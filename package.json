@@ -20,7 +20,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "format": "prettier --write src/**/*.ts{,x}",
-    "lint": "tsc --noEmit && eslint src/**/*.ts{,x} --fix",
+    "lint": "tsc --noEmit && eslint src/**/*.ts{,x} --color --fix",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -50,6 +50,7 @@
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.21.0",
     "eslint-plugin-react-hooks": "^4.1.2",
+    "husky": "^4.3.0",
     "prettier": "^2.1.2"
   }
 }
