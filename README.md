@@ -3,6 +3,9 @@
 ## SETUP
 
 run:
+
 ```
+
 npm install
+
 ```
