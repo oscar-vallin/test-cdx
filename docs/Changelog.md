@@ -9,6 +9,6 @@
 
 ---
 
-- Sep 25, 2020: UI Toolkit and GraphQL
+- Sep 25, 2020: Docs, UI Toolkit and GraphQL
   - Added Libraries Specifications doc.
   - Added Repo GuideLines doc.
