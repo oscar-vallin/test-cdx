@@ -61,7 +61,7 @@
   },
   "lint-staged": {
     "src/**/*.{ts,tsx,json}": [
-      "yarn format",
+      "prettier --write ./src/**/*.{ts,tsx}",
       "tslint ./src/**/*.{ts,tsx} --fix --color"
     ]
   }
