@@ -8,3 +8,7 @@
   - Modified Readme file.
 
 ---
+
+- Sep 25, 2020: UI Toolkit and GraphQL
+  - Added Libraries Specifications doc.
+  - Added Repo GuideLines doc.
