@@ -19,7 +19,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "format": "prettier --write src/**/*.{ts,tsx,json,md}",
+    "format": "prettier --write src/**/*.{ts,tsx}",
     "lint": "tsc --noEmit && eslint src/**/*.ts{,x} --color --fix",
     "eject": "react-scripts eject"
   },
