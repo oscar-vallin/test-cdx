@@ -1,23 +1,99 @@
 const { gql } = require('apollo-server')
 
 module.exports = gql`
-  # Comments in GraphQL strings (such as this one) start with the hash (#) symbol.
-
-  # This "Book" type defines the queryable fields for every book in our data source.
-  type Book {
-    id: ID!
-    title: String!
-    author: String!
-    description: String
-    observation: String @deprecated(reason: "Not all the Books have Observations, Don't have this field on your side.")
-  }
-
-  # The "Query" type is special: it lists all of the available queries that
-  # clients can execute, along with the return type for each. In this
-  # case, the "books" query returns an array of zero or more Books (defined above).
   type Query {
-    book(id: ID, title: String, author: String): [Book]
-    books(id: ID): [Book]
-    bookById(id: ID): Book
+    beginLogin(userId: String!): LoginStep
+    changeOwnPasswordPage: PasswordPage
+    changeOwnPasswordPage2: PasswordPage2
   }
+
+  type Mutation {
+    passwordLogin(userId: String!, password: String!): TokenUser
+  }
+
+  type LoginStep {
+    userId: String!
+    step: Int!
+    redirectPath: String
+    allowLostPassword: Boolean
+  }
+
+  type PasswordPage {
+    strengthLevel: Int
+    minLength: Int
+    maxLength: Int
+    minCharUpper: Int
+    minCharLower: Int
+    minCharDigit: Int
+    minCharSpecial: Int
+    strengthConjunction: Conjunction
+  }
+
+  type PasswordPage2 {
+    ruleGroup: PasswordRuleGroup!
+  }
+
+  type PasswordRuleGroup {
+    """
+    number of rule predicates that must be true for the group to pass
+    if numberOfCharacteristics is omitted all rules are required
+    """
+    numberOfCharacteristics: Int
+    """
+    list of rules or rule sub groups
+    """
+    rules: [PasswordRule]
+  }
+
+  type PasswordLengthRule {
+    minLength: Int
+    maxLength: Int
+  }
+
+  type PasswordWhitespaceRule {
+    allowedWhitespace: WhitespaceRuleType
+  }
+
+  type PasswordCharacterRule {
+    characterType: PasswordCharacterType
+    numberOfCharacters: Int
+  }
+
+  type PasswordStrengthRule {
+    requiredStrengthLevel: Int!
+  }
+
+  type TokenUser {
+    token: String
+    session: UserSession
+  }
+
+  type UserSession {
+    id: ID!
+    userId: String!
+    defaultAuthorities: [String]
+  }
+
+  enum Conjunction {
+    OR
+    AND
+  }
+
+  enum WhitespaceRuleType {
+    NONE
+  }
+
+  enum PasswordCharacterType {
+    UPPER_CASE
+    LOWER_CASE
+    DIGIT
+    SPECIAL
+  }
+
+  union PasswordRule =
+      PasswordLengthRule
+    | PasswordWhitespaceRule
+    | PasswordCharacterRule
+    | PasswordStrengthRule
+    | PasswordRuleGroup
 `

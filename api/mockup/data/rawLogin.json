@@ -1,0 +1,8 @@
+[
+  {
+    "userId": "AAA",
+    "step": 0,
+    "redirectPath": "./index.html",
+    "allowLostPassword": true
+  }
+]

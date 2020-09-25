@@ -1,13 +1,21 @@
 module.exports = {
+  // beginLogin(userId: String!): LoginStep
+  // changeOwnPasswordPage: PasswordPage
+  // changeOwnPasswordPage2
   Query: {
-    books: (parent, args, { dataSources }, info) => {
-      return dataSources.mockAPI.getBooks()
+    beginLogin: (parent, args, { dataSources }, info) => {
+      return dataSources.mockAPI.beginLogin()
     },
-    book: (parent, args, { dataSources }, info) => {
-      return dataSources.mockAPI.getBooks(args)
+    changeOwnPasswordPage: (parent, args, { dataSources }, info) => {
+      return dataSources.mockAPI.changeOwnPasswordPage()
     },
-    bookById: (parent, { id }, { dataSources }, info) => {
-      return dataSources.mockAPI.getBookById(id)
+    changeOwnPasswordPage2: (parent, { id }, { dataSources }, info) => {
+      return dataSources.mockAPI.changeOwnPasswordPage2()
+    },
+  },
+  Mutation: {
+    passwordLogin: (parent, { id }, { dataSources }, info) => {
+      return dataSources.mockAPI.passwordLogin()
     },
   },
 }

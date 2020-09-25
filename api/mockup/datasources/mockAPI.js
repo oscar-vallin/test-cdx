@@ -1,6 +1,9 @@
 const { DataSource } = require('apollo-datasource')
 const _ = require('lodash')
-const rawData = require('../data/mockData.json')
+const rawLogin = require('../data/rawLogin.json')
+const rawChangeOwn = require('../data/rawChangeOwn.json')
+const rawChangeOwn2 = require('../data/rawChangeOwn2.json')
+const rawToken = require('../data/rawToken.json')
 
 class mockAPI extends DataSource {
   constructor() {
@@ -9,15 +12,26 @@ class mockAPI extends DataSource {
 
   initialize(config) {}
 
-  getBooks(args) {
-    if (args) return _.filter(rawData, args)
+  // beginLogin(userId: String!): LoginStep
+  // changeOwnPasswordPage: PasswordPage
+  // changeOwnPasswordPage2
 
-    return rawData
+  beginLogin() {
+    console.log({ rawLogin: rawLogin[0] })
+
+    return rawLogin[0]
   }
 
-  getBookById(id) {
-    const item = _.filter(rawData, { id: parseInt(id) })
-    return rawData[0]
+  changeOwnPasswordPage() {
+    return rawChangeOwn[0]
+  }
+
+  changeOwnPasswordPage2() {
+    return rawChangeOwn2[0]
+  }
+
+  passwordLogin() {
+    return rawToken[0]
   }
 }
 
