@@ -1,10 +1,11 @@
 import React from 'react'
+import { LoginPage } from './pages/Login'
 
-const App: React.FC = (): React.ReactElement => {
+export const App: React.FC = (): React.ReactElement => {
   return (
-    <div>
-      <p>Develop</p>
-    </div>
+    <>
+      <LoginPage />
+    </>
   )
 }
 

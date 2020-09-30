@@ -40,7 +40,8 @@
     ],
     "prettier/prettier": "error",
     "no-use-before-define": "off",
-    "react/jsx-one-expression-per-line": "off"
+    "react/jsx-one-expression-per-line": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off"
   },
   "settings": {
     "import/resolver": {

@@ -1,14 +1,17 @@
-const { gql } = require('apollo-server')
+const { gql } = require('apollo-server');
 
 module.exports = gql`
   type Query {
     beginLogin(userId: String!): LoginStep
     changeOwnPasswordPage: PasswordPage
     changeOwnPasswordPage2: PasswordPage2
+    fileList: [File]
+    fileGet(id: ID!): File
   }
 
   type Mutation {
     passwordLogin(userId: String!, password: String!): TokenUser
+    fileUpdate(id: ID!, name: String, status: String): File
   }
 
   type LoginStep {
@@ -96,4 +99,20 @@ module.exports = gql`
     | PasswordCharacterRule
     | PasswordStrengthRule
     | PasswordRuleGroup
-`
+
+  enum FileStatus {
+    Incomplete
+    Complete
+    Approved
+  }
+
+  type File {
+    id: ID!
+    name: String
+    status: String
+  }
+
+  type Subscription {
+    updateStatus: File
+  }
+`;

@@ -3,10 +3,13 @@ import ReactDOM from 'react-dom'
 import './index.css'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
+import { ApolloContextProvider } from './contexts/ApolloContext.js'
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ApolloContextProvider>
+      <App />
+    </ApolloContextProvider>
   </React.StrictMode>,
   document.getElementById('app'),
 )
