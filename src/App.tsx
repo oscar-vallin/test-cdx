@@ -1,12 +1,12 @@
-import React from 'react'
-import { LoginPage } from './pages/Login'
+import React from 'react';
+import { Routes } from './pages/Routes.js';
 
 export const App: React.FC = (): React.ReactElement => {
   return (
-    <>
-      <LoginPage />
-    </>
-  )
-}
+    <React.Suspense fallback={null}>
+      <Routes />
+    </React.Suspense>
+  );
+};
 
-export default App
+export default App;
