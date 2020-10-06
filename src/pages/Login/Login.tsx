@@ -1,4 +1,5 @@
 import React from 'react';
+import { PrimaryButton } from '@fluentui/react';
 import { Container, Button, Result } from './Login.styles';
 import { useFileGetQuery, useLoginStepQuery } from '../../services/graphql';
 import { SubData } from '../../components/SubData';
@@ -30,7 +31,7 @@ export const LoginPage = () => {
 
   return (
     <Container>
-      <Button onClick={handleLogin}>Login</Button>
+      <PrimaryButton text="Login" onClick={handleLogin} />
       {loading && <Result>Loading...</Result>}
       {error && <Result>Error, Try again.</Result>}
       {data?.beginLogin && <Result>{data.beginLogin.userId}</Result>}
