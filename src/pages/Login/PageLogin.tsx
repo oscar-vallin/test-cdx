@@ -2,12 +2,24 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { Button, ButtonText } from '../../components/buttons';
-import { InputText } from '../../components/inputs/InputText/InputText';
+import { InputText } from '../../components/inputs/InputText/InputText.js';
 import { LayoutLogin } from '../../layouts/Login';
 import { Text } from '../../components/typography/Text';
 import { Logo } from '../../components/typography/Logo';
-import { Container, Row, RowInput, RowUsername, Username, RowForgot, LinkText, RowButton } from './PageLogin.styles';
-import { useInputValue } from '../../hooks/useInputValue';
+import {
+  Container,
+  Row,
+  RowInput,
+  RowUsername,
+  Username,
+  RowForgot,
+  RowBack,
+  LinkText,
+  RowButton,
+  TextIcon,
+  TextBack,
+} from './PageLogin.styles';
+import { useInputValue } from '../../hooks/useInputValue.js';
 import { useLoginStepQuery } from '../../services/graphql';
 
 const LoginPage = () => {
@@ -44,6 +56,14 @@ const LoginPage = () => {
   return (
     <LayoutLogin id="PageLogin">
       <Container id="LoginForm">
+        {!!stepPassword && (
+          <RowBack>
+            <ButtonText id="BackButton" onClick={() => setStepPassword(false)}>
+              <TextIcon>{'<'}</TextIcon>
+              <TextBack>Back</TextBack>
+            </ButtonText>
+          </RowBack>
+        )}
         <Row>
           <Logo>CDX</Logo>
         </Row>

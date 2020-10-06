@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { Text } from '../../components/typography/Text';
 
 export const Container = styled.div`
+  position: fixed;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -54,6 +55,27 @@ export const RowForgot = styled(Row)`
   flex-direction: row;
   justify-content: flex-end;
   align-items: flex-start;
+`;
+
+export const RowBack = styled(Row)`
+  position: absolute;
+  top: 0;
+  align-items: center;
+  width: 90%;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  text-transform: uppercase;
+`;
+
+export const TextIcon = styled(Text)`
+  font-size: 20px;
+  font-weight: 800;
+`;
+
+export const TextBack = styled(Text)`
+  font-size: 16px;
+  text-transform: uppercase;
 `;
 
 export const LinkText = styled(Text)`
