@@ -5,7 +5,7 @@ import { SEO } from '../../data/Constants';
 
 export const LayoutHome = ({ children = <></>, id = '' }) => {
   return (
-    <Layout id={`LoginLayout__${id}`} metaTitle={SEO.TITLE_LOGIN}>
+    <Layout id={`HomeLayout__${id}`} metaTitle={SEO.TITLE_LOGIN}>
       <Container>{children}</Container>
     </Layout>
   );

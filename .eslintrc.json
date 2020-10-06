@@ -41,7 +41,8 @@
     "prettier/prettier": "error",
     "no-use-before-define": "off",
     "react/jsx-one-expression-per-line": "off",
-    "@typescript-eslint/explicit-module-boundary-types": "off"
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "react/jsx-props-no-spreading": "off"
   },
   "settings": {
     "import/resolver": {

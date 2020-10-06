@@ -1,6 +1,12 @@
 import React from 'react';
 import { StyledComponent } from './Button.styles';
 
-export const Button = ({ children = <></>, id = '' }) => {
-  return <StyledComponent id={`Button__${id}`}>{children}</StyledComponent>;
+const DEFAULT_FUNCTION = () => console.log('Click');
+
+export const Button = ({ children = <></>, id = '', onClick = DEFAULT_FUNCTION }) => {
+  return (
+    <StyledComponent id={`Button__${id}`} onClick={onClick}>
+      {children}
+    </StyledComponent>
+  );
 };
