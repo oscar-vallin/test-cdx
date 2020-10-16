@@ -3,3 +3,4 @@ src/tests/
 **/*.js
 node_modules
 build
+api
