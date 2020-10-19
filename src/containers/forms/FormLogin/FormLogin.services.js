@@ -1,31 +1,44 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { useInputValue } from '../../../hooks/useInputValue';
+import { ROUTE_DASHBOARD } from '../../../data/constants/RouteConstants';
 
 // useEmailField
 export const useLogin = () => {
   const email = useInputValue('Email', 'Your email Address', '', 'email');
   const password = useInputValue('Password', 'Password', '', 'password');
+  const history = useHistory();
 
   const [isProcessing, setIsProcessing] = React.useState(false);
   const [validationError, setValidationError] = React.useState('');
-  const [isEmailValid, setIsEmailValid] = useState(false);
+  const [isEmailValid, setIsEmailValid] = React.useState(false);
 
   const resetEmail = () => {
     setIsEmailValid(false);
+  };
+
+  const routeDashboard = () => {
+    history.push(ROUTE_DASHBOARD.URL);
+  };
+
+  const setErrorMessage = (errorMessage) => {
+    setValidationError(errorMessage);
+
+    setTimeout(() => {
+      setValidationError('');
+    }, 3000);
   };
 
   const emailValidation = () => {
     setIsProcessing(true);
     setValidationError();
 
-    console.log(email.value);
-
     setTimeout(() => {
       // eslint-disable-next-line
       const validationResult = new RegExp(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g).test(email.value);
 
       if (!validationResult) {
-        setValidationError('Invalid e-mail');
+        setErrorMessage('Invalid e-mail');
       }
 
       setIsEmailValid(validationResult);
@@ -41,10 +54,13 @@ export const useLogin = () => {
       const validation = password.value === 'test';
 
       if (!validation) {
-        setValidationError('Invalid password');
+        setErrorMessage('Invalid password');
+        setIsProcessing(false);
+        return;
       }
 
-      setIsProcessing(false);
+      // Route to Dashboard
+      routeDashboard();
     }, 1000);
   };
 

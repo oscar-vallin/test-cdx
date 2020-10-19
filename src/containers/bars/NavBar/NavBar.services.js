@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import { useInputValue } from "../../../hooks/useInputValue";
+import React, { useState } from 'react';
+import { useInputValue } from '../../../hooks/useInputValue';
 
 // useEmailField
 export const useLogin = () => {
-  const email = useInputValue("Email", "");
-  const password = useInputValue("Password", "");
+  const email = useInputValue('Email', '');
+  const password = useInputValue('Password', '');
 
   const [isProcessing, setIsProcessing] = React.useState(false);
-  const [validationError, setValidationError] = React.useState("");
+  const [validationError, setValidationError] = React.useState('');
   const [isEmailValid, setIsEmailValid] = useState(false);
 
   const resetEmail = () => {
@@ -18,14 +18,12 @@ export const useLogin = () => {
     setIsProcessing(true);
     setValidationError();
 
-    console.log(email.value);
-
     setTimeout(() => {
       // eslint-disable-next-line
       const validationResult = new RegExp(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g).test(email.value);
 
       if (!validationResult) {
-        setValidationError("Invalid e-mail");
+        setValidationError('Invalid e-mail');
       }
 
       setIsEmailValid(validationResult);
@@ -38,10 +36,10 @@ export const useLogin = () => {
     setIsProcessing(true);
 
     setTimeout(() => {
-      const validation = password.value === "test";
+      const validation = password.value === 'test';
 
       if (!validation) {
-        setValidationError("Invalid password");
+        setValidationError('Invalid password');
       }
 
       setIsProcessing(false);

@@ -24,8 +24,6 @@ const FormLogin = ({ id = '__FormLogin' }) => {
   const handlerLogin = useLogin();
   const { email, password } = handlerLogin;
 
-  console.log({ email, password });
-
   return (
     <StyledBox id={id} sm="12">
       <StyledRowBottom id={`${id}__Card--Row`}>
@@ -52,7 +50,7 @@ const FormLogin = ({ id = '__FormLogin' }) => {
                   id={`${id}__Card__Row__Input-Email`}
                   autoFocus
                   disabled={handlerLogin.isProcessing || handlerLogin.isEmailValid}
-                  errorMessage={!handlerLogin.isEmailValid && handlerLogin.validationError}
+                  errorMessage={handlerLogin.isEmailValid ? '' : handlerLogin.validationError}
                   {...email}
                 />
               </Column>
