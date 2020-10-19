@@ -1,12 +1,12 @@
-import React from "react";
+import React from 'react';
 
-import { Customizer, loadTheme } from "@fluentui/react";
-import { initializeIcons } from "office-ui-fabric-react/lib/Icons";
+import { Customizer, loadTheme } from '@fluentui/react';
+import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 
-import "office-ui-fabric-react/dist/css/fabric.css";
-import { ThemeProvider } from "styled-components";
-import { defaultTheme, darkTheme } from "../styles/themes";
-import { theme as styledComponentsTheme } from "../styles/themes/theme";
+import 'office-ui-fabric-react/dist/css/fabric.css';
+import { ThemeProvider } from 'styled-components';
+import { defaultTheme, darkTheme } from '../styles/themes';
+import { theme as styledComponentsTheme } from '../styles/themes/theme';
 //
 export const ThemeContext = React.createContext(() => {
   // Initialization
@@ -15,7 +15,7 @@ export const ThemeContext = React.createContext(() => {
 export const ThemeContextProvider = ({ children }) => {
   // LocalState
   const [isContextLoading, setLoading] = React.useState(true);
-  const [themeName, setThemeName] = React.useState("light");
+  const [themeName, setThemeName] = React.useState('light');
   const [currentTheme, setTheme] = React.useState(defaultTheme);
   const [styledTheme, setStyledTheme] = React.useState(styledComponentsTheme);
 
@@ -23,7 +23,6 @@ export const ThemeContextProvider = ({ children }) => {
   React.useEffect(() => {
     const localFunction = async () => {
       setLoading(false);
-      console.log("Initializing Icons");
       initializeIcons();
     };
 
@@ -36,12 +35,12 @@ export const ThemeContextProvider = ({ children }) => {
 
   // Local Functions shared in Context.
   const changeTheme = async () => {
-    if (themeName === "light") {
-      setThemeName("dark");
+    if (themeName === 'light') {
+      setThemeName('dark');
       setTheme(darkTheme);
       setStyledTheme({ ...styledTheme, color: darkTheme });
     } else {
-      setThemeName("light");
+      setThemeName('light');
       setTheme(defaultTheme);
       setStyledTheme(styledTheme);
     }

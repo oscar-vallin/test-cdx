@@ -6,4 +6,5 @@ export const ComponentStyled = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: ${({ direction }) => direction};
+  padding: 0px;
 `;

@@ -1,11 +1,11 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 // Components
-import { Column } from "../../../components/layouts";
-import { InputText } from "../../../components/inputs/InputText";
-import { Spinner } from "../../../components/spinners/Spinner";
+import { Column } from '../../../components/layouts';
+import { InputText } from '../../../components/inputs/InputText';
+import { Spinner } from '../../../components/spinners/Spinner';
 // Hooks
-import { useLogin } from "./FormLogin.services";
+import { useLogin } from './FormLogin.services';
 // Styles
 import {
   StyledBox,
@@ -17,12 +17,14 @@ import {
   StyledTitle,
   StyledRowBottom,
   StyledButtonIcon,
-} from "./FormLogin.styles";
+} from './FormLogin.styles';
 
 // CardSection is called directly cause a restriction warning for that component.
-const FormLogin = ({ id = "__FormLogin" }) => {
+const FormLogin = ({ id = '__FormLogin' }) => {
   const handlerLogin = useLogin();
   const { email, password } = handlerLogin;
+
+  console.log({ email, password });
 
   return (
     <StyledBox id={id} sm="12">
@@ -74,7 +76,6 @@ const FormLogin = ({ id = "__FormLogin" }) => {
                     id={`${id}__Card__Row__Input-Email`}
                     autoFocus
                     type="password"
-                    // disabled={handlerLogin.isProcessing || handlerLogin.isEmailValid}
                     errorMessage={handlerLogin.validationError}
                     {...password}
                   />
@@ -90,7 +91,7 @@ const FormLogin = ({ id = "__FormLogin" }) => {
                     handlerLogin.isEmailValid ? handlerLogin.submitLogin() : handlerLogin.emailValidation()
                   }
                 >
-                  {handlerLogin.isProcessing ? <Spinner /> : !handlerLogin.isEmailValid ? "Next" : "Login"}
+                  {handlerLogin.isProcessing ? <Spinner /> : !handlerLogin.isEmailValid ? 'Next' : 'Login'}
                 </StyledButton>
               </Column>
             </StyledRow>

@@ -1,9 +1,27 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
-import { Input } from './InputText.styles';
+import PropTypes from 'prop-types';
+import { StyledTextField } from './InputText.styles';
 
-export const InputText = ({ placeholder = '', field }) => {
-  return <Input placeholder={placeholder} {...field} />;
+const InputText = ({
+  id = 'InputText',
+  disabled = false,
+  onChange,
+  autofocus = true,
+  errorMessage,
+  value,
+  ...props
+}) => {
+  return (
+    <StyledTextField
+      id={id}
+      autoFocus={autofocus}
+      disabled={disabled}
+      onChange={onChange}
+      value={value}
+      errorMessage={errorMessage}
+      {...props}
+    />
+  );
 };
 
 InputText.propTypes = {

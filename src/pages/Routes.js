@@ -2,23 +2,23 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 // Routes
-import { PageLogin } from './Login';
-import { PageDashboard } from './Dashboard';
-import { PageNotFound } from './NotFound';
+import { LoginPage } from './Login';
+import { DashboardPage } from './Dashboard';
+import { NotFoundPage } from './NotFound';
 
 export const Routes = () => {
   return (
     <Switch>
       <Route exact path="/">
-        <PageLogin />
+        <LoginPage />
       </Route>
 
       <Route path="/dashboard">
-        <PageDashboard />
+        <DashboardPage />
       </Route>
 
       <Route>
-        <PageNotFound />
+        <NotFoundPage />
       </Route>
     </Switch>
   );
