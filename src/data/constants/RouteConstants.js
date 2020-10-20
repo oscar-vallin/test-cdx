@@ -1,26 +1,110 @@
+export const ROUTES_ID = {
+  HOME: 'home',
+  LOGIN: 'login',
+  DASHBOARD: 'dashboard',
+  FILE_STATUS: 'file_status',
+  ARCHIVES: 'archives',
+  SCHEDULE: 'schedule',
+  TRANSMISSIONS: 'transmissions',
+  ERRORS: 'errors',
+  ADMIN: 'admin',
+};
+
 const URL_ROUTES = {
   HOME: '/',
-  LOGIN: '/login',
-  DASHBOARD: '/dashboard',
+  LOGIN: `/${ROUTES_ID.LOGIN}`,
+  DASHBOARD: `/${ROUTES_ID.DASHBOARD}`,
+  FILE_STATUS: `/${ROUTES_ID.FILE_STATUS}`,
+  ARCHIVES: `/${ROUTES_ID.ARCHIVES}`,
+  SCHEDULE: `/${ROUTES_ID.SCHEDULE}`,
+  TRANSMISSIONS: `/${ROUTES_ID.TRANSMISSIONS}`,
+  ERRORS: `/${ROUTES_ID.ERRORS}`,
+  ADMIN: `/${ROUTES_ID.ADMIN}`,
 };
 
 export const ROUTE_HOME = {
+  ID: ROUTES_ID.HOME,
   TITLE: '',
   URL: URL_ROUTES.HOME,
+  MAIN_MENU: false,
 };
 
 export const ROUTE_LOGIN = {
+  ID: ROUTES_ID.LOGIN,
   TITLE: 'Login',
   URL: URL_ROUTES.LOGIN,
+  MAIN_MENU: false,
 };
 
 export const ROUTE_DASHBOARD = {
+  ID: ROUTES_ID.DASHBOARD,
   TITLE: 'Dashboard',
   URL: URL_ROUTES.DASHBOARD,
+  MAIN_MENU: true,
+};
+
+export const ROUTE_FILE_STATUS = {
+  ID: ROUTES_ID.FILE_STATUS,
+  TITLE: 'File Status',
+  URL: URL_ROUTES.FILE_STATUS,
+  MAIN_MENU: true,
+};
+
+export const ROUTE_ARCHIVES = {
+  ID: ROUTES_ID.ARCHIVES,
+  TITLE: 'Archives',
+  URL: URL_ROUTES.ARCHIVES,
+  MAIN_MENU: true,
+};
+
+export const ROUTE_SCHEDULE = {
+  ID: ROUTES_ID.SCHEDULE,
+  TITLE: 'Schedule',
+  URL: URL_ROUTES.SCHEDULE,
+  MAIN_MENU: true,
+};
+
+export const ROUTE_TRANSMISSIONS = {
+  ID: ROUTES_ID.TRANSMISSIONS,
+  TITLE: 'Transmissions',
+  URL: URL_ROUTES.TRANSMISSIONS,
+  MAIN_MENU: true,
+};
+
+export const ROUTE_ERRORS = {
+  ID: ROUTES_ID.ERRORS,
+  TITLE: 'Errors',
+  URL: URL_ROUTES.ERRORS,
+  MAIN_MENU: true,
+};
+
+export const ROUTE_ADMIN = {
+  ID: ROUTES_ID.ADMIN,
+  TITLE: 'Admin',
+  URL: URL_ROUTES.ADMIN,
+  MAIN_MENU: true,
 };
 
 export const ROUTES = {
   ROUTE_HOME,
   ROUTE_LOGIN,
   ROUTE_DASHBOARD,
+  ROUTE_FILE_STATUS,
+  ROUTE_ARCHIVES,
+  ROUTE_SCHEDULE,
+  ROUTE_TRANSMISSIONS,
+  ROUTE_ERRORS,
+  ROUTE_ADMIN,
 };
+
+export const ROUTES_ARRAY = [
+  ROUTE_HOME,
+  ROUTE_LOGIN,
+  ROUTE_DASHBOARD,
+  ROUTE_FILE_STATUS,
+  ROUTE_ARCHIVES,
+  ROUTE_SCHEDULE,
+  ROUTE_TRANSMISSIONS,
+  ROUTE_ERRORS,
+  ROUTE_ADMIN,
+];

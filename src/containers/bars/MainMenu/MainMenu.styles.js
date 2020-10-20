@@ -1,10 +1,10 @@
-import styled from "styled-components";
-import { Box, Row as LayoutRow } from "../../../components/layouts";
-import { Card } from "../../../components/cards";
-import { Button } from "../../../components/buttons/Button";
-import { ButtonAction } from "../../../components/buttons/ButtonAction";
-import { Image } from "../../../components/images/Image";
-import { Text } from "../../../components/texts/Text";
+import styled from 'styled-components';
+import { Box, Row as LayoutRow, Column as LayoutColumn } from '../../../components/layouts';
+import { Card } from '../../../components/cards';
+import { Button } from '../../../components/buttons/Button';
+import { ButtonAction } from '../../../components/buttons/ButtonAction';
+import { Image } from '../../../components/images/Image';
+import { Text } from '../../../components/texts/Text';
 
 export const StyledBox = styled(Box)``;
 
@@ -14,43 +14,22 @@ export const StyledCard = styled(Card)`
 
 export const StyledRow = styled(LayoutRow)`
   && {
-    margin-top: ${({ marginTop }) => (marginTop ? `${marginTop}px` : "15px")};
     padding: 0px 8px;
   }
 `;
 
-export const StyledRowBottom = styled(LayoutRow)`
+export const StyledColumn = styled(LayoutColumn)`
   && {
-    width: 45vw;
-    max-width: 500px;
-    min-width: 300px;
-    margin-bottom: ${({ marginBottom }) => (marginBottom ? `${marginBottom}px` : "15px")};
     padding: 0px 8px;
   }
 `;
 
-export const StyledButton = styled(Button)`
-  margin-top: ${(props) => props.theme.margins.normal};
-  width: 100%;
+export const StyledMenuButton = styled(ButtonAction)`
+  /* text-decoration: ${({ selected }) => (selected ? 'underline' : 'none')}; */
+  font-weight: ${({ theme, selected }) => (selected ? theme.fontWeights.bold : theme.fontWeights.normal)};
+  color: ${({ theme }) => theme.colors.white};
+  /* text-underline-position: under; */
+  border-bottom: white;
+  border-bottom-width: 2px;
+  border-bottom-style: ${({ selected }) => (selected ? 'double' : 'none')};
 `;
-
-export const StyledButtonIcon = styled(ButtonAction)``;
-
-export const StyledImage = styled(Image)`
-  width: 100%;
-`;
-
-export const StyledText = styled(Text)`
-  width: 100%;
-`;
-
-export const StyledTitle = styled(Text)`
-  font: ${({ theme }) => theme.fontStyles.logo};
-  width: 100%;
-`;
-
-export const Stylesheet = {
-  CardSection: {
-    padding: "15px",
-  },
-};

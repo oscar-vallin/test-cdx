@@ -1,14 +1,14 @@
 const classesFluent = {
-  sm: "ms-sm",
-  md: "ms-md",
-  lg: "ms-lg",
-  pushSm: "ms-smPush",
-  pushMd: "ms-smPush",
-  pushLg: "ms-smPush",
-  pullSm: "ms-smPush",
-  pullMd: "ms-smPush",
-  pullLg: "ms-smPush",
-  hiddenAt: "ms-hidden",
+  sm: 'ms-sm',
+  md: 'ms-md',
+  lg: 'ms-lg',
+  pushSm: 'ms-smPush',
+  pushMd: 'ms-smPush',
+  pushLg: 'ms-smPush',
+  pullSm: 'ms-smPush',
+  pullMd: 'ms-smPush',
+  pullLg: 'ms-smPush',
+  hiddenAt: 'ms-hidden',
 };
 
 export const getClassNames = (initialClasses, props) => {
@@ -37,7 +37,8 @@ export const getClassNames = (initialClasses, props) => {
     !props.pushLg &&
     !props.pullSm &&
     !props.pullMd &&
-    !props.pullLg
+    !props.pullLg &&
+    !props.noStyle
   ) {
     classes.push(`${classesFluent.sm}12`);
     classes.push(`${classesFluent.pushSm}12`);
@@ -46,8 +47,8 @@ export const getClassNames = (initialClasses, props) => {
 
   if (props.className) {
     // Previous Classes
-    return classes.length > 1 ? `${classes.join(" ")} ${props.className}` : `${props.className} ${classes[0]}`;
+    return classes.length > 1 ? `${classes.join(' ')} ${props.className}` : `${props.className} ${classes[0]}`;
   }
 
-  return classes.length > 1 ? classes.join(" ") : classes[0];
+  return classes.length > 1 ? classes.join(' ') : classes[0];
 };
