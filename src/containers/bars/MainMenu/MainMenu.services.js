@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { useInputValue } from '../../../hooks/useInputValue';
+import React from 'react';
 
 // useEmailField
 export const useMainMenu = (defaultOption) => {

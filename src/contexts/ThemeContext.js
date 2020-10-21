@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Customizer, loadTheme } from '@fluentui/react';
-import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
+// import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 
 import 'office-ui-fabric-react/dist/css/fabric.css';
 import { ThemeProvider } from 'styled-components';
@@ -23,7 +23,6 @@ export const ThemeContextProvider = ({ children }) => {
   React.useEffect(() => {
     const localFunction = async () => {
       setLoading(false);
-      initializeIcons();
     };
 
     localFunction();

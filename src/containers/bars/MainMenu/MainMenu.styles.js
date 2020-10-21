@@ -1,10 +1,7 @@
 import styled from 'styled-components';
 import { Box, Row as LayoutRow, Column as LayoutColumn } from '../../../components/layouts';
 import { Card } from '../../../components/cards';
-import { Button } from '../../../components/buttons/Button';
 import { ButtonAction } from '../../../components/buttons/ButtonAction';
-import { Image } from '../../../components/images/Image';
-import { Text } from '../../../components/texts/Text';
 
 export const StyledBox = styled(Box)``;
 

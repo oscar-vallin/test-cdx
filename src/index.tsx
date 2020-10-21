@@ -2,10 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import 'office-ui-fabric-react/dist/css/fabric.css';
+import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 // import { ApolloContextProvider } from './contexts/ApolloContext.js';
 import { ThemeContextProvider } from './contexts/ThemeContext.js';
+
+initializeIcons();
 
 ReactDOM.render(
   <React.StrictMode>

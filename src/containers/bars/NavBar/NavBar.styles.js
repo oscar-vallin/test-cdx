@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import { Box, Row as LayoutRow, Column as LayoutColumn } from '../../../components/layouts';
 import { ButtonAction } from '../../../components/buttons/ButtonAction';
+// import { ButtonProfile } from '../../../components/buttons/ButtonProfile';
+import { ButtonIcon } from '../../../components/buttons/ButtonIcon';
 // import { Image } from '../../../components/images/Image';
 import { Text } from '../../../components/texts/Text';
 
@@ -36,3 +38,16 @@ export const StyledButtonProfile = styled(ButtonAction)`
     padding: 0px 8px;
   }
 `;
+
+export const StyledButtonIcon = styled(ButtonIcon)`
+  && {
+    padding: 0px 8px;
+    min-width: 0px;
+  }
+`;
+
+// export const StyledButtonProfile = styled(ButtonProfile)`
+//   && {
+//     padding: 0px 8px;
+//   }
+// `;

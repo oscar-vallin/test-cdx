@@ -1,16 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+// import { ProfileMenu } from '../ProfileMenu';
 // Components
 import { MainMenu } from '../MainMenu';
 // Hooks
 // import { useNavBar } from "./NavBar.services";
 // Styles
-import { StyledBox, StyledRow, StyledColumn, StyledTitle, StyledMenu, StyledButtonProfile } from './NavBar.styles';
+import {
+  StyledBox,
+  StyledRow,
+  StyledColumn,
+  StyledTitle,
+  // StyledButtonProfile,
+  StyledButtonIcon,
+} from './NavBar.styles';
 
 // CardSection is called directly cause a restriction warning for that component.
 const NavBar = ({ id = '__NavBar' }) => {
-  // const handlerNavBar = useNavBar();
+  const renderIcon = (iconName) => {
+    return (
+      <StyledColumn id={`${id}__Right__${iconName}`} noStyle>
+        <StyledButtonIcon icon={iconName} size={18} />
+      </StyledColumn>
+    );
+  };
 
+  // Render
   return (
     <StyledBox id={id} sm="12">
       <StyledRow id={`${id}__Nav`} left>
@@ -24,9 +39,11 @@ const NavBar = ({ id = '__NavBar' }) => {
             </StyledColumn>
           </StyledRow>
         </StyledColumn>
-
-        <StyledColumn id={`${id}__Card__Row-Column`} sm={2} right>
-          <StyledButtonProfile>CDX DASHBOARD</StyledButtonProfile>
+        <StyledColumn id={`${id}__Col-Right`} sm={2} right>
+          <StyledRow id={`${id}__Right_Row`} right>
+            {renderIcon('Settings')}
+            {renderIcon('Help')}
+          </StyledRow>
         </StyledColumn>
       </StyledRow>
     </StyledBox>
