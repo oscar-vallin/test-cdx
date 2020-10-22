@@ -16,14 +16,7 @@ class mockAPI extends DataSource {
 
   initialize(config) {}
 
-  // beginLogin(userId: String!): LoginStep
-  // changeOwnPasswordPage: PasswordPage
-  // changeOwnPasswordPage2
-
   beginLogin(userId) {
-    console.log({ userId });
-    console.log({ rawLogin: rawLogin[0] });
-
     return rawLogin[0];
   }
 
@@ -58,14 +51,8 @@ class mockAPI extends DataSource {
     const fileName = name;
     const fileStatus = status;
 
-    console.log({ pubsub });
-
-    console.log('FileName');
-    console.log({ fileId, fileName });
-
     const fileData = rawFiles.find(({ id }) => id == fileId);
 
-    console.log({ fileData });
     if (!fileData) return new ApolloError('Sorry, File ID not Found.');
 
     const updateFile = {
@@ -74,9 +61,7 @@ class mockAPI extends DataSource {
       status: fileStatus || fileData.status,
     };
 
-    console.log({ updateFile });
     pubsub.publish('UPDATE_STATUS', { updateStatus: updateFile });
-    // pubsub.publish('UPDATE_STATUS', { file: updateFile });
 
     return updateFile;
   }

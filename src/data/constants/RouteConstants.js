@@ -2,7 +2,7 @@ export const ROUTES_ID = {
   HOME: 'home',
   LOGIN: 'login',
   DASHBOARD: 'dashboard',
-  FILE_STATUS: 'file_status',
+  FILE_STATUS: 'file-status',
   ARCHIVES: 'archives',
   SCHEDULE: 'schedule',
   TRANSMISSIONS: 'transmissions',

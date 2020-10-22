@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import { ProfileMenu } from '../ProfileMenu';
+import { ProfileMenu } from '../../menus/ProfileMenu';
 // Components
-import { MainMenu } from '../MainMenu';
+import { MainMenu } from '../../menus/MainMenu';
 // Hooks
 // import { useNavBar } from "./NavBar.services";
 // Styles
@@ -16,7 +16,7 @@ import {
 } from './NavBar.styles';
 
 // CardSection is called directly cause a restriction warning for that component.
-const NavBar = ({ id = '__NavBar' }) => {
+const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard' }) => {
   const renderIcon = (iconName) => {
     return (
       <StyledColumn id={`${id}__Right__${iconName}`} noStyle>
@@ -35,7 +35,7 @@ const NavBar = ({ id = '__NavBar' }) => {
               <StyledTitle>CDX DASHBOARD</StyledTitle>
             </StyledColumn>
             <StyledColumn id={`${id}__Left-Row__Menu`}>
-              <MainMenu left />
+              <MainMenu left option={menuOptionSelected} />
             </StyledColumn>
           </StyledRow>
         </StyledColumn>
@@ -43,6 +43,7 @@ const NavBar = ({ id = '__NavBar' }) => {
           <StyledRow id={`${id}__Right_Row`} right>
             {renderIcon('Settings')}
             {renderIcon('Help')}
+            <ProfileMenu />
           </StyledRow>
         </StyledColumn>
       </StyledRow>

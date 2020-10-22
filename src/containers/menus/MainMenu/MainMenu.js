@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 // Components
 
 // Hooks
+import { useHistory, useLocation } from 'react-router-dom';
+
 // Styles
 import { StyledBox, StyledRow, StyledColumn, StyledMenuButton } from './MainMenu.styles';
 
@@ -10,7 +12,10 @@ import { ROUTES_ARRAY, ROUTES } from '../../../data/constants/RouteConstants';
 
 // CardSection is called directly cause a restriction warning for that component.
 const MainMenu = ({ id = '__MainMenu', option = ROUTES.ROUTE_DASHBOARD.ID, left }) => {
-  const [_option, setOption] = React.useState(option);
+  const history = useHistory();
+  const location = useLocation();
+
+  console.log({ location });
 
   const renderOptions = () => {
     return ROUTES_ARRAY.map((menuOption) => {
@@ -20,7 +25,12 @@ const MainMenu = ({ id = '__MainMenu', option = ROUTES.ROUTE_DASHBOARD.ID, left 
           key={`${id}__MainMenu__Row-${menuOption.ID}`}
           noStyle
         >
-          <StyledMenuButton selected={_option === menuOption.ID} onClick={() => setOption(menuOption.ID)}>
+          <StyledMenuButton
+            selected={location.pathname === menuOption.URL}
+            onClick={() => {
+              history.push(menuOption.URL);
+            }}
+          >
             {menuOption.TITLE}
           </StyledMenuButton>
         </StyledColumn>
