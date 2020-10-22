@@ -1,21 +1,26 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import "office-ui-fabric-react/dist/css/fabric.css";
-import "./index.css";
-import App from "./App";
-import * as serviceWorker from "./serviceWorker";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
+import 'office-ui-fabric-react/dist/css/fabric.css';
+import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
 // import { ApolloContextProvider } from './contexts/ApolloContext.js';
-import { ThemeContextProvider } from "./contexts/ThemeContext.js";
+import { ThemeContextProvider } from './contexts/ThemeContext.js';
+
+initializeIcons();
 
 ReactDOM.render(
   <React.StrictMode>
     {/* <ApolloContextProvider> */}
     <ThemeContextProvider>
-      <App />
+      <Router>
+        <App />
+      </Router>
     </ThemeContextProvider>
     {/* </ApolloContextProvider> */}
   </React.StrictMode>,
-  document.getElementById("app")
+  document.getElementById('app')
 );
 
 // If you want your app to work offline and load faster, you can change
