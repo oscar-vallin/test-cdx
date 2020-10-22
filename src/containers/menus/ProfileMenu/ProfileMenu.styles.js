@@ -4,7 +4,7 @@ import { Card } from '../../../components/cards';
 import { Button } from '../../../components/buttons/Button';
 import { ButtonAction } from '../../../components/buttons/ButtonAction';
 import { Image } from '../../../components/images/Image';
-import { Text } from '../../../components/texts/Text';
+import { Text } from '../../../components/typography/Text';
 
 export const StyledBox = styled(Box)`
   padding: 0px 0px;
