@@ -4,6 +4,8 @@ import { Text } from '../../../components/typography';
 
 export const StyledRow = styled(LayoutRow)`
   width: 100%;
+  padding-bottom: ${({ line }) => (line ? '10px' : '0px')};
+  border-bottom: ${({ line, theme }) => (line ? `2px solid ${theme.colors.neutralTertiary}` : 'none')};
 `;
 
 export const StyledColumn = styled(LayoutColumn)`

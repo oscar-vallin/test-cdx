@@ -15,8 +15,6 @@ const MainMenu = ({ id = '__MainMenu', option = ROUTES.ROUTE_DASHBOARD.ID, left 
   const history = useHistory();
   const location = useLocation();
 
-  console.log({ location });
-
   const renderOptions = () => {
     return ROUTES_ARRAY.map((menuOption) => {
       return menuOption.MAIN_MENU ? (

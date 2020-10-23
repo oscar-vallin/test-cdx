@@ -7,11 +7,16 @@ import { LayoutDashboard } from '../../layouts/LayoutDashboard';
 import { StyledRow, StyledColumn } from './DashboardPage.styles';
 
 const _DashboardPage = () => {
+  const data = [
+    { name: 'Completed', value: 25, color: '#219653' },
+    { name: 'Transmissions', value: 75, color: '#D0D0D0' },
+  ];
+
   return (
     <LayoutDashboard id="PageDashboard">
       <StyledRow>
         <StyledColumn>
-          <CardDashboard title="Transmissions" subtitle="Billing Units." value={99} maxValue={9999} percentage={0.25} />
+          <CardDashboard title="Transmissions" subtitle="Billing Units." levels={2} data={data} />
         </StyledColumn>
         <StyledColumn>Card 2</StyledColumn>
       </StyledRow>
