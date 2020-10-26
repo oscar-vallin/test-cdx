@@ -22,4 +22,12 @@ export default {
   black: '#121829',
   white: '#fefefe',
   navbar: '#0078D4',
+  errorBackground: '#FDE7E9',
+  error: '#A80000',
+  warning: '#D83B01',
+  warningBackground: '#FED9CC',
+  processing: '#A333C8',
+  processingBackground: '#d2a8e0',
+  successBackground: '#DFF6DD',
+  success: '#107C10',
 };

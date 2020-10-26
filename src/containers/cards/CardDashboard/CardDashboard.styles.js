@@ -3,9 +3,8 @@ import { Row as LayoutRow, Column as LayoutColumn } from '../../../components/la
 import { Text } from '../../../components/typography';
 
 export const StyledRow = styled(LayoutRow)`
-  width: 100%;
   padding-bottom: ${({ line }) => (line ? '10px' : '0px')};
-  border-bottom: ${({ line, theme }) => (line ? `2px solid ${theme.colors.neutralTertiary}` : 'none')};
+  border-bottom: ${({ line, theme }) => (line ? `1px solid ${theme.colors.black}` : 'none')};
 `;
 
 export const StyledColumn = styled(LayoutColumn)`
