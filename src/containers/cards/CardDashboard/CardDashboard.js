@@ -5,9 +5,9 @@ import { ChartDonut } from '../../../components/charts/ChartDonut';
 import { StyledRow, StyledColumn, StyledTitle, StyledSubtitle, StyledValues } from './CardDashboard.styles';
 
 const CardDashboard = ({ id = '__CardDashboard', title, subtitle, data }) => {
-  const total = data.reduce((accumulator = 0, item) => accumulator + item.value, 0);
-  const percentage = `${(data[0].value * 100) / total}%`;
-  const levels = data.length;
+  const total = data ? data.reduce((accumulator = 0, item) => accumulator + item.value, 0) : 0;
+  const percentage = data ? (data[0].value * 100) / total : 0;
+  // const levels = data ? data.length : 0;
 
   return (
     <Card id={id}>
@@ -22,7 +22,7 @@ const CardDashboard = ({ id = '__CardDashboard', title, subtitle, data }) => {
           </StyledRow>
         </StyledColumn>
         <StyledColumn>
-          <ChartDonut label={percentage} size={70} data={data} />
+          <ChartDonut label={`${percentage.toFixed(0)}%`} size={70} data={data} />
         </StyledColumn>
       </StyledRow>
     </Card>
