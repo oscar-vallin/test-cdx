@@ -32,7 +32,12 @@ import {
   HeaderColumn,
   StyledText,
   StyledMenuButton,
+  StyledContainer,
+  StyledCell,
+  StyledSpecs,
 } from './Table.styles';
+
+import { TableHeader } from '../TableHeader';
 
 const _buildColumns = (
   items,
@@ -51,8 +56,6 @@ const _buildColumns = (
     isSortedDescending,
     groupedColumnKey
   );
-
-  console.log({ buildColumns: columns });
 
   columns.forEach((column) => {
     // column.onRenderDivider = _onRenderDivider;
@@ -82,40 +85,9 @@ const _buildColumns = (
   return columns;
 };
 
-const _renderItemColumn = (item, index, column) => {
-  const fieldContent = item[column.fieldName];
-
-  switch (column.key) {
-    // case 'thumbnail':
-    //   return <Image src={fieldContent} width={50} height={50} imageFit={ImageFit.cover} />;
-
-    case 'bus':
-      return <StyledText right>{fieldContent}</StyledText>;
-      break;
-
-    case 'vendor':
-      return <Link href="#">{fieldContent}</Link>;
-      break;
-
-    case 'color':
-      return (
-        <span
-          data-selection-disabled
-          className={mergeStyles({ color: fieldContent, height: '100%', display: 'block' })}
-        >
-          {fieldContent}
-        </span>
-      );
-
-    default:
-      return <span>{fieldContent}</span>;
-  }
-};
-
 const classNames = mergeStyleSets({
   root: {
     width: '100%',
-    backgroundColor: 'cyan',
   },
 
   headerDivider: {
@@ -141,10 +113,48 @@ const Table = ({
   sortedColumnKey,
   selectionCount,
   announcedMessage,
-  headerType = 'dashboard',
+  structure,
 }) => {
-  const sortedItems = items;
+  const [sortLabel, setSortLabel] = React.useState();
+  const [sortedItems, setSortedItems] = React.useState(items);
+  const [optionFlag, setOptionFlag] = React.useState(false);
+
   const columns = _buildColumns(items);
+
+  const _renderItemColumn = (item, index, column) => {
+    const fieldContent = item[column.fieldName];
+
+    switch (column.key) {
+      // case 'thumbnail':
+      //   return <Image src={fieldContent} width={50} height={50} imageFit={ImageFit.cover} />;
+
+      case 'bus':
+        return <StyledText right>{fieldContent}</StyledText>;
+        break;
+
+      case 'vendor':
+        return (
+          <StyledCell left>
+            <Link href="#">{fieldContent}</Link>
+            {optionFlag && <StyledSpecs>spec: MemberIntegration</StyledSpecs>}
+          </StyledCell>
+        );
+        break;
+
+      case 'color':
+        return (
+          <span
+            data-selection-disabled
+            className={mergeStyles({ color: fieldContent, height: '100%', display: 'block' })}
+          >
+            {fieldContent}
+          </span>
+        );
+
+      default:
+        return <span>{fieldContent}</span>;
+    }
+  };
 
   const _onColumnClick = (event, column) => {
     let { isSortedDescending } = column;
@@ -174,48 +184,6 @@ const Table = ({
     return item.key;
   };
 
-  const _onRenderDetailsHeader = ({ ...props }) => {
-    if (headerType === 'normal' && props) {
-      return <DetailsHeader {...props} ariaLabelForToggleAllGroupsButton="Toggle selection" />;
-    }
-    if (headerType === 'dashboard') {
-      return (
-        <HeaderTable>
-          <StyledColumn left paddingLeft={12}>
-            <Link href="#">
-              <StyledText>Transmissions / BUs by Vendor</StyledText>
-            </Link>
-          </StyledColumn>
-          <StyledColumn>
-            <StyledRow>
-              <StyledColumn>
-                <StyledMenuButton
-                  icon="sort"
-                  onClick={() => {
-                    console.log('Sort');
-                  }}
-                >
-                  Vendor
-                </StyledMenuButton>
-              </StyledColumn>
-              <StyledColumn>
-                <StyledMenuButton
-                  icon="eye"
-                  onClick={() => {
-                    console.log('Specs');
-                  }}
-                >
-                  Specs
-                </StyledMenuButton>
-              </StyledColumn>
-            </StyledRow>
-          </StyledColumn>
-        </HeaderTable>
-      );
-    }
-    return null;
-  };
-
   const _onColumnHeaderContextMenu = (column, ev) => {
     console.log(`column ${column?.key} contextmenu opened.`);
   };
@@ -229,35 +197,43 @@ const Table = ({
     return items.slice(0).sort((a, b) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1));
   };
 
-  console.log({ columns });
+  const _onSort = () => {
+    if (structure.header.type === 'dashboard') {
+      setSortLabel(sortLabel === 'Vendor' ? 'BUs' : 'Vendor');
+
+      setSortedItems(_copyAndSort(sortedItems, columns[sortLabel === 'Vendor' ? 1 : 0].fieldName, false));
+    }
+  };
+
+  const _onShowSpecs = () => {
+    setOptionFlag(!optionFlag);
+  };
+
+  const _onRenderTableHeader = () => {
+    if (structure.header.type === 'dashboard' && !sortLabel) {
+      setSortLabel('Vendor');
+      setSortedItems(_copyAndSort(sortedItems, columns[0].fieldName, false));
+    }
+
+    return <TableHeader header={structure.header} sortLabel={sortLabel} onSort={_onSort} onOption={_onShowSpecs} />;
+  };
 
   return (
-    <div id="Table_Detailed" style={{ width: '100%' }}>
+    <StyledContainer id="Table_Detailed" style={{ width: '100%' }}>
       <DetailsList
+        className={classNames.root}
         id="TableDetailedList"
-        // items={sortedItems}
-        // // setKey="set"
-        // columns={columns}
-        // onRenderItemColumn={_renderItemColumn}
-        // onColumnHeaderClick={_onColumnClick}
-        // onItemInvoked={_onItemInvoked}
-        // onColumnHeaderContextMenu={_onColumnHeaderContextMenu}
-        // ariaLabelForSelectionColumn="Toggle selection"
-        // ariaLabelForSelectAllCheckbox="Toggle selection for all items"
-        // checkButtonAriaLabel="Row checkbox"
-        // className={classNames.root}
-        // selectionMode={SelectionMode.none}
-        items={items}
+        items={sortedItems}
         columns={columns}
         selectionMode={SelectionMode.none}
         setKey="none"
         layoutMode={DetailsListLayoutMode.justified}
         isHeaderVisible
         onItemInvoked={_onItemInvoked}
-        onRenderDetailsHeader={_onRenderDetailsHeader}
+        onRenderDetailsHeader={_onRenderTableHeader}
         onRenderItemColumn={_renderItemColumn}
       />
-    </div>
+    </StyledContainer>
   );
 };
 

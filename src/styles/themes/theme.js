@@ -63,6 +63,7 @@ const boxShadows = {
 
 const fontStyles = {
   logo: `normal ${fontWeights.bold} ${fontSizes.logo}/${lineHeights.normal} ${fonts.SegouUI}`,
+  link: `normal ${fontWeights.normal} ${fontSizes.normal}/${lineHeights.normal} ${fonts.SegouUI}`,
   headerTitle: `normal ${fontWeights.bold} ${fontSizes.logoNavBar}/${lineHeights.normal} ${fonts.SegouUI}`,
 };
 
