@@ -12,9 +12,10 @@ export const StyledColumn = styled(LayoutColumn)`
 `;
 
 export const StyledTitle = styled(Text)`
-  text-align: left;
+  text-align: ${({ noData }) => (noData ? 'center' : 'left')};
   color: gray;
   font-size: 14px;
+  font-weight: ${({ theme, noData }) => (noData ? theme.fontWeights.bold : theme.fontWeights.normal)};
 `;
 
 export const StyledSubtitle = styled(StyledTitle)`

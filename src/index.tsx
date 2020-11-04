@@ -5,20 +5,20 @@ import 'office-ui-fabric-react/dist/css/fabric.css';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-// import { ApolloContextProvider } from './contexts/ApolloContext.js';
+import { ApolloContextProvider } from './contexts/ApolloContext.js';
 import { ThemeContextProvider } from './contexts/ThemeContext.js';
 
 initializeIcons();
 
 ReactDOM.render(
   <React.StrictMode>
-    {/* <ApolloContextProvider> */}
-    <ThemeContextProvider>
-      <Router>
-        <App />
-      </Router>
-    </ThemeContextProvider>
-    {/* </ApolloContextProvider> */}
+    <ApolloContextProvider>
+      <ThemeContextProvider>
+        <Router>
+          <App />
+        </Router>
+      </ThemeContextProvider>
+    </ApolloContextProvider>
   </React.StrictMode>,
   document.getElementById('app')
 );

@@ -6,6 +6,7 @@ const rawChangeOwn = require('../data/rawChangeOwn.json');
 const rawChangeOwn2 = require('../data/rawChangeOwn2.json');
 const rawToken = require('../data/rawToken.json');
 const rawFiles = require('../data/rawFiles.json');
+const rawDashboard = require('../data/rawDashboard.json');
 
 const UPDATE_STATUS = 'UPDATE_STATUS';
 
@@ -44,6 +45,10 @@ class mockAPI extends DataSource {
 
   fileAdd(name) {
     return rawFiles[0];
+  }
+
+  dashboard(orgId) {
+    return rawDashboard;
   }
 
   fileUpdate(pubsub, id, name, status) {

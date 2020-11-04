@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { DetailsHeader } from 'office-ui-fabric-react/lib/DetailsList';
 import { useHistory } from 'react-router-dom';
 
-import { HeaderTable, StyledColumn, StyledRow, StyledMenuButton, StyledText, StyledLink } from './TableHeader.styles';
+import { HeaderTable, StyledColumn, StyledRow, StyledMenuButton, StyledLink } from './TableHeader.styles';
 
 const TableHeader = ({ id = '__TableHeader', header = 'default', sortLabel, onSort, onOption, ...props }) => {
   const history = useHistory();
 
-  console.log({ header });
+  // console.log({ header });
 
   if ((!header || !header.type || header.type === 'default') && props) {
     return <DetailsHeader {...props} ariaLabelForToggleAllGroupsButton="Toggle selection" />;
