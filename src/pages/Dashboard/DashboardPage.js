@@ -4,83 +4,86 @@ import { CardDashboard } from '../../containers/cards/CardDashboard';
 import { TableDashboard } from '../../containers/tables/TableDashboard';
 
 import { LayoutDashboard } from '../../layouts/LayoutDashboard';
-// import { TableFileStatus } from '../../containers/tables';
-import { StyledRow, StyledColumn } from './DashboardPage.styles';
+import { StyledRow, StyledColumn, StyledButton, StyledSpinner } from './DashboardPage.styles';
+import { useDashboardService } from './DashboardPage.service';
+
 import { TABLE_NAMES } from '../../data/constants/TableConstants';
 
-const data = [
-  { key: 0, name: 'Completed', value: 25, color: '#219653' },
-  { key: 1, name: 'Transmissions', value: 75, color: '#D0D0D0' },
-];
-
-const dataErrors = [
-  { key: 0, name: 'Failed', value: 10, color: '#A80000' },
-  { key: 1, name: 'Transmissions', value: 75, color: '#D0D0D0' },
-];
-
-const dataTable0 = [
-  { vendor: 'Ameritas', bus: '1/1788', specs: 'AAAA' },
-  { vendor: 'BCBSofNE', bus: '1/1955', specs: 'bbbb' },
-  { vendor: 'BCI', bus: '1/1573', specs: 'CCCCCC' },
-  { vendor: 'BenefitWallet', bus: '1/1193', specs: 'DDDDDD' },
-  { vendor: 'BostonMutual', bus: '1/1432', specs: 'EEEEE' },
-  { vendor: 'BrightHorizons', bus: '1/988', specs: 'FFFFF' },
-  { vendor: 'CVSCoremarks', bus: '1/323', specs: 'GGGGG' },
-  { vendor: 'DentalDentol', bus: '1/1', specs: 'HHHH' },
-  { vendor: 'Hybit', bus: '1/99999999', specs: 'I' },
-];
-
-const dataTable1 = [
-  { vendor: 'Ameritas', bus: '1/1788' },
-  { vendor: 'BCBSofNE', bus: '1/1955' },
-  { vendor: 'BCI', bus: '1/1573' },
-  { vendor: 'BenefitWallet', bus: '1/1193' },
-  { vendor: 'BostonMutual', bus: '1/1432' },
-  { vendor: 'BrightHorizons', bus: '1/988' },
-  { vendor: 'CVSCoremarks', bus: '1/323' },
-  { vendor: 'DentalDentol', bus: '1/1' },
-  { vendor: 'Hybit', bus: '1/99999999' },
-];
-
-const dataTableColumns = ['vendor', 'bus'];
-
-const dataTable2 = [];
+// TODO: Change for Session organization ID.
+const ORG_SID = 1;
 
 const _DashboardPage = () => {
+  const service = useDashboardService(ORG_SID);
+  const { isLoadingData, datesOptions, dataCounters } = service;
+  const { setDateId } = service;
+
+  // Render Buttons Bar
+  const renderDateButtons = () => {
+    if (!datesOptions) return null;
+
+    return datesOptions.map((option) => (
+      <StyledColumn key={`ContainerButton-${option.id}`} noStyle>
+        <StyledButton key={`Button-${option.id}`} selected={option.selected} onClick={() => setDateId(option.id)}>
+          {option.name}
+        </StyledButton>
+      </StyledColumn>
+    ));
+  };
+
   return (
     <LayoutDashboard id="PageDashboard">
-      <StyledRow marginTop={30} sm={12} around>
-        <StyledColumn sm={5}>
-          <CardDashboard title="Transmissions" subtitle="Billing Units." levels={2} data={data} />
-        </StyledColumn>
-        <StyledColumn sm={5}>
-          <CardDashboard title="Failed Files" subtitle="Billing Units." levels={2} data={dataErrors} />
-        </StyledColumn>
-      </StyledRow>
-      <StyledRow marginBottom={30} marginTop={30} sm={12} around>
-        <StyledColumn sm={5}>
-          <TableDashboard
-            columns={dataTableColumns}
-            tableID={TABLE_NAMES.DASHBOARD_TRANSMISSIONS_VENDOR}
-            data={dataTable1}
-          />
-        </StyledColumn>
-        <StyledColumn sm={5}>
-          <TableDashboard columns={dataTableColumns} tableID={TABLE_NAMES.DASHBOARD_ERRORS_VENDOR} data={dataTable1} />
-        </StyledColumn>
-      </StyledRow>
-      <StyledRow marginBottom={30} marginTop={30} sm={12} around>
-        <StyledColumn sm={5}>
-          <TableDashboard
-            columns={dataTableColumns}
-            tableID={TABLE_NAMES.DASHBOARD_TRANSMISSIONS_FILES}
-            data={dataTable1}
-          />
-        </StyledColumn>
-        <StyledColumn sm={5}>
-          <TableDashboard columns={dataTableColumns} tableID={TABLE_NAMES.DASHBOARD_ERRORS_FILES} data={dataTable1} />
-        </StyledColumn>
-      </StyledRow>
+      <React.Suspense fallback={<StyledSpinner>Loading...</StyledSpinner>}>
+        <StyledRow marginTop={15} sm={12} right>
+          {renderDateButtons()}
+        </StyledRow>
+        <StyledRow marginTop={10} sm={12} around>
+          <StyledColumn sm={5}>
+            <CardDashboard
+              title="Transmissions"
+              subtitle="Billing Units."
+              value={dataCounters?.transmissionCount ?? 0}
+              total={dataCounters?.billingUnitCount ?? 0}
+              color="#219653"
+              noDataLabel="No Transmissions"
+              loading={isLoadingData}
+            />
+          </StyledColumn>
+          <StyledColumn sm={5}>
+            <CardDashboard
+              title="Failed Files"
+              subtitle="Billing Units."
+              value={dataCounters?.processErrorCount ?? 0}
+              total={dataCounters?.billingUnitCount ?? 0}
+              color="#A80000"
+              noDataLabel="No Failed"
+              loading={isLoadingData}
+            />
+          </StyledColumn>
+        </StyledRow>
+        <StyledRow marginBottom={30} marginTop={30} sm={12} around top>
+          <StyledColumn sm={5}>
+            <TableDashboard
+              tableId={TABLE_NAMES.DASHBOARD_TRANSMISSIONS_VENDOR}
+              data={dataCounters?.vendorTransmissions}
+              altData={dataCounters?.vendorTransmissionsBySpec}
+            />
+          </StyledColumn>
+          <StyledColumn sm={5}>
+            <TableDashboard tableId={TABLE_NAMES.DASHBOARD_ERRORS_VENDOR} data={dataCounters?.vendorProcessErrors} />
+          </StyledColumn>
+        </StyledRow>
+        <StyledRow marginBottom={30} marginTop={30} sm={12} around top>
+          <StyledColumn sm={5}>
+            <TableDashboard
+              tableId={TABLE_NAMES.DASHBOARD_TRANSMISSIONS_FILES}
+              data={dataCounters?.fileTransmissions}
+            />
+          </StyledColumn>
+          <StyledColumn sm={5}>
+            <TableDashboard tableId={TABLE_NAMES.DASHBOARD_ERRORS_FILES} data={dataCounters?.fileProcessErrors} />
+          </StyledColumn>
+        </StyledRow>
+      </React.Suspense>
     </LayoutDashboard>
   );
 };

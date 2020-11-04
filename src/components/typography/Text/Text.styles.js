@@ -1,7 +1,8 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const StyledText = styled.span`
   width: 100%;
-  font-size: ${(props) => props.theme.fontSizes.normal};
-  text-align: ${(props) => (props.left ? "start" : props.right ? "end" : "center")};
+  font: ${({ theme }) => theme.fontStyles.normal};
+  text-transform: uppercase;
+  text-align: ${({ left, right }) => (left ? 'start' : right ? 'end' : 'center')};
 `;

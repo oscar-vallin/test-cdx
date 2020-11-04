@@ -1,37 +1,40 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import { Link } from 'office-ui-fabric-react/lib/Link';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { CommandBar, ICommandBarStyles } from 'office-ui-fabric-react/lib/CommandBar';
-import { Announced } from 'office-ui-fabric-react/lib/Announced';
-import { DirectionalHint, ContextualMenu } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { Image, ImageFit } from 'office-ui-fabric-react/lib/Image';
-import { mergeStyles, getTheme, mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
+// import { TextField } from 'office-ui-fabric-react/lib/TextField';
+// import { CommandBar, ICommandBarStyles } from 'office-ui-fabric-react/lib/CommandBar';
+// import { Announced } from 'office-ui-fabric-react/lib/Announced';
+// import { DirectionalHint, ContextualMenu } from 'office-ui-fabric-react/lib/ContextualMenu';
+// import { Image, ImageFit } from 'office-ui-fabric-react/lib/Image';
 import {
-  CheckboxVisibility,
+  mergeStyles,
+  // getTheme,
+  mergeStyleSets,
+} from 'office-ui-fabric-react/lib/Styling';
+import {
+  // CheckboxVisibility,
   ColumnActionsMode,
-  ConstrainMode,
+  // ConstrainMode,
   DetailsList,
-  DetailsHeader,
+  // DetailsHeader,
   DetailsListLayoutMode,
-  IColumn,
-  IGroup,
-  Selection,
+  // IColumn,
+  // IGroup,
+  // Selection,
   SelectionMode,
   buildColumns,
-  IDetailsColumnProps,
+  // IDetailsColumnProps,
 } from 'office-ui-fabric-react/lib/DetailsList';
-import { createListItems, isGroupable } from '@uifabric/example-data';
-import { memoizeFunction } from 'office-ui-fabric-react/lib/Utilities';
+// import { createListItems, isGroupable } from '@uifabric/example-data';
+// import { memoizeFunction } from 'office-ui-fabric-react/lib/Utilities';
 import {
-  StyledBox,
-  StyledRow,
-  StyledColumn,
-  HeaderTable,
-  HeaderColumn,
+  // StyledBox,
+  // StyledRow,
+  // StyledColumn,
+  // HeaderTable,
+  // HeaderColumn,
   StyledText,
-  StyledMenuButton,
+  // StyledMenuButton,
   StyledContainer,
   StyledCell,
   StyledSpecs,
@@ -114,32 +117,35 @@ const Table = ({
   selectionCount,
   announcedMessage,
   structure,
+  onOption,
 }) => {
   const [sortLabel, setSortLabel] = React.useState();
   const [sortedItems, setSortedItems] = React.useState(items);
-  const [optionFlag, setOptionFlag] = React.useState(false);
 
+  React.useEffect(() => {
+    setSortedItems(items);
+  }, [items]);
+
+  // console.log('Rendering Component Table...', sortedItems);
   const columns = _buildColumns(items);
 
   const _renderItemColumn = (item, index, column) => {
     const fieldContent = item[column.fieldName];
+    // console.log('_renderItemColumn, columns: ', columns);
+    // console.log('_renderItemColumn, item: ', item);
 
     switch (column.key) {
-      // case 'thumbnail':
-      //   return <Image src={fieldContent} width={50} height={50} imageFit={ImageFit.cover} />;
-
       case 'bus':
         return <StyledText right>{fieldContent}</StyledText>;
-        break;
 
       case 'vendor':
+        // console.log([item.column]);
         return (
           <StyledCell left>
             <Link href="#">{fieldContent}</Link>
-            {optionFlag && <StyledSpecs>spec: MemberIntegration</StyledSpecs>}
+            {item.specs && <StyledSpecs>{`specs: ${item.specs}`}</StyledSpecs>}
           </StyledCell>
         );
-        break;
 
       case 'color':
         return (
@@ -151,42 +157,46 @@ const Table = ({
           </span>
         );
 
+      case 'specs':
+        break;
+
       default:
         return <span>{fieldContent}</span>;
     }
   };
 
-  const _onColumnClick = (event, column) => {
-    let { isSortedDescending } = column;
+  // const _onColumnClick = (event, column) => {
+  //   let { isSortedDescending } = column;
 
-    // If we've sorted this column, flip it.
-    if (column.isSorted) {
-      isSortedDescending = !isSortedDescending;
-    }
+  //   // If we've sorted this column, flip it.
+  //   if (column.isSorted) {
+  //     isSortedDescending = !isSortedDescending;
+  //   }
 
-    // Sort the items.
-    sortedItems = _copyAndSort(sortedItems, column.fieldName, isSortedDescending);
+  //   // console.log({ column, sortedItems });
+  //   // Sort the items.
+  //   const _sortedItems = _copyAndSort(sortedItems, column?.fieldName, isSortedDescending);
+  //   setSortedItems(_sortedItems);
+  //   // Reset the items and columns to match the state.
 
-    // Reset the items and columns to match the state.
+  //   columns = columns.map((col) => {
+  //     col.isSorted = col.key === column.key;
 
-    columns = columns.map((col) => {
-      col.isSorted = col.key === column.key;
+  //     if (col.isSorted) {
+  //       col.isSortedDescending = isSortedDescending;
+  //     }
 
-      if (col.isSorted) {
-        col.isSortedDescending = isSortedDescending;
-      }
+  //     return col;
+  //   });
+  // };
 
-      return col;
-    });
-  };
+  // const _getKey = (item, index) => {
+  //   return item.key;
+  // };
 
-  const _getKey = (item, index) => {
-    return item.key;
-  };
-
-  const _onColumnHeaderContextMenu = (column, ev) => {
-    console.log(`column ${column?.key} contextmenu opened.`);
-  };
+  // const _onColumnHeaderContextMenu = (column, ev) => {
+  //   // console.log(`column ${column?.key} contextmenu opened.`);
+  // };
 
   const _onItemInvoked = (item, index) => {
     alert(`Item ${item.name} at index ${index} has been invoked.`);
@@ -206,13 +216,17 @@ const Table = ({
   };
 
   const _onShowSpecs = () => {
-    setOptionFlag(!optionFlag);
+    onOption();
+    // setOptionFlag(!optionFlag);
   };
 
   const _onRenderTableHeader = () => {
     if (structure.header.type === 'dashboard' && !sortLabel) {
       setSortLabel('Vendor');
-      setSortedItems(_copyAndSort(sortedItems, columns[0].fieldName, false));
+
+      // console.log('_onRenderTableHeader, ', { columns, sortedItems });
+      // if (columns.length)
+      setSortedItems(_copyAndSort(sortedItems, columns[0]?.fieldName, false));
     }
 
     return <TableHeader header={structure.header} sortLabel={sortLabel} onSort={_onSort} onOption={_onShowSpecs} />;
@@ -233,6 +247,7 @@ const Table = ({
         onRenderDetailsHeader={_onRenderTableHeader}
         onRenderItemColumn={_renderItemColumn}
       />
+      {sortedItems?.length === 0 && <StyledText bold>No Data</StyledText>}
     </StyledContainer>
   );
 };
