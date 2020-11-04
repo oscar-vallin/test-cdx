@@ -1,10 +1,10 @@
-import styled from "styled-components";
-import { Box, Row as LayoutRow } from "../../../components/layouts";
-import { Card } from "../../../components/cards";
-import { Button } from "../../../components/buttons/Button";
-import { ButtonAction } from "../../../components/buttons/ButtonAction";
-import { Image } from "../../../components/images/Image";
-import { Text } from "../../../components/texts/Text";
+import styled from 'styled-components';
+import { Box, Row as LayoutRow } from '../../../components/layouts';
+import { Card } from '../../../components/cards';
+import { Button } from '../../../components/buttons/Button';
+import { ButtonAction } from '../../../components/buttons/ButtonAction';
+import { Image } from '../../../components/images/Image';
+import { Text } from '../../../components/typography/Text';
 
 export const StyledBox = styled(Box)``;
 
@@ -14,7 +14,7 @@ export const StyledCard = styled(Card)`
 
 export const StyledRow = styled(LayoutRow)`
   && {
-    margin-top: ${({ marginTop }) => (marginTop ? `${marginTop}px` : "15px")};
+    margin-top: ${({ marginTop }) => (marginTop ? `${marginTop}px` : '15px')};
     padding: 0px 8px;
   }
 `;
@@ -24,7 +24,7 @@ export const StyledRowBottom = styled(LayoutRow)`
     width: 45vw;
     max-width: 500px;
     min-width: 300px;
-    margin-bottom: ${({ marginBottom }) => (marginBottom ? `${marginBottom}px` : "15px")};
+    margin-bottom: ${({ marginBottom }) => (marginBottom ? `${marginBottom}px` : '15px')};
     padding: 0px 8px;
   }
 `;
@@ -51,6 +51,6 @@ export const StyledTitle = styled(Text)`
 
 export const Stylesheet = {
   CardSection: {
-    padding: "15px",
+    padding: '15px',
   },
 };

@@ -4,7 +4,7 @@ import { ButtonAction } from '../../../components/buttons/ButtonAction';
 // import { ButtonProfile } from '../../../components/buttons/ButtonProfile';
 import { ButtonIcon } from '../../../components/buttons/ButtonIcon';
 // import { Image } from '../../../components/images/Image';
-import { Text } from '../../../components/texts/Text';
+import { Text } from '../../../components/typography/Text';
 
 export const StyledBox = styled(Box)`
   background: ${({ theme }) => theme.colors.navbar};
