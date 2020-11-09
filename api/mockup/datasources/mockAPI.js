@@ -7,6 +7,7 @@ const rawChangeOwn2 = require('../data/rawChangeOwn2.json');
 const rawToken = require('../data/rawToken.json');
 const rawFiles = require('../data/rawFiles.json');
 const rawDashboard = require('../data/rawDashboard.json');
+const rawWorkPacketStatuses = require('../data/rawWorkPacketStatuses.json');
 
 const UPDATE_STATUS = 'UPDATE_STATUS';
 
@@ -49,6 +50,11 @@ class mockAPI extends DataSource {
 
   dashboard(orgId) {
     return rawDashboard;
+  }
+
+  // WorkPacketStatuses($orgSid: ID!, $dateRange: DateTimeRangeInput, $filter: WorkPacketStatusFilter){
+  workPacketStatuses(orgSid, dateRange, filter) {
+    return rawWorkPacketStatuses;
   }
 
   fileUpdate(pubsub, id, name, status) {

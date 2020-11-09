@@ -29,6 +29,12 @@ module.exports = {
       console.log('DashBoardPresiods List...', Date.now());
       return dataSources.mockAPI.dashboard().data.dashboardPeriods;
     },
+    // orgSid, dateRange, filter;
+
+    workPacketStatuses: (parent, args, { dataSources }, info) => {
+      console.log('WorkPacket Statuses List...', Date.now());
+      return dataSources.mockAPI.workPacketStatuses(args.orgSid, args.dateRange, args.filter).workPacketStatuses;
+    },
   },
   Mutation: {
     passwordLogin: (parent, { id }, { dataSources }, info) => {

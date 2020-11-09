@@ -5,7 +5,9 @@ module.exports = gql`
     beginLogin(userId: String!): LoginStep
     changeOwnPasswordPage: PasswordPage
     workPacketStatusDetails(orgSid: ID!, workOrderID: String!): WorkPacketStatusDetails
+    workPacketStatuses(orgSid: ID!, dateRange: DateTimeRangeInput, filter: WorkPacketStatusFilter): [WorkPacketStatus]
     dashboardPeriods(orgSid: ID!): DashboardPeriods
+    systemTemplateAMGroupByName(name: String!): [AMGroup]
   }
 
   type Mutation {
@@ -17,6 +19,7 @@ module.exports = gql`
   }
 
   scalar DateTime
+  scalar Date
 
   type Organization {
     id: ID
@@ -91,15 +94,15 @@ module.exports = gql`
 
   type WorkPacketStatus {
     workOrderId: String!
-    timestamp: ZonedDateTime!
+    timestamp: DateTime!
     planSponsorId: String
     detailsPath: String
     subClientPath: String
     inboundFilename: String!
     vendorId: String
     step: Int!
-    stepStatus: Int!
-    packetStatus: Int!
+    stepStatus: String!
+    packetStatus: String!
     reprocessedBy: String
     reprocessAction: Int
     recordHighlightCount: Int
@@ -111,16 +114,17 @@ module.exports = gql`
     hasErrors: Boolean
   }
 
+  """
   type ZonedDateTime {
-    formatString(format: String!): String
-    iso: String
+      formatString(format: String!): String
+      iso: String
   }
 
   type Date {
-    formatString(format: String!): String
-    iso: String
+      formatString(format: String!): String
+      iso: String
   }
-
+  """
   type AMGroup {
     id: ID
     name: String!
@@ -205,6 +209,22 @@ module.exports = gql`
   input CreatePersonInput {
     firstNm: String!
     lastNm: String
+  }
+
+  input DateTimeRangeInput {
+    rangeStart: DateTime!
+    rangeEnd: DateTime!
+  }
+
+  """
+  input DateRangeInput{
+      rangeStart: Date!
+      rangeEnd: Date!
+      timeZone: String
+  }
+  """
+  input WorkPacketStatusFilter {
+    excludedEnvs: [String]
   }
 
   enum OrgType {

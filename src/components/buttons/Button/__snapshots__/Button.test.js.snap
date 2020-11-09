@@ -1,3 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Button Should render correctly 1`] = `ShallowWrapper {}`;
+exports[`Button Testing Unit... Should render correctly 1`] = `
+<Styled(CustomizedPrimaryButton)
+  disabled={false}
+  id="__Button"
+  onClick={[MockFunction]}
+>
+  Testing Button
+</Styled(CustomizedPrimaryButton)>
+`;
