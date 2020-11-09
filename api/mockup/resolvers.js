@@ -35,6 +35,11 @@ module.exports = {
       console.log('WorkPacket Statuses List...', Date.now());
       return dataSources.mockAPI.workPacketStatuses(args.orgSid, args.dateRange, args.filter).workPacketStatuses;
     },
+
+    workPacketStatusDetails: (parent, args, { dataSources }, info) => {
+      console.log('WorkPacket Status Details List...', Date.now());
+      return dataSources.mockAPI.workPacketStatusDetails(args.orgSid, args.workOrderID).workPacketStatusDetails;
+    },
   },
   Mutation: {
     passwordLogin: (parent, { id }, { dataSources }, info) => {
