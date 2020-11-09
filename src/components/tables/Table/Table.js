@@ -1,44 +1,16 @@
 import React from 'react';
 
 import { Link } from 'office-ui-fabric-react/lib/Link';
-// import { TextField } from 'office-ui-fabric-react/lib/TextField';
-// import { CommandBar, ICommandBarStyles } from 'office-ui-fabric-react/lib/CommandBar';
-// import { Announced } from 'office-ui-fabric-react/lib/Announced';
-// import { DirectionalHint, ContextualMenu } from 'office-ui-fabric-react/lib/ContextualMenu';
-// import { Image, ImageFit } from 'office-ui-fabric-react/lib/Image';
+import { mergeStyles, mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
 import {
-  mergeStyles,
-  // getTheme,
-  mergeStyleSets,
-} from 'office-ui-fabric-react/lib/Styling';
-import {
-  // CheckboxVisibility,
   ColumnActionsMode,
-  // ConstrainMode,
   DetailsList,
-  // DetailsHeader,
   DetailsListLayoutMode,
-  // IColumn,
-  // IGroup,
-  // Selection,
   SelectionMode,
   buildColumns,
-  // IDetailsColumnProps,
 } from 'office-ui-fabric-react/lib/DetailsList';
-// import { createListItems, isGroupable } from '@uifabric/example-data';
-// import { memoizeFunction } from 'office-ui-fabric-react/lib/Utilities';
-import {
-  // StyledBox,
-  // StyledRow,
-  // StyledColumn,
-  // HeaderTable,
-  // HeaderColumn,
-  StyledText,
-  // StyledMenuButton,
-  StyledContainer,
-  StyledCell,
-  StyledSpecs,
-} from './Table.styles';
+
+import { StyledText, StyledContainer, StyledCell, StyledSpecs } from './Table.styles';
 
 import { TableHeader } from '../TableHeader';
 
@@ -61,8 +33,6 @@ const _buildColumns = (
   );
 
   columns.forEach((column) => {
-    // column.onRenderDivider = _onRenderDivider;
-
     column.onColumnContextMenu = onColumnContextMenu;
     column.ariaLabel = `Operations for ${column.name}`;
     if (column.key === 'thumbnail') {
@@ -100,25 +70,7 @@ const classNames = mergeStyleSets({
 });
 
 //
-const Table = ({
-  canResizeColumns = false,
-  checkboxVisibility = false,
-  constrainMode,
-  contextualMenuProps,
-  groupItemLimit,
-  groups,
-  isHeaderVisible,
-  isLazyLoaded,
-  isSortedDescending,
-  items,
-  layoutMode,
-  selectionMode,
-  sortedColumnKey,
-  selectionCount,
-  announcedMessage,
-  structure,
-  onOption,
-}) => {
+const Table = ({ items, structure, onOption }) => {
   const [sortLabel, setSortLabel] = React.useState();
   const [sortedItems, setSortedItems] = React.useState(items);
 
@@ -126,20 +78,16 @@ const Table = ({
     setSortedItems(items);
   }, [items]);
 
-  // console.log('Rendering Component Table...', sortedItems);
   const columns = _buildColumns(items);
 
   const _renderItemColumn = (item, index, column) => {
     const fieldContent = item[column.fieldName];
-    // console.log('_renderItemColumn, columns: ', columns);
-    // console.log('_renderItemColumn, item: ', item);
 
     switch (column.key) {
       case 'bus':
         return <StyledText right>{fieldContent}</StyledText>;
 
       case 'vendor':
-        // console.log([item.column]);
         return (
           <StyledCell left>
             <Link href="#">{fieldContent}</Link>
@@ -165,39 +113,6 @@ const Table = ({
     }
   };
 
-  // const _onColumnClick = (event, column) => {
-  //   let { isSortedDescending } = column;
-
-  //   // If we've sorted this column, flip it.
-  //   if (column.isSorted) {
-  //     isSortedDescending = !isSortedDescending;
-  //   }
-
-  //   // console.log({ column, sortedItems });
-  //   // Sort the items.
-  //   const _sortedItems = _copyAndSort(sortedItems, column?.fieldName, isSortedDescending);
-  //   setSortedItems(_sortedItems);
-  //   // Reset the items and columns to match the state.
-
-  //   columns = columns.map((col) => {
-  //     col.isSorted = col.key === column.key;
-
-  //     if (col.isSorted) {
-  //       col.isSortedDescending = isSortedDescending;
-  //     }
-
-  //     return col;
-  //   });
-  // };
-
-  // const _getKey = (item, index) => {
-  //   return item.key;
-  // };
-
-  // const _onColumnHeaderContextMenu = (column, ev) => {
-  //   // console.log(`column ${column?.key} contextmenu opened.`);
-  // };
-
   const _onItemInvoked = (item, index) => {
     alert(`Item ${item.name} at index ${index} has been invoked.`);
   };
@@ -217,15 +132,12 @@ const Table = ({
 
   const _onShowSpecs = () => {
     onOption();
-    // setOptionFlag(!optionFlag);
   };
 
   const _onRenderTableHeader = () => {
     if (structure.header.type === 'dashboard' && !sortLabel) {
       setSortLabel('Vendor');
 
-      // console.log('_onRenderTableHeader, ', { columns, sortedItems });
-      // if (columns.length)
       setSortedItems(_copyAndSort(sortedItems, columns[0]?.fieldName, false));
     }
 
