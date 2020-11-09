@@ -10,6 +10,7 @@ export type Scalars = {
   Int: number;
   Float: number;
   DateTime: any;
+  Date: any;
 };
 
 export type Query = {
@@ -17,7 +18,9 @@ export type Query = {
   beginLogin?: Maybe<LoginStep>;
   changeOwnPasswordPage?: Maybe<PasswordPage>;
   workPacketStatusDetails?: Maybe<WorkPacketStatusDetails>;
+  workPacketStatuses?: Maybe<Array<Maybe<WorkPacketStatus>>>;
   dashboardPeriods?: Maybe<DashboardPeriods>;
+  systemTemplateAMGroupByName?: Maybe<Array<Maybe<AmGroup>>>;
 };
 
 export type QueryBeginLoginArgs = {
@@ -29,8 +32,18 @@ export type QueryWorkPacketStatusDetailsArgs = {
   workOrderID: Scalars['String'];
 };
 
+export type QueryWorkPacketStatusesArgs = {
+  orgSid: Scalars['ID'];
+  dateRange?: Maybe<DateTimeRangeInput>;
+  filter?: Maybe<WorkPacketStatusFilter>;
+};
+
 export type QueryDashboardPeriodsArgs = {
   orgSid: Scalars['ID'];
+};
+
+export type QuerySystemTemplateAmGroupByNameArgs = {
+  name: Scalars['String'];
 };
 
 export type Mutation = {
@@ -148,15 +161,15 @@ export type Person = {
 export type WorkPacketStatus = {
   __typename?: 'WorkPacketStatus';
   workOrderId: Scalars['String'];
-  timestamp: ZonedDateTime;
+  timestamp: Scalars['DateTime'];
   planSponsorId?: Maybe<Scalars['String']>;
   detailsPath?: Maybe<Scalars['String']>;
   subClientPath?: Maybe<Scalars['String']>;
   inboundFilename: Scalars['String'];
   vendorId?: Maybe<Scalars['String']>;
   step: Scalars['Int'];
-  stepStatus: Scalars['Int'];
-  packetStatus: Scalars['Int'];
+  stepStatus: Scalars['String'];
+  packetStatus: Scalars['String'];
   reprocessedBy?: Maybe<Scalars['String']>;
   reprocessAction?: Maybe<Scalars['Int']>;
   recordHighlightCount?: Maybe<Scalars['Int']>;
@@ -168,26 +181,17 @@ export type WorkPacketStatus = {
   hasErrors?: Maybe<Scalars['Boolean']>;
 };
 
-export type ZonedDateTime = {
-  __typename?: 'ZonedDateTime';
-  formatString?: Maybe<Scalars['String']>;
-  iso?: Maybe<Scalars['String']>;
-};
-
-export type ZonedDateTimeFormatStringArgs = {
-  format: Scalars['String'];
-};
-
-export type Date = {
-  __typename?: 'Date';
-  formatString?: Maybe<Scalars['String']>;
-  iso?: Maybe<Scalars['String']>;
-};
-
-export type DateFormatStringArgs = {
-  format: Scalars['String'];
-};
-
+/**
+ * type ZonedDateTime {
+ *     formatString(format: String!): String
+ *     iso: String
+ * }
+ *
+ * type Date {
+ *     formatString(format: String!): String
+ *     iso: String
+ * }
+ */
 export type AmGroup = {
   __typename?: 'AMGroup';
   id?: Maybe<Scalars['ID']>;
@@ -276,6 +280,22 @@ export type CreateUserInput = {
 export type CreatePersonInput = {
   firstNm: Scalars['String'];
   lastNm?: Maybe<Scalars['String']>;
+};
+
+export type DateTimeRangeInput = {
+  rangeStart: Scalars['DateTime'];
+  rangeEnd: Scalars['DateTime'];
+};
+
+/**
+ * input DateRangeInput{
+ *     rangeStart: Date!
+ *     rangeEnd: Date!
+ *     timeZone: String
+ * }
+ */
+export type WorkPacketStatusFilter = {
+  excludedEnvs?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
 export enum OrgType {
@@ -542,6 +562,43 @@ export type CreateAmPolicyMutationVariables = Exact<{
 
 export type CreateAmPolicyMutation = { __typename?: 'Mutation' } & {
   createAMPolicy?: Maybe<{ __typename?: 'AMPolicy' } & PolicyFragmentFragment>;
+};
+
+export type WorkPacketStatusesQueryVariables = Exact<{
+  orgSid: Scalars['ID'];
+  dateRange?: Maybe<DateTimeRangeInput>;
+  filter?: Maybe<WorkPacketStatusFilter>;
+}>;
+
+export type WorkPacketStatusesQuery = { __typename?: 'Query' } & {
+  workPacketStatuses?: Maybe<
+    Array<
+      Maybe<
+        { __typename?: 'WorkPacketStatus' } & Pick<
+          WorkPacketStatus,
+          | 'workOrderId'
+          | 'timestamp'
+          | 'planSponsorId'
+          | 'detailsPath'
+          | 'subClientPath'
+          | 'inboundFilename'
+          | 'vendorId'
+          | 'step'
+          | 'stepStatus'
+          | 'packetStatus'
+          | 'reprocessedBy'
+          | 'reprocessAction'
+          | 'recordHighlightCount'
+          | 'recordHighlightType'
+          | 'clientFileArchivePath'
+          | 'vendorFileArchivePath'
+          | 'supplementalFilesArchivePaths'
+          | 'archiveOnly'
+          | 'hasErrors'
+        >
+      >
+    >
+  >;
 };
 
 export type WorkPacketStatusDetailsQueryVariables = Exact<{
@@ -822,6 +879,23 @@ export type UnionPasswordRuleFragment =
   | UnionPasswordRule_PasswordCharacterRule_Fragment
   | UnionPasswordRule_PasswordStrengthRule_Fragment
   | UnionPasswordRule_PasswordRuleGroup_Fragment;
+
+export type SystemTemplateAmGroupByNameQueryVariables = Exact<{
+  name: Scalars['String'];
+}>;
+
+export type SystemTemplateAmGroupByNameQuery = { __typename?: 'Query' } & {
+  systemTemplateAMGroupByName?: Maybe<
+    Array<
+      Maybe<
+        { __typename?: 'AMGroup' } & Pick<
+          AmGroup,
+          'id' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'tmplServiceType'
+        >
+      >
+    >
+  >;
+};
 
 export const DashPeriodCountFragmentFragmentDoc = gql`
   fragment dashPeriodCountFragment on DashboardPeriodCount {
@@ -1120,6 +1194,72 @@ export type CreateAmPolicyMutationOptions = Apollo.BaseMutationOptions<
   CreateAmPolicyMutation,
   CreateAmPolicyMutationVariables
 >;
+export const WorkPacketStatusesDocument = gql`
+  query WorkPacketStatuses($orgSid: ID!, $dateRange: DateTimeRangeInput, $filter: WorkPacketStatusFilter) {
+    workPacketStatuses(orgSid: $orgSid, dateRange: $dateRange, filter: $filter) {
+      workOrderId
+      timestamp
+      planSponsorId
+      detailsPath
+      subClientPath
+      inboundFilename
+      vendorId
+      step
+      stepStatus
+      packetStatus
+      reprocessedBy
+      reprocessAction
+      recordHighlightCount
+      recordHighlightType
+      clientFileArchivePath
+      vendorFileArchivePath
+      supplementalFilesArchivePaths
+      archiveOnly
+      hasErrors
+    }
+  }
+`;
+
+/**
+ * __useWorkPacketStatusesQuery__
+ *
+ * To run a query within a React component, call `useWorkPacketStatusesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWorkPacketStatusesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useWorkPacketStatusesQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *      dateRange: // value for 'dateRange'
+ *      filter: // value for 'filter'
+ *   },
+ * });
+ */
+export function useWorkPacketStatusesQuery(
+  baseOptions: Apollo.QueryHookOptions<WorkPacketStatusesQuery, WorkPacketStatusesQueryVariables>
+) {
+  return Apollo.useQuery<WorkPacketStatusesQuery, WorkPacketStatusesQueryVariables>(
+    WorkPacketStatusesDocument,
+    baseOptions
+  );
+}
+export function useWorkPacketStatusesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<WorkPacketStatusesQuery, WorkPacketStatusesQueryVariables>
+) {
+  return Apollo.useLazyQuery<WorkPacketStatusesQuery, WorkPacketStatusesQueryVariables>(
+    WorkPacketStatusesDocument,
+    baseOptions
+  );
+}
+export type WorkPacketStatusesQueryHookResult = ReturnType<typeof useWorkPacketStatusesQuery>;
+export type WorkPacketStatusesLazyQueryHookResult = ReturnType<typeof useWorkPacketStatusesLazyQuery>;
+export type WorkPacketStatusesQueryResult = Apollo.QueryResult<
+  WorkPacketStatusesQuery,
+  WorkPacketStatusesQueryVariables
+>;
 export const WorkPacketStatusDetailsDocument = gql`
   query WorkPacketStatusDetails($orgSid: ID!, $workOrderID: String!) {
     workPacketStatusDetails(orgSid: $orgSid, workOrderID: $workOrderID) {
@@ -1225,7 +1365,7 @@ export const WorkPacketStatusDetailsDocument = gql`
  * });
  */
 export function useWorkPacketStatusDetailsQuery(
-  baseOptions?: Apollo.QueryHookOptions<WorkPacketStatusDetailsQuery, WorkPacketStatusDetailsQueryVariables>
+  baseOptions: Apollo.QueryHookOptions<WorkPacketStatusDetailsQuery, WorkPacketStatusDetailsQueryVariables>
 ) {
   return Apollo.useQuery<WorkPacketStatusDetailsQuery, WorkPacketStatusDetailsQueryVariables>(
     WorkPacketStatusDetailsDocument,
@@ -1283,7 +1423,7 @@ export const DashboardPeriodsDocument = gql`
  * });
  */
 export function useDashboardPeriodsQuery(
-  baseOptions?: Apollo.QueryHookOptions<DashboardPeriodsQuery, DashboardPeriodsQueryVariables>
+  baseOptions: Apollo.QueryHookOptions<DashboardPeriodsQuery, DashboardPeriodsQueryVariables>
 ) {
   return Apollo.useQuery<DashboardPeriodsQuery, DashboardPeriodsQueryVariables>(DashboardPeriodsDocument, baseOptions);
 }
@@ -1325,7 +1465,7 @@ export const BeginLoginDocument = gql`
  *   },
  * });
  */
-export function useBeginLoginQuery(baseOptions?: Apollo.QueryHookOptions<BeginLoginQuery, BeginLoginQueryVariables>) {
+export function useBeginLoginQuery(baseOptions: Apollo.QueryHookOptions<BeginLoginQuery, BeginLoginQueryVariables>) {
   return Apollo.useQuery<BeginLoginQuery, BeginLoginQueryVariables>(BeginLoginDocument, baseOptions);
 }
 export function useBeginLoginLazyQuery(
@@ -1401,4 +1541,55 @@ export type ChangeOwnPasswordPageLazyQueryHookResult = ReturnType<typeof useChan
 export type ChangeOwnPasswordPageQueryResult = Apollo.QueryResult<
   ChangeOwnPasswordPageQuery,
   ChangeOwnPasswordPageQueryVariables
+>;
+export const SystemTemplateAmGroupByNameDocument = gql`
+  query SystemTemplateAMGroupByName($name: String!) {
+    systemTemplateAMGroupByName(name: $name) {
+      id
+      name
+      description
+      tmpl
+      tmplUseAsIs
+      tmplServiceType
+    }
+  }
+`;
+
+/**
+ * __useSystemTemplateAmGroupByNameQuery__
+ *
+ * To run a query within a React component, call `useSystemTemplateAmGroupByNameQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSystemTemplateAmGroupByNameQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSystemTemplateAmGroupByNameQuery({
+ *   variables: {
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useSystemTemplateAmGroupByNameQuery(
+  baseOptions: Apollo.QueryHookOptions<SystemTemplateAmGroupByNameQuery, SystemTemplateAmGroupByNameQueryVariables>
+) {
+  return Apollo.useQuery<SystemTemplateAmGroupByNameQuery, SystemTemplateAmGroupByNameQueryVariables>(
+    SystemTemplateAmGroupByNameDocument,
+    baseOptions
+  );
+}
+export function useSystemTemplateAmGroupByNameLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<SystemTemplateAmGroupByNameQuery, SystemTemplateAmGroupByNameQueryVariables>
+) {
+  return Apollo.useLazyQuery<SystemTemplateAmGroupByNameQuery, SystemTemplateAmGroupByNameQueryVariables>(
+    SystemTemplateAmGroupByNameDocument,
+    baseOptions
+  );
+}
+export type SystemTemplateAmGroupByNameQueryHookResult = ReturnType<typeof useSystemTemplateAmGroupByNameQuery>;
+export type SystemTemplateAmGroupByNameLazyQueryHookResult = ReturnType<typeof useSystemTemplateAmGroupByNameLazyQuery>;
+export type SystemTemplateAmGroupByNameQueryResult = Apollo.QueryResult<
+  SystemTemplateAmGroupByNameQuery,
+  SystemTemplateAmGroupByNameQueryVariables
 >;

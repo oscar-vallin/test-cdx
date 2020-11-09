@@ -50,31 +50,6 @@ mutation CreateAMPolicy($policyInfo: CreateAMPolicyInput!){
     }
 }
 
-query WorkPacketStatuses($orgSid: ID!, $dateRange: DateTimeRangeInput, $filter: WorkPacketStatusFilter){
-
-    workPacketStatuses(orgSid: $orgSid, dateRange: $dateRange, filter: $filter){
-        workOrderId
-        timestamp
-        planSponsorId
-        detailsPath
-        subClientPath
-        inboundFilename
-        vendorId
-        step
-        stepStatus
-        packetStatus
-        reprocessedBy
-        reprocessAction
-        recordHighlightCount
-        recordHighlightType
-        clientFileArchivePath
-        vendorFileArchivePath
-        supplementalFilesArchivePaths
-        archiveOnly
-        hasErrors
-    }
-}
-
 query WorkPacketStatusDetails($orgSid: ID!, $workOrderID: String!){
     workPacketStatusDetails(orgSid: $orgSid, workOrderID: $workOrderID){
         workOrderID
@@ -294,16 +269,5 @@ fragment unionPasswordRule on PasswordRule{
     }
     ... on PasswordWhitespaceRule {
         allowedWhitespace
-    }
-}
-
-query SystemTemplateAMGroupByName($name: String!){
-    systemTemplateAMGroupByName(name: $name){
-        id
-        name
-        description
-        tmpl
-        tmplUseAsIs
-        tmplServiceType
     }
 }
