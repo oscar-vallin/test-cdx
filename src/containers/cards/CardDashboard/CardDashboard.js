@@ -5,9 +5,6 @@ import { ChartDonut } from '../../../components/charts/ChartDonut';
 import { StyledRow, StyledColumn, StyledTitle, StyledSubtitle, StyledValues } from './CardDashboard.styles';
 
 const CardDashboard = ({ id = '__CardDashboard', title, subtitle, value, total, color, noDataLabel, loading }) => {
-  // const value = 0;
-  // const total = 0;
-  //
   const percentage = (value ?? -1) < 0 ? 0 : (value / total) * 100;
   const leftValue = !value || value === 0 ? total : total - value;
 
