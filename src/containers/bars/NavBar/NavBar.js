@@ -27,14 +27,14 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard' }) => {
 
   // Render
   return (
-    <StyledBox id={id} sm="12">
+    <StyledBox id={id}>
       <StyledRow id={`${id}__Nav`} left>
         <StyledColumn id={`${id}__Col-Left`} sm={10} left>
           <StyledRow id={`${id}__Left-Row`} left sm={12}>
-            <StyledColumn id={`${id}__Left-Row__Logo`} sm={2} left noPadding>
+            <StyledColumn id={`${id}__Left-Row__Logo`} sm={2} noPadding>
               <StyledTitle>CDX DASHBOARD</StyledTitle>
             </StyledColumn>
-            <StyledColumn id={`${id}__Left-Row__Menu`}>
+            <StyledColumn id={`${id}__Left-Row__Menu`} sm={10}>
               <MainMenu left option={menuOptionSelected} />
             </StyledColumn>
           </StyledRow>

@@ -1,7 +1,8 @@
 import colors from './default';
 
 const fonts = {
-  SegouUI: 'Segoe UI',
+  SegoeUI: 'Segoe UI',
+  SourceSansPro: 'Source Sans Pro',
 };
 
 const fontSizes = {
@@ -19,7 +20,7 @@ const fontSizes = {
   h3: '30px',
   h4: '24px',
   h5: '20px',
-  regular: '16px',
+  regular: '16px', /* ? */
   logo: '5vh',
   logoNavBar: '1.3vw',
 };
@@ -52,20 +53,27 @@ const radius = {
   circle: '48px',
 };
 
-const margins = {
+const spacing = {
+  none: '0',
+  small: '5px', /* Third, base? */
   normal: '15px',
   double: '30px',
+  triple: '45px',
+  quadruple: '60px',
 };
 
 const boxShadows = {
-  normal: '0 19px 38px rgba(0, 0, 0, .30), 0 15px 12px rgba(0, 0, 0, .22)',
+  smallest: '0 1.6px 3.6px 0 rgba(0, 0, 0, .132), 0 0.3px 0.9px 0 rgba(0, 0, 0, .108)',
+  small: '0 3.2px 7.2px 0 rgba(0, 0, 0, .132), 0 0.6px 1.8px 0 rgba(0 0, 0, .108)',
+  normal: '0 6.4px 14.4px 0 rgba(0, 0, 0, .132), 0 1.2px 3.6px 0 rgba(0, 0, 0, .108)',
+  large: '0 25.6px 57.6px 0 rgba(0, 0, 0, .22), 0 4.8px 14.4px 0 rgba(0, 0, 0, .18)',
 };
 
 const fontStyles = {
-  normal: `normal ${fontWeights.normal} ${fontSizes.normal}/${lineHeights.normal} ${fonts.SegouUI}`,
-  logo: `normal ${fontWeights.bold} ${fontSizes.logo}/${lineHeights.normal} ${fonts.SegouUI}`,
-  link: `normal ${fontWeights.normal} ${fontSizes.normal}/${lineHeights.normal} ${fonts.SegouUI}`,
-  headerTitle: `normal ${fontWeights.bold} ${fontSizes.logoNavBar}/${lineHeights.normal} ${fonts.SegouUI}`,
+  normal: `normal ${fontWeights.normal} ${fontSizes.normal}/${lineHeights.normal} ${fonts.SegoeUI}, ${fonts.SourceSansPro}, sans-serif`,
+  logo: `normal ${fontWeights.bold} ${fontSizes.logo}/${lineHeights.normal} ${fonts.SegoeUI}, ${fonts.SourceSansPro}, sans-serif`,
+  link: `normal ${fontWeights.normal} ${fontSizes.normal}/${lineHeights.normal} ${fonts.SegoeUI}, ${fonts.SourceSansPro}, sans-serif`,
+  headerTitle: `normal ${fontWeights.bold} ${fontSizes.logoNavBar}/${lineHeights.normal} ${fonts.SegoeUI}, ${fonts.SourceSansPro}, sans-serif`,
 };
 
 export const theme = {
@@ -79,7 +87,7 @@ export const theme = {
   },
   colors,
   radius,
-  margins,
+  spacing,
   boxShadows,
   fontStyles,
 };

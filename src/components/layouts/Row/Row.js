@@ -7,7 +7,7 @@ const Row = ({
   id = '__Row',
   variant = 'normal',
   children,
-  left,
+  center,
   right,
   top,
   bottom,
@@ -21,7 +21,7 @@ const Row = ({
       id={id}
       variant={variant}
       className={getClassNames('ms-Grid-row', props)}
-      left={left}
+      center={center}
       right={right}
       top={top}
       bottom={bottom}

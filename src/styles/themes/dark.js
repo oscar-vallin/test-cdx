@@ -30,4 +30,5 @@ export default {
   processingBackground: '#d2a8e0',
   successBackground: '#DFF6DD',
   success: '#107C10',
+  textMuted: '#808080', /* TODO: Revise theme neutral colors */
 };

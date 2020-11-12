@@ -3,6 +3,8 @@ export const TABLE_NAMES = {
   DASHBOARD_ERRORS_VENDOR: 'ERRORS_VENDOR',
   DASHBOARD_TRANSMISSIONS_FILES: 'TRANSMISSIONS_FILES',
   DASHBOARD_ERRORS_FILES: 'ERRORS_FILES',
+  FILE_STATUS: 'FILE_STATUS',
+  FILE_STATUS_DETAIL_ENROLLMENT: 'DETAIL_ENROLLMENT',
 };
 
 export const TABLES = {
@@ -36,6 +38,20 @@ export const TABLES = {
       type: 'dashboard',
       title: 'Failed Files by Files',
       url: './errors',
+    },
+  },
+  DETAIL_ENROLLMENT: {
+    header: {
+      type: 'enrollment',
+      title: 'Enrollment Status',
+      url: null,
+    },
+  },
+  FILE_STATUS: {
+    header: {
+      type: 'file_status',
+      title: 'File Status',
+      url: null,
     },
   },
 };

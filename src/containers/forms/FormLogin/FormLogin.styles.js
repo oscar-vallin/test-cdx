@@ -30,7 +30,7 @@ export const StyledRowBottom = styled(LayoutRow)`
 `;
 
 export const StyledButton = styled(Button)`
-  margin-top: ${(props) => props.theme.margins.normal};
+  margin-top: ${(props) => props.theme.spacing.normal};
   width: 100%;
 `;
 

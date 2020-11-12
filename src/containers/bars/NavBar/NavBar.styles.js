@@ -13,12 +13,16 @@ export const StyledBox = styled(Box)`
 
 export const StyledRow = styled(LayoutRow)`
   && {
+    align-items: center;
+    display: flex;
     padding: 0px 8px;
   }
 `;
 
 export const StyledColumn = styled(LayoutColumn)`
   && {
+    align-items: center;
+    display: flex;
     padding: ${({ noPadding }) => (noPadding ? '0px' : '0px 8px')};
   }
 `;
@@ -41,6 +45,8 @@ export const StyledButtonProfile = styled(ButtonAction)`
 
 export const StyledButtonIcon = styled(ButtonIcon)`
   && {
+    border: none !important;
+    color: #fff !important;
     padding: 0px 8px;
     min-width: 0px;
   }

@@ -55,6 +55,7 @@ class mockAPI extends DataSource {
 
   // WorkPacketStatuses($orgSid: ID!, $dateRange: DateTimeRangeInput, $filter: WorkPacketStatusFilter){
   workPacketStatuses(orgSid, dateRange, filter) {
+    console.log('mockAPI, workPacketStatuses');
     return rawWorkPacketStatuses;
   }
 

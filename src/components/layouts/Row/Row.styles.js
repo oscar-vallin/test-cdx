@@ -3,9 +3,10 @@ import styled from 'styled-components';
 export const DivStyled = styled.div`
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   justify-content: ${(props) =>
-    props.left
-      ? 'flex-start'
+    props.center
+      ? 'center'
       : props.right
       ? 'flex-end'
       : props.around
@@ -14,6 +15,8 @@ export const DivStyled = styled.div`
       ? 'space-evenly'
       : props.between
       ? 'space-beween'
-      : 'center'};
-  align-items: ${(props) => (props.top ? 'flex-start' : props.bottom ? 'flex-end' : 'center')};
+      : 'flex-start'
+  };
+  align-items: ${(props) => (props.center ? 'center' : props.bottom ? 'flex-end' : 'flex-start')};
+  width: 100%;
 `;

@@ -22,12 +22,16 @@ export default {
   black: '#121829',
   white: '#fefefe',
   navbar: '#0078D4',
-  errorBackground: '#FDE7E9',
   error: '#A80000',
+  errorBackground: '#FDE7E9',
   warning: '#D83B01',
   warningBackground: '#FED9CC',
   processing: '#A333C8',
   processingBackground: '#d2a8e0',
-  successBackground: '#DFF6DD',
   success: '#107C10',
+  successBackground: '#DFF6DD',
+  info: '#005A9E',
+  infoBackground: '#C7E0F4',
+  severeError: '#FA4100',
+  textMuted: '#808080', /* TODO: Revise theme neutral colors */
 };

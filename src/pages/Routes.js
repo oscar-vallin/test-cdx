@@ -12,6 +12,7 @@ import { ErrorsPage } from './Errors';
 import { AdminPage } from './Admin';
 import { NotFoundPage } from './NotFound';
 import { FileStatusPage } from './FileStatus';
+import { FileStatusDetailsPage } from './FileStatusDetails';
 
 export const Routes = () => {
   return (
@@ -21,6 +22,9 @@ export const Routes = () => {
       </Route>
       <Route path={ROUTES.ROUTE_DASHBOARD.URL}>
         <DashboardPage />
+      </Route>
+      <Route path={ROUTES.ROUTE_FILE_STATUS_DETAILS.URL}>
+        <FileStatusDetailsPage />
       </Route>
       <Route path={ROUTES.ROUTE_FILE_STATUS.URL}>
         <FileStatusPage />
