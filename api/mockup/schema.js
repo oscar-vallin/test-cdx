@@ -29,9 +29,11 @@ module.exports = gql`
 
   type LoginStep {
     userId: String!
-    step: Int!
+    step: LoginStepType!
     redirectPath: String
     allowLostPassword: Boolean
+    loginCompletePage: LoginCompletePage
+    tokenUser: TokenUser
   }
 
   type PasswordPage {
@@ -78,6 +80,25 @@ module.exports = gql`
     orgId: ID!
     userId: String!
     defaultAuthorities: [String]
+  }
+
+  enum LoginStepType {
+    USERNAME
+    PASSWORD
+    COMPLETE
+    #SSO_REDIRECT
+    #TOTP
+  }
+
+  enum LoginCompletePage {
+    WP_STATUS
+    ORG_ACTIVITY
+    ORG_LIST
+  }
+
+  input AMPasswordConfigInput {
+    allowForgotten: Boolean
+    orgUnitOwner: ID
   }
 
   type User {
@@ -284,7 +305,7 @@ module.exports = gql`
     | PasswordRuleGroup
 
   type WorkPacketStatusDetails {
-    workOrderID: String!
+    workOrderId: String!
     specId: String
     specImplName: String
     fingerPrint: String
@@ -293,6 +314,9 @@ module.exports = gql`
     workStepStatus: [WorkStepStatus]
     extractParameters: ExtractParameters
     qualityChecks: QualityChecks
+    enrollmentStats: EnrollmentStat
+    inboundEnrollmentStats: EnrollmentStat
+    outboundEnrollmentStats: EnrollmentStat
   }
 
   type DeliveredFile {
@@ -416,5 +440,39 @@ module.exports = gql`
     secondaryDescr: String
     count: Int
     total: Int
+  }
+
+  type EnrollmentStat {
+    insuredStat: InsuredStat
+    excludedInsuredStat: InsuredStat
+    excludedPlanInsuredStat: [PlanInsuredStat]
+    planInsuredStat: [PlanInsuredStat]
+  }
+
+  type InsuredStat {
+    subscribers: InsuredStatCount
+    dependents: InsuredStatCount
+  }
+
+  type PlanInsuredStat {
+    planCode: String
+    planType: String
+
+    subscribers: InsuredStatCount
+    dependents: InsuredStatCount
+  }
+
+  type InsuredStatCount {
+    active: StatInt
+    ended: StatInt
+    expectedTotal: Int
+    inTolerance: Boolean
+    toleranceMsg: String
+    hold: Boolean
+  }
+
+  type StatInt {
+    prior: Int
+    value: Int
   }
 `;

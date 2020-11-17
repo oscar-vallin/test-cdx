@@ -1,68 +1,24 @@
 type Query {
   beginLogin(userId: String!): LoginStep
-  changeOwnPasswordPage: PasswordPage
-  workPacketStatusDetails(orgSid: ID!, workOrderID: String!): WorkPacketStatusDetails
+  workPacketStatusDetails(orgSid: ID!, workOrderId: String!): WorkPacketStatusDetails
   workPacketStatuses(orgSid: ID!, dateRange: DateTimeRangeInput, filter: WorkPacketStatusFilter): [WorkPacketStatus]
   dashboardPeriods(orgSid: ID!): DashboardPeriods
-  systemTemplateAMGroupByName(name: String!): [AMGroup]
 }
 
 type Mutation {
-  passwordLogin(userId: String!, password: String!): TokenUser
-  createOrg(orgInfo: CreateOrgInput!): Organization
-  createUser(userInfo: CreateUserInput!, personInfo: CreatePersonInput!): User
-  createAMPolicy(policyInfo: CreateAMPolicyInput!): AMPolicy
-  createAMGroup(amGroupInfo: CreateAMGroupInput!): AMGroup
+  passwordLogin(userId: String!, password: String!): LoginStep
 }
 
 scalar DateTime
 scalar Date
 
-type Organization {
-  id: ID
-  orgId: String!
-  orgType: OrgType!
-}
-
 type LoginStep {
   userId: String!
-  step: Int!
+  step: LoginStepType!
   redirectPath: String
   allowLostPassword: Boolean
-}
-
-type PasswordPage {
-  ruleGroup: PasswordRuleGroup!
-}
-
-type PasswordRuleGroup {
-  """
-  number of rule predicates that must be true for the group to pass
-  if numberOfCharacteristics is omitted all rules are required
-  """
-  numberOfCharacteristics: Int
-  """
-  list of rules or rule sub groups
-  """
-  rules: [PasswordRule]
-}
-
-type PasswordLengthRule {
-  minLength: Int
-  maxLength: Int
-}
-
-type PasswordWhitespaceRule {
-  allowedWhitespace: WhitespaceRuleType
-}
-
-type PasswordCharacterRule {
-  characterType: PasswordCharacterType
-  numberOfCharacters: Int
-}
-
-type PasswordStrengthRule {
-  requiredStrengthLevel: Int!
+  loginCompletePage: LoginCompletePage
+  tokenUser: TokenUser
 }
 
 type TokenUser {
@@ -77,135 +33,23 @@ type UserSession {
   defaultAuthorities: [String]
 }
 
-type User {
-  id: ID!
-  email: String!
-  person: Person
+enum LoginStepType {
+  USERNAME
+  PASSWORD
+  COMPLETE
+  #SSO_REDIRECT
+  #TOTP
 }
 
-type Person {
-  id: ID!
-  firstNm: String!
-  lastNm: String
+enum LoginCompletePage {
+  WP_STATUS
+  ORG_ACTIVITY
+  ORG_LIST
 }
 
-type WorkPacketStatus {
-  workOrderId: String!
-  timestamp: DateTime!
-  planSponsorId: String
-  detailsPath: String
-  subClientPath: String
-  inboundFilename: String!
-  vendorId: String
-  step: Int!
-  stepStatus: String!
-  packetStatus: String!
-  reprocessedBy: String
-  reprocessAction: Int
-  recordHighlightCount: Int
-  recordHighlightType: String
-  clientFileArchivePath: String
-  vendorFileArchivePath: String
-  supplementalFilesArchivePaths: [String]
-  archiveOnly: Boolean
-  hasErrors: Boolean
-}
-
-"""
-type ZonedDateTime {
-    formatString(format: String!): String
-    iso: String
-}
-
-type Date {
-    formatString(format: String!): String
-    iso: String
-}
-"""
-type AMGroup {
-  id: ID
-  name: String!
-  description: String
-  tmpl: Boolean
-  tmplUseAsIs: Boolean
-  tmplServiceType: CDXService
-  policies: [AMPolicy]
-}
-
-type AMPolicy {
-  id: ID
-  name: String!
-  permissions: [AMPermission]
-  tmpl: Boolean
-  tmplUseAsIs: Boolean
-  tmplServiceType: CDXService
-}
-
-type AMPermission {
-  id: ID
-  effect: PermissionEffect!
-  actions: [AMPermissionAction]
-  predicate: PermissionPredicate
-  predVar1: String
-  predParam1: String
-}
-
-type AMPermissionAction {
-  id: ID
-  service: CDXService!
-  facet: CDXFacet!
-  verb: PermissionVerb!
-}
-
-input CreateAMGroupInput {
-  name: String!
-  description: String
-  tmpl: Boolean
-  tmplUseAsIs: Boolean
-  tmplServiceType: CDXService
-  policyIds: [ID]
-}
-
-input CreateAMPolicyInput {
-  name: String!
-  orgOwnerId: ID!
-  permissions: [CreateAMPermissionInput]
-  tmpl: Boolean
-  tmplUseAsIs: Boolean
-  tmplServiceType: CDXService
-}
-
-input CreateAMPermissionInput {
-  effect: PermissionEffect!
-  actions: [CreateAMPermissionActionInput]
-  predicate: PermissionPredicate
-  predVar1: String
-  predParam1: String
-}
-
-input CreateAMPermissionActionInput {
-  service: CDXService!
-  facet: CDXFacet!
-  verb: PermissionVerb!
-}
-
-input CreateOrgInput {
-  orgId: String!
-  orgName: String!
-  orgType: OrgType!
-  orgOwnerId: ID
-}
-
-input CreateUserInput {
-  email: String!
-  password: String
-  orgOwnerId: ID!
-  groupIds: [ID]
-}
-
-input CreatePersonInput {
-  firstNm: String!
-  lastNm: String
+input AMPasswordConfigInput {
+  allowForgotten: Boolean
+  orgUnitOwner: ID
 }
 
 input DateTimeRangeInput {
@@ -213,75 +57,8 @@ input DateTimeRangeInput {
   rangeEnd: DateTime!
 }
 
-"""
-input DateRangeInput{
-    rangeStart: Date!
-    rangeEnd: Date!
-    timeZone: String
-}
-"""
-input WorkPacketStatusFilter {
-  excludedEnvs: [String]
-}
-
-enum OrgType {
-  INTEGRATION_SPONSOR
-  INTEGRATION_PLATFORM
-}
-
-enum WhitespaceRuleType {
-  NONE
-}
-
-enum PasswordCharacterType {
-  UPPER_CASE
-  LOWER_CASE
-  DIGIT
-  SPECIAL
-}
-
-enum PermissionEffect {
-  ALLOW
-  DENY
-}
-
-enum PermissionPredicate {
-  NOT_KNTU_ENV
-  STRING_EQUALS_IGNORE_CASE
-  STRING_NOT_EQUALS_IGNORE_CASE
-}
-
-enum CDXService {
-  CDX
-  INTEGRATION
-}
-
-enum CDXFacet {
-  ALL
-  ARCHIVE
-  STATUS
-}
-
-enum PermissionVerb {
-  ALL
-  CREATE
-  READ
-  UPDATE
-  DELETE
-  LIST
-  DOWNLOAD
-  RESTART
-}
-
-union PasswordRule =
-    PasswordLengthRule
-  | PasswordWhitespaceRule
-  | PasswordCharacterRule
-  | PasswordStrengthRule
-  | PasswordRuleGroup
-
 type WorkPacketStatusDetails {
-  workOrderID: String!
+  workOrderId: String!
   specId: String
   specImplName: String
   fingerPrint: String
@@ -290,6 +67,9 @@ type WorkPacketStatusDetails {
   workStepStatus: [WorkStepStatus]
   extractParameters: ExtractParameters
   qualityChecks: QualityChecks
+  enrollmentStats: EnrollmentStat
+  inboundEnrollmentStats: EnrollmentStat
+  outboundEnrollmentStats: EnrollmentStat
 }
 
 type DeliveredFile {
@@ -413,4 +193,64 @@ type DashboardPeriodCount {
   secondaryDescr: String
   count: Int
   total: Int
+}
+
+input WorkPacketStatusFilter {
+  excludedEnvs: [String]
+}
+
+type WorkPacketStatus {
+  workOrderId: String!
+  timestamp: DateTime!
+  planSponsorId: String
+  detailsPath: String
+  subClientPath: String
+  inboundFilename: String!
+  vendorId: String
+  step: Int!
+  stepStatus: String!
+  packetStatus: String!
+  reprocessedBy: String
+  reprocessAction: Int
+  recordHighlightCount: Int
+  recordHighlightType: String
+  clientFileArchivePath: String
+  vendorFileArchivePath: String
+  supplementalFilesArchivePaths: [String]
+  archiveOnly: Boolean
+  hasErrors: Boolean
+}
+
+type EnrollmentStat {
+  insuredStat: InsuredStat
+  excludedInsuredStat: InsuredStat
+  excludedPlanInsuredStat: [PlanInsuredStat]
+  planInsuredStat: [PlanInsuredStat]
+}
+
+type InsuredStat {
+  subscribers: InsuredStatCount
+  dependents: InsuredStatCount
+}
+
+type PlanInsuredStat {
+  planCode: String
+  planType: String
+
+  subscribers: InsuredStatCount
+  dependents: InsuredStatCount
+}
+
+type InsuredStatCount {
+  active: StatInt
+  ended: StatInt
+  expectedTotal: Int
+  inTolerance: Boolean
+  toleranceMsg: String
+  hold: Boolean
+}
+
+type StatInt {
+  prior: Int
+  value: Int
 }

@@ -8,7 +8,9 @@ const rawToken = require('../data/rawToken.json');
 const rawFiles = require('../data/rawFiles.json');
 const rawDashboard = require('../data/rawDashboard.json');
 const rawWorkPacketStatuses = require('../data/rawWorkPacketStatuses.json');
-const rawWorkPacketStatusDetails = require('../data/rawWorkPacketStatusDetails.json');
+const rawWorkPacketStatusDetails1 = require('../data/rawStatusDetail1.json');
+const rawWorkPacketStatusDetails2 = require('../data/rawStatusDetail2.json');
+const rawWorkPacketStatusDetails3 = require('../data/rawStatusDetail3.json');
 
 const UPDATE_STATUS = 'UPDATE_STATUS';
 
@@ -60,8 +62,17 @@ class mockAPI extends DataSource {
   }
 
   // WorkPacketStatuses($orgSid: ID!, $dateRange: DateTimeRangeInput, $filter: WorkPacketStatusFilter){
-  workPacketStatusDetails(orgSid, dateRange, filter) {
-    return rawWorkPacketStatusDetails;
+  workPacketStatusDetails(orgSid, workOrderID) {
+    const result =
+      workOrderID === '1'
+        ? rawWorkPacketStatusDetails2
+        : workOrderID === '2'
+        ? rawWorkPacketStatusDetails3
+        : rawWorkPacketStatusDetails1;
+
+    console.log({ resu: result.data.workPacketStatusDetails });
+
+    return result.data.workPacketStatusDetails;
   }
 
   fileUpdate(pubsub, id, name, status) {

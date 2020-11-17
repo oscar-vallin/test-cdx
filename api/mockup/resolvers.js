@@ -38,7 +38,11 @@ module.exports = {
 
     workPacketStatusDetails: (parent, args, { dataSources }, info) => {
       console.log('WorkPacket Status Details List...', Date.now());
-      return dataSources.mockAPI.workPacketStatusDetails(args.orgSid, args.workOrderID).workPacketStatusDetails;
+      const resultResolver = dataSources.mockAPI.workPacketStatusDetails(args.orgSid, args.workOrderID);
+
+      console.log({ resultResolver });
+
+      return resultResolver;
     },
   },
   Mutation: {

@@ -13,6 +13,7 @@ import {
 import { StyledText, StyledContainer, StyledCell, StyledSpecs } from './Table.styles';
 
 import { TableHeader } from '../TableHeader';
+import { FileProgress } from '../../../containers/bars/FileProgress';
 
 const _buildColumns = (
   items,
@@ -35,6 +36,14 @@ const _buildColumns = (
   columns.forEach((column) => {
     column.onColumnContextMenu = onColumnContextMenu;
     column.ariaLabel = `Operations for ${column.name}`;
+
+    // if (column.key[0] === '_') {
+    //   console.log('SkipColumn');
+    //   columns.splice(column, 1);
+
+    //   return;
+    // }
+
     if (column.key === 'thumbnail') {
       column.iconName = 'Picture';
       column.isIconOnly = true;
@@ -43,6 +52,10 @@ const _buildColumns = (
       column.minWidth = 200;
     } else if (column.key === 'name') {
       // column.onRender = (item) => <Link data-selection-invoke>{item.name}</Link>;
+    } else if (column.key === 'progress') {
+      // column.onRender = (item) => <Link data-selection-invoke>{item.name}</Link>;
+      column.minWidth = 270;
+      column.maxWidth = 270;
     } else if (column.key === 'key') {
       column.columnActionsMode = ColumnActionsMode.disabled;
       column.onRender = (item) => (
@@ -54,6 +67,8 @@ const _buildColumns = (
       column.maxWidth = 90;
     }
   });
+
+  console.log({ columns });
 
   return columns;
 };
@@ -82,6 +97,7 @@ const Table = ({ items, structure, onOption }) => {
 
   const _renderItemColumn = (item, index, column) => {
     const fieldContent = item[column.fieldName];
+    // console.log({ itemsRender: items });
 
     switch (column.key) {
       case 'bus':
@@ -94,6 +110,9 @@ const Table = ({ items, structure, onOption }) => {
             {item.specs && <StyledSpecs>{`specs: ${item.specs}`}</StyledSpecs>}
           </StyledCell>
         );
+
+      case 'progress':
+        return <FileProgress stringValues={item.progress} />;
 
       case 'color':
         return (

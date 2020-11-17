@@ -1,0 +1,1190 @@
+{
+  "data": {
+    "workPacketStatusDetails": {
+      "workOrderId": "2020-11-04-073218354m2ro01",
+      "specId": "EligibilityEnrollmentLADE",
+      "specImplName": "EligibilityEnrollmentLADETestImpl.xqm",
+      "fingerPrint": "ADENA-Cigna-Elig-TESTCignaEligibilityEnrollmentLADEEligibilityEnrollmentLADEImpl",
+      "suppressBilling": null,
+      "workStepStatus": [
+        {
+          "stepStatus": null,
+          "stepName": "K2U Extract Processing",
+          "stepType": null,
+          "populationCount": null,
+          "transformedArchiveFile": {
+            "value": "ADENA/CIGNA/2020/11/13/ADENA-Cigna-Elig-TEST/4b129aa8ce32de79770e97c1ff61e03bbeacbf6a5369182b48b3bdd629bfba21/01/khrxml.xml.zip"
+          },
+          "stepFile": [
+            {
+              "value": "ADENA/CIGNA/2020/11/13/ADENA-Cigna-Elig-TEST/4b129aa8ce32de79770e97c1ff61e03bbeacbf6a5369182b48b3bdd629bfba21/01/K2U Extract Processing-khcm.xml.zip"
+            },
+            {
+              "value": "ADENA/CIGNA/2020/11/13/ADENA-Cigna-Elig-TEST/4b129aa8ce32de79770e97c1ff61e03bbeacbf6a5369182b48b3bdd629bfba21/01/K2U Extract Processing-validation.xlsx.zip"
+            }
+          ],
+          "nvp": [
+            {
+              "name": "khcm:version",
+              "value": "1.33.2.2020-08-20-22174954"
+            },
+            {
+              "name": "khcm:feed",
+              "value": "Enrollment and Census"
+            }
+          ],
+          "recordCounts": null
+        },
+        {
+          "stepStatus": null,
+          "stepName": "EnrollmentStats",
+          "stepType": "Analysis",
+          "populationCount": null,
+          "transformedArchiveFile": null,
+          "stepFile": [],
+          "nvp": [],
+          "recordCounts": null
+        },
+        {
+          "stepStatus": null,
+          "stepName": "Semantic Map",
+          "stepType": "SemanticMap",
+          "populationCount": {
+            "value": 3328
+          },
+          "transformedArchiveFile": {
+            "value": "ADENA/CIGNA/2020/11/13/ADENA-Cigna-Elig-TEST/4b129aa8ce32de79770e97c1ff61e03bbeacbf6a5369182b48b3bdd629bfba21/01/spec.xml.zip"
+          },
+          "stepFile": [],
+          "nvp": [],
+          "recordCounts": {
+            "totalCount": 3330,
+            "showUser": true,
+            "recordCount": [
+              {
+                "name": "Header",
+                "count": 1
+              },
+              {
+                "name": "Enrollment",
+                "count": 3328
+              },
+              {
+                "name": "Trailer",
+                "count": 1
+              }
+            ]
+          }
+        },
+        {
+          "stepStatus": null,
+          "stepName": "FlatFile",
+          "stepType": "FlatFile",
+          "populationCount": null,
+          "transformedArchiveFile": null,
+          "stepFile": [],
+          "nvp": [],
+          "recordCounts": null
+        }
+      ],
+      "deliveredFile": {
+        "filename": "LBL1000__lbl0002i.72328.11132020.txt",
+        "fileSizeInBytes": 9993330,
+        "textSizeInBytes": 9993330,
+        "timeDelivered": "2020-11-13T08:52:30.297-05:00",
+        "ftp": {
+          "protocol": "sftp",
+          "host": "sftp-b2bgateway.sys.cigna.com",
+          "username": "cig_knontou",
+          "folder": "/Outbox",
+          "port": null
+        },
+        "kcurl": null
+      },
+      "extractParameters": {
+        "originalParameter": [
+          {
+            "label": null,
+            "name": "Include Assignment History:",
+            "value": ["Yes"]
+          },
+          {
+            "label": null,
+            "name": "Person Type:",
+            "value": ["Employee"]
+          },
+          {
+            "label": null,
+            "name": "Implicit Spouse Enroll:",
+            "value": ["No"]
+          },
+          {
+            "label": null,
+            "name": "Version:",
+            "value": ["1.33.2.2020-08-20-22174954"]
+          },
+          {
+            "label": null,
+            "name": "Effective From Date:",
+            "value": ["2020-01-01"]
+          },
+          {
+            "label": null,
+            "name": "Feed Type:",
+            "value": ["Enrollment and Census"]
+          },
+          {
+            "label": null,
+            "name": "Enroll Termination Events To Include:",
+            "value": ["NONE"]
+          },
+          {
+            "label": null,
+            "name": "Include Waived Enrollments:",
+            "value": ["No"]
+          },
+          {
+            "label": null,
+            "name": "Life Events Processed On Or After:",
+            "value": ["2020-01-01"]
+          },
+          {
+            "label": null,
+            "name": "Implicit Child Enroll:",
+            "value": ["No"]
+          },
+          {
+            "label": null,
+            "name": "Include EE Elections if Anyone Requires EOI:",
+            "value": ["No"]
+          },
+          {
+            "label": null,
+            "name": "Plan Name:",
+            "value": ["Basic Long-Term Disability", "Short-Term Disability", "Supplemental Long-Term Disability"]
+          },
+          {
+            "label": null,
+            "name": "Report Run Date:",
+            "value": ["2020-11-05 14:03:09"]
+          },
+          {
+            "label": null,
+            "name": "Legal Entity:",
+            "value": [
+              "Adena Care Inc.",
+              "Adena DME Home Infusion & Respiratory Care",
+              "LLC",
+              "Adena Health Foundation",
+              "Adena Health System",
+              "Adena Healthcare Collaborative",
+              "LLC",
+              "Adena Home Health",
+              "LLC",
+              "Adena Hospice",
+              "LLC",
+              "Adena Medical Group",
+              "LLC",
+              "Adena Pharmacy",
+              "LLC",
+              "Greenfield Area Medical Center",
+              "Pike Health Services",
+              "Inc",
+              "Southern Ohio Healthcare Network",
+              "Inc."
+            ]
+          },
+          {
+            "label": null,
+            "name": "Effective To Date:",
+            "value": ["2021-12-31"]
+          }
+        ],
+        "overriddenParameter": [],
+        "derivedParameter": [
+          {
+            "label": null,
+            "name": "fileType",
+            "value": ["psv"]
+          },
+          {
+            "label": null,
+            "name": "delimiter",
+            "value": ["|"]
+          },
+          {
+            "label": null,
+            "name": "delimiterQualifier",
+            "value": ["\""]
+          },
+          {
+            "label": null,
+            "name": "delimitedFileHeaderIndex",
+            "value": ["44"]
+          }
+        ]
+      },
+      "qualityChecks": {
+        "sequenceCreationEvent": [
+          {
+            "context": "Heather Schmidt",
+            "unitId": "75985",
+            "recordCreationEvent": [
+              {
+                "context": null,
+                "outerContext": "Heather Schmidt",
+                "unitId": "75985",
+                "error": [],
+                "warning": [],
+                "information": [
+                  {
+                    "message": ["Truncatable(R) over max length of: 35 Actual Length: 36"],
+                    "name": "EmployeeMailAddress1",
+                    "id": "Enrollment.EmployeeMailAddress1",
+                    "value": "271 Saint Anthonys Lane Apartment 3",
+                    "rawValue": "271 Saint Anthonys Lane Apartment 30",
+                    "type": "Trunc"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "context": "Celesta Renfro",
+            "unitId": "76058",
+            "recordCreationEvent": [
+              {
+                "context": null,
+                "outerContext": "Celesta Renfro",
+                "unitId": "76058",
+                "error": [],
+                "warning": [],
+                "information": [
+                  {
+                    "message": ["Truncatable(R) over max length of: 35 Actual Length: 36"],
+                    "name": "EmployeeMailAddress1",
+                    "id": "Enrollment.EmployeeMailAddress1",
+                    "value": "617 South Market Street Apartment 1",
+                    "rawValue": "617 South Market Street Apartment 10",
+                    "type": "Trunc"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "enrollmentStats": {
+        "insuredStat": {
+          "subscribers": {
+            "active": {
+              "prior": null,
+              "value": 3328
+            },
+            "ended": {
+              "prior": null,
+              "value": 0
+            },
+            "expectedTotal": null,
+            "inTolerance": null,
+            "toleranceMsg": null,
+            "hold": null
+          },
+          "dependents": {
+            "active": {
+              "prior": null,
+              "value": 0
+            },
+            "ended": {
+              "prior": null,
+              "value": 0
+            },
+            "expectedTotal": null,
+            "inTolerance": null,
+            "toleranceMsg": null,
+            "hold": null
+          }
+        },
+        "excludedInsuredStat": null,
+        "excludedPlanInsuredStat": [],
+        "planInsuredStat": [
+          {
+            "subscribers": {
+              "active": {
+                "prior": null,
+                "value": 3328
+              },
+              "ended": {
+                "prior": null,
+                "value": 0
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            },
+            "dependents": {
+              "active": {
+                "prior": null,
+                "value": 0
+              },
+              "ended": {
+                "prior": null,
+                "value": 0
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            }
+          },
+          {
+            "subscribers": {
+              "active": {
+                "prior": null,
+                "value": 3328
+              },
+              "ended": {
+                "prior": null,
+                "value": 0
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            },
+            "dependents": {
+              "active": {
+                "prior": null,
+                "value": 0
+              },
+              "ended": {
+                "prior": null,
+                "value": 0
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            }
+          },
+          {
+            "subscribers": {
+              "active": {
+                "prior": null,
+                "value": 3114
+              },
+              "ended": {
+                "prior": null,
+                "value": 0
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            },
+            "dependents": {
+              "active": {
+                "prior": null,
+                "value": 0
+              },
+              "ended": {
+                "prior": null,
+                "value": 0
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            }
+          }
+        ]
+      },
+      "inboundEnrollmentStats": {
+        "insuredStat": {
+          "subscribers": {
+            "active": {
+              "prior": null,
+              "value": 3328
+            },
+            "ended": {
+              "prior": null,
+              "value": 0
+            },
+            "expectedTotal": null,
+            "inTolerance": null,
+            "toleranceMsg": null,
+            "hold": null
+          },
+          "dependents": {
+            "active": {
+              "prior": null,
+              "value": 0
+            },
+            "ended": {
+              "prior": null,
+              "value": 0
+            },
+            "expectedTotal": null,
+            "inTolerance": null,
+            "toleranceMsg": null,
+            "hold": null
+          }
+        },
+        "excludedInsuredStat": null,
+        "excludedPlanInsuredStat": [],
+        "planInsuredStat": [
+          {
+            "subscribers": {
+              "active": {
+                "prior": null,
+                "value": 3328
+              },
+              "ended": {
+                "prior": null,
+                "value": 0
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            },
+            "dependents": {
+              "active": {
+                "prior": null,
+                "value": 0
+              },
+              "ended": {
+                "prior": null,
+                "value": 0
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            }
+          },
+          {
+            "subscribers": {
+              "active": {
+                "prior": null,
+                "value": 3328
+              },
+              "ended": {
+                "prior": null,
+                "value": 0
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            },
+            "dependents": {
+              "active": {
+                "prior": null,
+                "value": 0
+              },
+              "ended": {
+                "prior": null,
+                "value": 0
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            }
+          },
+          {
+            "subscribers": {
+              "active": {
+                "prior": null,
+                "value": 3114
+              },
+              "ended": {
+                "prior": null,
+                "value": 0
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            },
+            "dependents": {
+              "active": {
+                "prior": null,
+                "value": 0
+              },
+              "ended": {
+                "prior": null,
+                "value": 0
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            }
+          }
+        ]
+      },
+      "outboundEnrollmentStats": {
+        "insuredStat": {
+          "subscribers": {
+            "active": {
+              "prior": null,
+              "value": 3328
+            },
+            "ended": {
+              "prior": null,
+              "value": 0
+            },
+            "expectedTotal": null,
+            "inTolerance": null,
+            "toleranceMsg": null,
+            "hold": null
+          },
+          "dependents": {
+            "active": {
+              "prior": null,
+              "value": 0
+            },
+            "ended": {
+              "prior": null,
+              "value": 0
+            },
+            "expectedTotal": null,
+            "inTolerance": null,
+            "toleranceMsg": null,
+            "hold": null
+          }
+        },
+        "excludedInsuredStat": null,
+        "excludedPlanInsuredStat": [],
+        "planInsuredStat": [
+          {
+            "subscribers": {
+              "active": {
+                "prior": null,
+                "value": 3328
+              },
+              "ended": {
+                "prior": null,
+                "value": 0
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            },
+            "dependents": {
+              "active": {
+                "prior": null,
+                "value": 0
+              },
+              "ended": {
+                "prior": null,
+                "value": 0
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            }
+          },
+          {
+            "subscribers": {
+              "active": {
+                "prior": null,
+                "value": 3328
+              },
+              "ended": {
+                "prior": null,
+                "value": 0
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            },
+            "dependents": {
+              "active": {
+                "prior": null,
+                "value": 0
+              },
+              "ended": {
+                "prior": null,
+                "value": 0
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            }
+          },
+          {
+            "subscribers": {
+              "active": {
+                "prior": null,
+                "value": 3114
+              },
+              "ended": {
+                "prior": null,
+                "value": 0
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            },
+            "dependents": {
+              "active": {
+                "prior": null,
+                "value": 0
+              },
+              "ended": {
+                "prior": null,
+                "value": 0
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            }
+          }
+        ]
+      }
+    }
+  }
+}
+{
+  "data": {
+    "workPacketStatusDetails": {
+      "workOrderId": "2020-11-04-080537912sgwu01",
+      "specId": "600ByteSpring2015",
+      "specImplName": "600ByteSpring2015Impl.xqm",
+      "fingerPrint": "SMSN-VSP-PRODVSP600ByteSpring2015600ByteSpring2015Impl",
+      "suppressBilling": null,
+      "workStepStatus": [
+        {
+          "stepStatus": null,
+          "stepName": "K2U Extract Processing",
+          "stepType": null,
+          "populationCount": null,
+          "transformedArchiveFile": {
+            "value": "SMSN/VSP/2020/11/13/SMSN-VSP-PROD/093c6cb7c1324e98474755bbc3999d297ee3c70d2b2d6a644b045380234b62ec/01/khrxml.xml.zip"
+          },
+          "stepFile": [
+            {
+              "value": "SMSN/VSP/2020/11/13/SMSN-VSP-PROD/093c6cb7c1324e98474755bbc3999d297ee3c70d2b2d6a644b045380234b62ec/01/K2U Extract Processing-khcm.xml.zip"
+            },
+            {
+              "value": "SMSN/VSP/2020/11/13/SMSN-VSP-PROD/093c6cb7c1324e98474755bbc3999d297ee3c70d2b2d6a644b045380234b62ec/01/K2U Extract Processing-validation.xlsx.zip"
+            }
+          ],
+          "nvp": [
+            {
+              "name": "khcm:version",
+              "value": "1.25.0.2020-03-03-191345588"
+            },
+            {
+              "name": "khcm:feed",
+              "value": "Enrollment"
+            }
+          ],
+          "recordCounts": null
+        },
+        {
+          "stepStatus": null,
+          "stepName": "EnrollmentStats",
+          "stepType": "Analysis",
+          "populationCount": null,
+          "transformedArchiveFile": null,
+          "stepFile": [],
+          "nvp": [],
+          "recordCounts": null
+        },
+        {
+          "stepStatus": "qcfail",
+          "stepName": "EnrollStatAnalysis",
+          "stepType": "Analysis",
+          "populationCount": null,
+          "transformedArchiveFile": null,
+          "stepFile": [],
+          "nvp": [],
+          "recordCounts": null
+        }
+      ],
+      "deliveredFile": null,
+      "extractParameters": {
+        "originalParameter": [
+          {
+            "label": null,
+            "name": "Drop Terminated Coverages after X days:",
+            "value": [
+              "7"
+            ]
+          },
+          {
+            "label": null,
+            "name": "Include Assignment History:",
+            "value": [
+              "Yes"
+            ]
+          },
+          {
+            "label": null,
+            "name": "Person Type:",
+            "value": [
+              "Employee"
+            ]
+          },
+          {
+            "label": null,
+            "name": "Implicit Spouse Enroll:",
+            "value": [
+              "No"
+            ]
+          },
+          {
+            "label": null,
+            "name": "Version:",
+            "value": [
+              "1.25.0.2020-03-03-191345588"
+            ]
+          },
+          {
+            "label": null,
+            "name": "Suppress Coverages Effective X Days In The Future:",
+            "value": [
+              "1"
+            ]
+          },
+          {
+            "label": null,
+            "name": "Effective From Date:",
+            "value": [
+              "2020-01-01"
+            ]
+          },
+          {
+            "label": null,
+            "name": "Feed Type:",
+            "value": [
+              "Enrollment"
+            ]
+          },
+          {
+            "label": null,
+            "name": "Enroll Termination Events To Include:",
+            "value": [
+              "NONE"
+            ]
+          },
+          {
+            "label": null,
+            "name": "Include Waived Enrollments:",
+            "value": [
+              "No"
+            ]
+          },
+          {
+            "label": null,
+            "name": "Life Events Processed On Or After:",
+            "value": [
+              "2020-01-01"
+            ]
+          },
+          {
+            "label": null,
+            "name": "Implicit Child Enroll:",
+            "value": [
+              "No"
+            ]
+          },
+          {
+            "label": null,
+            "name": "Implicit Child Plans:",
+            "value": [
+              "Samsonite - Supplemental Life Insurance - Children",
+              "eBags - Supplemental Life Insurance - Children"
+            ]
+          },
+          {
+            "label": null,
+            "name": "Plan Name:",
+            "value": [
+              "Samsonite - Vision",
+              "Tumi - Vision",
+              "eBags - Vision"
+            ]
+          },
+          {
+            "label": null,
+            "name": "Report Run Date:",
+            "value": [
+              "2020-11-13 15:01:43"
+            ]
+          },
+          {
+            "label": null,
+            "name": "Implicit Spouse Plans:",
+            "value": [
+              "Samsonite Supplemental Life Insurance - Spouse",
+              "eBags - Supplemental Life Insurance - Spouse"
+            ]
+          },
+          {
+            "label": null,
+            "name": "Legal Entity:",
+            "value": [
+              "Direct Marketing Ventures",
+              "LLC",
+              "Samsonite Company Stores",
+              "LLC",
+              "Samsonite LLC",
+              "Tumi Stores",
+              "Inc.",
+              "Tumi",
+              "Inc.",
+              "eBags",
+              "LLC"
+            ]
+          },
+          {
+            "label": null,
+            "name": "Suppress Coverage Termination Dates X Days In The Future:",
+            "value": [
+              "1"
+            ]
+          },
+          {
+            "label": null,
+            "name": "Effective To Date:",
+            "value": [
+              "2020-12-31"
+            ]
+          }
+        ],
+        "overriddenParameter": [],
+        "derivedParameter": [
+          {
+            "label": null,
+            "name": "fileType",
+            "value": [
+              "psv"
+            ]
+          },
+          {
+            "label": null,
+            "name": "delimiter",
+            "value": [
+              "|"
+            ]
+          },
+          {
+            "label": null,
+            "name": "delimiterQualifier",
+            "value": [
+              "\""
+            ]
+          },
+          {
+            "label": null,
+            "name": "delimitedFileHeaderIndex",
+            "value": [
+              "40"
+            ]
+          }
+        ]
+      },
+      "qualityChecks": null,
+      "enrollmentStats": {
+        "insuredStat": {
+          "subscribers": {
+            "active": {
+              "prior": 748,
+              "value": 733
+            },
+            "ended": {
+              "prior": 30,
+              "value": 5
+            },
+            "expectedTotal": 748,
+            "inTolerance": true,
+            "toleranceMsg": null,
+            "hold": null
+          },
+          "dependents": {
+            "active": {
+              "prior": 640,
+              "value": 611
+            },
+            "ended": {
+              "prior": 13,
+              "value": 2
+            },
+            "expectedTotal": 640,
+            "inTolerance": true,
+            "toleranceMsg": null,
+            "hold": null
+          }
+        },
+        "excludedInsuredStat": null,
+        "excludedPlanInsuredStat": [],
+        "planInsuredStat": [
+          {
+            "subscribers": {
+              "active": {
+                "prior": 298,
+                "value": 297
+              },
+              "ended": {
+                "prior": 13,
+                "value": 3
+              },
+              "expectedTotal": 298,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            },
+            "dependents": {
+              "active": {
+                "prior": 287,
+                "value": 287
+              },
+              "ended": {
+                "prior": 7,
+                "value": 1
+              },
+              "expectedTotal": 287,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            }
+          },
+          {
+            "subscribers": {
+              "active": {
+                "prior": 450,
+                "value": 436
+              },
+              "ended": {
+                "prior": 17,
+                "value": 2
+              },
+              "expectedTotal": 450,
+              "inTolerance": true,
+              "toleranceMsg": null,
+              "hold": null
+            },
+            "dependents": {
+              "active": {
+                "prior": 353,
+                "value": 324
+              },
+              "ended": {
+                "prior": 6,
+                "value": 1
+              },
+              "expectedTotal": 353,
+              "inTolerance": false,
+              "toleranceMsg": "Expected total of 353 for Dependents in Tumi - Vision is greater than the actual total of 325. The actual total is only allowed to be 24 less than the expected.",
+              "hold": true
+            }
+          }
+        ]
+      },
+      "inboundEnrollmentStats": {
+        "insuredStat": {
+          "subscribers": {
+            "active": {
+              "prior": null,
+              "value": 733
+            },
+            "ended": {
+              "prior": null,
+              "value": 5
+            },
+            "expectedTotal": null,
+            "inTolerance": null,
+            "toleranceMsg": null,
+            "hold": null
+          },
+          "dependents": {
+            "active": {
+              "prior": null,
+              "value": 611
+            },
+            "ended": {
+              "prior": null,
+              "value": 2
+            },
+            "expectedTotal": null,
+            "inTolerance": null,
+            "toleranceMsg": null,
+            "hold": null
+          }
+        },
+        "excludedInsuredStat": null,
+        "excludedPlanInsuredStat": [],
+        "planInsuredStat": [
+          {
+            "subscribers": {
+              "active": {
+                "prior": null,
+                "value": 297
+              },
+              "ended": {
+                "prior": null,
+                "value": 3
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            },
+            "dependents": {
+              "active": {
+                "prior": null,
+                "value": 287
+              },
+              "ended": {
+                "prior": null,
+                "value": 1
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            }
+          },
+          {
+            "subscribers": {
+              "active": {
+                "prior": null,
+                "value": 436
+              },
+              "ended": {
+                "prior": null,
+                "value": 2
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            },
+            "dependents": {
+              "active": {
+                "prior": null,
+                "value": 324
+              },
+              "ended": {
+                "prior": null,
+                "value": 1
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            }
+          }
+        ]
+      },
+      "outboundEnrollmentStats": {
+        "insuredStat": {
+          "subscribers": {
+            "active": {
+              "prior": null,
+              "value": 733
+            },
+            "ended": {
+              "prior": null,
+              "value": 5
+            },
+            "expectedTotal": null,
+            "inTolerance": null,
+            "toleranceMsg": null,
+            "hold": null
+          },
+          "dependents": {
+            "active": {
+              "prior": null,
+              "value": 611
+            },
+            "ended": {
+              "prior": null,
+              "value": 2
+            },
+            "expectedTotal": null,
+            "inTolerance": null,
+            "toleranceMsg": null,
+            "hold": null
+          }
+        },
+        "excludedInsuredStat": null,
+        "excludedPlanInsuredStat": [],
+        "planInsuredStat": [
+          {
+            "subscribers": {
+              "active": {
+                "prior": null,
+                "value": 297
+              },
+              "ended": {
+                "prior": null,
+                "value": 3
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            },
+            "dependents": {
+              "active": {
+                "prior": null,
+                "value": 287
+              },
+              "ended": {
+                "prior": null,
+                "value": 1
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            }
+          },
+          {
+            "subscribers": {
+              "active": {
+                "prior": null,
+                "value": 436
+              },
+              "ended": {
+                "prior": null,
+                "value": 2
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            },
+            "dependents": {
+              "active": {
+                "prior": null,
+                "value": 324
+              },
+              "ended": {
+                "prior": null,
+                "value": 1
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            }
+          }
+        ]
+      }
+    }
+  }
+}
