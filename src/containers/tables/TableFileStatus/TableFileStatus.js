@@ -10,13 +10,11 @@ import { STEP_STATUS } from '../../../data/constants/FileStatusConstants';
 const TableFileStatus = ({ id = 'TableFileStatus', orgSid = 1, dateRange, filter }) => {
   const { tableProps, error } = useTable(orgSid, dateRange, filter);
 
-  console.log({ tableProps, error });
-
   return (
     <>
       <Row id={`${id}-temp`}>
-        {STEP_STATUS.map((item) => (
-          <FileProgress data={{ stepStatus: item.stepStatus, colors: item.colors }} />
+        {STEP_STATUS.map((item, index) => (
+          <FileProgress key={index} data={{ stepStatus: item.stepStatus, colors: item.colors }} />
         ))}
       </Row>
       <Box id={`${id}`}>

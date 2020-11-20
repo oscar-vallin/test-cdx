@@ -8,8 +8,6 @@ import { HeaderTable, StyledColumn, StyledRow, StyledMenuButton, StyledLink } fr
 const TableHeader = ({ id = '__TableHeader', header = 'default', sortLabel, onSort, onOption, ...props }) => {
   const history = useHistory();
 
-  console.log({ header });
-
   if ((!header || !header.type || header.type === 'default') && props) {
     return <DetailsHeader {...props} ariaLabelForToggleAllGroupsButton="Toggle selection" />;
   }

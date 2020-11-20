@@ -10,8 +10,6 @@ const FileProgress = ({ id = '__FileProgress', stringValues, data }) => {
 
     if (!progressItem) return null;
 
-    console.log({ progressItem });
-
     return (
       <Box left>
         <FileProgressBar colors={progressItem.colors} />
@@ -20,7 +18,6 @@ const FileProgress = ({ id = '__FileProgress', stringValues, data }) => {
     );
   }
   if (data) {
-    console.log({ data });
     return (
       <Box left>
         <FileProgressBar colors={data.colors} />

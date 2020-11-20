@@ -127,8 +127,6 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
       return _items;
     };
 
-    console.log('Data Changes: ', data);
-
     if (data) {
       doEffect();
     }

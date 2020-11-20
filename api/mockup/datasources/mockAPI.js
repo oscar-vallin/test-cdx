@@ -62,15 +62,13 @@ class mockAPI extends DataSource {
   }
 
   // WorkPacketStatuses($orgSid: ID!, $dateRange: DateTimeRangeInput, $filter: WorkPacketStatusFilter){
-  workPacketStatusDetails(orgSid, workOrderID) {
+  workPacketStatusDetails(orgSid, workOrderId) {
     const result =
-      workOrderID === '1'
+      workOrderId === '1'
         ? rawWorkPacketStatusDetails2
-        : workOrderID === '2'
+        : workOrderId === '2'
         ? rawWorkPacketStatusDetails3
         : rawWorkPacketStatusDetails1;
-
-    console.log({ resu: result.data.workPacketStatusDetails });
 
     return result.data.workPacketStatusDetails;
   }

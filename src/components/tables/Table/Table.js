@@ -37,13 +37,6 @@ const _buildColumns = (
     column.onColumnContextMenu = onColumnContextMenu;
     column.ariaLabel = `Operations for ${column.name}`;
 
-    // if (column.key[0] === '_') {
-    //   console.log('SkipColumn');
-    //   columns.splice(column, 1);
-
-    //   return;
-    // }
-
     if (column.key === 'thumbnail') {
       column.iconName = 'Picture';
       column.isIconOnly = true;
@@ -68,8 +61,6 @@ const _buildColumns = (
     }
   });
 
-  console.log({ columns });
-
   return columns;
 };
 
@@ -85,19 +76,51 @@ const classNames = mergeStyleSets({
 });
 
 //
-const Table = ({ items, structure, onOption }) => {
+const Table = ({ items, structure, onOption, groups }) => {
   const [sortLabel, setSortLabel] = React.useState();
-  const [sortedItems, setSortedItems] = React.useState(items);
+  const [sortedItems, setSortedItems] = React.useState([]);
+  const [sortedGroups, setSortedGroups] = React.useState();
+  const [columns, setColumns] = React.useState([]);
+
+  React.useEffect(() => {}, []);
 
   React.useEffect(() => {
-    setSortedItems(items);
-  }, [items]);
+    const doEffect = () => {
+      if (groups) {
+        const _groups = groups.map((groupItem) => {
+          return {
+            startIndex: groupItem?.startIndex ?? 0,
+            count: groupItem.count ?? 2,
+            level: groupItem.level ?? 0,
+            ...groupItem,
+          };
+        });
 
-  const columns = _buildColumns(items);
+        setSortedGroups(_groups);
+      }
+
+      const filterItems = items.map((item) => {
+        const _item = { ...item };
+
+        if (item.hasOwnProperty('groupId')) {
+          delete _item.groupId;
+        }
+
+        return _item;
+      });
+
+      setSortedItems(filterItems);
+
+      const filterColumns = _buildColumns(filterItems);
+
+      setColumns(filterColumns);
+    };
+
+    return doEffect();
+  }, [items, groups]);
 
   const _renderItemColumn = (item, index, column) => {
     const fieldContent = item[column.fieldName];
-    // console.log({ itemsRender: items });
 
     switch (column.key) {
       case 'bus':
@@ -136,9 +159,20 @@ const Table = ({ items, structure, onOption }) => {
     alert(`Item ${item.name} at index ${index} has been invoked.`);
   };
 
-  const _copyAndSort = (items, columnKey, isSortedDescending = false) => {
+  const _copyAndSort = (argItems, columnKey, isSortedDescending = false) => {
     const key = columnKey;
-    return items.slice(0).sort((a, b) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1));
+
+    const filterItems = argItems.map((item) => {
+      const _item = { ...item };
+
+      if (item.hasOwnProperty('groupId')) {
+        delete _item.groupId;
+      }
+
+      return _item;
+    });
+
+    return filterItems.slice(0).sort((a, b) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1));
   };
 
   const _onSort = () => {
@@ -177,6 +211,7 @@ const Table = ({ items, structure, onOption }) => {
         onItemInvoked={_onItemInvoked}
         onRenderDetailsHeader={_onRenderTableHeader}
         onRenderItemColumn={_renderItemColumn}
+        groups={sortedGroups}
       />
       {sortedItems?.length === 0 && <StyledText bold>No Data</StyledText>}
     </StyledContainer>

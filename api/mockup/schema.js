@@ -4,7 +4,7 @@ module.exports = gql`
   type Query {
     beginLogin(userId: String!): LoginStep
     changeOwnPasswordPage: PasswordPage
-    workPacketStatusDetails(orgSid: ID!, workOrderID: String!): WorkPacketStatusDetails
+    workPacketStatusDetails(orgSid: ID!, workOrderId: String!): WorkPacketStatusDetails
     workPacketStatuses(orgSid: ID!, dateRange: DateTimeRangeInput, filter: WorkPacketStatusFilter): [WorkPacketStatus]
     dashboardPeriods(orgSid: ID!): DashboardPeriods
     systemTemplateAMGroupByName(name: String!): [AMGroup]

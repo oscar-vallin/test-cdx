@@ -15,7 +15,6 @@ import { StyledBox } from './FileStatusDetails.styles';
 import { Tabs } from '../../components/tabs/Tabs';
 import { Text } from '../../components/typography/Text';
 
-import EnrollmentStatsTab from './EnrollmentStatsTab/EnrollmentStatsTab';
 import VendorCountStatsTab from './VendorCountStatsTab/VendorCountStatsTab';
 import QualityChecksTab from './QualityChecksTab/QualityChecksTab';
 import WorkStepsTab from './WorkStepsTab/WorkStepsTab';

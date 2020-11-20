@@ -2,6 +2,8 @@ import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> &
+  { [SubKey in keyof Pick<T, K>]?: Maybe<Pick<T, K>[SubKey]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -29,7 +31,7 @@ export type QueryBeginLoginArgs = {
 
 export type QueryWorkPacketStatusDetailsArgs = {
   orgSid: Scalars['ID'];
-  workOrderID: Scalars['String'];
+  workOrderId: Scalars['String'];
 };
 
 export type QueryWorkPacketStatusesArgs = {
@@ -87,9 +89,11 @@ export type Organization = {
 export type LoginStep = {
   __typename?: 'LoginStep';
   userId: Scalars['String'];
-  step: Scalars['Int'];
+  step: LoginStepType;
   redirectPath?: Maybe<Scalars['String']>;
   allowLostPassword?: Maybe<Scalars['Boolean']>;
+  loginCompletePage?: Maybe<LoginCompletePage>;
+  tokenUser?: Maybe<TokenUser>;
 };
 
 export type PasswordPage = {
@@ -142,6 +146,23 @@ export type UserSession = {
   orgId: Scalars['ID'];
   userId: Scalars['String'];
   defaultAuthorities?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+export enum LoginStepType {
+  Username = 'USERNAME',
+  Password = 'PASSWORD',
+  Complete = 'COMPLETE',
+}
+
+export enum LoginCompletePage {
+  WpStatus = 'WP_STATUS',
+  OrgActivity = 'ORG_ACTIVITY',
+  OrgList = 'ORG_LIST',
+}
+
+export type AmPasswordConfigInput = {
+  allowForgotten?: Maybe<Scalars['Boolean']>;
+  orgUnitOwner?: Maybe<Scalars['ID']>;
 };
 
 export type User = {
@@ -356,7 +377,7 @@ export type PasswordRule =
 
 export type WorkPacketStatusDetails = {
   __typename?: 'WorkPacketStatusDetails';
-  workOrderID: Scalars['String'];
+  workOrderId: Scalars['String'];
   specId?: Maybe<Scalars['String']>;
   specImplName?: Maybe<Scalars['String']>;
   fingerPrint?: Maybe<Scalars['String']>;
@@ -365,6 +386,9 @@ export type WorkPacketStatusDetails = {
   workStepStatus?: Maybe<Array<Maybe<WorkStepStatus>>>;
   extractParameters?: Maybe<ExtractParameters>;
   qualityChecks?: Maybe<QualityChecks>;
+  enrollmentStats?: Maybe<EnrollmentStat>;
+  inboundEnrollmentStats?: Maybe<EnrollmentStat>;
+  outboundEnrollmentStats?: Maybe<EnrollmentStat>;
 };
 
 export type DeliveredFile = {
@@ -508,6 +532,44 @@ export type DashboardPeriodCount = {
   total?: Maybe<Scalars['Int']>;
 };
 
+export type EnrollmentStat = {
+  __typename?: 'EnrollmentStat';
+  insuredStat?: Maybe<InsuredStat>;
+  excludedInsuredStat?: Maybe<InsuredStat>;
+  excludedPlanInsuredStat?: Maybe<Array<Maybe<PlanInsuredStat>>>;
+  planInsuredStat?: Maybe<Array<Maybe<PlanInsuredStat>>>;
+};
+
+export type InsuredStat = {
+  __typename?: 'InsuredStat';
+  subscribers?: Maybe<InsuredStatCount>;
+  dependents?: Maybe<InsuredStatCount>;
+};
+
+export type PlanInsuredStat = {
+  __typename?: 'PlanInsuredStat';
+  planCode?: Maybe<Scalars['String']>;
+  planType?: Maybe<Scalars['String']>;
+  subscribers?: Maybe<InsuredStatCount>;
+  dependents?: Maybe<InsuredStatCount>;
+};
+
+export type InsuredStatCount = {
+  __typename?: 'InsuredStatCount';
+  active?: Maybe<StatInt>;
+  ended?: Maybe<StatInt>;
+  expectedTotal?: Maybe<Scalars['Int']>;
+  inTolerance?: Maybe<Scalars['Boolean']>;
+  toleranceMsg?: Maybe<Scalars['String']>;
+  hold?: Maybe<Scalars['Boolean']>;
+};
+
+export type StatInt = {
+  __typename?: 'StatInt';
+  prior?: Maybe<Scalars['Int']>;
+  value?: Maybe<Scalars['Int']>;
+};
+
 export type UserTokenMutationVariables = Exact<{
   userId: Scalars['String'];
   password: Scalars['String'];
@@ -603,14 +665,14 @@ export type WorkPacketStatusesQuery = { __typename?: 'Query' } & {
 
 export type WorkPacketStatusDetailsQueryVariables = Exact<{
   orgSid: Scalars['ID'];
-  workOrderID: Scalars['String'];
+  workOrderId: Scalars['String'];
 }>;
 
 export type WorkPacketStatusDetailsQuery = { __typename?: 'Query' } & {
   workPacketStatusDetails?: Maybe<
     { __typename?: 'WorkPacketStatusDetails' } & Pick<
       WorkPacketStatusDetails,
-      'workOrderID' | 'specId' | 'specImplName' | 'fingerPrint' | 'suppressBilling'
+      'workOrderId' | 'specId' | 'specImplName' | 'fingerPrint' | 'suppressBilling'
     > & {
         workStepStatus?: Maybe<
           Array<
@@ -690,6 +752,9 @@ export type WorkPacketStatusDetailsQuery = { __typename?: 'Query' } & {
             >;
           }
         >;
+        enrollmentStats?: Maybe<{ __typename?: 'EnrollmentStat' } & EnrollmentStatFragmentFragment>;
+        inboundEnrollmentStats?: Maybe<{ __typename?: 'EnrollmentStat' } & EnrollmentStatFragmentFragment>;
+        outboundEnrollmentStats?: Maybe<{ __typename?: 'EnrollmentStat' } & EnrollmentStatFragmentFragment>;
       }
   >;
 };
@@ -897,6 +962,33 @@ export type SystemTemplateAmGroupByNameQuery = { __typename?: 'Query' } & {
   >;
 };
 
+export type EnrollmentStatFragmentFragment = { __typename?: 'EnrollmentStat' } & {
+  insuredStat?: Maybe<{ __typename?: 'InsuredStat' } & InsuredStatFragmentFragment>;
+  excludedInsuredStat?: Maybe<{ __typename?: 'InsuredStat' } & InsuredStatFragmentFragment>;
+  excludedPlanInsuredStat?: Maybe<Array<Maybe<{ __typename?: 'PlanInsuredStat' } & PlanInsuredStatFragmentFragment>>>;
+  planInsuredStat?: Maybe<Array<Maybe<{ __typename?: 'PlanInsuredStat' } & PlanInsuredStatFragmentFragment>>>;
+};
+
+export type InsuredStatFragmentFragment = { __typename?: 'InsuredStat' } & {
+  subscribers?: Maybe<{ __typename?: 'InsuredStatCount' } & InsuredStatCountFragmentFragment>;
+  dependents?: Maybe<{ __typename?: 'InsuredStatCount' } & InsuredStatCountFragmentFragment>;
+};
+
+export type PlanInsuredStatFragmentFragment = { __typename?: 'PlanInsuredStat' } & {
+  subscribers?: Maybe<{ __typename?: 'InsuredStatCount' } & InsuredStatCountFragmentFragment>;
+  dependents?: Maybe<{ __typename?: 'InsuredStatCount' } & InsuredStatCountFragmentFragment>;
+};
+
+export type InsuredStatCountFragmentFragment = { __typename?: 'InsuredStatCount' } & Pick<
+  InsuredStatCount,
+  'expectedTotal' | 'inTolerance' | 'toleranceMsg' | 'hold'
+> & {
+    active?: Maybe<{ __typename?: 'StatInt' } & StatIntFragmentFragment>;
+    ended?: Maybe<{ __typename?: 'StatInt' } & StatIntFragmentFragment>;
+  };
+
+export type StatIntFragmentFragment = { __typename?: 'StatInt' } & Pick<StatInt, 'prior' | 'value'>;
+
 export const DashPeriodCountFragmentFragmentDoc = gql`
   fragment dashPeriodCountFragment on DashboardPeriodCount {
     name
@@ -990,6 +1082,67 @@ export const UnionPasswordRuleFragmentDoc = gql`
       allowedWhitespace
     }
   }
+`;
+export const StatIntFragmentFragmentDoc = gql`
+  fragment statIntFragment on StatInt {
+    prior
+    value
+  }
+`;
+export const InsuredStatCountFragmentFragmentDoc = gql`
+  fragment insuredStatCountFragment on InsuredStatCount {
+    active {
+      ...statIntFragment
+    }
+    ended {
+      ...statIntFragment
+    }
+    expectedTotal
+    inTolerance
+    toleranceMsg
+    hold
+  }
+  ${StatIntFragmentFragmentDoc}
+`;
+export const InsuredStatFragmentFragmentDoc = gql`
+  fragment insuredStatFragment on InsuredStat {
+    subscribers {
+      ...insuredStatCountFragment
+    }
+    dependents {
+      ...insuredStatCountFragment
+    }
+  }
+  ${InsuredStatCountFragmentFragmentDoc}
+`;
+export const PlanInsuredStatFragmentFragmentDoc = gql`
+  fragment planInsuredStatFragment on PlanInsuredStat {
+    subscribers {
+      ...insuredStatCountFragment
+    }
+    dependents {
+      ...insuredStatCountFragment
+    }
+  }
+  ${InsuredStatCountFragmentFragmentDoc}
+`;
+export const EnrollmentStatFragmentFragmentDoc = gql`
+  fragment enrollmentStatFragment on EnrollmentStat {
+    insuredStat {
+      ...insuredStatFragment
+    }
+    excludedInsuredStat {
+      ...insuredStatFragment
+    }
+    excludedPlanInsuredStat {
+      ...planInsuredStatFragment
+    }
+    planInsuredStat {
+      ...planInsuredStatFragment
+    }
+  }
+  ${InsuredStatFragmentFragmentDoc}
+  ${PlanInsuredStatFragmentFragmentDoc}
 `;
 export const UserTokenDocument = gql`
   mutation UserToken($userId: String!, $password: String!) {
@@ -1261,9 +1414,9 @@ export type WorkPacketStatusesQueryResult = Apollo.QueryResult<
   WorkPacketStatusesQueryVariables
 >;
 export const WorkPacketStatusDetailsDocument = gql`
-  query WorkPacketStatusDetails($orgSid: ID!, $workOrderID: String!) {
-    workPacketStatusDetails(orgSid: $orgSid, workOrderID: $workOrderID) {
-      workOrderID
+  query WorkPacketStatusDetails($orgSid: ID!, $workOrderId: String!) {
+    workPacketStatusDetails(orgSid: $orgSid, workOrderId: $workOrderId) {
+      workOrderId
       specId
       specImplName
       fingerPrint
@@ -1341,10 +1494,20 @@ export const WorkPacketStatusDetailsDocument = gql`
           }
         }
       }
+      enrollmentStats {
+        ...enrollmentStatFragment
+      }
+      inboundEnrollmentStats {
+        ...enrollmentStatFragment
+      }
+      outboundEnrollmentStats {
+        ...enrollmentStatFragment
+      }
     }
   }
   ${ExtractParameterFragmentFragmentDoc}
   ${FieldCreationFragmentFragmentDoc}
+  ${EnrollmentStatFragmentFragmentDoc}
 `;
 
 /**
@@ -1360,7 +1523,7 @@ export const WorkPacketStatusDetailsDocument = gql`
  * const { data, loading, error } = useWorkPacketStatusDetailsQuery({
  *   variables: {
  *      orgSid: // value for 'orgSid'
- *      workOrderID: // value for 'workOrderID'
+ *      workOrderId: // value for 'workOrderId'
  *   },
  * });
  */
