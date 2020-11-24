@@ -2,25 +2,32 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Table } from '../../../components/tables/Table';
 
-import { Box, Row } from './TableFileStatus.styles';
-import { useTable } from './TableFileStatus.service';
-import { FileProgress } from '../../bars/FileProgress';
-import { STEP_STATUS } from '../../../data/constants/FileStatusConstants';
+import { Box, Row, Column, Container, RightColumn } from './TableFileStatus.styles';
+import { useTable, useInputs } from './TableFileStatus.service';
+import { InputText } from '../../../components/inputs/InputText';
+import { InputDateRange } from '../../../components/inputs/InputDateRange';
 
 const TableFileStatus = ({ id = 'TableFileStatus', orgSid = 1, dateRange, filter }) => {
-  const { tableProps, error } = useTable(orgSid, dateRange, filter);
+  const { tableProps } = useTable(orgSid, dateRange, filter);
+  const { localInput, startDate, endDate } = useInputs();
 
   return (
-    <>
-      <Row id={`${id}-temp`}>
-        {STEP_STATUS.map((item, index) => (
+    <Container>
+      <Row id={`${id}-temp`} around>
+        {/* {STEP_STATUS.map((item, index) => (
           <FileProgress key={index} data={{ stepStatus: item.stepStatus, colors: item.colors }} />
-        ))}
+        ))} */}
+        <Column center>
+          <InputText id={`${id}__Card__Row__Input-Email`} autoFocus disabled={false} {...localInput} />
+        </Column>
+        <RightColumn center>
+          <InputDateRange startDate={startDate} endDate={endDate} />
+        </RightColumn>
       </Row>
       <Box id={`${id}`}>
         <Table id={`${id}`} onOption={() => console.log('Table click')} {...tableProps} />
       </Box>
-    </>
+    </Container>
   );
 };
 
