@@ -13,10 +13,7 @@ const TableFileStatus = ({ id = 'TableFileStatus', orgSid = 1, dateRange, filter
 
   return (
     <Container>
-      <Row id={`${id}-temp`} around>
-        {/* {STEP_STATUS.map((item, index) => (
-          <FileProgress key={index} data={{ stepStatus: item.stepStatus, colors: item.colors }} />
-        ))} */}
+      <Row id={`${id}-filters`} around>
         <Column center>
           <InputText id={`${id}__Card__Row__Input-Email`} autoFocus disabled={false} {...localInput} />
         </Column>
