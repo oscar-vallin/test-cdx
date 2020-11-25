@@ -10,7 +10,7 @@ const VendorCountStatsTab = () => {
         structure={getTableStructure(tableId)}
       /> */}
     </Spacing>
-  )
-}
+  );
+};
 
 export default VendorCountStatsTab;

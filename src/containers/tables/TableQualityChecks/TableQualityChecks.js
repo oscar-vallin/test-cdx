@@ -1,0 +1,24 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Table } from '../../../components/tables/Table';
+import { Box } from './TableQualityChecks.styles';
+import { useTable } from './TableQualityChecks.service';
+
+const ORG_SID = 1;
+const WORK_ORDER_ID = '2';
+
+const TableQualityChecks = ({ id = 'TableQualityChecksStats' }) => {
+  const { tableProps } = useTable(ORG_SID, WORK_ORDER_ID);
+
+  return (
+    <Box id="VendorCountStats">
+      <Table onOption={() => console.log('Table click')} {...tableProps} />
+    </Box>
+  );
+};
+
+TableQualityChecks.propTypes = {
+  id: PropTypes.string,
+};
+
+export { TableQualityChecks };

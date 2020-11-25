@@ -5,6 +5,8 @@ export const TABLE_NAMES = {
   DASHBOARD_ERRORS_FILES: 'ERRORS_FILES',
   FILE_STATUS: 'FILE_STATUS',
   FILE_STATUS_DETAIL_ENROLLMENT: 'DETAIL_ENROLLMENT',
+  FILE_STATUS_DETAIL_VENDOR_COUNT: 'DETAIL_VENDOR_COUNT',
+  FILE_STATUS_DETAIL_QUALITY_CHECKS: 'DETAIL_QUALITY_CHECKS',
 };
 
 export const TABLES = {
@@ -44,6 +46,20 @@ export const TABLES = {
     header: {
       type: 'enrollment',
       title: 'Enrollment Status',
+      url: null,
+    },
+  },
+  DETAIL_VENDOR_COUNT: {
+    header: {
+      type: 'vendor_count',
+      title: 'Vendor Count Status',
+      url: null,
+    },
+  },
+  DETAIL_QUALITY_CHECKS: {
+    header: {
+      type: 'quality_checks',
+      title: 'Quality Checks',
       url: null,
     },
   },

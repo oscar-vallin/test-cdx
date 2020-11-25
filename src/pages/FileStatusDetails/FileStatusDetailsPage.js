@@ -15,11 +15,11 @@ import { StyledBox } from './FileStatusDetails.styles';
 import { Tabs } from '../../components/tabs/Tabs';
 import { Text } from '../../components/typography/Text';
 
-import VendorCountStatsTab from './VendorCountStatsTab/VendorCountStatsTab';
 import QualityChecksTab from './QualityChecksTab/QualityChecksTab';
 import WorkStepsTab from './WorkStepsTab/WorkStepsTab';
 
 import { TableEnrollment } from '../../containers/tables/TableEnrollment';
+import { TableVendorCount } from '../../containers/tables/TableVendorCount';
 
 const breadcrumbItems = [ROUTE_FILE_STATUS, { ID: 'work-packet-details', TITLE: 'Work Packet Details' }];
 
@@ -189,7 +189,7 @@ const _FileStatusDetailsPage = () => {
                       },
                       {
                         title: 'Vendor Count Stats',
-                        content: <VendorCountStatsTab />,
+                        content: <TableVendorCount />,
                       },
                       {
                         title: 'Work Steps',
