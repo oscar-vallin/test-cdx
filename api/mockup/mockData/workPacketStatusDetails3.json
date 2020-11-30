@@ -57,24 +57,7 @@
           },
           "stepFile": [],
           "nvp": [],
-          "recordCounts": {
-            "totalCount": 13,
-            "showUser": true,
-            "recordCount": [
-              {
-                "name": "Header",
-                "count": 1
-              },
-              {
-                "name": "Eligibility",
-                "count": 11
-              },
-              {
-                "name": "Trailer",
-                "count": 1
-              }
-            ]
-          }
+          "recordCounts": null
         },
         {
           "stepStatus": null,
@@ -729,6 +712,24 @@
               "toleranceMsg": null,
               "hold": null
             }
+          }
+        ]
+      },
+      "outboundRecordCounts": {
+        "totalCount": 13,
+        "showUser": true,
+        "recordCount": [
+          {
+            "name": "Header",
+            "count": 1
+          },
+          {
+            "name": "Eligibility",
+            "count": 11
+          },
+          {
+            "name": "Trailer",
+            "count": 1
           }
         ]
       }
