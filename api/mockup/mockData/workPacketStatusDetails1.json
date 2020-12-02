@@ -6,6 +6,16 @@
       "specImplName": "600ByteSpring2015Impl.xqm",
       "fingerPrint": "SMSN-VSP-PRODVSP600ByteSpring2015600ByteSpring2015Impl",
       "suppressBilling": null,
+      "vendorCountStats": {
+        "total": 2900,
+        "vendors": [
+          { "vendor": "ISA", "value": 199 },
+          { "vendor": "GS", "value": 2001 },
+          { "vendor": "ST", "value": 150 },
+          { "vendor": "BGN", "value": 350 },
+          { "vendor": "HDREF38", "value": 1 }
+        ]
+      },
       "workStepStatus": [
         {
           "stepStatus": null,

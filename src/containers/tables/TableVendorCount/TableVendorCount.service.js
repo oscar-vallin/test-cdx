@@ -38,6 +38,7 @@ export const useTable = (argOrgSid, argWorkerId) => {
 
   // Build Items.
   const buildItems = (_data) => {
+    console.log('Waiting Data');
     if (_data) {
       const arrayItems = [
         { recordName: 'ISA', count: 1 },

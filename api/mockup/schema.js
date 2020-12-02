@@ -310,6 +310,7 @@ module.exports = gql`
     specImplName: String
     fingerPrint: String
     suppressBilling: Boolean
+    vendorCountStats: VendorCountStats
     deliveredFile: DeliveredFile
     workStepStatus: [WorkStepStatus]
     extractParameters: ExtractParameters
@@ -389,6 +390,16 @@ module.exports = gql`
 
   type QualityChecks {
     sequenceCreationEvent: [SequenceCreationEvent]
+  }
+
+  type VendorCounters {
+    vendor: String
+    value: Int
+  }
+
+  type VendorCountStats {
+    total: Int
+    vendors: [VendorCounters]
   }
 
   type SequenceCreationEvent {

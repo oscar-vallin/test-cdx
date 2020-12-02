@@ -6,6 +6,16 @@
       "specImplName": "COBRACoverageV1.8Impl-Tumi.xqm",
       "fingerPrint": "SMSN-COBRA-QE-Tumi-PRODOptumHealthCOBRACoverageV1.8COBRACoverageV1.8Impl-Tumi",
       "suppressBilling": null,
+      "vendorCountStats": {
+        "total": 2900,
+        "vendors": [
+          { "vendor": "ISA", "value": 199 },
+          { "vendor": "GS", "value": 2001 },
+          { "vendor": "ST", "value": 150 },
+          { "vendor": "BGN", "value": 350 },
+          { "vendor": "HDREF38", "value": 1 }
+        ]
+      },
       "workStepStatus": [
         {
           "stepStatus": null,
