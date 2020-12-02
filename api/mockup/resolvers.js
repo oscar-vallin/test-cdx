@@ -15,6 +15,7 @@ module.exports = {
     changeOwnPasswordPage: (parent, args, { dataSources }, info) => {
       return dataSources.mockAPI.changeOwnPasswordPage();
     },
+
     // changeOwnPasswordPage2: (parent, { id }, { dataSources }, info) => {
     //   return dataSources.mockAPI.changeOwnPasswordPage2();
     // },

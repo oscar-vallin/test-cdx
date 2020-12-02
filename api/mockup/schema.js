@@ -3,71 +3,32 @@ const { gql } = require('apollo-server');
 module.exports = gql`
   type Query {
     beginLogin(userId: String!): LoginStep
-    changeOwnPasswordPage: PasswordPage
     workPacketStatusDetails(orgSid: ID!, workOrderId: String!): WorkPacketStatusDetails
     workPacketStatuses(orgSid: ID!, dateRange: DateTimeRangeInput, filter: WorkPacketStatusFilter): [WorkPacketStatus]
     dashboardPeriods(orgSid: ID!): DashboardPeriods
-    systemTemplateAMGroupByName(name: String!): [AMGroup]
+    changeOwnPasswordPage: PasswordPage
+    amPolicyPage(orgSid: ID!): AMPolicyPage
+    amPolicyFacetsForService(orgSid: ID!, cdxService: CDXService!): [CDXFacet]
+    amPolicyVerbForFacet(orgSid: ID!, cdxService: CDXService!, cdxFacet: CDXFacet!): [PermissionVerb]
   }
 
   type Mutation {
-    passwordLogin(userId: String!, password: String!): TokenUser
-    createOrg(orgInfo: CreateOrgInput!): Organization
-    createUser(userInfo: CreateUserInput!, personInfo: CreatePersonInput!): User
-    createAMPolicy(policyInfo: CreateAMPolicyInput!): AMPolicy
-    createAMGroup(amGroupInfo: CreateAMGroupInput!): AMGroup
+    passwordLogin(userId: String!, password: String!): LoginStep
   }
 
   scalar DateTime
   scalar Date
-
-  type Organization {
-    id: ID
-    orgId: String!
-    orgType: OrgType!
-  }
 
   type LoginStep {
     userId: String!
     step: LoginStepType!
     redirectPath: String
     allowLostPassword: Boolean
-    loginCompletePage: LoginCompletePage
+    """
+    this is the domain/section of the website to continue to if the login is complete
+    """
+    loginCompleteDomain: WebAppDomain
     tokenUser: TokenUser
-  }
-
-  type PasswordPage {
-    ruleGroup: PasswordRuleGroup!
-  }
-
-  type PasswordRuleGroup {
-    """
-    number of rule predicates that must be true for the group to pass
-    if numberOfCharacteristics is omitted all rules are required
-    """
-    numberOfCharacteristics: Int
-    """
-    list of rules or rule sub groups
-    """
-    rules: [PasswordRule]
-  }
-
-  type PasswordLengthRule {
-    minLength: Int
-    maxLength: Int
-  }
-
-  type PasswordWhitespaceRule {
-    allowedWhitespace: WhitespaceRuleType
-  }
-
-  type PasswordCharacterRule {
-    characterType: PasswordCharacterType
-    numberOfCharacters: Int
-  }
-
-  type PasswordStrengthRule {
-    requiredStrengthLevel: Int!
   }
 
   type TokenUser {
@@ -90,146 +51,9 @@ module.exports = gql`
     #TOTP
   }
 
-  enum LoginCompletePage {
-    WP_STATUS
-    ORG_ACTIVITY
-    ORG_LIST
-  }
-
   input AMPasswordConfigInput {
     allowForgotten: Boolean
     orgUnitOwner: ID
-  }
-
-  type User {
-    id: ID!
-    email: String!
-    person: Person
-  }
-
-  type Person {
-    id: ID!
-    firstNm: String!
-    lastNm: String
-  }
-
-  type WorkPacketStatus {
-    workOrderId: String!
-    timestamp: DateTime!
-    planSponsorId: String
-    detailsPath: String
-    subClientPath: String
-    inboundFilename: String!
-    vendorId: String
-    step: Int!
-    stepStatus: String!
-    packetStatus: String!
-    reprocessedBy: String
-    reprocessAction: Int
-    recordHighlightCount: Int
-    recordHighlightType: String
-    clientFileArchivePath: String
-    vendorFileArchivePath: String
-    supplementalFilesArchivePaths: [String]
-    archiveOnly: Boolean
-    hasErrors: Boolean
-  }
-
-  """
-  type ZonedDateTime {
-      formatString(format: String!): String
-      iso: String
-  }
-
-  type Date {
-      formatString(format: String!): String
-      iso: String
-  }
-  """
-  type AMGroup {
-    id: ID
-    name: String!
-    description: String
-    tmpl: Boolean
-    tmplUseAsIs: Boolean
-    tmplServiceType: CDXService
-    policies: [AMPolicy]
-  }
-
-  type AMPolicy {
-    id: ID
-    name: String!
-    permissions: [AMPermission]
-    tmpl: Boolean
-    tmplUseAsIs: Boolean
-    tmplServiceType: CDXService
-  }
-
-  type AMPermission {
-    id: ID
-    effect: PermissionEffect!
-    actions: [AMPermissionAction]
-    predicate: PermissionPredicate
-    predVar1: String
-    predParam1: String
-  }
-
-  type AMPermissionAction {
-    id: ID
-    service: CDXService!
-    facet: CDXFacet!
-    verb: PermissionVerb!
-  }
-
-  input CreateAMGroupInput {
-    name: String!
-    description: String
-    tmpl: Boolean
-    tmplUseAsIs: Boolean
-    tmplServiceType: CDXService
-    policyIds: [ID]
-  }
-
-  input CreateAMPolicyInput {
-    name: String!
-    orgOwnerId: ID!
-    permissions: [CreateAMPermissionInput]
-    tmpl: Boolean
-    tmplUseAsIs: Boolean
-    tmplServiceType: CDXService
-  }
-
-  input CreateAMPermissionInput {
-    effect: PermissionEffect!
-    actions: [CreateAMPermissionActionInput]
-    predicate: PermissionPredicate
-    predVar1: String
-    predParam1: String
-  }
-
-  input CreateAMPermissionActionInput {
-    service: CDXService!
-    facet: CDXFacet!
-    verb: PermissionVerb!
-  }
-
-  input CreateOrgInput {
-    orgId: String!
-    orgName: String!
-    orgType: OrgType!
-    orgOwnerId: ID
-  }
-
-  input CreateUserInput {
-    email: String!
-    password: String
-    orgOwnerId: ID!
-    groupIds: [ID]
-  }
-
-  input CreatePersonInput {
-    firstNm: String!
-    lastNm: String
   }
 
   input DateTimeRangeInput {
@@ -237,80 +61,12 @@ module.exports = gql`
     rangeEnd: DateTime!
   }
 
-  """
-  input DateRangeInput{
-      rangeStart: Date!
-      rangeEnd: Date!
-      timeZone: String
-  }
-  """
-  input WorkPacketStatusFilter {
-    excludedEnvs: [String]
-  }
-
-  enum OrgType {
-    INTEGRATION_SPONSOR
-    INTEGRATION_PLATFORM
-  }
-
-  enum WhitespaceRuleType {
-    NONE
-  }
-
-  enum PasswordCharacterType {
-    UPPER_CASE
-    LOWER_CASE
-    DIGIT
-    SPECIAL
-  }
-
-  enum PermissionEffect {
-    ALLOW
-    DENY
-  }
-
-  enum PermissionPredicate {
-    NOT_KNTU_ENV
-    STRING_EQUALS_IGNORE_CASE
-    STRING_NOT_EQUALS_IGNORE_CASE
-  }
-
-  enum CDXService {
-    CDX
-    INTEGRATION
-  }
-
-  enum CDXFacet {
-    ALL
-    ARCHIVE
-    STATUS
-  }
-
-  enum PermissionVerb {
-    ALL
-    CREATE
-    READ
-    UPDATE
-    DELETE
-    LIST
-    DOWNLOAD
-    RESTART
-  }
-
-  union PasswordRule =
-      PasswordLengthRule
-    | PasswordWhitespaceRule
-    | PasswordCharacterRule
-    | PasswordStrengthRule
-    | PasswordRuleGroup
-
   type WorkPacketStatusDetails {
     workOrderId: String!
     specId: String
     specImplName: String
     fingerPrint: String
     suppressBilling: Boolean
-    vendorCountStats: VendorCountStats
     deliveredFile: DeliveredFile
     workStepStatus: [WorkStepStatus]
     extractParameters: ExtractParameters
@@ -318,6 +74,7 @@ module.exports = gql`
     enrollmentStats: EnrollmentStat
     inboundEnrollmentStats: EnrollmentStat
     outboundEnrollmentStats: EnrollmentStat
+    outboundRecordCounts: RecordCounts
   }
 
   type DeliveredFile {
@@ -349,7 +106,7 @@ module.exports = gql`
     transformedArchiveFile: ArchiveFileType
     recordCounts: RecordCounts
     stepFile: [ArchiveFileType]
-    nvp: [NVP]
+    nvp: [NVPStr]
   }
 
   type StatCountType {
@@ -358,11 +115,6 @@ module.exports = gql`
 
   type ArchiveFileType {
     value: String
-  }
-
-  type NVP {
-    value: String!
-    name: String!
   }
 
   type RecordCounts {
@@ -390,16 +142,6 @@ module.exports = gql`
 
   type QualityChecks {
     sequenceCreationEvent: [SequenceCreationEvent]
-  }
-
-  type VendorCounters {
-    vendor: String
-    value: Int
-  }
-
-  type VendorCountStats {
-    total: Int
-    vendors: [VendorCounters]
   }
 
   type SequenceCreationEvent {
@@ -453,6 +195,32 @@ module.exports = gql`
     total: Int
   }
 
+  input WorkPacketStatusFilter {
+    excludedEnvs: [String]
+  }
+
+  type WorkPacketStatus {
+    workOrderId: String!
+    timestamp: DateTime!
+    planSponsorId: String
+    detailsPath: String
+    subClientPath: String
+    inboundFilename: String!
+    vendorId: String
+    step: Int!
+    stepStatus: String!
+    packetStatus: String!
+    reprocessedBy: String
+    reprocessAction: Int
+    recordHighlightCount: Int
+    recordHighlightType: String
+    clientFileArchivePath: String
+    vendorFileArchivePath: String
+    supplementalFilesArchivePaths: [String]
+    archiveOnly: Boolean
+    hasErrors: Boolean
+  }
+
   type EnrollmentStat {
     insuredStat: InsuredStat
     excludedInsuredStat: InsuredStat
@@ -486,4 +254,177 @@ module.exports = gql`
     prior: Int
     value: Int
   }
+
+  type PasswordPage {
+    ruleGroup: PasswordRuleGroup!
+  }
+
+  type PasswordRuleGroup {
+    """
+    number of rule predicates that must be true for the group to pass
+    if numberOfCharacteristics is omitted all rules are required
+    """
+    numberOfCharacteristics: Int
+    """
+    list of rules or rule sub groups
+    """
+    rules: [PasswordRule]
+  }
+
+  type PasswordLengthRule {
+    minLength: Int
+    maxLength: Int
+  }
+
+  type PasswordWhitespaceRule {
+    allowedWhitespace: WhitespaceRuleType
+  }
+
+  type PasswordCharacterRule {
+    characterType: PasswordCharacterType
+    numberOfCharacters: Int
+  }
+
+  type PasswordStrengthRule {
+    requiredStrengthLevel: Int!
+  }
+
+  enum WhitespaceRuleType {
+    NONE
+  }
+
+  enum PasswordCharacterType {
+    UPPER_CASE
+    LOWER_CASE
+    DIGIT
+    SPECIAL
+  }
+
+  union PasswordRule =
+      PasswordLengthRule
+    | PasswordWhitespaceRule
+    | PasswordCharacterRule
+    | PasswordStrengthRule
+    | PasswordRuleGroup
+
+  type AMPolicyPage {
+    services: [CDXService]
+  }
+
+  enum CDXService {
+    CDX
+    INTEGRATION
+    ACCESS_MANAGEMENT
+  }
+
+  enum CDXFacet {
+    ALL
+    ARCHIVE
+    STATUS
+    AM_POLICY
+    AM_USER
+    ORGANIZATION
+  }
+
+  enum PermissionVerb {
+    ALL
+    CREATE
+    READ
+    UPDATE
+    DELETE
+    LIST
+    DOWNLOAD
+    RESTART
+    ASSIGN
+  }
+
+  type WebPage {
+    type: CDXWebPage!
+    """
+    parameters: any dynamic parameters the page end point needs to be called with
+    """
+    parameters: [NVP]
+    """
+    commands: actions on the page that may lead to another page e.g. add new
+    """
+    commands: [WebNav]
+    """
+    pivots: any pivots the page might have
+    """
+    pivots: [WebPivot]
+  }
+
+  type WebAppDomain {
+    type: CDXWebAppDomain!
+    """
+    selectedPage: either the page to load - must be in teh navItems
+    """
+    selectedPage: CDXWebPage
+    """
+    navItems: either the left nav or top nav depending on the domain
+    """
+    navItems: [WebNav]
+  }
+
+  type WebNav {
+    label: String
+    """
+    page: WebPage to nave to, blank if this only has subnavs
+    """
+    page: WebPage
+    """
+    appDomain: only needs to be set here if this link will change domains
+    """
+    appDomain: CDXWebAppDomain
+    subNavItems: [WebNav]
+  }
+
+  type WebPivot {
+    label: String
+    type: CDXWebPivot!
+  }
+
+  type NVPStr {
+    name: String!
+    value: String!
+  }
+
+  type NVPId {
+    name: String!
+    value: ID!
+  }
+
+  enum CDXWebPage {
+    DASHBOARD
+    FILE_STATUS
+    ARCHIVES
+    SCHEDULE
+    TRANSMISSIONS
+    ERRORS
+    ORG_ACTIVITY
+    ACTIVE_ORGS
+    ACTIVE_USERS
+    DELETED_USERS
+    AM_GROUPS
+    AM_POLICIES
+    FTP_TEST
+    IMPL_DEPLOY
+    USER_ACCOUNT_RULES
+    PASSWORD_RULES
+    SSO_CONFIG
+    ADD_ORG
+    ADD_USER
+  }
+
+  enum CDXWebAppDomain {
+    DASHBOARD
+    ORGANIZATION
+  }
+
+  enum CDXWebPivot {
+    ACTIVITY
+    IN_PROGRESS
+  }
+
+  union NVP = NVPStr | NVPId
 `;

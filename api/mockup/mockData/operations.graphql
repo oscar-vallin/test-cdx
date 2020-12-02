@@ -1,51 +1,75 @@
-mutation UserToken($userId: String!, $password: String!) {
+query BeginLogin($userId: String!) {
+  beginLogin(userId: $userId) {
+    userId
+    step
+    redirectPath
+    allowLostPassword
+  }
+}
+
+mutation PasswordLogin($userId: String!, $password: String!) {
   passwordLogin(userId: $userId, password: $password) {
-    token
-    session {
-      id
-      orgId
-      userId
-      defaultAuthorities
+    step
+    loginCompleteDomain {
+      type
+      selectedPage
+      navItems {
+        ...navItemFragment
+        subNavItems {
+          ...navItemFragment
+        }
+      }
+    }
+    tokenUser {
+      token
+      session {
+        id
+        orgId
+        userId
+        defaultAuthorities
+      }
     }
   }
 }
 
-mutation CreateOrg($orgInfo: CreateOrgInput!) {
-  createOrg(orgInfo: $orgInfo) {
-    id
-    orgId
-    orgType
+fragment navItemFragment on WebNav {
+  label
+  page {
+    ...webPageFragment
   }
+  appDomain
 }
 
-mutation CreateUser($userInfo: CreateUserInput!, $personInfo: CreatePersonInput!) {
-  createUser(userInfo: $userInfo, personInfo: $personInfo) {
-    id
-    email
-    person {
-      firstNm
-      lastNm
+fragment webPageFragment on WebPage {
+  type
+  parameters {
+    ...unionNVP
+  }
+  commands {
+    label
+    page {
+      type
+      parameters {
+        ...unionNVP
+      }
     }
+    appDomain
+  }
+  pivots {
+    label
+    type
   }
 }
 
-mutation CreateAMGroup($amGroupInfo: CreateAMGroupInput!) {
-  createAMGroup(amGroupInfo: $amGroupInfo) {
-    id
+fragment unionNVP on NVP {
+  __typename
+  ... on NVPStr {
     name
-    description
-    tmpl
-    tmplUseAsIs
-    policies {
-      id
-      name
-    }
+    strValue: value
   }
-}
-
-mutation CreateAMPolicy($policyInfo: CreateAMPolicyInput!) {
-  createAMPolicy(policyInfo: $policyInfo) {
-    ...policyFragment
+  ... on NVPId {
+    name
+    idValue: value
   }
 }
 
@@ -72,6 +96,7 @@ query WorkPacketStatuses($orgSid: ID!, $dateRange: DateTimeRangeInput, $filter: 
     hasErrors
   }
 }
+
 query WorkPacketStatusDetails($orgSid: ID!, $workOrderId: String!) {
   workPacketStatusDetails(orgSid: $orgSid, workOrderId: $workOrderId) {
     workOrderId
@@ -97,12 +122,7 @@ query WorkPacketStatusDetails($orgSid: ID!, $workOrderId: String!) {
         value
       }
       recordCounts {
-        totalCount
-        showUser
-        recordCount {
-          name
-          count
-        }
+        ...recordCountsFragment
       }
     }
     deliveredFile {
@@ -161,112 +181,18 @@ query WorkPacketStatusDetails($orgSid: ID!, $workOrderId: String!) {
     outboundEnrollmentStats {
       ...enrollmentStatFragment
     }
-  }
-}
-
-query DashboardPeriods($orgSid: ID!) {
-  dashboardPeriods(orgSid: $orgSid) {
-    dailyCounts {
-      ...dashPeriodCountsFragment
-    }
-    yesterdayCounts {
-      ...dashPeriodCountsFragment
-    }
-    monthlyCounts {
-      ...dashPeriodCountsFragment
-    }
-    lastMonthlyCounts {
-      ...dashPeriodCountsFragment
+    outboundRecordCounts {
+      ...recordCountsFragment
     }
   }
 }
 
-query BeginLogin($userId: String!) {
-  beginLogin(userId: $userId) {
-    userId
-    step
-    redirectPath
-    allowLostPassword
-  }
-}
-
-query ChangeOwnPasswordPage {
-  changeOwnPasswordPage {
-    ruleGroup {
-      numberOfCharacteristics
-      rules {
-        ...unionPasswordRule
-        ... on PasswordRuleGroup {
-          numberOfCharacteristics
-          rules {
-            ...unionPasswordRule
-            ... on PasswordRuleGroup {
-              numberOfCharacteristics
-              rules {
-                ...unionPasswordRule
-                ... on PasswordRuleGroup {
-                  numberOfCharacteristics
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}
-
-fragment dashPeriodCountsFragment on DashboardPeriodCounts {
-  vendorTransmissions {
-    ...dashPeriodCountFragment
-  }
-  vendorTransmissionsBySpec {
-    ...dashPeriodCountFragment
-  }
-  planSponsorTransmissions {
-    ...dashPeriodCountFragment
-  }
-  fileTransmissions {
-    ...dashPeriodCountFragment
-  }
-  vendorProcessErrors {
-    ...dashPeriodCountFragment
-  }
-  planSponsorProcessErrors {
-    ...dashPeriodCountFragment
-  }
-  fileProcessErrors {
-    ...dashPeriodCountFragment
-  }
-  transmissionCount
-  billingUnitCount
-  processErrorCount
-}
-
-fragment dashPeriodCountFragment on DashboardPeriodCount {
-  name
-  secondaryDescr
-  count
-  total
-}
-
-fragment policyFragment on AMPolicy {
-  id
-  name
-  tmpl
-  tmplUseAsIs
-  permissions {
-    id
-    effect
-    predicate
-    predVar1
-    predParam1
-    actions {
-      id
-      service
-      facet
-      verb
-    }
+fragment recordCountsFragment on RecordCounts {
+  totalCount
+  showUser
+  recordCount {
+    name
+    count
   }
 }
 
@@ -283,35 +209,6 @@ fragment fieldCreationFragment on FieldCreationEvent {
   value
   rawValue
   type
-}
-
-fragment unionPasswordRule on PasswordRule {
-  __typename
-  ... on PasswordLengthRule {
-    minLength
-    maxLength
-  }
-  ... on PasswordStrengthRule {
-    requiredStrengthLevel
-  }
-  ... on PasswordCharacterRule {
-    characterType
-    numberOfCharacters
-  }
-  ... on PasswordWhitespaceRule {
-    allowedWhitespace
-  }
-}
-
-query SystemTemplateAMGroupByName($name: String!) {
-  systemTemplateAMGroupByName(name: $name) {
-    id
-    name
-    description
-    tmpl
-    tmplUseAsIs
-    tmplServiceType
-  }
 }
 
 fragment enrollmentStatFragment on EnrollmentStat {
@@ -363,4 +260,69 @@ fragment insuredStatCountFragment on InsuredStatCount {
 fragment statIntFragment on StatInt {
   prior
   value
+}
+
+query DashboardPeriods($orgSid: ID!) {
+  dashboardPeriods(orgSid: $orgSid) {
+    dailyCounts {
+      ...dashPeriodCountsFragment
+    }
+    yesterdayCounts {
+      ...dashPeriodCountsFragment
+    }
+    monthlyCounts {
+      ...dashPeriodCountsFragment
+    }
+    lastMonthlyCounts {
+      ...dashPeriodCountsFragment
+    }
+  }
+}
+
+fragment dashPeriodCountsFragment on DashboardPeriodCounts {
+  vendorTransmissions {
+    ...dashPeriodCountFragment
+  }
+  vendorTransmissionsBySpec {
+    ...dashPeriodCountFragment
+  }
+  planSponsorTransmissions {
+    ...dashPeriodCountFragment
+  }
+  fileTransmissions {
+    ...dashPeriodCountFragment
+  }
+  vendorProcessErrors {
+    ...dashPeriodCountFragment
+  }
+  planSponsorProcessErrors {
+    ...dashPeriodCountFragment
+  }
+  fileProcessErrors {
+    ...dashPeriodCountFragment
+  }
+  transmissionCount
+  billingUnitCount
+  processErrorCount
+}
+
+fragment dashPeriodCountFragment on DashboardPeriodCount {
+  name
+  secondaryDescr
+  count
+  total
+}
+
+query AMPolicyPage($orgSid: ID!) {
+  amPolicyPage(orgSid: $orgSid) {
+    services
+  }
+}
+
+query AMPolicyFacetsForService($orgSid: ID!, $cdxService: CDXService!) {
+  amPolicyFacetsForService(orgSid: $orgSid, cdxService: $cdxService)
+}
+
+query AMPolicyVerbForFacet($orgSid: ID!, $cdxService: CDXService!, $cdxFacet: CDXFacet!) {
+  amPolicyVerbForFacet(orgSid: $orgSid, cdxService: $cdxService, cdxFacet: $cdxFacet)
 }

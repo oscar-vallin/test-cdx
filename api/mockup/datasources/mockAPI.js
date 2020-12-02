@@ -11,6 +11,7 @@ const rawWorkPacketStatuses = require('../data/rawWorkPacketStatuses.json');
 const rawWorkPacketStatusDetails1 = require('../data/rawStatusDetail1.json');
 const rawWorkPacketStatusDetails2 = require('../data/rawStatusDetail2.json');
 const rawWorkPacketStatusDetails3 = require('../data/rawStatusDetail3.json');
+const rawPasswordLogin = require('../data/rawPasswordLogin.json');
 
 const UPDATE_STATUS = 'UPDATE_STATUS';
 
@@ -34,11 +35,8 @@ class mockAPI extends DataSource {
   }
 
   passwordLogin() {
-    return rawToken[0];
-  }
-
-  passwordLogin() {
-    return rawToken[0];
+    console.log(rawPasswordLogin.data);
+    return rawPasswordLogin.data.passwordLogin;
   }
 
   fileList(id) {
