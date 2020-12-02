@@ -40,6 +40,12 @@ const _buildColumns = (
     if (column.key === 'thumbnail') {
       column.iconName = 'Picture';
       column.isIconOnly = true;
+    } else if (column.key === 'datetime') {
+      column.minWidth = 150;
+      column.maxWidth = 190;
+    } else if (column.key === 'vendor') {
+      column.minWidth = 150;
+      column.maxWidth = 150;
     } else if (column.key === 'description') {
       column.isMultiline = true;
       column.minWidth = 200;
@@ -58,8 +64,13 @@ const _buildColumns = (
       );
       column.minWidth = 90;
       column.maxWidth = 90;
+    } else {
+      column.minWidth = 90;
+      column.maxWidth = 90;
     }
   });
+
+  console.log('Columns built: ', columns);
 
   return columns;
 };
@@ -119,14 +130,40 @@ const Table = ({ items, structure, onOption, groups }) => {
     return doEffect();
   }, [items, groups]);
 
+  //
   const _renderItemColumn = (item, index, column) => {
     const fieldContent = item[column.fieldName];
+    const tableType = structure.header.type;
 
+    const isTableArchive = tableType === 'archives';
+
+    // console.log('column: ', column);
     switch (column.key) {
+      case 'datetime':
+        console.log('structure: ', structure);
+        if (isTableArchive) {
+          return (
+            <>
+              <span>{`${fieldContent} `}</span>
+              <Link href="#">(details)</Link>
+            </>
+          );
+        }
+        return <span>{fieldContent}</span>;
+
+        break;
+
       case 'bus':
         return <StyledText right>{fieldContent}</StyledText>;
 
       case 'vendor':
+        if (isTableArchive) {
+          return (
+            <StyledCell left>
+              <span>{fieldContent}</span>
+            </StyledCell>
+          );
+        }
         return (
           <StyledCell left>
             <Link href="#">{fieldContent}</Link>
@@ -159,6 +196,7 @@ const Table = ({ items, structure, onOption, groups }) => {
     alert(`Item ${item.name} at index ${index} has been invoked.`);
   };
 
+  //
   const _copyAndSort = (argItems, columnKey, isSortedDescending = false) => {
     const key = columnKey;
 
@@ -175,6 +213,7 @@ const Table = ({ items, structure, onOption, groups }) => {
     return filterItems.slice(0).sort((a, b) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1));
   };
 
+  //
   const _onSort = () => {
     if (structure.header.type === 'dashboard') {
       setSortLabel(sortLabel === 'Vendor' ? 'BUs' : 'Vendor');
@@ -183,6 +222,7 @@ const Table = ({ items, structure, onOption, groups }) => {
     }
   };
 
+  //
   const _onShowSpecs = () => {
     onOption();
   };

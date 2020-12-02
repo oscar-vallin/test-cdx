@@ -5,7 +5,7 @@ import { ROUTES } from '../data/constants/RouteConstants';
 // Routes
 import { LoginPage } from './Login';
 import { DashboardPage } from './Dashboard';
-import { ArchivesPage } from './Archives';
+import { ArchivePage } from './Archives';
 import { SchedulePage } from './Schedule';
 import { TransmissionsPage } from './Transmissions';
 import { ErrorsPage } from './Errors';
@@ -30,7 +30,7 @@ export const Routes = () => {
         <FileStatusPage />
       </Route>
       <Route path={ROUTES.ROUTE_ARCHIVES.URL}>
-        <ArchivesPage />
+        <ArchivePage />
       </Route>
       <Route path={ROUTES.ROUTE_SCHEDULE.URL}>
         <SchedulePage />

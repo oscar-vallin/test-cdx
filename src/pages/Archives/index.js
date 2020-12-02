@@ -1,3 +1,3 @@
-import { ArchivesPage } from './ArchivesPage';
+import { ArchivePage } from './ArchivesPage';
 
-export { ArchivesPage };
+export { ArchivePage };

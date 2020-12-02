@@ -1,13 +1,11 @@
 import React from 'react';
 
-import { Badge } from '../../../components/badges/Badge';
 import { Button } from '../../../components/buttons/Button';
 import { Card } from '../../../components/cards/Card';
 import { Row, Column } from '../../../components/layouts';
 import { Spacing } from '../../../components/spacings/Spacing';
 import { MessageBar } from '../../../components/notifications/MessageBar';
 import { Separator } from '../../../components/separators/Separator';
-import { Text } from '../../../components/typography/Text';
 import { TableQualityChecks } from '../../../containers/tables/TableQualityChecks';
 
 const QualityChecksTab = () => {

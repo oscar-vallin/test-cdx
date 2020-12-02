@@ -2,15 +2,16 @@ import React from 'react';
 import { ROUTES } from '../../data/constants/RouteConstants';
 
 import { LayoutDashboard } from '../../layouts/LayoutDashboard';
+import { TableArchive } from '../../containers/tables/TableArchive';
 
-const _ArchivesPage = () => {
+const _ArchivePage = () => {
   return (
-    <LayoutDashboard id="PageArchives" menuOptionSelected={ROUTES.ROUTE_ARCHIVES.ID}>
-      Body Archives
+    <LayoutDashboard id="PageDashboard" menuOptionSelected={ROUTES.ROUTE_FILE_STATUS.ID}>
+      <TableArchive />
     </LayoutDashboard>
   );
 };
 
-const ArchivesPage = React.memo(_ArchivesPage);
+const ArchivePage = React.memo(_ArchivePage);
 
-export { ArchivesPage };
+export { ArchivePage };
