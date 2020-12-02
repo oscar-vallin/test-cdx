@@ -35,71 +35,30 @@ export const useTable = (argOrgSid, argWorkerId) => {
     }
   }, [data]);
 
+  const buildRecord = (label, context, outerContext, unitId, record) => {
+    return {
+      status: label,
+      employeeId: unitId,
+      employee: outerContext,
+      dependent: context,
+      message: record.message.join(' '),
+      field: record.id,
+      value: record.rawValue,
+      transformedValue: record.value,
+    };
+  };
+
   // Build Items.
   const buildItems = (_data) => {
     if (_data) {
-      const arrayItems = [
-        {
-          status: 'Error',
-          employeeId: '50023822',
-          employee: 'Eric Paine',
-          dependent: '',
-          message: 'Missing Field',
-          field: 'L2REFSX.REF02',
-          value: '',
-          transformedValue: '',
-        },
-        {
-          status: 'Error',
-          employeeId: '50023822',
-          employee: 'Eric Paine',
-          dependent: '',
-          message: 'Missing Field',
-          field: 'L2REFSX.REF02',
-          value: '',
-          transformedValue: '',
-        },
-        {
-          status: 'Error',
-          employeeId: '50023822',
-          employee: 'Eric Paine',
-          dependent: 'Isish Loew',
-          message: 'Missing Field',
-          field: 'L2REFSX.REF02',
-          value: '',
-          transformedValue: '',
-        },
-        {
-          status: 'Warning',
-          employeeId: '50023822',
-          employee: 'Eric Paine',
-          dependent: 'Isish Loew',
-          message: 'Missing Field',
-          field: 'L2REFSX.REF02',
-          value: '',
-          transformedValue: '',
-        },
-        {
-          status: 'Warning',
-          employeeId: '50023822',
-          employee: 'Eric Paine',
-          dependent: '',
-          message: 'Missing Field',
-          field: 'L2REFSX.REF02',
-          value: '',
-          transformedValue: '',
-        },
-        {
-          status: 'Warning',
-          employeeId: '50023822',
-          employee: 'Eric Paine',
-          dependent: '',
-          message: 'Missing Field',
-          field: 'L2REFSX.REF02',
-          value: '',
-          transformedValue: '',
-        },
-      ];
+      const arrayItems = _data.workPacketStatusDetails.qualityChecks.sequenceCreationEvent.map(
+        ({ recordCreationEvent }) =>
+          recordCreationEvent.map(({ context, outerContext, unitId, error, information, warning }) => [
+            ...error.map((itemRecord) => buildRecord('Error', context, outerContext, unitId, itemRecord)),
+            ...information.map((itemRecord) => buildRecord('Error', context, outerContext, unitId, itemRecord)),
+            ...warning.map((itemRecord) => buildRecord('Error', context, outerContext, unitId, itemRecord)),
+          ])
+      )[0][0];
 
       setTableItems(arrayItems);
     }
