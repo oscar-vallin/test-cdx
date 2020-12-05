@@ -7,6 +7,7 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { ApolloContextProvider } from './contexts/ApolloContext.js';
 import { ThemeContextProvider } from './contexts/ThemeContext.js';
+import { AuthContextProvider } from './contexts/AuthContext.js';
 
 initializeIcons();
 
@@ -14,9 +15,11 @@ ReactDOM.render(
   <React.StrictMode>
     <ApolloContextProvider>
       <ThemeContextProvider>
-        <Router>
-          <App />
-        </Router>
+        <AuthContextProvider>
+          <Router>
+            <App />
+          </Router>
+        </AuthContextProvider>
       </ThemeContextProvider>
     </ApolloContextProvider>
   </React.StrictMode>,

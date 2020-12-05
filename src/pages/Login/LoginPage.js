@@ -1,12 +1,13 @@
-import React from "react";
+import React from 'react';
 
-import { LayoutLogin } from "../../layouts/LayoutLogin";
-import { FormLogin } from "../../containers/forms/FormLogin";
+import { LayoutLogin } from '../../layouts/LayoutLogin';
+import { FormLogin } from '../../containers/forms/FormLogin';
+import { login } from './LoginPage.service';
 
 const _LoginPage = () => {
   return (
     <LayoutLogin id="PageLogin">
-      <FormLogin id="FormLogin" />
+      <FormLogin id="FormLogin" onLogin={() => {}} />
     </LayoutLogin>
   );
 };

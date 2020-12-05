@@ -1,12 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useInputValue } from '../../../hooks/useInputValue';
 import { ROUTE_DASHBOARD } from '../../../data/constants/RouteConstants';
+import { usePasswordLoginMutation } from '../../../data/services/graphql';
 
 // useEmailField
 export const useLogin = () => {
   const email = useInputValue('Email', 'Your email Address', '', 'email');
   const password = useInputValue('Password', 'Password', '', 'password');
+  const [passwordLoginMutation, { data, loading, error }] = usePasswordLoginMutation({
+    variables: {
+      userId: email.value,
+      password: password.value,
+    },
+  });
+
   const history = useHistory();
 
   const [isProcessing, setIsProcessing] = React.useState(false);
@@ -48,21 +56,28 @@ export const useLogin = () => {
 
   const submitLogin = () => {
     setValidationError();
-    setIsProcessing(true);
+    console.log('SubmitLogin');
 
-    setTimeout(() => {
-      const validation = password.value === 'test';
-
-      if (!validation) {
-        setErrorMessage('Invalid password');
-        setIsProcessing(false);
-        return;
-      }
-
-      // Route to Dashboard
-      routeDashboard();
-    }, 1000);
+    console.log('Email.value: ', email.value);
+    console.log('password.value: ', password.value);
+    passwordLoginMutation();
   };
+
+  useEffect(() => {
+    console.log('Data:', data);
+    console.log('Error: ', error);
+
+    if (data) {
+      if ((data?.passwordLogin?.step ?? '') === 'COMPLETE') {
+        routeDashboard();
+      }
+    }
+  }, [data, error]);
+
+  useEffect(() => {
+    console.log('loading:', loading);
+    setIsProcessing(loading);
+  }, [loading]);
 
   return { email, password, isProcessing, isEmailValid, validationError, emailValidation, resetEmail, submitLogin };
 };

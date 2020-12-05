@@ -20,8 +20,8 @@ import {
 } from './FormLogin.styles';
 
 // CardSection is called directly cause a restriction warning for that component.
-const FormLogin = ({ id = '__FormLogin' }) => {
-  const handlerLogin = useLogin();
+const FormLogin = ({ id = '__FormLogin', onLogin }) => {
+  const handlerLogin = useLogin(onLogin);
   const { email, password } = handlerLogin;
 
   return (
