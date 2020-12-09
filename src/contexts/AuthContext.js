@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { usePasswordLoginMutation } from '../data/services/graphql';
-
+import { useErrorMessage } from '../hooks/useErrorMessage';
 import { getRouteByApiId } from '../data/constants/RouteConstants';
 
 //
@@ -17,12 +17,14 @@ export const AuthContextProvider = ({ children }) => {
   const [password, setPassword] = useState('');
   const [authData, setAuthData] = useState();
   const [authHistory, setHistory] = useState();
+
   const [passwordLoginMutation, { data, loading, error }] = usePasswordLoginMutation({
     variables: {
       userId: user,
       password,
     },
   });
+  const authError = useErrorMessage();
 
   // Component Did Mount
   useEffect(() => {
@@ -41,6 +43,9 @@ export const AuthContextProvider = ({ children }) => {
 
   //
   useEffect(() => {
+    console.log('Data...: ', data);
+    console.log('Error...: ', error);
+
     if (error) {
       console.log('Error: ', error);
       return;
@@ -82,28 +87,29 @@ export const AuthContextProvider = ({ children }) => {
 
     const routePage = getRouteByApiId(authData.selectedPage);
 
+    console.log('routePage: ', routePage);
+
     if (!routePage) {
+      authError.setMessage('Route not Defined');
       return;
     }
 
-    console.log('routePAge: ', routePage);
+    // "userId": "joe.admin@example.com",
+    // "password": "changeBen21"
 
-    authHistory.push(routePage.URL);
+    return authHistory.push(routePage.URL);
   }, [authData, authHistory]);
 
-  // const authNavigate = (_history) => {
-  //   if (authData) console.log('authHistory: ', authHistory);
-  //   console.log('authData: ', authData);
-  //   const routePage = getRouteByApiId(authData.selectedPage);
+  useEffect(() => {
+    console.log('st User: ', user);
+    console.log('st Password:', password);
 
-  //   if (!routePage) {
-  //     return;
-  //   }
+    if (user.length && password.length) return passwordLoginMutation();
 
-  //   console.log('routePAge: ', routePage);
+    return null;
 
-  //   authHistory.push(routePage.URL);
-  // };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, password]);
 
   //
   const authLogin = (_user, _password, _history) => {
@@ -114,16 +120,14 @@ export const AuthContextProvider = ({ children }) => {
     setUser(_user);
     setPassword(_password);
     setHistory(_history);
-    passwordLoginMutation();
+    // passwordLoginMutation();
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const values = React.useMemo(() => ({ isContextLoading, isAuthenticating, isAuthenticated, authData, authLogin }), [
-    isContextLoading,
-    isAuthenticating,
-    isAuthenticated,
-    authData,
-  ]);
+  const values = React.useMemo(
+    () => ({ isContextLoading, isAuthenticating, isAuthenticated, authData, authError, authLogin }),
+    [isContextLoading, isAuthenticating, isAuthenticated, authData, authError]
+  );
 
   // Finally, return the interface that we want to expose to our other components
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;

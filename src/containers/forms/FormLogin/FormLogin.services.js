@@ -9,7 +9,7 @@ export const useLogin = () => {
   const password = useInputValue('Password', 'Password', '', 'password');
   const history = useHistory();
 
-  const { authLogin, isAuthenticating } = useAuthContext();
+  const { authLogin, isAuthenticating, authError } = useAuthContext();
 
   const [isProcessing, setIsProcessing] = React.useState(false);
   const [validationError, setValidationError] = React.useState('');
@@ -62,6 +62,11 @@ export const useLogin = () => {
   useEffect(() => {
     setIsProcessing(isAuthenticating);
   }, [isAuthenticating]);
+
+  //
+  useEffect(() => {
+    if (authError && authError.message) setValidationError(authError.message);
+  }, [authError]);
 
   //
   return { email, password, isProcessing, isEmailValid, validationError, emailValidation, resetEmail, submitLogin };
