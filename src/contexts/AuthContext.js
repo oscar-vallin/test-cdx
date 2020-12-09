@@ -23,7 +23,6 @@ export const AuthContextProvider = ({ children }) => {
       password,
     },
   });
-  // const history = useHistory();
 
   // Component Did Mount
   useEffect(() => {
@@ -33,7 +32,6 @@ export const AuthContextProvider = ({ children }) => {
     };
 
     localFunction();
-    console.log('AuthContext Loading...');
   }, []);
 
   //
