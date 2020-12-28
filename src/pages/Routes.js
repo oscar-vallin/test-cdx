@@ -13,6 +13,7 @@ import { AdminPage } from './Admin';
 import { NotFoundPage } from './NotFound';
 import { FileStatusPage } from './FileStatus';
 import { FileStatusDetailsPage } from './FileStatusDetails';
+import { OrganizationsPage } from './Organizations';
 
 export const Routes = () => {
   return (
@@ -43,6 +44,9 @@ export const Routes = () => {
       </Route>
       <Route path={ROUTES.ROUTE_ADMIN.URL}>
         <AdminPage />
+      </Route>
+      <Route path={ROUTES.ROUTE_ORGANIZATIONS.URL}>
+        <OrganizationsPage />
       </Route>
       <Route>
         <NotFoundPage />

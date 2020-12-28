@@ -8,6 +8,7 @@ export const ROUTES_ID = {
   TRANSMISSIONS: 'transmissions',
   ERRORS: 'errors',
   ADMIN: 'admin',
+  ORGANIZATIONS: 'organizations',
 };
 
 const URL_ROUTES = {
@@ -21,6 +22,7 @@ const URL_ROUTES = {
   TRANSMISSIONS: `/${ROUTES_ID.TRANSMISSIONS}`,
   ERRORS: `/${ROUTES_ID.ERRORS}`,
   ADMIN: `/${ROUTES_ID.ADMIN}`,
+  ORGANIZATIONS: `/${ROUTES_ID.ORGANIZATIONS}`,
 };
 
 // DASHBOARD;
@@ -123,6 +125,14 @@ export const ROUTE_ADMIN = {
   API_ID: 'ORG_ACTIVITY',
 };
 
+export const ROUTE_ORGANIZATIONS = {
+  ID: ROUTES_ID.ORGANIZATIONS,
+  TITLE: 'Organizations',
+  URL: URL_ROUTES.ORGANIZATIONS,
+  MAIN_MENU: false,
+  API_ID: 'ORG_ACTIVITY',
+};
+
 export const ROUTES = {
   ROUTE_HOME,
   ROUTE_LOGIN,
@@ -134,6 +144,7 @@ export const ROUTES = {
   ROUTE_TRANSMISSIONS,
   ROUTE_ERRORS,
   ROUTE_ADMIN,
+  ROUTE_ORGANIZATIONS,
 };
 
 export const ROUTES_ARRAY = [
@@ -147,6 +158,7 @@ export const ROUTES_ARRAY = [
   ROUTE_TRANSMISSIONS,
   ROUTE_ERRORS,
   ROUTE_ADMIN,
+  ROUTE_ORGANIZATIONS,
 ];
 
 export const getRouteByApiId = (_apiId) => {
