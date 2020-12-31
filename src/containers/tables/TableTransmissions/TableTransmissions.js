@@ -3,15 +3,15 @@ import PropTypes from 'prop-types';
 import { Table } from '../../../components/tables/TableNew';
 
 import { Box, Row, Column, Container, RightColumn } from './TableTransmissions.styles';
-import { useTable, useInputs } from './TableOrganizations.service';
+import { useTable, useInputs } from './TableTransmissions.service';
 import { InputText } from '../../../components/inputs/InputText';
 import { InputDateRange } from '../../../components/inputs/InputDateRange';
 
-const TableOrganizations = ({ id = 'TableOrganizations', data, dateRange, filter }) => {
+const TableTransmissions = ({ id = 'TableTransmissions', data, dateRange, filter }) => {
   const { tableProps } = useTable(data);
   const { localInput, startDate, endDate } = useInputs();
 
-  console.log('TableOrganizations, tableProps: ', tableProps);
+  console.log('TableTransmissions, tableProps: ', tableProps);
   return (
     <Container>
       {!tableProps.loading && (
@@ -23,11 +23,11 @@ const TableOrganizations = ({ id = 'TableOrganizations', data, dateRange, filter
   );
 };
 
-TableOrganizations.propTypes = {
+TableTransmissions.propTypes = {
   id: PropTypes.string,
   orgSid: PropTypes.string,
   dateRange: PropTypes.array,
   filter: PropTypes.string,
 };
 
-export { TableOrganizations };
+export { TableTransmissions };
