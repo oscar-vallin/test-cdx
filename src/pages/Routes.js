@@ -15,39 +15,44 @@ import { FileStatusPage } from './FileStatus';
 import { FileStatusDetailsPage } from './FileStatusDetails';
 import { OrganizationsPage } from './Organizations';
 
+import AuthenticatedRoute from './AuthRoute';
+import UnauthenticatedRoute from './UnauthRoute';
+
 export const Routes = () => {
   return (
     <Switch>
-      <Route exact path="/">
+      <UnauthenticatedRoute path="/login">
         <LoginPage />
-      </Route>
-      <Route path={ROUTES.ROUTE_DASHBOARD.URL}>
+      </UnauthenticatedRoute>
+      {/* Authenticated */}
+      <AuthenticatedRoute path="/">
         <DashboardPage />
-      </Route>
-      <Route path={ROUTES.ROUTE_FILE_STATUS_DETAILS.URL}>
+      </AuthenticatedRoute>
+      <AuthenticatedRoute path={ROUTES.ROUTE_FILE_STATUS_DETAILS.URL}>
         <FileStatusDetailsPage />
-      </Route>
-      <Route path={ROUTES.ROUTE_FILE_STATUS.URL}>
+      </AuthenticatedRoute>
+      <AuthenticatedRoute path={ROUTES.ROUTE_FILE_STATUS.URL}>
         <FileStatusPage />
-      </Route>
-      <Route path={ROUTES.ROUTE_ARCHIVES.URL}>
+      </AuthenticatedRoute>
+      <AuthenticatedRoute path={ROUTES.ROUTE_ARCHIVES.URL}>
         <ArchivePage />
-      </Route>
-      <Route path={ROUTES.ROUTE_SCHEDULE.URL}>
+      </AuthenticatedRoute>
+      <AuthenticatedRoute path={ROUTES.ROUTE_SCHEDULE.URL}>
         <SchedulePage />
-      </Route>
-      <Route path={ROUTES.ROUTE_TRANSMISSIONS.URL}>
+      </AuthenticatedRoute>
+      <AuthenticatedRoute path={ROUTES.ROUTE_TRANSMISSIONS.URL}>
         <TransmissionsPage />
-      </Route>
-      <Route path={ROUTES.ROUTE_ERRORS.URL}>
+      </AuthenticatedRoute>
+      <AuthenticatedRoute path={ROUTES.ROUTE_ERRORS.URL}>
         <ErrorsPage />
-      </Route>
-      <Route path={ROUTES.ROUTE_ADMIN.URL}>
+      </AuthenticatedRoute>
+      <AuthenticatedRoute path={ROUTES.ROUTE_ADMIN.URL}>
         <AdminPage />
-      </Route>
-      <Route path={ROUTES.ROUTE_ORGANIZATIONS.URL}>
+      </AuthenticatedRoute>
+      <AuthenticatedRoute path={ROUTES.ROUTE_ORGANIZATIONS.URL}>
         <OrganizationsPage />
-      </Route>
+      </AuthenticatedRoute>
+      {/* Not Found Route */}
       <Route>
         <NotFoundPage />
       </Route>

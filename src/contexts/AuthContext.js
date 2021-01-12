@@ -18,6 +18,9 @@ export const AuthContextProvider = ({ children }) => {
   const [authData, setAuthData] = useState();
   const [authHistory, setHistory] = useState();
 
+  // "userId": "joe.admin@example.com",
+  // "password": "changeBen21"
+
   const [passwordLoginMutation, { data, loading, error }] = usePasswordLoginMutation({
     variables: {
       userId: user,
@@ -30,6 +33,17 @@ export const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     const localFunction = async () => {
       setLoading(false);
+      const savedAuthData = localStorage.getItem('AUTH_DATA');
+      console.log('savedAuthData: ', savedAuthData);
+
+      if (savedAuthData) {
+        setAuthData(JSON.parse(savedAuthData));
+        setAuthenticated(true);
+        return;
+      }
+
+      setAuthenticated(false);
+
       // Execute Function
     };
 
@@ -71,6 +85,7 @@ export const AuthContextProvider = ({ children }) => {
         };
 
         console.log('Saved AuthData', authData);
+        localStorage.setItem('AUTH_DATA', JSON.stringify(authData));
         setAuthData(authData);
         setAuthenticated(true);
       }
@@ -85,6 +100,8 @@ export const AuthContextProvider = ({ children }) => {
       return;
     }
 
+    console.log('Change AuthData, authData.selectedPage: ', authData.selectedPage);
+
     const routePage = getRouteByApiId(authData.selectedPage);
 
     console.log('routePage: ', routePage);
@@ -96,6 +113,8 @@ export const AuthContextProvider = ({ children }) => {
 
     // "userId": "joe.admin@example.com",
     // "password": "changeBen21"
+
+    if (!authHistory) return;
 
     return authHistory.push(routePage.URL);
   }, [authData, authHistory]);
