@@ -21,11 +21,14 @@ import UnauthenticatedRoute from './UnauthRoute';
 export const Routes = () => {
   return (
     <Switch>
-      <UnauthenticatedRoute path="/login">
+      <UnauthenticatedRoute exact path="/login">
         <LoginPage />
       </UnauthenticatedRoute>
       {/* Authenticated */}
-      <AuthenticatedRoute path="/">
+      <AuthenticatedRoute exact path="/">
+        <DashboardPage />
+      </AuthenticatedRoute>
+      <AuthenticatedRoute path={ROUTES.ROUTE_DASHBOARD.URL}>
         <DashboardPage />
       </AuthenticatedRoute>
       <AuthenticatedRoute path={ROUTES.ROUTE_FILE_STATUS_DETAILS.URL}>

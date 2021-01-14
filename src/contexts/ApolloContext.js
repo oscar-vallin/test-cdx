@@ -3,6 +3,7 @@ import { ApolloProvider, ApolloClient, InMemoryCache, split, HttpLink } from '@a
 
 import { getMainDefinition } from '@apollo/client/utilities';
 import { WebSocketLink } from '@apollo/client/link/ws';
+import { setContext } from '@apollo/client/link/context';
 
 //
 export const ApolloContext = React.createContext(() => {
@@ -13,10 +14,22 @@ export const ApolloContext = React.createContext(() => {
 export const ApolloContextProvider = ({ children }) => {
   // LocalState
   const [isContextLoading, setLoading] = React.useState(true);
+  const [bearerToken, setBearerToken] = React.useState();
+
+  const authLink = setContext((_, { headers }) => {
+    const token = localStorage.getItem('AUTH_TOKEN');
+    return {
+      headers: {
+        ...headers,
+        authorization: token ? `Bearer ${token}` : '',
+      },
+    };
+  });
 
   const httpLink = new HttpLink({
     // uri: 'http://localhost:4000/',
     uri: 'https://x1-terraform-loadbalancer.k2u.xyz/graphql/',
+    options: {},
   });
 
   //
@@ -42,7 +55,8 @@ export const ApolloContextProvider = ({ children }) => {
   const link = httpLink;
 
   const client = new ApolloClient({
-    link,
+    // link,
+    link: authLink.concat(httpLink),
     cache: new InMemoryCache(),
     connectToDevTools: true,
   });
@@ -63,8 +77,17 @@ export const ApolloContextProvider = ({ children }) => {
   // Local Functions shared in Context.
   const onUpdate = async () => {};
 
+  // Local Functions shared in Context.
+  const saveToken = (token) => {
+    if (token) {
+      setToken(token);
+    } else {
+      setToken(undefined);
+    }
+  };
+
   //
-  const values = React.useMemo(() => ({ isContextLoading, client, onUpdate }), [isContextLoading, client]);
+  const values = React.useMemo(() => ({ isContextLoading, client, onUpdate, saveToken }), [isContextLoading, client]);
 
   // Finally, return the interface that we want to expose to our other components
   return (

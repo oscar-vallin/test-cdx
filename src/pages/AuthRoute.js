@@ -6,6 +6,8 @@ export default function AuthenticatedRoute({ children, ...rest }) {
   const { pathname, search } = useLocation();
   const { isAuthenticated } = useAuthContext();
 
+  console.log('AuthenticatedRoute, rest', rest);
+  console.log('AuthenticatedRoute, children', children);
   return (
     <Route {...rest}>
       {isAuthenticated ? (

@@ -5,6 +5,7 @@ import { LayoutDashboard } from '../../layouts/LayoutDashboard';
 import { TableFileStatus } from '../../containers/tables/TableFileStatus';
 
 const _FileStatusPage = () => {
+
   return (
     <LayoutDashboard id="PageDashboard" menuOptionSelected={ROUTES.ROUTE_FILE_STATUS.ID}>
       <TableFileStatus />

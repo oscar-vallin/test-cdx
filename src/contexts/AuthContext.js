@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { usePasswordLoginMutation } from '../data/services/graphql';
 import { useErrorMessage } from '../hooks/useErrorMessage';
 import { getRouteByApiId } from '../data/constants/RouteConstants';
-
+import { useApolloContext } from './ApolloContext';
 //
 export const AuthContext = React.createContext(() => {
   //
@@ -17,6 +17,7 @@ export const AuthContextProvider = ({ children }) => {
   const [password, setPassword] = useState('');
   const [authData, setAuthData] = useState();
   const [authHistory, setHistory] = useState();
+  const { saveToken } = useApolloContext();
 
   // "userId": "joe.admin@example.com",
   // "password": "changeBen21"
@@ -56,6 +57,8 @@ export const AuthContextProvider = ({ children }) => {
   }, [loading]);
 
   //
+  // When Server Response or Data is cleaned.
+  //
   useEffect(() => {
     console.log('Data...: ', data);
     console.log('Error...: ', error);
@@ -93,6 +96,8 @@ export const AuthContextProvider = ({ children }) => {
   }, [data, error]);
 
   //
+  // When AuthData changes cause is saved for login
+  //
   useEffect(() => {
     console.log('Change AuthData: ', authData);
 
@@ -119,11 +124,14 @@ export const AuthContextProvider = ({ children }) => {
     return authHistory.push(routePage.URL);
   }, [authData, authHistory]);
 
+  //
+  // When user / password.
+  //
   useEffect(() => {
     console.log('st User: ', user);
     console.log('st Password:', password);
 
-    if (user.length && password.length) return passwordLoginMutation();
+    if (user?.length && password?.length) return passwordLoginMutation();
 
     return null;
 
@@ -142,9 +150,26 @@ export const AuthContextProvider = ({ children }) => {
     // passwordLoginMutation();
   };
 
+  //
+  // * Clear all the Input Data Username and Password for the context.
+  //
+  const clearInputLoginData = () => {
+    setUser();
+    setPassword();
+  };
+
+  //
+  // * Clear all the Input Data Username and Password for the context.
+  //
+  const authLogout = () => {
+    setAuthData();
+    setAuthenticated(false);
+    clearInputLoginData();
+  };
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const values = React.useMemo(
-    () => ({ isContextLoading, isAuthenticating, isAuthenticated, authData, authError, authLogin }),
+    () => ({ isContextLoading, isAuthenticating, isAuthenticated, authData, authError, authLogin, authLogout }),
     [isContextLoading, isAuthenticating, isAuthenticated, authData, authError]
   );
 
