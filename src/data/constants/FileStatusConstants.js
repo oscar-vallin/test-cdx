@@ -121,3 +121,7 @@ export const getProgressItemByString = (argStringValues) => {
     STEP_STATUS_DEFAULT[0]
   );
 };
+
+export const getStepStatusLabel = (stepStatusId) => {
+  return STEP_STATUS.find((step) => step.stepStatus.value === stepStatusId).stepStatus.label;
+};

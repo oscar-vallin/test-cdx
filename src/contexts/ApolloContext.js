@@ -5,6 +5,8 @@ import { getMainDefinition } from '@apollo/client/utilities';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { setContext } from '@apollo/client/link/context';
 
+const SERVER_URL = 'https://x1-terraform-loadbalancer.k2u.xyz/graphql/';
+
 //
 export const ApolloContext = React.createContext(() => {
   // Initialization
@@ -15,9 +17,21 @@ export const ApolloContextProvider = ({ children }) => {
   // LocalState
   const [isContextLoading, setLoading] = React.useState(true);
   const [bearerToken, setBearerToken] = React.useState();
+  // const [client, setApolloClient] = React.useState(
+  //   new ApolloClient({
+  //     // link,
+  //     link: new HttpLink({
+  //       uri: SERVER_URL,
+  //       options: {},
+  //     }),
+  //     cache: new InMemoryCache(),
+  //     connectToDevTools: true,
+  //   })
+  // );
 
   const authLink = setContext((_, { headers }) => {
     const token = localStorage.getItem('AUTH_TOKEN');
+    setBearerToken(token);
     return {
       headers: {
         ...headers,
@@ -26,40 +40,38 @@ export const ApolloContextProvider = ({ children }) => {
     };
   });
 
-  const httpLink = new HttpLink({
-    // uri: 'http://localhost:4000/',
-    uri: 'https://x1-terraform-loadbalancer.k2u.xyz/graphql/',
-    options: {},
-  });
+  const httpLink = new HttpLink({ uri: SERVER_URL });
 
-  //
-  const wsLink = new WebSocketLink({
-    // uri: `ws://localhost:4000/graphql`,
-    uri: `ws://x1-terraform-loadbalancer.k2u.xyz/graphql/`,
-    options: {
-      reconnect: false,
-      timeout: 30000,
-    },
-  });
-
-  //
-  // const link = split(
-  //   ({ query }) => {
-  //     const definition = getMainDefinition(query);
-  //     return definition.kind === 'OperationDefinition' && definition.operation === 'subscription';
-  //   },
-  //   wsLink,
-  //   httpLink
-  // );
-
-  const link = httpLink;
-
-  const client = new ApolloClient({
+  let client = new ApolloClient({
     // link,
     link: authLink.concat(httpLink),
     cache: new InMemoryCache(),
     connectToDevTools: true,
   });
+
+  const configureApollo = () => {
+    const authLink = setContext((_, { headers }) => {
+      const token = localStorage.getItem('AUTH_TOKEN');
+      return {
+        headers: {
+          ...headers,
+          authorization: token ? `Bearer ${token}` : '',
+        },
+      };
+    });
+
+    const httpLink = new HttpLink({ uri: SERVER_URL });
+
+    const _client = new ApolloClient({
+      // link,
+      link: authLink.concat(httpLink),
+      cache: new InMemoryCache(),
+      connectToDevTools: true,
+    });
+
+    //
+    client = _client;
+  };
 
   // Con
 
@@ -67,6 +79,7 @@ export const ApolloContextProvider = ({ children }) => {
   React.useEffect(() => {
     const localFunction = async () => {
       setLoading(false);
+      configureApollo();
     };
 
     localFunction();
@@ -78,16 +91,17 @@ export const ApolloContextProvider = ({ children }) => {
   const onUpdate = async () => {};
 
   // Local Functions shared in Context.
-  const saveToken = (token) => {
-    if (token) {
-      setToken(token);
-    } else {
-      setToken(undefined);
+  const loadToken = (token) => {
+    console.log('ApolloContext - Token: ', token);
+    console.log('ApolloContext - bearerToken: ', bearerToken);
+    if (!!token && !!bearerToken && token !== bearerToken) {
+      configureApollo();
+      setBearerToken(token);
     }
   };
 
   //
-  const values = React.useMemo(() => ({ isContextLoading, client, onUpdate, saveToken }), [isContextLoading, client]);
+  const values = React.useMemo(() => ({ isContextLoading, client, onUpdate, loadToken }), [isContextLoading, client]);
 
   // Finally, return the interface that we want to expose to our other components
   return (
@@ -98,7 +112,7 @@ export const ApolloContextProvider = ({ children }) => {
 };
 
 //
-export function useLanguageContext() {
+export function useApolloContext() {
   const context = React.useContext(ApolloContext);
 
   return context;

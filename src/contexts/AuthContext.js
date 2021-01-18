@@ -17,7 +17,7 @@ export const AuthContextProvider = ({ children }) => {
   const [password, setPassword] = useState('');
   const [authData, setAuthData] = useState();
   const [authHistory, setHistory] = useState();
-  const { saveToken } = useApolloContext();
+  const [token, setToken] = useState();
 
   // "userId": "joe.admin@example.com",
   // "password": "changeBen21"
@@ -35,11 +35,14 @@ export const AuthContextProvider = ({ children }) => {
     const localFunction = async () => {
       setLoading(false);
       const savedAuthData = localStorage.getItem('AUTH_DATA');
+      const savedToken = localStorage.getItem('AUTH_TOKEN');
       console.log('savedAuthData: ', savedAuthData);
 
-      if (savedAuthData) {
+      if (savedToken) {
+        setToken(savedToken);
         setAuthData(JSON.parse(savedAuthData));
         setAuthenticated(true);
+
         return;
       }
 
@@ -89,8 +92,11 @@ export const AuthContextProvider = ({ children }) => {
 
         console.log('Saved AuthData', authData);
         localStorage.setItem('AUTH_DATA', JSON.stringify(authData));
+        localStorage.setItem('AUTH_TOKEN', authData.token);
         setAuthData(authData);
         setAuthenticated(true);
+        //
+        // Set Bearer Token
       }
     }
   }, [data, error]);
@@ -162,6 +168,7 @@ export const AuthContextProvider = ({ children }) => {
   // * Clear all the Input Data Username and Password for the context.
   //
   const authLogout = () => {
+    localStorage.removeItem('AUTH_TOKEN');
     setAuthData();
     setAuthenticated(false);
     clearInputLoginData();
@@ -169,8 +176,8 @@ export const AuthContextProvider = ({ children }) => {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const values = React.useMemo(
-    () => ({ isContextLoading, isAuthenticating, isAuthenticated, authData, authError, authLogin, authLogout }),
-    [isContextLoading, isAuthenticating, isAuthenticated, authData, authError]
+    () => ({ isContextLoading, isAuthenticating, isAuthenticated, authData, authError, token, authLogin, authLogout }),
+    [isContextLoading, isAuthenticating, isAuthenticated, authData, authError, token]
   );
 
   // Finally, return the interface that we want to expose to our other components

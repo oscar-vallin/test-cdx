@@ -132,16 +132,25 @@ const Table = ({ items, columns, structure, onOption, groups }) => {
     };
 
     return doEffect();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [items, groups]);
 
   //
   const _renderItemColumn = (item, index, column) => {
     const fieldContent = item[column.fieldName];
+    const fieldItem = items[index].find((_item) => _item.columnId === column.fieldName);
     const tableType = structure.header.type;
+
+    // console.log('renderItemColum, item: ', item);
+    // console.log('renderItemColum, fieldContent: ', fieldContent);
+    // console.log('renderItemColum, fieldLabel: ', fieldItem);
 
     const isTableArchive = tableType === 'archives';
 
     const columnData = columns.find((_column) => _column.key === column.key);
+
+    // console.log('renderItemColum, columnData: ', columnData);
 
     switch (columnData.style) {
       case 'datetime':
@@ -154,7 +163,21 @@ const Table = ({ items, columns, structure, onOption, groups }) => {
           );
         }
         return <span>{fieldContent}</span>;
-        break;
+
+      case 'link':
+        console.log('Table = link, fieldContent: ', fieldContent);
+        console.log('Table = link, fieldItem: ', fieldItem);
+
+        if (fieldItem?.sublabel) {
+          return (
+            <>
+              <span>{`${fieldContent} `}</span>
+              <Link href={`${fieldItem.text}`}>{fieldItem.sublabel}</Link>
+            </>
+          );
+        }
+
+        return <Link href={`${fieldContent}`}>{fieldItem.label}</Link>;
 
       case 'bus':
         return <StyledText right>{fieldContent}</StyledText>;
@@ -277,7 +300,6 @@ const Table = ({ items, columns, structure, onOption, groups }) => {
         layoutMode={DetailsListLayoutMode.justified}
         isHeaderVisible
         onItemInvoked={_onItemInvoked}
-        onRenderDetailsHeader={null}
         onRenderItemColumn={_renderItemColumn}
         groups={sortedGroups}
       />
@@ -286,7 +308,7 @@ const Table = ({ items, columns, structure, onOption, groups }) => {
     </StyledContainer>
   );
 
-  return <p>No Items</p>;
+  // return <p>No Items</p>;
 };
 
 Table.propTypes = {};
