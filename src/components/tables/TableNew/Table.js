@@ -17,6 +17,7 @@ import { FileProgress } from '../../../containers/bars/FileProgress';
 
 const _buildColumns = (
   items,
+  xtColumns,
   canResizeColumns,
   onColumnClick,
   sortedColumnKey,
@@ -36,6 +37,13 @@ const _buildColumns = (
   columns.forEach((column) => {
     column.onColumnContextMenu = onColumnContextMenu;
     column.ariaLabel = `Operations for ${column.name}`;
+    console.log('_buildColumns: column', column.ariaLabel);
+    column.isResizable = true;
+    column.minWidth = 100;
+    column.maxWidth = 200;
+    const columnData = xtColumns.find((xtColumn) => xtColumn.id === column.fieldName);
+    column.name = columnData?.label ?? column.name;
+    console.log('_buildColumns, xtColumns: ', columnData);
 
     if (column.key === 'thumbnail') {
       column.iconName = 'Picture';
@@ -55,6 +63,9 @@ const _buildColumns = (
       // column.onRender = (item) => <Link data-selection-invoke>{item.name}</Link>;
       column.minWidth = 270;
       column.maxWidth = 270;
+    } else if (column.key === 'clientFile') {
+      column.minWidth = 300;
+      column.maxWidth = 300;
     } else if (column.key === 'key') {
       column.columnActionsMode = ColumnActionsMode.disabled;
       column.onRender = (item) => (
@@ -87,16 +98,32 @@ const classNames = mergeStyleSets({
 });
 
 //
-const Table = ({ items, structure, onOption, groups }) => {
+const Table = ({ items, columns, structure, onOption, groups }) => {
   const [sortLabel, setSortLabel] = React.useState();
   const [sortedItems, setSortedItems] = React.useState([]);
   const [sortedGroups, setSortedGroups] = React.useState();
-  const [columns, setColumns] = React.useState([]);
+  const [tablecolumns, setColumns] = React.useState([]);
+
+  console.log('Table, items:', items);
+  console.log('Table, columns:', columns);
+  console.log('Table, structure:', structure);
 
   React.useEffect(() => {}, []);
 
   const _buildItems = () => {
-    console.log('Table buildItems: ', items);
+    const iItems = items.map((rowItem) => {
+      const objItem = {};
+
+      rowItem.forEach((rowColItem) => {
+        objItem[rowColItem.columnId] = rowColItem.value;
+      });
+
+      return objItem;
+    });
+
+    console.log('table, _buildItems, iItems', iItems);
+    setSortedItems(iItems);
+    return iItems;
   };
 
   React.useEffect(() => {
@@ -114,22 +141,9 @@ const Table = ({ items, structure, onOption, groups }) => {
         setSortedGroups(_groups);
       }
 
-      const filterItems = _buildItems(items);
-      // const filterItems = items.map((item) => {
-      //   const _item = { ...item };
-
-      //   if (item.hasOwnProperty('groupId')) {
-      //     delete _item.groupId;
-      //   }
-
-      //   return _item;
-      // });
-
-      setSortedItems(filterItems);
-
-      // const filterColumns = _buildColumns(filterItems);
-
-      // setColumns(filterColumns);
+      const _items = _buildItems();
+      const _columns = _buildColumns(_items, columns);
+      setColumns(_columns);
     };
 
     return doEffect();
@@ -142,8 +156,9 @@ const Table = ({ items, structure, onOption, groups }) => {
 
     const isTableArchive = tableType === 'archives';
 
-    // console.log('column: ', column);
-    switch (column.key) {
+    const columnData = columns.find((_column) => _column.key === column.key);
+
+    switch (columnData.style) {
       case 'datetime':
         console.log('structure: ', structure);
         if (isTableArchive) {
@@ -242,14 +257,18 @@ const Table = ({ items, structure, onOption, groups }) => {
     return <TableHeader header={structure.header} sortLabel={sortLabel} onSort={_onSort} onOption={_onShowSpecs} />;
   };
 
-  if (items) {
+  console.log('Render, SortedItems: ', sortedItems);
+  console.log('Render, tablecolumns: ', tablecolumns);
+  console.log('Header, type:', structure.header.type);
+
+  if (structure.header.type === 'dashboard') {
     return (
       <StyledContainer id="Table_Detailed" style={{ width: '100%' }}>
         <DetailsList
           className={classNames.root}
           id="TableDetailedList"
           items={sortedItems}
-          columns={columns}
+          columns={tablecolumns}
           selectionMode={SelectionMode.none}
           setKey="none"
           layoutMode={DetailsListLayoutMode.justified}
@@ -259,10 +278,31 @@ const Table = ({ items, structure, onOption, groups }) => {
           onRenderItemColumn={_renderItemColumn}
           groups={sortedGroups}
         />
+        {/* )} */}
         {sortedItems?.length === 0 && <StyledText bold>No Data</StyledText>}
       </StyledContainer>
     );
   }
+  return (
+    <StyledContainer id="Table_Detailed" style={{ width: '100%' }}>
+      <DetailsList
+        className={classNames.root}
+        id="TableDetailedList"
+        items={sortedItems}
+        columns={tablecolumns}
+        selectionMode={SelectionMode.none}
+        setKey="none"
+        layoutMode={DetailsListLayoutMode.justified}
+        isHeaderVisible
+        onItemInvoked={_onItemInvoked}
+        onRenderDetailsHeader={null}
+        onRenderItemColumn={_renderItemColumn}
+        groups={sortedGroups}
+      />
+      {/* )} */}
+      {sortedItems?.length === 0 && <StyledText bold>No Data</StyledText>}
+    </StyledContainer>
+  );
 
   return <p>No Items</p>;
 };

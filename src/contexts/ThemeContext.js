@@ -33,16 +33,17 @@ export const ThemeContextProvider = ({ children }) => {
   // useEffects Variables.
 
   // Local Functions shared in Context.
-  const changeTheme = async () => {
+  const changeTheme = () => {
     if (themeName === 'light') {
       setThemeName('dark');
       setTheme(darkTheme);
       setStyledTheme({ ...styledTheme, color: darkTheme });
-    } else {
-      setThemeName('light');
-      setTheme(defaultTheme);
-      setStyledTheme(styledTheme);
+      return;
     }
+
+    setThemeName('light');
+    setTheme(defaultTheme);
+    setStyledTheme(styledTheme);
   };
 
   // eslint-disable-next-line

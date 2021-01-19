@@ -13,18 +13,10 @@ export const AuthContextProvider = ({ children }) => {
   const [isContextLoading, setLoading] = useState(true);
   const [isAuthenticating, setAuthenticating] = useState(true);
   const [isAuthenticated, setAuthenticated] = useState(false);
-  const [user, setUser] = useState('');
-  const [password, setPassword] = useState('');
-  const [authData, setAuthData] = useState();
-  const [authHistory, setHistory] = useState();
-
-  const [passwordLoginMutation, { data, loading, error }] = usePasswordLoginMutation({
-    variables: {
-      userId: user,
-      password,
-    },
-  });
-  const authError = useErrorMessage();
+  const [user, setUser] = useState();
+  const [password, setPassword] = useState();
+  const [token, setToken] = useState();
+  const [data, setData] = useState();
 
   // Component Did Mount
   useEffect(() => {
@@ -38,13 +30,27 @@ export const AuthContextProvider = ({ children }) => {
 
   //
   useEffect(() => {
-    setAuthenticating(loading);
-  }, [loading]);
+    setAuthenticating(true);
+    // Reload Authenticated Flag, and set Authenticated.
+  }, [user, password]);
+
+  // Local Functions shared in Context.
+  const setLogin = async (_user, _password, _data) => {
+    //
+    setUser(_user);
+    setPassword(_password);
+    setToken('');
+    setData(_data);
+  };
 
   //
-  useEffect(() => {
-    localStorage.removeItem('k2u-auth');
-    
+  const values = React.useMemo(() => ({ isContextLoading, isAuthenticating, isAuthenticated, token, data, setLogin }), [
+    isContextLoading,
+    isAuthenticating,
+    isAuthenticated,
+    token,
+    data,
+  ]);
     console.log('Data...: ', data);
     console.log('Error...: ', error);
 
@@ -71,9 +77,6 @@ export const AuthContextProvider = ({ children }) => {
           step,
           token,
         };
-
-        /* TODO: Migrate to provider? */
-        localStorage.setItem('k2u-auth', JSON.stringify(authData));
 
         console.log('Saved AuthData', authData);
         setAuthData(authData);
