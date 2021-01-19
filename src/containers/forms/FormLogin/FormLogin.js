@@ -25,14 +25,14 @@ const FormLogin = ({ id = '__FormLogin', onLogin }) => {
   const { email, password } = handlerLogin;
 
   return (
-    <StyledBox id={id} sm="12">
+    <StyledBox id={id}>
       <StyledRowBottom id={`${id}__Card--Row`}>
         <Column id={`${id}__Card__Row-Column`}>
           <StyledImage name="logo" alt="Known2U Logo" />
         </Column>
       </StyledRowBottom>
-      <StyledRow id={`${id}--Row`} sm="8">
-        <Column id={`${id}__Row-Column`} sm="8">
+      <StyledRow id={`${id}--Row`}>
+        <Column id={`${id}__Row-Column`}>
           <StyledCard id={`${id}-Card`}>
             <StyledRow id={`${id}__Card__Row--label`}>
               <Column id={`${id}__Card__Row__Column--label`}>

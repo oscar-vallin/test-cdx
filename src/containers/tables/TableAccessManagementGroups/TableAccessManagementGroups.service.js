@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { format } from 'date-fns';
+import { format, compareAsc } from 'date-fns';
 import { useWorkPacketStatusesQuery } from '../../../data/services/graphql';
 import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { useInputValue } from '../../../hooks/useInputValue';
@@ -21,11 +21,10 @@ const STATUSES = {
   default: '',
 };
 
-//
 export const useTable = (argOrgSid, argDateRange, argFilter) => {
   const [_loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
-  const structure = getTableStructure(TABLE_NAMES.FILE_STATUS);
+  const structure = getTableStructure(TABLE_NAMES.ARCHIVES);
 
   const { data, loading, error } = useWorkPacketStatusesQuery({
     variables: {
@@ -35,51 +34,45 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
     },
   });
 
-  // * Component Did Mount.
+  // * Component Did Mount
   useEffect(() => {
     setLoading(false);
   }, []);
 
   useEffect(() => {
     const doEffect = () => {
-      console.log(data);
       const _items = buildItems(data);
-      console.log('TableFileStatus.service, _items: ', _items);
+      console.log('_items: ', _items);
       setItems(_items);
       return _items;
     };
 
-    console.log('There is Data: ', data);
     if (data) {
       doEffect();
     }
   }, [data]);
 
-  //
-  const formatField = (value, type, columnId) => {
-    return {
-      value,
-      type,
-      columnId,
-    };
-  };
-
   // Build Items.
   const buildItems = (_data) => {
     if (_data) {
       const { workPacketStatuses } = _data;
-      console.log('buildItems, _data', _data);
 
-      return workPacketStatuses.map(({ timestamp, vendorId, planSponsorId, inboundFilename, step, stepStatus }) => {
-        return {
-          datetime: formatField(format(new Date(timestamp), 'MM/dd/yyyy hh:mm a'), 'DATETIME'),
-          vendor: formatField(vendorId, '', 'vendor'),
-          planSponsor: formatField(planSponsorId, ''),
-          extractName: formatField(inboundFilename, ''),
-          overall: formatField(STATUSES[stepStatus] ?? STATUSES.default, ''),
-          progress: formatField({ step, stepStatus }, 'PROGRESS'),
-        };
-      });
+      console.log('workPacketStatuses: ', workPacketStatuses);
+
+      return workPacketStatuses.map(
+        ({ timestamp, vendorId, planSponsorId, clientFileArchivePath, vendorFileArchivePath }) => {
+          const arrayPathClient = clientFileArchivePath?.split('/');
+          const arrayPathVendor = vendorFileArchivePath?.split('/') ?? '';
+
+          return {
+            datetime: format(new Date(timestamp), 'MM/dd/yyyy hh:mm a'),
+            vendor: vendorId,
+            planSponsor: planSponsorId,
+            clientFile: arrayPathClient[arrayPathClient.length - 1],
+            vendorFile: arrayPathVendor[arrayPathVendor.length - 1],
+          };
+        }
+      );
     }
   };
 

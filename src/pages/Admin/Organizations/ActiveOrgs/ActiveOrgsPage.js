@@ -1,8 +1,8 @@
 import React from 'react';
-import { ROUTES } from '../../data/constants/RouteConstants';
+import { ROUTES } from '../../../../data/constants/RouteConstants';
 
-import { LayoutAdmin } from '../../layouts/LayoutAdmin';
-import { Spacing } from '../../components/spacings/Spacing';
+import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
+import { Spacing } from '../../../../components/spacings/Spacing';
 
 const NAV_ITEMS = [
   {
@@ -27,12 +27,12 @@ const NAV_ITEMS = [
         links: [
           {
             name: 'Policies',
-            url: '#',
+            url: '/admin/access-management/policies',
             key: 'policies',
           },
           {
             name: 'Groups',
-            url: '#',
+            url: '/admin/access-management/groups',
             key: 'groups',
           },
         ],
@@ -42,7 +42,7 @@ const NAV_ITEMS = [
         links: [
           {
             name: 'Active Orgs',
-            url: '#',
+            url: '/admin/organizations/active-orgs',
             key: 'activeOrgs',
           },
           {
@@ -91,19 +91,20 @@ const NAV_ITEMS = [
   },
 ];
 
-const _AdminPage = () => {
+const _ActiveOrgsPage = () => {
   return (
     <LayoutAdmin
-      id="PageAdmin"
+      id="PageActiveOrgs"
       sidebar={NAV_ITEMS}
+      sidebarOptionSelected="activeOrgs"
     >
       <Spacing margin="double">
-        
+        Active Orgs
       </Spacing>
     </LayoutAdmin>
   );
 };
 
-const AdminPage = React.memo(_AdminPage);
+const ActiveOrgsPage = React.memo(_ActiveOrgsPage);
 
-export { AdminPage };
+export { ActiveOrgsPage };

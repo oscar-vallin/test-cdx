@@ -6,10 +6,15 @@ import { ButtonAction } from '../../../components/buttons/ButtonAction';
 import { Image } from '../../../components/images/Image';
 import { Text } from '../../../components/typography/Text';
 
-export const StyledBox = styled(Box)``;
+export const StyledBox = styled(Box)`
+  display: flex;
+  justify-content: center;
+`;
 
 export const StyledCard = styled(Card)`
-  /* max-width: 30%; */
+  margin: 0 auto;
+  max-width: 530px;
+  width: 100%;
 `;
 
 export const StyledRow = styled(LayoutRow)`
