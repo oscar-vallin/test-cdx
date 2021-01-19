@@ -1,5 +1,6 @@
 import React from 'react';
 import { ApolloProvider, ApolloClient, InMemoryCache, split, HttpLink } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 
 import { getMainDefinition } from '@apollo/client/utilities';
 import { WebSocketLink } from '@apollo/client/link/ws';
@@ -15,30 +16,45 @@ export const ApolloContextProvider = ({ children }) => {
   const [isContextLoading, setLoading] = React.useState(true);
 
   const httpLink = new HttpLink({
-    uri: 'http://localhost:4000/',
+    // uri: 'http://localhost:4000/',
+    uri: 'https://x1-terraform-loadbalancer.k2u.xyz/graphql/',
   });
 
   //
   const wsLink = new WebSocketLink({
-    uri: `ws://localhost:4000/graphql`,
+    // uri: `ws://localhost:4000/graphql`,
+    uri: `ws://x1-terraform-loadbalancer.k2u.xyz/graphql/`,
     options: {
       reconnect: false,
       timeout: 30000,
     },
   });
 
+  const authLink = setContext((_, { headers }) => {
+    const auth = localStorage.getItem('k2u-auth');
+
+    return {
+      headers: {
+        ...headers,
+        authorization: auth ? `Bearer ${JSON.parse(auth).token}` : "",
+      }
+    }
+  });
+
   //
-  const link = split(
-    ({ query }) => {
-      const definition = getMainDefinition(query);
-      return definition.kind === 'OperationDefinition' && definition.operation === 'subscription';
-    },
-    wsLink,
-    httpLink,
-  );
+  // const link = split(
+  //   ({ query }) => {
+  //     const definition = getMainDefinition(query);
+  //     return definition.kind === 'OperationDefinition' && definition.operation === 'subscription';
+  //   },
+  //   wsLink,
+  //   httpLink
+  // );
+
+  const link = httpLink;
 
   const client = new ApolloClient({
-    link,
+    link: authLink.concat(link),
     cache: new InMemoryCache(),
     connectToDevTools: true,
   });

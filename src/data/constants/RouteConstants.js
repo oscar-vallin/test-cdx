@@ -8,6 +8,10 @@ export const ROUTES_ID = {
   TRANSMISSIONS: 'transmissions',
   ERRORS: 'errors',
   ADMIN: 'admin',
+  ACCESS_MANAGEMENT_GROUPS: 'access-management-groups',
+  ACCESS_MANAGEMENT_GROUPS: 'access-management-groups',
+  CREATE_POLICIES: 'create-policy',
+  ACTIVE_ORGS: 'active-orgs'
 };
 
 const URL_ROUTES = {
@@ -21,13 +25,38 @@ const URL_ROUTES = {
   TRANSMISSIONS: `/${ROUTES_ID.TRANSMISSIONS}`,
   ERRORS: `/${ROUTES_ID.ERRORS}`,
   ADMIN: `/${ROUTES_ID.ADMIN}`,
+  ACCESS_MANAGEMENT_GROUPS: `/${ROUTES_ID.ADMIN}/access-management/groups`,
+  ACCESS_MANAGEMENT_POLICIES: `/${ROUTES_ID.ADMIN}/access-management/policies`,
+  CREATE_POLICIES: `/${ROUTES_ID.ACCESS_MANAGEMENT_POLICIES}/create`,
+  ACTIVE_ORGS: `/${ROUTES_ID.ADMIN}/organizations/active-orgs`
 };
+
+// DASHBOARD;
+// FILE_STATUS;
+// ARCHIVES;
+// SCHEDULE;
+// TRANSMISSIONS;
+// ERRORS;
+// ORG_ACTIVITY;
+// ACTIVE_ORGS;
+// ACTIVE_USERS;
+// DELETED_USERS;
+// AM_GROUPS;
+// AM_POLICIES;
+// FTP_TEST;
+// IMPL_DEPLOY;
+// USER_ACCOUNT_RULES;
+// PASSWORD_RULES;
+// SSO_CONFIG;
+// ADD_ORG;
+// ADD_USER;
 
 export const ROUTE_HOME = {
   ID: ROUTES_ID.HOME,
   TITLE: '',
   URL: URL_ROUTES.HOME,
   MAIN_MENU: false,
+  API_ID: 'HOME',
 };
 
 export const ROUTE_LOGIN = {
@@ -35,6 +64,7 @@ export const ROUTE_LOGIN = {
   TITLE: 'Login',
   URL: URL_ROUTES.LOGIN,
   MAIN_MENU: false,
+  API_ID: 'LOGIN',
 };
 
 export const ROUTE_DASHBOARD = {
@@ -42,6 +72,7 @@ export const ROUTE_DASHBOARD = {
   TITLE: 'Dashboard',
   URL: URL_ROUTES.DASHBOARD,
   MAIN_MENU: true,
+  API_ID: 'DASHBOARD',
 };
 
 export const ROUTE_FILE_STATUS = {
@@ -49,6 +80,7 @@ export const ROUTE_FILE_STATUS = {
   TITLE: 'File Status',
   URL: URL_ROUTES.FILE_STATUS,
   MAIN_MENU: true,
+  API_ID: 'FILE_STATUS',
 };
 
 export const ROUTE_FILE_STATUS_DETAILS = {
@@ -56,6 +88,7 @@ export const ROUTE_FILE_STATUS_DETAILS = {
   TITLE: 'Work Packet Details',
   URL: URL_ROUTES.FILE_STATUS_DETAILS,
   MAIN_MENU: false,
+  API_ID: 'DASHBOARD',
 };
 
 export const ROUTE_ARCHIVES = {
@@ -63,6 +96,7 @@ export const ROUTE_ARCHIVES = {
   TITLE: 'Archives',
   URL: URL_ROUTES.ARCHIVES,
   MAIN_MENU: true,
+  API_ID: 'ARCHIVES',
 };
 
 export const ROUTE_SCHEDULE = {
@@ -70,6 +104,7 @@ export const ROUTE_SCHEDULE = {
   TITLE: 'Schedule',
   URL: URL_ROUTES.SCHEDULE,
   MAIN_MENU: true,
+  API_ID: 'SCHEDULE',
 };
 
 export const ROUTE_TRANSMISSIONS = {
@@ -77,6 +112,7 @@ export const ROUTE_TRANSMISSIONS = {
   TITLE: 'Transmissions',
   URL: URL_ROUTES.TRANSMISSIONS,
   MAIN_MENU: true,
+  API_ID: 'TRANSMISSIONS',
 };
 
 export const ROUTE_ERRORS = {
@@ -84,6 +120,7 @@ export const ROUTE_ERRORS = {
   TITLE: 'Errors',
   URL: URL_ROUTES.ERRORS,
   MAIN_MENU: true,
+  API_ID: 'ERRORS',
 };
 
 export const ROUTE_ADMIN = {
@@ -91,6 +128,39 @@ export const ROUTE_ADMIN = {
   TITLE: 'Admin',
   URL: URL_ROUTES.ADMIN,
   MAIN_MENU: true,
+  API_ID: 'ORG_ACTIVITY',
+};
+
+export const ROUTE_ACCESS_MANAGEMENT_GROUPS = {
+  ID: ROUTES_ID.ACCESS_MANAGEMENT_GROUPS,
+  TITLE: 'Groups',
+  URL: URL_ROUTES.ACCESS_MANAGEMENT_GROUPS,
+  MAIN_MENU: false,
+  API_ID: 'ADMIN',
+};
+
+export const ROUTE_ACCESS_MANAGEMENT_POLICIES = {
+  ID: ROUTES_ID.ACCESS_MANAGEMENT_POLICIES,
+  TITLE: 'Policies',
+  URL: URL_ROUTES.ACCESS_MANAGEMENT_POLICIES,
+  MAIN_MENU: false,
+  API_ID: 'ADMIN',
+};
+
+export const ROUTE_CREATE_POLICIES = {
+  ID: ROUTES_ID.CREATE_POLICIES,
+  TITLE: 'Create policy',
+  URL: URL_ROUTES.CREATE_POLICIES,
+  MAIN_MENU: false,
+  API_ID: 'ADMIN',
+};
+
+export const ROUTE_ACTIVE_ORGS = {
+  ID: ROUTES_ID.ACTIVE_ORGS,
+  TITLE: 'Active Orgs',
+  URL: URL_ROUTES.ACTIVE_ORGS,
+  MAIN_MENU: false,
+  API_ID: 'ADMIN',
 };
 
 export const ROUTES = {
@@ -104,6 +174,10 @@ export const ROUTES = {
   ROUTE_TRANSMISSIONS,
   ROUTE_ERRORS,
   ROUTE_ADMIN,
+  ROUTE_ACCESS_MANAGEMENT_GROUPS,
+  ROUTE_ACCESS_MANAGEMENT_POLICIES,
+  ROUTE_CREATE_POLICIES,
+  ROUTE_ACTIVE_ORGS
 };
 
 export const ROUTES_ARRAY = [
@@ -117,4 +191,14 @@ export const ROUTES_ARRAY = [
   ROUTE_TRANSMISSIONS,
   ROUTE_ERRORS,
   ROUTE_ADMIN,
+  ROUTE_CREATE_POLICIES,
+  ROUTE_ACCESS_MANAGEMENT_GROUPS,
+  ROUTE_ACCESS_MANAGEMENT_POLICIES,
+  ROUTE_ACTIVE_ORGS
 ];
+
+export const getRouteByApiId = (_apiId) => {
+  const routeResult = ROUTES_ARRAY.find((route) => route.API_ID === _apiId);
+
+  return routeResult;
+};

@@ -13,6 +13,12 @@ import { AdminPage } from './Admin';
 import { NotFoundPage } from './NotFound';
 import { FileStatusPage } from './FileStatus';
 import { FileStatusDetailsPage } from './FileStatusDetails';
+import {
+  AccessManagementGroupsPage,
+  AccessManagementPoliciesPage,
+  CreatePoliciesPage
+} from './Admin/AccessManagement';
+import { ActiveOrgsPage } from './Admin/Organizations';
 
 export const Routes = () => {
   return (
@@ -41,9 +47,21 @@ export const Routes = () => {
       <Route path={ROUTES.ROUTE_ERRORS.URL}>
         <ErrorsPage />
       </Route>
-      <Route path={ROUTES.ROUTE_ADMIN.URL}>
-        <AdminPage />
+      <Route path={ROUTES.ROUTE_ACCESS_MANAGEMENT_GROUPS.URL}>
+        <AccessManagementGroupsPage />
       </Route>
+      <Route path={ROUTES.ROUTE_CREATE_POLICIES.URL}>
+        <CreatePoliciesPage />
+      </Route>
+      <Route path={ROUTES.ROUTE_ACCESS_MANAGEMENT_POLICIES.URL}>
+        <AccessManagementPoliciesPage />
+      </Route>
+      <Route path={ROUTES.ROUTE_ACTIVE_ORGS.URL}>
+        <ActiveOrgsPage />
+      </Route>
+      {/* <Route path={ROUTES.ROUTE_ADMIN.URL}>
+        <AdminPage />
+      </Route> */}
       <Route>
         <NotFoundPage />
       </Route>
