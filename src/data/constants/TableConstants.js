@@ -8,6 +8,7 @@ export const TABLE_NAMES = {
   FILE_STATUS_DETAIL_VENDOR_COUNT: 'DETAIL_VENDOR_COUNT',
   FILE_STATUS_DETAIL_QUALITY_CHECKS: 'DETAIL_QUALITY_CHECKS',
   ARCHIVES: 'ARCHIVES',
+  ERRORS: 'ERRORS',
 };
 
 export const TABLES = {
@@ -75,6 +76,13 @@ export const TABLES = {
     header: {
       type: 'archives',
       title: 'Archives',
+      url: null,
+    },
+  },
+  ERRORS: {
+    header: {
+      type: 'errors',
+      title: 'Errors',
       url: null,
     },
   },
