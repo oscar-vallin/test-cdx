@@ -41,7 +41,7 @@ const _buildColumns = (
     column.isResizable = true;
     column.minWidth = 100;
     column.maxWidth = 200;
-    const columnData = xtColumns.find((xtColumn) => xtColumn.id === column.fieldName);
+    const columnData = xtColumns.find((xtColumn) => xtColumn.key === column.fieldName);
     column.name = columnData?.label ?? column.name;
     console.log('_buildColumns, xtColumns: ', columnData);
 
