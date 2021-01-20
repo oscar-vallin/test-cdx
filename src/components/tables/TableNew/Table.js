@@ -41,7 +41,7 @@ const _buildColumns = (
     column.isResizable = true;
     column.minWidth = 100;
     column.maxWidth = 200;
-    const columnData = xtColumns.find((xtColumn) => xtColumn.id === column.fieldName);
+    const columnData = xtColumns.find((xtColumn) => xtColumn.key === column.fieldName);
     column.name = columnData?.label ?? column.name;
     console.log('_buildColumns, xtColumns: ', columnData);
 
@@ -193,7 +193,7 @@ const Table = ({ items, columns, structure, onOption, groups }) => {
           );
         }
 
-        return <Link href={`${fieldContent}`}>{fieldItem.label}</Link>;
+        return <Link href={`${fieldItem.text}`}>{fieldContent}</Link>;
 
       case 'bus':
         return <StyledText right>{fieldContent}</StyledText>;

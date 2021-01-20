@@ -3,102 +3,7 @@ import { format } from 'date-fns';
 import { useWorkPacketStatusesQuery } from '../../../data/services/graphql';
 import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { getStepStatusLabel } from '../../../data/constants/FileStatusConstants';
-import { useInputValue } from '../../../hooks/useInputValue';
-
-const fakeData = {
-  fileErrors: [
-    {
-      timestamp: 1608067551,
-      fileName: 'filestatus/CHO-Boston-OracleHours.txt',
-      file: 'CHO-Boston-OracleHours.txt',
-      workStep: 'Transform',
-      plan: 'CHO',
-      vendor: 'TheHatford',
-      message: 'Error',
-    },
-    {
-      timestamp: 1608067551,
-      fileName: 'filestatus/CHO-Boston-OracleHours.txt',
-      file: 'CHO-Boston-OracleHours.txt',
-      workStep: 'Transform',
-      plan: 'CHO',
-      vendor: 'TheHatford',
-      message: 'Error',
-    },
-    {
-      timestamp: 1608067551,
-      fileName: 'filestatus/CHO-Boston-OracleHours.txt',
-      file: 'CHO-Boston-OracleHours.txt',
-      workStep: 'Transform',
-      plan: 'CHO',
-      vendor: 'TheHatford',
-      message: 'Error',
-    },
-    {
-      timestamp: 1608068919,
-      fileName: 'filestatus/CHO-Boston-OracleHours.txt',
-      file: 'CHO-Boston-OracleHours.txt',
-      workStep: 'Transform',
-      plan: 'CHO',
-      vendor: 'TheHatford',
-      message: 'Error',
-    },
-    {
-      timestamp: 1608068919,
-      fileName: 'filestatus/CHO-Boston-OracleHours.txt',
-      file: 'CHO-Boston-OracleHours.txt',
-      workStep: 'Transform',
-      plan: 'CHO',
-      vendor: 'TheHatford',
-      message: 'Error',
-    },
-    {
-      timestamp: 1608068919,
-      fileName: 'filestatus/CHO-Boston-OracleHours.txt',
-      file: 'CHO-Boston-OracleHours.txt',
-      workStep: 'Transform',
-      plan: 'CHO',
-      vendor: 'TheHatford',
-      message: 'Error',
-    },
-    {
-      timestamp: 1608068919,
-      fileName: 'filestatus/CHO-Boston-OracleHours.txt',
-      file: 'CHO-Boston-OracleHours.txt',
-      workStep: 'Transform',
-      plan: 'CHO',
-      vendor: 'TheHatford',
-      message: 'Error',
-    },
-    {
-      timestamp: 1608068919,
-      fileName: 'filestatus/CHO-Boston-OracleHours.txt',
-      file: 'CHO-Boston-OracleHours.txt',
-      workStep: 'Transform',
-      plan: 'CHO',
-      vendor: 'TheHatford',
-      message: 'Error',
-    },
-    {
-      timestamp: 1608068919,
-      fileName: 'filestatus/CHO-Boston-OracleHours.txt',
-      file: 'CHO-Boston-OracleHours.txt',
-      workStep: 'Transform',
-      plan: 'CHO',
-      vendor: 'TheHatford',
-      message: 'Error',
-    },
-    {
-      timestamp: 1608068919,
-      fileName: 'filestatus/CHO-Boston-OracleHours.txt',
-      file: 'CHO-Boston-OracleHours.txt',
-      workStep: 'Transform',
-      plan: 'CHO',
-      vendor: 'TheHatford',
-      message: 'Error',
-    },
-  ],
-};
+// import { useInputValue } from '../../../hooks/useInputValue';
 
 //
 export const useTable = (argOrgSid, argDateRange, argFilter) => {
@@ -107,9 +12,6 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
   const [columns, setColumns] = useState([]);
   const structure = getTableStructure(TABLE_NAMES.ERRORS);
 
-  // const [data, setData] = useState();
-  // const [loading, setFakeLoading] = useState(true);
-  // const [error, setError] = useState();
   const { data, loading, error } = useWorkPacketStatusesQuery({
     variables: {
       orgSid: argOrgSid,
@@ -121,9 +23,6 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
   // * Component Did Mount.
   useEffect(() => {
     setLoading(false);
-    // setData(fakeData);
-    // setFakeLoading(false);
-    // setError();
   }, []);
 
   useEffect(() => {

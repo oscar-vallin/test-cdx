@@ -13,61 +13,60 @@ import { AdminPage } from './Admin';
 import { NotFoundPage } from './NotFound';
 import { FileStatusPage } from './FileStatus';
 import { FileStatusDetailsPage } from './FileStatusDetails';
-import {
-  AccessManagementGroupsPage,
-  AccessManagementPoliciesPage,
-  CreatePoliciesPage
-} from './Admin/AccessManagement';
+import { AccessManagementGroupsPage, AccessManagementPoliciesPage, CreatePoliciesPage } from './Admin/AccessManagement';
 import { ActiveOrgsPage } from './Admin/Organizations';
 
-import AuthenticatedRoute from './AuthRoute';
-import UnauthenticatedRoute from './UnauthRoute';
+import AuthRoute from './AuthRoute';
+import UnauthRoute from './UnauthRoute';
 
 export const Routes = () => {
   return (
     <Switch>
-      <Route exact path="/">
+      <UnauthRoute path="/login">
         <LoginPage />
-      </Route>
-      <Route path={ROUTES.ROUTE_DASHBOARD.URL}>
+      </UnauthRoute>
+      <AuthRoute exact path="/">
         <DashboardPage />
-      </Route>
-      <Route path={ROUTES.ROUTE_FILE_STATUS_DETAILS.URL}>
+      </AuthRoute>
+      <AuthRoute path={ROUTES.ROUTE_DASHBOARD.URL}>
+        <DashboardPage />
+      </AuthRoute>
+      <AuthRoute path={ROUTES.ROUTE_FILE_STATUS_DETAILS.URL}>
         <FileStatusDetailsPage />
-      </Route>
-      <Route path={ROUTES.ROUTE_FILE_STATUS.URL}>
+      </AuthRoute>
+      <AuthRoute path={ROUTES.ROUTE_FILE_STATUS.URL}>
         <FileStatusPage />
-      </Route>
-      <Route path={ROUTES.ROUTE_ARCHIVES.URL}>
+      </AuthRoute>
+      <AuthRoute path={ROUTES.ROUTE_ARCHIVES.URL}>
         <ArchivePage />
-      </Route>
-      <Route path={ROUTES.ROUTE_SCHEDULE.URL}>
+      </AuthRoute>
+      <AuthRoute path={ROUTES.ROUTE_SCHEDULE.URL}>
         <SchedulePage />
-      </Route>
-      <Route path={ROUTES.ROUTE_TRANSMISSIONS.URL}>
+      </AuthRoute>
+      <AuthRoute path={ROUTES.ROUTE_TRANSMISSIONS.URL}>
         <TransmissionsPage />
-      </Route>
-      <Route path={ROUTES.ROUTE_ERRORS.URL}>
+      </AuthRoute>
+      <AuthRoute path={ROUTES.ROUTE_ERRORS.URL}>
         <ErrorsPage />
-      </Route>
-      <Route path={ROUTES.ROUTE_ACCESS_MANAGEMENT_GROUPS.URL}>
+      </AuthRoute>
+      <AuthRoute path={ROUTES.ROUTE_ACCESS_MANAGEMENT_GROUPS.URL}>
         <AccessManagementGroupsPage />
-      </Route>
-      <Route path={ROUTES.ROUTE_CREATE_POLICIES.URL}>
+      </AuthRoute>
+      <AuthRoute path={ROUTES.ROUTE_CREATE_POLICIES.URL}>
         <CreatePoliciesPage />
-      </Route>
-      <Route path={ROUTES.ROUTE_ACCESS_MANAGEMENT_POLICIES.URL}>
+      </AuthRoute>
+      <AuthRoute path={ROUTES.ROUTE_ACCESS_MANAGEMENT_POLICIES.URL}>
         <AccessManagementPoliciesPage />
-      </Route>
-      <Route path={ROUTES.ROUTE_ACTIVE_ORGS.URL}>
+      </AuthRoute>
+      <AuthRoute path={ROUTES.ROUTE_ACTIVE_ORGS.URL}>
         <ActiveOrgsPage />
-      </Route>
-      {/* <Route path={ROUTES.ROUTE_ADMIN.URL}>
+      </AuthRoute>
+      {/* <AuthRoute path={ROUTES.ROUTE_ADMIN.URL}>
         <AdminPage />
-      </Route> */}
-      <Route>
+      </AuthRoute> */}
+      <AuthRoute>
         <NotFoundPage />
-      </Route>
+      </AuthRoute>
     </Switch>
   );
 };

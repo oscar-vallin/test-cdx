@@ -1,9 +1,6 @@
 import React from 'react';
 import { ApolloProvider, ApolloClient, InMemoryCache, split, HttpLink } from '@apollo/client';
-import { setContext } from '@apollo/client/link/context';
 
-import { getMainDefinition } from '@apollo/client/utilities';
-import { WebSocketLink } from '@apollo/client/link/ws';
 import { setContext } from '@apollo/client/link/context';
 
 const SERVER_URL = 'https://x1-terraform-loadbalancer.k2u.xyz/graphql/';
@@ -18,17 +15,6 @@ export const ApolloContextProvider = ({ children }) => {
   // LocalState
   const [isContextLoading, setLoading] = React.useState(true);
   const [bearerToken, setBearerToken] = React.useState();
-  // const [client, setApolloClient] = React.useState(
-  //   new ApolloClient({
-  //     // link,
-  //     link: new HttpLink({
-  //       uri: SERVER_URL,
-  //       options: {},
-  //     }),
-  //     cache: new InMemoryCache(),
-  //     connectToDevTools: true,
-  //   })
-  // );
 
   const authLink = setContext((_, { headers }) => {
     const token = localStorage.getItem('AUTH_TOKEN');

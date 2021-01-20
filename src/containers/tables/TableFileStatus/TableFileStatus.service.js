@@ -3,7 +3,8 @@ import { format } from 'date-fns';
 import { useWorkPacketStatusesQuery } from '../../../data/services/graphql';
 import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { useInputValue } from '../../../hooks/useInputValue';
-
+import { formatField } from '../../../helpers/tableHelpers';
+import { getStepStatusLabel } from '../../../data/constants/FileStatusConstants';
 // import { STATUSES } from '../../../data/constants/'
 
 const STATUSES = {
@@ -25,7 +26,8 @@ const STATUSES = {
 export const useTable = (argOrgSid, argDateRange, argFilter) => {
   const [_loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
-  const structure = getTableStructure(TABLE_NAMES.FILE_STATUS);
+  const [columns, setColumns] = useState([]);
+  const structure = getTableStructure(TABLE_NAMES.ERRORS);
 
   const { data, loading, error } = useWorkPacketStatusesQuery({
     variables: {
@@ -42,46 +44,40 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
 
   useEffect(() => {
     const doEffect = () => {
-      console.log(data);
-      const _items = buildItems(data);
-      console.log('TableFileStatus.service, _items: ', _items);
+      console.log('TableErrors.service, data:', data);
+      const _columns = [
+        { key: 'datetime', label: 'Received On', id: 'datetime', style: 'link' },
+        { key: 'vendor', label: 'Vendor', id: 'vendor', style: 'text' },
+        { key: 'planSponsor', label: 'Sponsor', id: 'planSponsor', style: 'text' },
+        { key: 'extractName', label: 'Extract Name', id: 'extractName', style: 'text' },
+        { key: 'overall', label: 'Overall', id: 'overall', style: 'text' },
+        { key: 'progress', label: 'Progress', id: 'progress', style: 'text' },
+      ];
+
+      const _items = data.workPacketStatuses.map(
+        ({ timestamp, vendorId, planSponsorId, inboundFilename, step, stepStatus }) => {
+          const datetime = format(new Date(timestamp), 'MM/dd/yyyy hh:mm a');
+          const stepStatusLabel = getStepStatusLabel(stepStatus);
+
+          return [
+            formatField(datetime, 'datetime', datetime),
+            formatField(vendorId, 'vendor', vendorId),
+            formatField(planSponsorId, 'planSponsor', planSponsorId),
+            formatField(inboundFilename, 'extractName', inboundFilename),
+            formatField(stepStatusLabel, 'overall', stepStatusLabel),
+            formatField(stepStatusLabel, 'progress', stepStatusLabel, step),
+          ];
+        }
+      );
+
+      setColumns(_columns);
       setItems(_items);
-      return _items;
     };
 
-    console.log('There is Data: ', data);
     if (data) {
-      doEffect();
+      return doEffect();
     }
   }, [data]);
-
-  //
-  const formatField = (value, type, columnId) => {
-    return {
-      value,
-      type,
-      columnId,
-    };
-  };
-
-  // Build Items.
-  const buildItems = (_data) => {
-    if (_data) {
-      const { workPacketStatuses } = _data;
-      console.log('buildItems, _data', _data);
-
-      return workPacketStatuses.map(({ timestamp, vendorId, planSponsorId, inboundFilename, step, stepStatus }) => {
-        return {
-          datetime: formatField(format(new Date(timestamp), 'MM/dd/yyyy hh:mm a'), 'DATETIME'),
-          vendor: formatField(vendorId, '', 'vendor'),
-          planSponsor: formatField(planSponsorId, ''),
-          extractName: formatField(inboundFilename, ''),
-          overall: formatField(STATUSES[stepStatus] ?? STATUSES.default, ''),
-          progress: formatField({ step, stepStatus }, 'PROGRESS'),
-        };
-      });
-    }
-  };
 
   // * Loading Data
   useEffect(() => {
@@ -91,6 +87,7 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
   return {
     tableProps: {
       items,
+      columns,
       structure,
       loading: _loading,
     },
@@ -113,12 +110,10 @@ const useInput = (placeholder) => {
 
 //
 export const useInputs = () => {
-  const localFilter = useInputValue('Email', 'Your email Address', '', 'email');
   const startDate = useInput('Start Date...');
   const endDate = useInput('End Date...');
 
   return {
-    localFilter,
     startDate,
     endDate,
   };
