@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Table } from '../../../components/tables/Table';
+import { Table } from '../../../components/tables/TableNew';
 
 import { Box, Row, Column, Container, RightColumn } from './TableArchive.styles';
 import { useTable, useInputs } from './TableArchive.service';

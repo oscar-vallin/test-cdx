@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { usePasswordLoginMutation } from '../data/services/graphql';
 import { useErrorMessage } from '../hooks/useErrorMessage';
 import { getRouteByApiId } from '../data/constants/RouteConstants';
-
+import { useApolloContext } from './ApolloContext';
 //
 export const AuthContext = React.createContext(() => {
   //
@@ -13,15 +13,41 @@ export const AuthContextProvider = ({ children }) => {
   const [isContextLoading, setLoading] = useState(true);
   const [isAuthenticating, setAuthenticating] = useState(true);
   const [isAuthenticated, setAuthenticated] = useState(false);
-  const [user, setUser] = useState();
-  const [password, setPassword] = useState();
+  const [user, setUser] = useState('');
+  const [password, setPassword] = useState('');
+  const [authData, setAuthData] = useState();
+  const [authHistory, setHistory] = useState();
   const [token, setToken] = useState();
-  const [data, setData] = useState();
+
+  // "userId": "joe.admin@example.com",
+  // "password": "changeBen21"
+
+  const [passwordLoginMutation, { data, loading, error }] = usePasswordLoginMutation({
+    variables: {
+      userId: user,
+      password,
+    },
+  });
+  const authError = useErrorMessage();
 
   // Component Did Mount
   useEffect(() => {
     const localFunction = async () => {
       setLoading(false);
+      const savedAuthData = localStorage.getItem('AUTH_DATA');
+      const savedToken = localStorage.getItem('AUTH_TOKEN');
+      console.log('savedAuthData: ', savedAuthData);
+
+      if (savedToken) {
+        setToken(savedToken);
+        setAuthData(JSON.parse(savedAuthData));
+        setAuthenticated(true);
+
+        return;
+      }
+
+      setAuthenticated(false);
+
       // Execute Function
     };
 
@@ -30,27 +56,13 @@ export const AuthContextProvider = ({ children }) => {
 
   //
   useEffect(() => {
-    setAuthenticating(true);
-    // Reload Authenticated Flag, and set Authenticated.
-  }, [user, password]);
-
-  // Local Functions shared in Context.
-  const setLogin = async (_user, _password, _data) => {
-    //
-    setUser(_user);
-    setPassword(_password);
-    setToken('');
-    setData(_data);
-  };
+    setAuthenticating(loading);
+  }, [loading]);
 
   //
-  const values = React.useMemo(() => ({ isContextLoading, isAuthenticating, isAuthenticated, token, data, setLogin }), [
-    isContextLoading,
-    isAuthenticating,
-    isAuthenticated,
-    token,
-    data,
-  ]);
+  // When Server Response or Data is cleaned.
+  //
+  useEffect(() => {
     console.log('Data...: ', data);
     console.log('Error...: ', error);
 
@@ -79,12 +91,18 @@ export const AuthContextProvider = ({ children }) => {
         };
 
         console.log('Saved AuthData', authData);
+        localStorage.setItem('AUTH_DATA', JSON.stringify(authData));
+        localStorage.setItem('AUTH_TOKEN', authData.token);
         setAuthData(authData);
         setAuthenticated(true);
+        //
+        // Set Bearer Token
       }
     }
   }, [data, error]);
 
+  //
+  // When AuthData changes cause is saved for login
   //
   useEffect(() => {
     console.log('Change AuthData: ', authData);
@@ -92,6 +110,8 @@ export const AuthContextProvider = ({ children }) => {
     if (!authData) {
       return;
     }
+
+    console.log('Change AuthData, authData.selectedPage: ', authData.selectedPage);
 
     const routePage = getRouteByApiId(authData.selectedPage);
 
@@ -105,14 +125,19 @@ export const AuthContextProvider = ({ children }) => {
     // "userId": "joe.admin@example.com",
     // "password": "changeBen21"
 
+    if (!authHistory) return;
+
     return authHistory.push(routePage.URL);
   }, [authData, authHistory]);
 
+  //
+  // When user / password.
+  //
   useEffect(() => {
     console.log('st User: ', user);
     console.log('st Password:', password);
 
-    if (user.length && password.length) return passwordLoginMutation();
+    if (user?.length && password?.length) return passwordLoginMutation();
 
     return null;
 
@@ -131,10 +156,28 @@ export const AuthContextProvider = ({ children }) => {
     // passwordLoginMutation();
   };
 
+  //
+  // * Clear all the Input Data Username and Password for the context.
+  //
+  const clearInputLoginData = () => {
+    setUser();
+    setPassword();
+  };
+
+  //
+  // * Clear all the Input Data Username and Password for the context.
+  //
+  const authLogout = () => {
+    localStorage.removeItem('AUTH_TOKEN');
+    setAuthData();
+    setAuthenticated(false);
+    clearInputLoginData();
+  };
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const values = React.useMemo(
-    () => ({ isContextLoading, isAuthenticating, isAuthenticated, authData, authError, authLogin }),
-    [isContextLoading, isAuthenticating, isAuthenticated, authData, authError]
+    () => ({ isContextLoading, isAuthenticating, isAuthenticated, authData, authError, token, authLogin, authLogout }),
+    [isContextLoading, isAuthenticating, isAuthenticated, authData, authError, token]
   );
 
   // Finally, return the interface that we want to expose to our other components
