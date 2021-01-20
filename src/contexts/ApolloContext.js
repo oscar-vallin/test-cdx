@@ -1,6 +1,5 @@
 import React from 'react';
 import { ApolloProvider, ApolloClient, InMemoryCache, split, HttpLink } from '@apollo/client';
-import { setContext } from '@apollo/client/link/context';
 
 import { getMainDefinition } from '@apollo/client/utilities';
 import { WebSocketLink } from '@apollo/client/link/ws';
