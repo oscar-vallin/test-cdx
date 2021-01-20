@@ -7,6 +7,7 @@ import { useInputValue } from '../../../hooks/useInputValue';
 export const useTable = (argOrgSid, argDateRange, argFilter) => {
   const [_loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
+  const [columns, setColumns] = useState([]);
   const structure = getTableStructure(TABLE_NAMES.ARCHIVES);
 
   const { data, loading, error } = useWorkPacketStatusesQuery({
@@ -22,41 +23,59 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
     setLoading(false);
   }, []);
 
+  //
   useEffect(() => {
     const doEffect = () => {
-      const _items = buildItems(data);
-      console.log('_items: ', _items);
+      console.log('TableErrors.service, data:', data);
+      const _columns = [
+        { key: 'datetime', label: 'Received On', id: 'datetime', style: 'text' },
+        { key: 'vendor', label: 'Vendor', id: 'vendor', style: 'text' },
+        { key: 'planSponsor', label: 'Plan Sponsor', id: 'planSponsor', style: 'text' },
+        { key: 'clientFile', label: 'Client File', id: 'clientFile', style: 'link' },
+        { key: 'vendorFile', label: 'Vendor File', id: 'vendorFile', style: 'link' },
+      ];
+
+      const _items = data.workPacketStatuses.map(
+        ({
+          timestamp,
+          clientFileArchivePath,
+          inboundFilename,
+          workOrderId,
+          planSponsorId,
+          vendorId,
+          vendorFileArchivePath,
+        }) => {
+          const datetime = format(new Date(timestamp), 'MM/dd/yyyy hh:mm a');
+
+          return [
+            formatField(datetime, 'text', 'datetime', datetime),
+            formatField(vendorId, 'text', 'vendor', vendorId),
+            formatField(planSponsorId, 'text', 'planSponsor', planSponsorId),
+            formatField(inboundFilename, 'link', 'clientFile', clientFileArchivePath),
+            formatField(workOrderId, 'link', 'vendorFile', vendorFileArchivePath),
+          ];
+        }
+      );
+
+      setColumns(_columns);
       setItems(_items);
-      return _items;
     };
 
     if (data) {
-      doEffect();
+      return doEffect();
     }
   }, [data]);
 
-  // Build Items.
-  const buildItems = (_data) => {
-    if (_data) {
-      const { workPacketStatuses } = _data;
-
-      console.log('workPacketStatuses: ', workPacketStatuses);
-
-      return workPacketStatuses.map(
-        ({ timestamp, vendorId, planSponsorId, clientFileArchivePath, vendorFileArchivePath }) => {
-          const arrayPathClient = clientFileArchivePath?.split('/');
-          const arrayPathVendor = vendorFileArchivePath?.split('/') ?? '';
-
-          return {
-            datetime: format(new Date(timestamp), 'MM/dd/yyyy hh:mm a'),
-            vendor: vendorId,
-            planSponsor: planSponsorId,
-            clientFile: arrayPathClient[arrayPathClient.length - 1],
-            vendorFile: arrayPathVendor[arrayPathVendor.length - 1],
-          };
-        }
-      );
-    }
+  //
+  const formatField = (value, type, columnId, text, sublabel) => {
+    return {
+      id: columnId,
+      value,
+      type,
+      columnId,
+      text,
+      sublabel,
+    };
   };
 
   // * Loading Data
@@ -67,6 +86,7 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
   return {
     tableProps: {
       items,
+      columns,
       structure,
       loading: _loading,
     },
@@ -89,12 +109,10 @@ const useInput = (placeholder) => {
 
 //
 export const useInputs = () => {
-  const localFilter = useInputValue('Email', 'Your email Address', '', 'email');
   const startDate = useInput('Start Date...');
   const endDate = useInput('End Date...');
 
   return {
-    localFilter,
     startDate,
     endDate,
   };

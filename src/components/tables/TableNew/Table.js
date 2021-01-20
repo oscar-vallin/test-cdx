@@ -193,7 +193,7 @@ const Table = ({ items, columns, structure, onOption, groups }) => {
           );
         }
 
-        return <Link href={`${fieldContent}`}>{fieldItem.label}</Link>;
+        return <Link href={`${fieldItem.text}`}>{fieldContent}</Link>;
 
       case 'bus':
         return <StyledText right>{fieldContent}</StyledText>;

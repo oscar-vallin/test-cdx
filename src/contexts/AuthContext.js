@@ -153,7 +153,6 @@ export const AuthContextProvider = ({ children }) => {
     setUser(_user);
     setPassword(_password);
     setHistory(_history);
-    // passwordLoginMutation();
   };
 
   //
