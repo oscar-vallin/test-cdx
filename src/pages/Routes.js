@@ -61,9 +61,9 @@ export const Routes = () => {
       <AuthRoute path={ROUTES.ROUTE_ACTIVE_ORGS.URL}>
         <ActiveOrgsPage />
       </AuthRoute>
-      {/* <AuthRoute path={ROUTES.ROUTE_ADMIN.URL}>
+      <AuthRoute path={ROUTES.ROUTE_ADMIN.URL}>
         <AdminPage />
-      </AuthRoute> */}
+      </AuthRoute>
       <AuthRoute>
         <NotFoundPage />
       </AuthRoute>

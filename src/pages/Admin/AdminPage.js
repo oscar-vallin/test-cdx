@@ -27,12 +27,12 @@ const NAV_ITEMS = [
         links: [
           {
             name: 'Policies',
-            url: '#',
+            url: '/admin/access-management/policies',
             key: 'policies',
           },
           {
             name: 'Groups',
-            url: '#',
+            url: '/admin/access-management/groups',
             key: 'groups',
           },
         ],
@@ -42,7 +42,7 @@ const NAV_ITEMS = [
         links: [
           {
             name: 'Active Orgs',
-            url: '#',
+            url: '/admin/organizations/active-orgs',
             key: 'activeOrgs',
           },
           {
