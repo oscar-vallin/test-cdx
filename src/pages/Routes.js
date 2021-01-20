@@ -20,6 +20,9 @@ import {
 } from './Admin/AccessManagement';
 import { ActiveOrgsPage } from './Admin/Organizations';
 
+import AuthenticatedRoute from './AuthRoute';
+import UnauthenticatedRoute from './UnauthRoute';
+
 export const Routes = () => {
   return (
     <Switch>

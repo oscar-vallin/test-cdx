@@ -200,5 +200,9 @@ export const ROUTES_ARRAY = [
 export const getRouteByApiId = (_apiId) => {
   const routeResult = ROUTES_ARRAY.find((route) => route.API_ID === _apiId);
 
+  if (!routeResult) {
+    return ROUTES_ARRAY.find((route) => route.API_ID === ROUTE_FILE_STATUS.API_ID);
+  }
+
   return routeResult;
 };

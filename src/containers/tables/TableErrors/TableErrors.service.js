@@ -2,22 +2,8 @@ import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { useWorkPacketStatusesQuery } from '../../../data/services/graphql';
 import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableConstants';
+import { getStepStatusLabel } from '../../../data/constants/FileStatusConstants';
 import { useInputValue } from '../../../hooks/useInputValue';
-
-const STATUSES = {
-  0: 'Queued',
-  1: 'Processing',
-  2: 'Complete',
-  3: 'Error',
-  4: 'Submitted',
-  5: 'Warning',
-  6: 'Hold',
-  7: 'Canceled',
-  a: 'Quality Check Failed',
-  b: 'No Records',
-  c: 'Tech migration Check Failed',
-  default: '',
-};
 
 const fakeData = {
   fileErrors: [
@@ -121,28 +107,28 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
   const [columns, setColumns] = useState([]);
   const structure = getTableStructure(TABLE_NAMES.ERRORS);
 
-  const [data, setData] = useState();
-  const [loading, setFakeLoading] = useState(true);
-  const [error, setError] = useState();
-  // const { data, loading, error } = useWorkPacketStatusesQuery({
-  //   variables: {
-  //     orgSid: argOrgSid,
-  //     dateRange: argDateRange,
-  //     filter: argFilter,
-  //   },
-  // });
+  // const [data, setData] = useState();
+  // const [loading, setFakeLoading] = useState(true);
+  // const [error, setError] = useState();
+  const { data, loading, error } = useWorkPacketStatusesQuery({
+    variables: {
+      orgSid: argOrgSid,
+      dateRange: argDateRange,
+      filter: argFilter,
+    },
+  });
 
   // * Component Did Mount.
   useEffect(() => {
     setLoading(false);
-    setData(fakeData);
-    setFakeLoading(false);
+    // setData(fakeData);
+    // setFakeLoading(false);
     // setError();
   }, []);
 
   useEffect(() => {
     const doEffect = () => {
-      console.log(data);
+      console.log('TableErrors.service, data:', data);
       const _columns = [
         { key: 'datetime', label: 'Received On', id: 'datetime', style: 'text' },
         { key: 'clientFile', label: 'Client File', id: 'clientFile', style: 'link' },
@@ -152,18 +138,22 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
         { key: 'message', label: 'Message', id: 'message', style: 'text' },
       ];
 
-      const _items = data.fileErrors.map(({ timestamp, fileName, file, workStep, plan, vendor, message }) => {
-        const datetime = format(new Date(timestamp), 'MM/dd/yyyy hh:mm a');
+      const _items = data.workPacketStatuses.map(
+        ({ timestamp, clientFileArchivePath, inboundFilename, stepStatus, planSponsorId, vendorId, hasErrors }) => {
+          const datetime = format(new Date(timestamp), 'MM/dd/yyyy hh:mm a');
+          const message = hasErrors ? 'Error' : '';
+          const stepStatusLabel = getStepStatusLabel(stepStatus);
 
-        return [
-          formatField(datetime, 'text', 'datetime', datetime),
-          formatField(fileName, 'link', 'clientFile', file),
-          formatField(workStep, 'text', 'workStep', workStep),
-          formatField(plan, 'text', 'planSponsor', plan),
-          formatField(vendor, 'text', 'vendor', vendor),
-          formatField(message, 'text', 'message', message),
-        ];
-      });
+          return [
+            formatField(datetime, 'text', 'datetime', datetime),
+            formatField(inboundFilename, 'link', 'clientFile', clientFileArchivePath, '(Details)'),
+            formatField(stepStatusLabel, 'text', 'workStep', stepStatusLabel),
+            formatField(planSponsorId, 'text', 'planSponsor', planSponsorId),
+            formatField(vendorId, 'text', 'vendor', vendorId),
+            formatField(message, 'text', 'message', message),
+          ];
+        }
+      );
 
       setColumns(_columns);
       setItems(_items);
@@ -175,13 +165,14 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
   }, [data]);
 
   //
-  const formatField = (value, type, columnId, text) => {
+  const formatField = (value, type, columnId, text, sublabel) => {
     return {
       id: columnId,
       value,
       type,
       columnId,
       text,
+      sublabel,
     };
   };
 

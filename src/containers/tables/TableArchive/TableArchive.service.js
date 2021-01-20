@@ -4,23 +4,6 @@ import { useWorkPacketStatusesQuery } from '../../../data/services/graphql';
 import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { useInputValue } from '../../../hooks/useInputValue';
 
-// import { STATUSES } from '../../../data/constants/'
-
-const STATUSES = {
-  0: 'Queued',
-  1: 'Processing',
-  2: 'Complete',
-  3: 'Error',
-  4: 'Submitted',
-  5: 'Warning',
-  6: 'Hold',
-  7: 'Canceled',
-  a: 'Quality Check Failed',
-  b: 'No Records',
-  c: 'Tech migration Check Failed',
-  default: '',
-};
-
 export const useTable = (argOrgSid, argDateRange, argFilter) => {
   const [_loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
