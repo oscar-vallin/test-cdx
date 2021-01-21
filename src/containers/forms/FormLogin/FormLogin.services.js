@@ -1,31 +1,47 @@
-import React, { useState } from "react";
-import { useInputValue } from "../../../hooks/useInputValue";
+import React, { useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useInputValue } from '../../../hooks/useInputValue';
+import { useAuthContext } from '../../../contexts/AuthContext';
 
 // useEmailField
 export const useLogin = () => {
-  const email = useInputValue("Email", "");
-  const password = useInputValue("Password", "");
+  const email = useInputValue('Email', 'Your email Address', '', 'email');
+  const password = useInputValue('Password', 'Password', '', 'password');
+  const history = useHistory();
+
+  const { authLogin, isAuthenticating, authError } = useAuthContext();
 
   const [isProcessing, setIsProcessing] = React.useState(false);
-  const [validationError, setValidationError] = React.useState("");
-  const [isEmailValid, setIsEmailValid] = useState(false);
+  const [validationError, setValidationError] = React.useState('');
+  const [isEmailValid, setIsEmailValid] = React.useState(false);
+
+  //
 
   const resetEmail = () => {
     setIsEmailValid(false);
   };
 
+  //
+  const setErrorMessage = (errorMessage) => {
+    setValidationError(errorMessage);
+
+    setTimeout(() => {
+      setValidationError('');
+    }, 3000);
+  };
+
+  //
+
   const emailValidation = () => {
     setIsProcessing(true);
     setValidationError();
-
-    console.log(email.value);
 
     setTimeout(() => {
       // eslint-disable-next-line
       const validationResult = new RegExp(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g).test(email.value);
 
       if (!validationResult) {
-        setValidationError("Invalid e-mail");
+        setErrorMessage('Invalid e-mail');
       }
 
       setIsEmailValid(validationResult);
@@ -33,20 +49,28 @@ export const useLogin = () => {
     }, 1000);
   };
 
+  //
   const submitLogin = () => {
     setValidationError();
-    setIsProcessing(true);
+    console.log('SubmitLogin');
 
-    setTimeout(() => {
-      const validation = password.value === "test";
+    console.log('Email.value: ', email.value);
+    console.log('password.value: ', password.value);
 
-      if (!validation) {
-        setValidationError("Invalid password");
-      }
-
-      setIsProcessing(false);
-    }, 1000);
+    authLogin(email.value, password.value, history);
   };
+
+  //
+  useEffect(() => {
+    setIsProcessing(isAuthenticating);
+  }, [isAuthenticating]);
+
+  //
+  useEffect(() => {
+    if (authError && authError.message) setValidationError(authError.message);
+  }, [authError]);
+
+  //
 
   return { email, password, isProcessing, isEmailValid, validationError, emailValidation, resetEmail, submitLogin };
 };

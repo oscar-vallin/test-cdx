@@ -6,6 +6,12 @@ const rawChangeOwn = require('../data/rawChangeOwn.json');
 const rawChangeOwn2 = require('../data/rawChangeOwn2.json');
 const rawToken = require('../data/rawToken.json');
 const rawFiles = require('../data/rawFiles.json');
+const rawDashboard = require('../data/rawDashboard.json');
+const rawWorkPacketStatuses = require('../data/rawWorkPacketStatuses.json');
+const rawWorkPacketStatusDetails1 = require('../data/rawStatusDetail1.json');
+const rawWorkPacketStatusDetails2 = require('../data/rawStatusDetail2.json');
+const rawWorkPacketStatusDetails3 = require('../data/rawStatusDetail3.json');
+const rawPasswordLogin = require('../data/rawPasswordLogin.json');
 
 const UPDATE_STATUS = 'UPDATE_STATUS';
 
@@ -16,14 +22,7 @@ class mockAPI extends DataSource {
 
   initialize(config) {}
 
-  // beginLogin(userId: String!): LoginStep
-  // changeOwnPasswordPage: PasswordPage
-  // changeOwnPasswordPage2
-
   beginLogin(userId) {
-    console.log({ userId });
-    console.log({ rawLogin: rawLogin[0] });
-
     return rawLogin[0];
   }
 
@@ -36,11 +35,8 @@ class mockAPI extends DataSource {
   }
 
   passwordLogin() {
-    return rawToken[0];
-  }
-
-  passwordLogin() {
-    return rawToken[0];
+    console.log(rawPasswordLogin.data);
+    return rawPasswordLogin.data.passwordLogin;
   }
 
   fileList(id) {
@@ -57,15 +53,8 @@ class mockAPI extends DataSource {
     const fileId = id;
     const fileName = name;
     const fileStatus = status;
-
-    console.log({ pubsub });
-
-    console.log('FileName');
-    console.log({ fileId, fileName });
-
     const fileData = rawFiles.find(({ id }) => id == fileId);
 
-    console.log({ fileData });
     if (!fileData) return new ApolloError('Sorry, File ID not Found.');
 
     const updateFile = {
@@ -74,9 +63,7 @@ class mockAPI extends DataSource {
       status: fileStatus || fileData.status,
     };
 
-    console.log({ updateFile });
     pubsub.publish('UPDATE_STATUS', { updateStatus: updateFile });
-    // pubsub.publish('UPDATE_STATUS', { file: updateFile });
 
     return updateFile;
   }

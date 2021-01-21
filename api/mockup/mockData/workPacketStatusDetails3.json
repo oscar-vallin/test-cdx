@@ -1,0 +1,748 @@
+{
+  "data": {
+    "workPacketStatusDetails": {
+      "workOrderId": "2020-11-04-0914305320jkt01",
+      "specId": "COBRACoverageV1.8",
+      "specImplName": "COBRACoverageV1.8Impl-Tumi.xqm",
+      "fingerPrint": "SMSN-COBRA-QE-Tumi-PRODOptumHealthCOBRACoverageV1.8COBRACoverageV1.8Impl-Tumi",
+      "suppressBilling": null,
+      "vendorCountStats": {
+        "total": 2900,
+        "vendors": [
+          { "vendor": "ISA", "value": 199 },
+          { "vendor": "GS", "value": 2001 },
+          { "vendor": "ST", "value": 150 },
+          { "vendor": "BGN", "value": 350 },
+          { "vendor": "HDREF38", "value": 1 }
+        ]
+      },
+      "workStepStatus": [
+        {
+          "stepStatus": null,
+          "stepName": "K2U Extract Processing",
+          "stepType": null,
+          "populationCount": null,
+          "transformedArchiveFile": {
+            "value": "SMSN/COBRA/2020/11/13/SMSN-COBRA-QE-Tumi-PROD/e0d2f10e37fbfd1d978801fa8ca81a87895b5263fa08ea2aa2f969cb9cde08c0/03/khrxml.xml.zip"
+          },
+          "stepFile": [
+            {
+              "value": "SMSN/COBRA/2020/11/13/SMSN-COBRA-QE-Tumi-PROD/e0d2f10e37fbfd1d978801fa8ca81a87895b5263fa08ea2aa2f969cb9cde08c0/03/K2U Extract Processing-khcm.xml.zip"
+            },
+            {
+              "value": "SMSN/COBRA/2020/11/13/SMSN-COBRA-QE-Tumi-PROD/e0d2f10e37fbfd1d978801fa8ca81a87895b5263fa08ea2aa2f969cb9cde08c0/03/K2U Extract Processing-validation.xlsx.zip"
+            }
+          ],
+          "nvp": [
+            {
+              "name": "khcm:version",
+              "value": "1.25.0.2020-03-03-191345588"
+            },
+            {
+              "name": "khcm:feed",
+              "value": "COBRA QE"
+            }
+          ],
+          "recordCounts": null
+        },
+        {
+          "stepStatus": null,
+          "stepName": "EnrollmentStats",
+          "stepType": "Analysis",
+          "populationCount": null,
+          "transformedArchiveFile": null,
+          "stepFile": [],
+          "nvp": [],
+          "recordCounts": null
+        },
+        {
+          "stepStatus": null,
+          "stepName": "Semantic Map",
+          "stepType": "SemanticMap",
+          "populationCount": {
+            "value": 3
+          },
+          "transformedArchiveFile": {
+            "value": "SMSN/COBRA/2020/11/13/SMSN-COBRA-QE-Tumi-PROD/e0d2f10e37fbfd1d978801fa8ca81a87895b5263fa08ea2aa2f969cb9cde08c0/03/spec.xml.zip"
+          },
+          "stepFile": [],
+          "nvp": [],
+          "recordCounts": null
+        },
+        {
+          "stepStatus": null,
+          "stepName": "FlatFile",
+          "stepType": "FlatFile",
+          "populationCount": null,
+          "transformedArchiveFile": null,
+          "stepFile": [],
+          "nvp": [],
+          "recordCounts": null
+        }
+      ],
+      "deliveredFile": {
+        "filename": "20201113_CB_COV_OHFS222059452.txt",
+        "fileSizeInBytes": 544,
+        "textSizeInBytes": 544,
+        "timeDelivered": "2020-11-13T08:57:56.274-05:00",
+        "ftp": {
+          "protocol": "sftp",
+          "host": "ecgpe.healthtechnologygroup.com",
+          "username": "es00dvj",
+          "folder": "/in/tumi/ubs/cobra/prod",
+          "port": null
+        },
+        "kcurl": null
+      },
+      "extractParameters": {
+        "originalParameter": [
+          {
+            "label": null,
+            "name": "Include Assignment History:",
+            "value": ["Yes"]
+          },
+          {
+            "label": null,
+            "name": "Person Type:",
+            "value": ["Employee"]
+          },
+          {
+            "label": null,
+            "name": "Implicit Spouse Enroll:",
+            "value": ["No"]
+          },
+          {
+            "label": null,
+            "name": "Version:",
+            "value": ["1.25.0.2020-03-03-191345588"]
+          },
+          {
+            "label": null,
+            "name": "Effective From Date:",
+            "value": ["2019-11-12"]
+          },
+          {
+            "label": null,
+            "name": "Feed Type:",
+            "value": ["COBRA QE"]
+          },
+          {
+            "label": null,
+            "name": "Enroll Termination Events To Include:",
+            "value": ["NONE"]
+          },
+          {
+            "label": null,
+            "name": "Include Waived Enrollments:",
+            "value": ["No"]
+          },
+          {
+            "label": null,
+            "name": "Life Events Processed On Or After:",
+            "value": ["2020-11-06"]
+          },
+          {
+            "label": null,
+            "name": "Program Name:",
+            "value": ["Tumi Benefit Program"]
+          },
+          {
+            "label": null,
+            "name": "Implicit Child Enroll:",
+            "value": ["No"]
+          },
+          {
+            "label": null,
+            "name": "Implicit Child Plans:",
+            "value": [
+              "Samsonite - Supplemental Life Insurance - Children",
+              "eBags - Supplemental Life Insurance - Children"
+            ]
+          },
+          {
+            "label": null,
+            "name": "Process as if run on:",
+            "value": ["2020-11-12 00:00:00"]
+          },
+          {
+            "label": null,
+            "name": "Plan Name:",
+            "value": [
+              "Tumi - Dental",
+              "Tumi - FSA Health",
+              "Tumi - Medical Blue Care Elect Preferred",
+              "Tumi - Medical Blue Care Elect Saver (HSA)",
+              "Tumi - Vision"
+            ]
+          },
+          {
+            "label": null,
+            "name": "Report Run Date:",
+            "value": ["2020-11-13 13:51:30"]
+          },
+          {
+            "label": null,
+            "name": "Implicit Spouse Plans:",
+            "value": ["Samsonite Supplemental Life Insurance - Spouse", "eBags - Supplemental Life Insurance - Spouse"]
+          },
+          {
+            "label": null,
+            "name": "Legal Entity:",
+            "value": ["Tumi Stores", "Inc.", "Tumi", "Inc."]
+          },
+          {
+            "label": null,
+            "name": "Effective To Date:",
+            "value": ["4712-12-31"]
+          }
+        ],
+        "overriddenParameter": [],
+        "derivedParameter": [
+          {
+            "label": null,
+            "name": "fileType",
+            "value": ["psv"]
+          },
+          {
+            "label": null,
+            "name": "delimiter",
+            "value": ["|"]
+          },
+          {
+            "label": null,
+            "name": "delimiterQualifier",
+            "value": ["\""]
+          },
+          {
+            "label": null,
+            "name": "delimitedFileHeaderIndex",
+            "value": ["40"]
+          }
+        ]
+      },
+      "qualityChecks": {
+        "sequenceCreationEvent": [
+          {
+            "context": "Debra Holloway",
+            "unitId": "001851",
+            "recordCreationEvent": [
+              {
+                "context": "Raphael Holloway",
+                "outerContext": "Debra Holloway",
+                "unitId": "001851",
+                "error": [
+                  {
+                    "message": ["Missing field"],
+                    "name": "ParticipantSocialSecurityNumber",
+                    "id": "Eligibility.ParticipantSocialSecurityNumber",
+                    "value": null,
+                    "rawValue": null,
+                    "type": "Req"
+                  },
+                  {
+                    "message": ["Missing field"],
+                    "name": "ParticipantSocialSecurityNumber",
+                    "id": "Eligibility.ParticipantSocialSecurityNumber",
+                    "value": null,
+                    "rawValue": null,
+                    "type": "Req"
+                  }
+                ],
+                "warning": [],
+                "information": []
+              }
+            ]
+          }
+        ]
+      },
+      "enrollmentStats": {
+        "insuredStat": {
+          "subscribers": {
+            "active": {
+              "prior": null,
+              "value": 0
+            },
+            "ended": {
+              "prior": null,
+              "value": 2
+            },
+            "expectedTotal": null,
+            "inTolerance": null,
+            "toleranceMsg": null,
+            "hold": null
+          },
+          "dependents": {
+            "active": {
+              "prior": null,
+              "value": 0
+            },
+            "ended": {
+              "prior": null,
+              "value": 4
+            },
+            "expectedTotal": null,
+            "inTolerance": null,
+            "toleranceMsg": null,
+            "hold": null
+          }
+        },
+        "excludedInsuredStat": {
+          "subscribers": {
+            "active": {
+              "prior": null,
+              "value": 1
+            },
+            "ended": null,
+            "expectedTotal": null,
+            "inTolerance": null,
+            "toleranceMsg": null,
+            "hold": null
+          },
+          "dependents": {
+            "active": {
+              "prior": null,
+              "value": 1
+            },
+            "ended": {
+              "prior": null,
+              "value": 1
+            },
+            "expectedTotal": null,
+            "inTolerance": null,
+            "toleranceMsg": null,
+            "hold": null
+          }
+        },
+        "excludedPlanInsuredStat": [
+          {
+            "subscribers": null,
+            "dependents": {
+              "active": null,
+              "ended": {
+                "prior": null,
+                "value": 1
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            }
+          },
+          {
+            "subscribers": {
+              "active": {
+                "prior": null,
+                "value": 1
+              },
+              "ended": null,
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            },
+            "dependents": {
+              "active": {
+                "prior": null,
+                "value": 1
+              },
+              "ended": null,
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            }
+          },
+          {
+            "subscribers": {
+              "active": {
+                "prior": null,
+                "value": 1
+              },
+              "ended": null,
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            },
+            "dependents": {
+              "active": {
+                "prior": null,
+                "value": 1
+              },
+              "ended": {
+                "prior": null,
+                "value": 1
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            }
+          }
+        ],
+        "planInsuredStat": [
+          {
+            "subscribers": {
+              "active": {
+                "prior": null,
+                "value": 0
+              },
+              "ended": {
+                "prior": null,
+                "value": 2
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            },
+            "dependents": {
+              "active": {
+                "prior": null,
+                "value": 0
+              },
+              "ended": {
+                "prior": null,
+                "value": 3
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            }
+          },
+          {
+            "subscribers": {
+              "active": {
+                "prior": null,
+                "value": 0
+              },
+              "ended": {
+                "prior": null,
+                "value": 1
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            },
+            "dependents": {
+              "active": {
+                "prior": null,
+                "value": 0
+              },
+              "ended": {
+                "prior": null,
+                "value": 1
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            }
+          },
+          {
+            "subscribers": {
+              "active": {
+                "prior": null,
+                "value": 0
+              },
+              "ended": {
+                "prior": null,
+                "value": 2
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            },
+            "dependents": {
+              "active": {
+                "prior": null,
+                "value": 0
+              },
+              "ended": {
+                "prior": null,
+                "value": 4
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            }
+          }
+        ]
+      },
+      "inboundEnrollmentStats": {
+        "insuredStat": {
+          "subscribers": {
+            "active": {
+              "prior": null,
+              "value": 1
+            },
+            "ended": {
+              "prior": null,
+              "value": 2
+            },
+            "expectedTotal": null,
+            "inTolerance": null,
+            "toleranceMsg": null,
+            "hold": null
+          },
+          "dependents": {
+            "active": {
+              "prior": null,
+              "value": 1
+            },
+            "ended": {
+              "prior": null,
+              "value": 5
+            },
+            "expectedTotal": null,
+            "inTolerance": null,
+            "toleranceMsg": null,
+            "hold": null
+          }
+        },
+        "excludedInsuredStat": null,
+        "excludedPlanInsuredStat": [],
+        "planInsuredStat": [
+          {
+            "subscribers": {
+              "active": {
+                "prior": null,
+                "value": 0
+              },
+              "ended": {
+                "prior": null,
+                "value": 2
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            },
+            "dependents": {
+              "active": {
+                "prior": null,
+                "value": 0
+              },
+              "ended": {
+                "prior": null,
+                "value": 4
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            }
+          },
+          {
+            "subscribers": {
+              "active": {
+                "prior": null,
+                "value": 1
+              },
+              "ended": {
+                "prior": null,
+                "value": 1
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            },
+            "dependents": {
+              "active": {
+                "prior": null,
+                "value": 1
+              },
+              "ended": {
+                "prior": null,
+                "value": 1
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            }
+          },
+          {
+            "subscribers": {
+              "active": {
+                "prior": null,
+                "value": 1
+              },
+              "ended": {
+                "prior": null,
+                "value": 2
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            },
+            "dependents": {
+              "active": {
+                "prior": null,
+                "value": 1
+              },
+              "ended": {
+                "prior": null,
+                "value": 5
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            }
+          }
+        ]
+      },
+      "outboundEnrollmentStats": {
+        "insuredStat": {
+          "subscribers": {
+            "active": {
+              "prior": null,
+              "value": 0
+            },
+            "ended": {
+              "prior": null,
+              "value": 2
+            },
+            "expectedTotal": null,
+            "inTolerance": null,
+            "toleranceMsg": null,
+            "hold": null
+          },
+          "dependents": {
+            "active": {
+              "prior": null,
+              "value": 0
+            },
+            "ended": {
+              "prior": null,
+              "value": 4
+            },
+            "expectedTotal": null,
+            "inTolerance": null,
+            "toleranceMsg": null,
+            "hold": null
+          }
+        },
+        "excludedInsuredStat": null,
+        "excludedPlanInsuredStat": [],
+        "planInsuredStat": [
+          {
+            "subscribers": {
+              "active": {
+                "prior": null,
+                "value": 0
+              },
+              "ended": {
+                "prior": null,
+                "value": 2
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            },
+            "dependents": {
+              "active": {
+                "prior": null,
+                "value": 0
+              },
+              "ended": {
+                "prior": null,
+                "value": 3
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            }
+          },
+          {
+            "subscribers": {
+              "active": {
+                "prior": null,
+                "value": 0
+              },
+              "ended": {
+                "prior": null,
+                "value": 1
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            },
+            "dependents": {
+              "active": {
+                "prior": null,
+                "value": 0
+              },
+              "ended": {
+                "prior": null,
+                "value": 1
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            }
+          },
+          {
+            "subscribers": {
+              "active": {
+                "prior": null,
+                "value": 0
+              },
+              "ended": {
+                "prior": null,
+                "value": 2
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            },
+            "dependents": {
+              "active": {
+                "prior": null,
+                "value": 0
+              },
+              "ended": {
+                "prior": null,
+                "value": 4
+              },
+              "expectedTotal": null,
+              "inTolerance": null,
+              "toleranceMsg": null,
+              "hold": null
+            }
+          }
+        ]
+      },
+      "outboundRecordCounts": {
+        "totalCount": 13,
+        "showUser": true,
+        "recordCount": [
+          {
+            "name": "Header",
+            "count": 1
+          },
+          {
+            "name": "Eligibility",
+            "count": 11
+          },
+          {
+            "name": "Trailer",
+            "count": 1
+          }
+        ]
+      }
+    }
+  }
+}

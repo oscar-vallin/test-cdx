@@ -15,30 +15,30 @@ module.exports = {
     changeOwnPasswordPage: (parent, args, { dataSources }, info) => {
       return dataSources.mockAPI.changeOwnPasswordPage();
     },
-    changeOwnPasswordPage2: (parent, { id }, { dataSources }, info) => {
-      return dataSources.mockAPI.changeOwnPasswordPage2();
+
+    dashboardPeriods: (parent, args, { dataSources }, info) => {
+      console.log('DashBoardPresiods List...', Date.now());
+      return dataSources.mockAPI.dashboard().data.dashboardPeriods;
     },
-    fileList: (parent, args, { dataSources }, info) => {
-      return dataSources.mockAPI.fileList();
+    // orgSid, dateRange, filter;
+
+    workPacketStatuses: (parent, args, { dataSources }, info) => {
+      console.log('WorkPacket Statuses List...', Date.now());
+      return dataSources.mockAPI.workPacketStatuses(args.orgSid, args.dateRange, args.filter).workPacketStatuses;
     },
-    fileGet: (parent, { id }, { dataSources }, info) => {
-      return dataSources.mockAPI.fileList(id);
+
+    workPacketStatusDetails: (parent, args, { dataSources }, info) => {
+      console.log('WorkPacket Status Details List...', Date.now());
+      const resultResolver = dataSources.mockAPI.workPacketStatusDetails(args.orgSid, args.workOrderId);
+
+      console.log({ resultResolver });
+
+      return resultResolver;
     },
   },
   Mutation: {
     passwordLogin: (parent, { id }, { dataSources }, info) => {
       return dataSources.mockAPI.passwordLogin();
     },
-    fileUpdate: (parent, { id, name, status }, { dataSources }, info) => {
-      return dataSources.mockAPI.fileUpdate(pubSub, id, name, status);
-    },
-  },
-  Subscription: {
-    updateStatus: {
-      // Additional event labels can be passed to asyncIterator creation
-      subscribe: (parent, args, { dataSources }, info) => {
-        return pubSub.asyncIterator(UPDATE_STATUS);
-      },
-    },
-  },
+
 };

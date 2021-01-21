@@ -1,9 +1,9 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { StyledTextField } from "./InputText.styles";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { StyledTextField } from './InputText.styles';
 
 const InputText = ({
-  id = "InputText",
+  id = 'InputText',
   disabled = false,
   onChange,
   autofocus = true,

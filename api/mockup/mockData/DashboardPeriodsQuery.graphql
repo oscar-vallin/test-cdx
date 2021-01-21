@@ -1,0 +1,50 @@
+query DashboardPeriods($orgSid: ID!){
+    dashboardPeriods(orgSid: $orgSid){
+        dailyCounts{
+            ...dashPeriodCountsFragment
+        }
+        yesterdayCounts{
+            ...dashPeriodCountsFragment
+        }
+        monthlyCounts{
+            ...dashPeriodCountsFragment
+        }
+        lastMonthlyCounts{
+            ...dashPeriodCountsFragment
+        }
+    }
+}
+
+fragment dashPeriodCountsFragment on DashboardPeriodCounts{
+    vendorTransmissions{
+        ...dashPeriodCountFragment
+    }
+    vendorTransmissionsBySpec{
+        ...dashPeriodCountFragment
+    }
+    planSponsorTransmissions{
+        ...dashPeriodCountFragment
+    }
+    fileTransmissions{
+        ...dashPeriodCountFragment
+    }
+    vendorProcessErrors{
+        ...dashPeriodCountFragment
+    }
+    planSponsorProcessErrors{
+        ...dashPeriodCountFragment
+    }
+    fileProcessErrors{
+        ...dashPeriodCountFragment
+    }
+    transmissionCount
+    billingUnitCount
+    processErrorCount
+}
+
+fragment dashPeriodCountFragment on DashboardPeriodCount{
+    name
+    secondaryDescr
+    count
+    total
+}

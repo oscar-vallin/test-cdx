@@ -1,0 +1,328 @@
+query BeginLogin($userId: String!) {
+  beginLogin(userId: $userId) {
+    userId
+    step
+    redirectPath
+    allowLostPassword
+  }
+}
+
+mutation PasswordLogin($userId: String!, $password: String!) {
+  passwordLogin(userId: $userId, password: $password) {
+    step
+    loginCompleteDomain {
+      type
+      selectedPage
+      navItems {
+        ...navItemFragment
+        subNavItems {
+          ...navItemFragment
+        }
+      }
+    }
+    tokenUser {
+      token
+      session {
+        id
+        orgId
+        userId
+        defaultAuthorities
+      }
+    }
+  }
+}
+
+fragment navItemFragment on WebNav {
+  label
+  page {
+    ...webPageFragment
+  }
+  appDomain
+}
+
+fragment webPageFragment on WebPage {
+  type
+  parameters {
+    ...unionNVP
+  }
+  commands {
+    label
+    page {
+      type
+      parameters {
+        ...unionNVP
+      }
+    }
+    appDomain
+  }
+  pivots {
+    label
+    type
+  }
+}
+
+fragment unionNVP on NVP {
+  __typename
+  ... on NVPStr {
+    name
+    strValue: value
+  }
+  ... on NVPId {
+    name
+    idValue: value
+  }
+}
+
+query WorkPacketStatuses($orgSid: ID!, $dateRange: DateTimeRangeInput, $filter: WorkPacketStatusFilter) {
+  workPacketStatuses(orgSid: $orgSid, dateRange: $dateRange, filter: $filter) {
+    workOrderId
+    timestamp
+    planSponsorId
+    detailsPath
+    subClientPath
+    inboundFilename
+    vendorId
+    step
+    stepStatus
+    packetStatus
+    reprocessedBy
+    reprocessAction
+    recordHighlightCount
+    recordHighlightType
+    clientFileArchivePath
+    vendorFileArchivePath
+    supplementalFilesArchivePaths
+    archiveOnly
+    hasErrors
+  }
+}
+
+query WorkPacketStatusDetails($orgSid: ID!, $workOrderId: String!) {
+  workPacketStatusDetails(orgSid: $orgSid, workOrderId: $workOrderId) {
+    workOrderId
+    specId
+    specImplName
+    fingerPrint
+    suppressBilling
+    workStepStatus {
+      stepStatus
+      stepName
+      stepType
+      populationCount {
+        value
+      }
+      transformedArchiveFile {
+        value
+      }
+      stepFile {
+        value
+      }
+      nvp {
+        name
+        value
+      }
+      recordCounts {
+        ...recordCountsFragment
+      }
+    }
+    deliveredFile {
+      filename
+      fileSizeInBytes
+      textSizeInBytes
+      timeDelivered
+      ftp {
+        protocol
+        host
+        username
+        folder
+        port
+      }
+      kcurl {
+        url
+      }
+    }
+    extractParameters {
+      originalParameter {
+        ...extractParameterFragment
+      }
+      overriddenParameter {
+        ...extractParameterFragment
+      }
+      derivedParameter {
+        ...extractParameterFragment
+      }
+    }
+    qualityChecks {
+      sequenceCreationEvent {
+        context
+        unitId
+        recordCreationEvent {
+          context
+          outerContext
+          unitId
+          error {
+            ...fieldCreationFragment
+          }
+          warning {
+            ...fieldCreationFragment
+          }
+          information {
+            ...fieldCreationFragment
+          }
+        }
+      }
+    }
+    enrollmentStats {
+      ...enrollmentStatFragment
+    }
+    inboundEnrollmentStats {
+      ...enrollmentStatFragment
+    }
+    outboundEnrollmentStats {
+      ...enrollmentStatFragment
+    }
+    outboundRecordCounts {
+      ...recordCountsFragment
+    }
+  }
+}
+
+fragment recordCountsFragment on RecordCounts {
+  totalCount
+  showUser
+  recordCount {
+    name
+    count
+  }
+}
+
+fragment extractParameterFragment on ExtractParameter {
+  label
+  name
+  value
+}
+
+fragment fieldCreationFragment on FieldCreationEvent {
+  message
+  name
+  id
+  value
+  rawValue
+  type
+}
+
+fragment enrollmentStatFragment on EnrollmentStat {
+  insuredStat {
+    ...insuredStatFragment
+  }
+  excludedInsuredStat {
+    ...insuredStatFragment
+  }
+  excludedPlanInsuredStat {
+    ...planInsuredStatFragment
+  }
+  planInsuredStat {
+    ...planInsuredStatFragment
+  }
+}
+
+fragment insuredStatFragment on InsuredStat {
+  subscribers {
+    ...insuredStatCountFragment
+  }
+  dependents {
+    ...insuredStatCountFragment
+  }
+}
+
+fragment planInsuredStatFragment on PlanInsuredStat {
+  subscribers {
+    ...insuredStatCountFragment
+  }
+  dependents {
+    ...insuredStatCountFragment
+  }
+}
+
+fragment insuredStatCountFragment on InsuredStatCount {
+  active {
+    ...statIntFragment
+  }
+  ended {
+    ...statIntFragment
+  }
+  expectedTotal
+  inTolerance
+  toleranceMsg
+  hold
+}
+
+fragment statIntFragment on StatInt {
+  prior
+  value
+}
+
+query DashboardPeriods($orgSid: ID!) {
+  dashboardPeriods(orgSid: $orgSid) {
+    dailyCounts {
+      ...dashPeriodCountsFragment
+    }
+    yesterdayCounts {
+      ...dashPeriodCountsFragment
+    }
+    monthlyCounts {
+      ...dashPeriodCountsFragment
+    }
+    lastMonthlyCounts {
+      ...dashPeriodCountsFragment
+    }
+  }
+}
+
+fragment dashPeriodCountsFragment on DashboardPeriodCounts {
+  vendorTransmissions {
+    ...dashPeriodCountFragment
+  }
+  vendorTransmissionsBySpec {
+    ...dashPeriodCountFragment
+  }
+  planSponsorTransmissions {
+    ...dashPeriodCountFragment
+  }
+  fileTransmissions {
+    ...dashPeriodCountFragment
+  }
+  vendorProcessErrors {
+    ...dashPeriodCountFragment
+  }
+  planSponsorProcessErrors {
+    ...dashPeriodCountFragment
+  }
+  fileProcessErrors {
+    ...dashPeriodCountFragment
+  }
+  transmissionCount
+  billingUnitCount
+  processErrorCount
+}
+
+fragment dashPeriodCountFragment on DashboardPeriodCount {
+  name
+  secondaryDescr
+  count
+  total
+}
+
+query AMPolicyPage($orgSid: ID!) {
+  amPolicyPage(orgSid: $orgSid) {
+    services
+  }
+}
+
+query AMPolicyFacetsForService($orgSid: ID!, $cdxService: CDXService!) {
+  amPolicyFacetsForService(orgSid: $orgSid, cdxService: $cdxService)
+}
+
+query AMPolicyVerbForFacet($orgSid: ID!, $cdxService: CDXService!, $cdxFacet: CDXFacet!) {
+  amPolicyVerbForFacet(orgSid: $orgSid, cdxService: $cdxService, cdxFacet: $cdxFacet)
+}

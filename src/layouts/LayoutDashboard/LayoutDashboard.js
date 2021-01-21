@@ -1,11 +1,14 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { StyleConstants } from "../../data/constants/StyleConstants";
-import { BoxStyled } from "./LayoutDashboard.styles";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { NavBar } from '../../containers/bars/NavBar';
+import { StyleConstants } from '../../data/constants/StyleConstants';
+import { BoxStyled } from './LayoutDashboard.styles';
 
-const LayoutDashboard = ({ id = "LayoutDashboard", children, direction = StyleConstants.DIRECTION_COLUMN }) => {
+const LayoutDashboard = ({ id = 'LayoutDashboard', menuOptionSelected = 'dashboard', children }) => {
   return (
-    <BoxStyled id={id} direction={direction}>
+    <BoxStyled id={`${id}__Box`} direction={StyleConstants.DIRECTION_COLUMN} top>
+      <NavBar menuOptionSelected={menuOptionSelected} />
+
       {children}
     </BoxStyled>
   );

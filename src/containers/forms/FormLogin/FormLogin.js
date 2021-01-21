@@ -1,11 +1,12 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 // Components
-import { Column } from "../../../components/layouts";
-import { InputText } from "../../../components/inputs/InputText";
-import { Spinner } from "../../../components/spinners/Spinner";
+import { Column } from '../../../components/layouts';
+import { InputText } from '../../../components/inputs/InputText';
+import { Spinner } from '../../../components/spinners/Spinner';
 // Hooks
-import { useLogin } from "./FormLogin.services";
+import { useLogin } from './FormLogin.services';
+
 // Styles
 import {
   StyledBox,
@@ -17,22 +18,22 @@ import {
   StyledTitle,
   StyledRowBottom,
   StyledButtonIcon,
-} from "./FormLogin.styles";
+} from './FormLogin.styles';
 
 // CardSection is called directly cause a restriction warning for that component.
-const FormLogin = ({ id = "__FormLogin" }) => {
-  const handlerLogin = useLogin();
+const FormLogin = ({ id = '__FormLogin', onLogin }) => {
+  const handlerLogin = useLogin(onLogin);
   const { email, password } = handlerLogin;
 
   return (
-    <StyledBox id={id} sm="12">
+    <StyledBox id={id}>
       <StyledRowBottom id={`${id}__Card--Row`}>
         <Column id={`${id}__Card__Row-Column`}>
           <StyledImage name="logo" alt="Known2U Logo" />
         </Column>
       </StyledRowBottom>
-      <StyledRow id={`${id}--Row`} sm="8">
-        <Column id={`${id}__Row-Column`} sm="8">
+      <StyledRow id={`${id}--Row`}>
+        <Column id={`${id}__Row-Column`}>
           <StyledCard id={`${id}-Card`}>
             <StyledRow id={`${id}__Card__Row--label`}>
               <Column id={`${id}__Card__Row__Column--label`}>
@@ -50,7 +51,7 @@ const FormLogin = ({ id = "__FormLogin" }) => {
                   id={`${id}__Card__Row__Input-Email`}
                   autoFocus
                   disabled={handlerLogin.isProcessing || handlerLogin.isEmailValid}
-                  errorMessage={!handlerLogin.isEmailValid && handlerLogin.validationError}
+                  errorMessage={handlerLogin.isEmailValid ? '' : handlerLogin.validationError}
                   {...email}
                 />
               </Column>
@@ -74,7 +75,6 @@ const FormLogin = ({ id = "__FormLogin" }) => {
                     id={`${id}__Card__Row__Input-Email`}
                     autoFocus
                     type="password"
-                    // disabled={handlerLogin.isProcessing || handlerLogin.isEmailValid}
                     errorMessage={handlerLogin.validationError}
                     {...password}
                   />
@@ -90,7 +90,7 @@ const FormLogin = ({ id = "__FormLogin" }) => {
                     handlerLogin.isEmailValid ? handlerLogin.submitLogin() : handlerLogin.emailValidation()
                   }
                 >
-                  {handlerLogin.isProcessing ? <Spinner /> : !handlerLogin.isEmailValid ? "Next" : "Login"}
+                  {handlerLogin.isProcessing ? <Spinner /> : !handlerLogin.isEmailValid ? 'Next' : 'Login'}
                 </StyledButton>
               </Column>
             </StyledRow>
