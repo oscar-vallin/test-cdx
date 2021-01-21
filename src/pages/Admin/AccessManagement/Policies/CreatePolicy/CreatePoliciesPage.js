@@ -179,7 +179,7 @@ const OPTIONS = {
 const parseToComboBoxOption = ({ name, value }) => ({ key: value, text: name });
 
 const _CreatePoliciesPage = () => {
-  const { data, loading, error } = useAmPolicyPageQuery({});
+  const { data } = useAmPolicyPageQuery({});
 
   console.log(data);
 
