@@ -1,3 +1,4 @@
+import styled from 'styled-components';
 import { StyleConstants } from '../../../data/constants/StyleConstants';
 
 export const ComponentStyled = styled.div`
