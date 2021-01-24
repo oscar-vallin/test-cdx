@@ -9,7 +9,7 @@ export const ROUTES_ID = {
   ERRORS: 'errors',
   ADMIN: 'admin',
   ACCESS_MANAGEMENT_GROUPS: 'access-management-groups',
-  ACCESS_MANAGEMENT_GROUPS: 'access-management-groups',
+  ACCESS_MANAGEMENT_POLICIES: 'access-management-policies',
   CREATE_POLICIES: 'create-policy',
   ACTIVE_ORGS: 'active-orgs'
 };
@@ -27,7 +27,7 @@ const URL_ROUTES = {
   ADMIN: `/${ROUTES_ID.ADMIN}`,
   ACCESS_MANAGEMENT_GROUPS: `/${ROUTES_ID.ADMIN}/access-management/groups`,
   ACCESS_MANAGEMENT_POLICIES: `/${ROUTES_ID.ADMIN}/access-management/policies`,
-  CREATE_POLICIES: `/${ROUTES_ID.ACCESS_MANAGEMENT_POLICIES}/create`,
+  CREATE_POLICIES: `/${ROUTES_ID.ADMIN}/access-management/create-policy`,
   ACTIVE_ORGS: `/${ROUTES_ID.ADMIN}/organizations/active-orgs`
 };
 

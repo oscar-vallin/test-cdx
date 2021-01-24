@@ -7,6 +7,8 @@ import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { Row, Column } from '../../../../components/layouts';
 import { Spacing } from '../../../../components/spacings/Spacing';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
+import { Text } from '../../../../components/typography/Text';
+import { Separator } from '../../../../components/separators/Separator';
 
 import { useAmGroupsForOrgPQuery } from '../../../../data/services/graphql';
 
@@ -139,6 +141,18 @@ const _AccessManagementGroupsPage = () => {
     <LayoutAdmin id="PageAdmin" sidebar={NAV_ITEMS} sidebarOptionSelected="groups">
       <Spacing margin="double">
         <Row>
+          <Column lg="4">
+            <Spacing margin={{ top: 'small' }}>
+              <Text variant="bold">Groups</Text>
+            </Spacing>
+          </Column>
+        </Row>
+
+        <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+          <Separator />
+        </Spacing>
+
+        <Row>
           <Column>
             {!loading ? (
               groups.length > 0 ? (
@@ -151,7 +165,7 @@ const _AccessManagementGroupsPage = () => {
                   isHeaderVisible
                 />
               ) : (
-                <MessageBar>No actions added for this permission</MessageBar>
+                <MessageBar>No groups added</MessageBar>
               )
             ) : (
               <Spinner label="Loading groups" />
