@@ -9,9 +9,8 @@ export const ROUTES_ID = {
   ERRORS: 'errors',
   ADMIN: 'admin',
   ACCESS_MANAGEMENT_GROUPS: 'access-management-groups',
-  ACCESS_MANAGEMENT_GROUPS: 'access-management-groups',
   CREATE_POLICIES: 'create-policy',
-  ACTIVE_ORGS: 'active-orgs'
+  ACTIVE_ORGS: 'active-orgs',
 };
 
 const URL_ROUTES = {
@@ -28,7 +27,7 @@ const URL_ROUTES = {
   ACCESS_MANAGEMENT_GROUPS: `/${ROUTES_ID.ADMIN}/access-management/groups`,
   ACCESS_MANAGEMENT_POLICIES: `/${ROUTES_ID.ADMIN}/access-management/policies`,
   CREATE_POLICIES: `/${ROUTES_ID.ACCESS_MANAGEMENT_POLICIES}/create`,
-  ACTIVE_ORGS: `/${ROUTES_ID.ADMIN}/organizations/active-orgs`
+  ACTIVE_ORGS: `/${ROUTES_ID.ADMIN}/organizations/active-orgs`,
 };
 
 // DASHBOARD;
@@ -177,7 +176,7 @@ export const ROUTES = {
   ROUTE_ACCESS_MANAGEMENT_GROUPS,
   ROUTE_ACCESS_MANAGEMENT_POLICIES,
   ROUTE_CREATE_POLICIES,
-  ROUTE_ACTIVE_ORGS
+  ROUTE_ACTIVE_ORGS,
 };
 
 export const ROUTES_ARRAY = [
@@ -194,7 +193,7 @@ export const ROUTES_ARRAY = [
   ROUTE_CREATE_POLICIES,
   ROUTE_ACCESS_MANAGEMENT_GROUPS,
   ROUTE_ACCESS_MANAGEMENT_POLICIES,
-  ROUTE_ACTIVE_ORGS
+  ROUTE_ACTIVE_ORGS,
 ];
 
 export const getRouteByApiId = (_apiId) => {

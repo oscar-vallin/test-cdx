@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { usePasswordLoginMutation } from '../data/services/graphql';
 import { useErrorMessage } from '../hooks/useErrorMessage';
 import { getRouteByApiId } from '../data/constants/RouteConstants';
-import { useApolloContext } from './ApolloContext';
 //
 export const AuthContext = React.createContext(() => {
   //

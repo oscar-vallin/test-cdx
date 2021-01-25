@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { format, compareAsc } from 'date-fns';
+import { format } from 'date-fns';
 import { useWorkPacketStatusesQuery } from '../../../data/services/graphql';
 import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { useInputValue } from '../../../hooks/useInputValue';

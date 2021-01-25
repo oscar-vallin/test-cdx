@@ -1,5 +1,5 @@
 import React from 'react';
-import { ApolloProvider, ApolloClient, InMemoryCache, split, HttpLink } from '@apollo/client';
+import { ApolloProvider, ApolloClient, InMemoryCache, HttpLink } from '@apollo/client';
 
 import { setContext } from '@apollo/client/link/context';
 
