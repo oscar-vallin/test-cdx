@@ -223,6 +223,7 @@ const _AccessManagementPoliciesPage = () => {
     if (!loading && data) {
       setOptions(data.amPolicyPage);
     }
+    // eslint-disable-next-line
   }, [loading]);
 
   return (
