@@ -3,7 +3,7 @@ import { ApolloProvider, ApolloClient, InMemoryCache, HttpLink } from '@apollo/c
 
 import { setContext } from '@apollo/client/link/context';
 
-const SERVER_URL = 'https://x1-terraform-loadbalancer.k2u.xyz/graphql/';
+const SERVER_URL = process.env.REACT_APP_API_URL;
 
 //
 export const ApolloContext = React.createContext(() => {
@@ -72,6 +72,7 @@ export const ApolloContextProvider = ({ children }) => {
     };
 
     localFunction();
+    // eslint-disable-next-line
   }, []);
 
   // useEffects Variables.

@@ -127,6 +127,8 @@ export const AuthContextProvider = ({ children }) => {
     if (!authHistory) return;
 
     return authHistory.push(routePage.URL);
+
+    // eslint-disable-next-line
   }, [authData, authHistory]);
 
   //

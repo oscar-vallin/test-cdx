@@ -3,14 +3,18 @@ import React, { useState } from 'react';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { ComboBox } from 'office-ui-fabric-react/lib/ComboBox';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
+import { IconButton, CommandBarButton, MessageBar, MessageBarType } from 'office-ui-fabric-react';
 
 import { LayoutAdmin } from '../../../../../layouts/LayoutAdmin';
 import { Spacing } from '../../../../../components/spacings/Spacing';
+import { Card } from '../../../../../components/cards/Card';
 import { Button } from '../../../../../components/buttons/Button';
 import { Row, Column } from '../../../../../components/layouts';
 import { Separator } from '../../../../../components/separators/Separator';
 import { Text } from '../../../../../components/typography/Text';
 import { InputText } from '../../../../../components/inputs/InputText';
+import FacetCombobox from '../../../../../components/comboboxes/FacetCombobox/FacetCombobox';
+import VerbCombobox from '../../../../../components/comboboxes/VerbCombobox/VerbCombobox';
 
 import { useAmPolicyPageQuery } from '../../../../../data/services/graphql';
 
@@ -177,6 +181,24 @@ const OPTIONS = {
 };
 
 const parseToComboBoxOption = ({ name, value }) => ({ key: value, text: name });
+const generateColumns = () => {
+  const createColumn = (name) => ({
+    name,
+    key: name.toLowerCase(),
+    fieldName: name.toLowerCase(),
+    data: 'string',
+    isPadded: true,
+    minWidth: 225
+  });
+
+  return [
+    createColumn('Service'),
+    createColumn('Facet'),
+    createColumn('Verb'),
+    createColumn('Actions'),
+  ];
+}
+
 
 const _CreatePoliciesPage = () => {
   const { data } = useAmPolicyPageQuery({});
@@ -184,6 +206,7 @@ const _CreatePoliciesPage = () => {
   console.log(data);
 
   const [state, setState] = useState({
+    editIndex: null,
     policyName: '',
     isTemplate: false,
     usedAsIs: false,
@@ -196,6 +219,103 @@ const _CreatePoliciesPage = () => {
     },
     items: [],
   });
+
+  const [options, setOptions] = useState({
+    permissionServices: [],
+    predicates: [],
+    templateServices: []
+  });
+
+  const { data, loading } = useAmPolicyPageQuery({ variables: { orgSid : 1 } });
+  
+  const handleAsyncOptionChange = (attr, permissionIndex) => (option, item, data) => {
+    setState({
+      ...state,
+      permissions: state.permissions.map((permission, index) => {
+        if (index !== permissionIndex) {
+          return permission;
+        }
+
+        return {
+          ...permission,
+          actions: permission.actions.map((action, index) => {
+            if (permission.actions.indexOf(item) !== index) {
+              return action;
+            }
+    
+            return { ...action, [attr]: option };
+          }),
+        }
+      }),
+    });
+  };
+
+  const onRenderItemColumn = ({
+    data, services, onServiceChange, onFacetChange, onVerbChange, permissionIndex,
+  }) => (item, index, column) => {
+    switch (column.key) {
+      case 'service':
+        return (
+          <ComboBox
+            autoComplete="off"
+            selectedKey={item.service.key}
+            options={services.map(parseToComboBoxOption)}
+            onChange={(event, option) => onServiceChange(option, item, data)}
+            style={{ width: '100%' }}
+          />
+        );
+      case 'facet':
+        console.log(item);
+        return (
+          <FacetCombobox
+            service={item.service.key}
+            onChange={(event, option) => onFacetChange(option, item, data)}
+          />
+        );
+      case 'verb':
+        return (
+          <VerbCombobox
+            service={item.service.key}
+            facet={item.facet.key}
+            onChange={(event, option) => onVerbChange(option, item, data)}
+          />
+        );
+      case 'actions':
+        return (
+          <div>
+            <IconButton
+              iconProps={{ iconName: 'delete' }}
+              onClick={() => {
+                setState({
+                  ...state,
+                  permissions: state.permissions.map((item, currIndex) => {
+                    if (currIndex !== permissionIndex) {
+                      return item;
+                    }
+
+                    return {
+                      ...item,
+                      actions: item.actions
+                        .filter((action, actionIndex) => actionIndex !== index)
+                    }
+                  }),
+                })
+              }}
+            />
+          </div>
+        )
+    }
+  }
+
+  let columns = generateColumns(options);
+
+  useEffect(() => {
+    if (!loading && data) {
+      setOptions(data.amPolicyPage);
+    }
+  }, [loading]);
+
+  const [createPolicy] = useCreateAmPolicyMutation();
 
   return (
     <LayoutAdmin id="PageAdmin" sidebar={NAV_ITEMS} sidebarOptionSelected="policies">
@@ -297,7 +417,7 @@ const _CreatePoliciesPage = () => {
             <Column lg="2">
               <Button
                 variant="primary"
-                onClick={() => {
+                onClick={() => { 
                   setState({
                     ...state,
                     items: [

@@ -27,3 +27,5 @@ yarn.lock*
 #API
 /api/mockup/node_modules
 /api/mockup/yarn.lock
+
+/**/*.js.snap
