@@ -33,6 +33,7 @@ export const useTable = (argOrgSid, argWorkerId) => {
     if (data) {
       doEffect();
     }
+    // eslint-disable-next-line
   }, [data]);
 
   const buildRecord = (label, context, outerContext, unitId, record) => {

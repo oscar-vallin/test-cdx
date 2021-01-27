@@ -8,20 +8,20 @@ const getVariant = (theme, variant) => {
     light: { background: 'transparent', color: theme.colors.themePrimary },
     danger: { background: 'transparent', color: theme.colors.error },
     error: { background: theme.colors.severe, color: theme.colors.white },
-  }
+  };
 
   return VARIANTS[variant];
-}
+};
 
 export const StyledButton = styled(PrimaryButton)`
-  width: ${({ block }) => block ? '100%' : 'auto'};
+  width: ${({ block }) => (block ? '100%' : 'auto')};
   
   &,
   & + button {
     background: ${({ theme, variant }) => getVariant(theme, variant).background};
-    border ${({ theme, variant }) => `1px solid ${variant === 'secondary'
-      ? theme.colors.black
-      : 'transparent'} !important
+    border ${({ theme, variant }) => `1px solid ${
+      variant === 'secondary' ? theme.colors.black : 'transparent'
+    } !important
     `};
     color: ${({ theme, variant }) => getVariant(theme, variant).color} !important;
     

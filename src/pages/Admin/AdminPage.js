@@ -1,5 +1,4 @@
 import React from 'react';
-import { ROUTES } from '../../data/constants/RouteConstants';
 
 import { LayoutAdmin } from '../../layouts/LayoutAdmin';
 import { Spacing } from '../../components/spacings/Spacing';
@@ -93,13 +92,8 @@ const NAV_ITEMS = [
 
 const _AdminPage = () => {
   return (
-    <LayoutAdmin
-      id="PageAdmin"
-      sidebar={NAV_ITEMS}
-    >
-      <Spacing margin="double">
-        
-      </Spacing>
+    <LayoutAdmin id="PageAdmin" sidebar={NAV_ITEMS}>
+      <Spacing margin="double" />
     </LayoutAdmin>
   );
 };

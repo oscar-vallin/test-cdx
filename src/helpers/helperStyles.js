@@ -28,6 +28,7 @@ export const getClassNames = (initialClasses, props) => {
   if (props.sm) classes.push(`${classesFluent.sm}${props.sm}`);
   if (props.md) classes.push(`${classesFluent.md}${props.md}`);
   if (props.lg) classes.push(`${classesFluent.lg}${props.lg}`);
+
   if (props.xl) classes.push(`${classesFluent.xl}${props.xl}`);
   if (props.xxl) classes.push(`${classesFluent.xxl}${props.xxl}`);
   if (props.xxxl) classes.push(`${classesFluent.xxxl}${props.xxxl}`);
@@ -35,6 +36,7 @@ export const getClassNames = (initialClasses, props) => {
   if (props.pushSm) classes.push(`${classesFluent.pushSm}${props.pushSm}`);
   if (props.pushMd) classes.push(`${classesFluent.pushMd}${props.pushMd}`);
   if (props.pushLg) classes.push(`${classesFluent.pushLg}${props.pushLg}`);
+
   if (props.pushXl) classes.push(`${classesFluent.pushXl}${props.pushXl}`);
   if (props.pushXxl) classes.push(`${classesFluent.pushXxl}${props.pushXxl}`);
   if (props.pushXxxl) classes.push(`${classesFluent.pushXxxl}${props.pushXxxl}`);
@@ -42,25 +44,14 @@ export const getClassNames = (initialClasses, props) => {
   if (props.pullSm) classes.push(`${classesFluent.pullSm}${props.pullSm}`);
   if (props.pullMd) classes.push(`${classesFluent.pullMd}${props.pullMd}`);
   if (props.pullLg) classes.push(`${classesFluent.pullLg}${props.pullLg}`);
+
   if (props.pullXl) classes.push(`${classesFluent.pullXl}${props.pullXl}`);
   if (props.pullXxl) classes.push(`${classesFluent.pullXxl}${props.pullXxl}`);
   if (props.pullXxxl) classes.push(`${classesFluent.pullXxxl}${props.pullXxxl}`);
 
   if (props.hiddenAt) classes.push(`${classesFluent.hidden}${props.hiddenAt}`);
 
-  if (
-    !props.sm &&
-    // !props.md &&
-    // !props.lg &&
-    // !props.lg &&
-    // !props.pushSm &&
-    // !props.pushMd &&
-    // !props.pushLg &&
-    // !props.pullSm &&
-    // !props.pullMd &&
-    // !props.pullLg &&
-    !props.noStyle
-  ) {
+  if (!props.sm && !props.noStyle) {
     classes.push(`${classesFluent.sm}12`);
     // classes.push(`${classesFluent.pushSm}12`);
     // classes.push(`${classesFluent.pullSm}12`);

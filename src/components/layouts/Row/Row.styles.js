@@ -15,8 +15,7 @@ export const DivStyled = styled.div`
       ? 'space-evenly'
       : props.between
       ? 'space-beween'
-      : 'flex-start'
-  };
+      : 'flex-start'};
   align-items: ${(props) => (props.center ? 'center' : props.bottom ? 'flex-end' : 'flex-start')};
   width: 100%;
 `;

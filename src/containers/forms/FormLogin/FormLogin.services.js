@@ -16,6 +16,7 @@ export const useLogin = () => {
   const [isEmailValid, setIsEmailValid] = React.useState(false);
 
   //
+
   const resetEmail = () => {
     setIsEmailValid(false);
   };
@@ -30,6 +31,7 @@ export const useLogin = () => {
   };
 
   //
+
   const emailValidation = () => {
     setIsProcessing(true);
     setValidationError();
@@ -69,5 +71,6 @@ export const useLogin = () => {
   }, [authError]);
 
   //
+
   return { email, password, isProcessing, isEmailValid, validationError, emailValidation, resetEmail, submitLogin };
 };

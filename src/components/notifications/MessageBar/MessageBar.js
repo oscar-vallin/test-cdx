@@ -1,9 +1,6 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  MessageBar,
-  MessageBarType,
-} from 'office-ui-fabric-react';
+import { MessageBar, MessageBarType } from 'office-ui-fabric-react';
 
 const CDXMessageBar = ({
   id = '__MessageBar',
@@ -27,7 +24,7 @@ const CDXMessageBar = ({
       {content || children}
     </MessageBar>
   );
-}
+};
 
 CDXMessageBar.propTypes = {
   id: PropTypes.string,
@@ -35,6 +32,5 @@ CDXMessageBar.propTypes = {
   multiline: PropTypes.bool,
   truncated: PropTypes.bool,
 };
-
 
 export { CDXMessageBar };

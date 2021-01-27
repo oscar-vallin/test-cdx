@@ -1,5 +1,5 @@
 export default {
-  themePrimary: '#1ca9eb',
+Primary: '#1ca9eb',
   themeLighterAlt: '#f5fbfe',
   themeLighter: '#d8f1fc',
   themeLight: '#b7e4f9',

@@ -20,7 +20,7 @@ const fontSizes = {
   h3: '30px',
   h4: '24px',
   h5: '20px',
-  regular: '16px', /* ? */
+  regular: '16px' /* ? */,
   logo: '5vh',
   logoNavBar: '1.3vw',
 };
@@ -55,7 +55,7 @@ const radius = {
 
 const spacing = {
   none: '0',
-  small: '5px', /* Third, base? */
+  small: '5px' /* Third, base? */,
   normal: '15px',
   double: '30px',
   triple: '45px',
@@ -88,6 +88,7 @@ export const theme = {
   colors,
   radius,
   spacing,
+
   boxShadows,
   fontStyles,
 };

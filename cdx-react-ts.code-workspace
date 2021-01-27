@@ -10,9 +10,6 @@
     "editor.formatOnPaste": true,
     "html.format.endWithNewline": true,
     "git.ignoreLimitWarning": true,
-    "cSpell.words": [
-      "datetime",
-      "fluentui"
-    ]
+    "cSpell.words": ["datetime", "fluentui"]
   }
 }
