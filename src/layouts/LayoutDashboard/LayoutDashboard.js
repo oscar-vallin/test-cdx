@@ -8,6 +8,7 @@ const LayoutDashboard = ({ id = 'LayoutDashboard', menuOptionSelected = 'dashboa
   return (
     <BoxStyled id={`${id}__Box`} direction={StyleConstants.DIRECTION_COLUMN} top>
       <NavBar menuOptionSelected={menuOptionSelected} />
+
       {children}
     </BoxStyled>
   );

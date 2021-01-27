@@ -1,10 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
-import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
-import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
-import { MessageBar } from 'office-ui-fabric-react';
-import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
-import { Row, Column } from '../../../../components/layouts';
+import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Spacing } from '../../../../components/spacings/Spacing';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Text } from '../../../../components/typography/Text';
@@ -144,41 +140,8 @@ const _ActiveOrgsPage = () => {
   }, [loading]);
 
   return (
-    <LayoutAdmin id="PageAdmin" sidebar={NAV_ITEMS} sidebarOptionSelected="activeOrgs">
-      <Spacing margin="double">
-        <Row>
-          <Column lg="4">
-            <Spacing margin={{ top: 'small' }}>
-              <Text variant="bold">Active Orgs</Text>
-            </Spacing>
-          </Column>
-        </Row>
-
-        <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-          <Separator />
-        </Spacing>
-
-        <Row>
-          <Column>
-            {!loading ? (
-              orgs.length > 0 ? (
-                <DetailsList
-                  items={orgs}
-                  selectionMode={SelectionMode.none}
-                  columns={columns}
-                  layoutMode={DetailsListLayoutMode.justified}
-                  onRenderItemColumn={onRenderItemColumn}
-                  isHeaderVisible
-                />
-              ) : (
-                <MessageBar>No active orgs</MessageBar>
-              )
-            ) : (
-              <Spinner label="Loading active orgs" />
-            )}
-          </Column>
-        </Row>
-      </Spacing>
+    <LayoutAdmin id="PageActiveOrgs" sidebar={NAV_ITEMS} sidebarOptionSelected="activeOrgs">
+      <Spacing margin="double">Active Orgs</Spacing>
     </LayoutAdmin>
   );
 };

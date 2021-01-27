@@ -1,18 +1,11 @@
-import React from "react";
-import { PropTypes } from "prop-types";
-import { CardSection } from "@uifabric/react-cards";
+import React from 'react';
+import { PropTypes } from 'prop-types';
+import { CardSection } from '@uifabric/react-cards';
 //
-import { getClassNames } from "../../../helpers/helperStyles";
-import { CardStyled, Stylesheet } from "./Card.styles";
+import { getClassNames } from '../../../helpers/helperStyles';
+import { CardStyled, Stylesheet } from './Card.styles';
 
-const Card = ({
-  id = "__Card",
-  variant = "normal",
-  elevation = "normal",
-  spacing = "normal",
-  children,
-  ...props
-  }) => {
+const Card = ({ id = '__Card', variant = 'normal', elevation = 'normal', spacing = 'normal', children, ...props }) => {
   return (
     <CardStyled
       id={id}

@@ -179,7 +179,7 @@ const Table = ({ items, columns, structure, onOption, groups }) => {
           );
         }
         return <span>{fieldContent}</span>;
-        break;
+
       case 'link':
         console.log('Table = link, fieldContent: ', fieldContent);
         console.log('Table = link, fieldItem: ', fieldItem);

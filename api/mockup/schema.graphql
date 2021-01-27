@@ -73,6 +73,7 @@ type TokenUser {
 type UserSession {
   id: ID!
   orgId: ID!
+
   userId: String!
   defaultAuthorities: [String]
 }

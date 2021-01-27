@@ -1,9 +1,9 @@
 import React from 'react';
-import { ApolloProvider, ApolloClient, InMemoryCache, split, HttpLink } from '@apollo/client';
+import { ApolloProvider, ApolloClient, InMemoryCache, HttpLink } from '@apollo/client';
 
 import { setContext } from '@apollo/client/link/context';
 
-const SERVER_URL = 'https://x1-terraform-loadbalancer.k2u.xyz/graphql/';
+const SERVER_URL = process.env.REACT_APP_API_URL;
 
 //
 export const ApolloContext = React.createContext(() => {
@@ -32,6 +32,7 @@ export const ApolloContextProvider = ({ children }) => {
   let client = new ApolloClient({
     // link,
     link: authLink.concat(httpLink),
+
     cache: new InMemoryCache(),
     connectToDevTools: true,
   });
@@ -66,10 +67,12 @@ export const ApolloContextProvider = ({ children }) => {
   React.useEffect(() => {
     const localFunction = async () => {
       setLoading(false);
+
       configureApollo();
     };
 
     localFunction();
+    // eslint-disable-next-line
   }, []);
 
   // useEffects Variables.

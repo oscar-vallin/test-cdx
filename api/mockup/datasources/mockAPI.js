@@ -49,33 +49,10 @@ class mockAPI extends DataSource {
     return rawFiles[0];
   }
 
-  dashboard(orgId) {
-    return rawDashboard;
-  }
-
-  // WorkPacketStatuses($orgSid: ID!, $dateRange: DateTimeRangeInput, $filter: WorkPacketStatusFilter){
-  workPacketStatuses(orgSid, dateRange, filter) {
-    console.log('mockAPI, workPacketStatuses');
-    return rawWorkPacketStatuses;
-  }
-
-  // WorkPacketStatuses($orgSid: ID!, $dateRange: DateTimeRangeInput, $filter: WorkPacketStatusFilter){
-  workPacketStatusDetails(orgSid, workOrderId) {
-    const result =
-      workOrderId === '1'
-        ? rawWorkPacketStatusDetails2
-        : workOrderId === '2'
-        ? rawWorkPacketStatusDetails3
-        : rawWorkPacketStatusDetails1;
-
-    return result.data.workPacketStatusDetails;
-  }
-
   fileUpdate(pubsub, id, name, status) {
     const fileId = id;
     const fileName = name;
     const fileStatus = status;
-
     const fileData = rawFiles.find(({ id }) => id == fileId);
 
     if (!fileData) return new ApolloError('Sorry, File ID not Found.');

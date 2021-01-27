@@ -20,6 +20,7 @@ export const StyledCard = styled(Card)`
 export const StyledRow = styled(LayoutRow)`
   && {
     margin-top: ${({ marginTop }) => (marginTop ? `${marginTop}px` : '15px')};
+
     padding: 0px 8px;
   }
 `;
@@ -29,13 +30,16 @@ export const StyledRowBottom = styled(LayoutRow)`
     width: 45vw;
     max-width: 500px;
     min-width: 300px;
+
     margin-bottom: ${({ marginBottom }) => (marginBottom ? `${marginBottom}px` : '15px')};
+
     padding: 0px 8px;
   }
 `;
 
 export const StyledButton = styled(Button)`
   margin-top: ${(props) => props.theme.spacing.normal};
+
   width: 100%;
 `;
 

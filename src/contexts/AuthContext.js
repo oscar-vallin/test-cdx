@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { usePasswordLoginMutation } from '../data/services/graphql';
 import { useErrorMessage } from '../hooks/useErrorMessage';
 import { getRouteByApiId } from '../data/constants/RouteConstants';
-import { useApolloContext } from './ApolloContext';
 //
 export const AuthContext = React.createContext(() => {
   //
@@ -128,6 +127,8 @@ export const AuthContextProvider = ({ children }) => {
     if (!authHistory) return;
 
     return authHistory.push(routePage.URL);
+
+    // eslint-disable-next-line
   }, [authData, authHistory]);
 
   //
