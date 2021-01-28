@@ -30,7 +30,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --verbose",
+    "test": "react-scripts test --verbose --updateSnapshot",
     "format": "prettier --write src/**/*.{ts,tsx}",
     "lint": "tsc --noEmit && eslint src/**/*.ts{,x} --color --fix",
     "eject": "react-scripts eject"
@@ -75,11 +75,14 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "lint-staged",
+      "pre-push": "lint-staged",
+      "test:staged": "cross-env CI=true react-scripts test --env=jsdom --findRelatedTests --updateSnapshot"
     }
   },
   "lint-staged": {
     "src/**/*.{ts,tsx,json}": [
+      "test:staged",
       "prettier --write ./src/**/*.{ts,tsx}",
       "tslint ./src/**/*.{ts,tsx} --fix --color"
     ]
