@@ -5,6 +5,7 @@ exports[`Button Testing Unit... Should render correctly 1`] = `
   disabled={false}
   id="__Button"
   onClick={[MockFunction]}
+  variant="secondary"
 >
   Testing Button
 </Styled(CustomizedPrimaryButton)>
