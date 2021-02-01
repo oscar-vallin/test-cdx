@@ -101,11 +101,11 @@ const NAV_ITEMS = [
   },
 ];
 
-const SERVICE_TYPES = [
-  { key: 'A', text: 'Option A' },
-  { key: 'B', text: 'Option B' },
-  { key: 'C', text: 'Option C' },
-];
+// const SERVICE_TYPES = [
+//   { key: 'A', text: 'Option A' },
+//   { key: 'B', text: 'Option B' },
+//   { key: 'C', text: 'Option C' },
+// ];
 
 const COLUMNS = [
   {
@@ -132,48 +132,48 @@ const COLUMNS = [
     data: 'string',
     isPadded: true,
   },
-]
+];
 
 const OPTIONS = {
   permissionServices: [
     {
-      "name": "CDX",
-      "value": "CDX"
+      name: 'CDX',
+      value: 'CDX',
     },
     {
-      "name": "Integration",
-      "value": "INTEGRATION"
+      name: 'Integration',
+      value: 'INTEGRATION',
     },
     {
-      "name": "Access Management",
-      "value": "ACCESS_MANAGEMENT"
-    }
+      name: 'Access Management',
+      value: 'ACCESS_MANAGEMENT',
+    },
   ],
   predicates: [
     {
-      "name": "StringEqualsIgnoreCase",
-      "value": "STRING_EQUALS_IGNORE_CASE"
+      name: 'StringEqualsIgnoreCase',
+      value: 'STRING_EQUALS_IGNORE_CASE',
     },
     {
-      "name": "StringNotEqualsIgnoreCase",
-      "value": "STRING_NOT_EQUALS_IGNORE_CASE"
+      name: 'StringNotEqualsIgnoreCase',
+      value: 'STRING_NOT_EQUALS_IGNORE_CASE',
     },
     {
-      "name": "NotKNTUEnv",
-      "value": "NOT_KNTU_ENV"
-    }
+      name: 'NotKNTUEnv',
+      value: 'NOT_KNTU_ENV',
+    },
   ],
   showTemplateSection: true,
   templateServices: [
     {
-      "name": "CDX",
-      "value": "CDX"
+      name: 'CDX',
+      value: 'CDX',
     },
     {
-      "name": "Integration",
-      "value": "INTEGRATION"
-    }
-  ]
+      name: 'Integration',
+      value: 'INTEGRATION',
+    },
+  ],
 };
 
 const parseToComboBoxOption = ({ name, value }) => ({ key: value, text: name });
@@ -182,7 +182,6 @@ const _CreatePoliciesPage = () => {
   const { data } = useAmPolicyPageQuery({});
 
   console.log(data);
-
 
   const [state, setState] = useState({
     policyName: '',
@@ -199,11 +198,7 @@ const _CreatePoliciesPage = () => {
   });
 
   return (
-    <LayoutAdmin
-      id="PageAdmin"
-      sidebar={NAV_ITEMS}
-      sidebarOptionSelected="policies"
-    >
+    <LayoutAdmin id="PageAdmin" sidebar={NAV_ITEMS} sidebarOptionSelected="policies">
       <Spacing margin="double">
         <Row bottom>
           <Column lg="3">
@@ -218,41 +213,34 @@ const _CreatePoliciesPage = () => {
         <Row center>
           <Column lg="12">
             <Spacing margin={{ top: 'normal', bottom: 'small' }}>
-              <Checkbox
-                label="Is a template"
-                onChange={(event, isTemplate) => setState({ ...state, isTemplate })}
-              />
+              <Checkbox label="Is a template" onChange={(event, isTemplate) => setState({ ...state, isTemplate })} />
             </Spacing>
 
-            {
-              state.isTemplate && (
-                <Checkbox
-                  label="Template can be used as is"
-                  onChange={(event, usedAsIs) => setState({ ...state, usedAsIs })}
-                />
-              )
-            }
+            {state.isTemplate && (
+              <Checkbox
+                label="Template can be used as is"
+                onChange={(event, usedAsIs) => setState({ ...state, usedAsIs })}
+              />
+            )}
           </Column>
         </Row>
 
-        {
-          state.usedAsIs && (
-            <Row>
-              <Column lg="3">
-                <Spacing margin={{ top: 'small' }}>
-                  <ComboBox
-                    selectedKey={state.serviceType}
-                    label="Service type"
-                    autoComplete="off"
-                    options={OPTIONS.templateServices.map(parseToComboBoxOption)}
-                    onChange={(event, { key }) => setState({ ...state, serviceType: key })}
-                    style={{ width: '100%' }}
-                  />
-                </Spacing>
-              </Column>
-            </Row>
-          )
-        }
+        {state.usedAsIs && (
+          <Row>
+            <Column lg="3">
+              <Spacing margin={{ top: 'small' }}>
+                <ComboBox
+                  selectedKey={state.serviceType}
+                  label="Service type"
+                  autoComplete="off"
+                  options={OPTIONS.templateServices.map(parseToComboBoxOption)}
+                  onChange={(event, { key }) => setState({ ...state, serviceType: key })}
+                  style={{ width: '100%' }}
+                />
+              </Spacing>
+            </Column>
+          </Row>
+        )}
 
         <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
           <Separator />
@@ -292,7 +280,9 @@ const _CreatePoliciesPage = () => {
               <InputText
                 label="Parameter variable"
                 value={state.form.parameterVariable}
-                onChange={({ target }) => setState({ ...state, form: { ...state.form, parameterVariable: target.value } })}
+                onChange={({ target }) =>
+                  setState({ ...state, form: { ...state.form, parameterVariable: target.value } })
+                }
               />
             </Column>
 
@@ -307,20 +297,22 @@ const _CreatePoliciesPage = () => {
             <Column lg="2">
               <Button
                 variant="primary"
-                onClick={() => { 
+                onClick={() => {
                   setState({
                     ...state,
                     items: [
                       ...state.items,
                       {
-                        service: OPTIONS.templateServices.find(option => option.value === state.serviceType).name,
+                        service: OPTIONS.templateServices.find((option) => option.value === state.serviceType).name,
                         facet: '#Query',
                         verb: '#Query',
                       },
                     ],
                   });
                 }}
-              >Add</Button>
+              >
+                Add
+              </Button>
             </Column>
           </Row>
         </Spacing>
@@ -339,10 +331,10 @@ const _CreatePoliciesPage = () => {
               <DetailsList
                 items={state.items}
                 selectionMode={SelectionMode.none}
-                compact={true}
+                compact
                 columns={COLUMNS}
                 layoutMode={DetailsListLayoutMode.justified}
-                isHeaderVisible={true}
+                isHeaderVisible
               />
             </Column>
           </Row>
@@ -355,4 +347,3 @@ const _CreatePoliciesPage = () => {
 const CreatePoliciesPage = React.memo(_CreatePoliciesPage);
 
 export { CreatePoliciesPage };
-

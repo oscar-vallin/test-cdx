@@ -16,3 +16,5 @@ export const StyledColumn = styled(LayoutColumn)`
 `;
 
 export const StyledTable = styled(Table)``;
+
+export const TableBox = styled(LayoutBox)``;

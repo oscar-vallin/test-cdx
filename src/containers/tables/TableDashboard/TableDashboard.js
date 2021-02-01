@@ -1,12 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
+import { TableBox } from './TableDashboard.styles';
+
 import { Table } from '../../../components/tables/Table';
 import { getTableStructure } from '../../../data/constants/TableConstants';
 
 const TableDashboard = ({ id = '__TableDashboard', tableId = 'default', data, altData, loading }) => {
+  const [tableProps, setTableProps] = React.useState();
   const [specs, setSpecs] = React.useState(false);
   const [tableData, setTableData] = React.useState();
   const [isLoading, setIsLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    const _tableProps = {
+      items: [],
+      columns: [],
+      structure: {},
+      loading,
+    };
+
+    setTableProps(_tableProps);
+  }, []);
 
   const getNoData = () => {
     return [{ vendor: 'No Data', bus: '...' }];
@@ -62,12 +77,16 @@ const TableDashboard = ({ id = '__TableDashboard', tableId = 'default', data, al
 
   if (!isLoading && tableData) {
     return (
-      <Table
-        items={tableData}
-        structure={getTableStructure(tableId)}
-        loading={loading}
-        onOption={() => onChangeOption()}
-      />
+      <TableBox id={`${id}`}>
+        <Table id={`${id}`} onOption={() => console.log('Table click')} {...tableProps} />
+      </TableBox>
+
+      // <Table
+      //   items={tableData}
+      //   structure={getTableStructure(tableId)}
+      //   loading={loading}
+      //   onOption={() => onChangeOption()}
+      // />
     );
   }
 
