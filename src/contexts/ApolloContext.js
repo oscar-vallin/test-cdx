@@ -1,5 +1,5 @@
 import React from 'react';
-import { ApolloProvider, ApolloClient, InMemoryCache, split, HttpLink } from '@apollo/client';
+import { ApolloProvider, ApolloClient, InMemoryCache, HttpLink } from '@apollo/client';
 
 import { setContext } from '@apollo/client/link/context';
 
@@ -14,11 +14,9 @@ export const ApolloContext = React.createContext(() => {
 export const ApolloContextProvider = ({ children }) => {
   // LocalState
   const [isContextLoading, setLoading] = React.useState(true);
-  const [bearerToken, setBearerToken] = React.useState();
 
   const authLink = setContext((_, { headers }) => {
     const token = localStorage.getItem('AUTH_TOKEN');
-    setBearerToken(token);
     return {
       headers: {
         ...headers,
@@ -70,6 +68,7 @@ export const ApolloContextProvider = ({ children }) => {
     };
 
     localFunction();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // useEffects Variables.
@@ -77,18 +76,8 @@ export const ApolloContextProvider = ({ children }) => {
   // Local Functions shared in Context.
   const onUpdate = async () => {};
 
-  // Local Functions shared in Context.
-  const loadToken = (token) => {
-    console.log('ApolloContext - Token: ', token);
-    console.log('ApolloContext - bearerToken: ', bearerToken);
-    if (!!token && !!bearerToken && token !== bearerToken) {
-      configureApollo();
-      setBearerToken(token);
-    }
-  };
-
   //
-  const values = React.useMemo(() => ({ isContextLoading, client, onUpdate, loadToken }), [isContextLoading, client]);
+  const values = React.useMemo(() => ({ isContextLoading, client, onUpdate }), [isContextLoading, client]);
 
   // Finally, return the interface that we want to expose to our other components
   return (

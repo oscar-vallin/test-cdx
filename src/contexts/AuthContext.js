@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { usePasswordLoginMutation } from '../data/services/graphql';
 import { useErrorMessage } from '../hooks/useErrorMessage';
 import { getRouteByApiId } from '../data/constants/RouteConstants';
-import { useApolloContext } from './ApolloContext';
 //
 export const AuthContext = React.createContext(() => {
   //
@@ -128,6 +127,8 @@ export const AuthContextProvider = ({ children }) => {
     if (!authHistory) return;
 
     return authHistory.push(routePage.URL);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authData, authHistory]);
 
   //
@@ -158,24 +159,34 @@ export const AuthContextProvider = ({ children }) => {
   //
   // * Clear all the Input Data Username and Password for the context.
   //
-  const clearInputLoginData = () => {
-    setUser();
-    setPassword();
-  };
+  // const clearInputLoginData = () => {
+  //   setUser();
+  //   setPassword();
+  // };
 
   //
   // * Clear all the Input Data Username and Password for the context.
   //
-  const authLogout = () => {
-    localStorage.removeItem('AUTH_TOKEN');
-    setAuthData();
-    setAuthenticated(false);
-    clearInputLoginData();
-  };
+  // const authLogout = () => {
+  //   localStorage.removeItem('AUTH_TOKEN');
+  //   setAuthData();
+  //   setAuthenticated(false);
+  //   clearInputLoginData();
+  // };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const values = React.useMemo(
-    () => ({ isContextLoading, isAuthenticating, isAuthenticated, authData, authError, token, authLogin, authLogout }),
+    () => ({
+      isContextLoading,
+      isAuthenticating,
+      isAuthenticated,
+      authData,
+      authError,
+      token,
+      authLogin,
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      // authLogout,
+    }),
     [isContextLoading, isAuthenticating, isAuthenticated, authData, authError, token]
   );
 

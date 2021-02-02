@@ -1,5 +1,4 @@
 import React from 'react';
-import { ROUTES } from '../../../../data/constants/RouteConstants';
 
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Spacing } from '../../../../components/spacings/Spacing';
@@ -93,14 +92,8 @@ const NAV_ITEMS = [
 
 const _ActiveOrgsPage = () => {
   return (
-    <LayoutAdmin
-      id="PageActiveOrgs"
-      sidebar={NAV_ITEMS}
-      sidebarOptionSelected="activeOrgs"
-    >
-      <Spacing margin="double">
-        Active Orgs
-      </Spacing>
+    <LayoutAdmin id="PageActiveOrgs" sidebar={NAV_ITEMS} sidebarOptionSelected="activeOrgs">
+      <Spacing margin="double">Active Orgs</Spacing>
     </LayoutAdmin>
   );
 };

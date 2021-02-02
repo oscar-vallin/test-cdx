@@ -101,11 +101,11 @@ const NAV_ITEMS = [
   },
 ];
 
-const SERVICE_TYPES = [
-  { key: 'A', text: 'Option A' },
-  { key: 'B', text: 'Option B' },
-  { key: 'C', text: 'Option C' },
-];
+// const SERVICE_TYPES = [
+//   { key: 'A', text: 'Option A' },
+//   { key: 'B', text: 'Option B' },
+//   { key: 'C', text: 'Option C' },
+// ];
 
 const COLUMNS = [
   {

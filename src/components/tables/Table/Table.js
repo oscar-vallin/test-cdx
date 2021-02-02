@@ -151,8 +151,6 @@ const Table = ({ items, structure, onOption, groups }) => {
         }
         return <span>{fieldContent}</span>;
 
-        break;
-
       case 'bus':
         return <StyledText right>{fieldContent}</StyledText>;
 
