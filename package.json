@@ -15,6 +15,8 @@
     "@uifabric/react-cards": "^0.113.8",
     "apollo-link-ws": "^1.0.20",
     "date-fns": "^2.16.1",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.5",
     "graphql": "^15.3.0",
     "office-ui-fabric-react": "^7.144.2",
     "react": "17.0.0",
