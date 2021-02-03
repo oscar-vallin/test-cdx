@@ -1,14 +1,10 @@
 import React from 'react';
 import { Route, Redirect, useLocation } from "react-router-dom";
 import { useAuthContext } from "../contexts/AuthContext";
-import { useApolloContext } from "../contexts/ApolloContext";
 
 export default function AuthenticatedRoute({ children, ...rest }) {
   const { pathname, search } = useLocation();
   const { isAuthenticated } = useAuthContext();
-
-  console.log('AuthenticatedRoute, rest', rest);
-  console.log('AuthenticatedRoute, children', children);
 
   return (
     <Route {...rest}>

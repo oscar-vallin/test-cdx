@@ -2,25 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { TableBox } from './TableDashboard.styles';
+import { useTable } from './TableDashboard.service';
 
 import { Table } from '../../../components/tables/Table';
+// import { Table } from '../../../components/tables/_Table';
 import { getTableStructure } from '../../../data/constants/TableConstants';
 
 const TableDashboard = ({ id = '__TableDashboard', tableId = 'default', data, altData, loading }) => {
-  const [tableProps, setTableProps] = React.useState();
+  const { tableProps } = useTable(data);
   const [specs, setSpecs] = React.useState(false);
   const [tableData, setTableData] = React.useState();
-  const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
-    const _tableProps = {
-      items: [],
-      columns: [],
-      structure: {},
-      loading,
-    };
-
-    setTableProps(_tableProps);
+    console.log('TableDashboard, tableProps: ', tableProps);
   }, []);
 
   const getNoData = () => {
@@ -56,7 +50,6 @@ const TableDashboard = ({ id = '__TableDashboard', tableId = 'default', data, al
 
     if (altData) {
       setTableData(val);
-      setIsLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [specs]);
@@ -65,7 +58,6 @@ const TableDashboard = ({ id = '__TableDashboard', tableId = 'default', data, al
     if (data) {
       const NewTableData = getTable();
       setTableData(NewTableData);
-      setIsLoading(false);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -75,7 +67,7 @@ const TableDashboard = ({ id = '__TableDashboard', tableId = 'default', data, al
     setSpecs(!specs);
   };
 
-  if (!isLoading && tableData) {
+  if (tableProps) {
     return (
       <TableBox id={`${id}`}>
         <Table id={`${id}`} onOption={() => console.log('Table click')} {...tableProps} />

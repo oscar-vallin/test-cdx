@@ -1,6 +1,4 @@
 import React from 'react';
-// import { ROUTES } from '../../data/constants/RouteConstants';
-
 import { LayoutAdmin } from '../../layouts/LayoutAdmin';
 import { Spacing } from '../../components/spacings/Spacing';
 

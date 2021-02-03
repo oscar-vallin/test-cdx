@@ -157,9 +157,9 @@ const Table = ({ items, columns, structure, onOption, groups }) => {
     const fieldItem = items[index].find((_item) => _item.columnId === column.fieldName);
     const tableType = structure.header.type;
 
-    // console.log('renderItemColum, item: ', item);
-    // console.log('renderItemColum, fieldContent: ', fieldContent);
-    // console.log('renderItemColum, fieldLabel: ', fieldItem);
+    console.log('renderItemColum, item: ', item);
+    console.log('renderItemColum, fieldContent: ', fieldContent);
+    console.log('renderItemColum, fieldLabel: ', fieldItem);
 
     const isTableArchive = tableType === 'archives';
 
@@ -179,7 +179,7 @@ const Table = ({ items, columns, structure, onOption, groups }) => {
           );
         }
         return <span>{fieldContent}</span>;
-        break;
+
       case 'link':
         console.log('Table = link, fieldContent: ', fieldContent);
         console.log('Table = link, fieldItem: ', fieldItem);
@@ -283,28 +283,31 @@ const Table = ({ items, columns, structure, onOption, groups }) => {
   console.log('Render, tablecolumns: ', tablecolumns);
   console.log('Header, type:', structure.header.type);
 
-  if (structure.header.type === 'dashboard') {
-    return (
-      <StyledContainer id="Table_Detailed" style={{ width: '100%' }}>
-        <DetailsList
-          className={classNames.root}
-          id="TableDetailedList"
-          items={sortedItems}
-          columns={tablecolumns}
-          selectionMode={SelectionMode.none}
-          setKey="none"
-          layoutMode={DetailsListLayoutMode.justified}
-          isHeaderVisible
-          onItemInvoked={_onItemInvoked}
-          onRenderDetailsHeader={_onRenderTableHeader}
-          onRenderItemColumn={_renderItemColumn}
-          groups={sortedGroups}
-        />
-        {/* )} */}
-        {sortedItems?.length === 0 && <StyledText bold>No Data</StyledText>}
-      </StyledContainer>
-    );
-  }
+  // * RENDER
+
+  if (sortedItems)
+    if (structure.header.type === 'dashboard') {
+      return (
+        <StyledContainer id="Table_Detailed" style={{ width: '100%' }}>
+          <DetailsList
+            className={classNames.root}
+            id="TableDetailedList"
+            items={sortedItems}
+            columns={tablecolumns}
+            selectionMode={SelectionMode.none}
+            setKey="none"
+            layoutMode={DetailsListLayoutMode.justified}
+            isHeaderVisible
+            onItemInvoked={_onItemInvoked}
+            onRenderDetailsHeader={_onRenderTableHeader}
+            onRenderItemColumn={_renderItemColumn}
+            groups={sortedGroups}
+          />
+          {/* )} */}
+          {sortedItems?.length === 0 && <StyledText bold>No Data</StyledText>}
+        </StyledContainer>
+      );
+    }
   return (
     <StyledContainer id="Table_Detailed" style={{ width: '100%' }}>
       <DetailsList

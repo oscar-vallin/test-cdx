@@ -151,6 +151,19 @@ const Table = ({ items, structure, onOption, groups }) => {
         }
         return <span>{fieldContent}</span>;
 
+      case 'link':
+        console.log('Table = link, fieldContent: ', fieldContent);
+        console.log('Table = link, fieldItem: ', fieldItem);
+
+        if (fieldItem?.sublabel) {
+          return (
+            <>
+              <span>{`${fieldContent} `}</span>
+              <Link href={`${fieldItem.text}`}>{fieldItem.sublabel}</Link>
+            </>
+          );
+        }
+
         break;
 
       case 'bus':
