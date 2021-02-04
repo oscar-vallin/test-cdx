@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { Text } from '../../components/typography/Text';
 import { Container } from './NotFound.styles';
 
