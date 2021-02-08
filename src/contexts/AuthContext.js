@@ -158,20 +158,20 @@ export const AuthContextProvider = ({ children }) => {
   //
   // * Clear all the Input Data Username and Password for the context.
   //
-  // const clearInputLoginData = () => {
-  //   setUser();
-  //   setPassword();
-  // };
+  const clearInputLoginData = () => {
+    setUser();
+    setPassword();
+  };
 
   //
   // * Clear all the Input Data Username and Password for the context.
   //
-  // const authLogout = () => {
-  //   localStorage.removeItem('AUTH_TOKEN');
-  //   setAuthData();
-  //   setAuthenticated(false);
-  //   clearInputLoginData();
-  // };
+  const authLogout = () => {
+    localStorage.removeItem('AUTH_TOKEN');
+    setAuthData();
+    setAuthenticated(false);
+    clearInputLoginData();
+  };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const values = React.useMemo(
@@ -184,7 +184,7 @@ export const AuthContextProvider = ({ children }) => {
       token,
       authLogin,
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      // authLogout,
+      authLogout,
     }),
     [isContextLoading, isAuthenticating, isAuthenticated, authData, authError, token]
   );
