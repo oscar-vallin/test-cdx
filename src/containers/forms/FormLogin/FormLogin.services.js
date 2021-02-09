@@ -50,10 +50,6 @@ export const useLogin = () => {
   //
   const submitLogin = () => {
     setValidationError();
-    console.log('SubmitLogin');
-
-    console.log('Email.value: ', email.value);
-    console.log('password.value: ', password.value);
 
     authLogin(email.value, password.value, history);
   };
