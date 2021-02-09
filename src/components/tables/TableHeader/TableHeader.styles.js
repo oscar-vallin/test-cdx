@@ -13,15 +13,18 @@ export const StyledRow = styled(LayoutRow)`
   margin-left: ${({ marginH }) => (marginH ? `${marginH}px` : '0px')};
   margin-right: ${({ marginH }) => (marginH ? `${marginH}px` : '0px')};
   border-bottom: gray;
-  border-bottom-width: 2px;
+  border-bottom-width: ${({ noBorder }) => (noBorder ? '0px' : '2px')};
   border-bottom-style: solid;
 `;
 
 export const StyledColumn = styled(LayoutColumn)`
-  width: 100%;
   padding-left: ${({ paddingLeft }) => (paddingLeft ? `${paddingLeft}px` : '0px')};
   margin-left: ${({ marginH }) => (marginH ? `${marginH}px` : '0px')};
   margin-right: ${({ marginH }) => (marginH ? `${marginH}px` : '0px')};
+`;
+
+export const StyledColumnTitle = styled(StyledColumn)`
+  height: 100%;
 `;
 
 export const HeaderTable = styled(StyledRow)`

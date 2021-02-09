@@ -3,7 +3,14 @@ import PropTypes from 'prop-types';
 import { DetailsHeader } from 'office-ui-fabric-react/lib/DetailsList';
 import { useHistory } from 'react-router-dom';
 
-import { HeaderTable, StyledColumn, StyledRow, StyledMenuButton, StyledLink } from './TableHeader.styles';
+import {
+  HeaderTable,
+  StyledColumn,
+  StyledRow,
+  StyledMenuButton,
+  StyledLink,
+  StyledColumnTitle,
+} from './TableHeader.styles';
 
 const TableHeader = ({ id = '__TableHeader', header = 'default', sortLabel, onSort, onOption, ...props }) => {
   const history = useHistory();
@@ -14,14 +21,14 @@ const TableHeader = ({ id = '__TableHeader', header = 'default', sortLabel, onSo
 
   if (header.type === 'dashboard') {
     return (
-      <HeaderTable>
-        <StyledColumn left paddingLeft={12}>
+      <HeaderTable id="HeaderTable_dashboard">
+        <StyledColumnTitle left center paddingLeft={12} sm={6}>
           <StyledLink onClick={() => history.push('/transmissions')}>{header.title}</StyledLink>
-        </StyledColumn>
+        </StyledColumnTitle>
         {header.buttons && (
-          <StyledColumn>
-            <StyledRow>
-              <StyledColumn>
+          <StyledColumn sm={6}>
+            <StyledRow noBorder>
+              <StyledColumn sm={6}>
                 <StyledMenuButton
                   icon="sort"
                   onClick={() => {
@@ -31,7 +38,7 @@ const TableHeader = ({ id = '__TableHeader', header = 'default', sortLabel, onSo
                   {sortLabel}
                 </StyledMenuButton>
               </StyledColumn>
-              <StyledColumn>
+              <StyledColumn sm={6}>
                 <StyledMenuButton
                   icon="eye"
                   onClick={() => {

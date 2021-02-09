@@ -17,6 +17,7 @@ import { FileProgress } from '../../../containers/bars/FileProgress';
 
 const _buildColumns = (
   items,
+  xtColumns,
   canResizeColumns,
   onColumnClick,
   sortedColumnKey,
@@ -36,6 +37,13 @@ const _buildColumns = (
   columns.forEach((column) => {
     column.onColumnContextMenu = onColumnContextMenu;
     column.ariaLabel = `Operations for ${column.name}`;
+    console.log('_buildColumns: column', column.ariaLabel);
+    column.isResizable = true;
+    column.minWidth = 100;
+    column.maxWidth = 200;
+    const columnData = xtColumns.find((xtColumn) => xtColumn.key === column.fieldName);
+    column.name = columnData?.label ?? column.name;
+    console.log('_buildColumns, xtColumns: ', columnData);
 
     if (column.key === 'thumbnail') {
       column.iconName = 'Picture';
@@ -55,6 +63,9 @@ const _buildColumns = (
       // column.onRender = (item) => <Link data-selection-invoke>{item.name}</Link>;
       column.minWidth = 270;
       column.maxWidth = 270;
+    } else if (column.key === 'clientFile') {
+      column.minWidth = 300;
+      column.maxWidth = 300;
     } else if (column.key === 'key') {
       column.columnActionsMode = ColumnActionsMode.disabled;
       column.onRender = (item) => (
@@ -87,13 +98,33 @@ const classNames = mergeStyleSets({
 });
 
 //
-const Table = ({ items, structure, onOption, groups }) => {
+const Table = ({ items, columns, structure, onOption, groups }) => {
   const [sortLabel, setSortLabel] = React.useState();
   const [sortedItems, setSortedItems] = React.useState([]);
   const [sortedGroups, setSortedGroups] = React.useState();
-  const [columns, setColumns] = React.useState([]);
+  const [tablecolumns, setColumns] = React.useState([]);
+
+  console.log('Table, items:', items);
+  console.log('Table, columns:', columns);
+  console.log('Table, structure:', structure);
 
   React.useEffect(() => {}, []);
+
+  const _buildItems = () => {
+    const iItems = items.map((rowItem) => {
+      const objItem = {};
+
+      rowItem.forEach((rowColItem) => {
+        objItem[rowColItem.columnId] = rowColItem.value;
+      });
+
+      return objItem;
+    });
+
+    console.log('table, _buildItems, iItems', iItems);
+    setSortedItems(iItems);
+    return iItems;
+  };
 
   React.useEffect(() => {
     const doEffect = () => {
@@ -110,35 +141,33 @@ const Table = ({ items, structure, onOption, groups }) => {
         setSortedGroups(_groups);
       }
 
-      const filterItems = items.map((item) => {
-        const _item = { ...item };
-
-        if (item.hasOwnProperty('groupId')) {
-          delete _item.groupId;
-        }
-
-        return _item;
-      });
-
-      setSortedItems(filterItems);
-
-      const filterColumns = _buildColumns(filterItems);
-
-      setColumns(filterColumns);
+      const _items = _buildItems();
+      const _columns = _buildColumns(_items, columns);
+      setColumns(_columns);
     };
 
     return doEffect();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [items, groups]);
 
   //
   const _renderItemColumn = (item, index, column) => {
     const fieldContent = item[column.fieldName];
+    const fieldItem = items[index].find((_item) => _item.columnId === column.fieldName);
     const tableType = structure.header.type;
+
+    console.log('renderItemColum, item: ', item);
+    console.log('renderItemColum, fieldContent: ', fieldContent);
+    console.log('renderItemColum, fieldLabel: ', fieldItem);
 
     const isTableArchive = tableType === 'archives';
 
-    // console.log('column: ', column);
-    switch (column.key) {
+    const columnData = columns.find((_column) => _column.key === column.key);
+
+    // console.log('renderItemColum, columnData: ', columnData);
+
+    switch (columnData.style) {
       case 'datetime':
         console.log('structure: ', structure);
         if (isTableArchive) {
@@ -150,6 +179,21 @@ const Table = ({ items, structure, onOption, groups }) => {
           );
         }
         return <span>{fieldContent}</span>;
+
+      case 'link':
+        console.log('Table = link, fieldContent: ', fieldContent);
+        console.log('Table = link, fieldItem: ', fieldItem);
+
+        if (fieldItem?.sublabel) {
+          return (
+            <>
+              <span>{`${fieldContent} `}</span>
+              <Link href={`${fieldItem.text}`}>{fieldItem.sublabel}</Link>
+            </>
+          );
+        }
+
+        return <Link href={`${fieldItem.text}`}>{fieldContent}</Link>;
 
       case 'bus':
         return <StyledText right>{fieldContent}</StyledText>;
@@ -169,8 +213,8 @@ const Table = ({ items, structure, onOption, groups }) => {
           </StyledCell>
         );
 
-      case 'progress':
-        return <FileProgress stringValues={item.progress} />;
+      // case 'progress':
+      //   return <FileProgress stringValues={item.progress} />;
 
       case 'color':
         return (
@@ -184,6 +228,22 @@ const Table = ({ items, structure, onOption, groups }) => {
 
       case 'specs':
         break;
+
+      case 'total':
+        console.log('total cell: ', fieldContent);
+        return (
+          <StyledCell id="TotalCell" right>
+            <span>{fieldContent}</span>
+          </StyledCell>
+        );
+
+      case 'node':
+        console.log('progressBar: ', fieldContent);
+        return (
+          <StyledCell id="Progress">
+            <span>{fieldContent}</span>
+          </StyledCell>
+        );
 
       default:
         return <span>{fieldContent}</span>;
@@ -235,25 +295,57 @@ const Table = ({ items, structure, onOption, groups }) => {
     return <TableHeader header={structure.header} sortLabel={sortLabel} onSort={_onSort} onOption={_onShowSpecs} />;
   };
 
+  console.log('Render, SortedItems: ', sortedItems);
+  console.log('Render, tablecolumns: ', tablecolumns);
+  console.log('Header, type:', structure.header.type);
+
+  // * RENDER
+
+  if (sortedItems)
+    if (structure.header.type === 'dashboard') {
+      return (
+        <StyledContainer id="Table_Detailed" style={{ width: '100%' }}>
+          <DetailsList
+            className={classNames.root}
+            id="TableDetailedList"
+            items={sortedItems}
+            columns={tablecolumns}
+            selectionMode={SelectionMode.none}
+            setKey="none"
+            layoutMode={DetailsListLayoutMode.justified}
+            isHeaderVisible
+            onItemInvoked={_onItemInvoked}
+            onRenderDetailsHeader={_onRenderTableHeader}
+            onRenderItemColumn={_renderItemColumn}
+            groups={sortedGroups}
+          />
+          {/* )} */}
+          {sortedItems?.length === 0 && <StyledText bold>No Data</StyledText>}
+        </StyledContainer>
+      );
+    }
   return (
     <StyledContainer id="Table_Detailed" style={{ width: '100%' }}>
       <DetailsList
         className={classNames.root}
         id="TableDetailedList"
         items={sortedItems}
-        columns={columns}
+        columns={tablecolumns}
         selectionMode={SelectionMode.none}
         setKey="none"
         layoutMode={DetailsListLayoutMode.justified}
         isHeaderVisible
         onItemInvoked={_onItemInvoked}
-        onRenderDetailsHeader={_onRenderTableHeader}
+        onRenderDetailsHeader={null}
         onRenderItemColumn={_renderItemColumn}
         groups={sortedGroups}
       />
+      {/* )} */}
       {sortedItems?.length === 0 && <StyledText bold>No Data</StyledText>}
     </StyledContainer>
   );
+
+  // return <p>No Items</p>;
 };
 
 Table.propTypes = {};

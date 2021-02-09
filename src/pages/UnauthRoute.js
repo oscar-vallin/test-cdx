@@ -23,8 +23,6 @@ export default function UnauthenticatedRoute({ children, ...rest }) {
   const { isAuthenticated } = useAuthContext();
   const redirect = querystring("redirect");
 
-  console.log('UnauthenticatedRoute, isAuthenticated: ', isAuthenticated);
-
   return (
     <Route {...rest}>
       {!isAuthenticated ? (
