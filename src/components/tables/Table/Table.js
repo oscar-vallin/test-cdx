@@ -213,8 +213,8 @@ const Table = ({ items, columns, structure, onOption, groups }) => {
           </StyledCell>
         );
 
-      case 'progress':
-        return <FileProgress stringValues={item.progress} />;
+      // case 'progress':
+      //   return <FileProgress stringValues={item.progress} />;
 
       case 'color':
         return (
@@ -228,6 +228,22 @@ const Table = ({ items, columns, structure, onOption, groups }) => {
 
       case 'specs':
         break;
+
+      case 'total':
+        console.log('total cell: ', fieldContent);
+        return (
+          <StyledCell id="TotalCell" right>
+            <span>{fieldContent}</span>
+          </StyledCell>
+        );
+
+      case 'node':
+        console.log('progressBar: ', fieldContent);
+        return (
+          <StyledCell id="Progress">
+            <span>{fieldContent}</span>
+          </StyledCell>
+        );
 
       default:
         return <span>{fieldContent}</span>;

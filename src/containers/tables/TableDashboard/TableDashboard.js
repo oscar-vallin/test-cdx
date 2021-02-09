@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { TableBox } from './TableDashboard.styles';
 import { useTable } from './TableDashboard.service';
 
@@ -8,13 +9,19 @@ import { Table } from '../../../components/tables/Table';
 // import { Table } from '../../../components/tables/_Table';
 import { getTableStructure } from '../../../data/constants/TableConstants';
 
-const TableDashboard = ({ id = '__TableDashboard', tableId = 'default', data, altData, loading }) => {
-  const { tableProps } = useTable(data);
+const TableDashboard = ({
+  id = '__TableDashboard',
+  tableId = TABLE_NAMES.DASHBOARD_TRANSMISSIONS_VENDOR,
+  data,
+  altData,
+  loading,
+}) => {
+  const { tableProps } = useTable(data, tableId);
   const [specs, setSpecs] = React.useState(false);
   const [tableData, setTableData] = React.useState();
 
   React.useEffect(() => {
-    console.log('TableDashboard, tableProps: ', tableProps);
+    //
   }, []);
 
   const getNoData = () => {

@@ -4,6 +4,7 @@ import { useWorkPacketStatusesQuery } from '../../../data/services/graphql';
 import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { formatField } from '../../../helpers/tableHelpers';
 import { getStepStatusLabel } from '../../../data/constants/FileStatusConstants';
+import { FileProgress } from '../../bars/FileProgress';
 
 //
 export const useTable = (argOrgSid, argDateRange, argFilter) => {
@@ -34,12 +35,13 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
         { key: 'planSponsor', label: 'Sponsor', id: 'planSponsor', style: 'text' },
         { key: 'extractName', label: 'Extract Name', id: 'extractName', style: 'text' },
         { key: 'overall', label: 'Overall', id: 'overall', style: 'text' },
-        { key: 'progress', label: 'Progress', id: 'progress', style: 'text' },
+        { key: 'progress', label: 'Progress', id: 'progress', style: 'node' },
       ];
 
       const _items = data.workPacketStatuses.map(
         ({ timestamp, vendorId, planSponsorId, inboundFilename, step, stepStatus }) => {
           const datetime = format(new Date(timestamp), 'MM/dd/yyyy hh:mm a');
+          console.log('Xxxxx STepStatus: ', stepStatus);
           const stepStatusLabel = getStepStatusLabel(stepStatus);
 
           return [
@@ -48,7 +50,14 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
             formatField(planSponsorId, 'planSponsor', planSponsorId),
             formatField(inboundFilename, 'extractName', inboundFilename),
             formatField(stepStatusLabel, 'overall', stepStatusLabel),
-            formatField(stepStatusLabel, 'progress', stepStatusLabel, step),
+            formatField(
+              <>
+                <FileProgress step={step} stepStatus={stepStatus} />
+              </>,
+              'progress',
+              stepStatusLabel,
+              step
+            ),
           ];
         }
       );

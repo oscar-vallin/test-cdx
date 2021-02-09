@@ -3,11 +3,11 @@ import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableCon
 import { formatField } from '../../../helpers/tableHelpers';
 
 //
-export const useTable = (data) => {
+export const useTable = (data, tableName) => {
   const [loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
   const [columns, setColumns] = useState([]);
-  const structure = getTableStructure(TABLE_NAMES.ERRORS);
+  const structure = getTableStructure(tableName);
 
   // console.log('TableDashboard, useTable, data => ', data);
 
@@ -25,7 +25,7 @@ export const useTable = (data) => {
           style: 'link',
           child: { key: 'specs', label: 'Received On', id: 'secondaryDescr', style: 'text' },
         },
-        { key: 'total', label: 'Vendor', id: 'total', style: 'text' },
+        { key: 'total', label: 'Total', id: 'total', style: 'total' },
       ];
 
       const _items = data.map(({ name, secondaryDescr, count, total }) => {
