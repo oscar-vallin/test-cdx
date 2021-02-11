@@ -37,13 +37,11 @@ const _buildColumns = (
   columns.forEach((column) => {
     column.onColumnContextMenu = onColumnContextMenu;
     column.ariaLabel = `Operations for ${column.name}`;
-    console.log('_buildColumns: column', column.ariaLabel);
     column.isResizable = true;
     column.minWidth = 100;
     column.maxWidth = 200;
     const columnData = xtColumns.find((xtColumn) => xtColumn.key === column.fieldName);
     column.name = columnData?.label ?? column.name;
-    console.log('_buildColumns, xtColumns: ', columnData);
 
     if (column.key === 'thumbnail') {
       column.iconName = 'Picture';
@@ -81,8 +79,6 @@ const _buildColumns = (
     }
   });
 
-  console.log('Columns built: ', columns);
-
   return columns;
 };
 
@@ -104,10 +100,6 @@ const Table = ({ items, columns, structure, onOption, groups }) => {
   const [sortedGroups, setSortedGroups] = React.useState();
   const [tablecolumns, setColumns] = React.useState([]);
 
-  console.log('Table, items:', items);
-  console.log('Table, columns:', columns);
-  console.log('Table, structure:', structure);
-
   React.useEffect(() => {}, []);
 
   const _buildItems = () => {
@@ -121,7 +113,6 @@ const Table = ({ items, columns, structure, onOption, groups }) => {
       return objItem;
     });
 
-    console.log('table, _buildItems, iItems', iItems);
     setSortedItems(iItems);
     return iItems;
   };
@@ -157,19 +148,12 @@ const Table = ({ items, columns, structure, onOption, groups }) => {
     const fieldItem = items[index].find((_item) => _item.columnId === column.fieldName);
     const tableType = structure.header.type;
 
-    console.log('renderItemColum, item: ', item);
-    console.log('renderItemColum, fieldContent: ', fieldContent);
-    console.log('renderItemColum, fieldLabel: ', fieldItem);
-
     const isTableArchive = tableType === 'archives';
 
     const columnData = columns.find((_column) => _column.key === column.key);
 
-    // console.log('renderItemColum, columnData: ', columnData);
-
     switch (columnData.style) {
       case 'datetime':
-        console.log('structure: ', structure);
         if (isTableArchive) {
           return (
             <>
@@ -181,9 +165,6 @@ const Table = ({ items, columns, structure, onOption, groups }) => {
         return <span>{fieldContent}</span>;
 
       case 'link':
-        console.log('Table = link, fieldContent: ', fieldContent);
-        console.log('Table = link, fieldItem: ', fieldItem);
-
         if (fieldItem?.sublabel) {
           return (
             <>
@@ -230,7 +211,6 @@ const Table = ({ items, columns, structure, onOption, groups }) => {
         break;
 
       case 'total':
-        console.log('total cell: ', fieldContent);
         return (
           <StyledCell id="TotalCell" right>
             <span>{fieldContent}</span>
@@ -238,7 +218,6 @@ const Table = ({ items, columns, structure, onOption, groups }) => {
         );
 
       case 'node':
-        console.log('progressBar: ', fieldContent);
         return (
           <StyledCell id="Progress">
             <span>{fieldContent}</span>
@@ -250,11 +229,12 @@ const Table = ({ items, columns, structure, onOption, groups }) => {
     }
   };
 
+  // * Click on Row.
   const _onItemInvoked = (item, index) => {
-    alert(`Item ${item.name} at index ${index} has been invoked.`);
+    // alert(`Item ${item.name} at index ${index} has been invoked.`);
   };
 
-  //
+  // * Copy or sort
   const _copyAndSort = (argItems, columnKey, isSortedDescending = false) => {
     const key = columnKey;
 
@@ -294,10 +274,6 @@ const Table = ({ items, columns, structure, onOption, groups }) => {
 
     return <TableHeader header={structure.header} sortLabel={sortLabel} onSort={_onSort} onOption={_onShowSpecs} />;
   };
-
-  console.log('Render, SortedItems: ', sortedItems);
-  console.log('Render, tablecolumns: ', tablecolumns);
-  console.log('Header, type:', structure.header.type);
 
   // * RENDER
 

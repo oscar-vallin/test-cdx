@@ -6,6 +6,7 @@ import { InputText } from '../../../components/inputs/InputText';
 import { Spinner } from '../../../components/spinners/Spinner';
 // Hooks
 import { useLogin } from './FormLogin.services';
+import { useLoginBegin } from '../../../contexts/hooks/useLogin';
 // Styles
 import {
   StyledBox,
@@ -22,7 +23,11 @@ import {
 // CardSection is called directly cause a restriction warning for that component.
 const FormLogin = ({ id = '__FormLogin', onLogin }) => {
   const handlerLogin = useLogin(onLogin);
+  const { apiBeginLogin, isValidEmail, errorMessage } = useLoginBegin();
   const { email, password } = handlerLogin;
+
+  console.log('FormLogin, isValidEmail: ', isValidEmail);
+  console.log('FormLogin, errorMessage: ', errorMessage);
 
   return (
     <StyledBox id={id}>
@@ -49,12 +54,12 @@ const FormLogin = ({ id = '__FormLogin', onLogin }) => {
                 <InputText
                   id={`${id}__Card__Row__Input-Email`}
                   autoFocus
-                  disabled={handlerLogin.isProcessing || handlerLogin.isEmailValid}
-                  errorMessage={handlerLogin.isEmailValid ? '' : handlerLogin.validationError}
+                  disabled={handlerLogin.isProcessing || isValidEmail}
+                  errorMessage={isValidEmail ? '' : handlerLogin.validationError}
                   {...email}
                 />
               </Column>
-              {handlerLogin.isEmailValid && (
+              {isValidEmail && (
                 <Column id={`${id}__Card__Row__Column--label`} right>
                   <StyledButtonIcon
                     id={`${id}__Card__Row__Column__Button--Edit`}
@@ -67,7 +72,7 @@ const FormLogin = ({ id = '__FormLogin', onLogin }) => {
                 </Column>
               )}
             </StyledRow>
-            {handlerLogin.isEmailValid && (
+            {isValidEmail && (
               <StyledRow id={`${id}__Card__Row--Email`}>
                 <Column id={`${id}__Card__Row__Column--Email`}>
                   <InputText
@@ -85,11 +90,9 @@ const FormLogin = ({ id = '__FormLogin', onLogin }) => {
                 <StyledButton
                   id={`${id}__Card__Row__Column__Button--Button`}
                   disabled={handlerLogin.isProcessing}
-                  onClick={() =>
-                    handlerLogin.isEmailValid ? handlerLogin.submitLogin() : handlerLogin.emailValidation()
-                  }
+                  onClick={() => (isValidEmail ? handlerLogin.submitLogin() : apiBeginLogin(email.value))}
                 >
-                  {handlerLogin.isProcessing ? <Spinner /> : !handlerLogin.isEmailValid ? 'Next' : 'Login'}
+                  {handlerLogin.isProcessing ? <Spinner /> : !isValidEmail ? 'Next' : 'Login'}
                 </StyledButton>
               </Column>
             </StyledRow>

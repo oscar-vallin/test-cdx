@@ -4,7 +4,7 @@ import { FileProgressBar } from '../../../components/bars/FileProgressBar';
 import { Box, Text } from './FileProgress.styles';
 import { getProgressItemByString } from '../../../data/constants/FileStatusConstants';
 
-const FileProgress = ({ id = '__FileProgress', stringValues, data }) => {
+const FileProgress = ({ id = '__FileProgress', step, stepStatus }) => {
   if (stringValues) {
     const progressItem = getProgressItemByString(stringValues);
 

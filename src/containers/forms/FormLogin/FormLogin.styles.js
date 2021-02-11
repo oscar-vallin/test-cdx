@@ -15,6 +15,7 @@ export const StyledCard = styled(Card)`
   margin: 0 auto;
   max-width: 530px;
   width: 100%;
+  padding-bottom: 30px;
 `;
 
 export const StyledRow = styled(LayoutRow)`
