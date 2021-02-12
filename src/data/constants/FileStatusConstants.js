@@ -133,12 +133,12 @@ export const getStepStatusLabel = (stepStatusId) => {
 };
 
 const getStepStatus = (stepId, stepStatusId) => {
-  console.log('YYY FileStatusConstants, stepId: ', stepId);
-  console.log('YYY FileStatusConstants, stepStatusId: ', stepStatusId);
-  console.log(
-    'YYY FileStatusConstants, statusObj: ',
-    STEP_STATUS.find(({ step, stepStatus }) => step === stepId && stepStatus.value === stepStatusId)
-  );
+  // console.log('YYY FileStatusConstants, stepId: ', stepId);
+  // console.log('YYY FileStatusConstants, stepStatusId: ', stepStatusId);
+  // console.log(
+  //   'YYY FileStatusConstants, statusObj: ',
+  //   STEP_STATUS.find(({ step, stepStatus }) => step === stepId && stepStatus.value === stepStatusId)
+  // );
   return (
     STEP_STATUS.find(({ step, stepStatus }) => step === stepId && stepStatus.value === stepStatusId) ??
     STEP_STATUS_DEFAULT.find((step) => step === stepId) ??

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { mergeStyles, mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
@@ -93,31 +93,30 @@ const classNames = mergeStyleSets({
   },
 });
 
-//
-const Table = ({ items, columns, structure, onOption, groups }) => {
-  const [sortLabel, setSortLabel] = React.useState();
-  const [sortedItems, setSortedItems] = React.useState([]);
-  const [sortedGroups, setSortedGroups] = React.useState();
-  const [tablecolumns, setColumns] = React.useState([]);
+/**
+ * * TABLE COMPONENT
+ * @author [Edison](mailto://edison.sanchez@known2u.com)
+ * @param {array} items List of items.
+ * @param {Object} columns Structure of Columns
+ * @param {Object} structure Table Structure.
+ * @param {Function} onOption Function when clic on row.
+ * @param {Array} groups Group values to group rows.
+ * @param {string} searchIntput String.typing filter locally in the table. Data not modified, just view after filter.
+ * */
+const Table = ({ items, columns, structure, onOption, groups, searchInput }) => {
+  const [sortLabel, setSortLabel] = useState();
+  const [sortedItems, setSortedItems] = useState([]);
+  const [sortedGroups, setSortedGroups] = useState();
+  const [tablecolumns, setColumns] = useState([]);
+  const [filterInput, setFilterInput] = useState(searchInput);
 
-  React.useEffect(() => {}, []);
+  // * Component Effects
+  // Component Did Mount.
+  useEffect(() => {}, []);
 
-  const _buildItems = () => {
-    const iItems = items.map((rowItem) => {
-      const objItem = {};
-
-      rowItem.forEach((rowColItem) => {
-        objItem[rowColItem.columnId] = rowColItem.value;
-      });
-
-      return objItem;
-    });
-
-    setSortedItems(iItems);
-    return iItems;
-  };
-
-  React.useEffect(() => {
+  // When items or groups change
+  // > then group merge, build Columns, build Items, and set Columns.
+  useEffect(() => {
     const doEffect = () => {
       if (groups) {
         const _groups = groups.map((groupItem) => {
@@ -141,6 +140,76 @@ const Table = ({ items, columns, structure, onOption, groups }) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [items, groups]);
+
+  // When searchInput param changes
+  // -> setFilterInput and filter items changing sortedItems
+  useEffect(() => {
+    console.log('Table, useEffect(searchInput): ', searchInput);
+
+    if (searchInput) {
+      setFilterInput(searchInput);
+
+      _filterItems(searchInput);
+    } else if (!searchInput && !!filterInput) {
+      setFilterInput();
+      _buildItems();
+    }
+  }, [searchInput]);
+
+  /*
+   * Local Functions.
+   */
+  const _buildItems = () => {
+    const iItems = items.map((rowItem) => {
+      const objItem = {};
+
+      rowItem.forEach((rowColItem) => {
+        objItem[rowColItem.columnId] = rowColItem.value;
+      });
+
+      return objItem;
+    });
+
+    setSortedItems(iItems);
+    return iItems;
+  };
+
+  /*
+   * Local Functions.
+   */
+  const _filterItems = (textFilter) => {
+    const iItems = items.map((rowItem) => {
+      const objItem = {};
+      let filterFound = false;
+      console.log('map => rowItem: ', rowItem);
+
+      rowItem.forEach((rowColItem) => {
+        objItem[rowColItem.columnId] = rowColItem.value;
+
+        if (rowColItem.value && typeof rowColItem.value === 'string' && !filterFound) {
+          console.log('filter evaluation, rowColItem.value: ', rowColItem.value);
+          console.log('filter evaluation, typeofValue: ', typeof rowColItem.value);
+          filterFound = rowColItem.value.toLowerCase().includes(textFilter.toLowerCase());
+          console.log('filter evaluation, filterFound: ', filterFound);
+        }
+      });
+
+      console.log('filter end, filterFound: ', filterFound);
+
+      if (filterFound) return objItem;
+    });
+
+    console.log('map => return iItems: ', iItems);
+    console.log(
+      'map => return iItems(not undefined): ',
+      iItems.filter((iItemRow) => !!iItemRow)
+    );
+
+    const itemsResult = iItems.filter((iItemRow) => !!iItemRow);
+
+    setSortedItems(itemsResult);
+    return itemsResult;
+  };
 
   //
   const _renderItemColumn = (item, index, column) => {

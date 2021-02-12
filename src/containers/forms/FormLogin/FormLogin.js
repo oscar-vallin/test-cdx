@@ -26,8 +26,8 @@ const FormLogin = ({ id = '__FormLogin', onLogin }) => {
   const { apiBeginLogin, isValidEmail, errorMessage } = useLoginBegin();
   const { email, password } = handlerLogin;
 
-  console.log('FormLogin, isValidEmail: ', isValidEmail);
-  console.log('FormLogin, errorMessage: ', errorMessage);
+  // console.log('FormLogin, isValidEmail: ', isValidEmail);
+  // console.log('FormLogin, errorMessage: ', errorMessage);
 
   return (
     <StyledBox id={id}>
