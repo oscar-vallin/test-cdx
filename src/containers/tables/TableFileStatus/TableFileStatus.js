@@ -11,7 +11,7 @@ const TableFileStatus = ({ id = 'TableFileStatus', orgSid = 1, dateRange, filter
   const { tableProps } = useTable(orgSid, dateRange, filter);
   const { localInput, startDate, endDate } = useInputs();
 
-  console.log('TableFileStatus, tableProps: ', tableProps);
+  console.log('TableFileStatus, localInput: ', localInput);
   return (
     <Container>
       <Row id={`${id}-filters`} around>
@@ -24,7 +24,12 @@ const TableFileStatus = ({ id = 'TableFileStatus', orgSid = 1, dateRange, filter
       </Row>
       {!tableProps.loading && (
         <Box id={`${id}`}>
-          <Table id={`${id}`} onOption={() => console.log('Table click')} {...tableProps} />
+          <Table
+            id={`${id}`}
+            onOption={() => console.log('Table click')}
+            searchInput={localInput.value}
+            {...tableProps}
+          />
         </Box>
       )}
     </Container>

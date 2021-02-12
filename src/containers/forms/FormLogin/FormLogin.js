@@ -26,8 +26,8 @@ const FormLogin = ({ id = '__FormLogin', onLogin }) => {
   const { apiBeginLogin, isValidEmail, errorMessage } = useLoginBegin();
   const { email, password } = handlerLogin;
 
-  console.log('FormLogin, isValidEmail: ', isValidEmail);
-  console.log('FormLogin, errorMessage: ', errorMessage);
+  // console.log('FormLogin, isValidEmail: ', isValidEmail);
+  // console.log('FormLogin, errorMessage: ', errorMessage);
 
   return (
     <StyledBox id={id}>
@@ -54,12 +54,12 @@ const FormLogin = ({ id = '__FormLogin', onLogin }) => {
                 <InputText
                   id={`${id}__Card__Row__Input-Email`}
                   autoFocus
-                  disabled={handlerLogin.isProcessing || isValidEmail}
-                  errorMessage={isValidEmail ? '' : handlerLogin.validationError}
+                  disabled={handlerLogin.isProcessing || handlerLogin.isEmailValid}
+                  errorMessage={handlerLogin.isEmailValid ? '' : handlerLogin.validationError}
                   {...email}
                 />
               </Column>
-              {isValidEmail && (
+              {handlerLogin.isEmailValid && (
                 <Column id={`${id}__Card__Row__Column--label`} right>
                   <StyledButtonIcon
                     id={`${id}__Card__Row__Column__Button--Edit`}
@@ -72,7 +72,7 @@ const FormLogin = ({ id = '__FormLogin', onLogin }) => {
                 </Column>
               )}
             </StyledRow>
-            {isValidEmail && (
+            {handlerLogin.isEmailValid && (
               <StyledRow id={`${id}__Card__Row--Email`}>
                 <Column id={`${id}__Card__Row__Column--Email`}>
                   <InputText
@@ -90,9 +90,11 @@ const FormLogin = ({ id = '__FormLogin', onLogin }) => {
                 <StyledButton
                   id={`${id}__Card__Row__Column__Button--Button`}
                   disabled={handlerLogin.isProcessing}
-                  onClick={() => (isValidEmail ? handlerLogin.submitLogin() : apiBeginLogin(email.value))}
+                  onClick={() =>
+                    handlerLogin.isEmailValid ? handlerLogin.submitLogin() : handlerLogin.emailValidation()
+                  }
                 >
-                  {handlerLogin.isProcessing ? <Spinner /> : !isValidEmail ? 'Next' : 'Login'}
+                  {handlerLogin.isProcessing ? <Spinner /> : !handlerLogin.isEmailValid ? 'Next' : 'Login'}
                 </StyledButton>
               </Column>
             </StyledRow>
