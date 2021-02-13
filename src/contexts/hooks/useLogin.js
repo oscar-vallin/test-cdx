@@ -87,5 +87,5 @@ export const useLoginBegin = (_username, _password) => {
     setProcessing();
   };
 
-  return { isProcessing, username, isValidEmail, errorMessage, apiBeginLogin, setUsername };
+  return { isProcessingBegin: isProcessing, username, isValidEmail, errorMessage, apiBeginLogin, setUsername };
 };
