@@ -23,11 +23,8 @@ import {
 // CardSection is called directly cause a restriction warning for that component.
 const FormLogin = ({ id = '__FormLogin', onLogin }) => {
   const handlerLogin = useLogin(onLogin);
-  const { apiBeginLogin, isValidEmail, errorMessage } = useLoginBegin();
+  const { apiBeginLogin, isValidEmail, errorMessage, isProcessingBegin } = useLoginBegin();
   const { email, password } = handlerLogin;
-
-  // console.log('FormLogin, isValidEmail: ', isValidEmail);
-  // console.log('FormLogin, errorMessage: ', errorMessage);
 
   return (
     <StyledBox id={id}>
@@ -92,7 +89,7 @@ const FormLogin = ({ id = '__FormLogin', onLogin }) => {
                   disabled={handlerLogin.isProcessing}
                   onClick={() => (isValidEmail ? handlerLogin.submitLogin() : apiBeginLogin(email.value))}
                 >
-                  {handlerLogin.isProcessing ? <Spinner /> : !isValidEmail ? 'Next' : 'Login'}
+                  {handlerLogin.isProcessing || isProcessingBegin ? <Spinner /> : !isValidEmail ? 'Next' : 'Login'}
                 </StyledButton>
               </Column>
             </StyledRow>
