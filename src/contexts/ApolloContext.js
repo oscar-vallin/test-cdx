@@ -3,7 +3,7 @@ import { ApolloProvider, ApolloClient, InMemoryCache, HttpLink } from '@apollo/c
 
 import { setContext } from '@apollo/client/link/context';
 
-const SERVER_URL = 'https://x1-terraform-loadbalancer.k2u.xyz/graphql/';
+const SERVER_URL = process.env.REACT_APP_API_SERVER;
 
 //
 export const ApolloContext = React.createContext(() => {
