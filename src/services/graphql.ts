@@ -30,7 +30,7 @@ export type QueryBeginLoginArgs = {
 
 export type QueryWorkPacketStatusDetailsArgs = {
   orgSid: Scalars['ID'];
-  workOrderID: Scalars['String'];
+  workOrderId: Scalars['String'];
 };
 
 export type QueryWorkPacketStatusesArgs = {
@@ -357,7 +357,7 @@ export type PasswordRule =
 
 export type WorkPacketStatusDetails = {
   __typename?: 'WorkPacketStatusDetails';
-  workOrderID: Scalars['String'];
+  workOrderId: Scalars['String'];
   specId?: Maybe<Scalars['String']>;
   specImplName?: Maybe<Scalars['String']>;
   fingerPrint?: Maybe<Scalars['String']>;
@@ -604,14 +604,14 @@ export type WorkPacketStatusesQuery = { __typename?: 'Query' } & {
 
 export type WorkPacketStatusDetailsQueryVariables = Exact<{
   orgSid: Scalars['ID'];
-  workOrderID: Scalars['String'];
+  workOrderId: Scalars['String'];
 }>;
 
 export type WorkPacketStatusDetailsQuery = { __typename?: 'Query' } & {
   workPacketStatusDetails?: Maybe<
     { __typename?: 'WorkPacketStatusDetails' } & Pick<
       WorkPacketStatusDetails,
-      'workOrderID' | 'specId' | 'specImplName' | 'fingerPrint' | 'suppressBilling'
+      'workOrderId' | 'specId' | 'specImplName' | 'fingerPrint' | 'suppressBilling'
     > & {
         workStepStatus?: Maybe<
           Array<
@@ -1262,9 +1262,9 @@ export type WorkPacketStatusesQueryResult = Apollo.QueryResult<
   WorkPacketStatusesQueryVariables
 >;
 export const WorkPacketStatusDetailsDocument = gql`
-  query WorkPacketStatusDetails($orgSid: ID!, $workOrderID: String!) {
-    workPacketStatusDetails(orgSid: $orgSid, workOrderID: $workOrderID) {
-      workOrderID
+  query WorkPacketStatusDetails($orgSid: ID!, $workOrderId: String!) {
+    workPacketStatusDetails(orgSid: $orgSid, workOrderId: $workOrderId) {
+      workOrderId
       specId
       specImplName
       fingerPrint
@@ -1361,7 +1361,7 @@ export const WorkPacketStatusDetailsDocument = gql`
  * const { data, loading, error } = useWorkPacketStatusDetailsQuery({
  *   variables: {
  *      orgSid: // value for 'orgSid'
- *      workOrderID: // value for 'workOrderID'
+ *      workOrderId: // value for 'workOrderId'
  *   },
  * });
  */

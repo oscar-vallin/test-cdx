@@ -1,7 +1,7 @@
 {
   "data": {
     "workPacketStatusDetails": {
-      "workOrderID": "abc8997124",
+      "workOrderId": "abc8997124",
       "specId": "HRImportV4.0",
       "specImplName": "HRImportV4.0Impl.xqm",
       "fingerPrint": "ROGCORP-ADP-ACA-HR-PRODADPHRImportV4.0HRImportV4.0Impl",

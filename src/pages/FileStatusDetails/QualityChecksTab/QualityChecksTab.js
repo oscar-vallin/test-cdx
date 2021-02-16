@@ -36,7 +36,8 @@ const QualityChecksTab = () => {
 
         <Column xl={9}>
           <Card elevation="smallest">
-            <TableQualityChecks />
+            {/* <TableQualityChecks /> */}
+            Table
 
             <Separator />
 

@@ -40,13 +40,13 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
       ];
 
       const _items = data.workPacketStatuses.map(
-        ({ timestamp, vendorId, planSponsorId, inboundFilename, step, stepStatus }) => {
+        ({ workOrderId, timestamp, vendorId, planSponsorId, inboundFilename, step, stepStatus }) => {
           const datetime = format(new Date(timestamp), 'MM/dd/yyyy hh:mm a');
           // console.log('Xxxxx STepStatus: ', stepStatus);
           const stepStatusLabel = getStepStatusLabel(stepStatus);
 
           return [
-            formatField(datetime, 'datetime', datetime),
+            formatField(datetime, 'datetime', datetime, workOrderId),
             formatField(vendorId, 'vendor', vendorId),
             formatField(planSponsorId, 'planSponsor', planSponsorId),
             formatField(inboundFilename, 'extractName', inboundFilename),

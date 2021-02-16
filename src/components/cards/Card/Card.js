@@ -10,6 +10,7 @@ const Card = ({
   variant = "normal",
   elevation = "normal",
   spacing = "normal",
+  onClick = null,
   children,
   ...props
   }) => {
@@ -20,6 +21,7 @@ const Card = ({
       elevation={elevation}
       spacing={spacing}
       className={getClassNames(null, props)}
+      onClick={onClick}
       horizontal
     >
       <CardSection id={`${id}__Card-CardSection`} style={Stylesheet.CardSection}>
