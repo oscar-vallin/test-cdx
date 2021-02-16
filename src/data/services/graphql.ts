@@ -308,6 +308,8 @@ export type WorkPacketStatusDetails = {
   inboundEnrollmentStats?: Maybe<EnrollmentStat>;
   outboundEnrollmentStats?: Maybe<EnrollmentStat>;
   outboundRecordCounts?: Maybe<RecordCounts>;
+  inboundLabel?: Maybe<Scalars['String']>;
+  outboundLabel?: Maybe<Scalars['String']>;
 };
 
 export type DeliveredFile = {
@@ -353,7 +355,8 @@ export type StatCountType = {
 
 export type ArchiveFileType = {
   __typename?: 'ArchiveFileType';
-  value?: Maybe<Scalars['String']>;
+  value: Scalars['String'];
+  label?: Maybe<Scalars['String']>;
 };
 
 export type RecordCounts = {
@@ -464,6 +467,7 @@ export type WorkPacketStatus = {
   reprocessedBy?: Maybe<Scalars['String']>;
   reprocessAction?: Maybe<Scalars['Int']>;
   recordHighlightCount?: Maybe<Scalars['Int']>;
+  populationCount?: Maybe<Scalars['Int']>;
   recordHighlightType?: Maybe<Scalars['String']>;
   clientFileArchivePath?: Maybe<Scalars['String']>;
   vendorFileArchivePath?: Maybe<Scalars['String']>;
@@ -1152,7 +1156,7 @@ export type WorkPacketStatusesQuery = (
   { __typename?: 'Query' }
   & { workPacketStatuses?: Maybe<Array<Maybe<(
     { __typename?: 'WorkPacketStatus' }
-    & Pick<WorkPacketStatus, 'workOrderId' | 'timestamp' | 'planSponsorId' | 'detailsPath' | 'subClientPath' | 'inboundFilename' | 'vendorId' | 'step' | 'stepStatus' | 'packetStatus' | 'reprocessedBy' | 'reprocessAction' | 'recordHighlightCount' | 'recordHighlightType' | 'clientFileArchivePath' | 'vendorFileArchivePath' | 'supplementalFilesArchivePaths' | 'archiveOnly' | 'hasErrors'>
+    & Pick<WorkPacketStatus, 'workOrderId' | 'timestamp' | 'planSponsorId' | 'detailsPath' | 'subClientPath' | 'inboundFilename' | 'vendorId' | 'step' | 'stepStatus' | 'packetStatus' | 'reprocessedBy' | 'reprocessAction' | 'populationCount' | 'recordHighlightCount' | 'recordHighlightType' | 'clientFileArchivePath' | 'vendorFileArchivePath' | 'supplementalFilesArchivePaths' | 'archiveOnly' | 'hasErrors'>
   )>>> }
 );
 
@@ -1166,19 +1170,16 @@ export type WorkPacketStatusDetailsQuery = (
   { __typename?: 'Query' }
   & { workPacketStatusDetails?: Maybe<(
     { __typename?: 'WorkPacketStatusDetails' }
-    & Pick<WorkPacketStatusDetails, 'workOrderId' | 'specId' | 'specImplName' | 'fingerPrint' | 'suppressBilling'>
+    & Pick<WorkPacketStatusDetails, 'workOrderId' | 'specId' | 'specImplName' | 'fingerPrint' | 'suppressBilling' | 'inboundLabel' | 'outboundLabel'>
     & { workStepStatus?: Maybe<Array<Maybe<(
       { __typename?: 'WorkStepStatus' }
       & Pick<WorkStepStatus, 'stepStatus' | 'stepName' | 'stepType'>
       & { populationCount?: Maybe<(
         { __typename?: 'StatCountType' }
         & Pick<StatCountType, 'value'>
-      )>, transformedArchiveFile?: Maybe<(
-        { __typename?: 'ArchiveFileType' }
-        & Pick<ArchiveFileType, 'value'>
       )>, stepFile?: Maybe<Array<Maybe<(
         { __typename?: 'ArchiveFileType' }
-        & Pick<ArchiveFileType, 'value'>
+        & Pick<ArchiveFileType, 'value' | 'label'>
       )>>>, nvp?: Maybe<Array<Maybe<(
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
@@ -2156,6 +2157,7 @@ export const WorkPacketStatusesDocument = gql`
     packetStatus
     reprocessedBy
     reprocessAction
+    populationCount
     recordHighlightCount
     recordHighlightType
     clientFileArchivePath
@@ -2209,11 +2211,9 @@ export const WorkPacketStatusDetailsDocument = gql`
       populationCount {
         value
       }
-      transformedArchiveFile {
-        value
-      }
       stepFile {
         value
+        label
       }
       nvp {
         name
@@ -2282,6 +2282,8 @@ export const WorkPacketStatusDetailsDocument = gql`
     outboundRecordCounts {
       ...recordCountsFragment
     }
+    inboundLabel
+    outboundLabel
   }
 }
     ${RecordCountsFragmentFragmentDoc}

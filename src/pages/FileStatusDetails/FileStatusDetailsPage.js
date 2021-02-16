@@ -268,7 +268,7 @@ const _FileStatusDetailsPage = () => {
                               items={[
                                 {
                                   title: 'Enrollment Stats',
-                                  content: <EnrollmentStatsTab />,
+                                  content: <EnrollmentStatsTab items={query.workPacketStatusDetails.enrollmentStats}/>,
                                 },
                                 {
                                   title: 'Vendor Count Stats',
