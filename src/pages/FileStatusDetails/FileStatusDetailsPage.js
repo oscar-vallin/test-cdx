@@ -256,7 +256,7 @@ const _FileStatusDetailsPage = () => {
             </Card>
           </Column>
           <Column xl={9} xxl={10}>
-            <Card elevation="smallest" spacing={!(lWorkPacketDetails || lWorkPacketStatus) && 'none'}>
+            <Card elevation="smallest" spacing={(!lWorkPacketDetails && !lWorkPacketStatus) ? 'none' : 'normal'}>
               {
                 (lWorkPacketDetails || lWorkPacketStatus)
                   ? <Spinner style={{ justifySelf: 'center' }} />

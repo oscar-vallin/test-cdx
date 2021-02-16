@@ -28,7 +28,7 @@ const onRenderItemColumn = (item, index, column) => {
     ? data.error[0]
     : data.warning.length > 0
       ? data.warning[0]
-      : {};
+      : [{}];
       
   switch(column.key) {
     case 'status':
@@ -43,7 +43,7 @@ const onRenderItemColumn = (item, index, column) => {
     case 'dependent':
       return data.context;
     case 'message':
-      return details.message[0];
+      return (details.message || [])[0];
     case 'field':
       return data.name;
     case 'value':
