@@ -280,10 +280,10 @@ const _FileStatusDetailsPage = () => {
                                 },
                                 {
                                   title: 'Quality Checks',
-                                  content: <QualityChecksTab />,
+                                  content: <QualityChecksTab items={query.workPacketStatusDetails.qualityChecks.sequenceCreationEvent}/>,
                                   badge: {
                                     variant: 'severe',
-                                    label: '5',
+                                    label: query.workPacketStatusDetails.qualityChecks.sequenceCreationEvent.length,
                                   },
                                 },
                               ]}
