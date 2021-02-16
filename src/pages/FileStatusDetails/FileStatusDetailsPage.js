@@ -1,4 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react';
+
 import { useParams } from 'react-router-dom';
 import { ROUTES, ROUTE_FILE_STATUS } from '../../data/constants/RouteConstants';
 
@@ -275,7 +276,7 @@ const _FileStatusDetailsPage = () => {
                                 },
                                 {
                                   title: 'Work Steps',
-                                  content: <WorkStepsTab />,
+                                  content: <WorkStepsTab steps={query.workPacketStatusDetails.workStepStatus}/>,
                                 },
                                 {
                                   title: 'Quality Checks',

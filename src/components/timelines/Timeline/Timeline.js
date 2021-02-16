@@ -12,19 +12,19 @@ const getStatusIcon = status => {
   return ICONS[status];
 }
 
-const CDXTimeline = ({ items = [] }) => {
+const CDXTimeline = ({ items = [], activeIndex, onClick }) => {
   return (
     <StyledUl className="timeline">
       {
-        items.map(({ active = false, status, content }, index) => (
-          <StyledLi className="item" status={status} active={active} key={index}>
+        items.map((item, index) => (
+          <StyledLi className="item" status={item.status} active={index === activeIndex} onClick={() => onClick(index)} key={index}>
             <div className="item__status">
-              {getStatusIcon(status)}
+              {getStatusIcon(item.status)}
             </div>
 
-            <div className={`item__content ${active ? 'item__content--active' : ''}`}>
-              <div className="title">{content.title}</div>
-              {content.description && <span className="description">{content.description}</span>}
+            <div className={`item__content ${index === activeIndex ? 'item__content--active' : ''}`}>
+              <div className="title">{item.content.title}</div>
+              {item.content.description && <span className="description">{item.content.description}</span>}
             </div>
           </StyledLi>
         ))

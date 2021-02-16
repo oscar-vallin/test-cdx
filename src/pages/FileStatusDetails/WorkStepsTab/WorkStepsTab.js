@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, Fragment } from 'react';
+import { MessageBar } from 'office-ui-fabric-react';
 
 import { Badge } from '../../../components/badges/Badge';
 import { Button } from '../../../components/buttons/Button';
@@ -9,64 +10,59 @@ import { Separator } from '../../../components/separators/Separator';
 import { Text } from '../../../components/typography/Text';
 import { Timeline } from '../../../components/timelines/Timeline';
 
-const STEPS = [
-  { 
-    active: true,
-    status: 'DONE',
-    content: {title: 'K2U WFR Report Processing', description: 'Completed at 10/11/20 6:00 AM'},
-  },
-  { 
-    status: 'DONE',
-    content: {title: 'Enrollment Stats', description: 'Completed at 10/11/20 6:40 AM'},
-  },
-  { 
-    status: 'DONE',
-    content: {title: 'Semantic Map', description: 'Completed at 10/11/20 7:23 AM'},
-  },
-  { 
-    status: 'PROGRESS',
-    content: {title: 'Flat File', description: 'Expected at 10/11/20 8:00 AM'},
-  }
-]
+const parseSteps = steps => {
+  return steps.map(step => ({
+    ...step,
+    status: step.stepStatus,
+    content: {
+      title: step.stepName,
+      description: step.stepType || ''
+    },
+  }))
+}
 
-const WorkStepsTab = () => {
+const WorkStepsTab = ({ steps }) => {
+  const items = parseSteps(steps);
+
+  const [activeIndex, setActiveIndex] = useState(0);
+
   return (
     <Spacing padding="normal">
       <Row>
         <Column xl={3}>
-          <Timeline items={STEPS}/>
+          <Timeline items={items} activeIndex={activeIndex} onClick={setActiveIndex} />
         </Column>
 
         <Column xl={9}>
           <Card elevation="smallest">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Text variant="bold">K2U WFR Report Processing</Text>
-            
-              <Badge variant="success" label="Complete" pill />
-            </div>
+            {items[activeIndex].nvp.length === 0
+              ? <MessageBar>There are no details for this step</MessageBar>
+              : (
+                  <Fragment>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <Text variant="bold">{items[activeIndex].content.title}</Text>
+                    
+                      {/* TODO: Status */}
+                      {/* <Badge variant="success" label="Complete" pill /> */}
+                    </div>
 
-            <Separator />
+                    <Separator />
 
-            <div>
-              <Text variant="bold">khcm:feed: &nbsp;</Text>
-              <Text>Enrollment</Text>
-            </div>
-    
-            <div>
-              <Text variant="bold">Started at: &nbsp;</Text>
-              <Text>10/11/20 5:40 AM</Text>
-            </div>
-    
-            <div>
-              <Text variant="bold">Completed at: &nbsp;</Text>
-              <Text>10/11/20 6:00 AM</Text>
-            </div>
+                    {items[activeIndex].nvp.map(item => (
+                      <div>
+                        <Text variant="bold">{item.name}: &nbsp;</Text>
+                        <Text>{item.value}</Text>
+                      </div>
+                    ))}
+                
+                    <Separator />
 
-            <Separator />
-
-            <div>
-              <Button>Redo</Button>
-            </div>
+                    <div>
+                      <Button>Redo</Button>
+                    </div>
+                  </Fragment>
+                )
+            }
           </Card>
         </Column>
       </Row>
