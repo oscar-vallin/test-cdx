@@ -32,6 +32,7 @@ export const StyledLi = styled.li`
   }
 
   .item__content {
+    cursor: ${({ onClick }) => onClick ? 'pointer' : 'auto'};
     margin: ${({ theme }) => `0 0 0 ${theme.spacing.normal}`};
 
     .title {

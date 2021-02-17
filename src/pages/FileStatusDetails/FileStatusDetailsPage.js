@@ -272,7 +272,7 @@ const _FileStatusDetailsPage = () => {
                                 },
                                 {
                                   title: 'Vendor Count Stats',
-                                  content: <VendorCountStatsTab />,
+                                  content: <VendorCountStatsTab items={query.workPacketStatusDetails.outboundRecordCounts} />,
                                 },
                                 {
                                   title: 'Work Steps',

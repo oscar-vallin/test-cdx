@@ -1294,6 +1294,7 @@ export type InsuredStatFragmentFragment = (
 
 export type PlanInsuredStatFragmentFragment = (
   { __typename?: 'PlanInsuredStat' }
+  & Pick<PlanInsuredStat, 'planCode' | 'planType'>
   & { subscribers?: Maybe<(
     { __typename?: 'InsuredStatCount' }
     & InsuredStatCountFragmentFragment
@@ -1964,6 +1965,8 @@ export const InsuredStatFragmentFragmentDoc = gql`
     ${InsuredStatCountFragmentFragmentDoc}`;
 export const PlanInsuredStatFragmentFragmentDoc = gql`
     fragment planInsuredStatFragment on PlanInsuredStat {
+  planCode
+  planType
   subscribers {
     ...insuredStatCountFragment
   }
