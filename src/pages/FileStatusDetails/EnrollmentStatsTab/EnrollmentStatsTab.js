@@ -29,27 +29,31 @@ const onRenderRow = (props) => {
 
 const EnrollmentStatsTab = ({ items }) => {
   const data = [
-    { planCode: 'Any Plan' },
-    { planCode: 'Dependent Life' },
-    { planCode: 'Spousal Life' },
-    { planCode: 'Suppl. Employee Life Nicotine User' },
-    { planCode: 'Suppl. Employee Life Non-Nicotine User' },
-    { planCode: 'All Plans' },
-    { planCode: 'Buy-up STD' },
-    { planCode: 'Core STD' },
-    { planCode: 'LTD' },
-    { planCode: 'STD' },
-  ].map(row => ({
-    ...row,
-    activeSubscribers: items.insuredStat.subscribers.active?.value || 0,
-    endedSubscribers: items.insuredStat.subscribers.ended?.value || 0,
-    activeDependents: items.excludedInsuredStat.subscribers.active?.value || 0,
-    endedDependents: items.excludedInsuredStat.subscribers.active?.value || 0,
+    ...items.planInsuredStat,
+    ...items.excludedPlanInsuredStat
+  ]
+  .map(plan => ({
+    planCode: plan.planCode,
+    activeSubscribers: plan.subscribers?.active?.value || 0,
+    endedSubscribers: plan.subscribers?.ended?.value || 0,
+    activeDependents: plan.dependents?.active?.value || 0,
+    endedDependents: plan.dependents?.active?.value || 0
   }));
 
   const GROUPS = [
-    { count: 5, key: 'insuredStats', name: 'Included Subscribers / Enrollments', level: 0 },
-    { count: 5, key: 'excludedStats', name: 'Excluded Subscribers / Enrollments', startIndex: 5, level: 0 },
+    {
+      count: items.planInsuredStat.length,
+      key: 'insuredStats',
+      name: 'Included Subscribers / Enrollments',
+      level: 0
+    },
+    {
+      count: items.excludedPlanInsuredStat.length,
+      key: 'excludedStats',
+      name: 'Excluded Subscribers / Enrollments',
+      startIndex: items.excludedPlanInsuredStat.length,
+      level: 0
+    },
   ];
 
   return (
