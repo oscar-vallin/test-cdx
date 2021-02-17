@@ -22,7 +22,12 @@ const TableArchive = ({ id = 'TableArchive', orgSid = 1, dateRange, filter }) =>
         </RightColumn>
       </Row>
       <Box id={`${id}`}>
-        <Table id={`${id}`} onOption={() => console.log('Table click')} {...tableProps} />
+        <Table
+          id={`${id}`}
+          onOption={() => console.log('Table click')}
+          searchInput={localInput.value}
+          {...tableProps}
+        />
       </Box>
     </Container>
   );
