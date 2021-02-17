@@ -109,7 +109,7 @@ export const AuthContextProvider = ({ children }) => {
       return;
     }
 
-    // console.log('Change AuthData, authData.selectedPage: ', authData.selectedPage);
+    console.log('Change AuthData, authData.selectedPage: ', authData.selectedPage);
 
     const routePage = getRouteByApiId(authData.selectedPage);
 

@@ -1,49 +1,75 @@
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
+import { useWorkPacketStatusesQuery } from '../../../data/services/graphql';
 import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableConstants';
+import { getStepStatusLabel } from '../../../data/constants/FileStatusConstants';
+import { useInputValue } from '../../../hooks/useInputValue';
 
 //
-export const useTable = (data, argOrgSid, argDateRange, argFilter) => {
+export const useTable = (argOrgSid, argDateRange, argFilter) => {
   const [_loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
   const [columns, setColumns] = useState([]);
   const structure = getTableStructure(TABLE_NAMES.ERRORS);
 
-  // const [data, setData] = useState();
-  const [loading, setFakeLoading] = useState(true);
-  const [error, setError] = useState();
+  const { data, loading, error } = useWorkPacketStatusesQuery({
+    variables: {
+      orgSid: argOrgSid,
+      dateRange: argDateRange,
+      filter: argFilter,
+    },
+  });
 
   // * Component Did Mount.
   useEffect(() => {
     setLoading(false);
-    setFakeLoading(false);
-    setError();
   }, []);
 
   useEffect(() => {
     const doEffect = () => {
-      console.log(data);
+      console.log('TableTransmissions.service, data:', data);
       const _columns = [
-        { key: 'datetime', label: 'Received On', id: 'datetime', style: 'text' },
-        { key: 'clientFile', label: 'Client File', id: 'clientFile', style: 'link' },
-        { key: 'workStep', label: 'Work Step', id: 'workStep', style: 'text' },
+        { key: 'datetime', label: 'Delivered On', id: 'datetime', style: 'text' },
         { key: 'planSponsor', label: 'Plan Sponsor', id: 'planSponsor', style: 'text' },
         { key: 'vendor', label: 'Vendor', id: 'vendor', style: 'text' },
+        { key: 'vendor', label: 'Spec', id: 'vendor', style: 'text' },
+        { key: 'vendor', label: 'Implementation', id: 'vendor', style: 'text' },
+        { key: 'clientFile', label: 'Client File', id: 'clientFile', style: 'link' },
+        { key: 'vendorFile', label: 'Vendor File', id: 'vendorFile', style: 'link' },
         { key: 'message', label: 'Message', id: 'message', style: 'text' },
+        // { key: 'message', label: 'Outbound File Size', id: 'message', style: 'text' },
+        // { key: 'message', label: 'Billing Unit Count', id: 'message', style: 'text' },
+        // { key: 'message', label: 'Total Records', id: 'message', style: 'text' },
+        // { key: 'message', label: 'Feed', id: 'message', style: 'text' },
+        // { key: 'message', label: 'Version', id: 'message', style: 'text' },
       ];
 
-      const _items = data.map(({ timestamp, fileName, file, workStep, plan, vendor, message }) => {
-        const datetime = format(new Date(timestamp), 'MM/dd/yyyy hh:mm a');
+      const _items = data.workPacketStatuses.map(
+        ({
+          timestamp,
+          clientFileArchivePath,
+          inboundFilename,
+          planSponsorId,
+          vendorId,
+          hasErrors,
+          workOrderId,
+          vendorFileArchivePath,
+        }) => {
+          const datetime = format(new Date(timestamp), 'MM/dd/yyyy hh:mm a');
+          const message = hasErrors ? 'Error' : '';
 
-        return [
-          formatField(datetime, 'text', 'datetime', datetime),
-          formatField(fileName, 'link', 'clientFile', file),
-          formatField(workStep, 'text', 'workStep', workStep),
-          formatField(plan, 'text', 'planSponsor', plan),
-          formatField(vendor, 'text', 'vendor', vendor),
-          formatField(message, 'text', 'message', message),
-        ];
-      });
+          return [
+            formatField(datetime, 'text', 'datetime', datetime),
+            formatField(planSponsorId, 'text', 'planSponsor', planSponsorId),
+            formatField(vendorId, 'text', 'vendor', vendorId),
+            formatField(vendorId, 'text', 'vendor', vendorId),
+            formatField(vendorId, 'text', 'vendor', vendorId),
+            formatField(inboundFilename, 'link', 'clientFile', clientFileArchivePath),
+            formatField(workOrderId, 'link', 'vendorFile', vendorFileArchivePath),
+            formatField(message, 'text', 'message', message),
+          ];
+        }
+      );
 
       setColumns(_columns);
       setItems(_items);
@@ -55,13 +81,14 @@ export const useTable = (data, argOrgSid, argDateRange, argFilter) => {
   }, [data]);
 
   //
-  const formatField = (value, type, columnId, text) => {
+  const formatField = (value, type, columnId, text, sublabel) => {
     return {
       id: columnId,
       value,
       type,
       columnId,
       text,
+      sublabel,
     };
   };
 
@@ -81,26 +108,18 @@ export const useTable = (data, argOrgSid, argDateRange, argFilter) => {
   };
 };
 
-const useInput = (placeholder) => {
-  const [value, setValue] = useState();
-  const onChange = (e) => {
-    setValue(e);
-  };
-
-  return {
-    value,
-    onChange,
-    placeholder,
-  };
-};
+//
+const useInput = (placeholder) => {};
 
 //
 export const useInputs = () => {
   const startDate = useInput('Start Date...');
   const endDate = useInput('End Date...');
+  const localInput = useInputValue('', 'File name, client, ...', '', '');
 
   return {
     startDate,
     endDate,
+    localInput,
   };
 };
