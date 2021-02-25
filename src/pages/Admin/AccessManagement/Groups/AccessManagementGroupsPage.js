@@ -135,7 +135,7 @@ const _AccessManagementGroupsPage = () => {
     if (!loading && data) {
       setGroups(data.amGroupsForOrg.nodes);
     }
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading]);
 
   return (

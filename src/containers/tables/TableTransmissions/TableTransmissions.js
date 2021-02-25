@@ -1,15 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Table } from '../../../components/tables/TableNew';
+import { Table } from '../../../components/tables/Table';
 
-import { Box, Row, Column, Container, RightColumn } from './TableTransmissions.styles';
-import { useTable, useInputs } from './TableTransmissions.service';
-import { InputText } from '../../../components/inputs/InputText';
-import { InputDateRange } from '../../../components/inputs/InputDateRange';
+import { Box, Container } from './TableTransmissions.styles';
+import { useTable } from './TableTransmissions.service';
 
-const TableTransmissions = ({ id = 'TableTransmissions', data, dateRange, filter }) => {
+const TableTransmissions = ({ id = 'TableTransmissions', data }) => {
   const { tableProps } = useTable(data);
-  const { localInput, startDate, endDate } = useInputs();
 
   console.log('TableTransmissions, tableProps: ', tableProps);
   return (

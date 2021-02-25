@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { LayoutAdmin } from '../../layouts/LayoutAdmin';
 import { Spacing } from '../../components/spacings/Spacing';
 

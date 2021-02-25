@@ -4,7 +4,7 @@ import { PrimaryButton } from '@fluentui/react';
 const getVariant = (theme, variant) => {
   const VARIANTS = {
     primary: { background: theme.colors.themePrimary, color: theme.colors.white },
-    secondary: { background: theme.colors.white, color: theme.colors.black },
+    secondary: { background: theme.colors.white, color: theme.colors.themePrimary },
     light: { background: 'transparent', color: theme.colors.themePrimary },
     danger: { background: 'transparent', color: theme.colors.error },
     error: { background: theme.colors.severe, color: theme.colors.white },
@@ -19,11 +19,8 @@ export const StyledButton = styled(PrimaryButton)`
   &,
   & + button {
     background: ${({ theme, variant }) => getVariant(theme, variant).background};
-    border ${({ theme, variant }) => `1px solid ${
-      variant === 'secondary' ? theme.colors.black : 'transparent'
-    } !important
-    `};
-    color: ${({ theme, variant }) => getVariant(theme, variant).color} !important;
+    border ${({ theme, variant }) => `1px solid ${variant === 'secondary' ? theme.colors.black : 'transparent'}`};
+    color: ${({ theme, variant }) => getVariant(theme, variant).color};
     
     &:hover {
       background: ${({ theme, variant }) => getVariant(theme, variant).background};

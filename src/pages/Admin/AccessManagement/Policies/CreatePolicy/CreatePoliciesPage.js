@@ -417,7 +417,7 @@ const _CreatePoliciesPage = () => {
             <Column lg="2">
               <Button
                 variant="primary"
-                onClick={() => { 
+                onClick={() => {
                   setState({
                     ...state,
                     items: [

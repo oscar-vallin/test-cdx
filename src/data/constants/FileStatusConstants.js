@@ -97,6 +97,12 @@ export const STEP_STATUS = [
     colors: [STEP_COLOR_GREEN, STEP_COLOR_GREEN, STEP_COLOR_BLUE],
   },
   {
+    step: STEP_TRANSFORM,
+    stepStatus: STATUSES[8],
+    archiveOnly: true,
+    colors: [STEP_COLOR_GREEN, STEP_COLOR_GREEN, STEP_COLOR_RED],
+  },
+  {
     step: STEP_TRANSMIT,
     stepStatus: STATUSES[8],
     archiveOnly: true,
@@ -124,4 +130,22 @@ export const getProgressItemByString = (argStringValues) => {
 
 export const getStepStatusLabel = (stepStatusId) => {
   return STEP_STATUS.find((step) => step.stepStatus.value === stepStatusId).stepStatus.label;
+};
+
+const getStepStatus = (stepId, stepStatusId) => {
+  // console.log('YYY FileStatusConstants, stepId: ', stepId);
+  // console.log('YYY FileStatusConstants, stepStatusId: ', stepStatusId);
+  // console.log(
+  //   'YYY FileStatusConstants, statusObj: ',
+  //   STEP_STATUS.find(({ step, stepStatus }) => step === stepId && stepStatus.value === stepStatusId)
+  // );
+  return (
+    STEP_STATUS.find(({ step, stepStatus }) => step === stepId && stepStatus.value === stepStatusId) ??
+    STEP_STATUS_DEFAULT.find((step) => step === stepId) ??
+    STEP_STATUS_DEFAULT[0]
+  );
+};
+
+export const getProgressByValues = (step, stepStatus) => {
+  return getStepStatus(step, stepStatus);
 };

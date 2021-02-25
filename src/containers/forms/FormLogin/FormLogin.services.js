@@ -36,26 +36,22 @@ export const useLogin = () => {
     setIsProcessing(true);
     setValidationError();
 
-    setTimeout(() => {
-      // eslint-disable-next-line
-      const validationResult = new RegExp(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g).test(email.value);
+    // setTimeout(() => {
+    //   // eslint-disable-next-line
+    //   const validationResult = new RegExp(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g).test(email.value);
 
-      if (!validationResult) {
-        setErrorMessage('Invalid e-mail');
-      }
+    //   if (!validationResult) {
+    //     setErrorMessage('Invalid e-mail');
+    //   }
 
-      setIsEmailValid(validationResult);
-      setIsProcessing(false);
-    }, 1000);
+    //   setIsEmailValid(validationResult);
+    //   setIsProcessing(false);
+    // }, 1000);
   };
 
   //
   const submitLogin = () => {
     setValidationError();
-    console.log('SubmitLogin');
-
-    console.log('Email.value: ', email.value);
-    console.log('password.value: ', password.value);
 
     authLogin(email.value, password.value, history);
   };

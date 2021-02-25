@@ -136,7 +136,6 @@ const _AccessManagementPoliciesPage = () => {
   });
 
   const { data, loading } = useAmPolicyPageQuery({ variables: { orgSid: 1 } });
-  
   const handleAsyncOptionChange = (attr, permissionIndex) => (option, item, data) => {
     setState({
       ...state,
@@ -151,7 +150,7 @@ const _AccessManagementPoliciesPage = () => {
             if (permission.actions.indexOf(item) !== index) {
               return action;
             }
-    
+
             return { ...action, [attr]: option };
           }),
         };
@@ -213,7 +212,7 @@ const _AccessManagementPoliciesPage = () => {
         );
 
       default:
-        return <></>;
+        break;
     }
   };
 
@@ -223,7 +222,7 @@ const _AccessManagementPoliciesPage = () => {
     if (!loading && data) {
       setOptions(data.amPolicyPage);
     }
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading]);
 
   return (
@@ -342,7 +341,7 @@ const _AccessManagementPoliciesPage = () => {
                                     if (index !== permissionIndex) {
                                       return item;
                                     }
-    
+
                                     return { ...permission, effect: key };
                                   }),
                                 })
@@ -350,7 +349,7 @@ const _AccessManagementPoliciesPage = () => {
                               style={{ width: '100%' }}
                             />
                           </Column>
-    
+
                           <Column lg="3">
                             <ComboBox
                               selectedKey={permission.predicateName}
@@ -364,7 +363,7 @@ const _AccessManagementPoliciesPage = () => {
                                     if (index !== permissionIndex) {
                                       return item;
                                     }
-                                
+
                                     return { ...permission, predicateName: key };
                                   }),
                                 })

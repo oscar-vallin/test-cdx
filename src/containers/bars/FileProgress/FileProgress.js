@@ -2,29 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FileProgressBar } from '../../../components/bars/FileProgressBar';
 import { Box, Text } from './FileProgress.styles';
-import { getProgressItemByString } from '../../../data/constants/FileStatusConstants';
+import { getProgressByValues } from '../../../data/constants/FileStatusConstants';
 
-const FileProgress = ({ id = '__FileProgress', stringValues, data }) => {
-  if (stringValues) {
-    const progressItem = getProgressItemByString(stringValues);
+const FileProgress = ({ id = '__FileProgress', step, stepStatus }) => {
+  const progressItem = getProgressByValues(step, stepStatus);
 
-    if (!progressItem) return null;
+  if (!progressItem) return null;
 
-    return (
-      <Box left>
-        <FileProgressBar colors={progressItem.colors} />
-        <Text>{progressItem.stepStatus.label}</Text>
-      </Box>
-    );
-  }
-  if (data) {
-    return (
-      <Box left>
-        <FileProgressBar colors={data.colors} />
-        <Text>{data.stepStatus.label}</Text>
-      </Box>
-    );
-  }
+  return (
+    <Box left>
+      <FileProgressBar colors={progressItem.colors} />
+      <Text>{progressItem.stepStatus.label}</Text>
+    </Box>
+  );
+
   return null;
 };
 

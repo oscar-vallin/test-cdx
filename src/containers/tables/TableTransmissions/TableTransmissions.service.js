@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableConstants';
-// import { useInputValue } from '../../../hooks/useInputValue';
 
 //
 export const useTable = (data, argOrgSid, argDateRange, argFilter) => {
@@ -18,7 +17,7 @@ export const useTable = (data, argOrgSid, argDateRange, argFilter) => {
   useEffect(() => {
     setLoading(false);
     setFakeLoading(false);
-    // setError();
+    setError();
   }, []);
 
   useEffect(() => {

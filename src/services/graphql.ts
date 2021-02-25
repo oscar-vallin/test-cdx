@@ -1,5 +1,6 @@
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
+
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
@@ -39,24 +40,20 @@ export type Query = {
   scheduleOccurrences?: Maybe<ScheduleOccurrenceConnection>;
 };
 
-
 export type QueryBeginLoginArgs = {
   userId: Scalars['String'];
 };
-
 
 export type QueryWorkPacketStatusDetailsArgs = {
   orgSid: Scalars['ID'];
   workOrderID: Scalars['String'];
 };
 
-
 export type QueryWorkPacketStatusesArgs = {
   orgSid: Scalars['ID'];
   dateRange?: Maybe<DateTimeRangeInput>;
   filter?: Maybe<WorkPacketStatusFilter>;
 };
-
 
 export type QueryDashboardPeriodsArgs = {
   orgSid: Scalars['ID'];
@@ -170,12 +167,10 @@ export type Mutation = {
   updateAMPermissionAction?: Maybe<AmPermissionAction>;
 };
 
-
 export type MutationPasswordLoginArgs = {
   userId: Scalars['String'];
   password: Scalars['String'];
 };
-
 
 export type MutationCreateOrgArgs = {
   orgInfo: CreateOrgInput;
@@ -189,7 +184,6 @@ export type MutationCreateUserArgs = {
 export type MutationCreateAmPolicyArgs = {
   policyInfo: CreateAmPolicyInput;
 };
-
 
 export type MutationCreateAmGroupArgs = {
   amGroupInfo: CreateAmGroupInput;
@@ -351,7 +345,7 @@ export type WorkPacketStatus = {
  *     formatString(format: String!): String
  *     iso: String
  * }
- * 
+ *
  * type Date {
  *     formatString(format: String!): String
  *     iso: String
@@ -465,40 +459,40 @@ export type WorkPacketStatusFilter = {
 
 export enum OrgType {
   IntegrationSponsor = 'INTEGRATION_SPONSOR',
-  IntegrationPlatform = 'INTEGRATION_PLATFORM'
+  IntegrationPlatform = 'INTEGRATION_PLATFORM',
 }
 
 export enum WhitespaceRuleType {
-  None = 'NONE'
+  None = 'NONE',
 }
 
 export enum PasswordCharacterType {
   UpperCase = 'UPPER_CASE',
   LowerCase = 'LOWER_CASE',
   Digit = 'DIGIT',
-  Special = 'SPECIAL'
+  Special = 'SPECIAL',
 }
 
 export enum PermissionEffect {
   Allow = 'ALLOW',
-  Deny = 'DENY'
+  Deny = 'DENY',
 }
 
 export enum PermissionPredicate {
   NotKntuEnv = 'NOT_KNTU_ENV',
   StringEqualsIgnoreCase = 'STRING_EQUALS_IGNORE_CASE',
-  StringNotEqualsIgnoreCase = 'STRING_NOT_EQUALS_IGNORE_CASE'
+  StringNotEqualsIgnoreCase = 'STRING_NOT_EQUALS_IGNORE_CASE',
 }
 
 export enum CdxService {
   Cdx = 'CDX',
-  Integration = 'INTEGRATION'
+  Integration = 'INTEGRATION',
 }
 
 export enum CdxFacet {
   All = 'ALL',
   Archive = 'ARCHIVE',
-  Status = 'STATUS'
+  Status = 'STATUS',
 }
 
 export enum PermissionVerb {
@@ -509,10 +503,15 @@ export enum PermissionVerb {
   Delete = 'DELETE',
   List = 'LIST',
   Download = 'DOWNLOAD',
-  Restart = 'RESTART'
+  Restart = 'RESTART',
 }
 
-export type PasswordRule = PasswordLengthRule | PasswordWhitespaceRule | PasswordCharacterRule | PasswordStrengthRule | PasswordRuleGroup;
+export type PasswordRule =
+  | PasswordLengthRule
+  | PasswordWhitespaceRule
+  | PasswordCharacterRule
+  | PasswordStrengthRule
+  | PasswordRuleGroup;
 
 export type WorkPacketStatusDetails = {
   __typename?: 'WorkPacketStatusDetails';
@@ -677,31 +676,23 @@ export type UserTokenMutationVariables = Exact<{
   password: Scalars['String'];
 }>;
 
-
-export type UserTokenMutation = (
-  { __typename?: 'Mutation' }
-  & { passwordLogin?: Maybe<(
-    { __typename?: 'TokenUser' }
-    & Pick<TokenUser, 'token'>
-    & { session?: Maybe<(
-      { __typename?: 'UserSession' }
-      & Pick<UserSession, 'id' | 'orgId' | 'userId' | 'defaultAuthorities'>
-    )> }
-  )> }
-);
+export type UserTokenMutation = { __typename?: 'Mutation' } & {
+  passwordLogin?: Maybe<
+    { __typename?: 'TokenUser' } & Pick<TokenUser, 'token'> & {
+        session?: Maybe<
+          { __typename?: 'UserSession' } & Pick<UserSession, 'id' | 'orgId' | 'userId' | 'defaultAuthorities'>
+        >;
+      }
+  >;
+};
 
 export type CreateOrgMutationVariables = Exact<{
   orgInfo: CreateOrgInput;
 }>;
 
-
-export type CreateOrgMutation = (
-  { __typename?: 'Mutation' }
-  & { createOrg?: Maybe<(
-    { __typename?: 'Organization' }
-    & Pick<Organization, 'id' | 'orgId' | 'orgType'>
-  )> }
-);
+export type CreateOrgMutation = { __typename?: 'Mutation' } & {
+  createOrg?: Maybe<{ __typename?: 'Organization' } & Pick<Organization, 'id' | 'orgId' | 'orgType'>>;
+};
 
 export type CreateUserMutationVariables = Exact<{
   userInfo: CreateUserInput;
@@ -1266,6 +1257,78 @@ export type DirectOrganizationsFQueryVariables = Exact<{
   orgFilter?: Maybe<OrgFilterInput>;
 }>;
 
+export type BeginLoginQuery = { __typename?: 'Query' } & {
+  beginLogin?: Maybe<
+    { __typename?: 'LoginStep' } & Pick<LoginStep, 'userId' | 'step' | 'redirectPath' | 'allowLostPassword'>
+  >;
+};
+
+export type ChangeOwnPasswordPageQueryVariables = Exact<{ [key: string]: never }>;
+
+export type ChangeOwnPasswordPageQuery = { __typename?: 'Query' } & {
+  changeOwnPasswordPage?: Maybe<
+    { __typename?: 'PasswordPage' } & {
+      ruleGroup: { __typename?: 'PasswordRuleGroup' } & Pick<PasswordRuleGroup, 'numberOfCharacteristics'> & {
+          rules?: Maybe<
+            Array<
+              Maybe<
+                | ({ __typename?: 'PasswordLengthRule' } & UnionPasswordRule_PasswordLengthRule_Fragment)
+                | ({ __typename?: 'PasswordWhitespaceRule' } & UnionPasswordRule_PasswordWhitespaceRule_Fragment)
+                | ({ __typename?: 'PasswordCharacterRule' } & UnionPasswordRule_PasswordCharacterRule_Fragment)
+                | ({ __typename?: 'PasswordStrengthRule' } & UnionPasswordRule_PasswordStrengthRule_Fragment)
+                | ({ __typename?: 'PasswordRuleGroup' } & Pick<PasswordRuleGroup, 'numberOfCharacteristics'> & {
+                      rules?: Maybe<
+                        Array<
+                          Maybe<
+                            | ({ __typename?: 'PasswordLengthRule' } & UnionPasswordRule_PasswordLengthRule_Fragment)
+                            | ({
+                                __typename?: 'PasswordWhitespaceRule';
+                              } & UnionPasswordRule_PasswordWhitespaceRule_Fragment)
+                            | ({
+                                __typename?: 'PasswordCharacterRule';
+                              } & UnionPasswordRule_PasswordCharacterRule_Fragment)
+                            | ({
+                                __typename?: 'PasswordStrengthRule';
+                              } & UnionPasswordRule_PasswordStrengthRule_Fragment)
+                            | ({ __typename?: 'PasswordRuleGroup' } & Pick<
+                                PasswordRuleGroup,
+                                'numberOfCharacteristics'
+                              > & {
+                                  rules?: Maybe<
+                                    Array<
+                                      Maybe<
+                                        | ({
+                                            __typename?: 'PasswordLengthRule';
+                                          } & UnionPasswordRule_PasswordLengthRule_Fragment)
+                                        | ({
+                                            __typename?: 'PasswordWhitespaceRule';
+                                          } & UnionPasswordRule_PasswordWhitespaceRule_Fragment)
+                                        | ({
+                                            __typename?: 'PasswordCharacterRule';
+                                          } & UnionPasswordRule_PasswordCharacterRule_Fragment)
+                                        | ({
+                                            __typename?: 'PasswordStrengthRule';
+                                          } & UnionPasswordRule_PasswordStrengthRule_Fragment)
+                                        | ({ __typename?: 'PasswordRuleGroup' } & Pick<
+                                            PasswordRuleGroup,
+                                            'numberOfCharacteristics'
+                                          > &
+                                            UnionPasswordRule_PasswordRuleGroup_Fragment)
+                                      >
+                                    >
+                                  >;
+                                } & UnionPasswordRule_PasswordRuleGroup_Fragment)
+                          >
+                        >
+                      >;
+                    } & UnionPasswordRule_PasswordRuleGroup_Fragment)
+              >
+            >
+          >;
+        };
+    }
+  >;
+};
 
 export type DirectOrganizationsFQuery = (
   { __typename?: 'Query' }
@@ -1558,8 +1621,7 @@ export const RecordCountsFragmentFragmentDoc = gql`
     name
     count
   }
-}
-    `;
+`;
 export const ExtractParameterFragmentFragmentDoc = gql`
     fragment extractParameterFragment on ExtractParameter {
   label
@@ -1762,18 +1824,21 @@ export type UserTokenMutationFn = Apollo.MutationFunction<UserTokenMutation, Use
  *   },
  * });
  */
-export function useUserTokenMutation(baseOptions?: Apollo.MutationHookOptions<UserTokenMutation, UserTokenMutationVariables>) {
-        return Apollo.useMutation<UserTokenMutation, UserTokenMutationVariables>(UserTokenDocument, baseOptions);
-      }
+export function useUserTokenMutation(
+  baseOptions?: Apollo.MutationHookOptions<UserTokenMutation, UserTokenMutationVariables>
+) {
+  return Apollo.useMutation<UserTokenMutation, UserTokenMutationVariables>(UserTokenDocument, baseOptions);
+}
 export type UserTokenMutationHookResult = ReturnType<typeof useUserTokenMutation>;
 export type UserTokenMutationResult = Apollo.MutationResult<UserTokenMutation>;
 export type UserTokenMutationOptions = Apollo.BaseMutationOptions<UserTokenMutation, UserTokenMutationVariables>;
 export const CreateOrgDocument = gql`
-    mutation CreateOrg($orgInfo: CreateOrgInput!) {
-  createOrg(orgInfo: $orgInfo) {
-    id
-    orgId
-    orgType
+  mutation CreateOrg($orgInfo: CreateOrgInput!) {
+    createOrg(orgInfo: $orgInfo) {
+      id
+      orgId
+      orgType
+    }
   }
 `;
 export type CreateOrgMutationFn = Apollo.MutationFunction<CreateOrgMutation, CreateOrgMutationVariables>;
@@ -2059,7 +2124,6 @@ export const WorkPacketStatusDetailsDocument = gql`
       qualityChecks {
         sequenceCreationEvent {
           context
-          outerContext
           unitId
           recordCreationEvent {
             context
@@ -2636,27 +2700,40 @@ export const ChangeOwnPasswordPageDocument = gql`
  *   },
  * });
  */
-export function useChangeOwnPasswordPageQuery(baseOptions?: Apollo.QueryHookOptions<ChangeOwnPasswordPageQuery, ChangeOwnPasswordPageQueryVariables>) {
-        return Apollo.useQuery<ChangeOwnPasswordPageQuery, ChangeOwnPasswordPageQueryVariables>(ChangeOwnPasswordPageDocument, baseOptions);
-      }
-export function useChangeOwnPasswordPageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ChangeOwnPasswordPageQuery, ChangeOwnPasswordPageQueryVariables>) {
-          return Apollo.useLazyQuery<ChangeOwnPasswordPageQuery, ChangeOwnPasswordPageQueryVariables>(ChangeOwnPasswordPageDocument, baseOptions);
-        }
+export function useChangeOwnPasswordPageQuery(
+  baseOptions?: Apollo.QueryHookOptions<ChangeOwnPasswordPageQuery, ChangeOwnPasswordPageQueryVariables>
+) {
+  return Apollo.useQuery<ChangeOwnPasswordPageQuery, ChangeOwnPasswordPageQueryVariables>(
+    ChangeOwnPasswordPageDocument,
+    baseOptions
+  );
+}
+export function useChangeOwnPasswordPageLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<ChangeOwnPasswordPageQuery, ChangeOwnPasswordPageQueryVariables>
+) {
+  return Apollo.useLazyQuery<ChangeOwnPasswordPageQuery, ChangeOwnPasswordPageQueryVariables>(
+    ChangeOwnPasswordPageDocument,
+    baseOptions
+  );
+}
 export type ChangeOwnPasswordPageQueryHookResult = ReturnType<typeof useChangeOwnPasswordPageQuery>;
 export type ChangeOwnPasswordPageLazyQueryHookResult = ReturnType<typeof useChangeOwnPasswordPageLazyQuery>;
-export type ChangeOwnPasswordPageQueryResult = Apollo.QueryResult<ChangeOwnPasswordPageQuery, ChangeOwnPasswordPageQueryVariables>;
+export type ChangeOwnPasswordPageQueryResult = Apollo.QueryResult<
+  ChangeOwnPasswordPageQuery,
+  ChangeOwnPasswordPageQueryVariables
+>;
 export const SystemTemplateAmGroupByNameDocument = gql`
-    query SystemTemplateAMGroupByName($name: String!) {
-  systemTemplateAMGroupByName(name: $name) {
-    id
-    name
-    description
-    tmpl
-    tmplUseAsIs
-    tmplServiceType
+  query SystemTemplateAMGroupByName($name: String!) {
+    systemTemplateAMGroupByName(name: $name) {
+      id
+      name
+      description
+      tmpl
+      tmplUseAsIs
+      tmplServiceType
+    }
   }
-}
-    `;
+`;
 
 /**
  * __useSystemTemplateAmGroupByNameQuery__
@@ -2674,12 +2751,25 @@ export const SystemTemplateAmGroupByNameDocument = gql`
  *   },
  * });
  */
-export function useSystemTemplateAmGroupByNameQuery(baseOptions: Apollo.QueryHookOptions<SystemTemplateAmGroupByNameQuery, SystemTemplateAmGroupByNameQueryVariables>) {
-        return Apollo.useQuery<SystemTemplateAmGroupByNameQuery, SystemTemplateAmGroupByNameQueryVariables>(SystemTemplateAmGroupByNameDocument, baseOptions);
-      }
-export function useSystemTemplateAmGroupByNameLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SystemTemplateAmGroupByNameQuery, SystemTemplateAmGroupByNameQueryVariables>) {
-          return Apollo.useLazyQuery<SystemTemplateAmGroupByNameQuery, SystemTemplateAmGroupByNameQueryVariables>(SystemTemplateAmGroupByNameDocument, baseOptions);
-        }
+export function useSystemTemplateAmGroupByNameQuery(
+  baseOptions: Apollo.QueryHookOptions<SystemTemplateAmGroupByNameQuery, SystemTemplateAmGroupByNameQueryVariables>
+) {
+  return Apollo.useQuery<SystemTemplateAmGroupByNameQuery, SystemTemplateAmGroupByNameQueryVariables>(
+    SystemTemplateAmGroupByNameDocument,
+    baseOptions
+  );
+}
+export function useSystemTemplateAmGroupByNameLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<SystemTemplateAmGroupByNameQuery, SystemTemplateAmGroupByNameQueryVariables>
+) {
+  return Apollo.useLazyQuery<SystemTemplateAmGroupByNameQuery, SystemTemplateAmGroupByNameQueryVariables>(
+    SystemTemplateAmGroupByNameDocument,
+    baseOptions
+  );
+}
 export type SystemTemplateAmGroupByNameQueryHookResult = ReturnType<typeof useSystemTemplateAmGroupByNameQuery>;
 export type SystemTemplateAmGroupByNameLazyQueryHookResult = ReturnType<typeof useSystemTemplateAmGroupByNameLazyQuery>;
-export type SystemTemplateAmGroupByNameQueryResult = Apollo.QueryResult<SystemTemplateAmGroupByNameQuery, SystemTemplateAmGroupByNameQueryVariables>;
+export type SystemTemplateAmGroupByNameQueryResult = Apollo.QueryResult<
+  SystemTemplateAmGroupByNameQuery,
+  SystemTemplateAmGroupByNameQueryVariables
+>;

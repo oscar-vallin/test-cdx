@@ -29,3 +29,5 @@ yarn.lock*
 /api/mockup/yarn.lock
 
 /**/*.js.snap
+/.gradle/
+/.node/
