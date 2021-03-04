@@ -3,7 +3,7 @@ import { Box as LayoutBox, Row as LayoutRow, Column as LayoutColumn } from '../.
 import { Button } from '../../../components/buttons/Button';
 
 const COLOR_MAIN = '#1a8fff';
-const COLOR_TEXT = '#605e5c';
+const COLOR_TEXT = '#333';
 const COLOR_TEXT_LIGHT = '#CCC';
 const COLOR_BG = '#F9F9F9';
 const COLOR_NEUTRAL = '#FFF';
@@ -24,15 +24,10 @@ export const Box = styled(LayoutBox)`
   width: 100%;
 `;
 
-export const Row = styled(LayoutRow)`
+export const WeekRow = styled(LayoutRow)`
   width: 100%;
+  height: calc(80vh);
   background-color: #fff;
-`;
-
-export const RowWeek = styled(Row)`
-  border-bottom-width: 5px;
-  border-bottom-style: solid;
-  border-bottom-color: ${COLOR_BORDER};
 `;
 
 export const Column = styled(LayoutColumn)`
@@ -214,7 +209,7 @@ export const CalendarDays = styled.div`
   border-bottom: 1px solid var(--border-color);
 `;
 
-export const CalendarBodyCell = styled.div`
+export const DayOfWeekContainer = styled.div`
   /* position: relative;
   height: 5em;
   border-right: 1px solid var(--border-color);
@@ -229,10 +224,10 @@ export const CalendarBodyCell = styled.div`
   } */
 
   /* background-color: blue; */
-  border-right: ${`1px solid ${COLOR_BORDER}`};
+  border: ${`1px solid ${COLOR_BORDER}`};
   cursor: pointer;
   background: ${COLOR_NEUTRAL};
-  width: calc(100% / 7);
+  width: calc((100% - 14px) / 7);
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -278,60 +273,15 @@ export const RowHeaderItem = styled(LayoutBase)`
 
 export const HeaderTextLarge = styled.span`
   font-family: Segoe UI;
-  margin-bottom: 10px;
-  margin-top: 20px;
   font-size: 12px;
-  letter-spacing: -0.1px;
+  margin-bottom: 5px;
+  color: #c2c2c2;
 `;
 
 export const DayOfWeek = styled(HeaderTextLarge)`
-  margin-left: 10px;
-  width: calc((100% - 70px) / 7);
-`;
-
-export const WeekViewContainer = styled.div`
-  width: calc((100% - 15px) / 7);
-  height: 48px;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-
-  color: ${({ isSameDay }) => (isSameDay ? COLOR_MAIN : COLOR_BORDER)};
-  border-top-color: ${({ isSameDay }) => (isSameDay ? COLOR_MAIN : COLOR_BORDER)};
-  border-top-width: ${({ isSameDay }) => (isSameDay ? `5px 0px 0px` : `1px`)};
-  border-left-color: ${COLOR_BORDER};
-  border-right-color: ${COLOR_BORDER};
-  border-left-width: 1px;
-  border-right-width: 1px;
-  border-top-style: solid;
-  border-left-style: solid;
-  border-right-style: solid;
-
-  color: ${({ isSameDay, isSameMonth }) => (isSameDay ? COLOR_MAIN : isSameMonth ? COLOR_TEXT : COLOR_TEXT_LIGHT)};
-  font-weight: ${({ isSameDay }) => (isSameDay ? '600' : '400')};
-`;
-
-export const DayViewContainer = styled(WeekViewContainer)`
-  width: 100%;
-`;
-
-export const WeekViewNumber = styled(HeaderTextLarge)`
-  margin: 0 0 6px 10px;
-  font-size: 20px;
-  height: 40px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-`;
-
-export const WeekViewDayName = styled(HeaderTextLarge)`
-  margin: 0 0 8px 5px;
-  font-size: 14px;
-  color: ${({ isSameMonth }) => (isSameMonth ? COLOR_TEXT : COLOR_TEXT_LIGHT)};
-  height: 40px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+  font-weight: bold;
+  margin-left: 5px;
+  width: calc((100% - 35px) / 7);
 `;
 
 export const HeaderYear = styled(HeaderTextLarge)`

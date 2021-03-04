@@ -45,6 +45,7 @@ import { addWeeks } from '@fluentui/react';
 export const ScheduleHeader = ({ id, currentView, currentDate, onChangeDate, onChangeView }) => {
   const [currentMonth, setCurrentMonth] = React.useState(currentDate ?? new Date());
   const [currentWeek, setCurrentWeek] = React.useState(currentDate ?? new Date());
+  const [currentDay, setCurrentDay] = React.useState(currentDate ?? new Date());
   const headerMonthFormat = 'MMMM';
   const headerYearFormat = 'yyyy';
 
@@ -52,7 +53,22 @@ export const ScheduleHeader = ({ id, currentView, currentDate, onChangeDate, onC
   const handleChangeDate = (_newDate) => {
     setCurrentMonth(_newDate);
     setCurrentWeek(_newDate);
+    setCurrentDay(_newDate);
     onChangeDate(_newDate);
+  };
+
+  //
+  const handlePrevDay = () => {
+    const _currentDay = addDays(currentDay, -1);
+
+    handleChangeDate(_currentDay);
+  };
+
+  //
+  const handleNextDay = () => {
+    const _currentDay = addDays(currentDay, 1);
+
+    handleChangeDate(_currentDay);
   };
 
   //
@@ -103,6 +119,14 @@ export const ScheduleHeader = ({ id, currentView, currentDate, onChangeDate, onC
 
   const renderHeaderTitle = () => {
     const formatWeek = 'LLLL d';
+    if (isCurrentViewDay(currentView)) {
+      return (
+        <MonthYearContainer>
+          <HeaderMonth>{`${format(currentDay, formatWeek)}, ${format(currentDay, headerYearFormat)}`}</HeaderMonth>
+        </MonthYearContainer>
+      );
+    }
+
     if (isCurrentViewWeek(currentView)) {
       console.log('renderHeaderTitle, currentDate: ', currentWeek);
 
@@ -130,19 +154,26 @@ export const ScheduleHeader = ({ id, currentView, currentDate, onChangeDate, onC
   //
   // *
   const renderNavArrows = () => {
-    if (isCurrentViewWeek(currentView)) {
-      return (
-        <UpDownContainer>
-          <StyledButtonAction id={`ButtonPrev`} onClick={handlePrevWeek} icon="chromeBack" />
-          <StyledButtonAction id={`ButtonNext`} onClick={handleNextWeek} icon="chromeNext" />
-        </UpDownContainer>
-      );
-    }
-
     return (
       <UpDownContainer>
-        <StyledButtonAction id={`ButtonUp`} onClick={handlePrevMonth} icon="up" />
-        <StyledButtonAction id={`ButtonDown`} onClick={handleNextMonth} icon="down" />
+        {isCurrentViewDay(currentView) && (
+          <>
+            <StyledButtonAction id={`ButtonPrev`} onClick={handlePrevDay} icon="chromeBack" />
+            <StyledButtonAction id={`ButtonNext`} onClick={handleNextDay} icon="chromeNext" />
+          </>
+        )}
+        {isCurrentViewWeek(currentView) && (
+          <>
+            <StyledButtonAction id={`ButtonPrev`} onClick={handlePrevWeek} icon="chromeBack" />
+            <StyledButtonAction id={`ButtonNext`} onClick={handleNextWeek} icon="chromeNext" />
+          </>
+        )}
+        {isCurrentViewMonth(currentView) && (
+          <>
+            <StyledButtonAction id={`ButtonUp`} onClick={handlePrevMonth} icon="up" />
+            <StyledButtonAction id={`ButtonDown`} onClick={handleNextMonth} icon="down" />
+          </>
+        )}
       </UpDownContainer>
     );
   };

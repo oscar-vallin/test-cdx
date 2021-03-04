@@ -34,11 +34,13 @@ import {
   WeekViewNumber,
   WeekViewDayName,
   RowWeek,
+  DayViewContainer,
 } from './ScheduleSubHeader.styles';
-import { isCurrentViewWeek } from './helpers';
+import { isCurrentViewDay, isCurrentViewWeek } from './helpers';
 
 export const ScheduleSubHeader = ({ id, currentView, currentDate, selectedDate }) => {
   let _currentDate = startOfWeek(currentDate);
+  // let _currentDay = currentDate;
 
   React.useEffect(() => {
     _currentDate = startOfWeek(selectedDate);
@@ -46,33 +48,31 @@ export const ScheduleSubHeader = ({ id, currentView, currentDate, selectedDate }
     console.log('New Current Date: _currentDate: ', _currentDate);
   }, [selectedDate]);
 
-  console.log('ScheduleSubheader, _currentDate: ', _currentDate);
-
-  // const _renderSubHeader = () => {
-  //   const dateFormat = 'dd';
-  //   const rows = [];
-
-  //   let day = dates.startDate;
-  //   let days = [];
-  //   let formattedDate = '';
-  //   let formattedDateNotValid = '';
-
-  //   while (day <= dates.endDate) {
-  //     for (let i = 0; i < 7; i++) {
-  //       formattedDate = format(day, dateFormat);
-  //       formattedDateNotValid = format(day, 'LLL d');
-  //       const cloneDay = day;
-  //     }
-  //   }
-  // }
-
   const _renderSubHeader = () => {
     const dateFormat = 'EEEE';
     const days = [];
-    let _currentDate = startOfWeek(selectedDate);
+    let _currentDay = selectedDate ?? currentDate;
 
     console.log('_renderSubHeader, currentDate: ', currentDate);
     console.log('_renderSubHeader, selectedDate: ', selectedDate);
+
+    if (isCurrentViewDay(currentView)) {
+      const isCurrentDate = !!isSameDay(_currentDay, currentDate);
+      const isCurrentMonth = !!isSameMonth(_currentDay, currentDate);
+      const isStartMonth = !!isSameDay(_currentDay, startOfMonth(_currentDay));
+      const isEndMonth = !!isSameDay(_currentDay, endOfMonth(_currentDay));
+
+      return (
+        <RowWeek>
+          <DayViewContainer key={_currentDay} isSameDay={isCurrentDate} isSameMonth={isCurrentMonth}>
+            <WeekViewNumber>
+              {isCurrentDate || isStartMonth || isEndMonth ? format(_currentDay, 'MMM d') : format(_currentDay, 'd')}
+            </WeekViewNumber>
+            <WeekViewDayName isSameMonth={isCurrentMonth}>{format(_currentDay, 'EEE')}</WeekViewDayName>
+          </DayViewContainer>
+        </RowWeek>
+      );
+    }
 
     for (let i = 0; i < 7; i++) {
       if (isCurrentViewWeek(currentView)) {

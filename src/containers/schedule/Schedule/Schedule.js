@@ -41,14 +41,20 @@ import { ButtonAction } from '../../../components/buttons/ButtonAction';
 import { ScheduleHeader } from './ScheduleHeader';
 import { ScheduleWeek } from './ScheduleWeek';
 import ScheduleSubHeader from './ScheduleSubHeader';
-import { isCurrentViewWeek, isCurrentViewMonth } from './helpers';
+import { isCurrentViewWeek, isCurrentViewMonth, isCurrentViewDay } from './helpers';
 import ScheduleMonth from './ScheduleMonth';
+import { ScheduleDay } from './ScheduleDay';
+import { useScheduleItems } from './Schedule.service';
 
 // https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/3b27cc08-ebdc-42ea-b144-f91ae83b752e/dcc2mld-1481803c-ebe8-41c7-9e7c-ba8c37f8c47d.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3sicGF0aCI6IlwvZlwvM2IyN2NjMDgtZWJkYy00MmVhLWIxNDQtZjkxYWU4M2I3NTJlXC9kY2MybWxkLTE0ODE4MDNjLWViZTgtNDFjNy05ZTdjLWJhOGMzN2Y4YzQ3ZC5wbmcifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6ZmlsZS5kb3dubG9hZCJdfQ.I7WhA1T1xVSbcDQ7NHjdboU6FuUje3jD5C-chv4bt98
 const Schedule = ({ id = 'ScheduleContainer', orgSid = 1, dateRange, filter, ...props }) => {
   const [currentDate] = React.useState(new Date());
   const [selectedDate, setSelectedDate] = React.useState(new Date());
   const [currentView, setCurrentView] = React.useState('month');
+  const { items } = useScheduleItems(2, {
+    rangeStart: '2020-01-01T00:00:00-08:00',
+    rangeEnd: '2020-01-01T23:59:59-08:00',
+  });
   console.log('Schedule Container, props: ', props);
 
   //
@@ -76,6 +82,9 @@ const Schedule = ({ id = 'ScheduleContainer', orgSid = 1, dateRange, filter, ...
       )}
       {!!isCurrentViewWeek(currentView) && (
         <ScheduleWeek selectedDate={selectedDate} currentDate={currentDate} onChangeDate={handleChangeDate} />
+      )}
+      {!!isCurrentViewDay(currentView) && (
+        <ScheduleDay selectedDate={selectedDate} currentDate={currentDate} onChangeDate={handleChangeDate} />
       )}
     </Container>
   );
