@@ -9,8 +9,6 @@ const COLOR_BG = '#F9F9F9';
 const COLOR_NEUTRAL = '#FFF';
 const COLOR_BORDER = '#EEE';
 
-const COLOR_BACKGROUND = '#f3f2f1';
-
 // --main-color: #1a8fff;
 // --text-color: #777;
 // --text-color-light: #ccc;
@@ -19,14 +17,7 @@ const COLOR_BACKGROUND = '#f3f2f1';
 // --neutral-color: #fff;
 
 export const Container = styled(LayoutBox)`
-  width: 100vw;
-  background-color: ${COLOR_BACKGROUND};
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding-left: 10vw;
-  padding-right: 10vw;
+  width: 80%;
 `;
 
 export const Box = styled(LayoutBox)`
@@ -229,16 +220,19 @@ export const CalendarBodyCell = styled.div`
   } */
 
   /* background-color: blue; */
-  border-right: ${`1px solid ${COLOR_BORDER}`};
+  border-color: ${({ isSelectedDate }) => (isSelectedDate ? COLOR_MAIN : COLOR_BORDER)};
+  border-width: ${({ isSelectedDate }) => (isSelectedDate ? `5px 0px 0px` : `1px`)};
+  border-style: solid;
   cursor: pointer;
-  background: ${COLOR_NEUTRAL};
+  background: ${({ isSameDay }) => (isSameDay ? COLOR_BG : COLOR_NEUTRAL)};
   width: calc(100% / 7);
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: flex-end;
-  color: ${({ isSameMonth }) => (isSameMonth ? COLOR_TEXT : COLOR_TEXT_LIGHT)};
+  align-items: flex-start;
+  color: ${({ isSameDay, isSameMonth, isSelectedDate }) =>
+    isSelectedDate ? COLOR_MAIN : isSameMonth || isSameDay ? COLOR_TEXT : COLOR_TEXT_LIGHT};
 `;
 
 export const CalendarBodySelected = styled.div`
@@ -292,12 +286,12 @@ export const HeaderYear = styled(HeaderTextLarge)`
 `;
 
 export const CalendarBodyCellNumber = styled.span`
-  font-size: 82.5%;
+  font-size: 20px;
   line-height: 1;
-  top: 0.75em;
-  right: 0.75em;
+  /* top: 0.75em; */
+  /* right: 0.75em; */
   font-weight: 700;
-  margin: 10px 10px 0 0;
+  margin: 5px;
 `;
 
 export const CalendarBodyDisabled = styled.div`

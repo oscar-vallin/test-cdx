@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { ROUTES } from '../data/constants/RouteConstants';
 
 // Routes
@@ -40,6 +40,7 @@ export const Routes = () => {
       <AuthRoute path={ROUTES.ROUTE_ARCHIVES.URL}>
         <ArchivePage />
       </AuthRoute>
+      // !! BYPASS TEMPORALLY.
       <AuthRoute path={ROUTES.ROUTE_SCHEDULE.URL}>
         <SchedulePage />
       </AuthRoute>

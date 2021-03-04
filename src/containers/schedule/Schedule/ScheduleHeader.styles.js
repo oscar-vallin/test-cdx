@@ -1,15 +1,14 @@
 import styled from 'styled-components';
 import { Box as LayoutBox, Row as LayoutRow, Column as LayoutColumn } from '../../../components/layouts';
 import { Button } from '../../../components/buttons/Button';
+import { ButtonAction } from '../../../components/buttons/ButtonAction';
 
-const COLOR_MAIN = '#1a8fff';
+const COLOR_MAIN = 'rgb(0, 90, 158)';
 const COLOR_TEXT = '#333';
 const COLOR_TEXT_LIGHT = '#CCC';
 const COLOR_BG = '#F9F9F9';
 const COLOR_NEUTRAL = '#FFF';
 const COLOR_BORDER = '#EEE';
-
-const COLOR_BACKGROUND = '#f3f2f1';
 
 // --main-color: #1a8fff;
 // --text-color: #777;
@@ -19,14 +18,7 @@ const COLOR_BACKGROUND = '#f3f2f1';
 // --neutral-color: #fff;
 
 export const Container = styled(LayoutBox)`
-  width: 100vw;
-  background-color: ${COLOR_BACKGROUND};
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding-left: 10vw;
-  padding-right: 10vw;
+  width: 80%;
 `;
 
 export const Box = styled(LayoutBox)`
@@ -52,9 +44,11 @@ export const CalendarColumn = styled(LayoutColumn)`
 
 export const HeaderButtonView = styled(Button)`
   /* background-color: ${({ selected }) => (selected ? 'gray' : 'white')}; */
-  background: ${({ selected, theme }) => (selected ? theme.colors.themePrimary : theme.colors.neutralPrimary)};
-  color: ${({ selected, theme }) => (selected ? theme.colors.neutralPrimary : theme.colors.themePrimary)};
-  font-weight: ${({ selected, theme }) => (selected ? theme.fontWeights.bold : theme.fontWeights.normal)};
+  &&& {
+    background: ${({ selected, theme }) => (selected ? theme.colors.themePrimary : theme.colors.neutralLight)};
+    color: ${({ selected, theme }) => (selected ? theme.colors.neutralLight : theme.colors.themePrimary)};
+    font-weight: ${({ selected, theme }) => (selected ? theme.fontWeights.bold : theme.fontWeights.normal)};
+  }
 
   &:hover {
     border-color: ${({ theme }) => theme.colors.themePrimary};
@@ -274,16 +268,27 @@ export const RowHeader = styled(LayoutBase)`
 
 export const RowHeaderItem = styled(LayoutBase)`
   flex-direction: row;
+  justify-content: space-between;
+`;
+
+export const UpDownContainer = styled(LayoutBase)`
+  flex-direction: row;
+  margin-right: 10px;
+`;
+
+export const MonthYearContainer = styled(LayoutBase)`
+  flex-direction: row;
+  height: 40px;
+  align-items: center;
 `;
 
 export const HeaderTextLarge = styled.span`
   font-family: Segoe UI;
-  font-size: 28px;
-  margin-bottom: 5px;
+  font-size: 14px;
+  color: ${COLOR_MAIN};
 `;
 
 export const HeaderMonth = styled(HeaderTextLarge)`
-  font-weight: bold;
   margin-right: 0.2em;
 `;
 
@@ -326,4 +331,8 @@ export const CalendarBodyCol = styled.div`
   flex-grow: 0;
   flex-basis: calc(100% / 7);
   width: calc(100% / 7);
+`;
+
+export const StyledButtonAction = styled(ButtonAction)`
+  color: #005a9e;
 `;
