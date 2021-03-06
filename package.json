@@ -36,7 +36,8 @@
     "test": "react-scripts test --verbose --updateSnapshot",
     "format": "prettier --write src/**/*.{ts,tsx}",
     "lint": "tsc --noEmit && eslint src/**/*.ts{,x} --color --fix --quiet",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "clean": "rm -rf build"
   },
   "eslintConfig": {
     "extends": [
