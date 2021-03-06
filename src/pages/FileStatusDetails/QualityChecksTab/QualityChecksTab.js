@@ -23,33 +23,28 @@ const COLUMNS = [
 ].map(col => ({ ...col, data: 'string', isPadded: true }))
 
 const onRenderItemColumn = (item, index, column) => {
-  const data = item.recordCreationEvent[0];
-  const details = data.error.length > 0
-    ? data.error[0]
-    : data.warning.length > 0
-      ? data.warning[0]
-      : [{}];
-      
   switch(column.key) {
     case 'status':
       return <>
-        {data.error.length > 0 && <Badge variant="error" label="Error" pill />} &nbsp;
-        {data.warning.length > 0 && <Badge variant="warning" label="Warning" pill />}
+        {item.status === 'ERROR' && <Badge variant="error" label="Error" pill />} <br />
+        {item.status === 'WARNING' && <Badge variant="warning" label="Warning" pill />}
       </>
     case 'employeeId':
-      return item.unitId;
+      return <span title={item.employeeId}>{item.employeeId}</span>;
     case 'employee':
-      return data.outerContext;
+      return <span title={item.employee}>{item.employee}</span>;
     case 'dependent':
-      return data.context;
+      return <span title={item.dependent}>{item.dependent}</span>;
     case 'message':
-      return (details.message || [])[0];
+      return <>
+        {item.message.map((message, index) => <div key={index} title={message}>{message}</div>)}
+      </>
     case 'field':
-      return data.name;
+      return <span title={item.field}>{item.field}</span>;
     case 'value':
-      return data.rawValue;
+      return <span title={item.rawValue}>{item.rawValue}</span>;
     case 'transformedValue':
-      return data.value;
+      return <span title={item.value}>{item.value}</span>;
     default:
       return '';
   }
@@ -57,19 +52,53 @@ const onRenderItemColumn = (item, index, column) => {
 
 const QualityChecksTab = ({ items }) => {
   const chartInfo = items
-    .map(({ recordCreationEvent }) => ({ errors: recordCreationEvent[0].error.length, warnings: recordCreationEvent[0].warning.length }))
+    .map(({ recordCreationEvent }) => ({
+      errors: recordCreationEvent.map(item => item.error.length).reduce((sum , i) => sum + i, 0),
+      warnings: recordCreationEvent.map(item => item.warning.length).reduce((sum , i) => sum + i, 0)
+    }))
     .reduce((curr, count) => ({ 
       errors: curr.errors + count.errors,
       warnings: curr.warnings + count.warnings,
     }), { errors: 0, warnings: 0 });
-    
+
+  const data = items
+    .map(({ recordCreationEvent }) => recordCreationEvent
+      .map(evt => {
+        const arr = [];
+
+        const parse = status => (item) => ({
+          status: status,
+          employeeId: evt.unitId,
+          employee: evt.outerContext,
+          dependent: evt.context,
+          message: item.message,
+          field: item.name,
+          value: item.rawValue,
+          transformValue: item.value
+        });
+
+        if (evt.error.length > 0) {
+          arr.push(evt.error.map(parse('ERROR')));
+        }
+
+        if (evt.warning.length > 0) {
+          arr.push(evt.warning.map(parse('WARNING')))
+        }
+
+        return arr.reduce((arr, item) => [...arr, ...item], []);
+      })
+      .reduce((arr, item) => [...arr, ...Array.isArray(item) ? item : [item]], [])
+  )
+  .reduce((arr, item) => [...arr, ...Array.isArray(item) ? item : [item]], []);
+
+  console.log(data);
   return (
     <Spacing padding="normal">
       {items.length > 0 && (
         <Spacing margin={{ bottom: 'normal' }}>
           <Row>
             <Column>
-              <MessageBar type="error" content={`The error count (${items.length}) is greater than the configured ceiling of 0.`} />
+              <MessageBar type="error" content={`The error count (${data.length}) is greater than the configured ceiling of 0.`} />
             </Column>
           </Row>
         </Spacing>
@@ -102,7 +131,7 @@ const QualityChecksTab = ({ items }) => {
           <Card elevation="smallest">
             <DetailsList
               compact
-              items={items}
+              items={data}
               columns={COLUMNS}
               selectionMode={SelectionMode.none}
               layoutMode={DetailsListLayoutMode.justified}

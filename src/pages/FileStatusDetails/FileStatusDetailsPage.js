@@ -53,7 +53,14 @@ const _FileStatusDetailsPage = () => {
 
   useEffect(() => {
     if (list && query) {
-      setPacket(list.workPacketStatuses.find(item => item.workOrderId === id));
+      const packet = list.workPacketStatuses.find(item => item.workOrderId === id);
+
+      setPacket({
+        ...packet,
+        supplementalFiles: (query.workPacketStatusDetails.workStepStatus || [])
+          .map(({ stepFile}) => stepFile)
+          .reduce((arr, item) => [...arr, ...item], []),
+      });
     }
 
   }, [list, query]);
@@ -125,20 +132,20 @@ const _FileStatusDetailsPage = () => {
                                 <div>
                                   <Text variant="bold">Filename: &nbsp;</Text> <br />
                                   <Text breakWord="all">
-                                    {query.workPacketStatusDetails.deliveredFile.filename}
+                                    {query.workPacketStatusDetails.deliveredFile?.filename}
                                   </Text>
                                 </div>
 
                                 <div>
                                   <Text variant="bold">Delivered at: &nbsp;</Text>
                                   <Text>{
-                                    getReadableDate(query.workPacketStatusDetails.deliveredFile.timeDelivered)
+                                    getReadableDate(query.workPacketStatusDetails.deliveredFile?.timeDelivered)
                                   }</Text>
                                 </div>
 
                                 <div>
                                   <Text variant="bold">Size: &nbsp;</Text>
-                                  <Text>{query.workPacketStatusDetails.deliveredFile.fileSizeInBytes} bytes (without encryption)</Text>
+                                  <Text>{query.workPacketStatusDetails.deliveredFile?.fileSizeInBytes} bytes (without encryption)</Text>
                                 </div>
                               </div>
 
@@ -149,29 +156,29 @@ const _FileStatusDetailsPage = () => {
 
                                 <div>
                                   <Text variant="bold">Protocol: &nbsp;</Text>
-                                  <Text>{query.workPacketStatusDetails.deliveredFile.ftp.protocol}</Text>
+                                  <Text>{query.workPacketStatusDetails.deliveredFile?.ftp.protocol}</Text>
                                 </div>
 
-                                {query.workPacketStatusDetails.deliveredFile.ftp.port && (
+                                {query.workPacketStatusDetails.deliveredFile?.ftp.port && (
                                   <div>
                                     <Text variant="bold">Port: &nbsp;</Text>
-                                    <Text>{query.workPacketStatusDetails.deliveredFile.ftp.port}</Text>
+                                    <Text>{query.workPacketStatusDetails.deliveredFile?.ftp.port}</Text>
                                   </div>
                                 )}
 
                                 <div>
                                   <Text variant="bold">User: &nbsp;</Text>
-                                  <Text>{query.workPacketStatusDetails.deliveredFile.ftp.username}</Text>
+                                  <Text>{query.workPacketStatusDetails.deliveredFile?.ftp.username}</Text>
                                 </div>
 
                                 <div>
                                   <Text variant="bold">Host: &nbsp;</Text>
-                                  <Text>{query.workPacketStatusDetails.deliveredFile.ftp.host}</Text>
+                                  <Text>{query.workPacketStatusDetails.deliveredFile?.ftp.host}</Text>
                                 </div>
 
                                 <div>
                                   <Text variant="bold">Folder: &nbsp;</Text>
-                                  <Text>{query.workPacketStatusDetails.deliveredFile.ftp.folder}</Text>
+                                  <Text>{query.workPacketStatusDetails.deliveredFile?.ftp.folder}</Text>
                                 </div>
                               </div>
 
@@ -211,43 +218,27 @@ const _FileStatusDetailsPage = () => {
 
                       <Card elevation="smallest" onClick={() => window.open(packet.clientFileArchivePath)}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <Text>{packet.inboundFilename}</Text>
+                          <Text>{packet.clientFileArchivePath?.split('/').pop()}</Text>
                           <Badge variant="success" label="Client file" pill />
                         </div>
                       </Card>
 
                       <Card elevation="smallest" onClick={() => window.open(packet.vendorFileArchivePath)}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <Text>??</Text>
+                          <Text>{packet.vendorFileArchivePath?.split('/').pop()}</Text>
                           <Badge variant="info" label="Vendor file" pill />
                         </div>
                       </Card>
 
-                      {packet.supplementalFilesArchivePaths && (
+                      {(packet.supplementalFiles || []).length > 0 && (
                         <Collapse label="View all files">
-                          <Spacing margin={{ top: 'normal' }}>
-                            <Card elevation="smallest">
-                              <Text>??</Text>
-                            </Card>
-                          </Spacing>
-
-                          <Spacing margin={{ top: 'normal' }}>
-                            <Card elevation="smallest">
-                              <Text>??</Text>
-                            </Card>
-                          </Spacing>
-
-                          <Spacing margin={{ top: 'normal' }}>
-                            <Card elevation="smallest">
-                              <Text>??</Text>
-                            </Card>
-                          </Spacing>
-
-                          <Spacing margin={{ top: 'normal' }}>
-                            <Card elevation="smallest">
-                              <Text>??</Text>
-                            </Card>
-                          </Spacing>
+                          {packet.supplementalFiles.map(({ label, value }) => (
+                            <Spacing margin={{ top: 'normal' }}>
+                              <Card elevation="smallest" onClick={() => window.open(value)}>
+                                <Text>{value.split('/').pop()}</Text>
+                              </Card>
+                            </Spacing>
+                          ))}
                         </Collapse>
                       )}
                     </Fragment>
@@ -280,10 +271,10 @@ const _FileStatusDetailsPage = () => {
                                 },
                                 {
                                   title: 'Quality Checks',
-                                  content: <QualityChecksTab items={query.workPacketStatusDetails.qualityChecks.sequenceCreationEvent}/>,
+                                  content: <QualityChecksTab items={query.workPacketStatusDetails.qualityChecks?.sequenceCreationEvent}/>,
                                   badge: {
                                     variant: 'severe',
-                                    label: query.workPacketStatusDetails.qualityChecks.sequenceCreationEvent.length,
+                                    label: query.workPacketStatusDetails.qualityChecks?.sequenceCreationEvent.length || "0",
                                   },
                                 },
                               ]}
