@@ -9,6 +9,7 @@ export const TABLE_NAMES = {
   FILE_STATUS_DETAIL_QUALITY_CHECKS: 'DETAIL_QUALITY_CHECKS',
   ARCHIVES: 'ARCHIVES',
   ERRORS: 'ERRORS',
+  TRANSMISSIONS: 'TRANSMISSIONS',
 };
 
 export const TABLES = {
@@ -83,6 +84,13 @@ export const TABLES = {
     header: {
       type: 'errors',
       title: 'Errors',
+      url: null,
+    },
+  },
+  TRANSMISSIONS: {
+    header: {
+      type: 'transmissions',
+      title: 'Transmissions',
       url: null,
     },
   },

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { useWorkPacketStatusesQuery } from '../../../data/services/graphql';
 import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableConstants';
+import { useInputValue } from '../../../hooks/useInputValue';
 
 export const useTable = (argOrgSid, argDateRange, argFilter) => {
   const [_loading, setLoading] = useState(true);
@@ -93,26 +94,18 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
   };
 };
 
-const useInput = (placeholder) => {
-  const [value, setValue] = useState();
-  const onChange = (e) => {
-    setValue(e);
-  };
-
-  return {
-    value,
-    onChange,
-    placeholder,
-  };
-};
+//
+const useInput = (placeholder) => {};
 
 //
 export const useInputs = () => {
   const startDate = useInput('Start Date...');
   const endDate = useInput('End Date...');
+  const localInput = useInputValue('', 'File name, client, ...', '', '');
 
   return {
     startDate,
     endDate,
+    localInput,
   };
 };

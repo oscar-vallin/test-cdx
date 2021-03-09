@@ -6,6 +6,11 @@ const buttonIcons = {
   edit: 'Edit',
   sort: 'Sort',
   eye: 'RedEye',
+  chromeBack: 'ChromeBack',
+  chromeNext: 'ChromeBackMirrored',
+  up: 'Up',
+  down: 'Down',
+  today: 'GotoToday',
 };
 
 const ButtonAction = ({ id = '__Button', children, icon, primary = true, disabled = false, onClick, ...props }) => {

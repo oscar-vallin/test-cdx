@@ -1,17 +1,24 @@
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
+import { useWpTransmissionsQuery } from '../../../data/services/graphql';
 import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableConstants';
+import { getStepStatusLabel } from '../../../data/constants/FileStatusConstants';
+import { useInputValue } from '../../../hooks/useInputValue';
 
 //
-export const useTable = (data, argOrgSid, argDateRange, argFilter) => {
+export const useTable = (argOrgSid, argDateRange, argFilter) => {
   const [_loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
   const [columns, setColumns] = useState([]);
   const structure = getTableStructure(TABLE_NAMES.ERRORS);
 
-  // const [data, setData] = useState();
-  const [loading, setFakeLoading] = useState(true);
-  const [error] = useState();
+  const { data, loading, error } = useWpTransmissionsQuery({
+    variables: {
+      orgSid: argOrgSid,
+      dateRange: argDateRange,
+      filter: argFilter,
+    },
+  });
 
   // * Component Did Mount.
   useEffect(() => {
@@ -22,26 +29,40 @@ export const useTable = (data, argOrgSid, argDateRange, argFilter) => {
 
   useEffect(() => {
     const doEffect = () => {
-      console.log(data);
+      console.log('TableTransmissions.service, data.nodes:', data.wpTransmissions.nodes);
       const _columns = [
-        { key: 'datetime', label: 'Received On', id: 'datetime', style: 'text' },
-        { key: 'clientFile', label: 'Client File', id: 'clientFile', style: 'link' },
-        { key: 'workStep', label: 'Work Step', id: 'workStep', style: 'text' },
+        { key: 'datetime', label: 'Delivered On', id: 'datetime', style: 'text' },
         { key: 'planSponsor', label: 'Plan Sponsor', id: 'planSponsor', style: 'text' },
-        { key: 'vendor', label: 'Vendor', id: 'vendor', style: 'text' },
-        { key: 'message', label: 'Message', id: 'message', style: 'text' },
+        { key: 'vendorId', label: 'Vendor', id: 'vendorId', style: 'text' },
+        { key: 'specId', label: 'Spec', id: 'specId', style: 'text' },
+        { key: 'implementation', label: 'Implementation', id: 'implementation', style: 'text' },
+        { key: 'inboundFilename', label: 'Client File', id: 'inboundFilename', style: 'link' },
+        { key: 'outboundFilename', label: 'Vendor File', id: 'outboundFilename', style: 'link' },
+        { key: 'outboundFilesize', label: 'Outbound File Size', id: 'outboundFilesize', style: 'text' },
+        { key: 'billingCount', label: 'Billing Unit Count', id: 'billingCount', style: 'text' },
+        { key: 'totalRecords', label: 'Total Records', id: 'totalRecords', style: 'text' },
+        { key: 'extractType', label: 'Feed', id: 'extractType', style: 'text' },
+        { key: 'extractVersion', label: 'Version', id: 'extractVersion', style: 'text' },
       ];
 
-      const _items = data.map(({ timestamp, fileName, file, workStep, plan, vendor, message }) => {
-        const datetime = format(new Date(timestamp), 'MM/dd/yyyy hh:mm a');
+      console.log('Received Transmission Data: ', data);
+
+      const _items = data.wpTransmissions.nodes.map((item) => {
+        const datetime = format(new Date(item.deliveredOn), 'MM/dd/yyyy hh:mm a');
 
         return [
           formatField(datetime, 'text', 'datetime', datetime),
-          formatField(fileName, 'link', 'clientFile', file),
-          formatField(workStep, 'text', 'workStep', workStep),
-          formatField(plan, 'text', 'planSponsor', plan),
-          formatField(vendor, 'text', 'vendor', vendor),
-          formatField(message, 'text', 'message', message),
+          formatField(item.planSponsorId, 'text', 'planSponsor', item.planSponsorId),
+          formatField(item.vendorId, 'text', 'vendorId', item.vendorId),
+          formatField(item.specId, 'text', 'specId', item.specId),
+          formatField(item.implementation, 'text', 'implementation', item.implementation),
+          formatField(item.inboundFilename, 'link', 'inboundFilename', item.inboundFilename),
+          formatField(item.outboundFilename, 'link', 'outboundFilename', item.outboundFilename),
+          formatField(item.outboundFilesize, 'text', 'outboundFilesize', item.outboundFilesize),
+          formatField(item.billingCount, 'text', 'billingCount', item.billingCount),
+          formatField(item.totalRecords, 'text', 'totalRecords', item.totalRecords),
+          formatField(item.extractType, 'text', 'extractType', item.extractType),
+          formatField(item.extractVersion, 'text', 'extractVersion', item.extractVersion),
         ];
       });
 
@@ -55,13 +76,14 @@ export const useTable = (data, argOrgSid, argDateRange, argFilter) => {
   }, [data]);
 
   //
-  const formatField = (value, type, columnId, text) => {
+  const formatField = (value, type, columnId, text, sublabel) => {
     return {
       id: columnId,
       value,
       type,
       columnId,
       text,
+      sublabel,
     };
   };
 
@@ -81,26 +103,18 @@ export const useTable = (data, argOrgSid, argDateRange, argFilter) => {
   };
 };
 
-const useInput = (placeholder) => {
-  const [value, setValue] = useState();
-  const onChange = (e) => {
-    setValue(e);
-  };
-
-  return {
-    value,
-    onChange,
-    placeholder,
-  };
-};
+//
+const useInput = (placeholder) => {};
 
 //
 export const useInputs = () => {
   const startDate = useInput('Start Date...');
   const endDate = useInput('End Date...');
+  const localInput = useInputValue('', 'File name, client, ...', '', '');
 
   return {
     startDate,
     endDate,
+    localInput,
   };
 };

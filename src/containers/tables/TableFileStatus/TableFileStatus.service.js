@@ -31,7 +31,7 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
     const doEffect = () => {
       // console.log('TableErrors.service, data:', data);
       const _columns = [
-        { key: 'datetime', label: 'Received On', id: 'datetime', style: 'link' },
+        { key: 'datetime', label: 'Received On', id: 'datetime', fieldName: 'datetime', style: 'link' },
         { key: 'vendor', label: 'Vendor', id: 'vendor', style: 'text' },
         { key: 'planSponsor', label: 'Sponsor', id: 'planSponsor', style: 'text' },
         { key: 'extractName', label: 'Extract Name', id: 'extractName', style: 'text' },
@@ -40,13 +40,13 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
       ];
 
       const _items = data.workPacketStatuses.map(
-        ({ timestamp, vendorId, planSponsorId, inboundFilename, step, stepStatus }) => {
+        ({ workOrderId, timestamp, vendorId, planSponsorId, inboundFilename, step, stepStatus }) => {
           const datetime = format(new Date(timestamp), 'MM/dd/yyyy hh:mm a');
           // console.log('Xxxxx STepStatus: ', stepStatus);
           const stepStatusLabel = getStepStatusLabel(stepStatus);
 
           return [
-            formatField(datetime, 'datetime', datetime),
+            formatField(datetime, 'datetime', `/file-status/${workOrderId}`),
             formatField(vendorId, 'vendor', vendorId),
             formatField(planSponsorId, 'planSponsor', planSponsorId),
             formatField(inboundFilename, 'extractName', inboundFilename),
