@@ -9,6 +9,7 @@ import {
   isSameDay,
   isSameMonth,
   parse,
+  parseISO,
   set,
   startOfMonth,
   startOfWeek,
@@ -34,9 +35,10 @@ import {
   CalendarBodyCell,
   CalendarBodyCellBg,
   CalendarBodyRow,
+  CellItem,
 } from './ScheduleMonth.styles';
 
-export const ScheduleMonth = ({ id, currentDate, selectedDate, onChangeDate }) => {
+export const ScheduleMonth = ({ id, currentDate, selectedDate, onChangeDate, items }) => {
   const [dates, setDates] = React.useState({
     currentMonth: currentDate,
     selectedDate: currentDate,
@@ -64,6 +66,18 @@ export const ScheduleMonth = ({ id, currentDate, selectedDate, onChangeDate }) =
     }
   }, [selectedDate]);
 
+  const renderItems = (day, allItems) => {
+    console.log('RenderItems, day: ', day);
+    console.log('RenderItems _item.datetime', allItems);
+
+    const dayRows = allItems.filter((_item) => isSameDay(parseISO(_item.datetime), day));
+
+    console.log('renderItems, dayRows: ', dayRows);
+
+    return dayRows.map((_item) => <CellItem>{_item.label}</CellItem>);
+  };
+
+  //
   const _renderBody = () => {
     const dateFormat = 'dd';
     const rows = [];
@@ -97,7 +111,8 @@ export const ScheduleMonth = ({ id, currentDate, selectedDate, onChangeDate }) =
                 ? formattedDate
                 : formattedDateNotValid}
             </CalendarBodyCellNumber>
-            <CalendarBodyCellBg id="CalendarBodyCellBg">{formattedDate}</CalendarBodyCellBg>
+            {/* <CalendarBodyCellBg id="CalendarBodyCellBg">{formattedDate}</CalendarBodyCellBg> */}
+            {renderItems(day, items)}
           </CalendarBodyCell>
         );
 

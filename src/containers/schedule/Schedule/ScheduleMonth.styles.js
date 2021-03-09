@@ -249,6 +249,20 @@ export const CalendarBodyRow = styled.div`
   height: calc(80vh / 5);
 `;
 
+export const CellItem = styled.div`
+  font-size: 10px;
+  width: 80%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background: #808080;
+  color: white;
+  border-radius: 3px;
+  margin-left: 5%;
+  padding: 0 5%;
+  margin-bottom: 5px;
+`;
+
 export const LayoutBase = styled.div`
   display: flex;
   flex-direction: column;

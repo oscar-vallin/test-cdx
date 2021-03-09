@@ -9,12 +9,16 @@ import { getStepStatusLabel } from '../../../data/constants/FileStatusConstants'
 export const useScheduleItems = (argOrgSid, argDateRange, argFilter) => {
   const [_loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
+  const [dateStart, setDateStart] = useState(new Date());
+  const [dateEnd, setDateEnd] = useState(new Date());
 
   const { data, loading, error } = useScheduleOccurrencesQuery({
     variables: {
       orgSid: argOrgSid,
-      dateRange: argDateRange,
-      filter: argFilter,
+      dateRange: {
+        rangeStart: argDateRange.rangeStart,
+        rangeEnd: argDateRange.rangeEnd,
+      },
     },
   });
 
@@ -26,6 +30,15 @@ export const useScheduleItems = (argOrgSid, argDateRange, argFilter) => {
   useEffect(() => {
     const doEffect = () => {
       console.log('Schedule Data: ', data);
+      const _items = data.scheduleOccurrences.nodes.map((item) => {
+        return {
+          datetime: item.timeScheduled,
+          label: item.resource,
+          status: item.schedOccurStatus,
+        };
+      });
+
+      setItems(_items);
     };
 
     if (data) {
