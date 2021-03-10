@@ -35,11 +35,11 @@ const CardDashboard = ({ id = '__CardDashboard', title, subtitle, value, total, 
               </StyledColumn>
             </StyledRow>
           </StyledColumn>
-          <StyledColumn>
+          {/* <StyledColumn>
             {(value ?? -1) >= 0 && (total ?? -1) > 0 && (
               <ChartDonut label={`${percentage.toFixed(percentage < 1 ? 2 : 0)}%`} size={70} data={data} />
             )}
-          </StyledColumn>
+          </StyledColumn> */}
         </StyledRow>
       )}
     </Card>
