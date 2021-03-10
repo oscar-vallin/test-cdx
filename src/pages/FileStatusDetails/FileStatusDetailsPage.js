@@ -23,46 +23,43 @@ import WorkStepsTab from './WorkStepsTab/WorkStepsTab';
 import EnrollmentStatsTab from './EnrollmentStatsTab/EnrollmentStatsTab';
 import VendorCountStatsTab from './VendorCountStatsTab/VendorCountStatsTab';
 
-import { useWorkPacketStatusDetailsQuery, useWorkPacketStatusesQuery } from '../../services/graphql';
+import { useWorkPacketStatusDetailsQuery, useWorkPacketStatusesQuery } from '../../data/services/graphql';
 
 import { TableEnrollment } from '../../containers/tables/TableEnrollment';
 import { TableVendorCount } from '../../containers/tables/TableVendorCount';
 
 const breadcrumbItems = [ROUTE_FILE_STATUS, { ID: 'work-packet-details', TITLE: 'Work Packet Details' }];
 
-const getReadableDate = date => new Date(date)
-  .toLocaleString()
-  .replace(',', '');
+const getReadableDate = (date) => new Date(date).toLocaleString().replace(',', '');
 
 const _FileStatusDetailsPage = () => {
   const { id } = useParams();
-  const [packet, setPacket] = useState({}); 
+  const [packet, setPacket] = useState({});
 
   const { data: list, lWorkPacketDetails: lWorkPacketStatus } = useWorkPacketStatusesQuery({
     variables: {
       orgSid: 123,
-    }
+    },
   });
 
   const { data: query, loading: lWorkPacketDetails } = useWorkPacketStatusDetailsQuery({
     variables: {
       orgSid: 123,
-      workOrderId: id
+      workOrderId: id,
     },
   });
 
   useEffect(() => {
     if (list && query) {
-      const packet = list.workPacketStatuses.find(item => item.workOrderId === id);
+      const packet = list.workPacketStatuses.find((item) => item.workOrderId === id);
 
       setPacket({
         ...packet,
         supplementalFiles: (query.workPacketStatusDetails.workStepStatus || [])
-          .map(({ stepFile}) => stepFile)
+          .map(({ stepFile }) => stepFile)
           .reduce((arr, item) => [...arr, ...item], []),
       });
     }
-
   }, [list, query]);
 
   return (
@@ -77,128 +74,123 @@ const _FileStatusDetailsPage = () => {
             <Card elevation="smallest">
               <Spacing padding={{ left: 'small' }}>
                 <Row>
-                  <Column centerV={(lWorkPacketDetails || lWorkPacketStatus)}>
-                    {
-                      (lWorkPacketDetails || lWorkPacketStatus)
-                        ? <Spinner style={{ justifySelf: 'center' }} />
-                        : (
-                          <Fragment>
-                            <h3
-                              title={packet.inboundFilename}
-                              style={{
-                                fontWeight: 400,
-                                margin: '0 0 15px',
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                                whiteSpace: 'nowrap',
-                                width: '100%'
-                              }}
-                            >
-                              {packet.inboundFilename}
-                            </h3>
+                  <Column centerV={lWorkPacketDetails || lWorkPacketStatus}>
+                    {lWorkPacketDetails || lWorkPacketStatus ? (
+                      <Spinner style={{ justifySelf: 'center' }} />
+                    ) : (
+                      <Fragment>
+                        <h3
+                          title={packet.inboundFilename}
+                          style={{
+                            fontWeight: 400,
+                            margin: '0 0 15px',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                            width: '100%',
+                          }}
+                        >
+                          {packet.inboundFilename}
+                        </h3>
 
-                            <Spacing margin={{ bottom: 'normal' }}>
-                              <div style={{ display: 'flex' }}>
-                                {/* TODO: parse stepStatus and billing units */ }
-                                <Badge variant="success" label="Complete" pill /> &nbsp;
-                                <Badge variant="info" label="Billing Units: 1735" pill />
-                              </div>
+                        <Spacing margin={{ bottom: 'normal' }}>
+                          <div style={{ display: 'flex' }}>
+                            {/* TODO: parse stepStatus and billing units */}
+                            <Badge variant="success" label="Complete" pill /> &nbsp;
+                            <Badge variant="info" label="Billing Units: 1735" pill />
+                          </div>
+                        </Spacing>
+
+                        <div>
+                          <Spacing margin={{ top: 'small', bottom: 'small' }}>
+                            <Text variant="muted">{getReadableDate(packet.timestamp)}</Text>
+                          </Spacing>
+
+                          <div>
+                            <Text variant="bold">Vendor: &nbsp;</Text>
+                            <Text>{packet.vendorId}</Text>
+                          </div>
+
+                          <div>
+                            <Text variant="bold">Plan Sponsor: &nbsp;</Text>
+                            <Text>{packet.planSponsorId}</Text>
+                          </div>
+                        </div>
+
+                        <Collapse label="View details">
+                          <div>
+                            <Spacing margin={{ top: 'normal', bottom: 'small' }}>
+                              <Text variant="muted">Delivered Vendor File Details</Text>
                             </Spacing>
 
                             <div>
-                              <Spacing margin={{ top: 'small', bottom: 'small' }}>
-                                <Text variant="muted">
-                                  {getReadableDate(packet.timestamp)}
-                                </Text>
-                              </Spacing>
-
-                              <div>
-                                <Text variant="bold">Vendor: &nbsp;</Text>
-                                <Text>{packet.vendorId}</Text>
-                              </div>
-
-                              <div>
-                                <Text variant="bold">Plan Sponsor: &nbsp;</Text>
-                                <Text>{packet.planSponsorId}</Text>
-                              </div>
+                              <Text variant="bold">Filename: &nbsp;</Text> <br />
+                              <Text breakWord="all">{query.workPacketStatusDetails.deliveredFile?.filename}</Text>
                             </div>
 
-                            <Collapse label="View details">
+                            <div>
+                              <Text variant="bold">Delivered at: &nbsp;</Text>
+                              <Text>{getReadableDate(query.workPacketStatusDetails.deliveredFile?.timeDelivered)}</Text>
+                            </div>
+
+                            <div>
+                              <Text variant="bold">Size: &nbsp;</Text>
+                              <Text>
+                                {query.workPacketStatusDetails.deliveredFile?.fileSizeInBytes} bytes (without
+                                encryption)
+                              </Text>
+                            </div>
+                          </div>
+
+                          <div>
+                            <Spacing margin={{ top: 'normal' }}>
+                              <Text variant="muted">FTP details</Text>
+                            </Spacing>
+
+                            <div>
+                              <Text variant="bold">Protocol: &nbsp;</Text>
+                              <Text>{query.workPacketStatusDetails.deliveredFile?.ftp.protocol}</Text>
+                            </div>
+
+                            {query.workPacketStatusDetails.deliveredFile?.ftp.port && (
                               <div>
-                                <Spacing margin={{ top: 'normal', bottom: 'small' }}>
-                                  <Text variant="muted">Delivered Vendor File Details</Text>
-                                </Spacing>
-
-                                <div>
-                                  <Text variant="bold">Filename: &nbsp;</Text> <br />
-                                  <Text breakWord="all">
-                                    {query.workPacketStatusDetails.deliveredFile?.filename}
-                                  </Text>
-                                </div>
-
-                                <div>
-                                  <Text variant="bold">Delivered at: &nbsp;</Text>
-                                  <Text>{
-                                    getReadableDate(query.workPacketStatusDetails.deliveredFile?.timeDelivered)
-                                  }</Text>
-                                </div>
-
-                                <div>
-                                  <Text variant="bold">Size: &nbsp;</Text>
-                                  <Text>{query.workPacketStatusDetails.deliveredFile?.fileSizeInBytes} bytes (without encryption)</Text>
-                                </div>
+                                <Text variant="bold">Port: &nbsp;</Text>
+                                <Text>{query.workPacketStatusDetails.deliveredFile?.ftp.port}</Text>
                               </div>
+                            )}
 
-                              <div>
-                                <Spacing margin={{ top: 'normal' }}>
-                                  <Text variant="muted">FTP details</Text>
-                                </Spacing>
+                            <div>
+                              <Text variant="bold">User: &nbsp;</Text>
+                              <Text>{query.workPacketStatusDetails.deliveredFile?.ftp.username}</Text>
+                            </div>
 
-                                <div>
-                                  <Text variant="bold">Protocol: &nbsp;</Text>
-                                  <Text>{query.workPacketStatusDetails.deliveredFile?.ftp.protocol}</Text>
-                                </div>
+                            <div>
+                              <Text variant="bold">Host: &nbsp;</Text>
+                              <Text>{query.workPacketStatusDetails.deliveredFile?.ftp.host}</Text>
+                            </div>
 
-                                {query.workPacketStatusDetails.deliveredFile?.ftp.port && (
-                                  <div>
-                                    <Text variant="bold">Port: &nbsp;</Text>
-                                    <Text>{query.workPacketStatusDetails.deliveredFile?.ftp.port}</Text>
-                                  </div>
-                                )}
+                            <div>
+                              <Text variant="bold">Folder: &nbsp;</Text>
+                              <Text>{query.workPacketStatusDetails.deliveredFile?.ftp.folder}</Text>
+                            </div>
+                          </div>
 
-                                <div>
-                                  <Text variant="bold">User: &nbsp;</Text>
-                                  <Text>{query.workPacketStatusDetails.deliveredFile?.ftp.username}</Text>
-                                </div>
+                          <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                            <Separator />
+                          </Spacing>
 
-                                <div>
-                                  <Text variant="bold">Host: &nbsp;</Text>
-                                  <Text>{query.workPacketStatusDetails.deliveredFile?.ftp.host}</Text>
-                                </div>
+                          <Spacing margin={{ bottom: 'small' }}>
+                            <Button variant="primary" block>
+                              Re-transmit over FTP
+                            </Button>
+                          </Spacing>
 
-                                <div>
-                                  <Text variant="bold">Folder: &nbsp;</Text>
-                                  <Text>{query.workPacketStatusDetails.deliveredFile?.ftp.folder}</Text>
-                                </div>
-                              </div>
-
-                              <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                                <Separator />
-                              </Spacing>
-
-                              <Spacing margin={{ bottom: 'small' }}>
-                                <Button variant="primary" block>
-                                  Re-transmit over FTP
-                                  </Button>
-                              </Spacing>
-
-                              <Button variant="danger" block>
-                                Delete
-                                </Button>
-                            </Collapse>
-                          </Fragment>
-                        )
-                    }
+                          <Button variant="danger" block>
+                            Delete
+                          </Button>
+                        </Collapse>
+                      </Fragment>
+                    )}
                   </Column>
                 </Row>
               </Spacing>
@@ -207,83 +199,83 @@ const _FileStatusDetailsPage = () => {
             <br />
 
             <Card elevation="smallest">
-              {
-                (lWorkPacketDetails || lWorkPacketStatus)
-                  ? <Spinner style={{ justifySelf: 'center' }} />
-                  : (
-                    <Fragment>
-                      <Spacing margin={{ bottom: 'small' }}>
-                        <Text variant="bold">Archives</Text>
-                      </Spacing>
+              {lWorkPacketDetails || lWorkPacketStatus ? (
+                <Spinner style={{ justifySelf: 'center' }} />
+              ) : (
+                <Fragment>
+                  <Spacing margin={{ bottom: 'small' }}>
+                    <Text variant="bold">Archives</Text>
+                  </Spacing>
 
-                      <Card elevation="smallest" onClick={() => window.open(packet.clientFileArchivePath)}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <Text>{packet.clientFileArchivePath?.split('/').pop()}</Text>
-                          <Badge variant="success" label="Client file" pill />
-                        </div>
-                      </Card>
+                  <Card elevation="smallest" onClick={() => window.open(packet.clientFileArchivePath)}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <Text>{packet.clientFileArchivePath?.split('/').pop()}</Text>
+                      <Badge variant="success" label="Client file" pill />
+                    </div>
+                  </Card>
 
-                      <Card elevation="smallest" onClick={() => window.open(packet.vendorFileArchivePath)}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <Text>{packet.vendorFileArchivePath?.split('/').pop()}</Text>
-                          <Badge variant="info" label="Vendor file" pill />
-                        </div>
-                      </Card>
+                  <Card elevation="smallest" onClick={() => window.open(packet.vendorFileArchivePath)}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <Text>{packet.vendorFileArchivePath?.split('/').pop()}</Text>
+                      <Badge variant="info" label="Vendor file" pill />
+                    </div>
+                  </Card>
 
-                      {(packet.supplementalFiles || []).length > 0 && (
-                        <Collapse label="View all files">
-                          {packet.supplementalFiles.map(({ label, value }) => (
-                            <Spacing margin={{ top: 'normal' }}>
-                              <Card elevation="smallest" onClick={() => window.open(value)}>
-                                <Text>{value.split('/').pop()}</Text>
-                              </Card>
-                            </Spacing>
-                          ))}
-                        </Collapse>
-                      )}
-                    </Fragment>
-                  )
-              }
+                  {(packet.supplementalFiles || []).length > 0 && (
+                    <Collapse label="View all files">
+                      {packet.supplementalFiles.map(({ label, value }) => (
+                        <Spacing margin={{ top: 'normal' }}>
+                          <Card elevation="smallest" onClick={() => window.open(value)}>
+                            <Text>{value.split('/').pop()}</Text>
+                          </Card>
+                        </Spacing>
+                      ))}
+                    </Collapse>
+                  )}
+                </Fragment>
+              )}
             </Card>
           </Column>
           <Column xl={9} xxl={10}>
-            <Card elevation="smallest" spacing={(!lWorkPacketDetails && !lWorkPacketStatus) ? 'none' : 'normal'}>
-              {
-                (lWorkPacketDetails || lWorkPacketStatus)
-                  ? <Spinner style={{ justifySelf: 'center' }} />
-                  : (
-                      <Fragment>
-                        <Row>
-                          <Column>
-                            <Tabs
-                              items={[
-                                {
-                                  title: 'Enrollment Stats',
-                                  content: <EnrollmentStatsTab items={query.workPacketStatusDetails.enrollmentStats}/>,
-                                },
-                                {
-                                  title: 'Vendor Count Stats',
-                                  content: <VendorCountStatsTab items={query.workPacketStatusDetails.outboundRecordCounts} />,
-                                },
-                                {
-                                  title: 'Work Steps',
-                                  content: <WorkStepsTab steps={query.workPacketStatusDetails.workStepStatus}/>,
-                                },
-                                {
-                                  title: 'Quality Checks',
-                                  content: <QualityChecksTab items={query.workPacketStatusDetails.qualityChecks?.sequenceCreationEvent}/>,
-                                  badge: {
-                                    variant: 'severe',
-                                    label: query.workPacketStatusDetails.qualityChecks?.sequenceCreationEvent.length || "0",
-                                  },
-                                },
-                              ]}
-                            />
-                          </Column>
-                        </Row>
-                      </Fragment>
-                    )
-              }
+            <Card elevation="smallest" spacing={!lWorkPacketDetails && !lWorkPacketStatus ? 'none' : 'normal'}>
+              {lWorkPacketDetails || lWorkPacketStatus ? (
+                <Spinner style={{ justifySelf: 'center' }} />
+              ) : (
+                <Fragment>
+                  <Row>
+                    <Column>
+                      <Tabs
+                        items={[
+                          {
+                            title: 'Enrollment Stats',
+                            content: <EnrollmentStatsTab items={query.workPacketStatusDetails.enrollmentStats} />,
+                          },
+                          {
+                            title: 'Vendor Count Stats',
+                            content: <VendorCountStatsTab items={query.workPacketStatusDetails.outboundRecordCounts} />,
+                          },
+                          {
+                            title: 'Work Steps',
+                            content: <WorkStepsTab steps={query.workPacketStatusDetails.workStepStatus} />,
+                          },
+                          {
+                            title: 'Quality Checks',
+                            content: (
+                              <QualityChecksTab
+                                items={query.workPacketStatusDetails.qualityChecks?.sequenceCreationEvent}
+                              />
+                            ),
+                            badge: {
+                              variant: 'severe',
+                              label: query.workPacketStatusDetails.qualityChecks?.sequenceCreationEvent.length || '0',
+                            },
+                          },
+                        ]}
+                      />
+                    </Column>
+                  </Row>
+                </Fragment>
+              )}
             </Card>
           </Column>
         </Row>
