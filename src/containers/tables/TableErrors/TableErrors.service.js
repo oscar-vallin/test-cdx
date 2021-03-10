@@ -98,7 +98,7 @@ const useInput = (placeholder) => {};
 export const useInputs = () => {
   const startDate = useInput('Start Date...');
   const endDate = useInput('End Date...');
-  const localInput = useInputValue('', 'File name, client, ...', '', '');
+  const localInput = useInputValue('', 'Extract Name,  Status, Vendor, etc.', '', '');
 
   return {
     startDate,
