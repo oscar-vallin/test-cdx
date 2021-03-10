@@ -5,7 +5,6 @@ import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableCon
 import { formatField } from '../../../helpers/tableHelpers';
 import { getStepStatusLabel } from '../../../data/constants/FileStatusConstants';
 import { FileProgress } from '../../bars/FileProgress';
-import { useInputValue } from '../../../hooks/useInputValue';
 
 //
 export const useTable = (argOrgSid, argDateRange, argFilter) => {
@@ -51,14 +50,7 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
             formatField(planSponsorId, 'planSponsor', planSponsorId),
             formatField(inboundFilename, 'extractName', inboundFilename),
             formatField(stepStatusLabel, 'overall', stepStatusLabel),
-            formatField(
-              <>
-                <FileProgress step={step} stepStatus={stepStatus} />
-              </>,
-              'progress',
-              stepStatusLabel,
-              step
-            ),
+            formatField(<FileProgress step={step} stepStatus={stepStatus} />, 'progress', stepStatusLabel, step),
           ];
         }
       );
@@ -101,18 +93,4 @@ const useInput = (placeholder) => {
   //   onChange,
   //   placeholder,
   // };
-};
-
-//
-export const useInputs = () => {
-  const startDate = useInput('Start Date...');
-  const endDate = useInput('End Date...');
-  // const localInput = useInput('Vendor, status, ...');
-  const localInput = useInputValue('', 'Vendor ...', '', '');
-
-  return {
-    localInput,
-    startDate,
-    endDate,
-  };
 };

@@ -187,23 +187,12 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput }) => 
         objItem[rowColItem.columnId] = rowColItem.value;
 
         if (rowColItem.value && typeof rowColItem.value === 'string' && !filterFound) {
-          console.log('filter evaluation, rowColItem.value: ', rowColItem.value);
-          console.log('filter evaluation, typeofValue: ', typeof rowColItem.value);
           filterFound = rowColItem.value.toLowerCase().includes(textFilter.toLowerCase());
-          console.log('filter evaluation, filterFound: ', filterFound);
         }
       });
 
-      console.log('filter end, filterFound: ', filterFound);
-
       if (filterFound) return objItem;
     });
-
-    console.log('map => return iItems: ', iItems);
-    console.log(
-      'map => return iItems(not undefined): ',
-      iItems.filter((iItemRow) => !!iItemRow)
-    );
 
     const itemsResult = iItems.filter((iItemRow) => !!iItemRow);
 
@@ -287,11 +276,7 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput }) => 
         );
 
       case 'node':
-        return (
-          <StyledCell id="Progress">
-            <span>{fieldContent}</span>
-          </StyledCell>
-        );
+        return <StyledCell id="Progress">{fieldContent}</StyledCell>;
 
       default:
         return <span>{fieldContent}</span>;

@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 import { Table } from '../../../components/tables/Table';
 
 import { Box, Row, Column, Container, RightColumn } from './TableFileStatus.styles';
-import { useTable, useInputs } from './TableFileStatus.service';
+import { useTable } from './TableFileStatus.service';
 import { InputText } from '../../../components/inputs/InputText';
 import { InputDateRange } from '../../../components/inputs/InputDateRange';
+import { useTableFilters } from '../../../hooks/useTableFilters';
 
 const TableFileStatus = ({ id = 'TableFileStatus', orgSid = 1, dateRange, filter }) => {
   const { tableProps } = useTable(orgSid, dateRange, filter);
-  const { localInput, startDate, endDate } = useInputs();
+  const { localInput, startDate, endDate } = useTableFilters('Extract Name,  Status, Vendor, etc.');
 
   console.log('TableFileStatus, localInput: ', localInput);
   return (
