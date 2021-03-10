@@ -2,7 +2,7 @@ import React from 'react';
 
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Spacing } from '../../../../components/spacings/Spacing';
-import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
+// import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Text } from '../../../../components/typography/Text';
 import { Separator } from '../../../../components/separators/Separator';
 
@@ -130,7 +130,7 @@ const _ActiveOrgsPage = () => {
     variables: {
       orgSid: 1,
       orgFilter: { activeFilter: 'ACTIVE' },
-    }
+    },
   });
 
   useEffect(() => {

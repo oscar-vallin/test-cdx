@@ -188,22 +188,16 @@ const generateColumns = () => {
     fieldName: name.toLowerCase(),
     data: 'string',
     isPadded: true,
-    minWidth: 225
+    minWidth: 225,
   });
 
-  return [
-    createColumn('Service'),
-    createColumn('Facet'),
-    createColumn('Verb'),
-    createColumn('Actions'),
-  ];
-}
-
+  return [createColumn('Service'), createColumn('Facet'), createColumn('Verb'), createColumn('Actions')];
+};
 
 const _CreatePoliciesPage = () => {
-  const { data } = useAmPolicyPageQuery({});
+  // const { data } = useAmPolicyPageQuery({});
 
-  console.log(data);
+  // console.log(data);
 
   const [state, setState] = useState({
     editIndex: null,
@@ -223,11 +217,11 @@ const _CreatePoliciesPage = () => {
   const [options, setOptions] = useState({
     permissionServices: [],
     predicates: [],
-    templateServices: []
+    templateServices: [],
   });
 
-  const { data, loading } = useAmPolicyPageQuery({ variables: { orgSid : 1 } });
-  
+  const { data, loading } = useAmPolicyPageQuery({ variables: { orgSid: 1 } });
+
   const handleAsyncOptionChange = (attr, permissionIndex) => (option, item, data) => {
     setState({
       ...state,
@@ -242,17 +236,19 @@ const _CreatePoliciesPage = () => {
             if (permission.actions.indexOf(item) !== index) {
               return action;
             }
-    
+
             return { ...action, [attr]: option };
           }),
-        }
+        };
       }),
     });
   };
 
-  const onRenderItemColumn = ({
-    data, services, onServiceChange, onFacetChange, onVerbChange, permissionIndex,
-  }) => (item, index, column) => {
+  const onRenderItemColumn = ({ data, services, onServiceChange, onFacetChange, onVerbChange, permissionIndex }) => (
+    item,
+    index,
+    column
+  ) => {
     switch (column.key) {
       case 'service':
         return (
@@ -267,10 +263,7 @@ const _CreatePoliciesPage = () => {
       case 'facet':
         console.log(item);
         return (
-          <FacetCombobox
-            service={item.service.key}
-            onChange={(event, option) => onFacetChange(option, item, data)}
-          />
+          <FacetCombobox service={item.service.key} onChange={(event, option) => onFacetChange(option, item, data)} />
         );
       case 'verb':
         return (
@@ -295,17 +288,16 @@ const _CreatePoliciesPage = () => {
 
                     return {
                       ...item,
-                      actions: item.actions
-                        .filter((action, actionIndex) => actionIndex !== index)
-                    }
+                      actions: item.actions.filter((action, actionIndex) => actionIndex !== index),
+                    };
                   }),
-                })
+                });
               }}
             />
           </div>
-        )
+        );
     }
-  }
+  };
 
   let columns = generateColumns(options);
 
