@@ -38,32 +38,41 @@ const _buildColumns = (
     column.onColumnContextMenu = onColumnContextMenu;
     column.ariaLabel = `Operations for ${column.name}`;
     column.isResizable = true;
-    column.minWidth = 100;
-    column.maxWidth = 200;
+    // column.minWidth = 100;
+    // column.maxWidth = 200;
     const columnData = xtColumns.find((xtColumn) => xtColumn.key === column.fieldName);
     column.name = columnData?.label ?? column.name;
+
+    column.minWidth = columnData.minWidth ?? 100;
+    column.maxWidth = columnData.maxWidth ?? 200;
 
     if (column.key === 'thumbnail') {
       column.iconName = 'Picture';
       column.isIconOnly = true;
     } else if (column.key === 'datetime') {
-      column.minWidth = 150;
-      column.maxWidth = 190;
+      // column.minWidth = columnData.minWidth ?? 100;
+      // column.maxWidth = columnData.maxWidth ?? 150;
     } else if (column.key === 'vendor') {
-      column.minWidth = 150;
-      column.maxWidth = 150;
+      // column.minWidth = 150;
+      // column.maxWidth = 150;
     } else if (column.key === 'description') {
       column.isMultiline = true;
-      column.minWidth = 200;
+      // column.minWidth = 200;
     } else if (column.key === 'name') {
       // column.onRender = (item) => <Link data-selection-invoke>{item.name}</Link>;
+    } else if (column.key === 'extractName') {
+      // column.onRender = (item) => <Link data-selection-invoke>{item.name}</Link>;
+      // column.minWidth = 200;
     } else if (column.key === 'progress') {
       // column.onRender = (item) => <Link data-selection-invoke>{item.name}</Link>;
-      column.minWidth = 270;
-      column.maxWidth = 270;
+      console.log('Progress Column');
+
+      // column.minWidth = 80;
+      // column.maxWidth = 80;
+      // column.width = '80px';
     } else if (column.key === 'clientFile') {
-      column.minWidth = 300;
-      column.maxWidth = 300;
+      // column.minWidth = '300px';
+      // column.maxWidth = '300px';
     } else if (column.key === 'key') {
       column.columnActionsMode = ColumnActionsMode.disabled;
       column.onRender = (item) => (
@@ -71,11 +80,8 @@ const _buildColumns = (
           {item.key}
         </Link>
       );
-      column.minWidth = 90;
-      column.maxWidth = 90;
-    } else {
-      column.minWidth = 90;
-      column.maxWidth = 90;
+      // column.minWidth = 90;
+      // column.maxWidth = 90;
     }
   });
 

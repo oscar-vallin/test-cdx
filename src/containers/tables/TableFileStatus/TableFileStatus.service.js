@@ -30,12 +30,20 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
     const doEffect = () => {
       // console.log('TableErrors.service, data:', data);
       const _columns = [
-        { key: 'datetime', label: 'Received On', id: 'datetime', fieldName: 'datetime', style: 'link' },
-        { key: 'vendor', label: 'Vendor', id: 'vendor', style: 'text' },
-        { key: 'planSponsor', label: 'Sponsor', id: 'planSponsor', style: 'text' },
-        { key: 'extractName', label: 'Extract Name', id: 'extractName', style: 'text' },
-        { key: 'overall', label: 'Overall', id: 'overall', style: 'text' },
-        { key: 'progress', label: 'Progress', id: 'progress', style: 'node' },
+        {
+          key: 'datetime',
+          minWidth: 120,
+          maxWidth: 120,
+          label: 'Received On',
+          id: 'datetime',
+          fieldName: 'datetime',
+          style: 'link',
+        },
+        { key: 'vendor', minWidth: 80, maxWidth: 80, label: 'Vendor', id: 'vendor', style: 'text' },
+        { key: 'planSponsor', minWidth: 100, maxWidth: 120, label: 'Sponsor', id: 'planSponsor', style: 'text' },
+        { key: 'extractName', minWidth: 100, maxWidth: 300, label: 'Extract Name', id: 'extractName', style: 'text' },
+        { key: 'overall', minWidth: 100, maxWidth: 150, label: 'Overall', id: 'overall', style: 'text' },
+        { key: 'progress', minWidth: 100, maxWidth: 200, label: 'Progress', id: 'progress', style: 'node' },
       ];
 
       const _items = data.workPacketStatuses.map(
