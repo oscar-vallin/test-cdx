@@ -4,6 +4,7 @@ import { StyledTextField } from './InputText.styles';
 
 const InputText = ({
   id = 'InputText',
+  type = 'text',
   disabled = false,
   onChange,
   autofocus = true,
@@ -14,6 +15,7 @@ const InputText = ({
   return (
     <StyledTextField
       id={id}
+      type={type}
       autoFocus={autofocus}
       disabled={disabled}
       onChange={onChange}
@@ -26,6 +28,7 @@ const InputText = ({
 
 InputText.propTypes = {
   id: PropTypes.string,
+  type: PropTypes.string,
   disabled: PropTypes.bool,
   autoFocus: PropTypes.bool,
   onChange: PropTypes.func,

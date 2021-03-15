@@ -4,6 +4,7 @@ import { ROUTES } from '../data/constants/RouteConstants';
 
 // Routes
 import { LoginPage } from './Login';
+import { UserSettingsPage } from './UserSettings';
 import { DashboardPage } from './Dashboard';
 import { ArchivePage } from './Archives';
 import { SchedulePage } from './Schedule';
@@ -27,6 +28,9 @@ export const Routes = () => {
       </UnauthRoute>
       <AuthRoute exact path="/">
         <DashboardPage />
+      </AuthRoute>
+      <AuthRoute path={ROUTES.ROUTE_USER_SETTINGS.URL}>
+        <UserSettingsPage />
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_DASHBOARD.URL}>
         <DashboardPage />

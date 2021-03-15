@@ -1,6 +1,7 @@
 export const ROUTES_ID = {
   HOME: 'home',
   LOGIN: 'login',
+  USER_SETTINGS: 'user-settings',
   DASHBOARD: 'dashboard',
   FILE_STATUS: 'file-status',
   ARCHIVES: 'archives',
@@ -16,6 +17,7 @@ export const ROUTES_ID = {
 const URL_ROUTES = {
   HOME: '/',
   LOGIN: `/${ROUTES_ID.LOGIN}`,
+  USER_SETTINGS: `/${ROUTES_ID.USER_SETTINGS}`,
   DASHBOARD: `/${ROUTES_ID.DASHBOARD}`,
   FILE_STATUS: `/${ROUTES_ID.FILE_STATUS}`,
   FILE_STATUS_DETAILS: `/${ROUTES_ID.FILE_STATUS}/:id`,
@@ -72,6 +74,14 @@ export const ROUTE_DASHBOARD = {
   URL: URL_ROUTES.DASHBOARD,
   MAIN_MENU: true,
   API_ID: 'DASHBOARD',
+};
+
+export const ROUTE_USER_SETTINGS = {
+  ID: ROUTES_ID.USER_SETTINGS,
+  TITLE: 'User Settings',
+  URL: URL_ROUTES.USER_SETTINGS,
+  MAIN_MENU: false,
+  API_ID: 'USER_SETTINGS',
 };
 
 export const ROUTE_FILE_STATUS = {
@@ -165,6 +175,7 @@ export const ROUTE_ACTIVE_ORGS = {
 export const ROUTES = {
   ROUTE_HOME,
   ROUTE_LOGIN,
+  ROUTE_USER_SETTINGS,
   ROUTE_DASHBOARD,
   ROUTE_FILE_STATUS,
   ROUTE_FILE_STATUS_DETAILS,
@@ -182,6 +193,7 @@ export const ROUTES = {
 export const ROUTES_ARRAY = [
   ROUTE_HOME,
   ROUTE_LOGIN,
+  ROUTE_USER_SETTINGS,
   ROUTE_DASHBOARD,
   ROUTE_FILE_STATUS,
   ROUTE_FILE_STATUS_DETAILS,

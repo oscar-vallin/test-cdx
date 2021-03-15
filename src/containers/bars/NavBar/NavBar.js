@@ -16,7 +16,11 @@ import {
 } from './NavBar.styles';
 
 // CardSection is called directly cause a restriction warning for that component.
-const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard' }) => {
+const NavBar = ({
+  id = '__NavBar',
+  menuOptionSelected = 'dashboard',
+  onChangePassword
+}) => {
   const renderIcon = (iconName) => {
     return (
       <StyledColumn id={`${id}__Right__${iconName}`} noStyle>
@@ -43,7 +47,7 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard' }) => {
           <StyledRow id={`${id}__Right_Row`} right>
             {renderIcon('Settings')}
             {renderIcon('Help')}
-            <ProfileMenu />
+            <ProfileMenu onChangePassword={onChangePassword}/>
           </StyledRow>
         </StyledColumn>
       </StyledRow>
