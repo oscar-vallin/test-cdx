@@ -1,18 +1,16 @@
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
-import { useWpTransmissionsQuery } from '../../../data/services/graphql';
+import { useWorkPacketStatusesQuery } from '../../../data/services/graphql';
 import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableConstants';
-import { getStepStatusLabel } from '../../../data/constants/FileStatusConstants';
 import { useInputValue } from '../../../hooks/useInputValue';
 
-//
 export const useTable = (argOrgSid, argDateRange, argFilter) => {
   const [_loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
   const [columns, setColumns] = useState([]);
-  const structure = getTableStructure(TABLE_NAMES.ERRORS);
+  const structure = getTableStructure(TABLE_NAMES.ARCHIVES);
 
-  const { data, loading, error } = useWpTransmissionsQuery({
+  const { data, loading, error } = useWorkPacketStatusesQuery({
     variables: {
       orgSid: argOrgSid,
       dateRange: argDateRange,
@@ -20,35 +18,33 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
     },
   });
 
-  // * Component Did Mount.
+  // * Component Did Mount
   useEffect(() => {
     setLoading(false);
-    setFakeLoading(false);
-    setError();
   }, []);
 
+  //
   useEffect(() => {
     const doEffect = () => {
-      console.log('TableTransmissions.service, data.nodes:', data.wpTransmissions.nodes);
       const _columns = [
-        { key: 'datetime', label: 'Delivered On', id: 'datetime', style: 'text' },
-        { key: 'planSponsor', label: 'Plan Sponsor', id: 'planSponsor', style: 'text' },
-        { key: 'vendorId', label: 'Vendor', id: 'vendorId', style: 'text' },
-        { key: 'specId', label: 'Spec', id: 'specId', style: 'text' },
-        { key: 'implementation', label: 'Implementation', id: 'implementation', style: 'text' },
-        { key: 'inboundFilename', label: 'Client File', id: 'inboundFilename', style: 'link' },
-        { key: 'outboundFilename', label: 'Vendor File', id: 'outboundFilename', style: 'link' },
-        { key: 'outboundFilesize', label: 'Outbound File Size', id: 'outboundFilesize', style: 'text' },
-        { key: 'billingCount', label: 'Billing Unit Count', id: 'billingCount', style: 'text' },
-        { key: 'totalRecords', label: 'Total Records', id: 'totalRecords', style: 'text' },
-        { key: 'extractType', label: 'Feed', id: 'extractType', style: 'text' },
-        { key: 'extractVersion', label: 'Version', id: 'extractVersion', style: 'text' },
+        { key: 'datetime', label: 'Delivered On', style: 'text' },
+        { key: 'planSponsor', label: 'Plan Sponsor', style: 'text' },
+        { key: 'vendorId', label: 'Vendor', style: 'text' },
+        { key: 'specId', label: 'Spec', style: 'text' },
+        { key: 'implementation', label: 'Implementation', style: 'text' },
+        { key: 'inboundFilename', label: 'Client File', style: 'link' },
+        { key: 'outboundFilename', label: 'Vendor File', style: 'link' },
+        { key: 'outboundFilesize', label: 'Outbound File Size', style: 'text' },
+        { key: 'billingCount', label: 'Billing Unit Count', style: 'text' },
+        { key: 'totalRecords', label: 'Total Records', style: 'text' },
+        { key: 'extractType', label: 'Feed', style: 'text' },
+        { key: 'extractVersion', label: 'Version', style: 'text' },
       ];
 
-      console.log('Received Transmission Data: ', data);
-
-      const _items = data.wpTransmissions.nodes.map((item) => {
-        const datetime = format(new Date(item.deliveredOn), 'MM/dd/yyyy hh:mm a');
+      const _items = data.workPacketStatuses.map((item) => {
+        console.log('Transmissions item: ', item);
+        // const datetime = format(new Date(item.deliveredOn), 'MM/dd/yyyy hh:mm a');
+        const datetime = format(new Date(item.timestamp), 'MM/dd/yyyy hh:mm a');
 
         return [
           formatField(datetime, 'text', 'datetime', datetime),
@@ -100,21 +96,5 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
       loading: _loading,
     },
     error,
-  };
-};
-
-//
-const useInput = (placeholder) => {};
-
-//
-export const useInputs = () => {
-  const startDate = useInput('Start Date...');
-  const endDate = useInput('End Date...');
-  const localInput = useInputValue('', 'File name, client, ...', '', '');
-
-  return {
-    startDate,
-    endDate,
-    localInput,
   };
 };

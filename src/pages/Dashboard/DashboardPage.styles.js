@@ -19,8 +19,10 @@ export const StyledColumn = styled(LayoutColumn)`
 `;
 
 export const StyledButton = styled(Button)`
-  background: ${({ selected, theme }) => (selected ? theme.colors.themePrimary : theme.colors.neutralPrimary)};
+  background: ${({ selected, theme }) => (selected ? theme.colors.themePrimary : theme.colors.infoBackground)};
   font-weight: ${({ selected, theme }) => (selected ? theme.fontWeights.bold : theme.fontWeights.normal)};
+  /* background: ${({ selected, theme }) => (selected ? 'red' : 'yellow')}; */
+
   border: none;
 `;
 

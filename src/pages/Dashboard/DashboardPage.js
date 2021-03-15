@@ -23,7 +23,12 @@ const _DashboardPage = () => {
 
     return datesOptions.map((option) => (
       <StyledColumn key={`ContainerButton-${option.id}`} noStyle>
-        <StyledButton key={`Button-${option.id}`} selected={option.selected} onClick={() => setDateId(option.id)}>
+        <StyledButton
+          key={`Button-${option.id}`}
+          variant={option.selected ? 'primary' : 'secondary'}
+          selected={option.selected}
+          onClick={() => setDateId(option.id)}
+        >
           {option.name}
         </StyledButton>
       </StyledColumn>

@@ -28,11 +28,19 @@ export const useTable = (data, tableName) => {
         { key: 'total', label: 'Total', id: 'total', style: 'total' },
       ];
 
-      const _items = data.map(({ name, secondaryDescr, count, total }) => {
-        const countAndTotal = `${count}/${total}`;
+      const _items = data.map((item) => {
+        const countAndTotal = `${item.count}/${item.total}`;
+
+        console.log('Item: ', item);
 
         return [
-          formatField(name, 'vendor', name, null, formatField(secondaryDescr, 'specs', secondaryDescr)),
+          formatField(
+            item.name,
+            'vendor',
+            item.name,
+            null,
+            formatField(item.secondaryDescr, 'specs', item.secondaryDescr)
+          ),
           formatField(countAndTotal, 'total', countAndTotal),
         ];
       });
