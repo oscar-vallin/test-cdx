@@ -64,3 +64,9 @@ export const StyledSpecs = styled(Text)`
 export const StyledMenuButton = styled(ButtonAction)`
   color: ${({ theme }) => theme.colors.black};
 `;
+
+export const StyledSublabel = styled.span`
+  /* margin-left: 5px;
+  color: ${({ theme }) => theme.colors.textMuted};
+  font-size: 10px; */
+`;

@@ -64,11 +64,8 @@ const Schedule = ({ id = 'ScheduleContainer', orgSid = 1, dateRange, filter, ...
 
   //
   const handleChangeDate = (_newDate) => {
-    console.log('handleChangeDate: ', _newDate);
     setSelectedDate(_newDate);
   };
-
-  console.log('Schedule, items: ', items);
 
   return (
     <Container>

@@ -10,7 +10,7 @@ import {
   buildColumns,
 } from 'office-ui-fabric-react/lib/DetailsList';
 
-import { StyledText, StyledContainer, StyledCell, StyledSpecs } from './Table.styles';
+import { StyledText, StyledContainer, StyledCell, StyledSpecs, StyledSublabel } from './Table.styles';
 
 import { TableHeader } from '../TableHeader';
 import { FileProgress } from '../../../containers/bars/FileProgress';
@@ -46,33 +46,23 @@ const _buildColumns = (
     column.minWidth = columnData.minWidth ?? 100;
     column.maxWidth = columnData.maxWidth ?? 200;
 
+    if (!columnData.minWidth || !columnData.maxWidth) {
+      switch (column.key) {
+        case 'datetime':
+          column.minWidth = 120;
+          column.maxWidth = 120;
+          break;
+
+        default:
+          break;
+      }
+    }
+
     if (column.key === 'thumbnail') {
       column.iconName = 'Picture';
       column.isIconOnly = true;
-    } else if (column.key === 'datetime') {
-      // column.minWidth = columnData.minWidth ?? 100;
-      // column.maxWidth = columnData.maxWidth ?? 150;
-    } else if (column.key === 'vendor') {
-      // column.minWidth = 150;
-      // column.maxWidth = 150;
     } else if (column.key === 'description') {
       column.isMultiline = true;
-      // column.minWidth = 200;
-    } else if (column.key === 'name') {
-      // column.onRender = (item) => <Link data-selection-invoke>{item.name}</Link>;
-    } else if (column.key === 'extractName') {
-      // column.onRender = (item) => <Link data-selection-invoke>{item.name}</Link>;
-      // column.minWidth = 200;
-    } else if (column.key === 'progress') {
-      // column.onRender = (item) => <Link data-selection-invoke>{item.name}</Link>;
-      console.log('Progress Column');
-
-      // column.minWidth = 80;
-      // column.maxWidth = 80;
-      // column.width = '80px';
-    } else if (column.key === 'clientFile') {
-      // column.minWidth = '300px';
-      // column.maxWidth = '300px';
     } else if (column.key === 'key') {
       column.columnActionsMode = ColumnActionsMode.disabled;
       column.onRender = (item) => (
@@ -80,8 +70,6 @@ const _buildColumns = (
           {item.key}
         </Link>
       );
-      // column.minWidth = 90;
-      // column.maxWidth = 90;
     }
   });
 
@@ -115,6 +103,7 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput }) => 
   const [sortedGroups, setSortedGroups] = useState();
   const [tablecolumns, setColumns] = useState([]);
   const [filterInput, setFilterInput] = useState(searchInput);
+  const [option, setOption] = useState(false);
 
   // * Component Effects
   // Component Did Mount.
@@ -150,8 +139,6 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput }) => 
   // When searchInput param changes
   // -> setFilterInput and filter items changing sortedItems
   useEffect(() => {
-    console.log('Table, useEffect(searchInput): ', searchInput);
-
     if (searchInput) {
       setFilterInput(searchInput);
 
@@ -161,6 +148,11 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput }) => 
       _buildItems();
     }
   }, [searchInput]);
+
+  useEffect(() => {
+    console.log('Option Change', option);
+    setFilterInput(searchInput);
+  }, [option]);
 
   /*
    * Local Functions.
@@ -187,7 +179,6 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput }) => 
     const iItems = items.map((rowItem) => {
       const objItem = {};
       let filterFound = false;
-      console.log('map => rowItem: ', rowItem);
 
       rowItem.forEach((rowColItem) => {
         objItem[rowColItem.columnId] = rowColItem.value;
@@ -229,11 +220,13 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput }) => 
         return <span>{fieldContent}</span>;
 
       case 'link':
-        if (fieldItem?.sublabel) {
+        // console.log('Link, fieldItem: ', fieldItem);
+        // console.log('Link, Option: ', option);
+        if (!!option) {
           return (
             <>
-              <span>{`${fieldContent} `}</span>
-              <Link href={`${fieldItem.text}`}>{fieldItem.sublabel}</Link>
+              <Link href={`${fieldItem.text}`}>{fieldContent}</Link>
+              <StyledSublabel>{`Specs: ${fieldItem.sublabel}`}</StyledSublabel>
             </>
           );
         }
@@ -322,7 +315,8 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput }) => 
 
   //
   const _onShowSpecs = () => {
-    onOption();
+    console.log('Press button Specs');
+    setOption(!option);
   };
 
   const _onRenderTableHeader = () => {

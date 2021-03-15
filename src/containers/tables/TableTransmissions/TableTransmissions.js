@@ -6,10 +6,11 @@ import { Box, Row, Column, Container, RightColumn } from './TableTransmissions.s
 import { useTable, useInputs } from './TableTransmissions.service';
 import { InputText } from '../../../components/inputs/InputText';
 import { InputDateRange } from '../../../components/inputs/InputDateRange';
+import { useTableFilters } from '../../../hooks/useTableFilters';
 
 const TableTransmissions = ({ id = 'TableTransmissions', orgSid = 1, dateRange, filter }) => {
   const { tableProps } = useTable(orgSid, dateRange, filter);
-  const { localInput, startDate, endDate } = useInputs();
+  const { localInput, startDate, endDate } = useTableFilters('Extract Name,  Status, Vendor, etc.');
 
   console.log('TableTransmissions, tableProps: ', tableProps);
   return (
