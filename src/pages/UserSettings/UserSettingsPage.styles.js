@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { Box as LayoutBox } from '../../components/layouts';
 import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
+import { Icon } from '@fluentui/react';
 
 export const StyledBox = styled(LayoutBox)`
   padding: ${({ theme }) => `0 ${theme.spacing.double}`};
@@ -27,4 +28,8 @@ export const StyledChoiceGroup = styled(ChoiceGroup)`
       }
     }
   }
+`;
+
+export const StyledIcon = styled(Icon)`
+  color: ${({ theme, iconName }) => iconName === 'StatusCircleCheckmark' ? theme.colors.success : theme.colors.error };
 `;
