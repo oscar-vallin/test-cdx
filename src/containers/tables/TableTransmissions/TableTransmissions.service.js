@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
-import { useWorkPacketStatusesQuery } from '../../../data/services/graphql';
+import { useWorkPacketStatusesQuery, useWpTransmissionsQuery } from '../../../data/services/graphql';
 import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { useInputValue } from '../../../hooks/useInputValue';
 
@@ -10,7 +10,7 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
   const [columns, setColumns] = useState([]);
   const structure = getTableStructure(TABLE_NAMES.ARCHIVES);
 
-  const { data, loading, error } = useWorkPacketStatusesQuery({
+  const { data, loading, error } = useWpTransmissionsQuery({
     variables: {
       orgSid: argOrgSid,
       dateRange: argDateRange,
@@ -41,10 +41,11 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
         { key: 'extractVersion', label: 'Version', style: 'text' },
       ];
 
-      const _items = data.workPacketStatuses.map((item) => {
+      console.log('data: ', data);
+      const _items = data.wpTransmissions.nodes.map((item) => {
         console.log('Transmissions item: ', item);
         // const datetime = format(new Date(item.deliveredOn), 'MM/dd/yyyy hh:mm a');
-        const datetime = format(new Date(item.timestamp), 'MM/dd/yyyy hh:mm a');
+        const datetime = format(new Date(item.deliveredOn), 'MM/dd/yyyy hh:mm a');
 
         return [
           formatField(datetime, 'text', 'datetime', datetime),

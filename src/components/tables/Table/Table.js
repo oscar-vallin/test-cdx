@@ -10,7 +10,7 @@ import {
   buildColumns,
 } from 'office-ui-fabric-react/lib/DetailsList';
 
-import { StyledText, StyledContainer, StyledCell, StyledSpecs, StyledSublabel } from './Table.styles';
+import { StyledText, StyledContainer, StyledCell, StyledSpecs, StyledSublabel, CellItemRow } from './Table.styles';
 
 import { TableHeader } from '../TableHeader';
 import { FileProgress } from '../../../containers/bars/FileProgress';
@@ -204,6 +204,7 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput }) => 
     const tableType = structure.header.type;
 
     const isTableArchive = tableType === 'archives';
+    const isTableFileStatus = tableType === 'file_status';
 
     const columnData = columns.find((_column) => _column.key === column.key);
 
@@ -222,6 +223,20 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput }) => 
       case 'link':
         // console.log('Link, fieldItem: ', fieldItem);
         // console.log('Link, Option: ', option);
+        console.log('aaa isTableFileStatus: ', tableType, isTableFileStatus);
+        console.log('aaa fieldItem.sublabel: ', fieldItem.sublabel);
+        console.log('aaa fieldItem: ', fieldItem);
+
+        if (isTableFileStatus && fieldItem.child) {
+          console.log('OJJOOOO');
+          return (
+            <CellItemRow>
+              <Link href={`${fieldItem.text}`}>{fieldContent}</Link>
+              {fieldItem.child.value}
+            </CellItemRow>
+          );
+        }
+
         if (!!option) {
           return (
             <>
