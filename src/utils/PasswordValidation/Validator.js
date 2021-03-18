@@ -1,39 +1,54 @@
-import ValidationRulesParser from './Parser';
-
-const getRulesObj = (data) => {
-  const values = Object.values(data);
-  
-  if (values.length === 1) {
-    return Object.values(data).pop().ruleGroup;
+import PasswordValidator from 'password-validator';
+import ValidationMessages from './Messages';
+class PasswordRulesValidator {
+  constructor() {
+    this.validator = new PasswordValidator();
   }
-  
-  return data;
-}
 
-export default class RulesValidator {
-  static parse(data) {
-    const { numberOfCharacteristics, rules } = getRulesObj(data) ;
-    
-    let result = { numberOfCharacteristics };
-    
-    rules.forEach((rule, index) => {
-      if (rule.__typename !== 'PasswordRuleGroup') {
-        result = { ...result, ...ValidationRulesParser.parse(rule) };
-      } else {
-        result[`group${index}`] = PasswordValidator.parse(rule);
-      }
-    });
-    
-    return result;
-  }
-  
-  static _getRuleObj(data) {
-    const values = Object.values(data);
-    
-    if (values.length === 1) {
-      return Object.values(data).pop().ruleGroup;
+  validate(value, rules) {
+    const getRule = (characteristic) => rules.find((rule) => rule.characteristic === characteristic);
+    const contains = (characteristic) => getRule(characteristic) !== undefined;
+    const getCondition = (characteristic) => getRule(characteristic).condition;
+
+    if (contains('min')) {
+      this.validator.is().min(getCondition('min'));
     }
-    
-    return data;
+  
+    if (contains('max')) {
+      this.validator.is().max(getCondition('max'));
+    }
+  
+    if (contains('uppercase')) {
+      this.validator.has().uppercase(getCondition('uppercase'));
+    }
+  
+    if (contains('lowercase')) {
+      this.validator.has().lowercase(getCondition('lowercase'));
+    }
+  
+    if (contains('digits')) {
+      this.validator.has().digits(getCondition('digits'));
+    }
+  
+    if (contains('symbols')) {
+      this.validator.has().symbols(getCondition('symbols'));
+    }
+  
+    if (contains('whitespaces')) {
+      this.validator.has().spaces(getCondition('whitespaces'));
+    }
+
+    return this.validator.validate(value, { list: true });
+  }
+
+  getValidationObj({ characteristic, condition }, validations) {
+    return {
+      characteristic,
+      condition,
+      message: ValidationMessages[characteristic](condition),
+      isValid: validations.find(rule => rule === characteristic) === undefined,
+    };
   }
 }
+
+export default new PasswordRulesValidator();

@@ -1,30 +1,35 @@
+const rules = {
+  minLength: 'min',
+  maxLength: 'max',
+  LOWER_CASE: 'lowercase',
+  UPPER_CASE: 'uppercase',
+  DIGIT: 'digits',
+  SPECIAL: 'symbols',
+}
+
 export default class ValidationRulesParser {
-  static parse(rule) {
+  static parse(rules = []) {
+    return rules
+      .map(ValidationRulesParser.getRuleCharacteristics)
+      .reduce((rules, rule) => [...rules, ...rule], []);
+  }
+
+  static getRuleCharacteristics(rule = {}) {
     switch(rule.__typename) {
-      case 'PasswordStrengthRule':
-        return { strength: rule.requiredStrengthLevel };
       case 'PasswordLengthRule':
-        return { min: rule.minLength, max: rule.maxLength };
+        return [
+          { characteristic: rules.minLength, condition: rule.minLength },
+          { characteristic: rules.maxLength, condition: rule.maxLength },
+        ];
       case 'PasswordCharacterRule':
-        switch(rule.characterType) {
-          case 'UPPER_CASE':
-            return { uppercase: rule.numberOfCharacters };
-          case 'LOWER_CASE':
-            return { lowercase: rule.numberOfCharacters };
-          case 'DIGIT':
-            return { digits: rule.numberOfCharacters };
-          case 'SPECIAL':
-            return { symbols: rule.numberOfCharacters };
-          default:
-            return {};
+        return [
+          {
+            characteristic: rules[rule.characterType],
+            condition: rule.numberOfCharacters
           }
-      case 'PasswordWhitespaceRule':
-        return { spaces: (rule.allowedWhitespace !== 'NONE')
-          ? rule.allowedWhitespace
-          : 0
-        }
-      default: 
-        return {};
+        ]
+      default:
+        return [];
     }
   }
 }

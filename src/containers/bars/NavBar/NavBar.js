@@ -19,7 +19,7 @@ import {
 const NavBar = ({
   id = '__NavBar',
   menuOptionSelected = 'dashboard',
-  onChangePassword
+  onUserSettings
 }) => {
   const renderIcon = (iconName) => {
     return (
@@ -47,7 +47,7 @@ const NavBar = ({
           <StyledRow id={`${id}__Right_Row`} right>
             {renderIcon('Settings')}
             {renderIcon('Help')}
-            <ProfileMenu onChangePassword={onChangePassword}/>
+            <ProfileMenu onUserSettings={onUserSettings}/>
           </StyledRow>
         </StyledColumn>
       </StyledRow>

@@ -1,9 +1,9 @@
 import ValidationMessages from './Messages';
 import ValidationRulesParser from './Parser';
-import RulesValidator from './Validator';
+import PasswordValidator from './Validator';
 
 export {
-  RulesValidator,
+  PasswordValidator,
   ValidationMessages,
   ValidationRulesParser,
 };

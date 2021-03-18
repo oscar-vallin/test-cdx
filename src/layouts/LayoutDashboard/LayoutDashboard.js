@@ -16,7 +16,7 @@ const LayoutDashboard = ({ id = 'LayoutDashboard', menuOptionSelected = 'dashboa
       <BoxStyled id={`${id}__Box`} direction={StyleConstants.DIRECTION_COLUMN} top>
         <NavBar
           menuOptionSelected={menuOptionSelected}
-          onChangePassword={() => history.push(ROUTE_USER_SETTINGS.URL)}
+          onUserSettings={() => history.push(ROUTE_USER_SETTINGS.URL)}
         />
 
         {children}
