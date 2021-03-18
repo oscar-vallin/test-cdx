@@ -5,6 +5,7 @@ const rules = {
   UPPER_CASE: 'uppercase',
   DIGIT: 'digits',
   SPECIAL: 'symbols',
+  allowedWhitespace: 'whitespaces',
 }
 
 export default class ValidationRulesParser {
@@ -27,7 +28,14 @@ export default class ValidationRulesParser {
             characteristic: rules[rule.characterType],
             condition: rule.numberOfCharacters
           }
-        ]
+        ];
+      // case 'PasswordWhitespaceRule':
+      //   return [{
+      //     characteristic: rules.allowedWhitespace,
+      //     condition: rule.allowedWhitespace !== 'NONE'
+      //       ? Number(rule.allowedWhitespace) 
+      //       : 0
+      //   }];
       default:
         return [];
     }

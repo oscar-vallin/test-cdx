@@ -56,13 +56,13 @@ const _UserSettingsPage = () => {
   });
 
   useEffect(async () => {
-    const response = await fetch('/flat-password.json');
+    const response = await fetch('/nested-password.json');
     const { data } = await response.json();
 
     setRules(
       ValidationRulesParser.parse(data.changeOwnPasswordPage2.ruleGroup.rules)
     );
-  }, [])
+  }, []);
 
   useEffect(
     () => setValidations(PasswordValidator.validate(password, rules)),

@@ -35,7 +35,11 @@ class PasswordRulesValidator {
     }
   
     if (contains('whitespaces')) {
-      this.validator.has().spaces(getCondition('whitespaces'));
+      const whitespaces = getCondition('whitespaces');
+
+      (!whitespaces) 
+        ? this.validator.has().not().spaces()  
+        : this.validator.has().spaces();
     }
 
     return this.validator.validate(value, { list: true });

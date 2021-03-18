@@ -5,4 +5,7 @@ export default {
   lowercase: (count = 1) => `Must contain at least ${count} lowercase character(s)`,
   digits: (count = 1) => `Must contain at least ${count} digit(s)`,
   symbols: (count = 1) => `Must contain at least ${count} special character(s)`,
+  whitespaces: (count = 0) => !count
+    ? `Must not contain whitespaces`
+    : `Maximum of ${count} whitespaces`
 }
