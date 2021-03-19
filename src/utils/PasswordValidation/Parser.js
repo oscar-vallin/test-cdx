@@ -1,4 +1,5 @@
 const rules = {
+  requiredStrengthLevel: 'strength',
   minLength: 'min',
   maxLength: 'max',
   LOWER_CASE: 'lowercase',
@@ -7,24 +8,50 @@ const rules = {
   SPECIAL: 'symbols',
   allowedWhitespace: 'whitespaces',
 }
-
 export default class ValidationRulesParser {
-  static parse(rules = []) {
+  static parse(rules = [], level = 0) {
     return rules
-      .map(ValidationRulesParser.getRuleCharacteristics)
+      .map((rule, index) => {
+        if (rule.rules) {
+          return [{
+            title: rule.title,
+            expectation: rule.numberOfCharacteristics,
+            rules: ValidationRulesParser.getRuleCharacteristics(rule, index + 1)
+          }]
+        }
+
+        return ValidationRulesParser.getRuleCharacteristics(rule, level);
+      })
       .reduce((rules, rule) => [...rules, ...rule], []);
   }
 
-  static getRuleCharacteristics(rule = {}) {
+  static getRuleCharacteristics(rule = {}, level) {
     switch(rule.__typename) {
+      case 'PasswordStrengthRule':
+        return [
+          {
+            level,
+            characteristic: rules.requiredStrengthLevel,
+            condition: rule.requiredStrengthLevel
+          }
+        ];
       case 'PasswordLengthRule':
         return [
-          { characteristic: rules.minLength, condition: rule.minLength },
-          { characteristic: rules.maxLength, condition: rule.maxLength },
+          {
+            level,
+            characteristic: rules.minLength,
+            condition: rule.minLength
+          },
+          {
+            level,
+            characteristic: rules.maxLength,
+            condition: rule.maxLength
+          },
         ];
       case 'PasswordCharacterRule':
         return [
           {
+            level,
             characteristic: rules[rule.characterType],
             condition: rule.numberOfCharacters
           }

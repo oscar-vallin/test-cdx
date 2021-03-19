@@ -20,8 +20,62 @@ import { Spacing } from '../../components/spacings/Spacing';
 import { StyledBox, StyledTitle, StyledChoiceGroup, StyledIcon } from './UserSettingsPage.styles';
 import {
   PasswordValidator,
-  ValidationRulesParser,
+  ValidationMessages,
 } from './../../utils/PasswordValidation';
+
+const isArrayOfArrays = arr => arr.filter(item => Array.isArray(item)).length > 0;
+
+const isValid = (rules) => {
+  return PasswordValidator.getValidationStatus({ rules })
+    .reduce((arr, item) => [...arr, ...item], [])
+    .filter(item => !item)
+    .length > 0
+}
+
+const validateRulesets = (value, ruleSets) => {
+  return ruleSets.map(ruleSet => {
+    if (ruleSet.rules) {
+      return validateRulesets(value, ruleSet.rules).filter(validation => validation.length > 0);
+    }
+
+    return PasswordValidator.validate(value, [ruleSet]);
+  })
+}
+const validateRulesArr = (value, data) => data.map(ruleSet => {
+  const validationResults = validateRulesets(value, ruleSet.rules);
+
+  
+  const rootValidations = Array.from(new Set(validationResults
+      .filter(validation => !isArrayOfArrays(validation))
+      .reduce((rules, rule) => [...rules, ...rule], [])));
+  
+  const ruleObj = {
+    ...ruleSet,
+    validations: rootValidations,
+    rules: ruleSet.rules.map((rule, index) => {
+      if (rule.rules) {
+        return validateRulesArr(value, [rule]);
+      }
+      
+      const validations = isArrayOfArrays(validationResults[index])
+        ? validationResults[index].reduce((rules, rule) => [...rules, ...rule], [])
+        : validationResults[index];
+
+      return {
+        ...rule,
+        ...(rule.rules)
+          ? {
+            validations: Array.from(new Set(validations)),
+            isValid: isValid(rule.rules),
+          }
+          : {},
+        message: ValidationMessages[rule.characteristic](rule.condition),
+      };
+    }),
+  }
+  
+  return { ...ruleObj, isValid: isValid([ruleObj]) };
+});
 
 const _UserSettingsPage = () => {
   const [rules, setRules] = useState([]);
@@ -31,41 +85,92 @@ const _UserSettingsPage = () => {
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');
 
-  const onRenderCell = useCallback((item, index) => {
+  const onRenderCell = (item, index) => {
     return (
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        { 
-          item.isValid
-            ? <StyledIcon iconName="StatusCircleCheckmark" />
-            : <StyledIcon iconName="StatusCircleErrorX" />
+      <div style={{marginLeft: `${item.level * 15}px`}} key={index}>
+        {item.title && <h5 style={{ margin: '15px 0 5px' }}>{item.title}</h5>}
+        
+        {
+          item.rules
+            ? item.rules.map((rule, ruleIndex) => {
+                if(Array.isArray(rule)) {
+                  return rule.map(onRenderCell);
+                } else {
+                  return (
+                    <div style={{ display: 'flex', alignItems: 'center' }} key={ruleIndex}>
+                      { 
+                        rule.isValid
+                          ? <StyledIcon iconName="StatusCircleCheckmark" />
+                          : <StyledIcon iconName="StatusCircleErrorX" />
+                      }
+                
+                      {rule.message}
+                    </div>
+                  )
+                }
+              })
+            : (
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                { 
+                  item.isValid
+                    ? <StyledIcon iconName="StatusCircleCheckmark" />
+                    : <StyledIcon iconName="StatusCircleErrorX" />
+                }
+          
+                {item.message}
+              </div>
+            )
         }
-  
-        {item.message}
       </div>
     );
-  }, []);
-
-  const getFieldMessages = callback => value => new Promise((resolve) => {
-    if (!value) {
-      resolve('Required field');
-    }
-
-    if (callback) {
-      resolve(callback(value));
-    }
-  });
+  };
 
   useEffect(async () => {
     const response = await fetch('/nested-password.json');
     const { data } = await response.json();
 
     setRules(
-      ValidationRulesParser.parse(data.changeOwnPasswordPage2.ruleGroup.rules)
+      [
+        {
+          title: 'General rules',
+          expectation: 4,
+          level: 0,
+          rules: [
+            { characteristic: "digits", condition: 1 },
+            {
+              title: 'Size',
+              expectation: 2,
+              level: 1,
+              rules: [
+                { characteristic: "min", condition: 8 },
+                { characteristic: "max", condition: 120 },
+                {
+                  title: 'Cases',
+                  expectation: 2,
+                  level: 2,
+                  rules: [
+                    { characteristic: "uppercase", condition: 1 },
+                    { characteristic: "lowercase", condition: 2 },
+                  ]
+                }
+              ]
+            },
+            {
+              title: 'Characters',
+              expectation: 1,
+              level: 1,
+              rules: [
+                { characteristic: "symbols", condition: 1 }
+              ]
+            },
+          ]
+        }
+      ]
     );
   }, []);
 
   useEffect(
-    () => setValidations(PasswordValidator.validate(password, rules)),
+    () => setValidations(validateRulesArr(password, rules)),
     [password, rules]
   );
 
@@ -92,7 +197,6 @@ const _UserSettingsPage = () => {
                         value={currentPassword}
                         canRevealPassword
                         onChange={({ target }) => setCurrentPassword(target.value)}
-                        // onGetErrorMessage={getFieldMessages()}
                       />
 
                       <InputText
@@ -102,11 +206,6 @@ const _UserSettingsPage = () => {
                         value={password}
                         canRevealPassword
                         onChange={({ target }) => setPassword(target.value)}
-                        // onGetErrorMessage={getFieldMessages(
-                        //   value => validations.length > 0
-                        //     ? "Please fulfill the password requirements"
-                        //     : null 
-                        // )}
                       />
 
                       <InputText
@@ -116,9 +215,6 @@ const _UserSettingsPage = () => {
                         canRevealPassword
                         value={passwordConfirmation}
                         onChange={({ target }) => setPasswordConfirmation(target.value)}
-                        onGetErrorMessage={getFieldMessages(
-                          value => password !== value ? "Passwords don't match" : null 
-                        )}
                       />
                     </Column>
                   </Row>
@@ -160,7 +256,7 @@ const _UserSettingsPage = () => {
  
                   <Spacing margin={{ top: "normal" }}>
                     <List
-                      items={rules.map((rule) => PasswordValidator.getValidationObj(rule, validations))}
+                      items={validations}
                       onRenderCell={onRenderCell}
                     />
                   </Spacing>
