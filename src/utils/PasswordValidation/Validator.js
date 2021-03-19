@@ -62,8 +62,8 @@ class PasswordRulesValidator {
         return PasswordRulesValidator.getValidationStatus(ruleSet)
           .reduce((validations, isValid) => [...validations, isValid], []);
       }
-
-      return (ruleSet.expectation || ruleSet.expectation > 0)
+      
+      return (ruleSet.expectation && ruleSet.expectation > 0)
         ? (ruleSet.rules.length - ruleSet.expectation) >= data.validations.length
         : data.validations.length !== 0
     });

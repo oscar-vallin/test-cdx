@@ -13,16 +13,17 @@ export default class ValidationRulesParser {
     return rules
       .map((rule, index) => {
         if (rule.rules) {
-          return [{
+          return {
+            level,
             title: rule.title,
             expectation: rule.numberOfCharacteristics,
-            rules: ValidationRulesParser.getRuleCharacteristics(rule, index + 1)
-          }]
+            rules: ValidationRulesParser.parse(rule.rules, index + 1),
+          }
         }
-
+        
         return ValidationRulesParser.getRuleCharacteristics(rule, level);
       })
-      .reduce((rules, rule) => [...rules, ...rule], []);
+      .reduce((rules, rule) => [...rules, rule], []);
   }
 
   static getRuleCharacteristics(rule = {}, level) {

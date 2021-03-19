@@ -21,6 +21,7 @@ import { StyledBox, StyledTitle, StyledChoiceGroup, StyledIcon } from './UserSet
 import {
   PasswordValidator,
   ValidationMessages,
+  ValidationRulesParser,
 } from './../../utils/PasswordValidation';
 
 const isArrayOfArrays = arr => arr.filter(item => Array.isArray(item)).length > 0;
@@ -38,13 +39,12 @@ const validateRulesets = (value, ruleSets) => {
       return validateRulesets(value, ruleSet.rules).filter(validation => validation.length > 0);
     }
 
-    return PasswordValidator.validate(value, [ruleSet]);
+    return PasswordValidator.validate(value, ruleSet);
   })
 }
 const validateRulesArr = (value, data) => data.map(ruleSet => {
   const validationResults = validateRulesets(value, ruleSet.rules);
 
-  
   const rootValidations = Array.from(new Set(validationResults
       .filter(validation => !isArrayOfArrays(validation))
       .reduce((rules, rule) => [...rules, ...rule], [])));
@@ -53,8 +53,10 @@ const validateRulesArr = (value, data) => data.map(ruleSet => {
     ...ruleSet,
     validations: rootValidations,
     rules: ruleSet.rules.map((rule, index) => {
+      const item = Array.isArray(rule) ? rule[0] : rule;
+
       if (rule.rules) {
-        return validateRulesArr(value, [rule]);
+        return validateRulesArr(value, [item]);
       }
       
       const validations = isArrayOfArrays(validationResults[index])
@@ -62,18 +64,18 @@ const validateRulesArr = (value, data) => data.map(ruleSet => {
         : validationResults[index];
 
       return {
-        ...rule,
-        ...(rule.rules)
+        ...item,
+        ...(item.rules)
           ? {
             validations: Array.from(new Set(validations)),
-            isValid: isValid(rule.rules),
+            isValid: isValid(item.rules),
           }
           : {},
-        message: ValidationMessages[rule.characteristic](rule.condition),
+          message: ValidationMessages[item.characteristic](item.condition),
       };
     }),
   }
-  
+
   return { ...ruleObj, isValid: isValid([ruleObj]) };
 });
 
@@ -88,7 +90,9 @@ const _UserSettingsPage = () => {
   const onRenderCell = (item, index) => {
     return (
       <div style={{marginLeft: `${item.level * 15}px`}} key={index}>
-        {item.title && <h5 style={{ margin: '15px 0 5px' }}>{item.title}</h5>}
+        {item.title && <h5 style={{ margin: '15px 0 5px' }}>
+          {item.title}
+        </h5>}
         
         {
           item.rules
@@ -99,7 +103,7 @@ const _UserSettingsPage = () => {
                   return (
                     <div style={{ display: 'flex', alignItems: 'center' }} key={ruleIndex}>
                       { 
-                        rule.isValid
+                        !item.validations.includes(rule.characteristic)
                           ? <StyledIcon iconName="StatusCircleCheckmark" />
                           : <StyledIcon iconName="StatusCircleErrorX" />
                       }
@@ -130,42 +134,7 @@ const _UserSettingsPage = () => {
     const { data } = await response.json();
 
     setRules(
-      [
-        {
-          title: 'General rules',
-          expectation: 4,
-          level: 0,
-          rules: [
-            { characteristic: "digits", condition: 1 },
-            {
-              title: 'Size',
-              expectation: 2,
-              level: 1,
-              rules: [
-                { characteristic: "min", condition: 8 },
-                { characteristic: "max", condition: 120 },
-                {
-                  title: 'Cases',
-                  expectation: 2,
-                  level: 2,
-                  rules: [
-                    { characteristic: "uppercase", condition: 1 },
-                    { characteristic: "lowercase", condition: 2 },
-                  ]
-                }
-              ]
-            },
-            {
-              title: 'Characters',
-              expectation: 1,
-              level: 1,
-              rules: [
-                { characteristic: "symbols", condition: 1 }
-              ]
-            },
-          ]
-        }
-      ]
+      ValidationRulesParser.parse([data.changeOwnPasswordPage2.ruleGroup])
     );
   }, []);
 
