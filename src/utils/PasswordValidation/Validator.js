@@ -1,15 +1,4 @@
 import PasswordValidator from 'password-validator';
-import ValidationMessages from './Messages';
-
-const validateRulesets = (value, ruleSets) => {
-  return ruleSets.map(ruleSet => {
-    if (ruleSet.rules) {
-      return validateRulesets(value, ruleSet.rules).filter(validation => validation.length > 0);
-    }
-
-    return Validator.validate(value, [ruleSet]);
-  })
-}
 
 class PasswordRulesValidator {
   /* Validates a value against a set of rules */

@@ -36,7 +36,9 @@ const isValid = (rules) => {
 const validateRulesets = (value, ruleSets) => {
   return ruleSets.map(ruleSet => {
     if (ruleSet.rules) {
-      return validateRulesets(value, ruleSet.rules).filter(validation => validation.length > 0);
+      return validateRulesets(value, ruleSet.rules)
+        .filter(validation => validation.length > 0)
+        .reduce((arr, item) => [...arr, ...item || []], []);
     }
 
     return PasswordValidator.validate(value, ruleSet);
