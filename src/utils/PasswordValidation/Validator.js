@@ -58,13 +58,15 @@ class PasswordRulesValidator {
   /* Checks if a set of validations fulfills its required set of characteristics */
   static getValidationStatus(data = {}) {
     return data.rules.map(ruleSet => {
-      if(ruleSet.rules) {
-        return PasswordRulesValidator.getValidationStatus(ruleSet)
+      const item = Array.isArray(ruleSet) ? ruleSet[0] : ruleSet;
+
+      if(item.rules) {
+        return PasswordRulesValidator.getValidationStatus(item)
           .reduce((validations, isValid) => [...validations, isValid], []);
       }
-      
-      return (ruleSet.expectation && ruleSet.expectation > 0)
-        ? (ruleSet.rules.length - ruleSet.expectation) >= data.validations.length
+
+      return (data.expectation && data.expectation > 0)
+        ? (data.rules.length - data.expectation) >= data.validations.length
         : data.validations.length !== 0
     });
   }

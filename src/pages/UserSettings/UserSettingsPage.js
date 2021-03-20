@@ -30,7 +30,7 @@ const isValid = (rules) => {
   return PasswordValidator.getValidationStatus({ rules })
     .reduce((arr, item) => [...arr, ...item], [])
     .filter(item => !item)
-    .length > 0
+    .length === 0;
 }
 
 const validateRulesets = (value, ruleSets) => {
@@ -91,7 +91,11 @@ const _UserSettingsPage = () => {
     return (
       <div style={{marginLeft: `${item.level * 15}px`}} key={index}>
         {item.title && <h5 style={{ margin: '15px 0 5px' }}>
-          {item.title}
+          {item.isValid
+            ? <StyledIcon iconName="StatusCircleCheckmark" />
+            : <StyledIcon iconName="StatusCircleErrorX" />}
+
+          {item.title} (Minimum: {item.expectation})
         </h5>}
         
         {
