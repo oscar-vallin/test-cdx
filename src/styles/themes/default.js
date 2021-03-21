@@ -19,8 +19,6 @@ export default {
   neutralPrimaryAlt: '#3b3a39',
   neutralPrimary: '#323130',
   neutralDark: '#201f1e',
-  black: '#000000',
-  white: '#ffffff',
   black: '#121829',
   white: '#fefefe',
   navbar: '#0078D4',

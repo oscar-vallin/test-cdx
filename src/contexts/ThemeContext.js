@@ -8,20 +8,14 @@ import { ThemeProvider } from 'styled-components';
 import { defaultTheme, darkTheme } from '../styles/themes';
 import { theme as styledComponentsTheme } from '../styles/themes/theme';
 
-//
 export const ThemeContext = React.createContext(() => {
-  // Initialization
 });
 
 export const ThemeContextProvider = ({ children }) => {
-  // LocalState
   const [isContextLoading, setLoading] = React.useState(true);
-  const [themeName, setThemeName] = React.useState('light');
-
-  const [currentTheme, setTheme] = React.useState(defaultTheme);
+  const [currentTheme, setTheme] = React.useState(styledComponentsTheme);
   const [styledTheme, setStyledTheme] = React.useState(styledComponentsTheme);
 
-  // Component Did Mount
   React.useEffect(() => {
     const localFunction = async () => {
       setLoading(false);
@@ -32,27 +26,21 @@ export const ThemeContextProvider = ({ children }) => {
     return () => null;
   }, []);
 
-  // useEffects Variables.
-
-  // Local Functions shared in Context.
-
-  const changeTheme = () => {
-    if (themeName === 'light') {
-      setThemeName('dark');
-      setTheme(darkTheme);
-      setStyledTheme({ ...styledTheme, color: darkTheme });
-      return;
+  const changeTheme = (name, theme = {}) => {
+    const themes = {
+      light: defaultTheme,
+      dark: darkTheme,
     }
 
-    setThemeName('light');
-    setTheme(defaultTheme);
-    setStyledTheme(styledTheme);
+    const themeColors = (name !== 'custom') ? themes[name] : theme; 
+
+    setTheme(themeColors);
+    setStyledTheme({ ...styledTheme, colors: themeColors });
   };
 
   // eslint-disable-next-line
   const values = React.useMemo(() => ({ isContextLoading, changeTheme }), [isContextLoading]);
 
-  // Finally, return the interface that we want to expose to our other components
   return (
     <Customizer {...loadTheme({ palette: currentTheme })}>
       <ThemeProvider theme={styledTheme}>

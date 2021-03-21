@@ -24,7 +24,7 @@ export const StyledColumn = styled(LayoutColumn)`
 export const StyledMenuButton = styled(ButtonAction)`
   /* text-decoration: ${({ selected }) => (selected ? 'underline' : 'none')}; */
   font-weight: ${({ theme, selected }) => (selected ? theme.fontWeights.bold : theme.fontWeights.normal)};
-  color: ${({ theme }) => theme.colors.white};
+  color: #fff;
   /* text-underline-position: under; */
   border-bottom: white;
   border-bottom-width: 2px;

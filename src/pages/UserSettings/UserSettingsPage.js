@@ -3,26 +3,39 @@ import React, { useState, useEffect, useCallback, Fragment } from 'react';
 import { ROUTE_USER_SETTINGS } from '../../data/constants/RouteConstants';
 import { 
   List,
-  Icon,
+  ChoiceGroup,
 } from '@fluentui/react';
+
+import { useThemeContext } from '../../contexts/ThemeContext';
 
 import { LayoutDashboard } from '../../layouts/LayoutDashboard';
 import { PageHeader } from '../../containers/headers/PageHeader';
 import { Breadcrumb } from '../../components/breadcrumbs/Breadcrumb';
 import { Button } from '../../components/buttons/Button';
 import { Badge } from '../../components/badges/Badge';
-import { Card, CardSection } from '../../components/cards';
+import { CardSection } from '../../components/cards';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { InputText } from '../../components/inputs/InputText'
 import { Row, Column } from '../../components/layouts';
 import { Spacing } from '../../components/spacings/Spacing';
 
-import { StyledBox, StyledTitle, StyledChoiceGroup, StyledIcon } from './UserSettingsPage.styles';
+import {
+  StyledBox,
+  StyledRow,
+  StyledCard,
+  StyledTitle,
+  StyledIcon,
+  StyledColorPicker,
+  StyledChoiceGroup,
+  StyledPreview,
+} from './UserSettingsPage.styles';
+
 import {
   PasswordValidator,
   ValidationMessages,
   ValidationRulesParser,
 } from './../../utils/PasswordValidation';
+import { Card } from '@uifabric/react-cards';
 
 const isArrayOfArrays = arr => arr.filter(item => Array.isArray(item)).length > 0;
 
@@ -83,6 +96,44 @@ const validateRulesArr = (value, data) => data.map(ruleSet => {
 
 const _UserSettingsPage = () => {
   const [rules, setRules] = useState([]);
+  const [theme, setTheme] = useState('custom');
+  const [colors, setColors] = useState({
+    themePrimary: '#0078d4',
+    themeLighterAlt: '#eff6fc',
+    themeLighter: '#deecf9',
+    themeLight: '#c7e0f4',
+    themeTertiary: '#71afe5',
+    themeSecondary: '#2b88d8',
+    themeDarkAlt: '#106ebe',
+    themeDark: '#005a9e',
+    themeDarker: '#004578',
+    neutralLighterAlt: '#faf9f8',
+    neutralLighter: '#f3f2f1',
+    neutralLight: '#edebe9',
+    neutralQuaternaryAlt: '#e1dfdd',
+    neutralQuaternary: '#d0d0d0',
+    neutralTertiaryAlt: '#c8c6c4',
+    neutralTertiary: '#a19f9d',
+    neutralSecondary: '#605e5c',
+    neutralPrimaryAlt: '#3b3a39',
+    neutralPrimary: '#323130',
+    neutralDark: '#201f1e',
+    black: '#000000',
+    white: '#ffffff',
+  });
+  const [activeColor, setActiveColor] = useState({
+    key: 'themePrimary',
+    color: colors.themePrimary,
+  });
+
+  const onColorChange = useCallback((evt, { hex }) => {
+    setColors({ ...colors, [activeColor.key]: `#${hex}` });
+    setActiveColor({ ...activeColor, color: `#${hex}` });
+
+    changeTheme('custom', { ...colors, [activeColor.key]: `#${hex}` })
+  });
+
+  const { changeTheme } = useThemeContext();
 
   const [validations, setValidations] = useState([]);
   const [password, setPassword] = useState('');
@@ -97,7 +148,7 @@ const _UserSettingsPage = () => {
             ? <StyledIcon iconName="StatusCircleCheckmark" />
             : <StyledIcon iconName="StatusCircleErrorX" />}
 
-          {item.title} (Minimum: {item.expectation})
+          {item.title} {/*(Minimum: {item.expectation})*/}
         </h5>}
         
         {
@@ -156,9 +207,9 @@ const _UserSettingsPage = () => {
       </PageHeader>
 
       <StyledBox>
-        <Row>
+        <StyledRow>
           <Column lg="6">
-            <Card elevation="smallest">
+            <StyledCard elevation="smallest">
               <Spacing padding={{ left: 'small' }}>
                 <CardSection>
                   <StyledTitle>Change password</StyledTitle>
@@ -212,19 +263,85 @@ const _UserSettingsPage = () => {
 
                   <StyledChoiceGroup
                     label="Choose a theme"
-                    defaultSelectedKey="light"
+                    defaultSelectedKey={theme}
                     options={[
                       { key: 'light', text: 'Light' },
                       { key: 'dark', text: 'Dark' },
                       { key: 'custom', text: 'Custom' },
                     ]}
+                    onChange={(evt, { key }) => {
+                      setTheme(key);
+                      changeTheme(key, key === 'custom' ? colors : {});
+                    }}
                   />
                 </CardSection>
+                
+                {theme === 'custom' && (
+                  <CardSection>
+                    <Row>
+                      <Column lg="8">
+                        <ChoiceGroup
+                          label="Colors"
+                          defaultSelectedKey={activeColor.key}
+                          asd="123"
+                          options={
+                            Object
+                              .keys(colors)
+                              .map(key => ({
+                                key,
+                                label: key,
+                                onRenderField: (props, render) => {
+                                  const key = props.id.split('-').pop();
+
+                                  return (
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                      {render(props)}
+
+                                      <div style={{
+                                        height: 30,
+                                        width: 30,
+                                        margin: `0 15px`,
+                                        border: '1px solid #d0d0d0',
+                                        background: colors[key]
+                                      }} />
+
+                                      <span>{props.label}</span>
+                                    </div>
+                                  )
+                                }
+                              }))
+                          }
+                          onChange={(evt, { key }) => setActiveColor({ ...activeColor, key })}
+                        />
+                      </Column>
+                      <Column lg="4" right={true}>
+                        <StyledColorPicker
+                          showPreview={false}
+                          alphaType={'none'}
+                          color={activeColor.color}
+                          onChange={onColorChange}
+                        />
+                      </Column>
+                    </Row>
+
+                    <Row>
+                      <Column>
+                        <Spacing margin={{ top: "double" }}>
+                          <Button
+                            variant="primary"
+                            text="Save theme"
+                            onClick={() => alert('123')}
+                          />
+                        </Spacing>
+                      </Column>
+                    </Row>
+                  </CardSection>
+                )}
               </Spacing>
-            </Card>
+            </StyledCard>
           </Column>
           <Column lg="6">
-            <Card elevation="smallest">
+            <StyledCard elevation="smallest">
               <Spacing padding={{ left: "small" }}>
                 <CardSection>
                   <StyledTitle>Password rules</StyledTitle>
@@ -237,9 +354,9 @@ const _UserSettingsPage = () => {
                   </Spacing>
                 </CardSection>
               </Spacing>
-            </Card>
+            </StyledCard>
           </Column>
-        </Row>
+        </StyledRow>
       </StyledBox>
     </LayoutDashboard>
   );

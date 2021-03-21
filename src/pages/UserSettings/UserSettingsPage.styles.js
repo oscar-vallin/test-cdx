@@ -1,12 +1,22 @@
 import styled from 'styled-components';
 import { Box as LayoutBox } from '../../components/layouts';
 import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
-import { Icon } from '@fluentui/react';
+import { Icon, ColorPicker } from '@fluentui/react';
+import { Row } from '../../components/layouts';
+import { Card } from '../../components/cards';
 
 export const StyledBox = styled(LayoutBox)`
   padding: ${({ theme }) => `0 ${theme.spacing.double}`};
   transform: ${({ theme }) => `translateY(-${theme.spacing.triple})`};
 `;
+
+export const StyledRow = styled(Row)`
+  align-items: stretch;
+`
+
+export const StyledCard = styled(Card)`
+  height: 100%;
+`
 
 export const StyledTitle = styled.h3`
   margin: ${({ theme }) => `0 0 ${theme.spacing.normal}`};
@@ -33,3 +43,29 @@ export const StyledChoiceGroup = styled(ChoiceGroup)`
 export const StyledIcon = styled(Icon)`
   color: ${({ theme, iconName }) => iconName === 'StatusCircleCheckmark' ? theme.colors.success : theme.colors.error };
 `;
+
+export const StyledColorPicker = styled(ColorPicker)`
+  max-width: 100%;
+
+  .ms-ColorPicker-panel {
+    padding: 0;
+  }
+`
+
+export const StyledPreview = styled.div`
+  border: 1px solid ${({ theme }) => theme.colors.neutralTertiary};
+  margin: ${({ theme }) => theme.spacing.normal} 0;
+
+  .preview__header {
+    background: ${({ colors }) => colors.themePrimary};
+    color: #fff;
+    font-weight: 700;
+    padding: 10px;
+  }
+
+  .preview__body {
+    .Card {
+      background: ${({ colors }) => colors.themePrimary};
+    }
+  }
+`

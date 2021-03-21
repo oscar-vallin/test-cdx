@@ -7,7 +7,7 @@ import { ButtonIcon } from '../../../components/buttons/ButtonIcon';
 import { Text } from '../../../components/typography/Text';
 
 export const StyledBox = styled(Box)`
-  background: ${({ theme }) => theme.colors.navbar};
+  background: ${({ theme }) => theme.colors.themePrimary};
   height: 48px;
 `;
 
@@ -29,7 +29,7 @@ export const StyledColumn = styled(LayoutColumn)`
 
 export const StyledTitle = styled(Text)`
   font: ${({ theme }) => theme.fontStyles.headerTitle};
-  color: ${({ theme }) => theme.colors.white};
+  color: #fff;
   max-width: 20vw;
 `;
 
@@ -46,7 +46,7 @@ export const StyledButtonProfile = styled(ButtonAction)`
 export const StyledButtonIcon = styled(ButtonIcon)`
   && {
     border: none !important;
-    color: #fff !important;
+    color: ${({ theme }) => theme.colors.white};
     padding: 0px 8px;
     min-width: 0px;
   }
