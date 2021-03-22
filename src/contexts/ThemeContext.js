@@ -32,10 +32,15 @@ export const ThemeContextProvider = ({ children }) => {
       dark: darkTheme,
     }
 
-    const themeColors = (name !== 'custom') ? themes[name] : theme; 
+    const themeColors = (name !== 'custom')
+      ? themes[name]
+      : { ...styledTheme, ...theme }; 
 
     setTheme(themeColors);
-    setStyledTheme({ ...styledTheme, colors: themeColors });
+    setStyledTheme({
+      ...styledTheme,
+      colors: { ...styledTheme.colors, ...themeColors }
+    });
   };
 
   // eslint-disable-next-line

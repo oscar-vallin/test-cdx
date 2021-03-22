@@ -41,7 +41,7 @@ export const StyledChoiceGroup = styled(ChoiceGroup)`
 `;
 
 export const StyledIcon = styled(Icon)`
-  color: ${({ theme, iconName }) => iconName === 'StatusCircleCheckmark' ? theme.colors.success : theme.colors.error };
+  color: ${({ theme, iconName }) => iconName === 'StatusCircleCheckmark' ? theme.colors.custom.success : theme.colors.custom.error };
 `;
 
 export const StyledColorPicker = styled(ColorPicker)`

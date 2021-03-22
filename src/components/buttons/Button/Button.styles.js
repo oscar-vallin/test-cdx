@@ -2,13 +2,12 @@ import styled from 'styled-components';
 import { PrimaryButton } from '@fluentui/react';
 
 const getVariant = (theme, variant) => {
-  console.log(theme, variant);
   const VARIANTS = {
     primary: { background: theme.colors.themePrimary, color: '#fff' },
     secondary: { background: theme.colors.white, color: theme.colors.themePrimary },
     light: { background: 'transparent', color: theme.colors.themePrimary },
-    danger: { background: 'transparent', color: theme.colors.error },
-    error: { background: theme.colors.severe, color: theme.colors.white },
+    danger: { background: 'transparent', color: theme.colors.custom.error },
+    error: { background: theme.colors.custom.severeError, color: theme.colors.white },
   };
 
   return VARIANTS[variant];
