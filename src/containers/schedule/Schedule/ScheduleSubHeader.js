@@ -35,26 +35,50 @@ import {
   WeekViewDayName,
   RowWeek,
   DayViewContainer,
+  WeekHourSpace,
 } from './ScheduleSubHeader.styles';
 import { isCurrentViewDay, isCurrentViewWeek } from './helpers';
 
 export const ScheduleSubHeader = ({ id, currentView, currentDate, selectedDate }) => {
   let _currentDate = startOfWeek(currentDate);
+  const [dates, setDates] = React.useState({
+    currentMonth: currentDate,
+    selectedDate: currentDate,
+    monthStart: startOfMonth(currentDate),
+    monthEnd: endOfMonth(currentDate),
+    startDate: startOfWeek(startOfMonth(currentDate)),
+    endDate: endOfWeek(endOfMonth(currentDate)),
+  });
+
   // let _currentDay = currentDate;
 
+  // React.useEffect(() => {
+  //   _currentDate = startOfWeek(selectedDate);
+  // }, [selectedDate]);
+
   React.useEffect(() => {
-    _currentDate = startOfWeek(selectedDate);
-    console.log('New Current Date: selectedDate: ', selectedDate);
-    console.log('New Current Date: _currentDate: ', _currentDate);
+    console.log('change the SelectedDate: ', selectedDate);
+    if (!!selectedDate && selectedDate !== dates.selectedDate) {
+      const _monthStart = startOfWeek(selectedDate);
+      const _monthEnd = endOfWeek(selectedDate);
+      const _newDate = {
+        currentMonth: selectedDate,
+        selectedDate: selectedDate,
+        monthStart: _monthStart,
+        monthEnd: _monthEnd,
+        startDate: startOfWeek(_monthStart),
+        endDate: endOfWeek(_monthEnd),
+      };
+
+      setDates(_newDate);
+    }
   }, [selectedDate]);
 
   const _renderSubHeader = () => {
     const dateFormat = 'EEEE';
     const days = [];
+    let day = dates.startDate;
     let _currentDay = selectedDate ?? currentDate;
-
-    console.log('_renderSubHeader, currentDate: ', currentDate);
-    console.log('_renderSubHeader, selectedDate: ', selectedDate);
 
     if (isCurrentViewDay(currentView)) {
       const isCurrentDate = !!isSameDay(_currentDay, currentDate);
@@ -74,27 +98,33 @@ export const ScheduleSubHeader = ({ id, currentView, currentDate, selectedDate }
       );
     }
 
+    if (isCurrentViewWeek(currentView)) {
+      days.push(<WeekHourSpace />);
+    }
+
     for (let i = 0; i < 7; i++) {
+      const cloneDay = day;
+
       if (isCurrentViewWeek(currentView)) {
-        const isCurrentDate = !!isSameDay(_currentDate, currentDate);
-        const isCurrentMonth = !!isSameMonth(_currentDate, currentDate);
-        const isStartMonth = !!isSameDay(_currentDate, startOfMonth(_currentDate));
-        const isEndMonth = !!isSameDay(_currentDate, endOfMonth(_currentDate));
+        const isCurrentDate = !!isSameDay(day, currentDate);
+        // isSameMonth(day, dates.monthStart);
+        const isCurrentMonth = !!isSameMonth(day, currentDate);
+        const isStartMonth = !!isSameDay(day, startOfMonth(_currentDate));
+        const isEndMonth = !!isSameDay(day, endOfMonth(dates.selectedDate));
 
         days.push(
           <WeekViewContainer key={i} isSameDay={isCurrentDate} isSameMonth={isCurrentMonth}>
             <WeekViewNumber>
-              {isCurrentDate || isStartMonth || isEndMonth ? format(_currentDate, 'MMM d') : format(_currentDate, 'd')}
+              {isCurrentDate || isStartMonth || isEndMonth ? format(day, 'MMM d') : format(day, 'd')}
             </WeekViewNumber>
-            <WeekViewDayName isSameMonth={isCurrentMonth}>{format(_currentDate, 'EEE')}</WeekViewDayName>
+            <WeekViewDayName isSameMonth={isCurrentMonth}>{format(day, 'EEE')}</WeekViewDayName>
           </WeekViewContainer>
         );
       } else {
-        console.log('_currentDate, i:', i, _currentDate);
-        days.push(<DayOfWeek key={i}>{format(_currentDate, dateFormat)}</DayOfWeek>);
+        days.push(<DayOfWeek key={i}>{format(day, dateFormat)}</DayOfWeek>);
       }
 
-      _currentDate = addDays(_currentDate, 1);
+      day = addDays(day, 1);
     }
 
     if (isCurrentViewWeek(currentView)) {

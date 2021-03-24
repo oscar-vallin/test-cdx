@@ -55,6 +55,12 @@ export const HeaderButtonView = styled(Button)`
   }
 `;
 
+export const HeaderButtonTitle = styled(Button)`
+  /* background-color: ${({ selected }) => (selected ? 'gray' : 'white')}; */
+  background: transparent;
+  border: none;
+`;
+
 export const ScheduleColumn = styled.img`
   /* font-family: 'Material Icons', serif; */
   font-style: normal;
@@ -266,6 +272,11 @@ export const RowHeader = styled(LayoutBase)`
   margin: 1em;
 `;
 
+export const FillerHours = styled.div`
+  height: 100%;
+  width: 50px;
+`;
+
 export const RowHeaderItem = styled(LayoutBase)`
   flex-direction: row;
   justify-content: space-between;
@@ -280,6 +291,7 @@ export const MonthYearContainer = styled(LayoutBase)`
   flex-direction: row;
   height: 40px;
   align-items: center;
+  position: relative;
 `;
 
 export const HeaderTextLarge = styled.span`

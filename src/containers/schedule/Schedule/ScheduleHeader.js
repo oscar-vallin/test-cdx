@@ -36,11 +36,15 @@ import {
   StyledButtonAction,
   UpDownContainer,
   MonthYearContainer,
+  HeaderButtonTitle,
+  FillerHours,
 } from './ScheduleHeader.styles';
 
 import { ButtonAction } from '../../../components/buttons/ButtonAction';
 import { isCurrentViewDay, isCurrentViewMonth, isCurrentViewWeek } from './helpers';
 import { addWeeks } from '@fluentui/react';
+import { DateSelector } from '../../../components/inputs/DateSelector';
+import { MonthPicker } from '../../../components/inputs/MonthPicker';
 
 export const ScheduleHeader = ({ id, currentView, currentDate, onChangeDate, onChangeView }) => {
   const [currentMonth, setCurrentMonth] = React.useState(currentDate ?? new Date());
@@ -48,9 +52,11 @@ export const ScheduleHeader = ({ id, currentView, currentDate, onChangeDate, onC
   const [currentDay, setCurrentDay] = React.useState(currentDate ?? new Date());
   const headerMonthFormat = 'MMMM';
   const headerYearFormat = 'yyyy';
+  const [calendarOpen, setCalendarOpen] = React.useState(false);
 
   //
   const handleChangeDate = (_newDate) => {
+    setCalendarOpen(false);
     setCurrentMonth(_newDate);
     setCurrentWeek(_newDate);
     setCurrentDay(_newDate);
@@ -145,8 +151,11 @@ export const ScheduleHeader = ({ id, currentView, currentDate, onChangeDate, onC
 
     return (
       <MonthYearContainer>
-        <HeaderMonth>{format(currentMonth, headerMonthFormat)}</HeaderMonth>
-        <HeaderYear>{format(currentMonth, headerYearFormat)}</HeaderYear>
+        {calendarOpen && <MonthPicker open={calendarOpen} onSelect={handleChangeDate} />}
+        <HeaderButtonTitle onClick={() => setCalendarOpen(true)}>
+          <HeaderMonth>{format(currentMonth, headerMonthFormat)}</HeaderMonth>
+          <HeaderYear>{format(currentMonth, headerYearFormat)}</HeaderYear>
+        </HeaderButtonTitle>
       </MonthYearContainer>
     );
   };
@@ -183,6 +192,7 @@ export const ScheduleHeader = ({ id, currentView, currentDate, onChangeDate, onC
       <RowHeader>
         <ColumnHeader>
           <RowHeaderItem>
+            {isCurrentViewWeek(currentView) && <FillerHours />}
             {renderTodayButton()}
             {renderNavArrows()}
             {renderHeaderTitle()}
