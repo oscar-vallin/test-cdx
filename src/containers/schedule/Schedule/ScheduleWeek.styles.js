@@ -224,14 +224,15 @@ export const DayOfWeekContainer = styled.div`
 
   /* background-color: blue; */
   border: ${`1px solid ${COLOR_BORDER}`};
+  border-bottom-style: dashed;
   cursor: pointer;
   background: ${COLOR_NEUTRAL};
   width: calc((100% - 14px) / 7);
-  height: 100%;
+  height: 80px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: flex-end;
+  align-items: flex-start;
   color: ${({ isSameMonth }) => (isSameMonth ? COLOR_TEXT : COLOR_TEXT_LIGHT)};
 `;
 
@@ -246,7 +247,26 @@ export const CalendarBodyRow = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
-  height: calc(80vh / 5);
+  height: 80px;
+`;
+
+export const SWeekHourContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  padding-top: -10px;
+  height: 80px;
+  background: #f3f2f1;
+  width: 50px;
+`;
+
+export const SWeekHour = styled.span`
+  font-size: 12px;
+  font-weight: 400;
+  color: ${({ theme }) => theme.colors.neutralSecondary};
+  height: 100%;
+  margin-right: 5px;
+  margin-top: -8px;
 `;
 
 export const LayoutBase = styled.div`
@@ -288,12 +308,29 @@ export const HeaderYear = styled(HeaderTextLarge)`
 `;
 
 export const CalendarBodyCellNumber = styled.span`
-  font-size: 82.5%;
-  line-height: 1;
-  top: 0.75em;
-  right: 0.75em;
-  font-weight: 700;
-  margin: 10px 10px 0 0;
+  /* font-size: 82.5%; */
+  /* line-height: 1; */
+  /* top: 0.75em; */
+  /* right: 0.75em; */
+  /* font-weight: 700; */
+  /* margin: 10px 10px 0 10px; */
+  margin-top: 10px;
+  justify-content: flex-start;
+  width: calc(100% - 20px);
+`;
+
+export const CellItem = styled.div`
+  font-size: 10px;
+  width: 90%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background: #808080;
+  color: white;
+  border-radius: 3px;
+  margin-left: 5%;
+  padding: 0 5%;
+  margin-bottom: 5px;
 `;
 
 export const CalendarBodyDisabled = styled.div`

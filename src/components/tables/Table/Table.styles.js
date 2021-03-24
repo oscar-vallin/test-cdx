@@ -70,3 +70,11 @@ export const StyledSublabel = styled.span`
   color: ${({ theme }) => theme.colors.textMuted};
   font-size: 10px; */
 `;
+
+export const CellItemRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+`;

@@ -66,6 +66,8 @@ export const ScheduleMonth = ({ id, currentDate, selectedDate, onChangeDate, ite
     }
   }, [selectedDate]);
 
+  //
+  //
   const renderItems = (day, allItems) => {
     console.log('RenderItems, day: ', day);
     console.log('RenderItems _item.datetime', allItems);

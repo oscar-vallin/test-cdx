@@ -15,7 +15,7 @@ export default {
   neutralQuaternary: '#ffffff',
   neutralTertiaryAlt: '#ffffff',
   neutralTertiary: '#070910',
-  neutralSecondary: '#090c15',
+  neutralSecondary: '#605e5c',
   neutralPrimaryAlt: '#0b0f1a',
   neutralPrimary: ' #141b2d',
   neutralDark: '#101524',
@@ -33,5 +33,5 @@ export default {
   info: '#005A9E',
   infoBackground: '#C7E0F4',
   severeError: '#FA4100',
-  textMuted: '#808080', /* TODO: Revise theme neutral colors */
+  textMuted: '#808080' /* TODO: Revise theme neutral colors */,
 };

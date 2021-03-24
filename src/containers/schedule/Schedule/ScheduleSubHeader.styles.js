@@ -9,6 +9,8 @@ const COLOR_BG = '#F9F9F9';
 const COLOR_NEUTRAL = '#FFF';
 const COLOR_BORDER = '#EEE';
 
+const COLOR_BACKGROUND = '#f3f2f1';
+
 // --main-color: #1a8fff;
 // --text-color: #777;
 // --text-color-light: #ccc;
@@ -26,7 +28,7 @@ export const Box = styled(LayoutBox)`
 
 export const Row = styled(LayoutRow)`
   width: 100%;
-  background-color: #fff;
+  background-color: ${COLOR_BACKGROUND};
 `;
 
 export const RowWeek = styled(Row)`
@@ -286,11 +288,18 @@ export const HeaderTextLarge = styled.span`
 
 export const DayOfWeek = styled(HeaderTextLarge)`
   margin-left: 10px;
-  width: calc((100% - 70px) / 7);
+  width: calc((100% - 120px) / 7);
+`;
+
+export const WeekHourSpace = styled.div`
+  width: 48px;
+  background: transparent;
+  height: 48px;
+  background: #f3f2f1;
 `;
 
 export const WeekViewContainer = styled.div`
-  width: calc((100% - 15px) / 7);
+  width: calc((100% - 62px) / 7);
   height: 48px;
   display: flex;
   flex-direction: row;
@@ -309,6 +318,7 @@ export const WeekViewContainer = styled.div`
 
   color: ${({ isSameDay, isSameMonth }) => (isSameDay ? COLOR_MAIN : isSameMonth ? COLOR_TEXT : COLOR_TEXT_LIGHT)};
   font-weight: ${({ isSameDay }) => (isSameDay ? '600' : '400')};
+  background-color: ${COLOR_NEUTRAL};
 `;
 
 export const DayViewContainer = styled(WeekViewContainer)`

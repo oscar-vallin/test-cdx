@@ -5,13 +5,14 @@ import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableCon
 import { formatField } from '../../../helpers/tableHelpers';
 import { getStepStatusLabel } from '../../../data/constants/FileStatusConstants';
 import { FileProgress } from '../../bars/FileProgress';
+import { HighlightCounter } from '../../../components/badges/HighlightCounter';
 
 //
 export const useTable = (argOrgSid, argDateRange, argFilter) => {
   const [_loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
   const [columns, setColumns] = useState([]);
-  const structure = getTableStructure(TABLE_NAMES.ERRORS);
+  const structure = getTableStructure(TABLE_NAMES.FILE_STATUS);
 
   const { data, loading, error } = useWorkPacketStatusesQuery({
     variables: {
@@ -32,14 +33,14 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
       const _columns = [
         {
           key: 'datetime',
-          minWidth: 120,
-          maxWidth: 120,
+          minWidth: 140,
+          maxWidth: 150,
           label: 'Received On',
           id: 'datetime',
           fieldName: 'datetime',
           style: 'link',
         },
-        { key: 'vendor', minWidth: 80, maxWidth: 80, label: 'Vendor', id: 'vendor', style: 'text' },
+        { key: 'vendor', minWidth: 80, maxWidth: 150, label: 'Vendor', id: 'vendor', style: 'text' },
         { key: 'planSponsor', minWidth: 100, maxWidth: 120, label: 'Sponsor', id: 'planSponsor', style: 'text' },
         { key: 'extractName', minWidth: 100, maxWidth: 300, label: 'Extract Name', id: 'extractName', style: 'text' },
         { key: 'overall', minWidth: 100, maxWidth: 150, label: 'Overall', id: 'overall', style: 'text' },
@@ -47,13 +48,37 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
       ];
 
       const _items = data.workPacketStatuses.map(
-        ({ workOrderId, timestamp, vendorId, planSponsorId, inboundFilename, step, stepStatus }) => {
+        ({
+          workOrderId,
+          timestamp,
+          vendorId,
+          planSponsorId,
+          inboundFilename,
+          step,
+          stepStatus,
+          recordHighlightCount,
+          recordHighlightType,
+        }) => {
           const datetime = format(new Date(timestamp), 'MM/dd/yyyy hh:mm a');
-          // console.log('Xxxxx STepStatus: ', stepStatus);
           const stepStatusLabel = getStepStatusLabel(stepStatus);
 
+          console.log('Xxxxx highlight: ', recordHighlightCount, recordHighlightType);
+
           return [
-            formatField(datetime, 'datetime', `/file-status/${workOrderId}`),
+            formatField(
+              datetime,
+              'datetime',
+              `/file-status/${workOrderId}`,
+              '',
+              formatField(
+                <>
+                  {recordHighlightCount && (
+                    <HighlightCounter type={recordHighlightType}>{recordHighlightCount}</HighlightCounter>
+                  )}
+                </>,
+                'highlight'
+              )
+            ),
             formatField(vendorId, 'vendor', vendorId),
             formatField(planSponsorId, 'planSponsor', planSponsorId),
             formatField(inboundFilename, 'extractName', inboundFilename),
