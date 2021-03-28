@@ -93,69 +93,72 @@ const validateRulesArr = (value, data) => data.map(ruleSet => {
   return { ...ruleObj, isValid: isValid([ruleObj]) };
 });
 
-const getLightTheme = ({ themePrimary, neutralPrimary = '#323130' }) => {
+const getThemeVariant = ({
+  themePrimary,
+  neutralPrimary = '#323130',
+  black = '#000',
+  white = '#fff',
+}) => {
   return {
-    themePrimary: themePrimary,
-    themeLighterAlt: chroma(themePrimary).brighten(3.55).hex(),
-    themeLighter: chroma(themePrimary).brighten(3.25).hex(),
-    themeLight: chroma(themePrimary).brighten(2.85).hex(),
-    themeTertiary: chroma(themePrimary).brighten(1.32).hex(),
-    themeSecondary: chroma(themePrimary).brighten(0.29).hex(),
-    themeDarkAlt: chroma(themePrimary).brighten(0.065).hex(),
-    themeDark: chroma(themePrimary).brighten(-0.7).hex(),
-    themeDarker: chroma(themePrimary).brighten(-1.2).hex(),
-    neutralLighterAlt: '#faf9f8',
-    neutralLighter: '#f3f2f1',
-    neutralLight: '#edebe9',
-    neutralQuaternaryAlt: '#e1dfdd',
-    neutralQuaternary: '#d0d0d0',
-    neutralTertiaryAlt: '#c8c6c4',
-    neutralTertiary: '#a19f9d',
-    neutralSecondary: '#605e5c',
-    neutralPrimaryAlt: '#3b3a39',
-    neutralPrimary: neutralPrimary,
-    neutralDark: '#201f1e',
-    black: '#000000',
-    white: '#ffffff',
+    themeColors: {
+      themePrimary: themePrimary,
+      themeLighterAlt: chroma(themePrimary).brighten(3.55).hex(),
+      themeLighter: chroma(themePrimary).brighten(3.25).hex(),
+      themeLight: chroma(themePrimary).brighten(2.85).hex(),
+      themeTertiary: chroma(themePrimary).brighten(1.32).hex(),
+      themeSecondary: chroma(themePrimary).brighten(0.29).hex(),
+      themeDarkAlt: chroma(themePrimary).brighten(0.065).hex(),
+      themeDark: chroma(themePrimary).brighten(-0.7).hex(),
+      themeDarker: chroma(themePrimary).brighten(-1.2).hex(),
+      neutralLighterAlt: chroma(neutralPrimary).brighten(4.3).hex(),
+      neutralLighter: chroma(neutralPrimary).brighten(4.17).hex(),
+      neutralLight: chroma(neutralPrimary).brighten(4.04).hex(),
+      neutralQuaternaryAlt: chroma(neutralPrimary).brighten(3.81).hex(),
+      neutralQuaternary: chroma(neutralPrimary).brighten(3.49).hex(),
+      neutralTertiaryAlt: chroma(neutralPrimary).brighten(3.33).hex(),
+      neutralTertiary: chroma(neutralPrimary).brighten(2.52).hex(),
+      neutralSecondary: chroma(neutralPrimary).brighten(1.1).hex(),
+      neutralPrimaryAlt: chroma(neutralPrimary).brighten(0.22).hex(),
+      neutralPrimary: neutralPrimary,
+      neutralDark: chroma(neutralPrimary).brighten(-0.47).hex(),
+      black,
+      white,
+    }
   };
 }
 
 const _UserSettingsPage = () => {
   const activeTheme = localStorage.getItem('CURRENT_THEME');
-
-  const [rules, setRules] = useState([]);
-  const [theme, setTheme] = useState(activeTheme ? JSON.parse(activeTheme).name : 'light');
-  const [colors, setColors] = useState(activeTheme
-    ? JSON.parse(activeTheme).themeColors
-    : getLightTheme({ themePrimary: '#0078d4' })
-  );
-
-  const [activeColor, setActiveColor] = useState({
-    key: 'themePrimary',
-    color: colors.themePrimary,
-  });
-  
   const { changeTheme } = useThemeContext();
 
+  const [themeVariant, setThemeVariant] = useState(
+    activeTheme ? JSON.parse(activeTheme) : getThemeVariant({ themePrimary: '#0078d4' })
+  );
+
+  const [theme, setTheme] = useState(activeTheme ? JSON.parse(activeTheme).name : 'light');
+  const [colors, setColors] = useState({
+    themePrimary: themeVariant.themeColors.themePrimary,
+    neutralPrimary: themeVariant.themeColors.neutralPrimary,
+    white: themeVariant.themeColors.white,
+    black: themeVariant.themeColors.black,
+  });
+  
+  const [activeColor, setActiveColor] = useState({ key: 'themePrimary', color: colors.themePrimary });
+  
+  const [rules, setRules] = useState([]);
   const [validations, setValidations] = useState([]);
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');
 
   const onColorChange = useCallback((evt, { hex }) => {
-    if (activeColor.key === 'themePrimary') {
-      const state = getLightTheme({ [activeColor.key]: `#${hex}` })
+    const variant = getThemeVariant({ ...colors, [activeColor.key]: `#${hex}` });
+   
+    setColors({ ...colors, [activeColor.key]: `#${hex}` });
+    setActiveColor({ ...activeColor, color: `#${hex}` });
 
-      setColors(state);
-      setActiveColor({ ...activeColor, color: `#${hex}` });
-
-      changeTheme('custom', state)
-    }
-
-    // setColors({ ...colors, [activeColor.key]: `#${hex}` });
-    // setActiveColor({ ...activeColor, color: `#${hex}` });
-
-    // changeTheme('custom', { ...colors, [activeColor.key]: `#${hex}` })
+    setThemeVariant(variant);
+    changeTheme('custom', variant.themeColors);
   });
 
   const onRenderCell = (item, index) => {
@@ -285,7 +288,7 @@ const _UserSettingsPage = () => {
                         <Button
                           variant="primary"
                           text="Save password"
-                          onClick={() => alert('123')}
+                          onClick={() => alert('save')}
                         />
                       </Spacing>
                     </Column>
@@ -322,7 +325,13 @@ const _UserSettingsPage = () => {
                               .keys(colors)
                               .map(key => ({
                                 key,
-                                label: key,
+                                label: key === 'themePrimary'
+                                  ? 'Primary color'
+                                  : key === 'neutralPrimary'
+                                    ? 'Neutral color'
+                                    : key === 'black'
+                                      ? 'Text color'
+                                      : 'Background color',
                                 onRenderField: (props, render) => {
                                   const key = props.id.split('-').pop();
 
@@ -363,7 +372,9 @@ const _UserSettingsPage = () => {
                           <Button
                             variant="primary"
                             text="Save theme"
-                            onClick={() => alert('123')}
+                            onClick={() => {
+                              changeTheme('custom', themeVariant.themeColors)
+                            }}
                           />
                         </Spacing>
                       </Column>
