@@ -14,6 +14,7 @@
     "@types/react-dom": "^17.0.0",
     "@uifabric/react-cards": "^0.115.13",
     "apollo-link-ws": "^1.0.20",
+    "chroma-js": "^2.1.1",
     "date-fns": "^2.16.1",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.5",
@@ -23,13 +24,15 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-helmet": "^6.1.0",
+    "react-password-strength-bar": "^0.3.3",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.2",
     "recharts": "^2.0.6",
     "styled-components": "^5.2.0",
     "subscriptions-transport-ws": "^0.9.18",
     "typescript": "^4.1.2",
-    "web-vitals": "^1.0.1"
+    "web-vitals": "^1.0.1",
+    "zxcvbn": "^4.4.2"
   },
   "scripts": {
     "start": "react-scripts start",

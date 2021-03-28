@@ -1,13 +1,21 @@
 import PasswordValidator from 'password-validator';
+import zxcvbn from 'zxcvbn';
 
 class PasswordRulesValidator {
   /* Validates a value against a set of rules */
   static validate(value, rules) {
     const validator = new PasswordValidator();
+    const strength = [];
     
     const getRule = (characteristic) => rules.find((rule) => rule.characteristic === characteristic);
     const contains = (characteristic) => getRule(characteristic) !== undefined;
     const getCondition = (characteristic) => getRule(characteristic).condition;
+
+    if (contains('strength')) {
+      if (zxcvbn(value).score < getCondition('strength')) {
+        strength.push('strength');
+      }
+    }
 
     if (contains('min')) {
       validator.is().min(getCondition('min'));
@@ -41,7 +49,7 @@ class PasswordRulesValidator {
         : validator.has().spaces();
     }
 
-    return validator.validate(value, { list: true });
+    return [...strength, ...validator.validate(value, { list: true })];
   }
   
   /* Checks if a set of validations fulfills its required set of characteristics */

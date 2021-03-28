@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useCallback, Fragment } from 'react';
+import PasswordStrengthBar from 'react-password-strength-bar';
+import chroma from 'chroma-js';
 
 import { ROUTE_USER_SETTINGS } from '../../data/constants/RouteConstants';
 import { 
@@ -12,9 +14,7 @@ import { LayoutDashboard } from '../../layouts/LayoutDashboard';
 import { PageHeader } from '../../containers/headers/PageHeader';
 import { Breadcrumb } from '../../components/breadcrumbs/Breadcrumb';
 import { Button } from '../../components/buttons/Button';
-import { Badge } from '../../components/badges/Badge';
 import { CardSection } from '../../components/cards';
-import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { InputText } from '../../components/inputs/InputText'
 import { Row, Column } from '../../components/layouts';
 import { Spacing } from '../../components/spacings/Spacing';
@@ -27,7 +27,6 @@ import {
   StyledIcon,
   StyledColorPicker,
   StyledChoiceGroup,
-  StyledPreview,
 } from './UserSettingsPage.styles';
 
 import {
@@ -35,7 +34,6 @@ import {
   ValidationMessages,
   ValidationRulesParser,
 } from './../../utils/PasswordValidation';
-import { Card } from '@uifabric/react-cards';
 
 const isArrayOfArrays = arr => arr.filter(item => Array.isArray(item)).length > 0;
 
@@ -57,6 +55,7 @@ const validateRulesets = (value, ruleSets) => {
     return PasswordValidator.validate(value, ruleSet);
   })
 }
+
 const validateRulesArr = (value, data) => data.map(ruleSet => {
   const validationResults = validateRulesets(value, ruleSet.rules);
 
@@ -94,19 +93,17 @@ const validateRulesArr = (value, data) => data.map(ruleSet => {
   return { ...ruleObj, isValid: isValid([ruleObj]) };
 });
 
-const _UserSettingsPage = () => {
-  const [rules, setRules] = useState([]);
-  const [theme, setTheme] = useState('custom');
-  const [colors, setColors] = useState({
-    themePrimary: '#0078d4',
-    themeLighterAlt: '#eff6fc',
-    themeLighter: '#deecf9',
-    themeLight: '#c7e0f4',
-    themeTertiary: '#71afe5',
-    themeSecondary: '#2b88d8',
-    themeDarkAlt: '#106ebe',
-    themeDark: '#005a9e',
-    themeDarker: '#004578',
+const getLightTheme = ({ themePrimary, neutralPrimary = '#323130' }) => {
+  return {
+    themePrimary: themePrimary,
+    themeLighterAlt: chroma(themePrimary).brighten(3.55).hex(),
+    themeLighter: chroma(themePrimary).brighten(3.25).hex(),
+    themeLight: chroma(themePrimary).brighten(2.85).hex(),
+    themeTertiary: chroma(themePrimary).brighten(1.32).hex(),
+    themeSecondary: chroma(themePrimary).brighten(0.29).hex(),
+    themeDarkAlt: chroma(themePrimary).brighten(0.065).hex(),
+    themeDark: chroma(themePrimary).brighten(-0.7).hex(),
+    themeDarker: chroma(themePrimary).brighten(-1.2).hex(),
     neutralLighterAlt: '#faf9f8',
     neutralLighter: '#f3f2f1',
     neutralLight: '#edebe9',
@@ -116,29 +113,50 @@ const _UserSettingsPage = () => {
     neutralTertiary: '#a19f9d',
     neutralSecondary: '#605e5c',
     neutralPrimaryAlt: '#3b3a39',
-    neutralPrimary: '#323130',
+    neutralPrimary: neutralPrimary,
     neutralDark: '#201f1e',
     black: '#000000',
     white: '#ffffff',
-  });
+  };
+}
+
+const _UserSettingsPage = () => {
+  const activeTheme = localStorage.getItem('CURRENT_THEME');
+
+  const [rules, setRules] = useState([]);
+  const [theme, setTheme] = useState(activeTheme ? JSON.parse(activeTheme).name : 'light');
+  const [colors, setColors] = useState(activeTheme
+    ? JSON.parse(activeTheme).themeColors
+    : getLightTheme({ themePrimary: '#0078d4' })
+  );
+
   const [activeColor, setActiveColor] = useState({
     key: 'themePrimary',
     color: colors.themePrimary,
   });
-
-  const onColorChange = useCallback((evt, { hex }) => {
-    setColors({ ...colors, [activeColor.key]: `#${hex}` });
-    setActiveColor({ ...activeColor, color: `#${hex}` });
-
-    changeTheme('custom', { ...colors, [activeColor.key]: `#${hex}` })
-  });
-
+  
   const { changeTheme } = useThemeContext();
 
   const [validations, setValidations] = useState([]);
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');
+
+  const onColorChange = useCallback((evt, { hex }) => {
+    if (activeColor.key === 'themePrimary') {
+      const state = getLightTheme({ [activeColor.key]: `#${hex}` })
+
+      setColors(state);
+      setActiveColor({ ...activeColor, color: `#${hex}` });
+
+      changeTheme('custom', state)
+    }
+
+    // setColors({ ...colors, [activeColor.key]: `#${hex}` });
+    // setActiveColor({ ...activeColor, color: `#${hex}` });
+
+    // changeTheme('custom', { ...colors, [activeColor.key]: `#${hex}` })
+  });
 
   const onRenderCell = (item, index) => {
     return (
@@ -157,6 +175,22 @@ const _UserSettingsPage = () => {
                 if(Array.isArray(rule)) {
                   return rule.map(onRenderCell);
                 } else {
+                  if (rule.characteristic === 'strength') {
+                    return (
+                      <div>
+                        <div dangerouslySetInnerHTML={{ __html: rule.message }} />
+                        
+                        <PasswordStrengthBar
+                          password={password}
+                          style={{
+                            margin: '15px 0 0',
+                            width: '50%'
+                          }}
+                        />
+                      </div>
+                    )
+                  }
+
                   return (
                     <div style={{ display: 'flex', alignItems: 'center' }} key={ruleIndex}>
                       { 
@@ -171,16 +205,16 @@ const _UserSettingsPage = () => {
                 }
               })
             : (
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                { 
-                  item.isValid
-                    ? <StyledIcon iconName="StatusCircleCheckmark" />
-                    : <StyledIcon iconName="StatusCircleErrorX" />
-                }
-          
-                {item.message}
-              </div>
-            )
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  { 
+                    item.isValid
+                      ? <StyledIcon iconName="StatusCircleCheckmark" />
+                      : <StyledIcon iconName="StatusCircleErrorX" />
+                  }
+            
+                  {item.message}
+                </div>
+              )
         }
       </div>
     );
@@ -283,7 +317,6 @@ const _UserSettingsPage = () => {
                         <ChoiceGroup
                           label="Colors"
                           defaultSelectedKey={activeColor.key}
-                          asd="123"
                           options={
                             Object
                               .keys(colors)
