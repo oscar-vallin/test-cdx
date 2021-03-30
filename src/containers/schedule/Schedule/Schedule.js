@@ -81,6 +81,7 @@ const Schedule = ({ id = 'ScheduleContainer', orgSid = 1, dateRange, filter, ...
           selectedDate={selectedDate}
           currentDate={currentDate}
           onChangeDate={handleChangeDate}
+          onChangeView={handleChangeView}
           items={items}
         />
       )}
