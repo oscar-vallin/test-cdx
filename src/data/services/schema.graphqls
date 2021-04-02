@@ -4,6 +4,7 @@ type Query {
     workPacketStatuses(orgSid: ID!, dateRange: DateTimeRangeInput, filter: WorkPacketStatusFilter): [WorkPacketStatus]
     dashboardPeriods(orgSid: ID!): DashboardPeriods
     changeOwnPasswordPage : PasswordPage
+    currentUser : CurrentUserInfo
     amPolicyPage(orgSid: ID!) : AMPolicyPage
     amPolicy(orgSid: ID!, policySid: ID!) : AMPolicy
     amPolicyFacetsForService(orgSid: ID!, cdxService: CDXService!) : [CDXFacetNVP]
@@ -61,6 +62,12 @@ type LoginStep {
 type TokenUser {
     token: String
     session: UserSession
+}
+
+type CurrentUserInfo{
+    domain: WebAppDomain
+    tokenUser: TokenUser
+    loggedIn: Boolean
 }
 
 type UserSession{

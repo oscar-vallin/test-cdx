@@ -625,6 +625,31 @@ query OrgById($orgSid: ID!, $orgId: String!){
     }
 }
 
+query CurrentUser{
+    currentUser{
+        loggedIn
+        domain{
+            type
+            selectedPage
+            navItems{
+                ...navItemFragment
+                subNavItems{
+                    ...navItemFragment
+                }
+            }
+        }
+        tokenUser{
+            token
+            session{
+                id
+                orgId
+                userId
+                defaultAuthorities
+            }
+        }
+    }
+}
+
 mutation RemoveAMPolicy($policySid: ID!){
     removeAMPolicy(policySid: $policySid)
 }
