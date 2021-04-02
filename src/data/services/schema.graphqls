@@ -23,6 +23,7 @@ type Query {
 
 type Mutation {
     passwordLogin(userId: String!, password: String!) : LoginStep
+    updateOwnPassword(updatePasswordInput: UpdatePasswordInput!) : UserSession
     createOrg(orgInfo: CreateOrgInput!): Organization
 
     createAMPolicy(policyInfo: CreateAMPolicyInput!) : AMPolicy
@@ -88,6 +89,12 @@ enum LoginStepType {
 input AMPasswordConfigInput{
     allowForgotten: Boolean
     orgUnitOwner: ID
+}
+
+input UpdatePasswordInput{
+    originalPassword: String!
+    newPassword: String!
+    verifyPassword: String!
 }
 
 input DateTimeRangeInput{

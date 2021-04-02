@@ -616,6 +616,14 @@ mutation UpdateAMPermissionAction($updateAMPermissionActionInput: UpdateAMPermis
     }
 }
 
+mutation UpdateOwnPassword($updatePasswordInput: UpdatePasswordInput!){
+    updateOwnPassword(updatePasswordInput : $updatePasswordInput) {
+        id
+        orgId
+        userId
+    }
+}
+
 query OrgById($orgSid: ID!, $orgId: String!){
     orgById(orgSid: $orgSid, orgId: $orgId){
         id
