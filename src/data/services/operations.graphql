@@ -706,3 +706,9 @@ mutation UpdateAMPolicy($updateAMPolicyInput : UpdateAMPolicyInput!){
 mutation RemoveAMPermissionAction($permissionActionSid: ID!){
     removeAMPermissionAction(permissionActionSid: $permissionActionSid)
 }
+
+query LogOut{
+    logOut{
+        successful
+    }
+}

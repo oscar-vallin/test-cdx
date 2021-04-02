@@ -5,6 +5,7 @@ type Query {
     dashboardPeriods(orgSid: ID!): DashboardPeriods
     changeOwnPasswordPage : PasswordPage
     currentUser : CurrentUserInfo
+    logOut : LogOutInfo
     amPolicyPage(orgSid: ID!) : AMPolicyPage
     amPolicy(orgSid: ID!, policySid: ID!) : AMPolicy
     amPolicyFacetsForService(orgSid: ID!, cdxService: CDXService!) : [CDXFacetNVP]
@@ -810,4 +811,8 @@ type ScheduleRunOccurrence{
     workOrderId: String!
     timeRan: DateTime
     status: SchedOccurStatusEnum!
+}
+
+type LogOutInfo{
+    successful: Boolean!
 }
