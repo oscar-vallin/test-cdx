@@ -5,6 +5,7 @@ type Query {
     dashboardPeriods(orgSid: ID!): DashboardPeriods
     changeOwnPasswordPage : PasswordPage
     currentUser : CurrentUserInfo
+    userTheme(themeColorMode: ThemeColorMode): DashTheme
     logOut : LogOutInfo
     amPolicyPage(orgSid: ID!) : AMPolicyPage
     amPolicy(orgSid: ID!, policySid: ID!) : AMPolicy
@@ -478,6 +479,8 @@ enum CDXWebPage{
     SSO_CONFIG
     ADD_ORG
     ADD_USER
+    COLOR_PALETTES
+
 }
 
 enum CDXWebAppDomain{
@@ -815,4 +818,48 @@ type ScheduleRunOccurrence{
 
 type LogOutInfo{
     successful: Boolean!
+}
+
+enum ThemeColorMode{
+    LIGHT
+    DARK
+}
+
+enum ThemeFontSize {
+    SMALL
+    MEDIUM
+    LARGE
+}
+
+type DashTheme{
+    themeColorMode: ThemeColorMode
+    themeFontSize: ThemeFontSize
+}
+
+type DashThemeColor{
+    id: ID
+    defaultTheme: Boolean
+    paletteNm: String
+    themePrimary: String
+    themeLighterAlt: String
+    themeLighter: String
+    themeLight: String
+    themeTertiary: String
+    themeSecondary: String
+    themeDarkAlt: String
+    themeDark: String
+    themeDarker: String
+    neutralLighterAlt: String
+    neutralLighter: String
+    neutralLight: String
+    neutralQuaternaryAlt: String
+    neutralQuaternary: String
+    neutralTertiaryAlt: String
+    neutralTertiary: String
+    neutralSecondary: String
+    neutralPrimaryAlt: String
+    neutralPrimary: String
+    neutralDark: String
+    black: String
+    white: String
 }

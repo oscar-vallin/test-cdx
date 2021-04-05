@@ -712,3 +712,10 @@ query LogOut{
         successful
     }
 }
+
+query UserTheme($themeColorMode : ThemeColorMode){
+    userTheme(themeColorMode: $themeColorMode){
+        themeColorMode
+        themeFontSize
+    }
+}
