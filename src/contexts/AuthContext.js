@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { usePasswordLoginMutation } from '../data/services/graphql';
+import { usePasswordLoginMutation, useCurrentUserLazyQuery } from '../data/services/graphql';
 import { useErrorMessage } from '../hooks/useErrorMessage';
 import { getRouteByApiId } from '../data/constants/RouteConstants';
 //
@@ -27,6 +27,15 @@ export const AuthContextProvider = ({ children }) => {
       password,
     },
   });
+
+  // * Check User Session Status.
+  const [currentUserQuery, { currentUser: data }] = useCurrentUserLazyQuery({
+    variables: {
+      userId: user,
+      password,
+    },
+  });
+
   const authError = useErrorMessage();
 
   // Component Did Mount
@@ -39,6 +48,10 @@ export const AuthContextProvider = ({ children }) => {
       if (savedToken) {
         setToken(savedToken);
         setAuthData(JSON.parse(savedAuthData));
+
+        console.log('CurrentUser ??? ', currentUserQuery());
+        console.log('CurrentUser ??? ', currentUser);
+
         setAuthenticated(true);
 
         return;
