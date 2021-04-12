@@ -717,5 +717,218 @@ query UserTheme($themeColorMode : ThemeColorMode){
     userTheme(themeColorMode: $themeColorMode){
         themeColorMode
         themeFontSize
+        dashThemeColor{
+            id
+            defaultTheme
+            themeColorMode
+            paletteNm
+            themePrimary
+            themeLighterAlt
+            themeLighter
+            themeLight
+            themeTertiary
+            themeSecondary
+            themeDarkAlt
+            themeDark
+            themeDarker
+            neutralLighterAlt
+            neutralLighter
+            neutralLight
+            neutralQuaternaryAlt
+            neutralQuaternary
+            neutralTertiaryAlt
+            neutralTertiary
+            neutralSecondary
+            neutralPrimaryAlt
+            neutralPrimary
+            neutralDark
+            black
+            white
+        }
+    }
+}
+
+query DashThemeColorForOrg($ownedInput : OwnedInput, $pageableInput: PageableInput){
+    dashThemeColorForOrg(ownedInput: $ownedInput, pageableInput: $pageableInput){
+        paginationInfo{
+            ...paginationInfoFragment
+        }
+        nodes{
+            id
+            paletteNm
+            defaultTheme
+            themeColorMode
+            themePrimary
+            black
+            white
+        }
+    }
+}
+
+query DashSiteForOrg($orgSidInput : OrgSidInput){
+    dashSiteForOrg(orgSidInput: $orgSidInput){
+        id
+        active
+    }
+}
+
+mutation CreateDashThemeColor($createDashThemeColorInput: CreateDashThemeColorInput!){
+    createDashThemeColor(createDashThemeColorInput : $createDashThemeColorInput){
+        id
+        defaultTheme
+        themeColorMode
+        paletteNm
+        themePrimary
+        themeLighterAlt
+        themeLighter
+        themeLight
+        themeTertiary
+        themeSecondary
+        themeDarkAlt
+        themeDark
+        themeDarker
+        neutralLighterAlt
+        neutralLighter
+        neutralLight
+        neutralQuaternaryAlt
+        neutralQuaternary
+        neutralTertiaryAlt
+        neutralTertiary
+        neutralSecondary
+        neutralPrimaryAlt
+        neutralPrimary
+        neutralDark
+        black
+        white
+    }
+}
+
+query DashThemeColorByName($ownedInputName : OwnedInputName){
+    dashThemeColorByName(ownedInputName: $ownedInputName){
+        id
+        defaultTheme
+        themeColorMode
+        paletteNm
+        themePrimary
+        themeLighterAlt
+        themeLighter
+        themeLight
+        themeTertiary
+        themeSecondary
+        themeDarkAlt
+        themeDark
+        themeDarker
+        neutralLighterAlt
+        neutralLighter
+        neutralLight
+        neutralQuaternaryAlt
+        neutralQuaternary
+        neutralTertiaryAlt
+        neutralTertiary
+        neutralSecondary
+        neutralPrimaryAlt
+        neutralPrimary
+        neutralDark
+        black
+        white
+    }
+}
+
+mutation UpdateDashThemeColor($updateDashThemeColorInput: UpdateDashThemeColorInput!){
+    updateDashThemeColor(updateDashThemeColorInput : $updateDashThemeColorInput){
+        id
+        defaultTheme
+        themeColorMode
+        paletteNm
+        themePrimary
+        themeLighterAlt
+        themeLighter
+        themeLight
+        themeTertiary
+        themeSecondary
+        themeDarkAlt
+        themeDark
+        themeDarker
+        neutralLighterAlt
+        neutralLighter
+        neutralLight
+        neutralQuaternaryAlt
+        neutralQuaternary
+        neutralTertiaryAlt
+        neutralTertiary
+        neutralSecondary
+        neutralPrimaryAlt
+        neutralPrimary
+        neutralDark
+        black
+        white
+    }
+}
+
+mutation CreateDefaultDashTheme($createDefaultDashThemeInput: CreateDefaultDashThemeInput!){
+    createDefaultDashTheme(createDefaultDashThemeInput : $createDefaultDashThemeInput){
+        id
+        themeColorMode
+        themeFontSize
+        dashThemeColor{
+            id
+        }
+    }
+}
+
+query DefaultDashThemeForSite($ownedInput : OwnedInput){
+    defaultDashThemeForSite(ownedInput: $ownedInput){
+        id
+        themeColorMode
+        themeFontSize
+        dashThemeColor{
+            id
+            themePrimary
+            black
+            white
+        }
+    }
+}
+
+mutation UpdateDefaultDashTheme($updateDefaultDashThemeInput: UpdateDefaultDashThemeInput!){
+    updateDefaultDashTheme(updateDefaultDashThemeInput : $updateDefaultDashThemeInput){
+        id
+        themeColorMode
+        themeFontSize
+        dashThemeColor{
+            id
+        }
+    }
+}
+
+mutation RemoveDashThemeColor($ownedInputSid: OwnedInputSid!){
+    removeDashThemeColor(ownedInputSid: $ownedInputSid)
+}
+
+mutation RemoveDefaultDashTheme($ownedInputSid: OwnedInputSid!){
+    removeDefaultDashTheme(ownedInputSid: $ownedInputSid)
+}
+
+query CurrentUserDashThemePage{
+    currentUserDashThemePage{
+        themeColorModes
+        themeFontSizes
+        themeColorPalettes{
+            id
+            themePrimary
+            black
+            white
+        }
+        dashTheme{
+            id
+            themeFontSize
+            themeColorMode
+            dashThemeColor{
+                id
+                themePrimary
+                black
+                white
+            }
+        }
     }
 }
