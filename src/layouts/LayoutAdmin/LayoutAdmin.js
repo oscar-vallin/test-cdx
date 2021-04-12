@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyledBox, StyledNav } from './LayoutAdmin.styles';
 import { LayoutDashboard } from '../LayoutDashboard';
+import { useHistory } from 'react-router-dom';
 
 const LayoutAdmin = ({
   id = 'LayoutAdmin',
@@ -10,6 +11,8 @@ const LayoutAdmin = ({
   sidebar = [],
   children
 }) => {
+  const history = useHistory();
+
   return (
     <LayoutDashboard id={id} menuOptionSelected={menuOptionSelected}>
       <StyledBox>
@@ -17,6 +20,13 @@ const LayoutAdmin = ({
           onLinkClick={console.log}
           selectedKey={sidebarOptionSelected}
           groups={sidebar}
+          onLinkClick={(evt, route) => {
+            evt.preventDefault();
+
+            if (!route.links) {
+              history.push(route.url);
+            }
+          }}
         />
 
         <StyledBox>

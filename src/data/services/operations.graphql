@@ -616,12 +616,45 @@ mutation UpdateAMPermissionAction($updateAMPermissionActionInput: UpdateAMPermis
     }
 }
 
+mutation UpdateOwnPassword($updatePasswordInput: UpdatePasswordInput!){
+    updateOwnPassword(updatePasswordInput : $updatePasswordInput) {
+        id
+        orgId
+        userId
+    }
+}
+
 query OrgById($orgSid: ID!, $orgId: String!){
     orgById(orgSid: $orgSid, orgId: $orgId){
         id
         name
         orgId
         orgType
+    }
+}
+
+query CurrentUser{
+    currentUser{
+        loggedIn
+        domain{
+            type
+            selectedPage
+            navItems{
+                ...navItemFragment
+                subNavItems{
+                    ...navItemFragment
+                }
+            }
+        }
+        tokenUser{
+            token
+            session{
+                id
+                orgId
+                userId
+                defaultAuthorities
+            }
+        }
     }
 }
 
@@ -672,4 +705,17 @@ mutation UpdateAMPolicy($updateAMPolicyInput : UpdateAMPolicyInput!){
 
 mutation RemoveAMPermissionAction($permissionActionSid: ID!){
     removeAMPermissionAction(permissionActionSid: $permissionActionSid)
+}
+
+query LogOut{
+    logOut{
+        successful
+    }
+}
+
+query UserTheme($themeColorMode : ThemeColorMode){
+    userTheme(themeColorMode: $themeColorMode){
+        themeColorMode
+        themeFontSize
+    }
 }

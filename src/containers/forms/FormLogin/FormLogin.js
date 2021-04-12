@@ -26,9 +26,6 @@ const FormLogin = ({ id = '__FormLogin', onLogin }) => {
   const { apiBeginLogin, isValidEmail, errorMessage, isProcessingBegin } = useLoginBegin();
   const { email, password } = handlerLogin;
 
-  // console.log('FormLogin, isValidEmail: ', isValidEmail);
-  // console.log('FormLogin, errorMessage: ', errorMessage);
-
   return (
     <StyledBox id={id}>
       <StyledRowBottom id={`${id}__Card--Row`}>

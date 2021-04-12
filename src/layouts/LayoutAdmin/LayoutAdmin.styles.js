@@ -12,13 +12,13 @@ export const StyledBox = styled(LayoutBox)`
 `;
 
 export const StyledNav = styled(Nav)`
-  background: #dadada;
+  background: ${({ theme }) => theme.colors.neutralLighter};
   height: calc(100vh - 48px);
 
   .ms-Nav-compositeLink {
     &:hover {
       .ms-Button {
-        background: #dadada !important;
+        background: ${({ theme }) => theme.colors.neutralLighter};
       }
     }
   }

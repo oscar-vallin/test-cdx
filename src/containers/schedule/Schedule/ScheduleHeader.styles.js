@@ -3,12 +3,19 @@ import { Box as LayoutBox, Row as LayoutRow, Column as LayoutColumn } from '../.
 import { Button } from '../../../components/buttons/Button';
 import { ButtonAction } from '../../../components/buttons/ButtonAction';
 
-const COLOR_MAIN = 'rgb(0, 90, 158)';
-const COLOR_TEXT = '#333';
-const COLOR_TEXT_LIGHT = '#CCC';
-const COLOR_BG = '#F9F9F9';
-const COLOR_NEUTRAL = '#FFF';
-const COLOR_BORDER = '#EEE';
+// const COLOR_MAIN = 'rgb(0, 90, 158)';
+// const COLOR_TEXT = '#333';
+// const COLOR_TEXT_LIGHT = '#CCC';
+// const COLOR_BG = '#F9F9F9';
+// const COLOR_NEUTRAL = '#FFF';
+// const COLOR_BORDER = '#EEE';
+
+const COLOR_MAIN = ({ theme }) => theme.colors.themePrimary;
+const COLOR_TEXT = ({ theme }) => theme.colors.neutralPrimary;
+const COLOR_TEXT_LIGHT = ({ theme }) => theme.colors.neutralTertiaryAlt;
+const COLOR_BG = ({ theme }) => theme.colors.neutralLighterAlt;
+const COLOR_NEUTRAL = ({ theme }) => theme.colors.white;
+const COLOR_BORDER = ({ theme }) => theme.colors.neutralLight;
 
 // --main-color: #1a8fff;
 // --text-color: #777;
@@ -53,6 +60,12 @@ export const HeaderButtonView = styled(Button)`
   &:hover {
     border-color: ${({ theme }) => theme.colors.themePrimary};
   }
+`;
+
+export const HeaderButtonTitle = styled(Button)`
+  /* background-color: ${({ selected }) => (selected ? 'gray' : 'white')}; */
+  background: transparent;
+  border: none;
 `;
 
 export const ScheduleColumn = styled.img`
@@ -266,6 +279,11 @@ export const RowHeader = styled(LayoutBase)`
   margin: 1em;
 `;
 
+export const FillerHours = styled.div`
+  height: 100%;
+  width: 50px;
+`;
+
 export const RowHeaderItem = styled(LayoutBase)`
   flex-direction: row;
   justify-content: space-between;
@@ -280,6 +298,7 @@ export const MonthYearContainer = styled(LayoutBase)`
   flex-direction: row;
   height: 40px;
   align-items: center;
+  position: relative;
 `;
 
 export const HeaderTextLarge = styled.span`

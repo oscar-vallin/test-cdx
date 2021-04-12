@@ -24,7 +24,7 @@ const NavBar = ({
   const renderIcon = (iconName) => {
     return (
       <StyledColumn id={`${id}__Right__${iconName}`} noStyle>
-        <StyledButtonIcon icon={iconName} size={18} />
+        <StyledButtonIcon icon={iconName} variant={'navbar'} size={18} />
       </StyledColumn>
     );
   };

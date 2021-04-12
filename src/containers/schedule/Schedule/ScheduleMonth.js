@@ -38,7 +38,7 @@ import {
   CellItem,
 } from './ScheduleMonth.styles';
 
-export const ScheduleMonth = ({ id, currentDate, selectedDate, onChangeDate, items }) => {
+export const ScheduleMonth = ({ id, currentDate, selectedDate, onChangeDate, items, onChangeView }) => {
   const [dates, setDates] = React.useState({
     currentMonth: currentDate,
     selectedDate: currentDate,
@@ -49,7 +49,6 @@ export const ScheduleMonth = ({ id, currentDate, selectedDate, onChangeDate, ite
   });
 
   React.useEffect(() => {
-    console.log('change the SelectedDate: ', selectedDate);
     if (!!selectedDate && selectedDate !== dates.selectedDate) {
       const _monthStart = startOfMonth(selectedDate);
       const _monthEnd = endOfMonth(selectedDate);
@@ -66,16 +65,24 @@ export const ScheduleMonth = ({ id, currentDate, selectedDate, onChangeDate, ite
     }
   }, [selectedDate]);
 
+  //
+  //
   const renderItems = (day, allItems) => {
-    console.log('RenderItems, day: ', day);
-    console.log('RenderItems _item.datetime', allItems);
-
     const dayRows = allItems.filter((_item) => isSameDay(parseISO(_item.datetime), day));
-
-    console.log('renderItems, dayRows: ', dayRows);
 
     return dayRows.map((_item) => <CellItem>{_item.label}</CellItem>);
   };
+
+
+  // *
+  const handleChangeDate = (_date) => {
+    if( isSameDay(_date, selectedDate)){
+      onChangeView('day');
+      return;
+    }
+
+    onChangeDate(_date);
+  }
 
   //
   const _renderBody = () => {
@@ -104,12 +111,12 @@ export const ScheduleMonth = ({ id, currentDate, selectedDate, onChangeDate, ite
             isSameDay={isSameDay(day, currentDate)}
             isSelectedDate={isSameDay(day, dates.selectedDate)}
             key={day}
-            onClick={() => onChangeDate(cloneDay)}
+            onClick={() => handleChangeDate(cloneDay)}
           >
             <CalendarBodyCellNumber id="CalendarBodyCellNumber">
               {isSameMonth(day, dates.monthStart) && !isSameDay(day, currentDate)
                 ? formattedDate
-                : formattedDateNotValid}
+                : formattedDateNotValid }
             </CalendarBodyCellNumber>
             {/* <CalendarBodyCellBg id="CalendarBodyCellBg">{formattedDate}</CalendarBodyCellBg> */}
             {renderItems(day, items)}
