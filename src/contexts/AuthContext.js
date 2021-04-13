@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { usePasswordLoginMutation, useCurrentUserLazyQuery } from '../data/services/graphql';
 import { useErrorMessage } from '../hooks/useErrorMessage';
 import { getRouteByApiId } from '../data/constants/RouteConstants';
+import { useCurrentUser } from './hooks/useCurrentUser';
 //
 export const AuthContext = React.createContext(() => {
   //
@@ -29,12 +30,14 @@ export const AuthContextProvider = ({ children }) => {
   });
 
   // * Check User Session Status.
-  const [currentUserQuery, { currentUser: data }] = useCurrentUserLazyQuery({
-    variables: {
-      userId: user,
-      password,
-    },
-  });
+  // const [currentUserQuery, { currentUser: data }] = useCurrentUserLazyQuery({
+  //   variables: {
+  //     userId: user,
+  //     password,
+  //   },
+  // });
+
+  const { currentUserLoading: isProcessing, currentUserQuery, currentUserData } = useCurrentUser(user, password);
 
   const authError = useErrorMessage();
 
@@ -42,20 +45,12 @@ export const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     const localFunction = async () => {
       setLoading(false);
-      const savedAuthData = localStorage.getItem('AUTH_DATA');
-      const savedToken = localStorage.getItem('AUTH_TOKEN');
 
-      if (savedToken) {
-        setToken(savedToken);
-        setAuthData(JSON.parse(savedAuthData));
+      currentUserQuery();
 
-        console.log('CurrentUser ??? ', currentUserQuery());
-        console.log('CurrentUser ??? ', currentUser);
+      console.log('CurrentUser ??? ', currentUserData);
 
-        setAuthenticated(true);
-
-        return;
-      }
+      setAuthenticated(true);
 
       setAuthenticated(false);
 

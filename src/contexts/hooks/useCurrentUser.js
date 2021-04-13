@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useBeginLoginLazyQuery, useCurrentUserLazyQuery } from '../../data/services/graphql';
 
-export const useLoginBegin = (_username, _password) => {
+export const useCurrentUser = (_username, _password) => {
   const [isProcessing, setProcessing] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentUserData, setCurrentUserData] = useState({});
 
   //
-  const [currentUserQuery, { data, loading, error }] = useCurrentUserLazyQuery({
+  const [_apiCall, { data, loading, error }] = useCurrentUserLazyQuery({
     variables: {},
   });
 
@@ -27,11 +27,7 @@ export const useLoginBegin = (_username, _password) => {
   const currentUserQuery = async (__username) => {
     setProcessing(true);
 
-    if (data?.currentUser?.loggedIn ?? false) {
-      setIsAuthenticated(true);
-    } else {
-      setIsAuthenticated(false);
-    }
+    _apiCall();
 
     setProcessing(false);
   };
