@@ -30,6 +30,9 @@ type Query {
     defaultDashThemeForSitePage(ownedInput : OwnedInput) : DefaultDashThemePage
     """userDashThemePage(ownedInput : OwnedInput) : UserDashThemePage"""
     currentUserDashThemePage : UserDashThemePage
+
+    findUserByEmail(userEmail: String!) : User
+    findUser(ownedInputSid : OwnedInputSid) : User
 }
 
 type Mutation {
@@ -1055,5 +1058,5 @@ input DashThemeColorModeInput{
     orgSid: ID!
     ownerId: ID!
     sid: ID!
-    DashThemeColorModeInput: ThemeColorMode!
+    themeColorMode: ThemeColorMode!
 }

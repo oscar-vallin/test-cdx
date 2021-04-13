@@ -932,3 +932,59 @@ query CurrentUserDashThemePage{
         }
     }
 }
+
+query FindUserByEmail($userEmail: String!){
+    findUserByEmail(userEmail : $userEmail){
+        id
+        email
+        person{
+            id
+            firstNm
+            lastNm
+        }
+    }
+}
+
+query FindUser($ownedInputSid: OwnedInputSid!){
+    findUser(ownedInputSid: $ownedInputSid){
+        id
+        email
+        person{
+            id
+            firstNm
+            lastNm
+        }
+    }
+}
+
+mutation CreateOrUpdateOwnDashTheme($dashThemeInput: DashThemeInput!){
+    createOrUpdateOwnDashTheme(dashThemeInput :$dashThemeInput){
+        id
+        themeColorMode
+        themeFontSize
+        dashThemeColor{
+            id
+            themePrimary
+            black
+            white
+        }
+    }
+}
+
+mutation SetDashThemeColorDefault($dashThemeColorDefaultInput : DashThemeColorDefaultInput!){
+    setDashThemeColorDefault(dashThemeColorDefaultInput : $dashThemeColorDefaultInput){
+        id
+        themePrimary
+        black
+        white
+    }
+}
+
+mutation DashThemeColorMode($dashThemeColorModeInput : DashThemeColorModeInput!){
+    setDashThemeColorMode(dashThemeColorModeInput : $dashThemeColorModeInput){
+        id
+        themePrimary
+        black
+        white
+    }
+}
