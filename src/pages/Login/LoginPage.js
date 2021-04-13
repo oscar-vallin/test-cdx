@@ -2,6 +2,7 @@ import React from 'react';
 
 import { LayoutLogin } from '../../layouts/LayoutLogin';
 import { FormLogin } from '../../containers/forms/FormLogin';
+import { useCurrentUser } from '../../contexts/hooks/useCurrentUser';
 
 const _LoginPage = () => {
   return (

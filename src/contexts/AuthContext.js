@@ -142,8 +142,8 @@ export const AuthContextProvider = ({ children }) => {
   // When user / password.
   //
   useEffect(() => {
-    // console.log('st User: ', user);
-    // console.log('st Password:', password);
+    console.log('st User: ', user);
+    console.log('st Password:', password);
 
     if (user?.length && password?.length) return passwordLoginMutation();
 
@@ -154,9 +154,12 @@ export const AuthContextProvider = ({ children }) => {
 
   //
   const authLogin = (_user, _password, _history) => {
-    // console.log('authLogin');
-    // console.log('_user: ', _user);
-    // console.log('_password: ', _password);
+    console.log('authLogin');
+    console.log('_user: ', _user);
+    console.log('_password: ', _password);
+    console.log('authLogin');
+    console.log('currentUserQuery', currentUserQuery());
+    currentUserQuery();
 
     setUser(_user);
     setPassword(_password);

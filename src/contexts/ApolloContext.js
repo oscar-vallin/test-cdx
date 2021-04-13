@@ -3,6 +3,7 @@ import { ApolloProvider, ApolloClient, InMemoryCache, HttpLink, ApolloLink } fro
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
 import { tokenHelper } from '../helpers/tokenHelper';
+import { useCurrentUser } from './hooks/useCurrentUser';
 
 const SERVER_URL = process.env.REACT_APP_API_SERVER;
 
@@ -17,53 +18,36 @@ export const ApolloContextProvider = ({ children }) => {
   const [isApolloLoading, setLoading] = React.useState(true);
   const [token, setToken] = React.useState('');
 
+  let tokenXCSR;
+
   const httpLink = new HttpLink({
     uri: SERVER_URL,
-    // credentials: 'include',
+    // fetchOptions: { method: 'GET' },
+    credentials: 'include',
   });
-  const { tokenClient } = tokenHelper();
-
-  const tokenFunc = async () => {
-    const xcsrToken = await tokenClient();
-    setToken(xcsrToken);
-  };
 
   const ErrorLink = onError(({ networkError, operation, forward }) => {
     if (networkError.statusCode === 403) {
       console.log('Verify its coming 403');
 
-      // const xcsrToken = tokenClient();
-
-      console.log(token);
-      const cookieName = 'X-XSRF-TOKEN';
-      //setContext
-      operation.setContext(({ headers }) => ({
-        headers: {
-          'X-XSRF-TOKEN': token,
-          // authorization: `XSRF-TOKEN=${token}`,
-          ...headers,
-          // however you get your token
-        },
-      }));
-
-      console.log(operation);
-
-      return forward(operation);
-      // poner un Cookie, con el valor del string.
-      // al enviar otro request debe tener el header que se configuro.
+      tokenXCSR = tokenHelper();
     }
   });
 
+  const authLink = setContext(async (request, previousContext, headers) => ({
+    headers: { ...headers, 'X-XSRF-TOKEN': await tokenXCSR },
+  }));
+
   let client = new ApolloClient({
     cache: new InMemoryCache(),
-    link: ErrorLink.concat(httpLink),
+    link: ErrorLink.concat(authLink.concat(httpLink)),
   });
 
   // Component Did Mount
 
   React.useEffect(() => {
     const localFunction = async () => {
-      tokenFunc();
+      // tokenFunc();
       setLoading(false);
 
       // configureApollo();

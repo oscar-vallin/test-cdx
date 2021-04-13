@@ -1,15 +1,15 @@
 import axios from 'axios';
+import { useCurrentUser } from '../contexts/hooks/useCurrentUser';
 
-export const tokenHelper = () => {
+export const tokenHelper = async () => {
   const url = 'https://x2-terraform-loadbalancer.k2u.xyz/frsc';
+  // const { currentUserQuery } = useCurrentUser();
 
-  const tokenClient = async () => {
-    const res = await axios.get(url, {
-      withCredentials: true,
-    });
+  const res = await axios.get(url, {
+    withCredentials: true,
+  });
 
-    return res.data.token;
-  };
+  const csrToken = res.data.token;
 
-  return { tokenClient };
+  return csrToken;
 };
