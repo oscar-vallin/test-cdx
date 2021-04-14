@@ -13,7 +13,7 @@ export const ApolloContext = React.createContext(() => {
 export const ApolloContextProvider = ({ children }) => {
   // LocalState
   const [isApolloLoading, setLoading] = React.useState(true);
-  const [sessionID, setSessionID] = React.useState('');
+  // const [sessionID, setSessionID] = React.useState('');
 
   const httpLink = new HttpLink({
     uri: SERVER_URL,
@@ -22,53 +22,47 @@ export const ApolloContextProvider = ({ children }) => {
 
   const authLink = setContext((_, { headers }) => {
     // get the authentication token from local storage if it exists
-    // const token = localStorage.getItem('token');
+    const token = localStorage.getItem('AUTH_TOKEN');
     // return the headers to the context so httpLink can read them
     return {
       headers: {
         ...headers,
-        'x-auth-token': sessionID ? `Bearer ${sessionID}` : '',
+        'x-auth-token': token ? token : '',
       },
     };
   });
 
-  const afterwareLink = new ApolloLink((operation, forward) => {
-    console.log('afterware link');
-    return forward(operation).map((response) => {
-      const context = operation.getContext();
+  // const afterwareLink = new ApolloLink((operation, forward) => {
+  //   console.log('afterware link');
+  //   return forward(operation).map((response) => {
+  //     const context = operation.getContext();
 
-      const authHeader = context.response.headers.get('x-auth-token');
+  //     // const authHeader = context.response.headers.get('x-auth-token');
 
-      const { headers, status } = context.response;
+  //     const { headers, status } = context.response;
 
-      console.log('status code: ', status);
-      console.log('headers: ', headers);
+  //     console.log('status code: ', status);
+  //     console.log('headers: ', headers);
 
-      if (headers) {
-        console.log('Headers are there');
-        const yourHeader = headers.get('yourHeader');
+  //     if (headers) {
+  //       console.log('Headers are there');
+  //       const yourHeader = headers.get('x-auth-token');
+  //       // localStorage.setItem('token', yourHeader);
 
-        console.log('is ???', headers.get('x-auth-token'));
-      }
+  //       console.log('is ???', yourHeader);
+  //     }
 
-      // We would see this log in the SSR logs in the terminal
-      // but in the browser console it would always be null!
+  //     // We would see this log in the SSR logs in the terminal
+  //     // but in the browser console it would always be null
 
-      if (authHeader) {
-        // cut off the 'Bearer ' part from the header
-        SESSION_ID = authHeader.replace('Bearer ', '');
+  //     return response;
+  //   });
+  // });
 
-        setSessionID(SESSION_ID); // save sessionID, e.g. in a cookie
-      }
-
-      return response;
-    });
-  });
-
-  console.log('session ', sessionID);
+  // console.log('session ', sessionID);
 
   let client = new ApolloClient({
-    link: afterwareLink.concat(authLink.concat(httpLink)),
+    link: authLink.concat(httpLink),
     cache: new InMemoryCache(),
   });
 
@@ -77,6 +71,7 @@ export const ApolloContextProvider = ({ children }) => {
   React.useEffect(() => {
     const localFunction = async () => {
       // tokenFunc();
+      // setSessionID(localStorage.getItem('token'));
       setLoading(false);
 
       // configureApollo();
