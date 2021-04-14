@@ -52,8 +52,6 @@ export const AuthContextProvider = ({ children }) => {
 
       setAuthenticated(true);
 
-      setAuthenticated(false);
-
       // Execute Function
     };
 
