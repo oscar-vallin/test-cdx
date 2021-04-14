@@ -22,7 +22,7 @@ export const AuthContextProvider = ({ children }) => {
   // "userId": "joe.admin@example.com",
   // "password": "changeBen21"
 
-  const [passwordLoginMutation, { data, loading, error }] = usePasswordLoginMutation({
+  const [passwordLoginMutation, { data, loading, error, client }] = usePasswordLoginMutation({
     variables: {
       userId: user,
       password,
@@ -144,6 +144,8 @@ export const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     console.log('st User: ', user);
     console.log('st Password:', password);
+
+    console.log('Apollo Client: ', client);
 
     if (user?.length && password?.length) return passwordLoginMutation();
 

@@ -3,7 +3,7 @@ import { set } from 'date-fns';
 import { useState, useEffect } from 'react';
 
 export const useGetCookie = () => {
-  const [cookies, setCookies] = useState();
+  // const [cookies, setCookies] = useState();
 
   const getTokenCookies = async () => {
     const configAxios = {
