@@ -18,8 +18,6 @@ export const useLoginBegin = (_username, _password) => {
     },
   });
 
-  const { currentUserQuery } = useCurrentUser();
-
   //*
   useEffect(() => {
     if (data) setApiData(data);
@@ -76,7 +74,6 @@ export const useLoginBegin = (_username, _password) => {
       return;
     }
 
-    await currentUserQuery();
     setUsername(__username);
     const resp = await _apiBeginLogin();
 

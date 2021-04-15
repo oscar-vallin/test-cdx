@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import { useBeginLoginLazyQuery, useCurrentUserLazyQuery } from '../../data/services/graphql';
+import { useCurrentUserLazyQuery } from '../../data/services/graphql';
 
 export const useCurrentUser = (_username, _password) => {
   const [isProcessing, setProcessing] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentUserData, setCurrentUserData] = useState({});
-
+  const [isCurrentUserLogged, setLoggedIn] = useState(false);
   //
   const [_apiCall, { data, loading, error }] = useCurrentUserLazyQuery({
     variables: {},
@@ -13,13 +13,11 @@ export const useCurrentUser = (_username, _password) => {
 
   //*
   useEffect(() => {
-    setCurrentUserData({
-      data,
-      loading,
-      error,
-      isAuthenticated,
-    });
-  }, [data, loading, error]);
+    if (!data) return;
+
+    const _isLoggedIn = data.currentUser.loggedIn;
+    setLoggedIn(_isLoggedIn);
+  }, [data]);
 
   //
   // *
@@ -27,10 +25,10 @@ export const useCurrentUser = (_username, _password) => {
   const currentUserQuery = async (__username) => {
     setProcessing(true);
 
-    _apiCall();
+    await _apiCall();
 
     setProcessing(false);
   };
 
-  return { currentUserLoading: isProcessing, currentUserQuery, currentUserData };
+  return { currentUserQuery, currentUserData, isCurrentUserLogged };
 };

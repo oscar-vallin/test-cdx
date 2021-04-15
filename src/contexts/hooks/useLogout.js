@@ -25,8 +25,10 @@ export const useLogout = () => {
   const logoutQuery = async () => {
     setProcessing(true);
 
-    setUsername(__username);
-    const resp = await _apiCall();
+    ('logging Out');
+    _apiCall();
+
+    localStorage.removeItem('AUTH_TOKEN');
 
     setProcessing(false);
   };
