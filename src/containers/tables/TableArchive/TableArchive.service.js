@@ -26,7 +26,6 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
   //
   useEffect(() => {
     const doEffect = () => {
-      console.log('TableErrors.service, data:', data);
       const _columns = [
         { key: 'datetime', label: 'Received On', id: 'datetime', style: 'text' },
         { key: 'vendor', label: 'Vendor', id: 'vendor', style: 'text' },
