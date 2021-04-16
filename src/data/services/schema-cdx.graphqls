@@ -16,23 +16,11 @@ type Query {
     usersForOrg(orgSid: ID!, userFilter: UserFilterInput, pageableInput: PageableInput) : UserConnection
     systemTemplateAMGroupByName(name: String!): [AMGroup]
     topLevelOrgsByType(orgType: OrgType!): [Organization]
-    orgById(orgSid: ID, orgId: String!): Organization
+    orgById(orgSid: ID!, orgId: String!): Organization
     directOrganizations(orgSid: ID!, orgFilter: OrgFilterInput, pageableInput: PageableInput): OrganizationConnection
     wpProcessErrors(orgSid: ID!, dateRange: DateTimeRangeInput, pageableInput: PageableInput) : WPProcessErrorConnection
     wpTransmissions(orgSid: ID!, dateRange: DateTimeRangeInput, pageableInput: PageableInput) : WPTransmissionConnection
     scheduleOccurrences(orgSid: ID!, dateRange: DateTimeRangeInput, pageableInput: PageableInput) : ScheduleOccurrenceConnection
-
-    dashThemeColorForOrg(ownedInput: OwnedInput, pageableInput: PageableInput) : DashThemeColorConnection
-    dashSiteForOrg(orgSidInput : OrgSidInput) : DashSite
-    dashThemeColor(ownedInputSid : OwnedInputSid) : DashThemeColor
-    dashThemeColorByName(ownedInputName : OwnedInputName) : DashThemeColor
-    defaultDashThemeForSite(ownedInput : OwnedInput) : DashTheme
-    defaultDashThemeForSitePage(ownedInput : OwnedInput) : DefaultDashThemePage
-    """userDashThemePage(ownedInput : OwnedInput) : UserDashThemePage"""
-    currentUserDashThemePage : UserDashThemePage
-
-    findUserByEmail(userEmail: String!) : User
-    findUser(ownedInputSid : OwnedInputSid) : User
 }
 
 type Mutation {
@@ -57,25 +45,6 @@ type Mutation {
     updateAMPolicy(updateAMPolicyInput : UpdateAMPolicyInput) : AMPolicy
     updateAMPermission(updateAMPermissionInput : UpdateAMPermissionInput) : AMPermission
     updateAMPermissionAction(updateAMPermissionActionInput : UpdateAMPermissionActionInput) : AMPermissionAction
-
-    createDashThemeColor(createDashThemeColorInput : CreateDashThemeColorInput!) : DashThemeColor
-    updateDashThemeColor(updateDashThemeColorInput : UpdateDashThemeColorInput!) : DashThemeColor
-    createDefaultDashTheme(createDefaultDashThemeInput : CreateDefaultDashThemeInput) : DashTheme
-    updateDefaultDashTheme(updateDefaultDashThemeInput : UpdateDefaultDashThemeInput ) : DashTheme
-
-    removeDashThemeColor(ownedInputSid : OwnedInputSid) : GQOperationResponse
-    removeDefaultDashTheme(ownedInputSid : OwnedInputSid) : GQOperationResponse
-
-    setDashThemeColorDefault(dashThemeColorDefaultInput : DashThemeColorDefaultInput) : DashThemeColor
-    setDashThemeColorMode(dashThemeColorModeInput : DashThemeColorModeInput) : DashThemeColor
-
-    """
-    createUserDashTheme(createUserDashThemeInput : CreateUserDashThemeInput) : DashTheme
-    updateUserDashTheme(updateUserDashThemeInput : UpdateUserDashThemeInput ) : DashTheme
-
-    updateOwnDashTheme(dashThemeInput : DashThemeInput ) : DashTheme
-    """
-    createOrUpdateOwnDashTheme(dashThemeInput : DashThemeInput) : DashTheme
 }
 
 scalar DateTime
@@ -863,16 +832,13 @@ enum ThemeFontSize {
 }
 
 type DashTheme{
-    id: ID
     themeColorMode: ThemeColorMode
     themeFontSize: ThemeFontSize
-    dashThemeColor: DashThemeColor
 }
 
 type DashThemeColor{
     id: ID
     defaultTheme: Boolean
-    themeColorMode: ThemeColorMode
     paletteNm: String
     themePrimary: String
     themeLighterAlt: String
@@ -896,167 +862,4 @@ type DashThemeColor{
     neutralDark: String
     black: String
     white: String
-}
-
-input OwnedInput{
-    orgSid: ID!
-    ownerId: ID
-}
-
-input OwnedInputSid{
-    orgSid: ID!
-    ownerId: ID!
-    sid: ID!
-}
-
-input OwnedInputName{
-    orgSid: ID!
-    ownerId: ID!
-    name: String!
-}
-
-input OrgSidInput{
-    orgSid: ID!
-}
-
-type DashSite{
-    id: ID
-    active: Boolean
-}
-
-type DashThemeColorConnection{
-    paginationInfo: PaginationInfo!
-    nodes: [DashThemeColor]
-}
-
-input CreateDashThemeColorInput{
-    orgSid: ID!
-    ownerId: ID!
-    defaultTheme: Boolean
-    themeColorMode: ThemeColorMode
-    paletteNm: String
-    themePrimary: String
-    themeLighterAlt: String
-    themeLighter: String
-    themeLight: String
-    themeTertiary: String
-    themeSecondary: String
-    themeDarkAlt: String
-    themeDark: String
-    themeDarker: String
-    neutralLighterAlt: String
-    neutralLighter: String
-    neutralLight: String
-    neutralQuaternaryAlt: String
-    neutralQuaternary: String
-    neutralTertiaryAlt: String
-    neutralTertiary: String
-    neutralSecondary: String
-    neutralPrimaryAlt: String
-    neutralPrimary: String
-    neutralDark: String
-    black: String
-    white: String
-}
-
-input UpdateDashThemeColorInput{
-    sid: ID!
-    orgSid: ID!
-    ownerId: ID!
-    defaultTheme: Boolean
-    themeColorMode: ThemeColorMode
-    paletteNm: String
-    themePrimary: String
-    themeLighterAlt: String
-    themeLighter: String
-    themeLight: String
-    themeTertiary: String
-    themeSecondary: String
-    themeDarkAlt: String
-    themeDark: String
-    themeDarker: String
-    neutralLighterAlt: String
-    neutralLighter: String
-    neutralLight: String
-    neutralQuaternaryAlt: String
-    neutralQuaternary: String
-    neutralTertiaryAlt: String
-    neutralTertiary: String
-    neutralSecondary: String
-    neutralPrimaryAlt: String
-    neutralPrimary: String
-    neutralDark: String
-    black: String
-    white: String
-}
-
-input CreateDefaultDashThemeInput{
-    orgSid: ID!
-    ownerId: ID!
-    themeFontSize : ThemeFontSize
-    themeColorMode : ThemeColorMode
-    themeColorSid : ID
-}
-
-input UpdateDefaultDashThemeInput{
-    orgSid: ID!
-    ownerId: ID!
-    sid : ID!
-    themeFontSize : ThemeFontSize
-    themeColorMode : ThemeColorMode
-    themeColorSid : ID
-}
-
-enum GQOperationResponse{
-    SUCCESS
-    FAIL
-}
-
-type DefaultDashThemePage{
-    themeColorModes: [ThemeColorMode]
-    themeFontSizes: [ThemeFontSize]
-    themeColorPalettes: [DashThemeColor]
-}
-
-input DashThemeInput{
-    themeFontSize : ThemeFontSize
-    themeColorMode : ThemeColorMode
-}
-
-input CreateUserDashThemeInput{
-    orgSid: ID!
-    ownerId: ID!
-    themeFontSize : ThemeFontSize
-    themeColorMode : ThemeColorMode
-    themeColorSid : ID
-}
-
-input UpdateUserDashThemeInput{
-    orgSid: ID!
-    ownerId: ID!
-    sid : ID!
-    themeFontSize : ThemeFontSize
-    themeColorMode : ThemeColorMode
-    themeColorSid : ID
-}
-
-type UserDashThemePage{
-    themeColorModes: [ThemeColorMode]
-    themeFontSizes: [ThemeFontSize]
-    themeColorPalettes: [DashThemeColor]
-    dashTheme: DashTheme
-}
-
-input DashThemeColorDefaultInput{
-    orgSid: ID!
-    ownerId: ID!
-    sid: ID!
-    defaultTheme: Boolean!
-}
-
-input DashThemeColorModeInput{
-    orgSid: ID!
-    ownerId: ID!
-    sid: ID!
-    themeColorMode: ThemeColorMode!
 }

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useBeginLoginLazyQuery } from '../../data/services/graphql';
+import { useCurrentUser } from './useCurrentUser';
 
 export const useLoginBegin = (_username, _password) => {
   const [isProcessing, setProcessing] = useState(false);
@@ -64,7 +65,7 @@ export const useLoginBegin = (_username, _password) => {
   const apiBeginLogin = async (__username) => {
     clearState();
 
-    // console.log('apiBeginLogin call', __username);
+    console.log('apiBeginLogin call', __username);
 
     const validationResult = new RegExp(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g).test(__username);
     if (!validationResult) {
