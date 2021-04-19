@@ -26,6 +26,7 @@ mutation PasswordLogin($userId: String!, $password: String!){
                 id
                 orgId
                 userId
+                firstNm
                 defaultAuthorities
             }
         }
@@ -986,5 +987,49 @@ mutation DashThemeColorMode($dashThemeColorModeInput : DashThemeColorModeInput!)
         themePrimary
         black
         white
+    }
+}
+
+query ChangeOwnPasswordPage{
+    changeOwnPasswordPage{
+        ruleGroup{
+            numberOfCharacteristics
+            rules{
+                ...unionPasswordRule
+                ... on PasswordRuleGroup {
+                    numberOfCharacteristics
+                    rules{
+                        ...unionPasswordRule
+                        ... on PasswordRuleGroup {
+                            numberOfCharacteristics
+                            rules{
+                                ...unionPasswordRule
+                                ... on PasswordRuleGroup {
+                                    numberOfCharacteristics
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+fragment unionPasswordRule on PasswordRule{
+    __typename
+    ... on PasswordLengthRule {
+        minLength
+        maxLength
+    }
+    ... on PasswordStrengthRule {
+        requiredStrengthLevel
+    }
+    ... on PasswordCharacterRule {
+        characterType
+        numberOfCharacters
+    }
+    ... on PasswordWhitespaceRule {
+        allowedWhitespace
     }
 }
