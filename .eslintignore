@@ -4,5 +4,4 @@ src/tests/
 node_modules
 build
 api
-src/services/graphql.ts
 src/data/services/graphql.ts

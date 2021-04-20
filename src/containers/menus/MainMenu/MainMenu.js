@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 // Components
 
@@ -6,14 +6,20 @@ import PropTypes from 'prop-types';
 import { useHistory, useLocation } from 'react-router-dom';
 
 // Styles
-import { StyledBox, StyledRow, StyledColumn, StyledMenuButton } from './MainMenu.styles';
+import { StyledRow, StyledColumn, StyledMenuButton, StyledButtonIcon } from './MainMenu.styles';
 
 import { ROUTES_ARRAY, ROUTES } from '../../../data/constants/RouteConstants';
-
+import { OutsideComponent } from './OutsideComponent';
 // CardSection is called directly cause a restriction warning for that component.
-const MainMenu = ({ id = '__MainMenu', option = ROUTES.ROUTE_DASHBOARD.ID, left }) => {
+const MainMenu = ({ id = '__MainMenu', option = ROUTES.ROUTE_DASHBOARD.ID, left, changeCollapse }) => {
   const history = useHistory();
   const location = useLocation();
+  const [collapse, setCollapse] = React.useState();
+
+  const collapseNavMenu = () => {
+    setCollapse(!collapse);
+    changeCollapse();
+  };
 
   const renderOptions = () => {
     return ROUTES_ARRAY.map((menuOption) => {
@@ -25,6 +31,7 @@ const MainMenu = ({ id = '__MainMenu', option = ROUTES.ROUTE_DASHBOARD.ID, left 
         >
           <StyledMenuButton
             selected={location.pathname === menuOption.URL}
+            collapse={collapse}
             onClick={() => {
               history.push(menuOption.URL);
             }}
@@ -38,15 +45,24 @@ const MainMenu = ({ id = '__MainMenu', option = ROUTES.ROUTE_DASHBOARD.ID, left 
 
   // Render
   return (
-    <StyledBox id={id} sm="12">
-      <StyledRow id={`${id}__MainMenu--Row`} left={left}>
+    <OutsideComponent id={id} collapseClick={collapseNavMenu} hide={collapse}>
+      <StyledRow id={`${id}__MainMenu--Row`} left={left} collapse={collapse}>
+        <StyledButtonIcon
+          icon="BulletedListText"
+          disabled={false}
+          variant={'navbar'}
+          size={18}
+          onClick={collapseNavMenu}
+        />
+
         {renderOptions()}
       </StyledRow>
-    </StyledBox>
+    </OutsideComponent>
   );
 };
 
 MainMenu.propTypes = {
+  changeCollapse: PropTypes.func,
   id: PropTypes.string,
 };
 
