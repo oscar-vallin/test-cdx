@@ -36,6 +36,8 @@ const _FileStatusDetailsPage = () => {
   const { id } = useParams();
   const [packet, setPacket] = useState({});
 
+  const realId = id.replace('*', '');
+
   const { data: list, lWorkPacketDetails: lWorkPacketStatus } = useWorkPacketStatusesQuery({
     variables: {
       orgSid: 123,
@@ -45,13 +47,13 @@ const _FileStatusDetailsPage = () => {
   const { data: query, loading: lWorkPacketDetails } = useWorkPacketStatusDetailsQuery({
     variables: {
       orgSid: 123,
-      workOrderId: id,
+      workOrderId: realId,
     },
   });
 
   useEffect(() => {
     if (list && query) {
-      const packet = list.workPacketStatuses.find((item) => item.workOrderId === id);
+      const packet = list.workPacketStatuses.find((item) => item.workOrderId === realId);
 
       setPacket({
         ...packet,
@@ -271,6 +273,7 @@ const _FileStatusDetailsPage = () => {
                             },
                           },
                         ]}
+                        selectedKey={id.includes('*')}
                       />
                     </Column>
                   </Row>
