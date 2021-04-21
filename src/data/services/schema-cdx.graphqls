@@ -108,6 +108,7 @@ type UserSession{
     id: ID!
     orgId: ID!
     userId: String!
+    firstNm: String!
     defaultAuthorities: [String]
 }
 
