@@ -1033,3 +1033,57 @@ fragment unionPasswordRule on PasswordRule{
         allowedWhitespace
     }
 }
+
+query ExchangeActivityInProcess($orgSidInput: OrgSidInput!, $dateRange:DateTimeRangeInput!, $pageableInput: PageableInput!){
+    exchangeActivityInProcess(orgSidInput: $orgSidInput, dateRange: $dateRange, pageableInput: $pageableInput){
+        paginationInfo{
+            totalPages
+            totalElements
+            pageNumber
+            pageSize
+        }
+        nodes{
+            id
+            orgId
+            name
+            type
+            activityTime
+        }
+    }
+}
+
+query ExchangeActivityTransmitted($orgSidInput: OrgSidInput!, $dateRange:DateTimeRangeInput!, $pageableInput: PageableInput!){
+    exchangeActivityTransmitted(orgSidInput: $orgSidInput, dateRange: $dateRange, pageableInput: $pageableInput){
+        paginationInfo{
+            totalPages
+            totalElements
+            pageNumber
+            pageSize
+        }
+        nodes{
+            id
+            orgId
+            name
+            type
+            activityTime
+        }
+    }
+}
+
+query ExchangeActivityErrored($orgSidInput: OrgSidInput!, $dateRange:DateTimeRangeInput!, $pageableInput: PageableInput!){
+    exchangeActivityErrored(orgSidInput: $orgSidInput, dateRange: $dateRange, pageableInput: $pageableInput){
+        paginationInfo{
+            totalPages
+            totalElements
+            pageNumber
+            pageSize
+        }
+        nodes{
+            id
+            orgId
+            name
+            type
+            activityTime
+        }
+    }
+}

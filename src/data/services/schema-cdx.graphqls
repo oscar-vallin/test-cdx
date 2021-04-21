@@ -1,5 +1,9 @@
 type Query {
     beginLogin(userId: String!) : LoginStep
+    exchangeActivityInProcess(orgSidInput : OrgSidInput!, dateRange: DateTimeRangeInput!, pageableInput: PageableInput!) : OrganizationLinkConnection
+    exchangeActivityTransmitted(orgSidInput : OrgSidInput!, dateRange: DateTimeRangeInput!, pageableInput: PageableInput!) : OrganizationLinkConnection
+    exchangeActivityErrored(orgSidInput : OrgSidInput!, dateRange: DateTimeRangeInput!, pageableInput: PageableInput!) : OrganizationLinkConnection
+
     workPacketStatusDetails(orgSid: ID!, workOrderId: String!): WorkPacketStatusDetails
     workPacketStatuses(orgSid: ID!, dateRange: DateTimeRangeInput, filter: WorkPacketStatusFilter): [WorkPacketStatus]
     dashboardPeriods(orgSid: ID!): DashboardPeriods
@@ -1060,4 +1064,17 @@ input DashThemeColorModeInput{
     ownerId: ID!
     sid: ID!
     themeColorMode: ThemeColorMode!
+}
+
+type OrganizationLink{
+    id: ID!
+    orgId: String!
+    name: String!
+    type: CDXWebPage
+    activityTime: DateTime
+}
+
+type OrganizationLinkConnection{
+    paginationInfo: PaginationInfo!
+    nodes: [OrganizationLink]
 }
