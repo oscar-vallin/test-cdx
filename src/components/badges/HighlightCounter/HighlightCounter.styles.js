@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 
 const getVariant = ({ colors }, variant) => {
   const Variants = {
@@ -42,4 +43,8 @@ export const StyledContainer = styled.div`
   border-radius: 3px;
   font-size: 10px;
   min-width: 12px;
+`;
+
+export const StyledLink = styled(Link)`
+  color: inherit;
 `;
