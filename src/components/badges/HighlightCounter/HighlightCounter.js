@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { StyledContainer } from './HighlightCounter.styles';
+import { StyledContainer, StyledLink } from './HighlightCounter.styles';
 
-const HighlightCounter = ({ id = '__HighLight', type, children }) => {
+const HighlightCounter = ({ id = '__HighLight', type, href = '#', children }) => {
   return (
     <StyledContainer id={id} type={type}>
-      {children}
+      <StyledLink href={href}>{children}</StyledLink>
     </StyledContainer>
   );
 };
