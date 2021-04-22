@@ -166,7 +166,7 @@ export const AuthContextProvider = ({ children }) => {
   //
   const authLogout = () => {
     localStorage.removeItem('AUTH_TOKEN');
-
+    localStorage.removeItem('USER_NAME');
     console.log('Removed Item, AUTH_TOKEN');
     logoutQuery();
 
