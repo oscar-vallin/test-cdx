@@ -16,7 +16,6 @@ export const useCurrentUser = (_username, _password) => {
     if (!data) return;
 
     const _isLoggedIn = data.currentUser.loggedIn;
-    console.log('blablalbalba ', _isLoggedIn);
     setLoggedIn(_isLoggedIn);
   }, [data]);
 
