@@ -75,7 +75,8 @@ export const AuthContextProvider = ({ children }) => {
     // console.log('Error...: ', error);
 
     if (error) {
-      // console.log('Error: ', error);
+      console.log('Error: ', error);
+
       return;
     }
 
@@ -174,7 +175,7 @@ export const AuthContextProvider = ({ children }) => {
   //
   const authLogout = () => {
     localStorage.removeItem('AUTH_TOKEN');
-    // localStorage.removeItem('Login');
+    localStorage.removeItem('LOGIN');
 
     console.log('Removed Item, AUTH_TOKEN');
     logoutQuery();

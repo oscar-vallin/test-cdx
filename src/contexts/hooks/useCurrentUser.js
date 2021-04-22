@@ -16,6 +16,12 @@ export const useCurrentUser = (_username, _password) => {
     if (!data) return;
 
     const _isLoggedIn = data.currentUser.loggedIn;
+    if (_isLoggedIn === false) {
+      if (localStorage.getItem('LOGIN') != null) {
+        localStorage.removeItem('LOGIN');
+      }
+    }
+    console.log('logged in: ', _isLoggedIn);
     setLoggedIn(_isLoggedIn);
   }, [data]);
 
