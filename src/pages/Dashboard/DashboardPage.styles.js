@@ -11,6 +11,12 @@ export const StyledRow = styled(LayoutRow)`
   }
 `;
 
+export const StyledRowDate = styled(StyledRow)`
+  && {
+    margin-right: 8px;
+  }
+`;
+
 export const StyledColumn = styled(LayoutColumn)`
   && {
     margin-top: ${({ marginTop }) => (marginTop ? `${marginTop}px` : '15px')};

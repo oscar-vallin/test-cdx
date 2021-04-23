@@ -26,6 +26,7 @@ mutation PasswordLogin($userId: String!, $password: String!){
                 id
                 orgId
                 userId
+                firstNm
                 defaultAuthorities
             }
         }
@@ -986,5 +987,103 @@ mutation DashThemeColorMode($dashThemeColorModeInput : DashThemeColorModeInput!)
         themePrimary
         black
         white
+    }
+}
+
+query ChangeOwnPasswordPage{
+    changeOwnPasswordPage{
+        ruleGroup{
+            numberOfCharacteristics
+            rules{
+                ...unionPasswordRule
+                ... on PasswordRuleGroup {
+                    numberOfCharacteristics
+                    rules{
+                        ...unionPasswordRule
+                        ... on PasswordRuleGroup {
+                            numberOfCharacteristics
+                            rules{
+                                ...unionPasswordRule
+                                ... on PasswordRuleGroup {
+                                    numberOfCharacteristics
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+fragment unionPasswordRule on PasswordRule{
+    __typename
+    ... on PasswordLengthRule {
+        minLength
+        maxLength
+    }
+    ... on PasswordStrengthRule {
+        requiredStrengthLevel
+    }
+    ... on PasswordCharacterRule {
+        characterType
+        numberOfCharacters
+    }
+    ... on PasswordWhitespaceRule {
+        allowedWhitespace
+    }
+}
+
+query ExchangeActivityInProcess($orgSidInput: OrgSidInput!, $dateRange:DateTimeRangeInput!, $pageableInput: PageableInput!){
+    exchangeActivityInProcess(orgSidInput: $orgSidInput, dateRange: $dateRange, pageableInput: $pageableInput){
+        paginationInfo{
+            totalPages
+            totalElements
+            pageNumber
+            pageSize
+        }
+        nodes{
+            id
+            orgId
+            name
+            type
+            activityTime
+        }
+    }
+}
+
+query ExchangeActivityTransmitted($orgSidInput: OrgSidInput!, $dateRange:DateTimeRangeInput!, $pageableInput: PageableInput!){
+    exchangeActivityTransmitted(orgSidInput: $orgSidInput, dateRange: $dateRange, pageableInput: $pageableInput){
+        paginationInfo{
+            totalPages
+            totalElements
+            pageNumber
+            pageSize
+        }
+        nodes{
+            id
+            orgId
+            name
+            type
+            activityTime
+        }
+    }
+}
+
+query ExchangeActivityErrored($orgSidInput: OrgSidInput!, $dateRange:DateTimeRangeInput!, $pageableInput: PageableInput!){
+    exchangeActivityErrored(orgSidInput: $orgSidInput, dateRange: $dateRange, pageableInput: $pageableInput){
+        paginationInfo{
+            totalPages
+            totalElements
+            pageNumber
+            pageSize
+        }
+        nodes{
+            id
+            orgId
+            name
+            type
+            activityTime
+        }
     }
 }
