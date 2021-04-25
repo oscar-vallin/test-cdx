@@ -23,7 +23,7 @@ export const ThemeContextProvider = ({ children }) => {
       const { name, themeColors } = JSON.parse(theme);
       changeTheme(name, themeColors);
     } else {
-      changeTheme('light');
+      changeTheme('LIGHT');
     }
 
     const localFunction = async () => {
@@ -38,13 +38,13 @@ export const ThemeContextProvider = ({ children }) => {
 
   const getThemeColors = (name) => {
     const themes = {
-      light: defaultTheme,
-      dark: darkTheme,
+      LIGHT: defaultTheme,
+      DARK: darkTheme,
     }
 
-    return (name !== 'custom')
+    return (name !== 'CUSTOM')
       ? themes[name]
-      : themes.light; 
+      : themes.LIGHT; 
   }
 
   const changeTheme = (name, theme = {}) => {
