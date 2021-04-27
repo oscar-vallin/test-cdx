@@ -17,6 +17,8 @@ const _DashboardPage = () => {
   const { isLoadingData, datesOptions, dataCounters } = service;
   const { setDateId } = service;
 
+  console.log('fecha que quiero: ', dataCounters);
+
   // Render Buttons Bar
   const renderDateButtons = () => {
     if (!datesOptions) return null;

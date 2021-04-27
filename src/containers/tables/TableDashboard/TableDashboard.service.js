@@ -37,8 +37,8 @@ export const useTable = (data, tableName) => {
           formatField(
             item.name,
             'vendor',
-            item.name,
-            null,
+            `/filter/${item.name}`,
+            '',
             formatField(item.secondaryDescr, 'specs', item.secondaryDescr)
           ),
           formatField(countAndTotal, 'total', countAndTotal),

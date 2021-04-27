@@ -12,7 +12,7 @@ const TableFileStatus = ({ id = 'TableFileStatus', orgSid = 1, dateRange, filter
   const { tableProps } = useTable(orgSid, dateRange, filter);
   const { localInput, startDate, endDate } = useTableFilters('Extract Name,  Status, Vendor, etc.');
 
-  console.log('TableFileStatus, localInput: ', localInput);
+  console.log('TableFileStatus, localInput: ', tableProps);
   return (
     <Container>
       <Row id={`${id}-filters`} around>
