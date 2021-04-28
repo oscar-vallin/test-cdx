@@ -19,6 +19,9 @@ export type Scalars = {
 export type Query = {
   __typename?: 'Query';
   beginLogin?: Maybe<LoginStep>;
+  exchangeActivityInProcess?: Maybe<OrganizationLinkConnection>;
+  exchangeActivityTransmitted?: Maybe<OrganizationLinkConnection>;
+  exchangeActivityErrored?: Maybe<OrganizationLinkConnection>;
   workPacketStatusDetails?: Maybe<WorkPacketStatusDetails>;
   workPacketStatuses?: Maybe<Array<Maybe<WorkPacketStatus>>>;
   dashboardPeriods?: Maybe<DashboardPeriods>;
@@ -54,6 +57,24 @@ export type Query = {
 
 export type QueryBeginLoginArgs = {
   userId: Scalars['String'];
+};
+
+export type QueryExchangeActivityInProcessArgs = {
+  orgSidInput: OrgSidInput;
+  dateRange: DateTimeRangeInput;
+  pageableInput: PageableInput;
+};
+
+export type QueryExchangeActivityTransmittedArgs = {
+  orgSidInput: OrgSidInput;
+  dateRange: DateTimeRangeInput;
+  pageableInput: PageableInput;
+};
+
+export type QueryExchangeActivityErroredArgs = {
+  orgSidInput: OrgSidInput;
+  dateRange: DateTimeRangeInput;
+  pageableInput: PageableInput;
 };
 
 export type QueryWorkPacketStatusDetailsArgs = {
@@ -1359,6 +1380,21 @@ export type DashThemeColorModeInput = {
   themeColorMode: ThemeColorMode;
 };
 
+export type OrganizationLink = {
+  __typename?: 'OrganizationLink';
+  id: Scalars['ID'];
+  orgId: Scalars['String'];
+  name: Scalars['String'];
+  type?: Maybe<CdxWebPage>;
+  activityTime?: Maybe<Scalars['DateTime']>;
+};
+
+export type OrganizationLinkConnection = {
+  __typename?: 'OrganizationLinkConnection';
+  paginationInfo: PaginationInfo;
+  nodes?: Maybe<Array<Maybe<OrganizationLink>>>;
+};
+
 export type BeginLoginQueryVariables = Exact<{
   userId: Scalars['String'];
 }>;
@@ -2576,6 +2612,87 @@ export type UnionPasswordRuleFragment =
   | UnionPasswordRule_PasswordCharacterRule_Fragment
   | UnionPasswordRule_PasswordStrengthRule_Fragment
   | UnionPasswordRule_PasswordRuleGroup_Fragment;
+
+export type ExchangeActivityInProcessQueryVariables = Exact<{
+  orgSidInput: OrgSidInput;
+  dateRange: DateTimeRangeInput;
+  pageableInput: PageableInput;
+}>;
+
+export type ExchangeActivityInProcessQuery = { __typename?: 'Query' } & {
+  exchangeActivityInProcess?: Maybe<
+    { __typename?: 'OrganizationLinkConnection' } & {
+      paginationInfo: { __typename?: 'PaginationInfo' } & Pick<
+        PaginationInfo,
+        'totalPages' | 'totalElements' | 'pageNumber' | 'pageSize'
+      >;
+      nodes?: Maybe<
+        Array<
+          Maybe<
+            { __typename?: 'OrganizationLink' } & Pick<
+              OrganizationLink,
+              'id' | 'orgId' | 'name' | 'type' | 'activityTime'
+            >
+          >
+        >
+      >;
+    }
+  >;
+};
+
+export type ExchangeActivityTransmittedQueryVariables = Exact<{
+  orgSidInput: OrgSidInput;
+  dateRange: DateTimeRangeInput;
+  pageableInput: PageableInput;
+}>;
+
+export type ExchangeActivityTransmittedQuery = { __typename?: 'Query' } & {
+  exchangeActivityTransmitted?: Maybe<
+    { __typename?: 'OrganizationLinkConnection' } & {
+      paginationInfo: { __typename?: 'PaginationInfo' } & Pick<
+        PaginationInfo,
+        'totalPages' | 'totalElements' | 'pageNumber' | 'pageSize'
+      >;
+      nodes?: Maybe<
+        Array<
+          Maybe<
+            { __typename?: 'OrganizationLink' } & Pick<
+              OrganizationLink,
+              'id' | 'orgId' | 'name' | 'type' | 'activityTime'
+            >
+          >
+        >
+      >;
+    }
+  >;
+};
+
+export type ExchangeActivityErroredQueryVariables = Exact<{
+  orgSidInput: OrgSidInput;
+  dateRange: DateTimeRangeInput;
+  pageableInput: PageableInput;
+}>;
+
+export type ExchangeActivityErroredQuery = { __typename?: 'Query' } & {
+  exchangeActivityErrored?: Maybe<
+    { __typename?: 'OrganizationLinkConnection' } & {
+      paginationInfo: { __typename?: 'PaginationInfo' } & Pick<
+        PaginationInfo,
+        'totalPages' | 'totalElements' | 'pageNumber' | 'pageSize'
+      >;
+      nodes?: Maybe<
+        Array<
+          Maybe<
+            { __typename?: 'OrganizationLink' } & Pick<
+              OrganizationLink,
+              'id' | 'orgId' | 'name' | 'type' | 'activityTime'
+            >
+          >
+        >
+      >;
+    }
+  >;
+};
 
 export const UnionNvpFragmentDoc = gql`
   fragment unionNVP on NVP {
@@ -5644,4 +5761,202 @@ export type ChangeOwnPasswordPageLazyQueryHookResult = ReturnType<typeof useChan
 export type ChangeOwnPasswordPageQueryResult = Apollo.QueryResult<
   ChangeOwnPasswordPageQuery,
   ChangeOwnPasswordPageQueryVariables
+>;
+export const ExchangeActivityInProcessDocument = gql`
+  query ExchangeActivityInProcess(
+    $orgSidInput: OrgSidInput!
+    $dateRange: DateTimeRangeInput!
+    $pageableInput: PageableInput!
+  ) {
+    exchangeActivityInProcess(orgSidInput: $orgSidInput, dateRange: $dateRange, pageableInput: $pageableInput) {
+      paginationInfo {
+        totalPages
+        totalElements
+        pageNumber
+        pageSize
+      }
+      nodes {
+        id
+        orgId
+        name
+        type
+        activityTime
+      }
+    }
+  }
+`;
+
+/**
+ * __useExchangeActivityInProcessQuery__
+ *
+ * To run a query within a React component, call `useExchangeActivityInProcessQuery` and pass it any options that fit your needs.
+ * When your component renders, `useExchangeActivityInProcessQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useExchangeActivityInProcessQuery({
+ *   variables: {
+ *      orgSidInput: // value for 'orgSidInput'
+ *      dateRange: // value for 'dateRange'
+ *      pageableInput: // value for 'pageableInput'
+ *   },
+ * });
+ */
+export function useExchangeActivityInProcessQuery(
+  baseOptions: Apollo.QueryHookOptions<ExchangeActivityInProcessQuery, ExchangeActivityInProcessQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ExchangeActivityInProcessQuery, ExchangeActivityInProcessQueryVariables>(
+    ExchangeActivityInProcessDocument,
+    options
+  );
+}
+export function useExchangeActivityInProcessLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<ExchangeActivityInProcessQuery, ExchangeActivityInProcessQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<ExchangeActivityInProcessQuery, ExchangeActivityInProcessQueryVariables>(
+    ExchangeActivityInProcessDocument,
+    options
+  );
+}
+export type ExchangeActivityInProcessQueryHookResult = ReturnType<typeof useExchangeActivityInProcessQuery>;
+export type ExchangeActivityInProcessLazyQueryHookResult = ReturnType<typeof useExchangeActivityInProcessLazyQuery>;
+export type ExchangeActivityInProcessQueryResult = Apollo.QueryResult<
+  ExchangeActivityInProcessQuery,
+  ExchangeActivityInProcessQueryVariables
+>;
+export const ExchangeActivityTransmittedDocument = gql`
+  query ExchangeActivityTransmitted(
+    $orgSidInput: OrgSidInput!
+    $dateRange: DateTimeRangeInput!
+    $pageableInput: PageableInput!
+  ) {
+    exchangeActivityTransmitted(orgSidInput: $orgSidInput, dateRange: $dateRange, pageableInput: $pageableInput) {
+      paginationInfo {
+        totalPages
+        totalElements
+        pageNumber
+        pageSize
+      }
+      nodes {
+        id
+        orgId
+        name
+        type
+        activityTime
+      }
+    }
+  }
+`;
+
+/**
+ * __useExchangeActivityTransmittedQuery__
+ *
+ * To run a query within a React component, call `useExchangeActivityTransmittedQuery` and pass it any options that fit your needs.
+ * When your component renders, `useExchangeActivityTransmittedQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useExchangeActivityTransmittedQuery({
+ *   variables: {
+ *      orgSidInput: // value for 'orgSidInput'
+ *      dateRange: // value for 'dateRange'
+ *      pageableInput: // value for 'pageableInput'
+ *   },
+ * });
+ */
+export function useExchangeActivityTransmittedQuery(
+  baseOptions: Apollo.QueryHookOptions<ExchangeActivityTransmittedQuery, ExchangeActivityTransmittedQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ExchangeActivityTransmittedQuery, ExchangeActivityTransmittedQueryVariables>(
+    ExchangeActivityTransmittedDocument,
+    options
+  );
+}
+export function useExchangeActivityTransmittedLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<ExchangeActivityTransmittedQuery, ExchangeActivityTransmittedQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<ExchangeActivityTransmittedQuery, ExchangeActivityTransmittedQueryVariables>(
+    ExchangeActivityTransmittedDocument,
+    options
+  );
+}
+export type ExchangeActivityTransmittedQueryHookResult = ReturnType<typeof useExchangeActivityTransmittedQuery>;
+export type ExchangeActivityTransmittedLazyQueryHookResult = ReturnType<typeof useExchangeActivityTransmittedLazyQuery>;
+export type ExchangeActivityTransmittedQueryResult = Apollo.QueryResult<
+  ExchangeActivityTransmittedQuery,
+  ExchangeActivityTransmittedQueryVariables
+>;
+export const ExchangeActivityErroredDocument = gql`
+  query ExchangeActivityErrored(
+    $orgSidInput: OrgSidInput!
+    $dateRange: DateTimeRangeInput!
+    $pageableInput: PageableInput!
+  ) {
+    exchangeActivityErrored(orgSidInput: $orgSidInput, dateRange: $dateRange, pageableInput: $pageableInput) {
+      paginationInfo {
+        totalPages
+        totalElements
+        pageNumber
+        pageSize
+      }
+      nodes {
+        id
+        orgId
+        name
+        type
+        activityTime
+      }
+    }
+  }
+`;
+
+/**
+ * __useExchangeActivityErroredQuery__
+ *
+ * To run a query within a React component, call `useExchangeActivityErroredQuery` and pass it any options that fit your needs.
+ * When your component renders, `useExchangeActivityErroredQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useExchangeActivityErroredQuery({
+ *   variables: {
+ *      orgSidInput: // value for 'orgSidInput'
+ *      dateRange: // value for 'dateRange'
+ *      pageableInput: // value for 'pageableInput'
+ *   },
+ * });
+ */
+export function useExchangeActivityErroredQuery(
+  baseOptions: Apollo.QueryHookOptions<ExchangeActivityErroredQuery, ExchangeActivityErroredQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ExchangeActivityErroredQuery, ExchangeActivityErroredQueryVariables>(
+    ExchangeActivityErroredDocument,
+    options
+  );
+}
+export function useExchangeActivityErroredLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<ExchangeActivityErroredQuery, ExchangeActivityErroredQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<ExchangeActivityErroredQuery, ExchangeActivityErroredQueryVariables>(
+    ExchangeActivityErroredDocument,
+    options
+  );
+}
+export type ExchangeActivityErroredQueryHookResult = ReturnType<typeof useExchangeActivityErroredQuery>;
+export type ExchangeActivityErroredLazyQueryHookResult = ReturnType<typeof useExchangeActivityErroredLazyQuery>;
+export type ExchangeActivityErroredQueryResult = Apollo.QueryResult<
+  ExchangeActivityErroredQuery,
+  ExchangeActivityErroredQueryVariables
 >;
