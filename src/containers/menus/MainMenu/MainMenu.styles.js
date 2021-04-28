@@ -40,7 +40,7 @@ export const StyledMenuButton = styled(ButtonAction)`
   border-bottom: white;
   border-bottom-width: 2px;
   border-bottom-style: ${({ selected }) => (selected ? 'double' : 'none')};
-  font-size: 0.7vw;
+  font-size: 14px;
   @media (max-width: 993px) {
     display: ${({ collapse }) => (collapse ? 'inline-block' : 'none')};
     font-size: 14px;
