@@ -103,5 +103,6 @@ export const useDashboardService = (initOrgSid) => {
     getOption,
     setOrgSid,
     setDateId,
+    dateId,
   };
 };
