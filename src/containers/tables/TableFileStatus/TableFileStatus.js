@@ -2,7 +2,16 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Table } from '../../../components/tables/Table';
 import { useParams } from 'react-router-dom';
-import { format, isYesterday, lastDayOfMonth, startOfMonth, startOfYesterday, subMonths } from 'date-fns';
+import {
+  endOfDay,
+  endOfYesterday,
+  format,
+  lastDayOfMonth,
+  startOfDay,
+  startOfMonth,
+  startOfYesterday,
+  subMonths,
+} from 'date-fns';
 
 import { Box, Row, Column, Container, RightColumn } from './TableFileStatus.styles';
 import { useTable } from './TableFileStatus.service';
@@ -30,14 +39,18 @@ const TableFileStatus = ({ idPage = 'TableFileStatus', orgSid = 1, dateRange, fi
 
   const selectDate = (date) => {
     if (date === 'today') {
-      const startDay = format(new Date(), 'MM/dd/yyyy hh:mm a');
+      const startDay = format(startOfDay(new Date()), 'MM/dd/yyyy hh:mm a');
+      const endDay = format(endOfDay(new Date()), 'MM/dd/yyyy hh:mm a');
+
       startDate.setValue(startDay);
-      endDate.setValue(startDay);
+      endDate.setValue(endDay);
     }
     if (date === 'yesterday') {
       const startDay = format(startOfYesterday(new Date()), 'MM/dd/yyyy hh:mm a');
+      const endDay = format(endOfYesterday(new Date()), 'MM/dd/yyyy hh:mm a');
+
       startDate.setValue(startDay);
-      endDate.setValue(startDay);
+      endDate.setValue(endDay);
     }
     if (date === 'thisMonth') {
       const startDay = format(startOfMonth(new Date()), 'MM/dd/yyyy hh:mm a');
