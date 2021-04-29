@@ -5,22 +5,15 @@ import { Container, TableContainer, Row, Column, RightColumn } from './TableActi
 
 // import { useTable } from './TableFileStatus.service';
 import { InputText } from '../../../components/inputs/InputText';
+import { useTable } from './TableCurrentActivity.service';
 import { InputDateRange } from '../../../components/inputs/InputDateRange';
 import { useTableFilters } from '../../../hooks/useTableFilters';
+import { tokenToString } from 'typescript';
 
-const TablesCurrentActivity = ({ id = 'TableCurrentActivity', data, filter }) => {
+const TablesCurrentActivity = ({ id = 'TableCurrentActivity', argOrgSid = 1, argDateRange, argFilter }) => {
   const { localInput, startDate, endDate } = useTableFilters('Name, Id, Last Activity');
+  const { tableProc, tableComp, tableError } = useTable(argOrgSid, argDateRange, argFilter);
 
-  const items = [
-    { id: 'id1', name: 'John Smith', activity: '2020/11/04 09:14 AM' },
-    { id: 'id1', name: 'John Smith', activity: '2020/11/04 09:14 AM' },
-    { id: 'id1', name: 'John Smith', activity: '2020/11/04 09:14 AM' },
-    { id: 'id1', name: 'John Smith', activity: '2020/11/04 09:14 AM' },
-    { id: 'id1', name: 'John Smith', activity: '2020/11/04 09:14 AM' },
-    { id: 'id1', name: 'John Smith', activity: '2020/11/04 09:14 AM' },
-    { id: 'id1', name: 'John Smith', activity: '2020/11/04 09:14 AM' },
-    { id: 'id1', name: 'John Smith', activity: '2020/11/04 09:14 AM' },
-  ];
   return (
     <Container id={id}>
       <Row id={`${id}-filters`} around>
@@ -32,15 +25,15 @@ const TablesCurrentActivity = ({ id = 'TableCurrentActivity', data, filter }) =>
         </RightColumn>
       </Row>
       <TableContainer>
-        <TableActivity tableName="In Process" data={items} />
+        {tableProc.loading === false && <TableActivity tableName="In Process" {...tableProc} />}
         <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
           <Separator />
         </Spacing>
-        <TableActivity tableName="Completed" data={items} color="complete" />
+        {!tableProc.loading && <TableActivity tableName="Completed" color="complete" {...tableComp} />}
         <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
           <Separator />
         </Spacing>
-        <TableActivity tableName="Errored" data={items} color="error" />
+        {!tableProc.loading && <TableActivity tableName="Errored" color="error" {...tableError} />}
       </TableContainer>
     </Container>
   );

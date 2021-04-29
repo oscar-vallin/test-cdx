@@ -1,120 +1,99 @@
 import { useState, useEffect } from 'react';
-// import { format } from 'date-fns';
-// import { useWorkPacketStatusesQuery } from '../../../data/services/graphql';
-// import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableConstants';
-// import { formatField } from '../../../helpers/tableHelpers';
-// import { getStepStatusLabel } from '../../../data/constants/FileStatusConstants';
-// import { FileProgress } from '../../bars/FileProgress';
-// import { HighlightCounter } from '../../../components/badges/HighlightCounter';
+import { format } from 'date-fns';
+import { useExchangeActivityInProcessQuery } from '../../../data/services/graphql';
+import { useActivityComplete } from './hooks/useActivityComplete';
+import { useActivityErrored } from './hooks/useActivityErrored';
+import { formatField } from '../../../helpers/tableHelpers';
 
-//
 export const useTable = (argOrgSid, argDateRange, argFilter) => {
-  //   const [_loading, setLoading] = useState(true);
-  //   const [items, setItems] = useState([]);
-  //   const [columns, setColumns] = useState([]);
-  //   const structure = getTableStructure(TABLE_NAMES.FILE_STATUS);
-  //   const { data, loading, error } = useWorkPacketStatusesQuery({
-  //     variables: {
-  //       orgSid: argOrgSid,
-  //       dateRange: argDateRange,
-  //       filter: argFilter,
-  //     },
-  //   });
+  const [_loading, setLoading] = useState(true);
+  const [itemsProc, setItemsProc] = useState([]);
+  const [itemsComp, setItemsComp] = useState([]);
+  const [itemsError, setItemsError] = useState([]);
+  // const [columns, setColumns] = useState([]);
+
+  const { apiData, loadingComp } = useActivityComplete();
+  const { apiDataError, loadingError } = useActivityErrored();
+
+  const { data, loading, error } = useExchangeActivityInProcessQuery({
+    variables: {
+      orgSidInput: { orgSid: 1 },
+      dateRange: { rangeStart: '2020-01-01T00:00:00-08:00', rangeEnd: '2020-01-01T23:59:59-08:00' },
+      pageableInput: {
+        pageNumber: 0,
+        pageSize: 100,
+      },
+    },
+  });
+
   //   // * Component Did Mount.
-  //   useEffect(() => {
-  //     setLoading(false);
-  //   }, []);
-  //   useEffect(() => {
-  //     const doEffect = () => {
-  //       // console.log('TableErrors.service, data:', data);
-  //       const _columns = [
-  //         {
-  //           key: 'datetime',
-  //           minWidth: 140,
-  //           maxWidth: 150,
-  //           label: 'Received On',
-  //           id: 'datetime',
-  //           fieldName: 'datetime',
-  //           style: 'link',
-  //         },
-  //         { key: 'vendor', minWidth: 80, maxWidth: 150, label: 'Vendor', id: 'vendor', style: 'text' },
-  //         { key: 'planSponsor', minWidth: 100, maxWidth: 120, label: 'Sponsor', id: 'planSponsor', style: 'text' },
-  //         { key: 'extractName', minWidth: 100, maxWidth: 300, label: 'Extract Name', id: 'extractName', style: 'text' },
-  //         { key: 'overall', minWidth: 100, maxWidth: 150, label: 'Overall', id: 'overall', style: 'text' },
-  //         { key: 'progress', minWidth: 100, maxWidth: 200, label: 'Progress', id: 'progress', style: 'node' },
-  //       ];
-  //       const _items = data.workPacketStatuses.map(
-  //         ({
-  //           workOrderId,
-  //           timestamp,
-  //           vendorId,
-  //           planSponsorId,
-  //           inboundFilename,
-  //           step,
-  //           stepStatus,
-  //           recordHighlightCount,
-  //           recordHighlightType,
-  //         }) => {
-  //           const datetime = format(new Date(timestamp), 'MM/dd/yyyy hh:mm a');
-  //           const stepStatusLabel = getStepStatusLabel(stepStatus);
-  //           console.log('Xxxxx highlight: ', recordHighlightCount, recordHighlightType);
-  //           return [
-  //             formatField(
-  //               datetime,
-  //               'datetime',
-  //               `/file-status/${workOrderId}`,
-  //               '',
-  //               formatField(
-  //                 <>
-  //                   {recordHighlightCount && (
-  //                     <HighlightCounter type={recordHighlightType} href={`/file-status/${workOrderId}*`}>
-  //                       {recordHighlightCount}
-  //                     </HighlightCounter>
-  //                   )}
-  //                 </>,
-  //                 'highlight'
-  //               )
-  //             ),
-  //             formatField(vendorId, 'vendor', vendorId),
-  //             formatField(planSponsorId, 'planSponsor', planSponsorId),
-  //             formatField(inboundFilename, 'extractName', inboundFilename),
-  //             formatField(stepStatusLabel, 'overall', stepStatusLabel),
-  //             formatField(<FileProgress step={step} stepStatus={stepStatus} />, 'progress', stepStatusLabel, step),
-  //           ];
-  //         }
-  //       );
-  //       setColumns(_columns);
-  //       setItems(_items);
-  //     };
-  //     if (data) {
-  //       return doEffect();
-  //     }
-  //   }, [data]);
-  //   // * Loading Data
-  //   useEffect(() => {
-  //     setLoading(loading);
-  //   }, [loading]);
-  //   return {
-  //     tableProps: {
-  //       items,
-  //       columns,
-  //       structure,
-  //       loading: _loading,
-  //     },
-  //     error,
-  //   };
-  // };
-  // const useInput = (placeholder) => {
-  // const [value, setValue] = useState('');
-  // const onChange = (e) => {
-  //   console.log('useInput, onChange, e: ', e);
-  //   console.log('useInput, onChange, e.target: ', e.target);
-  //   console.log('useInput, onChange, value: ', value);
-  //   setValue(value + e.nativeEvent.data);
-  // };
-  // return {
-  //   value,
-  //   onChange,
-  //   placeholder,
-  // };
+  useEffect(() => {
+    setLoading(false);
+  }, []);
+  useEffect(() => {
+    const doEffect = () => {
+      console.log('data progress: ', apiDataError);
+
+      const _itemsProcess = data.exchangeActivityInProcess.nodes.map(({ id, name, activityTime }) => {
+        console.log('data progress: ', id, name, activityTime);
+        const datetime = format(new Date(activityTime), 'MM/dd/yyyy hh:mm a');
+
+        return [
+          formatField(id, 'id', id),
+          formatField(name, 'name', name),
+          formatField(datetime, 'activity', datetime),
+        ];
+      });
+
+      setItemsProc(_itemsProcess);
+
+      const _itemsComplete = apiData.exchangeActivityTransmitted.nodes.map(({ id, name, activityTime }) => {
+        console.log('data progress: ', id, name, activityTime);
+        const datetime = format(new Date(activityTime), 'MM/dd/yyyy hh:mm a');
+
+        return [
+          formatField(id, 'id', id),
+          formatField(name, 'name', name),
+          formatField(datetime, 'activity', datetime),
+        ];
+      });
+
+      setItemsComp(_itemsComplete);
+
+      const _itemsErrored = apiDataError.exchangeActivityErrored.nodes.map(({ id, name, activityTime }) => {
+        console.log('data progress: ', id, name, activityTime);
+        const datetime = format(new Date(activityTime), 'MM/dd/yyyy hh:mm a');
+
+        return [
+          formatField(id, 'id', id),
+          formatField(name, 'name', name),
+          formatField(datetime, 'activity', datetime),
+        ];
+      });
+
+      setItemsError(_itemsErrored);
+    };
+    if (data && apiData && apiDataError) {
+      return doEffect();
+    }
+  }, [data]);
+  // * Loading Data
+  useEffect(() => {
+    setLoading(loading);
+  }, [loading]);
+  return {
+    tableProc: {
+      items: itemsProc,
+      loading: _loading,
+    },
+    tableComp: {
+      items: itemsComp,
+      loading: loadingComp,
+    },
+    tableError: {
+      items: itemsError,
+      loading: loadingError,
+    },
+    error,
+  };
 };

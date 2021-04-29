@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { MessageBar } from 'office-ui-fabric-react';
 import { Row, Column } from '../../../components/layouts';
-import { TableName, StyledBox } from './TableActivity.style';
+import { TableName } from './TableActivity.style';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -22,20 +22,33 @@ const generateColumns = () => {
   ];
 };
 
-const onRenderItemColumn = (item, index, column) => {
-  switch (column.key) {
-    case 'tmpl':
-      return <FontIcon iconName={item.tmpl ? 'CheckMark' : 'Cancel'} />;
-    default:
-      return item[column.key];
-  }
-};
-
-const TableActivity = ({ id = 'TableActivity', tableName, data, color }) => {
+const TableActivity = ({ items, loading, tableName, color }) => {
   const columns = generateColumns();
+  const [sortedItems, setSortedItems] = useState('initialState');
+
+  useEffect(() => {
+    console.log('plpapala: ', items);
+
+    if (loading === false) {
+      _buildItems();
+    }
+  }, [loading]);
+  const _buildItems = () => {
+    const iItems = items.map((rowItem) => {
+      const objItem = {};
+
+      rowItem.forEach((rowColItem) => {
+        objItem[rowColItem.id] = rowColItem.value;
+      });
+
+      return objItem;
+    });
+
+    setSortedItems(iItems);
+    return iItems;
+  };
 
   return (
-    // <StyledBox id={id}>
     <Row>
       <Column>
         <TableName variant="bold" color={color}>
@@ -43,25 +56,19 @@ const TableActivity = ({ id = 'TableActivity', tableName, data, color }) => {
         </TableName>
       </Column>
       <Column>
-        {/* {!loading ? (
-      groups.length > 0 ? ( */}
-        <DetailsList
-          items={data}
-          selectionMode={SelectionMode.none}
-          columns={columns}
-          layoutMode={DetailsListLayoutMode.justified}
-          onRenderItemColumn={onRenderItemColumn}
-          isHeaderVisible
-        />
-        {/* ) : (
-        <MessageBar>No groups added</MessageBar>
-      )
-    ) : (
-      <Spinner label="Loading groups" />
-    )} */}
+        {loading === false ? (
+          <DetailsList
+            items={sortedItems}
+            selectionMode={SelectionMode.none}
+            columns={columns}
+            layoutMode={DetailsListLayoutMode.justified}
+            isHeaderVisible
+          />
+        ) : (
+          <Spinner label="Loading Activity" />
+        )}
       </Column>
     </Row>
-    // </StyledBox>
   );
 };
 
