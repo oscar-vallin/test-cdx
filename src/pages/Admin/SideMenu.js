@@ -1,8 +1,4 @@
-import React from 'react';
-import { LayoutAdmin } from '../../layouts/LayoutAdmin';
-import { Spacing } from '../../components/spacings/Spacing';
-
-const NAV_ITEMS = [
+export const NAV_ITEMS = [
   {
     links: [
       {
@@ -98,15 +94,3 @@ const NAV_ITEMS = [
     ],
   },
 ];
-
-const _AdminPage = () => {
-  return (
-    <LayoutAdmin id="PageAdmin" sidebar={NAV_ITEMS}>
-      <Spacing margin="double" />
-    </LayoutAdmin>
-  );
-};
-
-const AdminPage = React.memo(_AdminPage);
-
-export { AdminPage };
