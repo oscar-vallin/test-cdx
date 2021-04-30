@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Table } from '../../../components/tables/Table';
-import { useParams } from 'react-router-dom';
 
 import { Box, Row, Column, Container, RightColumn } from './TableFileStatus.styles';
 import { useTable } from './TableFileStatus.service';
@@ -14,10 +13,9 @@ const TableFileStatus = ({ idComp = 'TableFileStatus', orgSid = 1, dateRange, fi
   const { localInput, startDate, endDate } = useTableFilters('Extract Name,  Status, Vendor, etc.');
 
   console.log('TableFileStatus, localInput: ', localInput);
-  const { id } = useParams();
+  
   useEffect(() => {
-    if (id === undefined) {
-    }
+    
   }, []);
 
   console.log('dates: ', startDate.value, endDate.value);
