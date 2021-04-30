@@ -5,7 +5,6 @@ import { useParams } from 'react-router-dom';
 import {
   endOfDay,
   endOfYesterday,
-  format,
   lastDayOfMonth,
   startOfDay,
   startOfMonth,
@@ -39,29 +38,29 @@ const TableFileStatus = ({ idPage = 'TableFileStatus', orgSid = 1, dateRange, fi
 
   const selectDate = (date) => {
     if (date === 'today') {
-      const startDay = format(startOfDay(new Date()), 'MM/dd/yyyy hh:mm a');
-      const endDay = format(endOfDay(new Date()), 'MM/dd/yyyy hh:mm a');
+      const startDay = startOfDay(new Date());
+      const endDay = endOfDay(new Date());
 
       startDate.setValue(startDay);
       endDate.setValue(endDay);
     }
     if (date === 'yesterday') {
-      const startDay = format(startOfYesterday(new Date()), 'MM/dd/yyyy hh:mm a');
-      const endDay = format(endOfYesterday(new Date()), 'MM/dd/yyyy hh:mm a');
+      const startDay = startOfYesterday(new Date());
+      const endDay = endOfYesterday(new Date());
 
       startDate.setValue(startDay);
       endDate.setValue(endDay);
     }
     if (date === 'thisMonth') {
-      const startDay = format(startOfMonth(new Date()), 'MM/dd/yyyy hh:mm a');
-      const endDay = format(lastDayOfMonth(new Date()), 'MM/dd/yyyy hh:mm a');
+      const startDay = startOfMonth(new Date());
+      const endDay = lastDayOfMonth(new Date());
 
       startDate.setValue(startDay);
       endDate.setValue(endDay);
     }
     if (date === 'lastMonth') {
-      const startDay = format(startOfMonth(subMonths(new Date(), 1)), 'MM/dd/yyyy hh:mm a');
-      const endDay = format(lastDayOfMonth(subMonths(new Date(), 1)), 'MM/dd/yyyy hh:mm a');
+      const startDay = startOfMonth(subMonths(new Date(), 1));
+      const endDay = lastDayOfMonth(subMonths(new Date(), 1));
       startDate.setValue(startDay);
       endDate.setValue(endDay);
     }
