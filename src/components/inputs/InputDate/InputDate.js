@@ -1,8 +1,9 @@
 import React from 'react';
 import { addMonths, addYears } from '@fluentui/date-time-utilities';
 import { DatePicker, DayOfWeek } from 'office-ui-fabric-react/lib/DatePicker';
+import { endOfDay, endOfYesterday, getHours, startOfDay, startOfYesterday } from 'date-fns';
 
-const today = new Date(Date.now());
+const today = new Date();
 const minDate = addMonths(today, -1);
 const maxDate = addYears(today, 1);
 
@@ -46,7 +47,26 @@ const DayPickerStrings = {
 
 const firstDayOfWeek = DayOfWeek.Sunday;
 
-const InputDate = ({ id = '', Label, placeholder = 'Select a Date...', onChange, required }) => {
+const InputDate = ({ id = '', Label, placeholder = 'Select a Date...', value, onChange, required }) => {
+  const [selectedDate, setSelectedDate] = React.useState();
+  React.useEffect(() => {
+    if (value === '') {
+      const hour = getHours(new Date());
+      if (hour < 9) {
+        console.log('hours: ', hour);
+        const startDay = startOfYesterday(new Date());
+        setSelectedDate(startDay);
+
+        return;
+      }
+      const startDay = startOfDay(new Date());
+      setSelectedDate(startDay);
+
+      return;
+    }
+    setSelectedDate(value);
+  }, []);
+
   return (
     <DatePicker
       isRequired={required}
@@ -57,7 +77,7 @@ const InputDate = ({ id = '', Label, placeholder = 'Select a Date...', onChange,
       minDate={minDate}
       maxDate={maxDate}
       onSelectDate={onChange}
-      initialPickerDate={today}
+      value={selectedDate}
       allowTextInput
     />
   );

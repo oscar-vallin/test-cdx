@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Table } from '../../../components/tables/Table';
 import { useParams } from 'react-router-dom';
-import { endOfDay, format, startOfDay } from 'date-fns';
 
 import { Box, Row, Column, Container, RightColumn } from './TableFileStatus.styles';
 import { useTable } from './TableFileStatus.service';
@@ -18,16 +17,11 @@ const TableFileStatus = ({ idComp = 'TableFileStatus', orgSid = 1, dateRange, fi
   const { id } = useParams();
   useEffect(() => {
     if (id === undefined) {
-      const endDay = format(endOfDay(new Date()), 'MM/dd/yyyy hh:mm a');
-      const startDay = format(startOfDay(new Date()), 'MM/dd/yyyy hh:mm a');
-
-      startDate.setValue(startDay);
-      endDate.setValue(endDay);
-      return;
     }
   }, []);
 
   console.log('dates: ', startDate.value, endDate.value);
+  console.log('local input: ', localInput.value);
   return (
     <Container>
       <Row id={`${idComp}-filters`} around>
