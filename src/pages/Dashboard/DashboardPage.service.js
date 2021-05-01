@@ -34,6 +34,10 @@ export const useDashboardService = (initOrgSid) => {
     },
   });
 
+  useEffect(() => {
+    console.log('ORROR: ', error);
+  }, [error]);
+
   // * Set Data Counters.
   const getData = () => {
     if (!datesOptions || !data?.dashboardPeriods) return;

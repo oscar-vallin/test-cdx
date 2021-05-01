@@ -15,6 +15,8 @@ export const useCurrentUser = (_username, _password) => {
   useEffect(() => {
     if (!data) return;
 
+    console.log('data currentUser', data);
+
     const _isLoggedIn = data.currentUser.loggedIn;
     setLoggedIn(_isLoggedIn);
   }, [data]);

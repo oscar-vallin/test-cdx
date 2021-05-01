@@ -28,6 +28,10 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
   }, []);
 
   useEffect(() => {
+    console.log('ORROR: ', error);
+  }, [error]);
+
+  useEffect(() => {
     const doEffect = () => {
       // console.log('TableErrors.service, data:', data);
       const _columns = [
