@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
+import { useHistory } from 'react-router-dom';
+import { useAuthContext } from '../../../contexts/AuthContext';
 import { useScheduleOccurrencesQuery } from '../../../data/services/graphql';
 import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { getStepStatusLabel } from '../../../data/constants/FileStatusConstants';
@@ -11,6 +13,9 @@ export const useScheduleItems = (argOrgSid, argDateRange, argFilter) => {
   const [items, setItems] = useState([]);
   const [dateStart, setDateStart] = useState(new Date());
   const [dateEnd, setDateEnd] = useState(new Date());
+
+  const { authLogout } = useAuthContext();
+  const history = useHistory();
 
   const { data, loading, error } = useScheduleOccurrencesQuery({
     variables: {
@@ -26,6 +31,15 @@ export const useScheduleItems = (argOrgSid, argDateRange, argFilter) => {
   useEffect(() => {
     setLoading(false);
   }, []);
+
+  useEffect(() => {
+    if (error) {
+      console.log('ORROR: ', error);
+
+      authLogout('expired');
+      history.push('/');
+    }
+  }, [error]);
 
   useEffect(() => {
     const doEffect = () => {
