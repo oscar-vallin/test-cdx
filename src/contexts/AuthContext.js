@@ -52,9 +52,16 @@ export const AuthContextProvider = ({ children }) => {
   //
   useEffect(async () => {
     const _token = await localStorage.getItem('AUTH_TOKEN');
+    const _login = await localStorage.getItem('LOGIN');
 
     console.log('setAuthenticated, _token?', _token);
     console.log('setAuthenticated, isCurrentUserLogged?', isCurrentUserLogged);
+
+    // if (_login === null) {
+    //   setAuthenticated(false);
+    // } else {
+    // setAuthenticated(true);
+    // }
 
     setAuthenticated(!!_token && !!isCurrentUserLogged);
     setAuthenticating(false);
@@ -147,6 +154,8 @@ export const AuthContextProvider = ({ children }) => {
   //
   const authLogin = (_user, _password, _history) => {
     console.log('authLogin');
+    localStorage.setItem('LOGIN', 'login');
+
     setUser(_user);
     setPassword(_password);
     setHistory(_history);
@@ -165,6 +174,7 @@ export const AuthContextProvider = ({ children }) => {
   //
   const authLogout = () => {
     localStorage.removeItem('AUTH_TOKEN');
+    localStorage.removeItem('LOGIN');
 
     console.log('Removed Item, AUTH_TOKEN');
     logoutQuery();

@@ -1,4 +1,7 @@
 import { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useAuthContext } from '../../contexts/AuthContext';
+
 import { useDashboardPeriodsQuery } from '../../data/services/graphql';
 
 export const DATE_OPTION_NAME = {
@@ -27,6 +30,7 @@ export const useDashboardService = (initOrgSid) => {
   const [dataCounters, setDataCounters] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingData, setIsLoadingData] = useState(true);
+  const [_error, setError] = useState(false);
 
   const { data, loading, error } = useDashboardPeriodsQuery({
     variables: {
@@ -34,8 +38,23 @@ export const useDashboardService = (initOrgSid) => {
     },
   });
 
+  const { authLogout } = useAuthContext();
+  const history = useHistory();
+
   useEffect(() => {
-    console.log('ORROR: ', error);
+    if (error) {
+      console.log('ORROR: ', error);
+
+      let _login = localStorage.getItem('LOGIN');
+
+      authLogout();
+      history.push('/');
+
+      if (_login != null) {
+        localStorage.removeItem('LOGIN');
+      }
+      setError(true);
+    }
   }, [error]);
 
   // * Set Data Counters.
@@ -105,5 +124,6 @@ export const useDashboardService = (initOrgSid) => {
     getOption,
     setOrgSid,
     setDateId,
+    _error,
   };
 };

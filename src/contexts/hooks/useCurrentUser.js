@@ -15,9 +15,9 @@ export const useCurrentUser = (_username, _password) => {
   useEffect(() => {
     if (!data) return;
 
-    console.log('data currentUser', data);
-
     const _isLoggedIn = data.currentUser.loggedIn;
+
+    console.log('logged in: ', _isLoggedIn);
     setLoggedIn(_isLoggedIn);
   }, [data]);
 
@@ -26,7 +26,11 @@ export const useCurrentUser = (_username, _password) => {
   //
   const currentUserQuery = async (__username) => {
     setProcessing(true);
+    const _login = await localStorage.getItem('LOGIN');
 
+    // if (_login != null) {
+    //   return;
+    // }
     await _apiCall();
 
     setProcessing(false);
