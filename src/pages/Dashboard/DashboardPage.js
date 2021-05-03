@@ -14,7 +14,7 @@ const ORG_SID = 1;
 
 const _DashboardPage = () => {
   const service = useDashboardService(ORG_SID);
-  const { isLoadingData, datesOptions, dataCounters, _error } = service;
+  const { isLoadingData, datesOptions, dataCounters } = service;
   const { setDateId } = service;
 
   // Render Buttons Bar

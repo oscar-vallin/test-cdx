@@ -155,7 +155,11 @@ export const AuthContextProvider = ({ children }) => {
   const authLogin = (_user, _password, _history) => {
     console.log('authLogin');
     localStorage.setItem('LOGIN', 'login');
+    const logout = localStorage.getItem('LOGOUT');
 
+    if (logout != null) {
+      localStorage.removeItem('LOGOUT');
+    }
     setUser(_user);
     setPassword(_password);
     setHistory(_history);
@@ -172,10 +176,13 @@ export const AuthContextProvider = ({ children }) => {
   //
   // * Clear all the Input Data Username and Password for the context.
   //
-  const authLogout = () => {
+  const authLogout = (expired) => {
     localStorage.removeItem('AUTH_TOKEN');
     localStorage.removeItem('LOGIN');
 
+    if (expired === 'expired') {
+      localStorage.setItem('LOGOUT', 'logout');
+    }
     console.log('Removed Item, AUTH_TOKEN');
     logoutQuery();
 

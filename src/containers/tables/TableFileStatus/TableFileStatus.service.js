@@ -36,14 +36,8 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
     if (error) {
       console.log('ORROR: ', error);
 
-      let _login = localStorage.getItem('LOGIN');
-
-      authLogout();
+      authLogout('expired');
       history.push('/');
-
-      if (_login != null) {
-        localStorage.removeItem('LOGIN');
-      }
     }
   }, [error]);
 

@@ -30,7 +30,6 @@ export const useDashboardService = (initOrgSid) => {
   const [dataCounters, setDataCounters] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingData, setIsLoadingData] = useState(true);
-  const [_error, setError] = useState(false);
 
   const { data, loading, error } = useDashboardPeriodsQuery({
     variables: {
@@ -45,15 +44,8 @@ export const useDashboardService = (initOrgSid) => {
     if (error) {
       console.log('ORROR: ', error);
 
-      let _login = localStorage.getItem('LOGIN');
-
-      authLogout();
+      authLogout('expired');
       history.push('/');
-
-      if (_login != null) {
-        localStorage.removeItem('LOGIN');
-      }
-      setError(true);
     }
   }, [error]);
 
@@ -124,6 +116,5 @@ export const useDashboardService = (initOrgSid) => {
     getOption,
     setOrgSid,
     setDateId,
-    _error,
   };
 };
