@@ -3,16 +3,20 @@ import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableCon
 import { formatField } from '../../../helpers/tableHelpers';
 
 //
-export const useTable = (data, tableName) => {
+export const useTable = (data, tableName, date) => {
   const [loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
   const [columns, setColumns] = useState([]);
+  // const [urlDate, setUrlDate] = useState('');
   const structure = getTableStructure(tableName);
 
   // console.log('TableDashboard, useTable, data => ', data);
-
   // * Component Did Mount.
   useEffect(() => {}, []);
+
+  // useEffect(() => {
+  //   setUrlDate(date);
+  // }, [urlDate]);
 
   useEffect(() => {
     const doEffect = () => {
@@ -27,18 +31,16 @@ export const useTable = (data, tableName) => {
         },
         { key: 'total', label: 'Total', id: 'total', style: 'total' },
       ];
-
       const _items = data.map((item) => {
         const countAndTotal = `${item.count}/${item.total}`;
-
         console.log('Item: ', item);
 
         return [
           formatField(
             item.name,
             'vendor',
-            item.name,
-            null,
+            `file-status/filter/${item.name}*${date}`,
+            '',
             formatField(item.secondaryDescr, 'specs', item.secondaryDescr)
           ),
           formatField(countAndTotal, 'total', countAndTotal),

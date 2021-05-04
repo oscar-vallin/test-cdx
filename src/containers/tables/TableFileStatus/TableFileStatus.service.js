@@ -22,6 +22,8 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
     },
   });
 
+  console.log('sadasjjhdkjasda: ', data);
+
   // * Component Did Mount.
   useEffect(() => {
     setLoading(false);
