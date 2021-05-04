@@ -73,7 +73,7 @@ export const AuthContextProvider = ({ children }) => {
     }
 
     if (data) {
-      // console.log('Data', data);
+      console.log('Data probe', data);
       const { step, tokenUser, loginCompleteDomain } = data?.passwordLogin;
       const isCompleted = (step ?? '') === 'COMPLETE';
 
@@ -93,6 +93,7 @@ export const AuthContextProvider = ({ children }) => {
 
         // console.log('Saved AuthData', authData);
         localStorage.setItem('AUTH_DATA', JSON.stringify(authData));
+        localStorage.setItem('USER_NAME', session.firstNm);
         // localStorage.setItem('AUTH_TOKEN', authData.token);
         setAuthData(authData);
         setAuthenticated(true);
@@ -165,7 +166,7 @@ export const AuthContextProvider = ({ children }) => {
   //
   const authLogout = () => {
     localStorage.removeItem('AUTH_TOKEN');
-
+    localStorage.removeItem('USER_NAME');
     console.log('Removed Item, AUTH_TOKEN');
     logoutQuery();
 

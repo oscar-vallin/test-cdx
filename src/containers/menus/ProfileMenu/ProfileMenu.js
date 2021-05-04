@@ -16,6 +16,8 @@ const ProfileMenu = ({ id = '__ProfileMenu' }) => {
   const { authLogout } = useAuthContext();
   const history = useHistory();
 
+  const userName = localStorage.getItem('USER_NAME');
+
   //* HandleLogout
   const handleLogout = () => {
     authLogout();
@@ -32,7 +34,7 @@ const ProfileMenu = ({ id = '__ProfileMenu' }) => {
   return (
     <StyledBox id={id} noStyle>
       <ButtonContextual items={items}>
-        <UserToken name="Edison Sanchez" />
+        <UserToken name={userName} />
       </ButtonContextual>
     </StyledBox>
   );
