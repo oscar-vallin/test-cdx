@@ -21,8 +21,6 @@ const isFormInvalid = (passwords) => {
 }
 
 const PasswordChange = ({ state, validations, onChange }) => {
-  const [rules, setRules] = useState([]);
-  
   const [
     updateOwnPasswordMutation,
     {
@@ -33,6 +31,10 @@ const PasswordChange = ({ state, validations, onChange }) => {
   ] = useUpdateOwnPasswordMutation({
     variables: { updatePasswordInput: state.password },
   });
+
+  useEffect(() => {
+    console.log(validations[0]);
+  }, [validations])
 
   return (
     <CardSection>
@@ -78,7 +80,7 @@ const PasswordChange = ({ state, validations, onChange }) => {
             <Button
               variant="primary"
               text={isUpdatingPassword ? "Processing..." : "Save password"}
-              disabled={isFormInvalid(state) || isUpdatingPassword}
+              disabled={isFormInvalid(state) || !validations[0].isValid || isUpdatingPassword}
               onClick={() => {
                 updateOwnPasswordMutation({
                   variables: {

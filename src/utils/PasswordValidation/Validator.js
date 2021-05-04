@@ -5,15 +5,25 @@ class PasswordRulesValidator {
   /* Validates a value against a set of rules */
   static validate(value, rules) {
     const validator = new PasswordValidator();
-    const strength = [];
+    const manualValidations = [];
     
     const getRule = (characteristic) => rules.find((rule) => rule.characteristic === characteristic);
     const contains = (characteristic) => getRule(characteristic) !== undefined;
     const getCondition = (characteristic) => getRule(characteristic).condition;
 
+
     if (contains('strength')) {
       if (zxcvbn(value).score < getCondition('strength')) {
-        strength.push('strength');
+        manualValidations.push('strength');
+      }
+    }
+
+    if (contains('whitespaces')) {
+      const allowedWhitespaces = getCondition('whitespaces');
+      const whitespaces = value.match(/\s/g);
+
+      if (Array.isArray(whitespaces) && whitespaces[0].length > allowedWhitespaces) {
+        manualValidations.push('whitespaces');
       }
     }
 
@@ -40,16 +50,11 @@ class PasswordRulesValidator {
     if (contains('symbols')) {
       validator.has().symbols(getCondition('symbols'));
     }
-  
-    if (contains('whitespaces')) {
-      const whitespaces = getCondition('whitespaces');
 
-      (!whitespaces) 
-        ? validator.has().not().spaces()  
-        : validator.has().spaces();
-    }
-
-    return [...strength, ...validator.validate(value, { list: true })];
+    return [
+      ...Array.from(new Set(manualValidations)),
+      ...validator.validate(value, { list: true })
+    ];
   }
   
   /* Checks if a set of validations fulfills its required set of characteristics */

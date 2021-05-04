@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useMemo, useContext } from 'react';
 
 import { Customizer, loadTheme } from '@fluentui/react';
 // import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
@@ -7,34 +7,62 @@ import 'office-ui-fabric-react/dist/css/fabric.css';
 import { ThemeProvider } from 'styled-components';
 import { defaultTheme, darkTheme } from '../styles/themes';
 import { theme as styledComponentsTheme } from '../styles/themes/theme';
+import { useCurrentUserDashThemePageLazyQuery } from '../data/services/graphql';
 
 export const ThemeContext = React.createContext(() => {
 });
 
 export const ThemeContextProvider = ({ children }) => {
-  const [isContextLoading, setLoading] = React.useState(true);
-  const [currentTheme, setTheme] = React.useState(styledComponentsTheme);
-  const [styledTheme, setStyledTheme] = React.useState(styledComponentsTheme);
+  const [isContextLoading, setLoading] = useState(true);
+  const [currentTheme, setTheme] = useState(styledComponentsTheme);
+  const [styledTheme, setStyledTheme] = useState(styledComponentsTheme);
 
-  React.useEffect(() => {
-    const theme = localStorage.getItem('CURRENT_THEME');
-
-    if (theme) {
-      const { name, themeColors } = JSON.parse(theme);
-      changeTheme(name, themeColors);
-    } else {
-      changeTheme('LIGHT');
+  const [
+    useDashThemeQuery,
+    {
+      data: currentUserThemeParams,
+      loading: isLoadingCurrentUserThemeParams,
     }
+  ] = useCurrentUserDashThemePageLazyQuery({ variables: {}});
 
-    const localFunction = async () => {
+  // useEffect(() => {
+  //   const theme = localStorage.getItem('CURRENT_THEME');
 
-      setLoading(false);
-    };
+  //   if (theme) {
+  //     const { name, themeColors } = JSON.parse(theme);
+  //     changeTheme(name, themeColors);
+  //   } else {
+  //     changeTheme('LIGHT');
+  //   }
 
-    localFunction();
+  //   const localFunction = async () => {
 
-    return () => null;
-  }, []);
+  //     setLoading(false);
+  //   };
+
+  //   localFunction();
+
+  //   return () => null;
+  // }, []);
+
+  useEffect(useDashThemeQuery, []);
+
+  useEffect(() => {
+    if (!isLoadingCurrentUserThemeParams) {
+      if (currentUserThemeParams) {
+        const {
+          themeColorModes,
+          themeColorPalettes,
+          themeFontSizes,
+          dashTheme
+        } = currentUserThemeParams.currentUserDashThemePage;
+
+        changeTheme(!dashTheme ? 'LIGHT' : dashTheme);
+      } else {
+        changeTheme('LIGHT');
+      }
+    }
+  }, [isLoadingCurrentUserThemeParams]);
 
   const getThemeColors = (name) => {
     const themes = {
@@ -61,7 +89,10 @@ export const ThemeContextProvider = ({ children }) => {
   };
 
   // eslint-disable-next-line
-  const values = React.useMemo(() => ({ isContextLoading, changeTheme }), [isContextLoading]);
+  const values = useMemo(() => ({
+    isContextLoading: isLoadingCurrentUserThemeParams,
+    changeTheme
+  }), [isLoadingCurrentUserThemeParams]);
 
   return (
     <Customizer {...loadTheme({ palette: currentTheme })}>
@@ -74,7 +105,7 @@ export const ThemeContextProvider = ({ children }) => {
 
 //
 export function useThemeContext() {
-  const context = React.useContext(ThemeContext);
+  const context = useContext(ThemeContext);
 
   return context;
 }

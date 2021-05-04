@@ -13,6 +13,8 @@ export const ROUTES_ID = {
   CREATE_POLICIES: 'create-policy',
   ACTIVE_ORGS: 'active-orgs',
   CURRENT_ACTIVITY: 'current-activity',
+  COLOR_PALETTES: 'color-palettes',
+  DEFAULT_THEME: 'default-theme',
 };
 
 const URL_ROUTES = {
@@ -32,6 +34,8 @@ const URL_ROUTES = {
   CREATE_POLICIES: `/${ROUTES_ID.ACCESS_MANAGEMENT_POLICIES}/create`,
   ACTIVE_ORGS: `/${ROUTES_ID.ADMIN}/organizations/active-orgs`,
   CURRENT_ACTIVITY: `/${ROUTES_ID.ADMIN}/activity/current-activity`,
+  COLOR_PALETTES: `/${ROUTES_ID.ADMIN}/dashboard-site/color-palettes`,
+  DEFAULT_THEME: `/${ROUTES_ID.ADMIN}/dashboard-site/default-theme`,
 };
 
 // DASHBOARD;
@@ -178,6 +182,20 @@ export const ROUTE_ACTIVITY_CURRENT = {
   ID: ROUTES_ID.CURRENT_ACTIVITY,
   TITLE: 'Current Activity',
   URL: URL_ROUTES.CURRENT_ACTIVITY,
+}
+
+export const ROUTE_COLOR_PALETTES = {
+  ID: ROUTES_ID.COLOR_PALETTES,
+  TITLE: 'Color Palettes',
+  URL: URL_ROUTES.COLOR_PALETTES,
+  MAIN_MENU: false,
+  API_ID: 'ADMIN',
+};
+
+export const ROUTE_DEFAULT_THEME = {
+  ID: ROUTES_ID.DEFAULT_THEME,
+  TITLE: 'Default Theme',
+  URL: URL_ROUTES.DEFAULT_THEME,
   MAIN_MENU: false,
   API_ID: 'ADMIN',
 };
@@ -199,6 +217,8 @@ export const ROUTES = {
   ROUTE_CREATE_POLICIES,
   ROUTE_ACTIVE_ORGS,
   ROUTE_ACTIVITY_CURRENT,
+  ROUTE_COLOR_PALETTES,
+  ROUTE_DEFAULT_THEME,
 };
 
 export const ROUTES_ARRAY = [
@@ -218,6 +238,8 @@ export const ROUTES_ARRAY = [
   ROUTE_ACCESS_MANAGEMENT_POLICIES,
   ROUTE_ACTIVE_ORGS,
   ROUTE_ACTIVITY_CURRENT,
+  ROUTE_COLOR_PALETTES,
+  ROUTE_DEFAULT_THEME,
 ];
 
 export const getRouteByApiId = (_apiId) => {

@@ -1,0 +1,15 @@
+{
+  "possibleTypes": {
+    "PasswordRule": [
+      "PasswordLengthRule",
+      "PasswordWhitespaceRule",
+      "PasswordCharacterRule",
+      "PasswordStrengthRule",
+      "PasswordRuleGroup"
+    ],
+    "NVP": [
+      "NVPStr",
+      "NVPId"
+    ]
+  }
+}

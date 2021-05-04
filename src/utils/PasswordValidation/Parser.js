@@ -15,9 +15,9 @@ export default class ValidationRulesParser {
         if (rule.rules) {
           return {
             level,
-            title: rule.title,
+            title: rule.title || `${level} Rule group`,
             expectation: rule.numberOfCharacteristics,
-            rules: ValidationRulesParser.parse(rule.rules, index + 1),
+            rules: ValidationRulesParser.parse(rule.rules, level + 1),
           }
         }
         
@@ -33,7 +33,7 @@ export default class ValidationRulesParser {
           {
             level,
             characteristic: rules.requiredStrengthLevel,
-            condition: rule.requiredStrengthLevel
+            condition: rule.requiredStrengthLevel - 1
           }
         ];
       case 'PasswordLengthRule':
@@ -57,13 +57,13 @@ export default class ValidationRulesParser {
             condition: rule.numberOfCharacters
           }
         ];
-      // case 'PasswordWhitespaceRule':
-      //   return [{
-      //     characteristic: rules.allowedWhitespace,
-      //     condition: rule.allowedWhitespace !== 'NONE'
-      //       ? Number(rule.allowedWhitespace) 
-      //       : 0
-      //   }];
+      case 'PasswordWhitespaceRule':
+        return [{
+          characteristic: rules.allowedWhitespace,
+          condition: rule.allowedWhitespace !== 'NONE'
+            ? Number(rule.allowedWhitespace) 
+            : 0
+        }];
       default:
         return [];
     }

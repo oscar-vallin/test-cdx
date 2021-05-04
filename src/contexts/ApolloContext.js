@@ -1,6 +1,7 @@
 import React from 'react';
 import { ApolloProvider, ApolloClient, InMemoryCache, HttpLink, ApolloLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
+import introspection from '../data/services/introspection.json';
 
 const SERVER_URL = process.env.REACT_APP_API_SERVER;
 
@@ -59,7 +60,7 @@ export const ApolloContextProvider = ({ children }) => {
 
   let client = new ApolloClient({
     link: afterwareLink.concat(authLink.concat(httpLink)),
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache({ possibleTypes: introspection.possibleTypes }),
   });
 
   // Component Did Mount

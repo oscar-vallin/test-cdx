@@ -30,7 +30,6 @@ export const OutsideComponent = ({ id, hide, collapseClick, children }) => {
 
 OutsideComponent.propTypes = {
   id: PropTypes.string.isRequired,
-  hide: PropTypes.bool.isRequired,
   collapseClick: PropTypes.func.isRequired,
   children: PropTypes.element.isRequired,
 };

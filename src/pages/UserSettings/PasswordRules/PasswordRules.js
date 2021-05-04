@@ -13,6 +13,7 @@ import {
   ValidationMessages,
   ValidationRulesParser,
 } from './../../../utils/PasswordValidation';
+import { validate } from 'graphql';
 
 const isArrayOfArrays = arr => arr.filter(item => Array.isArray(item)).length > 0;
 
@@ -41,112 +42,122 @@ const validateRulesArr = (value, data) => data.map(ruleSet => {
   const rootValidations = Array.from(new Set(validationResults
       .filter(validation => !isArrayOfArrays(validation))
       .reduce((rules, rule) => [...rules, ...rule], [])));
-  
+      
   const ruleObj = {
     ...ruleSet,
     validations: rootValidations,
-    rules: ruleSet.rules.map((rule, index) => {
-      const item = Array.isArray(rule) ? rule[0] : rule;
-
-      if (rule.rules) {
-        return validateRulesArr(value, [item]);
-      }
-      
-      const validations = isArrayOfArrays(validationResults[index])
-        ? validationResults[index].reduce((rules, rule) => [...rules, ...rule], [])
-        : validationResults[index];
-
-      return {
-        ...item,
-        ...(item.rules)
-          ? {
-            validations: Array.from(new Set(validations)),
-            isValid: isValid(item.rules),
+    rules: ruleSet
+      .rules
+      .map((rule, index) => {
+        const item = Array.isArray(rule) ? rule : [rule];
+        
+        return item.map(rule => {
+          if (rule.rules) {
+            return validateRulesArr(value, item);
           }
-          : {},
-          message: ValidationMessages[item.characteristic](item.condition),
-      };
-    }),
+
+          const validations = isArrayOfArrays(validationResults[index])
+            ? validationResults[index].reduce((rules, rule) => [...rules, ...rule], [])
+            : validationResults[index];
+
+          return {
+            ...rule,
+            ...(rule.rules)
+              ? {
+                validations: Array.from(new Set(validations)),
+                isValid: isValid(rule.rules),
+              }
+              : {},
+              message: ValidationMessages[rule.characteristic](rule.condition),
+          };
+        });
+      })
+      .reduce((rules, rule) => [...rules, ...rule], []),
   }
 
   return { ...ruleObj, isValid: isValid([ruleObj]) };
 });
 
-const onRenderCell = (item, index) => {
-  return (
-    <div style={{marginLeft: `${item.level * 15}px`}} key={index}>
-      {item.title && <h5 style={{ margin: '15px 0 5px' }}>
-        {item.isValid
-          ? <StyledIcon iconName="StatusCircleCheckmark" />
-          : <StyledIcon iconName="StatusCircleErrorX" />}
-
-        {item.title} {/*(Minimum: {item.expectation})*/}
-      </h5>}
-      
-      {
-        item.rules
-          ? item.rules.map((rule, ruleIndex) => {
-              if(Array.isArray(rule)) {
-                return rule.map(onRenderCell);
-              } else {
-                if (rule.characteristic === 'strength') {
-                  return (
-                    <div>
-                      <div dangerouslySetInnerHTML={{ __html: rule.message }} />
-                      
-                      <PasswordStrengthBar
-                        password={passwords.new}
-                        style={{ margin: '15px 0 0', width: '50%' }}
-                      />
-                    </div>
-                  )
-                }
-
-                return (
-                  <div style={{ display: 'flex', alignItems: 'center' }} key={ruleIndex}>
-                    { 
-                      !item.validations.includes(rule.characteristic)
-                        ? <StyledIcon iconName="StatusCircleCheckmark" />
-                        : <StyledIcon iconName="StatusCircleErrorX" />
-                    }
-              
-                    {rule.message}
-                  </div>
-                )
-              }
-            })
-          : (
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                { 
-                  item.isValid
-                    ? <StyledIcon iconName="StatusCircleCheckmark" />
-                    : <StyledIcon iconName="StatusCircleErrorX" />
-                }
-          
-                {item.message}
-              </div>
-            )
-      }
-    </div>
-  );
-};
 
 const PasswordRules = ({ validations, password, onChange }) => {
   const [rules, setRules] = useState([]);
+  const { data, loading, error } = useChangeOwnPasswordPageQuery();
 
-  const {
-    data: passwordRulesResult,
-    loading: isLoadingPasswordRules,
-    error: passwordRulesError,
-  } = useChangeOwnPasswordPageQuery();
+  const onRenderCell = (item, index) => {
+    return (
+      <div style={{marginLeft: `${item.level * 15}px`}} key={index}>
+        {item.title && <h5 style={{ margin: '15px 0 5px' }}>
+          {/* {item.isValid
+            ? <StyledIcon iconName="StatusCircleCheckmark" />
+            : <StyledIcon iconName="StatusCircleErrorX" />} */}
+  
+          {item.title} {/*(Minimum: {item.expectation})*/}
+        </h5>}
 
-  useEffect(async () => {
-    if (!isLoadingPasswordRules && passwordRulesResult) {
-      // setRules(
-      //   ValidationRulesParser.parse([passwordRulesResult.changeOwnPasswordPage.ruleGroup])
-      // );
+        {
+          item.rules
+            ? item.rules.map((rule, ruleIndex) => {
+                if(Array.isArray(rule)) {
+                  return rule.map(onRenderCell);
+                } else {
+                  if (rule.characteristic === 'strength') {
+                    return (
+                      <div key={ruleIndex}>
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                          { 
+                            !item.validations.includes(rule.characteristic)
+                              ? <StyledIcon iconName="StatusCircleCheckmark" />
+                              : <StyledIcon iconName="StatusCircleErrorX" />
+                          }
+                    
+                          <div dangerouslySetInnerHTML={{ __html: rule.message }} />
+                        </div>
+
+                        
+                        <PasswordStrengthBar
+                          password={password}
+                          style={{ margin: '15px 0 0', width: '50%' }}
+                        />
+                      </div>
+                    )
+                  }
+
+                  return (
+                    <div style={{ display: 'flex', alignItems: 'center' }} key={ruleIndex}>
+                      { 
+                        !item.validations.includes(rule.characteristic)
+                          ? <StyledIcon iconName="StatusCircleCheckmark" />
+                          : <StyledIcon iconName="StatusCircleErrorX" />
+                      }
+                
+                      {rule.message}
+                    </div>
+                  )
+                }
+              })
+            : (
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  { 
+                    item.isValid
+                      ? <StyledIcon iconName="StatusCircleCheckmark" />
+                      : <StyledIcon iconName="StatusCircleErrorX" />
+                  }
+            
+                  {item.message}
+                </div>
+              )
+        }
+      </div>
+    );
+  };
+
+  useEffect(() => {
+    if (!loading && data) {
+      setRules(
+        ValidationRulesParser.parse([data.changeOwnPasswordPage.ruleGroup])
+      );
     }
-  }, [isLoadingPasswordRules, passwordRulesResult]);
+  }, [loading, data]);
 
   useEffect(
     () => onChange(validateRulesArr(password, rules)),

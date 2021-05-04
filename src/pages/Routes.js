@@ -17,6 +17,7 @@ import { FileStatusDetailsPage } from './FileStatusDetails';
 import { AccessManagementGroupsPage, AccessManagementPoliciesPage, CreatePoliciesPage } from './Admin/AccessManagement';
 import { ActiveOrgsPage } from './Admin/Organizations';
 import { CurrentActivityPage } from './Admin/Activity';
+import { ColorPalettesPage, DefaultThemePage } from './Admin/DashboardSite';
 
 import AuthRoute from './AuthRoute';
 import UnauthRoute from './UnauthRoute';
@@ -69,6 +70,12 @@ export const Routes = () => {
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_ACTIVITY_CURRENT.URL}>
         <CurrentActivityPage />
+      </AuthRoute>
+      <AuthRoute path={ROUTES.ROUTE_COLOR_PALETTES.URL}>
+        <ColorPalettesPage />
+      </AuthRoute>
+      <AuthRoute path={ROUTES.ROUTE_DEFAULT_THEME.URL}>
+        <DefaultThemePage />
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_ADMIN.URL}>
         <AdminPage />
