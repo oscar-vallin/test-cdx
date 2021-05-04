@@ -15,7 +15,7 @@ const ORG_SID = 1;
 const _DashboardPage = () => {
   const service = useDashboardService(ORG_SID);
   const { isLoadingData, datesOptions, dataCounters } = service;
-  const { setDateId } = service;
+  const { setDateId, dateId } = service;
 
   // Render Buttons Bar
   const renderDateButtons = () => {
@@ -71,10 +71,15 @@ const _DashboardPage = () => {
               tableId={TABLE_NAMES.DASHBOARD_TRANSMISSIONS_VENDOR}
               data={dataCounters?.vendorTransmissions}
               altData={dataCounters?.vendorTransmissionsBySpec}
+              date={dateId}
             />
           </StyledColumn>
           <StyledColumn sm={5}>
-            <TableDashboard tableId={TABLE_NAMES.DASHBOARD_ERRORS_VENDOR} data={dataCounters?.vendorProcessErrors} />
+            <TableDashboard
+              tableId={TABLE_NAMES.DASHBOARD_ERRORS_VENDOR}
+              data={dataCounters?.vendorProcessErrors}
+              date={dateId}
+            />
           </StyledColumn>
         </StyledRow>
         <StyledRow marginBottom={30} marginTop={30} sm={12} around top>
@@ -82,10 +87,15 @@ const _DashboardPage = () => {
             <TableDashboard
               tableId={TABLE_NAMES.DASHBOARD_TRANSMISSIONS_FILES}
               data={dataCounters?.fileTransmissions}
+              date={dateId}
             />
           </StyledColumn>
           <StyledColumn sm={5}>
-            <TableDashboard tableId={TABLE_NAMES.DASHBOARD_ERRORS_FILES} data={dataCounters?.fileProcessErrors} />
+            <TableDashboard
+              tableId={TABLE_NAMES.DASHBOARD_ERRORS_FILES}
+              data={dataCounters?.fileProcessErrors}
+              date={dateId}
+            />
           </StyledColumn>
         </StyledRow>
       </React.Suspense>

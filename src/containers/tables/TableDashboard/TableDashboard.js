@@ -14,9 +14,10 @@ const TableDashboard = ({
   tableId = TABLE_NAMES.DASHBOARD_TRANSMISSIONS_VENDOR,
   data,
   altData,
+  date,
   loading,
 }) => {
-  const { tableProps } = useTable(data, tableId);
+  const { tableProps } = useTable(data, tableId, date);
   const [specs, setSpecs] = React.useState(false);
   const [tableData, setTableData] = React.useState();
 

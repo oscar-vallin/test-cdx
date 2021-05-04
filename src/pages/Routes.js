@@ -32,6 +32,9 @@ export const Routes = () => {
       <AuthRoute path={ROUTES.ROUTE_DASHBOARD.URL}>
         <DashboardPage />
       </AuthRoute>
+      <AuthRoute path={ROUTES.ROUTE_DASHBOARD_TO_FILE_STATUS.URL}>
+        <FileStatusPage />
+      </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_FILE_STATUS_DETAILS.URL}>
         <FileStatusDetailsPage />
       </AuthRoute>

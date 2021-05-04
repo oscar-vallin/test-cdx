@@ -56,6 +56,8 @@ export const useDashboardService = (initOrgSid) => {
     return datesOptions.find((option) => option.id === id) ?? DATES_OPTIONS[0];
   };
 
+  console.log('data blabla', datesOptions);
+
   // * Component Did Mount
   useEffect(() => {
     setIsLoading(false);
@@ -101,5 +103,6 @@ export const useDashboardService = (initOrgSid) => {
     getOption,
     setOrgSid,
     setDateId,
+    dateId,
   };
 };
