@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { usePasswordLoginMutation } from '../data/services/graphql';
+import { usePasswordLoginMutation, useCurrentUserLazyQuery } from '../data/services/graphql';
 import { useErrorMessage } from '../hooks/useErrorMessage';
 import { getRouteByApiId } from '../data/constants/RouteConstants';
+import { useCurrentUser } from './hooks/useCurrentUser';
+import { useLogout } from './hooks/useLogout';
 //
 export const AuthContext = React.createContext(() => {
   //
@@ -16,10 +18,12 @@ export const AuthContextProvider = ({ children }) => {
   const [password, setPassword] = useState('');
   const [authData, setAuthData] = useState();
   const [authHistory, setHistory] = useState();
-  const [token, setToken] = useState();
+  const [token, setToken] = useState(localStorage);
 
   // "userId": "joe.admin@example.com",
   // "password": "changeBen21"
+  const { currentUserQuery, isCurrentUserLogged } = useCurrentUser(user, password);
+  const { logoutQuery } = useLogout();
 
   const [passwordLoginMutation, { data, loading, error }] = usePasswordLoginMutation({
     variables: {
@@ -27,35 +31,34 @@ export const AuthContextProvider = ({ children }) => {
       password,
     },
   });
+
   const authError = useErrorMessage();
 
   // Component Did Mount
-  useEffect(() => {
+  useEffect(async () => {
     const localFunction = async () => {
       setLoading(false);
-      const savedAuthData = localStorage.getItem('AUTH_DATA');
-      const savedToken = localStorage.getItem('AUTH_TOKEN');
+      setAuthenticating(true);
 
-      if (savedToken) {
-        setToken(savedToken);
-        setAuthData(JSON.parse(savedAuthData));
-        setAuthenticated(true);
+      await currentUserQuery();
 
-        return;
-      }
-
-      setAuthenticated(false);
-
-      // Execute Function
+      console.log('CurrentUser loggedIn??? ', isCurrentUserLogged);
+      console.log('CurrentUser token??? ', token);
     };
 
-    localFunction();
+    await localFunction();
   }, []);
 
   //
-  useEffect(() => {
-    setAuthenticating(loading);
-  }, [loading]);
+  useEffect(async () => {
+    const _token = await localStorage.getItem('AUTH_TOKEN');
+
+    console.log('setAuthenticated, _token?', _token);
+    console.log('setAuthenticated, isCurrentUserLogged?', isCurrentUserLogged);
+
+    setAuthenticated(!!_token && !!isCurrentUserLogged);
+    setAuthenticating(false);
+  }, [isCurrentUserLogged]);
 
   //
   // When Server Response or Data is cleaned.
@@ -90,7 +93,7 @@ export const AuthContextProvider = ({ children }) => {
 
         // console.log('Saved AuthData', authData);
         localStorage.setItem('AUTH_DATA', JSON.stringify(authData));
-        localStorage.setItem('AUTH_TOKEN', authData.token);
+        // localStorage.setItem('AUTH_TOKEN', authData.token);
         setAuthData(authData);
         setAuthenticated(true);
         //
@@ -109,7 +112,7 @@ export const AuthContextProvider = ({ children }) => {
       return;
     }
 
-    // console.log('Change AuthData, authData.selectedPage: ', authData.selectedPage);
+    console.log('Change AuthData, authData.selectedPage: ', authData.selectedPage);
 
     const routePage = getRouteByApiId(authData.selectedPage);
 
@@ -134,9 +137,6 @@ export const AuthContextProvider = ({ children }) => {
   // When user / password.
   //
   useEffect(() => {
-    // console.log('st User: ', user);
-    // console.log('st Password:', password);
-
     if (user?.length && password?.length) return passwordLoginMutation();
 
     return null;
@@ -146,10 +146,7 @@ export const AuthContextProvider = ({ children }) => {
 
   //
   const authLogin = (_user, _password, _history) => {
-    // console.log('authLogin');
-    // console.log('_user: ', _user);
-    // console.log('_password: ', _password);
-
+    console.log('authLogin');
     setUser(_user);
     setPassword(_password);
     setHistory(_history);
@@ -168,6 +165,10 @@ export const AuthContextProvider = ({ children }) => {
   //
   const authLogout = () => {
     localStorage.removeItem('AUTH_TOKEN');
+
+    console.log('Removed Item, AUTH_TOKEN');
+    logoutQuery();
+
     setAuthData();
     setAuthenticated(false);
     clearInputLoginData();

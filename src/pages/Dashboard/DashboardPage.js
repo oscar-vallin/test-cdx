@@ -4,7 +4,7 @@ import { CardDashboard } from '../../containers/cards/CardDashboard';
 import { TableDashboard } from '../../containers/tables/TableDashboard';
 
 import { LayoutDashboard } from '../../layouts/LayoutDashboard';
-import { StyledRow, StyledColumn, StyledButton, StyledSpinner } from './DashboardPage.styles';
+import { StyledRow, StyledRowDate, StyledColumn, StyledButton, StyledSpinner } from './DashboardPage.styles';
 import { useDashboardService } from './DashboardPage.service';
 
 import { TABLE_NAMES } from '../../data/constants/TableConstants';
@@ -23,7 +23,12 @@ const _DashboardPage = () => {
 
     return datesOptions.map((option) => (
       <StyledColumn key={`ContainerButton-${option.id}`} noStyle>
-        <StyledButton key={`Button-${option.id}`} selected={option.selected} onClick={() => setDateId(option.id)}>
+        <StyledButton
+          key={`Button-${option.id}`}
+          variant={option.selected ? 'primary' : 'secondary'}
+          selected={option.selected}
+          onClick={() => setDateId(option.id)}
+        >
           {option.name}
         </StyledButton>
       </StyledColumn>
@@ -33,9 +38,9 @@ const _DashboardPage = () => {
   return (
     <LayoutDashboard id="PageDashboard">
       <React.Suspense fallback={<StyledSpinner>Loading...</StyledSpinner>}>
-        <StyledRow marginTop={15} sm={12} right>
+        <StyledRowDate marginTop={15} sm={12} right>
           {renderDateButtons()}
-        </StyledRow>
+        </StyledRowDate>
         <StyledRow marginTop={10} sm={12} around>
           <StyledColumn sm={5}>
             <CardDashboard

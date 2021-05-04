@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { useWorkPacketStatusesQuery } from '../../../data/services/graphql';
 import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableConstants';
+import { useInputValue } from '../../../hooks/useInputValue';
 
 export const useTable = (argOrgSid, argDateRange, argFilter) => {
   const [_loading, setLoading] = useState(true);
@@ -25,7 +26,6 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
   //
   useEffect(() => {
     const doEffect = () => {
-      console.log('TableErrors.service, data:', data);
       const _columns = [
         { key: 'datetime', label: 'Received On', id: 'datetime', style: 'text' },
         { key: 'vendor', label: 'Vendor', id: 'vendor', style: 'text' },
@@ -93,26 +93,18 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
   };
 };
 
-const useInput = (placeholder) => {
-  const [value, setValue] = useState();
-  const onChange = (e) => {
-    setValue(e);
-  };
-
-  return {
-    value,
-    onChange,
-    placeholder,
-  };
-};
+//
+const useInput = (placeholder) => {};
 
 //
 export const useInputs = () => {
   const startDate = useInput('Start Date...');
   const endDate = useInput('End Date...');
+  const localInput = useInputValue('', 'Extract Name,  Status, Vendor, etc.', '', '');
 
   return {
     startDate,
     endDate,
+    localInput,
   };
 };

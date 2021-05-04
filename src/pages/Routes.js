@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { ROUTES } from '../data/constants/RouteConstants';
 
 // Routes
@@ -15,6 +15,7 @@ import { FileStatusPage } from './FileStatus';
 import { FileStatusDetailsPage } from './FileStatusDetails';
 import { AccessManagementGroupsPage, AccessManagementPoliciesPage, CreatePoliciesPage } from './Admin/AccessManagement';
 import { ActiveOrgsPage } from './Admin/Organizations';
+import { CurrentActivityPage } from './Admin/Activity';
 
 import AuthRoute from './AuthRoute';
 import UnauthRoute from './UnauthRoute';
@@ -40,6 +41,7 @@ export const Routes = () => {
       <AuthRoute path={ROUTES.ROUTE_ARCHIVES.URL}>
         <ArchivePage />
       </AuthRoute>
+      // !! BYPASS TEMPORALLY.
       <AuthRoute path={ROUTES.ROUTE_SCHEDULE.URL}>
         <SchedulePage />
       </AuthRoute>
@@ -60,6 +62,9 @@ export const Routes = () => {
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_ACTIVE_ORGS.URL}>
         <ActiveOrgsPage />
+      </AuthRoute>
+      <AuthRoute path={ROUTES.ROUTE_ACTIVITY_CURRENT.URL}>
+        <CurrentActivityPage />
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_ADMIN.URL}>
         <AdminPage />

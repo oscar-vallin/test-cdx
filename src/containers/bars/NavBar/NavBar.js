@@ -9,18 +9,27 @@ import { MainMenu } from '../../menus/MainMenu';
 import {
   StyledBox,
   StyledRow,
-  StyledColumn,
+  StyledColumnLogoR,
   StyledTitle,
+  StyledColumn,
+  StyledColumnNav,
+  StyledColumnLogoL,
+  StyledColumnCont,
   // StyledButtonProfile,
   StyledButtonIcon,
 } from './NavBar.styles';
 
 // CardSection is called directly cause a restriction warning for that component.
 const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard' }) => {
+  const [collapse, setCollapse] = React.useState('false');
+
+  const changeCollapse = () => {
+    setCollapse(!collapse);
+  };
   const renderIcon = (iconName) => {
     return (
       <StyledColumn id={`${id}__Right__${iconName}`} noStyle>
-        <StyledButtonIcon icon={iconName} size={18} />
+        <StyledButtonIcon icon={iconName} variant={'navbar'} size={18} />
       </StyledColumn>
     );
   };
@@ -29,23 +38,26 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard' }) => {
   return (
     <StyledBox id={id}>
       <StyledRow id={`${id}__Nav`} left>
-        <StyledColumn id={`${id}__Col-Left`} sm={10} left>
+        <StyledColumnCont id={`${id}__Col-Left`} sm={9} left container>
           <StyledRow id={`${id}__Left-Row`} left sm={12}>
-            <StyledColumn id={`${id}__Left-Row__Logo`} sm={2} noPadding>
+            <StyledColumnLogoL id={`${id}__Left-Row__Logo`} sm={2} noPadding>
               <StyledTitle>CDX DASHBOARD</StyledTitle>
-            </StyledColumn>
-            <StyledColumn id={`${id}__Left-Row__Menu`} sm={10}>
-              <MainMenu left option={menuOptionSelected} />
-            </StyledColumn>
+            </StyledColumnLogoL>
+            <StyledColumnNav id={`${id}__Left-Row__Menu`} sm={10}>
+              <MainMenu left option={menuOptionSelected} changeCollapse={changeCollapse} />
+            </StyledColumnNav>
+            <StyledColumnLogoR id={`${id}__Left-Row__Logo`} sm={2} noPadding collapse>
+              <StyledTitle>CDX DASHBOARD</StyledTitle>
+            </StyledColumnLogoR>
           </StyledRow>
-        </StyledColumn>
-        <StyledColumn id={`${id}__Col-Right`} sm={2} right>
+        </StyledColumnCont>
+        <StyledColumnCont id={`${id}__Col-Right`} sm={3} right container>
           <StyledRow id={`${id}__Right_Row`} right>
             {renderIcon('Settings')}
             {renderIcon('Help')}
             <ProfileMenu />
           </StyledRow>
-        </StyledColumn>
+        </StyledColumnCont>
       </StyledRow>
     </StyledBox>
   );

@@ -57,6 +57,15 @@ export const StyledText = styled(Text)`
 export const StyledTitle = styled(Text)`
   font: ${({ theme }) => theme.fontStyles.logo};
   width: 100%;
+  font-size: 4vw;
+
+  @media (min-width: 1250px) {
+    font-size: 50px;
+  }
+
+  @media (max-width: 750px) {
+    font-size: 30px;
+  }
 `;
 
 export const Stylesheet = {

@@ -5,14 +5,14 @@ import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableCon
 import { formatField } from '../../../helpers/tableHelpers';
 import { getStepStatusLabel } from '../../../data/constants/FileStatusConstants';
 import { FileProgress } from '../../bars/FileProgress';
-import { useInputValue } from '../../../hooks/useInputValue';
+import { HighlightCounter } from '../../../components/badges/HighlightCounter';
 
 //
 export const useTable = (argOrgSid, argDateRange, argFilter) => {
   const [_loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
   const [columns, setColumns] = useState([]);
-  const structure = getTableStructure(TABLE_NAMES.ERRORS);
+  const structure = getTableStructure(TABLE_NAMES.FILE_STATUS);
 
   const { data, loading, error } = useWorkPacketStatusesQuery({
     variables: {
@@ -31,34 +31,61 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
     const doEffect = () => {
       // console.log('TableErrors.service, data:', data);
       const _columns = [
-        { key: 'datetime', label: 'Received On', id: 'datetime', style: 'link' },
-        { key: 'vendor', label: 'Vendor', id: 'vendor', style: 'text' },
-        { key: 'planSponsor', label: 'Sponsor', id: 'planSponsor', style: 'text' },
-        { key: 'extractName', label: 'Extract Name', id: 'extractName', style: 'text' },
-        { key: 'overall', label: 'Overall', id: 'overall', style: 'text' },
-        { key: 'progress', label: 'Progress', id: 'progress', style: 'node' },
+        {
+          key: 'datetime',
+          minWidth: 140,
+          maxWidth: 150,
+          label: 'Received On',
+          id: 'datetime',
+          fieldName: 'datetime',
+          style: 'link',
+        },
+        { key: 'vendor', minWidth: 80, maxWidth: 150, label: 'Vendor', id: 'vendor', style: 'text' },
+        { key: 'planSponsor', minWidth: 100, maxWidth: 120, label: 'Sponsor', id: 'planSponsor', style: 'text' },
+        { key: 'extractName', minWidth: 100, maxWidth: 300, label: 'Extract Name', id: 'extractName', style: 'text' },
+        { key: 'overall', minWidth: 100, maxWidth: 150, label: 'Overall', id: 'overall', style: 'text' },
+        { key: 'progress', minWidth: 100, maxWidth: 200, label: 'Progress', id: 'progress', style: 'node' },
       ];
 
       const _items = data.workPacketStatuses.map(
-        ({ timestamp, vendorId, planSponsorId, inboundFilename, step, stepStatus }) => {
+        ({
+          workOrderId,
+          timestamp,
+          vendorId,
+          planSponsorId,
+          inboundFilename,
+          step,
+          stepStatus,
+          recordHighlightCount,
+          recordHighlightType,
+        }) => {
           const datetime = format(new Date(timestamp), 'MM/dd/yyyy hh:mm a');
-          // console.log('Xxxxx STepStatus: ', stepStatus);
           const stepStatusLabel = getStepStatusLabel(stepStatus);
 
+          console.log('Xxxxx highlight: ', recordHighlightCount, recordHighlightType);
+
           return [
-            formatField(datetime, 'datetime', datetime),
+            formatField(
+              datetime,
+              'datetime',
+              `/file-status/${workOrderId}`,
+              '',
+              formatField(
+                <>
+                  {recordHighlightCount && (
+                    <HighlightCounter type={recordHighlightType} href={`/file-status/${workOrderId}*`}>
+                      {recordHighlightCount}
+                    </HighlightCounter>
+                  )}
+                </>,
+                'highlight'
+              )
+            ),
             formatField(vendorId, 'vendor', vendorId),
             formatField(planSponsorId, 'planSponsor', planSponsorId),
             formatField(inboundFilename, 'extractName', inboundFilename),
             formatField(stepStatusLabel, 'overall', stepStatusLabel),
-            formatField(
-              <>
-                <FileProgress step={step} stepStatus={stepStatus} />
-              </>,
-              'progress',
-              stepStatusLabel,
-              step
-            ),
+            formatField(<FileProgress step={step} stepStatus={stepStatus} />, 'progress', stepStatusLabel, step),
           ];
         }
       );
@@ -101,18 +128,4 @@ const useInput = (placeholder) => {
   //   onChange,
   //   placeholder,
   // };
-};
-
-//
-export const useInputs = () => {
-  const startDate = useInput('Start Date...');
-  const endDate = useInput('End Date...');
-  // const localInput = useInput('Vendor, status, ...');
-  const localInput = useInputValue('', 'Vendor ...', '', '');
-
-  return {
-    localInput,
-    startDate,
-    endDate,
-  };
 };

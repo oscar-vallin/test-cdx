@@ -12,6 +12,7 @@ const ChartDonut = ({ id = '__ChartDonut', label, size = 50, data }) => {
     <PieChart width={size + size * 1.1} height={size + size * 1.1}>
       <Pie
         dataKey="value"
+        nameKey="name"
         data={_data}
         cx={size}
         cy={size}

@@ -3,7 +3,7 @@ import { format } from 'date-fns';
 import { useWorkPacketStatusesQuery } from '../../../data/services/graphql';
 import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { getStepStatusLabel } from '../../../data/constants/FileStatusConstants';
-// import { useInputValue } from '../../../hooks/useInputValue';
+import { useInputValue } from '../../../hooks/useInputValue';
 
 //
 export const useTable = (argOrgSid, argDateRange, argFilter) => {
@@ -91,26 +91,18 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
   };
 };
 
-const useInput = (placeholder) => {
-  const [value, setValue] = useState();
-  const onChange = (e) => {
-    setValue(e);
-  };
-
-  return {
-    value,
-    onChange,
-    placeholder,
-  };
-};
+//
+const useInput = (placeholder) => {};
 
 //
 export const useInputs = () => {
   const startDate = useInput('Start Date...');
   const endDate = useInput('End Date...');
+  const localInput = useInputValue('', 'Extract Name,  Status, Vendor, etc.', '', '');
 
   return {
     startDate,
     endDate,
+    localInput,
   };
 };

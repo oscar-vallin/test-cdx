@@ -11,6 +11,7 @@ export const ROUTES_ID = {
   ACCESS_MANAGEMENT_GROUPS: 'access-management-groups',
   CREATE_POLICIES: 'create-policy',
   ACTIVE_ORGS: 'active-orgs',
+  CURRENT_ACTIVITY: 'current-activity',
 };
 
 const URL_ROUTES = {
@@ -28,6 +29,7 @@ const URL_ROUTES = {
   ACCESS_MANAGEMENT_POLICIES: `/${ROUTES_ID.ADMIN}/access-management/policies`,
   CREATE_POLICIES: `/${ROUTES_ID.ACCESS_MANAGEMENT_POLICIES}/create`,
   ACTIVE_ORGS: `/${ROUTES_ID.ADMIN}/organizations/active-orgs`,
+  CURRENT_ACTIVITY: `/${ROUTES_ID.ADMIN}/activity/current-activity`,
 };
 
 // DASHBOARD;
@@ -162,6 +164,14 @@ export const ROUTE_ACTIVE_ORGS = {
   API_ID: 'ADMIN',
 };
 
+export const ROUTE_ACTIVITY_CURRENT = {
+  ID: ROUTES_ID.CURRENT_ACTIVITY,
+  TITLE: 'Current Activity',
+  URL: URL_ROUTES.CURRENT_ACTIVITY,
+  MAIN_MENU: false,
+  API_ID: 'ADMIN',
+};
+
 export const ROUTES = {
   ROUTE_HOME,
   ROUTE_LOGIN,
@@ -177,6 +187,7 @@ export const ROUTES = {
   ROUTE_ACCESS_MANAGEMENT_POLICIES,
   ROUTE_CREATE_POLICIES,
   ROUTE_ACTIVE_ORGS,
+  ROUTE_ACTIVITY_CURRENT,
 };
 
 export const ROUTES_ARRAY = [
@@ -194,6 +205,7 @@ export const ROUTES_ARRAY = [
   ROUTE_ACCESS_MANAGEMENT_GROUPS,
   ROUTE_ACCESS_MANAGEMENT_POLICIES,
   ROUTE_ACTIVE_ORGS,
+  ROUTE_ACTIVITY_CURRENT,
 ];
 
 export const getRouteByApiId = (_apiId) => {

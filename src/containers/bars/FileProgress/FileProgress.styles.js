@@ -5,6 +5,7 @@ import { Text as ComponentText } from '../../../components/typography/Text';
 export const Box = styled(LayoutBox)`
   width: 100%;
   height: 80%;
+  max-width: 300px;
 `;
 
 export const Text = styled(ComponentText)`

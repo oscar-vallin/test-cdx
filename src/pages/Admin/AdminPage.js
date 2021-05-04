@@ -85,6 +85,16 @@ const NAV_ITEMS = [
           },
         ],
       },
+      {
+        name: 'Activity',
+        links: [
+          {
+            name: 'Current Activity',
+            url: '/admin/activity/current-activity',
+            key: 'userAccountRules',
+          },
+        ],
+      },
     ],
   },
 ];
