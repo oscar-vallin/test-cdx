@@ -25,7 +25,7 @@ const TablesCurrentActivity = ({ id = 'TableCurrentActivity', argOrgSid = 1, arg
         </RightColumn>
       </Row>
       <TableContainer>
-        {tableProc.loading === false && <TableActivity tableName="In Process" {...tableProc} />}
+        {!tableProc.loading && <TableActivity tableName="In Process" {...tableProc} />}
         <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
           <Separator />
         </Spacing>
