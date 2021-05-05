@@ -1,13 +1,17 @@
 import React, { useState, useEffect }  from 'react';
 
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
+import { Row, Column } from '../../../../components/layouts';
 import { Spacing } from '../../../../components/spacings/Spacing';
+import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
+import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
+import { MessageBar } from 'office-ui-fabric-react';
 // import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Text } from '../../../../components/typography/Text';
 import { Separator } from '../../../../components/separators/Separator';
 
 import { useDirectOrganizationsFQuery } from '../../../../data/services/graphql';
-import { ADMIN_NAV } from '../../../../data/constants/AdminConstants';
+
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -54,8 +58,41 @@ const _ActiveOrgsPage = () => {
   }, [loading]);
 
   return (
-    <LayoutAdmin id="PageActiveOrgs" sidebar={ADMIN_NAV} sidebarOptionSelected="activeOrgs">
-      <Spacing margin="double">Active Orgs</Spacing>
+    <LayoutAdmin id="PageActiveOrgs" sidebarOptionSelected="ACTIVE_ORGS">
+      <Spacing margin="double">
+        <Row>
+          <Column lg="4">
+            <Spacing margin={{ top: 'small' }}>
+              <Text variant="bold">Active orgs</Text>
+            </Spacing>
+          </Column>
+        </Row>
+
+        <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+          <Separator />
+        </Spacing>
+
+        <Row>
+          <Column>
+            {!loading ? (
+              orgs.length > 0 ? (
+                <DetailsList
+                  items={orgs}
+                  selectionMode={SelectionMode.none}
+                  columns={columns}
+                  layoutMode={DetailsListLayoutMode.justified}
+                  onRenderItemColumn={onRenderItemColumn}
+                  isHeaderVisible
+                />
+              ) : (
+                <MessageBar>No active orgs</MessageBar>
+              )
+            ) : (
+              <Spinner label="Loading active orgs" />
+            )}
+          </Column>
+        </Row>
+      </Spacing>
     </LayoutAdmin>
   );
 };

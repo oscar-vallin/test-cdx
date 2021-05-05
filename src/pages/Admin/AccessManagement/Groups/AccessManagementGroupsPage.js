@@ -11,7 +11,7 @@ import { Text } from '../../../../components/typography/Text';
 import { Separator } from '../../../../components/separators/Separator';
 
 import { useAmGroupsForOrgPQuery } from '../../../../data/services/graphql';
-import { ADMIN_NAV } from '../../../../data/constants/AdminConstants';
+
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -53,7 +53,7 @@ const _AccessManagementGroupsPage = () => {
   }, [loading]);
 
   return (
-    <LayoutAdmin id="PageAdmin" sidebar={ADMIN_NAV} sidebarOptionSelected="groups">
+    <LayoutAdmin id="PageAdmin" sidebarOptionSelected="AM_GROUPS">
       <Spacing margin="double">
         <Row>
           <Column lg="4">

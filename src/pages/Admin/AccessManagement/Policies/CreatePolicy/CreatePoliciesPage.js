@@ -218,7 +218,7 @@ const _CreatePoliciesPage = () => {
   const [createPolicy] = useCreateAmPolicyMutation();
 
   return (
-    <LayoutAdmin id="PageAdmin" sidebar={ADMIN_NAV} sidebarOptionSelected="policies">
+    <LayoutAdmin id="PageAdmin" sidebarOptionSelected="AM_POLICIES">
       <Spacing margin="double">
         <Row bottom>
           <Column lg="3">

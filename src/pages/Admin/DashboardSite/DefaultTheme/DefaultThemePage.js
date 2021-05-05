@@ -10,7 +10,7 @@ import { Spinner } from '../../../../components/spinners/Spinner';
 import { StyledChoiceGroup } from './DefaultThemePage.styles';
 import { useThemeContext } from '../../../../contexts/ThemeContext';
 
-import { ADMIN_NAV } from '../../../../data/constants/AdminConstants';
+
 
 const _DefaultThemePage = () => {
   const [theme, setTheme] = useState('LIGHT');
@@ -18,7 +18,7 @@ const _DefaultThemePage = () => {
   const { themeConfig } = useThemeContext();
 
   return (
-    <LayoutAdmin id="PageDefaultTheme" sidebar={ADMIN_NAV} sidebarOptionSelected="defaultTheme">
+    <LayoutAdmin id="PageDefaultTheme" sidebarOptionSelected="DEFAULT_THEME">
       <Spacing margin="double">
         <Row>
           <Column lg="12">

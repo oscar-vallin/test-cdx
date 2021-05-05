@@ -10,7 +10,7 @@ import { Row, Column } from '../../../../components/layouts';
 import { InputText } from '../../../../components/inputs/InputText';
 import { StyledDiv, StyledChoiceGroup, StyledColorPicker, StyledCommandButton } from './ColorPalettesPage.styles';
 
-import { ADMIN_NAV } from '../../../../data/constants/AdminConstants';
+
 import { useThemeContext } from '../../../../contexts/ThemeContext';
 import { defaultTheme, darkTheme } from '../../../../styles/themes';
 
@@ -111,7 +111,7 @@ const _ColorPalettesPage = () => {
   });
 
   return (
-    <LayoutAdmin id="PageDefaultTheme" sidebar={ADMIN_NAV} sidebarOptionSelected="colorPalettes">
+    <LayoutAdmin id="PageDefaultTheme" sidebarOptionSelected="COLOR_PALETTES">
       <Spacing margin="double">
         <Row>
           <Column lg="8">

@@ -17,7 +17,7 @@ import FacetCombobox from '../../../../components/comboboxes/FacetCombobox/Facet
 import VerbCombobox from '../../../../components/comboboxes/VerbCombobox/VerbCombobox';
 
 import { useAmPolicyPageQuery } from '../../../../data/services/graphql';
-import { ADMIN_NAV } from '../../../../data/constants/AdminConstants';
+
 
 const parseToComboBoxOption = ({ name, value }) => ({ key: value, text: name });
 const generateColumns = () => {
@@ -140,7 +140,7 @@ const _AccessManagementPoliciesPage = () => {
   }, [loading]);
 
   return (
-    <LayoutAdmin id="PageAdmin" sidebar={ADMIN_NAV} sidebarOptionSelected="policies">
+    <LayoutAdmin id="PageAdmin" sidebarOptionSelected="AM_POLICIES">
       <Row>
         <Column lg="8">
           <Spacing margin="double">
