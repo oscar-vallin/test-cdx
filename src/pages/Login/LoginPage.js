@@ -8,16 +8,10 @@ const _LoginPage = () => {
 
   React.useEffect(() => {
     const logout = localStorage.getItem('LOGOUT');
-    const login = localStorage.getItem('LOGIN');
 
     if (logout != null) {
       console.log('token begin: ', logout);
-      setTimeout(() => localStorage.removeItem('LOGOUT'), 9000);
-    }
-
-    if (login != null) {
-      console.log('token begin: ', login);
-      localStorage.removeItem('LOGIN');
+      setTimeout(() => localStorage.removeItem('LOGOUT'), 200);
     }
 
     setLogout(logout);
