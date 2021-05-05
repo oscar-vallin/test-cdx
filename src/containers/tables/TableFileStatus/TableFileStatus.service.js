@@ -34,9 +34,9 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
 
   useEffect(() => {
     if (error) {
-      console.log('ORROR: ', error);
+      console.log('ORROR: ', error.message);
 
-      authLogout('expired');
+      authLogout(error.message);
       history.push('/');
     }
   }, [error]);

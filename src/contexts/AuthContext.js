@@ -179,9 +179,12 @@ export const AuthContextProvider = ({ children }) => {
   const authLogout = (expired) => {
     localStorage.removeItem('AUTH_TOKEN');
     localStorage.removeItem('LOGIN');
+    console.log('expired ', expired);
 
-    if (expired === 'expired') {
-      localStorage.setItem('LOGOUT', 'logout');
+    if (expired != undefined) {
+      console.log('Unexpired ', expired);
+
+      localStorage.setItem('LOGOUT', expired);
     }
     console.log('Removed Item, AUTH_TOKEN');
     logoutQuery();
