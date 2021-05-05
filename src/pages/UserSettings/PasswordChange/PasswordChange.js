@@ -32,10 +32,6 @@ const PasswordChange = ({ state, validations, onChange }) => {
     variables: { updatePasswordInput: state.password },
   });
 
-  useEffect(() => {
-    console.log(validations[0]);
-  }, [validations])
-
   return (
     <CardSection>
       <StyledTitle>Change password</StyledTitle>

@@ -146,7 +146,6 @@ export const AuthContextProvider = ({ children }) => {
 
   //
   const authLogin = (_user, _password, _history) => {
-    console.log('authLogin');
     setUser(_user);
     setPassword(_password);
     setHistory(_history);

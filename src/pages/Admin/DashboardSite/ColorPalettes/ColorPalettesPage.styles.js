@@ -1,6 +1,12 @@
 import styled from 'styled-components';
-import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
-import { ColorPicker } from '@fluentui/react';
+import { ColorPicker, ChoiceGroup, CommandBarButton } from '@fluentui/react';
+
+export const StyledDiv = styled.div`
+  align-items: flex-end;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+`;
 
 export const StyledChoiceGroup = styled(ChoiceGroup)`
   .ms-ChoiceFieldGroup-flexContainer {
@@ -21,4 +27,8 @@ export const StyledColorPicker = styled(ColorPicker)`
   .ms-ColorPicker-panel {
     padding: 0;
   }
-`
+`;
+
+export const StyledCommandButton = styled(CommandBarButton)`
+  padding: 8px 16px;
+`;

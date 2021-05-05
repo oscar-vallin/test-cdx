@@ -81,21 +81,21 @@ export const ADMIN_NAV = [
           },
         ],
       },
-      {
-        name: 'Dashboard site',
-        links: [
-          {
-            name: 'Color Palettes',
-            url: '/admin/dashboard-site/color-palettes',
-            key: 'colorPalettes',
-          },
-          {
-            name: 'Default Theme',
-            url: '/admin/dashboard-site/default-theme',
-            key: 'defaultTheme',
-          },
-        ],
-      },
+      // {
+      //   name: 'Dashboard site',
+      //   links: [
+      //     {
+      //       name: 'Color Palettes',
+      //       url: '/admin/dashboard-site/color-palettes',
+      //       key: 'colorPalettes',
+      //     },
+      //     {
+      //       name: 'Default Theme',
+      //       url: '/admin/dashboard-site/default-theme',
+      //       key: 'defaultTheme',
+      //     },
+      //   ],
+      // },
     ],
   },
 ];

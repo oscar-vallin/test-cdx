@@ -5,6 +5,7 @@ import { useChangeOwnPasswordPageQuery } from '../../../data/services/graphql';
 
 import { CardSection } from '../../../components/cards';
 import { Spacing } from '../../../components/spacings/Spacing';
+import { Spinner } from '../../../components/spinners/Spinner';
 
 import { StyledTitle, StyledIcon } from './../UserSettingsPage.styles';
 
@@ -13,7 +14,6 @@ import {
   ValidationMessages,
   ValidationRulesParser,
 } from './../../../utils/PasswordValidation';
-import { validate } from 'graphql';
 
 const isArrayOfArrays = arr => arr.filter(item => Array.isArray(item)).length > 0;
 
@@ -169,7 +169,15 @@ const PasswordRules = ({ validations, password, onChange }) => {
       <StyledTitle>Password rules</StyledTitle>
 
       <Spacing margin={{ top: "normal" }}>
-        <List items={validations} onRenderCell={onRenderCell} />
+        {
+          loading
+            ? (
+                <Spacing margin={{ top: 'normal' }}>
+                  <Spinner size="lg" label="Loading rules"/>
+                </Spacing>
+              )
+            : <List items={validations} onRenderCell={onRenderCell} />
+        }
       </Spacing>
     </CardSection>
   );

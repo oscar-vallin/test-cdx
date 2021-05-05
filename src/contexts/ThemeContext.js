@@ -17,6 +17,8 @@ export const ThemeContextProvider = ({ children }) => {
   const [currentTheme, setTheme] = useState(styledComponentsTheme);
   const [styledTheme, setStyledTheme] = useState(styledComponentsTheme);
 
+  const [themeConfig, setThemeConfig] = useState({});
+
   const [
     useDashThemeQuery,
     {
@@ -57,6 +59,12 @@ export const ThemeContextProvider = ({ children }) => {
           dashTheme
         } = currentUserThemeParams.currentUserDashThemePage;
 
+        setThemeConfig({
+          themeColorModes,
+          themeColorPalettes,
+          themeFontSizes
+        });
+
         changeTheme(!dashTheme ? 'LIGHT' : dashTheme);
       } else {
         changeTheme('LIGHT');
@@ -91,8 +99,9 @@ export const ThemeContextProvider = ({ children }) => {
   // eslint-disable-next-line
   const values = useMemo(() => ({
     isContextLoading: isLoadingCurrentUserThemeParams,
-    changeTheme
-  }), [isLoadingCurrentUserThemeParams]);
+    changeTheme,
+    themeConfig,
+  }), [isLoadingCurrentUserThemeParams, themeConfig]);
 
   return (
     <Customizer {...loadTheme({ palette: currentTheme })}>

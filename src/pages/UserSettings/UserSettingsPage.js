@@ -30,7 +30,7 @@ const _UserSettingsPage = () => {
   });
   
   const activeTheme = localStorage.getItem('CURRENT_THEME');
-  const { changeTheme } = useThemeContext();
+  const { changeTheme, themeConfig } = useThemeContext();
 
   const [theme, setTheme] = useState(activeTheme ? JSON.parse(activeTheme).name : 'LIGHT');
 
@@ -51,23 +51,23 @@ const _UserSettingsPage = () => {
                   validations={validations}
                 />
 
-                <CardSection>
+                {/* <CardSection>
                   <StyledTitle>Theme</StyledTitle>
 
                   <StyledChoiceGroup
                     label="Choose a theme"
                     defaultSelectedKey={theme}
-                    options={[
-                      { key: 'LIGHT', text: 'Default' },
-                      { key: 'DARK', text: 'Dark' },
-                      { key: 'CUSTOM', text: 'Organization' },
-                    ]}
+                    options={themeConfig.themeColorModes?.map(item => ({
+                        key: item,
+                        text: `${item.charAt(0)}${item.slice(1).toLowerCase()}`
+                      })) || []
+                    }
                     onChange={(evt, { key }) => {
                       setTheme(key);
                       changeTheme(key, key === 'CUSTOM' ? colors : {});
                     }}
                   />
-                </CardSection>
+                </CardSection> */}
               </Spacing>
             </StyledCard>
           </Column>

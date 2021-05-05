@@ -22,6 +22,7 @@ export const StyledButton = styled(PrimaryButton)`
     background: ${({ theme, variant }) => getVariant(theme, variant).background};
     border ${({ theme, variant }) => `1px solid ${variant === 'secondary' ? theme.colors.black : 'transparent'}`};
     color: ${({ theme, variant }) => getVariant(theme, variant).color};
+    white-space: nowrap;
     
     &:hover {
       background: ${({ theme, variant }) => getVariant(theme, variant).background};
@@ -36,6 +37,7 @@ export const StyledButton = styled(PrimaryButton)`
   & + button {
     & + span {
       background: ${({ theme, variant }) => getVariant(theme, variant).color};
+      color: ${({ theme, variant }) => getVariant(theme, variant).color};
     }
   }
 `;
