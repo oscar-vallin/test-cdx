@@ -34,12 +34,12 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
     const doEffect = () => {
       console.log('data progress: ', apiDataError);
 
-      const _itemsProcess = data.exchangeActivityInProcess.nodes.map(({ id, name, activityTime }) => {
-        console.log('data progress: ', id, name, activityTime);
+      const _itemsProcess = data.exchangeActivityInProcess.nodes.map(({ orgId, name, activityTime }) => {
+        console.log('data progress: ', orgId, name, activityTime);
         const datetime = format(new Date(activityTime), 'MM/dd/yyyy hh:mm a');
 
         return [
-          formatField(id, 'id', id),
+          formatField(orgId, 'id', orgId),
           formatField(name, 'name', name),
           formatField(datetime, 'activity', datetime),
         ];
@@ -47,12 +47,12 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
 
       setItemsProc(_itemsProcess);
 
-      const _itemsComplete = apiData.exchangeActivityTransmitted.nodes.map(({ id, name, activityTime }) => {
-        console.log('data progress: ', id, name, activityTime);
+      const _itemsComplete = apiData.exchangeActivityTransmitted.nodes.map(({ orgId, name, activityTime }) => {
+        console.log('data progress: ', orgId, name, activityTime);
         const datetime = format(new Date(activityTime), 'MM/dd/yyyy hh:mm a');
 
         return [
-          formatField(id, 'id', id),
+          formatField(orgId, 'id', orgId),
           formatField(name, 'name', name),
           formatField(datetime, 'activity', datetime),
         ];
@@ -60,12 +60,12 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
 
       setItemsComp(_itemsComplete);
 
-      const _itemsErrored = apiDataError.exchangeActivityErrored.nodes.map(({ id, name, activityTime }) => {
-        console.log('data progress: ', id, name, activityTime);
+      const _itemsErrored = apiDataError.exchangeActivityErrored.nodes.map(({ orgId, name, activityTime }) => {
+        console.log('data progress: ', orgId, name, activityTime);
         const datetime = format(new Date(activityTime), 'MM/dd/yyyy hh:mm a');
 
         return [
-          formatField(id, 'id', id),
+          formatField(orgId, 'id', orgId),
           formatField(name, 'name', name),
           formatField(datetime, 'activity', datetime),
         ];
