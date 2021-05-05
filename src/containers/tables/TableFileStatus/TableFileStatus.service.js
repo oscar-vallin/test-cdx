@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import { format } from 'date-fns';
 import { useWorkPacketStatusesQuery } from '../../../data/services/graphql';
+import { useAuthContext } from '../../../contexts/AuthContext';
 import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { formatField } from '../../../helpers/tableHelpers';
 import { getStepStatusLabel } from '../../../data/constants/FileStatusConstants';
@@ -13,6 +15,9 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
   const [items, setItems] = useState([]);
   const [columns, setColumns] = useState([]);
   const structure = getTableStructure(TABLE_NAMES.FILE_STATUS);
+
+  const { authLogout } = useAuthContext();
+  const history = useHistory();
 
   const { data, loading, error } = useWorkPacketStatusesQuery({
     variables: {
@@ -28,6 +33,15 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
   useEffect(() => {
     setLoading(false);
   }, []);
+
+  useEffect(() => {
+    if (error) {
+      console.log('ORROR: ', error);
+
+      authLogout('expired');
+      history.push('/');
+    }
+  }, [error]);
 
   useEffect(() => {
     const doEffect = () => {
