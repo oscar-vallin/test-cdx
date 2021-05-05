@@ -1,17 +1,24 @@
 import React from 'react';
-import Toast from 'react-toast-component';
-
 import { LayoutLogin } from '../../layouts/LayoutLogin';
 import { FormLogin } from '../../containers/forms/FormLogin';
+import { Toast } from './../../components/toast';
 
 const _LoginPage = () => {
-  const [isOpen, setToast] = React.useState(true);
   const [isLogout, setLogout] = React.useState();
 
   React.useEffect(() => {
     const logout = localStorage.getItem('LOGOUT');
+    const login = localStorage.getItem('LOGIN');
 
-    console.log('token begin: ', logout);
+    if (logout != null) {
+      console.log('token begin: ', logout);
+      setTimeout(() => localStorage.removeItem('LOGOUT'), 9000);
+    }
+
+    if (login != null) {
+      console.log('token begin: ', login);
+      localStorage.removeItem('LOGIN');
+    }
 
     setLogout(logout);
   }, []);
@@ -19,18 +26,7 @@ const _LoginPage = () => {
   return (
     <LayoutLogin id="PageLogin">
       <FormLogin id="FormLogin" onLogin={() => {}} />
-      {isLogout === 'logout' ? (
-        <Toast
-          isOpen={isOpen}
-          hasAutoDismiss={true}
-          hasCloseBtn
-          closeCallback={() => setToast(false)}
-          description="Your session has expired please login again."
-          title="Session Out"
-          duration={3000}
-          classNames={['error']} // 'success', 'info', 'warning', 'error'
-        />
-      ) : null}
+      {isLogout != undefined ? <Toast text={isLogout} duration={5000} /> : null}
     </LayoutLogin>
   );
 };
