@@ -1,4 +1,7 @@
 import { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useAuthContext } from '../../contexts/AuthContext';
+
 import { useDashboardPeriodsQuery } from '../../data/services/graphql';
 
 export const DATE_OPTION_NAME = {
@@ -33,6 +36,18 @@ export const useDashboardService = (initOrgSid) => {
       orgSid,
     },
   });
+
+  const { authLogout } = useAuthContext();
+  const history = useHistory();
+
+  useEffect(() => {
+    if (error) {
+      console.log('ORROR: ', error);
+
+      authLogout('expired');
+      history.push('/');
+    }
+  }, [error]);
 
   // * Set Data Counters.
   const getData = () => {

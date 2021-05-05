@@ -21,6 +21,7 @@ export const useCurrentUser = (_username, _password) => {
         localStorage.removeItem('LOGIN');
       }
     }
+
     console.log('logged in: ', _isLoggedIn);
     setLoggedIn(_isLoggedIn);
   }, [data]);
@@ -30,7 +31,11 @@ export const useCurrentUser = (_username, _password) => {
   //
   const currentUserQuery = async (__username) => {
     setProcessing(true);
+    const _login = await localStorage.getItem('LOGIN');
 
+    // if (_login != null) {
+    //   return;
+    // }
     await _apiCall();
 
     setProcessing(false);
