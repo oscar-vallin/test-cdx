@@ -6,7 +6,7 @@ import { StyledContainer, StyledLink } from './HighlightCounter.styles';
 const HighlightCounter = ({ id = '__HighLight', type, href = '#', children }) => {
   return (
     <StyledContainer id={id} type={type}>
-      <StyledLink href={href}>{children}</StyledLink>
+      <StyledLink to={href}>{children}</StyledLink>
     </StyledContainer>
   );
 };

@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { Box as LayoutBox, Row as LayoutRow, Column as LayoutColumn } from '../../layouts';
 import { Text } from '../../typography/Text';
 import { ButtonAction } from '../../buttons/ButtonAction';
+import { Link } from 'react-router-dom';
 
 export const StyledContainer = styled.div`
   width: 100%;
@@ -77,4 +78,9 @@ export const CellItemRow = styled.div`
   justify-content: flex-start;
   align-items: center;
   width: 100%;
+`;
+
+export const RouteLink = styled(Link)`
+  text-decoration: inherit;
+  color: inherit;
 `;
