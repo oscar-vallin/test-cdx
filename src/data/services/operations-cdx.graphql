@@ -653,6 +653,7 @@ query CurrentUser{
                 id
                 orgId
                 userId
+                pollInterval
                 defaultAuthorities
             }
         }
@@ -1084,6 +1085,19 @@ query ExchangeActivityErrored($orgSidInput: OrgSidInput!, $dateRange:DateTimeRan
             name
             type
             activityTime
+        }
+    }
+}
+
+query NavigateToNewDomain($domainNavInput: DomainNavInput!){
+    navigateToNewDomain(domainNavInput : $domainNavInput){
+        type
+        selectedPage
+        navItems{
+            ...navItemFragment
+            subNavItems{
+                ...navItemFragment
+            }
         }
     }
 }

@@ -37,6 +37,7 @@ type Query {
 
     findUserByEmail(userEmail: String!) : User
     findUser(ownedInputSid : OwnedInputSid) : User
+    navigateToNewDomain(domainNavInput: DomainNavInput) : WebAppDomain
 }
 
 type Mutation {
@@ -113,6 +114,7 @@ type UserSession{
     orgId: ID!
     userId: String!
     firstNm: String!
+    pollInterval: Int
     defaultAuthorities: [String]
 }
 
@@ -516,7 +518,7 @@ enum CDXWebPage{
     ADD_ORG
     ADD_USER
     COLOR_PALETTES
-
+    THEME
 }
 
 enum CDXWebAppDomain{
@@ -1077,4 +1079,11 @@ type OrganizationLink{
 type OrganizationLinkConnection{
     paginationInfo: PaginationInfo!
     nodes: [OrganizationLink]
+}
+
+input DomainNavInput{
+    orgSid: ID!
+    ownerId: ID
+    appDomain: CDXWebAppDomain!
+    selectedPage: CDXWebPage
 }
