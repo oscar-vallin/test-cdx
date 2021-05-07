@@ -10,7 +10,15 @@ import {
   buildColumns,
 } from 'office-ui-fabric-react/lib/DetailsList';
 
-import { StyledText, StyledContainer, StyledCell, StyledSpecs, StyledSublabel, CellItemRow } from './Table.styles';
+import {
+  StyledText,
+  StyledContainer,
+  StyledCell,
+  StyledSpecs,
+  StyledSublabel,
+  CellItemRow,
+  RouteLink,
+} from './Table.styles';
 
 import { TableHeader } from '../TableHeader';
 import { FileProgress } from '../../../containers/bars/FileProgress';
@@ -231,7 +239,9 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput }) => 
           console.log('OJJOOOO');
           return (
             <CellItemRow>
-              <Link href={`${fieldItem.text}`}>{fieldContent}</Link>
+              <Link>
+                <RouteLink to={`${fieldItem.text}`}>{fieldContent}</RouteLink>
+              </Link>
               {fieldItem.child.value}
             </CellItemRow>
           );
@@ -240,13 +250,19 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput }) => 
         if (!!option) {
           return (
             <>
-              <Link href={`${fieldItem.text}`}>{fieldContent}</Link>
+              <link>
+                <RouteLink to={`${fieldItem.text}`}>{fieldContent}</RouteLink>
+              </link>
               <StyledSublabel>{`Specs: ${fieldItem.sublabel}`}</StyledSublabel>
             </>
           );
         }
 
-        return <Link href={`${fieldItem.text}`}>{fieldContent}</Link>;
+        return (
+          <Link>
+            <RouteLink to={`${fieldItem.text}`}>{fieldContent}</RouteLink>
+          </Link>
+        );
 
       case 'bus':
         return <StyledText right>{fieldContent}</StyledText>;

@@ -10340,6 +10340,11 @@ react-test-renderer@^16.0.0-0:
     react-is "^16.8.6"
     scheduler "^0.19.1"
 
+react-toast-component@^1.4.18:
+  version "1.4.18"
+  resolved "https://registry.yarnpkg.com/react-toast-component/-/react-toast-component-1.4.18.tgz#e00a3ab2e309871c91622c1f12aa996cf7346a24"
+  integrity sha512-A0xX7XzmkpsJV8WgoyBvEo4dKKPBHtJMAirwADwBpG2dAzBaj9iyOxFG4qyHeao/3OMr8Dnk59VAp8c1mKBpSg==
+
 react-transition-group@2.9.0:
   version "2.9.0"
   resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-2.9.0.tgz#df9cdb025796211151a436c69a8f3b97b5b07c8d"

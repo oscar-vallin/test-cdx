@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import { Link } from 'office-ui-fabric-react/lib/Link';
+// import { Link } from 'office-ui-fabric-react/lib/Link';
+import { Link } from 'react-router-dom';
 
 const getVariant = ({ colors }, variant) => {
   const Variants = {
@@ -46,5 +47,6 @@ export const StyledContainer = styled.div`
 `;
 
 export const StyledLink = styled(Link)`
+  text-decoration: none;
   color: inherit;
 `;
