@@ -6,8 +6,9 @@ import { Row, Column } from '../../../../components/layouts';
 import { Spacing } from '../../../../components/spacings/Spacing';
 import { Separator } from '../../../../components/separators/Separator';
 import { Text } from '../../../../components/typography/Text';
-import { NAV_ITEMS } from './../../SideMenu';
 import { TablesCurrentActivity } from './../../../../containers/tables/TableCurrentActivity';
+import { RouteLink } from './../../AdminPage.styles';
+import { NAV_ITEMS } from './../../SideMenu';
 
 export const CurrentActivityPage = ({ id = 'CurrentActivity' }) => {
   return (

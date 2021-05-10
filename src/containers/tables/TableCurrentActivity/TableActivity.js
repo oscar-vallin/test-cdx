@@ -27,12 +27,12 @@ const TableActivity = ({ items, loading, tableName, color }) => {
   const [sortedItems, setSortedItems] = useState('initialState');
 
   useEffect(() => {
-    console.log('plpapala: ', items);
+    console.log('plpapala: ', items, loading);
 
     if (loading === false) {
       _buildItems();
     }
-  }, [loading]);
+  }, []);
   const _buildItems = () => {
     const iItems = items.map((rowItem) => {
       const objItem = {};

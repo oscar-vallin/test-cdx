@@ -3,43 +3,35 @@ import { format } from 'date-fns';
 import { useExchangeActivityInProcessQuery } from '../../../data/services/graphql';
 import { useActivityComplete } from './hooks/useActivityComplete';
 import { useActivityErrored } from './hooks/useActivityErrored';
+import { useActivityProcess } from './hooks/useActivityProcess';
 import { formatField } from '../../../helpers/tableHelpers';
 
 export const useTable = (argOrgSid, argDateRange, argFilter) => {
-  const [_loading, setLoading] = useState(true);
+  const [_loadingProc, setLoadingProc] = useState(true);
+  const [_loadingComp, setLoadingComp] = useState(true);
+  const [_loadingError, setLoadingError] = useState(true);
   const [itemsProc, setItemsProc] = useState([]);
   const [itemsComp, setItemsComp] = useState([]);
   const [itemsError, setItemsError] = useState([]);
   // const [columns, setColumns] = useState([]);
 
-  const { apiData, loadingComp } = useActivityComplete();
-  const { apiDataError, loadingError } = useActivityErrored();
+  const { dataComplete, loadingComp } = useActivityComplete();
+  const { dataError, loadingError } = useActivityErrored();
+  const { dataProcess, loadingProc, apiError } = useActivityProcess();
 
-  const { data, loading, error } = useExchangeActivityInProcessQuery({
-    variables: {
-      orgSidInput: { orgSid: 1 },
-      dateRange: { rangeStart: '2020-01-01T00:00:00-08:00', rangeEnd: '2020-01-01T23:59:59-08:00' },
-      pageableInput: {
-        pageNumber: 0,
-        pageSize: 100,
-      },
-    },
-  });
+  // * Component Did Mount.
+  useEffect(() => {}, []);
 
-  //   // * Component Did Mount.
-  useEffect(() => {
-    setLoading(false);
-  }, []);
   useEffect(() => {
     const doEffect = () => {
-      console.log('data progress: ', apiDataError);
+      console.log('data progress: ', dataProcess);
 
-      const _itemsProcess = data.exchangeActivityInProcess.nodes.map(({ orgId, name, activityTime }) => {
-        console.log('data progress: ', orgId, name, activityTime);
+      const _itemsProcess = dataProcess.exchangeActivityInProcess.nodes.map(({ id, name, activityTime }) => {
+        console.log('data progress: ', id, name, activityTime);
         const datetime = format(new Date(activityTime), 'MM/dd/yyyy hh:mm a');
 
         return [
-          formatField(orgId, 'id', orgId),
+          formatField(id, 'id', id),
           formatField(name, 'name', name),
           formatField(datetime, 'activity', datetime),
         ];
@@ -47,12 +39,12 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
 
       setItemsProc(_itemsProcess);
 
-      const _itemsComplete = apiData.exchangeActivityTransmitted.nodes.map(({ orgId, name, activityTime }) => {
-        console.log('data progress: ', orgId, name, activityTime);
+      const _itemsComplete = dataComplete.exchangeActivityTransmitted.nodes.map(({ id, name, activityTime }) => {
+        console.log('data progress: ', id, name, activityTime);
         const datetime = format(new Date(activityTime), 'MM/dd/yyyy hh:mm a');
 
         return [
-          formatField(orgId, 'id', orgId),
+          formatField(id, 'id', id),
           formatField(name, 'name', name),
           formatField(datetime, 'activity', datetime),
         ];
@@ -60,12 +52,12 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
 
       setItemsComp(_itemsComplete);
 
-      const _itemsErrored = apiDataError.exchangeActivityErrored.nodes.map(({ orgId, name, activityTime }) => {
-        console.log('data progress: ', orgId, name, activityTime);
+      const _itemsErrored = dataError.exchangeActivityErrored.nodes.map(({ id, name, activityTime }) => {
+        console.log('data progress: ', id, name, activityTime);
         const datetime = format(new Date(activityTime), 'MM/dd/yyyy hh:mm a');
 
         return [
-          formatField(orgId, 'id', orgId),
+          formatField(id, 'id', id),
           formatField(name, 'name', name),
           formatField(datetime, 'activity', datetime),
         ];
@@ -73,27 +65,33 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
 
       setItemsError(_itemsErrored);
     };
-    if (data && apiData && apiDataError) {
+
+    if (dataProcess && dataComplete && dataError) {
+      setLoadingProc(false);
+      setLoadingComp(false);
+      setLoadingError(false);
       return doEffect();
     }
-  }, [data]);
+  }, [dataProcess, dataComplete, dataError]);
   // * Loading Data
   useEffect(() => {
-    setLoading(loading);
-  }, [loading]);
+    setLoadingProc(loadingProc);
+    setLoadingComp(loadingComp);
+    setLoadingError(loadingError);
+  }, [loadingProc, loadingComp, loadingError]);
   return {
     tableProc: {
       items: itemsProc,
-      loading: _loading,
+      loading: _loadingProc,
     },
     tableComp: {
       items: itemsComp,
-      loading: loadingComp,
+      loading: _loadingComp,
     },
     tableError: {
       items: itemsError,
-      loading: loadingError,
+      loading: _loadingError,
     },
-    error,
+    apiError,
   };
 };
