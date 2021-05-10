@@ -1,3 +1,5 @@
+import { RouteLink } from './AdminPage.styles';
+
 export const NAV_ITEMS = [
   {
     links: [
@@ -20,13 +22,11 @@ export const NAV_ITEMS = [
         name: 'Access Management',
         links: [
           {
-            name: 'Policies',
-            url: '/admin/access-management/policies',
+            name: <RouteLink to="/admin/access-management/policies">Policies</RouteLink>,
             key: 'policies',
           },
           {
-            name: 'Groups',
-            url: '/admin/access-management/groups',
+            name: <RouteLink to="/admin/access-management/groups">Groups</RouteLink>,
             key: 'groups',
           },
         ],
@@ -35,8 +35,7 @@ export const NAV_ITEMS = [
         name: 'Organizations',
         links: [
           {
-            name: 'Active Orgs',
-            url: '/admin/organizations/active-orgs',
+            name: <RouteLink to="/admin/organizations/active-orgs">Active Orgs</RouteLink>,
             key: 'activeOrgs',
           },
           {
@@ -85,8 +84,7 @@ export const NAV_ITEMS = [
         name: 'Activity',
         links: [
           {
-            name: 'Current Activity',
-            url: '/admin/activity/current-activity',
+            name: <RouteLink to="/admin/activity/current-activity">Current Activity</RouteLink>,
             key: 'userAccountRules',
           },
         ],

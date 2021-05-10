@@ -49,6 +49,7 @@ const firstDayOfWeek = DayOfWeek.Sunday;
 
 const InputDate = ({ id = '', Label, placeholder = 'Select a Date...', value, onChange, required }) => {
   const [selectedDate, setSelectedDate] = React.useState();
+
   React.useEffect(() => {
     if (value === '') {
       const hour = getHours(new Date());
@@ -65,7 +66,7 @@ const InputDate = ({ id = '', Label, placeholder = 'Select a Date...', value, on
       return;
     }
     setSelectedDate(value);
-  }, [selectedDate]);
+  }, []);
 
   return (
     <DatePicker

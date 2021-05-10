@@ -9,95 +9,10 @@ import { Spacing } from '../../../../components/spacings/Spacing';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Text } from '../../../../components/typography/Text';
 import { Separator } from '../../../../components/separators/Separator';
+import { RouteLink } from './../../AdminPage.styles';
+import { NAV_ITEMS } from './../../SideMenu';
 
 import { useAmGroupsForOrgPQuery } from '../../../../data/services/graphql';
-
-const NAV_ITEMS = [
-  {
-    links: [
-      {
-        name: 'Users',
-        links: [
-          {
-            name: 'Active Users',
-            url: '#',
-            key: 'activeUsers',
-          },
-          {
-            name: 'Deleted Users',
-            url: '#',
-            key: 'deletedUsers',
-          },
-        ],
-      },
-      {
-        name: 'Access Management',
-        links: [
-          {
-            name: 'Policies',
-            url: '/admin/access-management/policies',
-            key: 'policies',
-          },
-          {
-            name: 'Groups',
-            url: '/admin/access-management/groups',
-            key: 'groups',
-          },
-        ],
-      },
-      {
-        name: 'Organizations',
-        links: [
-          {
-            name: 'Active Orgs',
-            url: '/admin/organizations/active-orgs',
-            key: 'activeOrgs',
-          },
-          {
-            name: 'Org Activity',
-            url: '#',
-            key: 'orgActivity',
-          },
-        ],
-      },
-      {
-        name: 'Tools',
-        links: [
-          {
-            name: 'FTP Test',
-            url: '#',
-            key: 'ftpTest',
-          },
-          {
-            name: 'Deploy',
-            url: '#',
-            key: 'deploy',
-          },
-        ],
-      },
-      {
-        name: 'Security',
-        links: [
-          {
-            name: 'User Account Rules',
-            url: '#',
-            key: 'userAccountRules',
-          },
-          {
-            name: 'Password Rules',
-            url: '#',
-            key: 'passwordRules',
-          },
-          {
-            name: 'SSO Config',
-            url: '#',
-            key: 'ssoConfig',
-          },
-        ],
-      },
-    ],
-  },
-];
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
