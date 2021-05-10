@@ -2,12 +2,19 @@ import styled from 'styled-components';
 import { Box as LayoutBox, Row as LayoutRow, Column as LayoutColumn } from '../../../components/layouts';
 import { Button } from '../../../components/buttons/Button';
 
-const COLOR_MAIN = '#1a8fff';
-const COLOR_TEXT = '#333';
-const COLOR_TEXT_LIGHT = '#CCC';
-const COLOR_BG = '#F9F9F9';
-const COLOR_NEUTRAL = '#FFF';
-const COLOR_BORDER = '#EEE';
+// const COLOR_MAIN = '#1a8fff';
+// const COLOR_TEXT = '#333';
+// const COLOR_TEXT_LIGHT = '#CCC';
+// const COLOR_BG = '#F9F9F9';
+// const COLOR_NEUTRAL = '#FFF';
+// const COLOR_BORDER = '#EEE';
+
+const COLOR_MAIN = ({ theme }) => theme.colors.themePrimary;
+const COLOR_TEXT = ({ theme }) => theme.colors.neutralPrimary;
+const COLOR_TEXT_LIGHT = ({ theme }) => theme.colors.neutralTertiaryAlt;
+const COLOR_BG = ({ theme }) => theme.colors.neutralLighterAlt;
+const COLOR_NEUTRAL = ({ theme }) => theme.colors.white;
+const COLOR_BORDER = ({ theme }) => theme.colors.neutralLight;
 
 // --main-color: #1a8fff;
 // --text-color: #777;
@@ -256,7 +263,7 @@ export const SWeekHourContainer = styled.div`
   justify-content: flex-end;
   padding-top: -10px;
   height: 80px;
-  background: #f3f2f1;
+  background: transparent;
   width: 50px;
 `;
 

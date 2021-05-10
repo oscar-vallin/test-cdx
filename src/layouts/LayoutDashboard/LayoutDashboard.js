@@ -1,20 +1,29 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
+import { ROUTE_USER_SETTINGS } from '../../data/constants/RouteConstants';
+
 import { NavBar } from '../../containers/bars/NavBar';
 import { StyleConstants } from '../../data/constants/StyleConstants';
 import { BoxStyled } from './LayoutDashboard.styles';
-import { Breadcrumb } from '../../components/breadcrumbs/Breadcrumb';
-import { ROUTE_FILE_STATUS } from '../../data/constants/RouteConstants';
+import { ChangePasswordModal } from '../../containers/modals/ChangePasswordModal';
 
 const LayoutDashboard = ({ id = 'LayoutDashboard', menuOptionSelected = 'dashboard', routeId, children }) => {
-  const breadcrumbItems = [routeId, { ID: 'work-packet-details', TITLE: 'Work Packet Details' }];
+  const history = useHistory();
 
   return (
-    <BoxStyled id={`${id}__Box`} direction={StyleConstants.DIRECTION_COLUMN} top>
-      <NavBar menuOptionSelected={menuOptionSelected} />
-      {/* <Breadcrumb items={{ text: ROUTE_FILE_STATUS.TITLE, key: ROUTE_FILE_STATUS.API_ID }} /> */}
-      {children}
-    </BoxStyled>
+    <Fragment>
+      <BoxStyled id={`${id}__Box`} direction={StyleConstants.DIRECTION_COLUMN} top>
+        <NavBar
+          menuOptionSelected={menuOptionSelected}
+          onUserSettings={() => history.push(ROUTE_USER_SETTINGS.URL)}
+        />
+
+        {children}
+      </BoxStyled>
+
+      {/* <ChangePasswordModal /> */}
+    </Fragment>
   );
 };
 

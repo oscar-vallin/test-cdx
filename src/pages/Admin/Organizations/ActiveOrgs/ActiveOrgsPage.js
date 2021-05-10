@@ -1,99 +1,17 @@
-import React from 'react';
+import React, { useState, useEffect }  from 'react';
 
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
+import { Row, Column } from '../../../../components/layouts';
 import { Spacing } from '../../../../components/spacings/Spacing';
+import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
+import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
+import { MessageBar } from 'office-ui-fabric-react';
 // import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Text } from '../../../../components/typography/Text';
 import { Separator } from '../../../../components/separators/Separator';
 
 import { useDirectOrganizationsFQuery } from '../../../../data/services/graphql';
 
-const NAV_ITEMS = [
-  {
-    links: [
-      {
-        name: 'Users',
-        links: [
-          {
-            name: 'Active Users',
-            url: '#',
-            key: 'activeUsers',
-          },
-          {
-            name: 'Deleted Users',
-            url: '#',
-            key: 'deletedUsers',
-          },
-        ],
-      },
-      {
-        name: 'Access Management',
-        links: [
-          {
-            name: 'Policies',
-            url: '/admin/access-management/policies',
-            key: 'policies',
-          },
-          {
-            name: 'Groups',
-            url: '/admin/access-management/groups',
-            key: 'groups',
-          },
-        ],
-      },
-      {
-        name: 'Organizations',
-        links: [
-          {
-            name: 'Active Orgs',
-            url: '/admin/organizations/active-orgs',
-            key: 'activeOrgs',
-          },
-          {
-            name: 'Org Activity',
-            url: '#',
-            key: 'orgActivity',
-          },
-        ],
-      },
-      {
-        name: 'Tools',
-        links: [
-          {
-            name: 'FTP Test',
-            url: '#',
-            key: 'ftpTest',
-          },
-          {
-            name: 'Deploy',
-            url: '#',
-            key: 'deploy',
-          },
-        ],
-      },
-      {
-        name: 'Security',
-        links: [
-          {
-            name: 'User Account Rules',
-            url: '#',
-            key: 'userAccountRules',
-          },
-          {
-            name: 'Password Rules',
-            url: '#',
-            key: 'passwordRules',
-          },
-          {
-            name: 'SSO Config',
-            url: '#',
-            key: 'ssoConfig',
-          },
-        ],
-      },
-    ],
-  },
-];
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -140,8 +58,41 @@ const _ActiveOrgsPage = () => {
   }, [loading]);
 
   return (
-    <LayoutAdmin id="PageActiveOrgs" sidebar={NAV_ITEMS} sidebarOptionSelected="activeOrgs">
-      <Spacing margin="double">Active Orgs</Spacing>
+    <LayoutAdmin id="PageActiveOrgs" sidebarOptionSelected="ACTIVE_ORGS">
+      <Spacing margin="double">
+        <Row>
+          <Column lg="4">
+            <Spacing margin={{ top: 'small' }}>
+              <Text variant="bold">Active orgs</Text>
+            </Spacing>
+          </Column>
+        </Row>
+
+        <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+          <Separator />
+        </Spacing>
+
+        <Row>
+          <Column>
+            {!loading ? (
+              orgs.length > 0 ? (
+                <DetailsList
+                  items={orgs}
+                  selectionMode={SelectionMode.none}
+                  columns={columns}
+                  layoutMode={DetailsListLayoutMode.justified}
+                  onRenderItemColumn={onRenderItemColumn}
+                  isHeaderVisible
+                />
+              ) : (
+                <MessageBar>No active orgs</MessageBar>
+              )
+            ) : (
+              <Spinner label="Loading active orgs" />
+            )}
+          </Column>
+        </Row>
+      </Spacing>
     </LayoutAdmin>
   );
 };

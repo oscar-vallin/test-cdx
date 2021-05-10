@@ -13,7 +13,6 @@ const CardSection = ({ id = '__CardSection', children, variant = 'normal', ...pr
 };
 
 CardSection.propTypes = {
-  id: PropTypes.string.isRequired,
   variant: PropTypes.string,
   children: PropTypes.node,
 };

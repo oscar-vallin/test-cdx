@@ -16,7 +16,7 @@ export const StyledLi = styled.li`
   .item__status {
     align-items: center;
     background: ${({ theme, status }) => status === 'DONE' 
-      ? theme.colors.success 
+      ? theme.colors.custom.success 
       : status === 'PROGRESS'
         ? theme.colors.white
         : '#eee'
@@ -42,7 +42,7 @@ export const StyledLi = styled.li`
     }
 
     .description {
-      color: ${({ theme }) => theme.colors.textMuted};
+      color: ${({ theme }) => theme.colors.themeTertiary};
       font-size: ${({ theme }) => theme.fontSizes.normal};
     }
   }

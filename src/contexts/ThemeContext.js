@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useMemo, useContext } from 'react';
 
 import { Customizer, loadTheme } from '@fluentui/react';
 // import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
@@ -7,52 +7,102 @@ import 'office-ui-fabric-react/dist/css/fabric.css';
 import { ThemeProvider } from 'styled-components';
 import { defaultTheme, darkTheme } from '../styles/themes';
 import { theme as styledComponentsTheme } from '../styles/themes/theme';
+import { useCurrentUserDashThemePageLazyQuery } from '../data/services/graphql';
 
-//
 export const ThemeContext = React.createContext(() => {
-  // Initialization
 });
 
 export const ThemeContextProvider = ({ children }) => {
-  // LocalState
-  const [isContextLoading, setLoading] = React.useState(true);
-  const [themeName, setThemeName] = React.useState('light');
+  const [isContextLoading, setLoading] = useState(true);
+  const [currentTheme, setTheme] = useState(styledComponentsTheme);
+  const [styledTheme, setStyledTheme] = useState(styledComponentsTheme);
 
-  const [currentTheme, setTheme] = React.useState(defaultTheme);
-  const [styledTheme, setStyledTheme] = React.useState(styledComponentsTheme);
+  const [themeConfig, setThemeConfig] = useState({});
 
-  // Component Did Mount
-  React.useEffect(() => {
-    const localFunction = async () => {
-      setLoading(false);
-    };
+  const [
+    useDashThemeQuery,
+    {
+      data: currentUserThemeParams,
+      loading: isLoadingCurrentUserThemeParams,
+    }
+  ] = useCurrentUserDashThemePageLazyQuery({ variables: {}});
 
-    localFunction();
+  // useEffect(() => {
+  //   const theme = localStorage.getItem('CURRENT_THEME');
 
-    return () => null;
-  }, []);
+  //   if (theme) {
+  //     const { name, themeColors } = JSON.parse(theme);
+  //     changeTheme(name, themeColors);
+  //   } else {
+  //     changeTheme('LIGHT');
+  //   }
 
-  // useEffects Variables.
+  //   const localFunction = async () => {
 
-  // Local Functions shared in Context.
+  //     setLoading(false);
+  //   };
 
-  const changeTheme = () => {
-    if (themeName === 'light') {
-      setThemeName('dark');
-      setTheme(darkTheme);
-      setStyledTheme({ ...styledTheme, color: darkTheme });
-      return;
+  //   localFunction();
+
+  //   return () => null;
+  // }, []);
+
+  useEffect(useDashThemeQuery, []);
+
+  useEffect(() => {
+    if (!isLoadingCurrentUserThemeParams) {
+      if (currentUserThemeParams) {
+        const {
+          themeColorModes,
+          themeColorPalettes,
+          themeFontSizes,
+          dashTheme
+        } = currentUserThemeParams.currentUserDashThemePage;
+
+        setThemeConfig({
+          themeColorModes,
+          themeColorPalettes,
+          themeFontSizes
+        });
+
+        changeTheme(!dashTheme ? 'LIGHT' : dashTheme);
+      } else {
+        changeTheme('LIGHT');
+      }
+    }
+  }, [isLoadingCurrentUserThemeParams]);
+
+  const getThemeColors = (name) => {
+    const themes = {
+      LIGHT: defaultTheme,
+      DARK: darkTheme,
     }
 
-    setThemeName('light');
-    setTheme(defaultTheme);
-    setStyledTheme(styledTheme);
+    return (name !== 'CUSTOM')
+      ? themes[name]
+      : themes.LIGHT; 
+  }
+
+  const changeTheme = (name, theme = {}) => {
+    const themeColors = { ...getThemeColors(name), ...theme };
+    const customizedTheme = {
+      ...styledTheme,
+      colors: { ...styledTheme.colors, ...themeColors }
+    };
+
+    setTheme(themeColors);
+    setStyledTheme(customizedTheme);
+
+    localStorage.setItem('CURRENT_THEME', JSON.stringify({ name, themeColors: customizedTheme.colors }));
   };
 
   // eslint-disable-next-line
-  const values = React.useMemo(() => ({ isContextLoading, changeTheme }), [isContextLoading]);
+  const values = useMemo(() => ({
+    isContextLoading: isLoadingCurrentUserThemeParams,
+    changeTheme,
+    themeConfig,
+  }), [isLoadingCurrentUserThemeParams, themeConfig]);
 
-  // Finally, return the interface that we want to expose to our other components
   return (
     <Customizer {...loadTheme({ palette: currentTheme })}>
       <ThemeProvider theme={styledTheme}>
@@ -64,7 +114,7 @@ export const ThemeContextProvider = ({ children }) => {
 
 //
 export function useThemeContext() {
-  const context = React.useContext(ThemeContext);
+  const context = useContext(ThemeContext);
 
   return context;
 }

@@ -7,7 +7,7 @@ export const StyledDiv = styled.div`
   .collapse__trigger {
     background: none;
     border: none;
-    color: ${({ theme }) => theme.colors.textMuted};
+    color: ${({ theme }) => theme.colors.themeTertiary};
     display: block;
     font: ${({ theme }) => theme.fontStyles.normal};
     font-size: ${({ theme }) => theme.fontSizes.normal};

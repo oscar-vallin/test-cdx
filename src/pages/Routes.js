@@ -4,6 +4,7 @@ import { ROUTES } from '../data/constants/RouteConstants';
 
 // Routes
 import { LoginPage } from './Login';
+import { UserSettingsPage } from './UserSettings';
 import { DashboardPage } from './Dashboard';
 import { ArchivePage } from './Archives';
 import { SchedulePage } from './Schedule';
@@ -16,6 +17,7 @@ import { FileStatusDetailsPage } from './FileStatusDetails';
 import { AccessManagementGroupsPage, AccessManagementPoliciesPage, CreatePoliciesPage } from './Admin/AccessManagement';
 import { ActiveOrgsPage } from './Admin/Organizations';
 import { CurrentActivityPage } from './Admin/Activity';
+import { ColorPalettesPage, DefaultThemePage } from './Admin/DashboardSite';
 
 import AuthRoute from './AuthRoute';
 import UnauthRoute from './UnauthRoute';
@@ -28,6 +30,9 @@ export const Routes = () => {
       </UnauthRoute>
       <AuthRoute exact path="/">
         <DashboardPage />
+      </AuthRoute>
+      <AuthRoute path={ROUTES.ROUTE_USER_SETTINGS.URL}>
+        <UserSettingsPage />
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_DASHBOARD.URL}>
         <DashboardPage />
@@ -68,6 +73,12 @@ export const Routes = () => {
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_ACTIVITY_CURRENT.URL}>
         <CurrentActivityPage />
+      </AuthRoute>
+      <AuthRoute path={ROUTES.ROUTE_COLOR_PALETTES.URL}>
+        <ColorPalettesPage />
+      </AuthRoute>
+      <AuthRoute path={ROUTES.ROUTE_DEFAULT_THEME.URL}>
+        <DefaultThemePage />
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_ADMIN.URL}>
         <AdminPage />

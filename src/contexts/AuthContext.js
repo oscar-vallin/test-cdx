@@ -162,6 +162,7 @@ export const AuthContextProvider = ({ children }) => {
     if (logout != null) {
       localStorage.removeItem('LOGOUT');
     }
+    
     setUser(_user);
     setPassword(_password);
     setHistory(_history);

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const StyledText = styled.span`
-  color: ${({ theme, variant }) => (variant === 'muted') ? theme.colors.textMuted : theme.colors.black };
+  color: ${({ theme, variant }) => (variant === 'muted') ? theme.colors.themeTertiary : theme.colors.black };
   display: inline-block;
   font: ${({ theme }) => theme.fontStyles.normal};
   font-size: ${({ theme, size }) => theme.fontSizes[size]};

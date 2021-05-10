@@ -18,92 +18,6 @@ import VerbCombobox from '../../../../components/comboboxes/VerbCombobox/VerbCom
 
 import { useAmPolicyPageQuery } from '../../../../data/services/graphql';
 
-const NAV_ITEMS = [
-  {
-    links: [
-      {
-        name: 'Users',
-        links: [
-          {
-            name: 'Active Users',
-            url: '#',
-            key: 'activeUsers',
-          },
-          {
-            name: 'Deleted Users',
-            url: '#',
-            key: 'deletedUsers',
-          },
-        ],
-      },
-      {
-        name: 'Access Management',
-        links: [
-          {
-            name: 'Policies',
-            url: '/admin/access-management/policies',
-            key: 'policies',
-          },
-          {
-            name: 'Groups',
-            url: '/admin/access-management/groups',
-            key: 'groups',
-          },
-        ],
-      },
-      {
-        name: 'Organizations',
-        links: [
-          {
-            name: 'Active Orgs',
-            url: '/admin/organizations/active-orgs',
-            key: 'activeOrgs',
-          },
-          {
-            name: 'Org Activity',
-            url: '#',
-            key: 'orgActivity',
-          },
-        ],
-      },
-      {
-        name: 'Tools',
-        links: [
-          {
-            name: 'FTP Test',
-            url: '#',
-            key: 'ftpTest',
-          },
-          {
-            name: 'Deploy',
-            url: '#',
-            key: 'deploy',
-          },
-        ],
-      },
-      {
-        name: 'Security',
-        links: [
-          {
-            name: 'User Account Rules',
-            url: '#',
-            key: 'userAccountRules',
-          },
-          {
-            name: 'Password Rules',
-            url: '#',
-            key: 'passwordRules',
-          },
-          {
-            name: 'SSO Config',
-            url: '#',
-            key: 'ssoConfig',
-          },
-        ],
-      },
-    ],
-  },
-];
 
 const parseToComboBoxOption = ({ name, value }) => ({ key: value, text: name });
 const generateColumns = () => {
@@ -226,7 +140,7 @@ const _AccessManagementPoliciesPage = () => {
   }, [loading]);
 
   return (
-    <LayoutAdmin id="PageAdmin" sidebar={NAV_ITEMS} sidebarOptionSelected="policies">
+    <LayoutAdmin id="PageAdmin" sidebarOptionSelected="AM_POLICIES">
       <Row>
         <Column lg="8">
           <Spacing margin="double">

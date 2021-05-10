@@ -20,7 +20,11 @@ import {
 } from './NavBar.styles';
 
 // CardSection is called directly cause a restriction warning for that component.
-const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard' }) => {
+const NavBar = ({
+  id = '__NavBar',
+  menuOptionSelected = 'dashboard',
+  onUserSettings
+}) => {
   const [collapse, setCollapse] = React.useState('false');
 
   const changeCollapse = () => {
@@ -55,7 +59,7 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard' }) => {
           <StyledRow id={`${id}__Right_Row`} right>
             {renderIcon('Settings')}
             {renderIcon('Help')}
-            <ProfileMenu />
+            <ProfileMenu onUserSettings={onUserSettings}/>
           </StyledRow>
         </StyledColumnCont>
       </StyledRow>

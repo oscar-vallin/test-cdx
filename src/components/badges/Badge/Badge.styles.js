@@ -1,14 +1,14 @@
 import styled from 'styled-components';
 
-const getVariant = ({ colors }, variant) => {
+const getVariant = (theme, variant) => {
   const Variants = {
-    primary: { background: colors.themePrimary, color: colors.white },
-    // light: { background: colors.themeLight, color: colors. },
-    success: { background: colors.successBackground, color: colors.success },
-    error: { background: colors.errorBackground, color: colors.error },
-    severe: { background: colors.severeError, color: colors.white },
-    warning: { background: colors.warningBackground, color: colors.warning },
-    info: { background: colors.infoBackground, color: colors.info },
+    primary: { background: theme.colors.themePrimary, color: theme.colors.white },
+    // light: { background: theme.colors.themeLight, color: theme.colors. },
+    success: { background: theme.colors.custom.successAlt, color: theme.colors.custom.success },
+    error: { background: theme.colors.custom.errorAlt, color: theme.colors.custom.error },
+    severe: { background: theme.colors.severeError, color: theme.colors.white },
+    warning: { background: theme.colors.custom.warningAlt, color: theme.colors.custom.warning },
+    info: { background: theme.colors.custom.infoAlt, color: theme.colors.custom.info },
   };
 
   return Variants[variant];

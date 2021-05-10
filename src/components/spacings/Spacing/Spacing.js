@@ -24,8 +24,8 @@ const CDXSpacing = ({
 };
 
 CDXSpacing.propTypes = {
-  margin: PropTypes.string,
-  padding: PropTypes.string,
+  margin: PropTypes.any,
+  padding: PropTypes.any,
 };
 
 export { CDXSpacing };

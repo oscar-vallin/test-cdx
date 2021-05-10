@@ -12,7 +12,7 @@ import { useAuthContext } from '../../../contexts/AuthContext';
 import { StyledBox } from './ProfileMenu.styles';
 import { ButtonContextual } from '../../../components/buttons/ButtonContextual';
 
-const ProfileMenu = ({ id = '__ProfileMenu' }) => {
+const ProfileMenu = ({ id = '__ProfileMenu', onUserSettings }) => {
   const { authLogout } = useAuthContext();
   const history = useHistory();
 
@@ -25,8 +25,7 @@ const ProfileMenu = ({ id = '__ProfileMenu' }) => {
   };
 
   const items = [
-    { key: 'ProfileMenu_ChangePassword', text: 'Change Password', onClick: () => console.log('Change Password') },
-    { key: 'ProfileMenu_DarkMode', text: 'Dark Mode', onClick: () => console.log('Dark Mode') },
+    { key: 'ProfileMenu_UserSettings', text: 'Settings', onClick: onUserSettings },
     { key: 'ProfileMenu_Logout', text: 'Logout', onClick: () => handleLogout() },
   ];
 
