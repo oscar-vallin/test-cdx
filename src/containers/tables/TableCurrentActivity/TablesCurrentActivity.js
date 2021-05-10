@@ -16,7 +16,7 @@ const TablesCurrentActivity = ({ id = 'TableCurrentActivity', argOrgSid = 1, arg
   const { tableProc, tableComp, tableError } = useTable(argOrgSid, argDateRange, argFilter);
 
   useEffect(() => {
-    console.log('Cosa k no veo: ', tableProc);
+    console.log('Not value: ', tableProc);
   }, []);
 
   return (
