@@ -4,7 +4,7 @@ import { useExchangeActivityErroredQuery } from '../../../../data/services/graph
 export const useActivityErrored = () => {
   const [isProcessing, setProcessing] = useState(false);
   const [loadingError, setLoadingError] = useState(true);
-  const [apiDataError, setApiDataError] = useState();
+  const [dataError, setDataError] = useState();
   const [apiError, setApiError] = useState();
 
   const { data, loading, error } = useExchangeActivityErroredQuery({
@@ -18,12 +18,12 @@ export const useActivityErrored = () => {
     },
   });
   useEffect(() => {
-    setLoadingError(false);
+    setLoadingError(loading);
   }, []);
 
   useEffect(() => {
     if (data) {
-      setApiDataError(data);
+      setDataError(data);
     }
   }, [data]);
 
@@ -32,5 +32,5 @@ export const useActivityErrored = () => {
     setApiError(error);
   }, [error]);
 
-  return { apiDataError, loadingError };
+  return { dataError, loadingError };
 };

@@ -15,9 +15,10 @@ import { Text } from '../../../../components/typography/Text';
 import { InputText } from '../../../../components/inputs/InputText';
 import FacetCombobox from '../../../../components/comboboxes/FacetCombobox/FacetCombobox';
 import VerbCombobox from '../../../../components/comboboxes/VerbCombobox/VerbCombobox';
+import { RouteLink } from './../../AdminPage.styles';
+import { NAV_ITEMS } from './../../SideMenu';
 
 import { useAmPolicyPageQuery } from '../../../../data/services/graphql';
-
 
 const parseToComboBoxOption = ({ name, value }) => ({ key: value, text: name });
 const generateColumns = () => {

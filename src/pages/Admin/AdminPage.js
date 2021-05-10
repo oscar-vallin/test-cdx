@@ -4,7 +4,7 @@ import { Spacing } from '../../components/spacings/Spacing';
 
 const _AdminPage = () => {
   return (
-    <LayoutAdmin id="PageAdmin" >
+    <LayoutAdmin id="PageAdmin">
       <Spacing margin="double" />
     </LayoutAdmin>
   );

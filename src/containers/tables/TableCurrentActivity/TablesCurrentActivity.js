@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Spacing } from '../../../components/spacings/Spacing';
 import { Separator } from '../../../components/separators/Separator';
 import { TableActivity } from './TableActivity';
@@ -14,6 +15,10 @@ const TablesCurrentActivity = ({ id = 'TableCurrentActivity', argOrgSid = 1, arg
   const { localInput, startDate, endDate } = useTableFilters('Name, Id, Last Activity');
   const { tableProc, tableComp, tableError } = useTable(argOrgSid, argDateRange, argFilter);
 
+  useEffect(() => {
+    console.log('Cosa k no veo: ', tableProc);
+  }, []);
+
   return (
     <Container id={id}>
       <Row id={`${id}-filters`} around>
@@ -29,11 +34,11 @@ const TablesCurrentActivity = ({ id = 'TableCurrentActivity', argOrgSid = 1, arg
         <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
           <Separator />
         </Spacing>
-        {!tableProc.loading && <TableActivity tableName="Completed" color="complete" {...tableComp} />}
+        {!tableComp.loading && <TableActivity tableName="Completed" color="complete" {...tableComp} />}
         <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
           <Separator />
         </Spacing>
-        {!tableProc.loading && <TableActivity tableName="Errored" color="error" {...tableError} />}
+        {!tableError.loading && <TableActivity tableName="Errored" color="error" {...tableError} />}
       </TableContainer>
     </Container>
   );
