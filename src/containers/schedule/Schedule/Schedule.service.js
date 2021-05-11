@@ -36,7 +36,7 @@ export const useScheduleItems = (argOrgSid, argDateRange, argFilter) => {
     if (error) {
       console.log('ORROR: ', error);
 
-      authLogout('expired');
+      authLogout(error.message);
       history.push('/');
     }
   }, [error]);
