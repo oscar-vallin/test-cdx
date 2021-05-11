@@ -2,6 +2,7 @@ import React from 'react';
 import { addMonths, addYears } from '@fluentui/date-time-utilities';
 import { DatePicker, DayOfWeek } from 'office-ui-fabric-react/lib/DatePicker';
 import { endOfDay, endOfYesterday, getHours, startOfDay, startOfYesterday } from 'date-fns';
+import { isConstructorDeclaration } from 'typescript';
 
 const today = new Date();
 const minDate = addMonths(today, -2);
@@ -49,6 +50,7 @@ const firstDayOfWeek = DayOfWeek.Sunday;
 
 const InputDate = ({ id = '', Label, placeholder = 'Select a Date...', value, onChange, required }) => {
   const [selectedDate, setSelectedDate] = React.useState();
+
   React.useEffect(() => {
     if (value === '') {
       const hour = getHours(new Date());
@@ -65,7 +67,9 @@ const InputDate = ({ id = '', Label, placeholder = 'Select a Date...', value, on
       return;
     }
     setSelectedDate(value);
-  }, [selectedDate]);
+  }, []);
+
+  console.log('date in uinput: ', selectedDate);
 
   return (
     <DatePicker

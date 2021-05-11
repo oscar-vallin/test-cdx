@@ -22,6 +22,8 @@ const TableFileStatus = ({ idPage = 'TableFileStatus', orgSid = 1, dateRange, fi
   const { tableProps } = useTable(orgSid, dateRange, filter);
   const { localInput, startDate, endDate } = useTableFilters('Extract Name,  Status, Vendor, etc.');
 
+  const [date, setDate] = useState();
+
   const { id } = useParams();
 
   //Component did mount
@@ -32,9 +34,14 @@ const TableFileStatus = ({ idPage = 'TableFileStatus', orgSid = 1, dateRange, fi
     let params = id.split('*');
     localInput.setValue(params[0]);
     selectDate(params[1]);
+    console.log('date filter', startDate.value, endDate.value);
 
     console.log('date: ');
   }, []);
+
+  useEffect(() => {
+    console.log('date filter', startDate.value, endDate.value);
+  }, [startDate, endDate]);
 
   const selectDate = (date) => {
     if (date === 'today') {
