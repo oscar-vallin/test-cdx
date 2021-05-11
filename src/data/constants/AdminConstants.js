@@ -3,7 +3,7 @@ export const ADMIN_NAV = {
   DELETED_USERS: '#',
   AM_POLICIES: '/admin/access-management/policies',
   AM_GROUPS: '/admin/access-management/groups',
-  ORG_ACTIVITY: '#',
+  ORG_ACTIVITY: '/admin/activity/current-activity',
   ACTIVE_ORGS: '/admin/organizations/active-orgs',
   COLOR_PALETTES: '#',
   // COLOR_PALETTES: '/admin/dashboard-site/color-palettes',
