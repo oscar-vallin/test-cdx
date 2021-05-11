@@ -19,8 +19,8 @@ import { InputDateRange } from '../../../components/inputs/InputDateRange';
 import { useTableFilters } from '../../../hooks/useTableFilters';
 
 const TableFileStatus = ({ idPage = 'TableFileStatus', orgSid = 1, dateRange, filter }) => {
-  const { tableProps } = useTable(orgSid, dateRange, filter);
   const { localInput, startDate, endDate } = useTableFilters('Extract Name,  Status, Vendor, etc.');
+  const { tableProps } = useTable(orgSid, dateRange, filter);
 
   const [date, setDate] = useState();
 
@@ -40,8 +40,12 @@ const TableFileStatus = ({ idPage = 'TableFileStatus', orgSid = 1, dateRange, fi
   }, []);
 
   useEffect(() => {
-    console.log('date filter', startDate.value, endDate.value);
-  }, [startDate, endDate]);
+    console.log('date filter', localInput);
+  }, [localInput]);
+
+  useEffect(() => {
+    console.log('date star', startDate);
+  }, [startDate]);
 
   const selectDate = (date) => {
     if (date === 'today') {
@@ -73,7 +77,7 @@ const TableFileStatus = ({ idPage = 'TableFileStatus', orgSid = 1, dateRange, fi
     }
   };
 
-  console.log('date filter', startDate, endDate);
+  console.log('date filter', localInput);
 
   console.log('TableFileStatus, localInput: ', tableProps);
   return (

@@ -51,25 +51,25 @@ const firstDayOfWeek = DayOfWeek.Sunday;
 const InputDate = ({ id = '', Label, placeholder = 'Select a Date...', value, onChange, required }) => {
   const [selectedDate, setSelectedDate] = React.useState();
 
-  React.useEffect(() => {
-    if (value === '') {
-      const hour = getHours(new Date());
-      if (hour < 9) {
-        console.log('hours: ', hour);
-        const startDay = startOfYesterday(new Date());
-        setSelectedDate(startDay);
+  // React.useEffect(() => {
+  //   if (value === '') {
+  //     const hour = getHours(new Date());
+  //     if (hour < 9) {
+  //       console.log('hours: ', hour);
+  //       const startDay = startOfYesterday(new Date());
+  //       setSelectedDate(startDay);
 
-        return;
-      }
-      const startDay = startOfDay(new Date());
-      setSelectedDate(startDay);
+  //       return;
+  //     }
+  //     const startDay = startOfDay(new Date());
+  //     setSelectedDate(startDay);
 
-      return;
-    }
-    setSelectedDate(value);
-  }, []);
+  //     return;
+  //   }
+  //   setSelectedDate(value);
+  // }, []);
 
-  console.log('date in uinput: ', selectedDate);
+  console.log('date in uinput: ', onChange);
 
   return (
     <DatePicker
@@ -81,7 +81,7 @@ const InputDate = ({ id = '', Label, placeholder = 'Select a Date...', value, on
       minDate={minDate}
       maxDate={maxDate}
       onSelectDate={onChange}
-      value={selectedDate}
+      value={value}
       allowTextInput
     />
   );
