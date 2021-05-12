@@ -30,8 +30,6 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
 
   useEffect(() => {
     if (error) {
-      console.log('ORROR: ', error);
-
       authLogout(error.message);
       history.push('/');
     }
@@ -55,10 +53,7 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
         { key: 'extractVersion', label: 'Version', style: 'text' },
       ];
 
-      console.log('data: ', data);
       const _items = data.wpTransmissions.nodes.map((item) => {
-        console.log('Transmissions item: ', item);
-        // const datetime = format(new Date(item.deliveredOn), 'MM/dd/yyyy hh:mm a');
         const datetime = format(new Date(item.deliveredOn), 'MM/dd/yyyy hh:mm a');
 
         return [

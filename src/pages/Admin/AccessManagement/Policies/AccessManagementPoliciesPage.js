@@ -90,7 +90,6 @@ const _AccessManagementPoliciesPage = () => {
           />
         );
       case 'facet':
-        console.log(item);
         return (
           <FacetCombobox service={item.service.key} onChange={(event, option) => onFacetChange(option, item, data)} />
         );

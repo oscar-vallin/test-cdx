@@ -22,7 +22,6 @@ export const useCurrentUser = (_username, _password) => {
       }
     }
 
-    console.log('logged in: ', _isLoggedIn);
     setLoggedIn(_isLoggedIn);
   }, [data]);
 

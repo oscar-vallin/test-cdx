@@ -23,7 +23,6 @@ export const useActivityComplete = () => {
   useEffect(() => {
     if (data) {
       setDataComp(data);
-      console.log('data complete: ', data);
     }
   }, [data]);
 

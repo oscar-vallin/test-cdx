@@ -12,7 +12,6 @@ const TableTransmissions = ({ id = 'TableTransmissions', orgSid = 1, dateRange, 
   const { tableProps } = useTable(orgSid, dateRange, filter);
   const { localInput, startDate, endDate } = useTableFilters('Extract Name,  Status, Vendor, etc.');
 
-  console.log('TableTransmissions, tableProps: ', tableProps);
   return (
     <Container>
       <Row id={`${id}-filters`} around>

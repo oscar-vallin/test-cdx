@@ -23,7 +23,6 @@ export const useActivityProcess = () => {
   useEffect(() => {
     if (data) {
       setData(data);
-      console.log('data processss: ', data);
     }
   }, [data]);
 

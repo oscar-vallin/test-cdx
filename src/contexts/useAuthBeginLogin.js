@@ -13,7 +13,5 @@ export const useAuthBeginLogin = (userId) => {
     },
   });
 
-  console.log('networkStatus: ', networkStatus);
-
   return { response: { data, loading, error }, apiBeginLogin };
 };

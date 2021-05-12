@@ -27,8 +27,6 @@ const TableActivity = ({ items, loading, tableName, color }) => {
   const [sortedItems, setSortedItems] = useState('initialState');
 
   useEffect(() => {
-    console.log('plpapala: ', items, loading);
-
     if (loading === false) {
       _buildItems();
     }

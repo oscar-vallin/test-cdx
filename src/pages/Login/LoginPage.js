@@ -10,7 +10,6 @@ const _LoginPage = () => {
     const logout = localStorage.getItem('LOGOUT');
 
     if (logout != null) {
-      console.log('token begin: ', logout);
       setTimeout(() => localStorage.removeItem('LOGOUT'), 200);
     }
 

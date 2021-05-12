@@ -16,9 +16,6 @@ export const useGetCookie = () => {
     };
 
     let res = await axios(configAxios);
-    console.log('Axios response: ', res);
-    console.log('Header', res.headers);
-    console.log('Header', res.headers['xsfr-token']);
   };
 
   return { getTokenCookies };

@@ -42,7 +42,6 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
   useEffect(() => {
     const doEffect = () => {
       const _items = buildItems(data);
-      console.log('_items: ', _items);
       setItems(_items);
       return _items;
     };
@@ -56,8 +55,6 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
   const buildItems = (_data) => {
     if (_data) {
       const { workPacketStatuses } = _data;
-
-      console.log('workPacketStatuses: ', workPacketStatuses);
 
       return workPacketStatuses.map(
         ({ timestamp, vendorId, planSponsorId, clientFileArchivePath, vendorFileArchivePath }) => {

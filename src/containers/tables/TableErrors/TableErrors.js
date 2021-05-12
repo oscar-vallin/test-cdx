@@ -11,7 +11,6 @@ const TableErrors = ({ id = 'TableErrors', orgSid = 1, dateRange, filter }) => {
   const { tableProps } = useTable(orgSid, dateRange, filter);
   const { localInput, startDate, endDate } = useInputs();
 
-  console.log('TableErrors, tableProps: ', tableProps);
   return (
     <Container>
       <Row id={`${id}-filters`} around>

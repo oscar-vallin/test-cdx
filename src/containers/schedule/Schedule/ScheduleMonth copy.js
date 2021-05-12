@@ -51,7 +51,6 @@ export const ScheduleMonth = ({ id, currentDate, selectedDate, onChangeDate }) =
   let formattedDateNotValid = '';
 
   React.useEffect(() => {
-    console.log('change the SelectedDate: ', selectedDate);
     if (!!selectedDate) {
       setCurrentMonth(selectedDate);
       setStartDate(startOfWeek(monthStart));
@@ -65,12 +64,8 @@ export const ScheduleMonth = ({ id, currentDate, selectedDate, onChangeDate }) =
 
   React.useEffect(() => {
     if (!!currentMonth) {
-      console.log('SecheduleMonth, useEffect currentMont:', currentMonth);
       setMonthStart(startOfMonth(currentMonth));
       setMonthEnd(endOfMonth(currentMonth));
-
-      console.log('ScheduleMonth, New CurrentMonth: ', currentMonth);
-      console.log('ScheduleMonth, New MonthStart: ', monthStart);
     }
   }, [currentMonth]);
 
@@ -83,8 +78,6 @@ export const ScheduleMonth = ({ id, currentDate, selectedDate, onChangeDate }) =
       // Month View, Week Month, Day Month.
       // Select Day highlihgt and Change the View.
       // Just highlighted.
-
-      console.log('Formated Date: ', formattedDate);
 
       days.push(
         <CalendarBodyCell

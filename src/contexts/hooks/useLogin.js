@@ -29,10 +29,6 @@ export const useLoginBegin = (_username, _password) => {
   }, [error]);
 
   useEffect(() => {
-    // console.log('useEffect, apiData:', apiData);
-    // console.log('useEffect, apiLoading:', apiLoading);
-    // console.log('useEffect, apiError:', apiError);
-
     if (apiLoading) {
       return false;
     }
@@ -42,12 +38,6 @@ export const useLoginBegin = (_username, _password) => {
     }
 
     if (data) {
-      // console.log('Request Begin Login: ', username);
-      // console.log('Response Begin Login: ', apiData);
-
-      // console.log('data.beginLogin: ', apiData.beginLogin);
-      // console.log('data.beginLogin.step: ', apiData.beginLogin.step);
-
       if (apiData?.beginLogin?.step === 'PASSWORD') {
         setValidEmail(true);
       } else {
@@ -69,8 +59,6 @@ export const useLoginBegin = (_username, _password) => {
   const apiBeginLogin = async (__username) => {
     clearState();
 
-    console.log('apiBeginLogin call', __username);
-
     const validationResult = new RegExp(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g).test(__username);
     if (!validationResult) {
       setErrorMessage('Invalid Email');
@@ -81,8 +69,6 @@ export const useLoginBegin = (_username, _password) => {
     setUsername(__username);
 
     const resp = await _apiBeginLogin();
-
-    // console.log('async response', resp);
   };
 
   const clearState = () => {

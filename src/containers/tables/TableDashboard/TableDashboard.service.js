@@ -7,20 +7,14 @@ export const useTable = (data, tableName, date) => {
   const [loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
   const [columns, setColumns] = useState([]);
-  // const [urlDate, setUrlDate] = useState('');
+
   const structure = getTableStructure(tableName);
 
-  // console.log('TableDashboard, useTable, data => ', data);
   // * Component Did Mount.
   useEffect(() => {}, []);
 
-  // useEffect(() => {
-  //   setUrlDate(date);
-  // }, [urlDate]);
-
   useEffect(() => {
     const doEffect = () => {
-      // console.log('Dashboard.service, data:', data);
       const _columns = [
         {
           key: 'vendor',
@@ -33,7 +27,6 @@ export const useTable = (data, tableName, date) => {
       ];
       const _items = data.map((item) => {
         const countAndTotal = `${item.count}/${item.total}`;
-        console.log('Item: ', item);
 
         return [
           formatField(
@@ -46,9 +39,6 @@ export const useTable = (data, tableName, date) => {
           formatField(countAndTotal, 'total', countAndTotal),
         ];
       });
-
-      // console.log('data ==> Columns: ', _columns);
-      // console.log('data ==> Items: ', _items);
 
       setColumns(_columns);
       setItems(_items);

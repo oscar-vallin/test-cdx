@@ -52,19 +52,13 @@ export const ScheduleWeek = ({ id, currentDate, selectedDate, onChangeDate, onCh
   let formattedDate = '';
   let formattedHour = '';
 
-  console.log('Schedule Week: ', currentDate);
   let hour = startOfDay(startDate);
   const hourFormat = 'h aa';
 
   //
   //
   const renderItems = (day, allItems) => {
-    console.log('RenderItems, day: ', day);
-    console.log('RenderItems _item.datetime', allItems);
-
     const dayRows = allItems.filter((_item) => isSameDay(parseISO(_item.datetime), day));
-
-    console.log('renderItems, dayRows: ', dayRows);
 
     return dayRows.map((_item) => <CellItem>{_item.label}</CellItem>);
   };

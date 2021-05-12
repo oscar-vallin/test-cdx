@@ -6,7 +6,6 @@ const useOutsideComponent = (ref, collapseClick, hide) => {
   useEffect(() => {
     function handleClickOutside(event) {
       if (ref.current && !ref.current.contains(event.target) && hide === true) {
-        console.log('algo', hide);
         collapseClick();
       }
     }

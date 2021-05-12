@@ -42,8 +42,6 @@ export const useDashboardService = (initOrgSid) => {
 
   useEffect(() => {
     if (error) {
-      console.log('ORROR: ', error.message);
-
       authLogout(error.message);
       history.push('/');
     }
@@ -70,8 +68,6 @@ export const useDashboardService = (initOrgSid) => {
   const getOption = (id) => {
     return datesOptions.find((option) => option.id === id) ?? DATES_OPTIONS[0];
   };
-
-  console.log('data blabla', datesOptions);
 
   // * Component Did Mount
   useEffect(() => {

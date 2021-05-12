@@ -49,14 +49,10 @@ export const ScheduleDay = ({ id, currentDate, selectedDate, items }) => {
   let hour = startOfDay(currentSelectedDate);
   const hourFormat = 'h aa';
 
-  console.log('Schedule Week: ', currentDate);
-
   //
   //
   const renderItems = (hour, allItems) => {
     const dayRows = allItems.filter((_item) => isSameHour(parseISO(_item.datetime), hour));
-
-    // console.log('renderItems, dayRows: ', dayRows);
 
     return dayRows.map((_item) => <CellItem>{_item.label}</CellItem>);
   };
