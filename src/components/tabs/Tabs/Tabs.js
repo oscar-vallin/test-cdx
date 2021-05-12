@@ -6,7 +6,7 @@ import { StyledPivot, StyledSpan } from './Tabs.styles';
 
 const CDXTabs = ({ items, selectedKey }) => {
   return (
-    <StyledPivot selectedKey={selectedKey ? '3' : ''}>
+    <StyledPivot defaultSelectedKey={selectedKey ? '3' : ''}>
       {items.map(({ title, content, badge }, index) => (
         <PivotItem
           headerText={title}
