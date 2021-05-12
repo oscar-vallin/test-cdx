@@ -62,6 +62,10 @@ export const useLoginBegin = (_username, _password) => {
   //
   // *
   //
+
+  const editUser = () => {
+    setValidEmail(false);
+  };
   const apiBeginLogin = async (__username) => {
     clearState();
 
@@ -75,6 +79,7 @@ export const useLoginBegin = (_username, _password) => {
     }
 
     setUsername(__username);
+
     const resp = await _apiBeginLogin();
 
     // console.log('async response', resp);
@@ -88,5 +93,13 @@ export const useLoginBegin = (_username, _password) => {
     setProcessing();
   };
 
-  return { isProcessingBegin: isProcessing, username, isValidEmail, errorMessage, apiBeginLogin, setUsername };
+  return {
+    isProcessingBegin: isProcessing,
+    username,
+    isValidEmail,
+    editUser,
+    errorMessage,
+    apiBeginLogin,
+    setUsername,
+  };
 };
