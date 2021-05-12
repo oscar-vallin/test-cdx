@@ -66,7 +66,7 @@ export const Routes = () => {
         <CreatePoliciesPage />
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_ACCESS_MANAGEMENT_POLICIES.URL}>
-        <AccessManagementPoliciesPage />
+        <CurrentActivityPage />
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_ACTIVE_ORGS.URL}>
         <ActiveOrgsPage />

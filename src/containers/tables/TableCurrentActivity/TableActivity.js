@@ -16,7 +16,7 @@ const generateColumns = () => {
   });
 
   return [
-    createColumn({ name: 'Client Id', key: 'id' }),
+    // createColumn({ name: 'Client Id', key: 'id' }),
     createColumn({ name: 'Client Name', key: 'name' }),
     createColumn({ name: 'Last Activity', key: 'activity' }),
   ];
