@@ -30,8 +30,6 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
 
   useEffect(() => {
     if (error) {
-      console.log('ORROR: ', error);
-
       authLogout(error.message);
       history.push('/');
     }

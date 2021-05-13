@@ -32,8 +32,6 @@ const TableFileStatus = ({ idPage = 'TableFileStatus', orgSid = 1, dateRange, fi
     let params = id.split('*');
     localInput.setValue(params[0]);
     selectDate(params[1]);
-
-    console.log('date: ');
   }, []);
 
   const selectDate = (date) => {
@@ -66,9 +64,6 @@ const TableFileStatus = ({ idPage = 'TableFileStatus', orgSid = 1, dateRange, fi
     }
   };
 
-  console.log('date filter', startDate, endDate);
-
-  console.log('TableFileStatus, localInput: ', tableProps);
   return (
     <Container>
       <Row id={`${idPage}-filters`} around>

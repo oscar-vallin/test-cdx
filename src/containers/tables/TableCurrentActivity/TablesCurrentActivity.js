@@ -15,9 +15,7 @@ const TablesCurrentActivity = ({ id = 'TableCurrentActivity', argOrgSid = 1, arg
   const { localInput, startDate, endDate } = useTableFilters('Name, Id, Last Activity');
   const { tableProc, tableComp, tableError } = useTable(argOrgSid, argDateRange, argFilter);
 
-  useEffect(() => {
-    console.log('Not value: ', tableProc);
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <Container id={id}>

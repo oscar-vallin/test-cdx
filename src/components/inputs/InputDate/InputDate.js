@@ -54,7 +54,6 @@ const InputDate = ({ id = '', Label, placeholder = 'Select a Date...', value, on
     if (value === '') {
       const hour = getHours(new Date());
       if (hour < 9) {
-        console.log('hours: ', hour);
         const startDay = startOfYesterday(new Date());
         setSelectedDate(startDay);
 

@@ -11,7 +11,6 @@ const TableOrganizations = ({ id = 'TableOrganizations', data, dateRange, filter
   const { tableProps } = useTable(data);
   const { localInput, startDate, endDate } = useInputs();
 
-  console.log('TableOrganizations, tableProps: ', tableProps);
   return (
     <Container>
       {!tableProps.loading && (

@@ -27,8 +27,6 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
     },
   });
 
-  console.log('sadasjjhdkjasda: ', data);
-
   // * Component Did Mount.
   useEffect(() => {
     setLoading(false);
@@ -36,8 +34,6 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
 
   useEffect(() => {
     if (error) {
-      console.log('ORROR: ', error.message);
-
       authLogout(error.message);
       history.push('/');
     }
@@ -45,7 +41,6 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
 
   useEffect(() => {
     const doEffect = () => {
-      // console.log('TableErrors.service, data:', data);
       const _columns = [
         {
           key: 'datetime',
@@ -77,8 +72,6 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
         }) => {
           const datetime = format(new Date(timestamp), 'MM/dd/yyyy hh:mm a');
           const stepStatusLabel = getStepStatusLabel(stepStatus);
-
-          console.log('Xxxxx highlight: ', recordHighlightCount, recordHighlightType);
 
           return [
             formatField(
@@ -131,17 +124,4 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
   };
 };
 
-const useInput = (placeholder) => {
-  // const [value, setValue] = useState('');
-  // const onChange = (e) => {
-  //   console.log('useInput, onChange, e: ', e);
-  //   console.log('useInput, onChange, e.target: ', e.target);
-  //   console.log('useInput, onChange, value: ', value);
-  //   setValue(value + e.nativeEvent.data);
-  // };
-  // return {
-  //   value,
-  //   onChange,
-  //   placeholder,
-  // };
-};
+const useInput = (placeholder) => {};

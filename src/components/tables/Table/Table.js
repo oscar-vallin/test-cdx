@@ -158,7 +158,6 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput }) => 
   }, [searchInput]);
 
   useEffect(() => {
-    console.log('Option Change', option);
     setFilterInput(searchInput);
   }, [option]);
 
@@ -229,14 +228,7 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput }) => 
         return <span>{fieldContent}</span>;
 
       case 'link':
-        // console.log('Link, fieldItem: ', fieldItem);
-        // console.log('Link, Option: ', option);
-        console.log('aaa isTableFileStatus: ', tableType, isTableFileStatus);
-        console.log('aaa fieldItem.sublabel: ', fieldItem.sublabel);
-        console.log('aaa fieldItem: ', fieldItem);
-
         if (isTableFileStatus && fieldItem.child) {
-          console.log('OJJOOOO');
           return (
             <CellItemRow>
               <Link>
@@ -346,7 +338,6 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput }) => 
 
   //
   const _onShowSpecs = () => {
-    console.log('Press button Specs');
     setOption(!option);
   };
 
