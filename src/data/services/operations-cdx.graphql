@@ -722,6 +722,7 @@ query UserTheme($themeColorMode : ThemeColorMode){
         dashThemeColor{
             id
             defaultTheme
+            allowDark
             themeColorMode
             paletteNm
             themePrimary
@@ -759,6 +760,7 @@ query DashThemeColorForOrg($ownedInput : OwnedInput, $pageableInput: PageableInp
             id
             paletteNm
             defaultTheme
+            allowDark
             themeColorMode
             themePrimary
             black
@@ -778,6 +780,7 @@ mutation CreateDashThemeColor($createDashThemeColorInput: CreateDashThemeColorIn
     createDashThemeColor(createDashThemeColorInput : $createDashThemeColorInput){
         id
         defaultTheme
+        allowDark
         themeColorMode
         paletteNm
         themePrimary
@@ -809,6 +812,7 @@ query DashThemeColorByName($ownedInputName : OwnedInputName){
     dashThemeColorByName(ownedInputName: $ownedInputName){
         id
         defaultTheme
+        allowDark
         themeColorMode
         paletteNm
         themePrimary
@@ -840,6 +844,7 @@ mutation UpdateDashThemeColor($updateDashThemeColorInput: UpdateDashThemeColorIn
     updateDashThemeColor(updateDashThemeColorInput : $updateDashThemeColorInput){
         id
         defaultTheme
+        allowDark
         themeColorMode
         paletteNm
         themePrimary
@@ -917,6 +922,7 @@ query CurrentUserDashThemePage{
         themeFontSizes
         themeColorPalettes{
             id
+            allowDark
             themePrimary
             black
             white
@@ -975,15 +981,6 @@ mutation CreateOrUpdateOwnDashTheme($dashThemeInput: DashThemeInput!){
 
 mutation SetDashThemeColorDefault($dashThemeColorDefaultInput : DashThemeColorDefaultInput!){
     setDashThemeColorDefault(dashThemeColorDefaultInput : $dashThemeColorDefaultInput){
-        id
-        themePrimary
-        black
-        white
-    }
-}
-
-mutation DashThemeColorMode($dashThemeColorModeInput : DashThemeColorModeInput!){
-    setDashThemeColorMode(dashThemeColorModeInput : $dashThemeColorModeInput){
         id
         themePrimary
         black

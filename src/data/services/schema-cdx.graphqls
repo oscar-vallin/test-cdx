@@ -72,9 +72,9 @@ type Mutation {
     removeDefaultDashTheme(ownedInputSid : OwnedInputSid) : GQOperationResponse
 
     setDashThemeColorDefault(dashThemeColorDefaultInput : DashThemeColorDefaultInput) : DashThemeColor
-    setDashThemeColorMode(dashThemeColorModeInput : DashThemeColorModeInput) : DashThemeColor
 
     """
+    setDashThemeColorMode(dashThemeColorModeInput : DashThemeColorModeInput) : DashThemeColor
     createUserDashTheme(createUserDashThemeInput : CreateUserDashThemeInput) : DashTheme
     updateUserDashTheme(updateUserDashThemeInput : UpdateUserDashThemeInput ) : DashTheme
 
@@ -880,6 +880,7 @@ type DashThemeColor{
     id: ID
     defaultTheme: Boolean
     themeColorMode: ThemeColorMode
+    allowDark: Boolean
     paletteNm: String
     themePrimary: String
     themeLighterAlt: String
@@ -940,6 +941,7 @@ input CreateDashThemeColorInput{
     orgSid: ID!
     ownerId: ID!
     defaultTheme: Boolean
+    allowDark: Boolean
     themeColorMode: ThemeColorMode
     paletteNm: String
     themePrimary: String
@@ -971,6 +973,7 @@ input UpdateDashThemeColorInput{
     orgSid: ID!
     ownerId: ID!
     defaultTheme: Boolean
+    allowDark: Boolean
     themeColorMode: ThemeColorMode
     paletteNm: String
     themePrimary: String
@@ -1059,14 +1062,16 @@ input DashThemeColorDefaultInput{
     ownerId: ID!
     sid: ID!
     defaultTheme: Boolean!
+    themeColorMode: ThemeColorMode
 }
-
+"""
 input DashThemeColorModeInput{
-    orgSid: ID!
-    ownerId: ID!
-    sid: ID!
-    themeColorMode: ThemeColorMode!
+orgSid: ID!
+ownerId: ID!
+sid: ID!
+themeColorMode: ThemeColorMode!
 }
+"""
 
 type OrganizationLink{
     id: ID!
