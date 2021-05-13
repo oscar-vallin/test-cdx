@@ -13,6 +13,7 @@ import { RouteLink } from './../../AdminPage.styles';
 import { NAV_ITEMS } from './../../SideMenu';
 
 import { useAmGroupsForOrgPQuery } from '../../../../data/services/graphql';
+import { StyledColumn } from './AccessManagementGroupsPage.styles';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -57,35 +58,43 @@ const _AccessManagementGroupsPage = () => {
     <LayoutAdmin id="PageAdmin" sidebarOptionSelected="AM_GROUPS">
       <Spacing margin="double">
         <Row>
-          <Column lg="4">
-            <Spacing margin={{ top: 'small' }}>
-              <Text variant="bold">Groups</Text>
+          <Column lg="8">
+            <Row>
+              <Column lg="4">
+                <Spacing margin={{ top: 'small' }}>
+                  <Text variant="bold">Groups</Text>
+                </Spacing>
+              </Column>
+            </Row>
+
+            <Spacing margin={{ top: 'normal' }}>
+              <Separator />
             </Spacing>
-          </Column>
-        </Row>
 
-        <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-          <Separator />
-        </Spacing>
-
-        <Row>
-          <Column>
-            {!loading ? (
-              groups.length > 0 ? (
-                <DetailsList
-                  items={groups}
-                  selectionMode={SelectionMode.none}
-                  columns={columns}
-                  layoutMode={DetailsListLayoutMode.justified}
-                  onRenderItemColumn={onRenderItemColumn}
-                  isHeaderVisible
-                />
-              ) : (
-                <MessageBar>No groups added</MessageBar>
-              )
-            ) : (
-              <Spinner label="Loading groups" />
-            )}
+            <Row>
+              <StyledColumn>
+                {!loading ? (
+                  groups.length > 0 ? (
+                    <DetailsList
+                      items={groups}
+                      selectionMode={SelectionMode.none}
+                      columns={columns}
+                      layoutMode={DetailsListLayoutMode.justified}
+                      onRenderItemColumn={onRenderItemColumn}
+                      isHeaderVisible
+                    />
+                  ) : (
+                    <MessageBar>No groups added</MessageBar>
+                  )
+                ) : (
+                  (
+                    <Spacing margin={{ top: 'double' }}>
+                      <Spinner size="lg" label="Loading groups"/>
+                    </Spacing>
+                  )
+                )}
+              </StyledColumn>
+            </Row>
           </Column>
         </Row>
       </Spacing>

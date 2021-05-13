@@ -11,7 +11,7 @@ import { Text } from '../../../../components/typography/Text';
 import { Separator } from '../../../../components/separators/Separator';
 
 import { useDirectOrganizationsFQuery } from '../../../../data/services/graphql';
-
+import { StyledColumn } from './ActiveOrgsPage.styles';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -61,35 +61,43 @@ const _ActiveOrgsPage = () => {
     <LayoutAdmin id="PageActiveOrgs" sidebarOptionSelected="ACTIVE_ORGS">
       <Spacing margin="double">
         <Row>
-          <Column lg="4">
-            <Spacing margin={{ top: 'small' }}>
-              <Text variant="bold">Active orgs</Text>
+          <Column lg="8">
+            <Row>
+              <Column lg="4">
+                <Spacing margin={{ top: 'small' }}>
+                  <Text variant="bold">Active orgs</Text>
+                </Spacing>
+              </Column>
+            </Row>
+
+            <Spacing margin={{ top: 'normal' }}>
+              <Separator />
             </Spacing>
-          </Column>
-        </Row>
 
-        <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-          <Separator />
-        </Spacing>
-
-        <Row>
-          <Column>
-            {!loading ? (
-              orgs.length > 0 ? (
-                <DetailsList
-                  items={orgs}
-                  selectionMode={SelectionMode.none}
-                  columns={columns}
-                  layoutMode={DetailsListLayoutMode.justified}
-                  onRenderItemColumn={onRenderItemColumn}
-                  isHeaderVisible
-                />
-              ) : (
-                <MessageBar>No active orgs</MessageBar>
-              )
-            ) : (
-              <Spinner label="Loading active orgs" />
-            )}
+            <Row>
+              <StyledColumn>
+                {!loading ? (
+                  orgs.length > 0 ? (
+                    <DetailsList
+                      items={orgs}
+                      selectionMode={SelectionMode.none}
+                      columns={columns}
+                      layoutMode={DetailsListLayoutMode.justified}
+                      onRenderItemColumn={onRenderItemColumn}
+                      isHeaderVisible
+                    />
+                  ) : (
+                    <MessageBar>No active orgs</MessageBar>
+                  )
+                ) : (
+                  (
+                    <Spacing margin={{ top: 'double' }}>
+                      <Spinner size="lg" label="Loading active orgs"/>
+                    </Spacing>
+                  )
+                )}
+              </StyledColumn>
+            </Row>
           </Column>
         </Row>
       </Spacing>

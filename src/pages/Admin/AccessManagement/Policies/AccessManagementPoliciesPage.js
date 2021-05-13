@@ -109,7 +109,11 @@ const _AccessManagementPoliciesPage = () => {
                     <MessageBar>No policies found</MessageBar>
                   )
                 ) : (
-                  <Spinner label="Loading policies" />
+                  (
+                    <Spacing margin={{ top: 'double' }}>
+                      <Spinner size="lg" label="Loading policies"/>
+                    </Spacing>
+                  )
                 )}
               </StyledColumn>
             </Row>
