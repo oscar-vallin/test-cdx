@@ -25,13 +25,15 @@ export const useTable = (argOrgSid, argDateRange, argFilter, isToday, filter) =>
 
   const [refresh, setRefresh] = useState(true);
 
+  console.log('filterrrrr', filter);
+
   // * Component Did Mount.
   useEffect(() => {
     setLoading(false);
   }, []);
 
   useEffect(() => {
-    if (isToday) {
+    if (isToday && filter === '') {
       if (refresh) {
         fileStatusQuery();
       }
@@ -119,7 +121,7 @@ export const useTable = (argOrgSid, argDateRange, argFilter, isToday, filter) =>
     if (apiData) {
       return doEffect();
     }
-  }, [apiData]);
+  }, [apiData, refresh]);
 
   // * Loading Data
   useEffect(() => {
