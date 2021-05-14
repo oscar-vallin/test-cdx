@@ -7,7 +7,7 @@ export const useUpdateFileStatus = () => {
   const [apiData, setApiData] = useState();
   const [_error, setError] = useState();
 
-  let argOrgSid, argDateRange, argFilter;
+  let argDateRange, argFilter;
 
   const [_apiCall, { data, loading, error }] = useWorkPacketStatusesLazyQuery({
     variables: {
@@ -17,12 +17,19 @@ export const useUpdateFileStatus = () => {
     },
   });
 
+  // useEffect(() => {
+  //   // fileStatusQuery();
+  // }, []);
+
   useEffect(() => {
     setLoadingFs(loading);
   }, [loading]);
 
   useEffect(() => {
+    console.log('data in data hook', data);
+
     if (data) {
+      console.log('data in data hook2', data);
       setApiData(data);
     }
   }, [data]);
@@ -43,5 +50,5 @@ export const useUpdateFileStatus = () => {
     setProcessing(false);
   };
 
-  return { apiData, loadingFs, _error, fileStatusQuery };
+  return { fileStatusQuery, apiData, loadingFs, _error };
 };

@@ -4,7 +4,6 @@ const useInputValue = (label, placeholder, initialValue, type) => {
   const [value, setValue] = useState(initialValue);
   const onChange = (e) => {
     setValue(e?.target?.value ?? '');
-    console.log('ttttttttt: ', e?.target?.value);
   };
 
   return { label, placeholder, type, value, onChange, setValue };
