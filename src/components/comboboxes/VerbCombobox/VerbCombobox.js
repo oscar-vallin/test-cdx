@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useAmPolicyVerbForFacetQuery } from '../../../data/services/graphql';
+import { useAmPolicyVerbForFacetLazyQuery } from '../../../data/services/graphql';
 import { ComboBox } from 'office-ui-fabric-react/lib/ComboBox';
 
 const parseToComboBoxOption = ({ name, value }) => ({ key: value, text: name });
@@ -7,10 +7,16 @@ const parseToComboBoxOption = ({ name, value }) => ({ key: value, text: name });
 const CDXVerbCombobox = ({ service = '', facet = '', value = '', orgSid = 1, onChange = () => {} }) => {
   const [verbs, setVerbs] = useState([]);
   const [selectedKey, setSelectedKey] = useState(value);
-  const { data, loading } = useAmPolicyVerbForFacetQuery({
-    variables: { orgSid, cdxService: service, cdxFacet: facet },
-  });
+  const [useAmPolicyVerbForFacetQuery, { data, loading }] = useAmPolicyVerbForFacetLazyQuery();
   
+  useEffect(() => {
+    if (service && facet) {
+      useAmPolicyVerbForFacetQuery({
+        variables: { orgSid, cdxService: service, cdxFacet: facet },
+      });
+    }
+  }, [service, facet]);
+
   useEffect(() => {
     setVerbs(data && !loading
       ? data.amPolicyVerbForFacet

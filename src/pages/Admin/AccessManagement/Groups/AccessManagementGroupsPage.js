@@ -26,7 +26,6 @@ const generateColumns = () => {
   });
 
   return [
-    createColumn({ name: 'ID', key: 'id' }),
     createColumn({ name: 'Name', key: 'name' }),
     createColumn({ name: 'Template', key: 'tmpl' }),
   ];

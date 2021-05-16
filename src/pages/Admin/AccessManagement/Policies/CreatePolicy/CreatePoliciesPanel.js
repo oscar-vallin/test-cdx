@@ -18,11 +18,15 @@ import VerbCombobox from '../../../../../components/comboboxes/VerbCombobox/Verb
 
 import { StyledCommandButton, StyledColumn } from './CreatePoliciesPanel.styles';
 
-import { useAmPolicyPageLazyQuery, useCreateAmPolicyMutation } from '../../../../../data/services/graphql';
+import {
+  useAmPolicyPageLazyQuery,
+  useCreateAmPolicyMutation,
+  useUpdateAmPolicyMutation,
+  useAmPolicyLazyQuery,
+} from '../../../../../data/services/graphql';
 import { useAuthContext } from '../../../../../contexts/AuthContext';
 
 const INITIAL_STATE = {
-  editIndex: null,
   policyName: '',
   isTemplate: false,
   usedAsIs: false,
@@ -53,6 +57,8 @@ const generateColumns = () => {
 const CreatePoliciesPanel = ({
   isOpen,
   onDismiss,
+  onCreatePolicy,
+  selectedPolicyId,
 }) => {
   const { token } = useAuthContext();
   const { id, orgId } = JSON.parse(token.AUTH_DATA); 
@@ -61,7 +67,55 @@ const CreatePoliciesPanel = ({
   const [options, setOptions] = useState({ ...INITIAL_OPTIONS });
 
   const [useAmPolicyPage, { data, loading }] = useAmPolicyPageLazyQuery();
-  const [createPolicy, { loading: isCreatingPolicy, error }] = useCreateAmPolicyMutation();
+  const [createPolicy, { data: createdPolicy, loading: isCreatingPolicy, error }] = useCreateAmPolicyMutation();
+  const [fetchPolicy, { loading: isLoadingPolicy, data: policy }] = useAmPolicyLazyQuery();
+  const [updatePolicy, { loading: isUpdatingPolicy }] = useUpdateAmPolicyMutation();
+
+  useEffect(() => {
+    if (isOpen && selectedPolicyId) {
+      fetchPolicy({
+        variables: {
+          orgSid: orgId,
+          policySid: selectedPolicyId,
+        }
+      })
+    }
+  }, [selectedPolicyId, isOpen]);
+
+  useEffect(() => {
+    if (policy) {
+      const { amPolicy } = policy;
+
+      setState({
+        ...state,
+        policySid: amPolicy.id,
+        policyName: amPolicy.name,
+        isTemplate: amPolicy.tmpl,
+        usedAsIs: amPolicy.tmplUseAsIs,
+        serviceType: amPolicy.tmplServiceType,
+        permissions: (amPolicy.permissions || []).map(permission => ({
+          policySid: amPolicy.id,
+          effect: permission.effect,
+          predicateName: permission.predicate,
+          parameterVariable: permission.predVar1,
+          parameterValue: permission.predParam1,
+          actions: (permission.actions || []).map(action => ({
+            facet: { key: action.facet },
+            service: { key: action.service },
+            verb: { key: action.verb },
+            permissionSid: permission.id
+          })),
+        })),
+      })
+    }
+  }, [policy]);
+
+  useEffect(() => {
+    if (createdPolicy) {
+      onCreatePolicy(createdPolicy.createAMPolicy);
+      onDismiss();
+    }
+  }, [createdPolicy]);
 
   const handleAsyncOptionChange = (attr, permissionIndex) => (option, item, data) => {
     setState({
@@ -103,13 +157,18 @@ const CreatePoliciesPanel = ({
         );
       case 'facet':
         return (
-          <FacetCombobox service={item.service.key} onChange={(event, option) => onFacetChange(option, item, data)} />
+          <FacetCombobox
+            service={item.service.key}
+            value={item.facet.key}
+            onChange={(event, option) => onFacetChange(option, item, data)}
+          />
         );
       case 'verb':
         return (
           <VerbCombobox
             service={item.service.key}
             facet={item.facet.key}
+            value={item.verb.key}
             onChange={(event, option) => onVerbChange(option, item, data)}
           />
         );
@@ -160,7 +219,7 @@ const CreatePoliciesPanel = ({
     <Panel
       closeButtonAriaLabel="Close"
       type={PanelType.large}
-      headerText="New Policy"
+      headerText={!state.policySid ? "New Policy" :  "Update policy"}
       isOpen={isOpen}
       onDismiss={() => {
         setState({ ...INITIAL_STATE });
@@ -189,6 +248,7 @@ const CreatePoliciesPanel = ({
                     <Spacing margin={{ top: 'normal', bottom: 'small' }}>
                       <Checkbox
                         label="Is a template"
+                        checked={state.isTemplate}
                         onChange={(event, isTemplate) => setState({ ...state, isTemplate })}
                       />
                     </Spacing>
@@ -196,6 +256,7 @@ const CreatePoliciesPanel = ({
                     {state.isTemplate && (
                       <Checkbox
                         label="Template can be used as is"
+                        checked={state.usedAsIs}
                         onChange={(event, usedAsIs) => setState({ ...state, usedAsIs })}
                       />
                     )}
@@ -270,7 +331,7 @@ const CreatePoliciesPanel = ({
                                 selectedKey={permission.effect}
                                 label="Effect"
                                 autoComplete="off"
-                                options={options.permissionEffectNVPs.map(parseToComboBoxOption)}
+                                options={(options.permissionEffectNVPs || []).map(parseToComboBoxOption)}
                                 onChange={(event, { key }) =>
                                   setState({
                                     ...state,
@@ -292,7 +353,7 @@ const CreatePoliciesPanel = ({
                                 selectedKey={permission.predicateName}
                                 label="Predicate name"
                                 autoComplete="off"
-                                options={options.predicates.map(parseToComboBoxOption)}
+                                options={(options.predicates || []).map(parseToComboBoxOption)}
                                 onChange={(event, { key }) =>
                                   setState({
                                     ...state,
@@ -402,7 +463,7 @@ const CreatePoliciesPanel = ({
                                   onRenderItemColumn={onRenderItemColumn({
                                     permissionIndex,
                                     data: permission.actions,
-                                    services: options.permissionServices,
+                                    services: (options.permissionServices || []),
                                     onServiceChange: handleAsyncOptionChange('service', permissionIndex),
                                     onFacetChange: handleAsyncOptionChange('facet', permissionIndex),
                                     onVerbChange: handleAsyncOptionChange('verb', permissionIndex),
@@ -451,9 +512,14 @@ const CreatePoliciesPanel = ({
                     variant="primary"
                     disabled={isCreatingPolicy}
                     onClick={() => {
-                      createPolicy({
+                      const callback = !state.policySid ? createPolicy : updatePolicy;
+
+                      callback({
                         variables: {
-                          policyInfo: {
+                          [!state.policySid ? 'policyInfo' : 'updateAMPolicyInput']: {
+                            ...(state.policySid)
+                              ? { policySid: state.policySid }
+                              : {},
                             name: state.policyName,
                             orgOwnerId: 1,
                             permissions: state.permissions.map(permission => ({
@@ -465,19 +531,21 @@ const CreatePoliciesPanel = ({
                                 facet: action.facet.key,
                                 verb: action.verb.key,
                               })),
-                              predicate: permission.predicate,
+                              predicate: permission.predicateName,
                               predVar1: permission.parameterVariable,
                               predParam1: permission.parameterValue, 
                             })),
                             tmpl: state.isTemplate,
                             tmplUseAsIs: state.usedAsIs,
-                            tmplServiceType: state.serviceType,
+                            ...(state.serviceType !== '')
+                              ? { tmplServiceType: state.serviceType }
+                              : {},
                           }
                         }
-                      })
+                      });
                     }}
                   >
-                    Create policy
+                    Save policy
                   </Button>
                 </Column>
               </Row>

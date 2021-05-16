@@ -24,7 +24,6 @@ const generateColumns = () => {
   });
 
   return [
-    createColumn({ name: 'ID', key: 'id' }),
     createColumn({ name: 'Name', key: 'name' }),
     createColumn({ name: 'Org ID', key: 'orgId' }),
     createColumn({ name: 'Org Type', key: 'orgType' }),

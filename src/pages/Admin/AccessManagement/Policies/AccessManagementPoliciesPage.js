@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 
-import { MessageBar } from 'office-ui-fabric-react';
+import { PrimaryButton, DefaultButton, MessageBar } from 'office-ui-fabric-react';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
-import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
+import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
 
+import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Spacing } from '../../../../components/spacings/Spacing';
 import { Button } from '../../../../components/buttons/Button';
@@ -11,13 +12,12 @@ import { Row, Column } from '../../../../components/layouts';
 import { Separator } from '../../../../components/separators/Separator';
 import { Text } from '../../../../components/typography/Text';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
-
 import { CreatePoliciesPanel } from './CreatePolicy';
 
 import { useAuthContext } from '../../../../contexts/AuthContext';
-import { useAmPoliciesForOrgPLazyQuery } from '../../../../data/services/graphql';
+import { useAmPoliciesForOrgPLazyQuery, useRemoveAmPolicyMutation } from '../../../../data/services/graphql';
 
-import { StyledColumn } from './AccessManagementPoliciesPage.styles';
+import { StyledColumn, StyledCommandButton } from './AccessManagementPoliciesPage.styles';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -30,19 +30,10 @@ const generateColumns = () => {
   });
 
   return [
-    createColumn({ name: 'ID', key: 'id' }),
     createColumn({ name: 'Name', key: 'name' }),
     createColumn({ name: 'Template', key: 'tmpl' }),
+    createColumn({ name: '', key: 'actions' }),
   ];
-};
-
-const onRenderItemColumn = (item, index, column) => {
-  switch (column.key) {
-    case 'tmpl':
-      return <FontIcon iconName={item.tmpl ? 'CheckMark' : 'Cancel'} />;
-    default:
-      return item[column.key];
-  }
 };
 
 const _AccessManagementPoliciesPage = () => {
@@ -51,8 +42,43 @@ const _AccessManagementPoliciesPage = () => {
   const { orgId } = JSON.parse(token.AUTH_DATA); 
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 
+  const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);
+  const [selectedPolicyId, setSelectedPolicyId] = useState(0);
+
   const [policies, setPolicies] = useState([]);
-  const [amPoliciesForOrg, { data, loading }] = useAmPoliciesForOrgPLazyQuery();
+  const [amPoliciesForOrg, { data, loading, error }] = useAmPoliciesForOrgPLazyQuery();
+  const [removeAmPolicy, { data: removeResponse, loading: isRemovingPolicy, error: removePolicyError }] = useRemoveAmPolicyMutation();
+
+  const hideConfirmation = () => {
+    setIsConfirmationHidden(true);
+    setSelectedPolicyId(0);
+  }
+
+  const onRenderItemColumn = (item, index, column) => {
+    switch (column.key) {
+      case 'tmpl':
+        return <FontIcon iconName={item.tmpl ? 'CheckMark' : 'Cancel'} />;
+      case 'actions':
+        return (
+          <Fragment>
+            {/* <StyledCommandButton iconProps={{ iconName: 'Edit' }} onClick={() => {
+              setSelectedPolicyId(item.id);
+              setIsPanelOpen(true)
+            }}/> */}
+            &nbsp;
+            <StyledCommandButton
+              iconProps={{ iconName: 'Delete' }}
+              onClick={() => {
+                setSelectedPolicyId(item.id);
+                setIsConfirmationHidden(false);
+              }}
+            />
+          </Fragment>
+        )
+      default:
+        return item[column.key];
+    }
+  };
   
   useEffect(() => {
     amPoliciesForOrg({
@@ -61,6 +87,12 @@ const _AccessManagementPoliciesPage = () => {
       }
     });
   }, []);
+
+  useEffect(() => {
+    if (!isRemovingPolicy && removeResponse) {
+      setPolicies(policies.filter(({ id }) => id !== selectedPolicyId));
+    }
+  }, [isRemovingPolicy, removeResponse]);
 
   useEffect(() => {
     if (data) {
@@ -123,8 +155,39 @@ const _AccessManagementPoliciesPage = () => {
 
       <CreatePoliciesPanel
         isOpen={isPanelOpen}
-        onDismiss={() => setIsPanelOpen(false)}
+        onCreatePolicy={(createdPolicy) => {
+          setPolicies([...policies, createdPolicy]);
+        }}
+        onDismiss={() => {
+          setIsPanelOpen(false);
+          setSelectedPolicyId(0);
+        }}
+        selectedPolicyId={selectedPolicyId}
       />
+
+      <Dialog
+        hidden={isConfirmationHidden}
+        onDismiss={hideConfirmation}
+        dialogContentProps={{
+          type: DialogType.normal,
+          title: 'Remove policy',
+          subText: `Do you really want to remove "${policies.find(({ id }) => selectedPolicyId === id)?.name || ''}"?`
+        }}
+        modalProps={{ isBlocking: true, isDraggable: false }}
+      >
+        <DialogFooter>
+          <PrimaryButton onClick={() => {
+            removeAmPolicy({
+              variables: {
+                policySid: selectedPolicyId,
+              }
+            });
+
+            setIsConfirmationHidden(true);
+          }} text="Remove" />
+          <DefaultButton onClick={hideConfirmation} text="Cancel" />
+        </DialogFooter>
+      </Dialog>
     </LayoutAdmin>
   );
 };
