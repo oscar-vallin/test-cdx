@@ -12,7 +12,7 @@ import { NAV_ITEMS } from './../../SideMenu';
 
 export const CurrentActivityPage = ({ id = 'CurrentActivity' }) => {
   return (
-    <LayoutAdmin id={id} sidebar={NAV_ITEMS} sidebarOptionSelected="Current Activity">
+    <LayoutAdmin id={id} sidebar={NAV_ITEMS} sidebarOptionSelected="ORG_ACTIVITY">
       <Spacing margin="double">
         <Row>
           <Column lg="4">
