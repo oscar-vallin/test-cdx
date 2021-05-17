@@ -49,7 +49,6 @@ export const Routes = () => {
       <AuthRoute path={ROUTES.ROUTE_ARCHIVES.URL}>
         <ArchivePage />
       </AuthRoute>
-      // !! BYPASS TEMPORALLY.
       <AuthRoute path={ROUTES.ROUTE_SCHEDULE.URL}>
         <SchedulePage />
       </AuthRoute>
@@ -63,7 +62,7 @@ export const Routes = () => {
         <AccessManagementGroupsPage />
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_ACCESS_MANAGEMENT_POLICIES.URL}>
-        <AccessManagementPoliciesPage />
+        <CurrentActivityPage />
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_ACTIVE_ORGS.URL}>
         <ActiveOrgsPage />
