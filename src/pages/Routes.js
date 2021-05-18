@@ -62,7 +62,7 @@ export const Routes = () => {
         <AccessManagementGroupsPage />
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_ACCESS_MANAGEMENT_POLICIES.URL}>
-        <CurrentActivityPage />
+        <AccessManagementPoliciesPage />
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_ACTIVE_ORGS.URL}>
         <ActiveOrgsPage />

@@ -32,7 +32,6 @@ const URL_ROUTES = {
   ADMIN: `/${ROUTES_ID.ADMIN}`,
   ACCESS_MANAGEMENT_GROUPS: `/${ROUTES_ID.ADMIN}/access-management/groups`,
   ACCESS_MANAGEMENT_POLICIES: `/${ROUTES_ID.ADMIN}/access-management/policies`,
-  CREATE_POLICIES: `/${ROUTES_ID.ACCESS_MANAGEMENT_POLICIES}/create`,
   ACTIVE_ORGS: `/${ROUTES_ID.ADMIN}/organizations/active-orgs`,
   CURRENT_ACTIVITY: `/${ROUTES_ID.ADMIN}/activity/current-activity`,
   COLOR_PALETTES: `/${ROUTES_ID.ADMIN}/dashboard-site/color-palettes`,
