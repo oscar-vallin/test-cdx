@@ -16,9 +16,19 @@ export const StyledNav = styled(Nav)`
   height: calc(100vh - 48px);
 
   .ms-Nav-compositeLink {
-    &:hover {
-      .ms-Button {
+    .ms-Button {
+      &:hover {
         background: ${({ theme }) => theme.colors.neutralLighter};
+      }
+    }
+
+    .ms-Nav-chevronButton {
+      position: absolute;
+      width: 100%;
+      z-index: 2;
+
+      & + .ms-Button {
+        pointer-events: none;
       }
     }
   }

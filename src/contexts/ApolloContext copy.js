@@ -30,10 +30,7 @@ const authLink = setContext((_, { headers }) => {
 // *
 // *
 const addDateLink = new ApolloLink((operation, forward) => {
-  console.log('addDateLink, operation:', operation);
-  console.log('addDateLink, forward:', forward);
   return forward(operation).map((response) => {
-    console.log('addDateLink, response: ', response);
     return response;
   });
 });
@@ -78,8 +75,6 @@ export const ApolloContextProvider = ({ children }) => {
       connectToDevTools: true,
     });
 
-    //
-    console.log('Saving Client Configuration');
     client = _client;
   };
 

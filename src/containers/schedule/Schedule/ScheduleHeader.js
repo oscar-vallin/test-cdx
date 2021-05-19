@@ -134,8 +134,6 @@ export const ScheduleHeader = ({ id, currentView, currentDate, onChangeDate, onC
     }
 
     if (isCurrentViewWeek(currentView)) {
-      console.log('renderHeaderTitle, currentDate: ', currentWeek);
-
       const weekStart = startOfWeek(currentWeek);
       const weekEnd = endOfWeek(currentWeek);
 

@@ -41,9 +41,6 @@ export const AuthContextProvider = ({ children }) => {
       setAuthenticating(true);
 
       await currentUserQuery();
-
-      console.log('CurrentUser loggedIn??? ', isCurrentUserLogged);
-      console.log('CurrentUser token??? ', token);
     };
 
     await localFunction();
@@ -54,15 +51,6 @@ export const AuthContextProvider = ({ children }) => {
     const _token = await localStorage.getItem('AUTH_TOKEN');
     const _login = await localStorage.getItem('LOGIN');
 
-    console.log('setAuthenticated, _token?', _token);
-    console.log('setAuthenticated, isCurrentUserLogged?', isCurrentUserLogged);
-
-    // if (_login === null) {
-    //   setAuthenticated(false);
-    // } else {
-    // setAuthenticated(true);
-    // }
-
     setAuthenticated(!!_token && !!isCurrentUserLogged);
     setAuthenticating(false);
   }, [isCurrentUserLogged]);
@@ -71,17 +59,11 @@ export const AuthContextProvider = ({ children }) => {
   // When Server Response or Data is cleaned.
   //
   useEffect(() => {
-    // console.log('Data...: ', data);
-    // console.log('Error...: ', error);
-
     if (error) {
-      console.log('Error: ', error);
-
       return;
     }
 
     if (data) {
-      console.log('Data probe', data);
       const { step, tokenUser, loginCompleteDomain } = data?.passwordLogin;
       const isCompleted = (step ?? '') === 'COMPLETE';
 
@@ -99,10 +81,8 @@ export const AuthContextProvider = ({ children }) => {
           token,
         };
 
-        // console.log('Saved AuthData', authData);
         localStorage.setItem('AUTH_DATA', JSON.stringify(authData));
         localStorage.setItem('USER_NAME', session.firstNm);
-        // localStorage.setItem('AUTH_TOKEN', authData.token);
         setAuthData(authData);
         setAuthenticated(true);
         //
@@ -115,17 +95,11 @@ export const AuthContextProvider = ({ children }) => {
   // When AuthData changes cause is saved for login
   //
   useEffect(() => {
-    // console.log('Change AuthData: ', authData);
-
     if (!authData) {
       return;
     }
 
-    console.log('Change AuthData, authData.selectedPage: ', authData.selectedPage);
-
     const routePage = getRouteByApiId(authData.selectedPage);
-
-    // console.log('routePage: ', routePage);
 
     if (!routePage) {
       authError.setMessage('Route not Defined');
@@ -155,14 +129,13 @@ export const AuthContextProvider = ({ children }) => {
 
   //
   const authLogin = (_user, _password, _history) => {
-    console.log('authLogin');
     localStorage.setItem('LOGIN', 'login');
     const logout = localStorage.getItem('LOGOUT');
 
     if (logout != null) {
       localStorage.removeItem('LOGOUT');
     }
-    
+
     setUser(_user);
     setPassword(_password);
     setHistory(_history);
@@ -183,14 +156,11 @@ export const AuthContextProvider = ({ children }) => {
     localStorage.removeItem('AUTH_TOKEN');
     localStorage.removeItem('USER_NAME');
     localStorage.removeItem('LOGIN');
-    console.log('expired ', expired);
 
     if (expired != undefined) {
-      console.log('Unexpired ', expired);
-
       localStorage.setItem('LOGOUT', expired);
     }
-    console.log('Removed Item, AUTH_TOKEN');
+
     logoutQuery();
 
     setAuthData();

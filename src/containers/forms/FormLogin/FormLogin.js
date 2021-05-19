@@ -23,7 +23,7 @@ import {
 // CardSection is called directly cause a restriction warning for that component.
 const FormLogin = ({ id = '__FormLogin', onLogin }) => {
   const handlerLogin = useLogin(onLogin);
-  const { apiBeginLogin, isValidEmail, errorMessage, isProcessingBegin } = useLoginBegin();
+  const { apiBeginLogin, isValidEmail, editUser, errorMessage, isProcessingBegin } = useLoginBegin();
   const { email, password } = handlerLogin;
 
   return (
@@ -61,7 +61,7 @@ const FormLogin = ({ id = '__FormLogin', onLogin }) => {
                   <StyledButtonIcon
                     id={`${id}__Card__Row__Column__Button--Edit`}
                     disabled={handlerLogin.isProcessing}
-                    onClick={() => handlerLogin.resetEmail()}
+                    onClick={() => editUser()}
                     icon="edit"
                   >
                     Edit

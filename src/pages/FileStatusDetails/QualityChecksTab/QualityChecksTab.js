@@ -20,15 +20,17 @@ const COLUMNS = [
   { key: 'field', name: 'Field', fieldName: 'field' },
   { key: 'value', name: 'Value', fieldName: 'value' },
   { key: 'transformedValue', name: 'Transform value', fieldName: 'transformedValue' },
-].map(col => ({ ...col, data: 'string', isPadded: true }))
+].map((col) => ({ ...col, data: 'string', isPadded: true }));
 
 const onRenderItemColumn = (item, index, column) => {
-  switch(column.key) {
+  switch (column.key) {
     case 'status':
-      return <>
-        {item.status === 'ERROR' && <Badge variant="error" label="Error" pill />} <br />
-        {item.status === 'WARNING' && <Badge variant="warning" label="Warning" pill />}
-      </>
+      return (
+        <>
+          {item.status === 'ERROR' && <Badge variant="error" label="Error" pill />} <br />
+          {item.status === 'WARNING' && <Badge variant="warning" label="Warning" pill />}
+        </>
+      );
     case 'employeeId':
       return <span title={item.employeeId}>{item.employeeId}</span>;
     case 'employee':
@@ -36,9 +38,15 @@ const onRenderItemColumn = (item, index, column) => {
     case 'dependent':
       return <span title={item.dependent}>{item.dependent}</span>;
     case 'message':
-      return <>
-        {item.message.map((message, index) => <div key={index} title={message}>{message}</div>)}
-      </>
+      return (
+        <>
+          {item.message.map((message, index) => (
+            <div key={index} title={message}>
+              {message}
+            </div>
+          ))}
+        </>
+      );
     case 'field':
       return <span title={item.field}>{item.field}</span>;
     case 'value':
@@ -48,57 +56,63 @@ const onRenderItemColumn = (item, index, column) => {
     default:
       return '';
   }
-}
+};
 
 const QualityChecksTab = ({ items }) => {
   const chartInfo = items
     .map(({ recordCreationEvent }) => ({
-      errors: recordCreationEvent.map(item => item.error.length).reduce((sum , i) => sum + i, 0),
-      warnings: recordCreationEvent.map(item => item.warning.length).reduce((sum , i) => sum + i, 0)
+      errors: recordCreationEvent.map((item) => item.error.length).reduce((sum, i) => sum + i, 0),
+      warnings: recordCreationEvent.map((item) => item.warning.length).reduce((sum, i) => sum + i, 0),
     }))
-    .reduce((curr, count) => ({ 
-      errors: curr.errors + count.errors,
-      warnings: curr.warnings + count.warnings,
-    }), { errors: 0, warnings: 0 });
+    .reduce(
+      (curr, count) => ({
+        errors: curr.errors + count.errors,
+        warnings: curr.warnings + count.warnings,
+      }),
+      { errors: 0, warnings: 0 }
+    );
 
   const data = items
-    .map(({ recordCreationEvent }) => recordCreationEvent
-      .map(evt => {
-        const arr = [];
+    .map(({ recordCreationEvent }) =>
+      recordCreationEvent
+        .map((evt) => {
+          const arr = [];
 
-        const parse = status => (item) => ({
-          status: status,
-          employeeId: evt.unitId,
-          employee: evt.outerContext,
-          dependent: evt.context,
-          message: item.message,
-          field: item.name,
-          value: item.rawValue,
-          transformValue: item.value
-        });
+          const parse = (status) => (item) => ({
+            status: status,
+            employeeId: evt.unitId,
+            employee: evt.outerContext,
+            dependent: evt.context,
+            message: item.message,
+            field: item.name,
+            value: item.rawValue,
+            transformValue: item.value,
+          });
 
-        if (evt.error.length > 0) {
-          arr.push(evt.error.map(parse('ERROR')));
-        }
+          if (evt.error.length > 0) {
+            arr.push(evt.error.map(parse('ERROR')));
+          }
 
-        if (evt.warning.length > 0) {
-          arr.push(evt.warning.map(parse('WARNING')))
-        }
+          if (evt.warning.length > 0) {
+            arr.push(evt.warning.map(parse('WARNING')));
+          }
 
-        return arr.reduce((arr, item) => [...arr, ...item], []);
-      })
-      .reduce((arr, item) => [...arr, ...Array.isArray(item) ? item : [item]], [])
-  )
-  .reduce((arr, item) => [...arr, ...Array.isArray(item) ? item : [item]], []);
+          return arr.reduce((arr, item) => [...arr, ...item], []);
+        })
+        .reduce((arr, item) => [...arr, ...(Array.isArray(item) ? item : [item])], [])
+    )
+    .reduce((arr, item) => [...arr, ...(Array.isArray(item) ? item : [item])], []);
 
-  console.log(data);
   return (
     <Spacing padding="normal">
       {items.length > 0 && (
         <Spacing margin={{ bottom: 'normal' }}>
           <Row>
             <Column>
-              <MessageBar type="error" content={`The error count (${data.length}) is greater than the configured ceiling of 0.`} />
+              <MessageBar
+                type="error"
+                content={`The error count (${data.length}) is greater than the configured ceiling of 0.`}
+              />
             </Column>
           </Row>
         </Spacing>
@@ -112,7 +126,7 @@ const QualityChecksTab = ({ items }) => {
                 size={70}
                 data={[
                   { key: 0, label: 'Errors', value: chartInfo.errors, color: '#fde7e9' },
-                  { key: 1, label: 'Warnings', value: chartInfo.warnings, color: '#fff4ce' }
+                  { key: 1, label: 'Warnings', value: chartInfo.warnings, color: '#fff4ce' },
                 ]}
               />
             </div>

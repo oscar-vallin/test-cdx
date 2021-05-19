@@ -6,10 +6,13 @@ import { useHistory } from 'react-router-dom';
 import { ADMIN_NAV } from '../../data/constants/AdminConstants';
 import { useAuthContext } from "../../contexts/AuthContext";
 
-const parseLinks = (links = []) => {
+const parseLinks = (links = [], sidebarOpt) => {
   return links.map(({ label, subNavItems, page }) => ({
     name: label,
-    ...(subNavItems) ? { links: parseLinks(subNavItems) } : {},
+    ...(subNavItems) ? {
+      isExpanded: subNavItems.find((item) => item.page.type === sidebarOpt),
+      links: parseLinks(subNavItems)
+    } : {},
     ...(page)
       ? {
           url: ADMIN_NAV[page.type],
@@ -36,7 +39,7 @@ const LayoutAdmin = ({
       <StyledBox>
         <StyledNav
           selectedKey={sidebarOptionSelected}
-          groups={[{ links: parseLinks(nav.navItems) }]}
+          groups={[{ links: parseLinks(nav.navItems, sidebarOptionSelected) }]}
           onLinkClick={(evt, route) => {
             evt.preventDefault();
 

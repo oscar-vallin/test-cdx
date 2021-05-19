@@ -57,7 +57,6 @@ export const ScheduleSubHeader = ({ id, currentView, currentDate, selectedDate }
   // }, [selectedDate]);
 
   React.useEffect(() => {
-    console.log('change the SelectedDate: ', selectedDate);
     if (!!selectedDate && selectedDate !== dates.selectedDate) {
       const _monthStart = startOfWeek(selectedDate);
       const _monthEnd = endOfWeek(selectedDate);

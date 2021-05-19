@@ -44,10 +44,6 @@ export const ApolloContextProvider = ({ children }) => {
 
       if (headers) {
         const authHeader = headers.get('x-auth-token');
-        console.log('authHeader ???', authHeader);
-
-        console.log('authToken', authToken);
-
         if (authHeader) {
           authToken = authHeader;
           localStorage.setItem('AUTH_TOKEN', authHeader);

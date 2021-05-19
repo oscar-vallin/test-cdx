@@ -16,7 +16,7 @@ const generateColumns = () => {
   });
 
   return [
-    createColumn({ name: 'Client Id', key: 'id' }),
+    // createColumn({ name: 'Client Id', key: 'id' }),
     createColumn({ name: 'Client Name', key: 'name' }),
     createColumn({ name: 'Last Activity', key: 'activity' }),
   ];
@@ -27,8 +27,6 @@ const TableActivity = ({ items, loading, tableName, color }) => {
   const [sortedItems, setSortedItems] = useState('initialState');
 
   useEffect(() => {
-    console.log('plpapala: ', items, loading);
-
     if (loading === false) {
       _buildItems();
     }

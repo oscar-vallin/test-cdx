@@ -34,8 +34,6 @@ export const useScheduleItems = (argOrgSid, argDateRange, argFilter) => {
 
   useEffect(() => {
     if (error) {
-      console.log('ORROR: ', error);
-
       authLogout(error.message);
       history.push('/');
     }
@@ -43,7 +41,6 @@ export const useScheduleItems = (argOrgSid, argDateRange, argFilter) => {
 
   useEffect(() => {
     const doEffect = () => {
-      console.log('Schedule Data: ', data);
       const _items = data.scheduleOccurrences.nodes.map((item) => {
         return {
           datetime: item.timeScheduled,

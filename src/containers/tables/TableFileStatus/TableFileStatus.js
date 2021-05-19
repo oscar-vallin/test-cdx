@@ -5,10 +5,14 @@ import { useParams } from 'react-router-dom';
 import {
   endOfDay,
   endOfYesterday,
+  getHours,
+  isToday,
+  isYesterday,
   lastDayOfMonth,
   startOfDay,
   startOfMonth,
   startOfYesterday,
+  subDays,
   subMonths,
 } from 'date-fns';
 
@@ -17,24 +21,42 @@ import { useTable } from './TableFileStatus.service';
 import { InputText } from '../../../components/inputs/InputText';
 import { InputDateRange } from '../../../components/inputs/InputDateRange';
 import { useTableFilters } from '../../../hooks/useTableFilters';
+import { useRefresh } from './hooks/useRefresh';
 
 const TableFileStatus = ({ idPage = 'TableFileStatus', orgSid = 1, dateRange, filter }) => {
-  const { tableProps } = useTable(orgSid, dateRange, filter);
+  const [_isToday, setIsToday] = useState(true);
+
   const { localInput, startDate, endDate } = useTableFilters('Extract Name,  Status, Vendor, etc.');
+  const { tableProps } = useTable(orgSid, dateRange, filter, _isToday, localInput.value);
 
   const { id } = useParams();
 
   //Component did mount
+
+  console.log('TableFileStatus, localInput: ', tableProps);
+
+  const hour = getHours(new Date());
+
   useEffect(() => {
     if (id === undefined) {
+      if (hour < 9) {
+        startDate.setValue(subDays(new Date(), 1));
+        endDate.setValue(subDays(new Date(), 1));
+
+        return;
+      }
+      startDate.setValue(new Date());
+      endDate.setValue(new Date());
       return;
     }
     let params = id.split('*');
     localInput.setValue(params[0]);
     selectDate(params[1]);
-
-    console.log('date: ');
   }, []);
+
+  useEffect(() => {
+    setIsToday(todayDate(startDate.value, endDate.value));
+  }, [startDate, endDate]);
 
   const selectDate = (date) => {
     if (date === 'today') {
@@ -66,9 +88,17 @@ const TableFileStatus = ({ idPage = 'TableFileStatus', orgSid = 1, dateRange, fi
     }
   };
 
-  console.log('date filter', startDate, endDate);
-
-  console.log('TableFileStatus, localInput: ', tableProps);
+  const todayDate = (firstDate, secondDate) => {
+    if (hour < 9) {
+      if (isYesterday(new Date(firstDate)) && isYesterday(new Date(secondDate))) {
+        return true;
+      }
+    }
+    if (isToday(new Date(firstDate)) && isToday(new Date(secondDate))) {
+      return true;
+    }
+    return false;
+  };
   return (
     <Container>
       <Row id={`${idPage}-filters`} around>

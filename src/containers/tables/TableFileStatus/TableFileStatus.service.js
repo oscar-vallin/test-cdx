@@ -3,14 +3,16 @@ import { useHistory } from 'react-router-dom';
 import { format } from 'date-fns';
 import { useWorkPacketStatusesQuery } from '../../../data/services/graphql';
 import { useAuthContext } from '../../../contexts/AuthContext';
+import { useUpdateFileStatus } from './hooks/useUpdateFileStatus';
 import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { formatField } from '../../../helpers/tableHelpers';
 import { getStepStatusLabel } from '../../../data/constants/FileStatusConstants';
 import { FileProgress } from '../../bars/FileProgress';
 import { HighlightCounter } from '../../../components/badges/HighlightCounter';
+import { is } from 'date-fns/locale';
 
 //
-export const useTable = (argOrgSid, argDateRange, argFilter) => {
+export const useTable = (argOrgSid, argDateRange, argFilter, isToday, filter) => {
   const [_loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
   const [columns, setColumns] = useState([]);
@@ -19,15 +21,9 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
   const { authLogout } = useAuthContext();
   const history = useHistory();
 
-  const { data, loading, error } = useWorkPacketStatusesQuery({
-    variables: {
-      orgSid: argOrgSid,
-      dateRange: argDateRange,
-      filter: argFilter,
-    },
-  });
+  const { fileStatusQuery, apiData, loadingFs, _error } = useUpdateFileStatus();
 
-  console.log('sadasjjhdkjasda: ', data);
+  const [refresh, setRefresh] = useState(true);
 
   // * Component Did Mount.
   useEffect(() => {
@@ -35,17 +31,26 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
   }, []);
 
   useEffect(() => {
-    if (error) {
-      console.log('ORROR: ', error.message);
+    if (isToday && filter === '') {
+      if (refresh) {
+        fileStatusQuery();
+      }
+      setRefresh(false);
+      setTimeout(() => setRefresh(true), 30000);
+    }
+  }, [refresh]);
 
-      authLogout(error.message);
+  useEffect(() => {
+    if (_error) {
+      console.log('ORROR: ', _error);
+
+      authLogout('expired');
       history.push('/');
     }
-  }, [error]);
+  }, [_error]);
 
   useEffect(() => {
     const doEffect = () => {
-      // console.log('TableErrors.service, data:', data);
       const _columns = [
         {
           key: 'datetime',
@@ -63,7 +68,7 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
         { key: 'progress', minWidth: 100, maxWidth: 200, label: 'Progress', id: 'progress', style: 'node' },
       ];
 
-      const _items = data.workPacketStatuses.map(
+      const _items = apiData.workPacketStatuses.map(
         ({
           workOrderId,
           timestamp,
@@ -77,8 +82,6 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
         }) => {
           const datetime = format(new Date(timestamp), 'MM/dd/yyyy hh:mm a');
           const stepStatusLabel = getStepStatusLabel(stepStatus);
-
-          console.log('Xxxxx highlight: ', recordHighlightCount, recordHighlightType);
 
           return [
             formatField(
@@ -110,15 +113,15 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
       setItems(_items);
     };
 
-    if (data) {
+    if (apiData) {
       return doEffect();
     }
-  }, [data]);
+  }, [apiData, refresh]);
 
   // * Loading Data
   useEffect(() => {
-    setLoading(loading);
-  }, [loading]);
+    setLoading(loadingFs);
+  }, [loadingFs]);
 
   return {
     tableProps: {
@@ -127,21 +130,8 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
       structure,
       loading: _loading,
     },
-    error,
+    _error,
   };
 };
 
-const useInput = (placeholder) => {
-  // const [value, setValue] = useState('');
-  // const onChange = (e) => {
-  //   console.log('useInput, onChange, e: ', e);
-  //   console.log('useInput, onChange, e.target: ', e.target);
-  //   console.log('useInput, onChange, value: ', value);
-  //   setValue(value + e.nativeEvent.data);
-  // };
-  // return {
-  //   value,
-  //   onChange,
-  //   placeholder,
-  // };
-};
+const useInput = (placeholder) => {};

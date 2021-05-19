@@ -23,7 +23,6 @@ export const useTable = (data, argOrgSid, argDateRange, argFilter) => {
 
   useEffect(() => {
     const doEffect = () => {
-      console.log(data);
       const _columns = [
         { key: 'datetime', label: 'Received On', id: 'datetime', style: 'text' },
         { key: 'clientFile', label: 'Client File', id: 'clientFile', style: 'link' },

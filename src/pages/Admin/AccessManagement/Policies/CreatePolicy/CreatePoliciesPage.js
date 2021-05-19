@@ -15,16 +15,9 @@ import { Text } from '../../../../../components/typography/Text';
 import { InputText } from '../../../../../components/inputs/InputText';
 import FacetCombobox from '../../../../../components/comboboxes/FacetCombobox/FacetCombobox';
 import VerbCombobox from '../../../../../components/comboboxes/VerbCombobox/VerbCombobox';
-import { RouteLink } from './../../../AdminPage.styles';
-import { NAV_ITEMS } from './../../../SideMenu';
 
 import { useAmPolicyPageQuery } from '../../../../../data/services/graphql';
-
-// const SERVICE_TYPES = [
-//   { key: 'A', text: 'Option A' },
-//   { key: 'B', text: 'Option B' },
-//   { key: 'C', text: 'Option C' },
-// ];
+import { ADMIN_NAV } from '../../../../../data/constants/AdminConstants';
 
 const COLUMNS = [
   {

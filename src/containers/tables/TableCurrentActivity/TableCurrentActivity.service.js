@@ -26,41 +26,29 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
     const doEffect = () => {
       console.log('data progress: ', dataProcess);
 
-      const _itemsProcess = dataProcess.exchangeActivityInProcess.nodes.map(({ id, name, activityTime }) => {
-        console.log('data progress: ', id, name, activityTime);
+      const _itemsProcess = dataProcess.exchangeActivityInProcess.nodes.map(({ name, activityTime }) => {
+        console.log('data progress: ', name, activityTime);
         const datetime = format(new Date(activityTime), 'MM/dd/yyyy hh:mm a');
 
-        return [
-          formatField(id, 'id', id),
-          formatField(name, 'name', name),
-          formatField(datetime, 'activity', datetime),
-        ];
+        return [formatField(name, 'name', name), formatField(datetime, 'activity', datetime)];
       });
 
       setItemsProc(_itemsProcess);
 
-      const _itemsComplete = dataComplete.exchangeActivityTransmitted.nodes.map(({ id, name, activityTime }) => {
-        console.log('data progress: ', id, name, activityTime);
+      const _itemsComplete = dataComplete.exchangeActivityTransmitted.nodes.map(({ name, activityTime }) => {
+        console.log('data progress: ', name, activityTime);
         const datetime = format(new Date(activityTime), 'MM/dd/yyyy hh:mm a');
 
-        return [
-          formatField(id, 'id', id),
-          formatField(name, 'name', name),
-          formatField(datetime, 'activity', datetime),
-        ];
+        return [formatField(name, 'name', name), formatField(datetime, 'activity', datetime)];
       });
 
       setItemsComp(_itemsComplete);
 
-      const _itemsErrored = dataError.exchangeActivityErrored.nodes.map(({ id, name, activityTime }) => {
-        console.log('data progress: ', id, name, activityTime);
+      const _itemsErrored = dataError.exchangeActivityErrored.nodes.map(({ name, activityTime }) => {
+        console.log('data progress: ', name, activityTime);
         const datetime = format(new Date(activityTime), 'MM/dd/yyyy hh:mm a');
 
-        return [
-          formatField(id, 'id', id),
-          formatField(name, 'name', name),
-          formatField(datetime, 'activity', datetime),
-        ];
+        return [formatField(name, 'name', name), formatField(datetime, 'activity', datetime)];
       });
 
       setItemsError(_itemsErrored);
