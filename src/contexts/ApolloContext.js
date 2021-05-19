@@ -71,7 +71,7 @@ export const ApolloContextProvider = ({ children }) => {
     cache: new InMemoryCache(),
     defaultOptions: {
       watchQuery: {
-        fetchPolicy: 'cache-and-network',
+        fetchPolicy: 'no-cache',
       },
     },
   });
