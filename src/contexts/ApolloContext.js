@@ -54,9 +54,26 @@ export const ApolloContextProvider = ({ children }) => {
     });
   });
 
+  const defaultOptions = {
+    watchQuery: {
+      fetchPolicy: 'no-cache',
+      errorPolicy: 'ignore',
+    },
+    query: {
+      fetchPolicy: 'no-cache',
+      errorPolicy: 'ignore',
+    },
+  };
+
   let client = new ApolloClient({
     link: afterwareLink.concat(authLink.concat(httpLink)),
-    cache: new InMemoryCache({ possibleTypes: introspection.possibleTypes }),
+    // cache: new InMemoryCache({ possibleTypes: introspection.possibleTypes }),
+    cache: new InMemoryCache(),
+    defaultOptions: {
+      watchQuery: {
+        fetchPolicy: 'cache-and-network',
+      },
+    },
   });
 
   // Component Did Mount
