@@ -53,7 +53,6 @@ const FormLogin = ({ id = '__FormLogin', onLogin }) => {
                   autoFocus
                   disabled={handlerLogin.isProcessing || isValidEmail}
                   errorMessage={isValidEmail ? '' : handlerLogin.validationError}
-                  // onKeyDown={() => (isValidEmail ? apiBeginLogin(email.value) : handlerLogin.validationError)}
                   onKeyEnter={() => (isValidEmail ? handlerLogin.submitLogin() : apiBeginLogin(email.value))}
                   {...email}
                 />
