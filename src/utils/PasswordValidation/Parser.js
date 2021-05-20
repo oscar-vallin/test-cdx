@@ -15,7 +15,6 @@ export default class ValidationRulesParser {
         if (rule.rules) {
           return {
             level,
-            title: rule.title || `${level} Rule group`,
             expectation: rule.numberOfCharacteristics,
             rules: ValidationRulesParser.parse(rule.rules, level + 1),
           }

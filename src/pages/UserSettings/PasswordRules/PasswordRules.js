@@ -6,6 +6,7 @@ import { useChangeOwnPasswordPageQuery } from '../../../data/services/graphql';
 import { CardSection } from '../../../components/cards';
 import { Spacing } from '../../../components/spacings/Spacing';
 import { Spinner } from '../../../components/spinners/Spinner';
+import { Text } from '../../../components/typography/Text';
 
 import { StyledTitle, StyledIcon } from './../UserSettingsPage.styles';
 
@@ -86,13 +87,17 @@ const PasswordRules = ({ validations, password, onChange }) => {
   const onRenderCell = (item, index) => {
     return (
       <div style={{marginLeft: `${item.level * 15}px`}} key={index}>
-        {item.title && <h5 style={{ margin: '15px 0 5px' }}>
-          {/* {item.isValid
-            ? <StyledIcon iconName="StatusCircleCheckmark" />
-            : <StyledIcon iconName="StatusCircleErrorX" />} */}
-  
-          {item.title} {/*(Minimum: {item.expectation})*/}
-        </h5>}
+        <Spacing margin={{ top: 'normal', bottom: 'small' }}>
+          <Text style={{ display: 'flex', alignItems: 'center'}}>
+            {item.isValid
+              ? <StyledIcon iconName="StatusCircleCheckmark" />
+              : <StyledIcon iconName="StatusCircleErrorX" />}
+    
+            <div>
+              Meet <strong>{item.level > 0 ? item.expectation : 'all'}</strong> of these
+            </div>
+          </Text>
+        </Spacing>
 
         {
           item.rules

@@ -17,7 +17,7 @@ export const StyledRow = styled(LayoutRow)`
       display: flex;
       flex-direction: column;
       z-index: 10000;
-      background-color: ${({ theme }) => theme.colors.navbar};
+      background-color: ${({ theme }) => theme.colors.themePrimary};
       width: ${({ collapse }) => (collapse ? '205px' : '50px')};
       position: absolute;
       top: -17px;
@@ -33,14 +33,17 @@ export const StyledColumn = styled(LayoutColumn)`
 `;
 
 export const StyledMenuButton = styled(ButtonAction)`
-  /* text-decoration: ${({ selected }) => (selected ? 'underline' : 'none')}; */
   font-weight: ${({ theme, selected }) => (selected ? theme.fontWeights.bold : theme.fontWeights.normal)};
   color: #fff;
-  /* text-underline-position: under; */
   border-bottom: white;
   border-bottom-width: 2px;
   border-bottom-style: ${({ selected }) => (selected ? 'double' : 'none')};
   font-size: 14px;
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.neutralLight};
+  }
+
   @media (max-width: 993px) {
     display: ${({ collapse }) => (collapse ? 'inline-block' : 'none')};
     font-size: 14px;
