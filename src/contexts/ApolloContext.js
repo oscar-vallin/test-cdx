@@ -56,7 +56,13 @@ export const ApolloContextProvider = ({ children }) => {
 
   let client = new ApolloClient({
     link: afterwareLink.concat(authLink.concat(httpLink)),
-    cache: new InMemoryCache({ possibleTypes: introspection.possibleTypes }),
+    // cache: new InMemoryCache({ possibleTypes: introspection.possibleTypes }),
+    cache: new InMemoryCache(),
+    defaultOptions: {
+      watchQuery: {
+        fetchPolicy: 'no-cache',
+      },
+    },
   });
 
   // Component Did Mount
