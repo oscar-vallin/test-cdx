@@ -1,7 +1,6 @@
 const rules = {
   requiredStrengthLevel: 'strength',
-  minLength: 'min',
-  maxLength: 'max',
+  length: 'length',
   LOWER_CASE: 'lowercase',
   UPPER_CASE: 'uppercase',
   DIGIT: 'digits',
@@ -39,14 +38,9 @@ export default class ValidationRulesParser {
         return [
           {
             level,
-            characteristic: rules.minLength,
-            condition: rule.minLength
-          },
-          {
-            level,
-            characteristic: rules.maxLength,
-            condition: rule.maxLength
-          },
+            characteristic: rules.length,
+            condition: { min: rule.minLength, max: rule.maxLength }
+          }
         ];
       case 'PasswordCharacterRule':
         return [
