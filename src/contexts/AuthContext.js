@@ -4,6 +4,7 @@ import { useErrorMessage } from '../hooks/useErrorMessage';
 import { getRouteByApiId } from '../data/constants/RouteConstants';
 import { useCurrentUser } from './hooks/useCurrentUser';
 import { useLogout } from './hooks/useLogout';
+import { setISODay } from 'date-fns';
 //
 export const AuthContext = React.createContext(() => {
   //
@@ -19,10 +20,11 @@ export const AuthContextProvider = ({ children }) => {
   const [authData, setAuthData] = useState();
   const [authHistory, setHistory] = useState();
   const [token, setToken] = useState(localStorage);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
 
   // "userId": "joe.admin@example.com",
   // "password": "changeBen21"
-  const { currentUserQuery, isCurrentUserLogged } = useCurrentUser(user, password);
+  const { currentUserQuery, isCurrentUserLogged, setLoggedIn } = useCurrentUser(user, password);
   const { logoutQuery } = useLogout();
 
   const [passwordLoginMutation, { data, loading, error }] = usePasswordLoginMutation({
@@ -49,17 +51,27 @@ export const AuthContextProvider = ({ children }) => {
   //
   useEffect(async () => {
     const _token = await localStorage.getItem('AUTH_TOKEN');
-    const _login = await localStorage.getItem('LOGIN');
 
+    setToken(_token);
     setAuthenticated(!!_token && !!isCurrentUserLogged);
     setAuthenticating(false);
   }, [isCurrentUserLogged]);
+
+  useEffect(() => {
+    setIsCheckingAuth(isAuthenticating || token !== null);
+    
+    if (!isAuthenticating && !authData && token === null) {
+      setIsCheckingAuth(false);
+    }
+  }, [token, isAuthenticating, authData]);
 
   //
   // When Server Response or Data is cleaned.
   //
   useEffect(() => {
     if (error) {
+      setToken(null);
+
       return;
     }
 
@@ -96,6 +108,9 @@ export const AuthContextProvider = ({ children }) => {
   //
   useEffect(() => {
     if (!authData) {
+      setToken(null);
+      setAuthenticating(false);
+      
       return;
     }
 
@@ -166,11 +181,15 @@ export const AuthContextProvider = ({ children }) => {
     setAuthData();
     setAuthenticated(false);
     clearInputLoginData();
+    setToken(null);
+    setLoggedIn(false);
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const values = React.useMemo(
     () => ({
+      isCheckingAuth,
+      setIsCheckingAuth,
       isContextLoading,
       isAuthenticating,
       isAuthenticated,

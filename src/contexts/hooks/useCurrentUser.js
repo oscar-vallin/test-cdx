@@ -40,5 +40,5 @@ export const useCurrentUser = (_username, _password) => {
     setProcessing(false);
   };
 
-  return { currentUserQuery, currentUserData, isCurrentUserLogged };
+  return { currentUserQuery, currentUserData, isCurrentUserLogged, setLoggedIn };
 };
