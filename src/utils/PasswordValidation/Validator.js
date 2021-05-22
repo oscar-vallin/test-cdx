@@ -27,6 +27,14 @@ class PasswordRulesValidator {
       }
     }
 
+    if (contains('length')) {
+      const { min, max } = getCondition('length');
+
+      if (value.length < min || value.length > max) {
+        manualValidations.push('length');
+      }
+    }
+
     if (contains('min')) {
       validator.is().min(getCondition('min'));
     }

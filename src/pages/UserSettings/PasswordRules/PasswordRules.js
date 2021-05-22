@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback, Fragment } from 'react';
 import PasswordStrengthBar from 'react-password-strength-bar';
+import chroma from 'chroma-js';
+
 import { List } from '@fluentui/react';
 import { useChangeOwnPasswordPageQuery } from '../../../data/services/graphql';
 
@@ -86,9 +88,25 @@ const PasswordRules = ({ validations, password, onChange }) => {
 
   const onRenderCell = (item, index) => {
     return (
-      <div style={{marginLeft: `${item.level * 15}px`}} key={index}>
-        <Spacing margin={{ top: 'normal', bottom: 'small' }}>
-          <Text style={{ display: 'flex', alignItems: 'center'}}>
+      <div style={{
+        background: chroma('#eee').darken(0.15 * item.level),
+        border: `1px solid ${chroma('#ddd').darken(0.15 * item.level)}`,
+        borderRadius: 5,
+        padding: `10px 15px 15px`,
+        margin: `30px 0 0 0`,
+        position: 'relative',
+      }} key={index}>
+        <Spacing margin={{ top: 'small', bottom: 'normal' }}>
+          <Text style={{
+            display: 'flex',
+            alignItems: 'center',
+            border: `1px solid ${chroma('#ddd').darken(0.15 * item.level)}`,
+            borderRadius: 5,
+            position: 'absolute',
+            top: '-15px',
+            background: '#f5f5f5',
+            padding: '5px 10px',
+          }}>
             {item.isValid
               ? <StyledIcon iconName="StatusCircleCheckmark" />
               : <StyledIcon iconName="StatusCircleErrorX" />}
@@ -128,7 +146,13 @@ const PasswordRules = ({ validations, password, onChange }) => {
                   }
 
                   return (
-                    <div style={{ display: 'flex', alignItems: 'center' }} key={ruleIndex}>
+                    <div
+                      key={ruleIndex}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                      }}
+                    >
                       { 
                         !item.validations.includes(rule.characteristic)
                           ? <StyledIcon iconName="StatusCircleCheckmark" />
