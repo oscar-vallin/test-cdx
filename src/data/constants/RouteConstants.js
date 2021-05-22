@@ -17,7 +17,7 @@ export const ROUTES_ID = {
   DEFAULT_THEME: 'default-theme',
 };
 
-const URL_ROUTES = {
+export const URL_ROUTES = {
   HOME: '/',
   LOGIN: `/${ROUTES_ID.LOGIN}`,
   USER_SETTINGS: `/${ROUTES_ID.USER_SETTINGS}`,
