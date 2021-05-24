@@ -267,10 +267,11 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput }) => 
             </StyledCell>
           );
         }
+
         return (
           <StyledCell left>
             <Link href="#">{fieldContent}</Link>
-            {item.specs && <StyledSpecs>{`specs: ${item.specs}`}</StyledSpecs>}
+            {fieldItem.sublabel && <StyledSpecs>{`specs: ${fieldItem.sublabel}`}</StyledSpecs>}
           </StyledCell>
         );
 
@@ -339,6 +340,8 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput }) => 
   //
   const _onShowSpecs = () => {
     setOption(!option);
+
+    onOption(!option);
   };
 
   const _onRenderTableHeader = () => {

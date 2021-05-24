@@ -32,9 +32,6 @@ const TableFileStatus = ({ idPage = 'TableFileStatus', orgSid = 1, dateRange, fi
   const { id } = useParams();
 
   //Component did mount
-
-  console.log('TableFileStatus, localInput: ', tableProps);
-
   const hour = getHours(new Date());
 
   useEffect(() => {
