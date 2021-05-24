@@ -54,7 +54,7 @@ export const StyledText = styled(Text)`
 
 export const StyledSpecs = styled(Text)`
   display: flex;
-  width: 100%;
+  // width: 100%;
   margin-left: 5px;
   justify-content: 'flex-start';
   align-items: center;

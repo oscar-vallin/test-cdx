@@ -3,15 +3,26 @@ import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableCon
 import { formatField } from '../../../helpers/tableHelpers';
 
 //
-export const useTable = (data, tableName, date) => {
+export const useTable = (data, tableName, date, altData) => {
   const [loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
   const [columns, setColumns] = useState([]);
+  const [specs, setSpecs] = useState(false);
+  const [dataItems, setDataItems] = useState(data);
 
   const structure = getTableStructure(tableName);
 
   // * Component Did Mount.
   useEffect(() => {}, []);
+
+  const updateData = () => {
+    if (specs && altData) setDataItems(altData);
+    else setDataItems(data);
+  };
+
+  useEffect(() => {
+    updateData();
+  }, [specs, data, altData]);
 
   useEffect(() => {
     const doEffect = () => {
@@ -20,12 +31,13 @@ export const useTable = (data, tableName, date) => {
           key: 'vendor',
           label: null,
           id: 'vendor',
-          style: 'link',
+          style: 'vendor',
           child: { key: 'specs', label: 'Received On', id: 'secondaryDescr', style: 'text' },
         },
         { key: 'total', label: 'Total', id: 'total', style: 'total' },
       ];
-      const _items = data.map((item) => {
+
+      const _items = dataItems.map((item) => {
         const countAndTotal = `${item.count}/${item.total}`;
 
         return [
@@ -33,7 +45,7 @@ export const useTable = (data, tableName, date) => {
             item.name,
             'vendor',
             `file-status/filter/${item.name}*${date}`,
-            '',
+            item.secondaryDescr,
             formatField(item.secondaryDescr, 'specs', item.secondaryDescr)
           ),
           formatField(countAndTotal, 'total', countAndTotal),
@@ -44,12 +56,10 @@ export const useTable = (data, tableName, date) => {
       setItems(_items);
     };
 
-    if (data) {
-      return doEffect();
-    }
+    if (data || altData) doEffect();
 
     setLoading(false);
-  }, [data]);
+  }, [dataItems]);
 
   // * Loading Data
   useEffect(() => {
@@ -63,6 +73,8 @@ export const useTable = (data, tableName, date) => {
       structure,
       loading,
     },
+    specs,
+    setSpecs,
   };
 };
 
