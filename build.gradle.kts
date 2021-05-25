@@ -36,12 +36,12 @@ plugins {
     dependsOn(*//*"copyReactRoot",*//* "copyReactRoot2"*//*, "copyReactRoot3"*//*, "copyReactRoot4")
 }*/
 
-/*task<Exec>("npmExtractRoutes") {
+task<Exec>("npmExtractRoutes") {
     commandLine("npm", "run", "extract-routes")
-}*/
+}
 
 tasks.webjarBuild{
-    //dependsOn("npmExtractRoutes")
+    dependsOn("npmExtractRoutes")
     doLast{
         //println("hello last")
         copy {
@@ -56,7 +56,7 @@ tasks.webjarBuild{
             into("$buildDir/webjar/static")
         }
 
-        /*copy {
+        copy {
             from("$buildDir/../internals")
             include("parent-routes.json")
             into("$buildDir/static")
@@ -66,7 +66,7 @@ tasks.webjarBuild{
             from("$buildDir/../internals")
             include("parent-routes.json")
             into("$buildDir/webjar/static")
-        }*/
+        }
     }
 }
 
