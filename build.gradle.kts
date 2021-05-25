@@ -37,6 +37,7 @@ plugins {
 }*/
 
 task<Exec>("npmExtractRoutes") {
+    commandLine("npm", "install")
     commandLine("npm", "run", "extract-routes")
 }
 
