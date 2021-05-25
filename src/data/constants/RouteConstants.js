@@ -100,7 +100,7 @@ export const ROUTE_FILE_STATUS = {
 
 export const ROUTE_FILE_STATUS_DETAILS = {
   ID: ROUTES_ID.FILE_STATUS,
-  TITLE: 'Work Packet Details',
+  TITLE: 'File Status Details',
   URL: URL_ROUTES.FILE_STATUS_DETAILS,
   MAIN_MENU: false,
   API_ID: 'DASHBOARD',
