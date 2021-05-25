@@ -36,8 +36,13 @@ plugins {
     dependsOn(*//*"copyReactRoot",*//* "copyReactRoot2"*//*, "copyReactRoot3"*//*, "copyReactRoot4")
 }*/
 
-task<Exec>("npmExtractRoutes") {
+/*task<Exec>("npmInstall") {
+    dependsOn("npmInstall")
     commandLine("npm", "install")
+}*/
+
+task<Exec>("npmExtractRoutes") {
+    dependsOn("npmInstall")
     commandLine("npm", "run", "extract-routes")
 }
 
