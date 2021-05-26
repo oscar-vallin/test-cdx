@@ -5,6 +5,7 @@ type Query {
     exchangeActivityErrored(orgSidInput : OrgSidInput!, dateRange: DateTimeRangeInput!, pageableInput: PageableInput!) : OrganizationLinkConnection
 
     workPacketStatusDetails(orgSid: ID!, workOrderId: String!): WorkPacketStatusDetails
+    workPacketStatus(orgSid: ID!, workOrderId: String!): WorkPacketStatus
     workPacketStatuses(orgSid: ID!, dateRange: DateTimeRangeInput, filter: WorkPacketStatusFilter): [WorkPacketStatus]
     dashboardPeriods(orgSid: ID!): DashboardPeriods
     changeOwnPasswordPage : PasswordPage
