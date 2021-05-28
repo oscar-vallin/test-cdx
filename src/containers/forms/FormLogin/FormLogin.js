@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
 // Components
 import { Column } from '../../../components/layouts';
@@ -9,6 +9,7 @@ import { Spinner } from '../../../components/spinners/Spinner';
 import { useLogin } from './FormLogin.services';
 import { useLoginBegin } from '../../../contexts/hooks/useLogin';
 import { useAuthContext } from '../../../contexts/AuthContext';
+import { useHistory } from 'react-router-dom';
 // Styles
 import {
   StyledBox,
@@ -24,10 +25,11 @@ import {
 
 // CardSection is called directly cause a restriction warning for that component.
 const FormLogin = ({ id = '__FormLogin', onLogin }) => {
+  const history = useHistory();
   const handlerLogin = useLogin(onLogin);
   const { apiBeginLogin, isValidEmail, editUser, errorMessage, isProcessingBegin } = useLoginBegin();
   const { email, password } = handlerLogin;
-  const { isCheckingAuth } = useAuthContext();
+  const { isCheckingAuth, isAuthenticating } = useAuthContext();
 
   return (
     <StyledBox id={id}>
@@ -40,7 +42,7 @@ const FormLogin = ({ id = '__FormLogin', onLogin }) => {
         <Column id={`${id}__Row-Column`}>
           <StyledCard id={`${id}-Card`}>
             {
-              isCheckingAuth
+              isCheckingAuth || isAuthenticating
                 ? (
                   <Spacing margin={{ top: 'normal' }}>
                     <Spinner size="lg" label="Checking authentication"/>

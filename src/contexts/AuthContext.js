@@ -4,20 +4,22 @@ import { useErrorMessage } from '../hooks/useErrorMessage';
 import { getRouteByApiId } from '../data/constants/RouteConstants';
 import { useCurrentUser } from './hooks/useCurrentUser';
 import { useLogout } from './hooks/useLogout';
-import { setISODay } from 'date-fns';
 //
 export const AuthContext = React.createContext(() => {
   //
 });
 
 export const AuthContextProvider = ({ children }) => {
+  const AUTH_DATA = localStorage.getItem('AUTH_DATA');
+  const [selectedPage, setSelectedPage] = useState('/');
   // LocalState
   const [isContextLoading, setLoading] = useState(true);
   const [isAuthenticating, setAuthenticating] = useState(true);
-  const [isAuthenticated, setAuthenticated] = useState(false);
+  const [isAuthenticated, setAuthenticated] = useState(true);
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
-  const [authData, setAuthData] = useState();
+  const [authData, setAuthData] = useState(AUTH_DATA ? JSON.parse(AUTH_DATA) : null);
+  
   const [authHistory, setHistory] = useState();
   const [token, setToken] = useState(localStorage);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
@@ -55,15 +57,20 @@ export const AuthContextProvider = ({ children }) => {
     setToken(_token);
     setAuthenticated(!!_token && !!isCurrentUserLogged);
     setAuthenticating(false);
+    // setHistory(history);
   }, [isCurrentUserLogged]);
 
   useEffect(() => {
     setIsCheckingAuth(isAuthenticating || token !== null);
-    
+
     if (!isAuthenticating && !authData && token === null) {
       setIsCheckingAuth(false);
     }
-  }, [token, isAuthenticating, authData]);
+
+    if (token && authData) {
+      setAuthenticated(true)
+    }
+  }, [token, isAuthenticating, isAuthenticated, authData]);
 
   //
   // When Server Response or Data is cleaned.
@@ -121,12 +128,13 @@ export const AuthContextProvider = ({ children }) => {
       return;
     }
 
+    setSelectedPage(routePage);
     // "userId": "joe.admin@example.com",
     // "password": "changeBen21"
 
     if (!authHistory) return;
 
-    return authHistory.push(routePage.URL);
+    authHistory.push(routePage.URL);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authData, authHistory]);
@@ -188,6 +196,7 @@ export const AuthContextProvider = ({ children }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const values = React.useMemo(
     () => ({
+      selectedPage,
       isCheckingAuth,
       setIsCheckingAuth,
       isContextLoading,

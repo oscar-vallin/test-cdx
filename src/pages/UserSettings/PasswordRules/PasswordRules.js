@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, Fragment } from 'react';
 import PasswordStrengthBar from 'react-password-strength-bar';
 import chroma from 'chroma-js';
+import _ from 'lodash';
 
 import { List } from '@fluentui/react';
 import { useChangeOwnPasswordPageQuery } from '../../../data/services/graphql';
@@ -21,10 +22,86 @@ import {
 const isArrayOfArrays = arr => arr.filter(item => Array.isArray(item)).length > 0;
 
 const isValid = (rules) => {
-  return PasswordValidator.getValidationStatus({ rules })
-    .reduce((arr, item) => [...arr, ...item], [])
-    .filter(item => !item)
-    .length === 0;
+  const { expectation, ruleCount, validations } = PasswordValidator
+    .getValidationStatus({ rules })
+    .reduce((count, { expectation, isValid }) => {
+      return ({
+        expectation: count.expectation + (Array.isArray(rules))
+          ? PasswordValidator.countExpectations(rules)
+          : expectation,
+        ruleCount: Array.isArray(rules)
+          ? rules.map(PasswordValidator.countRulesets)
+          : 0,
+        validations: [
+          ...count.validations,
+          ...isValid
+            .reduce((arr, item) => [...arr, ...PasswordValidator.flattenValidations(item)], [])
+        ],
+      });
+    }, { expectation: 0, ruleCount: 0, validations: [] });
+
+
+  const baseChildRules = _.flattenDeep(ruleCount)[0] - rules[0].rules.length;
+
+  const childRules = baseChildRules === 0 ? baseChildRules : baseChildRules + 1;
+  const childExpectations = expectation - rules[0].expectation;
+  const allowedChildFailures = childRules - childExpectations;
+
+  const currentRuleCount = rules[0].rules.length;
+  const currentValidationCount = rules[0].validations.length;
+  const currentAllowedFailures = currentRuleCount - rules[0].expectation;
+
+  // console.log('asd', {
+  //   ruleCount: _.flattenDeep(ruleCount)[0],
+  //   expectation,
+  //   validations: currentValidationCount,
+  //   allowedChildFailures: allowedChildFailures,
+  //   currentAllowedFailures: currentAllowedFailures,
+  //   currentRuleCount: currentRuleCount,
+  //   currentExpectation: rules[0].expectation,
+  //   differential: baseChildRules === 0 ? 0 : rules[0].expectation,
+
+  //   exp: `${currentValidationCount} - ${allowedChildFailures} <= (${currentAllowedFailures} + ${baseChildRules === 0 ? 0 : rules[0].expectation})`,
+  //   exp2: `${currentValidationCount - allowedChildFailures}  <= (${currentAllowedFailures + (baseChildRules === 0 ? 0 : rules[0].expectation)})`,
+  //   result: (currentValidationCount - allowedChildFailures) <= (currentAllowedFailures + baseChildRules === 0 ? 0 : rules[0].expectation),
+  // })
+
+  const x = _.flattenDeep(ruleCount)[0] - (expectation - (allowedChildFailures - (!baseChildRules ? 0 : currentAllowedFailures)));
+
+  console.log({
+    x,
+    ruleCount: _.flattenDeep(ruleCount)[0],
+    expectation,
+    vals: rules[0].validations,
+    allowedChildFailures,
+    currentAllowedFailures,
+    baseChildRules,
+    exp: `(${x} + 
+      ${(rules[0].level === 0 ? 1 : 0)}) >= 
+      (${rules[0].validations.length} - 
+        (${baseChildRules === 0
+          ? 0
+          : (allowedChildFailures +
+            (!baseChildRules ? 0 : currentAllowedFailures))}))`.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "")
+  })
+
+  return {
+    ruleCount,
+    expectation,
+    valid: (
+      x + (rules[0].level === 0
+        ? 1
+        : !baseChildRules ? 0 : -1)
+      ) >=
+      (rules[0].validations.length -
+        (!baseChildRules
+          ? 0
+          : (allowedChildFailures +
+            (!baseChildRules ? 0 : currentAllowedFailures)
+          )
+        )
+      )
+  };
 }
 
 const validateRulesets = (value, ruleSets) => {
@@ -42,10 +119,13 @@ const validateRulesets = (value, ruleSets) => {
 const validateRulesArr = (value, data) => data.map(ruleSet => {
   const validationResults = validateRulesets(value, ruleSet.rules);
 
-  const rootValidations = Array.from(new Set(validationResults
+  const rootValidations = Array.from(
+    new Set(validationResults
       .filter(validation => !isArrayOfArrays(validation))
-      .reduce((rules, rule) => [...rules, ...rule], [])));
-      
+      .reduce((rules, rule) => [...rules, ...rule], [])
+    )
+  );
+
   const ruleObj = {
     ...ruleSet,
     validations: rootValidations,
@@ -53,7 +133,7 @@ const validateRulesArr = (value, data) => data.map(ruleSet => {
       .rules
       .map((rule, index) => {
         const item = Array.isArray(rule) ? rule : [rule];
-        
+
         return item.map(rule => {
           if (rule.rules) {
             return validateRulesArr(value, item);
@@ -68,17 +148,20 @@ const validateRulesArr = (value, data) => data.map(ruleSet => {
             ...(rule.rules)
               ? {
                 validations: Array.from(new Set(validations)),
-                isValid: isValid(rule.rules),
+                isValid: isValid(rule.rules).valid,
+                acceptable: isValid(rule.rules).expectation,
               }
               : {},
-              message: ValidationMessages[rule.characteristic](rule.condition),
+            message: ValidationMessages[rule.characteristic](rule.condition),
           };
         });
       })
       .reduce((rules, rule) => [...rules, ...rule], []),
   }
 
-  return { ...ruleObj, isValid: isValid([ruleObj]) };
+  const results = isValid([ruleObj]);
+
+  return { ...ruleObj, isValid: results.valid, acceptable: results.acceptable };
 });
 
 
@@ -110,9 +193,11 @@ const PasswordRules = ({ validations, password, onChange }) => {
             {item.isValid
               ? <StyledIcon iconName="StatusCircleCheckmark" />
               : <StyledIcon iconName="StatusCircleErrorX" />}
-    
+
             <div>
-              Meet <strong>{item.level > 0 ? item.expectation : 'all'}</strong> of these
+              Meet <strong>{
+                item.level === 0 ? 'all' : item.level === 1 ? 'any' : item.expectation
+              }</strong> of these
             </div>
           </Text>
         </Spacing>
@@ -120,61 +205,63 @@ const PasswordRules = ({ validations, password, onChange }) => {
         {
           item.rules
             ? item.rules.map((rule, ruleIndex) => {
-                if(Array.isArray(rule)) {
-                  return rule.map(onRenderCell);
-                } else {
-                  if (rule.characteristic === 'strength') {
-                    return (
-                      <div key={ruleIndex}>
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                          { 
-                            !item.validations.includes(rule.characteristic)
-                              ? <StyledIcon iconName="StatusCircleCheckmark" />
-                              : <StyledIcon iconName="StatusCircleErrorX" />
-                          }
-                    
-                          <div dangerouslySetInnerHTML={{ __html: rule.message }} />
-                        </div>
-
-                        
-                        <PasswordStrengthBar
-                          password={password}
-                          style={{ margin: '15px 0 0', width: '50%' }}
-                        />
-                      </div>
-                    )
-                  }
-
+              if (Array.isArray(rule)) {
+                return rule.map(onRenderCell);
+              } else {
+                if (rule.characteristic === 'strength') {
                   return (
-                    <div
-                      key={ruleIndex}
-                      style={{
+                    <div key={ruleIndex}>
+                      <div style={{
                         display: 'flex',
                         alignItems: 'center',
-                      }}
-                    >
-                      { 
-                        !item.validations.includes(rule.characteristic)
-                          ? <StyledIcon iconName="StatusCircleCheckmark" />
-                          : <StyledIcon iconName="StatusCircleErrorX" />
-                      }
-                
-                      {rule.message}
+                      }}>
+                        {
+                          !item.validations.includes(rule.characteristic)
+                            ? <StyledIcon iconName="StatusCircleCheckmark" />
+                            : <StyledIcon iconName="StatusCircleErrorX" />
+                        }
+
+                        <div dangerouslySetInnerHTML={{ __html: rule.message }} />
+                      </div>
+
+                      <PasswordStrengthBar
+                        password={password}
+                        style={{ margin: '15px 0 0', width: '50%' }}
+                      />
                     </div>
                   )
                 }
-              })
+
+                return (
+                  <div
+                    key={ruleIndex}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}
+                  >
+                    {
+                      !item.validations.includes(rule.characteristic)
+                        ? <StyledIcon iconName="StatusCircleCheckmark" />
+                        : <StyledIcon iconName="StatusCircleErrorX" />
+                    }
+
+                    {rule.message}
+                  </div>
+                )
+              }
+            })
             : (
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  { 
-                    item.isValid
-                      ? <StyledIcon iconName="StatusCircleCheckmark" />
-                      : <StyledIcon iconName="StatusCircleErrorX" />
-                  }
-            
-                  {item.message}
-                </div>
-              )
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                {
+                  item.isValid
+                    ? <StyledIcon iconName="StatusCircleCheckmark" />
+                    : <StyledIcon iconName="StatusCircleErrorX" />
+                }
+
+                {item.message}
+              </div>
+            )
         }
       </div>
     );
@@ -201,10 +288,10 @@ const PasswordRules = ({ validations, password, onChange }) => {
         {
           loading
             ? (
-                <Spacing margin={{ top: 'normal' }}>
-                  <Spinner size="lg" label="Loading rules"/>
-                </Spacing>
-              )
+              <Spacing margin={{ top: 'normal' }}>
+                <Spinner size="lg" label="Loading rules" />
+              </Spacing>
+            )
             : <List items={validations} onRenderCell={onRenderCell} />
         }
       </Spacing>

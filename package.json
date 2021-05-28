@@ -23,6 +23,7 @@
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.5",
     "graphql": "^15.3.0",
+    "lodash": "^4.17.21",
     "office-ui-fabric-react": "^7.144.2",
     "password-validator": "^5.1.1",
     "react": "^17.0.1",
