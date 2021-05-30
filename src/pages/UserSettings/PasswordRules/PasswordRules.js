@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, Fragment } from 'react';
+import React, { useState, useEffect, useCallback, Fragment, Children } from 'react';
 import PasswordStrengthBar from 'react-password-strength-bar';
 import chroma from 'chroma-js';
 import _ from 'lodash';
@@ -21,89 +21,6 @@ import {
 
 const isArrayOfArrays = arr => arr.filter(item => Array.isArray(item)).length > 0;
 
-const isValid = (rules) => {
-  const { expectation, ruleCount, validations } = PasswordValidator
-    .getValidationStatus({ rules })
-    .reduce((count, { expectation, isValid }) => {
-      return ({
-        expectation: count.expectation + (Array.isArray(rules))
-          ? PasswordValidator.countExpectations(rules)
-          : expectation,
-        ruleCount: Array.isArray(rules)
-          ? rules.map(PasswordValidator.countRulesets)
-          : 0,
-        validations: [
-          ...count.validations,
-          ...isValid
-            .reduce((arr, item) => [...arr, ...PasswordValidator.flattenValidations(item)], [])
-        ],
-      });
-    }, { expectation: 0, ruleCount: 0, validations: [] });
-
-
-  const baseChildRules = _.flattenDeep(ruleCount)[0] - rules[0].rules.length;
-
-  const childRules = baseChildRules === 0 ? baseChildRules : baseChildRules + 1;
-  const childExpectations = expectation - rules[0].expectation;
-  const allowedChildFailures = childRules - childExpectations;
-
-  const currentRuleCount = rules[0].rules.length;
-  const currentValidationCount = rules[0].validations.length;
-  const currentAllowedFailures = currentRuleCount - rules[0].expectation;
-
-  // console.log('asd', {
-  //   ruleCount: _.flattenDeep(ruleCount)[0],
-  //   expectation,
-  //   validations: currentValidationCount,
-  //   allowedChildFailures: allowedChildFailures,
-  //   currentAllowedFailures: currentAllowedFailures,
-  //   currentRuleCount: currentRuleCount,
-  //   currentExpectation: rules[0].expectation,
-  //   differential: baseChildRules === 0 ? 0 : rules[0].expectation,
-
-  //   exp: `${currentValidationCount} - ${allowedChildFailures} <= (${currentAllowedFailures} + ${baseChildRules === 0 ? 0 : rules[0].expectation})`,
-  //   exp2: `${currentValidationCount - allowedChildFailures}  <= (${currentAllowedFailures + (baseChildRules === 0 ? 0 : rules[0].expectation)})`,
-  //   result: (currentValidationCount - allowedChildFailures) <= (currentAllowedFailures + baseChildRules === 0 ? 0 : rules[0].expectation),
-  // })
-
-  const x = _.flattenDeep(ruleCount)[0] - (expectation - (allowedChildFailures - (!baseChildRules ? 0 : currentAllowedFailures)));
-
-  console.log({
-    x,
-    ruleCount: _.flattenDeep(ruleCount)[0],
-    expectation,
-    vals: rules[0].validations,
-    allowedChildFailures,
-    currentAllowedFailures,
-    baseChildRules,
-    exp: `(${x} + 
-      ${(rules[0].level === 0 ? 1 : 0)}) >= 
-      (${rules[0].validations.length} - 
-        (${baseChildRules === 0
-          ? 0
-          : (allowedChildFailures +
-            (!baseChildRules ? 0 : currentAllowedFailures))}))`.replace(/(\r\n|\n|\r)/gm, "").replace(/\s/g, "")
-  })
-
-  return {
-    ruleCount,
-    expectation,
-    valid: (
-      x + (rules[0].level === 0
-        ? 1
-        : !baseChildRules ? 0 : -1)
-      ) >=
-      (rules[0].validations.length -
-        (!baseChildRules
-          ? 0
-          : (allowedChildFailures +
-            (!baseChildRules ? 0 : currentAllowedFailures)
-          )
-        )
-      )
-  };
-}
-
 const validateRulesets = (value, ruleSets) => {
   return ruleSets.map(ruleSet => {
     if (ruleSet.rules) {
@@ -111,14 +28,13 @@ const validateRulesets = (value, ruleSets) => {
         .filter(validation => validation.length > 0)
         .reduce((arr, item) => [...arr, ...item || []], []);
     }
-
+    
     return PasswordValidator.validate(value, ruleSet);
   })
 }
 
 const validateRulesArr = (value, data) => data.map(ruleSet => {
   const validationResults = validateRulesets(value, ruleSet.rules);
-
   const rootValidations = Array.from(
     new Set(validationResults
       .filter(validation => !isArrayOfArrays(validation))
@@ -133,7 +49,7 @@ const validateRulesArr = (value, data) => data.map(ruleSet => {
       .rules
       .map((rule, index) => {
         const item = Array.isArray(rule) ? rule : [rule];
-
+        
         return item.map(rule => {
           if (rule.rules) {
             return validateRulesArr(value, item);
@@ -143,25 +59,48 @@ const validateRulesArr = (value, data) => data.map(ruleSet => {
             ? validationResults[index].reduce((rules, rule) => [...rules, ...rule], [])
             : validationResults[index];
 
+          const isValid = !validations.includes(rule.characteristic);
+
           return {
             ...rule,
+            isValid,
+            message: ValidationMessages[rule.characteristic](rule.condition),
             ...(rule.rules)
               ? {
-                validations: Array.from(new Set(validations)),
-                isValid: isValid(rule.rules).valid,
-                acceptable: isValid(rule.rules).expectation,
+                validations: Array.from(new Set(validations.map(validation => validation.includes(rule.characteristic)))),
               }
               : {},
-            message: ValidationMessages[rule.characteristic](rule.condition),
           };
         });
       })
       .reduce((rules, rule) => [...rules, ...rule], []),
   }
 
-  const results = isValid([ruleObj]);
 
-  return { ...ruleObj, isValid: results.valid, acceptable: results.acceptable };
+  const currentLevelRules = ruleObj.rules.filter(rule => !Array.isArray(rule)).map(rule => rule.characteristic);
+  const childRules = _.flatten(ruleObj.rules.filter(rule => Array.isArray(rule)));
+
+  const currentLevelValidations = ruleObj.validations.filter(validation => currentLevelRules.includes(validation));
+  // const isCurrentLevelValid = [
+  //   currentLevelValidations.length <= currentLevelRules.length - ruleObj.expectation - (childRules.length > 0 ? 1 : 0),
+  //   ...(!childRules.length) ? [] : childRules[0]?.isCurrentLevelValid
+  // ]
+
+  const currentValidationResults = (childRules.length)
+    ? [
+        currentLevelValidations.length <= currentLevelRules.length - (ruleObj.expectation - (ruleObj.level === 0 ? 1 : 0 )),
+        ...[childRules[0]?.isCurrentLevelValid]
+      ]
+    : [currentLevelValidations.length <= currentLevelRules.length - ruleObj.expectation];
+  
+  const isCurrentLevelValid = !childRules.length
+    ? currentValidationResults[0]
+    : _
+        .flattenDeep(currentValidationResults)
+        .filter(Boolean)
+        .length >= (ruleObj.expectation - (ruleObj.level === 0 ? 1 : 0 ));
+
+  return { ...ruleObj, isCurrentLevelValid };
 });
 
 
@@ -190,7 +129,7 @@ const PasswordRules = ({ validations, password, onChange }) => {
             background: '#f5f5f5',
             padding: '5px 10px',
           }}>
-            {item.isValid
+            {((item.rules) ? item.isCurrentLevelValid : item.isValid)
               ? <StyledIcon iconName="StatusCircleCheckmark" />
               : <StyledIcon iconName="StatusCircleErrorX" />}
 

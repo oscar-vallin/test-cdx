@@ -115,6 +115,7 @@ class PasswordRulesValidator {
       if(item.rules) {
         return {
           expectation: item.expectation,
+          characteristic: item.characteristic,
           isValid: PasswordRulesValidator
             .getValidationStatus(item)
             .reduce((validations, isValid) => [...validations, isValid], []),
