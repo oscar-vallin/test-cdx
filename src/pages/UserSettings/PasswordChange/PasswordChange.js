@@ -13,6 +13,20 @@ import {
   StyledTitle,
 } from '../UserSettingsPage.styles';
 
+const getValidationMessage = (passwords, isValid) => {
+  if (!passwords.current || !passwords.new || !passwords.confirmation) {
+    return 'Please fill all the required fields';
+  }
+
+  if (!isValid) {
+    return 'Please fulfill all the security requirements'
+  }
+
+  if (passwords.new !== passwords.confirmation) {
+    return 'Passwords don\'t match';
+  }
+}
+
 const isFormInvalid = (passwords) => {
   return !passwords.current
     || !passwords.new
@@ -20,7 +34,7 @@ const isFormInvalid = (passwords) => {
     || passwords.new !== passwords.confirmation
 }
 
-const PasswordChange = ({ state, validations, onChange }) => {
+const PasswordChange = ({ state, validations = [], onChange }) => {
   const [
     updateOwnPasswordMutation,
     {
@@ -70,13 +84,26 @@ const PasswordChange = ({ state, validations, onChange }) => {
         </Column>
       </Row>
 
+      {(isFormInvalid(state) || !validations[0]?.isCurrentLevelValid) && (
+        <Row>
+          <Column>
+            <Spacing margin={{ top: "normal" }}>
+              <MessageBar
+                type="warning"
+                content={getValidationMessage(state, validations[0]?.isCurrentLevelValid)}
+              />
+            </Spacing>
+          </Column>
+        </Row>
+      )}
+
       <Row>
         <Column>
           <Spacing margin={{ top: "normal" }}>
             <Button
               variant="primary"
               text={isUpdatingPassword ? "Processing..." : "Save password"}
-              disabled={isFormInvalid(state) || !validations[0].isValid || isUpdatingPassword}
+              disabled={isFormInvalid(state) || !validations[0]?.isCurrentLevelValid || isUpdatingPassword}
               onClick={() => {
                 updateOwnPasswordMutation({
                   variables: {
