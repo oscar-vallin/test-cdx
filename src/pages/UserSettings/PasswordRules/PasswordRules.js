@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback, Fragment, Children } from 'react';
 import PasswordStrengthBar from 'react-password-strength-bar';
-import chroma from 'chroma-js';
 import _ from 'lodash';
 
 import { List } from '@fluentui/react';
@@ -9,9 +8,9 @@ import { useChangeOwnPasswordPageQuery } from '../../../data/services/graphql';
 import { CardSection } from '../../../components/cards';
 import { Spacing } from '../../../components/spacings/Spacing';
 import { Spinner } from '../../../components/spinners/Spinner';
-import { Text } from '../../../components/typography/Text';
 
 import { StyledTitle, StyledIcon } from './../UserSettingsPage.styles';
+import { RuleGroup } from './RuleGroup';
 
 import {
   PasswordValidator,
@@ -105,37 +104,7 @@ const PasswordRules = ({ validations, password, onChange }) => {
 
   const onRenderCell = (item, index) => {
     return (
-      <div style={{
-        background: chroma('#eee').darken(0.15 * item.level),
-        border: `1px solid ${chroma('#ddd').darken(0.15 * item.level)}`,
-        borderRadius: 5,
-        padding: `10px 15px 15px`,
-        margin: `30px 0 0 0`,
-        position: 'relative',
-      }} key={index}>
-        <Spacing margin={{ top: 'small', bottom: 'normal' }}>
-          <Text style={{
-            display: 'flex',
-            alignItems: 'center',
-            border: `1px solid ${chroma('#ddd').darken(0.15 * item.level)}`,
-            borderRadius: 5,
-            position: 'absolute',
-            top: '-15px',
-            background: '#f5f5f5',
-            padding: '5px 10px',
-          }}>
-            {((item.rules) ? item.isCurrentLevelValid : item.isValid)
-              ? <StyledIcon iconName="StatusCircleCheckmark" />
-              : <StyledIcon iconName="StatusCircleErrorX" />}
-
-            <div>
-              Meet <strong>{
-                item.level === 0 ? 'all' : item.level === 1 ? 'any' : item.expectation
-              }</strong> of these
-            </div>
-          </Text>
-        </Spacing>
-
+      <RuleGroup item={item} key={index}>
         {
           item.rules
             ? item.rules.map((rule, ruleIndex) => {
@@ -169,10 +138,7 @@ const PasswordRules = ({ validations, password, onChange }) => {
                 return (
                   <div
                     key={ruleIndex}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                    }}
+                    style={{ display: 'flex', alignItems: 'center' }}
                   >
                     {
                       !item.validations.includes(rule.characteristic)
@@ -197,7 +163,7 @@ const PasswordRules = ({ validations, password, onChange }) => {
               </div>
             )
         }
-      </div>
+      </RuleGroup>
     );
   };
 
