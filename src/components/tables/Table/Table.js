@@ -165,6 +165,7 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput }) => 
    * Local Functions.
    */
   const _buildItems = () => {
+    if (!items) return;
     const iItems = items.map((rowItem) => {
       const objItem = {};
 

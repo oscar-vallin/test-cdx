@@ -1,3 +1,6 @@
+import { useWorkPacketStatusesLazyQuery } from '../services/graphql';
+import { columns as tableArchivesColumns, getItems as tableArchivesGetItems } from './tables/ArchiveTableConstants';
+
 export const TABLE_NAMES = {
   DASHBOARD_TRANSMISSIONS_VENDOR: 'TRANSMISSIONS_VENDOR',
   DASHBOARD_ERRORS_VENDOR: 'ERRORS_VENDOR',
@@ -10,6 +13,7 @@ export const TABLE_NAMES = {
   ARCHIVES: 'ARCHIVES',
   ERRORS: 'ERRORS',
   TRANSMISSIONS: 'TRANSMISSIONS',
+  ORG_ACTIVITY: 'ORG_ACTIVITY',
 };
 
 export const TABLES = {
@@ -23,6 +27,7 @@ export const TABLES = {
       url: './transmissions',
       buttons: ['Sort', 'Specs'],
     },
+    polling: 1 / 3,
   },
   ERRORS_VENDOR: {
     header: {
@@ -30,6 +35,7 @@ export const TABLES = {
       title: 'Failed Files by Vendor',
       url: './transmissions',
     },
+    polling: 1 / 3,
   },
   TRANSMISSIONS_FILES: {
     header: {
@@ -37,6 +43,7 @@ export const TABLES = {
       title: 'Transmissions / BUS by Vendor',
       url: './errors',
     },
+    polling: 1 / 3,
   },
   ERRORS_FILES: {
     header: {
@@ -44,6 +51,7 @@ export const TABLES = {
       title: 'Failed Files by Files',
       url: './errors',
     },
+    polling: 1 / 3,
   },
   DETAIL_ENROLLMENT: {
     header: {
@@ -51,6 +59,7 @@ export const TABLES = {
       title: 'Enrollment Status',
       url: null,
     },
+    polling: 1 / 3,
   },
   DETAIL_VENDOR_COUNT: {
     header: {
@@ -58,6 +67,7 @@ export const TABLES = {
       title: 'Vendor Count Status',
       url: null,
     },
+    polling: 1 / 3,
   },
   DETAIL_QUALITY_CHECKS: {
     header: {
@@ -65,6 +75,7 @@ export const TABLES = {
       title: 'Quality Checks',
       url: null,
     },
+    polling: 1 / 3,
   },
   FILE_STATUS: {
     header: {
@@ -72,6 +83,7 @@ export const TABLES = {
       title: 'File Status',
       url: null,
     },
+    polling: 1,
   },
   ARCHIVES: {
     header: {
@@ -79,6 +91,9 @@ export const TABLES = {
       title: 'Archives',
       url: null,
     },
+    polling: 1 / 3,
+    columns: tableArchivesColumns,
+    items: tableArchivesGetItems,
   },
   ERRORS: {
     header: {
@@ -86,6 +101,7 @@ export const TABLES = {
       title: 'Errors',
       url: null,
     },
+    polling: 1 / 3,
   },
   TRANSMISSIONS: {
     header: {
@@ -93,6 +109,15 @@ export const TABLES = {
       title: 'Transmissions',
       url: null,
     },
+    polling: 1 / 3,
+  },
+  TRANSMISSIONS: {
+    header: {
+      type: 'org_activity',
+      title: 'Org Activity',
+      url: null,
+    },
+    polling: 1 / 3,
   },
 };
 
@@ -100,4 +125,16 @@ export const getTableStructure = (name) => {
   const tableStructure = TABLES[name];
 
   return tableStructure ?? TABLES.DEFAULT;
+};
+
+export const useQueryTable = (tableID, tableArguments) => {
+  if (tableID === TABLE_NAMES.ARCHIVES) {
+    return useWorkPacketStatusesLazyQuery({
+      variables: {
+        orgSid: tableArguments.orgId ?? 1,
+        dateRange: tableArguments.dateRange,
+        filter: tableArguments.filter,
+      },
+    });
+  }
 };

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Table } from '../../../components/tables/Table';
+
 import { useParams } from 'react-router-dom';
 import {
   endOfDay,
@@ -21,20 +22,23 @@ import { useTable } from './TableFileStatus.service';
 import { InputText } from '../../../components/inputs/InputText';
 import { InputDateRange } from '../../../components/inputs/InputDateRange';
 import { useTableFilters } from '../../../hooks/useTableFilters';
-import { useRefresh } from './hooks/useRefresh';
 
 const TableFileStatus = ({ idPage = 'TableFileStatus', orgSid = 1, dateRange, filter }) => {
-  const [_isToday, setIsToday] = useState(true);
-
   const { localInput, startDate, endDate } = useTableFilters('Extract Name,  Status, Vendor, etc.');
-  const { tableProps } = useTable(orgSid, dateRange, filter, _isToday, localInput.value);
+  const { tableProps } = useTable(
+    orgSid,
+    { rangeStart: startDate.value, rangeEnd: endDate.value },
+    localInput.value,
+    '',
+    localInput.value
+  );
 
   const { id } = useParams();
 
   //Component did mount
-  const hour = getHours(new Date());
-
   useEffect(() => {
+    const hour = getHours(new Date());
+
     if (id === undefined) {
       if (hour < 9) {
         startDate.setValue(subDays(new Date(), 1));
@@ -51,51 +55,14 @@ const TableFileStatus = ({ idPage = 'TableFileStatus', orgSid = 1, dateRange, fi
     selectDate(params[1]);
   }, []);
 
-  useEffect(() => {
-    setIsToday(todayDate(startDate.value, endDate.value));
-  }, [startDate, endDate]);
-
   const selectDate = (date) => {
-    if (date === 'today') {
-      const startDay = startOfDay(new Date());
-      const endDay = endOfDay(new Date());
+    const _startDay = getStartDay(date);
+    const _endDay = getEndDay(date);
 
-      startDate.setValue(startDay);
-      endDate.setValue(endDay);
-    }
-    if (date === 'yesterday') {
-      const startDay = startOfYesterday(new Date());
-      const endDay = endOfYesterday(new Date());
-
-      startDate.setValue(startDay);
-      endDate.setValue(endDay);
-    }
-    if (date === 'thisMonth') {
-      const startDay = startOfMonth(new Date());
-      const endDay = lastDayOfMonth(new Date());
-
-      startDate.setValue(startDay);
-      endDate.setValue(endDay);
-    }
-    if (date === 'lastMonth') {
-      const startDay = startOfMonth(subMonths(new Date(), 1));
-      const endDay = lastDayOfMonth(subMonths(new Date(), 1));
-      startDate.setValue(startDay);
-      endDate.setValue(endDay);
-    }
+    startDate.setValue(_startDay);
+    endDate.setValue(_endDay);
   };
 
-  const todayDate = (firstDate, secondDate) => {
-    if (hour < 9) {
-      if (isYesterday(new Date(firstDate)) && isYesterday(new Date(secondDate))) {
-        return true;
-      }
-    }
-    if (isToday(new Date(firstDate)) && isToday(new Date(secondDate))) {
-      return true;
-    }
-    return false;
-  };
   return (
     <Container>
       <Row id={`${idPage}-filters`} around>
