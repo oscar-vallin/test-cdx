@@ -1,7 +1,49 @@
 import PasswordValidator from 'password-validator';
 import zxcvbn from 'zxcvbn';
-
+import _ from 'lodash';
 class PasswordRulesValidator {
+  static countRulesets = (rules) => {
+    const data = Array.isArray(rules) ? rules : [rules];
+
+    return _
+      .chain(data)
+      .map(rule => (Array.isArray(rule))
+        ? PasswordRulesValidator.countRulesets(rule)
+        : rule.rules
+          ? PasswordRulesValidator.countRulesets(rule.rules)
+          : rule.level !== 0 ? 1 : 1 //ou 0 
+      )
+      .flattenDeep()
+      .sum()
+      .value()
+  }
+
+  static countExpectations = (rule) => {
+    const data = Array.isArray(rule) ? rule[0] : rule;
+
+    if (!data.rules) {
+      return 0;
+    }
+
+    const expectations = data
+      .rules
+      .map(PasswordRulesValidator.countExpectations)
+
+    return _
+      .chain([data.expectation, ...expectations])
+      .flattenDeep()
+      .sum()
+      .value()
+  }
+
+  static flattenValidations(item) {
+    const items = (typeof item === 'object')
+      ? item.isValid ? item.isValid.map(PasswordRulesValidator.flattenValidations) : item.validations
+      : [item];
+
+    return items.reduce((arr, item) => [...arr, ...Array.isArray(item) ? item : [item]], []);
+  }
+
   /* Validates a value against a set of rules */
   static validate(value, rules) {
     const validator = new PasswordValidator();
@@ -71,13 +113,20 @@ class PasswordRulesValidator {
       const item = Array.isArray(ruleSet) ? ruleSet[0] : ruleSet;
 
       if(item.rules) {
-        return PasswordRulesValidator.getValidationStatus(item)
-          .reduce((validations, isValid) => [...validations, isValid], []);
-      }
+        return {
+          expectation: item.expectation,
+          characteristic: item.characteristic,
+          isValid: PasswordRulesValidator
+            .getValidationStatus(item)
+            .reduce((validations, isValid) => [...validations, isValid], []),
+        }
+      } 
 
-      return (data.expectation && data.expectation > 0)
-        ? (data.rules.length - data.expectation) >= data.validations.length
-        : data.validations.length !== 0
+      const { rules, expectation, validations } = data;
+
+      return (expectation && expectation > 0)
+        ? (rules.length - expectation) >= validations.length
+        : validations.length !== 0
     });
   }
 }
