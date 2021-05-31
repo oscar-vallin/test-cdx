@@ -5,8 +5,6 @@ export const useRefresh = (isToday, action, apiCall) => {
 
   useEffect(() => {
     if (isToday) {
-      console.log('estravirauis');
-
       setRefreshNow(false);
       setTimeout(setRefreshNow(true), 30000);
     }

@@ -28,7 +28,7 @@ import { useWorkPacketStatusDetailsQuery, useWorkPacketStatusesQuery } from '../
 import { TableEnrollment } from '../../containers/tables/TableEnrollment';
 import { TableVendorCount } from '../../containers/tables/TableVendorCount';
 
-const breadcrumbItems = [ROUTE_FILE_STATUS, { ID: 'work-packet-details', TITLE: 'Work Packet Details' }];
+const breadcrumbItems = [ROUTE_FILE_STATUS, { ID: 'work-packet-details', TITLE: 'File Status Details' }];
 
 const getReadableDate = (date) => new Date(date).toLocaleString().replace(',', '');
 

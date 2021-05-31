@@ -17,8 +17,8 @@ const TableDashboard = ({
   date,
   loading,
 }) => {
-  const { tableProps } = useTable(data, tableId, date);
-  const [specs, setSpecs] = React.useState(false);
+  const { tableProps, specs, setSpecs } = useTable(data, tableId, date, altData);
+
   const [tableData, setTableData] = React.useState();
 
   React.useEffect(() => {
@@ -56,9 +56,10 @@ const TableDashboard = ({
   React.useEffect(() => {
     const val = specs ? getAltTable() : getTable();
 
-    if (altData) {
-      setTableData(val);
-    }
+    if (specs)
+      if (altData) {
+        setTableData(val);
+      }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [specs]);
 
@@ -78,15 +79,8 @@ const TableDashboard = ({
   if (tableProps) {
     return (
       <TableBox id={`${id}`}>
-        <Table id={`${id}`} onOption={() => console.log('Table click')} {...tableProps} />
+        <Table id={`${id}`} onOption={onChangeOption} {...tableProps} />
       </TableBox>
-
-      // <Table
-      //   items={tableData}
-      //   structure={getTableStructure(tableId)}
-      //   loading={loading}
-      //   onOption={() => onChangeOption()}
-      // />
     );
   }
 

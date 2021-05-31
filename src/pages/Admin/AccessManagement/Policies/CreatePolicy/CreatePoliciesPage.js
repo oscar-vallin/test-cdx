@@ -103,10 +103,6 @@ const generateColumns = () => {
 };
 
 const _CreatePoliciesPage = () => {
-  // const { data } = useAmPolicyPageQuery({});
-
-  // console.log(data);
-
   const [state, setState] = useState({
     editIndex: null,
     policyName: '',
@@ -169,7 +165,6 @@ const _CreatePoliciesPage = () => {
           />
         );
       case 'facet':
-        console.log(item);
         return (
           <FacetCombobox service={item.service.key} onChange={(event, option) => onFacetChange(option, item, data)} />
         );

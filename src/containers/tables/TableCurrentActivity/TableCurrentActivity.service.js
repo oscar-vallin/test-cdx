@@ -24,10 +24,7 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
 
   useEffect(() => {
     const doEffect = () => {
-      console.log('data progress: ', dataProcess);
-
       const _itemsProcess = dataProcess.exchangeActivityInProcess.nodes.map(({ name, activityTime }) => {
-        console.log('data progress: ', name, activityTime);
         const datetime = format(new Date(activityTime), 'MM/dd/yyyy hh:mm a');
 
         return [formatField(name, 'name', name), formatField(datetime, 'activity', datetime)];
@@ -36,7 +33,6 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
       setItemsProc(_itemsProcess);
 
       const _itemsComplete = dataComplete.exchangeActivityTransmitted.nodes.map(({ name, activityTime }) => {
-        console.log('data progress: ', name, activityTime);
         const datetime = format(new Date(activityTime), 'MM/dd/yyyy hh:mm a');
 
         return [formatField(name, 'name', name), formatField(datetime, 'activity', datetime)];
@@ -45,7 +41,6 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
       setItemsComp(_itemsComplete);
 
       const _itemsErrored = dataError.exchangeActivityErrored.nodes.map(({ name, activityTime }) => {
-        console.log('data progress: ', name, activityTime);
         const datetime = format(new Date(activityTime), 'MM/dd/yyyy hh:mm a');
 
         return [formatField(name, 'name', name), formatField(datetime, 'activity', datetime)];
