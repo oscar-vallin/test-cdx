@@ -76,15 +76,10 @@ const validateRulesArr = (value, data) => data.map(ruleSet => {
       .reduce((rules, rule) => [...rules, ...rule], []),
   }
 
-
   const currentLevelRules = ruleObj.rules.filter(rule => !Array.isArray(rule)).map(rule => rule.characteristic);
   const childRules = _.flatten(ruleObj.rules.filter(rule => Array.isArray(rule)));
 
   const currentLevelValidations = ruleObj.validations.filter(validation => currentLevelRules.includes(validation));
-  // const isCurrentLevelValid = [
-  //   currentLevelValidations.length <= currentLevelRules.length - ruleObj.expectation - (childRules.length > 0 ? 1 : 0),
-  //   ...(!childRules.length) ? [] : childRules[0]?.isCurrentLevelValid
-  // ]
 
   const currentValidationResults = (childRules.length)
     ? [
