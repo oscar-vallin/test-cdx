@@ -38,8 +38,7 @@ const generateColumns = () => {
 
 const _AccessManagementPoliciesPage = () => {
   const columns = generateColumns();
-  const { token } = useAuthContext();
-  const { orgId } = JSON.parse(token.AUTH_DATA); 
+  const { authData } = useAuthContext();
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);
@@ -83,7 +82,7 @@ const _AccessManagementPoliciesPage = () => {
   useEffect(() => {
     amPoliciesForOrg({
       variables: {
-        orgSid: orgId,
+        orgSid: authData.orgId,
       }
     });
   }, []);

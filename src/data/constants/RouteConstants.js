@@ -151,7 +151,7 @@ export const ROUTE_ACCESS_MANAGEMENT_GROUPS = {
   TITLE: 'Groups',
   URL: URL_ROUTES.ACCESS_MANAGEMENT_GROUPS,
   MAIN_MENU: false,
-  API_ID: 'ADMIN',
+  API_ID: 'AM_GROUPS',
 };
 
 export const ROUTE_ACCESS_MANAGEMENT_POLICIES = {
@@ -159,7 +159,7 @@ export const ROUTE_ACCESS_MANAGEMENT_POLICIES = {
   TITLE: 'Policies',
   URL: URL_ROUTES.ACCESS_MANAGEMENT_POLICIES,
   MAIN_MENU: false,
-  API_ID: 'ADMIN',
+  API_ID: 'AM_POLICIES',
 };
 
 export const ROUTE_CREATE_POLICIES = {
@@ -175,7 +175,7 @@ export const ROUTE_ACTIVE_ORGS = {
   TITLE: 'Active Orgs',
   URL: URL_ROUTES.ACTIVE_ORGS,
   MAIN_MENU: false,
-  API_ID: 'ADMIN',
+  API_ID: 'ACTIVE_ORGS',
 };
 
 export const ROUTE_ACTIVITY_CURRENT = {
@@ -189,7 +189,7 @@ export const ROUTE_COLOR_PALETTES = {
   TITLE: 'Color Palettes',
   URL: URL_ROUTES.COLOR_PALETTES,
   MAIN_MENU: false,
-  API_ID: 'ADMIN',
+  API_ID: 'COLOR_PALETTES',
 };
 
 export const ROUTE_DEFAULT_THEME = {
@@ -197,7 +197,7 @@ export const ROUTE_DEFAULT_THEME = {
   TITLE: 'Default Theme',
   URL: URL_ROUTES.DEFAULT_THEME,
   MAIN_MENU: false,
-  API_ID: 'ADMIN',
+  API_ID: 'DEFAULT_THEME',
 };
 
 export const ROUTE_DASHBOARD_TO_FILE_STATUS = {
