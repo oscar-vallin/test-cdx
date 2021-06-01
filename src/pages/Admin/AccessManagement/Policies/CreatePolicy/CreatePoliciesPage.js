@@ -103,10 +103,6 @@ const generateColumns = () => {
 };
 
 const _CreatePoliciesPage = () => {
-  // const { data } = useAmPolicyPageQuery({});
-
-  // console.log(data);
-
   const [state, setState] = useState({
     editIndex: null,
     policyName: '',

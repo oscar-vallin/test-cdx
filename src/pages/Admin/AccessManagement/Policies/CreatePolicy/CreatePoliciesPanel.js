@@ -60,8 +60,8 @@ const CreatePoliciesPanel = ({
   onCreatePolicy,
   selectedPolicyId,
 }) => {
-  const { token } = useAuthContext();
-  const { id, orgId } = JSON.parse(token.AUTH_DATA); 
+  const { authData } = useAuthContext();
+  const { id, orgId } = authData; 
   const [state, setState] = useState({ ...INITIAL_STATE });
 
   const [options, setOptions] = useState({ ...INITIAL_OPTIONS });

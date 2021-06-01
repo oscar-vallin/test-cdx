@@ -8,13 +8,23 @@ import { useHistory, useLocation } from 'react-router-dom';
 // Styles
 import { StyledRow, StyledColumn, StyledMenuButton, StyledButtonIcon } from './MainMenu.styles';
 
-import { ROUTES_ARRAY, ROUTES } from '../../../data/constants/RouteConstants';
+import { ROUTES_ARRAY, ROUTES, ROUTES_ID, URL_ROUTES } from '../../../data/constants/RouteConstants';
 import { OutsideComponent } from './OutsideComponent';
 // CardSection is called directly cause a restriction warning for that component.
 const MainMenu = ({ id = '__MainMenu', option = ROUTES.ROUTE_DASHBOARD.ID, left, changeCollapse }) => {
   const history = useHistory();
   const location = useLocation();
   const [collapse, setCollapse] = React.useState();
+  const navItems = (option !== ROUTES_ID.ADMIN)
+    ? ROUTES_ARRAY
+    : [
+        {
+          ID: 'USER_DOMAIN',
+          TITLE: 'Return to User Domain',
+          URL: URL_ROUTES.DASHBOARD,
+          MAIN_MENU: true,
+        } 
+      ];
 
   const collapseNavMenu = () => {
     setCollapse(!collapse);
@@ -22,7 +32,7 @@ const MainMenu = ({ id = '__MainMenu', option = ROUTES.ROUTE_DASHBOARD.ID, left,
   };
 
   const renderOptions = () => {
-    return ROUTES_ARRAY.map((menuOption) => {
+    return navItems.map((menuOption) => {
       return menuOption.MAIN_MENU ? (
         <StyledColumn
           id={`${id}__MainMenu__Row-${menuOption.ID}`}
