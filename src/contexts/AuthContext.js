@@ -7,8 +7,7 @@ import { useLogout } from './hooks/useLogout';
 <<<<<<< HEAD
 =======
 import { setISODay } from 'date-fns';
-
-const DEFAULT_POLLING_TIME = 10000; // 10secs.
+import { DEFAULT_POLLING_TIME } from '../data/constants/TableConstants';
 
 >>>>>>> 7e741f7 (210525_CDX_Enhance__Polling: Adding new hook for common tables)
 //

@@ -10,17 +10,13 @@ import { TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { useTableFilters } from '../../../hooks/useTableFilters';
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
-import { getHours } from 'date-fns';
+import { getHours, subDays } from 'date-fns';
 
-const TableArchive = ({ idPage = 'TableArchive', orgSid = 1, dateRange, filter }) => {
-  const { localInput, startDate, endDate } = useTableFilters('Extract Name,  Status, Vendor, etc.');
-  // const { tableProps } = useTable(
-  //   orgSid,
-  //   { rangeStart: startDate.value, rangeEnd: endDate.value },
-  //   localInput.value,
-  //   '',
-  //   localInput.value
-  // );
+const TableArchive = ({ idPage = 'TableArchive', orgSid = 1 }) => {
+  const { localInput, startDate, endDate, selectDate } = useTableFilters(
+    'Extract Name,  Status, Vendor, etc.',
+    useParams()
+  );
 
   const { tableProps } = useTableTemplate(
     TABLE_NAMES.ARCHIVES,
@@ -31,51 +27,22 @@ const TableArchive = ({ idPage = 'TableArchive', orgSid = 1, dateRange, filter }
     localInput.value
   );
 
-  const { id } = useParams();
-
   //Component did mount
-  useEffect(() => {
-    const hour = getHours(new Date());
-
-    if (id === undefined) {
-      if (hour < 9) {
-        startDate.setValue(subDays(new Date(), 1));
-        endDate.setValue(subDays(new Date(), 1));
-
-        return;
-      }
-      startDate.setValue(new Date());
-      endDate.setValue(new Date());
-      return;
-    }
-    let params = id.split('*');
-    localInput.setValue(params[0]);
-    selectDate(params[1]);
-  }, []);
-
-  const selectDate = (date) => {
-    const _startDay = getStartDay(date);
-    const _endDay = getEndDay(date);
-
-    startDate.setValue(_startDay);
-    endDate.setValue(_endDay);
-  };
-
-  console.log('Archive return Props: ', tableProps);
+  useEffect(() => {}, []);
 
   return (
     <Container>
       <Row id={`${idPage}-filters`} around>
         <Column center>
-          <InputText id={`${id}__Card__Row__Input-Email`} autoFocus disabled={false} {...localInput} />
+          <InputText id={`${idPage}__Card__Row__Input-Email`} autoFocus disabled={false} {...localInput} />
         </Column>
         <RightColumn center>
           <InputDateRange startDate={startDate} endDate={endDate} />
         </RightColumn>
       </Row>
-      <Box id={`${id}`}>
+      <Box id={`${idPage}`}>
         <Table
-          id={`${id}`}
+          id={`${idPage}`}
           onOption={() => console.log('Table click')}
           searchInput={localInput.value}
           {...tableProps}

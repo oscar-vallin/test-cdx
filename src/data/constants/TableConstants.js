@@ -1,5 +1,12 @@
 import { useWorkPacketStatusesLazyQuery } from '../services/graphql';
 import { columns as tableArchivesColumns, getItems as tableArchivesGetItems } from './tables/ArchiveTableConstants';
+import { errorColumns, getErrorsItems } from './tables/ErrorTableConstants';
+import {
+  columns as tableTransmissionsColumns,
+  getItems as tableTransmissionsGetItems,
+} from './tables/TransmissionsTableConstants';
+
+export const DEFAULT_POLLING_TIME = 30000;
 
 export const TABLE_NAMES = {
   DASHBOARD_TRANSMISSIONS_VENDOR: 'TRANSMISSIONS_VENDOR',
@@ -102,6 +109,8 @@ export const TABLES = {
       url: null,
     },
     polling: 1 / 3,
+    columns: errorColumns,
+    items: getErrorsItems,
   },
   TRANSMISSIONS: {
     header: {
@@ -110,8 +119,10 @@ export const TABLES = {
       url: null,
     },
     polling: 1 / 3,
+    columns: tableTransmissionsColumns,
+    items: tableTransmissionsGetItems,
   },
-  TRANSMISSIONS: {
+  ORG_ACTIVITY: {
     header: {
       type: 'org_activity',
       title: 'Org Activity',
@@ -124,17 +135,20 @@ export const TABLES = {
 export const getTableStructure = (name) => {
   const tableStructure = TABLES[name];
 
+  console.log('getTableStructure = ', tableStructure);
+
   return tableStructure ?? TABLES.DEFAULT;
 };
 
 export const useQueryTable = (tableID, tableArguments) => {
-  if (tableID === TABLE_NAMES.ARCHIVES) {
-    return useWorkPacketStatusesLazyQuery({
+  if (tableID === TABLE_NAMES.ARCHIVES || tableID === TABLE_NAMES.ERRORS || tableID === TABLE_NAMES.TRANSMISSIONS) {
+    const [apiCall, { data, loading, error }] = useWorkPacketStatusesLazyQuery({
       variables: {
         orgSid: tableArguments.orgId ?? 1,
         dateRange: tableArguments.dateRange,
-        filter: tableArguments.filter,
       },
     });
+
+    return { apiCall, data, loading, error };
   }
 };

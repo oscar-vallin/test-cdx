@@ -14,10 +14,10 @@ export const getItems = (data) =>
     const datetime = format(new Date(item.timestamp), 'MM/dd/yyyy hh:mm a');
 
     return [
-      formatField(datetime, 'text', 'datetime', datetime),
-      formatField(item.vendorId, 'text', 'vendor', item.vendorId),
-      formatField(item.planSponsorId, 'text', 'planSponsor', item.planSponsorId),
-      formatField(item.inboundFilename, 'link', 'clientFile', item.clientFileArchivePath),
-      formatField(item.workOrderId, 'link', 'vendorFile', item.vendorFileArchivePath),
+      formatField(datetime, 'datetime', datetime),
+      formatField(item.vendorId, 'vendor', item.vendorId),
+      formatField(item.planSponsorId, 'planSponsor', item.planSponsorId),
+      formatField(item.inboundFilename, 'clientFile', item.clientFileArchivePath),
+      formatField(item.workOrderId, 'vendorFile', item.vendorFileArchivePath),
     ];
   });

@@ -24,6 +24,8 @@ export const useRefresh = (id, triggerFunction) => {
   const startRefresh = () => {
     setRefreshOff();
 
+    console.log('Polling Time:', pollingTime);
+    console.log('Polling Factor: ', pollingFactor);
     setTimeout(setRefreshOn, pollingTime * (pollingFactor ?? 1));
   };
 

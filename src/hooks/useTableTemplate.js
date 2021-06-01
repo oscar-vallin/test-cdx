@@ -14,7 +14,7 @@ export const useTableTemplate = (tableId, argOrgSid, argDateRange, argFilter) =>
   const { authLogout } = useAuthContext();
   const history = useHistory();
 
-  const [apiCall, data, loading, error] = useQueryTable(tableId, {
+  const { apiCall, data, loading, error } = useQueryTable(tableId, {
     orgId: argOrgSid,
     dateRange: argDateRange,
     filter: argFilter,
@@ -34,7 +34,8 @@ export const useTableTemplate = (tableId, argOrgSid, argDateRange, argFilter) =>
   //
   useEffect(() => {
     const _condition = isCDXToday(argDateRange.rangeStart, argDateRange.rangeEnd);
-    enableRefresh(_condition && argFilter === '');
+    console.log('structure.polling?', structure.polling);
+    if (structure.polling) enableRefresh(_condition && argFilter === '');
   }, [argDateRange, argFilter]);
 
   useEffect(() => {
@@ -47,7 +48,7 @@ export const useTableTemplate = (tableId, argOrgSid, argDateRange, argFilter) =>
   useEffect(() => {
     console.log('useTableTemplate, data: ', data);
     if (data) {
-      //   setItems(getItems(data));
+      setItems(getItems(data));
     }
   }, [data]);
 

@@ -51,10 +51,10 @@ const _buildColumns = (
     const columnData = xtColumns.find((xtColumn) => xtColumn.key === column.fieldName);
     column.name = columnData?.label ?? column.name;
 
-    column.minWidth = columnData.minWidth ?? 100;
-    column.maxWidth = columnData.maxWidth ?? 200;
+    column.minWidth = columnData?.minWidth ?? 100;
+    column.maxWidth = columnData?.maxWidth ?? 200;
 
-    if (!columnData.minWidth || !columnData.maxWidth) {
+    if (!columnData?.minWidth || !columnData?.maxWidth) {
       switch (column.key) {
         case 'datetime':
           column.minWidth = 120;
@@ -206,6 +206,8 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput }) => 
   };
 
   //
+  // Render Item Column
+  //
   const _renderItemColumn = (item, index, column) => {
     const fieldContent = item[column.fieldName];
     const fieldItem = items[index].find((_item) => _item.columnId === column.fieldName);
@@ -214,6 +216,8 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput }) => 
     const isTableArchive = tableType === 'archives';
     const isTableFileStatus = tableType === 'file_status';
 
+    console.log('_renderItemColumn, columns: ', columns);
+    console.log('_renderItemColumn, column', column);
     const columnData = columns.find((_column) => _column.key === column.key);
 
     switch (columnData.style) {
