@@ -308,7 +308,7 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput }) => 
 
   // * Click on Row.
   const _onItemInvoked = (item, index) => {
-    alert(`Item ${item.name} at index ${index} has been invoked.`);
+    // alert(`Item ${item.name} at index ${index} has been invoked.`);
   };
 
   //
