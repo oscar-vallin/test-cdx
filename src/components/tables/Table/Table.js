@@ -245,7 +245,7 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput }) => 
               <link>
                 <RouteLink to={`${fieldItem.text}`}>{fieldContent}</RouteLink>
               </link>
-              <StyledSublabel>{`Specs: ${fieldItem.sublabel}`}</StyledSublabel>
+              <StyledSublabel>{`Spec: ${fieldItem.sublabel}`}</StyledSublabel>
             </>
           );
         }
@@ -271,7 +271,7 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput }) => 
         return (
           <StyledCell left>
             <Link href="#">{fieldContent}</Link>
-            {fieldItem.sublabel && <StyledSpecs>{`specs: ${fieldItem.sublabel}`}</StyledSpecs>}
+            {fieldItem.sublabel && <StyledSpecs>{`spec: ${fieldItem.sublabel}`}</StyledSpecs>}
           </StyledCell>
         );
 
