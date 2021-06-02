@@ -14,7 +14,7 @@ export const errorColumns = [
 export const getErrorsItems = (data) =>
   data?.workPacketStatuses?.map((item) => {
     const datetime = format(new Date(item.timestamp), 'MM/dd/yyyy hh:mm a');
-    const message = hasErrors ? 'Error' : '';
+    const message = item.hasErrors ? 'Error' : '';
     const stepStatusLabel = getStepStatusLabel(item.stepStatus);
 
     return [

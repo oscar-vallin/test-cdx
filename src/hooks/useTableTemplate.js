@@ -48,7 +48,7 @@ export const useTableTemplate = (tableId, argOrgSid, argDateRange, argFilter) =>
   useEffect(() => {
     console.log('useTableTemplate, data: ', data);
     if (data) {
-      setItems(getItems(data));
+      setItems(structure.items(data));
     }
   }, [data]);
 

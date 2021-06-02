@@ -216,8 +216,8 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput }) => 
     const isTableArchive = tableType === 'archives';
     const isTableFileStatus = tableType === 'file_status';
 
-    console.log('_renderItemColumn, columns: ', columns);
-    console.log('_renderItemColumn, column', column);
+    // console.log('_renderItemColumn, columns: ', columns);
+    // console.log('_renderItemColumn, column', column);
     const columnData = columns.find((_column) => _column.key === column.key);
 
     switch (columnData.style) {

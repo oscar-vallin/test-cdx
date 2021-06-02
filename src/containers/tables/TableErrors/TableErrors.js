@@ -24,6 +24,8 @@ const TableErrors = ({ id = 'TableErrors', orgSid = 1 }) => {
 
   //Component did mount
 
+  console.log('Table Errors, tableProps: ', tableProps);
+
   return (
     <Container>
       <Row id={`${id}-filters`} around>
@@ -36,12 +38,7 @@ const TableErrors = ({ id = 'TableErrors', orgSid = 1 }) => {
       </Row>
       {!tableProps.loading && (
         <Box id={`${id}`}>
-          <Table
-            id={`${id}`}
-            onOption={() => console.log('Table click')}
-            searchInput={localInput.value}
-            {...tableProps}
-          />
+          <Table id={`${id}`} onOption={() => null} searchInput={localInput.value} {...tableProps} />
         </Box>
       )}
     </Container>

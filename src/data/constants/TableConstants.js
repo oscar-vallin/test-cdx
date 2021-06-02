@@ -1,4 +1,4 @@
-import { useWorkPacketStatusesLazyQuery } from '../services/graphql';
+import { useWorkPacketStatusesLazyQuery, useWpTransmissionsLazyQuery } from '../services/graphql';
 import { columns as tableArchivesColumns, getItems as tableArchivesGetItems } from './tables/ArchiveTableConstants';
 import { errorColumns, getErrorsItems } from './tables/ErrorTableConstants';
 import {
@@ -141,8 +141,19 @@ export const getTableStructure = (name) => {
 };
 
 export const useQueryTable = (tableID, tableArguments) => {
-  if (tableID === TABLE_NAMES.ARCHIVES || tableID === TABLE_NAMES.ERRORS || tableID === TABLE_NAMES.TRANSMISSIONS) {
+  if (tableID === TABLE_NAMES.ARCHIVES || tableID === TABLE_NAMES.ERRORS) {
     const [apiCall, { data, loading, error }] = useWorkPacketStatusesLazyQuery({
+      variables: {
+        orgSid: tableArguments.orgId ?? 1,
+        dateRange: tableArguments.dateRange,
+      },
+    });
+
+    return { apiCall, data, loading, error };
+  }
+
+  if (tableID === TABLE_NAMES.TRANSMISSIONS) {
+    const [apiCall, { data, loading, error }] = useWpTransmissionsLazyQuery({
       variables: {
         orgSid: tableArguments.orgId ?? 1,
         dateRange: tableArguments.dateRange,
