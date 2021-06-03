@@ -36,7 +36,7 @@ const TableTransmissions = ({ idPage = 'TableTransmissions', orgSid = 1, dateRan
         <Box id={`${idPage}`}>
           <Table
             id={`${idPage}`}
-            onOption={() => console.log('Table click')}
+            onOption={() => null}
             searchInput={localInput.value}
             {...tableProps}
           />

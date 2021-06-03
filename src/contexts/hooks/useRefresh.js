@@ -28,18 +28,14 @@ export const useRefresh = (id, triggerFunction) => {
   };
 
   const setRefreshOn = () => {
-    console.log('Set Refresh ON');
     setRefreshNow(true);
   };
 
   const setRefreshOff = () => {
-    console.log('Set Refresh OFF');
     setRefreshNow(false);
   };
 
   const enableRefresh = (condition) => {
-    console.log('Enable Refresh, condition = ', condition);
-
     if (!condition) {
       disableRefresh();
       return;
@@ -51,7 +47,6 @@ export const useRefresh = (id, triggerFunction) => {
   };
 
   const disableRefresh = () => {
-    console.log('Disable Refresh');
     setRefreshOff();
     setRefresh(false);
   };

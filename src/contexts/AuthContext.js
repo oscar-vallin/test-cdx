@@ -103,8 +103,6 @@ export const AuthContextProvider = ({ children }) => {
           token,
         };
 
-        console.log('Login Data response: ', data);
-
         localStorage.setItem('AUTH_DATA', JSON.stringify(authData));
         localStorage.setItem('USER_NAME', session.firstNm);
         setAuthData(authData);

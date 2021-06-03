@@ -34,7 +34,6 @@ export const useTableTemplate = (tableId, argOrgSid, argDateRange, argFilter) =>
   //
   useEffect(() => {
     const _condition = isCDXToday(argDateRange.rangeStart, argDateRange.rangeEnd);
-    console.log('structure.polling?', structure.polling);
     if (structure.polling) enableRefresh(_condition && argFilter === '');
   }, [argDateRange, argFilter]);
 
@@ -46,7 +45,6 @@ export const useTableTemplate = (tableId, argOrgSid, argDateRange, argFilter) =>
   }, [error]);
 
   useEffect(() => {
-    console.log('useTableTemplate, data: ', data);
     if (data) {
       setItems(structure.items(data));
     }

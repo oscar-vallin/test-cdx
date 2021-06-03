@@ -77,7 +77,7 @@ const TableFileStatus = ({ idPage = 'TableFileStatus', orgSid = 1, dateRange, fi
         <Box id={`${idPage}`}>
           <Table
             id={`${idPage}`}
-            onOption={() => console.log('Table click')}
+            onOption={() => null}
             searchInput={localInput.value}
             {...tableProps}
           />

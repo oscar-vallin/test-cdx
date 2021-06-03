@@ -19,7 +19,6 @@ export const useTableFilters = (placeholder, id) => {
 
   useEffect(() => {
     const hour = getHours(new Date());
-    console.log('useTableFilters, id: ', id);
 
     if (id && Object.is(id) && !id.isEmpty()) {
       localInput.setValue(params[0]);

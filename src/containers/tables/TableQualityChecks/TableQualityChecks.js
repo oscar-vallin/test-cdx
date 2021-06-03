@@ -12,7 +12,7 @@ const TableQualityChecks = ({ id = 'TableQualityChecksStats' }) => {
 
   return (
     <Box id="VendorCountStats">
-      <Table onOption={() => console.log('Table click')} {...tableProps} />
+      <Table onOption={() => null} {...tableProps} />
     </Box>
   );
 };

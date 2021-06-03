@@ -43,7 +43,7 @@ const TableArchive = ({ idPage = 'TableArchive', orgSid = 1 }) => {
       <Box id={`${idPage}`}>
         <Table
           id={`${idPage}`}
-          onOption={() => console.log('Table click')}
+          onOption={() => null}
           searchInput={localInput.value}
           {...tableProps}
         />

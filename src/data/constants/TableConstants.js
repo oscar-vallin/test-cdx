@@ -135,8 +135,6 @@ export const TABLES = {
 export const getTableStructure = (name) => {
   const tableStructure = TABLES[name];
 
-  console.log('getTableStructure = ', tableStructure);
-
   return tableStructure ?? TABLES.DEFAULT;
 };
 

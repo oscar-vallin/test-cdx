@@ -24,8 +24,6 @@ const TableErrors = ({ id = 'TableErrors', orgSid = 1 }) => {
 
   //Component did mount
 
-  console.log('Table Errors, tableProps: ', tableProps);
-
   return (
     <Container>
       <Row id={`${id}-filters`} around>
