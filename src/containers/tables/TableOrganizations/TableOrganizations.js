@@ -15,7 +15,7 @@ const TableOrganizations = ({ id = 'TableOrganizations', data, dateRange, filter
     <Container>
       {!tableProps.loading && (
         <Box id={`${id}`}>
-          <Table id={`${id}`} onOption={() => console.log('Table click')} {...tableProps} />
+          <Table id={`${id}`} onOption={() => null} {...tableProps} />
         </Box>
       )}
     </Container>

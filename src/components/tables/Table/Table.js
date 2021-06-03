@@ -51,10 +51,10 @@ const _buildColumns = (
     const columnData = xtColumns.find((xtColumn) => xtColumn.key === column.fieldName);
     column.name = columnData?.label ?? column.name;
 
-    column.minWidth = columnData.minWidth ?? 100;
-    column.maxWidth = columnData.maxWidth ?? 200;
+    column.minWidth = columnData?.minWidth ?? 100;
+    column.maxWidth = columnData?.maxWidth ?? 200;
 
-    if (!columnData.minWidth || !columnData.maxWidth) {
+    if (!columnData?.minWidth || !columnData?.maxWidth) {
       switch (column.key) {
         case 'datetime':
           column.minWidth = 120;
@@ -165,6 +165,7 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput }) => 
    * Local Functions.
    */
   const _buildItems = () => {
+    if (!items) return;
     const iItems = items.map((rowItem) => {
       const objItem = {};
 
@@ -204,6 +205,8 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput }) => 
     return itemsResult;
   };
 
+  //
+  // Render Item Column
   //
   const _renderItemColumn = (item, index, column) => {
     const fieldContent = item[column.fieldName];

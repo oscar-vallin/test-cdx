@@ -4,6 +4,8 @@ import { useErrorMessage } from '../hooks/useErrorMessage';
 import { getRouteByApiId } from '../data/constants/RouteConstants';
 import { useCurrentUser } from './hooks/useCurrentUser';
 import { useLogout } from './hooks/useLogout';
+import { DEFAULT_POLLING_TIME } from '../data/constants/TableConstants';
+
 //
 export const AuthContext = React.createContext(() => {
   //
@@ -23,6 +25,7 @@ export const AuthContextProvider = ({ children }) => {
   const [authHistory, setHistory] = useState();
   const [token, setToken] = useState(localStorage);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+  const [pollingTime, setPollingTime] = useState(DEFAULT_POLLING_TIME);
 
   // "userId": "joe.admin@example.com",
   // "password": "changeBen21"
@@ -117,7 +120,7 @@ export const AuthContextProvider = ({ children }) => {
     if (!authData) {
       setToken(null);
       setAuthenticating(false);
-      
+
       return;
     }
 
@@ -193,6 +196,14 @@ export const AuthContextProvider = ({ children }) => {
     setLoggedIn(false);
   };
 
+  //
+  // Set Polling timeout.
+  //
+  const updatePollingTime = (iTimer) => {
+    if (iTimer) setPollingTime(iTimer);
+    else setPollingTime(30000);
+  };
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const values = React.useMemo(
     () => ({
@@ -205,11 +216,12 @@ export const AuthContextProvider = ({ children }) => {
       authData,
       authError,
       token,
+      pollingTime,
       authLogin,
       // eslint-disable-next-line react-hooks/exhaustive-deps
       authLogout,
     }),
-    [isContextLoading, isAuthenticating, isAuthenticated, authData, authError, token]
+    [isContextLoading, isAuthenticating, isAuthenticated, authData, authError, token, pollingTime]
   );
 
   // Finally, return the interface that we want to expose to our other components

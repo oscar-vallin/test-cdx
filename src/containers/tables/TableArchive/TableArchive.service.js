@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { useHistory } from 'react-router-dom';
 import { useAuthContext } from '../../../contexts/AuthContext';
-import { useWorkPacketStatusesQuery } from '../../../data/services/graphql';
+import { useWorkPacketStatusesLazyQuery, useWorkPacketStatusesQuery } from '../../../data/services/graphql';
 import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { useInputValue } from '../../../hooks/useInputValue';
 
@@ -15,19 +15,41 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
   const { authLogout } = useAuthContext();
   const history = useHistory();
 
-  const { data, loading, error } = useWorkPacketStatusesQuery({
+  const [apiCall, data, loading, error] = useWorkPacketStatusesLazyQuery({
     variables: {
-      orgSid: argOrgSid,
+      orgSid: argOrgSid ?? 1,
       dateRange: argDateRange,
       filter: argFilter,
     },
   });
 
+  const { enableRefresh, disableRefresh } = useRefresh(TABLE_NAMES.ARCHIVES, apiCall);
+
+  const _columns = [
+    { key: 'datetime', label: 'Received On', id: 'datetime', style: 'text' },
+    { key: 'vendor', label: 'Vendor', id: 'vendor', style: 'text' },
+    { key: 'planSponsor', label: 'Plan Sponsor', id: 'planSponsor', style: 'text' },
+    { key: 'clientFile', label: 'Client File', id: 'clientFile', style: 'link' },
+    { key: 'vendorFile', label: 'Vendor File', id: 'vendorFile', style: 'link' },
+  ];
+
   // * Component Did Mount
   useEffect(() => {
     setLoading(false);
+    apiCall();
+
+    return function unmount() {
+      disableRefresh();
+    };
   }, []);
 
+  //
+  useEffect(() => {
+    const _condition = isCDXToday(argDateRange.rangeStart, argDateRange.rangeEnd);
+    enableRefresh(_condition && argFilter === '');
+  }, [argDateRange, argFilter]);
+
+  //
   useEffect(() => {
     if (error) {
       authLogout(error.message);
@@ -38,37 +60,18 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
   //
   useEffect(() => {
     const doEffect = () => {
-      const _columns = [
-        { key: 'datetime', label: 'Received On', id: 'datetime', style: 'text' },
-        { key: 'vendor', label: 'Vendor', id: 'vendor', style: 'text' },
-        { key: 'planSponsor', label: 'Plan Sponsor', id: 'planSponsor', style: 'text' },
-        { key: 'clientFile', label: 'Client File', id: 'clientFile', style: 'link' },
-        { key: 'vendorFile', label: 'Vendor File', id: 'vendorFile', style: 'link' },
-      ];
+      const _items = data.workPacketStatuses.map((_item) => {
+        const datetime = format(new Date(_item.timestamp), 'MM/dd/yyyy hh:mm a');
 
-      const _items = data.workPacketStatuses.map(
-        ({
-          timestamp,
-          clientFileArchivePath,
-          inboundFilename,
-          workOrderId,
-          planSponsorId,
-          vendorId,
-          vendorFileArchivePath,
-        }) => {
-          const datetime = format(new Date(timestamp), 'MM/dd/yyyy hh:mm a');
+        return [
+          formatField(datetime, 'text', 'datetime', datetime),
+          formatField(_item.vendorId, 'text', 'vendor', _item.vendorId),
+          formatField(_item.planSponsorId, 'text', 'planSponsor', _item.planSponsorId),
+          formatField(_item.inboundFilename, 'link', 'clientFile', _item.clientFileArchivePath),
+          formatField(_item.workOrderId, 'link', 'vendorFile', _item.vendorFileArchivePath),
+        ];
+      });
 
-          return [
-            formatField(datetime, 'text', 'datetime', datetime),
-            formatField(vendorId, 'text', 'vendor', vendorId),
-            formatField(planSponsorId, 'text', 'planSponsor', planSponsorId),
-            formatField(inboundFilename, 'link', 'clientFile', clientFileArchivePath),
-            formatField(workOrderId, 'link', 'vendorFile', vendorFileArchivePath),
-          ];
-        }
-      );
-
-      setColumns(_columns);
       setItems(_items);
     };
 
