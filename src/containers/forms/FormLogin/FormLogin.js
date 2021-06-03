@@ -22,16 +22,21 @@ import {
   StyledRowBottom,
   StyledButtonIcon,
 } from './FormLogin.styles';
+import { Toast } from '../../../components/toast';
 
 // CardSection is called directly cause a restriction warning for that component.
 const FormLogin = ({ id = '__FormLogin', onLogin }) => {
   const history = useHistory();
   const handlerLogin = useLogin(onLogin);
-  const { apiBeginLogin, isValidEmail, editUser, errorMessage, isProcessingBegin } = useLoginBegin();
+  const { apiBeginLogin, isValidEmail, editUser, isProcessingBegin } = useLoginBegin();
   const { email, password } = handlerLogin;
-  const { isCheckingAuth, isAuthenticating } = useAuthContext();
+  const { isCheckingAuth, isAuthenticating, errorMessage } = useAuthContext();
+
+  console.log('errorMessage = ', errorMessage)
 
   return (
+    <>
+    {errorMessage && <Toast text={errorMessage} duration={5000} /> }
     <StyledBox id={id}>
       <StyledRowBottom id={`${id}__Card--Row`}>
         <Column id={`${id}__Card__Row-Column`}>
@@ -116,6 +121,7 @@ const FormLogin = ({ id = '__FormLogin', onLogin }) => {
         </Column>
       </StyledRow>
     </StyledBox>
+    </>
   );
 };
 

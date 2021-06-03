@@ -26,6 +26,7 @@ export const AuthContextProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [pollingTime, setPollingTime] = useState(DEFAULT_POLLING_TIME);
+  const [errorMessage, setErrorMessage] = useState('');
 
   // "userId": "joe.admin@example.com",
   // "password": "changeBen21"
@@ -79,8 +80,14 @@ export const AuthContextProvider = ({ children }) => {
   // When Server Response or Data is cleaned.
   //
   useEffect(() => {
+    console.log('There is an error: ', error);
     if (error) {
+
       setToken(null);
+
+      console.log('set Error Message');
+      setErrorMessage('Wrong User/Password');
+      // setTimeout(setErrorMessage(null),5000);
 
       return;
     }
@@ -145,8 +152,19 @@ export const AuthContextProvider = ({ children }) => {
   //
   // When user / password.
   //
-  useEffect(() => {
-    if (user?.length && password?.length) return passwordLoginMutation();
+  useEffect(async () => {
+    if (user?.length && password?.length) {
+      try{
+        console.log('Adding passwordLogin Mutation')
+        const passwordResponse = await passwordLoginMutation()
+        console.log('Adding passwordLogin Mutation response')
+
+        return passwordResponse;
+      }
+      catch( e ) {
+        console.log('Exception e = ', e);
+      }
+    } 
 
     return null;
 
@@ -217,6 +235,7 @@ export const AuthContextProvider = ({ children }) => {
       authError,
       token,
       pollingTime,
+      errorMessage,
       authLogin,
       // eslint-disable-next-line react-hooks/exhaustive-deps
       authLogout,
