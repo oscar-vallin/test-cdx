@@ -4,12 +4,8 @@ import { useErrorMessage } from '../hooks/useErrorMessage';
 import { getRouteByApiId } from '../data/constants/RouteConstants';
 import { useCurrentUser } from './hooks/useCurrentUser';
 import { useLogout } from './hooks/useLogout';
-<<<<<<< HEAD
-=======
-import { setISODay } from 'date-fns';
 import { DEFAULT_POLLING_TIME } from '../data/constants/TableConstants';
 
->>>>>>> 7e741f7 (210525_CDX_Enhance__Polling: Adding new hook for common tables)
 //
 export const AuthContext = React.createContext(() => {
   //
