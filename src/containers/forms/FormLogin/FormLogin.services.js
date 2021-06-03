@@ -9,7 +9,7 @@ export const useLogin = () => {
   const password = useInputValue('Password', 'Password', '', 'password');
   const history = useHistory();
 
-  const { authLogin, isAuthenticating, authError } = useAuthContext();
+  const { authLogin, isAuthenticating, authError, errorMessage } = useAuthContext();
 
   const [isProcessing, setIsProcessing] = React.useState(false);
   const [validationError, setValidationError] = React.useState('');
@@ -21,14 +21,14 @@ export const useLogin = () => {
     setIsEmailValid(false);
   };
 
-  //
-  const setErrorMessage = (errorMessage) => {
-    setValidationError(errorMessage);
+  // //
+  // const setErrorMessage = (errorMessage) => {
+  //   setValidationError(errorMessage);
 
-    setTimeout(() => {
-      setValidationError('');
-    }, 3000);
-  };
+  //   setTimeout(() => {
+  //     setValidationError('');
+  //   }, 3000);
+  // };
 
   //
 
@@ -68,5 +68,5 @@ export const useLogin = () => {
 
   //
 
-  return { email, password, isProcessing, isEmailValid, validationError, emailValidation, resetEmail, submitLogin };
+  return { email, password, isProcessing, isEmailValid, validationError, errorMessage, emailValidation, resetEmail, submitLogin };
 };
