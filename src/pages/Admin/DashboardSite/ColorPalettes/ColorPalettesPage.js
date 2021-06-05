@@ -10,9 +10,10 @@ import { Row, Column } from '../../../../components/layouts';
 import { InputText } from '../../../../components/inputs/InputText';
 import { StyledDiv, StyledChoiceGroup, StyledColorPicker, StyledCommandButton } from './ColorPalettesPage.styles';
 
-
 import { useThemeContext } from '../../../../contexts/ThemeContext';
 import { defaultTheme, darkTheme } from '../../../../styles/themes';
+
+import Theming from './../../../../utils/Theming';
 
 const getBaseColorPaletteVariant = (mode) => ({
   id: null,
@@ -23,29 +24,10 @@ const getBaseColorPaletteVariant = (mode) => ({
   custom: undefined,
 });
 
-const getThemeVariant = ({ themePrimary, neutralPrimary, black, white }) => ({
-  themePrimary: themePrimary,
-  themeLighterAlt: chroma(themePrimary).brighten(3.55).hex(),
-  themeLighter: chroma(themePrimary).brighten(3.25).hex(),
-  themeLight: chroma(themePrimary).brighten(2.85).hex(),
-  themeTertiary: chroma(themePrimary).brighten(1.32).hex(),
-  themeSecondary: chroma(themePrimary).brighten(0.29).hex(),
-  themeDarkAlt: chroma(themePrimary).brighten(0.065).hex(),
-  themeDark: chroma(themePrimary).brighten(-0.7).hex(),
-  themeDarker: chroma(themePrimary).brighten(-1.2).hex(),
-  neutralLighterAlt: chroma(neutralPrimary).brighten(4.3).hex(),
-  neutralLighter: chroma(neutralPrimary).brighten(4.17).hex(),
-  neutralLight: chroma(neutralPrimary).brighten(4.04).hex(),
-  neutralQuaternaryAlt: chroma(neutralPrimary).brighten(3.81).hex(),
-  neutralQuaternary: chroma(neutralPrimary).brighten(3.49).hex(),
-  neutralTertiaryAlt: chroma(neutralPrimary).brighten(3.33).hex(),
-  neutralTertiary: chroma(neutralPrimary).brighten(2.52).hex(),
-  neutralSecondary: chroma(neutralPrimary).brighten(1.1).hex(),
-  neutralPrimaryAlt: chroma(neutralPrimary).brighten(0.22).hex(),
-  neutralPrimary: chroma(neutralPrimary).brighten(-0.47).hex(),
-  neutralDark: chroma(neutralPrimary).brighten(-0.47).hex(),
-  black,
-  white,
+const getThemeVariant = ({ themePrimary, neutralPrimary, white }) => ({
+  ...Theming.generate.primary(themePrimary),
+  ...Theming.generate.foreground(neutralPrimary, white),
+  ...Theming.generate.background(white),
 })
 
 const _ColorPalettesPage = () => {
@@ -73,20 +55,18 @@ const _ColorPalettesPage = () => {
       ...palette
     } = (paletteVariant === 'LIGHT') ? defaultTheme : darkTheme;
 
-    setColors({ themePrimary, neutralPrimary, white, black });
+    setColors({ themePrimary, neutralPrimary, white });
     setActiveColor({ key: 'themePrimary', color: themePrimary });
 
     changeTheme('CUSTOM', {
+      ...palette,
       themePrimary,
       neutralPrimary,
       white,
-      black,
-      ...palette
     });
   }, [paletteVariant]);
 
   /* -------------------------- */
-
 
   // const [themeVariant, setThemeVariant] = useState(
   //   activeTheme ? JSON.parse(activeTheme) : getThemeVariant({ themePrimary: '#0078d4' })
@@ -187,10 +167,8 @@ const _ColorPalettesPage = () => {
                       label: key === 'themePrimary'
                         ? 'Primary color'
                         : key === 'neutralPrimary'
-                          ? 'Neutral color'
-                          : key === 'black'
-                            ? 'Text color'
-                            : 'Background color',
+                          ? 'Text color'
+                          : 'Background color',
                       onRenderField: (props, render) => {
                         const key = props.id.split('-').pop();
 
@@ -237,7 +215,9 @@ const _ColorPalettesPage = () => {
                 variant="primary"
                 disabled={isProcessingPalette}
                 text={isCreatingPalette ? "Create palette" : "Save changes"}
-                onClick={() => alert('123')}
+                onClick={() => {
+                  Theming.generate.foreground('#fff', '#16004d');
+                }}
               />
 
               {

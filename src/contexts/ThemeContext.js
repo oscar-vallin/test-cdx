@@ -13,7 +13,6 @@ export const ThemeContext = React.createContext(() => {
 });
 
 export const ThemeContextProvider = ({ children }) => {
-  const [isContextLoading, setLoading] = useState(true);
   const [currentTheme, setTheme] = useState(styledComponentsTheme);
   const [styledTheme, setStyledTheme] = useState(styledComponentsTheme);
 
