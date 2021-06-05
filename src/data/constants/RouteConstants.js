@@ -143,7 +143,7 @@ export const ROUTE_ADMIN = {
   TITLE: 'Admin',
   URL: URL_ROUTES.ADMIN,
   MAIN_MENU: true,
-  API_ID: 'ORG_ACTIVITY',
+  API_ID: 'ADMIN',
 };
 
 export const ROUTE_ACCESS_MANAGEMENT_GROUPS = {
@@ -167,7 +167,7 @@ export const ROUTE_CREATE_POLICIES = {
   TITLE: 'Create policy',
   URL: URL_ROUTES.CREATE_POLICIES,
   MAIN_MENU: false,
-  API_ID: 'ADMIN',
+  API_ID: null,
 };
 
 export const ROUTE_ACTIVE_ORGS = {
@@ -182,6 +182,7 @@ export const ROUTE_ACTIVITY_CURRENT = {
   ID: ROUTES_ID.CURRENT_ACTIVITY,
   TITLE: 'Current Activity',
   URL: URL_ROUTES.CURRENT_ACTIVITY,
+  API_ID: 'ORG_ACTIVITY'
 }
 
 export const ROUTE_COLOR_PALETTES = {
@@ -197,7 +198,7 @@ export const ROUTE_DEFAULT_THEME = {
   TITLE: 'Default Theme',
   URL: URL_ROUTES.DEFAULT_THEME,
   MAIN_MENU: false,
-  API_ID: 'DEFAULT_THEME',
+  API_ID: 'THEME',
 };
 
 export const ROUTE_DASHBOARD_TO_FILE_STATUS = {

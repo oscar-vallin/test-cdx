@@ -10,15 +10,13 @@ import { Spinner } from '../../../../components/spinners/Spinner';
 import { StyledChoiceGroup } from './DefaultThemePage.styles';
 import { useThemeContext } from '../../../../contexts/ThemeContext';
 
-
-
 const _DefaultThemePage = () => {
   const [theme, setTheme] = useState('LIGHT');
 
   const { themeConfig } = useThemeContext();
 
   return (
-    <LayoutAdmin id="PageDefaultTheme" sidebarOptionSelected="DEFAULT_THEME">
+    <LayoutAdmin id="PageDefaultTheme" sidebarOptionSelected="THEME">
       <Spacing margin="double">
         <Row>
           <Column lg="12">

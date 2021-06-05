@@ -10,6 +10,8 @@ const _LoginPage = () => {
     const logout = localStorage.getItem('LOGOUT');
 
     if (logout != null) {
+      localStorage.removeItem('ADMIN_NAV');
+      
       setTimeout(() => localStorage.removeItem('LOGOUT'), 200);
     }
 

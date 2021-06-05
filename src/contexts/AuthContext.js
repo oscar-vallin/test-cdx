@@ -118,6 +118,8 @@ export const AuthContextProvider = ({ children }) => {
       setToken(null);
       setAuthenticating(false);
       
+      localStorage.removeItem('ADMIN_NAV');
+
       return;
     }
 

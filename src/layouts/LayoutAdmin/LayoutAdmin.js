@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { StyledBox, StyledNav } from './LayoutAdmin.styles';
 import { LayoutDashboard } from '../LayoutDashboard';
 import { useHistory } from 'react-router-dom';
+import { getRouteByApiId } from '../../data/constants/RouteConstants';
 import { ADMIN_NAV } from '../../data/constants/AdminConstants';
 import { useAuthContext } from '../../contexts/AuthContext';
 
@@ -12,7 +13,7 @@ import { Spacing } from '../../components/spacings/Spacing';
 import { useNavigateToNewDomainQuery } from '../../data/services/graphql';
 
 const parseLinks = (links = [], sidebarOpt) => {
-  return links.map(({ label, subNavItems, page }) => ({
+  return links.map(({ appDomain, label, subNavItems, page }) => ({
     name: label,
     ...(subNavItems) ? {
       isExpanded: subNavItems.find((item) => item.page.type === sidebarOpt),
@@ -20,7 +21,7 @@ const parseLinks = (links = [], sidebarOpt) => {
     } : {},
     ...(page)
       ? {
-        url: ADMIN_NAV[page.type],
+        url: getRouteByApiId(page?.type)?.URL,
         key: page.type,
         params: page.parameters,
         commands: page.commands
@@ -36,6 +37,8 @@ const LayoutAdmin = ({
 }) => {
   const history = useHistory();
   const { authData } = useAuthContext();
+  const cache = localStorage.getItem('ADMIN_NAV');
+  
   const [domain, setDomain] = useState({});
 
   const { data, loading, error } = useNavigateToNewDomainQuery({
@@ -48,21 +51,38 @@ const LayoutAdmin = ({
     },
   });
 
-  useEffect(() => {
-    if (data && !loading) {
-      setDomain(data.navigateToNewDomain);
+  const redirect = (page, sidebarOpt) => {
+    if (!sidebarOpt) {
+      history.replace(getRouteByApiId(page).URL);
+    }
+  }
 
-      if (!sidebarOptionSelected) {
-        history.push(ADMIN_NAV[domain.selectedPage]);
-      }
+  useEffect(() => {
+    if (cache) {
+      const domain = JSON.parse(cache);
+
+      setDomain(domain);
+      redirect(domain.selectedPage, sidebarOptionSelected);
+      
+      return;
+    }
+
+    if (data && !loading) {
+      const { navigateToNewDomain: domain } = data;
+      
+      localStorage.setItem('ADMIN_NAV', JSON.stringify(domain));
+
+      setDomain(domain);
+      redirect(domain.selectedPage, sidebarOptionSelected);
+
+      return;
     }
   }, [data, loading, sidebarOptionSelected])
-
 
   return (
     <LayoutDashboard id={id} menuOptionSelected={menuOptionSelected}>
       {
-        loading
+        (!cache && loading)
           ? <Spacing margin={{ top: 'double' }}>
               <Spinner size="lg" label="Loading admin domain"/>
             </Spacing>
