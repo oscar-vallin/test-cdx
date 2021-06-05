@@ -3,8 +3,8 @@ import chroma from 'chroma-js';
 import { Text } from '../../../../components/typography/Text';
 
 export const StyledDiv = styled.div`
-  background: ${({ level }) => chroma('#eee').darken(0.15 * level)};
-  border: ${({ level }) => `1px solid ${chroma('#ddd').darken(0.15 * level)}`};
+  background: ${({ theme, level }) => theme.colors.neutralLighter};
+  border: ${({ theme, level }) => `1px solid ${chroma(theme.colors.neutralTertiaryAlt).darken(0.25 * level)}`};
   border-radius: 5px;
   padding: 10px 15px 15px;
   margin: 30px 0 0 0;
@@ -31,8 +31,8 @@ export const StyledDiv = styled.div`
 
 export const StyledText = styled(Text)`
   align-items: center;
-  background: #f5f5f5;
-  border: ${({ level }) => `1px solid ${chroma('#ddd').darken(0.15 * level)}`};
+  background: ${({ theme, level }) => theme.colors.neutralLighter};
+  border: ${({ theme, level }) => `1px solid ${chroma(theme.colors.neutralTertiaryAlt).darken(0.25 * level)}`};
   border-radius: 5px;
   display: flex;
   padding: 5px 10px;        

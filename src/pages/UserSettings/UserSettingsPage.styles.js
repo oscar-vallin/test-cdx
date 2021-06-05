@@ -14,6 +14,23 @@ export const StyledRow = styled(Row)`
   align-items: stretch;
 `
 
+export const StyledDiv = styled.div`
+  align-items: center;
+  display: flex;
+  justify-content: flex-start;
+
+  .text {
+    display: inline-block;
+    margin: 0 ${({ theme }) => theme.spacing.normal} 0 0;
+    white-space: nowrap;
+    width: 120px;
+
+    &--centered {
+      margin-top: 7px;
+    }
+  }
+`
+
 export const StyledCard = styled(Card)`
   height: 100%;
 `

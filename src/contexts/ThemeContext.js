@@ -62,7 +62,8 @@ export const ThemeContextProvider = ({ children }) => {
         setThemeConfig({
           themeColorModes,
           themeColorPalettes,
-          themeFontSizes
+          themeFontSizes,
+          dashTheme
         });
 
         changeTheme(!dashTheme ? 'LIGHT' : dashTheme);
@@ -93,7 +94,7 @@ export const ThemeContextProvider = ({ children }) => {
     setTheme(themeColors);
     setStyledTheme(customizedTheme);
 
-    localStorage.setItem('CURRENT_THEME', JSON.stringify({ name, themeColors: customizedTheme.colors }));
+    // localStorage.setItem('CURRENT_THEME', JSON.stringify({ name, themeColors: customizedTheme.colors }));
   };
 
   // eslint-disable-next-line
