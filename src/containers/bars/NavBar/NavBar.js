@@ -45,7 +45,7 @@ const NavBar = ({
         <StyledColumnCont id={`${id}__Col-Left`} sm={9} left container>
           <StyledRow id={`${id}__Left-Row`} left sm={12}>
             <StyledColumnLogoL id={`${id}__Left-Row__Logo`} sm={2} noPadding>
-              <StyledTitle>CDX DASHBOARD</StyledTitle>
+              <StyledTitle variant="bold">CDX DASHBOARD</StyledTitle>
             </StyledColumnLogoL>
             <StyledColumnNav id={`${id}__Left-Row__Menu`} sm={10}>
               <MainMenu left option={menuOptionSelected} changeCollapse={changeCollapse} />

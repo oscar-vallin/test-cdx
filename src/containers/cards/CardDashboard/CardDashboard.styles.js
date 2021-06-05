@@ -12,19 +12,25 @@ export const StyledColumn = styled(LayoutColumn)`
 `;
 
 export const StyledTitle = styled(Text)`
-  text-align: ${({ noData }) => (noData ? 'center' : 'left')};
-  color: gray;
-  font-size: 14px;
-  font-weight: ${({ theme, noData }) => (noData ? theme.fontWeights.bold : theme.fontWeights.normal)};
+  &&& {
+    text-align: ${({ noData }) => (noData ? 'center' : 'left')};
+    color: gray;
+    font-size: 14px;
+    font-weight: ${({ theme, noData }) => (noData ? theme.fontWeights.bold : theme.fontWeights.normal)};
+  }
 `;
 
 export const StyledSubtitle = styled(StyledTitle)`
-  font-size: 12px;
+  &&& {
+    font-size: 12px;
+  }
 `;
 
 export const StyledValues = styled(Text)`
-  text-align: left;
-  color: black;
-  font-size: 36px;
-  font-weight: 700;
+  &&& {
+    text-align: left;
+    color: black;
+    font-size: 36px;
+    font-weight: 700;
+  }
 `;

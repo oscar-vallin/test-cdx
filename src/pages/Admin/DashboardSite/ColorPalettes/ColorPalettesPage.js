@@ -1,17 +1,27 @@
 import React, { useState, useEffect, useCallback, Fragment }  from 'react';
-import chroma from 'chroma-js';
 
-import { ChoiceGroup } from '@fluentui/react';
+import { ChoiceGroup, Checkbox } from '@fluentui/react';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Button } from '../../../../components/buttons/Button';
 import { Separator } from '../../../../components/separators/Separator';
 import { Spacing } from '../../../../components/spacings/Spacing';
 import { Row, Column } from '../../../../components/layouts';
 import { InputText } from '../../../../components/inputs/InputText';
-import { StyledDiv, StyledChoiceGroup, StyledColorPicker, StyledCommandButton } from './ColorPalettesPage.styles';
+import { MessageBar } from '../../../../components/notifications/MessageBar';
+import { Text } from '../../../../components/typography/Text';
+import { PaletteColors } from './PaletteColors';
 
+import { StyledDiv, StyledChoiceGroup, StyledColorPicker, StyledCommandButton, StyledColorPreview, StyledPreview } from './ColorPalettesPage.styles';
+
+import { useAuthContext } from '../../../../contexts/AuthContext';
 import { useThemeContext } from '../../../../contexts/ThemeContext';
 import { defaultTheme, darkTheme } from '../../../../styles/themes';
+
+import {
+  useCreateDashThemeColorMutation,
+  useUpdateDashThemeColorMutation,
+  useRemoveDashThemeColorMutation,
+} from './../../../../data/services/graphql';
 
 import Theming from './../../../../utils/Theming';
 
@@ -31,27 +41,102 @@ const getThemeVariant = ({ themePrimary, neutralPrimary, white }) => ({
 })
 
 const _ColorPalettesPage = () => {
-  const { changeTheme, themeConfig } = useThemeContext();
-  const [theme, setTheme] = useState('LIGHT');
+   const { authData } = useAuthContext();
+  const { id, orgId } = authData;
 
-  const [isCreatingPalette, setIsCreatingPalette] = useState(false);
+  const { changeTheme, themeConfig } = useThemeContext();
+  const [createDashThemeColorMutation] = useCreateDashThemeColorMutation();
+  const [updateDashThemeColorMutation] = useUpdateDashThemeColorMutation();
+  const [removeDashThemeColorMutation] = useRemoveDashThemeColorMutation();
+
+  const [wantsReset, setWantsReset] = useState(false);
+
+  const [selectedPalette, setSelectedPalette] = useState(
+    (themeConfig.themeColorPalettes || [])[0]?.id
+  );
+
+  const [isCreatingPalette, setIsCreatingPalette] = useState(!themeConfig.themeColorPalettes);
   const [isProcessingPalette, setIsProcessingPalette] = useState(false);
 
-  const [paletteVariant, setPaletteVariant] = useState('LIGHT');
-  const [paletteName, setPaletteName] = useState('');
+  const [paletteType, setPaletteType] = useState('EXTEND');
+  const [enableDarkMode, setEnableDarkMode] = useState(true);
 
-  const [colors, setColors] = useState({});
+  const [paletteName, setPaletteName] = useState(''); /* Should come from color palette */
+  const [defaultPalette, setDefaultPalette] = useState(false);
+  const [paletteVariant, setPaletteVariant] = useState('LIGHT'); /* Should come from color palette */
+
+  const [colors, setColors] = useState({
+    themePrimary: (themeConfig.themeColorPalettes || [])[0]
+  });
+
   const [activeColor, setActiveColor] = useState({
     key: 'themePrimary',
     color: colors.themePrimary
   });
+
+  /* PALETTE TYPE -------------- */
+    useEffect(() => {
+      const isExtendingPalette = paletteType === 'EXTEND';
+      const { themePrimary, neutralPrimary, white } = defaultTheme;
+
+        setColors({ themePrimary, neutralPrimary, white });
+        setActiveColor({ key: 'themePrimary', color: themePrimary });
+
+        setPaletteVariant('LIGHT');
+
+      setEnableDarkMode(isExtendingPalette);
+    }, [paletteType])
+
+  /* --------------------------- */
+
+  useEffect(() => {
+    // setIsProcessingPalette(true);
+
+  }, [selectedPalette]);
+
+  useEffect(() => {
+    const { themePrimary } = selectedPalette
+      ? themeConfig.themeColorPalettes.find(({ id }) => id === selectedPalette)
+      : defaultTheme;
+
+    setColors({ themePrimary });
+    setActiveColor({ key: 'themePrimary', color: themePrimary });
+
+    changeTheme('CUSTOM', {
+      ...selectedPalette
+        ? defaultTheme
+        : paletteVariant === 'LIGHT' ? defaultTheme : darkTheme,
+      themePrimary,
+    });
+  }, [selectedPalette, paletteVariant]);
+
+  useEffect(() => {
+    if (wantsReset) {
+      setSelectedPalette(themeConfig.themeColorPalettes[0].id);
+
+      /* TODO: Review name variables */
+      setIsCreatingPalette(false);
+      setPaletteName('');
+      setPaletteVariant('LIGHT');
+      
+      setWantsReset(false);
+    }
+  }, [wantsReset]);
+
+  const onColorChange = (evt, { hex }) => {
+    const variant = getThemeVariant({ [activeColor.key]: `#${hex}` });
+    
+    setColors({ ...colors, [activeColor.key]: `#${hex}` });
+    setActiveColor({ ...activeColor, color: `#${hex}` });
+
+    changeTheme('CUSTOM', variant);
+  };
 
   useEffect(() => {
     const {
       themePrimary,
       neutralPrimary,
       white,
-      black,
       ...palette
     } = (paletteVariant === 'LIGHT') ? defaultTheme : darkTheme;
 
@@ -66,54 +151,43 @@ const _ColorPalettesPage = () => {
     });
   }, [paletteVariant]);
 
-  /* -------------------------- */
-
-  // const [themeVariant, setThemeVariant] = useState(
-  //   activeTheme ? JSON.parse(activeTheme) : getThemeVariant({ themePrimary: '#0078d4' })
-  // );
-
-  // const [colors, setColors] = useState({
-  //   themePrimary: themeVariant.themeColors.themePrimary,
-  //   neutralPrimary: themeVariant.themeColors.neutralPrimary,
-  //   white: themeVariant.themeColors.white,
-  //   black: themeVariant.themeColors.black,
-  // });
-  
-  
-  const onColorChange = useCallback((evt, { hex }) => {
-    const variant = getThemeVariant({ ...colors, [activeColor.key]: `#${hex}` });
-  
-    setColors({ ...colors, [activeColor.key]: `#${hex}` });
-    setActiveColor({ ...activeColor, color: `#${hex}` });
-
-    // setThemeVariant(variant);
-    changeTheme('CUSTOM', variant);
-  });
-
   return (
     <LayoutAdmin id="PageDefaultTheme" sidebarOptionSelected="COLOR_PALETTES">
       <Spacing margin="double">
         <Row>
           <Column lg="8">
             <StyledDiv>
-              <StyledChoiceGroup
-                label="Color Palettes"
-                defaultSelectedKey={theme}
-                disabled={isCreatingPalette}
-                options={themeConfig.themeColorModes?.map(item => ({
-                    key: item,
-                    text: `${item.charAt(0)}${item.slice(1).toLowerCase()}`
-                  })) || []
-                }
-                onChange={(evt, { key }) => setTheme(key)}
-              />
+              {
+                themeConfig.themeColorPalettes
+                  ? (
+                    <StyledChoiceGroup
+                      label="Color palettes"
+                      selectedKey={selectedPalette}
+                      disabled={isCreatingPalette}
+                      options={themeConfig.themeColorPalettes?.map(item => ({
+                          key: item.id,
+                          text: `Palette #${item.id}`
+                        })) || []
+                      }
+                      onChange={(evt, { key }) => setSelectedPalette(key)}
+                    />
+                  )
+                  : <MessageBar type="warning" content="No color palettes found" />
+              }
 
-              <StyledCommandButton
-                iconProps={{ iconName: 'Add' }}
-                onClick={() => setIsCreatingPalette(true)}
-              >
-                New palette
-              </StyledCommandButton>
+              {
+                !isCreatingPalette && (
+                  <StyledCommandButton
+                    iconProps={{ iconName: 'Add' }}
+                    onClick={() => {
+                      setSelectedPalette(null);
+                      setIsCreatingPalette(true);
+                    }}
+                  >
+                    New palette
+                  </StyledCommandButton>
+                )
+              }
             </StyledDiv>
           </Column>
         </Row>
@@ -126,28 +200,71 @@ const _ColorPalettesPage = () => {
           isCreatingPalette && (
             <Fragment>
               <Row>
-                <Column lg="2">
-                  <InputText
-                    required
-                    label="Palette name"
-                    value={paletteName}
-                    onChange={({ target }) => setPaletteName(target.value)}
+                <Column>
+                  <Spacing margin={{ bottom: 'normal' }}>
+                    <Text variant="bold">Create new palette</Text>
+                  </Spacing>
+                </Column>
+              </Row>
+
+              <Row>
+                <Column lg="8">
+                  <Spacing margin={{ bottom: 'normal' }}>
+                    <InputText
+                      required
+                      label="Palette name"
+                      value={paletteName}
+                      onChange={({ target }) => setPaletteName(target.value)}
+                    />
+
+                    <Spacing margin={{ top: 'normal' }}>
+                      <Checkbox
+                        label="Set as the default palette for the organization"
+                        checked={defaultPalette}
+                        onChange={(event, isDefault) => setDefaultPalette(isDefault)}
+                      />
+                    </Spacing>
+                  </Spacing>
+                </Column>
+              </Row>
+
+              <Spacing margin={{ top: 'small', bottom: 'normal' }}>
+                <Separator />
+              </Spacing>
+
+              <Row>
+                <Column lg="4">
+                  <Spacing margin={{ bottom: 'small' }}>
+                    <Text size="small" variant="semiBold">
+                      What would you like to do?
+                    </Text>
+                  </Spacing>
+
+                  <StyledChoiceGroup
+                    selectedKey={paletteType}
+                    options={[
+                      { key: 'EXTEND', text: 'Customize the original palette' },
+                      { key: 'CUSTOM', text: 'Create a palette from scratch' },
+                    ]}
+                    onChange={(evt, { key }) => setPaletteType(key)}
                   />
                 </Column>
 
-                <Column lg="3">
-                  <Spacing margin={{ left: 'normal' }}>
-                    <StyledChoiceGroup
-                      label="Color mode"
-                      defaultSelectedKey={theme}
-                      options={[
-                        { key: 'LIGHT', text: 'Light' },
-                        { key: 'DARK', text: 'Dark' },
-                      ]}
-                      onChange={(evt, { key }) => setPaletteVariant(key)}
-                    />
-                  </Spacing>
-                </Column>
+                {
+                  paletteType === 'EXTEND' && (
+                    <Column lg="4">
+                      <Spacing margin={{ bottom: 'normal' }}>
+                        <Text size="small" variant="semiBold">Color modes</Text>
+                      </Spacing>
+
+                      <Checkbox
+                        label="Enable Dark color mode for this palette"
+                        checked={enableDarkMode}
+                        onChange={(event, enabled) => setEnableDarkMode(enabled)}
+                      />
+                    </Column>
+                  )
+                }
               </Row>
             </Fragment>
           )
@@ -156,41 +273,11 @@ const _ColorPalettesPage = () => {
         <Spacing margin={{ top: 'normal' }}>
           <Row>
             <Column lg="4">
-              <ChoiceGroup
-                label="Color Palette"
-                defaultSelectedKey={activeColor.key}
-                options={
-                  Object
-                    .keys(colors)
-                    .map(key => ({
-                      key,
-                      label: key === 'themePrimary'
-                        ? 'Primary color'
-                        : key === 'neutralPrimary'
-                          ? 'Text color'
-                          : 'Background color',
-                      onRenderField: (props, render) => {
-                        const key = props.id.split('-').pop();
-
-                        return (
-                          <div style={{ display: 'flex', alignItems: 'center' }}>
-                            {render(props)}
-
-                            <div style={{
-                              height: 30,
-                              width: 30,
-                              margin: `0 15px`,
-                              border: '1px solid #d0d0d0',
-                              background: colors[key]
-                            }} />
-
-                            <span>{props.label}</span>
-                          </div>
-                        )
-                      }
-                    }))
-                }
-                onChange={(evt, { key }) => setActiveColor({ ...activeColor, key })}
+              <PaletteColors
+                colors={colors}
+                type={paletteType}
+                selected={activeColor.key}
+                onChange={setActiveColor}
               />
             </Column>
             <Column lg="4" right={true}>
@@ -216,20 +303,66 @@ const _ColorPalettesPage = () => {
                 disabled={isProcessingPalette}
                 text={isCreatingPalette ? "Create palette" : "Save changes"}
                 onClick={() => {
-                  Theming.generate.foreground('#fff', '#16004d');
+                  const params = {
+                    ownerId: id,
+                    orgSid: orgId,
+                    themeColorMode: paletteVariant,
+                    defaultTheme: defaultPalette,
+                    paletteNm: paletteName,
+                    ...getThemeVariant({ paletteVariant, themePrimary: colors.themePrimary }),
+                    custom: undefined,
+                  }
+
+                  if (!selectedPalette) {
+                    createDashThemeColorMutation({
+                      variables: {
+                        createDashThemeColorInput: { ...params }
+                      }
+                    });
+                  } else {
+                    updateDashThemeColorMutation({
+                      variables: {
+                        updateDashThemeColorInput: {
+                          sid: selectedPalette,
+                          ...params,
+                        }
+                      }
+                    })
+                  }
                 }}
               />
 
               {
-                isCreatingPalette && (
+                !isCreatingPalette && themeConfig.themeColorPalettes.length > 1 && (
+                  <Spacing margin={{ left: 'normal' }}>
+                    <Button
+                      variant="danger"
+                      disabled={isProcessingPalette}
+                      text="Delete palette"
+                      onClick={() => {
+                        removeDashThemeColorMutation({
+                          variables: {
+                            ownedInputSid: {
+                              orgSid: orgId,
+                              ownerId: id,
+                              sid: selectedPalette,
+                            }
+                          }
+                        })
+                      }}
+                    />
+                  </Spacing>
+                )
+              }
+
+              {
+                isCreatingPalette && themeConfig.themeColorPalettes !== null && (
                   <Spacing margin={{ left: 'normal' }}>
                     <Button
                       text="Discard changes"
                       disabled={isProcessingPalette}
                       onClick={() => {
-                        setPaletteName('');
-                        setIsCreatingPalette(false);
-                        setPaletteVariant('LIGHT');
+                        setWantsReset(true);
                       }}
                     />
                   </Spacing>
