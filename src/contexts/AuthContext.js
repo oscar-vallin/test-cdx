@@ -88,10 +88,11 @@ export const AuthContextProvider = ({ children }) => {
 
       if (isCompleted) {
         const { token, session } = tokenUser;
-        const { orgId } = session;
+        const { id, orgId } = session;
         const { navItems, selectedPage, type } = loginCompleteDomain;
 
         const authData = {
+          id,
           orgId,
           selectedPage,
           userType: type,

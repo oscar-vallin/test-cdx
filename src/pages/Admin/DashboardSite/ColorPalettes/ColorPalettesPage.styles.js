@@ -14,17 +14,17 @@ export const StyledChoiceGroup = styled(ChoiceGroup)`
     display: ${({ inline }) => inline ? 'flex' : 'block'};
 
     .ms-ChoiceField {
-      display: block;
-      
-      ${({ theme, inline }) => {
+      ${({ theme, inline }) => 
         inline
-          ? `margin: 0 0 ${theme.spacing.normal};`
-          : `margin: ${theme.spacing.normal} 0 0;`
+          ? `&:not(:last-child) {
+              margin: 0 ${theme.spacing.normal} 0 0;
+            }`
+          : `margin: ${theme.spacing.small} 0 0;`
       }}
     }
   }
 `;
-
+0 
 export const StyledColorPicker = styled(ColorPicker)`
   max-width: 100%;
 
