@@ -51,10 +51,10 @@ const _buildColumns = (
     const columnData = xtColumns.find((xtColumn) => xtColumn.key === column.fieldName);
     column.name = columnData?.label ?? column.name;
 
-    column.minWidth = columnData.minWidth ?? 100;
-    column.maxWidth = columnData.maxWidth ?? 200;
+    column.minWidth = columnData?.minWidth ?? 100;
+    column.maxWidth = columnData?.maxWidth ?? 200;
 
-    if (!columnData.minWidth || !columnData.maxWidth) {
+    if (!columnData?.minWidth || !columnData?.maxWidth) {
       switch (column.key) {
         case 'datetime':
           column.minWidth = 120;
@@ -165,6 +165,7 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput }) => 
    * Local Functions.
    */
   const _buildItems = () => {
+    if (!items) return;
     const iItems = items.map((rowItem) => {
       const objItem = {};
 
@@ -204,6 +205,8 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput }) => 
     return itemsResult;
   };
 
+  //
+  // Render Item Column
   //
   const _renderItemColumn = (item, index, column) => {
     const fieldContent = item[column.fieldName];
@@ -245,7 +248,7 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput }) => 
               <link>
                 <RouteLink to={`${fieldItem.text}`}>{fieldContent}</RouteLink>
               </link>
-              <StyledSublabel>{`Specs: ${fieldItem.sublabel}`}</StyledSublabel>
+              <StyledSublabel>{`Spec: ${fieldItem.sublabel}`}</StyledSublabel>
             </>
           );
         }
@@ -267,10 +270,11 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput }) => 
             </StyledCell>
           );
         }
+
         return (
           <StyledCell left>
             <Link href="#">{fieldContent}</Link>
-            {item.specs && <StyledSpecs>{`specs: ${item.specs}`}</StyledSpecs>}
+            {fieldItem.sublabel && <StyledSpecs>{`spec: ${fieldItem.sublabel}`}</StyledSpecs>}
           </StyledCell>
         );
 
@@ -307,7 +311,7 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput }) => 
 
   // * Click on Row.
   const _onItemInvoked = (item, index) => {
-    alert(`Item ${item.name} at index ${index} has been invoked.`);
+    // alert(`Item ${item.name} at index ${index} has been invoked.`);
   };
 
   //
@@ -339,6 +343,8 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput }) => 
   //
   const _onShowSpecs = () => {
     setOption(!option);
+
+    onOption(!option);
   };
 
   const _onRenderTableHeader = () => {

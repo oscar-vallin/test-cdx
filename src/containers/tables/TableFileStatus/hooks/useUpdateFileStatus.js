@@ -26,10 +26,7 @@ export const useUpdateFileStatus = () => {
   }, [loading]);
 
   useEffect(() => {
-    console.log('data in data hook', data);
-
     if (data) {
-      console.log('data in data hook2', data);
       setApiData(data);
     }
   }, [data]);

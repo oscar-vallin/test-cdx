@@ -190,6 +190,31 @@ query WorkPacketStatusDetails($orgSid: ID!, $workOrderId: String!){
     }
 }
 
+query WorkPacketStatus($orgSid: ID!, $workOrderId: String!){
+    workPacketStatus(orgSid: $orgSid, workOrderId: $workOrderId){
+        workOrderId
+        timestamp
+        planSponsorId
+        detailsPath
+        subClientPath
+        inboundFilename
+        vendorId
+        step
+        stepStatus
+        packetStatus
+        reprocessedBy
+        reprocessAction
+        populationCount
+        recordHighlightCount
+        recordHighlightType
+        clientFileArchivePath
+        vendorFileArchivePath
+        supplementalFilesArchivePaths
+        archiveOnly
+        hasErrors
+    }
+}
+
 fragment recordCountsFragment on RecordCounts {
     totalCount
     showUser
@@ -720,10 +745,6 @@ query UserTheme($themeColorMode : ThemeColorMode){
         themeColorMode
         themeFontSize
         dashThemeColor{
-            id
-            defaultTheme
-            allowDark
-            themeColorMode
             paletteNm
             themePrimary
             themeLighterAlt

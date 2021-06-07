@@ -17,7 +17,7 @@ const TableEnrollment = ({ id = 'TableEnrollmentStats' }) => {
       </BoxCaption>
       <BoxHeader>
         <Table
-          onOption={() => console.log('Table click')}
+          onOption={() => null}
           structure={tableProps.structure}
           items={tableItems ? tableItems[0] : []}
         />
@@ -26,7 +26,7 @@ const TableEnrollment = ({ id = 'TableEnrollmentStats' }) => {
         <Text>Counts for the enrollments that were included in the outbound vendor file.</Text>
       </BoxCaption>
       <Table
-        onOption={() => console.log('Table click')}
+        onOption={() => null}
         {...tableProps}
         items={tableItems ? tableItems[1] : []}
         groups={tableGroups ? tableGroups[0] : []}
@@ -40,7 +40,7 @@ const TableEnrollment = ({ id = 'TableEnrollmentStats' }) => {
             </Text>
           </BoxCaption>
           <Table
-            onOption={() => console.log('Table click')}
+            onOption={() => null}
             {...tableProps}
             items={tableItems ? tableItems[2] : []}
             groups={tableGroups ? tableGroups[1] : []}

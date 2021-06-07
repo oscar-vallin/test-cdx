@@ -4,6 +4,8 @@ import { useErrorMessage } from '../hooks/useErrorMessage';
 import { getRouteByApiId } from '../data/constants/RouteConstants';
 import { useCurrentUser } from './hooks/useCurrentUser';
 import { useLogout } from './hooks/useLogout';
+import { DEFAULT_POLLING_TIME } from '../data/constants/TableConstants';
+
 //
 export const AuthContext = React.createContext(() => {
   //
@@ -19,10 +21,12 @@ export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
   const [authData, setAuthData] = useState(AUTH_DATA ? JSON.parse(AUTH_DATA) : null);
-  
+
   const [authHistory, setHistory] = useState();
   const [token, setToken] = useState(localStorage);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+  const [pollingTime, setPollingTime] = useState(DEFAULT_POLLING_TIME);
+  const [errorMessage, setErrorMessage] = useState('');
 
   // "userId": "joe.admin@example.com",
   // "password": "changeBen21"
@@ -68,7 +72,7 @@ export const AuthContextProvider = ({ children }) => {
     }
 
     if (token && authData) {
-      setAuthenticated(true)
+      setAuthenticated(true);
     }
   }, [token, isAuthenticating, isAuthenticated, authData]);
 
@@ -76,8 +80,11 @@ export const AuthContextProvider = ({ children }) => {
   // When Server Response or Data is cleaned.
   //
   useEffect(() => {
+    console.log('There is an error: ', error);
     if (error) {
       setToken(null);
+
+      setErrorMessage('Wrong User/Password');
 
       return;
     }
@@ -145,8 +152,16 @@ export const AuthContextProvider = ({ children }) => {
   //
   // When user / password.
   //
-  useEffect(() => {
-    if (user?.length && password?.length) return passwordLoginMutation();
+  useEffect(async () => {
+    if (user?.length && password?.length) {
+      try {
+        const passwordResponse = await passwordLoginMutation();
+
+        return passwordResponse;
+      } catch (e) {
+        console.log('Exception e = ', e);
+      }
+    }
 
     return null;
 
@@ -196,6 +211,14 @@ export const AuthContextProvider = ({ children }) => {
     setLoggedIn(false);
   };
 
+  //
+  // Set Polling timeout.
+  //
+  const updatePollingTime = (iTimer) => {
+    if (iTimer) setPollingTime(iTimer);
+    else setPollingTime(30000);
+  };
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const values = React.useMemo(
     () => ({
@@ -208,11 +231,13 @@ export const AuthContextProvider = ({ children }) => {
       authData,
       authError,
       token,
+      pollingTime,
+      errorMessage,
       authLogin,
       // eslint-disable-next-line react-hooks/exhaustive-deps
       authLogout,
     }),
-    [isContextLoading, isAuthenticating, isAuthenticated, authData, authError, token]
+    [isContextLoading, isAuthenticating, isAuthenticated, authData, authError, token, pollingTime]
   );
 
   // Finally, return the interface that we want to expose to our other components

@@ -9,9 +9,17 @@ const InputText = ({
   onChange,
   autofocus = true,
   errorMessage,
+  onKeyDown,
+  onKeyEnter,
   value,
   ...props
 }) => {
+  const handleKey = (key) => {
+    if (key === 'Enter' && onKeyEnter) return onKeyEnter();
+
+    if (onKeyDown) return onKeyDown(key);
+  };
+
   return (
     <StyledTextField
       id={id}
@@ -19,6 +27,7 @@ const InputText = ({
       autoFocus={autofocus}
       disabled={disabled}
       onChange={onChange}
+      onKeyDown={({ key }) => handleKey(key)}
       value={value}
       errorMessage={errorMessage}
       {...props}

@@ -12,8 +12,8 @@ const TableVendorCount = ({ id = 'TableVendorCountStats' }) => {
 
   return (
     <Box id={id}>
-      <Table onOption={() => console.log('Table click')} {...tableProps} />
-      <Table onOption={() => console.log('Table click')} {...tableTotals} />
+      <Table onOption={() => null} {...tableProps} />
+      <Table onOption={() => null} {...tableTotals} />
     </Box>
   );
 };

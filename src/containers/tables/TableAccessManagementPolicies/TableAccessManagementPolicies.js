@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Table } from '../../../components/tables/_Table';
 
 const TableAccessManagementPolicies = ({ id = 'TableAccessManagementPolicies', ...props }) => {
-  return <Table id={`${id}`} onOption={() => console.log('Table click')} {...props} />;
+  return <Table id={`${id}`} onOption={() => null} {...props} />;
 };
 
 TableAccessManagementPolicies.propTypes = {
