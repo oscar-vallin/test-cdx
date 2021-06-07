@@ -21,7 +21,7 @@ export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
   const [authData, setAuthData] = useState(AUTH_DATA ? JSON.parse(AUTH_DATA) : null);
-  
+
   const [authHistory, setHistory] = useState();
   const [token, setToken] = useState(localStorage);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
@@ -72,7 +72,7 @@ export const AuthContextProvider = ({ children }) => {
     }
 
     if (token && authData) {
-      setAuthenticated(true)
+      setAuthenticated(true);
     }
   }, [token, isAuthenticating, isAuthenticated, authData]);
 
@@ -82,12 +82,9 @@ export const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     console.log('There is an error: ', error);
     if (error) {
-
       setToken(null);
 
-      console.log('set Error Message');
       setErrorMessage('Wrong User/Password');
-      // setTimeout(setErrorMessage(null),5000);
 
       return;
     }
@@ -154,17 +151,14 @@ export const AuthContextProvider = ({ children }) => {
   //
   useEffect(async () => {
     if (user?.length && password?.length) {
-      try{
-        console.log('Adding passwordLogin Mutation')
-        const passwordResponse = await passwordLoginMutation()
-        console.log('Adding passwordLogin Mutation response')
+      try {
+        const passwordResponse = await passwordLoginMutation();
 
         return passwordResponse;
-      }
-      catch( e ) {
+      } catch (e) {
         console.log('Exception e = ', e);
       }
-    } 
+    }
 
     return null;
 
