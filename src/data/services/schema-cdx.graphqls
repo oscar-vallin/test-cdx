@@ -879,7 +879,7 @@ type DashTheme{
 
 type DashThemeColor{
     id: ID
-    defaultTheme: Boolean
+    defaultPalette: Boolean
     themeColorMode: ThemeColorMode
     allowDark: Boolean
     paletteNm: String
@@ -941,7 +941,7 @@ type DashThemeColorConnection{
 input CreateDashThemeColorInput{
     orgSid: ID!
     ownerId: ID!
-    defaultTheme: Boolean
+    defaultPalette: Boolean
     allowDark: Boolean
     themeColorMode: ThemeColorMode
     paletteNm: String
@@ -973,7 +973,7 @@ input UpdateDashThemeColorInput{
     sid: ID!
     orgSid: ID!
     ownerId: ID!
-    defaultTheme: Boolean
+    defaultPalette: Boolean
     allowDark: Boolean
     themeColorMode: ThemeColorMode
     paletteNm: String
@@ -1062,7 +1062,7 @@ input DashThemeColorDefaultInput{
     orgSid: ID!
     ownerId: ID!
     sid: ID!
-    defaultTheme: Boolean!
+    defaultPalette: Boolean!
     themeColorMode: ThemeColorMode
 }
 """
