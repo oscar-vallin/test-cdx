@@ -14,7 +14,7 @@ export const formatField = (value, columnId, text, sublabel, child) => {
 
 export const isCDXToday = (firstDate, secondDate) => {
   const _startDate = startOfDay(new Date(firstDate));
-  const _endDate = endOfDay(secondDate);
+  const _endDate = endOfDay(new Date(secondDate));
   const hour = getHours(new Date());
 
   if (hour < 9) {
