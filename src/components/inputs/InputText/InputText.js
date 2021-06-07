@@ -15,7 +15,7 @@ const InputText = ({
   ...props
 }) => {
   const handleKey = (key) => {
-    if (key === 'Enter') return onKeyEnter();
+    if (key === 'Enter' && onKeyEnter) return onKeyEnter();
 
     if (onKeyDown) return onKeyDown(key);
   };
