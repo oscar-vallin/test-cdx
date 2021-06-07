@@ -780,11 +780,11 @@ query DashThemeColorForOrg($ownedInput : OwnedInput, $pageableInput: PageableInp
         nodes{
             id
             paletteNm
-            defaultTheme
+            defaultPalette
             allowDark
             themeColorMode
             themePrimary
-            black
+            neutralPrimary
             white
         }
     }
@@ -800,7 +800,7 @@ query DashSiteForOrg($orgSidInput : OrgSidInput){
 mutation CreateDashThemeColor($createDashThemeColorInput: CreateDashThemeColorInput!){
     createDashThemeColor(createDashThemeColorInput : $createDashThemeColorInput){
         id
-        defaultTheme
+        defaultPalette
         allowDark
         themeColorMode
         paletteNm
@@ -832,7 +832,7 @@ mutation CreateDashThemeColor($createDashThemeColorInput: CreateDashThemeColorIn
 query DashThemeColorByName($ownedInputName : OwnedInputName){
     dashThemeColorByName(ownedInputName: $ownedInputName){
         id
-        defaultTheme
+        defaultPalette
         allowDark
         themeColorMode
         paletteNm
@@ -864,7 +864,7 @@ query DashThemeColorByName($ownedInputName : OwnedInputName){
 mutation UpdateDashThemeColor($updateDashThemeColorInput: UpdateDashThemeColorInput!){
     updateDashThemeColor(updateDashThemeColorInput : $updateDashThemeColorInput){
         id
-        defaultTheme
+        defaultPalette
         allowDark
         themeColorMode
         paletteNm
@@ -912,7 +912,7 @@ query DefaultDashThemeForSite($ownedInput : OwnedInput){
         dashThemeColor{
             id
             themePrimary
-            black
+            neutralPrimary
             white
         }
     }
@@ -945,7 +945,7 @@ query CurrentUserDashThemePage{
             id
             allowDark
             themePrimary
-            black
+            neutralPrimary
             white
         }
         dashTheme{
@@ -955,7 +955,7 @@ query CurrentUserDashThemePage{
             dashThemeColor{
                 id
                 themePrimary
-                black
+                neutralPrimary
                 white
             }
         }
@@ -994,7 +994,7 @@ mutation CreateOrUpdateOwnDashTheme($dashThemeInput: DashThemeInput!){
         dashThemeColor{
             id
             themePrimary
-            black
+            neutralPrimary
             white
         }
     }
@@ -1004,7 +1004,7 @@ mutation SetDashThemeColorDefault($dashThemeColorDefaultInput : DashThemeColorDe
     setDashThemeColorDefault(dashThemeColorDefaultInput : $dashThemeColorDefaultInput){
         id
         themePrimary
-        black
+        neutralPrimary
         white
     }
 }
