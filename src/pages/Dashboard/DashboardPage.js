@@ -24,7 +24,6 @@ const _DashboardPage = () => {
 
   useEffect(() => {
     if (urlParams?.date) {
-      console.log('set Params in Date = ', urlParams.date);
       setDateId(urlParams.date);
     }
 
@@ -39,13 +38,8 @@ const _DashboardPage = () => {
     }
   }, [location]);
 
-  useEffect(() => {
-    console.log('history = ', history);
-  }, []);
-
   const handleChangeDate = (date) => {
     setDateId(date);
-
     history.push(`?date=${date}`);
   };
 
