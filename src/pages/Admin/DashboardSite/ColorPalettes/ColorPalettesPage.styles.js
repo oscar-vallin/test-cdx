@@ -4,7 +4,6 @@ import { ColorPicker, ChoiceGroup, CommandBarButton } from '@fluentui/react';
 export const StyledDiv = styled.div`
   align-items: flex-end;
   display: flex;
-  justify-content: space-between;
   width: 100%;
 `;
 

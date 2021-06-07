@@ -26,26 +26,6 @@ export const ThemeContextProvider = ({ children }) => {
     }
   ] = useCurrentUserDashThemePageLazyQuery({ variables: {}});
 
-  // useEffect(() => {
-  //   const theme = localStorage.getItem('CURRENT_THEME');
-
-  //   if (theme) {
-  //     const { name, themeColors } = JSON.parse(theme);
-  //     changeTheme(name, themeColors);
-  //   } else {
-  //     changeTheme('LIGHT');
-  //   }
-
-  //   const localFunction = async () => {
-
-  //     setLoading(false);
-  //   };
-
-  //   localFunction();
-
-  //   return () => null;
-  // }, []);
-
   useEffect(useDashThemeQuery, []);
 
   useEffect(() => {

@@ -77,7 +77,7 @@ const ThemeSettings = ({ }) => {
           className={`text ${(themeConfig.themeColorModes || []).length && 'text--centered'}`}
         >
           Color modes:
-  </Text>
+        </Text>
 
         {
           !(themeConfig.themeColorModes || []).length

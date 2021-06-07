@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useCallback, Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 
-import { ChoiceGroup, Checkbox, getTheme } from '@fluentui/react';
+import { Checkbox } from '@fluentui/react';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Button } from '../../../../components/buttons/Button';
 import { Separator } from '../../../../components/separators/Separator';
@@ -12,35 +12,22 @@ import { MessageBar } from '../../../../components/notifications/MessageBar';
 import { Text } from '../../../../components/typography/Text';
 import { PaletteColors } from './PaletteColors';
 
-import { StyledDiv, StyledChoiceGroup, StyledColorPicker, StyledCommandButton, StyledColorPreview, StyledPreview } from './ColorPalettesPage.styles';
+import { StyledDiv, StyledChoiceGroup, StyledColorPicker } from './ColorPalettesPage.styles';
 
-import { useAuthContext } from '../../../../contexts/AuthContext';
 import { useThemeContext } from '../../../../contexts/ThemeContext';
-import { defaultTheme, darkTheme } from '../../../../styles/themes';
-
-import {
-  useCreateDashThemeColorMutation,
-  useUpdateDashThemeColorMutation,
-  useRemoveDashThemeColorMutation,
-  useDashThemeColorByNameLazyQuery,
-  useDashThemeColorForOrgLazyQuery
-} from './../../../../data/services/graphql';
+import { useColorPalettes } from '../../../../hooks/useColorPalettes';
+import { defaultTheme } from '../../../../styles/themes';
 
 import Theming from './../../../../utils/Theming';
 
-const getBaseColorPaletteVariant = (mode) => ({
-  id: null,
-  defaultTheme: false,
-  themeColorMode: mode,
-  paletteNm: '',
-  ...(mode === 'LIGHT') ? defaultTheme : darkTheme,
-  custom: undefined,
-});
-
-
 /*
+  TODO: FIX {
+    fetchPolicy: 'network-only',
+  } in GQL Lazy Queries
+
   PROPOSALS
   
+  Could not find useDashThemeColorById
   Allow theme color mode to be null or find a new value
   Change variable defaultTheme to defaultPalette
   change black variable to neutralPrimary
@@ -53,26 +40,27 @@ const getThemeVariant = ({ themePrimary, neutralPrimary, white }) => ({
 })
 
 const _ColorPalettesPage = () => {
-  const { authData } = useAuthContext();
-  const { id, orgId } = authData;
-
   const { changeTheme, themeConfig } = useThemeContext();
+  const {
+    colorPalettes,
+    isLoadingPalettes,
+    isProcessingPalettes,
+    palettesUpdated,
+    fetchColorPalettes,
+    createColorPalette,
+    updateColorPalette,
+    removeColorPalette,
+  } = useColorPalettes();
 
-  const [createDashThemeColorMutation] = useCreateDashThemeColorMutation();
-  const [updateDashThemeColorMutation] = useUpdateDashThemeColorMutation();
-  const [removeDashThemeColorMutation] = useRemoveDashThemeColorMutation();
-  const [
-    getDashThemeColorForOrg,
-    { data: orgPalettes, loading: isLoadingPalettes }
-  ] = useDashThemeColorForOrgLazyQuery();
+  useEffect(() => {
+    if (palettesUpdated) {
+      fetchColorPalettes();
+    }
+  }, [palettesUpdated]);
 
   const [wantsReset, setWantsReset] = useState(false);
-  const [colorPalettes, setColorPalettes] = useState([]);
 
   const [selectedPaletteId, setSelectedPaletteId] = useState(null);
-
-  const [isCreatingPalette, setIsCreatingPalette] = useState(!themeConfig.themeColorPalettes);
-  const [isProcessingPalette, setIsProcessingPalette] = useState(false);
 
   const [paletteType, setPaletteType] = useState('EXTEND');
   const [enableDarkMode, setEnableDarkMode] = useState(true);
@@ -90,26 +78,7 @@ const _ColorPalettesPage = () => {
     color: colors.themePrimary
   });
 
-  useEffect(() => {
-    getDashThemeColorForOrg({
-      variables: {
-        ownedInput: {
-          orgSid: orgId,
-          ownerId: id,
-        },
-        pageableInput: {
-          pageNumber: 0,
-          pageSize: 100,
-        },
-      }
-    });
-  }, []);
-
-  useEffect(() => {
-    if (orgPalettes && !isLoadingPalettes) {
-      setColorPalettes(orgPalettes?.dashThemeColorForOrg?.nodes);
-    }
-  }, [orgPalettes, isLoadingPalettes]);
+  useEffect(fetchColorPalettes, []);
 
   /* PALETTE TYPE -------------- */
   useEffect(() => {
@@ -211,7 +180,7 @@ const _ColorPalettesPage = () => {
             : (
               <Fragment>
                 <Row>
-                  <Column lg="8">
+                  <Column lg="6">
                     <StyledDiv>
                       {
                         themeConfig.themeColorPalettes
@@ -256,7 +225,7 @@ const _ColorPalettesPage = () => {
                         </Row>
 
                         <Row>
-                          <Column lg="8">
+                          <Column lg="6">
                             <Spacing margin={{ bottom: 'normal' }}>
                               <InputText
                                 required
@@ -277,7 +246,7 @@ const _ColorPalettesPage = () => {
                         </Row>
 
                         <Row>
-                          <Column lg="4">
+                          <Column lg="3">
                             <Spacing margin={{ bottom: 'small' }}>
                               <Text size="small" variant="semiBold">
                                 What would you like to do?
@@ -296,7 +265,7 @@ const _ColorPalettesPage = () => {
 
                           {
                             paletteType === 'EXTEND' && (
-                              <Column lg="4">
+                              <Column lg="3">
                                 <Spacing margin={{ bottom: 'normal' }}>
                                   <Text size="small" variant="semiBold">Color modes</Text>
                                 </Spacing>
@@ -313,7 +282,7 @@ const _ColorPalettesPage = () => {
 
                         <Spacing margin={{ top: 'normal' }}>
                           <Row>
-                            <Column lg="4">
+                            <Column lg="3">
                               <PaletteColors
                                 colors={colors}
                                 type={paletteType}
@@ -321,7 +290,7 @@ const _ColorPalettesPage = () => {
                                 onChange={setActiveColor}
                               />
                             </Column>
-                            <Column lg="4" right={true}>
+                            <Column lg="3" right={true}>
                               <StyledColorPicker
                                 showPreview={false}
                                 alphaType={'none'}
@@ -341,12 +310,10 @@ const _ColorPalettesPage = () => {
                             <StyledDiv>
                               <Button
                                 variant="primary"
-                                disabled={isProcessingPalette}
+                                disabled={isProcessingPalettes}
                                 text={!selectedPaletteId ? "Create palette" : "Update palette"}
                                 onClick={() => {
                                   const params = {
-                                    ownerId: id,
-                                    orgSid: orgId,
                                     themeColorMode: 'LIGHT',
                                     // defaultTheme: isDefaultPalette,
                                     allowDark: enableDarkMode,
@@ -355,56 +322,34 @@ const _ColorPalettesPage = () => {
                                   }
 
                                   if (!selectedPaletteId) {
-                                    createDashThemeColorMutation({
-                                      variables: {
-                                        createDashThemeColorInput: { ...params }
-                                      }
-                                    });
+                                    createColorPalette(params);
                                   } else {
-                                    updateDashThemeColorMutation({
-                                      variables: {
-                                        updateDashThemeColorInput: {
-                                          sid: selectedPaletteId,
-                                          ...params,
-                                        }
-                                      }
-                                    })
+                                    updateColorPalette(selectedPaletteId, params);
                                   }
                                 }}
                               />
 
+                              <span>&nbsp;</span>
+
+                              <Button
+                                variant="secondary"
+                                text="Discard changes"
+                                disabled={isProcessingPalettes}
+                                onClick={() => setWantsReset(true)}
+                              />
+
+                              <span>&nbsp;</span>
+
                               {
-                                !isCreatingPalette && themeConfig.themeColorPalettes.length > 1 && (
-                                  <Spacing margin={{ left: 'normal' }}>
-                                    <Button
-                                      variant="danger"
-                                      disabled={isProcessingPalette}
-                                      text="Delete palette"
-                                      onClick={() => {
-                                        removeDashThemeColorMutation({
-                                          variables: {
-                                            ownedInputSid: {
-                                              orgSid: orgId,
-                                              ownerId: id,
-                                              sid: selectedPalette,
-                                            }
-                                          }
-                                        })
-                                      }}
-                                    />
-                                  </Spacing>
+                                selectedPaletteId && (
+                                  <Button
+                                    variant="danger"
+                                    disabled={isProcessingPalettes}
+                                    text="Delete palette"
+                                    onClick={() => removeColorPalette(selectedPaletteId)}
+                                  />
                                 )
                               }
-
-                              <Spacing margin={{ left: 'normal' }}>
-                                <Button
-                                  text="Discard changes"
-                                  disabled={isProcessingPalette}
-                                  onClick={() => {
-                                    setWantsReset(true);
-                                  }}
-                                />
-                              </Spacing>
                             </StyledDiv>
                           </Column>
                         </Row>
