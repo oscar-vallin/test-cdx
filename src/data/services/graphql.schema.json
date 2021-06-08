@@ -1414,7 +1414,7 @@
             "deprecationReason": null
           },
           {
-            "name": "defaultTheme",
+            "name": "defaultPalette",
             "description": null,
             "type": {
               "kind": "SCALAR",
@@ -2228,7 +2228,7 @@
             "deprecationReason": null
           },
           {
-            "name": "defaultTheme",
+            "name": "defaultPalette",
             "description": null,
             "args": [],
             "type": {
@@ -2643,7 +2643,7 @@
             "deprecationReason": null
           },
           {
-            "name": "defaultTheme",
+            "name": "defaultPalette",
             "description": null,
             "type": {
               "kind": "NON_NULL",
@@ -8576,7 +8576,7 @@
             "deprecationReason": null
           },
           {
-            "name": "defaultTheme",
+            "name": "defaultPalette",
             "description": null,
             "type": {
               "kind": "SCALAR",

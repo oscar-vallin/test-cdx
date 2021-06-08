@@ -37,7 +37,7 @@ const getThemeVariant = ({ themePrimary, neutralPrimary, white }) => ({
   ...Theming.generate.primary(themePrimary),
   ...Theming.generate.foreground(neutralPrimary, white),
   ...Theming.generate.background(white),
-})
+});
 
 const _ColorPalettesPage = () => {
   const { changeTheme, themeConfig } = useThemeContext();
@@ -82,7 +82,7 @@ const _ColorPalettesPage = () => {
 
   /* PALETTE TYPE -------------- */
   useEffect(() => {
-    const defaultVariant = getThemeVariant(defaultTheme);
+    const defaultVariant = defaultTheme;
     const currentVariant = colorPalettes.find(({ id }) => id === selectedPaletteId) || {};
 
     const isExtendingPalette = paletteType === 'EXTEND';
@@ -111,9 +111,12 @@ const _ColorPalettesPage = () => {
 
     setColors(colors);
     setActiveColor({ key: 'themePrimary', color: variant.themePrimary });
-    changeTheme('CUSTOM', { ...variant, ...colors });
+    changeTheme('CUSTOM', getThemeVariant({ ...variant, ...colors }));
 
-    setEnableDarkMode(isExtendingPalette);
+    setEnableDarkMode(selectedPaletteId
+      ? Boolean(currentVariant.allowDark)
+      : isExtendingPalette
+    );
   }, [paletteType, selectedPaletteId, colorPalettes])
 
   /* --------------------------- */
@@ -123,16 +126,17 @@ const _ColorPalettesPage = () => {
       const {
         paletteNm,
         allowDark,
-        defaultTheme,
+        defaultPalette,
         themePrimary,
         neutralPrimary,
         white,
+        themeColorMode,
       } = colorPalettes.find(({ id }) => id === selectedPaletteId);
 
       setPaletteName(paletteNm);
-      setPaletteType('EXTEND'); //EXTEND or CUSTOM
+      setPaletteType(themeColorMode !== null ? 'EXTEND' : 'CUSTOM');
       setEnableDarkMode(Boolean(allowDark));
-      setIsDefaultPalette(defaultTheme);
+      setIsDefaultPalette(defaultPalette);
       setColors({ themePrimary, neutralPrimary, white });
 
       setActiveColor({ key: 'themePrimary', color: themePrimary });
@@ -175,15 +179,15 @@ const _ColorPalettesPage = () => {
         {
           isLoadingPalettes
             ? <Spacing margin={{ top: 'double' }}>
-              <Spinner size="lg" label="Loading color palettes" />
-            </Spacing>
+                <Spinner size="lg" label="Loading color palettes" />
+              </Spacing>
             : (
               <Fragment>
                 <Row>
-                  <Column lg="6">
+                  <Column xxl="6" xl="9" lg="12">
                     <StyledDiv>
                       {
-                        themeConfig.themeColorPalettes
+                        colorPalettes?.length > 0
                           ? (
                             <StyledChoiceGroup
                               inline={true}
@@ -225,7 +229,7 @@ const _ColorPalettesPage = () => {
                         </Row>
 
                         <Row>
-                          <Column lg="6">
+                          <Column xxl="6" xl="12">
                             <Spacing margin={{ bottom: 'normal' }}>
                               <InputText
                                 required
@@ -234,23 +238,25 @@ const _ColorPalettesPage = () => {
                                 onChange={({ target }) => setPaletteName(target.value)}
                               />
 
-                              {/* <Spacing margin={{ top: 'normal' }}>
-                <Checkbox
-                  label="Set as the default palette for the organization"
-                  checked={isDefaultPalette}
-                  onChange={(event, isDefault) => setIsDefaultPalette(isDefault)}
-                />
-              </Spacing> */}
+                              <Spacing margin={{ top: 'normal' }}>
+                                <Checkbox
+                                  label="Set as the default palette for the organization"
+                                  checked={isDefaultPalette}
+                                  onChange={(event, isDefault) => setIsDefaultPalette(isDefault)}
+                                />
+                              </Spacing>
                             </Spacing>
                           </Column>
                         </Row>
+                        
+                        <br />
 
                         <Row>
-                          <Column lg="3">
+                          <Column xxl="3" xl="6" lg="12">
                             <Spacing margin={{ bottom: 'small' }}>
                               <Text size="small" variant="semiBold">
                                 What would you like to do?
-                </Text>
+                              </Text>
                             </Spacing>
 
                             <StyledChoiceGroup
@@ -265,7 +271,7 @@ const _ColorPalettesPage = () => {
 
                           {
                             paletteType === 'EXTEND' && (
-                              <Column lg="3">
+                              <Column xxl="3" xl="6" lg="12">
                                 <Spacing margin={{ bottom: 'normal' }}>
                                   <Text size="small" variant="semiBold">Color modes</Text>
                                 </Spacing>
@@ -282,7 +288,7 @@ const _ColorPalettesPage = () => {
 
                         <Spacing margin={{ top: 'normal' }}>
                           <Row>
-                            <Column lg="3">
+                            <Column xxl="3" xl="6" lg="12">
                               <PaletteColors
                                 colors={colors}
                                 type={paletteType}
@@ -290,7 +296,7 @@ const _ColorPalettesPage = () => {
                                 onChange={setActiveColor}
                               />
                             </Column>
-                            <Column lg="3" right={true}>
+                            <Column xxl="3" xl="6" lg="12" right={true}>
                               <StyledColorPicker
                                 showPreview={false}
                                 alphaType={'none'}
@@ -314,8 +320,8 @@ const _ColorPalettesPage = () => {
                                 text={!selectedPaletteId ? "Create palette" : "Update palette"}
                                 onClick={() => {
                                   const params = {
-                                    themeColorMode: 'LIGHT',
-                                    // defaultTheme: isDefaultPalette,
+                                    themeColorMode: paletteType === 'EXTEND' ? 'LIGHT' : null,
+                                    defaultPalette: isDefaultPalette,
                                     allowDark: enableDarkMode,
                                     paletteNm: paletteName,
                                     ...getThemeVariant({ ...colors }),
