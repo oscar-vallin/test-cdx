@@ -1,6 +1,6 @@
 import { useInputValue } from './useInputValue';
 import { useDateValue } from './useDateValue';
-import { getHours, subDays, format } from 'date-fns';
+import { getHours, subDays, format, addDays } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import queryString from 'query-string';
@@ -70,10 +70,10 @@ export const useTableFilters = (placeholder, id) => {
     } else {
       if (hour < 9) {
         startDate.setValue(subDays(new Date(), 1));
-        endDate.setValue(subDays(new Date(), 1));
+        endDate.setValue(new Date());
       } else {
         startDate.setValue(new Date());
-        endDate.setValue(new Date());
+        endDate.setValue(addDays(new Date(), 1));
       }
     }
 

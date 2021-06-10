@@ -37,17 +37,7 @@ const TableFileStatus = ({ idPage = 'TableFileStatus', orgSid = 1, dateRange, fi
 
   //Component did mount
   useEffect(() => {
-    const hour = getHours(new Date());
-
     if (id === undefined) {
-      if (hour < 9) {
-        startDate.setValue(subDays(new Date(), 1));
-        endDate.setValue(subDays(new Date(), 1));
-
-        return;
-      }
-      startDate.setValue(new Date());
-      endDate.setValue(new Date());
       return;
     }
     let params = id.split('*');
@@ -75,12 +65,7 @@ const TableFileStatus = ({ idPage = 'TableFileStatus', orgSid = 1, dateRange, fi
       </Row>
       {!tableProps.loading && (
         <Box id={`${idPage}`}>
-          <Table
-            id={`${idPage}`}
-            onOption={() => null}
-            searchInput={localInput.value}
-            {...tableProps}
-          />
+          <Table id={`${idPage}`} onOption={() => null} searchInput={localInput.value} {...tableProps} />
         </Box>
       )}
     </Container>
