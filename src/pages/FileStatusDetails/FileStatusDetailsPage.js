@@ -264,7 +264,7 @@ const _FileStatusDetailsPage = () => {
                             title: 'Quality Checks',
                             content: (
                               <QualityChecksTab
-                                items={query.workPacketStatusDetails.qualityChecks?.sequenceCreationEvent}
+                                items={query.workPacketStatusDetails.qualityChecks?.sequenceCreationEvent || []}
                               />
                             ),
                             badge: {
