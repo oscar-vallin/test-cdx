@@ -41,12 +41,9 @@ const TableArchive = ({ idPage = 'TableArchive', orgSid = 1 }) => {
         </RightColumn>
       </Row>
       <Box id={`${idPage}`}>
-        <Table
-          id={`${idPage}`}
-          onOption={() => null}
-          searchInput={localInput.value}
-          {...tableProps}
-        />
+        {!tableProps.loading && (
+          <Table id={`${idPage}`} onOption={() => null} searchInput={localInput.value} {...tableProps} />
+        )}
       </Box>
     </Container>
   );

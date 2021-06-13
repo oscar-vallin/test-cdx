@@ -54,7 +54,7 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
   useEffect(() => {
     const _condition = isCDXToday(argDateRange.rangeStart, argDateRange.rangeEnd);
     enableRefresh(_condition && argFilter === '');
-  }, [argDateRange, argFilter]);
+  }, [argFilter]);
 
   useEffect(() => {
     if (_error) {
