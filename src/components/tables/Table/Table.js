@@ -273,7 +273,9 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput }) => 
 
         return (
           <StyledCell left>
-            <Link href="#">{fieldContent}</Link>
+            <Link>
+              <RouteLink to={`/file-status?filter=${fieldContent}`}>{fieldContent}</RouteLink>
+            </Link>
             {fieldItem.sublabel && <StyledSpecs>{`spec: ${fieldItem.sublabel}`}</StyledSpecs>}
           </StyledCell>
         );
