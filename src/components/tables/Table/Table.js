@@ -235,7 +235,7 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput }) => 
           return (
             <CellItemRow>
               <Link>
-                <RouteLink to={`${fieldItem.text}`}>{fieldContent}</RouteLink>
+                <RouteLink to={`${fieldItem.text}?filter=${filterInput}`}>{fieldContent}</RouteLink>
               </Link>
               {fieldItem.child.value}
             </CellItemRow>
