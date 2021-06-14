@@ -17,47 +17,62 @@ import {
   StyledTitle,
   StyledChoiceGroup,
 } from './../UserSettingsPage.styles';
-import { defaultTheme } from '../../../styles/themes';
+import { defaultTheme, darkTheme } from '../../../styles/themes';
 
-const getThemeVariant = ({ themePrimary, neutralPrimary, white }) => ({
-  ...Theming.generate.primary(themePrimary),
-  ...Theming.generate.foreground(neutralPrimary, white),
-  ...Theming.generate.background(white),
-})
-
-const ThemeSettings = ({ }) => {
+const ThemeSettings = ({ userTheme }) => {
   const {
     colorPalettes,
     isLoadingPalettes,
     fetchColorPalettes,
   } = useColorPalettes();
 
-  useEffect(() => {
-    fetchColorPalettes();
-  }, []);
+  useEffect(fetchColorPalettes, []);
 
-  const { changeTheme, themeConfig } = useThemeContext();
-  const { theme = { themeColorMode: 'LIGHT' } } = themeConfig;
+  const [palettes, setPalettes] = useState([
+    {
+      id: null,
+      paletteNm: 'Default',
+      allowDark: true,
+      defaultPalette: true,
+      themeColorMode: 'LIGHT',
+      ...defaultTheme,
+    }
+  ]);
+
+  const { changeTheme } = useThemeContext();
 
   const [selectedPaletteId, setSelectedPaletteId] = useState(null);
   const [palette, setPalette] = useState({});
-  const [colorMode, setColorMode] = useState(null);
+  const [themeColorMode, setThemeColorMode] = useState(userTheme?.themeColorMode || 'LIGHT');
+  const [themeFontSize, setThemeFontSize] = useState(userTheme?.themeFontSize || 'MEDIUM');
 
   useEffect(() => {
     if (colorPalettes && !isLoadingPalettes) {
       const defaultPalette = colorPalettes.find(({ defaultPalette }) => defaultPalette);
-
-      setSelectedPaletteId(defaultPalette?.id || null);
+     
+      setPalettes([...palettes, ...colorPalettes]);
+      setSelectedPaletteId(defaultPalette?.id);
     }
   }, [colorPalettes, isLoadingPalettes]);
 
   useEffect(() => {
-    const palette = colorPalettes.find(({ id }) => id === selectedPaletteId) || {};
-
+    const palette = palettes.find(({ id }) => id === selectedPaletteId) || {};
+    const { themePrimary } = palette;
+    
+    const variant = palette.themeColorMode
+      ? Theming.getVariant({
+        ...(themeColorMode === 'LIGHT')
+          ? defaultTheme
+          : darkTheme,
+          themePrimary
+        })
+      : palette;
+    
     setPalette(palette);
-    setColorMode(palette?.colorMode);
-    changeTheme('CUSTOM', getThemeVariant(palette));
-  }, [selectedPaletteId]);
+    setThemeColorMode(themeColorMode || palette?.themeColorMode);
+
+    changeTheme(variant);
+  }, [selectedPaletteId, themeColorMode]);
 
   const [
     createOrUpdateOwnDashTheme,
@@ -69,50 +84,48 @@ const ThemeSettings = ({ }) => {
   ] = useCreateOrUpdateOwnDashThemeMutation();
 
   return (
-    <Fragment>
-      <StyledTitle>Theme</StyledTitle>
+    isLoadingPalettes
+      ? <Spacing padding="Double">
+          <Spinner size="lg" label="Loading theme settings" />
+        </Spacing>
+      : (
+        <Fragment>
+          <StyledTitle>Theme</StyledTitle>
 
-      <StyledDiv>
-        <Text
-          size="normal"
-          className={`text ${(themeConfig.themeColorPalettes || []).length > 1 && 'text--centered'}`}
-        >
-          Color palettes:
-        </Text>
-
-        {
-          isLoadingPalettes
-            ? <Spacing margin={{ top: 'double' }}>
-              <Spinner size="lg" label="Loading theme settings" />
-            </Spacing>
-            : !themeConfig.themeColorPalettes
+          <StyledDiv>
+            <Text
+              size="normal"
+              className={`text ${(palettes || []).length > 1 && 'text--centered'}`}
+            >
+              Color palettes:
+            </Text>
+            {!palettes
               ? <MessageBar content="No color palettes available" />
-              : themeConfig.themeColorPalettes.length === 1
+              : (palettes || []).length === 1
                 ? <MessageBar content="Organization (default)" />
                 : (
                   <StyledChoiceGroup
                     selectedKey={selectedPaletteId}
-                    options={colorPalettes?.map(item => ({
+                    options={palettes?.map(item => ({
                       key: item.id,
                       text: item.paletteNm
                     })) || []}
                     onChange={(evt, { key }) => setSelectedPaletteId(key)}
                   />
                 )
-        }
-      </StyledDiv>
-      
-      {selectedPaletteId && (
-        <Spacing margin={{ top: 'normal' }}>
-          <StyledDiv>
-            <Text size="normal" className="text">
-              Color modes:
-            </Text>
+            }
+          </StyledDiv>
 
-            {(!palette.themeColorMode || !palette.allowDark)
-              ? <Text>No color modes available for this palette</Text>
-              : <StyledChoiceGroup
-                  selectedKey={palette.themeColorMode || 'LIGHT'}
+          <Spacing margin={{ top: 'normal' }}>
+            <StyledDiv>
+              <Text size="normal" className="text">
+                Color modes:
+              </Text>
+
+              {(!palette.themeColorMode)
+                ? <Text>No color modes available for this palette</Text>
+                : <StyledChoiceGroup
+                  selectedKey={themeColorMode}
                   options={[
                     { key: 'LIGHT', text: 'Light' },
                     ...(palette.allowDark) ? [{ key: 'DARK', text: 'Dark' }] : []
@@ -121,33 +134,32 @@ const ThemeSettings = ({ }) => {
                     setThemeColorMode(key);
                   }}
                 />
-            }
-          </StyledDiv>
-        </Spacing>
-      )}
-
-      <Row>
-        <Column>
-          <Spacing margin={{ top: "normal" }}>
-            <Button
-              variant="primary"
-              text={isHandlingTheme ? "Processing..." : "Save theme"}
-              // disabled={isFormInvalid(state) || !validations[0].isValid || isUpdatingPassword}
-              onClick={() => {
-                createOrUpdateOwnDashTheme({
-                  variables: {
-                    dashThemeInput: {
-                      themeFontSize,
-                      themeColorMode,
-                    }
-                  }
-                })
-              }}
-            />
+              }
+            </StyledDiv>
           </Spacing>
-        </Column>
-      </Row>
-    </Fragment>
+
+          <Row>
+            <Column>
+              <Spacing margin={{ top: "normal" }}>
+                <Button
+                  variant="primary"
+                  text={isHandlingTheme ? "Processing..." : "Save theme"}
+                  onClick={() => {
+                    createOrUpdateOwnDashTheme({
+                      variables: {
+                        dashThemeInput: {
+                          themeFontSize,
+                          themeColorMode,
+                        }
+                      }
+                    })
+                  }}
+                />
+              </Spacing>
+            </Column>
+          </Row>
+        </Fragment>
+      )
   )
 }
 

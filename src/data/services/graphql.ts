@@ -2470,7 +2470,7 @@ export type DefaultDashThemeForSiteQuery = (
     & Pick<DashTheme, 'id' | 'themeColorMode' | 'themeFontSize'>
     & { dashThemeColor?: Maybe<(
       { __typename?: 'DashThemeColor' }
-      & Pick<DashThemeColor, 'id' | 'themePrimary' | 'neutralPrimary' | 'white'>
+      & Pick<DashThemeColor, 'id' | 'paletteNm' | 'allowDark' | 'themePrimary' | 'neutralPrimary' | 'white'>
     )> }
   )> }
 );
@@ -2522,13 +2522,13 @@ export type CurrentUserDashThemePageQuery = (
     & Pick<UserDashThemePage, 'themeColorModes' | 'themeFontSizes'>
     & { themeColorPalettes?: Maybe<Array<Maybe<(
       { __typename?: 'DashThemeColor' }
-      & Pick<DashThemeColor, 'id' | 'allowDark' | 'themePrimary' | 'neutralPrimary' | 'white'>
+      & Pick<DashThemeColor, 'id' | 'neutralPrimary' | 'allowDark' | 'themePrimary' | 'white'>
     )>>>, dashTheme?: Maybe<(
       { __typename?: 'DashTheme' }
       & Pick<DashTheme, 'id' | 'themeFontSize' | 'themeColorMode'>
       & { dashThemeColor?: Maybe<(
         { __typename?: 'DashThemeColor' }
-        & Pick<DashThemeColor, 'id' | 'themePrimary' | 'neutralPrimary' | 'white'>
+        & Pick<DashThemeColor, 'id' | 'paletteNm' | 'allowDark' | 'themePrimary' | 'neutralPrimary' | 'white'>
       )> }
     )> }
   )> }
@@ -4944,6 +4944,8 @@ export const DefaultDashThemeForSiteDocument = gql`
     themeFontSize
     dashThemeColor {
       id
+      paletteNm
+      allowDark
       themePrimary
       neutralPrimary
       white
@@ -5083,6 +5085,7 @@ export const CurrentUserDashThemePageDocument = gql`
     themeFontSizes
     themeColorPalettes {
       id
+      neutralPrimary
       allowDark
       themePrimary
       neutralPrimary
@@ -5094,6 +5097,8 @@ export const CurrentUserDashThemePageDocument = gql`
       themeColorMode
       dashThemeColor {
         id
+        paletteNm
+        allowDark
         themePrimary
         neutralPrimary
         white

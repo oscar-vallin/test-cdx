@@ -5,88 +5,53 @@ import { Customizer, loadTheme } from '@fluentui/react';
 
 import 'office-ui-fabric-react/dist/css/fabric.css';
 import { ThemeProvider } from 'styled-components';
-import { defaultTheme, darkTheme } from '../styles/themes';
 import { theme as styledComponentsTheme } from '../styles/themes/theme';
-import { useCurrentUserDashThemePageLazyQuery } from '../data/services/graphql';
+
+import { useCurrentUserTheme } from './../hooks/useCurrentUserTheme';
 
 export const ThemeContext = React.createContext(() => {
 });
 
 export const ThemeContextProvider = ({ children }) => {
+  const { userTheme, fetchTheme } = useCurrentUserTheme();
   const [currentTheme, setTheme] = useState(styledComponentsTheme);
   const [styledTheme, setStyledTheme] = useState(styledComponentsTheme);
 
   const [themeConfig, setThemeConfig] = useState({});
 
-  const [
-    useDashThemeQuery,
-    {
-      data: currentUserThemeParams,
-      loading: isLoadingCurrentUserThemeParams,
-    }
-  ] = useCurrentUserDashThemePageLazyQuery({ variables: {}});
-
-  useEffect(useDashThemeQuery, []);
+  useEffect(fetchTheme, []);
 
   useEffect(() => {
-    if (!isLoadingCurrentUserThemeParams) {
-      if (currentUserThemeParams) {
-        const {
-          themeColorModes,
-          themeColorPalettes,
-          themeFontSizes,
-          dashTheme
-        } = currentUserThemeParams.currentUserDashThemePage;
-
-        setThemeConfig({
-          themeColorModes,
-          themeColorPalettes,
-          themeFontSizes,
-          dashTheme
-        });
-
-        changeTheme(!dashTheme ? 'LIGHT' : dashTheme);
-      } else {
-        changeTheme('LIGHT');
-      }
+    if (!userTheme.loading) {
+      changeTheme(userTheme.data);
     }
-  }, [isLoadingCurrentUserThemeParams]);
+  }, [userTheme]);
 
-  const getThemeColors = (name) => {
-    const themes = {
-      LIGHT: defaultTheme,
-      DARK: darkTheme,
-    }
-
-    return (name !== 'CUSTOM')
-      ? themes[name]
-      : themes.LIGHT; 
-  }
-
-  const changeTheme = (name, theme = {}) => {
-    const themeColors = { ...getThemeColors(name), ...theme };
+  const changeTheme = (theme = {}) => {
     const customizedTheme = {
-      ...styledTheme,
-      colors: { ...styledTheme.colors, ...themeColors }
+      ...styledTheme, colors: { ...styledTheme.colors, ...theme }
     };
 
-    setTheme(themeColors);
+    setTheme(theme);
     setStyledTheme(customizedTheme);
-
-    // localStorage.setItem('CURRENT_THEME', JSON.stringify({ name, themeColors: customizedTheme.colors }));
   };
 
   // eslint-disable-next-line
   const values = useMemo(() => ({
-    isContextLoading: isLoadingCurrentUserThemeParams,
+    // isContextLoading: isLoadingCurrentUserThemeParams,
     changeTheme,
     themeConfig,
-  }), [isLoadingCurrentUserThemeParams, themeConfig]);
+  }), [themeConfig]);
 
   return (
-    <Customizer {...loadTheme({ palette: currentTheme })}>
+    <Customizer {...loadTheme({ palette: (currentTheme || {}) })}>
       <ThemeProvider theme={styledTheme}>
-        <ThemeContext.Provider value={values}>{children}</ThemeContext.Provider>
+        <ThemeContext.Provider value={values}>
+          {userTheme.loading
+            ? 'Loading theme'
+            : children
+          }
+        </ThemeContext.Provider>
       </ThemeProvider>
     </Customizer>
   );

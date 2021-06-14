@@ -15,23 +15,11 @@ import { PaletteColors } from './PaletteColors';
 import { StyledDiv, StyledChoiceGroup, StyledColorPicker } from './ColorPalettesPage.styles';
 
 import { useThemeContext } from '../../../../contexts/ThemeContext';
+import { useCurrentUserTheme } from '../../../../hooks/useCurrentUserTheme';
 import { useColorPalettes } from '../../../../hooks/useColorPalettes';
 import { defaultTheme } from '../../../../styles/themes';
 
 import Theming from './../../../../utils/Theming';
-
-/*
-  TODO: FIX {
-    fetchPolicy: 'network-only',
-  } in GQL Lazy Queries
-
-  PROPOSALS
-  
-  Could not find useDashThemeColorById
-  Allow theme color mode to be null or find a new value
-  Change variable defaultTheme to defaultPalette
-  change black variable to neutralPrimary
-*/
 
 const getThemeVariant = ({ themePrimary, neutralPrimary, white }) => ({
   ...Theming.generate.primary(themePrimary),
@@ -40,6 +28,7 @@ const getThemeVariant = ({ themePrimary, neutralPrimary, white }) => ({
 });
 
 const _ColorPalettesPage = () => {
+  const { userTheme } = useCurrentUserTheme();
   const { changeTheme, themeConfig } = useThemeContext();
   const {
     colorPalettes,
@@ -52,14 +41,7 @@ const _ColorPalettesPage = () => {
     removeColorPalette,
   } = useColorPalettes();
 
-  useEffect(() => {
-    if (palettesUpdated) {
-      fetchColorPalettes();
-    }
-  }, [palettesUpdated]);
-
   const [wantsReset, setWantsReset] = useState(false);
-
   const [selectedPaletteId, setSelectedPaletteId] = useState(null);
 
   const [paletteType, setPaletteType] = useState('EXTEND');
@@ -79,6 +61,12 @@ const _ColorPalettesPage = () => {
   });
 
   useEffect(fetchColorPalettes, []);
+
+  useEffect(() => {
+    if (palettesUpdated) {
+      fetchColorPalettes();
+    }
+  }, [palettesUpdated]);
 
   /* PALETTE TYPE -------------- */
   useEffect(() => {
@@ -111,7 +99,7 @@ const _ColorPalettesPage = () => {
 
     setColors(colors);
     setActiveColor({ key: 'themePrimary', color: variant.themePrimary });
-    changeTheme('CUSTOM', getThemeVariant({ ...variant, ...colors }));
+    changeTheme(getThemeVariant({ ...variant, ...colors }));
 
     setEnableDarkMode(selectedPaletteId
       ? Boolean(currentVariant.allowDark)
@@ -156,7 +144,7 @@ const _ColorPalettesPage = () => {
       setColors({ themePrimary, neutralPrimary, white });
       setActiveColor({ key: 'themePrimary', color: themePrimary });
 
-      changeTheme('CUSTOM', variant);
+      changeTheme(variant);
       setWantsReset(false);
     }
   }, [wantsReset]);
@@ -170,7 +158,7 @@ const _ColorPalettesPage = () => {
     setColors({ ...colors, [activeColor.key]: str });
     setActiveColor({ ...activeColor, color: str });
 
-    changeTheme('CUSTOM', variant);
+    changeTheme(variant);
   };
 
   return (
@@ -329,6 +317,7 @@ const _ColorPalettesPage = () => {
 
                                   if (!selectedPaletteId) {
                                     createColorPalette(params);
+                                    setWantsReset(true);
                                   } else {
                                     updateColorPalette(selectedPaletteId, params);
                                   }
@@ -352,7 +341,10 @@ const _ColorPalettesPage = () => {
                                     variant="danger"
                                     disabled={isProcessingPalettes}
                                     text="Delete palette"
-                                    onClick={() => removeColorPalette(selectedPaletteId)}
+                                    onClick={() => {
+                                      removeColorPalette(selectedPaletteId);
+                                      setWantsReset(true);
+                                    }}
                                   />
                                 )
                               }

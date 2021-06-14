@@ -38,4 +38,12 @@ export default class Theming {
       }
     }
   }
+
+  static getVariant({ themePrimary, neutralPrimary, white }) {
+    return {
+      ...Theming.generate.primary(themePrimary),
+      ...Theming.generate.foreground(neutralPrimary, white),
+      ...Theming.generate.background(white),
+    }
+  }
 }

@@ -10,6 +10,7 @@ import { Spacing } from '../../components/spacings/Spacing';
 import { PasswordChange } from './PasswordChange';
 import { PasswordRules } from './PasswordRules';
 import { ThemeSettings } from './ThemeSettings';
+import { useCurrentUserTheme } from '../../hooks/useCurrentUserTheme';
 
 import {
   StyledBox,
@@ -17,13 +18,9 @@ import {
   StyledCard,
 } from './UserSettingsPage.styles';
 
-/* TODO:
-  Find out why dashTheme is null (GQL)
-  Update theme on GQL response
-  Cancel theme updates after leaving without saving
-*/
-
 const _UserSettingsPage = () => {
+  const { userTheme } = useCurrentUserTheme();
+
   const [validations, setValidations] = useState([]);
   const [passwords, setPasswords] = useState({
     current: '',
@@ -72,7 +69,7 @@ const _UserSettingsPage = () => {
           <Column>
             <StyledCard elevation="smallest">
               <Spacing padding={{ left: 'small' }}>
-                <ThemeSettings />
+                <ThemeSettings userTheme={userTheme} />
               </Spacing>
             </StyledCard>
           </Column>

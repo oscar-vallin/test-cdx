@@ -50,7 +50,6 @@ export const useColorPalettes = () => {
   }, [createdPalette, updatedPalette, removedPalette, isProcessingPalettes]);
 
   const fetchColorPalettes = () => {
-    console.log('Called');
     getDashThemeColorForOrg({
       variables: {
         ownedInput,

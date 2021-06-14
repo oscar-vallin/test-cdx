@@ -5,13 +5,15 @@ import { getRouteByApiId } from '../data/constants/RouteConstants';
 import { useCurrentUser } from './hooks/useCurrentUser';
 import { useLogout } from './hooks/useLogout';
 import { DEFAULT_POLLING_TIME } from '../data/constants/TableConstants';
-
+import { useCurrentUserTheme } from './../hooks/useCurrentUserTheme';
 //
 export const AuthContext = React.createContext(() => {
   //
 });
 
 export const AuthContextProvider = ({ children }) => {
+  const { fetchTheme } = useCurrentUserTheme();
+
   const AUTH_DATA = localStorage.getItem('AUTH_DATA');
   const [selectedPage, setSelectedPage] = useState('/');
   // LocalState
@@ -144,7 +146,10 @@ export const AuthContextProvider = ({ children }) => {
 
     if (!authHistory) return;
 
+    fetchTheme();
+
     authHistory.push(routePage.URL);
+
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authData, authHistory]);
