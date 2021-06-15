@@ -28,14 +28,16 @@ import { useWorkPacketStatusDetailsQuery, useWorkPacketStatusesQuery } from '../
 import { TableEnrollment } from '../../containers/tables/TableEnrollment';
 import { TableVendorCount } from '../../containers/tables/TableVendorCount';
 
-const breadcrumbItems = [ROUTE_FILE_STATUS, { ID: 'work-packet-details', TITLE: 'File Status Details' }];
 
 const getReadableDate = (date) => new Date(date).toLocaleString().replace(',', '');
 
 const _FileStatusDetailsPage = () => {
   const { id } = useParams();
   const [packet, setPacket] = useState({});
-  const { hash } = useLocation();
+  const { hash, search } = useLocation();
+  const filter = new URLSearchParams(search).get('filter');
+
+  const breadcrumbItems = [{...ROUTE_FILE_STATUS, URL: filter ? `${ROUTE_FILE_STATUS.URL}?filter=${filter}` : ROUTE_FILE_STATUS.URL }, { ID: 'work-packet-details', TITLE: 'File Status Details' }];
 
   const realId = id.replace('*', '');
   const history = useHistory();
@@ -60,6 +62,7 @@ const _FileStatusDetailsPage = () => {
   useEffect(() => {
     history.push({
       hash: hash || tabs[0],
+      search: search || undefined,
     });
   }, []);
 
