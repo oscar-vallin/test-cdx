@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-
+import { useLocation } from 'react-router-dom';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { mergeStyles, mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
 import {
@@ -235,7 +235,7 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput }) => 
           return (
             <CellItemRow>
               <Link>
-                <RouteLink to={`${fieldItem.text}`}>{fieldContent}</RouteLink>
+                <RouteLink to={`${fieldItem.text}?filter=${filterInput}`}>{fieldContent}</RouteLink>
               </Link>
               {fieldItem.child.value}
             </CellItemRow>
