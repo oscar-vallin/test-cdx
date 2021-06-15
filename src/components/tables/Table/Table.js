@@ -105,7 +105,7 @@ const classNames = mergeStyleSets({
  * @param {Array} groups Group values to group rows.
  * @param {string} searchIntput String.typing filter locally in the table. Data not modified, just view after filter.
  * */
-const Table = ({ items, columns, structure, onOption, groups, searchInput }) => {
+const Table = ({ items, columns, structure, onOption, groups, searchInput, date }) => {
   const [sortLabel, setSortLabel] = useState();
   const [sortedItems, setSortedItems] = useState([]);
   const [sortedGroups, setSortedGroups] = useState();
@@ -274,7 +274,7 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput }) => 
         return (
           <StyledCell left>
             <Link>
-              <RouteLink to={`/file-status?filter=${fieldContent}`}>{fieldContent}</RouteLink>
+              <RouteLink to={`/file-status?filter=${fieldContent}&date=${date}`}>{fieldContent}</RouteLink>
             </Link>
             {fieldItem.sublabel && <StyledSpecs>{`spec: ${fieldItem.sublabel}`}</StyledSpecs>}
           </StyledCell>

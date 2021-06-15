@@ -79,7 +79,7 @@ const TableDashboard = ({
   if (tableProps) {
     return (
       <TableBox id={`${id}`}>
-        <Table id={`${id}`} onOption={onChangeOption} {...tableProps} />
+        <Table id={`${id}`} date={date} onOption={onChangeOption} {...tableProps} />
       </TableBox>
     );
   }

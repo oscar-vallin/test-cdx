@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Table } from '../../../components/tables/Table';
 
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import {
   endOfDay,
   endOfYesterday,
@@ -22,6 +22,7 @@ import { useTable } from './TableFileStatus.service';
 import { InputText } from '../../../components/inputs/InputText';
 import { InputDateRange } from '../../../components/inputs/InputDateRange';
 import { useTableFilters } from '../../../hooks/useTableFilters';
+import { getStartDay, getEndDay } from '../../../helpers/tableHelpers';
 
 const TableFileStatus = ({ idPage = 'TableFileStatus', orgSid = 1, dateRange, filter }) => {
   const { localInput, startDate, endDate } = useTableFilters('Extract Name,  Status, Vendor, etc.');
@@ -34,9 +35,16 @@ const TableFileStatus = ({ idPage = 'TableFileStatus', orgSid = 1, dateRange, fi
   );
 
   const { id } = useParams();
+  const { search } = useLocation();
 
   //Component did mount
   useEffect(() => {
+    const date = new URLSearchParams(search).get('date');
+
+    if (date) {
+      selectDate(date);
+    }
+
     if (id === undefined) {
       return;
     }
