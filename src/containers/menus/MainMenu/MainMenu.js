@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 // Components
 
@@ -14,6 +14,9 @@ import { OutsideComponent } from './OutsideComponent';
 const MainMenu = ({ id = '__MainMenu', option = ROUTES.ROUTE_DASHBOARD.ID, left, changeCollapse }) => {
   const history = useHistory();
   const location = useLocation();
+  const { search } = location
+  const [filterParam, _setFilterParam] = useState(search)
+  const filter = new URLSearchParams(filterParam).get('filter');
   const [collapse, setCollapse] = React.useState();
   const navItems = (option !== ROUTES_ID.ADMIN)
     ? ROUTES_ARRAY
@@ -43,7 +46,11 @@ const MainMenu = ({ id = '__MainMenu', option = ROUTES.ROUTE_DASHBOARD.ID, left,
             selected={location.pathname === menuOption.URL}
             collapse={collapse}
             onClick={() => {
-              history.push(menuOption.URL);
+              if (menuOption.URL === `/${ROUTES_ID.FILE_STATUS}`) {
+                history.push(`${menuOption.URL}?filter=${filter}`);
+              } else {
+                history.push(menuOption.URL);
+              }
             }}
           >
             {menuOption.TITLE}
