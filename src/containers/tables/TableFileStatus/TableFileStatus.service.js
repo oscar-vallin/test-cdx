@@ -78,7 +78,7 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
             formatField(
               <>
                 {item.recordHighlightCount && (
-                  <HighlightCounter type={item.recordHighlightType} href={`/file-status/${item.workOrderId}*`}>
+                  <HighlightCounter type={item.recordHighlightType} href={`/file-status/${item.workOrderId}*#quality`}>
                     {item.recordHighlightCount}
                   </HighlightCounter>
                 )}
