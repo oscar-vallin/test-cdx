@@ -14,20 +14,21 @@ import { OutsideComponent } from './OutsideComponent';
 const MainMenu = ({ id = '__MainMenu', option = ROUTES.ROUTE_DASHBOARD.ID, left, changeCollapse }) => {
   const history = useHistory();
   const location = useLocation();
-  const { search } = location
-  const [filterParam, _setFilterParam] = useState(search)
+  const { search } = location;
+  const [filterParam, _setFilterParam] = useState(search);
   const filter = new URLSearchParams(filterParam).get('filter');
   const [collapse, setCollapse] = React.useState();
-  const navItems = (option !== ROUTES_ID.ADMIN)
-    ? ROUTES_ARRAY
-    : [
-        {
-          ID: 'USER_DOMAIN',
-          TITLE: 'Return to User Domain',
-          URL: URL_ROUTES.DASHBOARD,
-          MAIN_MENU: true,
-        } 
-      ];
+  const navItems =
+    option !== ROUTES_ID.ADMIN
+      ? ROUTES_ARRAY
+      : [
+          {
+            ID: 'USER_DOMAIN',
+            TITLE: 'Return to User Domain',
+            URL: URL_ROUTES.DASHBOARD,
+            MAIN_MENU: true,
+          },
+        ];
 
   const collapseNavMenu = () => {
     setCollapse(!collapse);
