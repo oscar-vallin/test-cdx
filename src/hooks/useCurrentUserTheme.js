@@ -47,6 +47,7 @@ export const useCurrentUserTheme = () => {
   }, [theme]);
 
   return {
+    isLoadingTheme,
     userTheme,
     fetchTheme,
   }

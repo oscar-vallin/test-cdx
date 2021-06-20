@@ -5,14 +5,23 @@ import { getRouteByApiId } from '../data/constants/RouteConstants';
 import { useCurrentUser } from './hooks/useCurrentUser';
 import { useLogout } from './hooks/useLogout';
 import { DEFAULT_POLLING_TIME } from '../data/constants/TableConstants';
+
 import { useCurrentUserTheme } from './../hooks/useCurrentUserTheme';
+import { LayoutLogin } from './../layouts/LayoutLogin';
+import { Spacing } from './../components/spacings/Spacing';
+import { Spinner } from './../components/spinners/Spinner';
+import { StyledCard } from './../containers/forms/FormLogin/FormLogin.styles';
+import { useThemeContext } from './ThemeContext';
+import Theming from './../utils/Theming';
+
 //
 export const AuthContext = React.createContext(() => {
   //
 });
 
 export const AuthContextProvider = ({ children }) => {
-  const { fetchTheme } = useCurrentUserTheme();
+  const { changeTheme } = useThemeContext();
+  const { userTheme, isLoadingTheme, fetchTheme } = useCurrentUserTheme();
 
   const AUTH_DATA = localStorage.getItem('AUTH_DATA');
   const [selectedPage, setSelectedPage] = useState('/');
@@ -154,6 +163,12 @@ export const AuthContextProvider = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authData, authHistory]);
 
+  useEffect(() => {
+    if (!isLoadingTheme && authData && userTheme.data) {
+      changeTheme(Theming.getVariant(userTheme.data));
+    }
+  }, [userTheme, authData]);
+
   //
   // When user / password.
   //
@@ -246,7 +261,22 @@ export const AuthContextProvider = ({ children }) => {
   );
 
   // Finally, return the interface that we want to expose to our other components
-  return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={values}>
+      {isLoadingTheme
+        ? (
+          <LayoutLogin>
+            <StyledCard>
+              <Spacing margin={{ top: 'normal' }}>
+                <Spinner size="lg" label="Fetching your preferences"/>
+              </Spacing>
+            </StyledCard>
+          </LayoutLogin>
+        )
+        : children
+      }
+    </AuthContext.Provider>
+  );
 };
 
 //

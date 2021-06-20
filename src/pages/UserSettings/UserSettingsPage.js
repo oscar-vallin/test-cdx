@@ -11,6 +11,7 @@ import { PasswordChange } from './PasswordChange';
 import { PasswordRules } from './PasswordRules';
 import { ThemeSettings } from './ThemeSettings';
 import { useCurrentUserTheme } from '../../hooks/useCurrentUserTheme';
+import { useThemeContext } from './../../contexts/ThemeContext';
 
 import {
   StyledBox,
@@ -27,7 +28,7 @@ const _UserSettingsPage = () => {
     new: '',
     confirmation: ''
   });
-  
+
   // const activeTheme = localStorage.getItem('CURRENT_THEME');
 
   // const [theme, setTheme] = useState(activeTheme ? JSON.parse(activeTheme).name : 'LIGHT');

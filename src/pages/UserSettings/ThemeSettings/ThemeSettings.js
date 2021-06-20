@@ -20,13 +20,12 @@ import {
 import { defaultTheme, darkTheme } from '../../../styles/themes';
 
 const ThemeSettings = ({ userTheme }) => {
+  const { changeTheme } = useThemeContext();
   const {
     colorPalettes,
     isLoadingPalettes,
     fetchColorPalettes,
   } = useColorPalettes();
-
-  useEffect(fetchColorPalettes, []);
 
   const [palettes, setPalettes] = useState([
     {
@@ -39,19 +38,24 @@ const ThemeSettings = ({ userTheme }) => {
     }
   ]);
 
-  const { changeTheme } = useThemeContext();
-
   const [selectedPaletteId, setSelectedPaletteId] = useState(null);
   const [palette, setPalette] = useState({});
   const [themeColorMode, setThemeColorMode] = useState(userTheme?.themeColorMode || 'LIGHT');
   const [themeFontSize, setThemeFontSize] = useState(userTheme?.themeFontSize || 'MEDIUM');
+  
+  useEffect(fetchColorPalettes, []);
+  useEffect(() => {
+    if (userTheme.data) {
+      changeTheme(userTheme.data);
+    }
+  }, [userTheme]);
 
   useEffect(() => {
     if (colorPalettes && !isLoadingPalettes) {
       const defaultPalette = colorPalettes.find(({ defaultPalette }) => defaultPalette);
      
       setPalettes([...palettes, ...colorPalettes]);
-      setSelectedPaletteId(defaultPalette?.id);
+      setSelectedPaletteId(defaultPalette?.id || null);
     }
   }, [colorPalettes, isLoadingPalettes]);
 
@@ -69,8 +73,11 @@ const ThemeSettings = ({ userTheme }) => {
       : palette;
     
     setPalette(palette);
-    setThemeColorMode(themeColorMode || palette?.themeColorMode);
-
+    setThemeColorMode((palette.themeColorMode !== null && palette.allowDark)
+      ? themeColorMode
+      : 'LIGHT'
+    );
+    
     changeTheme(variant);
   }, [selectedPaletteId, themeColorMode]);
 
@@ -101,9 +108,7 @@ const ThemeSettings = ({ userTheme }) => {
             </Text>
             {!palettes
               ? <MessageBar content="No color palettes available" />
-              : (palettes || []).length === 1
-                ? <MessageBar content="Organization (default)" />
-                : (
+              : (
                   <StyledChoiceGroup
                     selectedKey={selectedPaletteId}
                     options={palettes?.map(item => ({
@@ -130,6 +135,7 @@ const ThemeSettings = ({ userTheme }) => {
                     { key: 'LIGHT', text: 'Light' },
                     ...(palette.allowDark) ? [{ key: 'DARK', text: 'Dark' }] : []
                   ]}
+                  disabled={!palette.allowDark}
                   onChange={(evt, { key }) => {
                     setThemeColorMode(key);
                   }}
@@ -148,6 +154,13 @@ const ThemeSettings = ({ userTheme }) => {
                     createOrUpdateOwnDashTheme({
                       variables: {
                         dashThemeInput: {
+                          // TODO: Ask matt to include this in gql mutation
+                          // dashThemeColor: {
+                          //   id: palette.id,
+                          //   themePrimary: palette.themePrimary,
+                          //   neutralPrimary: palette.neutralPrimary,
+                          //   white: palette.white,
+                          // },
                           themeFontSize,
                           themeColorMode,
                         }
