@@ -60,9 +60,9 @@ const NavBar = ({
     shouldFocusOnMount: true,
     items: [
       {
-        key: 'Actions',
+        key: 'FONT_SIZES',
         itemType: ContextualMenuItemType.Header,
-        text: 'Actions',
+        text: 'Font size',
       },
       {
         key: 'SMALL',
