@@ -41,12 +41,13 @@ const ThemeSettings = ({ userTheme }) => {
   const [selectedPaletteId, setSelectedPaletteId] = useState(null);
   const [palette, setPalette] = useState({});
   const [themeColorMode, setThemeColorMode] = useState(userTheme?.themeColorMode || 'LIGHT');
-  const [themeFontSize, setThemeFontSize] = useState(userTheme?.themeFontSize || 'MEDIUM');
   
   useEffect(fetchColorPalettes, []);
   useEffect(() => {
     if (userTheme.data) {
       changeTheme(userTheme.data);
+      setThemeFontSize(userTheme.data.themeColorMode);
+      setThemeFontSize(userTheme.data.themeFontSize);
     }
   }, [userTheme]);
 
@@ -164,7 +165,6 @@ const ThemeSettings = ({ userTheme }) => {
                           //   neutralPrimary: palette.neutralPrimary,
                           //   white: palette.white,
                           // },
-                          themeFontSize,
                           themeColorMode,
                         }
                       }

@@ -4,7 +4,8 @@ import { defaultTheme, darkTheme } from './../styles/themes';
 import Theming from './../utils/Theming';
 
 import {
-  useUserThemeLazyQuery
+  useUserThemeLazyQuery,
+  useCreateOrUpdateOwnDashThemeMutation
 } from '../data/services/graphql';
 
 export const useCurrentUserTheme = () => {
@@ -24,9 +25,18 @@ export const useCurrentUserTheme = () => {
     useUserThemeQuery({ variables: { themeColorMode: null } });
   }
 
+  const [
+    createOrUpdateOwnDashTheme,
+    {
+      data: updatedTheme,
+      loading: isHandlingTheme,
+      error: themeError
+    }
+  ] = useCreateOrUpdateOwnDashThemeMutation();
+
   useEffect(() => {
     if (theme) {
-      const { dashThemeColor, themeColorMode, themeFontSize } = theme.userTheme || {};
+      const { dashThemeColor, themeColorMode, themeFontSize } = theme?.userTheme || {};
 
       const palette = (dashThemeColor)
       ? dashThemeColor
@@ -44,9 +54,14 @@ export const useCurrentUserTheme = () => {
         loading: isLoadingTheme
       });
     }
-  }, [theme]);
+  }, [theme, updatedTheme]);
 
   return {
+    createOrUpdateTheme: (dashThemeInput) => {
+      createOrUpdateOwnDashTheme({ variables: { dashThemeInput } });
+    },
+    updatedTheme,
+    isHandlingTheme,
     isLoadingTheme,
     userTheme,
     fetchTheme,

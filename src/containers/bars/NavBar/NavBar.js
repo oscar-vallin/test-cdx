@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { ProfileMenu } from '../../menus/ProfileMenu';
 // Components
+import { ContextualMenuItemType } from '@fluentui/react/lib/ContextualMenu';
 import { MainMenu } from '../../menus/MainMenu';
+import { IconButton } from '@fluentui/react/lib/Button';
+import { useCurrentUserTheme } from '../../../hooks/useCurrentUserTheme';
+import { useAuthContext } from '../../../contexts/AuthContext';
 // Hooks
 // import { useNavBar } from "./NavBar.services";
 // Styles
@@ -23,19 +27,64 @@ import {
 const NavBar = ({
   id = '__NavBar',
   menuOptionSelected = 'dashboard',
-  onUserSettings
+  onUserSettings,
+  ...props
 }) => {
   const [collapse, setCollapse] = React.useState('false');
+  const { userTheme, createOrUpdateTheme, isLoadingTheme, isHandlingTheme } = useCurrentUserTheme();
+  const { isAuthenticated } = useAuthContext();
 
   const changeCollapse = () => {
     setCollapse(!collapse);
   };
+
+  const [themeFontSize, setThemeFontSize] = useState(userTheme?.data?.themeFontSize || null);
+
   const renderIcon = (iconName) => {
     return (
       <StyledColumn id={`${id}__Right__${iconName}`} noStyle>
         <StyledButtonIcon icon={iconName} variant={'navbar'} size={18} />
       </StyledColumn>
     );
+  };
+
+  const updateThemeFontSize = (event, { key }) => {
+    setThemeFontSize(key);
+  };
+
+  useEffect(() => {
+    if (themeFontSize && isAuthenticated) {
+      createOrUpdateTheme({ ...userTheme.data, themeFontSize });
+    }
+  }, [themeFontSize, userTheme, isAuthenticated]);
+
+  const settingsMenu = {
+    shouldFocusOnMount: true,
+    items: [
+      {
+        key: 'Actions',
+        itemType: ContextualMenuItemType.Header,
+        text: 'Actions',
+      },
+      {
+        key: 'SMALL',
+        iconProps: { iconName: 'FontDecrease' },
+        text: 'Small',
+        onClick: updateThemeFontSize,
+      },
+      {
+        key: 'MEDIUM',
+        iconProps: { iconName: 'FontColorA' },
+        text: 'Medium (default)',
+        onClick: updateThemeFontSize,
+      },
+      {
+        key: 'LARGE',
+        iconProps: { iconName: 'FontIncrease' },
+        text: 'Large',
+        onClick: updateThemeFontSize,
+      },
+    ],
   };
 
   // Render
@@ -57,7 +106,11 @@ const NavBar = ({
         </StyledColumnCont>
         <StyledColumnCont id={`${id}__Col-Right`} sm={3} right container>
           <StyledRow id={`${id}__Right_Row`} right>
-            {renderIcon('Settings')}
+            <IconButton
+              menuProps={settingsMenu}
+              iconProps={{ iconName: 'Settings' }}
+            />
+
             {renderIcon('Help')}
             <ProfileMenu onUserSettings={onUserSettings}/>
           </StyledRow>
