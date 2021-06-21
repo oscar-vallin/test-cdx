@@ -4,15 +4,15 @@ import { Badge } from '../../badges/Badge';
 import { PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 import { StyledPivot, StyledSpan } from './Tabs.styles';
 
-const CDXTabs = ({ items, selectedKey }) => {
+const CDXTabs = ({ items, selectedKey, onClickTab }) => {
   return (
-    <StyledPivot defaultSelectedKey={selectedKey ? '3' : ''}>
-      {items.map(({ title, content, badge }, index) => (
+    <StyledPivot defaultSelectedKey={selectedKey}>
+      {items.map(({ title, content, badge, hash }, index) => (
         <PivotItem
           headerText={title}
           key={index}
           onRenderItemLink={(link, defaultRenderer) => (
-            <StyledSpan>
+            <StyledSpan onClick={() => onClickTab(hash)}>
               {defaultRenderer(link)}
               {badge && <Badge variant={badge.variant} label={badge.label} />}
             </StyledSpan>

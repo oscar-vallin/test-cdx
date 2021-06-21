@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-
+import { useLocation } from 'react-router-dom';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { mergeStyles, mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
 import {
@@ -105,7 +105,7 @@ const classNames = mergeStyleSets({
  * @param {Array} groups Group values to group rows.
  * @param {string} searchIntput String.typing filter locally in the table. Data not modified, just view after filter.
  * */
-const Table = ({ items, columns, structure, onOption, groups, searchInput }) => {
+const Table = ({ items, columns, structure, onOption, groups, searchInput, date }) => {
   const [sortLabel, setSortLabel] = useState();
   const [sortedItems, setSortedItems] = useState([]);
   const [sortedGroups, setSortedGroups] = useState();
@@ -235,7 +235,7 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput }) => 
           return (
             <CellItemRow>
               <Link>
-                <RouteLink to={`${fieldItem.text}`}>{fieldContent}</RouteLink>
+                <RouteLink to={`${fieldItem.text}?filter=${filterInput}`}>{fieldContent}</RouteLink>
               </Link>
               {fieldItem.child.value}
             </CellItemRow>
@@ -273,7 +273,9 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput }) => 
 
         return (
           <StyledCell left>
-            <Link href="#">{fieldContent}</Link>
+            <Link>
+              <RouteLink to={`/file-status?filter=${fieldContent}&date=${date}`}>{fieldContent}</RouteLink>
+            </Link>
             {fieldItem.sublabel && <StyledSpecs>{`spec: ${fieldItem.sublabel}`}</StyledSpecs>}
           </StyledCell>
         );

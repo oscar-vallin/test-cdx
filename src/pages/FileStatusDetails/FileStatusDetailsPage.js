@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation, useHistory } from 'react-router-dom';
 import { ROUTES, ROUTE_FILE_STATUS } from '../../data/constants/RouteConstants';
 
 import { LayoutDashboard } from '../../layouts/LayoutDashboard';
@@ -28,15 +28,23 @@ import { useWorkPacketStatusDetailsQuery, useWorkPacketStatusesQuery } from '../
 import { TableEnrollment } from '../../containers/tables/TableEnrollment';
 import { TableVendorCount } from '../../containers/tables/TableVendorCount';
 
-const breadcrumbItems = [ROUTE_FILE_STATUS, { ID: 'work-packet-details', TITLE: 'File Status Details' }];
 
 const getReadableDate = (date) => new Date(date).toLocaleString().replace(',', '');
 
 const _FileStatusDetailsPage = () => {
   const { id } = useParams();
   const [packet, setPacket] = useState({});
+  const { hash, search } = useLocation();
+  const filter = new URLSearchParams(search).get('filter');
+
+  const breadcrumbItems = [{...ROUTE_FILE_STATUS, URL: filter ? `${ROUTE_FILE_STATUS.URL}?filter=${filter}` : ROUTE_FILE_STATUS.URL }, { ID: 'work-packet-details', TITLE: 'File Status Details' }];
 
   const realId = id.replace('*', '');
+  const history = useHistory();
+
+  const tabs = ['#enrollment', '#vendor', '#work', '#quality'];
+
+  const selectedTab = tabs.indexOf(hash);
 
   const { data: list, lWorkPacketDetails: lWorkPacketStatus } = useWorkPacketStatusesQuery({
     variables: {
@@ -52,6 +60,13 @@ const _FileStatusDetailsPage = () => {
   });
 
   useEffect(() => {
+    history.push({
+      hash: hash || tabs[0],
+      search: search || undefined,
+    });
+  }, []);
+
+  useEffect(() => {
     if (list && query) {
       const packet = list.workPacketStatuses.find((item) => item.workOrderId === realId);
 
@@ -63,6 +78,12 @@ const _FileStatusDetailsPage = () => {
       });
     }
   }, [list, query]);
+
+  const changeUrlHash = (hash) => {
+    history.push({
+      hash,
+    });
+  };
 
   return (
     <LayoutDashboard id="PageFileStatusDetails" menuOptionSelected={ROUTES.ROUTE_FILE_STATUS.ID}>
@@ -251,29 +272,34 @@ const _FileStatusDetailsPage = () => {
                           {
                             title: 'Enrollment Stats',
                             content: <EnrollmentStatsTab items={query.workPacketStatusDetails.enrollmentStats} />,
+                            hash: '#enrollment',
                           },
                           {
                             title: 'Vendor Count Stats',
                             content: <VendorCountStatsTab items={query.workPacketStatusDetails.outboundRecordCounts} />,
+                            hash: '#vendor',
                           },
                           {
                             title: 'Work Steps',
                             content: <WorkStepsTab steps={query.workPacketStatusDetails.workStepStatus} />,
+                            hash: '#work',
                           },
                           {
                             title: 'Quality Checks',
                             content: (
                               <QualityChecksTab
-                                items={query.workPacketStatusDetails.qualityChecks?.sequenceCreationEvent}
+                                items={query.workPacketStatusDetails.qualityChecks?.sequenceCreationEvent || []}
                               />
                             ),
                             badge: {
                               variant: 'severe',
                               label: query.workPacketStatusDetails.qualityChecks?.sequenceCreationEvent.length || '0',
                             },
+                            hash: '#quality',
                           },
                         ]}
-                        selectedKey={id.includes('*')}
+                        selectedKey={selectedTab < 0 ? '0' : selectedTab.toString()}
+                        onClickTab={(hash) => changeUrlHash(hash)}
                       />
                     </Column>
                   </Row>

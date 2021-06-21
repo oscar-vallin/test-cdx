@@ -54,7 +54,7 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
   useEffect(() => {
     const _condition = isCDXToday(argDateRange.rangeStart, argDateRange.rangeEnd);
     enableRefresh(_condition && argFilter === '');
-  }, [argDateRange, argFilter]);
+  }, [argFilter]);
 
   useEffect(() => {
     if (_error) {
@@ -78,7 +78,7 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
             formatField(
               <>
                 {item.recordHighlightCount && (
-                  <HighlightCounter type={item.recordHighlightType} href={`/file-status/${item.workOrderId}*`}>
+                  <HighlightCounter type={item.recordHighlightType} href={`/file-status/${item.workOrderId}*#quality`}>
                     {item.recordHighlightCount}
                   </HighlightCounter>
                 )}

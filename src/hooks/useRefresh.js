@@ -41,7 +41,6 @@ export const useRefresh = (id, triggerFunction) => {
       return;
     }
 
-    setRefreshOff();
     setRefresh(true);
     startRefresh();
   };

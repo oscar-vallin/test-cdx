@@ -22,7 +22,7 @@ export const StyledRow = styled(LayoutRow)`
     align-items: center;
     display: flex;
     padding: 0px 8px;
-    @media (max-width: 993px) {
+    @media (max-width: 1137px) {
       padding: 0px 8px 0px 0px;
     }
   }
@@ -32,19 +32,19 @@ export const StyledColumn = styled(LayoutColumn)`
     align-items: center;
     display: flex;
     padding: ${({ noPadding }) => (noPadding ? '0px' : '0px 8px')};
-    @media (max-width: 993px) {
+    @media (max-width: 1137px) {
       padding: 0;
     }
   }
 `;
 export const StyledColumnCont = styled(LayoutColumn)`
-  @media (max-width: 993px) {
+  @media (max-width: 1137px) {
     width: 50%;
   }
 `;
 
 export const StyledColumnNav = styled(StyledColumn)`
-  @media (max-width: 993px) {
+  @media (max-width: 1137px) {
     width: 15%;
   }
 
@@ -66,7 +66,7 @@ export const StyledColumnLogoL = styled(StyledColumn)`
   && {
     display: inline-block;
 
-    @media (max-width: 993px) {
+    @media (max-width: 1137px) {
       display: none;
     }
   }
@@ -77,7 +77,7 @@ export const StyledColumnLogoR = styled(StyledColumn)`
     align-items: flex-start;
     display: none;
 
-    @media (max-width: 993px) {
+    @media (max-width: 1137px) {
       width: 70%;
       display: ${({ collapse }) => (collapse ? 'inline-block' : 'none')};
     }
@@ -85,13 +85,11 @@ export const StyledColumnLogoR = styled(StyledColumn)`
 `;
 
 export const StyledTitle = styled(Text)`
-  &&& {
-    font: ${({ theme }) => theme.fontStyles.headerTitle};
-    color: ${({ theme }) => theme.colors.white};
-    /* max-width: 20vw; */
-    @media (max-width: 993px) {
-      font-size: 0.9375rem;
-    }
+  font: ${({ theme }) => theme.fontStyles.headerTitle};
+  color: ${({ theme }) => theme.colors.white};
+  /* max-width: 20vw; */
+  @media (max-width: 1137px) {
+    font-size: 15px;
   }
 `;
 
