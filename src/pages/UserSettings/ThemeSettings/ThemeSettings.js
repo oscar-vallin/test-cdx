@@ -53,11 +53,14 @@ const ThemeSettings = ({ userTheme }) => {
   useEffect(() => {
     if (colorPalettes && !isLoadingPalettes) {
       const defaultPalette = colorPalettes.find(({ defaultPalette }) => defaultPalette);
-     
+      const selectedPalette = (userTheme && userTheme.data)
+        ? colorPalettes.find(({ paletteNm }) => paletteNm === userTheme.data.dashThemeColor.paletteNm)
+        : defaultPalette;
+
       setPalettes([...palettes, ...colorPalettes]);
-      setSelectedPaletteId(defaultPalette?.id || null);
+      setSelectedPaletteId(selectedPalette?.id || null);
     }
-  }, [colorPalettes, isLoadingPalettes]);
+  }, [colorPalettes, isLoadingPalettes, userTheme]);
 
   useEffect(() => {
     const palette = palettes.find(({ id }) => id === selectedPaletteId) || {};
