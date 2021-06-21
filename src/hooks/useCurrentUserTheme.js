@@ -35,8 +35,12 @@ export const useCurrentUserTheme = () => {
   ] = useCreateOrUpdateOwnDashThemeMutation();
 
   useEffect(() => {
-    if (theme) {
-      const { dashThemeColor, themeColorMode, themeFontSize } = theme?.userTheme || {};
+    if (theme || updatedTheme) {
+      const data = {
+        ...(theme?.userTheme || {}),
+        ...(updatedTheme?.createOrUpdateOwnDashTheme || {})
+      };
+      const { dashThemeColor, themeColorMode, themeFontSize } = data;
 
       const palette = (dashThemeColor)
       ? dashThemeColor

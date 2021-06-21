@@ -279,7 +279,7 @@ export const RowHeaderItem = styled(LayoutBase)`
 
 export const HeaderTextLarge = styled.span`
   font-family: Segoe UI;
-  font-size: 12px;
+  font-size: 0.75rem;
   margin-bottom: 5px;
   color: #c2c2c2;
 `;
@@ -338,7 +338,7 @@ export const SWeekHourContainer = styled.div`
 `;
 
 export const SWeekHour = styled.span`
-  font-size: 12px;
+  font-size: 0.75rem;
   font-weight: 400;
   color: ${({ theme }) => theme.colors.neutralSecondary};
   height: 100%;
@@ -347,7 +347,7 @@ export const SWeekHour = styled.span`
 `;
 
 export const CellItem = styled.div`
-  font-size: 10px;
+  font-size: 0.625rem;
   width: 90%;
   overflow: hidden;
   text-overflow: ellipsis;

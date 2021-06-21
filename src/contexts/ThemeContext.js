@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useContext } from 'react';
-
+import { createGlobalStyle } from 'styled-components';
 import { Customizer, loadTheme } from '@fluentui/react';
 // import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 
@@ -17,17 +17,33 @@ import Theming from './../utils/Theming';
 export const ThemeContext = React.createContext(() => {
 });
 
+const sizes = {
+  SMALL: '.75rem',
+  MEDIUM: '1rem',
+  LARGE: '1.5rem'
+}
+
+
+
 export const ThemeContextProvider = ({ children }) => {
   const { userTheme, isLoadingTheme, fetchTheme } = useCurrentUserTheme();
   const [currentTheme, setTheme] = useState(styledComponentsTheme);
   const [styledTheme, setStyledTheme] = useState(styledComponentsTheme);
-
   const [themeConfig, setThemeConfig] = useState({});
-
+  const [fontSize, setFontSize] = useState(userTheme?.themeFontSize);
+  
   useEffect(fetchTheme, []);
+
+  const GlobalStyle = createGlobalStyle`
+    html {
+      font-size: ${({ fontSize }) => sizes[fontSize]}
+    }
+  `;
 
   useEffect(() => {
     if (!isLoadingTheme) {
+      setFontSize(userTheme?.themeFontSize);
+
       changeTheme(Theming.getVariant(userTheme?.data || {}));
     }
   }, [userTheme]);
@@ -45,6 +61,7 @@ export const ThemeContextProvider = ({ children }) => {
   const values = useMemo(() => ({
     // isContextLoading: isLoadingCurrentUserThemeParams,
     changeTheme,
+    setFontSize,
     themeConfig,
   }), [themeConfig]);
 
@@ -52,6 +69,8 @@ export const ThemeContextProvider = ({ children }) => {
     <Customizer {...loadTheme({ palette: (currentTheme || {}) })}>
       <ThemeProvider theme={styledTheme}>
         <ThemeContext.Provider value={values}>
+          <GlobalStyle fontSize={fontSize}/>
+          
           {isLoadingTheme
             ? (
               <LayoutLogin>

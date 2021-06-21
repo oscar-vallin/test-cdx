@@ -20,7 +20,7 @@ export const StyledSpan = styled.span`
   align-items: center;
   border-radius: ${({ theme }) => theme.radius.large};
   display: flex;
-  font-size: 12px;
+  font-size: 0.75rem;
   font-weight: ${({ theme }) => theme.fontWeights.normal};
   justify-content: center;
   border-color: ${({ theme, type }) => (type === 0 ? `red` : type === 1 ? `yellow` : 'blue')};
@@ -42,7 +42,7 @@ export const StyledContainer = styled.div`
   border-style: solid;
   padding: 0px 2px;
   border-radius: 3px;
-  font-size: 10px;
+  font-size: 0.625rem;
   min-width: 12px;
 `;
 

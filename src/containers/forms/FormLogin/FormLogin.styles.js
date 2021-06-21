@@ -60,11 +60,11 @@ export const StyledTitle = styled(Text)`
   font-size: 4vw;
 
   @media (min-width: 1250px) {
-    font-size: 50px;
+    font-size: 3.125rem;
   }
 
   @media (max-width: 750px) {
-    font-size: 30px;
+    font-size: 1.875rem;
   }
 `;
 

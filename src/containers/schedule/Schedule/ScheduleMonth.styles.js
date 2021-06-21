@@ -257,7 +257,7 @@ export const CalendarBodyRow = styled.div`
 `;
 
 export const CellItem = styled.div`
-  font-size: 10px;
+  font-size: 0.625rem;
   width: 80%;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -293,7 +293,7 @@ export const RowHeaderItem = styled(LayoutBase)`
 
 export const HeaderTextLarge = styled.span`
   font-family: Segoe UI;
-  font-size: 28px;
+  font-size: 1.75rem;
   margin-bottom: 5px;
 `;
 
@@ -307,7 +307,7 @@ export const HeaderYear = styled(HeaderTextLarge)`
 `;
 
 export const CalendarBodyCellNumber = styled.span`
-  font-size: 20px;
+  font-size: 1.25rem;
   line-height: 1;
   /* top: 0.75em; */
   /* right: 0.75em; */

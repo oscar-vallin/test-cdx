@@ -38,7 +38,7 @@ export const StyledMenuButton = styled(ButtonAction)`
   border-bottom: white;
   border-bottom-width: 2px;
   border-bottom-style: ${({ selected }) => (selected ? 'double' : 'none')};
-  font-size: 14px;
+  font-size: 0.875rem;
 
   &:hover {
     color: ${({ theme }) => theme.colors.neutralLight};
@@ -46,7 +46,7 @@ export const StyledMenuButton = styled(ButtonAction)`
 
   @media (max-width: 993px) {
     display: ${({ collapse }) => (collapse ? 'inline-block' : 'none')};
-    font-size: 14px;
+    font-size: 0.875rem;
   }
 `;
 

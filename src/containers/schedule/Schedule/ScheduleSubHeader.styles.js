@@ -290,7 +290,7 @@ export const HeaderTextLarge = styled.span`
   font-family: Segoe UI;
   margin-bottom: 10px;
   margin-top: 20px;
-  font-size: 12px;
+  font-size: 0.75rem;
   letter-spacing: -0.1px;
 `;
 
@@ -334,7 +334,7 @@ export const DayViewContainer = styled(WeekViewContainer)`
 
 export const WeekViewNumber = styled(HeaderTextLarge)`
   margin: 0 0 6px 10px;
-  font-size: 20px;
+  font-size: 1.25rem;
   height: 40px;
   display: flex;
   flex-direction: column;
@@ -343,7 +343,7 @@ export const WeekViewNumber = styled(HeaderTextLarge)`
 
 export const WeekViewDayName = styled(HeaderTextLarge)`
   margin: 0 0 8px 5px;
-  font-size: 14px;
+  font-size: 0.875rem;
   color: ${({ isSameMonth }) => (isSameMonth ? COLOR_TEXT : COLOR_TEXT_LIGHT)};
   height: 40px;
   display: flex;

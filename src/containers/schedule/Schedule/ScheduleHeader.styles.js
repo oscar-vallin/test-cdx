@@ -303,7 +303,7 @@ export const MonthYearContainer = styled(LayoutBase)`
 
 export const HeaderTextLarge = styled.span`
   font-family: Segoe UI;
-  font-size: 14px;
+  font-size: 0.875rem;
   color: ${COLOR_MAIN};
 `;
 

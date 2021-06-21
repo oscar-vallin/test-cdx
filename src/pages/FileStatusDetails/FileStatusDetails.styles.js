@@ -11,7 +11,7 @@ export const StyledHeaderRow = styled.div`
   display: flex;
 
   div {
-    font-size: 14px;
+    font-size: 0.875rem;
     font-weight 600;
     text-align: left;
     width: 300px;
@@ -67,7 +67,7 @@ export const StyledFooter = styled.div`
   margin: 10px 0 0;
 
   div {
-    font-size: 14px;
+    font-size: 0.875rem;
     font-weight 600;
     text-align: left;
     width: 300px;

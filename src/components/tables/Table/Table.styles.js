@@ -46,7 +46,7 @@ export const HeaderColumn = styled(LayoutColumn)`
 export const StyledText = styled(Text)`
   display: flex;
   width: 100%;
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: ${({ bold, theme }) => (bold ? theme.fontWeights.bold : theme.fontWeights.normal)};
   justify-content: ${({ left, right }) => (left ? 'flex-start' : right ? 'flex-end' : 'center')};
   align-items: center;
@@ -59,7 +59,7 @@ export const StyledSpecs = styled(Text)`
   justify-content: 'flex-start';
   align-items: center;
   color: gray;
-  font-size: 12px;
+  font-size: 0.75rem;
 `;
 
 export const StyledMenuButton = styled(ButtonAction)`
@@ -69,7 +69,7 @@ export const StyledMenuButton = styled(ButtonAction)`
 export const StyledSublabel = styled.span`
   /* margin-left: 5px;
   color: ${({ theme }) => theme.colors.textMuted};
-  font-size: 10px; */
+  font-size: 0.625rem; */
 `;
 
 export const CellItemRow = styled.div`

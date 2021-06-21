@@ -10,6 +10,6 @@ export const Box = styled(LayoutBox)`
 
 export const Text = styled(ComponentText)`
   color: gray;
-  font-size: 12px;
+  font-size: 0.75rem;
   margin: 1px 2px 5px 2%;
 `;

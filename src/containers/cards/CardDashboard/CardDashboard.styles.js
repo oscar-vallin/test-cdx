@@ -15,14 +15,14 @@ export const StyledTitle = styled(Text)`
   &&& {
     text-align: ${({ noData }) => (noData ? 'center' : 'left')};
     color: gray;
-    font-size: 14px;
+    font-size: 0.875rem;
     font-weight: ${({ theme, noData }) => (noData ? theme.fontWeights.bold : theme.fontWeights.normal)};
   }
 `;
 
 export const StyledSubtitle = styled(StyledTitle)`
   &&& {
-    font-size: 12px;
+    font-size: 0.75rem;
   }
 `;
 
@@ -30,7 +30,7 @@ export const StyledValues = styled(Text)`
   &&& {
     text-align: left;
     color: black;
-    font-size: 36px;
+    font-size: 2.25rem;
     font-weight: 700;
   }
 `;

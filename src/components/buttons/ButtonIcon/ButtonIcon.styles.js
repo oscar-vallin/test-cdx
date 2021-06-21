@@ -9,5 +9,5 @@ export const StyledButton = styled(Button)`
 `;
 
 export const StyledFontIcon = styled(FontIcon)`
-  font-size: ${({ size }) => (size ? `${size}px` : '20px')};
+  font-size: ${({ size }) => (size ? `${size}px` : '1.25rem')};
 `;

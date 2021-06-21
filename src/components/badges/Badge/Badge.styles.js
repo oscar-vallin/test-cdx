@@ -20,7 +20,7 @@ export const StyledSpan = styled.span`
   border-radius: ${({ theme }) => theme.radius.large};
   color: ${({ theme, variant }) => getVariant(theme, variant).color};
   display: flex;
-  font-size: ${({ theme, pill }) => pill ? theme.fontSizes.small : '12px'};
+  font-size: ${({ theme, pill }) => pill ? theme.fontSizes.small : '0.75rem'};
   font-weight: ${({ theme, pill }) => pill
     ? theme.fontWeights.normal
     : theme.fontWeights.bold};

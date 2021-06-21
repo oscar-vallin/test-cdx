@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { IconButton } from '@fluentui/react/lib/Button';
 import { Box, Row as LayoutRow, Column as LayoutColumn } from '../../../components/layouts';
 import { ButtonAction } from '../../../components/buttons/ButtonAction';
 // import { ButtonProfile } from '../../../components/buttons/ButtonProfile';
@@ -9,6 +10,11 @@ import { Text } from '../../../components/typography/Text';
 export const StyledBox = styled(Box)`
   background: ${({ theme }) => theme.colors.themePrimary};
   height: 48px;
+`;
+
+export const StyledDropdown = styled(IconButton)`
+  background: ${({ theme }) => theme.colors.themePrimary};
+  color: ${({ theme }) => theme.colors.white};
 `;
 
 export const StyledRow = styled(LayoutRow)`
@@ -84,7 +90,7 @@ export const StyledTitle = styled(Text)`
     color: ${({ theme }) => theme.colors.white};
     /* max-width: 20vw; */
     @media (max-width: 993px) {
-      font-size: 15px;
+      font-size: 0.9375rem;
     }
   }
 `;

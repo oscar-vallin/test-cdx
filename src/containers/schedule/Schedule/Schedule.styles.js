@@ -286,7 +286,7 @@ export const RowHeaderItem = styled(LayoutBase)`
 
 export const HeaderTextLarge = styled.span`
   font-family: Segoe UI;
-  font-size: 28px;
+  font-size: 1.75rem;
   margin-bottom: 5px;
 `;
 

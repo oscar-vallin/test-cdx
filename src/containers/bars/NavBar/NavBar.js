@@ -4,8 +4,8 @@ import { ProfileMenu } from '../../menus/ProfileMenu';
 // Components
 import { ContextualMenuItemType } from '@fluentui/react/lib/ContextualMenu';
 import { MainMenu } from '../../menus/MainMenu';
-import { IconButton } from '@fluentui/react/lib/Button';
 import { useCurrentUserTheme } from '../../../hooks/useCurrentUserTheme';
+import { useThemeContext } from '../../../contexts/ThemeContext';
 import { useAuthContext } from '../../../contexts/AuthContext';
 // Hooks
 // import { useNavBar } from "./NavBar.services";
@@ -19,6 +19,7 @@ import {
   StyledColumnNav,
   StyledColumnLogoL,
   StyledColumnCont,
+  StyledDropdown,
   // StyledButtonProfile,
   StyledButtonIcon,
 } from './NavBar.styles';
@@ -32,13 +33,14 @@ const NavBar = ({
 }) => {
   const [collapse, setCollapse] = React.useState('false');
   const { userTheme, createOrUpdateTheme, isLoadingTheme, isHandlingTheme } = useCurrentUserTheme();
+  const { setFontSize } = useThemeContext();
   const { isAuthenticated } = useAuthContext();
 
   const changeCollapse = () => {
     setCollapse(!collapse);
   };
 
-  const [themeFontSize, setThemeFontSize] = useState(userTheme?.data?.themeFontSize || null);
+  const [themeFontSize, setThemeFontSize] = useState(userTheme?.themeFontSize || null);
 
   const renderIcon = (iconName) => {
     return (
@@ -50,13 +52,9 @@ const NavBar = ({
 
   const updateThemeFontSize = (event, { key }) => {
     setThemeFontSize(key);
+    setFontSize(key);
+    createOrUpdateTheme({ themeFontSize });
   };
-
-  useEffect(() => {
-    if (themeFontSize && isAuthenticated) {
-      createOrUpdateTheme({ ...userTheme.data, themeFontSize });
-    }
-  }, [themeFontSize, userTheme, isAuthenticated]);
 
   const settingsMenu = {
     shouldFocusOnMount: true,
@@ -106,7 +104,7 @@ const NavBar = ({
         </StyledColumnCont>
         <StyledColumnCont id={`${id}__Col-Right`} sm={3} right container>
           <StyledRow id={`${id}__Right_Row`} right>
-            <IconButton
+            <StyledDropdown
               menuProps={settingsMenu}
               iconProps={{ iconName: 'Settings' }}
             />

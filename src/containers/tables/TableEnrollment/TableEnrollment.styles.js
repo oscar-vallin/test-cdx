@@ -25,6 +25,6 @@ export const BoxHeader = styled(Box)`
 export const Text = styled(ComponentText)`
   width: 100%;
   color: gray;
-  font-size: 14px;
+  font-size: 0.875rem;
   padding-left: 1%;
 `;
