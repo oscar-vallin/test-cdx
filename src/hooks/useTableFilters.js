@@ -90,7 +90,7 @@ export const useTableFilters = (placeholder, id) => {
 
   useEffect(() => {
     pushQueryString();
-  }, [localInput.value, startDate.value]);
+  }, [localInput.value, startDate.value, endDate.value]);
 
   return {
     localInput,
