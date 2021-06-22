@@ -11,7 +11,7 @@ export const Box = styled(LayoutBox)`
 
 export const Row = styled(LayoutRow)`
   width: 100%;
-  margin: 10vh 0;
+  margin: 50px 0 10px;
 `;
 
 export const Column = styled(LayoutColumn)`
