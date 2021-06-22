@@ -1,4 +1,17 @@
-import { isToday, isYesterday, getHours, startOfDay, endOfDay, startOfYesterday, startOfMonth, endOfMonth, endOfYesterday, subMonths, subDays, addDays } from 'date-fns';
+import {
+  isToday,
+  isYesterday,
+  getHours,
+  startOfDay,
+  endOfDay,
+  startOfYesterday,
+  startOfMonth,
+  endOfMonth,
+  endOfYesterday,
+  subMonths,
+  subDays,
+  addDays,
+} from 'date-fns';
 
 //
 export const formatField = (value, columnId, text, sublabel, child) => {
@@ -35,7 +48,9 @@ export const getStartDay = (date) => {
   const hour = getHours(_newDate);
 
   return date === 'today'
-    ? hour < 9 ? subDays(_newDate, 1) : startOfDay(_newDate)
+    ? hour < 9
+      ? subDays(_newDate, 1)
+      : startOfDay(_newDate)
     : date === 'yesterday'
     ? startOfYesterday(_newDate)
     : date === 'thisMonth'
@@ -50,7 +65,9 @@ export const getEndDay = (date) => {
   const hour = getHours(_newDate);
 
   return date === 'today'
-    ? hour < 9 ? endOfDay(_newDate) : addDays(_newDate, 1)
+    ? hour < 9
+      ? endOfDay(_newDate)
+      : addDays(_newDate, 1)
     : date === 'yesterday'
     ? endOfYesterday(_newDate)
     : date === 'thisMonth'

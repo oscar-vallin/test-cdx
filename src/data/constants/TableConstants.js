@@ -1,6 +1,7 @@
 import { useWorkPacketStatusesLazyQuery, useWpTransmissionsLazyQuery } from '../services/graphql';
 import { columns as tableArchivesColumns, getItems as tableArchivesGetItems } from './tables/ArchiveTableConstants';
 import { errorColumns, getErrorsItems } from './tables/ErrorTableConstants';
+import { fileStatusColumns, getFileStatusItems } from './tables/fileStatusTableConstants';
 import {
   columns as tableTransmissionsColumns,
   getItems as tableTransmissionsGetItems,
@@ -91,6 +92,8 @@ export const TABLES = {
       url: null,
     },
     polling: 1,
+    columns: fileStatusColumns,
+    items: getFileStatusItems,
   },
   ARCHIVES: {
     header: {
@@ -139,7 +142,7 @@ export const getTableStructure = (name) => {
 };
 
 export const useQueryTable = (tableID, tableArguments) => {
-  if (tableID === TABLE_NAMES.ARCHIVES || tableID === TABLE_NAMES.ERRORS) {
+  if (tableID === TABLE_NAMES.ARCHIVES || tableID === TABLE_NAMES.ERRORS || tableID === TABLE_NAMES.FILE_STATUS) {
     const [apiCall, { data, loading, error }] = useWorkPacketStatusesLazyQuery({
       variables: {
         orgSid: tableArguments.orgId ?? 1,

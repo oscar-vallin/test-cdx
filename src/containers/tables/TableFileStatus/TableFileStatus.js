@@ -22,11 +22,15 @@ import { useTable } from './TableFileStatus.service';
 import { InputText } from '../../../components/inputs/InputText';
 import { InputDateRange } from '../../../components/inputs/InputDateRange';
 import { useTableFilters } from '../../../hooks/useTableFilters';
+import { TABLE_NAMES } from '../../../data/constants/TableConstants';
+import { useTableTemplate } from '../../../hooks/useTableTemplate';
 import { getStartDay, getEndDay } from '../../../helpers/tableHelpers';
 
 const TableFileStatus = ({ idPage = 'TableFileStatus', orgSid = 1, dateRange, filter }) => {
   const { localInput, startDate, endDate } = useTableFilters('Extract Name,  Status, Vendor, etc.');
-  const { tableProps } = useTable(
+
+  const { tableProps } = useTableTemplate(
+    TABLE_NAMES.FILE_STATUS,
     orgSid,
     { rangeStart: startDate.value, rangeEnd: endDate.value },
     localInput.value,
