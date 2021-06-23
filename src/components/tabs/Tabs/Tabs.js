@@ -14,7 +14,7 @@ const CDXTabs = ({ items, selectedKey, onClickTab }) => {
           onRenderItemLink={(link, defaultRenderer) => (
             <StyledSpan onClick={() => onClickTab(hash)}>
               {defaultRenderer(link)}
-              {badge && <Badge variant={badge.variant} label={badge.label} />}
+              {badge && <Badge variant={badge.variant} label={badge.label?.toString()} />}
             </StyledSpan>
           )}
         >

@@ -136,7 +136,7 @@ export const AuthContextProvider = ({ children }) => {
     if (!authData) {
       setToken(null);
       setAuthenticating(false);
-      
+
       localStorage.removeItem('ADMIN_NAV');
 
       return;
@@ -158,7 +158,6 @@ export const AuthContextProvider = ({ children }) => {
     fetchTheme();
 
     authHistory.push(routePage.URL);
-
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authData, authHistory]);
@@ -263,18 +262,17 @@ export const AuthContextProvider = ({ children }) => {
   // Finally, return the interface that we want to expose to our other components
   return (
     <AuthContext.Provider value={values}>
-      {isLoadingTheme
-        ? (
-          <LayoutLogin>
-            <StyledCard>
-              <Spacing margin={{ top: 'normal' }}>
-                <Spinner size="lg" label="Fetching your preferences"/>
-              </Spacing>
-            </StyledCard>
-          </LayoutLogin>
-        )
-        : children
-      }
+      {isLoadingTheme ? (
+        <LayoutLogin id="AuthContext">
+          <StyledCard>
+            <Spacing margin={{ top: 'normal' }}>
+              <Spinner size="lg" label="Fetching your preferences" />
+            </Spacing>
+          </StyledCard>
+        </LayoutLogin>
+      ) : (
+        children
+      )}
     </AuthContext.Provider>
   );
 };

@@ -266,8 +266,8 @@ const _FileStatusDetailsPage = () => {
 
                   {(packet.supplementalFiles || []).length > 0 && (
                     <Collapse label="View all files">
-                      {packet.supplementalFiles.map(({ label, value }) => (
-                        <Spacing margin={{ top: 'normal' }}>
+                      {packet.supplementalFiles.map(({ label, value }, index) => (
+                        <Spacing key={index} margin={{ top: 'normal' }}>
                           <Card elevation="smallest" onClick={() => window.open(value)}>
                             <Text>{value.split('/').pop()}</Text>
                           </Card>
