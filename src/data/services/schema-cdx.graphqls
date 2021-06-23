@@ -1032,6 +1032,7 @@ type DefaultDashThemePage{
 input DashThemeInput{
     themeFontSize : ThemeFontSize
     themeColorMode : ThemeColorMode
+    themeColorSid : ID
 }
 
 input CreateUserDashThemeInput{
