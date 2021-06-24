@@ -91,7 +91,6 @@ export const AuthContextProvider = ({ children }) => {
   // When Server Response or Data is cleaned.
   //
   useEffect(() => {
-    console.log('There is an error: ', error);
     if (error) {
       setToken(null);
 
