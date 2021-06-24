@@ -91,6 +91,7 @@ export const AuthContextProvider = ({ children }) => {
   // When Server Response or Data is cleaned.
   //
   useEffect(() => {
+    console.log('There is an error: ', error);
     if (error) {
       setToken(null);
 
@@ -135,7 +136,7 @@ export const AuthContextProvider = ({ children }) => {
     if (!authData) {
       setToken(null);
       setAuthenticating(false);
-
+      
       localStorage.removeItem('ADMIN_NAV');
 
       return;
