@@ -8,6 +8,7 @@ import {
   DetailsListLayoutMode,
   SelectionMode,
   buildColumns,
+  DetailsHeader,
 } from 'office-ui-fabric-react/lib/DetailsList';
 
 import {
@@ -18,6 +19,7 @@ import {
   StyledSublabel,
   CellItemRow,
   RouteLink,
+  StyledMenuButton,
 } from './Table.styles';
 
 import { TableHeader } from '../TableHeader';
@@ -112,6 +114,7 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput, date 
   const [tablecolumns, setColumns] = useState([]);
   const [filterInput, setFilterInput] = useState(searchInput);
   const [option, setOption] = useState(false);
+  const [sort, setSort] = useState('asc');
 
   // * Component Effects
   // Component Did Mount.
@@ -334,11 +337,14 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput, date 
   };
 
   //
-  const _onSort = () => {
+  const _onSort = (key) => {
+    setSort(sort === 'asc' ? 'desc' : 'asc');
     if (structure.header.type === 'dashboard') {
       setSortLabel(sortLabel === 'Vendor' ? 'BUs' : 'Vendor');
 
       setSortedItems(_copyAndSort(sortedItems, columns[sortLabel === 'Vendor' ? 1 : 0].fieldName, false));
+    } else if (structure.header.type === 'file_status' && key !== 'progress') {
+      setSortedItems(_copyAndSort(sortedItems, key, sort == 'asc' ? true : false));
     }
   };
 
@@ -349,11 +355,25 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput, date 
     onOption(!option);
   };
 
-  const _onRenderTableHeader = () => {
+  const _onRenderTableHeader = (props) => {
     if (structure.header.type === 'dashboard' && !sortLabel) {
       setSortLabel('Vendor');
 
       setSortedItems(_copyAndSort(sortedItems, columns[0]?.fieldName, false));
+    } else if (structure.header.type === 'file_status') {
+      return (
+        <DetailsHeader
+          {...props}
+          onColumnClick={(_ev, column) => _onSort(column.key)}
+          onRenderColumnHeaderTooltip={(props) =>
+            props.column.key === 'progress' ? (
+              props.children
+            ) : (
+              <StyledMenuButton icon="sort">{props.children}</StyledMenuButton>
+            )
+          }
+        />
+      );
     }
 
     return <TableHeader header={structure.header} sortLabel={sortLabel} onSort={_onSort} onOption={_onShowSpecs} />;
@@ -396,7 +416,7 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput, date 
         layoutMode={DetailsListLayoutMode.justified}
         isHeaderVisible
         onItemInvoked={_onItemInvoked}
-        onRenderDetailsHeader={null}
+        onRenderDetailsHeader={structure.header.type === 'file_status' ? _onRenderTableHeader : null}
         onRenderItemColumn={_renderItemColumn}
         groups={sortedGroups}
       />
