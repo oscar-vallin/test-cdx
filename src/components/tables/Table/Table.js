@@ -158,7 +158,7 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput, date 
       setFilterInput();
       _buildItems();
     }
-  }, [searchInput]);
+  }, [searchInput, items]);
 
   useEffect(() => {
     setFilterInput(searchInput);

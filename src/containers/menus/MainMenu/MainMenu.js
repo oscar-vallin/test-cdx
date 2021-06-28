@@ -37,7 +37,7 @@ const MainMenu = ({ id = '__MainMenu', option = ROUTES.ROUTE_DASHBOARD.ID, left,
             selected={location.pathname === menuOption.URL}
             collapse={collapse}
             onClick={() => {
-              if (menuOption.URL === `/${ROUTES_ID.FILE_STATUS}` && filter) {
+              if (menuOption.URL === `/${ROUTES_ID.FILE_STATUS}` && filter && filter !== 'undefined') {
                 history.push(`${menuOption.URL}?filter=${filter}`);
               } else {
                 history.push(menuOption.URL);
