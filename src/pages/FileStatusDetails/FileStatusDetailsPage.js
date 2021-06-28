@@ -54,7 +54,10 @@ const _FileStatusDetailsPage = () => {
   } = useFsPacketStatusDetails(realId);
 
   const breadcrumbItems = [
-    { ...ROUTE_FILE_STATUS, URL: filter ? `${ROUTE_FILE_STATUS.URL}?filter=${filter}` : ROUTE_FILE_STATUS.URL },
+    {
+      ...ROUTE_FILE_STATUS,
+      URL: filter && filter !== 'undefined' ? `${ROUTE_FILE_STATUS.URL}?filter=${filter}` : ROUTE_FILE_STATUS.URL,
+    },
     { ID: 'work-packet-details', TITLE: 'File Status Details' },
   ];
 
