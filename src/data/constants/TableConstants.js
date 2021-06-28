@@ -92,6 +92,10 @@ export const TABLES = {
       url: null,
     },
     polling: 1,
+    pagination: {
+      active: true,
+      pageSize: 5,
+    },
     columns: fileStatusColumns,
     items: getFileStatusItems,
   },
