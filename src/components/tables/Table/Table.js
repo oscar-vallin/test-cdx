@@ -20,7 +20,10 @@ import {
   CellItemRow,
   RouteLink,
   StyledMenuButton,
+  ContainerPagination,
 } from './Table.styles';
+
+import Pagination from 'office-ui-fabric-react-pagination';
 
 import { TableHeader } from '../TableHeader';
 import { FileProgress } from '../../../containers/bars/FileProgress';
@@ -115,11 +118,15 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput, date 
   const [filterInput, setFilterInput] = useState(searchInput);
   const [option, setOption] = useState(false);
   const [sort, setSort] = useState('asc');
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   // * Component Effects
   // Component Did Mount.
-  useEffect(() => {}, []);
-
+  useEffect(() => {
+    definePages();
+  });
+  //
   // When items or groups change
   // > then group merge, build Columns, build Items, and set Columns.
   useEffect(() => {
@@ -344,7 +351,11 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput, date 
 
       setSortedItems(_copyAndSort(sortedItems, columns[sortLabel === 'Vendor' ? 1 : 0].fieldName, false));
     } else if (structure.header.type === 'file_status' && key !== 'progress') {
-      setSortedItems(_copyAndSort(sortedItems, key, sort == 'asc' ? true : false));
+      if (totalPages === 1) {
+        setSortedItems(_copyAndSort(sortedItems, key, sort == 'asc' ? true : false));
+      } else {
+        alert('Sorting unavailable for a multi-page table');
+      }
     }
   };
 
@@ -381,6 +392,27 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput, date 
 
   // * RENDER
 
+  const definePages = () => {
+    if (structure?.pagination?.active) {
+      let _totalPages = 1;
+      _totalPages = Math.ceil(sortedItems.length / structure?.pagination?.pageSize);
+      _totalPages = _totalPages < 1 ? 1 : _totalPages;
+      setTotalPages(_totalPages);
+    }
+  };
+
+  const onChangePage = (page) => {
+    setPage(page > totalPages ? 1 : page);
+  };
+
+  const renderItems = () => {
+    if (structure?.pagination?.active) {
+      return sortedItems.slice((page - 1) * structure?.pagination?.pageSize, page * structure?.pagination?.pageSize);
+    } else {
+      return sortedItems;
+    }
+  };
+
   if (sortedItems)
     if (structure.header.type === 'dashboard') {
       return (
@@ -409,7 +441,7 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput, date 
       <DetailsList
         className={classNames.root}
         id="TableDetailedList"
-        items={sortedItems}
+        items={renderItems()}
         columns={tablecolumns}
         selectionMode={SelectionMode.none}
         setKey="none"
@@ -422,6 +454,11 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput, date 
       />
       {/* )} */}
       {sortedItems?.length === 0 && <StyledText bold>No Data</StyledText>}
+      {structure?.pagination?.active && (
+        <ContainerPagination>
+          <Pagination currentPage={page} totalPages={totalPages || 1} onChange={(page) => onChangePage(page)} />
+        </ContainerPagination>
+      )}
     </StyledContainer>
   );
 
