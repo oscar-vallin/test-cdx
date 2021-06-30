@@ -75,14 +75,15 @@ export const AuthContextProvider = ({ children }) => {
     // setHistory(history);
   }, [isCurrentUserLogged]);
 
+  //
   useEffect(() => {
-    setIsCheckingAuth(isAuthenticating || token !== null);
+    setIsCheckingAuth(isAuthenticating || !!token);
 
-    if (!isAuthenticating && !authData && token === null) {
+    if (!isAuthenticating && !authData && !token) {
       setIsCheckingAuth(false);
     }
 
-    if (token && authData) {
+    if (!!token && !!authData) {
       setAuthenticated(true);
     }
   }, [token, isAuthenticating, isAuthenticated, authData]);
