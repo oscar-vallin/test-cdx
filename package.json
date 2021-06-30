@@ -25,7 +25,6 @@
     "graphql": "^15.3.0",
     "lodash": "^4.17.21",
     "office-ui-fabric-react": "^7.144.2",
-    "office-ui-fabric-react-pagination": "^0.0.8",
     "password-validator": "^5.1.1",
     "query-string": "^7.0.0",
     "react": "^17.0.1",
