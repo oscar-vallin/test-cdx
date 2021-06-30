@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { mergeStyles, mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
 import {
@@ -22,8 +21,6 @@ import {
   StyledMenuButton,
   ContainerPagination,
 } from './Table.styles';
-
-import Pagination from 'office-ui-fabric-react-pagination';
 
 import { TableHeader } from '../TableHeader';
 import { FileProgress } from '../../../containers/bars/FileProgress';
@@ -393,12 +390,12 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput, date 
   // * RENDER
 
   const definePages = () => {
-    if (structure?.pagination?.active) {
-      let _totalPages = 1;
-      _totalPages = Math.ceil(sortedItems.length / structure?.pagination?.pageSize);
-      _totalPages = _totalPages < 1 ? 1 : _totalPages;
-      setTotalPages(_totalPages);
-    }
+    // if (structure?.pagination?.active) {
+    //   let _totalPages = 1;
+    //   _totalPages = Math.ceil(sortedItems.length / structure?.pagination?.pageSize);
+    //   _totalPages = _totalPages < 1 ? 1 : _totalPages;
+    //   setTotalPages(_totalPages);
+    // }
   };
 
   const onChangePage = (page) => {
@@ -406,11 +403,11 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput, date 
   };
 
   const renderItems = () => {
-    if (structure?.pagination?.active) {
-      return sortedItems.slice((page - 1) * structure?.pagination?.pageSize, page * structure?.pagination?.pageSize);
-    } else {
-      return sortedItems;
-    }
+    // if (structure?.pagination?.active) {
+    //   return sortedItems.slice((page - 1) * structure?.pagination?.pageSize, page * structure?.pagination?.pageSize);
+    // } else {
+    return sortedItems;
+    // }
   };
 
   if (sortedItems)
@@ -454,11 +451,11 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput, date 
       />
       {/* )} */}
       {sortedItems?.length === 0 && <StyledText bold>No Data</StyledText>}
-      {structure?.pagination?.active && (
+      {/* {structure?.pagination?.active && (
         <ContainerPagination>
           <Pagination currentPage={page} totalPages={totalPages || 1} onChange={(page) => onChangePage(page)} />
         </ContainerPagination>
-      )}
+      )} */}
     </StyledContainer>
   );
 
