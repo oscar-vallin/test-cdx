@@ -15,30 +15,27 @@ import { useNavigateToNewDomainQuery } from '../../data/services/graphql';
 const parseLinks = (links = [], sidebarOpt) => {
   return links.map(({ appDomain, label, subNavItems, page }) => ({
     name: label,
-    ...(subNavItems) ? {
-      isExpanded: subNavItems.find((item) => item.page.type === sidebarOpt),
-      links: parseLinks(subNavItems)
-    } : {},
-    ...(page)
+    ...(subNavItems
       ? {
-        url: getRouteByApiId(page?.type)?.URL,
-        key: page.type,
-        params: page.parameters,
-        commands: page.commands
-      }
-      : {}
-  }))
-}
-const LayoutAdmin = ({
-  id = 'LayoutAdmin',
-  menuOptionSelected = 'admin',
-  sidebarOptionSelected = '',
-  children
-}) => {
+          isExpanded: subNavItems.find((item) => item.page.type === sidebarOpt),
+          links: parseLinks(subNavItems),
+        }
+      : {}),
+    ...(page
+      ? {
+          url: getRouteByApiId(page?.type)?.URL,
+          key: page.type,
+          params: page.parameters,
+          commands: page.commands,
+        }
+      : {}),
+  }));
+};
+const LayoutAdmin = ({ id = 'LayoutAdmin', menuOptionSelected = 'admin', sidebarOptionSelected = '', children }) => {
   const history = useHistory();
   const { authData } = useAuthContext();
   const cache = localStorage.getItem('ADMIN_NAV');
-  
+
   const [domain, setDomain] = useState({});
 
   const { data, loading, error } = useNavigateToNewDomainQuery({
@@ -46,8 +43,8 @@ const LayoutAdmin = ({
       domainNavInput: {
         orgSid: authData.orgId,
         appDomain: authData.userType,
-        selectedPage: authData.selectedPage
-      }
+        selectedPage: authData.selectedPage,
+      },
     },
   });
 
@@ -55,7 +52,7 @@ const LayoutAdmin = ({
     if (!sidebarOpt) {
       history.replace(getRouteByApiId(page).URL);
     }
-  }
+  };
 
   useEffect(() => {
     if (cache) {
@@ -63,13 +60,13 @@ const LayoutAdmin = ({
 
       setDomain(domain);
       redirect(domain.selectedPage, sidebarOptionSelected);
-      
+
       return;
     }
 
     if (data && !loading) {
       const { navigateToNewDomain: domain } = data;
-      
+
       localStorage.setItem('ADMIN_NAV', JSON.stringify(domain));
 
       setDomain(domain);
@@ -77,35 +74,31 @@ const LayoutAdmin = ({
 
       return;
     }
-  }, [data, loading, sidebarOptionSelected])
+  }, [data, loading, sidebarOptionSelected]);
 
   return (
     <LayoutDashboard id={id} menuOptionSelected={menuOptionSelected}>
-      {
-        (!cache && loading)
-          ? <Spacing margin={{ top: 'double' }}>
-              <Spinner size="lg" label="Loading admin domain"/>
-            </Spacing>
-          : (
-            <StyledBox>
-              <StyledNav
-                selectedKey={sidebarOptionSelected}
-                groups={[{ links: parseLinks(domain.navItems, sidebarOptionSelected) }]}
-                onLinkClick={(evt, route) => {
-                  evt.preventDefault();
+      {!cache && loading ? (
+        <Spacing margin={{ top: 'double' }}>
+          <Spinner size="lg" label="Loading admin domain" />
+        </Spacing>
+      ) : (
+        <StyledBox>
+          <StyledNav
+            selectedKey={sidebarOptionSelected}
+            groups={[{ links: parseLinks(domain.navItems, sidebarOptionSelected) }]}
+            onLinkClick={(evt, route) => {
+              evt.preventDefault();
 
-                  if (!route.links) {
-                    history.push(route.url);
-                  }
-                }}
-              />
+              if (!route.links) {
+                history.push(route.url);
+              }
+            }}
+          />
 
-              <StyledBox>
-                {children}
-              </StyledBox>
-            </StyledBox>
-          )
-      }
+          <StyledBox>{children}</StyledBox>
+        </StyledBox>
+      )}
     </LayoutDashboard>
   );
 };
