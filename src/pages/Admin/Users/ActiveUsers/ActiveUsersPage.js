@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
+import { Button } from '../../../../components/buttons/Button';
 import { Row, Column } from '../../../../components/layouts';
 import { Spacing } from '../../../../components/spacings/Spacing';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
@@ -8,9 +9,10 @@ import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { MessageBar } from 'office-ui-fabric-react';
 import { Text } from '../../../../components/typography/Text';
 import { Separator } from '../../../../components/separators/Separator';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { useUsersForOrgFpQuery } from '../../../../data/services/graphql';
-import { StyledColumn } from './ActiveUsersPage.styles';
+import { StyledColumn, RouteLink } from './ActiveUsersPage.styles';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -30,8 +32,16 @@ const generateColumns = () => {
   ];
 };
 
-const onRenderItemColumn = (item, index, column) => {
-  return item[column.key] || item['person'][column.key];
+const onRenderItemColumn = (item, _index, column) => {
+  if (column.key == 'id') {
+    return (
+      <Link>
+        <RouteLink to={`/user-details/${1}`}>{item[column.key]}</RouteLink>
+      </Link>
+    );
+  } else {
+    return item[column.key] || item['person'][column.key];
+  }
 };
 
 const _ActiveUsersPage = () => {

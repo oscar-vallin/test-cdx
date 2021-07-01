@@ -19,6 +19,7 @@ import { ActiveOrgsPage } from './Admin/Organizations';
 import { CurrentActivityPage } from './Admin/Activity';
 import { ColorPalettesPage, DefaultThemePage } from './Admin/DashboardSite';
 import { ActiveUsersPage } from './Admin/Users/ActiveUsers';
+import { UserDetailsPage } from './Admin/UserDetails';
 import { DeletedUsersPage } from './Admin/Users/DeletedUsers';
 
 import AuthRoute from './AuthRoute';
@@ -86,6 +87,9 @@ export const Routes = () => {
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_DELETED_USERS.URL}>
         <DeletedUsersPage />
+      </AuthRoute>
+      <AuthRoute path={ROUTES.ROUTE_USER_DETAILS.URL}>
+        <UserDetailsPage />
       </AuthRoute>
       <AuthRoute>
         <NotFoundPage />
