@@ -7,13 +7,11 @@ export const NAV_ITEMS = [
         name: 'Users',
         links: [
           {
-            name: 'Active Users',
-            url: '#',
+            name: <RouteLink to="/admin/users/active-users">Active Users</RouteLink>,
             key: 'activeUsers',
           },
           {
-            name: 'Deleted Users',
-            url: '#',
+            name: <RouteLink to="/admin/users/deleted-users">Deleted Users</RouteLink>,
             key: 'deletedUsers',
           },
         ],
