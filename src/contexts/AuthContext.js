@@ -77,7 +77,7 @@ export const AuthContextProvider = ({ children }) => {
 
   //
   useEffect(() => {
-    setIsCheckingAuth(isAuthenticating || !!token);
+    setIsCheckingAuth(isAuthenticating);
 
     if (!isAuthenticating && !authData && !token) {
       setIsCheckingAuth(false);
