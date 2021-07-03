@@ -88,9 +88,6 @@ export const Routes = () => {
       <AuthRoute path={ROUTES.ROUTE_DELETED_USERS.URL}>
         <DeletedUsersPage />
       </AuthRoute>
-      <AuthRoute path={ROUTES.ROUTE_USER_DETAILS.URL}>
-        <UserDetailsPage />
-      </AuthRoute>
       <AuthRoute>
         <NotFoundPage />
       </AuthRoute>

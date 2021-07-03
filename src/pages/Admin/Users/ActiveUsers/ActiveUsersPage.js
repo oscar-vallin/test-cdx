@@ -11,6 +11,8 @@ import { Text } from '../../../../components/typography/Text';
 import { Separator } from '../../../../components/separators/Separator';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 
+import { CreateUsersPanel } from '../CreateUsers';
+
 import { useUsersForOrgFpQuery } from '../../../../data/services/graphql';
 import { StyledColumn, RouteLink, StyledButtonAction } from './ActiveUsersPage.styles';
 
@@ -39,6 +41,7 @@ const onRenderItemColumn = (item, _index, column) => {
 const _ActiveUsersPage = () => {
   const [users, setUsers] = useState([]);
   const columns = generateColumns();
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   const { data, loading } = useUsersForOrgFpQuery({
     variables: {
@@ -58,18 +61,22 @@ const _ActiveUsersPage = () => {
       <Spacing margin="double">
         <Row>
           <Column lg="8">
-            <Row>
+            <Row center>
               <Column lg="4">
                 <Spacing margin={{ top: 'small' }}>
                   <Text variant="bold">Active Users</Text>
                 </Spacing>
               </Column>
-              <Column right>
-                <StyledButtonAction id={`ButtonToday`} variant={'secondary'} selected>
-                  <Link>
-                    <RouteLink to={`/user-details`}>Create</RouteLink>
-                  </Link>
-                </StyledButtonAction>
+
+              <Column lg="8" right>
+                <Button
+                  variant="primary"
+                  onClick={() => {
+                    setIsPanelOpen(true);
+                  }}
+                >
+                  Create user
+                </Button>
               </Column>
             </Row>
 
@@ -102,6 +109,16 @@ const _ActiveUsersPage = () => {
           </Column>
         </Row>
       </Spacing>
+
+      <CreateUsersPanel
+        isOpen={isPanelOpen}
+        onCreateUser={(createdUser) => {
+          setUsers([...users, createdUser]);
+        }}
+        onDismiss={() => {
+          setIsPanelOpen(false);
+        }}
+      />
     </LayoutAdmin>
   );
 };
