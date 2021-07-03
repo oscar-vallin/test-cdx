@@ -25,7 +25,6 @@ export const RightColumn = styled(LayoutColumn)`
 `;
 
 export const StyledButtonAction = styled(Button)`
-  /* background-color: ${({ selected }) => (selected ? 'gray' : 'white')}; */
   &&& {
     background: ${({ selected, theme }) => (selected ? theme.colors.themePrimary : theme.colors.neutralLight)};
     color: ${({ selected, theme }) => (selected ? theme.colors.neutralLight : theme.colors.themePrimary)};

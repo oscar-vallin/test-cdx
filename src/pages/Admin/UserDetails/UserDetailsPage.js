@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-
+import { useHistory } from 'react-router-dom';
 import { LayoutAdmin } from '../../../layouts/LayoutAdmin';
-import { Box, Row, Column, StyledButtonAction } from './UserDetalisPage.styles';
+import { Row, Column } from '../../../components/layouts';
+import { Box, Row as Row_, Column as Column_, StyledButtonAction } from './UserDetalisPage.styles';
 import { Spacing } from '../../../components/spacings/Spacing';
 import { Separator } from '../../../components/separators/Separator';
 import { Text } from '../../../components/typography/Text';
@@ -17,20 +18,28 @@ const UserDetailsPage = ({ id = 'CurrentActivity' }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [groupIds, setGroupIds] = useState(0);
+  const history = useHistory();
 
-  const onCreateUser = () => {
-    // TODO: CREATE CORRECT STRUCTURE FOR THIS DATA
-    const form = {
-      firstName,
-      lastName,
-      email,
-      password,
-      groupIds,
-    };
+  const [_apiCall, { data, loading }] = useCreateUserMutation({
+    variables: {
+      userInfo: {
+        email,
+        password,
+        orgOwnerId: 1,
+        groupIds,
+      },
+      personInfo: {
+        firstNm: firstName,
+        lastNm: lastName,
+      },
+    },
+  });
 
-    // TODO: CREATE USERS HERE
-    // const { data, loading } = useCreateUserMutation({});
-  };
+  useEffect(() => {
+    if (!loading && data) {
+      history.push('/active-users');
+    }
+  }, [loading]);
 
   return (
     <LayoutAdmin id={id} sidebar={NAV_ITEMS} sidebarOptionSelected="USER_DETAILS">
@@ -47,8 +56,8 @@ const UserDetailsPage = ({ id = 'CurrentActivity' }) => {
           <Separator />
         </Spacing>
 
-        <Row>
-          <Column center>
+        <Row_>
+          <Column_ center>
             <InputText
               id="Input__First__Name"
               autoFocus
@@ -56,8 +65,8 @@ const UserDetailsPage = ({ id = 'CurrentActivity' }) => {
               placeholder="Person First Name"
               onChange={(v) => setFirstName(v.target.value)}
             />
-          </Column>
-          <Column center>
+          </Column_>
+          <Column_ center>
             <InputText
               id="Input__Last__Name"
               autoFocus
@@ -65,10 +74,10 @@ const UserDetailsPage = ({ id = 'CurrentActivity' }) => {
               placeholder="Person Last Name"
               onChange={(v) => setLastName(v.target.value)}
             />
-          </Column>
-        </Row>
-        <Row>
-          <Column center>
+          </Column_>
+        </Row_>
+        <Row_>
+          <Column_ center>
             <InputText
               id="Input__Email"
               autoFocus
@@ -76,8 +85,8 @@ const UserDetailsPage = ({ id = 'CurrentActivity' }) => {
               placeholder="Email"
               onChange={(v) => setEmail(v.target.value)}
             />
-          </Column>
-          <Column center>
+          </Column_>
+          <Column_ center>
             <InputText
               id="Input__Password"
               autoFocus
@@ -86,10 +95,10 @@ const UserDetailsPage = ({ id = 'CurrentActivity' }) => {
               type="password"
               onChange={(v) => setPassword(v.target.value)}
             />
-          </Column>
-        </Row>
-        <Row>
-          <Column center>
+          </Column_>
+        </Row_>
+        <Row_>
+          <Column_ center>
             <InputText
               id="Input__Group__Ids"
               autoFocus
@@ -98,16 +107,16 @@ const UserDetailsPage = ({ id = 'CurrentActivity' }) => {
               type="number"
               onChange={(v) => setGroupIds(v.target.value)}
             />
-          </Column>
-        </Row>
+          </Column_>
+        </Row_>
 
-        <Row>
-          <Column center>
-            <StyledButtonAction id={`ButtonToday`} onClick={onCreateUser} selected>
+        <Row_>
+          <Column_ center>
+            <StyledButtonAction id={`ButtonToday`} onClick={_apiCall} selected>
               Create User
             </StyledButtonAction>
-          </Column>
-        </Row>
+          </Column_>
+        </Row_>
       </Spacing>
     </LayoutAdmin>
   );

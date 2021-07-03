@@ -12,7 +12,7 @@ import { Separator } from '../../../../components/separators/Separator';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { useUsersForOrgFpQuery } from '../../../../data/services/graphql';
-import { StyledColumn, RouteLink } from './ActiveUsersPage.styles';
+import { StyledColumn, RouteLink, StyledButtonAction } from './ActiveUsersPage.styles';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -33,15 +33,7 @@ const generateColumns = () => {
 };
 
 const onRenderItemColumn = (item, _index, column) => {
-  if (column.key == 'id') {
-    return (
-      <Link>
-        <RouteLink to={`/user-details/${1}`}>{item[column.key]}</RouteLink>
-      </Link>
-    );
-  } else {
-    return item[column.key] || item['person'][column.key];
-  }
+  return item[column.key] || item['person'][column.key];
 };
 
 const _ActiveUsersPage = () => {
@@ -71,6 +63,13 @@ const _ActiveUsersPage = () => {
                 <Spacing margin={{ top: 'small' }}>
                   <Text variant="bold">Active Users</Text>
                 </Spacing>
+              </Column>
+              <Column right>
+                <StyledButtonAction id={`ButtonToday`} variant={'secondary'} selected>
+                  <Link>
+                    <RouteLink to={`/user-details`}>Create</RouteLink>
+                  </Link>
+                </StyledButtonAction>
               </Column>
             </Row>
 
