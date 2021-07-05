@@ -17,7 +17,6 @@ export const ROUTES_ID = {
   DEFAULT_THEME: 'default-theme',
   ACTIVE_USERS: 'active-users',
   DELETED_USERS: 'deleted-users',
-  USER_DETAILS: 'user-details',
 };
 
 export const URL_ROUTES = {
@@ -41,7 +40,6 @@ export const URL_ROUTES = {
   DEFAULT_THEME: `/${ROUTES_ID.ADMIN}/dashboard-site/default-theme`,
   ACTIVE_USERS: `/${ROUTES_ID.ACTIVE_USERS}`,
   DELETED_USERS: `/${ROUTES_ID.DELETED_USERS}`,
-  USER_DETAILS: `/${ROUTES_ID.USER_DETAILS}/:id`,
 };
 
 // DASHBOARD;
@@ -231,14 +229,6 @@ export const ROUTE_DELETED_USERS = {
   API_ID: 'DELETED_USERS',
 };
 
-export const ROUTE_USER_DETAILS = {
-  ID: ROUTES_ID.USER_DETAILS,
-  TITLE: 'User Details',
-  URL: URL_ROUTES.USER_DETAILS,
-  MAIN_MENU: false,
-  API_ID: 'USER_DETAILS',
-};
-
 export const ROUTES = {
   ROUTE_HOME,
   ROUTE_LOGIN,
@@ -261,7 +251,6 @@ export const ROUTES = {
   ROUTE_DEFAULT_THEME,
   ROUTE_ACTIVE_USERS,
   ROUTE_DELETED_USERS,
-  ROUTE_USER_DETAILS,
 };
 
 export const ROUTES_ARRAY = [
@@ -286,7 +275,6 @@ export const ROUTES_ARRAY = [
   ROUTE_DEFAULT_THEME,
   ROUTE_ACTIVE_USERS,
   ROUTE_DELETED_USERS,
-  ROUTE_USER_DETAILS,
 ];
 
 export const getRouteByApiId = (_apiId) => {
