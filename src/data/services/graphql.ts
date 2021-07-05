@@ -327,6 +327,7 @@ export type DashThemeColorDefaultInput = {
 export type DashThemeInput = {
   themeFontSize?: Maybe<ThemeFontSize>;
   themeColorMode?: Maybe<ThemeColorMode>;
+  themeColorSid?: Maybe<Scalars['ID']>;
 };
 
 export type DashboardPeriodCount = {

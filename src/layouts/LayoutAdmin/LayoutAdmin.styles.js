@@ -17,6 +17,8 @@ export const StyledNav = styled(Nav)`
 
   .ms-Nav-compositeLink {
     .ms-Button {
+      font-size: .75rem;
+      
       &:hover {
         background: ${({ theme }) => theme.colors.neutralLighter};
       }
@@ -28,6 +30,7 @@ export const StyledNav = styled(Nav)`
       z-index: 2;
 
       & + .ms-Button {
+        font-size: .75rem;
         pointer-events: none;
       }
     }

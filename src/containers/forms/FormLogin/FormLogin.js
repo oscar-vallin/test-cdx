@@ -47,7 +47,7 @@ const FormLogin = ({ id = '__FormLogin', onLogin }) => {
         <Column id={`${id}__Row-Column`}>
           <StyledCard id={`${id}-Card`}>
             {
-              isCheckingAuth || isAuthenticating
+              false
                 ? (
                   <Spacing margin={{ top: 'normal' }}>
                     <Spinner size="lg" label="Checking authentication"/>

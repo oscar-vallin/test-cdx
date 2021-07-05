@@ -6,8 +6,9 @@ export const StyledDiv = styled.div`
   background: ${({ theme, level }) => theme.colors.neutralLighter};
   border: ${({ theme, level }) => `1px solid ${chroma(theme.colors.neutralTertiaryAlt).darken(0.25 * level)}`};
   border-radius: 5px;
-  padding: 10px 15px 15px;
+  font-size: 1rem;
   margin: 30px 0 0 0;
+  padding: 10px 15px 15px;
   position: relative;
   transition: border .15s ease-out, box-shadow .15s ease-out;
 

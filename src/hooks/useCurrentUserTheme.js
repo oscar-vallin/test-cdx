@@ -8,14 +8,16 @@ import {
   useCreateOrUpdateOwnDashThemeMutation
 } from '../data/services/graphql';
 
+const INITIAL_THEME = {
+  data: null,
+  loading: false,
+  paletteNm: 'Default',
+  themeColorMode: 'LIGHT',
+  themeFontSize: 'MEDIUM'
+};
+
 export const useCurrentUserTheme = () => {
-  const [userTheme, setUserTheme] = useState({
-    data: null,
-    loading: false,
-    paletteNm: 'Default',
-    themeColorMode: 'LIGHT',
-    themeFontSize: 'MEDIUM'
-  })
+  const [userTheme, setUserTheme] = useState({ ...INITIAL_THEME });
 
   const [
     useUserThemeQuery, { data: theme, loading: isLoadingTheme }
@@ -40,13 +42,15 @@ export const useCurrentUserTheme = () => {
         ...(theme?.userTheme || {}),
         ...(updatedTheme?.createOrUpdateOwnDashTheme || {})
       };
+
       const { dashThemeColor, themeColorMode, themeFontSize } = data;
 
-      const palette = (dashThemeColor)
-      ? dashThemeColor
-      : (themeColorMode)
-          ? (themeColorMode === 'LIGHT') ? defaultTheme : darkTheme
-          : defaultTheme;
+      const palette = (themeColorMode)
+      ? {
+        ...(themeColorMode === 'LIGHT') ? defaultTheme : darkTheme,
+        themePrimary: dashThemeColor.themePrimary,
+      }
+      : dashThemeColor;
 
       const variant = Theming.getVariant(palette);
 

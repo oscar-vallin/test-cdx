@@ -22,6 +22,7 @@ export const StyledRow = styled(LayoutRow)`
 `;
 
 export const StyledCell = styled(LayoutRow)`
+  font-size: .75rem;
   width: 100%;
   margin-left: ${({ marginH }) => (marginH ? `${marginH}px` : '0px')};
   margin-right: ${({ marginH }) => (marginH ? `${marginH}px` : '0px')};
@@ -46,7 +47,7 @@ export const HeaderColumn = styled(LayoutColumn)`
 export const StyledText = styled(Text)`
   display: flex;
   width: 100%;
-  font-size: 0.875rem;
+  font-size: .875rem;
   font-weight: ${({ bold, theme }) => (bold ? theme.fontWeights.bold : theme.fontWeights.normal)};
   justify-content: ${({ left, right }) => (left ? 'flex-start' : right ? 'flex-end' : 'center')};
   align-items: center;

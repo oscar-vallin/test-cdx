@@ -35,8 +35,22 @@ export const ThemeContextProvider = ({ children }) => {
   useEffect(fetchTheme, []);
 
   const GlobalStyle = createGlobalStyle`
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     html {
       font-size: ${({ fontSize }) => sizes[fontSize]}
+    }
+
+    [class*="ms-DetailsHeader"] {
+      font-size: .875rem;
+    }
+
+    [class*="ms-DetailsRow"] {
+      font-size: .75rem;
     }
   `;
 

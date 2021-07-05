@@ -9,8 +9,11 @@ import { Spinner } from './../../../components/spinners/Spinner';
 
 import { useThemeContext } from './../../../contexts/ThemeContext';
 import { useColorPalettes } from './../../../hooks/useColorPalettes';
-import { useCreateOrUpdateOwnDashThemeMutation } from './../../../data/services/graphql';
 import Theming from './../../../utils/Theming';
+import {
+  useCreateOrUpdateOwnDashThemeMutation,
+  useUserThemeLazyQuery
+} from './../../../data/services/graphql';
 
 import {
   StyledDiv,
@@ -18,8 +21,25 @@ import {
   StyledChoiceGroup,
 } from './../UserSettingsPage.styles';
 import { defaultTheme, darkTheme } from '../../../styles/themes';
+import { useCurrentUserTheme } from '../../../hooks/useCurrentUserTheme';
 
-const ThemeSettings = ({ userTheme }) => {
+const INITIAL_THEME = {
+  data: null,
+  loading: false,
+  paletteNm: 'Default',
+  themeColorMode: 'LIGHT',
+  themeFontSize: 'MEDIUM'
+};
+
+const ThemeSettings = ({ userTheme = { ...INITIAL_THEME } }) => {
+  const [
+    useUserThemeQuery, { data: theme, loading: isLoadingTheme }
+  ] = useUserThemeLazyQuery();
+
+  useEffect(() => {
+    useUserThemeQuery({ variables: { themeColorMode: null } });
+  }, []);
+
   const { changeTheme } = useThemeContext();
   const {
     colorPalettes,
@@ -38,30 +58,32 @@ const ThemeSettings = ({ userTheme }) => {
     }
   ]);
 
-  const [selectedPaletteId, setSelectedPaletteId] = useState(null);
+  // const [selectedPaletteId, setSelectedPaletteId] = useState(null);
   const [palette, setPalette] = useState({});
-  const [themeColorMode, setThemeColorMode] = useState(userTheme?.themeColorMode || 'LIGHT');
+  // const [themeColorMode, setThemeColorMode] = useState(userTheme?.themeColorMode || 'LIGHT');
+
+  const [selectedPaletteId, setSelectedPaletteId] = useState();
+  const [themeColorMode, setThemeColorMode] = useState();
   
   useEffect(fetchColorPalettes, []);
   useEffect(() => {
-    if (userTheme.data) {
-      changeTheme(userTheme.data);
-      setThemeFontSize(userTheme.data.themeColorMode);
-      setThemeFontSize(userTheme.data.themeFontSize);
+    if (theme?.userTheme) {
+      changeTheme(Theming.getVariant(theme?.userTheme?.dashThemeColor));
+      setThemeColorMode(theme?.userTheme?.themeColorMode);
     }
-  }, [userTheme]);
+  }, [theme]);
 
   useEffect(() => {
     if (colorPalettes && !isLoadingPalettes) {
       const defaultPalette = colorPalettes.find(({ defaultPalette }) => defaultPalette);
-      const selectedPalette = (userTheme && userTheme.data)
-        ? colorPalettes.find(({ paletteNm }) => paletteNm === userTheme.data.dashThemeColor.paletteNm)
-        : defaultPalette;
+      const selectedPalette = (theme?.userTheme)
+        ? colorPalettes.find(({ paletteNm }) => paletteNm === theme?.userTheme.dashThemeColor.paletteNm)?.id || null
+        : null;
 
-      setPalettes([...palettes, ...colorPalettes]);
-      setSelectedPaletteId(selectedPalette?.id || null);
+      setPalettes(Array.from(new Set([...palettes, ...colorPalettes])));
+      setSelectedPaletteId(selectedPalette);
     }
-  }, [colorPalettes, isLoadingPalettes, userTheme]);
+  }, [colorPalettes, isLoadingPalettes, theme]);
 
   useEffect(() => {
     const palette = palettes.find(({ id }) => id === selectedPaletteId) || {};
@@ -81,7 +103,7 @@ const ThemeSettings = ({ userTheme }) => {
       ? themeColorMode
       : 'LIGHT'
     );
-    
+
     changeTheme(variant);
   }, [selectedPaletteId, themeColorMode]);
 
@@ -95,7 +117,7 @@ const ThemeSettings = ({ userTheme }) => {
   ] = useCreateOrUpdateOwnDashThemeMutation();
 
   return (
-    isLoadingPalettes
+    (isLoadingPalettes || isLoadingTheme)
       ? <Spacing padding="Double">
           <Spinner size="lg" label="Loading theme settings" />
         </Spacing>
@@ -158,13 +180,7 @@ const ThemeSettings = ({ userTheme }) => {
                     createOrUpdateOwnDashTheme({
                       variables: {
                         dashThemeInput: {
-                          // TODO: Ask matt to include this in gql mutation
-                          // dashThemeColor: {
-                          //   id: palette.id,
-                          //   themePrimary: palette.themePrimary,
-                          //   neutralPrimary: palette.neutralPrimary,
-                          //   white: palette.white,
-                          // },
+                          themeColorSid: selectedPaletteId,
                           themeColorMode,
                         }
                       }

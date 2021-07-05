@@ -15,6 +15,7 @@ const getVariant = (theme, variant) => {
 };
 
 export const StyledButton = styled(PrimaryButton)`
+  font-size: .875rem;
   width: ${({ block }) => (block ? '100%' : 'auto')};
   
   &,

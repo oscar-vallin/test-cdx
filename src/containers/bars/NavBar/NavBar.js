@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { FontIcon } from '@fluentui/react/lib/Icon';
 import { ProfileMenu } from '../../menus/ProfileMenu';
 // Components
 import { ContextualMenuItemType } from '@fluentui/react/lib/ContextualMenu';
@@ -22,6 +23,7 @@ import {
   StyledDropdown,
   // StyledButtonProfile,
   StyledButtonIcon,
+  StyledChoiceGroup
 } from './NavBar.styles';
 
 // CardSection is called directly cause a restriction warning for that component.
@@ -40,50 +42,39 @@ const NavBar = ({
     setCollapse(!collapse);
   };
 
-  const [themeFontSize, setThemeFontSize] = useState(userTheme?.themeFontSize || null);
+  const [themeFontSize, setThemeFontSize] = useState(userTheme?.themeFontSize || undefined);
 
-  const renderIcon = (iconName) => {
-    return (
-      <StyledColumn id={`${id}__Right__${iconName}`} noStyle>
-        <StyledButtonIcon icon={iconName} variant={'navbar'} size={18} />
-      </StyledColumn>
-    );
-  };
+  // const renderIcon = (iconName) => {
+  //   return (
+  //     <StyledColumn id={`${id}__Right__${iconName}`} noStyle>
+  //       <StyledButtonIcon icon={iconName} variant={'navbar'} size={18} />
+  //     </StyledColumn>
+  //   );
+  // };
 
-  const updateThemeFontSize = (event, { key }) => {
+  const updateThemeFontSize = (key) => {
     setThemeFontSize(key);
     setFontSize(key);
-    createOrUpdateTheme({ themeFontSize });
+    createOrUpdateTheme({ themeFontSize: key });
   };
 
-  const settingsMenu = {
-    shouldFocusOnMount: true,
-    items: [
-      {
-        key: 'FONT_SIZES',
-        itemType: ContextualMenuItemType.Header,
-        text: 'Font size',
-      },
-      {
-        key: 'SMALL',
-        iconProps: { iconName: 'FontDecrease' },
-        text: 'Small',
-        onClick: updateThemeFontSize,
-      },
-      {
-        key: 'MEDIUM',
-        iconProps: { iconName: 'FontColorA' },
-        text: 'Medium (default)',
-        onClick: updateThemeFontSize,
-      },
-      {
-        key: 'LARGE',
-        iconProps: { iconName: 'FontIncrease' },
-        text: 'Large',
-        onClick: updateThemeFontSize,
-      },
-    ],
-  };
+  const settingsMenu = [
+    {
+      key: 'SMALL',
+      iconProps: { iconName: 'FontDecrease' },
+      label: 'Small',
+    },
+    {
+      key: 'MEDIUM',
+      iconProps: { iconName: 'FontColorA' },
+      label: 'Medium (default)',
+    },
+    {
+      key: 'LARGE',
+      iconProps: { iconName: 'FontIncrease' },
+      label: 'Large',
+    },
+  ];
 
   // Render
   return (
@@ -104,13 +95,26 @@ const NavBar = ({
         </StyledColumnCont>
         <StyledColumnCont id={`${id}__Col-Right`} sm={3} right container>
           <StyledRow id={`${id}__Right_Row`} right>
-            <StyledDropdown
-              menuProps={settingsMenu}
-              iconProps={{ iconName: 'Settings' }}
+            <StyledChoiceGroup
+                selectedKey={themeFontSize}
+                options={
+                settingsMenu
+                  .map(({ key, label, iconProps }, index) => ({
+                    key,
+                    label,
+                    onRenderField: (props, render) => {
+                      return (
+                        <label
+                          className={themeFontSize === key && 'selected'}
+                          onClick={() => updateThemeFontSize(key)}>
+                          <FontIcon iconName={iconProps.iconName} />
+                        </label>
+                      )
+                    }
+                  }))
+              }
             />
-
-            {renderIcon('Help')}
-            <ProfileMenu onUserSettings={onUserSettings}/>
+            <ProfileMenu onUserSettings={onUserSettings} />
           </StyledRow>
         </StyledColumnCont>
       </StyledRow>
