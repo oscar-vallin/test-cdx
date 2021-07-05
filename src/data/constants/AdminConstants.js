@@ -1,6 +1,6 @@
 export const ADMIN_NAV = {
-  ACTIVE_USERS: '#',
-  DELETED_USERS: '#',
+  ACTIVE_USERS: '/admin/users/active-users',
+  DELETED_USERS: '/admin/users/deleted-users',
   AM_POLICIES: '/admin/access-management/policies',
   AM_GROUPS: '/admin/access-management/groups',
   ORG_ACTIVITY: '/admin/activity/current-activity',
@@ -13,5 +13,5 @@ export const ADMIN_NAV = {
   IMPL_DEPLOY: '#',
   USER_ACCOUNT_RULES: '#',
   PASSWORD_RULES: '#',
-  SSO_CONFIG: '#'
-}
+  SSO_CONFIG: '#',
+};
