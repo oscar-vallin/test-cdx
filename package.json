@@ -49,7 +49,9 @@
     "lint": "tsc --noEmit && eslint src/**/*.ts{,x} --color --fix --quiet",
     "eject": "react-scripts eject",
     "clean": "rm -rf build",
-    "extract-routes": "node --experimental-modules internals/route-extractor.mjs"
+    "extract-routes": "node --experimental-modules internals/route-extractor.mjs",
+    "prettify": "prettier --write src/**/*.{js,jsx,ts,tsx,css} && yarn-or-npm lint:fix",
+    "lint:fix": "eslint --fix src/**/*.{js,ts,tsx}"
   },
   "eslintConfig": {
     "extends": [
@@ -89,7 +91,8 @@
     "eslint-plugin-react-hooks": "^4.1.2",
     "husky": "^4.3.0",
     "lint-staged": "^10.4.0",
-    "prettier": "^2.1.2"
+    "prettier": "^2.1.2",
+    "yarn-or-npm": "^3.0.1"
   },
   "husky": {
     "hooks": {
@@ -98,8 +101,7 @@
   },
   "lint-staged": {
     "src/**/*.{ts,tsx,json}": [
-      "prettier --write ./src/**/*.{ts, tsx, js,jsx}",
-      "eslint ./src/**/*.{ts,tsx,js,jsx} --fix --color"
+      "yarn prettify"
     ]
   }
 }

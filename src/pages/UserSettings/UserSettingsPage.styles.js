@@ -12,7 +12,7 @@ export const StyledBox = styled(LayoutBox)`
 
 export const StyledRow = styled(Row)`
   align-items: stretch;
-`
+`;
 
 export const StyledDiv = styled.div`
   align-items: center;
@@ -29,20 +29,20 @@ export const StyledDiv = styled.div`
       margin-top: 7px;
     }
   }
-`
+`;
 
 export const StyledCard = styled(Card)`
   height: 100%;
-`
+`;
 
 export const StyledTitle = styled.h3`
   margin: ${({ theme }) => `0 0 ${theme.spacing.normal}`};
-`
+`;
 
 export const StyledSubTitle = styled.p`
   color: ${({ theme }) => theme.colors.neutralSecondary};
   margin: ${({ theme }) => `0 0 ${theme.spacing.normal}`};
-`
+`;
 
 export const StyledChoiceGroup = styled(ChoiceGroup)`
   .ms-ChoiceFieldGroup-flexContainer {
@@ -58,7 +58,8 @@ export const StyledChoiceGroup = styled(ChoiceGroup)`
 `;
 
 export const StyledIcon = styled(Icon)`
-  color: ${({ theme, iconName }) => iconName === 'StatusCircleCheckmark' ? theme.colors.custom.success : theme.colors.custom.error };
+  color: ${({ theme, iconName }) =>
+    iconName === 'StatusCircleCheckmark' ? theme.colors.custom.success : theme.colors.custom.error};
 `;
 
 export const StyledColorPicker = styled(ColorPicker)`
@@ -67,7 +68,7 @@ export const StyledColorPicker = styled(ColorPicker)`
   .ms-ColorPicker-panel {
     padding: 0;
   }
-`
+`;
 
 export const StyledPreview = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.neutralTertiary};
@@ -85,4 +86,4 @@ export const StyledPreview = styled.div`
       background: ${({ colors }) => colors.themePrimary};
     }
   }
-`
+`;

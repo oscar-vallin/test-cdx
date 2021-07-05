@@ -25,11 +25,15 @@ const ProfileMenu = ({ id = '__ProfileMenu', onUserSettings }) => {
   };
 
   const items = [
-    { key: 'ProfileMenu_UserSettings', text: 'Settings', onClick: (event) => {
-      event.preventDefault();
+    {
+      key: 'ProfileMenu_UserSettings',
+      text: 'Settings',
+      onClick: (event) => {
+        event.preventDefault();
 
-      onUserSettings();
-    } },
+        onUserSettings();
+      },
+    },
     { key: 'ProfileMenu_Logout', text: 'Logout', onClick: () => handleLogout() },
   ];
 

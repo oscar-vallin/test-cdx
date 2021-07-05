@@ -15,14 +15,10 @@ export const StyledLi = styled.li`
 
   .item__status {
     align-items: center;
-    background: ${({ theme, status }) => status === 'DONE' 
-      ? theme.colors.custom.success 
-      : status === 'PROGRESS'
-        ? theme.colors.white
-        : '#eee'
-    };
+    background: ${({ theme, status }) =>
+      status === 'DONE' ? theme.colors.custom.success : status === 'PROGRESS' ? theme.colors.white : '#eee'};
     border-radius: 50%;
-    color: ${({ theme, status }) => status === 'DONE' ? theme.colors.white : theme.colors.black};
+    color: ${({ theme, status }) => (status === 'DONE' ? theme.colors.white : theme.colors.black)};
     display: flex;
     justify-content: center;
     min-height: 35px;
@@ -32,11 +28,11 @@ export const StyledLi = styled.li`
   }
 
   .item__content {
-    cursor: ${({ onClick }) => onClick ? 'pointer' : 'auto'};
+    cursor: ${({ onClick }) => (onClick ? 'pointer' : 'auto')};
     margin: ${({ theme }) => `0 0 0 ${theme.spacing.normal}`};
 
     .title {
-      color: ${({ theme, active }) => active ? theme.colors.themePrimary : theme.colors.black};
+      color: ${({ theme, active }) => (active ? theme.colors.themePrimary : theme.colors.black)};
       font-weight: ${({ theme }) => theme.fontWeights.bold};
       margin: ${({ theme }) => `0 0 ${theme.spacing.small} 0`};
     }
@@ -53,9 +49,9 @@ export const StyledLi = styled.li`
       content: '';
       display: block;
       height: 100%;
-      left: ${({ theme }) =>  theme.spacing.normal};
+      left: ${({ theme }) => theme.spacing.normal};
       position: absolute;
-      top: ${({ theme }) =>  theme.spacing.normal};
+      top: ${({ theme }) => theme.spacing.normal};
       transform: translateX(1px);
       z-index: -1;
     }

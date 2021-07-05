@@ -4,11 +4,11 @@ import { Pivot } from 'office-ui-fabric-react/lib/Pivot';
 export const StyledPivot = styled(Pivot)`
   width: 100%;
 
-  [role="tablist"] {
+  [role='tablist'] {
     border-bottom: 1px solid #edebe9;
     margin: ${({ theme }) => `0 0 0 ${theme.spacing.normal}`};
   }
-`
+`;
 
 export const StyledSpan = styled.span`
   align-items: center;
@@ -16,7 +16,7 @@ export const StyledSpan = styled.span`
   justify-content: center;
 
   #__CDXBadge {
-    line-height: .8;
+    line-height: 0.8;
     margin: ${({ theme }) => `0 0 0 ${theme.spacing.small}`};
   }
 `;

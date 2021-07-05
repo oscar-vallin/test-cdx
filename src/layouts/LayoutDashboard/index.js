@@ -1,3 +1,3 @@
-import { LayoutDashboard } from "./LayoutDashboard";
+import { LayoutDashboard } from './LayoutDashboard';
 
 export { LayoutDashboard };

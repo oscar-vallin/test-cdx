@@ -34,12 +34,7 @@ const TableTransmissions = ({ idPage = 'TableTransmissions', orgSid = 1, dateRan
       </Row>
       {!tableProps.loading && (
         <Box id={`${idPage}`}>
-          <Table
-            id={`${idPage}`}
-            onOption={() => null}
-            searchInput={localInput.value}
-            {...tableProps}
-          />
+          <Table id={`${idPage}`} onOption={() => null} searchInput={localInput.value} {...tableProps} />
         </Box>
       )}
     </Container>

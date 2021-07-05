@@ -14,12 +14,9 @@ const CDXFacetCombobox = ({ service = '', value = '', orgSid = 1, onChange = () 
       variables: { orgSid, cdxService: service },
     });
   }, [service]);
-  
+
   useEffect(() => {
-    setFacets(data && !loading
-      ? data.amPolicyFacetsForService
-      : []
-    );
+    setFacets(data && !loading ? data.amPolicyFacetsForService : []);
   }, [service, data, loading]);
 
   return (
@@ -35,6 +32,6 @@ const CDXFacetCombobox = ({ service = '', value = '', orgSid = 1, onChange = () 
       style={{ width: '100%' }}
     />
   );
-}
+};
 
 export default CDXFacetCombobox;

@@ -19,7 +19,7 @@ import { defaultTheme, darkTheme } from '../../../../styles/themes';
 import {
   useCreateDefaultDashThemeMutation,
   useUpdateDefaultDashThemeMutation,
-  useDefaultDashThemeForSiteLazyQuery
+  useDefaultDashThemeForSiteLazyQuery,
 } from './../../../../data/services/graphql';
 
 const _DefaultThemePage = () => {
@@ -29,21 +29,14 @@ const _DefaultThemePage = () => {
 
   const [
     useDefaultDashThemeQuery,
-    {
-      data: defaultTheme,
-      loading: isLoadingDefaultTheme,
-    }
+    { data: defaultTheme, loading: isLoadingDefaultTheme },
   ] = useDefaultDashThemeForSiteLazyQuery();
 
-  const {
-    colorPalettes,
-    isLoadingPalettes,
-    fetchColorPalettes,
-  } = useColorPalettes();
+  const { colorPalettes, isLoadingPalettes, fetchColorPalettes } = useColorPalettes();
 
   useEffect(() => {
     fetchColorPalettes();
-    useDefaultDashThemeQuery({ variables: { ownedInput } })
+    useDefaultDashThemeQuery({ variables: { ownedInput } });
   }, []);
 
   const { changeTheme } = useThemeContext();
@@ -54,32 +47,26 @@ const _DefaultThemePage = () => {
       allowDark: true,
       defaultPalette: true,
       themeColorMode: 'LIGHT',
-      ...defaultTheme?.defaultDashThemeForSite || {},
-    }
+      ...(defaultTheme?.defaultDashThemeForSite || {}),
+    },
   ]);
 
   const [palette, setPalette] = useState({});
   const [selectedPaletteId, setSelectedPaletteId] = useState(null);
   const [themeColorMode, setThemeColorMode] = useState(null);
 
-  const [
-    createDefaultDashThemeMutation,
-    { loading: isCreatingTheme }
-  ] = useCreateDefaultDashThemeMutation();
+  const [createDefaultDashThemeMutation, { loading: isCreatingTheme }] = useCreateDefaultDashThemeMutation();
 
-  const [
-    updateDefaultDashThemeMutation,
-    { loading: isUpdatingTheme }
-  ] = useUpdateDefaultDashThemeMutation();
+  const [updateDefaultDashThemeMutation, { loading: isUpdatingTheme }] = useUpdateDefaultDashThemeMutation();
 
   useEffect(() => {
     if (colorPalettes && !isLoadingPalettes && !isLoadingDefaultTheme) {
       const { defaultDashThemeForSite } = defaultTheme || {};
 
-      const palette = (defaultDashThemeForSite)
+      const palette = defaultDashThemeForSite
         ? { ...defaultDashThemeForSite, ...defaultDashThemeForSite.dashThemeColor }
         : colorPalettes.find(({ defaultPalette }) => defaultPalette);
-      
+
       setPalettes([...palettes, ...colorPalettes]);
       setSelectedPaletteId(palette?.id);
       setThemeColorMode(palette?.themeColorMode);
@@ -89,16 +76,14 @@ const _DefaultThemePage = () => {
   useEffect(() => {
     const palette = palettes.find(({ id }) => id === selectedPaletteId) || {};
     const { themePrimary } = palette;
-    
-    const variant = (themeColorMode)
+
+    const variant = themeColorMode
       ? Theming.getVariant({
-        ...(themeColorMode === 'LIGHT')
-          ? defaultTheme
-          : darkTheme,
-          themePrimary
+          ...(themeColorMode === 'LIGHT' ? defaultTheme : darkTheme),
+          themePrimary,
         })
       : palette;
-    
+
     setPalette(palette);
     setThemeColorMode(themeColorMode);
 
@@ -110,102 +95,100 @@ const _DefaultThemePage = () => {
       <Spacing margin="double">
         <Row>
           <Column lg="12">
-            {isLoadingPalettes || isLoadingDefaultTheme
-              ? <Spacing margin={{ top: 'double' }}>
-                  <Spinner size="lg" label="Loading theme settings" />
-                </Spacing>
-              : (
-                <Fragment>
-                  <StyledDiv>
-                    <Text
-                      size="normal"
-                      className={`text ${(palettes || []).length > 1 && 'text--centered'}`}
-                    >
-                      Color palettes:
-                    </Text>
-                    {
-                      !palettes
-                        ? <MessageBar content="No color palettes available" />
-                        : (
-                            <StyledChoiceGroup
-                              selectedKey={selectedPaletteId}
-                              options={palettes?.map(item => ({
-                                key: item.id,
-                                text: item.paletteNm
-                              })) || []}
-                              onChange={(evt, { key }) => setSelectedPaletteId(key)}
-                            />
-                          )
-                    }
-                  </StyledDiv>
-
-                  {selectedPaletteId && (
-                    <Spacing margin={{ top: 'normal' }}>
-                      <StyledDiv>
-                        <Text size="normal" className="text">
-                          Color modes:
-                            </Text>
-
-                        {(!palette.themeColorMode)
-                          ? <Text>No color modes available for this palette</Text>
-                          : <StyledChoiceGroup
-                              selectedKey={themeColorMode}
-                              disabled={palette.themeColorMode && !palette.allowDark}
-                              options={[
-                                { key: 'LIGHT', text: 'Light' },
-                                ...(palette.allowDark) ? [{ key: 'DARK', text: 'Dark' }] : []
-                              ]}
-                              onChange={(evt, { key }) => {
-                                setThemeColorMode(key);
-                              }}
-                            />
-                        }
-                      </StyledDiv>
-                    </Spacing>
+            {isLoadingPalettes || isLoadingDefaultTheme ? (
+              <Spacing margin={{ top: 'double' }}>
+                <Spinner size="lg" label="Loading theme settings" />
+              </Spacing>
+            ) : (
+              <Fragment>
+                <StyledDiv>
+                  <Text size="normal" className={`text ${(palettes || []).length > 1 && 'text--centered'}`}>
+                    Color palettes:
+                  </Text>
+                  {!palettes ? (
+                    <MessageBar content="No color palettes available" />
+                  ) : (
+                    <StyledChoiceGroup
+                      selectedKey={selectedPaletteId}
+                      options={
+                        palettes?.map((item) => ({
+                          key: item.id,
+                          text: item.paletteNm,
+                        })) || []
+                      }
+                      onChange={(evt, { key }) => setSelectedPaletteId(key)}
+                    />
                   )}
+                </StyledDiv>
 
-                  <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                    <Separator />
+                {selectedPaletteId && (
+                  <Spacing margin={{ top: 'normal' }}>
+                    <StyledDiv>
+                      <Text size="normal" className="text">
+                        Color modes:
+                      </Text>
+
+                      {!palette.themeColorMode ? (
+                        <Text>No color modes available for this palette</Text>
+                      ) : (
+                        <StyledChoiceGroup
+                          selectedKey={themeColorMode}
+                          disabled={palette.themeColorMode && !palette.allowDark}
+                          options={[
+                            { key: 'LIGHT', text: 'Light' },
+                            ...(palette.allowDark ? [{ key: 'DARK', text: 'Dark' }] : []),
+                          ]}
+                          onChange={(evt, { key }) => {
+                            setThemeColorMode(key);
+                          }}
+                        />
+                      )}
+                    </StyledDiv>
                   </Spacing>
+                )}
 
-                  <Button
-                    variant="primary"
-                    text={!(isCreatingTheme || isUpdatingTheme)
+                <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                  <Separator />
+                </Spacing>
+
+                <Button
+                  variant="primary"
+                  text={
+                    !(isCreatingTheme || isUpdatingTheme)
                       ? `${!defaultTheme?.defaultDashThemeForSite ? 'Set' : 'Update'} default theme`
                       : 'Processing...'
-                    }
-                    disabled={isCreatingTheme || isUpdatingTheme}
-                    onClick={() => {
-                      const params = {
-                        ...ownedInput,
-                        themeFontSize: 'MEDIUM',
-                        themeColorMode,
-                        themeColorSid: selectedPaletteId
-                      };
+                  }
+                  disabled={isCreatingTheme || isUpdatingTheme}
+                  onClick={() => {
+                    const params = {
+                      ...ownedInput,
+                      themeFontSize: 'MEDIUM',
+                      themeColorMode,
+                      themeColorSid: selectedPaletteId,
+                    };
 
-                      if (!defaultTheme?.defaultDashThemeForSite) {
-                        createDefaultDashThemeMutation({
-                          variables: {
-                             createDefaultDashThemeInput: {
-                               ...params
-                             }
+                    if (!defaultTheme?.defaultDashThemeForSite) {
+                      createDefaultDashThemeMutation({
+                        variables: {
+                          createDefaultDashThemeInput: {
+                            ...params,
                           },
-                        })
-                      } else {
-                        updateDefaultDashThemeMutation({
-                          variables: {
-                            updateDefaultDashThemeInput: {
-                              ...params,
-                              sid: defaultTheme.defaultDashThemeForSite.id
-                            }
+                        },
+                      });
+                    } else {
+                      updateDefaultDashThemeMutation({
+                        variables: {
+                          updateDefaultDashThemeInput: {
+                            ...params,
+                            sid: defaultTheme.defaultDashThemeForSite.id,
                           },
-                        })
-                      }
-                    }}
-                  />
-                </Fragment>
-              )
-            }
+                        },
+                      });
+                    }
+                  }}
+                />
+              </Fragment>
+            )}
           </Column>
         </Row>
       </Spacing>

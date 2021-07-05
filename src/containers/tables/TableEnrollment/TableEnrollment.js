@@ -16,11 +16,7 @@ const TableEnrollment = ({ id = 'TableEnrollmentStats' }) => {
         <Text>{error}</Text>
       </BoxCaption>
       <BoxHeader>
-        <Table
-          onOption={() => null}
-          structure={tableProps.structure}
-          items={tableItems ? tableItems[0] : []}
-        />
+        <Table onOption={() => null} structure={tableProps.structure} items={tableItems ? tableItems[0] : []} />
       </BoxHeader>
       <BoxCaption>
         <Text>Counts for the enrollments that were included in the outbound vendor file.</Text>

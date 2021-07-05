@@ -1,12 +1,12 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { getClassNames } from "../../../helpers/helperStyles";
-import { StyleConstants } from "../../../data/constants/StyleConstants";
-import { validateDirection } from "./Box.handlers";
-import { ComponentStyled } from "./Box.styles";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { getClassNames } from '../../../helpers/helperStyles';
+import { StyleConstants } from '../../../data/constants/StyleConstants';
+import { validateDirection } from './Box.handlers';
+import { ComponentStyled } from './Box.styles';
 
 const Box = ({
-  id = "Box",
+  id = 'Box',
   children,
   direction = StyleConstants.DIRECTION_COLUMN,
   left,
@@ -19,7 +19,7 @@ const Box = ({
     <ComponentStyled
       id={id}
       direction={validateDirection(direction)}
-      className={getClassNames("ms-Grid-col", props)}
+      className={getClassNames('ms-Grid-col', props)}
       left={left}
       right={right}
       top={top}
