@@ -9,9 +9,9 @@ const COLUMNS = [
   { key: 'endedSubscribers', name: 'Ended', fieldName: 'endedSubscribers' },
   { key: 'activeDependents', name: 'Active', fieldName: 'activeDependents' },
   { key: 'endedDependents', name: 'Ended', fieldName: 'endedDependents' },
-].map(col => ({ ...col, data: 'string', isPadded: true }));
+].map((col) => ({ ...col, data: 'string', isPadded: true }));
 
-const onRenderDetailsHeader = props => (
+const onRenderDetailsHeader = (props) => (
   <Fragment>
     <StyledHeaderRow>
       <div></div>
@@ -24,20 +24,16 @@ const onRenderDetailsHeader = props => (
 );
 
 const onRenderRow = (props) => {
-  return <StyledRow {...props} />
-}
+  return <StyledRow {...props} />;
+};
 
 const EnrollmentStatsTab = ({ items }) => {
-  const data = [
-    ...items.planInsuredStat,
-    ...items.excludedPlanInsuredStat
-  ]
-  .map(plan => ({
+  const data = [...items.planInsuredStat, ...items.excludedPlanInsuredStat].map((plan) => ({
     planCode: plan.planCode,
     activeSubscribers: plan.subscribers?.active?.value || 0,
     endedSubscribers: plan.subscribers?.ended?.value || 0,
     activeDependents: plan.dependents?.active?.value || 0,
-    endedDependents: plan.dependents?.active?.value || 0
+    endedDependents: plan.dependents?.active?.value || 0,
   }));
 
   const GROUPS = [
@@ -45,14 +41,14 @@ const EnrollmentStatsTab = ({ items }) => {
       count: items.planInsuredStat.length,
       key: 'insuredStats',
       name: 'Included Subscribers / Enrollments',
-      level: 0
+      level: 0,
     },
     {
       count: items.excludedPlanInsuredStat.length,
       key: 'excludedStats',
       name: 'Excluded Subscribers / Enrollments',
       startIndex: items.excludedPlanInsuredStat.length,
-      level: 0
+      level: 0,
     },
   ];
 
@@ -71,6 +67,6 @@ const EnrollmentStatsTab = ({ items }) => {
       />
     </Spacing>
   );
-}
+};
 
 export default EnrollmentStatsTab;

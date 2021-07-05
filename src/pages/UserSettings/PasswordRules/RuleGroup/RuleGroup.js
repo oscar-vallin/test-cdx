@@ -9,21 +9,21 @@ const RuleGroup = ({ item, children, ...props }) => {
     <StyledDiv level={item.level} {...props}>
       <Spacing margin={{ top: 'small', bottom: 'normal' }}>
         <StyledText level={item.level}>
-          {((item.rules) ? item.isCurrentLevelValid : item.isValid)
-            ? <StyledIcon iconName="StatusCircleCheckmark" />
-            : <StyledIcon iconName="StatusCircleErrorX" />}
+          {(item.rules ? item.isCurrentLevelValid : item.isValid) ? (
+            <StyledIcon iconName="StatusCircleCheckmark" />
+          ) : (
+            <StyledIcon iconName="StatusCircleErrorX" />
+          )}
 
           <div>
-            Meet <strong>{
-              item.level === 0 ? 'all' : item.level === 1 ? 'any' : item.expectation
-            }</strong> of these
+            Meet <strong>{item.level === 0 ? 'all' : item.level === 1 ? 'any' : item.expectation}</strong> of these
           </div>
         </StyledText>
       </Spacing>
 
       {children}
     </StyledDiv>
-  )
-}
+  );
+};
 
 export default RuleGroup;

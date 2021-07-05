@@ -1,3 +1,3 @@
-import { ButtonAction } from "./ButtonAction";
+import { ButtonAction } from './ButtonAction';
 
 export { ButtonAction };

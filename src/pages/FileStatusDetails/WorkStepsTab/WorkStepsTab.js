@@ -10,16 +10,16 @@ import { Separator } from '../../../components/separators/Separator';
 import { Text } from '../../../components/typography/Text';
 import { Timeline } from '../../../components/timelines/Timeline';
 
-const parseSteps = steps => {
-  return steps.map(step => ({
+const parseSteps = (steps) => {
+  return steps.map((step) => ({
     ...step,
     status: step.stepStatus,
     content: {
       title: step.stepName,
-      description: step.stepType || ''
+      description: step.stepType || '',
     },
-  }))
-}
+  }));
+};
 
 const WorkStepsTab = ({ steps }) => {
   const items = parseSteps(steps);
@@ -35,53 +35,52 @@ const WorkStepsTab = ({ steps }) => {
 
         <Column xl={9}>
           <Card elevation="smallest">
-            {items[activeIndex].nvp.length === 0
-              ? <MessageBar>There are no details for this step</MessageBar>
-              : (
-                  <Fragment>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <Text variant="bold">{items[activeIndex].content.title}</Text>
-                    
-                      {/* TODO: Status */}
-                      {/* <Badge variant="success" label="Complete" pill /> */}
-                    </div>
+            {items[activeIndex].nvp.length === 0 ? (
+              <MessageBar>There are no details for this step</MessageBar>
+            ) : (
+              <Fragment>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Text variant="bold">{items[activeIndex].content.title}</Text>
 
-                    <Separator />
+                  {/* TODO: Status */}
+                  {/* <Badge variant="success" label="Complete" pill /> */}
+                </div>
 
-                    {items[activeIndex].nvp.map(item => (
-                      <div>
-                        <Text variant="bold">{item.name}: &nbsp;</Text>
-                        <Text>{item.value}</Text>
-                      </div>
-                    ))}
-                
-                    <Separator />
+                <Separator />
 
-                    <div>
-                      <Button>Redo</Button>
-                    </div>
-                  </Fragment>
-                )
-            }
+                {items[activeIndex].nvp.map((item) => (
+                  <div>
+                    <Text variant="bold">{item.name}: &nbsp;</Text>
+                    <Text>{item.value}</Text>
+                  </div>
+                ))}
+
+                <Separator />
+
+                <div>
+                  <Button>Redo</Button>
+                </div>
+              </Fragment>
+            )}
           </Card>
         </Column>
       </Row>
 
       <Separator />
 
-      <Spacing margin={{ top: "normal" }}>
+      <Spacing margin={{ top: 'normal' }}>
         <Button
           split
           onClick={() => alert('Click')}
           text="Re-process file"
           variant="primary"
           menuProps={{
-            items: [{ text: 'Rename & re-process'}]
+            items: [{ text: 'Rename & re-process' }],
           }}
         />
       </Spacing>
     </Spacing>
-  )
-}
+  );
+};
 
 export default WorkStepsTab;

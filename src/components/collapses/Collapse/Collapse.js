@@ -9,7 +9,9 @@ const CDXCollapse = ({ label, children, className = '' }) => {
   const handleClick = () => {
     if (isExpanded) {
       setIsAnimating(false);
-      setTimeout(() => { setIsExpanded(false) }, 75);
+      setTimeout(() => {
+        setIsExpanded(false);
+      }, 75);
     } else {
       setIsExpanded(true);
       setIsAnimating(true);
@@ -17,20 +19,16 @@ const CDXCollapse = ({ label, children, className = '' }) => {
   };
 
   return (
-    <StyledDiv className={`collapse ${className}`} >
+    <StyledDiv className={`collapse ${className}`}>
       <button className="collapse__trigger" onClick={handleClick}>
         {label} &nbsp; <FontIcon iconName="ChevroDown" />
       </button>
 
-      {
-        isExpanded && (
-          <div className={`collapse__content ms-motion-${isAnimating ? 'fadeIn' : 'fadeOut'}`}>
-            {children}
-          </div>
-        )
-      }
+      {isExpanded && (
+        <div className={`collapse__content ms-motion-${isAnimating ? 'fadeIn' : 'fadeOut'}`}>{children}</div>
+      )}
     </StyledDiv>
-  )
-}
+  );
+};
 
 export default CDXCollapse;

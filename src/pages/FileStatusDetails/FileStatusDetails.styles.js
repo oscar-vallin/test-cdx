@@ -31,7 +31,7 @@ export const StyledVendorHeaderRow = styled(StyledHeaderRow)`
 `;
 
 export const StyledHeader = styled(DetailsHeader)`
-  [role="columnheader"] {
+  [role='columnheader'] {
     padding: 0;
     width: 150px !important;
 

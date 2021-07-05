@@ -10,20 +10,19 @@ export const StyledDiv = styled.div`
 export const StyledChoiceGroup = styled(ChoiceGroup)`
   .ms-ChoiceFieldGroup-flexContainer {
     align-items: flex-end;
-    display: ${({ inline }) => inline ? 'flex' : 'block'};
+    display: ${({ inline }) => (inline ? 'flex' : 'block')};
 
     .ms-ChoiceField {
-      ${({ theme, inline }) => 
+      ${({ theme, inline }) =>
         inline
           ? `&:not(:last-child) {
               margin: 0 ${theme.spacing.normal} 0 0;
             }`
-          : `margin: ${theme.spacing.small} 0 0;`
-      }}
+          : `margin: ${theme.spacing.small} 0 0;`}}
     }
   }
 `;
-0 
+0;
 export const StyledColorPicker = styled(ColorPicker)`
   max-width: 100%;
 

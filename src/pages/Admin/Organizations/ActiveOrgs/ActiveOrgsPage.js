@@ -1,4 +1,4 @@
-import React, { useState, useEffect }  from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Row, Column } from '../../../../components/layouts';
@@ -89,11 +89,9 @@ const _ActiveOrgsPage = () => {
                     <MessageBar>No active orgs</MessageBar>
                   )
                 ) : (
-                  (
-                    <Spacing margin={{ top: 'double' }}>
-                      <Spinner size="lg" label="Loading active orgs"/>
-                    </Spacing>
-                  )
+                  <Spacing margin={{ top: 'double' }}>
+                    <Spinner size="lg" label="Loading active orgs" />
+                  </Spacing>
                 )}
               </StyledColumn>
             </Row>

@@ -13,7 +13,7 @@ export default class Theming {
         themeLight: chroma.mix(hex, '#000', 0.91).hex(),
         themeLighter: chroma.mix(hex, '#000', 0.975).hex(),
         themeLighterAlt: chroma.mix(hex, '#000', 0.9975).hex(),
-      }
+      };
     },
 
     foreground(hex = '#323130', white = '#fff') {
@@ -25,7 +25,7 @@ export default class Theming {
         neutralSecondary: chroma.mix(hex, '#000', 0.335).hex(),
         neutralTertiary: chroma.mix(hex, '#000', 0.385).hex(),
         white,
-      }
+      };
     },
 
     background(hex = '#fff') {
@@ -35,15 +35,15 @@ export default class Theming {
         neutralLight: chroma.mix(hex, '#000', 0.2).hex(),
         neutralLighter: chroma.mix(hex, '#000', 0.1).hex(),
         neutralLighterAlt: chroma.mix(hex, '#000', 0.05).hex(),
-      }
-    }
-  }
+      };
+    },
+  };
 
   static getVariant({ themePrimary, neutralPrimary, white }) {
     return {
       ...Theming.generate.primary(themePrimary),
       ...Theming.generate.foreground(neutralPrimary, white),
       ...Theming.generate.background(white),
-    }
+    };
   }
 }

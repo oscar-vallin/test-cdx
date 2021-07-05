@@ -68,5 +68,15 @@ export const useLogin = () => {
 
   //
 
-  return { email, password, isProcessing, isEmailValid, validationError, errorMessage, emailValidation, resetEmail, submitLogin };
+  return {
+    email,
+    password,
+    isProcessing,
+    isEmailValid,
+    validationError,
+    errorMessage,
+    emailValidation,
+    resetEmail,
+    submitLogin,
+  };
 };

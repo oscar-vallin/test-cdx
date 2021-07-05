@@ -25,10 +25,7 @@ const generateColumns = () => {
     minWidth: 225,
   });
 
-  return [
-    createColumn({ name: 'Name', key: 'name' }),
-    createColumn({ name: 'Template', key: 'tmpl' }),
-  ];
+  return [createColumn({ name: 'Name', key: 'name' }), createColumn({ name: 'Template', key: 'tmpl' })];
 };
 
 const onRenderItemColumn = (item, index, column) => {
@@ -86,11 +83,9 @@ const _AccessManagementGroupsPage = () => {
                     <MessageBar>No groups added</MessageBar>
                   )
                 ) : (
-                  (
-                    <Spacing margin={{ top: 'double' }}>
-                      <Spinner size="lg" label="Loading groups"/>
-                    </Spacing>
-                  )
+                  <Spacing margin={{ top: 'double' }}>
+                    <Spinner size="lg" label="Loading groups" />
+                  </Spacing>
                 )}
               </StyledColumn>
             </Row>

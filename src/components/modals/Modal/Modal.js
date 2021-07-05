@@ -18,19 +18,15 @@ const CDXModal = ({
       modalProps={{ isBlocking }}
       dialogContentProps={{
         type: DialogType.normal,
-        ...title ? { title } : {},
-        ...subText ? { subText } : {},
+        ...(title ? { title } : {}),
+        ...(subText ? { subText } : {}),
       }}
     >
       {children}
 
-      {footer && (
-        <DialogFooter>
-          {footer}
-        </DialogFooter>
-      )}
+      {footer && <DialogFooter>{footer}</DialogFooter>}
     </StyledModal>
-  )
-}
+  );
+};
 
 export { CDXModal };

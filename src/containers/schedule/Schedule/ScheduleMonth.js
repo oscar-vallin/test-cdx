@@ -73,16 +73,15 @@ export const ScheduleMonth = ({ id, currentDate, selectedDate, onChangeDate, ite
     return dayRows.map((_item) => <CellItem>{_item.label}</CellItem>);
   };
 
-
   // *
   const handleChangeDate = (_date) => {
-    if( isSameDay(_date, selectedDate)){
+    if (isSameDay(_date, selectedDate)) {
       onChangeView('day');
       return;
     }
 
     onChangeDate(_date);
-  }
+  };
 
   //
   const _renderBody = () => {
@@ -116,7 +115,7 @@ export const ScheduleMonth = ({ id, currentDate, selectedDate, onChangeDate, ite
             <CalendarBodyCellNumber id="CalendarBodyCellNumber">
               {isSameMonth(day, dates.monthStart) && !isSameDay(day, currentDate)
                 ? formattedDate
-                : formattedDateNotValid }
+                : formattedDateNotValid}
             </CalendarBodyCellNumber>
             {/* <CalendarBodyCellBg id="CalendarBodyCellBg">{formattedDate}</CalendarBodyCellBg> */}
             {renderItems(day, items)}

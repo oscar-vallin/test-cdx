@@ -32,13 +32,13 @@ const INITIAL_STATE = {
   usedAsIs: false,
   serviceType: '',
   permissions: [],
-}
+};
 
 const INITIAL_OPTIONS = {
   permissionServices: [],
   predicates: [],
   templateServices: [],
-}
+};
 
 const parseToComboBoxOption = ({ name, value }) => ({ key: value, text: name });
 const generateColumns = () => {
@@ -54,14 +54,9 @@ const generateColumns = () => {
   return [createColumn('Service'), createColumn('Facet'), createColumn('Verb'), createColumn('Actions')];
 };
 
-const CreatePoliciesPanel = ({
-  isOpen,
-  onDismiss,
-  onCreatePolicy,
-  selectedPolicyId,
-}) => {
+const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicyId }) => {
   const { authData } = useAuthContext();
-  const { id, orgId } = authData; 
+  const { id, orgId } = authData;
   const [state, setState] = useState({ ...INITIAL_STATE });
 
   const [options, setOptions] = useState({ ...INITIAL_OPTIONS });
@@ -77,8 +72,8 @@ const CreatePoliciesPanel = ({
         variables: {
           orgSid: orgId,
           policySid: selectedPolicyId,
-        }
-      })
+        },
+      });
     }
   }, [selectedPolicyId, isOpen]);
 
@@ -93,20 +88,20 @@ const CreatePoliciesPanel = ({
         isTemplate: amPolicy.tmpl,
         usedAsIs: amPolicy.tmplUseAsIs,
         serviceType: amPolicy.tmplServiceType,
-        permissions: (amPolicy.permissions || []).map(permission => ({
+        permissions: (amPolicy.permissions || []).map((permission) => ({
           policySid: amPolicy.id,
           effect: permission.effect,
           predicateName: permission.predicate,
           parameterVariable: permission.predVar1,
           parameterValue: permission.predParam1,
-          actions: (permission.actions || []).map(action => ({
+          actions: (permission.actions || []).map((action) => ({
             facet: { key: action.facet },
             service: { key: action.service },
             verb: { key: action.verb },
-            permissionSid: permission.id
+            permissionSid: permission.id,
           })),
         })),
-      })
+      });
     }
   }, [policy]);
 
@@ -214,12 +209,12 @@ const CreatePoliciesPanel = ({
       setOptions(data.amPolicyPage);
     }
   }, [data, isOpen]);
-  
+
   return (
     <Panel
       closeButtonAriaLabel="Close"
       type={PanelType.large}
-      headerText={!state.policySid ? "New Policy" :  "Update policy"}
+      headerText={!state.policySid ? 'New Policy' : 'Update policy'}
       isOpen={isOpen}
       onDismiss={() => {
         setState({ ...INITIAL_STATE });
@@ -463,7 +458,7 @@ const CreatePoliciesPanel = ({
                                   onRenderItemColumn={onRenderItemColumn({
                                     permissionIndex,
                                     data: permission.actions,
-                                    services: (options.permissionServices || []),
+                                    services: options.permissionServices || [],
                                     onServiceChange: handleAsyncOptionChange('service', permissionIndex),
                                     onFacetChange: handleAsyncOptionChange('facet', permissionIndex),
                                     onVerbChange: handleAsyncOptionChange('verb', permissionIndex),
@@ -517,15 +512,13 @@ const CreatePoliciesPanel = ({
                       callback({
                         variables: {
                           [!state.policySid ? 'policyInfo' : 'updateAMPolicyInput']: {
-                            ...(state.policySid)
-                              ? { policySid: state.policySid }
-                              : {},
+                            ...(state.policySid ? { policySid: state.policySid } : {}),
                             name: state.policyName,
                             orgOwnerId: 1,
-                            permissions: state.permissions.map(permission => ({
+                            permissions: state.permissions.map((permission) => ({
                               policySid: state.policySid,
                               effect: permission.effect,
-                              actions: permission.actions.map(action => ({
+                              actions: permission.actions.map((action) => ({
                                 permissionSid: permission.permissionSid,
                                 service: action.service.key,
                                 facet: action.facet.key,
@@ -533,15 +526,13 @@ const CreatePoliciesPanel = ({
                               })),
                               predicate: permission.predicateName,
                               predVar1: permission.parameterVariable,
-                              predParam1: permission.parameterValue, 
+                              predParam1: permission.parameterValue,
                             })),
                             tmpl: state.isTemplate,
                             tmplUseAsIs: state.usedAsIs,
-                            ...(state.serviceType !== '')
-                              ? { tmplServiceType: state.serviceType }
-                              : {},
-                          }
-                        }
+                            ...(state.serviceType !== '' ? { tmplServiceType: state.serviceType } : {}),
+                          },
+                        },
                       });
                     }}
                   >
@@ -554,7 +545,7 @@ const CreatePoliciesPanel = ({
         </Row>
       </Fragment>
     </Panel>
-  )
-}
+  );
+};
 
 export default CreatePoliciesPanel;

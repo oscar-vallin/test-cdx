@@ -13,11 +13,7 @@ import { ThemeSettings } from './ThemeSettings';
 import { useCurrentUserTheme } from '../../hooks/useCurrentUserTheme';
 import { useThemeContext } from './../../contexts/ThemeContext';
 
-import {
-  StyledBox,
-  StyledRow,
-  StyledCard,
-} from './UserSettingsPage.styles';
+import { StyledBox, StyledRow, StyledCard } from './UserSettingsPage.styles';
 
 const _UserSettingsPage = () => {
   const { userTheme } = useCurrentUserTheme();
@@ -26,7 +22,7 @@ const _UserSettingsPage = () => {
   const [passwords, setPasswords] = useState({
     current: '',
     new: '',
-    confirmation: ''
+    confirmation: '',
   });
 
   // const activeTheme = localStorage.getItem('CURRENT_THEME');
@@ -43,22 +39,14 @@ const _UserSettingsPage = () => {
           <Column lg="6">
             <StyledCard elevation="smallest">
               <Spacing padding={{ left: 'small' }}>
-                <PasswordChange
-                  state={passwords}
-                  onChange={setPasswords}
-                  validations={validations}
-                />
+                <PasswordChange state={passwords} onChange={setPasswords} validations={validations} />
               </Spacing>
             </StyledCard>
           </Column>
           <Column lg="6">
             <StyledCard elevation="smallest">
-              <Spacing padding={{ left: "small" }}>
-                <PasswordRules
-                  password={passwords.new}
-                  validations={validations}
-                  onChange={setValidations}
-                />
+              <Spacing padding={{ left: 'small' }}>
+                <PasswordRules password={passwords.new} validations={validations} onChange={setValidations} />
               </Spacing>
             </StyledCard>
           </Column>

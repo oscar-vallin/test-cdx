@@ -12,7 +12,7 @@ const getVariant = (theme, variant) => {
   };
 
   return Variants[variant];
-}
+};
 
 export const StyledSpan = styled.span`
   align-items: center;
@@ -20,15 +20,10 @@ export const StyledSpan = styled.span`
   border-radius: ${({ theme }) => theme.radius.large};
   color: ${({ theme, variant }) => getVariant(theme, variant).color};
   display: flex;
-  font-size: ${({ theme, pill }) => pill ? theme.fontSizes.small : '0.75rem'};
-  font-weight: ${({ theme, pill }) => pill
-    ? theme.fontWeights.normal
-    : theme.fontWeights.bold};
+  font-size: ${({ theme, pill }) => (pill ? theme.fontSizes.small : '0.75rem')};
+  font-weight: ${({ theme, pill }) => (pill ? theme.fontWeights.normal : theme.fontWeights.bold)};
   justify-content: center;
-  padding: ${({ theme, pill }) => pill
-    ? `${theme.radius.normal} ${theme.radius.medium}`
-    : `${theme.radius.normal} 6px`};
+  padding: ${({ theme, pill }) =>
+    pill ? `${theme.radius.normal} ${theme.radius.medium}` : `${theme.radius.normal} 6px`};
   white-space: nowrap;
 `;
-
-
