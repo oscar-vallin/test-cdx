@@ -3,5 +3,7 @@ src/tests/
 **/*.js
 node_modules
 build
+**/build
+*.d.ts
 api
 src/data/services/graphql.ts

@@ -19,7 +19,7 @@ import { ActiveOrgsPage } from './Admin/Organizations';
 import { CurrentActivityPage } from './Admin/Activity';
 import { ColorPalettesPage, DefaultThemePage } from './Admin/DashboardSite';
 import { ActiveUsersPage } from './Admin/Users/ActiveUsers';
-import { UserDetailsPage } from './Admin/UserDetails';
+// import { UserDetailsPage } from './Admin/Users/CreateUsers';
 import { DeletedUsersPage } from './Admin/Users/DeletedUsers';
 
 import AuthRoute from './AuthRoute';
