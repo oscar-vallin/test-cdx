@@ -10,16 +10,9 @@ import { Spinner } from './../../../components/spinners/Spinner';
 import { useThemeContext } from './../../../contexts/ThemeContext';
 import { useColorPalettes } from './../../../hooks/useColorPalettes';
 import Theming from './../../../utils/Theming';
-import {
-  useCreateOrUpdateOwnDashThemeMutation,
-  useUserThemeLazyQuery
-} from './../../../data/services/graphql';
+import { useCreateOrUpdateOwnDashThemeMutation, useUserThemeLazyQuery } from './../../../data/services/graphql';
 
-import {
-  StyledDiv,
-  StyledTitle,
-  StyledChoiceGroup,
-} from './../UserSettingsPage.styles';
+import { StyledDiv, StyledTitle, StyledChoiceGroup } from './../UserSettingsPage.styles';
 import { defaultTheme, darkTheme } from '../../../styles/themes';
 import { useCurrentUserTheme } from '../../../hooks/useCurrentUserTheme';
 
@@ -28,25 +21,22 @@ const INITIAL_THEME = {
   loading: false,
   paletteNm: 'Default',
   themeColorMode: 'LIGHT',
-  themeFontSize: 'MEDIUM'
+  themeFontSize: 'MEDIUM',
 };
 
 const ThemeSettings = ({ userTheme = { ...INITIAL_THEME } }) => {
-  const [
-    useUserThemeQuery, { data: theme, loading: isLoadingTheme }
-  ] = useUserThemeLazyQuery();
+  const [useUserThemeQuery, { data: theme, loading: isLoadingTheme }] = useUserThemeLazyQuery();
 
   useEffect(() => {
     useUserThemeQuery({ variables: { themeColorMode: null } });
   }, []);
 
   const { changeTheme } = useThemeContext();
-  const {
-    colorPalettes,
-    isLoadingPalettes,
-    fetchColorPalettes,
-  } = useColorPalettes();
-
+  const { colorPalettes, isLoadingPalettes, fetchColorPalettes } = useColorPalettes();
+  const [
+    createOrUpdateOwnDashTheme,
+    { data: themeResponse, loading: isHandlingTheme, error: themeError },
+  ] = useCreateOrUpdateOwnDashThemeMutation();
   const [palettes, setPalettes] = useState([
     {
       id: null,
@@ -55,7 +45,7 @@ const ThemeSettings = ({ userTheme = { ...INITIAL_THEME } }) => {
       defaultPalette: true,
       themeColorMode: 'LIGHT',
       ...defaultTheme,
-    }
+    },
   ]);
 
   // const [selectedPaletteId, setSelectedPaletteId] = useState(null);
@@ -64,7 +54,7 @@ const ThemeSettings = ({ userTheme = { ...INITIAL_THEME } }) => {
 
   const [selectedPaletteId, setSelectedPaletteId] = useState();
   const [themeColorMode, setThemeColorMode] = useState();
-  
+
   useEffect(fetchColorPalettes, []);
   useEffect(() => {
     if (theme?.userTheme) {
@@ -76,7 +66,7 @@ const ThemeSettings = ({ userTheme = { ...INITIAL_THEME } }) => {
   useEffect(() => {
     if (colorPalettes && !isLoadingPalettes) {
       const defaultPalette = colorPalettes.find(({ defaultPalette }) => defaultPalette);
-      const selectedPalette = (theme?.userTheme)
+      const selectedPalette = theme?.userTheme
         ? colorPalettes.find(({ paletteNm }) => paletteNm === theme?.userTheme.dashThemeColor.paletteNm)?.id || null
         : null;
 
@@ -88,111 +78,89 @@ const ThemeSettings = ({ userTheme = { ...INITIAL_THEME } }) => {
   useEffect(() => {
     const palette = palettes.find(({ id }) => id === selectedPaletteId) || {};
     const { themePrimary } = palette;
-    
+
     const variant = palette.themeColorMode
       ? Theming.getVariant({
-        ...(themeColorMode === 'LIGHT')
-          ? defaultTheme
-          : darkTheme,
-          themePrimary
+          ...(themeColorMode === 'LIGHT' ? defaultTheme : darkTheme),
+          themePrimary,
         })
       : palette;
-    
-    setPalette(palette);
-    setThemeColorMode((palette.themeColorMode !== null && palette.allowDark)
-      ? themeColorMode
-      : 'LIGHT'
-    );
 
+    setPalette(palette);
     changeTheme(variant);
   }, [selectedPaletteId, themeColorMode]);
 
-  const [
-    createOrUpdateOwnDashTheme,
-    {
-      data: themeResponse,
-      loading: isHandlingTheme,
-      error: themeError
-    }
-  ] = useCreateOrUpdateOwnDashThemeMutation();
+  return isLoadingPalettes || isLoadingTheme ? (
+    <Spacing padding="Double">
+      <Spinner size="lg" label="Loading theme settings" />
+    </Spacing>
+  ) : (
+    <Fragment>
+      <StyledTitle>Theme</StyledTitle>
 
-  return (
-    (isLoadingPalettes || isLoadingTheme)
-      ? <Spacing padding="Double">
-          <Spinner size="lg" label="Loading theme settings" />
-        </Spacing>
-      : (
-        <Fragment>
-          <StyledTitle>Theme</StyledTitle>
-
-          <StyledDiv>
-            <Text
-              size="normal"
-              className={`text ${(palettes || []).length > 1 && 'text--centered'}`}
-            >
-              Color palettes:
-            </Text>
-            {!palettes
-              ? <MessageBar content="No color palettes available" />
-              : (
-                  <StyledChoiceGroup
-                    selectedKey={selectedPaletteId}
-                    options={palettes?.map(item => ({
-                      key: item.id,
-                      text: item.paletteNm
-                    })) || []}
-                    onChange={(evt, { key }) => setSelectedPaletteId(key)}
-                  />
-                )
+      <StyledDiv>
+        <Text size="normal" className={`text ${(palettes || []).length > 1 && 'text--centered'}`}>
+          Color palettes:
+        </Text>
+        {!palettes ? (
+          <MessageBar content="No color palettes available" />
+        ) : (
+          <StyledChoiceGroup
+            selectedKey={selectedPaletteId}
+            options={
+              palettes?.map((item) => ({
+                key: item.id,
+                text: item.paletteNm,
+              })) || []
             }
-          </StyledDiv>
+            onChange={(evt, { key }) => setSelectedPaletteId(key)}
+          />
+        )}
+      </StyledDiv>
 
+      <Spacing margin={{ top: 'normal' }}>
+        <StyledDiv>
+          <Text size="normal" className="text">
+            Color modes:
+          </Text>
+
+          {!palette.themeColorMode ? (
+            <Text>No color modes available for this palette</Text>
+          ) : (
+            <StyledChoiceGroup
+              selectedKey={themeColorMode}
+              options={[{ key: 'LIGHT', text: 'Light' }, ...(palette.allowDark ? [{ key: 'DARK', text: 'Dark' }] : [])]}
+              disabled={!palette.allowDark}
+              onChange={(evt, { key }) => {
+                setThemeColorMode(key);
+              }}
+            />
+          )}
+        </StyledDiv>
+      </Spacing>
+
+      <Row>
+        <Column>
           <Spacing margin={{ top: 'normal' }}>
-            <StyledDiv>
-              <Text size="normal" className="text">
-                Color modes:
-              </Text>
-
-              {(!palette.themeColorMode)
-                ? <Text>No color modes available for this palette</Text>
-                : <StyledChoiceGroup
-                  selectedKey={themeColorMode}
-                  options={[
-                    { key: 'LIGHT', text: 'Light' },
-                    ...(palette.allowDark) ? [{ key: 'DARK', text: 'Dark' }] : []
-                  ]}
-                  disabled={!palette.allowDark}
-                  onChange={(evt, { key }) => {
-                    setThemeColorMode(key);
-                  }}
-                />
-              }
-            </StyledDiv>
+            <Button
+              variant="primary"
+              text={isHandlingTheme ? 'Processing...' : 'Save theme'}
+              onClick={() => {
+                createOrUpdateOwnDashTheme({
+                  variables: {
+                    dashThemeInput: {
+                      themeColorSid: selectedPaletteId,
+                      themeColorMode,
+                    },
+                  },
+                });
+              }}
+            />
           </Spacing>
-
-          <Row>
-            <Column>
-              <Spacing margin={{ top: "normal" }}>
-                <Button
-                  variant="primary"
-                  text={isHandlingTheme ? "Processing..." : "Save theme"}
-                  onClick={() => {
-                    createOrUpdateOwnDashTheme({
-                      variables: {
-                        dashThemeInput: {
-                          themeColorSid: selectedPaletteId,
-                          themeColorMode,
-                        }
-                      }
-                    })
-                  }}
-                />
-              </Spacing>
-            </Column>
-          </Row>
-        </Fragment>
-      )
-  )
-}
+        </Column>
+      </Row>
+    </Fragment>
+  );
+};
 
 export default ThemeSettings;
