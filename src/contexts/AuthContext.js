@@ -217,7 +217,7 @@ export const AuthContextProvider = ({ children }) => {
     localStorage.removeItem('USER_NAME');
     localStorage.removeItem('LOGIN');
 
-    if (expired != undefined) {
+    if (expired) {
       localStorage.setItem('LOGOUT', expired);
     }
 
