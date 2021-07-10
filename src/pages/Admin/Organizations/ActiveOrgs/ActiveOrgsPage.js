@@ -1,15 +1,17 @@
 import React, { useState, useEffect }  from 'react';
 
+import { Link } from 'react-router-dom';
+
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Row, Column } from '../../../../components/layouts';
 import { Spacing } from '../../../../components/spacings/Spacing';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { MessageBar } from 'office-ui-fabric-react';
-// import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Text } from '../../../../components/typography/Text';
 import { Separator } from '../../../../components/separators/Separator';
 
+import { useAuthContext } from '../../../../contexts/AuthContext';
 import { useDirectOrganizationsFQuery } from '../../../../data/services/graphql';
 import { StyledColumn } from './ActiveOrgsPage.styles';
 
@@ -30,25 +32,31 @@ const generateColumns = () => {
   ];
 };
 
-const onRenderItemColumn = (item, index, column) => {
-  switch (column.key) {
-    case 'tmpl':
-      return <FontIcon iconName={item.tmpl ? 'CheckMark' : 'Cancel'} />;
-    default:
-      return item[column.key];
-  }
-};
-
 const _ActiveOrgsPage = () => {
+  const { authData, setAuthData } = useAuthContext();
+
   const [orgs, setOrgs] = useState([]);
   const columns = generateColumns();
 
   const { data, loading } = useDirectOrganizationsFQuery({
     variables: {
-      orgSid: 1,
+      orgSid: authData.orgId || 1,
       orgFilter: { activeFilter: 'ACTIVE' },
     },
   });
+
+  const onRenderItemColumn = (item, index, column) => {
+    switch (column.key) {
+      case 'name':
+        return (
+          <Link to={{ pathname: '/', search: `?orgSid=${item.id}` }}>
+            {item[column.key]}
+          </Link>
+        );
+      default:
+        return item[column.key];
+    }
+  };
 
   useEffect(() => {
     if (!loading && data) {

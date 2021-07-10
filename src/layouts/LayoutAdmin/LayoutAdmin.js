@@ -4,7 +4,6 @@ import { StyledBox, StyledNav } from './LayoutAdmin.styles';
 import { LayoutDashboard } from '../LayoutDashboard';
 import { useHistory } from 'react-router-dom';
 import { getRouteByApiId } from '../../data/constants/RouteConstants';
-import { ADMIN_NAV } from '../../data/constants/AdminConstants';
 import { useAuthContext } from '../../contexts/AuthContext';
 
 import { Spinner } from '../../components/spinners/Spinner';
@@ -29,6 +28,7 @@ const parseLinks = (links = [], sidebarOpt) => {
       : {}
   }))
 }
+
 const LayoutAdmin = ({
   id = 'LayoutAdmin',
   menuOptionSelected = 'admin',
@@ -80,7 +80,7 @@ const LayoutAdmin = ({
   }, [data, loading, sidebarOptionSelected])
 
   return (
-    <LayoutDashboard id={id} menuOptionSelected={menuOptionSelected}>
+    <LayoutDashboard id={id} menuOptionSelected={null}>
       {
         (!cache && loading)
           ? <Spacing margin={{ top: 'double' }}>

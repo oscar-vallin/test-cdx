@@ -367,6 +367,10 @@ export type DateTimeRangeInput = {
   rangeEnd: Scalars['DateTime'];
 };
 
+export type DeactivateUsersInput = {
+  userSids: Array<Maybe<Scalars['ID']>>;
+};
+
 export type DefaultDashThemePage = {
   __typename?: 'DefaultDashThemePage';
   themeColorModes?: Maybe<Array<Maybe<ThemeColorMode>>>;
@@ -504,6 +508,8 @@ export type Mutation = {
   createAMPermissionAction?: Maybe<AmPermissionAction>;
   createAMGroup?: Maybe<AmGroup>;
   createUser?: Maybe<User>;
+  deactivateUser?: Maybe<Scalars['String']>;
+  deactivateUsers?: Maybe<Scalars['String']>;
   removeAMPolicies?: Maybe<Scalars['String']>;
   removeAMPolicy?: Maybe<Scalars['String']>;
   removeAMPermissions?: Maybe<Scalars['String']>;
@@ -570,6 +576,16 @@ export type MutationCreateAmGroupArgs = {
 export type MutationCreateUserArgs = {
   userInfo: CreateUserInput;
   personInfo: CreatePersonInput;
+};
+
+
+export type MutationDeactivateUserArgs = {
+  userSid: Scalars['ID'];
+};
+
+
+export type MutationDeactivateUsersArgs = {
+  deactivateUsersInput?: Maybe<DeactivateUsersInput>;
 };
 
 
@@ -1321,7 +1337,9 @@ export type UserFilterInput = {
 export type UserSession = {
   __typename?: 'UserSession';
   id: Scalars['ID'];
-  orgId: Scalars['ID'];
+  /** orgId is deprecated prefer orgSid instead */
+  orgId?: Maybe<Scalars['ID']>;
+  orgSid: Scalars['ID'];
   userId: Scalars['String'];
   firstNm: Scalars['String'];
   pollInterval?: Maybe<Scalars['Int']>;
@@ -1510,7 +1528,7 @@ export type PasswordLoginMutation = (
       & Pick<TokenUser, 'token'>
       & { session?: Maybe<(
         { __typename?: 'UserSession' }
-        & Pick<UserSession, 'id' | 'orgId' | 'userId' | 'firstNm' | 'defaultAuthorities'>
+        & Pick<UserSession, 'id' | 'orgId' | 'orgSid' | 'userId' | 'firstNm' | 'defaultAuthorities'>
       )> }
     )> }
   )> }
@@ -1955,6 +1973,26 @@ export type CreateUserMutation = (
       & Pick<Person, 'firstNm' | 'lastNm'>
     )> }
   )> }
+);
+
+export type DeactivateUserMutationVariables = Exact<{
+  userSid: Scalars['ID'];
+}>;
+
+
+export type DeactivateUserMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deactivateUser'>
+);
+
+export type DeactivateUsersMutationVariables = Exact<{
+  deactivateUsersInput: DeactivateUsersInput;
+}>;
+
+
+export type DeactivateUsersMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deactivateUsers'>
 );
 
 export type AmPoliciesForOrgPQueryVariables = Exact<{
@@ -2523,7 +2561,7 @@ export type CurrentUserDashThemePageQuery = (
     & Pick<UserDashThemePage, 'themeColorModes' | 'themeFontSizes'>
     & { themeColorPalettes?: Maybe<Array<Maybe<(
       { __typename?: 'DashThemeColor' }
-      & Pick<DashThemeColor, 'id' | 'neutralPrimary' | 'allowDark' | 'themePrimary' | 'white'>
+      & Pick<DashThemeColor, 'id' | 'paletteNm' | 'neutralPrimary' | 'allowDark' | 'themePrimary' | 'white'>
     )>>>, dashTheme?: Maybe<(
       { __typename?: 'DashTheme' }
       & Pick<DashTheme, 'id' | 'themeFontSize' | 'themeColorMode'>
@@ -3041,6 +3079,7 @@ export const PasswordLoginDocument = gql`
       session {
         id
         orgId
+        orgSid
         userId
         firstNm
         defaultAuthorities
@@ -3653,6 +3692,66 @@ export function useCreateUserMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreateUserMutationHookResult = ReturnType<typeof useCreateUserMutation>;
 export type CreateUserMutationResult = Apollo.MutationResult<CreateUserMutation>;
 export type CreateUserMutationOptions = Apollo.BaseMutationOptions<CreateUserMutation, CreateUserMutationVariables>;
+export const DeactivateUserDocument = gql`
+    mutation DeactivateUser($userSid: ID!) {
+  deactivateUser(userSid: $userSid)
+}
+    `;
+export type DeactivateUserMutationFn = Apollo.MutationFunction<DeactivateUserMutation, DeactivateUserMutationVariables>;
+
+/**
+ * __useDeactivateUserMutation__
+ *
+ * To run a mutation, you first call `useDeactivateUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeactivateUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deactivateUserMutation, { data, loading, error }] = useDeactivateUserMutation({
+ *   variables: {
+ *      userSid: // value for 'userSid'
+ *   },
+ * });
+ */
+export function useDeactivateUserMutation(baseOptions?: Apollo.MutationHookOptions<DeactivateUserMutation, DeactivateUserMutationVariables>) {
+        return Apollo.useMutation<DeactivateUserMutation, DeactivateUserMutationVariables>(DeactivateUserDocument, baseOptions);
+      }
+export type DeactivateUserMutationHookResult = ReturnType<typeof useDeactivateUserMutation>;
+export type DeactivateUserMutationResult = Apollo.MutationResult<DeactivateUserMutation>;
+export type DeactivateUserMutationOptions = Apollo.BaseMutationOptions<DeactivateUserMutation, DeactivateUserMutationVariables>;
+export const DeactivateUsersDocument = gql`
+    mutation DeactivateUsers($deactivateUsersInput: DeactivateUsersInput!) {
+  deactivateUsers(deactivateUsersInput: $deactivateUsersInput)
+}
+    `;
+export type DeactivateUsersMutationFn = Apollo.MutationFunction<DeactivateUsersMutation, DeactivateUsersMutationVariables>;
+
+/**
+ * __useDeactivateUsersMutation__
+ *
+ * To run a mutation, you first call `useDeactivateUsersMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeactivateUsersMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deactivateUsersMutation, { data, loading, error }] = useDeactivateUsersMutation({
+ *   variables: {
+ *      deactivateUsersInput: // value for 'deactivateUsersInput'
+ *   },
+ * });
+ */
+export function useDeactivateUsersMutation(baseOptions?: Apollo.MutationHookOptions<DeactivateUsersMutation, DeactivateUsersMutationVariables>) {
+        return Apollo.useMutation<DeactivateUsersMutation, DeactivateUsersMutationVariables>(DeactivateUsersDocument, baseOptions);
+      }
+export type DeactivateUsersMutationHookResult = ReturnType<typeof useDeactivateUsersMutation>;
+export type DeactivateUsersMutationResult = Apollo.MutationResult<DeactivateUsersMutation>;
+export type DeactivateUsersMutationOptions = Apollo.BaseMutationOptions<DeactivateUsersMutation, DeactivateUsersMutationVariables>;
 export const AmPoliciesForOrgPDocument = gql`
     query AMPoliciesForOrgP($orgSid: ID!, $pageableInput: PageableInput) {
   amPoliciesForOrg(orgSid: $orgSid, pageableInput: $pageableInput) {
@@ -5086,6 +5185,7 @@ export const CurrentUserDashThemePageDocument = gql`
     themeFontSizes
     themeColorPalettes {
       id
+      paletteNm
       neutralPrimary
       allowDark
       themePrimary

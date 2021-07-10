@@ -137,6 +137,7 @@ export const AuthContextProvider = ({ children }) => {
       setToken(null);
       setAuthenticating(false);
       
+      localStorage.removeItem('DASHBOARD_NAV');
       localStorage.removeItem('ADMIN_NAV');
 
       return;
@@ -245,6 +246,7 @@ export const AuthContextProvider = ({ children }) => {
       selectedPage,
       isCheckingAuth,
       setIsCheckingAuth,
+      setAuthData,
       isContextLoading,
       isAuthenticating,
       isAuthenticated,

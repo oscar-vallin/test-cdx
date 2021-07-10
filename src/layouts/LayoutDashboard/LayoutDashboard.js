@@ -6,7 +6,6 @@ import { ROUTE_USER_SETTINGS } from '../../data/constants/RouteConstants';
 import { NavBar } from '../../containers/bars/NavBar';
 import { StyleConstants } from '../../data/constants/StyleConstants';
 import { BoxStyled } from './LayoutDashboard.styles';
-import { ChangePasswordModal } from '../../containers/modals/ChangePasswordModal';
 
 const LayoutDashboard = ({ id = 'LayoutDashboard', menuOptionSelected = 'dashboard', routeId, children }) => {
   const history = useHistory();
@@ -21,8 +20,6 @@ const LayoutDashboard = ({ id = 'LayoutDashboard', menuOptionSelected = 'dashboa
 
         {children}
       </BoxStyled>
-
-      {/* <ChangePasswordModal /> */}
     </Fragment>
   );
 };

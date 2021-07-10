@@ -10,6 +10,11 @@ import { StyledRow, StyledColumn, StyledMenuButton, StyledButtonIcon } from './M
 
 import { ROUTES_ARRAY, ROUTES, ROUTES_ID, URL_ROUTES } from '../../../data/constants/RouteConstants';
 import { OutsideComponent } from './OutsideComponent';
+import { useAuthContext } from './../../../contexts/AuthContext';
+import { getRouteByApiId } from './../../../data/constants/RouteConstants';
+import { useNavigateToNewDomainLazyQuery } from './../../../data/services/graphql';
+import queryString from 'query-string';
+
 // CardSection is called directly cause a restriction warning for that component.
 const MainMenu = ({ id = '__MainMenu', option = ROUTES.ROUTE_DASHBOARD.ID, left, changeCollapse }) => {
   const history = useHistory();
@@ -18,9 +23,49 @@ const MainMenu = ({ id = '__MainMenu', option = ROUTES.ROUTE_DASHBOARD.ID, left,
   const [filterParam, _setFilterParam] = useState(search)
   const filter = new URLSearchParams(filterParam).get('filter');
   const [collapse, setCollapse] = React.useState();
-  const navItems = (option !== ROUTES_ID.ADMIN)
-    ? ROUTES_ARRAY
-    : [];
+  const { authData } = useAuthContext();
+
+  const [domain, setDomain] = useState({
+    navItems: [],
+  });
+
+  const cache = localStorage.getItem('DASHBOARD_NAV');
+
+  const [fetchNav, { data, loading, error }] = useNavigateToNewDomainLazyQuery({
+    variables: {
+      domainNavInput: {
+        orgSid: authData.orgId,
+        appDomain: 'DASHBOARD',
+        selectedPage: 'DASHBOARD'
+      }
+    },
+  });
+
+  useEffect(() => {
+    if (authData.orgId) {
+      fetchNav();
+    }
+  }, [authData.orgId]);
+
+  useEffect(() => {
+    if (cache) {
+      const domain = JSON.parse(cache);
+
+      setDomain(domain);
+      
+      return;
+    }
+
+    if (data && !loading) {
+      const { navigateToNewDomain: domain } = data;
+      
+      localStorage.setItem('DASHBOARD_NAV', JSON.stringify(domain));
+
+      setDomain(domain);
+
+      return;
+    }
+  }, [data, loading]);
 
   const collapseNavMenu = () => {
     setCollapse(!collapse);
@@ -28,25 +73,47 @@ const MainMenu = ({ id = '__MainMenu', option = ROUTES.ROUTE_DASHBOARD.ID, left,
   };
 
   const renderOptions = () => {
-    return navItems.map((menuOption) => {
-      return menuOption.MAIN_MENU ? (
+    const { authData } = useAuthContext();
+    
+    return domain.navItems.map((menuOption) => {
+      const page = menuOption?.page;
+      const opt = getRouteByApiId(menuOption.label !== 'Admin'
+        ? page?.type
+        : 'ADMIN'
+      );
+
+      return opt.MAIN_MENU ? (
         <StyledColumn
-          id={`${id}__MainMenu__Row-${menuOption.ID}`}
-          key={`${id}__MainMenu__Row-${menuOption.ID}`}
+          id={`${id}__MainMenu__Row-${opt.ID}`}
+          key={`${id}__MainMenu__Row-${opt.ID}`}
           noStyle
         >
           <StyledMenuButton
-            selected={location.pathname === menuOption.URL}
+            selected={location.pathname === opt.URL}
             collapse={collapse}
             onClick={() => {
-              if (menuOption.URL === `/${ROUTES_ID.FILE_STATUS}`) {
-                history.push(`${menuOption.URL}?filter=${filter}`);
-              } else {
-                history.push(menuOption.URL);
+              const { parameters } = page;
+              const search = queryString.parse(location.search);
+
+              let url = `${opt.URL}?${parameters
+                .map(({ name, idValue }) => {
+                  if (name === 'orgSid') {
+                    return `orgSid=${search.orgSid || idValue}`
+                  }
+
+                  return `${name}=${idValue}`;
+                })
+                .join('&')}
+              `
+              
+              if (opt.URL === `/${ROUTES_ID.FILE_STATUS}`) {
+                url = `${url}&filter=${filter || ''}`;
               }
+
+              history.push(url);
             }}
           >
-            {menuOption.TITLE}
+            {menuOption.label}
           </StyledMenuButton>
         </StyledColumn>
       ) : null;

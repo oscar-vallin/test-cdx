@@ -4,7 +4,7 @@ import { useAuthContext } from "../contexts/AuthContext";
 
 export default function AuthenticatedRoute({ children, ...rest }) {
   const { pathname, search } = useLocation();
-  const { isAuthenticated } = useAuthContext();
+  const { isAuthenticated, authData } = useAuthContext();
 
   return (
     <Route {...rest}>
