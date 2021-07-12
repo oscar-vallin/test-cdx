@@ -42,7 +42,7 @@ export const useDashboardService = (initOrgSid) => {
 
   useEffect(() => {
     if (error) {
-      authLogout(error.message);
+      authLogout();
       history.push('/');
     }
   }, [error]);

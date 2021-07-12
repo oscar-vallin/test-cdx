@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState, memo } from 'react';
 import { LayoutLogin } from '../../layouts/LayoutLogin';
 import { FormLogin } from '../../containers/forms/FormLogin';
 import { Toast } from './../../components/toast';
 
 const _LoginPage = () => {
-  const [isLogout, setLogout] = React.useState();
+  const [isLogout, setLogout] = useState();
 
-  React.useEffect(() => {
+  useEffect(() => {
     const logout = localStorage.getItem('LOGOUT');
 
     if (logout != null) {
@@ -21,11 +21,11 @@ const _LoginPage = () => {
   return (
     <LayoutLogin id="PageLogin">
       <FormLogin id="FormLogin" onLogin={() => {}} />
-      {isLogout != undefined ? <Toast text={isLogout} duration={5000} /> : null}
+      {isLogout && <Toast text={isLogout} duration={5000} />}
     </LayoutLogin>
   );
 };
 
-const LoginPage = React.memo(_LoginPage);
+const LoginPage = memo(_LoginPage);
 
 export { LoginPage };
