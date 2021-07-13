@@ -117,6 +117,9 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput, date 
   const [sort, setSort] = useState('asc');
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [currentKeySort, setCurrentKeySort] = useState('datetime');
+  const [isHovering, setIsHovering] = useState(false);
+  const [currentHover, setCurrentHover] = useState(null);
 
   // * Component Effects
   // Component Did Mount.
@@ -167,6 +170,20 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput, date 
   useEffect(() => {
     setFilterInput(searchInput);
   }, [option]);
+
+  useEffect(() => {
+    setSortedItems(_copyAndSort(sortedItems, 'datetime', false));
+  }, []);
+
+  const handleMouseOver = (key) => {
+    setCurrentHover(key);
+    setIsHovering(true);
+  };
+
+  const handleMouseOut = () => {
+    setCurrentHover(null);
+    setIsHovering(false);
+  };
 
   /*
    * Local Functions.
@@ -343,13 +360,14 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput, date 
   //
   const _onSort = (key) => {
     setSort(sort === 'asc' ? 'desc' : 'asc');
+    setCurrentKeySort(key);
     if (structure.header.type === 'dashboard') {
       setSortLabel(sortLabel === 'Vendor' ? 'BUs' : 'Vendor');
 
       setSortedItems(_copyAndSort(sortedItems, columns[sortLabel === 'Vendor' ? 1 : 0].fieldName, false));
     } else if (structure.header.type === 'file_status' && key !== 'progress') {
       if (totalPages === 1) {
-        setSortedItems(_copyAndSort(sortedItems, key, sort == 'asc' ? true : false));
+        setSortedItems(_copyAndSort(sortedItems, key, sort === 'asc' ? false : true));
       } else {
         alert('Sorting unavailable for a multi-page table');
       }
@@ -376,8 +394,19 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput, date 
           onRenderColumnHeaderTooltip={(props) =>
             props.column.key === 'progress' ? (
               props.children
+            ) : props.column.key === currentKeySort ? (
+              <StyledMenuButton onClick={() => _onSort(props.column.key)} icon={sort}>
+                {props.children}
+              </StyledMenuButton>
             ) : (
-              <StyledMenuButton icon="sort">{props.children}</StyledMenuButton>
+              <StyledMenuButton
+                icon={isHovering && currentHover === props.column.key ? 'sort' : null}
+                onMouseOver={() => handleMouseOver(props.column.key)}
+                onMouseOut={handleMouseOut}
+                onClick={() => _onSort(props.column.key)}
+              >
+                {props.children}
+              </StyledMenuButton>
             )
           }
         />
