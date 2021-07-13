@@ -11,6 +11,8 @@ const buttonIcons = {
   up: 'Up',
   down: 'Down',
   today: 'GotoToday',
+  asc: 'SortUp',
+  desc: 'SortDown',
 };
 
 const ButtonAction = ({ id = '__Button', children, icon, primary = true, disabled = false, onClick, ...props }) => {
