@@ -85,3 +85,8 @@ export const RouteLink = styled(Link)`
   text-decoration: inherit;
   color: inherit;
 `;
+
+export const ContainerPagination = styled(CellItemRow)`
+  margin: 30px;
+  justify-content: center;
+`;

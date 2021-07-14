@@ -46,12 +46,15 @@ const _AccessManagementPoliciesPage = () => {
 
   const [policies, setPolicies] = useState([]);
   const [amPoliciesForOrg, { data, loading, error }] = useAmPoliciesForOrgPLazyQuery();
-  const [removeAmPolicy, { data: removeResponse, loading: isRemovingPolicy, error: removePolicyError }] = useRemoveAmPolicyMutation();
+  const [
+    removeAmPolicy,
+    { data: removeResponse, loading: isRemovingPolicy, error: removePolicyError },
+  ] = useRemoveAmPolicyMutation();
 
   const hideConfirmation = () => {
     setIsConfirmationHidden(true);
     setSelectedPolicyId(0);
-  }
+  };
 
   const onRenderItemColumn = (item, index, column) => {
     switch (column.key) {
@@ -73,17 +76,17 @@ const _AccessManagementPoliciesPage = () => {
               }}
             />
           </Fragment>
-        )
+        );
       default:
         return item[column.key];
     }
   };
-  
+
   useEffect(() => {
     amPoliciesForOrg({
       variables: {
         orgSid: authData.orgId,
-      }
+      },
     });
   }, []);
 
@@ -112,9 +115,12 @@ const _AccessManagementPoliciesPage = () => {
               </Column>
 
               <Column lg="8" right>
-                <Button variant="primary" onClick={() => {
-                  setIsPanelOpen(true);
-                }}>
+                <Button
+                  variant="primary"
+                  onClick={() => {
+                    setIsPanelOpen(true);
+                  }}
+                >
                   Create policy
                 </Button>
               </Column>
@@ -140,11 +146,9 @@ const _AccessManagementPoliciesPage = () => {
                     <MessageBar>No policies found</MessageBar>
                   )
                 ) : (
-                  (
-                    <Spacing margin={{ top: 'double' }}>
-                      <Spinner size="lg" label="Loading policies"/>
-                    </Spacing>
-                  )
+                  <Spacing margin={{ top: 'double' }}>
+                    <Spinner size="lg" label="Loading policies" />
+                  </Spacing>
                 )}
               </StyledColumn>
             </Row>
@@ -170,20 +174,23 @@ const _AccessManagementPoliciesPage = () => {
         dialogContentProps={{
           type: DialogType.normal,
           title: 'Remove policy',
-          subText: `Do you really want to remove "${policies.find(({ id }) => selectedPolicyId === id)?.name || ''}"?`
+          subText: `Do you really want to remove "${policies.find(({ id }) => selectedPolicyId === id)?.name || ''}"?`,
         }}
         modalProps={{ isBlocking: true, isDraggable: false }}
       >
         <DialogFooter>
-          <PrimaryButton onClick={() => {
-            removeAmPolicy({
-              variables: {
-                policySid: selectedPolicyId,
-              }
-            });
+          <PrimaryButton
+            onClick={() => {
+              removeAmPolicy({
+                variables: {
+                  policySid: selectedPolicyId,
+                },
+              });
 
-            setIsConfirmationHidden(true);
-          }} text="Remove" />
+              setIsConfirmationHidden(true);
+            }}
+            text="Remove"
+          />
           <DefaultButton onClick={hideConfirmation} text="Cancel" />
         </DialogFooter>
       </Dialog>

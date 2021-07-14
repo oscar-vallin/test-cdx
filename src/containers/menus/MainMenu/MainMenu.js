@@ -19,8 +19,8 @@ import queryString from 'query-string';
 const MainMenu = ({ id = '__MainMenu', option = ROUTES.ROUTE_DASHBOARD.ID, left, changeCollapse }) => {
   const history = useHistory();
   const location = useLocation();
-  const { search } = location
-  const [filterParam, _setFilterParam] = useState(search)
+  const { search } = location;
+  const [filterParam, _setFilterParam] = useState(search);
   const filter = new URLSearchParams(filterParam).get('filter');
   const [collapse, setCollapse] = React.useState();
   const { authData } = useAuthContext();

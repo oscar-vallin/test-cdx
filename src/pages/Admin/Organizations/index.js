@@ -1,5 +1,3 @@
 import { ActiveOrgsPage } from './ActiveOrgs/ActiveOrgsPage';
 
-export {
-  ActiveOrgsPage,
-};
+export { ActiveOrgsPage };

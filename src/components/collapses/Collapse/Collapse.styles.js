@@ -14,7 +14,7 @@ export const StyledDiv = styled.div`
     outline: none;
     text-align: center;
     width: 100%;
-    
+
     &:hover,
     &:focus {
       color: ${({ theme }) => theme.colors.themePrimary};

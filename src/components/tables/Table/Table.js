@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { mergeStyles, mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
 import {
@@ -8,6 +7,7 @@ import {
   DetailsListLayoutMode,
   SelectionMode,
   buildColumns,
+  DetailsHeader,
 } from 'office-ui-fabric-react/lib/DetailsList';
 
 import {
@@ -18,6 +18,8 @@ import {
   StyledSublabel,
   CellItemRow,
   RouteLink,
+  StyledMenuButton,
+  ContainerPagination,
 } from './Table.styles';
 
 import { TableHeader } from '../TableHeader';
@@ -112,11 +114,19 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput, date 
   const [tablecolumns, setColumns] = useState([]);
   const [filterInput, setFilterInput] = useState(searchInput);
   const [option, setOption] = useState(false);
+  const [sort, setSort] = useState('asc');
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [currentKeySort, setCurrentKeySort] = useState('datetime');
+  const [isHovering, setIsHovering] = useState(false);
+  const [currentHover, setCurrentHover] = useState(null);
 
   // * Component Effects
   // Component Did Mount.
-  useEffect(() => {}, []);
-
+  useEffect(() => {
+    definePages();
+  });
+  //
   // When items or groups change
   // > then group merge, build Columns, build Items, and set Columns.
   useEffect(() => {
@@ -155,11 +165,25 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput, date 
       setFilterInput();
       _buildItems();
     }
-  }, [searchInput]);
+  }, [searchInput, items]);
 
   useEffect(() => {
     setFilterInput(searchInput);
   }, [option]);
+
+  useEffect(() => {
+    setSortedItems(_copyAndSort(sortedItems, 'datetime', false));
+  }, []);
+
+  const handleMouseOver = (key) => {
+    setCurrentHover(key);
+    setIsHovering(true);
+  };
+
+  const handleMouseOut = () => {
+    setCurrentHover(null);
+    setIsHovering(false);
+  };
 
   /*
    * Local Functions.
@@ -334,11 +358,19 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput, date 
   };
 
   //
-  const _onSort = () => {
+  const _onSort = (key) => {
+    setSort(sort === 'asc' ? 'desc' : 'asc');
+    setCurrentKeySort(key);
     if (structure.header.type === 'dashboard') {
       setSortLabel(sortLabel === 'Vendor' ? 'BUs' : 'Vendor');
 
       setSortedItems(_copyAndSort(sortedItems, columns[sortLabel === 'Vendor' ? 1 : 0].fieldName, false));
+    } else if (structure.header.type === 'file_status' && key !== 'progress') {
+      if (totalPages === 1) {
+        setSortedItems(_copyAndSort(sortedItems, key, sort === 'asc' ? false : true));
+      } else {
+        alert('Sorting unavailable for a multi-page table');
+      }
     }
   };
 
@@ -349,17 +381,63 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput, date 
     onOption(!option);
   };
 
-  const _onRenderTableHeader = () => {
+  const _onRenderTableHeader = (props) => {
     if (structure.header.type === 'dashboard' && !sortLabel) {
       setSortLabel('Vendor');
 
       setSortedItems(_copyAndSort(sortedItems, columns[0]?.fieldName, false));
+    } else if (structure.header.type === 'file_status') {
+      return (
+        <DetailsHeader
+          {...props}
+          onColumnClick={(_ev, column) => _onSort(column.key)}
+          onRenderColumnHeaderTooltip={(props) =>
+            props.column.key === 'progress' ? (
+              props.children
+            ) : props.column.key === currentKeySort ? (
+              <StyledMenuButton onClick={() => _onSort(props.column.key)} icon={sort}>
+                {props.children}
+              </StyledMenuButton>
+            ) : (
+              <StyledMenuButton
+                icon={isHovering && currentHover === props.column.key ? 'sort' : null}
+                onMouseOver={() => handleMouseOver(props.column.key)}
+                onMouseOut={handleMouseOut}
+                onClick={() => _onSort(props.column.key)}
+              >
+                {props.children}
+              </StyledMenuButton>
+            )
+          }
+        />
+      );
     }
 
     return <TableHeader header={structure.header} sortLabel={sortLabel} onSort={_onSort} onOption={_onShowSpecs} />;
   };
 
   // * RENDER
+
+  const definePages = () => {
+    // if (structure?.pagination?.active) {
+    //   let _totalPages = 1;
+    //   _totalPages = Math.ceil(sortedItems.length / structure?.pagination?.pageSize);
+    //   _totalPages = _totalPages < 1 ? 1 : _totalPages;
+    //   setTotalPages(_totalPages);
+    // }
+  };
+
+  const onChangePage = (page) => {
+    setPage(page > totalPages ? 1 : page);
+  };
+
+  const renderItems = () => {
+    // if (structure?.pagination?.active) {
+    //   return sortedItems.slice((page - 1) * structure?.pagination?.pageSize, page * structure?.pagination?.pageSize);
+    // } else {
+    return sortedItems;
+    // }
+  };
 
   if (sortedItems)
     if (structure.header.type === 'dashboard') {
@@ -389,19 +467,24 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput, date 
       <DetailsList
         className={classNames.root}
         id="TableDetailedList"
-        items={sortedItems}
+        items={renderItems()}
         columns={tablecolumns}
         selectionMode={SelectionMode.none}
         setKey="none"
         layoutMode={DetailsListLayoutMode.justified}
         isHeaderVisible
         onItemInvoked={_onItemInvoked}
-        onRenderDetailsHeader={null}
+        onRenderDetailsHeader={structure.header.type === 'file_status' ? _onRenderTableHeader : null}
         onRenderItemColumn={_renderItemColumn}
         groups={sortedGroups}
       />
       {/* )} */}
       {sortedItems?.length === 0 && <StyledText bold>No Data</StyledText>}
+      {/* {structure?.pagination?.active && (
+        <ContainerPagination>
+          <Pagination currentPage={page} totalPages={totalPages || 1} onChange={(page) => onChangePage(page)} />
+        </ContainerPagination>
+      )} */}
     </StyledContainer>
   );
 

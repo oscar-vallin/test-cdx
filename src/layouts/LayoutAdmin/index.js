@@ -1,3 +1,3 @@
-import { LayoutAdmin } from "./LayoutAdmin";
+import { LayoutAdmin } from './LayoutAdmin';
 
 export { LayoutAdmin };

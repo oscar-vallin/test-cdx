@@ -15,6 +15,8 @@ export const ROUTES_ID = {
   CURRENT_ACTIVITY: 'current-activity',
   COLOR_PALETTES: 'color-palettes',
   DEFAULT_THEME: 'default-theme',
+  ACTIVE_USERS: 'active-users',
+  DELETED_USERS: 'deleted-users',
 };
 
 export const URL_ROUTES = {
@@ -36,6 +38,8 @@ export const URL_ROUTES = {
   CURRENT_ACTIVITY: `/${ROUTES_ID.ADMIN}/activity/current-activity`,
   COLOR_PALETTES: `/${ROUTES_ID.ADMIN}/dashboard-site/color-palettes`,
   DEFAULT_THEME: `/${ROUTES_ID.ADMIN}/dashboard-site/default-theme`,
+  ACTIVE_USERS: `/${ROUTES_ID.ACTIVE_USERS}`,
+  DELETED_USERS: `/${ROUTES_ID.DELETED_USERS}`,
 };
 
 // DASHBOARD;
@@ -182,8 +186,8 @@ export const ROUTE_ACTIVITY_CURRENT = {
   ID: ROUTES_ID.CURRENT_ACTIVITY,
   TITLE: 'Current Activity',
   URL: URL_ROUTES.CURRENT_ACTIVITY,
-  API_ID: 'ORG_ACTIVITY'
-}
+  API_ID: 'ORG_ACTIVITY',
+};
 
 export const ROUTE_COLOR_PALETTES = {
   ID: ROUTES_ID.COLOR_PALETTES,
@@ -209,6 +213,22 @@ export const ROUTE_DASHBOARD_TO_FILE_STATUS = {
   API_ID: 'DASHBOARD_TO_FILE_STATUS',
 };
 
+export const ROUTE_ACTIVE_USERS = {
+  ID: ROUTES_ID.ACTIVE_USERS,
+  TITLE: 'Active Users',
+  URL: URL_ROUTES.ACTIVE_USERS,
+  MAIN_MENU: false,
+  API_ID: 'ACTIVE_USERS',
+};
+
+export const ROUTE_DELETED_USERS = {
+  ID: ROUTES_ID.DELETED_USERS,
+  TITLE: 'Deleted Users',
+  URL: URL_ROUTES.DELETED_USERS,
+  MAIN_MENU: false,
+  API_ID: 'DELETED_USERS',
+};
+
 export const ROUTES = {
   ROUTE_HOME,
   ROUTE_LOGIN,
@@ -229,6 +249,8 @@ export const ROUTES = {
   ROUTE_ACTIVITY_CURRENT,
   ROUTE_COLOR_PALETTES,
   ROUTE_DEFAULT_THEME,
+  ROUTE_ACTIVE_USERS,
+  ROUTE_DELETED_USERS,
 };
 
 export const ROUTES_ARRAY = [
@@ -251,6 +273,8 @@ export const ROUTES_ARRAY = [
   ROUTE_ACTIVITY_CURRENT,
   ROUTE_COLOR_PALETTES,
   ROUTE_DEFAULT_THEME,
+  ROUTE_ACTIVE_USERS,
+  ROUTE_DELETED_USERS,
 ];
 
 export const getRouteByApiId = (_apiId) => {

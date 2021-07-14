@@ -18,6 +18,9 @@ import { AccessManagementGroupsPage, AccessManagementPoliciesPage } from './Admi
 import { ActiveOrgsPage } from './Admin/Organizations';
 import { CurrentActivityPage } from './Admin/Activity';
 import { ColorPalettesPage, DefaultThemePage } from './Admin/DashboardSite';
+import { ActiveUsersPage } from './Admin/Users/ActiveUsers';
+// import { UserDetailsPage } from './Admin/Users/CreateUsers';
+import { DeletedUsersPage } from './Admin/Users/DeletedUsers';
 
 import AuthRoute from './AuthRoute';
 import UnauthRoute from './UnauthRoute';
@@ -78,6 +81,12 @@ export const Routes = () => {
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_ADMIN.URL}>
         <AdminPage />
+      </AuthRoute>
+      <AuthRoute path={ROUTES.ROUTE_ACTIVE_USERS.URL}>
+        <ActiveUsersPage />
+      </AuthRoute>
+      <AuthRoute path={ROUTES.ROUTE_DELETED_USERS.URL}>
+        <DeletedUsersPage />
       </AuthRoute>
       <AuthRoute>
         <NotFoundPage />

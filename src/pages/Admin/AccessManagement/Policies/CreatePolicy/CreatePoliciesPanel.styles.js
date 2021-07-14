@@ -12,7 +12,7 @@ export const StyledColumn = styled(Column)`
     width: 100%;
   }
 
-  [class*="ms-Details"] {
+  [class*='ms-Details'] {
     background: transparent;
   }
 `;

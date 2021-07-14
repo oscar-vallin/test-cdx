@@ -1,18 +1,18 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { StyledText } from "./Text.styles";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { StyledText } from './Text.styles';
 
 const Text = ({
-  id = "__Text",
+  id = '__Text',
   children,
-  variant = "normal",
-  transform = "none",
-  size = "normal",
+  variant = 'normal',
+  transform = 'none',
+  size = 'normal',
   center,
   right,
   top,
   bottom,
-  breakWord = "word",
+  breakWord = 'word',
   ...props
 }) => {
   return (

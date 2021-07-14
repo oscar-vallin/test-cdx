@@ -75,14 +75,15 @@ export const AuthContextProvider = ({ children }) => {
     // setHistory(history);
   }, [isCurrentUserLogged]);
 
+  //
   useEffect(() => {
-    setIsCheckingAuth(isAuthenticating || token !== null);
+    setIsCheckingAuth(isAuthenticating);
 
-    if (!isAuthenticating && !authData && token === null) {
+    if (!isAuthenticating && !authData && !token) {
       setIsCheckingAuth(false);
     }
 
-    if (token && authData) {
+    if (!!token && !!authData) {
       setAuthenticated(true);
     }
   }, [token, isAuthenticating, isAuthenticated, authData]);
@@ -91,7 +92,6 @@ export const AuthContextProvider = ({ children }) => {
   // When Server Response or Data is cleaned.
   //
   useEffect(() => {
-    console.log('There is an error: ', error);
     if (error) {
       setToken(null);
 
@@ -138,6 +138,7 @@ export const AuthContextProvider = ({ children }) => {
       setAuthenticating(false);
       
       localStorage.removeItem('DASHBOARD_NAV');
+
       localStorage.removeItem('ADMIN_NAV');
 
       return;
@@ -159,7 +160,6 @@ export const AuthContextProvider = ({ children }) => {
     fetchTheme();
 
     authHistory.push(routePage.URL);
-
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authData, authHistory]);
@@ -219,7 +219,7 @@ export const AuthContextProvider = ({ children }) => {
     localStorage.removeItem('USER_NAME');
     localStorage.removeItem('LOGIN');
 
-    if (expired != undefined) {
+    if (expired) {
       localStorage.setItem('LOGOUT', expired);
     }
 
@@ -265,18 +265,17 @@ export const AuthContextProvider = ({ children }) => {
   // Finally, return the interface that we want to expose to our other components
   return (
     <AuthContext.Provider value={values}>
-      {isLoadingTheme
-        ? (
-          <LayoutLogin>
-            <StyledCard>
-              <Spacing margin={{ top: 'normal' }}>
-                <Spinner size="lg" label="Fetching your preferences"/>
-              </Spacing>
-            </StyledCard>
-          </LayoutLogin>
-        )
-        : children
-      }
+      {isLoadingTheme ? (
+        <LayoutLogin id="AuthContext">
+          <StyledCard>
+            <Spacing margin={{ top: 'normal' }}>
+              <Spinner size="lg" label="Fetching your preferences" />
+            </Spacing>
+          </StyledCard>
+        </LayoutLogin>
+      ) : (
+        children
+      )}
     </AuthContext.Provider>
   );
 };

@@ -87,7 +87,7 @@ export const ThemeContextProvider = ({ children }) => {
           <GlobalStyle fontSize={fontSize} />
 
           {isLoadingTheme ? (
-            <LayoutLogin>
+            <LayoutLogin id="ThemeContext">
               <StyledCard>
                 <Spacing margin={{ top: 'normal' }}>
                   <Spinner size="lg" label="Fetching your preferences" />

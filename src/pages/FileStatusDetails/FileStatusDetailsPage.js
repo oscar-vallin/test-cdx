@@ -1,5 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 
+import { TABLE_NAMES } from '../../data/constants/TableConstants';
+
 import { useParams, useLocation, useHistory } from 'react-router-dom';
 import { ROUTES, ROUTE_FILE_STATUS } from '../../data/constants/RouteConstants';
 
@@ -28,6 +30,9 @@ import { useWorkPacketStatusDetailsQuery, useWorkPacketStatusesQuery } from '../
 import { TableEnrollment } from '../../containers/tables/TableEnrollment';
 import { TableVendorCount } from '../../containers/tables/TableVendorCount';
 
+import { useRefresh } from '../../hooks/useRefresh';
+import { useFsDetailsPacketStatus } from './hooks/useFsDetailsPacketStatus';
+import { useFsPacketStatusDetails } from './hooks/useFsPacketStatusDetails';
 
 const getReadableDate = (date) => new Date(date).toLocaleString().replace(',', '');
 
@@ -36,28 +41,29 @@ const _FileStatusDetailsPage = () => {
   const [packet, setPacket] = useState({});
   const { hash, search } = useLocation();
   const filter = new URLSearchParams(search).get('filter');
-
-  const breadcrumbItems = [{...ROUTE_FILE_STATUS, URL: filter ? `${ROUTE_FILE_STATUS.URL}?filter=${filter}` : ROUTE_FILE_STATUS.URL }, { ID: 'work-packet-details', TITLE: 'File Status Details' }];
-
   const realId = id.replace('*', '');
   const history = useHistory();
+
+  const { fSPacketStatusQuery, apiData: list, loadingFs: lWorkPacketStatus } = useFsDetailsPacketStatus();
+  const { enableRefresh, disableRefresh } = useRefresh(TABLE_NAMES.DETAIL_ENROLLMENT, fSPacketStatusQuery);
+
+  const {
+    fSPacketStatusDetailQuery,
+    apiData: query,
+    loadingPacketDetail: lWorkPacketDetails,
+  } = useFsPacketStatusDetails(realId);
+
+  const breadcrumbItems = [
+    {
+      ...ROUTE_FILE_STATUS,
+      URL: filter && filter !== 'undefined' ? `${ROUTE_FILE_STATUS.URL}?filter=${filter}` : ROUTE_FILE_STATUS.URL,
+    },
+    { ID: 'work-packet-details', TITLE: 'File Status Details' },
+  ];
 
   const tabs = ['#enrollment', '#vendor', '#work', '#quality'];
 
   const selectedTab = tabs.indexOf(hash);
-
-  const { data: list, lWorkPacketDetails: lWorkPacketStatus } = useWorkPacketStatusesQuery({
-    variables: {
-      orgSid: 123,
-    },
-  });
-
-  const { data: query, loading: lWorkPacketDetails } = useWorkPacketStatusDetailsQuery({
-    variables: {
-      orgSid: 123,
-      workOrderId: realId,
-    },
-  });
 
   useEffect(() => {
     history.push({
@@ -78,6 +84,23 @@ const _FileStatusDetailsPage = () => {
       });
     }
   }, [list, query]);
+
+  useEffect(() => {
+    const condition = packet.packetStatus === '0' || packet.packetStatus === '1' || packet.packetStatus === '4';
+    enableRefresh(condition);
+  }, []);
+
+  useEffect(() => {
+    fSPacketStatusQuery();
+
+    return function unmount() {
+      disableRefresh();
+    };
+  }, []);
+
+  useEffect(() => {
+    fSPacketStatusDetailQuery();
+  }, [packet.step, packet.stepStatus, packet.packetStatus]);
 
   const changeUrlHash = (hash) => {
     history.push({
@@ -246,8 +269,8 @@ const _FileStatusDetailsPage = () => {
 
                   {(packet.supplementalFiles || []).length > 0 && (
                     <Collapse label="View all files">
-                      {packet.supplementalFiles.map(({ label, value }) => (
-                        <Spacing margin={{ top: 'normal' }}>
+                      {packet.supplementalFiles.map(({ label, value }, index) => (
+                        <Spacing key={index} margin={{ top: 'normal' }}>
                           <Card elevation="smallest" onClick={() => window.open(value)}>
                             <Text>{value.split('/').pop()}</Text>
                           </Card>

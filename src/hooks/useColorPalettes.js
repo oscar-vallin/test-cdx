@@ -5,7 +5,7 @@ import {
   useCreateDashThemeColorMutation,
   useUpdateDashThemeColorMutation,
   useRemoveDashThemeColorMutation,
-  useDashThemeColorForOrgLazyQuery
+  useDashThemeColorForOrgLazyQuery,
 } from '../data/services/graphql';
 
 export const useColorPalettes = () => {
@@ -13,23 +13,20 @@ export const useColorPalettes = () => {
   const { id, orgId } = authData;
   const ownedInput = { orgSid: orgId, ownerId: id };
 
-  const [
-    getDashThemeColorForOrg,
-    { data: palettes, loading: isLoadingPalettes }
-  ] = useDashThemeColorForOrgLazyQuery();
+  const [getDashThemeColorForOrg, { data: palettes, loading: isLoadingPalettes }] = useDashThemeColorForOrgLazyQuery();
   const [
     createDashThemeColorMutation,
-    { data: createdPalette, loading: isCreatingPalette }
+    { data: createdPalette, loading: isCreatingPalette },
   ] = useCreateDashThemeColorMutation();
   const [
     updateDashThemeColorMutation,
-    { data: updatedPalette, loading: isUpdatingPalette }
+    { data: updatedPalette, loading: isUpdatingPalette },
   ] = useUpdateDashThemeColorMutation();
   const [
     removeDashThemeColorMutation,
-    { data: removedPalette, loading: isRemovingPalette }
+    { data: removedPalette, loading: isRemovingPalette },
   ] = useRemoveDashThemeColorMutation();
-  
+
   const [palettesUpdated, setPalettesUpdated] = useState(false);
   const [colorPalettes, setColorPalettes] = useState([]);
   const [isProcessingPalettes, setIsProcessingPalettes] = useState(false);
@@ -46,7 +43,7 @@ export const useColorPalettes = () => {
   }, [isCreatingPalette, isUpdatingPalette, isRemovingPalette]);
 
   useEffect(() => {
-    setPalettesUpdated(!isProcessingPalettes && (!!createdPalette || !!updatedPalette || !!removedPalette))
+    setPalettesUpdated(!isProcessingPalettes && (!!createdPalette || !!updatedPalette || !!removedPalette));
   }, [createdPalette, updatedPalette, removedPalette, isProcessingPalettes]);
 
   const fetchColorPalettes = () => {
@@ -57,33 +54,33 @@ export const useColorPalettes = () => {
           pageNumber: 0,
           pageSize: 100,
         },
-      }
+      },
     });
   };
 
-  const createColorPalette = params => {
+  const createColorPalette = (params) => {
     createDashThemeColorMutation({
       variables: {
-        createDashThemeColorInput: { ...ownedInput, ...params }
-      }
+        createDashThemeColorInput: { ...ownedInput, ...params },
+      },
     });
-  }
+  };
 
   const updateColorPalette = (sid, params) => {
     updateDashThemeColorMutation({
       variables: {
-        updateDashThemeColorInput: { ...ownedInput, sid, ...params }
-      }
-    })
-  }
+        updateDashThemeColorInput: { ...ownedInput, sid, ...params },
+      },
+    });
+  };
 
-  const removeColorPalette = sid => {
+  const removeColorPalette = (sid) => {
     removeDashThemeColorMutation({
       variables: {
-        ownedInputSid: { ...ownedInput, sid }
-      }
+        ownedInputSid: { ...ownedInput, sid },
+      },
     });
-  }
+  };
 
   return {
     colorPalettes,
@@ -100,5 +97,5 @@ export const useColorPalettes = () => {
     createColorPalette,
     updateColorPalette,
     removeColorPalette,
-  }
+  };
 };

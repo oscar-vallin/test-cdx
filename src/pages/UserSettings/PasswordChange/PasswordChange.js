@@ -2,16 +2,14 @@ import React, { useState, useEffect, useCallback, Fragment } from 'react';
 
 import { Button } from '../../../components/buttons/Button';
 import { CardSection } from '../../../components/cards';
-import { InputText } from '../../../components/inputs/InputText'
+import { InputText } from '../../../components/inputs/InputText';
 import { Row, Column } from '../../../components/layouts';
 import { Spacing } from '../../../components/spacings/Spacing';
 import { MessageBar } from '../../../components/notifications/MessageBar';
 
 import { useUpdateOwnPasswordMutation } from '../../../data/services/graphql';
 
-import {
-  StyledTitle,
-} from '../UserSettingsPage.styles';
+import { StyledTitle } from '../UserSettingsPage.styles';
 
 const getValidationMessage = (passwords, isValid) => {
   if (!passwords.current || !passwords.new || !passwords.confirmation) {
@@ -19,29 +17,22 @@ const getValidationMessage = (passwords, isValid) => {
   }
 
   if (!isValid) {
-    return 'Please fulfill all the security requirements'
+    return 'Please fulfill all the security requirements';
   }
 
   if (passwords.new !== passwords.confirmation) {
-    return 'Passwords don\'t match';
+    return "Passwords don't match";
   }
-}
+};
 
 const isFormInvalid = (passwords) => {
-  return !passwords.current
-    || !passwords.new
-    || !passwords.confirmation
-    || passwords.new !== passwords.confirmation
-}
+  return !passwords.current || !passwords.new || !passwords.confirmation || passwords.new !== passwords.confirmation;
+};
 
 const PasswordChange = ({ state, validations = [], onChange }) => {
   const [
     updateOwnPasswordMutation,
-    {
-      data: passwordUpdateResult,
-      loading: isUpdatingPassword,
-      error: passwordUpdateError,
-    }
+    { data: passwordUpdateResult, loading: isUpdatingPassword, error: passwordUpdateError },
   ] = useUpdateOwnPasswordMutation({
     variables: { updatePasswordInput: state.password },
   });
@@ -75,7 +66,7 @@ const PasswordChange = ({ state, validations = [], onChange }) => {
           <InputText
             required
             type="password"
-            label="Retype new password" 
+            label="Retype new password"
             canRevealPassword
             disabled={isUpdatingPassword}
             value={state.confirmation}
@@ -87,11 +78,8 @@ const PasswordChange = ({ state, validations = [], onChange }) => {
       {(isFormInvalid(state) || !validations[0]?.isCurrentLevelValid) && (
         <Row>
           <Column>
-            <Spacing margin={{ top: "normal" }}>
-              <MessageBar
-                type="warning"
-                content={getValidationMessage(state, validations[0]?.isCurrentLevelValid)}
-              />
+            <Spacing margin={{ top: 'normal' }}>
+              <MessageBar type="warning" content={getValidationMessage(state, validations[0]?.isCurrentLevelValid)} />
             </Spacing>
           </Column>
         </Row>
@@ -99,10 +87,10 @@ const PasswordChange = ({ state, validations = [], onChange }) => {
 
       <Row>
         <Column>
-          <Spacing margin={{ top: "normal" }}>
+          <Spacing margin={{ top: 'normal' }}>
             <Button
               variant="primary"
-              text={isUpdatingPassword ? "Processing..." : "Save password"}
+              text={isUpdatingPassword ? 'Processing...' : 'Save password'}
               disabled={isFormInvalid(state) || !validations[0]?.isCurrentLevelValid || isUpdatingPassword}
               onClick={() => {
                 updateOwnPasswordMutation({
@@ -110,9 +98,9 @@ const PasswordChange = ({ state, validations = [], onChange }) => {
                     updatePasswordInput: {
                       originalPassword: state.current,
                       newPassword: state.new,
-                      verifyPassword: state.confirmation
-                    }
-                  }
+                      verifyPassword: state.confirmation,
+                    },
+                  },
                 });
               }}
             />
@@ -125,10 +113,11 @@ const PasswordChange = ({ state, validations = [], onChange }) => {
           <Spacing margin={{ top: 'normal' }}>
             {(passwordUpdateResult || passwordUpdateError) && (
               <MessageBar
-                type={(!passwordUpdateResult?.updateOwnPassword) ? "error" : "success"}
-                content={(!passwordUpdateResult?.updateOwnPassword)
-                  ? passwordUpdateError.message
-                  : "Password updated successfully."
+                type={!passwordUpdateResult?.updateOwnPassword ? 'error' : 'success'}
+                content={
+                  !passwordUpdateResult?.updateOwnPassword
+                    ? passwordUpdateError.message
+                    : 'Password updated successfully.'
                 }
               />
             )}
@@ -137,6 +126,6 @@ const PasswordChange = ({ state, validations = [], onChange }) => {
       </Row>
     </CardSection>
   );
-}
+};
 
 export default PasswordChange;

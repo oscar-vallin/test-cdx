@@ -6,7 +6,7 @@ const rules = {
   DIGIT: 'digits',
   SPECIAL: 'symbols',
   allowedWhitespace: 'whitespaces',
-}
+};
 export default class ValidationRulesParser {
   static parse(rules = [], level = 0) {
     return rules
@@ -16,47 +16,47 @@ export default class ValidationRulesParser {
             level,
             expectation: rule.numberOfCharacteristics,
             rules: ValidationRulesParser.parse(rule.rules, level + 1),
-          }
+          };
         }
-        
+
         return ValidationRulesParser.getRuleCharacteristics(rule, level);
       })
       .reduce((rules, rule) => [...rules, rule], []);
   }
 
   static getRuleCharacteristics(rule = {}, level) {
-    switch(rule.__typename) {
+    switch (rule.__typename) {
       case 'PasswordStrengthRule':
         return [
           {
             level,
             characteristic: rules.requiredStrengthLevel,
-            condition: rule.requiredStrengthLevel - 1
-          }
+            condition: rule.requiredStrengthLevel - 1,
+          },
         ];
       case 'PasswordLengthRule':
         return [
           {
             level,
             characteristic: rules.length,
-            condition: { min: rule.minLength, max: rule.maxLength }
-          }
+            condition: { min: rule.minLength, max: rule.maxLength },
+          },
         ];
       case 'PasswordCharacterRule':
         return [
           {
             level,
             characteristic: rules[rule.characterType],
-            condition: rule.numberOfCharacters
-          }
+            condition: rule.numberOfCharacters,
+          },
         ];
       case 'PasswordWhitespaceRule':
-        return [{
-          characteristic: rules.allowedWhitespace,
-          condition: rule.allowedWhitespace !== 'NONE'
-            ? Number(rule.allowedWhitespace) 
-            : 0
-        }];
+        return [
+          {
+            characteristic: rules.allowedWhitespace,
+            condition: rule.allowedWhitespace !== 'NONE' ? Number(rule.allowedWhitespace) : 0,
+          },
+        ];
       default:
         return [];
     }

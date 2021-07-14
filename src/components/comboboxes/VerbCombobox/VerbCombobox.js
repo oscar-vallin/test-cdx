@@ -8,7 +8,7 @@ const CDXVerbCombobox = ({ service = '', facet = '', value = '', orgSid = 1, onC
   const [verbs, setVerbs] = useState([]);
   const [selectedKey, setSelectedKey] = useState(value);
   const [useAmPolicyVerbForFacetQuery, { data, loading }] = useAmPolicyVerbForFacetLazyQuery();
-  
+
   useEffect(() => {
     if (service && facet) {
       useAmPolicyVerbForFacetQuery({
@@ -18,10 +18,7 @@ const CDXVerbCombobox = ({ service = '', facet = '', value = '', orgSid = 1, onC
   }, [service, facet]);
 
   useEffect(() => {
-    setVerbs(data && !loading
-      ? data.amPolicyVerbForFacet
-      : []
-    );
+    setVerbs(data && !loading ? data.amPolicyVerbForFacet : []);
   }, [service, facet, data, loading]);
 
   return (
@@ -37,6 +34,6 @@ const CDXVerbCombobox = ({ service = '', facet = '', value = '', orgSid = 1, onC
       style={{ width: '100%' }}
     />
   );
-}
+};
 
 export default CDXVerbCombobox;
