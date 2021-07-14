@@ -23,26 +23,24 @@ import {
   StyledDropdown,
   // StyledButtonProfile,
   StyledButtonIcon,
-  StyledChoiceGroup
+  StyledChoiceGroup,
 } from './NavBar.styles';
 
 // CardSection is called directly cause a restriction warning for that component.
-const NavBar = ({
-  id = '__NavBar',
-  menuOptionSelected = 'dashboard',
-  onUserSettings,
-  ...props
-}) => {
+const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSettings, ...props }) => {
   const [collapse, setCollapse] = React.useState('false');
   const { userTheme, createOrUpdateTheme, isLoadingTheme, isHandlingTheme } = useCurrentUserTheme();
   const { setFontSize } = useThemeContext();
   const { isAuthenticated } = useAuthContext();
+  const [themeFontSize, setThemeFontSize] = useState(userTheme?.themeFontSize || undefined);
 
   const changeCollapse = () => {
     setCollapse(!collapse);
   };
 
-  const [themeFontSize, setThemeFontSize] = useState(userTheme?.themeFontSize || undefined);
+  useEffect(() => {
+    setThemeFontSize(userTheme.themeFontSize);
+  }, [userTheme]);
 
   // const renderIcon = (iconName) => {
   //   return (
@@ -98,23 +96,18 @@ const NavBar = ({
         <StyledColumnCont id={`${id}__Col-Right`} sm={3} right container>
           <StyledRow id={`${id}__Right_Row`} right>
             <StyledChoiceGroup
-                selectedKey={themeFontSize}
-                options={
-                settingsMenu
-                  .map(({ key, label, iconProps }, index) => ({
-                    key,
-                    label,
-                    onRenderField: (props, render) => {
-                      return (
-                        <label
-                          className={themeFontSize === key && 'selected'}
-                          onClick={() => updateThemeFontSize(key)}>
-                          <FontIcon iconName={iconProps.iconName} />
-                        </label>
-                      )
-                    }
-                  }))
-              }
+              selectedKey={themeFontSize}
+              options={settingsMenu.map(({ key, label, iconProps }, index) => ({
+                key,
+                label,
+                onRenderField: (props, render) => {
+                  return (
+                    <label className={themeFontSize === key && 'selected'} onClick={() => updateThemeFontSize(key)}>
+                      <FontIcon iconName={iconProps.iconName} />
+                    </label>
+                  );
+                },
+              }))}
             />
             <ProfileMenu onUserSettings={onUserSettings} />
           </StyledRow>
