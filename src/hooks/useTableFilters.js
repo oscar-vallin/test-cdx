@@ -54,7 +54,7 @@ export const useTableFilters = (placeholder, id) => {
     }
 
     console.log('FinalURL?', finalURL);
-    history.push(finalURL);
+    history.replace(finalURL);
   };
 
   useEffect(() => {
