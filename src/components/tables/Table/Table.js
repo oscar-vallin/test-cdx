@@ -19,7 +19,7 @@ import {
   CellItemRow,
   RouteLink,
   StyledMenuButton,
-  ContainerPagination,
+  StyledMenuIcon,
 } from './Table.styles';
 
 import { TableHeader } from '../TableHeader';
@@ -399,14 +399,15 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput, date 
                 {props.children}
               </StyledMenuButton>
             ) : (
-              <StyledMenuButton
-                icon={isHovering && currentHover === props.column.key ? 'sort' : null}
-                onMouseOver={() => handleMouseOver(props.column.key)}
-                onMouseOut={handleMouseOut}
-                onClick={() => _onSort(props.column.key)}
-              >
-                {props.children}
-              </StyledMenuButton>
+              <div onMouseOver={() => handleMouseOver(props.column.key)} onMouseOut={handleMouseOut}>
+                {isHovering && currentHover === props.column.key ? (
+                  <StyledMenuIcon icon={'sort'} onClick={() => _onSort(props.column.key)}>
+                    {props.children}
+                  </StyledMenuIcon>
+                ) : (
+                  <StyledMenuButton onClick={() => _onSort(props.column.key)}>{props.children}</StyledMenuButton>
+                )}
+              </div>
             )
           }
         />
