@@ -12,7 +12,7 @@ import {
   StyledColumnTitle,
 } from './TableHeader.styles';
 
-const TableHeader = ({ id = '__TableHeader', header = 'default', sortLabel, onSort, onOption, ...props }) => {
+const TableHeader = ({ id = '__TableHeader', header = 'default', sortLabel, onSort, onOption, date, ...props }) => {
   const history = useHistory();
 
   if ((!header || !header.type || header.type === 'default') && props) {
@@ -23,7 +23,7 @@ const TableHeader = ({ id = '__TableHeader', header = 'default', sortLabel, onSo
     return (
       <HeaderTable id="HeaderTable_dashboard">
         <StyledColumnTitle left center paddingLeft={12} sm={6}>
-          <StyledLink onClick={() => history.push('/transmissions')}>{header.title}</StyledLink>
+          <StyledLink onClick={() => history.push(`/transmissions?date=${date}`)}>{header.title}</StyledLink>
         </StyledColumnTitle>
         {header.buttons && (
           <StyledColumn sm={6}>

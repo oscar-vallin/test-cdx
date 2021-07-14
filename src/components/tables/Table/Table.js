@@ -414,7 +414,15 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput, date 
       );
     }
 
-    return <TableHeader header={structure.header} sortLabel={sortLabel} onSort={_onSort} onOption={_onShowSpecs} />;
+    return (
+      <TableHeader
+        header={structure.header}
+        sortLabel={sortLabel}
+        onSort={_onSort}
+        onOption={_onShowSpecs}
+        date={date}
+      />
+    );
   };
 
   // * RENDER
