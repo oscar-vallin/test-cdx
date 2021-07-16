@@ -40,7 +40,7 @@ const _ActiveOrgsPage = () => {
 
   const { data, loading } = useDirectOrganizationsFQuery({
     variables: {
-      orgSid: authData.orgId || 1,
+      orgSid: authData?.orgId || 1,
       orgFilter: { activeFilter: 'ACTIVE' },
     },
   });

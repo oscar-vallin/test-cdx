@@ -34,7 +34,7 @@ const MainMenu = ({ id = '__MainMenu', option = ROUTES.ROUTE_DASHBOARD.ID, left,
   const [fetchNav, { data, loading, error }] = useNavigateToNewDomainLazyQuery({
     variables: {
       domainNavInput: {
-        orgSid: authData.orgId,
+        orgSid: authData?.orgId,
         appDomain: 'DASHBOARD',
         selectedPage: 'DASHBOARD'
       }
@@ -42,10 +42,10 @@ const MainMenu = ({ id = '__MainMenu', option = ROUTES.ROUTE_DASHBOARD.ID, left,
   });
 
   useEffect(() => {
-    if (authData.orgId) {
+    if (authData?.orgId) {
       fetchNav();
     }
-  }, [authData.orgId]);
+  }, [authData?.orgId]);
 
   useEffect(() => {
     if (cache) {

@@ -40,7 +40,7 @@ const LayoutAdmin = ({ id = 'LayoutAdmin', menuOptionSelected = 'admin', sidebar
   const { data, loading, error } = useNavigateToNewDomainQuery({
     variables: {
       domainNavInput: {
-        orgSid: authData.orgId,
+        orgSid: authData?.orgId,
         appDomain: authData.userType,
         selectedPage: authData.selectedPage,
       },

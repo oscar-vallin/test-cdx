@@ -85,7 +85,7 @@ const _AccessManagementPoliciesPage = () => {
   useEffect(() => {
     amPoliciesForOrg({
       variables: {
-        orgSid: authData.orgId,
+        orgSid: authData?.orgId,
       },
     });
   }, []);
