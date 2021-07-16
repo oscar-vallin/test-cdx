@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { DetailsHeader } from 'office-ui-fabric-react/lib/DetailsList';
 import { useHistory } from 'react-router-dom';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import {
   HeaderTable,
@@ -10,6 +11,7 @@ import {
   StyledMenuButton,
   StyledLink,
   StyledColumnTitle,
+  RouteLink,
 } from './TableHeader.styles';
 
 const TableHeader = ({ id = '__TableHeader', header = 'default', sortLabel, onSort, onOption, date, ...props }) => {
@@ -22,9 +24,9 @@ const TableHeader = ({ id = '__TableHeader', header = 'default', sortLabel, onSo
   if (header.type === 'dashboard') {
     return (
       <HeaderTable id="HeaderTable_dashboard">
-        <StyledColumnTitle left center paddingLeft={12} sm={6}>
-          <StyledLink onClick={() => history.push(`/transmissions?date=${date}`)}>{header.title}</StyledLink>
-        </StyledColumnTitle>
+        <Link>
+          <RouteLink to={`/transmissions?date=${date}`}>{header.title}</RouteLink>
+        </Link>
         {header.buttons && (
           <StyledColumn sm={6}>
             <StyledRow noBorder>

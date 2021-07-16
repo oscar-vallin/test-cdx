@@ -120,6 +120,23 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput, date 
   const [currentKeySort, setCurrentKeySort] = useState('datetime');
   const [isHovering, setIsHovering] = useState(false);
   const [currentHover, setCurrentHover] = useState(null);
+  const location = useLocation();
+  const [urlParams, setUrlParams] = useState(queryString.parse(location.search));
+  const { startDate, endDate } = useTableFilters('Extract Name,  Status, Vendor, etc.');
+  const initialStartDate = new Date(urlParams.startDate);
+  const initialEndDate = new Date(urlParams.endDate);
+
+  // WIP custom dates from URL
+  // useEffect(() => {
+  //   console.log(initialStartDate);
+  //   if (initialStartDate) {
+  //     startDate.setValue(initialStartDate);
+  //   }
+
+  //   if (initialEndDate) {
+  //     endDate.setValue(initialEndDate);
+  //   }
+  // }, []);
 
   // * Component Effects
   // Component Did Mount.
@@ -295,10 +312,16 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput, date 
           );
         }
 
+        const formatDatesURL = 'yyyy-MM-dd';
+        const startFormatted = format(getDates(date).startDate, formatDatesURL);
+        const endFormatted = format(getDates(date).endDate, formatDatesURL);
+
         return (
           <StyledCell left>
             <Link>
-              <RouteLink to={`/file-status?filter=${fieldContent}&date=${date}`}>{fieldContent}</RouteLink>
+              <RouteLink to={`/file-status?filter=${fieldContent}&startDate=${startFormatted}&endDate=${endFormatted}`}>
+                {fieldContent}
+              </RouteLink>
             </Link>
             {fieldItem.sublabel && <StyledSpecs>{`spec: ${fieldItem.sublabel}`}</StyledSpecs>}
           </StyledCell>
@@ -333,6 +356,36 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput, date 
       default:
         return <span>{fieldContent}</span>;
     }
+  };
+
+  const getDates = (date) => {
+    const _newDate = new Date();
+    let startDate = '';
+    let endDate = '';
+
+    switch (date) {
+      case 'today':
+        startDate = startOfDay(_newDate);
+        endDate = startOfDay(_newDate);
+        break;
+      case 'yesterday':
+        startDate = startOfYesterday(_newDate);
+        endDate = endOfYesterday(_newDate);
+        break;
+      case 'thisMonth':
+        startDate = startOfMonth(_newDate);
+        endDate = endOfMonth(_newDate);
+        break;
+      case 'lastMonth':
+        startDate = startOfMonth(subMonths(_newDate, 1));
+        endDate = endOfMonth(subMonths(_newDate, 1));
+        break;
+    }
+
+    return {
+      startDate,
+      endDate,
+    };
   };
 
   // * Click on Row.

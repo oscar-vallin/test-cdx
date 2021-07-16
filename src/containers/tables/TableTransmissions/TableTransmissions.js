@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Table } from '../../../components/tables/Table';
 
@@ -9,7 +9,6 @@ import { useTableFilters } from '../../../hooks/useTableFilters';
 import { TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { useTableTemplate } from '../../../hooks/useTableTemplate';
 import { useParams, useLocation } from 'react-router-dom';
-import { getStartDay, getEndDay } from '../../../helpers/tableHelpers';
 
 const TableTransmissions = ({ idPage = 'TableTransmissions', orgSid = 1, dateRange, filter }) => {
   const { localInput, startDate, endDate } = useTableFilters('Extract Name,  Status, Vendor, etc.', useParams());
@@ -25,21 +24,6 @@ const TableTransmissions = ({ idPage = 'TableTransmissions', orgSid = 1, dateRan
     '',
     localInput.value
   );
-
-  //Component did mount
-  useEffect(() => {
-    if (date) {
-      selectDate(date);
-    }
-  }, []);
-
-  const selectDate = (date) => {
-    const _startDay = getStartDay(date);
-    const _endDay = getEndDay(date);
-
-    startDate.setValue(_startDay);
-    endDate.setValue(_endDay);
-  };
 
   return (
     <Container>

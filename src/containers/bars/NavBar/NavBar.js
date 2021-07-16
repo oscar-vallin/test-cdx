@@ -84,9 +84,7 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSetti
               <StyledTitle variant="bold">CDX DASHBOARD</StyledTitle>
             </StyledColumnLogoL>
             <StyledColumnNav id={`${id}__Left-Row__Menu`} sm={10}>
-              {menuOptionSelected && 
-                <MainMenu left option={menuOptionSelected} changeCollapse={changeCollapse} />
-              }
+              {menuOptionSelected && <MainMenu left option={menuOptionSelected} changeCollapse={changeCollapse} />}
             </StyledColumnNav>
             <StyledColumnLogoR id={`${id}__Left-Row__Logo`} sm={2} noPadding collapse>
               <StyledTitle>CDX DASHBOARD</StyledTitle>

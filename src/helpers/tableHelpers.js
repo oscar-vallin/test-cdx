@@ -11,6 +11,7 @@ import {
   subMonths,
   subDays,
   addDays,
+  isTomorrow,
 } from 'date-fns';
 
 //
@@ -31,12 +32,12 @@ export const isCDXToday = (firstDate, secondDate) => {
   const hour = getHours(new Date());
 
   if (hour < 9) {
-    if (isYesterday(new Date(_startDate)) && isYesterday(new Date(_endDate))) {
+    if (isYesterday(new Date(_startDate)) && isToday(new Date(_endDate))) {
       return true;
     }
   }
 
-  if (isToday(new Date(_startDate)) && isToday(new Date(_endDate))) {
+  if (isToday(new Date(_startDate)) && isTomorrow(new Date(_endDate))) {
     return true;
   }
 

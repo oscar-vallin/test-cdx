@@ -47,3 +47,8 @@ export const StyledMenuButton = styled(ButtonAction)`
 export const StyledLink = styled(Link)`
   width: 100%;
 `;
+
+export const RouteLink = styled(Link)`
+  text-decoration: inherit;
+  color: inherit;
+`;

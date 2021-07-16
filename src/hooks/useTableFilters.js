@@ -28,6 +28,7 @@ export const useTableFilters = (placeholder, id) => {
 
     console.log('pushQueryString, localInput.value = ', localInput.value);
     console.log('pushQueryString, startDate.value = ', startDate.value);
+    console.log('pushQueryString, endDate.value = ', endDate.value);
 
     if (localInput.value || startDate.value || endDate.value) {
       finalURL += '?';
