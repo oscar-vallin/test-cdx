@@ -66,7 +66,7 @@ const _FileStatusDetailsPage = () => {
   const selectedTab = tabs.indexOf(hash);
 
   useEffect(() => {
-    history.push({
+    history.replace({
       hash: hash || tabs[0],
       search: search || undefined,
     });
@@ -103,7 +103,7 @@ const _FileStatusDetailsPage = () => {
   }, [packet.step, packet.stepStatus, packet.packetStatus]);
 
   const changeUrlHash = (hash) => {
-    history.push({
+    history.replace({
       hash,
     });
   };

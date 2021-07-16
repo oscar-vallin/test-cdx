@@ -90,3 +90,7 @@ export const ContainerPagination = styled(CellItemRow)`
   margin: 30px;
   justify-content: center;
 `;
+
+export const StyledMenuIcon = styled(ButtonAction)`
+  color: ${({ theme }) => theme.colors.black};
+`;

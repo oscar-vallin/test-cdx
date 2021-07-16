@@ -3,22 +3,8 @@ import PropTypes from 'prop-types';
 import { Table } from '../../../components/tables/Table';
 
 import { useParams, useLocation } from 'react-router-dom';
-import {
-  endOfDay,
-  endOfYesterday,
-  getHours,
-  isToday,
-  isYesterday,
-  lastDayOfMonth,
-  startOfDay,
-  startOfMonth,
-  startOfYesterday,
-  subDays,
-  subMonths,
-} from 'date-fns';
 
 import { Box, Row, Column, Container, RightColumn } from './TableFileStatus.styles';
-import { useTable } from './TableFileStatus.service';
 import { InputText } from '../../../components/inputs/InputText';
 import { InputDateRange } from '../../../components/inputs/InputDateRange';
 import { useTableFilters } from '../../../hooks/useTableFilters';
