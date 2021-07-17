@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { mergeStyles, mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
 import { useHistory, useLocation } from 'react-router-dom';
-import { startOfDay, startOfYesterday, startOfMonth, endOfMonth, endOfYesterday, subMonths, format } from 'date-fns';
+import { format } from 'date-fns';
 import queryString from 'query-string';
 import { useTableFilters } from '../../../hooks/useTableFilters';
+import { getDates } from '../../../helpers/tableHelpers';
 import {
   ColumnActionsMode,
   DetailsList,
@@ -348,36 +349,6 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput, date 
       default:
         return <span>{fieldContent}</span>;
     }
-  };
-
-  const getDates = (date) => {
-    const _newDate = new Date();
-    let startDate = '';
-    let endDate = '';
-
-    switch (date) {
-      case 'today':
-        startDate = startOfDay(_newDate);
-        endDate = startOfDay(_newDate);
-        break;
-      case 'yesterday':
-        startDate = startOfYesterday(_newDate);
-        endDate = endOfYesterday(_newDate);
-        break;
-      case 'thisMonth':
-        startDate = startOfMonth(_newDate);
-        endDate = endOfMonth(_newDate);
-        break;
-      case 'lastMonth':
-        startDate = startOfMonth(subMonths(_newDate, 1));
-        endDate = endOfMonth(subMonths(_newDate, 1));
-        break;
-    }
-
-    return {
-      startDate,
-      endDate,
-    };
   };
 
   // * Click on Row.

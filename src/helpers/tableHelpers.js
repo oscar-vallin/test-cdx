@@ -77,3 +77,33 @@ export const getEndDay = (date) => {
     ? endOfMonth(subMonths(_newDate, 1))
     : endOfDay(_newDate);
 };
+
+export const getDates = (date) => {
+  const _newDate = new Date();
+  let startDate = '';
+  let endDate = '';
+
+  switch (date) {
+    case 'today':
+      startDate = startOfDay(_newDate);
+      endDate = startOfDay(_newDate);
+      break;
+    case 'yesterday':
+      startDate = startOfYesterday(_newDate);
+      endDate = endOfYesterday(_newDate);
+      break;
+    case 'thisMonth':
+      startDate = startOfMonth(_newDate);
+      endDate = endOfMonth(_newDate);
+      break;
+    case 'lastMonth':
+      startDate = startOfMonth(subMonths(_newDate, 1));
+      endDate = endOfMonth(subMonths(_newDate, 1));
+      break;
+  }
+
+  return {
+    startDate,
+    endDate,
+  };
+};

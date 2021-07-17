@@ -11,7 +11,6 @@ import { useTableFilters } from '../../../hooks/useTableFilters';
 import { TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { useTableTemplate } from '../../../hooks/useTableTemplate';
 import { getStartDay, getEndDay } from '../../../helpers/tableHelpers';
-import { startOfDay, endOfDay } from 'date-fns';
 import queryString from 'query-string';
 
 const TableFileStatus = ({ idPage = 'TableFileStatus', orgSid = 1, dateRange, filter }) => {
@@ -36,7 +35,7 @@ const TableFileStatus = ({ idPage = 'TableFileStatus', orgSid = 1, dateRange, fi
       startDate.setValue(new Date(`${urlParams.startDate} 00:00:00`));
       endDate.setValue(new Date(`${urlParams.endDate} 00:00:00`));
     }
-  }, []);
+  }, [urlParams.startDate, urlParams.endDate]);
 
   //Component did mount
   useEffect(() => {
