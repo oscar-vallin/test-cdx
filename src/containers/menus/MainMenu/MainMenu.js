@@ -86,8 +86,7 @@ const MainMenu = ({ id = '__MainMenu', option = ROUTES.ROUTE_DASHBOARD.ID, left,
             collapse={collapse}
             onClick={() => {
               const { parameters } = page;
-              console.log('clicked');
-              console.log(parameters);
+
               const search = queryString.parse(location.search);
 
               const urlResult = parameters

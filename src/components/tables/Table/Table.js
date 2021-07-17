@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { mergeStyles, mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
+import { useHistory, useLocation } from 'react-router-dom';
+import { startOfDay, startOfYesterday, startOfMonth, endOfMonth, endOfYesterday, subMonths, format } from 'date-fns';
+import queryString from 'query-string';
+import { useTableFilters } from '../../../hooks/useTableFilters';
 import {
   ColumnActionsMode,
   DetailsList,
@@ -125,18 +129,6 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput, date 
   const { startDate, endDate } = useTableFilters('Extract Name,  Status, Vendor, etc.');
   const initialStartDate = new Date(urlParams.startDate);
   const initialEndDate = new Date(urlParams.endDate);
-
-  // WIP custom dates from URL
-  // useEffect(() => {
-  //   console.log(initialStartDate);
-  //   if (initialStartDate) {
-  //     startDate.setValue(initialStartDate);
-  //   }
-
-  //   if (initialEndDate) {
-  //     endDate.setValue(initialEndDate);
-  //   }
-  // }, []);
 
   // * Component Effects
   // Component Did Mount.
