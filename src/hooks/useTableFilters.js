@@ -28,6 +28,7 @@ export const useTableFilters = (placeholder, id) => {
 
     console.log('pushQueryString, localInput.value = ', localInput.value);
     console.log('pushQueryString, startDate.value = ', startDate.value);
+    console.log('pushQueryString, endDate.value = ', endDate.value);
 
     if (localInput.value || startDate.value || endDate.value) {
       finalURL += '?';
@@ -35,26 +36,37 @@ export const useTableFilters = (placeholder, id) => {
 
     if (localInput.value) finalURL += `${localInput.value ? 'filter=' + localInput.value : ''}`;
 
+    if (urlParams.startDate && urlParams.endDate) {
+      const startFormatted = urlParams.startDate;
+      const endFormatted = urlParams.endDate;
+
+      finalURL = generateFinalUrl(finalURL, startFormatted, endFormatted);
+      return history.replace(finalURL);
+    }
+
     if (startDate.value || endDate.value) {
       const startFormatted = format(startDate.value, formatDatesURL);
       const endFormatted = format(endDate.value, formatDatesURL);
-
-      if (localInput.value) finalURL += '&';
-
-      if (startDate.value) finalURL += `${startFormatted ? 'startDate=' + startFormatted : ''}`;
-
-      if (endDate.value) {
-        if (startDate.value) finalURL += '&';
-        else {
-          finalURL += `${startFormatted ? 'startDate=' + startFormatted : ''}`;
-        }
-
-        finalURL += `${endFormatted ? 'endDate=' + endFormatted : ''}`;
-      }
+      finalURL = generateFinalUrl(finalURL, startFormatted, endFormatted);
     }
 
-    console.log('FinalURL?', finalURL);
     history.replace(finalURL);
+  };
+
+  const generateFinalUrl = (finalURL, startFormatted, endFormatted) => {
+    if (localInput.value) finalURL += '&';
+
+    if (startDate.value) finalURL += `${startFormatted ? 'startDate=' + startFormatted : ''}`;
+
+    if (endDate.value) {
+      if (startDate.value) finalURL += '&';
+      else {
+        finalURL += `${startFormatted ? 'startDate=' + startFormatted : ''}`;
+      }
+
+      finalURL += `${endFormatted ? 'endDate=' + endFormatted : ''}`;
+    }
+    return finalURL;
   };
 
   useEffect(() => {

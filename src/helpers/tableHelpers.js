@@ -11,6 +11,7 @@ import {
   subMonths,
   subDays,
   addDays,
+  isTomorrow,
 } from 'date-fns';
 
 //
@@ -31,12 +32,12 @@ export const isCDXToday = (firstDate, secondDate) => {
   const hour = getHours(new Date());
 
   if (hour < 9) {
-    if (isYesterday(new Date(_startDate)) && isYesterday(new Date(_endDate))) {
+    if (isYesterday(new Date(_startDate)) && isToday(new Date(_endDate))) {
       return true;
     }
   }
 
-  if (isToday(new Date(_startDate)) && isToday(new Date(_endDate))) {
+  if (isToday(new Date(_startDate)) && isTomorrow(new Date(_endDate))) {
     return true;
   }
 
@@ -75,4 +76,34 @@ export const getEndDay = (date) => {
     : date === 'lastMonth'
     ? endOfMonth(subMonths(_newDate, 1))
     : endOfDay(_newDate);
+};
+
+export const getDates = (date) => {
+  const _newDate = new Date();
+  let startDate = '';
+  let endDate = '';
+
+  switch (date) {
+    case 'today':
+      startDate = startOfDay(_newDate);
+      endDate = startOfDay(_newDate);
+      break;
+    case 'yesterday':
+      startDate = startOfYesterday(_newDate);
+      endDate = endOfYesterday(_newDate);
+      break;
+    case 'thisMonth':
+      startDate = startOfMonth(_newDate);
+      endDate = endOfMonth(_newDate);
+      break;
+    case 'lastMonth':
+      startDate = startOfMonth(subMonths(_newDate, 1));
+      endDate = endOfMonth(subMonths(_newDate, 1));
+      break;
+  }
+
+  return {
+    startDate,
+    endDate,
+  };
 };
