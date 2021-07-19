@@ -14,7 +14,10 @@ export const Box = styled(LayoutBox)`
 `;
 
 export const FilterSection = styled(LayoutRow)`
+  position: sticky;
+  top: 30px;
   transform: translateY(-30px);
+  z-index: 2;
 `;
 
 export const StyledRow = styled(LayoutRow)`
