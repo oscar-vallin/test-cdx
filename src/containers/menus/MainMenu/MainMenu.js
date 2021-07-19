@@ -36,8 +36,8 @@ const MainMenu = ({ id = '__MainMenu', option = ROUTES.ROUTE_DASHBOARD.ID, left,
       domainNavInput: {
         orgSid: authData?.orgId,
         appDomain: 'DASHBOARD',
-        selectedPage: 'DASHBOARD'
-      }
+        selectedPage: 'DASHBOARD',
+      },
     },
   });
 
@@ -52,13 +52,13 @@ const MainMenu = ({ id = '__MainMenu', option = ROUTES.ROUTE_DASHBOARD.ID, left,
       const domain = JSON.parse(cache);
 
       setDomain(domain);
-      
+
       return;
     }
 
     if (data && !loading) {
       const { navigateToNewDomain: domain } = data;
-      
+
       localStorage.setItem('DASHBOARD_NAV', JSON.stringify(domain));
 
       setDomain(domain);
@@ -74,38 +74,33 @@ const MainMenu = ({ id = '__MainMenu', option = ROUTES.ROUTE_DASHBOARD.ID, left,
 
   const renderOptions = () => {
     const { authData } = useAuthContext();
-    
+
     return domain.navItems.map((menuOption) => {
       const page = menuOption?.page;
-      const opt = getRouteByApiId(menuOption.label !== 'Admin'
-        ? page?.type
-        : 'ADMIN'
-      );
+      const opt = getRouteByApiId(menuOption.label !== 'Admin' ? page?.type : 'ADMIN');
 
       return opt.MAIN_MENU ? (
-        <StyledColumn
-          id={`${id}__MainMenu__Row-${opt.ID}`}
-          key={`${id}__MainMenu__Row-${opt.ID}`}
-          noStyle
-        >
+        <StyledColumn id={`${id}__MainMenu__Row-${opt.ID}`} key={`${id}__MainMenu__Row-${opt.ID}`} noStyle>
           <StyledMenuButton
             selected={location.pathname === opt.URL}
             collapse={collapse}
             onClick={() => {
               const { parameters } = page;
+
               const search = queryString.parse(location.search);
 
-              let url = `${opt.URL}?${parameters
+              const urlResult = parameters
                 .map(({ name, idValue }) => {
                   if (name === 'orgSid') {
-                    return `orgSid=${search.orgSid || idValue}`
+                    return `orgSid=${search.orgSid || idValue}`;
                   }
 
                   return `${name}=${idValue}`;
                 })
-                .join('&')}
-              `
-              
+                .join('&');
+
+              let url = `${opt.URL}?${urlResult}`;
+
               if (opt.URL === `/${ROUTES_ID.FILE_STATUS}`) {
                 url = `${url}&filter=${filter || ''}`;
               }

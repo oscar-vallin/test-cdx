@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Table } from '../../../components/tables/Table';
 
@@ -11,10 +11,15 @@ import { InputDateRange } from '../../../components/inputs/InputDateRange';
 import { useTableFilters } from '../../../hooks/useTableFilters';
 import { TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { useTableTemplate } from '../../../hooks/useTableTemplate';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
+import queryString from 'query-string';
 
 const TableTransmissions = ({ idPage = 'TableTransmissions', orgSid = 1, dateRange, filter, onItemsListChange = () => {} }) => {
   const { localInput, startDate, endDate } = useTableFilters('Extract Name,  Status, Vendor, etc.', useParams());
+  const { search } = useLocation();
+  const paramsDate = new URLSearchParams(search).get('date');
+  const [date, _setDate] = useState(paramsDate);
+  const [urlParams, _setUrlParams] = useState(queryString.parse(search));
 
   const { tableProps } = useTableTemplate(
     TABLE_NAMES.TRANSMISSIONS,
@@ -24,6 +29,13 @@ const TableTransmissions = ({ idPage = 'TableTransmissions', orgSid = 1, dateRan
     '',
     localInput.value
   );
+
+  useEffect(() => {
+    if (urlParams.startDate && urlParams.endDate) {
+      startDate.setValue(new Date(`${urlParams.startDate} 00:00:00`));
+      endDate.setValue(new Date(`${urlParams.endDate} 00:00:00`));
+    }
+  }, []);
 
   return (
     <Fragment>
@@ -53,6 +65,7 @@ const TableTransmissions = ({ idPage = 'TableTransmissions', orgSid = 1, dateRan
                 id={`${idPage}`}
                 onOption={() => null}
                 searchInput={localInput.value}
+                date={date}
                 onItemsListChange={items => onItemsListChange({
                   count: items.length,
                   loading: tableProps.loading,
