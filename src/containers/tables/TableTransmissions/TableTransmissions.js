@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Table } from '../../../components/tables/Table';
 
-import { Box, Row, Column, Container, RightColumn } from './TableTransmissions.styles';
+import { Box, StyledRow, Column, Container, FilterSection } from './TableTransmissions.styles';
+import { Card } from '../../../components/cards/Card';
+import { Spacing } from '../../../components/spacings/Spacing';
+import { Spinner } from '../../../components/spinners/Spinner';
 import { InputText } from '../../../components/inputs/InputText';
 import { InputDateRange } from '../../../components/inputs/InputDateRange';
 import { useTableFilters } from '../../../hooks/useTableFilters';
@@ -10,7 +13,7 @@ import { TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { useTableTemplate } from '../../../hooks/useTableTemplate';
 import { useParams } from 'react-router-dom';
 
-const TableTransmissions = ({ idPage = 'TableTransmissions', orgSid = 1, dateRange, filter }) => {
+const TableTransmissions = ({ idPage = 'TableTransmissions', orgSid = 1, dateRange, filter, onItemsListChange = () => {} }) => {
   const { localInput, startDate, endDate } = useTableFilters('Extract Name,  Status, Vendor, etc.', useParams());
 
   const { tableProps } = useTableTemplate(
@@ -23,21 +26,43 @@ const TableTransmissions = ({ idPage = 'TableTransmissions', orgSid = 1, dateRan
   );
 
   return (
-    <Container>
-      <Row id={`${idPage}-filters`} around>
-        <Column center>
-          <InputText id={`${idPage}__Card__Row__Input-Email`} autoFocus disabled={false} {...localInput} />
-        </Column>
-        <RightColumn center>
-          <InputDateRange startDate={startDate} endDate={endDate} />
-        </RightColumn>
-      </Row>
-      {!tableProps.loading && (
+    <Fragment>
+      <FilterSection id={`${idPage}-filters`}>
+        <Container>
+          <Card elevation="smallest">
+            <StyledRow>
+              <Column lg="6">
+                <InputText id={`${idPage}__Card__Row__Input-Email`} autoFocus disabled={false} {...localInput} />
+              </Column>
+              <Column lg="6">
+                <InputDateRange startDate={startDate} endDate={endDate} />
+              </Column>
+            </StyledRow>
+          </Card>
+        </Container>
+      </FilterSection>
+
+      <Container>
         <Box id={`${idPage}`}>
-          <Table id={`${idPage}`} onOption={() => null} searchInput={localInput.value} {...tableProps} />
+          {tableProps.loading
+            ? <Spacing margin={{ top: 'double' }}>
+                <Spinner size="lg" label="Fetching transmissions" />
+              </Spacing>
+            : (
+              <Table
+                id={`${idPage}`}
+                onOption={() => null}
+                searchInput={localInput.value}
+                onItemsListChange={items => onItemsListChange({
+                  count: items.length,
+                  loading: tableProps.loading,
+                })}
+                {...tableProps}
+              />
+          )}
         </Box>
-      )}
-    </Container>
+      </Container>
+    </Fragment>
   );
 };
 

@@ -21,8 +21,9 @@ const _FileStatusPage = () => {
         <Container>
           <Spacing margin={{ top: 'double' }}>
             <Row>
-              <Column lg="6">
-                <Text variant="bold">Advanced search</Text>
+              <Column lg="6" direction="row">
+                <Text variant="bold">File Status</Text>
+                <Text>&nbsp; — Advanced search</Text>
               </Column>
               <Column lg="6" right>
                 <Text right>

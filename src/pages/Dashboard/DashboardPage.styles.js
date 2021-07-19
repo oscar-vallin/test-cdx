@@ -4,32 +4,21 @@ import { Button } from '../../components/buttons/Button';
 import { Text } from '../../components/typography/Text';
 
 export const StyledRow = styled(LayoutRow)`
-  && {
-    margin-top: ${({ marginTop }) => (marginTop ? `${marginTop}px` : '15px')};
-    margin-bottom: ${({ marginBottom }) => (marginBottom ? `${marginBottom}px` : '15px')};
-    padding: 0px 8px;
-  }
+  transform: translateY(-25px);
 `;
 
 export const StyledRowDate = styled(StyledRow)`
-  && {
-    margin-right: 8px;
-  }
-`;
 
-export const StyledColumn = styled(LayoutColumn)`
-  && {
-    margin-top: ${({ marginTop }) => (marginTop ? `${marginTop}px` : '15px')};
-    padding: 0px 8px;
-  }
 `;
 
 export const StyledButton = styled(Button)`
   background: ${({ selected, theme }) => (selected ? theme.colors.themePrimary : theme.colors.infoBackground)};
-  font-weight: ${({ selected, theme }) => (selected ? theme.fontWeights.bold : theme.fontWeights.normal)};
-  /* background: ${({ selected, theme }) => (selected ? 'red' : 'yellow')}; */
-
   border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .05);
+  font-weight: ${({ selected, theme }) => (selected ? theme.fontWeights.bold : theme.fontWeights.normal)};
+  transition: all .15s ease-out;
+
+  width: 100%;
 `;
 
 export const StyledSpinner = styled(Text)`

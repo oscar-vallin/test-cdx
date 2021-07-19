@@ -26,7 +26,7 @@ const TableDashboard = ({
   }, []);
 
   const getNoData = () => {
-    return [{ vendor: 'No Data', bus: '...' }];
+    return [{ vendor: 'No data available', bus: '...' }];
   };
 
   const getTable = () => {

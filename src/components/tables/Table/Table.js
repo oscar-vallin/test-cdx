@@ -465,7 +465,7 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput, date,
             groups={sortedGroups}
           />
           {/* )} */}
-          {sortedItems?.length === 0 && <StyledText bold>No Data</StyledText>}
+          {sortedItems?.length === 0 && <StyledText bold>No data available</StyledText>}
         </StyledContainer>
       );
     }
@@ -486,7 +486,7 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput, date,
         groups={sortedGroups}
       />
       {/* )} */}
-      {sortedItems?.length === 0 && <StyledText bold>No Data</StyledText>}
+      {sortedItems?.length === 0 && <StyledText bold>No data available</StyledText>}
       {/* {structure?.pagination?.active && (
         <ContainerPagination>
           <Pagination currentPage={page} totalPages={totalPages || 1} onChange={(page) => onChangePage(page)} />

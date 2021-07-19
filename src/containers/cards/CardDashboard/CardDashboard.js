@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Row, Column } from '../../../components/layouts';
 import { Card } from '../../../components/cards/Card';
+import { Text } from '../../../components/typography/Text';
+import { Spacing } from '../../../components/spacings/Spacing';
 import { ChartDonut } from '../../../components/charts/ChartDonut';
 import { StyledRow, StyledColumn, StyledTitle, StyledSubtitle, StyledValues } from './CardDashboard.styles';
 
@@ -16,31 +19,37 @@ const CardDashboard = ({ id = '__CardDashboard', title, subtitle, value, total, 
   const isNotData = (total ?? 0) === 0;
 
   return (
-    <Card id={id}>
+    <Card id={id} elevation="smallest">
       {isNotData && (
-        <StyledRow line>
-          <StyledColumn>
-            <StyledTitle noData>{noDataLabel}</StyledTitle>
-          </StyledColumn>
-        </StyledRow>
+        <Row>
+          <Column>
+            <Text variant="bold">No data available</Text>
+          </Column>
+        </Row>
       )}
+
       {!isNotData && (
-        <StyledRow line>
-          <StyledColumn>
-            <StyledRow left>
-              <StyledColumn left>
-                <StyledTitle>{title}</StyledTitle>
-                <StyledSubtitle>{subtitle}</StyledSubtitle>
+        <Row>
+          <Column>
+            <Row>
+              <Column>
+                <Spacing margin={{ bottom: 'small' }}>
+                  <StyledTitle>
+                    {title} &nbsp;
+                    {subtitle && <StyledSubtitle>({subtitle})</StyledSubtitle>}
+                  </StyledTitle>
+                </Spacing>
+                
                 {(value ?? -1) >= 0 && (total ?? -1) > 0 && <StyledValues>{`${value}/${total}`}</StyledValues>}
-              </StyledColumn>
-            </StyledRow>
-          </StyledColumn>
+              </Column>
+            </Row>
+          </Column>
           {/* <StyledColumn>
             {(value ?? -1) >= 0 && (total ?? -1) > 0 && (
               <ChartDonut label={`${percentage.toFixed(percentage < 1 ? 2 : 0)}%`} size={70} data={data} />
             )}
           </StyledColumn> */}
-        </StyledRow>
+        </Row>
       )}
     </Card>
   );
