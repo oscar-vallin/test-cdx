@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { mergeStyles, mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
+import { useHistory, useLocation } from 'react-router-dom';
+import { format } from 'date-fns';
+import queryString from 'query-string';
+import { useTableFilters } from '../../../hooks/useTableFilters';
+import { getDates } from '../../../helpers/tableHelpers';
 import {
   ColumnActionsMode,
   DetailsList,
@@ -120,6 +125,11 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput, date 
   const [currentKeySort, setCurrentKeySort] = useState('datetime');
   const [isHovering, setIsHovering] = useState(false);
   const [currentHover, setCurrentHover] = useState(null);
+  const location = useLocation();
+  const [urlParams, setUrlParams] = useState(queryString.parse(location.search));
+  const { startDate, endDate } = useTableFilters('Extract Name,  Status, Vendor, etc.');
+  const initialStartDate = new Date(urlParams.startDate);
+  const initialEndDate = new Date(urlParams.endDate);
 
   // * Component Effects
   // Component Did Mount.
@@ -295,10 +305,16 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput, date 
           );
         }
 
+        const formatDatesURL = 'yyyy-MM-dd';
+        const startFormatted = format(getDates(date).startDate, formatDatesURL);
+        const endFormatted = format(getDates(date).endDate, formatDatesURL);
+
         return (
           <StyledCell left>
             <Link>
-              <RouteLink to={`/file-status?filter=${fieldContent}&date=${date}`}>{fieldContent}</RouteLink>
+              <RouteLink to={`/file-status?filter=${fieldContent}&startDate=${startFormatted}&endDate=${endFormatted}`}>
+                {fieldContent}
+              </RouteLink>
             </Link>
             {fieldItem.sublabel && <StyledSpecs>{`spec: ${fieldItem.sublabel}`}</StyledSpecs>}
           </StyledCell>
@@ -414,7 +430,15 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput, date 
       );
     }
 
-    return <TableHeader header={structure.header} sortLabel={sortLabel} onSort={_onSort} onOption={_onShowSpecs} />;
+    return (
+      <TableHeader
+        header={structure.header}
+        sortLabel={sortLabel}
+        onSort={_onSort}
+        onOption={_onShowSpecs}
+        date={date}
+      />
+    );
   };
 
   // * RENDER

@@ -48,7 +48,7 @@ export const TABLES = {
   TRANSMISSIONS_FILES: {
     header: {
       type: 'dashboard',
-      title: 'Transmissions / BUS by Vendor',
+      title: 'Transmissions / BUS by Files',
       url: './errors',
     },
     polling: 1 / 3,
