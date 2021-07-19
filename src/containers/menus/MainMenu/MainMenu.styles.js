@@ -33,12 +33,14 @@ export const StyledColumn = styled(LayoutColumn)`
 `;
 
 export const StyledMenuButton = styled(ButtonAction)`
-  font-weight: ${({ theme, selected }) => (selected ? theme.fontWeights.bold : theme.fontWeights.normal)};
   color: #fff;
   border-bottom: white;
   border-bottom-width: 2px;
   border-bottom-style: ${({ selected }) => (selected ? 'double' : 'none')};
   font-size: 0.875rem;
+  font-weight: ${({ theme, selected }) => (selected ? theme.fontWeights.bold : theme.fontWeights.normal)};
+  height: 48px;
+  text-shadow: ${({ selected }) => (selected ? '0 2px 5px rgba(0, 0, 0, .1)' : 'none')};
 
   &:hover {
     color: ${({ theme }) => theme.colors.neutralLight};

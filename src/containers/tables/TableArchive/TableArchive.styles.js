@@ -2,23 +2,27 @@ import styled from 'styled-components';
 import { Box as LayoutBox, Row as LayoutRow, Column as LayoutColumn } from '../../../components/layouts';
 
 export const Container = styled(LayoutBox)`
-  width: 80%;
+  margin: 0 auto;
+  width: 75%;
 `;
 
 export const Box = styled(LayoutBox)`
+  align-items: flex-start;
+  justify-content: flex-start;
+  transform: translateY(-15px);
   width: 100%;
 `;
 
-export const Row = styled(LayoutRow)`
-  width: 100%;
-  margin: 50px 0 10px;
+export const FilterSection = styled(LayoutRow)`
+  transform: translateY(-30px);
+`;
+
+export const StyledRow = styled(LayoutRow)`
+  padding: 15px;
 `;
 
 export const Column = styled(LayoutColumn)`
-  width: 40%;
-  max-width: 300px;
 `;
 
 export const RightColumn = styled(LayoutColumn)`
-  width: 40%;
 `;

@@ -3,7 +3,11 @@ import { useState, useEffect } from 'react';
 import { defaultTheme, darkTheme } from './../styles/themes';
 import Theming from './../utils/Theming';
 
-import { useUserThemeLazyQuery, useCreateOrUpdateOwnDashThemeMutation } from '../data/services/graphql';
+import {
+  useUserThemeLazyQuery,
+  useCreateOrUpdateOwnDashThemeMutation,
+  useSetOwnDashThemeFontSizeMutation
+} from '../data/services/graphql';
 
 const INITIAL_THEME = {
   data: null,
@@ -26,6 +30,11 @@ export const useCurrentUserTheme = () => {
     createOrUpdateOwnDashTheme,
     { data: updatedTheme, loading: isHandlingTheme, error: themeError },
   ] = useCreateOrUpdateOwnDashThemeMutation();
+
+  const [
+    setOwnDashFontSize,
+    { data: updatedFontSize, loading: isHandlingFontSize, error: fontSizeError },
+  ] = useSetOwnDashThemeFontSizeMutation();
 
   useEffect(() => {
     setUserTheme(theme?.userTheme || {});
@@ -66,9 +75,13 @@ export const useCurrentUserTheme = () => {
     createOrUpdateTheme: (dashThemeInput) => {
       createOrUpdateOwnDashTheme({ variables: { dashThemeInput } });
     },
+    setOwnDashFontSize: (dashThemeInput) => {
+      setOwnDashFontSize({ variables: { dashThemeInput } })
+    },
     updatedTheme,
     isHandlingTheme,
     isLoadingTheme,
+    isHandlingFontSize,
     userTheme,
     fetchTheme,
   };

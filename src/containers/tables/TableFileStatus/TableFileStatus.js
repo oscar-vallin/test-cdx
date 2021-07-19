@@ -1,18 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { Text } from '../../../components/typography/Text';
 import { Table } from '../../../components/tables/Table';
 
 import { useParams, useLocation } from 'react-router-dom';
 
-import { Box, Row, Column, Container, RightColumn } from './TableFileStatus.styles';
+import { Box, StyledRow, Column, Container, FilterSection } from './TableFileStatus.styles';
 import { InputText } from '../../../components/inputs/InputText';
 import { InputDateRange } from '../../../components/inputs/InputDateRange';
+import { Card } from '../../../components/cards/Card';
+import { Spacing } from '../../../components/spacings/Spacing';
+import { Spinner } from '../../../components/spinners/Spinner';
 import { useTableFilters } from '../../../hooks/useTableFilters';
 import { TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { useTableTemplate } from '../../../hooks/useTableTemplate';
 import { getStartDay, getEndDay } from '../../../helpers/tableHelpers';
 
-const TableFileStatus = ({ idPage = 'TableFileStatus', orgSid = 1, dateRange, filter }) => {
+const TableFileStatus = ({ idPage = 'TableFileStatus', orgSid = 1, dateRange, filter, onItemsListChange = () => {} }) => {
   const { localInput, startDate, endDate } = useTableFilters('Extract Name,  Status, Vendor, etc.');
 
   const { tableProps } = useTableTemplate(
@@ -52,21 +56,43 @@ const TableFileStatus = ({ idPage = 'TableFileStatus', orgSid = 1, dateRange, fi
   };
 
   return (
-    <Container>
-      <Row id={`${idPage}-filters`} around>
-        <Column center>
-          <InputText id={`${idPage}__Card__Row__Input-Email`} autoFocus disabled={false} {...localInput} />
-        </Column>
-        <RightColumn center>
-          <InputDateRange startDate={startDate} endDate={endDate} />
-        </RightColumn>
-      </Row>
-      {!tableProps.loading && (
-        <Box id={`${idPage}`}>
-          <Table id={`${idPage}`} onOption={() => null} searchInput={localInput.value} {...tableProps} />
-        </Box>
-      )}
-    </Container>
+    <Fragment>
+      <FilterSection id={`${idPage}-filters`}>
+        <Container>
+          <Card elevation="smallest">
+            <StyledRow>
+              <Column lg="6">
+                <InputText id={`${idPage}__Card__Row__Input-Email`} autoFocus disabled={false} {...localInput} />
+              </Column>
+              <Column lg="6">
+                <InputDateRange startDate={startDate} endDate={endDate} />
+              </Column>
+            </StyledRow>
+          </Card>
+        </Container>
+      </FilterSection>
+
+      <Container>
+      {tableProps.loading
+        ? <Spacing margin={{ top: 'double' }}>
+            <Spinner size="lg" label="Fetching file status" />
+          </Spacing>
+        : (
+          <Box id={`${idPage}`}>
+            <Table
+              id={`${idPage}`}
+              onOption={() => null}
+              searchInput={localInput.value}
+              onItemsListChange={items => onItemsListChange({
+                count: items.length,
+                loading: tableProps.loading,
+              })}
+              {...tableProps}
+            />
+          </Box>
+        )}
+      </Container>
+    </Fragment>
   );
 };
 

@@ -107,7 +107,7 @@ const classNames = mergeStyleSets({
  * @param {Array} groups Group values to group rows.
  * @param {string} searchIntput String.typing filter locally in the table. Data not modified, just view after filter.
  * */
-const Table = ({ items, columns, structure, onOption, groups, searchInput, date }) => {
+const Table = ({ items, columns, structure, onOption, groups, searchInput, date, onItemsListChange }) => {
   const [sortLabel, setSortLabel] = useState();
   const [sortedItems, setSortedItems] = useState([]);
   const [sortedGroups, setSortedGroups] = useState();
@@ -174,6 +174,12 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput, date 
   useEffect(() => {
     setSortedItems(_copyAndSort(sortedItems, 'datetime', false));
   }, []);
+
+  useEffect(() => {
+    if (onItemsListChange) {
+      onItemsListChange(sortedItems);
+    }
+  }, [sortedItems]);
 
   const handleMouseOver = (key) => {
     setCurrentHover(key);

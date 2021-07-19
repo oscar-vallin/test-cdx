@@ -10,7 +10,6 @@ import { Text } from '../../../components/typography/Text';
 
 export const StyledBox = styled(Box)`
   background: ${({ theme }) => theme.colors.themePrimary};
-  height: 48px;
 `;
 
 export const StyledDropdown = styled(IconButton)`
@@ -122,9 +121,10 @@ export const StyledChoiceGroup = styled(ChoiceGroup)`
     display: flex;
     margin: 0 0 7px;
 
-    label {
+    button {
       align-items: center;
       background: rgba(255, 255, 255, .2);
+      border: none;
       border-radius: 4px;
       display: flex;
       justify-content: center;
@@ -135,6 +135,10 @@ export const StyledChoiceGroup = styled(ChoiceGroup)`
       i {
         padding: 6px 15px;
         transform: translateY(2px);
+      }
+
+      div.ms-Spinner {
+        padding: 6px 15px;
       }
 
       &:hover {

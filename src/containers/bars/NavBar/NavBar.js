@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { FontIcon } from '@fluentui/react/lib/Icon';
 import { ProfileMenu } from '../../menus/ProfileMenu';
+
 // Components
-import { ContextualMenuItemType } from '@fluentui/react/lib/ContextualMenu';
+import { TooltipHost } from '@fluentui/react/lib/Tooltip';
 import { MainMenu } from '../../menus/MainMenu';
 import { useCurrentUserTheme } from '../../../hooks/useCurrentUserTheme';
 import { useThemeContext } from '../../../contexts/ThemeContext';
 import { useAuthContext } from '../../../contexts/AuthContext';
+import { Spinner } from '../../../components/spinners/Spinner';
 // Hooks
 // import { useNavBar } from "./NavBar.services";
 // Styles
@@ -29,7 +31,7 @@ import {
 // CardSection is called directly cause a restriction warning for that component.
 const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSettings, ...props }) => {
   const [collapse, setCollapse] = React.useState('false');
-  const { userTheme, createOrUpdateTheme, isLoadingTheme, isHandlingTheme } = useCurrentUserTheme();
+  const { userTheme, setOwnDashFontSize, isHandlingFontSize } = useCurrentUserTheme();
   const { setFontSize } = useThemeContext();
   const { isAuthenticated } = useAuthContext();
   const [themeFontSize, setThemeFontSize] = useState(userTheme?.themeFontSize || undefined);
@@ -42,35 +44,27 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSetti
     setThemeFontSize(userTheme.themeFontSize);
   }, [userTheme]);
 
-  // const renderIcon = (iconName) => {
-  //   return (
-  //     <StyledColumn id={`${id}__Right__${iconName}`} noStyle>
-  //       <StyledButtonIcon icon={iconName} variant={'navbar'} size={18} />
-  //     </StyledColumn>
-  //   );
-  // };
-
   const updateThemeFontSize = (key) => {
     setThemeFontSize(key);
     setFontSize(key);
-    createOrUpdateTheme({ themeFontSize: key });
+    setOwnDashFontSize({ themeFontSize: key });
   };
 
   const settingsMenu = [
     {
       key: 'SMALL',
       iconProps: { iconName: 'FontDecrease' },
-      label: 'Small',
+      label: 'Small font size',
     },
     {
       key: 'MEDIUM',
       iconProps: { iconName: 'FontColorA' },
-      label: 'Medium (default)',
+      label: 'Medium font size (default)',
     },
     {
       key: 'LARGE',
       iconProps: { iconName: 'FontIncrease' },
-      label: 'Large',
+      label: 'Large font size',
     },
   ];
 
@@ -102,9 +96,24 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSetti
                 label,
                 onRenderField: (props, render) => {
                   return (
-                    <label className={themeFontSize === key && 'selected'} onClick={() => updateThemeFontSize(key)}>
-                      <FontIcon iconName={iconProps.iconName} />
-                    </label>
+                    <TooltipHost
+                      content={label}
+                      id={`tooltip-${index}`}
+                      calloutProps={{ gapSpace: 0 }}
+                    >
+                      <button
+                        disabled={isHandlingFontSize}
+                        className={themeFontSize === key && 'selected'}
+                        onClick={() => updateThemeFontSize(key)}
+                      >
+                        {isHandlingFontSize
+                          ? themeFontSize === key
+                            ? <Spinner size="xs" />
+                            : <FontIcon iconName={iconProps.iconName} />
+                          : <FontIcon iconName={iconProps.iconName} />
+                        }
+                      </button>
+                    </TooltipHost>
                   );
                 },
               }))}

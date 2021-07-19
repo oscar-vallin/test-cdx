@@ -3,5 +3,5 @@ import { Box } from '../../../components/layouts';
 
 export const StyledBox = styled(Box)`
   background: ${({ theme }) => theme.colors.neutralLighterAlt};
-  padding: ${({ theme }) => `0  ${theme.spacing.double}  ${theme.spacing.triple}`};
+  padding: ${({ theme, spacing }) => `0  ${spacing !== undefined ? spacing : theme.spacing.double}  ${theme.spacing.triple}`};
 `;

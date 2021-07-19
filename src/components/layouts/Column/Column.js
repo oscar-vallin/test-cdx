@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { getClassNames } from '../../../helpers/helperStyles';
 import { DivStyled } from './Column.styles';
 
-const Column = ({ id = '__Column', variant = 'normal', children, center, right, top, bottom, centerV, ...props }) => {
+const Column = ({ id = '__Column', variant = 'normal', direction = 'column', children, center, right, top, bottom, centerV, ...props }) => {
   return (
     <DivStyled
       id={id}
@@ -14,6 +14,7 @@ const Column = ({ id = '__Column', variant = 'normal', children, center, right, 
       top={top}
       bottom={bottom}
       centerV={centerV}
+      direction={direction}
     >
       {children}
     </DivStyled>

@@ -534,6 +534,7 @@ export type Mutation = {
    * updateOwnDashTheme(dashThemeInput : DashThemeInput ) : DashTheme
    */
   createOrUpdateOwnDashTheme?: Maybe<DashTheme>;
+  setOwnDashThemeFontSize?: Maybe<DashTheme>;
 };
 
 
@@ -670,6 +671,11 @@ export type MutationSetDashThemeColorDefaultArgs = {
 
 
 export type MutationCreateOrUpdateOwnDashThemeArgs = {
+  dashThemeInput?: Maybe<DashThemeInput>;
+};
+
+
+export type MutationSetOwnDashThemeFontSizeArgs = {
   dashThemeInput?: Maybe<DashThemeInput>;
 };
 
@@ -2603,6 +2609,23 @@ export type FindUserQuery = (
     & { person?: Maybe<(
       { __typename?: 'Person' }
       & Pick<Person, 'id' | 'firstNm' | 'lastNm'>
+    )> }
+  )> }
+);
+
+export type SetOwnDashThemeFontSizeMutationVariables = Exact<{
+  dashThemeInput: DashThemeInput;
+}>;
+
+
+export type SetOwnDashThemeFontSizeMutation = (
+  { __typename?: 'Mutation' }
+  & { setOwnDashThemeFontSize?: Maybe<(
+    { __typename?: 'DashTheme' }
+    & Pick<DashTheme, 'id' | 'themeColorMode' | 'themeFontSize'>
+    & { dashThemeColor?: Maybe<(
+      { __typename?: 'DashThemeColor' }
+      & Pick<DashThemeColor, 'id' | 'paletteNm' | 'themePrimary' | 'themeLighterAlt' | 'themeLighter' | 'themeLight' | 'themeTertiary' | 'themeSecondary' | 'themeDarkAlt' | 'themeDark' | 'themeDarker' | 'neutralLighterAlt' | 'neutralLighter' | 'neutralLight' | 'neutralQuaternaryAlt' | 'neutralQuaternary' | 'neutralTertiaryAlt' | 'neutralTertiary' | 'neutralSecondary' | 'neutralPrimaryAlt' | 'neutralPrimary' | 'neutralDark' | 'black' | 'white'>
     )> }
   )> }
 );
@@ -5311,6 +5334,66 @@ export function useFindUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<F
 export type FindUserQueryHookResult = ReturnType<typeof useFindUserQuery>;
 export type FindUserLazyQueryHookResult = ReturnType<typeof useFindUserLazyQuery>;
 export type FindUserQueryResult = Apollo.QueryResult<FindUserQuery, FindUserQueryVariables>;
+export const SetOwnDashThemeFontSizeDocument = gql`
+    mutation SetOwnDashThemeFontSize($dashThemeInput: DashThemeInput!) {
+  setOwnDashThemeFontSize(dashThemeInput: $dashThemeInput) {
+    id
+    themeColorMode
+    themeFontSize
+    dashThemeColor {
+      id
+      paletteNm
+      themePrimary
+      themeLighterAlt
+      themeLighter
+      themeLight
+      themeTertiary
+      themeSecondary
+      themeDarkAlt
+      themeDark
+      themeDarker
+      neutralLighterAlt
+      neutralLighter
+      neutralLight
+      neutralQuaternaryAlt
+      neutralQuaternary
+      neutralTertiaryAlt
+      neutralTertiary
+      neutralSecondary
+      neutralPrimaryAlt
+      neutralPrimary
+      neutralDark
+      black
+      white
+    }
+  }
+}
+    `;
+export type SetOwnDashThemeFontSizeMutationFn = Apollo.MutationFunction<SetOwnDashThemeFontSizeMutation, SetOwnDashThemeFontSizeMutationVariables>;
+
+/**
+ * __useSetOwnDashThemeFontSizeMutation__
+ *
+ * To run a mutation, you first call `useSetOwnDashThemeFontSizeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetOwnDashThemeFontSizeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setOwnDashThemeFontSizeMutation, { data, loading, error }] = useSetOwnDashThemeFontSizeMutation({
+ *   variables: {
+ *      dashThemeInput: // value for 'dashThemeInput'
+ *   },
+ * });
+ */
+export function useSetOwnDashThemeFontSizeMutation(baseOptions?: Apollo.MutationHookOptions<SetOwnDashThemeFontSizeMutation, SetOwnDashThemeFontSizeMutationVariables>) {
+        return Apollo.useMutation<SetOwnDashThemeFontSizeMutation, SetOwnDashThemeFontSizeMutationVariables>(SetOwnDashThemeFontSizeDocument, baseOptions);
+      }
+export type SetOwnDashThemeFontSizeMutationHookResult = ReturnType<typeof useSetOwnDashThemeFontSizeMutation>;
+export type SetOwnDashThemeFontSizeMutationResult = Apollo.MutationResult<SetOwnDashThemeFontSizeMutation>;
+export type SetOwnDashThemeFontSizeMutationOptions = Apollo.BaseMutationOptions<SetOwnDashThemeFontSizeMutation, SetOwnDashThemeFontSizeMutationVariables>;
 export const CreateOrUpdateOwnDashThemeDocument = gql`
     mutation CreateOrUpdateOwnDashTheme($dashThemeInput: DashThemeInput!) {
   createOrUpdateOwnDashTheme(dashThemeInput: $dashThemeInput) {
