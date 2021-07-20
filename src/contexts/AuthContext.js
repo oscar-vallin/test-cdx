@@ -136,7 +136,7 @@ export const AuthContextProvider = ({ children }) => {
     if (!authData) {
       setToken(null);
       setAuthenticating(false);
-      
+
       localStorage.removeItem('DASHBOARD_NAV');
 
       localStorage.removeItem('ADMIN_NAV');

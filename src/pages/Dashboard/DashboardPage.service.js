@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useAuthContext } from '../../contexts/AuthContext';
 
-import { useDashboardPeriodsQuery } from '../../data/services/graphql';
+import { useDashboardPeriodsLazyQuery } from '../../data/services/graphql';
 
 export const DATE_OPTION_NAME = {
   today: 'today',
@@ -31,11 +31,11 @@ export const useDashboardService = (initOrgSid) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingData, setIsLoadingData] = useState(true);
 
-  const { data, loading, error } = useDashboardPeriodsQuery({
-    variables: {
-      orgSid,
-    },
-  });
+  const [useDashboardPeriodsQuery, { data, loading, error }] = useDashboardPeriodsLazyQuery();
+
+  useEffect(() => {
+    useDashboardPeriodsQuery({ variables: { orgSid } });
+  }, []);
 
   const { authLogout } = useAuthContext();
   const history = useHistory();
