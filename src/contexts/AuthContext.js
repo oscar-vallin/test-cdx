@@ -28,7 +28,7 @@ export const AuthContextProvider = ({ children }) => {
   // LocalState
   const [isContextLoading, setLoading] = useState(true);
   const [isAuthenticating, setAuthenticating] = useState(true);
-  const [isAuthenticated, setAuthenticated] = useState(true);
+  const [isAuthenticated, setAuthenticated] = useState(false);
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
   const [authData, setAuthData] = useState(AUTH_DATA ? JSON.parse(AUTH_DATA) : null);
@@ -94,7 +94,7 @@ export const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     if (error) {
       setToken(null);
-
+      isAuthenticated(false);
       setErrorMessage('Wrong User/Password');
 
       return;

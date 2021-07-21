@@ -29,6 +29,7 @@ export const useLogout = () => {
     _apiCall();
 
     localStorage.removeItem('AUTH_TOKEN');
+    localStorage.removeItem('AUTH_DATA');
 
     setProcessing(false);
   };
