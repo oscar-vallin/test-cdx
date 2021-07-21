@@ -62,18 +62,20 @@ const _DashboardPage = () => {
           onClick={() => handleChangeDate(option.id)}
         >
           {option.name}
-        </StyledButton> 
+        </StyledButton>
       </Spacing>
     ));
   };
 
   return (
     <LayoutDashboard id="PageDashboard">
-      <React.Suspense fallback={
-        <Spacing margin={{ top: 'double' }}>
-          <Spinner size="lg" label="Fetching dashboard data" />
-        </Spacing>
-      }>
+      <React.Suspense
+        fallback={
+          <Spacing margin={{ top: 'double' }}>
+            <Spinner size="lg" label="Fetching dashboard data" />
+          </Spacing>
+        }
+      >
         <PageHeader spacing="0">
           <Container>
             <Spacing margin={{ top: 'double' }}>
@@ -89,7 +91,7 @@ const _DashboardPage = () => {
             </Spacing>
           </Container>
         </PageHeader>
-        
+
         <Container>
           <StyledRow>
             <Column lg="6">

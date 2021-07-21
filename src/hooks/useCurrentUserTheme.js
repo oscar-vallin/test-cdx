@@ -6,8 +6,10 @@ import Theming from './../utils/Theming';
 import {
   useUserThemeLazyQuery,
   useCreateOrUpdateOwnDashThemeMutation,
-  useSetOwnDashThemeFontSizeMutation
+  useSetOwnDashThemeFontSizeMutation,
 } from '../data/services/graphql';
+
+import { useAuthContext } from '../contexts/AuthContext';
 
 const INITIAL_THEME = {
   data: null,
@@ -19,11 +21,14 @@ const INITIAL_THEME = {
 
 export const useCurrentUserTheme = () => {
   const [userTheme, setUserTheme] = useState({ ...INITIAL_THEME });
+  const { isAuthenticated } = useAuthContext();
 
   const [useUserThemeQuery, { data: theme, loading: isLoadingTheme }] = useUserThemeLazyQuery();
 
   const fetchTheme = () => {
-    useUserThemeQuery({ variables: { themeColorMode: null } });
+    if (isAuthenticated) {
+      useUserThemeQuery({ variables: { themeColorMode: null } });
+    }
   };
 
   const [
@@ -76,7 +81,7 @@ export const useCurrentUserTheme = () => {
       createOrUpdateOwnDashTheme({ variables: { dashThemeInput } });
     },
     setOwnDashFontSize: (dashThemeInput) => {
-      setOwnDashFontSize({ variables: { dashThemeInput } })
+      setOwnDashFontSize({ variables: { dashThemeInput } });
     },
     updatedTheme,
     isHandlingTheme,
