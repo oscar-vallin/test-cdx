@@ -38,7 +38,7 @@ const generateColumns = () => {
 
 const _AccessManagementPoliciesPage = () => {
   const columns = generateColumns();
-  const { authData } = useAuthContext();
+  const { authData, orgSid } = useAuthContext();
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);
@@ -85,7 +85,7 @@ const _AccessManagementPoliciesPage = () => {
   useEffect(() => {
     amPoliciesForOrg({
       variables: {
-        orgSid: authData?.orgId,
+        orgSid,
       },
     });
   }, []);

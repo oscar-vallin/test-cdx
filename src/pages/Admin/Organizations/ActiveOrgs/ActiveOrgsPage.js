@@ -12,7 +12,7 @@ import { Text } from '../../../../components/typography/Text';
 import { Separator } from '../../../../components/separators/Separator';
 
 import { useAuthContext } from '../../../../contexts/AuthContext';
-import { useDirectOrganizationsFQuery } from '../../../../data/services/graphql';
+import { useDirectOrganizationsFQuery, useDirectOrganizationsFLazyQuery } from '../../../../data/services/graphql';
 import { StyledColumn } from './ActiveOrgsPage.styles';
 
 const generateColumns = () => {
@@ -33,23 +33,38 @@ const generateColumns = () => {
 };
 
 const _ActiveOrgsPage = () => {
-  const { authData, setAuthData } = useAuthContext();
+  const { orgSid, storeOrgsId } = useAuthContext();
 
   const [orgs, setOrgs] = useState([]);
   const columns = generateColumns();
 
-  const { data, loading } = useDirectOrganizationsFQuery({
-    variables: {
-      orgSid: authData?.orgId || 1,
-      orgFilter: { activeFilter: 'ACTIVE' },
-    },
-  });
+  const [directOrganizationsFQuery, { data, loading }] = useDirectOrganizationsFLazyQuery();
+
+  useEffect(() => {
+    directOrganizationsFQuery({
+      variables: {
+        orgSid: orgSid,
+        orgFilter: { activeFilter: 'ACTIVE' },
+      },
+    });
+  }, [orgSid]);
+
+  const changeActiveOrg = (newOrgSid) => {
+    directOrganizationsFQuery({
+      variables: {
+        orgSid: newOrgSid,
+        orgFilter: { activeFilter: 'ACTIVE' },
+      },
+    });
+
+    storeOrgsId(newOrgSid);
+  };
 
   const onRenderItemColumn = (item, index, column) => {
     switch (column.key) {
       case 'name':
         return (
-          <Link to={{ pathname: '/', search: `?orgSid=${item.id}` }}>
+          <Link to={'#'} onClick={() => changeActiveOrg(item.id)}>
             {item[column.key]}
           </Link>
         );

@@ -11,9 +11,12 @@ import { InputDateRange } from '../../../components/inputs/InputDateRange';
 import { useTableFilters } from '../../../hooks/useTableFilters';
 import { tokenToString } from 'typescript';
 
+import { useAuthContext } from '../../../contexts/AuthContext';
+
 const TablesCurrentActivity = ({ id = 'TableCurrentActivity', argOrgSid = 1, argDateRange, argFilter }) => {
+  const { orgSid } = useAuthContext();
   const { localInput, startDate, endDate } = useTableFilters('Name, Id, Last Activity');
-  const { tableProc, tableComp, tableError } = useTable(argOrgSid, argDateRange, argFilter);
+  const { tableProc, tableComp, tableError } = useTable(orgSid || argOrgSid, argDateRange, argFilter);
 
   useEffect(() => {}, []);
 

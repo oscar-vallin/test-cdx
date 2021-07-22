@@ -9,9 +9,9 @@ import {
 } from '../data/services/graphql';
 
 export const useColorPalettes = () => {
-  const { authData } = useAuthContext();
+  const { authData, orgSid } = useAuthContext();
   const { id, orgId } = authData;
-  const ownedInput = { orgSid: orgId, ownerId: id };
+  const ownedInput = { orgSid, ownerId: id };
 
   const [getDashThemeColorForOrg, { data: palettes, loading: isLoadingPalettes }] = useDashThemeColorForOrgLazyQuery();
   const [

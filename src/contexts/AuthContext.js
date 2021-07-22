@@ -38,6 +38,7 @@ export const AuthContextProvider = ({ children }) => {
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [pollingTime, setPollingTime] = useState(DEFAULT_POLLING_TIME);
   const [errorMessage, setErrorMessage] = useState('');
+  const [orgSid, setOrgsId] = useState();
 
   // "userId": "joe.admin@example.com",
   // "password": "changeBen21"
@@ -63,6 +64,15 @@ export const AuthContextProvider = ({ children }) => {
     };
 
     await localFunction();
+  }, []);
+
+  useEffect(() => {
+    if (!orgSid) {
+      const _orgSid = localStorage.getItem('ORGS_ID');
+      if (_orgSid) {
+        setOrgsId(_orgSid);
+      }
+    }
   }, []);
 
   //
@@ -123,6 +133,9 @@ export const AuthContextProvider = ({ children }) => {
         localStorage.setItem('USER_NAME', session.firstNm);
         setAuthData(authData);
         setAuthenticated(true);
+
+        setOrgsId(authData?.orgId);
+        localStorage.setItem('ORGS_ID', authData?.orgId);
         //
         // Set Bearer Token
       }
@@ -217,6 +230,7 @@ export const AuthContextProvider = ({ children }) => {
   const authLogout = (expired) => {
     localStorage.removeItem('AUTH_TOKEN');
     localStorage.removeItem('USER_NAME');
+    localStorage.removeItem('ORGS_ID');
     localStorage.removeItem('LOGIN');
 
     if (expired) {
@@ -229,6 +243,7 @@ export const AuthContextProvider = ({ children }) => {
     setAuthenticated(false);
     clearInputLoginData();
     setToken(null);
+    setOrgsId(null);
     setLoggedIn(false);
   };
 
@@ -238,6 +253,11 @@ export const AuthContextProvider = ({ children }) => {
   const updatePollingTime = (iTimer) => {
     if (iTimer) setPollingTime(iTimer);
     else setPollingTime(30000);
+  };
+
+  const storeOrgsId = (newOrgSid) => {
+    setOrgsId(newOrgSid);
+    localStorage.setItem('ORGS_ID', newOrgSid);
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -258,8 +278,10 @@ export const AuthContextProvider = ({ children }) => {
       authLogin,
       // eslint-disable-next-line react-hooks/exhaustive-deps
       authLogout,
+      orgSid,
+      storeOrgsId,
     }),
-    [isContextLoading, isAuthenticating, isAuthenticated, authData, authError, token, pollingTime]
+    [isContextLoading, isAuthenticating, isAuthenticated, authData, authError, token, pollingTime, orgSid]
   );
 
   // Finally, return the interface that we want to expose to our other components

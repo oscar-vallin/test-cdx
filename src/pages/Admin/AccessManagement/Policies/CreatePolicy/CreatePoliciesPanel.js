@@ -55,8 +55,9 @@ const generateColumns = () => {
 };
 
 const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicyId }) => {
+  const { orgSid } = useAuthContext();
   const { authData } = useAuthContext();
-  const { id, orgId } = authData;
+  // const { id, orgId } = authData;
   const [state, setState] = useState({ ...INITIAL_STATE });
 
   const [options, setOptions] = useState({ ...INITIAL_OPTIONS });
@@ -70,7 +71,7 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
     if (isOpen && selectedPolicyId) {
       fetchPolicy({
         variables: {
-          orgSid: orgId,
+          orgSid,
           policySid: selectedPolicyId,
         },
       });
@@ -200,7 +201,7 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
 
   useEffect(() => {
     if (isOpen) {
-      useAmPolicyPage({ variables: { orgSid: orgId } });
+      useAmPolicyPage({ variables: { orgSid } });
     }
   }, [isOpen]);
 

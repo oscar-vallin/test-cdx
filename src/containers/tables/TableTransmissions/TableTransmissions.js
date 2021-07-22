@@ -14,7 +14,16 @@ import { useTableTemplate } from '../../../hooks/useTableTemplate';
 import { useParams, useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 
-const TableTransmissions = ({ idPage = 'TableTransmissions', orgSid = 1, dateRange, filter, onItemsListChange = () => {} }) => {
+import { useAuthContext } from '../../../contexts/AuthContext';
+
+const TableTransmissions = ({
+  idPage = 'TableTransmissions',
+  _orgSid = 1,
+  dateRange,
+  filter,
+  onItemsListChange = () => {},
+}) => {
+  const { orgSid } = useAuthContext();
   const { localInput, startDate, endDate } = useTableFilters('Extract Name,  Status, Vendor, etc.', useParams());
   const { search } = useLocation();
   const paramsDate = new URLSearchParams(search).get('date');
@@ -56,22 +65,24 @@ const TableTransmissions = ({ idPage = 'TableTransmissions', orgSid = 1, dateRan
 
       <Container>
         <Box id={`${idPage}`}>
-          {tableProps.loading
-            ? <Spacing margin={{ top: 'double' }}>
-                <Spinner size="lg" label="Fetching transmissions" />
-              </Spacing>
-            : (
-              <Table
-                id={`${idPage}`}
-                onOption={() => null}
-                searchInput={localInput.value}
-                date={date}
-                onItemsListChange={items => onItemsListChange({
+          {tableProps.loading ? (
+            <Spacing margin={{ top: 'double' }}>
+              <Spinner size="lg" label="Fetching transmissions" />
+            </Spacing>
+          ) : (
+            <Table
+              id={`${idPage}`}
+              onOption={() => null}
+              searchInput={localInput.value}
+              date={date}
+              onItemsListChange={(items) =>
+                onItemsListChange({
                   count: items.length,
                   loading: tableProps.loading,
-                })}
-                {...tableProps}
-              />
+                })
+              }
+              {...tableProps}
+            />
           )}
         </Box>
       </Container>
@@ -81,7 +92,7 @@ const TableTransmissions = ({ idPage = 'TableTransmissions', orgSid = 1, dateRan
 
 TableTransmissions.propTypes = {
   id: PropTypes.string,
-  orgSid: PropTypes.string,
+  _orgSid: PropTypes.string,
   dateRange: PropTypes.array,
   filter: PropTypes.string,
 };
