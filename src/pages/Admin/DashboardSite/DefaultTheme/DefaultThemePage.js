@@ -23,9 +23,9 @@ import {
 } from './../../../../data/services/graphql';
 
 const _DefaultThemePage = () => {
-  const { authData } = useAuthContext();
+  const { authData, orgSid } = useAuthContext();
   const { id, orgId } = authData;
-  const ownedInput = { orgSid: orgId, ownerId: id };
+  const ownedInput = { orgSid, ownerId: id };
 
   const [
     useDefaultDashThemeQuery,

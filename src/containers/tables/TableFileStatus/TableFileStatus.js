@@ -15,12 +15,20 @@ import { useTableFilters } from '../../../hooks/useTableFilters';
 import { TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { useTableTemplate } from '../../../hooks/useTableTemplate';
 import { getStartDay, getEndDay } from '../../../helpers/tableHelpers';
+import { useAuthContext } from '../../../contexts/AuthContext';
 import queryString from 'query-string';
 
-const TableFileStatus = ({ idPage = 'TableFileStatus', orgSid = 1, dateRange, filter, onItemsListChange = () => {} }) => {
+const TableFileStatus = ({
+  idPage = 'TableFileStatus',
+  _orgSid = 1,
+  dateRange,
+  filter,
+  onItemsListChange = () => {},
+}) => {
   const { localInput, startDate, endDate } = useTableFilters('Extract Name,  Status, Vendor, etc.');
   const location = useLocation();
   const [urlParams, setUrlParams] = useState(queryString.parse(location.search));
+  const { authData, orgSid } = useAuthContext();
 
   const { tableProps } = useTableTemplate(
     TABLE_NAMES.FILE_STATUS,
@@ -83,20 +91,22 @@ const TableFileStatus = ({ idPage = 'TableFileStatus', orgSid = 1, dateRange, fi
       </FilterSection>
 
       <Container>
-      {tableProps.loading
-        ? <Spacing margin={{ top: 'double' }}>
+        {tableProps.loading ? (
+          <Spacing margin={{ top: 'double' }}>
             <Spinner size="lg" label="Fetching file status" />
           </Spacing>
-        : (
+        ) : (
           <Box id={`${idPage}`}>
             <Table
               id={`${idPage}`}
               onOption={() => null}
               searchInput={localInput.value}
-              onItemsListChange={items => onItemsListChange({
-                count: items.length,
-                loading: tableProps.loading,
-              })}
+              onItemsListChange={(items) =>
+                onItemsListChange({
+                  count: items.length,
+                  loading: tableProps.loading,
+                })
+              }
               {...tableProps}
             />
           </Box>

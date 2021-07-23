@@ -13,7 +13,10 @@ import { useTableFilters } from '../../../hooks/useTableFilters';
 import { useTableTemplate } from '../../../hooks/useTableTemplate';
 import { useParams } from 'react-router-dom';
 
-const TableErrors = ({ idPage = 'TableErrors', orgSid = 1, onItemsListChange = () => {} }) => {
+import { useAuthContext } from '../../../contexts/AuthContext';
+
+const TableErrors = ({ idPage = 'TableErrors', _orgSid = 1, onItemsListChange = () => {} }) => {
+  const { orgSid } = useAuthContext();
   const { localInput, startDate, endDate } = useTableFilters('Extract Name,  Status, Vendor, etc.', useParams());
 
   const { tableProps } = useTableTemplate(
@@ -44,21 +47,23 @@ const TableErrors = ({ idPage = 'TableErrors', orgSid = 1, onItemsListChange = (
 
       <Container>
         <Box id={`${idPage}`}>
-          {tableProps.loading
-            ? <Spacing margin={{ top: 'double' }}>
-                <Spinner size="lg" label="Fetching errors" />
-              </Spacing>
-            : (
-              <Table
-                id={`${idPage}`}
-                onOption={() => null}
-                searchInput={localInput.value}
-                onItemsListChange={items => onItemsListChange({
+          {tableProps.loading ? (
+            <Spacing margin={{ top: 'double' }}>
+              <Spinner size="lg" label="Fetching errors" />
+            </Spacing>
+          ) : (
+            <Table
+              id={`${idPage}`}
+              onOption={() => null}
+              searchInput={localInput.value}
+              onItemsListChange={(items) =>
+                onItemsListChange({
                   count: items.length,
                   loading: tableProps.loading,
-                })}
-                {...tableProps}
-              />
+                })
+              }
+              {...tableProps}
+            />
           )}
         </Box>
       </Container>
@@ -68,7 +73,7 @@ const TableErrors = ({ idPage = 'TableErrors', orgSid = 1, onItemsListChange = (
 
 TableErrors.propTypes = {
   id: PropTypes.string,
-  orgSid: PropTypes.string,
+  _orgSid: PropTypes.string,
   dateRange: PropTypes.array,
   filter: PropTypes.string,
 };
