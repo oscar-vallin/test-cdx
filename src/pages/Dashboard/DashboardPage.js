@@ -9,6 +9,8 @@ import { Spinner } from '../../components/spinners/Spinner';
 import { Text } from '../../components/typography/Text';
 import { PageHeader } from '../../containers/headers/PageHeader';
 
+import { useAuthContext } from '../../contexts/AuthContext';
+
 import { LayoutDashboard } from '../../layouts/LayoutDashboard';
 import { StyledRow, StyledRowDate, StyledColumn, StyledButton, StyledSpinner } from './DashboardPage.styles';
 import { useDashboardService } from './DashboardPage.service';
@@ -18,10 +20,11 @@ import { useHistory, useLocation, useParams } from 'react-router-dom';
 import queryString from 'query-string';
 
 // TODO: Change for Session organization ID.
-const ORG_SID = 1;
+// const ORG_SID = 1;
 
 const _DashboardPage = () => {
-  const service = useDashboardService(ORG_SID);
+  const { authData, orgSid } = useAuthContext();
+  const service = useDashboardService(orgSid);
   const { isLoadingData, datesOptions, dataCounters } = service;
   const { setDateId, dateId } = service;
   const history = useHistory();
