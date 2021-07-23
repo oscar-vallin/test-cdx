@@ -3,7 +3,7 @@ import { useHistory } from 'react-router';
 import { useAuthContext } from '../contexts/AuthContext';
 import { getTableStructure, useQueryTable } from '../data/constants/TableConstants';
 import { getItems } from '../data/constants/tables/ArchiveTableConstants';
-import { isCDXToday } from '../helpers/tableHelpers';
+import { isCDXToday, isTodayInRange } from '../helpers/tableHelpers';
 import { useRefresh } from './useRefresh';
 
 //
@@ -33,7 +33,7 @@ export const useTableTemplate = (tableId, argOrgSid, argDateRange, argFilter) =>
 
   //
   useEffect(() => {
-    const _condition = isCDXToday(argDateRange.rangeStart, argDateRange.rangeEnd);
+    const _condition = isTodayInRange(argDateRange.rangeStart, argDateRange.rangeEnd);
     if (structure.polling) enableRefresh(_condition && argFilter === '');
   }, [argFilter, argDateRange.rangeStart, argDateRange.rangeEnd]);
 

@@ -12,6 +12,7 @@ import {
   subDays,
   addDays,
   isTomorrow,
+  isWithinInterval,
 } from 'date-fns';
 
 //
@@ -24,6 +25,18 @@ export const formatField = (value, columnId, text, sublabel, child) => {
     sublabel,
     child,
   };
+};
+
+export const isTodayInRange = (firstDate, secondDate) => {
+  const _today = new Date();
+  const _startDate = startOfDay(new Date(firstDate));
+  const _endDate = endOfDay(new Date(secondDate));
+
+  if (firstDate && secondDate) {
+    return isWithinInterval(_today, { start: new Date(_startDate), end: new Date(_endDate) });
+  } else {
+    return false;
+  }
 };
 
 export const isCDXToday = (firstDate, secondDate) => {
