@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ROUTES } from '../../data/constants/RouteConstants';
-
+import { FontIcon } from '@fluentui/react/lib/Icon';
 import { Row, Column, Container } from '../../components/layouts';
 import { Spacing } from '../../components/spacings/Spacing';
 import { Text } from '../../components/typography/Text';
@@ -21,6 +21,8 @@ const _ArchivePage = () => {
           <Spacing margin={{ top: 'double' }}>
             <Row>
               <Column lg="6" direction="row">
+                <FontIcon iconName="FilterSolid" />
+
                 <Text variant="bold">Archives</Text>
                 <Text>&nbsp; — Advanced search</Text>
               </Column>

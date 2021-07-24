@@ -1,10 +1,19 @@
 import React, { useEffect, useState, memo } from 'react';
 import { LayoutLogin } from '../../layouts/LayoutLogin';
 import { FormLogin } from '../../containers/forms/FormLogin';
-import { Toast } from './../../components/toast';
+import { useNotification } from '../../contexts/hooks/useNotification';
 
 const _LoginPage = () => {
   const [isLogout, setLogout] = useState();
+  const Toast = useNotification();
+
+  useEffect(() => {
+    console.log('isLogout', isLogout);
+    
+    if (isLogout) {
+      Toast.error({ text: isLogout });
+    }
+  }, [isLogout]);
 
   useEffect(() => {
     const logout = localStorage.getItem('LOGOUT');
@@ -21,7 +30,6 @@ const _LoginPage = () => {
   return (
     <LayoutLogin id="PageLogin">
       <FormLogin id="FormLogin" onLogin={() => {}} />
-      {isLogout && <Toast text={isLogout} duration={5000} />}
     </LayoutLogin>
   );
 };

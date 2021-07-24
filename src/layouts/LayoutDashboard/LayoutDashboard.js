@@ -7,13 +7,13 @@ import { NavBar } from '../../containers/bars/NavBar';
 import { StyleConstants } from '../../data/constants/StyleConstants';
 import { BoxStyled } from './LayoutDashboard.styles';
 
-const LayoutDashboard = ({ id = 'LayoutDashboard', menuOptionSelected = 'dashboard', routeId, children }) => {
+const LayoutDashboard = ({ id = 'LayoutDashboard', menuOptionSelected = 'dashboard', showMenu = true, children }) => {
   const history = useHistory();
 
   return (
     <Fragment>
       <BoxStyled id={`${id}__Box`} direction={StyleConstants.DIRECTION_COLUMN} top>
-        <NavBar menuOptionSelected={menuOptionSelected} onUserSettings={() => history.push(ROUTE_USER_SETTINGS.URL)} />
+        <NavBar visible={showMenu} menuOptionSelected={menuOptionSelected} onUserSettings={() => history.push(ROUTE_USER_SETTINGS.URL)} />
 
         {children}
       </BoxStyled>

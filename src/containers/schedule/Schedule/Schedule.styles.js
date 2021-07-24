@@ -58,15 +58,8 @@ export const CalendarColumn = styled(LayoutColumn)`
   width: calc(100% / 7);
 `;
 
-export const HeaderButtonView = styled(Button)`
-  /* background-color: ${({ selected }) => (selected ? 'gray' : 'white')}; */
-  background: ${({ selected, theme }) => (selected ? theme.colors.themePrimary : theme.colors.neutralPrimary)};
-  color: ${({ selected, theme }) => (selected ? theme.colors.neutralPrimary : theme.colors.themePrimary)};
-  font-weight: ${({ selected, theme }) => (selected ? theme.fontWeights.bold : theme.fontWeights.normal)};
-
-  &:hover {
-    border-color: ${({ theme }) => theme.colors.themePrimary};
-  }
+export const StyledRow = styled(LayoutRow)`
+  transform: translateY(-25px);
 `;
 
 export const ScheduleColumn = styled.img`

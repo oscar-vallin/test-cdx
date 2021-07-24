@@ -180,7 +180,7 @@ export const AuthContextProvider = ({ children }) => {
 
         return passwordResponse;
       } catch (e) {
-        console.log('Exception e = ', e);
+        //console.log('Exception e = ', e);
       }
     }
 

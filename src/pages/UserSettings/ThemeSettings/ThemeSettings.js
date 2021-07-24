@@ -15,6 +15,7 @@ import { useCreateOrUpdateOwnDashThemeMutation, useUserThemeLazyQuery } from './
 import { StyledDiv, StyledTitle, StyledChoiceGroup } from './../UserSettingsPage.styles';
 import { defaultTheme, darkTheme } from '../../../styles/themes';
 import { useCurrentUserTheme } from '../../../hooks/useCurrentUserTheme';
+import { useNotification } from '../../../contexts/hooks/useNotification';
 
 const INITIAL_THEME = {
   data: null,
@@ -26,11 +27,12 @@ const INITIAL_THEME = {
 
 const ThemeSettings = ({ userTheme = { ...INITIAL_THEME } }) => {
   const [useUserThemeQuery, { data: theme, loading: isLoadingTheme }] = useUserThemeLazyQuery();
-
+  
   useEffect(() => {
     useUserThemeQuery({ variables: { themeColorMode: null } });
   }, []);
 
+  const Toast = useNotification();
   const { changeTheme } = useThemeContext();
   const { colorPalettes, isLoadingPalettes, fetchColorPalettes } = useColorPalettes();
   const [
@@ -48,6 +50,11 @@ const ThemeSettings = ({ userTheme = { ...INITIAL_THEME } }) => {
     },
   ]);
 
+  useEffect(() => {
+    if (themeResponse) {
+      Toast.success({ text: 'Theme saved successfully'});
+    }
+  }, [themeResponse]);
   // const [selectedPaletteId, setSelectedPaletteId] = useState(null);
   const [palette, setPalette] = useState({});
   // const [themeColorMode, setThemeColorMode] = useState(userTheme?.themeColorMode || 'LIGHT');

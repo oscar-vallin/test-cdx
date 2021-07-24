@@ -29,7 +29,7 @@ import {
 } from './NavBar.styles';
 
 // CardSection is called directly cause a restriction warning for that component.
-const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSettings, ...props }) => {
+const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSettings, visible, ...props }) => {
   const [collapse, setCollapse] = React.useState('false');
   const { userTheme, setOwnDashFontSize, isHandlingFontSize } = useCurrentUserTheme();
   const { setFontSize } = useThemeContext();
@@ -78,7 +78,7 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSetti
               <StyledTitle variant="bold">CDX DASHBOARD</StyledTitle>
             </StyledColumnLogoL>
             <StyledColumnNav id={`${id}__Left-Row__Menu`} sm={10}>
-              {menuOptionSelected && <MainMenu left option={menuOptionSelected} changeCollapse={changeCollapse} />}
+              {visible && menuOptionSelected && <MainMenu left option={menuOptionSelected} changeCollapse={changeCollapse} />}
             </StyledColumnNav>
             <StyledColumnLogoR id={`${id}__Left-Row__Logo`} sm={2} noPadding collapse>
               <StyledTitle>CDX DASHBOARD</StyledTitle>

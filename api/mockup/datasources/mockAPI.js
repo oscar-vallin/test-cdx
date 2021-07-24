@@ -35,7 +35,7 @@ class mockAPI extends DataSource {
   }
 
   passwordLogin() {
-    console.log(rawPasswordLogin.data);
+    //console.log(rawPasswordLogin.data);
     return rawPasswordLogin.data.passwordLogin;
   }
 

@@ -1,42 +1,13 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import {
-  addDays,
   endOfMonth,
-  endOfWeek,
-  format,
-  isSameDay,
-  isSameMonth,
-  parse,
-  set,
   startOfMonth,
-  startOfWeek,
-  subMonths,
 } from 'date-fns';
 
 import {
-  Box,
-  Row,
-  Column,
-  Container,
-  RightColumn,
-  Body,
-  RowHeader,
-  ColumnHeader,
-  RowHeaderItem,
-  HeaderMonth,
-  HeaderYear,
-  HeaderButtonView,
-  CalendarBodyRow,
-  CalendarBodyCell,
-  CalendarBodyCellNumber,
-  CalendarBodyCellBg,
-  CalendarColumn,
+  StyledRow
 } from './Schedule.styles';
-import { addMonths } from 'date-fns/esm';
-
-import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
-import { ButtonAction } from '../../../components/buttons/ButtonAction';
 
 import { ScheduleHeader } from './ScheduleHeader';
 import { ScheduleWeek } from './ScheduleWeek';
@@ -45,6 +16,11 @@ import { isCurrentViewWeek, isCurrentViewMonth, isCurrentViewDay } from './helpe
 import ScheduleMonth from './ScheduleMonth';
 import { ScheduleDay } from './ScheduleDay';
 import { useScheduleItems } from './Schedule.service';
+
+import { Column, Container } from '../../../components/layouts';
+import { Card } from '../../../components/cards/Card';
+import { PageHeader } from '../../headers/PageHeader';
+import { Spacing } from '../../../components/spacings/Spacing';
 
 // https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/3b27cc08-ebdc-42ea-b144-f91ae83b752e/dcc2mld-1481803c-ebe8-41c7-9e7c-ba8c37f8c47d.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3sicGF0aCI6IlwvZlwvM2IyN2NjMDgtZWJkYy00MmVhLWIxNDQtZjkxYWU4M2I3NTJlXC9kY2MybWxkLTE0ODE4MDNjLWViZTgtNDFjNy05ZTdjLWJhOGMzN2Y4YzQ3ZC5wbmcifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6ZmlsZS5kb3dubG9hZCJdfQ.I7WhA1T1xVSbcDQ7NHjdboU6FuUje3jD5C-chv4bt98
 // Add hours.  Week and Day, and dashed lines.
@@ -68,40 +44,56 @@ const Schedule = ({ id = 'ScheduleContainer', orgSid = 1, dateRange, filter, ...
   };
 
   return (
-    <Container>
-      <ScheduleHeader
-        currentDate={currentDate}
-        currentView={currentView}
-        onChangeView={handleChangeView}
-        onChangeDate={handleChangeDate}
-      />
-      <ScheduleSubHeader currentDate={currentDate} currentView={currentView} selectedDate={selectedDate} />
-      {!!isCurrentViewMonth(currentView) && (
-        <ScheduleMonth
-          selectedDate={selectedDate}
-          currentDate={currentDate}
-          onChangeDate={handleChangeDate}
-          onChangeView={handleChangeView}
-          items={items}
-        />
-      )}
-      {!!isCurrentViewWeek(currentView) && (
-        <ScheduleWeek
-          selectedDate={selectedDate}
-          currentDate={currentDate}
-          onChangeDate={handleChangeDate}
-          items={items}
-        />
-      )}
-      {!!isCurrentViewDay(currentView) && (
-        <ScheduleDay
-          selectedDate={selectedDate}
-          currentDate={currentDate}
-          onChangeDate={handleChangeDate}
-          items={items}
-        />
-      )}
-    </Container>
+    <Fragment>
+      <PageHeader spacing="0">
+        <Container>
+          <Spacing margin={{ top: 'double' }}>
+            <ScheduleHeader
+              currentDate={currentDate}
+              currentView={currentView}
+              onChangeView={handleChangeView}
+              onChangeDate={handleChangeDate}
+            />
+          </Spacing>
+        </Container>
+      </PageHeader>
+    
+      <Container>
+        <StyledRow>
+          <Column lg="12">
+            <Card elevation="smallest">
+              <ScheduleSubHeader currentDate={currentDate} currentView={currentView} selectedDate={selectedDate} />
+              
+              {!!isCurrentViewMonth(currentView) && (
+                <ScheduleMonth
+                  selectedDate={selectedDate}
+                  currentDate={currentDate}
+                  onChangeDate={handleChangeDate}
+                  onChangeView={handleChangeView}
+                  items={items}
+                />
+              )}
+              {!!isCurrentViewWeek(currentView) && (
+                <ScheduleWeek
+                  selectedDate={selectedDate}
+                  currentDate={currentDate}
+                  onChangeDate={handleChangeDate}
+                  items={items}
+                />
+              )}
+              {!!isCurrentViewDay(currentView) && (
+                <ScheduleDay
+                  selectedDate={selectedDate}
+                  currentDate={currentDate}
+                  onChangeDate={handleChangeDate}
+                  items={items}
+                />
+              )}
+            </Card>
+          </Column>
+        </StyledRow>
+      </Container>
+    </Fragment>
   );
 };
 

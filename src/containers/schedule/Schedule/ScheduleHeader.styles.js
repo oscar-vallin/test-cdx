@@ -50,15 +50,15 @@ export const CalendarColumn = styled(LayoutColumn)`
 `;
 
 export const HeaderButtonView = styled(Button)`
-  /* background-color: ${({ selected }) => (selected ? 'gray' : 'white')}; */
-  &&& {
-    background: ${({ selected, theme }) => (selected ? theme.colors.themePrimary : theme.colors.neutralLight)};
-    color: ${({ selected, theme }) => (selected ? theme.colors.neutralLight : theme.colors.themePrimary)};
-    font-weight: ${({ selected, theme }) => (selected ? theme.fontWeights.bold : theme.fontWeights.normal)};
-  }
+  background: ${({ selected, theme }) => (selected ? theme.colors.themePrimary : theme.colors.infoBackground)};
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .05);
+  color: ${({ selected, theme }) => (selected ? theme.colors.white : theme.colors.themePrimary)};
+  font-weight: ${({ selected, theme }) => (selected ? theme.fontWeights.bold : theme.fontWeights.normal)};
+  transition: all .15s ease-out;
+  width: 100%;
 
-  &:hover {
-    border-color: ${({ theme }) => theme.colors.themePrimary};
+  && {
+    border: none;
   }
 `;
 

@@ -295,8 +295,8 @@ export const HeaderTextLarge = styled.span`
 `;
 
 export const DayOfWeek = styled(HeaderTextLarge)`
-  margin-left: 10px;
-  width: calc((100% - 120px) / 7);
+  margin: 0 0 0 15px;
+  width: calc((100% - 110px) / 7);
 `;
 
 export const WeekHourSpace = styled.div`

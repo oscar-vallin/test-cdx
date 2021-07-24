@@ -1,38 +1,17 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {
   addDays,
   addMonths,
-  endOfMonth,
   endOfWeek,
   format,
-  isSameDay,
-  isSameMonth,
-  parse,
-  set,
-  startOfMonth,
   startOfWeek,
-  subMonths,
 } from 'date-fns';
 
 import {
-  Box,
-  Row,
-  Column,
-  Container,
-  RightColumn,
-  Body,
-  RowHeader,
-  ColumnHeader,
   RowHeaderItem,
   HeaderMonth,
   HeaderYear,
   HeaderButtonView,
-  CalendarBodyRow,
-  CalendarBodyCell,
-  CalendarBodyCellNumber,
-  CalendarBodyCellBg,
-  CalendarColumn,
   StyledButtonAction,
   UpDownContainer,
   MonthYearContainer,
@@ -40,11 +19,12 @@ import {
   FillerHours,
 } from './ScheduleHeader.styles';
 
-import { ButtonAction } from '../../../components/buttons/ButtonAction';
 import { isCurrentViewDay, isCurrentViewMonth, isCurrentViewWeek } from './helpers';
 import { addWeeks } from '@fluentui/react';
-import { DateSelector } from '../../../components/inputs/DateSelector';
 import { MonthPicker } from '../../../components/inputs/MonthPicker';
+
+import { Spacing } from '../../../components/spacings/Spacing';
+import { Row, Column } from '../../../components/layouts';
 
 export const ScheduleHeader = ({ id, currentView, currentDate, onChangeDate, onChangeView }) => {
   const [currentMonth, setCurrentMonth] = React.useState(currentDate ?? new Date());
@@ -187,17 +167,17 @@ export const ScheduleHeader = ({ id, currentView, currentDate, onChangeDate, onC
 
   const renderHeaderMonth = () => {
     return (
-      <RowHeader>
-        <ColumnHeader>
+      <Row>
+        <Column lg="8">
           <RowHeaderItem>
             {isCurrentViewWeek(currentView) && <FillerHours />}
             {renderTodayButton()}
             {renderNavArrows()}
             {renderHeaderTitle()}
           </RowHeaderItem>
-        </ColumnHeader>
-        <ColumnHeader>
-          <RowHeaderItem key={`ContainerButton-View`}>
+        </Column>
+        <Column lg="4" direction="row" right>
+          <Spacing margin={{ left: 'normal' }}>
             <HeaderButtonView
               key={`Button-MonthView`}
               selected={isCurrentViewMonth(currentView)}
@@ -205,6 +185,9 @@ export const ScheduleHeader = ({ id, currentView, currentDate, onChangeDate, onC
             >
               {'Month'}
             </HeaderButtonView>
+          </Spacing>
+
+          <Spacing margin={{ left: 'normal' }}>
             <HeaderButtonView
               key={`Button-WeekView`}
               selected={isCurrentViewWeek(currentView)}
@@ -212,6 +195,9 @@ export const ScheduleHeader = ({ id, currentView, currentDate, onChangeDate, onC
             >
               {'Week'}
             </HeaderButtonView>
+          </Spacing>
+          
+          <Spacing margin={{ left: 'normal' }}>
             <HeaderButtonView
               key={`Button-DayView`}
               selected={isCurrentViewDay(currentView)}
@@ -219,9 +205,9 @@ export const ScheduleHeader = ({ id, currentView, currentDate, onChangeDate, onC
             >
               {'Day'}
             </HeaderButtonView>
-          </RowHeaderItem>
-        </ColumnHeader>
-      </RowHeader>
+          </Spacing>
+        </Column>
+      </Row>
     );
   };
 

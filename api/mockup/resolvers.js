@@ -17,21 +17,21 @@ module.exports = {
     },
 
     dashboardPeriods: (parent, args, { dataSources }, info) => {
-      console.log('DashBoardPresiods List...', Date.now());
+      //console.log('DashBoardPresiods List...', Date.now());
       return dataSources.mockAPI.dashboard().data.dashboardPeriods;
     },
     // orgSid, dateRange, filter;
 
     workPacketStatuses: (parent, args, { dataSources }, info) => {
-      console.log('WorkPacket Statuses List...', Date.now());
+      //console.log('WorkPacket Statuses List...', Date.now());
       return dataSources.mockAPI.workPacketStatuses(args.orgSid, args.dateRange, args.filter).workPacketStatuses;
     },
 
     workPacketStatusDetails: (parent, args, { dataSources }, info) => {
-      console.log('WorkPacket Status Details List...', Date.now());
+      //console.log('WorkPacket Status Details List...', Date.now());
       const resultResolver = dataSources.mockAPI.workPacketStatusDetails(args.orgSid, args.workOrderId);
 
-      console.log({ resultResolver });
+      //console.log({ resultResolver });
 
       return resultResolver;
     },

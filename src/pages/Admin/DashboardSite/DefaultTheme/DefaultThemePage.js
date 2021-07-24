@@ -21,8 +21,10 @@ import {
   useUpdateDefaultDashThemeMutation,
   useDefaultDashThemeForSiteLazyQuery,
 } from './../../../../data/services/graphql';
+import { useNotification } from '../../../../contexts/hooks/useNotification';
 
 const _DefaultThemePage = () => {
+  const Toast = useNotification();
   const { authData } = useAuthContext();
   const { id, orgId } = authData;
   const ownedInput = { orgSid: orgId, ownerId: id };
@@ -55,9 +57,16 @@ const _DefaultThemePage = () => {
   const [selectedPaletteId, setSelectedPaletteId] = useState(null);
   const [themeColorMode, setThemeColorMode] = useState(null);
 
-  const [createDefaultDashThemeMutation, { loading: isCreatingTheme }] = useCreateDefaultDashThemeMutation();
+  const [createDefaultDashThemeMutation, { data: themeCreated, loading: isCreatingTheme }] = useCreateDefaultDashThemeMutation();
 
-  const [updateDefaultDashThemeMutation, { loading: isUpdatingTheme }] = useUpdateDefaultDashThemeMutation();
+  const [updateDefaultDashThemeMutation, { data: themeUpdated, loading: isUpdatingTheme }] = useUpdateDefaultDashThemeMutation();
+
+
+  useEffect(() => {
+    if (themeCreated || themeUpdated) {
+      Toast.success({ text: 'Default theme saved successfully'});
+    }
+  }, [themeCreated, themeUpdated]);
 
   useEffect(() => {
     if (colorPalettes && !isLoadingPalettes && !isLoadingDefaultTheme) {

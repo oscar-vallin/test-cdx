@@ -9,6 +9,7 @@ import { useAuthContext } from '../../contexts/AuthContext';
 import { Spinner } from '../../components/spinners/Spinner';
 import { Spacing } from '../../components/spacings/Spacing';
 
+import { useNotification } from '../../contexts/hooks/useNotification';
 import { useNavigateToNewDomainQuery } from '../../data/services/graphql';
 
 const parseLinks = (links = [], sidebarOpt) => {
@@ -41,8 +42,8 @@ const LayoutAdmin = ({ id = 'LayoutAdmin', menuOptionSelected = 'admin', sidebar
     variables: {
       domainNavInput: {
         orgSid: authData?.orgId,
-        appDomain: authData.userType,
-        selectedPage: authData.selectedPage,
+        appDomain: authData?.userType,
+        selectedPage: authData?.selectedPage,
       },
     },
   });
@@ -76,7 +77,7 @@ const LayoutAdmin = ({ id = 'LayoutAdmin', menuOptionSelected = 'admin', sidebar
   }, [data, loading, sidebarOptionSelected]);
 
   return (
-    <LayoutDashboard id={id} menuOptionSelected={menuOptionSelected}>
+    <LayoutDashboard id={id} menuOptionSelected={menuOptionSelected} showMenu={false}>
       {!cache && loading ? (
         <Spacing margin={{ top: 'double' }}>
           <Spinner size="lg" label="Loading admin domain" />

@@ -20,6 +20,7 @@ import { useColorPalettes } from '../../../../hooks/useColorPalettes';
 import { defaultTheme } from '../../../../styles/themes';
 
 import Theming from './../../../../utils/Theming';
+import { useNotification } from '../../../../contexts/hooks/useNotification';
 
 const getThemeVariant = ({ themePrimary, neutralPrimary, white }) => ({
   ...Theming.generate.primary(themePrimary),
@@ -28,6 +29,7 @@ const getThemeVariant = ({ themePrimary, neutralPrimary, white }) => ({
 });
 
 const _ColorPalettesPage = () => {
+  const Toast = useNotification();
   const { userTheme } = useCurrentUserTheme();
   const { changeTheme, themeConfig } = useThemeContext();
   const {
@@ -65,6 +67,8 @@ const _ColorPalettesPage = () => {
   useEffect(() => {
     if (palettesUpdated) {
       fetchColorPalettes();
+
+      Toast.success({ text: 'Palette saved successfully'});
     }
   }, [palettesUpdated]);
 

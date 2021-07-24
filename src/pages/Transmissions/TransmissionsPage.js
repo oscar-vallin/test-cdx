@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ROUTES } from '../../data/constants/RouteConstants';
-
+import { FontIcon } from '@fluentui/react/lib/Icon';
 import { LayoutDashboard } from '../../layouts/LayoutDashboard';
 import { Row, Column, Container } from '../../components/layouts';
 import { Spacing } from '../../components/spacings/Spacing';
@@ -22,6 +22,7 @@ const _TransmissionsPage = () => {
           <Spacing margin={{ top: 'double' }}>
             <Row>
               <Column lg="6" direction="row">
+                <FontIcon iconName="FilterSolid" />
                 <Text variant="bold">Transmissions</Text>
                 <Text>&nbsp; — Advanced search</Text>
               </Column>

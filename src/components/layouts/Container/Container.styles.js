@@ -6,5 +6,6 @@ export const StyledBox = styled(Box)`
   justify-content: flex-start;
   padding: 0;
   margin: 0 auto;
+  max-width: 1366px;
   width: 75%;
 `;

@@ -10,6 +10,7 @@ import { Text } from '../../../components/typography/Text';
 
 export const StyledBox = styled(Box)`
   background: ${({ theme }) => theme.colors.themePrimary};
+  height: 48px;
 `;
 
 export const StyledDropdown = styled(IconButton)`

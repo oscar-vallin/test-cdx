@@ -22,7 +22,7 @@ const Story = (args) => (
     items={testTableData}
     structure={getTableStructure(TABLE_NAMES.TEST)}
     loading={false}
-    onOption={() => console.log('Click')}
+    onOption={() => //console.log('Click')}
   />
 );
 
@@ -32,5 +32,5 @@ Dashboard.args = {
   items: testTableData,
   structure: getTableStructure(TABLE_NAMES.TEST),
   loading: false,
-  onOption: () => console.log('Click on Option'),
+  onOption: () => //console.log('Click on Option'),
 };

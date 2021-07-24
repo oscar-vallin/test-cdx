@@ -26,9 +26,9 @@ export const useTableFilters = (placeholder, id) => {
     let finalURL = '';
     const formatDatesURL = 'yyyy-MM-dd';
 
-    console.log('pushQueryString, localInput.value = ', localInput.value);
-    console.log('pushQueryString, startDate.value = ', startDate.value);
-    console.log('pushQueryString, endDate.value = ', endDate.value);
+    // //console.log('pushQueryString, localInput.value = ', localInput.value);
+    // //console.log('pushQueryString, startDate.value = ', startDate.value);
+    // //console.log('pushQueryString, endDate.value = ', endDate.value);
 
     if (localInput.value || startDate.value || endDate.value) {
       finalURL += '?';
@@ -72,7 +72,7 @@ export const useTableFilters = (placeholder, id) => {
   useEffect(() => {
     const hour = getHours(new Date());
 
-    console.log('urlParams.filter? ', urlParams.filter);
+    //console.log('urlParams.filter? ', urlParams.filter);
     if (urlParams?.filter) {
       localInput.setValue(urlParams.filter);
     }

@@ -2,38 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   addDays,
-  addMonths,
   endOfMonth,
   endOfWeek,
   format,
   isSameDay,
   isSameMonth,
-  parse,
   parseISO,
-  set,
   startOfMonth,
   startOfWeek,
-  subMonths,
 } from 'date-fns';
 
 import {
-  Box,
-  WeekRow,
-  Column,
-  Container,
-  RightColumn,
   Body,
-  RowHeader,
-  ColumnHeader,
-  RowHeaderItem,
-  HeaderMonth,
-  HeaderYear,
-  HeaderButtonView,
-  CalendarColumn,
-  DayOfWeekContainer,
   CalendarBodyCellNumber,
   CalendarBodyCell,
-  CalendarBodyCellBg,
   CalendarBodyRow,
   CellItem,
 } from './ScheduleMonth.styles';

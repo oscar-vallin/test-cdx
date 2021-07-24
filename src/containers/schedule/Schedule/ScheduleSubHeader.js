@@ -1,34 +1,17 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {
   addDays,
-  addMonths,
   endOfMonth,
   endOfWeek,
   format,
   isSameDay,
   isSameMonth,
-  parse,
-  set,
   startOfMonth,
   startOfWeek,
-  subMonths,
 } from 'date-fns';
 
 import {
-  Box,
   Row,
-  Column,
-  Container,
-  RightColumn,
-  Body,
-  RowHeader,
-  ColumnHeader,
-  RowHeaderItem,
-  HeaderMonth,
-  HeaderYear,
-  HeaderButtonView,
-  CalendarColumn,
   DayOfWeek,
   WeekViewContainer,
   WeekViewNumber,
@@ -38,6 +21,7 @@ import {
   WeekHourSpace,
 } from './ScheduleSubHeader.styles';
 import { isCurrentViewDay, isCurrentViewWeek } from './helpers';
+import { Text } from '../../../components/typography';
 
 export const ScheduleSubHeader = ({ id, currentView, currentDate, selectedDate }) => {
   let _currentDate = startOfWeek(currentDate);
@@ -120,7 +104,9 @@ export const ScheduleSubHeader = ({ id, currentView, currentDate, selectedDate }
           </WeekViewContainer>
         );
       } else {
-        days.push(<DayOfWeek key={i}>{format(day, dateFormat)}</DayOfWeek>);
+        days.push(<DayOfWeek key={i}>
+          <Text size="small">{format(day, dateFormat)}</Text>
+        </DayOfWeek>);
       }
 
       day = addDays(day, 1);
@@ -135,7 +121,5 @@ export const ScheduleSubHeader = ({ id, currentView, currentDate, selectedDate }
 
   return <>{_renderSubHeader()}</>;
 };
-
-ScheduleSubHeader.propTypes = {};
 
 export default ScheduleSubHeader;
