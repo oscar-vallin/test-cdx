@@ -15,6 +15,8 @@ import { NAV_ITEMS } from './../../SideMenu';
 import { useAmGroupsForOrgPQuery } from '../../../../data/services/graphql';
 import { StyledColumn } from './AccessManagementGroupsPage.styles';
 
+import { useAuthContext } from '../../../../contexts/AuthContext';
+
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
     name,
@@ -38,10 +40,11 @@ const onRenderItemColumn = (item, index, column) => {
 };
 
 const _AccessManagementGroupsPage = () => {
+  const { orgSid } = useAuthContext();
   const [groups, setGroups] = useState([]);
   const columns = generateColumns();
 
-  const { data, loading } = useAmGroupsForOrgPQuery({ variables: { orgSid: 1 } });
+  const { data, loading } = useAmGroupsForOrgPQuery({ variables: { orgSid } });
 
   useEffect(() => {
     if (!loading && data) {

@@ -21,14 +21,16 @@ import { Column, Container } from '../../../components/layouts';
 import { Card } from '../../../components/cards/Card';
 import { PageHeader } from '../../headers/PageHeader';
 import { Spacing } from '../../../components/spacings/Spacing';
+import { useAuthContext } from '../../../contexts/AuthContext';
 
 // https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/3b27cc08-ebdc-42ea-b144-f91ae83b752e/dcc2mld-1481803c-ebe8-41c7-9e7c-ba8c37f8c47d.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3sicGF0aCI6IlwvZlwvM2IyN2NjMDgtZWJkYy00MmVhLWIxNDQtZjkxYWU4M2I3NTJlXC9kY2MybWxkLTE0ODE4MDNjLWViZTgtNDFjNy05ZTdjLWJhOGMzN2Y4YzQ3ZC5wbmcifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6ZmlsZS5kb3dubG9hZCJdfQ.I7WhA1T1xVSbcDQ7NHjdboU6FuUje3jD5C-chv4bt98
 // Add hours.  Week and Day, and dashed lines.
-const Schedule = ({ id = 'ScheduleContainer', orgSid = 1, dateRange, filter, ...props }) => {
+const Schedule = ({ id = 'ScheduleContainer', _orgSid = 1, dateRange, filter, ...props }) => {
+  const { orgSid } = useAuthContext();
   const [currentDate] = React.useState(new Date());
   const [selectedDate, setSelectedDate] = React.useState(new Date());
   const [currentView, setCurrentView] = React.useState('month');
-  const { items } = useScheduleItems(2, {
+  const { items } = useScheduleItems(orgSid, {
     rangeStart: startOfMonth(selectedDate),
     rangeEnd: endOfMonth(selectedDate),
   });
@@ -99,7 +101,7 @@ const Schedule = ({ id = 'ScheduleContainer', orgSid = 1, dateRange, filter, ...
 
 Schedule.propTypes = {
   id: PropTypes.string,
-  orgSid: PropTypes.string,
+  _orgSid: PropTypes.string,
   dateRange: PropTypes.array,
   filter: PropTypes.string,
 };

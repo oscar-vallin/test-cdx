@@ -9,6 +9,8 @@ import { Spinner } from '../../components/spinners/Spinner';
 import { Text } from '../../components/typography/Text';
 import { PageHeader } from '../../containers/headers/PageHeader';
 
+import { useAuthContext } from '../../contexts/AuthContext';
+
 import { LayoutDashboard } from '../../layouts/LayoutDashboard';
 import { StyledRow, StyledRowDate, StyledColumn, StyledButton, StyledSpinner } from './DashboardPage.styles';
 import { useDashboardService } from './DashboardPage.service';
@@ -18,10 +20,11 @@ import { useHistory, useLocation, useParams } from 'react-router-dom';
 import queryString from 'query-string';
 
 // TODO: Change for Session organization ID.
-const ORG_SID = 1;
+// const ORG_SID = 1;
 
 const _DashboardPage = () => {
-  const service = useDashboardService(ORG_SID);
+  const { authData, orgSid } = useAuthContext();
+  const service = useDashboardService(orgSid);
   const { isLoadingData, datesOptions, dataCounters } = service;
   const { setDateId, dateId } = service;
   const history = useHistory();
@@ -62,18 +65,20 @@ const _DashboardPage = () => {
           onClick={() => handleChangeDate(option.id)}
         >
           {option.name}
-        </StyledButton> 
+        </StyledButton>
       </Spacing>
     ));
   };
 
   return (
     <LayoutDashboard id="PageDashboard">
-      <React.Suspense fallback={
-        <Spacing margin={{ top: 'double' }}>
-          <Spinner size="lg" label="Fetching dashboard data" />
-        </Spacing>
-      }>
+      <React.Suspense
+        fallback={
+          <Spacing margin={{ top: 'double' }}>
+            <Spinner size="lg" label="Fetching dashboard data" />
+          </Spacing>
+        }
+      >
         <PageHeader spacing="0">
           <Container>
             <Spacing margin={{ top: 'double' }}>
@@ -89,7 +94,7 @@ const _DashboardPage = () => {
             </Spacing>
           </Container>
         </PageHeader>
-        
+
         <Container>
           <StyledRow>
             <Column lg="6">

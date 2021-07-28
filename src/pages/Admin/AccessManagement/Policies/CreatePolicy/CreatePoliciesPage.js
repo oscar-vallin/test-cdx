@@ -19,6 +19,8 @@ import VerbCombobox from '../../../../../components/comboboxes/VerbCombobox/Verb
 import { useAmPolicyPageQuery } from '../../../../../data/services/graphql';
 import { ADMIN_NAV } from '../../../../../data/constants/AdminConstants';
 
+import { useAuthContext } from '../../../../../contexts/AuthContext';
+
 const COLUMNS = [
   {
     key: 'service',
@@ -103,6 +105,7 @@ const generateColumns = () => {
 };
 
 const _CreatePoliciesPage = () => {
+  const { orgSid } = useAuthContext();
   const [state, setState] = useState({
     editIndex: null,
     policyName: '',
@@ -124,7 +127,7 @@ const _CreatePoliciesPage = () => {
     templateServices: [],
   });
 
-  const { data, loading } = useAmPolicyPageQuery({ variables: { orgSid: 1 } });
+  const { data, loading } = useAmPolicyPageQuery({ variables: { orgSid } });
 
   const handleAsyncOptionChange = (attr, permissionIndex) => (option, item, data) => {
     setState({

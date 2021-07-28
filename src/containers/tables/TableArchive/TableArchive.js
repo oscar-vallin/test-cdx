@@ -13,7 +13,10 @@ import { useTableFilters } from '../../../hooks/useTableFilters';
 import { useParams } from 'react-router-dom';
 import { useEffect, Fragment } from 'react';
 
-const TableArchive = ({ idPage = 'TableArchive', orgSid = 1, onItemsListChange = () => {} }) => {
+import { useAuthContext } from '../../../contexts/AuthContext';
+
+const TableArchive = ({ idPage = 'TableArchive', _orgSid = 1, onItemsListChange = () => {} }) => {
+  const { orgSid } = useAuthContext();
   const { localInput, startDate, endDate, selectDate } = useTableFilters(
     'Extract Name,  Status, Vendor, etc.',
     useParams()
@@ -50,21 +53,23 @@ const TableArchive = ({ idPage = 'TableArchive', orgSid = 1, onItemsListChange =
 
       <Container>
         <Box id={`${idPage}`}>
-          {tableProps.loading
-            ? <Spacing margin={{ top: 'double' }}>
-                <Spinner size="lg" label="Fetching archives" />
-              </Spacing>
-            : (
-              <Table
-                id={`${idPage}`}
-                onOption={() => null}
-                searchInput={localInput.value}
-                onItemsListChange={items => onItemsListChange({
+          {tableProps.loading ? (
+            <Spacing margin={{ top: 'double' }}>
+              <Spinner size="lg" label="Fetching archives" />
+            </Spacing>
+          ) : (
+            <Table
+              id={`${idPage}`}
+              onOption={() => null}
+              searchInput={localInput.value}
+              onItemsListChange={(items) =>
+                onItemsListChange({
                   count: items.length,
                   loading: tableProps.loading,
-                })}
-                {...tableProps}
-              />
+                })
+              }
+              {...tableProps}
+            />
           )}
         </Box>
       </Container>
@@ -74,7 +79,7 @@ const TableArchive = ({ idPage = 'TableArchive', orgSid = 1, onItemsListChange =
 
 TableArchive.propTypes = {
   id: PropTypes.string,
-  orgSid: PropTypes.string,
+  _orgSid: PropTypes.string,
   dateRange: PropTypes.array,
   filter: PropTypes.string,
 };

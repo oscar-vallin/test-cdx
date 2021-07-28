@@ -27,7 +27,7 @@ const _DefaultThemePage = () => {
   const Toast = useNotification();
   const { authData } = useAuthContext();
   const { id, orgId } = authData;
-  const ownedInput = { orgSid: orgId, ownerId: id };
+  const ownedInput = { orgSid, ownerId: id };
 
   const [
     useDefaultDashThemeQuery,

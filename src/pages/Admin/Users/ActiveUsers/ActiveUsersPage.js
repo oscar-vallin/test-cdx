@@ -16,6 +16,8 @@ import { CreateUsersPanel } from '../CreateUsers';
 import { useUsersForOrgFpQuery } from '../../../../data/services/graphql';
 import { StyledColumn, RouteLink, StyledButtonAction } from './ActiveUsersPage.styles';
 
+import { useAuthContext } from '../../../../contexts/AuthContext';
+
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
     name,
@@ -39,13 +41,14 @@ const onRenderItemColumn = (item, _index, column) => {
 };
 
 const _ActiveUsersPage = () => {
+  const { orgSid } = useAuthContext();
   const [users, setUsers] = useState([]);
   const columns = generateColumns();
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   const { data, loading } = useUsersForOrgFpQuery({
     variables: {
-      orgSid: 1,
+      orgSid,
       userFilter: { activeFilter: 'ACTIVE' },
     },
   });

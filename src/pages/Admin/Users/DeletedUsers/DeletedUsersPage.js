@@ -12,6 +12,8 @@ import { Separator } from '../../../../components/separators/Separator';
 import { useUsersForOrgFpQuery } from '../../../../data/services/graphql';
 import { StyledColumn } from './DeletedUsersPage.styles';
 
+import { useAuthContext } from '../../../../contexts/AuthContext';
+
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
     name,
@@ -34,12 +36,13 @@ const onRenderItemColumn = (item, _index, column) => {
   return item[column.key] || item['person'][column.key];
 };
 const _DeletedUsersPage = () => {
+  const { orgSid } = useAuthContext();
   const [users, setUsers] = useState([]);
   const columns = generateColumns();
 
   const { data, loading } = useUsersForOrgFpQuery({
     variables: {
-      orgSid: 1,
+      orgSid,
       userFilter: { activeFilter: 'INACTIVE' },
     },
   });
