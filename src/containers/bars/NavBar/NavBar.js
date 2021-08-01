@@ -11,6 +11,7 @@ import { MainMenu } from '../../menus/MainMenu';
 import { useCurrentUserTheme } from '../../../hooks/useCurrentUserTheme';
 import { useThemeContext } from '../../../contexts/ThemeContext';
 import { useAuthContext } from '../../../contexts/AuthContext';
+import { Spacing } from '../../../components/spacings/Spacing';
 import { Spinner } from '../../../components/spinners/Spinner';
 // Hooks
 // import { useNavBar } from "./NavBar.services";
@@ -28,6 +29,7 @@ import {
   // StyledButtonProfile,
   StyledButtonIcon,
   StyledChoiceGroup,
+  StyledButtonOrg
 } from './NavBar.styles';
 import { useUserDomain } from '../../../contexts/hooks/useUserDomain';
 
@@ -76,7 +78,7 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSetti
   return (
     <StyledBox id={id}>
       <StyledRow id={`${id}__Nav`} left>
-        <StyledColumnCont id={`${id}__Col-Left`} sm={9} left container>
+        <StyledColumnCont id={`${id}__Col-Left`} sm={8} left container>
           <StyledRow id={`${id}__Left-Row`} left sm={12}>
             <StyledColumnLogoL id={`${id}__Left-Row__Logo`} sm={2} noPadding>
               <StyledTitle variant="bold">CDX DASHBOARD</StyledTitle>
@@ -91,9 +93,9 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSetti
             </StyledColumnLogoR>
           </StyledRow>
         </StyledColumnCont>
-        <StyledColumnCont id={`${id}__Col-Right`} sm={3} right container>
+        <StyledColumnCont id={`${id}__Col-Right`} sm={4} right container>
           <StyledRow id={`${id}__Right_Row`} right>
-            <DefaultButton
+            <StyledButtonOrg
               text={currentUserOrgNav?.label}
               {...(currentUserOrgNav.subNavItems || []).length > 1 && {
                 menuProps: {
