@@ -6720,6 +6720,31 @@
             "deprecationReason": null
           },
           {
+            "name": "currentOrgNav",
+            "description": "currentOrgInfo(orgInput: OrgSidInput): [Organization]",
+            "args": [
+              {
+                "name": "orgInput",
+                "description": null,
+                "type": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "OrgSidInput",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "WebNav",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "userTheme",
             "description": null,
             "args": [
