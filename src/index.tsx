@@ -9,6 +9,7 @@ import { ApolloContextProvider } from './contexts/ApolloContext.js';
 import { ThemeContextProvider } from './contexts/ThemeContext.js';
 import { AuthContextProvider } from './contexts/AuthContext.js';
 import { NotificationContextProvider } from './contexts/NotificationContext.js';
+import { UserDomainContextProvider } from './contexts/UserDomainContext.js';
 
 initializeIcons();
 
@@ -17,11 +18,13 @@ ReactDOM.render(
     <ApolloContextProvider>
       <ThemeContextProvider>
         <AuthContextProvider>
-          <NotificationContextProvider>
-            <Router>
-              <App />
-            </Router>
-          </NotificationContextProvider>
+          <UserDomainContextProvider>
+            <NotificationContextProvider>
+              <Router>
+                <App />
+              </Router>
+            </NotificationContextProvider>
+          </UserDomainContextProvider>
         </AuthContextProvider>
       </ThemeContextProvider>
     </ApolloContextProvider>

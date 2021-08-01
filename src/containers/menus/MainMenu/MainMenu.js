@@ -11,6 +11,7 @@ import { StyledRow, StyledColumn, StyledMenuButton, StyledButtonIcon } from './M
 import { ROUTES_ARRAY, ROUTES, ROUTES_ID, URL_ROUTES } from '../../../data/constants/RouteConstants';
 import { OutsideComponent } from './OutsideComponent';
 import { useAuthContext } from './../../../contexts/AuthContext';
+import { useUserDomain } from './../../../contexts/hooks/useUserDomain';
 import { getRouteByApiId } from './../../../data/constants/RouteConstants';
 import { useNavigateToNewDomainLazyQuery } from './../../../data/services/graphql';
 import queryString from 'query-string';
@@ -25,57 +26,15 @@ const MainMenu = ({ id = '__MainMenu', option = ROUTES.ROUTE_DASHBOARD.ID, left,
   const [collapse, setCollapse] = React.useState();
   const { authData } = useAuthContext();
 
-  const [domain, setDomain] = useState({
-    navItems: [],
-  });
-
-  const cache = localStorage.getItem('DASHBOARD_NAV');
-
-  const [fetchNav, { data, loading, error }] = useNavigateToNewDomainLazyQuery({
-    variables: {
-      domainNavInput: {
-        orgSid: authData?.orgId,
-        appDomain: 'DASHBOARD',
-        selectedPage: 'DASHBOARD',
-      },
-    },
-  });
-
-  useEffect(() => {
-    if (authData?.orgId) {
-      fetchNav();
-    }
-  }, [authData?.orgId]);
-
-  useEffect(() => {
-    if (cache) {
-      const domain = JSON.parse(cache);
-
-      setDomain(domain);
-
-      return;
-    }
-
-    if (data && !loading) {
-      const { navigateToNewDomain: domain } = data;
-
-      localStorage.setItem('DASHBOARD_NAV', JSON.stringify(domain));
-
-      setDomain(domain);
-
-      return;
-    }
-  }, [data, loading]);
-
   const collapseNavMenu = () => {
     setCollapse(!collapse);
     changeCollapse();
   };
 
   const renderOptions = () => {
-    const { authData } = useAuthContext();
+    const { dashboard } = useUserDomain();
 
-    return domain.navItems.map((menuOption) => {
+    return (dashboard?.navItems || []).map((menuOption) => {
       const page = menuOption?.page;
       const opt = getRouteByApiId(menuOption.label !== 'Admin' ? page?.type : 'ADMIN');
 

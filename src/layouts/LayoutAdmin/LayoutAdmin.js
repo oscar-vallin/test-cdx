@@ -4,13 +4,9 @@ import { StyledBox, StyledNav } from './LayoutAdmin.styles';
 import { LayoutDashboard } from '../LayoutDashboard';
 import { useHistory } from 'react-router-dom';
 import { getRouteByApiId } from '../../data/constants/RouteConstants';
-import { useAuthContext } from '../../contexts/AuthContext';
-
+import { useUserDomain } from '../../contexts/hooks/useUserDomain';
 import { Spinner } from '../../components/spinners/Spinner';
 import { Spacing } from '../../components/spacings/Spacing';
-
-import { useNotification } from '../../contexts/hooks/useNotification';
-import { useNavigateToNewDomainQuery } from '../../data/services/graphql';
 
 const parseLinks = (links = [], sidebarOpt) => {
   return links.map(({ appDomain, label, subNavItems, page }) => ({
@@ -31,54 +27,20 @@ const parseLinks = (links = [], sidebarOpt) => {
       : {}),
   }));
 };
+
 const LayoutAdmin = ({ id = 'LayoutAdmin', menuOptionSelected = 'admin', sidebarOptionSelected = '', children }) => {
   const history = useHistory();
-  const { authData, orgSid } = useAuthContext();
-  const cache = localStorage.getItem('ADMIN_NAV');
+  const { organization, isFetchingOrgNav } = useUserDomain();
 
-  const [domain, setDomain] = useState({});
-
-  const { data, loading, error } = useNavigateToNewDomainQuery({
-    variables: {
-      domainNavInput: {
-        orgSid: authData?.orgId,
-        appDomain: authData?.userType,
-        selectedPage: authData?.selectedPage,
-      },
-    },
-  });
-
-  const redirect = (page, sidebarOpt) => {
-    if (!sidebarOpt) {
-      history.replace(getRouteByApiId(page).URL);
-    }
-  };
-
-  useEffect(() => {
-    if (cache) {
-      const domain = JSON.parse(cache);
-
-      setDomain(domain);
-      redirect(domain.selectedPage, sidebarOptionSelected);
-
-      return;
-    }
-
-    if (data && !loading) {
-      const { navigateToNewDomain: domain } = data;
-
-      localStorage.setItem('ADMIN_NAV', JSON.stringify(domain));
-
-      setDomain(domain);
-      redirect(domain.selectedPage, sidebarOptionSelected);
-
-      return;
-    }
-  }, [data, loading, sidebarOptionSelected]);
+  // const redirect = (page, sidebarOpt) => {
+  //   if (!sidebarOpt) {
+  //     history.replace(getRouteByApiId(page).URL);
+  //   }
+  // };
 
   return (
     <LayoutDashboard id={id} menuOptionSelected={menuOptionSelected} showMenu={false}>
-      {!cache && loading ? (
+      {isFetchingOrgNav ? (
         <Spacing margin={{ top: 'double' }}>
           <Spinner size="lg" label="Loading admin domain" />
         </Spacing>
@@ -86,7 +48,7 @@ const LayoutAdmin = ({ id = 'LayoutAdmin', menuOptionSelected = 'admin', sidebar
         <StyledBox>
           <StyledNav
             selectedKey={sidebarOptionSelected}
-            groups={[{ links: parseLinks(domain.navItems, sidebarOptionSelected) }]}
+            groups={[{ links: parseLinks((organization?.navItems || []), sidebarOptionSelected) }]}
             onLinkClick={(evt, route) => {
               evt.preventDefault();
 
