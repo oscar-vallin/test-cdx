@@ -1006,6 +1006,11 @@ export type QueryCurrentOrgNavArgs = {
   orgInput?: Maybe<OrgSidInput>;
 };
 
+export type QueryCurrentOrgNavArgs = {
+  orgInput?: Maybe<OrgSidInput>;
+};
+
+
 export type QueryUserThemeArgs = {
   themeColorMode?: Maybe<ThemeColorMode>;
 };
@@ -2691,6 +2696,23 @@ export type CurrentOrgNavQuery = { __typename?: 'Query' } & {
       }
   >;
 };
+
+export type CurrentOrgNavQueryVariables = Exact<{
+  orgInput?: Maybe<OrgSidInput>;
+}>;
+
+
+export type CurrentOrgNavQuery = (
+  { __typename?: 'Query' }
+  & { currentOrgNav?: Maybe<(
+    { __typename?: 'WebNav' }
+    & Pick<WebNav, 'label'>
+    & { subNavItems?: Maybe<Array<Maybe<(
+      { __typename?: 'WebNav' }
+      & NavItemFragmentFragment
+    )>>> }
+  )> }
+);
 
 export type UpdateDefaultDashThemeMutationVariables = Exact<{
   updateDefaultDashThemeInput: UpdateDefaultDashThemeInput;
