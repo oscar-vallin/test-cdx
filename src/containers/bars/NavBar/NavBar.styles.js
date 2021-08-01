@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { IconButton } from '@fluentui/react/lib/Button';
+import { DefaultButton, IconButton } from '@fluentui/react/lib/Button';
 import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { Box, Row as LayoutRow, Column as LayoutColumn } from '../../../components/layouts';
 import { ButtonAction } from '../../../components/buttons/ButtonAction';
@@ -134,7 +134,7 @@ export const StyledChoiceGroup = styled(ChoiceGroup)`
       user-select: none;
 
       i {
-        padding: 6px 15px;
+        padding: 6px 10px;
         transform: translateY(2px);
       }
 
@@ -154,6 +154,19 @@ export const StyledChoiceGroup = styled(ChoiceGroup)`
         background: ${({ theme }) => theme.colors.white};
       }
     }
+  }
+`;
+
+export const StyledButtonOrg = styled(DefaultButton)`
+  background: none;
+  border: none;
+  color: ${({ theme }) => theme.colors.white};
+  margin: 0 5px 0 0;
+  transition: all .15s ease-out;
+
+  &:hover {
+    background: none;
+    color: #e4e4e4;
   }
 `;
 
