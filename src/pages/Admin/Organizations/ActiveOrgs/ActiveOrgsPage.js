@@ -69,6 +69,10 @@ const _ActiveOrgsPage = () => {
       setOrgSid(newOrgSid);
       history.push(`${URL_ROUTES.FILE_STATUS}?orgSid=${newOrgSid}`);
     }, 1000);
+
+    storeOrgsId(newOrgSid);
+
+    history.push(URL_ROUTES.FILE_STATUS);
   };
 
   const onRenderItemColumn = (item, index, column) => {
