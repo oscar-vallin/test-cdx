@@ -30,7 +30,7 @@ const parseLinks = (links = [], sidebarOpt) => {
 
 const LayoutAdmin = ({ id = 'LayoutAdmin', menuOptionSelected = 'admin', sidebarOptionSelected = '', children }) => {
   const history = useHistory();
-  const { organization, isFetchingOrgNav } = useUserDomain();
+  const { userDomain: { organization }, isFetchingOrgNav } = useUserDomain();
 
   // const redirect = (page, sidebarOpt) => {
   //   if (!sidebarOpt) {

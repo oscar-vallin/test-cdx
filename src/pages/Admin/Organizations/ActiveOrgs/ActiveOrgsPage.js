@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-
+import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 
+import { URL_ROUTES } from '../../../../data/constants/RouteConstants';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Row, Column } from '../../../../components/layouts';
 import { Spacing } from '../../../../components/spacings/Spacing';
@@ -33,8 +34,8 @@ const generateColumns = () => {
 };
 
 const _ActiveOrgsPage = () => {
+  const history = useHistory();
   const { orgSid, storeOrgsId } = useAuthContext();
-
   const [orgs, setOrgs] = useState([]);
   const columns = generateColumns();
 
@@ -58,6 +59,8 @@ const _ActiveOrgsPage = () => {
     });
 
     storeOrgsId(newOrgSid);
+
+    history.push(URL_ROUTES.FILE_STATUS);
   };
 
   const onRenderItemColumn = (item, index, column) => {

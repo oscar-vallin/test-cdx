@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { FontIcon } from '@fluentui/react/lib/Icon';
+import { DefaultButton } from '@fluentui/react/lib/Button';
+
 import { ProfileMenu } from '../../menus/ProfileMenu';
 
 // Components
@@ -27,13 +29,15 @@ import {
   StyledButtonIcon,
   StyledChoiceGroup,
 } from './NavBar.styles';
+import { useUserDomain } from '../../../contexts/hooks/useUserDomain';
 
 // CardSection is called directly cause a restriction warning for that component.
 const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSettings, visible, ...props }) => {
+  const { currentUserOrgNav } = useUserDomain();
   const [collapse, setCollapse] = React.useState('false');
   const { userTheme, setOwnDashFontSize, isHandlingFontSize } = useCurrentUserTheme();
   const { setFontSize } = useThemeContext();
-  const { isAuthenticated } = useAuthContext();
+  const { storeOrgsId } = useAuthContext();
   const [themeFontSize, setThemeFontSize] = useState(userTheme?.themeFontSize || undefined);
 
   const changeCollapse = () => {
@@ -87,6 +91,23 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSetti
         </StyledColumnCont>
         <StyledColumnCont id={`${id}__Col-Right`} sm={3} right container>
           <StyledRow id={`${id}__Right_Row`} right>
+            <DefaultButton
+              text={currentUserOrgNav?.label}
+              {...(currentUserOrgNav.subNavItems || []).length > 1 && {
+                menuProps: {
+                  items: (currentUserOrgNav.subNavItems || []).length <= 1
+                    ? []
+                    : (currentUserOrgNav?.subNavItems || []).map((item, index) => (
+                      {
+                        key: index,
+                        text: item.label,
+                        onClick: () => storeOrgsId(item.page.parameters.orgSid)
+                      }
+                    ))
+                }
+              }}
+            />
+
             <StyledChoiceGroup
               selectedKey={themeFontSize}
               options={settingsMenu.map(({ key, label, iconProps }, index) => ({

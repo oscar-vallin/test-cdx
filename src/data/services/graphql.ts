@@ -908,6 +908,8 @@ export type Query = {
   dashboardPeriods?: Maybe<DashboardPeriods>;
   changeOwnPasswordPage?: Maybe<PasswordPage>;
   currentUser?: Maybe<CurrentUserInfo>;
+  /** currentOrgInfo(orgInput: OrgSidInput): [Organization] */
+  currentOrgNav?: Maybe<WebNav>;
   userTheme?: Maybe<DashTheme>;
   logOut?: Maybe<LogOutInfo>;
   amPolicyPage?: Maybe<AmPolicyPage>;
@@ -985,6 +987,11 @@ export type QueryWorkPacketStatusesArgs = {
 
 export type QueryDashboardPeriodsArgs = {
   orgSid: Scalars['ID'];
+};
+
+
+export type QueryCurrentOrgNavArgs = {
+  orgInput?: Maybe<OrgSidInput>;
 };
 
 
@@ -2517,6 +2524,23 @@ export type DefaultDashThemeForSiteQuery = (
       { __typename?: 'DashThemeColor' }
       & Pick<DashThemeColor, 'id' | 'paletteNm' | 'allowDark' | 'themePrimary' | 'neutralPrimary' | 'white'>
     )> }
+  )> }
+);
+
+export type CurrentOrgNavQueryVariables = Exact<{
+  orgInput?: Maybe<OrgSidInput>;
+}>;
+
+
+export type CurrentOrgNavQuery = (
+  { __typename?: 'Query' }
+  & { currentOrgNav?: Maybe<(
+    { __typename?: 'WebNav' }
+    & Pick<WebNav, 'label'>
+    & { subNavItems?: Maybe<Array<Maybe<(
+      { __typename?: 'WebNav' }
+      & NavItemFragmentFragment
+    )>>> }
   )> }
 );
 
@@ -5102,6 +5126,42 @@ export function useDefaultDashThemeForSiteLazyQuery(baseOptions?: Apollo.LazyQue
 export type DefaultDashThemeForSiteQueryHookResult = ReturnType<typeof useDefaultDashThemeForSiteQuery>;
 export type DefaultDashThemeForSiteLazyQueryHookResult = ReturnType<typeof useDefaultDashThemeForSiteLazyQuery>;
 export type DefaultDashThemeForSiteQueryResult = Apollo.QueryResult<DefaultDashThemeForSiteQuery, DefaultDashThemeForSiteQueryVariables>;
+export const CurrentOrgNavDocument = gql`
+    query CurrentOrgNav($orgInput: OrgSidInput) {
+  currentOrgNav(orgInput: $orgInput) {
+    label
+    subNavItems {
+      ...navItemFragment
+    }
+  }
+}
+    ${NavItemFragmentFragmentDoc}`;
+
+/**
+ * __useCurrentOrgNavQuery__
+ *
+ * To run a query within a React component, call `useCurrentOrgNavQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCurrentOrgNavQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCurrentOrgNavQuery({
+ *   variables: {
+ *      orgInput: // value for 'orgInput'
+ *   },
+ * });
+ */
+export function useCurrentOrgNavQuery(baseOptions?: Apollo.QueryHookOptions<CurrentOrgNavQuery, CurrentOrgNavQueryVariables>) {
+        return Apollo.useQuery<CurrentOrgNavQuery, CurrentOrgNavQueryVariables>(CurrentOrgNavDocument, baseOptions);
+      }
+export function useCurrentOrgNavLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CurrentOrgNavQuery, CurrentOrgNavQueryVariables>) {
+          return Apollo.useLazyQuery<CurrentOrgNavQuery, CurrentOrgNavQueryVariables>(CurrentOrgNavDocument, baseOptions);
+        }
+export type CurrentOrgNavQueryHookResult = ReturnType<typeof useCurrentOrgNavQuery>;
+export type CurrentOrgNavLazyQueryHookResult = ReturnType<typeof useCurrentOrgNavLazyQuery>;
+export type CurrentOrgNavQueryResult = Apollo.QueryResult<CurrentOrgNavQuery, CurrentOrgNavQueryVariables>;
 export const UpdateDefaultDashThemeDocument = gql`
     mutation UpdateDefaultDashTheme($updateDefaultDashThemeInput: UpdateDefaultDashThemeInput!) {
   updateDefaultDashTheme(

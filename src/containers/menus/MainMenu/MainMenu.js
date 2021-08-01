@@ -13,7 +13,6 @@ import { OutsideComponent } from './OutsideComponent';
 import { useAuthContext } from './../../../contexts/AuthContext';
 import { useUserDomain } from './../../../contexts/hooks/useUserDomain';
 import { getRouteByApiId } from './../../../data/constants/RouteConstants';
-import { useNavigateToNewDomainLazyQuery } from './../../../data/services/graphql';
 import queryString from 'query-string';
 
 // CardSection is called directly cause a restriction warning for that component.
@@ -32,7 +31,7 @@ const MainMenu = ({ id = '__MainMenu', option = ROUTES.ROUTE_DASHBOARD.ID, left,
   };
 
   const renderOptions = () => {
-    const { dashboard } = useUserDomain();
+    const { userDomain: { dashboard }} = useUserDomain();
 
     return (dashboard?.navItems || []).map((menuOption) => {
       const page = menuOption?.page;
