@@ -13,6 +13,7 @@ import { Text } from '../../../../components/typography/Text';
 import { Separator } from '../../../../components/separators/Separator';
 
 import { useAuthContext } from '../../../../contexts/AuthContext';
+import { useNotification } from '../../../../contexts/hooks/useNotification';
 import { useDirectOrganizationsFQuery, useDirectOrganizationsFLazyQuery } from '../../../../data/services/graphql';
 import { StyledColumn } from './ActiveOrgsPage.styles';
 
@@ -34,6 +35,7 @@ const generateColumns = () => {
 };
 
 const _ActiveOrgsPage = () => {
+  const Toast = useNotification();
   const history = useHistory();
   const { orgSid, storeOrgsId } = useAuthContext();
   const [orgs, setOrgs] = useState([]);
@@ -50,24 +52,28 @@ const _ActiveOrgsPage = () => {
     });
   }, [orgSid]);
 
-  const changeActiveOrg = (newOrgSid) => {
-    directOrganizationsFQuery({
-      variables: {
-        orgSid: newOrgSid,
-        orgFilter: { activeFilter: 'ACTIVE' },
-      },
-    });
+  const changeActiveOrg = (newOrgSid, orgName) => {
+    Toast.info({ text: `Loading ${orgName} domain`, duration: 3000 });
 
-    storeOrgsId(newOrgSid);
+    setTimeout(() => {
+      directOrganizationsFQuery({
+        variables: {
+          orgSid: newOrgSid,
+          orgFilter: { activeFilter: 'ACTIVE' },
+        },
+      });
 
-    history.push(URL_ROUTES.FILE_STATUS);
+      storeOrgsId(newOrgSid);
+
+      history.push(URL_ROUTES.FILE_STATUS);
+    }, 1000);
   };
 
   const onRenderItemColumn = (item, index, column) => {
     switch (column.key) {
       case 'name':
         return (
-          <Link to={'#'} onClick={() => changeActiveOrg(item.id)}>
+          <Link to={'#'} onClick={() => changeActiveOrg(item.id, item.name)}>
             {item[column.key]}
           </Link>
         );

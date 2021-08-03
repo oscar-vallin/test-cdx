@@ -104,7 +104,7 @@ export const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     if (error) {
       setToken(null);
-      isAuthenticated(false);
+      setAuthenticated(false);
       setErrorMessage('Wrong User/Password');
 
       return;

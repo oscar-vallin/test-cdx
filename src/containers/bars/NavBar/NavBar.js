@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { FontIcon } from '@fluentui/react/lib/Icon';
-import { DefaultButton } from '@fluentui/react/lib/Button';
+import { ContextualMenuItemType } from '@fluentui/react/lib/ContextualMenu';
 
 import { ProfileMenu } from '../../menus/ProfileMenu';
 
@@ -11,6 +11,7 @@ import { MainMenu } from '../../menus/MainMenu';
 import { useCurrentUserTheme } from '../../../hooks/useCurrentUserTheme';
 import { useThemeContext } from '../../../contexts/ThemeContext';
 import { useAuthContext } from '../../../contexts/AuthContext';
+import { useNotification } from '../../../contexts/hooks/useNotification';
 import { Spacing } from '../../../components/spacings/Spacing';
 import { Spinner } from '../../../components/spinners/Spinner';
 // Hooks
@@ -29,17 +30,18 @@ import {
   // StyledButtonProfile,
   StyledButtonIcon,
   StyledChoiceGroup,
-  StyledButtonOrg
+  StyledButtonOrg,
 } from './NavBar.styles';
 import { useUserDomain } from '../../../contexts/hooks/useUserDomain';
 
 // CardSection is called directly cause a restriction warning for that component.
 const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSettings, visible, ...props }) => {
+  const Toast = useNotification();
   const { currentUserOrgNav } = useUserDomain();
   const [collapse, setCollapse] = React.useState('false');
   const { userTheme, setOwnDashFontSize, isHandlingFontSize } = useCurrentUserTheme();
   const { setFontSize } = useThemeContext();
-  const { storeOrgsId } = useAuthContext();
+  const { storeOrgsId, authData } = useAuthContext();
   const [themeFontSize, setThemeFontSize] = useState(userTheme?.themeFontSize || undefined);
 
   const changeCollapse = () => {
@@ -97,19 +99,35 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSetti
           <StyledRow id={`${id}__Right_Row`} right>
             <StyledButtonOrg
               text={currentUserOrgNav?.label}
-              {...(currentUserOrgNav.subNavItems || []).length > 1 && {
+              {...((currentUserOrgNav.subNavItems || []).length > 1 && {
                 menuProps: {
-                  items: (currentUserOrgNav.subNavItems || []).length <= 1
-                    ? []
-                    : (currentUserOrgNav?.subNavItems || []).map((item, index) => (
-                      {
-                        key: index,
-                        text: item.label,
-                        onClick: () => storeOrgsId(item.page.parameters.orgSid)
-                      }
-                    ))
-                }
-              }}
+                  items:
+                    (currentUserOrgNav.subNavItems || []).length <= 1
+                      ? []
+                      : (currentUserOrgNav?.subNavItems || [])
+                          .map((item, index) => ({
+                            key: index,
+                            text: item.label,
+                            onClick: () => {
+                              Toast.info({ text: `Loading ${item.label} domain`, duration: 3000 });
+
+                              setTimeout(() => storeOrgsId(item.page.parameters.orgSid), 1500);
+                            },
+                          }))
+                          .concat([
+                            { key: 'DIVIDER', itemType: ContextualMenuItemType.Divider },
+                            {
+                              key: 'MAIN_ORG',
+                              text: 'Return to my organization',
+                              onClick: () => {
+                                Toast.info({ text: `Loading your organization's domain`, duration: 3000 });
+
+                                setTimeout(() => storeOrgsId(authData.orgId), 1500);
+                              },
+                            },
+                          ]),
+                },
+              })}
             />
 
             <StyledChoiceGroup

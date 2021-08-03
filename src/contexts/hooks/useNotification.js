@@ -4,10 +4,10 @@ import { NotificationContext } from '../NotificationContext';
 export const useNotification = () => {
   const { dispatch } = useContext(NotificationContext);
 
-  const notify = (type) => ({ text }) =>
+  const notify = (type) => ({ text, duration = 5000 }) =>
     dispatch({
       type: 'TOAST_SHOW',
-      payload: { type, text },
+      payload: { type, text, duration },
     });
 
   return {

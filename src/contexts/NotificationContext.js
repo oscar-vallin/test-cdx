@@ -7,6 +7,7 @@ const INITIAL_STATE = {
   type: 'info',
   text: '',
   visible: false,
+  duration: 5000,
 };
 
 const reducer = (state, { type, payload }) => {
@@ -25,7 +26,7 @@ export const NotificationContextProvider = ({ children }) => {
 
   useEffect(() => {
     if (state.visible) {
-      setTimeout(() => dispatch({ type: 'TOAST_HIDE' }), 6000);
+      setTimeout(() => dispatch({ type: 'TOAST_HIDE' }), state.duration);
     }
   }, [state]);
 
