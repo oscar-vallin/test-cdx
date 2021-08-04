@@ -58,6 +58,7 @@ export const ApolloContextProvider = ({ children }) => {
     link: afterwareLink.concat(authLink.concat(httpLink)),
     // cache: new InMemoryCache({ possibleTypes: introspection.possibleTypes }),
     cache: new InMemoryCache(),
+    credentials: 'include',
     defaultOptions: {
       watchQuery: {
         fetchPolicy: 'no-cache',
