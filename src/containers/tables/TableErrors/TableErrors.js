@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Table } from '../../../components/tables/Table';
 
@@ -11,17 +11,19 @@ import { InputDateRange } from '../../../components/inputs/InputDateRange';
 import { TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { useTableFilters } from '../../../hooks/useTableFilters';
 import { useTableTemplate } from '../../../hooks/useTableTemplate';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
+import queryString from 'query-string';
 
 import { useAuthContext } from '../../../contexts/AuthContext';
 
 const TableErrors = ({ idPage = 'TableErrors', _orgSid = 1, onItemsListChange = () => {} }) => {
-  const { orgSid } = useAuthContext();
+  // const { orgSid } = useAuthContext();
+  const location = useLocation();
+  const [urlParams, _setUrlParams] = useState(queryString.parse(location.search));
   const { localInput, startDate, endDate } = useTableFilters('Extract Name,  Status, Vendor, etc.', useParams());
-
   const { tableProps } = useTableTemplate(
     TABLE_NAMES.ERRORS,
-    orgSid,
+    urlParams?.orgSid,
     { rangeStart: startDate.value, rangeEnd: endDate.value },
     localInput.value,
     '',
