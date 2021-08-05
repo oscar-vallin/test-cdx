@@ -47,7 +47,7 @@ const _ActiveOrgsPage = () => {
   useEffect(() => {
     directOrganizationsFQuery({
       variables: {
-        orgSid: orgSid,
+        orgSid,
         orgFilter: { activeFilter: 'ACTIVE' },
       },
     });

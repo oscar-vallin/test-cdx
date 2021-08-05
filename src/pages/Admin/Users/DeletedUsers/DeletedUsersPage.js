@@ -9,10 +9,11 @@ import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { Text } from '../../../../components/typography/Text';
 import { MarqueeSelection } from '@fluentui/react/lib/MarqueeSelection';
 import { Separator } from '../../../../components/separators/Separator';
-import { Button } from '../../../../components/buttons/Button';
-import { useUsersForOrgFpLazyQuery, useDeactivateUsersMutation } from '../../../../data/services/graphql';
+
+import { useUsersForOrgFpLazyQuery } from '../../../../data/services/graphql';
 import { StyledColumn } from './DeletedUsersPage.styles';
 
+// import { useAuthContext } from '../../../../contexts/AuthContext';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
 
 const generateColumns = () => {
@@ -44,27 +45,6 @@ const _DeletedUsersPage = () => {
   const columns = generateColumns();
 
   const [useUsersForOrgFpLazy, { data, loading }] = useUsersForOrgFpLazyQuery();
-
-  const [
-    enableUser,
-    { data: enableResponse, loading: isEnablingUser, error: EnableUserError },
-  ] = useDeactivateUsersMutation();
-
-  const selection = useMemo(
-    () =>
-      new Selection({
-        onSelectionChanged: () => {
-          setSelectedItems(selection.getSelection());
-        },
-        selectionMode: SelectionMode.multiple,
-      }),
-    []
-  );
-
-  const hideConfirmation = () => {
-    setIsConfirmationHidden(true);
-    setSelectedItems([]);
-  };
 
   useEffect(() => {
     useUsersForOrgFpLazy({
