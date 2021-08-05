@@ -21,6 +21,7 @@ import { defaultTheme } from '../../../../styles/themes';
 
 import Theming from './../../../../utils/Theming';
 import { useNotification } from '../../../../contexts/hooks/useNotification';
+import { useOrgSid } from '../../../../hooks/useOrgSid';
 
 const getThemeVariant = ({ themePrimary, neutralPrimary, white }) => ({
   ...Theming.generate.primary(themePrimary),
@@ -68,7 +69,7 @@ const _ColorPalettesPage = () => {
     if (palettesUpdated) {
       fetchColorPalettes();
 
-      Toast.success({ text: 'Palette saved successfully'});
+      Toast.success({ text: 'Palette saved successfully' });
     }
   }, [palettesUpdated]);
 

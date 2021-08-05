@@ -10,7 +10,8 @@ import { Spinner } from '../../components/spinners/Spinner';
 import { Spacing } from '../../components/spacings/Spacing';
 
 import { useNotification } from '../../contexts/hooks/useNotification';
-import { useNavigateToNewDomainQuery } from '../../data/services/graphql';
+import { useNavigateToNewDomainLazyQuery } from '../../data/services/graphql';
+import { useOrgSid } from '../../hooks/useOrgSid';
 
 const parseLinks = (links = [], sidebarOpt) => {
   return links.map(({ appDomain, label, subNavItems, page }) => ({
@@ -32,21 +33,26 @@ const parseLinks = (links = [], sidebarOpt) => {
   }));
 };
 const LayoutAdmin = ({ id = 'LayoutAdmin', menuOptionSelected = 'admin', sidebarOptionSelected = '', children }) => {
+  const { orgSid } = useOrgSid();
   const history = useHistory();
-  const { authData, orgSid } = useAuthContext();
+  const { authData } = useAuthContext();
   const cache = localStorage.getItem('ADMIN_NAV');
 
   const [domain, setDomain] = useState({});
 
-  const { data, loading, error } = useNavigateToNewDomainQuery({
-    variables: {
-      domainNavInput: {
-        orgSid: authData?.orgId,
-        appDomain: authData?.userType,
-        selectedPage: authData?.selectedPage,
+  const [useNavigateToNewDomainLazy, { data, loading, error }] = useNavigateToNewDomainLazyQuery();
+
+  useEffect(() => {
+    useNavigateToNewDomainLazy({
+      variables: {
+        domainNavInput: {
+          orgSid,
+          appDomain: authData?.userType,
+          selectedPage: authData?.selectedPage,
+        },
       },
-    },
-  });
+    });
+  }, [orgSid]);
 
   const redirect = (page, sidebarOpt) => {
     if (!sidebarOpt) {
@@ -91,7 +97,7 @@ const LayoutAdmin = ({ id = 'LayoutAdmin', menuOptionSelected = 'admin', sidebar
               evt.preventDefault();
 
               if (!route.links) {
-                history.push(route.url);
+                history.push(`${route.url}?orgSid=${orgSid}`);
               }
             }}
           />

@@ -11,9 +11,11 @@ import { InputText } from '../../../../components/inputs/InputText';
 import { useCreateUserMutation } from '../../../../data/services/graphql';
 
 import { useAuthContext } from '../../../../contexts/AuthContext';
+import { useOrgSid } from '../../../../hooks/useOrgSid';
 
 const CreateUsersPanel = ({ isOpen, onDismiss, onCreateUser, selectedPolicyId }) => {
-  const { orgSid } = useAuthContext();
+  // const { orgSid } = useAuthContext();
+  const { orgSid } = useOrgSid();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');

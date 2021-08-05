@@ -16,6 +16,7 @@ import { StyledDiv, StyledTitle, StyledChoiceGroup } from './../UserSettingsPage
 import { defaultTheme, darkTheme } from '../../../styles/themes';
 import { useCurrentUserTheme } from '../../../hooks/useCurrentUserTheme';
 import { useNotification } from '../../../contexts/hooks/useNotification';
+import { useOrgSid } from '../../../hooks/useOrgSid';
 
 const INITIAL_THEME = {
   data: null,
@@ -27,7 +28,7 @@ const INITIAL_THEME = {
 
 const ThemeSettings = ({ userTheme = { ...INITIAL_THEME } }) => {
   const [useUserThemeQuery, { data: theme, loading: isLoadingTheme }] = useUserThemeLazyQuery();
-  
+
   useEffect(() => {
     useUserThemeQuery({ variables: { themeColorMode: null } });
   }, []);
@@ -49,10 +50,11 @@ const ThemeSettings = ({ userTheme = { ...INITIAL_THEME } }) => {
       ...defaultTheme,
     },
   ]);
+  const { orgSid } = useOrgSid();
 
   useEffect(() => {
     if (themeResponse) {
-      Toast.success({ text: 'Theme saved successfully'});
+      Toast.success({ text: 'Theme saved successfully' });
     }
   }, [themeResponse]);
   // const [selectedPaletteId, setSelectedPaletteId] = useState(null);
@@ -62,7 +64,7 @@ const ThemeSettings = ({ userTheme = { ...INITIAL_THEME } }) => {
   const [selectedPaletteId, setSelectedPaletteId] = useState();
   const [themeColorMode, setThemeColorMode] = useState();
 
-  useEffect(fetchColorPalettes, []);
+  useEffect(fetchColorPalettes, [orgSid]);
   useEffect(() => {
     if (theme?.userTheme) {
       changeTheme(Theming.getVariant(theme?.userTheme?.dashThemeColor));
@@ -80,7 +82,7 @@ const ThemeSettings = ({ userTheme = { ...INITIAL_THEME } }) => {
       setPalettes(Array.from(new Set([...palettes, ...colorPalettes])));
       setSelectedPaletteId(selectedPalette);
     }
-  }, [colorPalettes, isLoadingPalettes, theme]);
+  }, [colorPalettes, isLoadingPalettes, theme, orgSid]);
 
   useEffect(() => {
     const palette = palettes.find(({ id }) => id === selectedPaletteId) || {};

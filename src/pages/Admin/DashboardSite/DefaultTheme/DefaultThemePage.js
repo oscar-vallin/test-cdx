@@ -22,9 +22,11 @@ import {
   useDefaultDashThemeForSiteLazyQuery,
 } from './../../../../data/services/graphql';
 import { useNotification } from '../../../../contexts/hooks/useNotification';
+import { useOrgSid } from '../../../../hooks/useOrgSid';
 
 const _DefaultThemePage = () => {
   const Toast = useNotification();
+  const { orgSid } = useOrgSid();
   const { authData } = useAuthContext();
   const { id, orgId } = authData;
   const ownedInput = { orgSid, ownerId: id };
@@ -57,14 +59,19 @@ const _DefaultThemePage = () => {
   const [selectedPaletteId, setSelectedPaletteId] = useState(null);
   const [themeColorMode, setThemeColorMode] = useState(null);
 
-  const [createDefaultDashThemeMutation, { data: themeCreated, loading: isCreatingTheme }] = useCreateDefaultDashThemeMutation();
+  const [
+    createDefaultDashThemeMutation,
+    { data: themeCreated, loading: isCreatingTheme },
+  ] = useCreateDefaultDashThemeMutation();
 
-  const [updateDefaultDashThemeMutation, { data: themeUpdated, loading: isUpdatingTheme }] = useUpdateDefaultDashThemeMutation();
-
+  const [
+    updateDefaultDashThemeMutation,
+    { data: themeUpdated, loading: isUpdatingTheme },
+  ] = useUpdateDefaultDashThemeMutation();
 
   useEffect(() => {
     if (themeCreated || themeUpdated) {
-      Toast.success({ text: 'Default theme saved successfully'});
+      Toast.success({ text: 'Default theme saved successfully' });
     }
   }, [themeCreated, themeUpdated]);
 

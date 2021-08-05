@@ -7,9 +7,11 @@ import {
   useRemoveDashThemeColorMutation,
   useDashThemeColorForOrgLazyQuery,
 } from '../data/services/graphql';
+import { useOrgSid } from './useOrgSid';
 
 export const useColorPalettes = () => {
-  const { authData, orgSid } = useAuthContext();
+  const { authData } = useAuthContext();
+  const { orgSid } = useOrgSid();
   const { id, orgId } = authData;
   const ownedInput = { orgSid, ownerId: id };
 
@@ -47,15 +49,17 @@ export const useColorPalettes = () => {
   }, [createdPalette, updatedPalette, removedPalette, isProcessingPalettes]);
 
   const fetchColorPalettes = () => {
-    getDashThemeColorForOrg({
-      variables: {
-        ownedInput,
-        pageableInput: {
-          pageNumber: 0,
-          pageSize: 100,
+    if (orgSid) {
+      getDashThemeColorForOrg({
+        variables: {
+          ownedInput,
+          pageableInput: {
+            pageNumber: 0,
+            pageSize: 100,
+          },
         },
-      },
-    });
+      });
+    }
   };
 
   const createColorPalette = (params) => {
