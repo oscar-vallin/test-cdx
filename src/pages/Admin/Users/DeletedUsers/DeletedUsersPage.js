@@ -9,10 +9,11 @@ import { MessageBar } from 'office-ui-fabric-react';
 import { Text } from '../../../../components/typography/Text';
 import { Separator } from '../../../../components/separators/Separator';
 
-import { useUsersForOrgFpQuery } from '../../../../data/services/graphql';
+import { useUsersForOrgFpLazyQuery } from '../../../../data/services/graphql';
 import { StyledColumn } from './DeletedUsersPage.styles';
 
-import { useAuthContext } from '../../../../contexts/AuthContext';
+// import { useAuthContext } from '../../../../contexts/AuthContext';
+import { useOrgSid } from '../../../../hooks/useOrgSid';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -35,17 +36,22 @@ const generateColumns = () => {
 const onRenderItemColumn = (node, _index, column) => {
   return node.item[column.key] || node.item['person'][column.key];
 };
+
 const _DeletedUsersPage = () => {
-  const { orgSid } = useAuthContext();
+  const { orgSid } = useOrgSid();
   const [users, setUsers] = useState([]);
   const columns = generateColumns();
 
-  const { data, loading } = useUsersForOrgFpQuery({
-    variables: {
-      orgSid,
-      userFilter: { activeFilter: 'INACTIVE' },
-    },
-  });
+  const [useUsersForOrgFpLazy, { data, loading }] = useUsersForOrgFpLazyQuery();
+
+  useEffect(() => {
+    useUsersForOrgFpLazy({
+      variables: {
+        orgSid,
+        userFilter: { activeFilter: 'INACTIVE' },
+      },
+    });
+  }, [orgSid]);
 
   useEffect(() => {
     if (!loading && data) {

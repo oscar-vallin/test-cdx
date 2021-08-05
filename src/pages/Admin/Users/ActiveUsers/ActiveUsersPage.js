@@ -13,10 +13,10 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { CreateUsersPanel } from '../CreateUsers';
 
-import { useUsersForOrgFpQuery } from '../../../../data/services/graphql';
-import { StyledColumn, RouteLink, StyledCommandButton } from './ActiveUsersPage.styles';
+import { useUsersForOrgFpLazyQuery } from '../../../../data/services/graphql';
+import { StyledColumn, RouteLink, StyledButtonAction } from './ActiveUsersPage.styles';
 
-import { useAuthContext } from '../../../../contexts/AuthContext';
+import { useOrgSid } from '../../../../hooks/useOrgSid';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -37,22 +37,23 @@ const generateColumns = () => {
 };
 
 const _ActiveUsersPage = () => {
-  const { orgSid } = useAuthContext();
+  const { orgSid } = useOrgSid();
   const [users, setUsers] = useState([]);
   const columns = generateColumns();
   const [isPanelOpen, setIsPanelOpen] = useState(false);
-  const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);
-  const [selectedUserId, setSelectedUserId] = useState(0);
-  // const [
-  //   disableUser,
-  //   { data: disableResponse, loading: isDisablingUser, error: DisableUserError },
-  // ] = useDeactivateUsersMutation();
-  const { data, loading } = useUsersForOrgFpQuery({
-    variables: {
-      orgSid,
-      userFilter: { activeFilter: 'ACTIVE' },
-    },
-  });
+
+  const [useUsersForOrgFpLazy, { data, loading }] = useUsersForOrgFpLazyQuery();
+
+  // const { data, loading } = useUsersForOrgFpQuery();
+
+  useEffect(() => {
+    useUsersForOrgFpLazy({
+      variables: {
+        orgSid,
+        userFilter: { activeFilter: 'ACTIVE' },
+      },
+    });
+  }, [orgSid]);
 
   const onRenderItemColumn = (node, _index, column) => {
     if (column.key == 'actions') {

@@ -11,11 +11,9 @@ import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { MessageBar } from 'office-ui-fabric-react';
 import { Text } from '../../../../components/typography/Text';
 import { Separator } from '../../../../components/separators/Separator';
-
-import { useAuthContext } from '../../../../contexts/AuthContext';
-import { useNotification } from '../../../../contexts/hooks/useNotification';
 import { useDirectOrganizationsFQuery, useDirectOrganizationsFLazyQuery } from '../../../../data/services/graphql';
 import { StyledColumn } from './ActiveOrgsPage.styles';
+import { useOrgSid } from '../../../../hooks/useOrgSid';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -37,7 +35,9 @@ const generateColumns = () => {
 const _ActiveOrgsPage = () => {
   const Toast = useNotification();
   const history = useHistory();
-  const { orgSid, storeOrgsId } = useAuthContext();
+  const { storeOrgsId } = useAuthContext();
+  const { orgSid } = useOrgSid();
+
   const [orgs, setOrgs] = useState([]);
   const columns = generateColumns();
 
@@ -46,7 +46,7 @@ const _ActiveOrgsPage = () => {
   useEffect(() => {
     directOrganizationsFQuery({
       variables: {
-        orgSid: orgSid,
+        orgSid,
         orgFilter: { activeFilter: 'ACTIVE' },
       },
     });

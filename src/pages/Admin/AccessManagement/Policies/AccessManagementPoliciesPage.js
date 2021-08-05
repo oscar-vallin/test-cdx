@@ -18,6 +18,7 @@ import { useAuthContext } from '../../../../contexts/AuthContext';
 import { useAmPoliciesForOrgPLazyQuery, useRemoveAmPolicyMutation } from '../../../../data/services/graphql';
 
 import { StyledColumn, StyledCommandButton } from './AccessManagementPoliciesPage.styles';
+import { useOrgSid } from '../../../../hooks/useOrgSid';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -37,8 +38,9 @@ const generateColumns = () => {
 };
 
 const _AccessManagementPoliciesPage = () => {
+  const { orgSid } = useOrgSid();
   const columns = generateColumns();
-  const { authData, orgSid } = useAuthContext();
+  // const { authData, orgSid } = useAuthContext();
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);
@@ -88,7 +90,7 @@ const _AccessManagementPoliciesPage = () => {
         orgSid,
       },
     });
-  }, []);
+  }, [orgSid]);
 
   useEffect(() => {
     if (!isRemovingPolicy && removeResponse) {
