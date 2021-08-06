@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useCurrentUserLazyQuery } from '../../data/services/graphql';
-import { useAuthContext } from '../AuthContext';
+import { useAuthContext } from '../../contexts/AuthContext';
+import { useHistory } from 'react-router-dom';
 
 export const useCurrentUser = (_username, _password) => {
   const [isProcessing, setProcessing] = useState(false);
@@ -8,26 +9,21 @@ export const useCurrentUser = (_username, _password) => {
   const [currentUserData, setCurrentUserData] = useState({});
   const [isCurrentUserLogged, setLoggedIn] = useState(false);
   const { authLogout } = useAuthContext();
+  const history = useHistory();
   //
   const [_apiCall, { data, loading, error }] = useCurrentUserLazyQuery({
     variables: {},
   });
-
-  useEffect(() => {
-    if (error) {
-      console.log('We have an error');
-      authLogout('Session Expired');
-      history.push('/');
-    }
-    console.log('I am the diestro');
-  }, [error]);
 
   //*
   useEffect(() => {
     if (!data) return;
 
     const _isLoggedIn = data.currentUser.loggedIn;
-    if (_isLoggedIn === false) {
+    if (!_isLoggedIn) {
+      console.log('is it here when session expired ?');
+      // authLogout('Session Expired');
+      // history.push('/');
       if (localStorage.getItem('LOGIN') != null) {
         localStorage.removeItem('LOGIN');
       }
