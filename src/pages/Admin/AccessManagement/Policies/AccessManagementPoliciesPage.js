@@ -14,7 +14,6 @@ import { Text } from '../../../../components/typography/Text';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { CreatePoliciesPanel } from './CreatePolicy';
 
-import { useAuthContext } from '../../../../contexts/AuthContext';
 import { useAmPoliciesForOrgPLazyQuery, useRemoveAmPolicyMutation } from '../../../../data/services/graphql';
 
 import { StyledColumn, StyledCommandButton } from './AccessManagementPoliciesPage.styles';

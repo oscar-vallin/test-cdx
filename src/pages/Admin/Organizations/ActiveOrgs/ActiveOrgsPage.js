@@ -13,6 +13,7 @@ import { Separator } from '../../../../components/separators/Separator';
 import { useDirectOrganizationsFQuery, useDirectOrganizationsFLazyQuery } from '../../../../data/services/graphql';
 import { StyledColumn } from './ActiveOrgsPage.styles';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
+import { useHistory } from 'react-router-dom';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -33,8 +34,7 @@ const generateColumns = () => {
 
 const _ActiveOrgsPage = () => {
   // const { orgSid, storeOrgsId } = useAuthContext();
-  const { orgSid } = useOrgSid();
-
+  const { orgSid, setOrgSid, setUrlParams } = useOrgSid();
   const [orgs, setOrgs] = useState([]);
   const columns = generateColumns();
 
@@ -50,21 +50,15 @@ const _ActiveOrgsPage = () => {
   }, [orgSid]);
 
   const changeActiveOrg = (newOrgSid) => {
-    directOrganizationsFQuery({
-      variables: {
-        orgSid: newOrgSid,
-        orgFilter: { activeFilter: 'ACTIVE' },
-      },
-    });
-
-    storeOrgsId(newOrgSid);
+    setUrlParams({ orgSid: newOrgSid });
+    setOrgSid(newOrgSid);
   };
 
   const onRenderItemColumn = (item, index, column) => {
     switch (column.key) {
       case 'name':
         return (
-          <Link to={'#'} onClick={() => changeActiveOrg(item.id)}>
+          <Link to={`active-orgs?orgSid=${item.id}`} onClick={() => changeActiveOrg(item.id)}>
             {item[column.key]}
           </Link>
         );
