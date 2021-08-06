@@ -37,7 +37,7 @@ const _ActiveOrgsPage = () => {
   const { orgSid, setOrgSid, setUrlParams } = useOrgSid();
   const [orgs, setOrgs] = useState([]);
   const columns = generateColumns();
-
+  const history = useHistory();
   const [directOrganizationsFQuery, { data, loading }] = useDirectOrganizationsFLazyQuery();
 
   useEffect(() => {
@@ -50,15 +50,14 @@ const _ActiveOrgsPage = () => {
   }, [orgSid]);
 
   const changeActiveOrg = (newOrgSid) => {
-    setUrlParams({ orgSid: newOrgSid });
-    setOrgSid(newOrgSid);
+    window.location.href = `active-orgs?orgSid=${newOrgSid}`;
   };
 
   const onRenderItemColumn = (item, index, column) => {
     switch (column.key) {
       case 'name':
         return (
-          <Link to={`active-orgs?orgSid=${item.id}`} onClick={() => changeActiveOrg(item.id)}>
+          <Link to={'#'} onClick={() => changeActiveOrg(item.id)}>
             {item[column.key]}
           </Link>
         );
