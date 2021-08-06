@@ -6,7 +6,7 @@ import { useAuthContext } from '../contexts/AuthContext';
 export const useOrgSid = () => {
   const history = useHistory();
   const location = useLocation();
-  const [urlParams, _setUrlParams] = useState(queryString.parse(location.search));
+  const [urlParams, setUrlParams] = useState(queryString.parse(location.search));
   const [orgSid, setOrgSid] = useState();
   const { authData } = useAuthContext();
 
@@ -28,5 +28,6 @@ export const useOrgSid = () => {
   return {
     orgSid,
     setOrgSid,
+    setUrlParams,
   };
 };

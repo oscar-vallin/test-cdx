@@ -14,6 +14,7 @@ import { Separator } from '../../../../components/separators/Separator';
 import { useDirectOrganizationsFQuery, useDirectOrganizationsFLazyQuery } from '../../../../data/services/graphql';
 import { StyledColumn } from './ActiveOrgsPage.styles';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
+import { useHistory } from 'react-router-dom';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -36,8 +37,7 @@ const _ActiveOrgsPage = () => {
   const Toast = useNotification();
   const history = useHistory();
   const { storeOrgsId } = useAuthContext();
-  const { orgSid } = useOrgSid();
-
+  const { orgSid, setOrgSid, setUrlParams } = useOrgSid();
   const [orgs, setOrgs] = useState([]);
   const columns = generateColumns();
 
@@ -64,6 +64,8 @@ const _ActiveOrgsPage = () => {
       });
 
       storeOrgsId(newOrgSid);
+      setUrlParams({ orgSid: newOrgSid });
+      setOrgSid(newOrgSid);
 
       history.push(URL_ROUTES.FILE_STATUS);
     }, 1000);
@@ -73,7 +75,7 @@ const _ActiveOrgsPage = () => {
     switch (column.key) {
       case 'name':
         return (
-          <Link to={'#'} onClick={() => changeActiveOrg(item.id, item.name)}>
+          <Link to={`active-orgs?orgSid=${item.id}`} onClick={() => changeActiveOrg(item.id, item.name)}>
             {item[column.key]}
           </Link>
         );

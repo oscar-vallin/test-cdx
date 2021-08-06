@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { StyledBox, StyledNav } from './LayoutAdmin.styles';
 import { LayoutDashboard } from '../LayoutDashboard';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { getRouteByApiId } from '../../data/constants/RouteConstants';
 import { useUserDomain } from '../../contexts/hooks/useUserDomain';
 import { Spinner } from '../../components/spinners/Spinner';
@@ -45,6 +45,7 @@ const LayoutAdmin = ({ id = 'LayoutAdmin', menuOptionSelected = 'admin', sidebar
   const [domain, setDomain] = useState({});
 
   const [useNavigateToNewDomainLazy, { data, loading, error }] = useNavigateToNewDomainLazyQuery();
+  const location = useLocation();
 
   useEffect(() => {
     useNavigateToNewDomainLazy({
