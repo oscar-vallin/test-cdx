@@ -40,7 +40,7 @@ const _ActiveOrgsPage = () => {
   const { orgSid, setOrgSid, setUrlParams } = useOrgSid();
   const [orgs, setOrgs] = useState([]);
   const columns = generateColumns();
-
+  const history = useHistory();
   const [directOrganizationsFQuery, { data, loading }] = useDirectOrganizationsFLazyQuery();
 
   useEffect(() => {
