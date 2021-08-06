@@ -33,7 +33,7 @@ const parseLinks = (links = [], sidebarOpt) => {
 };
 const LayoutAdmin = ({ id = 'LayoutAdmin', menuOptionSelected = 'admin', sidebarOptionSelected = '', children }) => {
   const history = useHistory();
-  const { authData, orgSid } = useAuthContext();
+  const { authData, authLogout } = useAuthContext();
   const cache = localStorage.getItem('ADMIN_NAV');
 
   const [domain, setDomain] = useState({});
