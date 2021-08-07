@@ -11,6 +11,7 @@ import { Spacing } from '../../components/spacings/Spacing';
 
 import { useNotification } from '../../contexts/hooks/useNotification';
 import { useNavigateToNewDomainQuery } from '../../data/services/graphql';
+import { useCurrentUser } from '../../contexts/hooks/useCurrentUser';
 
 const parseLinks = (links = [], sidebarOpt) => {
   return links.map(({ appDomain, label, subNavItems, page }) => ({
@@ -33,7 +34,8 @@ const parseLinks = (links = [], sidebarOpt) => {
 };
 const LayoutAdmin = ({ id = 'LayoutAdmin', menuOptionSelected = 'admin', sidebarOptionSelected = '', children }) => {
   const history = useHistory();
-  const { authData, authLogout } = useAuthContext();
+  const { authData, authLogout, isAuthenticated } = useAuthContext();
+  const { isCurrentUserLogged } = useCurrentUser();
   const cache = localStorage.getItem('ADMIN_NAV');
 
   const [domain, setDomain] = useState({});
@@ -53,6 +55,13 @@ const LayoutAdmin = ({ id = 'LayoutAdmin', menuOptionSelected = 'admin', sidebar
       history.replace(getRouteByApiId(page).URL);
     }
   };
+
+  useEffect(() => {
+    if (error) {
+      authLogout('Session Expired');
+      history.push('/');
+    }
+  }, [error]);
 
   useEffect(() => {
     if (cache) {

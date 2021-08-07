@@ -22,8 +22,6 @@ export const useCurrentUser = (_username, _password) => {
     const _isLoggedIn = data.currentUser.loggedIn;
     if (!_isLoggedIn) {
       console.log('is it here when session expired ?');
-      // authLogout('Session Expired');
-      // history.push('/');
       if (localStorage.getItem('LOGIN') != null) {
         localStorage.removeItem('LOGIN');
       }
