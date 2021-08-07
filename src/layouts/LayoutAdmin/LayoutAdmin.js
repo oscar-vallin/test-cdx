@@ -48,8 +48,8 @@ const LayoutAdmin = ({ id = 'LayoutAdmin', menuOptionSelected = 'admin', sidebar
     userDomain: { organization },
     isFetchingOrgNav,
   } = useUserDomain();
-  const { authData } = useAuthContext();
-
+  const { authData, authLogout } = useAuthContext();
+  const { isCurrentUserLogged } = useCurrentUser();
   const cache = localStorage.getItem('ADMIN_NAV');
 
   const [domain, setDomain] = useState({});
