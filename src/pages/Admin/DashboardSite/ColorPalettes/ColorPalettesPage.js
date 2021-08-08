@@ -68,7 +68,7 @@ const _ColorPalettesPage = () => {
     if (palettesUpdated) {
       fetchColorPalettes();
 
-      Toast.success({ text: 'Palette saved successfully'});
+      Toast.success({ text: 'Palette saved successfully' });
     }
   }, [palettesUpdated]);
 

@@ -4,16 +4,18 @@ import { MessageBarType } from '@fluentui/react';
 import { StyledMessageBar } from './Toast.style';
 
 export const Toast = ({ type, visible, text }) => {
-  return (visible && 
-    <StyledMessageBar
-      visible={visible}
-      messageBarType={MessageBarType[type]}
-      isMultiline={false}
-      // onDismiss={p.resetChoice}
-      dismissButtonAriaLabel="Close"
-    >
-      {text}
-    </StyledMessageBar>
+  return (
+    visible && (
+      <StyledMessageBar
+        visible={visible}
+        messageBarType={MessageBarType[type]}
+        isMultiline={false}
+        // onDismiss={p.resetChoice}
+        dismissButtonAriaLabel="Close"
+      >
+        {text}
+      </StyledMessageBar>
+    )
   );
 };
 

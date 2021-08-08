@@ -12,13 +12,7 @@ import {
   startOfWeek,
 } from 'date-fns';
 
-import {
-  Body,
-  CalendarBodyCellNumber,
-  CalendarBodyCell,
-  CalendarBodyRow,
-  CellItem,
-} from './ScheduleMonth.styles';
+import { Body, CalendarBodyCellNumber, CalendarBodyCell, CalendarBodyRow, CellItem } from './ScheduleMonth.styles';
 
 export const ScheduleMonth = ({ id, currentDate, selectedDate, onChangeDate, items, onChangeView }) => {
   const [dates, setDates] = React.useState({

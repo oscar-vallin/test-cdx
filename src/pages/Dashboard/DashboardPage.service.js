@@ -43,7 +43,7 @@ export const useDashboardService = (initOrgSid) => {
   const history = useHistory();
 
   useEffect(() => {
-    useDashboardPeriodsQuery()
+    useDashboardPeriodsQuery();
   }, []);
 
   useEffect(() => {

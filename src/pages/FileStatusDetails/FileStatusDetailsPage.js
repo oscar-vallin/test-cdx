@@ -109,10 +109,7 @@ const _FileStatusDetailsPage = () => {
   };
 
   return (
-    <LayoutDashboard
-      id="PageFileStatusDetails"
-      menuOptionSelected={ROUTES.ROUTE_FILE_STATUS.ID}
-    >
+    <LayoutDashboard id="PageFileStatusDetails" menuOptionSelected={ROUTES.ROUTE_FILE_STATUS.ID}>
       <PageHeader>
         <Breadcrumb items={breadcrumbItems} />
       </PageHeader>

@@ -28,13 +28,8 @@ const _FileStatusPage = () => {
               </Column>
               <Column lg="6" right>
                 <Text right>
-                 {!tableMeta.loading && (
-                    tableMeta.count !== null && (
-                      <Text>{tableMeta.count > 0
-                        ? `${tableMeta.count} results found`
-                        : 'No results were found'
-                      }</Text>
-                    )
+                  {!tableMeta.loading && tableMeta.count !== null && (
+                    <Text>{tableMeta.count > 0 ? `${tableMeta.count} results found` : 'No results were found'}</Text>
                   )}
                 </Text>
               </Column>
@@ -42,7 +37,7 @@ const _FileStatusPage = () => {
           </Spacing>
         </Container>
       </PageHeader>
-      
+
       <TableFileStatus onItemsListChange={setTableMeta} />
     </LayoutDashboard>
   );

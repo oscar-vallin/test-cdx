@@ -1,13 +1,8 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import {
-  endOfMonth,
-  startOfMonth,
-} from 'date-fns';
+import { endOfMonth, startOfMonth } from 'date-fns';
 
-import {
-  StyledRow
-} from './Schedule.styles';
+import { StyledRow } from './Schedule.styles';
 
 import { ScheduleHeader } from './ScheduleHeader';
 import { ScheduleWeek } from './ScheduleWeek';
@@ -59,13 +54,13 @@ const Schedule = ({ id = 'ScheduleContainer', _orgSid = 1, dateRange, filter, ..
           </Spacing>
         </Container>
       </PageHeader>
-    
+
       <Container>
         <StyledRow>
           <Column lg="12">
             <Card elevation="smallest">
               <ScheduleSubHeader currentDate={currentDate} currentView={currentView} selectedDate={selectedDate} />
-              
+
               {!!isCurrentViewMonth(currentView) && (
                 <ScheduleMonth
                   selectedDate={selectedDate}

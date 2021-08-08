@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  addDays,
-  addMonths,
-  endOfWeek,
-  format,
-  startOfWeek,
-} from 'date-fns';
+import { addDays, addMonths, endOfWeek, format, startOfWeek } from 'date-fns';
 
 import {
   RowHeaderItem,
@@ -196,7 +190,7 @@ export const ScheduleHeader = ({ id, currentView, currentDate, onChangeDate, onC
               {'Week'}
             </HeaderButtonView>
           </Spacing>
-          
+
           <Spacing margin={{ left: 'normal' }}>
             <HeaderButtonView
               key={`Button-DayView`}

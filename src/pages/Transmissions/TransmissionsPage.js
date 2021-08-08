@@ -11,12 +11,9 @@ import { data } from './TransmissionsPage.service';
 
 const _TransmissionsPage = () => {
   const [tableMeta, setTableMeta] = useState({ count: null, loading: null });
-  
+
   return (
-    <LayoutDashboard
-      id="PageTransmissions"
-      menuOptionSelected={ROUTES.ROUTE_ADMIN.API_ID}
-    >
+    <LayoutDashboard id="PageTransmissions" menuOptionSelected={ROUTES.ROUTE_ADMIN.API_ID}>
       <PageHeader spacing="0">
         <Container>
           <Spacing margin={{ top: 'double' }}>
@@ -28,13 +25,8 @@ const _TransmissionsPage = () => {
               </Column>
               <Column lg="6" right>
                 <Text right>
-                  {!tableMeta.loading && (
-                    tableMeta.count !== null && (
-                      <Text>{tableMeta.count > 0
-                        ? `${tableMeta.count} results found`
-                        : 'No results were found'
-                      }</Text>
-                    )
+                  {!tableMeta.loading && tableMeta.count !== null && (
+                    <Text>{tableMeta.count > 0 ? `${tableMeta.count} results found` : 'No results were found'}</Text>
                   )}
                 </Text>
               </Column>

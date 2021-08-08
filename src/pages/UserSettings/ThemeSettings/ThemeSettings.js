@@ -27,7 +27,7 @@ const INITIAL_THEME = {
 
 const ThemeSettings = ({ userTheme = { ...INITIAL_THEME } }) => {
   const [useUserThemeQuery, { data: theme, loading: isLoadingTheme }] = useUserThemeLazyQuery();
-  
+
   useEffect(() => {
     useUserThemeQuery({ variables: { themeColorMode: null } });
   }, []);
@@ -52,7 +52,7 @@ const ThemeSettings = ({ userTheme = { ...INITIAL_THEME } }) => {
 
   useEffect(() => {
     if (themeResponse) {
-      Toast.success({ text: 'Theme saved successfully'});
+      Toast.success({ text: 'Theme saved successfully' });
     }
   }, [themeResponse]);
   // const [selectedPaletteId, setSelectedPaletteId] = useState(null);

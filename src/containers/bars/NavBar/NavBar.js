@@ -78,7 +78,9 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSetti
               <StyledTitle variant="bold">CDX DASHBOARD</StyledTitle>
             </StyledColumnLogoL>
             <StyledColumnNav id={`${id}__Left-Row__Menu`} sm={10}>
-              {visible && menuOptionSelected && <MainMenu left option={menuOptionSelected} changeCollapse={changeCollapse} />}
+              {visible && menuOptionSelected && (
+                <MainMenu left option={menuOptionSelected} changeCollapse={changeCollapse} />
+              )}
             </StyledColumnNav>
             <StyledColumnLogoR id={`${id}__Left-Row__Logo`} sm={2} noPadding collapse>
               <StyledTitle>CDX DASHBOARD</StyledTitle>
@@ -94,22 +96,21 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSetti
                 label,
                 onRenderField: (props, render) => {
                   return (
-                    <TooltipHost
-                      content={label}
-                      id={`tooltip-${index}`}
-                      calloutProps={{ gapSpace: 0 }}
-                    >
+                    <TooltipHost content={label} id={`tooltip-${index}`} calloutProps={{ gapSpace: 0 }}>
                       <button
                         disabled={isHandlingFontSize}
                         className={themeFontSize === key && 'selected'}
                         onClick={() => updateThemeFontSize(key)}
                       >
-                        {isHandlingFontSize
-                          ? themeFontSize === key
-                            ? <Spinner size="xs" />
-                            : <FontIcon iconName={iconProps.iconName} />
-                          : <FontIcon iconName={iconProps.iconName} />
-                        }
+                        {isHandlingFontSize ? (
+                          themeFontSize === key ? (
+                            <Spinner size="xs" />
+                          ) : (
+                            <FontIcon iconName={iconProps.iconName} />
+                          )
+                        ) : (
+                          <FontIcon iconName={iconProps.iconName} />
+                        )}
                       </button>
                     </TooltipHost>
                   );

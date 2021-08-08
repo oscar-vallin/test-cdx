@@ -4,16 +4,19 @@ const INITIAL_STATE = {
   type: 'info',
   text: '',
   visible: false,
-}
+};
 
 const reducer = (state, newState) => ({ ...newState });
 
 export const useToast = () => {
   const [toast, setToast] = useReducer(reducer, INITIAL_STATE);
-  
-  const setCustomToast = type => ({ text }) => setToast({
-    type, text, visible: true
-  });
+
+  const setCustomToast = (type) => ({ text }) =>
+    setToast({
+      type,
+      text,
+      visible: true,
+    });
 
   useEffect(() => {
     if (toast.text) {
@@ -26,5 +29,5 @@ export const useToast = () => {
   return {
     toast,
     show: setToast,
-  }
+  };
 };
