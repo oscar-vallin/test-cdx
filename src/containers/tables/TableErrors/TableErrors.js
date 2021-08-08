@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Table } from '../../../components/tables/Table';
+import { Label } from '@fluentui/react/lib/Label';
 
 import { Box, StyledRow, Column, Container, FilterSection } from './TableErrors.styles';
 import { Card } from '../../../components/cards/Card';
@@ -35,6 +36,7 @@ const TableErrors = ({ idPage = 'TableErrors', _orgSid = 1, onItemsListChange = 
           <Card elevation="smallest">
             <StyledRow>
               <Column lg="6">
+                <Label>Search</Label>
                 <InputText id={`${idPage}__Card__Row__Input-Email`} autoFocus disabled={false} {...localInput} />
               </Column>
               <Column lg="6">

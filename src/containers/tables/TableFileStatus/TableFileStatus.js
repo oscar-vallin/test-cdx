@@ -2,6 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Text } from '../../../components/typography/Text';
 import { Table } from '../../../components/tables/Table';
+import { Label } from '@fluentui/react/lib/Label';
 
 import { useParams, useLocation } from 'react-router-dom';
 
@@ -80,6 +81,7 @@ const TableFileStatus = ({
           <Card elevation="smallest">
             <StyledRow>
               <Column lg="6">
+                <Label>Search</Label>
                 <InputText id={`${idPage}__Card__Row__Input-Email`} autoFocus disabled={false} {...localInput} />
               </Column>
               <Column lg="6">

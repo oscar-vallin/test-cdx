@@ -3,6 +3,7 @@ import { Spacing } from '../../../components/spacings/Spacing';
 import { Separator } from '../../../components/separators/Separator';
 import { TableActivity } from './TableActivity';
 import { Container, TableContainer, Row, Column, RightColumn } from './TableActivity.style';
+import { Label } from '@fluentui/react/lib/Label';
 
 // import { useTable } from './TableFileStatus.service';
 import { InputText } from '../../../components/inputs/InputText';
@@ -24,6 +25,7 @@ const TablesCurrentActivity = ({ id = 'TableCurrentActivity', argOrgSid = 1, arg
     <Container id={id}>
       <Row id={`${id}-filters`} around>
         <Column center>
+          <Label>Search</Label>
           <InputText id={`${id}__Card__Row__Input-Email`} autoFocus disabled={false} {...localInput} />
         </Column>
         <RightColumn center>

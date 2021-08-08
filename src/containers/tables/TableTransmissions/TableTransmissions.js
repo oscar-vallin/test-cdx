@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Table } from '../../../components/tables/Table';
-
+import { Label } from '@fluentui/react/lib/Label';
 import { Box, StyledRow, Column, Container, FilterSection } from './TableTransmissions.styles';
 import { Card } from '../../../components/cards/Card';
 import { Spacing } from '../../../components/spacings/Spacing';
@@ -53,6 +53,7 @@ const TableTransmissions = ({
           <Card elevation="smallest">
             <StyledRow>
               <Column lg="6">
+                <Label>Search</Label>
                 <InputText id={`${idPage}__Card__Row__Input-Email`} autoFocus disabled={false} {...localInput} />
               </Column>
               <Column lg="6">

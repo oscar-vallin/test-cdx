@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { Table } from '../../../components/tables/Table';
+import { Label } from '@fluentui/react/lib/Label';
 
 import { Box, StyledRow, Column, Container, FilterSection } from './TableArchive.styles';
 import { InputText } from '../../../components/inputs/InputText';
@@ -41,6 +42,7 @@ const TableArchive = ({ idPage = 'TableArchive', _orgSid = 1, onItemsListChange 
           <Card elevation="smallest">
             <StyledRow>
               <Column lg="6">
+                <Label>Search</Label>
                 <InputText id={`${idPage}__Card__Row__Input-Email`} autoFocus disabled={false} {...localInput} />
               </Column>
               <Column lg="6">
