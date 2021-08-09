@@ -16,7 +16,7 @@ import { useTableFilters } from '../../../hooks/useTableFilters';
 import { TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { useTableTemplate } from '../../../hooks/useTableTemplate';
 import { getStartDay, getEndDay } from '../../../helpers/tableHelpers';
-import { useAuthContext } from '../../../contexts/AuthContext';
+// import { useAuthContext } from '../../../contexts/AuthContext';
 import queryString from 'query-string';
 
 const TableFileStatus = ({
@@ -28,12 +28,12 @@ const TableFileStatus = ({
 }) => {
   const { localInput, startDate, endDate } = useTableFilters('Extract Name,  Status, Vendor, etc.');
   const location = useLocation();
-  const [urlParams, setUrlParams] = useState(queryString.parse(location.search));
-  const { authData, orgSid } = useAuthContext();
+  const [urlParams, _setUrlParams] = useState(queryString.parse(location.search));
+  //const { authData, orgSid } = useAuthContext();
 
   const { tableProps } = useTableTemplate(
     TABLE_NAMES.FILE_STATUS,
-    orgSid,
+    urlParams?.orgSid,
     { rangeStart: startDate.value, rangeEnd: endDate.value },
     localInput.value,
     '',

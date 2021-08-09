@@ -3,6 +3,7 @@ import { useDateValue } from './useDateValue';
 import { getHours, subDays, format, addDays } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
+import { useAuthContext } from '../contexts/AuthContext';
 import queryString from 'query-string';
 
 //
@@ -12,7 +13,8 @@ export const useTableFilters = (placeholder, id) => {
   const localInput = useInputValue('', placeholder, '', '');
   const history = useHistory();
   const location = useLocation();
-  const [urlParams, setUrlParams] = useState(queryString.parse(location.search));
+  const [urlParams, _setUrlParams] = useState(queryString.parse(location.search));
+  const { authData } = useAuthContext();
 
   const selectDate = (date) => {
     const _startDay = getStartDay(date);
@@ -30,8 +32,12 @@ export const useTableFilters = (placeholder, id) => {
     // //console.log('pushQueryString, startDate.value = ', startDate.value);
     // //console.log('pushQueryString, endDate.value = ', endDate.value);
 
+    if (urlParams?.orgSid || authData?.orgId) {
+      finalURL += `?orgSid=${urlParams.orgSid || authData?.orgId}`;
+    }
+
     if (localInput.value || startDate.value || endDate.value) {
-      finalURL += '?';
+      finalURL += '&';
     } else return;
 
     if (localInput.value) finalURL += `${localInput.value ? 'filter=' + localInput.value : ''}`;
@@ -102,7 +108,7 @@ export const useTableFilters = (placeholder, id) => {
 
   useEffect(() => {
     pushQueryString();
-  }, [localInput.value, startDate.value, endDate.value]);
+  }, [localInput.value, startDate.value, endDate.value, urlParams.orgSid]);
 
   return {
     localInput,

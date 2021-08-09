@@ -13,10 +13,11 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { CreateUsersPanel } from '../CreateUsers';
 
-import { useUsersForOrgFpQuery } from '../../../../data/services/graphql';
+import { useUsersForOrgFpLazyQuery } from '../../../../data/services/graphql';
 import { StyledColumn, RouteLink, StyledButtonAction } from './ActiveUsersPage.styles';
 
-import { useAuthContext } from '../../../../contexts/AuthContext';
+// import { useAuthContext } from '../../../../contexts/AuthContext';
+import { useOrgSid } from '../../../../hooks/useOrgSid';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -41,17 +42,23 @@ const onRenderItemColumn = (item, _index, column) => {
 };
 
 const _ActiveUsersPage = () => {
-  const { orgSid } = useAuthContext();
+  const { orgSid } = useOrgSid();
   const [users, setUsers] = useState([]);
   const columns = generateColumns();
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 
-  const { data, loading } = useUsersForOrgFpQuery({
-    variables: {
-      orgSid,
-      userFilter: { activeFilter: 'ACTIVE' },
-    },
-  });
+  const [useUsersForOrgFpLazy, { data, loading }] = useUsersForOrgFpLazyQuery();
+
+  // const { data, loading } = useUsersForOrgFpQuery();
+
+  useEffect(() => {
+    useUsersForOrgFpLazy({
+      variables: {
+        orgSid,
+        userFilter: { activeFilter: 'ACTIVE' },
+      },
+    });
+  }, [orgSid]);
 
   useEffect(() => {
     if (!loading && data) {

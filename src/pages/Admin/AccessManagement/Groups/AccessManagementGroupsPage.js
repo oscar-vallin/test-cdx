@@ -12,10 +12,11 @@ import { Separator } from '../../../../components/separators/Separator';
 import { RouteLink } from './../../AdminPage.styles';
 import { NAV_ITEMS } from './../../SideMenu';
 
-import { useAmGroupsForOrgPQuery } from '../../../../data/services/graphql';
+import { useAmGroupsForOrgPLazyQuery } from '../../../../data/services/graphql';
 import { StyledColumn } from './AccessManagementGroupsPage.styles';
 
-import { useAuthContext } from '../../../../contexts/AuthContext';
+// import { useAuthContext } from '../../../../contexts/AuthContext';
+import { useOrgSid } from '../../../../hooks/useOrgSid';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -40,11 +41,16 @@ const onRenderItemColumn = (item, index, column) => {
 };
 
 const _AccessManagementGroupsPage = () => {
-  const { orgSid } = useAuthContext();
+  const { orgSid } = useOrgSid();
   const [groups, setGroups] = useState([]);
   const columns = generateColumns();
 
-  const { data, loading } = useAmGroupsForOrgPQuery({ variables: { orgSid } });
+  //const { data, loading } = useAmGroupsForOrgPQuery({ variables: { orgSid } });
+  const [useAmGroupsForOrg, { data, loading }] = useAmGroupsForOrgPLazyQuery();
+
+  useEffect(() => {
+    useAmGroupsForOrg({ variables: { orgSid } });
+  }, [orgSid]);
 
   useEffect(() => {
     if (!loading && data) {

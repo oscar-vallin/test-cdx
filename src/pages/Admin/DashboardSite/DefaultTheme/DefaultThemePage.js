@@ -22,9 +22,11 @@ import {
   useDefaultDashThemeForSiteLazyQuery,
 } from './../../../../data/services/graphql';
 import { useNotification } from '../../../../contexts/hooks/useNotification';
+import { useOrgSid } from '../../../../hooks/useOrgSid';
 
 const _DefaultThemePage = () => {
   const Toast = useNotification();
+  const { orgSid } = useOrgSid();
   const { authData } = useAuthContext();
   const { id, orgId } = authData;
   const ownedInput = { orgSid: authData?.orgId, ownerId: id };
