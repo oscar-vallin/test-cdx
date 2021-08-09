@@ -14,10 +14,6 @@ import { CreateUsersPanel } from '../CreateUsers';
 import { useUsersForOrgFpLazyQuery, useDeactivateUsersMutation } from '../../../../data/services/graphql';
 import { StyledColumn, StyledCommandButton } from './ActiveUsersPage.styles';
 
-import { useUsersForOrgFpLazyQuery } from '../../../../data/services/graphql';
-import { StyledColumn, RouteLink, StyledButtonAction } from './ActiveUsersPage.styles';
-
-// import { useAuthContext } from '../../../../contexts/AuthContext';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
 
 const generateColumns = () => {
@@ -47,9 +43,10 @@ const _ActiveUsersPage = () => {
   const [useUsersForOrgFpLazy, { data, loading }] = useUsersForOrgFpLazyQuery();
   const [selectedItems, setSelectedItems] = useState([]);
 
-  const [useUsersForOrgFpLazy, { data, loading }] = useUsersForOrgFpLazyQuery();
-
-  // const { data, loading } = useUsersForOrgFpQuery();
+  const [
+    disableUser,
+    { data: disableResponse, loading: isDisablingUser, error: DisableUserError },
+  ] = useDeactivateUsersMutation();
 
   useEffect(() => {
     useUsersForOrgFpLazy({
@@ -59,6 +56,40 @@ const _ActiveUsersPage = () => {
       },
     });
   }, [orgSid]);
+
+  const selection = useMemo(
+    () =>
+      new Selection({
+        onSelectionChanged: () => {
+          setSelectedItems(selection.getSelection());
+        },
+        selectionMode: SelectionMode.multiple,
+      }),
+    []
+  );
+
+  const onRenderItemColumn = (node, _index, column) => {
+    if (column.key == 'actions') {
+      return (
+        <Fragment>
+          <StyledCommandButton
+            iconProps={{ iconName: 'Delete' }}
+            onClick={() => {
+              // setSelectedUserId(node.item?.id);
+              setIsConfirmationHidden(false);
+            }}
+          />
+        </Fragment>
+      );
+    } else {
+      return node.item[column.key] || node.item['person'][column.key];
+    }
+  };
+
+  const hideConfirmation = () => {
+    setIsConfirmationHidden(true);
+    setSelectedItems([]);
+  };
 
   useEffect(() => {
     if (!loading && data) {
