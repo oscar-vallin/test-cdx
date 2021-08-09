@@ -24,7 +24,7 @@ const isThisMonth = (id) => id === DATE_OPTION_NAME.thisMonth;
 const isLastMonth = (id) => id === DATE_OPTION_NAME.lastMonth;
 
 export const useDashboardService = (initOrgSid) => {
-  const { authLogout, orgSid } = useAuthContext();
+  const { authLogout } = useAuthContext();
   const [setOrgSid] = useState(initOrgSid);
   const [dateId, setDateId] = useState(DATE_OPTION_NAME.today);
   const [datesOptions, setDateOptions] = useState(DATES_OPTIONS);
@@ -35,16 +35,12 @@ export const useDashboardService = (initOrgSid) => {
   const [useDashboardPeriodsQuery, { data, loading, error }] = useDashboardPeriodsLazyQuery();
 
   useEffect(() => {
-    if (orgSid) {
-      useDashboardPeriodsQuery({ variables: { orgSid } });
+    if (initOrgSid) {
+      useDashboardPeriodsQuery({ variables: { orgSid: initOrgSid } });
     }
-  }, [orgSid]);
+  }, [initOrgSid]);
 
   const history = useHistory();
-
-  useEffect(() => {
-    useDashboardPeriodsQuery();
-  }, []);
 
   useEffect(() => {
     if (error) {
@@ -112,7 +108,7 @@ export const useDashboardService = (initOrgSid) => {
   return {
     isLoading,
     isLoadingData,
-    orgSid,
+    initOrgSid,
     loading,
     error,
     datesOptions,
