@@ -111,13 +111,7 @@ const FormLogin = ({ id = '__FormLogin', onLogin }) => {
                       disabled={handlerLogin.isProcessing}
                       onClick={() => (isValidEmail ? handlerLogin.submitLogin() : apiBeginLogin(email.value))}
                     >
-                      {handlerLogin.isProcessing || isProcessingBegin ? (
-                        <Spinner />
-                      ) : !isValidEmail ? (
-                        'Next'
-                      ) : (
-                        'Login'
-                      )}
+                      {handlerLogin.isProcessing || isProcessingBegin ? <Spinner /> : !isValidEmail ? 'Next' : 'Login'}
                     </StyledButton>
                   </Column>
                 </StyledRow>

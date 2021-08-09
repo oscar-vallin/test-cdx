@@ -1,14 +1,5 @@
 import React from 'react';
-import {
-  addDays,
-  endOfMonth,
-  endOfWeek,
-  format,
-  isSameDay,
-  isSameMonth,
-  startOfMonth,
-  startOfWeek,
-} from 'date-fns';
+import { addDays, endOfMonth, endOfWeek, format, isSameDay, isSameMonth, startOfMonth, startOfWeek } from 'date-fns';
 
 import {
   Row,
@@ -104,9 +95,11 @@ export const ScheduleSubHeader = ({ id, currentView, currentDate, selectedDate }
           </WeekViewContainer>
         );
       } else {
-        days.push(<DayOfWeek key={i}>
-          <Text size="small">{format(day, dateFormat)}</Text>
-        </DayOfWeek>);
+        days.push(
+          <DayOfWeek key={i}>
+            <Text size="small">{format(day, dateFormat)}</Text>
+          </DayOfWeek>
+        );
       }
 
       day = addDays(day, 1);

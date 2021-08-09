@@ -124,13 +124,13 @@ export const StyledChoiceGroup = styled(ChoiceGroup)`
 
     button {
       align-items: center;
-      background: rgba(255, 255, 255, .2);
+      background: rgba(255, 255, 255, 0.2);
       border: none;
       border-radius: 4px;
       display: flex;
       justify-content: center;
       margin: ${({ theme }) => `0 ${theme.spacing.normal} 0 0`};
-      transition: background .15s ease-out;
+      transition: background 0.15s ease-out;
       user-select: none;
 
       i {

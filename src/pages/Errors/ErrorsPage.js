@@ -11,12 +11,9 @@ import { TableErrors } from '../../containers/tables/TableErrors';
 
 const _ErrorsPage = () => {
   const [tableMeta, setTableMeta] = useState({ count: null, loading: null });
-  
+
   return (
-    <LayoutDashboard
-      id="PageErrors"
-      menuOptionSelected={ROUTES.ROUTE_ERRORS.API_ID}
-    >
+    <LayoutDashboard id="PageErrors" menuOptionSelected={ROUTES.ROUTE_ERRORS.API_ID}>
       <PageHeader spacing="0">
         <Container>
           <Spacing margin={{ top: 'double' }}>
@@ -28,13 +25,8 @@ const _ErrorsPage = () => {
               </Column>
               <Column lg="6" right>
                 <Text right>
-                  {!tableMeta.loading && (
-                    tableMeta.count !== null && (
-                      <Text>{tableMeta.count > 0
-                        ? `${tableMeta.count} results found`
-                        : 'No results were found'
-                      }</Text>
-                    )
+                  {!tableMeta.loading && tableMeta.count !== null && (
+                    <Text>{tableMeta.count > 0 ? `${tableMeta.count} results found` : 'No results were found'}</Text>
                   )}
                 </Text>
               </Column>

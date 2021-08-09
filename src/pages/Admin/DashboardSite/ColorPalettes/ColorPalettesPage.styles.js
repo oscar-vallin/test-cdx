@@ -22,7 +22,7 @@ export const StyledChoiceGroup = styled(ChoiceGroup)`
     }
   }
 `;
- 
+
 export const StyledColorPicker = styled(ColorPicker)`
   max-width: 100%;
 

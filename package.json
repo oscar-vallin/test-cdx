@@ -51,7 +51,7 @@
     "eject": "react-scripts eject",
     "clean": "rm -rf build",
     "extract-routes": "node --experimental-modules internals/route-extractor.mjs",
-    "prettify": "prettier --write src/**/*.{js,jsx,ts,tsx,css} && yarn-or-npm lint:fix",
+    "prettify": "prettier --write \"src/**/*.{js,jsx,ts,tsx,css}\"",
     "lint:fix": "eslint --fix src/**/*.{js,ts,tsx}"
   },
   "eslintConfig": {
@@ -102,7 +102,8 @@
   },
   "lint-staged": {
     "src/**/*.{ts,tsx,json}": [
-      "yarn prettify"
+      "yarn prettify",
+      "yarn lint"
     ]
   }
 }

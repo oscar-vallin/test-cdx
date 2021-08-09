@@ -24,8 +24,6 @@ export const StyledRow = styled(LayoutRow)`
   padding: 15px;
 `;
 
-export const Column = styled(LayoutColumn)`
-`;
+export const Column = styled(LayoutColumn)``;
 
-export const RightColumn = styled(LayoutColumn)`
-`;
+export const RightColumn = styled(LayoutColumn)``;

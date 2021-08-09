@@ -39,7 +39,7 @@ const CardDashboard = ({ id = '__CardDashboard', title, subtitle, value, total, 
                     {subtitle && <StyledSubtitle>({subtitle})</StyledSubtitle>}
                   </StyledTitle>
                 </Spacing>
-                
+
                 {(value ?? -1) >= 0 && (total ?? -1) > 0 && <StyledValues>{`${value}/${total}`}</StyledValues>}
               </Column>
             </Row>

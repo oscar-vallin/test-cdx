@@ -111,6 +111,13 @@ export type CdxFacetNvp = {
   value: CdxFacet;
 };
 
+export type CdxPageInfo = {
+  __typename?: 'CDXPageInfo';
+  orgSid?: Maybe<Scalars['ID']>;
+  formInfo?: Maybe<Array<Maybe<FormInfo>>>;
+  lookupData?: Maybe<Array<Maybe<LookupData>>>;
+};
+
 export enum CdxService {
   Cdx = 'CDX',
   Integration = 'INTEGRATION',
@@ -126,6 +133,14 @@ export type CdxServiceNvp = {
 export enum CdxWebAppDomain {
   Dashboard = 'DASHBOARD',
   Organization = 'ORGANIZATION'
+}
+
+export enum CdxWebCommandType {
+  PageAdd = 'PAGE_ADD',
+  PageUpdate = 'PAGE_UPDATE',
+  Deactivate = 'DEACTIVATE',
+  Add = 'ADD',
+  Update = 'UPDATE'
 }
 
 export enum CdxWebPage {
@@ -367,10 +382,6 @@ export type DateTimeRangeInput = {
   rangeEnd: Scalars['DateTime'];
 };
 
-export type DeactivateUsersInput = {
-  userSids: Array<Maybe<Scalars['ID']>>;
-};
-
 export type DefaultDashThemePage = {
   __typename?: 'DefaultDashThemePage';
   themeColorModes?: Maybe<Array<Maybe<ThemeColorMode>>>;
@@ -455,6 +466,12 @@ export type FieldCreationEvent = {
   type?: Maybe<Scalars['String']>;
 };
 
+export type FormInfo = {
+  __typename?: 'FormInfo';
+  label?: Maybe<Scalars['String']>;
+  formCommands?: Maybe<Array<Maybe<WebCommand>>>;
+};
+
 export enum GqOperationResponse {
   Success = 'SUCCESS',
   Fail = 'FAIL'
@@ -474,6 +491,14 @@ export type InsuredStatCount = {
   inTolerance?: Maybe<Scalars['Boolean']>;
   toleranceMsg?: Maybe<Scalars['String']>;
   hold?: Maybe<Scalars['Boolean']>;
+};
+
+export type ListPageInfo = {
+  __typename?: 'ListPageInfo';
+  pageHeaderLabel?: Maybe<Scalars['String']>;
+  pageCommands?: Maybe<Array<Maybe<WebCommand>>>;
+  listItemCommands?: Maybe<Array<Maybe<WebCommand>>>;
+  listItemBulkCommands?: Maybe<Array<Maybe<WebCommand>>>;
 };
 
 export type LogOutInfo = {
@@ -498,6 +523,12 @@ export enum LoginStepType {
   Complete = 'COMPLETE'
 }
 
+export type LookupData = {
+  __typename?: 'LookupData';
+  key?: Maybe<Scalars['String']>;
+  lookupPairs?: Maybe<Array<Maybe<Nvp>>>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   passwordLogin?: Maybe<LoginStep>;
@@ -507,9 +538,11 @@ export type Mutation = {
   createAMPermission?: Maybe<AmPermission>;
   createAMPermissionAction?: Maybe<AmPermissionAction>;
   createAMGroup?: Maybe<AmGroup>;
-  createUser?: Maybe<User>;
-  deactivateUser?: Maybe<Scalars['String']>;
-  deactivateUsers?: Maybe<Scalars['String']>;
+  createUser?: Maybe<UserResponse>;
+  updateUser?: Maybe<User>;
+  updateUserAMGroups?: Maybe<Array<Maybe<AmGroup>>>;
+  deactivateUser?: Maybe<GqOperationResponse>;
+  deactivateUsers?: Maybe<GqOperationResponse>;
   removeAMPolicies?: Maybe<Scalars['String']>;
   removeAMPolicy?: Maybe<Scalars['String']>;
   removeAMPermissions?: Maybe<Scalars['String']>;
@@ -580,13 +613,23 @@ export type MutationCreateUserArgs = {
 };
 
 
+export type MutationUpdateUserArgs = {
+  userInfo: UpdateUserInput;
+};
+
+
+export type MutationUpdateUserAmGroupsArgs = {
+  userAmGroupUpdate?: Maybe<UpdateUserAmGroupsInput>;
+};
+
+
 export type MutationDeactivateUserArgs = {
-  userSid: Scalars['ID'];
+  sidInput: SidInput;
 };
 
 
 export type MutationDeactivateUsersArgs = {
-  deactivateUsersInput?: Maybe<DeactivateUsersInput>;
+  sidsInput: SidsInput;
 };
 
 
@@ -937,6 +980,10 @@ export type Query = {
   findUserByEmail?: Maybe<User>;
   findUser?: Maybe<User>;
   navigateToNewDomain?: Maybe<WebAppDomain>;
+  userCreatePage?: Maybe<UserPageInfo>;
+  /** userAssignAMGroups(sidInput: SidInput) :  */
+  userUpdatePage?: Maybe<UserPageInfo>;
+  userAssignAMGroupsPage?: Maybe<UserPageInfo>;
 };
 
 
@@ -1132,6 +1179,21 @@ export type QueryNavigateToNewDomainArgs = {
   domainNavInput?: Maybe<DomainNavInput>;
 };
 
+
+export type QueryUserCreatePageArgs = {
+  orgSidInput?: Maybe<OrgSidInput>;
+};
+
+
+export type QueryUserUpdatePageArgs = {
+  sidInput?: Maybe<SidInput>;
+};
+
+
+export type QueryUserAssignAmGroupsPageArgs = {
+  sidInput?: Maybe<SidInput>;
+};
+
 export type RecordCount = {
   __typename?: 'RecordCount';
   name: Scalars['String'];
@@ -1202,6 +1264,14 @@ export type SequenceCreationEvent = {
   context?: Maybe<Scalars['String']>;
   unitId?: Maybe<Scalars['String']>;
   recordCreationEvent?: Maybe<Array<Maybe<RecordCreationEvent>>>;
+};
+
+export type SidInput = {
+  sid: Scalars['ID'];
+};
+
+export type SidsInput = {
+  sids: Array<Maybe<Scalars['ID']>>;
 };
 
 export enum SortDirection {
@@ -1313,6 +1383,10 @@ export type UpdatePasswordInput = {
   verifyPassword: Scalars['String'];
 };
 
+export type UpdateUserAmGroupsInput = {
+  amGroupSids?: Maybe<Array<Maybe<Scalars['ID']>>>;
+};
+
 export type UpdateUserDashThemeInput = {
   orgSid: Scalars['ID'];
   ownerId: Scalars['ID'];
@@ -1322,17 +1396,26 @@ export type UpdateUserDashThemeInput = {
   themeColorSid?: Maybe<Scalars['ID']>;
 };
 
+export type UpdateUserInput = {
+  sid: Scalars['ID'];
+  email: Scalars['String'];
+  firstNm: Scalars['String'];
+  lastNm?: Maybe<Scalars['String']>;
+};
+
 export type User = {
   __typename?: 'User';
   id: Scalars['ID'];
   email: Scalars['String'];
   person?: Maybe<Person>;
+  amGroups?: Maybe<Array<Maybe<AmGroup>>>;
 };
 
 export type UserConnection = {
   __typename?: 'UserConnection';
   paginationInfo: PaginationInfo;
-  nodes?: Maybe<Array<Maybe<User>>>;
+  listPageInfo?: Maybe<ListPageInfo>;
+  nodes?: Maybe<Array<Maybe<UserItem>>>;
 };
 
 export type UserDashThemePage = {
@@ -1347,6 +1430,27 @@ export type UserFilterInput = {
   activeFilter?: Maybe<ActiveEnum>;
 };
 
+export type UserItem = {
+  __typename?: 'UserItem';
+  item: User;
+  listItemCommands?: Maybe<Array<Maybe<WebCommand>>>;
+};
+
+export type UserPageInfo = {
+  __typename?: 'UserPageInfo';
+  model?: Maybe<User>;
+  cdxPageInfo?: Maybe<CdxPageInfo>;
+  amGroupConnection?: Maybe<AmGroupConnection>;
+};
+
+export type UserResponse = {
+  __typename?: 'UserResponse';
+  response: GqOperationResponse;
+  msg?: Maybe<Scalars['String']>;
+  model?: Maybe<User>;
+  nextPage?: Maybe<UserWebPage>;
+};
+
 export type UserSession = {
   __typename?: 'UserSession';
   id: Scalars['ID'];
@@ -1358,6 +1462,12 @@ export type UserSession = {
   pollInterval?: Maybe<Scalars['Int']>;
   defaultAuthorities?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
+
+export enum UserWebPage {
+  AmGroup = 'AM_GROUP',
+  GenPass = 'GEN_PASS',
+  RegLink = 'REG_LINK'
+}
 
 export type WpProcessError = {
   __typename?: 'WPProcessError';
@@ -1409,6 +1519,14 @@ export type WebAppDomain = {
   selectedPage?: Maybe<CdxWebPage>;
   /** navItems: either the left nav or top nav depending on the domain */
   navItems?: Maybe<Array<Maybe<WebNav>>>;
+};
+
+export type WebCommand = {
+  __typename?: 'WebCommand';
+  endPoint?: Maybe<Scalars['String']>;
+  label?: Maybe<Scalars['String']>;
+  parameters?: Maybe<Array<Maybe<Nvp>>>;
+  commandType?: Maybe<CdxWebCommandType>;
 };
 
 export type WebNav = {
@@ -1979,6 +2097,27 @@ export type CreateUserMutationVariables = Exact<{
 export type CreateUserMutation = (
   { __typename?: 'Mutation' }
   & { createUser?: Maybe<(
+    { __typename?: 'UserResponse' }
+    & Pick<UserResponse, 'response' | 'msg' | 'nextPage'>
+    & { model?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'email'>
+      & { person?: Maybe<(
+        { __typename?: 'Person' }
+        & Pick<Person, 'firstNm' | 'lastNm'>
+      )> }
+    )> }
+  )> }
+);
+
+export type UpdateUserMutationVariables = Exact<{
+  userInfo: UpdateUserInput;
+}>;
+
+
+export type UpdateUserMutation = (
+  { __typename?: 'Mutation' }
+  & { updateUser?: Maybe<(
     { __typename?: 'User' }
     & Pick<User, 'id' | 'email'>
     & { person?: Maybe<(
@@ -1988,8 +2127,21 @@ export type CreateUserMutation = (
   )> }
 );
 
+export type UpdateUserAmGroupsMutationVariables = Exact<{
+  userAmGroupUpdate: UpdateUserAmGroupsInput;
+}>;
+
+
+export type UpdateUserAmGroupsMutation = (
+  { __typename?: 'Mutation' }
+  & { updateUserAMGroups?: Maybe<Array<Maybe<(
+    { __typename?: 'AMGroup' }
+    & Pick<AmGroup, 'id' | 'name'>
+  )>>> }
+);
+
 export type DeactivateUserMutationVariables = Exact<{
-  userSid: Scalars['ID'];
+  sidInput: SidInput;
 }>;
 
 
@@ -1999,7 +2151,7 @@ export type DeactivateUserMutation = (
 );
 
 export type DeactivateUsersMutationVariables = Exact<{
-  deactivateUsersInput: DeactivateUsersInput;
+  sidsInput: SidsInput;
 }>;
 
 
@@ -2075,13 +2227,29 @@ export type UsersForOrgFpQuery = (
     & { paginationInfo: (
       { __typename?: 'PaginationInfo' }
       & PaginationInfoFragmentFragment
-    ), nodes?: Maybe<Array<Maybe<(
-      { __typename?: 'User' }
-      & Pick<User, 'id' | 'email'>
-      & { person?: Maybe<(
-        { __typename?: 'Person' }
-        & Pick<Person, 'firstNm' | 'lastNm'>
-      )> }
+    ), listPageInfo?: Maybe<(
+      { __typename?: 'ListPageInfo' }
+      & Pick<ListPageInfo, 'pageHeaderLabel'>
+      & { pageCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & WebCommandFragmentFragment
+      )>>>, listItemCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & WebCommandFragmentFragment
+      )>>>, listItemBulkCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & WebCommandFragmentFragment
+      )>>> }
+    )>, nodes?: Maybe<Array<Maybe<(
+      { __typename?: 'UserItem' }
+      & { item: (
+        { __typename?: 'User' }
+        & Pick<User, 'id' | 'email'>
+        & { person?: Maybe<(
+          { __typename?: 'Person' }
+          & Pick<Person, 'firstNm' | 'lastNm'>
+        )> }
+      ) }
     )>>> }
   )> }
 );
@@ -2149,6 +2317,18 @@ export type DirectOrganizationsFpQuery = (
 export type PaginationInfoFragmentFragment = (
   { __typename?: 'PaginationInfo' }
   & Pick<PaginationInfo, 'totalPages' | 'totalElements' | 'pageNumber' | 'pageSize'>
+);
+
+export type WebCommandFragmentFragment = (
+  { __typename?: 'WebCommand' }
+  & Pick<WebCommand, 'endPoint' | 'label' | 'commandType'>
+  & { parameters?: Maybe<Array<Maybe<(
+    { __typename?: 'NVPStr' }
+    & UnionNvp_NvpStr_Fragment
+  ) | (
+    { __typename?: 'NVPId' }
+    & UnionNvp_NvpId_Fragment
+  )>>> }
 );
 
 export type WpProcessErrorsQueryVariables = Exact<{
@@ -2857,6 +3037,111 @@ export type NavigateToNewDomainQuery = (
   )> }
 );
 
+export type UserCreatePageQueryVariables = Exact<{
+  orgSidInput: OrgSidInput;
+}>;
+
+
+export type UserCreatePageQuery = (
+  { __typename?: 'Query' }
+  & { userCreatePage?: Maybe<(
+    { __typename?: 'UserPageInfo' }
+    & FragmentUserPageInfoFragment
+  )> }
+);
+
+export type UserUpdatePageQueryVariables = Exact<{
+  sidInput: SidInput;
+}>;
+
+
+export type UserUpdatePageQuery = (
+  { __typename?: 'Query' }
+  & { userUpdatePage?: Maybe<(
+    { __typename?: 'UserPageInfo' }
+    & FragmentUserPageInfoFragment
+  )> }
+);
+
+export type UserAssignAmGroupsPageQueryVariables = Exact<{
+  sidInput: SidInput;
+}>;
+
+
+export type UserAssignAmGroupsPageQuery = (
+  { __typename?: 'Query' }
+  & { userUpdatePage?: Maybe<(
+    { __typename?: 'UserPageInfo' }
+    & FragmentUserPageInfoFragment
+  )> }
+);
+
+export type FragmentUserPageInfoFragment = (
+  { __typename?: 'UserPageInfo' }
+  & { model?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'email'>
+    & { person?: Maybe<(
+      { __typename?: 'Person' }
+      & Pick<Person, 'firstNm' | 'lastNm'>
+    )>, amGroups?: Maybe<Array<Maybe<(
+      { __typename?: 'AMGroup' }
+      & Pick<AmGroup, 'id' | 'name'>
+      & { policies?: Maybe<Array<Maybe<(
+        { __typename?: 'AMPolicy' }
+        & Pick<AmPolicy, 'name'>
+      )>>> }
+    )>>> }
+  )>, cdxPageInfo?: Maybe<(
+    { __typename?: 'CDXPageInfo' }
+    & FragmentPageInfoFragment
+  )>, amGroupConnection?: Maybe<(
+    { __typename?: 'AMGroupConnection' }
+    & { paginationInfo: (
+      { __typename?: 'PaginationInfo' }
+      & PaginationInfoFragmentFragment
+    ), nodes?: Maybe<Array<Maybe<(
+      { __typename?: 'AMGroup' }
+      & Pick<AmGroup, 'id' | 'name'>
+    )>>> }
+  )> }
+);
+
+export type FragmentPageInfoFragment = (
+  { __typename?: 'CDXPageInfo' }
+  & Pick<CdxPageInfo, 'orgSid'>
+  & { formInfo?: Maybe<Array<Maybe<(
+    { __typename?: 'FormInfo' }
+    & Pick<FormInfo, 'label'>
+    & { formCommands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>>> }
+  )>>>, lookupData?: Maybe<Array<Maybe<(
+    { __typename?: 'LookupData' }
+    & Pick<LookupData, 'key'>
+    & { lookupPairs?: Maybe<Array<Maybe<(
+      { __typename?: 'NVPStr' }
+      & UnionNvp_NvpStr_Fragment
+    ) | (
+      { __typename?: 'NVPId' }
+      & UnionNvp_NvpId_Fragment
+    )>>> }
+  )>>> }
+);
+
+export type FragmentWebCommandFragment = (
+  { __typename?: 'WebCommand' }
+  & Pick<WebCommand, 'endPoint' | 'label' | 'commandType'>
+  & { parameters?: Maybe<Array<Maybe<(
+    { __typename?: 'NVPStr' }
+    & UnionNvp_NvpStr_Fragment
+  ) | (
+    { __typename?: 'NVPId' }
+    & UnionNvp_NvpId_Fragment
+  )>>> }
+);
+
 export const UnionNvpFragmentDoc = gql`
     fragment unionNVP on NVP {
   __typename
@@ -3044,14 +3329,16 @@ export const PolicyFragmentFragmentDoc = gql`
   }
 }
     `;
-export const PaginationInfoFragmentFragmentDoc = gql`
-    fragment paginationInfoFragment on PaginationInfo {
-  totalPages
-  totalElements
-  pageNumber
-  pageSize
+export const WebCommandFragmentFragmentDoc = gql`
+    fragment webCommandFragment on WebCommand {
+  endPoint
+  label
+  commandType
+  parameters {
+    ...unionNVP
+  }
 }
-    `;
+    ${UnionNvpFragmentDoc}`;
 export const UnionPasswordRuleFragmentDoc = gql`
     fragment unionPasswordRule on PasswordRule {
   __typename
@@ -3071,6 +3358,74 @@ export const UnionPasswordRuleFragmentDoc = gql`
   }
 }
     `;
+export const FragmentWebCommandFragmentDoc = gql`
+    fragment fragmentWebCommand on WebCommand {
+  endPoint
+  label
+  parameters {
+    ...unionNVP
+  }
+  commandType
+}
+    ${UnionNvpFragmentDoc}`;
+export const FragmentPageInfoFragmentDoc = gql`
+    fragment fragmentPageInfo on CDXPageInfo {
+  orgSid
+  formInfo {
+    label
+    formCommands {
+      ...fragmentWebCommand
+    }
+  }
+  lookupData {
+    key
+    lookupPairs {
+      ...unionNVP
+    }
+  }
+}
+    ${FragmentWebCommandFragmentDoc}
+${UnionNvpFragmentDoc}`;
+export const PaginationInfoFragmentFragmentDoc = gql`
+    fragment paginationInfoFragment on PaginationInfo {
+  totalPages
+  totalElements
+  pageNumber
+  pageSize
+}
+    `;
+export const FragmentUserPageInfoFragmentDoc = gql`
+    fragment fragmentUserPageInfo on UserPageInfo {
+  model {
+    id
+    email
+    person {
+      firstNm
+      lastNm
+    }
+    amGroups {
+      id
+      name
+      policies {
+        name
+      }
+    }
+  }
+  cdxPageInfo {
+    ...fragmentPageInfo
+  }
+  amGroupConnection {
+    paginationInfo {
+      ...paginationInfoFragment
+    }
+    nodes {
+      id
+      name
+    }
+  }
+}
+    ${FragmentPageInfoFragmentDoc}
+${PaginationInfoFragmentFragmentDoc}`;
 export const BeginLoginDocument = gql`
     query BeginLogin($userId: String!) {
   beginLogin(userId: $userId) {
@@ -3704,12 +4059,17 @@ export type SystemTemplateAmGroupByNameQueryResult = Apollo.QueryResult<SystemTe
 export const CreateUserDocument = gql`
     mutation CreateUser($userInfo: CreateUserInput!, $personInfo: CreatePersonInput!) {
   createUser(userInfo: $userInfo, personInfo: $personInfo) {
-    id
-    email
-    person {
-      firstNm
-      lastNm
+    response
+    msg
+    model {
+      id
+      email
+      person {
+        firstNm
+        lastNm
+      }
     }
+    nextPage
   }
 }
     `;
@@ -3739,9 +4099,79 @@ export function useCreateUserMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreateUserMutationHookResult = ReturnType<typeof useCreateUserMutation>;
 export type CreateUserMutationResult = Apollo.MutationResult<CreateUserMutation>;
 export type CreateUserMutationOptions = Apollo.BaseMutationOptions<CreateUserMutation, CreateUserMutationVariables>;
+export const UpdateUserDocument = gql`
+    mutation UpdateUser($userInfo: UpdateUserInput!) {
+  updateUser(userInfo: $userInfo) {
+    id
+    email
+    person {
+      firstNm
+      lastNm
+    }
+  }
+}
+    `;
+export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, UpdateUserMutationVariables>;
+
+/**
+ * __useUpdateUserMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserMutation, { data, loading, error }] = useUpdateUserMutation({
+ *   variables: {
+ *      userInfo: // value for 'userInfo'
+ *   },
+ * });
+ */
+export function useUpdateUserMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>) {
+        return Apollo.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, baseOptions);
+      }
+export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
+export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
+export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
+export const UpdateUserAmGroupsDocument = gql`
+    mutation UpdateUserAMGroups($userAmGroupUpdate: UpdateUserAMGroupsInput!) {
+  updateUserAMGroups(userAmGroupUpdate: $userAmGroupUpdate) {
+    id
+    name
+  }
+}
+    `;
+export type UpdateUserAmGroupsMutationFn = Apollo.MutationFunction<UpdateUserAmGroupsMutation, UpdateUserAmGroupsMutationVariables>;
+
+/**
+ * __useUpdateUserAmGroupsMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserAmGroupsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserAmGroupsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserAmGroupsMutation, { data, loading, error }] = useUpdateUserAmGroupsMutation({
+ *   variables: {
+ *      userAmGroupUpdate: // value for 'userAmGroupUpdate'
+ *   },
+ * });
+ */
+export function useUpdateUserAmGroupsMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserAmGroupsMutation, UpdateUserAmGroupsMutationVariables>) {
+        return Apollo.useMutation<UpdateUserAmGroupsMutation, UpdateUserAmGroupsMutationVariables>(UpdateUserAmGroupsDocument, baseOptions);
+      }
+export type UpdateUserAmGroupsMutationHookResult = ReturnType<typeof useUpdateUserAmGroupsMutation>;
+export type UpdateUserAmGroupsMutationResult = Apollo.MutationResult<UpdateUserAmGroupsMutation>;
+export type UpdateUserAmGroupsMutationOptions = Apollo.BaseMutationOptions<UpdateUserAmGroupsMutation, UpdateUserAmGroupsMutationVariables>;
 export const DeactivateUserDocument = gql`
-    mutation DeactivateUser($userSid: ID!) {
-  deactivateUser(userSid: $userSid)
+    mutation DeactivateUser($sidInput: SidInput!) {
+  deactivateUser(sidInput: $sidInput)
 }
     `;
 export type DeactivateUserMutationFn = Apollo.MutationFunction<DeactivateUserMutation, DeactivateUserMutationVariables>;
@@ -3759,7 +4189,7 @@ export type DeactivateUserMutationFn = Apollo.MutationFunction<DeactivateUserMut
  * @example
  * const [deactivateUserMutation, { data, loading, error }] = useDeactivateUserMutation({
  *   variables: {
- *      userSid: // value for 'userSid'
+ *      sidInput: // value for 'sidInput'
  *   },
  * });
  */
@@ -3770,8 +4200,8 @@ export type DeactivateUserMutationHookResult = ReturnType<typeof useDeactivateUs
 export type DeactivateUserMutationResult = Apollo.MutationResult<DeactivateUserMutation>;
 export type DeactivateUserMutationOptions = Apollo.BaseMutationOptions<DeactivateUserMutation, DeactivateUserMutationVariables>;
 export const DeactivateUsersDocument = gql`
-    mutation DeactivateUsers($deactivateUsersInput: DeactivateUsersInput!) {
-  deactivateUsers(deactivateUsersInput: $deactivateUsersInput)
+    mutation DeactivateUsers($sidsInput: SidsInput!) {
+  deactivateUsers(sidsInput: $sidsInput)
 }
     `;
 export type DeactivateUsersMutationFn = Apollo.MutationFunction<DeactivateUsersMutation, DeactivateUsersMutationVariables>;
@@ -3789,7 +4219,7 @@ export type DeactivateUsersMutationFn = Apollo.MutationFunction<DeactivateUsersM
  * @example
  * const [deactivateUsersMutation, { data, loading, error }] = useDeactivateUsersMutation({
  *   variables: {
- *      deactivateUsersInput: // value for 'deactivateUsersInput'
+ *      sidsInput: // value for 'sidsInput'
  *   },
  * });
  */
@@ -3926,17 +4356,32 @@ export const UsersForOrgFpDocument = gql`
     paginationInfo {
       ...paginationInfoFragment
     }
+    listPageInfo {
+      pageHeaderLabel
+      pageCommands {
+        ...webCommandFragment
+      }
+      listItemCommands {
+        ...webCommandFragment
+      }
+      listItemBulkCommands {
+        ...webCommandFragment
+      }
+    }
     nodes {
-      id
-      email
-      person {
-        firstNm
-        lastNm
+      item {
+        id
+        email
+        person {
+          firstNm
+          lastNm
+        }
       }
     }
   }
 }
-    ${PaginationInfoFragmentFragmentDoc}`;
+    ${PaginationInfoFragmentFragmentDoc}
+${WebCommandFragmentFragmentDoc}`;
 
 /**
  * __useUsersForOrgFpQuery__
@@ -5776,3 +6221,102 @@ export function useNavigateToNewDomainLazyQuery(baseOptions?: Apollo.LazyQueryHo
 export type NavigateToNewDomainQueryHookResult = ReturnType<typeof useNavigateToNewDomainQuery>;
 export type NavigateToNewDomainLazyQueryHookResult = ReturnType<typeof useNavigateToNewDomainLazyQuery>;
 export type NavigateToNewDomainQueryResult = Apollo.QueryResult<NavigateToNewDomainQuery, NavigateToNewDomainQueryVariables>;
+export const UserCreatePageDocument = gql`
+    query UserCreatePage($orgSidInput: OrgSidInput!) {
+  userCreatePage(orgSidInput: $orgSidInput) {
+    ...fragmentUserPageInfo
+  }
+}
+    ${FragmentUserPageInfoFragmentDoc}`;
+
+/**
+ * __useUserCreatePageQuery__
+ *
+ * To run a query within a React component, call `useUserCreatePageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserCreatePageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserCreatePageQuery({
+ *   variables: {
+ *      orgSidInput: // value for 'orgSidInput'
+ *   },
+ * });
+ */
+export function useUserCreatePageQuery(baseOptions: Apollo.QueryHookOptions<UserCreatePageQuery, UserCreatePageQueryVariables>) {
+        return Apollo.useQuery<UserCreatePageQuery, UserCreatePageQueryVariables>(UserCreatePageDocument, baseOptions);
+      }
+export function useUserCreatePageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserCreatePageQuery, UserCreatePageQueryVariables>) {
+          return Apollo.useLazyQuery<UserCreatePageQuery, UserCreatePageQueryVariables>(UserCreatePageDocument, baseOptions);
+        }
+export type UserCreatePageQueryHookResult = ReturnType<typeof useUserCreatePageQuery>;
+export type UserCreatePageLazyQueryHookResult = ReturnType<typeof useUserCreatePageLazyQuery>;
+export type UserCreatePageQueryResult = Apollo.QueryResult<UserCreatePageQuery, UserCreatePageQueryVariables>;
+export const UserUpdatePageDocument = gql`
+    query UserUpdatePage($sidInput: SidInput!) {
+  userUpdatePage(sidInput: $sidInput) {
+    ...fragmentUserPageInfo
+  }
+}
+    ${FragmentUserPageInfoFragmentDoc}`;
+
+/**
+ * __useUserUpdatePageQuery__
+ *
+ * To run a query within a React component, call `useUserUpdatePageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserUpdatePageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserUpdatePageQuery({
+ *   variables: {
+ *      sidInput: // value for 'sidInput'
+ *   },
+ * });
+ */
+export function useUserUpdatePageQuery(baseOptions: Apollo.QueryHookOptions<UserUpdatePageQuery, UserUpdatePageQueryVariables>) {
+        return Apollo.useQuery<UserUpdatePageQuery, UserUpdatePageQueryVariables>(UserUpdatePageDocument, baseOptions);
+      }
+export function useUserUpdatePageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserUpdatePageQuery, UserUpdatePageQueryVariables>) {
+          return Apollo.useLazyQuery<UserUpdatePageQuery, UserUpdatePageQueryVariables>(UserUpdatePageDocument, baseOptions);
+        }
+export type UserUpdatePageQueryHookResult = ReturnType<typeof useUserUpdatePageQuery>;
+export type UserUpdatePageLazyQueryHookResult = ReturnType<typeof useUserUpdatePageLazyQuery>;
+export type UserUpdatePageQueryResult = Apollo.QueryResult<UserUpdatePageQuery, UserUpdatePageQueryVariables>;
+export const UserAssignAmGroupsPageDocument = gql`
+    query userAssignAMGroupsPage($sidInput: SidInput!) {
+  userUpdatePage(sidInput: $sidInput) {
+    ...fragmentUserPageInfo
+  }
+}
+    ${FragmentUserPageInfoFragmentDoc}`;
+
+/**
+ * __useUserAssignAmGroupsPageQuery__
+ *
+ * To run a query within a React component, call `useUserAssignAmGroupsPageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserAssignAmGroupsPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserAssignAmGroupsPageQuery({
+ *   variables: {
+ *      sidInput: // value for 'sidInput'
+ *   },
+ * });
+ */
+export function useUserAssignAmGroupsPageQuery(baseOptions: Apollo.QueryHookOptions<UserAssignAmGroupsPageQuery, UserAssignAmGroupsPageQueryVariables>) {
+        return Apollo.useQuery<UserAssignAmGroupsPageQuery, UserAssignAmGroupsPageQueryVariables>(UserAssignAmGroupsPageDocument, baseOptions);
+      }
+export function useUserAssignAmGroupsPageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserAssignAmGroupsPageQuery, UserAssignAmGroupsPageQueryVariables>) {
+          return Apollo.useLazyQuery<UserAssignAmGroupsPageQuery, UserAssignAmGroupsPageQueryVariables>(UserAssignAmGroupsPageDocument, baseOptions);
+        }
+export type UserAssignAmGroupsPageQueryHookResult = ReturnType<typeof useUserAssignAmGroupsPageQuery>;
+export type UserAssignAmGroupsPageLazyQueryHookResult = ReturnType<typeof useUserAssignAmGroupsPageLazyQuery>;
+export type UserAssignAmGroupsPageQueryResult = Apollo.QueryResult<UserAssignAmGroupsPageQuery, UserAssignAmGroupsPageQueryVariables>;

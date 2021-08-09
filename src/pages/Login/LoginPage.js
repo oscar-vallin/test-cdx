@@ -9,7 +9,7 @@ const _LoginPage = () => {
 
   useEffect(() => {
     console.log('isLogout', isLogout);
-    
+
     if (isLogout) {
       Toast.error({ text: isLogout });
     }

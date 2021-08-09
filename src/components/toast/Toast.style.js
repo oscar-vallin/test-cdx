@@ -3,7 +3,7 @@ import { Link, Stack, StackItem, MessageBar, MessageBarType, ChoiceGroup, IStack
 import { MessageBarButton } from '@fluentui/react/lib/Button';
 
 export const StyledMessageBar = styled(MessageBar)`
-  animation: ${({ visible }) => visible ? 'fadeInDown' : 'fadeInUp'} 1s forwards;
+  animation: ${({ visible }) => (visible ? 'fadeInDown' : 'fadeInUp')} 1s forwards;
   box-shadow: 0 6.4px 14.4px 0 rgb(0 0 0 / 13%), 0 1.2px 3.6px 0 rgb(0 0 0 / 11%);
   border-radius: 5px;
   left: 50%;
