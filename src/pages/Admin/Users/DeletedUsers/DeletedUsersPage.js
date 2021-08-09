@@ -32,8 +32,8 @@ const generateColumns = () => {
   ];
 };
 
-const onRenderItemColumn = (item, _index, column) => {
-  return item[column.key] || item['person'][column.key];
+const onRenderItemColumn = (node, _index, column) => {
+  return node.item[column.key] || node.item['person'][column.key];
 };
 const _DeletedUsersPage = () => {
   const { orgSid } = useAuthContext();

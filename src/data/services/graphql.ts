@@ -5339,11 +5339,13 @@ export const UsersForOrgFpDocument = gql`
         ...paginationInfoFragment
       }
       nodes {
-        id
-        email
-        person {
-          firstNm
-          lastNm
+        item {
+          id
+          email
+          person {
+            firstNm
+            lastNm
+          }
         }
       }
     }

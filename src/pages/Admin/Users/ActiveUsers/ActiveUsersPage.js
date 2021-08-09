@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from 'react';
-
+import React, { useState, useEffect, Fragment } from 'react';
+import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
+import { PrimaryButton, DefaultButton, MessageBar } from 'office-ui-fabric-react';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Button } from '../../../../components/buttons/Button';
 import { Row, Column } from '../../../../components/layouts';
 import { Spacing } from '../../../../components/spacings/Spacing';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
-import { MessageBar } from 'office-ui-fabric-react';
 import { Text } from '../../../../components/typography/Text';
 import { Separator } from '../../../../components/separators/Separator';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { CreateUsersPanel } from '../CreateUsers';
 
-import { useUsersForOrgFpQuery } from '../../../../data/services/graphql';
-import { StyledColumn, RouteLink, StyledButtonAction } from './ActiveUsersPage.styles';
+import { useUsersForOrgFpQuery, useDeactivateUsersMutation } from '../../../../data/services/graphql';
+import { StyledColumn, RouteLink, StyledCommandButton } from './ActiveUsersPage.styles';
 
 import { useAuthContext } from '../../../../contexts/AuthContext';
 
@@ -30,14 +30,10 @@ const generateColumns = () => {
 
   return [
     createColumn({ name: 'ID', key: 'id' }),
-    createColumn({ name: 'Email', key: 'email' }),
     createColumn({ name: 'First Name', key: 'firstNm' }),
     createColumn({ name: 'Last Name', key: 'lastNm' }),
+    createColumn({ name: '', key: 'actions' }),
   ];
-};
-
-const onRenderItemColumn = (item, _index, column) => {
-  return item[column.key] || item['person'][column.key];
 };
 
 const _ActiveUsersPage = () => {
@@ -45,7 +41,12 @@ const _ActiveUsersPage = () => {
   const [users, setUsers] = useState([]);
   const columns = generateColumns();
   const [isPanelOpen, setIsPanelOpen] = useState(false);
-
+  const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);
+  const [selectedUserId, setSelectedUserId] = useState(0);
+  const [
+    disableUser,
+    { data: disableResponse, loading: isDisablingUser, error: DisableUserError },
+  ] = useDeactivateUsersMutation();
   const { data, loading } = useUsersForOrgFpQuery({
     variables: {
       orgSid,
@@ -53,11 +54,40 @@ const _ActiveUsersPage = () => {
     },
   });
 
+  const onRenderItemColumn = (node, _index, column) => {
+    if (column.key == 'actions') {
+      return (
+        <Fragment>
+          <StyledCommandButton
+            iconProps={{ iconName: 'Delete' }}
+            onClick={() => {
+              setSelectedUserId(node.item.id);
+              setIsConfirmationHidden(false);
+            }}
+          />
+        </Fragment>
+      );
+    } else {
+      return node.item[column.key] || node.item['person'][column.key];
+    }
+  };
+
+  const hideConfirmation = () => {
+    setIsConfirmationHidden(true);
+    setSelectedUserId(0);
+  };
+
   useEffect(() => {
     if (!loading && data) {
       setUsers(data.usersForOrg.nodes);
     }
   }, [loading]);
+
+  useEffect(() => {
+    if (!isDisablingUser && disableResponse) {
+      setPolicies(users.filter(({ item }) => item.id !== selectedUserId));
+    }
+  }, [isDisablingUser, disableResponse]);
 
   return (
     <LayoutAdmin id="PageActiveUsers" sidebarOptionSelected="ACTIVE_USERS">
@@ -116,12 +146,43 @@ const _ActiveUsersPage = () => {
       <CreateUsersPanel
         isOpen={isPanelOpen}
         onCreateUser={(createdUser) => {
+          setSelectedUserId(0);
           setUsers([...users, createdUser]);
         }}
         onDismiss={() => {
           setIsPanelOpen(false);
         }}
+        selectedUserId={selectedUserId}
       />
+
+      <Dialog
+        hidden={isConfirmationHidden}
+        onDismiss={hideConfirmation}
+        dialogContentProps={{
+          type: DialogType.normal,
+          title: 'Disable user',
+          subText: `Do you really want to disable "${
+            users.find(({ item }) => selectedUserId === item.id)?.item?.person?.firstNm || ''
+          }"?`,
+        }}
+        modalProps={{ isBlocking: true, isDraggable: false }}
+      >
+        <DialogFooter>
+          <PrimaryButton
+            onClick={() => {
+              disableUser({
+                variables: {
+                  userSids: selectedUserId,
+                },
+              });
+
+              setIsConfirmationHidden(true);
+            }}
+            text="Disable"
+          />
+          <DefaultButton onClick={hideConfirmation} text="Cancel" />
+        </DialogFooter>
+      </Dialog>
     </LayoutAdmin>
   );
 };

@@ -12,7 +12,7 @@ import { useCreateUserMutation } from '../../../../data/services/graphql';
 
 import { useAuthContext } from '../../../../contexts/AuthContext';
 
-const CreateUsersPanel = ({ isOpen, onDismiss, onCreateUser, selectedPolicyId }) => {
+const CreateUsersPanel = ({ isOpen, onDismiss, onCreateUser, selectedUserId }) => {
   const { orgSid } = useAuthContext();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
