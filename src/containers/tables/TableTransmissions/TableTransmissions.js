@@ -14,7 +14,7 @@ import { useTableTemplate } from '../../../hooks/useTableTemplate';
 import { useParams, useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 
-import { useAuthContext } from '../../../contexts/AuthContext';
+// import { useAuthContext } from '../../../contexts/AuthContext';
 
 const TableTransmissions = ({
   idPage = 'TableTransmissions',
@@ -23,7 +23,7 @@ const TableTransmissions = ({
   filter,
   onItemsListChange = () => {},
 }) => {
-  const { orgSid } = useAuthContext();
+  //const { orgSid } = useAuthContext();
   const { localInput, startDate, endDate } = useTableFilters('Extract Name,  Status, Vendor, etc.', useParams());
   const { search } = useLocation();
   const paramsDate = new URLSearchParams(search).get('date');
@@ -32,7 +32,7 @@ const TableTransmissions = ({
 
   const { tableProps } = useTableTemplate(
     TABLE_NAMES.TRANSMISSIONS,
-    orgSid,
+    urlParams?.orgSid,
     { rangeStart: startDate.value, rangeEnd: endDate.value },
     localInput.value,
     '',
