@@ -6,7 +6,7 @@ import Theming from './../utils/Theming';
 import {
   useUserThemeLazyQuery,
   useCreateOrUpdateOwnDashThemeMutation,
-  useSetOwnDashThemeFontSizeMutation,
+  // useSetOwnDashThemeFontSizeMutation,
 } from '../data/services/graphql';
 
 import { useAuthContext } from '../contexts/AuthContext';
@@ -36,10 +36,10 @@ export const useCurrentUserTheme = () => {
     { data: updatedTheme, loading: isHandlingTheme, error: themeError },
   ] = useCreateOrUpdateOwnDashThemeMutation();
 
-  const [
-    setOwnDashFontSize,
-    { data: updatedFontSize, loading: isHandlingFontSize, error: fontSizeError },
-  ] = useSetOwnDashThemeFontSizeMutation();
+  // const [
+  //   setOwnDashFontSize,
+  //   { data: updatedFontSize, loading: isHandlingFontSize, error: fontSizeError },
+  // ] = useSetOwnDashThemeFontSizeMutation();
 
   useEffect(() => {
     setUserTheme(theme?.userTheme || {});
@@ -80,13 +80,13 @@ export const useCurrentUserTheme = () => {
     createOrUpdateTheme: (dashThemeInput) => {
       createOrUpdateOwnDashTheme({ variables: { dashThemeInput } });
     },
-    setOwnDashFontSize: (dashThemeInput) => {
-      setOwnDashFontSize({ variables: { dashThemeInput } });
-    },
+    // setOwnDashFontSize: (dashThemeInput) => {
+    //   setOwnDashFontSize({ variables: { dashThemeInput } });
+    // },
     updatedTheme,
     isHandlingTheme,
     isLoadingTheme,
-    isHandlingFontSize,
+    // isHandlingFontSize,
     userTheme,
     fetchTheme,
   };

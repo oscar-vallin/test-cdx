@@ -13,7 +13,7 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { CreateUsersPanel } from '../CreateUsers';
 
-import { useUsersForOrgFpQuery, useDeactivateUsersMutation } from '../../../../data/services/graphql';
+import { useUsersForOrgFpQuery } from '../../../../data/services/graphql';
 import { StyledColumn, RouteLink, StyledCommandButton } from './ActiveUsersPage.styles';
 
 import { useAuthContext } from '../../../../contexts/AuthContext';
@@ -43,10 +43,10 @@ const _ActiveUsersPage = () => {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);
   const [selectedUserId, setSelectedUserId] = useState(0);
-  const [
-    disableUser,
-    { data: disableResponse, loading: isDisablingUser, error: DisableUserError },
-  ] = useDeactivateUsersMutation();
+  // const [
+  //   disableUser,
+  //   { data: disableResponse, loading: isDisablingUser, error: DisableUserError },
+  // ] = useDeactivateUsersMutation();
   const { data, loading } = useUsersForOrgFpQuery({
     variables: {
       orgSid,
@@ -83,11 +83,11 @@ const _ActiveUsersPage = () => {
     }
   }, [loading]);
 
-  useEffect(() => {
-    if (!isDisablingUser && disableResponse) {
-      setPolicies(users.filter(({ item }) => item.id !== selectedUserId));
-    }
-  }, [isDisablingUser, disableResponse]);
+  // useEffect(() => {
+  //   if (!isDisablingUser && disableResponse) {
+  //     setPolicies(users.filter(({ item }) => item.id !== selectedUserId));
+  //   }
+  // }, [isDisablingUser, disableResponse]);
 
   return (
     <LayoutAdmin id="PageActiveUsers" sidebarOptionSelected="ACTIVE_USERS">
@@ -170,11 +170,11 @@ const _ActiveUsersPage = () => {
         <DialogFooter>
           <PrimaryButton
             onClick={() => {
-              disableUser({
-                variables: {
-                  userSids: selectedUserId,
-                },
-              });
+              // disableUser({
+              //   variables: {
+              //     userSids: selectedUserId,
+              //   },
+              // });
 
               setIsConfirmationHidden(true);
             }}
