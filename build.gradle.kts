@@ -3,7 +3,9 @@ plugins {
    // id("com.dorongold.task-tree") version "1.5" //gradle build taskTree
 }
 
-
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+}
 /*tasks.register<Copy>("copyReactRoot") {
     from("$buildDir")
     include("*.*")
@@ -40,11 +42,15 @@ plugins {
     dependsOn("npmInstall")
     commandLine("npm", "install")
 }*/
+task<com.moowork.gradle.node.npm.NpmTask>("npmExtractRoutes"){
+    //args = ['run', 'extract-routes']
+    setArgs(listOf("run", "extract-routes"))
+}
 
-task<Exec>("npmExtractRoutes") {
+/*task<Exec>("npmExtractRoutes") {
     dependsOn("npmInstall")
     commandLine("npm", "run", "extract-routes")
-}
+}*/
 
 tasks.webjarBuild{
     dependsOn("npmExtractRoutes")
