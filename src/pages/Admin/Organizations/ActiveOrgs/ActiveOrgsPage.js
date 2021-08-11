@@ -41,13 +41,13 @@ const _ActiveOrgsPage = () => {
   const { storeOrgsId } = useAuthContext();
   const [orgs, setOrgs] = useState([]);
   const columns = generateColumns();
-  const history = useHistory();
+
   const [directOrganizationsFQuery, { data, loading }] = useDirectOrganizationsFLazyQuery();
 
   useEffect(() => {
     directOrganizationsFQuery({
       variables: {
-        orgSid,
+        orgSid: orgSid,
         orgFilter: { activeFilter: 'ACTIVE' },
       },
     });
