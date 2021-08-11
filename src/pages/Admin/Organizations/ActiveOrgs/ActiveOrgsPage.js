@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
+import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 
 import { URL_ROUTES } from '../../../../data/constants/RouteConstants';
@@ -16,8 +16,6 @@ import { useAuthContext } from '../../../../contexts/AuthContext';
 import { useNotification } from '../../../../contexts/hooks/useNotification';
 import { useDirectOrganizationsFQuery, useDirectOrganizationsFLazyQuery } from '../../../../data/services/graphql';
 import { StyledColumn } from './ActiveOrgsPage.styles';
-import { useOrgSid } from '../../../../hooks/useOrgSid';
-import { useHistory } from 'react-router-dom';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -37,31 +35,45 @@ const generateColumns = () => {
 };
 
 const _ActiveOrgsPage = () => {
-  // const { orgSid, storeOrgsId } = useAuthContext();
-  const { orgSid, setOrgSid, setUrlParams } = useOrgSid();
+  const Toast = useNotification();
+  const history = useHistory();
+  const { orgSid, storeOrgsId } = useAuthContext();
   const [orgs, setOrgs] = useState([]);
   const columns = generateColumns();
-  const history = useHistory();
+
   const [directOrganizationsFQuery, { data, loading }] = useDirectOrganizationsFLazyQuery();
 
   useEffect(() => {
     directOrganizationsFQuery({
       variables: {
-        orgSid,
+        orgSid: orgSid,
         orgFilter: { activeFilter: 'ACTIVE' },
       },
     });
   }, [orgSid]);
 
-  const changeActiveOrg = (newOrgSid) => {
-    window.location.href = `active-orgs?orgSid=${newOrgSid}`;
+  const changeActiveOrg = (newOrgSid, orgName) => {
+    Toast.info({ text: `Loading ${orgName} domain`, duration: 3000 });
+
+    setTimeout(() => {
+      directOrganizationsFQuery({
+        variables: {
+          orgSid: newOrgSid,
+          orgFilter: { activeFilter: 'ACTIVE' },
+        },
+      });
+
+      storeOrgsId(newOrgSid);
+
+      history.push(`${URL_ROUTES.FILE_STATUS}?orgSid=${newOrgSid}`);
+    }, 1000);
   };
 
   const onRenderItemColumn = (item, index, column) => {
     switch (column.key) {
       case 'name':
         return (
-          <Link to={'#'} onClick={() => changeActiveOrg(item.id)}>
+          <Link to={'#'} onClick={() => changeActiveOrg(item.id, item.name)}>
             {item[column.key]}
           </Link>
         );
