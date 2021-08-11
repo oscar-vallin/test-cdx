@@ -13,8 +13,6 @@ import { Text } from '../../../../components/typography/Text';
 import { Separator } from '../../../../components/separators/Separator';
 import { useDirectOrganizationsFQuery, useDirectOrganizationsFLazyQuery } from '../../../../data/services/graphql';
 import { StyledColumn } from './ActiveOrgsPage.styles';
-import { useOrgSid } from '../../../../hooks/useOrgSid';
-import { useHistory } from 'react-router-dom';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -36,17 +34,17 @@ const generateColumns = () => {
 const _ActiveOrgsPage = () => {
   const Toast = useNotification();
   const history = useHistory();
-  const { storeOrgsId } = useAuthContext();
   const { orgSid, setOrgSid, setUrlParams } = useOrgSid();
+  const { storeOrgsId } = useAuthContext();
   const [orgs, setOrgs] = useState([]);
   const columns = generateColumns();
-  const history = useHistory();
+
   const [directOrganizationsFQuery, { data, loading }] = useDirectOrganizationsFLazyQuery();
 
   useEffect(() => {
     directOrganizationsFQuery({
       variables: {
-        orgSid,
+        orgSid: orgSid,
         orgFilter: { activeFilter: 'ACTIVE' },
       },
     });
@@ -66,8 +64,7 @@ const _ActiveOrgsPage = () => {
       storeOrgsId(newOrgSid);
       setUrlParams({ orgSid: newOrgSid });
       setOrgSid(newOrgSid);
-
-      history.push(URL_ROUTES.FILE_STATUS);
+      history.push(`${URL_ROUTES.FILE_STATUS}?orgSid=${newOrgSid}`);
     }, 1000);
   };
 
