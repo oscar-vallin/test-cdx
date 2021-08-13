@@ -93,7 +93,7 @@ const LayoutAdmin = ({ id = 'LayoutAdmin', menuOptionSelected = 'admin', sidebar
       setDomain(domain);
       redirect(domain.selectedPage, sidebarOptionSelected);
     }
-  });
+  }, []);
 
   return (
     <LayoutDashboard id={id} menuOptionSelected={menuOptionSelected} showMenu={false}>

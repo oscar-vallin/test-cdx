@@ -9,12 +9,9 @@ import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fab
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { Text } from '../../../../components/typography/Text';
 import { Separator } from '../../../../components/separators/Separator';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-
 import { CreateUsersPanel } from '../CreateUsers';
-
-import { useUsersForOrgFpLazyQuery } from '../../../../data/services/graphql';
-import { StyledColumn, RouteLink, StyledButtonAction } from './ActiveUsersPage.styles';
+import { useUsersForOrgFpLazyQuery, useDeactivateUsersMutation } from '../../../../data/services/graphql';
+import { StyledColumn, StyledCommandButton } from './ActiveUsersPage.styles';
 
 import { useOrgSid } from '../../../../hooks/useOrgSid';
 
@@ -41,10 +38,14 @@ const _ActiveUsersPage = () => {
   const [users, setUsers] = useState([]);
   const columns = generateColumns();
   const [isPanelOpen, setIsPanelOpen] = useState(false);
-
+  const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);
+  const [selectedUserId, setSelectedUserId] = useState(0);
   const [useUsersForOrgFpLazy, { data, loading }] = useUsersForOrgFpLazyQuery();
 
-  // const { data, loading } = useUsersForOrgFpQuery();
+  const [
+    disableUser,
+    { data: disableResponse, loading: isDisablingUser, error: DisableUserError },
+  ] = useDeactivateUsersMutation();
 
   useEffect(() => {
     useUsersForOrgFpLazy({
@@ -62,7 +63,7 @@ const _ActiveUsersPage = () => {
           <StyledCommandButton
             iconProps={{ iconName: 'Delete' }}
             onClick={() => {
-              setSelectedUserId(node.item.id);
+              setSelectedUserId(node.item?.id);
               setIsConfirmationHidden(false);
             }}
           />
@@ -84,11 +85,11 @@ const _ActiveUsersPage = () => {
     }
   }, [loading]);
 
-  // useEffect(() => {
-  //   if (!isDisablingUser && disableResponse) {
-  //     setPolicies(users.filter(({ item }) => item.id !== selectedUserId));
-  //   }
-  // }, [isDisablingUser, disableResponse]);
+  useEffect(() => {
+    if (!isDisablingUser && disableResponse) {
+      setUsers(users.filter(({ item }) => item.id !== selectedUserId));
+    }
+  }, [isDisablingUser, disableResponse]);
 
   return (
     <LayoutAdmin id="PageActiveUsers" sidebarOptionSelected="ACTIVE_USERS">
@@ -148,7 +149,7 @@ const _ActiveUsersPage = () => {
         isOpen={isPanelOpen}
         onCreateUser={(createdUser) => {
           setSelectedUserId(0);
-          setUsers([...users, createdUser]);
+          setUsers([...users, { item: createdUser.model }]);
         }}
         onDismiss={() => {
           setIsPanelOpen(false);
@@ -163,7 +164,7 @@ const _ActiveUsersPage = () => {
           type: DialogType.normal,
           title: 'Disable user',
           subText: `Do you really want to disable "${
-            users.find(({ item }) => selectedUserId === item.id)?.item?.person?.firstNm || ''
+            users.find(({ item }) => selectedUserId === item?.id)?.item?.person?.firstNm || ''
           }"?`,
         }}
         modalProps={{ isBlocking: true, isDraggable: false }}
@@ -171,11 +172,11 @@ const _ActiveUsersPage = () => {
         <DialogFooter>
           <PrimaryButton
             onClick={() => {
-              // disableUser({
-              //   variables: {
-              //     userSids: selectedUserId,
-              //   },
-              // });
+              disableUser({
+                variables: {
+                  sidsInput: { sids: [selectedUserId] },
+                },
+              });
 
               setIsConfirmationHidden(true);
             }}
