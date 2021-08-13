@@ -72,9 +72,9 @@ export const useCurrentUserTheme = () => {
     }
   }, [theme, updatedTheme]);
 
-  useEffect(() => {
-    fetchTheme();
-  }, []);
+  // useEffect(() => {
+  //   fetchTheme();
+  // }, []);
 
   return {
     createOrUpdateTheme: (dashThemeInput) => {
