@@ -13,6 +13,9 @@ import { Text } from '../../../../components/typography/Text';
 import { Separator } from '../../../../components/separators/Separator';
 import { useDirectOrganizationsFQuery, useDirectOrganizationsFLazyQuery } from '../../../../data/services/graphql';
 import { StyledColumn } from './ActiveOrgsPage.styles';
+import { useNotification } from '../../../../contexts/hooks/useNotification';
+import { useOrgSid } from '../../../../hooks/useOrgSid';
+import { useAuthContext } from '../../../../contexts/AuthContext';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({

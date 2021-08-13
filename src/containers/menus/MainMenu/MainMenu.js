@@ -15,6 +15,7 @@ import { useUserDomain } from './../../../contexts/hooks/useUserDomain';
 import { getRouteByApiId } from './../../../data/constants/RouteConstants';
 import queryString from 'query-string';
 import { useOrgSid } from '../../../hooks/useOrgSid';
+import { useNavigateToNewDomainLazyQuery } from '../../../data/services/graphql';
 
 // CardSection is called directly cause a restriction warning for that component.
 const MainMenu = ({ id = '__MainMenu', option = ROUTES.ROUTE_DASHBOARD.ID, left, changeCollapse }) => {

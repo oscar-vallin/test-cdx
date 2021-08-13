@@ -12,6 +12,7 @@ import { useNotification } from '../../contexts/hooks/useNotification';
 import { useNavigateToNewDomainLazyQuery } from '../../data/services/graphql';
 import { useOrgSid } from '../../hooks/useOrgSid';
 import { useCurrentUser } from '../../contexts/hooks/useCurrentUser';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const parseLinks = (links = [], sidebarOpt) => {
   return links.map(({ appDomain, label, subNavItems, page }) => ({
