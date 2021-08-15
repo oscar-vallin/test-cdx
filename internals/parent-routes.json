@@ -1,1 +1,13 @@
-{"LOGIN":"/login","USER_SETTINGS":"/user-settings","DASHBOARD":"/dashboard","FILE_STATUS":"/file-status","ARCHIVES":"/archives","SCHEDULE":"/schedule","TRANSMISSIONS":"/transmissions","ERRORS":"/errors","ADMIN":"/admin"}
+{
+  "LOGIN": "/login",
+  "USER_SETTINGS": "/user-settings",
+  "DASHBOARD": "/dashboard",
+  "FILE_STATUS": "/file-status",
+  "ARCHIVES": "/archives",
+  "SCHEDULE": "/schedule",
+  "TRANSMISSIONS": "/transmissions",
+  "ERRORS": "/errors",
+  "ADMIN": "/admin",
+  "ACTIVE_USERS": "/active-users",
+  "DELETED_USERS": "/deleted-users"
+}
