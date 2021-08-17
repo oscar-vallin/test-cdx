@@ -27,10 +27,9 @@ const generateColumns = () => {
   });
 
   return [
-    createColumn({ name: 'ID', key: 'id' }),
     createColumn({ name: 'First Name', key: 'firstNm' }),
     createColumn({ name: 'Last Name', key: 'lastNm' }),
-    // createColumn({ name: '', key: 'actions' }),
+    createColumn({ name: 'Email', key: 'email' }),
   ];
 };
 
