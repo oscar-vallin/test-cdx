@@ -157,7 +157,7 @@ const _ActiveUsersPage = () => {
               <StyledColumn>
                 {!loading ? (
                   users.length > 0 ? (
-                    <MarqueeSelection selection={null}>
+                    <MarqueeSelection selection={selection}>
                       <DetailsList
                         items={users}
                         columns={columns}
@@ -200,7 +200,7 @@ const _ActiveUsersPage = () => {
         dialogContentProps={{
           type: DialogType.normal,
           title: 'Disable user',
-          subText: `Do you really want to disable the selected users ?`,
+          subText: `Do you really want to disable the selected user(s) ?`,
         }}
         modalProps={{ isBlocking: true, isDraggable: false }}
       >
