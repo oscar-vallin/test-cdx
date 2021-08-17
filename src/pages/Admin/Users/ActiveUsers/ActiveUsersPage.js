@@ -1,11 +1,12 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment, useMemo } from 'react';
 import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
+import { MarqueeSelection } from '@fluentui/react/lib/MarqueeSelection';
 import { PrimaryButton, DefaultButton, MessageBar } from 'office-ui-fabric-react';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Button } from '../../../../components/buttons/Button';
 import { Row, Column } from '../../../../components/layouts';
 import { Spacing } from '../../../../components/spacings/Spacing';
-import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
+import { DetailsList, DetailsListLayoutMode, SelectionMode, Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { Text } from '../../../../components/typography/Text';
 import { Separator } from '../../../../components/separators/Separator';
@@ -29,7 +30,7 @@ const generateColumns = () => {
     createColumn({ name: 'ID', key: 'id' }),
     createColumn({ name: 'First Name', key: 'firstNm' }),
     createColumn({ name: 'Last Name', key: 'lastNm' }),
-    createColumn({ name: '', key: 'actions' }),
+    // createColumn({ name: '', key: 'actions' }),
   ];
 };
 
@@ -41,6 +42,7 @@ const _ActiveUsersPage = () => {
   const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);
   const [selectedUserId, setSelectedUserId] = useState(0);
   const [useUsersForOrgFpLazy, { data, loading }] = useUsersForOrgFpLazyQuery();
+  const [selectedItems, setSelectedItems] = useState([]);
 
   const [
     disableUser,
@@ -56,6 +58,17 @@ const _ActiveUsersPage = () => {
     });
   }, [orgSid]);
 
+  const selection = useMemo(
+    () =>
+      new Selection({
+        onSelectionChanged: () => {
+          setSelectedItems(selection.getSelection());
+        },
+        selectionMode: SelectionMode.multiple,
+      }),
+    []
+  );
+
   const onRenderItemColumn = (node, _index, column) => {
     if (column.key == 'actions') {
       return (
@@ -63,7 +76,7 @@ const _ActiveUsersPage = () => {
           <StyledCommandButton
             iconProps={{ iconName: 'Delete' }}
             onClick={() => {
-              setSelectedUserId(node.item?.id);
+              // setSelectedUserId(node.item?.id);
               setIsConfirmationHidden(false);
             }}
           />
@@ -76,7 +89,7 @@ const _ActiveUsersPage = () => {
 
   const hideConfirmation = () => {
     setIsConfirmationHidden(true);
-    setSelectedUserId(0);
+    setSelectedItems([]);
   };
 
   useEffect(() => {
@@ -85,9 +98,15 @@ const _ActiveUsersPage = () => {
     }
   }, [loading]);
 
+  const selectedUserIds = () => {
+    return selectedItems.map((node) => {
+      return node.item.id;
+    });
+  };
+
   useEffect(() => {
     if (!isDisablingUser && disableResponse) {
-      setUsers(users.filter(({ item }) => item.id !== selectedUserId));
+      setUsers(users.filter(({ item }) => !selectedUserIds().includes(item.id)));
     }
   }, [isDisablingUser, disableResponse]);
 
@@ -97,13 +116,13 @@ const _ActiveUsersPage = () => {
         <Row>
           <Column lg="8">
             <Row center>
-              <Column lg="4">
+              <Column lg="8">
                 <Spacing margin={{ top: 'small' }}>
                   <Text variant="bold">Active Users</Text>
                 </Spacing>
               </Column>
 
-              <Column lg="8" right>
+              <Column lg="2" right>
                 <Button
                   variant="primary"
                   onClick={() => {
@@ -111,6 +130,21 @@ const _ActiveUsersPage = () => {
                   }}
                 >
                   Create user
+                </Button>
+              </Column>
+
+              <Column lg="2" right>
+                <Button
+                  variant="primary"
+                  onClick={() => {
+                    if (selectedItems.length > 0) {
+                      setIsConfirmationHidden(false);
+                    } else {
+                      alert('Please select at least one user');
+                    }
+                  }}
+                >
+                  Disable Users
                 </Button>
               </Column>
             </Row>
@@ -123,14 +157,17 @@ const _ActiveUsersPage = () => {
               <StyledColumn>
                 {!loading ? (
                   users.length > 0 ? (
-                    <DetailsList
-                      items={users}
-                      selectionMode={SelectionMode.none}
-                      columns={columns}
-                      layoutMode={DetailsListLayoutMode.justified}
-                      onRenderItemColumn={onRenderItemColumn}
-                      isHeaderVisible
-                    />
+                    <MarqueeSelection selection={null}>
+                      <DetailsList
+                        items={users}
+                        columns={columns}
+                        layoutMode={DetailsListLayoutMode.justified}
+                        onRenderItemColumn={onRenderItemColumn}
+                        selection={selection}
+                        selectionPreservedOnEmptyClick={true}
+                        isHeaderVisible
+                      />
+                    </MarqueeSelection>
                   ) : (
                     <MessageBar>No active users</MessageBar>
                   )
@@ -148,7 +185,7 @@ const _ActiveUsersPage = () => {
       <CreateUsersPanel
         isOpen={isPanelOpen}
         onCreateUser={(createdUser) => {
-          setSelectedUserId(0);
+          setSelectedItems([]);
           setUsers([...users, { item: createdUser.model }]);
         }}
         onDismiss={() => {
@@ -163,9 +200,7 @@ const _ActiveUsersPage = () => {
         dialogContentProps={{
           type: DialogType.normal,
           title: 'Disable user',
-          subText: `Do you really want to disable "${
-            users.find(({ item }) => selectedUserId === item?.id)?.item?.person?.firstNm || ''
-          }"?`,
+          subText: `Do you really want to disable the selected users ?`,
         }}
         modalProps={{ isBlocking: true, isDraggable: false }}
       >
@@ -174,10 +209,9 @@ const _ActiveUsersPage = () => {
             onClick={() => {
               disableUser({
                 variables: {
-                  sidsInput: { sids: [selectedUserId] },
+                  sidsInput: { sids: selectedUserIds() },
                 },
               });
-
               setIsConfirmationHidden(true);
             }}
             text="Disable"
