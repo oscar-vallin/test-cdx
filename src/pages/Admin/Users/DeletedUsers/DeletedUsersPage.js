@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react';
-
+import React, { useState, useEffect, useMemo } from 'react';
+import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Row, Column } from '../../../../components/layouts';
 import { Spacing } from '../../../../components/spacings/Spacing';
-import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
+import { PrimaryButton, DefaultButton, MessageBar } from 'office-ui-fabric-react';
+import { DetailsList, DetailsListLayoutMode, SelectionMode, Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { MessageBar } from 'office-ui-fabric-react';
 import { Text } from '../../../../components/typography/Text';
+import { MarqueeSelection } from '@fluentui/react/lib/MarqueeSelection';
 import { Separator } from '../../../../components/separators/Separator';
-
-import { useUsersForOrgFpLazyQuery } from '../../../../data/services/graphql';
+import { Button } from '../../../../components/buttons/Button';
+import { useUsersForOrgFpLazyQuery, useActivateUserMutation } from '../../../../data/services/graphql';
 import { StyledColumn } from './DeletedUsersPage.styles';
 
 // import { useAuthContext } from '../../../../contexts/AuthContext';
@@ -26,23 +28,51 @@ const generateColumns = () => {
   });
 
   return [
-    createColumn({ name: 'ID', key: 'id' }),
+    createColumn({ name: 'First Name', key: 'firstNm' }),
+    createColumn({ name: 'Last Name', key: 'lastNm' }),
     createColumn({ name: 'Email', key: 'email' }),
     createColumn({ name: 'First Name', key: 'person.firstName' }),
     createColumn({ name: 'Last Name', key: 'person.lastNm' }),
   ];
 };
 
-const onRenderItemColumn = (item, _index, column) => {
-  return item[column.key] || item['person'][column.key];
+const onRenderItemColumn = (node, _index, column) => {
+  return node.item[column.key] || node.item['person'][column.key];
 };
 
 const _DeletedUsersPage = () => {
-  const { orgSid } = useOrgSid();
+  const { orgSid } = useAuthContext();
   const [users, setUsers] = useState([]);
+  const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);
+  const [selectedItems, setSelectedItems] = useState([]);
   const columns = generateColumns();
 
-  const [useUsersForOrgFpLazy, { data, loading }] = useUsersForOrgFpLazyQuery();
+  const { data, loading } = useUsersForOrgFpQuery({
+    variables: {
+      orgSid,
+      userFilter: { activeFilter: 'INACTIVE' },
+    },
+  });
+  const [
+    enableUser,
+    { data: enableResponse, loading: isEnablingUser, error: EnableUserError },
+  ] = useActivateUserMutation();
+
+  const selection = useMemo(
+    () =>
+      new Selection({
+        onSelectionChanged: () => {
+          setSelectedItems(selection.getSelection());
+        },
+        selectionMode: SelectionMode.single,
+      }),
+    []
+  );
+
+  const hideConfirmation = () => {
+    setIsConfirmationHidden(true);
+    setSelectedItems([]);
+  };
 
   useEffect(() => {
     useUsersForOrgFpLazy({
@@ -59,16 +89,42 @@ const _DeletedUsersPage = () => {
     }
   }, [loading]);
 
+  useEffect(() => {
+    if (!isEnablingUser && enableResponse) {
+      setUsers(users.filter(({ item }) => !selectedUserIds().includes(item.id)));
+    }
+  }, [isEnablingUser, enableResponse]);
+
+  const selectedUserIds = () => {
+    return selectedItems.map((node) => {
+      return node.item.id;
+    });
+  };
+
   return (
     <LayoutAdmin id="PageDeletedUsers" sidebarOptionSelected="DELETED_USERS">
       <Spacing margin="double">
         <Row>
           <Column lg="8">
             <Row>
-              <Column lg="4">
+              <Column lg="8">
                 <Spacing margin={{ top: 'small' }}>
                   <Text variant="bold">Deleted Users</Text>
                 </Spacing>
+              </Column>
+              <Column lg="4" right>
+                <Button
+                  variant="primary"
+                  onClick={() => {
+                    if (selectedItems.length > 0) {
+                      setIsConfirmationHidden(false);
+                    } else {
+                      alert('Please select at least one user');
+                    }
+                  }}
+                >
+                  Enable Users
+                </Button>
               </Column>
             </Row>
 
@@ -80,14 +136,17 @@ const _DeletedUsersPage = () => {
               <StyledColumn>
                 {!loading ? (
                   users.length > 0 ? (
-                    <DetailsList
-                      items={users}
-                      selectionMode={SelectionMode.none}
-                      columns={columns}
-                      layoutMode={DetailsListLayoutMode.justified}
-                      onRenderItemColumn={onRenderItemColumn}
-                      isHeaderVisible
-                    />
+                    <MarqueeSelection selection={selection}>
+                      <DetailsList
+                        items={users}
+                        columns={columns}
+                        layoutMode={DetailsListLayoutMode.justified}
+                        onRenderItemColumn={onRenderItemColumn}
+                        selection={selection}
+                        selectionPreservedOnEmptyClick={true}
+                        isHeaderVisible
+                      />
+                    </MarqueeSelection>
                   ) : (
                     <MessageBar>No deleted users</MessageBar>
                   )
@@ -101,6 +160,32 @@ const _DeletedUsersPage = () => {
           </Column>
         </Row>
       </Spacing>
+
+      <Dialog
+        hidden={isConfirmationHidden}
+        onDismiss={hideConfirmation}
+        dialogContentProps={{
+          type: DialogType.normal,
+          title: 'Enable user',
+          subText: `Do you really want to enable the selected user ?`,
+        }}
+        modalProps={{ isBlocking: true, isDraggable: false }}
+      >
+        <DialogFooter>
+          <PrimaryButton
+            onClick={() => {
+              enableUser({
+                variables: {
+                  sidInput: { sid: selectedUserIds()[0] },
+                },
+              });
+              setIsConfirmationHidden(true);
+            }}
+            text="Enable"
+          />
+          <DefaultButton onClick={hideConfirmation} text="Cancel" />
+        </DialogFooter>
+      </Dialog>
     </LayoutAdmin>
   );
 };

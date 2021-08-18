@@ -15,6 +15,15 @@ export const useCurrentUser = (_username, _password) => {
     variables: {},
   });
 
+  useEffect(() => {
+    if (error) {
+      console.log('We have an error');
+      authLogout('Session Expired');
+      history.push('/');
+    }
+    console.log('I am the diestro');
+  }, [error]);
+
   //*
   useEffect(() => {
     if (!data) return;

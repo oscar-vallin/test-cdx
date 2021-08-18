@@ -16,6 +16,7 @@ import { getRouteByApiId } from './../../../data/constants/RouteConstants';
 import { useNavigateToNewDomainLazyQuery } from './../../../data/services/graphql';
 import queryString from 'query-string';
 import { useOrgSid } from '../../../hooks/useOrgSid';
+import { useNavigateToNewDomainLazyQuery } from '../../../data/services/graphql';
 
 // CardSection is called directly cause a restriction warning for that component.
 const MainMenu = ({ id = '__MainMenu', option = ROUTES.ROUTE_DASHBOARD.ID, left, changeCollapse }) => {
@@ -37,7 +38,7 @@ const MainMenu = ({ id = '__MainMenu', option = ROUTES.ROUTE_DASHBOARD.ID, left,
   const [fetchNav, { data, loading, error }] = useNavigateToNewDomainLazyQuery({
     variables: {
       domainNavInput: {
-        orgSid,
+        orgSid: authData?.orgId,
         appDomain: 'DASHBOARD',
         selectedPage: 'DASHBOARD',
       },
@@ -45,10 +46,10 @@ const MainMenu = ({ id = '__MainMenu', option = ROUTES.ROUTE_DASHBOARD.ID, left,
   });
 
   useEffect(() => {
-    if (orgSid) {
+    if (authData?.orgId) {
       fetchNav();
     }
-  }, [orgSid]);
+  }, [authData?.orgId]);
 
   useEffect(() => {
     if (cache) {
@@ -76,9 +77,11 @@ const MainMenu = ({ id = '__MainMenu', option = ROUTES.ROUTE_DASHBOARD.ID, left,
   };
 
   const renderOptions = () => {
-    const { authData } = useAuthContext();
+    const {
+      userDomain: { dashboard },
+    } = useUserDomain();
 
-    return domain.navItems.map((menuOption) => {
+    return (dashboard?.navItems || []).map((menuOption) => {
       const page = menuOption?.page;
       const opt = getRouteByApiId(menuOption.label !== 'Admin' ? page?.type : 'ADMIN');
 

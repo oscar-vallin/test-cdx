@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { Column } from '../../../../components/layouts';
 import { Link } from 'react-router-dom';
 import { Button } from '../../../../components/buttons/Button';
+import { CommandBarButton } from '@fluentui/react';
 
 export const StyledColumn = styled(Column)`
   .ms-Viewport {
@@ -22,4 +23,8 @@ export const StyledButtonAction = styled(Button)`
   &:hover {
     background: ${({ theme }) => theme.colors.themePrimary};
   }
+`;
+
+export const StyledCommandButton = styled(CommandBarButton)`
+  background: transparent;
 `;

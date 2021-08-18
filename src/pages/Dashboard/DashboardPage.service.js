@@ -43,10 +43,6 @@ export const useDashboardService = (initOrgSid) => {
   const history = useHistory();
 
   useEffect(() => {
-    useDashboardPeriodsQuery();
-  }, []);
-
-  useEffect(() => {
     if (error) {
       authLogout();
       history.push('/');
