@@ -9,11 +9,10 @@ import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { Text } from '../../../../components/typography/Text';
 import { MarqueeSelection } from '@fluentui/react/lib/MarqueeSelection';
 import { Separator } from '../../../../components/separators/Separator';
-
-import { useUsersForOrgFpLazyQuery } from '../../../../data/services/graphql';
+import { Button } from '../../../../components/buttons/Button';
+import { useUsersForOrgFpLazyQuery, useActivateUserMutation } from '../../../../data/services/graphql';
 import { StyledColumn } from './DeletedUsersPage.styles';
 
-// import { useAuthContext } from '../../../../contexts/AuthContext';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
 
 const generateColumns = () => {
@@ -30,8 +29,6 @@ const generateColumns = () => {
     createColumn({ name: 'First Name', key: 'firstNm' }),
     createColumn({ name: 'Last Name', key: 'lastNm' }),
     createColumn({ name: 'Email', key: 'email' }),
-    createColumn({ name: 'First Name', key: 'firstNm' }),
-    createColumn({ name: 'Last Name', key: 'lastNm' }),
   ];
 };
 
@@ -47,6 +44,27 @@ const _DeletedUsersPage = () => {
   const columns = generateColumns();
 
   const [useUsersForOrgFpLazy, { data, loading }] = useUsersForOrgFpLazyQuery();
+
+  const [
+    enableUser,
+    { data: enableResponse, loading: isEnablingUser, error: EnableUserError },
+  ] = useActivateUserMutation();
+
+  const selection = useMemo(
+    () =>
+      new Selection({
+        onSelectionChanged: () => {
+          setSelectedItems(selection.getSelection());
+        },
+        selectionMode: SelectionMode.single,
+      }),
+    []
+  );
+
+  const hideConfirmation = () => {
+    setIsConfirmationHidden(true);
+    setSelectedItems([]);
+  };
 
   useEffect(() => {
     useUsersForOrgFpLazy({
@@ -141,20 +159,18 @@ const _DeletedUsersPage = () => {
         dialogContentProps={{
           type: DialogType.normal,
           title: 'Enable user',
-          subText: `Do you really want to enable the selected user(s) ?`,
+          subText: `Do you really want to enable the selected user ?`,
         }}
         modalProps={{ isBlocking: true, isDraggable: false }}
       >
         <DialogFooter>
           <PrimaryButton
             onClick={() => {
-              // enableUser({
-              //   variables: {
-              //     sidsInput: { sids: selectedUserIds() },
-              //   },
-              // });
-              console.log('users to enable: ', selectedUserIds());
-
+              enableUser({
+                variables: {
+                  sidInput: { sid: selectedUserIds()[0] },
+                },
+              });
               setIsConfirmationHidden(true);
             }}
             text="Enable"

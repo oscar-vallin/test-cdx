@@ -19,7 +19,6 @@ const CreateUsersPanel = ({ isOpen, onDismiss, onCreateUser, selectedUserId }) =
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [groupIds, setGroupIds] = useState(0);
-  const history = useHistory();
 
   const [_apiCall, { data, loading }] = useCreateUserMutation({
     variables: {
@@ -40,6 +39,11 @@ const CreateUsersPanel = ({ isOpen, onDismiss, onCreateUser, selectedUserId }) =
     if (data) {
       onCreateUser(data.createUser);
       onDismiss();
+      setFirstName('');
+      setLastName('');
+      setEmail('');
+      setPassword('');
+      setGroupIds(0);
     }
   }, [data]);
 

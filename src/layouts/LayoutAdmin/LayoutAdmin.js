@@ -43,20 +43,11 @@ const LayoutAdmin = ({ id = 'LayoutAdmin', menuOptionSelected = 'admin', sidebar
   } = useUserDomain();
   const { authData, authLogout } = useAuthContext();
   const { isCurrentUserLogged } = useCurrentUser();
-
-  const {
-    userDomain: { organization },
-    isFetchingOrgNav,
-  } = useUserDomain();
-  const { authData, authLogout } = useAuthContext();
-  const { isCurrentUserLogged } = useCurrentUser();
   const cache = localStorage.getItem('ADMIN_NAV');
 
   const [domain, setDomain] = useState({});
 
   const [useNavigateToNewDomainLazy, { data, loading, error }] = useNavigateToNewDomainLazyQuery();
-  const location = useLocation();
-
   const location = useLocation();
 
   useEffect(() => {

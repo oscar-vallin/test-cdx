@@ -14,7 +14,6 @@ import { CreateUsersPanel } from '../CreateUsers';
 import { useUsersForOrgFpLazyQuery, useDeactivateUsersMutation } from '../../../../data/services/graphql';
 import { StyledColumn, StyledCommandButton } from './ActiveUsersPage.styles';
 
-// import { useAuthContext } from '../../../../contexts/AuthContext';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
 
 const generateColumns = () => {
@@ -42,6 +41,7 @@ const _ActiveUsersPage = () => {
   const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);
   const [selectedUserId, setSelectedUserId] = useState(0);
   const [useUsersForOrgFpLazy, { data, loading }] = useUsersForOrgFpLazyQuery();
+  const [selectedItems, setSelectedItems] = useState([]);
 
   const [
     disableUser,
@@ -57,6 +57,17 @@ const _ActiveUsersPage = () => {
     });
   }, [orgSid]);
 
+  const selection = useMemo(
+    () =>
+      new Selection({
+        onSelectionChanged: () => {
+          setSelectedItems(selection.getSelection());
+        },
+        selectionMode: SelectionMode.multiple,
+      }),
+    []
+  );
+
   const onRenderItemColumn = (node, _index, column) => {
     if (column.key == 'actions') {
       return (
@@ -64,7 +75,7 @@ const _ActiveUsersPage = () => {
           <StyledCommandButton
             iconProps={{ iconName: 'Delete' }}
             onClick={() => {
-              setSelectedUserId(node.item?.id);
+              // setSelectedUserId(node.item?.id);
               setIsConfirmationHidden(false);
             }}
           />
@@ -94,7 +105,7 @@ const _ActiveUsersPage = () => {
 
   useEffect(() => {
     if (!isDisablingUser && disableResponse) {
-      setUsers(users.filter(({ item }) => item.id !== selectedUserId));
+      setUsers(users.filter(({ item }) => !selectedUserIds().includes(item.id)));
     }
   }, [isDisablingUser, disableResponse]);
 
@@ -173,7 +184,7 @@ const _ActiveUsersPage = () => {
       <CreateUsersPanel
         isOpen={isPanelOpen}
         onCreateUser={(createdUser) => {
-          setSelectedUserId(0);
+          setSelectedItems([]);
           setUsers([...users, { item: createdUser.model }]);
         }}
         onDismiss={() => {
@@ -188,9 +199,7 @@ const _ActiveUsersPage = () => {
         dialogContentProps={{
           type: DialogType.normal,
           title: 'Disable user',
-          subText: `Do you really want to disable "${
-            users.find(({ item }) => selectedUserId === item?.id)?.item?.person?.firstNm || ''
-          }"?`,
+          subText: `Do you really want to disable the selected user(s) ?`,
         }}
         modalProps={{ isBlocking: true, isDraggable: false }}
       >
@@ -199,7 +208,7 @@ const _ActiveUsersPage = () => {
             onClick={() => {
               disableUser({
                 variables: {
-                  sidsInput: { sids: [selectedUserId] },
+                  sidsInput: { sids: selectedUserIds() },
                 },
               });
               setIsConfirmationHidden(true);
