@@ -621,6 +621,14 @@ export type MutationDeactivateUsersArgs = {
   sidsInput: SidsInput;
 };
 
+export type MutationActivateUserArgs = {
+  sidInput: SidInput;
+};
+
+export type MutationActivateUsersArgs = {
+  sidsInput: SidsInput;
+};
+
 export type MutationRemoveAmPoliciesArgs = {
   deleteAMPoliciesInput?: Maybe<DeleteAmPoliciesInput>;
 };
@@ -1003,10 +1011,6 @@ export type QueryWorkPacketStatusesArgs = {
 
 export type QueryDashboardPeriodsArgs = {
   orgSid: Scalars['ID'];
-};
-
-export type QueryCurrentOrgNavArgs = {
-  orgInput?: Maybe<OrgSidInput>;
 };
 
 export type QueryCurrentOrgNavArgs = {
@@ -2066,6 +2070,18 @@ export type DeactivateUsersMutationVariables = Exact<{
 
 export type DeactivateUsersMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'deactivateUsers'>;
 
+export type ActivateUserMutationVariables = Exact<{
+  sidInput: SidInput;
+}>;
+
+export type ActivateUserMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'activateUser'>;
+
+export type ActivateUsersMutationVariables = Exact<{
+  sidsInput: SidsInput;
+}>;
+
+export type ActivateUsersMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'activateUsers'>;
+
 export type AmPoliciesForOrgPQueryVariables = Exact<{
   orgSid: Scalars['ID'];
   pageableInput?: Maybe<PageableInput>;
@@ -2683,18 +2699,6 @@ export type DefaultDashThemeForSiteQuery = { __typename?: 'Query' } & {
             'id' | 'paletteNm' | 'allowDark' | 'themePrimary' | 'neutralPrimary' | 'white'
           >
         >;
-      }
-  >;
-};
-
-export type CurrentOrgNavQueryVariables = Exact<{
-  orgInput?: Maybe<OrgSidInput>;
-}>;
-
-export type CurrentOrgNavQuery = { __typename?: 'Query' } & {
-  currentOrgNav?: Maybe<
-    { __typename?: 'WebNav' } & Pick<WebNav, 'label'> & {
-        subNavItems?: Maybe<Array<Maybe<{ __typename?: 'WebNav' } & NavItemFragmentFragment>>>;
       }
   >;
 };
@@ -4380,6 +4384,76 @@ export type DeactivateUsersMutationResult = Apollo.MutationResult<DeactivateUser
 export type DeactivateUsersMutationOptions = Apollo.BaseMutationOptions<
   DeactivateUsersMutation,
   DeactivateUsersMutationVariables
+>;
+export const ActivateUserDocument = gql`
+  mutation ActivateUser($sidInput: SidInput!) {
+    activateUser(sidInput: $sidInput)
+  }
+`;
+export type ActivateUserMutationFn = Apollo.MutationFunction<ActivateUserMutation, ActivateUserMutationVariables>;
+
+/**
+ * __useActivateUserMutation__
+ *
+ * To run a mutation, you first call `useActivateUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useActivateUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [activateUserMutation, { data, loading, error }] = useActivateUserMutation({
+ *   variables: {
+ *      sidInput: // value for 'sidInput'
+ *   },
+ * });
+ */
+export function useActivateUserMutation(
+  baseOptions?: Apollo.MutationHookOptions<ActivateUserMutation, ActivateUserMutationVariables>
+) {
+  return Apollo.useMutation<ActivateUserMutation, ActivateUserMutationVariables>(ActivateUserDocument, baseOptions);
+}
+export type ActivateUserMutationHookResult = ReturnType<typeof useActivateUserMutation>;
+export type ActivateUserMutationResult = Apollo.MutationResult<ActivateUserMutation>;
+export type ActivateUserMutationOptions = Apollo.BaseMutationOptions<
+  ActivateUserMutation,
+  ActivateUserMutationVariables
+>;
+export const ActivateUsersDocument = gql`
+  mutation activateUsers($sidsInput: SidsInput!) {
+    activateUsers(sidsInput: $sidsInput)
+  }
+`;
+export type ActivateUsersMutationFn = Apollo.MutationFunction<ActivateUsersMutation, ActivateUsersMutationVariables>;
+
+/**
+ * __useActivateUsersMutation__
+ *
+ * To run a mutation, you first call `useActivateUsersMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useActivateUsersMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [activateUsersMutation, { data, loading, error }] = useActivateUsersMutation({
+ *   variables: {
+ *      sidsInput: // value for 'sidsInput'
+ *   },
+ * });
+ */
+export function useActivateUsersMutation(
+  baseOptions?: Apollo.MutationHookOptions<ActivateUsersMutation, ActivateUsersMutationVariables>
+) {
+  return Apollo.useMutation<ActivateUsersMutation, ActivateUsersMutationVariables>(ActivateUsersDocument, baseOptions);
+}
+export type ActivateUsersMutationHookResult = ReturnType<typeof useActivateUsersMutation>;
+export type ActivateUsersMutationResult = Apollo.MutationResult<ActivateUsersMutation>;
+export type ActivateUsersMutationOptions = Apollo.BaseMutationOptions<
+  ActivateUsersMutation,
+  ActivateUsersMutationVariables
 >;
 export const AmPoliciesForOrgPDocument = gql`
   query AMPoliciesForOrgP($orgSid: ID!, $pageableInput: PageableInput) {
