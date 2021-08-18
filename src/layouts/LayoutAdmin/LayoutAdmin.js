@@ -16,7 +16,6 @@ import { useOrgSid } from '../../hooks/useOrgSid';
 import { useNavigateToNewDomainQuery } from '../../data/services/graphql';
 import { useCurrentUser } from '../../contexts/hooks/useCurrentUser';
 
-
 const parseLinks = (links = [], sidebarOpt) => {
   return links.map(({ appDomain, label, subNavItems, page }) => ({
     name: label,

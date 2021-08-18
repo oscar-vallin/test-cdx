@@ -11,11 +11,11 @@ export default function AuthenticatedRoute({ children, ...rest }) {
 
   return (
     <Route {...rest}>
-      {isAuthenticated
-        ? <ErrorBoundary FallbackComponent={GenericErrorBoundary}>
-            {children}
-          </ErrorBoundary>
-        : <Redirect to={`/login?redirect=${pathname}${search}`} />}
+      {isAuthenticated ? (
+        <ErrorBoundary FallbackComponent={GenericErrorBoundary}>{children}</ErrorBoundary>
+      ) : (
+        <Redirect to={`/login?redirect=${pathname}${search}`} />
+      )}
     </Route>
   );
 }

@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useAuthContext } from './AuthContext';
-import {
-  useNavigateToNewDomainLazyQuery,
-  useCurrentOrgNavLazyQuery,
-} from '../data/services/graphql';
+import { useNavigateToNewDomainLazyQuery, useCurrentOrgNavLazyQuery } from '../data/services/graphql';
 
 export const UserDomainContext = React.createContext(() => {});
 
-const INITIAL_STATE = {}
+const INITIAL_STATE = {};
 
 export const UserDomainContextProvider = ({ children }) => {
   const { isAuthenticated, isAuthenticating, authData, orgSid } = useAuthContext();
@@ -16,17 +13,17 @@ export const UserDomainContextProvider = ({ children }) => {
 
   const [
     fetchDashNav,
-    { data: dashNav, loading: isFetchingDashNav, error: dashNavError }
+    { data: dashNav, loading: isFetchingDashNav, error: dashNavError },
   ] = useNavigateToNewDomainLazyQuery();
 
   const [
     fetchOrgNav,
-    { data: orgNav, loading: isFetchingOrgNav, error: orgNavError }
+    { data: orgNav, loading: isFetchingOrgNav, error: orgNavError },
   ] = useNavigateToNewDomainLazyQuery();
 
   const [
     fetchCurrentOrgNav,
-    { data: currentOrgNav, loading: isFetchingCurrentOrgNav, error: currentOrgNavError }
+    { data: currentOrgNav, loading: isFetchingCurrentOrgNav, error: currentOrgNavError },
   ] = useCurrentOrgNavLazyQuery();
 
   useEffect(() => {
@@ -58,7 +55,7 @@ export const UserDomainContextProvider = ({ children }) => {
       const domain = {
         dashboard: dashNav.navigateToNewDomain,
         organization: orgNav.navigateToNewDomain,
-      }
+      };
 
       setUserDomain({ ...userDomain, ...domain });
     }
@@ -71,13 +68,15 @@ export const UserDomainContextProvider = ({ children }) => {
   }, [currentOrgNav]);
 
   return (
-    <UserDomainContext.Provider value={{
-      userDomain,
-      currentUserOrgNav,
-      isFetchingOrgNav,
-      setUserDomain
-    }}>
+    <UserDomainContext.Provider
+      value={{
+        userDomain,
+        currentUserOrgNav,
+        isFetchingOrgNav,
+        setUserDomain,
+      }}
+    >
       {children}
     </UserDomainContext.Provider>
-  )
-}
+  );
+};

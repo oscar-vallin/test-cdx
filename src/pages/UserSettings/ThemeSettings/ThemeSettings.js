@@ -28,7 +28,7 @@ const INITIAL_THEME = {
 
 const ThemeSettings = ({ userTheme = { ...INITIAL_THEME } }) => {
   const [useUserThemeQuery, { data: theme, loading: isLoadingTheme }] = useUserThemeLazyQuery();
-  
+
   useEffect(() => {
     useUserThemeQuery({ variables: { themeColorMode: null } });
   }, []);

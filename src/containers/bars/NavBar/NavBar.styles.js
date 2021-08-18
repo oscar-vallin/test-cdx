@@ -162,7 +162,7 @@ export const StyledButtonOrg = styled(DefaultButton)`
   border: none;
   color: ${({ theme }) => theme.colors.white};
   margin: 0 5px 0 0;
-  transition: all .15s ease-out;
+  transition: all 0.15s ease-out;
 
   &:hover {
     background: none;
