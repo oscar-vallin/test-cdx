@@ -139,6 +139,7 @@ export enum CdxWebCommandType {
   PageAdd = 'PAGE_ADD',
   PageUpdate = 'PAGE_UPDATE',
   Deactivate = 'DEACTIVATE',
+  Activate = 'ACTIVATE',
   Add = 'ADD',
   Update = 'UPDATE',
 }
@@ -541,6 +542,8 @@ export type Mutation = {
   updateUserAMGroups?: Maybe<Array<Maybe<AmGroup>>>;
   deactivateUser?: Maybe<GqOperationResponse>;
   deactivateUsers?: Maybe<GqOperationResponse>;
+  activateUser?: Maybe<GqOperationResponse>;
+  activateUsers?: Maybe<GqOperationResponse>;
   removeAMPolicies?: Maybe<Scalars['String']>;
   removeAMPolicy?: Maybe<Scalars['String']>;
   removeAMPermissions?: Maybe<Scalars['String']>;
@@ -1009,7 +1012,6 @@ export type QueryCurrentOrgNavArgs = {
 export type QueryCurrentOrgNavArgs = {
   orgInput?: Maybe<OrgSidInput>;
 };
-
 
 export type QueryUserThemeArgs = {
   themeColorMode?: Maybe<ThemeColorMode>;
@@ -2701,18 +2703,13 @@ export type CurrentOrgNavQueryVariables = Exact<{
   orgInput?: Maybe<OrgSidInput>;
 }>;
 
-
-export type CurrentOrgNavQuery = (
-  { __typename?: 'Query' }
-  & { currentOrgNav?: Maybe<(
-    { __typename?: 'WebNav' }
-    & Pick<WebNav, 'label'>
-    & { subNavItems?: Maybe<Array<Maybe<(
-      { __typename?: 'WebNav' }
-      & NavItemFragmentFragment
-    )>>> }
-  )> }
-);
+export type CurrentOrgNavQuery = { __typename?: 'Query' } & {
+  currentOrgNav?: Maybe<
+    { __typename?: 'WebNav' } & Pick<WebNav, 'label'> & {
+        subNavItems?: Maybe<Array<Maybe<{ __typename?: 'WebNav' } & NavItemFragmentFragment>>>;
+      }
+  >;
+};
 
 export type UpdateDefaultDashThemeMutationVariables = Exact<{
   updateDefaultDashThemeInput: UpdateDefaultDashThemeInput;
