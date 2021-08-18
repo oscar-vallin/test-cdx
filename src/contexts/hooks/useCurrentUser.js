@@ -21,7 +21,6 @@ export const useCurrentUser = (_username, _password) => {
       authLogout('Session Expired');
       history.push('/');
     }
-    console.log('I am the diestro');
   }, [error]);
 
   //*

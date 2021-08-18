@@ -10,7 +10,7 @@ import { Text } from '../../../../components/typography/Text';
 import { MarqueeSelection } from '@fluentui/react/lib/MarqueeSelection';
 import { Separator } from '../../../../components/separators/Separator';
 import { Button } from '../../../../components/buttons/Button';
-import { useUsersForOrgFpLazyQuery, useActivateUserMutation } from '../../../../data/services/graphql';
+import { useUsersForOrgFpLazyQuery, useActivateUsersMutation } from '../../../../data/services/graphql';
 import { StyledColumn } from './DeletedUsersPage.styles';
 
 // import { useAuthContext } from '../../../../contexts/AuthContext';
@@ -55,7 +55,7 @@ const _DeletedUsersPage = () => {
   const [
     enableUser,
     { data: enableResponse, loading: isEnablingUser, error: EnableUserError },
-  ] = useActivateUserMutation();
+  ] = useActivateUsersMutation();
 
   const selection = useMemo(
     () =>
@@ -63,7 +63,7 @@ const _DeletedUsersPage = () => {
         onSelectionChanged: () => {
           setSelectedItems(selection.getSelection());
         },
-        selectionMode: SelectionMode.single,
+        selectionMode: SelectionMode.multiple,
       }),
     []
   );
@@ -175,7 +175,7 @@ const _DeletedUsersPage = () => {
             onClick={() => {
               enableUser({
                 variables: {
-                  sidInput: { sid: selectedUserIds()[0] },
+                  sidsInput: { sids: selectedUserIds() },
                 },
               });
               setIsConfirmationHidden(true);
