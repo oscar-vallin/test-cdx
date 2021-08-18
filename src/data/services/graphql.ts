@@ -87,7 +87,7 @@ export type AmPolicyPage = {
 export enum ActiveEnum {
   Active = 'ACTIVE',
   Inactive = 'INACTIVE',
-  All = 'ALL'
+  All = 'ALL',
 }
 
 export type ArchiveFileType = {
@@ -102,7 +102,7 @@ export enum CdxFacet {
   Status = 'STATUS',
   AmPolicy = 'AM_POLICY',
   AmUser = 'AM_USER',
-  Organization = 'ORGANIZATION'
+  Organization = 'ORGANIZATION',
 }
 
 export type CdxFacetNvp = {
@@ -121,7 +121,7 @@ export type CdxPageInfo = {
 export enum CdxService {
   Cdx = 'CDX',
   Integration = 'INTEGRATION',
-  AccessManagement = 'ACCESS_MANAGEMENT'
+  AccessManagement = 'ACCESS_MANAGEMENT',
 }
 
 export type CdxServiceNvp = {
@@ -132,15 +132,16 @@ export type CdxServiceNvp = {
 
 export enum CdxWebAppDomain {
   Dashboard = 'DASHBOARD',
-  Organization = 'ORGANIZATION'
+  Organization = 'ORGANIZATION',
 }
 
 export enum CdxWebCommandType {
   PageAdd = 'PAGE_ADD',
   PageUpdate = 'PAGE_UPDATE',
   Deactivate = 'DEACTIVATE',
+  Activate = 'ACTIVATE',
   Add = 'ADD',
-  Update = 'UPDATE'
+  Update = 'UPDATE',
 }
 
 export enum CdxWebPage {
@@ -164,12 +165,12 @@ export enum CdxWebPage {
   AddOrg = 'ADD_ORG',
   AddUser = 'ADD_USER',
   ColorPalettes = 'COLOR_PALETTES',
-  Theme = 'THEME'
+  Theme = 'THEME',
 }
 
 export enum CdxWebPivot {
   Activity = 'ACTIVITY',
-  InProgress = 'IN_PROGRESS'
+  InProgress = 'IN_PROGRESS',
 }
 
 export type CreateAmGroupInput = {
@@ -375,8 +376,6 @@ export type DashboardPeriods = {
   lastMonthlyCounts?: Maybe<DashboardPeriodCounts>;
 };
 
-
-
 export type DateTimeRangeInput = {
   rangeStart: Scalars['DateTime'];
   rangeEnd: Scalars['DateTime'];
@@ -474,7 +473,7 @@ export type FormInfo = {
 
 export enum GqOperationResponse {
   Success = 'SUCCESS',
-  Fail = 'FAIL'
+  Fail = 'FAIL',
 }
 
 export type InsuredStat = {
@@ -520,7 +519,7 @@ export type LoginStep = {
 export enum LoginStepType {
   Username = 'USERNAME',
   Password = 'PASSWORD',
-  Complete = 'COMPLETE'
+  Complete = 'COMPLETE',
 }
 
 export type LookupData = {
@@ -543,6 +542,8 @@ export type Mutation = {
   updateUserAMGroups?: Maybe<Array<Maybe<AmGroup>>>;
   deactivateUser?: Maybe<GqOperationResponse>;
   deactivateUsers?: Maybe<GqOperationResponse>;
+  activateUser?: Maybe<GqOperationResponse>;
+  activateUsers?: Maybe<GqOperationResponse>;
   removeAMPolicies?: Maybe<Scalars['String']>;
   removeAMPolicy?: Maybe<Scalars['String']>;
   removeAMPermissions?: Maybe<Scalars['String']>;
@@ -570,153 +571,131 @@ export type Mutation = {
   setOwnDashThemeFontSize?: Maybe<DashTheme>;
 };
 
-
 export type MutationPasswordLoginArgs = {
   userId: Scalars['String'];
   password: Scalars['String'];
 };
 
-
 export type MutationUpdateOwnPasswordArgs = {
   updatePasswordInput: UpdatePasswordInput;
 };
-
 
 export type MutationCreateOrgArgs = {
   orgInfo: CreateOrgInput;
 };
 
-
 export type MutationCreateAmPolicyArgs = {
   policyInfo: CreateAmPolicyInput;
 };
-
 
 export type MutationCreateAmPermissionArgs = {
   permissionInfo: CreateAmPermissionInput;
 };
 
-
 export type MutationCreateAmPermissionActionArgs = {
   permssionActionInfo: CreateAmPermissionActionInput;
 };
 
-
 export type MutationCreateAmGroupArgs = {
   amGroupInfo: CreateAmGroupInput;
 };
-
 
 export type MutationCreateUserArgs = {
   userInfo: CreateUserInput;
   personInfo: CreatePersonInput;
 };
 
-
 export type MutationUpdateUserArgs = {
   userInfo: UpdateUserInput;
 };
-
 
 export type MutationUpdateUserAmGroupsArgs = {
   userAmGroupUpdate?: Maybe<UpdateUserAmGroupsInput>;
 };
 
-
 export type MutationDeactivateUserArgs = {
   sidInput: SidInput;
 };
-
 
 export type MutationDeactivateUsersArgs = {
   sidsInput: SidsInput;
 };
 
+export type MutationActivateUserArgs = {
+  sidInput: SidInput;
+};
+
+export type MutationActivateUsersArgs = {
+  sidsInput: SidsInput;
+};
 
 export type MutationRemoveAmPoliciesArgs = {
   deleteAMPoliciesInput?: Maybe<DeleteAmPoliciesInput>;
 };
 
-
 export type MutationRemoveAmPolicyArgs = {
   policySid: Scalars['ID'];
 };
-
 
 export type MutationRemoveAmPermissionsArgs = {
   deleteAMPermissionsInput?: Maybe<DeleteAmPermissionsInput>;
 };
 
-
 export type MutationRemoveAmPermissionArgs = {
   permissionSid: Scalars['ID'];
 };
-
 
 export type MutationRemoveAmPermissionActionsArgs = {
   deleteAMPermissionActionsInput?: Maybe<DeleteAmPermissionActionsInput>;
 };
 
-
 export type MutationRemoveAmPermissionActionArgs = {
   permissionActionSid: Scalars['ID'];
 };
-
 
 export type MutationUpdateAmPolicyArgs = {
   updateAMPolicyInput?: Maybe<UpdateAmPolicyInput>;
 };
 
-
 export type MutationUpdateAmPermissionArgs = {
   updateAMPermissionInput?: Maybe<UpdateAmPermissionInput>;
 };
-
 
 export type MutationUpdateAmPermissionActionArgs = {
   updateAMPermissionActionInput?: Maybe<UpdateAmPermissionActionInput>;
 };
 
-
 export type MutationCreateDashThemeColorArgs = {
   createDashThemeColorInput: CreateDashThemeColorInput;
 };
-
 
 export type MutationUpdateDashThemeColorArgs = {
   updateDashThemeColorInput: UpdateDashThemeColorInput;
 };
 
-
 export type MutationCreateDefaultDashThemeArgs = {
   createDefaultDashThemeInput?: Maybe<CreateDefaultDashThemeInput>;
 };
-
 
 export type MutationUpdateDefaultDashThemeArgs = {
   updateDefaultDashThemeInput?: Maybe<UpdateDefaultDashThemeInput>;
 };
 
-
 export type MutationRemoveDashThemeColorArgs = {
   ownedInputSid?: Maybe<OwnedInputSid>;
 };
-
 
 export type MutationRemoveDefaultDashThemeArgs = {
   ownedInputSid?: Maybe<OwnedInputSid>;
 };
 
-
 export type MutationSetDashThemeColorDefaultArgs = {
   dashThemeColorDefaultInput?: Maybe<DashThemeColorDefaultInput>;
 };
 
-
 export type MutationCreateOrUpdateOwnDashThemeArgs = {
   dashThemeInput?: Maybe<DashThemeInput>;
 };
-
 
 export type MutationSetOwnDashThemeFontSizeArgs = {
   dashThemeInput?: Maybe<DashThemeInput>;
@@ -738,7 +717,7 @@ export type NvpStr = {
 
 export enum NullHandling {
   NullsFirst = 'NULLS_FIRST',
-  NullsLast = 'NULLS_LAST'
+  NullsLast = 'NULLS_LAST',
 }
 
 export type OrgFilterInput = {
@@ -760,7 +739,7 @@ export enum OrgType {
   Cdx = 'CDX',
   Template = 'TEMPLATE',
   OutsidePromoter = 'OUTSIDE_PROMOTER',
-  SalesProspect = 'SALES_PROSPECT'
+  SalesProspect = 'SALES_PROSPECT',
 }
 
 export type Organization = {
@@ -841,7 +820,7 @@ export enum PasswordCharacterType {
   UpperCase = 'UPPER_CASE',
   LowerCase = 'LOWER_CASE',
   Digit = 'DIGIT',
-  Special = 'SPECIAL'
+  Special = 'SPECIAL',
 }
 
 export type PasswordLengthRule = {
@@ -855,7 +834,12 @@ export type PasswordPage = {
   ruleGroup: PasswordRuleGroup;
 };
 
-export type PasswordRule = PasswordLengthRule | PasswordWhitespaceRule | PasswordCharacterRule | PasswordStrengthRule | PasswordRuleGroup;
+export type PasswordRule =
+  | PasswordLengthRule
+  | PasswordWhitespaceRule
+  | PasswordCharacterRule
+  | PasswordStrengthRule
+  | PasswordRuleGroup;
 
 export type PasswordRuleGroup = {
   __typename?: 'PasswordRuleGroup';
@@ -880,7 +864,7 @@ export type PasswordWhitespaceRule = {
 
 export enum PermissionEffect {
   Allow = 'ALLOW',
-  Deny = 'DENY'
+  Deny = 'DENY',
 }
 
 export type PermissionEffectNvp = {
@@ -892,7 +876,7 @@ export type PermissionEffectNvp = {
 export enum PermissionPredicate {
   NotKntuEnv = 'NOT_KNTU_ENV',
   StringEqualsIgnoreCase = 'STRING_EQUALS_IGNORE_CASE',
-  StringNotEqualsIgnoreCase = 'STRING_NOT_EQUALS_IGNORE_CASE'
+  StringNotEqualsIgnoreCase = 'STRING_NOT_EQUALS_IGNORE_CASE',
 }
 
 export type PermissionPredicateNvp = {
@@ -910,7 +894,7 @@ export enum PermissionVerb {
   List = 'LIST',
   Download = 'DOWNLOAD',
   Restart = 'RESTART',
-  Assign = 'ASSIGN'
+  Assign = 'ASSIGN',
 }
 
 export type PermissionVerbNvp = {
@@ -955,6 +939,7 @@ export type Query = {
   currentOrgNav?: Maybe<WebNav>;
   userTheme?: Maybe<DashTheme>;
   logOut?: Maybe<LogOutInfo>;
+  simulateSessionExpir?: Maybe<LogOutInfo>;
   amPolicyPage?: Maybe<AmPolicyPage>;
   amPolicy?: Maybe<AmPolicy>;
   amPolicyFacetsForService?: Maybe<Array<Maybe<CdxFacetNvp>>>;
@@ -986,11 +971,9 @@ export type Query = {
   userAssignAMGroupsPage?: Maybe<UserPageInfo>;
 };
 
-
 export type QueryBeginLoginArgs = {
   userId: Scalars['String'];
 };
-
 
 export type QueryExchangeActivityInProcessArgs = {
   orgSidInput: OrgSidInput;
@@ -998,13 +981,11 @@ export type QueryExchangeActivityInProcessArgs = {
   pageableInput: PageableInput;
 };
 
-
 export type QueryExchangeActivityTransmittedArgs = {
   orgSidInput: OrgSidInput;
   dateRange: DateTimeRangeInput;
   pageableInput: PageableInput;
 };
-
 
 export type QueryExchangeActivityErroredArgs = {
   orgSidInput: OrgSidInput;
@@ -1012,18 +993,15 @@ export type QueryExchangeActivityErroredArgs = {
   pageableInput: PageableInput;
 };
 
-
 export type QueryWorkPacketStatusDetailsArgs = {
   orgSid: Scalars['ID'];
   workOrderId: Scalars['String'];
 };
 
-
 export type QueryWorkPacketStatusArgs = {
   orgSid: Scalars['ID'];
   workOrderId: Scalars['String'];
 };
-
 
 export type QueryWorkPacketStatusesArgs = {
   orgSid: Scalars['ID'];
@@ -1031,38 +1009,31 @@ export type QueryWorkPacketStatusesArgs = {
   filter?: Maybe<WorkPacketStatusFilter>;
 };
 
-
 export type QueryDashboardPeriodsArgs = {
   orgSid: Scalars['ID'];
 };
-
 
 export type QueryCurrentOrgNavArgs = {
   orgInput?: Maybe<OrgSidInput>;
 };
 
-
 export type QueryUserThemeArgs = {
   themeColorMode?: Maybe<ThemeColorMode>;
 };
 
-
 export type QueryAmPolicyPageArgs = {
   orgSid: Scalars['ID'];
 };
-
 
 export type QueryAmPolicyArgs = {
   orgSid: Scalars['ID'];
   policySid: Scalars['ID'];
 };
 
-
 export type QueryAmPolicyFacetsForServiceArgs = {
   orgSid: Scalars['ID'];
   cdxService: CdxService;
 };
-
 
 export type QueryAmPolicyVerbForFacetArgs = {
   orgSid: Scalars['ID'];
@@ -1070,18 +1041,15 @@ export type QueryAmPolicyVerbForFacetArgs = {
   cdxFacet: CdxFacet;
 };
 
-
 export type QueryAmPoliciesForOrgArgs = {
   orgSid: Scalars['ID'];
   pageableInput?: Maybe<PageableInput>;
 };
 
-
 export type QueryAmGroupsForOrgArgs = {
   orgSid: Scalars['ID'];
   pageableInput?: Maybe<PageableInput>;
 };
-
 
 export type QueryUsersForOrgArgs = {
   orgSid: Scalars['ID'];
@@ -1089,22 +1057,18 @@ export type QueryUsersForOrgArgs = {
   pageableInput?: Maybe<PageableInput>;
 };
 
-
 export type QuerySystemTemplateAmGroupByNameArgs = {
   name: Scalars['String'];
 };
-
 
 export type QueryTopLevelOrgsByTypeArgs = {
   orgType: OrgType;
 };
 
-
 export type QueryOrgByIdArgs = {
   orgSid?: Maybe<Scalars['ID']>;
   orgId: Scalars['String'];
 };
-
 
 export type QueryDirectOrganizationsArgs = {
   orgSid: Scalars['ID'];
@@ -1112,13 +1076,11 @@ export type QueryDirectOrganizationsArgs = {
   pageableInput?: Maybe<PageableInput>;
 };
 
-
 export type QueryWpProcessErrorsArgs = {
   orgSid: Scalars['ID'];
   dateRange?: Maybe<DateTimeRangeInput>;
   pageableInput?: Maybe<PageableInput>;
 };
-
 
 export type QueryWpTransmissionsArgs = {
   orgSid: Scalars['ID'];
@@ -1126,69 +1088,56 @@ export type QueryWpTransmissionsArgs = {
   pageableInput?: Maybe<PageableInput>;
 };
 
-
 export type QueryScheduleOccurrencesArgs = {
   orgSid: Scalars['ID'];
   dateRange?: Maybe<DateTimeRangeInput>;
   pageableInput?: Maybe<PageableInput>;
 };
 
-
 export type QueryDashThemeColorForOrgArgs = {
   ownedInput?: Maybe<OwnedInput>;
   pageableInput?: Maybe<PageableInput>;
 };
 
-
 export type QueryDashSiteForOrgArgs = {
   orgSidInput?: Maybe<OrgSidInput>;
 };
-
 
 export type QueryDashThemeColorArgs = {
   ownedInputSid?: Maybe<OwnedInputSid>;
 };
 
-
 export type QueryDashThemeColorByNameArgs = {
   ownedInputName?: Maybe<OwnedInputName>;
 };
-
 
 export type QueryDefaultDashThemeForSiteArgs = {
   ownedInput?: Maybe<OwnedInput>;
 };
 
-
 export type QueryDefaultDashThemeForSitePageArgs = {
   ownedInput?: Maybe<OwnedInput>;
 };
-
 
 export type QueryFindUserByEmailArgs = {
   userEmail: Scalars['String'];
 };
 
-
 export type QueryFindUserArgs = {
   ownedInputSid?: Maybe<OwnedInputSid>;
 };
-
 
 export type QueryNavigateToNewDomainArgs = {
   domainNavInput?: Maybe<DomainNavInput>;
 };
 
-
 export type QueryUserCreatePageArgs = {
   orgSidInput?: Maybe<OrgSidInput>;
 };
 
-
 export type QueryUserUpdatePageArgs = {
   sidInput?: Maybe<SidInput>;
 };
-
 
 export type QueryUserAssignAmGroupsPageArgs = {
   sidInput?: Maybe<SidInput>;
@@ -1234,7 +1183,7 @@ export enum SchedOccurStatusEnum {
   ErroredCloseToSchedule = 'ERRORED_CLOSE_TO_SCHEDULE',
   ExchangeHeld = 'EXCHANGE_HELD',
   ExchangeHeldOffSchedule = 'EXCHANGE_HELD_OFF_SCHEDULE',
-  NotScheduled = 'NOT_SCHEDULED'
+  NotScheduled = 'NOT_SCHEDULED',
 }
 
 export type ScheduleOccurrence = {
@@ -1276,7 +1225,7 @@ export type SidsInput = {
 
 export enum SortDirection {
   Asc = 'ASC',
-  Desc = 'DESC'
+  Desc = 'DESC',
 }
 
 export type SortOrderInput = {
@@ -1299,13 +1248,13 @@ export type StatInt = {
 
 export enum ThemeColorMode {
   Light = 'LIGHT',
-  Dark = 'DARK'
+  Dark = 'DARK',
 }
 
 export enum ThemeFontSize {
   Small = 'SMALL',
   Medium = 'MEDIUM',
-  Large = 'LARGE'
+  Large = 'LARGE',
 }
 
 export type TokenUser = {
@@ -1466,7 +1415,7 @@ export type UserSession = {
 export enum UserWebPage {
   AmGroup = 'AM_GROUP',
   GenPass = 'GEN_PASS',
-  RegLink = 'REG_LINK'
+  RegLink = 'REG_LINK',
 }
 
 export type WpProcessError = {
@@ -1557,7 +1506,7 @@ export type WebPivot = {
 };
 
 export enum WhitespaceRuleType {
-  None = 'NONE'
+  None = 'NONE',
 }
 
 export type WorkPacketStatus = {
@@ -1623,97 +1572,85 @@ export type BeginLoginQueryVariables = Exact<{
   userId: Scalars['String'];
 }>;
 
-
-export type BeginLoginQuery = (
-  { __typename?: 'Query' }
-  & { beginLogin?: Maybe<(
-    { __typename?: 'LoginStep' }
-    & Pick<LoginStep, 'userId' | 'step' | 'redirectPath' | 'allowLostPassword'>
-  )> }
-);
+export type BeginLoginQuery = { __typename?: 'Query' } & {
+  beginLogin?: Maybe<
+    { __typename?: 'LoginStep' } & Pick<LoginStep, 'userId' | 'step' | 'redirectPath' | 'allowLostPassword'>
+  >;
+};
 
 export type PasswordLoginMutationVariables = Exact<{
   userId: Scalars['String'];
   password: Scalars['String'];
 }>;
 
+export type PasswordLoginMutation = { __typename?: 'Mutation' } & {
+  passwordLogin?: Maybe<
+    { __typename?: 'LoginStep' } & Pick<LoginStep, 'step'> & {
+        loginCompleteDomain?: Maybe<
+          { __typename?: 'WebAppDomain' } & Pick<WebAppDomain, 'type' | 'selectedPage'> & {
+              navItems?: Maybe<
+                Array<
+                  Maybe<
+                    { __typename?: 'WebNav' } & {
+                      subNavItems?: Maybe<Array<Maybe<{ __typename?: 'WebNav' } & NavItemFragmentFragment>>>;
+                    } & NavItemFragmentFragment
+                  >
+                >
+              >;
+            }
+        >;
+        tokenUser?: Maybe<
+          { __typename?: 'TokenUser' } & Pick<TokenUser, 'token'> & {
+              session?: Maybe<
+                { __typename?: 'UserSession' } & Pick<
+                  UserSession,
+                  'id' | 'orgId' | 'orgSid' | 'userId' | 'firstNm' | 'defaultAuthorities'
+                >
+              >;
+            }
+        >;
+      }
+  >;
+};
 
-export type PasswordLoginMutation = (
-  { __typename?: 'Mutation' }
-  & { passwordLogin?: Maybe<(
-    { __typename?: 'LoginStep' }
-    & Pick<LoginStep, 'step'>
-    & { loginCompleteDomain?: Maybe<(
-      { __typename?: 'WebAppDomain' }
-      & Pick<WebAppDomain, 'type' | 'selectedPage'>
-      & { navItems?: Maybe<Array<Maybe<(
-        { __typename?: 'WebNav' }
-        & { subNavItems?: Maybe<Array<Maybe<(
-          { __typename?: 'WebNav' }
-          & NavItemFragmentFragment
-        )>>> }
-        & NavItemFragmentFragment
-      )>>> }
-    )>, tokenUser?: Maybe<(
-      { __typename?: 'TokenUser' }
-      & Pick<TokenUser, 'token'>
-      & { session?: Maybe<(
-        { __typename?: 'UserSession' }
-        & Pick<UserSession, 'id' | 'orgId' | 'orgSid' | 'userId' | 'firstNm' | 'defaultAuthorities'>
-      )> }
-    )> }
-  )> }
-);
+export type NavItemFragmentFragment = { __typename?: 'WebNav' } & Pick<WebNav, 'label' | 'appDomain'> & {
+    page?: Maybe<{ __typename?: 'WebPage' } & WebPageFragmentFragment>;
+  };
 
-export type NavItemFragmentFragment = (
-  { __typename?: 'WebNav' }
-  & Pick<WebNav, 'label' | 'appDomain'>
-  & { page?: Maybe<(
-    { __typename?: 'WebPage' }
-    & WebPageFragmentFragment
-  )> }
-);
+export type WebPageFragmentFragment = { __typename?: 'WebPage' } & Pick<WebPage, 'type'> & {
+    parameters?: Maybe<
+      Array<
+        Maybe<
+          ({ __typename?: 'NVPStr' } & UnionNvp_NvpStr_Fragment) | ({ __typename?: 'NVPId' } & UnionNvp_NvpId_Fragment)
+        >
+      >
+    >;
+    commands?: Maybe<
+      Array<
+        Maybe<
+          { __typename?: 'WebNav' } & Pick<WebNav, 'label' | 'appDomain'> & {
+              page?: Maybe<
+                { __typename?: 'WebPage' } & Pick<WebPage, 'type'> & {
+                    parameters?: Maybe<
+                      Array<
+                        Maybe<
+                          | ({ __typename?: 'NVPStr' } & UnionNvp_NvpStr_Fragment)
+                          | ({ __typename?: 'NVPId' } & UnionNvp_NvpId_Fragment)
+                        >
+                      >
+                    >;
+                  }
+              >;
+            }
+        >
+      >
+    >;
+    pivots?: Maybe<Array<Maybe<{ __typename?: 'WebPivot' } & Pick<WebPivot, 'label' | 'type'>>>>;
+  };
 
-export type WebPageFragmentFragment = (
-  { __typename?: 'WebPage' }
-  & Pick<WebPage, 'type'>
-  & { parameters?: Maybe<Array<Maybe<(
-    { __typename?: 'NVPStr' }
-    & UnionNvp_NvpStr_Fragment
-  ) | (
-    { __typename?: 'NVPId' }
-    & UnionNvp_NvpId_Fragment
-  )>>>, commands?: Maybe<Array<Maybe<(
-    { __typename?: 'WebNav' }
-    & Pick<WebNav, 'label' | 'appDomain'>
-    & { page?: Maybe<(
-      { __typename?: 'WebPage' }
-      & Pick<WebPage, 'type'>
-      & { parameters?: Maybe<Array<Maybe<(
-        { __typename?: 'NVPStr' }
-        & UnionNvp_NvpStr_Fragment
-      ) | (
-        { __typename?: 'NVPId' }
-        & UnionNvp_NvpId_Fragment
-      )>>> }
-    )> }
-  )>>>, pivots?: Maybe<Array<Maybe<(
-    { __typename?: 'WebPivot' }
-    & Pick<WebPivot, 'label' | 'type'>
-  )>>> }
-);
+type UnionNvp_NvpStr_Fragment = { __typename: 'NVPStr' } & Pick<NvpStr, 'name'> & { strValue: NvpStr['value'] };
 
-type UnionNvp_NvpStr_Fragment = (
-  { __typename: 'NVPStr' }
-  & Pick<NvpStr, 'name'>
-  & { strValue: NvpStr['value'] }
-);
-
-type UnionNvp_NvpId_Fragment = (
-  { __typename: 'NVPId' }
-  & Pick<NvpId, 'name'>
-  & { idValue: NvpId['value'] }
-);
+type UnionNvp_NvpId_Fragment = { __typename: 'NVPId' } & Pick<NvpId, 'name'> & { idValue: NvpId['value'] };
 
 export type UnionNvpFragment = UnionNvp_NvpStr_Fragment | UnionNvp_NvpId_Fragment;
 
@@ -1723,286 +1660,282 @@ export type WorkPacketStatusesQueryVariables = Exact<{
   filter?: Maybe<WorkPacketStatusFilter>;
 }>;
 
-
-export type WorkPacketStatusesQuery = (
-  { __typename?: 'Query' }
-  & { workPacketStatuses?: Maybe<Array<Maybe<(
-    { __typename?: 'WorkPacketStatus' }
-    & Pick<WorkPacketStatus, 'workOrderId' | 'timestamp' | 'planSponsorId' | 'detailsPath' | 'subClientPath' | 'inboundFilename' | 'vendorId' | 'step' | 'stepStatus' | 'packetStatus' | 'reprocessedBy' | 'reprocessAction' | 'populationCount' | 'recordHighlightCount' | 'recordHighlightType' | 'clientFileArchivePath' | 'vendorFileArchivePath' | 'supplementalFilesArchivePaths' | 'archiveOnly' | 'hasErrors'>
-  )>>> }
-);
+export type WorkPacketStatusesQuery = { __typename?: 'Query' } & {
+  workPacketStatuses?: Maybe<
+    Array<
+      Maybe<
+        { __typename?: 'WorkPacketStatus' } & Pick<
+          WorkPacketStatus,
+          | 'workOrderId'
+          | 'timestamp'
+          | 'planSponsorId'
+          | 'detailsPath'
+          | 'subClientPath'
+          | 'inboundFilename'
+          | 'vendorId'
+          | 'step'
+          | 'stepStatus'
+          | 'packetStatus'
+          | 'reprocessedBy'
+          | 'reprocessAction'
+          | 'populationCount'
+          | 'recordHighlightCount'
+          | 'recordHighlightType'
+          | 'clientFileArchivePath'
+          | 'vendorFileArchivePath'
+          | 'supplementalFilesArchivePaths'
+          | 'archiveOnly'
+          | 'hasErrors'
+        >
+      >
+    >
+  >;
+};
 
 export type WorkPacketStatusDetailsQueryVariables = Exact<{
   orgSid: Scalars['ID'];
   workOrderId: Scalars['String'];
 }>;
 
-
-export type WorkPacketStatusDetailsQuery = (
-  { __typename?: 'Query' }
-  & { workPacketStatusDetails?: Maybe<(
-    { __typename?: 'WorkPacketStatusDetails' }
-    & Pick<WorkPacketStatusDetails, 'workOrderId' | 'specId' | 'specImplName' | 'fingerPrint' | 'suppressBilling' | 'inboundLabel' | 'outboundLabel'>
-    & { workStepStatus?: Maybe<Array<Maybe<(
-      { __typename?: 'WorkStepStatus' }
-      & Pick<WorkStepStatus, 'stepStatus' | 'stepName' | 'stepType'>
-      & { populationCount?: Maybe<(
-        { __typename?: 'StatCountType' }
-        & Pick<StatCountType, 'value'>
-      )>, stepFile?: Maybe<Array<Maybe<(
-        { __typename?: 'ArchiveFileType' }
-        & Pick<ArchiveFileType, 'value' | 'label'>
-      )>>>, nvp?: Maybe<Array<Maybe<(
-        { __typename?: 'NVPStr' }
-        & Pick<NvpStr, 'name' | 'value'>
-      )>>>, recordCounts?: Maybe<(
-        { __typename?: 'RecordCounts' }
-        & RecordCountsFragmentFragment
-      )> }
-    )>>>, deliveredFile?: Maybe<(
-      { __typename?: 'DeliveredFile' }
-      & Pick<DeliveredFile, 'filename' | 'fileSizeInBytes' | 'textSizeInBytes' | 'timeDelivered'>
-      & { ftp?: Maybe<(
-        { __typename?: 'DeliveredFileFTP' }
-        & Pick<DeliveredFileFtp, 'protocol' | 'host' | 'username' | 'folder' | 'port'>
-      )>, kcurl?: Maybe<(
-        { __typename?: 'DeliveredKCURL' }
-        & Pick<DeliveredKcurl, 'url'>
-      )> }
-    )>, extractParameters?: Maybe<(
-      { __typename?: 'ExtractParameters' }
-      & { originalParameter?: Maybe<Array<Maybe<(
-        { __typename?: 'ExtractParameter' }
-        & ExtractParameterFragmentFragment
-      )>>>, overriddenParameter?: Maybe<Array<Maybe<(
-        { __typename?: 'ExtractParameter' }
-        & ExtractParameterFragmentFragment
-      )>>>, derivedParameter?: Maybe<Array<Maybe<(
-        { __typename?: 'ExtractParameter' }
-        & ExtractParameterFragmentFragment
-      )>>> }
-    )>, qualityChecks?: Maybe<(
-      { __typename?: 'QualityChecks' }
-      & { sequenceCreationEvent?: Maybe<Array<Maybe<(
-        { __typename?: 'SequenceCreationEvent' }
-        & Pick<SequenceCreationEvent, 'context' | 'unitId'>
-        & { recordCreationEvent?: Maybe<Array<Maybe<(
-          { __typename?: 'RecordCreationEvent' }
-          & Pick<RecordCreationEvent, 'context' | 'outerContext' | 'unitId'>
-          & { error?: Maybe<Array<Maybe<(
-            { __typename?: 'FieldCreationEvent' }
-            & FieldCreationFragmentFragment
-          )>>>, warning?: Maybe<Array<Maybe<(
-            { __typename?: 'FieldCreationEvent' }
-            & FieldCreationFragmentFragment
-          )>>>, information?: Maybe<Array<Maybe<(
-            { __typename?: 'FieldCreationEvent' }
-            & FieldCreationFragmentFragment
-          )>>> }
-        )>>> }
-      )>>> }
-    )>, enrollmentStats?: Maybe<(
-      { __typename?: 'EnrollmentStat' }
-      & EnrollmentStatFragmentFragment
-    )>, inboundEnrollmentStats?: Maybe<(
-      { __typename?: 'EnrollmentStat' }
-      & EnrollmentStatFragmentFragment
-    )>, outboundEnrollmentStats?: Maybe<(
-      { __typename?: 'EnrollmentStat' }
-      & EnrollmentStatFragmentFragment
-    )>, outboundRecordCounts?: Maybe<(
-      { __typename?: 'RecordCounts' }
-      & RecordCountsFragmentFragment
-    )> }
-  )> }
-);
+export type WorkPacketStatusDetailsQuery = { __typename?: 'Query' } & {
+  workPacketStatusDetails?: Maybe<
+    { __typename?: 'WorkPacketStatusDetails' } & Pick<
+      WorkPacketStatusDetails,
+      'workOrderId' | 'specId' | 'specImplName' | 'fingerPrint' | 'suppressBilling' | 'inboundLabel' | 'outboundLabel'
+    > & {
+        workStepStatus?: Maybe<
+          Array<
+            Maybe<
+              { __typename?: 'WorkStepStatus' } & Pick<WorkStepStatus, 'stepStatus' | 'stepName' | 'stepType'> & {
+                  populationCount?: Maybe<{ __typename?: 'StatCountType' } & Pick<StatCountType, 'value'>>;
+                  stepFile?: Maybe<
+                    Array<Maybe<{ __typename?: 'ArchiveFileType' } & Pick<ArchiveFileType, 'value' | 'label'>>>
+                  >;
+                  nvp?: Maybe<Array<Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>>>>;
+                  recordCounts?: Maybe<{ __typename?: 'RecordCounts' } & RecordCountsFragmentFragment>;
+                }
+            >
+          >
+        >;
+        deliveredFile?: Maybe<
+          { __typename?: 'DeliveredFile' } & Pick<
+            DeliveredFile,
+            'filename' | 'fileSizeInBytes' | 'textSizeInBytes' | 'timeDelivered'
+          > & {
+              ftp?: Maybe<
+                { __typename?: 'DeliveredFileFTP' } & Pick<
+                  DeliveredFileFtp,
+                  'protocol' | 'host' | 'username' | 'folder' | 'port'
+                >
+              >;
+              kcurl?: Maybe<{ __typename?: 'DeliveredKCURL' } & Pick<DeliveredKcurl, 'url'>>;
+            }
+        >;
+        extractParameters?: Maybe<
+          { __typename?: 'ExtractParameters' } & {
+            originalParameter?: Maybe<
+              Array<Maybe<{ __typename?: 'ExtractParameter' } & ExtractParameterFragmentFragment>>
+            >;
+            overriddenParameter?: Maybe<
+              Array<Maybe<{ __typename?: 'ExtractParameter' } & ExtractParameterFragmentFragment>>
+            >;
+            derivedParameter?: Maybe<
+              Array<Maybe<{ __typename?: 'ExtractParameter' } & ExtractParameterFragmentFragment>>
+            >;
+          }
+        >;
+        qualityChecks?: Maybe<
+          { __typename?: 'QualityChecks' } & {
+            sequenceCreationEvent?: Maybe<
+              Array<
+                Maybe<
+                  { __typename?: 'SequenceCreationEvent' } & Pick<SequenceCreationEvent, 'context' | 'unitId'> & {
+                      recordCreationEvent?: Maybe<
+                        Array<
+                          Maybe<
+                            { __typename?: 'RecordCreationEvent' } & Pick<
+                              RecordCreationEvent,
+                              'context' | 'outerContext' | 'unitId'
+                            > & {
+                                error?: Maybe<
+                                  Array<Maybe<{ __typename?: 'FieldCreationEvent' } & FieldCreationFragmentFragment>>
+                                >;
+                                warning?: Maybe<
+                                  Array<Maybe<{ __typename?: 'FieldCreationEvent' } & FieldCreationFragmentFragment>>
+                                >;
+                                information?: Maybe<
+                                  Array<Maybe<{ __typename?: 'FieldCreationEvent' } & FieldCreationFragmentFragment>>
+                                >;
+                              }
+                          >
+                        >
+                      >;
+                    }
+                >
+              >
+            >;
+          }
+        >;
+        enrollmentStats?: Maybe<{ __typename?: 'EnrollmentStat' } & EnrollmentStatFragmentFragment>;
+        inboundEnrollmentStats?: Maybe<{ __typename?: 'EnrollmentStat' } & EnrollmentStatFragmentFragment>;
+        outboundEnrollmentStats?: Maybe<{ __typename?: 'EnrollmentStat' } & EnrollmentStatFragmentFragment>;
+        outboundRecordCounts?: Maybe<{ __typename?: 'RecordCounts' } & RecordCountsFragmentFragment>;
+      }
+  >;
+};
 
 export type WorkPacketStatusQueryVariables = Exact<{
   orgSid: Scalars['ID'];
   workOrderId: Scalars['String'];
 }>;
 
+export type WorkPacketStatusQuery = { __typename?: 'Query' } & {
+  workPacketStatus?: Maybe<
+    { __typename?: 'WorkPacketStatus' } & Pick<
+      WorkPacketStatus,
+      | 'workOrderId'
+      | 'timestamp'
+      | 'planSponsorId'
+      | 'detailsPath'
+      | 'subClientPath'
+      | 'inboundFilename'
+      | 'vendorId'
+      | 'step'
+      | 'stepStatus'
+      | 'packetStatus'
+      | 'reprocessedBy'
+      | 'reprocessAction'
+      | 'populationCount'
+      | 'recordHighlightCount'
+      | 'recordHighlightType'
+      | 'clientFileArchivePath'
+      | 'vendorFileArchivePath'
+      | 'supplementalFilesArchivePaths'
+      | 'archiveOnly'
+      | 'hasErrors'
+    >
+  >;
+};
 
-export type WorkPacketStatusQuery = (
-  { __typename?: 'Query' }
-  & { workPacketStatus?: Maybe<(
-    { __typename?: 'WorkPacketStatus' }
-    & Pick<WorkPacketStatus, 'workOrderId' | 'timestamp' | 'planSponsorId' | 'detailsPath' | 'subClientPath' | 'inboundFilename' | 'vendorId' | 'step' | 'stepStatus' | 'packetStatus' | 'reprocessedBy' | 'reprocessAction' | 'populationCount' | 'recordHighlightCount' | 'recordHighlightType' | 'clientFileArchivePath' | 'vendorFileArchivePath' | 'supplementalFilesArchivePaths' | 'archiveOnly' | 'hasErrors'>
-  )> }
-);
+export type RecordCountsFragmentFragment = { __typename?: 'RecordCounts' } & Pick<
+  RecordCounts,
+  'totalCount' | 'showUser'
+> & { recordCount?: Maybe<Array<Maybe<{ __typename?: 'RecordCount' } & Pick<RecordCount, 'name' | 'count'>>>> };
 
-export type RecordCountsFragmentFragment = (
-  { __typename?: 'RecordCounts' }
-  & Pick<RecordCounts, 'totalCount' | 'showUser'>
-  & { recordCount?: Maybe<Array<Maybe<(
-    { __typename?: 'RecordCount' }
-    & Pick<RecordCount, 'name' | 'count'>
-  )>>> }
-);
+export type ExtractParameterFragmentFragment = { __typename?: 'ExtractParameter' } & Pick<
+  ExtractParameter,
+  'label' | 'name' | 'value'
+>;
 
-export type ExtractParameterFragmentFragment = (
-  { __typename?: 'ExtractParameter' }
-  & Pick<ExtractParameter, 'label' | 'name' | 'value'>
-);
+export type FieldCreationFragmentFragment = { __typename?: 'FieldCreationEvent' } & Pick<
+  FieldCreationEvent,
+  'message' | 'name' | 'id' | 'value' | 'rawValue' | 'type'
+>;
 
-export type FieldCreationFragmentFragment = (
-  { __typename?: 'FieldCreationEvent' }
-  & Pick<FieldCreationEvent, 'message' | 'name' | 'id' | 'value' | 'rawValue' | 'type'>
-);
+export type EnrollmentStatFragmentFragment = { __typename?: 'EnrollmentStat' } & {
+  insuredStat?: Maybe<{ __typename?: 'InsuredStat' } & InsuredStatFragmentFragment>;
+  excludedInsuredStat?: Maybe<{ __typename?: 'InsuredStat' } & InsuredStatFragmentFragment>;
+  excludedPlanInsuredStat?: Maybe<Array<Maybe<{ __typename?: 'PlanInsuredStat' } & PlanInsuredStatFragmentFragment>>>;
+  planInsuredStat?: Maybe<Array<Maybe<{ __typename?: 'PlanInsuredStat' } & PlanInsuredStatFragmentFragment>>>;
+};
 
-export type EnrollmentStatFragmentFragment = (
-  { __typename?: 'EnrollmentStat' }
-  & { insuredStat?: Maybe<(
-    { __typename?: 'InsuredStat' }
-    & InsuredStatFragmentFragment
-  )>, excludedInsuredStat?: Maybe<(
-    { __typename?: 'InsuredStat' }
-    & InsuredStatFragmentFragment
-  )>, excludedPlanInsuredStat?: Maybe<Array<Maybe<(
-    { __typename?: 'PlanInsuredStat' }
-    & PlanInsuredStatFragmentFragment
-  )>>>, planInsuredStat?: Maybe<Array<Maybe<(
-    { __typename?: 'PlanInsuredStat' }
-    & PlanInsuredStatFragmentFragment
-  )>>> }
-);
+export type InsuredStatFragmentFragment = { __typename?: 'InsuredStat' } & {
+  subscribers?: Maybe<{ __typename?: 'InsuredStatCount' } & InsuredStatCountFragmentFragment>;
+  dependents?: Maybe<{ __typename?: 'InsuredStatCount' } & InsuredStatCountFragmentFragment>;
+};
 
-export type InsuredStatFragmentFragment = (
-  { __typename?: 'InsuredStat' }
-  & { subscribers?: Maybe<(
-    { __typename?: 'InsuredStatCount' }
-    & InsuredStatCountFragmentFragment
-  )>, dependents?: Maybe<(
-    { __typename?: 'InsuredStatCount' }
-    & InsuredStatCountFragmentFragment
-  )> }
-);
+export type PlanInsuredStatFragmentFragment = { __typename?: 'PlanInsuredStat' } & Pick<
+  PlanInsuredStat,
+  'planCode' | 'planType'
+> & {
+    subscribers?: Maybe<{ __typename?: 'InsuredStatCount' } & InsuredStatCountFragmentFragment>;
+    dependents?: Maybe<{ __typename?: 'InsuredStatCount' } & InsuredStatCountFragmentFragment>;
+  };
 
-export type PlanInsuredStatFragmentFragment = (
-  { __typename?: 'PlanInsuredStat' }
-  & Pick<PlanInsuredStat, 'planCode' | 'planType'>
-  & { subscribers?: Maybe<(
-    { __typename?: 'InsuredStatCount' }
-    & InsuredStatCountFragmentFragment
-  )>, dependents?: Maybe<(
-    { __typename?: 'InsuredStatCount' }
-    & InsuredStatCountFragmentFragment
-  )> }
-);
+export type InsuredStatCountFragmentFragment = { __typename?: 'InsuredStatCount' } & Pick<
+  InsuredStatCount,
+  'expectedTotal' | 'inTolerance' | 'toleranceMsg' | 'hold'
+> & {
+    active?: Maybe<{ __typename?: 'StatInt' } & StatIntFragmentFragment>;
+    ended?: Maybe<{ __typename?: 'StatInt' } & StatIntFragmentFragment>;
+  };
 
-export type InsuredStatCountFragmentFragment = (
-  { __typename?: 'InsuredStatCount' }
-  & Pick<InsuredStatCount, 'expectedTotal' | 'inTolerance' | 'toleranceMsg' | 'hold'>
-  & { active?: Maybe<(
-    { __typename?: 'StatInt' }
-    & StatIntFragmentFragment
-  )>, ended?: Maybe<(
-    { __typename?: 'StatInt' }
-    & StatIntFragmentFragment
-  )> }
-);
-
-export type StatIntFragmentFragment = (
-  { __typename?: 'StatInt' }
-  & Pick<StatInt, 'prior' | 'value'>
-);
+export type StatIntFragmentFragment = { __typename?: 'StatInt' } & Pick<StatInt, 'prior' | 'value'>;
 
 export type DashboardPeriodsQueryVariables = Exact<{
   orgSid: Scalars['ID'];
 }>;
 
+export type DashboardPeriodsQuery = { __typename?: 'Query' } & {
+  dashboardPeriods?: Maybe<
+    { __typename?: 'DashboardPeriods' } & {
+      dailyCounts?: Maybe<{ __typename?: 'DashboardPeriodCounts' } & DashPeriodCountsFragmentFragment>;
+      yesterdayCounts?: Maybe<{ __typename?: 'DashboardPeriodCounts' } & DashPeriodCountsFragmentFragment>;
+      monthlyCounts?: Maybe<{ __typename?: 'DashboardPeriodCounts' } & DashPeriodCountsFragmentFragment>;
+      lastMonthlyCounts?: Maybe<{ __typename?: 'DashboardPeriodCounts' } & DashPeriodCountsFragmentFragment>;
+    }
+  >;
+};
 
-export type DashboardPeriodsQuery = (
-  { __typename?: 'Query' }
-  & { dashboardPeriods?: Maybe<(
-    { __typename?: 'DashboardPeriods' }
-    & { dailyCounts?: Maybe<(
-      { __typename?: 'DashboardPeriodCounts' }
-      & DashPeriodCountsFragmentFragment
-    )>, yesterdayCounts?: Maybe<(
-      { __typename?: 'DashboardPeriodCounts' }
-      & DashPeriodCountsFragmentFragment
-    )>, monthlyCounts?: Maybe<(
-      { __typename?: 'DashboardPeriodCounts' }
-      & DashPeriodCountsFragmentFragment
-    )>, lastMonthlyCounts?: Maybe<(
-      { __typename?: 'DashboardPeriodCounts' }
-      & DashPeriodCountsFragmentFragment
-    )> }
-  )> }
-);
+export type DashPeriodCountsFragmentFragment = { __typename?: 'DashboardPeriodCounts' } & Pick<
+  DashboardPeriodCounts,
+  'transmissionCount' | 'billingUnitCount' | 'processErrorCount'
+> & {
+    vendorTransmissions?: Maybe<
+      Array<Maybe<{ __typename?: 'DashboardPeriodCount' } & DashPeriodCountFragmentFragment>>
+    >;
+    vendorTransmissionsBySpec?: Maybe<
+      Array<Maybe<{ __typename?: 'DashboardPeriodCount' } & DashPeriodCountFragmentFragment>>
+    >;
+    planSponsorTransmissions?: Maybe<
+      Array<Maybe<{ __typename?: 'DashboardPeriodCount' } & DashPeriodCountFragmentFragment>>
+    >;
+    fileTransmissions?: Maybe<Array<Maybe<{ __typename?: 'DashboardPeriodCount' } & DashPeriodCountFragmentFragment>>>;
+    vendorProcessErrors?: Maybe<
+      Array<Maybe<{ __typename?: 'DashboardPeriodCount' } & DashPeriodCountFragmentFragment>>
+    >;
+    planSponsorProcessErrors?: Maybe<
+      Array<Maybe<{ __typename?: 'DashboardPeriodCount' } & DashPeriodCountFragmentFragment>>
+    >;
+    fileProcessErrors?: Maybe<Array<Maybe<{ __typename?: 'DashboardPeriodCount' } & DashPeriodCountFragmentFragment>>>;
+  };
 
-export type DashPeriodCountsFragmentFragment = (
-  { __typename?: 'DashboardPeriodCounts' }
-  & Pick<DashboardPeriodCounts, 'transmissionCount' | 'billingUnitCount' | 'processErrorCount'>
-  & { vendorTransmissions?: Maybe<Array<Maybe<(
-    { __typename?: 'DashboardPeriodCount' }
-    & DashPeriodCountFragmentFragment
-  )>>>, vendorTransmissionsBySpec?: Maybe<Array<Maybe<(
-    { __typename?: 'DashboardPeriodCount' }
-    & DashPeriodCountFragmentFragment
-  )>>>, planSponsorTransmissions?: Maybe<Array<Maybe<(
-    { __typename?: 'DashboardPeriodCount' }
-    & DashPeriodCountFragmentFragment
-  )>>>, fileTransmissions?: Maybe<Array<Maybe<(
-    { __typename?: 'DashboardPeriodCount' }
-    & DashPeriodCountFragmentFragment
-  )>>>, vendorProcessErrors?: Maybe<Array<Maybe<(
-    { __typename?: 'DashboardPeriodCount' }
-    & DashPeriodCountFragmentFragment
-  )>>>, planSponsorProcessErrors?: Maybe<Array<Maybe<(
-    { __typename?: 'DashboardPeriodCount' }
-    & DashPeriodCountFragmentFragment
-  )>>>, fileProcessErrors?: Maybe<Array<Maybe<(
-    { __typename?: 'DashboardPeriodCount' }
-    & DashPeriodCountFragmentFragment
-  )>>> }
-);
-
-export type DashPeriodCountFragmentFragment = (
-  { __typename?: 'DashboardPeriodCount' }
-  & Pick<DashboardPeriodCount, 'name' | 'secondaryDescr' | 'count' | 'total'>
-);
+export type DashPeriodCountFragmentFragment = { __typename?: 'DashboardPeriodCount' } & Pick<
+  DashboardPeriodCount,
+  'name' | 'secondaryDescr' | 'count' | 'total'
+>;
 
 export type AmPolicyPageQueryVariables = Exact<{
   orgSid: Scalars['ID'];
 }>;
 
-
-export type AmPolicyPageQuery = (
-  { __typename?: 'Query' }
-  & { amPolicyPage?: Maybe<(
-    { __typename?: 'AMPolicyPage' }
-    & Pick<AmPolicyPage, 'showTemplateSection'>
-    & { permissionServices?: Maybe<Array<Maybe<(
-      { __typename?: 'CDXServiceNVP' }
-      & Pick<CdxServiceNvp, 'name' | 'value'>
-    )>>>, predicates?: Maybe<Array<Maybe<(
-      { __typename?: 'PermissionPredicateNVP' }
-      & Pick<PermissionPredicateNvp, 'name' | 'value'>
-    )>>>, templateServices?: Maybe<Array<Maybe<(
-      { __typename?: 'CDXServiceNVP' }
-      & Pick<CdxServiceNvp, 'name' | 'value'>
-    )>>>, permissionEffectNVPs?: Maybe<Array<Maybe<(
-      { __typename?: 'PermissionEffectNVP' }
-      & Pick<PermissionEffectNvp, 'name' | 'value'>
-    )>>> }
-  )> }
-);
+export type AmPolicyPageQuery = { __typename?: 'Query' } & {
+  amPolicyPage?: Maybe<
+    { __typename?: 'AMPolicyPage' } & Pick<AmPolicyPage, 'showTemplateSection'> & {
+        permissionServices?: Maybe<
+          Array<Maybe<{ __typename?: 'CDXServiceNVP' } & Pick<CdxServiceNvp, 'name' | 'value'>>>
+        >;
+        predicates?: Maybe<
+          Array<Maybe<{ __typename?: 'PermissionPredicateNVP' } & Pick<PermissionPredicateNvp, 'name' | 'value'>>>
+        >;
+        templateServices?: Maybe<
+          Array<Maybe<{ __typename?: 'CDXServiceNVP' } & Pick<CdxServiceNvp, 'name' | 'value'>>>
+        >;
+        permissionEffectNVPs?: Maybe<
+          Array<Maybe<{ __typename?: 'PermissionEffectNVP' } & Pick<PermissionEffectNvp, 'name' | 'value'>>>
+        >;
+      }
+  >;
+};
 
 export type AmPolicyFacetsForServiceQueryVariables = Exact<{
   orgSid: Scalars['ID'];
   cdxService: CdxService;
 }>;
 
-
-export type AmPolicyFacetsForServiceQuery = (
-  { __typename?: 'Query' }
-  & { amPolicyFacetsForService?: Maybe<Array<Maybe<(
-    { __typename?: 'CDXFacetNVP' }
-    & Pick<CdxFacetNvp, 'name' | 'value'>
-  )>>> }
-);
+export type AmPolicyFacetsForServiceQuery = { __typename?: 'Query' } & {
+  amPolicyFacetsForService?: Maybe<Array<Maybe<{ __typename?: 'CDXFacetNVP' } & Pick<CdxFacetNvp, 'name' | 'value'>>>>;
+};
 
 export type AmPolicyVerbForFacetQueryVariables = Exact<{
   orgSid: Scalars['ID'];
@@ -2010,208 +1943,182 @@ export type AmPolicyVerbForFacetQueryVariables = Exact<{
   cdxFacet: CdxFacet;
 }>;
 
-
-export type AmPolicyVerbForFacetQuery = (
-  { __typename?: 'Query' }
-  & { amPolicyVerbForFacet?: Maybe<Array<Maybe<(
-    { __typename?: 'PermissionVerbNVP' }
-    & Pick<PermissionVerbNvp, 'name' | 'value'>
-  )>>> }
-);
+export type AmPolicyVerbForFacetQuery = { __typename?: 'Query' } & {
+  amPolicyVerbForFacet?: Maybe<
+    Array<Maybe<{ __typename?: 'PermissionVerbNVP' } & Pick<PermissionVerbNvp, 'name' | 'value'>>>
+  >;
+};
 
 export type CreateOrgMutationVariables = Exact<{
   orgInfo: CreateOrgInput;
 }>;
 
-
-export type CreateOrgMutation = (
-  { __typename?: 'Mutation' }
-  & { createOrg?: Maybe<(
-    { __typename?: 'Organization' }
-    & Pick<Organization, 'id' | 'orgId' | 'orgType'>
-  )> }
-);
+export type CreateOrgMutation = { __typename?: 'Mutation' } & {
+  createOrg?: Maybe<{ __typename?: 'Organization' } & Pick<Organization, 'id' | 'orgId' | 'orgType'>>;
+};
 
 export type CreateAmPolicyMutationVariables = Exact<{
   policyInfo: CreateAmPolicyInput;
 }>;
 
+export type CreateAmPolicyMutation = { __typename?: 'Mutation' } & {
+  createAMPolicy?: Maybe<{ __typename?: 'AMPolicy' } & PolicyFragmentFragment>;
+};
 
-export type CreateAmPolicyMutation = (
-  { __typename?: 'Mutation' }
-  & { createAMPolicy?: Maybe<(
-    { __typename?: 'AMPolicy' }
-    & PolicyFragmentFragment
-  )> }
-);
-
-export type PolicyFragmentFragment = (
-  { __typename?: 'AMPolicy' }
-  & Pick<AmPolicy, 'id' | 'name' | 'tmpl' | 'tmplUseAsIs'>
-  & { permissions?: Maybe<Array<Maybe<(
-    { __typename?: 'AMPermission' }
-    & Pick<AmPermission, 'id' | 'effect' | 'predicate' | 'predVar1' | 'predParam1'>
-    & { actions?: Maybe<Array<Maybe<(
-      { __typename?: 'AMPermissionAction' }
-      & Pick<AmPermissionAction, 'id' | 'service' | 'facet' | 'verb'>
-    )>>> }
-  )>>> }
-);
+export type PolicyFragmentFragment = { __typename?: 'AMPolicy' } & Pick<
+  AmPolicy,
+  'id' | 'name' | 'tmpl' | 'tmplUseAsIs'
+> & {
+    permissions?: Maybe<
+      Array<
+        Maybe<
+          { __typename?: 'AMPermission' } & Pick<
+            AmPermission,
+            'id' | 'effect' | 'predicate' | 'predVar1' | 'predParam1'
+          > & {
+              actions?: Maybe<
+                Array<
+                  Maybe<
+                    { __typename?: 'AMPermissionAction' } & Pick<
+                      AmPermissionAction,
+                      'id' | 'service' | 'facet' | 'verb'
+                    >
+                  >
+                >
+              >;
+            }
+        >
+      >
+    >;
+  };
 
 export type CreateAmGroupMutationVariables = Exact<{
   amGroupInfo: CreateAmGroupInput;
 }>;
 
-
-export type CreateAmGroupMutation = (
-  { __typename?: 'Mutation' }
-  & { createAMGroup?: Maybe<(
-    { __typename?: 'AMGroup' }
-    & Pick<AmGroup, 'id' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs'>
-    & { policies?: Maybe<Array<Maybe<(
-      { __typename?: 'AMPolicy' }
-      & Pick<AmPolicy, 'id' | 'name'>
-    )>>> }
-  )> }
-);
+export type CreateAmGroupMutation = { __typename?: 'Mutation' } & {
+  createAMGroup?: Maybe<
+    { __typename?: 'AMGroup' } & Pick<AmGroup, 'id' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs'> & {
+        policies?: Maybe<Array<Maybe<{ __typename?: 'AMPolicy' } & Pick<AmPolicy, 'id' | 'name'>>>>;
+      }
+  >;
+};
 
 export type SystemTemplateAmGroupByNameQueryVariables = Exact<{
   name: Scalars['String'];
 }>;
 
-
-export type SystemTemplateAmGroupByNameQuery = (
-  { __typename?: 'Query' }
-  & { systemTemplateAMGroupByName?: Maybe<Array<Maybe<(
-    { __typename?: 'AMGroup' }
-    & Pick<AmGroup, 'id' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'tmplServiceType'>
-  )>>> }
-);
+export type SystemTemplateAmGroupByNameQuery = { __typename?: 'Query' } & {
+  systemTemplateAMGroupByName?: Maybe<
+    Array<
+      Maybe<
+        { __typename?: 'AMGroup' } & Pick<
+          AmGroup,
+          'id' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'tmplServiceType'
+        >
+      >
+    >
+  >;
+};
 
 export type CreateUserMutationVariables = Exact<{
   userInfo: CreateUserInput;
   personInfo: CreatePersonInput;
 }>;
 
-
-export type CreateUserMutation = (
-  { __typename?: 'Mutation' }
-  & { createUser?: Maybe<(
-    { __typename?: 'UserResponse' }
-    & Pick<UserResponse, 'response' | 'msg' | 'nextPage'>
-    & { model?: Maybe<(
-      { __typename?: 'User' }
-      & Pick<User, 'id' | 'email'>
-      & { person?: Maybe<(
-        { __typename?: 'Person' }
-        & Pick<Person, 'firstNm' | 'lastNm'>
-      )> }
-    )> }
-  )> }
-);
+export type CreateUserMutation = { __typename?: 'Mutation' } & {
+  createUser?: Maybe<
+    { __typename?: 'UserResponse' } & Pick<UserResponse, 'response' | 'msg' | 'nextPage'> & {
+        model?: Maybe<
+          { __typename?: 'User' } & Pick<User, 'id' | 'email'> & {
+              person?: Maybe<{ __typename?: 'Person' } & Pick<Person, 'firstNm' | 'lastNm'>>;
+            }
+        >;
+      }
+  >;
+};
 
 export type UpdateUserMutationVariables = Exact<{
   userInfo: UpdateUserInput;
 }>;
 
-
-export type UpdateUserMutation = (
-  { __typename?: 'Mutation' }
-  & { updateUser?: Maybe<(
-    { __typename?: 'User' }
-    & Pick<User, 'id' | 'email'>
-    & { person?: Maybe<(
-      { __typename?: 'Person' }
-      & Pick<Person, 'firstNm' | 'lastNm'>
-    )> }
-  )> }
-);
+export type UpdateUserMutation = { __typename?: 'Mutation' } & {
+  updateUser?: Maybe<
+    { __typename?: 'User' } & Pick<User, 'id' | 'email'> & {
+        person?: Maybe<{ __typename?: 'Person' } & Pick<Person, 'firstNm' | 'lastNm'>>;
+      }
+  >;
+};
 
 export type UpdateUserAmGroupsMutationVariables = Exact<{
   userAmGroupUpdate: UpdateUserAmGroupsInput;
 }>;
 
-
-export type UpdateUserAmGroupsMutation = (
-  { __typename?: 'Mutation' }
-  & { updateUserAMGroups?: Maybe<Array<Maybe<(
-    { __typename?: 'AMGroup' }
-    & Pick<AmGroup, 'id' | 'name'>
-  )>>> }
-);
+export type UpdateUserAmGroupsMutation = { __typename?: 'Mutation' } & {
+  updateUserAMGroups?: Maybe<Array<Maybe<{ __typename?: 'AMGroup' } & Pick<AmGroup, 'id' | 'name'>>>>;
+};
 
 export type DeactivateUserMutationVariables = Exact<{
   sidInput: SidInput;
 }>;
 
-
-export type DeactivateUserMutation = (
-  { __typename?: 'Mutation' }
-  & Pick<Mutation, 'deactivateUser'>
-);
+export type DeactivateUserMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'deactivateUser'>;
 
 export type DeactivateUsersMutationVariables = Exact<{
   sidsInput: SidsInput;
 }>;
 
+export type DeactivateUsersMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'deactivateUsers'>;
 
-export type DeactivateUsersMutation = (
-  { __typename?: 'Mutation' }
-  & Pick<Mutation, 'deactivateUsers'>
-);
+export type ActivateUserMutationVariables = Exact<{
+  sidInput: SidInput;
+}>;
+
+export type ActivateUserMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'activateUser'>;
+
+export type ActivateUsersMutationVariables = Exact<{
+  sidsInput: SidsInput;
+}>;
+
+export type ActivateUsersMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'activateUsers'>;
 
 export type AmPoliciesForOrgPQueryVariables = Exact<{
   orgSid: Scalars['ID'];
   pageableInput?: Maybe<PageableInput>;
 }>;
 
-
-export type AmPoliciesForOrgPQuery = (
-  { __typename?: 'Query' }
-  & { amPoliciesForOrg?: Maybe<(
-    { __typename?: 'AMPolicyConnection' }
-    & { paginationInfo: (
-      { __typename?: 'PaginationInfo' }
-      & PaginationInfoFragmentFragment
-    ), nodes?: Maybe<Array<Maybe<(
-      { __typename?: 'AMPolicy' }
-      & Pick<AmPolicy, 'id' | 'name' | 'tmpl'>
-    )>>> }
-  )> }
-);
+export type AmPoliciesForOrgPQuery = { __typename?: 'Query' } & {
+  amPoliciesForOrg?: Maybe<
+    { __typename?: 'AMPolicyConnection' } & {
+      paginationInfo: { __typename?: 'PaginationInfo' } & PaginationInfoFragmentFragment;
+      nodes?: Maybe<Array<Maybe<{ __typename?: 'AMPolicy' } & Pick<AmPolicy, 'id' | 'name' | 'tmpl'>>>>;
+    }
+  >;
+};
 
 export type TopLevelOrgsByTypeQueryVariables = Exact<{
   orgType: OrgType;
 }>;
 
-
-export type TopLevelOrgsByTypeQuery = (
-  { __typename?: 'Query' }
-  & { topLevelOrgsByType?: Maybe<Array<Maybe<(
-    { __typename?: 'Organization' }
-    & Pick<Organization, 'id' | 'orgId' | 'orgType'>
-  )>>> }
-);
+export type TopLevelOrgsByTypeQuery = { __typename?: 'Query' } & {
+  topLevelOrgsByType?: Maybe<
+    Array<Maybe<{ __typename?: 'Organization' } & Pick<Organization, 'id' | 'orgId' | 'orgType'>>>
+  >;
+};
 
 export type AmGroupsForOrgPQueryVariables = Exact<{
   orgSid: Scalars['ID'];
   pageableInput?: Maybe<PageableInput>;
 }>;
 
-
-export type AmGroupsForOrgPQuery = (
-  { __typename?: 'Query' }
-  & { amGroupsForOrg?: Maybe<(
-    { __typename?: 'AMGroupConnection' }
-    & { paginationInfo: (
-      { __typename?: 'PaginationInfo' }
-      & PaginationInfoFragmentFragment
-    ), nodes?: Maybe<Array<Maybe<(
-      { __typename?: 'AMGroup' }
-      & Pick<AmGroup, 'id' | 'name' | 'tmpl'>
-    )>>> }
-  )> }
-);
+export type AmGroupsForOrgPQuery = { __typename?: 'Query' } & {
+  amGroupsForOrg?: Maybe<
+    { __typename?: 'AMGroupConnection' } & {
+      paginationInfo: { __typename?: 'PaginationInfo' } & PaginationInfoFragmentFragment;
+      nodes?: Maybe<Array<Maybe<{ __typename?: 'AMGroup' } & Pick<AmGroup, 'id' | 'name' | 'tmpl'>>>>;
+    }
+  >;
+};
 
 export type UsersForOrgFpQueryVariables = Exact<{
   orgSid: Scalars['ID'];
@@ -2219,79 +2126,62 @@ export type UsersForOrgFpQueryVariables = Exact<{
   pageableInput?: Maybe<PageableInput>;
 }>;
 
-
-export type UsersForOrgFpQuery = (
-  { __typename?: 'Query' }
-  & { usersForOrg?: Maybe<(
-    { __typename?: 'UserConnection' }
-    & { paginationInfo: (
-      { __typename?: 'PaginationInfo' }
-      & PaginationInfoFragmentFragment
-    ), listPageInfo?: Maybe<(
-      { __typename?: 'ListPageInfo' }
-      & Pick<ListPageInfo, 'pageHeaderLabel'>
-      & { pageCommands?: Maybe<Array<Maybe<(
-        { __typename?: 'WebCommand' }
-        & WebCommandFragmentFragment
-      )>>>, listItemCommands?: Maybe<Array<Maybe<(
-        { __typename?: 'WebCommand' }
-        & WebCommandFragmentFragment
-      )>>>, listItemBulkCommands?: Maybe<Array<Maybe<(
-        { __typename?: 'WebCommand' }
-        & WebCommandFragmentFragment
-      )>>> }
-    )>, nodes?: Maybe<Array<Maybe<(
-      { __typename?: 'UserItem' }
-      & { item: (
-        { __typename?: 'User' }
-        & Pick<User, 'id' | 'email'>
-        & { person?: Maybe<(
-          { __typename?: 'Person' }
-          & Pick<Person, 'firstNm' | 'lastNm'>
-        )> }
-      ) }
-    )>>> }
-  )> }
-);
+export type UsersForOrgFpQuery = { __typename?: 'Query' } & {
+  usersForOrg?: Maybe<
+    { __typename?: 'UserConnection' } & {
+      paginationInfo: { __typename?: 'PaginationInfo' } & PaginationInfoFragmentFragment;
+      listPageInfo?: Maybe<
+        { __typename?: 'ListPageInfo' } & Pick<ListPageInfo, 'pageHeaderLabel'> & {
+            pageCommands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & WebCommandFragmentFragment>>>;
+            listItemCommands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & WebCommandFragmentFragment>>>;
+            listItemBulkCommands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & WebCommandFragmentFragment>>>;
+          }
+      >;
+      nodes?: Maybe<
+        Array<
+          Maybe<
+            { __typename?: 'UserItem' } & {
+              item: { __typename?: 'User' } & Pick<User, 'id' | 'email'> & {
+                  person?: Maybe<{ __typename?: 'Person' } & Pick<Person, 'firstNm' | 'lastNm'>>;
+                };
+            }
+          >
+        >
+      >;
+    }
+  >;
+};
 
 export type DirectOrganizationsQueryVariables = Exact<{
   orgSid: Scalars['ID'];
 }>;
 
-
-export type DirectOrganizationsQuery = (
-  { __typename?: 'Query' }
-  & { directOrganizations?: Maybe<(
-    { __typename?: 'OrganizationConnection' }
-    & { paginationInfo: (
-      { __typename?: 'PaginationInfo' }
-      & PaginationInfoFragmentFragment
-    ), nodes?: Maybe<Array<Maybe<(
-      { __typename?: 'Organization' }
-      & Pick<Organization, 'id' | 'name' | 'orgId' | 'orgType'>
-    )>>> }
-  )> }
-);
+export type DirectOrganizationsQuery = { __typename?: 'Query' } & {
+  directOrganizations?: Maybe<
+    { __typename?: 'OrganizationConnection' } & {
+      paginationInfo: { __typename?: 'PaginationInfo' } & PaginationInfoFragmentFragment;
+      nodes?: Maybe<
+        Array<Maybe<{ __typename?: 'Organization' } & Pick<Organization, 'id' | 'name' | 'orgId' | 'orgType'>>>
+      >;
+    }
+  >;
+};
 
 export type DirectOrganizationsFQueryVariables = Exact<{
   orgSid: Scalars['ID'];
   orgFilter?: Maybe<OrgFilterInput>;
 }>;
 
-
-export type DirectOrganizationsFQuery = (
-  { __typename?: 'Query' }
-  & { directOrganizations?: Maybe<(
-    { __typename?: 'OrganizationConnection' }
-    & { paginationInfo: (
-      { __typename?: 'PaginationInfo' }
-      & PaginationInfoFragmentFragment
-    ), nodes?: Maybe<Array<Maybe<(
-      { __typename?: 'Organization' }
-      & Pick<Organization, 'id' | 'name' | 'orgId' | 'orgType'>
-    )>>> }
-  )> }
-);
+export type DirectOrganizationsFQuery = { __typename?: 'Query' } & {
+  directOrganizations?: Maybe<
+    { __typename?: 'OrganizationConnection' } & {
+      paginationInfo: { __typename?: 'PaginationInfo' } & PaginationInfoFragmentFragment;
+      nodes?: Maybe<
+        Array<Maybe<{ __typename?: 'Organization' } & Pick<Organization, 'id' | 'name' | 'orgId' | 'orgType'>>>
+      >;
+    }
+  >;
+};
 
 export type DirectOrganizationsFpQueryVariables = Exact<{
   orgSid: Scalars['ID'];
@@ -2299,37 +2189,34 @@ export type DirectOrganizationsFpQueryVariables = Exact<{
   pageableInput?: Maybe<PageableInput>;
 }>;
 
+export type DirectOrganizationsFpQuery = { __typename?: 'Query' } & {
+  directOrganizations?: Maybe<
+    { __typename?: 'OrganizationConnection' } & {
+      paginationInfo: { __typename?: 'PaginationInfo' } & PaginationInfoFragmentFragment;
+      nodes?: Maybe<
+        Array<Maybe<{ __typename?: 'Organization' } & Pick<Organization, 'id' | 'name' | 'orgId' | 'orgType'>>>
+      >;
+    }
+  >;
+};
 
-export type DirectOrganizationsFpQuery = (
-  { __typename?: 'Query' }
-  & { directOrganizations?: Maybe<(
-    { __typename?: 'OrganizationConnection' }
-    & { paginationInfo: (
-      { __typename?: 'PaginationInfo' }
-      & PaginationInfoFragmentFragment
-    ), nodes?: Maybe<Array<Maybe<(
-      { __typename?: 'Organization' }
-      & Pick<Organization, 'id' | 'name' | 'orgId' | 'orgType'>
-    )>>> }
-  )> }
-);
+export type PaginationInfoFragmentFragment = { __typename?: 'PaginationInfo' } & Pick<
+  PaginationInfo,
+  'totalPages' | 'totalElements' | 'pageNumber' | 'pageSize'
+>;
 
-export type PaginationInfoFragmentFragment = (
-  { __typename?: 'PaginationInfo' }
-  & Pick<PaginationInfo, 'totalPages' | 'totalElements' | 'pageNumber' | 'pageSize'>
-);
-
-export type WebCommandFragmentFragment = (
-  { __typename?: 'WebCommand' }
-  & Pick<WebCommand, 'endPoint' | 'label' | 'commandType'>
-  & { parameters?: Maybe<Array<Maybe<(
-    { __typename?: 'NVPStr' }
-    & UnionNvp_NvpStr_Fragment
-  ) | (
-    { __typename?: 'NVPId' }
-    & UnionNvp_NvpId_Fragment
-  )>>> }
-);
+export type WebCommandFragmentFragment = { __typename?: 'WebCommand' } & Pick<
+  WebCommand,
+  'endPoint' | 'label' | 'commandType'
+> & {
+    parameters?: Maybe<
+      Array<
+        Maybe<
+          ({ __typename?: 'NVPStr' } & UnionNvp_NvpStr_Fragment) | ({ __typename?: 'NVPId' } & UnionNvp_NvpId_Fragment)
+        >
+      >
+    >;
+  };
 
 export type WpProcessErrorsQueryVariables = Exact<{
   orgSid: Scalars['ID'];
@@ -2337,20 +2224,31 @@ export type WpProcessErrorsQueryVariables = Exact<{
   pageableInput?: Maybe<PageableInput>;
 }>;
 
-
-export type WpProcessErrorsQuery = (
-  { __typename?: 'Query' }
-  & { wpProcessErrors?: Maybe<(
-    { __typename?: 'WPProcessErrorConnection' }
-    & { paginationInfo: (
-      { __typename?: 'PaginationInfo' }
-      & PaginationInfoFragmentFragment
-    ), nodes?: Maybe<Array<Maybe<(
-      { __typename?: 'WPProcessError' }
-      & Pick<WpProcessError, 'id' | 'workOrderId' | 'startTime' | 'stepName' | 'planSponsorId' | 'vendorId' | 'msg' | 'inboundFilename' | 'clientFileArchivePath'>
-    )>>> }
-  )> }
-);
+export type WpProcessErrorsQuery = { __typename?: 'Query' } & {
+  wpProcessErrors?: Maybe<
+    { __typename?: 'WPProcessErrorConnection' } & {
+      paginationInfo: { __typename?: 'PaginationInfo' } & PaginationInfoFragmentFragment;
+      nodes?: Maybe<
+        Array<
+          Maybe<
+            { __typename?: 'WPProcessError' } & Pick<
+              WpProcessError,
+              | 'id'
+              | 'workOrderId'
+              | 'startTime'
+              | 'stepName'
+              | 'planSponsorId'
+              | 'vendorId'
+              | 'msg'
+              | 'inboundFilename'
+              | 'clientFileArchivePath'
+            >
+          >
+        >
+      >;
+    }
+  >;
+};
 
 export type WpTransmissionsQueryVariables = Exact<{
   orgSid: Scalars['ID'];
@@ -2358,42 +2256,69 @@ export type WpTransmissionsQueryVariables = Exact<{
   pageableInput?: Maybe<PageableInput>;
 }>;
 
-
-export type WpTransmissionsQuery = (
-  { __typename?: 'Query' }
-  & { wpTransmissions?: Maybe<(
-    { __typename?: 'WPTransmissionConnection' }
-    & { paginationInfo: (
-      { __typename?: 'PaginationInfo' }
-      & PaginationInfoFragmentFragment
-    ), nodes?: Maybe<Array<Maybe<(
-      { __typename?: 'WPTransmission' }
-      & Pick<WpTransmission, 'id' | 'workOrderId' | 'deliveredOn' | 'planSponsorId' | 'vendorId' | 'specId' | 'implementation' | 'inboundFilename' | 'outboundFilename' | 'outboundFilesize' | 'billingCount' | 'totalRecords' | 'extractType' | 'extractVersion'>
-    )>>> }
-  )> }
-);
+export type WpTransmissionsQuery = { __typename?: 'Query' } & {
+  wpTransmissions?: Maybe<
+    { __typename?: 'WPTransmissionConnection' } & {
+      paginationInfo: { __typename?: 'PaginationInfo' } & PaginationInfoFragmentFragment;
+      nodes?: Maybe<
+        Array<
+          Maybe<
+            { __typename?: 'WPTransmission' } & Pick<
+              WpTransmission,
+              | 'id'
+              | 'workOrderId'
+              | 'deliveredOn'
+              | 'planSponsorId'
+              | 'vendorId'
+              | 'specId'
+              | 'implementation'
+              | 'inboundFilename'
+              | 'outboundFilename'
+              | 'outboundFilesize'
+              | 'billingCount'
+              | 'totalRecords'
+              | 'extractType'
+              | 'extractVersion'
+            >
+          >
+        >
+      >;
+    }
+  >;
+};
 
 export type AmPolicyQueryVariables = Exact<{
   orgSid: Scalars['ID'];
   policySid: Scalars['ID'];
 }>;
 
-
-export type AmPolicyQuery = (
-  { __typename?: 'Query' }
-  & { amPolicy?: Maybe<(
-    { __typename?: 'AMPolicy' }
-    & Pick<AmPolicy, 'id' | 'name' | 'tmpl' | 'tmplUseAsIs' | 'tmplServiceType'>
-    & { permissions?: Maybe<Array<Maybe<(
-      { __typename?: 'AMPermission' }
-      & Pick<AmPermission, 'id' | 'effect' | 'predicate' | 'predVar1' | 'predParam1'>
-      & { actions?: Maybe<Array<Maybe<(
-        { __typename?: 'AMPermissionAction' }
-        & Pick<AmPermissionAction, 'id' | 'service' | 'facet' | 'verb'>
-      )>>> }
-    )>>> }
-  )> }
-);
+export type AmPolicyQuery = { __typename?: 'Query' } & {
+  amPolicy?: Maybe<
+    { __typename?: 'AMPolicy' } & Pick<AmPolicy, 'id' | 'name' | 'tmpl' | 'tmplUseAsIs' | 'tmplServiceType'> & {
+        permissions?: Maybe<
+          Array<
+            Maybe<
+              { __typename?: 'AMPermission' } & Pick<
+                AmPermission,
+                'id' | 'effect' | 'predicate' | 'predVar1' | 'predParam1'
+              > & {
+                  actions?: Maybe<
+                    Array<
+                      Maybe<
+                        { __typename?: 'AMPermissionAction' } & Pick<
+                          AmPermissionAction,
+                          'id' | 'service' | 'facet' | 'verb'
+                        >
+                      >
+                    >
+                  >;
+                }
+            >
+          >
+        >;
+      }
+  >;
+};
 
 export type ScheduleOccurrencesQueryVariables = Exact<{
   orgSid: Scalars['ID'];
@@ -2401,557 +2326,631 @@ export type ScheduleOccurrencesQueryVariables = Exact<{
   pageableInput?: Maybe<PageableInput>;
 }>;
 
-
-export type ScheduleOccurrencesQuery = (
-  { __typename?: 'Query' }
-  & { scheduleOccurrences?: Maybe<(
-    { __typename?: 'ScheduleOccurrenceConnection' }
-    & { paginationInfo: (
-      { __typename?: 'PaginationInfo' }
-      & PaginationInfoFragmentFragment
-    ), nodes?: Maybe<Array<Maybe<(
-      { __typename?: 'ScheduleOccurrence' }
-      & Pick<ScheduleOccurrence, 'resource' | 'scheduleId' | 'timeScheduled' | 'schedOccurStatus'>
-      & { runOccurrences?: Maybe<Array<Maybe<(
-        { __typename?: 'ScheduleRunOccurrence' }
-        & Pick<ScheduleRunOccurrence, 'workOrderId' | 'timeRan' | 'status'>
-      )>>> }
-    )>>> }
-  )> }
-);
+export type ScheduleOccurrencesQuery = { __typename?: 'Query' } & {
+  scheduleOccurrences?: Maybe<
+    { __typename?: 'ScheduleOccurrenceConnection' } & {
+      paginationInfo: { __typename?: 'PaginationInfo' } & PaginationInfoFragmentFragment;
+      nodes?: Maybe<
+        Array<
+          Maybe<
+            { __typename?: 'ScheduleOccurrence' } & Pick<
+              ScheduleOccurrence,
+              'resource' | 'scheduleId' | 'timeScheduled' | 'schedOccurStatus'
+            > & {
+                runOccurrences?: Maybe<
+                  Array<
+                    Maybe<
+                      { __typename?: 'ScheduleRunOccurrence' } & Pick<
+                        ScheduleRunOccurrence,
+                        'workOrderId' | 'timeRan' | 'status'
+                      >
+                    >
+                  >
+                >;
+              }
+          >
+        >
+      >;
+    }
+  >;
+};
 
 export type UpdateAmPermissionActionMutationVariables = Exact<{
   updateAMPermissionActionInput?: Maybe<UpdateAmPermissionActionInput>;
 }>;
 
-
-export type UpdateAmPermissionActionMutation = (
-  { __typename?: 'Mutation' }
-  & { updateAMPermissionAction?: Maybe<(
-    { __typename?: 'AMPermissionAction' }
-    & Pick<AmPermissionAction, 'id' | 'service' | 'facet' | 'verb'>
-  )> }
-);
+export type UpdateAmPermissionActionMutation = { __typename?: 'Mutation' } & {
+  updateAMPermissionAction?: Maybe<
+    { __typename?: 'AMPermissionAction' } & Pick<AmPermissionAction, 'id' | 'service' | 'facet' | 'verb'>
+  >;
+};
 
 export type UpdateOwnPasswordMutationVariables = Exact<{
   updatePasswordInput: UpdatePasswordInput;
 }>;
 
-
-export type UpdateOwnPasswordMutation = (
-  { __typename?: 'Mutation' }
-  & { updateOwnPassword?: Maybe<(
-    { __typename?: 'UserSession' }
-    & Pick<UserSession, 'id' | 'orgId' | 'userId'>
-  )> }
-);
+export type UpdateOwnPasswordMutation = { __typename?: 'Mutation' } & {
+  updateOwnPassword?: Maybe<{ __typename?: 'UserSession' } & Pick<UserSession, 'id' | 'orgId' | 'userId'>>;
+};
 
 export type OrgByIdQueryVariables = Exact<{
   orgSid: Scalars['ID'];
   orgId: Scalars['String'];
 }>;
 
+export type OrgByIdQuery = { __typename?: 'Query' } & {
+  orgById?: Maybe<{ __typename?: 'Organization' } & Pick<Organization, 'id' | 'name' | 'orgId' | 'orgType'>>;
+};
 
-export type OrgByIdQuery = (
-  { __typename?: 'Query' }
-  & { orgById?: Maybe<(
-    { __typename?: 'Organization' }
-    & Pick<Organization, 'id' | 'name' | 'orgId' | 'orgType'>
-  )> }
-);
+export type CurrentUserQueryVariables = Exact<{ [key: string]: never }>;
 
-export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type CurrentUserQuery = (
-  { __typename?: 'Query' }
-  & { currentUser?: Maybe<(
-    { __typename?: 'CurrentUserInfo' }
-    & Pick<CurrentUserInfo, 'loggedIn'>
-    & { domain?: Maybe<(
-      { __typename?: 'WebAppDomain' }
-      & Pick<WebAppDomain, 'type' | 'selectedPage'>
-      & { navItems?: Maybe<Array<Maybe<(
-        { __typename?: 'WebNav' }
-        & { subNavItems?: Maybe<Array<Maybe<(
-          { __typename?: 'WebNav' }
-          & NavItemFragmentFragment
-        )>>> }
-        & NavItemFragmentFragment
-      )>>> }
-    )>, tokenUser?: Maybe<(
-      { __typename?: 'TokenUser' }
-      & Pick<TokenUser, 'token'>
-      & { session?: Maybe<(
-        { __typename?: 'UserSession' }
-        & Pick<UserSession, 'id' | 'orgId' | 'userId' | 'pollInterval' | 'defaultAuthorities'>
-      )> }
-    )> }
-  )> }
-);
+export type CurrentUserQuery = { __typename?: 'Query' } & {
+  currentUser?: Maybe<
+    { __typename?: 'CurrentUserInfo' } & Pick<CurrentUserInfo, 'loggedIn'> & {
+        domain?: Maybe<
+          { __typename?: 'WebAppDomain' } & Pick<WebAppDomain, 'type' | 'selectedPage'> & {
+              navItems?: Maybe<
+                Array<
+                  Maybe<
+                    { __typename?: 'WebNav' } & {
+                      subNavItems?: Maybe<Array<Maybe<{ __typename?: 'WebNav' } & NavItemFragmentFragment>>>;
+                    } & NavItemFragmentFragment
+                  >
+                >
+              >;
+            }
+        >;
+        tokenUser?: Maybe<
+          { __typename?: 'TokenUser' } & Pick<TokenUser, 'token'> & {
+              session?: Maybe<
+                { __typename?: 'UserSession' } & Pick<
+                  UserSession,
+                  'id' | 'orgId' | 'userId' | 'pollInterval' | 'defaultAuthorities'
+                >
+              >;
+            }
+        >;
+      }
+  >;
+};
 
 export type RemoveAmPolicyMutationVariables = Exact<{
   policySid: Scalars['ID'];
 }>;
 
-
-export type RemoveAmPolicyMutation = (
-  { __typename?: 'Mutation' }
-  & Pick<Mutation, 'removeAMPolicy'>
-);
+export type RemoveAmPolicyMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'removeAMPolicy'>;
 
 export type RemoveAmPoliciesMutationVariables = Exact<{
   deleteAMPoliciesInput: DeleteAmPoliciesInput;
 }>;
 
-
-export type RemoveAmPoliciesMutation = (
-  { __typename?: 'Mutation' }
-  & Pick<Mutation, 'removeAMPolicies'>
-);
+export type RemoveAmPoliciesMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'removeAMPolicies'>;
 
 export type CreateAmPermissionMutationVariables = Exact<{
   permissionInfo: CreateAmPermissionInput;
 }>;
 
-
-export type CreateAmPermissionMutation = (
-  { __typename?: 'Mutation' }
-  & { createAMPermission?: Maybe<(
-    { __typename?: 'AMPermission' }
-    & Pick<AmPermission, 'id' | 'effect'>
-    & { actions?: Maybe<Array<Maybe<(
-      { __typename?: 'AMPermissionAction' }
-      & Pick<AmPermissionAction, 'id' | 'service' | 'facet' | 'verb'>
-    )>>> }
-  )> }
-);
+export type CreateAmPermissionMutation = { __typename?: 'Mutation' } & {
+  createAMPermission?: Maybe<
+    { __typename?: 'AMPermission' } & Pick<AmPermission, 'id' | 'effect'> & {
+        actions?: Maybe<
+          Array<
+            Maybe<{ __typename?: 'AMPermissionAction' } & Pick<AmPermissionAction, 'id' | 'service' | 'facet' | 'verb'>>
+          >
+        >;
+      }
+  >;
+};
 
 export type UpdateAmPermissionMutationVariables = Exact<{
   updateAMPermissionInput?: Maybe<UpdateAmPermissionInput>;
 }>;
 
-
-export type UpdateAmPermissionMutation = (
-  { __typename?: 'Mutation' }
-  & { updateAMPermission?: Maybe<(
-    { __typename?: 'AMPermission' }
-    & Pick<AmPermission, 'id' | 'effect' | 'predicate' | 'predVar1' | 'predParam1'>
-  )> }
-);
+export type UpdateAmPermissionMutation = { __typename?: 'Mutation' } & {
+  updateAMPermission?: Maybe<
+    { __typename?: 'AMPermission' } & Pick<AmPermission, 'id' | 'effect' | 'predicate' | 'predVar1' | 'predParam1'>
+  >;
+};
 
 export type RemoveAmPermissionMutationVariables = Exact<{
   permissionSid: Scalars['ID'];
 }>;
 
-
-export type RemoveAmPermissionMutation = (
-  { __typename?: 'Mutation' }
-  & Pick<Mutation, 'removeAMPermission'>
-);
+export type RemoveAmPermissionMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'removeAMPermission'>;
 
 export type UpdateAmPolicyMutationVariables = Exact<{
   updateAMPolicyInput: UpdateAmPolicyInput;
 }>;
 
-
-export type UpdateAmPolicyMutation = (
-  { __typename?: 'Mutation' }
-  & { updateAMPolicy?: Maybe<(
-    { __typename?: 'AMPolicy' }
-    & Pick<AmPolicy, 'id' | 'name' | 'tmpl' | 'tmplUseAsIs' | 'tmplServiceType'>
-  )> }
-);
+export type UpdateAmPolicyMutation = { __typename?: 'Mutation' } & {
+  updateAMPolicy?: Maybe<
+    { __typename?: 'AMPolicy' } & Pick<AmPolicy, 'id' | 'name' | 'tmpl' | 'tmplUseAsIs' | 'tmplServiceType'>
+  >;
+};
 
 export type RemoveAmPermissionActionMutationVariables = Exact<{
   permissionActionSid: Scalars['ID'];
 }>;
 
+export type RemoveAmPermissionActionMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'removeAMPermissionAction'>;
 
-export type RemoveAmPermissionActionMutation = (
-  { __typename?: 'Mutation' }
-  & Pick<Mutation, 'removeAMPermissionAction'>
-);
+export type LogOutQueryVariables = Exact<{ [key: string]: never }>;
 
-export type LogOutQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type LogOutQuery = (
-  { __typename?: 'Query' }
-  & { logOut?: Maybe<(
-    { __typename?: 'LogOutInfo' }
-    & Pick<LogOutInfo, 'successful'>
-  )> }
-);
+export type LogOutQuery = { __typename?: 'Query' } & {
+  logOut?: Maybe<{ __typename?: 'LogOutInfo' } & Pick<LogOutInfo, 'successful'>>;
+};
 
 export type UserThemeQueryVariables = Exact<{
   themeColorMode?: Maybe<ThemeColorMode>;
 }>;
 
-
-export type UserThemeQuery = (
-  { __typename?: 'Query' }
-  & { userTheme?: Maybe<(
-    { __typename?: 'DashTheme' }
-    & Pick<DashTheme, 'themeColorMode' | 'themeFontSize'>
-    & { dashThemeColor?: Maybe<(
-      { __typename?: 'DashThemeColor' }
-      & Pick<DashThemeColor, 'paletteNm' | 'themePrimary' | 'themeLighterAlt' | 'themeLighter' | 'themeLight' | 'themeTertiary' | 'themeSecondary' | 'themeDarkAlt' | 'themeDark' | 'themeDarker' | 'neutralLighterAlt' | 'neutralLighter' | 'neutralLight' | 'neutralQuaternaryAlt' | 'neutralQuaternary' | 'neutralTertiaryAlt' | 'neutralTertiary' | 'neutralSecondary' | 'neutralPrimaryAlt' | 'neutralPrimary' | 'neutralDark' | 'black' | 'white'>
-    )> }
-  )> }
-);
+export type UserThemeQuery = { __typename?: 'Query' } & {
+  userTheme?: Maybe<
+    { __typename?: 'DashTheme' } & Pick<DashTheme, 'themeColorMode' | 'themeFontSize'> & {
+        dashThemeColor?: Maybe<
+          { __typename?: 'DashThemeColor' } & Pick<
+            DashThemeColor,
+            | 'paletteNm'
+            | 'themePrimary'
+            | 'themeLighterAlt'
+            | 'themeLighter'
+            | 'themeLight'
+            | 'themeTertiary'
+            | 'themeSecondary'
+            | 'themeDarkAlt'
+            | 'themeDark'
+            | 'themeDarker'
+            | 'neutralLighterAlt'
+            | 'neutralLighter'
+            | 'neutralLight'
+            | 'neutralQuaternaryAlt'
+            | 'neutralQuaternary'
+            | 'neutralTertiaryAlt'
+            | 'neutralTertiary'
+            | 'neutralSecondary'
+            | 'neutralPrimaryAlt'
+            | 'neutralPrimary'
+            | 'neutralDark'
+            | 'black'
+            | 'white'
+          >
+        >;
+      }
+  >;
+};
 
 export type DashThemeColorForOrgQueryVariables = Exact<{
   ownedInput?: Maybe<OwnedInput>;
   pageableInput?: Maybe<PageableInput>;
 }>;
 
-
-export type DashThemeColorForOrgQuery = (
-  { __typename?: 'Query' }
-  & { dashThemeColorForOrg?: Maybe<(
-    { __typename?: 'DashThemeColorConnection' }
-    & { paginationInfo: (
-      { __typename?: 'PaginationInfo' }
-      & PaginationInfoFragmentFragment
-    ), nodes?: Maybe<Array<Maybe<(
-      { __typename?: 'DashThemeColor' }
-      & Pick<DashThemeColor, 'id' | 'paletteNm' | 'defaultPalette' | 'allowDark' | 'themeColorMode' | 'themePrimary' | 'neutralPrimary' | 'white'>
-    )>>> }
-  )> }
-);
+export type DashThemeColorForOrgQuery = { __typename?: 'Query' } & {
+  dashThemeColorForOrg?: Maybe<
+    { __typename?: 'DashThemeColorConnection' } & {
+      paginationInfo: { __typename?: 'PaginationInfo' } & PaginationInfoFragmentFragment;
+      nodes?: Maybe<
+        Array<
+          Maybe<
+            { __typename?: 'DashThemeColor' } & Pick<
+              DashThemeColor,
+              | 'id'
+              | 'paletteNm'
+              | 'defaultPalette'
+              | 'allowDark'
+              | 'themeColorMode'
+              | 'themePrimary'
+              | 'neutralPrimary'
+              | 'white'
+            >
+          >
+        >
+      >;
+    }
+  >;
+};
 
 export type DashSiteForOrgQueryVariables = Exact<{
   orgSidInput?: Maybe<OrgSidInput>;
 }>;
 
-
-export type DashSiteForOrgQuery = (
-  { __typename?: 'Query' }
-  & { dashSiteForOrg?: Maybe<(
-    { __typename?: 'DashSite' }
-    & Pick<DashSite, 'id' | 'active'>
-  )> }
-);
+export type DashSiteForOrgQuery = { __typename?: 'Query' } & {
+  dashSiteForOrg?: Maybe<{ __typename?: 'DashSite' } & Pick<DashSite, 'id' | 'active'>>;
+};
 
 export type CreateDashThemeColorMutationVariables = Exact<{
   createDashThemeColorInput: CreateDashThemeColorInput;
 }>;
 
-
-export type CreateDashThemeColorMutation = (
-  { __typename?: 'Mutation' }
-  & { createDashThemeColor?: Maybe<(
-    { __typename?: 'DashThemeColor' }
-    & Pick<DashThemeColor, 'id' | 'defaultPalette' | 'allowDark' | 'themeColorMode' | 'paletteNm' | 'themePrimary' | 'themeLighterAlt' | 'themeLighter' | 'themeLight' | 'themeTertiary' | 'themeSecondary' | 'themeDarkAlt' | 'themeDark' | 'themeDarker' | 'neutralLighterAlt' | 'neutralLighter' | 'neutralLight' | 'neutralQuaternaryAlt' | 'neutralQuaternary' | 'neutralTertiaryAlt' | 'neutralTertiary' | 'neutralSecondary' | 'neutralPrimaryAlt' | 'neutralPrimary' | 'neutralDark' | 'black' | 'white'>
-  )> }
-);
+export type CreateDashThemeColorMutation = { __typename?: 'Mutation' } & {
+  createDashThemeColor?: Maybe<
+    { __typename?: 'DashThemeColor' } & Pick<
+      DashThemeColor,
+      | 'id'
+      | 'defaultPalette'
+      | 'allowDark'
+      | 'themeColorMode'
+      | 'paletteNm'
+      | 'themePrimary'
+      | 'themeLighterAlt'
+      | 'themeLighter'
+      | 'themeLight'
+      | 'themeTertiary'
+      | 'themeSecondary'
+      | 'themeDarkAlt'
+      | 'themeDark'
+      | 'themeDarker'
+      | 'neutralLighterAlt'
+      | 'neutralLighter'
+      | 'neutralLight'
+      | 'neutralQuaternaryAlt'
+      | 'neutralQuaternary'
+      | 'neutralTertiaryAlt'
+      | 'neutralTertiary'
+      | 'neutralSecondary'
+      | 'neutralPrimaryAlt'
+      | 'neutralPrimary'
+      | 'neutralDark'
+      | 'black'
+      | 'white'
+    >
+  >;
+};
 
 export type DashThemeColorByNameQueryVariables = Exact<{
   ownedInputName?: Maybe<OwnedInputName>;
 }>;
 
-
-export type DashThemeColorByNameQuery = (
-  { __typename?: 'Query' }
-  & { dashThemeColorByName?: Maybe<(
-    { __typename?: 'DashThemeColor' }
-    & Pick<DashThemeColor, 'id' | 'defaultPalette' | 'allowDark' | 'themeColorMode' | 'paletteNm' | 'themePrimary' | 'themeLighterAlt' | 'themeLighter' | 'themeLight' | 'themeTertiary' | 'themeSecondary' | 'themeDarkAlt' | 'themeDark' | 'themeDarker' | 'neutralLighterAlt' | 'neutralLighter' | 'neutralLight' | 'neutralQuaternaryAlt' | 'neutralQuaternary' | 'neutralTertiaryAlt' | 'neutralTertiary' | 'neutralSecondary' | 'neutralPrimaryAlt' | 'neutralPrimary' | 'neutralDark' | 'black' | 'white'>
-  )> }
-);
+export type DashThemeColorByNameQuery = { __typename?: 'Query' } & {
+  dashThemeColorByName?: Maybe<
+    { __typename?: 'DashThemeColor' } & Pick<
+      DashThemeColor,
+      | 'id'
+      | 'defaultPalette'
+      | 'allowDark'
+      | 'themeColorMode'
+      | 'paletteNm'
+      | 'themePrimary'
+      | 'themeLighterAlt'
+      | 'themeLighter'
+      | 'themeLight'
+      | 'themeTertiary'
+      | 'themeSecondary'
+      | 'themeDarkAlt'
+      | 'themeDark'
+      | 'themeDarker'
+      | 'neutralLighterAlt'
+      | 'neutralLighter'
+      | 'neutralLight'
+      | 'neutralQuaternaryAlt'
+      | 'neutralQuaternary'
+      | 'neutralTertiaryAlt'
+      | 'neutralTertiary'
+      | 'neutralSecondary'
+      | 'neutralPrimaryAlt'
+      | 'neutralPrimary'
+      | 'neutralDark'
+      | 'black'
+      | 'white'
+    >
+  >;
+};
 
 export type UpdateDashThemeColorMutationVariables = Exact<{
   updateDashThemeColorInput: UpdateDashThemeColorInput;
 }>;
 
-
-export type UpdateDashThemeColorMutation = (
-  { __typename?: 'Mutation' }
-  & { updateDashThemeColor?: Maybe<(
-    { __typename?: 'DashThemeColor' }
-    & Pick<DashThemeColor, 'id' | 'defaultPalette' | 'allowDark' | 'themeColorMode' | 'paletteNm' | 'themePrimary' | 'themeLighterAlt' | 'themeLighter' | 'themeLight' | 'themeTertiary' | 'themeSecondary' | 'themeDarkAlt' | 'themeDark' | 'themeDarker' | 'neutralLighterAlt' | 'neutralLighter' | 'neutralLight' | 'neutralQuaternaryAlt' | 'neutralQuaternary' | 'neutralTertiaryAlt' | 'neutralTertiary' | 'neutralSecondary' | 'neutralPrimaryAlt' | 'neutralPrimary' | 'neutralDark' | 'black' | 'white'>
-  )> }
-);
+export type UpdateDashThemeColorMutation = { __typename?: 'Mutation' } & {
+  updateDashThemeColor?: Maybe<
+    { __typename?: 'DashThemeColor' } & Pick<
+      DashThemeColor,
+      | 'id'
+      | 'defaultPalette'
+      | 'allowDark'
+      | 'themeColorMode'
+      | 'paletteNm'
+      | 'themePrimary'
+      | 'themeLighterAlt'
+      | 'themeLighter'
+      | 'themeLight'
+      | 'themeTertiary'
+      | 'themeSecondary'
+      | 'themeDarkAlt'
+      | 'themeDark'
+      | 'themeDarker'
+      | 'neutralLighterAlt'
+      | 'neutralLighter'
+      | 'neutralLight'
+      | 'neutralQuaternaryAlt'
+      | 'neutralQuaternary'
+      | 'neutralTertiaryAlt'
+      | 'neutralTertiary'
+      | 'neutralSecondary'
+      | 'neutralPrimaryAlt'
+      | 'neutralPrimary'
+      | 'neutralDark'
+      | 'black'
+      | 'white'
+    >
+  >;
+};
 
 export type CreateDefaultDashThemeMutationVariables = Exact<{
   createDefaultDashThemeInput: CreateDefaultDashThemeInput;
 }>;
 
-
-export type CreateDefaultDashThemeMutation = (
-  { __typename?: 'Mutation' }
-  & { createDefaultDashTheme?: Maybe<(
-    { __typename?: 'DashTheme' }
-    & Pick<DashTheme, 'id' | 'themeColorMode' | 'themeFontSize'>
-    & { dashThemeColor?: Maybe<(
-      { __typename?: 'DashThemeColor' }
-      & Pick<DashThemeColor, 'id'>
-    )> }
-  )> }
-);
+export type CreateDefaultDashThemeMutation = { __typename?: 'Mutation' } & {
+  createDefaultDashTheme?: Maybe<
+    { __typename?: 'DashTheme' } & Pick<DashTheme, 'id' | 'themeColorMode' | 'themeFontSize'> & {
+        dashThemeColor?: Maybe<{ __typename?: 'DashThemeColor' } & Pick<DashThemeColor, 'id'>>;
+      }
+  >;
+};
 
 export type DefaultDashThemeForSiteQueryVariables = Exact<{
   ownedInput?: Maybe<OwnedInput>;
 }>;
 
-
-export type DefaultDashThemeForSiteQuery = (
-  { __typename?: 'Query' }
-  & { defaultDashThemeForSite?: Maybe<(
-    { __typename?: 'DashTheme' }
-    & Pick<DashTheme, 'id' | 'themeColorMode' | 'themeFontSize'>
-    & { dashThemeColor?: Maybe<(
-      { __typename?: 'DashThemeColor' }
-      & Pick<DashThemeColor, 'id' | 'paletteNm' | 'allowDark' | 'themePrimary' | 'neutralPrimary' | 'white'>
-    )> }
-  )> }
-);
+export type DefaultDashThemeForSiteQuery = { __typename?: 'Query' } & {
+  defaultDashThemeForSite?: Maybe<
+    { __typename?: 'DashTheme' } & Pick<DashTheme, 'id' | 'themeColorMode' | 'themeFontSize'> & {
+        dashThemeColor?: Maybe<
+          { __typename?: 'DashThemeColor' } & Pick<
+            DashThemeColor,
+            'id' | 'paletteNm' | 'allowDark' | 'themePrimary' | 'neutralPrimary' | 'white'
+          >
+        >;
+      }
+  >;
+};
 
 export type CurrentOrgNavQueryVariables = Exact<{
   orgInput?: Maybe<OrgSidInput>;
 }>;
 
-
-export type CurrentOrgNavQuery = (
-  { __typename?: 'Query' }
-  & { currentOrgNav?: Maybe<(
-    { __typename?: 'WebNav' }
-    & Pick<WebNav, 'label'>
-    & { subNavItems?: Maybe<Array<Maybe<(
-      { __typename?: 'WebNav' }
-      & NavItemFragmentFragment
-    )>>> }
-  )> }
-);
+export type CurrentOrgNavQuery = { __typename?: 'Query' } & {
+  currentOrgNav?: Maybe<
+    { __typename?: 'WebNav' } & Pick<WebNav, 'label'> & {
+        subNavItems?: Maybe<Array<Maybe<{ __typename?: 'WebNav' } & NavItemFragmentFragment>>>;
+      }
+  >;
+};
 
 export type UpdateDefaultDashThemeMutationVariables = Exact<{
   updateDefaultDashThemeInput: UpdateDefaultDashThemeInput;
 }>;
 
-
-export type UpdateDefaultDashThemeMutation = (
-  { __typename?: 'Mutation' }
-  & { updateDefaultDashTheme?: Maybe<(
-    { __typename?: 'DashTheme' }
-    & Pick<DashTheme, 'id' | 'themeColorMode' | 'themeFontSize'>
-    & { dashThemeColor?: Maybe<(
-      { __typename?: 'DashThemeColor' }
-      & Pick<DashThemeColor, 'id'>
-    )> }
-  )> }
-);
+export type UpdateDefaultDashThemeMutation = { __typename?: 'Mutation' } & {
+  updateDefaultDashTheme?: Maybe<
+    { __typename?: 'DashTheme' } & Pick<DashTheme, 'id' | 'themeColorMode' | 'themeFontSize'> & {
+        dashThemeColor?: Maybe<{ __typename?: 'DashThemeColor' } & Pick<DashThemeColor, 'id'>>;
+      }
+  >;
+};
 
 export type RemoveDashThemeColorMutationVariables = Exact<{
   ownedInputSid: OwnedInputSid;
 }>;
 
-
-export type RemoveDashThemeColorMutation = (
-  { __typename?: 'Mutation' }
-  & Pick<Mutation, 'removeDashThemeColor'>
-);
+export type RemoveDashThemeColorMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'removeDashThemeColor'>;
 
 export type RemoveDefaultDashThemeMutationVariables = Exact<{
   ownedInputSid: OwnedInputSid;
 }>;
 
+export type RemoveDefaultDashThemeMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'removeDefaultDashTheme'>;
 
-export type RemoveDefaultDashThemeMutation = (
-  { __typename?: 'Mutation' }
-  & Pick<Mutation, 'removeDefaultDashTheme'>
-);
+export type CurrentUserDashThemePageQueryVariables = Exact<{ [key: string]: never }>;
 
-export type CurrentUserDashThemePageQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type CurrentUserDashThemePageQuery = (
-  { __typename?: 'Query' }
-  & { currentUserDashThemePage?: Maybe<(
-    { __typename?: 'UserDashThemePage' }
-    & Pick<UserDashThemePage, 'themeColorModes' | 'themeFontSizes'>
-    & { themeColorPalettes?: Maybe<Array<Maybe<(
-      { __typename?: 'DashThemeColor' }
-      & Pick<DashThemeColor, 'id' | 'paletteNm' | 'neutralPrimary' | 'allowDark' | 'themePrimary' | 'white'>
-    )>>>, dashTheme?: Maybe<(
-      { __typename?: 'DashTheme' }
-      & Pick<DashTheme, 'id' | 'themeFontSize' | 'themeColorMode'>
-      & { dashThemeColor?: Maybe<(
-        { __typename?: 'DashThemeColor' }
-        & Pick<DashThemeColor, 'id' | 'paletteNm' | 'allowDark' | 'themePrimary' | 'neutralPrimary' | 'white'>
-      )> }
-    )> }
-  )> }
-);
+export type CurrentUserDashThemePageQuery = { __typename?: 'Query' } & {
+  currentUserDashThemePage?: Maybe<
+    { __typename?: 'UserDashThemePage' } & Pick<UserDashThemePage, 'themeColorModes' | 'themeFontSizes'> & {
+        themeColorPalettes?: Maybe<
+          Array<
+            Maybe<
+              { __typename?: 'DashThemeColor' } & Pick<
+                DashThemeColor,
+                'id' | 'paletteNm' | 'neutralPrimary' | 'allowDark' | 'themePrimary' | 'white'
+              >
+            >
+          >
+        >;
+        dashTheme?: Maybe<
+          { __typename?: 'DashTheme' } & Pick<DashTheme, 'id' | 'themeFontSize' | 'themeColorMode'> & {
+              dashThemeColor?: Maybe<
+                { __typename?: 'DashThemeColor' } & Pick<
+                  DashThemeColor,
+                  'id' | 'paletteNm' | 'allowDark' | 'themePrimary' | 'neutralPrimary' | 'white'
+                >
+              >;
+            }
+        >;
+      }
+  >;
+};
 
 export type FindUserByEmailQueryVariables = Exact<{
   userEmail: Scalars['String'];
 }>;
 
-
-export type FindUserByEmailQuery = (
-  { __typename?: 'Query' }
-  & { findUserByEmail?: Maybe<(
-    { __typename?: 'User' }
-    & Pick<User, 'id' | 'email'>
-    & { person?: Maybe<(
-      { __typename?: 'Person' }
-      & Pick<Person, 'id' | 'firstNm' | 'lastNm'>
-    )> }
-  )> }
-);
+export type FindUserByEmailQuery = { __typename?: 'Query' } & {
+  findUserByEmail?: Maybe<
+    { __typename?: 'User' } & Pick<User, 'id' | 'email'> & {
+        person?: Maybe<{ __typename?: 'Person' } & Pick<Person, 'id' | 'firstNm' | 'lastNm'>>;
+      }
+  >;
+};
 
 export type FindUserQueryVariables = Exact<{
   ownedInputSid: OwnedInputSid;
 }>;
 
-
-export type FindUserQuery = (
-  { __typename?: 'Query' }
-  & { findUser?: Maybe<(
-    { __typename?: 'User' }
-    & Pick<User, 'id' | 'email'>
-    & { person?: Maybe<(
-      { __typename?: 'Person' }
-      & Pick<Person, 'id' | 'firstNm' | 'lastNm'>
-    )> }
-  )> }
-);
+export type FindUserQuery = { __typename?: 'Query' } & {
+  findUser?: Maybe<
+    { __typename?: 'User' } & Pick<User, 'id' | 'email'> & {
+        person?: Maybe<{ __typename?: 'Person' } & Pick<Person, 'id' | 'firstNm' | 'lastNm'>>;
+      }
+  >;
+};
 
 export type SetOwnDashThemeFontSizeMutationVariables = Exact<{
   dashThemeInput: DashThemeInput;
 }>;
 
-
-export type SetOwnDashThemeFontSizeMutation = (
-  { __typename?: 'Mutation' }
-  & { setOwnDashThemeFontSize?: Maybe<(
-    { __typename?: 'DashTheme' }
-    & Pick<DashTheme, 'id' | 'themeColorMode' | 'themeFontSize'>
-    & { dashThemeColor?: Maybe<(
-      { __typename?: 'DashThemeColor' }
-      & Pick<DashThemeColor, 'id' | 'paletteNm' | 'themePrimary' | 'themeLighterAlt' | 'themeLighter' | 'themeLight' | 'themeTertiary' | 'themeSecondary' | 'themeDarkAlt' | 'themeDark' | 'themeDarker' | 'neutralLighterAlt' | 'neutralLighter' | 'neutralLight' | 'neutralQuaternaryAlt' | 'neutralQuaternary' | 'neutralTertiaryAlt' | 'neutralTertiary' | 'neutralSecondary' | 'neutralPrimaryAlt' | 'neutralPrimary' | 'neutralDark' | 'black' | 'white'>
-    )> }
-  )> }
-);
+export type SetOwnDashThemeFontSizeMutation = { __typename?: 'Mutation' } & {
+  setOwnDashThemeFontSize?: Maybe<
+    { __typename?: 'DashTheme' } & Pick<DashTheme, 'id' | 'themeColorMode' | 'themeFontSize'> & {
+        dashThemeColor?: Maybe<
+          { __typename?: 'DashThemeColor' } & Pick<
+            DashThemeColor,
+            | 'id'
+            | 'paletteNm'
+            | 'themePrimary'
+            | 'themeLighterAlt'
+            | 'themeLighter'
+            | 'themeLight'
+            | 'themeTertiary'
+            | 'themeSecondary'
+            | 'themeDarkAlt'
+            | 'themeDark'
+            | 'themeDarker'
+            | 'neutralLighterAlt'
+            | 'neutralLighter'
+            | 'neutralLight'
+            | 'neutralQuaternaryAlt'
+            | 'neutralQuaternary'
+            | 'neutralTertiaryAlt'
+            | 'neutralTertiary'
+            | 'neutralSecondary'
+            | 'neutralPrimaryAlt'
+            | 'neutralPrimary'
+            | 'neutralDark'
+            | 'black'
+            | 'white'
+          >
+        >;
+      }
+  >;
+};
 
 export type CreateOrUpdateOwnDashThemeMutationVariables = Exact<{
   dashThemeInput: DashThemeInput;
 }>;
 
-
-export type CreateOrUpdateOwnDashThemeMutation = (
-  { __typename?: 'Mutation' }
-  & { createOrUpdateOwnDashTheme?: Maybe<(
-    { __typename?: 'DashTheme' }
-    & Pick<DashTheme, 'id' | 'themeColorMode' | 'themeFontSize'>
-    & { dashThemeColor?: Maybe<(
-      { __typename?: 'DashThemeColor' }
-      & Pick<DashThemeColor, 'id' | 'themePrimary' | 'neutralPrimary' | 'white'>
-    )> }
-  )> }
-);
+export type CreateOrUpdateOwnDashThemeMutation = { __typename?: 'Mutation' } & {
+  createOrUpdateOwnDashTheme?: Maybe<
+    { __typename?: 'DashTheme' } & Pick<DashTheme, 'id' | 'themeColorMode' | 'themeFontSize'> & {
+        dashThemeColor?: Maybe<
+          { __typename?: 'DashThemeColor' } & Pick<DashThemeColor, 'id' | 'themePrimary' | 'neutralPrimary' | 'white'>
+        >;
+      }
+  >;
+};
 
 export type SetDashThemeColorDefaultMutationVariables = Exact<{
   dashThemeColorDefaultInput: DashThemeColorDefaultInput;
 }>;
 
+export type SetDashThemeColorDefaultMutation = { __typename?: 'Mutation' } & {
+  setDashThemeColorDefault?: Maybe<
+    { __typename?: 'DashThemeColor' } & Pick<DashThemeColor, 'id' | 'themePrimary' | 'neutralPrimary' | 'white'>
+  >;
+};
 
-export type SetDashThemeColorDefaultMutation = (
-  { __typename?: 'Mutation' }
-  & { setDashThemeColorDefault?: Maybe<(
-    { __typename?: 'DashThemeColor' }
-    & Pick<DashThemeColor, 'id' | 'themePrimary' | 'neutralPrimary' | 'white'>
-  )> }
-);
+export type ChangeOwnPasswordPageQueryVariables = Exact<{ [key: string]: never }>;
 
-export type ChangeOwnPasswordPageQueryVariables = Exact<{ [key: string]: never; }>;
+export type ChangeOwnPasswordPageQuery = { __typename?: 'Query' } & {
+  changeOwnPasswordPage?: Maybe<
+    { __typename?: 'PasswordPage' } & {
+      ruleGroup: { __typename?: 'PasswordRuleGroup' } & Pick<PasswordRuleGroup, 'numberOfCharacteristics'> & {
+          rules?: Maybe<
+            Array<
+              Maybe<
+                | ({ __typename?: 'PasswordLengthRule' } & UnionPasswordRule_PasswordLengthRule_Fragment)
+                | ({ __typename?: 'PasswordWhitespaceRule' } & UnionPasswordRule_PasswordWhitespaceRule_Fragment)
+                | ({ __typename?: 'PasswordCharacterRule' } & UnionPasswordRule_PasswordCharacterRule_Fragment)
+                | ({ __typename?: 'PasswordStrengthRule' } & UnionPasswordRule_PasswordStrengthRule_Fragment)
+                | ({ __typename?: 'PasswordRuleGroup' } & Pick<PasswordRuleGroup, 'numberOfCharacteristics'> & {
+                      rules?: Maybe<
+                        Array<
+                          Maybe<
+                            | ({ __typename?: 'PasswordLengthRule' } & UnionPasswordRule_PasswordLengthRule_Fragment)
+                            | ({
+                                __typename?: 'PasswordWhitespaceRule';
+                              } & UnionPasswordRule_PasswordWhitespaceRule_Fragment)
+                            | ({
+                                __typename?: 'PasswordCharacterRule';
+                              } & UnionPasswordRule_PasswordCharacterRule_Fragment)
+                            | ({
+                                __typename?: 'PasswordStrengthRule';
+                              } & UnionPasswordRule_PasswordStrengthRule_Fragment)
+                            | ({ __typename?: 'PasswordRuleGroup' } & Pick<
+                                PasswordRuleGroup,
+                                'numberOfCharacteristics'
+                              > & {
+                                  rules?: Maybe<
+                                    Array<
+                                      Maybe<
+                                        | ({
+                                            __typename?: 'PasswordLengthRule';
+                                          } & UnionPasswordRule_PasswordLengthRule_Fragment)
+                                        | ({
+                                            __typename?: 'PasswordWhitespaceRule';
+                                          } & UnionPasswordRule_PasswordWhitespaceRule_Fragment)
+                                        | ({
+                                            __typename?: 'PasswordCharacterRule';
+                                          } & UnionPasswordRule_PasswordCharacterRule_Fragment)
+                                        | ({
+                                            __typename?: 'PasswordStrengthRule';
+                                          } & UnionPasswordRule_PasswordStrengthRule_Fragment)
+                                        | ({ __typename?: 'PasswordRuleGroup' } & Pick<
+                                            PasswordRuleGroup,
+                                            'numberOfCharacteristics'
+                                          > &
+                                            UnionPasswordRule_PasswordRuleGroup_Fragment)
+                                      >
+                                    >
+                                  >;
+                                } & UnionPasswordRule_PasswordRuleGroup_Fragment)
+                          >
+                        >
+                      >;
+                    } & UnionPasswordRule_PasswordRuleGroup_Fragment)
+              >
+            >
+          >;
+        };
+    }
+  >;
+};
 
+type UnionPasswordRule_PasswordLengthRule_Fragment = { __typename: 'PasswordLengthRule' } & Pick<
+  PasswordLengthRule,
+  'minLength' | 'maxLength'
+>;
 
-export type ChangeOwnPasswordPageQuery = (
-  { __typename?: 'Query' }
-  & { changeOwnPasswordPage?: Maybe<(
-    { __typename?: 'PasswordPage' }
-    & { ruleGroup: (
-      { __typename?: 'PasswordRuleGroup' }
-      & Pick<PasswordRuleGroup, 'numberOfCharacteristics'>
-      & { rules?: Maybe<Array<Maybe<(
-        { __typename?: 'PasswordLengthRule' }
-        & UnionPasswordRule_PasswordLengthRule_Fragment
-      ) | (
-        { __typename?: 'PasswordWhitespaceRule' }
-        & UnionPasswordRule_PasswordWhitespaceRule_Fragment
-      ) | (
-        { __typename?: 'PasswordCharacterRule' }
-        & UnionPasswordRule_PasswordCharacterRule_Fragment
-      ) | (
-        { __typename?: 'PasswordStrengthRule' }
-        & UnionPasswordRule_PasswordStrengthRule_Fragment
-      ) | (
-        { __typename?: 'PasswordRuleGroup' }
-        & Pick<PasswordRuleGroup, 'numberOfCharacteristics'>
-        & { rules?: Maybe<Array<Maybe<(
-          { __typename?: 'PasswordLengthRule' }
-          & UnionPasswordRule_PasswordLengthRule_Fragment
-        ) | (
-          { __typename?: 'PasswordWhitespaceRule' }
-          & UnionPasswordRule_PasswordWhitespaceRule_Fragment
-        ) | (
-          { __typename?: 'PasswordCharacterRule' }
-          & UnionPasswordRule_PasswordCharacterRule_Fragment
-        ) | (
-          { __typename?: 'PasswordStrengthRule' }
-          & UnionPasswordRule_PasswordStrengthRule_Fragment
-        ) | (
-          { __typename?: 'PasswordRuleGroup' }
-          & Pick<PasswordRuleGroup, 'numberOfCharacteristics'>
-          & { rules?: Maybe<Array<Maybe<(
-            { __typename?: 'PasswordLengthRule' }
-            & UnionPasswordRule_PasswordLengthRule_Fragment
-          ) | (
-            { __typename?: 'PasswordWhitespaceRule' }
-            & UnionPasswordRule_PasswordWhitespaceRule_Fragment
-          ) | (
-            { __typename?: 'PasswordCharacterRule' }
-            & UnionPasswordRule_PasswordCharacterRule_Fragment
-          ) | (
-            { __typename?: 'PasswordStrengthRule' }
-            & UnionPasswordRule_PasswordStrengthRule_Fragment
-          ) | (
-            { __typename?: 'PasswordRuleGroup' }
-            & Pick<PasswordRuleGroup, 'numberOfCharacteristics'>
-            & UnionPasswordRule_PasswordRuleGroup_Fragment
-          )>>> }
-          & UnionPasswordRule_PasswordRuleGroup_Fragment
-        )>>> }
-        & UnionPasswordRule_PasswordRuleGroup_Fragment
-      )>>> }
-    ) }
-  )> }
-);
+type UnionPasswordRule_PasswordWhitespaceRule_Fragment = { __typename: 'PasswordWhitespaceRule' } & Pick<
+  PasswordWhitespaceRule,
+  'allowedWhitespace'
+>;
 
-type UnionPasswordRule_PasswordLengthRule_Fragment = (
-  { __typename: 'PasswordLengthRule' }
-  & Pick<PasswordLengthRule, 'minLength' | 'maxLength'>
-);
+type UnionPasswordRule_PasswordCharacterRule_Fragment = { __typename: 'PasswordCharacterRule' } & Pick<
+  PasswordCharacterRule,
+  'characterType' | 'numberOfCharacters'
+>;
 
-type UnionPasswordRule_PasswordWhitespaceRule_Fragment = (
-  { __typename: 'PasswordWhitespaceRule' }
-  & Pick<PasswordWhitespaceRule, 'allowedWhitespace'>
-);
-
-type UnionPasswordRule_PasswordCharacterRule_Fragment = (
-  { __typename: 'PasswordCharacterRule' }
-  & Pick<PasswordCharacterRule, 'characterType' | 'numberOfCharacters'>
-);
-
-type UnionPasswordRule_PasswordStrengthRule_Fragment = (
-  { __typename: 'PasswordStrengthRule' }
-  & Pick<PasswordStrengthRule, 'requiredStrengthLevel'>
-);
+type UnionPasswordRule_PasswordStrengthRule_Fragment = { __typename: 'PasswordStrengthRule' } & Pick<
+  PasswordStrengthRule,
+  'requiredStrengthLevel'
+>;
 
 type UnionPasswordRule_PasswordRuleGroup_Fragment = { __typename: 'PasswordRuleGroup' };
 
-export type UnionPasswordRuleFragment = UnionPasswordRule_PasswordLengthRule_Fragment | UnionPasswordRule_PasswordWhitespaceRule_Fragment | UnionPasswordRule_PasswordCharacterRule_Fragment | UnionPasswordRule_PasswordStrengthRule_Fragment | UnionPasswordRule_PasswordRuleGroup_Fragment;
+export type UnionPasswordRuleFragment =
+  | UnionPasswordRule_PasswordLengthRule_Fragment
+  | UnionPasswordRule_PasswordWhitespaceRule_Fragment
+  | UnionPasswordRule_PasswordCharacterRule_Fragment
+  | UnionPasswordRule_PasswordStrengthRule_Fragment
+  | UnionPasswordRule_PasswordRuleGroup_Fragment;
 
 export type ExchangeActivityInProcessQueryVariables = Exact<{
   orgSidInput: OrgSidInput;
@@ -2959,20 +2958,26 @@ export type ExchangeActivityInProcessQueryVariables = Exact<{
   pageableInput: PageableInput;
 }>;
 
-
-export type ExchangeActivityInProcessQuery = (
-  { __typename?: 'Query' }
-  & { exchangeActivityInProcess?: Maybe<(
-    { __typename?: 'OrganizationLinkConnection' }
-    & { paginationInfo: (
-      { __typename?: 'PaginationInfo' }
-      & Pick<PaginationInfo, 'totalPages' | 'totalElements' | 'pageNumber' | 'pageSize'>
-    ), nodes?: Maybe<Array<Maybe<(
-      { __typename?: 'OrganizationLink' }
-      & Pick<OrganizationLink, 'id' | 'orgId' | 'name' | 'type' | 'activityTime'>
-    )>>> }
-  )> }
-);
+export type ExchangeActivityInProcessQuery = { __typename?: 'Query' } & {
+  exchangeActivityInProcess?: Maybe<
+    { __typename?: 'OrganizationLinkConnection' } & {
+      paginationInfo: { __typename?: 'PaginationInfo' } & Pick<
+        PaginationInfo,
+        'totalPages' | 'totalElements' | 'pageNumber' | 'pageSize'
+      >;
+      nodes?: Maybe<
+        Array<
+          Maybe<
+            { __typename?: 'OrganizationLink' } & Pick<
+              OrganizationLink,
+              'id' | 'orgId' | 'name' | 'type' | 'activityTime'
+            >
+          >
+        >
+      >;
+    }
+  >;
+};
 
 export type ExchangeActivityTransmittedQueryVariables = Exact<{
   orgSidInput: OrgSidInput;
@@ -2980,20 +2985,26 @@ export type ExchangeActivityTransmittedQueryVariables = Exact<{
   pageableInput: PageableInput;
 }>;
 
-
-export type ExchangeActivityTransmittedQuery = (
-  { __typename?: 'Query' }
-  & { exchangeActivityTransmitted?: Maybe<(
-    { __typename?: 'OrganizationLinkConnection' }
-    & { paginationInfo: (
-      { __typename?: 'PaginationInfo' }
-      & Pick<PaginationInfo, 'totalPages' | 'totalElements' | 'pageNumber' | 'pageSize'>
-    ), nodes?: Maybe<Array<Maybe<(
-      { __typename?: 'OrganizationLink' }
-      & Pick<OrganizationLink, 'id' | 'orgId' | 'name' | 'type' | 'activityTime'>
-    )>>> }
-  )> }
-);
+export type ExchangeActivityTransmittedQuery = { __typename?: 'Query' } & {
+  exchangeActivityTransmitted?: Maybe<
+    { __typename?: 'OrganizationLinkConnection' } & {
+      paginationInfo: { __typename?: 'PaginationInfo' } & Pick<
+        PaginationInfo,
+        'totalPages' | 'totalElements' | 'pageNumber' | 'pageSize'
+      >;
+      nodes?: Maybe<
+        Array<
+          Maybe<
+            { __typename?: 'OrganizationLink' } & Pick<
+              OrganizationLink,
+              'id' | 'orgId' | 'name' | 'type' | 'activityTime'
+            >
+          >
+        >
+      >;
+    }
+  >;
+};
 
 export type ExchangeActivityErroredQueryVariables = Exact<{
   orgSidInput: OrgSidInput;
@@ -3001,441 +3012,447 @@ export type ExchangeActivityErroredQueryVariables = Exact<{
   pageableInput: PageableInput;
 }>;
 
-
-export type ExchangeActivityErroredQuery = (
-  { __typename?: 'Query' }
-  & { exchangeActivityErrored?: Maybe<(
-    { __typename?: 'OrganizationLinkConnection' }
-    & { paginationInfo: (
-      { __typename?: 'PaginationInfo' }
-      & Pick<PaginationInfo, 'totalPages' | 'totalElements' | 'pageNumber' | 'pageSize'>
-    ), nodes?: Maybe<Array<Maybe<(
-      { __typename?: 'OrganizationLink' }
-      & Pick<OrganizationLink, 'id' | 'orgId' | 'name' | 'type' | 'activityTime'>
-    )>>> }
-  )> }
-);
+export type ExchangeActivityErroredQuery = { __typename?: 'Query' } & {
+  exchangeActivityErrored?: Maybe<
+    { __typename?: 'OrganizationLinkConnection' } & {
+      paginationInfo: { __typename?: 'PaginationInfo' } & Pick<
+        PaginationInfo,
+        'totalPages' | 'totalElements' | 'pageNumber' | 'pageSize'
+      >;
+      nodes?: Maybe<
+        Array<
+          Maybe<
+            { __typename?: 'OrganizationLink' } & Pick<
+              OrganizationLink,
+              'id' | 'orgId' | 'name' | 'type' | 'activityTime'
+            >
+          >
+        >
+      >;
+    }
+  >;
+};
 
 export type NavigateToNewDomainQueryVariables = Exact<{
   domainNavInput: DomainNavInput;
 }>;
 
-
-export type NavigateToNewDomainQuery = (
-  { __typename?: 'Query' }
-  & { navigateToNewDomain?: Maybe<(
-    { __typename?: 'WebAppDomain' }
-    & Pick<WebAppDomain, 'type' | 'selectedPage'>
-    & { navItems?: Maybe<Array<Maybe<(
-      { __typename?: 'WebNav' }
-      & { subNavItems?: Maybe<Array<Maybe<(
-        { __typename?: 'WebNav' }
-        & NavItemFragmentFragment
-      )>>> }
-      & NavItemFragmentFragment
-    )>>> }
-  )> }
-);
+export type NavigateToNewDomainQuery = { __typename?: 'Query' } & {
+  navigateToNewDomain?: Maybe<
+    { __typename?: 'WebAppDomain' } & Pick<WebAppDomain, 'type' | 'selectedPage'> & {
+        navItems?: Maybe<
+          Array<
+            Maybe<
+              { __typename?: 'WebNav' } & {
+                subNavItems?: Maybe<Array<Maybe<{ __typename?: 'WebNav' } & NavItemFragmentFragment>>>;
+              } & NavItemFragmentFragment
+            >
+          >
+        >;
+      }
+  >;
+};
 
 export type UserCreatePageQueryVariables = Exact<{
   orgSidInput: OrgSidInput;
 }>;
 
-
-export type UserCreatePageQuery = (
-  { __typename?: 'Query' }
-  & { userCreatePage?: Maybe<(
-    { __typename?: 'UserPageInfo' }
-    & FragmentUserPageInfoFragment
-  )> }
-);
+export type UserCreatePageQuery = { __typename?: 'Query' } & {
+  userCreatePage?: Maybe<{ __typename?: 'UserPageInfo' } & FragmentUserPageInfoFragment>;
+};
 
 export type UserUpdatePageQueryVariables = Exact<{
   sidInput: SidInput;
 }>;
 
-
-export type UserUpdatePageQuery = (
-  { __typename?: 'Query' }
-  & { userUpdatePage?: Maybe<(
-    { __typename?: 'UserPageInfo' }
-    & FragmentUserPageInfoFragment
-  )> }
-);
+export type UserUpdatePageQuery = { __typename?: 'Query' } & {
+  userUpdatePage?: Maybe<{ __typename?: 'UserPageInfo' } & FragmentUserPageInfoFragment>;
+};
 
 export type UserAssignAmGroupsPageQueryVariables = Exact<{
   sidInput: SidInput;
 }>;
 
+export type UserAssignAmGroupsPageQuery = { __typename?: 'Query' } & {
+  userUpdatePage?: Maybe<{ __typename?: 'UserPageInfo' } & FragmentUserPageInfoFragment>;
+};
 
-export type UserAssignAmGroupsPageQuery = (
-  { __typename?: 'Query' }
-  & { userUpdatePage?: Maybe<(
-    { __typename?: 'UserPageInfo' }
-    & FragmentUserPageInfoFragment
-  )> }
-);
+export type FragmentUserPageInfoFragment = { __typename?: 'UserPageInfo' } & {
+  model?: Maybe<
+    { __typename?: 'User' } & Pick<User, 'id' | 'email'> & {
+        person?: Maybe<{ __typename?: 'Person' } & Pick<Person, 'firstNm' | 'lastNm'>>;
+        amGroups?: Maybe<
+          Array<
+            Maybe<
+              { __typename?: 'AMGroup' } & Pick<AmGroup, 'id' | 'name'> & {
+                  policies?: Maybe<Array<Maybe<{ __typename?: 'AMPolicy' } & Pick<AmPolicy, 'name'>>>>;
+                }
+            >
+          >
+        >;
+      }
+  >;
+  cdxPageInfo?: Maybe<{ __typename?: 'CDXPageInfo' } & FragmentPageInfoFragment>;
+  amGroupConnection?: Maybe<
+    { __typename?: 'AMGroupConnection' } & {
+      paginationInfo: { __typename?: 'PaginationInfo' } & PaginationInfoFragmentFragment;
+      nodes?: Maybe<Array<Maybe<{ __typename?: 'AMGroup' } & Pick<AmGroup, 'id' | 'name'>>>>;
+    }
+  >;
+};
 
-export type FragmentUserPageInfoFragment = (
-  { __typename?: 'UserPageInfo' }
-  & { model?: Maybe<(
-    { __typename?: 'User' }
-    & Pick<User, 'id' | 'email'>
-    & { person?: Maybe<(
-      { __typename?: 'Person' }
-      & Pick<Person, 'firstNm' | 'lastNm'>
-    )>, amGroups?: Maybe<Array<Maybe<(
-      { __typename?: 'AMGroup' }
-      & Pick<AmGroup, 'id' | 'name'>
-      & { policies?: Maybe<Array<Maybe<(
-        { __typename?: 'AMPolicy' }
-        & Pick<AmPolicy, 'name'>
-      )>>> }
-    )>>> }
-  )>, cdxPageInfo?: Maybe<(
-    { __typename?: 'CDXPageInfo' }
-    & FragmentPageInfoFragment
-  )>, amGroupConnection?: Maybe<(
-    { __typename?: 'AMGroupConnection' }
-    & { paginationInfo: (
-      { __typename?: 'PaginationInfo' }
-      & PaginationInfoFragmentFragment
-    ), nodes?: Maybe<Array<Maybe<(
-      { __typename?: 'AMGroup' }
-      & Pick<AmGroup, 'id' | 'name'>
-    )>>> }
-  )> }
-);
+export type FragmentPageInfoFragment = { __typename?: 'CDXPageInfo' } & Pick<CdxPageInfo, 'orgSid'> & {
+    formInfo?: Maybe<
+      Array<
+        Maybe<
+          { __typename?: 'FormInfo' } & Pick<FormInfo, 'label'> & {
+              formCommands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
+            }
+        >
+      >
+    >;
+    lookupData?: Maybe<
+      Array<
+        Maybe<
+          { __typename?: 'LookupData' } & Pick<LookupData, 'key'> & {
+              lookupPairs?: Maybe<
+                Array<
+                  Maybe<
+                    | ({ __typename?: 'NVPStr' } & UnionNvp_NvpStr_Fragment)
+                    | ({ __typename?: 'NVPId' } & UnionNvp_NvpId_Fragment)
+                  >
+                >
+              >;
+            }
+        >
+      >
+    >;
+  };
 
-export type FragmentPageInfoFragment = (
-  { __typename?: 'CDXPageInfo' }
-  & Pick<CdxPageInfo, 'orgSid'>
-  & { formInfo?: Maybe<Array<Maybe<(
-    { __typename?: 'FormInfo' }
-    & Pick<FormInfo, 'label'>
-    & { formCommands?: Maybe<Array<Maybe<(
-      { __typename?: 'WebCommand' }
-      & FragmentWebCommandFragment
-    )>>> }
-  )>>>, lookupData?: Maybe<Array<Maybe<(
-    { __typename?: 'LookupData' }
-    & Pick<LookupData, 'key'>
-    & { lookupPairs?: Maybe<Array<Maybe<(
-      { __typename?: 'NVPStr' }
-      & UnionNvp_NvpStr_Fragment
-    ) | (
-      { __typename?: 'NVPId' }
-      & UnionNvp_NvpId_Fragment
-    )>>> }
-  )>>> }
-);
+export type FragmentWebCommandFragment = { __typename?: 'WebCommand' } & Pick<
+  WebCommand,
+  'endPoint' | 'label' | 'commandType'
+> & {
+    parameters?: Maybe<
+      Array<
+        Maybe<
+          ({ __typename?: 'NVPStr' } & UnionNvp_NvpStr_Fragment) | ({ __typename?: 'NVPId' } & UnionNvp_NvpId_Fragment)
+        >
+      >
+    >;
+  };
 
-export type FragmentWebCommandFragment = (
-  { __typename?: 'WebCommand' }
-  & Pick<WebCommand, 'endPoint' | 'label' | 'commandType'>
-  & { parameters?: Maybe<Array<Maybe<(
-    { __typename?: 'NVPStr' }
-    & UnionNvp_NvpStr_Fragment
-  ) | (
-    { __typename?: 'NVPId' }
-    & UnionNvp_NvpId_Fragment
-  )>>> }
-);
+export type SimulateSessionExpirQueryVariables = Exact<{ [key: string]: never }>;
+
+export type SimulateSessionExpirQuery = { __typename?: 'Query' } & {
+  simulateSessionExpir?: Maybe<{ __typename?: 'LogOutInfo' } & Pick<LogOutInfo, 'successful'>>;
+};
 
 export const UnionNvpFragmentDoc = gql`
-    fragment unionNVP on NVP {
-  __typename
-  ... on NVPStr {
-    name
-    strValue: value
+  fragment unionNVP on NVP {
+    __typename
+    ... on NVPStr {
+      name
+      strValue: value
+    }
+    ... on NVPId {
+      name
+      idValue: value
+    }
   }
-  ... on NVPId {
-    name
-    idValue: value
-  }
-}
-    `;
+`;
 export const WebPageFragmentFragmentDoc = gql`
-    fragment webPageFragment on WebPage {
-  type
-  parameters {
-    ...unionNVP
+  fragment webPageFragment on WebPage {
+    type
+    parameters {
+      ...unionNVP
+    }
+    commands {
+      label
+      page {
+        type
+        parameters {
+          ...unionNVP
+        }
+      }
+      appDomain
+    }
+    pivots {
+      label
+      type
+    }
   }
-  commands {
+  ${UnionNvpFragmentDoc}
+`;
+export const NavItemFragmentFragmentDoc = gql`
+  fragment navItemFragment on WebNav {
     label
     page {
-      type
-      parameters {
-        ...unionNVP
-      }
+      ...webPageFragment
     }
     appDomain
   }
-  pivots {
+  ${WebPageFragmentFragmentDoc}
+`;
+export const RecordCountsFragmentFragmentDoc = gql`
+  fragment recordCountsFragment on RecordCounts {
+    totalCount
+    showUser
+    recordCount {
+      name
+      count
+    }
+  }
+`;
+export const ExtractParameterFragmentFragmentDoc = gql`
+  fragment extractParameterFragment on ExtractParameter {
     label
+    name
+    value
+  }
+`;
+export const FieldCreationFragmentFragmentDoc = gql`
+  fragment fieldCreationFragment on FieldCreationEvent {
+    message
+    name
+    id
+    value
+    rawValue
     type
   }
-}
-    ${UnionNvpFragmentDoc}`;
-export const NavItemFragmentFragmentDoc = gql`
-    fragment navItemFragment on WebNav {
-  label
-  page {
-    ...webPageFragment
-  }
-  appDomain
-}
-    ${WebPageFragmentFragmentDoc}`;
-export const RecordCountsFragmentFragmentDoc = gql`
-    fragment recordCountsFragment on RecordCounts {
-  totalCount
-  showUser
-  recordCount {
-    name
-    count
-  }
-}
-    `;
-export const ExtractParameterFragmentFragmentDoc = gql`
-    fragment extractParameterFragment on ExtractParameter {
-  label
-  name
-  value
-}
-    `;
-export const FieldCreationFragmentFragmentDoc = gql`
-    fragment fieldCreationFragment on FieldCreationEvent {
-  message
-  name
-  id
-  value
-  rawValue
-  type
-}
-    `;
+`;
 export const StatIntFragmentFragmentDoc = gql`
-    fragment statIntFragment on StatInt {
-  prior
-  value
-}
-    `;
+  fragment statIntFragment on StatInt {
+    prior
+    value
+  }
+`;
 export const InsuredStatCountFragmentFragmentDoc = gql`
-    fragment insuredStatCountFragment on InsuredStatCount {
-  active {
-    ...statIntFragment
+  fragment insuredStatCountFragment on InsuredStatCount {
+    active {
+      ...statIntFragment
+    }
+    ended {
+      ...statIntFragment
+    }
+    expectedTotal
+    inTolerance
+    toleranceMsg
+    hold
   }
-  ended {
-    ...statIntFragment
-  }
-  expectedTotal
-  inTolerance
-  toleranceMsg
-  hold
-}
-    ${StatIntFragmentFragmentDoc}`;
+  ${StatIntFragmentFragmentDoc}
+`;
 export const InsuredStatFragmentFragmentDoc = gql`
-    fragment insuredStatFragment on InsuredStat {
-  subscribers {
-    ...insuredStatCountFragment
+  fragment insuredStatFragment on InsuredStat {
+    subscribers {
+      ...insuredStatCountFragment
+    }
+    dependents {
+      ...insuredStatCountFragment
+    }
   }
-  dependents {
-    ...insuredStatCountFragment
-  }
-}
-    ${InsuredStatCountFragmentFragmentDoc}`;
+  ${InsuredStatCountFragmentFragmentDoc}
+`;
 export const PlanInsuredStatFragmentFragmentDoc = gql`
-    fragment planInsuredStatFragment on PlanInsuredStat {
-  planCode
-  planType
-  subscribers {
-    ...insuredStatCountFragment
+  fragment planInsuredStatFragment on PlanInsuredStat {
+    planCode
+    planType
+    subscribers {
+      ...insuredStatCountFragment
+    }
+    dependents {
+      ...insuredStatCountFragment
+    }
   }
-  dependents {
-    ...insuredStatCountFragment
-  }
-}
-    ${InsuredStatCountFragmentFragmentDoc}`;
+  ${InsuredStatCountFragmentFragmentDoc}
+`;
 export const EnrollmentStatFragmentFragmentDoc = gql`
-    fragment enrollmentStatFragment on EnrollmentStat {
-  insuredStat {
-    ...insuredStatFragment
+  fragment enrollmentStatFragment on EnrollmentStat {
+    insuredStat {
+      ...insuredStatFragment
+    }
+    excludedInsuredStat {
+      ...insuredStatFragment
+    }
+    excludedPlanInsuredStat {
+      ...planInsuredStatFragment
+    }
+    planInsuredStat {
+      ...planInsuredStatFragment
+    }
   }
-  excludedInsuredStat {
-    ...insuredStatFragment
-  }
-  excludedPlanInsuredStat {
-    ...planInsuredStatFragment
-  }
-  planInsuredStat {
-    ...planInsuredStatFragment
-  }
-}
-    ${InsuredStatFragmentFragmentDoc}
-${PlanInsuredStatFragmentFragmentDoc}`;
+  ${InsuredStatFragmentFragmentDoc}
+  ${PlanInsuredStatFragmentFragmentDoc}
+`;
 export const DashPeriodCountFragmentFragmentDoc = gql`
-    fragment dashPeriodCountFragment on DashboardPeriodCount {
-  name
-  secondaryDescr
-  count
-  total
-}
-    `;
+  fragment dashPeriodCountFragment on DashboardPeriodCount {
+    name
+    secondaryDescr
+    count
+    total
+  }
+`;
 export const DashPeriodCountsFragmentFragmentDoc = gql`
-    fragment dashPeriodCountsFragment on DashboardPeriodCounts {
-  vendorTransmissions {
-    ...dashPeriodCountFragment
+  fragment dashPeriodCountsFragment on DashboardPeriodCounts {
+    vendorTransmissions {
+      ...dashPeriodCountFragment
+    }
+    vendorTransmissionsBySpec {
+      ...dashPeriodCountFragment
+    }
+    planSponsorTransmissions {
+      ...dashPeriodCountFragment
+    }
+    fileTransmissions {
+      ...dashPeriodCountFragment
+    }
+    vendorProcessErrors {
+      ...dashPeriodCountFragment
+    }
+    planSponsorProcessErrors {
+      ...dashPeriodCountFragment
+    }
+    fileProcessErrors {
+      ...dashPeriodCountFragment
+    }
+    transmissionCount
+    billingUnitCount
+    processErrorCount
   }
-  vendorTransmissionsBySpec {
-    ...dashPeriodCountFragment
-  }
-  planSponsorTransmissions {
-    ...dashPeriodCountFragment
-  }
-  fileTransmissions {
-    ...dashPeriodCountFragment
-  }
-  vendorProcessErrors {
-    ...dashPeriodCountFragment
-  }
-  planSponsorProcessErrors {
-    ...dashPeriodCountFragment
-  }
-  fileProcessErrors {
-    ...dashPeriodCountFragment
-  }
-  transmissionCount
-  billingUnitCount
-  processErrorCount
-}
-    ${DashPeriodCountFragmentFragmentDoc}`;
+  ${DashPeriodCountFragmentFragmentDoc}
+`;
 export const PolicyFragmentFragmentDoc = gql`
-    fragment policyFragment on AMPolicy {
-  id
-  name
-  tmpl
-  tmplUseAsIs
-  permissions {
+  fragment policyFragment on AMPolicy {
     id
-    effect
-    predicate
-    predVar1
-    predParam1
-    actions {
+    name
+    tmpl
+    tmplUseAsIs
+    permissions {
       id
-      service
-      facet
-      verb
+      effect
+      predicate
+      predVar1
+      predParam1
+      actions {
+        id
+        service
+        facet
+        verb
+      }
     }
   }
-}
-    `;
+`;
 export const WebCommandFragmentFragmentDoc = gql`
-    fragment webCommandFragment on WebCommand {
-  endPoint
-  label
-  commandType
-  parameters {
-    ...unionNVP
-  }
-}
-    ${UnionNvpFragmentDoc}`;
-export const UnionPasswordRuleFragmentDoc = gql`
-    fragment unionPasswordRule on PasswordRule {
-  __typename
-  ... on PasswordLengthRule {
-    minLength
-    maxLength
-  }
-  ... on PasswordStrengthRule {
-    requiredStrengthLevel
-  }
-  ... on PasswordCharacterRule {
-    characterType
-    numberOfCharacters
-  }
-  ... on PasswordWhitespaceRule {
-    allowedWhitespace
-  }
-}
-    `;
-export const FragmentWebCommandFragmentDoc = gql`
-    fragment fragmentWebCommand on WebCommand {
-  endPoint
-  label
-  parameters {
-    ...unionNVP
-  }
-  commandType
-}
-    ${UnionNvpFragmentDoc}`;
-export const FragmentPageInfoFragmentDoc = gql`
-    fragment fragmentPageInfo on CDXPageInfo {
-  orgSid
-  formInfo {
+  fragment webCommandFragment on WebCommand {
+    endPoint
     label
-    formCommands {
-      ...fragmentWebCommand
-    }
-  }
-  lookupData {
-    key
-    lookupPairs {
+    commandType
+    parameters {
       ...unionNVP
     }
   }
-}
-    ${FragmentWebCommandFragmentDoc}
-${UnionNvpFragmentDoc}`;
-export const PaginationInfoFragmentFragmentDoc = gql`
-    fragment paginationInfoFragment on PaginationInfo {
-  totalPages
-  totalElements
-  pageNumber
-  pageSize
-}
-    `;
-export const FragmentUserPageInfoFragmentDoc = gql`
-    fragment fragmentUserPageInfo on UserPageInfo {
-  model {
-    id
-    email
-    person {
-      firstNm
-      lastNm
+  ${UnionNvpFragmentDoc}
+`;
+export const UnionPasswordRuleFragmentDoc = gql`
+  fragment unionPasswordRule on PasswordRule {
+    __typename
+    ... on PasswordLengthRule {
+      minLength
+      maxLength
     }
-    amGroups {
+    ... on PasswordStrengthRule {
+      requiredStrengthLevel
+    }
+    ... on PasswordCharacterRule {
+      characterType
+      numberOfCharacters
+    }
+    ... on PasswordWhitespaceRule {
+      allowedWhitespace
+    }
+  }
+`;
+export const FragmentWebCommandFragmentDoc = gql`
+  fragment fragmentWebCommand on WebCommand {
+    endPoint
+    label
+    parameters {
+      ...unionNVP
+    }
+    commandType
+  }
+  ${UnionNvpFragmentDoc}
+`;
+export const FragmentPageInfoFragmentDoc = gql`
+  fragment fragmentPageInfo on CDXPageInfo {
+    orgSid
+    formInfo {
+      label
+      formCommands {
+        ...fragmentWebCommand
+      }
+    }
+    lookupData {
+      key
+      lookupPairs {
+        ...unionNVP
+      }
+    }
+  }
+  ${FragmentWebCommandFragmentDoc}
+  ${UnionNvpFragmentDoc}
+`;
+export const PaginationInfoFragmentFragmentDoc = gql`
+  fragment paginationInfoFragment on PaginationInfo {
+    totalPages
+    totalElements
+    pageNumber
+    pageSize
+  }
+`;
+export const FragmentUserPageInfoFragmentDoc = gql`
+  fragment fragmentUserPageInfo on UserPageInfo {
+    model {
       id
-      name
-      policies {
+      email
+      person {
+        firstNm
+        lastNm
+      }
+      amGroups {
+        id
+        name
+        policies {
+          name
+        }
+      }
+    }
+    cdxPageInfo {
+      ...fragmentPageInfo
+    }
+    amGroupConnection {
+      paginationInfo {
+        ...paginationInfoFragment
+      }
+      nodes {
+        id
         name
       }
     }
   }
-  cdxPageInfo {
-    ...fragmentPageInfo
-  }
-  amGroupConnection {
-    paginationInfo {
-      ...paginationInfoFragment
-    }
-    nodes {
-      id
-      name
-    }
-  }
-}
-    ${FragmentPageInfoFragmentDoc}
-${PaginationInfoFragmentFragmentDoc}`;
+  ${FragmentPageInfoFragmentDoc}
+  ${PaginationInfoFragmentFragmentDoc}
+`;
 export const BeginLoginDocument = gql`
-    query BeginLogin($userId: String!) {
-  beginLogin(userId: $userId) {
-    userId
-    step
-    redirectPath
-    allowLostPassword
+  query BeginLogin($userId: String!) {
+    beginLogin(userId: $userId) {
+      userId
+      step
+      redirectPath
+      allowLostPassword
+    }
   }
-}
-    `;
+`;
 
 /**
  * __useBeginLoginQuery__
@@ -3454,42 +3471,45 @@ export const BeginLoginDocument = gql`
  * });
  */
 export function useBeginLoginQuery(baseOptions: Apollo.QueryHookOptions<BeginLoginQuery, BeginLoginQueryVariables>) {
-        return Apollo.useQuery<BeginLoginQuery, BeginLoginQueryVariables>(BeginLoginDocument, baseOptions);
-      }
-export function useBeginLoginLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BeginLoginQuery, BeginLoginQueryVariables>) {
-          return Apollo.useLazyQuery<BeginLoginQuery, BeginLoginQueryVariables>(BeginLoginDocument, baseOptions);
-        }
+  return Apollo.useQuery<BeginLoginQuery, BeginLoginQueryVariables>(BeginLoginDocument, baseOptions);
+}
+export function useBeginLoginLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<BeginLoginQuery, BeginLoginQueryVariables>
+) {
+  return Apollo.useLazyQuery<BeginLoginQuery, BeginLoginQueryVariables>(BeginLoginDocument, baseOptions);
+}
 export type BeginLoginQueryHookResult = ReturnType<typeof useBeginLoginQuery>;
 export type BeginLoginLazyQueryHookResult = ReturnType<typeof useBeginLoginLazyQuery>;
 export type BeginLoginQueryResult = Apollo.QueryResult<BeginLoginQuery, BeginLoginQueryVariables>;
 export const PasswordLoginDocument = gql`
-    mutation PasswordLogin($userId: String!, $password: String!) {
-  passwordLogin(userId: $userId, password: $password) {
-    step
-    loginCompleteDomain {
-      type
-      selectedPage
-      navItems {
-        ...navItemFragment
-        subNavItems {
+  mutation PasswordLogin($userId: String!, $password: String!) {
+    passwordLogin(userId: $userId, password: $password) {
+      step
+      loginCompleteDomain {
+        type
+        selectedPage
+        navItems {
           ...navItemFragment
+          subNavItems {
+            ...navItemFragment
+          }
+        }
+      }
+      tokenUser {
+        token
+        session {
+          id
+          orgId
+          orgSid
+          userId
+          firstNm
+          defaultAuthorities
         }
       }
     }
-    tokenUser {
-      token
-      session {
-        id
-        orgId
-        orgSid
-        userId
-        firstNm
-        defaultAuthorities
-      }
-    }
   }
-}
-    ${NavItemFragmentFragmentDoc}`;
+  ${NavItemFragmentFragmentDoc}
+`;
 export type PasswordLoginMutationFn = Apollo.MutationFunction<PasswordLoginMutation, PasswordLoginMutationVariables>;
 
 /**
@@ -3510,38 +3530,43 @@ export type PasswordLoginMutationFn = Apollo.MutationFunction<PasswordLoginMutat
  *   },
  * });
  */
-export function usePasswordLoginMutation(baseOptions?: Apollo.MutationHookOptions<PasswordLoginMutation, PasswordLoginMutationVariables>) {
-        return Apollo.useMutation<PasswordLoginMutation, PasswordLoginMutationVariables>(PasswordLoginDocument, baseOptions);
-      }
+export function usePasswordLoginMutation(
+  baseOptions?: Apollo.MutationHookOptions<PasswordLoginMutation, PasswordLoginMutationVariables>
+) {
+  return Apollo.useMutation<PasswordLoginMutation, PasswordLoginMutationVariables>(PasswordLoginDocument, baseOptions);
+}
 export type PasswordLoginMutationHookResult = ReturnType<typeof usePasswordLoginMutation>;
 export type PasswordLoginMutationResult = Apollo.MutationResult<PasswordLoginMutation>;
-export type PasswordLoginMutationOptions = Apollo.BaseMutationOptions<PasswordLoginMutation, PasswordLoginMutationVariables>;
+export type PasswordLoginMutationOptions = Apollo.BaseMutationOptions<
+  PasswordLoginMutation,
+  PasswordLoginMutationVariables
+>;
 export const WorkPacketStatusesDocument = gql`
-    query WorkPacketStatuses($orgSid: ID!, $dateRange: DateTimeRangeInput, $filter: WorkPacketStatusFilter) {
-  workPacketStatuses(orgSid: $orgSid, dateRange: $dateRange, filter: $filter) {
-    workOrderId
-    timestamp
-    planSponsorId
-    detailsPath
-    subClientPath
-    inboundFilename
-    vendorId
-    step
-    stepStatus
-    packetStatus
-    reprocessedBy
-    reprocessAction
-    populationCount
-    recordHighlightCount
-    recordHighlightType
-    clientFileArchivePath
-    vendorFileArchivePath
-    supplementalFilesArchivePaths
-    archiveOnly
-    hasErrors
+  query WorkPacketStatuses($orgSid: ID!, $dateRange: DateTimeRangeInput, $filter: WorkPacketStatusFilter) {
+    workPacketStatuses(orgSid: $orgSid, dateRange: $dateRange, filter: $filter) {
+      workOrderId
+      timestamp
+      planSponsorId
+      detailsPath
+      subClientPath
+      inboundFilename
+      vendorId
+      step
+      stepStatus
+      packetStatus
+      reprocessedBy
+      reprocessAction
+      populationCount
+      recordHighlightCount
+      recordHighlightType
+      clientFileArchivePath
+      vendorFileArchivePath
+      supplementalFilesArchivePaths
+      archiveOnly
+      hasErrors
+    }
   }
-}
-    `;
+`;
 
 /**
  * __useWorkPacketStatusesQuery__
@@ -3561,109 +3586,123 @@ export const WorkPacketStatusesDocument = gql`
  *   },
  * });
  */
-export function useWorkPacketStatusesQuery(baseOptions: Apollo.QueryHookOptions<WorkPacketStatusesQuery, WorkPacketStatusesQueryVariables>) {
-        return Apollo.useQuery<WorkPacketStatusesQuery, WorkPacketStatusesQueryVariables>(WorkPacketStatusesDocument, baseOptions);
-      }
-export function useWorkPacketStatusesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WorkPacketStatusesQuery, WorkPacketStatusesQueryVariables>) {
-          return Apollo.useLazyQuery<WorkPacketStatusesQuery, WorkPacketStatusesQueryVariables>(WorkPacketStatusesDocument, baseOptions);
-        }
+export function useWorkPacketStatusesQuery(
+  baseOptions: Apollo.QueryHookOptions<WorkPacketStatusesQuery, WorkPacketStatusesQueryVariables>
+) {
+  return Apollo.useQuery<WorkPacketStatusesQuery, WorkPacketStatusesQueryVariables>(
+    WorkPacketStatusesDocument,
+    baseOptions
+  );
+}
+export function useWorkPacketStatusesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<WorkPacketStatusesQuery, WorkPacketStatusesQueryVariables>
+) {
+  return Apollo.useLazyQuery<WorkPacketStatusesQuery, WorkPacketStatusesQueryVariables>(
+    WorkPacketStatusesDocument,
+    baseOptions
+  );
+}
 export type WorkPacketStatusesQueryHookResult = ReturnType<typeof useWorkPacketStatusesQuery>;
 export type WorkPacketStatusesLazyQueryHookResult = ReturnType<typeof useWorkPacketStatusesLazyQuery>;
-export type WorkPacketStatusesQueryResult = Apollo.QueryResult<WorkPacketStatusesQuery, WorkPacketStatusesQueryVariables>;
+export type WorkPacketStatusesQueryResult = Apollo.QueryResult<
+  WorkPacketStatusesQuery,
+  WorkPacketStatusesQueryVariables
+>;
 export const WorkPacketStatusDetailsDocument = gql`
-    query WorkPacketStatusDetails($orgSid: ID!, $workOrderId: String!) {
-  workPacketStatusDetails(orgSid: $orgSid, workOrderId: $workOrderId) {
-    workOrderId
-    specId
-    specImplName
-    fingerPrint
-    suppressBilling
-    workStepStatus {
-      stepStatus
-      stepName
-      stepType
-      populationCount {
-        value
+  query WorkPacketStatusDetails($orgSid: ID!, $workOrderId: String!) {
+    workPacketStatusDetails(orgSid: $orgSid, workOrderId: $workOrderId) {
+      workOrderId
+      specId
+      specImplName
+      fingerPrint
+      suppressBilling
+      workStepStatus {
+        stepStatus
+        stepName
+        stepType
+        populationCount {
+          value
+        }
+        stepFile {
+          value
+          label
+        }
+        nvp {
+          name
+          value
+        }
+        recordCounts {
+          ...recordCountsFragment
+        }
       }
-      stepFile {
-        value
-        label
+      deliveredFile {
+        filename
+        fileSizeInBytes
+        textSizeInBytes
+        timeDelivered
+        ftp {
+          protocol
+          host
+          username
+          folder
+          port
+        }
+        kcurl {
+          url
+        }
       }
-      nvp {
-        name
-        value
+      extractParameters {
+        originalParameter {
+          ...extractParameterFragment
+        }
+        overriddenParameter {
+          ...extractParameterFragment
+        }
+        derivedParameter {
+          ...extractParameterFragment
+        }
       }
-      recordCounts {
-        ...recordCountsFragment
-      }
-    }
-    deliveredFile {
-      filename
-      fileSizeInBytes
-      textSizeInBytes
-      timeDelivered
-      ftp {
-        protocol
-        host
-        username
-        folder
-        port
-      }
-      kcurl {
-        url
-      }
-    }
-    extractParameters {
-      originalParameter {
-        ...extractParameterFragment
-      }
-      overriddenParameter {
-        ...extractParameterFragment
-      }
-      derivedParameter {
-        ...extractParameterFragment
-      }
-    }
-    qualityChecks {
-      sequenceCreationEvent {
-        context
-        unitId
-        recordCreationEvent {
+      qualityChecks {
+        sequenceCreationEvent {
           context
-          outerContext
           unitId
-          error {
-            ...fieldCreationFragment
-          }
-          warning {
-            ...fieldCreationFragment
-          }
-          information {
-            ...fieldCreationFragment
+          recordCreationEvent {
+            context
+            outerContext
+            unitId
+            error {
+              ...fieldCreationFragment
+            }
+            warning {
+              ...fieldCreationFragment
+            }
+            information {
+              ...fieldCreationFragment
+            }
           }
         }
       }
+      enrollmentStats {
+        ...enrollmentStatFragment
+      }
+      inboundEnrollmentStats {
+        ...enrollmentStatFragment
+      }
+      outboundEnrollmentStats {
+        ...enrollmentStatFragment
+      }
+      outboundRecordCounts {
+        ...recordCountsFragment
+      }
+      inboundLabel
+      outboundLabel
     }
-    enrollmentStats {
-      ...enrollmentStatFragment
-    }
-    inboundEnrollmentStats {
-      ...enrollmentStatFragment
-    }
-    outboundEnrollmentStats {
-      ...enrollmentStatFragment
-    }
-    outboundRecordCounts {
-      ...recordCountsFragment
-    }
-    inboundLabel
-    outboundLabel
   }
-}
-    ${RecordCountsFragmentFragmentDoc}
-${ExtractParameterFragmentFragmentDoc}
-${FieldCreationFragmentFragmentDoc}
-${EnrollmentStatFragmentFragmentDoc}`;
+  ${RecordCountsFragmentFragmentDoc}
+  ${ExtractParameterFragmentFragmentDoc}
+  ${FieldCreationFragmentFragmentDoc}
+  ${EnrollmentStatFragmentFragmentDoc}
+`;
 
 /**
  * __useWorkPacketStatusDetailsQuery__
@@ -3682,41 +3721,54 @@ ${EnrollmentStatFragmentFragmentDoc}`;
  *   },
  * });
  */
-export function useWorkPacketStatusDetailsQuery(baseOptions: Apollo.QueryHookOptions<WorkPacketStatusDetailsQuery, WorkPacketStatusDetailsQueryVariables>) {
-        return Apollo.useQuery<WorkPacketStatusDetailsQuery, WorkPacketStatusDetailsQueryVariables>(WorkPacketStatusDetailsDocument, baseOptions);
-      }
-export function useWorkPacketStatusDetailsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WorkPacketStatusDetailsQuery, WorkPacketStatusDetailsQueryVariables>) {
-          return Apollo.useLazyQuery<WorkPacketStatusDetailsQuery, WorkPacketStatusDetailsQueryVariables>(WorkPacketStatusDetailsDocument, baseOptions);
-        }
+export function useWorkPacketStatusDetailsQuery(
+  baseOptions: Apollo.QueryHookOptions<WorkPacketStatusDetailsQuery, WorkPacketStatusDetailsQueryVariables>
+) {
+  return Apollo.useQuery<WorkPacketStatusDetailsQuery, WorkPacketStatusDetailsQueryVariables>(
+    WorkPacketStatusDetailsDocument,
+    baseOptions
+  );
+}
+export function useWorkPacketStatusDetailsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<WorkPacketStatusDetailsQuery, WorkPacketStatusDetailsQueryVariables>
+) {
+  return Apollo.useLazyQuery<WorkPacketStatusDetailsQuery, WorkPacketStatusDetailsQueryVariables>(
+    WorkPacketStatusDetailsDocument,
+    baseOptions
+  );
+}
 export type WorkPacketStatusDetailsQueryHookResult = ReturnType<typeof useWorkPacketStatusDetailsQuery>;
 export type WorkPacketStatusDetailsLazyQueryHookResult = ReturnType<typeof useWorkPacketStatusDetailsLazyQuery>;
-export type WorkPacketStatusDetailsQueryResult = Apollo.QueryResult<WorkPacketStatusDetailsQuery, WorkPacketStatusDetailsQueryVariables>;
+export type WorkPacketStatusDetailsQueryResult = Apollo.QueryResult<
+  WorkPacketStatusDetailsQuery,
+  WorkPacketStatusDetailsQueryVariables
+>;
 export const WorkPacketStatusDocument = gql`
-    query WorkPacketStatus($orgSid: ID!, $workOrderId: String!) {
-  workPacketStatus(orgSid: $orgSid, workOrderId: $workOrderId) {
-    workOrderId
-    timestamp
-    planSponsorId
-    detailsPath
-    subClientPath
-    inboundFilename
-    vendorId
-    step
-    stepStatus
-    packetStatus
-    reprocessedBy
-    reprocessAction
-    populationCount
-    recordHighlightCount
-    recordHighlightType
-    clientFileArchivePath
-    vendorFileArchivePath
-    supplementalFilesArchivePaths
-    archiveOnly
-    hasErrors
+  query WorkPacketStatus($orgSid: ID!, $workOrderId: String!) {
+    workPacketStatus(orgSid: $orgSid, workOrderId: $workOrderId) {
+      workOrderId
+      timestamp
+      planSponsorId
+      detailsPath
+      subClientPath
+      inboundFilename
+      vendorId
+      step
+      stepStatus
+      packetStatus
+      reprocessedBy
+      reprocessAction
+      populationCount
+      recordHighlightCount
+      recordHighlightType
+      clientFileArchivePath
+      vendorFileArchivePath
+      supplementalFilesArchivePaths
+      archiveOnly
+      hasErrors
+    }
   }
-}
-    `;
+`;
 
 /**
  * __useWorkPacketStatusQuery__
@@ -3735,33 +3787,41 @@ export const WorkPacketStatusDocument = gql`
  *   },
  * });
  */
-export function useWorkPacketStatusQuery(baseOptions: Apollo.QueryHookOptions<WorkPacketStatusQuery, WorkPacketStatusQueryVariables>) {
-        return Apollo.useQuery<WorkPacketStatusQuery, WorkPacketStatusQueryVariables>(WorkPacketStatusDocument, baseOptions);
-      }
-export function useWorkPacketStatusLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WorkPacketStatusQuery, WorkPacketStatusQueryVariables>) {
-          return Apollo.useLazyQuery<WorkPacketStatusQuery, WorkPacketStatusQueryVariables>(WorkPacketStatusDocument, baseOptions);
-        }
+export function useWorkPacketStatusQuery(
+  baseOptions: Apollo.QueryHookOptions<WorkPacketStatusQuery, WorkPacketStatusQueryVariables>
+) {
+  return Apollo.useQuery<WorkPacketStatusQuery, WorkPacketStatusQueryVariables>(WorkPacketStatusDocument, baseOptions);
+}
+export function useWorkPacketStatusLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<WorkPacketStatusQuery, WorkPacketStatusQueryVariables>
+) {
+  return Apollo.useLazyQuery<WorkPacketStatusQuery, WorkPacketStatusQueryVariables>(
+    WorkPacketStatusDocument,
+    baseOptions
+  );
+}
 export type WorkPacketStatusQueryHookResult = ReturnType<typeof useWorkPacketStatusQuery>;
 export type WorkPacketStatusLazyQueryHookResult = ReturnType<typeof useWorkPacketStatusLazyQuery>;
 export type WorkPacketStatusQueryResult = Apollo.QueryResult<WorkPacketStatusQuery, WorkPacketStatusQueryVariables>;
 export const DashboardPeriodsDocument = gql`
-    query DashboardPeriods($orgSid: ID!) {
-  dashboardPeriods(orgSid: $orgSid) {
-    dailyCounts {
-      ...dashPeriodCountsFragment
-    }
-    yesterdayCounts {
-      ...dashPeriodCountsFragment
-    }
-    monthlyCounts {
-      ...dashPeriodCountsFragment
-    }
-    lastMonthlyCounts {
-      ...dashPeriodCountsFragment
+  query DashboardPeriods($orgSid: ID!) {
+    dashboardPeriods(orgSid: $orgSid) {
+      dailyCounts {
+        ...dashPeriodCountsFragment
+      }
+      yesterdayCounts {
+        ...dashPeriodCountsFragment
+      }
+      monthlyCounts {
+        ...dashPeriodCountsFragment
+      }
+      lastMonthlyCounts {
+        ...dashPeriodCountsFragment
+      }
     }
   }
-}
-    ${DashPeriodCountsFragmentFragmentDoc}`;
+  ${DashPeriodCountsFragmentFragmentDoc}
+`;
 
 /**
  * __useDashboardPeriodsQuery__
@@ -3779,38 +3839,45 @@ export const DashboardPeriodsDocument = gql`
  *   },
  * });
  */
-export function useDashboardPeriodsQuery(baseOptions: Apollo.QueryHookOptions<DashboardPeriodsQuery, DashboardPeriodsQueryVariables>) {
-        return Apollo.useQuery<DashboardPeriodsQuery, DashboardPeriodsQueryVariables>(DashboardPeriodsDocument, baseOptions);
-      }
-export function useDashboardPeriodsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DashboardPeriodsQuery, DashboardPeriodsQueryVariables>) {
-          return Apollo.useLazyQuery<DashboardPeriodsQuery, DashboardPeriodsQueryVariables>(DashboardPeriodsDocument, baseOptions);
-        }
+export function useDashboardPeriodsQuery(
+  baseOptions: Apollo.QueryHookOptions<DashboardPeriodsQuery, DashboardPeriodsQueryVariables>
+) {
+  return Apollo.useQuery<DashboardPeriodsQuery, DashboardPeriodsQueryVariables>(DashboardPeriodsDocument, baseOptions);
+}
+export function useDashboardPeriodsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<DashboardPeriodsQuery, DashboardPeriodsQueryVariables>
+) {
+  return Apollo.useLazyQuery<DashboardPeriodsQuery, DashboardPeriodsQueryVariables>(
+    DashboardPeriodsDocument,
+    baseOptions
+  );
+}
 export type DashboardPeriodsQueryHookResult = ReturnType<typeof useDashboardPeriodsQuery>;
 export type DashboardPeriodsLazyQueryHookResult = ReturnType<typeof useDashboardPeriodsLazyQuery>;
 export type DashboardPeriodsQueryResult = Apollo.QueryResult<DashboardPeriodsQuery, DashboardPeriodsQueryVariables>;
 export const AmPolicyPageDocument = gql`
-    query AMPolicyPage($orgSid: ID!) {
-  amPolicyPage(orgSid: $orgSid) {
-    permissionServices {
-      name
-      value
-    }
-    predicates {
-      name
-      value
-    }
-    showTemplateSection
-    templateServices {
-      name
-      value
-    }
-    permissionEffectNVPs {
-      name
-      value
+  query AMPolicyPage($orgSid: ID!) {
+    amPolicyPage(orgSid: $orgSid) {
+      permissionServices {
+        name
+        value
+      }
+      predicates {
+        name
+        value
+      }
+      showTemplateSection
+      templateServices {
+        name
+        value
+      }
+      permissionEffectNVPs {
+        name
+        value
+      }
     }
   }
-}
-    `;
+`;
 
 /**
  * __useAmPolicyPageQuery__
@@ -3828,23 +3895,27 @@ export const AmPolicyPageDocument = gql`
  *   },
  * });
  */
-export function useAmPolicyPageQuery(baseOptions: Apollo.QueryHookOptions<AmPolicyPageQuery, AmPolicyPageQueryVariables>) {
-        return Apollo.useQuery<AmPolicyPageQuery, AmPolicyPageQueryVariables>(AmPolicyPageDocument, baseOptions);
-      }
-export function useAmPolicyPageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AmPolicyPageQuery, AmPolicyPageQueryVariables>) {
-          return Apollo.useLazyQuery<AmPolicyPageQuery, AmPolicyPageQueryVariables>(AmPolicyPageDocument, baseOptions);
-        }
+export function useAmPolicyPageQuery(
+  baseOptions: Apollo.QueryHookOptions<AmPolicyPageQuery, AmPolicyPageQueryVariables>
+) {
+  return Apollo.useQuery<AmPolicyPageQuery, AmPolicyPageQueryVariables>(AmPolicyPageDocument, baseOptions);
+}
+export function useAmPolicyPageLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<AmPolicyPageQuery, AmPolicyPageQueryVariables>
+) {
+  return Apollo.useLazyQuery<AmPolicyPageQuery, AmPolicyPageQueryVariables>(AmPolicyPageDocument, baseOptions);
+}
 export type AmPolicyPageQueryHookResult = ReturnType<typeof useAmPolicyPageQuery>;
 export type AmPolicyPageLazyQueryHookResult = ReturnType<typeof useAmPolicyPageLazyQuery>;
 export type AmPolicyPageQueryResult = Apollo.QueryResult<AmPolicyPageQuery, AmPolicyPageQueryVariables>;
 export const AmPolicyFacetsForServiceDocument = gql`
-    query AMPolicyFacetsForService($orgSid: ID!, $cdxService: CDXService!) {
-  amPolicyFacetsForService(orgSid: $orgSid, cdxService: $cdxService) {
-    name
-    value
+  query AMPolicyFacetsForService($orgSid: ID!, $cdxService: CDXService!) {
+    amPolicyFacetsForService(orgSid: $orgSid, cdxService: $cdxService) {
+      name
+      value
+    }
   }
-}
-    `;
+`;
 
 /**
  * __useAmPolicyFacetsForServiceQuery__
@@ -3863,27 +3934,36 @@ export const AmPolicyFacetsForServiceDocument = gql`
  *   },
  * });
  */
-export function useAmPolicyFacetsForServiceQuery(baseOptions: Apollo.QueryHookOptions<AmPolicyFacetsForServiceQuery, AmPolicyFacetsForServiceQueryVariables>) {
-        return Apollo.useQuery<AmPolicyFacetsForServiceQuery, AmPolicyFacetsForServiceQueryVariables>(AmPolicyFacetsForServiceDocument, baseOptions);
-      }
-export function useAmPolicyFacetsForServiceLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AmPolicyFacetsForServiceQuery, AmPolicyFacetsForServiceQueryVariables>) {
-          return Apollo.useLazyQuery<AmPolicyFacetsForServiceQuery, AmPolicyFacetsForServiceQueryVariables>(AmPolicyFacetsForServiceDocument, baseOptions);
-        }
+export function useAmPolicyFacetsForServiceQuery(
+  baseOptions: Apollo.QueryHookOptions<AmPolicyFacetsForServiceQuery, AmPolicyFacetsForServiceQueryVariables>
+) {
+  return Apollo.useQuery<AmPolicyFacetsForServiceQuery, AmPolicyFacetsForServiceQueryVariables>(
+    AmPolicyFacetsForServiceDocument,
+    baseOptions
+  );
+}
+export function useAmPolicyFacetsForServiceLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<AmPolicyFacetsForServiceQuery, AmPolicyFacetsForServiceQueryVariables>
+) {
+  return Apollo.useLazyQuery<AmPolicyFacetsForServiceQuery, AmPolicyFacetsForServiceQueryVariables>(
+    AmPolicyFacetsForServiceDocument,
+    baseOptions
+  );
+}
 export type AmPolicyFacetsForServiceQueryHookResult = ReturnType<typeof useAmPolicyFacetsForServiceQuery>;
 export type AmPolicyFacetsForServiceLazyQueryHookResult = ReturnType<typeof useAmPolicyFacetsForServiceLazyQuery>;
-export type AmPolicyFacetsForServiceQueryResult = Apollo.QueryResult<AmPolicyFacetsForServiceQuery, AmPolicyFacetsForServiceQueryVariables>;
+export type AmPolicyFacetsForServiceQueryResult = Apollo.QueryResult<
+  AmPolicyFacetsForServiceQuery,
+  AmPolicyFacetsForServiceQueryVariables
+>;
 export const AmPolicyVerbForFacetDocument = gql`
-    query AMPolicyVerbForFacet($orgSid: ID!, $cdxService: CDXService!, $cdxFacet: CDXFacet!) {
-  amPolicyVerbForFacet(
-    orgSid: $orgSid
-    cdxService: $cdxService
-    cdxFacet: $cdxFacet
-  ) {
-    name
-    value
+  query AMPolicyVerbForFacet($orgSid: ID!, $cdxService: CDXService!, $cdxFacet: CDXFacet!) {
+    amPolicyVerbForFacet(orgSid: $orgSid, cdxService: $cdxService, cdxFacet: $cdxFacet) {
+      name
+      value
+    }
   }
-}
-    `;
+`;
 
 /**
  * __useAmPolicyVerbForFacetQuery__
@@ -3903,24 +3983,37 @@ export const AmPolicyVerbForFacetDocument = gql`
  *   },
  * });
  */
-export function useAmPolicyVerbForFacetQuery(baseOptions: Apollo.QueryHookOptions<AmPolicyVerbForFacetQuery, AmPolicyVerbForFacetQueryVariables>) {
-        return Apollo.useQuery<AmPolicyVerbForFacetQuery, AmPolicyVerbForFacetQueryVariables>(AmPolicyVerbForFacetDocument, baseOptions);
-      }
-export function useAmPolicyVerbForFacetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AmPolicyVerbForFacetQuery, AmPolicyVerbForFacetQueryVariables>) {
-          return Apollo.useLazyQuery<AmPolicyVerbForFacetQuery, AmPolicyVerbForFacetQueryVariables>(AmPolicyVerbForFacetDocument, baseOptions);
-        }
+export function useAmPolicyVerbForFacetQuery(
+  baseOptions: Apollo.QueryHookOptions<AmPolicyVerbForFacetQuery, AmPolicyVerbForFacetQueryVariables>
+) {
+  return Apollo.useQuery<AmPolicyVerbForFacetQuery, AmPolicyVerbForFacetQueryVariables>(
+    AmPolicyVerbForFacetDocument,
+    baseOptions
+  );
+}
+export function useAmPolicyVerbForFacetLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<AmPolicyVerbForFacetQuery, AmPolicyVerbForFacetQueryVariables>
+) {
+  return Apollo.useLazyQuery<AmPolicyVerbForFacetQuery, AmPolicyVerbForFacetQueryVariables>(
+    AmPolicyVerbForFacetDocument,
+    baseOptions
+  );
+}
 export type AmPolicyVerbForFacetQueryHookResult = ReturnType<typeof useAmPolicyVerbForFacetQuery>;
 export type AmPolicyVerbForFacetLazyQueryHookResult = ReturnType<typeof useAmPolicyVerbForFacetLazyQuery>;
-export type AmPolicyVerbForFacetQueryResult = Apollo.QueryResult<AmPolicyVerbForFacetQuery, AmPolicyVerbForFacetQueryVariables>;
+export type AmPolicyVerbForFacetQueryResult = Apollo.QueryResult<
+  AmPolicyVerbForFacetQuery,
+  AmPolicyVerbForFacetQueryVariables
+>;
 export const CreateOrgDocument = gql`
-    mutation CreateOrg($orgInfo: CreateOrgInput!) {
-  createOrg(orgInfo: $orgInfo) {
-    id
-    orgId
-    orgType
+  mutation CreateOrg($orgInfo: CreateOrgInput!) {
+    createOrg(orgInfo: $orgInfo) {
+      id
+      orgId
+      orgType
+    }
   }
-}
-    `;
+`;
 export type CreateOrgMutationFn = Apollo.MutationFunction<CreateOrgMutation, CreateOrgMutationVariables>;
 
 /**
@@ -3940,19 +4033,22 @@ export type CreateOrgMutationFn = Apollo.MutationFunction<CreateOrgMutation, Cre
  *   },
  * });
  */
-export function useCreateOrgMutation(baseOptions?: Apollo.MutationHookOptions<CreateOrgMutation, CreateOrgMutationVariables>) {
-        return Apollo.useMutation<CreateOrgMutation, CreateOrgMutationVariables>(CreateOrgDocument, baseOptions);
-      }
+export function useCreateOrgMutation(
+  baseOptions?: Apollo.MutationHookOptions<CreateOrgMutation, CreateOrgMutationVariables>
+) {
+  return Apollo.useMutation<CreateOrgMutation, CreateOrgMutationVariables>(CreateOrgDocument, baseOptions);
+}
 export type CreateOrgMutationHookResult = ReturnType<typeof useCreateOrgMutation>;
 export type CreateOrgMutationResult = Apollo.MutationResult<CreateOrgMutation>;
 export type CreateOrgMutationOptions = Apollo.BaseMutationOptions<CreateOrgMutation, CreateOrgMutationVariables>;
 export const CreateAmPolicyDocument = gql`
-    mutation CreateAMPolicy($policyInfo: CreateAMPolicyInput!) {
-  createAMPolicy(policyInfo: $policyInfo) {
-    ...policyFragment
+  mutation CreateAMPolicy($policyInfo: CreateAMPolicyInput!) {
+    createAMPolicy(policyInfo: $policyInfo) {
+      ...policyFragment
+    }
   }
-}
-    ${PolicyFragmentFragmentDoc}`;
+  ${PolicyFragmentFragmentDoc}
+`;
 export type CreateAmPolicyMutationFn = Apollo.MutationFunction<CreateAmPolicyMutation, CreateAmPolicyMutationVariables>;
 
 /**
@@ -3972,27 +4068,35 @@ export type CreateAmPolicyMutationFn = Apollo.MutationFunction<CreateAmPolicyMut
  *   },
  * });
  */
-export function useCreateAmPolicyMutation(baseOptions?: Apollo.MutationHookOptions<CreateAmPolicyMutation, CreateAmPolicyMutationVariables>) {
-        return Apollo.useMutation<CreateAmPolicyMutation, CreateAmPolicyMutationVariables>(CreateAmPolicyDocument, baseOptions);
-      }
+export function useCreateAmPolicyMutation(
+  baseOptions?: Apollo.MutationHookOptions<CreateAmPolicyMutation, CreateAmPolicyMutationVariables>
+) {
+  return Apollo.useMutation<CreateAmPolicyMutation, CreateAmPolicyMutationVariables>(
+    CreateAmPolicyDocument,
+    baseOptions
+  );
+}
 export type CreateAmPolicyMutationHookResult = ReturnType<typeof useCreateAmPolicyMutation>;
 export type CreateAmPolicyMutationResult = Apollo.MutationResult<CreateAmPolicyMutation>;
-export type CreateAmPolicyMutationOptions = Apollo.BaseMutationOptions<CreateAmPolicyMutation, CreateAmPolicyMutationVariables>;
+export type CreateAmPolicyMutationOptions = Apollo.BaseMutationOptions<
+  CreateAmPolicyMutation,
+  CreateAmPolicyMutationVariables
+>;
 export const CreateAmGroupDocument = gql`
-    mutation CreateAMGroup($amGroupInfo: CreateAMGroupInput!) {
-  createAMGroup(amGroupInfo: $amGroupInfo) {
-    id
-    name
-    description
-    tmpl
-    tmplUseAsIs
-    policies {
+  mutation CreateAMGroup($amGroupInfo: CreateAMGroupInput!) {
+    createAMGroup(amGroupInfo: $amGroupInfo) {
       id
       name
+      description
+      tmpl
+      tmplUseAsIs
+      policies {
+        id
+        name
+      }
     }
   }
-}
-    `;
+`;
 export type CreateAmGroupMutationFn = Apollo.MutationFunction<CreateAmGroupMutation, CreateAmGroupMutationVariables>;
 
 /**
@@ -4012,24 +4116,29 @@ export type CreateAmGroupMutationFn = Apollo.MutationFunction<CreateAmGroupMutat
  *   },
  * });
  */
-export function useCreateAmGroupMutation(baseOptions?: Apollo.MutationHookOptions<CreateAmGroupMutation, CreateAmGroupMutationVariables>) {
-        return Apollo.useMutation<CreateAmGroupMutation, CreateAmGroupMutationVariables>(CreateAmGroupDocument, baseOptions);
-      }
+export function useCreateAmGroupMutation(
+  baseOptions?: Apollo.MutationHookOptions<CreateAmGroupMutation, CreateAmGroupMutationVariables>
+) {
+  return Apollo.useMutation<CreateAmGroupMutation, CreateAmGroupMutationVariables>(CreateAmGroupDocument, baseOptions);
+}
 export type CreateAmGroupMutationHookResult = ReturnType<typeof useCreateAmGroupMutation>;
 export type CreateAmGroupMutationResult = Apollo.MutationResult<CreateAmGroupMutation>;
-export type CreateAmGroupMutationOptions = Apollo.BaseMutationOptions<CreateAmGroupMutation, CreateAmGroupMutationVariables>;
+export type CreateAmGroupMutationOptions = Apollo.BaseMutationOptions<
+  CreateAmGroupMutation,
+  CreateAmGroupMutationVariables
+>;
 export const SystemTemplateAmGroupByNameDocument = gql`
-    query SystemTemplateAMGroupByName($name: String!) {
-  systemTemplateAMGroupByName(name: $name) {
-    id
-    name
-    description
-    tmpl
-    tmplUseAsIs
-    tmplServiceType
+  query SystemTemplateAMGroupByName($name: String!) {
+    systemTemplateAMGroupByName(name: $name) {
+      id
+      name
+      description
+      tmpl
+      tmplUseAsIs
+      tmplServiceType
+    }
   }
-}
-    `;
+`;
 
 /**
  * __useSystemTemplateAmGroupByNameQuery__
@@ -4047,32 +4156,45 @@ export const SystemTemplateAmGroupByNameDocument = gql`
  *   },
  * });
  */
-export function useSystemTemplateAmGroupByNameQuery(baseOptions: Apollo.QueryHookOptions<SystemTemplateAmGroupByNameQuery, SystemTemplateAmGroupByNameQueryVariables>) {
-        return Apollo.useQuery<SystemTemplateAmGroupByNameQuery, SystemTemplateAmGroupByNameQueryVariables>(SystemTemplateAmGroupByNameDocument, baseOptions);
-      }
-export function useSystemTemplateAmGroupByNameLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SystemTemplateAmGroupByNameQuery, SystemTemplateAmGroupByNameQueryVariables>) {
-          return Apollo.useLazyQuery<SystemTemplateAmGroupByNameQuery, SystemTemplateAmGroupByNameQueryVariables>(SystemTemplateAmGroupByNameDocument, baseOptions);
-        }
+export function useSystemTemplateAmGroupByNameQuery(
+  baseOptions: Apollo.QueryHookOptions<SystemTemplateAmGroupByNameQuery, SystemTemplateAmGroupByNameQueryVariables>
+) {
+  return Apollo.useQuery<SystemTemplateAmGroupByNameQuery, SystemTemplateAmGroupByNameQueryVariables>(
+    SystemTemplateAmGroupByNameDocument,
+    baseOptions
+  );
+}
+export function useSystemTemplateAmGroupByNameLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<SystemTemplateAmGroupByNameQuery, SystemTemplateAmGroupByNameQueryVariables>
+) {
+  return Apollo.useLazyQuery<SystemTemplateAmGroupByNameQuery, SystemTemplateAmGroupByNameQueryVariables>(
+    SystemTemplateAmGroupByNameDocument,
+    baseOptions
+  );
+}
 export type SystemTemplateAmGroupByNameQueryHookResult = ReturnType<typeof useSystemTemplateAmGroupByNameQuery>;
 export type SystemTemplateAmGroupByNameLazyQueryHookResult = ReturnType<typeof useSystemTemplateAmGroupByNameLazyQuery>;
-export type SystemTemplateAmGroupByNameQueryResult = Apollo.QueryResult<SystemTemplateAmGroupByNameQuery, SystemTemplateAmGroupByNameQueryVariables>;
+export type SystemTemplateAmGroupByNameQueryResult = Apollo.QueryResult<
+  SystemTemplateAmGroupByNameQuery,
+  SystemTemplateAmGroupByNameQueryVariables
+>;
 export const CreateUserDocument = gql`
-    mutation CreateUser($userInfo: CreateUserInput!, $personInfo: CreatePersonInput!) {
-  createUser(userInfo: $userInfo, personInfo: $personInfo) {
-    response
-    msg
-    model {
-      id
-      email
-      person {
-        firstNm
-        lastNm
+  mutation CreateUser($userInfo: CreateUserInput!, $personInfo: CreatePersonInput!) {
+    createUser(userInfo: $userInfo, personInfo: $personInfo) {
+      response
+      msg
+      model {
+        id
+        email
+        person {
+          firstNm
+          lastNm
+        }
       }
+      nextPage
     }
-    nextPage
   }
-}
-    `;
+`;
 export type CreateUserMutationFn = Apollo.MutationFunction<CreateUserMutation, CreateUserMutationVariables>;
 
 /**
@@ -4093,24 +4215,26 @@ export type CreateUserMutationFn = Apollo.MutationFunction<CreateUserMutation, C
  *   },
  * });
  */
-export function useCreateUserMutation(baseOptions?: Apollo.MutationHookOptions<CreateUserMutation, CreateUserMutationVariables>) {
-        return Apollo.useMutation<CreateUserMutation, CreateUserMutationVariables>(CreateUserDocument, baseOptions);
-      }
+export function useCreateUserMutation(
+  baseOptions?: Apollo.MutationHookOptions<CreateUserMutation, CreateUserMutationVariables>
+) {
+  return Apollo.useMutation<CreateUserMutation, CreateUserMutationVariables>(CreateUserDocument, baseOptions);
+}
 export type CreateUserMutationHookResult = ReturnType<typeof useCreateUserMutation>;
 export type CreateUserMutationResult = Apollo.MutationResult<CreateUserMutation>;
 export type CreateUserMutationOptions = Apollo.BaseMutationOptions<CreateUserMutation, CreateUserMutationVariables>;
 export const UpdateUserDocument = gql`
-    mutation UpdateUser($userInfo: UpdateUserInput!) {
-  updateUser(userInfo: $userInfo) {
-    id
-    email
-    person {
-      firstNm
-      lastNm
+  mutation UpdateUser($userInfo: UpdateUserInput!) {
+    updateUser(userInfo: $userInfo) {
+      id
+      email
+      person {
+        firstNm
+        lastNm
+      }
     }
   }
-}
-    `;
+`;
 export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, UpdateUserMutationVariables>;
 
 /**
@@ -4130,21 +4254,26 @@ export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, U
  *   },
  * });
  */
-export function useUpdateUserMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>) {
-        return Apollo.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, baseOptions);
-      }
+export function useUpdateUserMutation(
+  baseOptions?: Apollo.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>
+) {
+  return Apollo.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, baseOptions);
+}
 export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
 export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
 export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
 export const UpdateUserAmGroupsDocument = gql`
-    mutation UpdateUserAMGroups($userAmGroupUpdate: UpdateUserAMGroupsInput!) {
-  updateUserAMGroups(userAmGroupUpdate: $userAmGroupUpdate) {
-    id
-    name
+  mutation UpdateUserAMGroups($userAmGroupUpdate: UpdateUserAMGroupsInput!) {
+    updateUserAMGroups(userAmGroupUpdate: $userAmGroupUpdate) {
+      id
+      name
+    }
   }
-}
-    `;
-export type UpdateUserAmGroupsMutationFn = Apollo.MutationFunction<UpdateUserAmGroupsMutation, UpdateUserAmGroupsMutationVariables>;
+`;
+export type UpdateUserAmGroupsMutationFn = Apollo.MutationFunction<
+  UpdateUserAmGroupsMutation,
+  UpdateUserAmGroupsMutationVariables
+>;
 
 /**
  * __useUpdateUserAmGroupsMutation__
@@ -4163,17 +4292,25 @@ export type UpdateUserAmGroupsMutationFn = Apollo.MutationFunction<UpdateUserAmG
  *   },
  * });
  */
-export function useUpdateUserAmGroupsMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserAmGroupsMutation, UpdateUserAmGroupsMutationVariables>) {
-        return Apollo.useMutation<UpdateUserAmGroupsMutation, UpdateUserAmGroupsMutationVariables>(UpdateUserAmGroupsDocument, baseOptions);
-      }
+export function useUpdateUserAmGroupsMutation(
+  baseOptions?: Apollo.MutationHookOptions<UpdateUserAmGroupsMutation, UpdateUserAmGroupsMutationVariables>
+) {
+  return Apollo.useMutation<UpdateUserAmGroupsMutation, UpdateUserAmGroupsMutationVariables>(
+    UpdateUserAmGroupsDocument,
+    baseOptions
+  );
+}
 export type UpdateUserAmGroupsMutationHookResult = ReturnType<typeof useUpdateUserAmGroupsMutation>;
 export type UpdateUserAmGroupsMutationResult = Apollo.MutationResult<UpdateUserAmGroupsMutation>;
-export type UpdateUserAmGroupsMutationOptions = Apollo.BaseMutationOptions<UpdateUserAmGroupsMutation, UpdateUserAmGroupsMutationVariables>;
+export type UpdateUserAmGroupsMutationOptions = Apollo.BaseMutationOptions<
+  UpdateUserAmGroupsMutation,
+  UpdateUserAmGroupsMutationVariables
+>;
 export const DeactivateUserDocument = gql`
-    mutation DeactivateUser($sidInput: SidInput!) {
-  deactivateUser(sidInput: $sidInput)
-}
-    `;
+  mutation DeactivateUser($sidInput: SidInput!) {
+    deactivateUser(sidInput: $sidInput)
+  }
+`;
 export type DeactivateUserMutationFn = Apollo.MutationFunction<DeactivateUserMutation, DeactivateUserMutationVariables>;
 
 /**
@@ -4193,18 +4330,29 @@ export type DeactivateUserMutationFn = Apollo.MutationFunction<DeactivateUserMut
  *   },
  * });
  */
-export function useDeactivateUserMutation(baseOptions?: Apollo.MutationHookOptions<DeactivateUserMutation, DeactivateUserMutationVariables>) {
-        return Apollo.useMutation<DeactivateUserMutation, DeactivateUserMutationVariables>(DeactivateUserDocument, baseOptions);
-      }
+export function useDeactivateUserMutation(
+  baseOptions?: Apollo.MutationHookOptions<DeactivateUserMutation, DeactivateUserMutationVariables>
+) {
+  return Apollo.useMutation<DeactivateUserMutation, DeactivateUserMutationVariables>(
+    DeactivateUserDocument,
+    baseOptions
+  );
+}
 export type DeactivateUserMutationHookResult = ReturnType<typeof useDeactivateUserMutation>;
 export type DeactivateUserMutationResult = Apollo.MutationResult<DeactivateUserMutation>;
-export type DeactivateUserMutationOptions = Apollo.BaseMutationOptions<DeactivateUserMutation, DeactivateUserMutationVariables>;
+export type DeactivateUserMutationOptions = Apollo.BaseMutationOptions<
+  DeactivateUserMutation,
+  DeactivateUserMutationVariables
+>;
 export const DeactivateUsersDocument = gql`
-    mutation DeactivateUsers($sidsInput: SidsInput!) {
-  deactivateUsers(sidsInput: $sidsInput)
-}
-    `;
-export type DeactivateUsersMutationFn = Apollo.MutationFunction<DeactivateUsersMutation, DeactivateUsersMutationVariables>;
+  mutation DeactivateUsers($sidsInput: SidsInput!) {
+    deactivateUsers(sidsInput: $sidsInput)
+  }
+`;
+export type DeactivateUsersMutationFn = Apollo.MutationFunction<
+  DeactivateUsersMutation,
+  DeactivateUsersMutationVariables
+>;
 
 /**
  * __useDeactivateUsersMutation__
@@ -4223,26 +4371,105 @@ export type DeactivateUsersMutationFn = Apollo.MutationFunction<DeactivateUsersM
  *   },
  * });
  */
-export function useDeactivateUsersMutation(baseOptions?: Apollo.MutationHookOptions<DeactivateUsersMutation, DeactivateUsersMutationVariables>) {
-        return Apollo.useMutation<DeactivateUsersMutation, DeactivateUsersMutationVariables>(DeactivateUsersDocument, baseOptions);
-      }
+export function useDeactivateUsersMutation(
+  baseOptions?: Apollo.MutationHookOptions<DeactivateUsersMutation, DeactivateUsersMutationVariables>
+) {
+  return Apollo.useMutation<DeactivateUsersMutation, DeactivateUsersMutationVariables>(
+    DeactivateUsersDocument,
+    baseOptions
+  );
+}
 export type DeactivateUsersMutationHookResult = ReturnType<typeof useDeactivateUsersMutation>;
 export type DeactivateUsersMutationResult = Apollo.MutationResult<DeactivateUsersMutation>;
-export type DeactivateUsersMutationOptions = Apollo.BaseMutationOptions<DeactivateUsersMutation, DeactivateUsersMutationVariables>;
+export type DeactivateUsersMutationOptions = Apollo.BaseMutationOptions<
+  DeactivateUsersMutation,
+  DeactivateUsersMutationVariables
+>;
+export const ActivateUserDocument = gql`
+  mutation ActivateUser($sidInput: SidInput!) {
+    activateUser(sidInput: $sidInput)
+  }
+`;
+export type ActivateUserMutationFn = Apollo.MutationFunction<ActivateUserMutation, ActivateUserMutationVariables>;
+
+/**
+ * __useActivateUserMutation__
+ *
+ * To run a mutation, you first call `useActivateUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useActivateUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [activateUserMutation, { data, loading, error }] = useActivateUserMutation({
+ *   variables: {
+ *      sidInput: // value for 'sidInput'
+ *   },
+ * });
+ */
+export function useActivateUserMutation(
+  baseOptions?: Apollo.MutationHookOptions<ActivateUserMutation, ActivateUserMutationVariables>
+) {
+  return Apollo.useMutation<ActivateUserMutation, ActivateUserMutationVariables>(ActivateUserDocument, baseOptions);
+}
+export type ActivateUserMutationHookResult = ReturnType<typeof useActivateUserMutation>;
+export type ActivateUserMutationResult = Apollo.MutationResult<ActivateUserMutation>;
+export type ActivateUserMutationOptions = Apollo.BaseMutationOptions<
+  ActivateUserMutation,
+  ActivateUserMutationVariables
+>;
+export const ActivateUsersDocument = gql`
+  mutation activateUsers($sidsInput: SidsInput!) {
+    activateUsers(sidsInput: $sidsInput)
+  }
+`;
+export type ActivateUsersMutationFn = Apollo.MutationFunction<ActivateUsersMutation, ActivateUsersMutationVariables>;
+
+/**
+ * __useActivateUsersMutation__
+ *
+ * To run a mutation, you first call `useActivateUsersMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useActivateUsersMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [activateUsersMutation, { data, loading, error }] = useActivateUsersMutation({
+ *   variables: {
+ *      sidsInput: // value for 'sidsInput'
+ *   },
+ * });
+ */
+export function useActivateUsersMutation(
+  baseOptions?: Apollo.MutationHookOptions<ActivateUsersMutation, ActivateUsersMutationVariables>
+) {
+  return Apollo.useMutation<ActivateUsersMutation, ActivateUsersMutationVariables>(ActivateUsersDocument, baseOptions);
+}
+export type ActivateUsersMutationHookResult = ReturnType<typeof useActivateUsersMutation>;
+export type ActivateUsersMutationResult = Apollo.MutationResult<ActivateUsersMutation>;
+export type ActivateUsersMutationOptions = Apollo.BaseMutationOptions<
+  ActivateUsersMutation,
+  ActivateUsersMutationVariables
+>;
 export const AmPoliciesForOrgPDocument = gql`
-    query AMPoliciesForOrgP($orgSid: ID!, $pageableInput: PageableInput) {
-  amPoliciesForOrg(orgSid: $orgSid, pageableInput: $pageableInput) {
-    paginationInfo {
-      ...paginationInfoFragment
-    }
-    nodes {
-      id
-      name
-      tmpl
+  query AMPoliciesForOrgP($orgSid: ID!, $pageableInput: PageableInput) {
+    amPoliciesForOrg(orgSid: $orgSid, pageableInput: $pageableInput) {
+      paginationInfo {
+        ...paginationInfoFragment
+      }
+      nodes {
+        id
+        name
+        tmpl
+      }
     }
   }
-}
-    ${PaginationInfoFragmentFragmentDoc}`;
+  ${PaginationInfoFragmentFragmentDoc}
+`;
 
 /**
  * __useAmPoliciesForOrgPQuery__
@@ -4261,24 +4488,34 @@ export const AmPoliciesForOrgPDocument = gql`
  *   },
  * });
  */
-export function useAmPoliciesForOrgPQuery(baseOptions: Apollo.QueryHookOptions<AmPoliciesForOrgPQuery, AmPoliciesForOrgPQueryVariables>) {
-        return Apollo.useQuery<AmPoliciesForOrgPQuery, AmPoliciesForOrgPQueryVariables>(AmPoliciesForOrgPDocument, baseOptions);
-      }
-export function useAmPoliciesForOrgPLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AmPoliciesForOrgPQuery, AmPoliciesForOrgPQueryVariables>) {
-          return Apollo.useLazyQuery<AmPoliciesForOrgPQuery, AmPoliciesForOrgPQueryVariables>(AmPoliciesForOrgPDocument, baseOptions);
-        }
+export function useAmPoliciesForOrgPQuery(
+  baseOptions: Apollo.QueryHookOptions<AmPoliciesForOrgPQuery, AmPoliciesForOrgPQueryVariables>
+) {
+  return Apollo.useQuery<AmPoliciesForOrgPQuery, AmPoliciesForOrgPQueryVariables>(
+    AmPoliciesForOrgPDocument,
+    baseOptions
+  );
+}
+export function useAmPoliciesForOrgPLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<AmPoliciesForOrgPQuery, AmPoliciesForOrgPQueryVariables>
+) {
+  return Apollo.useLazyQuery<AmPoliciesForOrgPQuery, AmPoliciesForOrgPQueryVariables>(
+    AmPoliciesForOrgPDocument,
+    baseOptions
+  );
+}
 export type AmPoliciesForOrgPQueryHookResult = ReturnType<typeof useAmPoliciesForOrgPQuery>;
 export type AmPoliciesForOrgPLazyQueryHookResult = ReturnType<typeof useAmPoliciesForOrgPLazyQuery>;
 export type AmPoliciesForOrgPQueryResult = Apollo.QueryResult<AmPoliciesForOrgPQuery, AmPoliciesForOrgPQueryVariables>;
 export const TopLevelOrgsByTypeDocument = gql`
-    query TopLevelOrgsByType($orgType: OrgType!) {
-  topLevelOrgsByType(orgType: $orgType) {
-    id
-    orgId
-    orgType
+  query TopLevelOrgsByType($orgType: OrgType!) {
+    topLevelOrgsByType(orgType: $orgType) {
+      id
+      orgId
+      orgType
+    }
   }
-}
-    `;
+`;
 
 /**
  * __useTopLevelOrgsByTypeQuery__
@@ -4296,29 +4533,43 @@ export const TopLevelOrgsByTypeDocument = gql`
  *   },
  * });
  */
-export function useTopLevelOrgsByTypeQuery(baseOptions: Apollo.QueryHookOptions<TopLevelOrgsByTypeQuery, TopLevelOrgsByTypeQueryVariables>) {
-        return Apollo.useQuery<TopLevelOrgsByTypeQuery, TopLevelOrgsByTypeQueryVariables>(TopLevelOrgsByTypeDocument, baseOptions);
-      }
-export function useTopLevelOrgsByTypeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TopLevelOrgsByTypeQuery, TopLevelOrgsByTypeQueryVariables>) {
-          return Apollo.useLazyQuery<TopLevelOrgsByTypeQuery, TopLevelOrgsByTypeQueryVariables>(TopLevelOrgsByTypeDocument, baseOptions);
-        }
+export function useTopLevelOrgsByTypeQuery(
+  baseOptions: Apollo.QueryHookOptions<TopLevelOrgsByTypeQuery, TopLevelOrgsByTypeQueryVariables>
+) {
+  return Apollo.useQuery<TopLevelOrgsByTypeQuery, TopLevelOrgsByTypeQueryVariables>(
+    TopLevelOrgsByTypeDocument,
+    baseOptions
+  );
+}
+export function useTopLevelOrgsByTypeLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<TopLevelOrgsByTypeQuery, TopLevelOrgsByTypeQueryVariables>
+) {
+  return Apollo.useLazyQuery<TopLevelOrgsByTypeQuery, TopLevelOrgsByTypeQueryVariables>(
+    TopLevelOrgsByTypeDocument,
+    baseOptions
+  );
+}
 export type TopLevelOrgsByTypeQueryHookResult = ReturnType<typeof useTopLevelOrgsByTypeQuery>;
 export type TopLevelOrgsByTypeLazyQueryHookResult = ReturnType<typeof useTopLevelOrgsByTypeLazyQuery>;
-export type TopLevelOrgsByTypeQueryResult = Apollo.QueryResult<TopLevelOrgsByTypeQuery, TopLevelOrgsByTypeQueryVariables>;
+export type TopLevelOrgsByTypeQueryResult = Apollo.QueryResult<
+  TopLevelOrgsByTypeQuery,
+  TopLevelOrgsByTypeQueryVariables
+>;
 export const AmGroupsForOrgPDocument = gql`
-    query AMGroupsForOrgP($orgSid: ID!, $pageableInput: PageableInput) {
-  amGroupsForOrg(orgSid: $orgSid, pageableInput: $pageableInput) {
-    paginationInfo {
-      ...paginationInfoFragment
-    }
-    nodes {
-      id
-      name
-      tmpl
+  query AMGroupsForOrgP($orgSid: ID!, $pageableInput: PageableInput) {
+    amGroupsForOrg(orgSid: $orgSid, pageableInput: $pageableInput) {
+      paginationInfo {
+        ...paginationInfoFragment
+      }
+      nodes {
+        id
+        name
+        tmpl
+      }
     }
   }
-}
-    ${PaginationInfoFragmentFragmentDoc}`;
+  ${PaginationInfoFragmentFragmentDoc}
+`;
 
 /**
  * __useAmGroupsForOrgPQuery__
@@ -4337,51 +4588,52 @@ export const AmGroupsForOrgPDocument = gql`
  *   },
  * });
  */
-export function useAmGroupsForOrgPQuery(baseOptions: Apollo.QueryHookOptions<AmGroupsForOrgPQuery, AmGroupsForOrgPQueryVariables>) {
-        return Apollo.useQuery<AmGroupsForOrgPQuery, AmGroupsForOrgPQueryVariables>(AmGroupsForOrgPDocument, baseOptions);
-      }
-export function useAmGroupsForOrgPLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AmGroupsForOrgPQuery, AmGroupsForOrgPQueryVariables>) {
-          return Apollo.useLazyQuery<AmGroupsForOrgPQuery, AmGroupsForOrgPQueryVariables>(AmGroupsForOrgPDocument, baseOptions);
-        }
+export function useAmGroupsForOrgPQuery(
+  baseOptions: Apollo.QueryHookOptions<AmGroupsForOrgPQuery, AmGroupsForOrgPQueryVariables>
+) {
+  return Apollo.useQuery<AmGroupsForOrgPQuery, AmGroupsForOrgPQueryVariables>(AmGroupsForOrgPDocument, baseOptions);
+}
+export function useAmGroupsForOrgPLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<AmGroupsForOrgPQuery, AmGroupsForOrgPQueryVariables>
+) {
+  return Apollo.useLazyQuery<AmGroupsForOrgPQuery, AmGroupsForOrgPQueryVariables>(AmGroupsForOrgPDocument, baseOptions);
+}
 export type AmGroupsForOrgPQueryHookResult = ReturnType<typeof useAmGroupsForOrgPQuery>;
 export type AmGroupsForOrgPLazyQueryHookResult = ReturnType<typeof useAmGroupsForOrgPLazyQuery>;
 export type AmGroupsForOrgPQueryResult = Apollo.QueryResult<AmGroupsForOrgPQuery, AmGroupsForOrgPQueryVariables>;
 export const UsersForOrgFpDocument = gql`
-    query UsersForOrgFP($orgSid: ID!, $userFilter: UserFilterInput, $pageableInput: PageableInput) {
-  usersForOrg(
-    orgSid: $orgSid
-    userFilter: $userFilter
-    pageableInput: $pageableInput
-  ) {
-    paginationInfo {
-      ...paginationInfoFragment
-    }
-    listPageInfo {
-      pageHeaderLabel
-      pageCommands {
-        ...webCommandFragment
+  query UsersForOrgFP($orgSid: ID!, $userFilter: UserFilterInput, $pageableInput: PageableInput) {
+    usersForOrg(orgSid: $orgSid, userFilter: $userFilter, pageableInput: $pageableInput) {
+      paginationInfo {
+        ...paginationInfoFragment
       }
-      listItemCommands {
-        ...webCommandFragment
+      listPageInfo {
+        pageHeaderLabel
+        pageCommands {
+          ...webCommandFragment
+        }
+        listItemCommands {
+          ...webCommandFragment
+        }
+        listItemBulkCommands {
+          ...webCommandFragment
+        }
       }
-      listItemBulkCommands {
-        ...webCommandFragment
-      }
-    }
-    nodes {
-      item {
-        id
-        email
-        person {
-          firstNm
-          lastNm
+      nodes {
+        item {
+          id
+          email
+          person {
+            firstNm
+            lastNm
+          }
         }
       }
     }
   }
-}
-    ${PaginationInfoFragmentFragmentDoc}
-${WebCommandFragmentFragmentDoc}`;
+  ${PaginationInfoFragmentFragmentDoc}
+  ${WebCommandFragmentFragmentDoc}
+`;
 
 /**
  * __useUsersForOrgFpQuery__
@@ -4401,30 +4653,35 @@ ${WebCommandFragmentFragmentDoc}`;
  *   },
  * });
  */
-export function useUsersForOrgFpQuery(baseOptions: Apollo.QueryHookOptions<UsersForOrgFpQuery, UsersForOrgFpQueryVariables>) {
-        return Apollo.useQuery<UsersForOrgFpQuery, UsersForOrgFpQueryVariables>(UsersForOrgFpDocument, baseOptions);
-      }
-export function useUsersForOrgFpLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UsersForOrgFpQuery, UsersForOrgFpQueryVariables>) {
-          return Apollo.useLazyQuery<UsersForOrgFpQuery, UsersForOrgFpQueryVariables>(UsersForOrgFpDocument, baseOptions);
-        }
+export function useUsersForOrgFpQuery(
+  baseOptions: Apollo.QueryHookOptions<UsersForOrgFpQuery, UsersForOrgFpQueryVariables>
+) {
+  return Apollo.useQuery<UsersForOrgFpQuery, UsersForOrgFpQueryVariables>(UsersForOrgFpDocument, baseOptions);
+}
+export function useUsersForOrgFpLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<UsersForOrgFpQuery, UsersForOrgFpQueryVariables>
+) {
+  return Apollo.useLazyQuery<UsersForOrgFpQuery, UsersForOrgFpQueryVariables>(UsersForOrgFpDocument, baseOptions);
+}
 export type UsersForOrgFpQueryHookResult = ReturnType<typeof useUsersForOrgFpQuery>;
 export type UsersForOrgFpLazyQueryHookResult = ReturnType<typeof useUsersForOrgFpLazyQuery>;
 export type UsersForOrgFpQueryResult = Apollo.QueryResult<UsersForOrgFpQuery, UsersForOrgFpQueryVariables>;
 export const DirectOrganizationsDocument = gql`
-    query DirectOrganizations($orgSid: ID!) {
-  directOrganizations(orgSid: $orgSid) {
-    paginationInfo {
-      ...paginationInfoFragment
-    }
-    nodes {
-      id
-      name
-      orgId
-      orgType
+  query DirectOrganizations($orgSid: ID!) {
+    directOrganizations(orgSid: $orgSid) {
+      paginationInfo {
+        ...paginationInfoFragment
+      }
+      nodes {
+        id
+        name
+        orgId
+        orgType
+      }
     }
   }
-}
-    ${PaginationInfoFragmentFragmentDoc}`;
+  ${PaginationInfoFragmentFragmentDoc}
+`;
 
 /**
  * __useDirectOrganizationsQuery__
@@ -4442,30 +4699,44 @@ export const DirectOrganizationsDocument = gql`
  *   },
  * });
  */
-export function useDirectOrganizationsQuery(baseOptions: Apollo.QueryHookOptions<DirectOrganizationsQuery, DirectOrganizationsQueryVariables>) {
-        return Apollo.useQuery<DirectOrganizationsQuery, DirectOrganizationsQueryVariables>(DirectOrganizationsDocument, baseOptions);
-      }
-export function useDirectOrganizationsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DirectOrganizationsQuery, DirectOrganizationsQueryVariables>) {
-          return Apollo.useLazyQuery<DirectOrganizationsQuery, DirectOrganizationsQueryVariables>(DirectOrganizationsDocument, baseOptions);
-        }
+export function useDirectOrganizationsQuery(
+  baseOptions: Apollo.QueryHookOptions<DirectOrganizationsQuery, DirectOrganizationsQueryVariables>
+) {
+  return Apollo.useQuery<DirectOrganizationsQuery, DirectOrganizationsQueryVariables>(
+    DirectOrganizationsDocument,
+    baseOptions
+  );
+}
+export function useDirectOrganizationsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<DirectOrganizationsQuery, DirectOrganizationsQueryVariables>
+) {
+  return Apollo.useLazyQuery<DirectOrganizationsQuery, DirectOrganizationsQueryVariables>(
+    DirectOrganizationsDocument,
+    baseOptions
+  );
+}
 export type DirectOrganizationsQueryHookResult = ReturnType<typeof useDirectOrganizationsQuery>;
 export type DirectOrganizationsLazyQueryHookResult = ReturnType<typeof useDirectOrganizationsLazyQuery>;
-export type DirectOrganizationsQueryResult = Apollo.QueryResult<DirectOrganizationsQuery, DirectOrganizationsQueryVariables>;
+export type DirectOrganizationsQueryResult = Apollo.QueryResult<
+  DirectOrganizationsQuery,
+  DirectOrganizationsQueryVariables
+>;
 export const DirectOrganizationsFDocument = gql`
-    query DirectOrganizationsF($orgSid: ID!, $orgFilter: OrgFilterInput) {
-  directOrganizations(orgSid: $orgSid, orgFilter: $orgFilter) {
-    paginationInfo {
-      ...paginationInfoFragment
-    }
-    nodes {
-      id
-      name
-      orgId
-      orgType
+  query DirectOrganizationsF($orgSid: ID!, $orgFilter: OrgFilterInput) {
+    directOrganizations(orgSid: $orgSid, orgFilter: $orgFilter) {
+      paginationInfo {
+        ...paginationInfoFragment
+      }
+      nodes {
+        id
+        name
+        orgId
+        orgType
+      }
     }
   }
-}
-    ${PaginationInfoFragmentFragmentDoc}`;
+  ${PaginationInfoFragmentFragmentDoc}
+`;
 
 /**
  * __useDirectOrganizationsFQuery__
@@ -4484,34 +4755,44 @@ export const DirectOrganizationsFDocument = gql`
  *   },
  * });
  */
-export function useDirectOrganizationsFQuery(baseOptions: Apollo.QueryHookOptions<DirectOrganizationsFQuery, DirectOrganizationsFQueryVariables>) {
-        return Apollo.useQuery<DirectOrganizationsFQuery, DirectOrganizationsFQueryVariables>(DirectOrganizationsFDocument, baseOptions);
-      }
-export function useDirectOrganizationsFLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DirectOrganizationsFQuery, DirectOrganizationsFQueryVariables>) {
-          return Apollo.useLazyQuery<DirectOrganizationsFQuery, DirectOrganizationsFQueryVariables>(DirectOrganizationsFDocument, baseOptions);
-        }
+export function useDirectOrganizationsFQuery(
+  baseOptions: Apollo.QueryHookOptions<DirectOrganizationsFQuery, DirectOrganizationsFQueryVariables>
+) {
+  return Apollo.useQuery<DirectOrganizationsFQuery, DirectOrganizationsFQueryVariables>(
+    DirectOrganizationsFDocument,
+    baseOptions
+  );
+}
+export function useDirectOrganizationsFLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<DirectOrganizationsFQuery, DirectOrganizationsFQueryVariables>
+) {
+  return Apollo.useLazyQuery<DirectOrganizationsFQuery, DirectOrganizationsFQueryVariables>(
+    DirectOrganizationsFDocument,
+    baseOptions
+  );
+}
 export type DirectOrganizationsFQueryHookResult = ReturnType<typeof useDirectOrganizationsFQuery>;
 export type DirectOrganizationsFLazyQueryHookResult = ReturnType<typeof useDirectOrganizationsFLazyQuery>;
-export type DirectOrganizationsFQueryResult = Apollo.QueryResult<DirectOrganizationsFQuery, DirectOrganizationsFQueryVariables>;
+export type DirectOrganizationsFQueryResult = Apollo.QueryResult<
+  DirectOrganizationsFQuery,
+  DirectOrganizationsFQueryVariables
+>;
 export const DirectOrganizationsFpDocument = gql`
-    query DirectOrganizationsFP($orgSid: ID!, $orgFilter: OrgFilterInput, $pageableInput: PageableInput) {
-  directOrganizations(
-    orgSid: $orgSid
-    orgFilter: $orgFilter
-    pageableInput: $pageableInput
-  ) {
-    paginationInfo {
-      ...paginationInfoFragment
-    }
-    nodes {
-      id
-      name
-      orgId
-      orgType
+  query DirectOrganizationsFP($orgSid: ID!, $orgFilter: OrgFilterInput, $pageableInput: PageableInput) {
+    directOrganizations(orgSid: $orgSid, orgFilter: $orgFilter, pageableInput: $pageableInput) {
+      paginationInfo {
+        ...paginationInfoFragment
+      }
+      nodes {
+        id
+        name
+        orgId
+        orgType
+      }
     }
   }
-}
-    ${PaginationInfoFragmentFragmentDoc}`;
+  ${PaginationInfoFragmentFragmentDoc}
+`;
 
 /**
  * __useDirectOrganizationsFpQuery__
@@ -4531,39 +4812,49 @@ export const DirectOrganizationsFpDocument = gql`
  *   },
  * });
  */
-export function useDirectOrganizationsFpQuery(baseOptions: Apollo.QueryHookOptions<DirectOrganizationsFpQuery, DirectOrganizationsFpQueryVariables>) {
-        return Apollo.useQuery<DirectOrganizationsFpQuery, DirectOrganizationsFpQueryVariables>(DirectOrganizationsFpDocument, baseOptions);
-      }
-export function useDirectOrganizationsFpLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DirectOrganizationsFpQuery, DirectOrganizationsFpQueryVariables>) {
-          return Apollo.useLazyQuery<DirectOrganizationsFpQuery, DirectOrganizationsFpQueryVariables>(DirectOrganizationsFpDocument, baseOptions);
-        }
+export function useDirectOrganizationsFpQuery(
+  baseOptions: Apollo.QueryHookOptions<DirectOrganizationsFpQuery, DirectOrganizationsFpQueryVariables>
+) {
+  return Apollo.useQuery<DirectOrganizationsFpQuery, DirectOrganizationsFpQueryVariables>(
+    DirectOrganizationsFpDocument,
+    baseOptions
+  );
+}
+export function useDirectOrganizationsFpLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<DirectOrganizationsFpQuery, DirectOrganizationsFpQueryVariables>
+) {
+  return Apollo.useLazyQuery<DirectOrganizationsFpQuery, DirectOrganizationsFpQueryVariables>(
+    DirectOrganizationsFpDocument,
+    baseOptions
+  );
+}
 export type DirectOrganizationsFpQueryHookResult = ReturnType<typeof useDirectOrganizationsFpQuery>;
 export type DirectOrganizationsFpLazyQueryHookResult = ReturnType<typeof useDirectOrganizationsFpLazyQuery>;
-export type DirectOrganizationsFpQueryResult = Apollo.QueryResult<DirectOrganizationsFpQuery, DirectOrganizationsFpQueryVariables>;
+export type DirectOrganizationsFpQueryResult = Apollo.QueryResult<
+  DirectOrganizationsFpQuery,
+  DirectOrganizationsFpQueryVariables
+>;
 export const WpProcessErrorsDocument = gql`
-    query WPProcessErrors($orgSid: ID!, $dateRange: DateTimeRangeInput, $pageableInput: PageableInput) {
-  wpProcessErrors(
-    orgSid: $orgSid
-    dateRange: $dateRange
-    pageableInput: $pageableInput
-  ) {
-    paginationInfo {
-      ...paginationInfoFragment
-    }
-    nodes {
-      id
-      workOrderId
-      startTime
-      stepName
-      planSponsorId
-      vendorId
-      msg
-      inboundFilename
-      clientFileArchivePath
+  query WPProcessErrors($orgSid: ID!, $dateRange: DateTimeRangeInput, $pageableInput: PageableInput) {
+    wpProcessErrors(orgSid: $orgSid, dateRange: $dateRange, pageableInput: $pageableInput) {
+      paginationInfo {
+        ...paginationInfoFragment
+      }
+      nodes {
+        id
+        workOrderId
+        startTime
+        stepName
+        planSponsorId
+        vendorId
+        msg
+        inboundFilename
+        clientFileArchivePath
+      }
     }
   }
-}
-    ${PaginationInfoFragmentFragmentDoc}`;
+  ${PaginationInfoFragmentFragmentDoc}
+`;
 
 /**
  * __useWpProcessErrorsQuery__
@@ -4583,44 +4874,45 @@ export const WpProcessErrorsDocument = gql`
  *   },
  * });
  */
-export function useWpProcessErrorsQuery(baseOptions: Apollo.QueryHookOptions<WpProcessErrorsQuery, WpProcessErrorsQueryVariables>) {
-        return Apollo.useQuery<WpProcessErrorsQuery, WpProcessErrorsQueryVariables>(WpProcessErrorsDocument, baseOptions);
-      }
-export function useWpProcessErrorsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WpProcessErrorsQuery, WpProcessErrorsQueryVariables>) {
-          return Apollo.useLazyQuery<WpProcessErrorsQuery, WpProcessErrorsQueryVariables>(WpProcessErrorsDocument, baseOptions);
-        }
+export function useWpProcessErrorsQuery(
+  baseOptions: Apollo.QueryHookOptions<WpProcessErrorsQuery, WpProcessErrorsQueryVariables>
+) {
+  return Apollo.useQuery<WpProcessErrorsQuery, WpProcessErrorsQueryVariables>(WpProcessErrorsDocument, baseOptions);
+}
+export function useWpProcessErrorsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<WpProcessErrorsQuery, WpProcessErrorsQueryVariables>
+) {
+  return Apollo.useLazyQuery<WpProcessErrorsQuery, WpProcessErrorsQueryVariables>(WpProcessErrorsDocument, baseOptions);
+}
 export type WpProcessErrorsQueryHookResult = ReturnType<typeof useWpProcessErrorsQuery>;
 export type WpProcessErrorsLazyQueryHookResult = ReturnType<typeof useWpProcessErrorsLazyQuery>;
 export type WpProcessErrorsQueryResult = Apollo.QueryResult<WpProcessErrorsQuery, WpProcessErrorsQueryVariables>;
 export const WpTransmissionsDocument = gql`
-    query WPTransmissions($orgSid: ID!, $dateRange: DateTimeRangeInput, $pageableInput: PageableInput) {
-  wpTransmissions(
-    orgSid: $orgSid
-    dateRange: $dateRange
-    pageableInput: $pageableInput
-  ) {
-    paginationInfo {
-      ...paginationInfoFragment
-    }
-    nodes {
-      id
-      workOrderId
-      deliveredOn
-      planSponsorId
-      vendorId
-      specId
-      implementation
-      inboundFilename
-      outboundFilename
-      outboundFilesize
-      billingCount
-      totalRecords
-      extractType
-      extractVersion
+  query WPTransmissions($orgSid: ID!, $dateRange: DateTimeRangeInput, $pageableInput: PageableInput) {
+    wpTransmissions(orgSid: $orgSid, dateRange: $dateRange, pageableInput: $pageableInput) {
+      paginationInfo {
+        ...paginationInfoFragment
+      }
+      nodes {
+        id
+        workOrderId
+        deliveredOn
+        planSponsorId
+        vendorId
+        specId
+        implementation
+        inboundFilename
+        outboundFilename
+        outboundFilesize
+        billingCount
+        totalRecords
+        extractType
+        extractVersion
+      }
     }
   }
-}
-    ${PaginationInfoFragmentFragmentDoc}`;
+  ${PaginationInfoFragmentFragmentDoc}
+`;
 
 /**
  * __useWpTransmissionsQuery__
@@ -4640,39 +4932,43 @@ export const WpTransmissionsDocument = gql`
  *   },
  * });
  */
-export function useWpTransmissionsQuery(baseOptions: Apollo.QueryHookOptions<WpTransmissionsQuery, WpTransmissionsQueryVariables>) {
-        return Apollo.useQuery<WpTransmissionsQuery, WpTransmissionsQueryVariables>(WpTransmissionsDocument, baseOptions);
-      }
-export function useWpTransmissionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WpTransmissionsQuery, WpTransmissionsQueryVariables>) {
-          return Apollo.useLazyQuery<WpTransmissionsQuery, WpTransmissionsQueryVariables>(WpTransmissionsDocument, baseOptions);
-        }
+export function useWpTransmissionsQuery(
+  baseOptions: Apollo.QueryHookOptions<WpTransmissionsQuery, WpTransmissionsQueryVariables>
+) {
+  return Apollo.useQuery<WpTransmissionsQuery, WpTransmissionsQueryVariables>(WpTransmissionsDocument, baseOptions);
+}
+export function useWpTransmissionsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<WpTransmissionsQuery, WpTransmissionsQueryVariables>
+) {
+  return Apollo.useLazyQuery<WpTransmissionsQuery, WpTransmissionsQueryVariables>(WpTransmissionsDocument, baseOptions);
+}
 export type WpTransmissionsQueryHookResult = ReturnType<typeof useWpTransmissionsQuery>;
 export type WpTransmissionsLazyQueryHookResult = ReturnType<typeof useWpTransmissionsLazyQuery>;
 export type WpTransmissionsQueryResult = Apollo.QueryResult<WpTransmissionsQuery, WpTransmissionsQueryVariables>;
 export const AmPolicyDocument = gql`
-    query AMPolicy($orgSid: ID!, $policySid: ID!) {
-  amPolicy(orgSid: $orgSid, policySid: $policySid) {
-    id
-    name
-    permissions {
+  query AMPolicy($orgSid: ID!, $policySid: ID!) {
+    amPolicy(orgSid: $orgSid, policySid: $policySid) {
       id
-      effect
-      actions {
+      name
+      permissions {
         id
-        service
-        facet
-        verb
+        effect
+        actions {
+          id
+          service
+          facet
+          verb
+        }
+        predicate
+        predVar1
+        predParam1
       }
-      predicate
-      predVar1
-      predParam1
+      tmpl
+      tmplUseAsIs
+      tmplServiceType
     }
-    tmpl
-    tmplUseAsIs
-    tmplServiceType
   }
-}
-    `;
+`;
 
 /**
  * __useAmPolicyQuery__
@@ -4692,38 +4988,35 @@ export const AmPolicyDocument = gql`
  * });
  */
 export function useAmPolicyQuery(baseOptions: Apollo.QueryHookOptions<AmPolicyQuery, AmPolicyQueryVariables>) {
-        return Apollo.useQuery<AmPolicyQuery, AmPolicyQueryVariables>(AmPolicyDocument, baseOptions);
-      }
+  return Apollo.useQuery<AmPolicyQuery, AmPolicyQueryVariables>(AmPolicyDocument, baseOptions);
+}
 export function useAmPolicyLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AmPolicyQuery, AmPolicyQueryVariables>) {
-          return Apollo.useLazyQuery<AmPolicyQuery, AmPolicyQueryVariables>(AmPolicyDocument, baseOptions);
-        }
+  return Apollo.useLazyQuery<AmPolicyQuery, AmPolicyQueryVariables>(AmPolicyDocument, baseOptions);
+}
 export type AmPolicyQueryHookResult = ReturnType<typeof useAmPolicyQuery>;
 export type AmPolicyLazyQueryHookResult = ReturnType<typeof useAmPolicyLazyQuery>;
 export type AmPolicyQueryResult = Apollo.QueryResult<AmPolicyQuery, AmPolicyQueryVariables>;
 export const ScheduleOccurrencesDocument = gql`
-    query ScheduleOccurrences($orgSid: ID!, $dateRange: DateTimeRangeInput, $pageableInput: PageableInput) {
-  scheduleOccurrences(
-    orgSid: $orgSid
-    dateRange: $dateRange
-    pageableInput: $pageableInput
-  ) {
-    paginationInfo {
-      ...paginationInfoFragment
-    }
-    nodes {
-      resource
-      scheduleId
-      timeScheduled
-      schedOccurStatus
-      runOccurrences {
-        workOrderId
-        timeRan
-        status
+  query ScheduleOccurrences($orgSid: ID!, $dateRange: DateTimeRangeInput, $pageableInput: PageableInput) {
+    scheduleOccurrences(orgSid: $orgSid, dateRange: $dateRange, pageableInput: $pageableInput) {
+      paginationInfo {
+        ...paginationInfoFragment
+      }
+      nodes {
+        resource
+        scheduleId
+        timeScheduled
+        schedOccurStatus
+        runOccurrences {
+          workOrderId
+          timeRan
+          status
+        }
       }
     }
   }
-}
-    ${PaginationInfoFragmentFragmentDoc}`;
+  ${PaginationInfoFragmentFragmentDoc}
+`;
 
 /**
  * __useScheduleOccurrencesQuery__
@@ -4743,28 +5036,42 @@ export const ScheduleOccurrencesDocument = gql`
  *   },
  * });
  */
-export function useScheduleOccurrencesQuery(baseOptions: Apollo.QueryHookOptions<ScheduleOccurrencesQuery, ScheduleOccurrencesQueryVariables>) {
-        return Apollo.useQuery<ScheduleOccurrencesQuery, ScheduleOccurrencesQueryVariables>(ScheduleOccurrencesDocument, baseOptions);
-      }
-export function useScheduleOccurrencesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ScheduleOccurrencesQuery, ScheduleOccurrencesQueryVariables>) {
-          return Apollo.useLazyQuery<ScheduleOccurrencesQuery, ScheduleOccurrencesQueryVariables>(ScheduleOccurrencesDocument, baseOptions);
-        }
+export function useScheduleOccurrencesQuery(
+  baseOptions: Apollo.QueryHookOptions<ScheduleOccurrencesQuery, ScheduleOccurrencesQueryVariables>
+) {
+  return Apollo.useQuery<ScheduleOccurrencesQuery, ScheduleOccurrencesQueryVariables>(
+    ScheduleOccurrencesDocument,
+    baseOptions
+  );
+}
+export function useScheduleOccurrencesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<ScheduleOccurrencesQuery, ScheduleOccurrencesQueryVariables>
+) {
+  return Apollo.useLazyQuery<ScheduleOccurrencesQuery, ScheduleOccurrencesQueryVariables>(
+    ScheduleOccurrencesDocument,
+    baseOptions
+  );
+}
 export type ScheduleOccurrencesQueryHookResult = ReturnType<typeof useScheduleOccurrencesQuery>;
 export type ScheduleOccurrencesLazyQueryHookResult = ReturnType<typeof useScheduleOccurrencesLazyQuery>;
-export type ScheduleOccurrencesQueryResult = Apollo.QueryResult<ScheduleOccurrencesQuery, ScheduleOccurrencesQueryVariables>;
+export type ScheduleOccurrencesQueryResult = Apollo.QueryResult<
+  ScheduleOccurrencesQuery,
+  ScheduleOccurrencesQueryVariables
+>;
 export const UpdateAmPermissionActionDocument = gql`
-    mutation UpdateAMPermissionAction($updateAMPermissionActionInput: UpdateAMPermissionActionInput) {
-  updateAMPermissionAction(
-    updateAMPermissionActionInput: $updateAMPermissionActionInput
-  ) {
-    id
-    service
-    facet
-    verb
+  mutation UpdateAMPermissionAction($updateAMPermissionActionInput: UpdateAMPermissionActionInput) {
+    updateAMPermissionAction(updateAMPermissionActionInput: $updateAMPermissionActionInput) {
+      id
+      service
+      facet
+      verb
+    }
   }
-}
-    `;
-export type UpdateAmPermissionActionMutationFn = Apollo.MutationFunction<UpdateAmPermissionActionMutation, UpdateAmPermissionActionMutationVariables>;
+`;
+export type UpdateAmPermissionActionMutationFn = Apollo.MutationFunction<
+  UpdateAmPermissionActionMutation,
+  UpdateAmPermissionActionMutationVariables
+>;
 
 /**
  * __useUpdateAmPermissionActionMutation__
@@ -4783,22 +5090,33 @@ export type UpdateAmPermissionActionMutationFn = Apollo.MutationFunction<UpdateA
  *   },
  * });
  */
-export function useUpdateAmPermissionActionMutation(baseOptions?: Apollo.MutationHookOptions<UpdateAmPermissionActionMutation, UpdateAmPermissionActionMutationVariables>) {
-        return Apollo.useMutation<UpdateAmPermissionActionMutation, UpdateAmPermissionActionMutationVariables>(UpdateAmPermissionActionDocument, baseOptions);
-      }
+export function useUpdateAmPermissionActionMutation(
+  baseOptions?: Apollo.MutationHookOptions<UpdateAmPermissionActionMutation, UpdateAmPermissionActionMutationVariables>
+) {
+  return Apollo.useMutation<UpdateAmPermissionActionMutation, UpdateAmPermissionActionMutationVariables>(
+    UpdateAmPermissionActionDocument,
+    baseOptions
+  );
+}
 export type UpdateAmPermissionActionMutationHookResult = ReturnType<typeof useUpdateAmPermissionActionMutation>;
 export type UpdateAmPermissionActionMutationResult = Apollo.MutationResult<UpdateAmPermissionActionMutation>;
-export type UpdateAmPermissionActionMutationOptions = Apollo.BaseMutationOptions<UpdateAmPermissionActionMutation, UpdateAmPermissionActionMutationVariables>;
+export type UpdateAmPermissionActionMutationOptions = Apollo.BaseMutationOptions<
+  UpdateAmPermissionActionMutation,
+  UpdateAmPermissionActionMutationVariables
+>;
 export const UpdateOwnPasswordDocument = gql`
-    mutation UpdateOwnPassword($updatePasswordInput: UpdatePasswordInput!) {
-  updateOwnPassword(updatePasswordInput: $updatePasswordInput) {
-    id
-    orgId
-    userId
+  mutation UpdateOwnPassword($updatePasswordInput: UpdatePasswordInput!) {
+    updateOwnPassword(updatePasswordInput: $updatePasswordInput) {
+      id
+      orgId
+      userId
+    }
   }
-}
-    `;
-export type UpdateOwnPasswordMutationFn = Apollo.MutationFunction<UpdateOwnPasswordMutation, UpdateOwnPasswordMutationVariables>;
+`;
+export type UpdateOwnPasswordMutationFn = Apollo.MutationFunction<
+  UpdateOwnPasswordMutation,
+  UpdateOwnPasswordMutationVariables
+>;
 
 /**
  * __useUpdateOwnPasswordMutation__
@@ -4817,22 +5135,30 @@ export type UpdateOwnPasswordMutationFn = Apollo.MutationFunction<UpdateOwnPassw
  *   },
  * });
  */
-export function useUpdateOwnPasswordMutation(baseOptions?: Apollo.MutationHookOptions<UpdateOwnPasswordMutation, UpdateOwnPasswordMutationVariables>) {
-        return Apollo.useMutation<UpdateOwnPasswordMutation, UpdateOwnPasswordMutationVariables>(UpdateOwnPasswordDocument, baseOptions);
-      }
+export function useUpdateOwnPasswordMutation(
+  baseOptions?: Apollo.MutationHookOptions<UpdateOwnPasswordMutation, UpdateOwnPasswordMutationVariables>
+) {
+  return Apollo.useMutation<UpdateOwnPasswordMutation, UpdateOwnPasswordMutationVariables>(
+    UpdateOwnPasswordDocument,
+    baseOptions
+  );
+}
 export type UpdateOwnPasswordMutationHookResult = ReturnType<typeof useUpdateOwnPasswordMutation>;
 export type UpdateOwnPasswordMutationResult = Apollo.MutationResult<UpdateOwnPasswordMutation>;
-export type UpdateOwnPasswordMutationOptions = Apollo.BaseMutationOptions<UpdateOwnPasswordMutation, UpdateOwnPasswordMutationVariables>;
+export type UpdateOwnPasswordMutationOptions = Apollo.BaseMutationOptions<
+  UpdateOwnPasswordMutation,
+  UpdateOwnPasswordMutationVariables
+>;
 export const OrgByIdDocument = gql`
-    query OrgById($orgSid: ID!, $orgId: String!) {
-  orgById(orgSid: $orgSid, orgId: $orgId) {
-    id
-    name
-    orgId
-    orgType
+  query OrgById($orgSid: ID!, $orgId: String!) {
+    orgById(orgSid: $orgSid, orgId: $orgId) {
+      id
+      name
+      orgId
+      orgType
+    }
   }
-}
-    `;
+`;
 
 /**
  * __useOrgByIdQuery__
@@ -4852,41 +5178,42 @@ export const OrgByIdDocument = gql`
  * });
  */
 export function useOrgByIdQuery(baseOptions: Apollo.QueryHookOptions<OrgByIdQuery, OrgByIdQueryVariables>) {
-        return Apollo.useQuery<OrgByIdQuery, OrgByIdQueryVariables>(OrgByIdDocument, baseOptions);
-      }
+  return Apollo.useQuery<OrgByIdQuery, OrgByIdQueryVariables>(OrgByIdDocument, baseOptions);
+}
 export function useOrgByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OrgByIdQuery, OrgByIdQueryVariables>) {
-          return Apollo.useLazyQuery<OrgByIdQuery, OrgByIdQueryVariables>(OrgByIdDocument, baseOptions);
-        }
+  return Apollo.useLazyQuery<OrgByIdQuery, OrgByIdQueryVariables>(OrgByIdDocument, baseOptions);
+}
 export type OrgByIdQueryHookResult = ReturnType<typeof useOrgByIdQuery>;
 export type OrgByIdLazyQueryHookResult = ReturnType<typeof useOrgByIdLazyQuery>;
 export type OrgByIdQueryResult = Apollo.QueryResult<OrgByIdQuery, OrgByIdQueryVariables>;
 export const CurrentUserDocument = gql`
-    query CurrentUser {
-  currentUser {
-    loggedIn
-    domain {
-      type
-      selectedPage
-      navItems {
-        ...navItemFragment
-        subNavItems {
+  query CurrentUser {
+    currentUser {
+      loggedIn
+      domain {
+        type
+        selectedPage
+        navItems {
           ...navItemFragment
+          subNavItems {
+            ...navItemFragment
+          }
+        }
+      }
+      tokenUser {
+        token
+        session {
+          id
+          orgId
+          userId
+          pollInterval
+          defaultAuthorities
         }
       }
     }
-    tokenUser {
-      token
-      session {
-        id
-        orgId
-        userId
-        pollInterval
-        defaultAuthorities
-      }
-    }
   }
-}
-    ${NavItemFragmentFragmentDoc}`;
+  ${NavItemFragmentFragmentDoc}
+`;
 
 /**
  * __useCurrentUserQuery__
@@ -4903,20 +5230,24 @@ export const CurrentUserDocument = gql`
  *   },
  * });
  */
-export function useCurrentUserQuery(baseOptions?: Apollo.QueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>) {
-        return Apollo.useQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, baseOptions);
-      }
-export function useCurrentUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>) {
-          return Apollo.useLazyQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, baseOptions);
-        }
+export function useCurrentUserQuery(
+  baseOptions?: Apollo.QueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>
+) {
+  return Apollo.useQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, baseOptions);
+}
+export function useCurrentUserLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>
+) {
+  return Apollo.useLazyQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, baseOptions);
+}
 export type CurrentUserQueryHookResult = ReturnType<typeof useCurrentUserQuery>;
 export type CurrentUserLazyQueryHookResult = ReturnType<typeof useCurrentUserLazyQuery>;
 export type CurrentUserQueryResult = Apollo.QueryResult<CurrentUserQuery, CurrentUserQueryVariables>;
 export const RemoveAmPolicyDocument = gql`
-    mutation RemoveAMPolicy($policySid: ID!) {
-  removeAMPolicy(policySid: $policySid)
-}
-    `;
+  mutation RemoveAMPolicy($policySid: ID!) {
+    removeAMPolicy(policySid: $policySid)
+  }
+`;
 export type RemoveAmPolicyMutationFn = Apollo.MutationFunction<RemoveAmPolicyMutation, RemoveAmPolicyMutationVariables>;
 
 /**
@@ -4936,18 +5267,29 @@ export type RemoveAmPolicyMutationFn = Apollo.MutationFunction<RemoveAmPolicyMut
  *   },
  * });
  */
-export function useRemoveAmPolicyMutation(baseOptions?: Apollo.MutationHookOptions<RemoveAmPolicyMutation, RemoveAmPolicyMutationVariables>) {
-        return Apollo.useMutation<RemoveAmPolicyMutation, RemoveAmPolicyMutationVariables>(RemoveAmPolicyDocument, baseOptions);
-      }
+export function useRemoveAmPolicyMutation(
+  baseOptions?: Apollo.MutationHookOptions<RemoveAmPolicyMutation, RemoveAmPolicyMutationVariables>
+) {
+  return Apollo.useMutation<RemoveAmPolicyMutation, RemoveAmPolicyMutationVariables>(
+    RemoveAmPolicyDocument,
+    baseOptions
+  );
+}
 export type RemoveAmPolicyMutationHookResult = ReturnType<typeof useRemoveAmPolicyMutation>;
 export type RemoveAmPolicyMutationResult = Apollo.MutationResult<RemoveAmPolicyMutation>;
-export type RemoveAmPolicyMutationOptions = Apollo.BaseMutationOptions<RemoveAmPolicyMutation, RemoveAmPolicyMutationVariables>;
+export type RemoveAmPolicyMutationOptions = Apollo.BaseMutationOptions<
+  RemoveAmPolicyMutation,
+  RemoveAmPolicyMutationVariables
+>;
 export const RemoveAmPoliciesDocument = gql`
-    mutation RemoveAMPolicies($deleteAMPoliciesInput: DeleteAMPoliciesInput!) {
-  removeAMPolicies(deleteAMPoliciesInput: $deleteAMPoliciesInput)
-}
-    `;
-export type RemoveAmPoliciesMutationFn = Apollo.MutationFunction<RemoveAmPoliciesMutation, RemoveAmPoliciesMutationVariables>;
+  mutation RemoveAMPolicies($deleteAMPoliciesInput: DeleteAMPoliciesInput!) {
+    removeAMPolicies(deleteAMPoliciesInput: $deleteAMPoliciesInput)
+  }
+`;
+export type RemoveAmPoliciesMutationFn = Apollo.MutationFunction<
+  RemoveAmPoliciesMutation,
+  RemoveAmPoliciesMutationVariables
+>;
 
 /**
  * __useRemoveAmPoliciesMutation__
@@ -4966,27 +5308,38 @@ export type RemoveAmPoliciesMutationFn = Apollo.MutationFunction<RemoveAmPolicie
  *   },
  * });
  */
-export function useRemoveAmPoliciesMutation(baseOptions?: Apollo.MutationHookOptions<RemoveAmPoliciesMutation, RemoveAmPoliciesMutationVariables>) {
-        return Apollo.useMutation<RemoveAmPoliciesMutation, RemoveAmPoliciesMutationVariables>(RemoveAmPoliciesDocument, baseOptions);
-      }
+export function useRemoveAmPoliciesMutation(
+  baseOptions?: Apollo.MutationHookOptions<RemoveAmPoliciesMutation, RemoveAmPoliciesMutationVariables>
+) {
+  return Apollo.useMutation<RemoveAmPoliciesMutation, RemoveAmPoliciesMutationVariables>(
+    RemoveAmPoliciesDocument,
+    baseOptions
+  );
+}
 export type RemoveAmPoliciesMutationHookResult = ReturnType<typeof useRemoveAmPoliciesMutation>;
 export type RemoveAmPoliciesMutationResult = Apollo.MutationResult<RemoveAmPoliciesMutation>;
-export type RemoveAmPoliciesMutationOptions = Apollo.BaseMutationOptions<RemoveAmPoliciesMutation, RemoveAmPoliciesMutationVariables>;
+export type RemoveAmPoliciesMutationOptions = Apollo.BaseMutationOptions<
+  RemoveAmPoliciesMutation,
+  RemoveAmPoliciesMutationVariables
+>;
 export const CreateAmPermissionDocument = gql`
-    mutation CreateAMPermission($permissionInfo: CreateAMPermissionInput!) {
-  createAMPermission(permissionInfo: $permissionInfo) {
-    id
-    effect
-    actions {
+  mutation CreateAMPermission($permissionInfo: CreateAMPermissionInput!) {
+    createAMPermission(permissionInfo: $permissionInfo) {
       id
-      service
-      facet
-      verb
+      effect
+      actions {
+        id
+        service
+        facet
+        verb
+      }
     }
   }
-}
-    `;
-export type CreateAmPermissionMutationFn = Apollo.MutationFunction<CreateAmPermissionMutation, CreateAmPermissionMutationVariables>;
+`;
+export type CreateAmPermissionMutationFn = Apollo.MutationFunction<
+  CreateAmPermissionMutation,
+  CreateAmPermissionMutationVariables
+>;
 
 /**
  * __useCreateAmPermissionMutation__
@@ -5005,24 +5358,35 @@ export type CreateAmPermissionMutationFn = Apollo.MutationFunction<CreateAmPermi
  *   },
  * });
  */
-export function useCreateAmPermissionMutation(baseOptions?: Apollo.MutationHookOptions<CreateAmPermissionMutation, CreateAmPermissionMutationVariables>) {
-        return Apollo.useMutation<CreateAmPermissionMutation, CreateAmPermissionMutationVariables>(CreateAmPermissionDocument, baseOptions);
-      }
+export function useCreateAmPermissionMutation(
+  baseOptions?: Apollo.MutationHookOptions<CreateAmPermissionMutation, CreateAmPermissionMutationVariables>
+) {
+  return Apollo.useMutation<CreateAmPermissionMutation, CreateAmPermissionMutationVariables>(
+    CreateAmPermissionDocument,
+    baseOptions
+  );
+}
 export type CreateAmPermissionMutationHookResult = ReturnType<typeof useCreateAmPermissionMutation>;
 export type CreateAmPermissionMutationResult = Apollo.MutationResult<CreateAmPermissionMutation>;
-export type CreateAmPermissionMutationOptions = Apollo.BaseMutationOptions<CreateAmPermissionMutation, CreateAmPermissionMutationVariables>;
+export type CreateAmPermissionMutationOptions = Apollo.BaseMutationOptions<
+  CreateAmPermissionMutation,
+  CreateAmPermissionMutationVariables
+>;
 export const UpdateAmPermissionDocument = gql`
-    mutation UpdateAMPermission($updateAMPermissionInput: UpdateAMPermissionInput) {
-  updateAMPermission(updateAMPermissionInput: $updateAMPermissionInput) {
-    id
-    effect
-    predicate
-    predVar1
-    predParam1
+  mutation UpdateAMPermission($updateAMPermissionInput: UpdateAMPermissionInput) {
+    updateAMPermission(updateAMPermissionInput: $updateAMPermissionInput) {
+      id
+      effect
+      predicate
+      predVar1
+      predParam1
+    }
   }
-}
-    `;
-export type UpdateAmPermissionMutationFn = Apollo.MutationFunction<UpdateAmPermissionMutation, UpdateAmPermissionMutationVariables>;
+`;
+export type UpdateAmPermissionMutationFn = Apollo.MutationFunction<
+  UpdateAmPermissionMutation,
+  UpdateAmPermissionMutationVariables
+>;
 
 /**
  * __useUpdateAmPermissionMutation__
@@ -5041,18 +5405,29 @@ export type UpdateAmPermissionMutationFn = Apollo.MutationFunction<UpdateAmPermi
  *   },
  * });
  */
-export function useUpdateAmPermissionMutation(baseOptions?: Apollo.MutationHookOptions<UpdateAmPermissionMutation, UpdateAmPermissionMutationVariables>) {
-        return Apollo.useMutation<UpdateAmPermissionMutation, UpdateAmPermissionMutationVariables>(UpdateAmPermissionDocument, baseOptions);
-      }
+export function useUpdateAmPermissionMutation(
+  baseOptions?: Apollo.MutationHookOptions<UpdateAmPermissionMutation, UpdateAmPermissionMutationVariables>
+) {
+  return Apollo.useMutation<UpdateAmPermissionMutation, UpdateAmPermissionMutationVariables>(
+    UpdateAmPermissionDocument,
+    baseOptions
+  );
+}
 export type UpdateAmPermissionMutationHookResult = ReturnType<typeof useUpdateAmPermissionMutation>;
 export type UpdateAmPermissionMutationResult = Apollo.MutationResult<UpdateAmPermissionMutation>;
-export type UpdateAmPermissionMutationOptions = Apollo.BaseMutationOptions<UpdateAmPermissionMutation, UpdateAmPermissionMutationVariables>;
+export type UpdateAmPermissionMutationOptions = Apollo.BaseMutationOptions<
+  UpdateAmPermissionMutation,
+  UpdateAmPermissionMutationVariables
+>;
 export const RemoveAmPermissionDocument = gql`
-    mutation RemoveAMPermission($permissionSid: ID!) {
-  removeAMPermission(permissionSid: $permissionSid)
-}
-    `;
-export type RemoveAmPermissionMutationFn = Apollo.MutationFunction<RemoveAmPermissionMutation, RemoveAmPermissionMutationVariables>;
+  mutation RemoveAMPermission($permissionSid: ID!) {
+    removeAMPermission(permissionSid: $permissionSid)
+  }
+`;
+export type RemoveAmPermissionMutationFn = Apollo.MutationFunction<
+  RemoveAmPermissionMutation,
+  RemoveAmPermissionMutationVariables
+>;
 
 /**
  * __useRemoveAmPermissionMutation__
@@ -5071,23 +5446,31 @@ export type RemoveAmPermissionMutationFn = Apollo.MutationFunction<RemoveAmPermi
  *   },
  * });
  */
-export function useRemoveAmPermissionMutation(baseOptions?: Apollo.MutationHookOptions<RemoveAmPermissionMutation, RemoveAmPermissionMutationVariables>) {
-        return Apollo.useMutation<RemoveAmPermissionMutation, RemoveAmPermissionMutationVariables>(RemoveAmPermissionDocument, baseOptions);
-      }
+export function useRemoveAmPermissionMutation(
+  baseOptions?: Apollo.MutationHookOptions<RemoveAmPermissionMutation, RemoveAmPermissionMutationVariables>
+) {
+  return Apollo.useMutation<RemoveAmPermissionMutation, RemoveAmPermissionMutationVariables>(
+    RemoveAmPermissionDocument,
+    baseOptions
+  );
+}
 export type RemoveAmPermissionMutationHookResult = ReturnType<typeof useRemoveAmPermissionMutation>;
 export type RemoveAmPermissionMutationResult = Apollo.MutationResult<RemoveAmPermissionMutation>;
-export type RemoveAmPermissionMutationOptions = Apollo.BaseMutationOptions<RemoveAmPermissionMutation, RemoveAmPermissionMutationVariables>;
+export type RemoveAmPermissionMutationOptions = Apollo.BaseMutationOptions<
+  RemoveAmPermissionMutation,
+  RemoveAmPermissionMutationVariables
+>;
 export const UpdateAmPolicyDocument = gql`
-    mutation UpdateAMPolicy($updateAMPolicyInput: UpdateAMPolicyInput!) {
-  updateAMPolicy(updateAMPolicyInput: $updateAMPolicyInput) {
-    id
-    name
-    tmpl
-    tmplUseAsIs
-    tmplServiceType
+  mutation UpdateAMPolicy($updateAMPolicyInput: UpdateAMPolicyInput!) {
+    updateAMPolicy(updateAMPolicyInput: $updateAMPolicyInput) {
+      id
+      name
+      tmpl
+      tmplUseAsIs
+      tmplServiceType
+    }
   }
-}
-    `;
+`;
 export type UpdateAmPolicyMutationFn = Apollo.MutationFunction<UpdateAmPolicyMutation, UpdateAmPolicyMutationVariables>;
 
 /**
@@ -5107,18 +5490,29 @@ export type UpdateAmPolicyMutationFn = Apollo.MutationFunction<UpdateAmPolicyMut
  *   },
  * });
  */
-export function useUpdateAmPolicyMutation(baseOptions?: Apollo.MutationHookOptions<UpdateAmPolicyMutation, UpdateAmPolicyMutationVariables>) {
-        return Apollo.useMutation<UpdateAmPolicyMutation, UpdateAmPolicyMutationVariables>(UpdateAmPolicyDocument, baseOptions);
-      }
+export function useUpdateAmPolicyMutation(
+  baseOptions?: Apollo.MutationHookOptions<UpdateAmPolicyMutation, UpdateAmPolicyMutationVariables>
+) {
+  return Apollo.useMutation<UpdateAmPolicyMutation, UpdateAmPolicyMutationVariables>(
+    UpdateAmPolicyDocument,
+    baseOptions
+  );
+}
 export type UpdateAmPolicyMutationHookResult = ReturnType<typeof useUpdateAmPolicyMutation>;
 export type UpdateAmPolicyMutationResult = Apollo.MutationResult<UpdateAmPolicyMutation>;
-export type UpdateAmPolicyMutationOptions = Apollo.BaseMutationOptions<UpdateAmPolicyMutation, UpdateAmPolicyMutationVariables>;
+export type UpdateAmPolicyMutationOptions = Apollo.BaseMutationOptions<
+  UpdateAmPolicyMutation,
+  UpdateAmPolicyMutationVariables
+>;
 export const RemoveAmPermissionActionDocument = gql`
-    mutation RemoveAMPermissionAction($permissionActionSid: ID!) {
-  removeAMPermissionAction(permissionActionSid: $permissionActionSid)
-}
-    `;
-export type RemoveAmPermissionActionMutationFn = Apollo.MutationFunction<RemoveAmPermissionActionMutation, RemoveAmPermissionActionMutationVariables>;
+  mutation RemoveAMPermissionAction($permissionActionSid: ID!) {
+    removeAMPermissionAction(permissionActionSid: $permissionActionSid)
+  }
+`;
+export type RemoveAmPermissionActionMutationFn = Apollo.MutationFunction<
+  RemoveAmPermissionActionMutation,
+  RemoveAmPermissionActionMutationVariables
+>;
 
 /**
  * __useRemoveAmPermissionActionMutation__
@@ -5137,19 +5531,27 @@ export type RemoveAmPermissionActionMutationFn = Apollo.MutationFunction<RemoveA
  *   },
  * });
  */
-export function useRemoveAmPermissionActionMutation(baseOptions?: Apollo.MutationHookOptions<RemoveAmPermissionActionMutation, RemoveAmPermissionActionMutationVariables>) {
-        return Apollo.useMutation<RemoveAmPermissionActionMutation, RemoveAmPermissionActionMutationVariables>(RemoveAmPermissionActionDocument, baseOptions);
-      }
+export function useRemoveAmPermissionActionMutation(
+  baseOptions?: Apollo.MutationHookOptions<RemoveAmPermissionActionMutation, RemoveAmPermissionActionMutationVariables>
+) {
+  return Apollo.useMutation<RemoveAmPermissionActionMutation, RemoveAmPermissionActionMutationVariables>(
+    RemoveAmPermissionActionDocument,
+    baseOptions
+  );
+}
 export type RemoveAmPermissionActionMutationHookResult = ReturnType<typeof useRemoveAmPermissionActionMutation>;
 export type RemoveAmPermissionActionMutationResult = Apollo.MutationResult<RemoveAmPermissionActionMutation>;
-export type RemoveAmPermissionActionMutationOptions = Apollo.BaseMutationOptions<RemoveAmPermissionActionMutation, RemoveAmPermissionActionMutationVariables>;
+export type RemoveAmPermissionActionMutationOptions = Apollo.BaseMutationOptions<
+  RemoveAmPermissionActionMutation,
+  RemoveAmPermissionActionMutationVariables
+>;
 export const LogOutDocument = gql`
-    query LogOut {
-  logOut {
-    successful
+  query LogOut {
+    logOut {
+      successful
+    }
   }
-}
-    `;
+`;
 
 /**
  * __useLogOutQuery__
@@ -5167,47 +5569,47 @@ export const LogOutDocument = gql`
  * });
  */
 export function useLogOutQuery(baseOptions?: Apollo.QueryHookOptions<LogOutQuery, LogOutQueryVariables>) {
-        return Apollo.useQuery<LogOutQuery, LogOutQueryVariables>(LogOutDocument, baseOptions);
-      }
+  return Apollo.useQuery<LogOutQuery, LogOutQueryVariables>(LogOutDocument, baseOptions);
+}
 export function useLogOutLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LogOutQuery, LogOutQueryVariables>) {
-          return Apollo.useLazyQuery<LogOutQuery, LogOutQueryVariables>(LogOutDocument, baseOptions);
-        }
+  return Apollo.useLazyQuery<LogOutQuery, LogOutQueryVariables>(LogOutDocument, baseOptions);
+}
 export type LogOutQueryHookResult = ReturnType<typeof useLogOutQuery>;
 export type LogOutLazyQueryHookResult = ReturnType<typeof useLogOutLazyQuery>;
 export type LogOutQueryResult = Apollo.QueryResult<LogOutQuery, LogOutQueryVariables>;
 export const UserThemeDocument = gql`
-    query UserTheme($themeColorMode: ThemeColorMode) {
-  userTheme(themeColorMode: $themeColorMode) {
-    themeColorMode
-    themeFontSize
-    dashThemeColor {
-      paletteNm
-      themePrimary
-      themeLighterAlt
-      themeLighter
-      themeLight
-      themeTertiary
-      themeSecondary
-      themeDarkAlt
-      themeDark
-      themeDarker
-      neutralLighterAlt
-      neutralLighter
-      neutralLight
-      neutralQuaternaryAlt
-      neutralQuaternary
-      neutralTertiaryAlt
-      neutralTertiary
-      neutralSecondary
-      neutralPrimaryAlt
-      neutralPrimary
-      neutralDark
-      black
-      white
+  query UserTheme($themeColorMode: ThemeColorMode) {
+    userTheme(themeColorMode: $themeColorMode) {
+      themeColorMode
+      themeFontSize
+      dashThemeColor {
+        paletteNm
+        themePrimary
+        themeLighterAlt
+        themeLighter
+        themeLight
+        themeTertiary
+        themeSecondary
+        themeDarkAlt
+        themeDark
+        themeDarker
+        neutralLighterAlt
+        neutralLighter
+        neutralLight
+        neutralQuaternaryAlt
+        neutralQuaternary
+        neutralTertiaryAlt
+        neutralTertiary
+        neutralSecondary
+        neutralPrimaryAlt
+        neutralPrimary
+        neutralDark
+        black
+        white
+      }
     }
   }
-}
-    `;
+`;
 
 /**
  * __useUserThemeQuery__
@@ -5226,33 +5628,36 @@ export const UserThemeDocument = gql`
  * });
  */
 export function useUserThemeQuery(baseOptions?: Apollo.QueryHookOptions<UserThemeQuery, UserThemeQueryVariables>) {
-        return Apollo.useQuery<UserThemeQuery, UserThemeQueryVariables>(UserThemeDocument, baseOptions);
-      }
-export function useUserThemeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserThemeQuery, UserThemeQueryVariables>) {
-          return Apollo.useLazyQuery<UserThemeQuery, UserThemeQueryVariables>(UserThemeDocument, baseOptions);
-        }
+  return Apollo.useQuery<UserThemeQuery, UserThemeQueryVariables>(UserThemeDocument, baseOptions);
+}
+export function useUserThemeLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<UserThemeQuery, UserThemeQueryVariables>
+) {
+  return Apollo.useLazyQuery<UserThemeQuery, UserThemeQueryVariables>(UserThemeDocument, baseOptions);
+}
 export type UserThemeQueryHookResult = ReturnType<typeof useUserThemeQuery>;
 export type UserThemeLazyQueryHookResult = ReturnType<typeof useUserThemeLazyQuery>;
 export type UserThemeQueryResult = Apollo.QueryResult<UserThemeQuery, UserThemeQueryVariables>;
 export const DashThemeColorForOrgDocument = gql`
-    query DashThemeColorForOrg($ownedInput: OwnedInput, $pageableInput: PageableInput) {
-  dashThemeColorForOrg(ownedInput: $ownedInput, pageableInput: $pageableInput) {
-    paginationInfo {
-      ...paginationInfoFragment
-    }
-    nodes {
-      id
-      paletteNm
-      defaultPalette
-      allowDark
-      themeColorMode
-      themePrimary
-      neutralPrimary
-      white
+  query DashThemeColorForOrg($ownedInput: OwnedInput, $pageableInput: PageableInput) {
+    dashThemeColorForOrg(ownedInput: $ownedInput, pageableInput: $pageableInput) {
+      paginationInfo {
+        ...paginationInfoFragment
+      }
+      nodes {
+        id
+        paletteNm
+        defaultPalette
+        allowDark
+        themeColorMode
+        themePrimary
+        neutralPrimary
+        white
+      }
     }
   }
-}
-    ${PaginationInfoFragmentFragmentDoc}`;
+  ${PaginationInfoFragmentFragmentDoc}
+`;
 
 /**
  * __useDashThemeColorForOrgQuery__
@@ -5271,23 +5676,36 @@ export const DashThemeColorForOrgDocument = gql`
  *   },
  * });
  */
-export function useDashThemeColorForOrgQuery(baseOptions?: Apollo.QueryHookOptions<DashThemeColorForOrgQuery, DashThemeColorForOrgQueryVariables>) {
-        return Apollo.useQuery<DashThemeColorForOrgQuery, DashThemeColorForOrgQueryVariables>(DashThemeColorForOrgDocument, baseOptions);
-      }
-export function useDashThemeColorForOrgLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DashThemeColorForOrgQuery, DashThemeColorForOrgQueryVariables>) {
-          return Apollo.useLazyQuery<DashThemeColorForOrgQuery, DashThemeColorForOrgQueryVariables>(DashThemeColorForOrgDocument, baseOptions);
-        }
+export function useDashThemeColorForOrgQuery(
+  baseOptions?: Apollo.QueryHookOptions<DashThemeColorForOrgQuery, DashThemeColorForOrgQueryVariables>
+) {
+  return Apollo.useQuery<DashThemeColorForOrgQuery, DashThemeColorForOrgQueryVariables>(
+    DashThemeColorForOrgDocument,
+    baseOptions
+  );
+}
+export function useDashThemeColorForOrgLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<DashThemeColorForOrgQuery, DashThemeColorForOrgQueryVariables>
+) {
+  return Apollo.useLazyQuery<DashThemeColorForOrgQuery, DashThemeColorForOrgQueryVariables>(
+    DashThemeColorForOrgDocument,
+    baseOptions
+  );
+}
 export type DashThemeColorForOrgQueryHookResult = ReturnType<typeof useDashThemeColorForOrgQuery>;
 export type DashThemeColorForOrgLazyQueryHookResult = ReturnType<typeof useDashThemeColorForOrgLazyQuery>;
-export type DashThemeColorForOrgQueryResult = Apollo.QueryResult<DashThemeColorForOrgQuery, DashThemeColorForOrgQueryVariables>;
+export type DashThemeColorForOrgQueryResult = Apollo.QueryResult<
+  DashThemeColorForOrgQuery,
+  DashThemeColorForOrgQueryVariables
+>;
 export const DashSiteForOrgDocument = gql`
-    query DashSiteForOrg($orgSidInput: OrgSidInput) {
-  dashSiteForOrg(orgSidInput: $orgSidInput) {
-    id
-    active
+  query DashSiteForOrg($orgSidInput: OrgSidInput) {
+    dashSiteForOrg(orgSidInput: $orgSidInput) {
+      id
+      active
+    }
   }
-}
-    `;
+`;
 
 /**
  * __useDashSiteForOrgQuery__
@@ -5305,548 +5723,26 @@ export const DashSiteForOrgDocument = gql`
  *   },
  * });
  */
-export function useDashSiteForOrgQuery(baseOptions?: Apollo.QueryHookOptions<DashSiteForOrgQuery, DashSiteForOrgQueryVariables>) {
-        return Apollo.useQuery<DashSiteForOrgQuery, DashSiteForOrgQueryVariables>(DashSiteForOrgDocument, baseOptions);
-      }
-export function useDashSiteForOrgLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DashSiteForOrgQuery, DashSiteForOrgQueryVariables>) {
-          return Apollo.useLazyQuery<DashSiteForOrgQuery, DashSiteForOrgQueryVariables>(DashSiteForOrgDocument, baseOptions);
-        }
+export function useDashSiteForOrgQuery(
+  baseOptions?: Apollo.QueryHookOptions<DashSiteForOrgQuery, DashSiteForOrgQueryVariables>
+) {
+  return Apollo.useQuery<DashSiteForOrgQuery, DashSiteForOrgQueryVariables>(DashSiteForOrgDocument, baseOptions);
+}
+export function useDashSiteForOrgLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<DashSiteForOrgQuery, DashSiteForOrgQueryVariables>
+) {
+  return Apollo.useLazyQuery<DashSiteForOrgQuery, DashSiteForOrgQueryVariables>(DashSiteForOrgDocument, baseOptions);
+}
 export type DashSiteForOrgQueryHookResult = ReturnType<typeof useDashSiteForOrgQuery>;
 export type DashSiteForOrgLazyQueryHookResult = ReturnType<typeof useDashSiteForOrgLazyQuery>;
 export type DashSiteForOrgQueryResult = Apollo.QueryResult<DashSiteForOrgQuery, DashSiteForOrgQueryVariables>;
 export const CreateDashThemeColorDocument = gql`
-    mutation CreateDashThemeColor($createDashThemeColorInput: CreateDashThemeColorInput!) {
-  createDashThemeColor(createDashThemeColorInput: $createDashThemeColorInput) {
-    id
-    defaultPalette
-    allowDark
-    themeColorMode
-    paletteNm
-    themePrimary
-    themeLighterAlt
-    themeLighter
-    themeLight
-    themeTertiary
-    themeSecondary
-    themeDarkAlt
-    themeDark
-    themeDarker
-    neutralLighterAlt
-    neutralLighter
-    neutralLight
-    neutralQuaternaryAlt
-    neutralQuaternary
-    neutralTertiaryAlt
-    neutralTertiary
-    neutralSecondary
-    neutralPrimaryAlt
-    neutralPrimary
-    neutralDark
-    black
-    white
-  }
-}
-    `;
-export type CreateDashThemeColorMutationFn = Apollo.MutationFunction<CreateDashThemeColorMutation, CreateDashThemeColorMutationVariables>;
-
-/**
- * __useCreateDashThemeColorMutation__
- *
- * To run a mutation, you first call `useCreateDashThemeColorMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateDashThemeColorMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createDashThemeColorMutation, { data, loading, error }] = useCreateDashThemeColorMutation({
- *   variables: {
- *      createDashThemeColorInput: // value for 'createDashThemeColorInput'
- *   },
- * });
- */
-export function useCreateDashThemeColorMutation(baseOptions?: Apollo.MutationHookOptions<CreateDashThemeColorMutation, CreateDashThemeColorMutationVariables>) {
-        return Apollo.useMutation<CreateDashThemeColorMutation, CreateDashThemeColorMutationVariables>(CreateDashThemeColorDocument, baseOptions);
-      }
-export type CreateDashThemeColorMutationHookResult = ReturnType<typeof useCreateDashThemeColorMutation>;
-export type CreateDashThemeColorMutationResult = Apollo.MutationResult<CreateDashThemeColorMutation>;
-export type CreateDashThemeColorMutationOptions = Apollo.BaseMutationOptions<CreateDashThemeColorMutation, CreateDashThemeColorMutationVariables>;
-export const DashThemeColorByNameDocument = gql`
-    query DashThemeColorByName($ownedInputName: OwnedInputName) {
-  dashThemeColorByName(ownedInputName: $ownedInputName) {
-    id
-    defaultPalette
-    allowDark
-    themeColorMode
-    paletteNm
-    themePrimary
-    themeLighterAlt
-    themeLighter
-    themeLight
-    themeTertiary
-    themeSecondary
-    themeDarkAlt
-    themeDark
-    themeDarker
-    neutralLighterAlt
-    neutralLighter
-    neutralLight
-    neutralQuaternaryAlt
-    neutralQuaternary
-    neutralTertiaryAlt
-    neutralTertiary
-    neutralSecondary
-    neutralPrimaryAlt
-    neutralPrimary
-    neutralDark
-    black
-    white
-  }
-}
-    `;
-
-/**
- * __useDashThemeColorByNameQuery__
- *
- * To run a query within a React component, call `useDashThemeColorByNameQuery` and pass it any options that fit your needs.
- * When your component renders, `useDashThemeColorByNameQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useDashThemeColorByNameQuery({
- *   variables: {
- *      ownedInputName: // value for 'ownedInputName'
- *   },
- * });
- */
-export function useDashThemeColorByNameQuery(baseOptions?: Apollo.QueryHookOptions<DashThemeColorByNameQuery, DashThemeColorByNameQueryVariables>) {
-        return Apollo.useQuery<DashThemeColorByNameQuery, DashThemeColorByNameQueryVariables>(DashThemeColorByNameDocument, baseOptions);
-      }
-export function useDashThemeColorByNameLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DashThemeColorByNameQuery, DashThemeColorByNameQueryVariables>) {
-          return Apollo.useLazyQuery<DashThemeColorByNameQuery, DashThemeColorByNameQueryVariables>(DashThemeColorByNameDocument, baseOptions);
-        }
-export type DashThemeColorByNameQueryHookResult = ReturnType<typeof useDashThemeColorByNameQuery>;
-export type DashThemeColorByNameLazyQueryHookResult = ReturnType<typeof useDashThemeColorByNameLazyQuery>;
-export type DashThemeColorByNameQueryResult = Apollo.QueryResult<DashThemeColorByNameQuery, DashThemeColorByNameQueryVariables>;
-export const UpdateDashThemeColorDocument = gql`
-    mutation UpdateDashThemeColor($updateDashThemeColorInput: UpdateDashThemeColorInput!) {
-  updateDashThemeColor(updateDashThemeColorInput: $updateDashThemeColorInput) {
-    id
-    defaultPalette
-    allowDark
-    themeColorMode
-    paletteNm
-    themePrimary
-    themeLighterAlt
-    themeLighter
-    themeLight
-    themeTertiary
-    themeSecondary
-    themeDarkAlt
-    themeDark
-    themeDarker
-    neutralLighterAlt
-    neutralLighter
-    neutralLight
-    neutralQuaternaryAlt
-    neutralQuaternary
-    neutralTertiaryAlt
-    neutralTertiary
-    neutralSecondary
-    neutralPrimaryAlt
-    neutralPrimary
-    neutralDark
-    black
-    white
-  }
-}
-    `;
-export type UpdateDashThemeColorMutationFn = Apollo.MutationFunction<UpdateDashThemeColorMutation, UpdateDashThemeColorMutationVariables>;
-
-/**
- * __useUpdateDashThemeColorMutation__
- *
- * To run a mutation, you first call `useUpdateDashThemeColorMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateDashThemeColorMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateDashThemeColorMutation, { data, loading, error }] = useUpdateDashThemeColorMutation({
- *   variables: {
- *      updateDashThemeColorInput: // value for 'updateDashThemeColorInput'
- *   },
- * });
- */
-export function useUpdateDashThemeColorMutation(baseOptions?: Apollo.MutationHookOptions<UpdateDashThemeColorMutation, UpdateDashThemeColorMutationVariables>) {
-        return Apollo.useMutation<UpdateDashThemeColorMutation, UpdateDashThemeColorMutationVariables>(UpdateDashThemeColorDocument, baseOptions);
-      }
-export type UpdateDashThemeColorMutationHookResult = ReturnType<typeof useUpdateDashThemeColorMutation>;
-export type UpdateDashThemeColorMutationResult = Apollo.MutationResult<UpdateDashThemeColorMutation>;
-export type UpdateDashThemeColorMutationOptions = Apollo.BaseMutationOptions<UpdateDashThemeColorMutation, UpdateDashThemeColorMutationVariables>;
-export const CreateDefaultDashThemeDocument = gql`
-    mutation CreateDefaultDashTheme($createDefaultDashThemeInput: CreateDefaultDashThemeInput!) {
-  createDefaultDashTheme(
-    createDefaultDashThemeInput: $createDefaultDashThemeInput
-  ) {
-    id
-    themeColorMode
-    themeFontSize
-    dashThemeColor {
+  mutation CreateDashThemeColor($createDashThemeColorInput: CreateDashThemeColorInput!) {
+    createDashThemeColor(createDashThemeColorInput: $createDashThemeColorInput) {
       id
-    }
-  }
-}
-    `;
-export type CreateDefaultDashThemeMutationFn = Apollo.MutationFunction<CreateDefaultDashThemeMutation, CreateDefaultDashThemeMutationVariables>;
-
-/**
- * __useCreateDefaultDashThemeMutation__
- *
- * To run a mutation, you first call `useCreateDefaultDashThemeMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateDefaultDashThemeMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createDefaultDashThemeMutation, { data, loading, error }] = useCreateDefaultDashThemeMutation({
- *   variables: {
- *      createDefaultDashThemeInput: // value for 'createDefaultDashThemeInput'
- *   },
- * });
- */
-export function useCreateDefaultDashThemeMutation(baseOptions?: Apollo.MutationHookOptions<CreateDefaultDashThemeMutation, CreateDefaultDashThemeMutationVariables>) {
-        return Apollo.useMutation<CreateDefaultDashThemeMutation, CreateDefaultDashThemeMutationVariables>(CreateDefaultDashThemeDocument, baseOptions);
-      }
-export type CreateDefaultDashThemeMutationHookResult = ReturnType<typeof useCreateDefaultDashThemeMutation>;
-export type CreateDefaultDashThemeMutationResult = Apollo.MutationResult<CreateDefaultDashThemeMutation>;
-export type CreateDefaultDashThemeMutationOptions = Apollo.BaseMutationOptions<CreateDefaultDashThemeMutation, CreateDefaultDashThemeMutationVariables>;
-export const DefaultDashThemeForSiteDocument = gql`
-    query DefaultDashThemeForSite($ownedInput: OwnedInput) {
-  defaultDashThemeForSite(ownedInput: $ownedInput) {
-    id
-    themeColorMode
-    themeFontSize
-    dashThemeColor {
-      id
-      paletteNm
+      defaultPalette
       allowDark
-      themePrimary
-      neutralPrimary
-      white
-    }
-  }
-}
-    `;
-
-/**
- * __useDefaultDashThemeForSiteQuery__
- *
- * To run a query within a React component, call `useDefaultDashThemeForSiteQuery` and pass it any options that fit your needs.
- * When your component renders, `useDefaultDashThemeForSiteQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useDefaultDashThemeForSiteQuery({
- *   variables: {
- *      ownedInput: // value for 'ownedInput'
- *   },
- * });
- */
-export function useDefaultDashThemeForSiteQuery(baseOptions?: Apollo.QueryHookOptions<DefaultDashThemeForSiteQuery, DefaultDashThemeForSiteQueryVariables>) {
-        return Apollo.useQuery<DefaultDashThemeForSiteQuery, DefaultDashThemeForSiteQueryVariables>(DefaultDashThemeForSiteDocument, baseOptions);
-      }
-export function useDefaultDashThemeForSiteLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DefaultDashThemeForSiteQuery, DefaultDashThemeForSiteQueryVariables>) {
-          return Apollo.useLazyQuery<DefaultDashThemeForSiteQuery, DefaultDashThemeForSiteQueryVariables>(DefaultDashThemeForSiteDocument, baseOptions);
-        }
-export type DefaultDashThemeForSiteQueryHookResult = ReturnType<typeof useDefaultDashThemeForSiteQuery>;
-export type DefaultDashThemeForSiteLazyQueryHookResult = ReturnType<typeof useDefaultDashThemeForSiteLazyQuery>;
-export type DefaultDashThemeForSiteQueryResult = Apollo.QueryResult<DefaultDashThemeForSiteQuery, DefaultDashThemeForSiteQueryVariables>;
-export const CurrentOrgNavDocument = gql`
-    query CurrentOrgNav($orgInput: OrgSidInput) {
-  currentOrgNav(orgInput: $orgInput) {
-    label
-    subNavItems {
-      ...navItemFragment
-    }
-  }
-}
-    ${NavItemFragmentFragmentDoc}`;
-
-/**
- * __useCurrentOrgNavQuery__
- *
- * To run a query within a React component, call `useCurrentOrgNavQuery` and pass it any options that fit your needs.
- * When your component renders, `useCurrentOrgNavQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useCurrentOrgNavQuery({
- *   variables: {
- *      orgInput: // value for 'orgInput'
- *   },
- * });
- */
-export function useCurrentOrgNavQuery(baseOptions?: Apollo.QueryHookOptions<CurrentOrgNavQuery, CurrentOrgNavQueryVariables>) {
-        return Apollo.useQuery<CurrentOrgNavQuery, CurrentOrgNavQueryVariables>(CurrentOrgNavDocument, baseOptions);
-      }
-export function useCurrentOrgNavLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CurrentOrgNavQuery, CurrentOrgNavQueryVariables>) {
-          return Apollo.useLazyQuery<CurrentOrgNavQuery, CurrentOrgNavQueryVariables>(CurrentOrgNavDocument, baseOptions);
-        }
-export type CurrentOrgNavQueryHookResult = ReturnType<typeof useCurrentOrgNavQuery>;
-export type CurrentOrgNavLazyQueryHookResult = ReturnType<typeof useCurrentOrgNavLazyQuery>;
-export type CurrentOrgNavQueryResult = Apollo.QueryResult<CurrentOrgNavQuery, CurrentOrgNavQueryVariables>;
-export const UpdateDefaultDashThemeDocument = gql`
-    mutation UpdateDefaultDashTheme($updateDefaultDashThemeInput: UpdateDefaultDashThemeInput!) {
-  updateDefaultDashTheme(
-    updateDefaultDashThemeInput: $updateDefaultDashThemeInput
-  ) {
-    id
-    themeColorMode
-    themeFontSize
-    dashThemeColor {
-      id
-    }
-  }
-}
-    `;
-export type UpdateDefaultDashThemeMutationFn = Apollo.MutationFunction<UpdateDefaultDashThemeMutation, UpdateDefaultDashThemeMutationVariables>;
-
-/**
- * __useUpdateDefaultDashThemeMutation__
- *
- * To run a mutation, you first call `useUpdateDefaultDashThemeMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateDefaultDashThemeMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateDefaultDashThemeMutation, { data, loading, error }] = useUpdateDefaultDashThemeMutation({
- *   variables: {
- *      updateDefaultDashThemeInput: // value for 'updateDefaultDashThemeInput'
- *   },
- * });
- */
-export function useUpdateDefaultDashThemeMutation(baseOptions?: Apollo.MutationHookOptions<UpdateDefaultDashThemeMutation, UpdateDefaultDashThemeMutationVariables>) {
-        return Apollo.useMutation<UpdateDefaultDashThemeMutation, UpdateDefaultDashThemeMutationVariables>(UpdateDefaultDashThemeDocument, baseOptions);
-      }
-export type UpdateDefaultDashThemeMutationHookResult = ReturnType<typeof useUpdateDefaultDashThemeMutation>;
-export type UpdateDefaultDashThemeMutationResult = Apollo.MutationResult<UpdateDefaultDashThemeMutation>;
-export type UpdateDefaultDashThemeMutationOptions = Apollo.BaseMutationOptions<UpdateDefaultDashThemeMutation, UpdateDefaultDashThemeMutationVariables>;
-export const RemoveDashThemeColorDocument = gql`
-    mutation RemoveDashThemeColor($ownedInputSid: OwnedInputSid!) {
-  removeDashThemeColor(ownedInputSid: $ownedInputSid)
-}
-    `;
-export type RemoveDashThemeColorMutationFn = Apollo.MutationFunction<RemoveDashThemeColorMutation, RemoveDashThemeColorMutationVariables>;
-
-/**
- * __useRemoveDashThemeColorMutation__
- *
- * To run a mutation, you first call `useRemoveDashThemeColorMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRemoveDashThemeColorMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [removeDashThemeColorMutation, { data, loading, error }] = useRemoveDashThemeColorMutation({
- *   variables: {
- *      ownedInputSid: // value for 'ownedInputSid'
- *   },
- * });
- */
-export function useRemoveDashThemeColorMutation(baseOptions?: Apollo.MutationHookOptions<RemoveDashThemeColorMutation, RemoveDashThemeColorMutationVariables>) {
-        return Apollo.useMutation<RemoveDashThemeColorMutation, RemoveDashThemeColorMutationVariables>(RemoveDashThemeColorDocument, baseOptions);
-      }
-export type RemoveDashThemeColorMutationHookResult = ReturnType<typeof useRemoveDashThemeColorMutation>;
-export type RemoveDashThemeColorMutationResult = Apollo.MutationResult<RemoveDashThemeColorMutation>;
-export type RemoveDashThemeColorMutationOptions = Apollo.BaseMutationOptions<RemoveDashThemeColorMutation, RemoveDashThemeColorMutationVariables>;
-export const RemoveDefaultDashThemeDocument = gql`
-    mutation RemoveDefaultDashTheme($ownedInputSid: OwnedInputSid!) {
-  removeDefaultDashTheme(ownedInputSid: $ownedInputSid)
-}
-    `;
-export type RemoveDefaultDashThemeMutationFn = Apollo.MutationFunction<RemoveDefaultDashThemeMutation, RemoveDefaultDashThemeMutationVariables>;
-
-/**
- * __useRemoveDefaultDashThemeMutation__
- *
- * To run a mutation, you first call `useRemoveDefaultDashThemeMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRemoveDefaultDashThemeMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [removeDefaultDashThemeMutation, { data, loading, error }] = useRemoveDefaultDashThemeMutation({
- *   variables: {
- *      ownedInputSid: // value for 'ownedInputSid'
- *   },
- * });
- */
-export function useRemoveDefaultDashThemeMutation(baseOptions?: Apollo.MutationHookOptions<RemoveDefaultDashThemeMutation, RemoveDefaultDashThemeMutationVariables>) {
-        return Apollo.useMutation<RemoveDefaultDashThemeMutation, RemoveDefaultDashThemeMutationVariables>(RemoveDefaultDashThemeDocument, baseOptions);
-      }
-export type RemoveDefaultDashThemeMutationHookResult = ReturnType<typeof useRemoveDefaultDashThemeMutation>;
-export type RemoveDefaultDashThemeMutationResult = Apollo.MutationResult<RemoveDefaultDashThemeMutation>;
-export type RemoveDefaultDashThemeMutationOptions = Apollo.BaseMutationOptions<RemoveDefaultDashThemeMutation, RemoveDefaultDashThemeMutationVariables>;
-export const CurrentUserDashThemePageDocument = gql`
-    query CurrentUserDashThemePage {
-  currentUserDashThemePage {
-    themeColorModes
-    themeFontSizes
-    themeColorPalettes {
-      id
-      paletteNm
-      neutralPrimary
-      allowDark
-      themePrimary
-      neutralPrimary
-      white
-    }
-    dashTheme {
-      id
-      themeFontSize
       themeColorMode
-      dashThemeColor {
-        id
-        paletteNm
-        allowDark
-        themePrimary
-        neutralPrimary
-        white
-      }
-    }
-  }
-}
-    `;
-
-/**
- * __useCurrentUserDashThemePageQuery__
- *
- * To run a query within a React component, call `useCurrentUserDashThemePageQuery` and pass it any options that fit your needs.
- * When your component renders, `useCurrentUserDashThemePageQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useCurrentUserDashThemePageQuery({
- *   variables: {
- *   },
- * });
- */
-export function useCurrentUserDashThemePageQuery(baseOptions?: Apollo.QueryHookOptions<CurrentUserDashThemePageQuery, CurrentUserDashThemePageQueryVariables>) {
-        return Apollo.useQuery<CurrentUserDashThemePageQuery, CurrentUserDashThemePageQueryVariables>(CurrentUserDashThemePageDocument, baseOptions);
-      }
-export function useCurrentUserDashThemePageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CurrentUserDashThemePageQuery, CurrentUserDashThemePageQueryVariables>) {
-          return Apollo.useLazyQuery<CurrentUserDashThemePageQuery, CurrentUserDashThemePageQueryVariables>(CurrentUserDashThemePageDocument, baseOptions);
-        }
-export type CurrentUserDashThemePageQueryHookResult = ReturnType<typeof useCurrentUserDashThemePageQuery>;
-export type CurrentUserDashThemePageLazyQueryHookResult = ReturnType<typeof useCurrentUserDashThemePageLazyQuery>;
-export type CurrentUserDashThemePageQueryResult = Apollo.QueryResult<CurrentUserDashThemePageQuery, CurrentUserDashThemePageQueryVariables>;
-export const FindUserByEmailDocument = gql`
-    query FindUserByEmail($userEmail: String!) {
-  findUserByEmail(userEmail: $userEmail) {
-    id
-    email
-    person {
-      id
-      firstNm
-      lastNm
-    }
-  }
-}
-    `;
-
-/**
- * __useFindUserByEmailQuery__
- *
- * To run a query within a React component, call `useFindUserByEmailQuery` and pass it any options that fit your needs.
- * When your component renders, `useFindUserByEmailQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useFindUserByEmailQuery({
- *   variables: {
- *      userEmail: // value for 'userEmail'
- *   },
- * });
- */
-export function useFindUserByEmailQuery(baseOptions: Apollo.QueryHookOptions<FindUserByEmailQuery, FindUserByEmailQueryVariables>) {
-        return Apollo.useQuery<FindUserByEmailQuery, FindUserByEmailQueryVariables>(FindUserByEmailDocument, baseOptions);
-      }
-export function useFindUserByEmailLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindUserByEmailQuery, FindUserByEmailQueryVariables>) {
-          return Apollo.useLazyQuery<FindUserByEmailQuery, FindUserByEmailQueryVariables>(FindUserByEmailDocument, baseOptions);
-        }
-export type FindUserByEmailQueryHookResult = ReturnType<typeof useFindUserByEmailQuery>;
-export type FindUserByEmailLazyQueryHookResult = ReturnType<typeof useFindUserByEmailLazyQuery>;
-export type FindUserByEmailQueryResult = Apollo.QueryResult<FindUserByEmailQuery, FindUserByEmailQueryVariables>;
-export const FindUserDocument = gql`
-    query FindUser($ownedInputSid: OwnedInputSid!) {
-  findUser(ownedInputSid: $ownedInputSid) {
-    id
-    email
-    person {
-      id
-      firstNm
-      lastNm
-    }
-  }
-}
-    `;
-
-/**
- * __useFindUserQuery__
- *
- * To run a query within a React component, call `useFindUserQuery` and pass it any options that fit your needs.
- * When your component renders, `useFindUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useFindUserQuery({
- *   variables: {
- *      ownedInputSid: // value for 'ownedInputSid'
- *   },
- * });
- */
-export function useFindUserQuery(baseOptions: Apollo.QueryHookOptions<FindUserQuery, FindUserQueryVariables>) {
-        return Apollo.useQuery<FindUserQuery, FindUserQueryVariables>(FindUserDocument, baseOptions);
-      }
-export function useFindUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindUserQuery, FindUserQueryVariables>) {
-          return Apollo.useLazyQuery<FindUserQuery, FindUserQueryVariables>(FindUserDocument, baseOptions);
-        }
-export type FindUserQueryHookResult = ReturnType<typeof useFindUserQuery>;
-export type FindUserLazyQueryHookResult = ReturnType<typeof useFindUserLazyQuery>;
-export type FindUserQueryResult = Apollo.QueryResult<FindUserQuery, FindUserQueryVariables>;
-export const SetOwnDashThemeFontSizeDocument = gql`
-    mutation SetOwnDashThemeFontSize($dashThemeInput: DashThemeInput!) {
-  setOwnDashThemeFontSize(dashThemeInput: $dashThemeInput) {
-    id
-    themeColorMode
-    themeFontSize
-    dashThemeColor {
-      id
       paletteNm
       themePrimary
       themeLighterAlt
@@ -5872,9 +5768,648 @@ export const SetOwnDashThemeFontSizeDocument = gql`
       white
     }
   }
+`;
+export type CreateDashThemeColorMutationFn = Apollo.MutationFunction<
+  CreateDashThemeColorMutation,
+  CreateDashThemeColorMutationVariables
+>;
+
+/**
+ * __useCreateDashThemeColorMutation__
+ *
+ * To run a mutation, you first call `useCreateDashThemeColorMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateDashThemeColorMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createDashThemeColorMutation, { data, loading, error }] = useCreateDashThemeColorMutation({
+ *   variables: {
+ *      createDashThemeColorInput: // value for 'createDashThemeColorInput'
+ *   },
+ * });
+ */
+export function useCreateDashThemeColorMutation(
+  baseOptions?: Apollo.MutationHookOptions<CreateDashThemeColorMutation, CreateDashThemeColorMutationVariables>
+) {
+  return Apollo.useMutation<CreateDashThemeColorMutation, CreateDashThemeColorMutationVariables>(
+    CreateDashThemeColorDocument,
+    baseOptions
+  );
 }
-    `;
-export type SetOwnDashThemeFontSizeMutationFn = Apollo.MutationFunction<SetOwnDashThemeFontSizeMutation, SetOwnDashThemeFontSizeMutationVariables>;
+export type CreateDashThemeColorMutationHookResult = ReturnType<typeof useCreateDashThemeColorMutation>;
+export type CreateDashThemeColorMutationResult = Apollo.MutationResult<CreateDashThemeColorMutation>;
+export type CreateDashThemeColorMutationOptions = Apollo.BaseMutationOptions<
+  CreateDashThemeColorMutation,
+  CreateDashThemeColorMutationVariables
+>;
+export const DashThemeColorByNameDocument = gql`
+  query DashThemeColorByName($ownedInputName: OwnedInputName) {
+    dashThemeColorByName(ownedInputName: $ownedInputName) {
+      id
+      defaultPalette
+      allowDark
+      themeColorMode
+      paletteNm
+      themePrimary
+      themeLighterAlt
+      themeLighter
+      themeLight
+      themeTertiary
+      themeSecondary
+      themeDarkAlt
+      themeDark
+      themeDarker
+      neutralLighterAlt
+      neutralLighter
+      neutralLight
+      neutralQuaternaryAlt
+      neutralQuaternary
+      neutralTertiaryAlt
+      neutralTertiary
+      neutralSecondary
+      neutralPrimaryAlt
+      neutralPrimary
+      neutralDark
+      black
+      white
+    }
+  }
+`;
+
+/**
+ * __useDashThemeColorByNameQuery__
+ *
+ * To run a query within a React component, call `useDashThemeColorByNameQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDashThemeColorByNameQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useDashThemeColorByNameQuery({
+ *   variables: {
+ *      ownedInputName: // value for 'ownedInputName'
+ *   },
+ * });
+ */
+export function useDashThemeColorByNameQuery(
+  baseOptions?: Apollo.QueryHookOptions<DashThemeColorByNameQuery, DashThemeColorByNameQueryVariables>
+) {
+  return Apollo.useQuery<DashThemeColorByNameQuery, DashThemeColorByNameQueryVariables>(
+    DashThemeColorByNameDocument,
+    baseOptions
+  );
+}
+export function useDashThemeColorByNameLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<DashThemeColorByNameQuery, DashThemeColorByNameQueryVariables>
+) {
+  return Apollo.useLazyQuery<DashThemeColorByNameQuery, DashThemeColorByNameQueryVariables>(
+    DashThemeColorByNameDocument,
+    baseOptions
+  );
+}
+export type DashThemeColorByNameQueryHookResult = ReturnType<typeof useDashThemeColorByNameQuery>;
+export type DashThemeColorByNameLazyQueryHookResult = ReturnType<typeof useDashThemeColorByNameLazyQuery>;
+export type DashThemeColorByNameQueryResult = Apollo.QueryResult<
+  DashThemeColorByNameQuery,
+  DashThemeColorByNameQueryVariables
+>;
+export const UpdateDashThemeColorDocument = gql`
+  mutation UpdateDashThemeColor($updateDashThemeColorInput: UpdateDashThemeColorInput!) {
+    updateDashThemeColor(updateDashThemeColorInput: $updateDashThemeColorInput) {
+      id
+      defaultPalette
+      allowDark
+      themeColorMode
+      paletteNm
+      themePrimary
+      themeLighterAlt
+      themeLighter
+      themeLight
+      themeTertiary
+      themeSecondary
+      themeDarkAlt
+      themeDark
+      themeDarker
+      neutralLighterAlt
+      neutralLighter
+      neutralLight
+      neutralQuaternaryAlt
+      neutralQuaternary
+      neutralTertiaryAlt
+      neutralTertiary
+      neutralSecondary
+      neutralPrimaryAlt
+      neutralPrimary
+      neutralDark
+      black
+      white
+    }
+  }
+`;
+export type UpdateDashThemeColorMutationFn = Apollo.MutationFunction<
+  UpdateDashThemeColorMutation,
+  UpdateDashThemeColorMutationVariables
+>;
+
+/**
+ * __useUpdateDashThemeColorMutation__
+ *
+ * To run a mutation, you first call `useUpdateDashThemeColorMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateDashThemeColorMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateDashThemeColorMutation, { data, loading, error }] = useUpdateDashThemeColorMutation({
+ *   variables: {
+ *      updateDashThemeColorInput: // value for 'updateDashThemeColorInput'
+ *   },
+ * });
+ */
+export function useUpdateDashThemeColorMutation(
+  baseOptions?: Apollo.MutationHookOptions<UpdateDashThemeColorMutation, UpdateDashThemeColorMutationVariables>
+) {
+  return Apollo.useMutation<UpdateDashThemeColorMutation, UpdateDashThemeColorMutationVariables>(
+    UpdateDashThemeColorDocument,
+    baseOptions
+  );
+}
+export type UpdateDashThemeColorMutationHookResult = ReturnType<typeof useUpdateDashThemeColorMutation>;
+export type UpdateDashThemeColorMutationResult = Apollo.MutationResult<UpdateDashThemeColorMutation>;
+export type UpdateDashThemeColorMutationOptions = Apollo.BaseMutationOptions<
+  UpdateDashThemeColorMutation,
+  UpdateDashThemeColorMutationVariables
+>;
+export const CreateDefaultDashThemeDocument = gql`
+  mutation CreateDefaultDashTheme($createDefaultDashThemeInput: CreateDefaultDashThemeInput!) {
+    createDefaultDashTheme(createDefaultDashThemeInput: $createDefaultDashThemeInput) {
+      id
+      themeColorMode
+      themeFontSize
+      dashThemeColor {
+        id
+      }
+    }
+  }
+`;
+export type CreateDefaultDashThemeMutationFn = Apollo.MutationFunction<
+  CreateDefaultDashThemeMutation,
+  CreateDefaultDashThemeMutationVariables
+>;
+
+/**
+ * __useCreateDefaultDashThemeMutation__
+ *
+ * To run a mutation, you first call `useCreateDefaultDashThemeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateDefaultDashThemeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createDefaultDashThemeMutation, { data, loading, error }] = useCreateDefaultDashThemeMutation({
+ *   variables: {
+ *      createDefaultDashThemeInput: // value for 'createDefaultDashThemeInput'
+ *   },
+ * });
+ */
+export function useCreateDefaultDashThemeMutation(
+  baseOptions?: Apollo.MutationHookOptions<CreateDefaultDashThemeMutation, CreateDefaultDashThemeMutationVariables>
+) {
+  return Apollo.useMutation<CreateDefaultDashThemeMutation, CreateDefaultDashThemeMutationVariables>(
+    CreateDefaultDashThemeDocument,
+    baseOptions
+  );
+}
+export type CreateDefaultDashThemeMutationHookResult = ReturnType<typeof useCreateDefaultDashThemeMutation>;
+export type CreateDefaultDashThemeMutationResult = Apollo.MutationResult<CreateDefaultDashThemeMutation>;
+export type CreateDefaultDashThemeMutationOptions = Apollo.BaseMutationOptions<
+  CreateDefaultDashThemeMutation,
+  CreateDefaultDashThemeMutationVariables
+>;
+export const DefaultDashThemeForSiteDocument = gql`
+  query DefaultDashThemeForSite($ownedInput: OwnedInput) {
+    defaultDashThemeForSite(ownedInput: $ownedInput) {
+      id
+      themeColorMode
+      themeFontSize
+      dashThemeColor {
+        id
+        paletteNm
+        allowDark
+        themePrimary
+        neutralPrimary
+        white
+      }
+    }
+  }
+`;
+
+/**
+ * __useDefaultDashThemeForSiteQuery__
+ *
+ * To run a query within a React component, call `useDefaultDashThemeForSiteQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDefaultDashThemeForSiteQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useDefaultDashThemeForSiteQuery({
+ *   variables: {
+ *      ownedInput: // value for 'ownedInput'
+ *   },
+ * });
+ */
+export function useDefaultDashThemeForSiteQuery(
+  baseOptions?: Apollo.QueryHookOptions<DefaultDashThemeForSiteQuery, DefaultDashThemeForSiteQueryVariables>
+) {
+  return Apollo.useQuery<DefaultDashThemeForSiteQuery, DefaultDashThemeForSiteQueryVariables>(
+    DefaultDashThemeForSiteDocument,
+    baseOptions
+  );
+}
+export function useDefaultDashThemeForSiteLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<DefaultDashThemeForSiteQuery, DefaultDashThemeForSiteQueryVariables>
+) {
+  return Apollo.useLazyQuery<DefaultDashThemeForSiteQuery, DefaultDashThemeForSiteQueryVariables>(
+    DefaultDashThemeForSiteDocument,
+    baseOptions
+  );
+}
+export type DefaultDashThemeForSiteQueryHookResult = ReturnType<typeof useDefaultDashThemeForSiteQuery>;
+export type DefaultDashThemeForSiteLazyQueryHookResult = ReturnType<typeof useDefaultDashThemeForSiteLazyQuery>;
+export type DefaultDashThemeForSiteQueryResult = Apollo.QueryResult<
+  DefaultDashThemeForSiteQuery,
+  DefaultDashThemeForSiteQueryVariables
+>;
+export const CurrentOrgNavDocument = gql`
+  query CurrentOrgNav($orgInput: OrgSidInput) {
+    currentOrgNav(orgInput: $orgInput) {
+      label
+      subNavItems {
+        ...navItemFragment
+      }
+    }
+  }
+  ${NavItemFragmentFragmentDoc}
+`;
+
+/**
+ * __useCurrentOrgNavQuery__
+ *
+ * To run a query within a React component, call `useCurrentOrgNavQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCurrentOrgNavQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCurrentOrgNavQuery({
+ *   variables: {
+ *      orgInput: // value for 'orgInput'
+ *   },
+ * });
+ */
+export function useCurrentOrgNavQuery(
+  baseOptions?: Apollo.QueryHookOptions<CurrentOrgNavQuery, CurrentOrgNavQueryVariables>
+) {
+  return Apollo.useQuery<CurrentOrgNavQuery, CurrentOrgNavQueryVariables>(CurrentOrgNavDocument, baseOptions);
+}
+export function useCurrentOrgNavLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<CurrentOrgNavQuery, CurrentOrgNavQueryVariables>
+) {
+  return Apollo.useLazyQuery<CurrentOrgNavQuery, CurrentOrgNavQueryVariables>(CurrentOrgNavDocument, baseOptions);
+}
+export type CurrentOrgNavQueryHookResult = ReturnType<typeof useCurrentOrgNavQuery>;
+export type CurrentOrgNavLazyQueryHookResult = ReturnType<typeof useCurrentOrgNavLazyQuery>;
+export type CurrentOrgNavQueryResult = Apollo.QueryResult<CurrentOrgNavQuery, CurrentOrgNavQueryVariables>;
+export const UpdateDefaultDashThemeDocument = gql`
+  mutation UpdateDefaultDashTheme($updateDefaultDashThemeInput: UpdateDefaultDashThemeInput!) {
+    updateDefaultDashTheme(updateDefaultDashThemeInput: $updateDefaultDashThemeInput) {
+      id
+      themeColorMode
+      themeFontSize
+      dashThemeColor {
+        id
+      }
+    }
+  }
+`;
+export type UpdateDefaultDashThemeMutationFn = Apollo.MutationFunction<
+  UpdateDefaultDashThemeMutation,
+  UpdateDefaultDashThemeMutationVariables
+>;
+
+/**
+ * __useUpdateDefaultDashThemeMutation__
+ *
+ * To run a mutation, you first call `useUpdateDefaultDashThemeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateDefaultDashThemeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateDefaultDashThemeMutation, { data, loading, error }] = useUpdateDefaultDashThemeMutation({
+ *   variables: {
+ *      updateDefaultDashThemeInput: // value for 'updateDefaultDashThemeInput'
+ *   },
+ * });
+ */
+export function useUpdateDefaultDashThemeMutation(
+  baseOptions?: Apollo.MutationHookOptions<UpdateDefaultDashThemeMutation, UpdateDefaultDashThemeMutationVariables>
+) {
+  return Apollo.useMutation<UpdateDefaultDashThemeMutation, UpdateDefaultDashThemeMutationVariables>(
+    UpdateDefaultDashThemeDocument,
+    baseOptions
+  );
+}
+export type UpdateDefaultDashThemeMutationHookResult = ReturnType<typeof useUpdateDefaultDashThemeMutation>;
+export type UpdateDefaultDashThemeMutationResult = Apollo.MutationResult<UpdateDefaultDashThemeMutation>;
+export type UpdateDefaultDashThemeMutationOptions = Apollo.BaseMutationOptions<
+  UpdateDefaultDashThemeMutation,
+  UpdateDefaultDashThemeMutationVariables
+>;
+export const RemoveDashThemeColorDocument = gql`
+  mutation RemoveDashThemeColor($ownedInputSid: OwnedInputSid!) {
+    removeDashThemeColor(ownedInputSid: $ownedInputSid)
+  }
+`;
+export type RemoveDashThemeColorMutationFn = Apollo.MutationFunction<
+  RemoveDashThemeColorMutation,
+  RemoveDashThemeColorMutationVariables
+>;
+
+/**
+ * __useRemoveDashThemeColorMutation__
+ *
+ * To run a mutation, you first call `useRemoveDashThemeColorMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveDashThemeColorMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeDashThemeColorMutation, { data, loading, error }] = useRemoveDashThemeColorMutation({
+ *   variables: {
+ *      ownedInputSid: // value for 'ownedInputSid'
+ *   },
+ * });
+ */
+export function useRemoveDashThemeColorMutation(
+  baseOptions?: Apollo.MutationHookOptions<RemoveDashThemeColorMutation, RemoveDashThemeColorMutationVariables>
+) {
+  return Apollo.useMutation<RemoveDashThemeColorMutation, RemoveDashThemeColorMutationVariables>(
+    RemoveDashThemeColorDocument,
+    baseOptions
+  );
+}
+export type RemoveDashThemeColorMutationHookResult = ReturnType<typeof useRemoveDashThemeColorMutation>;
+export type RemoveDashThemeColorMutationResult = Apollo.MutationResult<RemoveDashThemeColorMutation>;
+export type RemoveDashThemeColorMutationOptions = Apollo.BaseMutationOptions<
+  RemoveDashThemeColorMutation,
+  RemoveDashThemeColorMutationVariables
+>;
+export const RemoveDefaultDashThemeDocument = gql`
+  mutation RemoveDefaultDashTheme($ownedInputSid: OwnedInputSid!) {
+    removeDefaultDashTheme(ownedInputSid: $ownedInputSid)
+  }
+`;
+export type RemoveDefaultDashThemeMutationFn = Apollo.MutationFunction<
+  RemoveDefaultDashThemeMutation,
+  RemoveDefaultDashThemeMutationVariables
+>;
+
+/**
+ * __useRemoveDefaultDashThemeMutation__
+ *
+ * To run a mutation, you first call `useRemoveDefaultDashThemeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveDefaultDashThemeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeDefaultDashThemeMutation, { data, loading, error }] = useRemoveDefaultDashThemeMutation({
+ *   variables: {
+ *      ownedInputSid: // value for 'ownedInputSid'
+ *   },
+ * });
+ */
+export function useRemoveDefaultDashThemeMutation(
+  baseOptions?: Apollo.MutationHookOptions<RemoveDefaultDashThemeMutation, RemoveDefaultDashThemeMutationVariables>
+) {
+  return Apollo.useMutation<RemoveDefaultDashThemeMutation, RemoveDefaultDashThemeMutationVariables>(
+    RemoveDefaultDashThemeDocument,
+    baseOptions
+  );
+}
+export type RemoveDefaultDashThemeMutationHookResult = ReturnType<typeof useRemoveDefaultDashThemeMutation>;
+export type RemoveDefaultDashThemeMutationResult = Apollo.MutationResult<RemoveDefaultDashThemeMutation>;
+export type RemoveDefaultDashThemeMutationOptions = Apollo.BaseMutationOptions<
+  RemoveDefaultDashThemeMutation,
+  RemoveDefaultDashThemeMutationVariables
+>;
+export const CurrentUserDashThemePageDocument = gql`
+  query CurrentUserDashThemePage {
+    currentUserDashThemePage {
+      themeColorModes
+      themeFontSizes
+      themeColorPalettes {
+        id
+        paletteNm
+        neutralPrimary
+        allowDark
+        themePrimary
+        neutralPrimary
+        white
+      }
+      dashTheme {
+        id
+        themeFontSize
+        themeColorMode
+        dashThemeColor {
+          id
+          paletteNm
+          allowDark
+          themePrimary
+          neutralPrimary
+          white
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useCurrentUserDashThemePageQuery__
+ *
+ * To run a query within a React component, call `useCurrentUserDashThemePageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCurrentUserDashThemePageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCurrentUserDashThemePageQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCurrentUserDashThemePageQuery(
+  baseOptions?: Apollo.QueryHookOptions<CurrentUserDashThemePageQuery, CurrentUserDashThemePageQueryVariables>
+) {
+  return Apollo.useQuery<CurrentUserDashThemePageQuery, CurrentUserDashThemePageQueryVariables>(
+    CurrentUserDashThemePageDocument,
+    baseOptions
+  );
+}
+export function useCurrentUserDashThemePageLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<CurrentUserDashThemePageQuery, CurrentUserDashThemePageQueryVariables>
+) {
+  return Apollo.useLazyQuery<CurrentUserDashThemePageQuery, CurrentUserDashThemePageQueryVariables>(
+    CurrentUserDashThemePageDocument,
+    baseOptions
+  );
+}
+export type CurrentUserDashThemePageQueryHookResult = ReturnType<typeof useCurrentUserDashThemePageQuery>;
+export type CurrentUserDashThemePageLazyQueryHookResult = ReturnType<typeof useCurrentUserDashThemePageLazyQuery>;
+export type CurrentUserDashThemePageQueryResult = Apollo.QueryResult<
+  CurrentUserDashThemePageQuery,
+  CurrentUserDashThemePageQueryVariables
+>;
+export const FindUserByEmailDocument = gql`
+  query FindUserByEmail($userEmail: String!) {
+    findUserByEmail(userEmail: $userEmail) {
+      id
+      email
+      person {
+        id
+        firstNm
+        lastNm
+      }
+    }
+  }
+`;
+
+/**
+ * __useFindUserByEmailQuery__
+ *
+ * To run a query within a React component, call `useFindUserByEmailQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindUserByEmailQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindUserByEmailQuery({
+ *   variables: {
+ *      userEmail: // value for 'userEmail'
+ *   },
+ * });
+ */
+export function useFindUserByEmailQuery(
+  baseOptions: Apollo.QueryHookOptions<FindUserByEmailQuery, FindUserByEmailQueryVariables>
+) {
+  return Apollo.useQuery<FindUserByEmailQuery, FindUserByEmailQueryVariables>(FindUserByEmailDocument, baseOptions);
+}
+export function useFindUserByEmailLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<FindUserByEmailQuery, FindUserByEmailQueryVariables>
+) {
+  return Apollo.useLazyQuery<FindUserByEmailQuery, FindUserByEmailQueryVariables>(FindUserByEmailDocument, baseOptions);
+}
+export type FindUserByEmailQueryHookResult = ReturnType<typeof useFindUserByEmailQuery>;
+export type FindUserByEmailLazyQueryHookResult = ReturnType<typeof useFindUserByEmailLazyQuery>;
+export type FindUserByEmailQueryResult = Apollo.QueryResult<FindUserByEmailQuery, FindUserByEmailQueryVariables>;
+export const FindUserDocument = gql`
+  query FindUser($ownedInputSid: OwnedInputSid!) {
+    findUser(ownedInputSid: $ownedInputSid) {
+      id
+      email
+      person {
+        id
+        firstNm
+        lastNm
+      }
+    }
+  }
+`;
+
+/**
+ * __useFindUserQuery__
+ *
+ * To run a query within a React component, call `useFindUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindUserQuery({
+ *   variables: {
+ *      ownedInputSid: // value for 'ownedInputSid'
+ *   },
+ * });
+ */
+export function useFindUserQuery(baseOptions: Apollo.QueryHookOptions<FindUserQuery, FindUserQueryVariables>) {
+  return Apollo.useQuery<FindUserQuery, FindUserQueryVariables>(FindUserDocument, baseOptions);
+}
+export function useFindUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindUserQuery, FindUserQueryVariables>) {
+  return Apollo.useLazyQuery<FindUserQuery, FindUserQueryVariables>(FindUserDocument, baseOptions);
+}
+export type FindUserQueryHookResult = ReturnType<typeof useFindUserQuery>;
+export type FindUserLazyQueryHookResult = ReturnType<typeof useFindUserLazyQuery>;
+export type FindUserQueryResult = Apollo.QueryResult<FindUserQuery, FindUserQueryVariables>;
+export const SetOwnDashThemeFontSizeDocument = gql`
+  mutation SetOwnDashThemeFontSize($dashThemeInput: DashThemeInput!) {
+    setOwnDashThemeFontSize(dashThemeInput: $dashThemeInput) {
+      id
+      themeColorMode
+      themeFontSize
+      dashThemeColor {
+        id
+        paletteNm
+        themePrimary
+        themeLighterAlt
+        themeLighter
+        themeLight
+        themeTertiary
+        themeSecondary
+        themeDarkAlt
+        themeDark
+        themeDarker
+        neutralLighterAlt
+        neutralLighter
+        neutralLight
+        neutralQuaternaryAlt
+        neutralQuaternary
+        neutralTertiaryAlt
+        neutralTertiary
+        neutralSecondary
+        neutralPrimaryAlt
+        neutralPrimary
+        neutralDark
+        black
+        white
+      }
+    }
+  }
+`;
+export type SetOwnDashThemeFontSizeMutationFn = Apollo.MutationFunction<
+  SetOwnDashThemeFontSizeMutation,
+  SetOwnDashThemeFontSizeMutationVariables
+>;
 
 /**
  * __useSetOwnDashThemeFontSizeMutation__
@@ -5893,28 +6428,39 @@ export type SetOwnDashThemeFontSizeMutationFn = Apollo.MutationFunction<SetOwnDa
  *   },
  * });
  */
-export function useSetOwnDashThemeFontSizeMutation(baseOptions?: Apollo.MutationHookOptions<SetOwnDashThemeFontSizeMutation, SetOwnDashThemeFontSizeMutationVariables>) {
-        return Apollo.useMutation<SetOwnDashThemeFontSizeMutation, SetOwnDashThemeFontSizeMutationVariables>(SetOwnDashThemeFontSizeDocument, baseOptions);
-      }
+export function useSetOwnDashThemeFontSizeMutation(
+  baseOptions?: Apollo.MutationHookOptions<SetOwnDashThemeFontSizeMutation, SetOwnDashThemeFontSizeMutationVariables>
+) {
+  return Apollo.useMutation<SetOwnDashThemeFontSizeMutation, SetOwnDashThemeFontSizeMutationVariables>(
+    SetOwnDashThemeFontSizeDocument,
+    baseOptions
+  );
+}
 export type SetOwnDashThemeFontSizeMutationHookResult = ReturnType<typeof useSetOwnDashThemeFontSizeMutation>;
 export type SetOwnDashThemeFontSizeMutationResult = Apollo.MutationResult<SetOwnDashThemeFontSizeMutation>;
-export type SetOwnDashThemeFontSizeMutationOptions = Apollo.BaseMutationOptions<SetOwnDashThemeFontSizeMutation, SetOwnDashThemeFontSizeMutationVariables>;
+export type SetOwnDashThemeFontSizeMutationOptions = Apollo.BaseMutationOptions<
+  SetOwnDashThemeFontSizeMutation,
+  SetOwnDashThemeFontSizeMutationVariables
+>;
 export const CreateOrUpdateOwnDashThemeDocument = gql`
-    mutation CreateOrUpdateOwnDashTheme($dashThemeInput: DashThemeInput!) {
-  createOrUpdateOwnDashTheme(dashThemeInput: $dashThemeInput) {
-    id
-    themeColorMode
-    themeFontSize
-    dashThemeColor {
+  mutation CreateOrUpdateOwnDashTheme($dashThemeInput: DashThemeInput!) {
+    createOrUpdateOwnDashTheme(dashThemeInput: $dashThemeInput) {
       id
-      themePrimary
-      neutralPrimary
-      white
+      themeColorMode
+      themeFontSize
+      dashThemeColor {
+        id
+        themePrimary
+        neutralPrimary
+        white
+      }
     }
   }
-}
-    `;
-export type CreateOrUpdateOwnDashThemeMutationFn = Apollo.MutationFunction<CreateOrUpdateOwnDashThemeMutation, CreateOrUpdateOwnDashThemeMutationVariables>;
+`;
+export type CreateOrUpdateOwnDashThemeMutationFn = Apollo.MutationFunction<
+  CreateOrUpdateOwnDashThemeMutation,
+  CreateOrUpdateOwnDashThemeMutationVariables
+>;
 
 /**
  * __useCreateOrUpdateOwnDashThemeMutation__
@@ -5933,25 +6479,37 @@ export type CreateOrUpdateOwnDashThemeMutationFn = Apollo.MutationFunction<Creat
  *   },
  * });
  */
-export function useCreateOrUpdateOwnDashThemeMutation(baseOptions?: Apollo.MutationHookOptions<CreateOrUpdateOwnDashThemeMutation, CreateOrUpdateOwnDashThemeMutationVariables>) {
-        return Apollo.useMutation<CreateOrUpdateOwnDashThemeMutation, CreateOrUpdateOwnDashThemeMutationVariables>(CreateOrUpdateOwnDashThemeDocument, baseOptions);
-      }
+export function useCreateOrUpdateOwnDashThemeMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateOrUpdateOwnDashThemeMutation,
+    CreateOrUpdateOwnDashThemeMutationVariables
+  >
+) {
+  return Apollo.useMutation<CreateOrUpdateOwnDashThemeMutation, CreateOrUpdateOwnDashThemeMutationVariables>(
+    CreateOrUpdateOwnDashThemeDocument,
+    baseOptions
+  );
+}
 export type CreateOrUpdateOwnDashThemeMutationHookResult = ReturnType<typeof useCreateOrUpdateOwnDashThemeMutation>;
 export type CreateOrUpdateOwnDashThemeMutationResult = Apollo.MutationResult<CreateOrUpdateOwnDashThemeMutation>;
-export type CreateOrUpdateOwnDashThemeMutationOptions = Apollo.BaseMutationOptions<CreateOrUpdateOwnDashThemeMutation, CreateOrUpdateOwnDashThemeMutationVariables>;
+export type CreateOrUpdateOwnDashThemeMutationOptions = Apollo.BaseMutationOptions<
+  CreateOrUpdateOwnDashThemeMutation,
+  CreateOrUpdateOwnDashThemeMutationVariables
+>;
 export const SetDashThemeColorDefaultDocument = gql`
-    mutation SetDashThemeColorDefault($dashThemeColorDefaultInput: DashThemeColorDefaultInput!) {
-  setDashThemeColorDefault(
-    dashThemeColorDefaultInput: $dashThemeColorDefaultInput
-  ) {
-    id
-    themePrimary
-    neutralPrimary
-    white
+  mutation SetDashThemeColorDefault($dashThemeColorDefaultInput: DashThemeColorDefaultInput!) {
+    setDashThemeColorDefault(dashThemeColorDefaultInput: $dashThemeColorDefaultInput) {
+      id
+      themePrimary
+      neutralPrimary
+      white
+    }
   }
-}
-    `;
-export type SetDashThemeColorDefaultMutationFn = Apollo.MutationFunction<SetDashThemeColorDefaultMutation, SetDashThemeColorDefaultMutationVariables>;
+`;
+export type SetDashThemeColorDefaultMutationFn = Apollo.MutationFunction<
+  SetDashThemeColorDefaultMutation,
+  SetDashThemeColorDefaultMutationVariables
+>;
 
 /**
  * __useSetDashThemeColorDefaultMutation__
@@ -5970,29 +6528,38 @@ export type SetDashThemeColorDefaultMutationFn = Apollo.MutationFunction<SetDash
  *   },
  * });
  */
-export function useSetDashThemeColorDefaultMutation(baseOptions?: Apollo.MutationHookOptions<SetDashThemeColorDefaultMutation, SetDashThemeColorDefaultMutationVariables>) {
-        return Apollo.useMutation<SetDashThemeColorDefaultMutation, SetDashThemeColorDefaultMutationVariables>(SetDashThemeColorDefaultDocument, baseOptions);
-      }
+export function useSetDashThemeColorDefaultMutation(
+  baseOptions?: Apollo.MutationHookOptions<SetDashThemeColorDefaultMutation, SetDashThemeColorDefaultMutationVariables>
+) {
+  return Apollo.useMutation<SetDashThemeColorDefaultMutation, SetDashThemeColorDefaultMutationVariables>(
+    SetDashThemeColorDefaultDocument,
+    baseOptions
+  );
+}
 export type SetDashThemeColorDefaultMutationHookResult = ReturnType<typeof useSetDashThemeColorDefaultMutation>;
 export type SetDashThemeColorDefaultMutationResult = Apollo.MutationResult<SetDashThemeColorDefaultMutation>;
-export type SetDashThemeColorDefaultMutationOptions = Apollo.BaseMutationOptions<SetDashThemeColorDefaultMutation, SetDashThemeColorDefaultMutationVariables>;
+export type SetDashThemeColorDefaultMutationOptions = Apollo.BaseMutationOptions<
+  SetDashThemeColorDefaultMutation,
+  SetDashThemeColorDefaultMutationVariables
+>;
 export const ChangeOwnPasswordPageDocument = gql`
-    query ChangeOwnPasswordPage {
-  changeOwnPasswordPage {
-    ruleGroup {
-      numberOfCharacteristics
-      rules {
-        ...unionPasswordRule
-        ... on PasswordRuleGroup {
-          numberOfCharacteristics
-          rules {
-            ...unionPasswordRule
-            ... on PasswordRuleGroup {
-              numberOfCharacteristics
-              rules {
-                ...unionPasswordRule
-                ... on PasswordRuleGroup {
-                  numberOfCharacteristics
+  query ChangeOwnPasswordPage {
+    changeOwnPasswordPage {
+      ruleGroup {
+        numberOfCharacteristics
+        rules {
+          ...unionPasswordRule
+          ... on PasswordRuleGroup {
+            numberOfCharacteristics
+            rules {
+              ...unionPasswordRule
+              ... on PasswordRuleGroup {
+                numberOfCharacteristics
+                rules {
+                  ...unionPasswordRule
+                  ... on PasswordRuleGroup {
+                    numberOfCharacteristics
+                  }
                 }
               }
             }
@@ -6001,8 +6568,8 @@ export const ChangeOwnPasswordPageDocument = gql`
       }
     }
   }
-}
-    ${UnionPasswordRuleFragmentDoc}`;
+  ${UnionPasswordRuleFragmentDoc}
+`;
 
 /**
  * __useChangeOwnPasswordPageQuery__
@@ -6019,38 +6586,51 @@ export const ChangeOwnPasswordPageDocument = gql`
  *   },
  * });
  */
-export function useChangeOwnPasswordPageQuery(baseOptions?: Apollo.QueryHookOptions<ChangeOwnPasswordPageQuery, ChangeOwnPasswordPageQueryVariables>) {
-        return Apollo.useQuery<ChangeOwnPasswordPageQuery, ChangeOwnPasswordPageQueryVariables>(ChangeOwnPasswordPageDocument, baseOptions);
-      }
-export function useChangeOwnPasswordPageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ChangeOwnPasswordPageQuery, ChangeOwnPasswordPageQueryVariables>) {
-          return Apollo.useLazyQuery<ChangeOwnPasswordPageQuery, ChangeOwnPasswordPageQueryVariables>(ChangeOwnPasswordPageDocument, baseOptions);
-        }
+export function useChangeOwnPasswordPageQuery(
+  baseOptions?: Apollo.QueryHookOptions<ChangeOwnPasswordPageQuery, ChangeOwnPasswordPageQueryVariables>
+) {
+  return Apollo.useQuery<ChangeOwnPasswordPageQuery, ChangeOwnPasswordPageQueryVariables>(
+    ChangeOwnPasswordPageDocument,
+    baseOptions
+  );
+}
+export function useChangeOwnPasswordPageLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<ChangeOwnPasswordPageQuery, ChangeOwnPasswordPageQueryVariables>
+) {
+  return Apollo.useLazyQuery<ChangeOwnPasswordPageQuery, ChangeOwnPasswordPageQueryVariables>(
+    ChangeOwnPasswordPageDocument,
+    baseOptions
+  );
+}
 export type ChangeOwnPasswordPageQueryHookResult = ReturnType<typeof useChangeOwnPasswordPageQuery>;
 export type ChangeOwnPasswordPageLazyQueryHookResult = ReturnType<typeof useChangeOwnPasswordPageLazyQuery>;
-export type ChangeOwnPasswordPageQueryResult = Apollo.QueryResult<ChangeOwnPasswordPageQuery, ChangeOwnPasswordPageQueryVariables>;
+export type ChangeOwnPasswordPageQueryResult = Apollo.QueryResult<
+  ChangeOwnPasswordPageQuery,
+  ChangeOwnPasswordPageQueryVariables
+>;
 export const ExchangeActivityInProcessDocument = gql`
-    query ExchangeActivityInProcess($orgSidInput: OrgSidInput!, $dateRange: DateTimeRangeInput!, $pageableInput: PageableInput!) {
-  exchangeActivityInProcess(
-    orgSidInput: $orgSidInput
-    dateRange: $dateRange
-    pageableInput: $pageableInput
+  query ExchangeActivityInProcess(
+    $orgSidInput: OrgSidInput!
+    $dateRange: DateTimeRangeInput!
+    $pageableInput: PageableInput!
   ) {
-    paginationInfo {
-      totalPages
-      totalElements
-      pageNumber
-      pageSize
-    }
-    nodes {
-      id
-      orgId
-      name
-      type
-      activityTime
+    exchangeActivityInProcess(orgSidInput: $orgSidInput, dateRange: $dateRange, pageableInput: $pageableInput) {
+      paginationInfo {
+        totalPages
+        totalElements
+        pageNumber
+        pageSize
+      }
+      nodes {
+        id
+        orgId
+        name
+        type
+        activityTime
+      }
     }
   }
-}
-    `;
+`;
 
 /**
  * __useExchangeActivityInProcessQuery__
@@ -6070,38 +6650,51 @@ export const ExchangeActivityInProcessDocument = gql`
  *   },
  * });
  */
-export function useExchangeActivityInProcessQuery(baseOptions: Apollo.QueryHookOptions<ExchangeActivityInProcessQuery, ExchangeActivityInProcessQueryVariables>) {
-        return Apollo.useQuery<ExchangeActivityInProcessQuery, ExchangeActivityInProcessQueryVariables>(ExchangeActivityInProcessDocument, baseOptions);
-      }
-export function useExchangeActivityInProcessLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ExchangeActivityInProcessQuery, ExchangeActivityInProcessQueryVariables>) {
-          return Apollo.useLazyQuery<ExchangeActivityInProcessQuery, ExchangeActivityInProcessQueryVariables>(ExchangeActivityInProcessDocument, baseOptions);
-        }
+export function useExchangeActivityInProcessQuery(
+  baseOptions: Apollo.QueryHookOptions<ExchangeActivityInProcessQuery, ExchangeActivityInProcessQueryVariables>
+) {
+  return Apollo.useQuery<ExchangeActivityInProcessQuery, ExchangeActivityInProcessQueryVariables>(
+    ExchangeActivityInProcessDocument,
+    baseOptions
+  );
+}
+export function useExchangeActivityInProcessLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<ExchangeActivityInProcessQuery, ExchangeActivityInProcessQueryVariables>
+) {
+  return Apollo.useLazyQuery<ExchangeActivityInProcessQuery, ExchangeActivityInProcessQueryVariables>(
+    ExchangeActivityInProcessDocument,
+    baseOptions
+  );
+}
 export type ExchangeActivityInProcessQueryHookResult = ReturnType<typeof useExchangeActivityInProcessQuery>;
 export type ExchangeActivityInProcessLazyQueryHookResult = ReturnType<typeof useExchangeActivityInProcessLazyQuery>;
-export type ExchangeActivityInProcessQueryResult = Apollo.QueryResult<ExchangeActivityInProcessQuery, ExchangeActivityInProcessQueryVariables>;
+export type ExchangeActivityInProcessQueryResult = Apollo.QueryResult<
+  ExchangeActivityInProcessQuery,
+  ExchangeActivityInProcessQueryVariables
+>;
 export const ExchangeActivityTransmittedDocument = gql`
-    query ExchangeActivityTransmitted($orgSidInput: OrgSidInput!, $dateRange: DateTimeRangeInput!, $pageableInput: PageableInput!) {
-  exchangeActivityTransmitted(
-    orgSidInput: $orgSidInput
-    dateRange: $dateRange
-    pageableInput: $pageableInput
+  query ExchangeActivityTransmitted(
+    $orgSidInput: OrgSidInput!
+    $dateRange: DateTimeRangeInput!
+    $pageableInput: PageableInput!
   ) {
-    paginationInfo {
-      totalPages
-      totalElements
-      pageNumber
-      pageSize
-    }
-    nodes {
-      id
-      orgId
-      name
-      type
-      activityTime
+    exchangeActivityTransmitted(orgSidInput: $orgSidInput, dateRange: $dateRange, pageableInput: $pageableInput) {
+      paginationInfo {
+        totalPages
+        totalElements
+        pageNumber
+        pageSize
+      }
+      nodes {
+        id
+        orgId
+        name
+        type
+        activityTime
+      }
     }
   }
-}
-    `;
+`;
 
 /**
  * __useExchangeActivityTransmittedQuery__
@@ -6121,38 +6714,51 @@ export const ExchangeActivityTransmittedDocument = gql`
  *   },
  * });
  */
-export function useExchangeActivityTransmittedQuery(baseOptions: Apollo.QueryHookOptions<ExchangeActivityTransmittedQuery, ExchangeActivityTransmittedQueryVariables>) {
-        return Apollo.useQuery<ExchangeActivityTransmittedQuery, ExchangeActivityTransmittedQueryVariables>(ExchangeActivityTransmittedDocument, baseOptions);
-      }
-export function useExchangeActivityTransmittedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ExchangeActivityTransmittedQuery, ExchangeActivityTransmittedQueryVariables>) {
-          return Apollo.useLazyQuery<ExchangeActivityTransmittedQuery, ExchangeActivityTransmittedQueryVariables>(ExchangeActivityTransmittedDocument, baseOptions);
-        }
+export function useExchangeActivityTransmittedQuery(
+  baseOptions: Apollo.QueryHookOptions<ExchangeActivityTransmittedQuery, ExchangeActivityTransmittedQueryVariables>
+) {
+  return Apollo.useQuery<ExchangeActivityTransmittedQuery, ExchangeActivityTransmittedQueryVariables>(
+    ExchangeActivityTransmittedDocument,
+    baseOptions
+  );
+}
+export function useExchangeActivityTransmittedLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<ExchangeActivityTransmittedQuery, ExchangeActivityTransmittedQueryVariables>
+) {
+  return Apollo.useLazyQuery<ExchangeActivityTransmittedQuery, ExchangeActivityTransmittedQueryVariables>(
+    ExchangeActivityTransmittedDocument,
+    baseOptions
+  );
+}
 export type ExchangeActivityTransmittedQueryHookResult = ReturnType<typeof useExchangeActivityTransmittedQuery>;
 export type ExchangeActivityTransmittedLazyQueryHookResult = ReturnType<typeof useExchangeActivityTransmittedLazyQuery>;
-export type ExchangeActivityTransmittedQueryResult = Apollo.QueryResult<ExchangeActivityTransmittedQuery, ExchangeActivityTransmittedQueryVariables>;
+export type ExchangeActivityTransmittedQueryResult = Apollo.QueryResult<
+  ExchangeActivityTransmittedQuery,
+  ExchangeActivityTransmittedQueryVariables
+>;
 export const ExchangeActivityErroredDocument = gql`
-    query ExchangeActivityErrored($orgSidInput: OrgSidInput!, $dateRange: DateTimeRangeInput!, $pageableInput: PageableInput!) {
-  exchangeActivityErrored(
-    orgSidInput: $orgSidInput
-    dateRange: $dateRange
-    pageableInput: $pageableInput
+  query ExchangeActivityErrored(
+    $orgSidInput: OrgSidInput!
+    $dateRange: DateTimeRangeInput!
+    $pageableInput: PageableInput!
   ) {
-    paginationInfo {
-      totalPages
-      totalElements
-      pageNumber
-      pageSize
-    }
-    nodes {
-      id
-      orgId
-      name
-      type
-      activityTime
+    exchangeActivityErrored(orgSidInput: $orgSidInput, dateRange: $dateRange, pageableInput: $pageableInput) {
+      paginationInfo {
+        totalPages
+        totalElements
+        pageNumber
+        pageSize
+      }
+      nodes {
+        id
+        orgId
+        name
+        type
+        activityTime
+      }
     }
   }
-}
-    `;
+`;
 
 /**
  * __useExchangeActivityErroredQuery__
@@ -6172,29 +6778,43 @@ export const ExchangeActivityErroredDocument = gql`
  *   },
  * });
  */
-export function useExchangeActivityErroredQuery(baseOptions: Apollo.QueryHookOptions<ExchangeActivityErroredQuery, ExchangeActivityErroredQueryVariables>) {
-        return Apollo.useQuery<ExchangeActivityErroredQuery, ExchangeActivityErroredQueryVariables>(ExchangeActivityErroredDocument, baseOptions);
-      }
-export function useExchangeActivityErroredLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ExchangeActivityErroredQuery, ExchangeActivityErroredQueryVariables>) {
-          return Apollo.useLazyQuery<ExchangeActivityErroredQuery, ExchangeActivityErroredQueryVariables>(ExchangeActivityErroredDocument, baseOptions);
-        }
+export function useExchangeActivityErroredQuery(
+  baseOptions: Apollo.QueryHookOptions<ExchangeActivityErroredQuery, ExchangeActivityErroredQueryVariables>
+) {
+  return Apollo.useQuery<ExchangeActivityErroredQuery, ExchangeActivityErroredQueryVariables>(
+    ExchangeActivityErroredDocument,
+    baseOptions
+  );
+}
+export function useExchangeActivityErroredLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<ExchangeActivityErroredQuery, ExchangeActivityErroredQueryVariables>
+) {
+  return Apollo.useLazyQuery<ExchangeActivityErroredQuery, ExchangeActivityErroredQueryVariables>(
+    ExchangeActivityErroredDocument,
+    baseOptions
+  );
+}
 export type ExchangeActivityErroredQueryHookResult = ReturnType<typeof useExchangeActivityErroredQuery>;
 export type ExchangeActivityErroredLazyQueryHookResult = ReturnType<typeof useExchangeActivityErroredLazyQuery>;
-export type ExchangeActivityErroredQueryResult = Apollo.QueryResult<ExchangeActivityErroredQuery, ExchangeActivityErroredQueryVariables>;
+export type ExchangeActivityErroredQueryResult = Apollo.QueryResult<
+  ExchangeActivityErroredQuery,
+  ExchangeActivityErroredQueryVariables
+>;
 export const NavigateToNewDomainDocument = gql`
-    query NavigateToNewDomain($domainNavInput: DomainNavInput!) {
-  navigateToNewDomain(domainNavInput: $domainNavInput) {
-    type
-    selectedPage
-    navItems {
-      ...navItemFragment
-      subNavItems {
+  query NavigateToNewDomain($domainNavInput: DomainNavInput!) {
+    navigateToNewDomain(domainNavInput: $domainNavInput) {
+      type
+      selectedPage
+      navItems {
         ...navItemFragment
+        subNavItems {
+          ...navItemFragment
+        }
       }
     }
   }
-}
-    ${NavItemFragmentFragmentDoc}`;
+  ${NavItemFragmentFragmentDoc}
+`;
 
 /**
  * __useNavigateToNewDomainQuery__
@@ -6212,22 +6832,36 @@ export const NavigateToNewDomainDocument = gql`
  *   },
  * });
  */
-export function useNavigateToNewDomainQuery(baseOptions: Apollo.QueryHookOptions<NavigateToNewDomainQuery, NavigateToNewDomainQueryVariables>) {
-        return Apollo.useQuery<NavigateToNewDomainQuery, NavigateToNewDomainQueryVariables>(NavigateToNewDomainDocument, baseOptions);
-      }
-export function useNavigateToNewDomainLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<NavigateToNewDomainQuery, NavigateToNewDomainQueryVariables>) {
-          return Apollo.useLazyQuery<NavigateToNewDomainQuery, NavigateToNewDomainQueryVariables>(NavigateToNewDomainDocument, baseOptions);
-        }
+export function useNavigateToNewDomainQuery(
+  baseOptions: Apollo.QueryHookOptions<NavigateToNewDomainQuery, NavigateToNewDomainQueryVariables>
+) {
+  return Apollo.useQuery<NavigateToNewDomainQuery, NavigateToNewDomainQueryVariables>(
+    NavigateToNewDomainDocument,
+    baseOptions
+  );
+}
+export function useNavigateToNewDomainLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<NavigateToNewDomainQuery, NavigateToNewDomainQueryVariables>
+) {
+  return Apollo.useLazyQuery<NavigateToNewDomainQuery, NavigateToNewDomainQueryVariables>(
+    NavigateToNewDomainDocument,
+    baseOptions
+  );
+}
 export type NavigateToNewDomainQueryHookResult = ReturnType<typeof useNavigateToNewDomainQuery>;
 export type NavigateToNewDomainLazyQueryHookResult = ReturnType<typeof useNavigateToNewDomainLazyQuery>;
-export type NavigateToNewDomainQueryResult = Apollo.QueryResult<NavigateToNewDomainQuery, NavigateToNewDomainQueryVariables>;
+export type NavigateToNewDomainQueryResult = Apollo.QueryResult<
+  NavigateToNewDomainQuery,
+  NavigateToNewDomainQueryVariables
+>;
 export const UserCreatePageDocument = gql`
-    query UserCreatePage($orgSidInput: OrgSidInput!) {
-  userCreatePage(orgSidInput: $orgSidInput) {
-    ...fragmentUserPageInfo
+  query UserCreatePage($orgSidInput: OrgSidInput!) {
+    userCreatePage(orgSidInput: $orgSidInput) {
+      ...fragmentUserPageInfo
+    }
   }
-}
-    ${FragmentUserPageInfoFragmentDoc}`;
+  ${FragmentUserPageInfoFragmentDoc}
+`;
 
 /**
  * __useUserCreatePageQuery__
@@ -6245,22 +6879,27 @@ export const UserCreatePageDocument = gql`
  *   },
  * });
  */
-export function useUserCreatePageQuery(baseOptions: Apollo.QueryHookOptions<UserCreatePageQuery, UserCreatePageQueryVariables>) {
-        return Apollo.useQuery<UserCreatePageQuery, UserCreatePageQueryVariables>(UserCreatePageDocument, baseOptions);
-      }
-export function useUserCreatePageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserCreatePageQuery, UserCreatePageQueryVariables>) {
-          return Apollo.useLazyQuery<UserCreatePageQuery, UserCreatePageQueryVariables>(UserCreatePageDocument, baseOptions);
-        }
+export function useUserCreatePageQuery(
+  baseOptions: Apollo.QueryHookOptions<UserCreatePageQuery, UserCreatePageQueryVariables>
+) {
+  return Apollo.useQuery<UserCreatePageQuery, UserCreatePageQueryVariables>(UserCreatePageDocument, baseOptions);
+}
+export function useUserCreatePageLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<UserCreatePageQuery, UserCreatePageQueryVariables>
+) {
+  return Apollo.useLazyQuery<UserCreatePageQuery, UserCreatePageQueryVariables>(UserCreatePageDocument, baseOptions);
+}
 export type UserCreatePageQueryHookResult = ReturnType<typeof useUserCreatePageQuery>;
 export type UserCreatePageLazyQueryHookResult = ReturnType<typeof useUserCreatePageLazyQuery>;
 export type UserCreatePageQueryResult = Apollo.QueryResult<UserCreatePageQuery, UserCreatePageQueryVariables>;
 export const UserUpdatePageDocument = gql`
-    query UserUpdatePage($sidInput: SidInput!) {
-  userUpdatePage(sidInput: $sidInput) {
-    ...fragmentUserPageInfo
+  query UserUpdatePage($sidInput: SidInput!) {
+    userUpdatePage(sidInput: $sidInput) {
+      ...fragmentUserPageInfo
+    }
   }
-}
-    ${FragmentUserPageInfoFragmentDoc}`;
+  ${FragmentUserPageInfoFragmentDoc}
+`;
 
 /**
  * __useUserUpdatePageQuery__
@@ -6278,22 +6917,27 @@ export const UserUpdatePageDocument = gql`
  *   },
  * });
  */
-export function useUserUpdatePageQuery(baseOptions: Apollo.QueryHookOptions<UserUpdatePageQuery, UserUpdatePageQueryVariables>) {
-        return Apollo.useQuery<UserUpdatePageQuery, UserUpdatePageQueryVariables>(UserUpdatePageDocument, baseOptions);
-      }
-export function useUserUpdatePageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserUpdatePageQuery, UserUpdatePageQueryVariables>) {
-          return Apollo.useLazyQuery<UserUpdatePageQuery, UserUpdatePageQueryVariables>(UserUpdatePageDocument, baseOptions);
-        }
+export function useUserUpdatePageQuery(
+  baseOptions: Apollo.QueryHookOptions<UserUpdatePageQuery, UserUpdatePageQueryVariables>
+) {
+  return Apollo.useQuery<UserUpdatePageQuery, UserUpdatePageQueryVariables>(UserUpdatePageDocument, baseOptions);
+}
+export function useUserUpdatePageLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<UserUpdatePageQuery, UserUpdatePageQueryVariables>
+) {
+  return Apollo.useLazyQuery<UserUpdatePageQuery, UserUpdatePageQueryVariables>(UserUpdatePageDocument, baseOptions);
+}
 export type UserUpdatePageQueryHookResult = ReturnType<typeof useUserUpdatePageQuery>;
 export type UserUpdatePageLazyQueryHookResult = ReturnType<typeof useUserUpdatePageLazyQuery>;
 export type UserUpdatePageQueryResult = Apollo.QueryResult<UserUpdatePageQuery, UserUpdatePageQueryVariables>;
 export const UserAssignAmGroupsPageDocument = gql`
-    query userAssignAMGroupsPage($sidInput: SidInput!) {
-  userUpdatePage(sidInput: $sidInput) {
-    ...fragmentUserPageInfo
+  query userAssignAMGroupsPage($sidInput: SidInput!) {
+    userUpdatePage(sidInput: $sidInput) {
+      ...fragmentUserPageInfo
+    }
   }
-}
-    ${FragmentUserPageInfoFragmentDoc}`;
+  ${FragmentUserPageInfoFragmentDoc}
+`;
 
 /**
  * __useUserAssignAmGroupsPageQuery__
@@ -6311,12 +6955,70 @@ export const UserAssignAmGroupsPageDocument = gql`
  *   },
  * });
  */
-export function useUserAssignAmGroupsPageQuery(baseOptions: Apollo.QueryHookOptions<UserAssignAmGroupsPageQuery, UserAssignAmGroupsPageQueryVariables>) {
-        return Apollo.useQuery<UserAssignAmGroupsPageQuery, UserAssignAmGroupsPageQueryVariables>(UserAssignAmGroupsPageDocument, baseOptions);
-      }
-export function useUserAssignAmGroupsPageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserAssignAmGroupsPageQuery, UserAssignAmGroupsPageQueryVariables>) {
-          return Apollo.useLazyQuery<UserAssignAmGroupsPageQuery, UserAssignAmGroupsPageQueryVariables>(UserAssignAmGroupsPageDocument, baseOptions);
-        }
+export function useUserAssignAmGroupsPageQuery(
+  baseOptions: Apollo.QueryHookOptions<UserAssignAmGroupsPageQuery, UserAssignAmGroupsPageQueryVariables>
+) {
+  return Apollo.useQuery<UserAssignAmGroupsPageQuery, UserAssignAmGroupsPageQueryVariables>(
+    UserAssignAmGroupsPageDocument,
+    baseOptions
+  );
+}
+export function useUserAssignAmGroupsPageLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<UserAssignAmGroupsPageQuery, UserAssignAmGroupsPageQueryVariables>
+) {
+  return Apollo.useLazyQuery<UserAssignAmGroupsPageQuery, UserAssignAmGroupsPageQueryVariables>(
+    UserAssignAmGroupsPageDocument,
+    baseOptions
+  );
+}
 export type UserAssignAmGroupsPageQueryHookResult = ReturnType<typeof useUserAssignAmGroupsPageQuery>;
 export type UserAssignAmGroupsPageLazyQueryHookResult = ReturnType<typeof useUserAssignAmGroupsPageLazyQuery>;
-export type UserAssignAmGroupsPageQueryResult = Apollo.QueryResult<UserAssignAmGroupsPageQuery, UserAssignAmGroupsPageQueryVariables>;
+export type UserAssignAmGroupsPageQueryResult = Apollo.QueryResult<
+  UserAssignAmGroupsPageQuery,
+  UserAssignAmGroupsPageQueryVariables
+>;
+export const SimulateSessionExpirDocument = gql`
+  query SimulateSessionExpir {
+    simulateSessionExpir {
+      successful
+    }
+  }
+`;
+
+/**
+ * __useSimulateSessionExpirQuery__
+ *
+ * To run a query within a React component, call `useSimulateSessionExpirQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSimulateSessionExpirQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSimulateSessionExpirQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useSimulateSessionExpirQuery(
+  baseOptions?: Apollo.QueryHookOptions<SimulateSessionExpirQuery, SimulateSessionExpirQueryVariables>
+) {
+  return Apollo.useQuery<SimulateSessionExpirQuery, SimulateSessionExpirQueryVariables>(
+    SimulateSessionExpirDocument,
+    baseOptions
+  );
+}
+export function useSimulateSessionExpirLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<SimulateSessionExpirQuery, SimulateSessionExpirQueryVariables>
+) {
+  return Apollo.useLazyQuery<SimulateSessionExpirQuery, SimulateSessionExpirQueryVariables>(
+    SimulateSessionExpirDocument,
+    baseOptions
+  );
+}
+export type SimulateSessionExpirQueryHookResult = ReturnType<typeof useSimulateSessionExpirQuery>;
+export type SimulateSessionExpirLazyQueryHookResult = ReturnType<typeof useSimulateSessionExpirLazyQuery>;
+export type SimulateSessionExpirQueryResult = Apollo.QueryResult<
+  SimulateSessionExpirQuery,
+  SimulateSessionExpirQueryVariables
+>;
