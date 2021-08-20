@@ -18,15 +18,17 @@ import { useDashboardService } from './DashboardPage.service';
 import { TABLE_NAMES } from '../../data/constants/TableConstants';
 import { useHistory, useLocation } from 'react-router-dom';
 import queryString from 'query-string';
+import { useOrgSid } from '../../hooks/useOrgSid';
 
 // TODO: Change for Session organization ID.
 // const ORG_SID = 1;
 
 const _DashboardPage = () => {
   // const { authData, orgSid } = useAuthContext();
+  const { orgSid } = useOrgSid();
   const location = useLocation();
   const [urlParams, _setUrlParams] = useState(queryString.parse(location.search));
-  const service = useDashboardService(urlParams?.orgSid);
+  const service = useDashboardService(orgSid);
   const { isLoadingData, datesOptions, dataCounters } = service;
   const { setDateId, dateId } = service;
   const history = useHistory();

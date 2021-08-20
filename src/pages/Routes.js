@@ -19,8 +19,8 @@ import { ActiveOrgsPage } from './Admin/Organizations';
 import { CurrentActivityPage } from './Admin/Activity';
 import { ColorPalettesPage, DefaultThemePage } from './Admin/DashboardSite';
 import { ActiveUsersPage } from './Admin/Users/ActiveUsers';
-// import { UserDetailsPage } from './Admin/Users/CreateUsers';
 import { DeletedUsersPage } from './Admin/Users/DeletedUsers';
+import { FtpTestPage } from './Admin/FtpTest';
 
 import AuthRoute from './AuthRoute';
 import UnauthRoute from './UnauthRoute';
@@ -87,6 +87,9 @@ export const Routes = () => {
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_DELETED_USERS.URL}>
         <DeletedUsersPage />
+      </AuthRoute>
+      <AuthRoute path={ROUTES.ROUTE_FTP_TEST.URL}>
+        <FtpTestPage />
       </AuthRoute>
       <AuthRoute>
         <NotFoundPage />
