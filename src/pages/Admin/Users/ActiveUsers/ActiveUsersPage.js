@@ -8,7 +8,6 @@ import { Row, Column } from '../../../../components/layouts';
 import { Spacing } from '../../../../components/spacings/Spacing';
 import { DetailsList, DetailsListLayoutMode, SelectionMode, Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
-import { MessageBar } from 'office-ui-fabric-react';
 import { Text } from '../../../../components/typography/Text';
 import { Separator } from '../../../../components/separators/Separator';
 import { Link } from 'office-ui-fabric-react/lib/Link';
@@ -17,8 +16,7 @@ import { CreateUsersPanel } from '../CreateUsers';
 import { useUsersForOrgFpLazyQuery, useDeactivateUsersMutation } from '../../../../data/services/graphql';
 import { StyledColumn, StyledCommandButton } from './ActiveUsersPage.styles';
 
-import { useUsersForOrgFpLazyQuery } from '../../../../data/services/graphql';
-import { StyledColumn, RouteLink, StyledButtonAction } from './ActiveUsersPage.styles';
+import { RouteLink, StyledButtonAction } from './ActiveUsersPage.styles';
 
 // import { useAuthContext } from '../../../../contexts/AuthContext';
 import { useOrgSid } from '../../../../hooks/useOrgSid';

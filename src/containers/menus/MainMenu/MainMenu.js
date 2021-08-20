@@ -13,7 +13,6 @@ import { OutsideComponent } from './OutsideComponent';
 import { useAuthContext } from './../../../contexts/AuthContext';
 import { useUserDomain } from './../../../contexts/hooks/useUserDomain';
 import { getRouteByApiId } from './../../../data/constants/RouteConstants';
-import { useNavigateToNewDomainLazyQuery } from './../../../data/services/graphql';
 import queryString from 'query-string';
 import { useOrgSid } from '../../../hooks/useOrgSid';
 import { useNavigateToNewDomainLazyQuery } from '../../../data/services/graphql';

@@ -6,7 +6,6 @@ import { Spacing } from '../../../../components/spacings/Spacing';
 import { PrimaryButton, DefaultButton, MessageBar } from 'office-ui-fabric-react';
 import { DetailsList, DetailsListLayoutMode, SelectionMode, Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
-import { MessageBar } from 'office-ui-fabric-react';
 import { Text } from '../../../../components/typography/Text';
 import { MarqueeSelection } from '@fluentui/react/lib/MarqueeSelection';
 import { Separator } from '../../../../components/separators/Separator';
