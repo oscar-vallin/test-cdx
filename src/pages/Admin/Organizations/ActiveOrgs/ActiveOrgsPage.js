@@ -13,12 +13,10 @@ import { Text } from '../../../../components/typography/Text';
 import { Separator } from '../../../../components/separators/Separator';
 
 import { useAuthContext } from '../../../../contexts/AuthContext';
-import { useNotification } from '../../../../contexts/hooks/useNotification';
 import { useDirectOrganizationsFQuery, useDirectOrganizationsFLazyQuery } from '../../../../data/services/graphql';
 import { StyledColumn } from './ActiveOrgsPage.styles';
 import { useNotification } from '../../../../contexts/hooks/useNotification';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
-import { useAuthContext } from '../../../../contexts/AuthContext';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -38,8 +36,6 @@ const generateColumns = () => {
 };
 
 const _ActiveOrgsPage = () => {
-  const { orgSid, storeOrgsId } = useAuthContext();
-
   const { orgSid, setOrgSid, setUrlParams } = useOrgSid();
   const { storeOrgsId } = useAuthContext();
   const [orgs, setOrgs] = useState([]);
@@ -65,10 +61,9 @@ const _ActiveOrgsPage = () => {
     });
 
     storeOrgsId(newOrgSid);
-      setUrlParams({ orgSid: newOrgSid });
-      setOrgSid(newOrgSid);
-      history.push(`${URL_ROUTES.FILE_STATUS}?orgSid=${newOrgSid}`);
-    }, 1000);
+    setUrlParams({ orgSid: newOrgSid });
+    setOrgSid(newOrgSid);
+    history.push(`${URL_ROUTES.FILE_STATUS}?orgSid=${newOrgSid}`);
   };
 
   const onRenderItemColumn = (item, index, column) => {
