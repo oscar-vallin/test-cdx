@@ -10,10 +10,15 @@ import { Text } from '../../../../components/typography/Text';
 import { MarqueeSelection } from '@fluentui/react/lib/MarqueeSelection';
 import { Separator } from '../../../../components/separators/Separator';
 import { Button } from '../../../../components/buttons/Button';
-import { useUsersForOrgFpLazyQuery, useActivateUsersMutation } from '../../../../data/services/graphql';
+import {
+  useUsersForOrgFpLazy,
+  useUsersForOrgFpLazyQuery,
+  useActivateUsersMutation,
+  useUsersForOrgFpQuery,
+} from '../../../../data/services/graphql';
 import { StyledColumn } from './DeletedUsersPage.styles';
 
-// import { useAuthContext } from '../../../../contexts/AuthContext';
+import { useAuthContext } from '../../../../contexts/AuthContext';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
 
 const generateColumns = () => {
@@ -74,7 +79,7 @@ const _DeletedUsersPage = () => {
   };
 
   useEffect(() => {
-    useUsersForOrgFpLazy({
+    useUsersForOrgFpQuery({
       variables: {
         orgSid,
         userFilter: { activeFilter: 'INACTIVE' },

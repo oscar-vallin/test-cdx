@@ -18,7 +18,7 @@ import { StyledColumn, StyledCommandButton } from './ActiveUsersPage.styles';
 
 import { RouteLink, StyledButtonAction } from './ActiveUsersPage.styles';
 
-// import { useAuthContext } from '../../../../contexts/AuthContext';
+import { useAuthContext } from '../../../../contexts/AuthContext';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
 
 const generateColumns = () => {
