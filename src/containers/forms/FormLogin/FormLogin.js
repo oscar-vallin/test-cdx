@@ -28,7 +28,7 @@ import {
 const FormLogin = ({ id = '__FormLogin', onLogin }) => {
   const history = useHistory();
   const handlerLogin = useLogin(onLogin);
-  const { apiBeginLogin, isValidEmail, editUser, isProcessingBegin } = useLoginBegin();
+  const { apiBeginLogin, validateEmail, isValidEmail, editUser, isProcessingBegin, emailError } = useLoginBegin(1000);
   const { email, password } = handlerLogin;
   const { isCheckingAuth, isAuthenticating, errorMessage } = useAuthContext();
 
@@ -39,6 +39,12 @@ const FormLogin = ({ id = '__FormLogin', onLogin }) => {
       Toast.error({ text: errorMessage });
     }
   }, [errorMessage]);
+
+  useEffect(() => {
+    if (emailError) {
+      Toast.error({ text: emailError });
+    }
+  }, [emailError]);
 
   return (
     <StyledBox id={id}>
@@ -73,7 +79,7 @@ const FormLogin = ({ id = '__FormLogin', onLogin }) => {
                       autoFocus
                       disabled={handlerLogin.isProcessing || isValidEmail}
                       errorMessage={isValidEmail ? '' : handlerLogin.validationError}
-                      onKeyEnter={() => (isValidEmail ? handlerLogin.submitLogin() : apiBeginLogin(email.value))}
+                      onKeyEnter={() => (isValidEmail ? handlerLogin.submitLogin() : validateEmail(email.value))}
                       {...email}
                     />
                   </Column>
@@ -98,7 +104,7 @@ const FormLogin = ({ id = '__FormLogin', onLogin }) => {
                         autoFocus
                         type="password"
                         errorMessage={handlerLogin.validationError}
-                        onKeyEnter={() => (isValidEmail ? handlerLogin.submitLogin() : apiBeginLogin(email.value))}
+                        onKeyEnter={() => (isValidEmail ? handlerLogin.submitLogin() : validateEmail(email.value))}
                         {...password}
                       />
                     </Column>
@@ -109,7 +115,7 @@ const FormLogin = ({ id = '__FormLogin', onLogin }) => {
                     <StyledButton
                       id={`${id}__Card__Row__Column__Button--Button`}
                       disabled={handlerLogin.isProcessing}
-                      onClick={() => (isValidEmail ? handlerLogin.submitLogin() : apiBeginLogin(email.value))}
+                      onClick={() => (isValidEmail ? handlerLogin.submitLogin() : validateEmail(email.value))}
                     >
                       {handlerLogin.isProcessing || isProcessingBegin ? <Spinner /> : !isValidEmail ? 'Next' : 'Login'}
                     </StyledButton>
