@@ -9,10 +9,7 @@ import { Spinner } from '../../components/spinners/Spinner';
 import { Spacing } from '../../components/spacings/Spacing';
 
 import { useNotification } from '../../contexts/hooks/useNotification';
-import { useNavigateToNewDomainLazyQuery, useNavigateToNewDomainQuery } from '../../data/services/graphql';
 import { useOrgSid } from '../../hooks/useOrgSid';
-import { useCurrentUser } from '../../contexts/hooks/useCurrentUser';
-import { useAuthContext } from '../../contexts/AuthContext';
 
 const parseLinks = (links = [], sidebarOpt) => {
   return links.map(({ appDomain, label, subNavItems, page }) => ({
@@ -41,56 +38,6 @@ const LayoutAdmin = ({ id = 'LayoutAdmin', menuOptionSelected = 'admin', sidebar
     userDomain: { organization },
     isFetchingOrgNav,
   } = useUserDomain();
-  const { authData, authLogout } = useAuthContext();
-  const { isCurrentUserLogged } = useCurrentUser();
-  const cache = localStorage.getItem('ADMIN_NAV');
-
-  const [domain, setDomain] = useState({});
-
-  const { data, loading, error } = useNavigateToNewDomainQuery({
-    variables: {
-      domainNavInput: {
-        orgSid: authData?.orgId,
-        appDomain: authData?.userType,
-        selectedPage: authData?.selectedPage,
-      },
-    },
-  });
-
-  const redirect = (page, sidebarOpt) => {
-    if (!sidebarOpt) {
-      history.replace(getRouteByApiId(page).URL);
-    }
-  };
-
-  useEffect(() => {
-    if (error) {
-      authLogout('Session Expired');
-      history.push('/');
-    }
-  }, [error]);
-
-  useEffect(() => {
-    if (cache) {
-      const domain = JSON.parse(cache);
-
-      setDomain(domain);
-      redirect(domain.selectedPage, sidebarOptionSelected);
-
-      return;
-    }
-
-    if (data && !loading) {
-      const { navigateToNewDomain: domain } = data;
-
-      localStorage.setItem('ADMIN_NAV', JSON.stringify(domain));
-
-      setDomain(domain);
-      redirect(domain.selectedPage, sidebarOptionSelected);
-
-      return;
-    }
-  }, []);
 
   return (
     <LayoutDashboard id={id} menuOptionSelected={menuOptionSelected} showMenu={false}>

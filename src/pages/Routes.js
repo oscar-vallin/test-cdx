@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
+import { ErrorBoundary } from 'react-error-boundary';
 import { ROUTES } from '../data/constants/RouteConstants';
 
 // Routes
@@ -24,6 +25,7 @@ import { FtpTestPage } from './Admin/FtpTest';
 
 import AuthRoute from './AuthRoute';
 import UnauthRoute from './UnauthRoute';
+import { AdminErrorBoundary } from '../containers/boundaries/AdminErrorBoundary';
 
 export const Routes = () => {
   return (
@@ -61,36 +63,58 @@ export const Routes = () => {
       <AuthRoute path={ROUTES.ROUTE_ERRORS.URL}>
         <ErrorsPage />
       </AuthRoute>
+
       <AuthRoute path={ROUTES.ROUTE_ACCESS_MANAGEMENT_GROUPS.URL}>
-        <AccessManagementGroupsPage />
+        <ErrorBoundary FallbackComponent={AdminErrorBoundary}>
+          <AccessManagementGroupsPage />
+        </ErrorBoundary>
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_ACCESS_MANAGEMENT_POLICIES.URL}>
-        <AccessManagementPoliciesPage />
+        <ErrorBoundary FallbackComponent={AdminErrorBoundary}>
+          <AccessManagementPoliciesPage />
+        </ErrorBoundary>
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_ACTIVE_ORGS.URL}>
-        <ActiveOrgsPage />
+        <ErrorBoundary FallbackComponent={AdminErrorBoundary}>
+          <ActiveOrgsPage />
+        </ErrorBoundary>
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_ACTIVITY_CURRENT.URL}>
-        <CurrentActivityPage />
+        <ErrorBoundary FallbackComponent={AdminErrorBoundary}>
+          <CurrentActivityPage />
+        </ErrorBoundary>
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_COLOR_PALETTES.URL}>
-        <ColorPalettesPage />
+        <ErrorBoundary FallbackComponent={AdminErrorBoundary}>
+          <ColorPalettesPage />
+        </ErrorBoundary>
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_DEFAULT_THEME.URL}>
-        <DefaultThemePage />
+        <ErrorBoundary FallbackComponent={AdminErrorBoundary}>
+          <DefaultThemePage />
+        </ErrorBoundary>
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_ADMIN.URL}>
-        <AdminPage />
+        <ErrorBoundary FallbackComponent={AdminErrorBoundary}>
+          <AdminPage />
+        </ErrorBoundary>
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_ACTIVE_USERS.URL}>
-        <ActiveUsersPage />
+        <ErrorBoundary FallbackComponent={AdminErrorBoundary}>
+          <ActiveUsersPage />
+        </ErrorBoundary>
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_DELETED_USERS.URL}>
-        <DeletedUsersPage />
+        <ErrorBoundary FallbackComponent={AdminErrorBoundary}>
+          <DeletedUsersPage />
+        </ErrorBoundary>
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_FTP_TEST.URL}>
-        <FtpTestPage />
+        <ErrorBoundary FallbackComponent={AdminErrorBoundary}>
+          <FtpTestPage />
+        </ErrorBoundary>
       </AuthRoute>
+
       <AuthRoute>
         <NotFoundPage />
       </AuthRoute>

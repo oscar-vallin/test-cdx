@@ -18,8 +18,8 @@ const STEP_RECEIVE = 0;
 const STEP_TRANSFORM = 1;
 const STEP_TRANSMIT = 2;
 
-export const STEP_COLOR_GREEN = '#219653';
-export const STEP_COLOR_YELLOW = '#F2C94C';
+export const STEP_COLOR_GREEN = '#29c891';
+export const STEP_COLOR_YELLOW = '#e5d64f';
 export const STEP_COLOR_NONE = 'transparent';
 export const STEP_COLOR_BLUE = '#2F80ED';
 export const STEP_COLOR_PURPLE = '#A333C8';

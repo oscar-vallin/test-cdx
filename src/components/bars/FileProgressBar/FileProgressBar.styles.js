@@ -29,8 +29,15 @@ export const Bar = styled(LayoutBox)`
 `;
 
 export const BarAnimated = styled(LayoutBox)`
+  @keyframes barberpole {
+    100% {
+      background-position: 100% 100%;
+    }
+  }
+
   width: 100%;
   min-height: 16px;
-  animation: ${rotate} 3s linear infinite;
-  background: repeating-linear-gradient(-45deg, transparent 1px, transparent 30px, white 40px);
+  animation: barberpole 3s linear infinite;
+  background: repeating-linear-gradient(45deg, #9e89fa, #9e89fa 10px, #ac9afa 10px, #ac9afa 20px);
+  background-size: 200% 200%;
 `;

@@ -10,16 +10,12 @@ import { DetailsList, DetailsListLayoutMode, SelectionMode, Selection } from 'of
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { Text } from '../../../../components/typography/Text';
 import { Separator } from '../../../../components/separators/Separator';
-import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { CreateUsersPanel } from '../CreateUsers';
 import { useUsersForOrgFpLazyQuery, useDeactivateUsersMutation } from '../../../../data/services/graphql';
-import { StyledColumn, StyledCommandButton } from './ActiveUsersPage.styles';
-
-import { RouteLink, StyledButtonAction } from './ActiveUsersPage.styles';
+import { StyledColumn } from './ActiveUsersPage.styles';
 
 import { useAuthContext } from '../../../../contexts/AuthContext';
-import { useOrgSid } from '../../../../hooks/useOrgSid';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({

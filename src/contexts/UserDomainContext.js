@@ -28,6 +28,7 @@ export const UserDomainContextProvider = ({ children }) => {
 
   useEffect(() => {
     if (isAuthenticated && !isAuthenticating) {
+      console.log('123');
       fetchOrgNav({
         variables: {
           domainNavInput: { orgSid: orgSid || authData?.orgId, appDomain: 'ORGANIZATION' },
@@ -37,18 +38,22 @@ export const UserDomainContextProvider = ({ children }) => {
   }, [isAuthenticated, !isAuthenticating]);
 
   useEffect(() => {
-    fetchDashNav({
-      variables: {
-        domainNavInput: { orgSid: orgSid || authData?.orgId, appDomain: 'DASHBOARD' },
-      },
-    });
+    if (isAuthenticated) {
+      fetchDashNav({
+        variables: {
+          domainNavInput: { orgSid: orgSid || authData?.orgId, appDomain: 'DASHBOARD' },
+        },
+      });
 
-    fetchCurrentOrgNav({
-      variables: {
-        orgInput: { orgSid: orgSid || authData?.orgId },
-      },
-    });
-  }, [orgSid]);
+      fetchCurrentOrgNav({
+        variables: {
+          orgInput: { orgSid: orgSid || authData?.orgId },
+        },
+      });
+
+      console.log('321');
+    }
+  }, [isAuthenticated, orgSid]);
 
   useEffect(() => {
     if (dashNav && orgNav) {

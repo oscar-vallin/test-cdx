@@ -1,3 +1,3 @@
-import { GenericErrorBoundary } from './GenericErrorBoundary';
+import { AuthenticatedErrorBoundary } from './AuthenticatedErrorBoundary';
 
-export { GenericErrorBoundary };
+export { AuthenticatedErrorBoundary };

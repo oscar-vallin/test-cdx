@@ -15,60 +15,59 @@ import { useUserDomain } from './../../../contexts/hooks/useUserDomain';
 import { getRouteByApiId } from './../../../data/constants/RouteConstants';
 import queryString from 'query-string';
 import { useOrgSid } from '../../../hooks/useOrgSid';
-import { useNavigateToNewDomainLazyQuery } from '../../../data/services/graphql';
 
 // CardSection is called directly cause a restriction warning for that component.
 const MainMenu = ({ id = '__MainMenu', option = ROUTES.ROUTE_DASHBOARD.ID, left, changeCollapse }) => {
-  const history = useHistory();
-  const location = useLocation();
-  const { search } = location;
-  const [filterParam, _setFilterParam] = useState(search);
-  const filter = new URLSearchParams(filterParam).get('filter');
+  // const history = useHistory();
+  // const location = useLocation();
+  // const { search } = location;
+  // const [filterParam, _setFilterParam] = useState(search);
+  // const filter = new URLSearchParams(filterParam).get('filter');
   const [collapse, setCollapse] = React.useState();
-  const { authData } = useAuthContext();
-  const { orgSid } = useOrgSid();
+  // const { authData } = useAuthContext();
+  // const { orgSid } = useOrgSid();
 
-  const [domain, setDomain] = useState({
-    navItems: [],
-  });
+  // const [domain, setDomain] = useState({
+  //   navItems: [],
+  // });
 
-  const cache = localStorage.getItem('DASHBOARD_NAV');
+  // const cache = localStorage.getItem('DASHBOARD_NAV');
 
-  const [fetchNav, { data, loading, error }] = useNavigateToNewDomainLazyQuery({
-    variables: {
-      domainNavInput: {
-        orgSid: authData?.orgId,
-        appDomain: 'DASHBOARD',
-        selectedPage: 'DASHBOARD',
-      },
-    },
-  });
+  // const [fetchNav, { data, loading, error }] = useNavigateToNewDomainLazyQuery({
+  //   variables: {
+  //     domainNavInput: {
+  //       orgSid: authData?.orgId,
+  //       appDomain: 'DASHBOARD',
+  //       selectedPage: 'DASHBOARD',
+  //     },
+  //   },
+  // });
 
-  useEffect(() => {
-    if (authData?.orgId) {
-      fetchNav();
-    }
-  }, [authData?.orgId]);
+  // useEffect(() => {
+  //   if (authData?.orgId) {
+  //     fetchNav();
+  //   }
+  // }, [authData?.orgId]);
 
-  useEffect(() => {
-    if (cache) {
-      const domain = JSON.parse(cache);
+  // useEffect(() => {
+  //   if (cache) {
+  //     const domain = JSON.parse(cache);
 
-      setDomain(domain);
+  //     setDomain(domain);
 
-      return;
-    }
+  //     return;
+  //   }
 
-    if (data && !loading) {
-      const { navigateToNewDomain: domain } = data;
+  //   if (data && !loading) {
+  //     const { navigateToNewDomain: domain } = data;
 
-      localStorage.setItem('DASHBOARD_NAV', JSON.stringify(domain));
+  //     localStorage.setItem('DASHBOARD_NAV', JSON.stringify(domain));
 
-      setDomain(domain);
+  //     setDomain(domain);
 
-      return;
-    }
-  }, [data, loading]);
+  //     return;
+  //   }
+  // }, [data, loading]);
 
   const collapseNavMenu = () => {
     setCollapse(!collapse);
