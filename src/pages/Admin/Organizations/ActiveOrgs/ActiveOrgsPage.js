@@ -18,6 +18,8 @@ import { StyledColumn } from './ActiveOrgsPage.styles';
 import { useNotification } from '../../../../contexts/hooks/useNotification';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
 
+import { useHistory } from 'react-router-dom';
+
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
     name,
@@ -40,6 +42,7 @@ const _ActiveOrgsPage = () => {
   const { storeOrgsId } = useAuthContext();
   const [orgs, setOrgs] = useState([]);
   const columns = generateColumns();
+  const history = useHistory();
 
   const [directOrganizationsFQuery, { data, loading }] = useDirectOrganizationsFLazyQuery();
 
@@ -70,7 +73,10 @@ const _ActiveOrgsPage = () => {
     switch (column.key) {
       case 'name':
         return (
-          <Link to={`active-orgs?orgSid=${item.id}`} onClick={() => changeActiveOrg(item.id, item.name)}>
+          <Link
+            to={`/admin/organizations/active-orgs?orgSid=${item.id}`}
+            onClick={() => changeActiveOrg(item.id, item.name)}
+          >
             {item[column.key]}
           </Link>
         );
