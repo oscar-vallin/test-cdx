@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { useBeginLoginLazyQuery } from '../../data/services/graphql';
 import { useCurrentUser } from './useCurrentUser';
 
-export const useLoginBegin = (_username, _password) => {
+export const useLoginBegin = (resetInterval = null) => {
   const [isProcessing, setProcessing] = useState(false);
-  const [username, setUsername] = useState(_username);
+  const [username, setUsername] = useState();
   const [isValidEmail, setValidEmail] = useState();
   const [errorMessage, setErrorMessage] = useState();
   const [apiData, setApiData] = useState();
@@ -41,13 +41,23 @@ export const useLoginBegin = (_username, _password) => {
       if (apiData?.beginLogin?.step === 'PASSWORD') {
         setValidEmail(true);
       } else {
-        setErrorMessage('Wrong Email Username');
+        setErrorMessage('Please provide a valid email address to proceed');
         setValidEmail();
       }
     }
 
     setProcessing(false);
   }, [apiData, apiError, apiLoading]);
+
+  useEffect(() => {
+    let timeout;
+    if (errorMessage && resetInterval) {
+      timeout = setTimeout(() => setErrorMessage(undefined), resetInterval);
+    }
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [errorMessage, isValidEmail]);
 
   //
   // *
@@ -56,19 +66,21 @@ export const useLoginBegin = (_username, _password) => {
   const editUser = () => {
     setValidEmail(false);
   };
-  const apiBeginLogin = async (__username) => {
+
+  const validateEmail = (email) => {
     clearState();
-
-    const validationResult = new RegExp(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g).test(__username);
-    if (!validationResult) {
-      setErrorMessage('Invalid Email');
+    const validationResult = new RegExp(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g).test(email);
+    if (validationResult) {
+      apiBeginLogin(email);
+    } else {
       setValidEmail(false);
-      return;
+      setErrorMessage('Please provide a valid email address to proceed');
     }
+  };
 
+  const apiBeginLogin = async (__username) => {
     setUsername(__username);
-
-    const resp = await _apiBeginLogin();
+    await _apiBeginLogin();
   };
 
   const clearState = () => {
@@ -84,8 +96,9 @@ export const useLoginBegin = (_username, _password) => {
     username,
     isValidEmail,
     editUser,
-    errorMessage,
+    emailError: errorMessage,
     apiBeginLogin,
     setUsername,
+    validateEmail,
   };
 };
