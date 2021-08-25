@@ -9,7 +9,7 @@ import { Spinner } from '../../components/spinners/Spinner';
 import { Spacing } from '../../components/spacings/Spacing';
 
 import { useNotification } from '../../contexts/hooks/useNotification';
-import { useNavigateToNewDomainLazyQuery } from '../../data/services/graphql';
+import { useNavigateToNewDomainLazyQuery, useNavigateToNewDomainQuery } from '../../data/services/graphql';
 import { useOrgSid } from '../../hooks/useOrgSid';
 import { useCurrentUser } from '../../contexts/hooks/useCurrentUser';
 import { useAuthContext } from '../../contexts/AuthContext';

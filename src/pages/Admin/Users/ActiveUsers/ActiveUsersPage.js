@@ -18,7 +18,7 @@ import { StyledColumn, StyledCommandButton } from './ActiveUsersPage.styles';
 
 import { RouteLink, StyledButtonAction } from './ActiveUsersPage.styles';
 
-// import { useAuthContext } from '../../../../contexts/AuthContext';
+import { useAuthContext } from '../../../../contexts/AuthContext';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
 
 const generateColumns = () => {
@@ -32,16 +32,14 @@ const generateColumns = () => {
   });
 
   return [
-    createColumn({ name: 'ID', key: 'id' }),
-    createColumn({ name: 'Email', key: 'email' }),
     createColumn({ name: 'First Name', key: 'firstNm' }),
     createColumn({ name: 'Last Name', key: 'lastNm' }),
     createColumn({ name: 'Email', key: 'email' }),
   ];
 };
 
-const onRenderItemColumn = (item, _index, column) => {
-  return item[column.key] || item['person'][column.key];
+const onRenderItemColumn = (node, _index, column) => {
+  return node.item[column.key] || node.item['person'][column.key];
 };
 
 const _ActiveUsersPage = () => {
@@ -78,24 +76,6 @@ const _ActiveUsersPage = () => {
       }),
     []
   );
-
-  const onRenderItemColumn = (node, _index, column) => {
-    if (column.key == 'actions') {
-      return (
-        <Fragment>
-          <StyledCommandButton
-            iconProps={{ iconName: 'Delete' }}
-            onClick={() => {
-              // setSelectedUserId(node.item?.id);
-              setIsConfirmationHidden(false);
-            }}
-          />
-        </Fragment>
-      );
-    } else {
-      return node.item[column.key] || node.item['person'][column.key];
-    }
-  };
 
   const hideConfirmation = () => {
     setIsConfirmationHidden(true);

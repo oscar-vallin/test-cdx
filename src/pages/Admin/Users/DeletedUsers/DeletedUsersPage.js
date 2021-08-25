@@ -10,10 +10,14 @@ import { Text } from '../../../../components/typography/Text';
 import { MarqueeSelection } from '@fluentui/react/lib/MarqueeSelection';
 import { Separator } from '../../../../components/separators/Separator';
 import { Button } from '../../../../components/buttons/Button';
-import { useUsersForOrgFpLazyQuery, useActivateUsersMutation } from '../../../../data/services/graphql';
+import {
+  useUsersForOrgFpLazyQuery,
+  useActivateUsersMutation,
+  useUsersForOrgFpQuery,
+} from '../../../../data/services/graphql';
 import { StyledColumn } from './DeletedUsersPage.styles';
 
-// import { useAuthContext } from '../../../../contexts/AuthContext';
+import { useAuthContext } from '../../../../contexts/AuthContext';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
 
 const generateColumns = () => {
@@ -30,8 +34,6 @@ const generateColumns = () => {
     createColumn({ name: 'First Name', key: 'firstNm' }),
     createColumn({ name: 'Last Name', key: 'lastNm' }),
     createColumn({ name: 'Email', key: 'email' }),
-    createColumn({ name: 'First Name', key: 'person.firstName' }),
-    createColumn({ name: 'Last Name', key: 'person.lastNm' }),
   ];
 };
 
@@ -40,18 +42,13 @@ const onRenderItemColumn = (node, _index, column) => {
 };
 
 const _DeletedUsersPage = () => {
-  const { orgSid } = useAuthContext();
+  const { orgSid } = useOrgSid();
   const [users, setUsers] = useState([]);
   const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);
   const [selectedItems, setSelectedItems] = useState([]);
   const columns = generateColumns();
 
-  const { data, loading } = useUsersForOrgFpQuery({
-    variables: {
-      orgSid,
-      userFilter: { activeFilter: 'INACTIVE' },
-    },
-  });
+  const [useUsersForOrgFpLazy, { data, loading }] = useUsersForOrgFpLazyQuery();
   const [
     enableUser,
     { data: enableResponse, loading: isEnablingUser, error: EnableUserError },
