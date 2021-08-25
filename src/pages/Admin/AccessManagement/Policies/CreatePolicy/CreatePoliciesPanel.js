@@ -133,50 +133,48 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
     });
   };
 
-  const onRenderItemColumn = ({ data, services, onServiceChange, onFacetChange, onVerbChange, permissionIndex }) => (
-    item,
-    index,
-    column
-  ) => {
-    switch (column.key) {
-      case 'service':
-        return (
-          <ComboBox
-            autoComplete="off"
-            selectedKey={item.service.key}
-            options={services.map(parseToComboBoxOption)}
-            onChange={(event, option) => onServiceChange(option, item, data)}
-            style={{ width: '100%' }}
-          />
-        );
-      case 'actions':
-        return (
-          <div>
-            <IconButton
-              iconProps={{ iconName: 'delete' }}
-              onClick={() => {
-                setState({
-                  ...state,
-                  permissions: state.permissions.map((item, currIndex) => {
-                    if (currIndex !== permissionIndex) {
-                      return item;
-                    }
-
-                    return {
-                      ...item,
-                      actions: item.actions.filter((action, actionIndex) => actionIndex !== index),
-                    };
-                  }),
-                });
-              }}
+  const onRenderItemColumn =
+    ({ data, services, onServiceChange, onFacetChange, onVerbChange, permissionIndex }) =>
+    (item, index, column) => {
+      switch (column.key) {
+        case 'service':
+          return (
+            <ComboBox
+              autoComplete="off"
+              selectedKey={item.service.key}
+              options={services.map(parseToComboBoxOption)}
+              onChange={(event, option) => onServiceChange(option, item, data)}
+              style={{ width: '100%' }}
             />
-          </div>
-        );
+          );
+        case 'actions':
+          return (
+            <div>
+              <IconButton
+                iconProps={{ iconName: 'delete' }}
+                onClick={() => {
+                  setState({
+                    ...state,
+                    permissions: state.permissions.map((item, currIndex) => {
+                      if (currIndex !== permissionIndex) {
+                        return item;
+                      }
 
-      default:
-        break;
-    }
-  };
+                      return {
+                        ...item,
+                        actions: item.actions.filter((action, actionIndex) => actionIndex !== index),
+                      };
+                    }),
+                  });
+                }}
+              />
+            </div>
+          );
+
+        default:
+          break;
+      }
+    };
 
   const columns = generateColumns(options);
 

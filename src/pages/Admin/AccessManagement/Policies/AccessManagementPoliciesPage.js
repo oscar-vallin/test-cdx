@@ -47,10 +47,8 @@ const _AccessManagementPoliciesPage = () => {
 
   const [policies, setPolicies] = useState([]);
   const [accessPoliciesForOrg, { data, loading, error }] = useAccessPoliciesForOrgLazyQuery();
-  const [
-    removeAccessPolicy,
-    { data: removeResponse, loading: isRemovingPolicy, error: removePolicyError },
-  ] = useRemoveAccessPolicyMutation();
+  const [removeAccessPolicy, { data: removeResponse, loading: isRemovingPolicy, error: removePolicyError }] =
+    useRemoveAccessPolicyMutation();
 
   const hideConfirmation = () => {
     setIsConfirmationHidden(true);
