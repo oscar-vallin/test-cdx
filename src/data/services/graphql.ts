@@ -15,64 +15,44 @@ export type Scalars = {
   DateTime: any;
 };
 
-export type AmGroup = {
-  __typename?: 'AMGroup';
-  id?: Maybe<Scalars['ID']>;
-  name: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
-  tmpl?: Maybe<Scalars['Boolean']>;
-  tmplUseAsIs?: Maybe<Scalars['Boolean']>;
-  tmplServiceType?: Maybe<CdxService>;
-  policies?: Maybe<Array<Maybe<AmPolicy>>>;
-};
-
-export type AmGroupConnection = {
-  __typename?: 'AMGroupConnection';
-  paginationInfo: PaginationInfo;
-  nodes?: Maybe<Array<Maybe<AmGroup>>>;
-};
-
 export type AmPasswordConfigInput = {
   allowForgotten?: Maybe<Scalars['Boolean']>;
   orgUnitOwner?: Maybe<Scalars['ID']>;
 };
 
-export type AmPermission = {
-  __typename?: 'AMPermission';
-  id?: Maybe<Scalars['ID']>;
-  effect: PermissionEffect;
-  actions?: Maybe<Array<Maybe<AmPermissionAction>>>;
-  predicate?: Maybe<PermissionPredicate>;
-  predVar1?: Maybe<Scalars['String']>;
-  predParam1?: Maybe<Scalars['String']>;
-};
-
-export type AmPermissionAction = {
-  __typename?: 'AMPermissionAction';
-  id?: Maybe<Scalars['ID']>;
-  service: CdxService;
-  facet: CdxFacet;
-  verb: PermissionVerb;
-};
-
-export type AmPolicy = {
-  __typename?: 'AMPolicy';
+export type AccessPolicy = {
+  __typename?: 'AccessPolicy';
   id?: Maybe<Scalars['ID']>;
   name: Scalars['String'];
-  permissions?: Maybe<Array<Maybe<AmPermission>>>;
+  permissions?: Maybe<Array<Maybe<Permission>>>;
   tmpl?: Maybe<Scalars['Boolean']>;
   tmplUseAsIs?: Maybe<Scalars['Boolean']>;
-  tmplServiceType?: Maybe<CdxService>;
 };
 
-export type AmPolicyConnection = {
-  __typename?: 'AMPolicyConnection';
+export type AccessPolicyConnection = {
+  __typename?: 'AccessPolicyConnection';
   paginationInfo: PaginationInfo;
-  nodes?: Maybe<Array<Maybe<AmPolicy>>>;
+  nodes?: Maybe<Array<Maybe<AccessPolicy>>>;
 };
 
-export type AmPolicyPage = {
-  __typename?: 'AMPolicyPage';
+export type AccessPolicyGroup = {
+  __typename?: 'AccessPolicyGroup';
+  id?: Maybe<Scalars['ID']>;
+  name: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  tmpl?: Maybe<Scalars['Boolean']>;
+  tmplUseAsIs?: Maybe<Scalars['Boolean']>;
+  policies?: Maybe<Array<Maybe<AccessPolicy>>>;
+};
+
+export type AccessPolicyGroupConnection = {
+  __typename?: 'AccessPolicyGroupConnection';
+  paginationInfo: PaginationInfo;
+  nodes?: Maybe<Array<Maybe<AccessPolicyGroup>>>;
+};
+
+export type AccessPolicyPage = {
+  __typename?: 'AccessPolicyPage';
   /** The services availble for permission actions */
   permissionServices?: Maybe<Array<Maybe<CdxServiceNvp>>>;
   /** Avaliable Predicates for this policy's permissions note a policy does not need a predicate */
@@ -81,7 +61,19 @@ export type AmPolicyPage = {
   showTemplateSection?: Maybe<Scalars['Boolean']>;
   /** The service archtype for this template */
   templateServices?: Maybe<Array<Maybe<CdxServiceNvp>>>;
-  permissionEffectNVPs?: Maybe<Array<Maybe<PermissionEffectNvp>>>;
+};
+
+export type AccessSpecialization = {
+  __typename?: 'AccessSpecialization';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  filters?: Maybe<Array<Maybe<SpecializationFilter>>>;
+};
+
+export type AccessSpecializationConnection = {
+  __typename?: 'AccessSpecializationConnection';
+  paginationInfo: PaginationInfo;
+  nodes?: Maybe<Array<Maybe<AccessSpecialization>>>;
 };
 
 export enum ActiveEnum {
@@ -173,39 +165,27 @@ export enum CdxWebPivot {
   InProgress = 'IN_PROGRESS',
 }
 
-export type CreateAmGroupInput = {
+export type CreateAccessPolicyGroupInput = {
   orgOwnerId: Scalars['ID'];
   name: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   tmpl?: Maybe<Scalars['Boolean']>;
   tmplUseAsIs?: Maybe<Scalars['Boolean']>;
-  tmplServiceType?: Maybe<CdxService>;
   policyIds?: Maybe<Array<Maybe<Scalars['ID']>>>;
 };
 
-export type CreateAmPermissionActionInput = {
-  permissionSid?: Maybe<Scalars['ID']>;
-  service: CdxService;
-  facet: CdxFacet;
-  verb: PermissionVerb;
-};
-
-export type CreateAmPermissionInput = {
-  policySid?: Maybe<Scalars['ID']>;
-  effect: PermissionEffect;
-  actions?: Maybe<Array<Maybe<CreateAmPermissionActionInput>>>;
-  predicate?: Maybe<PermissionPredicate>;
-  predVar1?: Maybe<Scalars['String']>;
-  predParam1?: Maybe<Scalars['String']>;
-};
-
-export type CreateAmPolicyInput = {
+export type CreateAccessPolicyInput = {
   name: Scalars['String'];
   orgOwnerId: Scalars['ID'];
-  permissions?: Maybe<Array<Maybe<CreateAmPermissionInput>>>;
+  permissions?: Maybe<Array<Maybe<Permission>>>;
   tmpl?: Maybe<Scalars['Boolean']>;
   tmplUseAsIs?: Maybe<Scalars['Boolean']>;
-  tmplServiceType?: Maybe<CdxService>;
+};
+
+export type CreateAccessSpecializationInput = {
+  orgOwnerId: Scalars['ID'];
+  name: Scalars['String'];
+  filters?: Maybe<Array<Maybe<CreateSpecializationFilterInput>>>;
 };
 
 export type CreateDashThemeColorInput = {
@@ -257,6 +237,11 @@ export type CreateOrgInput = {
 export type CreatePersonInput = {
   firstNm: Scalars['String'];
   lastNm?: Maybe<Scalars['String']>;
+};
+
+export type CreateSpecializationFilterInput = {
+  permission: Permission;
+  organizationIds?: Maybe<Array<Maybe<Scalars['ID']>>>;
 };
 
 export type CreateUserDashThemeInput = {
@@ -388,17 +373,7 @@ export type DefaultDashThemePage = {
   themeColorPalettes?: Maybe<Array<Maybe<DashThemeColor>>>;
 };
 
-export type DeleteAmPermissionActionsInput = {
-  permissionSid: Scalars['ID'];
-  permissionActionSids: Array<Maybe<Scalars['ID']>>;
-};
-
-export type DeleteAmPermissionsInput = {
-  policySid: Scalars['ID'];
-  permissionSids: Array<Maybe<Scalars['ID']>>;
-};
-
-export type DeleteAmPoliciesInput = {
+export type DeleteAccessPoliciesInput = {
   policySids: Array<Maybe<Scalars['ID']>>;
 };
 
@@ -533,26 +508,19 @@ export type Mutation = {
   passwordLogin?: Maybe<LoginStep>;
   updateOwnPassword?: Maybe<UserSession>;
   createOrg?: Maybe<Organization>;
-  createAMPolicy?: Maybe<AmPolicy>;
-  createAMPermission?: Maybe<AmPermission>;
-  createAMPermissionAction?: Maybe<AmPermissionAction>;
-  createAMGroup?: Maybe<AmGroup>;
+  createAccessPolicy?: Maybe<AccessPolicy>;
+  createAccessSpecialization?: Maybe<AccessSpecialization>;
+  createAccessPolicyGroup?: Maybe<AccessPolicyGroup>;
   createUser?: Maybe<UserResponse>;
   updateUser?: Maybe<User>;
-  updateUserAMGroups?: Maybe<Array<Maybe<AmGroup>>>;
+  updateUserAccessPolicyGroups?: Maybe<Array<Maybe<AccessPolicyGroup>>>;
   deactivateUser?: Maybe<GqOperationResponse>;
   deactivateUsers?: Maybe<GqOperationResponse>;
   activateUser?: Maybe<GqOperationResponse>;
   activateUsers?: Maybe<GqOperationResponse>;
-  removeAMPolicies?: Maybe<Scalars['String']>;
-  removeAMPolicy?: Maybe<Scalars['String']>;
-  removeAMPermissions?: Maybe<Scalars['String']>;
-  removeAMPermission?: Maybe<Scalars['String']>;
-  removeAMPermissionActions?: Maybe<Scalars['String']>;
-  removeAMPermissionAction?: Maybe<Scalars['String']>;
-  updateAMPolicy?: Maybe<AmPolicy>;
-  updateAMPermission?: Maybe<AmPermission>;
-  updateAMPermissionAction?: Maybe<AmPermissionAction>;
+  removeAccessPolicies?: Maybe<Scalars['String']>;
+  removeAccessPolicy?: Maybe<Scalars['String']>;
+  updateAccessPolicy?: Maybe<AccessPolicy>;
   createDashThemeColor?: Maybe<DashThemeColor>;
   updateDashThemeColor?: Maybe<DashThemeColor>;
   createDefaultDashTheme?: Maybe<DashTheme>;
@@ -584,20 +552,16 @@ export type MutationCreateOrgArgs = {
   orgInfo: CreateOrgInput;
 };
 
-export type MutationCreateAmPolicyArgs = {
-  policyInfo: CreateAmPolicyInput;
+export type MutationCreateAccessPolicyArgs = {
+  policyInfo: CreateAccessPolicyInput;
 };
 
-export type MutationCreateAmPermissionArgs = {
-  permissionInfo: CreateAmPermissionInput;
+export type MutationCreateAccessSpecializationArgs = {
+  specializationInfo: CreateAccessSpecializationInput;
 };
 
-export type MutationCreateAmPermissionActionArgs = {
-  permssionActionInfo: CreateAmPermissionActionInput;
-};
-
-export type MutationCreateAmGroupArgs = {
-  amGroupInfo: CreateAmGroupInput;
+export type MutationCreateAccessPolicyGroupArgs = {
+  accessPolicyGroupInfo: CreateAccessPolicyGroupInput;
 };
 
 export type MutationCreateUserArgs = {
@@ -609,8 +573,8 @@ export type MutationUpdateUserArgs = {
   userInfo: UpdateUserInput;
 };
 
-export type MutationUpdateUserAmGroupsArgs = {
-  userAmGroupUpdate?: Maybe<UpdateUserAmGroupsInput>;
+export type MutationUpdateUserAccessPolicyGroupsArgs = {
+  userAccessPolicyGroupUpdate?: Maybe<UpdateUserAccessPolicyGroupsInput>;
 };
 
 export type MutationDeactivateUserArgs = {
@@ -629,40 +593,16 @@ export type MutationActivateUsersArgs = {
   sidsInput: SidsInput;
 };
 
-export type MutationRemoveAmPoliciesArgs = {
-  deleteAMPoliciesInput?: Maybe<DeleteAmPoliciesInput>;
+export type MutationRemoveAccessPoliciesArgs = {
+  deleteAccessPoliciesInput?: Maybe<DeleteAccessPoliciesInput>;
 };
 
-export type MutationRemoveAmPolicyArgs = {
+export type MutationRemoveAccessPolicyArgs = {
   policySid: Scalars['ID'];
 };
 
-export type MutationRemoveAmPermissionsArgs = {
-  deleteAMPermissionsInput?: Maybe<DeleteAmPermissionsInput>;
-};
-
-export type MutationRemoveAmPermissionArgs = {
-  permissionSid: Scalars['ID'];
-};
-
-export type MutationRemoveAmPermissionActionsArgs = {
-  deleteAMPermissionActionsInput?: Maybe<DeleteAmPermissionActionsInput>;
-};
-
-export type MutationRemoveAmPermissionActionArgs = {
-  permissionActionSid: Scalars['ID'];
-};
-
-export type MutationUpdateAmPolicyArgs = {
-  updateAMPolicyInput?: Maybe<UpdateAmPolicyInput>;
-};
-
-export type MutationUpdateAmPermissionArgs = {
-  updateAMPermissionInput?: Maybe<UpdateAmPermissionInput>;
-};
-
-export type MutationUpdateAmPermissionActionArgs = {
-  updateAMPermissionActionInput?: Maybe<UpdateAmPermissionActionInput>;
+export type MutationUpdateAccessPolicyArgs = {
+  updateAccessPolicyInput?: Maybe<UpdateAccessPolicyInput>;
 };
 
 export type MutationCreateDashThemeColorArgs = {
@@ -862,16 +802,70 @@ export type PasswordWhitespaceRule = {
   allowedWhitespace?: Maybe<WhitespaceRuleType>;
 };
 
-export enum PermissionEffect {
-  Allow = 'ALLOW',
-  Deny = 'DENY',
+export enum Permission {
+  K2UExchangeList = 'K2U_EXCHANGE_LIST',
+  K2UExchangeRead = 'K2U_EXCHANGE_READ',
+  K2UExchangeDownload = 'K2U_EXCHANGE_DOWNLOAD',
+  K2UExchangeRestart = 'K2U_EXCHANGE_RESTART',
+  K2UExchangeCancel = 'K2U_EXCHANGE_CANCEL',
+  K2UExchangeArchiveRead = 'K2U_EXCHANGE_ARCHIVE_READ',
+  K2UExchangeArchiveStepsRead = 'K2U_EXCHANGE_ARCHIVE_STEPS_READ',
+  TestExchangeList = 'TEST_EXCHANGE_LIST',
+  TestExchangeRead = 'TEST_EXCHANGE_READ',
+  TestExchangeDownload = 'TEST_EXCHANGE_DOWNLOAD',
+  TestExchangeRestart = 'TEST_EXCHANGE_RESTART',
+  TestExchangeCancel = 'TEST_EXCHANGE_CANCEL',
+  TestExchangeArchiveRead = 'TEST_EXCHANGE_ARCHIVE_READ',
+  TestExchangeArchiveStepsRead = 'TEST_EXCHANGE_ARCHIVE_STEPS_READ',
+  UatExchangeList = 'UAT_EXCHANGE_LIST',
+  UatExchangeRead = 'UAT_EXCHANGE_READ',
+  UatExchangeDownload = 'UAT_EXCHANGE_DOWNLOAD',
+  UatExchangeRestart = 'UAT_EXCHANGE_RESTART',
+  UatExchangeCancel = 'UAT_EXCHANGE_CANCEL',
+  UatExchangeArchiveRead = 'UAT_EXCHANGE_ARCHIVE_READ',
+  UatExchangeArchiveStepsRead = 'UAT_EXCHANGE_ARCHIVE_STEPS_READ',
+  ProdExchangeList = 'PROD_EXCHANGE_LIST',
+  ProdExchangeRead = 'PROD_EXCHANGE_READ',
+  ProdExchangeDownload = 'PROD_EXCHANGE_DOWNLOAD',
+  ProdExchangeRestart = 'PROD_EXCHANGE_RESTART',
+  ProdExchangeCancel = 'PROD_EXCHANGE_CANCEL',
+  ProdExchangeArchiveRead = 'PROD_EXCHANGE_ARCHIVE_READ',
+  ProdExchangeArchiveStepsRead = 'PROD_EXCHANGE_ARCHIVE_STEPS_READ',
+  UserCreate = 'USER_CREATE',
+  UserRead = 'USER_READ',
+  UserUpdate = 'USER_UPDATE',
+  UserDelete = 'USER_DELETE',
+  UserAssign = 'USER_ASSIGN',
+  AccessPolicyCreate = 'ACCESS_POLICY_CREATE',
+  AccessPolicyRead = 'ACCESS_POLICY_READ',
+  AccessPolicyUpdate = 'ACCESS_POLICY_UPDATE',
+  AccessPolicyDelete = 'ACCESS_POLICY_DELETE',
+  AccessSpecCreate = 'ACCESS_SPEC_CREATE',
+  AccessSpecRead = 'ACCESS_SPEC_READ',
+  AccessSpecUpdate = 'ACCESS_SPEC_UPDATE',
+  AccessSpecDelete = 'ACCESS_SPEC_DELETE',
+  AccessPolicyGroupCreate = 'ACCESS_POLICY_GROUP_CREATE',
+  AccessPolicyGroupRead = 'ACCESS_POLICY_GROUP_READ',
+  AccessPolicyGroupUpdate = 'ACCESS_POLICY_GROUP_UPDATE',
+  AccessPolicyGroupDelete = 'ACCESS_POLICY_GROUP_DELETE',
+  OrgCreate = 'ORG_CREATE',
+  OrgRead = 'ORG_READ',
+  OrgUpdate = 'ORG_UPDATE',
+  OrgDelete = 'ORG_DELETE',
+  PasswordRulesUpdate = 'PASSWORD_RULES_UPDATE',
+  SsoidpCreate = 'SSOIDP_CREATE',
+  SsoidpRead = 'SSOIDP_READ',
+  SsoidpUpdate = 'SSOIDP_UPDATE',
+  SsoidpDelete = 'SSOIDP_DELETE',
+  ColorpaletteCreate = 'COLORPALETTE_CREATE',
+  ColorpaletteRead = 'COLORPALETTE_READ',
+  ColorpaletteUpdate = 'COLORPALETTE_UPDATE',
+  ColorpaletteDelete = 'COLORPALETTE_DELETE',
+  ThemeCreate = 'THEME_CREATE',
+  ThemeRead = 'THEME_READ',
+  ThemeUpdate = 'THEME_UPDATE',
+  ThemeDelete = 'THEME_DELETE',
 }
-
-export type PermissionEffectNvp = {
-  __typename?: 'PermissionEffectNVP';
-  name: Scalars['String'];
-  value: PermissionEffect;
-};
 
 export enum PermissionPredicate {
   NotKntuEnv = 'NOT_KNTU_ENV',
@@ -883,24 +877,6 @@ export type PermissionPredicateNvp = {
   __typename?: 'PermissionPredicateNVP';
   name: Scalars['String'];
   value: PermissionPredicate;
-};
-
-export enum PermissionVerb {
-  All = 'ALL',
-  Create = 'CREATE',
-  Read = 'READ',
-  Update = 'UPDATE',
-  Delete = 'DELETE',
-  List = 'LIST',
-  Download = 'DOWNLOAD',
-  Restart = 'RESTART',
-  Assign = 'ASSIGN',
-}
-
-export type PermissionVerbNvp = {
-  __typename?: 'PermissionVerbNVP';
-  name: Scalars['String'];
-  value: PermissionVerb;
 };
 
 export type Person = {
@@ -940,14 +916,13 @@ export type Query = {
   userTheme?: Maybe<DashTheme>;
   logOut?: Maybe<LogOutInfo>;
   simulateSessionExpir?: Maybe<LogOutInfo>;
-  amPolicyPage?: Maybe<AmPolicyPage>;
-  amPolicy?: Maybe<AmPolicy>;
-  amPolicyFacetsForService?: Maybe<Array<Maybe<CdxFacetNvp>>>;
-  amPolicyVerbForFacet?: Maybe<Array<Maybe<PermissionVerbNvp>>>;
-  amPoliciesForOrg?: Maybe<AmPolicyConnection>;
-  amGroupsForOrg?: Maybe<AmGroupConnection>;
+  accessPolicyPage?: Maybe<AccessPolicyPage>;
+  accessPolicy?: Maybe<AccessPolicy>;
+  accessPoliciesForOrg?: Maybe<AccessPolicyConnection>;
+  accessSpecializationsForOrg?: Maybe<AccessSpecializationConnection>;
+  accessPolicyGroupsForOrg?: Maybe<AccessPolicyGroupConnection>;
   usersForOrg?: Maybe<UserConnection>;
-  systemTemplateAMGroupByName?: Maybe<Array<Maybe<AmGroup>>>;
+  systemTemplateAccessPolicyGroupByName?: Maybe<Array<Maybe<AccessPolicyGroup>>>;
   topLevelOrgsByType?: Maybe<Array<Maybe<Organization>>>;
   orgById?: Maybe<Organization>;
   directOrganizations?: Maybe<OrganizationConnection>;
@@ -966,9 +941,9 @@ export type Query = {
   findUser?: Maybe<User>;
   navigateToNewDomain?: Maybe<WebAppDomain>;
   userCreatePage?: Maybe<UserPageInfo>;
-  /** userAssignAMGroups(sidInput: SidInput) :  */
+  /** userAssignAccessPolicyGroups(sidInput: SidInput) :  */
   userUpdatePage?: Maybe<UserPageInfo>;
-  userAssignAMGroupsPage?: Maybe<UserPageInfo>;
+  userAssignAccessPolicyGroupsPage?: Maybe<UserPageInfo>;
 };
 
 export type QueryBeginLoginArgs = {
@@ -1021,32 +996,26 @@ export type QueryUserThemeArgs = {
   themeColorMode?: Maybe<ThemeColorMode>;
 };
 
-export type QueryAmPolicyPageArgs = {
+export type QueryAccessPolicyPageArgs = {
   orgSid: Scalars['ID'];
 };
 
-export type QueryAmPolicyArgs = {
+export type QueryAccessPolicyArgs = {
   orgSid: Scalars['ID'];
   policySid: Scalars['ID'];
 };
 
-export type QueryAmPolicyFacetsForServiceArgs = {
-  orgSid: Scalars['ID'];
-  cdxService: CdxService;
-};
-
-export type QueryAmPolicyVerbForFacetArgs = {
-  orgSid: Scalars['ID'];
-  cdxService: CdxService;
-  cdxFacet: CdxFacet;
-};
-
-export type QueryAmPoliciesForOrgArgs = {
+export type QueryAccessPoliciesForOrgArgs = {
   orgSid: Scalars['ID'];
   pageableInput?: Maybe<PageableInput>;
 };
 
-export type QueryAmGroupsForOrgArgs = {
+export type QueryAccessSpecializationsForOrgArgs = {
+  orgSid: Scalars['ID'];
+  pageableInput?: Maybe<PageableInput>;
+};
+
+export type QueryAccessPolicyGroupsForOrgArgs = {
   orgSid: Scalars['ID'];
   pageableInput?: Maybe<PageableInput>;
 };
@@ -1057,7 +1026,7 @@ export type QueryUsersForOrgArgs = {
   pageableInput?: Maybe<PageableInput>;
 };
 
-export type QuerySystemTemplateAmGroupByNameArgs = {
+export type QuerySystemTemplateAccessPolicyGroupByNameArgs = {
   name: Scalars['String'];
 };
 
@@ -1139,7 +1108,7 @@ export type QueryUserUpdatePageArgs = {
   sidInput?: Maybe<SidInput>;
 };
 
-export type QueryUserAssignAmGroupsPageArgs = {
+export type QueryUserAssignAccessPolicyGroupsPageArgs = {
   sidInput?: Maybe<SidInput>;
 };
 
@@ -1235,6 +1204,13 @@ export type SortOrderInput = {
   nullHandling?: Maybe<NullHandling>;
 };
 
+export type SpecializationFilter = {
+  __typename?: 'SpecializationFilter';
+  id: Scalars['ID'];
+  permission: Permission;
+  organizationIds?: Maybe<Array<Maybe<Scalars['ID']>>>;
+};
+
 export type StatCountType = {
   __typename?: 'StatCountType';
   value?: Maybe<Scalars['Int']>;
@@ -1263,26 +1239,10 @@ export type TokenUser = {
   session?: Maybe<UserSession>;
 };
 
-export type UpdateAmPermissionActionInput = {
-  permissionSid: Scalars['ID'];
-  permissionActionSid: Scalars['ID'];
-  service: CdxService;
-  facet: CdxFacet;
-  verb: PermissionVerb;
-};
-
-export type UpdateAmPermissionInput = {
-  policySid: Scalars['ID'];
-  permissionSid: Scalars['ID'];
-  effect: PermissionEffect;
-  predicate?: Maybe<PermissionPredicate>;
-  predVar1?: Maybe<Scalars['String']>;
-  predParam1?: Maybe<Scalars['String']>;
-};
-
-export type UpdateAmPolicyInput = {
+export type UpdateAccessPolicyInput = {
   policySid: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
+  permissions?: Maybe<Array<Maybe<Permission>>>;
 };
 
 export type UpdateDashThemeColorInput = {
@@ -1332,8 +1292,8 @@ export type UpdatePasswordInput = {
   verifyPassword: Scalars['String'];
 };
 
-export type UpdateUserAmGroupsInput = {
-  amGroupSids?: Maybe<Array<Maybe<Scalars['ID']>>>;
+export type UpdateUserAccessPolicyGroupsInput = {
+  accessPolicyGroupIds?: Maybe<Array<Maybe<Scalars['ID']>>>;
 };
 
 export type UpdateUserDashThemeInput = {
@@ -1357,7 +1317,7 @@ export type User = {
   id: Scalars['ID'];
   email: Scalars['String'];
   person?: Maybe<Person>;
-  amGroups?: Maybe<Array<Maybe<AmGroup>>>;
+  accessPolicyGroups?: Maybe<Array<Maybe<AccessPolicyGroup>>>;
 };
 
 export type UserConnection = {
@@ -1389,7 +1349,7 @@ export type UserPageInfo = {
   __typename?: 'UserPageInfo';
   model?: Maybe<User>;
   cdxPageInfo?: Maybe<CdxPageInfo>;
-  amGroupConnection?: Maybe<AmGroupConnection>;
+  accessPolicyGroupConnection?: Maybe<AccessPolicyGroupConnection>;
 };
 
 export type UserResponse = {
@@ -1905,13 +1865,13 @@ export type DashPeriodCountFragmentFragment = { __typename?: 'DashboardPeriodCou
   'name' | 'secondaryDescr' | 'count' | 'total'
 >;
 
-export type AmPolicyPageQueryVariables = Exact<{
+export type AccessPolicyPageQueryVariables = Exact<{
   orgSid: Scalars['ID'];
 }>;
 
-export type AmPolicyPageQuery = { __typename?: 'Query' } & {
-  amPolicyPage?: Maybe<
-    { __typename?: 'AMPolicyPage' } & Pick<AmPolicyPage, 'showTemplateSection'> & {
+export type AccessPolicyPageQuery = { __typename?: 'Query' } & {
+  accessPolicyPage?: Maybe<
+    { __typename?: 'AccessPolicyPage' } & Pick<AccessPolicyPage, 'showTemplateSection'> & {
         permissionServices?: Maybe<
           Array<Maybe<{ __typename?: 'CDXServiceNVP' } & Pick<CdxServiceNvp, 'name' | 'value'>>>
         >;
@@ -1921,31 +1881,7 @@ export type AmPolicyPageQuery = { __typename?: 'Query' } & {
         templateServices?: Maybe<
           Array<Maybe<{ __typename?: 'CDXServiceNVP' } & Pick<CdxServiceNvp, 'name' | 'value'>>>
         >;
-        permissionEffectNVPs?: Maybe<
-          Array<Maybe<{ __typename?: 'PermissionEffectNVP' } & Pick<PermissionEffectNvp, 'name' | 'value'>>>
-        >;
       }
-  >;
-};
-
-export type AmPolicyFacetsForServiceQueryVariables = Exact<{
-  orgSid: Scalars['ID'];
-  cdxService: CdxService;
-}>;
-
-export type AmPolicyFacetsForServiceQuery = { __typename?: 'Query' } & {
-  amPolicyFacetsForService?: Maybe<Array<Maybe<{ __typename?: 'CDXFacetNVP' } & Pick<CdxFacetNvp, 'name' | 'value'>>>>;
-};
-
-export type AmPolicyVerbForFacetQueryVariables = Exact<{
-  orgSid: Scalars['ID'];
-  cdxService: CdxService;
-  cdxFacet: CdxFacet;
-}>;
-
-export type AmPolicyVerbForFacetQuery = { __typename?: 'Query' } & {
-  amPolicyVerbForFacet?: Maybe<
-    Array<Maybe<{ __typename?: 'PermissionVerbNVP' } & Pick<PermissionVerbNvp, 'name' | 'value'>>>
   >;
 };
 
@@ -1957,64 +1893,61 @@ export type CreateOrgMutation = { __typename?: 'Mutation' } & {
   createOrg?: Maybe<{ __typename?: 'Organization' } & Pick<Organization, 'id' | 'orgId' | 'orgType'>>;
 };
 
-export type CreateAmPolicyMutationVariables = Exact<{
-  policyInfo: CreateAmPolicyInput;
+export type CreateAccessPolicyMutationVariables = Exact<{
+  policyInfo: CreateAccessPolicyInput;
 }>;
 
-export type CreateAmPolicyMutation = { __typename?: 'Mutation' } & {
-  createAMPolicy?: Maybe<{ __typename?: 'AMPolicy' } & PolicyFragmentFragment>;
+export type CreateAccessPolicyMutation = { __typename?: 'Mutation' } & {
+  createAccessPolicy?: Maybe<{ __typename?: 'AccessPolicy' } & PolicyFragmentFragment>;
 };
 
-export type PolicyFragmentFragment = { __typename?: 'AMPolicy' } & Pick<
-  AmPolicy,
-  'id' | 'name' | 'tmpl' | 'tmplUseAsIs'
-> & {
-    permissions?: Maybe<
-      Array<
-        Maybe<
-          { __typename?: 'AMPermission' } & Pick<
-            AmPermission,
-            'id' | 'effect' | 'predicate' | 'predVar1' | 'predParam1'
-          > & {
-              actions?: Maybe<
-                Array<
-                  Maybe<
-                    { __typename?: 'AMPermissionAction' } & Pick<
-                      AmPermissionAction,
-                      'id' | 'service' | 'facet' | 'verb'
-                    >
-                  >
-                >
-              >;
-            }
-        >
-      >
-    >;
-  };
+export type PolicyFragmentFragment = { __typename?: 'AccessPolicy' } & Pick<
+  AccessPolicy,
+  'id' | 'name' | 'tmpl' | 'tmplUseAsIs' | 'permissions'
+>;
 
-export type CreateAmGroupMutationVariables = Exact<{
-  amGroupInfo: CreateAmGroupInput;
+export type CreateAccessPolicyGroupMutationVariables = Exact<{
+  accessPolicyGroupInfo: CreateAccessPolicyGroupInput;
 }>;
 
-export type CreateAmGroupMutation = { __typename?: 'Mutation' } & {
-  createAMGroup?: Maybe<
-    { __typename?: 'AMGroup' } & Pick<AmGroup, 'id' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs'> & {
-        policies?: Maybe<Array<Maybe<{ __typename?: 'AMPolicy' } & Pick<AmPolicy, 'id' | 'name'>>>>;
+export type CreateAccessPolicyGroupMutation = { __typename?: 'Mutation' } & {
+  createAccessPolicyGroup?: Maybe<
+    { __typename?: 'AccessPolicyGroup' } & Pick<
+      AccessPolicyGroup,
+      'id' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs'
+    > & { policies?: Maybe<Array<Maybe<{ __typename?: 'AccessPolicy' } & Pick<AccessPolicy, 'id' | 'name'>>>> }
+  >;
+};
+
+export type CreateAccessSpecializationMutationVariables = Exact<{
+  specializationInfo: CreateAccessSpecializationInput;
+}>;
+
+export type CreateAccessSpecializationMutation = { __typename?: 'Mutation' } & {
+  createAccessSpecialization?: Maybe<
+    { __typename?: 'AccessSpecialization' } & Pick<AccessSpecialization, 'id' | 'name'> & {
+        filters?: Maybe<
+          Array<
+            Maybe<
+              { __typename?: 'SpecializationFilter' } & Pick<SpecializationFilter, 'permission' | 'organizationIds'>
+            >
+          >
+        >;
       }
   >;
 };
 
-export type SystemTemplateAmGroupByNameQueryVariables = Exact<{
+export type SystemTemplateAccessPolicyGroupByNameQueryVariables = Exact<{
   name: Scalars['String'];
 }>;
 
-export type SystemTemplateAmGroupByNameQuery = { __typename?: 'Query' } & {
-  systemTemplateAMGroupByName?: Maybe<
+export type SystemTemplateAccessPolicyGroupByNameQuery = { __typename?: 'Query' } & {
+  systemTemplateAccessPolicyGroupByName?: Maybe<
     Array<
       Maybe<
-        { __typename?: 'AMGroup' } & Pick<
-          AmGroup,
-          'id' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'tmplServiceType'
+        { __typename?: 'AccessPolicyGroup' } & Pick<
+          AccessPolicyGroup,
+          'id' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs'
         >
       >
     >
@@ -2050,12 +1983,14 @@ export type UpdateUserMutation = { __typename?: 'Mutation' } & {
   >;
 };
 
-export type UpdateUserAmGroupsMutationVariables = Exact<{
-  userAmGroupUpdate: UpdateUserAmGroupsInput;
+export type UpdateUserAccessPolicyGroupsMutationVariables = Exact<{
+  userAccessPolicyGroupUpdate: UpdateUserAccessPolicyGroupsInput;
 }>;
 
-export type UpdateUserAmGroupsMutation = { __typename?: 'Mutation' } & {
-  updateUserAMGroups?: Maybe<Array<Maybe<{ __typename?: 'AMGroup' } & Pick<AmGroup, 'id' | 'name'>>>>;
+export type UpdateUserAccessPolicyGroupsMutation = { __typename?: 'Mutation' } & {
+  updateUserAccessPolicyGroups?: Maybe<
+    Array<Maybe<{ __typename?: 'AccessPolicyGroup' } & Pick<AccessPolicyGroup, 'id' | 'name'>>>
+  >;
 };
 
 export type DeactivateUserMutationVariables = Exact<{
@@ -2082,16 +2017,46 @@ export type ActivateUsersMutationVariables = Exact<{
 
 export type ActivateUsersMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'activateUsers'>;
 
-export type AmPoliciesForOrgPQueryVariables = Exact<{
+export type AccessPoliciesForOrgQueryVariables = Exact<{
   orgSid: Scalars['ID'];
   pageableInput?: Maybe<PageableInput>;
 }>;
 
-export type AmPoliciesForOrgPQuery = { __typename?: 'Query' } & {
-  amPoliciesForOrg?: Maybe<
-    { __typename?: 'AMPolicyConnection' } & {
+export type AccessPoliciesForOrgQuery = { __typename?: 'Query' } & {
+  accessPoliciesForOrg?: Maybe<
+    { __typename?: 'AccessPolicyConnection' } & {
       paginationInfo: { __typename?: 'PaginationInfo' } & PaginationInfoFragmentFragment;
-      nodes?: Maybe<Array<Maybe<{ __typename?: 'AMPolicy' } & Pick<AmPolicy, 'id' | 'name' | 'tmpl'>>>>;
+      nodes?: Maybe<Array<Maybe<{ __typename?: 'AccessPolicy' } & Pick<AccessPolicy, 'id' | 'name' | 'tmpl'>>>>;
+    }
+  >;
+};
+
+export type AccessSpecializationsForOrgQueryVariables = Exact<{
+  orgSid: Scalars['ID'];
+  pageableInput?: Maybe<PageableInput>;
+}>;
+
+export type AccessSpecializationsForOrgQuery = { __typename?: 'Query' } & {
+  accessSpecializationsForOrg?: Maybe<
+    { __typename?: 'AccessSpecializationConnection' } & {
+      paginationInfo: { __typename?: 'PaginationInfo' } & PaginationInfoFragmentFragment;
+      nodes?: Maybe<Array<Maybe<{ __typename?: 'AccessSpecialization' } & Pick<AccessSpecialization, 'id' | 'name'>>>>;
+    }
+  >;
+};
+
+export type AccessPolicyGroupsForOrgQueryVariables = Exact<{
+  orgSid: Scalars['ID'];
+  pageableInput?: Maybe<PageableInput>;
+}>;
+
+export type AccessPolicyGroupsForOrgQuery = { __typename?: 'Query' } & {
+  accessPolicyGroupsForOrg?: Maybe<
+    { __typename?: 'AccessPolicyGroupConnection' } & {
+      paginationInfo: { __typename?: 'PaginationInfo' } & PaginationInfoFragmentFragment;
+      nodes?: Maybe<
+        Array<Maybe<{ __typename?: 'AccessPolicyGroup' } & Pick<AccessPolicyGroup, 'id' | 'name' | 'tmpl'>>>
+      >;
     }
   >;
 };
@@ -2103,20 +2068,6 @@ export type TopLevelOrgsByTypeQueryVariables = Exact<{
 export type TopLevelOrgsByTypeQuery = { __typename?: 'Query' } & {
   topLevelOrgsByType?: Maybe<
     Array<Maybe<{ __typename?: 'Organization' } & Pick<Organization, 'id' | 'orgId' | 'orgType'>>>
-  >;
-};
-
-export type AmGroupsForOrgPQueryVariables = Exact<{
-  orgSid: Scalars['ID'];
-  pageableInput?: Maybe<PageableInput>;
-}>;
-
-export type AmGroupsForOrgPQuery = { __typename?: 'Query' } & {
-  amGroupsForOrg?: Maybe<
-    { __typename?: 'AMGroupConnection' } & {
-      paginationInfo: { __typename?: 'PaginationInfo' } & PaginationInfoFragmentFragment;
-      nodes?: Maybe<Array<Maybe<{ __typename?: 'AMGroup' } & Pick<AmGroup, 'id' | 'name' | 'tmpl'>>>>;
-    }
   >;
 };
 
@@ -2287,36 +2238,14 @@ export type WpTransmissionsQuery = { __typename?: 'Query' } & {
   >;
 };
 
-export type AmPolicyQueryVariables = Exact<{
+export type AccessPolicyQueryVariables = Exact<{
   orgSid: Scalars['ID'];
   policySid: Scalars['ID'];
 }>;
 
-export type AmPolicyQuery = { __typename?: 'Query' } & {
-  amPolicy?: Maybe<
-    { __typename?: 'AMPolicy' } & Pick<AmPolicy, 'id' | 'name' | 'tmpl' | 'tmplUseAsIs' | 'tmplServiceType'> & {
-        permissions?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'AMPermission' } & Pick<
-                AmPermission,
-                'id' | 'effect' | 'predicate' | 'predVar1' | 'predParam1'
-              > & {
-                  actions?: Maybe<
-                    Array<
-                      Maybe<
-                        { __typename?: 'AMPermissionAction' } & Pick<
-                          AmPermissionAction,
-                          'id' | 'service' | 'facet' | 'verb'
-                        >
-                      >
-                    >
-                  >;
-                }
-            >
-          >
-        >;
-      }
+export type AccessPolicyQuery = { __typename?: 'Query' } & {
+  accessPolicy?: Maybe<
+    { __typename?: 'AccessPolicy' } & Pick<AccessPolicy, 'id' | 'name' | 'permissions' | 'tmpl' | 'tmplUseAsIs'>
   >;
 };
 
@@ -2352,16 +2281,6 @@ export type ScheduleOccurrencesQuery = { __typename?: 'Query' } & {
         >
       >;
     }
-  >;
-};
-
-export type UpdateAmPermissionActionMutationVariables = Exact<{
-  updateAMPermissionActionInput?: Maybe<UpdateAmPermissionActionInput>;
-}>;
-
-export type UpdateAmPermissionActionMutation = { __typename?: 'Mutation' } & {
-  updateAMPermissionAction?: Maybe<
-    { __typename?: 'AMPermissionAction' } & Pick<AmPermissionAction, 'id' | 'service' | 'facet' | 'verb'>
   >;
 };
 
@@ -2414,65 +2333,27 @@ export type CurrentUserQuery = { __typename?: 'Query' } & {
   >;
 };
 
-export type RemoveAmPolicyMutationVariables = Exact<{
+export type RemoveAccessPolicyMutationVariables = Exact<{
   policySid: Scalars['ID'];
 }>;
 
-export type RemoveAmPolicyMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'removeAMPolicy'>;
+export type RemoveAccessPolicyMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'removeAccessPolicy'>;
 
-export type RemoveAmPoliciesMutationVariables = Exact<{
-  deleteAMPoliciesInput: DeleteAmPoliciesInput;
+export type RemoveAccessPoliciesMutationVariables = Exact<{
+  deleteAccessPoliciesInput: DeleteAccessPoliciesInput;
 }>;
 
-export type RemoveAmPoliciesMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'removeAMPolicies'>;
+export type RemoveAccessPoliciesMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'removeAccessPolicies'>;
 
-export type CreateAmPermissionMutationVariables = Exact<{
-  permissionInfo: CreateAmPermissionInput;
+export type UpdateAccessPolicyMutationVariables = Exact<{
+  updateAccessPolicyInput: UpdateAccessPolicyInput;
 }>;
 
-export type CreateAmPermissionMutation = { __typename?: 'Mutation' } & {
-  createAMPermission?: Maybe<
-    { __typename?: 'AMPermission' } & Pick<AmPermission, 'id' | 'effect'> & {
-        actions?: Maybe<
-          Array<
-            Maybe<{ __typename?: 'AMPermissionAction' } & Pick<AmPermissionAction, 'id' | 'service' | 'facet' | 'verb'>>
-          >
-        >;
-      }
+export type UpdateAccessPolicyMutation = { __typename?: 'Mutation' } & {
+  updateAccessPolicy?: Maybe<
+    { __typename?: 'AccessPolicy' } & Pick<AccessPolicy, 'id' | 'name' | 'tmpl' | 'tmplUseAsIs' | 'permissions'>
   >;
 };
-
-export type UpdateAmPermissionMutationVariables = Exact<{
-  updateAMPermissionInput?: Maybe<UpdateAmPermissionInput>;
-}>;
-
-export type UpdateAmPermissionMutation = { __typename?: 'Mutation' } & {
-  updateAMPermission?: Maybe<
-    { __typename?: 'AMPermission' } & Pick<AmPermission, 'id' | 'effect' | 'predicate' | 'predVar1' | 'predParam1'>
-  >;
-};
-
-export type RemoveAmPermissionMutationVariables = Exact<{
-  permissionSid: Scalars['ID'];
-}>;
-
-export type RemoveAmPermissionMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'removeAMPermission'>;
-
-export type UpdateAmPolicyMutationVariables = Exact<{
-  updateAMPolicyInput: UpdateAmPolicyInput;
-}>;
-
-export type UpdateAmPolicyMutation = { __typename?: 'Mutation' } & {
-  updateAMPolicy?: Maybe<
-    { __typename?: 'AMPolicy' } & Pick<AmPolicy, 'id' | 'name' | 'tmpl' | 'tmplUseAsIs' | 'tmplServiceType'>
-  >;
-};
-
-export type RemoveAmPermissionActionMutationVariables = Exact<{
-  permissionActionSid: Scalars['ID'];
-}>;
-
-export type RemoveAmPermissionActionMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'removeAMPermissionAction'>;
 
 export type LogOutQueryVariables = Exact<{ [key: string]: never }>;
 
@@ -3069,11 +2950,11 @@ export type UserUpdatePageQuery = { __typename?: 'Query' } & {
   userUpdatePage?: Maybe<{ __typename?: 'UserPageInfo' } & FragmentUserPageInfoFragment>;
 };
 
-export type UserAssignAmGroupsPageQueryVariables = Exact<{
+export type UserAssignAccessPolicyGroupsPageQueryVariables = Exact<{
   sidInput: SidInput;
 }>;
 
-export type UserAssignAmGroupsPageQuery = { __typename?: 'Query' } & {
+export type UserAssignAccessPolicyGroupsPageQuery = { __typename?: 'Query' } & {
   userUpdatePage?: Maybe<{ __typename?: 'UserPageInfo' } & FragmentUserPageInfoFragment>;
 };
 
@@ -3081,11 +2962,11 @@ export type FragmentUserPageInfoFragment = { __typename?: 'UserPageInfo' } & {
   model?: Maybe<
     { __typename?: 'User' } & Pick<User, 'id' | 'email'> & {
         person?: Maybe<{ __typename?: 'Person' } & Pick<Person, 'firstNm' | 'lastNm'>>;
-        amGroups?: Maybe<
+        accessPolicyGroups?: Maybe<
           Array<
             Maybe<
-              { __typename?: 'AMGroup' } & Pick<AmGroup, 'id' | 'name'> & {
-                  policies?: Maybe<Array<Maybe<{ __typename?: 'AMPolicy' } & Pick<AmPolicy, 'name'>>>>;
+              { __typename?: 'AccessPolicyGroup' } & Pick<AccessPolicyGroup, 'id' | 'name'> & {
+                  policies?: Maybe<Array<Maybe<{ __typename?: 'AccessPolicy' } & Pick<AccessPolicy, 'name'>>>>;
                 }
             >
           >
@@ -3093,10 +2974,10 @@ export type FragmentUserPageInfoFragment = { __typename?: 'UserPageInfo' } & {
       }
   >;
   cdxPageInfo?: Maybe<{ __typename?: 'CDXPageInfo' } & FragmentPageInfoFragment>;
-  amGroupConnection?: Maybe<
-    { __typename?: 'AMGroupConnection' } & {
+  accessPolicyGroupConnection?: Maybe<
+    { __typename?: 'AccessPolicyGroupConnection' } & {
       paginationInfo: { __typename?: 'PaginationInfo' } & PaginationInfoFragmentFragment;
-      nodes?: Maybe<Array<Maybe<{ __typename?: 'AMGroup' } & Pick<AmGroup, 'id' | 'name'>>>>;
+      nodes?: Maybe<Array<Maybe<{ __typename?: 'AccessPolicyGroup' } & Pick<AccessPolicyGroup, 'id' | 'name'>>>>;
     }
   >;
 };
@@ -3322,24 +3203,12 @@ export const DashPeriodCountsFragmentFragmentDoc = gql`
   ${DashPeriodCountFragmentFragmentDoc}
 `;
 export const PolicyFragmentFragmentDoc = gql`
-  fragment policyFragment on AMPolicy {
+  fragment policyFragment on AccessPolicy {
     id
     name
     tmpl
     tmplUseAsIs
-    permissions {
-      id
-      effect
-      predicate
-      predVar1
-      predParam1
-      actions {
-        id
-        service
-        facet
-        verb
-      }
-    }
+    permissions
   }
 `;
 export const WebCommandFragmentFragmentDoc = gql`
@@ -3419,7 +3288,7 @@ export const FragmentUserPageInfoFragmentDoc = gql`
         firstNm
         lastNm
       }
-      amGroups {
+      accessPolicyGroups {
         id
         name
         policies {
@@ -3430,7 +3299,7 @@ export const FragmentUserPageInfoFragmentDoc = gql`
     cdxPageInfo {
       ...fragmentPageInfo
     }
-    amGroupConnection {
+    accessPolicyGroupConnection {
       paginationInfo {
         ...paginationInfoFragment
       }
@@ -3855,9 +3724,9 @@ export function useDashboardPeriodsLazyQuery(
 export type DashboardPeriodsQueryHookResult = ReturnType<typeof useDashboardPeriodsQuery>;
 export type DashboardPeriodsLazyQueryHookResult = ReturnType<typeof useDashboardPeriodsLazyQuery>;
 export type DashboardPeriodsQueryResult = Apollo.QueryResult<DashboardPeriodsQuery, DashboardPeriodsQueryVariables>;
-export const AmPolicyPageDocument = gql`
-  query AMPolicyPage($orgSid: ID!) {
-    amPolicyPage(orgSid: $orgSid) {
+export const AccessPolicyPageDocument = gql`
+  query AccessPolicyPage($orgSid: ID!) {
+    accessPolicyPage(orgSid: $orgSid) {
       permissionServices {
         name
         value
@@ -3871,140 +3740,42 @@ export const AmPolicyPageDocument = gql`
         name
         value
       }
-      permissionEffectNVPs {
-        name
-        value
-      }
     }
   }
 `;
 
 /**
- * __useAmPolicyPageQuery__
+ * __useAccessPolicyPageQuery__
  *
- * To run a query within a React component, call `useAmPolicyPageQuery` and pass it any options that fit your needs.
- * When your component renders, `useAmPolicyPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useAccessPolicyPageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAccessPolicyPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useAmPolicyPageQuery({
+ * const { data, loading, error } = useAccessPolicyPageQuery({
  *   variables: {
  *      orgSid: // value for 'orgSid'
  *   },
  * });
  */
-export function useAmPolicyPageQuery(
-  baseOptions: Apollo.QueryHookOptions<AmPolicyPageQuery, AmPolicyPageQueryVariables>
+export function useAccessPolicyPageQuery(
+  baseOptions: Apollo.QueryHookOptions<AccessPolicyPageQuery, AccessPolicyPageQueryVariables>
 ) {
-  return Apollo.useQuery<AmPolicyPageQuery, AmPolicyPageQueryVariables>(AmPolicyPageDocument, baseOptions);
+  return Apollo.useQuery<AccessPolicyPageQuery, AccessPolicyPageQueryVariables>(AccessPolicyPageDocument, baseOptions);
 }
-export function useAmPolicyPageLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<AmPolicyPageQuery, AmPolicyPageQueryVariables>
+export function useAccessPolicyPageLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<AccessPolicyPageQuery, AccessPolicyPageQueryVariables>
 ) {
-  return Apollo.useLazyQuery<AmPolicyPageQuery, AmPolicyPageQueryVariables>(AmPolicyPageDocument, baseOptions);
-}
-export type AmPolicyPageQueryHookResult = ReturnType<typeof useAmPolicyPageQuery>;
-export type AmPolicyPageLazyQueryHookResult = ReturnType<typeof useAmPolicyPageLazyQuery>;
-export type AmPolicyPageQueryResult = Apollo.QueryResult<AmPolicyPageQuery, AmPolicyPageQueryVariables>;
-export const AmPolicyFacetsForServiceDocument = gql`
-  query AMPolicyFacetsForService($orgSid: ID!, $cdxService: CDXService!) {
-    amPolicyFacetsForService(orgSid: $orgSid, cdxService: $cdxService) {
-      name
-      value
-    }
-  }
-`;
-
-/**
- * __useAmPolicyFacetsForServiceQuery__
- *
- * To run a query within a React component, call `useAmPolicyFacetsForServiceQuery` and pass it any options that fit your needs.
- * When your component renders, `useAmPolicyFacetsForServiceQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useAmPolicyFacetsForServiceQuery({
- *   variables: {
- *      orgSid: // value for 'orgSid'
- *      cdxService: // value for 'cdxService'
- *   },
- * });
- */
-export function useAmPolicyFacetsForServiceQuery(
-  baseOptions: Apollo.QueryHookOptions<AmPolicyFacetsForServiceQuery, AmPolicyFacetsForServiceQueryVariables>
-) {
-  return Apollo.useQuery<AmPolicyFacetsForServiceQuery, AmPolicyFacetsForServiceQueryVariables>(
-    AmPolicyFacetsForServiceDocument,
+  return Apollo.useLazyQuery<AccessPolicyPageQuery, AccessPolicyPageQueryVariables>(
+    AccessPolicyPageDocument,
     baseOptions
   );
 }
-export function useAmPolicyFacetsForServiceLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<AmPolicyFacetsForServiceQuery, AmPolicyFacetsForServiceQueryVariables>
-) {
-  return Apollo.useLazyQuery<AmPolicyFacetsForServiceQuery, AmPolicyFacetsForServiceQueryVariables>(
-    AmPolicyFacetsForServiceDocument,
-    baseOptions
-  );
-}
-export type AmPolicyFacetsForServiceQueryHookResult = ReturnType<typeof useAmPolicyFacetsForServiceQuery>;
-export type AmPolicyFacetsForServiceLazyQueryHookResult = ReturnType<typeof useAmPolicyFacetsForServiceLazyQuery>;
-export type AmPolicyFacetsForServiceQueryResult = Apollo.QueryResult<
-  AmPolicyFacetsForServiceQuery,
-  AmPolicyFacetsForServiceQueryVariables
->;
-export const AmPolicyVerbForFacetDocument = gql`
-  query AMPolicyVerbForFacet($orgSid: ID!, $cdxService: CDXService!, $cdxFacet: CDXFacet!) {
-    amPolicyVerbForFacet(orgSid: $orgSid, cdxService: $cdxService, cdxFacet: $cdxFacet) {
-      name
-      value
-    }
-  }
-`;
-
-/**
- * __useAmPolicyVerbForFacetQuery__
- *
- * To run a query within a React component, call `useAmPolicyVerbForFacetQuery` and pass it any options that fit your needs.
- * When your component renders, `useAmPolicyVerbForFacetQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useAmPolicyVerbForFacetQuery({
- *   variables: {
- *      orgSid: // value for 'orgSid'
- *      cdxService: // value for 'cdxService'
- *      cdxFacet: // value for 'cdxFacet'
- *   },
- * });
- */
-export function useAmPolicyVerbForFacetQuery(
-  baseOptions: Apollo.QueryHookOptions<AmPolicyVerbForFacetQuery, AmPolicyVerbForFacetQueryVariables>
-) {
-  return Apollo.useQuery<AmPolicyVerbForFacetQuery, AmPolicyVerbForFacetQueryVariables>(
-    AmPolicyVerbForFacetDocument,
-    baseOptions
-  );
-}
-export function useAmPolicyVerbForFacetLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<AmPolicyVerbForFacetQuery, AmPolicyVerbForFacetQueryVariables>
-) {
-  return Apollo.useLazyQuery<AmPolicyVerbForFacetQuery, AmPolicyVerbForFacetQueryVariables>(
-    AmPolicyVerbForFacetDocument,
-    baseOptions
-  );
-}
-export type AmPolicyVerbForFacetQueryHookResult = ReturnType<typeof useAmPolicyVerbForFacetQuery>;
-export type AmPolicyVerbForFacetLazyQueryHookResult = ReturnType<typeof useAmPolicyVerbForFacetLazyQuery>;
-export type AmPolicyVerbForFacetQueryResult = Apollo.QueryResult<
-  AmPolicyVerbForFacetQuery,
-  AmPolicyVerbForFacetQueryVariables
->;
+export type AccessPolicyPageQueryHookResult = ReturnType<typeof useAccessPolicyPageQuery>;
+export type AccessPolicyPageLazyQueryHookResult = ReturnType<typeof useAccessPolicyPageLazyQuery>;
+export type AccessPolicyPageQueryResult = Apollo.QueryResult<AccessPolicyPageQuery, AccessPolicyPageQueryVariables>;
 export const CreateOrgDocument = gql`
   mutation CreateOrg($orgInfo: CreateOrgInput!) {
     createOrg(orgInfo: $orgInfo) {
@@ -4041,50 +3812,53 @@ export function useCreateOrgMutation(
 export type CreateOrgMutationHookResult = ReturnType<typeof useCreateOrgMutation>;
 export type CreateOrgMutationResult = Apollo.MutationResult<CreateOrgMutation>;
 export type CreateOrgMutationOptions = Apollo.BaseMutationOptions<CreateOrgMutation, CreateOrgMutationVariables>;
-export const CreateAmPolicyDocument = gql`
-  mutation CreateAMPolicy($policyInfo: CreateAMPolicyInput!) {
-    createAMPolicy(policyInfo: $policyInfo) {
+export const CreateAccessPolicyDocument = gql`
+  mutation CreateAccessPolicy($policyInfo: CreateAccessPolicyInput!) {
+    createAccessPolicy(policyInfo: $policyInfo) {
       ...policyFragment
     }
   }
   ${PolicyFragmentFragmentDoc}
 `;
-export type CreateAmPolicyMutationFn = Apollo.MutationFunction<CreateAmPolicyMutation, CreateAmPolicyMutationVariables>;
+export type CreateAccessPolicyMutationFn = Apollo.MutationFunction<
+  CreateAccessPolicyMutation,
+  CreateAccessPolicyMutationVariables
+>;
 
 /**
- * __useCreateAmPolicyMutation__
+ * __useCreateAccessPolicyMutation__
  *
- * To run a mutation, you first call `useCreateAmPolicyMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateAmPolicyMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useCreateAccessPolicyMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateAccessPolicyMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [createAmPolicyMutation, { data, loading, error }] = useCreateAmPolicyMutation({
+ * const [createAccessPolicyMutation, { data, loading, error }] = useCreateAccessPolicyMutation({
  *   variables: {
  *      policyInfo: // value for 'policyInfo'
  *   },
  * });
  */
-export function useCreateAmPolicyMutation(
-  baseOptions?: Apollo.MutationHookOptions<CreateAmPolicyMutation, CreateAmPolicyMutationVariables>
+export function useCreateAccessPolicyMutation(
+  baseOptions?: Apollo.MutationHookOptions<CreateAccessPolicyMutation, CreateAccessPolicyMutationVariables>
 ) {
-  return Apollo.useMutation<CreateAmPolicyMutation, CreateAmPolicyMutationVariables>(
-    CreateAmPolicyDocument,
+  return Apollo.useMutation<CreateAccessPolicyMutation, CreateAccessPolicyMutationVariables>(
+    CreateAccessPolicyDocument,
     baseOptions
   );
 }
-export type CreateAmPolicyMutationHookResult = ReturnType<typeof useCreateAmPolicyMutation>;
-export type CreateAmPolicyMutationResult = Apollo.MutationResult<CreateAmPolicyMutation>;
-export type CreateAmPolicyMutationOptions = Apollo.BaseMutationOptions<
-  CreateAmPolicyMutation,
-  CreateAmPolicyMutationVariables
+export type CreateAccessPolicyMutationHookResult = ReturnType<typeof useCreateAccessPolicyMutation>;
+export type CreateAccessPolicyMutationResult = Apollo.MutationResult<CreateAccessPolicyMutation>;
+export type CreateAccessPolicyMutationOptions = Apollo.BaseMutationOptions<
+  CreateAccessPolicyMutation,
+  CreateAccessPolicyMutationVariables
 >;
-export const CreateAmGroupDocument = gql`
-  mutation CreateAMGroup($amGroupInfo: CreateAMGroupInput!) {
-    createAMGroup(amGroupInfo: $amGroupInfo) {
+export const CreateAccessPolicyGroupDocument = gql`
+  mutation CreateAccessPolicyGroup($accessPolicyGroupInfo: CreateAccessPolicyGroupInput!) {
+    createAccessPolicyGroup(accessPolicyGroupInfo: $accessPolicyGroupInfo) {
       id
       name
       description
@@ -4097,86 +3871,152 @@ export const CreateAmGroupDocument = gql`
     }
   }
 `;
-export type CreateAmGroupMutationFn = Apollo.MutationFunction<CreateAmGroupMutation, CreateAmGroupMutationVariables>;
+export type CreateAccessPolicyGroupMutationFn = Apollo.MutationFunction<
+  CreateAccessPolicyGroupMutation,
+  CreateAccessPolicyGroupMutationVariables
+>;
 
 /**
- * __useCreateAmGroupMutation__
+ * __useCreateAccessPolicyGroupMutation__
  *
- * To run a mutation, you first call `useCreateAmGroupMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateAmGroupMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useCreateAccessPolicyGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateAccessPolicyGroupMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [createAmGroupMutation, { data, loading, error }] = useCreateAmGroupMutation({
+ * const [createAccessPolicyGroupMutation, { data, loading, error }] = useCreateAccessPolicyGroupMutation({
  *   variables: {
- *      amGroupInfo: // value for 'amGroupInfo'
+ *      accessPolicyGroupInfo: // value for 'accessPolicyGroupInfo'
  *   },
  * });
  */
-export function useCreateAmGroupMutation(
-  baseOptions?: Apollo.MutationHookOptions<CreateAmGroupMutation, CreateAmGroupMutationVariables>
+export function useCreateAccessPolicyGroupMutation(
+  baseOptions?: Apollo.MutationHookOptions<CreateAccessPolicyGroupMutation, CreateAccessPolicyGroupMutationVariables>
 ) {
-  return Apollo.useMutation<CreateAmGroupMutation, CreateAmGroupMutationVariables>(CreateAmGroupDocument, baseOptions);
+  return Apollo.useMutation<CreateAccessPolicyGroupMutation, CreateAccessPolicyGroupMutationVariables>(
+    CreateAccessPolicyGroupDocument,
+    baseOptions
+  );
 }
-export type CreateAmGroupMutationHookResult = ReturnType<typeof useCreateAmGroupMutation>;
-export type CreateAmGroupMutationResult = Apollo.MutationResult<CreateAmGroupMutation>;
-export type CreateAmGroupMutationOptions = Apollo.BaseMutationOptions<
-  CreateAmGroupMutation,
-  CreateAmGroupMutationVariables
+export type CreateAccessPolicyGroupMutationHookResult = ReturnType<typeof useCreateAccessPolicyGroupMutation>;
+export type CreateAccessPolicyGroupMutationResult = Apollo.MutationResult<CreateAccessPolicyGroupMutation>;
+export type CreateAccessPolicyGroupMutationOptions = Apollo.BaseMutationOptions<
+  CreateAccessPolicyGroupMutation,
+  CreateAccessPolicyGroupMutationVariables
 >;
-export const SystemTemplateAmGroupByNameDocument = gql`
-  query SystemTemplateAMGroupByName($name: String!) {
-    systemTemplateAMGroupByName(name: $name) {
+export const CreateAccessSpecializationDocument = gql`
+  mutation CreateAccessSpecialization($specializationInfo: CreateAccessSpecializationInput!) {
+    createAccessSpecialization(specializationInfo: $specializationInfo) {
+      id
+      name
+      filters {
+        permission
+        organizationIds
+      }
+    }
+  }
+`;
+export type CreateAccessSpecializationMutationFn = Apollo.MutationFunction<
+  CreateAccessSpecializationMutation,
+  CreateAccessSpecializationMutationVariables
+>;
+
+/**
+ * __useCreateAccessSpecializationMutation__
+ *
+ * To run a mutation, you first call `useCreateAccessSpecializationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateAccessSpecializationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createAccessSpecializationMutation, { data, loading, error }] = useCreateAccessSpecializationMutation({
+ *   variables: {
+ *      specializationInfo: // value for 'specializationInfo'
+ *   },
+ * });
+ */
+export function useCreateAccessSpecializationMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateAccessSpecializationMutation,
+    CreateAccessSpecializationMutationVariables
+  >
+) {
+  return Apollo.useMutation<CreateAccessSpecializationMutation, CreateAccessSpecializationMutationVariables>(
+    CreateAccessSpecializationDocument,
+    baseOptions
+  );
+}
+export type CreateAccessSpecializationMutationHookResult = ReturnType<typeof useCreateAccessSpecializationMutation>;
+export type CreateAccessSpecializationMutationResult = Apollo.MutationResult<CreateAccessSpecializationMutation>;
+export type CreateAccessSpecializationMutationOptions = Apollo.BaseMutationOptions<
+  CreateAccessSpecializationMutation,
+  CreateAccessSpecializationMutationVariables
+>;
+export const SystemTemplateAccessPolicyGroupByNameDocument = gql`
+  query SystemTemplateAccessPolicyGroupByName($name: String!) {
+    systemTemplateAccessPolicyGroupByName(name: $name) {
       id
       name
       description
       tmpl
       tmplUseAsIs
-      tmplServiceType
     }
   }
 `;
 
 /**
- * __useSystemTemplateAmGroupByNameQuery__
+ * __useSystemTemplateAccessPolicyGroupByNameQuery__
  *
- * To run a query within a React component, call `useSystemTemplateAmGroupByNameQuery` and pass it any options that fit your needs.
- * When your component renders, `useSystemTemplateAmGroupByNameQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useSystemTemplateAccessPolicyGroupByNameQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSystemTemplateAccessPolicyGroupByNameQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useSystemTemplateAmGroupByNameQuery({
+ * const { data, loading, error } = useSystemTemplateAccessPolicyGroupByNameQuery({
  *   variables: {
  *      name: // value for 'name'
  *   },
  * });
  */
-export function useSystemTemplateAmGroupByNameQuery(
-  baseOptions: Apollo.QueryHookOptions<SystemTemplateAmGroupByNameQuery, SystemTemplateAmGroupByNameQueryVariables>
+export function useSystemTemplateAccessPolicyGroupByNameQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    SystemTemplateAccessPolicyGroupByNameQuery,
+    SystemTemplateAccessPolicyGroupByNameQueryVariables
+  >
 ) {
-  return Apollo.useQuery<SystemTemplateAmGroupByNameQuery, SystemTemplateAmGroupByNameQueryVariables>(
-    SystemTemplateAmGroupByNameDocument,
-    baseOptions
-  );
+  return Apollo.useQuery<
+    SystemTemplateAccessPolicyGroupByNameQuery,
+    SystemTemplateAccessPolicyGroupByNameQueryVariables
+  >(SystemTemplateAccessPolicyGroupByNameDocument, baseOptions);
 }
-export function useSystemTemplateAmGroupByNameLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<SystemTemplateAmGroupByNameQuery, SystemTemplateAmGroupByNameQueryVariables>
+export function useSystemTemplateAccessPolicyGroupByNameLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    SystemTemplateAccessPolicyGroupByNameQuery,
+    SystemTemplateAccessPolicyGroupByNameQueryVariables
+  >
 ) {
-  return Apollo.useLazyQuery<SystemTemplateAmGroupByNameQuery, SystemTemplateAmGroupByNameQueryVariables>(
-    SystemTemplateAmGroupByNameDocument,
-    baseOptions
-  );
+  return Apollo.useLazyQuery<
+    SystemTemplateAccessPolicyGroupByNameQuery,
+    SystemTemplateAccessPolicyGroupByNameQueryVariables
+  >(SystemTemplateAccessPolicyGroupByNameDocument, baseOptions);
 }
-export type SystemTemplateAmGroupByNameQueryHookResult = ReturnType<typeof useSystemTemplateAmGroupByNameQuery>;
-export type SystemTemplateAmGroupByNameLazyQueryHookResult = ReturnType<typeof useSystemTemplateAmGroupByNameLazyQuery>;
-export type SystemTemplateAmGroupByNameQueryResult = Apollo.QueryResult<
-  SystemTemplateAmGroupByNameQuery,
-  SystemTemplateAmGroupByNameQueryVariables
+export type SystemTemplateAccessPolicyGroupByNameQueryHookResult = ReturnType<
+  typeof useSystemTemplateAccessPolicyGroupByNameQuery
+>;
+export type SystemTemplateAccessPolicyGroupByNameLazyQueryHookResult = ReturnType<
+  typeof useSystemTemplateAccessPolicyGroupByNameLazyQuery
+>;
+export type SystemTemplateAccessPolicyGroupByNameQueryResult = Apollo.QueryResult<
+  SystemTemplateAccessPolicyGroupByNameQuery,
+  SystemTemplateAccessPolicyGroupByNameQueryVariables
 >;
 export const CreateUserDocument = gql`
   mutation CreateUser($userInfo: CreateUserInput!, $personInfo: CreatePersonInput!) {
@@ -4262,49 +4102,52 @@ export function useUpdateUserMutation(
 export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
 export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
 export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
-export const UpdateUserAmGroupsDocument = gql`
-  mutation UpdateUserAMGroups($userAmGroupUpdate: UpdateUserAMGroupsInput!) {
-    updateUserAMGroups(userAmGroupUpdate: $userAmGroupUpdate) {
+export const UpdateUserAccessPolicyGroupsDocument = gql`
+  mutation UpdateUserAccessPolicyGroups($userAccessPolicyGroupUpdate: UpdateUserAccessPolicyGroupsInput!) {
+    updateUserAccessPolicyGroups(userAccessPolicyGroupUpdate: $userAccessPolicyGroupUpdate) {
       id
       name
     }
   }
 `;
-export type UpdateUserAmGroupsMutationFn = Apollo.MutationFunction<
-  UpdateUserAmGroupsMutation,
-  UpdateUserAmGroupsMutationVariables
+export type UpdateUserAccessPolicyGroupsMutationFn = Apollo.MutationFunction<
+  UpdateUserAccessPolicyGroupsMutation,
+  UpdateUserAccessPolicyGroupsMutationVariables
 >;
 
 /**
- * __useUpdateUserAmGroupsMutation__
+ * __useUpdateUserAccessPolicyGroupsMutation__
  *
- * To run a mutation, you first call `useUpdateUserAmGroupsMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateUserAmGroupsMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useUpdateUserAccessPolicyGroupsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserAccessPolicyGroupsMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [updateUserAmGroupsMutation, { data, loading, error }] = useUpdateUserAmGroupsMutation({
+ * const [updateUserAccessPolicyGroupsMutation, { data, loading, error }] = useUpdateUserAccessPolicyGroupsMutation({
  *   variables: {
- *      userAmGroupUpdate: // value for 'userAmGroupUpdate'
+ *      userAccessPolicyGroupUpdate: // value for 'userAccessPolicyGroupUpdate'
  *   },
  * });
  */
-export function useUpdateUserAmGroupsMutation(
-  baseOptions?: Apollo.MutationHookOptions<UpdateUserAmGroupsMutation, UpdateUserAmGroupsMutationVariables>
+export function useUpdateUserAccessPolicyGroupsMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateUserAccessPolicyGroupsMutation,
+    UpdateUserAccessPolicyGroupsMutationVariables
+  >
 ) {
-  return Apollo.useMutation<UpdateUserAmGroupsMutation, UpdateUserAmGroupsMutationVariables>(
-    UpdateUserAmGroupsDocument,
+  return Apollo.useMutation<UpdateUserAccessPolicyGroupsMutation, UpdateUserAccessPolicyGroupsMutationVariables>(
+    UpdateUserAccessPolicyGroupsDocument,
     baseOptions
   );
 }
-export type UpdateUserAmGroupsMutationHookResult = ReturnType<typeof useUpdateUserAmGroupsMutation>;
-export type UpdateUserAmGroupsMutationResult = Apollo.MutationResult<UpdateUserAmGroupsMutation>;
-export type UpdateUserAmGroupsMutationOptions = Apollo.BaseMutationOptions<
-  UpdateUserAmGroupsMutation,
-  UpdateUserAmGroupsMutationVariables
+export type UpdateUserAccessPolicyGroupsMutationHookResult = ReturnType<typeof useUpdateUserAccessPolicyGroupsMutation>;
+export type UpdateUserAccessPolicyGroupsMutationResult = Apollo.MutationResult<UpdateUserAccessPolicyGroupsMutation>;
+export type UpdateUserAccessPolicyGroupsMutationOptions = Apollo.BaseMutationOptions<
+  UpdateUserAccessPolicyGroupsMutation,
+  UpdateUserAccessPolicyGroupsMutationVariables
 >;
 export const DeactivateUserDocument = gql`
   mutation DeactivateUser($sidInput: SidInput!) {
@@ -4455,9 +4298,9 @@ export type ActivateUsersMutationOptions = Apollo.BaseMutationOptions<
   ActivateUsersMutation,
   ActivateUsersMutationVariables
 >;
-export const AmPoliciesForOrgPDocument = gql`
-  query AMPoliciesForOrgP($orgSid: ID!, $pageableInput: PageableInput) {
-    amPoliciesForOrg(orgSid: $orgSid, pageableInput: $pageableInput) {
+export const AccessPoliciesForOrgDocument = gql`
+  query AccessPoliciesForOrg($orgSid: ID!, $pageableInput: PageableInput) {
+    accessPoliciesForOrg(orgSid: $orgSid, pageableInput: $pageableInput) {
       paginationInfo {
         ...paginationInfoFragment
       }
@@ -4472,41 +4315,153 @@ export const AmPoliciesForOrgPDocument = gql`
 `;
 
 /**
- * __useAmPoliciesForOrgPQuery__
+ * __useAccessPoliciesForOrgQuery__
  *
- * To run a query within a React component, call `useAmPoliciesForOrgPQuery` and pass it any options that fit your needs.
- * When your component renders, `useAmPoliciesForOrgPQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useAccessPoliciesForOrgQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAccessPoliciesForOrgQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useAmPoliciesForOrgPQuery({
+ * const { data, loading, error } = useAccessPoliciesForOrgQuery({
  *   variables: {
  *      orgSid: // value for 'orgSid'
  *      pageableInput: // value for 'pageableInput'
  *   },
  * });
  */
-export function useAmPoliciesForOrgPQuery(
-  baseOptions: Apollo.QueryHookOptions<AmPoliciesForOrgPQuery, AmPoliciesForOrgPQueryVariables>
+export function useAccessPoliciesForOrgQuery(
+  baseOptions: Apollo.QueryHookOptions<AccessPoliciesForOrgQuery, AccessPoliciesForOrgQueryVariables>
 ) {
-  return Apollo.useQuery<AmPoliciesForOrgPQuery, AmPoliciesForOrgPQueryVariables>(
-    AmPoliciesForOrgPDocument,
+  return Apollo.useQuery<AccessPoliciesForOrgQuery, AccessPoliciesForOrgQueryVariables>(
+    AccessPoliciesForOrgDocument,
     baseOptions
   );
 }
-export function useAmPoliciesForOrgPLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<AmPoliciesForOrgPQuery, AmPoliciesForOrgPQueryVariables>
+export function useAccessPoliciesForOrgLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<AccessPoliciesForOrgQuery, AccessPoliciesForOrgQueryVariables>
 ) {
-  return Apollo.useLazyQuery<AmPoliciesForOrgPQuery, AmPoliciesForOrgPQueryVariables>(
-    AmPoliciesForOrgPDocument,
+  return Apollo.useLazyQuery<AccessPoliciesForOrgQuery, AccessPoliciesForOrgQueryVariables>(
+    AccessPoliciesForOrgDocument,
     baseOptions
   );
 }
-export type AmPoliciesForOrgPQueryHookResult = ReturnType<typeof useAmPoliciesForOrgPQuery>;
-export type AmPoliciesForOrgPLazyQueryHookResult = ReturnType<typeof useAmPoliciesForOrgPLazyQuery>;
-export type AmPoliciesForOrgPQueryResult = Apollo.QueryResult<AmPoliciesForOrgPQuery, AmPoliciesForOrgPQueryVariables>;
+export type AccessPoliciesForOrgQueryHookResult = ReturnType<typeof useAccessPoliciesForOrgQuery>;
+export type AccessPoliciesForOrgLazyQueryHookResult = ReturnType<typeof useAccessPoliciesForOrgLazyQuery>;
+export type AccessPoliciesForOrgQueryResult = Apollo.QueryResult<
+  AccessPoliciesForOrgQuery,
+  AccessPoliciesForOrgQueryVariables
+>;
+export const AccessSpecializationsForOrgDocument = gql`
+  query AccessSpecializationsForOrg($orgSid: ID!, $pageableInput: PageableInput) {
+    accessSpecializationsForOrg(orgSid: $orgSid, pageableInput: $pageableInput) {
+      paginationInfo {
+        ...paginationInfoFragment
+      }
+      nodes {
+        id
+        name
+      }
+    }
+  }
+  ${PaginationInfoFragmentFragmentDoc}
+`;
+
+/**
+ * __useAccessSpecializationsForOrgQuery__
+ *
+ * To run a query within a React component, call `useAccessSpecializationsForOrgQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAccessSpecializationsForOrgQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAccessSpecializationsForOrgQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *      pageableInput: // value for 'pageableInput'
+ *   },
+ * });
+ */
+export function useAccessSpecializationsForOrgQuery(
+  baseOptions: Apollo.QueryHookOptions<AccessSpecializationsForOrgQuery, AccessSpecializationsForOrgQueryVariables>
+) {
+  return Apollo.useQuery<AccessSpecializationsForOrgQuery, AccessSpecializationsForOrgQueryVariables>(
+    AccessSpecializationsForOrgDocument,
+    baseOptions
+  );
+}
+export function useAccessSpecializationsForOrgLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<AccessSpecializationsForOrgQuery, AccessSpecializationsForOrgQueryVariables>
+) {
+  return Apollo.useLazyQuery<AccessSpecializationsForOrgQuery, AccessSpecializationsForOrgQueryVariables>(
+    AccessSpecializationsForOrgDocument,
+    baseOptions
+  );
+}
+export type AccessSpecializationsForOrgQueryHookResult = ReturnType<typeof useAccessSpecializationsForOrgQuery>;
+export type AccessSpecializationsForOrgLazyQueryHookResult = ReturnType<typeof useAccessSpecializationsForOrgLazyQuery>;
+export type AccessSpecializationsForOrgQueryResult = Apollo.QueryResult<
+  AccessSpecializationsForOrgQuery,
+  AccessSpecializationsForOrgQueryVariables
+>;
+export const AccessPolicyGroupsForOrgDocument = gql`
+  query AccessPolicyGroupsForOrg($orgSid: ID!, $pageableInput: PageableInput) {
+    accessPolicyGroupsForOrg(orgSid: $orgSid, pageableInput: $pageableInput) {
+      paginationInfo {
+        ...paginationInfoFragment
+      }
+      nodes {
+        id
+        name
+        tmpl
+      }
+    }
+  }
+  ${PaginationInfoFragmentFragmentDoc}
+`;
+
+/**
+ * __useAccessPolicyGroupsForOrgQuery__
+ *
+ * To run a query within a React component, call `useAccessPolicyGroupsForOrgQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAccessPolicyGroupsForOrgQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAccessPolicyGroupsForOrgQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *      pageableInput: // value for 'pageableInput'
+ *   },
+ * });
+ */
+export function useAccessPolicyGroupsForOrgQuery(
+  baseOptions: Apollo.QueryHookOptions<AccessPolicyGroupsForOrgQuery, AccessPolicyGroupsForOrgQueryVariables>
+) {
+  return Apollo.useQuery<AccessPolicyGroupsForOrgQuery, AccessPolicyGroupsForOrgQueryVariables>(
+    AccessPolicyGroupsForOrgDocument,
+    baseOptions
+  );
+}
+export function useAccessPolicyGroupsForOrgLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<AccessPolicyGroupsForOrgQuery, AccessPolicyGroupsForOrgQueryVariables>
+) {
+  return Apollo.useLazyQuery<AccessPolicyGroupsForOrgQuery, AccessPolicyGroupsForOrgQueryVariables>(
+    AccessPolicyGroupsForOrgDocument,
+    baseOptions
+  );
+}
+export type AccessPolicyGroupsForOrgQueryHookResult = ReturnType<typeof useAccessPolicyGroupsForOrgQuery>;
+export type AccessPolicyGroupsForOrgLazyQueryHookResult = ReturnType<typeof useAccessPolicyGroupsForOrgLazyQuery>;
+export type AccessPolicyGroupsForOrgQueryResult = Apollo.QueryResult<
+  AccessPolicyGroupsForOrgQuery,
+  AccessPolicyGroupsForOrgQueryVariables
+>;
 export const TopLevelOrgsByTypeDocument = gql`
   query TopLevelOrgsByType($orgType: OrgType!) {
     topLevelOrgsByType(orgType: $orgType) {
@@ -4555,52 +4510,6 @@ export type TopLevelOrgsByTypeQueryResult = Apollo.QueryResult<
   TopLevelOrgsByTypeQuery,
   TopLevelOrgsByTypeQueryVariables
 >;
-export const AmGroupsForOrgPDocument = gql`
-  query AMGroupsForOrgP($orgSid: ID!, $pageableInput: PageableInput) {
-    amGroupsForOrg(orgSid: $orgSid, pageableInput: $pageableInput) {
-      paginationInfo {
-        ...paginationInfoFragment
-      }
-      nodes {
-        id
-        name
-        tmpl
-      }
-    }
-  }
-  ${PaginationInfoFragmentFragmentDoc}
-`;
-
-/**
- * __useAmGroupsForOrgPQuery__
- *
- * To run a query within a React component, call `useAmGroupsForOrgPQuery` and pass it any options that fit your needs.
- * When your component renders, `useAmGroupsForOrgPQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useAmGroupsForOrgPQuery({
- *   variables: {
- *      orgSid: // value for 'orgSid'
- *      pageableInput: // value for 'pageableInput'
- *   },
- * });
- */
-export function useAmGroupsForOrgPQuery(
-  baseOptions: Apollo.QueryHookOptions<AmGroupsForOrgPQuery, AmGroupsForOrgPQueryVariables>
-) {
-  return Apollo.useQuery<AmGroupsForOrgPQuery, AmGroupsForOrgPQueryVariables>(AmGroupsForOrgPDocument, baseOptions);
-}
-export function useAmGroupsForOrgPLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<AmGroupsForOrgPQuery, AmGroupsForOrgPQueryVariables>
-) {
-  return Apollo.useLazyQuery<AmGroupsForOrgPQuery, AmGroupsForOrgPQueryVariables>(AmGroupsForOrgPDocument, baseOptions);
-}
-export type AmGroupsForOrgPQueryHookResult = ReturnType<typeof useAmGroupsForOrgPQuery>;
-export type AmGroupsForOrgPLazyQueryHookResult = ReturnType<typeof useAmGroupsForOrgPLazyQuery>;
-export type AmGroupsForOrgPQueryResult = Apollo.QueryResult<AmGroupsForOrgPQuery, AmGroupsForOrgPQueryVariables>;
 export const UsersForOrgFpDocument = gql`
   query UsersForOrgFP($orgSid: ID!, $userFilter: UserFilterInput, $pageableInput: PageableInput) {
     usersForOrg(orgSid: $orgSid, userFilter: $userFilter, pageableInput: $pageableInput) {
@@ -4945,57 +4854,48 @@ export function useWpTransmissionsLazyQuery(
 export type WpTransmissionsQueryHookResult = ReturnType<typeof useWpTransmissionsQuery>;
 export type WpTransmissionsLazyQueryHookResult = ReturnType<typeof useWpTransmissionsLazyQuery>;
 export type WpTransmissionsQueryResult = Apollo.QueryResult<WpTransmissionsQuery, WpTransmissionsQueryVariables>;
-export const AmPolicyDocument = gql`
-  query AMPolicy($orgSid: ID!, $policySid: ID!) {
-    amPolicy(orgSid: $orgSid, policySid: $policySid) {
+export const AccessPolicyDocument = gql`
+  query AccessPolicy($orgSid: ID!, $policySid: ID!) {
+    accessPolicy(orgSid: $orgSid, policySid: $policySid) {
       id
       name
-      permissions {
-        id
-        effect
-        actions {
-          id
-          service
-          facet
-          verb
-        }
-        predicate
-        predVar1
-        predParam1
-      }
+      permissions
       tmpl
       tmplUseAsIs
-      tmplServiceType
     }
   }
 `;
 
 /**
- * __useAmPolicyQuery__
+ * __useAccessPolicyQuery__
  *
- * To run a query within a React component, call `useAmPolicyQuery` and pass it any options that fit your needs.
- * When your component renders, `useAmPolicyQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useAccessPolicyQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAccessPolicyQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useAmPolicyQuery({
+ * const { data, loading, error } = useAccessPolicyQuery({
  *   variables: {
  *      orgSid: // value for 'orgSid'
  *      policySid: // value for 'policySid'
  *   },
  * });
  */
-export function useAmPolicyQuery(baseOptions: Apollo.QueryHookOptions<AmPolicyQuery, AmPolicyQueryVariables>) {
-  return Apollo.useQuery<AmPolicyQuery, AmPolicyQueryVariables>(AmPolicyDocument, baseOptions);
+export function useAccessPolicyQuery(
+  baseOptions: Apollo.QueryHookOptions<AccessPolicyQuery, AccessPolicyQueryVariables>
+) {
+  return Apollo.useQuery<AccessPolicyQuery, AccessPolicyQueryVariables>(AccessPolicyDocument, baseOptions);
 }
-export function useAmPolicyLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AmPolicyQuery, AmPolicyQueryVariables>) {
-  return Apollo.useLazyQuery<AmPolicyQuery, AmPolicyQueryVariables>(AmPolicyDocument, baseOptions);
+export function useAccessPolicyLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<AccessPolicyQuery, AccessPolicyQueryVariables>
+) {
+  return Apollo.useLazyQuery<AccessPolicyQuery, AccessPolicyQueryVariables>(AccessPolicyDocument, baseOptions);
 }
-export type AmPolicyQueryHookResult = ReturnType<typeof useAmPolicyQuery>;
-export type AmPolicyLazyQueryHookResult = ReturnType<typeof useAmPolicyLazyQuery>;
-export type AmPolicyQueryResult = Apollo.QueryResult<AmPolicyQuery, AmPolicyQueryVariables>;
+export type AccessPolicyQueryHookResult = ReturnType<typeof useAccessPolicyQuery>;
+export type AccessPolicyLazyQueryHookResult = ReturnType<typeof useAccessPolicyLazyQuery>;
+export type AccessPolicyQueryResult = Apollo.QueryResult<AccessPolicyQuery, AccessPolicyQueryVariables>;
 export const ScheduleOccurrencesDocument = gql`
   query ScheduleOccurrences($orgSid: ID!, $dateRange: DateTimeRangeInput, $pageableInput: PageableInput) {
     scheduleOccurrences(orgSid: $orgSid, dateRange: $dateRange, pageableInput: $pageableInput) {
@@ -5057,52 +4957,6 @@ export type ScheduleOccurrencesLazyQueryHookResult = ReturnType<typeof useSchedu
 export type ScheduleOccurrencesQueryResult = Apollo.QueryResult<
   ScheduleOccurrencesQuery,
   ScheduleOccurrencesQueryVariables
->;
-export const UpdateAmPermissionActionDocument = gql`
-  mutation UpdateAMPermissionAction($updateAMPermissionActionInput: UpdateAMPermissionActionInput) {
-    updateAMPermissionAction(updateAMPermissionActionInput: $updateAMPermissionActionInput) {
-      id
-      service
-      facet
-      verb
-    }
-  }
-`;
-export type UpdateAmPermissionActionMutationFn = Apollo.MutationFunction<
-  UpdateAmPermissionActionMutation,
-  UpdateAmPermissionActionMutationVariables
->;
-
-/**
- * __useUpdateAmPermissionActionMutation__
- *
- * To run a mutation, you first call `useUpdateAmPermissionActionMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateAmPermissionActionMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateAmPermissionActionMutation, { data, loading, error }] = useUpdateAmPermissionActionMutation({
- *   variables: {
- *      updateAMPermissionActionInput: // value for 'updateAMPermissionActionInput'
- *   },
- * });
- */
-export function useUpdateAmPermissionActionMutation(
-  baseOptions?: Apollo.MutationHookOptions<UpdateAmPermissionActionMutation, UpdateAmPermissionActionMutationVariables>
-) {
-  return Apollo.useMutation<UpdateAmPermissionActionMutation, UpdateAmPermissionActionMutationVariables>(
-    UpdateAmPermissionActionDocument,
-    baseOptions
-  );
-}
-export type UpdateAmPermissionActionMutationHookResult = ReturnType<typeof useUpdateAmPermissionActionMutation>;
-export type UpdateAmPermissionActionMutationResult = Apollo.MutationResult<UpdateAmPermissionActionMutation>;
-export type UpdateAmPermissionActionMutationOptions = Apollo.BaseMutationOptions<
-  UpdateAmPermissionActionMutation,
-  UpdateAmPermissionActionMutationVariables
 >;
 export const UpdateOwnPasswordDocument = gql`
   mutation UpdateOwnPassword($updatePasswordInput: UpdatePasswordInput!) {
@@ -5243,307 +5097,134 @@ export function useCurrentUserLazyQuery(
 export type CurrentUserQueryHookResult = ReturnType<typeof useCurrentUserQuery>;
 export type CurrentUserLazyQueryHookResult = ReturnType<typeof useCurrentUserLazyQuery>;
 export type CurrentUserQueryResult = Apollo.QueryResult<CurrentUserQuery, CurrentUserQueryVariables>;
-export const RemoveAmPolicyDocument = gql`
-  mutation RemoveAMPolicy($policySid: ID!) {
-    removeAMPolicy(policySid: $policySid)
+export const RemoveAccessPolicyDocument = gql`
+  mutation RemoveAccessPolicy($policySid: ID!) {
+    removeAccessPolicy(policySid: $policySid)
   }
 `;
-export type RemoveAmPolicyMutationFn = Apollo.MutationFunction<RemoveAmPolicyMutation, RemoveAmPolicyMutationVariables>;
+export type RemoveAccessPolicyMutationFn = Apollo.MutationFunction<
+  RemoveAccessPolicyMutation,
+  RemoveAccessPolicyMutationVariables
+>;
 
 /**
- * __useRemoveAmPolicyMutation__
+ * __useRemoveAccessPolicyMutation__
  *
- * To run a mutation, you first call `useRemoveAmPolicyMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRemoveAmPolicyMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useRemoveAccessPolicyMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveAccessPolicyMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [removeAmPolicyMutation, { data, loading, error }] = useRemoveAmPolicyMutation({
+ * const [removeAccessPolicyMutation, { data, loading, error }] = useRemoveAccessPolicyMutation({
  *   variables: {
  *      policySid: // value for 'policySid'
  *   },
  * });
  */
-export function useRemoveAmPolicyMutation(
-  baseOptions?: Apollo.MutationHookOptions<RemoveAmPolicyMutation, RemoveAmPolicyMutationVariables>
+export function useRemoveAccessPolicyMutation(
+  baseOptions?: Apollo.MutationHookOptions<RemoveAccessPolicyMutation, RemoveAccessPolicyMutationVariables>
 ) {
-  return Apollo.useMutation<RemoveAmPolicyMutation, RemoveAmPolicyMutationVariables>(
-    RemoveAmPolicyDocument,
+  return Apollo.useMutation<RemoveAccessPolicyMutation, RemoveAccessPolicyMutationVariables>(
+    RemoveAccessPolicyDocument,
     baseOptions
   );
 }
-export type RemoveAmPolicyMutationHookResult = ReturnType<typeof useRemoveAmPolicyMutation>;
-export type RemoveAmPolicyMutationResult = Apollo.MutationResult<RemoveAmPolicyMutation>;
-export type RemoveAmPolicyMutationOptions = Apollo.BaseMutationOptions<
-  RemoveAmPolicyMutation,
-  RemoveAmPolicyMutationVariables
+export type RemoveAccessPolicyMutationHookResult = ReturnType<typeof useRemoveAccessPolicyMutation>;
+export type RemoveAccessPolicyMutationResult = Apollo.MutationResult<RemoveAccessPolicyMutation>;
+export type RemoveAccessPolicyMutationOptions = Apollo.BaseMutationOptions<
+  RemoveAccessPolicyMutation,
+  RemoveAccessPolicyMutationVariables
 >;
-export const RemoveAmPoliciesDocument = gql`
-  mutation RemoveAMPolicies($deleteAMPoliciesInput: DeleteAMPoliciesInput!) {
-    removeAMPolicies(deleteAMPoliciesInput: $deleteAMPoliciesInput)
+export const RemoveAccessPoliciesDocument = gql`
+  mutation RemoveAccessPolicies($deleteAccessPoliciesInput: DeleteAccessPoliciesInput!) {
+    removeAccessPolicies(deleteAccessPoliciesInput: $deleteAccessPoliciesInput)
   }
 `;
-export type RemoveAmPoliciesMutationFn = Apollo.MutationFunction<
-  RemoveAmPoliciesMutation,
-  RemoveAmPoliciesMutationVariables
+export type RemoveAccessPoliciesMutationFn = Apollo.MutationFunction<
+  RemoveAccessPoliciesMutation,
+  RemoveAccessPoliciesMutationVariables
 >;
 
 /**
- * __useRemoveAmPoliciesMutation__
+ * __useRemoveAccessPoliciesMutation__
  *
- * To run a mutation, you first call `useRemoveAmPoliciesMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRemoveAmPoliciesMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useRemoveAccessPoliciesMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveAccessPoliciesMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [removeAmPoliciesMutation, { data, loading, error }] = useRemoveAmPoliciesMutation({
+ * const [removeAccessPoliciesMutation, { data, loading, error }] = useRemoveAccessPoliciesMutation({
  *   variables: {
- *      deleteAMPoliciesInput: // value for 'deleteAMPoliciesInput'
+ *      deleteAccessPoliciesInput: // value for 'deleteAccessPoliciesInput'
  *   },
  * });
  */
-export function useRemoveAmPoliciesMutation(
-  baseOptions?: Apollo.MutationHookOptions<RemoveAmPoliciesMutation, RemoveAmPoliciesMutationVariables>
+export function useRemoveAccessPoliciesMutation(
+  baseOptions?: Apollo.MutationHookOptions<RemoveAccessPoliciesMutation, RemoveAccessPoliciesMutationVariables>
 ) {
-  return Apollo.useMutation<RemoveAmPoliciesMutation, RemoveAmPoliciesMutationVariables>(
-    RemoveAmPoliciesDocument,
+  return Apollo.useMutation<RemoveAccessPoliciesMutation, RemoveAccessPoliciesMutationVariables>(
+    RemoveAccessPoliciesDocument,
     baseOptions
   );
 }
-export type RemoveAmPoliciesMutationHookResult = ReturnType<typeof useRemoveAmPoliciesMutation>;
-export type RemoveAmPoliciesMutationResult = Apollo.MutationResult<RemoveAmPoliciesMutation>;
-export type RemoveAmPoliciesMutationOptions = Apollo.BaseMutationOptions<
-  RemoveAmPoliciesMutation,
-  RemoveAmPoliciesMutationVariables
+export type RemoveAccessPoliciesMutationHookResult = ReturnType<typeof useRemoveAccessPoliciesMutation>;
+export type RemoveAccessPoliciesMutationResult = Apollo.MutationResult<RemoveAccessPoliciesMutation>;
+export type RemoveAccessPoliciesMutationOptions = Apollo.BaseMutationOptions<
+  RemoveAccessPoliciesMutation,
+  RemoveAccessPoliciesMutationVariables
 >;
-export const CreateAmPermissionDocument = gql`
-  mutation CreateAMPermission($permissionInfo: CreateAMPermissionInput!) {
-    createAMPermission(permissionInfo: $permissionInfo) {
-      id
-      effect
-      actions {
-        id
-        service
-        facet
-        verb
-      }
-    }
-  }
-`;
-export type CreateAmPermissionMutationFn = Apollo.MutationFunction<
-  CreateAmPermissionMutation,
-  CreateAmPermissionMutationVariables
->;
-
-/**
- * __useCreateAmPermissionMutation__
- *
- * To run a mutation, you first call `useCreateAmPermissionMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateAmPermissionMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createAmPermissionMutation, { data, loading, error }] = useCreateAmPermissionMutation({
- *   variables: {
- *      permissionInfo: // value for 'permissionInfo'
- *   },
- * });
- */
-export function useCreateAmPermissionMutation(
-  baseOptions?: Apollo.MutationHookOptions<CreateAmPermissionMutation, CreateAmPermissionMutationVariables>
-) {
-  return Apollo.useMutation<CreateAmPermissionMutation, CreateAmPermissionMutationVariables>(
-    CreateAmPermissionDocument,
-    baseOptions
-  );
-}
-export type CreateAmPermissionMutationHookResult = ReturnType<typeof useCreateAmPermissionMutation>;
-export type CreateAmPermissionMutationResult = Apollo.MutationResult<CreateAmPermissionMutation>;
-export type CreateAmPermissionMutationOptions = Apollo.BaseMutationOptions<
-  CreateAmPermissionMutation,
-  CreateAmPermissionMutationVariables
->;
-export const UpdateAmPermissionDocument = gql`
-  mutation UpdateAMPermission($updateAMPermissionInput: UpdateAMPermissionInput) {
-    updateAMPermission(updateAMPermissionInput: $updateAMPermissionInput) {
-      id
-      effect
-      predicate
-      predVar1
-      predParam1
-    }
-  }
-`;
-export type UpdateAmPermissionMutationFn = Apollo.MutationFunction<
-  UpdateAmPermissionMutation,
-  UpdateAmPermissionMutationVariables
->;
-
-/**
- * __useUpdateAmPermissionMutation__
- *
- * To run a mutation, you first call `useUpdateAmPermissionMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateAmPermissionMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateAmPermissionMutation, { data, loading, error }] = useUpdateAmPermissionMutation({
- *   variables: {
- *      updateAMPermissionInput: // value for 'updateAMPermissionInput'
- *   },
- * });
- */
-export function useUpdateAmPermissionMutation(
-  baseOptions?: Apollo.MutationHookOptions<UpdateAmPermissionMutation, UpdateAmPermissionMutationVariables>
-) {
-  return Apollo.useMutation<UpdateAmPermissionMutation, UpdateAmPermissionMutationVariables>(
-    UpdateAmPermissionDocument,
-    baseOptions
-  );
-}
-export type UpdateAmPermissionMutationHookResult = ReturnType<typeof useUpdateAmPermissionMutation>;
-export type UpdateAmPermissionMutationResult = Apollo.MutationResult<UpdateAmPermissionMutation>;
-export type UpdateAmPermissionMutationOptions = Apollo.BaseMutationOptions<
-  UpdateAmPermissionMutation,
-  UpdateAmPermissionMutationVariables
->;
-export const RemoveAmPermissionDocument = gql`
-  mutation RemoveAMPermission($permissionSid: ID!) {
-    removeAMPermission(permissionSid: $permissionSid)
-  }
-`;
-export type RemoveAmPermissionMutationFn = Apollo.MutationFunction<
-  RemoveAmPermissionMutation,
-  RemoveAmPermissionMutationVariables
->;
-
-/**
- * __useRemoveAmPermissionMutation__
- *
- * To run a mutation, you first call `useRemoveAmPermissionMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRemoveAmPermissionMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [removeAmPermissionMutation, { data, loading, error }] = useRemoveAmPermissionMutation({
- *   variables: {
- *      permissionSid: // value for 'permissionSid'
- *   },
- * });
- */
-export function useRemoveAmPermissionMutation(
-  baseOptions?: Apollo.MutationHookOptions<RemoveAmPermissionMutation, RemoveAmPermissionMutationVariables>
-) {
-  return Apollo.useMutation<RemoveAmPermissionMutation, RemoveAmPermissionMutationVariables>(
-    RemoveAmPermissionDocument,
-    baseOptions
-  );
-}
-export type RemoveAmPermissionMutationHookResult = ReturnType<typeof useRemoveAmPermissionMutation>;
-export type RemoveAmPermissionMutationResult = Apollo.MutationResult<RemoveAmPermissionMutation>;
-export type RemoveAmPermissionMutationOptions = Apollo.BaseMutationOptions<
-  RemoveAmPermissionMutation,
-  RemoveAmPermissionMutationVariables
->;
-export const UpdateAmPolicyDocument = gql`
-  mutation UpdateAMPolicy($updateAMPolicyInput: UpdateAMPolicyInput!) {
-    updateAMPolicy(updateAMPolicyInput: $updateAMPolicyInput) {
+export const UpdateAccessPolicyDocument = gql`
+  mutation UpdateAccessPolicy($updateAccessPolicyInput: UpdateAccessPolicyInput!) {
+    updateAccessPolicy(updateAccessPolicyInput: $updateAccessPolicyInput) {
       id
       name
       tmpl
       tmplUseAsIs
-      tmplServiceType
+      permissions
     }
   }
 `;
-export type UpdateAmPolicyMutationFn = Apollo.MutationFunction<UpdateAmPolicyMutation, UpdateAmPolicyMutationVariables>;
+export type UpdateAccessPolicyMutationFn = Apollo.MutationFunction<
+  UpdateAccessPolicyMutation,
+  UpdateAccessPolicyMutationVariables
+>;
 
 /**
- * __useUpdateAmPolicyMutation__
+ * __useUpdateAccessPolicyMutation__
  *
- * To run a mutation, you first call `useUpdateAmPolicyMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateAmPolicyMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useUpdateAccessPolicyMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateAccessPolicyMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [updateAmPolicyMutation, { data, loading, error }] = useUpdateAmPolicyMutation({
+ * const [updateAccessPolicyMutation, { data, loading, error }] = useUpdateAccessPolicyMutation({
  *   variables: {
- *      updateAMPolicyInput: // value for 'updateAMPolicyInput'
+ *      updateAccessPolicyInput: // value for 'updateAccessPolicyInput'
  *   },
  * });
  */
-export function useUpdateAmPolicyMutation(
-  baseOptions?: Apollo.MutationHookOptions<UpdateAmPolicyMutation, UpdateAmPolicyMutationVariables>
+export function useUpdateAccessPolicyMutation(
+  baseOptions?: Apollo.MutationHookOptions<UpdateAccessPolicyMutation, UpdateAccessPolicyMutationVariables>
 ) {
-  return Apollo.useMutation<UpdateAmPolicyMutation, UpdateAmPolicyMutationVariables>(
-    UpdateAmPolicyDocument,
+  return Apollo.useMutation<UpdateAccessPolicyMutation, UpdateAccessPolicyMutationVariables>(
+    UpdateAccessPolicyDocument,
     baseOptions
   );
 }
-export type UpdateAmPolicyMutationHookResult = ReturnType<typeof useUpdateAmPolicyMutation>;
-export type UpdateAmPolicyMutationResult = Apollo.MutationResult<UpdateAmPolicyMutation>;
-export type UpdateAmPolicyMutationOptions = Apollo.BaseMutationOptions<
-  UpdateAmPolicyMutation,
-  UpdateAmPolicyMutationVariables
->;
-export const RemoveAmPermissionActionDocument = gql`
-  mutation RemoveAMPermissionAction($permissionActionSid: ID!) {
-    removeAMPermissionAction(permissionActionSid: $permissionActionSid)
-  }
-`;
-export type RemoveAmPermissionActionMutationFn = Apollo.MutationFunction<
-  RemoveAmPermissionActionMutation,
-  RemoveAmPermissionActionMutationVariables
->;
-
-/**
- * __useRemoveAmPermissionActionMutation__
- *
- * To run a mutation, you first call `useRemoveAmPermissionActionMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRemoveAmPermissionActionMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [removeAmPermissionActionMutation, { data, loading, error }] = useRemoveAmPermissionActionMutation({
- *   variables: {
- *      permissionActionSid: // value for 'permissionActionSid'
- *   },
- * });
- */
-export function useRemoveAmPermissionActionMutation(
-  baseOptions?: Apollo.MutationHookOptions<RemoveAmPermissionActionMutation, RemoveAmPermissionActionMutationVariables>
-) {
-  return Apollo.useMutation<RemoveAmPermissionActionMutation, RemoveAmPermissionActionMutationVariables>(
-    RemoveAmPermissionActionDocument,
-    baseOptions
-  );
-}
-export type RemoveAmPermissionActionMutationHookResult = ReturnType<typeof useRemoveAmPermissionActionMutation>;
-export type RemoveAmPermissionActionMutationResult = Apollo.MutationResult<RemoveAmPermissionActionMutation>;
-export type RemoveAmPermissionActionMutationOptions = Apollo.BaseMutationOptions<
-  RemoveAmPermissionActionMutation,
-  RemoveAmPermissionActionMutationVariables
+export type UpdateAccessPolicyMutationHookResult = ReturnType<typeof useUpdateAccessPolicyMutation>;
+export type UpdateAccessPolicyMutationResult = Apollo.MutationResult<UpdateAccessPolicyMutation>;
+export type UpdateAccessPolicyMutationOptions = Apollo.BaseMutationOptions<
+  UpdateAccessPolicyMutation,
+  UpdateAccessPolicyMutationVariables
 >;
 export const LogOutDocument = gql`
   query LogOut {
@@ -6930,8 +6611,8 @@ export function useUserUpdatePageLazyQuery(
 export type UserUpdatePageQueryHookResult = ReturnType<typeof useUserUpdatePageQuery>;
 export type UserUpdatePageLazyQueryHookResult = ReturnType<typeof useUserUpdatePageLazyQuery>;
 export type UserUpdatePageQueryResult = Apollo.QueryResult<UserUpdatePageQuery, UserUpdatePageQueryVariables>;
-export const UserAssignAmGroupsPageDocument = gql`
-  query userAssignAMGroupsPage($sidInput: SidInput!) {
+export const UserAssignAccessPolicyGroupsPageDocument = gql`
+  query userAssignAccessPolicyGroupsPage($sidInput: SidInput!) {
     userUpdatePage(sidInput: $sidInput) {
       ...fragmentUserPageInfo
     }
@@ -6940,42 +6621,52 @@ export const UserAssignAmGroupsPageDocument = gql`
 `;
 
 /**
- * __useUserAssignAmGroupsPageQuery__
+ * __useUserAssignAccessPolicyGroupsPageQuery__
  *
- * To run a query within a React component, call `useUserAssignAmGroupsPageQuery` and pass it any options that fit your needs.
- * When your component renders, `useUserAssignAmGroupsPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useUserAssignAccessPolicyGroupsPageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserAssignAccessPolicyGroupsPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useUserAssignAmGroupsPageQuery({
+ * const { data, loading, error } = useUserAssignAccessPolicyGroupsPageQuery({
  *   variables: {
  *      sidInput: // value for 'sidInput'
  *   },
  * });
  */
-export function useUserAssignAmGroupsPageQuery(
-  baseOptions: Apollo.QueryHookOptions<UserAssignAmGroupsPageQuery, UserAssignAmGroupsPageQueryVariables>
+export function useUserAssignAccessPolicyGroupsPageQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    UserAssignAccessPolicyGroupsPageQuery,
+    UserAssignAccessPolicyGroupsPageQueryVariables
+  >
 ) {
-  return Apollo.useQuery<UserAssignAmGroupsPageQuery, UserAssignAmGroupsPageQueryVariables>(
-    UserAssignAmGroupsPageDocument,
+  return Apollo.useQuery<UserAssignAccessPolicyGroupsPageQuery, UserAssignAccessPolicyGroupsPageQueryVariables>(
+    UserAssignAccessPolicyGroupsPageDocument,
     baseOptions
   );
 }
-export function useUserAssignAmGroupsPageLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<UserAssignAmGroupsPageQuery, UserAssignAmGroupsPageQueryVariables>
+export function useUserAssignAccessPolicyGroupsPageLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    UserAssignAccessPolicyGroupsPageQuery,
+    UserAssignAccessPolicyGroupsPageQueryVariables
+  >
 ) {
-  return Apollo.useLazyQuery<UserAssignAmGroupsPageQuery, UserAssignAmGroupsPageQueryVariables>(
-    UserAssignAmGroupsPageDocument,
+  return Apollo.useLazyQuery<UserAssignAccessPolicyGroupsPageQuery, UserAssignAccessPolicyGroupsPageQueryVariables>(
+    UserAssignAccessPolicyGroupsPageDocument,
     baseOptions
   );
 }
-export type UserAssignAmGroupsPageQueryHookResult = ReturnType<typeof useUserAssignAmGroupsPageQuery>;
-export type UserAssignAmGroupsPageLazyQueryHookResult = ReturnType<typeof useUserAssignAmGroupsPageLazyQuery>;
-export type UserAssignAmGroupsPageQueryResult = Apollo.QueryResult<
-  UserAssignAmGroupsPageQuery,
-  UserAssignAmGroupsPageQueryVariables
+export type UserAssignAccessPolicyGroupsPageQueryHookResult = ReturnType<
+  typeof useUserAssignAccessPolicyGroupsPageQuery
+>;
+export type UserAssignAccessPolicyGroupsPageLazyQueryHookResult = ReturnType<
+  typeof useUserAssignAccessPolicyGroupsPageLazyQuery
+>;
+export type UserAssignAccessPolicyGroupsPageQueryResult = Apollo.QueryResult<
+  UserAssignAccessPolicyGroupsPageQuery,
+  UserAssignAccessPolicyGroupsPageQueryVariables
 >;
 export const SimulateSessionExpirDocument = gql`
   query SimulateSessionExpir {

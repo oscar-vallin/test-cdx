@@ -12,7 +12,7 @@ import { Separator } from '../../../../components/separators/Separator';
 import { RouteLink } from './../../AdminPage.styles';
 import { NAV_ITEMS } from './../../SideMenu';
 
-import { useAmGroupsForOrgPLazyQuery } from '../../../../data/services/graphql';
+import { useAccessPolicyGroupsForOrgLazyQuery } from '../../../../data/services/graphql';
 import { StyledColumn } from './AccessManagementGroupsPage.styles';
 
 // import { useAuthContext } from '../../../../contexts/AuthContext';
@@ -46,15 +46,15 @@ const _AccessManagementGroupsPage = () => {
   const columns = generateColumns();
 
   //const { data, loading } = useAmGroupsForOrgPQuery({ variables: { orgSid } });
-  const [useAmGroupsForOrg, { data, loading }] = useAmGroupsForOrgPLazyQuery();
+  const [useAccessPolicyGroupsForOrg, { data, loading }] = useAccessPolicyGroupsForOrgLazyQuery();
 
   useEffect(() => {
-    useAmGroupsForOrg({ variables: { orgSid } });
+    useAccessPolicyGroupsForOrg({ variables: { orgSid } });
   }, [orgSid]);
 
   useEffect(() => {
     if (!loading && data) {
-      setGroups(data.amGroupsForOrg.nodes);
+      setGroups(data.accessPolicyGroupsForOrg.nodes);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading]);

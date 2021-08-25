@@ -13,16 +13,14 @@ import { Row, Column } from '../../../../../components/layouts';
 import { Separator } from '../../../../../components/separators/Separator';
 import { Text } from '../../../../../components/typography/Text';
 import { InputText } from '../../../../../components/inputs/InputText';
-import FacetCombobox from '../../../../../components/comboboxes/FacetCombobox/FacetCombobox';
-import VerbCombobox from '../../../../../components/comboboxes/VerbCombobox/VerbCombobox';
 
 import { StyledCommandButton, StyledColumn } from './CreatePoliciesPanel.styles';
 
 import {
-  useAmPolicyPageLazyQuery,
-  useCreateAmPolicyMutation,
-  useUpdateAmPolicyMutation,
-  useAmPolicyLazyQuery,
+  useAccessPolicyPageLazyQuery,
+  useCreateAccessPolicyMutation,
+  useUpdateAccessPolicyMutation,
+  useAccessPolicyLazyQuery,
 } from '../../../../../data/services/graphql';
 import { useAuthContext } from '../../../../../contexts/AuthContext';
 
@@ -62,10 +60,10 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
 
   const [options, setOptions] = useState({ ...INITIAL_OPTIONS });
 
-  const [useAmPolicyPage, { data, loading }] = useAmPolicyPageLazyQuery();
-  const [createPolicy, { data: createdPolicy, loading: isCreatingPolicy, error }] = useCreateAmPolicyMutation();
-  const [fetchPolicy, { loading: isLoadingPolicy, data: policy }] = useAmPolicyLazyQuery();
-  const [updatePolicy, { loading: isUpdatingPolicy }] = useUpdateAmPolicyMutation();
+  const [useAmPolicyPage, { data, loading }] = useAccessPolicyPageLazyQuery();
+  const [createPolicy, { data: createdPolicy, loading: isCreatingPolicy, error }] = useCreateAccessPolicyMutation();
+  const [fetchPolicy, { loading: isLoadingPolicy, data: policy }] = useAccessPolicyLazyQuery();
+  const [updatePolicy, { loading: isUpdatingPolicy }] = useUpdateAccessPolicyMutation();
 
   useEffect(() => {
     if (isOpen && selectedPolicyId) {
@@ -108,7 +106,7 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
 
   useEffect(() => {
     if (createdPolicy) {
-      onCreatePolicy(createdPolicy.createAMPolicy);
+      onCreatePolicy(createdPolicy.createAccessPolicy);
       onDismiss();
     }
   }, [createdPolicy]);
@@ -149,23 +147,6 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
             options={services.map(parseToComboBoxOption)}
             onChange={(event, option) => onServiceChange(option, item, data)}
             style={{ width: '100%' }}
-          />
-        );
-      case 'facet':
-        return (
-          <FacetCombobox
-            service={item.service.key}
-            value={item.facet.key}
-            onChange={(event, option) => onFacetChange(option, item, data)}
-          />
-        );
-      case 'verb':
-        return (
-          <VerbCombobox
-            service={item.service.key}
-            facet={item.facet.key}
-            value={item.verb.key}
-            onChange={(event, option) => onVerbChange(option, item, data)}
           />
         );
       case 'actions':

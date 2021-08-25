@@ -14,7 +14,7 @@ import { Text } from '../../../../components/typography/Text';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { CreatePoliciesPanel } from './CreatePolicy';
 
-import { useAmPoliciesForOrgPLazyQuery, useRemoveAmPolicyMutation } from '../../../../data/services/graphql';
+import { useAccessPoliciesForOrgLazyQuery, useRemoveAccessPolicyMutation } from '../../../../data/services/graphql';
 
 import { StyledColumn, StyledCommandButton } from './AccessManagementPoliciesPage.styles';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
@@ -46,11 +46,11 @@ const _AccessManagementPoliciesPage = () => {
   const [selectedPolicyId, setSelectedPolicyId] = useState(0);
 
   const [policies, setPolicies] = useState([]);
-  const [amPoliciesForOrg, { data, loading, error }] = useAmPoliciesForOrgPLazyQuery();
+  const [accessPoliciesForOrg, { data, loading, error }] = useAccessPoliciesForOrgLazyQuery();
   const [
-    removeAmPolicy,
+    removeAccessPolicy,
     { data: removeResponse, loading: isRemovingPolicy, error: removePolicyError },
-  ] = useRemoveAmPolicyMutation();
+  ] = useRemoveAccessPolicyMutation();
 
   const hideConfirmation = () => {
     setIsConfirmationHidden(true);
@@ -84,7 +84,7 @@ const _AccessManagementPoliciesPage = () => {
   };
 
   useEffect(() => {
-    amPoliciesForOrg({
+    accessPoliciesForOrg({
       variables: {
         orgSid,
       },
@@ -99,7 +99,7 @@ const _AccessManagementPoliciesPage = () => {
 
   useEffect(() => {
     if (data) {
-      setPolicies(data.amPoliciesForOrg.nodes);
+      setPolicies(data.accessPoliciesForOrg.nodes);
     }
   }, [data]);
 
@@ -182,7 +182,7 @@ const _AccessManagementPoliciesPage = () => {
         <DialogFooter>
           <PrimaryButton
             onClick={() => {
-              removeAmPolicy({
+              removeAccessPolicy({
                 variables: {
                   policySid: selectedPolicyId,
                 },
