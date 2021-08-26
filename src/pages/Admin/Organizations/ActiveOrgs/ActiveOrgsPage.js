@@ -35,8 +35,6 @@ const generateColumns = () => {
 };
 
 const _ActiveOrgsPage = () => {
-  const { storeOrgsId } = useAuthContext();
-
   const { orgSid, setOrgSid, setUrlParams } = useOrgSid();
   const [orgs, setOrgs] = useState([]);
   const columns = generateColumns();
@@ -53,7 +51,7 @@ const _ActiveOrgsPage = () => {
     });
   }, [orgSid]);
 
-  const changeActiveOrg = ({ id, name, ...item }) => {
+  const changeActiveOrg = ({ id, name, orgType }) => {
     directOrganizationsFQuery({
       variables: {
         orgSid: id,
@@ -61,13 +59,7 @@ const _ActiveOrgsPage = () => {
       },
     });
 
-    storeOrgsId(id);
     setOrgSid(id);
-    setUrlParams({ orgSid: id });
-
-    console.log(item);
-
-    // history.push()
   };
 
   const onRenderItemColumn = (item, index, column) => {

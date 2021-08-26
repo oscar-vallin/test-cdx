@@ -33,6 +33,7 @@ import {
   StyledButtonOrg,
 } from './NavBar.styles';
 import { useUserDomain } from '../../../contexts/hooks/useUserDomain';
+import { useOrgSid } from '../../../hooks/useOrgSid';
 
 // CardSection is called directly cause a restriction warning for that component.
 const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSettings, visible, ...props }) => {
@@ -41,7 +42,8 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSetti
   const [collapse, setCollapse] = React.useState('false');
   const { userTheme, setOwnDashFontSize, isHandlingFontSize } = useCurrentUserTheme();
   const { setFontSize } = useThemeContext();
-  const { storeOrgsId, authData } = useAuthContext();
+  const { authData } = useAuthContext();
+  const { orgSid, setOrgSid, setUrlParams } = useOrgSid();
   const [themeFontSize, setThemeFontSize] = useState(userTheme?.themeFontSize || undefined);
 
   const changeCollapse = () => {
@@ -111,7 +113,12 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSetti
                             onClick: () => {
                               Toast.info({ text: `Loading ${item.label} domain`, duration: 3000 });
 
-                              setTimeout(() => storeOrgsId(item.page.parameters.orgSid), 1500);
+                              setTimeout(() => {
+                                const orgId = item.page.parameters.orgSid;
+
+                                setOrgSid(orgId);
+                                setUrlParams({ orgSid: orgId });
+                              }, 1500);
                             },
                           }))
                           .concat([
@@ -122,7 +129,10 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSetti
                               onClick: () => {
                                 Toast.info({ text: `Loading your organization's domain`, duration: 3000 });
 
-                                setTimeout(() => storeOrgsId(authData.orgId), 1500);
+                                setTimeout(() => {
+                                  setOrgSid(authData.orgId);
+                                  setUrlParams({ orgSid: authData.orgId });
+                                }, 1500);
                               },
                             },
                           ]),

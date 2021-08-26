@@ -1,3 +1,4 @@
-import { AuthenticatedErrorBoundary } from './AuthenticatedErrorBoundary';
+import { DashboardErrorBoundary } from './DashboardErrorBoundary';
+import { AdminErrorBoundary } from './AdminErrorBoundary';
 
-export { AuthenticatedErrorBoundary };
+export { AdminErrorBoundary, DashboardErrorBoundary };

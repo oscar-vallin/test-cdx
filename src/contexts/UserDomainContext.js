@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useAuthContext } from './AuthContext';
 import { useNavigateToNewDomainLazyQuery, useCurrentOrgNavLazyQuery } from '../data/services/graphql';
+import { useOrgSid } from '../hooks/useOrgSid';
 
 export const UserDomainContext = React.createContext(() => {});
 
 const INITIAL_STATE = {};
 
 export const UserDomainContextProvider = ({ children }) => {
-  const { isAuthenticated, isAuthenticating, authData, orgSid } = useAuthContext();
+  const { isAuthenticated, isAuthenticating, authData } = useAuthContext();
+  const { orgSid } = useOrgSid();
   const [userDomain, setUserDomain] = useState({ ...INITIAL_STATE });
   const [currentUserOrgNav, setCurrentUserOrgNav] = useState({});
 
@@ -28,7 +30,6 @@ export const UserDomainContextProvider = ({ children }) => {
 
   useEffect(() => {
     if (isAuthenticated && !isAuthenticating) {
-      console.log('123');
       fetchOrgNav({
         variables: {
           domainNavInput: { orgSid: orgSid || authData?.orgId, appDomain: 'ORGANIZATION' },
@@ -50,8 +51,6 @@ export const UserDomainContextProvider = ({ children }) => {
           orgInput: { orgSid: orgSid || authData?.orgId },
         },
       });
-
-      console.log('321');
     }
   }, [isAuthenticated, orgSid]);
 

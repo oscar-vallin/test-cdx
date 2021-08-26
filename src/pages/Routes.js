@@ -2,7 +2,6 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ROUTES } from '../data/constants/RouteConstants';
-
 // Routes
 import { LoginPage } from './Login';
 import { UserSettingsPage } from './UserSettings';
@@ -25,7 +24,7 @@ import { FtpTestPage } from './Admin/FtpTest';
 
 import AuthRoute from './AuthRoute';
 import UnauthRoute from './UnauthRoute';
-import { AdminErrorBoundary } from '../containers/boundaries/AdminErrorBoundary';
+import { AdminErrorBoundary, DashboardErrorBoundary } from '../containers/boundaries';
 
 export const Routes = () => {
   return (
@@ -34,34 +33,54 @@ export const Routes = () => {
         <LoginPage />
       </UnauthRoute>
       <AuthRoute exact path="/">
-        <DashboardPage />
+        <ErrorBoundary FallbackComponent={DashboardErrorBoundary}>
+          <DashboardPage />
+        </ErrorBoundary>
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_USER_SETTINGS.URL}>
-        <UserSettingsPage />
+        <ErrorBoundary FallbackComponent={DashboardErrorBoundary}>
+          <UserSettingsPage />
+        </ErrorBoundary>
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_DASHBOARD.URL}>
-        <DashboardPage />
+        <ErrorBoundary FallbackComponent={DashboardErrorBoundary}>
+          <DashboardPage />
+        </ErrorBoundary>
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_DASHBOARD_TO_FILE_STATUS.URL}>
-        <FileStatusPage />
+        <ErrorBoundary FallbackComponent={DashboardErrorBoundary}>
+          <FileStatusPage />
+        </ErrorBoundary>
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_FILE_STATUS_DETAILS.URL}>
-        <FileStatusDetailsPage />
+        <ErrorBoundary FallbackComponent={DashboardErrorBoundary}>
+          <FileStatusDetailsPage />
+        </ErrorBoundary>
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_FILE_STATUS.URL}>
-        <FileStatusPage />
+        <ErrorBoundary FallbackComponent={DashboardErrorBoundary}>
+          <FileStatusPage />
+        </ErrorBoundary>
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_ARCHIVES.URL}>
-        <ArchivePage />
+        <ErrorBoundary FallbackComponent={DashboardErrorBoundary}>
+          <ArchivePage />
+        </ErrorBoundary>
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_SCHEDULE.URL}>
-        <SchedulePage />
+        <ErrorBoundary FallbackComponent={DashboardErrorBoundary}>
+          <SchedulePage />
+        </ErrorBoundary>
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_TRANSMISSIONS.URL}>
-        <TransmissionsPage />
+        <ErrorBoundary FallbackComponent={DashboardErrorBoundary}>
+          <TransmissionsPage />
+        </ErrorBoundary>
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_ERRORS.URL}>
-        <ErrorsPage />
+        <ErrorBoundary FallbackComponent={DashboardErrorBoundary}>
+          <ErrorsPage />
+        </ErrorBoundary>
       </AuthRoute>
 
       <AuthRoute path={ROUTES.ROUTE_ACCESS_MANAGEMENT_GROUPS.URL}>

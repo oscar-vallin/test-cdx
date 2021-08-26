@@ -5,11 +5,11 @@ import { Spacing } from '../../../components/spacings/Spacing';
 import { Text } from '../../../components/typography/Text';
 import { PageHeader } from '../../headers/PageHeader';
 
-import { StyledErrorIcon, StyledDiv } from './AuthenticatedErrorBoundary.styles';
+import { StyledErrorIcon, StyledDiv } from './DashboardErrorBoundary.styles';
 import { LayoutAdmin } from '../../../layouts/LayoutAdmin';
 import { LayoutDashboard } from '../../../layouts/LayoutDashboard';
 
-const AuthenticatedErrorBoundary = ({ type }) => {
+const DashboardErrorBoundary = ({ type }) => {
   const isAdmin = type === 'ADMIN';
   const Layout = isAdmin ? LayoutAdmin : LayoutDashboard;
 
@@ -48,4 +48,4 @@ const AuthenticatedErrorBoundary = ({ type }) => {
   );
 };
 
-export default AuthenticatedErrorBoundary;
+export default DashboardErrorBoundary;
