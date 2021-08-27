@@ -13,7 +13,7 @@ export const useOrgSid = () => {
   const pushQueryString = () => {
     let finalURL = '';
 
-    if (urlParams.orgSid || authData.orgId) {
+    if (urlParams?.orgSid || authData?.orgId) {
       setOrgSid(urlParams?.orgSid || authData?.orgId);
       finalURL += `?orgSid=${urlParams?.orgSid || authData?.orgId}`;
     }
