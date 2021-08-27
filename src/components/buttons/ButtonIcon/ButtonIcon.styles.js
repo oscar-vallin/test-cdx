@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
+import { FontIcon } from 'office-ui-fabric-react/lib-commonjs/Icon';
 import { Button } from '../Button';
 
 export const StyledButton = styled(Button)`

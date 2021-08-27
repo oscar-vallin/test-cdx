@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Link } from 'office-ui-fabric-react/lib/Link';
+import { Link } from 'office-ui-fabric-react/lib-commonjs/Link';
 
 export const StyledLink = styled(Link)`
   font: ${({ theme }) => theme.fontStyles.link};
