@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import { URL_ROUTES } from '../../../../data/constants/RouteConstants';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
@@ -13,12 +13,9 @@ import { Text } from '../../../../components/typography/Text';
 import { Separator } from '../../../../components/separators/Separator';
 
 import { useAuthContext } from '../../../../contexts/AuthContext';
-import { useDirectOrganizationsFQuery, useDirectOrganizationsFLazyQuery } from '../../../../data/services/graphql';
+import { useDirectOrganizationsFLazyQuery } from '../../../../data/services/graphql';
 import { StyledColumn } from './ActiveOrgsPage.styles';
-import { useNotification } from '../../../../contexts/hooks/useNotification';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
-
-import { useHistory } from 'react-router-dom';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -39,7 +36,6 @@ const generateColumns = () => {
 
 const _ActiveOrgsPage = () => {
   const { orgSid, setOrgSid, setUrlParams } = useOrgSid();
-  const { storeOrgsId } = useAuthContext();
   const [orgs, setOrgs] = useState([]);
   const columns = generateColumns();
   const history = useHistory();
@@ -55,28 +51,22 @@ const _ActiveOrgsPage = () => {
     });
   }, [orgSid]);
 
-  const changeActiveOrg = (newOrgSid) => {
+  const changeActiveOrg = ({ id, name, orgType }) => {
     directOrganizationsFQuery({
       variables: {
-        orgSid: newOrgSid,
+        orgSid: id,
         orgFilter: { activeFilter: 'ACTIVE' },
       },
     });
 
-    storeOrgsId(newOrgSid);
-    setUrlParams({ orgSid: newOrgSid });
-    setOrgSid(newOrgSid);
-    history.push(`${URL_ROUTES.FILE_STATUS}?orgSid=${newOrgSid}`);
+    setOrgSid(id);
   };
 
   const onRenderItemColumn = (item, index, column) => {
     switch (column.key) {
       case 'name':
         return (
-          <Link
-            to={`/admin/organizations/active-orgs?orgSid=${item.id}`}
-            onClick={() => changeActiveOrg(item.id, item.name)}
-          >
+          <Link to={`/admin/organizations/active-orgs?orgSid=${item.id}`} onClick={() => changeActiveOrg(item)}>
             {item[column.key]}
           </Link>
         );

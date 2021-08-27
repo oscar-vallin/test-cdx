@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useAuthContext } from './AuthContext';
 import { useNavigateToNewDomainLazyQuery, useCurrentOrgNavLazyQuery } from '../data/services/graphql';
+import { useOrgSid } from '../hooks/useOrgSid';
 
 export const UserDomainContext = React.createContext(() => {});
 
 const INITIAL_STATE = {};
 
 export const UserDomainContextProvider = ({ children }) => {
-  const { isAuthenticated, isAuthenticating, authData, orgSid } = useAuthContext();
+  const { isAuthenticated, isAuthenticating, authData } = useAuthContext();
+  const { orgSid } = useOrgSid();
   const [userDomain, setUserDomain] = useState({ ...INITIAL_STATE });
   const [currentUserOrgNav, setCurrentUserOrgNav] = useState({});
 
@@ -37,18 +39,20 @@ export const UserDomainContextProvider = ({ children }) => {
   }, [isAuthenticated, !isAuthenticating]);
 
   useEffect(() => {
-    fetchDashNav({
-      variables: {
-        domainNavInput: { orgSid: orgSid || authData?.orgId, appDomain: 'DASHBOARD' },
-      },
-    });
+    if (isAuthenticated) {
+      fetchDashNav({
+        variables: {
+          domainNavInput: { orgSid: orgSid || authData?.orgId, appDomain: 'DASHBOARD' },
+        },
+      });
 
-    fetchCurrentOrgNav({
-      variables: {
-        orgInput: { orgSid: orgSid || authData?.orgId },
-      },
-    });
-  }, [orgSid]);
+      fetchCurrentOrgNav({
+        variables: {
+          orgInput: { orgSid: orgSid || authData?.orgId },
+        },
+      });
+    }
+  }, [isAuthenticated, orgSid]);
 
   useEffect(() => {
     if (dashNav && orgNav) {

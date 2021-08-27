@@ -1,3 +1,4 @@
-import { GenericErrorBoundary } from './GenericErrorBoundary';
+import { DashboardErrorBoundary } from './DashboardErrorBoundary';
+import { AdminErrorBoundary } from './AdminErrorBoundary';
 
-export { GenericErrorBoundary };
+export { AdminErrorBoundary, DashboardErrorBoundary };

@@ -18,13 +18,13 @@ ReactDOM.render(
     <ApolloContextProvider>
       <ThemeContextProvider>
         <AuthContextProvider>
-          <UserDomainContextProvider>
-            <NotificationContextProvider>
-              <Router>
+          <Router>
+            <UserDomainContextProvider>
+              <NotificationContextProvider>
                 <App />
-              </Router>
-            </NotificationContextProvider>
-          </UserDomainContextProvider>
+              </NotificationContextProvider>
+            </UserDomainContextProvider>
+          </Router>
         </AuthContextProvider>
       </ThemeContextProvider>
     </ApolloContextProvider>
