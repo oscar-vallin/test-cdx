@@ -13,9 +13,7 @@ const defaultProps = {
   id: 'InputText',
   type: 'text',
   disabled: false,
-  onChange: (e: React.FormEvent<HTMLInputElement>) => {
-    return e?.currentTarget?.value ?? '';
-  },
+  onChange: (e: React.FormEvent<HTMLInputElement>) => e.currentTarget.value,
   autofocus: true,
   errorMessage: null,
   onKeyDown: null,
