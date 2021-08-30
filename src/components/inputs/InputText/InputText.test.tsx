@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import toJSON from 'enzyme-to-json';
 import { shallow } from 'enzyme';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 //
 import { InputText as Component } from './index.js';
 
@@ -13,12 +13,21 @@ const defaultProps = {
   id: 'InputText',
   type: 'text',
   disabled: false,
-  onChange: (e: React.FormEvent<HTMLInputElement>) => e.currentTarget.value,
+  onChange: (e: React.FormEvent<HTMLInputElement>) => e?.currentTarget?.value ?? '',
   autofocus: true,
   errorMessage: null,
   onKeyDown: null,
   onKeyEnter: null,
   value: '',
+};
+
+const setup = () => {
+  const utils = render(<Component {...defaultProps} placeholder={placeholderText} />);
+  const input = utils.getByRole('textbox');
+  return {
+    input,
+    ...utils,
+  };
 };
 
 test('Matches Snapshot', () => {
@@ -60,5 +69,13 @@ describe('Basic Input Component', () => {
     render(<Component {...defaultProps} placeholder={placeholderText} />);
     const input = screen.getByRole('textbox');
     expect(input).toBeInTheDocument();
+  });
+
+  it('@Testing: Input Text', () => {
+    render(<Component {...defaultProps} placeholder={placeholderText} />);
+    const input = screen.getByRole('textbox');
+    fireEvent.change(input, { target: { value: 'searchString' } });
+    console.log('Input', input);
+    expect(input).toHaveValue('searchString');
   });
 });
