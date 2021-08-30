@@ -24,7 +24,7 @@ const InputText = ({
     <StyledTextField
       id={id}
       type={type}
-      autoFocus={autofocus}
+      autofocus={autofocus}
       disabled={disabled}
       onChange={onChange}
       onKeyDown={({ key }) => handleKey(key)}
@@ -39,7 +39,7 @@ InputText.propTypes = {
   id: PropTypes.string,
   type: PropTypes.string,
   disabled: PropTypes.bool,
-  autoFocus: PropTypes.bool,
+  autofocus: PropTypes.bool,
   onChange: PropTypes.func,
   errorMessage: PropTypes.string,
   value: PropTypes.string,
