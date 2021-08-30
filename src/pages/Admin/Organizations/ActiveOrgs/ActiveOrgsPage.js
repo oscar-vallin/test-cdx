@@ -17,8 +17,6 @@ import { useDirectOrganizationsFLazyQuery } from '../../../../data/services/grap
 import { StyledColumn } from './ActiveOrgsPage.styles';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
 
-import { useHistory } from 'react-router-dom';
-
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
     name,
