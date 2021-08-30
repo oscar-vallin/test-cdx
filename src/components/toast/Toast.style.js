@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Link, Stack, StackItem, MessageBar, MessageBarType, ChoiceGroup, IStackProps } from '@fluentui/react';
-import { MessageBarButton } from '@fluentui/react/lib/Button';
+import { MessageBarButton } from '@fluentui/react/lib-commonjs/Button';
 
 export const StyledMessageBar = styled(MessageBar)`
   animation: ${({ visible }) => (visible ? 'fadeInDown' : 'fadeInUp')} 1s forwards;
