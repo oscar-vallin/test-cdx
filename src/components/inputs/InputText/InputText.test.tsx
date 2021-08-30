@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import toJSON from 'enzyme-to-json';
 import { shallow } from 'enzyme';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 //
 import { InputText as Component } from './index.js';
 
