@@ -13,20 +13,14 @@ export const UserDomainContextProvider = ({ children }) => {
   const [userDomain, setUserDomain] = useState({ ...INITIAL_STATE });
   const [currentUserOrgNav, setCurrentUserOrgNav] = useState({});
 
-  const [
-    fetchDashNav,
-    { data: dashNav, loading: isFetchingDashNav, error: dashNavError },
-  ] = useNavigateToNewDomainLazyQuery();
+  const [fetchDashNav, { data: dashNav, loading: isFetchingDashNav, error: dashNavError }] =
+    useNavigateToNewDomainLazyQuery();
 
-  const [
-    fetchOrgNav,
-    { data: orgNav, loading: isFetchingOrgNav, error: orgNavError },
-  ] = useNavigateToNewDomainLazyQuery();
+  const [fetchOrgNav, { data: orgNav, loading: isFetchingOrgNav, error: orgNavError }] =
+    useNavigateToNewDomainLazyQuery();
 
-  const [
-    fetchCurrentOrgNav,
-    { data: currentOrgNav, loading: isFetchingCurrentOrgNav, error: currentOrgNavError },
-  ] = useCurrentOrgNavLazyQuery();
+  const [fetchCurrentOrgNav, { data: currentOrgNav, loading: isFetchingCurrentOrgNav, error: currentOrgNavError }] =
+    useCurrentOrgNavLazyQuery();
 
   useEffect(() => {
     if (isAuthenticated && !isAuthenticating) {

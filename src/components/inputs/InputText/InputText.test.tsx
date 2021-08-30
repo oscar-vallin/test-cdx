@@ -13,21 +13,15 @@ const defaultProps = {
   id: 'InputText',
   type: 'text',
   disabled: false,
-  onChange: (e: React.FormEvent<HTMLInputElement>) => e?.currentTarget?.value ?? '',
+  onChange: (e: React.FormEvent<HTMLInputElement>) => {
+    console.log('e:', e);
+    return e?.currentTarget?.value ?? '';
+  },
   autofocus: true,
   errorMessage: null,
   onKeyDown: null,
   onKeyEnter: null,
   value: '',
-};
-
-const setup = () => {
-  const utils = render(<Component {...defaultProps} placeholder={placeholderText} />);
-  const input = utils.getByRole('textbox');
-  return {
-    input,
-    ...utils,
-  };
 };
 
 test('Matches Snapshot', () => {
