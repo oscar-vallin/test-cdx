@@ -46,7 +46,8 @@
     "react/jsx-props-no-spreading": "off",
     // note you must disable the base rule as it can report incorrect errors
     "no-use-before-define": "off",
-    "@typescript-eslint/no-use-before-define": ["error"]
+    "@typescript-eslint/no-use-before-define": ["error"],
+    "import/no-extraneous-dependencies": "off"
   },
   "settings": {
     "import/resolver": {

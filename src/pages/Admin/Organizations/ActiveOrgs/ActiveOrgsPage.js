@@ -17,6 +17,8 @@ import { useDirectOrganizationsFLazyQuery } from '../../../../data/services/grap
 import { StyledColumn } from './ActiveOrgsPage.styles';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
 
+import { useHistory } from 'react-router-dom';
+
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
     name,
@@ -66,7 +68,10 @@ const _ActiveOrgsPage = () => {
     switch (column.key) {
       case 'name':
         return (
-          <Link to={`/admin/organizations/active-orgs?orgSid=${item.id}`} onClick={() => changeActiveOrg(item)}>
+          <Link
+            to={`/admin/organizations/active-orgs?orgSid=${item.id}`}
+            onClick={() => changeActiveOrg(item.id, item.name)}
+          >
             {item[column.key]}
           </Link>
         );
