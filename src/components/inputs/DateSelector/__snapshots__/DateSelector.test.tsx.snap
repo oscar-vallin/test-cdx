@@ -1,0 +1,76 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Matches Snapshot 1`] = `
+<StyledDatePickerBase
+  allowTextInput={true}
+  firstDayOfWeek={0}
+  initialPickerDate={2021-08-31T22:59:52.484Z}
+  isRequired={false}
+  maxDate={2022-08-31T22:59:52.484Z}
+  minDate={2021-07-31T22:59:52.484Z}
+  onSelectDate={[Function]}
+  strings={
+    Object {
+      "closeButtonAriaLabel": "Close date picker",
+      "days": Array [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+      ],
+      "goToToday": "Go to today",
+      "invalidInputErrorMessage": "Invalid date format.",
+      "isOutOfBoundsErrorMessage": "Date must be between 7/31/2021-8/31/2022",
+      "isRequiredErrorMessage": "Field is required.",
+      "monthPickerHeaderAriaLabel": "{0}, select to change the year",
+      "months": Array [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ],
+      "nextMonthAriaLabel": "Go to next month",
+      "nextYearAriaLabel": "Go to next year",
+      "prevMonthAriaLabel": "Go to previous month",
+      "prevYearAriaLabel": "Go to previous year",
+      "shortDays": Array [
+        "S",
+        "M",
+        "T",
+        "W",
+        "T",
+        "F",
+        "S",
+      ],
+      "shortMonths": Array [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ],
+      "yearPickerHeaderAriaLabel": "{0}, select to change the month",
+    }
+  }
+>
+  AAAAAAAA
+</StyledDatePickerBase>
+`;
