@@ -6,6 +6,6 @@ const defaultProps = { children: '', left: 'center', right: 'center', top: 'cent
 
 test('Render - Testing Message inside Row', () => {
   const { getByText } = render(<Component {...defaultProps}>Testing</Component>);
-  const linkElement = getByText(/Test/i);
+  const linkElement = getByText(/Testing/i);
   expect(linkElement).toBeInTheDocument();
 });
