@@ -1,5 +1,6 @@
+import React from 'react';
 import { shallow } from 'enzyme';
-import { ButtonContextual } from './ButtonContextual';
+import { ButtonContextual } from './ButtonContextual.js';
 
 const items = [
   {

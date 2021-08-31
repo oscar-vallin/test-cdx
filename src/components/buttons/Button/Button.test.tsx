@@ -1,10 +1,18 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { Button } from './Button';
+import { Button } from './Button.js';
+
+const defaultProps = {
+  text: 'text',
+};
 
 describe('Button Testing Unit...', () => {
   const mockFn = jest.fn();
-  const tree = shallow(<Button onClick={mockFn}>Testing Button</Button>);
+  const tree = shallow(
+    <Button {...defaultProps} onClick={mockFn}>
+      Testing Button
+    </Button>
+  );
 
   it('Should be defined', () => {
     expect(Button).toBeDefined();
@@ -15,7 +23,6 @@ describe('Button Testing Unit...', () => {
   });
 
   it('Should have a click function', () => {
-    // const tree = shallow(<Button onClick={mockFn}>Testing Button</Button>);
     tree.simulate('click');
     expect(mockFn).toHaveBeenCalled();
   });
