@@ -1,10 +1,16 @@
+import React from 'react';
 import { shallow } from 'enzyme';
-import { ButtonAction } from './ButtonAction';
+import { ButtonAction } from './ButtonAction.js';
+
+const defaultProps = {
+  icon: 'edit',
+  onClick: () => null,
+};
 
 describe('ButtonAction', () => {
   const mockFn = jest.fn();
   const tree = shallow(
-    <ButtonAction onClick={mockFn} iconProps={'edit'}>
+    <ButtonAction {...defaultProps} onClick={mockFn} iconProps="edit">
       Testing ButtonAction
     </ButtonAction>
   );
@@ -32,7 +38,7 @@ describe('ButtonAction', () => {
 
   it('Should renders children when passed in', () => {
     const wrapper = shallow(
-      <ButtonAction>
+      <ButtonAction {...defaultProps}>
         <div className="children" />
       </ButtonAction>
     );

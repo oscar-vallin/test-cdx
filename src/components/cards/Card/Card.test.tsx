@@ -1,15 +1,6 @@
-// import React from 'react';
-// import { render } from '@testing-library/react';
-// import { Card as Component } from './Card';
-
-// test('Render - Testing Message inside Card', () => {
-//   const { getByText } = render(<Component>Testing</Component>);
-//   const linkElement = getByText(/Card/i);
-//   expect(linkElement).toBeInTheDocument();
-// });
-
+import React from 'react';
 import { shallow } from 'enzyme';
-import { Card as Component } from './index';
+import { Card as Component } from './index.js';
 
 describe('Card', () => {
   const mockFn = jest.fn();

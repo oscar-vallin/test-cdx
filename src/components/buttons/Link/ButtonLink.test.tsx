@@ -1,5 +1,6 @@
+import React from 'react';
 import { shallow } from 'enzyme';
-import { Link } from './ButtonLink';
+import { Link } from './ButtonLink.js';
 
 describe('Link', () => {
   const mockFn = jest.fn();
@@ -28,7 +29,7 @@ describe('Link', () => {
 
   it('Should renders children when passed in', () => {
     const wrapper = shallow(
-      <Link>
+      <Link onClick={mockFn} href="http://testlink.com">
         <div className="children" />
       </Link>
     );
