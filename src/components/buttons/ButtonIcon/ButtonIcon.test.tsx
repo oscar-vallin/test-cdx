@@ -1,10 +1,15 @@
+import React from 'react';
 import { shallow } from 'enzyme';
-import { ButtonIcon } from './ButtonIcon';
+import { ButtonIcon } from './ButtonIcon.js';
+
+const defaultProps = {
+  size: '10',
+};
 
 describe('ButtonIcon', () => {
   const mockFn = jest.fn();
   const tree = shallow(
-    <ButtonIcon icon="edit" onClick={mockFn}>
+    <ButtonIcon {...defaultProps} icon="edit" onClick={mockFn}>
       Button Contextual
     </ButtonIcon>
   );

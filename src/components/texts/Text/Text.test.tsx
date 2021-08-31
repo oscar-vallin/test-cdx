@@ -1,19 +1,12 @@
-// import React from 'react';
-// import { render } from '@testing-library/react';
-// import { Text as Component } from './index';
-
-// test('Render - Testing Message inside Text', () => {
-//   const { getByText } = render(<Component>Testing</Component>);
-//   const linkElement = getByText(/Testing/i);
-//   expect(linkElement).toBeInTheDocument();
-// });
-
+import React from 'react';
 import { shallow } from 'enzyme';
-import { Text as Component } from './index';
+import { Text as Component } from './index.js';
+
+const defaultProps = { left: 'star', right: 'end', top: 'center', bottom: 'center' };
 
 describe('Text', () => {
   const tree = shallow(
-    <Component variant="normal" left="star" right="end" top="center" bottom="center">
+    <Component {...defaultProps} variant="normal">
       Text test
     </Component>
   );
@@ -32,7 +25,7 @@ describe('Text', () => {
 
   it('Should renders children when passed in', () => {
     const wrapper = shallow(
-      <Component>
+      <Component {...defaultProps} variant="normal">
         <p className="children">Test</p>
       </Component>
     );
