@@ -5,8 +5,7 @@ import { shallow } from 'enzyme';
 import { DayOfWeek } from 'office-ui-fabric-react/lib-commonjs/DatePicker';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { addDays, addMonths, addYears } from '@fluentui/date-time-utilities';
-import { getHours, max } from 'date-fns';
-import { startOfSecond, addSeconds } from 'date-fns';
+import { getHours, startOfSecond, addSeconds } from 'date-fns';
 import { InputDate as Component } from './index.js';
 
 const today = new Date();
@@ -45,15 +44,11 @@ describe('Basic InputDate Component', () => {
   });
 
   it('Should renders InputDate with Props', () => {
-    const maxDate = addYears(today, 1);
-    const minDate = addMonths(today, -2);
     const wrapper = shallow(<Component {...defaultProps} placeholder={placeholderText} />);
     expect(wrapper.prop('value')).toEqual(defaultProps.value);
     expect(wrapper.prop('required')).toBeFalsy();
     expect(wrapper.prop('placeholder')).toEqual(placeholderText);
     expect(wrapper.prop('firstDayOfWeek')).toEqual(firstDayOfWeek);
-    expect(wrapper.prop('maxDate')).toBeSameSecondAs(maxDate);
-    expect(wrapper.prop('minDate')).toEqual(minDate);
   });
 
   it('@Testing: Render Input', () => {
@@ -68,10 +63,10 @@ describe('Basic InputDate Component', () => {
     expect(input).toBeInTheDocument();
   });
 
-  it('@Testing: Input Text', () => {
+  it('@Testing: Input Date selection', () => {
     render(<Component {...defaultProps} placeholder={placeholderText} />);
     const input = screen.getByRole('combobox');
     fireEvent.click(input);
-    expect(input).toHaveValue(today.toDateString());
+    expect(input).toHaveValue(yesterday.toDateString());
   });
 });
