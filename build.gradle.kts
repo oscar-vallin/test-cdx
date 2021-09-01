@@ -1,108 +1,81 @@
+import com.github.gradle.node.yarn.task.YarnTask
+
 plugins {
-    id("com.coditory.webjar") version "1.0.3" //https://github.com/coditory/gradle-webjar-plugin
-   // id("com.dorongold.task-tree") version "1.5" //gradle build taskTree
+    //id("com.coditory.webjar") version "1.0.3" //https://github.com/coditory/gradle-webjar-plugin
+    id("com.github.node-gradle.node") version "3.1.0"
+    java
 }
 
 java {
     sourceCompatibility = JavaVersion.VERSION_11
 }
-/*tasks.register<Copy>("copyReactRoot") {
-    from("$buildDir")
-    include("*.*")
-    into("$buildDir/webjar/static")
-}*/
 
-/*tasks.register<Copy>("copyReactRoot2") {
-    from("$buildDir")
-    include("*.*")
-    into("$buildDir/resources/main/static")
-}*/
+node {
+    version.set("14.17.5")
+    yarnVersion.set("1.22.11")
 
-/*tasks.register<Copy>("copyReactRoot3") {
-    from("$buildDir/resources/main/static")
-    include("*.*")
-    into("$buildDir/webjar/static")
-}*/
+}
+task<YarnTask>("yarnInstall") {
+    dependsOn(tasks.yarnSetup)
+    yarnCommand.set(listOf("install"))
+}
 
-/*tasks.register<Copy>("copyReactRoot4") {
-    from("$buildDir")
-    include("*.*")
-    into("$buildDir/static")
-}*/
+task<YarnTask>("buildReact") {
+    dependsOn("yarnInstall", "extractRoutes")
+    yarnCommand.set(listOf("run", "build"))
+//    args.set(listOf("--out-dir", "./src/main/resources/static/dist"))
+//    inputs.dir("src")
+//    outputs.dir("")
 
-/*tasks.jar{//processResources
-    dependsOn( "copyReactRoot2", "copyReactRoot4")
-}*/
+    doLast {
+        copy {
+            from("$buildDir")
+            include("*.*")
+            into("$buildDir/static")
+        }
+        copy {
+            from("$buildDir/static")
+            include("**/*.*")
+            into("./src/main/resources/static")
+        }
+    }
+}
 
-/*tasks.processResources{
-    dependsOn(*//*"copyReactRoot",*//* "copyReactRoot2"*//*, "copyReactRoot3"*//*, "copyReactRoot4")
-}*/
+tasks.processResources {
+    dependsOn("buildReact")
+}
+tasks.clean {
+    delete(file("node_modules"))
+    delete(file("src/main/resources/static"))
+}
 
-/*task<Exec>("npmInstall") {
-    dependsOn("npmInstall")
-    commandLine("npm", "install")
-}*/
-task<com.moowork.gradle.node.npm.NpmTask>("npmExtractRoutes"){
+task<YarnTask>("extractRoutes"){
     //args = ['run', 'extract-routes']
-    setArgs(listOf("run", "extract-routes"))
-}
-
-/*task<Exec>("npmExtractRoutes") {
-    dependsOn("npmInstall")
-    commandLine("npm", "run", "extract-routes")
-}*/
-
-tasks.webjarBuild{
-    dependsOn("npmExtractRoutes")
+    yarnCommand.set(listOf("run", "extract-routes"))
     doLast{
-        //println("hello last")
-        copy {
-            from("$buildDir")
-            include("*.*")
-            into("$buildDir/static")
-        }
-
-        copy {
-            from("$buildDir")
-            include("*.*")
-            into("$buildDir/webjar/static")
-        }
-
         copy {
             from("$buildDir/../internals")
             include("parent-routes.json")
-            into("$buildDir/static")
-        }
-
-        copy {
-            from("$buildDir/../internals")
-            include("parent-routes.json")
-            into("$buildDir/webjar/static")
+            into("./src/main/resources/static")
         }
     }
 }
 
-/*tasks.test{
-    environment("CI", "true")
-}*/
-
-/*tasks.test{
-    doFirst{
-        environment("CI", "true")
-    }
-}*/
-
-webjar {
-    distDir = "build/static"
-    //distDir = "build"
-    //webjarDir = "react"
-
-    /*taskNames {
-        clean = "clean"
-        build = "build"
-        test = "build"
-        lint = "build"
-        watch = "watch"
-    }*/
+task<YarnTask>("yarnTest") {
+    yarnCommand.set(listOf("run", "test-forbuild"))
 }
+
+task<YarnTask>("yarnLint") {
+    yarnCommand.set(listOf("run", "lint"))
+}
+
+tasks.test {
+    dependsOn("yarnTest")
+}
+
+tasks.check {
+    dependsOn("yarnLint")
+}
+
+
 //CI=true gradle build
