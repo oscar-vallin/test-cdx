@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import { Breadcrumb } from 'office-ui-fabric-react/lib/Breadcrumb';
+import { Breadcrumb } from '@fluentui/react/lib/Breadcrumb';
 import { ROUTE_DASHBOARD } from '../../../data/constants/RouteConstants';
 
 // import {
@@ -22,16 +22,16 @@ const parseBreadcrumbItems = (routes, onClick = () => {}) =>
     };
   });
 
-const CDXBreadcrumb = ({ id = '__CDXBreadcrumb', items = [] }) => {
+const CDXBreadcrumb = ({ id = '__CDXBreadcrumb', items = [], onClick = () => {} }) => {
   const history = useHistory();
 
-  return <Breadcrumb items={parseBreadcrumbItems([ROUTE_DASHBOARD, ...items], history.push)} id={id} />;
+  return <Breadcrumb items={parseBreadcrumbItems([ROUTE_DASHBOARD, ...items], onClick || history.push)} id={id} />;
 };
 
-export const BreadCrumbs = ({ id = '__CDXBreadcrumb', items = [] }) => {
+export const BreadCrumbs = ({ id = '__CDXBreadcrumb', items = [], onClick = () => {} }) => {
   const history = useHistory();
 
-  return <Breadcrumb items={parseBreadcrumbItems([...items], history.push)} id={id} />;
+  return <Breadcrumb items={parseBreadcrumbItems([...items], onClick || history.push)} id={id} />;
 };
 
 CDXBreadcrumb.propTypes = {

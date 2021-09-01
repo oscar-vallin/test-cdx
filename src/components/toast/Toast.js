@@ -10,7 +10,6 @@ export const Toast = ({ type, visible, text }) => {
         visible={visible}
         messageBarType={MessageBarType[type]}
         isMultiline={false}
-        // onDismiss={p.resetChoice}
         dismissButtonAriaLabel="Close"
       >
         {text}
