@@ -106,7 +106,6 @@
   },
   "lint-staged": {
     "src/**/*.{ts,tsx,json}": [
-      "yarn prettify",
       "yarn lint"
     ]
   }
