@@ -4,10 +4,10 @@ exports[`Matches Snapshot 1`] = `
 <StyledDatePickerBase
   allowTextInput={true}
   firstDayOfWeek={0}
-  initialPickerDate={2021-09-01T12:26:01.068Z}
+  initialPickerDate={2021-09-02T03:05:48.901Z}
   isRequired={false}
-  maxDate={2022-09-01T12:26:01.068Z}
-  minDate={2021-08-01T12:26:01.068Z}
+  maxDate={2022-09-02T03:05:48.901Z}
+  minDate={2021-08-02T03:05:48.901Z}
   onSelectDate={[Function]}
   strings={
     Object {

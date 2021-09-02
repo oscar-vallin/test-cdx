@@ -6,8 +6,8 @@ exports[`Matches Snapshot 1`] = `
   ariaLabel="This is a placeholder"
   firstDayOfWeek={0}
   isRequired={false}
-  maxDate={2022-09-01T12:26:01.673Z}
-  minDate={2021-07-01T12:26:01.673Z}
+  maxDate={2022-09-02T03:05:48.331Z}
+  minDate={2021-07-02T03:05:48.331Z}
   onSelectDate={[Function]}
   placeholder="This is a placeholder"
   strings={
@@ -71,6 +71,6 @@ exports[`Matches Snapshot 1`] = `
       "yearPickerHeaderAriaLabel": "{0}, select to change the month",
     }
   }
-  value={2021-08-31T12:26:01.688Z}
+  value={2021-09-02T03:05:48.345Z}
 />
 `;

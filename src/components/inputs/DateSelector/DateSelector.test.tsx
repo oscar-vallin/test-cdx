@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import toJSON from 'enzyme-to-json';
 import { shallow } from 'enzyme';
 import { DayOfWeek } from 'office-ui-fabric-react/lib-commonjs/DatePicker';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { DateSelector as Component } from './DateSelector.js';
 
 const today = new Date();
@@ -34,6 +34,7 @@ describe('Basic InputDate Component', () => {
   it('Should renders InputDate with Props', () => {
     const wrapper = shallow(<Component {...defaultProps} />);
     expect(wrapper.prop('required')).toBeFalsy();
+    expect(wrapper.prop('allowTextInput')).toBeTruthy();
   });
 
   it('Should have the first day of the week as parameter', () => {

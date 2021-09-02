@@ -67,6 +67,6 @@ describe('Basic InputDate Component', () => {
     render(<Component {...defaultProps} placeholder={placeholderText} />);
     const input = screen.getByRole('combobox');
     fireEvent.click(input);
-    expect(input).toHaveValue(yesterday.toDateString());
+    expect(input).toHaveValue(today.toDateString());
   });
 });
