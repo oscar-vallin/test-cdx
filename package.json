@@ -103,8 +103,7 @@
     }
   },
   "lint-staged": {
-    "src/**/*.{ts,tsx,json}": [
-      "yarn prettify",
+    "src/**/*.{ts,tsx}": [
       "yarn lint"
     ]
   }
