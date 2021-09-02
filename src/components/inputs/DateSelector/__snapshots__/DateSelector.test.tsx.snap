@@ -4,10 +4,10 @@ exports[`Matches Snapshot 1`] = `
 <StyledDatePickerBase
   allowTextInput={true}
   firstDayOfWeek={0}
-  initialPickerDate={2021-09-02T03:05:48.901Z}
+  initialPickerDate={2021-09-02T11:04:10.927Z}
   isRequired={false}
-  maxDate={2022-09-02T03:05:48.901Z}
-  minDate={2021-08-02T03:05:48.901Z}
+  maxDate={2022-09-02T11:04:10.927Z}
+  minDate={2021-08-02T11:04:10.927Z}
   onSelectDate={[Function]}
   strings={
     Object {
@@ -23,7 +23,7 @@ exports[`Matches Snapshot 1`] = `
       ],
       "goToToday": "Go to today",
       "invalidInputErrorMessage": "Invalid date format.",
-      "isOutOfBoundsErrorMessage": "Date must be between 8/1/2021-9/1/2022",
+      "isOutOfBoundsErrorMessage": "Date must be between 8/2/2021-9/2/2022",
       "isRequiredErrorMessage": "Field is required.",
       "monthPickerHeaderAriaLabel": "{0}, select to change the year",
       "months": Array [
