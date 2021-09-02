@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyledDiv } from './Collapse.styles';
-import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
+import { FontIcon } from '@fluentui/react/lib/Icon';
 
 const CDXCollapse = ({ label, children, className = '' }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -21,7 +21,7 @@ const CDXCollapse = ({ label, children, className = '' }) => {
   return (
     <StyledDiv className={`collapse ${className}`}>
       <button className="collapse__trigger" onClick={handleClick}>
-        {label} &nbsp; <FontIcon iconName="ChevroDown" />
+        {label} &nbsp; <FontIcon iconName="ChevronDown" />
       </button>
 
       {isExpanded && (
