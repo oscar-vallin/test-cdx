@@ -48,6 +48,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "test:local": "react-scripts test --verbose --updateSnapshot ",
     "test": "react-scripts test --verbose --updateSnapshot --transformIgnorePatterns \"node_modules/(?!react-ts)/\"",
     "test-forbuild": "react-scripts test --verbose --watchAll=false --updateSnapshot --transformIgnorePatterns \"node_modules/(?!react-ts)/\"",
     "format": "prettier --write src/**/*.{ts,tsx}",
