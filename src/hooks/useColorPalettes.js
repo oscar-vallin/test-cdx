@@ -16,18 +16,12 @@ export const useColorPalettes = () => {
   const ownedInput = { orgSid, ownerId: id };
 
   const [getDashThemeColorForOrg, { data: palettes, loading: isLoadingPalettes }] = useDashThemeColorForOrgLazyQuery();
-  const [
-    createDashThemeColorMutation,
-    { data: createdPalette, loading: isCreatingPalette },
-  ] = useCreateDashThemeColorMutation();
-  const [
-    updateDashThemeColorMutation,
-    { data: updatedPalette, loading: isUpdatingPalette },
-  ] = useUpdateDashThemeColorMutation();
-  const [
-    removeDashThemeColorMutation,
-    { data: removedPalette, loading: isRemovingPalette },
-  ] = useRemoveDashThemeColorMutation();
+  const [createDashThemeColorMutation, { data: createdPalette, loading: isCreatingPalette }] =
+    useCreateDashThemeColorMutation();
+  const [updateDashThemeColorMutation, { data: updatedPalette, loading: isUpdatingPalette }] =
+    useUpdateDashThemeColorMutation();
+  const [removeDashThemeColorMutation, { data: removedPalette, loading: isRemovingPalette }] =
+    useRemoveDashThemeColorMutation();
 
   const [palettesUpdated, setPalettesUpdated] = useState(false);
   const [colorPalettes, setColorPalettes] = useState([]);

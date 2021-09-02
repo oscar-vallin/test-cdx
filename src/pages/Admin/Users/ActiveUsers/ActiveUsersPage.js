@@ -48,10 +48,8 @@ const _ActiveUsersPage = () => {
   const [useUsersForOrgFpLazy, { data, loading }] = useUsersForOrgFpLazyQuery();
   const [selectedItems, setSelectedItems] = useState([]);
 
-  const [
-    disableUser,
-    { data: disableResponse, loading: isDisablingUser, error: DisableUserError },
-  ] = useDeactivateUsersMutation();
+  const [disableUser, { data: disableResponse, loading: isDisablingUser, error: DisableUserError }] =
+    useDeactivateUsersMutation();
 
   useEffect(() => {
     useUsersForOrgFpLazy({

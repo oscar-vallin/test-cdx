@@ -109,15 +109,8 @@ const _ColorPalettesPage = () => {
 
   useEffect(() => {
     if (selectedPaletteId) {
-      const {
-        paletteNm,
-        allowDark,
-        defaultPalette,
-        themePrimary,
-        neutralPrimary,
-        white,
-        themeColorMode,
-      } = colorPalettes.find(({ id }) => id === selectedPaletteId);
+      const { paletteNm, allowDark, defaultPalette, themePrimary, neutralPrimary, white, themeColorMode } =
+        colorPalettes.find(({ id }) => id === selectedPaletteId);
 
       setPaletteName(paletteNm);
       setPaletteType(themeColorMode !== null ? 'EXTEND' : 'CUSTOM');

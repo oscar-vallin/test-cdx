@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Calendar, DayOfWeek, DateRangeType } from 'office-ui-fabric-react/lib/Calendar';
-import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { Calendar, DayOfWeek, DateRangeType } from 'office-ui-fabric-react/lib-commonjs/Calendar';
+import { DefaultButton } from 'office-ui-fabric-react/lib-commonjs/Button';
 import { addDays, getDateRangeArray } from '@fluentui/date-time-utilities';
 import { Container } from './MonthPicker.styles.js';
 

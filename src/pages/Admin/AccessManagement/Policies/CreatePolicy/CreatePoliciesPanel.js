@@ -135,67 +135,65 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
     });
   };
 
-  const onRenderItemColumn = ({ data, services, onServiceChange, onFacetChange, onVerbChange, permissionIndex }) => (
-    item,
-    index,
-    column
-  ) => {
-    switch (column.key) {
-      case 'service':
-        return (
-          <ComboBox
-            autoComplete="off"
-            selectedKey={item.service.key}
-            options={services.map(parseToComboBoxOption)}
-            onChange={(event, option) => onServiceChange(option, item, data)}
-            style={{ width: '100%' }}
-          />
-        );
-      case 'facet':
-        return (
-          <FacetCombobox
-            service={item.service.key}
-            value={item.facet.key}
-            onChange={(event, option) => onFacetChange(option, item, data)}
-          />
-        );
-      case 'verb':
-        return (
-          <VerbCombobox
-            service={item.service.key}
-            facet={item.facet.key}
-            value={item.verb.key}
-            onChange={(event, option) => onVerbChange(option, item, data)}
-          />
-        );
-      case 'actions':
-        return (
-          <div>
-            <IconButton
-              iconProps={{ iconName: 'delete' }}
-              onClick={() => {
-                setState({
-                  ...state,
-                  permissions: state.permissions.map((item, currIndex) => {
-                    if (currIndex !== permissionIndex) {
-                      return item;
-                    }
-
-                    return {
-                      ...item,
-                      actions: item.actions.filter((action, actionIndex) => actionIndex !== index),
-                    };
-                  }),
-                });
-              }}
+  const onRenderItemColumn =
+    ({ data, services, onServiceChange, onFacetChange, onVerbChange, permissionIndex }) =>
+    (item, index, column) => {
+      switch (column.key) {
+        case 'service':
+          return (
+            <ComboBox
+              autoComplete="off"
+              selectedKey={item.service.key}
+              options={services.map(parseToComboBoxOption)}
+              onChange={(event, option) => onServiceChange(option, item, data)}
+              style={{ width: '100%' }}
             />
-          </div>
-        );
+          );
+        case 'facet':
+          return (
+            <FacetCombobox
+              service={item.service.key}
+              value={item.facet.key}
+              onChange={(event, option) => onFacetChange(option, item, data)}
+            />
+          );
+        case 'verb':
+          return (
+            <VerbCombobox
+              service={item.service.key}
+              facet={item.facet.key}
+              value={item.verb.key}
+              onChange={(event, option) => onVerbChange(option, item, data)}
+            />
+          );
+        case 'actions':
+          return (
+            <div>
+              <IconButton
+                iconProps={{ iconName: 'delete' }}
+                onClick={() => {
+                  setState({
+                    ...state,
+                    permissions: state.permissions.map((item, currIndex) => {
+                      if (currIndex !== permissionIndex) {
+                        return item;
+                      }
 
-      default:
-        break;
-    }
-  };
+                      return {
+                        ...item,
+                        actions: item.actions.filter((action, actionIndex) => actionIndex !== index),
+                      };
+                    }),
+                  });
+                }}
+              />
+            </div>
+          );
+
+        default:
+          break;
+      }
+    };
 
   const columns = generateColumns(options);
 

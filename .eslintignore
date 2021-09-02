@@ -7,3 +7,4 @@ build
 *.d.ts
 api
 src/data/services/graphql.ts
+**/*.snap
