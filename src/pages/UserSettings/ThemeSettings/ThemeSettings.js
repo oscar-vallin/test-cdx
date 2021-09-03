@@ -36,10 +36,8 @@ const ThemeSettings = ({ userTheme = { ...INITIAL_THEME } }) => {
   const Toast = useNotification();
   const { changeTheme } = useThemeContext();
   const { colorPalettes, isLoadingPalettes, fetchColorPalettes } = useColorPalettes();
-  const [
-    createOrUpdateOwnDashTheme,
-    { data: themeResponse, loading: isHandlingTheme, error: themeError },
-  ] = useCreateOrUpdateOwnDashThemeMutation();
+  const [createOrUpdateOwnDashTheme, { data: themeResponse, loading: isHandlingTheme, error: themeError }] =
+    useCreateOrUpdateOwnDashThemeMutation();
   const [palettes, setPalettes] = useState([
     {
       id: null,

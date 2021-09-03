@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import { Breadcrumb } from '@fluentui/react/lib/Breadcrumb';
+import { Breadcrumb } from '@fluentui/react/lib-commonjs/Breadcrumb';
 import { ROUTE_DASHBOARD } from '../../../data/constants/RouteConstants';
 
 // import {

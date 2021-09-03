@@ -31,10 +31,8 @@ const _DefaultThemePage = () => {
   const { id, orgId } = authData;
   const ownedInput = { orgSid: authData?.orgId, ownerId: id };
 
-  const [
-    useDefaultDashThemeQuery,
-    { data: defaultTheme, loading: isLoadingDefaultTheme },
-  ] = useDefaultDashThemeForSiteLazyQuery();
+  const [useDefaultDashThemeQuery, { data: defaultTheme, loading: isLoadingDefaultTheme }] =
+    useDefaultDashThemeForSiteLazyQuery();
 
   const { colorPalettes, isLoadingPalettes, fetchColorPalettes } = useColorPalettes();
 
@@ -59,15 +57,11 @@ const _DefaultThemePage = () => {
   const [selectedPaletteId, setSelectedPaletteId] = useState(null);
   const [themeColorMode, setThemeColorMode] = useState(null);
 
-  const [
-    createDefaultDashThemeMutation,
-    { data: themeCreated, loading: isCreatingTheme },
-  ] = useCreateDefaultDashThemeMutation();
+  const [createDefaultDashThemeMutation, { data: themeCreated, loading: isCreatingTheme }] =
+    useCreateDefaultDashThemeMutation();
 
-  const [
-    updateDefaultDashThemeMutation,
-    { data: themeUpdated, loading: isUpdatingTheme },
-  ] = useUpdateDefaultDashThemeMutation();
+  const [updateDefaultDashThemeMutation, { data: themeUpdated, loading: isUpdatingTheme }] =
+    useUpdateDefaultDashThemeMutation();
 
   useEffect(() => {
     if (themeCreated || themeUpdated) {
