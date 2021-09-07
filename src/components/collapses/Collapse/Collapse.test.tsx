@@ -7,7 +7,13 @@ const defaultProps = {
 };
 
 describe('Collapse Testing Unit...', () => {
-  const tree = mountWithTheme(<CDXCollapse {...defaultProps}>Content</CDXCollapse>);
+  const mockFn = jest.fn();
+
+  const tree = mountWithTheme(
+    <CDXCollapse {...defaultProps} onToggle={mockFn}>
+      Content
+    </CDXCollapse>
+  );
 
   it('Should be defined', () => {
     expect(CDXCollapse).toBeDefined();
@@ -17,15 +23,15 @@ describe('Collapse Testing Unit...', () => {
     expect(tree).toMatchSnapshot();
   });
 
-  // it('Should render the text property', () => {
-  //   expect(tree.props().text).toEqual(defaultProps.text);
-  // });
+  it('Should render the label property', () => {
+    const text = tree.find('.collapse__trigger').text().trim();
 
-  // it('Should match the type property', () => {
-  //   expect(tree.props().type).toEqual(MessageBarType.info);
-  // });
+    expect(text).toEqual(defaultProps.label);
+  });
 
-  // it('Should be hidden by default', () => {
-  //   expect(tree.props().visible).toEqual(false);
-  // });
+  it('Should trigger the onToggle callback', () => {
+    tree.find('.collapse__trigger').simulate('click');
+
+    expect(mockFn).toHaveBeenCalled();
+  });
 });

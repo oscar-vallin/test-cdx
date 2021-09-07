@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { FontIcon } from '@fluentui/react/lib/Icon';
 import { ContextualMenuItemType } from '@fluentui/react/lib/ContextualMenu';
+import { useStoreActions, useStoreState } from 'easy-peasy';
 
 import { ProfileMenu } from '../../menus/ProfileMenu';
 
@@ -9,10 +10,8 @@ import { ProfileMenu } from '../../menus/ProfileMenu';
 import { TooltipHost } from '@fluentui/react/lib/Tooltip';
 import { MainMenu } from '../../menus/MainMenu';
 import { useCurrentUserTheme } from '../../../hooks/useCurrentUserTheme';
-import { useThemeContext } from '../../../contexts/ThemeContext';
 import { useAuthContext } from '../../../contexts/AuthContext';
 import { useNotification } from '../../../contexts/hooks/useNotification';
-import { Spacing } from '../../../components/spacings/Spacing';
 import { Spinner } from '../../../components/spinners/Spinner';
 // Hooks
 // import { useNavBar } from "./NavBar.services";
@@ -22,13 +21,9 @@ import {
   StyledRow,
   StyledColumnLogoR,
   StyledTitle,
-  StyledColumn,
   StyledColumnNav,
   StyledColumnLogoL,
   StyledColumnCont,
-  StyledDropdown,
-  // StyledButtonProfile,
-  StyledButtonIcon,
   StyledChoiceGroup,
   StyledButtonOrg,
 } from './NavBar.styles';
@@ -40,25 +35,25 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSetti
   const Toast = useNotification();
   const { currentUserOrgNav } = useUserDomain();
   const [collapse, setCollapse] = React.useState('false');
-  const { userTheme, setOwnDashFontSize, isHandlingFontSize } = useCurrentUserTheme();
-  const { setFontSize } = useThemeContext();
+  const { setOwnDashFontSize, isHandlingFontSize } = useCurrentUserTheme();
   const { authData } = useAuthContext();
   const { orgSid, setOrgSid, setUrlParams } = useOrgSid();
-  const [themeFontSize, setThemeFontSize] = useState(userTheme?.themeFontSize || undefined);
+
+  const userTheme = useStoreState(({ ThemeStore }) => ThemeStore.theme);
+  const setUserTheme = useStoreActions(({ ThemeStore }) => ThemeStore.updateTheme);
 
   const changeCollapse = () => {
     setCollapse(!collapse);
   };
 
-  useEffect(() => {
-    setThemeFontSize(userTheme.themeFontSize);
-  }, [userTheme]);
-
   const updateThemeFontSize = (key) => {
-    setThemeFontSize(key);
-    setFontSize(key);
-    setOwnDashFontSize({ themeFontSize: key });
+    const fontSize = { themeFontSize: key };
+
+    setOwnDashFontSize(fontSize);
+    setUserTheme(fontSize);
   };
+
+  useEffect(() => console.log(userTheme), [userTheme]);
 
   const settingsMenu = [
     {
@@ -141,7 +136,7 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSetti
             />
 
             <StyledChoiceGroup
-              selectedKey={themeFontSize}
+              selectedKey={userTheme.themeFontSize}
               options={settingsMenu.map(({ key, label, iconProps }, index) => ({
                 key,
                 label,
@@ -150,11 +145,11 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSetti
                     <TooltipHost content={label} id={`tooltip-${index}`} calloutProps={{ gapSpace: 0 }}>
                       <button
                         disabled={isHandlingFontSize}
-                        className={themeFontSize === key && 'selected'}
+                        className={userTheme.themeFontSize === key && 'selected'}
                         onClick={() => updateThemeFontSize(key)}
                       >
                         {isHandlingFontSize ? (
-                          themeFontSize === key ? (
+                          userTheme.themeFontSize === key ? (
                             <Spinner size="xs" />
                           ) : (
                             <FontIcon iconName={iconProps.iconName} />
