@@ -14,6 +14,7 @@ import {
   buildColumns,
   DetailsHeader,
 } from 'office-ui-fabric-react/lib/DetailsList';
+import { Spinner } from '../../spinners/Spinner';
 
 import {
   StyledText,
@@ -25,6 +26,7 @@ import {
   RouteLink,
   StyledMenuButton,
   StyledMenuIcon,
+  StyledSpacing,
 } from './Table.styles';
 
 import { TableHeader } from '../TableHeader';
@@ -112,7 +114,17 @@ const classNames = mergeStyleSets({
  * @param {Array} groups Group values to group rows.
  * @param {string} searchIntput String.typing filter locally in the table. Data not modified, just view after filter.
  * */
-const Table = ({ items, columns, structure, onOption, groups, searchInput, date, onItemsListChange }) => {
+const Table = ({
+  items,
+  columns,
+  structure,
+  onOption,
+  groups,
+  searchInput,
+  date,
+  onItemsListChange,
+  loading = true,
+}) => {
   const [sortLabel, setSortLabel] = useState();
   const [sortedItems, setSortedItems] = useState([]);
   const [sortedGroups, setSortedGroups] = useState();
@@ -449,77 +461,67 @@ const Table = ({ items, columns, structure, onOption, groups, searchInput, date,
 
   // * RENDER
 
-  const definePages = () => {
-    // if (structure?.pagination?.active) {
-    //   let _totalPages = 1;
-    //   _totalPages = Math.ceil(sortedItems.length / structure?.pagination?.pageSize);
-    //   _totalPages = _totalPages < 1 ? 1 : _totalPages;
-    //   setTotalPages(_totalPages);
-    // }
-  };
-
-  const onChangePage = (page) => {
-    setPage(page > totalPages ? 1 : page);
-  };
+  const definePages = () => {};
 
   const renderItems = () => {
-    // if (structure?.pagination?.active) {
-    //   return sortedItems.slice((page - 1) * structure?.pagination?.pageSize, page * structure?.pagination?.pageSize);
-    // } else {
     return sortedItems;
-    // }
   };
 
   if (sortedItems)
     if (structure.header.type === 'dashboard') {
       return (
         <StyledContainer id="Table_Detailed" style={{ width: '100%' }}>
-          <DetailsList
-            className={classNames.root}
-            id="TableDetailedList"
-            items={sortedItems}
-            columns={tablecolumns}
-            selectionMode={SelectionMode.none}
-            setKey="none"
-            layoutMode={DetailsListLayoutMode.justified}
-            isHeaderVisible
-            onItemInvoked={_onItemInvoked}
-            onRenderDetailsHeader={_onRenderTableHeader}
-            onRenderItemColumn={_renderItemColumn}
-            groups={sortedGroups}
-          />
-          {/* )} */}
-          {sortedItems?.length === 0 && <StyledText bold>No data available</StyledText>}
+          {loading ? (
+            <StyledSpacing margin={{ top: 'double' }}>
+              <Spinner size="lg" label="Loading data" />
+            </StyledSpacing>
+          ) : sortedItems?.length > 0 ? (
+            <DetailsList
+              className={classNames.root}
+              id="TableDetailedList"
+              items={sortedItems}
+              columns={tablecolumns}
+              selectionMode={SelectionMode.none}
+              setKey="none"
+              layoutMode={DetailsListLayoutMode.justified}
+              isHeaderVisible
+              onItemInvoked={_onItemInvoked}
+              onRenderDetailsHeader={_onRenderTableHeader}
+              onRenderItemColumn={_renderItemColumn}
+              groups={sortedGroups}
+            />
+          ) : (
+            <StyledText bold>No data available</StyledText>
+          )}
         </StyledContainer>
       );
     }
   return (
     <StyledContainer id="Table_Detailed" style={{ width: '100%' }}>
-      <DetailsList
-        className={classNames.root}
-        id="TableDetailedList"
-        items={renderItems()}
-        columns={tablecolumns}
-        selectionMode={SelectionMode.none}
-        setKey="none"
-        layoutMode={DetailsListLayoutMode.justified}
-        isHeaderVisible
-        onItemInvoked={_onItemInvoked}
-        onRenderDetailsHeader={structure.header.type === 'file_status' ? _onRenderTableHeader : null}
-        onRenderItemColumn={_renderItemColumn}
-        groups={sortedGroups}
-      />
-      {/* )} */}
-      {sortedItems?.length === 0 && <StyledText bold>No data available</StyledText>}
-      {/* {structure?.pagination?.active && (
-        <ContainerPagination>
-          <Pagination currentPage={page} totalPages={totalPages || 1} onChange={(page) => onChangePage(page)} />
-        </ContainerPagination>
-      )} */}
+      {loading ? (
+        <StyledSpacing margin={{ top: 'double' }}>
+          <Spinner size="lg" label="Loading data" />
+        </StyledSpacing>
+      ) : sortedItems?.length > 0 ? (
+        <DetailsList
+          className={classNames.root}
+          id="TableDetailedList"
+          items={renderItems()}
+          columns={tablecolumns}
+          selectionMode={SelectionMode.none}
+          setKey="none"
+          layoutMode={DetailsListLayoutMode.justified}
+          isHeaderVisible
+          onItemInvoked={_onItemInvoked}
+          onRenderDetailsHeader={structure.header.type === 'file_status' ? _onRenderTableHeader : null}
+          onRenderItemColumn={_renderItemColumn}
+          groups={sortedGroups}
+        />
+      ) : (
+        <StyledText bold>No data available</StyledText>
+      )}
     </StyledContainer>
   );
-
-  // return <p>No Items</p>;
 };
 
 Table.propTypes = {};

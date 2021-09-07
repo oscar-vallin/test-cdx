@@ -3,6 +3,11 @@ import { Box as LayoutBox, Row as LayoutRow, Column as LayoutColumn } from '../.
 import { Text } from '../../typography/Text';
 import { ButtonAction } from '../../buttons/ButtonAction';
 import { Link } from 'react-router-dom';
+import { Spacing } from '../../spacings/Spacing';
+
+export const StyledSpacing = styled(Spacing)`
+  min-height: 200px;
+`;
 
 export const StyledContainer = styled.div`
   width: 100%;

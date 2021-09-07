@@ -15,7 +15,7 @@ import { CreateUsersPanel } from '../CreateUsers';
 import { useUsersForOrgFpLazyQuery, useDeactivateUsersMutation } from '../../../../data/services/graphql';
 import { StyledColumn } from './ActiveUsersPage.styles';
 
-import { useAuthContext } from '../../../../contexts/AuthContext';
+import { useOrgSid } from '../../../../hooks/useOrgSid';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -39,7 +39,7 @@ const onRenderItemColumn = (node, _index, column) => {
 };
 
 const _ActiveUsersPage = () => {
-  const { orgSid } = useAuthContext();
+  const { orgSid } = useOrgSid();
   const [users, setUsers] = useState([]);
   const columns = generateColumns();
   const [isPanelOpen, setIsPanelOpen] = useState(false);
@@ -48,8 +48,10 @@ const _ActiveUsersPage = () => {
   const [useUsersForOrgFpLazy, { data, loading }] = useUsersForOrgFpLazyQuery();
   const [selectedItems, setSelectedItems] = useState([]);
 
-  const [disableUser, { data: disableResponse, loading: isDisablingUser, error: DisableUserError }] =
-    useDeactivateUsersMutation();
+  const [
+    disableUser,
+    { data: disableResponse, loading: isDisablingUser, error: DisableUserError },
+  ] = useDeactivateUsersMutation();
 
   useEffect(() => {
     useUsersForOrgFpLazy({

@@ -2,19 +2,22 @@ import { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 import { useAuthContext } from '../contexts/AuthContext';
+import { useStoreActions, useStoreState } from 'easy-peasy';
 
 export const useOrgSid = () => {
   const history = useHistory();
   const location = useLocation();
   const [urlParams, setUrlParams] = useState(queryString.parse(location.search));
-  const [orgSid, setOrgSid] = useState();
-  const { authData } = useAuthContext();
+
+  const authData = useStoreState(({ AuthStore }) => AuthStore.data);
+  const orgSid = useStoreState(({ ActiveOrgStore }) => ActiveOrgStore.orgSid);
+  const updateOrgSid = useStoreActions(({ ActiveOrgStore }) => ActiveOrgStore.updateOrgSid);
 
   const pushQueryString = () => {
     let finalURL = '';
 
     if (urlParams?.orgSid || authData?.orgId) {
-      setOrgSid(urlParams?.orgSid || authData?.orgId);
+      updateOrgSid(urlParams?.orgSid || authData?.orgId);
       finalURL += `?orgSid=${urlParams?.orgSid || authData?.orgId}`;
     }
 
@@ -27,7 +30,7 @@ export const useOrgSid = () => {
 
   return {
     orgSid,
-    setOrgSid,
+    setOrgSid: updateOrgSid,
     setUrlParams,
   };
 };
