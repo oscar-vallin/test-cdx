@@ -54,7 +54,7 @@ const LayoutAdmin = ({ id = 'LayoutAdmin', menuOptionSelected = 'admin', sidebar
               evt.preventDefault();
 
               if (!route.links) {
-                history.push(route.url);
+                history.push(`${route.url}?orgSid=${orgSid}`);
               }
             }}
           />
