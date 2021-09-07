@@ -2,11 +2,11 @@ import { action } from 'easy-peasy';
 
 const CURRENT_NAV = {};
 
-const updateCurrentNav = (state: any, payload: any): any => {
+const updateCurrentNav = (state, payload) => {
   state.currentNav = { ...state.currentNav, ...payload };
 };
 
-const updateOrgSid = (state: any, payload: any): any => {
+const updateOrgSid = (state, payload) => {
   state.orgSid = payload;
 };
 

@@ -2,7 +2,7 @@ import { action } from 'easy-peasy';
 
 const INITIAL_AUTH_STATE = null;
 
-const setAuthData = (state: any, payload: any): any => {
+const setAuthData = (state, payload) => {
   state.data = { ...state.data, ...payload };
 };
 
