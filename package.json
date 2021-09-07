@@ -23,6 +23,7 @@
     "babel-jest": "^27.1.0",
     "chroma-js": "^2.1.1",
     "date-fns": "^2.16.1",
+    "easy-peasy": "^5.0.3",
     "enzyme": "^3.11.0",
     "graphql": "^15.3.0",
     "lodash": "^4.17.21",

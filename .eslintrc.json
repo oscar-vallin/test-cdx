@@ -47,7 +47,9 @@
     // note you must disable the base rule as it can report incorrect errors
     "no-use-before-define": "off",
     "@typescript-eslint/no-use-before-define": ["error"],
-    "import/no-extraneous-dependencies": "off"
+    "import/no-extraneous-dependencies": "off",
+    "no-param-reassign": "off",
+    "@typescript-eslint/no-explicit-any": "off"
   },
   "settings": {
     "import/resolver": {

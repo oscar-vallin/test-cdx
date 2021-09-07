@@ -170,22 +170,11 @@ export const AuthContextProvider = ({ children }) => {
 
     if (!authHistory) return;
 
-    fetchTheme();
-
     authHistory.push(routePage.URL);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authData, authHistory]);
 
-  useEffect(() => {
-    if (!isLoadingTheme && authData && userTheme.data) {
-      changeTheme(Theming.getVariant(userTheme.data));
-    }
-  }, [userTheme, authData]);
-
-  //
-  // When user / password.
-  //
   useEffect(async () => {
     if (user?.length && password?.length) {
       try {

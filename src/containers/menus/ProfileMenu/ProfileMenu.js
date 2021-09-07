@@ -11,8 +11,10 @@ import { useAuthContext } from '../../../contexts/AuthContext';
 // Styles
 import { StyledBox } from './ProfileMenu.styles';
 import { ButtonContextual } from '../../../components/buttons/ButtonContextual';
+import { useStoreActions } from 'easy-peasy';
 
 const ProfileMenu = ({ id = '__ProfileMenu', onUserSettings }) => {
+  const resetTheme = useStoreActions(({ ThemeStore }) => ThemeStore.resetTheme);
   const { authLogout } = useAuthContext();
   const history = useHistory();
 
@@ -21,6 +23,7 @@ const ProfileMenu = ({ id = '__ProfileMenu', onUserSettings }) => {
   //* HandleLogout
   const handleLogout = () => {
     authLogout();
+    resetTheme();
     history.push('/');
   };
 
