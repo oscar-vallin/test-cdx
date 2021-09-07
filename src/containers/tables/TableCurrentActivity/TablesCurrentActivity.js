@@ -33,15 +33,17 @@ const TablesCurrentActivity = ({ id = 'TableCurrentActivity', argOrgSid = 1, arg
         </RightColumn>
       </Row>
       <TableContainer>
-        {!tableProc.loading && <TableActivity tableName="In Process" {...tableProc} />}
+        <TableActivity tableName="In Process" loading={tableProc.loading} {...tableProc} />
         <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
           <Separator />
         </Spacing>
-        {!tableComp.loading && <TableActivity tableName="Completed" color="complete" {...tableComp} />}
+
+        <TableActivity tableName="Completed" color="complete" loading={tableComp.loading} {...tableComp} />
         <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
           <Separator />
         </Spacing>
-        {!tableError.loading && <TableActivity tableName="Errored" color="error" {...tableError} />}
+
+        <TableActivity tableName="Errored" color="error" loading={tableError.loading} {...tableError} />
       </TableContainer>
     </Container>
   );

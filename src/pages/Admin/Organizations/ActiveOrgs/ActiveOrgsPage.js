@@ -12,7 +12,6 @@ import { MessageBar } from 'office-ui-fabric-react';
 import { Text } from '../../../../components/typography/Text';
 import { Separator } from '../../../../components/separators/Separator';
 
-import { useAuthContext } from '../../../../contexts/AuthContext';
 import { useDirectOrganizationsFLazyQuery } from '../../../../data/services/graphql';
 import { StyledColumn } from './ActiveOrgsPage.styles';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
@@ -60,16 +59,14 @@ const _ActiveOrgsPage = () => {
     });
 
     setOrgSid(id);
+    setUrlParams({ orgSid: id });
   };
 
   const onRenderItemColumn = (item, index, column) => {
     switch (column.key) {
       case 'name':
         return (
-          <Link
-            to={`/admin/organizations/active-orgs?orgSid=${item.id}`}
-            onClick={() => changeActiveOrg(item.id, item.name)}
-          >
+          <Link to={`/admin/organizations/active-orgs?orgSid=${item.id}`} onClick={() => changeActiveOrg(item)}>
             {item[column.key]}
           </Link>
         );

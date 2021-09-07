@@ -27,18 +27,19 @@ import {
   StyledChoiceGroup,
   StyledButtonOrg,
 } from './NavBar.styles';
-import { useUserDomain } from '../../../contexts/hooks/useUserDomain';
+
 import { useOrgSid } from '../../../hooks/useOrgSid';
 
 // CardSection is called directly cause a restriction warning for that component.
 const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSettings, visible, ...props }) => {
   const Toast = useNotification();
-  const { currentUserOrgNav } = useUserDomain();
   const [collapse, setCollapse] = React.useState('false');
   const { setOwnDashFontSize, isHandlingFontSize } = useCurrentUserTheme();
-  const { authData } = useAuthContext();
-  const { orgSid, setOrgSid, setUrlParams } = useOrgSid();
+  const { setOrgSid, setUrlParams } = useOrgSid();
 
+  const authData = useStoreState(({ AuthStore }) => AuthStore.data);
+
+  const currentUserOrgNav = useStoreState(({ ActiveOrgStore }) => ActiveOrgStore.currentNav);
   const userTheme = useStoreState(({ ThemeStore }) => ThemeStore.theme);
   const setUserTheme = useStoreActions(({ ThemeStore }) => ThemeStore.updateTheme);
 
@@ -52,8 +53,6 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSetti
     setOwnDashFontSize(fontSize);
     setUserTheme(fontSize);
   };
-
-  useEffect(() => console.log(userTheme), [userTheme]);
 
   const settingsMenu = [
     {
@@ -109,7 +108,7 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSetti
                               Toast.info({ text: `Loading ${item.label} domain`, duration: 3000 });
 
                               setTimeout(() => {
-                                const orgId = item.page.parameters.orgSid;
+                                const orgId = [...item.page.parameters].shift().idValue;
 
                                 setOrgSid(orgId);
                                 setUrlParams({ orgSid: orgId });
@@ -145,7 +144,7 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSetti
                     <TooltipHost content={label} id={`tooltip-${index}`} calloutProps={{ gapSpace: 0 }}>
                       <button
                         disabled={isHandlingFontSize}
-                        className={userTheme.themeFontSize === key && 'selected'}
+                        className={userTheme.themeFontSize === key ? 'selected' : ''}
                         onClick={() => updateThemeFontSize(key)}
                       >
                         {isHandlingFontSize ? (

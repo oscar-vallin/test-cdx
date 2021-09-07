@@ -58,8 +58,8 @@ const _DashboardPage = () => {
   const renderDateButtons = () => {
     if (!datesOptions) return null;
 
-    return datesOptions.map((option) => (
-      <Spacing margin={{ left: 'normal' }}>
+    return datesOptions.map((option, index) => (
+      <Spacing margin={{ left: 'normal' }} key={index}>
         <StyledButton
           key={`Button-${option.id}`}
           variant={option.selected ? 'primary' : 'secondary'}
@@ -131,6 +131,7 @@ const _DashboardPage = () => {
                 data={dataCounters?.vendorTransmissions}
                 altData={dataCounters?.vendorTransmissionsBySpec}
                 date={dateId}
+                loading={isLoadingData}
               />
             </Column>
             <Column lg="6">
@@ -138,6 +139,7 @@ const _DashboardPage = () => {
                 tableId={TABLE_NAMES.DASHBOARD_ERRORS_VENDOR}
                 data={dataCounters?.vendorProcessErrors}
                 date={dateId}
+                loading={isLoadingData}
               />
             </Column>
           </Row>
@@ -148,6 +150,7 @@ const _DashboardPage = () => {
                 tableId={TABLE_NAMES.DASHBOARD_TRANSMISSIONS_FILES}
                 data={dataCounters?.fileTransmissions}
                 date={dateId}
+                loading={isLoadingData}
               />
             </Column>
             <Column lg="6">
@@ -155,6 +158,7 @@ const _DashboardPage = () => {
                 tableId={TABLE_NAMES.DASHBOARD_ERRORS_FILES}
                 data={dataCounters?.fileProcessErrors}
                 date={dateId}
+                loading={isLoadingData}
               />
             </Column>
           </Row>

@@ -2,25 +2,32 @@ import React, { useState, useEffect } from 'react';
 import { useAuthContext } from './AuthContext';
 import { useNavigateToNewDomainLazyQuery, useCurrentOrgNavLazyQuery } from '../data/services/graphql';
 import { useOrgSid } from '../hooks/useOrgSid';
+import { useStoreActions } from 'easy-peasy';
 
 export const UserDomainContext = React.createContext(() => {});
 
 const INITIAL_STATE = {};
 
 export const UserDomainContextProvider = ({ children }) => {
+  const updateCurrentNav = useStoreActions(({ ActiveOrgStore }) => ActiveOrgStore.updateCurrentNav);
   const { isAuthenticated, isAuthenticating, authData } = useAuthContext();
   const { orgSid } = useOrgSid();
   const [userDomain, setUserDomain] = useState({ ...INITIAL_STATE });
-  const [currentUserOrgNav, setCurrentUserOrgNav] = useState({});
 
-  const [fetchDashNav, { data: dashNav, loading: isFetchingDashNav, error: dashNavError }] =
-    useNavigateToNewDomainLazyQuery();
+  const [
+    fetchDashNav,
+    { data: dashNav, loading: isFetchingDashNav, error: dashNavError },
+  ] = useNavigateToNewDomainLazyQuery();
 
-  const [fetchOrgNav, { data: orgNav, loading: isFetchingOrgNav, error: orgNavError }] =
-    useNavigateToNewDomainLazyQuery();
+  const [
+    fetchOrgNav,
+    { data: orgNav, loading: isFetchingOrgNav, error: orgNavError },
+  ] = useNavigateToNewDomainLazyQuery();
 
-  const [fetchCurrentOrgNav, { data: currentOrgNav, loading: isFetchingCurrentOrgNav, error: currentOrgNavError }] =
-    useCurrentOrgNavLazyQuery();
+  const [
+    fetchCurrentOrgNav,
+    { data: currentOrgNav, loading: isFetchingCurrentOrgNav, error: currentOrgNavError },
+  ] = useCurrentOrgNavLazyQuery();
 
   useEffect(() => {
     if (isAuthenticated && !isAuthenticating) {
@@ -61,7 +68,7 @@ export const UserDomainContextProvider = ({ children }) => {
 
   useEffect(() => {
     if (currentOrgNav) {
-      setCurrentUserOrgNav(currentOrgNav.currentOrgNav);
+      updateCurrentNav(currentOrgNav.currentOrgNav);
     }
   }, [currentOrgNav]);
 
@@ -69,7 +76,6 @@ export const UserDomainContextProvider = ({ children }) => {
     <UserDomainContext.Provider
       value={{
         userDomain,
-        currentUserOrgNav,
         isFetchingOrgNav,
         setUserDomain,
       }}
