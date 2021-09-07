@@ -24,10 +24,8 @@ export const useCurrentUserTheme = () => {
     }
   };
 
-  const [
-    createOrUpdateOwnDashTheme,
-    { data: updatedTheme, loading: isHandlingTheme, error: themeError },
-  ] = useCreateOrUpdateOwnDashThemeMutation();
+  const [createOrUpdateOwnDashTheme, { data: updatedTheme, loading: isHandlingTheme, error: themeError }] =
+    useCreateOrUpdateOwnDashThemeMutation();
 
   const [
     setOwnDashFontSize,

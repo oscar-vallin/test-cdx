@@ -1,6 +1,6 @@
 import React from 'react';
 import { addDays, addMonths, addYears } from '@fluentui/date-time-utilities';
-import { DatePicker, DayOfWeek } from 'office-ui-fabric-react/lib/DatePicker';
+import { DatePicker, DayOfWeek } from 'office-ui-fabric-react/lib-commonjs/DatePicker';
 import { endOfDay, endOfYesterday, getHours, startOfDay, startOfYesterday } from 'date-fns';
 import { isConstructorDeclaration } from 'typescript';
 import { useDateValue } from './../../../hooks/useDateValue';

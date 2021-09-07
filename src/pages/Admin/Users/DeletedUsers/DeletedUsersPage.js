@@ -49,10 +49,8 @@ const _DeletedUsersPage = () => {
   const columns = generateColumns();
 
   const [useUsersForOrgFpLazy, { data, loading }] = useUsersForOrgFpLazyQuery();
-  const [
-    enableUser,
-    { data: enableResponse, loading: isEnablingUser, error: EnableUserError },
-  ] = useActivateUsersMutation();
+  const [enableUser, { data: enableResponse, loading: isEnablingUser, error: EnableUserError }] =
+    useActivateUsersMutation();
 
   const selection = useMemo(
     () =>
