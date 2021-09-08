@@ -4,8 +4,9 @@ import { mergeStyles, mergeStyleSets } from 'office-ui-fabric-react/lib/Styling'
 import { useHistory, useLocation } from 'react-router-dom';
 import { format } from 'date-fns';
 import queryString from 'query-string';
-import { useTableFilters } from '../../../hooks/useTableFilters';
+// import { useTableFilters } from '../../../hooks/useTableFilters';
 import { getDates } from '../../../helpers/tableHelpers';
+import PropTypes from 'prop-types';
 import {
   ColumnActionsMode,
   DetailsList,
@@ -137,9 +138,9 @@ const Table = ({
   const [currentKeySort, setCurrentKeySort] = useState('datetime');
   const [isHovering, setIsHovering] = useState(false);
   const [currentHover, setCurrentHover] = useState(null);
-  const location = useLocation();
-  const [urlParams, setUrlParams] = useState(queryString.parse(location.search));
-  const { startDate, endDate } = useTableFilters('Extract Name,  Status, Vendor, etc.');
+  // const location = useLocation();
+  const [urlParams, setUrlParams] = useState(queryString.parse(''));
+  // const { startDate, endDate } = useTableFilters('Extract Name,  Status, Vendor, etc.');
   const initialStartDate = new Date(urlParams.startDate);
   const initialEndDate = new Date(urlParams.endDate);
 
@@ -469,6 +470,7 @@ const Table = ({
 
   if (sortedItems)
     if (structure.header.type === 'dashboard') {
+      console.log(tablecolumns);
       return (
         <StyledContainer id="Table_Detailed" style={{ width: '100%' }}>
           {loading ? (
@@ -524,6 +526,9 @@ const Table = ({
   );
 };
 
-Table.propTypes = {};
+Table.propTypes = {
+  structure: PropTypes.Object,
+  columns: PropTypes.array,
+};
 
 export { Table };
