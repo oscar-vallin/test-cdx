@@ -8,11 +8,11 @@ const INITIAL_THEME = {
   themeFontSize: 'MEDIUM',
 };
 
-const updateTheme = (state: any, payload: any): any => {
+const updateTheme = (state, payload) => {
   state.theme = { ...state.theme, ...payload };
 };
 
-const resetTheme = (state: any): any => {
+const resetTheme = (state) => {
   state.theme = { ...INITIAL_THEME };
 };
 

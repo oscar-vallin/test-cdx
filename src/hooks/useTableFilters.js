@@ -47,7 +47,7 @@ export const useTableFilters = (placeholder, id) => {
       const endFormatted = urlParams.endDate;
 
       finalURL = generateFinalUrl(finalURL, startFormatted, endFormatted);
-      return history.push(finalURL);
+      // return history.push(finalURL);
     }
 
     if (startDate.value || endDate.value) {
@@ -56,7 +56,7 @@ export const useTableFilters = (placeholder, id) => {
       finalURL = generateFinalUrl(finalURL, startFormatted, endFormatted);
     }
 
-    history.push(finalURL);
+    // history.push(finalURL);
   };
 
   const generateFinalUrl = (finalURL, startFormatted, endFormatted) => {
