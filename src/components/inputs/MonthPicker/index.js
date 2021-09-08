@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as React from 'react';
 import { Calendar, DayOfWeek, DateRangeType } from 'office-ui-fabric-react/lib-commonjs/Calendar';
 import { DefaultButton } from 'office-ui-fabric-react/lib-commonjs/Button';
@@ -34,12 +35,7 @@ const dayPickerStrings = {
   monthPickerHeaderAriaLabel: '{0}, select to change the year',
   yearPickerHeaderAriaLabel: '{0}, select to change the month',
 };
-// const divStyle: React.CSSProperties = {
-//   height: 'auto',
-// };
-// const buttonStyle: React.CSSProperties = {
-//   margin: '17px 10px 0 0',
-// };
+
 let dateRangeString = null;
 
 export const MonthPicker = ({

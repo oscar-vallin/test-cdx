@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import queryString from 'query-string';
-import { useAuthContext } from '../contexts/AuthContext';
 import { useStoreActions, useStoreState } from 'easy-peasy';
+import { useAuthContext } from '../contexts/AuthContext';
 
 export const useOrgSid = () => {
   const history = useHistory();

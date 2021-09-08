@@ -1,10 +1,10 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { Label } from '@fluentui/react/lib/Label';
+import { useParams, useLocation } from 'react-router-dom';
+import queryString from 'query-string';
 import { Text } from '../../../components/typography/Text';
 import { Table } from '../../../components/tables/Table';
-import { Label } from '@fluentui/react/lib/Label';
-
-import { useParams, useLocation } from 'react-router-dom';
 
 import { Box, StyledRow, Column, Container, FilterSection } from './TableFileStatus.styles';
 import { InputText } from '../../../components/inputs/InputText';
@@ -17,7 +17,6 @@ import { TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { useTableTemplate } from '../../../hooks/useTableTemplate';
 import { getStartDay, getEndDay } from '../../../helpers/tableHelpers';
 // import { useAuthContext } from '../../../contexts/AuthContext';
-import queryString from 'query-string';
 
 const TableFileStatus = ({
   idPage = 'TableFileStatus',
@@ -29,7 +28,7 @@ const TableFileStatus = ({
   const { localInput, startDate, endDate } = useTableFilters('Extract Name,  Status, Vendor, etc.');
   const location = useLocation();
   const [urlParams, _setUrlParams] = useState(queryString.parse(location.search));
-  //const { authData, orgSid } = useAuthContext();
+  // const { authData, orgSid } = useAuthContext();
 
   const { tableProps } = useTableTemplate(
     TABLE_NAMES.FILE_STATUS,
@@ -50,7 +49,7 @@ const TableFileStatus = ({
     }
   }, [urlParams.startDate, urlParams.endDate]);
 
-  //Component did mount
+  // Component did mount
   useEffect(() => {
     const date = new URLSearchParams(search).get('date');
 
@@ -61,7 +60,7 @@ const TableFileStatus = ({
     if (id === undefined) {
       return;
     }
-    let params = id.split('*');
+    const params = id.split('*');
     localInput.setValue(params[0]);
     selectDate(params[1]);
   }, []);
@@ -75,7 +74,7 @@ const TableFileStatus = ({
   };
 
   return (
-    <Fragment>
+    <>
       <FilterSection id={`${idPage}-filters`}>
         <Container>
           <Card elevation="smallest">
@@ -107,14 +106,13 @@ const TableFileStatus = ({
                 onItemsListChange({
                   count: items.length,
                   loading: tableProps.loading,
-                })
-              }
+                })}
               {...tableProps}
             />
           </Box>
         )}
       </Container>
-    </Fragment>
+    </>
   );
 };
 

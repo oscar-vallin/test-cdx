@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { DetailsHeader } from 'office-ui-fabric-react/lib/DetailsList';
 import { useHistory } from 'react-router-dom';
@@ -12,7 +11,6 @@ import {
   StyledMenuButton,
   StyledLink,
   StyledColumnTitle,
-  RouteLink,
 } from './TableHeader.styles';
 
 const TableHeader = ({ id = '__TableHeader', header = {}, sortLabel, onSort, onOption, date, ...props }) => {
@@ -27,7 +25,7 @@ const TableHeader = ({ id = '__TableHeader', header = {}, sortLabel, onSort, onO
 
   if (header.type === 'dashboard') {
     return (
-      <HeaderTable id="HeaderTable_dashboard">
+      <HeaderTable id={`${id}-HeaderTable_dashboard`}>
         <StyledColumnTitle left center paddingLeft={12} sm={6}>
           <StyledLink
             onClick={() => history.push(`/transmissions?startDate=${startFormatted}&endDate=${endFormatted}`)}

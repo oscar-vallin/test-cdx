@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 
 import { Link, useHistory } from 'react-router-dom';
 
+import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
+import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
+import { MessageBar } from 'office-ui-fabric-react';
 import { URL_ROUTES } from '../../../../data/constants/RouteConstants';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Row, Column } from '../../../../components/layouts';
 import { Spacing } from '../../../../components/spacings/Spacing';
-import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
-import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
-import { MessageBar } from 'office-ui-fabric-react';
 import { Text } from '../../../../components/typography/Text';
 import { Separator } from '../../../../components/separators/Separator';
 
@@ -44,7 +44,7 @@ const _ActiveOrgsPage = () => {
   useEffect(() => {
     directOrganizationsFQuery({
       variables: {
-        orgSid: orgSid,
+        orgSid,
         orgFilter: { activeFilter: 'ACTIVE' },
       },
     });

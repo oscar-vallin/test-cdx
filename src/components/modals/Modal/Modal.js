@@ -1,6 +1,5 @@
-import React from 'react';
-import { StyledModal } from './Modal.styles';
 import { DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
+import { StyledModal } from './Modal.styles';
 
 const CDXModal = ({
   footer,
@@ -8,7 +7,9 @@ const CDXModal = ({
   subText = '',
   hidden = true,
   isBlocking = true,
-  onDismiss = () => {},
+  onDismiss = () => {
+    return {};
+  },
   children,
 }) => {
   return (

@@ -1,4 +1,3 @@
-import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { MessageBarType } from '@fluentui/react';
 import { StyledMessageBar } from './Toast.style';

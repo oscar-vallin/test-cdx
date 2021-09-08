@@ -1,8 +1,8 @@
 import React, { useState, useEffect, Fragment } from 'react';
 
+import { useParams, useLocation, useHistory } from 'react-router-dom';
 import { TABLE_NAMES } from '../../data/constants/TableConstants';
 
-import { useParams, useLocation, useHistory } from 'react-router-dom';
 import { ROUTES, ROUTE_FILE_STATUS } from '../../data/constants/RouteConstants';
 
 import { LayoutDashboard } from '../../layouts/LayoutDashboard';
@@ -124,7 +124,7 @@ const _FileStatusDetailsPage = () => {
                     {lWorkPacketDetails || lWorkPacketStatus ? (
                       <Spinner style={{ justifySelf: 'center' }} />
                     ) : (
-                      <Fragment>
+                      <>
                         <h3
                           title={packet.inboundFilename}
                           style={{
@@ -235,7 +235,7 @@ const _FileStatusDetailsPage = () => {
                             Delete
                           </Button>
                         </Collapse>
-                      </Fragment>
+                      </>
                     )}
                   </Column>
                 </Row>
@@ -248,7 +248,7 @@ const _FileStatusDetailsPage = () => {
               {lWorkPacketDetails || lWorkPacketStatus ? (
                 <Spinner style={{ justifySelf: 'center' }} />
               ) : (
-                <Fragment>
+                <>
                   <Spacing margin={{ bottom: 'small' }}>
                     <Text variant="bold">Archives</Text>
                   </Spacing>
@@ -278,7 +278,7 @@ const _FileStatusDetailsPage = () => {
                       ))}
                     </Collapse>
                   )}
-                </Fragment>
+                </>
               )}
             </Card>
           </Column>
@@ -287,7 +287,7 @@ const _FileStatusDetailsPage = () => {
               {lWorkPacketDetails || lWorkPacketStatus ? (
                 <Spinner style={{ justifySelf: 'center' }} />
               ) : (
-                <Fragment>
+                <>
                   <Row>
                     <Column>
                       <Tabs
@@ -326,7 +326,7 @@ const _FileStatusDetailsPage = () => {
                       />
                     </Column>
                   </Row>
-                </Fragment>
+                </>
               )}
             </Card>
           </Column>

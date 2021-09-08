@@ -9,8 +9,8 @@ import { Spacing } from '../../../../components/spacings/Spacing';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Text } from '../../../../components/typography/Text';
 import { Separator } from '../../../../components/separators/Separator';
-import { RouteLink } from './../../AdminPage.styles';
-import { NAV_ITEMS } from './../../SideMenu';
+import { RouteLink } from '../../AdminPage.styles';
+import { NAV_ITEMS } from '../../SideMenu';
 
 import { useAmGroupsForOrgPLazyQuery } from '../../../../data/services/graphql';
 import { StyledColumn } from './AccessManagementGroupsPage.styles';
@@ -45,7 +45,7 @@ const _AccessManagementGroupsPage = () => {
   const [groups, setGroups] = useState([]);
   const columns = generateColumns();
 
-  //const { data, loading } = useAmGroupsForOrgPQuery({ variables: { orgSid } });
+  // const { data, loading } = useAmGroupsForOrgPQuery({ variables: { orgSid } });
   const [useAmGroupsForOrg, { data, loading }] = useAmGroupsForOrgPLazyQuery();
 
   useEffect(() => {

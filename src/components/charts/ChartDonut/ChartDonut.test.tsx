@@ -1,4 +1,3 @@
-import React from 'react';
 import { render, shallow } from 'enzyme';
 import toJSON from 'enzyme-to-json';
 import { ChartDonut as Component } from './index.js';

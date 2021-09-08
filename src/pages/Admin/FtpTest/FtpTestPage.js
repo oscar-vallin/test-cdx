@@ -1,5 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { Checkbox } from '@fluentui/react';
+import { TextField } from '@fluentui/react/lib/TextField';
 import { LayoutAdmin } from '../../../layouts/LayoutAdmin';
 import { Button } from '../../../components/buttons/Button';
 import { Spacing } from '../../../components/spacings/Spacing';
@@ -7,7 +8,6 @@ import { Spinner } from '../../../components/spinners/Spinner';
 import { Row, Column } from '../../../components/layouts';
 import { InputText } from '../../../components/inputs/InputText';
 import { Text } from '../../../components/typography/Text';
-import { TextField } from '@fluentui/react/lib/TextField';
 
 const _FtpTestPage = () => {
   const [host, setHost] = useState('');
@@ -42,17 +42,17 @@ const _FtpTestPage = () => {
             <Spinner size="lg" label="Loading color palettes" />
           </Spacing>
         ) : (
-          <Fragment>
+          <>
             {false ? (
               <Spacing margin={{ top: 'double' }}>
                 <Spinner size="lg" label="Loading color palette" />
               </Spacing>
             ) : (
-              <Fragment>
+              <>
                 <Row>
                   <Column>
                     <Spacing margin={{ bottom: 'normal' }}>
-                      <Text variant="bold">{'SFTP TEST'}</Text>
+                      <Text variant="bold">SFTP TEST</Text>
                       {/* <Text variant="bold">{!selectedPaletteId ? 'Create new palette' : 'Update palette'}</Text> */}
                     </Spacing>
                   </Column>
@@ -140,13 +140,13 @@ const _FtpTestPage = () => {
                     )}
 
                     <Spacing margin={{ bottom: 'normal' }}>
-                      <Button variant="primary" disabled={false} text={'Test'} onClick={onTestBtn} />
+                      <Button variant="primary" disabled={false} text="Test" onClick={onTestBtn} />
                     </Spacing>
                   </Column>
                 </Row>
-              </Fragment>
+              </>
             )}
-          </Fragment>
+          </>
         )}
       </Spacing>
     </LayoutAdmin>

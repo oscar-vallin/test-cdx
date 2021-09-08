@@ -15,7 +15,7 @@ import { isCurrentViewDay, isCurrentViewWeek } from './helpers';
 import { Text } from '../../../components/typography';
 
 export const ScheduleSubHeader = ({ id, currentView, currentDate, selectedDate }) => {
-  let _currentDate = startOfWeek(currentDate);
+  const _currentDate = startOfWeek(currentDate);
   const [dates, setDates] = React.useState({
     currentMonth: currentDate,
     selectedDate: currentDate,
@@ -37,7 +37,7 @@ export const ScheduleSubHeader = ({ id, currentView, currentDate, selectedDate }
       const _monthEnd = endOfWeek(selectedDate);
       const _newDate = {
         currentMonth: selectedDate,
-        selectedDate: selectedDate,
+        selectedDate,
         monthStart: _monthStart,
         monthEnd: _monthEnd,
         startDate: startOfWeek(_monthStart),
@@ -52,7 +52,7 @@ export const ScheduleSubHeader = ({ id, currentView, currentDate, selectedDate }
     const dateFormat = 'EEEE';
     const days = [];
     let day = dates.startDate;
-    let _currentDay = selectedDate ?? currentDate;
+    const _currentDay = selectedDate ?? currentDate;
 
     if (isCurrentViewDay(currentView)) {
       const isCurrentDate = !!isSameDay(_currentDay, currentDate);
@@ -107,9 +107,8 @@ export const ScheduleSubHeader = ({ id, currentView, currentDate, selectedDate }
 
     if (isCurrentViewWeek(currentView)) {
       return <RowWeek>{days}</RowWeek>;
-    } else {
-      return <Row>{days}</Row>;
     }
+    return <Row>{days}</Row>;
   };
 
   return <>{_renderSubHeader()}</>;

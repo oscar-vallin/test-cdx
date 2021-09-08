@@ -56,7 +56,7 @@ const getValue = (value) => {
   return today;
 };
 
-const InputDate = ({ id = '', label, placeholder = 'Select a Date...', value, onChange, required }) => {
+const InputDate = ({ id = '', placeholder = 'Select a Date...', value, onChange, required }) => {
   return (
     <DatePicker
       id={id}
@@ -64,7 +64,7 @@ const InputDate = ({ id = '', label, placeholder = 'Select a Date...', value, on
       firstDayOfWeek={firstDayOfWeek}
       strings={DayPickerStrings}
       placeholder={placeholder}
-      ariaLabel={placeholder || label}
+      ariaLabel={placeholder}
       minDate={minDate}
       maxDate={maxDate}
       onSelectDate={onChange}

@@ -7,7 +7,8 @@ export const useUpdateFileStatus = () => {
   const [apiData, setApiData] = useState();
   const [_error, setError] = useState();
 
-  let argDateRange, argFilter;
+  let argDateRange;
+  let argFilter;
 
   const [_apiCall, { data, loading, error }] = useWorkPacketStatusesLazyQuery({
     variables: {

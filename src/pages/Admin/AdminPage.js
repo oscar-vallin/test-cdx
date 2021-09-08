@@ -1,7 +1,7 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { LayoutAdmin } from '../../layouts/LayoutAdmin';
 import { Spacing } from '../../components/spacings/Spacing';
-import { useHistory } from 'react-router-dom';
 
 const _AdminPage = () => {
   const history = useHistory();

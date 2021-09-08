@@ -1,14 +1,5 @@
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { Box as LayoutBox } from '../../layouts/Box';
-
-const rotate = keyframes`
-  0% {
-    background-position: 0 0;
-  }
-  100% {
-    background-position: 10rem 0;
-  }
-`;
 
 export const Box = styled(LayoutBox)`
   width: 100%;

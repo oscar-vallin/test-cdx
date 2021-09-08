@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
-import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
-import { Row, Column } from '../../../../components/layouts';
-import { Spacing } from '../../../../components/spacings/Spacing';
 import { PrimaryButton, DefaultButton, MessageBar } from 'office-ui-fabric-react';
 import { DetailsList, DetailsListLayoutMode, SelectionMode, Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
-import { Text } from '../../../../components/typography/Text';
 import { MarqueeSelection } from '@fluentui/react/lib/MarqueeSelection';
+import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
+import { Row, Column } from '../../../../components/layouts';
+import { Spacing } from '../../../../components/spacings/Spacing';
+import { Text } from '../../../../components/typography/Text';
 import { Separator } from '../../../../components/separators/Separator';
 import { Button } from '../../../../components/buttons/Button';
 import {
@@ -38,7 +38,7 @@ const generateColumns = () => {
 };
 
 const onRenderItemColumn = (node, _index, column) => {
-  return node.item[column.key] || node.item['person'][column.key];
+  return node.item[column.key] || node.item.person[column.key];
 };
 
 const _DeletedUsersPage = () => {
@@ -137,7 +137,7 @@ const _DeletedUsersPage = () => {
                         layoutMode={DetailsListLayoutMode.justified}
                         onRenderItemColumn={onRenderItemColumn}
                         selection={selection}
-                        selectionPreservedOnEmptyClick={true}
+                        selectionPreservedOnEmptyClick
                         isHeaderVisible
                       />
                     </MarqueeSelection>

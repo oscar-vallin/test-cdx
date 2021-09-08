@@ -1,9 +1,9 @@
 import React, { useState, useEffect, Fragment } from 'react';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { InputText } from '../../../components/inputs/InputText';
 import { Button } from '../../../components/buttons/Button';
 import { Modal } from '../../../components/modals/Modal';
 import { Spacing } from '../../../components/spacings/Spacing';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { StyledDiv } from './ChangePasswordModal.styles';
 
 const ChangePasswordModal = ({ hidden = false, ...props }) => {
@@ -15,7 +15,7 @@ const ChangePasswordModal = ({ hidden = false, ...props }) => {
 
   const ModalFooter = () => {
     return (
-      <Fragment>
+      <>
         <StyledDiv>
           <Spacing margin={{ right: 'small' }}>
             <Button text="Cancel" onClick={() => alert('Cancel')} />
@@ -23,7 +23,7 @@ const ChangePasswordModal = ({ hidden = false, ...props }) => {
 
           <Button variant="primary" text="Save" onClick={() => alert('Save')} />
         </StyledDiv>
-      </Fragment>
+      </>
     );
   };
 

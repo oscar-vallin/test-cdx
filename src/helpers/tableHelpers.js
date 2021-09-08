@@ -34,9 +34,8 @@ export const isTodayInRange = (firstDate, secondDate) => {
 
   if (firstDate && secondDate) {
     return isWithinInterval(_today, { start: new Date(_startDate), end: new Date(_endDate) });
-  } else {
-    return false;
   }
+  return false;
 };
 
 export const isCDXToday = (firstDate, secondDate) => {

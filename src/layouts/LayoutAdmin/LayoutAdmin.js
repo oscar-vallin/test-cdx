@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 import { StyledBox, StyledNav } from './LayoutAdmin.styles';
 import { LayoutDashboard } from '../LayoutDashboard';
-import { useHistory } from 'react-router-dom';
 import { getRouteByApiId } from '../../data/constants/RouteConstants';
 import { useUserDomain } from '../../contexts/hooks/useUserDomain';
 import { Spinner } from '../../components/spinners/Spinner';

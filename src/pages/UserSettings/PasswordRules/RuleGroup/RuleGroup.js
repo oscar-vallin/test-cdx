@@ -1,7 +1,7 @@
 import React from 'react';
 import { Spacing } from '../../../../components/spacings/Spacing';
 
-import { StyledIcon } from './../../UserSettingsPage.styles';
+import { StyledIcon } from '../../UserSettingsPage.styles';
 import { StyledDiv, StyledText } from './RuleGroup.styles';
 
 const RuleGroup = ({ item, children, ...props }) => {

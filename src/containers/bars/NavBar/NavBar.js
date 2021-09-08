@@ -4,10 +4,10 @@ import { FontIcon } from '@fluentui/react/lib/Icon';
 import { ContextualMenuItemType } from '@fluentui/react/lib/ContextualMenu';
 import { useStoreActions, useStoreState } from 'easy-peasy';
 
+import { TooltipHost } from '@fluentui/react/lib/Tooltip';
 import { ProfileMenu } from '../../menus/ProfileMenu';
 
 // Components
-import { TooltipHost } from '@fluentui/react/lib/Tooltip';
 import { MainMenu } from '../../menus/MainMenu';
 import { useCurrentUserTheme } from '../../../hooks/useCurrentUserTheme';
 import { useAuthContext } from '../../../contexts/AuthContext';

@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
+import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { Spacing } from '../../../components/spacings/Spacing';
 import { StyledHeaderRow, StyledHeader, StyledRow } from '../FileStatusDetails.styles';
-import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 
 const COLUMNS = [
   { key: 'planCode', name: 'Plan Code', fieldName: 'planCode' },
@@ -12,15 +12,15 @@ const COLUMNS = [
 ].map((col) => ({ ...col, data: 'string', isPadded: true }));
 
 const onRenderDetailsHeader = (props) => (
-  <Fragment>
+  <>
     <StyledHeaderRow>
-      <div></div>
+      <div />
       <div>Subscribers</div>
       <div>Dependents</div>
     </StyledHeaderRow>
 
     <StyledHeader {...props} />
-  </Fragment>
+  </>
 );
 
 const onRenderRow = (props) => {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { ComboBox } from 'office-ui-fabric-react/lib/ComboBox';
 import { useAmPolicyVerbForFacetLazyQuery } from '../../../data/services/graphql';
 

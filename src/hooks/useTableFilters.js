@@ -1,10 +1,10 @@
-import { useInputValue } from './useInputValue';
-import { useDateValue } from './useDateValue';
 import { getHours, subDays, format, addDays } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { useAuthContext } from '../contexts/AuthContext';
 import queryString from 'query-string';
+import { useAuthContext } from '../contexts/AuthContext';
+import { useDateValue } from './useDateValue';
+import { useInputValue } from './useInputValue';
 
 //
 export const useTableFilters = (placeholder, id) => {
@@ -40,7 +40,7 @@ export const useTableFilters = (placeholder, id) => {
       finalURL += '&';
     } else return;
 
-    if (localInput.value) finalURL += `${localInput.value ? 'filter=' + localInput.value : ''}`;
+    if (localInput.value) finalURL += `${localInput.value ? `filter=${localInput.value}` : ''}`;
 
     if (urlParams.startDate && urlParams.endDate) {
       const startFormatted = urlParams.startDate;
@@ -62,15 +62,15 @@ export const useTableFilters = (placeholder, id) => {
   const generateFinalUrl = (finalURL, startFormatted, endFormatted) => {
     if (localInput.value) finalURL += '&';
 
-    if (startDate.value) finalURL += `${startFormatted ? 'startDate=' + startFormatted : ''}`;
+    if (startDate.value) finalURL += `${startFormatted ? `startDate=${startFormatted}` : ''}`;
 
     if (endDate.value) {
       if (startDate.value) finalURL += '&';
       else {
-        finalURL += `${startFormatted ? 'startDate=' + startFormatted : ''}`;
+        finalURL += `${startFormatted ? `startDate=${startFormatted}` : ''}`;
       }
 
-      finalURL += `${endFormatted ? 'endDate=' + endFormatted : ''}`;
+      finalURL += `${endFormatted ? `endDate=${endFormatted}` : ''}`;
     }
     return finalURL;
   };
@@ -78,21 +78,19 @@ export const useTableFilters = (placeholder, id) => {
   useEffect(() => {
     const hour = getHours(new Date());
 
-    //console.log('urlParams.filter? ', urlParams.filter);
+    // console.log('urlParams.filter? ', urlParams.filter);
     if (urlParams?.filter) {
       localInput.setValue(urlParams.filter);
     }
 
     if (id && Object.is(id) && !id.isEmpty()) {
       selectDate(params[1]);
+    } else if (hour < 9) {
+      startDate.setValue(subDays(new Date(), 1));
+      endDate.setValue(new Date());
     } else {
-      if (hour < 9) {
-        startDate.setValue(subDays(new Date(), 1));
-        endDate.setValue(new Date());
-      } else {
-        startDate.setValue(new Date());
-        endDate.setValue(addDays(new Date(), 1));
-      }
+      startDate.setValue(new Date());
+      endDate.setValue(addDays(new Date(), 1));
     }
 
     return () => {

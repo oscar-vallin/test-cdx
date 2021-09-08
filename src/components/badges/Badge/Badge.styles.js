@@ -3,7 +3,6 @@ import styled from 'styled-components';
 const getVariant = (theme, variant) => {
   const Variants = {
     primary: { background: theme.colors.themePrimary, color: theme.colors.white },
-    // light: { background: theme.colors.themeLight, color: theme.colors. },
     success: { background: theme.colors.custom.successAlt, color: theme.colors.custom.success },
     error: { background: theme.colors.custom.errorAlt, color: theme.colors.custom.error },
     severe: { background: theme.colors.severeError, color: theme.colors.white },

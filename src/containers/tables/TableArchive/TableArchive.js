@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Table } from '../../../components/tables/Table';
 import { Label } from '@fluentui/react/lib/Label';
+import { useParams, useLocation } from 'react-router-dom';
+import queryString from 'query-string';
+import { Table } from '../../../components/tables/Table';
 
 import { Box, StyledRow, Column, Container, FilterSection } from './TableArchive.styles';
 import { InputText } from '../../../components/inputs/InputText';
@@ -12,9 +14,6 @@ import { Spinner } from '../../../components/spinners/Spinner';
 import { useTableTemplate } from '../../../hooks/useTableTemplate';
 import { TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { useTableFilters } from '../../../hooks/useTableFilters';
-import { useParams, useLocation } from 'react-router-dom';
-import { useEffect, Fragment } from 'react';
-import queryString from 'query-string';
 
 import { useAuthContext } from '../../../contexts/AuthContext';
 
@@ -37,11 +36,11 @@ const TableArchive = ({ idPage = 'TableArchive', _orgSid = 1, onItemsListChange 
     localInput.value
   );
 
-  //Component did mount
+  // Component did mount
   useEffect(() => {}, []);
 
   return (
-    <Fragment>
+    <>
       <FilterSection id={`${idPage}-filters`}>
         <Container>
           <Card elevation="smallest">
@@ -73,14 +72,13 @@ const TableArchive = ({ idPage = 'TableArchive', _orgSid = 1, onItemsListChange 
                 onItemsListChange({
                   count: items.length,
                   loading: tableProps.loading,
-                })
-              }
+                })}
               {...tableProps}
             />
           )}
         </Box>
       </Container>
-    </Fragment>
+    </>
   );
 };
 

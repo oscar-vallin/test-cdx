@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FontIcon } from '@fluentui/react/lib/Icon';
 import { StyledDiv, StyledButton } from './Collapse.styles';
 

@@ -79,7 +79,7 @@ const QualityChecksTab = ({ items }) => {
           const arr = [];
 
           const parse = (status) => (item) => ({
-            status: status,
+            status,
             employeeId: evt.unitId,
             employee: evt.outerContext,
             dependent: evt.context,

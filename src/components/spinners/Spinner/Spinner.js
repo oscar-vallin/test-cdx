@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleConstants } from '../../../data/constants/StyleConstants';
 import { getSpinnerSize } from './Spinner.handlers';

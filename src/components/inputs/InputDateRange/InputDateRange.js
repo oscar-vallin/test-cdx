@@ -1,4 +1,3 @@
-import React from 'react';
 import { Label } from '@fluentui/react/lib-commonjs/Label';
 import { InputDate } from '../InputDate';
 import { Row, Column } from './InputDateRange.styles';

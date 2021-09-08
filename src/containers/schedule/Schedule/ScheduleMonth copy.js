@@ -51,7 +51,7 @@ export const ScheduleMonth = ({ id, currentDate, selectedDate, onChangeDate }) =
   let formattedDateNotValid = '';
 
   React.useEffect(() => {
-    if (!!selectedDate) {
+    if (selectedDate) {
       setCurrentMonth(selectedDate);
       setStartDate(startOfWeek(monthStart));
       setEndDate(endOfWeek(monthEnd));
@@ -63,7 +63,7 @@ export const ScheduleMonth = ({ id, currentDate, selectedDate, onChangeDate }) =
   }, [selectedDate]);
 
   React.useEffect(() => {
-    if (!!currentMonth) {
+    if (currentMonth) {
       setMonthStart(startOfMonth(currentMonth));
       setMonthEnd(endOfMonth(currentMonth));
     }

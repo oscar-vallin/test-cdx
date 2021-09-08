@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { getTheme } from 'office-ui-fabric-react/lib/Styling';
 import { StyledTableRow } from './TableRow.styles';
@@ -13,7 +12,7 @@ const TableRow = ({ id = '__TableRow', ...props }) => {
       customStyles.root = { backgroundColor: theme.palette.themeLighterAlt };
     }
 
-    return <StyledTableRow {...props} styles={customStyles} />;
+    return <StyledTableRow id={id} {...props} styles={customStyles} />;
   }
   return null;
 };
