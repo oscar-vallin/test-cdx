@@ -36,7 +36,7 @@ export const URL_ROUTES = {
   ACCESS_MANAGEMENT_GROUPS: `/${ROUTES_ID.ADMIN}/access-management/groups`,
   ACCESS_MANAGEMENT_POLICIES: `/${ROUTES_ID.ADMIN}/access-management/policies`,
   ACTIVE_ORGS: `/${ROUTES_ID.ADMIN}/organizations/active-orgs`,
-  CURRENT_ACTIVITY: `/${ROUTES_ID.ADMIN}/activity/current-activity`,
+  CURRENT_ACTIVITY: `/${ROUTES_ID.ADMIN}/organizations/current-activity`,
   COLOR_PALETTES: `/${ROUTES_ID.ADMIN}/dashboard-site/color-palettes`,
   DEFAULT_THEME: `/${ROUTES_ID.ADMIN}/dashboard-site/default-theme`,
   ACTIVE_USERS: `/${ROUTES_ID.ACTIVE_USERS}`,

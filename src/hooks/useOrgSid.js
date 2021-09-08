@@ -1,27 +1,33 @@
 import { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import queryString from 'query-string';
-import { useAuthContext } from '../contexts/AuthContext';
 import { useStoreActions, useStoreState } from 'easy-peasy';
 
 export const useOrgSid = () => {
   const history = useHistory();
   const location = useLocation();
   const [urlParams, setUrlParams] = useState(queryString.parse(location.search));
+  console.log(location);
 
   const authData = useStoreState(({ AuthStore }) => AuthStore.data);
-  const orgSid = useStoreState(({ ActiveOrgStore }) => ActiveOrgStore.orgSid);
+  const orgId = useStoreState(({ ActiveOrgStore }) => ActiveOrgStore.orgSid);
   const updateOrgSid = useStoreActions(({ ActiveOrgStore }) => ActiveOrgStore.updateOrgSid);
 
   const pushQueryString = () => {
-    let finalURL = '';
+    const { ...search } = urlParams;
 
-    if (urlParams?.orgSid || authData?.orgId) {
-      updateOrgSid(urlParams?.orgSid || authData?.orgId);
-      finalURL += `?orgSid=${urlParams?.orgSid || authData?.orgId}`;
+    const params = {
+      orgSid: orgId || authData?.orgId,
+      ...search,
+    };
+
+    if (params.orgSid) {
+      updateOrgSid(params.orgSid);
     }
 
-    history.replace({ search: finalURL });
+    location.search = queryString.stringify(params);
+
+    history.replace(`${location.pathname}?${location.search}`);
   };
 
   useEffect(() => {
@@ -29,7 +35,7 @@ export const useOrgSid = () => {
   }, [urlParams.orgSid]);
 
   return {
-    orgSid,
+    orgSid: orgId,
     setOrgSid: updateOrgSid,
     setUrlParams,
   };
