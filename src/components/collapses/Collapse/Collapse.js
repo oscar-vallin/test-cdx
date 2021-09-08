@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyledDiv } from './Collapse.styles';
 import { FontIcon } from '@fluentui/react/lib/Icon';
 
-const CDXCollapse = ({ label, children, className = '' }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+const CDXCollapse = ({ label, children, className = '', expanded = false, onToggle = () => {} }) => {
+  const [isExpanded, setIsExpanded] = useState(expanded);
   const [isAnimating, setIsAnimating] = useState(false);
 
   const handleClick = () => {
@@ -17,6 +17,8 @@ const CDXCollapse = ({ label, children, className = '' }) => {
       setIsAnimating(true);
     }
   };
+
+  useEffect(() => onToggle(isExpanded), [isExpanded]);
 
   return (
     <StyledDiv className={`collapse ${className}`}>

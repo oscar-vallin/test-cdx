@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import 'office-ui-fabric-react/dist/css/fabric.css';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
+import { StoreProvider } from 'easy-peasy';
+
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { ApolloContextProvider } from './contexts/ApolloContext.js';
@@ -10,23 +12,26 @@ import { ThemeContextProvider } from './contexts/ThemeContext.js';
 import { AuthContextProvider } from './contexts/AuthContext.js';
 import { NotificationContextProvider } from './contexts/NotificationContext.js';
 import { UserDomainContextProvider } from './contexts/UserDomainContext.js';
+import store from './store';
 
 initializeIcons();
 
 ReactDOM.render(
   <React.StrictMode>
     <ApolloContextProvider>
-      <ThemeContextProvider>
+      <StoreProvider store={store}>
         <AuthContextProvider>
-          <Router>
-            <UserDomainContextProvider>
-              <NotificationContextProvider>
-                <App />
-              </NotificationContextProvider>
-            </UserDomainContextProvider>
-          </Router>
+          <ThemeContextProvider>
+            <Router>
+              <UserDomainContextProvider>
+                <NotificationContextProvider>
+                  <App />
+                </NotificationContextProvider>
+              </UserDomainContextProvider>
+            </Router>
+          </ThemeContextProvider>
         </AuthContextProvider>
-      </ThemeContextProvider>
+      </StoreProvider>
     </ApolloContextProvider>
   </React.StrictMode>,
   document.getElementById('app')

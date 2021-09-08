@@ -1,26 +1,19 @@
-import { useState, useEffect } from 'react';
-
+import { useEffect } from 'react';
+import { useStoreState, useStoreActions } from 'easy-peasy';
 import { defaultTheme, darkTheme } from './../styles/themes';
 import Theming from './../utils/Theming';
 
 import {
   useUserThemeLazyQuery,
   useCreateOrUpdateOwnDashThemeMutation,
-  // useSetOwnDashThemeFontSizeMutation,
+  useSetOwnDashThemeFontSizeMutation,
 } from '../data/services/graphql';
 
 import { useAuthContext } from '../contexts/AuthContext';
 
-const INITIAL_THEME = {
-  data: null,
-  loading: false,
-  paletteNm: 'Default',
-  themeColorMode: 'LIGHT',
-  themeFontSize: 'MEDIUM',
-};
-
 export const useCurrentUserTheme = () => {
-  const [userTheme, setUserTheme] = useState({ ...INITIAL_THEME });
+  const setUserTheme = useStoreActions(({ ThemeStore }) => ThemeStore.updateTheme);
+
   const { isAuthenticated } = useAuthContext();
 
   const [useUserThemeQuery, { data: theme, loading: isLoadingTheme }] = useUserThemeLazyQuery();
@@ -34,13 +27,15 @@ export const useCurrentUserTheme = () => {
   const [createOrUpdateOwnDashTheme, { data: updatedTheme, loading: isHandlingTheme, error: themeError }] =
     useCreateOrUpdateOwnDashThemeMutation();
 
-  // const [
-  //   setOwnDashFontSize,
-  //   { data: updatedFontSize, loading: isHandlingFontSize, error: fontSizeError },
-  // ] = useSetOwnDashThemeFontSizeMutation();
+  const [
+    setOwnDashFontSize,
+    { data: updatedFontSize, loading: isHandlingFontSize, error: fontSizeError },
+  ] = useSetOwnDashThemeFontSizeMutation();
 
   useEffect(() => {
-    setUserTheme(theme?.userTheme || {});
+    if (theme?.userTheme) {
+      setUserTheme(theme.userTheme);
+    }
   }, [theme]);
 
   useEffect(() => {
@@ -60,6 +55,7 @@ export const useCurrentUserTheme = () => {
         : dashThemeColor;
 
       const variant = Theming.getVariant(palette);
+
       setUserTheme({
         paletteNm: dashThemeColor?.paletteNm,
         data: variant,
@@ -70,22 +66,17 @@ export const useCurrentUserTheme = () => {
     }
   }, [theme, updatedTheme]);
 
-  // useEffect(() => {
-  //   fetchTheme();
-  // }, []);
-
   return {
     createOrUpdateTheme: (dashThemeInput) => {
       createOrUpdateOwnDashTheme({ variables: { dashThemeInput } });
     },
-    // setOwnDashFontSize: (dashThemeInput) => {
-    //   setOwnDashFontSize({ variables: { dashThemeInput } });
-    // },
+    setOwnDashFontSize: (dashThemeInput) => {
+      setOwnDashFontSize({ variables: { dashThemeInput } });
+    },
     updatedTheme,
     isHandlingTheme,
     isLoadingTheme,
     // isHandlingFontSize,
-    userTheme,
     fetchTheme,
   };
 };

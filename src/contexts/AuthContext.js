@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useStoreActions, useStoreState } from 'easy-peasy';
+
 import { usePasswordLoginMutation, useCurrentUserLazyQuery } from '../data/services/graphql';
 import { useErrorMessage } from '../hooks/useErrorMessage';
 import { getRouteByApiId } from '../data/constants/RouteConstants';
@@ -31,17 +33,23 @@ export const AuthContextProvider = ({ children }) => {
   const [isAuthenticated, setAuthenticated] = useState(false);
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
-  const [authData, setAuthData] = useState(AUTH_DATA ? JSON.parse(AUTH_DATA) : null);
 
   const [authHistory, setHistory] = useState();
   const [token, setToken] = useState(localStorage);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [pollingTime, setPollingTime] = useState(DEFAULT_POLLING_TIME);
   const [errorMessage, setErrorMessage] = useState('');
-  const [orgSid, setOrgsId] = useState();
 
-  // "userId": "joe.admin@example.com",
-  // "password": "changeBen21"
+  const { authData, orgSid } = useStoreState(({ AuthStore, ActiveOrgStore }) => ({
+    authData: AuthStore.data,
+    orgSid: ActiveOrgStore.orgSid,
+  }));
+
+  const { setAuthData, updateOrgSid } = useStoreActions(({ AuthStore, ActiveOrgStore }) => ({
+    setAuthData: AuthStore.setAuthData,
+    updateOrgSid: ActiveOrgStore.updateOrgSid,
+  }));
+
   const { currentUserQuery, isCurrentUserLogged, setLoggedIn } = useCurrentUser(user, password);
   const { logoutQuery } = useLogout();
 
@@ -67,10 +75,14 @@ export const AuthContextProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
+    setAuthData(AUTH_DATA ? JSON.parse(AUTH_DATA) : null);
+  }, []);
+
+  useEffect(() => {
     if (!orgSid) {
       const _orgSid = localStorage.getItem('ORGS_ID');
       if (_orgSid) {
-        setOrgsId(_orgSid);
+        updateOrgSid(_orgSid);
       }
     }
   }, []);
@@ -134,7 +146,7 @@ export const AuthContextProvider = ({ children }) => {
         setAuthData(authData);
         setAuthenticated(true);
 
-        setOrgsId(authData?.orgId);
+        updateOrgSid(authData?.orgId);
         localStorage.setItem('ORGS_ID', authData?.orgId);
         //
         // Set Bearer Token
@@ -170,22 +182,11 @@ export const AuthContextProvider = ({ children }) => {
 
     if (!authHistory) return;
 
-    fetchTheme();
-
     authHistory.push(routePage.URL);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authData, authHistory]);
 
-  useEffect(() => {
-    if (!isLoadingTheme && authData && userTheme.data) {
-      changeTheme(Theming.getVariant(userTheme.data));
-    }
-  }, [userTheme, authData]);
-
-  //
-  // When user / password.
-  //
   useEffect(async () => {
     if (user?.length && password?.length) {
       try {
@@ -239,11 +240,11 @@ export const AuthContextProvider = ({ children }) => {
 
     logoutQuery();
 
-    setAuthData();
+    setAuthData(null);
     setAuthenticated(false);
     clearInputLoginData();
     setToken(null);
-    setOrgsId(null);
+    updateOrgSid(null);
     setLoggedIn(false);
   };
 
@@ -255,22 +256,15 @@ export const AuthContextProvider = ({ children }) => {
     else setPollingTime(30000);
   };
 
-  const storeOrgsId = (newOrgSid) => {
-    setOrgsId(newOrgSid);
-    localStorage.setItem('ORGS_ID', newOrgSid);
-  };
-
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const values = React.useMemo(
     () => ({
       selectedPage,
       isCheckingAuth,
       setIsCheckingAuth,
-      setAuthData,
       isContextLoading,
       isAuthenticating,
       isAuthenticated,
-      authData,
       authError,
       token,
       pollingTime,
@@ -278,8 +272,6 @@ export const AuthContextProvider = ({ children }) => {
       authLogin,
       // eslint-disable-next-line react-hooks/exhaustive-deps
       authLogout,
-      orgSid,
-      storeOrgsId,
     }),
     [isContextLoading, isAuthenticating, isAuthenticated, authData, authError, token, pollingTime, orgSid]
   );
