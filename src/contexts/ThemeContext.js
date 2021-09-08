@@ -1,22 +1,22 @@
 import React, { useState, useEffect, useMemo, useContext } from 'react';
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { Customizer, loadTheme } from '@fluentui/react';
 import { useStoreState } from 'easy-peasy';
-// import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 
 import 'office-ui-fabric-react/dist/css/fabric.css';
-import { ThemeProvider } from 'styled-components';
 import { theme as styledComponentsTheme } from '../styles/themes/theme';
 
-import { useCurrentUserTheme } from './../hooks/useCurrentUserTheme';
-import { LayoutLogin } from './../layouts/LayoutLogin';
-import { Spacing } from './../components/spacings/Spacing';
-import { Spinner } from './../components/spinners/Spinner';
-import { StyledCard } from './../containers/forms/FormLogin/FormLogin.styles';
+import { useCurrentUserTheme } from '../hooks/useCurrentUserTheme';
+import { LayoutLogin } from '../layouts/LayoutLogin';
+import { Spacing } from '../components/spacings/Spacing';
+import { Spinner } from '../components/spinners/Spinner';
+import { StyledCard } from '../containers/forms/FormLogin/FormLogin.styles';
 import { useAuthContext } from './AuthContext';
-import Theming from './../utils/Theming';
+import Theming from '../utils/Theming';
 
-export const ThemeContext = React.createContext(() => {});
+export const ThemeContext = React.createContext(() => {
+  return {};
+});
 
 const sizes = {
   SMALL: '.75rem',
@@ -30,12 +30,13 @@ export const ThemeContextProvider = ({ children }) => {
   const { isLoadingTheme, fetchTheme } = useCurrentUserTheme();
   const [currentTheme, setTheme] = useState(styledComponentsTheme);
   const [styledTheme, setStyledTheme] = useState(styledComponentsTheme);
-  const [themeConfig, setThemeConfig] = useState({});
+  const themeConfig = {};
 
   useEffect(() => {
     if (isAuthenticated && !isAuthenticating) {
       fetchTheme();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, isAuthenticating]);
 
   const GlobalStyle = createGlobalStyle`
@@ -58,12 +59,6 @@ export const ThemeContextProvider = ({ children }) => {
     }
   `;
 
-  useEffect(() => {
-    if (!isLoadingTheme) {
-      changeTheme(Theming.getVariant(userTheme?.data || {}));
-    }
-  }, [userTheme]);
-
   const changeTheme = (theme = {}) => {
     const customizedTheme = {
       ...styledTheme,
@@ -74,6 +69,13 @@ export const ThemeContextProvider = ({ children }) => {
     setStyledTheme(customizedTheme);
   };
 
+  useEffect(() => {
+    if (!isLoadingTheme) {
+      changeTheme(Theming.getVariant(userTheme?.data || {}));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userTheme]);
+
   // eslint-disable-next-line
   const values = useMemo(
     () => ({
@@ -81,6 +83,7 @@ export const ThemeContextProvider = ({ children }) => {
       changeTheme,
       themeConfig,
     }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [themeConfig]
   );
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useBeginLoginLazyQuery, useLogOutLazyQuery } from '../../data/services/graphql';
+import { useLogOutLazyQuery } from '../../data/services/graphql';
 
 export const useLogout = () => {
   const [isProcessing, setProcessing] = useState(false);
@@ -24,8 +24,6 @@ export const useLogout = () => {
   //
   const logoutQuery = async () => {
     setProcessing(true);
-
-    ('logging Out');
     _apiCall();
 
     localStorage.removeItem('AUTH_TOKEN');

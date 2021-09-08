@@ -8,7 +8,7 @@ import { useUserDomain } from '../../contexts/hooks/useUserDomain';
 import { Spinner } from '../../components/spinners/Spinner';
 import { Spacing } from '../../components/spacings/Spacing';
 
-import { useNotification } from '../../contexts/hooks/useNotification';
+import { useNotification } from '../../hooks/useNotification';
 import { useOrgSid } from '../../hooks/useOrgSid';
 
 const parseLinks = (links = [], sidebarOpt) => {

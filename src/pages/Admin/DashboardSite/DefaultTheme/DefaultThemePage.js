@@ -21,7 +21,7 @@ import {
   useUpdateDefaultDashThemeMutation,
   useDefaultDashThemeForSiteLazyQuery,
 } from './../../../../data/services/graphql';
-import { useNotification } from '../../../../contexts/hooks/useNotification';
+import { useNotification } from '../../../../hooks/useNotification';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
 
 const _DefaultThemePage = () => {

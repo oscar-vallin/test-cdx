@@ -11,7 +11,7 @@ import { TooltipHost } from '@fluentui/react/lib/Tooltip';
 import { MainMenu } from '../../menus/MainMenu';
 import { useCurrentUserTheme } from '../../../hooks/useCurrentUserTheme';
 import { useAuthContext } from '../../../contexts/AuthContext';
-import { useNotification } from '../../../contexts/hooks/useNotification';
+import { useNotification } from '../../../hooks/useNotification';
 import { Spinner } from '../../../components/spinners/Spinner';
 // Hooks
 // import { useNavBar } from "./NavBar.services";

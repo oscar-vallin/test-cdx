@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { useAuthContext } from '../../../../contexts/AuthContext';
-import { getTableStructure } from '../../../../data/constants/TableConstants';
+import { useState, useEffect } from 'react';
+import { useAuthContext } from '../AuthContext';
+import { getTableStructure } from '../../data/constants/TableConstants';
 
 export const useRefresh = (id, triggerFunction) => {
   const [refresh, setRefresh] = useState(false);
@@ -8,18 +8,13 @@ export const useRefresh = (id, triggerFunction) => {
   const { pollingTime } = useAuthContext();
   const pollingFactor = getTableStructure(id)?.polling;
 
-  useEffect(() => {
-    return function unmountHook() {
-      disableRefresh();
-    };
-  }, []);
+  const setRefreshOff = () => {
+    setRefreshNow(false);
+  };
 
-  useEffect(() => {
-    if (refreshNow && refresh) {
-      triggerFunction();
-      startRefresh();
-    }
-  }, [refreshNow]);
+  const setRefreshOn = () => {
+    setRefreshNow(true);
+  };
 
   const startRefresh = () => {
     setRefreshOff();
@@ -27,12 +22,9 @@ export const useRefresh = (id, triggerFunction) => {
     setTimeout(setRefreshOn, pollingTime * (pollingFactor ?? 1));
   };
 
-  const setRefreshOn = () => {
-    setRefreshNow(true);
-  };
-
-  const setRefreshOff = () => {
-    setRefreshNow(false);
+  const disableRefresh = () => {
+    setRefreshOff();
+    setRefresh(false);
   };
 
   const enableRefresh = (condition) => {
@@ -46,10 +38,20 @@ export const useRefresh = (id, triggerFunction) => {
     startRefresh();
   };
 
-  const disableRefresh = () => {
-    setRefreshOff();
-    setRefresh(false);
-  };
+  useEffect(() => {
+    return function unmountHook() {
+      disableRefresh();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (refreshNow && refresh) {
+      triggerFunction();
+      startRefresh();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refreshNow]);
 
   return { refreshNow, setRefreshOn, setRefreshOff, enableRefresh, disableRefresh };
 };

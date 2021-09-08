@@ -15,7 +15,7 @@ import { useCreateOrUpdateOwnDashThemeMutation, useUserThemeLazyQuery } from './
 import { StyledDiv, StyledTitle, StyledChoiceGroup } from './../UserSettingsPage.styles';
 import { defaultTheme, darkTheme } from '../../../styles/themes';
 import { useCurrentUserTheme } from '../../../hooks/useCurrentUserTheme';
-import { useNotification } from '../../../contexts/hooks/useNotification';
+import { useNotification } from '../../../hooks/useNotification';
 import { useOrgSid } from '../../../hooks/useOrgSid';
 
 const INITIAL_THEME = {

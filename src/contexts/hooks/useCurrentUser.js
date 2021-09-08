@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react';
-import { useCurrentUserLazyQuery } from '../../data/services/graphql';
-import { useAuthContext } from '../../contexts/AuthContext';
 import { useHistory } from 'react-router-dom';
+import { useCurrentUserLazyQuery } from '../../data/services/graphql';
+// eslint-disable-next-line import/no-cycle
+import { useAuthContext } from '../AuthContext';
 
-export const useCurrentUser = (_username, _password) => {
+export const useCurrentUser = () => {
   const [isProcessing, setProcessing] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [currentUserData, setCurrentUserData] = useState({});
   const [isCurrentUserLogged, setLoggedIn] = useState(false);
   const { authLogout } = useAuthContext();
   const history = useHistory();
+
   //
   const [_apiCall, { data, loading, error }] = useCurrentUserLazyQuery({
     variables: {},
@@ -17,10 +17,10 @@ export const useCurrentUser = (_username, _password) => {
 
   useEffect(() => {
     if (error) {
-      console.log('We have an error');
       authLogout('Session Expired');
       history.push('/');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
 
   //*
@@ -29,7 +29,6 @@ export const useCurrentUser = (_username, _password) => {
 
     const _isLoggedIn = data.currentUser.loggedIn;
     if (!_isLoggedIn) {
-      console.log('is it here when session expired ?');
       if (localStorage.getItem('LOGIN') != null) {
         localStorage.removeItem('LOGIN');
       }
@@ -41,17 +40,11 @@ export const useCurrentUser = (_username, _password) => {
   //
   // *
   //
-  const currentUserQuery = async (__username) => {
+  const currentUserQuery = async () => {
     setProcessing(true);
-    const _login = await localStorage.getItem('LOGIN');
-
-    // if (_login != null) {
-    //   return;
-    // }
     await _apiCall();
-
     setProcessing(false);
   };
 
-  return { currentUserQuery, currentUserData, isCurrentUserLogged, setLoggedIn };
+  return { currentUserQuery, isProcessing, isLoading: loading, isCurrentUserLogged, setLoggedIn };
 };
