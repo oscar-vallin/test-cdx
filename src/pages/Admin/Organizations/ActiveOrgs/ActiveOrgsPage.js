@@ -50,7 +50,7 @@ const _ActiveOrgsPage = () => {
     });
   }, [orgSid]);
 
-  const changeActiveOrg = ({ id, name, orgType }) => {
+  const changeActiveOrg = async ({ id, name, orgType }) => {
     directOrganizationsFQuery({
       variables: {
         orgSid: id,
@@ -58,8 +58,12 @@ const _ActiveOrgsPage = () => {
       },
     });
 
-    setOrgSid(id);
-    setUrlParams({ orgSid: id });
+    await setOrgSid(id);
+    await setUrlParams({ orgSid: id });
+
+    const destination = orgType === 'INTEGRATION_SPONSOR' ? URL_ROUTES.FILE_STATUS : URL_ROUTES.CURRENT_ACTIVITY;
+
+    history.replace(destination);
   };
 
   const onRenderItemColumn = (item, index, column) => {
