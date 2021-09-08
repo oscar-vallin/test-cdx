@@ -25,6 +25,7 @@
     "date-fns": "^2.16.1",
     "easy-peasy": "^5.0.3",
     "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.6",
     "graphql": "^15.3.0",
     "lodash": "^4.17.21",
     "office-ui-fabric-react": "^7.144.2",
@@ -49,16 +50,17 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "test": "react-scripts test --verbose --updateSnapshot --transformIgnorePatterns \"node_modules/(?!react-ts)/\"",
     "test:local": "react-scripts test --verbose --updateSnapshot --transformIgnorePatterns \"node_modules/(?!react-ts)/\" --silent",
     "test-forbuild": "react-scripts test --verbose --watchAll=false --updateSnapshot --transformIgnorePatterns \"node_modules/(?!react-ts)/\"",
     "test:coverage": "react-scripts test --coverage --runInBand --watchAll=false",
     "format": "prettier --write src/**/*.{ts,tsx}",
-    "lint": "tsc --noEmit && eslint src/**/*.ts{,x} --color --fix --quiet",
+    "lint": "yarn lint:fix",
     "eject": "react-scripts eject",
     "clean": "rm -rf build",
     "extract-routes": "node --experimental-modules internals/route-extractor.mjs",
     "prettify": "prettier --write \"src/**/*.{js,jsx,ts,tsx,css}\"",
-    "lint:fix": "eslint --fix src/**/*.{js,ts,tsx}",
+    "lint:fix": "eslint \"src/**/*.{js,ts,tsx}\" --color --fix",
     "isready": "yarn run format && yarn run lint && yarn run test:coverage && yarn run build"
   },
   "eslintConfig": {
