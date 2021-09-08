@@ -24,23 +24,18 @@
     "semi": 0,
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
-    "react/jsx-filename-extension": [
-      1,
-      {
-        "extensions": [".tsx"]
-      }
-    ],
     "import/prefer-default-export": "off",
     "import/extensions": [
       "error",
       "ignorePackages",
       {
         "ts": "never",
-        "tsx": "never"
+        "tsx": "never",
+        "js": "never",
+        "jsx": "never"
       }
     ],
     "prettier/prettier": "error",
-    "no-use-before-define": "off",
     "react/jsx-one-expression-per-line": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "react/jsx-props-no-spreading": "off",
@@ -49,7 +44,16 @@
     "@typescript-eslint/no-use-before-define": ["error"],
     "import/no-extraneous-dependencies": "off",
     "no-param-reassign": "off",
-    "@typescript-eslint/no-explicit-any": "off"
+    "@typescript-eslint/no-explicit-any": "off",
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".tsx"] }],
+    "react/jsx-uses-react": "off",
+    "react/react-in-jsx-scope": "off",
+    "no-underscore-dangle": "off",
+    "react/require-default-props": "off",
+    "react/prop-types": "off",
+    "react/no-unused-prop-types": "off",
+    "react/forbid-prop-types": "off",
+    "react/no-array-index-key": "off"
   },
   "settings": {
     "import/resolver": {

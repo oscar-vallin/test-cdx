@@ -1,6 +1,8 @@
 src/serviceWorker.ts
 src/tests/
-**/*.js
+**/*.snap.js
+**/*.test.js
+**/*.test.tsx
 node_modules
 build
 **/build
