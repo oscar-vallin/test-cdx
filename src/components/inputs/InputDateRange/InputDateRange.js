@@ -1,7 +1,7 @@
 import React from 'react';
-import { InputDate } from '../InputDate';
-import { Box, Row, Column } from './InputDateRange.styles.js';
 import { Label } from '@fluentui/react/lib-commonjs/Label';
+import { InputDate } from '../InputDate';
+import { Row, Column } from './InputDateRange.styles';
 
 const InputDateRange = ({ startDate, endDate }) => {
   return (

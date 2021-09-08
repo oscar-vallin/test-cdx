@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Calendar, DayOfWeek, DateRangeType } from 'office-ui-fabric-react/lib-commonjs/Calendar';
 import { DefaultButton } from 'office-ui-fabric-react/lib-commonjs/Button';
 import { addDays, getDateRangeArray } from '@fluentui/date-time-utilities';
-import { Container } from './MonthPicker.styles.js';
+import { Container } from './MonthPicker.styles';
 
 const dayPickerStrings = {
   months: [
@@ -56,11 +56,6 @@ export const MonthPicker = ({
   isDayPickerVisible = false,
   showMonthPickerAsOverlay = true,
   showWeekNumbers = false,
-  // minDate?: Date;
-  // maxDate?: Date;
-  // restrictedDates?: Date[];
-  // showSixWeeksByDefault?: boolean;
-  // workWeekDays?: DayOfWeek[];
   firstDayOfWeek = DayOfWeek.Monday,
   ...props
 }) => {
@@ -105,7 +100,7 @@ export const MonthPicker = ({
   if (selectedDateRange) {
     const rangeStart = selectedDateRange[0];
     const rangeEnd = selectedDateRange[selectedDateRange.length - 1];
-    dateRangeString = rangeStart.toLocaleDateString() + '-' + rangeEnd.toLocaleDateString();
+    dateRangeString = `${rangeStart.toLocaleDateString()}-${rangeEnd.toLocaleDateString()}`;
   }
 
   return (
@@ -148,7 +143,7 @@ export const MonthPicker = ({
         onSelectDate={onSelectDate}
         // eslint-disable-next-line react/jsx-no-bind
         onDismiss={onDismiss}
-        isMonthPickerVisible={true}
+        isMonthPickerVisible
         dateRangeType={props.dateRangeType}
         autoNavigateOnSelection={props.autoNavigateOnSelection}
         showGoToToday={props.showGoToToday}
@@ -169,13 +164,11 @@ export const MonthPicker = ({
       {props.showNavigateButtons && (
         <div>
           <DefaultButton
-            style={buttonStyle}
             // eslint-disable-next-line react/jsx-no-bind
             onClick={goPrevious}
             text="Previous"
           />
           <DefaultButton
-            style={buttonStyle}
             // eslint-disable-next-line react/jsx-no-bind
             onClick={goNext}
             text="Next"

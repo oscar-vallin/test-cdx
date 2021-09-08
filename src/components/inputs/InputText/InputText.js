@@ -18,6 +18,8 @@ const InputText = ({
     if (key === 'Enter' && onKeyEnter) return onKeyEnter();
 
     if (onKeyDown) return onKeyDown(key);
+
+    return null;
   };
 
   return (

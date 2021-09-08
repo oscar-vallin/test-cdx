@@ -8,7 +8,12 @@ import { ROUTE_DASHBOARD } from '../../../data/constants/RouteConstants';
 //   StyledBox,
 // } from './Breadcrumb.styles.js';
 
-const parseBreadcrumbItems = (routes, onClick = () => {}) =>
+const parseBreadcrumbItems = (
+  routes,
+  onClick = () => {
+    return {};
+  }
+) =>
   routes.map((route, index) => {
     const path = { text: route.TITLE, key: route.ID };
 
@@ -22,13 +27,25 @@ const parseBreadcrumbItems = (routes, onClick = () => {}) =>
     };
   });
 
-const CDXBreadcrumb = ({ id = '__CDXBreadcrumb', items = [], onClick = () => {} }) => {
+const CDXBreadcrumb = ({
+  id = '__CDXBreadcrumb',
+  items = [],
+  onClick = () => {
+    return {};
+  },
+}) => {
   const history = useHistory();
 
   return <Breadcrumb items={parseBreadcrumbItems([ROUTE_DASHBOARD, ...items], onClick || history.push)} id={id} />;
 };
 
-export const BreadCrumbs = ({ id = '__CDXBreadcrumb', items = [], onClick = () => {} }) => {
+export const BreadCrumbs = ({
+  id = '__CDXBreadcrumb',
+  items = [],
+  onClick = () => {
+    return {};
+  },
+}) => {
   const history = useHistory();
 
   return <Breadcrumb items={parseBreadcrumbItems([...items], onClick || history.push)} id={id} />;

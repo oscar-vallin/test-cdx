@@ -1,9 +1,6 @@
-import React from 'react';
 import { addDays, addMonths, addYears } from '@fluentui/date-time-utilities';
 import { DatePicker, DayOfWeek } from 'office-ui-fabric-react/lib-commonjs/DatePicker';
-import { endOfDay, endOfYesterday, getHours, startOfDay, startOfYesterday } from 'date-fns';
-import { isConstructorDeclaration } from 'typescript';
-import { useDateValue } from './../../../hooks/useDateValue';
+import { getHours } from 'date-fns';
 
 const today = new Date();
 const yesterday = addDays(today, -1);
@@ -51,18 +48,27 @@ const DayPickerStrings = {
 
 const firstDayOfWeek = DayOfWeek.Sunday;
 
-const InputDate = ({ id = '', Label, placeholder = 'Select a Date...', value, onChange, required }) => {
+const getValue = (value) => {
+  if (value !== '') return value;
+
+  if (hour < 9) return yesterday;
+
+  return today;
+};
+
+const InputDate = ({ id = '', label, placeholder = 'Select a Date...', value, onChange, required }) => {
   return (
     <DatePicker
+      id={id}
       isRequired={required}
       firstDayOfWeek={firstDayOfWeek}
       strings={DayPickerStrings}
       placeholder={placeholder}
-      ariaLabel={placeholder}
+      ariaLabel={placeholder || label}
       minDate={minDate}
       maxDate={maxDate}
       onSelectDate={onChange}
-      value={value === '' ? (hour < 9 ? yesterday : today) : value}
+      value={getValue(value)}
       allowTextInput
     />
   );
