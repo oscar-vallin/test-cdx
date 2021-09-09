@@ -19,7 +19,7 @@
     "ecmaVersion": 2020,
     "sourceType": "module"
   },
-  "plugins": ["react", "react-hooks", "@typescript-eslint", "prettier"],
+  "plugins": ["react", "react-hooks", "@typescript-eslint", "prettier", "only-warn"],
   "rules": {
     "semi": 0,
     "react-hooks/rules-of-hooks": "error",

@@ -4,10 +4,10 @@ import { FontIcon } from '@fluentui/react/lib/Icon';
 import { ContextualMenuItemType } from '@fluentui/react/lib/ContextualMenu';
 import { useStoreActions, useStoreState } from 'easy-peasy';
 
+import { TooltipHost } from '@fluentui/react/lib/Tooltip';
 import { ProfileMenu } from '../../menus/ProfileMenu';
 
 // Components
-import { TooltipHost } from '@fluentui/react/lib/Tooltip';
 import { MainMenu } from '../../menus/MainMenu';
 import { useCurrentUserTheme } from '../../../hooks/useCurrentUserTheme';
 import { useAuthContext } from '../../../contexts/AuthContext';
@@ -35,7 +35,7 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSetti
   const Toast = useNotification();
   const [collapse, setCollapse] = React.useState('false');
   const { setOwnDashFontSize, isHandlingFontSize } = useCurrentUserTheme();
-  const { setOrgSid, setUrlParams } = useOrgSid();
+  const { setOrgSid } = useOrgSid();
 
   const authData = useStoreState(({ AuthStore }) => AuthStore.data);
 
@@ -111,7 +111,6 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSetti
                                 const orgId = [...item.page.parameters].shift().idValue;
 
                                 setOrgSid(orgId);
-                                setUrlParams({ orgSid: orgId });
                               }, 1500);
                             },
                           }))
@@ -125,7 +124,6 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSetti
 
                                 setTimeout(() => {
                                   setOrgSid(authData.orgId);
-                                  setUrlParams({ orgSid: authData.orgId });
                                 }, 1500);
                               },
                             },

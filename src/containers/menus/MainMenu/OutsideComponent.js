@@ -28,7 +28,7 @@ export const OutsideComponent = ({ id, hide, collapseClick, children }) => {
 };
 
 OutsideComponent.propTypes = {
-  id: PropTypes.string.isRequired,
+  id: PropTypes.string,
   collapseClick: PropTypes.func.isRequired,
   children: PropTypes.element.isRequired,
 };
