@@ -15,7 +15,7 @@ export const useGetCookie = () => {
       crossDomain: true,
     };
 
-    let res = await axios(configAxios);
+    const res = await axios(configAxios);
   };
 
   return { getTokenCookies };

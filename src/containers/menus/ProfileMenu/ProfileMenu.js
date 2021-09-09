@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
+import { useStoreActions } from 'easy-peasy';
 import { UserToken } from '../../../components/images/UserToken';
 import { useAuthContext } from '../../../contexts/AuthContext';
 
@@ -11,7 +12,6 @@ import { useAuthContext } from '../../../contexts/AuthContext';
 // Styles
 import { StyledBox } from './ProfileMenu.styles';
 import { ButtonContextual } from '../../../components/buttons/ButtonContextual';
-import { useStoreActions } from 'easy-peasy';
 
 const ProfileMenu = ({ id = '__ProfileMenu', onUserSettings }) => {
   const resetTheme = useStoreActions(({ ThemeStore }) => ThemeStore.resetTheme);

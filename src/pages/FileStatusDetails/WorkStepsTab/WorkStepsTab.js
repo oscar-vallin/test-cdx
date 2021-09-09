@@ -38,7 +38,7 @@ const WorkStepsTab = ({ steps }) => {
             {items[activeIndex].nvp.length === 0 ? (
               <MessageBar>There are no details for this step</MessageBar>
             ) : (
-              <Fragment>
+              <>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <Text variant="bold">{items[activeIndex].content.title}</Text>
 
@@ -60,7 +60,7 @@ const WorkStepsTab = ({ steps }) => {
                 <div>
                   <Button>Redo</Button>
                 </div>
-              </Fragment>
+              </>
             )}
           </Card>
         </Column>

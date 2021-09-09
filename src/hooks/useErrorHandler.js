@@ -1,8 +1,6 @@
 const handle = (err) => {
   if (err === 'SESSION_EXPIRED') {
     // Toast + redirect to login
-
-    return;
   }
 
   // Generic Toast

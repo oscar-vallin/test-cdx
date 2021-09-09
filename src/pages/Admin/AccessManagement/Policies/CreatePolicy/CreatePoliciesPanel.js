@@ -222,7 +222,7 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
         onDismiss();
       }}
     >
-      <Fragment>
+      <>
         <Row>
           <Column lg="12">
             <Spacing margin={{ top: 'normal' }}>
@@ -302,8 +302,7 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
                               actions: [],
                             },
                           ],
-                        })
-                      }
+                        })}
                     >
                       Add permission
                     </StyledCommandButton>
@@ -336,8 +335,7 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
 
                                       return { ...permission, effect: key };
                                     }),
-                                  })
-                                }
+                                  })}
                                 style={{ width: '100%' }}
                               />
                             </Column>
@@ -358,8 +356,7 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
 
                                       return { ...permission, predicateName: key };
                                     }),
-                                  })
-                                }
+                                  })}
                                 style={{ width: '100%' }}
                               />
                             </Column>
@@ -378,8 +375,7 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
 
                                       return { ...permission, parameterVariable: target.value };
                                     }),
-                                  })
-                                }
+                                  })}
                               />
                             </Column>
 
@@ -397,8 +393,7 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
 
                                       return { ...permission, parameterValue: target.value };
                                     }),
-                                  })
-                                }
+                                  })}
                               />
                             </Column>
                           </Row>
@@ -438,8 +433,7 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
                                       ],
                                     };
                                   }),
-                                })
-                              }
+                                })}
                             >
                               Add action
                             </StyledCommandButton>
@@ -542,7 +536,7 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
             </Spacing>
           </Column>
         </Row>
-      </Fragment>
+      </>
     </Panel>
   );
 };

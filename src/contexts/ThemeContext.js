@@ -1,20 +1,19 @@
 import React, { useState, useEffect, useMemo, useContext } from 'react';
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { Customizer, loadTheme } from '@fluentui/react';
 import { useStoreState } from 'easy-peasy';
 // import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 
 import 'office-ui-fabric-react/dist/css/fabric.css';
-import { ThemeProvider } from 'styled-components';
 import { theme as styledComponentsTheme } from '../styles/themes/theme';
 
-import { useCurrentUserTheme } from './../hooks/useCurrentUserTheme';
-import { LayoutLogin } from './../layouts/LayoutLogin';
-import { Spacing } from './../components/spacings/Spacing';
-import { Spinner } from './../components/spinners/Spinner';
-import { StyledCard } from './../containers/forms/FormLogin/FormLogin.styles';
+import { useCurrentUserTheme } from '../hooks/useCurrentUserTheme';
+import { LayoutLogin } from '../layouts/LayoutLogin';
+import { Spacing } from '../components/spacings/Spacing';
+import { Spinner } from '../components/spinners/Spinner';
+import { StyledCard } from '../containers/forms/FormLogin/FormLogin.styles';
 import { useAuthContext } from './AuthContext';
-import Theming from './../utils/Theming';
+import Theming from '../utils/Theming';
 
 export const ThemeContext = React.createContext(() => {});
 

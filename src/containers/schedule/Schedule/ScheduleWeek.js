@@ -49,7 +49,7 @@ export const ScheduleWeek = ({ id, currentDate, selectedDate, onChangeDate, onCh
   const rows = [];
   let days = [];
   let day = startDate;
-  let formattedDate = '';
+  const formattedDate = '';
   let formattedHour = '';
 
   let hour = startOfDay(startDate);

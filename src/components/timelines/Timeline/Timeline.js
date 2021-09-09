@@ -1,7 +1,7 @@
 import React from 'react';
+import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { StyledUl, StyledLi } from './Timeline.styles';
 import { Spinner } from '../../spinners/Spinner';
-import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 
 const getStatusIcon = (status) => {
   const ICONS = {

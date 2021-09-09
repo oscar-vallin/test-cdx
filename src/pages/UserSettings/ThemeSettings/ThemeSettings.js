@@ -1,18 +1,18 @@
 import React, { useState, useEffect, Fragment } from 'react';
 
-import { Button } from './../../../components/buttons/Button';
-import { MessageBar } from './../../../components/notifications/MessageBar';
-import { Text } from './../../../components/typography/Text';
-import { Row, Column } from './../../../components/layouts';
-import { Spacing } from './../../../components/spacings/Spacing';
-import { Spinner } from './../../../components/spinners/Spinner';
+import { Button } from '../../../components/buttons/Button';
+import { MessageBar } from '../../../components/notifications/MessageBar';
+import { Text } from '../../../components/typography/Text';
+import { Row, Column } from '../../../components/layouts';
+import { Spacing } from '../../../components/spacings/Spacing';
+import { Spinner } from '../../../components/spinners/Spinner';
 
-import { useThemeContext } from './../../../contexts/ThemeContext';
-import { useColorPalettes } from './../../../hooks/useColorPalettes';
-import Theming from './../../../utils/Theming';
-import { useCreateOrUpdateOwnDashThemeMutation, useUserThemeLazyQuery } from './../../../data/services/graphql';
+import { useThemeContext } from '../../../contexts/ThemeContext';
+import { useColorPalettes } from '../../../hooks/useColorPalettes';
+import Theming from '../../../utils/Theming';
+import { useCreateOrUpdateOwnDashThemeMutation, useUserThemeLazyQuery } from '../../../data/services/graphql';
 
-import { StyledDiv, StyledTitle, StyledChoiceGroup } from './../UserSettingsPage.styles';
+import { StyledDiv, StyledTitle, StyledChoiceGroup } from '../UserSettingsPage.styles';
 import { defaultTheme, darkTheme } from '../../../styles/themes';
 import { useCurrentUserTheme } from '../../../hooks/useCurrentUserTheme';
 import { useNotification } from '../../../contexts/hooks/useNotification';
@@ -102,7 +102,7 @@ const ThemeSettings = ({ userTheme = { ...INITIAL_THEME } }) => {
       <Spinner size="lg" label="Loading theme settings" />
     </Spacing>
   ) : (
-    <Fragment>
+    <>
       <StyledTitle>Theme</StyledTitle>
 
       <StyledDiv>
@@ -166,7 +166,7 @@ const ThemeSettings = ({ userTheme = { ...INITIAL_THEME } }) => {
           </Spacing>
         </Column>
       </Row>
-    </Fragment>
+    </>
   );
 };
 

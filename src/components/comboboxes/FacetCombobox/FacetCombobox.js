@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useAmPolicyFacetsForServiceLazyQuery } from '../../../data/services/graphql';
 import { ComboBox } from 'office-ui-fabric-react/lib/ComboBox';
+import { useAmPolicyFacetsForServiceLazyQuery } from '../../../data/services/graphql';
 
 const parseToComboBoxOption = ({ name, value }) => ({ key: value, text: name });
 

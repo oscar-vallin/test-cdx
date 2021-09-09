@@ -2,12 +2,12 @@ import React, { useState, useEffect, Fragment, useMemo } from 'react';
 import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
 import { MarqueeSelection } from '@fluentui/react/lib/MarqueeSelection';
 import { PrimaryButton, DefaultButton, MessageBar } from 'office-ui-fabric-react';
+import { DetailsList, DetailsListLayoutMode, SelectionMode, Selection } from 'office-ui-fabric-react/lib/DetailsList';
+import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Button } from '../../../../components/buttons/Button';
 import { Row, Column } from '../../../../components/layouts';
 import { Spacing } from '../../../../components/spacings/Spacing';
-import { DetailsList, DetailsListLayoutMode, SelectionMode, Selection } from 'office-ui-fabric-react/lib/DetailsList';
-import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { Text } from '../../../../components/typography/Text';
 import { Separator } from '../../../../components/separators/Separator';
 
@@ -35,7 +35,7 @@ const generateColumns = () => {
 };
 
 const onRenderItemColumn = (node, _index, column) => {
-  return node.item[column.key] || node.item['person'][column.key];
+  return node.item[column.key] || node.item.person[column.key];
 };
 
 const _ActiveUsersPage = () => {
@@ -48,10 +48,8 @@ const _ActiveUsersPage = () => {
   const [useUsersForOrgFpLazy, { data, loading }] = useUsersForOrgFpLazyQuery();
   const [selectedItems, setSelectedItems] = useState([]);
 
-  const [
-    disableUser,
-    { data: disableResponse, loading: isDisablingUser, error: DisableUserError },
-  ] = useDeactivateUsersMutation();
+  const [disableUser, { data: disableResponse, loading: isDisablingUser, error: DisableUserError }] =
+    useDeactivateUsersMutation();
 
   useEffect(() => {
     useUsersForOrgFpLazy({
@@ -150,7 +148,7 @@ const _ActiveUsersPage = () => {
                         layoutMode={DetailsListLayoutMode.justified}
                         onRenderItemColumn={onRenderItemColumn}
                         selection={selection}
-                        selectionPreservedOnEmptyClick={true}
+                        selectionPreservedOnEmptyClick
                         isHeaderVisible
                       />
                     </MarqueeSelection>

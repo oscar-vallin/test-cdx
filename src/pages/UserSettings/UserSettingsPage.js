@@ -11,7 +11,7 @@ import { PasswordChange } from './PasswordChange';
 import { PasswordRules } from './PasswordRules';
 import { ThemeSettings } from './ThemeSettings';
 import { useCurrentUserTheme } from '../../hooks/useCurrentUserTheme';
-import { useThemeContext } from './../../contexts/ThemeContext';
+import { useThemeContext } from '../../contexts/ThemeContext';
 
 import { StyledBox, StyledRow, StyledCard } from './UserSettingsPage.styles';
 

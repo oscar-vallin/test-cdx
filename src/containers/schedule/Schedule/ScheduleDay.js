@@ -77,10 +77,10 @@ export const ScheduleDay = ({ id, currentDate, selectedDate, items }) => {
       hour = addHours(hour, 1);
     }
 
-    return <Container id={'DayContainer'}>{rows}</Container>;
+    return <Container id="DayContainer">{rows}</Container>;
   };
 
-  return <WeekRow id={'WeekRow'}>{_renderBody()}</WeekRow>;
+  return <WeekRow id="WeekRow">{_renderBody()}</WeekRow>;
   // return <>{_renderBody()}</>;
 };
 

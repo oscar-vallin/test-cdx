@@ -105,7 +105,7 @@ export const MonthPicker = ({
   if (selectedDateRange) {
     const rangeStart = selectedDateRange[0];
     const rangeEnd = selectedDateRange[selectedDateRange.length - 1];
-    dateRangeString = rangeStart.toLocaleDateString() + '-' + rangeEnd.toLocaleDateString();
+    dateRangeString = `${rangeStart.toLocaleDateString()}-${rangeEnd.toLocaleDateString()}`;
   }
 
   return (
@@ -148,7 +148,7 @@ export const MonthPicker = ({
         onSelectDate={onSelectDate}
         // eslint-disable-next-line react/jsx-no-bind
         onDismiss={onDismiss}
-        isMonthPickerVisible={true}
+        isMonthPickerVisible
         dateRangeType={props.dateRangeType}
         autoNavigateOnSelection={props.autoNavigateOnSelection}
         showGoToToday={props.showGoToToday}

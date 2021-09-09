@@ -53,13 +53,13 @@ const CreateUsersPanel = ({ isOpen, onDismiss, onCreateUser, selectedUserId }) =
     <Panel
       closeButtonAriaLabel="Close"
       type={PanelType.medium}
-      headerText={'Update user'}
+      headerText="Update user"
       isOpen={isOpen}
       onDismiss={() => {
         onDismiss();
       }}
     >
-      <Fragment>
+      <>
         <Row>
           <Column lg="12">
             <Spacing margin={{ top: 'normal' }}>
@@ -136,7 +136,7 @@ const CreateUsersPanel = ({ isOpen, onDismiss, onCreateUser, selectedUserId }) =
             </Row>
           </Column>
         </Row>
-      </Fragment>
+      </>
     </Panel>
   );
 };

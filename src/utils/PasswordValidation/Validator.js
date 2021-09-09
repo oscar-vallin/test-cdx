@@ -1,6 +1,7 @@
 import PasswordValidator from 'password-validator';
 import zxcvbn from 'zxcvbn';
 import _ from 'lodash';
+
 class PasswordRulesValidator {
   static countRulesets = (rules) => {
     const data = Array.isArray(rules) ? rules : [rules];
@@ -14,7 +15,7 @@ class PasswordRulesValidator {
             ? PasswordRulesValidator.countRulesets(rule.rules)
             : rule.level !== 0
             ? 1
-            : 1 //ou 0
+            : 1 // ou 0
       )
       .flattenDeep()
       .sum()

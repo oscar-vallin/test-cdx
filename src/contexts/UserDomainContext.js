@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { useStoreActions } from 'easy-peasy';
 import { useAuthContext } from './AuthContext';
 import { useNavigateToNewDomainLazyQuery, useCurrentOrgNavLazyQuery } from '../data/services/graphql';
 import { useOrgSid } from '../hooks/useOrgSid';
-import { useStoreActions } from 'easy-peasy';
 
 export const UserDomainContext = React.createContext(() => {});
 
@@ -14,20 +14,14 @@ export const UserDomainContextProvider = ({ children }) => {
   const { orgSid } = useOrgSid();
   const [userDomain, setUserDomain] = useState({ ...INITIAL_STATE });
 
-  const [
-    fetchDashNav,
-    { data: dashNav, loading: isFetchingDashNav, error: dashNavError },
-  ] = useNavigateToNewDomainLazyQuery();
+  const [fetchDashNav, { data: dashNav, loading: isFetchingDashNav, error: dashNavError }] =
+    useNavigateToNewDomainLazyQuery();
 
-  const [
-    fetchOrgNav,
-    { data: orgNav, loading: isFetchingOrgNav, error: orgNavError },
-  ] = useNavigateToNewDomainLazyQuery();
+  const [fetchOrgNav, { data: orgNav, loading: isFetchingOrgNav, error: orgNavError }] =
+    useNavigateToNewDomainLazyQuery();
 
-  const [
-    fetchCurrentOrgNav,
-    { data: currentOrgNav, loading: isFetchingCurrentOrgNav, error: currentOrgNavError },
-  ] = useCurrentOrgNavLazyQuery();
+  const [fetchCurrentOrgNav, { data: currentOrgNav, loading: isFetchingCurrentOrgNav, error: currentOrgNavError }] =
+    useCurrentOrgNavLazyQuery();
 
   useEffect(() => {
     if (isAuthenticated && !isAuthenticating) {

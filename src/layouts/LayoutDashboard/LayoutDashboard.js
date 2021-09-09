@@ -11,7 +11,7 @@ const LayoutDashboard = ({ id = 'LayoutDashboard', menuOptionSelected = 'dashboa
   const history = useHistory();
 
   return (
-    <Fragment>
+    <>
       <BoxStyled id={`${id}__Box`} direction={StyleConstants.DIRECTION_COLUMN} top>
         <NavBar
           visible={showMenu}
@@ -21,7 +21,7 @@ const LayoutDashboard = ({ id = 'LayoutDashboard', menuOptionSelected = 'dashboa
 
         {children}
       </BoxStyled>
-    </Fragment>
+    </>
   );
 };
 

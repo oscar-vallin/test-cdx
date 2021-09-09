@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useCurrentUserLazyQuery } from '../../data/services/graphql';
-import { useAuthContext } from '../../contexts/AuthContext';
 import { useHistory } from 'react-router-dom';
+import { useCurrentUserLazyQuery } from '../../data/services/graphql';
+import { useAuthContext } from '../AuthContext';
 
 export const useCurrentUser = (_username, _password) => {
   const [isProcessing, setProcessing] = useState(false);
