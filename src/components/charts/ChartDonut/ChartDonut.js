@@ -21,7 +21,7 @@ const ChartDonut = ({ id = '__ChartDonut', label, size = 50, data }) => {
         fill="#D0D0D0"
         paddingAngle={0}
       >
-        <Label value={label} position="center" className="label" fontSize={`1rem`} />;
+        <Label value={label} position="center" className="label" fontSize="1rem" />;
         {_data.map((entry, index) => (
           <Cell key={index} fill={data[index % data.length].color ?? COLORS[index % COLORS.length]} />
         ))}

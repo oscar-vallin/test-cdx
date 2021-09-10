@@ -9,10 +9,10 @@ import { CardSection } from '../../../components/cards';
 import { Spacing } from '../../../components/spacings/Spacing';
 import { Spinner } from '../../../components/spinners/Spinner';
 
-import { StyledTitle, StyledIcon } from './../UserSettingsPage.styles';
+import { StyledTitle, StyledIcon } from '../UserSettingsPage.styles';
 import { RuleGroup } from './RuleGroup';
 
-import { PasswordValidator, ValidationMessages, ValidationRulesParser } from './../../../utils/PasswordValidation';
+import { PasswordValidator, ValidationMessages, ValidationRulesParser } from '../../../utils/PasswordValidation';
 
 const isArrayOfArrays = (arr) => arr.filter((item) => Array.isArray(item)).length > 0;
 
@@ -106,42 +106,41 @@ const PasswordRules = ({ validations, password, onChange }) => {
           item.rules.map((rule, ruleIndex) => {
             if (Array.isArray(rule)) {
               return rule.map(onRenderCell);
-            } else {
-              if (rule.characteristic === 'strength') {
-                return (
-                  <div key={ruleIndex}>
-                    <div
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                      }}
-                    >
-                      {!item.validations.includes(rule.characteristic) ? (
-                        <StyledIcon iconName="StatusCircleCheckmark" />
-                      ) : (
-                        <StyledIcon iconName="StatusCircleErrorX" />
-                      )}
-
-                      <div dangerouslySetInnerHTML={{ __html: rule.message }} />
-                    </div>
-
-                    <PasswordStrengthBar password={password} style={{ margin: '15px 0 0', width: '50%' }} />
-                  </div>
-                );
-              }
-
+            }
+            if (rule.characteristic === 'strength') {
               return (
-                <div key={ruleIndex} style={{ display: 'flex', alignItems: 'center' }}>
-                  {!item.validations.includes(rule.characteristic) ? (
-                    <StyledIcon iconName="StatusCircleCheckmark" />
-                  ) : (
-                    <StyledIcon iconName="StatusCircleErrorX" />
-                  )}
+                <div key={ruleIndex}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}
+                  >
+                    {!item.validations.includes(rule.characteristic) ? (
+                      <StyledIcon iconName="StatusCircleCheckmark" />
+                    ) : (
+                      <StyledIcon iconName="StatusCircleErrorX" />
+                    )}
 
-                  {rule.message}
+                    <div dangerouslySetInnerHTML={{ __html: rule.message }} />
+                  </div>
+
+                  <PasswordStrengthBar password={password} style={{ margin: '15px 0 0', width: '50%' }} />
                 </div>
               );
             }
+
+            return (
+              <div key={ruleIndex} style={{ display: 'flex', alignItems: 'center' }}>
+                {!item.validations.includes(rule.characteristic) ? (
+                  <StyledIcon iconName="StatusCircleCheckmark" />
+                ) : (
+                  <StyledIcon iconName="StatusCircleErrorX" />
+                )}
+
+                {rule.message}
+              </div>
+            );
           })
         ) : (
           <div style={{ display: 'flex', alignItems: 'center' }}>

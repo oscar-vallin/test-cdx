@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { Box as LayoutBox } from '../../components/layouts';
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
 import { Link } from 'react-router-dom';
+import { Box as LayoutBox } from '../../components/layouts';
 
 export const StyledBox = styled(LayoutBox)`
   display: flex;

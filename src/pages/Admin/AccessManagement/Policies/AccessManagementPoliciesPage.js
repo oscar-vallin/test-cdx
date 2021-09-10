@@ -5,13 +5,13 @@ import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fab
 import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
 
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
+import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Spacing } from '../../../../components/spacings/Spacing';
 import { Button } from '../../../../components/buttons/Button';
 import { Row, Column } from '../../../../components/layouts';
 import { Separator } from '../../../../components/separators/Separator';
 import { Text } from '../../../../components/typography/Text';
-import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { CreatePoliciesPanel } from './CreatePolicy';
 
 import { useAccessPoliciesForOrgLazyQuery, useRemoveAccessPolicyMutation } from '../../../../data/services/graphql';
@@ -61,7 +61,7 @@ const _AccessManagementPoliciesPage = () => {
         return <FontIcon iconName={item.tmpl ? 'CheckMark' : 'Cancel'} />;
       case 'actions':
         return (
-          <Fragment>
+          <>
             {/* <StyledCommandButton iconProps={{ iconName: 'Edit' }} onClick={() => {
               setSelectedPolicyId(item.id);
               setIsPanelOpen(true)
@@ -74,7 +74,7 @@ const _AccessManagementPoliciesPage = () => {
                 setIsConfirmationHidden(false);
               }}
             />
-          </Fragment>
+          </>
         );
       default:
         return item[column.key];

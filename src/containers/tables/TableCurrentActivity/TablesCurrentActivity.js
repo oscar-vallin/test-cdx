@@ -1,16 +1,16 @@
 import { useEffect } from 'react';
+import { Label } from '@fluentui/react/lib/Label';
+import { tokenToString } from 'typescript';
 import { Spacing } from '../../../components/spacings/Spacing';
 import { Separator } from '../../../components/separators/Separator';
 import { TableActivity } from './TableActivity';
 import { Container, TableContainer, Row, Column, RightColumn } from './TableActivity.style';
-import { Label } from '@fluentui/react/lib/Label';
 
 // import { useTable } from './TableFileStatus.service';
 import { InputText } from '../../../components/inputs/InputText';
 import { useTable } from './TableCurrentActivity.service';
 import { InputDateRange } from '../../../components/inputs/InputDateRange';
 import { useTableFilters } from '../../../hooks/useTableFilters';
-import { tokenToString } from 'typescript';
 
 import { useAuthContext } from '../../../contexts/AuthContext';
 

@@ -10,17 +10,17 @@ import { Spinner } from '../../../../components/spinners/Spinner';
 import { Text } from '../../../../components/typography/Text';
 import { StyledChoiceGroup, StyledDiv } from './DefaultThemePage.styles';
 
-import { useAuthContext } from './../../../../contexts/AuthContext';
-import { useThemeContext } from './../../../../contexts/ThemeContext';
-import { useColorPalettes } from './../../../../hooks/useColorPalettes';
-import Theming from './../../../../utils/Theming';
+import { useAuthContext } from '../../../../contexts/AuthContext';
+import { useThemeContext } from '../../../../contexts/ThemeContext';
+import { useColorPalettes } from '../../../../hooks/useColorPalettes';
+import Theming from '../../../../utils/Theming';
 import { defaultTheme, darkTheme } from '../../../../styles/themes';
 
 import {
   useCreateDefaultDashThemeMutation,
   useUpdateDefaultDashThemeMutation,
   useDefaultDashThemeForSiteLazyQuery,
-} from './../../../../data/services/graphql';
+} from '../../../../data/services/graphql';
 import { useNotification } from '../../../../contexts/hooks/useNotification';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
 
@@ -110,7 +110,7 @@ const _DefaultThemePage = () => {
                 <Spinner size="lg" label="Loading theme settings" />
               </Spacing>
             ) : (
-              <Fragment>
+              <>
                 <StyledDiv>
                   <Text size="normal" className={`text ${(palettes || []).length > 1 && 'text--centered'}`}>
                     Color palettes:
@@ -197,7 +197,7 @@ const _DefaultThemePage = () => {
                     }
                   }}
                 />
-              </Fragment>
+              </>
             )}
           </Column>
         </Row>

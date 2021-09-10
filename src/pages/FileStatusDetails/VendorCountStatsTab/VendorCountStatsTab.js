@@ -1,6 +1,6 @@
 import React from 'react';
-import { Spacing } from '../../../components/spacings/Spacing';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
+import { Spacing } from '../../../components/spacings/Spacing';
 import { StyledRow, StyledVendorHeaderRow, StyledFooter } from '../FileStatusDetails.styles';
 
 const COLUMNS = [

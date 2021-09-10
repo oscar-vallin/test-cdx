@@ -54,7 +54,7 @@ export const ApolloContextProvider = ({ children }) => {
     });
   });
 
-  let client = new ApolloClient({
+  const client = new ApolloClient({
     link: afterwareLink.concat(authLink.concat(httpLink)),
     // cache: new InMemoryCache({ possibleTypes: introspection.possibleTypes }),
     cache: new InMemoryCache(),

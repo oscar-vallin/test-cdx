@@ -55,7 +55,7 @@ export const useTableTemplate = (tableId, argOrgSid, argDateRange, argFilter) =>
       items,
       columns: structure.columns,
       structure,
-      loading: loading,
+      loading,
     },
     error,
   };

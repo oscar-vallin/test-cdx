@@ -30,7 +30,7 @@ export const ScheduleMonth = ({ id, currentDate, selectedDate, onChangeDate, ite
       const _monthEnd = endOfMonth(selectedDate);
       const _newDate = {
         currentMonth: selectedDate,
-        selectedDate: selectedDate,
+        selectedDate,
         monthStart: _monthStart,
         monthEnd: _monthEnd,
         startDate: startOfWeek(_monthStart),

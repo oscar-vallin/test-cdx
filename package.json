@@ -30,6 +30,7 @@
     "lodash": "^4.17.21",
     "office-ui-fabric-react": "^7.144.2",
     "password-validator": "^5.1.1",
+    "puppeteer": "^10.2.0",
     "query-string": "^7.0.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
@@ -95,6 +96,7 @@
     "eslint-import-resolver-typescript": "^2.3.0",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-jsx-a11y": "^6.3.1",
+    "eslint-plugin-only-warn": "npm:@aminya/eslint-plugin-only-warn",
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.21.0",
     "eslint-plugin-react-hooks": "^4.1.2",
@@ -155,7 +157,7 @@
     "moduleNameMapper": {
       "^react-native$": "react-native-web",
       "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy",
-      "src/(.*)$": "<rootDir>/src/$1"
+      "src/pages/(.*)$": "<rootDir>/src/pages/$1"
     }
   }
 }

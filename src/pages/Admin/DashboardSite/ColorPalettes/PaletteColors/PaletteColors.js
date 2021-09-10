@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { ChoiceGroup } from '@fluentui/react';
-import { StyledColorPreview, StyledPreview } from './../ColorPalettesPage.styles';
+import { StyledColorPreview, StyledPreview } from '../ColorPalettesPage.styles';
 
 const labels = ['Primary color', 'Text color', 'Background color'];
 

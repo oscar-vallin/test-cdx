@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { StyledDiv } from './Collapse.styles';
 import { FontIcon } from '@fluentui/react/lib/Icon';
+import { StyledDiv } from './Collapse.styles';
 
 const CDXCollapse = ({ label, children, className = '', expanded = false, onToggle = () => {} }) => {
   const [isExpanded, setIsExpanded] = useState(expanded);

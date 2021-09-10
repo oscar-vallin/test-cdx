@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 // components
+import { useHistory, useLocation } from 'react-router-dom';
+import queryString from 'query-string';
 import { CardDashboard } from '../../containers/cards/CardDashboard';
 import { TableDashboard } from '../../containers/tables/TableDashboard';
 
@@ -16,8 +18,6 @@ import { StyledRow, StyledRowDate, StyledColumn, StyledButton, StyledSpinner } f
 import { useDashboardService } from './DashboardPage.service';
 
 import { TABLE_NAMES } from '../../data/constants/TableConstants';
-import { useHistory, useLocation } from 'react-router-dom';
-import queryString from 'query-string';
 import { useOrgSid } from '../../hooks/useOrgSid';
 
 // TODO: Change for Session organization ID.

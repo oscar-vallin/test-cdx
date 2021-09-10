@@ -1,6 +1,7 @@
 import React, { useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
 // Components
+import { useHistory } from 'react-router-dom';
 import { Column } from '../../../components/layouts';
 import { InputText } from '../../../components/inputs/InputText';
 import { Spacing } from '../../../components/spacings/Spacing';
@@ -10,7 +11,6 @@ import { useLogin } from './FormLogin.services';
 import { useLoginBegin } from '../../../contexts/hooks/useLogin';
 import { useAuthContext } from '../../../contexts/AuthContext';
 import { useNotification } from '../../../contexts/hooks/useNotification';
-import { useHistory } from 'react-router-dom';
 // Styles
 import {
   StyledBox,
@@ -61,14 +61,14 @@ const FormLogin = ({ id = '__FormLogin', onLogin }) => {
                 <Spinner size="lg" label="Checking authentication" />
               </Spacing>
             ) : (
-              <Fragment>
+              <>
                 <StyledRow id={`${id}__Card__Row--label`}>
                   <Column id={`${id}__Card__Row__Column--label`}>
                     <StyledTitle>CDX DASHBOARD</StyledTitle>
                   </Column>
                 </StyledRow>
-                <StyledRow id={`${id}__Card__Row--label`}>
-                  <Column id={`${id}__Card__Row__Column--label`}>
+                <StyledRow id={`${id}__Card__Row--sublabel`}>
+                  <Column id={`${id}__Card__Row__Column--sublabel`}>
                     <StyledText>Sign in to access your dashboard</StyledText>
                   </Column>
                 </StyledRow>
@@ -97,10 +97,10 @@ const FormLogin = ({ id = '__FormLogin', onLogin }) => {
                   )}
                 </StyledRow>
                 {isValidEmail && (
-                  <StyledRow id={`${id}__Card__Row--Email`}>
-                    <Column id={`${id}__Card__Row__Column--Email`}>
+                  <StyledRow id={`${id}__Card__Row--Password`}>
+                    <Column id={`${id}__Card__Row__Column--Password`}>
                       <InputText
-                        id={`${id}__Card__Row__Input-Email`}
+                        id={`${id}__Card__Row__Input-Password`}
                         autoFocus
                         type="password"
                         errorMessage={handlerLogin.validationError}
@@ -121,7 +121,7 @@ const FormLogin = ({ id = '__FormLogin', onLogin }) => {
                     </StyledButton>
                   </Column>
                 </StyledRow>
-              </Fragment>
+              </>
             )}
           </StyledCard>
         </Column>

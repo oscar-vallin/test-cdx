@@ -1,7 +1,9 @@
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Table } from '../../../components/tables/Table';
 import { Label } from '@fluentui/react/lib/Label';
+import { useParams, useLocation } from 'react-router-dom';
+import queryString from 'query-string';
+import { Table } from '../../../components/tables/Table';
 
 import { Box, StyledRow, Column, Container, FilterSection } from './TableErrors.styles';
 import { Card } from '../../../components/cards/Card';
@@ -12,8 +14,6 @@ import { InputDateRange } from '../../../components/inputs/InputDateRange';
 import { TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { useTableFilters } from '../../../hooks/useTableFilters';
 import { useTableTemplate } from '../../../hooks/useTableTemplate';
-import { useParams, useLocation } from 'react-router-dom';
-import queryString from 'query-string';
 
 import { useAuthContext } from '../../../contexts/AuthContext';
 
@@ -32,7 +32,7 @@ const TableErrors = ({ idPage = 'TableErrors', _orgSid = 1, onItemsListChange = 
   );
 
   return (
-    <Fragment>
+    <>
       <FilterSection id={`${idPage}-filters`}>
         <Container>
           <Card elevation="smallest">
@@ -64,14 +64,13 @@ const TableErrors = ({ idPage = 'TableErrors', _orgSid = 1, onItemsListChange = 
                 onItemsListChange({
                   count: items.length,
                   loading: tableProps.loading,
-                })
-              }
+                })}
               {...tableProps}
             />
           )}
         </Box>
       </Container>
-    </Fragment>
+    </>
   );
 };
 

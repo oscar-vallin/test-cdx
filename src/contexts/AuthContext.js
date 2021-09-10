@@ -8,13 +8,13 @@ import { useCurrentUser } from './hooks/useCurrentUser';
 import { useLogout } from './hooks/useLogout';
 import { DEFAULT_POLLING_TIME } from '../data/constants/TableConstants';
 
-import { useCurrentUserTheme } from './../hooks/useCurrentUserTheme';
-import { LayoutLogin } from './../layouts/LayoutLogin';
-import { Spacing } from './../components/spacings/Spacing';
-import { Spinner } from './../components/spinners/Spinner';
-import { StyledCard } from './../containers/forms/FormLogin/FormLogin.styles';
+import { useCurrentUserTheme } from '../hooks/useCurrentUserTheme';
+import { LayoutLogin } from '../layouts/LayoutLogin';
+import { Spacing } from '../components/spacings/Spacing';
+import { Spinner } from '../components/spinners/Spinner';
+import { StyledCard } from '../containers/forms/FormLogin/FormLogin.styles';
 import { useThemeContext } from './ThemeContext';
-import Theming from './../utils/Theming';
+import Theming from '../utils/Theming';
 
 //
 export const AuthContext = React.createContext(() => {
@@ -194,7 +194,7 @@ export const AuthContextProvider = ({ children }) => {
 
         return passwordResponse;
       } catch (e) {
-        //console.log('Exception e = ', e);
+        // console.log('Exception e = ', e);
       }
     }
 

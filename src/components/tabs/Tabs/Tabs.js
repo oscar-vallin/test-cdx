@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { Badge } from '../../badges/Badge';
 import { PivotItem } from 'office-ui-fabric-react/lib-commonjs/Pivot';
+import { Badge } from '../../badges/Badge';
 import { StyledPivot, StyledSpan } from './Tabs.styles';
 
 const CDXTabs = ({ items, selectedKey, onClickTab }) => {

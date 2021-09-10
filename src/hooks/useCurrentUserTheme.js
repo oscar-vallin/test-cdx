@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useStoreState, useStoreActions } from 'easy-peasy';
-import { defaultTheme, darkTheme } from './../styles/themes';
-import Theming from './../utils/Theming';
+import { defaultTheme, darkTheme } from '../styles/themes';
+import Theming from '../utils/Theming';
 
 import {
   useUserThemeLazyQuery,
@@ -27,10 +27,8 @@ export const useCurrentUserTheme = () => {
   const [createOrUpdateOwnDashTheme, { data: updatedTheme, loading: isHandlingTheme, error: themeError }] =
     useCreateOrUpdateOwnDashThemeMutation();
 
-  const [
-    setOwnDashFontSize,
-    { data: updatedFontSize, loading: isHandlingFontSize, error: fontSizeError },
-  ] = useSetOwnDashThemeFontSizeMutation();
+  const [setOwnDashFontSize, { data: updatedFontSize, loading: isHandlingFontSize, error: fontSizeError }] =
+    useSetOwnDashThemeFontSizeMutation();
 
   useEffect(() => {
     if (theme?.userTheme) {

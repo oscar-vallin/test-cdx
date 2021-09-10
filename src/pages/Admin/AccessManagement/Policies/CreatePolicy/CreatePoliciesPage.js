@@ -203,7 +203,7 @@ const _CreatePoliciesPage = () => {
       }
     };
 
-  let columns = generateColumns(options);
+  const columns = generateColumns(options);
 
   useEffect(() => {
     if (!loading && data) {

@@ -19,7 +19,7 @@ import { useCurrentUserTheme } from '../../../../hooks/useCurrentUserTheme';
 import { useColorPalettes } from '../../../../hooks/useColorPalettes';
 import { defaultTheme } from '../../../../styles/themes';
 
-import Theming from './../../../../utils/Theming';
+import Theming from '../../../../utils/Theming';
 import { useNotification } from '../../../../contexts/hooks/useNotification';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
 
@@ -160,13 +160,13 @@ const _ColorPalettesPage = () => {
             <Spinner size="lg" label="Loading color palettes" />
           </Spacing>
         ) : (
-          <Fragment>
+          <>
             <Row>
               <Column xxl="6" xl="9" lg="12">
                 <StyledDiv>
                   {colorPalettes?.length > 0 ? (
                     <StyledChoiceGroup
-                      inline={true}
+                      inline
                       label="Color palettes"
                       selectedKey={selectedPaletteId}
                       disabled={false}
@@ -189,7 +189,7 @@ const _ColorPalettesPage = () => {
                 <Spinner size="lg" label="Loading color palette" />
               </Spacing>
             ) : (
-              <Fragment>
+              <>
                 <Row>
                   <Column>
                     <Spacing margin={{ bottom: 'normal' }}>
@@ -266,10 +266,10 @@ const _ColorPalettesPage = () => {
                         onChange={setActiveColor}
                       />
                     </Column>
-                    <Column xxl="3" xl="6" lg="12" right={true}>
+                    <Column xxl="3" xl="6" lg="12" right>
                       <StyledColorPicker
                         showPreview={false}
-                        alphaType={'none'}
+                        alphaType="none"
                         color={activeColor.color}
                         onChange={onColorChange}
                       />
@@ -331,9 +331,9 @@ const _ColorPalettesPage = () => {
                     </StyledDiv>
                   </Column>
                 </Row>
-              </Fragment>
+              </>
             )}
-          </Fragment>
+          </>
         )}
       </Spacing>
     </LayoutAdmin>

@@ -6,14 +6,13 @@ import PropTypes from 'prop-types';
 import { useHistory, useLocation } from 'react-router-dom';
 
 // Styles
+import queryString from 'query-string';
 import { StyledRow, StyledColumn, StyledMenuButton, StyledButtonIcon } from './MainMenu.styles';
 
-import { ROUTES_ARRAY, ROUTES, ROUTES_ID, URL_ROUTES } from '../../../data/constants/RouteConstants';
+import { ROUTES_ARRAY, ROUTES, ROUTES_ID, URL_ROUTES, getRouteByApiId } from '../../../data/constants/RouteConstants';
 import { OutsideComponent } from './OutsideComponent';
-import { useAuthContext } from './../../../contexts/AuthContext';
-import { useUserDomain } from './../../../contexts/hooks/useUserDomain';
-import { getRouteByApiId } from './../../../data/constants/RouteConstants';
-import queryString from 'query-string';
+import { useAuthContext } from '../../../contexts/AuthContext';
+import { useUserDomain } from '../../../contexts/hooks/useUserDomain';
 import { useOrgSid } from '../../../hooks/useOrgSid';
 
 // CardSection is called directly cause a restriction warning for that component.
@@ -82,7 +81,7 @@ const MainMenu = ({ id = '__MainMenu', option = ROUTES.ROUTE_DASHBOARD.ID, left,
         <StyledButtonIcon
           icon="BulletedListText"
           disabled={false}
-          variant={'navbar'}
+          variant="navbar"
           size={18}
           onClick={collapseNavMenu}
         />

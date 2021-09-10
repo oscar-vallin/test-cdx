@@ -5,7 +5,6 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { format } from 'date-fns';
 import queryString from 'query-string';
 // import { useTableFilters } from '../../../hooks/useTableFilters';
-import { getDates } from '../../../helpers/tableHelpers';
 import PropTypes from 'prop-types';
 import {
   ColumnActionsMode,
@@ -15,6 +14,8 @@ import {
   buildColumns,
   DetailsHeader,
 } from 'office-ui-fabric-react/lib/DetailsList';
+import { useQuery } from '@apollo/client';
+import { getDates } from '../../../helpers/tableHelpers';
 import { Spinner } from '../../spinners/Spinner';
 
 import {
@@ -32,6 +33,7 @@ import {
 
 import { TableHeader } from '../TableHeader';
 import { FileProgress } from '../../../containers/bars/FileProgress';
+import { useQueryParams } from '../../../hooks/useQueryParams';
 
 const _buildColumns = (
   items,
@@ -126,6 +128,7 @@ const Table = ({
   onItemsListChange,
   loading = true,
 }) => {
+  const QueryParams = useQueryParams();
   const [sortLabel, setSortLabel] = useState();
   const [sortedItems, setSortedItems] = useState([]);
   const [sortedGroups, setSortedGroups] = useState();
@@ -138,8 +141,10 @@ const Table = ({
   const [currentKeySort, setCurrentKeySort] = useState('datetime');
   const [isHovering, setIsHovering] = useState(false);
   const [currentHover, setCurrentHover] = useState(null);
+
+  const urlParams = QueryParams.parse('');
+
   // const location = useLocation();
-  const [urlParams, setUrlParams] = useState(queryString.parse(''));
   // const { startDate, endDate } = useTableFilters('Extract Name,  Status, Vendor, etc.');
   const initialStartDate = new Date(urlParams.startDate);
   const initialEndDate = new Date(urlParams.endDate);
@@ -295,7 +300,7 @@ const Table = ({
           );
         }
 
-        if (!!option) {
+        if (option) {
           return (
             <>
               <link>
@@ -402,7 +407,7 @@ const Table = ({
       setSortedItems(_copyAndSort(sortedItems, columns[sortLabel === 'Vendor' ? 1 : 0].fieldName, false));
     } else if (structure.header.type === 'file_status' && key !== 'progress') {
       if (totalPages === 1) {
-        setSortedItems(_copyAndSort(sortedItems, key, sort === 'asc' ? false : true));
+        setSortedItems(_copyAndSort(sortedItems, key, sort !== 'asc'));
       } else {
         alert('Sorting unavailable for a multi-page table');
       }
@@ -436,7 +441,7 @@ const Table = ({
             ) : (
               <div onMouseOver={() => handleMouseOver(props.column.key)} onMouseOut={handleMouseOut}>
                 {isHovering && currentHover === props.column.key ? (
-                  <StyledMenuIcon icon={'sort'} onClick={() => _onSort(props.column.key)}>
+                  <StyledMenuIcon icon="sort" onClick={() => _onSort(props.column.key)}>
                     {props.children}
                   </StyledMenuIcon>
                 ) : (
@@ -470,7 +475,6 @@ const Table = ({
 
   if (sortedItems)
     if (structure.header.type === 'dashboard') {
-      console.log(tablecolumns);
       return (
         <StyledContainer id="Table_Detailed" style={{ width: '100%' }}>
           {loading ? (

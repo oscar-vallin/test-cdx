@@ -1,8 +1,8 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import { Box as LayoutBox, Row as LayoutRow, Column as LayoutColumn } from '../../layouts';
 import { Text } from '../../typography/Text';
 import { ButtonAction } from '../../buttons/ButtonAction';
-import { Link } from 'react-router-dom';
 import { Spacing } from '../../spacings/Spacing';
 
 export const StyledSpacing = styled(Spacing)`

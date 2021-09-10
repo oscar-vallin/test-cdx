@@ -1,8 +1,7 @@
 import styled from 'styled-components';
-import { Box as LayoutBox } from '../../components/layouts';
 import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { Icon, ColorPicker } from '@fluentui/react';
-import { Row } from '../../components/layouts';
+import { Box as LayoutBox, Row } from '../../components/layouts';
 import { Card } from '../../components/cards';
 
 export const StyledBox = styled(LayoutBox)`
