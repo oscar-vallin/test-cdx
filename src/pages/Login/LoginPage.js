@@ -4,32 +4,30 @@ import { FormLogin } from '../../containers/forms/FormLogin';
 import { useNotification } from '../../contexts/hooks/useNotification';
 
 const _LoginPage = () => {
-  const [isLogout, setLogout] = useState();
-  const Toast = useNotification();
+  // const [isLogout, setLogout] = useState();
+  // const Toast = useNotification();
 
-  useEffect(() => {
-    console.log('isLogout', isLogout);
+  // useEffect(() => {
+  //   if (isLogout) {
+  //     Toast.error({ text: isLogout });
+  //   }
+  // }, [isLogout]);
 
-    if (isLogout) {
-      Toast.error({ text: isLogout });
-    }
-  }, [isLogout]);
+  // useEffect(() => {
+  //   const logout = localStorage.getItem('LOGOUT');
 
-  useEffect(() => {
-    const logout = localStorage.getItem('LOGOUT');
+  //   if (logout != null) {
+  //     localStorage.removeItem('ADMIN_NAV');
 
-    if (logout != null) {
-      localStorage.removeItem('ADMIN_NAV');
+  //     setTimeout(() => localStorage.removeItem('LOGOUT'), 200);
+  //   }
 
-      setTimeout(() => localStorage.removeItem('LOGOUT'), 200);
-    }
-
-    setLogout(logout);
-  }, []);
+  //   setLogout(logout);
+  // }, []);
 
   return (
     <LayoutLogin id="PageLogin">
-      <FormLogin id="FormLogin" onLogin={() => {}} />
+      <FormLogin />
     </LayoutLogin>
   );
 };

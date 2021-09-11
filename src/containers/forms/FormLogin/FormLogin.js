@@ -1,17 +1,11 @@
-import React, { useEffect, Fragment } from 'react';
-import PropTypes from 'prop-types';
-// Components
+import React, { useState, useEffect } from 'react';
+
 import { useHistory } from 'react-router-dom';
 import { Column } from '../../../components/layouts';
 import { InputText } from '../../../components/inputs/InputText';
 import { Spacing } from '../../../components/spacings/Spacing';
 import { Spinner } from '../../../components/spinners/Spinner';
-// Hooks
-import { useLogin } from './FormLogin.services';
-import { useLoginBegin } from '../../../contexts/hooks/useLogin';
-import { useAuthContext } from '../../../contexts/AuthContext';
-import { useNotification } from '../../../contexts/hooks/useNotification';
-// Styles
+
 import {
   StyledBox,
   StyledRow,
@@ -24,27 +18,39 @@ import {
   StyledButtonIcon,
 } from './FormLogin.styles';
 
-// CardSection is called directly cause a restriction warning for that component.
-const FormLogin = ({ id = '__FormLogin', onLogin }) => {
-  const history = useHistory();
-  const handlerLogin = useLogin(onLogin);
-  const { apiBeginLogin, validateEmail, isValidEmail, editUser, isProcessingBegin, emailError } = useLoginBegin(1000);
-  const { email, password } = handlerLogin;
-  const { isCheckingAuth, isAuthenticating, errorMessage } = useAuthContext();
+import { useSessionStore } from '../../../store/SessionStore';
+import { useLoginUseCase } from '../../../use-cases/Authentication';
+import { useNotification } from '../../../contexts/hooks/useNotification';
 
+const INITIAL_STATE = { userId: '', password: '' };
+
+const FormLogin = ({ id = '__FormLogin' }) => {
+  const SessionStore = useSessionStore();
   const Toast = useNotification();
 
-  useEffect(() => {
-    if (errorMessage) {
-      Toast.error({ text: errorMessage });
-    }
-  }, [errorMessage]);
+  const { performUserIdVerification, performUserAuthentication, state } = useLoginUseCase();
+
+  const [values, setValues] = useState({ ...INITIAL_STATE });
+  const [isValidEmail, setIsValidEmail] = useState(false);
+
+  /* Migrate to Active domain */
+  // useEffect(() => {
+  //   if (SessionStore.status.isAuthenticated) {
+  //     history.push('/');
+  //   }
+  // }, [SessionStore.status.isAuthenticated]);
 
   useEffect(() => {
-    if (emailError) {
-      Toast.error({ text: emailError });
+    setIsValidEmail(state.step === 'PASSWORD');
+
+    if (state.reset) {
+      setValues({ ...INITIAL_STATE });
     }
-  }, [emailError]);
+
+    if (state.error) {
+      Toast.error({ text: state.error });
+    }
+  }, [state]);
 
   return (
     <StyledBox id={id}>
@@ -56,9 +62,9 @@ const FormLogin = ({ id = '__FormLogin', onLogin }) => {
       <StyledRow id={`${id}--Row`}>
         <Column id={`${id}__Row-Column`}>
           <StyledCard id={`${id}-Card`}>
-            {isCheckingAuth || isAuthenticating ? (
+            {SessionStore.isRehydrating ? (
               <Spacing margin={{ top: 'normal' }}>
-                <Spinner size="lg" label="Checking authentication" />
+                <Spinner size="lg" label="Checking current user session" />
               </Spacing>
             ) : (
               <>
@@ -77,18 +83,19 @@ const FormLogin = ({ id = '__FormLogin', onLogin }) => {
                     <InputText
                       id={`${id}__Card__Row__Input-Email`}
                       autoFocus
-                      disabled={handlerLogin.isProcessing || isValidEmail}
-                      errorMessage={isValidEmail ? '' : handlerLogin.validationError}
-                      onKeyEnter={() => (isValidEmail ? handlerLogin.submitLogin() : validateEmail(email.value))}
-                      {...email}
+                      label="Email"
+                      disabled={state.loading || isValidEmail}
+                      value={values.userId}
+                      onKeyEnter={() => performUserIdVerification(values)}
+                      onChange={({ target }) => setValues({ ...values, userId: target.value })}
                     />
                   </Column>
                   {isValidEmail && (
                     <Column id={`${id}__Card__Row__Column--label`} right>
                       <StyledButtonIcon
                         id={`${id}__Card__Row__Column__Button--Edit`}
-                        disabled={handlerLogin.isProcessing}
-                        onClick={() => editUser()}
+                        disabled={state.loading}
+                        onClick={() => editUserEmail()}
                         icon="edit"
                       >
                         Edit
@@ -102,10 +109,11 @@ const FormLogin = ({ id = '__FormLogin', onLogin }) => {
                       <InputText
                         id={`${id}__Card__Row__Input-Password`}
                         autoFocus
+                        label="Password"
                         type="password"
-                        errorMessage={handlerLogin.validationError}
-                        onKeyEnter={() => (isValidEmail ? handlerLogin.submitLogin() : validateEmail(email.value))}
-                        {...password}
+                        value={values.password}
+                        onKeyEnter={() => performUserAuthentication(values)}
+                        onChange={({ target }) => setValues({ ...values, password: target.value })}
                       />
                     </Column>
                   </StyledRow>
@@ -114,10 +122,12 @@ const FormLogin = ({ id = '__FormLogin', onLogin }) => {
                   <Column id={`${id}__Card__Row__Column--Email`}>
                     <StyledButton
                       id={`${id}__Card__Row__Column__Button--Button`}
-                      disabled={handlerLogin.isProcessing}
-                      onClick={() => (isValidEmail ? handlerLogin.submitLogin() : validateEmail(email.value))}
+                      disabled={state.loading}
+                      onClick={() =>
+                        isValidEmail ? performUserAuthentication(values) : performUserIdVerification(values)
+                      }
                     >
-                      {handlerLogin.isProcessing || isProcessingBegin ? <Spinner /> : !isValidEmail ? 'Next' : 'Login'}
+                      {state.loading ? <Spinner /> : !isValidEmail ? 'Next' : 'Login'}
                     </StyledButton>
                   </Column>
                 </StyledRow>
@@ -130,8 +140,6 @@ const FormLogin = ({ id = '__FormLogin', onLogin }) => {
   );
 };
 
-FormLogin.propTypes = {
-  id: PropTypes.string,
-};
+FormLogin.propTypes = {};
 
 export { FormLogin };

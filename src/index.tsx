@@ -10,6 +10,7 @@ import * as serviceWorker from './serviceWorker';
 import { ApolloContextProvider } from './contexts/ApolloContext.js';
 import { ThemeContextProvider } from './contexts/ThemeContext.js';
 import { AuthContextProvider } from './contexts/AuthContext.js';
+import { SessionContextProvider } from './contexts/SessionContext.js';
 import { NotificationContextProvider } from './contexts/NotificationContext.js';
 import { UserDomainContextProvider } from './contexts/UserDomainContext.js';
 import store from './store/index';
@@ -20,17 +21,19 @@ ReactDOM.render(
   <React.StrictMode>
     <ApolloContextProvider>
       <StoreProvider store={store}>
-        <AuthContextProvider>
-          <ThemeContextProvider>
-            <Router>
-              <UserDomainContextProvider>
-                <NotificationContextProvider>
-                  <App />
-                </NotificationContextProvider>
-              </UserDomainContextProvider>
-            </Router>
-          </ThemeContextProvider>
-        </AuthContextProvider>
+        <SessionContextProvider>
+          <AuthContextProvider>
+            <ThemeContextProvider>
+              <Router>
+                <UserDomainContextProvider>
+                  <NotificationContextProvider>
+                    <App />
+                  </NotificationContextProvider>
+                </UserDomainContextProvider>
+              </Router>
+            </ThemeContextProvider>
+          </AuthContextProvider>
+        </SessionContextProvider>
       </StoreProvider>
     </ApolloContextProvider>
   </React.StrictMode>,
