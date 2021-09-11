@@ -12,7 +12,7 @@ import { ThemeContextProvider } from './contexts/ThemeContext.js';
 import { AuthContextProvider } from './contexts/AuthContext.js';
 import { NotificationContextProvider } from './contexts/NotificationContext.js';
 import { UserDomainContextProvider } from './contexts/UserDomainContext.js';
-import store from './store/index.js';
+import store from './store/index';
 
 initializeIcons();
 
