@@ -21,17 +21,17 @@ ReactDOM.render(
   <React.StrictMode>
     <ApolloContextProvider>
       <StoreProvider store={store}>
-        <SessionContextProvider>
-          <ThemeContextProvider>
-            <Router>
-              <UserDomainContextProvider>
+        <Router>
+          <SessionContextProvider>
+            <UserDomainContextProvider>
+              <ThemeContextProvider>
                 <NotificationContextProvider>
                   <App />
                 </NotificationContextProvider>
-              </UserDomainContextProvider>
-            </Router>
-          </ThemeContextProvider>
-        </SessionContextProvider>
+              </ThemeContextProvider>
+            </UserDomainContextProvider>
+          </SessionContextProvider>
+        </Router>
       </StoreProvider>
     </ApolloContextProvider>
   </React.StrictMode>,
