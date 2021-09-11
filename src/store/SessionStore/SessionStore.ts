@@ -1,14 +1,5 @@
-import { Action, ActionOn, action, actionOn, Thunk, thunk, computed, useStoreRehydrated } from 'easy-peasy';
+import { Action, ActionOn, action, actionOn, computed } from 'easy-peasy';
 import { SessionUser, SessionStatus, SessionStages } from './SessionTypes';
-
-/* TODO
-
-- Save on session storage
-- Retrieve session from storage
-- Implement thunk for login and logout
-- Migrate structures to consume store 
-
-*/
 
 export interface SessionModel {
   user: SessionUser;
