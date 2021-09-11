@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ROUTES } from '../data/constants/RouteConstants';
@@ -32,6 +32,7 @@ export const Routes = () => {
       <UnauthRoute path="/login">
         <LoginPage />
       </UnauthRoute>
+
       <AuthRoute exact path="/">
         <ErrorBoundary FallbackComponent={DashboardErrorBoundary}>
           <DashboardPage />

@@ -22,17 +22,15 @@ ReactDOM.render(
     <ApolloContextProvider>
       <StoreProvider store={store}>
         <SessionContextProvider>
-          <AuthContextProvider>
-            <ThemeContextProvider>
-              <Router>
-                <UserDomainContextProvider>
-                  <NotificationContextProvider>
-                    <App />
-                  </NotificationContextProvider>
-                </UserDomainContextProvider>
-              </Router>
-            </ThemeContextProvider>
-          </AuthContextProvider>
+          <ThemeContextProvider>
+            <Router>
+              <UserDomainContextProvider>
+                <NotificationContextProvider>
+                  <App />
+                </NotificationContextProvider>
+              </UserDomainContextProvider>
+            </Router>
+          </ThemeContextProvider>
         </SessionContextProvider>
       </StoreProvider>
     </ApolloContextProvider>

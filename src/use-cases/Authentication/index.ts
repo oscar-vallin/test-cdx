@@ -1,3 +1,4 @@
 import { useLoginUseCase } from './Login';
+import { useLogoutUseCase } from './Logout';
 
-export { useLoginUseCase };
+export { useLoginUseCase, useLogoutUseCase };

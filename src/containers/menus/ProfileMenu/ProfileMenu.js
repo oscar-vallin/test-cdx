@@ -1,31 +1,24 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { useStoreActions } from 'easy-peasy';
 import { UserToken } from '../../../components/images/UserToken';
-import { useAuthContext } from '../../../contexts/AuthContext';
 
-// Components
-
-// Hooks
-
-// Styles
 import { StyledBox } from './ProfileMenu.styles';
 import { ButtonContextual } from '../../../components/buttons/ButtonContextual';
 
+import { useLogoutUseCase } from '../../../use-cases/Authentication';
+import { useSessionStore } from '../../../store/SessionStore';
+
 const ProfileMenu = ({ id = '__ProfileMenu', onUserSettings }) => {
+  /* Migrate to user context */
   const resetTheme = useStoreActions(({ ThemeStore }) => ThemeStore.resetTheme);
-  const { authLogout } = useAuthContext();
+
+  /* Redirect on domain context */
   const history = useHistory();
 
-  const userName = localStorage.getItem('USER_NAME');
-
-  //* HandleLogout
-  const handleLogout = () => {
-    authLogout();
-    resetTheme();
-    history.push('/');
-  };
+  const SessionStore = useSessionStore();
+  const { performUserLogout } = useLogoutUseCase();
 
   const items = [
     {
@@ -37,14 +30,14 @@ const ProfileMenu = ({ id = '__ProfileMenu', onUserSettings }) => {
         onUserSettings();
       },
     },
-    { key: 'ProfileMenu_Logout', text: 'Logout', onClick: () => handleLogout() },
+    { key: 'ProfileMenu_Logout', text: 'Logout', onClick: performUserLogout },
   ];
 
   // Render
   return (
     <StyledBox id={id} noStyle>
       <ButtonContextual items={items}>
-        <UserToken name={userName} />
+        <UserToken name={SessionStore.user.firstNm} />
       </ButtonContextual>
     </StyledBox>
   );

@@ -1,13 +1,17 @@
-import React from 'react';
-import { Route, Redirect, useLocation } from 'react-router-dom';
-
-import { useAuthContext } from '../contexts/AuthContext';
+import React, { useEffect } from 'react';
+import { Route, useHistory, useLocation } from 'react-router-dom';
+import { useSessionStore } from '../store/SessionStore';
 
 export default function AuthenticatedRoute({ children, ...rest }) {
+  const history = useHistory();
   const { pathname, search } = useLocation();
-  const { isAuthenticated } = useAuthContext();
+  const { status } = useSessionStore();
 
-  return (
-    <Route {...rest}>{isAuthenticated ? children : <Redirect to={`/login?redirect=${pathname}${search}`} />}</Route>
-  );
+  useEffect(() => {
+    if (!status.isAuthenticated) {
+      history.push(`/login?redirect=${pathname}${search}`);
+    }
+  }, [status.isAuthenticated]);
+
+  return <Route {...rest}>{children}</Route>;
 }
