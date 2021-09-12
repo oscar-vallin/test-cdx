@@ -20,7 +20,7 @@ import { useColorPalettes } from '../../../../hooks/useColorPalettes';
 import { defaultTheme } from '../../../../styles/themes';
 
 import Theming from '../../../../utils/Theming';
-import { useNotification } from '../../../../contexts/hooks/useNotification';
+import { useNotification } from '../../../../hooks/useNotification';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
 
 const getThemeVariant = ({ themePrimary, neutralPrimary, white }) => ({

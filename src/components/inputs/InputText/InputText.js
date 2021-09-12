@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { StyledTextField } from './InputText.styles';
 
@@ -18,6 +17,8 @@ const InputText = ({
     if (key === 'Enter' && onKeyEnter) return onKeyEnter();
 
     if (onKeyDown) return onKeyDown(key);
+
+    return null;
   };
 
   return (

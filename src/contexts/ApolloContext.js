@@ -1,21 +1,18 @@
-import React from 'react';
+import { createContext, useState, useEffect, useMemo, useContext } from 'react';
 import { ApolloProvider, ApolloClient, InMemoryCache, HttpLink, ApolloLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
-import introspection from '../data/services/introspection.json';
 
 const SERVER_URL = process.env.REACT_APP_API_SERVER;
 
 //
-export const ApolloContext = React.createContext(() => {
+export const ApolloContext = createContext(() => {
   // Initialization
   // i18n.changeLanguage(localStorage.getItem('local.language'));
 });
 
 export const ApolloContextProvider = ({ children }) => {
   // LocalState
-  const [isApolloLoading, setLoading] = React.useState(true);
-  // const [sessionID, setSessionID] = React.useState('');
-  const [saveToken, setSaveToken] = React.useState(false);
+  const [isApolloLoading, setLoading] = useState(true);
 
   let authToken = localStorage.getItem('AUTH_TOKEN');
 
@@ -40,7 +37,7 @@ export const ApolloContextProvider = ({ children }) => {
     return forward(operation).map((response) => {
       const context = operation.getContext();
 
-      const { headers, status } = context.response;
+      const { headers } = context.response;
 
       if (headers) {
         const authHeader = headers.get('x-auth-token');
@@ -54,6 +51,7 @@ export const ApolloContextProvider = ({ children }) => {
     });
   });
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const client = new ApolloClient({
     link: afterwareLink.concat(authLink.concat(httpLink)),
     // cache: new InMemoryCache({ possibleTypes: introspection.possibleTypes }),
@@ -67,10 +65,11 @@ export const ApolloContextProvider = ({ children }) => {
   });
 
   // Component Did Mount
-  React.useEffect(() => {
-    const localFunction = async () => {
+  useEffect(() => {
+    const localFunction = () => {
       // tokenFunc();
-      authToken = await localStorage.getItem('AUTH_TOKEN');
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      authToken = localStorage.getItem('AUTH_TOKEN');
       setLoading(false);
     };
 
@@ -78,7 +77,7 @@ export const ApolloContextProvider = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const values = React.useMemo(() => ({ isApolloLoading, client }), [isApolloLoading, client]);
+  const values = useMemo(() => ({ isApolloLoading, client }), [isApolloLoading, client]);
 
   // Finally, return the interface that we want to expose to our other components
   return (
@@ -90,7 +89,7 @@ export const ApolloContextProvider = ({ children }) => {
 
 //
 export function useApolloContext() {
-  const context = React.useContext(ApolloContext);
+  const context = useContext(ApolloContext);
 
   return context;
 }

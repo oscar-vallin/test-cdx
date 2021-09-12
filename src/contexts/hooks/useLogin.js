@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useBeginLoginLazyQuery } from '../../data/services/graphql';
-import { useCurrentUser } from './useCurrentUser';
 
 export const useLoginBegin = (resetInterval = null) => {
   const [isProcessing, setProcessing] = useState(false);
@@ -8,7 +7,6 @@ export const useLoginBegin = (resetInterval = null) => {
   const [isValidEmail, setValidEmail] = useState();
   const [errorMessage, setErrorMessage] = useState();
   const [apiData, setApiData] = useState();
-  const [apiLoading, setApiLoading] = useState();
   const [apiError, setApiError] = useState();
   // const [password, setPassword] = useUsername(_password);
   //
@@ -29,8 +27,8 @@ export const useLoginBegin = (resetInterval = null) => {
   }, [error]);
 
   useEffect(() => {
-    if (apiLoading) {
-      return false;
+    if (loading) {
+      return;
     }
 
     if (apiError) {
@@ -47,7 +45,8 @@ export const useLoginBegin = (resetInterval = null) => {
     }
 
     setProcessing(false);
-  }, [apiData, apiError, apiLoading]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [apiData, apiError, loading]);
 
   useEffect(() => {
     let timeout;
@@ -57,6 +56,7 @@ export const useLoginBegin = (resetInterval = null) => {
     return () => {
       clearTimeout(timeout);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [errorMessage, isValidEmail]);
 
   //
@@ -67,15 +67,12 @@ export const useLoginBegin = (resetInterval = null) => {
     setValidEmail(false);
   };
 
-  const validateEmail = (email) => {
-    clearState();
-    const validationResult = new RegExp(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g).test(email);
-    if (validationResult) {
-      apiBeginLogin(email);
-    } else {
-      setValidEmail(false);
-      setErrorMessage('Please provide a valid email address to proceed');
-    }
+  const clearState = () => {
+    setValidEmail(undefined);
+    setErrorMessage(undefined);
+    setApiData();
+    setApiError();
+    setProcessing();
   };
 
   const apiBeginLogin = async (__username) => {
@@ -83,12 +80,16 @@ export const useLoginBegin = (resetInterval = null) => {
     await _apiBeginLogin();
   };
 
-  const clearState = () => {
-    setValidEmail(undefined);
-    setErrorMessage(undefined);
-    setApiData();
-    setApiError();
-    setProcessing();
+  const validateEmail = (email) => {
+    clearState();
+    // eslint-disable-next-line no-useless-escape
+    const validationResult = new RegExp(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g).test(email);
+    if (validationResult) {
+      apiBeginLogin(email);
+    } else {
+      setValidEmail(false);
+      setErrorMessage('Please provide a valid email address to proceed');
+    }
   };
 
   return {

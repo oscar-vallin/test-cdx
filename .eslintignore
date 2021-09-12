@@ -1,7 +1,7 @@
 src/serviceWorker.ts
 src/tests/
-**/*.js
-**/*.tsx
+# **/*.js
+# **/*.tsx
 **/*.snap.js
 **/*.test.js
 **/*.test.tsx

@@ -22,3 +22,5 @@ export const StyledDiv = styled.div`
     }
   }
 `;
+
+export const StyledButton = styled.button``;

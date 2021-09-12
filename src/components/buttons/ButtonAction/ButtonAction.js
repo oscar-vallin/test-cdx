@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { StyledButtonAction } from './ButtonAction.styles';
 
@@ -15,7 +14,7 @@ const buttonIcons = {
   desc: 'SortDown',
 };
 
-const ButtonAction = ({ id = '__Button', children, icon, primary = true, disabled = false, onClick, ...props }) => {
+const ButtonAction = ({ id = '__Button', children, icon, disabled = false, onClick, ...props }) => {
   const _icon = { iconName: buttonIcons[icon] };
 
   return (

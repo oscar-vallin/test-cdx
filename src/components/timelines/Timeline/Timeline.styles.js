@@ -15,8 +15,13 @@ export const StyledLi = styled.li`
 
   .item__status {
     align-items: center;
-    background: ${({ theme, status }) =>
-      status === 'DONE' ? theme.colors.custom.success : status === 'PROGRESS' ? theme.colors.white : '#eee'};
+    background: ${({ theme, status }) => {
+      if (status === 'DONE') return theme.colors.custom.success;
+
+      if (status === 'PROGRESS') return theme.colors.white;
+
+      return '#EEE';
+    }};
     border-radius: 50%;
     color: ${({ theme, status }) => (status === 'DONE' ? theme.colors.white : theme.colors.black)};
     display: flex;

@@ -1,20 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { ComboBox } from 'office-ui-fabric-react/lib/ComboBox';
 import { useAmPolicyVerbForFacetLazyQuery } from '../../../data/services/graphql';
 
 const parseToComboBoxOption = ({ name, value }) => ({ key: value, text: name });
 
-const CDXVerbCombobox = ({ service = '', facet = '', value = '', orgSid = 1, onChange = () => {} }) => {
+const CDXVerbCombobox = ({
+  service = '',
+  facet = '',
+  value = '',
+  orgSid = 1,
+  onChange = () => {
+    return {};
+  },
+}) => {
   const [verbs, setVerbs] = useState([]);
   const [selectedKey, setSelectedKey] = useState(value);
-  const [useAmPolicyVerbForFacetQuery, { data, loading }] = useAmPolicyVerbForFacetLazyQuery();
+  const [apiAmPolicyVerbForFacetQuery, { data, loading }] = useAmPolicyVerbForFacetLazyQuery();
 
   useEffect(() => {
     if (service && facet) {
-      useAmPolicyVerbForFacetQuery({
+      apiAmPolicyVerbForFacetQuery({
         variables: { orgSid, cdxService: service, cdxFacet: facet },
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [service, facet]);
 
   useEffect(() => {

@@ -4,7 +4,9 @@ import { useAuthContext } from './AuthContext';
 import { useNavigateToNewDomainLazyQuery, useCurrentOrgNavLazyQuery } from '../data/services/graphql';
 import { useOrgSid } from '../hooks/useOrgSid';
 
-export const UserDomainContext = React.createContext(() => {});
+export const UserDomainContext = React.createContext(() => {
+  return {};
+});
 
 const INITIAL_STATE = {};
 
@@ -14,14 +16,11 @@ export const UserDomainContextProvider = ({ children }) => {
   const { orgSid } = useOrgSid();
   const [userDomain, setUserDomain] = useState({ ...INITIAL_STATE });
 
-  const [fetchDashNav, { data: dashNav, loading: isFetchingDashNav, error: dashNavError }] =
-    useNavigateToNewDomainLazyQuery();
+  const [fetchDashNav, { data: dashNav }] = useNavigateToNewDomainLazyQuery();
 
-  const [fetchOrgNav, { data: orgNav, loading: isFetchingOrgNav, error: orgNavError }] =
-    useNavigateToNewDomainLazyQuery();
+  const [fetchOrgNav, { data: orgNav, loading: isFetchingOrgNav }] = useNavigateToNewDomainLazyQuery();
 
-  const [fetchCurrentOrgNav, { data: currentOrgNav, loading: isFetchingCurrentOrgNav, error: currentOrgNavError }] =
-    useCurrentOrgNavLazyQuery();
+  const [fetchCurrentOrgNav, { data: currentOrgNav }] = useCurrentOrgNavLazyQuery();
 
   useEffect(() => {
     if (isAuthenticated && !isAuthenticating) {
@@ -31,6 +30,7 @@ export const UserDomainContextProvider = ({ children }) => {
         },
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, !isAuthenticating]);
 
   useEffect(() => {
@@ -47,6 +47,7 @@ export const UserDomainContextProvider = ({ children }) => {
         },
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, orgSid]);
 
   useEffect(() => {
@@ -58,12 +59,14 @@ export const UserDomainContextProvider = ({ children }) => {
 
       setUserDomain({ ...userDomain, ...domain });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dashNav, orgNav]);
 
   useEffect(() => {
     if (currentOrgNav) {
       updateCurrentNav(currentOrgNav.currentOrgNav);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentOrgNav]);
 
   return (

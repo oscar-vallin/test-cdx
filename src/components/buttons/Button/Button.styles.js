@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 import { PrimaryButton } from '@fluentui/react';
 
+const getBorderVariant = (theme, variant) => {
+  return `1px solid ${variant === 'secondary' ? theme.colors.black : 'transparent'}`;
+};
+
 const getVariant = (theme, variant) => {
   const VARIANTS = {
     primary: { background: theme.colors.themePrimary, color: '#fff' },
@@ -15,16 +19,16 @@ const getVariant = (theme, variant) => {
 };
 
 export const StyledButton = styled(PrimaryButton)`
-  font-size: .875rem;
+  font-size: 0.875rem;
   width: ${({ block }) => (block ? '100%' : 'auto')};
-  
+
   &,
   & + button {
     background: ${({ theme, variant }) => getVariant(theme, variant).background};
-    border ${({ theme, variant }) => `1px solid ${variant === 'secondary' ? theme.colors.black : 'transparent'}`};
+    border: ${({ theme, variant }) => getBorderVariant(theme, variant)};
     color: ${({ theme, variant }) => getVariant(theme, variant).color};
     white-space: nowrap;
-    
+
     &:hover {
       background: ${({ theme, variant }) => getVariant(theme, variant).background};
       color: ${({ theme, variant }) => getVariant(theme, variant).color};

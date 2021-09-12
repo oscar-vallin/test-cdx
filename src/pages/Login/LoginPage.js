@@ -1,7 +1,7 @@
 import React, { useEffect, useState, memo } from 'react';
 import { LayoutLogin } from '../../layouts/LayoutLogin';
 import { FormLogin } from '../../containers/forms/FormLogin';
-import { useNotification } from '../../contexts/hooks/useNotification';
+import { useNotification } from '../../hooks/useNotification';
 
 const _LoginPage = () => {
   const [isLogout, setLogout] = useState();

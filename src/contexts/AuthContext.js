@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useStoreActions, useStoreState } from 'easy-peasy';
 
-import { usePasswordLoginMutation, useCurrentUserLazyQuery } from '../data/services/graphql';
+import { usePasswordLoginMutation } from '../data/services/graphql';
 import { useErrorMessage } from '../hooks/useErrorMessage';
 import { getRouteByApiId } from '../data/constants/RouteConstants';
+// eslint-disable-next-line import/no-cycle
 import { useCurrentUser } from './hooks/useCurrentUser';
 import { useLogout } from './hooks/useLogout';
 import { DEFAULT_POLLING_TIME } from '../data/constants/TableConstants';
 
+// eslint-disable-next-line import/no-cycle
 import { useCurrentUserTheme } from '../hooks/useCurrentUserTheme';
 import { LayoutLogin } from '../layouts/LayoutLogin';
 import { Spacing } from '../components/spacings/Spacing';
 import { Spinner } from '../components/spinners/Spinner';
 import { StyledCard } from '../containers/forms/FormLogin/FormLogin.styles';
-import { useThemeContext } from './ThemeContext';
-import Theming from '../utils/Theming';
+// eslint-disable-next-line import/no-cycle
 
 //
 export const AuthContext = React.createContext(() => {
@@ -22,8 +23,7 @@ export const AuthContext = React.createContext(() => {
 });
 
 export const AuthContextProvider = ({ children }) => {
-  const { changeTheme } = useThemeContext();
-  const { userTheme, isLoadingTheme, fetchTheme } = useCurrentUserTheme();
+  const { isLoadingTheme } = useCurrentUserTheme();
 
   const AUTH_DATA = localStorage.getItem('AUTH_DATA');
   const [selectedPage, setSelectedPage] = useState('/');
@@ -37,7 +37,6 @@ export const AuthContextProvider = ({ children }) => {
   const [authHistory, setHistory] = useState();
   const [token, setToken] = useState(localStorage);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
-  const [pollingTime, setPollingTime] = useState(DEFAULT_POLLING_TIME);
   const [errorMessage, setErrorMessage] = useState('');
 
   const { authData, orgSid } = useStoreState(({ AuthStore, ActiveOrgStore }) => ({
@@ -53,16 +52,19 @@ export const AuthContextProvider = ({ children }) => {
   const { currentUserQuery, isCurrentUserLogged, setLoggedIn } = useCurrentUser(user, password);
   const { logoutQuery } = useLogout();
 
-  const [passwordLoginMutation, { data, loading, error }] = usePasswordLoginMutation({
+  const [passwordLoginMutation, { data, error }] = usePasswordLoginMutation({
     variables: {
       userId: user,
       password,
     },
   });
 
+  const pollingTime = DEFAULT_POLLING_TIME;
+
   const authError = useErrorMessage();
 
   // Component Did Mount
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     const localFunction = async () => {
       setLoading(false);
@@ -72,10 +74,12 @@ export const AuthContextProvider = ({ children }) => {
     };
 
     await localFunction();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     setAuthData(AUTH_DATA ? JSON.parse(AUTH_DATA) : null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -85,16 +89,17 @@ export const AuthContextProvider = ({ children }) => {
         updateOrgSid(_orgSid);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   //
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     const _token = await localStorage.getItem('AUTH_TOKEN');
 
     setToken(_token);
     setAuthenticated(!!_token && !!isCurrentUserLogged);
     setAuthenticating(false);
-    // setHistory(history);
   }, [isCurrentUserLogged]);
 
   //
@@ -127,31 +132,32 @@ export const AuthContextProvider = ({ children }) => {
       const isCompleted = (step ?? '') === 'COMPLETE';
 
       if (isCompleted) {
-        const { token, session } = tokenUser;
+        const { xToken, session } = tokenUser;
         const { id, orgId } = session;
-        const { navItems, selectedPage, type } = loginCompleteDomain;
+        const { navItems, xSelectedPage, type } = loginCompleteDomain;
 
-        const authData = {
+        const xAuthData = {
           id,
           orgId,
-          selectedPage,
+          selectedPage: xSelectedPage,
           userType: type,
           navItems,
           step,
-          token,
+          token: xToken,
         };
 
-        localStorage.setItem('AUTH_DATA', JSON.stringify(authData));
+        localStorage.setItem('AUTH_DATA', JSON.stringify(xAuthData));
         localStorage.setItem('USER_NAME', session.firstNm);
-        setAuthData(authData);
+        setAuthData(xAuthData);
         setAuthenticated(true);
 
-        updateOrgSid(authData?.orgId);
-        localStorage.setItem('ORGS_ID', authData?.orgId);
+        updateOrgSid(xAuthData?.orgId);
+        localStorage.setItem('ORGS_ID', xAuthData?.orgId);
         //
         // Set Bearer Token
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, error]);
 
   //
@@ -187,6 +193,7 @@ export const AuthContextProvider = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authData, authHistory]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     if (user?.length && password?.length) {
       try {
@@ -248,14 +255,6 @@ export const AuthContextProvider = ({ children }) => {
     setLoggedIn(false);
   };
 
-  //
-  // Set Polling timeout.
-  //
-  const updatePollingTime = (iTimer) => {
-    if (iTimer) setPollingTime(iTimer);
-    else setPollingTime(30000);
-  };
-
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const values = React.useMemo(
     () => ({
@@ -273,6 +272,7 @@ export const AuthContextProvider = ({ children }) => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
       authLogout,
     }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [isContextLoading, isAuthenticating, isAuthenticated, authData, authError, token, pollingTime, orgSid]
   );
 
