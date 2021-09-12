@@ -11,7 +11,7 @@ const TableEnrollment = ({ id = 'TableEnrollmentStats' }) => {
   const { tableProps, tableItems, tableGroups, excludedCounter, error } = useTable(ORG_SID, WORK_ORDER_ID);
 
   return (
-    <Box>
+    <Box id={id}>
       <BoxCaption>
         <Text>{error}</Text>
       </BoxCaption>

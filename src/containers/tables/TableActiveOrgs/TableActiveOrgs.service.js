@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { format, compareAsc } from 'date-fns';
+import { format } from 'date-fns';
 import { useWorkPacketStatusesQuery } from '../../../data/services/graphql';
 import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { useInputValue } from '../../../hooks/useInputValue';
@@ -16,23 +16,6 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
       filter: argFilter,
     },
   });
-
-  // * Component Did Mount
-  useEffect(() => {
-    setLoading(false);
-  }, []);
-
-  useEffect(() => {
-    const doEffect = () => {
-      const _items = buildItems(data);
-      setItems(_items);
-      return _items;
-    };
-
-    if (data) {
-      doEffect();
-    }
-  }, [data]);
 
   // Build Items.
   const buildItems = (_data) => {
@@ -54,7 +37,26 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
         }
       );
     }
+
+    return null;
   };
+
+  // * Component Did Mount
+  useEffect(() => {
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    const doEffect = () => {
+      const _items = buildItems(data);
+      setItems(_items);
+      return _items;
+    };
+
+    if (data) {
+      doEffect();
+    }
+  }, [data]);
 
   // * Loading Data
   useEffect(() => {

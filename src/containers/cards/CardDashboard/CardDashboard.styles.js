@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Row as LayoutRow, Column as LayoutColumn } from '../../../components/layouts';
+import { Column as LayoutColumn } from '../../../components/layouts';
 import { Text } from '../../../components/typography';
 
 export const StyledColumn = styled(LayoutColumn)`

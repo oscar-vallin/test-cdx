@@ -2,13 +2,6 @@ import styled from 'styled-components';
 import { Box as LayoutBox, Row as LayoutRow, Column as LayoutColumn } from '../../../components/layouts';
 import { Button } from '../../../components/buttons/Button';
 
-// const COLOR_MAIN = '#1a8fff';
-// const COLOR_TEXT = '#605e5c';
-// const COLOR_TEXT_LIGHT = '#CCC';
-// const COLOR_BG = '#F9F9F9';
-// const COLOR_NEUTRAL = '#FFF';
-// const COLOR_BORDER = '#EEE';
-
 const COLOR_MAIN = ({ theme }) => theme.colors.themePrimary;
 const COLOR_TEXT = ({ theme }) => theme.colors.neutralPrimary;
 const COLOR_TEXT_LIGHT = ({ theme }) => theme.colors.neutralTertiaryAlt;
@@ -16,15 +9,7 @@ const COLOR_BG = ({ theme }) => theme.colors.neutralLighterAlt;
 const COLOR_NEUTRAL = ({ theme }) => theme.colors.white;
 const COLOR_BORDER = ({ theme }) => theme.colors.neutralLight;
 
-// const COLOR_BACKGROUND = '#f3f2f1';
 const COLOR_BACKGROUND = ({ theme }) => theme.colors.neutralLighter;
-
-// --main-color: #1a8fff;
-// --text-color: #777;
-// --text-color-light: #ccc;
-// --border-color: #eee;
-// --bg-color: #f9f9f9;
-// --neutral-color: #fff;
 
 export const Container = styled(LayoutBox)`
   width: 80%;
@@ -323,7 +308,13 @@ export const WeekViewContainer = styled.div`
   border-left-style: solid;
   border-right-style: solid;
 
-  color: ${({ isSameDay, isSameMonth }) => (isSameDay ? COLOR_MAIN : isSameMonth ? COLOR_TEXT : COLOR_TEXT_LIGHT)};
+  color: ${({ isSameDay, isSameMonth }) => {
+    if (isSameDay) return COLOR_MAIN;
+
+    if (isSameMonth) return COLOR_TEXT;
+
+    return COLOR_TEXT_LIGHT;
+  }};
   font-weight: ${({ isSameDay }) => (isSameDay ? '600' : '400')};
   background-color: ${COLOR_NEUTRAL};
 `;

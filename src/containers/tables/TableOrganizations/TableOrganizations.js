@@ -1,15 +1,11 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { Table } from '../../../components/tables/Table';
 
-import { Box, Row, Column, Container, RightColumn } from './TableOrganizations.styles';
-import { useTable, useInputs } from './TableOrganizations.service';
-import { InputText } from '../../../components/inputs/InputText';
-import { InputDateRange } from '../../../components/inputs/InputDateRange';
+import { Box, Container } from './TableOrganizations.styles';
+import { useTable } from './TableOrganizations.service';
 
-const TableOrganizations = ({ id = 'TableOrganizations', data, dateRange, filter }) => {
+const TableOrganizations = ({ id = 'TableOrganizations', data }) => {
   const { tableProps } = useTable(data);
-  const { localInput, startDate, endDate } = useInputs();
 
   return (
     <Container>
