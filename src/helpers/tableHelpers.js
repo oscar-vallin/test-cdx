@@ -60,34 +60,48 @@ export const getStartDay = (date) => {
   const _newDate = new Date();
   const hour = getHours(_newDate);
 
-  return date === 'today'
-    ? hour < 9
-      ? subDays(_newDate, 1)
-      : startOfDay(_newDate)
-    : date === 'yesterday'
-    ? startOfYesterday(_newDate)
-    : date === 'thisMonth'
-    ? startOfMonth(_newDate)
-    : date === 'lastMonth'
-    ? startOfMonth(subMonths(_newDate, 1))
-    : startOfDay(_newDate);
+  switch (date) {
+    case 'today':
+      if (hour < 9) return subDays(_newDate, 1);
+
+      return startOfDay(_newDate);
+
+    case 'yesterday':
+      return startOfYesterday(_newDate);
+
+    case 'thisMonth':
+      return startOfMonth(_newDate);
+
+    case 'lastMonth':
+      return startOfMonth(subMonths(_newDate, 1));
+
+    default:
+      return startOfDay(_newDate);
+  }
 };
 
 export const getEndDay = (date) => {
   const _newDate = new Date();
   const hour = getHours(_newDate);
 
-  return date === 'today'
-    ? hour < 9
-      ? endOfDay(_newDate)
-      : addDays(_newDate, 1)
-    : date === 'yesterday'
-    ? endOfYesterday(_newDate)
-    : date === 'thisMonth'
-    ? endOfMonth(_newDate)
-    : date === 'lastMonth'
-    ? endOfMonth(subMonths(_newDate, 1))
-    : endOfDay(_newDate);
+  switch (date) {
+    case 'today':
+      if (hour < 9) return endOfDay(_newDate);
+
+      return addDays(_newDate, 1);
+
+    case 'yesterday':
+      return endOfYesterday(_newDate);
+
+    case 'thisMonth':
+      return endOfMonth(_newDate);
+
+    case 'lastMonth':
+      return endOfMonth(subMonths(_newDate, 1));
+
+    default:
+      return endOfDay(_newDate);
+  }
 };
 
 export const getDates = (date) => {
@@ -111,6 +125,11 @@ export const getDates = (date) => {
     case 'lastMonth':
       startDate = startOfMonth(subMonths(_newDate, 1));
       endDate = endOfMonth(subMonths(_newDate, 1));
+      break;
+
+    default:
+      startDate = startOfDay(_newDate);
+      endDate = startOfDay(_newDate);
       break;
   }
 
