@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { StyledImage } from './Image.styles';
 
@@ -11,7 +10,7 @@ const images = {
 const Image = ({ id = '__Image', name, src, alt }) => {
   const _src = images[name] ?? src;
 
-  return <StyledImage src={_src} alt={alt} />;
+  return <StyledImage id={id} src={_src} alt={alt} />;
 };
 
 Image.propTypes = {

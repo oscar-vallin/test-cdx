@@ -1,4 +1,3 @@
-import React from 'react';
 import { CDXBadge } from './Badge.js';
 import { mountWithTheme } from '../../../utils/testUtils';
 

@@ -1,20 +1,5 @@
 import styled from 'styled-components';
-// import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Link } from 'react-router-dom';
-
-const getVariant = ({ colors }, variant) => {
-  const Variants = {
-    primary: { background: colors.themePrimary, color: colors.white },
-    // light: { background: colors.themeLight, color: colors. },
-    success: { background: colors.successBackground, color: colors.success },
-    error: { background: colors.errorBackground, color: colors.error },
-    severe: { background: colors.severeError, color: colors.white },
-    warning: { background: colors.warningBackground, color: colors.warning },
-    info: { background: colors.infoBackground, color: colors.info },
-  };
-
-  return Variants[variant];
-};
 
 export const StyledSpan = styled.span`
   align-items: center;
@@ -23,7 +8,13 @@ export const StyledSpan = styled.span`
   font-size: 0.75rem;
   font-weight: ${({ theme }) => theme.fontWeights.normal};
   justify-content: center;
-  border-color: ${({ theme, type }) => (type === 0 ? `red` : type === 1 ? `yellow` : 'blue')};
+  border-color: ${({ type }) => {
+    if (type === 0) return `red`;
+
+    if (type === 1) return `yellow`;
+
+    return 'blue';
+  }};
   white-space: nowrap;
 `;
 
@@ -32,10 +23,20 @@ export const StyledContainer = styled.div`
   justify-content: center;
   align-items: center;
   white-space: nowrap;
-  color: ${({ theme, type }) =>
-    type === 0 ? theme.colors.error : type === 1 ? theme.colors.warning : theme.colors.info};
-  border-color: ${({ theme, type }) =>
-    type === 0 ? theme.colors.error : type === 1 ? theme.colors.warning : theme.colors.info};
+  color: ${({ theme, type }) => {
+    if (type === 0) return theme.colors.error;
+
+    if (type === 1) return theme.colors.warning;
+
+    return theme.colors.info;
+  }};
+  border-color: ${({ theme, type }) => {
+    if (type === 0) return theme.colors.error;
+
+    if (type === 1) return theme.colors.warning;
+
+    return theme.colors.info;
+  }};
 
   margin-left: 5px;
   border-width: 1px;

@@ -36,7 +36,13 @@ export const StyledText = styled(Text)`
   display: flex;
   width: 100%;
   font-weight: ${({ bold, theme }) => (bold ? theme.fontWeights.bold : theme.fontWeights.normal)};
-  justify-content: ${({ left, right }) => (left ? 'flex-start' : right ? 'flex-end' : 'center')};
+  justify-content: ${({ left, right }) => {
+    if (left) return 'flex-start';
+
+    if (right) return 'flex-end';
+
+    return 'center';
+  }};
   align-items: center;
 `;
 

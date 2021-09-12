@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 
 import { PieChart, Pie, Cell, Label } from 'recharts';
@@ -9,7 +8,7 @@ const ChartDonut = ({ id = '__ChartDonut', label, size = 50, data }) => {
   const _data = data;
 
   return (
-    <PieChart width={size + size * 1.1} height={size + size * 1.1}>
+    <PieChart id={id} width={size + size * 1.1} height={size + size * 1.1}>
       <Pie
         dataKey="value"
         nameKey="name"

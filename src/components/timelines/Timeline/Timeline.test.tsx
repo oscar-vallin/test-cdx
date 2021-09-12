@@ -1,4 +1,3 @@
-import React from 'react';
 import CDXTimeline from './Timeline.js';
 import { mountWithTheme } from '../../../utils/testUtils';
 

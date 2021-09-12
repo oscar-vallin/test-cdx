@@ -2,11 +2,11 @@ import { SpinnerSize } from '@fluentui/react';
 import { StyleConstants } from '../../../data/constants/StyleConstants';
 
 export const getSpinnerSize = (size) => {
-  return size === StyleConstants.SPINNER_XSMALL
-    ? SpinnerSize.xSmall
-    : size === StyleConstants.SPINNER_MEDIUM
-    ? SpinnerSize.medium
-    : size === 'lg'
-    ? SpinnerSize.large
-    : SpinnerSize.small;
+  if (size === StyleConstants.SPINNER_XSMALL) return SpinnerSize.xSmall;
+
+  if (size === StyleConstants.SPINNER_MEDIUM) return SpinnerSize.medium;
+
+  if (size === 'lg') return SpinnerSize.large;
+
+  return SpinnerSize.small;
 };

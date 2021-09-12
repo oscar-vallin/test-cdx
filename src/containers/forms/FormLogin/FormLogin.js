@@ -10,7 +10,7 @@ import { Spinner } from '../../../components/spinners/Spinner';
 import { useLogin } from './FormLogin.services';
 import { useLoginBegin } from '../../../contexts/hooks/useLogin';
 import { useAuthContext } from '../../../contexts/AuthContext';
-import { useNotification } from '../../../contexts/hooks/useNotification';
+import { useNotification } from '../../../hooks/useNotification';
 // Styles
 import {
   StyledBox,

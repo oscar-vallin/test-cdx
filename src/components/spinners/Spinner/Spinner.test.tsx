@@ -1,4 +1,3 @@
-import React from 'react';
 import { shallow } from 'enzyme';
 import { Spinner as Component } from './index.js';
 import { StyleConstants } from '../../../data/constants/StyleConstants.js';

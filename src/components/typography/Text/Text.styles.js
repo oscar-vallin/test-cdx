@@ -6,7 +6,12 @@ export const StyledText = styled.span`
   font: ${({ theme }) => theme.fontStyles.normal};
   font-size: ${({ theme, size }) => theme.fontSizes[size]};
   font-weight: ${({ theme, variant }) => theme.fontWeights[variant]};
-  text-align: ${({ center, right }) => (center ? 'center' : right ? 'end' : 'start')};
+  text-align: ${({ center, right }) => {
+    if (center) return 'center';
+    if (right) return 'end';
+
+    return 'start';
+  }};
   text-transform: ${({ transform }) => transform};
   word-break: ${({ breakWord }) => `break-${breakWord}`};
   width: ${({ center, right }) => (center || right ? '100%' : 'auto')};
