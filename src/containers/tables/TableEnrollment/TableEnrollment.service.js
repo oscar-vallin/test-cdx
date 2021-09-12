@@ -16,28 +16,6 @@ export const useTable = (argOrgSid, argWorkerId) => {
       workOrderId: argWorkerId,
     },
   });
-
-  // * Component Did Mount
-  useEffect(() => {
-    setLoading(false);
-  }, []);
-
-  // * Component Did Mount
-  useEffect(() => {
-    setLoading(loading);
-  }, [loading]);
-
-  useEffect(() => {
-    const doEffect = () => {
-      buildItems(data);
-      buildGroups();
-    };
-
-    if (data) {
-      doEffect();
-    }
-  }, [data]);
-
   // Build Items.
   const buildItems = (_data) => {
     if (_data) {
@@ -119,6 +97,27 @@ export const useTable = (argOrgSid, argWorkerId) => {
       { id: 2, name: 'Excluded Subscribers / Enrollments', startIndex: 5, count: 5, level: 0 },
     ];
   };
+
+  // * Component Did Mount
+  useEffect(() => {
+    setLoading(false);
+  }, []);
+
+  // * Component Did Mount
+  useEffect(() => {
+    setLoading(loading);
+  }, [loading]);
+
+  useEffect(() => {
+    const doEffect = () => {
+      buildItems(data);
+      buildGroups();
+    };
+
+    if (data) {
+      doEffect();
+    }
+  }, [data]);
 
   return {
     tableProps: {

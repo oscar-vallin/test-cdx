@@ -1,26 +1,23 @@
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
-import { useExchangeActivityInProcessQuery } from '../../../data/services/graphql';
 import { useActivityComplete } from './hooks/useActivityComplete';
 import { useActivityErrored } from './hooks/useActivityErrored';
 import { useActivityProcess } from './hooks/useActivityProcess';
 import { formatField } from '../../../helpers/tableHelpers';
 
-export const useTable = (argOrgSid, argDateRange, argFilter) => {
+export const useTable = () => {
   const [_loadingProc, setLoadingProc] = useState(true);
   const [_loadingComp, setLoadingComp] = useState(true);
   const [_loadingError, setLoadingError] = useState(true);
   const [itemsProc, setItemsProc] = useState([]);
   const [itemsComp, setItemsComp] = useState([]);
   const [itemsError, setItemsError] = useState([]);
-  // const [columns, setColumns] = useState([]);
 
   const { dataComplete, loadingComp } = useActivityComplete();
   const { dataError, loadingError } = useActivityErrored();
   const { dataProcess, loadingProc, apiError } = useActivityProcess();
 
   // * Component Did Mount.
-  useEffect(() => {}, []);
 
   useEffect(() => {
     const doEffect = () => {
@@ -53,9 +50,10 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
       setLoadingProc(false);
       setLoadingComp(false);
       setLoadingError(false);
-      return doEffect();
+      doEffect();
     }
   }, [dataProcess, dataComplete, dataError]);
+
   // * Loading Data
   useEffect(() => {
     setLoadingProc(loadingProc);

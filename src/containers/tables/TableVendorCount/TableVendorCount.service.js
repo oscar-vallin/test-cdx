@@ -16,26 +16,6 @@ export const useTable = (argOrgSid, argWorkerId) => {
     },
   });
 
-  // * Component Did Mount
-  useEffect(() => {
-    setLoading(false);
-  }, []);
-
-  // * Component Did Mount
-  useEffect(() => {
-    setLoading(loading);
-  }, [loading]);
-
-  useEffect(() => {
-    const doEffect = () => {
-      buildItems(data);
-    };
-
-    if (data) {
-      doEffect();
-    }
-  }, [data]);
-
   // Build Items.
   const buildItems = (_data) => {
     if (_data) {
@@ -63,6 +43,26 @@ export const useTable = (argOrgSid, argWorkerId) => {
       setTableTotals(arrayTotals);
     }
   };
+
+  // * Component Did Mount
+  useEffect(() => {
+    setLoading(false);
+  }, []);
+
+  // * Component Did Mount
+  useEffect(() => {
+    setLoading(loading);
+  }, [loading]);
+
+  useEffect(() => {
+    const doEffect = () => {
+      buildItems(data);
+    };
+
+    if (data) {
+      doEffect();
+    }
+  }, [data]);
 
   return {
     tableProps: {

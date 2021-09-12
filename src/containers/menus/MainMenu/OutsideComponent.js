@@ -1,6 +1,5 @@
-import { useRef, useEffect, Fragment } from 'react';
+import { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { StyledBox } from './MainMenu.styles';
 
 const useOutsideComponent = (ref, collapseClick, hide) => {
   useEffect(() => {
@@ -13,6 +12,7 @@ const useOutsideComponent = (ref, collapseClick, hide) => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ref, hide]);
 };
 

@@ -1,18 +1,15 @@
-import React, { useEffect, useState } from 'react';
 import { MessageBarType } from '@fluentui/react';
 import { MessageBar } from 'office-ui-fabric-react';
 import { useHistory } from 'react-router-dom';
 import { StyledBox, StyledNav } from '../../../layouts/LayoutAdmin/LayoutAdmin.styles';
 import { StyledColumn } from './AdminErrorBoundary.styles';
 import { LayoutDashboard } from '../../../layouts/LayoutDashboard';
-import { Row, Column } from '../../../components/layouts';
+import { Row } from '../../../components/layouts';
 import { getRouteByApiId } from '../../../data/constants/RouteConstants';
 import { useUserDomain } from '../../../contexts/hooks/useUserDomain';
 
-import { useOrgSid } from '../../../hooks/useOrgSid';
-
 const parseLinks = (links = [], sidebarOpt) => {
-  return links.map(({ appDomain, label, subNavItems, page }) => ({
+  return links.map(({ label, subNavItems, page }) => ({
     name: label,
     ...(subNavItems
       ? {
@@ -35,13 +32,10 @@ const AdminErrorBoundary = ({
   id = 'AdminErrorBoundary',
   menuOptionSelected = 'admin',
   sidebarOptionSelected = '',
-  children,
 }) => {
-  const { orgSid } = useOrgSid();
   const history = useHistory();
   const {
     userDomain: { organization },
-    isFetchingOrgNav,
   } = useUserDomain();
 
   return (

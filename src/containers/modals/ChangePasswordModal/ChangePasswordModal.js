@@ -1,18 +1,11 @@
-import React, { useState, useEffect, Fragment } from 'react';
+/* eslint-disable no-alert */
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { InputText } from '../../../components/inputs/InputText';
 import { Button } from '../../../components/buttons/Button';
 import { Modal } from '../../../components/modals/Modal';
 import { Spacing } from '../../../components/spacings/Spacing';
 import { StyledDiv } from './ChangePasswordModal.styles';
 
 const ChangePasswordModal = ({ hidden = false, ...props }) => {
-  const [isFormValid, setIsFormValid] = useState(false);
-  const [passwords, setPasswords] = useState({
-    current: '',
-    new: '',
-  });
-
   const ModalFooter = () => {
     return (
       <>
@@ -26,8 +19,6 @@ const ChangePasswordModal = ({ hidden = false, ...props }) => {
       </>
     );
   };
-
-  useEffect(() => {}, [isFormValid]);
 
   return (
     <Modal title="Change password" hidden={hidden} footer={<ModalFooter />} {...props}>

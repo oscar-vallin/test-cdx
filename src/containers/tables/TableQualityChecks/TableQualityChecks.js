@@ -11,7 +11,7 @@ const TableQualityChecks = ({ id = 'TableQualityChecksStats' }) => {
   const { tableProps } = useTable(ORG_SID, WORK_ORDER_ID);
 
   return (
-    <Box id="VendorCountStats">
+    <Box id={`${id}-VendorCountStats`}>
       <Table onOption={() => null} {...tableProps} />
     </Box>
   );

@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import { addDays, endOfMonth, endOfWeek, format, isSameDay, isSameMonth, startOfMonth, startOfWeek } from 'date-fns';
 
 import {
@@ -16,7 +16,7 @@ import { Text } from '../../../components/typography';
 
 export const ScheduleSubHeader = ({ id, currentView, currentDate, selectedDate }) => {
   const _currentDate = startOfWeek(currentDate);
-  const [dates, setDates] = React.useState({
+  const [dates, setDates] = useState({
     currentMonth: currentDate,
     selectedDate: currentDate,
     monthStart: startOfMonth(currentDate),
@@ -25,13 +25,7 @@ export const ScheduleSubHeader = ({ id, currentView, currentDate, selectedDate }
     endDate: endOfWeek(endOfMonth(currentDate)),
   });
 
-  // let _currentDay = currentDate;
-
-  // React.useEffect(() => {
-  //   _currentDate = startOfWeek(selectedDate);
-  // }, [selectedDate]);
-
-  React.useEffect(() => {
+  useEffect(() => {
     if (!!selectedDate && selectedDate !== dates.selectedDate) {
       const _monthStart = startOfWeek(selectedDate);
       const _monthEnd = endOfWeek(selectedDate);
@@ -46,6 +40,7 @@ export const ScheduleSubHeader = ({ id, currentView, currentDate, selectedDate }
 
       setDates(_newDate);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDate]);
 
   const _renderSubHeader = () => {
@@ -61,7 +56,7 @@ export const ScheduleSubHeader = ({ id, currentView, currentDate, selectedDate }
       const isEndMonth = !!isSameDay(_currentDay, endOfMonth(_currentDay));
 
       return (
-        <RowWeek>
+        <RowWeek id={id}>
           <DayViewContainer key={_currentDay} isSameDay={isCurrentDate} isSameMonth={isCurrentMonth}>
             <WeekViewNumber>
               {isCurrentDate || isStartMonth || isEndMonth ? format(_currentDay, 'MMM d') : format(_currentDay, 'd')}
@@ -77,8 +72,6 @@ export const ScheduleSubHeader = ({ id, currentView, currentDate, selectedDate }
     }
 
     for (let i = 0; i < 7; i++) {
-      const cloneDay = day;
-
       if (isCurrentViewWeek(currentView)) {
         const isCurrentDate = !!isSameDay(day, currentDate);
         // isSameMonth(day, dates.monthStart);

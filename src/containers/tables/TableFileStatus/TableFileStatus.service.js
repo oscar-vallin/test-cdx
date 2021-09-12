@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { format } from 'date-fns';
-import { useWorkPacketStatusesQuery } from '../../../data/services/graphql';
 import { useAuthContext } from '../../../contexts/AuthContext';
 import { useUpdateFileStatus } from './hooks/useUpdateFileStatus';
 import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableConstants';
@@ -48,12 +47,14 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
     return function unmount() {
       disableRefresh();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   //
   useEffect(() => {
     const _condition = isCDXToday(argDateRange.rangeStart, argDateRange.rangeEnd);
     enableRefresh(_condition && argFilter === '');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [argFilter]);
 
   useEffect(() => {
@@ -61,6 +62,7 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
       authLogout('expired');
       history.push('/');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [_error]);
 
   useEffect(() => {
@@ -103,7 +105,7 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
     };
 
     if (apiData) {
-      return doEffect();
+      doEffect();
     }
   }, [apiData]);
 

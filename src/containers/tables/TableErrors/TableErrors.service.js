@@ -25,6 +25,18 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
     },
   });
 
+  //
+  const formatField = (value, type, columnId, text, sublabel) => {
+    return {
+      id: columnId,
+      value,
+      type,
+      columnId,
+      text,
+      sublabel,
+    };
+  };
+
   // * Component Did Mount.
   useEffect(() => {
     setLoading(false);
@@ -35,6 +47,7 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
       authLogout(error.message);
       history.push('/');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
 
   useEffect(() => {
@@ -70,21 +83,9 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
     };
 
     if (data) {
-      return doEffect();
+      doEffect();
     }
   }, [data]);
-
-  //
-  const formatField = (value, type, columnId, text, sublabel) => {
-    return {
-      id: columnId,
-      value,
-      type,
-      columnId,
-      text,
-      sublabel,
-    };
-  };
 
   // * Loading Data
   useEffect(() => {
@@ -103,17 +104,10 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
 };
 
 //
-const useInput = (placeholder) => {};
-
-//
 export const useInputs = () => {
-  const startDate = useInput('Start Date...');
-  const endDate = useInput('End Date...');
   const localInput = useInputValue('', 'Extract Name,  Status, Vendor, etc.', '', '');
 
   return {
-    startDate,
-    endDate,
     localInput,
   };
 };
