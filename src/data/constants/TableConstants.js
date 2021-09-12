@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { useWorkPacketStatusesLazyQuery, useWpTransmissionsLazyQuery } from '../services/graphql';
 import { columns as tableArchivesColumns, getItems as tableArchivesGetItems } from './tables/ArchiveTableConstants';
 import { errorColumns, getErrorsItems } from './tables/ErrorTableConstants';
@@ -167,4 +168,6 @@ export const useQueryTable = (tableID, tableArguments) => {
 
     return { apiCall, data, loading, error };
   }
+
+  return null;
 };
