@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useStoreState, useStoreActions } from 'easy-peasy';
+import { useStoreActions } from 'easy-peasy';
 import { defaultTheme, darkTheme } from '../styles/themes';
 import Theming from '../utils/Theming';
 
@@ -9,6 +9,7 @@ import {
   useSetOwnDashThemeFontSizeMutation,
 } from '../data/services/graphql';
 
+// eslint-disable-next-line import/no-cycle
 import { useAuthContext } from '../contexts/AuthContext';
 
 export const useCurrentUserTheme = () => {
@@ -16,24 +17,24 @@ export const useCurrentUserTheme = () => {
 
   const { isAuthenticated } = useAuthContext();
 
-  const [useUserThemeQuery, { data: theme, loading: isLoadingTheme }] = useUserThemeLazyQuery();
+  const [apiUserThemeQuery, { data: theme, loading: isLoadingTheme }] = useUserThemeLazyQuery();
 
   const fetchTheme = () => {
     if (isAuthenticated) {
-      useUserThemeQuery({ variables: { themeColorMode: null } });
+      apiUserThemeQuery({ variables: { themeColorMode: null } });
     }
   };
 
-  const [createOrUpdateOwnDashTheme, { data: updatedTheme, loading: isHandlingTheme, error: themeError }] =
+  const [createOrUpdateOwnDashTheme, { data: updatedTheme, loading: isHandlingTheme }] =
     useCreateOrUpdateOwnDashThemeMutation();
 
-  const [setOwnDashFontSize, { data: updatedFontSize, loading: isHandlingFontSize, error: fontSizeError }] =
-    useSetOwnDashThemeFontSizeMutation();
+  const [setOwnDashFontSize] = useSetOwnDashThemeFontSizeMutation();
 
   useEffect(() => {
     if (theme?.userTheme) {
       setUserTheme(theme.userTheme);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [theme]);
 
   useEffect(() => {
@@ -62,6 +63,7 @@ export const useCurrentUserTheme = () => {
         loading: isLoadingTheme,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [theme, updatedTheme]);
 
   return {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuthContext } from '../contexts/AuthContext';
 import { getTableStructure } from '../data/constants/TableConstants';
 
@@ -8,18 +8,18 @@ export const useRefresh = (id, triggerFunction) => {
   const { pollingTime } = useAuthContext();
   const pollingFactor = getTableStructure(id)?.polling;
 
-  useEffect(() => {
-    return function unmountHook() {
-      disableRefresh();
-    };
-  }, []);
+  const setRefreshOff = () => {
+    setRefreshNow(false);
+  };
 
-  useEffect(() => {
-    if (refreshNow && refresh) {
-      triggerFunction();
-      startRefresh();
-    }
-  }, [refreshNow]);
+  const disableRefresh = () => {
+    setRefreshOff();
+    setRefresh(false);
+  };
+
+  const setRefreshOn = () => {
+    setRefreshNow(true);
+  };
 
   const startRefresh = () => {
     setRefreshOff();
@@ -27,13 +27,20 @@ export const useRefresh = (id, triggerFunction) => {
     setTimeout(setRefreshOn, pollingTime * (pollingFactor ?? 1));
   };
 
-  const setRefreshOn = () => {
-    setRefreshNow(true);
-  };
+  useEffect(() => {
+    return function unmountHook() {
+      disableRefresh();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const setRefreshOff = () => {
-    setRefreshNow(false);
-  };
+  useEffect(() => {
+    if (refreshNow && refresh) {
+      triggerFunction();
+      startRefresh();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refreshNow]);
 
   const enableRefresh = (condition) => {
     if (!condition) {
@@ -43,11 +50,6 @@ export const useRefresh = (id, triggerFunction) => {
 
     setRefresh(true);
     startRefresh();
-  };
-
-  const disableRefresh = () => {
-    setRefreshOff();
-    setRefresh(false);
   };
 
   return { refreshNow, setRefreshOn, setRefreshOff, enableRefresh, disableRefresh };
