@@ -1,7 +1,7 @@
-import React, { useEffect, Fragment } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 // Components
-import { useHistory } from 'react-router-dom';
 import { Column } from '../../../components/layouts';
 import { InputText } from '../../../components/inputs/InputText';
 import { Spacing } from '../../../components/spacings/Spacing';
@@ -10,7 +10,7 @@ import { Spinner } from '../../../components/spinners/Spinner';
 import { useLogin } from './FormLogin.services';
 import { useLoginBegin } from '../../../contexts/hooks/useLogin';
 import { useAuthContext } from '../../../contexts/AuthContext';
-import { useNotification } from '../../../contexts/hooks/useNotification';
+import { useNotification } from '../../../hooks/useNotification';
 // Styles
 import {
   StyledBox,
@@ -26,9 +26,8 @@ import {
 
 // CardSection is called directly cause a restriction warning for that component.
 const FormLogin = ({ id = '__FormLogin', onLogin }) => {
-  const history = useHistory();
   const handlerLogin = useLogin(onLogin);
-  const { apiBeginLogin, validateEmail, isValidEmail, editUser, isProcessingBegin, emailError } = useLoginBegin(1000);
+  const { validateEmail, isValidEmail, editUser, isProcessingBegin, emailError } = useLoginBegin(1000);
   const { email, password } = handlerLogin;
   const { isCheckingAuth, isAuthenticating, errorMessage } = useAuthContext();
 
@@ -117,7 +116,11 @@ const FormLogin = ({ id = '__FormLogin', onLogin }) => {
                       disabled={handlerLogin.isProcessing}
                       onClick={() => (isValidEmail ? handlerLogin.submitLogin() : validateEmail(email.value))}
                     >
-                      {handlerLogin.isProcessing || isProcessingBegin ? <Spinner /> : !isValidEmail ? 'Next' : 'Login'}
+                      {handlerLogin.isProcessing || isProcessingBegin ? (
+                        <Spinner />
+                      ) : (
+                        `${!isValidEmail ? 'Next' : 'Login'}`
+                      )}
                     </StyledButton>
                   </Column>
                 </StyledRow>

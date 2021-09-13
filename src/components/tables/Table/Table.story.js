@@ -1,9 +1,7 @@
-import React from 'react';
-
 // also exported from '@storybook/react' if you can deal with breaking changes in 6.1
 // import { Story, Meta } from '@storybook/react/types-6-0';
 
-import { Table } from './Table.js';
+import { Table } from './Table';
 import { TABLE_NAMES, getTableStructure } from '../../../data/constants/TableConstants';
 
 const testTableData = [
@@ -17,12 +15,14 @@ export default {
   component: Table,
 };
 
-const Story = (args) => (
+const Story = () => (
   <Table
     items={testTableData}
     structure={getTableStructure(TABLE_NAMES.TEST)}
     loading={false}
-    onOption={() => console.log('Click')}
+    onOption={() => {
+      return {};
+    }}
   />
 );
 
@@ -32,5 +32,7 @@ Dashboard.args = {
   items: testTableData,
   structure: getTableStructure(TABLE_NAMES.TEST),
   loading: false,
-  onOption: () => console.log('Click on Option'),
+  onOption: () => {
+    return {};
+  },
 };

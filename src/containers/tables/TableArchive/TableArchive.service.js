@@ -1,15 +1,18 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { useHistory } from 'react-router-dom';
 import { useAuthContext } from '../../../contexts/AuthContext';
-import { useWorkPacketStatusesLazyQuery, useWorkPacketStatusesQuery } from '../../../data/services/graphql';
+import { useWorkPacketStatusesLazyQuery } from '../../../data/services/graphql';
 import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { useInputValue } from '../../../hooks/useInputValue';
+import { isCDXToday } from '../../../helpers/tableHelpers';
+import { useRefresh } from '../../../hooks/useRefresh';
 
 export const useTable = (argOrgSid, argDateRange, argFilter) => {
   const [_loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
-  const [columns, setColumns] = useState([]);
+  const [columns] = useState([]);
   const structure = getTableStructure(TABLE_NAMES.ARCHIVES);
 
   const { authLogout } = useAuthContext();
@@ -25,13 +28,17 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
 
   const { enableRefresh, disableRefresh } = useRefresh(TABLE_NAMES.ARCHIVES, apiCall);
 
-  const _columns = [
-    { key: 'datetime', label: 'Received On', id: 'datetime', style: 'text' },
-    { key: 'vendor', label: 'Vendor', id: 'vendor', style: 'text' },
-    { key: 'planSponsor', label: 'Plan Sponsor', id: 'planSponsor', style: 'text' },
-    { key: 'clientFile', label: 'Client File', id: 'clientFile', style: 'link' },
-    { key: 'vendorFile', label: 'Vendor File', id: 'vendorFile', style: 'link' },
-  ];
+  //
+  const formatField = (value, type, columnId, text, sublabel) => {
+    return {
+      id: columnId,
+      value,
+      type,
+      columnId,
+      text,
+      sublabel,
+    };
+  };
 
   // * Component Did Mount
   useEffect(() => {
@@ -76,21 +83,9 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
     };
 
     if (data) {
-      return doEffect();
+      doEffect();
     }
   }, [data]);
-
-  //
-  const formatField = (value, type, columnId, text, sublabel) => {
-    return {
-      id: columnId,
-      value,
-      type,
-      columnId,
-      text,
-      sublabel,
-    };
-  };
 
   // * Loading Data
   useEffect(() => {
@@ -109,17 +104,10 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
 };
 
 //
-const useInput = (placeholder) => {};
-
-//
 export const useInputs = () => {
-  const startDate = useInput('Start Date...');
-  const endDate = useInput('End Date...');
   const localInput = useInputValue('', 'Extract Name,  Status, Vendor, etc.', '', '');
 
   return {
-    startDate,
-    endDate,
     localInput,
   };
 };

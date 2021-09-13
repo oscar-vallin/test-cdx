@@ -1,18 +1,13 @@
 import { useState, useEffect } from 'react';
-import { format } from 'date-fns';
 import { useHistory } from 'react-router-dom';
 import { useAuthContext } from '../../../contexts/AuthContext';
 import { useScheduleOccurrencesQuery } from '../../../data/services/graphql';
-import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableConstants';
-import { getStepStatusLabel } from '../../../data/constants/FileStatusConstants';
 // import { useInputValue } from '../../../hooks/useInputValue';
 
 //
-export const useScheduleItems = (argOrgSid, argDateRange, argFilter) => {
-  const [_loading, setLoading] = useState(true);
+export const useScheduleItems = (argOrgSid, argDateRange) => {
+  const [, setLoading] = useState(true);
   const [items, setItems] = useState([]);
-  const [dateStart, setDateStart] = useState(new Date());
-  const [dateEnd, setDateEnd] = useState(new Date());
 
   const { authLogout } = useAuthContext();
   const history = useHistory();
@@ -37,6 +32,7 @@ export const useScheduleItems = (argOrgSid, argDateRange, argFilter) => {
       authLogout(error.message);
       history.push('/');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
 
   useEffect(() => {
@@ -53,7 +49,7 @@ export const useScheduleItems = (argOrgSid, argDateRange, argFilter) => {
     };
 
     if (data) {
-      return doEffect();
+      doEffect();
     }
   }, [data]);
 

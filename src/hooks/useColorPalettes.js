@@ -12,7 +12,7 @@ import { useOrgSid } from './useOrgSid';
 export const useColorPalettes = () => {
   const { authData } = useAuthContext();
   const { orgSid } = useOrgSid();
-  const { id, orgId } = authData;
+  const { id } = authData;
   const ownedInput = { orgSid, ownerId: id };
 
   const [getDashThemeColorForOrg, { data: palettes, loading: isLoadingPalettes }] = useDashThemeColorForOrgLazyQuery();

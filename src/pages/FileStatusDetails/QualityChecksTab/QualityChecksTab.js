@@ -1,4 +1,4 @@
-import React from 'react';
+/* eslint-disable no-alert */
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 
 import { Badge } from '../../../components/badges/Badge';
@@ -9,7 +9,6 @@ import { Row, Column } from '../../../components/layouts';
 import { Spacing } from '../../../components/spacings/Spacing';
 import { MessageBar } from '../../../components/notifications/MessageBar';
 import { Separator } from '../../../components/separators/Separator';
-import { TableQualityChecks } from '../../../containers/tables/TableQualityChecks';
 
 const COLUMNS = [
   { key: 'status', name: 'Status', fieldName: 'status' },
@@ -40,8 +39,8 @@ const onRenderItemColumn = (item, index, column) => {
     case 'message':
       return (
         <>
-          {item.message.map((message, index) => (
-            <div key={index} title={message}>
+          {item.message.map((message, _index) => (
+            <div key={_index} title={message}>
               {message}
             </div>
           ))}
@@ -97,7 +96,7 @@ const QualityChecksTab = ({ items }) => {
             arr.push(evt.warning.map(parse('WARNING')));
           }
 
-          return arr.reduce((arr, item) => [...arr, ...item], []);
+          return arr.reduce((_arr, item) => [..._arr, ...item], []);
         })
         .reduce((arr, item) => [...arr, ...(Array.isArray(item) ? item : [item])], [])
     )

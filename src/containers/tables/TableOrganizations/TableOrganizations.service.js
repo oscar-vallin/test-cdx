@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableConstants';
-import { useInputValue } from '../../../hooks/useInputValue';
 
 //
-export const useTable = (data, argOrgSid, argDateRange, argFilter) => {
+export const useTable = (data) => {
   const [_loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
   const [columns, setColumns] = useState([]);
@@ -12,13 +11,23 @@ export const useTable = (data, argOrgSid, argDateRange, argFilter) => {
 
   // const [data, setData] = useState();
   const [loading, setFakeLoading] = useState(true);
-  const [error, setError] = useState();
+  const [error] = useState();
+
+  //
+  const formatField = (value, type, columnId, text) => {
+    return {
+      id: columnId,
+      value,
+      type,
+      columnId,
+      text,
+    };
+  };
 
   // * Component Did Mount.
   useEffect(() => {
     setLoading(false);
     setFakeLoading(false);
-    // setError();
   }, []);
 
   useEffect(() => {
@@ -50,20 +59,9 @@ export const useTable = (data, argOrgSid, argDateRange, argFilter) => {
     };
 
     if (data) {
-      return doEffect();
+      doEffect();
     }
   }, [data]);
-
-  //
-  const formatField = (value, type, columnId, text) => {
-    return {
-      id: columnId,
-      value,
-      type,
-      columnId,
-      text,
-    };
-  };
 
   // * Loading Data
   useEffect(() => {

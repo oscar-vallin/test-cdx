@@ -1,4 +1,3 @@
-import React from 'react';
 import CDXCollapse from './Collapse.js';
 import { mountWithTheme } from '../../../utils/testUtils';
 

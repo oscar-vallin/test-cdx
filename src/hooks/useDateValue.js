@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 const useDateValue = (placeholder, initialState) => {
   const [value, setValue] = useState(initialState);

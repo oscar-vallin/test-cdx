@@ -1,4 +1,3 @@
-import React, { Fragment } from 'react';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { Spacing } from '../../../components/spacings/Spacing';
 import { StyledHeaderRow, StyledHeader, StyledRow } from '../FileStatusDetails.styles';

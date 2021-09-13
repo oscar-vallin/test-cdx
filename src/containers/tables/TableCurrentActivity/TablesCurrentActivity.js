@@ -1,6 +1,4 @@
-import { useEffect } from 'react';
 import { Label } from '@fluentui/react/lib/Label';
-import { tokenToString } from 'typescript';
 import { Spacing } from '../../../components/spacings/Spacing';
 import { Separator } from '../../../components/separators/Separator';
 import { TableActivity } from './TableActivity';
@@ -18,8 +16,6 @@ const TablesCurrentActivity = ({ id = 'TableCurrentActivity', argOrgSid = 1, arg
   const { orgSid } = useAuthContext();
   const { localInput, startDate, endDate } = useTableFilters('Name, Id, Last Activity');
   const { tableProc, tableComp, tableError } = useTable(orgSid || argOrgSid, argDateRange, argFilter);
-
-  useEffect(() => {}, []);
 
   return (
     <Container id={id}>

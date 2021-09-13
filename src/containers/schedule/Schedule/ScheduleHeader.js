@@ -163,7 +163,7 @@ export const ScheduleHeader = ({ id, currentView, currentDate, onChangeDate, onC
 
   const renderHeaderMonth = () => {
     return (
-      <Row>
+      <Row id={id}>
         <Column lg="8">
           <RowHeaderItem>
             {isCurrentViewWeek(currentView) && <FillerHours />}

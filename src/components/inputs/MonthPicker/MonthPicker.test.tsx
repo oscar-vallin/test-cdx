@@ -1,4 +1,3 @@
-import React from 'react';
 import toJSON from 'enzyme-to-json';
 import { shallow } from 'enzyme';
 import { DayOfWeek } from 'office-ui-fabric-react/lib-commonjs/DatePicker';

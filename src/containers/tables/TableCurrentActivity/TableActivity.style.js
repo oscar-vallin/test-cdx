@@ -25,10 +25,10 @@ export const TableName = styled(Text)`
     switch (color) {
       case 'complete':
         return '#3CC918';
-        break;
+
       case 'error':
         return '#C32B2B';
-        break;
+
       default:
         return '#0078D4';
     }

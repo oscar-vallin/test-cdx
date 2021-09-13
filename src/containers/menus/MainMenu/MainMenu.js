@@ -1,4 +1,6 @@
-import React, { useRef, useEffect, useState } from 'react';
+/* eslint-disable no-shadow */
+/* eslint-disable react-hooks/rules-of-hooks */
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 // Components
 
@@ -9,20 +11,18 @@ import { useHistory, useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 import { StyledRow, StyledColumn, StyledMenuButton, StyledButtonIcon } from './MainMenu.styles';
 
-import { ROUTES_ARRAY, ROUTES, ROUTES_ID, URL_ROUTES, getRouteByApiId } from '../../../data/constants/RouteConstants';
+import { ROUTES_ID, getRouteByApiId } from '../../../data/constants/RouteConstants';
 import { OutsideComponent } from './OutsideComponent';
-import { useAuthContext } from '../../../contexts/AuthContext';
 import { useUserDomain } from '../../../contexts/hooks/useUserDomain';
-import { useOrgSid } from '../../../hooks/useOrgSid';
 
 // CardSection is called directly cause a restriction warning for that component.
-const MainMenu = ({ id = '__MainMenu', option = ROUTES.ROUTE_DASHBOARD.ID, left, changeCollapse }) => {
+const MainMenu = ({ id = '__MainMenu', left, changeCollapse }) => {
   const history = useHistory();
   const location = useLocation();
   const { search } = location;
-  const [filterParam, _setFilterParam] = useState(search);
+  const [filterParam] = useState(search);
   const filter = new URLSearchParams(filterParam).get('filter');
-  const [collapse, setCollapse] = React.useState();
+  const [collapse, setCollapse] = useState();
 
   const collapseNavMenu = () => {
     setCollapse(!collapse);

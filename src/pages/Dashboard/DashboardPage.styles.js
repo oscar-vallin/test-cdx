@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Row as LayoutRow, Column as LayoutColumn } from '../../components/layouts';
+import { Row as LayoutRow } from '../../components/layouts';
 import { Button } from '../../components/buttons/Button';
 import { Text } from '../../components/typography/Text';
 

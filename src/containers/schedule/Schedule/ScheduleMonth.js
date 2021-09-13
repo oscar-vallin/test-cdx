@@ -1,5 +1,4 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import { useState, useEffect } from 'react';
 import {
   addDays,
   endOfMonth,
@@ -15,7 +14,7 @@ import {
 import { Body, CalendarBodyCellNumber, CalendarBodyCell, CalendarBodyRow, CellItem } from './ScheduleMonth.styles';
 
 export const ScheduleMonth = ({ id, currentDate, selectedDate, onChangeDate, items, onChangeView }) => {
-  const [dates, setDates] = React.useState({
+  const [dates, setDates] = useState({
     currentMonth: currentDate,
     selectedDate: currentDate,
     monthStart: startOfMonth(currentDate),
@@ -24,7 +23,7 @@ export const ScheduleMonth = ({ id, currentDate, selectedDate, onChangeDate, ite
     endDate: endOfWeek(endOfMonth(currentDate)),
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!!selectedDate && selectedDate !== dates.selectedDate) {
       const _monthStart = startOfMonth(selectedDate);
       const _monthEnd = endOfMonth(selectedDate);
@@ -39,6 +38,7 @@ export const ScheduleMonth = ({ id, currentDate, selectedDate, onChangeDate, ite
 
       setDates(_newDate);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDate]);
 
   //
@@ -93,7 +93,6 @@ export const ScheduleMonth = ({ id, currentDate, selectedDate, onChangeDate, ite
                 ? formattedDate
                 : formattedDateNotValid}
             </CalendarBodyCellNumber>
-            {/* <CalendarBodyCellBg id="CalendarBodyCellBg">{formattedDate}</CalendarBodyCellBg> */}
             {renderItems(day, items)}
           </CalendarBodyCell>
         );
@@ -110,7 +109,7 @@ export const ScheduleMonth = ({ id, currentDate, selectedDate, onChangeDate, ite
     return rows;
   };
 
-  return <Body id="CalendarBody">{_renderBody()}</Body>;
+  return <Body id={`${id}-CalendarBody`}>{_renderBody()}</Body>;
 };
 
 ScheduleMonth.propTypes = {};

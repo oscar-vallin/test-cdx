@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import { TABLE_NAMES } from '../../../data/constants/TableConstants';
@@ -7,7 +7,6 @@ import { useTable } from './TableDashboard.service';
 
 import { Table } from '../../../components/tables/Table';
 // import { Table } from '../../../components/tables/_Table';
-import { getTableStructure } from '../../../data/constants/TableConstants';
 
 const TableDashboard = ({
   id = '__TableDashboard',
@@ -19,11 +18,7 @@ const TableDashboard = ({
 }) => {
   const { tableProps, specs, setSpecs } = useTable(data, tableId, date, altData);
 
-  const [tableData, setTableData] = React.useState();
-
-  React.useEffect(() => {
-    //
-  }, []);
+  const [, setTableData] = useState();
 
   const getNoData = () => {
     return [{ vendor: 'No data available', bus: '...' }];
@@ -53,7 +48,7 @@ const TableDashboard = ({
     return getNoData();
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     const val = specs ? getAltTable() : getTable();
 
     if (specs)
@@ -63,7 +58,7 @@ const TableDashboard = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [specs]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (data) {
       const NewTableData = getTable();
       setTableData(NewTableData);

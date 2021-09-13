@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { PivotItem } from 'office-ui-fabric-react/lib-commonjs/Pivot';
 import { Badge } from '../../badges/Badge';
 import { StyledPivot, StyledSpan } from './Tabs.styles';

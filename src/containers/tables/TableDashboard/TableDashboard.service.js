@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableConstants';
+import { getTableStructure } from '../../../data/constants/TableConstants';
 import { formatField } from '../../../helpers/tableHelpers';
 
 //
@@ -13,7 +13,6 @@ export const useTable = (data, tableName, date, altData) => {
   const structure = getTableStructure(tableName);
 
   // * Component Did Mount.
-  useEffect(() => {}, []);
 
   const updateData = () => {
     if (specs && altData) setDataItems(altData);
@@ -22,6 +21,7 @@ export const useTable = (data, tableName, date, altData) => {
 
   useEffect(() => {
     updateData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [specs, data, altData]);
 
   useEffect(() => {
@@ -59,6 +59,7 @@ export const useTable = (data, tableName, date, altData) => {
     if (data || altData) doEffect();
 
     setLoading(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataItems]);
 
   // * Loading Data

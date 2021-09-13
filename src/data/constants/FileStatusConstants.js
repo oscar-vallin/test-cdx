@@ -110,15 +110,9 @@ export const STEP_STATUS = [
   },
 ];
 
-export const getColorsByString = (argStringValues) => {
-  const xColors = getProgressItemByString(argStringValues);
-
-  return xColors.colors;
-};
-
 export const getProgressItemByString = (argStringValues) => {
   const stringVal = argStringValues.split(',');
-  const _step = parseInt(stringVal[0]);
+  const _step = parseInt(stringVal[0], 10);
   const _stepStatus = stringVal[1];
 
   return (
@@ -126,6 +120,12 @@ export const getProgressItemByString = (argStringValues) => {
     STEP_STATUS_DEFAULT.find((step) => step === _step) ??
     STEP_STATUS_DEFAULT[0]
   );
+};
+
+export const getColorsByString = (argStringValues) => {
+  const xColors = getProgressItemByString(argStringValues);
+
+  return xColors.colors;
 };
 
 export const getStepStatusLabel = (stepStatusId) => {

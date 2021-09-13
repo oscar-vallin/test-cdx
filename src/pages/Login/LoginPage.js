@@ -1,18 +1,17 @@
 import React, { useEffect, useState, memo } from 'react';
 import { LayoutLogin } from '../../layouts/LayoutLogin';
 import { FormLogin } from '../../containers/forms/FormLogin';
-import { useNotification } from '../../contexts/hooks/useNotification';
+import { useNotification } from '../../hooks/useNotification';
 
 const _LoginPage = () => {
   const [isLogout, setLogout] = useState();
   const Toast = useNotification();
 
   useEffect(() => {
-    console.log('isLogout', isLogout);
-
     if (isLogout) {
       Toast.error({ text: isLogout });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLogout]);
 
   useEffect(() => {
@@ -29,7 +28,12 @@ const _LoginPage = () => {
 
   return (
     <LayoutLogin id="PageLogin">
-      <FormLogin id="FormLogin" onLogin={() => {}} />
+      <FormLogin
+        id="FormLogin"
+        onLogin={() => {
+          return null;
+        }}
+      />
     </LayoutLogin>
   );
 };

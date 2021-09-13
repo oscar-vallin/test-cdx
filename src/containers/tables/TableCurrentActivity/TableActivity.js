@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
-import { MessageBar } from 'office-ui-fabric-react';
 import { Row, Column } from '../../../components/layouts';
 import { TableName } from './TableActivity.style';
 
@@ -15,22 +14,13 @@ const generateColumns = () => {
     minWidth: 225,
   });
 
-  return [
-    // createColumn({ name: 'Client Id', key: 'id' }),
-    createColumn({ name: 'Client Name', key: 'name' }),
-    createColumn({ name: 'Last Activity', key: 'activity' }),
-  ];
+  return [createColumn({ name: 'Client Name', key: 'name' }), createColumn({ name: 'Last Activity', key: 'activity' })];
 };
 
 const TableActivity = ({ items, loading, tableName, color }) => {
   const columns = generateColumns();
   const [sortedItems, setSortedItems] = useState('initialState');
 
-  useEffect(() => {
-    if (loading === false) {
-      _buildItems();
-    }
-  }, []);
   const _buildItems = () => {
     const iItems = items.map((rowItem) => {
       const objItem = {};
@@ -45,6 +35,13 @@ const TableActivity = ({ items, loading, tableName, color }) => {
     setSortedItems(iItems);
     return iItems;
   };
+
+  useEffect(() => {
+    if (loading === false) {
+      _buildItems();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Row>

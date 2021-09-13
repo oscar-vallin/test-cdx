@@ -1,4 +1,3 @@
-import React from 'react';
 import { addMonths, addYears } from '@fluentui/date-time-utilities';
 import { DatePicker, DayOfWeek } from 'office-ui-fabric-react/lib-commonjs/DatePicker';
 
@@ -46,20 +45,13 @@ const DayPickerStrings = {
 
 const firstDayOfWeek = DayOfWeek.Sunday;
 
-export const DateSelector = ({
-  id = '',
-  Label,
-  // placeholder = 'Select a Date...',
-  onChange,
-  required,
-}) => {
+export const DateSelector = ({ id = '', onChange, required }) => {
   return (
     <DatePicker
+      id={id}
       isRequired={required}
       firstDayOfWeek={firstDayOfWeek}
       strings={DayPickerStrings}
-      // placeholder={placeholder}
-      // ariaLabel={placeholder}
       minDate={minDate}
       maxDate={maxDate}
       onSelectDate={onChange}

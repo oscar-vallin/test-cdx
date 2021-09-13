@@ -1,4 +1,3 @@
-import React, { ReactElement } from 'react';
 import { mount, render } from 'enzyme';
 import { CDXBreadcrumb } from './Breadcrumb.js';
 

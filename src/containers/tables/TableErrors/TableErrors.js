@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Label } from '@fluentui/react/lib/Label';
 import { useParams, useLocation } from 'react-router-dom';
@@ -15,12 +15,15 @@ import { TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { useTableFilters } from '../../../hooks/useTableFilters';
 import { useTableTemplate } from '../../../hooks/useTableTemplate';
 
-import { useAuthContext } from '../../../contexts/AuthContext';
-
-const TableErrors = ({ idPage = 'TableErrors', _orgSid = 1, onItemsListChange = () => {} }) => {
+const TableErrors = ({
+  idPage = 'TableErrors',
+  onItemsListChange = () => {
+    return null;
+  },
+}) => {
   // const { orgSid } = useAuthContext();
   const location = useLocation();
-  const [urlParams, _setUrlParams] = useState(queryString.parse(location.search));
+  const [urlParams] = useState(queryString.parse(location.search));
   const { localInput, startDate, endDate } = useTableFilters('Extract Name,  Status, Vendor, etc.', useParams());
   const { tableProps } = useTableTemplate(
     TABLE_NAMES.ERRORS,
@@ -60,11 +63,12 @@ const TableErrors = ({ idPage = 'TableErrors', _orgSid = 1, onItemsListChange = 
               id={`${idPage}`}
               onOption={() => null}
               searchInput={localInput.value}
-              onItemsListChange={(items) =>
+              onItemsListChange={(items) => {
                 onItemsListChange({
                   count: items.length,
                   loading: tableProps.loading,
-                })}
+                });
+              }}
               {...tableProps}
             />
           )}

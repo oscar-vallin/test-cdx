@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 const rules = {
   requiredStrengthLevel: 'strength',
   length: 'length',
@@ -10,18 +11,18 @@ const rules = {
 export default class ValidationRulesParser {
   static parse(rules = [], level = 0) {
     return rules
-      .map((rule, index) => {
-        if (rule.rules) {
+      .map((_rule) => {
+        if (_rule.rules) {
           return {
             level,
-            expectation: rule.numberOfCharacteristics,
-            rules: ValidationRulesParser.parse(rule.rules, level + 1),
+            expectation: _rule.numberOfCharacteristics,
+            rules: ValidationRulesParser.parse(_rule.rules, level + 1),
           };
         }
 
-        return ValidationRulesParser.getRuleCharacteristics(rule, level);
+        return ValidationRulesParser.getRuleCharacteristics(_rule, level);
       })
-      .reduce((rules, rule) => [...rules, rule], []);
+      .reduce((_rules, _rule) => [..._rules, _rule], []);
   }
 
   static getRuleCharacteristics(rule = {}, level) {
