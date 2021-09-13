@@ -32,11 +32,11 @@ phases:
     commands:
     - echo Build completed on `date`
 reports:
-  jest_reports:
+  jest:
     files:
-      - *.xml
+      - '*.xml'
+    base-directory: 'test-results'
     file-format: JUNITXML
-    base-directory: test-results
   coverage:
     files:
       - '*.xml'
