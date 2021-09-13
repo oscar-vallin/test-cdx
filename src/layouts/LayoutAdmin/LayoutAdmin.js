@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { StyledBox, StyledNav } from './LayoutAdmin.styles';
@@ -8,11 +7,10 @@ import { useUserDomain } from '../../contexts/hooks/useUserDomain';
 import { Spinner } from '../../components/spinners/Spinner';
 import { Spacing } from '../../components/spacings/Spacing';
 
-import { useNotification } from '../../hooks/useNotification';
 import { useOrgSid } from '../../hooks/useOrgSid';
 
 const parseLinks = (links = [], sidebarOpt) => {
-  return links.map(({ appDomain, label, subNavItems, page }) => ({
+  return links.map(({ label, subNavItems, page }) => ({
     name: label,
     ...(subNavItems
       ? {
