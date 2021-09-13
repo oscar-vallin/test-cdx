@@ -31,6 +31,17 @@ phases:
   post_build:
     commands:
     - echo Build completed on `date`
+reports:
+  jest_reports:
+    files:
+      - *.xml
+    file-format: JUNITXML
+    base-directory: test-results
+  coverage:
+    files:
+      - '*.xml'
+    base-directory: 'coverage'
+    file-format: CLOVERXML
 artifacts:
   files:
   - 'build/libs/*.jar'
