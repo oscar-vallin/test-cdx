@@ -8,11 +8,10 @@ const _LoginPage = () => {
   const Toast = useNotification();
 
   useEffect(() => {
-    console.log('isLogout', isLogout);
-
     if (isLogout) {
       Toast.error({ text: isLogout });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLogout]);
 
   useEffect(() => {
@@ -29,7 +28,12 @@ const _LoginPage = () => {
 
   return (
     <LayoutLogin id="PageLogin">
-      <FormLogin id="FormLogin" onLogin={() => {}} />
+      <FormLogin
+        id="FormLogin"
+        onLogin={() => {
+          return null;
+        }}
+      />
     </LayoutLogin>
   );
 };

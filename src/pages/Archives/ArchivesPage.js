@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { memo, useState } from 'react';
 import { FontIcon } from '@fluentui/react/lib/Icon';
 import { ROUTES } from '../../data/constants/RouteConstants';
 import { Row, Column, Container } from '../../components/layouts';
@@ -40,6 +40,6 @@ const _ArchivePage = () => {
   );
 };
 
-const ArchivePage = React.memo(_ArchivePage);
+const ArchivePage = memo(_ArchivePage);
 
 export { ArchivePage };

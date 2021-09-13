@@ -1,4 +1,3 @@
-import React from 'react';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { Spacing } from '../../../components/spacings/Spacing';
 import { StyledRow, StyledVendorHeaderRow, StyledFooter } from '../FileStatusDetails.styles';
@@ -22,7 +21,7 @@ const onRenderDetailsHeader = (props) => {
   );
 };
 
-const onRenderDetailsFooter = (count, props) => {
+const onRenderDetailsFooter = (count) => {
   return (
     <StyledFooter>
       <div>Total</div>
