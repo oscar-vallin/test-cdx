@@ -1,5 +1,4 @@
-import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ROUTES } from '../data/constants/RouteConstants';
 // Routes
