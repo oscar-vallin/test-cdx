@@ -9,8 +9,8 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { ApolloContextProvider } from './contexts/ApolloContext.js';
 import { ThemeContextProvider } from './contexts/ThemeContext.js';
-import { AuthContextProvider } from './contexts/AuthContext.js';
 import { SessionContextProvider } from './contexts/SessionContext.js';
+import { ActiveDomainContextProvider } from './contexts/ActiveDomainContext.js';
 import { NotificationContextProvider } from './contexts/NotificationContext.js';
 import { UserDomainContextProvider } from './contexts/UserDomainContext.js';
 import store from './store/index';
@@ -23,6 +23,7 @@ ReactDOM.render(
       <StoreProvider store={store}>
         <Router>
           <SessionContextProvider>
+            <ActiveDomainContextProvider>
             <UserDomainContextProvider>
               <ThemeContextProvider>
                 <NotificationContextProvider>
@@ -30,6 +31,7 @@ ReactDOM.render(
                 </NotificationContextProvider>
               </ThemeContextProvider>
             </UserDomainContextProvider>
+            </ActiveDomainContextProvider>
           </SessionContextProvider>
         </Router>
       </StoreProvider>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSessionStore } from '../../store/SessionStore';
 import { useBeginLoginLazyQuery, usePasswordLoginMutation } from '../../data/services/graphql';
+import { useActiveDomainStore } from '../../store/ActiveDomainStore';
 
 type LoginState = {
   step: string;
@@ -20,6 +21,8 @@ const INITIAL_STATE: LoginState = {
 
 export const useLoginUseCase = () => {
   const SessionStore = useSessionStore();
+  const ActiveDomainStore = useActiveDomainStore();
+
   const [state, setState] = useState({ ...INITIAL_STATE });
 
   const [verifyUserId, { data: verifiedUserId, loading: isVerifyingUserId, error: userIdVerificationError }] =
@@ -45,6 +48,10 @@ export const useLoginUseCase = () => {
       },
     }).catch(() => null);
 
+  const returnToInitialStep = () => {
+    setState({ ...state, step: 'USER_ID', loading: false, error: null, reset: false });
+  };
+
   useEffect(() => {
     setState({ ...state, loading: isVerifyingUserId || isVerifyingCredentials, error: null, reset: false });
   }, [isVerifyingUserId, isVerifyingCredentials]);
@@ -69,14 +76,24 @@ export const useLoginUseCase = () => {
 
   useEffect(() => {
     if (userSession) {
+      const { passwordLogin } = userSession;
+      const organization = {
+        type: passwordLogin?.loginCompleteDomain?.type,
+        orgSid: passwordLogin?.tokenUser?.session?.orgSid,
+        destination: passwordLogin?.loginCompleteDomain?.selectedPage,
+        label: '',
+        subOrgs: [],
+      };
+
       SessionStore.setCurrentSession({
-        token: userSession.passwordLogin?.tokenUser?.token,
-        ...userSession.passwordLogin?.tokenUser?.session,
+        token: passwordLogin?.tokenUser?.token,
+        ...passwordLogin?.tokenUser?.session,
       });
 
-      /* Store domain in domain store */
+      ActiveDomainStore.setOriginOrg(organization);
+      ActiveDomainStore.setCurrentOrg(organization);
     }
   }, [userSession]);
 
-  return { performUserIdVerification, performUserAuthentication, state };
+  return { performUserIdVerification, performUserAuthentication, returnToInitialStep, state };
 };

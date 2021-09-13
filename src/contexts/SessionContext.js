@@ -14,21 +14,21 @@ export const SessionContextProvider = ({ children }) => {
 
   useEffect(() => {
     if (isRehydrated) {
-      const stage = SessionStore.status.isAutheticated ? SessionStages.LoggedIn : SessionStages.LoggedOut;
+      const stage = SessionStore.user.token ? SessionStages.LoggedIn : SessionStages.LoggedOut;
 
       SessionStore.setSessionStage(stage);
     }
-  }, [isRehydrated]);
+  }, [isRehydrated, SessionStore.user.token]);
 
   useEffect(() => {
     const {
-      status: { isAutheticated, isRehydrating },
+      status: { isAuthenticated, isRehydrating },
     } = SessionStore;
 
-    if (!isRehydrating && !isAutheticated) {
+    if (!isRehydrating && !isAuthenticated) {
       history.push('/login');
     }
-  }, [SessionStore.status.isAutheticated, SessionStore.status.isRehydrating]);
+  }, [SessionStore.status.isAuthenticated, SessionStore.status.isRehydrating]);
 
-  return <SessionContext.Provider>{children}</SessionContext.Provider>;
+  return <SessionContext.Provider>{isRehydrated && children}</SessionContext.Provider>;
 };

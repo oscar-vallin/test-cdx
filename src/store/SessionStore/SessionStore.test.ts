@@ -1,4 +1,3 @@
-import React from 'react';
 import { createStore } from 'easy-peasy';
 
 import SessionStore from './SessionStore';

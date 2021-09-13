@@ -28,17 +28,10 @@ const FormLogin = ({ id = '__FormLogin' }) => {
   const SessionStore = useSessionStore();
   const Toast = useNotification();
 
-  const { performUserIdVerification, performUserAuthentication, state } = useLoginUseCase();
+  const { performUserIdVerification, performUserAuthentication, returnToInitialStep, state } = useLoginUseCase();
 
   const [values, setValues] = useState({ ...INITIAL_STATE });
   const [isValidEmail, setIsValidEmail] = useState(false);
-
-  /* Migrate to Active domain */
-  // useEffect(() => {
-  //   if (SessionStore.status.isAuthenticated) {
-  //     history.push('/');
-  //   }
-  // }, [SessionStore.status.isAuthenticated]);
 
   useEffect(() => {
     setIsValidEmail(state.step === 'PASSWORD');
@@ -95,7 +88,7 @@ const FormLogin = ({ id = '__FormLogin' }) => {
                       <StyledButtonIcon
                         id={`${id}__Card__Row__Column__Button--Edit`}
                         disabled={state.loading}
-                        onClick={() => editUserEmail()}
+                        onClick={returnToInitialStep}
                         icon="edit"
                       >
                         Edit
