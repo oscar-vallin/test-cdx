@@ -1,4 +1,3 @@
-import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { ROUTE_USER_SETTINGS } from '../../data/constants/RouteConstants';
