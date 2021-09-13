@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import { useQueryParams } from './useQueryParams';
@@ -24,6 +24,7 @@ export const useOrgSid = () => {
 
   useEffect(() => {
     pushQueryString();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orgId || authData?.orgId]);
 
   return {

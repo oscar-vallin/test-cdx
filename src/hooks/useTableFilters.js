@@ -19,7 +19,7 @@ export const useTableFilters = (placeholder) => {
   const endDate = useDateValue('End Date...', hour < 9 ? new Date() : addDays(new Date(), 1));
   const localInput = useInputValue('', placeholder, '', '');
 
-  const [urlParams, setUrlParams] = useState(QueryParams.parse(location.search));
+  const [urlParams] = useState(QueryParams.parse(location.search));
 
   const setDates = () => {
     if (urlParams.filter) {
@@ -55,10 +55,12 @@ export const useTableFilters = (placeholder) => {
     history.replace(QueryParams.merge(location, params));
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(setDates, []);
 
   useEffect(() => {
     pushQueryString();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [localInput.value, startDate.value, endDate.value, data.orgSid]);
 
   return {
