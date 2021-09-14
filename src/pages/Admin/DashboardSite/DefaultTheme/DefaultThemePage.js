@@ -1,4 +1,5 @@
-import React, { useState, useEffect, Fragment } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useEffect, memo } from 'react';
 
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Button } from '../../../../components/buttons/Button';
@@ -14,7 +15,7 @@ import { useAuthContext } from '../../../../contexts/AuthContext';
 import { useThemeContext } from '../../../../contexts/ThemeContext';
 import { useColorPalettes } from '../../../../hooks/useColorPalettes';
 import Theming from '../../../../utils/Theming';
-import { defaultTheme, darkTheme } from '../../../../styles/themes';
+import { darkTheme } from '../../../../styles/themes';
 
 import {
   useCreateDefaultDashThemeMutation,
@@ -22,23 +23,22 @@ import {
   useDefaultDashThemeForSiteLazyQuery,
 } from '../../../../data/services/graphql';
 import { useNotification } from '../../../../hooks/useNotification';
-import { useOrgSid } from '../../../../hooks/useOrgSid';
 
 const _DefaultThemePage = () => {
   const Toast = useNotification();
-  const { orgSid } = useOrgSid();
+
   const { authData } = useAuthContext();
-  const { id, orgId } = authData;
+  const { id } = authData;
   const ownedInput = { orgSid: authData?.orgId, ownerId: id };
 
-  const [useDefaultDashThemeQuery, { data: defaultTheme, loading: isLoadingDefaultTheme }] =
+  const [apiDefaultDashThemeQuery, { data: defaultTheme, loading: isLoadingDefaultTheme }] =
     useDefaultDashThemeForSiteLazyQuery();
 
   const { colorPalettes, isLoadingPalettes, fetchColorPalettes } = useColorPalettes();
 
   useEffect(() => {
     fetchColorPalettes();
-    useDefaultDashThemeQuery({ variables: { ownedInput } });
+    apiDefaultDashThemeQuery({ variables: { ownedInput } });
   }, []);
 
   const { changeTheme } = useThemeContext();
@@ -206,6 +206,6 @@ const _DefaultThemePage = () => {
   );
 };
 
-const DefaultThemePage = React.memo(_DefaultThemePage);
+const DefaultThemePage = memo(_DefaultThemePage);
 
 export { DefaultThemePage };

@@ -1,4 +1,5 @@
-import React, { useState, useEffect, Fragment } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useEffect } from 'react';
 
 import { Button } from '../../../components/buttons/Button';
 import { MessageBar } from '../../../components/notifications/MessageBar';
@@ -14,29 +15,20 @@ import { useCreateOrUpdateOwnDashThemeMutation, useUserThemeLazyQuery } from '..
 
 import { StyledDiv, StyledTitle, StyledChoiceGroup } from '../UserSettingsPage.styles';
 import { defaultTheme, darkTheme } from '../../../styles/themes';
-import { useCurrentUserTheme } from '../../../hooks/useCurrentUserTheme';
 import { useNotification } from '../../../hooks/useNotification';
 import { useOrgSid } from '../../../hooks/useOrgSid';
 
-const INITIAL_THEME = {
-  data: null,
-  loading: false,
-  paletteNm: 'Default',
-  themeColorMode: 'LIGHT',
-  themeFontSize: 'MEDIUM',
-};
-
-const ThemeSettings = ({ userTheme = { ...INITIAL_THEME } }) => {
-  const [useUserThemeQuery, { data: theme, loading: isLoadingTheme }] = useUserThemeLazyQuery();
+const ThemeSettings = () => {
+  const [apiUserThemeQuery, { data: theme, loading: isLoadingTheme }] = useUserThemeLazyQuery();
 
   useEffect(() => {
-    useUserThemeQuery({ variables: { themeColorMode: null } });
+    apiUserThemeQuery({ variables: { themeColorMode: null } });
   }, []);
 
   const Toast = useNotification();
   const { changeTheme } = useThemeContext();
   const { colorPalettes, isLoadingPalettes, fetchColorPalettes } = useColorPalettes();
-  const [createOrUpdateOwnDashTheme, { data: themeResponse, loading: isHandlingTheme, error: themeError }] =
+  const [createOrUpdateOwnDashTheme, { data: themeResponse, loading: isHandlingTheme }] =
     useCreateOrUpdateOwnDashThemeMutation();
   const [palettes, setPalettes] = useState([
     {
@@ -55,14 +47,13 @@ const ThemeSettings = ({ userTheme = { ...INITIAL_THEME } }) => {
       Toast.success({ text: 'Theme saved successfully' });
     }
   }, [themeResponse]);
-  // const [selectedPaletteId, setSelectedPaletteId] = useState(null);
   const [palette, setPalette] = useState({});
-  // const [themeColorMode, setThemeColorMode] = useState(userTheme?.themeColorMode || 'LIGHT');
 
   const [selectedPaletteId, setSelectedPaletteId] = useState();
   const [themeColorMode, setThemeColorMode] = useState();
 
   useEffect(fetchColorPalettes, [orgSid]);
+
   useEffect(() => {
     if (theme?.userTheme) {
       changeTheme(Theming.getVariant(theme?.userTheme?.dashThemeColor));
@@ -72,7 +63,6 @@ const ThemeSettings = ({ userTheme = { ...INITIAL_THEME } }) => {
 
   useEffect(() => {
     if (colorPalettes && !isLoadingPalettes) {
-      const defaultPalette = colorPalettes.find(({ defaultPalette }) => defaultPalette);
       const selectedPalette = theme?.userTheme
         ? colorPalettes.find(({ paletteNm }) => paletteNm === theme?.userTheme.dashThemeColor.paletteNm)?.id || null
         : null;

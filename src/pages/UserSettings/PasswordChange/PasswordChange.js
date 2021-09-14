@@ -1,5 +1,3 @@
-import React, { useState, useEffect, useCallback, Fragment } from 'react';
-
 import { Button } from '../../../components/buttons/Button';
 import { CardSection } from '../../../components/cards';
 import { InputText } from '../../../components/inputs/InputText';
@@ -23,6 +21,8 @@ const getValidationMessage = (passwords, isValid) => {
   if (passwords.new !== passwords.confirmation) {
     return "Passwords don't match";
   }
+
+  return null;
 };
 
 const isFormInvalid = (passwords) => {
