@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useEffect, memo } from 'react';
 
 import { Link, useHistory } from 'react-router-dom';
 
@@ -50,7 +51,7 @@ const _ActiveOrgsPage = () => {
     });
   }, [orgSid]);
 
-  const changeActiveOrg = async ({ id, name, orgType }) => {
+  const changeActiveOrg = async ({ id, orgType }) => {
     directOrganizationsFQuery({
       variables: {
         orgSid: id,
@@ -84,6 +85,21 @@ const _ActiveOrgsPage = () => {
     }
   }, [loading]);
 
+  const renderList = () => {
+    return orgs.length > 0 ? (
+      <DetailsList
+        items={orgs}
+        selectionMode={SelectionMode.none}
+        columns={columns}
+        layoutMode={DetailsListLayoutMode.justified}
+        onRenderItemColumn={onRenderItemColumn}
+        isHeaderVisible
+      />
+    ) : (
+      <MessageBar>No active orgs</MessageBar>
+    );
+  };
+
   return (
     <LayoutAdmin id="PageActiveOrgs" sidebarOptionSelected="ACTIVE_ORGS">
       <Spacing margin="double">
@@ -104,18 +120,7 @@ const _ActiveOrgsPage = () => {
             <Row>
               <StyledColumn>
                 {!loading ? (
-                  orgs.length > 0 ? (
-                    <DetailsList
-                      items={orgs}
-                      selectionMode={SelectionMode.none}
-                      columns={columns}
-                      layoutMode={DetailsListLayoutMode.justified}
-                      onRenderItemColumn={onRenderItemColumn}
-                      isHeaderVisible
-                    />
-                  ) : (
-                    <MessageBar>No active orgs</MessageBar>
-                  )
+                  renderList()
                 ) : (
                   <Spacing margin={{ top: 'double' }}>
                     <Spinner size="lg" label="Loading active orgs" />
@@ -130,6 +135,6 @@ const _ActiveOrgsPage = () => {
   );
 };
 
-const ActiveOrgsPage = React.memo(_ActiveOrgsPage);
+const ActiveOrgsPage = memo(_ActiveOrgsPage);
 
 export { ActiveOrgsPage };
