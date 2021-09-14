@@ -22,14 +22,17 @@ export const ActiveDomainContextProvider = ({ children }) => {
   });
 
   useEffect(() => {
-    if (SessionStore.status.isAuthenticated) {
-      performNavUpdate({ orgSid: ActiveDomainStore.domainOrg.origin.orgSid, domain: 'DASHBOARD' });
+    const { isAuthenticated } = SessionStore.status;
+    const { origin } = ActiveDomainStore.domainOrg;
 
-      if (ActiveDomainStore.domainOrg.origin.type === 'ORGANIZATION') {
-        performNavUpdate({ orgSid: ActiveDomainStore.domainOrg.origin.orgSid, domain: 'ORGANIZATION' });
+    if (isAuthenticated && origin.orgSid) {
+      performNavUpdate({ orgSid: origin.orgSid, domain: 'DASHBOARD' });
+
+      if (origin.type === 'ORGANIZATION') {
+        performNavUpdate({ orgSid: origin.orgSid, domain: 'ORGANIZATION' });
       }
     }
-  }, [SessionStore.status.isAuthenticated]);
+  }, [SessionStore.status, ActiveDomainStore.domainOrg]);
 
   useEffect(() => {
     const { orgSid } = ActiveDomainStore.domainOrg.current;
