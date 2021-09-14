@@ -11,12 +11,6 @@ import { useLogoutUseCase } from '../../../use-cases/Authentication';
 import { useSessionStore } from '../../../store/SessionStore';
 
 const ProfileMenu = ({ id = '__ProfileMenu', onUserSettings }) => {
-  /* Migrate to user context */
-  const resetTheme = useStoreActions(({ ThemeStore }) => ThemeStore.resetTheme);
-
-  /* Redirect on domain context */
-  const history = useHistory();
-
   const SessionStore = useSessionStore();
   const { performUserLogout } = useLogoutUseCase();
 

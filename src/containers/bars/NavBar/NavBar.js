@@ -27,10 +27,12 @@ import {
 import { useOrgSid } from '../../../hooks/useOrgSid';
 import { useSessionStore } from '../../../store/SessionStore';
 import { useActiveDomainStore } from '../../../store/ActiveDomainStore';
+import { useThemeStore } from '../../../store/ThemeStore';
 
 const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSettings, visible, ...props }) => {
   const SessionStore = useSessionStore();
   const ActiveDomainStore = useActiveDomainStore();
+  const ThemeStore = useThemeStore();
 
   const Toast = useNotification();
   const authData = SessionStore.user;
@@ -40,9 +42,6 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSetti
 
   const { setOrgSid } = useOrgSid();
 
-  const userTheme = useStoreState(({ ThemeStore }) => ThemeStore.theme);
-  const setUserTheme = useStoreActions(({ ThemeStore }) => ThemeStore.updateTheme);
-
   const changeCollapse = () => {
     setCollapse(!collapse);
   };
@@ -51,7 +50,8 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSetti
     const fontSize = { themeFontSize: key };
 
     setOwnDashFontSize(fontSize);
-    setUserTheme(fontSize);
+
+    ThemeStore.setUserTheme(fontSize);
   };
 
   const settingsMenu = [
@@ -131,7 +131,7 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSetti
             />
 
             <StyledChoiceGroup
-              selectedKey={userTheme.themeFontSize}
+              selectedKey={ThemeStore.themes.current.themeFontSize}
               options={settingsMenu.map(({ key, label, iconProps }, index) => ({
                 key,
                 label,
@@ -140,11 +140,11 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSetti
                     <TooltipHost content={label} id={`tooltip-${index}`} calloutProps={{ gapSpace: 0 }}>
                       <button
                         disabled={isHandlingFontSize}
-                        className={userTheme.themeFontSize === key ? 'selected' : ''}
+                        className={ThemeStore.themes.current.themeFontSize === key ? 'selected' : ''}
                         onClick={() => updateThemeFontSize(key)}
                       >
                         {isHandlingFontSize ? (
-                          userTheme.themeFontSize === key ? (
+                          ThemeStore.themes.current.themeFontSize === key ? (
                             <Spinner size="xs" />
                           ) : (
                             <FontIcon iconName={iconProps.iconName} />

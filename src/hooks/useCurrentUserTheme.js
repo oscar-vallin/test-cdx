@@ -9,10 +9,11 @@ import {
   useSetOwnDashThemeFontSizeMutation,
 } from '../data/services/graphql';
 import { useSessionStore } from '../store/SessionStore';
+import { useThemeStore } from '../store/ThemeStore';
 
 export const useCurrentUserTheme = () => {
   const SessionStore = useSessionStore();
-  const setUserTheme = useStoreActions(({ ThemeStore }) => ThemeStore.updateTheme);
+  const ThemeStore = useThemeStore();
 
   const { isAuthenticated } = SessionStore.status;
 
@@ -32,7 +33,7 @@ export const useCurrentUserTheme = () => {
 
   useEffect(() => {
     if (theme?.userTheme) {
-      setUserTheme(theme.userTheme);
+      ThemeStore.setUserTheme(theme.userTheme);
     }
   }, [theme]);
 
@@ -54,7 +55,7 @@ export const useCurrentUserTheme = () => {
 
       const variant = Theming.getVariant(palette);
 
-      setUserTheme({
+      ThemeStore.setUserTheme({
         paletteNm: dashThemeColor?.paletteNm,
         data: variant,
         themeColorMode,

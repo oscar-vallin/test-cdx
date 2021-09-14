@@ -1,10 +1,10 @@
 import { thunkOn, createStore, persist } from 'easy-peasy';
-import ThemeStore from './ThemeStore';
 import ActiveOrgStore from './ActiveOrgStore';
 import QueryParamStore from './QueryParamStore';
 
 import { SessionStore } from './SessionStore';
 import { ActiveDomainStore } from './ActiveDomainStore';
+import { ThemeStore } from './ThemeStore';
 
 const onSetCurrentSession = (store) => store.SessionStore.setCurrentSession;
 
@@ -13,6 +13,7 @@ const resetStores = async (actions, target, { getStoreActions }) => {
 
   if (!target.payload.token) {
     StoreActions.ActiveDomainStore.reset();
+    StoreActions.ThemeStore.reset();
   }
 };
 

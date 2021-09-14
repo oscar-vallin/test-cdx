@@ -14,6 +14,7 @@ import { Spinner } from '../components/spinners/Spinner';
 import { StyledCard } from '../containers/forms/FormLogin/FormLogin.styles';
 import Theming from '../utils/Theming';
 import { useSessionStore } from './../store/SessionStore';
+import { useThemeStore } from '../store/ThemeStore';
 
 export const ThemeContext = React.createContext(() => {});
 
@@ -25,8 +26,8 @@ const sizes = {
 
 export const ThemeContextProvider = ({ children }) => {
   const SessionStore = useSessionStore();
+  const ThemeStore = useThemeStore();
 
-  const userTheme = useStoreState(({ ThemeStore }) => ThemeStore.theme);
   const { isLoadingTheme, fetchTheme } = useCurrentUserTheme();
   const [currentTheme, setTheme] = useState(styledComponentsTheme);
   const [styledTheme, setStyledTheme] = useState(styledComponentsTheme);
@@ -62,9 +63,9 @@ export const ThemeContextProvider = ({ children }) => {
 
   useEffect(() => {
     if (!isLoadingTheme) {
-      changeTheme(Theming.getVariant(userTheme?.data || {}));
+      changeTheme(Theming.getVariant(ThemeStore.themes.current.data || {}));
     }
-  }, [userTheme]);
+  }, [ThemeStore.themes.current]);
 
   const changeTheme = (theme = {}) => {
     const customizedTheme = {
@@ -90,7 +91,7 @@ export const ThemeContextProvider = ({ children }) => {
     <Customizer {...loadTheme({ palette: currentTheme || {} })}>
       <ThemeProvider theme={styledTheme}>
         <ThemeContext.Provider value={values}>
-          <GlobalStyle fontSize={userTheme.themeFontSize} />
+          <GlobalStyle fontSize={ThemeStore.themes.current.themeFontSize} />
 
           {isLoadingTheme ? (
             <LayoutLogin id="ThemeContext">
