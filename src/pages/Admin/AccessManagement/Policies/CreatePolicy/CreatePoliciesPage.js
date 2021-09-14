@@ -18,8 +18,7 @@ import VerbCombobox from '../../../../../components/comboboxes/VerbCombobox/Verb
 
 import { useAmPolicyPageQuery } from '../../../../../data/services/graphql';
 import { ADMIN_NAV } from '../../../../../data/constants/AdminConstants';
-
-import { useAuthContext } from '../../../../../contexts/AuthContext';
+import { useOrgSid } from '../../../../../hooks/useOrgSid';
 
 const COLUMNS = [
   {
@@ -105,7 +104,7 @@ const generateColumns = () => {
 };
 
 const _CreatePoliciesPage = () => {
-  const { orgSid } = useAuthContext();
+  const { orgSid } = useOrgSid();
   const [state, setState] = useState({
     editIndex: null,
     policyName: '',

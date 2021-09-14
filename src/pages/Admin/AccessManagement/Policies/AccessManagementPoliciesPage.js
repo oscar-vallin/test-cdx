@@ -39,7 +39,6 @@ const generateColumns = () => {
 const _AccessManagementPoliciesPage = () => {
   const { orgSid } = useOrgSid();
   const columns = generateColumns();
-  // const { authData, orgSid } = useAuthContext();
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);

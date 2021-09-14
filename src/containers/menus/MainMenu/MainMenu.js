@@ -9,19 +9,17 @@ import { useHistory, useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 import { StyledRow, StyledColumn, StyledMenuButton, StyledButtonIcon } from './MainMenu.styles';
 
-import { ROUTES_ARRAY, ROUTES, ROUTES_ID, URL_ROUTES, getRouteByApiId } from '../../../data/constants/RouteConstants';
+import { ROUTES, ROUTES_ID, getRouteByApiId } from '../../../data/constants/RouteConstants';
 import { OutsideComponent } from './OutsideComponent';
-import { useAuthContext } from '../../../contexts/AuthContext';
-import { useUserDomain } from '../../../contexts/hooks/useUserDomain';
-import { useOrgSid } from '../../../hooks/useOrgSid';
+import { useActiveDomainStore } from '../../../store/ActiveDomainStore';
 
 // CardSection is called directly cause a restriction warning for that component.
 const MainMenu = ({ id = '__MainMenu', option = ROUTES.ROUTE_DASHBOARD.ID, left, changeCollapse }) => {
+  const ActiveDomainStore = useActiveDomainStore();
   const history = useHistory();
   const location = useLocation();
   const { search } = location;
   const [filterParam, _setFilterParam] = useState(search);
-  const filter = new URLSearchParams(filterParam).get('filter');
   const [collapse, setCollapse] = React.useState();
 
   const collapseNavMenu = () => {
@@ -30,41 +28,20 @@ const MainMenu = ({ id = '__MainMenu', option = ROUTES.ROUTE_DASHBOARD.ID, left,
   };
 
   const renderOptions = () => {
-    const {
-      userDomain: { dashboard },
-    } = useUserDomain();
-
-    return (dashboard?.navItems || []).map((menuOption) => {
-      const page = menuOption?.page;
-      const opt = getRouteByApiId(menuOption.label !== 'Admin' ? page?.type : 'ADMIN');
+    return ActiveDomainStore.nav.dashboard.map((menuOption, index) => {
+      const opt = getRouteByApiId(menuOption.label !== 'Admin' ? menuOption.destination : 'ADMIN');
 
       return opt.MAIN_MENU ? (
-        <StyledColumn id={`${id}__MainMenu__Row-${opt.ID}`} key={`${id}__MainMenu__Row-${opt.ID}`} noStyle>
+        <StyledColumn
+          id={`${id}__MainMenu__Row-${opt.ID}-${index}`}
+          key={`${id}__MainMenu__Row-${opt.ID}-${index}`}
+          noStyle
+        >
           <StyledMenuButton
             selected={location.pathname === opt.URL}
             collapse={collapse}
             onClick={() => {
-              const { parameters } = page;
-
-              const search = queryString.parse(location.search);
-
-              const urlResult = parameters
-                .map(({ name, idValue }) => {
-                  if (name === 'orgSid') {
-                    return `orgSid=${search.orgSid || idValue}`;
-                  }
-
-                  return `${name}=${idValue}`;
-                })
-                .join('&');
-
-              let url = `${opt.URL}?${urlResult}`;
-
-              if (opt.URL === `/${ROUTES_ID.FILE_STATUS}`) {
-                url = `${url}&filter=${filter || ''}`;
-              }
-
-              history.push(url);
+              history.push(opt.URL);
             }}
           >
             {menuOption.label}

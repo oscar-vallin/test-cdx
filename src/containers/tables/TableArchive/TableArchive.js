@@ -15,10 +15,7 @@ import { useTableTemplate } from '../../../hooks/useTableTemplate';
 import { TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { useTableFilters } from '../../../hooks/useTableFilters';
 
-import { useAuthContext } from '../../../contexts/AuthContext';
-
 const TableArchive = ({ idPage = 'TableArchive', _orgSid = 1, onItemsListChange = () => {} }) => {
-  // const { orgSid } = useAuthContext();
   const { localInput, startDate, endDate, selectDate } = useTableFilters(
     'Extract Name,  Status, Vendor, etc.',
     useParams()
@@ -72,7 +69,8 @@ const TableArchive = ({ idPage = 'TableArchive', _orgSid = 1, onItemsListChange 
                 onItemsListChange({
                   count: items.length,
                   loading: tableProps.loading,
-                })}
+                })
+              }
               {...tableProps}
             />
           )}

@@ -17,7 +17,6 @@ import {
 } from '../../../../data/services/graphql';
 import { StyledColumn } from './DeletedUsersPage.styles';
 
-import { useAuthContext } from '../../../../contexts/AuthContext';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
 
 const generateColumns = () => {

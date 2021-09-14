@@ -19,7 +19,7 @@ import {
 } from './FormLogin.styles';
 
 import { useSessionStore } from '../../../store/SessionStore';
-import { useLoginUseCase } from '../../../use-cases/Authentication';
+import { useLoginUseCase, useLogoutUseCase } from '../../../use-cases/Authentication';
 import { useNotification } from '../../../contexts/hooks/useNotification';
 
 const INITIAL_STATE = { userId: '', password: '' };

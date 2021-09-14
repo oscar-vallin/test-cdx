@@ -12,8 +12,8 @@ import { LayoutLogin } from '../layouts/LayoutLogin';
 import { Spacing } from '../components/spacings/Spacing';
 import { Spinner } from '../components/spinners/Spinner';
 import { StyledCard } from '../containers/forms/FormLogin/FormLogin.styles';
-import { useAuthContext } from './AuthContext';
 import Theming from '../utils/Theming';
+import { useSessionStore } from './../store/SessionStore';
 
 export const ThemeContext = React.createContext(() => {});
 
@@ -24,18 +24,21 @@ const sizes = {
 };
 
 export const ThemeContextProvider = ({ children }) => {
+  const SessionStore = useSessionStore();
+
   const userTheme = useStoreState(({ ThemeStore }) => ThemeStore.theme);
-  const { isAuthenticated, isAuthenticating } = useAuthContext();
   const { isLoadingTheme, fetchTheme } = useCurrentUserTheme();
   const [currentTheme, setTheme] = useState(styledComponentsTheme);
   const [styledTheme, setStyledTheme] = useState(styledComponentsTheme);
   const [themeConfig, setThemeConfig] = useState({});
 
   useEffect(() => {
-    if (isAuthenticated && !isAuthenticating) {
+    const { isAuthenticated } = SessionStore.status;
+
+    if (isAuthenticated) {
       fetchTheme();
     }
-  }, [isAuthenticated, isAuthenticating]);
+  }, [SessionStore.status.isAuthenticated]);
 
   const GlobalStyle = createGlobalStyle`
     * {

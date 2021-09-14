@@ -11,8 +11,6 @@ import { Spinner } from '../../components/spinners/Spinner';
 import { Text } from '../../components/typography/Text';
 import { PageHeader } from '../../containers/headers/PageHeader';
 
-import { useAuthContext } from '../../contexts/AuthContext';
-
 import { LayoutDashboard } from '../../layouts/LayoutDashboard';
 import { StyledRow, StyledRowDate, StyledColumn, StyledButton, StyledSpinner } from './DashboardPage.styles';
 import { useDashboardService } from './DashboardPage.service';
@@ -24,7 +22,6 @@ import { useOrgSid } from '../../hooks/useOrgSid';
 // const ORG_SID = 1;
 
 const _DashboardPage = () => {
-  // const { authData, orgSid } = useAuthContext();
   const { orgSid } = useOrgSid();
   const location = useLocation();
   const [urlParams, _setUrlParams] = useState(queryString.parse(location.search));

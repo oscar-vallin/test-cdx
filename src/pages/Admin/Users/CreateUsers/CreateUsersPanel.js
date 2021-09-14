@@ -10,7 +10,6 @@ import { InputText } from '../../../../components/inputs/InputText';
 
 import { useCreateUserMutation } from '../../../../data/services/graphql';
 
-import { useAuthContext } from '../../../../contexts/AuthContext';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
 
 const CreateUsersPanel = ({ isOpen, onDismiss, onCreateUser, selectedUserId }) => {
@@ -20,7 +19,6 @@ const CreateUsersPanel = ({ isOpen, onDismiss, onCreateUser, selectedUserId }) =
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [groupIds, setGroupIds] = useState(0);
-  const history = useHistory();
 
   const [_apiCall, { data, loading }] = useCreateUserMutation({
     variables: {

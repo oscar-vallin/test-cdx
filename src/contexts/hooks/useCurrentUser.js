@@ -1,14 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useCurrentUserLazyQuery } from '../../data/services/graphql';
-import { useAuthContext } from '../AuthContext';
 
 export const useCurrentUser = (_username, _password) => {
   const [isProcessing, setProcessing] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentUserData, setCurrentUserData] = useState({});
   const [isCurrentUserLogged, setLoggedIn] = useState(false);
-  const { authLogout } = useAuthContext();
   const history = useHistory();
   //
   const [_apiCall, { data, loading, error }] = useCurrentUserLazyQuery({
@@ -17,9 +15,9 @@ export const useCurrentUser = (_username, _password) => {
 
   useEffect(() => {
     if (error) {
-      console.log('We have an error');
-      authLogout('Session Expired');
-      history.push('/');
+      // console.log('We have an error');
+      // authLogout('Session Expired');
+      // history.push('/');
     }
   }, [error]);
 

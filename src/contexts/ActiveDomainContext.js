@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router';
 
+import { URL_ROUTES } from '../data/constants/RouteConstants';
 import { useActiveDomainStore } from '../store/ActiveDomainStore';
 import { useSessionStore } from '../store/SessionStore';
 import { useActiveDomainUseCase } from '../use-cases/ActiveDomain';
@@ -60,10 +61,18 @@ export const ActiveDomainContextProvider = ({ children }) => {
     if (currentOrg.data && !currentOrg.loading) {
       ActiveDomainStore.setCurrentOrg({
         label: currentOrg.data.currentOrgNav.label,
-        subOrgs: currentOrg.data.currentOrgNav.subNavItems.map(parseToStoreObj),
+        subNavItems: currentOrg.data.currentOrgNav.subNavItems.map(parseToStoreObj),
       });
     }
   }, [activeDomainState.currentOrg.loading]);
+
+  useEffect(() => {
+    const { destination } = ActiveDomainStore.domainOrg.current;
+
+    if (destination) {
+      history.push(URL_ROUTES[destination]);
+    }
+  }, [ActiveDomainStore.domainOrg.current.destination]);
 
   return <ActiveDomainContext.Provider>{children}</ActiveDomainContext.Provider>;
 };

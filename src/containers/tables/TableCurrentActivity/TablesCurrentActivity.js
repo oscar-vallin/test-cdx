@@ -11,11 +11,10 @@ import { InputText } from '../../../components/inputs/InputText';
 import { useTable } from './TableCurrentActivity.service';
 import { InputDateRange } from '../../../components/inputs/InputDateRange';
 import { useTableFilters } from '../../../hooks/useTableFilters';
-
-import { useAuthContext } from '../../../contexts/AuthContext';
+import { useOrgSid } from '../../../hooks/useOrgSid';
 
 const TablesCurrentActivity = ({ id = 'TableCurrentActivity', argOrgSid = 1, argDateRange, argFilter }) => {
-  const { orgSid } = useAuthContext();
+  const { orgSid } = useOrgSid();
   const { localInput, startDate, endDate } = useTableFilters('Name, Id, Last Activity');
   const { tableProc, tableComp, tableError } = useTable(orgSid || argOrgSid, argDateRange, argFilter);
 

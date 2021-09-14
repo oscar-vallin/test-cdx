@@ -82,7 +82,7 @@ export const useLoginUseCase = () => {
         orgSid: passwordLogin?.tokenUser?.session?.orgSid,
         destination: passwordLogin?.loginCompleteDomain?.selectedPage,
         label: '',
-        subOrgs: [],
+        subNavItems: [],
       };
 
       SessionStore.setCurrentSession({

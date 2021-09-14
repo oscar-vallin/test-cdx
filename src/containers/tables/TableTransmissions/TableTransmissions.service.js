@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { useHistory } from 'react-router-dom';
-import { useAuthContext } from '../../../contexts/AuthContext';
 import { useWorkPacketStatusesQuery, useWpTransmissionsQuery } from '../../../data/services/graphql';
 import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { useInputValue } from '../../../hooks/useInputValue';
@@ -12,7 +11,6 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
   const [columns, setColumns] = useState([]);
   const structure = getTableStructure(TABLE_NAMES.ARCHIVES);
 
-  const { authLogout } = useAuthContext();
   const history = useHistory();
 
   const { data, loading, error } = useWpTransmissionsQuery({
@@ -30,8 +28,8 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
 
   useEffect(() => {
     if (error) {
-      authLogout(error.message);
-      history.push('/');
+      // authLogout(error.message);
+      // history.push('/');
     }
   }, [error]);
 

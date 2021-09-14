@@ -15,7 +15,6 @@ import { NAV_ITEMS } from '../../SideMenu';
 import { useAmGroupsForOrgPLazyQuery } from '../../../../data/services/graphql';
 import { StyledColumn } from './AccessManagementGroupsPage.styles';
 
-// import { useAuthContext } from '../../../../contexts/AuthContext';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
 
 const generateColumns = () => {

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useStoreState, useStoreActions } from 'easy-peasy';
+import { useStoreActions } from 'easy-peasy';
 import { defaultTheme, darkTheme } from '../styles/themes';
 import Theming from '../utils/Theming';
 
@@ -8,13 +8,13 @@ import {
   useCreateOrUpdateOwnDashThemeMutation,
   useSetOwnDashThemeFontSizeMutation,
 } from '../data/services/graphql';
-
-import { useAuthContext } from '../contexts/AuthContext';
+import { useSessionStore } from '../store/SessionStore';
 
 export const useCurrentUserTheme = () => {
+  const SessionStore = useSessionStore();
   const setUserTheme = useStoreActions(({ ThemeStore }) => ThemeStore.updateTheme);
 
-  const { isAuthenticated } = useAuthContext();
+  const { isAuthenticated } = SessionStore.status;
 
   const [useUserThemeQuery, { data: theme, loading: isLoadingTheme }] = useUserThemeLazyQuery();
 

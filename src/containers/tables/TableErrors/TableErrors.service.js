@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { useHistory } from 'react-router-dom';
-import { useAuthContext } from '../../../contexts/AuthContext';
 import { useWorkPacketStatusesQuery } from '../../../data/services/graphql';
 import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { getStepStatusLabel } from '../../../data/constants/FileStatusConstants';
@@ -14,7 +13,6 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
   const [columns, setColumns] = useState([]);
   const structure = getTableStructure(TABLE_NAMES.ERRORS);
 
-  const { authLogout } = useAuthContext();
   const history = useHistory();
 
   const { data, loading, error } = useWorkPacketStatusesQuery({
@@ -32,8 +30,9 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
 
   useEffect(() => {
     if (error) {
-      authLogout(error.message);
-      history.push('/');
+      /* TODO: Refactor to logout use-case */
+      // authLogout(error.message);
+      // history.push('/');
     }
   }, [error]);
 

@@ -15,10 +15,7 @@ import { TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { useTableFilters } from '../../../hooks/useTableFilters';
 import { useTableTemplate } from '../../../hooks/useTableTemplate';
 
-import { useAuthContext } from '../../../contexts/AuthContext';
-
 const TableErrors = ({ idPage = 'TableErrors', _orgSid = 1, onItemsListChange = () => {} }) => {
-  // const { orgSid } = useAuthContext();
   const location = useLocation();
   const [urlParams, _setUrlParams] = useState(queryString.parse(location.search));
   const { localInput, startDate, endDate } = useTableFilters('Extract Name,  Status, Vendor, etc.', useParams());
@@ -64,7 +61,8 @@ const TableErrors = ({ idPage = 'TableErrors', _orgSid = 1, onItemsListChange = 
                 onItemsListChange({
                   count: items.length,
                   loading: tableProps.loading,
-                })}
+                })
+              }
               {...tableProps}
             />
           )}

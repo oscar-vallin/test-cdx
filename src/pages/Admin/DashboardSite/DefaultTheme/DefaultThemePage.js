@@ -10,7 +10,6 @@ import { Spinner } from '../../../../components/spinners/Spinner';
 import { Text } from '../../../../components/typography/Text';
 import { StyledChoiceGroup, StyledDiv } from './DefaultThemePage.styles';
 
-import { useAuthContext } from '../../../../contexts/AuthContext';
 import { useThemeContext } from '../../../../contexts/ThemeContext';
 import { useColorPalettes } from '../../../../hooks/useColorPalettes';
 import Theming from '../../../../utils/Theming';
@@ -23,13 +22,13 @@ import {
 } from '../../../../data/services/graphql';
 import { useNotification } from '../../../../contexts/hooks/useNotification';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
+import { useSessionStore } from '../../../../store/SessionStore';
 
 const _DefaultThemePage = () => {
-  const Toast = useNotification();
+  const SessionStore = useSessionStore();
   const { orgSid } = useOrgSid();
-  const { authData } = useAuthContext();
-  const { id, orgId } = authData;
-  const ownedInput = { orgSid: authData?.orgId, ownerId: id };
+  const Toast = useNotification();
+  const ownedInput = { orgSid, ownerId: SessionStore.user.id };
 
   const [useDefaultDashThemeQuery, { data: defaultTheme, loading: isLoadingDefaultTheme }] =
     useDefaultDashThemeForSiteLazyQuery();

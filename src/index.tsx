@@ -12,7 +12,6 @@ import { ThemeContextProvider } from './contexts/ThemeContext.js';
 import { SessionContextProvider } from './contexts/SessionContext.js';
 import { ActiveDomainContextProvider } from './contexts/ActiveDomainContext.js';
 import { NotificationContextProvider } from './contexts/NotificationContext.js';
-import { UserDomainContextProvider } from './contexts/UserDomainContext.js';
 import store from './store/index';
 
 initializeIcons();
@@ -24,13 +23,11 @@ ReactDOM.render(
         <Router>
           <SessionContextProvider>
             <ActiveDomainContextProvider>
-            <UserDomainContextProvider>
               <ThemeContextProvider>
                 <NotificationContextProvider>
                   <App />
                 </NotificationContextProvider>
               </ThemeContextProvider>
-            </UserDomainContextProvider>
             </ActiveDomainContextProvider>
           </SessionContextProvider>
         </Router>

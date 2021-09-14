@@ -4,28 +4,28 @@ import { useHistory } from 'react-router-dom';
 import { StyledBox, StyledNav } from './LayoutAdmin.styles';
 import { LayoutDashboard } from '../LayoutDashboard';
 import { getRouteByApiId } from '../../data/constants/RouteConstants';
-import { useUserDomain } from '../../contexts/hooks/useUserDomain';
 import { Spinner } from '../../components/spinners/Spinner';
 import { Spacing } from '../../components/spacings/Spacing';
 
 import { useNotification } from '../../contexts/hooks/useNotification';
 import { useOrgSid } from '../../hooks/useOrgSid';
+import { useActiveDomainStore } from '../../store/ActiveDomainStore';
 
 const parseLinks = (links = [], sidebarOpt) => {
-  return links.map(({ appDomain, label, subNavItems, page }) => ({
+  return links.map(({ type, label, destination, subNavItems, page }) => ({
     name: label,
     ...(subNavItems
       ? {
-          isExpanded: subNavItems.find((item) => item.page.type === sidebarOpt),
+          isExpanded: subNavItems.find((item) => item.type === sidebarOpt),
           links: parseLinks(subNavItems),
         }
       : {}),
-    ...(page
+    ...(destination
       ? {
-          url: getRouteByApiId(page?.type)?.URL,
-          key: page.type,
-          params: page.parameters,
-          commands: page.commands,
+          url: getRouteByApiId(destination)?.URL,
+          key: type,
+          // params: page.parameters,
+          // commands: page.commands,
         }
       : {}),
   }));
@@ -34,10 +34,9 @@ const parseLinks = (links = [], sidebarOpt) => {
 const LayoutAdmin = ({ id = 'LayoutAdmin', menuOptionSelected = 'admin', sidebarOptionSelected = '', children }) => {
   const { orgSid } = useOrgSid();
   const history = useHistory();
-  const {
-    userDomain: { organization },
-    isFetchingOrgNav,
-  } = useUserDomain();
+  const ActiveDomainStore = useActiveDomainStore();
+
+  const isFetchingOrgNav = false;
 
   return (
     <LayoutDashboard id={id} menuOptionSelected={menuOptionSelected} showMenu={false}>
@@ -49,7 +48,7 @@ const LayoutAdmin = ({ id = 'LayoutAdmin', menuOptionSelected = 'admin', sidebar
         <StyledBox>
           <StyledNav
             selectedKey={sidebarOptionSelected}
-            groups={[{ links: parseLinks(organization?.navItems || [], sidebarOptionSelected) }]}
+            groups={[{ links: parseLinks(ActiveDomainStore.nav.admin, sidebarOptionSelected) }]}
             onLinkClick={(evt, route) => {
               evt.preventDefault();
 

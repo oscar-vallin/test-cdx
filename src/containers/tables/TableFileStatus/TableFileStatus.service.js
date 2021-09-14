@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { format } from 'date-fns';
 import { useWorkPacketStatusesQuery } from '../../../data/services/graphql';
-import { useAuthContext } from '../../../contexts/AuthContext';
 import { useUpdateFileStatus } from './hooks/useUpdateFileStatus';
 import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { formatField, isCDXToday } from '../../../helpers/tableHelpers';
@@ -17,7 +16,6 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
   const [items, setItems] = useState([]);
   const structure = getTableStructure(TABLE_NAMES.FILE_STATUS);
 
-  const { authLogout } = useAuthContext();
   const history = useHistory();
 
   const { fileStatusQuery, apiData, loadingFs, _error } = useUpdateFileStatus();
@@ -58,8 +56,8 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
 
   useEffect(() => {
     if (_error) {
-      authLogout('expired');
-      history.push('/');
+      // authLogout('expired');
+      // history.push('/');
     }
   }, [_error]);
 

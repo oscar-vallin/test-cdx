@@ -24,7 +24,8 @@ import {
   useUpdateAmPolicyMutation,
   useAmPolicyLazyQuery,
 } from '../../../../../data/services/graphql';
-import { useAuthContext } from '../../../../../contexts/AuthContext';
+import { useOrgSid } from '../../../../../hooks/useOrgSid';
+import { useSessionStore } from '../../../../../store/SessionStore';
 
 const INITIAL_STATE = {
   policyName: '',
@@ -55,9 +56,7 @@ const generateColumns = () => {
 };
 
 const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicyId }) => {
-  const { orgSid } = useAuthContext();
-  const { authData } = useAuthContext();
-  // const { id, orgId } = authData;
+  const { orgSid } = useOrgSid();
   const [state, setState] = useState({ ...INITIAL_STATE });
 
   const [options, setOptions] = useState({ ...INITIAL_OPTIONS });
@@ -302,7 +301,8 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
                               actions: [],
                             },
                           ],
-                        })}
+                        })
+                      }
                     >
                       Add permission
                     </StyledCommandButton>
@@ -335,7 +335,8 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
 
                                       return { ...permission, effect: key };
                                     }),
-                                  })}
+                                  })
+                                }
                                 style={{ width: '100%' }}
                               />
                             </Column>
@@ -356,7 +357,8 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
 
                                       return { ...permission, predicateName: key };
                                     }),
-                                  })}
+                                  })
+                                }
                                 style={{ width: '100%' }}
                               />
                             </Column>
@@ -375,7 +377,8 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
 
                                       return { ...permission, parameterVariable: target.value };
                                     }),
-                                  })}
+                                  })
+                                }
                               />
                             </Column>
 
@@ -393,7 +396,8 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
 
                                       return { ...permission, parameterValue: target.value };
                                     }),
-                                  })}
+                                  })
+                                }
                               />
                             </Column>
                           </Row>
@@ -433,7 +437,8 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
                                       ],
                                     };
                                   }),
-                                })}
+                                })
+                              }
                             >
                               Add action
                             </StyledCommandButton>

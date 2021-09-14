@@ -7,15 +7,11 @@ import { useStoreActions, useStoreState } from 'easy-peasy';
 import { TooltipHost } from '@fluentui/react/lib/Tooltip';
 import { ProfileMenu } from '../../menus/ProfileMenu';
 
-// Components
 import { MainMenu } from '../../menus/MainMenu';
 import { useCurrentUserTheme } from '../../../hooks/useCurrentUserTheme';
-import { useAuthContext } from '../../../contexts/AuthContext';
 import { useNotification } from '../../../contexts/hooks/useNotification';
 import { Spinner } from '../../../components/spinners/Spinner';
-// Hooks
-// import { useNavBar } from "./NavBar.services";
-// Styles
+
 import {
   StyledBox,
   StyledRow,
@@ -29,17 +25,21 @@ import {
 } from './NavBar.styles';
 
 import { useOrgSid } from '../../../hooks/useOrgSid';
+import { useSessionStore } from '../../../store/SessionStore';
+import { useActiveDomainStore } from '../../../store/ActiveDomainStore';
 
-// CardSection is called directly cause a restriction warning for that component.
 const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSettings, visible, ...props }) => {
+  const SessionStore = useSessionStore();
+  const ActiveDomainStore = useActiveDomainStore();
+
   const Toast = useNotification();
+  const authData = SessionStore.user;
+
   const [collapse, setCollapse] = React.useState('false');
   const { setOwnDashFontSize, isHandlingFontSize } = useCurrentUserTheme();
+
   const { setOrgSid } = useOrgSid();
 
-  const authData = useStoreState(({ AuthStore }) => AuthStore.data);
-
-  const currentUserOrgNav = useStoreState(({ ActiveOrgStore }) => ActiveOrgStore.currentNav);
   const userTheme = useStoreState(({ ThemeStore }) => ThemeStore.theme);
   const setUserTheme = useStoreActions(({ ThemeStore }) => ThemeStore.updateTheme);
 
@@ -94,13 +94,13 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSetti
         <StyledColumnCont id={`${id}__Col-Right`} sm={4} right container>
           <StyledRow id={`${id}__Right_Row`} right>
             <StyledButtonOrg
-              text={currentUserOrgNav?.label}
-              {...((currentUserOrgNav.subNavItems || []).length > 1 && {
+              text={ActiveDomainStore.domainOrg.current.label}
+              {...(ActiveDomainStore.domainOrg.current.subNavItems.length > 1 && {
                 menuProps: {
                   items:
-                    (currentUserOrgNav.subNavItems || []).length <= 1
+                    ActiveDomainStore.domainOrg.current.subNavItems.length <= 1
                       ? []
-                      : (currentUserOrgNav?.subNavItems || [])
+                      : ActiveDomainStore.domainOrg.current.subNavItems
                           .map((item, index) => ({
                             key: index,
                             text: item.label,
@@ -108,9 +108,7 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSetti
                               Toast.info({ text: `Loading ${item.label} domain`, duration: 3000 });
 
                               setTimeout(() => {
-                                const orgId = [...item.page.parameters].shift().idValue;
-
-                                setOrgSid(orgId);
+                                setOrgSid(item.orgSid);
                               }, 1500);
                             },
                           }))
@@ -123,7 +121,7 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSetti
                                 Toast.info({ text: `Loading your organization's domain`, duration: 3000 });
 
                                 setTimeout(() => {
-                                  setOrgSid(authData.orgId);
+                                  setOrgSid(authData.orgSid);
                                 }, 1500);
                               },
                             },

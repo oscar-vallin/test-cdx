@@ -16,7 +16,6 @@ import { useTableFilters } from '../../../hooks/useTableFilters';
 import { TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { useTableTemplate } from '../../../hooks/useTableTemplate';
 import { getStartDay, getEndDay } from '../../../helpers/tableHelpers';
-// import { useAuthContext } from '../../../contexts/AuthContext';
 import { useQueryParams } from '../../../hooks/useQueryParams';
 
 const TableFileStatus = ({

@@ -1,12 +1,12 @@
 import { action } from 'easy-peasy';
 import { ActiveDomainModel } from './ActiveDomainTypes';
 
-const INITIAL_NAV_STATE = {
+export const INITIAL_NAV_STATE = {
   dashboard: [],
   admin: [],
 };
 
-const INITIAL_ORG_STATE = {
+export const INITIAL_ORG_STATE = {
   type: 'DASHBOARD',
   orgSid: null,
   destination: '',

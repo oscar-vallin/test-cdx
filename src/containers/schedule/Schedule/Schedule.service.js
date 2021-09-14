@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { useHistory } from 'react-router-dom';
-import { useAuthContext } from '../../../contexts/AuthContext';
 import { useScheduleOccurrencesQuery } from '../../../data/services/graphql';
 import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { getStepStatusLabel } from '../../../data/constants/FileStatusConstants';
@@ -14,7 +13,6 @@ export const useScheduleItems = (argOrgSid, argDateRange, argFilter) => {
   const [dateStart, setDateStart] = useState(new Date());
   const [dateEnd, setDateEnd] = useState(new Date());
 
-  const { authLogout } = useAuthContext();
   const history = useHistory();
 
   const { data, loading, error } = useScheduleOccurrencesQuery({
@@ -34,8 +32,9 @@ export const useScheduleItems = (argOrgSid, argDateRange, argFilter) => {
 
   useEffect(() => {
     if (error) {
-      authLogout(error.message);
-      history.push('/');
+      /* TODO: Refactor to logout use-case */
+      // authLogout(error.message);
+      // history.push('/');
     }
   }, [error]);
 

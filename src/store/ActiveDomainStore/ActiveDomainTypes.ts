@@ -1,25 +1,27 @@
 import { Action } from 'easy-peasy';
 
 export interface ActiveDomainModel {
-  nav: {
-    dashboard: DomainNav[];
-    admin: DomainNav[];
-  };
+  nav: DomainNav;
   domainOrg: {
-    origin: DomainNav;
-    current: DomainNav;
+    origin: DomainNavItem;
+    current: DomainNavItem;
   };
-  setDashboardNav: Action<ActiveDomainModel, DomainNav>;
-  setAdminNav: Action<ActiveDomainModel, DomainNav>;
-  setOriginOrg: Action<ActiveDomainModel, DomainNav>;
-  setCurrentOrg: Action<ActiveDomainModel, DomainNav>;
+  setDashboardNav: Action<ActiveDomainModel, DomainNavItem>;
+  setAdminNav: Action<ActiveDomainModel, DomainNavItem>;
+  setOriginOrg: Action<ActiveDomainModel, DomainNavItem>;
+  setCurrentOrg: Action<ActiveDomainModel, DomainNavItem>;
   reset: Action<ActiveDomainModel>;
 }
 
 export type DomainNav = {
+  dashboard: DomainNavItem[];
+  admin: DomainNavItem[];
+};
+
+export type DomainNavItem = {
   orgSid?: string | null;
   destination: string;
   label: string;
   type?: string;
-  subNavItems?: DomainNav[];
+  subNavItems?: DomainNavItem[];
 };

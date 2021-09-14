@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useWorkPacketStatusDetailsLazyQuery } from '../../../data/services/graphql';
-import { useAuthContext } from '../../../contexts/AuthContext';
+import { useOrgSid } from '../../../hooks/useOrgSid';
 
 export const useFsPacketStatusDetails = (realId) => {
-  const { orgSid } = useAuthContext();
+  const { orgSid } = useOrgSid();
   const [loadingPacketDetail, setLoadingPacketDetail] = useState(true);
   const [apiData, setApiData] = useState();
   const [_error, setError] = useState();

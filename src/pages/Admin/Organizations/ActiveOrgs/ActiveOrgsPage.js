@@ -15,6 +15,7 @@ import { Separator } from '../../../../components/separators/Separator';
 import { useDirectOrganizationsFLazyQuery } from '../../../../data/services/graphql';
 import { StyledColumn } from './ActiveOrgsPage.styles';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
+import { useActiveDomainStore } from '../../../../store/ActiveDomainStore';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -34,7 +35,7 @@ const generateColumns = () => {
 };
 
 const _ActiveOrgsPage = () => {
-  const { orgSid, setOrgSid } = useOrgSid();
+  const ActiveDomainStore = useActiveDomainStore();
   const [orgs, setOrgs] = useState([]);
   const columns = generateColumns();
   const history = useHistory();
@@ -44,13 +45,13 @@ const _ActiveOrgsPage = () => {
   useEffect(() => {
     directOrganizationsFQuery({
       variables: {
-        orgSid,
+        orgSid: ActiveDomainStore.domainOrg.current.orgSid,
         orgFilter: { activeFilter: 'ACTIVE' },
       },
     });
-  }, [orgSid]);
+  }, [ActiveDomainStore.domainOrg.current.orgSid]);
 
-  const changeActiveOrg = async ({ id, name, orgType }) => {
+  const changeActiveOrg = ({ id, name, orgType }) => {
     directOrganizationsFQuery({
       variables: {
         orgSid: id,
@@ -58,11 +59,10 @@ const _ActiveOrgsPage = () => {
       },
     });
 
-    await setOrgSid(id);
-
-    const destination = orgType === 'INTEGRATION_SPONSOR' ? URL_ROUTES.FILE_STATUS : URL_ROUTES.CURRENT_ACTIVITY;
-
-    history.replace(destination);
+    ActiveDomainStore.setCurrentOrg({
+      orgSid: id,
+      destination: orgType === 'INTEGRATION_SPONSOR' ? 'FILE_STATUS' : 'CURRENT_ACTIVITY',
+    });
   };
 
   const onRenderItemColumn = (item, index, column) => {
