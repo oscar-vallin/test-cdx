@@ -14,8 +14,8 @@ import { Separator } from '../../../../components/separators/Separator';
 
 import { useDirectOrganizationsFLazyQuery } from '../../../../data/services/graphql';
 import { StyledColumn } from './ActiveOrgsPage.styles';
-import { useOrgSid } from '../../../../hooks/useOrgSid';
 import { useActiveDomainStore } from '../../../../store/ActiveDomainStore';
+import { useQueryHandler } from '../../../../hooks/useQueryHandler';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -38,9 +38,8 @@ const _ActiveOrgsPage = () => {
   const ActiveDomainStore = useActiveDomainStore();
   const [orgs, setOrgs] = useState([]);
   const columns = generateColumns();
-  const history = useHistory();
 
-  const [directOrganizationsFQuery, { data, loading }] = useDirectOrganizationsFLazyQuery();
+  const [directOrganizationsFQuery, { data, loading }] = useQueryHandler(useDirectOrganizationsFLazyQuery);
 
   useEffect(() => {
     directOrganizationsFQuery({
