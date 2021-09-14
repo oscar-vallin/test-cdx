@@ -1,5 +1,5 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import { useHistory } from 'react-router-dom';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useEffect } from 'react';
 import { Panel, PanelType } from '@fluentui/react/lib/Panel';
 
 import { Spacing } from '../../../../components/spacings/Spacing';
@@ -10,17 +10,15 @@ import { InputText } from '../../../../components/inputs/InputText';
 
 import { useCreateUserMutation } from '../../../../data/services/graphql';
 
-import { useAuthContext } from '../../../../contexts/AuthContext';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
 
-const CreateUsersPanel = ({ isOpen, onDismiss, onCreateUser, selectedUserId }) => {
+const CreateUsersPanel = ({ isOpen, onDismiss, onCreateUser }) => {
   const { orgSid } = useOrgSid();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [groupIds, setGroupIds] = useState(0);
-  const history = useHistory();
 
   const [_apiCall, { data, loading }] = useCreateUserMutation({
     variables: {
@@ -126,6 +124,7 @@ const CreateUsersPanel = ({ isOpen, onDismiss, onCreateUser, selectedUserId }) =
                     if (firstName && lastName && password && email && groupIds !== 0) {
                       _apiCall();
                     } else {
+                      // eslint-disable-next-line no-alert
                       alert('Please check the provided data');
                     }
                   }}

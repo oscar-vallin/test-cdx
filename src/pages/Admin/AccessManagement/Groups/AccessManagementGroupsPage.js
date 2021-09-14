@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
@@ -9,13 +10,10 @@ import { Spacing } from '../../../../components/spacings/Spacing';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Text } from '../../../../components/typography/Text';
 import { Separator } from '../../../../components/separators/Separator';
-import { RouteLink } from '../../AdminPage.styles';
-import { NAV_ITEMS } from '../../SideMenu';
 
 import { useAccessPolicyGroupsForOrgLazyQuery } from '../../../../data/services/graphql';
 import { StyledColumn } from './AccessManagementGroupsPage.styles';
 
-// import { useAuthContext } from '../../../../contexts/AuthContext';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
 
 const generateColumns = () => {
@@ -31,13 +29,10 @@ const generateColumns = () => {
   return [createColumn({ name: 'Name', key: 'name' }), createColumn({ name: 'Template', key: 'tmpl' })];
 };
 
-const onRenderItemColumn = (item, index, column) => {
-  switch (column.key) {
-    case 'tmpl':
-      return <FontIcon iconName={item.tmpl ? 'CheckMark' : 'Cancel'} />;
-    default:
-      return item[column.key];
-  }
+const onRenderItemColumn = (item, column) => {
+  if (column.key === 'tmpl') return <FontIcon iconName={item.tmpl ? 'CheckMark' : 'Cancel'} />;
+
+  return item[column.key];
 };
 
 const _AccessManagementGroupsPage = () => {
@@ -59,6 +54,21 @@ const _AccessManagementGroupsPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading]);
 
+  const renderList = () => {
+    return groups.length > 0 ? (
+      <DetailsList
+        items={groups}
+        selectionMode={SelectionMode.none}
+        columns={columns}
+        layoutMode={DetailsListLayoutMode.justified}
+        onRenderItemColumn={onRenderItemColumn}
+        isHeaderVisible
+      />
+    ) : (
+      <MessageBar>No groups added</MessageBar>
+    );
+  };
+
   return (
     <LayoutAdmin id="PageAdmin" sidebarOptionSelected="AM_GROUPS">
       <Spacing margin="double">
@@ -79,18 +89,7 @@ const _AccessManagementGroupsPage = () => {
             <Row>
               <StyledColumn>
                 {!loading ? (
-                  groups.length > 0 ? (
-                    <DetailsList
-                      items={groups}
-                      selectionMode={SelectionMode.none}
-                      columns={columns}
-                      layoutMode={DetailsListLayoutMode.justified}
-                      onRenderItemColumn={onRenderItemColumn}
-                      isHeaderVisible
-                    />
-                  ) : (
-                    <MessageBar>No groups added</MessageBar>
-                  )
+                  renderList()
                 ) : (
                   <Spacing margin={{ top: 'double' }}>
                     <Spinner size="lg" label="Loading groups" />

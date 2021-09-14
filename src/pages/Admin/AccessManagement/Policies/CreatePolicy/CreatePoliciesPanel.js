@@ -1,4 +1,5 @@
-import React, { useState, useEffect, Fragment } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useEffect } from 'react';
 
 import { Panel, PanelType } from '@fluentui/react/lib/Panel';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
@@ -54,8 +55,7 @@ const generateColumns = () => {
 
 const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicyId }) => {
   const { orgSid } = useAuthContext();
-  const { authData } = useAuthContext();
-  // const { id, orgId } = authData;
+
   const [state, setState] = useState({ ...INITIAL_STATE });
 
   const [options, setOptions] = useState({ ...INITIAL_OPTIONS });
@@ -111,7 +111,7 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
     }
   }, [createdPolicy]);
 
-  const handleAsyncOptionChange = (attr, permissionIndex) => (option, item, data) => {
+  const handleAsyncOptionChange = (attr, permissionIndex) => (option, item) => {
     setState({
       ...state,
       permissions: state.permissions.map((permission, index) => {
@@ -176,11 +176,11 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
       }
     };
 
-  const columns = generateColumns(options);
+  const columns = generateColumns();
 
   useEffect(() => {
     if (isOpen) {
-      useAmPolicyPage({ variables: { orgSid } });
+      apiAmPolicyPage({ variables: { orgSid } });
     }
   }, [isOpen]);
 
@@ -270,7 +270,7 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
                   <Column lg="8" right>
                     <StyledCommandButton
                       iconProps={{ iconName: 'Add' }}
-                      onClick={() =>
+                      onClick={() => {
                         setState({
                           ...state,
                           permissions: [
@@ -283,7 +283,8 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
                               actions: [],
                             },
                           ],
-                        })}
+                        });
+                      }}
                     >
                       Add permission
                     </StyledCommandButton>
@@ -306,7 +307,7 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
                                 label="Effect"
                                 autoComplete="off"
                                 options={(options.permissionEffectNVPs || []).map(parseToComboBoxOption)}
-                                onChange={(event, { key }) =>
+                                onChange={(event, { key }) => {
                                   setState({
                                     ...state,
                                     permissions: state.permissions.map((item, index) => {
@@ -316,7 +317,8 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
 
                                       return { ...permission, effect: key };
                                     }),
-                                  })}
+                                  });
+                                }}
                                 style={{ width: '100%' }}
                               />
                             </Column>
@@ -327,7 +329,7 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
                                 label="Predicate name"
                                 autoComplete="off"
                                 options={(options.predicates || []).map(parseToComboBoxOption)}
-                                onChange={(event, { key }) =>
+                                onChange={(event, { key }) => {
                                   setState({
                                     ...state,
                                     permissions: state.permissions.map((item, index) => {
@@ -337,7 +339,8 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
 
                                       return { ...permission, predicateName: key };
                                     }),
-                                  })}
+                                  });
+                                }}
                                 style={{ width: '100%' }}
                               />
                             </Column>
@@ -346,7 +349,7 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
                               <InputText
                                 label="Parameter variable"
                                 value={permission.parameterVariable}
-                                onChange={({ target }) =>
+                                onChange={({ target }) => {
                                   setState({
                                     ...state,
                                     permissions: state.permissions.map((item, index) => {
@@ -356,7 +359,8 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
 
                                       return { ...permission, parameterVariable: target.value };
                                     }),
-                                  })}
+                                  });
+                                }}
                               />
                             </Column>
 
@@ -364,7 +368,7 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
                               <InputText
                                 label="Parameter value"
                                 value={permission.parameterValue}
-                                onChange={({ target }) =>
+                                onChange={({ target }) => {
                                   setState({
                                     ...state,
                                     permissions: state.permissions.map((item, index) => {
@@ -374,7 +378,8 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
 
                                       return { ...permission, parameterValue: target.value };
                                     }),
-                                  })}
+                                  });
+                                }}
                               />
                             </Column>
                           </Row>
@@ -394,7 +399,7 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
                           <Column lg="8" right>
                             <StyledCommandButton
                               iconProps={{ iconName: 'Add' }}
-                              onClick={() =>
+                              onClick={() => {
                                 setState({
                                   ...state,
                                   permissions: state.permissions.map((item, index) => {
@@ -414,7 +419,8 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
                                       ],
                                     };
                                   }),
-                                })}
+                                });
+                              }}
                             >
                               Add action
                             </StyledCommandButton>

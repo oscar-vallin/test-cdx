@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useCallback, Fragment, Children } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react/no-danger */
+import { useState, useEffect } from 'react';
 import PasswordStrengthBar from 'react-password-strength-bar';
 import _ from 'lodash';
 
@@ -97,7 +99,7 @@ const validateRulesArr = (value, data) =>
 
 const PasswordRules = ({ validations, password, onChange }) => {
   const [rules, setRules] = useState([]);
-  const { data, loading, error } = useChangeOwnPasswordPageQuery();
+  const { data, loading } = useChangeOwnPasswordPageQuery();
 
   const onRenderCell = (item, index) => {
     return (
