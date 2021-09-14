@@ -21,14 +21,10 @@ export const SessionContextProvider = ({ children }) => {
   }, [isRehydrated, SessionStore.user.token]);
 
   useEffect(() => {
-    const {
-      status: { isAuthenticated, isRehydrating },
-    } = SessionStore;
-
-    if (!isRehydrating && !isAuthenticated) {
+    if (isRehydrated && !SessionStore.user.token) {
       history.push('/login');
     }
-  }, [SessionStore.status.isAuthenticated, SessionStore.status.isRehydrating]);
+  }, [SessionStore.user.token, isRehydrated]);
 
-  return <SessionContext.Provider>{isRehydrated && children}</SessionContext.Provider>;
+  return <SessionContext.Provider>{!isRehydrated ? <div>Loading</div> : children}</SessionContext.Provider>;
 };

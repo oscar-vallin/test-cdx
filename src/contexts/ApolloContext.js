@@ -1,6 +1,7 @@
 import React from 'react';
 import { ApolloProvider, ApolloClient, InMemoryCache, HttpLink, ApolloLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
+import { useSessionStore } from '../store/SessionStore';
 import introspection from '../data/services/introspection.json';
 
 const SERVER_URL = process.env.REACT_APP_API_SERVER;
@@ -12,12 +13,10 @@ export const ApolloContext = React.createContext(() => {
 });
 
 export const ApolloContextProvider = ({ children }) => {
+  const SessionStore = useSessionStore();
   // LocalState
   const [isApolloLoading, setLoading] = React.useState(true);
   // const [sessionID, setSessionID] = React.useState('');
-  const [saveToken, setSaveToken] = React.useState(false);
-
-  let authToken = localStorage.getItem('AUTH_TOKEN');
 
   const httpLink = new HttpLink({
     uri: SERVER_URL,
@@ -31,7 +30,7 @@ export const ApolloContextProvider = ({ children }) => {
     return {
       headers: {
         ...headers,
-        'x-auth-token': authToken ? `${authToken}` : '',
+        'x-auth-token': SessionStore.user.token || '',
       },
     };
   });
@@ -42,13 +41,12 @@ export const ApolloContextProvider = ({ children }) => {
 
       const { headers, status } = context.response;
 
-      if (headers) {
-        const authHeader = headers.get('x-auth-token');
-        if (authHeader) {
-          authToken = authHeader;
-          localStorage.setItem('AUTH_TOKEN', authHeader);
-        }
-      }
+      // if (headers) {
+      //   const authHeader = headers.get('x-auth-token');
+      //   if (authHeader) {
+      //     SessionStore.user.setCurrentSession({ ...SessionStore.user, token: authHeader });
+      //   }
+      // }
 
       return response;
     });
@@ -70,8 +68,8 @@ export const ApolloContextProvider = ({ children }) => {
   React.useEffect(() => {
     const localFunction = async () => {
       // tokenFunc();
-      authToken = await localStorage.getItem('AUTH_TOKEN');
-      setLoading(false);
+      // authToken = await localStorage.getItem('AUTH_TOKEN');
+      // setLoading(false);
     };
 
     localFunction();

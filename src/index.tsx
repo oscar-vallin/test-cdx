@@ -18,8 +18,8 @@ initializeIcons();
 
 ReactDOM.render(
   <React.StrictMode>
-    <ApolloContextProvider>
-      <StoreProvider store={store}>
+    <StoreProvider store={store}>
+      <ApolloContextProvider>
         <Router>
           <SessionContextProvider>
             <ActiveDomainContextProvider>
@@ -31,8 +31,8 @@ ReactDOM.render(
             </ActiveDomainContextProvider>
           </SessionContextProvider>
         </Router>
-      </StoreProvider>
-    </ApolloContextProvider>
+      </ApolloContextProvider>
+    </StoreProvider>
   </React.StrictMode>,
   document.getElementById('app')
 );
