@@ -1,4 +1,6 @@
-import React, { useState, useEffect, Fragment, useMemo } from 'react';
+/* eslint-disable no-alert */
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect, useMemo } from 'react';
 import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
 import { MarqueeSelection } from '@fluentui/react/lib/MarqueeSelection';
 import { PrimaryButton, DefaultButton, MessageBar } from 'office-ui-fabric-react';
@@ -44,15 +46,14 @@ const _ActiveUsersPage = () => {
   const columns = generateColumns();
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);
-  const [selectedUserId, setSelectedUserId] = useState(0);
-  const [useUsersForOrgFpLazy, { data, loading }] = useUsersForOrgFpLazyQuery();
+  const [selectedUserId] = useState(0);
+  const [apiUsersForOrgFpLazy, { data, loading }] = useUsersForOrgFpLazyQuery();
   const [selectedItems, setSelectedItems] = useState([]);
 
-  const [disableUser, { data: disableResponse, loading: isDisablingUser, error: DisableUserError }] =
-    useDeactivateUsersMutation();
+  const [disableUser, { data: disableResponse, loading: isDisablingUser }] = useDeactivateUsersMutation();
 
   useEffect(() => {
-    useUsersForOrgFpLazy({
+    apiUsersForOrgFpLazy({
       variables: {
         orgSid,
         userFilter: { activeFilter: 'ACTIVE' },
@@ -93,6 +94,24 @@ const _ActiveUsersPage = () => {
       setUsers(users.filter(({ item }) => !selectedUserIds().includes(item.id)));
     }
   }, [isDisablingUser, disableResponse]);
+
+  const renderList = () => {
+    return users.length > 0 ? (
+      <MarqueeSelection selection={selection}>
+        <DetailsList
+          items={users}
+          columns={columns}
+          layoutMode={DetailsListLayoutMode.justified}
+          onRenderItemColumn={onRenderItemColumn}
+          selection={selection}
+          selectionPreservedOnEmptyClick
+          isHeaderVisible
+        />
+      </MarqueeSelection>
+    ) : (
+      <MessageBar>No active users</MessageBar>
+    );
+  };
 
   return (
     <LayoutAdmin id="PageActiveUsers" sidebarOptionSelected="ACTIVE_USERS">
@@ -140,21 +159,7 @@ const _ActiveUsersPage = () => {
             <Row>
               <StyledColumn>
                 {!loading ? (
-                  users.length > 0 ? (
-                    <MarqueeSelection selection={selection}>
-                      <DetailsList
-                        items={users}
-                        columns={columns}
-                        layoutMode={DetailsListLayoutMode.justified}
-                        onRenderItemColumn={onRenderItemColumn}
-                        selection={selection}
-                        selectionPreservedOnEmptyClick
-                        isHeaderVisible
-                      />
-                    </MarqueeSelection>
-                  ) : (
-                    <MessageBar>No active users</MessageBar>
-                  )
+                  renderList()
                 ) : (
                   <Spacing margin={{ top: 'double' }}>
                     <Spinner size="lg" label="Loading active users" />

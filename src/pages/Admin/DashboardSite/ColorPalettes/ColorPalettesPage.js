@@ -1,4 +1,5 @@
-import React, { useState, useEffect, Fragment } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useEffect, memo } from 'react';
 
 import { Checkbox } from '@fluentui/react';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
@@ -15,13 +16,11 @@ import { PaletteColors } from './PaletteColors';
 import { StyledDiv, StyledChoiceGroup, StyledColorPicker } from './ColorPalettesPage.styles';
 
 import { useThemeContext } from '../../../../contexts/ThemeContext';
-import { useCurrentUserTheme } from '../../../../hooks/useCurrentUserTheme';
 import { useColorPalettes } from '../../../../hooks/useColorPalettes';
 import { defaultTheme } from '../../../../styles/themes';
 
 import Theming from '../../../../utils/Theming';
 import { useNotification } from '../../../../hooks/useNotification';
-import { useOrgSid } from '../../../../hooks/useOrgSid';
 
 const getThemeVariant = ({ themePrimary, neutralPrimary, white }) => ({
   ...Theming.generate.primary(themePrimary),
@@ -31,7 +30,6 @@ const getThemeVariant = ({ themePrimary, neutralPrimary, white }) => ({
 
 const _ColorPalettesPage = () => {
   const Toast = useNotification();
-  const { userTheme } = useCurrentUserTheme();
   const { changeTheme, themeConfig } = useThemeContext();
   const {
     colorPalettes,
@@ -52,7 +50,6 @@ const _ColorPalettesPage = () => {
 
   const [paletteName, setPaletteName] = useState('');
   const [isDefaultPalette, setIsDefaultPalette] = useState(false);
-  // const [paletteVariant, setPaletteVariant] = useState('LIGHT'); /* Should come from color palette */
 
   const [colors, setColors] = useState({
     themePrimary: (themeConfig.themeColorPalettes || [])[0],
@@ -340,6 +337,6 @@ const _ColorPalettesPage = () => {
   );
 };
 
-const ColorPalettesPage = React.memo(_ColorPalettesPage);
+const ColorPalettesPage = memo(_ColorPalettesPage);
 
 export { ColorPalettesPage };

@@ -1,4 +1,5 @@
-import React, { useState, useEffect, Fragment } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useEffect, memo } from 'react';
 
 import { PrimaryButton, DefaultButton, MessageBar } from 'office-ui-fabric-react';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
@@ -39,16 +40,15 @@ const generateColumns = () => {
 const _AccessManagementPoliciesPage = () => {
   const { orgSid } = useOrgSid();
   const columns = generateColumns();
-  // const { authData, orgSid } = useAuthContext();
+
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);
   const [selectedPolicyId, setSelectedPolicyId] = useState(0);
 
   const [policies, setPolicies] = useState([]);
-  const [amPoliciesForOrg, { data, loading, error }] = useAmPoliciesForOrgPLazyQuery();
-  const [removeAmPolicy, { data: removeResponse, loading: isRemovingPolicy, error: removePolicyError }] =
-    useRemoveAmPolicyMutation();
+  const [amPoliciesForOrg, { data, loading }] = useAmPoliciesForOrgPLazyQuery();
+  const [removeAmPolicy, { data: removeResponse, loading: isRemovingPolicy }] = useRemoveAmPolicyMutation();
 
   const hideConfirmation = () => {
     setIsConfirmationHidden(true);
@@ -62,10 +62,6 @@ const _AccessManagementPoliciesPage = () => {
       case 'actions':
         return (
           <>
-            {/* <StyledCommandButton iconProps={{ iconName: 'Edit' }} onClick={() => {
-              setSelectedPolicyId(item.id);
-              setIsPanelOpen(true)
-            }}/> */}
             &nbsp;
             <StyledCommandButton
               iconProps={{ iconName: 'Delete' }}
@@ -101,6 +97,21 @@ const _AccessManagementPoliciesPage = () => {
     }
   }, [data]);
 
+  const renderList = () => {
+    return policies.length ? (
+      <DetailsList
+        items={policies}
+        selectionMode={SelectionMode.none}
+        columns={columns}
+        layoutMode={DetailsListLayoutMode.justified}
+        onRenderItemColumn={onRenderItemColumn}
+        isHeaderVisible
+      />
+    ) : (
+      <MessageBar>No policies found</MessageBar>
+    );
+  };
+
   return (
     <LayoutAdmin id="PageAdmin" sidebarOptionSelected="AM_POLICIES">
       <Spacing margin="double">
@@ -132,18 +143,7 @@ const _AccessManagementPoliciesPage = () => {
             <Row>
               <StyledColumn lg="12">
                 {!loading ? (
-                  policies.length ? (
-                    <DetailsList
-                      items={policies}
-                      selectionMode={SelectionMode.none}
-                      columns={columns}
-                      layoutMode={DetailsListLayoutMode.justified}
-                      onRenderItemColumn={onRenderItemColumn}
-                      isHeaderVisible
-                    />
-                  ) : (
-                    <MessageBar>No policies found</MessageBar>
-                  )
+                  renderList()
                 ) : (
                   <Spacing margin={{ top: 'double' }}>
                     <Spinner size="lg" label="Loading policies" />
@@ -197,6 +197,6 @@ const _AccessManagementPoliciesPage = () => {
   );
 };
 
-const AccessManagementPoliciesPage = React.memo(_AccessManagementPoliciesPage);
+const AccessManagementPoliciesPage = memo(_AccessManagementPoliciesPage);
 
 export { AccessManagementPoliciesPage };
