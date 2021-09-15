@@ -2484,6 +2484,10 @@ export type CurrentUserQuery = (
       & Pick<WebAppDomain, 'type' | 'selectedPage'>
       & { navItems?: Maybe<Array<Maybe<(
         { __typename?: 'WebNav' }
+        & { subNavItems?: Maybe<Array<Maybe<(
+          { __typename?: 'WebNav' }
+          & FragmentWebNavFragment
+        )>>> }
         & FragmentWebNavFragment
       )>>> }
     )>, tokenUser?: Maybe<(
@@ -3330,7 +3334,7 @@ export type CurrentUserDashThemePageQuery = (
 );
 
 export type NavigateToNewDomainQueryVariables = Exact<{
-  domainNavInput?: Maybe<DomainNavInput>;
+  domainNavInput: DomainNavInput;
 }>;
 
 
@@ -3341,6 +3345,10 @@ export type NavigateToNewDomainQuery = (
     & Pick<WebAppDomain, 'type' | 'selectedPage'>
     & { navItems?: Maybe<Array<Maybe<(
       { __typename?: 'WebNav' }
+      & { subNavItems?: Maybe<Array<Maybe<(
+        { __typename?: 'WebNav' }
+        & FragmentWebNavFragment
+      )>>> }
       & FragmentWebNavFragment
     )>>> }
   )> }
@@ -3367,12 +3375,16 @@ export type PasswordLoginMutation = (
   { __typename?: 'Mutation' }
   & { passwordLogin?: Maybe<(
     { __typename?: 'LoginStep' }
-    & Pick<LoginStep, 'userId' | 'step' | 'redirectPath' | 'allowLostPassword'>
+    & Pick<LoginStep, 'step'>
     & { loginCompleteDomain?: Maybe<(
       { __typename?: 'WebAppDomain' }
       & Pick<WebAppDomain, 'type' | 'selectedPage'>
       & { navItems?: Maybe<Array<Maybe<(
         { __typename?: 'WebNav' }
+        & { subNavItems?: Maybe<Array<Maybe<(
+          { __typename?: 'WebNav' }
+          & FragmentWebNavFragment
+        )>>> }
         & FragmentWebNavFragment
       )>>> }
     )>, tokenUser?: Maybe<(
@@ -4888,6 +4900,9 @@ export const CurrentUserDocument = gql`
       selectedPage
       navItems {
         ...fragmentWebNav
+        subNavItems {
+          ...fragmentWebNav
+        }
       }
     }
     tokenUser {
@@ -7247,12 +7262,15 @@ export type CurrentUserDashThemePageQueryHookResult = ReturnType<typeof useCurre
 export type CurrentUserDashThemePageLazyQueryHookResult = ReturnType<typeof useCurrentUserDashThemePageLazyQuery>;
 export type CurrentUserDashThemePageQueryResult = Apollo.QueryResult<CurrentUserDashThemePageQuery, CurrentUserDashThemePageQueryVariables>;
 export const NavigateToNewDomainDocument = gql`
-    query NavigateToNewDomain($domainNavInput: DomainNavInput) {
+    query NavigateToNewDomain($domainNavInput: DomainNavInput!) {
   navigateToNewDomain(domainNavInput: $domainNavInput) {
     type
     selectedPage
     navItems {
       ...fragmentWebNav
+      subNavItems {
+        ...fragmentWebNav
+      }
     }
   }
 }
@@ -7274,7 +7292,7 @@ export const NavigateToNewDomainDocument = gql`
  *   },
  * });
  */
-export function useNavigateToNewDomainQuery(baseOptions?: Apollo.QueryHookOptions<NavigateToNewDomainQuery, NavigateToNewDomainQueryVariables>) {
+export function useNavigateToNewDomainQuery(baseOptions: Apollo.QueryHookOptions<NavigateToNewDomainQuery, NavigateToNewDomainQueryVariables>) {
         return Apollo.useQuery<NavigateToNewDomainQuery, NavigateToNewDomainQueryVariables>(NavigateToNewDomainDocument, baseOptions);
       }
 export function useNavigateToNewDomainLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<NavigateToNewDomainQuery, NavigateToNewDomainQueryVariables>) {
@@ -7318,15 +7336,15 @@ export type SimulateSessionExpirQueryResult = Apollo.QueryResult<SimulateSession
 export const PasswordLoginDocument = gql`
     mutation PasswordLogin($userId: String!, $password: String!) {
   passwordLogin(userId: $userId, password: $password) {
-    userId
     step
-    redirectPath
-    allowLostPassword
     loginCompleteDomain {
       type
       selectedPage
       navItems {
         ...fragmentWebNav
+        subNavItems {
+          ...fragmentWebNav
+        }
       }
     }
     tokenUser {
