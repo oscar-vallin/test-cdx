@@ -48,25 +48,25 @@ const validateRulesArr = (value, data) =>
         .map((rule, index) => {
           const item = Array.isArray(rule) ? rule : [rule];
 
-          return item.map((rule) => {
-            if (rule.rules) {
+          return item.map((itemRule) => {
+            if (itemRule.rules) {
               return validateRulesArr(value, item);
             }
 
             const validations = isArrayOfArrays(validationResults[index])
-              ? validationResults[index].reduce((rules, rule) => [...rules, ...rule], [])
+              ? validationResults[index].reduce((rules, validationRule) => [...rules, ...validationRule], [])
               : validationResults[index];
 
-            const isValid = !validations.includes(rule.characteristic);
+            const isValid = !validations.includes(itemRule.characteristic);
 
             return {
-              ...rule,
+              ...itemRule,
               isValid,
-              message: ValidationMessages[rule.characteristic](rule.condition),
-              ...(rule.rules
+              message: ValidationMessages[itemRule.characteristic](itemRule.condition),
+              ...(itemRule.rules
                 ? {
                     validations: Array.from(
-                      new Set(validations.map((validation) => validation.includes(rule.characteristic)))
+                      new Set(validations.map((validation) => validation.includes(itemRule.characteristic)))
                     ),
                   }
                 : {}),

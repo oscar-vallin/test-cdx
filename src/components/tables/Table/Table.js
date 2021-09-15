@@ -501,7 +501,7 @@ const Table = ({
       );
     }
 
-    if (sortedItems?.length > 0) {
+    if (items?.length > 0) {
       return (
         <DetailsList
           className={classNames.root}
@@ -545,7 +545,7 @@ const Table = ({
       );
     }
 
-    if (sortedItems?.length > 0) {
+    if (items?.length > 0) {
       return (
         <DetailsList
           className={classNames.root}
@@ -584,7 +584,9 @@ const Table = ({
 };
 
 Table.propTypes = {
+  structure: PropTypes.any,
   columns: PropTypes.array,
+  items: PropTypes.array,
 };
 
 export { Table };

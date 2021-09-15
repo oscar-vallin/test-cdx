@@ -1,6 +1,6 @@
 import puppeteer from 'puppeteer';
 
-describe('LoginPage.js', () => {
+describe.skip('LoginPage.js', () => {
   let browser;
   let page;
   const email = 'joe.admin@example.com';

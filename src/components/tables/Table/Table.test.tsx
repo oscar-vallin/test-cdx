@@ -1,4 +1,4 @@
-import { shallow } from 'enzyme';
+import { mount, shallow, render } from 'enzyme';
 import toJSON from 'enzyme-to-json';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { Link } from 'office-ui-fabric-react/lib/Link';
@@ -6,7 +6,83 @@ import { Table as Component } from './index.js';
 import { TableHeader } from '../TableHeader/index.js';
 
 const defaultProps = {
-  items: [],
+  items: [
+    {
+      child: undefined,
+      columnId: 'datetime',
+      id: 'datetime',
+      sublabel: undefined,
+      text: '11/04/2020 08:12 AM',
+      value: '11/04/2020 08:12 AM',
+    },
+    { child: undefined, columnId: 'planSponsor', id: 'planSponsor', sublabel: undefined, text: 'PZZA', value: 'PZZA' },
+    { child: undefined, columnId: 'vendorId', id: 'vendorId', sublabel: undefined, text: 'Disc', value: 'Disc' },
+    { child: undefined, columnId: 'specId', id: 'specId', sublabel: undefined, text: 'DiscSpec', value: 'DiscSpec' },
+    {
+      child: undefined,
+      columnId: 'implementation',
+      id: 'implementation',
+      sublabel: undefined,
+      text: 'DiscImplementation',
+      value: 'DiscImplementation',
+    },
+    {
+      child: undefined,
+      columnId: 'inboundFilename',
+      id: 'inboundFilename',
+      sublabel: undefined,
+      text: 'K2UDEMO-MetLife-TEST-Warnings.xml',
+      value: 'K2UDEMO-MetLife-TEST-Warnings.xml',
+    },
+    {
+      child: undefined,
+      columnId: 'outboundFilename',
+      id: 'outboundFilename',
+      sublabel: undefined,
+      text: 'K2UDEMO-MetLife-12282020085407.txt',
+      value: 'K2UDEMO-MetLife-12282020085407.txt',
+    },
+    {
+      child: undefined,
+      columnId: 'outboundFilesize',
+      id: 'outboundFilesize',
+      sublabel: undefined,
+      text: 45919,
+      value: 45919,
+    },
+    {
+      child: undefined,
+      columnId: 'billingCount',
+      id: 'billingCount',
+      sublabel: undefined,
+      text: 89,
+      value: 89,
+    },
+    {
+      child: undefined,
+      columnId: 'totalRecords',
+      id: 'totalRecords',
+      sublabel: undefined,
+      text: 132,
+      value: 132,
+    },
+    {
+      child: undefined,
+      columnId: 'extractType',
+      id: 'extractType',
+      sublabel: undefined,
+      text: 'Enrollment',
+      value: 'Enrollment',
+    },
+    {
+      child: undefined,
+      columnId: 'extractVersion',
+      id: 'extractVersion',
+      sublabel: undefined,
+      text: '1.0.0.2020092018',
+      value: '1.0.0.2020092018',
+    },
+  ],
   columns: [
     { key: 'datetime', label: 'Delivered On', style: 'text' },
     { key: 'planSponsor', label: 'Plan Sponsor', style: 'text' },
@@ -31,6 +107,7 @@ const defaultProps = {
   searchInput: '',
   date: 'today',
   onItemsListChange: () => null,
+  loading: false,
 };
 
 const defaultHeaderProps = {
@@ -63,7 +140,7 @@ describe('Basic Table Component', () => {
 
   it('Should render table header when structure is type dashboard', () => {
     const tree = shallow(<TableHeader {...defaultHeaderProps} />);
-    expect(tree.prop('id')).toEqual('HeaderTable_dashboard');
+    expect(tree.prop('id')).toEqual('__TableHeader-HeaderTable_dashboard');
   });
 
   it('Should render table header correctly', () => {

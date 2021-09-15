@@ -114,15 +114,15 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
   const handleAsyncOptionChange = (attr, permissionIndex) => (option, item) => {
     setState({
       ...state,
-      permissions: state.permissions.map((permission, index) => {
-        if (index !== permissionIndex) {
+      permissions: state.permissions.map((permission, permissionsIndex) => {
+        if (permissionsIndex !== permissionIndex) {
           return permission;
         }
 
         return {
           ...permission,
-          actions: permission.actions.map((action, pIndex) => {
-            if (permission.actions.indexOf(item) !== pIndex) {
+          actions: permission.actions.map((action, actionsIndex) => {
+            if (permission.actions.indexOf(item) !== actionsIndex) {
               return action;
             }
 
@@ -134,7 +134,7 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
   };
 
   const onRenderItemColumn =
-    ({ colData, services, onServiceChange, permissionIndex }) =>
+    ({ itemColumndata, services, onServiceChange, onFacetChange, onVerbChange, permissionIndex }) =>
     (item, index, column) => {
       switch (column.key) {
         case 'service':
@@ -143,7 +143,7 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
               autoComplete="off"
               selectedKey={item.service.key}
               options={services.map(parseToComboBoxOption)}
-              onChange={(event, option) => onServiceChange(option, item, colData)}
+              onChange={(event, option) => onServiceChange(option, item, itemColumndata)}
               style={{ width: '100%' }}
             />
           );
@@ -155,14 +155,14 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
                 onClick={() => {
                   setState({
                     ...state,
-                    permissions: state.permissions.map((pItem, currIndex) => {
+                    permissions: state.permissions.map((permissionsItem, currIndex) => {
                       if (currIndex !== permissionIndex) {
-                        return pItem;
+                        return permissionsItem;
                       }
 
                       return {
-                        ...pItem,
-                        actions: pItem.actions.filter((action, actionIndex) => actionIndex !== index),
+                        ...permissionsItem,
+                        actions: permissionsItem.actions.filter((action, actionIndex) => actionIndex !== index),
                       };
                     }),
                   });
@@ -174,6 +174,7 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
         default:
           break;
       }
+      return <></>;
     };
 
   const columns = generateColumns();

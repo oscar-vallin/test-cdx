@@ -73,28 +73,28 @@ const _DefaultThemePage = () => {
     if (colorPalettes && !isLoadingPalettes && !isLoadingDefaultTheme) {
       const { defaultDashThemeForSite } = defaultTheme || {};
 
-      const palette = defaultDashThemeForSite
+      const finalPalette = defaultDashThemeForSite
         ? { ...defaultDashThemeForSite, ...defaultDashThemeForSite.dashThemeColor }
         : colorPalettes.find(({ defaultPalette }) => defaultPalette);
 
       setPalettes([...palettes, ...colorPalettes]);
-      setSelectedPaletteId(palette?.id);
-      setThemeColorMode(palette?.themeColorMode);
+      setSelectedPaletteId(finalPalette?.id);
+      setThemeColorMode(finalPalette?.themeColorMode);
     }
   }, [colorPalettes, defaultTheme]);
 
   useEffect(() => {
-    const palette = palettes.find(({ id }) => id === selectedPaletteId) || {};
-    const { themePrimary } = palette;
+    const selectedPalette = palettes.find(({ palleteId }) => palleteId === selectedPaletteId) || {};
+    const { themePrimary } = selectedPalette;
 
     const variant = themeColorMode
       ? Theming.getVariant({
           ...(themeColorMode === 'LIGHT' ? defaultTheme : darkTheme),
           themePrimary,
         })
-      : palette;
+      : selectedPalette;
 
-    setPalette(palette);
+    setPalette(selectedPalette);
     setThemeColorMode(themeColorMode);
 
     changeTheme(variant);

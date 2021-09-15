@@ -9,6 +9,7 @@ src/tests/
 node
 node_modules
 .scannerwork
+.gradle
 test-results
 coverage
 build

@@ -34,6 +34,7 @@ const _ColorPalettesPage = () => {
   const {
     colorPalettes,
     isLoadingPalettes,
+    isCreatingPalette,
     isProcessingPalettes,
     palettesUpdated,
     fetchColorPalettes,
@@ -76,7 +77,7 @@ const _ColorPalettesPage = () => {
     const currentVariant = colorPalettes.find(({ id }) => id === selectedPaletteId) || {};
 
     const isExtendingPalette = paletteType === 'EXTEND';
-    const colors = {
+    const paletteColors = {
       ...(selectedPaletteId
         ? {
             themePrimary: currentVariant.themePrimary,
@@ -92,12 +93,12 @@ const _ColorPalettesPage = () => {
 
     const variant = {
       ...(selectedPaletteId ? currentVariant : defaultVariant),
-      ...colors,
+      ...paletteColors,
     };
 
-    setColors(colors);
+    setColors(paletteColors);
     setActiveColor({ key: 'themePrimary', color: variant.themePrimary });
-    changeTheme(getThemeVariant({ ...variant, ...colors }));
+    changeTheme(getThemeVariant({ ...variant, ...paletteColors }));
 
     setEnableDarkMode(selectedPaletteId ? Boolean(currentVariant.allowDark) : isExtendingPalette);
   }, [paletteType, selectedPaletteId, colorPalettes]);
@@ -181,7 +182,7 @@ const _ColorPalettesPage = () => {
               <Separator />
             </Spacing>
 
-            {false ? (
+            {isCreatingPalette ? (
               <Spacing margin={{ top: 'double' }}>
                 <Spinner size="lg" label="Loading color palette" />
               </Spacing>

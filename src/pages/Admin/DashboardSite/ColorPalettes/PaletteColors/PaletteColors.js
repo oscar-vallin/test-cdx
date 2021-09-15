@@ -16,13 +16,13 @@ const PaletteColors = ({ type, colors, selected, onChange }) => {
           key,
           label: labels[index],
           onRenderField: (props, render) => {
-            const key = props.id.split('-').pop();
+            const colorKey = props.id.split('-').pop();
 
             return (
               <StyledPreview>
                 {render(props)}
 
-                <StyledColorPreview color={colors[key]} />
+                <StyledColorPreview color={colors[colorKey]} />
 
                 <span>{props.label}</span>
               </StyledPreview>
