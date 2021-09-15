@@ -19,9 +19,7 @@ export const App: React.FC = (): React.ReactElement => {
   }, [data.orgSid]);
 
   return (
-    <React.Suspense fallback={null}>
-      <Routes />
-    </React.Suspense>
+    <Routes />
   );
 };
 

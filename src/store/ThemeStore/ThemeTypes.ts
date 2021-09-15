@@ -10,7 +10,7 @@ export enum FontSizes {
 }
 
 export type Theme = {
-  data: any;
+  dashThemeColor: any;
   paletteNm: string;
   themeColorMode: ColorModes;
   themeFontSize: FontSizes;

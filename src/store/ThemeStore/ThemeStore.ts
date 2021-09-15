@@ -1,4 +1,4 @@
-import { Action, ActionOn, action, actionOn } from 'easy-peasy';
+import { Action, ThunkOn, action, thunkOn } from 'easy-peasy';
 import { Theme, ColorModes, FontSizes } from './ThemeTypes';
 
 export interface ThemeModel {
@@ -8,12 +8,12 @@ export interface ThemeModel {
   };
   setUserTheme: Action<ThemeModel>;
   setCurrentTheme: Action<ThemeModel>;
-  onUserThemeUpdate: ActionOn<ThemeModel>;
+  onUserThemeUpdate: ThunkOn<ThemeModel>;
   reset: Action<ThemeModel>;
 }
 
 const INITIAL_THEME = {
-  data: null,
+  dashThemeColor: null,
   paletteNm: 'Default',
   themeColorMode: ColorModes.Light,
   themeFontSize: FontSizes.Medium,
@@ -23,14 +23,16 @@ const setUserTheme = (state, payload) => {
   state.themes.user = { ...state.themes.user, ...payload };
 };
 
-const setCurrentTheme = (state, action) => {
-  const data = action?.payload || action;
-
-  state.themes.current = { ...state.themes.current, ...data };
+const setCurrentTheme = (state, payload) => {
+  state.themes.current = { ...state.themes.current, ...payload };
 };
 
 const reset = (state) => {
-  state.themes.current = { ...INITIAL_THEME };
+  state.themes.user = { ...INITIAL_THEME };
+};
+
+const onUserThemeUpdate = async (actions, target) => {
+  await actions.setCurrentTheme(target.payload || INITIAL_THEME);
 };
 
 const INITIAL_THEME_STATE: ThemeModel = {
@@ -41,7 +43,7 @@ const INITIAL_THEME_STATE: ThemeModel = {
   reset: action(reset),
   setUserTheme: action(setUserTheme),
   setCurrentTheme: action(setCurrentTheme),
-  onUserThemeUpdate: actionOn((actions) => actions.setUserTheme, setCurrentTheme),
+  onUserThemeUpdate: thunkOn((actions) => [actions.setUserTheme, actions.reset], onUserThemeUpdate),
 };
 
 export default INITIAL_THEME_STATE;

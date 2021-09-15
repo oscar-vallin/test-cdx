@@ -16,6 +16,7 @@ import { useAmGroupsForOrgPLazyQuery } from '../../../../data/services/graphql';
 import { StyledColumn } from './AccessManagementGroupsPage.styles';
 
 import { useOrgSid } from '../../../../hooks/useOrgSid';
+import { useQueryHandler } from '../../../../hooks/useQueryHandler';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -44,8 +45,7 @@ const _AccessManagementGroupsPage = () => {
   const [groups, setGroups] = useState([]);
   const columns = generateColumns();
 
-  // const { data, loading } = useAmGroupsForOrgPQuery({ variables: { orgSid } });
-  const [useAmGroupsForOrg, { data, loading }] = useAmGroupsForOrgPLazyQuery();
+  const [useAmGroupsForOrg, { data, loading }] = useQueryHandler(useAmGroupsForOrgPLazyQuery);
 
   useEffect(() => {
     useAmGroupsForOrg({ variables: { orgSid } });

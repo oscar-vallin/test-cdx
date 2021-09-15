@@ -35,7 +35,6 @@ export const useLogoutUseCase = () => {
   useEffect(() => {
     if (logoutStatus?.logOut?.successful) {
       SessionStore.setCurrentSession({ token: null });
-      ActiveDomainStore.setOriginOrg({ orgSid: null });
 
       setState({ ...INITIAL_STATE });
     }

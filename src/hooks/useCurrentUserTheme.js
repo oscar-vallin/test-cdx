@@ -57,10 +57,10 @@ export const useCurrentUserTheme = () => {
 
       ThemeStore.setUserTheme({
         paletteNm: dashThemeColor?.paletteNm,
-        data: variant,
+        dashThemeColor: variant,
         themeColorMode,
         themeFontSize,
-        loading: isLoadingTheme,
+        // loading: isLoadingTheme,
       });
     }
   }, [theme, updatedTheme]);

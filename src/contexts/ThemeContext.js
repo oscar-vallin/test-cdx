@@ -63,7 +63,7 @@ export const ThemeContextProvider = ({ children }) => {
 
   useEffect(() => {
     if (!isLoadingTheme) {
-      changeTheme(Theming.getVariant(ThemeStore.themes.current.data || {}));
+      changeTheme(Theming.getVariant(ThemeStore.themes.current.dashThemeColor || {}));
     }
   }, [ThemeStore.themes.current]);
 

@@ -18,6 +18,7 @@ import { useAmPoliciesForOrgPLazyQuery, useRemoveAmPolicyMutation } from '../../
 
 import { StyledColumn, StyledCommandButton } from './AccessManagementPoliciesPage.styles';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
+import { useQueryHandler } from '../../../../hooks/useQueryHandler';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -45,9 +46,9 @@ const _AccessManagementPoliciesPage = () => {
   const [selectedPolicyId, setSelectedPolicyId] = useState(0);
 
   const [policies, setPolicies] = useState([]);
-  const [amPoliciesForOrg, { data, loading, error }] = useAmPoliciesForOrgPLazyQuery();
+  const [amPoliciesForOrg, { data, loading, error }] = useQueryHandler(useAmPoliciesForOrgPLazyQuery);
   const [removeAmPolicy, { data: removeResponse, loading: isRemovingPolicy, error: removePolicyError }] =
-    useRemoveAmPolicyMutation();
+    useQueryHandler(useRemoveAmPolicyMutation);
 
   const hideConfirmation = () => {
     setIsConfirmationHidden(true);
