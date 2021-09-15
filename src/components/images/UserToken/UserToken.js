@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { PersonaInitialsColor, PersonaSize } from 'office-ui-fabric-react/lib/Persona';
+import { PersonaInitialsColor, PersonaSize } from 'office-ui-fabric-react/lib-commonjs/Persona';
 import { StyledPersona } from './UserToken.styles';
 
 const UserToken = ({ id = '__UserToken', name }) => {

@@ -1,4 +1,4 @@
-import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
+import { FontIcon } from 'office-ui-fabric-react/lib-commonjs/Icon';
 import { StyledUl, StyledLi } from './Timeline.styles';
 import { Spinner } from '../../spinners/Spinner';
 

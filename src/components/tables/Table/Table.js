@@ -1,8 +1,8 @@
 /* eslint-disable react/void-dom-elements-no-children */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useEffect, useState } from 'react';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { mergeStyles, mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
+import { Link } from 'office-ui-fabric-react/lib-commonjs/Link';
+import { mergeStyles, mergeStyleSets } from 'office-ui-fabric-react/lib-commonjs/Styling';
 import { format } from 'date-fns';
 import PropTypes from 'prop-types';
 import {
@@ -12,7 +12,7 @@ import {
   SelectionMode,
   buildColumns,
   DetailsHeader,
-} from 'office-ui-fabric-react/lib/DetailsList';
+} from 'office-ui-fabric-react/lib-commonjs/DetailsList';
 import { getDates } from '../../../helpers/tableHelpers';
 import { Spinner } from '../../spinners/Spinner';
 
