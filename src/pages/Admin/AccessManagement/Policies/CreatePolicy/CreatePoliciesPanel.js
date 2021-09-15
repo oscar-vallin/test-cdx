@@ -8,17 +8,17 @@ import { IconButton, MessageBar } from 'office-ui-fabric-react';
 import { DetailsList, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 
 import { Spacing } from '../../../../../components/spacings/Spacing';
-import { Card } from '../../../../../components/cards/Card';
-import { Button } from '../../../../../components/buttons/Button';
+import { Card } from '../../../../../components/cards';
+import { Button } from '../../../../../components/buttons';
 import { Row, Column } from '../../../../../components/layouts';
 import { Separator } from '../../../../../components/separators/Separator';
-import { Text } from '../../../../../components/typography/Text';
+import { Text } from '../../../../../components/typography';
 import { InputText } from '../../../../../components/inputs/InputText';
 
 import { StyledCommandButton, StyledColumn } from './CreatePoliciesPanel.styles';
 
 import {
-  useAccessPolicyPageLazyQuery,
+  useAccessPolicyFormQuery,
   useCreateAccessPolicyMutation,
   useUpdateAccessPolicyMutation,
   useAccessPolicyLazyQuery,
@@ -60,10 +60,10 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
 
   const [options, setOptions] = useState({ ...INITIAL_OPTIONS });
 
-  const [useAmPolicyPage, { data, loading }] = useAccessPolicyPageLazyQuery();
-  const [createPolicy, { data: createdPolicy, loading: isCreatingPolicy, error }] = useCreateAccessPolicyMutation();
-  const [fetchPolicy, { loading: isLoadingPolicy, data: policy }] = useAccessPolicyLazyQuery();
-  const [updatePolicy, { loading: isUpdatingPolicy }] = useUpdateAccessPolicyMutation();
+  const [apiUseAccessPolicyForm, { data }] = useAccessPolicyFormQuery();
+  const [createPolicy, { data: createdPolicy, loading: isCreatingPolicy }] = useCreateAccessPolicyMutation();
+  const [fetchPolicy, { data: policy }] = useAccessPolicyLazyQuery();
+  const [updatePolicy] = useUpdateAccessPolicyMutation();
 
   useEffect(() => {
     if (isOpen && selectedPolicyId) {
@@ -121,8 +121,8 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
 
         return {
           ...permission,
-          actions: permission.actions.map((action, index) => {
-            if (permission.actions.indexOf(item) !== index) {
+          actions: permission.actions.map((action, pIndex) => {
+            if (permission.actions.indexOf(item) !== pIndex) {
               return action;
             }
 
@@ -134,7 +134,7 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
   };
 
   const onRenderItemColumn =
-    ({ data, services, onServiceChange, onFacetChange, onVerbChange, permissionIndex }) =>
+    ({ colData, services, onServiceChange, permissionIndex }) =>
     (item, index, column) => {
       switch (column.key) {
         case 'service':
@@ -143,7 +143,7 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
               autoComplete="off"
               selectedKey={item.service.key}
               options={services.map(parseToComboBoxOption)}
-              onChange={(event, option) => onServiceChange(option, item, data)}
+              onChange={(event, option) => onServiceChange(option, item, colData)}
               style={{ width: '100%' }}
             />
           );
@@ -155,14 +155,14 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
                 onClick={() => {
                   setState({
                     ...state,
-                    permissions: state.permissions.map((item, currIndex) => {
+                    permissions: state.permissions.map((pItem, currIndex) => {
                       if (currIndex !== permissionIndex) {
-                        return item;
+                        return pItem;
                       }
 
                       return {
-                        ...item,
-                        actions: item.actions.filter((action, actionIndex) => actionIndex !== index),
+                        ...pItem,
+                        actions: pItem.actions.filter((action, actionIndex) => actionIndex !== index),
                       };
                     }),
                   });
@@ -180,13 +180,13 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
 
   useEffect(() => {
     if (isOpen) {
-      apiAmPolicyPage({ variables: { orgSid } });
+      apiUseAccessPolicyForm({ variables: { orgSid } });
     }
   }, [isOpen]);
 
   useEffect(() => {
     if (isOpen && data) {
-      setOptions(data.amPolicyPage);
+      setOptions(data.accessPolicyForm);
     }
   }, [data, isOpen]);
 

@@ -9,10 +9,10 @@ import { MarqueeSelection } from '@fluentui/react/lib/MarqueeSelection';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Row, Column } from '../../../../components/layouts';
 import { Spacing } from '../../../../components/spacings/Spacing';
-import { Text } from '../../../../components/typography/Text';
+import { Text } from '../../../../components/typography';
 import { Separator } from '../../../../components/separators/Separator';
-import { Button } from '../../../../components/buttons/Button';
-import { useUsersForOrgFpLazyQuery, useActivateUsersMutation } from '../../../../data/services/graphql';
+import { Button } from '../../../../components/buttons';
+import { useUsersForOrgLazyQuery, useActivateUsersMutation } from '../../../../data/services/graphql';
 import { StyledColumn } from './DeletedUsersPage.styles';
 
 import { useOrgSid } from '../../../../hooks/useOrgSid';
@@ -45,7 +45,7 @@ const _DeletedUsersPage = () => {
   const [selectedItems, setSelectedItems] = useState([]);
   const columns = generateColumns();
 
-  const [apiUsersForOrgFpLazy, { data, loading }] = useUsersForOrgFpLazyQuery();
+  const [apiUsersForOrgFpLazy, { data, loading }] = useUsersForOrgLazyQuery();
   const [enableUser, { data: enableResponse, loading: isEnablingUser }] = useActivateUsersMutation();
 
   const selection = useMemo(

@@ -4,9 +4,12 @@
 /node_modules
 /.pnp
 .pnp.js
+node
 
 # testing
 /coverage
+/.scannerwork
+/test-results
 
 # production
 /build

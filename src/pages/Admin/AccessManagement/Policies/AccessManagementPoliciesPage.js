@@ -9,13 +9,13 @@ import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Spacing } from '../../../../components/spacings/Spacing';
-import { Button } from '../../../../components/buttons/Button';
+import { Button } from '../../../../components/buttons';
 import { Row, Column } from '../../../../components/layouts';
 import { Separator } from '../../../../components/separators/Separator';
-import { Text } from '../../../../components/typography/Text';
+import { Text } from '../../../../components/typography';
 import { CreatePoliciesPanel } from './CreatePolicy';
 
-import { useAccessPoliciesForOrgLazyQuery, useRemoveAccessPolicyMutation } from '../../../../data/services/graphql';
+import { useAccessPoliciesForOrgLazyQuery, useDeleteAccessPolicyMutation } from '../../../../data/services/graphql';
 
 import { StyledColumn, StyledCommandButton } from './AccessManagementPoliciesPage.styles';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
@@ -49,7 +49,7 @@ const _AccessManagementPoliciesPage = () => {
   const [policies, setPolicies] = useState([]);
   const [accessPoliciesForOrg, { data, loading }] = useAccessPoliciesForOrgLazyQuery();
   const [removeAccessPolicy, { data: removeResponse, loading: isRemovingPolicy }] =
-    useRemoveAccessPolicyMutation();
+    useDeleteAccessPolicyMutation();
 
   const hideConfirmation = () => {
     setIsConfirmationHidden(true);

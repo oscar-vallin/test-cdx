@@ -7,14 +7,14 @@ import { PrimaryButton, DefaultButton, MessageBar } from 'office-ui-fabric-react
 import { DetailsList, DetailsListLayoutMode, SelectionMode, Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
-import { Button } from '../../../../components/buttons/Button';
+import { Button } from '../../../../components/buttons';
 import { Row, Column } from '../../../../components/layouts';
 import { Spacing } from '../../../../components/spacings/Spacing';
-import { Text } from '../../../../components/typography/Text';
+import { Text } from '../../../../components/typography';
 import { Separator } from '../../../../components/separators/Separator';
 
 import { CreateUsersPanel } from '../CreateUsers';
-import { useUsersForOrgFpLazyQuery, useDeactivateUsersMutation } from '../../../../data/services/graphql';
+import { useUsersForOrgLazyQuery, useDeactivateUsersMutation } from '../../../../data/services/graphql';
 import { StyledColumn } from './ActiveUsersPage.styles';
 
 import { useOrgSid } from '../../../../hooks/useOrgSid';
@@ -47,7 +47,7 @@ const _ActiveUsersPage = () => {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);
   const [selectedUserId] = useState(0);
-  const [apiUsersForOrgFpLazy, { data, loading }] = useUsersForOrgFpLazyQuery();
+  const [apiUsersForOrgFpLazy, { data, loading }] = useUsersForOrgLazyQuery();
   const [selectedItems, setSelectedItems] = useState([]);
 
   const [disableUser, { data: disableResponse, loading: isDisablingUser }] = useDeactivateUsersMutation();

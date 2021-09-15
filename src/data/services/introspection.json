@@ -10,6 +10,16 @@
       "PasswordCharacterRule",
       "PasswordStrengthRule",
       "PasswordRuleGroup"
+    ],
+    "UIField": [
+      "UIBooleanField",
+      "UIDateField",
+      "UIIntField",
+      "UILongField",
+      "UIReadOnlyField",
+      "UISelectManyField",
+      "UISelectOneField",
+      "UIStringField"
     ]
   }
 }

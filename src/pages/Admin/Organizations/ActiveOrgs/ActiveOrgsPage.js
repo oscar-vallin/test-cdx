@@ -10,10 +10,10 @@ import { URL_ROUTES } from '../../../../data/constants/RouteConstants';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Row, Column } from '../../../../components/layouts';
 import { Spacing } from '../../../../components/spacings/Spacing';
-import { Text } from '../../../../components/typography/Text';
+import { Text } from '../../../../components/typography';
 import { Separator } from '../../../../components/separators/Separator';
 
-import { useDirectOrganizationsFLazyQuery } from '../../../../data/services/graphql';
+import { useDirectOrganizationsLazyQuery } from '../../../../data/services/graphql';
 import { StyledColumn } from './ActiveOrgsPage.styles';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
 
@@ -40,7 +40,7 @@ const _ActiveOrgsPage = () => {
   const columns = generateColumns();
   const history = useHistory();
 
-  const [directOrganizationsFQuery, { data, loading }] = useDirectOrganizationsFLazyQuery();
+  const [directOrganizationsFQuery, { data, loading }] = useDirectOrganizationsLazyQuery();
 
   useEffect(() => {
     directOrganizationsFQuery({
@@ -67,15 +67,14 @@ const _ActiveOrgsPage = () => {
   };
 
   const onRenderItemColumn = (item, index, column) => {
-    switch (column.key) {
-      case 'name':
-        return (
-          <Link to={`/admin/organizations/active-orgs?orgSid=${item.id}`} onClick={() => changeActiveOrg(item)}>
-            {item[column.key]}
-          </Link>
-        );
-      default:
-        return item[column.key];
+    if (column.key === 'name') {
+      return (
+        <Link to={`/admin/organizations/active-orgs?orgSid=${item.id}`} onClick={() => changeActiveOrg(item)}>
+          {item[column.key]}
+        </Link>
+      );
+    } else {
+      return item[column.key];
     }
   };
 
