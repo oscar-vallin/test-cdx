@@ -5,8 +5,14 @@ src/tests/
 **/*.snap.js
 **/*.test.js
 **/*.test.tsx
+.node
+node
 node_modules
+.scannerwork
+test-results
+coverage
 build
+yarn
 **/build
 *.d.ts
 api
