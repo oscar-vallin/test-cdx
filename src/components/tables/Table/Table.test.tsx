@@ -1,6 +1,6 @@
 import { mount, shallow, render } from 'enzyme';
 import toJSON from 'enzyme-to-json';
-import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
+import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib-commonjs/DetailsList';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Table as Component } from './index.js';
 import { TableHeader } from '../TableHeader/index.js';
