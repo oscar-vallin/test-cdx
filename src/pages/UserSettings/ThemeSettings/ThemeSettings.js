@@ -73,17 +73,17 @@ const ThemeSettings = () => {
   }, [colorPalettes, isLoadingPalettes, theme, orgSid]);
 
   useEffect(() => {
-    const palette = palettes.find(({ id }) => id === selectedPaletteId) || {};
-    const { themePrimary } = palette;
+    const finalPalette = palettes.find(({ id }) => id === selectedPaletteId) || {};
+    const { themePrimary } = finalPalette;
 
-    const variant = palette.themeColorMode
+    const variant = finalPalette.themeColorMode
       ? Theming.getVariant({
           ...(themeColorMode === 'LIGHT' ? defaultTheme : darkTheme),
           themePrimary,
         })
-      : palette;
+      : finalPalette;
 
-    setPalette(palette);
+    setPalette(finalPalette);
     changeTheme(variant);
   }, [selectedPaletteId, themeColorMode]);
 
