@@ -1,21 +1,22 @@
-src/serviceWorker.ts
-src/tests/
 # **/*.js
 # **/*.tsx
 **/*.snap.js
 **/*.test.js
 **/*.test.tsx
+.gradle
 .node
+.scannerwork
+build
+coverage
 node
 node_modules
-.scannerwork
-.gradle
 test-results
-coverage
-build
 yarn
 **/build
 *.d.ts
 api
 src/data/services/graphql.ts
+src/main/resources
+src/serviceWorker.ts
+src/tests/
 **/*.snap
