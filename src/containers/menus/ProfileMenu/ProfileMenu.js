@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
-import { useStoreActions } from 'easy-peasy';
 import { UserToken } from '../../../components/images/UserToken';
 
 import { StyledBox } from './ProfileMenu.styles';

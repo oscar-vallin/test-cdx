@@ -17,24 +17,24 @@ export const useCurrentUserTheme = () => {
 
   const { isAuthenticated } = SessionStore.status;
 
-  const [apiUserThemeQuery, { data: theme, loading: isLoadingTheme }] = useUserThemeLazyQuery();
+  const [useUserThemeQuery, { data: theme, loading: isLoadingTheme }] = useUserThemeLazyQuery();
 
   const fetchTheme = () => {
     if (isAuthenticated) {
-      apiUserThemeQuery({ variables: { themeColorMode: null } });
+      useUserThemeQuery({ variables: { themeColorMode: null } });
     }
   };
 
-  const [createOrUpdateOwnDashTheme, { data: updatedTheme, loading: isHandlingTheme }] =
+  const [createOrUpdateOwnDashTheme, { data: updatedTheme, loading: isHandlingTheme, error: themeError }] =
     useCreateOrUpdateOwnDashThemeMutation();
 
-  const [setOwnDashFontSize] = useSetOwnDashThemeFontSizeMutation();
+  const [setOwnDashFontSize, { data: updatedFontSize, loading: isHandlingFontSize, error: fontSizeError }] =
+    useSetOwnDashThemeFontSizeMutation();
 
   useEffect(() => {
     if (theme?.userTheme) {
       ThemeStore.setUserTheme(theme.userTheme);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [theme]);
 
   useEffect(() => {
@@ -63,7 +63,6 @@ export const useCurrentUserTheme = () => {
         // loading: isLoadingTheme,
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [theme, updatedTheme]);
 
   return {
