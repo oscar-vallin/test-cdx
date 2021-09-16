@@ -1,3 +1,11 @@
-import { render } from '@testing-library/react';
+import { createStore } from 'easy-peasy';
 
-test.skip('Render - Testing ThemeStore', () => {});
+import ThemeStore from './ThemeStore';
+
+describe('Unit::ThemeStore', () => {
+  const store = createStore(ThemeStore);
+
+  it('Still in implementation', async () => {
+    expect(store).toBeDefined();
+  });
+});
