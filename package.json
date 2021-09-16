@@ -50,6 +50,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "test:e2e": "react-scripts test --testPathPattern=.*e2e.test.js$",
     "test": "react-scripts test --verbose --updateSnapshot --transformIgnorePatterns \"node_modules/(?!react-ts)/\"",
     "test:local": "react-scripts test --verbose --updateSnapshot --transformIgnorePatterns \"node_modules/(?!react-ts)/\" --silent",
     "test:forbuild": "react-scripts test --coverage --watchAll=false --updateSnapshot --reporters=default --reporters=jest-junit --testPathIgnorePatterns \"^.+\\.e2e\\.test\\.(js|ts)\"",
@@ -130,13 +131,13 @@
       "src/.*\\.*types\\.{ts,tsx}",
       "src/index\\.tsx",
       "src/serviceWorker\\.ts",
-	  "src/main/resources/static/.*",
-	  "/\\.gradle",
-	  "/\\.node/",
-	  "/\\.scannerwork/",
-	  "/build/",
-	  "/node/",
-	  "/node_modules/"
+      "src/main/resources/static/.*",
+      "/\\.gradle",
+      "/\\.node/",
+      "/\\.scannerwork/",
+      "/build/",
+      "/node/",
+      "/node_modules/"
     ],
     "coverageReporters": [
       "json",
