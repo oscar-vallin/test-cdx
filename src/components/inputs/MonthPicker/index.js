@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import * as React from 'react';
+import React, { useState } from 'react';
 import { Calendar, DayOfWeek, DateRangeType } from 'office-ui-fabric-react/lib-commonjs/Calendar';
 import { DefaultButton } from 'office-ui-fabric-react/lib-commonjs/Button';
 import { addDays, getDateRangeArray } from '@fluentui/date-time-utilities';
