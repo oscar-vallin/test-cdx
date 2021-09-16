@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Table } from '../../../components/tables/Table';
 import { Box, BoxCaption, Text, BoxHeader } from './TableEnrollment.styles';

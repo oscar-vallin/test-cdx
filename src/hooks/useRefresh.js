@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
-import { useAuthContext } from '../contexts/AuthContext';
+import React, { useState, useEffect } from 'react';
 import { getTableStructure } from '../data/constants/TableConstants';
 
 export const useRefresh = (id, triggerFunction) => {
   const [refresh, setRefresh] = useState(false);
   const [refreshNow, setRefreshNow] = useState(false);
-  const { pollingTime } = useAuthContext();
+  // const { pollingTime } = useAuthContext();
+  const pollingTime = 60000;
   const pollingFactor = getTableStructure(id)?.polling;
 
   const setRefreshOff = () => {

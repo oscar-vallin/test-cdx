@@ -2,8 +2,7 @@
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { useHistory } from 'react-router-dom';
-import { useAuthContext } from '../../../contexts/AuthContext';
-import { useWorkPacketStatusesLazyQuery } from '../../../data/services/graphql';
+import { useWorkPacketStatusesLazyQuery, useWorkPacketStatusesQuery } from '../../../data/services/graphql';
 import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { useInputValue } from '../../../hooks/useInputValue';
 import { isCDXToday } from '../../../helpers/tableHelpers';
@@ -14,9 +13,6 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
   const [items, setItems] = useState([]);
   const [columns] = useState([]);
   const structure = getTableStructure(TABLE_NAMES.ARCHIVES);
-
-  const { authLogout } = useAuthContext();
-  const history = useHistory();
 
   const [apiCall, data, loading, error] = useWorkPacketStatusesLazyQuery({
     variables: {
@@ -59,8 +55,9 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
   //
   useEffect(() => {
     if (error) {
-      authLogout(error.message);
-      history.push('/');
+      /* TODO: Refactor to logout use-case */
+      // authLogout(error.message);
+      // history.push('/');
     }
   }, [error]);
 

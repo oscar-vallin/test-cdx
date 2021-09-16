@@ -14,15 +14,12 @@ import { useTableFilters } from '../../../hooks/useTableFilters';
 import { TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { useTableTemplate } from '../../../hooks/useTableTemplate';
 
-// import { useAuthContext } from '../../../contexts/AuthContext';
-
 const TableTransmissions = ({
   idPage = 'TableTransmissions',
   onItemsListChange = () => {
     return null;
   },
 }) => {
-  // const { orgSid } = useAuthContext();
   const { localInput, startDate, endDate } = useTableFilters('Extract Name,  Status, Vendor, etc.', useParams());
   const { search } = useLocation();
   const paramsDate = new URLSearchParams(search).get('date');

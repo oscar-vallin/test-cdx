@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { getTheme } from 'office-ui-fabric-react/lib/Styling';
+import { getTheme } from 'office-ui-fabric-react/lib-commonjs/Styling';
 import { StyledTableRow } from './TableRow.styles';
 
 const theme = getTheme();

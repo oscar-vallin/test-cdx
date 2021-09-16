@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { FileProgressBar } from '../../../components/bars/FileProgressBar';
 import { Box, Text } from './FileProgress.styles';

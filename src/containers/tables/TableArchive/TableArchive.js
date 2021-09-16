@@ -15,14 +15,11 @@ import { useTableTemplate } from '../../../hooks/useTableTemplate';
 import { TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { useTableFilters } from '../../../hooks/useTableFilters';
 
-const TableArchive = ({
-  idPage = 'TableArchive',
-  onItemsListChange = () => {
-    return null;
-  },
-}) => {
-  // const { orgSid } = useAuthContext();
-  const { localInput, startDate, endDate } = useTableFilters('Extract Name,  Status, Vendor, etc.', useParams());
+const TableArchive = ({ idPage = 'TableArchive', _orgSid = 1, onItemsListChange = () => {} }) => {
+  const { localInput, startDate, endDate, selectDate } = useTableFilters(
+    'Extract Name,  Status, Vendor, etc.',
+    useParams()
+  );
 
   const location = useLocation();
   const [urlParams] = useState(queryString.parse(location.search));

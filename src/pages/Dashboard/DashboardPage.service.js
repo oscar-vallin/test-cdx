@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useAuthContext } from '../../contexts/AuthContext';
 
 import { useDashboardPeriodsLazyQuery } from '../../data/services/graphql';
 
@@ -24,7 +23,6 @@ const isThisMonth = (id) => id === DATE_OPTION_NAME.thisMonth;
 const isLastMonth = (id) => id === DATE_OPTION_NAME.lastMonth;
 
 export const useDashboardService = (initOrgSid) => {
-  const { authLogout } = useAuthContext();
   const [setOrgSid] = useState(initOrgSid);
   const [dateId, setDateId] = useState(DATE_OPTION_NAME.today);
   const [datesOptions, setDateOptions] = useState(DATES_OPTIONS);
@@ -45,8 +43,8 @@ export const useDashboardService = (initOrgSid) => {
 
   useEffect(() => {
     if (error) {
-      authLogout();
-      history.push('/');
+      // authLogout();
+      // history.push('/');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);

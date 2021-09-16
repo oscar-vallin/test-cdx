@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Box, Bar, BarAnimated } from './FileProgressBar.styles';
 import { STEP_COLOR_PURPLE } from '../../../data/constants/FileStatusConstants';

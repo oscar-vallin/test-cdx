@@ -6,23 +6,24 @@ import { StyledColumn } from './AdminErrorBoundary.styles';
 import { LayoutDashboard } from '../../../layouts/LayoutDashboard';
 import { Row } from '../../../components/layouts';
 import { getRouteByApiId } from '../../../data/constants/RouteConstants';
-import { useUserDomain } from '../../../contexts/hooks/useUserDomain';
+
+import { useActiveDomainStore } from '../../../store/ActiveDomainStore';
 
 const parseLinks = (links = [], sidebarOpt) => {
-  return links.map(({ label, subNavItems, page }) => ({
+  return links.map(({ type, label, destination, subNavItems, page }) => ({
     name: label,
     ...(subNavItems
       ? {
-          isExpanded: subNavItems.find((item) => item.page.type === sidebarOpt),
+          isExpanded: subNavItems.find((item) => item.type === sidebarOpt),
           links: parseLinks(subNavItems),
         }
       : {}),
-    ...(page
+    ...(destination
       ? {
-          url: getRouteByApiId(page?.type)?.URL,
-          key: page.type,
-          params: page.parameters,
-          commands: page.commands,
+          url: getRouteByApiId(destination)?.URL,
+          key: type,
+          // params: page.parameters,
+          // commands: page.commands,
         }
       : {}),
   }));
@@ -34,16 +35,14 @@ const AdminErrorBoundary = ({
   sidebarOptionSelected = '',
 }) => {
   const history = useHistory();
-  const {
-    userDomain: { organization },
-  } = useUserDomain();
+  const ActiveDomainStore = useActiveDomainStore();
 
   return (
     <LayoutDashboard id={id} menuOptionSelected={menuOptionSelected} showMenu={false}>
       <StyledBox>
         <StyledNav
           selectedKey={sidebarOptionSelected}
-          groups={[{ links: parseLinks(organization?.navItems || [], sidebarOptionSelected) }]}
+          groups={[{ links: parseLinks(ActiveDomainStore.nav.admin, sidebarOptionSelected) }]}
           onLinkClick={(evt, route) => {
             evt.preventDefault();
 

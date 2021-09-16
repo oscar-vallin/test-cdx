@@ -55,8 +55,8 @@ export const MonthPicker = ({
   firstDayOfWeek = DayOfWeek.Monday,
   ...props
 }) => {
-  const [selectedDateRange, setSelectedDateRange] = React.useState();
-  const [selectedDate, setSelectedDate] = React.useState();
+  const [selectedDateRange, setSelectedDateRange] = useState();
+  const [selectedDate, setSelectedDate] = useState();
 
   const onSelectDate = (date, dateRangeArray) => {
     setSelectedDate(date);

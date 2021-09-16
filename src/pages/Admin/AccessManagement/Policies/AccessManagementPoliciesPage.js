@@ -19,6 +19,7 @@ import { useAccessPoliciesForOrgLazyQuery, useDeleteAccessPolicyMutation } from 
 
 import { StyledColumn, StyledCommandButton } from './AccessManagementPoliciesPage.styles';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
+import { useQueryHandler } from '../../../../hooks/useQueryHandler';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -40,7 +41,6 @@ const generateColumns = () => {
 const _AccessManagementPoliciesPage = () => {
   const { orgSid } = useOrgSid();
   const columns = generateColumns();
-
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);

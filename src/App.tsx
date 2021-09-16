@@ -19,11 +19,7 @@ export const App: React.FC = (): React.ReactElement => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data.orgSid]);
 
-  return (
-    <React.Suspense fallback={null}>
-      <Routes />
-    </React.Suspense>
-  );
+  return <Routes />;
 };
 
 export default App;

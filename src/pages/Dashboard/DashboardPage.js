@@ -22,7 +22,6 @@ import { useOrgSid } from '../../hooks/useOrgSid';
 // const ORG_SID = 1;
 
 const _DashboardPage = () => {
-  // const { authData, orgSid } = useAuthContext();
   const { orgSid } = useOrgSid();
   const location = useLocation();
   const [urlParams] = useState(queryString.parse(location.search));

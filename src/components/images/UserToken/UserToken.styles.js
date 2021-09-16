@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Persona } from 'office-ui-fabric-react/lib/Persona';
+import { Persona } from 'office-ui-fabric-react/lib-commonjs/Persona';
 
 export const StyledPersona = styled(Persona)`
   .ms-Persona-initials {

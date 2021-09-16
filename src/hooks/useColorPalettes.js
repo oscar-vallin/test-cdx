@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useAuthContext } from '../contexts/AuthContext';
 
 import {
   useCreateDashThemeColorMutation,
@@ -7,13 +6,14 @@ import {
   useRemoveDashThemeColorMutation,
   useDashThemeColorForOrgLazyQuery,
 } from '../data/services/graphql';
+import { useSessionStore } from '../store/SessionStore';
 import { useOrgSid } from './useOrgSid';
 
 export const useColorPalettes = () => {
-  const { authData } = useAuthContext();
+  const SessionStore = useSessionStore();
+
   const { orgSid } = useOrgSid();
-  const { id } = authData;
-  const ownedInput = { orgSid, ownerId: id };
+  const ownedInput = { orgSid, ownerId: SessionStore.user.id };
 
   const [getDashThemeColorForOrg, { data: palettes, loading: isLoadingPalettes }] = useDashThemeColorForOrgLazyQuery();
   const [createDashThemeColorMutation, { data: createdPalette, loading: isCreatingPalette }] =

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Spacing } from '../../../../components/spacings/Spacing';
 
 import { StyledIcon } from '../../UserSettingsPage.styles';

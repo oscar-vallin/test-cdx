@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useAuthContext } from '../../../contexts/AuthContext';
 import { useScheduleOccurrencesQuery } from '../../../data/services/graphql';
 // import { useInputValue } from '../../../hooks/useInputValue';
 
@@ -9,7 +8,6 @@ export const useScheduleItems = (argOrgSid, argDateRange) => {
   const [, setLoading] = useState(true);
   const [items, setItems] = useState([]);
 
-  const { authLogout } = useAuthContext();
   const history = useHistory();
 
   const { data, loading, error } = useScheduleOccurrencesQuery({
@@ -29,8 +27,9 @@ export const useScheduleItems = (argOrgSid, argDateRange) => {
 
   useEffect(() => {
     if (error) {
-      authLogout(error.message);
-      history.push('/');
+      /* TODO: Refactor to logout use-case */
+      // authLogout(error.message);
+      // history.push('/');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);

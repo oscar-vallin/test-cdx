@@ -1,13 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useCurrentUserLazyQuery } from '../../data/services/graphql';
-// eslint-disable-next-line import/no-cycle
-import { useAuthContext } from '../AuthContext';
 
 export const useCurrentUser = () => {
   const [isProcessing, setProcessing] = useState(false);
   const [isCurrentUserLogged, setLoggedIn] = useState(false);
-  const { authLogout } = useAuthContext();
   const history = useHistory();
 
   //
@@ -17,8 +14,9 @@ export const useCurrentUser = () => {
 
   useEffect(() => {
     if (error) {
-      authLogout('Session Expired');
-      history.push('/');
+      // console.log('We have an error');
+      // authLogout('Session Expired');
+      // history.push('/');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);

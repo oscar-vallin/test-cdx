@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import 'office-ui-fabric-react/dist/css/fabric.css';
@@ -7,32 +7,32 @@ import { StoreProvider } from 'easy-peasy';
 
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import { ApolloContextProvider } from './contexts/ApolloContext';
-import { ThemeContextProvider } from './contexts/ThemeContext';
-import { AuthContextProvider } from './contexts/AuthContext';
-import { NotificationContextProvider } from './contexts/NotificationContext';
-import { UserDomainContextProvider } from './contexts/UserDomainContext';
+import { ApolloContextProvider } from './contexts/ApolloContext.js';
+import { ThemeContextProvider } from './contexts/ThemeContext.js';
+import { SessionContextProvider } from './contexts/SessionContext.js';
+import { ActiveDomainContextProvider } from './contexts/ActiveDomainContext.js';
+import { NotificationContextProvider } from './contexts/NotificationContext.js';
 import store from './store/index';
 
 initializeIcons();
 
 ReactDOM.render(
   <React.StrictMode>
-    <ApolloContextProvider>
-      <StoreProvider store={store}>
-        <AuthContextProvider>
-          <ThemeContextProvider>
-            <Router>
-              <UserDomainContextProvider>
+    <StoreProvider store={store}>
+      <ApolloContextProvider>
+        <Router>
+          <SessionContextProvider>
+            <ActiveDomainContextProvider>
+              <ThemeContextProvider>
                 <NotificationContextProvider>
                   <App />
                 </NotificationContextProvider>
-              </UserDomainContextProvider>
-            </Router>
-          </ThemeContextProvider>
-        </AuthContextProvider>
-      </StoreProvider>
-    </ApolloContextProvider>
+              </ThemeContextProvider>
+            </ActiveDomainContextProvider>
+          </SessionContextProvider>
+        </Router>
+      </ApolloContextProvider>
+    </StoreProvider>
   </React.StrictMode>,
   document.getElementById('app')
 );

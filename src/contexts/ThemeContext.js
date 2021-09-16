@@ -11,8 +11,9 @@ import { LayoutLogin } from '../layouts/LayoutLogin';
 import { Spacing } from '../components/spacings/Spacing';
 import { Spinner } from '../components/spinners/Spinner';
 import { StyledCard } from '../containers/forms/FormLogin/FormLogin.styles';
-import { useAuthContext } from './AuthContext';
 import Theming from '../utils/Theming';
+import { useSessionStore } from '../store/SessionStore';
+import { useThemeStore } from '../store/ThemeStore';
 
 export const ThemeContext = React.createContext(() => {
   return {};
@@ -25,19 +26,21 @@ const sizes = {
 };
 
 export const ThemeContextProvider = ({ children }) => {
-  const userTheme = useStoreState(({ ThemeStore }) => ThemeStore.theme);
-  const { isAuthenticated, isAuthenticating } = useAuthContext();
+  const SessionStore = useSessionStore();
+  const ThemeStore = useThemeStore();
+
   const { isLoadingTheme, fetchTheme } = useCurrentUserTheme();
   const [currentTheme, setTheme] = useState(styledComponentsTheme);
   const [styledTheme, setStyledTheme] = useState(styledComponentsTheme);
   const themeConfig = {};
 
   useEffect(() => {
-    if (isAuthenticated && !isAuthenticating) {
+    const { isAuthenticated } = SessionStore.status;
+
+    if (isAuthenticated) {
       fetchTheme();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuthenticated, isAuthenticating]);
+  }, [SessionStore.status.isAuthenticated]);
 
   const GlobalStyle = createGlobalStyle`
     * {
@@ -59,6 +62,12 @@ export const ThemeContextProvider = ({ children }) => {
     }
   `;
 
+  useEffect(() => {
+    if (!isLoadingTheme) {
+      changeTheme(Theming.getVariant(ThemeStore.themes.current.dashThemeColor || {}));
+    }
+  }, [ThemeStore.themes.current]);
+
   const changeTheme = (theme = {}) => {
     const customizedTheme = {
       ...styledTheme,
@@ -68,13 +77,6 @@ export const ThemeContextProvider = ({ children }) => {
     setTheme(theme);
     setStyledTheme(customizedTheme);
   };
-
-  useEffect(() => {
-    if (!isLoadingTheme) {
-      changeTheme(Theming.getVariant(userTheme?.data || {}));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userTheme]);
 
   // eslint-disable-next-line
   const values = useMemo(
@@ -91,7 +93,7 @@ export const ThemeContextProvider = ({ children }) => {
     <Customizer {...loadTheme({ palette: currentTheme || {} })}>
       <ThemeProvider theme={styledTheme}>
         <ThemeContext.Provider value={values}>
-          <GlobalStyle fontSize={userTheme.themeFontSize} />
+          <GlobalStyle fontSize={ThemeStore.themes.current.themeFontSize} />
 
           {isLoadingTheme ? (
             <LayoutLogin id="ThemeContext">

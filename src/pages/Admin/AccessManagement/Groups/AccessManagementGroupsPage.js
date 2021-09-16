@@ -15,6 +15,7 @@ import { useAccessPolicyGroupsForOrgLazyQuery } from '../../../../data/services/
 import { StyledColumn } from './AccessManagementGroupsPage.styles';
 
 import { useOrgSid } from '../../../../hooks/useOrgSid';
+import { useQueryHandler } from '../../../../hooks/useQueryHandler';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -29,7 +30,7 @@ const generateColumns = () => {
   return [createColumn({ name: 'Name', key: 'name' }), createColumn({ name: 'Template', key: 'tmpl' })];
 };
 
-const onRenderItemColumn = (item, column) => {
+const onRenderItemColumn = (item, index, column) => {
   if (column.key === 'tmpl') return <FontIcon iconName={item.tmpl ? 'CheckMark' : 'Cancel'} />;
 
   return item[column.key];

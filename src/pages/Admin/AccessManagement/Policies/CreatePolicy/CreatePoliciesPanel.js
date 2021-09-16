@@ -23,7 +23,8 @@ import {
   useUpdateAccessPolicyMutation,
   useAccessPolicyLazyQuery,
 } from '../../../../../data/services/graphql';
-import { useAuthContext } from '../../../../../contexts/AuthContext';
+import { useOrgSid } from '../../../../../hooks/useOrgSid';
+import { useSessionStore } from '../../../../../store/SessionStore';
 
 const INITIAL_STATE = {
   policyName: '',
@@ -54,8 +55,7 @@ const generateColumns = () => {
 };
 
 const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicyId }) => {
-  const { orgSid } = useAuthContext();
-
+  const { orgSid } = useOrgSid();
   const [state, setState] = useState({ ...INITIAL_STATE });
 
   const [options, setOptions] = useState({ ...INITIAL_OPTIONS });
