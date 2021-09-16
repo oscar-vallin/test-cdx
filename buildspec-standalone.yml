@@ -1,0 +1,49 @@
+version: 0.2
+env:
+  secrets-manager:
+    LOGIN: sonarqube/cdx-dash-react-ts:sonartoken
+    HOST: sonarqube/cdx-dash-react-ts:host
+    PROJECT: sonarqube/cdx-dash-react-ts:project
+phases:
+  install:
+    runtime-versions:
+      java: corretto11
+  pre_build:
+    commands:
+    - echo In the pre_build phase...
+    - echo https://services.gradle.org/distributions/
+    - wget https://services.gradle.org/distributions/gradle-6.6.1-all.zip
+    - unzip -d /opt/gradle gradle-6.6.1-all.zip
+    - wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip
+    - unzip -d /opt/sonar sonar-scanner-cli-4.6.2.2472-linux.zip
+    - export PATH=$PATH:/sonar-scanner-4.6.2.2472-linux/bin/
+    - export NODE_OPTIONS=--max_old_space_size=2048
+  build:
+    commands:
+    - echo Build started on `date`
+    - echo Starting build `date`
+    - echo Current directory is `pwd`
+    - pwd
+    - whereis gradle
+    - which gradle
+    - /opt/gradle/gradle-6.6.1/bin/gradle -version
+    - /opt/gradle/gradle-6.6.1/bin/gradle clean jar yarnTest
+    - /opt/sonar/sonar-scanner-4.6.2.2472-linux/bin/sonar-scanner -D"sonar.projectKey=$PROJECT" -D"sonar.sources=src" -D"sonar.host.url=$HOST" -D"sonar.login=$LOGIN"
+  post_build:
+    commands:
+    - echo Build completed on `date`
+reports:
+  jest:
+    files:
+      - '*.xml'
+    base-directory: 'test-results'
+    file-format: JUNITXML
+  coverage:
+    files:
+      - '*.xml'
+    base-directory: 'coverage'
+    file-format: CLOVERXML
+artifacts:
+  files:
+  - 'build/libs/*.jar'
+

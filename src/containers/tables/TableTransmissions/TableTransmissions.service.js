@@ -3,7 +3,6 @@ import { format } from 'date-fns';
 import { useHistory } from 'react-router-dom';
 import { useWorkPacketStatusesQuery, useWpTransmissionsQuery } from '../../../data/services/graphql';
 import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableConstants';
-import { useInputValue } from '../../../hooks/useInputValue';
 
 export const useTable = (argOrgSid, argDateRange, argFilter) => {
   const [_loading, setLoading] = useState(true);
@@ -21,6 +20,18 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
     },
   });
 
+  //
+  const formatField = (value, type, columnId, text, sublabel) => {
+    return {
+      id: columnId,
+      value,
+      type,
+      columnId,
+      text,
+      sublabel,
+    };
+  };
+
   // * Component Did Mount
   useEffect(() => {
     setLoading(false);
@@ -31,6 +42,7 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
       // authLogout(error.message);
       // history.push('/');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
 
   //
@@ -75,22 +87,9 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
     };
 
     if (data) {
-      return doEffect();
+      doEffect();
     }
   }, [data]);
-
-  //
-  const formatField = (value, type, columnId, text, sublabel) => {
-    return {
-      id: columnId,
-      value,
-      type,
-      columnId,
-      text,
-      sublabel,
-    };
-  };
-
   // * Loading Data
   useEffect(() => {
     setLoading(loading);

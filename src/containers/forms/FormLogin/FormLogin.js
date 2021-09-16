@@ -20,7 +20,7 @@ import {
 
 import { useSessionStore } from '../../../store/SessionStore';
 import { useLoginUseCase, useLogoutUseCase } from '../../../use-cases/Authentication';
-import { useNotification } from '../../../contexts/hooks/useNotification';
+import { useNotification } from '../../../hooks/useNotification';
 
 const INITIAL_STATE = { userId: '', password: '' };
 

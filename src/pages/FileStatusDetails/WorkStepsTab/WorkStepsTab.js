@@ -1,7 +1,7 @@
-import React, { useState, Fragment } from 'react';
+/* eslint-disable no-alert */
+import { useState } from 'react';
 import { MessageBar } from 'office-ui-fabric-react';
 
-import { Badge } from '../../../components/badges/Badge';
 import { Button } from '../../../components/buttons/Button';
 import { Card } from '../../../components/cards/Card';
 import { Row, Column } from '../../../components/layouts';

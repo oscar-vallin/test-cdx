@@ -1,7 +1,9 @@
 import React, { useEffect, useReducer } from 'react';
 import { Toast } from '../components/toast';
 
-export const NotificationContext = React.createContext(() => {});
+export const NotificationContext = React.createContext(() => {
+  return {};
+});
 
 const INITIAL_STATE = {
   type: 'info',

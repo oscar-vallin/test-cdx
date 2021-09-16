@@ -4,18 +4,20 @@ export const DivStyled = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: ${(props) =>
-    props.center
-      ? 'center'
-      : props.right
-      ? 'flex-end'
-      : props.around
-      ? 'space-around'
-      : props.evenly
-      ? 'space-evenly'
-      : props.between
-      ? 'space-beween'
-      : 'flex-start'};
-  align-items: ${(props) => (props.center ? 'center' : props.bottom ? 'flex-end' : 'flex-start')};
+  justify-content: ${({ center, right, around, evenly, between }) => {
+    if (center) return 'center';
+    if (right) return 'flex-end';
+    if (around) return 'space-around';
+    if (evenly) return 'space-evenly';
+    if (between) return 'space-between';
+
+    return 'flex-start';
+  }};
+  align-items: ${({ center, bottom }) => {
+    if (center) return 'center';
+    if (bottom) return 'flex-end';
+
+    return 'flex-start';
+  }};
   width: 100%;
 `;

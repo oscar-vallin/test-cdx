@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useWorkPacketStatusesLazyQuery } from '../../../../data/services/graphql';
 
 export const useUpdateFileStatus = () => {
@@ -18,10 +18,6 @@ export const useUpdateFileStatus = () => {
     },
   });
 
-  // useEffect(() => {
-  //   // fileStatusQuery();
-  // }, []);
-
   useEffect(() => {
     setLoadingFs(loading);
   }, [loading]);
@@ -38,15 +34,11 @@ export const useUpdateFileStatus = () => {
 
   const fileStatusQuery = async () => {
     setProcessing(true);
-    // const _login = await localStorage.getItem('LOGIN');
 
-    // if (_login != null) {
-    //   return;
-    // }
     await _apiCall();
 
     setProcessing(false);
   };
 
-  return { fileStatusQuery, apiData, loadingFs, _error };
+  return { fileStatusQuery, apiData, loadingFs, _error, isProcessing };
 };

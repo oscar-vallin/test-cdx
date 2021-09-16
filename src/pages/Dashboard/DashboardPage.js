@@ -12,7 +12,7 @@ import { Text } from '../../components/typography/Text';
 import { PageHeader } from '../../containers/headers/PageHeader';
 
 import { LayoutDashboard } from '../../layouts/LayoutDashboard';
-import { StyledRow, StyledRowDate, StyledColumn, StyledButton, StyledSpinner } from './DashboardPage.styles';
+import { StyledRow, StyledButton } from './DashboardPage.styles';
 import { useDashboardService } from './DashboardPage.service';
 
 import { TABLE_NAMES } from '../../data/constants/TableConstants';
@@ -24,7 +24,7 @@ import { useOrgSid } from '../../hooks/useOrgSid';
 const _DashboardPage = () => {
   const { orgSid } = useOrgSid();
   const location = useLocation();
-  const [urlParams, _setUrlParams] = useState(queryString.parse(location.search));
+  const [urlParams] = useState(queryString.parse(location.search));
   const service = useDashboardService(orgSid);
   const { isLoadingData, datesOptions, dataCounters } = service;
   const { setDateId, dateId } = service;
@@ -38,6 +38,7 @@ const _DashboardPage = () => {
     return () => {
       return null;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -69,15 +70,17 @@ const _DashboardPage = () => {
     ));
   };
 
+  const pageFallBack = () => {
+    return (
+      <Spacing margin={{ top: 'double' }}>
+        <Spinner size="lg" label="Fetching dashboard data" />
+      </Spacing>
+    );
+  };
+
   return (
     <LayoutDashboard id="PageDashboard">
-      <React.Suspense
-        fallback={
-          <Spacing margin={{ top: 'double' }}>
-            <Spinner size="lg" label="Fetching dashboard data" />
-          </Spacing>
-        }
-      >
+      <React.Suspense fallback={pageFallBack()}>
         <PageHeader spacing="0">
           <Container>
             <Spacing margin={{ top: 'double' }}>

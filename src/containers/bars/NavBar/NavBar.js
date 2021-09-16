@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { FontIcon } from '@fluentui/react/lib/Icon';
 import { ContextualMenuItemType } from '@fluentui/react/lib/ContextualMenu';
@@ -9,7 +9,7 @@ import { ProfileMenu } from '../../menus/ProfileMenu';
 
 import { MainMenu } from '../../menus/MainMenu';
 import { useCurrentUserTheme } from '../../../hooks/useCurrentUserTheme';
-import { useNotification } from '../../../contexts/hooks/useNotification';
+import { useNotification } from '../../../hooks/useNotification';
 import { Spinner } from '../../../components/spinners/Spinner';
 
 import {
@@ -22,6 +22,7 @@ import {
   StyledColumnCont,
   StyledChoiceGroup,
   StyledButtonOrg,
+  StyledButton,
 } from './NavBar.styles';
 
 import { useOrgSid } from '../../../hooks/useOrgSid';
@@ -37,7 +38,7 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSetti
   const Toast = useNotification();
   const authData = SessionStore.user;
 
-  const [collapse, setCollapse] = React.useState('false');
+  const [collapse, setCollapse] = useState('false');
   const { setOwnDashFontSize, isHandlingFontSize } = useCurrentUserTheme();
 
   const { setOrgSid } = useOrgSid();
@@ -71,6 +72,18 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSetti
       label: 'Large font size',
     },
   ];
+
+  const renderButton = (_iconProps, _key) => {
+    if (isHandlingFontSize) {
+      if (userTheme.themeFontSize === _key) {
+        return <Spinner size="xs" />;
+      }
+
+      return <FontIcon iconName={_iconProps.iconName} />;
+    }
+
+    return <FontIcon iconName={_iconProps.iconName} />;
+  };
 
   // Render
   return (
@@ -135,10 +148,10 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSetti
               options={settingsMenu.map(({ key, label, iconProps }, index) => ({
                 key,
                 label,
-                onRenderField: (props, render) => {
+                onRenderField: () => {
                   return (
                     <TooltipHost content={label} id={`tooltip-${index}`} calloutProps={{ gapSpace: 0 }}>
-                      <button
+                      <StyledButton
                         disabled={isHandlingFontSize}
                         className={ThemeStore.themes.current.themeFontSize === key ? 'selected' : ''}
                         onClick={() => updateThemeFontSize(key)}
@@ -152,7 +165,7 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSetti
                         ) : (
                           <FontIcon iconName={iconProps.iconName} />
                         )}
-                      </button>
+                      </StyledButton>
                     </TooltipHost>
                   );
                 },

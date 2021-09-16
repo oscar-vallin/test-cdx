@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useWorkPacketStatusDetailsLazyQuery } from '../../../data/services/graphql';
 import { useOrgSid } from '../../../hooks/useOrgSid';
 

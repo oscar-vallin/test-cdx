@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { CommandBarButton, DetailsList } from '@fluentui/react';
+import { CommandBarButton } from '@fluentui/react';
 import { Column } from '../../../../../components/layouts';
 
 export const StyledCommandButton = styled(CommandBarButton)`

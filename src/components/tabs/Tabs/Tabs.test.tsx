@@ -1,4 +1,3 @@
-import React, { ReactElement } from 'react';
 import { CDXTabs } from './Tabs.js';
 import { renderWithTheme } from '../../../utils/testUtils';
 
@@ -37,8 +36,4 @@ describe('Tabs Testing Unit...', () => {
 
     expect(text).toEqual(content);
   });
-
-  // it('Should trigger the onClickTab callback', () => {
-  //   expect(mockFn).toHaveBeenCalled();
-  // });
 });

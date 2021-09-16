@@ -1,4 +1,5 @@
-import React, { useState, useEffect, Fragment } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useEffect, memo } from 'react';
 
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Button } from '../../../../components/buttons/Button';
@@ -13,14 +14,14 @@ import { StyledChoiceGroup, StyledDiv } from './DefaultThemePage.styles';
 import { useThemeContext } from '../../../../contexts/ThemeContext';
 import { useColorPalettes } from '../../../../hooks/useColorPalettes';
 import Theming from '../../../../utils/Theming';
-import { defaultTheme, darkTheme } from '../../../../styles/themes';
+import { darkTheme } from '../../../../styles/themes';
 
 import {
   useCreateDefaultDashThemeMutation,
   useUpdateDefaultDashThemeMutation,
   useDefaultDashThemeForSiteLazyQuery,
 } from '../../../../data/services/graphql';
-import { useNotification } from '../../../../contexts/hooks/useNotification';
+import { useNotification } from '../../../../hooks/useNotification';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
 import { useSessionStore } from '../../../../store/SessionStore';
 
@@ -30,14 +31,14 @@ const _DefaultThemePage = () => {
   const Toast = useNotification();
   const ownedInput = { orgSid, ownerId: SessionStore.user.id };
 
-  const [useDefaultDashThemeQuery, { data: defaultTheme, loading: isLoadingDefaultTheme }] =
+  const [apiDefaultDashThemeQuery, { data: defaultTheme, loading: isLoadingDefaultTheme }] =
     useDefaultDashThemeForSiteLazyQuery();
 
   const { colorPalettes, isLoadingPalettes, fetchColorPalettes } = useColorPalettes();
 
   useEffect(() => {
     fetchColorPalettes();
-    useDefaultDashThemeQuery({ variables: { ownedInput } });
+    apiDefaultDashThemeQuery({ variables: { ownedInput } });
   }, []);
 
   const { changeTheme } = useThemeContext();
@@ -72,28 +73,28 @@ const _DefaultThemePage = () => {
     if (colorPalettes && !isLoadingPalettes && !isLoadingDefaultTheme) {
       const { defaultDashThemeForSite } = defaultTheme || {};
 
-      const palette = defaultDashThemeForSite
+      const finalPalette = defaultDashThemeForSite
         ? { ...defaultDashThemeForSite, ...defaultDashThemeForSite.dashThemeColor }
         : colorPalettes.find(({ defaultPalette }) => defaultPalette);
 
       setPalettes([...palettes, ...colorPalettes]);
-      setSelectedPaletteId(palette?.id);
-      setThemeColorMode(palette?.themeColorMode);
+      setSelectedPaletteId(finalPalette?.id);
+      setThemeColorMode(finalPalette?.themeColorMode);
     }
   }, [colorPalettes, defaultTheme]);
 
   useEffect(() => {
-    const palette = palettes.find(({ id }) => id === selectedPaletteId) || {};
-    const { themePrimary } = palette;
+    const selectedPalette = palettes.find(({ palleteId }) => palleteId === selectedPaletteId) || {};
+    const { themePrimary } = selectedPalette;
 
     const variant = themeColorMode
       ? Theming.getVariant({
           ...(themeColorMode === 'LIGHT' ? defaultTheme : darkTheme),
           themePrimary,
         })
-      : palette;
+      : selectedPalette;
 
-    setPalette(palette);
+    setPalette(selectedPalette);
     setThemeColorMode(themeColorMode);
 
     changeTheme(variant);
@@ -205,6 +206,6 @@ const _DefaultThemePage = () => {
   );
 };
 
-const DefaultThemePage = React.memo(_DefaultThemePage);
+const DefaultThemePage = memo(_DefaultThemePage);
 
 export { DefaultThemePage };

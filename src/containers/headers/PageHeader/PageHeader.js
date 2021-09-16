@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Row, Column } from '../../../components/layouts';
 
-import { StyledBox } from './PageHeader.styles.js';
+import { StyledBox } from './PageHeader.styles';
 
 const PageHeader = ({ id = '__PageHeader', spacing, children }) => {
   return (

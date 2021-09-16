@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Table } from '../../../components/tables/_Table';
+import { Table } from '../../../components/tables/Table';
 
 const TableActiveOrgs = ({ id = 'TableActiveOrgs', ...props }) => {
   return <Table id={`${id}`} onOption={() => null} {...props} />;

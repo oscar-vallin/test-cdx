@@ -1,4 +1,6 @@
-import React, { useRef, useEffect, useState } from 'react';
+/* eslint-disable no-shadow */
+/* eslint-disable react-hooks/rules-of-hooks */
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 // Components
 
@@ -20,7 +22,7 @@ const MainMenu = ({ id = '__MainMenu', option = ROUTES.ROUTE_DASHBOARD.ID, left,
   const location = useLocation();
   const { search } = location;
   const [filterParam, _setFilterParam] = useState(search);
-  const [collapse, setCollapse] = React.useState();
+  const [collapse, setCollapse] = useState();
 
   const collapseNavMenu = () => {
     setCollapse(!collapse);

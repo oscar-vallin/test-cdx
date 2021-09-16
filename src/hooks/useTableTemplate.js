@@ -1,8 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { getTableStructure, useQueryTable } from '../data/constants/TableConstants';
-import { getItems } from '../data/constants/tables/ArchiveTableConstants';
-import { isCDXToday, isTodayInRange } from '../helpers/tableHelpers';
+import { isTodayInRange } from '../helpers/tableHelpers';
 import { useRefresh } from './useRefresh';
 
 //

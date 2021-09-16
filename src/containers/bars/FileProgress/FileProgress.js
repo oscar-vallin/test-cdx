@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { FileProgressBar } from '../../../components/bars/FileProgressBar';
 import { Box, Text } from './FileProgress.styles';
@@ -10,13 +10,11 @@ const FileProgress = ({ id = '__FileProgress', step, stepStatus }) => {
   if (!progressItem) return null;
 
   return (
-    <Box id="BoxInside" left>
+    <Box id={id} left>
       <FileProgressBar colors={progressItem.colors} />
       <Text>{progressItem.stepStatus.label}</Text>
     </Box>
   );
-
-  return null;
 };
 
 FileProgress.propTypes = {

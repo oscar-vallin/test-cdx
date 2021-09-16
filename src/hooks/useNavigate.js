@@ -1,6 +1,4 @@
-import { useState } from 'react';
-
-const useNavigate = (route) => {
+const useNavigate = () => {
   const navigate = () => {
     //
   };

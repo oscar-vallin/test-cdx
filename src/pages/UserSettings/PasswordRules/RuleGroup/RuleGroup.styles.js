@@ -3,7 +3,7 @@ import chroma from 'chroma-js';
 import { Text } from '../../../../components/typography/Text';
 
 export const StyledDiv = styled.div`
-  background: ${({ theme, level }) => theme.colors.neutralLighter};
+  background: ${({ theme }) => theme.colors.neutralLighter};
   border: ${({ theme, level }) => `1px solid ${chroma(theme.colors.neutralTertiaryAlt).darken(0.25 * level)}`};
   border-radius: 5px;
   font-size: 1rem;
@@ -32,7 +32,7 @@ export const StyledDiv = styled.div`
 
 export const StyledText = styled(Text)`
   align-items: center;
-  background: ${({ theme, level }) => theme.colors.neutralLighter};
+  background: ${({ theme }) => theme.colors.neutralLighter};
   border: ${({ theme, level }) => `1px solid ${chroma(theme.colors.neutralTertiaryAlt).darken(0.25 * level)}`};
   border-radius: 5px;
   display: flex;

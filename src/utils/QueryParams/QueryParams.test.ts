@@ -1,5 +1,4 @@
-import React from 'react';
-import QueryParams from './QueryParams.js';
+import QueryParams from './QueryParams';
 
 describe('QueryParams Testing Unit...', () => {
   it('Should parse the query params from the search string', () => {

@@ -7,16 +7,13 @@ class PasswordRulesValidator {
     const data = Array.isArray(rules) ? rules : [rules];
 
     return _.chain(data)
-      .map(
-        (rule) =>
-          Array.isArray(rule)
-            ? PasswordRulesValidator.countRulesets(rule)
-            : rule.rules
-            ? PasswordRulesValidator.countRulesets(rule.rules)
-            : rule.level !== 0
-            ? 1
-            : 1 // ou 0
-      )
+      .map((rule) => {
+        if (Array.isArray(rule)) return PasswordRulesValidator.countRulesets(rule);
+
+        if (rule.rules) return PasswordRulesValidator.countRulesets(rule.rules);
+
+        return 1;
+      })
       .flattenDeep()
       .sum()
       .value();
@@ -38,14 +35,18 @@ class PasswordRulesValidator {
   };
 
   static flattenValidations(item) {
-    const items =
-      typeof item === 'object'
-        ? item.isValid
-          ? item.isValid.map(PasswordRulesValidator.flattenValidations)
-          : item.validations
-        : [item];
+    let items;
+    if (typeof item === 'object') {
+      if (item.isValid) {
+        items = item.isValid.map(PasswordRulesValidator.flattenValidations);
+      } else {
+        items = item.validations;
+      }
+    } else {
+      items = [item];
+    }
 
-    return items.reduce((arr, item) => [...arr, ...(Array.isArray(item) ? item : [item])], []);
+    return items.reduce((arr, _item) => [...arr, ...(Array.isArray(_item) ? _item : [_item])], []);
   }
 
   /* Validates a value against a set of rules */

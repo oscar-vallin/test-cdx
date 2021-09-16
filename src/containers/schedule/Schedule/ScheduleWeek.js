@@ -1,37 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import {
-  addDays,
-  addHours,
-  addMonths,
-  endOfMonth,
-  endOfWeek,
-  format,
-  isSameDay,
-  isSameMonth,
-  parse,
-  parseISO,
-  set,
-  startOfDay,
-  startOfMonth,
-  startOfWeek,
-  subMonths,
-} from 'date-fns';
+import { addDays, addHours, format, isSameDay, parseISO, startOfDay, startOfWeek } from 'date-fns';
 
 import {
-  Box,
-  WeekRow,
-  Column,
-  Container,
-  RightColumn,
   Body,
-  RowHeader,
-  ColumnHeader,
-  RowHeaderItem,
-  HeaderMonth,
-  HeaderYear,
-  HeaderButtonView,
-  CalendarColumn,
   DayOfWeekContainer,
   CalendarBodyCellNumber,
   CalendarBodyRow,
@@ -40,16 +10,13 @@ import {
   CellItem,
 } from './ScheduleWeek.styles';
 
-export const ScheduleWeek = ({ id, currentDate, selectedDate, onChangeDate, onChangeView, items }) => {
+export const ScheduleWeek = ({ currentDate, selectedDate, items }) => {
   const startDate = startOfWeek(selectedDate ?? currentDate);
-  const endDate = endOfWeek(selectedDate ?? currentDate);
   const currentSelectedDate = selectedDate ?? currentDate;
 
-  const dateFormat = 'd';
   const rows = [];
   let days = [];
   let day = startDate;
-  const formattedDate = '';
   let formattedHour = '';
 
   let hour = startOfDay(startDate);
@@ -57,8 +24,8 @@ export const ScheduleWeek = ({ id, currentDate, selectedDate, onChangeDate, onCh
 
   //
   //
-  const renderItems = (day, allItems) => {
-    const dayRows = allItems.filter((_item) => isSameDay(parseISO(_item.datetime), day));
+  const renderItems = (_day, allItems) => {
+    const dayRows = allItems.filter((_item) => isSameDay(parseISO(_item.datetime), _day));
 
     return dayRows.map((_item) => <CellItem>{_item.label}</CellItem>);
   };

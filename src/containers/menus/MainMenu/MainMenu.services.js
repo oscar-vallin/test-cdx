@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 // useEmailField
 export const useMainMenu = (defaultOption) => {
-  const [selectedOption, setOption] = React.useState(defaultOption);
+  const [selectedOption, setOption] = useState(defaultOption);
 
   return { selectedOption, setOption };
 };

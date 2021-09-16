@@ -1,8 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { FontIcon } from '@fluentui/react/lib/Icon';
-import { StyledDiv } from './Collapse.styles';
+import { useEffect, useState } from 'react';
+import { FontIcon } from '@fluentui/react/lib-commonjs/Icon';
+import { StyledDiv, StyledButton } from './Collapse.styles';
 
-const CDXCollapse = ({ label, children, className = '', expanded = false, onToggle = () => {} }) => {
+const CDXCollapse = ({
+  label,
+  children,
+  className = '',
+  expanded = false,
+  onToggle = () => {
+    return {};
+  },
+}) => {
   const [isExpanded, setIsExpanded] = useState(expanded);
   const [isAnimating, setIsAnimating] = useState(false);
 
@@ -18,13 +26,14 @@ const CDXCollapse = ({ label, children, className = '', expanded = false, onTogg
     }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => onToggle(isExpanded), [isExpanded]);
 
   return (
     <StyledDiv className={`collapse ${className}`}>
-      <button className="collapse__trigger" onClick={handleClick}>
+      <StyledButton className="collapse__trigger" onClick={handleClick}>
         {label} &nbsp; <FontIcon iconName="ChevronDown" />
-      </button>
+      </StyledButton>
 
       {isExpanded && (
         <div className={`collapse__content ms-motion-${isAnimating ? 'fadeIn' : 'fadeOut'}`}>{children}</div>

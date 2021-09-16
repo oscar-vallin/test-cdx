@@ -1,3 +1,3 @@
-import { InputDateRange } from './InputDateRange.js';
+import { InputDateRange } from './InputDateRange';
 
 export { InputDateRange };

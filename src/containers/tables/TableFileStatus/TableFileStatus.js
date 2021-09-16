@@ -1,9 +1,8 @@
-import React, { useState, useEffect, Fragment } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Label } from '@fluentui/react/lib/Label';
 import { useParams, useLocation } from 'react-router-dom';
-import queryString from 'query-string';
-import { Text } from '../../../components/typography/Text';
 import { Table } from '../../../components/tables/Table';
 
 import { Box, StyledRow, Column, Container, FilterSection } from './TableFileStatus.styles';
@@ -20,10 +19,9 @@ import { useQueryParams } from '../../../hooks/useQueryParams';
 
 const TableFileStatus = ({
   idPage = 'TableFileStatus',
-  _orgSid = 1,
-  dateRange,
-  filter,
-  onItemsListChange = () => {},
+  onItemsListChange = () => {
+    return null;
+  },
 }) => {
   const QueryParams = useQueryParams();
 
@@ -43,6 +41,14 @@ const TableFileStatus = ({
 
   const { id } = useParams();
   const { search } = useLocation();
+
+  const selectDate = (date) => {
+    const _startDay = getStartDay(date);
+    const _endDay = getEndDay(date);
+
+    startDate.setValue(_startDay);
+    endDate.setValue(_endDay);
+  };
 
   useEffect(() => {
     if (urlParams.startDate && urlParams.endDate) {
@@ -66,14 +72,6 @@ const TableFileStatus = ({
     localInput.setValue(params[0]);
     selectDate(params[1]);
   }, []);
-
-  const selectDate = (date) => {
-    const _startDay = getStartDay(date);
-    const _endDay = getEndDay(date);
-
-    startDate.setValue(_startDay);
-    endDate.setValue(_endDay);
-  };
 
   return (
     <>
@@ -104,12 +102,12 @@ const TableFileStatus = ({
               id={`${idPage}`}
               onOption={() => null}
               searchInput={localInput.value}
-              onItemsListChange={(items) =>
+              onItemsListChange={(items) => {
                 onItemsListChange({
                   count: items.length,
                   loading: tableProps.loading,
-                })
-              }
+                });
+              }}
               {...tableProps}
             />
           </Box>

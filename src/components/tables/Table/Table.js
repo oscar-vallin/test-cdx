@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { mergeStyles, mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
-import { useHistory, useLocation } from 'react-router-dom';
+/* eslint-disable react/void-dom-elements-no-children */
+/* eslint-disable jsx-a11y/anchor-is-valid */
+import { useEffect, useState } from 'react';
+import { Link } from 'office-ui-fabric-react/lib-commonjs/Link';
+import { mergeStyles, mergeStyleSets } from 'office-ui-fabric-react/lib-commonjs/Styling';
 import { format } from 'date-fns';
-import queryString from 'query-string';
-// import { useTableFilters } from '../../../hooks/useTableFilters';
 import PropTypes from 'prop-types';
 import {
   ColumnActionsMode,
@@ -13,8 +12,7 @@ import {
   SelectionMode,
   buildColumns,
   DetailsHeader,
-} from 'office-ui-fabric-react/lib/DetailsList';
-import { useQuery } from '@apollo/client';
+} from 'office-ui-fabric-react/lib-commonjs/DetailsList';
 import { getDates } from '../../../helpers/tableHelpers';
 import { Spinner } from '../../spinners/Spinner';
 
@@ -32,8 +30,6 @@ import {
 } from './Table.styles';
 
 import { TableHeader } from '../TableHeader';
-import { FileProgress } from '../../../containers/bars/FileProgress';
-import { useQueryParams } from '../../../hooks/useQueryParams';
 
 const _buildColumns = (
   items,
@@ -45,6 +41,18 @@ const _buildColumns = (
   groupedColumnKey,
   onColumnContextMenu
 ) => {
+  const classNames = mergeStyleSets({
+    root: {
+      width: '100%',
+    },
+
+    headerDivider: {
+      display: 'inline-block',
+      height: '100%',
+    },
+  });
+
+  //
   const columns = buildColumns(
     items,
     canResizeColumns,
@@ -58,8 +66,7 @@ const _buildColumns = (
     column.onColumnContextMenu = onColumnContextMenu;
     column.ariaLabel = `Operations for ${column.name}`;
     column.isResizable = true;
-    // column.minWidth = 100;
-    // column.maxWidth = 200;
+
     const columnData = xtColumns.find((xtColumn) => xtColumn.key === column.fieldName);
     column.name = columnData?.label ?? column.name;
 
@@ -85,9 +92,9 @@ const _buildColumns = (
       column.isMultiline = true;
     } else if (column.key === 'key') {
       column.columnActionsMode = ColumnActionsMode.disabled;
-      column.onRender = (item) => (
+      column.onRender = ({ key }) => (
         <Link className={classNames.linkField} href="https://microsoft.com" target="_blank" rel="noopener">
-          {item.key}
+          {key}
         </Link>
       );
     }
@@ -95,17 +102,6 @@ const _buildColumns = (
 
   return columns;
 };
-
-const classNames = mergeStyleSets({
-  root: {
-    width: '100%',
-  },
-
-  headerDivider: {
-    display: 'inline-block',
-    height: '100%',
-  },
-});
 
 /**
  * * TABLE COMPONENT
@@ -128,7 +124,6 @@ const Table = ({
   onItemsListChange,
   loading = true,
 }) => {
-  const QueryParams = useQueryParams();
   const [sortLabel, setSortLabel] = useState();
   const [sortedItems, setSortedItems] = useState([]);
   const [sortedGroups, setSortedGroups] = useState();
@@ -136,24 +131,74 @@ const Table = ({
   const [filterInput, setFilterInput] = useState(searchInput);
   const [option, setOption] = useState(false);
   const [sort, setSort] = useState('asc');
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const totalPages = 1;
+
   const [currentKeySort, setCurrentKeySort] = useState('datetime');
   const [isHovering, setIsHovering] = useState(false);
   const [currentHover, setCurrentHover] = useState(null);
 
-  const urlParams = QueryParams.parse('');
+  const _copyAndSort = (argItems, columnKey, isSortedDescending = false) => {
+    const key = columnKey;
 
-  // const location = useLocation();
-  // const { startDate, endDate } = useTableFilters('Extract Name,  Status, Vendor, etc.');
-  const initialStartDate = new Date(urlParams.startDate);
-  const initialEndDate = new Date(urlParams.endDate);
+    const filterItems = argItems.map((item) => {
+      const _item = { ...item };
 
-  // * Component Effects
-  // Component Did Mount.
-  useEffect(() => {
-    definePages();
-  });
+      if (Object.prototype.hasOwnProperty.call(item, 'groupId')) {
+        delete _item.groupId;
+      }
+
+      return _item;
+    });
+
+    return filterItems.slice(0).sort((a, b) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1));
+  };
+
+  /*
+   * Local Functions.
+   */
+  const _buildItems = () => {
+    if (!items) return null;
+    const iItems = items.map((rowItem) => {
+      const objItem = {};
+
+      rowItem.forEach((rowColItem) => {
+        objItem[rowColItem.columnId] = rowColItem.value;
+      });
+
+      return objItem;
+    });
+
+    setSortedItems(iItems);
+    return iItems;
+  };
+
+  /*
+   * Local Functions.
+   */
+  const _filterItems = (textFilter) => {
+    const iItems = items.map((rowItem) => {
+      const objItem = {};
+      let filterFound = false;
+
+      rowItem.forEach((rowColItem) => {
+        objItem[rowColItem.columnId] = rowColItem.value;
+
+        if (rowColItem.value && typeof rowColItem.value === 'string' && !filterFound) {
+          filterFound = rowColItem.value.toLowerCase().includes(textFilter.toLowerCase());
+        }
+      });
+
+      if (filterFound) return objItem;
+
+      return undefined;
+    });
+
+    const itemsResult = iItems.filter((iItemRow) => !!iItemRow);
+
+    setSortedItems(itemsResult);
+    return itemsResult;
+  };
+
   //
   // When items or groups change
   // > then group merge, build Columns, build Items, and set Columns.
@@ -193,20 +238,24 @@ const Table = ({
       setFilterInput();
       _buildItems();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchInput, items]);
 
   useEffect(() => {
     setFilterInput(searchInput);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [option]);
 
   useEffect(() => {
     setSortedItems(_copyAndSort(sortedItems, 'datetime', false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     if (onItemsListChange) {
       onItemsListChange(sortedItems);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sortedItems]);
 
   const handleMouseOver = (key) => {
@@ -219,55 +268,13 @@ const Table = ({
     setIsHovering(false);
   };
 
-  /*
-   * Local Functions.
-   */
-  const _buildItems = () => {
-    if (!items) return;
-    const iItems = items.map((rowItem) => {
-      const objItem = {};
-
-      rowItem.forEach((rowColItem) => {
-        objItem[rowColItem.columnId] = rowColItem.value;
-      });
-
-      return objItem;
-    });
-
-    setSortedItems(iItems);
-    return iItems;
-  };
-
-  /*
-   * Local Functions.
-   */
-  const _filterItems = (textFilter) => {
-    const iItems = items.map((rowItem) => {
-      const objItem = {};
-      let filterFound = false;
-
-      rowItem.forEach((rowColItem) => {
-        objItem[rowColItem.columnId] = rowColItem.value;
-
-        if (rowColItem.value && typeof rowColItem.value === 'string' && !filterFound) {
-          filterFound = rowColItem.value.toLowerCase().includes(textFilter.toLowerCase());
-        }
-      });
-
-      if (filterFound) return objItem;
-    });
-
-    const itemsResult = iItems.filter((iItemRow) => !!iItemRow);
-
-    setSortedItems(itemsResult);
-    return itemsResult;
-  };
-
   //
   // Render Item Column
   //
   const _renderItemColumn = (item, index, column) => {
-    const fieldContent = item[column.fieldName];
+    const { fieldName } = column;
+    // eslint-disable-next-line react/destructuring-assignment
+    const fieldContent = item[fieldName];
     const fieldItem = items[index].find((_item) => _item.columnId === column.fieldName);
     const tableType = structure.header.type;
 
@@ -329,20 +336,24 @@ const Table = ({
           );
         }
 
-        const formatDatesURL = 'yyyy-MM-dd';
-        const startFormatted = format(getDates(date).startDate, formatDatesURL);
-        const endFormatted = format(getDates(date).endDate, formatDatesURL);
+        {
+          const formatDatesURL = 'yyyy-MM-dd';
+          const startFormatted = format(getDates(date).startDate, formatDatesURL);
+          const endFormatted = format(getDates(date).endDate, formatDatesURL);
 
-        return (
-          <StyledCell left>
-            <Link>
-              <RouteLink to={`/file-status?filter=${fieldContent}&startDate=${startFormatted}&endDate=${endFormatted}`}>
-                {fieldContent}
-              </RouteLink>
-            </Link>
-            {fieldItem.sublabel && <StyledSpecs>{`spec: ${fieldItem.sublabel}`}</StyledSpecs>}
-          </StyledCell>
-        );
+          return (
+            <StyledCell left>
+              <Link>
+                <RouteLink
+                  to={`/file-status?filter=${fieldContent}&startDate=${startFormatted}&endDate=${endFormatted}`}
+                >
+                  {fieldContent}
+                </RouteLink>
+              </Link>
+              {fieldItem.sublabel && <StyledSpecs>{`spec: ${fieldItem.sublabel}`}</StyledSpecs>}
+            </StyledCell>
+          );
+        }
 
       // case 'progress':
       //   return <FileProgress stringValues={item.progress} />;
@@ -373,28 +384,13 @@ const Table = ({
       default:
         return <span>{fieldContent}</span>;
     }
+
+    return <span>{fieldContent}</span>;
   };
 
   // * Click on Row.
-  const _onItemInvoked = (item, index) => {
+  const _onItemInvoked = () => {
     // alert(`Item ${item.name} at index ${index} has been invoked.`);
-  };
-
-  //
-  const _copyAndSort = (argItems, columnKey, isSortedDescending = false) => {
-    const key = columnKey;
-
-    const filterItems = argItems.map((item) => {
-      const _item = { ...item };
-
-      if (item.hasOwnProperty('groupId')) {
-        delete _item.groupId;
-      }
-
-      return _item;
-    });
-
-    return filterItems.slice(0).sort((a, b) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1));
   };
 
   //
@@ -409,6 +405,7 @@ const Table = ({
       if (totalPages === 1) {
         setSortedItems(_copyAndSort(sortedItems, key, sort !== 'asc'));
       } else {
+        // eslint-disable-next-line no-alert
         alert('Sorting unavailable for a multi-page table');
       }
     }
@@ -421,6 +418,8 @@ const Table = ({
     onOption(!option);
   };
 
+  //
+  //
   const _onRenderTableHeader = (props) => {
     if (structure.header.type === 'dashboard' && !sortLabel) {
       setSortLabel('Vendor');
@@ -431,25 +430,36 @@ const Table = ({
         <DetailsHeader
           {...props}
           onColumnClick={(_ev, column) => _onSort(column.key)}
-          onRenderColumnHeaderTooltip={(props) =>
-            props.column.key === 'progress' ? (
-              props.children
-            ) : props.column.key === currentKeySort ? (
-              <StyledMenuButton onClick={() => _onSort(props.column.key)} icon={sort}>
-                {props.children}
-              </StyledMenuButton>
-            ) : (
-              <div onMouseOver={() => handleMouseOver(props.column.key)} onMouseOut={handleMouseOut}>
-                {isHovering && currentHover === props.column.key ? (
-                  <StyledMenuIcon icon="sort" onClick={() => _onSort(props.column.key)}>
-                    {props.children}
+          onRenderColumnHeaderTooltip={(_props) => {
+            if (_props.column.key === 'progress') {
+              return _props.children;
+            }
+
+            if (_props.column.key === currentKeySort) {
+              return (
+                <StyledMenuButton onClick={() => _onSort(_props.column.key)} icon={sort}>
+                  {_props.children}
+                </StyledMenuButton>
+              );
+            }
+
+            return (
+              <div
+                onMouseOver={() => handleMouseOver(_props.column.key)}
+                onMouseOut={handleMouseOut}
+                onFocus={() => null}
+                onBlur={() => null}
+              >
+                {isHovering && currentHover === _props.column.key ? (
+                  <StyledMenuIcon icon="sort" onClick={() => _onSort(_props.column.key)}>
+                    {_props.children}
                   </StyledMenuIcon>
                 ) : (
-                  <StyledMenuButton onClick={() => _onSort(props.column.key)}>{props.children}</StyledMenuButton>
+                  <StyledMenuButton onClick={() => _onSort(_props.column.key)}>{_props.children}</StyledMenuButton>
                 )}
               </div>
-            )
-          }
+            );
+          }}
         />
       );
     }
@@ -467,48 +477,76 @@ const Table = ({
 
   // * RENDER
 
-  const definePages = () => {};
-
   const renderItems = () => {
     return sortedItems;
   };
 
-  if (sortedItems)
-    if (structure.header.type === 'dashboard') {
+  const renderSortedItem = () => {
+    const classNames = mergeStyleSets({
+      root: {
+        width: '100%',
+      },
+
+      headerDivider: {
+        display: 'inline-block',
+        height: '100%',
+      },
+    });
+
+    if (loading) {
       return (
-        <StyledContainer id="Table_Detailed" style={{ width: '100%' }}>
-          {loading ? (
-            <StyledSpacing margin={{ top: 'double' }}>
-              <Spinner size="lg" label="Loading data" />
-            </StyledSpacing>
-          ) : sortedItems?.length > 0 ? (
-            <DetailsList
-              className={classNames.root}
-              id="TableDetailedList"
-              items={sortedItems}
-              columns={tablecolumns}
-              selectionMode={SelectionMode.none}
-              setKey="none"
-              layoutMode={DetailsListLayoutMode.justified}
-              isHeaderVisible
-              onItemInvoked={_onItemInvoked}
-              onRenderDetailsHeader={_onRenderTableHeader}
-              onRenderItemColumn={_renderItemColumn}
-              groups={sortedGroups}
-            />
-          ) : (
-            <StyledText bold>No data available</StyledText>
-          )}
-        </StyledContainer>
-      );
-    }
-  return (
-    <StyledContainer id="Table_Detailed" style={{ width: '100%' }}>
-      {loading ? (
         <StyledSpacing margin={{ top: 'double' }}>
           <Spinner size="lg" label="Loading data" />
         </StyledSpacing>
-      ) : sortedItems?.length > 0 ? (
+      );
+    }
+
+    if (items?.length > 0) {
+      return (
+        <DetailsList
+          className={classNames.root}
+          id="TableDetailedList"
+          items={sortedItems}
+          columns={tablecolumns}
+          selectionMode={SelectionMode.none}
+          setKey="none"
+          layoutMode={DetailsListLayoutMode.justified}
+          isHeaderVisible
+          onItemInvoked={_onItemInvoked}
+          onRenderDetailsHeader={_onRenderTableHeader}
+          onRenderItemColumn={_renderItemColumn}
+          groups={sortedGroups}
+        />
+      );
+    }
+
+    return <StyledText bold>No data available</StyledText>;
+  };
+
+  //
+  //
+  const renderItem = () => {
+    const classNames = mergeStyleSets({
+      root: {
+        width: '100%',
+      },
+
+      headerDivider: {
+        display: 'inline-block',
+        height: '100%',
+      },
+    });
+
+    if (loading) {
+      return (
+        <StyledSpacing margin={{ top: 'double' }}>
+          <Spinner size="lg" label="Loading data" />
+        </StyledSpacing>
+      );
+    }
+
+    if (items?.length > 0) {
+      return (
         <DetailsList
           className={classNames.root}
           id="TableDetailedList"
@@ -523,16 +561,32 @@ const Table = ({
           onRenderItemColumn={_renderItemColumn}
           groups={sortedGroups}
         />
-      ) : (
-        <StyledText bold>No data available</StyledText>
-      )}
+      );
+    }
+
+    return <StyledText bold>No data available</StyledText>;
+  };
+
+  if (sortedItems)
+    if (structure.header.type === 'dashboard') {
+      return (
+        <StyledContainer id="Table_Detailed" style={{ width: '100%' }}>
+          {renderSortedItem()}
+        </StyledContainer>
+      );
+    }
+
+  return (
+    <StyledContainer id="Table_Detailed" style={{ width: '100%' }}>
+      {renderItem()}
     </StyledContainer>
   );
 };
 
 Table.propTypes = {
-  structure: PropTypes.Object,
+  structure: PropTypes.any,
   columns: PropTypes.array,
+  items: PropTypes.array,
 };
 
 export { Table };

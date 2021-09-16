@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Table } from '../../../components/tables/Table';
 import { Box, BoxCaption, Text, BoxHeader } from './TableEnrollment.styles';
@@ -11,7 +11,7 @@ const TableEnrollment = ({ id = 'TableEnrollmentStats' }) => {
   const { tableProps, tableItems, tableGroups, excludedCounter, error } = useTable(ORG_SID, WORK_ORDER_ID);
 
   return (
-    <Box>
+    <Box id={id}>
       <BoxCaption>
         <Text>{error}</Text>
       </BoxCaption>

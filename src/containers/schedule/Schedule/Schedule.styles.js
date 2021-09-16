@@ -1,13 +1,5 @@
 import styled from 'styled-components';
 import { Box as LayoutBox, Row as LayoutRow, Column as LayoutColumn } from '../../../components/layouts';
-import { Button } from '../../../components/buttons/Button';
-
-// const COLOR_MAIN = '#1a8fff';
-// const COLOR_TEXT = '#333';
-// const COLOR_TEXT_LIGHT = '#CCC';
-// const COLOR_BG = '#F9F9F9';
-// const COLOR_NEUTRAL = '#FFF';
-// const COLOR_BORDER = '#EEE';
 
 const COLOR_MAIN = ({ theme }) => theme.colors.themePrimary;
 const COLOR_TEXT = ({ theme }) => theme.colors.neutralPrimary;
@@ -16,14 +8,7 @@ const COLOR_BG = ({ theme }) => theme.colors.neutralLighterAlt;
 const COLOR_NEUTRAL = ({ theme }) => theme.colors.white;
 const COLOR_BORDER = ({ theme }) => theme.colors.neutralLight;
 
-const COLOR_BACKGROUND = ({ theme }) => 'transparent';
-
-// --main-color: #1a8fff;
-// --text-color: #777;
-// --text-color-light: #ccc;
-// --border-color: #eee;
-// --bg-color: #f9f9f9;
-// --neutral-color: #fff;
+const COLOR_BACKGROUND = () => 'transparent';
 
 export const Container = styled(LayoutBox)`
   width: 100vw;
@@ -34,7 +19,6 @@ export const Container = styled(LayoutBox)`
   justify-content: center;
   padding-left: 10vw;
   padding-right: 10vw;
-  // height: calc(100vh - 48px);
 `;
 
 export const Box = styled(LayoutBox)`

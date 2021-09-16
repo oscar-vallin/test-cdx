@@ -1,4 +1,5 @@
-import React, { useState, useEffect, Fragment } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useEffect, memo } from 'react';
 
 import { Checkbox } from '@fluentui/react';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
@@ -15,13 +16,11 @@ import { PaletteColors } from './PaletteColors';
 import { StyledDiv, StyledChoiceGroup, StyledColorPicker } from './ColorPalettesPage.styles';
 
 import { useThemeContext } from '../../../../contexts/ThemeContext';
-import { useCurrentUserTheme } from '../../../../hooks/useCurrentUserTheme';
 import { useColorPalettes } from '../../../../hooks/useColorPalettes';
 import { defaultTheme } from '../../../../styles/themes';
 
 import Theming from '../../../../utils/Theming';
-import { useNotification } from '../../../../contexts/hooks/useNotification';
-import { useOrgSid } from '../../../../hooks/useOrgSid';
+import { useNotification } from '../../../../hooks/useNotification';
 
 const getThemeVariant = ({ themePrimary, neutralPrimary, white }) => ({
   ...Theming.generate.primary(themePrimary),
@@ -31,11 +30,11 @@ const getThemeVariant = ({ themePrimary, neutralPrimary, white }) => ({
 
 const _ColorPalettesPage = () => {
   const Toast = useNotification();
-  const { userTheme } = useCurrentUserTheme();
   const { changeTheme, themeConfig } = useThemeContext();
   const {
     colorPalettes,
     isLoadingPalettes,
+    isCreatingPalette,
     isProcessingPalettes,
     palettesUpdated,
     fetchColorPalettes,
@@ -52,7 +51,6 @@ const _ColorPalettesPage = () => {
 
   const [paletteName, setPaletteName] = useState('');
   const [isDefaultPalette, setIsDefaultPalette] = useState(false);
-  // const [paletteVariant, setPaletteVariant] = useState('LIGHT'); /* Should come from color palette */
 
   const [colors, setColors] = useState({
     themePrimary: (themeConfig.themeColorPalettes || [])[0],
@@ -79,7 +77,7 @@ const _ColorPalettesPage = () => {
     const currentVariant = colorPalettes.find(({ id }) => id === selectedPaletteId) || {};
 
     const isExtendingPalette = paletteType === 'EXTEND';
-    const colors = {
+    const paletteColors = {
       ...(selectedPaletteId
         ? {
             themePrimary: currentVariant.themePrimary,
@@ -95,12 +93,12 @@ const _ColorPalettesPage = () => {
 
     const variant = {
       ...(selectedPaletteId ? currentVariant : defaultVariant),
-      ...colors,
+      ...paletteColors,
     };
 
-    setColors(colors);
+    setColors(paletteColors);
     setActiveColor({ key: 'themePrimary', color: variant.themePrimary });
-    changeTheme(getThemeVariant({ ...variant, ...colors }));
+    changeTheme(getThemeVariant({ ...variant, ...paletteColors }));
 
     setEnableDarkMode(selectedPaletteId ? Boolean(currentVariant.allowDark) : isExtendingPalette);
   }, [paletteType, selectedPaletteId, colorPalettes]);
@@ -184,7 +182,7 @@ const _ColorPalettesPage = () => {
               <Separator />
             </Spacing>
 
-            {false ? (
+            {isCreatingPalette ? (
               <Spacing margin={{ top: 'double' }}>
                 <Spinner size="lg" label="Loading color palette" />
               </Spacing>
@@ -340,6 +338,6 @@ const _ColorPalettesPage = () => {
   );
 };
 
-const ColorPalettesPage = React.memo(_ColorPalettesPage);
+const ColorPalettesPage = memo(_ColorPalettesPage);
 
 export { ColorPalettesPage };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Label } from '@fluentui/react/lib/Label';
 import { useParams, useLocation } from 'react-router-dom';
@@ -16,16 +16,15 @@ import { useTableTemplate } from '../../../hooks/useTableTemplate';
 
 const TableTransmissions = ({
   idPage = 'TableTransmissions',
-  _orgSid = 1,
-  dateRange,
-  filter,
-  onItemsListChange = () => {},
+  onItemsListChange = () => {
+    return null;
+  },
 }) => {
   const { localInput, startDate, endDate } = useTableFilters('Extract Name,  Status, Vendor, etc.', useParams());
   const { search } = useLocation();
   const paramsDate = new URLSearchParams(search).get('date');
-  const [date, _setDate] = useState(paramsDate);
-  const [urlParams, _setUrlParams] = useState(queryString.parse(search));
+  const [date] = useState(paramsDate);
+  const [urlParams] = useState(queryString.parse(search));
 
   const { tableProps } = useTableTemplate(
     TABLE_NAMES.TRANSMISSIONS,
@@ -41,6 +40,7 @@ const TableTransmissions = ({
       startDate.setValue(new Date(`${urlParams.startDate} 00:00:00`));
       endDate.setValue(new Date(`${urlParams.endDate} 00:00:00`));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -73,12 +73,12 @@ const TableTransmissions = ({
               onOption={() => null}
               searchInput={localInput.value}
               date={date}
-              onItemsListChange={(items) =>
+              onItemsListChange={(items) => {
                 onItemsListChange({
                   count: items.length,
                   loading: tableProps.loading,
-                })
-              }
+                });
+              }}
               {...tableProps}
             />
           )}

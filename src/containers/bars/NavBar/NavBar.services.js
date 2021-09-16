@@ -6,8 +6,8 @@ export const useLogin = () => {
   const email = useInputValue('Email', '');
   const password = useInputValue('Password', '');
 
-  const [isProcessing, setIsProcessing] = React.useState(false);
-  const [validationError, setValidationError] = React.useState('');
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [validationError, setValidationError] = useState('');
   const [isEmailValid, setIsEmailValid] = useState(false);
 
   const resetEmail = () => {

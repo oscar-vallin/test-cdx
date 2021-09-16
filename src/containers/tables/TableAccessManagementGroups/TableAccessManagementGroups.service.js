@@ -1,25 +1,8 @@
 import { useState, useEffect } from 'react';
-import { format, compareAsc } from 'date-fns';
+import { format } from 'date-fns';
 import { useWorkPacketStatusesQuery } from '../../../data/services/graphql';
 import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { useInputValue } from '../../../hooks/useInputValue';
-
-// import { STATUSES } from '../../../data/constants/'
-
-const STATUSES = {
-  0: 'Queued',
-  1: 'Processing',
-  2: 'Complete',
-  3: 'Error',
-  4: 'Submitted',
-  5: 'Warning',
-  6: 'Hold',
-  7: 'Canceled',
-  a: 'Quality Check Failed',
-  b: 'No Records',
-  c: 'Tech migration Check Failed',
-  default: '',
-};
 
 export const useTable = (argOrgSid, argDateRange, argFilter) => {
   const [_loading, setLoading] = useState(true);
@@ -33,23 +16,6 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
       filter: argFilter,
     },
   });
-
-  // * Component Did Mount
-  useEffect(() => {
-    setLoading(false);
-  }, []);
-
-  useEffect(() => {
-    const doEffect = () => {
-      const _items = buildItems(data);
-      setItems(_items);
-      return _items;
-    };
-
-    if (data) {
-      doEffect();
-    }
-  }, [data]);
 
   // Build Items.
   const buildItems = (_data) => {
@@ -71,7 +37,26 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
         }
       );
     }
+
+    return null;
   };
+
+  // * Component Did Mount
+  useEffect(() => {
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    const doEffect = () => {
+      const _items = buildItems(data);
+      setItems(_items);
+      return _items;
+    };
+
+    if (data) {
+      doEffect();
+    }
+  }, [data]);
 
   // * Loading Data
   useEffect(() => {

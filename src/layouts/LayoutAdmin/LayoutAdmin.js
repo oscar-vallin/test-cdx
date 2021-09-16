@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { StyledBox, StyledNav } from './LayoutAdmin.styles';
@@ -7,7 +6,6 @@ import { getRouteByApiId } from '../../data/constants/RouteConstants';
 import { Spinner } from '../../components/spinners/Spinner';
 import { Spacing } from '../../components/spacings/Spacing';
 
-import { useNotification } from '../../contexts/hooks/useNotification';
 import { useOrgSid } from '../../hooks/useOrgSid';
 import { useActiveDomainStore } from '../../store/ActiveDomainStore';
 

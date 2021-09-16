@@ -1,4 +1,5 @@
-import React, { useState, useEffect, Fragment } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect } from 'react';
 
 import { useParams, useLocation, useHistory } from 'react-router-dom';
 import { TABLE_NAMES } from '../../data/constants/TableConstants';
@@ -24,11 +25,6 @@ import QualityChecksTab from './QualityChecksTab/QualityChecksTab';
 import WorkStepsTab from './WorkStepsTab/WorkStepsTab';
 import EnrollmentStatsTab from './EnrollmentStatsTab/EnrollmentStatsTab';
 import VendorCountStatsTab from './VendorCountStatsTab/VendorCountStatsTab';
-
-import { useWorkPacketStatusDetailsQuery, useWorkPacketStatusesQuery } from '../../data/services/graphql';
-
-import { TableEnrollment } from '../../containers/tables/TableEnrollment';
-import { TableVendorCount } from '../../containers/tables/TableVendorCount';
 
 import { useRefresh } from '../../hooks/useRefresh';
 import { useFsDetailsPacketStatus } from './hooks/useFsDetailsPacketStatus';
@@ -74,10 +70,10 @@ const _FileStatusDetailsPage = () => {
 
   useEffect(() => {
     if (list && query) {
-      const packet = list.workPacketStatuses.find((item) => item.workOrderId === realId);
+      const _packet = list.workPacketStatuses.find((item) => item.workOrderId === realId);
 
       setPacket({
-        ...packet,
+        ..._packet,
         supplementalFiles: (query.workPacketStatusDetails.workStepStatus || [])
           .map(({ stepFile }) => stepFile)
           .reduce((arr, item) => [...arr, ...item], []),
@@ -102,9 +98,9 @@ const _FileStatusDetailsPage = () => {
     fSPacketStatusDetailQuery();
   }, [packet.step, packet.stepStatus, packet.packetStatus]);
 
-  const changeUrlHash = (hash) => {
+  const changeUrlHash = (_hash) => {
     history.replace({
-      hash,
+      _hash,
     });
   };
 
@@ -269,7 +265,7 @@ const _FileStatusDetailsPage = () => {
 
                   {(packet.supplementalFiles || []).length > 0 && (
                     <Collapse label="View all files">
-                      {packet.supplementalFiles.map(({ label, value }, index) => (
+                      {packet.supplementalFiles.map(({ value }, index) => (
                         <Spacing key={index} margin={{ top: 'normal' }}>
                           <Card elevation="smallest" onClick={() => window.open(value)}>
                             <Text>{value.split('/').pop()}</Text>
@@ -322,7 +318,7 @@ const _FileStatusDetailsPage = () => {
                           },
                         ]}
                         selectedKey={selectedTab < 0 ? '0' : selectedTab.toString()}
-                        onClickTab={(hash) => changeUrlHash(hash)}
+                        onClickTab={(_hash) => changeUrlHash(_hash)}
                       />
                     </Column>
                   </Row>

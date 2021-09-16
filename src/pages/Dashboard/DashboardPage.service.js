@@ -30,12 +30,13 @@ export const useDashboardService = (initOrgSid) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingData, setIsLoadingData] = useState(true);
 
-  const [useDashboardPeriodsQuery, { data, loading, error }] = useDashboardPeriodsLazyQuery();
+  const [apiDashboardPeriodsQuery, { data, loading, error }] = useDashboardPeriodsLazyQuery();
 
   useEffect(() => {
     if (initOrgSid) {
-      useDashboardPeriodsQuery({ variables: { orgSid: initOrgSid } });
+      apiDashboardPeriodsQuery({ variables: { orgSid: initOrgSid } });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initOrgSid]);
 
   const history = useHistory();
@@ -45,23 +46,26 @@ export const useDashboardService = (initOrgSid) => {
       // authLogout();
       // history.push('/');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
 
   // * Set Data Counters.
   const getData = () => {
-    if (!datesOptions || !data?.dashboardPeriods) return;
+    if (!datesOptions || !data?.dashboardPeriods) return null;
 
     const { dailyCounts, yesterdayCounts, monthlyCounts, lastMonthlyCounts } = data.dashboardPeriods;
 
-    return isToday(dateId)
-      ? dailyCounts
-      : isYesterday(dateId)
-      ? yesterdayCounts
-      : isThisMonth(dateId)
-      ? monthlyCounts
-      : isLastMonth(dateId)
-      ? lastMonthlyCounts
-      : dailyCounts;
+    if (isToday(dateId)) {
+      return dailyCounts;
+    }
+
+    if (isYesterday(dateId)) return yesterdayCounts;
+
+    if (isThisMonth(dateId)) return monthlyCounts;
+
+    if (isLastMonth(dateId)) return lastMonthlyCounts;
+
+    return dailyCounts;
   };
 
   // * Get options by ID

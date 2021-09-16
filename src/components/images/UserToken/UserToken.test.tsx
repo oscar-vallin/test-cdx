@@ -1,4 +1,3 @@
-import React from 'react';
 import { UserToken } from './UserToken.js';
 import { renderWithTheme } from '../../../utils/testUtils';
 

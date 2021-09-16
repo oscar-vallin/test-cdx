@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Box, Bar, BarAnimated } from './FileProgressBar.styles';
 import { STEP_COLOR_PURPLE } from '../../../data/constants/FileStatusConstants';
 
 const FileProgressBar = ({ id = '__FileProgressBar', colors = [] }) => {
   return (
-    <Box>
+    <Box id={id}>
       {colors.map((color, index) => {
         if (color === STEP_COLOR_PURPLE) {
           return (

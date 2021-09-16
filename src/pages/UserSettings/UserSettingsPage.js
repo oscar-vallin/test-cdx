@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useState, memo } from 'react';
 
 import { ROUTE_USER_SETTINGS } from '../../data/constants/RouteConstants';
 
@@ -11,7 +11,6 @@ import { PasswordChange } from './PasswordChange';
 import { PasswordRules } from './PasswordRules';
 import { ThemeSettings } from './ThemeSettings';
 import { useCurrentUserTheme } from '../../hooks/useCurrentUserTheme';
-import { useThemeContext } from '../../contexts/ThemeContext';
 
 import { StyledBox, StyledRow, StyledCard } from './UserSettingsPage.styles';
 
@@ -25,9 +24,6 @@ const _UserSettingsPage = () => {
     confirmation: '',
   });
 
-  // const activeTheme = localStorage.getItem('CURRENT_THEME');
-
-  // const [theme, setTheme] = useState(activeTheme ? JSON.parse(activeTheme).name : 'LIGHT');
   return (
     <LayoutDashboard id="USER_SETTINGS">
       <PageHeader>
@@ -68,6 +64,6 @@ const _UserSettingsPage = () => {
   );
 };
 
-const UserSettingsPage = React.memo(_UserSettingsPage);
+const UserSettingsPage = memo(_UserSettingsPage);
 
 export { UserSettingsPage };

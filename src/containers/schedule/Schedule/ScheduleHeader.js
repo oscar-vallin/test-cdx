@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { addDays, addMonths, endOfWeek, format, startOfWeek } from 'date-fns';
 
 import { addWeeks } from '@fluentui/react';
@@ -21,12 +21,12 @@ import { Spacing } from '../../../components/spacings/Spacing';
 import { Row, Column } from '../../../components/layouts';
 
 export const ScheduleHeader = ({ id, currentView, currentDate, onChangeDate, onChangeView }) => {
-  const [currentMonth, setCurrentMonth] = React.useState(currentDate ?? new Date());
-  const [currentWeek, setCurrentWeek] = React.useState(currentDate ?? new Date());
-  const [currentDay, setCurrentDay] = React.useState(currentDate ?? new Date());
+  const [currentMonth, setCurrentMonth] = useState(currentDate ?? new Date());
+  const [currentWeek, setCurrentWeek] = useState(currentDate ?? new Date());
+  const [currentDay, setCurrentDay] = useState(currentDate ?? new Date());
   const headerMonthFormat = 'MMMM';
   const headerYearFormat = 'yyyy';
-  const [calendarOpen, setCalendarOpen] = React.useState(false);
+  const [calendarOpen, setCalendarOpen] = useState(false);
 
   //
   const handleChangeDate = (_newDate) => {
@@ -163,7 +163,7 @@ export const ScheduleHeader = ({ id, currentView, currentDate, onChangeDate, onC
 
   const renderHeaderMonth = () => {
     return (
-      <Row>
+      <Row id={id}>
         <Column lg="8">
           <RowHeaderItem>
             {isCurrentViewWeek(currentView) && <FillerHours />}

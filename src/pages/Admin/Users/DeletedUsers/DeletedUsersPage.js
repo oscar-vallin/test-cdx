@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useMemo } from 'react';
+/* eslint-disable no-alert */
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useEffect, useMemo, memo } from 'react';
 import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
 import { PrimaryButton, DefaultButton, MessageBar } from 'office-ui-fabric-react';
 import { DetailsList, DetailsListLayoutMode, SelectionMode, Selection } from 'office-ui-fabric-react/lib/DetailsList';
@@ -10,11 +12,7 @@ import { Spacing } from '../../../../components/spacings/Spacing';
 import { Text } from '../../../../components/typography/Text';
 import { Separator } from '../../../../components/separators/Separator';
 import { Button } from '../../../../components/buttons/Button';
-import {
-  useUsersForOrgFpLazyQuery,
-  useActivateUsersMutation,
-  useUsersForOrgFpQuery,
-} from '../../../../data/services/graphql';
+import { useUsersForOrgFpLazyQuery, useActivateUsersMutation } from '../../../../data/services/graphql';
 import { StyledColumn } from './DeletedUsersPage.styles';
 
 import { useOrgSid } from '../../../../hooks/useOrgSid';
@@ -47,9 +45,8 @@ const _DeletedUsersPage = () => {
   const [selectedItems, setSelectedItems] = useState([]);
   const columns = generateColumns();
 
-  const [useUsersForOrgFpLazy, { data, loading }] = useUsersForOrgFpLazyQuery();
-  const [enableUser, { data: enableResponse, loading: isEnablingUser, error: EnableUserError }] =
-    useActivateUsersMutation();
+  const [apiUsersForOrgFpLazy, { data, loading }] = useUsersForOrgFpLazyQuery();
+  const [enableUser, { data: enableResponse, loading: isEnablingUser }] = useActivateUsersMutation();
 
   const selection = useMemo(
     () =>
@@ -68,7 +65,7 @@ const _DeletedUsersPage = () => {
   };
 
   useEffect(() => {
-    useUsersForOrgFpLazy({
+    apiUsersForOrgFpLazy({
       variables: {
         orgSid,
         userFilter: { activeFilter: 'INACTIVE' },
@@ -82,16 +79,34 @@ const _DeletedUsersPage = () => {
     }
   }, [loading]);
 
+  const selectedUserIds = () => {
+    return selectedItems.map((node) => {
+      return node.item.id;
+    });
+  };
+
   useEffect(() => {
     if (!isEnablingUser && enableResponse) {
       setUsers(users.filter(({ item }) => !selectedUserIds().includes(item.id)));
     }
   }, [isEnablingUser, enableResponse]);
 
-  const selectedUserIds = () => {
-    return selectedItems.map((node) => {
-      return node.item.id;
-    });
+  const renderList = () => {
+    return users.length > 0 ? (
+      <MarqueeSelection selection={selection}>
+        <DetailsList
+          items={users}
+          columns={columns}
+          layoutMode={DetailsListLayoutMode.justified}
+          onRenderItemColumn={onRenderItemColumn}
+          selection={selection}
+          selectionPreservedOnEmptyClick
+          isHeaderVisible
+        />
+      </MarqueeSelection>
+    ) : (
+      <MessageBar>No deleted users</MessageBar>
+    );
   };
 
   return (
@@ -128,21 +143,7 @@ const _DeletedUsersPage = () => {
             <Row>
               <StyledColumn>
                 {!loading ? (
-                  users.length > 0 ? (
-                    <MarqueeSelection selection={selection}>
-                      <DetailsList
-                        items={users}
-                        columns={columns}
-                        layoutMode={DetailsListLayoutMode.justified}
-                        onRenderItemColumn={onRenderItemColumn}
-                        selection={selection}
-                        selectionPreservedOnEmptyClick
-                        isHeaderVisible
-                      />
-                    </MarqueeSelection>
-                  ) : (
-                    <MessageBar>No deleted users</MessageBar>
-                  )
+                  renderList()
                 ) : (
                   <Spacing margin={{ top: 'double' }}>
                     <Spinner size="lg" label="Loading deleted users" />
@@ -183,6 +184,6 @@ const _DeletedUsersPage = () => {
   );
 };
 
-const DeletedUsersPage = React.memo(_DeletedUsersPage);
+const DeletedUsersPage = memo(_DeletedUsersPage);
 
 export { DeletedUsersPage };

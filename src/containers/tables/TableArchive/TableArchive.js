@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Label } from '@fluentui/react/lib/Label';
 import { useParams, useLocation } from 'react-router-dom';
@@ -22,7 +22,7 @@ const TableArchive = ({ idPage = 'TableArchive', _orgSid = 1, onItemsListChange 
   );
 
   const location = useLocation();
-  const [urlParams, _setUrlParams] = useState(queryString.parse(location.search));
+  const [urlParams] = useState(queryString.parse(location.search));
 
   const { tableProps } = useTableTemplate(
     TABLE_NAMES.ARCHIVES,
@@ -34,7 +34,6 @@ const TableArchive = ({ idPage = 'TableArchive', _orgSid = 1, onItemsListChange 
   );
 
   // Component did mount
-  useEffect(() => {}, []);
 
   return (
     <>
@@ -65,12 +64,12 @@ const TableArchive = ({ idPage = 'TableArchive', _orgSid = 1, onItemsListChange 
               id={`${idPage}`}
               onOption={() => null}
               searchInput={localInput.value}
-              onItemsListChange={(items) =>
+              onItemsListChange={(items) => {
                 onItemsListChange({
                   count: items.length,
                   loading: tableProps.loading,
-                })
-              }
+                });
+              }}
               {...tableProps}
             />
           )}

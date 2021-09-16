@@ -62,7 +62,7 @@ task<YarnTask>("extractRoutes"){
 }
 
 task<YarnTask>("yarnTest") {
-    yarnCommand.set(listOf("run", "test-forbuild"))
+    yarnCommand.set(listOf("run", "test:forbuild"))
 }
 
 task<YarnTask>("yarnLint") {

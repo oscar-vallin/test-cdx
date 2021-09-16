@@ -1,20 +1,17 @@
-import React, { useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useEffect, memo } from 'react';
 
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { ComboBox } from 'office-ui-fabric-react/lib/ComboBox';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
-import { IconButton, CommandBarButton, MessageBar, MessageBarType } from 'office-ui-fabric-react';
 
 import { LayoutAdmin } from '../../../../../layouts/LayoutAdmin';
 import { Spacing } from '../../../../../components/spacings/Spacing';
-import { Card } from '../../../../../components/cards/Card';
 import { Button } from '../../../../../components/buttons/Button';
 import { Row, Column } from '../../../../../components/layouts';
 import { Separator } from '../../../../../components/separators/Separator';
 import { Text } from '../../../../../components/typography/Text';
 import { InputText } from '../../../../../components/inputs/InputText';
-import FacetCombobox from '../../../../../components/comboboxes/FacetCombobox/FacetCombobox';
-import VerbCombobox from '../../../../../components/comboboxes/VerbCombobox/VerbCombobox';
 
 import { useAmPolicyPageQuery } from '../../../../../data/services/graphql';
 import { ADMIN_NAV } from '../../../../../data/constants/AdminConstants';
@@ -25,7 +22,9 @@ const COLUMNS = [
     key: 'service',
     name: 'Service',
     fieldName: 'service',
-    onColumnClick: () => {},
+    onColumnClick: () => {
+      return null;
+    },
     data: 'string',
     isPadded: true,
   },
@@ -33,7 +32,9 @@ const COLUMNS = [
     key: 'facet',
     name: 'Facet',
     fieldName: 'facet',
-    onColumnClick: () => {},
+    onColumnClick: () => {
+      return null;
+    },
     data: 'string',
     isPadded: true,
   },
@@ -41,7 +42,9 @@ const COLUMNS = [
     key: 'verb',
     name: 'Verb',
     fieldName: 'verb',
-    onColumnClick: () => {},
+    onColumnClick: () => {
+      return null;
+    },
     data: 'string',
     isPadded: true,
   },
@@ -90,18 +93,6 @@ const OPTIONS = {
 };
 
 const parseToComboBoxOption = ({ name, value }) => ({ key: value, text: name });
-const generateColumns = () => {
-  const createColumn = (name) => ({
-    name,
-    key: name.toLowerCase(),
-    fieldName: name.toLowerCase(),
-    data: 'string',
-    isPadded: true,
-    minWidth: 225,
-  });
-
-  return [createColumn('Service'), createColumn('Facet'), createColumn('Verb'), createColumn('Actions')];
-};
 
 const _CreatePoliciesPage = () => {
   const { orgSid } = useOrgSid();
@@ -120,7 +111,7 @@ const _CreatePoliciesPage = () => {
     items: [],
   });
 
-  const [options, setOptions] = useState({
+  const [, setOptions] = useState({
     permissionServices: [],
     predicates: [],
     templateServices: [],
@@ -128,89 +119,11 @@ const _CreatePoliciesPage = () => {
 
   const { data, loading } = useAmPolicyPageQuery({ variables: { orgSid } });
 
-  const handleAsyncOptionChange = (attr, permissionIndex) => (option, item, data) => {
-    setState({
-      ...state,
-      permissions: state.permissions.map((permission, index) => {
-        if (index !== permissionIndex) {
-          return permission;
-        }
-
-        return {
-          ...permission,
-          actions: permission.actions.map((action, index) => {
-            if (permission.actions.indexOf(item) !== index) {
-              return action;
-            }
-
-            return { ...action, [attr]: option };
-          }),
-        };
-      }),
-    });
-  };
-
-  const onRenderItemColumn =
-    ({ data, services, onServiceChange, onFacetChange, onVerbChange, permissionIndex }) =>
-    (item, index, column) => {
-      switch (column.key) {
-        case 'service':
-          return (
-            <ComboBox
-              autoComplete="off"
-              selectedKey={item.service.key}
-              options={services.map(parseToComboBoxOption)}
-              onChange={(event, option) => onServiceChange(option, item, data)}
-              style={{ width: '100%' }}
-            />
-          );
-        case 'facet':
-          return (
-            <FacetCombobox service={item.service.key} onChange={(event, option) => onFacetChange(option, item, data)} />
-          );
-        case 'verb':
-          return (
-            <VerbCombobox
-              service={item.service.key}
-              facet={item.facet.key}
-              onChange={(event, option) => onVerbChange(option, item, data)}
-            />
-          );
-        case 'actions':
-          return (
-            <div>
-              <IconButton
-                iconProps={{ iconName: 'delete' }}
-                onClick={() => {
-                  setState({
-                    ...state,
-                    permissions: state.permissions.map((item, currIndex) => {
-                      if (currIndex !== permissionIndex) {
-                        return item;
-                      }
-
-                      return {
-                        ...item,
-                        actions: item.actions.filter((action, actionIndex) => actionIndex !== index),
-                      };
-                    }),
-                  });
-                }}
-              />
-            </div>
-          );
-      }
-    };
-
-  const columns = generateColumns(options);
-
   useEffect(() => {
     if (!loading && data) {
       setOptions(data.amPolicyPage);
     }
   }, [loading]);
-
-  const [createPolicy] = useCreateAmPolicyMutation();
 
   return (
     <LayoutAdmin id="PageAdmin" sidebarOptionSelected="AM_POLICIES">
@@ -295,9 +208,9 @@ const _CreatePoliciesPage = () => {
               <InputText
                 label="Parameter variable"
                 value={state.form.parameterVariable}
-                onChange={({ target }) =>
-                  setState({ ...state, form: { ...state.form, parameterVariable: target.value } })
-                }
+                onChange={({ target }) => {
+                  setState({ ...state, form: { ...state.form, parameterVariable: target.value } });
+                }}
               />
             </Column>
 
@@ -359,6 +272,6 @@ const _CreatePoliciesPage = () => {
   );
 };
 
-const CreatePoliciesPage = React.memo(_CreatePoliciesPage);
+const CreatePoliciesPage = memo(_CreatePoliciesPage);
 
 export { CreatePoliciesPage };

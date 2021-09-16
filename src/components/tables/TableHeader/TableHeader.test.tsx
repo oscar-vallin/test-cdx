@@ -1,4 +1,3 @@
-import React from 'react';
 import { shallow } from 'enzyme';
 import toJSON from 'enzyme-to-json';
 import { HeaderTable, StyledMenuButton } from './TableHeader.styles.js';
@@ -40,7 +39,7 @@ describe('Table Header Component', () => {
   it('Should render children if type is "dashboard"', () => {
     const tree = shallow(<Component {...defaultProps} />);
     const header = tree.find(HeaderTable);
-    expect(header.prop('id')).toEqual('HeaderTable_dashboard');
+    expect(header.prop('id')).toEqual('__TableHeader-HeaderTable_dashboard');
   });
 
   it('Should render null if type is different "dashboard"', () => {

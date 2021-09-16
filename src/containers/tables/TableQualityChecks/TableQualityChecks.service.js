@@ -15,6 +15,35 @@ export const useTable = (argOrgSid, argWorkerId) => {
     },
   });
 
+  const buildRecord = (label, context, outerContext, unitId, record) => {
+    return {
+      status: label,
+      employeeId: unitId,
+      employee: outerContext,
+      dependent: context,
+      message: record.message.join(' '),
+      field: record.id,
+      value: record.rawValue,
+      transformedValue: record.value,
+    };
+  };
+
+  // Build Items.
+  const buildItems = (_data) => {
+    if (_data) {
+      const arrayItems = _data.workPacketStatusDetails.qualityChecks.sequenceCreationEvent.map(
+        ({ recordCreationEvent }) =>
+          recordCreationEvent.map(({ context, outerContext, unitId, _error, information, warning }) => [
+            ..._error.map((itemRecord) => buildRecord('Error', context, outerContext, unitId, itemRecord)),
+            ...information.map((itemRecord) => buildRecord('Error', context, outerContext, unitId, itemRecord)),
+            ...warning.map((itemRecord) => buildRecord('Error', context, outerContext, unitId, itemRecord)),
+          ])
+      )[0][0];
+
+      setTableItems(arrayItems);
+    }
+  };
+
   // * Component Did Mount
   useEffect(() => {
     setLoading(false);
@@ -36,35 +65,6 @@ export const useTable = (argOrgSid, argWorkerId) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
-
-  const buildRecord = (label, context, outerContext, unitId, record) => {
-    return {
-      status: label,
-      employeeId: unitId,
-      employee: outerContext,
-      dependent: context,
-      message: record.message.join(' '),
-      field: record.id,
-      value: record.rawValue,
-      transformedValue: record.value,
-    };
-  };
-
-  // Build Items.
-  const buildItems = (_data) => {
-    if (_data) {
-      const arrayItems = _data.workPacketStatusDetails.qualityChecks.sequenceCreationEvent.map(
-        ({ recordCreationEvent }) =>
-          recordCreationEvent.map(({ context, outerContext, unitId, error, information, warning }) => [
-            ...error.map((itemRecord) => buildRecord('Error', context, outerContext, unitId, itemRecord)),
-            ...information.map((itemRecord) => buildRecord('Error', context, outerContext, unitId, itemRecord)),
-            ...warning.map((itemRecord) => buildRecord('Error', context, outerContext, unitId, itemRecord)),
-          ])
-      )[0][0];
-
-      setTableItems(arrayItems);
-    }
-  };
 
   return {
     tableProps: {

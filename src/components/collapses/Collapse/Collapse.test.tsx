@@ -1,4 +1,3 @@
-import React from 'react';
 import CDXCollapse from './Collapse.js';
 import { mountWithTheme } from '../../../utils/testUtils';
 
@@ -24,13 +23,13 @@ describe('Collapse Testing Unit...', () => {
   });
 
   it('Should render the label property', () => {
-    const text = tree.find('.collapse__trigger').text().trim();
+    const text = tree.find('.collapse__trigger').at(0).text().trim();
 
     expect(text).toEqual(defaultProps.label);
   });
 
   it('Should trigger the onToggle callback', () => {
-    tree.find('.collapse__trigger').simulate('click');
+    tree.find('.collapse__trigger').at(0).simulate('click');
 
     expect(mockFn).toHaveBeenCalled();
   });
