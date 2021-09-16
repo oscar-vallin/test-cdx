@@ -4,7 +4,15 @@ plugins {
     //id("com.coditory.webjar") version "1.0.3" //https://github.com/coditory/gradle-webjar-plugin
     id("com.github.node-gradle.node") version "3.1.0"
     java
+    `maven-publish`
 }
+
+group = "com.k2u"
+version = "1.0.0"
+
+val awsAccessKeyId: String = (System.getenv("AWS_ACCESS_KEY_ID")?.toString() ?: findProperty("AWS_ACCESS_KEY_ID")?.toString()) ?: ""
+val awsSecretAccessKey:String  = (System.getenv("AWS_SECRET_ACCESS_KEY")?.toString() ?: findProperty("AWS_SECRET_ACCESS_KEY")?.toString()) ?: ""
+
 
 java {
     sourceCompatibility = JavaVersion.VERSION_11
@@ -77,5 +85,21 @@ tasks.check {
     dependsOn("yarnLint")
 }
 
+publishing {
+    publications {
+        create<MavenPublication>("cdx-dash-react-ts") {
+            from(components["java"])
+        }
+    }
+    repositories {
+        maven {
+            setUrl("s3://k2u-s3-codebuild-artifacts/")
+            credentials(AwsCredentials::class) {
+                accessKey = awsAccessKeyId
+                secretKey = awsSecretAccessKey
+            }
+        }
+    }
+}
 
 //CI=true gradle build
