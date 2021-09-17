@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
 import { getTableStructure, useQueryTable } from '../data/constants/TableConstants';
 import { isTodayInRange } from '../helpers/tableHelpers';
 import { useRefresh } from './useRefresh';
@@ -9,8 +8,6 @@ import { useRefresh } from './useRefresh';
 export const useTableTemplate = (tableId, argOrgSid, argDateRange, argFilter) => {
   const [items, setItems] = useState([]);
   const structure = getTableStructure(tableId);
-
-  const history = useHistory();
 
   const { apiCall, data, loading, error } = useQueryTable(tableId, {
     orgId: argOrgSid,

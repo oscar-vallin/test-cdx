@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { memo } from 'react';
 import { useHistory } from 'react-router-dom';
 import { LayoutAdmin } from '../../layouts/LayoutAdmin';
 import { Spacing } from '../../components/spacings/Spacing';
@@ -13,6 +13,6 @@ const _AdminPage = () => {
   );
 };
 
-const AdminPage = React.memo(_AdminPage);
+const AdminPage = memo(_AdminPage);
 
 export { AdminPage };

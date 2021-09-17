@@ -10,7 +10,7 @@ import { useOrgSid } from '../../hooks/useOrgSid';
 import { useActiveDomainStore } from '../../store/ActiveDomainStore';
 
 const parseLinks = (links = [], sidebarOpt) => {
-  return links.map(({ type, label, destination, subNavItems, page }) => ({
+  return links.map(({ type, label, destination, subNavItems }) => ({
     name: label,
     ...(subNavItems
       ? {

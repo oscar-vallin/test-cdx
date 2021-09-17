@@ -32,3 +32,6 @@ yarn.lock*
 /**/*.tsx.snap
 /.gradle/
 /.node/
+
+# test
+/test-results/junit.xml

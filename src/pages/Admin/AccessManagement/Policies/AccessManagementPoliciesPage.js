@@ -47,8 +47,8 @@ const _AccessManagementPoliciesPage = () => {
   const [selectedPolicyId, setSelectedPolicyId] = useState(0);
 
   const [policies, setPolicies] = useState([]);
-  const [amPoliciesForOrg, { data, loading, error }] = useQueryHandler(useAmPoliciesForOrgPLazyQuery);
-  const [removeAmPolicy, { data: removeResponse, loading: isRemovingPolicy, error: removePolicyError }] =
+  const [amPoliciesForOrg, { data, loading }] = useQueryHandler(useAmPoliciesForOrgPLazyQuery);
+  const [removeAmPolicy, { data: removeResponse, loading: isRemovingPolicy }] =
     useQueryHandler(useRemoveAmPolicyMutation);
 
   const hideConfirmation = () => {

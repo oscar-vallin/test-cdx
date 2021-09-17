@@ -1,5 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react';
-import { useStoreActions } from 'easy-peasy';
 import { defaultTheme, darkTheme } from '../styles/themes';
 import Theming from '../utils/Theming';
 
@@ -17,19 +17,18 @@ export const useCurrentUserTheme = () => {
 
   const { isAuthenticated } = SessionStore.status;
 
-  const [useUserThemeQuery, { data: theme, loading: isLoadingTheme }] = useUserThemeLazyQuery();
+  const [apiUserThemeQuery, { data: theme, loading: isLoadingTheme }] = useUserThemeLazyQuery();
 
   const fetchTheme = () => {
     if (isAuthenticated) {
-      useUserThemeQuery({ variables: { themeColorMode: null } });
+      apiUserThemeQuery({ variables: { themeColorMode: null } });
     }
   };
 
-  const [createOrUpdateOwnDashTheme, { data: updatedTheme, loading: isHandlingTheme, error: themeError }] =
+  const [createOrUpdateOwnDashTheme, { data: updatedTheme, loading: isHandlingTheme }] =
     useCreateOrUpdateOwnDashThemeMutation();
 
-  const [setOwnDashFontSize, { data: updatedFontSize, loading: isHandlingFontSize, error: fontSizeError }] =
-    useSetOwnDashThemeFontSizeMutation();
+  const [setOwnDashFontSize] = useSetOwnDashThemeFontSizeMutation();
 
   useEffect(() => {
     if (theme?.userTheme) {

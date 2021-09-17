@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { FontIcon } from '@fluentui/react/lib/Icon';
@@ -29,7 +30,7 @@ import { useSessionStore } from '../../../store/SessionStore';
 import { useActiveDomainStore } from '../../../store/ActiveDomainStore';
 import { useThemeStore } from '../../../store/ThemeStore';
 
-const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSettings, visible, ...props }) => {
+const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSettings, visible }) => {
   const SessionStore = useSessionStore();
   const ActiveDomainStore = useActiveDomainStore();
   const ThemeStore = useThemeStore();
@@ -71,18 +72,6 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSetti
       label: 'Large font size',
     },
   ];
-
-  const renderButton = (_iconProps, _key) => {
-    if (isHandlingFontSize) {
-      if (userTheme.themeFontSize === _key) {
-        return <Spinner size="xs" />;
-      }
-
-      return <FontIcon iconName={_iconProps.iconName} />;
-    }
-
-    return <FontIcon iconName={_iconProps.iconName} />;
-  };
 
   // Render
   return (

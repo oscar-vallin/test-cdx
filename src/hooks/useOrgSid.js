@@ -1,6 +1,4 @@
-import { useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { useStoreActions, useStoreState } from 'easy-peasy';
 import { useQueryParams } from './useQueryParams';
 import { useActiveDomainStore } from '../store/ActiveDomainStore';
 

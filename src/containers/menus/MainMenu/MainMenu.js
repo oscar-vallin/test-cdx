@@ -8,20 +8,18 @@ import PropTypes from 'prop-types';
 import { useHistory, useLocation } from 'react-router-dom';
 
 // Styles
-import queryString from 'query-string';
 import { StyledRow, StyledColumn, StyledMenuButton, StyledButtonIcon } from './MainMenu.styles';
 
-import { ROUTES, ROUTES_ID, getRouteByApiId } from '../../../data/constants/RouteConstants';
+import { getRouteByApiId } from '../../../data/constants/RouteConstants';
 import { OutsideComponent } from './OutsideComponent';
 import { useActiveDomainStore } from '../../../store/ActiveDomainStore';
 
 // CardSection is called directly cause a restriction warning for that component.
-const MainMenu = ({ id = '__MainMenu', option = ROUTES.ROUTE_DASHBOARD.ID, left, changeCollapse }) => {
+const MainMenu = ({ id = '__MainMenu', left, changeCollapse }) => {
   const ActiveDomainStore = useActiveDomainStore();
   const history = useHistory();
   const location = useLocation();
-  const { search } = location;
-  const [filterParam, _setFilterParam] = useState(search);
+
   const [collapse, setCollapse] = useState();
 
   const collapseNavMenu = () => {

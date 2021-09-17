@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { memo } from 'react';
 import { ROUTES } from '../../data/constants/RouteConstants';
 
 import { LayoutDashboard } from '../../layouts/LayoutDashboard';
@@ -13,6 +13,6 @@ const _OrganizationsPage = () => {
   );
 };
 
-const OrganizationsPage = React.memo(_OrganizationsPage);
+const OrganizationsPage = memo(_OrganizationsPage);
 
 export { OrganizationsPage };

@@ -1,397 +1,397 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="162" failures="0" errors="0" time="24.963">
-  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2021-09-17T02:49:13" time="4.369" tests="6">
-    <testcase classname=" Matches Snapshot" name=" Matches Snapshot" time="0.005">
+<testsuites name="jest tests" tests="162" failures="0" errors="0" time="25.524">
+  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2021-09-17T03:25:03" time="2.591" tests="6">
+    <testcase classname=" Matches Snapshot" name=" Matches Snapshot" time="0.01">
     </testcase>
-    <testcase classname="Basic Input Component Renders 6 sectors circles in simple PieChart" name="Basic Input Component Renders 6 sectors circles in simple PieChart" time="0.019">
+    <testcase classname="Basic Input Component Renders 6 sectors circles in simple PieChart" name="Basic Input Component Renders 6 sectors circles in simple PieChart" time="0.039">
     </testcase>
-    <testcase classname="Basic Input Component Renders 6 sectors circles when add Cell to specified props of eact slice" name="Basic Input Component Renders 6 sectors circles when add Cell to specified props of eact slice" time="0.003">
+    <testcase classname="Basic Input Component Renders 6 sectors circles when add Cell to specified props of eact slice" name="Basic Input Component Renders 6 sectors circles when add Cell to specified props of eact slice" time="0.006">
     </testcase>
-    <testcase classname="Basic Input Component Renders legend when all the values are 0" name="Basic Input Component Renders legend when all the values are 0" time="0.003">
+    <testcase classname="Basic Input Component Renders legend when all the values are 0" name="Basic Input Component Renders legend when all the values are 0" time="0.005">
     </testcase>
-    <testcase classname="Basic Input Component Don&apos;t renders any sectors when width or height is smaller than 0" name="Basic Input Component Don&apos;t renders any sectors when width or height is smaller than 0" time="0.001">
+    <testcase classname="Basic Input Component Don&apos;t renders any sectors when width or height is smaller than 0" name="Basic Input Component Don&apos;t renders any sectors when width or height is smaller than 0" time="0.002">
     </testcase>
-    <testcase classname="Basic Input Component Renders label legend item when add a Label element" name="Basic Input Component Renders label legend item when add a Label element" time="0.004">
-    </testcase>
-  </testsuite>
-  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2021-09-17T02:49:13" time="5.089" tests="2">
-    <testcase classname=" Matches Snapshot" name=" Matches Snapshot" time="0.006">
-    </testcase>
-    <testcase classname="Basic MonthPicker Component Should renders MonthPicker with Props" name="Basic MonthPicker Component Should renders MonthPicker with Props" time="0.001">
+    <testcase classname="Basic Input Component Renders label legend item when add a Label element" name="Basic Input Component Renders label legend item when add a Label element" time="0.007">
     </testcase>
   </testsuite>
-  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2021-09-17T02:49:18" time="0.297" tests="4">
-    <testcase classname=" Matches Snapshot" name=" Matches Snapshot" time="0.001">
+  <testsuite name="Unit::SessionStore" errors="0" failures="0" skipped="0" timestamp="2021-09-17T03:25:03" time="3.216" tests="10">
+    <testcase classname="Unit::SessionStore Should store the authenticated user" name="Unit::SessionStore Should store the authenticated user" time="0.003">
     </testcase>
-    <testcase classname="Layout Row Component Should renders Row Component" name="Layout Row Component Should renders Row Component" time="0.013">
+    <testcase classname="Unit::SessionStore Should update the session stage" name="Unit::SessionStore Should update the session stage" time="0">
     </testcase>
-    <testcase classname="Layout Row Component Should renders Row with Props" name="Layout Row Component Should renders Row with Props" time="0.002">
+    <testcase classname="Unit::SessionStore Should set stage to LOGGED_IN if a user token is present" name="Unit::SessionStore Should set stage to LOGGED_IN if a user token is present" time="0">
     </testcase>
-    <testcase classname="Layout Row Component Should renders children when passed in" name="Layout Row Component Should renders children when passed in" time="0.001">
+    <testcase classname="Unit::SessionStore Should set isAuthenticated to true if a user token is present" name="Unit::SessionStore Should set isAuthenticated to true if a user token is present" time="0.001">
+    </testcase>
+    <testcase classname="Unit::SessionStore Should set stage to LOGGED_OUT if no user token is present" name="Unit::SessionStore Should set stage to LOGGED_OUT if no user token is present" time="0.083">
+    </testcase>
+    <testcase classname="Unit::SessionStore Should set isAuthenticated to false if no token is present" name="Unit::SessionStore Should set isAuthenticated to false if no token is present" time="0">
+    </testcase>
+    <testcase classname="Unit::SessionStore Should set isAutheticating to true if the session stage is VALIDATING" name="Unit::SessionStore Should set isAutheticating to true if the session stage is VALIDATING" time="0.003">
+    </testcase>
+    <testcase classname="Unit::SessionStore Should set isAutheticating to false if the session stage is not VALIDATING" name="Unit::SessionStore Should set isAutheticating to false if the session stage is not VALIDATING" time="0.001">
+    </testcase>
+    <testcase classname="Unit::SessionStore Should set isRehydrating to true if the session stage is REHYDRATING" name="Unit::SessionStore Should set isRehydrating to true if the session stage is REHYDRATING" time="0.002">
+    </testcase>
+    <testcase classname="Unit::SessionStore Should set isRehydrating to false if the session stage is not REHYDRATING" name="Unit::SessionStore Should set isRehydrating to false if the session stage is not REHYDRATING" time="0.004">
     </testcase>
   </testsuite>
-  <testsuite name="ButtonIcon" errors="0" failures="0" skipped="0" timestamp="2021-09-17T02:49:18" time="2.306" tests="4">
-    <testcase classname="ButtonIcon Should be defined" name="ButtonIcon Should be defined" time="0.001">
+  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2021-09-17T03:25:03" time="3.61" tests="7">
+    <testcase classname=" Matches Snapshot" name=" Matches Snapshot" time="0.009">
     </testcase>
-    <testcase classname="ButtonIcon Should render correctly" name="ButtonIcon Should render correctly" time="0">
+    <testcase classname="Basic InputDate Component Should renders InputDate Component" name="Basic InputDate Component Should renders InputDate Component" time="0.083">
     </testcase>
-    <testcase classname="ButtonIcon Should have a click function" name="ButtonIcon Should have a click function" time="0">
-    </testcase>
-    <testcase classname="ButtonIcon Should have a children with the icon prop" name="ButtonIcon Should have a children with the icon prop" time="0.001">
-    </testcase>
-  </testsuite>
-  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2021-09-17T02:49:13" time="7.729" tests="7">
-    <testcase classname=" Matches Snapshot" name=" Matches Snapshot" time="0.005">
-    </testcase>
-    <testcase classname="Basic InputDate Component Should renders InputDate Component" name="Basic InputDate Component Should renders InputDate Component" time="0.076">
-    </testcase>
-    <testcase classname="Basic InputDate Component Should renders InputDate with placeholder" name="Basic InputDate Component Should renders InputDate with placeholder" time="0">
+    <testcase classname="Basic InputDate Component Should renders InputDate with placeholder" name="Basic InputDate Component Should renders InputDate with placeholder" time="0.001">
     </testcase>
     <testcase classname="Basic InputDate Component Should renders InputDate with Props" name="Basic InputDate Component Should renders InputDate with Props" time="0.001">
     </testcase>
-    <testcase classname="Basic InputDate Component @Testing: Render Input" name="Basic InputDate Component @Testing: Render Input" time="0.005">
+    <testcase classname="Basic InputDate Component @Testing: Render Input" name="Basic InputDate Component @Testing: Render Input" time="0.011">
     </testcase>
-    <testcase classname="Basic InputDate Component @Testing: Render by Role" name="Basic InputDate Component @Testing: Render by Role" time="0.1">
+    <testcase classname="Basic InputDate Component @Testing: Render by Role" name="Basic InputDate Component @Testing: Render by Role" time="0.144">
     </testcase>
-    <testcase classname="Basic InputDate Component @Testing: Input Date selection" name="Basic InputDate Component @Testing: Input Date selection" time="0.129">
-    </testcase>
-  </testsuite>
-  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2021-09-17T02:49:13" time="8.082" tests="7">
-    <testcase classname=" Matches Snapshot" name=" Matches Snapshot" time="0.011">
-    </testcase>
-    <testcase classname="Basic Input Component Should renders InputText Component" name="Basic Input Component Should renders InputText Component" time="0.041">
-    </testcase>
-    <testcase classname="Basic Input Component Should renders InputText with placeholder" name="Basic Input Component Should renders InputText with placeholder" time="0.021">
-    </testcase>
-    <testcase classname="Basic Input Component Should renders InputText with Props" name="Basic Input Component Should renders InputText with Props" time="0.002">
-    </testcase>
-    <testcase classname="Basic Input Component @Testing: Render Input" name="Basic Input Component @Testing: Render Input" time="0.021">
-    </testcase>
-    <testcase classname="Basic Input Component @Testing: Render by Role" name="Basic Input Component @Testing: Render by Role" time="0.189">
-    </testcase>
-    <testcase classname="Basic Input Component @Testing: Input Text" name="Basic Input Component @Testing: Input Text" time="0.065">
+    <testcase classname="Basic InputDate Component @Testing: Input Date selection" name="Basic InputDate Component @Testing: Input Date selection" time="0.2">
     </testcase>
   </testsuite>
-  <testsuite name="Timeline Testing Unit..." errors="0" failures="0" skipped="0" timestamp="2021-09-17T02:49:17" time="3.709" tests="6">
-    <testcase classname="Timeline Testing Unit... Should be defined" name="Timeline Testing Unit... Should be defined" time="0.004">
-    </testcase>
-    <testcase classname="Timeline Testing Unit... Should render correctly" name="Timeline Testing Unit... Should render correctly" time="0.008">
-    </testcase>
-    <testcase classname="Timeline Testing Unit... Should match the step title" name="Timeline Testing Unit... Should match the step title" time="0.005">
-    </testcase>
-    <testcase classname="Timeline Testing Unit... Should match the step description" name="Timeline Testing Unit... Should match the step description" time="0.003">
-    </testcase>
-    <testcase classname="Timeline Testing Unit... Should trigger the onClick callback" name="Timeline Testing Unit... Should trigger the onClick callback" time="0.007">
-    </testcase>
-    <testcase classname="Timeline Testing Unit... Should highlight the active step" name="Timeline Testing Unit... Should highlight the active step" time="0">
+  <testsuite name="Unit::ThemeStore" errors="0" failures="0" skipped="0" timestamp="2021-09-17T03:25:06" time="1.417" tests="1">
+    <testcase classname="Unit::ThemeStore Still in implementation" name="Unit::ThemeStore Still in implementation" time="0.001">
     </testcase>
   </testsuite>
-  <testsuite name="Unit::ThemeStore" errors="0" failures="0" skipped="0" timestamp="2021-09-17T02:49:13" time="8.554" tests="1">
-    <testcase classname="Unit::ThemeStore Still in implementation" name="Unit::ThemeStore Still in implementation" time="0.012">
+  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2021-09-17T03:25:03" time="4.167" tests="7">
+    <testcase classname=" Matches Snapshot" name=" Matches Snapshot" time="0.009">
+    </testcase>
+    <testcase classname="Basic Input Component Should renders InputText Component" name="Basic Input Component Should renders InputText Component" time="0.037">
+    </testcase>
+    <testcase classname="Basic Input Component Should renders InputText with placeholder" name="Basic Input Component Should renders InputText with placeholder" time="0.001">
+    </testcase>
+    <testcase classname="Basic Input Component Should renders InputText with Props" name="Basic Input Component Should renders InputText with Props" time="0.003">
+    </testcase>
+    <testcase classname="Basic Input Component @Testing: Render Input" name="Basic Input Component @Testing: Render Input" time="0.009">
+    </testcase>
+    <testcase classname="Basic Input Component @Testing: Render by Role" name="Basic Input Component @Testing: Render by Role" time="0.126">
+    </testcase>
+    <testcase classname="Basic Input Component @Testing: Input Text" name="Basic Input Component @Testing: Input Text" time="0.092">
     </testcase>
   </testsuite>
-  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2021-09-17T02:49:13" time="8.835" tests="8">
-    <testcase classname=" Matches Snapshot" name=" Matches Snapshot" time="0.01">
+  <testsuite name="Timeline Testing Unit..." errors="0" failures="0" skipped="0" timestamp="2021-09-17T03:25:03" time="4.167" tests="6">
+    <testcase classname="Timeline Testing Unit... Should be defined" name="Timeline Testing Unit... Should be defined" time="0.003">
     </testcase>
-    <testcase classname="Basic Table Component Should be defined" name="Basic Table Component Should be defined" time="0">
+    <testcase classname="Timeline Testing Unit... Should render correctly" name="Timeline Testing Unit... Should render correctly" time="0.009">
+    </testcase>
+    <testcase classname="Timeline Testing Unit... Should match the step title" name="Timeline Testing Unit... Should match the step title" time="0.01">
+    </testcase>
+    <testcase classname="Timeline Testing Unit... Should match the step description" name="Timeline Testing Unit... Should match the step description" time="0.001">
+    </testcase>
+    <testcase classname="Timeline Testing Unit... Should trigger the onClick callback" name="Timeline Testing Unit... Should trigger the onClick callback" time="0.006">
+    </testcase>
+    <testcase classname="Timeline Testing Unit... Should highlight the active step" name="Timeline Testing Unit... Should highlight the active step" time="0.002">
+    </testcase>
+  </testsuite>
+  <testsuite name="UserToken Testing Unit..." errors="0" failures="0" skipped="0" timestamp="2021-09-17T03:25:07" time="0.795" tests="3">
+    <testcase classname="UserToken Testing Unit... Should be defined" name="UserToken Testing Unit... Should be defined" time="0">
+    </testcase>
+    <testcase classname="UserToken Testing Unit... Should render correctly" name="UserToken Testing Unit... Should render correctly" time="0.002">
+    </testcase>
+    <testcase classname="UserToken Testing Unit... Should render first letter of the name property" name="UserToken Testing Unit... Should render first letter of the name property" time="0.003">
+    </testcase>
+  </testsuite>
+  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2021-09-17T03:25:03" time="4.655" tests="8">
+    <testcase classname=" Matches Snapshot" name=" Matches Snapshot" time="0.013">
+    </testcase>
+    <testcase classname="Basic Table Component Should be defined" name="Basic Table Component Should be defined" time="0.001">
     </testcase>
     <testcase classname="Basic Table Component Should render table header when structure is type dashboard" name="Basic Table Component Should render table header when structure is type dashboard" time="0.005">
     </testcase>
-    <testcase classname="Basic Table Component Should render table header when structure is type dashboard" name="Basic Table Component Should render table header when structure is type dashboard" time="0.004">
+    <testcase classname="Basic Table Component Should render table header when structure is type dashboard" name="Basic Table Component Should render table header when structure is type dashboard" time="0.003">
     </testcase>
     <testcase classname="Basic Table Component Should render table header correctly" name="Basic Table Component Should render table header correctly" time="0.001">
     </testcase>
-    <testcase classname="Basic Table Component Should render dashboard list item with props" name="Basic Table Component Should render dashboard list item with props" time="0.033">
+    <testcase classname="Basic Table Component Should render dashboard list item with props" name="Basic Table Component Should render dashboard list item with props" time="0.025">
     </testcase>
-    <testcase classname="Basic Table Component Should render no dashboard list item with props" name="Basic Table Component Should render no dashboard list item with props" time="0.017">
+    <testcase classname="Basic Table Component Should render no dashboard list item with props" name="Basic Table Component Should render no dashboard list item with props" time="0.008">
     </testcase>
-    <testcase classname="Basic Table Component Should has items with props" name="Basic Table Component Should has items with props" time="0.004">
+    <testcase classname="Basic Table Component Should has items with props" name="Basic Table Component Should has items with props" time="0.007">
     </testcase>
   </testsuite>
-  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2021-09-17T02:49:13" time="8.928" tests="9">
-    <testcase classname=" Matches Snapshot" name=" Matches Snapshot" time="0.014">
+  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2021-09-17T03:25:03" time="4.689" tests="9">
+    <testcase classname=" Matches Snapshot" name=" Matches Snapshot" time="0.009">
     </testcase>
     <testcase classname="Table Header Component Should be defined" name="Table Header Component Should be defined" time="0.001">
     </testcase>
-    <testcase classname="Table Header Component Should render correctly" name="Table Header Component Should render correctly" time="0.003">
+    <testcase classname="Table Header Component Should render correctly" name="Table Header Component Should render correctly" time="0.002">
     </testcase>
-    <testcase classname="Table Header Component Should render children if type is &quot;dashboard&quot;" name="Table Header Component Should render children if type is &quot;dashboard&quot;" time="0.034">
+    <testcase classname="Table Header Component Should render children if type is &quot;dashboard&quot;" name="Table Header Component Should render children if type is &quot;dashboard&quot;" time="0.021">
     </testcase>
-    <testcase classname="Table Header Component Should render null if type is different &quot;dashboard&quot;" name="Table Header Component Should render null if type is different &quot;dashboard&quot;" time="0.011">
+    <testcase classname="Table Header Component Should render null if type is different &quot;dashboard&quot;" name="Table Header Component Should render null if type is different &quot;dashboard&quot;" time="0.001">
     </testcase>
-    <testcase classname="Table Header Component Should render a Sort button with icon prop" name="Table Header Component Should render a Sort button with icon prop" time="0.004">
+    <testcase classname="Table Header Component Should render a Sort button with icon prop" name="Table Header Component Should render a Sort button with icon prop" time="0.003">
     </testcase>
-    <testcase classname="Table Header Component Should call function when click on Sort button" name="Table Header Component Should call function when click on Sort button" time="0.001">
+    <testcase classname="Table Header Component Should call function when click on Sort button" name="Table Header Component Should call function when click on Sort button" time="0.002">
     </testcase>
-    <testcase classname="Table Header Component Should render a Option button with icon prop" name="Table Header Component Should render a Option button with icon prop" time="0.003">
+    <testcase classname="Table Header Component Should render a Option button with icon prop" name="Table Header Component Should render a Option button with icon prop" time="0.001">
     </testcase>
-    <testcase classname="Table Header Component Should call function when click on Option button" name="Table Header Component Should call function when click on Option button" time="0.002">
-    </testcase>
-  </testsuite>
-  <testsuite name="Button Testing Unit..." errors="0" failures="0" skipped="0" timestamp="2021-09-17T02:49:21" time="1.247" tests="3">
-    <testcase classname="Button Testing Unit... Should be defined" name="Button Testing Unit... Should be defined" time="0.006">
-    </testcase>
-    <testcase classname="Button Testing Unit... Should render correctly" name="Button Testing Unit... Should render correctly" time="0.003">
-    </testcase>
-    <testcase classname="Button Testing Unit... Should have a click function" name="Button Testing Unit... Should have a click function" time="0.001">
+    <testcase classname="Table Header Component Should call function when click on Option button" name="Table Header Component Should call function when click on Option button" time="0.001">
     </testcase>
   </testsuite>
-  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2021-09-17T02:49:21" time="1.353" tests="2">
-    <testcase classname=" Matches Snapshot" name=" Matches Snapshot" time="0.009">
+  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2021-09-17T03:25:08" time="0.926" tests="5">
+    <testcase classname=" Matches Snapshot" name=" Matches Snapshot" time="0.005">
     </testcase>
-    <testcase classname="Basic InputDate Component Should renders InputDate Component" name="Basic InputDate Component Should renders InputDate Component" time="0.046">
+    <testcase classname="Basic InputDate Component Should renders InputDate Component" name="Basic InputDate Component Should renders InputDate Component" time="0.034">
     </testcase>
-  </testsuite>
-  <testsuite name="Breadcrumb Testing Unit..." errors="0" failures="0" skipped="0" timestamp="2021-09-17T02:49:21" time="1.348" tests="5">
-    <testcase classname="Breadcrumb Testing Unit... Should be defined" name="Breadcrumb Testing Unit... Should be defined" time="0.001">
+    <testcase classname="Basic InputDate Component Should renders InputDate with Props" name="Basic InputDate Component Should renders InputDate with Props" time="0.001">
     </testcase>
-    <testcase classname="Breadcrumb Testing Unit... Should render correctly" name="Breadcrumb Testing Unit... Should render correctly" time="0.002">
+    <testcase classname="Basic InputDate Component Should have the first day of the week as parameter" name="Basic InputDate Component Should have the first day of the week as parameter" time="0.001">
     </testcase>
-    <testcase classname="Breadcrumb Testing Unit... Should render the default dashboard button" name="Breadcrumb Testing Unit... Should render the default dashboard button" time="0.004">
-    </testcase>
-    <testcase classname="Breadcrumb Testing Unit... Should render the breadcrumb buttons" name="Breadcrumb Testing Unit... Should render the breadcrumb buttons" time="0.001">
-    </testcase>
-    <testcase classname="Breadcrumb Testing Unit... Should trigger the onClick callback" name="Breadcrumb Testing Unit... Should trigger the onClick callback" time="0.072">
+    <testcase classname="Basic InputDate Component @Testing: Render by Role" name="Basic InputDate Component @Testing: Render by Role" time="0.149">
     </testcase>
   </testsuite>
-  <testsuite name="Toast Testing Unit..." errors="0" failures="0" skipped="0" timestamp="2021-09-17T02:49:21" time="1.335" tests="5">
-    <testcase classname="Toast Testing Unit... Should be defined" name="Toast Testing Unit... Should be defined" time="0.001">
+  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2021-09-17T03:25:07" time="1.929" tests="2">
+    <testcase classname=" Matches Snapshot" name=" Matches Snapshot" time="0.007">
     </testcase>
-    <testcase classname="Toast Testing Unit... Should render correctly" name="Toast Testing Unit... Should render correctly" time="0.001">
-    </testcase>
-    <testcase classname="Toast Testing Unit... Should render the text property" name="Toast Testing Unit... Should render the text property" time="0.001">
-    </testcase>
-    <testcase classname="Toast Testing Unit... Should match the type property" name="Toast Testing Unit... Should match the type property" time="0">
-    </testcase>
-    <testcase classname="Toast Testing Unit... Should be hidden by default" name="Toast Testing Unit... Should be hidden by default" time="0">
+    <testcase classname="Basic InputDate Component Should renders InputDate Component" name="Basic InputDate Component Should renders InputDate Component" time="0.094">
     </testcase>
   </testsuite>
-  <testsuite name="Spinner" errors="0" failures="0" skipped="0" timestamp="2021-09-17T02:49:22" time="1.26" tests="4">
-    <testcase classname="Spinner Should be defined" name="Spinner Should be defined" time="0.001">
+  <testsuite name="Collapse Testing Unit..." errors="0" failures="0" skipped="0" timestamp="2021-09-17T03:25:08" time="0.887" tests="4">
+    <testcase classname="Collapse Testing Unit... Should be defined" name="Collapse Testing Unit... Should be defined" time="0.001">
     </testcase>
-    <testcase classname="Spinner Should render correctly" name="Spinner Should render correctly" time="0.001">
+    <testcase classname="Collapse Testing Unit... Should render correctly" name="Collapse Testing Unit... Should render correctly" time="0.005">
+    </testcase>
+    <testcase classname="Collapse Testing Unit... Should render the label property" name="Collapse Testing Unit... Should render the label property" time="0.006">
+    </testcase>
+    <testcase classname="Collapse Testing Unit... Should trigger the onToggle callback" name="Collapse Testing Unit... Should trigger the onToggle callback" time="0.009">
+    </testcase>
+  </testsuite>
+  <testsuite name="Button Testing Unit..." errors="0" failures="0" skipped="0" timestamp="2021-09-17T03:25:08" time="0.894" tests="3">
+    <testcase classname="Button Testing Unit... Should be defined" name="Button Testing Unit... Should be defined" time="0">
+    </testcase>
+    <testcase classname="Button Testing Unit... Should render correctly" name="Button Testing Unit... Should render correctly" time="0.002">
+    </testcase>
+    <testcase classname="Button Testing Unit... Should have a click function" name="Button Testing Unit... Should have a click function" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="ButtonAction" errors="0" failures="0" skipped="0" timestamp="2021-09-17T03:25:09" time="0.906" tests="6">
+    <testcase classname="ButtonAction Should be defined" name="ButtonAction Should be defined" time="0.001">
+    </testcase>
+    <testcase classname="ButtonAction Should render correctly" name="ButtonAction Should render correctly" time="0.001">
+    </testcase>
+    <testcase classname="ButtonAction Should have a click function" name="ButtonAction Should have a click function" time="0.001">
+    </testcase>
+    <testcase classname="ButtonAction Should have an icon" name="ButtonAction Should have an icon" time="0">
+    </testcase>
+    <testcase classname="ButtonAction Should renders children" name="ButtonAction Should renders children" time="0.001">
+    </testcase>
+    <testcase classname="ButtonAction Should renders children when passed in" name="ButtonAction Should renders children when passed in" time="0.002">
+    </testcase>
+  </testsuite>
+  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2021-09-17T03:25:09" time="0.878" tests="5">
+    <testcase classname=" Matches Snapshot" name=" Matches Snapshot" time="0.003">
+    </testcase>
+    <testcase classname="Basic TableRow Component Should be defined" name="Basic TableRow Component Should be defined" time="0.001">
+    </testcase>
+    <testcase classname="Basic TableRow Component Should render correctly" name="Basic TableRow Component Should render correctly" time="0.001">
+    </testcase>
+    <testcase classname="Basic TableRow Component Should render children if props exist" name="Basic TableRow Component Should render children if props exist" time="0.022">
+    </testcase>
+    <testcase classname="Basic TableRow Component Should not render children if props does not exist" name="Basic TableRow Component Should not render children if props does not exist" time="0.008">
+    </testcase>
+  </testsuite>
+  <testsuite name="QueryParams Testing Unit..." errors="0" failures="0" skipped="0" timestamp="2021-09-17T03:25:09" time="0.579" tests="5">
+    <testcase classname="QueryParams Testing Unit... Should parse the query params from the search string" name="QueryParams Testing Unit... Should parse the query params from the search string" time="0">
+    </testcase>
+    <testcase classname="QueryParams Testing Unit... Should stringify the query params from object" name="QueryParams Testing Unit... Should stringify the query params from object" time="0.001">
+    </testcase>
+    <testcase classname="QueryParams Testing Unit... Should generate a new URL containing the query params" name="QueryParams Testing Unit... Should generate a new URL containing the query params" time="0.003">
+    </testcase>
+    <testcase classname="QueryParams Testing Unit... Should replace the query params from a URL" name="QueryParams Testing Unit... Should replace the query params from a URL" time="0.001">
+    </testcase>
+    <testcase classname="QueryParams Testing Unit... Should merge the query params from a URL" name="QueryParams Testing Unit... Should merge the query params from a URL" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="Breadcrumb Testing Unit..." errors="0" failures="0" skipped="0" timestamp="2021-09-17T03:25:08" time="2.103" tests="5">
+    <testcase classname="Breadcrumb Testing Unit... Should be defined" name="Breadcrumb Testing Unit... Should be defined" time="0">
+    </testcase>
+    <testcase classname="Breadcrumb Testing Unit... Should render correctly" name="Breadcrumb Testing Unit... Should render correctly" time="0">
+    </testcase>
+    <testcase classname="Breadcrumb Testing Unit... Should render the default dashboard button" name="Breadcrumb Testing Unit... Should render the default dashboard button" time="0.007">
+    </testcase>
+    <testcase classname="Breadcrumb Testing Unit... Should render the breadcrumb buttons" name="Breadcrumb Testing Unit... Should render the breadcrumb buttons" time="0.002">
+    </testcase>
+    <testcase classname="Breadcrumb Testing Unit... Should trigger the onClick callback" name="Breadcrumb Testing Unit... Should trigger the onClick callback" time="0.121">
+    </testcase>
+  </testsuite>
+  <testsuite name="ButtonContextual" errors="0" failures="0" skipped="0" timestamp="2021-09-17T03:25:09" time="0.719" tests="5">
+    <testcase classname="ButtonContextual Should be defined" name="ButtonContextual Should be defined" time="0">
+    </testcase>
+    <testcase classname="ButtonContextual Should render correctly" name="ButtonContextual Should render correctly" time="0.002">
+    </testcase>
+    <testcase classname="ButtonContextual Should have items" name="ButtonContextual Should have items" time="0.001">
+    </testcase>
+    <testcase classname="ButtonContextual Should renders children" name="ButtonContextual Should renders children" time="0.001">
+    </testcase>
+    <testcase classname="ButtonContextual Should renders children when passed in" name="ButtonContextual Should renders children when passed in" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="Spinner" errors="0" failures="0" skipped="0" timestamp="2021-09-17T03:25:08" time="1.932" tests="4">
+    <testcase classname="Spinner Should be defined" name="Spinner Should be defined" time="0">
+    </testcase>
+    <testcase classname="Spinner Should render correctly" name="Spinner Should render correctly" time="0.002">
     </testcase>
     <testcase classname="Spinner Should have a size" name="Spinner Should have a size" time="0.001">
     </testcase>
     <testcase classname="Spinner Should have a label" name="Spinner Should have a label" time="0">
     </testcase>
   </testsuite>
-  <testsuite name="Unit::SessionStore" errors="0" failures="0" skipped="0" timestamp="2021-09-17T02:49:22" time="0.66" tests="5">
-    <testcase classname="Unit::SessionStore Should update the dashboard navigation" name="Unit::SessionStore Should update the dashboard navigation" time="0.003">
+  <testsuite name="Toast Testing Unit..." errors="0" failures="0" skipped="0" timestamp="2021-09-17T03:25:07" time="2.443" tests="5">
+    <testcase classname="Toast Testing Unit... Should be defined" name="Toast Testing Unit... Should be defined" time="0">
     </testcase>
-    <testcase classname="Unit::SessionStore Should update the admin navigation" name="Unit::SessionStore Should update the admin navigation" time="0">
+    <testcase classname="Toast Testing Unit... Should render correctly" name="Toast Testing Unit... Should render correctly" time="0.002">
     </testcase>
-    <testcase classname="Unit::SessionStore Should store the user&apos;s original organization info" name="Unit::SessionStore Should store the user&apos;s original organization info" time="0.001">
+    <testcase classname="Toast Testing Unit... Should render the text property" name="Toast Testing Unit... Should render the text property" time="0">
     </testcase>
-    <testcase classname="Unit::SessionStore Should store the current organization info" name="Unit::SessionStore Should store the current organization info" time="0.001">
+    <testcase classname="Toast Testing Unit... Should match the type property" name="Toast Testing Unit... Should match the type property" time="0">
     </testcase>
-    <testcase classname="Unit::SessionStore Should reset its state" name="Unit::SessionStore Should reset its state" time="0">
-    </testcase>
-  </testsuite>
-  <testsuite name="ButtonAction" errors="0" failures="0" skipped="0" timestamp="2021-09-17T02:49:22" time="1.188" tests="6">
-    <testcase classname="ButtonAction Should be defined" name="ButtonAction Should be defined" time="0">
-    </testcase>
-    <testcase classname="ButtonAction Should render correctly" name="ButtonAction Should render correctly" time="0.001">
-    </testcase>
-    <testcase classname="ButtonAction Should have a click function" name="ButtonAction Should have a click function" time="0">
-    </testcase>
-    <testcase classname="ButtonAction Should have an icon" name="ButtonAction Should have an icon" time="0">
-    </testcase>
-    <testcase classname="ButtonAction Should renders children" name="ButtonAction Should renders children" time="0">
-    </testcase>
-    <testcase classname="ButtonAction Should renders children when passed in" name="ButtonAction Should renders children when passed in" time="0.001">
+    <testcase classname="Toast Testing Unit... Should be hidden by default" name="Toast Testing Unit... Should be hidden by default" time="0">
     </testcase>
   </testsuite>
-  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2021-09-17T02:49:22" time="0.953" tests="5">
-    <testcase classname=" Matches Snapshot" name=" Matches Snapshot" time="0.002">
+  <testsuite name="Link" errors="0" failures="0" skipped="0" timestamp="2021-09-17T03:25:10" time="0.656" tests="7">
+    <testcase classname="Link Should be defined" name="Link Should be defined" time="0">
     </testcase>
-    <testcase classname="Basic InputDate Component Should renders InputDate Component" name="Basic InputDate Component Should renders InputDate Component" time="0.009">
+    <testcase classname="Link Should render correctly" name="Link Should render correctly" time="0.001">
     </testcase>
-    <testcase classname="Basic InputDate Component Should renders InputDate with Props" name="Basic InputDate Component Should renders InputDate with Props" time="0.001">
+    <testcase classname="Link Should have a click function" name="Link Should have a click function" time="0.001">
     </testcase>
-    <testcase classname="Basic InputDate Component Should have the first day of the week as parameter" name="Basic InputDate Component Should have the first day of the week as parameter" time="0.001">
-    </testcase>
-    <testcase classname="Basic InputDate Component @Testing: Render by Role" name="Basic InputDate Component @Testing: Render by Role" time="0.106">
-    </testcase>
-  </testsuite>
-  <testsuite name="Collapse Testing Unit..." errors="0" failures="0" skipped="0" timestamp="2021-09-17T02:49:22" time="1.27" tests="4">
-    <testcase classname="Collapse Testing Unit... Should be defined" name="Collapse Testing Unit... Should be defined" time="0.001">
-    </testcase>
-    <testcase classname="Collapse Testing Unit... Should render correctly" name="Collapse Testing Unit... Should render correctly" time="0.014">
-    </testcase>
-    <testcase classname="Collapse Testing Unit... Should render the label property" name="Collapse Testing Unit... Should render the label property" time="0.005">
-    </testcase>
-    <testcase classname="Collapse Testing Unit... Should trigger the onToggle callback" name="Collapse Testing Unit... Should trigger the onToggle callback" time="0.008">
-    </testcase>
-  </testsuite>
-  <testsuite name="UserToken Testing Unit..." errors="0" failures="0" skipped="0" timestamp="2021-09-17T02:49:22" time="0.905" tests="3">
-    <testcase classname="UserToken Testing Unit... Should be defined" name="UserToken Testing Unit... Should be defined" time="0.001">
-    </testcase>
-    <testcase classname="UserToken Testing Unit... Should render correctly" name="UserToken Testing Unit... Should render correctly" time="0.004">
-    </testcase>
-    <testcase classname="UserToken Testing Unit... Should render first letter of the name property" name="UserToken Testing Unit... Should render first letter of the name property" time="0.001">
-    </testcase>
-  </testsuite>
-  <testsuite name="Tabs Testing Unit..." errors="0" failures="0" skipped="0" timestamp="2021-09-17T02:49:21" time="1.987" tests="4">
-    <testcase classname="Tabs Testing Unit... Should be defined" name="Tabs Testing Unit... Should be defined" time="0.001">
-    </testcase>
-    <testcase classname="Tabs Testing Unit... Should render correctly" name="Tabs Testing Unit... Should render correctly" time="0.003">
-    </testcase>
-    <testcase classname="Tabs Testing Unit... Should render the tab button" name="Tabs Testing Unit... Should render the tab button" time="0.004">
-    </testcase>
-    <testcase classname="Tabs Testing Unit... Should render the tab content" name="Tabs Testing Unit... Should render the tab content" time="0.001">
-    </testcase>
-  </testsuite>
-  <testsuite name="Image" errors="0" failures="0" skipped="0" timestamp="2021-09-17T02:49:23" time="0.646" tests="3">
-    <testcase classname="Image Should be defined" name="Image Should be defined" time="0">
-    </testcase>
-    <testcase classname="Image Should render correctly" name="Image Should render correctly" time="0.001">
-    </testcase>
-    <testcase classname="Image Should have a src image prop" name="Image Should have a src image prop" time="0.001">
-    </testcase>
-  </testsuite>
-  <testsuite name="QueryParams Testing Unit..." errors="0" failures="0" skipped="0" timestamp="2021-09-17T02:49:23" time="0.702" tests="5">
-    <testcase classname="QueryParams Testing Unit... Should parse the query params from the search string" name="QueryParams Testing Unit... Should parse the query params from the search string" time="0.002">
-    </testcase>
-    <testcase classname="QueryParams Testing Unit... Should stringify the query params from object" name="QueryParams Testing Unit... Should stringify the query params from object" time="0.001">
-    </testcase>
-    <testcase classname="QueryParams Testing Unit... Should generate a new URL containing the query params" name="QueryParams Testing Unit... Should generate a new URL containing the query params" time="0.001">
-    </testcase>
-    <testcase classname="QueryParams Testing Unit... Should replace the query params from a URL" name="QueryParams Testing Unit... Should replace the query params from a URL" time="0.001">
-    </testcase>
-    <testcase classname="QueryParams Testing Unit... Should merge the query params from a URL" name="QueryParams Testing Unit... Should merge the query params from a URL" time="0.002">
-    </testcase>
-  </testsuite>
-  <testsuite name="ButtonContextual" errors="0" failures="0" skipped="0" timestamp="2021-09-17T02:49:23" time="0.768" tests="5">
-    <testcase classname="ButtonContextual Should be defined" name="ButtonContextual Should be defined" time="0.001">
-    </testcase>
-    <testcase classname="ButtonContextual Should render correctly" name="ButtonContextual Should render correctly" time="0.001">
-    </testcase>
-    <testcase classname="ButtonContextual Should have items" name="ButtonContextual Should have items" time="0.001">
-    </testcase>
-    <testcase classname="ButtonContextual Should renders children" name="ButtonContextual Should renders children" time="0.001">
-    </testcase>
-    <testcase classname="ButtonContextual Should renders children when passed in" name="ButtonContextual Should renders children when passed in" time="0.002">
-    </testcase>
-  </testsuite>
-  <testsuite name="undefined" errors="0" failures="0" skipped="1" timestamp="2021-09-17T02:49:23" time="0.582" tests="1">
-    <testcase classname=" Render - Testing CardSection Component" name=" Render - Testing CardSection Component" time="0">
-      <skipped/>
-    </testcase>
-  </testsuite>
-  <testsuite name="Link" errors="0" failures="0" skipped="0" timestamp="2021-09-17T02:49:23" time="0.793" tests="7">
-    <testcase classname="Link Should be defined" name="Link Should be defined" time="0.001">
-    </testcase>
-    <testcase classname="Link Should render correctly" name="Link Should render correctly" time="0.002">
-    </testcase>
-    <testcase classname="Link Should have a click function" name="Link Should have a click function" time="0">
-    </testcase>
-    <testcase classname="Link Should renders children" name="Link Should renders children" time="0.002">
+    <testcase classname="Link Should renders children" name="Link Should renders children" time="0.001">
     </testcase>
     <testcase classname="Link Should renders children when passed in" name="Link Should renders children when passed in" time="0.001">
     </testcase>
-    <testcase classname="Link Should have a href prop" name="Link Should have a href prop" time="0">
+    <testcase classname="Link Should have a href prop" name="Link Should have a href prop" time="0.001">
     </testcase>
     <testcase classname="Link Should have a traget blank prop" name="Link Should have a traget blank prop" time="0.001">
     </testcase>
   </testsuite>
-  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2021-09-17T02:49:23" time="0.873" tests="5">
+  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2021-09-17T03:25:10" time="0.667" tests="4">
     <testcase classname=" Matches Snapshot" name=" Matches Snapshot" time="0.003">
     </testcase>
-    <testcase classname="Basic TableRow Component Should be defined" name="Basic TableRow Component Should be defined" time="0">
+    <testcase classname="Layout Container Component Should renders Container Component" name="Layout Container Component Should renders Container Component" time="0.015">
     </testcase>
-    <testcase classname="Basic TableRow Component Should render correctly" name="Basic TableRow Component Should render correctly" time="0.001">
+    <testcase classname="Layout Container Component Should renders Container with Props" name="Layout Container Component Should renders Container with Props" time="0">
     </testcase>
-    <testcase classname="Basic TableRow Component Should render children if props exist" name="Basic TableRow Component Should render children if props exist" time="0.009">
-    </testcase>
-    <testcase classname="Basic TableRow Component Should not render children if props does not exist" name="Basic TableRow Component Should not render children if props does not exist" time="0.007">
+    <testcase classname="Layout Container Component Should renders children when passed in" name="Layout Container Component Should renders children when passed in" time="0.002">
     </testcase>
   </testsuite>
-  <testsuite name="undefined" errors="0" failures="0" skipped="1" timestamp="2021-09-17T02:49:24" time="0.569" tests="1">
+  <testsuite name="Image" errors="0" failures="0" skipped="0" timestamp="2021-09-17T03:25:10" time="0.61" tests="3">
+    <testcase classname="Image Should be defined" name="Image Should be defined" time="0.003">
+    </testcase>
+    <testcase classname="Image Should render correctly" name="Image Should render correctly" time="0.001">
+    </testcase>
+    <testcase classname="Image Should have a src image prop" name="Image Should have a src image prop" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="undefined" errors="0" failures="0" skipped="1" timestamp="2021-09-17T03:25:10" time="0.602" tests="1">
+    <testcase classname=" Render - Testing CardSection Component" name=" Render - Testing CardSection Component" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="ButtonIcon" errors="0" failures="0" skipped="0" timestamp="2021-09-17T03:25:09" time="1.065" tests="4">
+    <testcase classname="ButtonIcon Should be defined" name="ButtonIcon Should be defined" time="0">
+    </testcase>
+    <testcase classname="ButtonIcon Should render correctly" name="ButtonIcon Should render correctly" time="0.001">
+    </testcase>
+    <testcase classname="ButtonIcon Should have a click function" name="ButtonIcon Should have a click function" time="0.001">
+    </testcase>
+    <testcase classname="ButtonIcon Should have a children with the icon prop" name="ButtonIcon Should have a children with the icon prop" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="undefined" errors="0" failures="0" skipped="1" timestamp="2021-09-17T03:25:10" time="0.65" tests="1">
     <testcase classname=" Render - Testing Card Component" name=" Render - Testing Card Component" time="0">
       <skipped/>
     </testcase>
   </testsuite>
-  <testsuite name="Text" errors="0" failures="0" skipped="0" timestamp="2021-09-17T02:49:24" time="0.609" tests="9">
-    <testcase classname="Text Should be defined" name="Text Should be defined" time="0.001">
+  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2021-09-17T03:25:10" time="0.674" tests="4">
+    <testcase classname=" Matches Snapshot" name=" Matches Snapshot" time="0.001">
     </testcase>
-    <testcase classname="Text Should render correctly" name="Text Should render correctly" time="0">
+    <testcase classname="Layout Row Component Should renders Row Component" name="Layout Row Component Should renders Row Component" time="0.035">
+    </testcase>
+    <testcase classname="Layout Row Component Should renders Row with Props" name="Layout Row Component Should renders Row with Props" time="0.002">
+    </testcase>
+    <testcase classname="Layout Row Component Should renders children when passed in" name="Layout Row Component Should renders children when passed in" time="0.003">
+    </testcase>
+  </testsuite>
+  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2021-09-17T03:25:10" time="0.714" tests="4">
+    <testcase classname=" Matches Snapshot" name=" Matches Snapshot" time="0.008">
+    </testcase>
+    <testcase classname="Layout Column Component Should renders Column Component" name="Layout Column Component Should renders Column Component" time="0.004">
+    </testcase>
+    <testcase classname="Layout Column Component Should renders Column with Props" name="Layout Column Component Should renders Column with Props" time="0.003">
+    </testcase>
+    <testcase classname="Layout Column Component Should renders children when passed in" name="Layout Column Component Should renders children when passed in" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2021-09-17T03:25:10" time="0.733" tests="4">
+    <testcase classname=" Matches Snapshot" name=" Matches Snapshot" time="0.002">
+    </testcase>
+    <testcase classname="Layout Box Component Should renders Box Component" name="Layout Box Component Should renders Box Component" time="0.011">
+    </testcase>
+    <testcase classname="Layout Box Component Should renders Box with Props" name="Layout Box Component Should renders Box with Props" time="0.003">
+    </testcase>
+    <testcase classname="Layout Box Component Should renders children when passed in" name="Layout Box Component Should renders children when passed in" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2021-09-17T03:25:10" time="1.02" tests="2">
+    <testcase classname=" Matches Snapshot" name=" Matches Snapshot" time="0.003">
+    </testcase>
+    <testcase classname="Basic MonthPicker Component Should renders MonthPicker with Props" name="Basic MonthPicker Component Should renders MonthPicker with Props" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="Text" errors="0" failures="0" skipped="0" timestamp="2021-09-17T03:25:11" time="0.737" tests="9">
+    <testcase classname="Text Should be defined" name="Text Should be defined" time="0.005">
+    </testcase>
+    <testcase classname="Text Should render correctly" name="Text Should render correctly" time="0.001">
     </testcase>
     <testcase classname="Text Should renders children" name="Text Should renders children" time="0.001">
     </testcase>
-    <testcase classname="Text Should renders children when passed in" name="Text Should renders children when passed in" time="0.001">
+    <testcase classname="Text Should renders children when passed in" name="Text Should renders children when passed in" time="0.002">
     </testcase>
     <testcase classname="Text Should have varian property" name="Text Should have varian property" time="0.001">
     </testcase>
     <testcase classname="Text Should have left property" name="Text Should have left property" time="0">
     </testcase>
-    <testcase classname="Text Should have rigth property" name="Text Should have rigth property" time="0">
+    <testcase classname="Text Should have rigth property" name="Text Should have rigth property" time="0.001">
     </testcase>
     <testcase classname="Text Should have top property" name="Text Should have top property" time="0">
     </testcase>
     <testcase classname="Text Should have bottom property" name="Text Should have bottom property" time="0">
     </testcase>
   </testsuite>
-  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2021-09-17T02:49:24" time="0.543" tests="4">
-    <testcase classname=" Matches Snapshot" name=" Matches Snapshot" time="0.002">
+  <testsuite name="Tabs Testing Unit..." errors="0" failures="0" skipped="0" timestamp="2021-09-17T03:25:10" time="2.022" tests="4">
+    <testcase classname="Tabs Testing Unit... Should be defined" name="Tabs Testing Unit... Should be defined" time="0">
     </testcase>
-    <testcase classname="Layout Box Component Should renders Box Component" name="Layout Box Component Should renders Box Component" time="0.01">
+    <testcase classname="Tabs Testing Unit... Should render correctly" name="Tabs Testing Unit... Should render correctly" time="0.001">
     </testcase>
-    <testcase classname="Layout Box Component Should renders Box with Props" name="Layout Box Component Should renders Box with Props" time="0.002">
+    <testcase classname="Tabs Testing Unit... Should render the tab button" name="Tabs Testing Unit... Should render the tab button" time="0.003">
     </testcase>
-    <testcase classname="Layout Box Component Should renders children when passed in" name="Layout Box Component Should renders children when passed in" time="0.003">
-    </testcase>
-  </testsuite>
-  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2021-09-17T02:49:24" time="0.513" tests="4">
-    <testcase classname=" Matches Snapshot" name=" Matches Snapshot" time="0.001">
-    </testcase>
-    <testcase classname="Layout Container Component Should renders Container Component" name="Layout Container Component Should renders Container Component" time="0.01">
-    </testcase>
-    <testcase classname="Layout Container Component Should renders Container with Props" name="Layout Container Component Should renders Container with Props" time="0">
-    </testcase>
-    <testcase classname="Layout Container Component Should renders children when passed in" name="Layout Container Component Should renders children when passed in" time="0">
+    <testcase classname="Tabs Testing Unit... Should render the tab content" name="Tabs Testing Unit... Should render the tab content" time="0">
     </testcase>
   </testsuite>
-  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2021-09-17T02:49:24" time="0.53" tests="4">
-    <testcase classname=" Matches Snapshot" name=" Matches Snapshot" time="0.002">
+  <testsuite name="Unit::SessionStore" errors="0" failures="0" skipped="0" timestamp="2021-09-17T03:25:11" time="0.548" tests="5">
+    <testcase classname="Unit::SessionStore Should update the dashboard navigation" name="Unit::SessionStore Should update the dashboard navigation" time="0.001">
     </testcase>
-    <testcase classname="Layout Column Component Should renders Column Component" name="Layout Column Component Should renders Column Component" time="0.018">
+    <testcase classname="Unit::SessionStore Should update the admin navigation" name="Unit::SessionStore Should update the admin navigation" time="0.001">
     </testcase>
-    <testcase classname="Layout Column Component Should renders Column with Props" name="Layout Column Component Should renders Column with Props" time="0.004">
+    <testcase classname="Unit::SessionStore Should store the user&apos;s original organization info" name="Unit::SessionStore Should store the user&apos;s original organization info" time="0">
     </testcase>
-    <testcase classname="Layout Column Component Should renders children when passed in" name="Layout Column Component Should renders children when passed in" time="0.001">
+    <testcase classname="Unit::SessionStore Should store the current organization info" name="Unit::SessionStore Should store the current organization info" time="0">
+    </testcase>
+    <testcase classname="Unit::SessionStore Should reset its state" name="Unit::SessionStore Should reset its state" time="0">
     </testcase>
   </testsuite>
-  <testsuite name="Badge Testing Unit..." errors="0" failures="0" skipped="0" timestamp="2021-09-17T02:49:24" time="0.602" tests="4">
-    <testcase classname="Badge Testing Unit... Should be defined" name="Badge Testing Unit... Should be defined" time="0.001">
+  <testsuite name="Badge Testing Unit..." errors="0" failures="0" skipped="0" timestamp="2021-09-17T03:25:11" time="1.383" tests="4">
+    <testcase classname="Badge Testing Unit... Should be defined" name="Badge Testing Unit... Should be defined" time="0">
     </testcase>
     <testcase classname="Badge Testing Unit... Should render correctly" name="Badge Testing Unit... Should render correctly" time="0.002">
     </testcase>
-    <testcase classname="Badge Testing Unit... Should render the label property if provided" name="Badge Testing Unit... Should render the label property if provided" time="0.008">
+    <testcase classname="Badge Testing Unit... Should render the label property if provided" name="Badge Testing Unit... Should render the label property if provided" time="0.005">
     </testcase>
-    <testcase classname="Badge Testing Unit... Should render its children if no label is provided" name="Badge Testing Unit... Should render its children if no label is provided" time="0.002">
-    </testcase>
-  </testsuite>
-  <testsuite name="Unit::SessionStore" errors="0" failures="0" skipped="0" timestamp="2021-09-17T02:49:24" time="0.677" tests="10">
-    <testcase classname="Unit::SessionStore Should store the authenticated user" name="Unit::SessionStore Should store the authenticated user" time="0.001">
-    </testcase>
-    <testcase classname="Unit::SessionStore Should update the session stage" name="Unit::SessionStore Should update the session stage" time="0.001">
-    </testcase>
-    <testcase classname="Unit::SessionStore Should set stage to LOGGED_IN if a user token is present" name="Unit::SessionStore Should set stage to LOGGED_IN if a user token is present" time="0">
-    </testcase>
-    <testcase classname="Unit::SessionStore Should set isAuthenticated to true if a user token is present" name="Unit::SessionStore Should set isAuthenticated to true if a user token is present" time="0">
-    </testcase>
-    <testcase classname="Unit::SessionStore Should set stage to LOGGED_OUT if no user token is present" name="Unit::SessionStore Should set stage to LOGGED_OUT if no user token is present" time="0.134">
-    </testcase>
-    <testcase classname="Unit::SessionStore Should set isAuthenticated to false if no token is present" name="Unit::SessionStore Should set isAuthenticated to false if no token is present" time="0">
-    </testcase>
-    <testcase classname="Unit::SessionStore Should set isAutheticating to true if the session stage is VALIDATING" name="Unit::SessionStore Should set isAutheticating to true if the session stage is VALIDATING" time="0">
-    </testcase>
-    <testcase classname="Unit::SessionStore Should set isAutheticating to false if the session stage is not VALIDATING" name="Unit::SessionStore Should set isAutheticating to false if the session stage is not VALIDATING" time="0.001">
-    </testcase>
-    <testcase classname="Unit::SessionStore Should set isRehydrating to true if the session stage is REHYDRATING" name="Unit::SessionStore Should set isRehydrating to true if the session stage is REHYDRATING" time="0.001">
-    </testcase>
-    <testcase classname="Unit::SessionStore Should set isRehydrating to false if the session stage is not REHYDRATING" name="Unit::SessionStore Should set isRehydrating to false if the session stage is not REHYDRATING" time="0.001">
+    <testcase classname="Badge Testing Unit... Should render its children if no label is provided" name="Badge Testing Unit... Should render its children if no label is provided" time="0">
     </testcase>
   </testsuite>
 </testsuites>

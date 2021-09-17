@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { StyleConstants } from '../../data/constants/StyleConstants';
 import { BoxStyled } from './LayoutLogin.styles';

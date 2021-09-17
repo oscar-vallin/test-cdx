@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
 import { format } from 'date-fns';
 import { useUpdateFileStatus } from './hooks/useUpdateFileStatus';
 import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableConstants';

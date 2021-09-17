@@ -1,6 +1,4 @@
-import React, { useEffect } from 'react';
-import { Route, Switch } from 'react-router-dom';
-import { ErrorBoundary } from 'react-error-boundary';
+import { Switch } from 'react-router-dom';
 import { ROUTES } from '../data/constants/RouteConstants';
 // Routes
 import { LoginPage } from './Login';

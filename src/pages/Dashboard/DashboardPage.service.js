@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
 
 import { useDashboardPeriodsLazyQuery } from '../../data/services/graphql';
 
@@ -38,8 +37,6 @@ export const useDashboardService = (initOrgSid) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initOrgSid]);
-
-  const history = useHistory();
 
   useEffect(() => {
     if (error) {

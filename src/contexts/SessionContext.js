@@ -1,11 +1,14 @@
-import React, { useEffect } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect, createContext } from 'react';
 import { useHistory } from 'react-router';
 import { useStoreRehydrated } from 'easy-peasy';
 
 import { SessionStages } from '../store/SessionStore/SessionTypes';
 import { useSessionStore } from '../store/SessionStore';
 
-export const SessionContext = React.createContext(() => {});
+export const SessionContext = createContext(() => {
+  return null;
+});
 
 export const SessionContextProvider = ({ children }) => {
   const history = useHistory();

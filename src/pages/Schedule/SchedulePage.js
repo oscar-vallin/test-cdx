@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { memo } from 'react';
 import { ROUTES } from '../../data/constants/RouteConstants';
 import { Schedule } from '../../containers/schedule';
 
@@ -12,6 +12,6 @@ const _SchedulePage = () => {
   );
 };
 
-const SchedulePage = React.memo(_SchedulePage);
+const SchedulePage = memo(_SchedulePage);
 
 export { SchedulePage };
