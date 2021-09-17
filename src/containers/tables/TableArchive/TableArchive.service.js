@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
-import { useHistory } from 'react-router-dom';
-import { useWorkPacketStatusesLazyQuery, useWorkPacketStatusesQuery } from '../../../data/services/graphql';
+
+import { useWorkPacketStatusesLazyQuery } from '../../../data/services/graphql';
 import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { useInputValue } from '../../../hooks/useInputValue';
 import { isCDXToday } from '../../../helpers/tableHelpers';

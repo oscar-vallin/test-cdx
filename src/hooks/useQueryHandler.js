@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react';
 import { useLogoutUseCase } from '../use-cases/Authentication';
 import { useNotification } from './useNotification';
@@ -10,8 +11,6 @@ export const useQueryHandler = (lazyQuery) => {
 
   useEffect(() => {
     if (error) {
-      console.error('GraphQL => ', error);
-
       /* TODO: Migrate to error handler */
       const { extensions = null, message = 'An error occurred while perform this operation. Please, try again.' } =
         error?.graphQLErrors.shift();

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { memo } from 'react';
 import { Text } from '../../components/typography/Text';
 import { Container } from './NotFound.styles';
 
@@ -10,6 +10,6 @@ const PageNotFound = () => {
   );
 };
 
-const NotFoundPage = React.memo(PageNotFound);
+const NotFoundPage = memo(PageNotFound);
 
 export { NotFoundPage };

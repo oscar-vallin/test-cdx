@@ -36,3 +36,8 @@ yarn.lock*
 /.gradle/
 /.node/
 /src/main/resources/
+
+# test
+/test-results/junit.xml
+test-results/junit.xml
+/**/*.xml

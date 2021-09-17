@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import 'office-ui-fabric-react/dist/css/fabric.css';
@@ -7,11 +7,11 @@ import { StoreProvider } from 'easy-peasy';
 
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import { ApolloContextProvider } from './contexts/ApolloContext.js';
-import { ThemeContextProvider } from './contexts/ThemeContext.js';
-import { SessionContextProvider } from './contexts/SessionContext.js';
-import { ActiveDomainContextProvider } from './contexts/ActiveDomainContext.js';
-import { NotificationContextProvider } from './contexts/NotificationContext.js';
+import { ApolloContextProvider } from './contexts/ApolloContext';
+import { ThemeContextProvider } from './contexts/ThemeContext';
+import { SessionContextProvider } from './contexts/SessionContext';
+import { ActiveDomainContextProvider } from './contexts/ActiveDomainContext';
+import { NotificationContextProvider } from './contexts/NotificationContext';
 import store from './store/index';
 
 initializeIcons();

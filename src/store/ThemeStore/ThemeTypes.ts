@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 export enum ColorModes {
   Light = 'LIGHT',
   Dark = 'DARK',

@@ -23,7 +23,7 @@ import { Spacing } from '../../../components/spacings/Spacing';
 // Add hours.  Week and Day, and dashed lines.
 const Schedule = ({ id = 'ScheduleContainer' }) => {
   const location = useLocation();
-  const [urlParams, _setUrlParams] = useState(queryString.parse(location.search));
+  const [urlParams] = useState(queryString.parse(location.search));
   const [currentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [currentView, setCurrentView] = useState('month');

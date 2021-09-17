@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useMemo, useContext } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useEffect, useMemo, useContext, createContext } from 'react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { Customizer, loadTheme } from '@fluentui/react';
-import { useStoreState } from 'easy-peasy';
 
 import 'office-ui-fabric-react/dist/css/fabric.css';
 import { theme as styledComponentsTheme } from '../styles/themes/theme';
@@ -15,7 +15,7 @@ import Theming from '../utils/Theming';
 import { useSessionStore } from '../store/SessionStore';
 import { useThemeStore } from '../store/ThemeStore';
 
-export const ThemeContext = React.createContext(() => {
+export const ThemeContext = createContext(() => {
   return {};
 });
 
@@ -62,12 +62,6 @@ export const ThemeContextProvider = ({ children }) => {
     }
   `;
 
-  useEffect(() => {
-    if (!isLoadingTheme) {
-      changeTheme(Theming.getVariant(ThemeStore.themes.current.dashThemeColor || {}));
-    }
-  }, [ThemeStore.themes.current]);
-
   const changeTheme = (theme = {}) => {
     const customizedTheme = {
       ...styledTheme,
@@ -77,6 +71,12 @@ export const ThemeContextProvider = ({ children }) => {
     setTheme(theme);
     setStyledTheme(customizedTheme);
   };
+
+  useEffect(() => {
+    if (!isLoadingTheme) {
+      changeTheme(Theming.getVariant(ThemeStore.themes.current.dashThemeColor || {}));
+    }
+  }, [ThemeStore.themes.current]);
 
   // eslint-disable-next-line
   const values = useMemo(

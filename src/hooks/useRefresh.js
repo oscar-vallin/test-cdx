@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { getTableStructure } from '../data/constants/TableConstants';
 
 export const useRefresh = (id, triggerFunction) => {

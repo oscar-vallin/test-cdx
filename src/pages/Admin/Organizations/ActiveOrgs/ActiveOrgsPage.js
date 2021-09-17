@@ -1,12 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, memo } from 'react';
 
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { MessageBar } from 'office-ui-fabric-react';
-import { URL_ROUTES } from '../../../../data/constants/RouteConstants';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Row, Column } from '../../../../components/layouts';
 import { Spacing } from '../../../../components/spacings/Spacing';
@@ -51,7 +50,7 @@ const _ActiveOrgsPage = () => {
     });
   }, [ActiveDomainStore.domainOrg.current.orgSid]);
 
-  const changeActiveOrg = ({ id, name, orgType }) => {
+  const changeActiveOrg = ({ id, orgType }) => {
     directOrganizationsFQuery({
       variables: {
         orgSid: id,

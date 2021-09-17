@@ -24,7 +24,6 @@ import {
   useAccessPolicyLazyQuery,
 } from '../../../../../data/services/graphql';
 import { useOrgSid } from '../../../../../hooks/useOrgSid';
-import { useSessionStore } from '../../../../../store/SessionStore';
 
 const INITIAL_STATE = {
   policyName: '',
