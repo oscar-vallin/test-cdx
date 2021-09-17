@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { format } from 'date-fns';
-import { useWorkPacketStatusesQuery } from '../../../data/services/graphql';
 import { useUpdateFileStatus } from './hooks/useUpdateFileStatus';
 import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { formatField, isCDXToday } from '../../../helpers/tableHelpers';
@@ -15,8 +14,6 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
   const [_loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
   const structure = getTableStructure(TABLE_NAMES.FILE_STATUS);
-
-  const history = useHistory();
 
   const { fileStatusQuery, apiData, loadingFs, _error } = useUpdateFileStatus();
   const { enableRefresh, disableRefresh } = useRefresh(TABLE_NAMES.FILE_STATUS, fileStatusQuery);

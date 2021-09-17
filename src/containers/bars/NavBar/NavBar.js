@@ -2,7 +2,6 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { FontIcon } from '@fluentui/react/lib/Icon';
 import { ContextualMenuItemType } from '@fluentui/react/lib/ContextualMenu';
-import { useStoreActions, useStoreState } from 'easy-peasy';
 
 import { TooltipHost } from '@fluentui/react/lib/Tooltip';
 import { ProfileMenu } from '../../menus/ProfileMenu';
