@@ -40,7 +40,7 @@ const _ActiveOrgsPage = () => {
   const [orgs, setOrgs] = useState([]);
   const columns = generateColumns();
 
-  const [directOrganizationsFQuery, { data, loading }] = useQueryHandler(useDirectOrganizationsFLazyQuery);
+  const [directOrganizationsFQuery, { data, loading }] = useQueryHandler(useDirectOrganizationsLazyQuery);
 
   useEffect(() => {
     directOrganizationsFQuery({
@@ -72,9 +72,8 @@ const _ActiveOrgsPage = () => {
           {item[column.key]}
         </Link>
       );
-    } else {
-      return item[column.key];
     }
+    return item[column.key];
   };
 
   useEffect(() => {
