@@ -36,3 +36,4 @@ yarn.lock*
 # test
 /test-results/junit.xml
 test-results/junit.xml
+/**/*.xml
