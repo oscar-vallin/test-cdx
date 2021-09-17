@@ -30,5 +30,32 @@ describe('DashboardPage.js', () => {
     expect(loginButton).toContain('Exchange Statuses');
   });
 
+  it('Click Exchage Status', async () => {
+    await page.waitForSelector('div[name="Exchange Statuses"]');
+    await page.click('div[name="Exchange Statuses"]');
+  });
+
+  it('Click Dashboard', async () => {
+    await page.waitForTimeout(1000);
+    await page.waitForSelector('#__MainMenu__MainMenu__Row-dashboard-0');
+    await page.click('#__MainMenu__MainMenu__Row-dashboard-0');
+  });
+
+  it('Verify number of Transmissions matches the correct value', async () => {
+    await page.waitForTimeout(2000);
+    await page.waitForSelector('#__Transmissions__Billing_Units');
+    const transmissionValue = await page.$eval('#__Transmissions__Billing_Units', (e) => e.textContent);
+
+    expect(transmissionValue).toContain('Transmissions  (Billing Units.)7/6979');
+  });
+
+  it('Verify number of Failed Files  matches the correct value', async () => {
+    await page.waitForTimeout(2000);
+    await page.waitForSelector('#__Failed__Files__Billing_Units');
+    const transmissionValue = await page.$eval('#__Failed__Files__Billing_Units', (e) => e.textContent);
+
+    expect(transmissionValue).toContain('Failed Files  (Billing Units.)0/6979');
+  });
+
   afterAll(() => browser.close());
 });
