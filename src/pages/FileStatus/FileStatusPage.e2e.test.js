@@ -36,41 +36,104 @@ describe('FileStatusPage.js', () => {
   });
 
   it('Table Should have 1 row', async () => {
-    await page.waitForTimeout(3000);
-    const result = await page.$$eval('.ms-DetailsList', (rows) => {
+    await page.waitForTimeout(1000);
+    const result = await page.$$eval('.ms-DetailsRow-fields', (rows) => {
       return rows.length;
     });
 
     expect(result).toEqual(1);
   });
 
-  //   it('Read table first item', async () => {
-  //     await page.waitForTimeout(1000);
-  //     const result = await page.$$eval('.ms-DetailsList', (rows) => {
-  //       return Array.from(rows, (row) => {
-  //         const columns = row.querySelectorAll('.ms-DetailsList-contentWrapper');
-  //         return Array.from(columns, (column) => column.innerText);
-  //       });
-  //     });
+  it('Should not have records when search input filled with wrong value', async () => {
+    await page.waitForSelector('#TableFileStatus__Card__Row__Input-Search');
+    await page.type('#TableFileStatus__Card__Row__Input-Search', 'WrongSearch');
 
-  //     expect(result[0][0]).toContain('09/17/2021');
-  //   });
+    await page.waitForTimeout(1000);
 
-  //   it('Click on Receive On', async () => {
-  //     await page.waitForSelector('#button__datetime');
-  //     await page.click('#button__datetime');
-  //   });
+    const result = await page.$$eval('.ms-DetailsRow-fields', (rows) => {
+      return rows.length;
+    });
 
-  //   it('Read table first item', async () => {
-  //     await page.waitForTimeout(1000);
-  //     const result = await page.$$eval('.ms-DetailsList', (rows) => {
-  //       return Array.from(rows, (row) => {
-  //         const columns = row.querySelectorAll('.ms-DetailsList-contentWrapper');
-  //         return Array.from(columns, (column) => column.innerText);
-  //       });
-  //     });
+    expect(result).toEqual(0);
+  });
 
-  //     expect(result[0][0]).toContain('09/17/2021');
-  //   });
+  it('Should have 1 record when searching by Vendor', async () => {
+    const inputValue = await page.$eval('#TableFileStatus__Card__Row__Input-Search', (el) => el.value);
+
+    for (let i = 0; i < inputValue.length; i++) {
+      await page.keyboard.press('Backspace');
+    }
+
+    await page.waitForSelector('#TableFileStatus__Card__Row__Input-Search');
+    await page.type('#TableFileStatus__Card__Row__Input-Search', 'HealthyPet');
+
+    await page.waitForTimeout(1000);
+
+    const result = await page.$$eval('.ms-DetailsRow-fields', (rows) => {
+      return Array.from(rows, (row) => {
+        const columns = row.querySelectorAll('.ms-DetailsRow-cell');
+        return Array.from(columns, (column) => column.innerText);
+      });
+    });
+
+    expect(result[0][1]).toEqual('HealthyPet');
+  });
+
+  it('Should have 1 record when searching by Sponsor', async () => {
+    const inputValue = await page.$eval('#TableFileStatus__Card__Row__Input-Search', (el) => el.value);
+
+    for (let i = 0; i < inputValue.length; i++) {
+      await page.keyboard.press('Backspace');
+    }
+
+    await page.waitForSelector('#TableFileStatus__Card__Row__Input-Search');
+    await page.type('#TableFileStatus__Card__Row__Input-Search', 'K2UFKE');
+
+    await page.waitForTimeout(1000);
+
+    const result = await page.$$eval('.ms-DetailsRow-fields', (rows) => {
+      return Array.from(rows, (row) => {
+        const columns = row.querySelectorAll('.ms-DetailsRow-cell');
+        return Array.from(columns, (column) => column.innerText);
+      });
+    });
+
+    expect(result[0][2]).toEqual('K2UFKE');
+  });
+
+  it('Should have 1 record when searching by Extract Name', async () => {
+    const inputValue = await page.$eval('#TableFileStatus__Card__Row__Input-Search', (el) => el.value);
+
+    for (let i = 0; i < inputValue.length; i++) {
+      await page.keyboard.press('Backspace');
+    }
+
+    await page.waitForSelector('#TableFileStatus__Card__Row__Input-Search');
+    await page.type('#TableFileStatus__Card__Row__Input-Search', 'K2UFKE-HealthyPet-UAT.txt');
+
+    await page.waitForTimeout(1000);
+
+    const result = await page.$$eval('.ms-DetailsRow-fields', (rows) => {
+      return Array.from(rows, (row) => {
+        const columns = row.querySelectorAll('.ms-DetailsRow-cell');
+        return Array.from(columns, (column) => column.innerText);
+      });
+    });
+
+    expect(result[0][3]).toEqual('K2UFKE-HealthyPet-UAT.txt');
+  });
+
+  it('Read table first item', async () => {
+    await page.waitForTimeout(1000);
+    const result = await page.$$eval('.ms-DetailsRow-fields', (rows) => {
+      return Array.from(rows, (row) => {
+        const columns = row.querySelectorAll('.ms-DetailsRow-cell');
+        return Array.from(columns, (column) => column.innerText);
+      });
+    });
+
+    expect(result[0][0]).toContain('09/18/2021 12:00 AM');
+  });
+
   afterAll(() => browser.close());
 });
