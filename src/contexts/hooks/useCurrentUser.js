@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
 import { useCurrentUserLazyQuery } from '../../data/services/graphql';
 
 export const useCurrentUser = () => {
   const [isProcessing, setProcessing] = useState(false);
   const [isCurrentUserLogged, setLoggedIn] = useState(false);
-  const history = useHistory();
 
   //
   const [_apiCall, { data, loading, error }] = useCurrentUserLazyQuery({

@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
 import { useScheduleOccurrencesQuery } from '../../../data/services/graphql';
 // import { useInputValue } from '../../../hooks/useInputValue';
 
@@ -7,8 +6,6 @@ import { useScheduleOccurrencesQuery } from '../../../data/services/graphql';
 export const useScheduleItems = (argOrgSid, argDateRange) => {
   const [, setLoading] = useState(true);
   const [items, setItems] = useState([]);
-
-  const history = useHistory();
 
   const { data, loading, error } = useScheduleOccurrencesQuery({
     variables: {

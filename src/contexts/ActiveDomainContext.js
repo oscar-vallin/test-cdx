@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect, createContext } from 'react';
 import { useHistory } from 'react-router';
 
 import { URL_ROUTES } from '../data/constants/RouteConstants';
@@ -6,7 +7,9 @@ import { useActiveDomainStore } from '../store/ActiveDomainStore';
 import { useSessionStore } from '../store/SessionStore';
 import { useActiveDomainUseCase } from '../use-cases/ActiveDomain';
 
-export const ActiveDomainContext = React.createContext(() => {});
+export const ActiveDomainContext = createContext(() => {
+  return null;
+});
 
 export const ActiveDomainContextProvider = ({ children }) => {
   const history = useHistory();

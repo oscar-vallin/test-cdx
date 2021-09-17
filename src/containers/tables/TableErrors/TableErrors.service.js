@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
-import { useHistory } from 'react-router-dom';
 import { useWorkPacketStatusesQuery } from '../../../data/services/graphql';
 import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { getStepStatusLabel } from '../../../data/constants/FileStatusConstants';
@@ -12,8 +11,6 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
   const [items, setItems] = useState([]);
   const [columns, setColumns] = useState([]);
   const structure = getTableStructure(TABLE_NAMES.ERRORS);
-
-  const history = useHistory();
 
   const { data, loading, error } = useWorkPacketStatusesQuery({
     variables: {

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
 
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
@@ -41,10 +41,10 @@ const _AccessManagementGroupsPage = () => {
   const [groups, setGroups] = useState([]);
   const columns = generateColumns();
 
-  const [useAmGroupsForOrg, { data, loading }] = useQueryHandler(useAmGroupsForOrgPLazyQuery);
+  const [apiAmGroupsForOrg, { data, loading }] = useQueryHandler(useAmGroupsForOrgPLazyQuery);
 
   useEffect(() => {
-    useAmGroupsForOrg({ variables: { orgSid } });
+    apiAmGroupsForOrg({ variables: { orgSid } });
   }, [orgSid]);
 
   useEffect(() => {
@@ -104,6 +104,6 @@ const _AccessManagementGroupsPage = () => {
   );
 };
 
-const AccessManagementGroupsPage = React.memo(_AccessManagementGroupsPage);
+const AccessManagementGroupsPage = memo(_AccessManagementGroupsPage);
 
 export { AccessManagementGroupsPage };

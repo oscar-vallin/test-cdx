@@ -1,5 +1,3 @@
-import React, { useState } from 'react';
-
 import { ChoiceGroup } from '@fluentui/react';
 import { StyledColorPreview, StyledPreview } from '../ColorPalettesPage.styles';
 

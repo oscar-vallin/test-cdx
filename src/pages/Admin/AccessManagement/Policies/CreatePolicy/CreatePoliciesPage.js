@@ -14,7 +14,6 @@ import { Text } from '../../../../../components/typography/Text';
 import { InputText } from '../../../../../components/inputs/InputText';
 
 import { useAmPolicyPageQuery } from '../../../../../data/services/graphql';
-import { ADMIN_NAV } from '../../../../../data/constants/AdminConstants';
 import { useOrgSid } from '../../../../../hooks/useOrgSid';
 
 const COLUMNS = [

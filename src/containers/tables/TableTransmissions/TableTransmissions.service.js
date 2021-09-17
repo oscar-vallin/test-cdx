@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
-import { useHistory } from 'react-router-dom';
-import { useWorkPacketStatusesQuery, useWpTransmissionsQuery } from '../../../data/services/graphql';
+import { useWpTransmissionsQuery } from '../../../data/services/graphql';
 import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableConstants';
 
 export const useTable = (argOrgSid, argDateRange, argFilter) => {
@@ -9,8 +8,6 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
   const [items, setItems] = useState([]);
   const [columns, setColumns] = useState([]);
   const structure = getTableStructure(TABLE_NAMES.ARCHIVES);
-
-  const history = useHistory();
 
   const { data, loading, error } = useWpTransmissionsQuery({
     variables: {

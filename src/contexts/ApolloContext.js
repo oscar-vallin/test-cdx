@@ -2,7 +2,6 @@ import { createContext, useState, useEffect, useMemo, useContext } from 'react';
 import { ApolloProvider, ApolloClient, InMemoryCache, HttpLink, ApolloLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { useSessionStore } from '../store/SessionStore';
-import introspection from '../data/services/introspection.json';
 
 const SERVER_URL = process.env.REACT_APP_API_SERVER;
 
@@ -15,7 +14,7 @@ export const ApolloContext = createContext(() => {
 export const ApolloContextProvider = ({ children }) => {
   const SessionStore = useSessionStore();
   // LocalState
-  const [isApolloLoading, setLoading] = useState(true);
+  const [isApolloLoading] = useState(true);
   // const [sessionID, setSessionID] = useState('');
 
   const httpLink = new HttpLink({
@@ -37,17 +36,6 @@ export const ApolloContextProvider = ({ children }) => {
 
   const afterwareLink = new ApolloLink((operation, forward) => {
     return forward(operation).map((response) => {
-      const context = operation.getContext();
-
-      const { headers } = context.response;
-
-      // if (headers) {
-      //   const authHeader = headers.get('x-auth-token');
-      //   if (authHeader) {
-      //     SessionStore.user.setCurrentSession({ ...SessionStore.user, token: authHeader });
-      //   }
-      // }
-
       return response;
     });
   });

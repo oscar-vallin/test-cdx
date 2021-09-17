@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import { useSessionStore } from '../../store/SessionStore';
 import { useBeginLoginLazyQuery, usePasswordLoginMutation } from '../../data/services/graphql';

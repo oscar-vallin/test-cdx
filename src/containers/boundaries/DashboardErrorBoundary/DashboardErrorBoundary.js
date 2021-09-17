@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { Row, Column, Container } from '../../../components/layouts';
 import { Card } from '../../../components/cards/Card';
 import { Spacing } from '../../../components/spacings/Spacing';

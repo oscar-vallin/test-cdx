@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-
-import { useHistory } from 'react-router-dom';
+/* eslint-disable no-nested-ternary */
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useEffect } from 'react';
 import { Column } from '../../../components/layouts';
 import { InputText } from '../../../components/inputs/InputText';
 import { Spacing } from '../../../components/spacings/Spacing';
@@ -19,7 +19,7 @@ import {
 } from './FormLogin.styles';
 
 import { useSessionStore } from '../../../store/SessionStore';
-import { useLoginUseCase, useLogoutUseCase } from '../../../use-cases/Authentication';
+import { useLoginUseCase } from '../../../use-cases/Authentication';
 import { useNotification } from '../../../hooks/useNotification';
 
 const INITIAL_STATE = { userId: '', password: '' };
@@ -116,9 +116,9 @@ const FormLogin = ({ id = '__FormLogin' }) => {
                     <StyledButton
                       id={`${id}__Card__Row__Column__Button--Button`}
                       disabled={state.loading}
-                      onClick={() =>
-                        isValidEmail ? performUserAuthentication(values) : performUserIdVerification(values)
-                      }
+                      onClick={() => {
+                        return isValidEmail ? performUserAuthentication(values) : performUserIdVerification(values);
+                      }}
                     >
                       {state.loading ? <Spinner /> : !isValidEmail ? 'Next' : 'Login'}
                     </StyledButton>
