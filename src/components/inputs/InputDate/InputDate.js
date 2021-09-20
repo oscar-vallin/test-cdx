@@ -5,7 +5,7 @@ import { getHours } from 'date-fns';
 const today = new Date();
 const yesterday = addDays(today, -1);
 const hour = getHours(new Date());
-const minDate = addMonths(today, -2);
+// const minDate = addMonths(today, -2);
 const maxDate = addYears(today, 1);
 
 const DayPickerStrings = {
@@ -43,7 +43,7 @@ const DayPickerStrings = {
 
   invalidInputErrorMessage: 'Invalid date format.',
 
-  isOutOfBoundsErrorMessage: `Date must be between ${minDate.toLocaleDateString()}-${maxDate.toLocaleDateString()}`,
+  isOutOfBoundsErrorMessage: `Date must be between some initial date}-${maxDate.toLocaleDateString()}`,
 };
 
 const firstDayOfWeek = DayOfWeek.Sunday;
@@ -65,7 +65,7 @@ const InputDate = ({ id = '', placeholder = 'Select a Date...', value, onChange,
       strings={DayPickerStrings}
       placeholder={placeholder}
       ariaLabel={placeholder}
-      minDate={minDate}
+      // minDate={minDate}
       maxDate={maxDate}
       onSelectDate={onChange}
       value={getValue(value)}
