@@ -132,7 +132,7 @@ describe('FileStatusPage.js', () => {
       });
     });
 
-    expect(result[0][0]).toContain('09/18/2021 12:00 AM');
+    expect(result[0][0]).toContain('09/20/2021 12:00 AM');
   });
 
   afterAll(() => browser.close());
