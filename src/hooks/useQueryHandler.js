@@ -2,16 +2,22 @@
 import { useEffect } from 'react';
 import { useLogoutUseCase } from '../use-cases/Authentication';
 import { useNotification } from './useNotification';
+import { useOrgSid } from './useOrgSid';
 
 export const useQueryHandler = (lazyQuery) => {
   const Toast = useNotification();
+  const { orgSid } = useOrgSid();
   const { performUserLogout } = useLogoutUseCase();
 
   const [callback, { data, loading, error }] = lazyQuery();
 
+  // const query = (params) =>
+  //   callback({
+  //     variables: { orgSid, ...params },
+  //   });
+
   useEffect(() => {
     if (error) {
-      /* TODO: Migrate to error handler */
       const { extensions = null, message = 'An error occurred while perform this operation. Please, try again.' } =
         error?.graphQLErrors.shift();
 

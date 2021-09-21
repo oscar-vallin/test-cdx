@@ -35,7 +35,7 @@ export const ActiveDomainContextProvider = ({ children }) => {
         performNavUpdate({ orgSid: origin.orgSid, domain: 'ORGANIZATION' });
       }
     }
-  }, [SessionStore.status, ActiveDomainStore.domainOrg]);
+  }, [SessionStore.status, ActiveDomainStore.domainOrg.origin]);
 
   useEffect(() => {
     const { orgSid } = ActiveDomainStore.domainOrg.current;
@@ -65,9 +65,14 @@ export const ActiveDomainContextProvider = ({ children }) => {
     const { currentOrg } = activeDomainState;
 
     if (currentOrg.data && !currentOrg.loading) {
+      const { currentOrgNav } = currentOrg.data;
+
+      const subNavItems = currentOrg.data.currentOrgNav.subNavItems.map(parseToStoreObj);
+
       ActiveDomainStore.setCurrentOrg({
-        label: currentOrg.data.currentOrgNav.label,
-        subNavItems: currentOrg.data.currentOrgNav.subNavItems.map(parseToStoreObj),
+        subNavItems,
+        label: currentOrgNav.label,
+        orgSid: subNavItems.find(({ label }) => label.includes(currentOrgNav.label))?.orgSid,
       });
     }
   }, [activeDomainState.currentOrg.loading]);
