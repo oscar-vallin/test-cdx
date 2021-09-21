@@ -1,10 +1,12 @@
 import puppeteer from 'puppeteer';
+import { format, startOfTomorrow } from 'date-fns';
 
 describe('FileStatusPage.js', () => {
   let browser;
   let page;
   const email = 'joe.admin@example.com';
   const password = 'changeBen21';
+  const formattedDate = format(startOfTomorrow(new Date()), 'MM/dd/yyyy');
 
   beforeAll(async () => {
     browser = await puppeteer.launch({ headless: false, slowMo: true });
@@ -33,6 +35,12 @@ describe('FileStatusPage.js', () => {
   it('Go to Exchage Status page', async () => {
     await page.waitForSelector('div[name="Exchange Statuses"]');
     await page.click('div[name="Exchange Statuses"]');
+  });
+
+  it('Click on File Status', async () => {
+    await page.waitForTimeout(1000);
+    await page.waitForSelector('#__MainMenu__MainMenu__Row-file-status-1');
+    await page.click('#__MainMenu__MainMenu__Row-file-status-1');
   });
 
   it('Table Should have 1 row', async () => {
@@ -132,7 +140,7 @@ describe('FileStatusPage.js', () => {
       });
     });
 
-    expect(result[0][0]).toContain('09/20/2021 12:00 AM');
+    expect(result[0][0]).toContain(`${formattedDate} 12:00 AM`);
   });
 
   afterAll(() => browser.close());
