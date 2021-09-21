@@ -2,7 +2,7 @@ import { addMonths, addYears } from '@fluentui/date-time-utilities';
 import { DatePicker, DayOfWeek } from 'office-ui-fabric-react/lib-commonjs/DatePicker';
 
 const today = new Date(Date.now());
-const minDate = addMonths(today, -1);
+// const minDate = addMonths(today, -1);
 const maxDate = addYears(today, 1);
 
 const DayPickerStrings = {
@@ -40,7 +40,7 @@ const DayPickerStrings = {
 
   invalidInputErrorMessage: 'Invalid date format.',
 
-  isOutOfBoundsErrorMessage: `Date must be between ${minDate.toLocaleDateString()}-${maxDate.toLocaleDateString()}`,
+  isOutOfBoundsErrorMessage: `Date must be between some initial date}-${maxDate.toLocaleDateString()}`,
 };
 
 const firstDayOfWeek = DayOfWeek.Sunday;
@@ -52,7 +52,7 @@ export const DateSelector = ({ id = '', onChange, required }) => {
       isRequired={required}
       firstDayOfWeek={firstDayOfWeek}
       strings={DayPickerStrings}
-      minDate={minDate}
+      // minDate={minDate}
       maxDate={maxDate}
       onSelectDate={onChange}
       initialPickerDate={today}
