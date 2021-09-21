@@ -33,7 +33,7 @@ export const isTodayInRange = (firstDate, secondDate) => {
   const _endDate = endOfDay(new Date(secondDate));
 
   if (firstDate && secondDate) {
-    if (firstDate < secondDate) {
+    if (firstDate <= secondDate) {
       return isWithinInterval(_today, { start: new Date(_startDate), end: new Date(_endDate) });
     }
     return false;
