@@ -101,6 +101,7 @@ const _DashboardPage = () => {
           <StyledRow>
             <Column lg="6">
               <CardDashboard
+                id="__Transmissions__Billing_Units"
                 title="Transmissions"
                 subtitle="Billing Units."
                 value={dataCounters?.transmissionCount ?? 0}
@@ -113,6 +114,7 @@ const _DashboardPage = () => {
 
             <Column lg="6">
               <CardDashboard
+                id="__Failed__Files__Billing_Units"
                 title="Failed Files"
                 subtitle="Billing Units."
                 value={dataCounters?.processErrorCount ?? 0}
