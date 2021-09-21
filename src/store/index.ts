@@ -1,5 +1,4 @@
 import { thunkOn, createStore, persist } from 'easy-peasy';
-import ActiveOrgStore from './ActiveOrgStore';
 import QueryParamStore from './QueryParamStore';
 
 import { SessionStore } from './SessionStore';
@@ -19,7 +18,6 @@ const resetStores = async (actions, target, { getStoreActions }) => {
 
 const model = {
   ThemeStore,
-  ActiveOrgStore,
   QueryParamStore,
   SessionStore: persist(SessionStore),
   ActiveDomainStore: persist(ActiveDomainStore),

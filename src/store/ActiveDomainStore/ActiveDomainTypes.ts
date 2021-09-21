@@ -1,4 +1,4 @@
-import { Action } from 'easy-peasy';
+import { Action, ThunkOn } from 'easy-peasy';
 
 export interface ActiveDomainModel {
   nav: DomainNav;
@@ -11,6 +11,7 @@ export interface ActiveDomainModel {
   setOriginOrg: Action<ActiveDomainModel, DomainNavItem>;
   setCurrentOrg: Action<ActiveDomainModel, DomainNavItem>;
   reset: Action<ActiveDomainModel>;
+  onCurrentOrgUpdate: ThunkOn<ActiveDomainModel>;
 }
 
 export type DomainNav = {

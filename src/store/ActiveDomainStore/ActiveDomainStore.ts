@@ -1,4 +1,4 @@
-import { action } from 'easy-peasy';
+import { action, thunkOn } from 'easy-peasy';
 import { ActiveDomainModel } from './ActiveDomainTypes';
 
 export const INITIAL_NAV_STATE = {
@@ -30,6 +30,10 @@ const resetState = (state) => {
   };
 };
 
+const updateOrgSidParam = async (actions, target, { getStoreActions }) => {
+  await getStoreActions().QueryParamStore.setGlobalParam({ orgSid: target.payload.orgSid });
+};
+
 export const INITIAL_ACTIVE_DOMAIN_STATE: ActiveDomainModel = {
   nav: { ...INITIAL_NAV_STATE },
   domainOrg: {
@@ -41,15 +45,7 @@ export const INITIAL_ACTIVE_DOMAIN_STATE: ActiveDomainModel = {
   setOriginOrg: action(setOrgInfo('origin')),
   setCurrentOrg: action(setOrgInfo('current')),
   reset: action(resetState),
+  onCurrentOrgUpdate: thunkOn((actions) => actions.setCurrentOrg, updateOrgSidParam),
 };
 
 export default INITIAL_ACTIVE_DOMAIN_STATE;
-
-/* TODO */
-// const updateOrgSidParam = async (actions, target, { getStoreActions }) => {
-//   await getStoreActions().QueryParamStore.setGlobalParam({ orgSid: target.payload });
-// };
-
-// const ActiveOrgStore = {
-//   onUpdateOrgSid: thunkOn((actions) => actions.updateOrgSid, updateOrgSidParam),
-// };

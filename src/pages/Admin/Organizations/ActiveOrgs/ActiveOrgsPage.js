@@ -16,6 +16,7 @@ import { useDirectOrganizationsFLazyQuery } from '../../../../data/services/grap
 import { StyledColumn } from './ActiveOrgsPage.styles';
 import { useActiveDomainStore } from '../../../../store/ActiveDomainStore';
 import { useQueryHandler } from '../../../../hooks/useQueryHandler';
+import { useOrgSid } from '../../../../hooks/useOrgSid';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -51,13 +52,6 @@ const _ActiveOrgsPage = () => {
   }, [ActiveDomainStore.domainOrg.current.orgSid]);
 
   const changeActiveOrg = ({ id, orgType }) => {
-    directOrganizationsFQuery({
-      variables: {
-        orgSid: id,
-        orgFilter: { activeFilter: 'ACTIVE' },
-      },
-    });
-
     ActiveDomainStore.setCurrentOrg({
       orgSid: id,
       destination: orgType === 'INTEGRATION_SPONSOR' ? 'FILE_STATUS' : 'CURRENT_ACTIVITY',
