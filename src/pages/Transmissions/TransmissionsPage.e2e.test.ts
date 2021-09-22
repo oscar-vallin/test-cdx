@@ -1,21 +1,22 @@
 import puppeteer from 'puppeteer';
-import { format, startOfTomorrow } from 'date-fns';
+// import { format, startOfTomorrow } from 'date-fns';
 
 describe('TransmissionsPage.js', () => {
+  const url = process.env.TEST_URL || process.env.REACT_TEST_URL;
   let browser;
   let page;
   const email = 'joe.admin@example.com';
   const password = 'changeBen21';
-  const formattedDate = format(startOfTomorrow(new Date()), 'MM/dd/yyyy');
+  // const formattedDate = format(startOfTomorrow(new Date()), 'MM/dd/yyyy');
 
   beforeAll(async () => {
-    browser = await puppeteer.launch({ headless: false, slowMo: true });
+    browser = await puppeteer.launch();
     page = await browser.newPage();
     await page.setViewport({ width: 1920, height: 1080 });
   });
 
   it('Login', async () => {
-    await page.goto('http://localhost:3000');
+    await page.goto(url);
     await page.waitForSelector('#__FormLogin__Card__Row__Input-Email');
     await page.type('#__FormLogin__Card__Row__Input-Email', email);
 
