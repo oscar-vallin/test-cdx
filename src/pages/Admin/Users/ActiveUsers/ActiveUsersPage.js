@@ -85,13 +85,13 @@ const _ActiveUsersPage = () => {
 
   const selectedUserIds = () => {
     return selectedItems.map((node) => {
-      return node.item.id;
+      return node.item.sid;
     });
   };
 
   useEffect(() => {
     if (!isDisablingUser && disableResponse) {
-      setUsers(users.filter(({ item }) => !selectedUserIds().includes(item.id)));
+      setUsers(users.filter(({ item }) => !selectedUserIds().includes(item.sid)));
     }
   }, [isDisablingUser, disableResponse]);
 

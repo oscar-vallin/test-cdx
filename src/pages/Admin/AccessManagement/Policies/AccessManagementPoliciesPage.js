@@ -15,7 +15,7 @@ import { Separator } from '../../../../components/separators/Separator';
 import { Text } from '../../../../components/typography';
 import { CreatePoliciesPanel } from './CreatePolicy';
 
-import { useAccessPoliciesForOrgLazyQuery, useDeleteAccessPolicyMutation } from '../../../../data/services/graphql';
+import { useAccessPoliciesForOrgLazyQuery } from '../../../../data/services/graphql';
 
 import { StyledColumn, StyledCommandButton } from './AccessManagementPoliciesPage.styles';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
@@ -67,7 +67,7 @@ const _AccessManagementPoliciesPage = () => {
             <StyledCommandButton
               iconProps={{ iconName: 'Delete' }}
               onClick={() => {
-                setSelectedPolicyId(item.id);
+                setSelectedPolicyId(item.sid);
                 setIsConfirmationHidden(false);
               }}
             />

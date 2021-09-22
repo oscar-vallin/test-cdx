@@ -16,7 +16,6 @@ import { useDirectOrganizationsLazyQuery } from '../../../../data/services/graph
 import { StyledColumn } from './ActiveOrgsPage.styles';
 import { useActiveDomainStore } from '../../../../store/ActiveDomainStore';
 import { useQueryHandler } from '../../../../hooks/useQueryHandler';
-import { useOrgSid } from '../../../../hooks/useOrgSid';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -51,9 +50,9 @@ const _ActiveOrgsPage = () => {
     });
   }, [ActiveDomainStore.domainOrg.current.orgSid]);
 
-  const changeActiveOrg = ({ id, orgType }) => {
+  const changeActiveOrg = ({ sid, orgType }) => {
     ActiveDomainStore.setCurrentOrg({
-      orgSid: id,
+      orgSid: sid,
       destination: orgType === 'INTEGRATION_SPONSOR' ? 'FILE_STATUS' : 'CURRENT_ACTIVITY',
     });
   };
@@ -61,7 +60,7 @@ const _ActiveOrgsPage = () => {
   const onRenderItemColumn = (item, index, column) => {
     if (column.key === 'name') {
       return (
-        <Link to={`/admin/organizations/active-orgs?orgSid=${item.id}`} onClick={() => changeActiveOrg(item)}>
+        <Link to={`/admin/organizations/active-orgs?orgSid=${item.sid}`} onClick={() => changeActiveOrg(item)}>
           {item[column.key]}
         </Link>
       );
