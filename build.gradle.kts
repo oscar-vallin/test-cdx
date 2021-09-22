@@ -19,6 +19,7 @@ java {
 }
 
 node {
+    download.set(true)
     version.set("14.17.5")
     yarnVersion.set("1.22.11")
 
