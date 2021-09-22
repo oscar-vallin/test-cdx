@@ -50,7 +50,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "e2e": "react-scripts test --maxWorkers 1 --testPathPattern=.*e2e.test.js$",
+    "e2e": "react-scripts test --maxWorkers 1 --testPathPattern=.*e2e.test.ts$",
     "test:e2e": "start-server-and-test 'yarn start' http://localhost:3000 'yarn e2e'",
     "test": "react-scripts test --verbose --updateSnapshot --transformIgnorePatterns \"node_modules/(?!react-ts)/\"",
     "test:local": "react-scripts test --verbose --updateSnapshot --transformIgnorePatterns \"node_modules/(?!react-ts)/\" --silent",
