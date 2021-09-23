@@ -93,31 +93,27 @@ const _ActiveOrgsPage = () => {
     <LayoutAdmin id="PageActiveOrgs" sidebarOptionSelected="ACTIVE_ORGS">
       <Spacing margin="double">
         <Row>
-          <Column lg="8">
-            <Row>
-              <Column lg="4">
-                <Spacing margin={{ top: 'small' }}>
-                  <Text variant="bold">Active orgs</Text>
-                </Spacing>
-              </Column>
-            </Row>
-
-            <Spacing margin={{ top: 'normal' }}>
-              <Separator />
+          <Column lg="4">
+            <Spacing margin={{ top: 'small' }}>
+              <Text variant="bold">Active orgs</Text>
             </Spacing>
-
-            <Row>
-              <StyledColumn>
-                {!loading ? (
-                  renderList()
-                ) : (
-                  <Spacing margin={{ top: 'double' }}>
-                    <Spinner size="lg" label="Loading active orgs" />
-                  </Spacing>
-                )}
-              </StyledColumn>
-            </Row>
           </Column>
+        </Row>
+
+        <Spacing margin={{ top: 'normal' }}>
+          <Separator />
+        </Spacing>
+
+        <Row>
+          <StyledColumn>
+            {!loading ? (
+              renderList()
+            ) : (
+              <Spacing margin={{ top: 'double' }}>
+                <Spinner size="lg" label="Loading active orgs" />
+              </Spacing>
+            )}
+          </StyledColumn>
         </Row>
       </Spacing>
     </LayoutAdmin>
