@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { DocumentCard } from '@fluentui/react/lib/DocumentCard';
+import { DocumentCard } from '@fluentui/react';
 
 export const CardStyled = styled(DocumentCard)`
   background: ${({ theme }) => theme.colors.neutralLighter};
