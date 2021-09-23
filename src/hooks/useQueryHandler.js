@@ -16,10 +16,11 @@ export const useQueryHandler = (lazyQuery) => {
 
       if (extensions) {
         if (extensions.errorSubType === 'NEED_AUTH') {
+          Toast.error({ text: message });
+
           setTimeout(performUserLogout, 3000);
         } else {
-          // Toast.error({ text: message });
-          console.error('GraphQL =>', error);
+          Toast.error({ text: message });
         }
       }
     }
