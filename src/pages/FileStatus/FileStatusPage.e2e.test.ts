@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 import puppeteer from 'puppeteer';
 import { format, startOfTomorrow } from 'date-fns';
 
@@ -7,7 +8,7 @@ describe('FileStatusPage.js', () => {
   let page;
   const email = 'joe.admin@example.com';
   const password = 'changeBen21';
-  const formattedDate = format(startOfTomorrow(new Date()), 'MM/dd/yyyy');
+  const formattedDate = format(startOfTomorrow(), 'MM/dd/yyyy');
 
   beforeAll(async () => {
     browser = await puppeteer.launch();
@@ -79,9 +80,9 @@ describe('FileStatusPage.js', () => {
     await page.waitForTimeout(1000);
 
     const result = await page.$$eval('.ms-DetailsRow-fields', (rows) => {
-      return Array.from(rows, (row) => {
+      return Array.from(rows, (row: any) => {
         const columns = row.querySelectorAll('.ms-DetailsRow-cell');
-        return Array.from(columns, (column) => column.innerText);
+        return Array.from(columns, (column: any) => column.innerText);
       });
     });
 
@@ -101,9 +102,9 @@ describe('FileStatusPage.js', () => {
     await page.waitForTimeout(1000);
 
     const result = await page.$$eval('.ms-DetailsRow-fields', (rows) => {
-      return Array.from(rows, (row) => {
+      return Array.from(rows, (row: any) => {
         const columns = row.querySelectorAll('.ms-DetailsRow-cell');
-        return Array.from(columns, (column) => column.innerText);
+        return Array.from(columns, (column: any) => column.innerText);
       });
     });
 
@@ -123,9 +124,9 @@ describe('FileStatusPage.js', () => {
     await page.waitForTimeout(1000);
 
     const result = await page.$$eval('.ms-DetailsRow-fields', (rows) => {
-      return Array.from(rows, (row) => {
+      return Array.from(rows, (row: any) => {
         const columns = row.querySelectorAll('.ms-DetailsRow-cell');
-        return Array.from(columns, (column) => column.innerText);
+        return Array.from(columns, (column: any) => column.innerText);
       });
     });
 
@@ -135,9 +136,9 @@ describe('FileStatusPage.js', () => {
   it('Read table first item', async () => {
     await page.waitForTimeout(1000);
     const result = await page.$$eval('.ms-DetailsRow-fields', (rows) => {
-      return Array.from(rows, (row) => {
+      return Array.from(rows, (row: any) => {
         const columns = row.querySelectorAll('.ms-DetailsRow-cell');
-        return Array.from(columns, (column) => column.innerText);
+        return Array.from(columns, (column: any) => column.innerText);
       });
     });
 

@@ -1,11 +1,10 @@
-import { addDays, addMonths, addYears } from '@fluentui/date-time-utilities';
+import { addDays, addYears } from '@fluentui/date-time-utilities';
 import { DatePicker, DayOfWeek } from 'office-ui-fabric-react/lib-commonjs/DatePicker';
 import { getHours } from 'date-fns';
 
 const today = new Date();
 const yesterday = addDays(today, -1);
 const hour = getHours(new Date());
-// const minDate = addMonths(today, -2);
 const maxDate = addYears(today, 1);
 
 const DayPickerStrings = {
