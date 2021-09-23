@@ -4,7 +4,7 @@ import { useStoreState } from 'easy-peasy';
 import { Routes } from './pages/Routes';
 import { useQueryParams } from './hooks/useQueryParams';
 
-const getQueryParams = ({ QueryParamStore }) => QueryParamStore.data;
+const getQueryParams = ({ QueryParamStore }) => QueryParamStore.params;
 
 export const App: React.FC = (): React.ReactElement => {
   const history = useHistory();
@@ -12,12 +12,12 @@ export const App: React.FC = (): React.ReactElement => {
 
   const QueryParams = useQueryParams();
 
-  const data = useStoreState(getQueryParams);
+  const params = useStoreState(getQueryParams);
 
   useEffect(() => {
-    history.replace(QueryParams.merge(location, data));
+    history.replace(QueryParams.merge(location, params));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data.orgSid]);
+  }, [params.orgSid]);
 
   return <Routes />;
 };

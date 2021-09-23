@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 import { DefaultButton, IconButton } from '@fluentui/react/lib/Button';
 import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
+import { FontIcon } from '@fluentui/react/lib/Icon';
 import { Box, Row as LayoutRow, Column as LayoutColumn } from '../../../components/layouts';
 import { ButtonAction } from '../../../components/buttons/ButtonAction';
 // import { ButtonProfile } from '../../../components/buttons/ButtonProfile';
-import { ButtonIcon } from '../../../components/buttons/ButtonIcon';
 // import { Image } from '../../../components/images/Image';
 import { Text } from '../../../components/typography/Text';
 
@@ -23,7 +23,7 @@ export const StyledRow = styled(LayoutRow)`
     align-items: center;
     display: flex;
     padding: 0px 8px;
-    @media (max-width: 1137px) {
+    @media (max-width: 1400px) {
       padding: 0px 8px 0px 0px;
     }
   }
@@ -33,19 +33,19 @@ export const StyledColumn = styled(LayoutColumn)`
     align-items: center;
     display: flex;
     padding: ${({ noPadding }) => (noPadding ? '0px' : '0px 8px')};
-    @media (max-width: 1137px) {
+    @media (max-width: 1400px) {
       padding: 0;
     }
   }
 `;
 export const StyledColumnCont = styled(LayoutColumn)`
-  @media (max-width: 1137px) {
+  @media (max-width: 1400px) {
     width: 50%;
   }
 `;
 
 export const StyledColumnNav = styled(StyledColumn)`
-  @media (max-width: 1137px) {
+  @media (max-width: 1400px) {
     width: 15%;
   }
 
@@ -67,7 +67,7 @@ export const StyledColumnLogoL = styled(StyledColumn)`
   && {
     display: inline-block;
 
-    @media (max-width: 1137px) {
+    @media (max-width: 1400px) {
       display: none;
     }
   }
@@ -78,7 +78,7 @@ export const StyledColumnLogoR = styled(StyledColumn)`
     align-items: flex-start;
     display: none;
 
-    @media (max-width: 1137px) {
+    @media (max-width: 1400px) {
       width: 70%;
       display: ${({ collapse }) => (collapse ? 'inline-block' : 'none')};
     }
@@ -89,7 +89,7 @@ export const StyledTitle = styled(Text)`
   font: ${({ theme }) => theme.fontStyles.headerTitle};
   color: ${({ theme }) => theme.colors.white};
   /* max-width: 20vw; */
-  @media (max-width: 1137px) {
+  @media (max-width: 1400px) {
     font-size: 15px;
   }
 `;
@@ -104,14 +104,17 @@ export const StyledButtonProfile = styled(ButtonAction)`
   }
 `;
 
-export const StyledButtonIcon = styled(ButtonIcon)`
+export const StyledIconButton = styled(IconButton)`
   && {
     border: none !important;
     color: ${({ theme }) => theme.colors.white};
     padding: 0px 8px;
     min-width: 0px;
-    @media (max-width: 480px) {
-      display: none;
+
+    &:hover,
+    &.is-expanded {
+      background: ${({ theme }) => theme.colors.white} !important;
+      color: ${({ theme }) => theme.colors.themePrimary} !important;
     }
   }
 `;

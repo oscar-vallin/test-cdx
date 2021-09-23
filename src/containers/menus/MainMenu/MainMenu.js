@@ -14,7 +14,6 @@ import { getRouteByApiId } from '../../../data/constants/RouteConstants';
 import { OutsideComponent } from './OutsideComponent';
 import { useActiveDomainStore } from '../../../store/ActiveDomainStore';
 
-// CardSection is called directly cause a restriction warning for that component.
 const MainMenu = ({ id = '__MainMenu', left, changeCollapse }) => {
   const ActiveDomainStore = useActiveDomainStore();
   const history = useHistory();

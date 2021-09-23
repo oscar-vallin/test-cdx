@@ -9,7 +9,7 @@ import { useQueryParams } from './useQueryParams';
 //
 export const useTableFilters = (placeholder) => {
   const QueryParams = useQueryParams();
-  const data = useStoreState(({ QueryParamStore }) => QueryParamStore.data);
+  const params = useStoreState(({ QueryParamStore }) => QueryParamStore.params);
 
   const history = useHistory();
   const location = useLocation();
@@ -61,7 +61,7 @@ export const useTableFilters = (placeholder) => {
   useEffect(() => {
     pushQueryString();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [localInput.value, startDate.value, endDate.value, data.orgSid]);
+  }, [localInput.value, startDate.value, endDate.value, params.orgSid]);
 
   return {
     localInput,

@@ -13,7 +13,7 @@ export const StyledCard = styled(Card)`
 export const StyledRow = styled(LayoutRow)`
   && {
     padding: 0px 8px;
-    @media (max-width: 1137px) {
+    @media (max-width: 1400px) {
       display: flex;
       flex-direction: column;
       z-index: 10000;
@@ -46,7 +46,7 @@ export const StyledMenuButton = styled(ButtonAction)`
     color: ${({ theme }) => theme.colors.neutralLight};
   }
 
-  @media (max-width: 1137px) {
+  @media (max-width: 1400px) {
     display: ${({ collapse }) => (collapse ? 'inline-block' : 'none')};
     font-size: 0.875rem;
   }
@@ -59,7 +59,7 @@ export const StyledButtonIcon = styled(ButtonIcon)`
     padding: 0px 8px;
     min-width: 0px;
     display: none;
-    @media (max-width: 1137px) {
+    @media (max-width: 1400px) {
       display: inline-block;
     }
   }

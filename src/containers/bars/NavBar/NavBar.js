@@ -1,9 +1,9 @@
 /* eslint-disable no-nested-ternary */
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { FontIcon } from '@fluentui/react/lib/Icon';
 import { ContextualMenuItemType } from '@fluentui/react/lib/ContextualMenu';
 
+import { IconButton } from '@fluentui/react/lib/Button';
 import { TooltipHost } from '@fluentui/react/lib/Tooltip';
 import { ProfileMenu } from '../../menus/ProfileMenu';
 
@@ -22,7 +22,7 @@ import {
   StyledColumnCont,
   StyledChoiceGroup,
   StyledButtonOrg,
-  StyledButton,
+  StyledIconButton,
 } from './NavBar.styles';
 
 import { useOrgSid } from '../../../hooks/useOrgSid';
@@ -59,17 +59,20 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSetti
     {
       key: 'SMALL',
       iconProps: { iconName: 'FontDecrease' },
-      label: 'Small font size',
+      text: 'Small font size',
+      onClick: () => updateThemeFontSize('SMALL'),
     },
     {
       key: 'MEDIUM',
       iconProps: { iconName: 'FontColorA' },
-      label: 'Medium font size (default)',
+      text: 'Medium font size (default)',
+      onClick: () => updateThemeFontSize('MEDIUM'),
     },
     {
       key: 'LARGE',
       iconProps: { iconName: 'FontIncrease' },
-      label: 'Large font size',
+      text: 'Large font size',
+      onClick: () => updateThemeFontSize('LARGE'),
     },
   ];
 
@@ -131,34 +134,8 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSetti
               })}
             />
 
-            <StyledChoiceGroup
-              selectedKey={ThemeStore.themes.current.themeFontSize}
-              options={settingsMenu.map(({ key, label, iconProps }, index) => ({
-                key,
-                label,
-                onRenderField: () => {
-                  return (
-                    <TooltipHost content={label} id={`tooltip-${index}`} calloutProps={{ gapSpace: 0 }}>
-                      <StyledButton
-                        disabled={isHandlingFontSize}
-                        className={ThemeStore.themes.current.themeFontSize === key ? 'selected' : ''}
-                        onClick={() => updateThemeFontSize(key)}
-                      >
-                        {isHandlingFontSize ? (
-                          ThemeStore.themes.current.themeFontSize === key ? (
-                            <Spinner size="xs" />
-                          ) : (
-                            <FontIcon iconName={iconProps.iconName} />
-                          )
-                        ) : (
-                          <FontIcon iconName={iconProps.iconName} />
-                        )}
-                      </StyledButton>
-                    </TooltipHost>
-                  );
-                },
-              }))}
-            />
+            <StyledIconButton iconProps={{ iconName: 'Font' }} title="Font sizes" menuProps={{ items: settingsMenu }} />
+
             <ProfileMenu onUserSettings={onUserSettings} />
           </StyledRow>
         </StyledColumnCont>
