@@ -51,7 +51,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "e2e": "react-scripts test --maxWorkers 1 --testPathPattern=.*e2e.test.js$",
-    "test:e2e": "start-server-and-test 'yarn start' http://localhost:3000 'yarn e2e'",
+    "test:e2e": "export TEST_URL=$npm_config_url && start-server-and-test 'yarn start' http://localhost:3000 'yarn e2e'",
     "test": "react-scripts test --verbose --updateSnapshot --transformIgnorePatterns \"node_modules/(?!react-ts)/\"",
     "test:local": "react-scripts test --verbose --updateSnapshot --transformIgnorePatterns \"node_modules/(?!react-ts)/\" --silent",
     "test:forbuild": "react-scripts test --coverage --watchAll=false --updateSnapshot --reporters=default --reporters=jest-junit --testPathIgnorePatterns \"^.+\\.e2e\\.test\\.(js|ts)\"",
@@ -172,7 +172,7 @@
     }
   },
   "jest-junit": {
-	"outputDirectory": "test-results",
-	"outputName": "junit.xml"
+    "outputDirectory": "test-results",
+    "outputName": "junit.xml"
   }
 }
