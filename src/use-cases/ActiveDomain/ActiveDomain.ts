@@ -53,8 +53,6 @@ export const useActiveDomainUseCase = () => {
         fetchDashNav({ variables: params });
         break;
       default:
-        fetchOrgNav();
-        fetchDashNav();
         break;
     }
   };

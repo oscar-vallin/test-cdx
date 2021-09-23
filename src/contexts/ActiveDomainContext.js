@@ -25,46 +25,45 @@ export const ActiveDomainContextProvider = ({ children }) => {
   });
 
   useEffect(() => {
-    const { isAuthenticated } = SessionStore.status;
     const { origin } = ActiveDomainStore.domainOrg;
 
-    if (isAuthenticated && origin.orgSid) {
+    if (SessionStore.user.token && origin.orgSid) {
       performNavUpdate({ orgSid: origin.orgSid, domain: 'DASHBOARD' });
 
       if (origin.type === 'ORGANIZATION') {
         performNavUpdate({ orgSid: origin.orgSid, domain: 'ORGANIZATION' });
       }
     }
-  }, [SessionStore.status, ActiveDomainStore.domainOrg.origin]);
+  }, [SessionStore.user.token, ActiveDomainStore.domainOrg.origin]);
 
   useEffect(() => {
     const { orgSid } = ActiveDomainStore.domainOrg.current;
 
-    if (orgSid) {
+    if (SessionStore.user.token && orgSid) {
       performCurrentOrgUpdate({ orgSid });
     }
-  }, [ActiveDomainStore.domainOrg.current.orgSid]);
+  }, [SessionStore.user.token, ActiveDomainStore.domainOrg.current.orgSid]);
 
   useEffect(() => {
     const { dashboard } = activeDomainState.nav;
 
-    if (dashboard.data && !dashboard.loading) {
+    if (dashboard.data) {
       ActiveDomainStore.setDashboardNav(dashboard.data.navigateToNewDomain.navItems.map(parseToStoreObj));
     }
-  }, [activeDomainState.nav.dashboard.loading]);
+  }, [activeDomainState.nav.dashboard.data]);
 
   useEffect(() => {
     const { admin } = activeDomainState.nav;
 
-    if (admin.data && !admin.loading) {
+    if (admin.data) {
       ActiveDomainStore.setAdminNav(admin.data.navigateToNewDomain.navItems.map(parseToStoreObj));
     }
-  }, [activeDomainState.nav.admin.loading]);
+  }, [activeDomainState.nav.admin.data]);
 
   useEffect(() => {
     const { currentOrg } = activeDomainState;
 
-    if (currentOrg.data && !currentOrg.loading) {
+    if (currentOrg.data) {
       const { currentOrgNav } = currentOrg.data;
 
       const subNavItems = currentOrg.data.currentOrgNav.subNavItems.map(parseToStoreObj);
@@ -75,7 +74,7 @@ export const ActiveDomainContextProvider = ({ children }) => {
         orgSid: subNavItems.find(({ label }) => label.includes(currentOrgNav.label))?.orgSid,
       });
     }
-  }, [activeDomainState.currentOrg.loading]);
+  }, [activeDomainState.currentOrg.data]);
 
   useEffect(() => {
     const { destination } = ActiveDomainStore.domainOrg.current;
