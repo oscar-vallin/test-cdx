@@ -1,4 +1,4 @@
-import { action, actionOn } from 'easy-peasy';
+import { action } from 'easy-peasy';
 
 const INITIAL_PARAMS = {
   orgSid: null,

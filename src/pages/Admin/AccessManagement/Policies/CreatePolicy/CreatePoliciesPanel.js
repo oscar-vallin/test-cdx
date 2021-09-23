@@ -133,7 +133,7 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
   };
 
   const onRenderItemColumn =
-    ({ itemColumndata, services, onServiceChange, onFacetChange, onVerbChange, permissionIndex }) =>
+    ({ itemColumndata, services, onServiceChange, permissionIndex }) =>
     (item, index, column) => {
       switch (column.key) {
         case 'service':
@@ -295,6 +295,7 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
               {state.permissions.length === 0 ? (
                 <MessageBar>No permissions added for this policy</MessageBar>
               ) : (
+                // Linter Issue: Login complexity > 15
                 state.permissions.map((permission, permissionIndex) => {
                   return (
                     <Spacing margin={{ top: 'normal' }} key={permissionIndex}>

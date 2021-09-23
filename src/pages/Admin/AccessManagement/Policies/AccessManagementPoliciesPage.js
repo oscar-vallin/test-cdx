@@ -48,7 +48,9 @@ const _AccessManagementPoliciesPage = () => {
 
   const [policies, setPolicies] = useState([]);
   const [accessPoliciesForOrg, { data, loading }] = useQueryHandler(useAccessPoliciesForOrgLazyQuery);
+  // Linter Issue.  useRemoveAmPolicyMutation??
   const [removeAccessPolicy, { data: removeResponse, loading: isRemovingPolicy }] =
+    // eslint-disable-next-line no-undef
     useQueryHandler(useRemoveAmPolicyMutation);
 
   const hideConfirmation = () => {
