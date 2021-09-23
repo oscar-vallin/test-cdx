@@ -1,10 +1,13 @@
 import puppeteer from 'puppeteer';
 
 describe('LoginPage.js', () => {
+  const url = process.env.TEST_URL || process.env.REACT_TEST_URL;
   let browser;
   let page;
   const email = 'joe.admin@example.com';
+  const wrongEmail = 'foo@bar.com';
   const password = 'changeBen21';
+  const wrongPassword = 'foobarpass';
 
   beforeAll(async () => {
     browser = await puppeteer.launch();
@@ -12,7 +15,7 @@ describe('LoginPage.js', () => {
   });
 
   it('contains the CDX DASHBOARD text', async () => {
-    await page.goto('http://localhost:3000');
+    await page.goto(url);
     await page.waitForSelector('#PageLogin');
     const text = await page.$eval('#PageLogin', (e) => e.textContent);
     expect(text).toContain('CDX DASHBOARD');
@@ -50,8 +53,39 @@ describe('LoginPage.js', () => {
     expect(loginButton).toContain('Login');
   });
 
+  it('Should render error message when email is not valid', async () => {
+    await page.goto(url);
+    await page.waitForSelector('#__FormLogin__Card__Row__Input-Email');
+    await page.type('#__FormLogin__Card__Row__Input-Email', wrongEmail);
+
+    await page.click('#__FormLogin__Card__Row__Column__Button--Button');
+
+    await page.waitForSelector('.ms-MessageBar-innerText');
+    const errorMessage = await page.$eval('.ms-MessageBar-innerText', (e) => e.textContent);
+
+    expect(errorMessage).toEqual('Please provide a valid email address to proceed');
+  });
+
+  it('Should render error message when password is not valid', async () => {
+    await page.goto(url);
+    await page.waitForSelector('#__FormLogin__Card__Row__Input-Email');
+    await page.type('#__FormLogin__Card__Row__Input-Email', email);
+
+    await page.click('#__FormLogin__Card__Row__Column__Button--Button');
+
+    await page.waitForSelector('#__FormLogin__Card__Row__Input-Password');
+    await page.type('#__FormLogin__Card__Row__Input-Password', wrongPassword);
+
+    await page.click('#__FormLogin__Card__Row__Column__Button--Button');
+
+    await page.waitForSelector('.ms-MessageBar-innerText');
+    const errorMessage = await page.$eval('.ms-MessageBar-innerText', (e) => e.textContent);
+
+    expect(errorMessage).toEqual('Invalid credentials');
+  });
+
   it('Fill credentials form and login', async () => {
-    await page.goto('http://localhost:3000');
+    await page.goto(url);
     await page.waitForSelector('#__FormLogin__Card__Row__Input-Email');
     await page.type('#__FormLogin__Card__Row__Input-Email', email);
 

@@ -1,19 +1,23 @@
+/* eslint-disable no-await-in-loop */
 import puppeteer from 'puppeteer';
+import { format, startOfTomorrow } from 'date-fns';
 
-describe('ArchivesPage.js', () => {
+describe('FileStatusPage.js', () => {
+  const url = process.env.TEST_URL || process.env.REACT_TEST_URL;
   let browser;
   let page;
   const email = 'joe.admin@example.com';
   const password = 'changeBen21';
+  const formattedDate = format(startOfTomorrow(), 'MM/dd/yyyy');
 
   beforeAll(async () => {
-    browser = await puppeteer.launch({ headless: false, slowMo: true });
+    browser = await puppeteer.launch();
     page = await browser.newPage();
     await page.setViewport({ width: 1920, height: 1080 });
   });
 
   it('Login', async () => {
-    await page.goto('http://localhost:3000');
+    await page.goto(url);
     await page.waitForSelector('#__FormLogin__Card__Row__Input-Email');
     await page.type('#__FormLogin__Card__Row__Input-Email', email);
 
@@ -33,6 +37,12 @@ describe('ArchivesPage.js', () => {
   it('Go to Exchage Status page', async () => {
     await page.waitForSelector('div[name="Exchange Statuses"]');
     await page.click('div[name="Exchange Statuses"]');
+  });
+
+  it('Click on File Status', async () => {
+    await page.waitForTimeout(1000);
+    await page.waitForSelector('#__MainMenu__MainMenu__Row-file-status-1');
+    await page.click('#__MainMenu__MainMenu__Row-file-status-1');
   });
 
   it('Table Should have 1 row', async () => {
@@ -70,9 +80,9 @@ describe('ArchivesPage.js', () => {
     await page.waitForTimeout(1000);
 
     const result = await page.$$eval('.ms-DetailsRow-fields', (rows) => {
-      return Array.from(rows, (row) => {
+      return Array.from(rows, (row: any) => {
         const columns = row.querySelectorAll('.ms-DetailsRow-cell');
-        return Array.from(columns, (column) => column.innerText);
+        return Array.from(columns, (column: any) => column.innerText);
       });
     });
 
@@ -92,9 +102,9 @@ describe('ArchivesPage.js', () => {
     await page.waitForTimeout(1000);
 
     const result = await page.$$eval('.ms-DetailsRow-fields', (rows) => {
-      return Array.from(rows, (row) => {
+      return Array.from(rows, (row: any) => {
         const columns = row.querySelectorAll('.ms-DetailsRow-cell');
-        return Array.from(columns, (column) => column.innerText);
+        return Array.from(columns, (column: any) => column.innerText);
       });
     });
 
@@ -114,9 +124,9 @@ describe('ArchivesPage.js', () => {
     await page.waitForTimeout(1000);
 
     const result = await page.$$eval('.ms-DetailsRow-fields', (rows) => {
-      return Array.from(rows, (row) => {
+      return Array.from(rows, (row: any) => {
         const columns = row.querySelectorAll('.ms-DetailsRow-cell');
-        return Array.from(columns, (column) => column.innerText);
+        return Array.from(columns, (column: any) => column.innerText);
       });
     });
 
@@ -126,13 +136,13 @@ describe('ArchivesPage.js', () => {
   it('Read table first item', async () => {
     await page.waitForTimeout(1000);
     const result = await page.$$eval('.ms-DetailsRow-fields', (rows) => {
-      return Array.from(rows, (row) => {
+      return Array.from(rows, (row: any) => {
         const columns = row.querySelectorAll('.ms-DetailsRow-cell');
-        return Array.from(columns, (column) => column.innerText);
+        return Array.from(columns, (column: any) => column.innerText);
       });
     });
 
-    expect(result[0][0]).toContain('09/20/2021 12:00 AM');
+    expect(result[0][0]).toContain(`${formattedDate} 12:00 AM`);
   });
 
   afterAll(() => browser.close());

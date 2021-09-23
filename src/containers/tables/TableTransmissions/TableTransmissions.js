@@ -51,7 +51,7 @@ const TableTransmissions = ({
             <StyledRow>
               <Column lg="6">
                 <Label>Search</Label>
-                <InputText id={`${idPage}__Card__Row__Input-Email`} autoFocus disabled={false} {...localInput} />
+                <InputText id={`${idPage}__Card__Row__Input-Search`} autoFocus disabled={false} {...localInput} />
               </Column>
               <Column lg="6">
                 <InputDateRange startDate={startDate} endDate={endDate} />
