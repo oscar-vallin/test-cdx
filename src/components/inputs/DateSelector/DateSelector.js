@@ -2,7 +2,6 @@ import { addYears } from '@fluentui/date-time-utilities';
 import { DatePicker, DayOfWeek } from 'office-ui-fabric-react/lib-commonjs/DatePicker';
 
 const today = new Date(Date.now());
-// const minDate = addMonths(today, -1);
 const maxDate = addYears(today, 1);
 
 const DayPickerStrings = {
