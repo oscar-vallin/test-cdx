@@ -1,5 +1,4 @@
 import { Button } from '../../../components/buttons/Button';
-import { CardSection } from '../../../components/cards';
 import { InputText } from '../../../components/inputs/InputText';
 import { Row, Column } from '../../../components/layouts';
 import { Spacing } from '../../../components/spacings/Spacing';
@@ -38,7 +37,7 @@ const PasswordChange = ({ state, validations = [], onChange }) => {
   });
 
   return (
-    <CardSection>
+    <>
       <StyledTitle>Change password</StyledTitle>
 
       <Row>
@@ -124,7 +123,7 @@ const PasswordChange = ({ state, validations = [], onChange }) => {
           </Spacing>
         </Column>
       </Row>
-    </CardSection>
+    </>
   );
 };
 

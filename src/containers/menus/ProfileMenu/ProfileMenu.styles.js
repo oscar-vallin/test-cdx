@@ -58,9 +58,3 @@ export const StyledTitle = styled(Text)`
   font: ${({ theme }) => theme.fontStyles.logo};
   width: 100%;
 `;
-
-export const Stylesheet = {
-  CardSection: {
-    padding: '15px',
-  },
-};

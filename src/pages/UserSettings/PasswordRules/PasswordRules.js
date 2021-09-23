@@ -7,7 +7,6 @@ import _ from 'lodash';
 import { List } from '@fluentui/react';
 import { useChangeOwnPasswordPageQuery } from '../../../data/services/graphql';
 
-import { CardSection } from '../../../components/cards';
 import { Spacing } from '../../../components/spacings/Spacing';
 import { Spinner } from '../../../components/spinners/Spinner';
 
@@ -168,7 +167,7 @@ const PasswordRules = ({ validations, password, onChange }) => {
   useEffect(() => onChange(validateRulesArr(password, rules)), [password, rules]);
 
   return (
-    <CardSection>
+    <>
       <StyledTitle>Password rules</StyledTitle>
 
       <Spacing margin={{ top: 'normal' }}>
@@ -180,7 +179,7 @@ const PasswordRules = ({ validations, password, onChange }) => {
           <List items={validations} onRenderCell={onRenderCell} />
         )}
       </Spacing>
-    </CardSection>
+    </>
   );
 };
 

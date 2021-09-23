@@ -9,13 +9,17 @@ import { Text } from '../../../components/typography/Text';
 export const StyledBox = styled(Box)`
   display: flex;
   justify-content: center;
+  min-width: 300px;
+  max-width: 530px;
+  width: 45vw;
 `;
 
 export const StyledCard = styled(Card)`
   margin: 0 auto;
-  max-width: 530px;
-  width: 100%;
   padding-bottom: 30px;
+  min-width: 300px;
+  max-width: 530px;
+  width: 45vw;
 `;
 
 export const StyledRow = styled(LayoutRow)`
@@ -28,10 +32,6 @@ export const StyledRow = styled(LayoutRow)`
 
 export const StyledRowBottom = styled(LayoutRow)`
   && {
-    width: 45vw;
-    max-width: 500px;
-    min-width: 300px;
-
     margin-bottom: ${({ marginBottom }) => (marginBottom ? `${marginBottom}px` : '15px')};
 
     padding: 0px 8px;
@@ -67,9 +67,3 @@ export const StyledTitle = styled(Text)`
     font-size: 1.875rem;
   }
 `;
-
-export const Stylesheet = {
-  CardSection: {
-    padding: '15px',
-  },
-};

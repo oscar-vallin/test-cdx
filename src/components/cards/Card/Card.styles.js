@@ -1,18 +1,25 @@
 import styled from 'styled-components';
-import { Card as uiFabricCard } from '@uifabric/react-cards';
+import { DocumentCard } from '@fluentui/react/lib/DocumentCard';
 
-export const CardStyled = styled(uiFabricCard)`
+export const CardStyled = styled(DocumentCard)`
   background: ${({ theme }) => theme.colors.neutralLighter};
   box-shadow: ${({ theme, elevation }) => theme.boxShadows[elevation]};
-  cursor: ${({ onClick }) => (onClick ? 'pointer' : 'normal')};
+  border: none;
+  font: ${({ theme }) => theme.fontStyles.normal};
   min-width: unset;
   max-width: unset;
   padding: ${({ theme, spacing }) => theme.spacing[spacing]};
   width: 100%;
-`;
 
-export const Stylesheet = {
-  CardSection: {
-    width: '100%',
-  },
-};
+  &:hover {
+    cursor: ${({ onClick }) => (onClick ? 'pointer' : 'auto')};
+  }
+
+  .ms-DocumentCard {
+    &:hover {
+      &::after {
+        border: none;
+      }
+    }
+  }
+`;
