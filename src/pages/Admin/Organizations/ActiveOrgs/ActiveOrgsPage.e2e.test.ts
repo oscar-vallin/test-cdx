@@ -1,6 +1,6 @@
 import puppeteer from 'puppeteer';
 
-describe('AcriveOrgsPage.js', () => {
+describe('ActiveOrgsPage.js', () => {
   const url = process.env.TEST_URL || process.env.REACT_TEST_URL;
   let browser;
   let page;
