@@ -102,5 +102,32 @@ describe('LoginPage.js', () => {
     expect(loginButton).toContain('Exchange Statuses');
   });
 
+  it('Logout and check requests', async () => {
+    await page.waitForSelector('#__UserToken');
+    await page.click('#__UserToken');
+
+    await page.waitForTimeout(1000);
+
+    await page.waitForSelector('#__Logout_button');
+    await page.click('#__Logout_button');
+
+    await page.setRequestInterception(true);
+    await page.on('request', (request) => {
+      const serviceName = JSON.parse(request._postData)?.operationName;
+      if (serviceName === 'CurrentOrgNav' || serviceName === 'UserTheme' || serviceName === 'NavigateToNewDomain') {
+        request.continue();
+      } else {
+        request.abort();
+      }
+    });
+  });
+
+  it('check login page', async () => {
+    await page.waitForTimeout(3000);
+    await page.waitForSelector('#PageLogin');
+    const text = await page.$eval('#PageLogin', (e) => e.textContent);
+    expect(text).toContain('CDX DASHBOARD');
+  });
+
   afterAll(() => browser.close());
 });
