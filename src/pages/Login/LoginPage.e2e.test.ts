@@ -8,10 +8,21 @@ describe('LoginPage.js', () => {
   const password = process.env.REACT_E2E_PASS_CREDENTIALS_LOGIN;
   const wrongEmail = 'foo@bar.com';
   const wrongPassword = 'foobarpass';
+  let isLogout = false;
+  let assert: string;
 
   beforeAll(async () => {
     browser = await puppeteer.launch();
     page = await browser.newPage();
+  });
+
+  afterEach(async () => {
+    if (isLogout) {
+      await page.on('request', (request: any) => {
+        assert = JSON.parse(request._postData)?.operationName;
+      });
+      expect(['CurrentOrgNav', 'UserTheme', 'NavigateToNewDomain'].includes(assert)).toBeFalsy();
+    }
   });
 
   it('contains the CDX DASHBOARD text', async () => {
@@ -103,6 +114,7 @@ describe('LoginPage.js', () => {
   });
 
   it('Logout and check requests', async () => {
+    isLogout = true;
     await page.waitForSelector('#__UserToken');
     await page.click('#__UserToken');
 
@@ -110,16 +122,6 @@ describe('LoginPage.js', () => {
 
     await page.waitForSelector('#__Logout_button');
     await page.click('#__Logout_button');
-
-    await page.setRequestInterception(true);
-    await page.on('request', (request) => {
-      const serviceName = JSON.parse(request._postData)?.operationName;
-      if (serviceName === 'CurrentOrgNav' || serviceName === 'UserTheme' || serviceName === 'NavigateToNewDomain') {
-        request.continue();
-      } else {
-        request.abort();
-      }
-    });
   });
 
   it('check login page', async () => {
