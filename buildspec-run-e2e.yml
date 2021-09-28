@@ -1,0 +1,40 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo update npm...
+      - npm install -g n
+      - n latest
+      - npm update -g npm
+      - echo node -v
+      - node -v
+      - echo npm -v
+      - npm -v
+      - echo install yarn...
+      - npm install -g yarn
+      - echo yarn -v
+      - yarn -v
+  pre_build:
+    commands:
+      - echo Installing source NPM dependencies...
+      - yarn install
+      - echo updating the environment variable
+      - echo SKIP_PREFLIGHT_CHECK=true > .env
+      - echo REACT_APP_API_SERVER='https://x2-terraform-loadbalancer.k2u.xyz/graphql/' >> .env
+      - echo REACT_TEST_URL = 'https://x2-terraform-loadbalancer.k2u.xyz' >> .env
+      - echo REACT_E2E_USER_CREDENTIALS_LOGIN = 'joe.admin@example.com' >> .env
+      - echo REACT_E2E_PASS_CREDENTIALS_LOGIN = 'changeBen21' >> .env
+  build:
+    commands:
+      - echo Started on `date`
+      - yarn test:e2e
+  post_build:
+    commands:
+    - echo Build completed on `date`
+reports:
+  jest:
+    files:
+      - '*.xml'
+    base-directory: 'test-results'
+    file-format: JUNITXML
