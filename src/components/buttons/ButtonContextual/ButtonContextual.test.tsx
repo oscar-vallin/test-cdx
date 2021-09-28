@@ -37,4 +37,13 @@ describe('ButtonContextual', () => {
     );
     expect(wrapper.contains(<div className="children" />)).toEqual(true);
   });
+
+  it('Test styled ButtonContextual component', () => {
+    const wrapper = shallow(
+      <ButtonContextual>
+        <div className="children" />
+      </ButtonContextual>
+    ).dive();
+    expect(wrapper).toMatchSnapshot();
+  });
 });

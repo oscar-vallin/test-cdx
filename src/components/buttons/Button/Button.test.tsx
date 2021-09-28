@@ -10,6 +10,10 @@ const defaultProps = {
   onClick: jest.fn(),
 };
 
+const theme = {
+  colors: { themePrimary: '#fff', custom: { error: '#000  ' } },
+};
+
 describe('Button Testing Unit...', () => {
   const mockFn = jest.fn();
   const tree = shallow(<Button {...defaultProps} onClick={mockFn}></Button>);
@@ -43,8 +47,13 @@ describe('Button Testing Unit...', () => {
   });
 
   it("Can't click when button is disabled", () => {
-    const tree = shallow(<Button {...defaultProps} disabled={true}></Button>);
+    const tree = shallow(<Button {...defaultProps} theme={theme} disabled={true}></Button>);
     tree.simulate('click');
     expect(mockFn).not.toHaveBeenCalled();
+  });
+
+  it('Test styled Button component', () => {
+    const wrapper = shallow(<Button {...defaultProps} theme={theme} />).dive();
+    expect(wrapper).toMatchSnapshot();
   });
 });

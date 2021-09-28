@@ -6,6 +6,10 @@ const defaultProps = {
   onClick: () => null,
 };
 
+const theme = {
+  colors: { themePrimary: '#fff' },
+};
+
 describe('ButtonAction', () => {
   const mockFn = jest.fn();
   const tree = shallow(
@@ -42,5 +46,14 @@ describe('ButtonAction', () => {
       </ButtonAction>
     );
     expect(wrapper.contains(<div className="children" />)).toEqual(true);
+  });
+
+  it('Test styled ButtonAction component', () => {
+    const wrapper = shallow(
+      <ButtonAction {...defaultProps} theme={theme}>
+        <div className="children" />
+      </ButtonAction>
+    ).dive();
+    expect(wrapper).toMatchSnapshot();
   });
 });
