@@ -14,7 +14,12 @@ phases:
       - echo yarn -v
       - yarn -v
       - yum install -y amazon-linux-extras
-      - /usr/bin/amazon-linux-extras install epel -y
+      - ls -l /usr/bin | grep amazon
+      - ls -l /lib/python2.7/site-packages |grep amazon
+      - ls -l ~/.pyenv/versions/3.9.5/lib
+      - ls -l /root/.pyenv/versions/3.9.5/lib
+      #- ln -s /lib/python2.7/site-packages/amazon_linux_extras ~/.pyenv/versions/3.9.5/lib/python3.9/site-packages/
+      #- /usr/bin/amazon-linux-extras install epel -y
       - yum install -y chromium
   pre_build:
     commands:
