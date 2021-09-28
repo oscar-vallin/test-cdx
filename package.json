@@ -51,7 +51,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "e2e": "react-scripts test --maxWorkers 1 --testPathPattern=.*e2e.test.ts$",
-    "test:e2e": "react-scripts test --maxWorkers 1 --testPathPattern=.*e2e.test.ts$",
+    "test:e2e": "react-scripts test --maxWorkers 1 --testPathPattern=.*e2e.test.ts$ --watchAll=false --reporters=default --reporters=jest-junit ",
     "test:e2e:local": "export TEST_URL=$npm_config_url && start-server-and-test 'yarn start' http://localhost:3000 'yarn e2e'",
     "test:e2e:url": "REACT_TEMP_URL=\"$npm_config_url\" && echo \"Parsing: $REACT_TEMP_URL\" && npm run e2e",
     "test": "react-scripts test --verbose --updateSnapshot --transformIgnorePatterns \"node_modules/(?!react-ts)/\"",
