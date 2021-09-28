@@ -17,7 +17,7 @@ const generateColumns = () => {
   return [createColumn({ name: 'Client Name', key: 'name' }), createColumn({ name: 'Last Activity', key: 'activity' })];
 };
 
-const TableActivity = ({ items, loading, tableName, color }) => {
+const TableActivity = ({ id, items, loading, tableName, color }) => {
   const columns = generateColumns();
   const [sortedItems, setSortedItems] = useState('initialState');
 
@@ -44,7 +44,7 @@ const TableActivity = ({ items, loading, tableName, color }) => {
   }, []);
 
   return (
-    <Row>
+    <Row id={id}>
       <Column>
         <TableName variant="bold" color={color}>
           {tableName}

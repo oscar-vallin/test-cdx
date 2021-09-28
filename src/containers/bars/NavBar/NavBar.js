@@ -98,6 +98,7 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSetti
         <StyledColumnCont id={`${id}__Col-Right`} sm={4} right container>
           <StyledRow id={`${id}__Right_Row`} right>
             <StyledButtonOrg
+              id="__Organization__Button"
               text={ActiveDomainStore.domainOrg.current.label}
               {...(ActiveDomainStore.domainOrg.current.subNavItems.length > 1 && {
                 menuProps: {
@@ -119,6 +120,7 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSetti
                           .concat([
                             { key: 'DIVIDER', itemType: ContextualMenuItemType.Divider },
                             {
+                              id: '__Return__Organization',
                               key: 'MAIN_ORG',
                               text: 'Return to my organization',
                               onClick: () => {

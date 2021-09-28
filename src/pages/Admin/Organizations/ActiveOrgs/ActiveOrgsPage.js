@@ -60,7 +60,11 @@ const _ActiveOrgsPage = () => {
   const onRenderItemColumn = (item, index, column) => {
     if (column.key === 'name') {
       return (
-        <Link to={`/admin/organizations/active-orgs?orgSid=${item.sid}`} onClick={() => changeActiveOrg(item)}>
+        <Link
+          id={`__ActiveOrg__Name_Field_${index + 1}`}
+          to={`/admin/organizations/active-orgs?orgSid=${item.sid}`}
+          onClick={() => changeActiveOrg(item)}
+        >
           {item[column.key]}
         </Link>
       );

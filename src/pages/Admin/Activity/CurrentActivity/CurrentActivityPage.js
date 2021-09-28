@@ -13,7 +13,9 @@ export const CurrentActivityPage = ({ id = 'CurrentActivity' }) => {
         <Row>
           <Column lg="4">
             <Spacing margin={{ top: 'small' }}>
-              <Text variant="bold">Current Activity</Text>
+              <Text id="__Current_Activity_Text" variant="bold">
+                Current Activity
+              </Text>
             </Spacing>
           </Column>
         </Row>

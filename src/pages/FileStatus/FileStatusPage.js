@@ -23,8 +23,10 @@ const _FileStatusPage = () => {
             <Row>
               <Column lg="6" direction="row">
                 <FontIcon iconName="FilterSolid" />
-                <Text variant="bold">File Status</Text>
-                <Text>&nbsp; — Advanced search</Text>
+                <Text id="__Text_File-Status" variant="bold">
+                  File Status
+                </Text>
+                <Text id="__Text_Advanced-search">&nbsp; — Advanced search</Text>
               </Column>
               <Column lg="6" right>
                 <Text right>

@@ -6,8 +6,8 @@ describe('ErrorsPage.js', () => {
   const url = process.env.TEST_URL || process.env.REACT_TEST_URL;
   let browser;
   let page;
-  const email = 'joe.admin@example.com';
-  const password = 'changeBen21';
+  const email = process.env.REACT_E2E_USER_CREDENTIALS_LOGIN;
+  const password = process.env.REACT_E2E_PASS_CREDENTIALS_LOGIN;
   const formattedDate = format(startOfTomorrow(), 'MM/dd/yyyy');
 
   beforeAll(async () => {
