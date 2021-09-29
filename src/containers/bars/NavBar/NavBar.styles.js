@@ -1,11 +1,8 @@
 import styled from 'styled-components';
 import { DefaultButton, IconButton } from '@fluentui/react/lib/Button';
 import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
-import { FontIcon } from '@fluentui/react/lib/Icon';
 import { Box, Row as LayoutRow, Column as LayoutColumn } from '../../../components/layouts';
 import { ButtonAction } from '../../../components/buttons/ButtonAction';
-// import { ButtonProfile } from '../../../components/buttons/ButtonProfile';
-// import { Image } from '../../../components/images/Image';
 import { Text } from '../../../components/typography/Text';
 
 export const StyledBox = styled(Box)`

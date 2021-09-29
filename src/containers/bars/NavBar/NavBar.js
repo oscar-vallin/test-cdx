@@ -3,14 +3,11 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { ContextualMenuItemType } from '@fluentui/react/lib/ContextualMenu';
 
-import { IconButton } from '@fluentui/react/lib/Button';
-import { TooltipHost } from '@fluentui/react/lib/Tooltip';
 import { ProfileMenu } from '../../menus/ProfileMenu';
 
 import { MainMenu } from '../../menus/MainMenu';
 import { useCurrentUserTheme } from '../../../hooks/useCurrentUserTheme';
 import { useNotification } from '../../../hooks/useNotification';
-import { Spinner } from '../../../components/spinners/Spinner';
 
 import {
   StyledBox,
@@ -20,7 +17,6 @@ import {
   StyledColumnNav,
   StyledColumnLogoL,
   StyledColumnCont,
-  StyledChoiceGroup,
   StyledButtonOrg,
   StyledIconButton,
 } from './NavBar.styles';
@@ -39,7 +35,7 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSetti
   const authData = SessionStore.user;
 
   const [collapse, setCollapse] = useState('false');
-  const { setOwnDashFontSize, isHandlingFontSize } = useCurrentUserTheme();
+  const { setOwnDashFontSize } = useCurrentUserTheme();
 
   const { setOrgSid } = useOrgSid();
 

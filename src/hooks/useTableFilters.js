@@ -44,15 +44,15 @@ export const useTableFilters = (placeholder) => {
   const addParamIfExists = (key, value) => (key ? { [key]: value } : {});
 
   const pushQueryString = () => {
-    const params = {
+    const xParams = {
       ...addParamIfExists('filter', localInput.value),
       ...addParamIfExists('startDate', format(startDate.value, 'yyyy-MM-dd')),
       ...addParamIfExists('endDate', format(endDate.value, 'yyyy-MM-dd')),
     };
 
-    location.search = QueryParams.stringify(params);
+    location.search = QueryParams.stringify(xParams);
 
-    history.replace(QueryParams.merge(location, params));
+    history.replace(QueryParams.merge(location, xParams));
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
