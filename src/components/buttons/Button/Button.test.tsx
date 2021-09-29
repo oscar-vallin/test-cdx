@@ -1,13 +1,18 @@
 import { shallow } from 'enzyme';
 import { Button } from './Button.js';
 
-const defaultProps = {
-  id: '__Button',
+const baseProps = {
   text: 'Button Text',
   children: null,
+  onClick: jest.fn(),
+};
+
+const defaultProps = {
+  ...baseProps,
+  id: '__Button',
   variant: 'secondary',
   disabled: false,
-  onClick: jest.fn(),
+  block: false,
 };
 
 const theme = {
@@ -42,18 +47,31 @@ describe('Button Testing Unit...', () => {
   });
 
   it('Should have a children when it is passed', () => {
-    const tree = shallow(<Button {...defaultProps} text={null} children={<p>Text Children</p>}></Button>);
-    expect(tree.children().text()).toEqual('Text Children');
+    const defaultTree = shallow(<Button {...defaultProps} text={null} children={<p>Text Children</p>}></Button>);
+    expect(defaultTree.children().text()).toEqual('Text Children');
   });
 
   it("Can't click when button is disabled", () => {
-    const tree = shallow(<Button {...defaultProps} theme={theme} disabled={true}></Button>);
-    tree.simulate('click');
+    const defaultTree = shallow(<Button {...defaultProps} theme={theme} disabled={true}></Button>);
+    defaultTree.simulate('click');
     expect(mockFn).not.toHaveBeenCalled();
   });
 
   it('Test styled Button component', () => {
     const wrapper = shallow(<Button {...defaultProps} theme={theme} />).dive();
     expect(wrapper).toMatchSnapshot();
+  });
+
+  it('Default props values, Should have a props', () => {
+    const baseTree = shallow(<Button {...baseProps}></Button>);
+    expect(baseTree.props().id).toEqual('__Button');
+    expect(baseTree.props().variant).toEqual('secondary');
+    expect(baseTree.props().disabled).toBeFalsy();
+    expect(baseTree.props().block).toBeFalsy();
+  });
+
+  it('Styled variants, coverate theme.', () => {
+    const baseTree = shallow(<Button {...baseProps} block={true} theme={theme} variant="primary"></Button>).dive();
+    expect(baseTree).toMatchSnapshot();
   });
 });
