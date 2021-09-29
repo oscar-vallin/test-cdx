@@ -21,7 +21,7 @@ const ProfileMenu = ({ id = '__ProfileMenu', onUserSettings }) => {
         onUserSettings();
       },
     },
-    { key: 'ProfileMenu_Logout', text: 'Logout', onClick: performUserLogout },
+    { id: '__Logout_button', key: 'ProfileMenu_Logout', text: 'Logout', onClick: performUserLogout },
   ];
 
   // Render
