@@ -62,6 +62,7 @@ const _ActiveOrgsPage = () => {
       return (
         <Link
           id={`__ActiveOrg__Name_Field_${index + 1}`}
+          className={item.orgId}
           to={`/admin/organizations/active-orgs?orgSid=${item.sid}`}
           onClick={() => changeActiveOrg(item)}
         >
@@ -99,7 +100,9 @@ const _ActiveOrgsPage = () => {
         <Row>
           <Column lg="4">
             <Spacing margin={{ top: 'small' }}>
-              <Text variant="bold">Active orgs</Text>
+              <Text id="__Page-Title" variant="bold">
+                Active orgs
+              </Text>
             </Spacing>
           </Column>
         </Row>
