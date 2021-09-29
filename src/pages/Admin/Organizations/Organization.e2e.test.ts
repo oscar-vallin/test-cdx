@@ -10,7 +10,6 @@ describe('E2E - Organization Navigation Test', () => {
 
   beforeAll(async () => {
     browser = await puppeteer.launch({
-      headless: false,
       args: ['--no-sandbox'],
     });
     page = await browser.newPage();
