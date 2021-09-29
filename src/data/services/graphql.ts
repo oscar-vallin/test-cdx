@@ -903,6 +903,33 @@ export type PasswordRuleGroup = {
   rules?: Maybe<Array<Maybe<PasswordRule>>>;
 };
 
+export type PasswordRuleSet = {
+  __typename?: 'PasswordRuleSet';
+  mustNotContainWhiteSpace?: Maybe<Scalars['Boolean']>;
+  mustNotContainUserName?: Maybe<Scalars['Boolean']>;
+  mustNotContainNumericSequence?: Maybe<Scalars['Boolean']>;
+  minLength?: Maybe<Scalars['Int']>;
+  maxLength?: Maybe<Scalars['Int']>;
+  minUpperCaseLetters?: Maybe<Scalars['Int']>;
+  minLowerCaseLetters?: Maybe<Scalars['Int']>;
+  minNumericDigits?: Maybe<Scalars['Int']>;
+  minSpecialCharacters?: Maybe<Scalars['Int']>;
+  maxAllowedRepeatedChars?: Maybe<Scalars['Int']>;
+  minPasswordHistoryVariations?: Maybe<Scalars['Int']>;
+  mustNotMatchExactDictionaryWord?: Maybe<Scalars['Boolean']>;
+  mustNotMatchPartialDictionaryWord?: Maybe<Scalars['Boolean']>;
+};
+
+export type PasswordRules = {
+  __typename?: 'PasswordRules';
+  mustAlwaysBeMet?: Maybe<PasswordRuleSet>;
+  someMustBeMet?: Maybe<PasswordRuleSet>;
+  autoLockAccount?: Maybe<Scalars['Boolean']>;
+  autoLockAfterFailedAttempts?: Maybe<Scalars['Int']>;
+  autoUnlockAccount?: Maybe<Scalars['Boolean']>;
+  autoUnlockAccountDelayMinutes?: Maybe<Scalars['Int']>;
+};
+
 export type PasswordStrengthRule = {
   __typename?: 'PasswordStrengthRule';
   requiredStrengthLevel: Scalars['Int'];
@@ -1010,6 +1037,7 @@ export type QualityChecks = {
 
 export type Query = {
   __typename?: 'Query';
+  version?: Maybe<Scalars['String']>;
   beginLogin?: Maybe<LoginStep>;
   logOut?: Maybe<LogOutInfo>;
   exchangeActivityInProcess?: Maybe<OrganizationLinkConnection>;
@@ -1025,7 +1053,6 @@ export type Query = {
   currentOrgNav?: Maybe<WebNav>;
   userTheme?: Maybe<DashTheme>;
   findUserByEmail?: Maybe<UserAccount>;
-  findUser?: Maybe<UserAccount>;
   userAccountForm?: Maybe<UserAccountForm>;
   findUserAccount?: Maybe<UserAccountForm>;
   accessPolicy?: Maybe<AccessPolicy>;
@@ -1131,11 +1158,6 @@ export type QueryUserThemeArgs = {
 
 export type QueryFindUserByEmailArgs = {
   userEmail: Scalars['String'];
-};
-
-
-export type QueryFindUserArgs = {
-  ownedInputSid?: Maybe<OwnedInputSid>;
 };
 
 
@@ -1637,7 +1659,8 @@ export type UpdateSpecializationFilterInput = {
 };
 
 export type UpdateUserAccessPolicyGroupsInput = {
-  accessPolicyGroupIds?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  userAccountSid: Scalars['ID'];
+  accessPolicyGroupSids?: Maybe<Array<Maybe<Scalars['ID']>>>;
 };
 
 export type UpdateUserDashThemeInput = {
@@ -1702,13 +1725,6 @@ export type UserItem = {
   __typename?: 'UserItem';
   item: UserAccount;
   listItemCommands?: Maybe<Array<Maybe<WebCommand>>>;
-};
-
-export type UserPageInfo = {
-  __typename?: 'UserPageInfo';
-  model?: Maybe<UserAccount>;
-  cdxPageInfo?: Maybe<CdxPageInfo>;
-  accessPolicyGroupConnection?: Maybe<AccessPolicyGroupConnection>;
 };
 
 export type UserResponse = {
@@ -1990,30 +2006,6 @@ export type StatInFragmentFragment = (
   & Pick<StatInt, 'prior' | 'value'>
 );
 
-type UnionPasswordRule_PasswordLengthRule_Fragment = (
-  { __typename: 'PasswordLengthRule' }
-  & Pick<PasswordLengthRule, 'minLength' | 'maxLength'>
-);
-
-type UnionPasswordRule_PasswordWhitespaceRule_Fragment = (
-  { __typename: 'PasswordWhitespaceRule' }
-  & Pick<PasswordWhitespaceRule, 'allowedWhitespace'>
-);
-
-type UnionPasswordRule_PasswordCharacterRule_Fragment = (
-  { __typename: 'PasswordCharacterRule' }
-  & Pick<PasswordCharacterRule, 'characterType' | 'numberOfCharacters'>
-);
-
-type UnionPasswordRule_PasswordStrengthRule_Fragment = (
-  { __typename: 'PasswordStrengthRule' }
-  & Pick<PasswordStrengthRule, 'requiredStrengthLevel'>
-);
-
-type UnionPasswordRule_PasswordRuleGroup_Fragment = { __typename: 'PasswordRuleGroup' };
-
-export type UnionPasswordRuleFragment = UnionPasswordRule_PasswordLengthRule_Fragment | UnionPasswordRule_PasswordWhitespaceRule_Fragment | UnionPasswordRule_PasswordCharacterRule_Fragment | UnionPasswordRule_PasswordStrengthRule_Fragment | UnionPasswordRule_PasswordRuleGroup_Fragment;
-
 export type FragmentWebPageFragment = (
   { __typename?: 'WebPage' }
   & Pick<WebPage, 'type'>
@@ -2111,39 +2103,12 @@ export type FragmentCdxPageInfoFragment = (
   )>>> }
 );
 
-export type FragmentUserPageInfoFragment = (
-  { __typename?: 'UserPageInfo' }
-  & { model?: Maybe<(
-    { __typename?: 'UserAccount' }
-    & Pick<UserAccount, 'sid' | 'email'>
-    & { person?: Maybe<(
-      { __typename?: 'Person' }
-      & Pick<Person, 'sid' | 'firstNm' | 'lastNm'>
-    )>, accessPolicyGroups?: Maybe<Array<Maybe<(
-      { __typename?: 'AccessPolicyGroup' }
-      & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs'>
-      & { policies?: Maybe<Array<Maybe<(
-        { __typename?: 'AccessPolicy' }
-        & FragmentAccessPolicyFragment
-      )>>> }
-    )>>> }
-  )>, cdxPageInfo?: Maybe<(
-    { __typename?: 'CDXPageInfo' }
-    & FragmentCdxPageInfoFragment
-  )>, accessPolicyGroupConnection?: Maybe<(
-    { __typename?: 'AccessPolicyGroupConnection' }
-    & { paginationInfo: (
-      { __typename?: 'PaginationInfo' }
-      & FragmentPaginationInfoFragment
-    ), nodes?: Maybe<Array<Maybe<(
-      { __typename?: 'AccessPolicyGroup' }
-      & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs'>
-      & { policies?: Maybe<Array<Maybe<(
-        { __typename?: 'AccessPolicy' }
-        & FragmentAccessPolicyFragment
-      )>>> }
-    )>>> }
-  )> }
+export type VersionQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type VersionQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'version'>
 );
 
 export type BeginLoginQueryVariables = Exact<{
@@ -2156,21 +2121,6 @@ export type BeginLoginQuery = (
   & { beginLogin?: Maybe<(
     { __typename?: 'LoginStep' }
     & Pick<LoginStep, 'userId' | 'step' | 'redirectPath' | 'allowLostPassword'>
-    & { loginCompleteDomain?: Maybe<(
-      { __typename?: 'WebAppDomain' }
-      & Pick<WebAppDomain, 'type' | 'selectedPage'>
-      & { navItems?: Maybe<Array<Maybe<(
-        { __typename?: 'WebNav' }
-        & FragmentWebNavFragment
-      )>>> }
-    )>, tokenUser?: Maybe<(
-      { __typename?: 'TokenUser' }
-      & Pick<TokenUser, 'token'>
-      & { session?: Maybe<(
-        { __typename?: 'UserSession' }
-        & Pick<UserSession, 'id' | 'orgId' | 'orgSid' | 'userId' | 'firstNm' | 'pollInterval' | 'defaultAuthorities'>
-      )> }
-    )> }
   )> }
 );
 
@@ -2451,22 +2401,6 @@ export type ChangeOwnPasswordPageQuery = (
     & { ruleGroup: (
       { __typename?: 'PasswordRuleGroup' }
       & Pick<PasswordRuleGroup, 'numberOfCharacteristics'>
-      & { rules?: Maybe<Array<Maybe<(
-        { __typename?: 'PasswordLengthRule' }
-        & UnionPasswordRule_PasswordLengthRule_Fragment
-      ) | (
-        { __typename?: 'PasswordWhitespaceRule' }
-        & UnionPasswordRule_PasswordWhitespaceRule_Fragment
-      ) | (
-        { __typename?: 'PasswordCharacterRule' }
-        & UnionPasswordRule_PasswordCharacterRule_Fragment
-      ) | (
-        { __typename?: 'PasswordStrengthRule' }
-        & UnionPasswordRule_PasswordStrengthRule_Fragment
-      ) | (
-        { __typename?: 'PasswordRuleGroup' }
-        & UnionPasswordRule_PasswordRuleGroup_Fragment
-      )>>> }
     ) }
   )> }
 );
@@ -2484,10 +2418,6 @@ export type CurrentUserQuery = (
       & Pick<WebAppDomain, 'type' | 'selectedPage'>
       & { navItems?: Maybe<Array<Maybe<(
         { __typename?: 'WebNav' }
-        & { subNavItems?: Maybe<Array<Maybe<(
-          { __typename?: 'WebNav' }
-          & FragmentWebNavFragment
-        )>>> }
         & FragmentWebNavFragment
       )>>> }
     )>, tokenUser?: Maybe<(
@@ -2546,30 +2476,6 @@ export type FindUserByEmailQueryVariables = Exact<{
 export type FindUserByEmailQuery = (
   { __typename?: 'Query' }
   & { findUserByEmail?: Maybe<(
-    { __typename?: 'UserAccount' }
-    & Pick<UserAccount, 'sid' | 'email'>
-    & { person?: Maybe<(
-      { __typename?: 'Person' }
-      & Pick<Person, 'sid' | 'firstNm' | 'lastNm'>
-    )>, accessPolicyGroups?: Maybe<Array<Maybe<(
-      { __typename?: 'AccessPolicyGroup' }
-      & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs'>
-      & { policies?: Maybe<Array<Maybe<(
-        { __typename?: 'AccessPolicy' }
-        & FragmentAccessPolicyFragment
-      )>>> }
-    )>>> }
-  )> }
-);
-
-export type FindUserQueryVariables = Exact<{
-  ownedInputSid?: Maybe<OwnedInputSid>;
-}>;
-
-
-export type FindUserQuery = (
-  { __typename?: 'Query' }
-  & { findUser?: Maybe<(
     { __typename?: 'UserAccount' }
     & Pick<UserAccount, 'sid' | 'email'>
     & { person?: Maybe<(
@@ -3334,7 +3240,7 @@ export type CurrentUserDashThemePageQuery = (
 );
 
 export type NavigateToNewDomainQueryVariables = Exact<{
-  domainNavInput: DomainNavInput;
+  domainNavInput?: Maybe<DomainNavInput>;
 }>;
 
 
@@ -3375,7 +3281,7 @@ export type PasswordLoginMutation = (
   { __typename?: 'Mutation' }
   & { passwordLogin?: Maybe<(
     { __typename?: 'LoginStep' }
-    & Pick<LoginStep, 'step'>
+    & Pick<LoginStep, 'step' | 'redirectPath' | 'allowLostPassword'>
     & { loginCompleteDomain?: Maybe<(
       { __typename?: 'WebAppDomain' }
       & Pick<WebAppDomain, 'type' | 'selectedPage'>
@@ -4118,25 +4024,6 @@ export const EnrollmentStatFragmentFragmentDoc = gql`
 }
     ${InsuredStatFragmentFragmentDoc}
 ${PlanInsuredStatFragmentFragmentDoc}`;
-export const UnionPasswordRuleFragmentDoc = gql`
-    fragment unionPasswordRule on PasswordRule {
-  __typename
-  ... on PasswordLengthRule {
-    minLength
-    maxLength
-  }
-  ... on PasswordWhitespaceRule {
-    allowedWhitespace
-  }
-  ... on PasswordCharacterRule {
-    characterType
-    numberOfCharacters
-  }
-  ... on PasswordStrengthRule {
-    requiredStrengthLevel
-  }
-}
-    `;
 export const UnionNvpFragmentDoc = gql`
     fragment unionNVP on NVP {
   __typename
@@ -4190,6 +4077,14 @@ export const FragmentAccessPolicyFragmentDoc = gql`
   tmplUseAsIs
 }
     `;
+export const FragmentPaginationInfoFragmentDoc = gql`
+    fragment fragmentPaginationInfo on PaginationInfo {
+  totalPages
+  totalElements
+  pageNumber
+  pageSize
+}
+    `;
 export const FragmentWebCommandFragmentDoc = gql`
     fragment fragmentWebCommand on WebCommand {
   endPoint
@@ -4218,57 +4113,36 @@ export const FragmentCdxPageInfoFragmentDoc = gql`
 }
     ${FragmentWebCommandFragmentDoc}
 ${UnionNvpFragmentDoc}`;
-export const FragmentPaginationInfoFragmentDoc = gql`
-    fragment fragmentPaginationInfo on PaginationInfo {
-  totalPages
-  totalElements
-  pageNumber
-  pageSize
+export const VersionDocument = gql`
+    query Version {
+  version
 }
     `;
-export const FragmentUserPageInfoFragmentDoc = gql`
-    fragment fragmentUserPageInfo on UserPageInfo {
-  model {
-    sid
-    email
-    person {
-      sid
-      firstNm
-      lastNm
-    }
-    accessPolicyGroups {
-      sid
-      name
-      description
-      tmpl
-      tmplUseAsIs
-      policies {
-        ...fragmentAccessPolicy
+
+/**
+ * __useVersionQuery__
+ *
+ * To run a query within a React component, call `useVersionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useVersionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useVersionQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useVersionQuery(baseOptions?: Apollo.QueryHookOptions<VersionQuery, VersionQueryVariables>) {
+        return Apollo.useQuery<VersionQuery, VersionQueryVariables>(VersionDocument, baseOptions);
       }
-    }
-  }
-  cdxPageInfo {
-    ...fragmentCDXPageInfo
-  }
-  accessPolicyGroupConnection {
-    paginationInfo {
-      ...fragmentPaginationInfo
-    }
-    nodes {
-      sid
-      name
-      description
-      tmpl
-      tmplUseAsIs
-      policies {
-        ...fragmentAccessPolicy
-      }
-    }
-  }
-}
-    ${FragmentAccessPolicyFragmentDoc}
-${FragmentCdxPageInfoFragmentDoc}
-${FragmentPaginationInfoFragmentDoc}`;
+export function useVersionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<VersionQuery, VersionQueryVariables>) {
+          return Apollo.useLazyQuery<VersionQuery, VersionQueryVariables>(VersionDocument, baseOptions);
+        }
+export type VersionQueryHookResult = ReturnType<typeof useVersionQuery>;
+export type VersionLazyQueryHookResult = ReturnType<typeof useVersionLazyQuery>;
+export type VersionQueryResult = Apollo.QueryResult<VersionQuery, VersionQueryVariables>;
 export const BeginLoginDocument = gql`
     query BeginLogin($userId: String!) {
   beginLogin(userId: $userId) {
@@ -4276,28 +4150,9 @@ export const BeginLoginDocument = gql`
     step
     redirectPath
     allowLostPassword
-    loginCompleteDomain {
-      type
-      selectedPage
-      navItems {
-        ...fragmentWebNav
-      }
-    }
-    tokenUser {
-      token
-      session {
-        id
-        orgId
-        orgSid
-        userId
-        firstNm
-        pollInterval
-        defaultAuthorities
-      }
-    }
   }
 }
-    ${FragmentWebNavFragmentDoc}`;
+    `;
 
 /**
  * __useBeginLoginQuery__
@@ -4860,13 +4715,10 @@ export const ChangeOwnPasswordPageDocument = gql`
   changeOwnPasswordPage {
     ruleGroup {
       numberOfCharacteristics
-      rules {
-        ...unionPasswordRule
-      }
     }
   }
 }
-    ${UnionPasswordRuleFragmentDoc}`;
+    `;
 
 /**
  * __useChangeOwnPasswordPageQuery__
@@ -4900,9 +4752,6 @@ export const CurrentUserDocument = gql`
       selectedPage
       navItems {
         ...fragmentWebNav
-        subNavItems {
-          ...fragmentWebNav
-        }
       }
     }
     tokenUser {
@@ -5100,55 +4949,6 @@ export function useFindUserByEmailLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
 export type FindUserByEmailQueryHookResult = ReturnType<typeof useFindUserByEmailQuery>;
 export type FindUserByEmailLazyQueryHookResult = ReturnType<typeof useFindUserByEmailLazyQuery>;
 export type FindUserByEmailQueryResult = Apollo.QueryResult<FindUserByEmailQuery, FindUserByEmailQueryVariables>;
-export const FindUserDocument = gql`
-    query FindUser($ownedInputSid: OwnedInputSid) {
-  findUser(ownedInputSid: $ownedInputSid) {
-    sid
-    email
-    person {
-      sid
-      firstNm
-      lastNm
-    }
-    accessPolicyGroups {
-      sid
-      name
-      description
-      tmpl
-      tmplUseAsIs
-      policies {
-        ...fragmentAccessPolicy
-      }
-    }
-  }
-}
-    ${FragmentAccessPolicyFragmentDoc}`;
-
-/**
- * __useFindUserQuery__
- *
- * To run a query within a React component, call `useFindUserQuery` and pass it any options that fit your needs.
- * When your component renders, `useFindUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useFindUserQuery({
- *   variables: {
- *      ownedInputSid: // value for 'ownedInputSid'
- *   },
- * });
- */
-export function useFindUserQuery(baseOptions?: Apollo.QueryHookOptions<FindUserQuery, FindUserQueryVariables>) {
-        return Apollo.useQuery<FindUserQuery, FindUserQueryVariables>(FindUserDocument, baseOptions);
-      }
-export function useFindUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindUserQuery, FindUserQueryVariables>) {
-          return Apollo.useLazyQuery<FindUserQuery, FindUserQueryVariables>(FindUserDocument, baseOptions);
-        }
-export type FindUserQueryHookResult = ReturnType<typeof useFindUserQuery>;
-export type FindUserLazyQueryHookResult = ReturnType<typeof useFindUserLazyQuery>;
-export type FindUserQueryResult = Apollo.QueryResult<FindUserQuery, FindUserQueryVariables>;
 export const UserAccountFormDocument = gql`
     query UserAccountForm($orgSid: ID!) {
   userAccountForm(orgSid: $orgSid) {
@@ -7262,7 +7062,7 @@ export type CurrentUserDashThemePageQueryHookResult = ReturnType<typeof useCurre
 export type CurrentUserDashThemePageLazyQueryHookResult = ReturnType<typeof useCurrentUserDashThemePageLazyQuery>;
 export type CurrentUserDashThemePageQueryResult = Apollo.QueryResult<CurrentUserDashThemePageQuery, CurrentUserDashThemePageQueryVariables>;
 export const NavigateToNewDomainDocument = gql`
-    query NavigateToNewDomain($domainNavInput: DomainNavInput!) {
+    query NavigateToNewDomain($domainNavInput: DomainNavInput) {
   navigateToNewDomain(domainNavInput: $domainNavInput) {
     type
     selectedPage
@@ -7292,7 +7092,7 @@ export const NavigateToNewDomainDocument = gql`
  *   },
  * });
  */
-export function useNavigateToNewDomainQuery(baseOptions: Apollo.QueryHookOptions<NavigateToNewDomainQuery, NavigateToNewDomainQueryVariables>) {
+export function useNavigateToNewDomainQuery(baseOptions?: Apollo.QueryHookOptions<NavigateToNewDomainQuery, NavigateToNewDomainQueryVariables>) {
         return Apollo.useQuery<NavigateToNewDomainQuery, NavigateToNewDomainQueryVariables>(NavigateToNewDomainDocument, baseOptions);
       }
 export function useNavigateToNewDomainLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<NavigateToNewDomainQuery, NavigateToNewDomainQueryVariables>) {
@@ -7337,6 +7137,8 @@ export const PasswordLoginDocument = gql`
     mutation PasswordLogin($userId: String!, $password: String!) {
   passwordLogin(userId: $userId, password: $password) {
     step
+    redirectPath
+    allowLostPassword
     loginCompleteDomain {
       type
       selectedPage

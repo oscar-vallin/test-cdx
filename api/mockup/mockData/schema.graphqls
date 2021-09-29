@@ -1,31 +1,152 @@
+# noinspection GraphQLTypeRedefinition
+
+# Directive which hints that the given Type should be generated as a Fragment in te operations.graphql
+directive @fragment(name: String) on OBJECT | UNION
+
+# Directive which hints to not return the field on a Query
+directive @skipQuery on FIELD_DEFINITION
+
+# Directive which hints to not return the field on a Mutation
+directive @skipMutation on FIELD_DEFINITION
+
+directive @unionName(name: String!) on FIELD_DEFINITION
+
 type Query {
-  beginLogin(userId: String!): LoginStep
+  version: String
+
+  # Authentication
+  beginLogin(userId: String!) : LoginStep
+  logOut : LogOutInfo
+
+  # Exchange Status
+  exchangeActivityInProcess(orgSidInput : OrgSidInput!, dateRange: DateTimeRangeInput!, pageableInput: PageableInput!) : OrganizationLinkConnection
+  exchangeActivityTransmitted(orgSidInput : OrgSidInput!, dateRange: DateTimeRangeInput!, pageableInput: PageableInput!) : OrganizationLinkConnection
+  exchangeActivityErrored(orgSidInput : OrgSidInput!, dateRange: DateTimeRangeInput!, pageableInput: PageableInput!) : OrganizationLinkConnection
+
   workPacketStatusDetails(orgSid: ID!, workOrderId: String!): WorkPacketStatusDetails
+  workPacketStatus(orgSid: ID!, workOrderId: String!): WorkPacketStatus
   workPacketStatuses(orgSid: ID!, dateRange: DateTimeRangeInput, filter: WorkPacketStatusFilter): [WorkPacketStatus]
   dashboardPeriods(orgSid: ID!): DashboardPeriods
-  changeOwnPasswordPage: PasswordPage
-  amPolicyPage(orgSid: ID!): AMPolicyPage
-  amPolicyFacetsForService(orgSid: ID!, cdxService: CDXService!): [CDXFacet]
-  amPolicyVerbForFacet(orgSid: ID!, cdxService: CDXService!, cdxFacet: CDXFacet!): [PermissionVerb]
+
+  # Users
+  usersForOrg(orgSid: ID!, userFilter: UserFilterInput, pageableInput: PageableInput) : UserConnection
+  changeOwnPasswordPage : PasswordPage
+  currentUser : CurrentUserInfo
+  currentOrgNav(orgInput: OrgSidInput): WebNav
+  userTheme(themeColorMode: ThemeColorMode): DashTheme
+  findUserByEmail(userEmail: String!) : UserAccount
+
+  # Users v2.1
+  userAccountForm(orgSid: ID!): UserAccountForm
+  findUserAccount(userSid: ID!): UserAccountForm
+
+  # Access Management
+  accessPolicy(orgSid: ID!, policySid: ID!) : AccessPolicy
+  accessPoliciesForOrg(orgSid: ID!, pageableInput: PageableInput) : AccessPolicyConnection
+  accessSpecializationsForOrg(orgSid: ID!, pageableInput: PageableInput): AccessSpecializationConnection
+  accessPolicyGroupsForOrg(orgSid: ID!, pageableInput: PageableInput) : AccessPolicyGroupConnection
+  systemTemplateAccessPolicyGroupByName(name: String!): [AccessPolicyGroup]
+
+  accessPolicyForm: AccessPolicyForm
+  findAccessPolicy(policySid: ID!): AccessPolicyForm
+
+  accessSpecializationForm(orgSid: ID!): AccessSpecializationForm
+  findAccessSpecialization(specializationSid: ID!): AccessSpecializationForm
+
+  accessPolicyGroupForm(orgSid: ID!): AccessPolicyGroupForm
+  findAccessPolicyGroup(policyGroupSid: ID!): AccessPolicyGroupForm
+
+  # Organizations
+  """currentOrgInfo(orgInput: OrgSidInput): [Organization]"""
+  topLevelOrgsByType(orgType: OrgType!): [Organization]
+  orgById(orgSid: ID, orgId: String!): Organization
+  directOrganizations(orgSid: ID!, orgFilter: OrgFilterInput, pageableInput: PageableInput): OrganizationConnection
+
+  wpProcessErrors(orgSid: ID!, dateRange: DateTimeRangeInput, pageableInput: PageableInput) : WPProcessErrorConnection
+  wpTransmissions(orgSid: ID!, dateRange: DateTimeRangeInput, pageableInput: PageableInput) : WPTransmissionConnection
+  scheduleOccurrences(orgSid: ID!, dateRange: DateTimeRangeInput, pageableInput: PageableInput) : ScheduleOccurrenceConnection
+
+  # Organizations v2.1
+  organizationForm: OrganizationForm
+  findOrganization(orgSid: ID!): OrganizationForm
+  searchOrganizations(searchText: String!, orgOwnerSid: ID!, orgFilter: OrgFilterInput, pageableInput: PageableInput): OrganizationConnection
+
+  # Themes
+  dashThemeColorForOrg(ownedInput: OwnedInput, pageableInput: PageableInput) : DashThemeColorConnection
+  dashSiteForOrg(orgSidInput : OrgSidInput) : DashSite
+  dashThemeColor(ownedInputSid : OwnedInputSid) : DashThemeColor
+  dashThemeColorByName(ownedInputName : OwnedInputName) : DashThemeColor
+  defaultDashThemeForSite(ownedInput : OwnedInput) : DashTheme
+  defaultDashThemeForSitePage(ownedInput : OwnedInput) : DefaultDashThemePage
+  """userDashThemePage(ownedInput : OwnedInput) : UserDashThemePage"""
+  currentUserDashThemePage : UserDashThemePage
+
+  # Util
+  navigateToNewDomain(domainNavInput: DomainNavInput) : WebAppDomain
+  simulateSessionExpir : LogOutInfo
 }
 
 type Mutation {
-  passwordLogin(userId: String!, password: String!): LoginStep
+  passwordLogin(userId: String!, password: String!) : LoginStep
+  updateOwnPassword(updatePasswordInput: UpdatePasswordInput!) : UserSession
+  createOrg(orgInfo: CreateOrgInput!): Organization
+
+  createAccessPolicy(createAccessPolicyInput: CreateAccessPolicyInput!) : AccessPolicyForm
+  updateAccessPolicy(updateAccessPolicyInput : UpdateAccessPolicyInput) : AccessPolicyForm
+  deleteAccessPolicies(deleteAccessPoliciesInput: DeleteAccessPoliciesInput) : GQOperationResponse
+  deleteAccessPolicy(policySid: ID!) : GQOperationResponse
+
+  createAccessSpecialization(createAccessSpecializationInput: CreateAccessSpecializationInput!) : AccessSpecializationForm
+  updateAccessSpecialization(updateAccessSpecializationInput: UpdateAccessSpecializationInput): AccessSpecializationForm
+  deleteAccessSpecialization(specializationSid: ID!): GQOperationResponse
+
+  createAccessPolicyGroup(createAccessPolicyInput: CreateAccessPolicyGroupInput!) : AccessPolicyGroupForm
+  updateAccessPolicyGroup(updateAccessPolicyInput: UpdateAccessPolicyGroupInput): AccessPolicyGroupForm
+  deleteAccessPolicyGroup(policyGroupSid: ID!) : GQOperationResponse
+
+  # Users v2.1
+  createUser(userInfo: CreateUserInput!, personInfo: CreatePersonInput!) : UserAccountForm
+  updateUser(userInfo: UpdateUserInput!) : UserAccountForm
+  updateUserAccessPolicyGroups(userAccessPolicyGroupUpdate: UpdateUserAccessPolicyGroupsInput) : [AccessPolicyGroup]
+  deactivateUser(sidInput: SidInput!) : GQOperationResponse
+  deactivateUsers(sidsInput: SidsInput!) : GQOperationResponse
+  activateUser(sidInput: SidInput!) : GQOperationResponse
+  activateUsers(sidsInput: SidsInput!) : GQOperationResponse
+
+  createDashThemeColor(createDashThemeColorInput : CreateDashThemeColorInput!) : DashThemeColor
+  updateDashThemeColor(updateDashThemeColorInput : UpdateDashThemeColorInput!) : DashThemeColor
+  createDefaultDashTheme(createDefaultDashThemeInput : CreateDefaultDashThemeInput) : DashTheme
+  updateDefaultDashTheme(updateDefaultDashThemeInput : UpdateDefaultDashThemeInput ) : DashTheme
+
+  removeDashThemeColor(ownedInputSid : OwnedInputSid) : GQOperationResponse
+  removeDefaultDashTheme(ownedInputSid : OwnedInputSid) : GQOperationResponse
+
+  setDashThemeColorDefault(dashThemeColorDefaultInput : DashThemeColorDefaultInput) : DashThemeColor
+
+  """
+  setDashThemeColorMode(dashThemeColorModeInput : DashThemeColorModeInput) : DashThemeColor
+  createUserDashTheme(createUserDashThemeInput : CreateUserDashThemeInput) : DashTheme
+  updateUserDashTheme(updateUserDashThemeInput : UpdateUserDashThemeInput ) : DashTheme
+
+  updateOwnDashTheme(dashThemeInput : DashThemeInput ) : DashTheme
+  """
+  createOrUpdateOwnDashTheme(dashThemeInput : DashThemeInput) : DashTheme
+  setOwnDashThemeFontSize(dashThemeInput : DashThemeInput) : DashTheme
 }
 
 scalar DateTime
 scalar Date
 
 type LoginStep {
-  userId: String!
+  userId: String! @skipMutation
   step: LoginStepType!
-  redirectPath: String
-  allowLostPassword: Boolean
+  redirectPath: String @skipMutation
+  allowLostPassword: Boolean @skipMutation
   """
   this is the domain/section of the website to continue to if the login is complete
   """
-  loginCompleteDomain: WebAppDomain
-  tokenUser: TokenUser
+  loginCompleteDomain: WebAppDomain @skipQuery
+  tokenUser: TokenUser @skipQuery
 }
 
 type TokenUser {
@@ -33,10 +154,20 @@ type TokenUser {
   session: UserSession
 }
 
-type UserSession {
+type CurrentUserInfo{
+  domain: WebAppDomain
+  tokenUser: TokenUser
+  loggedIn: Boolean
+}
+
+type UserSession{
   id: ID!
-  orgId: ID!
+  """orgId is deprecated prefer orgSid instead"""
+  orgId: ID
+  orgSid: ID!
   userId: String!
+  firstNm: String!
+  pollInterval: Int
   defaultAuthorities: [String]
 }
 
@@ -48,17 +179,27 @@ enum LoginStepType {
   #TOTP
 }
 
-input AMPasswordConfigInput {
+input AMPasswordConfigInput{
   allowForgotten: Boolean
   orgUnitOwner: ID
 }
 
-input DateTimeRangeInput {
+input UpdatePasswordInput{
+  originalPassword: String!
+  newPassword: String!
+  verifyPassword: String!
+}
+
+input SidInput{
+  sid: ID!
+}
+
+input DateTimeRangeInput{
   rangeStart: DateTime!
   rangeEnd: DateTime!
 }
 
-type WorkPacketStatusDetails {
+type WorkPacketStatusDetails{
   workOrderId: String!
   specId: String
   specImplName: String
@@ -72,9 +213,11 @@ type WorkPacketStatusDetails {
   inboundEnrollmentStats: EnrollmentStat
   outboundEnrollmentStats: EnrollmentStat
   outboundRecordCounts: RecordCounts
+  inboundLabel: String
+  outboundLabel: String
 }
 
-type DeliveredFile {
+type DeliveredFile{
   filename: String!
   fileSizeInBytes: Int
   textSizeInBytes: Int
@@ -83,7 +226,7 @@ type DeliveredFile {
   kcurl: DeliveredKCURL
 }
 
-type DeliveredFileFTP {
+type DeliveredFileFTP{
   protocol: String!
   host: String!
   username: String
@@ -91,11 +234,11 @@ type DeliveredFileFTP {
   port: Int
 }
 
-type DeliveredKCURL {
+type DeliveredKCURL{
   url: String!
 }
 
-type WorkStepStatus {
+type WorkStepStatus{
   stepStatus: String
   stepName: String
   stepType: String
@@ -106,48 +249,49 @@ type WorkStepStatus {
   nvp: [NVPStr]
 }
 
-type StatCountType {
+type StatCountType{
   value: Int
 }
 
-type ArchiveFileType {
-  value: String
+type ArchiveFileType{
+  value: String!
+  label: String
 }
 
-type RecordCounts {
+type RecordCounts @fragment(name: "recordCountsFragment") {
   totalCount: Int
   showUser: Boolean
   recordCount: [RecordCount]
 }
 
-type RecordCount {
+type RecordCount{
   name: String!
   count: Int!
 }
 
-type ExtractParameters {
+type ExtractParameters{
   originalParameter: [ExtractParameter]
   overriddenParameter: [ExtractParameter]
   derivedParameter: [ExtractParameter]
 }
 
-type ExtractParameter {
+type ExtractParameter @fragment(name: "extractParameterFragment") {
   label: String
   name: String
   value: [String]
 }
 
-type QualityChecks {
+type QualityChecks{
   sequenceCreationEvent: [SequenceCreationEvent]
 }
 
-type SequenceCreationEvent {
+type SequenceCreationEvent{
   context: String
   unitId: String
   recordCreationEvent: [RecordCreationEvent]
 }
 
-type RecordCreationEvent {
+type RecordCreationEvent{
   context: String
   outerContext: String
   unitId: String
@@ -156,7 +300,7 @@ type RecordCreationEvent {
   information: [FieldCreationEvent]
 }
 
-type FieldCreationEvent {
+type FieldCreationEvent @fragment(name: "fieldCreationFragment") {
   message: [String]
   name: String
   id: String
@@ -165,14 +309,14 @@ type FieldCreationEvent {
   type: String
 }
 
-type DashboardPeriods {
+type DashboardPeriods{
   dailyCounts: DashboardPeriodCounts
   yesterdayCounts: DashboardPeriodCounts
   monthlyCounts: DashboardPeriodCounts
   lastMonthlyCounts: DashboardPeriodCounts
 }
 
-type DashboardPeriodCounts {
+type DashboardPeriodCounts @fragment {
   vendorTransmissions: [DashboardPeriodCount]
   vendorTransmissionsBySpec: [DashboardPeriodCount]
   planSponsorTransmissions: [DashboardPeriodCount]
@@ -185,52 +329,53 @@ type DashboardPeriodCounts {
   processErrorCount: Int
 }
 
-type DashboardPeriodCount {
+type DashboardPeriodCount{
   name: String
   secondaryDescr: String
   count: Int
   total: Int
 }
 
-input WorkPacketStatusFilter {
+input WorkPacketStatusFilter{
   excludedEnvs: [String]
 }
 
-type WorkPacketStatus {
+type WorkPacketStatus{
   workOrderId: String!
-  timestamp: DateTime!
-  planSponsorId: String
-  detailsPath: String
-  subClientPath: String
-  inboundFilename: String!
-  vendorId: String
-  step: Int!
-  stepStatus: String!
-  packetStatus: String!
-  reprocessedBy: String
-  reprocessAction: Int
-  recordHighlightCount: Int
-  recordHighlightType: String
-  clientFileArchivePath: String
-  vendorFileArchivePath: String
-  supplementalFilesArchivePaths: [String]
-  archiveOnly: Boolean
+  timestamp: DateTime!,
+  planSponsorId: String,
+  detailsPath: String,
+  subClientPath: String,
+  inboundFilename: String!,
+  vendorId: String,
+  step: Int!,
+  stepStatus: String!,
+  packetStatus: String!,
+  reprocessedBy: String,
+  reprocessAction: Int,
+  recordHighlightCount: Int,
+  populationCount: Int,
+  recordHighlightType: String,
+  clientFileArchivePath: String,
+  vendorFileArchivePath: String,
+  supplementalFilesArchivePaths: [String],
+  archiveOnly: Boolean,
   hasErrors: Boolean
 }
 
-type EnrollmentStat {
+type EnrollmentStat @fragment(name: "enrollmentStatFragment") {
   insuredStat: InsuredStat
   excludedInsuredStat: InsuredStat
   excludedPlanInsuredStat: [PlanInsuredStat]
   planInsuredStat: [PlanInsuredStat]
 }
 
-type InsuredStat {
+type InsuredStat @fragment(name: "insuredStatFragment") {
   subscribers: InsuredStatCount
   dependents: InsuredStatCount
 }
 
-type PlanInsuredStat {
+type PlanInsuredStat @fragment(name: "planInsuredStatFragment") {
   planCode: String
   planType: String
 
@@ -238,7 +383,7 @@ type PlanInsuredStat {
   dependents: InsuredStatCount
 }
 
-type InsuredStatCount {
+type InsuredStatCount @fragment(name: "insuredStatCountFragment") {
   active: StatInt
   ended: StatInt
   expectedTotal: Int
@@ -247,16 +392,42 @@ type InsuredStatCount {
   hold: Boolean
 }
 
-type StatInt {
+type StatInt @fragment(name: "statInFragment") {
   prior: Int
   value: Int
+}
+
+type PasswordRules {
+  mustAlwaysBeMet: PasswordRuleSet
+
+  someMustBeMet: PasswordRuleSet
+  autoLockAccount: Boolean
+  autoLockAfterFailedAttempts: Int
+  autoUnlockAccount: Boolean
+  autoUnlockAccountDelayMinutes: Int
+}
+
+type PasswordRuleSet {
+  mustNotContainWhiteSpace: Boolean
+  mustNotContainUserName: Boolean
+  mustNotContainNumericSequence: Boolean
+  minLength: Int
+  maxLength: Int
+  minUpperCaseLetters: Int
+  minLowerCaseLetters: Int
+  minNumericDigits: Int
+  minSpecialCharacters: Int
+  maxAllowedRepeatedChars: Int
+  minPasswordHistoryVariations: Int
+  mustNotMatchExactDictionaryWord: Boolean
+  mustNotMatchPartialDictionaryWord: Boolean
 }
 
 type PasswordPage {
   ruleGroup: PasswordRuleGroup!
 }
 
-type PasswordRuleGroup {
+type PasswordRuleGroup{
   """
   number of rule predicates that must be true for the group to pass
   if numberOfCharacteristics is omitted all rules are required
@@ -297,24 +468,21 @@ enum PasswordCharacterType {
   SPECIAL
 }
 
-union PasswordRule =
-    PasswordLengthRule
-  | PasswordWhitespaceRule
-  | PasswordCharacterRule
-  | PasswordStrengthRule
-  | PasswordRuleGroup
+union PasswordRule @fragment(name: "unionPasswordRule") = PasswordLengthRule | PasswordWhitespaceRule | PasswordCharacterRule | PasswordStrengthRule | PasswordRuleGroup
 
-type AMPolicyPage {
-  services: [CDXService]
-}
 
-enum CDXService {
+enum CDXService{
   CDX
   INTEGRATION
   ACCESS_MANAGEMENT
 }
 
-enum CDXFacet {
+type CDXServiceNVP{
+  name: String!
+  value: CDXService
+}
+
+enum CDXFacet{
   ALL
   ARCHIVE
   STATUS
@@ -323,19 +491,12 @@ enum CDXFacet {
   ORGANIZATION
 }
 
-enum PermissionVerb {
-  ALL
-  CREATE
-  READ
-  UPDATE
-  DELETE
-  LIST
-  DOWNLOAD
-  RESTART
-  ASSIGN
+type CDXFacetNVP{
+  name: String!
+  value: CDXFacet!
 }
 
-type WebPage {
+type WebPage @fragment {
   type: CDXWebPage!
   """
   parameters: any dynamic parameters the page end point needs to be called with
@@ -351,7 +512,7 @@ type WebPage {
   pivots: [WebPivot]
 }
 
-type WebAppDomain {
+type WebAppDomain{
   type: CDXWebAppDomain!
   """
   selectedPage: either the page to load - must be in teh navItems
@@ -363,7 +524,7 @@ type WebAppDomain {
   navItems: [WebNav]
 }
 
-type WebNav {
+type WebNav @fragment {
   label: String
   """
   page: WebPage to nave to, blank if this only has subnavs
@@ -376,22 +537,22 @@ type WebNav {
   subNavItems: [WebNav]
 }
 
-type WebPivot {
+type WebPivot{
   label: String
   type: CDXWebPivot!
 }
 
-type NVPStr {
+type NVPStr{
   name: String!
-  value: String!
+  value: String! @unionName(name: "strValue")
 }
 
-type NVPId {
+type NVPId{
   name: String!
-  value: ID!
+  value: ID! @unionName(name: "idValue")
 }
 
-enum CDXWebPage {
+enum CDXWebPage{
   DASHBOARD
   FILE_STATUS
   ARCHIVES
@@ -411,16 +572,959 @@ enum CDXWebPage {
   SSO_CONFIG
   ADD_ORG
   ADD_USER
+  COLOR_PALETTES
+  THEME
 }
 
-enum CDXWebAppDomain {
+enum CDXWebAppDomain{
   DASHBOARD
   ORGANIZATION
 }
 
-enum CDXWebPivot {
+enum CDXWebPivot{
   ACTIVITY
   IN_PROGRESS
 }
 
-union NVP = NVPStr | NVPId
+union NVP @fragment(name: "unionNVP") = NVPStr | NVPId
+
+enum Permission{
+  K2U_EXCHANGE_LIST,
+  K2U_EXCHANGE_READ,
+  K2U_EXCHANGE_DOWNLOAD,
+  K2U_EXCHANGE_RESTART,
+  K2U_EXCHANGE_CANCEL,
+  K2U_EXCHANGE_ARCHIVE_READ,
+  K2U_EXCHANGE_ARCHIVE_STEPS_READ,
+
+  TEST_EXCHANGE_LIST,
+  TEST_EXCHANGE_READ,
+  TEST_EXCHANGE_DOWNLOAD,
+  TEST_EXCHANGE_RESTART,
+  TEST_EXCHANGE_CANCEL,
+  TEST_EXCHANGE_ARCHIVE_READ,
+  TEST_EXCHANGE_ARCHIVE_STEPS_READ,
+
+  UAT_EXCHANGE_LIST,
+  UAT_EXCHANGE_READ,
+  UAT_EXCHANGE_DOWNLOAD,
+  UAT_EXCHANGE_RESTART,
+  UAT_EXCHANGE_CANCEL,
+  UAT_EXCHANGE_ARCHIVE_READ,
+  UAT_EXCHANGE_ARCHIVE_STEPS_READ,
+
+  PROD_EXCHANGE_LIST,
+  PROD_EXCHANGE_READ,
+  PROD_EXCHANGE_DOWNLOAD,
+  PROD_EXCHANGE_RESTART,
+  PROD_EXCHANGE_CANCEL,
+  PROD_EXCHANGE_ARCHIVE_READ,
+  PROD_EXCHANGE_ARCHIVE_STEPS_READ,
+
+  USER_CREATE,
+  USER_READ,
+  USER_UPDATE,
+  USER_DELETE,
+  USER_ASSIGN,
+
+  ACCESS_POLICY_CREATE,
+  ACCESS_POLICY_READ,
+  ACCESS_POLICY_UPDATE,
+  ACCESS_POLICY_DELETE,
+
+  ACCESS_SPEC_CREATE,
+  ACCESS_SPEC_READ,
+  ACCESS_SPEC_UPDATE,
+  ACCESS_SPEC_DELETE,
+
+  ACCESS_POLICY_GROUP_CREATE,
+  ACCESS_POLICY_GROUP_READ,
+  ACCESS_POLICY_GROUP_UPDATE,
+  ACCESS_POLICY_GROUP_DELETE,
+
+  ORG_CREATE,
+  ORG_READ,
+  ORG_UPDATE,
+  ORG_DELETE,
+
+  PASSWORD_RULES_UPDATE,
+
+  SSOIDP_CREATE,
+  SSOIDP_READ,
+  SSOIDP_UPDATE,
+  SSOIDP_DELETE,
+
+  COLORPALETTE_CREATE,
+  COLORPALETTE_READ,
+  COLORPALETTE_UPDATE,
+  COLORPALETTE_DELETE,
+
+  THEME_CREATE,
+  THEME_READ,
+  THEME_UPDATE,
+  THEME_DELETE
+}
+
+# ============================================================================================================
+# Organizations
+# ============================================================================================================
+
+type Organization{
+  sid: ID
+  name: String
+  orgId: String!
+  orgType: OrgType!
+}
+
+type OrganizationForm {
+  sid: ID
+  name: UIStringField!
+  orgId: UIStringField!
+  orgType: UISelectOneField
+  active: UIBooleanField!
+  options: [UIOptions]
+  response: GQOperationResponse!
+  errCode: String
+  errMsg: String
+  errSeverity: ErrorSeverity
+}
+
+input CreateOrgInput {
+  orgId: String!
+  name: String!
+  orgType: OrgType!
+  orgOwnerSid: ID
+}
+
+enum OrgType {
+  INTEGRATION_SPONSOR
+  INTEGRATION_ADMIN_SEGREGATED
+  INTEGRATION_PLATFORM
+  INTEGRATION_ADMIN_COMBINED
+  VENDOR
+  SYSTEM_INTEGRATOR
+  INDEPENDENT_CONSULTANT
+  CDX
+  TEMPLATE
+  OUTSIDE_PROMOTER
+  SALES_PROSPECT
+}
+
+# ============================================================================================================
+# Access Policies
+# ============================================================================================================
+
+type AccessPolicy @fragment {
+  sid: ID
+  name: String!
+  permissions: [Permission]
+  tmpl: Boolean
+  tmplUseAsIs: Boolean
+}
+
+type AccessPolicyForm {
+  sid: ID
+  name: UIStringField!
+  organization: UIReadOnlyField!
+  permissions: UISelectManyField
+  tmpl: UIBooleanField
+  tmplUseAsIs: UIBooleanField
+  options: [UIOptions]
+  response: GQOperationResponse!
+  errCode: String
+  errMsg: String
+  errSeverity: ErrorSeverity
+}
+
+input CreateAccessPolicyInput{
+  name: String!
+  organizationSid: ID!
+  permissions: [Permission]
+  tmpl: Boolean
+  tmplUseAsIs: Boolean
+}
+
+input UpdateAccessPolicyInput{
+  policySid: ID!
+  name: String
+  permissions: [Permission]
+}
+
+input DeleteAccessPoliciesInput{
+  policySids: [ID]!
+}
+
+type AccessPolicyConnection{
+  paginationInfo: PaginationInfo!
+  nodes: [AccessPolicy]
+}
+
+# ============================================================================================================
+# Access Specializations
+# ============================================================================================================
+type AccessSpecialization {
+  sid: ID!
+  name: String!
+  filters: [SpecializationFilter]
+}
+
+type SpecializationFilter {
+  sid: ID!
+  permission: Permission!
+  organizationSids: [ID]
+}
+
+type AccessSpecializationForm {
+  sid: ID
+  name: UIStringField!
+  organization: UIReadOnlyField!
+  filters: [SpecializationFilterForm]
+  options: [UIOptions]
+  response: GQOperationResponse!
+  errCode: String
+  errMsg: String
+  errSeverity: ErrorSeverity
+}
+
+type SpecializationFilterForm {
+  sid: ID
+  permission: UISelectOneField!
+  organizationSids: UISelectManyField
+  errCode: String
+  errMsg: String
+  errSeverity: ErrorSeverity
+}
+
+input CreateAccessSpecializationInput {
+  orgOwnerSid: ID!
+  name: String!
+  filters: [CreateSpecializationFilterInput]
+}
+
+input CreateSpecializationFilterInput {
+  permission: Permission!
+  organizationSids: [ID]
+}
+
+input UpdateAccessSpecializationInput {
+  sid: ID!
+  name: String!
+  filters: [UpdateSpecializationFilterInput]
+}
+
+input UpdateSpecializationFilterInput {
+  sid: ID
+  permission: Permission!
+  organizationSids: [ID]
+}
+
+type AccessSpecializationConnection{
+  paginationInfo: PaginationInfo!
+  nodes: [AccessSpecialization]
+}
+
+# ============================================================================================================
+# Access Policy Groups
+# ============================================================================================================
+
+type AccessPolicyGroup{
+  sid: ID
+  name: String!
+  description: String
+  tmpl: Boolean
+  tmplUseAsIs: Boolean
+  policies: [AccessPolicy]
+}
+
+type AccessPolicyGroupForm {
+  sid: ID
+  name: UIStringField!
+  description: UIStringField!
+  organization: UIReadOnlyField!
+  tmpl: UIBooleanField
+  tmplUseAsIs: UIBooleanField
+  policies: UISelectManyField
+  specializations: UISelectManyField
+  """
+  Apply policies and specializations of this group to all sub organizations to the Primary Organization
+  """
+  includeAllSubOrgs: UIBooleanField
+  includeOrgSids: UISelectManyField
+  excludeOrgSids: UISelectManyField
+  options: [UIOptions]
+  response: GQOperationResponse!
+  errCode: String
+  errMsg: String
+  errSeverity: ErrorSeverity
+}
+
+input CreateAccessPolicyGroupInput{
+  organizationSid: ID!
+  name: String!
+  description: String
+  tmpl: Boolean
+  tmplUseAsIs: Boolean
+  policySids: [ID]
+  specializationSids: [ID]
+  includeAllSubOrgs: Boolean
+  includeOrgSids: [ID]
+  excludeOrgSids: [ID]
+}
+
+input UpdateAccessPolicyGroupInput{
+  sid: ID!
+  name: String!
+  description: String
+  tmpl: Boolean
+  tmplUseAsIs: Boolean
+  policySids: [ID]
+  specializationSids: [ID]
+  includeAllSubOrgs: Boolean
+  includeOrgSids: [ID]
+  excludeOrgSids: [ID]
+}
+
+type AccessPolicyGroupConnection{
+  paginationInfo: PaginationInfo!
+  nodes: [AccessPolicyGroup]
+}
+
+# ============================================================================================================
+# Users
+# ============================================================================================================
+
+type UserAccountForm {
+  sid: ID
+  email: UIStringField
+  active: UIBooleanField
+  person: PersonForm
+  organization: UIReadOnlyField!
+  accessPolicyGroups: UISelectManyField
+  response: GQOperationResponse!
+  options: [UIOptions]
+  errCode: String
+  errMsg: String
+  errSeverity: ErrorSeverity
+}
+
+type PersonForm {
+  sid: ID
+  firstNm: UIStringField!
+  lastNm: UIStringField!
+  errCode: String
+  errMsg: String
+  errSeverity: ErrorSeverity
+}
+
+input CreateUserInput {
+  email: String!
+  password: String
+  organizationSid: ID!
+  accessPolicyGroupSids: [ID]
+}
+
+input UpdateUserInput{
+  sid: ID!
+  email: String!
+  firstNm: String!
+  lastNm: String
+}
+
+input CreatePersonInput {
+  firstNm: String!
+  lastNm: String
+}
+
+input UpdateUserAccessPolicyGroupsInput{
+  userAccountSid: ID!
+  accessPolicyGroupSids: [ID]
+}
+
+type UserAccount{
+  sid: ID!
+  email: String!
+  person: Person
+  accessPolicyGroups: [AccessPolicyGroup]
+}
+
+type Person {
+  sid: ID!
+  firstNm: String!
+  lastNm: String
+}
+
+input SidsInput{
+  sids: [ID]!
+}
+
+
+
+type ListPageInfo{
+  pageHeaderLabel: String
+  pageCommands: [WebCommand]
+  listItemCommands: [WebCommand]
+  listItemBulkCommands: [WebCommand]
+}
+
+type WebCommand @fragment {
+  endPoint: String
+  label: String
+  parameters: [NVP]
+  commandType: CDXWebCommandType
+}
+
+enum CDXWebCommandType{
+  PAGE_ADD
+  PAGE_UPDATE
+  DEACTIVATE
+  ACTIVATE
+  ADD
+  UPDATE
+}
+
+type PaginationInfo @fragment {
+  totalPages: Int
+  totalElements: Int
+  pageNumber: Int
+  pageSize: Int
+}
+
+input PageableInput{
+  pageNumber: Int
+  pageSize: Int
+  sort: [SortOrderInput]
+}
+
+input SortOrderInput{
+  direction: SortDirection
+  property: String
+  ignoreCase: Boolean
+  nullHandling: NullHandling
+}
+
+input UserFilterInput{
+  activeFilter: ActiveEnum
+}
+
+input OrgFilterInput{
+  activeFilter: ActiveEnum
+}
+
+enum SortDirection{
+  ASC
+  DESC
+}
+
+enum NullHandling{
+  NULLS_FIRST
+  NULLS_LAST
+}
+
+enum ActiveEnum{
+  ACTIVE
+  INACTIVE
+  ALL
+}
+
+type OrganizationConnection{
+  paginationInfo: PaginationInfo!
+  nodes: [Organization]
+}
+
+type UserConnection{
+  paginationInfo: PaginationInfo!
+  listPageInfo: ListPageInfo
+  nodes: [UserItem]
+}
+
+type WPProcessErrorConnection{
+  paginationInfo: PaginationInfo!
+  nodes: [WPProcessError]
+}
+
+type WPProcessError{
+  id: ID!
+  workOrderId: String!
+  startTime: DateTime!
+  stepName: String
+  planSponsorId: String
+  vendorId: String
+  msg : String
+  inboundFilename : String
+  clientFileArchivePath : String
+}
+
+type WPTransmissionConnection{
+  paginationInfo: PaginationInfo!
+  nodes: [WPTransmission]
+}
+
+type WPTransmission{
+  id: ID!
+  workOrderId: String!
+  deliveredOn: DateTime!
+  planSponsorId: String
+  vendorId: String
+  specId: String
+  implementation: String
+  inboundFilename: String
+  outboundFilename: String
+  outboundFilesize: Int
+  billingCount : Int
+  totalRecords : Int
+  extractType : String
+  extractVersion : String
+}
+
+enum SchedOccurStatusEnum{
+  SCHEDULED
+  IN_RUN_WINDOW
+  MISSED
+  RAN_IN_WINDOW
+  RAN_LATE
+  RAN_EARLY
+  RAN_OFF_SCHEDULE
+  RAN_CLOSE_TO_SCHEDULE
+  RAN_NOT_SCHEDULED
+  ERRORED
+  ERRORED_LATE
+  ERRORED_EARLY
+  ERRORED_OFF_SCHEDULE
+  ERRORED_CLOSE_TO_SCHEDULE
+  EXCHANGE_HELD
+  EXCHANGE_HELD_OFF_SCHEDULE
+  NOT_SCHEDULED
+}
+
+type ScheduleOccurrenceConnection{
+  paginationInfo: PaginationInfo!
+  nodes: [ScheduleOccurrence]
+}
+
+type ScheduleOccurrence{
+  resource : String!
+  scheduleId: ID
+  timeScheduled: DateTime
+  schedOccurStatus: SchedOccurStatusEnum!
+  runOccurrences: [ScheduleRunOccurrence]
+}
+
+type ScheduleRunOccurrence{
+  workOrderId: String!
+  timeRan: DateTime
+  status: SchedOccurStatusEnum!
+}
+
+type LogOutInfo{
+  successful: Boolean!
+}
+
+enum ThemeColorMode{
+  LIGHT
+  DARK
+}
+
+enum ThemeFontSize {
+  SMALL
+  MEDIUM
+  LARGE
+}
+
+type DashTheme{
+  id: ID
+  themeColorMode: ThemeColorMode
+  themeFontSize: ThemeFontSize
+  dashThemeColor: DashThemeColor
+}
+
+type DashThemeColor{
+  id: ID
+  defaultPalette: Boolean
+  themeColorMode: ThemeColorMode
+  allowDark: Boolean
+  paletteNm: String
+  themePrimary: String
+  themeLighterAlt: String
+  themeLighter: String
+  themeLight: String
+  themeTertiary: String
+  themeSecondary: String
+  themeDarkAlt: String
+  themeDark: String
+  themeDarker: String
+  neutralLighterAlt: String
+  neutralLighter: String
+  neutralLight: String
+  neutralQuaternaryAlt: String
+  neutralQuaternary: String
+  neutralTertiaryAlt: String
+  neutralTertiary: String
+  neutralSecondary: String
+  neutralPrimaryAlt: String
+  neutralPrimary: String
+  neutralDark: String
+  black: String
+  white: String
+}
+
+input OwnedInput{
+  orgSid: ID!
+  ownerId: ID
+}
+
+input OwnedInputSid{
+  orgSid: ID!
+  ownerId: ID!
+  sid: ID!
+}
+
+input OwnedInputName{
+  orgSid: ID!
+  ownerId: ID!
+  name: String!
+}
+
+input OrgSidInput{
+  orgSid: ID!
+}
+
+type DashSite{
+  id: ID
+  active: Boolean
+}
+
+type DashThemeColorConnection{
+  paginationInfo: PaginationInfo!
+  nodes: [DashThemeColor]
+}
+
+input CreateDashThemeColorInput{
+  orgSid: ID!
+  ownerId: ID!
+  defaultPalette: Boolean
+  allowDark: Boolean
+  themeColorMode: ThemeColorMode
+  paletteNm: String
+  themePrimary: String
+  themeLighterAlt: String
+  themeLighter: String
+  themeLight: String
+  themeTertiary: String
+  themeSecondary: String
+  themeDarkAlt: String
+  themeDark: String
+  themeDarker: String
+  neutralLighterAlt: String
+  neutralLighter: String
+  neutralLight: String
+  neutralQuaternaryAlt: String
+  neutralQuaternary: String
+  neutralTertiaryAlt: String
+  neutralTertiary: String
+  neutralSecondary: String
+  neutralPrimaryAlt: String
+  neutralPrimary: String
+  neutralDark: String
+  black: String
+  white: String
+}
+
+input UpdateDashThemeColorInput{
+  sid: ID!
+  orgSid: ID!
+  ownerId: ID!
+  defaultPalette: Boolean
+  allowDark: Boolean
+  themeColorMode: ThemeColorMode
+  paletteNm: String
+  themePrimary: String
+  themeLighterAlt: String
+  themeLighter: String
+  themeLight: String
+  themeTertiary: String
+  themeSecondary: String
+  themeDarkAlt: String
+  themeDark: String
+  themeDarker: String
+  neutralLighterAlt: String
+  neutralLighter: String
+  neutralLight: String
+  neutralQuaternaryAlt: String
+  neutralQuaternary: String
+  neutralTertiaryAlt: String
+  neutralTertiary: String
+  neutralSecondary: String
+  neutralPrimaryAlt: String
+  neutralPrimary: String
+  neutralDark: String
+  black: String
+  white: String
+}
+
+input CreateDefaultDashThemeInput{
+  orgSid: ID!
+  ownerId: ID!
+  themeFontSize : ThemeFontSize
+  themeColorMode : ThemeColorMode
+  themeColorSid : ID
+}
+
+input UpdateDefaultDashThemeInput{
+  orgSid: ID!
+  ownerId: ID!
+  sid : ID!
+  themeFontSize : ThemeFontSize
+  themeColorMode : ThemeColorMode
+  themeColorSid : ID
+}
+
+enum GQOperationResponse{
+  SUCCESS
+  FAIL
+}
+
+type DefaultDashThemePage{
+  themeColorModes: [ThemeColorMode]
+  themeFontSizes: [ThemeFontSize]
+  themeColorPalettes: [DashThemeColor]
+}
+
+input DashThemeInput{
+  themeFontSize : ThemeFontSize
+  themeColorMode : ThemeColorMode
+  themeColorSid : ID
+}
+
+input CreateUserDashThemeInput{
+  orgSid: ID!
+  ownerId: ID!
+  themeFontSize : ThemeFontSize
+  themeColorMode : ThemeColorMode
+  themeColorSid : ID
+}
+
+input UpdateUserDashThemeInput{
+  orgSid: ID!
+  ownerId: ID!
+  sid : ID!
+  themeFontSize : ThemeFontSize
+  themeColorMode : ThemeColorMode
+  themeColorSid : ID
+}
+
+type UserDashThemePage{
+  themeColorModes: [ThemeColorMode]
+  themeFontSizes: [ThemeFontSize]
+  themeColorPalettes: [DashThemeColor]
+  dashTheme: DashTheme
+}
+
+input DashThemeColorDefaultInput{
+  orgSid: ID!
+  ownerId: ID!
+  sid: ID!
+  defaultPalette: Boolean!
+  themeColorMode: ThemeColorMode
+}
+"""
+input DashThemeColorModeInput{
+orgSid: ID!
+ownerId: ID!
+sid: ID!
+themeColorMode: ThemeColorMode!
+}
+"""
+
+type OrganizationLink{
+  id: ID!
+  orgId: String!
+  name: String!
+  type: CDXWebPage
+  activityTime: DateTime
+}
+
+type OrganizationLinkConnection{
+  paginationInfo: PaginationInfo!
+  nodes: [OrganizationLink]
+}
+
+input DomainNavInput{
+  orgSid: ID!
+  ownerId: ID
+  appDomain: CDXWebAppDomain!
+  selectedPage: CDXWebPage
+}
+
+type UserItem{
+  item: UserAccount!
+  listItemCommands: [WebCommand]
+}
+
+type CDXPageInfo @fragment {
+  orgSid: ID
+  formInfo: [FormInfo]
+  lookupData: [LookupData]
+}
+
+type FormInfo{
+  label: String
+  formCommands: [WebCommand]
+}
+
+type LookupData{
+  key: String
+  lookupPairs: [NVP]
+}
+
+type UIOptions {
+  key: String
+  values: [UIOption]
+}
+
+type UIOption {
+  label: String!
+  value: String!
+  info: String
+}
+
+type UserResponse{
+  response: GQOperationResponse!
+  msg: String
+  model: UserAccount
+  nextPage: UserWebPage
+}
+
+enum UserWebPage {
+  AM_GROUP
+  GEN_PASS
+  REG_LINK
+}
+
+# ============================================================================================================
+# Form Fields
+# ============================================================================================================
+
+
+interface UIField {
+  label: String!
+  info: String
+  required: Boolean!
+  visible: Boolean!
+}
+
+type UIStringField implements UIField {
+  value: String
+  label: String!
+  info: String
+  required: Boolean!
+  visible: Boolean!
+  min: Int!
+  max: Int!
+  errCode: String
+  errMsg: String
+  errSeverity: ErrorSeverity
+}
+
+type UIBooleanField implements UIField {
+  value: Boolean
+  label: String!
+  info: String
+  required: Boolean!
+  visible: Boolean!
+  errCode: String
+  errMsg: String
+  errSeverity: ErrorSeverity
+}
+
+type UIDateField implements UIField {
+  value: Date
+  label: String!
+  info: String
+  required: Boolean!
+  visible: Boolean!
+  errCode: String
+  errMsg: String
+  errSeverity: ErrorSeverity
+}
+
+type UIIntField implements UIField {
+  value: Int
+  label: String!
+  info: String
+  required: Boolean!
+  visible: Boolean!
+  min: Int
+  max: Int
+  errCode: String
+  errMsg: String
+  errSeverity: ErrorSeverity
+}
+
+type UILongField implements UIField {
+  value: Int
+  label: String!
+  info: String
+  required: Boolean!
+  visible: Boolean!
+  min: Int
+  max: Int
+  errCode: String
+  errMsg: String
+  errSeverity: ErrorSeverity
+}
+
+type UISelectOneField implements UIField {
+  value: String
+  label: String!
+  info: String
+  required: Boolean!
+  visible: Boolean!
+  """
+  Name of the list of options the user can choose from to populate this value
+  """
+  options: String
+  """
+  Query name to invoke to search for assignable values
+  """
+  query: String
+  errCode: String
+  errMsg: String
+  errSeverity: ErrorSeverity
+}
+
+type UISelectManyField implements UIField {
+  value: [String]
+  label: String!
+  info: String
+  required: Boolean!
+  visible: Boolean!
+  """
+  Name of the list of options the user can choose from to populate this value
+  """
+  options: String
+  """
+  Query name to invoke to search for assignable values
+  """
+  query: String
+  errCode: String
+  errMsg: String
+  errSeverity: ErrorSeverity
+}
+
+type UIReadOnlyField implements UIField {
+  value: String
+  description: String
+  label: String!
+  info: String
+  required: Boolean!
+  visible: Boolean!
+  errCode: String
+  errMsg: String
+  errSeverity: ErrorSeverity
+}
+
+enum ErrorSeverity {
+  ERROR,
+  WARNING,
+  INFO
+}
