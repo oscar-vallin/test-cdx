@@ -36,16 +36,16 @@ describe('ButtonIcon', () => {
   });
 
   it('Test styled ButtonIcon component', () => {
-    const tree = shallow(
+    const testTree = shallow(
       <ButtonIcon {...defaultProps} theme={theme} size={10} icon="edit" onClick={mockFn}>
         Button Contextual
       </ButtonIcon>
     ).dive();
-    expect(tree).toMatchSnapshot();
+    expect(testTree).toMatchSnapshot();
   });
 
   it('Test styled StyledFontIcon component', () => {
-    const tree = shallow(<StyledFontIcon size={10} />).dive();
-    expect(tree).toMatchSnapshot();
+    const testTree = shallow(<StyledFontIcon size={10} />).dive();
+    expect(testTree).toMatchSnapshot();
   });
 });

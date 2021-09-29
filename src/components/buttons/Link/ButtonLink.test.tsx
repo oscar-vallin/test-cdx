@@ -1,6 +1,13 @@
 import { shallow } from 'enzyme';
 import { Link } from './ButtonLink.js';
 
+const theme = {
+  colors: { themePrimary: '#fff', custom: { error: '#000  ' } },
+  fontStyles: {
+    link: `normal ${400} ${10}/${1} ${'Segoe UI'}, ${'Source Sans Pro'}, sans-serif`,
+  },
+};
+
 describe('Link', () => {
   const mockFn = jest.fn();
   const tree = shallow(
@@ -41,5 +48,14 @@ describe('Link', () => {
 
   it('Should have a traget blank prop', () => {
     expect(tree.props().target).toEqual('_blank');
+  });
+
+  it('Test styled Button component', () => {
+    const testTemp = shallow(
+      <Link onClick={mockFn} href="http://testlink.com" theme={theme}>
+        Testing ButtonLink
+      </Link>
+    ).dive();
+    expect(testTemp).toMatchSnapshot();
   });
 });
