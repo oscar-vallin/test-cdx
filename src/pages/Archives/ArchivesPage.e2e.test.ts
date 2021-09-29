@@ -11,7 +11,9 @@ describe('ArchivesPage.js', () => {
   const formattedDate = format(startOfTomorrow(), 'MM/dd/yyyy');
 
   beforeAll(async () => {
-    browser = await puppeteer.launch();
+    browser = await puppeteer.launch({
+      args: ['--no-sandbox'],
+    });
     page = await browser.newPage();
     await page.setViewport({ width: 1920, height: 1080 });
   });

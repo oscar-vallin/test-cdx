@@ -8,7 +8,9 @@ describe('DashboardPage.js', () => {
   const password = process.env.REACT_E2E_PASS_CREDENTIALS_LOGIN;
 
   beforeAll(async () => {
-    browser = await puppeteer.launch();
+    browser = await puppeteer.launch({
+      args: ['--no-sandbox'],
+    });
     page = await browser.newPage();
     await page.setViewport({ width: 1920, height: 1080 });
   });
