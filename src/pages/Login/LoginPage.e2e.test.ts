@@ -68,7 +68,7 @@ describe('LoginPage.js', () => {
     expect(errorMessage).toEqual('Please provide a valid email address to proceed');
   });
 
-  it('Should render error message when password is not valid', async () => {
+  it('Fill credentials form and login', async () => {
     await page.goto(url);
     await page.waitForSelector('#__FormLogin__Card__Row__Input-Email');
     await page.type('#__FormLogin__Card__Row__Input-Email', email);
