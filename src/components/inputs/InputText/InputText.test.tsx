@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import toJSON from 'enzyme-to-json';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import { fireEvent, render, screen } from '@testing-library/react';
 //
 import { InputText as Component } from './index.js';
@@ -69,5 +69,60 @@ describe('Basic Input Component', () => {
     const input = screen.getByRole('textbox');
     fireEvent.keyPress(input, { target: { value: 'searchString' } });
     expect(input).toHaveValue('searchString');
+  });
+
+  it('@Testing: Input Text', () => {
+    render(<Component {...defaultProps} placeholder={placeholderText} />);
+    const input = screen.getByRole('textbox');
+    fireEvent.keyPress(input, { target: { value: 'searchString' } });
+    expect(input).toHaveValue('searchString');
+  });
+
+  it('@Testing: Check call function when key press = Enter', () => {
+    const mockFn = jest.fn();
+    const mockFn2 = jest.fn();
+    render(
+      <Component
+        {...defaultProps}
+        placeholder={placeholderText}
+        onKeyDown={(key) => mockFn(key)}
+        onKeyEnter={mockFn2}
+      />
+    );
+    const input = screen.getByRole('textbox');
+    fireEvent.keyDown(input, { key: 'Enter', code: 13 });
+    expect(mockFn2).toHaveBeenCalled();
+  });
+
+  it('@Testing: Check call function when key press', () => {
+    const mockFn = jest.fn();
+    const mockFn2 = jest.fn();
+    render(
+      <Component
+        {...defaultProps}
+        placeholder={placeholderText}
+        onKeyDown={(key) => mockFn(key)}
+        onKeyEnter={mockFn2}
+      />
+    );
+    const input = screen.getByRole('textbox');
+    fireEvent.keyDown(input, { key: 'K' });
+    expect(mockFn).toHaveBeenCalled();
+  });
+
+  it('@Testing: Check call function when key press', () => {
+    const mockFn = jest.fn();
+    const mockFn2 = jest.fn();
+    render(
+      <Component
+        {...defaultProps}
+        placeholder={placeholderText}
+        // onKeyDown={(key) => mockFn(key)}
+        // onKeyEnter={mockFn2}
+      />
+    );
+    const input = screen.getByRole('textbox');
+    fireEvent.keyDown(input);
+    expect(mockFn).not.toHaveBeenCalled();
   });
 });
