@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 import { StyledSpan } from './Badge.styles';
 
-const CDXBadge = ({ id = '__CDXBadge', variant = 'primary', pill, label, children }) => {
+const CDXBadge = ({ id, variant = 'primary', pill, label, children }) => {
   return (
     <StyledSpan id={id} variant={variant} pill={pill}>
       {label || children}

@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { Box, Bar, BarAnimated } from './FileProgressBar.styles';
 import { STEP_COLOR_PURPLE } from '../../../data/constants/FileStatusConstants';
 
-const FileProgressBar = ({ id = '__FileProgressBar', colors = [] }) => {
+const FileProgressBar = ({ id, colors = [] }) => {
   return (
     <Box id={id}>
       {colors.map((color, index) => {

@@ -26,7 +26,7 @@ import { useSessionStore } from '../../../store/SessionStore';
 import { useActiveDomainStore } from '../../../store/ActiveDomainStore';
 import { useThemeStore } from '../../../store/ThemeStore';
 
-const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSettings, visible }) => {
+const NavBar = ({ id, menuOptionSelected = 'dashboard', onUserSettings, visible }) => {
   const SessionStore = useSessionStore();
   const ActiveDomainStore = useActiveDomainStore();
   const ThemeStore = useThemeStore();

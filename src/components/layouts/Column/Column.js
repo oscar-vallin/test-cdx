@@ -3,7 +3,7 @@ import { getClassNames } from '../../../helpers/helperStyles';
 import { DivStyled } from './Column.styles';
 
 const Column = ({
-  id = '__Column',
+  id,
   variant = 'normal',
   direction = 'column',
   children,

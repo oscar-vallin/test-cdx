@@ -4,7 +4,7 @@ import { PieChart, Pie, Cell, Label } from 'recharts';
 
 const COLORS = ['#0088FE', '#D0D0D0', '#FFAAAA', '#AADD00', '#EEAA00', '#DDCCFF', '#00AAAA'];
 
-const ChartDonut = ({ id = '__ChartDonut', label, size = 50, data }) => {
+const ChartDonut = ({ id, label, size = 50, data }) => {
   const _data = data;
 
   return (

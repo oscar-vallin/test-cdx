@@ -13,7 +13,7 @@ import {
   StyledColumnTitle,
 } from './TableHeader.styles';
 
-const TableHeader = ({ id = '__TableHeader', header = {}, sortLabel, onSort, onOption, date, ...props }) => {
+const TableHeader = ({ id, header = {}, sortLabel, onSort, onOption, date, ...props }) => {
   const history = useHistory();
   if ((!header || !header.type || header.type === 'default') && props) {
     return <DetailsHeader {...props} ariaLabelForToggleAllGroupsButton="Toggle selection" />;

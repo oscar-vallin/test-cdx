@@ -55,7 +55,7 @@ const getValue = (value) => {
   return today;
 };
 
-const InputDate = ({ id = '', placeholder = 'Select a Date...', value, onChange, required }) => {
+const InputDate = ({ id, placeholder = 'Select a Date...', value, onChange, required }) => {
   return (
     <DatePicker
       id={id}

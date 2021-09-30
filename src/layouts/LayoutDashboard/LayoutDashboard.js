@@ -6,7 +6,7 @@ import { NavBar } from '../../containers/bars/NavBar';
 import { StyleConstants } from '../../data/constants/StyleConstants';
 import { BoxStyled } from './LayoutDashboard.styles';
 
-const LayoutDashboard = ({ id = 'LayoutDashboard', menuOptionSelected = 'dashboard', showMenu = true, children }) => {
+const LayoutDashboard = ({ id, menuOptionSelected = 'dashboard', showMenu = true, children }) => {
   const history = useHistory();
 
   return (
