@@ -59,6 +59,7 @@ const _DashboardPage = () => {
     return datesOptions.map((option, index) => (
       <Spacing margin={{ left: 'normal' }} key={index}>
         <StyledButton
+          id={`__Button-${option.id}`}
           key={`Button-${option.id}`}
           variant={option.selected ? 'primary' : 'secondary'}
           selected={option.selected}
@@ -129,6 +130,7 @@ const _DashboardPage = () => {
           <Row>
             <Column lg="6">
               <TableDashboard
+                id="__Table_Transmissions_Vendor"
                 tableId={TABLE_NAMES.DASHBOARD_TRANSMISSIONS_VENDOR}
                 data={dataCounters?.vendorTransmissions}
                 altData={dataCounters?.vendorTransmissionsBySpec}
@@ -138,6 +140,7 @@ const _DashboardPage = () => {
             </Column>
             <Column lg="6">
               <TableDashboard
+                id="__Table_Errors_Vendor"
                 tableId={TABLE_NAMES.DASHBOARD_ERRORS_VENDOR}
                 data={dataCounters?.vendorProcessErrors}
                 date={dateId}
@@ -149,6 +152,7 @@ const _DashboardPage = () => {
           <Row>
             <Column lg="6">
               <TableDashboard
+                id="__Table_Transmissions_Files"
                 tableId={TABLE_NAMES.DASHBOARD_TRANSMISSIONS_FILES}
                 data={dataCounters?.fileTransmissions}
                 date={dateId}
@@ -157,6 +161,7 @@ const _DashboardPage = () => {
             </Column>
             <Column lg="6">
               <TableDashboard
+                id="__Table_Errors_Files"
                 tableId={TABLE_NAMES.DASHBOARD_ERRORS_FILES}
                 data={dataCounters?.fileProcessErrors}
                 date={dateId}

@@ -60,5 +60,122 @@ describe('DashboardPage.js', () => {
     expect(transmissionValue).toContain('Failed Files  (Billing Units.)0/6979');
   });
 
+  it('Cehck count items in transmission vendor table', async () => {
+    await page.waitForTimeout(1000);
+    const result = await page.$$eval('#__Table_Transmissions_Vendor', (rows) => {
+      return rows.length;
+    });
+
+    expect(result).toEqual(1);
+  });
+
+  it('Check first item in transmission vendor table', async () => {
+    const result = await page.$$eval('#__Table_Transmissions_Vendor', (rows) => {
+      return Array.from(rows, (row: any) => {
+        const columns = row.querySelectorAll('.ms-DetailsRow-cell');
+        return Array.from(columns, (column: any) => column.innerText);
+      });
+    });
+
+    expect(result[0][0]).toEqual('BenefitResourceInc');
+  });
+
+  it('Click on first element in transmission table', async () => {
+    await page.waitForTimeout(1000);
+    await page.waitForSelector('#__Table_Transmissions_Vendor');
+    const a = await page.$x('//*[@id="__Row"]/button');
+    await a[0].click();
+  });
+
+  it('Check url with filter=BenefitResourceInc ans file-status page', async () => {
+    expect(page.url()).toContain('/file-status?filter=BenefitResource');
+  });
+
+  it('Return to Dashboard', async () => {
+    await page.goto(url);
+    await page.waitForTimeout(3000);
+  });
+
+  it('Check first item in transmission files table', async () => {
+    await page.waitForSelector('#__Table_Transmissions_Files');
+    const result = await page.$$eval('#__Table_Transmissions_Files', (rows) => {
+      return Array.from(rows, (row: any) => {
+        const columns = row.querySelectorAll('.ms-DetailsRow-cell');
+        return Array.from(columns, (column: any) => column.innerText);
+      });
+    });
+
+    expect(result[0][0]).toEqual('BBC-BCBS-PROD');
+  });
+
+  // it('Login', async () => {
+  //   await page.waitForTimeout(1000);
+  //   await page.waitForSelector('#__Table_Transmissions_Files');
+  //   const a = await page.$x('//*[@id="__Table_Transmissions_Files"]/button');
+  //   await a[0].click();
+  // });
+
+  it('Click in Yesterday filter', async () => {
+    await page.waitForTimeout(1000);
+    await page.waitForSelector('#__Button-yesterday');
+    await page.click('#__Button-yesterday');
+  });
+
+  it('Check url with date=yesterday', async () => {
+    await page.waitForTimeout(1000);
+    expect(page.url()).toContain('?date=yesterday');
+  });
+
+  it('Check no results with Yesterday filter', async () => {
+    await page.waitForTimeout(1000);
+    const noResults = await page.$eval('#__Table_Transmissions_Vendor', (e) => e.textContent);
+
+    expect(noResults).toEqual('No data available');
+  });
+
+  it('Click on This Month filter ', async () => {
+    await page.waitForTimeout(1000);
+    await page.waitForSelector('#__Button-thisMonth');
+    await page.click('#__Button-thisMonth');
+  });
+
+  it('Check url with date=thisMonth', async () => {
+    await page.waitForTimeout(1000);
+    expect(page.url()).toContain('?date=thisMonth');
+  });
+
+  it('Check results in table with this month filter', async () => {
+    const result = await page.$$eval('#__Table_Transmissions_Vendor', (rows) => {
+      return Array.from(rows, (row: any) => {
+        const columns = row.querySelectorAll('.ms-DetailsRow-cell');
+        return Array.from(columns, (column: any) => column.innerText);
+      });
+    });
+
+    expect(result[0][0]).toEqual('BenefitResourceInc');
+  });
+
+  it('Click on Last Month filter', async () => {
+    await page.waitForTimeout(1000);
+    await page.waitForSelector('#__Button-lastMonth');
+    await page.click('#__Button-lastMonth');
+  });
+
+  it('Check url with date=lastMonth', async () => {
+    await page.waitForTimeout(1000);
+    expect(page.url()).toContain('?date=lastMonth');
+  });
+
+  it('Check results in table with last month filter', async () => {
+    const result = await page.$$eval('#__Table_Transmissions_Vendor', (rows) => {
+      return Array.from(rows, (row: any) => {
+        const columns = row.querySelectorAll('.ms-DetailsRow-cell');
+        return Array.from(columns, (column: any) => column.innerText);
+      });
+    });
+
+    expect(result[0][0]).toEqual('BCBSofMA');
+  });
+
   afterAll(() => browser.close());
 });
