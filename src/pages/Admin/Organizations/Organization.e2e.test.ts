@@ -1,186 +1,86 @@
-import puppeteer from 'puppeteer';
+import P_CDXApp from '../../../teste2e/pages/P_CDXApp';
+import P_ActivityOrgs from '../../../teste2e/pages/P_ActivityOrgs';
+import P_ExchangeStatus from '../../../teste2e/pages/P_ExchangeStatus';
+import P_CurrentActivity from '../../../teste2e/pages/P_CurrentActivity';
+import P_MainMenu from '../../../teste2e/pages/P_MainMenu';
 
 describe('E2E - Organization Navigation Test', () => {
-  const url = process.env.TEST_URL || process.env.REACT_TEST_URL;
-  let browser;
-  let page;
-  const k2uisSelector = 'a.K2UIS';
-  const email = process.env.REACT_E2E_USER_CREDENTIALS_LOGIN;
-  const password = process.env.REACT_E2E_PASS_CREDENTIALS_LOGIN;
+  let cdxApp: P_CDXApp;
 
   beforeAll(async () => {
-    browser = await puppeteer.launch({
-      args: ['--no-sandbox'],
-    });
-    page = await browser.newPage();
-    await page.setViewport({ width: 1920, height: 1080 });
+    cdxApp = await P_CDXApp.startBrowser();
   });
 
   it('Login', async () => {
-    await page.goto(url);
-    await page.waitForSelector('#__FormLogin__Card__Row__Input-Email');
-    await page.type('#__FormLogin__Card__Row__Input-Email', email);
-
-    await page.click('#__FormLogin__Card__Row__Column__Button--Button');
-
-    await page.waitForSelector('#__FormLogin__Card__Row__Input-Password');
-    await page.type('#__FormLogin__Card__Row__Input-Password', password);
-
-    await page.click('#__FormLogin__Card__Row__Column__Button--Button');
-
-    await page.waitForSelector('div[name="Exchange Statuses"]');
-    const loginButton = await page.$eval('div[name="Exchange Statuses"]', (e) => e.textContent);
-
-    expect(loginButton).toContain('Exchange Statuses');
-  });
-
-  it('Click on Organizations Nav button', async () => {
-    await page.waitForTimeout(3000);
-    await page.waitForSelector('div[name="Organizations"]');
-    await page.click('div[name="Organizations"]');
-  });
-
-  it('Click on Active Orgs', async () => {
-    await page.waitForTimeout(1000);
-    await page.waitForSelector('div[name="Active Orgs"]');
-    await page.click('div[name="Active Orgs"]');
+    const loginPage = await cdxApp.toLoginPage();
+    await loginPage.loginAsAdmin();
+    await loginPage.expectOnActiveOrgsPage();
   });
 
   it('Check first Active Org (ABC Co)', async () => {
-    await page.waitForTimeout(1000);
-    const result = await page.$$eval('.ms-DetailsRow-fields', (rows) => {
-      return Array.from(rows, (row: any) => {
-        const columns = row.querySelectorAll('.ms-DetailsRow-cell');
-        return Array.from(columns, (column: any) => column.innerText);
-      });
-    });
-
-    expect(result[0][0]).toEqual('ABC Co');
+    const activeOrgs = new P_ActivityOrgs(cdxApp.page);
+    await activeOrgs.expectOnPage();
+    await activeOrgs.waitForSelector('a.ABC');
   });
 
   it('Go to Exchange Status page', async () => {
-    await page.waitForSelector('div[name="Exchange Statuses"]');
-    await page.click('div[name="Exchange Statuses"]');
-  });
+    const adminMenu = cdxApp.getAdminMenu();
+    await adminMenu.openMenu('Exchange Statuses');
 
-  it('Should redirect to File Status page', async () => {
-    await page.waitForTimeout(1000);
-    await page.waitForSelector('#__Text_File-Status-Text');
-    const titleText = await page.$eval('#__Text_File-Status-Text', (e) => e.textContent);
-
-    await page.waitForSelector('#__Text_Advanced-search-Text');
-    const secondaryText = await page.$eval('#__Text_Advanced-search-Text', (e) => e.textContent);
-
-    expect(titleText).toContain('File Status');
-    expect(secondaryText).toContain('  — Advanced search');
+    const exchangeStatus = new P_ExchangeStatus(cdxApp.page);
+    await exchangeStatus.expectOnPage();
   });
 
   it('Click on Admin', async () => {
-    await page.waitForTimeout(1000);
-    await page.waitForSelector('#__MainMenu__MainMenu__Row-admin-6');
-    await page.click('#__MainMenu__MainMenu__Row-admin-6');
+    const mainMenu = new P_MainMenu(cdxApp.page);
+    await mainMenu.clickAdmin();
   });
 
-  it('Click on Organizations Nav button', async () => {
-    await page.waitForTimeout(3000);
-    await page.waitForSelector('div[name="Organizations"]');
-    await page.click('div[name="Organizations"]');
-  });
-
-  it('Click on Active Orgs', async () => {
-    await page.waitForTimeout(1000);
-    await page.waitForSelector('div[name="Active Orgs"]');
-    await page.click('div[name="Active Orgs"]');
+  it('Navigate to Active Orgs', async () => {
+    const adminMenu = cdxApp.getAdminMenu();
+    await adminMenu.openMenu('Organizations', 'Active Orgs');
   });
 
   it('Check first Active Org (ABC Co)', async () => {
-    await page.waitForTimeout(1000);
-    const result = await page.$$eval('.ms-DetailsRow-fields', (rows) => {
-      return Array.from(rows, (row: any) => {
-        const columns = row.querySelectorAll('.ms-DetailsRow-cell');
-        return Array.from(columns, (column: any) => column.innerText);
-      });
-    });
-
-    expect(result[0][0]).toEqual('ABC Co');
+    const activeOrgs = new P_ActivityOrgs(cdxApp.page);
+    await activeOrgs.expectOnPage();
+    await activeOrgs.waitForSelector('a.ABC');
   });
 
   it('Check Known2U Implementation Services', async () => {
-    await page.waitForTimeout(1000);
-    await page.waitForSelector(k2uisSelector);
-    const know2uText = await page.$eval(k2uisSelector, (e) => e.textContent);
-
-    expect(know2uText).toEqual('Known2U Implementation Services');
-    await page.click(k2uisSelector);
+    const activeOrgs = new P_ActivityOrgs(cdxApp.page);
+    await activeOrgs.expectOnPage();
+    await activeOrgs.clickOnOrg('K2UIS', 'Known2U Implementation Services');
   });
 
   it('Verify on K2UIS Current Activity Page', async () => {
-    await page.waitForTimeout(1000);
-    await page.waitForSelector('#__Current_Activity_Text-Text');
-    const titleText = await page.$eval('#__Current_Activity_Text-Text', (e) => e.textContent);
-
-    expect(titleText).toContain('Current Activity');
-  });
-
-  it('Check In Progress section', async () => {
-    await page.waitForTimeout(1000);
-    await page.waitForSelector('#__Table__In__Proccess');
-    const titleText = await page.$eval('#__Table__In__Proccess', (e) => e.textContent);
-
-    expect(titleText).toContain('In Process');
-  });
-
-  it('Check Completed section', async () => {
-    await page.waitForTimeout(1000);
-    await page.waitForSelector('#__Table__Completed');
-    const titleText = await page.$eval('#__Table__Completed', (e) => e.textContent);
-
-    expect(titleText).toContain('Completed');
-  });
-
-  it('Check Errored section', async () => {
-    await page.waitForTimeout(1000);
-    await page.waitForSelector('#__Table__Errored');
-    const titleText = await page.$eval('#__Table__Errored', (e) => e.textContent);
-
-    expect(titleText).toContain('Errored');
+    const currentActivity = new P_CurrentActivity(cdxApp.page);
+    await currentActivity.expectOnPage();
   });
 
   it('Go back up to CDX Organization', async () => {
-    await page.click('#__Organization__Button');
-    await page.waitForSelector('#__Return__Organization');
-    await page.click('#__Return__Organization');
-  });
-
-  it('Click on Organizations Nav button', async () => {
-    await page.waitForTimeout(3000);
-    await page.waitForSelector('div[name="Organizations"]');
-    await page.click('div[name="Organizations"]');
+    await cdxApp.returnToMyOrganization();
   });
 
   it('Click on Active Orgs', async () => {
-    await page.waitForTimeout(1000);
-    await page.waitForSelector('div[name="Active Orgs"]');
-    await page.click('div[name="Active Orgs"]');
-
-    // Should be on Active Orgs pages
-    await page.waitForSelector('#__Page-Title-Text');
-    const titleText = await page.$eval('#__Page-Title-Text', (e) => e.textContent);
-    expect(titleText).toEqual('Active orgs');
+    const adminMenu = cdxApp.getAdminMenu();
+    await adminMenu.openMenu('Organizations', 'Active Orgs');
   });
 
   it('Click on first Active Org (ABC Co)', async () => {
-    await page.waitForSelector('a.ABC');
-    await page.click('a.ABC');
+    const activeOrgs = new P_ActivityOrgs(cdxApp.page);
+    await activeOrgs.expectOnPage();
+    await activeOrgs.clickOnOrg('ABC', 'ABC Co');
   });
 
   it('Should redirect to File Status Page', async () => {
-    await page.waitForTimeout(1000);
-    await page.waitForSelector('#__Text_File-Status-Text');
-    const titleText = await page.$eval('#__Text_File-Status-Text', (e) => e.textContent);
-
-    expect(titleText).toContain('File Status');
+    const fileStatus = new P_ExchangeStatus(cdxApp.page);
+    await fileStatus.expectOnPage();
   });
 
-  afterAll(() => browser.close());
+  it('Logout', async () => {
+    await cdxApp.logout();
+  });
+
+  afterAll(() => cdxApp.closeBrowser());
 });
