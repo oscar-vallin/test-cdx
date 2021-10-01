@@ -4,7 +4,7 @@ import { Table } from '../../../components/tables/Table';
 import { Box, Container } from './TableOrganizations.styles';
 import { useTable } from './TableOrganizations.service';
 
-const TableOrganizations = ({ id = 'TableOrganizations', data }) => {
+const TableOrganizations = ({ id, data }) => {
   const { tableProps } = useTable(data);
 
   return (

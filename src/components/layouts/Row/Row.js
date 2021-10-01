@@ -2,19 +2,7 @@ import PropTypes from 'prop-types';
 import { getClassNames } from '../../../helpers/helperStyles';
 import { DivStyled } from './Row.styles';
 
-const Row = ({
-  id = '__Row',
-  variant = 'normal',
-  children,
-  center,
-  right,
-  top,
-  bottom,
-  between,
-  evenly,
-  around,
-  ...props
-}) => {
+const Row = ({ id, variant = 'normal', children, center, right, top, bottom, between, evenly, around, ...props }) => {
   return (
     <DivStyled
       id={id}

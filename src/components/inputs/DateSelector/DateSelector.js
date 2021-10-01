@@ -44,7 +44,7 @@ const DayPickerStrings = {
 
 const firstDayOfWeek = DayOfWeek.Sunday;
 
-export const DateSelector = ({ id = '', onChange, required }) => {
+export const DateSelector = ({ id, onChange, required }) => {
   return (
     <DatePicker
       id={id}

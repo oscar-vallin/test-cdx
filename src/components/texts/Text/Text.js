@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { StyledText } from './Text.styles';
 
-const Text = ({ id = '__Text', children, variant = 'normal', left, right, top, bottom, ...props }) => {
+const Text = ({ id, children, variant = 'normal', left, right, top, bottom, ...props }) => {
   return (
     <StyledText id={`${id}-Text`} variant={variant} left={left} right={right} top={top} bottom={bottom} {...props}>
       {children}

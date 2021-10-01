@@ -6,7 +6,7 @@ import { useTable } from './TableEnrollment.service';
 const ORG_SID = 1;
 const WORK_ORDER_ID = '2';
 
-const TableEnrollment = ({ id = 'TableEnrollmentStats' }) => {
+const TableEnrollment = ({ id }) => {
   const { tableProps, tableItems, tableGroups, excludedCounter, error } = useTable(ORG_SID, WORK_ORDER_ID);
 
   return (

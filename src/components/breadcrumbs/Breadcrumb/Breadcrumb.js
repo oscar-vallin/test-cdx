@@ -23,7 +23,7 @@ const parseBreadcrumbItems = (
   });
 
 const CDXBreadcrumb = ({
-  id = '__CDXBreadcrumb',
+  id,
   items = [],
   onClick = () => {
     return {};
@@ -35,7 +35,7 @@ const CDXBreadcrumb = ({
 };
 
 export const BreadCrumbs = ({
-  id = '__CDXBreadcrumb',
+  id,
   items = [],
   onClick = () => {
     return {};

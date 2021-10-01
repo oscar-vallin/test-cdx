@@ -7,7 +7,7 @@ import { ButtonContextual } from '../../../components/buttons/ButtonContextual';
 import { useLogoutUseCase } from '../../../use-cases/Authentication';
 import { useSessionStore } from '../../../store/SessionStore';
 
-const ProfileMenu = ({ id = '__ProfileMenu', onUserSettings }) => {
+const ProfileMenu = ({ id, onUserSettings }) => {
   const SessionStore = useSessionStore();
   const { performUserLogout } = useLogoutUseCase();
 

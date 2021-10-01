@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { StyledText } from './Text.styles';
 
 const Text = ({
-  id = '__Text',
+  id,
   children,
   variant = 'normal',
   transform = 'none',

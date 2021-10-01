@@ -6,7 +6,7 @@ import { Text } from '../../../../components/typography/Text';
 import { TablesCurrentActivity } from '../../../../containers/tables/TableCurrentActivity';
 import { NAV_ITEMS } from '../../SideMenu';
 
-export const CurrentActivityPage = ({ id = 'CurrentActivity' }) => {
+export const CurrentActivityPage = ({ id }) => {
   return (
     <LayoutAdmin id={id} sidebar={NAV_ITEMS} sidebarOptionSelected="ORG_ACTIVITY">
       <Spacing margin="double">
