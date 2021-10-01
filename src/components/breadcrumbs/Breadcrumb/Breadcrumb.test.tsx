@@ -1,7 +1,12 @@
-import { mount, render } from 'enzyme';
+import { mount, render, shallow } from 'enzyme';
 import { CDXBreadcrumb } from './Breadcrumb.js';
 
+const baseProps = {
+  id: 'Breadcrumb_UnitTest',
+};
+
 const defaultProps = {
+  ...baseProps,
   items: [{ ID: 'test', TITLE: 'Test' }],
 };
 
@@ -36,5 +41,19 @@ describe('Breadcrumb Testing Unit...', () => {
     wrapper.find('.ms-Breadcrumb-itemLink').last().simulate('click');
 
     expect(mockFn).toHaveBeenCalled();
+  });
+
+  it('Breadcrumb Default Props', () => {
+    const wrapper = shallow(<CDXBreadcrumb {...baseProps}>1</CDXBreadcrumb>);
+    expect(wrapper).toMatchSnapshot();
+  });
+
+  it('Breadcrumb Variants', () => {
+    const wrapper = shallow(
+      <CDXBreadcrumb {...baseProps} onClick={undefined}>
+        1
+      </CDXBreadcrumb>
+    );
+    expect(wrapper).toMatchSnapshot();
   });
 });

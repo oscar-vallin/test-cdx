@@ -64,7 +64,6 @@ const InputDate = ({ id, placeholder = 'Select a Date...', value, onChange, requ
       strings={DayPickerStrings}
       placeholder={placeholder}
       ariaLabel={placeholder}
-      // minDate={minDate}
       maxDate={maxDate}
       onSelectDate={onChange}
       value={getValue(value)}

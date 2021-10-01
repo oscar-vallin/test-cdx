@@ -1,23 +1,6 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
-export const StyledSpan = styled.span`
-  align-items: center;
-  border-radius: ${({ theme }) => theme.radius.large};
-  display: flex;
-  font-size: 0.75rem;
-  font-weight: ${({ theme }) => theme.fontWeights.normal};
-  justify-content: center;
-  border-color: ${({ type }) => {
-    if (type === 0) return `red`;
-
-    if (type === 1) return `yellow`;
-
-    return 'blue';
-  }};
-  white-space: nowrap;
-`;
-
 export const StyledContainer = styled.div`
   display: flex;
   justify-content: center;
