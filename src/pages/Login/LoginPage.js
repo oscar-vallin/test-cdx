@@ -5,7 +5,7 @@ import { FormLogin } from '../../containers/forms/FormLogin';
 const _LoginPage = () => {
   return (
     <LayoutLogin id="PageLogin">
-      <FormLogin />
+      <FormLogin id="__FormLogin" />
     </LayoutLogin>
   );
 };

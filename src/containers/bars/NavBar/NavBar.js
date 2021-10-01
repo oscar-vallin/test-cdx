@@ -83,7 +83,7 @@ const NavBar = ({ id, menuOptionSelected = 'dashboard', onUserSettings, visible 
             </StyledColumnLogoL>
             <StyledColumnNav id={`${id}__Left-Row__Menu`} sm={10}>
               {visible && menuOptionSelected && (
-                <MainMenu left option={menuOptionSelected} changeCollapse={changeCollapse} />
+                <MainMenu id="__MainMenu" left option={menuOptionSelected} changeCollapse={changeCollapse} />
               )}
             </StyledColumnNav>
             <StyledColumnLogoR id={`${id}__Left-Row__Logo`} sm={2} noPadding collapse>
@@ -134,7 +134,7 @@ const NavBar = ({ id, menuOptionSelected = 'dashboard', onUserSettings, visible 
 
             <StyledIconButton iconProps={{ iconName: 'Font' }} title="Font sizes" menuProps={{ items: settingsMenu }} />
 
-            <ProfileMenu onUserSettings={onUserSettings} />
+            <ProfileMenu id="__ProfileMenu" onUserSettings={onUserSettings} />
           </StyledRow>
         </StyledColumnCont>
       </StyledRow>
