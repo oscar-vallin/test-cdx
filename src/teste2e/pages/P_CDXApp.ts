@@ -71,7 +71,6 @@ export default class P_CDXApp {
 
   static async startBrowser(): Promise<P_CDXApp> {
     const browser = await puppeteer.launch({
-      headless: false,
       args: ['--no-sandbox'],
     });
     const page = await browser.newPage();
