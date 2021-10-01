@@ -7,7 +7,7 @@ export interface QueryParamModel {
   reset: Action<QueryParamModel>;
 }
 
-const DEFAULT_QUERY_PARAMS = {
+export const DEFAULT_QUERY_PARAMS = {
   orgSid: null,
 };
 

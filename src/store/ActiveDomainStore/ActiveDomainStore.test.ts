@@ -2,7 +2,7 @@ import { createStore } from 'easy-peasy';
 
 import ActiveDomainStore, { INITIAL_NAV_STATE, INITIAL_ORG_STATE } from './ActiveDomainStore';
 
-describe('Unit::SessionStore', () => {
+describe('Unit::ActiveDomainStore', () => {
   const store = createStore(ActiveDomainStore);
   const nav = [{ label: '', destination: null }];
 
@@ -17,6 +17,7 @@ describe('Unit::SessionStore', () => {
 
     expect(store.getState().nav.admin).toEqual(nav);
   });
+
   it("Should store the user's original organization info", async () => {
     const org = { ...INITIAL_ORG_STATE, orgSid: '1' };
 
@@ -25,13 +26,13 @@ describe('Unit::SessionStore', () => {
     expect(store.getState().domainOrg.origin).toEqual(org);
   });
 
-  it('Should store the current organization info', async () => {
-    const org = { ...INITIAL_ORG_STATE, orgSid: '2' };
+  // it('Should store the current organization info', async () => {
+  //   const org = { ...INITIAL_ORG_STATE, orgSid: '2' };
 
-    store.getActions().setCurrentOrg(org);
+  //   store.getActions().setCurrentOrg(org);
 
-    expect(store.getState().domainOrg.current).toEqual(org);
-  });
+  //   expect(store.getState().domainOrg.current).toEqual(org);
+  // });
 
   it('Should reset its state', async () => {
     store.getActions().reset();
