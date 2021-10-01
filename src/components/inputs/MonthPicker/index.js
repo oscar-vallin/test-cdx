@@ -135,6 +135,7 @@ export const MonthPicker = ({
         </div>
       )}
       <Calendar
+        data-testid="Calendar"
         // eslint-disable-next-line react/jsx-no-bind
         onSelectDate={onSelectDate}
         // eslint-disable-next-line react/jsx-no-bind
@@ -160,11 +161,13 @@ export const MonthPicker = ({
       {props.showNavigateButtons && (
         <div>
           <DefaultButton
+            data-testid="__PrevioustBtn"
             // eslint-disable-next-line react/jsx-no-bind
             onClick={goPrevious}
             text="Previous"
           />
           <DefaultButton
+            data-testid="__NextBtn"
             // eslint-disable-next-line react/jsx-no-bind
             onClick={goNext}
             text="Next"
