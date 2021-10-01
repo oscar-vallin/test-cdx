@@ -7,6 +7,11 @@ import { MonthPicker as Component } from './index.js';
 import { Container } from './MonthPicker.styles';
 import { DefaultButton } from 'office-ui-fabric-react/lib-commonjs/Button';
 
+const baseProps = {
+  onSelect: () => null,
+  show: true,
+};
+
 const defaultProps = {
   open: false,
   onSelect: () => null,
@@ -62,11 +67,8 @@ describe('Basic MonthPicker Component', () => {
     expect(toJSON(wrapper)).toMatchSnapshot();
   });
 
-  // it('Test styled MonthPicker component', () => {
-  //   const mockFn = jest.fn();
-  //   const wrapper = shallow(<Component {...defaultProps} theme={theme}></Component>);
-  //   const input = wrapper.children(<Calendar onSelectDate={() => mockFn} />);
-  //   fireEvent.click(screen.getByTestId('Calendar'));
-  //   expect(mockFn).toHaveBeenCalled();
-  // });
+  it('Test default props MonthPicker component', () => {
+    const wrapper = shallow(<Component {...baseProps} theme={theme} restrictedDates={[new Date()]} />);
+    expect(toJSON(wrapper)).toMatchSnapshot();
+  });
 });

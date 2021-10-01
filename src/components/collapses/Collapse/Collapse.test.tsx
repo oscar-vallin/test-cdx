@@ -1,8 +1,24 @@
 import CDXCollapse from './Collapse.js';
 import { mountWithTheme } from '../../../utils/testUtils';
+import { shallow } from 'enzyme';
 
 const defaultProps = {
   label: 'Test',
+};
+
+const theme = {
+  radius: { large: '10px' },
+  fontWeights: { normal: 400 },
+  fontStyles: {
+    link: `normal ${400} ${10}/${1} ${'Segoe UI'}, ${'Source Sans Pro'}, sans-serif`,
+  },
+  colors: {
+    themeTertiary: '#000',
+    warning: 'yellow',
+    custom: { error: '#FAFAFA  ' },
+  },
+  spacing: { normal: '15px' },
+  fontSizes: { normal: '400' },
 };
 
 describe('Collapse Testing Unit...', () => {
@@ -32,5 +48,15 @@ describe('Collapse Testing Unit...', () => {
     tree.find('.collapse__trigger').at(0).simulate('click');
 
     expect(mockFn).toHaveBeenCalled();
+  });
+
+  it('Test styled Collapse component', () => {
+    const testTemp = shallow(
+      <CDXCollapse {...defaultProps} onToggle={mockFn} expanded={true} theme={theme}>
+        Content
+      </CDXCollapse>
+    ).dive();
+
+    expect(testTemp).toMatchSnapshot();
   });
 });
