@@ -13,12 +13,12 @@ const defaultProps = {
 };
 
 const theme = {
+  radius: { large: '10px' },
+  fontWeights: { normal: 400 },
   colors: {
     themePrimary: '#fff',
     warning: 'red',
     custom: { error: '#000  ' },
-    radius: { large: '10px' },
-    fontWeights: { normal: 400 },
   },
 };
 
@@ -64,6 +64,16 @@ describe('Highlight Counter Testing Unit...', () => {
   it('Test styled Highlight Counter component variants', () => {
     const wrapper = shallow(
       <HighlightCounter {...defaultProps} theme={theme} type={1}>
+        1
+      </HighlightCounter>
+    ).dive();
+
+    expect(wrapper).toMatchSnapshot();
+  });
+
+  it('Test styled Highlight Counter type null', () => {
+    const wrapper = shallow(
+      <HighlightCounter {...defaultProps} theme={theme} type={null}>
         1
       </HighlightCounter>
     ).dive();
