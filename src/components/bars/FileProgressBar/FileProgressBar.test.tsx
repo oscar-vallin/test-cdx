@@ -7,7 +7,7 @@ const defaultProps = {
 };
 
 describe('FileProgressBar Testing Unit...', () => {
-  const tree = mountWithTheme(<FileProgressBar {...defaultProps} />);
+  const tree = mountWithTheme(<FileProgressBar id={'Box'} {...defaultProps} />);
 
   it('Should be defined', () => {
     expect(FileProgressBar).toBeDefined();
@@ -19,15 +19,15 @@ describe('FileProgressBar Testing Unit...', () => {
 
   it('Should render the provided color if its not processing', () => {
     const node = tree.find('#Box').last().getDOMNode();
-    const style =  window.getComputedStyle(node);
+    const style = window.getComputedStyle(node);
 
     expect(style.background).toEqual('rgb(41, 200, 145)');
   });
 
   it('Should render the provided color if its not processing', () => {
-    const wrapper = mountWithTheme(<FileProgressBar colors={[STEP_COLOR_PURPLE]} />);
+    const wrapper = mountWithTheme(<FileProgressBar colors={[STEP_COLOR_PURPLE]} id={'Box'} />);
     const node = wrapper.find('#Box').last().getDOMNode();
-    const style =  window.getComputedStyle(node);
+    const style = window.getComputedStyle(node);
 
     expect(style.animation).toEqual('barberpole 3s linear infinite');
   });

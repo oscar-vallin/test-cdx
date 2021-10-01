@@ -17,7 +17,6 @@ const parseBreadcrumbItems = (routes, onClick = () => null) =>
     };
   });
 
-
 const CDXBreadcrumb = ({ id, items = [], onClick = () => null, ...props }) => {
   const history = useHistory();
 
