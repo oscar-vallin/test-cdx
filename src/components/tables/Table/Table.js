@@ -437,7 +437,11 @@ const Table = ({
 
             if (_props.column.key === currentKeySort) {
               return (
-                <StyledMenuButton onClick={() => _onSort(_props.column.key)} icon={sort}>
+                <StyledMenuButton
+                  id={_props.column.name.replaceAll(' ', '__')}
+                  onClick={() => _onSort(_props.column.key)}
+                  icon={sort}
+                >
                   {_props.children}
                 </StyledMenuButton>
               );
@@ -455,7 +459,12 @@ const Table = ({
                     {_props.children}
                   </StyledMenuIcon>
                 ) : (
-                  <StyledMenuButton onClick={() => _onSort(_props.column.key)}>{_props.children}</StyledMenuButton>
+                  <StyledMenuButton
+                    id={_props.column.name.replaceAll(' ', '__')}
+                    onClick={() => _onSort(_props.column.key)}
+                  >
+                    {_props.children}
+                  </StyledMenuButton>
                 )}
               </div>
             );
