@@ -9,9 +9,9 @@ export const StyledSpan = styled.span`
   font-weight: ${({ theme }) => theme.fontWeights.normal};
   justify-content: center;
   border-color: ${({ type }) => {
-    if (type === 0) return `red`;
+    if (type === 0) return 'red';
 
-    if (type === 1) return `yellow`;
+    if (type === 1) return 'yellow';
 
     return 'blue';
   }};
