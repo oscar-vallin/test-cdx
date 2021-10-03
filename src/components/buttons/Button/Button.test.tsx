@@ -21,7 +21,7 @@ const theme = {
 
 describe('Button Testing Unit...', () => {
   const mockFn = jest.fn();
-  const tree = shallow(<Button {...defaultProps} onClick={mockFn}></Button>);
+  const tree = shallow(<Button {...defaultProps} id={'__Button'} onClick={mockFn}></Button>);
 
   it('Should be defined', () => {
     expect(Button).toBeDefined();
@@ -63,7 +63,7 @@ describe('Button Testing Unit...', () => {
   });
 
   it('Default props values, Should have a props', () => {
-    const baseTree = shallow(<Button {...baseProps}></Button>);
+    const baseTree = shallow(<Button {...baseProps} id={'__Button'}></Button>);
     expect(baseTree.props().id).toEqual('__Button');
     expect(baseTree.props().variant).toEqual('secondary');
     expect(baseTree.props().disabled).toBeFalsy();
@@ -71,7 +71,9 @@ describe('Button Testing Unit...', () => {
   });
 
   it('Styled variants, coverate theme.', () => {
-    const baseTree = shallow(<Button {...baseProps} block={true} theme={theme} variant="primary"></Button>).dive();
+    const baseTree = shallow(
+      <Button {...baseProps} id={'__Button'} block={true} theme={theme} variant="primary"></Button>
+    ).dive();
     expect(baseTree).toMatchSnapshot();
   });
 });

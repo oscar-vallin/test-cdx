@@ -31,7 +31,7 @@ const resetState = (state) => {
 };
 
 const updateOrgSidParam = async (actions, target, { getStoreActions }) => {
-  await getStoreActions().QueryParamStore.setGlobalParam({ orgSid: target.payload.orgSid });
+  await getStoreActions().QueryParamStore?.setGlobalParam({ orgSid: target.payload.orgSid });
 };
 
 export const INITIAL_ACTIVE_DOMAIN_STATE: ActiveDomainModel = {

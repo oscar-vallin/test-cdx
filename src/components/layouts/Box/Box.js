@@ -4,7 +4,16 @@ import { StyleConstants } from '../../../data/constants/StyleConstants';
 import { validateDirection } from './Box.handlers';
 import { ComponentStyled } from './Box.styles';
 
-const Box = ({ id, children, direction = StyleConstants.DIRECTION_COLUMN, left, right, top, bottom, ...props }) => {
+const Box = ({
+  id = 'Box',
+  children,
+  direction = StyleConstants.DIRECTION_COLUMN,
+  left,
+  right,
+  top,
+  bottom,
+  ...props
+}) => {
   return (
     <ComponentStyled
       id={id}
