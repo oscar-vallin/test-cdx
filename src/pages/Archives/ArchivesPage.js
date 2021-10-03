@@ -20,8 +20,10 @@ const _ArchivePage = () => {
               <Column lg="6" direction="row">
                 <FontIcon iconName="FilterSolid" />
 
-                <Text variant="bold">Archives</Text>
-                <Text>&nbsp; — Advanced search</Text>
+                <Text id="__Text_Archives" variant="bold">
+                  Archives
+                </Text>
+                <Text id="__Text_Advanced-search">&nbsp; — Advanced search</Text>
               </Column>
               <Column lg="6" right>
                 <Text right>
