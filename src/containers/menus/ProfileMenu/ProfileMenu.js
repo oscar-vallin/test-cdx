@@ -27,8 +27,8 @@ const ProfileMenu = ({ id, onUserSettings }) => {
   // Render
   return (
     <StyledBox id={id} noStyle>
-      <ButtonContextual items={items}>
-        <UserToken name={SessionStore.user.firstNm} />
+      <ButtonContextual id="__ButtonContext" items={items}>
+        <UserToken id="__UserToken" name={SessionStore.user.firstNm} />
       </ButtonContextual>
     </StyledBox>
   );

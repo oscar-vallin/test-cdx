@@ -20,8 +20,10 @@ const _TransmissionsPage = () => {
             <Row>
               <Column lg="6" direction="row">
                 <FontIcon iconName="FilterSolid" />
-                <Text variant="bold">Transmissions</Text>
-                <Text>&nbsp; — Advanced search</Text>
+                <Text id="__Text_Transmissions" variant="bold">
+                  Transmissions
+                </Text>
+                <Text id="__Text_Advanced-search">&nbsp; — Advanced search</Text>
               </Column>
               <Column lg="6" right>
                 <Text right>

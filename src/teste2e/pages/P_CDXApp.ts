@@ -41,12 +41,12 @@ export default class P_CDXApp {
   }
 
   async returnToMyOrganization() {
+    await this.page.waitForTimeout(3000);
     const menuButton = await this.waitForSelector('#__Organization__Button');
     menuButton?.click();
     await this.page.waitForTimeout(1000);
     const returnButton = await this.waitForSelector('#__Return__Organization');
     returnButton?.click();
-    await this.page.waitForTimeout(3000);
   }
 
   getAdminMenu(): P_AdminMenu {
@@ -71,6 +71,7 @@ export default class P_CDXApp {
 
   static async startBrowser(): Promise<P_CDXApp> {
     const browser = await puppeteer.launch({
+      headless: false,
       args: ['--no-sandbox'],
     });
     const page = await browser.newPage();

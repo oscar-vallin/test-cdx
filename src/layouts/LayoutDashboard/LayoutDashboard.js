@@ -13,6 +13,7 @@ const LayoutDashboard = ({ id, menuOptionSelected = 'dashboard', showMenu = true
     <>
       <BoxStyled id={`${id}__Box`} direction={StyleConstants.DIRECTION_COLUMN} top>
         <NavBar
+          id="__NavBar"
           visible={showMenu}
           menuOptionSelected={menuOptionSelected}
           onUserSettings={() => history.push(ROUTE_USER_SETTINGS.URL)}
