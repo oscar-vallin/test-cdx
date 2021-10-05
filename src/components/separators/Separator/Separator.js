@@ -10,3 +10,4 @@ CDXSeparator.propTypes = {
 };
 
 export { CDXSeparator };
+export default CDXSeparator;

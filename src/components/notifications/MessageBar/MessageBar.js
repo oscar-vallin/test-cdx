@@ -33,3 +33,4 @@ CDXMessageBar.propTypes = {
 };
 
 export { CDXMessageBar };
+export default CDXMessageBar;

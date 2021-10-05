@@ -142,7 +142,15 @@
       "/\\.scannerwork/",
       "/build/",
       "/node/",
-      "/node_modules/"
+      "/node_modules/",
+      "src/pages",
+      "src/utils",
+      "src/store",
+      "src/contexts",
+      "src/data",
+      "src/hooks",
+      "src/teste2e",
+      "src/use-cases"
     ],
     "coverageReporters": [
       "json",
@@ -171,6 +179,7 @@
     "moduleNameMapper": {
       "^react-native$": "react-native-web",
       "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy",
+      "office-ui-fabric-react/lib/(.*)$": "office-ui-fabric-react/lib-commonjs/$1",
       "src/pages/(.*)$": "<rootDir>/src/pages/$1"
     }
   },
