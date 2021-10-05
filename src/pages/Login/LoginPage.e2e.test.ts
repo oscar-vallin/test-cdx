@@ -13,19 +13,20 @@ describe('LoginPage.js', () => {
 
   beforeAll(async () => {
     browser = await puppeteer.launch({
+      headless: false,
       args: ['--no-sandbox'],
     });
     page = await browser.newPage();
   });
 
-  afterEach(async () => {
-    if (isLogout) {
-      await page.on('request', (request: any) => {
-        assert = JSON.parse(request._postData)?.operationName;
-      });
-      expect(['CurrentOrgNav', 'UserTheme', 'NavigateToNewDomain'].includes(assert)).toBeFalsy();
-    }
-  });
+  // afterEach(async () => {
+  //   if (isLogout) {
+  //     await page.on('request', (request: any) => {
+  //       assert = JSON.parse(request._postData)?.operationName;
+  //     });
+  //     expect(['CurrentOrgNav', 'UserTheme', 'NavigateToNewDomain'].includes(assert)).toBeFalsy();
+  //   }
+  // });
 
   it('contains the CDX DASHBOARD text', async () => {
     await page.goto(url);
