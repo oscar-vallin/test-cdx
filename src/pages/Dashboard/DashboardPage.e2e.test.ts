@@ -83,8 +83,7 @@ describe('DashboardPage.js', () => {
   it('Click on first element in transmission table', async () => {
     await page.waitForTimeout(1000);
     await page.waitForSelector('#__Table_Transmissions_Vendor');
-    const a = await page.$x('//*[@id="__Row"]/button');
-    await a[0].click();
+    await page.click('a.fcFBPI');
   });
 
   it('Check url with filter=BenefitResourceInc ans file-status page', async () => {
