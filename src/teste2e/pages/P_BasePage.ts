@@ -22,10 +22,14 @@ export default class P_BasePage {
 
   async expectTextOnPage(selector: string, expectedText: string) {
     const { page } = this;
-    await this.waitForSelector(selector);
-    const actualText = await page.$eval(selector, (e) => e.textContent);
+    try {
+      await this.waitForSelector(selector);
+      const actualText = await page.$eval(selector, (e) => e.textContent);
 
-    expect(actualText).toContain(expectedText);
+      expect(actualText).toContain(expectedText);
+    } catch (err) {
+      throw Error(`Did not find element ${selector} within the time limit`);
+    }
   }
 
   async waitForSelector(selector: string): Promise<ElementHandle | null> {
