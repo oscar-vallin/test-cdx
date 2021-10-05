@@ -14,7 +14,7 @@ import { getRouteByApiId } from '../../../data/constants/RouteConstants';
 import { OutsideComponent } from './OutsideComponent';
 import { useActiveDomainStore } from '../../../store/ActiveDomainStore';
 
-const MainMenu = ({ id = '__MainMenu', left, changeCollapse }) => {
+const MainMenu = ({ id, left, changeCollapse }) => {
   const ActiveDomainStore = useActiveDomainStore();
   const history = useHistory();
   const location = useLocation();

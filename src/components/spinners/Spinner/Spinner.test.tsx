@@ -1,10 +1,28 @@
 import { shallow } from 'enzyme';
-import { Spinner as Component } from './index.js';
-import { StyleConstants } from '../../../data/constants/StyleConstants.js';
-import { getSpinnerSize } from './Spinner.handlers.js';
+import { StyleConstants } from '../../../data/constants/StyleConstants';
+import Component from './Spinner';
 
-describe('Spinner', () => {
-  const tree = shallow(<Component size={StyleConstants.SPINNER_SMALL} label="loading ..." />);
+const defaultId = 'SpinnerComponentTest';
+const defaultSize = StyleConstants.SPINNER_XSMALL;
+const defaultSizeValue = 0;
+const defaultLabel = 'Label';
+
+const baseProps = {
+  id: defaultId,
+};
+
+const defaultProps = {
+  ...baseProps,
+  size: defaultSize,
+  label: defaultLabel,
+};
+
+const theme = {
+  colors: { themePrimary: '#fff', custom: { error: '#000  ' } },
+};
+
+describe('MessageBar Testing Unit...', () => {
+  const tree = shallow(<Component {...defaultProps} />);
 
   it('Should be defined', () => {
     expect(Component).toBeDefined();
@@ -14,11 +32,16 @@ describe('Spinner', () => {
     expect(tree).toMatchSnapshot();
   });
 
-  it('Should have a size', () => {
-    expect(tree.props().size).toEqual(getSpinnerSize(StyleConstants.SPINNER_SMALL));
+  it('Should have a props', () => {
+    expect(tree.props().id).toEqual(defaultId);
+    expect(tree.props().size).toEqual(defaultSizeValue);
+    expect(tree.props().label).toEqual(defaultLabel);
   });
 
-  it('Should have a label', () => {
-    expect(tree.props().label).toEqual('loading ...');
+  it('Default props values, Should have a props', () => {
+    const baseTree = shallow(<Component {...baseProps} />);
+    expect(baseTree.props().id).toEqual(defaultId);
+    expect(baseTree.props().size).toEqual(1);
+    expect(baseTree.props().label).toEqual('');
   });
 });

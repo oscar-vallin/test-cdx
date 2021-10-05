@@ -6,7 +6,7 @@ import { useTable } from './TableQualityChecks.service';
 const ORG_SID = 1;
 const WORK_ORDER_ID = '2';
 
-const TableQualityChecks = ({ id = 'TableQualityChecksStats' }) => {
+const TableQualityChecks = ({ id }) => {
   const { tableProps } = useTable(ORG_SID, WORK_ORDER_ID);
 
   return (

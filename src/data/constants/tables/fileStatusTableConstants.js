@@ -7,6 +7,7 @@ import { FileProgress } from '../../../containers/bars/FileProgress';
 export const fileStatusColumns = [
   {
     key: 'datetime',
+    className: 'Datetime',
     minWidth: 140,
     maxWidth: 150,
     label: 'Received On',

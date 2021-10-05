@@ -17,6 +17,7 @@ describe('Unit::SessionStore', () => {
 
     expect(store.getState().nav.admin).toEqual(nav);
   });
+
   it("Should store the user's original organization info", async () => {
     const org = { ...INITIAL_ORG_STATE, orgSid: '1' };
 

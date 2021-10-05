@@ -14,7 +14,7 @@ const buttonIcons = {
   desc: 'SortDown',
 };
 
-const ButtonAction = ({ id = '__Button', children, icon, disabled = false, onClick, ...props }) => {
+const ButtonAction = ({ id, children, icon, disabled = false, onClick, ...props }) => {
   const _icon = { iconName: buttonIcons[icon] };
 
   return (

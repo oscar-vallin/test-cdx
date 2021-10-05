@@ -7,7 +7,7 @@ import { ButtonContextual } from '../../../components/buttons/ButtonContextual';
 import { useLogoutUseCase } from '../../../use-cases/Authentication';
 import { useSessionStore } from '../../../store/SessionStore';
 
-const ProfileMenu = ({ id = '__ProfileMenu', onUserSettings }) => {
+const ProfileMenu = ({ id, onUserSettings }) => {
   const SessionStore = useSessionStore();
   const { performUserLogout } = useLogoutUseCase();
 
@@ -27,8 +27,8 @@ const ProfileMenu = ({ id = '__ProfileMenu', onUserSettings }) => {
   // Render
   return (
     <StyledBox id={id} noStyle>
-      <ButtonContextual items={items}>
-        <UserToken name={SessionStore.user.firstNm} />
+      <ButtonContextual id="__ButtonContext" items={items}>
+        <UserToken id="__UserToken" name={SessionStore.user.firstNm} />
       </ButtonContextual>
     </StyledBox>
   );

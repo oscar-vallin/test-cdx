@@ -7,7 +7,7 @@ const images = {
   logo: imgLogo,
 };
 
-const Image = ({ id = '__Image', name, src, alt }) => {
+const Image = ({ id, name, src, alt }) => {
   const _src = images[name] ?? src;
 
   return <StyledImage id={id} src={_src} alt={alt} />;

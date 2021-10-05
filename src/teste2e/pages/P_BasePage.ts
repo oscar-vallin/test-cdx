@@ -35,4 +35,16 @@ export default class P_BasePage {
       throw Error(`Did not find element ${selector} within the time limit`);
     }
   }
+
+  async expectTextOnFirstRow(text: string, tableRow: number, tableCol: number) {
+    await this.page.waitForTimeout(1000);
+    const result = await this.page.$$eval('.ms-DetailsRow-fields', (rows) => {
+      return Array.from(rows, (row: any) => {
+        const columns = row.querySelectorAll('.ms-DetailsRow-cell');
+        return Array.from(columns, (column: any) => column.innerText);
+      });
+    });
+
+    expect(result[tableRow][tableCol]).toContain(text);
+  }
 }

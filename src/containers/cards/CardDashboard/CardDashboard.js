@@ -5,7 +5,7 @@ import { Text } from '../../../components/typography/Text';
 import { Spacing } from '../../../components/spacings/Spacing';
 import { StyledTitle, StyledSubtitle, StyledValues } from './CardDashboard.styles';
 
-const CardDashboard = ({ id = '__CardDashboard', title, subtitle, value, total }) => {
+const CardDashboard = ({ id, title, subtitle, value, total }) => {
   const isNotData = (total ?? 0) === 0;
 
   return (

@@ -8,14 +8,7 @@ import { useTable } from './TableDashboard.service';
 import { Table } from '../../../components/tables/Table';
 // import { Table } from '../../../components/tables/_Table';
 
-const TableDashboard = ({
-  id = '__TableDashboard',
-  tableId = TABLE_NAMES.DASHBOARD_TRANSMISSIONS_VENDOR,
-  data,
-  altData,
-  date,
-  loading,
-}) => {
+const TableDashboard = ({ id, tableId = TABLE_NAMES.DASHBOARD_TRANSMISSIONS_VENDOR, data, altData, date, loading }) => {
   const { tableProps, specs, setSpecs } = useTable(data, tableId, date, altData);
 
   const [, setTableData] = useState();
