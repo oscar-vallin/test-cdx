@@ -8,7 +8,7 @@ describe('E2E - Organization Navigation Test', () => {
   let cdxApp: P_CDXApp;
 
   beforeAll(async () => {
-    cdxApp = await P_CDXApp.startBrowser();
+    cdxApp = await P_CDXApp.startBrowser('E2E - Organization Navigation Test');
   });
 
   it('Login', async () => {
@@ -82,5 +82,7 @@ describe('E2E - Organization Navigation Test', () => {
     await cdxApp.logout();
   });
 
-  afterAll(() => cdxApp.closeBrowser());
+  afterAll(async () => {
+    await cdxApp.closeBrowser();
+  });
 });

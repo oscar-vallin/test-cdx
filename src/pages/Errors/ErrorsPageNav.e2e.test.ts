@@ -7,7 +7,7 @@ describe('E2E - Errors Navigation Test', () => {
   let cdxApp: P_CDXApp;
 
   beforeAll(async () => {
-    cdxApp = await P_CDXApp.startBrowser();
+    cdxApp = await P_CDXApp.startBrowser('E2E - Errors Navigation Test');
   });
 
   it('Login', async () => {
@@ -59,5 +59,7 @@ describe('E2E - Errors Navigation Test', () => {
     await cdxApp.logout();
   });
 
-  afterAll(() => cdxApp.closeBrowser());
+  afterAll(async () => {
+    await cdxApp.closeBrowser();
+  });
 });

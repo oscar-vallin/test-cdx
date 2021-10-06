@@ -60,7 +60,7 @@ describe('DashboardPage.js', () => {
     expect(transmissionValue).toContain('Failed Files  (Billing Units.)0/6979');
   });
 
-  it('Cehck count items in transmission vendor table', async () => {
+  it('Check count items in transmission vendor table', async () => {
     await page.waitForTimeout(1000);
     const result = await page.$$eval('#__Table_Transmissions_Vendor', (rows) => {
       return rows.length;
@@ -83,7 +83,7 @@ describe('DashboardPage.js', () => {
   it('Click on first element in transmission table', async () => {
     await page.waitForTimeout(1000);
     await page.waitForSelector('#__Table_Transmissions_Vendor');
-    await page.click('a.fcFBPI');
+    await page.click('#__Table_Transmissions_Vendor div.ms-Grid-row a');
   });
 
   it('Check url with filter=BenefitResourceInc ans file-status page', async () => {

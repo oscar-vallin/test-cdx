@@ -47,13 +47,13 @@ type Query {
   accessPolicyGroupsForOrg(orgSid: ID!, pageableInput: PageableInput) : AccessPolicyGroupConnection
   systemTemplateAccessPolicyGroupByName(name: String!): [AccessPolicyGroup]
 
-  accessPolicyForm: AccessPolicyForm
+  accessPolicyForm(templatePolicySid: ID): AccessPolicyForm
   findAccessPolicy(policySid: ID!): AccessPolicyForm
 
   accessSpecializationForm(orgSid: ID!): AccessSpecializationForm
   findAccessSpecialization(specializationSid: ID!): AccessSpecializationForm
 
-  accessPolicyGroupForm(orgSid: ID!): AccessPolicyGroupForm
+  accessPolicyGroupForm(orgSid: ID!, templateGroupSid: ID): AccessPolicyGroupForm
   findAccessPolicyGroup(policyGroupSid: ID!): AccessPolicyGroupForm
 
   # Organizations
@@ -70,6 +70,8 @@ type Query {
   organizationForm: OrganizationForm
   findOrganization(orgSid: ID!): OrganizationForm
   searchOrganizations(searchText: String!, orgOwnerSid: ID!, orgFilter: OrgFilterInput, pageableInput: PageableInput): OrganizationConnection
+  organizationQuickSearch(searchText: String!, orgOwnerSid: ID!): [Organization]
+  vendorQuickSearch(searchText: String!, orgOwnerSid: ID!): [Organization]
 
   # Themes
   dashThemeColorForOrg(ownedInput: OwnedInput, pageableInput: PageableInput) : DashThemeColorConnection
