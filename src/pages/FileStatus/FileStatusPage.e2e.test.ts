@@ -48,13 +48,13 @@ describe('FileStatusPage.js', () => {
     await page.click('#__MainMenu__MainMenu__Row-file-status-1');
   });
 
-  it('Table Should have 1 row', async () => {
+  it('Table Should have 17 rows', async () => {
     await page.waitForTimeout(1000);
     const result = await page.$$eval('.ms-DetailsRow-fields', (rows) => {
       return rows.length;
     });
 
-    expect(result).toEqual(1);
+    expect(result).toEqual(17);
   });
 
   it('Should not have records when search input filled with wrong value', async () => {
