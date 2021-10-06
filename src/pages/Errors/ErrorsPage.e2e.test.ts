@@ -12,6 +12,7 @@ describe('ErrorsPage.js', () => {
 
   beforeAll(async () => {
     browser = await puppeteer.launch({
+      headless: !(!!process.env.npm_config_headless || !!process.env.IS_HEADLESS),
       args: ['--no-sandbox'],
     });
     page = await browser.newPage();

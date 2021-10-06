@@ -9,10 +9,10 @@ describe('LoginPage.js', () => {
   const wrongEmail = 'foo@bar.com';
   const wrongPassword = 'foobarpass';
   let isLogout = false;
-  let assert: string;
 
   beforeAll(async () => {
     browser = await puppeteer.launch({
+      headless: !(!!process.env.npm_config_headless || !!process.env.IS_HEADLESS),
       args: ['--no-sandbox'],
     });
     page = await browser.newPage();
