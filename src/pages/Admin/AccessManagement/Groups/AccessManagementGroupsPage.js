@@ -7,8 +7,10 @@ import { MessageBar } from 'office-ui-fabric-react';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { Row, Column } from '../../../../components/layouts';
 import { Spacing } from '../../../../components/spacings/Spacing';
+import { Button } from '../../../../components/buttons';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Text } from '../../../../components/typography/Text';
+import { CreateGroupPanel } from './CreateGroup';
 import { Separator } from '../../../../components/separators/Separator';
 
 import { useAccessPolicyGroupsForOrgLazyQuery } from '../../../../data/services/graphql';
@@ -40,8 +42,12 @@ const _AccessManagementGroupsPage = () => {
   const { orgSid } = useOrgSid();
   const [groups, setGroups] = useState([]);
   const columns = generateColumns();
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   const [apiAmGroupsForOrg, { data, loading }] = useQueryHandler(useAccessPolicyGroupsForOrgLazyQuery);
+  const [selectedGroupId, setSelectedGroupId] = useState(0);
+
+  // const [policies, setGroups] = useState([]);
 
   useEffect(() => {
     apiAmGroupsForOrg({ variables: { orgSid } });
@@ -69,6 +75,12 @@ const _AccessManagementGroupsPage = () => {
     );
   };
 
+  useEffect(() => {
+    if (data) {
+      setGroups(data.accessPoliciesForOrg.nodes);
+    }
+  }, [data]);
+
   return (
     <LayoutAdmin id="PageAdmin" sidebarOptionSelected="AM_GROUPS">
       <Spacing margin="double">
@@ -79,6 +91,17 @@ const _AccessManagementGroupsPage = () => {
                 <Spacing margin={{ top: 'small' }}>
                   <Text variant="bold">Groups</Text>
                 </Spacing>
+              </Column>
+
+              <Column lg="8" right>
+                <Button
+                  variant="primary"
+                  onClick={() => {
+                    setIsPanelOpen(true);
+                  }}
+                >
+                  Create Group
+                </Button>
               </Column>
             </Row>
 
@@ -100,6 +123,18 @@ const _AccessManagementGroupsPage = () => {
           </Column>
         </Row>
       </Spacing>
+
+      <CreateGroupPanel
+        isOpen={isPanelOpen}
+        onCreatePolicy={(createdPolicy) => {
+          setGroups([...groups, createdPolicy]);
+        }}
+        onDismiss={() => {
+          setIsPanelOpen(false);
+          setSelectedGroupId(0);
+        }}
+        selectedGroupId={selectedGroupId}
+      />
     </LayoutAdmin>
   );
 };
