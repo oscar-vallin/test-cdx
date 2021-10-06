@@ -3,7 +3,7 @@ import puppeteer from 'puppeteer';
 import { format, startOfTomorrow } from 'date-fns';
 
 describe('FileStatusPage.js', () => {
-  const url = process.env.TEST_URL || process.env.REACT_TEST_URL;
+  const url = process.env.npm_config_url || process.env.REACT_TEMP_URL || process.env.REACT_TEST_URL;
   let browser;
   let page;
   const email = process.env.REACT_E2E_USER_CREDENTIALS_LOGIN;

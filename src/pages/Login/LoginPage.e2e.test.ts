@@ -1,7 +1,7 @@
 import puppeteer from 'puppeteer';
 
 describe('LoginPage.js', () => {
-  const url = process.env.TEST_URL || process.env.REACT_TEST_URL;
+  const url = process.env.npm_config_url || process.env.REACT_TEMP_URL || process.env.REACT_TEST_URL;
   let browser;
   let page;
   const email = process.env.REACT_E2E_USER_CREDENTIALS_LOGIN;
@@ -17,15 +17,6 @@ describe('LoginPage.js', () => {
     });
     page = await browser.newPage();
   });
-
-  // afterEach(async () => {
-  //   if (isLogout) {
-  //     await page.on('request', (request: any) => {
-  //       assert = JSON.parse(request._postData)?.operationName;
-  //     });
-  //     expect(['CurrentOrgNav', 'UserTheme', 'NavigateToNewDomain'].includes(assert)).toBeFalsy();
-  //   }
-  // });
 
   it('contains the CDX DASHBOARD text', async () => {
     await page.goto(url);
