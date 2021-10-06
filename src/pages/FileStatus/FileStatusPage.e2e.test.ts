@@ -8,7 +8,7 @@ describe('FileStatusPage.js', () => {
   let page;
   const email = process.env.REACT_E2E_USER_CREDENTIALS_LOGIN;
   const password = process.env.REACT_E2E_PASS_CREDENTIALS_LOGIN;
-  const formattedDate = format(startOfTomorrow(), 'MM/dd/yyyy hh:mm a');
+  const formattedDate = format(startOfTomorrow(), 'MM/dd/yyyy');
 
   beforeAll(async () => {
     browser = await puppeteer.launch({
