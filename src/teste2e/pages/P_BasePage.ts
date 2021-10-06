@@ -14,7 +14,7 @@ export default class P_BasePage {
   adminPassword: string;
 
   constructor(page: Page) {
-    this.url = process.env.TEST_URL || process.env.REACT_TEST_URL || '';
+    this.url = process.env.npm_config_url || process.env.REACT_TEMP_URL || process.env.REACT_TEST_URL || '';
     this.adminEmail = process.env.REACT_E2E_USER_CREDENTIALS_LOGIN || '';
     this.adminPassword = process.env.REACT_E2E_PASS_CREDENTIALS_LOGIN || '';
     this.page = page;
