@@ -5,13 +5,13 @@ import { Row, Column } from './InputDateRange.styles';
 const InputDateRange = ({ startDate, endDate }) => {
   return (
     <Row id="InputDateRange--Row">
-      <Column id="InputDateRange--Column" lg="6">
+      <Column id="InputDateRange--Column--From" lg="6">
         <Label>From</Label>
-        <InputDate {...startDate} />
+        <InputDate id="Input__From__Date" {...startDate} />
       </Column>
-      <Column id="InputDateRange--Column" lg="6">
+      <Column id="InputDateRange--Column--To" lg="6">
         <Label>To</Label>
-        <InputDate {...endDate} />
+        <InputDate id="Input__To__Date" {...endDate} />
       </Column>
     </Row>
   );
