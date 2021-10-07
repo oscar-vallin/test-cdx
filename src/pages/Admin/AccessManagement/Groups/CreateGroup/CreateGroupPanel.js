@@ -3,19 +3,15 @@ import { useState, useEffect } from 'react';
 
 import { Panel, PanelType } from '@fluentui/react/lib/Panel';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
-import { ComboBox } from 'office-ui-fabric-react/lib/ComboBox';
-import { IconButton, MessageBar } from 'office-ui-fabric-react';
-import { DetailsList, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
+import { FontIcon } from '@fluentui/react/lib/Icon';
 
 import { Spacing } from '../../../../../components/spacings/Spacing';
-import { Card } from '../../../../../components/cards';
 import { Button } from '../../../../../components/buttons';
 import { Row, Column } from '../../../../../components/layouts';
 import { Separator } from '../../../../../components/separators/Separator';
 import { Text } from '../../../../../components/typography';
 import { InputText } from '../../../../../components/inputs/InputText';
-
-import { StyledCommandButton, StyledColumn } from './CreateGroupPanel.styles';
+import { StyledContainer } from './CreateGroupPanel.styles';
 
 import {
   useAccessPolicyFormQuery,
@@ -39,21 +35,8 @@ const INITIAL_OPTIONS = {
   templateServices: [],
 };
 
-const parseToComboBoxOption = ({ name, value }) => ({ key: value, text: name });
-const generateColumns = () => {
-  const createColumn = (name) => ({
-    name,
-    key: name.toLowerCase(),
-    fieldName: name.toLowerCase(),
-    data: 'string',
-    isPadded: true,
-    minWidth: 225,
-  });
-
-  return [createColumn('Service'), createColumn('Facet'), createColumn('Verb'), createColumn('Actions')];
-};
-
 const CreateGroupPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicyId }) => {
+  const [stepWise, setStepWise] = useState(false);
   const { orgSid } = useOrgSid();
   const [state, setState] = useState({ ...INITIAL_STATE });
 
@@ -110,86 +93,6 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicyId 
     }
   }, [createdPolicy]);
 
-  const handleAsyncOptionChange = (attr, permissionIndex) => (option, item) => {
-    setState({
-      ...state,
-      permissions: state.permissions.map((permission, permissionsIndex) => {
-        if (permissionsIndex !== permissionIndex) {
-          return permission;
-        }
-
-        return {
-          ...permission,
-          actions: permission.actions.map((action, actionsIndex) => {
-            if (permission.actions.indexOf(item) !== actionsIndex) {
-              return action;
-            }
-
-            return { ...action, [attr]: option };
-          }),
-        };
-      }),
-    });
-  };
-
-  const onRenderItemColumn =
-    ({ itemColumndata, services, onServiceChange, permissionIndex }) =>
-    (item, index, column) => {
-      switch (column.key) {
-        case 'service':
-          return (
-            <ComboBox
-              autoComplete="off"
-              selectedKey={item.service.key}
-              options={services.map(parseToComboBoxOption)}
-              onChange={(event, option) => onServiceChange(option, item, itemColumndata)}
-              style={{ width: '100%' }}
-            />
-          );
-        case 'actions':
-          return (
-            <div>
-              <IconButton
-                iconProps={{ iconName: 'delete' }}
-                onClick={() => {
-                  setState({
-                    ...state,
-                    permissions: state.permissions.map((permissionsItem, currIndex) => {
-                      if (currIndex !== permissionIndex) {
-                        return permissionsItem;
-                      }
-
-                      return {
-                        ...permissionsItem,
-                        actions: permissionsItem.actions.filter((action, actionIndex) => actionIndex !== index),
-                      };
-                    }),
-                  });
-                }}
-              />
-            </div>
-          );
-
-        default:
-          break;
-      }
-      return <></>;
-    };
-
-  const columns = generateColumns();
-
-  // useEffect(() => {
-  //   if (isOpen) {
-  //     apiUseAccessPolicyForm({ variables: { orgSid } });
-  //   }
-  // }, [isOpen]);
-
-  // useEffect(() => {
-  //   if (isOpen && data) {
-  //     setOptions(data.accessPolicyForm);
-  //   }
-  // }, [data, isOpen]);
-
   return (
     <Panel
       closeButtonAriaLabel="Close"
@@ -219,59 +122,163 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicyId 
                 </Column>
               </Row>
 
-              {options.showTemplateSection && (
-                <Row center>
-                  <Column lg="12">
-                    <Spacing margin={{ top: 'normal', bottom: 'small' }}>
-                      <Checkbox
-                        label="Is a template"
-                        checked={state.isTemplate}
-                        onChange={(event, isTemplate) => setState({ ...state, isTemplate })}
-                      />
-                    </Spacing>
-
-                    {state.isTemplate && (
-                      <Checkbox
-                        label="Template can be used as is"
-                        checked={state.usedAsIs}
-                        onChange={(event, usedAsIs) => setState({ ...state, usedAsIs })}
-                      />
-                    )}
-                  </Column>
-                </Row>
-              )}
-              {options.showTemplateSection && state.usedAsIs && (
+              <div>
                 <Row>
-                  <Column lg="3">
-                    <Spacing margin={{ top: 'small' }}>
-                      <ComboBox
-                        selectedKey={state.serviceType}
-                        label="Service type"
-                        autoComplete="off"
-                        options={options.templateServices.map(parseToComboBoxOption)}
-                        onChange={(event, { key }) => setState({ ...state, serviceType: key })}
-                        style={{ width: '100%' }}
-                      />
+                  <Spacing margin={{ top: 'normal' }}>
+                    <Text variant="bold">Organization</Text>
+                  </Spacing>
+
+                  <Spacing margin={{ top: 'small' }}>
+                    <Text variant="normal">Third Party Admin B (TPAB)</Text>
+                  </Spacing>
+                  <Column lg="6">
+                    <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                      <Checkbox label="Template Policy" onChange={(event, _stepWise) => setStepWise(_stepWise)} />
+                    </Spacing>
+                  </Column>
+                  <Column lg="6">
+                    <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                      <Checkbox label="Us as is?" onChange={(event, _stepWise) => setStepWise(_stepWise)} />
                     </Spacing>
                   </Column>
                 </Row>
-              )}
+              </div>
 
               <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                 <Separator />
               </Spacing>
+              <Row>
+                <Column lg="4" direction="row">
+                  <Spacing margin={{ top: 'small', bottom: 'normal' }}>
+                    <Text variant="bold">Policies</Text>
+                    &nbsp; <FontIcon iconName="Error" />
+                  </Spacing>
+                </Column>
+              </Row>
 
+              <StyledContainer>
+                <Row>
+                  <Column lg="6">
+                    <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                      <Checkbox label="Exchange Prod  Read" onChange={(event, _stepWise) => setStepWise(_stepWise)} />
+                    </Spacing>
+
+                    <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                      <Checkbox label="Exchange K2U Admin" onChange={(event, _stepWise) => setStepWise(_stepWise)} />
+                    </Spacing>
+
+                    <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                      <Checkbox label="Exchange Test Admin" onChange={(event, _stepWise) => setStepWise(_stepWise)} />
+                    </Spacing>
+
+                    <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                      <Checkbox label="Exchange UAT Admin" onChange={(event, _stepWise) => setStepWise(_stepWise)} />
+                    </Spacing>
+
+                    <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                      <Checkbox label="Exchange Prod Admin" onChange={(event, _stepWise) => setStepWise(_stepWise)} />
+                    </Spacing>
+                  </Column>
+                  <Column lg="6">
+                    <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                      <Checkbox label="Site Settings Admin" onChange={(event, _stepWise) => setStepWise(_stepWise)} />
+                    </Spacing>
+
+                    <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                      <Checkbox label="Acces Management Read" onChange={(event, _stepWise) => setStepWise(_stepWise)} />
+                    </Spacing>
+
+                    <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                      <Checkbox
+                        label="Acces Management Admin"
+                        onChange={(event, _stepWise) => setStepWise(_stepWise)}
+                      />
+                    </Spacing>
+
+                    <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                      <Checkbox label="User Admin" onChange={(event, _stepWise) => setStepWise(_stepWise)} />
+                    </Spacing>
+                  </Column>
+                </Row>
+              </StyledContainer>
               <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                 <Separator />
               </Spacing>
 
               <Row>
+                <Column lg="4" direction="row">
+                  <Spacing margin={{ top: 'small', bottom: 'normal' }}>
+                    <Text variant="bold">Specialization</Text>
+                    &nbsp; <FontIcon iconName="Error" />
+                  </Spacing>
+                </Column>
+              </Row>
+
+              <StyledContainer>
+                <Row>
+                  <Column lg="6">
+                    <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                      <Checkbox label="Vendor V" onChange={(event, _stepWise) => setStepWise(_stepWise)} />
+                    </Spacing>
+
+                    <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                      <Checkbox label="Sub Org Users Only" onChange={(event, _stepWise) => setStepWise(_stepWise)} />
+                    </Spacing>
+
+                    <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                      <Checkbox
+                        label="TPAB Access Management"
+                        onChange={(event, _stepWise) => setStepWise(_stepWise)}
+                      />
+                    </Spacing>
+
+                    <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                      <Checkbox label="Exchange UAT Admin" onChange={(event, _stepWise) => setStepWise(_stepWise)} />
+                    </Spacing>
+                  </Column>
+                </Row>
+              </StyledContainer>
+              <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                <Separator />
+              </Spacing>
+
+              <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                <Checkbox
+                  label="Policies Applies to All Sub Organizations except for those explicitly exclude"
+                  onChange={(event, _stepWise) => setStepWise(_stepWise)}
+                />
+              </Spacing>
+
+              <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                <Row bottom>
+                  <Column lg="12">
+                    <InputText
+                      label="Policies apply to the following Organizations"
+                      placeholder="Type to Search"
+                      disabled
+                      value={state.policyName}
+                      onChange={({ target }) => setState({ ...state, policyName: target.value })}
+                    />
+                  </Column>
+                </Row>
+              </Spacing>
+
+              <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                <Row bottom>
+                  <Column lg="12">
+                    <InputText
+                      label="Policies do NOT apply to the following Organizations"
+                      placeholder="Type to Search"
+                      value={state.policyName}
+                      onChange={({ target }) => setState({ ...state, policyName: target.value })}
+                    />
+                  </Column>
+                </Row>
+              </Spacing>
+
+              <Row>
                 <Column lg="12">
-                  <Button
-                    variant="primary"
-                    disabled={isCreatingPolicy}
-                    onClick={() => console.log('saving')}
-                  >
+                  <Button variant="primary" disabled={isCreatingPolicy} onClick={() => console.log('saving')}>
                     Save
                   </Button>
                 </Column>
