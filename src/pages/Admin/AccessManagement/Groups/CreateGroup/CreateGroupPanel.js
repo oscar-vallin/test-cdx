@@ -343,6 +343,33 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, onUpdateGrou
                 />
               </Spacing>
 
+              <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                <Row bottom>
+                  <Column lg="12">
+                    <InputText
+                      label="Policies apply to the following Organizations"
+                      placeholder="Type to Search"
+                      disabled
+                      value={state.policyName}
+                      onChange={({ target }) => setState({ ...state, policyName: target.value })}
+                    />
+                  </Column>
+                </Row>
+              </Spacing>
+
+              <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                <Row bottom>
+                  <Column lg="12">
+                    <InputText
+                      label="Policies do NOT apply to the following Organizations"
+                      placeholder="Type to Search"
+                      value={state.policyName}
+                      onChange={({ target }) => setState({ ...state, policyName: target.value })}
+                    />
+                  </Column>
+                </Row>
+              </Spacing>
+
               {response?.includeOrgSids?.visible && (
                 <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                   <Row bottom>
