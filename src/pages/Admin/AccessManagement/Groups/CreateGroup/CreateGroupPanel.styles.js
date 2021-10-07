@@ -16,3 +16,8 @@ export const StyledColumn = styled(Column)`
     background: transparent;
   }
 `;
+
+export const StyledContainer = styled.div`
+  background-color: #f3f2f1;
+  padding: 10px;
+`;

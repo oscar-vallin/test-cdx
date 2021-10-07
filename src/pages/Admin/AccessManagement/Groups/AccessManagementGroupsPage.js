@@ -75,11 +75,11 @@ const _AccessManagementGroupsPage = () => {
     );
   };
 
-  useEffect(() => {
-    if (data) {
-      setGroups(data.accessPoliciesForOrg.nodes);
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data) {
+  //     setGroups(data.accessPoliciesForOrg.nodes);
+  //   }
+  // }, [data]);
 
   return (
     <LayoutAdmin id="PageAdmin" sidebarOptionSelected="AM_GROUPS">
