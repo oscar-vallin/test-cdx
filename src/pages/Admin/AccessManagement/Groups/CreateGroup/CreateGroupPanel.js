@@ -360,12 +360,20 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, onUpdateGrou
               <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                 <Row bottom>
                   <Column lg="12">
-                    <InputText
-                      label="Policies do NOT apply to the following Organizations"
-                      placeholder="Type to Search"
-                      value={state.policyName}
-                      onChange={({ target }) => setState({ ...state, policyName: target.value })}
-                    />
+                    <div className={rootClass}>
+                      <strong>Policies do NOT apply to the following Organizations</strong>
+                      <TagPicker
+                        removeButtonAriaLabel="Remove"
+                        selectionAriaLabel="Selected colors"
+                        onResolveSuggestions={filterSuggestedTags}
+                        getTextFromItem={getTextFromItem}
+                        pickerSuggestionsProps={pickerSuggestionsProps}
+                        itemLimit={4}
+                        inputProps={{
+                          id: 'pickerId',
+                        }}
+                      />
+                    </div>
                   </Column>
                 </Row>
               </Spacing>
