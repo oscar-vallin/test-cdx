@@ -1,6 +1,5 @@
 /* eslint-disable no-await-in-loop */
 import puppeteer from 'puppeteer';
-import { format, startOfTomorrow } from 'date-fns';
 
 describe('ArchivesPage.js', () => {
   const url = process.env.npm_config_url || process.env.REACT_TEMP_URL || process.env.REACT_TEST_URL;
@@ -36,9 +35,37 @@ describe('ArchivesPage.js', () => {
     expect(loginButton).toContain('Exchange Statuses');
   });
 
+  it('Check first Active Org (ABC Co)', async () => {
+    await page.waitForSelector('a.ABC');
+  });
+
+  it('Check first Active Org (ABC Co)', async () => {
+    await page.waitForSelector('a.K2UIS');
+    const selector = 'a.K2UIS';
+    await page.waitForSelector(selector);
+    const actualText = await page.$eval(selector, (e) => e.textContent);
+    expect(actualText).toContain('Known2U Implementation Services');
+    await page.click(selector);
+  });
+
   it('Go to Exchage Status page', async () => {
-    await page.waitForSelector('div[name="Exchange Statuses"]');
-    await page.click('div[name="Exchange Statuses"]');
+    await page.waitForTimeout(1000);
+    await page.waitForSelector('div[name="Organizations"]');
+    await page.click('div[name="Organizations"]');
+  });
+
+  it('Go to Exchage Status page', async () => {
+    await page.waitForSelector('div[name="Active Orgs"]');
+    await page.click('div[name="Active Orgs"]');
+  });
+
+  it('Check first Active Org (Farm Hop)', async () => {
+    await page.waitForSelector('a.FMHP');
+  });
+
+  it('Click on first Active Org (Farm Hop)', async () => {
+    await page.waitForSelector('a.FMHP');
+    await page.click('a.FMHP');
   });
 
   it('Click Archives', async () => {
@@ -47,8 +74,39 @@ describe('ArchivesPage.js', () => {
     await page.click('#__MainMenu__MainMenu__Row-archives-2');
   });
 
-  it('Table Should have 17 rows', async () => {
+  it('Select Nov 01, 2020 as Start Date', async () => {
     await page.waitForTimeout(1000);
+    await page.waitForSelector('#Input__From__Date-label');
+    // await page.keyboard.press('Enter');
+    await page.click('#Input__From__Date-label');
+
+    await page.waitForTimeout(1000);
+    await page.click('.ms-DatePicker-prevYear');
+
+    await page.waitForTimeout(1000);
+    await page.click('.ms-DatePicker-monthOption[aria-label="November 2020"]');
+
+    await page.waitForTimeout(1000);
+    await page.click('.ms-DatePicker-day-button[aria-label="November 1, 2020"]');
+  });
+
+  it('Select Nov 30, 2020 as End Date', async () => {
+    await page.waitForTimeout(1000);
+    await page.waitForSelector('#Input__To__Date-label');
+    await page.click('#Input__To__Date-label');
+
+    await page.waitForTimeout(1000);
+    await page.click('.ms-DatePicker-prevYear');
+
+    await page.waitForTimeout(1000);
+    await page.click('.ms-DatePicker-monthOption[aria-label="November 2020"]');
+
+    await page.waitForTimeout(1000);
+    await page.click('.ms-DatePicker-day-button[aria-label="November 30, 2020"]');
+  });
+
+  it('Table Should have 17 rows', async () => {
+    await page.waitForTimeout(3000);
     const result = await page.$$eval('.ms-DetailsRow-fields', (rows) => {
       return rows.length;
     });

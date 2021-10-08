@@ -1,6 +1,5 @@
 /* eslint-disable no-await-in-loop */
 import puppeteer from 'puppeteer';
-import { format, startOfTomorrow } from 'date-fns';
 
 describe('FileStatusPage.js', () => {
   const url = process.env.npm_config_url || process.env.REACT_TEMP_URL || process.env.REACT_TEST_URL;
@@ -8,7 +7,6 @@ describe('FileStatusPage.js', () => {
   let page;
   const email = process.env.REACT_E2E_USER_CREDENTIALS_LOGIN;
   const password = process.env.REACT_E2E_PASS_CREDENTIALS_LOGIN;
-  const formattedDate = format(startOfTomorrow(), 'MM/dd/yyyy');
 
   beforeAll(async () => {
     browser = await puppeteer.launch({
@@ -37,19 +35,71 @@ describe('FileStatusPage.js', () => {
     expect(loginButton).toContain('Exchange Statuses');
   });
 
-  it('Go to Exchage Status page', async () => {
-    await page.waitForSelector('div[name="Exchange Statuses"]');
-    await page.click('div[name="Exchange Statuses"]');
+  it('Check first Active Org (ABC Co)', async () => {
+    await page.waitForSelector('a.ABC');
   });
 
-  it('Click on File Status', async () => {
+  it('Check first Active Org (ABC Co)', async () => {
+    await page.waitForSelector('a.K2UIS');
+    const selector = 'a.K2UIS';
+    await page.waitForSelector(selector);
+    const actualText = await page.$eval(selector, (e) => e.textContent);
+    expect(actualText).toContain('Known2U Implementation Services');
+    await page.click(selector);
+  });
+
+  it('Go to Exchage Status page', async () => {
     await page.waitForTimeout(1000);
-    await page.waitForSelector('#__MainMenu__MainMenu__Row-file-status-1');
-    await page.click('#__MainMenu__MainMenu__Row-file-status-1');
+    await page.waitForSelector('div[name="Organizations"]');
+    await page.click('div[name="Organizations"]');
+  });
+
+  it('Go to Exchage Status page', async () => {
+    await page.waitForSelector('div[name="Active Orgs"]');
+    await page.click('div[name="Active Orgs"]');
+  });
+
+  it('Check first Active Org (Farm Hop)', async () => {
+    await page.waitForSelector('a.FMHP');
+  });
+
+  it('Click on first Active Org (Farm Hop)', async () => {
+    await page.waitForSelector('a.FMHP');
+    await page.click('a.FMHP');
+  });
+
+  it('Select Nov 01, 2020 as Start Date', async () => {
+    await page.waitForTimeout(1000);
+    await page.waitForSelector('#Input__From__Date-label');
+    await page.click('#Input__From__Date-label');
+
+    await page.waitForTimeout(1000);
+    await page.click('.ms-DatePicker-prevYear');
+
+    await page.waitForTimeout(1000);
+    await page.click('.ms-DatePicker-monthOption[aria-label="November 2020"]');
+
+    await page.waitForTimeout(1000);
+    await page.click('.ms-DatePicker-day-button[aria-label="November 1, 2020"]');
+  });
+
+  it('Select Nov 30, 2020 as End Date', async () => {
+    await page.waitForTimeout(1000);
+    await page.waitForSelector('#Input__To__Date-label');
+    await page.click('#Input__To__Date-label');
+
+    await page.waitForTimeout(1000);
+    await page.click('.ms-DatePicker-prevYear');
+
+    await page.waitForTimeout(1000);
+    await page.click('.ms-DatePicker-monthOption[aria-label="November 2020"]');
+
+    await page.waitForTimeout(1000);
+    await page.click('.ms-DatePicker-day-button[aria-label="November 30, 2020"]');
   });
 
   it('Table Should have 17 rows', async () => {
-    await page.waitForTimeout(1000);
+    await page.waitForTimeout(3000);
     const result = await page.$$eval('.ms-DetailsRow-fields', (rows) => {
       return rows.length;
     });
@@ -78,7 +128,7 @@ describe('FileStatusPage.js', () => {
     }
 
     await page.waitForSelector('#TableFileStatus__Card__Row__Input-Search');
-    await page.type('#TableFileStatus__Card__Row__Input-Search', 'HealthyPet');
+    await page.type('#TableFileStatus__Card__Row__Input-Search', 'VSP');
 
     await page.waitForTimeout(1000);
 
@@ -89,7 +139,7 @@ describe('FileStatusPage.js', () => {
       });
     });
 
-    expect(result[0][1]).toEqual('HealthyPet');
+    expect(result[0][1]).toEqual('VSP');
   });
 
   it('Should have 1 record when searching by Sponsor', async () => {
@@ -100,7 +150,7 @@ describe('FileStatusPage.js', () => {
     }
 
     await page.waitForSelector('#TableFileStatus__Card__Row__Input-Search');
-    await page.type('#TableFileStatus__Card__Row__Input-Search', 'K2UFKE');
+    await page.type('#TableFileStatus__Card__Row__Input-Search', 'GOLD');
 
     await page.waitForTimeout(1000);
 
@@ -111,7 +161,7 @@ describe('FileStatusPage.js', () => {
       });
     });
 
-    expect(result[0][2]).toEqual('K2UFKE');
+    expect(result[0][2]).toEqual('GOLD');
   });
 
   it('Should have 1 record when searching by Extract Name', async () => {
@@ -122,7 +172,7 @@ describe('FileStatusPage.js', () => {
     }
 
     await page.waitForSelector('#TableFileStatus__Card__Row__Input-Search');
-    await page.type('#TableFileStatus__Card__Row__Input-Search', 'K2UFKE-HealthyPet-UAT.txt');
+    await page.type('#TableFileStatus__Card__Row__Input-Search', 'ADENA-Cigna-Elig-KNTU');
 
     await page.waitForTimeout(1000);
 
@@ -133,7 +183,7 @@ describe('FileStatusPage.js', () => {
       });
     });
 
-    expect(result[0][3]).toEqual('K2UFKE-HealthyPet-UAT.txt');
+    expect(result[0][3]).toEqual('ADENA-Cigna-Elig-KNTU');
   });
 
   it('Read table first item', async () => {
@@ -145,7 +195,7 @@ describe('FileStatusPage.js', () => {
       });
     });
 
-    expect(result[0][0]).toContain(`${formattedDate} 12:00 AM`);
+    expect(result[0][0]).toContain('11/04/2020');
   });
 
   afterAll(() => browser.close());
