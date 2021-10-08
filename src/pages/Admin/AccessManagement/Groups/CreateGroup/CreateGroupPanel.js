@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 
 import { Panel, PanelType } from '@fluentui/react/lib/Panel';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
+import { TagPicker, ITag, IBasePickerSuggestionsProps } from '@fluentui/react/lib/Pickers';
+import { mergeStyles } from '@fluentui/react/lib/Styling';
 import { FontIcon } from '@fluentui/react/lib/Icon';
 
 import { Spacing } from '../../../../../components/spacings/Spacing';
@@ -14,7 +16,7 @@ import { InputText } from '../../../../../components/inputs/InputText';
 import { StyledContainer } from './CreateGroupPanel.styles';
 
 import {
-  useAccessPolicyFormQuery,
+  useAccessPolicyGroupFormLazyQuery,
   useCreateAccessPolicyMutation,
   useUpdateAccessPolicyMutation,
   useAccessPolicyLazyQuery,
@@ -35,69 +37,76 @@ const INITIAL_OPTIONS = {
   templateServices: [],
 };
 
-const CreateGroupPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicyId }) => {
+const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGroupPolicyId }) => {
   const [stepWise, setStepWise] = useState(false);
   const { orgSid } = useOrgSid();
   const [state, setState] = useState({ ...INITIAL_STATE });
 
   const [options, setOptions] = useState({ ...INITIAL_OPTIONS });
 
-  // const [apiUseAccessPolicyForm, { data }] = useAccessPolicyFormQuery();
-  const [createPolicy, { data: createdPolicy, loading: isCreatingPolicy }] = useCreateAccessPolicyMutation();
-  const [fetchPolicy, { data: policy }] = useAccessPolicyLazyQuery();
-  const [updatePolicy] = useUpdateAccessPolicyMutation();
+  const [apiUseAccessPolicyForm, { data, loading: isCreatingPolicy }] = useAccessPolicyGroupFormLazyQuery();
 
   useEffect(() => {
-    if (isOpen && selectedPolicyId) {
-      fetchPolicy({
-        variables: {
-          orgSid,
-          policySid: selectedPolicyId,
-        },
-      });
+    if (isOpen) {
+      apiUseAccessPolicyForm({ variables: { orgSid } });
     }
-  }, [selectedPolicyId, isOpen]);
+  }, [isOpen]);
 
   useEffect(() => {
-    if (policy) {
-      const { amPolicy } = policy;
-
-      setState({
-        ...state,
-        policySid: amPolicy.id,
-        policyName: amPolicy.name,
-        isTemplate: amPolicy.tmpl,
-        usedAsIs: amPolicy.tmplUseAsIs,
-        serviceType: amPolicy.tmplServiceType,
-        permissions: (amPolicy.permissions || []).map((permission) => ({
-          policySid: amPolicy.id,
-          effect: permission.effect,
-          predicateName: permission.predicate,
-          parameterVariable: permission.predVar1,
-          parameterValue: permission.predParam1,
-          actions: (permission.actions || []).map((action) => ({
-            facet: { key: action.facet },
-            service: { key: action.service },
-            verb: { key: action.verb },
-            permissionSid: permission.id,
-          })),
-        })),
-      });
+    if (isOpen && data) {
+      setOptions(data.accessPolicyGroupForm);
     }
-  }, [policy]);
+  }, [data, isOpen]);
 
-  useEffect(() => {
-    if (createdPolicy) {
-      onCreatePolicy(createdPolicy.createAccessPolicy);
-      onDismiss();
+  const rootClass = mergeStyles({
+    width: '100%',
+  });
+
+  const pickerSuggestionsProps = {
+    suggestionsHeaderText: 'Suggested Organizations',
+    noResultsFoundText: 'No organization tags found',
+  };
+
+  const testTags = [
+    'black',
+    'blue',
+    'brown',
+    'cyan',
+    'green',
+    'magenta',
+    'mauve',
+    'orange',
+    'pink',
+    'purple',
+    'red',
+    'rose',
+    'violet',
+    'white',
+    'yellow',
+  ].map((item) => ({ key: item, name: item[0].toUpperCase() + item.slice(1) }));
+
+  const listContainsTagList = (tag, tagList) => {
+    if (!tagList || !tagList.length || tagList.length === 0) {
+      return false;
     }
-  }, [createdPolicy]);
+    return tagList.some((compareTag) => compareTag.key === tag.key);
+  };
+
+  const filterSuggestedTags = (filterText, tagList) => {
+    return filterText
+      ? testTags.filter(
+          (tag) => tag.name.toLowerCase().indexOf(filterText.toLowerCase()) === 0 && !listContainsTagList(tag, tagList)
+        )
+      : [];
+  };
+
+  const getTextFromItem = (item) => item.name;
 
   return (
     <Panel
       closeButtonAriaLabel="Close"
       type={PanelType.large}
-      headerText={!state.policySid ? 'New Access Policy Group' : 'Update policy'}
+      headerText={!state.policySid ? 'New Access Policy Group' : 'Update Policy Group'}
       isOpen={isOpen}
       onDismiss={() => {
         setState({ ...INITIAL_STATE });
@@ -266,12 +275,20 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicyId 
               <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                 <Row bottom>
                   <Column lg="12">
-                    <InputText
-                      label="Policies do NOT apply to the following Organizations"
-                      placeholder="Type to Search"
-                      value={state.policyName}
-                      onChange={({ target }) => setState({ ...state, policyName: target.value })}
-                    />
+                    <div className={rootClass}>
+                      <strong>Policies do NOT apply to the following Organizations</strong>
+                      <TagPicker
+                        removeButtonAriaLabel="Remove"
+                        selectionAriaLabel="Selected colors"
+                        onResolveSuggestions={filterSuggestedTags}
+                        getTextFromItem={getTextFromItem}
+                        pickerSuggestionsProps={pickerSuggestionsProps}
+                        itemLimit={4}
+                        inputProps={{
+                          id: 'pickerId',
+                        }}
+                      />
+                    </div>
                   </Column>
                 </Row>
               </Spacing>
