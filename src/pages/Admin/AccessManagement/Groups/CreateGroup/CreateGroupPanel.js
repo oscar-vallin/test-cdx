@@ -44,6 +44,8 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
 
   const [options, setOptions] = useState({ ...INITIAL_OPTIONS });
 
+  const [response, setResponse] = useState({});
+
   const [apiUseAccessPolicyForm, { data, loading: isCreatingPolicy }] = useAccessPolicyGroupFormLazyQuery();
 
   useEffect(() => {
@@ -54,7 +56,7 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
 
   useEffect(() => {
     if (isOpen && data) {
-      setOptions(data.accessPolicyGroupForm);
+      setResponse(data.accessPolicyGroupForm);
     }
   }, [data, isOpen]);
 
@@ -156,97 +158,69 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
               <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                 <Separator />
               </Spacing>
-              <Row>
-                <Column lg="4" direction="row">
-                  <Spacing margin={{ top: 'small', bottom: 'normal' }}>
-                    <Text variant="bold">Policies</Text>
-                    &nbsp; <FontIcon iconName="Error" />
-                  </Spacing>
-                </Column>
-              </Row>
 
-              <StyledContainer>
-                <Row>
-                  <Column lg="6">
-                    <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                      <Checkbox label="Exchange Prod  Read" onChange={(event, _stepWise) => setStepWise(_stepWise)} />
-                    </Spacing>
+              {response?.policies?.visible && (
+                <>
+                  <Row>
+                    <Column lg="4" direction="row">
+                      <Spacing margin={{ top: 'small', bottom: 'normal' }}>
+                        <Text variant="bold">Policies</Text>
+                        &nbsp; <FontIcon iconName="Error" />
+                      </Spacing>
+                    </Column>
+                  </Row>
 
-                    <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                      <Checkbox label="Exchange K2U Admin" onChange={(event, _stepWise) => setStepWise(_stepWise)} />
-                    </Spacing>
+                  <StyledContainer>
+                    <Row>
+                      <Column lg="6">
+                        {response?.options
+                          ?.find((pols) => pols.key === 'AccessPolicy')
+                          .values.map((item) => {
+                            return (
+                              <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                                <Checkbox label={item.label} onChange={(event, _stepWise) => setStepWise(_stepWise)} />
+                              </Spacing>
+                            );
+                          })}
+                      </Column>
+                    </Row>
+                  </StyledContainer>
+                </>
+              )}
 
-                    <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                      <Checkbox label="Exchange Test Admin" onChange={(event, _stepWise) => setStepWise(_stepWise)} />
-                    </Spacing>
-
-                    <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                      <Checkbox label="Exchange UAT Admin" onChange={(event, _stepWise) => setStepWise(_stepWise)} />
-                    </Spacing>
-
-                    <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                      <Checkbox label="Exchange Prod Admin" onChange={(event, _stepWise) => setStepWise(_stepWise)} />
-                    </Spacing>
-                  </Column>
-                  <Column lg="6">
-                    <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                      <Checkbox label="Site Settings Admin" onChange={(event, _stepWise) => setStepWise(_stepWise)} />
-                    </Spacing>
-
-                    <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                      <Checkbox label="Acces Management Read" onChange={(event, _stepWise) => setStepWise(_stepWise)} />
-                    </Spacing>
-
-                    <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                      <Checkbox
-                        label="Acces Management Admin"
-                        onChange={(event, _stepWise) => setStepWise(_stepWise)}
-                      />
-                    </Spacing>
-
-                    <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                      <Checkbox label="User Admin" onChange={(event, _stepWise) => setStepWise(_stepWise)} />
-                    </Spacing>
-                  </Column>
-                </Row>
-              </StyledContainer>
               <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                 <Separator />
               </Spacing>
 
-              <Row>
-                <Column lg="4" direction="row">
-                  <Spacing margin={{ top: 'small', bottom: 'normal' }}>
-                    <Text variant="bold">Specialization</Text>
-                    &nbsp; <FontIcon iconName="Error" />
-                  </Spacing>
-                </Column>
-              </Row>
+              {response?.specializations?.visible && (
+                <>
+                  <Row>
+                    <Column lg="4" direction="row">
+                      <Spacing margin={{ top: 'small', bottom: 'normal' }}>
+                        <Text variant="bold">Specialization</Text>
+                        &nbsp; <FontIcon iconName="Error" />
+                      </Spacing>
+                    </Column>
+                  </Row>
 
-              <StyledContainer>
-                <Row>
-                  <Column lg="6">
-                    <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                      <Checkbox label="Vendor V" onChange={(event, _stepWise) => setStepWise(_stepWise)} />
-                    </Spacing>
+                  <StyledContainer>
+                    <Row>
+                      <Column lg="6">
+                        {response?.options
+                          ?.find((specs) => specs.key === 'AccessSpecialization')
+                          .values.map((item) => {
+                            return (
+                              <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                                <Checkbox label={item.label} onChange={(event, _stepWise) => setStepWise(_stepWise)} />
+                              </Spacing>
+                            );
+                          })}
+                      </Column>
+                    </Row>
+                  </StyledContainer>
+                </>
+              )}
 
-                    <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                      <Checkbox label="Sub Org Users Only" onChange={(event, _stepWise) => setStepWise(_stepWise)} />
-                    </Spacing>
-
-                    <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                      <Checkbox
-                        label="TPAB Access Management"
-                        onChange={(event, _stepWise) => setStepWise(_stepWise)}
-                      />
-                    </Spacing>
-
-                    <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                      <Checkbox label="Exchange UAT Admin" onChange={(event, _stepWise) => setStepWise(_stepWise)} />
-                    </Spacing>
-                  </Column>
-                </Row>
-              </StyledContainer>
               <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                 <Separator />
               </Spacing>
@@ -272,26 +246,28 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
                 </Row>
               </Spacing>
 
-              <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                <Row bottom>
-                  <Column lg="12">
-                    <div className={rootClass}>
-                      <strong>Policies do NOT apply to the following Organizations</strong>
-                      <TagPicker
-                        removeButtonAriaLabel="Remove"
-                        selectionAriaLabel="Selected colors"
-                        onResolveSuggestions={filterSuggestedTags}
-                        getTextFromItem={getTextFromItem}
-                        pickerSuggestionsProps={pickerSuggestionsProps}
-                        itemLimit={4}
-                        inputProps={{
-                          id: 'pickerId',
-                        }}
-                      />
-                    </div>
-                  </Column>
-                </Row>
-              </Spacing>
+              {response?.excludeOrgSids?.visible && (
+                <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                  <Row bottom>
+                    <Column lg="12">
+                      <div className={rootClass}>
+                        <strong>{response?.excludeOrgSids?.label}</strong>
+                        <TagPicker
+                          removeButtonAriaLabel="Remove"
+                          selectionAriaLabel="Selected colors"
+                          onResolveSuggestions={filterSuggestedTags}
+                          getTextFromItem={getTextFromItem}
+                          pickerSuggestionsProps={pickerSuggestionsProps}
+                          itemLimit={4}
+                          inputProps={{
+                            id: 'pickerId',
+                          }}
+                        />
+                      </div>
+                    </Column>
+                  </Row>
+                </Spacing>
+              )}
 
               <Row>
                 <Column lg="12">
