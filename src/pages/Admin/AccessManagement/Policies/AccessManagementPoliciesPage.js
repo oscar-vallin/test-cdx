@@ -15,7 +15,7 @@ import { Separator } from '../../../../components/separators/Separator';
 import { Text } from '../../../../components/typography';
 import { CreatePoliciesPanel } from './CreatePolicy';
 
-import { useAccessPoliciesForOrgLazyQuery } from '../../../../data/services/graphql';
+import { useAccessPoliciesForOrgLazyQuery, useDeleteAccessPoliciesMutation } from '../../../../data/services/graphql';
 
 import { StyledColumn, StyledCommandButton } from './AccessManagementPoliciesPage.styles';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
@@ -51,7 +51,7 @@ const _AccessManagementPoliciesPage = () => {
   // Linter Issue.  useRemoveAmPolicyMutation??
   const [removeAccessPolicy, { data: removeResponse, loading: isRemovingPolicy }] =
     // eslint-disable-next-line no-undef
-    useQueryHandler(useRemoveAmPolicyMutation);
+    useQueryHandler(useDeleteAccessPoliciesMutation);
 
   const hideConfirmation = () => {
     setIsConfirmationHidden(true);
