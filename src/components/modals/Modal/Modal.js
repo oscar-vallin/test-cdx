@@ -7,10 +7,9 @@ const CDXModal = ({
   subText = '',
   hidden = true,
   isBlocking = true,
-  onDismiss = () => {
-    return {};
-  },
+  onDismiss = () => null,
   children,
+  ...props
 }) => {
   return (
     <StyledModal
@@ -22,6 +21,7 @@ const CDXModal = ({
         ...(title ? { title } : {}),
         ...(subText ? { subText } : {}),
       }}
+      {...props}
     >
       {children}
 
@@ -31,3 +31,4 @@ const CDXModal = ({
 };
 
 export { CDXModal };
+export default CDXModal;

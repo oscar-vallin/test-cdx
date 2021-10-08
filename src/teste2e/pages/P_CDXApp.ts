@@ -10,13 +10,16 @@ export default class P_CDXApp {
 
   logoutButton = '#__Logout_button';
 
+  testTitle: string;
+
   page: Page;
 
   browser: Browser;
 
-  constructor(browser: Browser, page: Page) {
+  constructor(browser: Browser, page: Page, testTitle: string) {
     this.browser = browser;
     this.page = page;
+    this.testTitle = testTitle;
   }
 
   async toLoginPage(): Promise<P_LoginPage> {
@@ -41,12 +44,12 @@ export default class P_CDXApp {
   }
 
   async returnToMyOrganization() {
+    await this.page.waitForTimeout(3000);
     const menuButton = await this.waitForSelector('#__Organization__Button');
     menuButton?.click();
     await this.page.waitForTimeout(1000);
     const returnButton = await this.waitForSelector('#__Return__Organization');
     returnButton?.click();
-    await this.page.waitForTimeout(3000);
   }
 
   getAdminMenu(): P_AdminMenu {
@@ -65,18 +68,23 @@ export default class P_CDXApp {
     }
   }
 
-  closeBrowser() {
-    this.browser.close();
+  async screenshot() {
+    await this.page.screenshot({ path: `test-results/ss-${this.testTitle}.png`, type: 'png' });
   }
 
-  static async startBrowser(): Promise<P_CDXApp> {
+  async closeBrowser() {
+    await this.page.close();
+    await this.browser.close();
+  }
+
+  static async startBrowser(testTitle: string): Promise<P_CDXApp> {
     const browser = await puppeteer.launch({
-      headless: false,
+      headless: !(!!process.env.npm_config_headless || !!process.env.IS_HEADLESS),
       args: ['--no-sandbox'],
     });
     const page = await browser.newPage();
     await page.setViewport({ width: 1600, height: 1080 });
 
-    return new P_CDXApp(browser, page);
+    return new P_CDXApp(browser, page, testTitle);
   }
 }

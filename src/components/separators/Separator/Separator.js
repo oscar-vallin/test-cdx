@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { StyledSeparator } from './Separator.styles';
 
-const CDXSeparator = ({ id = '__CDXSeparator' }) => {
+const CDXSeparator = ({ id }) => {
   return <StyledSeparator id={id} />;
 };
 
@@ -10,3 +10,4 @@ CDXSeparator.propTypes = {
 };
 
 export { CDXSeparator };
+export default CDXSeparator;

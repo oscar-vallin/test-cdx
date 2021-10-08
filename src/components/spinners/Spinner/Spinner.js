@@ -3,8 +3,8 @@ import { StyleConstants } from '../../../data/constants/StyleConstants';
 import { getSpinnerSize } from './Spinner.handlers';
 import { StyledSpinner } from './Spinner.styles';
 
-const Spinner = ({ id = '__Spinner', size = StyleConstants.SPINNER_SMALL, label = '' }) => {
-  return <StyledSpinner id={id} size={getSpinnerSize(size)} label={label} />;
+const Spinner = ({ id, size = StyleConstants.SPINNER_SMALL, label = '', ...props }) => {
+  return <StyledSpinner id={id} size={getSpinnerSize(size)} label={label} {...props} />;
 };
 
 Spinner.propTypes = {
@@ -14,3 +14,4 @@ Spinner.propTypes = {
 };
 
 export { Spinner };
+export default Spinner;

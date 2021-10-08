@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { StyledTextField } from './InputText.styles';
 
 const InputText = ({
-  id = 'InputText',
+  id,
   type = 'text',
   disabled = false,
   onChange,

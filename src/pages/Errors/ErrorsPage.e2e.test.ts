@@ -1,17 +1,16 @@
 /* eslint-disable no-await-in-loop */
 import puppeteer from 'puppeteer';
-import { format, startOfTomorrow } from 'date-fns';
 
 describe('ErrorsPage.js', () => {
-  const url = process.env.TEST_URL || process.env.REACT_TEST_URL;
+  const url = process.env.npm_config_url || process.env.REACT_TEMP_URL || process.env.REACT_TEST_URL;
   let browser;
   let page;
   const email = process.env.REACT_E2E_USER_CREDENTIALS_LOGIN;
   const password = process.env.REACT_E2E_PASS_CREDENTIALS_LOGIN;
-  const formattedDate = format(startOfTomorrow(), 'MM/dd/yyyy');
 
   beforeAll(async () => {
     browser = await puppeteer.launch({
+      headless: !(!!process.env.npm_config_headless || !!process.env.IS_HEADLESS),
       args: ['--no-sandbox'],
     });
     page = await browser.newPage();
@@ -36,24 +35,83 @@ describe('ErrorsPage.js', () => {
     expect(loginButton).toContain('Exchange Statuses');
   });
 
-  it('Go to Exchage Status page', async () => {
-    await page.waitForSelector('div[name="Exchange Statuses"]');
-    await page.click('div[name="Exchange Statuses"]');
+  it('Check first Active Org (ABC Co)', async () => {
+    await page.waitForSelector('a.ABC');
   });
 
-  it('Click Archives', async () => {
+  it('Check first Active Org (ABC Co)', async () => {
+    await page.waitForSelector('a.K2UIS');
+    const selector = 'a.K2UIS';
+    await page.waitForSelector(selector);
+    const actualText = await page.$eval(selector, (e) => e.textContent);
+    expect(actualText).toContain('Known2U Implementation Services');
+    await page.click(selector);
+  });
+
+  it('Go to Exchage Status page', async () => {
+    await page.waitForTimeout(1000);
+    await page.waitForSelector('div[name="Organizations"]');
+    await page.click('div[name="Organizations"]');
+  });
+
+  it('Go to Exchage Status page', async () => {
+    await page.waitForSelector('div[name="Active Orgs"]');
+    await page.click('div[name="Active Orgs"]');
+  });
+
+  it('Check first Active Org (Farm Hop)', async () => {
+    await page.waitForSelector('a.FMHP');
+  });
+
+  it('Click on first Active Org (Farm Hop)', async () => {
+    await page.waitForSelector('a.FMHP');
+    await page.click('a.FMHP');
+  });
+
+  it('Click Errors', async () => {
     await page.waitForTimeout(1000);
     await page.waitForSelector('#__MainMenu__MainMenu__Row-errors-5');
     await page.click('#__MainMenu__MainMenu__Row-errors-5');
   });
 
-  it('Table Should have 1 row', async () => {
+  it('Select Nov 01, 2020 as Start Date', async () => {
     await page.waitForTimeout(1000);
+    await page.waitForSelector('#Input__From__Date-label');
+    // await page.keyboard.press('Enter');
+    await page.click('#Input__From__Date-label');
+
+    await page.waitForTimeout(1000);
+    await page.click('.ms-DatePicker-prevYear');
+
+    await page.waitForTimeout(1000);
+    await page.click('.ms-DatePicker-monthOption[aria-label="November 2020"]');
+
+    await page.waitForTimeout(1000);
+    await page.click('.ms-DatePicker-day-button[aria-label="November 1, 2020"]');
+  });
+
+  it('Select Nov 30, 2020 as End Date', async () => {
+    await page.waitForTimeout(1000);
+    await page.waitForSelector('#Input__To__Date-label');
+    await page.click('#Input__To__Date-label');
+
+    await page.waitForTimeout(1000);
+    await page.click('.ms-DatePicker-prevYear');
+
+    await page.waitForTimeout(1000);
+    await page.click('.ms-DatePicker-monthOption[aria-label="November 2020"]');
+
+    await page.waitForTimeout(1000);
+    await page.click('.ms-DatePicker-day-button[aria-label="November 30, 2020"]');
+  });
+
+  it('Table Should have 17 rows', async () => {
+    await page.waitForTimeout(3000);
     const result = await page.$$eval('.ms-DetailsRow-fields', (rows) => {
       return rows.length;
     });
 
-    expect(result).toEqual(1);
+    expect(result).toEqual(17);
   });
 
   it('Should not have records when search input filled with wrong value', async () => {
@@ -77,7 +135,7 @@ describe('ErrorsPage.js', () => {
     }
 
     await page.waitForSelector('#TableErrors__Card__Row__Input-Search');
-    await page.type('#TableErrors__Card__Row__Input-Search', 'HealthyPet');
+    await page.type('#TableErrors__Card__Row__Input-Search', 'GOLD-VSP-PROD.txt.pgp');
 
     await page.waitForTimeout(1000);
 
@@ -88,7 +146,7 @@ describe('ErrorsPage.js', () => {
       });
     });
 
-    expect(result[0][1]).toEqual('K2UFKE-HealthyPet-UAT.txt');
+    expect(result[0][1]).toEqual('GOLD-VSP-PROD.txt.pgp');
   });
 
   it('Should have 1 record when searching by Work Step', async () => {
@@ -99,7 +157,7 @@ describe('ErrorsPage.js', () => {
     }
 
     await page.waitForSelector('#TableErrors__Card__Row__Input-Search');
-    await page.type('#TableErrors__Card__Row__Input-Search', 'K2UFKE');
+    await page.type('#TableErrors__Card__Row__Input-Search', 'Quality Check Failed');
 
     await page.waitForTimeout(1000);
 
@@ -110,10 +168,10 @@ describe('ErrorsPage.js', () => {
       });
     });
 
-    expect(result[0][2]).toEqual('Processing');
+    expect(result[0][2]).toEqual('Quality Check Failed');
   });
 
-  it('Should have 1 record when searching by Plan Sponsor', async () => {
+  it('Should have 14 records when searching by Work Step Complete', async () => {
     const inputValue = await page.$eval('#TableErrors__Card__Row__Input-Search', (el) => el.value);
 
     for (let i = 0; i < inputValue.length; i++) {
@@ -121,7 +179,7 @@ describe('ErrorsPage.js', () => {
     }
 
     await page.waitForSelector('#TableErrors__Card__Row__Input-Search');
-    await page.type('#TableErrors__Card__Row__Input-Search', 'K2UFKE');
+    await page.type('#TableErrors__Card__Row__Input-Search', 'Complete');
 
     await page.waitForTimeout(1000);
 
@@ -132,7 +190,29 @@ describe('ErrorsPage.js', () => {
       });
     });
 
-    expect(result[0][3]).toEqual('K2UFKE');
+    expect(result[0][2]).toEqual('Complete');
+  });
+
+  it('Should have 2 records when searching by Plan Sponsor', async () => {
+    const inputValue = await page.$eval('#TableErrors__Card__Row__Input-Search', (el) => el.value);
+
+    for (let i = 0; i < inputValue.length; i++) {
+      await page.keyboard.press('Backspace');
+    }
+
+    await page.waitForSelector('#TableErrors__Card__Row__Input-Search');
+    await page.type('#TableErrors__Card__Row__Input-Search', 'SSTAR');
+
+    await page.waitForTimeout(1000);
+
+    const result = await page.$$eval('.ms-DetailsRow-fields', (rows) => {
+      return Array.from(rows, (row: any) => {
+        const columns = row.querySelectorAll('.ms-DetailsRow-cell');
+        return Array.from(columns, (column: any) => column.innerText);
+      });
+    });
+
+    expect(result[0][3]).toEqual('SSTAR');
   });
 
   it('Should have 1 record when searching by Vendor', async () => {
@@ -143,7 +223,7 @@ describe('ErrorsPage.js', () => {
     }
 
     await page.waitForSelector('#TableErrors__Card__Row__Input-Search');
-    await page.type('#TableErrors__Card__Row__Input-Search', 'HealthyPet');
+    await page.type('#TableErrors__Card__Row__Input-Search', 'VSP');
 
     await page.waitForTimeout(1000);
 
@@ -154,7 +234,7 @@ describe('ErrorsPage.js', () => {
       });
     });
 
-    expect(result[0][4]).toEqual('HealthyPet');
+    expect(result[0][4]).toEqual('VSP');
   });
 
   it('Read table first item', async () => {
@@ -166,7 +246,7 @@ describe('ErrorsPage.js', () => {
       });
     });
 
-    expect(result[0][0]).toContain(formattedDate);
+    expect(result[0][0]).toContain('11/04/2020');
   });
 
   afterAll(() => browser.close());

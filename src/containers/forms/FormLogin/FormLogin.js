@@ -24,7 +24,7 @@ import { useNotification } from '../../../hooks/useNotification';
 
 const INITIAL_STATE = { userId: '', password: '' };
 
-const FormLogin = ({ id = '__FormLogin' }) => {
+const FormLogin = ({ id }) => {
   const SessionStore = useSessionStore();
   const Toast = useNotification();
 

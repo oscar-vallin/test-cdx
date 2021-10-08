@@ -6,6 +6,7 @@ export default class P_AdminMenu extends P_BasePage {
   menuParent = 'div.ms-Nav-group';
 
   async openMenu(...menuItems: string[]) {
+    await this.page.waitForTimeout(500);
     if (menuItems.length > 1) {
       // expand all of the top level menus first
       for (let i = 0; i < menuItems.length - 1; i++) {

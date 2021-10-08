@@ -3,7 +3,7 @@ import { Row, Column } from '../../../components/layouts';
 
 import { StyledBox } from './PageHeader.styles';
 
-const PageHeader = ({ id = '__PageHeader', spacing, children }) => {
+const PageHeader = ({ id, spacing, children }) => {
   return (
     <StyledBox id={id} spacing={spacing}>
       <Row id={`${id}__Nav`} left>

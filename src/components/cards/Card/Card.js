@@ -2,15 +2,7 @@ import { PropTypes } from 'prop-types';
 import { getClassNames } from '../../../helpers/helperStyles';
 import { CardStyled } from './Card.styles';
 
-const Card = ({
-  id = '__Card',
-  variant = 'normal',
-  elevation = 'normal',
-  spacing = 'normal',
-  onClick,
-  children,
-  ...props
-}) => {
+const Card = ({ id, variant = 'normal', elevation = 'normal', spacing = 'normal', onClick, children, ...props }) => {
   return (
     <CardStyled
       id={id}

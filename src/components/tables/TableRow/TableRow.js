@@ -4,7 +4,7 @@ import { StyledTableRow } from './TableRow.styles';
 
 const theme = getTheme();
 
-const TableRow = ({ id = '__TableRow', ...props }) => {
+const TableRow = ({ id, ...props }) => {
   const customStyles = {};
   if (props) {
     if (props.itemIndex % 2 === 0) {

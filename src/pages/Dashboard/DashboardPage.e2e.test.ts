@@ -9,6 +9,7 @@ describe('DashboardPage.js', () => {
 
   beforeAll(async () => {
     browser = await puppeteer.launch({
+      headless: !(!!process.env.npm_config_headless || !!process.env.IS_HEADLESS),
       args: ['--no-sandbox'],
     });
     page = await browser.newPage();
@@ -60,7 +61,7 @@ describe('DashboardPage.js', () => {
     expect(transmissionValue).toContain('Failed Files  (Billing Units.)0/6979');
   });
 
-  it('Cehck count items in transmission vendor table', async () => {
+  it('Check count items in transmission vendor table', async () => {
     await page.waitForTimeout(1000);
     const result = await page.$$eval('#__Table_Transmissions_Vendor', (rows) => {
       return rows.length;
@@ -83,8 +84,7 @@ describe('DashboardPage.js', () => {
   it('Click on first element in transmission table', async () => {
     await page.waitForTimeout(1000);
     await page.waitForSelector('#__Table_Transmissions_Vendor');
-    const a = await page.$x('//*[@id="__Row"]/button');
-    await a[0].click();
+    await page.click('#__Table_Transmissions_Vendor div.ms-Grid-row a');
   });
 
   it('Check url with filter=BenefitResourceInc ans file-status page', async () => {

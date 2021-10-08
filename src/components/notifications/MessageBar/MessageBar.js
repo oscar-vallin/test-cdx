@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react';
 
 const CDXMessageBar = ({
-  id = '__MessageBar',
+  id,
   type = 'info',
   multiline = false,
   truncated = false,
@@ -33,3 +33,4 @@ CDXMessageBar.propTypes = {
 };
 
 export { CDXMessageBar };
+export default CDXMessageBar;

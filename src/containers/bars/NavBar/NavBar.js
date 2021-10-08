@@ -26,7 +26,7 @@ import { useSessionStore } from '../../../store/SessionStore';
 import { useActiveDomainStore } from '../../../store/ActiveDomainStore';
 import { useThemeStore } from '../../../store/ThemeStore';
 
-const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSettings, visible }) => {
+const NavBar = ({ id, menuOptionSelected = 'dashboard', onUserSettings, visible }) => {
   const SessionStore = useSessionStore();
   const ActiveDomainStore = useActiveDomainStore();
   const ThemeStore = useThemeStore();
@@ -83,7 +83,7 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSetti
             </StyledColumnLogoL>
             <StyledColumnNav id={`${id}__Left-Row__Menu`} sm={10}>
               {visible && menuOptionSelected && (
-                <MainMenu left option={menuOptionSelected} changeCollapse={changeCollapse} />
+                <MainMenu id="__MainMenu" left option={menuOptionSelected} changeCollapse={changeCollapse} />
               )}
             </StyledColumnNav>
             <StyledColumnLogoR id={`${id}__Left-Row__Logo`} sm={2} noPadding collapse>
@@ -134,7 +134,7 @@ const NavBar = ({ id = '__NavBar', menuOptionSelected = 'dashboard', onUserSetti
 
             <StyledIconButton iconProps={{ iconName: 'Font' }} title="Font sizes" menuProps={{ items: settingsMenu }} />
 
-            <ProfileMenu onUserSettings={onUserSettings} />
+            <ProfileMenu id="__ProfileMenu" onUserSettings={onUserSettings} />
           </StyledRow>
         </StyledColumnCont>
       </StyledRow>

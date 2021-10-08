@@ -29,7 +29,7 @@ const parseLinks = (links = [], sidebarOpt) => {
   }));
 };
 
-const LayoutAdmin = ({ id = 'LayoutAdmin', menuOptionSelected = 'admin', sidebarOptionSelected = '', children }) => {
+const LayoutAdmin = ({ id, menuOptionSelected = 'admin', sidebarOptionSelected = '', children }) => {
   const { orgSid } = useOrgSid();
   const history = useHistory();
   const ActiveDomainStore = useActiveDomainStore();
