@@ -17,9 +17,9 @@ import { StyledContainer } from './CreateGroupPanel.styles';
 
 import {
   useAccessPolicyGroupFormLazyQuery,
-  useCreateAccessPolicyMutation,
-  useUpdateAccessPolicyMutation,
   useAccessPolicyLazyQuery,
+  useUpdateAccessPolicyMutation,
+  useAccessPoliciesForOrgLazyQuery,
 } from '../../../../../data/services/graphql';
 import { useOrgSid } from '../../../../../hooks/useOrgSid';
 
@@ -43,14 +43,17 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
   const [state, setState] = useState({ ...INITIAL_STATE });
 
   const [options, setOptions] = useState({ ...INITIAL_OPTIONS });
+  const [policies, setPolicies] = useState([]);
 
   const [response, setResponse] = useState({});
 
   const [apiUseAccessPolicyForm, { data, loading: isCreatingPolicy }] = useAccessPolicyGroupFormLazyQuery();
+  const [fetchPolicies, { data: policiesData }] = useAccessPoliciesForOrgLazyQuery();
 
   useEffect(() => {
     if (isOpen) {
       apiUseAccessPolicyForm({ variables: { orgSid } });
+      fetchPolicies({ variables: { orgSid } });
     }
   }, [isOpen]);
 
@@ -59,6 +62,12 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
       setResponse(data.accessPolicyGroupForm);
     }
   }, [data, isOpen]);
+
+  useEffect(() => {
+    if (isOpen && policiesData) {
+      setPolicies(policiesData.data.accessPoliciesForOrg.nodes);
+    }
+  }, [isOpen, policiesData]);
 
   const rootClass = mergeStyles({
     width: '100%',
@@ -133,27 +142,39 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
                 </Column>
               </Row>
 
-              <div>
-                <Row>
-                  <Spacing margin={{ top: 'normal' }}>
-                    <Text variant="bold">Organization</Text>
-                  </Spacing>
+              {response?.organization?.visible && (
+                <>
+                  <Row>
+                    <Spacing margin={{ top: 'normal' }}>
+                      <Text variant="bold">Organizations</Text>
+                    </Spacing>
 
-                  <Spacing margin={{ top: 'small' }}>
-                    <Text variant="normal">Third Party Admin B (TPAB)</Text>
-                  </Spacing>
-                  <Column lg="6">
-                    <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                      <Checkbox label="Template Policy" onChange={(event, _stepWise) => setStepWise(_stepWise)} />
+                    <Spacing margin={{ top: 'small' }}>
+                      <Text variant="normal">{response?.organization?.label}</Text>
                     </Spacing>
-                  </Column>
-                  <Column lg="6">
-                    <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                      <Checkbox label="Us as is?" onChange={(event, _stepWise) => setStepWise(_stepWise)} />
-                    </Spacing>
-                  </Column>
-                </Row>
-              </div>
+                    {response?.tmpl?.visible && (
+                      <Column lg="6">
+                        <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                          <Checkbox
+                            label={response?.tmpl?.label}
+                            onChange={(event, _stepWise) => setStepWise(_stepWise)}
+                          />
+                        </Spacing>
+                      </Column>
+                    )}
+                    {response?.tmplUseAsIs?.visible && (
+                      <Column lg="6">
+                        <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                          <Checkbox
+                            label={response?.tmplUseAsIs?.label}
+                            onChange={(event, _stepWise) => setStepWise(_stepWise)}
+                          />
+                        </Spacing>
+                      </Column>
+                    )}
+                  </Row>
+                </>
+              )}
 
               <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                 <Separator />
@@ -225,26 +246,30 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
                 <Separator />
               </Spacing>
 
-              <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                <Checkbox
-                  label="Policies Applies to All Sub Organizations except for those explicitly exclude"
-                  onChange={(event, _stepWise) => setStepWise(_stepWise)}
-                />
-              </Spacing>
+              {response?.includeAllSubOrgs?.visible && (
+                <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                  <Checkbox
+                    label={response?.includeAllSubOrgs?.label}
+                    onChange={(event, _stepWise) => setStepWise(_stepWise)}
+                  />
+                </Spacing>
+              )}
 
-              <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                <Row bottom>
-                  <Column lg="12">
-                    <InputText
-                      label="Policies apply to the following Organizations"
-                      placeholder="Type to Search"
-                      disabled
-                      value={state.policyName}
-                      onChange={({ target }) => setState({ ...state, policyName: target.value })}
-                    />
-                  </Column>
-                </Row>
-              </Spacing>
+              {response?.includeOrgSids?.visible && (
+                <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                  <Row bottom>
+                    <Column lg="12">
+                      <InputText
+                        label={response?.includeOrgSids.label}
+                        placeholder="Type to Search"
+                        disabled
+                        value={state.policyName}
+                        onChange={({ target }) => setState({ ...state, policyName: target.value })}
+                      />
+                    </Column>
+                  </Row>
+                </Spacing>
+              )}
 
               {response?.excludeOrgSids?.visible && (
                 <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
