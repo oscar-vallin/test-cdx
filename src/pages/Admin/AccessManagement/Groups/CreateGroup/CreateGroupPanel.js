@@ -67,7 +67,7 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
 
   useEffect(() => {
     if (isOpen && policiesData) {
-      setPolicies(policiesData.data.accessPoliciesForOrg.nodes);
+      setPolicies(policiesData.accessPoliciesForOrg.nodes);
     }
   }, [isOpen, policiesData]);
 
@@ -202,15 +202,13 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
                   <StyledContainer>
                     <Row>
                       <Column lg="6">
-                        {response?.options
-                          ?.find((pols) => pols.key === 'AccessPolicy')
-                          .values.map((item) => {
-                            return (
-                              <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                                <Checkbox label={item.label} onChange={(event, _stepWise) => setStepWise(_stepWise)} />
-                              </Spacing>
-                            );
-                          })}
+                        {policies.map((item) => {
+                          return (
+                            <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                              <Checkbox label={item.name} onChange={(event, _stepWise) => setStepWise(_stepWise)} />
+                            </Spacing>
+                          );
+                        })}
                       </Column>
                     </Row>
                   </StyledContainer>
@@ -238,7 +236,7 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
                         {specializations.map((item) => {
                           return (
                             <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                              <Checkbox label={item.label} onChange={(event, _stepWise) => setStepWise(_stepWise)} />
+                              <Checkbox label={item.name} onChange={(event, _stepWise) => setStepWise(_stepWise)} />
                             </Spacing>
                           );
                         })}
