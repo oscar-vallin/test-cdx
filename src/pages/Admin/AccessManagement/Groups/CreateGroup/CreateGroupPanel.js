@@ -357,26 +357,28 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, onUpdateGrou
                 </Row>
               </Spacing>
 
-              <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                <Row bottom>
-                  <Column lg="12">
-                    <div className={rootClass}>
-                      <strong>Policies do NOT apply to the following Organizations</strong>
-                      <TagPicker
-                        removeButtonAriaLabel="Remove"
-                        selectionAriaLabel="Selected colors"
-                        onResolveSuggestions={filterSuggestedTags}
-                        getTextFromItem={getTextFromItem}
-                        pickerSuggestionsProps={pickerSuggestionsProps}
-                        itemLimit={4}
-                        inputProps={{
-                          id: 'pickerId',
-                        }}
-                      />
-                    </div>
-                  </Column>
-                </Row>
-              </Spacing>
+              {response?.excludeOrgSids?.visible && (
+                <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                  <Row bottom>
+                    <Column lg="12">
+                      <div className={rootClass}>
+                        <strong>{response?.excludeOrgSids?.label}</strong>
+                        <TagPicker
+                          removeButtonAriaLabel="Remove"
+                          selectionAriaLabel="Selected colors"
+                          onResolveSuggestions={filterSuggestedTags}
+                          getTextFromItem={getTextFromItem}
+                          pickerSuggestionsProps={pickerSuggestionsProps}
+                          itemLimit={4}
+                          inputProps={{
+                            id: 'pickerId',
+                          }}
+                        />
+                      </div>
+                    </Column>
+                  </Row>
+                </Spacing>
+              )}
 
               {response?.includeAllSubOrgs?.visible && (
                 <Column lg="6" direction="row">
