@@ -17,8 +17,7 @@ import { StyledContainer } from './CreateGroupPanel.styles';
 
 import {
   useAccessPolicyGroupFormLazyQuery,
-  useAccessPolicyLazyQuery,
-  useUpdateAccessPolicyMutation,
+  useAccessSpecializationsForOrgLazyQuery,
   useAccessPoliciesForOrgLazyQuery,
 } from '../../../../../data/services/graphql';
 import { useOrgSid } from '../../../../../hooks/useOrgSid';
@@ -44,16 +43,19 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
 
   const [options, setOptions] = useState({ ...INITIAL_OPTIONS });
   const [policies, setPolicies] = useState([]);
+  const [specializations, setSpecializations] = useState([]);
 
   const [response, setResponse] = useState({});
 
   const [apiUseAccessPolicyForm, { data, loading: isCreatingPolicy }] = useAccessPolicyGroupFormLazyQuery();
   const [fetchPolicies, { data: policiesData }] = useAccessPoliciesForOrgLazyQuery();
+  const [fetchSpecializations, { data: specializationsData }] = useAccessSpecializationsForOrgLazyQuery();
 
   useEffect(() => {
     if (isOpen) {
       apiUseAccessPolicyForm({ variables: { orgSid } });
       fetchPolicies({ variables: { orgSid } });
+      fetchSpecializations({ variables: { orgSid } });
     }
   }, [isOpen]);
 
@@ -68,6 +70,12 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
       setPolicies(policiesData.data.accessPoliciesForOrg.nodes);
     }
   }, [isOpen, policiesData]);
+
+  useEffect(() => {
+    if (isOpen && specializationsData) {
+      setSpecializations(specializationsData.accessSpecializationsForOrg.nodes);
+    }
+  }, [isOpen, specializationsData]);
 
   const rootClass = mergeStyles({
     width: '100%',
@@ -227,15 +235,13 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
                   <StyledContainer>
                     <Row>
                       <Column lg="6">
-                        {response?.options
-                          ?.find((specs) => specs.key === 'AccessSpecialization')
-                          .values.map((item) => {
-                            return (
-                              <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                                <Checkbox label={item.label} onChange={(event, _stepWise) => setStepWise(_stepWise)} />
-                              </Spacing>
-                            );
-                          })}
+                        {specializations.map((item) => {
+                          return (
+                            <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                              <Checkbox label={item.label} onChange={(event, _stepWise) => setStepWise(_stepWise)} />
+                            </Spacing>
+                          );
+                        })}
                       </Column>
                     </Row>
                   </StyledContainer>
