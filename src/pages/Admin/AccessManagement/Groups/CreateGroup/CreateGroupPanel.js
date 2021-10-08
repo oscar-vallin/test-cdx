@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { Panel, PanelType } from '@fluentui/react/lib/Panel';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
-import { TagPicker, ITag, IBasePickerSuggestionsProps } from '@fluentui/react/lib/Pickers';
+import { TagPicker } from '@fluentui/react/lib/Pickers';
 import { mergeStyles } from '@fluentui/react/lib/Styling';
 import { FontIcon } from '@fluentui/react/lib/Icon';
 
@@ -20,15 +20,19 @@ import {
   useAccessSpecializationsForOrgLazyQuery,
   useAccessPoliciesForOrgLazyQuery,
   useDirectOrganizationsLazyQuery,
+  useCreateAccessPolicyGroupMutation,
 } from '../../../../../data/services/graphql';
 import { useOrgSid } from '../../../../../hooks/useOrgSid';
 
 const INITIAL_STATE = {
-  policyName: '',
-  isTemplate: false,
-  usedAsIs: false,
-  serviceType: '',
-  permissions: [],
+  name: '',
+  tmpl: false,
+  tmplUseAsIs: false,
+  includeAllSubOrgs: false,
+  policySids: [],
+  specializationSids: [],
+  includeOrgSids: [],
+  excludeOrgSids: [],
 };
 
 const INITIAL_OPTIONS = {
@@ -38,7 +42,6 @@ const INITIAL_OPTIONS = {
 };
 
 const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGroupPolicyId }) => {
-  const [stepWise, setStepWise] = useState(false);
   const { orgSid } = useOrgSid();
   const [state, setState] = useState({ ...INITIAL_STATE });
 
@@ -49,10 +52,13 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
 
   const [response, setResponse] = useState({});
 
-  const [apiUseAccessPolicyForm, { data, loading: isCreatingPolicy }] = useAccessPolicyGroupFormLazyQuery();
+  const [apiUseAccessPolicyForm, { data, loading: isLoadingPolicy }] = useAccessPolicyGroupFormLazyQuery();
   const [fetchPolicies, { data: policiesData }] = useAccessPoliciesForOrgLazyQuery();
   const [fetchSpecializations, { data: specializationsData }] = useAccessSpecializationsForOrgLazyQuery();
   const [fetchOrganizations, { data: orgsData, loading: loadingOrgs }] = useDirectOrganizationsLazyQuery();
+  const [createPolicyGroup, { data: createdPolicyGroup, loading: isCreatingPolicyGroup }] =
+    useCreateAccessPolicyGroupMutation();
+
   useEffect(() => {
     if (isOpen) {
       apiUseAccessPolicyForm({ variables: { orgSid } });
@@ -118,6 +124,11 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
 
   const getTextFromItem = (item) => item.name;
 
+  const onItemSelected = React.useCallback((item) => {
+    setState({ ...state, excludeOrgSids: [...state.excludeOrgSids, item] });
+    return item;
+  }, []);
+
   return (
     <Panel
       closeButtonAriaLabel="Close"
@@ -141,8 +152,8 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
                     required
                     label="Name"
                     placeholder="Please enter a Unifique Name"
-                    value={state.policyName}
-                    onChange={({ target }) => setState({ ...state, policyName: target.value })}
+                    value={state.name}
+                    onChange={({ target }) => setState({ ...state, name: target.value })}
                   />
                 </Column>
               </Row>
@@ -162,7 +173,7 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
                         <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                           <Checkbox
                             label={response?.tmpl?.label}
-                            onChange={(event, _stepWise) => setStepWise(_stepWise)}
+                            onChange={(event, tmpl) => setState({ ...state, tmpl })}
                           />
                         </Spacing>
                       </Column>
@@ -172,7 +183,7 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
                         <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                           <Checkbox
                             label={response?.tmplUseAsIs?.label}
-                            onChange={(event, _stepWise) => setStepWise(_stepWise)}
+                            onChange={(event, tmplUseAsIs) => setState({ ...state, tmplUseAsIs })}
                           />
                         </Spacing>
                       </Column>
@@ -202,7 +213,15 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
                         {policies.map((item) => {
                           return (
                             <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                              <Checkbox label={item.name} onChange={(event, _stepWise) => setStepWise(_stepWise)} />
+                              <Checkbox
+                                label={item.name}
+                                onChange={(event, policy) => {
+                                  setState({
+                                    ...state,
+                                    policies: policy ? [...state.policySids, item.sid] : [...state.policySids],
+                                  });
+                                }}
+                              />
                             </Spacing>
                           );
                         })}
@@ -233,7 +252,17 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
                         {specializations.map((item) => {
                           return (
                             <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                              <Checkbox label={item.name} onChange={(event, _stepWise) => setStepWise(_stepWise)} />
+                              <Checkbox
+                                label={item.name}
+                                onChange={(event, specialization) => {
+                                  setState({
+                                    ...state,
+                                    specialization: specialization
+                                      ? [...state.specializationSids, item.sid]
+                                      : [...state.specializationSids],
+                                  });
+                                }}
+                              />
                             </Spacing>
                           );
                         })}
@@ -251,7 +280,7 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
                 <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                   <Checkbox
                     label={response?.includeAllSubOrgs?.label}
-                    onChange={(event, _stepWise) => setStepWise(_stepWise)}
+                    onChange={(event, includeAllSubOrgs) => setState({ ...state, includeAllSubOrgs })}
                   />
                 </Spacing>
               )}
@@ -280,10 +309,11 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
                         <strong>{response?.excludeOrgSids?.label}</strong>
                         <TagPicker
                           removeButtonAriaLabel="Remove"
-                          selectionAriaLabel="Selected colors"
+                          selectionAriaLabel="Selected Orgs"
                           onResolveSuggestions={filterSuggestedTags}
                           getTextFromItem={getTextFromItem}
                           pickerSuggestionsProps={pickerSuggestionsProps}
+                          onItemSelected={onItemSelected}
                           itemLimit={4}
                           inputProps={{
                             id: 'pickerId',
@@ -297,7 +327,24 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
 
               <Row>
                 <Column lg="12">
-                  <Button variant="primary" disabled={isCreatingPolicy} onClick={() => console.log('saving')}>
+                  <Button
+                    variant="primary"
+                    disabled={isLoadingPolicy}
+                    onClick={() => {
+                      createPolicyGroup({
+                        variables: {
+                          name: state.name,
+                          organizationSid: '1',
+                          policies: state.policySids,
+                          specializations: state.specializationSids,
+                          tmpl: state.tmpl,
+                          tmplUseAsIs: state.tmplUseAsIs,
+                          includeAllSubOrgs: state.includeAllSubOrgs,
+                          excludeOrgSids: state.excludeOrgSids,
+                        },
+                      });
+                    }}
+                  >
                     Save
                   </Button>
                 </Column>
