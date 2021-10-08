@@ -19,6 +19,7 @@ import {
   useAccessPolicyGroupFormLazyQuery,
   useAccessSpecializationsForOrgLazyQuery,
   useAccessPoliciesForOrgLazyQuery,
+  useDirectOrganizationsLazyQuery,
 } from '../../../../../data/services/graphql';
 import { useOrgSid } from '../../../../../hooks/useOrgSid';
 
@@ -44,18 +45,25 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
   const [options, setOptions] = useState({ ...INITIAL_OPTIONS });
   const [policies, setPolicies] = useState([]);
   const [specializations, setSpecializations] = useState([]);
+  const [organizations, setOrganizations] = useState([]);
 
   const [response, setResponse] = useState({});
 
   const [apiUseAccessPolicyForm, { data, loading: isCreatingPolicy }] = useAccessPolicyGroupFormLazyQuery();
   const [fetchPolicies, { data: policiesData }] = useAccessPoliciesForOrgLazyQuery();
   const [fetchSpecializations, { data: specializationsData }] = useAccessSpecializationsForOrgLazyQuery();
-
+  const [fetchOrganizations, { data: orgsData, loading: loadingOrgs }] = useDirectOrganizationsLazyQuery();
   useEffect(() => {
     if (isOpen) {
       apiUseAccessPolicyForm({ variables: { orgSid } });
       fetchPolicies({ variables: { orgSid } });
       fetchSpecializations({ variables: { orgSid } });
+      fetchOrganizations({
+        variables: {
+          orgSid,
+          orgFilter: { activeFilter: 'ACTIVE' },
+        },
+      });
     }
   }, [isOpen]);
 
@@ -77,6 +85,12 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
     }
   }, [isOpen, specializationsData]);
 
+  useEffect(() => {
+    if (isOpen && orgsData) {
+      setOrganizations(orgsData.directOrganizations.nodes);
+    }
+  }, [isOpen, orgsData]);
+
   const rootClass = mergeStyles({
     width: '100%',
   });
@@ -85,25 +99,6 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
     suggestionsHeaderText: 'Suggested Organizations',
     noResultsFoundText: 'No organization tags found',
   };
-
-  const testTags = [
-    'black',
-    'blue',
-    'brown',
-    'cyan',
-    'green',
-    'magenta',
-    'mauve',
-    'orange',
-    'pink',
-    'purple',
-    'red',
-    'rose',
-    'violet',
-    'white',
-    'yellow',
-  ].map((item) => ({ key: item, name: item[0].toUpperCase() + item.slice(1) }));
-
   const listContainsTagList = (tag, tagList) => {
     if (!tagList || !tagList.length || tagList.length === 0) {
       return false;
@@ -111,9 +106,11 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
     return tagList.some((compareTag) => compareTag.key === tag.key);
   };
 
+  const organizationTags = organizations.map((item) => ({ key: item.sid, name: item.name }));
+
   const filterSuggestedTags = (filterText, tagList) => {
     return filterText
-      ? testTags.filter(
+      ? organizationTags.filter(
           (tag) => tag.name.toLowerCase().indexOf(filterText.toLowerCase()) === 0 && !listContainsTagList(tag, tagList)
         )
       : [];
