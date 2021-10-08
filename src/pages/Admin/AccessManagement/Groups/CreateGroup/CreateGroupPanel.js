@@ -367,10 +367,11 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, onUpdateGrou
                         <strong>{response?.excludeOrgSids?.label}</strong>
                         <TagPicker
                           removeButtonAriaLabel="Remove"
-                          selectionAriaLabel="Selected colors"
+                          selectionAriaLabel="Selected Orgs"
                           onResolveSuggestions={filterSuggestedTags}
                           getTextFromItem={getTextFromItem}
                           pickerSuggestionsProps={pickerSuggestionsProps}
+                          onItemSelected={onItemSelected}
                           itemLimit={4}
                           inputProps={{
                             id: 'pickerId',
