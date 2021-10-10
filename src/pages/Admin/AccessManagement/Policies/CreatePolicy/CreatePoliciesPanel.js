@@ -26,7 +26,7 @@ import { useQueryHandler } from '../../../../../hooks/useQueryHandler';
 import { StyledCommandButton, StyledColumn } from './CreatePoliciesPanel.styles';
 
 import {
-  useAccessPolicyFormQuery,
+  useAccessPolicyFormLazyQuery,
   useCreateAccessPolicyMutation,
   useUpdateAccessPolicyMutation,
   useAccessPolicyLazyQuery,
@@ -83,9 +83,7 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
   const [policyForm, setPolicyForm] = useState({});
   const [permissions, setPermissions] = useState([]);
 
-  const [options, setOptions] = useState({ ...INITIAL_OPTIONS });
-
-  const [apiUseAccessPolicyForm, { data }] = useAccessPolicyFormQuery();
+  const [fetchPolicyForm, { data: form }] = useQueryHandler(useAccessPolicyFormLazyQuery);
   const [createPolicy, { data: createdPolicy, loading: isCreatingPolicy }] = useCreateAccessPolicyMutation();
   // const [fetchPolicy, { data: policy }] = useAccessPolicyLazyQuery();
   const [updatePolicy] = useUpdateAccessPolicyMutation();
