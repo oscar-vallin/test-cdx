@@ -1,11 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react';
 
-import { Panel, PanelType } from '@fluentui/react/lib/Panel';
-import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
-import { ComboBox } from 'office-ui-fabric-react/lib/ComboBox';
-import { IconButton, MessageBar } from 'office-ui-fabric-react';
-import { DetailsList, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
+import {
+  IconButton,
+  MessageBar,
+  Label,
+  ComboBox,
+  Checkbox,
+  Panel,
+  PanelType,
+  DetailsList,
+  SelectionMode,
+} from 'office-ui-fabric-react';
+import _ from 'lodash';
 
 import { Spacing } from '../../../../../components/spacings/Spacing';
 import { Card } from '../../../../../components/cards';
@@ -14,11 +21,12 @@ import { Row, Column } from '../../../../../components/layouts';
 import { Separator } from '../../../../../components/separators/Separator';
 import { Text } from '../../../../../components/typography';
 import { InputText } from '../../../../../components/inputs/InputText';
-
+import { Collapse } from '../../../../../components/collapses/Collapse';
+import { useQueryHandler } from '../../../../../hooks/useQueryHandler';
 import { StyledCommandButton, StyledColumn } from './CreatePoliciesPanel.styles';
 
 import {
-  useAccessPolicyFormQuery,
+  useAccessPolicyFormLazyQuery,
   useCreateAccessPolicyMutation,
   useUpdateAccessPolicyMutation,
   useAccessPolicyLazyQuery,
@@ -29,79 +37,80 @@ const INITIAL_STATE = {
   policyName: '',
   isTemplate: false,
   usedAsIs: false,
-  serviceType: '',
   permissions: [],
 };
 
-const INITIAL_OPTIONS = {
-  permissionServices: [],
-  predicates: [],
-  templateServices: [],
-};
+const groupPermissions = ([permissions, ...opts]) => {
+  const { values } = permissions;
+  const { K2U, COLORPALETTE, ACCESS, ORG, PASSWORD, PROD, SSOIDP, TEST, THEME, UAT, USER } = _.groupBy(
+    values,
+    (item) => {
+      return item.value.split('_').shift();
+    }
+  );
 
-const parseToComboBoxOption = ({ name, value }) => ({ key: value, text: name });
-const generateColumns = () => {
-  const createColumn = (name) => ({
-    name,
-    key: name.toLowerCase(),
-    fieldName: name.toLowerCase(),
-    data: 'string',
-    isPadded: true,
-    minWidth: 225,
-  });
+  const exchangeStatus = [
+    { label: 'ASD', options: K2U },
+    { label: 'ASD', options: TEST },
+    { label: 'ASD', options: UAT },
+    { label: 'ASD', options: PROD },
+  ];
 
-  return [createColumn('Service'), createColumn('Facet'), createColumn('Verb'), createColumn('Actions')];
+  const accessManagement = [
+    { label: 'ASD', options: USER },
+    { label: 'ASD', options: ACCESS },
+    { label: 'ASD', options: ORG },
+  ];
+
+  const siteSettings = [
+    { label: 'ASD', options: PASSWORD },
+    { label: 'ASD', options: COLORPALETTE },
+    { label: 'ASD', options: THEME },
+    { label: 'ASD', options: SSOIDP },
+  ];
+
+  return [
+    { label: 'Exchange Status', permissions: exchangeStatus },
+    { label: 'Access Management', permissions: accessManagement },
+    { label: 'Site Settings', permissions: siteSettings },
+  ];
 };
 
 const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicyId }) => {
   const { orgSid } = useOrgSid();
   const [state, setState] = useState({ ...INITIAL_STATE });
+  const [policyForm, setPolicyForm] = useState({});
+  const [permissions, setPermissions] = useState([]);
 
-  const [options, setOptions] = useState({ ...INITIAL_OPTIONS });
-
-  const [apiUseAccessPolicyForm, { data }] = useAccessPolicyFormQuery();
+  const [fetchPolicyForm, { data: form }] = useQueryHandler(useAccessPolicyFormLazyQuery);
   const [createPolicy, { data: createdPolicy, loading: isCreatingPolicy }] = useCreateAccessPolicyMutation();
-  const [fetchPolicy, { data: policy }] = useAccessPolicyLazyQuery();
+  // const [fetchPolicy, { data: policy }] = useAccessPolicyLazyQuery();
   const [updatePolicy] = useUpdateAccessPolicyMutation();
 
-  useEffect(() => {
-    if (isOpen && selectedPolicyId) {
-      fetchPolicy({
-        variables: {
-          orgSid,
-          policySid: selectedPolicyId,
-        },
-      });
-    }
-  }, [selectedPolicyId, isOpen]);
+  // useEffect(() => {
+  //   if (isOpen && selectedPolicyId) {
+  //     fetchPolicy({
+  //       variables: {
+  //         orgSid,
+  //         policySid: selectedPolicyId,
+  //       },
+  //     });
+  //   }
+  // }, [selectedPolicyId, isOpen]);
 
-  useEffect(() => {
-    if (policy) {
-      const { amPolicy } = policy;
+  // useEffect(() => {
+  //   if (policy) {
+  //     const { amPolicy } = policy;
 
-      setState({
-        ...state,
-        policySid: amPolicy.id,
-        policyName: amPolicy.name,
-        isTemplate: amPolicy.tmpl,
-        usedAsIs: amPolicy.tmplUseAsIs,
-        serviceType: amPolicy.tmplServiceType,
-        permissions: (amPolicy.permissions || []).map((permission) => ({
-          policySid: amPolicy.id,
-          effect: permission.effect,
-          predicateName: permission.predicate,
-          parameterVariable: permission.predVar1,
-          parameterValue: permission.predParam1,
-          actions: (permission.actions || []).map((action) => ({
-            facet: { key: action.facet },
-            service: { key: action.service },
-            verb: { key: action.verb },
-            permissionSid: permission.id,
-          })),
-        })),
-      });
-    }
-  }, [policy]);
+  //     setState({
+  //       ...state,
+  //       policySid: amPolicy.id,
+  //       policyName: amPolicy.name,
+  //       isTemplate: amPolicy.tmpl,
+  //       usedAsIs: amPolicy.tmplUseAsIs,
+  //     });
+  //   }
+  // }, [policy]);
 
   useEffect(() => {
     if (createdPolicy) {
@@ -110,95 +119,28 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
     }
   }, [createdPolicy]);
 
-  const handleAsyncOptionChange = (attr, permissionIndex) => (option, item) => {
-    setState({
-      ...state,
-      permissions: state.permissions.map((permission, permissionsIndex) => {
-        if (permissionsIndex !== permissionIndex) {
-          return permission;
-        }
-
-        return {
-          ...permission,
-          actions: permission.actions.map((action, actionsIndex) => {
-            if (permission.actions.indexOf(item) !== actionsIndex) {
-              return action;
-            }
-
-            return { ...action, [attr]: option };
-          }),
-        };
-      }),
-    });
-  };
-
-  const onRenderItemColumn =
-    ({ itemColumndata, services, onServiceChange, permissionIndex }) =>
-    (item, index, column) => {
-      switch (column.key) {
-        case 'service':
-          return (
-            <ComboBox
-              autoComplete="off"
-              selectedKey={item.service.key}
-              options={services.map(parseToComboBoxOption)}
-              onChange={(event, option) => onServiceChange(option, item, itemColumndata)}
-              style={{ width: '100%' }}
-            />
-          );
-        case 'actions':
-          return (
-            <div>
-              <IconButton
-                iconProps={{ iconName: 'delete' }}
-                onClick={() => {
-                  setState({
-                    ...state,
-                    permissions: state.permissions.map((permissionsItem, currIndex) => {
-                      if (currIndex !== permissionIndex) {
-                        return permissionsItem;
-                      }
-
-                      return {
-                        ...permissionsItem,
-                        actions: permissionsItem.actions.filter((action, actionIndex) => actionIndex !== index),
-                      };
-                    }),
-                  });
-                }}
-              />
-            </div>
-          );
-
-        default:
-          break;
-      }
-      return <></>;
-    };
-
-  const columns = generateColumns();
-
   useEffect(() => {
     if (isOpen) {
-      apiUseAccessPolicyForm({ variables: { orgSid } });
+      fetchPolicyForm({ variables: { orgSid } });
     }
   }, [isOpen]);
 
   useEffect(() => {
-    if (isOpen && data) {
-      setOptions(data.accessPolicyForm);
+    if (isOpen && form) {
+      setPolicyForm(form.accessPolicyForm);
+      setPermissions(groupPermissions(form.accessPolicyForm.options));
     }
-  }, [data, isOpen]);
+  }, [form, isOpen]);
 
   return (
     <Panel
       closeButtonAriaLabel="Close"
       type={PanelType.large}
-      headerText={!state.policySid ? 'New Policy' : 'Update policy'}
+      headerText={!state.policySid ? 'New Access Policy' : 'Update Access Policy'}
       isOpen={isOpen}
       onDismiss={() => {
         setState({ ...INITIAL_STATE });
-        setOptions({ ...INITIAL_OPTIONS });
+        // setOptions({ ...INITIAL_OPTIONS });
 
         onDismiss();
       }}
@@ -208,274 +150,113 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
           <Column lg="12">
             <Spacing margin={{ top: 'normal' }}>
               <Row bottom>
-                <Column lg="12">
-                  <InputText
-                    label="Policy Name"
-                    value={state.policyName}
-                    onChange={({ target }) => setState({ ...state, policyName: target.value })}
-                  />
+                <Column lg="6">
+                  {policyForm.name?.visible && (
+                    <InputText
+                      label={policyForm.name?.label}
+                      minLength={policyForm.name?.min}
+                      maxLength={policyForm.name?.max}
+                      value={state.policyName}
+                      required={policyForm.name?.required}
+                      onChange={({ target }) => setState({ ...state, policyName: target.value })}
+                    />
+                  )}
+                </Column>
+
+                <Column lg="6">
+                  <Row>
+                    <Column lg="4">
+                      <Spacing margin={{ bottom: 'small' }}>
+                        {policyForm.tmpl?.visible && (
+                          <Checkbox
+                            label={policyForm.tmpl?.label}
+                            required={policyForm.tmpl?.required}
+                            checked={state.isTemplate}
+                            onChange={(event, isTemplate) => setState({ ...state, isTemplate })}
+                          />
+                        )}
+                      </Spacing>
+                    </Column>
+                    {state.isTemplate && (
+                      <Column lg="8">
+                        <Spacing margin={{ bottom: 'small' }}>
+                          {policyForm.tmplUseAsIs?.visible && (
+                            <Checkbox
+                              label={policyForm.tmplUseAsIs?.label}
+                              required={policyForm.tmplUseAsIs?.required}
+                              checked={state.usedAsIs}
+                              onChange={(event, usedAsIs) => setState({ ...state, usedAsIs })}
+                            />
+                          )}
+                        </Spacing>
+                      </Column>
+                    )}
+                  </Row>
                 </Column>
               </Row>
 
-              {options.showTemplateSection && (
-                <Row center>
-                  <Column lg="12">
-                    <Spacing margin={{ top: 'normal', bottom: 'small' }}>
-                      <Checkbox
-                        label="Is a template"
-                        checked={state.isTemplate}
-                        onChange={(event, isTemplate) => setState({ ...state, isTemplate })}
-                      />
-                    </Spacing>
-
-                    {state.isTemplate && (
-                      <Checkbox
-                        label="Template can be used as is"
-                        checked={state.usedAsIs}
-                        onChange={(event, usedAsIs) => setState({ ...state, usedAsIs })}
-                      />
-                    )}
-                  </Column>
-                </Row>
-              )}
-              {options.showTemplateSection && state.usedAsIs && (
-                <Row>
-                  <Column lg="3">
-                    <Spacing margin={{ top: 'small' }}>
-                      <ComboBox
-                        selectedKey={state.serviceType}
-                        label="Service type"
-                        autoComplete="off"
-                        options={options.templateServices.map(parseToComboBoxOption)}
-                        onChange={(event, { key }) => setState({ ...state, serviceType: key })}
-                        style={{ width: '100%' }}
-                      />
-                    </Spacing>
-                  </Column>
-                </Row>
+              {policyForm.organization?.visible && (
+                <Spacing margin={{ top: 'normal' }}>
+                  <Label>Organization</Label>
+                  <p>{policyForm.organization?.label}</p>
+                </Spacing>
               )}
 
-              <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                <Separator />
-              </Spacing>
+              {policyForm.permissions?.visible && (
+                <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                  <Row>
+                    <Column lg="12">
+                      <Spacing margin={{ top: 'small' }}>
+                        <Text variant="bold">Permissions</Text>
+                      </Spacing>
+                    </Column>
+                  </Row>
 
-              <Spacing margin={{ bottom: 'normal' }}>
-                <Row>
-                  <Column lg="4">
-                    <Spacing margin={{ top: 'small' }}>
-                      <Text variant="bold">Permissions</Text>
-                    </Spacing>
-                  </Column>
+                  <Row>
+                    <Column lg="12">
+                      {permissions.map((group) => (
+                        <Collapse label={group.label} expanded>
+                          <Spacing padding={{ top: 'normal', bottom: 'normal' }}>
+                            <Row>
+                              <Column lg="12">
+                                <Card elevation="none" spacing="none">
+                                  <Row top>
+                                    {group.permissions.map((permission) => (
+                                      <Column lg="3">
+                                        <Card elevation="none">
+                                          <Spacing margin={{ bottom: 'normal' }}>
+                                            <Label>{permission.label}</Label>
+                                          </Spacing>
 
-                  <Column lg="8" right>
-                    <StyledCommandButton
-                      iconProps={{ iconName: 'Add' }}
-                      onClick={() => {
-                        setState({
-                          ...state,
-                          permissions: [
-                            ...state.permissions,
-                            {
-                              effect: '',
-                              predicateName: '',
-                              parameterVariable: '',
-                              parameterValue: '',
-                              actions: [],
-                            },
-                          ],
-                        });
-                      }}
-                    >
-                      Add permission
-                    </StyledCommandButton>
-                  </Column>
-                </Row>
-              </Spacing>
-
-              {state.permissions.length === 0 ? (
-                <MessageBar>No permissions added for this policy</MessageBar>
-              ) : (
-                // Linter Issue: Login complexity > 15
-                state.permissions.map((permission, permissionIndex) => {
-                  return (
-                    <Spacing margin={{ top: 'normal' }} key={permissionIndex}>
-                      <Card>
-                        <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                          <Row bottom>
-                            <Column lg="3">
-                              <ComboBox
-                                selectedKey={permission.effect}
-                                label="Effect"
-                                autoComplete="off"
-                                options={(options.permissionEffectNVPs || []).map(parseToComboBoxOption)}
-                                onChange={(event, { key }) => {
-                                  setState({
-                                    ...state,
-                                    permissions: state.permissions.map((item, index) => {
-                                      if (index !== permissionIndex) {
-                                        return item;
-                                      }
-
-                                      return { ...permission, effect: key };
-                                    }),
-                                  });
-                                }}
-                                style={{ width: '100%' }}
-                              />
-                            </Column>
-
-                            <Column lg="3">
-                              <ComboBox
-                                selectedKey={permission.predicateName}
-                                label="Predicate name"
-                                autoComplete="off"
-                                options={(options.predicates || []).map(parseToComboBoxOption)}
-                                onChange={(event, { key }) => {
-                                  setState({
-                                    ...state,
-                                    permissions: state.permissions.map((item, index) => {
-                                      if (index !== permissionIndex) {
-                                        return item;
-                                      }
-
-                                      return { ...permission, predicateName: key };
-                                    }),
-                                  });
-                                }}
-                                style={{ width: '100%' }}
-                              />
-                            </Column>
-
-                            <Column lg="3">
-                              <InputText
-                                label="Parameter variable"
-                                value={permission.parameterVariable}
-                                onChange={({ target }) => {
-                                  setState({
-                                    ...state,
-                                    permissions: state.permissions.map((item, index) => {
-                                      if (index !== permissionIndex) {
-                                        return item;
-                                      }
-
-                                      return { ...permission, parameterVariable: target.value };
-                                    }),
-                                  });
-                                }}
-                              />
-                            </Column>
-
-                            <Column lg="3">
-                              <InputText
-                                label="Parameter value"
-                                value={permission.parameterValue}
-                                onChange={({ target }) => {
-                                  setState({
-                                    ...state,
-                                    permissions: state.permissions.map((item, index) => {
-                                      if (index !== permissionIndex) {
-                                        return item;
-                                      }
-
-                                      return { ...permission, parameterValue: target.value };
-                                    }),
-                                  });
-                                }}
-                              />
-                            </Column>
-                          </Row>
-                        </Spacing>
-
-                        <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                          <Separator />
-                        </Spacing>
-
-                        <Row>
-                          <Column lg="4" center>
-                            <Spacing margin={{ top: 'small' }}>
-                              <Text>Actions</Text>
-                            </Spacing>
-                          </Column>
-
-                          <Column lg="8" right>
-                            <StyledCommandButton
-                              iconProps={{ iconName: 'Add' }}
-                              onClick={() => {
-                                setState({
-                                  ...state,
-                                  permissions: state.permissions.map((item, index) => {
-                                    if (index !== permissionIndex) {
-                                      return item;
-                                    }
-
-                                    return {
-                                      ...permission,
-                                      actions: [
-                                        ...permission.actions,
-                                        {
-                                          service: '',
-                                          facet: '',
-                                          verb: '',
-                                        },
-                                      ],
-                                    };
-                                  }),
-                                });
-                              }}
-                            >
-                              Add action
-                            </StyledCommandButton>
-                          </Column>
-                        </Row>
-
-                        <Spacing>
-                          <Row>
-                            <StyledColumn lg="12">
-                              {permission.actions.length > 0 ? (
-                                <DetailsList
-                                  items={permission.actions}
-                                  selectionMode={SelectionMode.none}
-                                  columns={columns}
-                                  onRenderItemColumn={onRenderItemColumn({
-                                    permissionIndex,
-                                    data: permission.actions,
-                                    services: options.permissionServices || [],
-                                    onServiceChange: handleAsyncOptionChange('service', permissionIndex),
-                                    onFacetChange: handleAsyncOptionChange('facet', permissionIndex),
-                                    onVerbChange: handleAsyncOptionChange('verb', permissionIndex),
-                                  })}
-                                  isHeaderVisible
-                                />
-                              ) : (
-                                <MessageBar>No actions added for this permission</MessageBar>
-                              )}
-                            </StyledColumn>
-                          </Row>
-                        </Spacing>
-
-                        <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                          <Separator />
-                        </Spacing>
-
-                        <Row>
-                          <Column lg="12" right>
-                            <StyledCommandButton
-                              iconProps={{ iconName: 'delete' }}
-                              onClick={() => {
-                                setState({
-                                  ...state,
-                                  permissions: state.permissions.filter((item, index) => index !== permissionIndex),
-                                });
-                              }}
-                            >
-                              Remove
-                            </StyledCommandButton>
-                          </Column>
-                        </Row>
-                      </Card>
-                    </Spacing>
-                  );
-                })
+                                          {permission.options.map((option) => (
+                                            <Spacing margin={{ top: 'small' }}>
+                                              <Checkbox
+                                                label={option.label}
+                                                checked={state.permissions.includes(option.value)}
+                                                onChange={(event, checked) =>
+                                                  setState({
+                                                    ...state,
+                                                    permissions: checked
+                                                      ? [...state.permissions, option.value]
+                                                      : state.permissions.filter((value) => value !== option.value),
+                                                  })
+                                                }
+                                              />
+                                            </Spacing>
+                                          ))}
+                                        </Card>
+                                      </Column>
+                                    ))}
+                                  </Row>
+                                </Card>
+                              </Column>
+                            </Row>
+                          </Spacing>
+                        </Collapse>
+                      ))}
+                    </Column>
+                  </Row>
+                </Spacing>
               )}
 
               <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
