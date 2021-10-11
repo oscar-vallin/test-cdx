@@ -6,6 +6,7 @@ import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { TagPicker } from '@fluentui/react/lib/Pickers';
 import { mergeStyles } from '@fluentui/react/lib/Styling';
 import { FontIcon } from '@fluentui/react/lib/Icon';
+import { TooltipHost } from '@fluentui/react/lib/Tooltip';
 
 import { Spacing } from '../../../../../components/spacings/Spacing';
 import { Button } from '../../../../../components/buttons';
@@ -161,31 +162,38 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
               {response?.organization?.visible && (
                 <>
                   <Row>
-                    <Spacing margin={{ top: 'normal' }}>
+                    <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                       <Text variant="bold">Organizations</Text>
                     </Spacing>
 
-                    <Spacing margin={{ top: 'small' }}>
+                    <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                       <Text variant="normal">{response?.organization?.label}</Text>
                     </Spacing>
+
                     {response?.tmpl?.visible && (
-                      <Column lg="6">
-                        <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                          <Checkbox
-                            label={response?.tmpl?.label}
-                            onChange={(event, tmpl) => setState({ ...state, tmpl })}
-                          />
-                        </Spacing>
+                      <Column lg="6" direction="row">
+                        <Checkbox
+                          label={response?.tmpl?.label}
+                          onChange={(event, tmpl) => setState({ ...state, tmpl })}
+                        />
+                        {response?.tmpl?.info && (
+                          <TooltipHost content={response?.tmpl?.info} id="tmplTooltip">
+                            &nbsp; <FontIcon aria-describedby="tmplTooltip" iconName="Error" />
+                          </TooltipHost>
+                        )}
                       </Column>
                     )}
-                    {response?.tmplUseAsIs?.visible && (
-                      <Column lg="6">
-                        <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                          <Checkbox
-                            label={response?.tmplUseAsIs?.label}
-                            onChange={(event, tmplUseAsIs) => setState({ ...state, tmplUseAsIs })}
-                          />
-                        </Spacing>
+                    {state.tmpl && response?.tmplUseAsIs?.visible && (
+                      <Column lg="6" direction="row">
+                        <Checkbox
+                          label={response?.tmplUseAsIs?.label}
+                          onChange={(event, tmplUseAsIs) => setState({ ...state, tmplUseAsIs })}
+                        />
+                        {response?.tmplUseAsIs?.info && (
+                          <TooltipHost content={response?.tmplUseAsIs?.info} id="tmplUseAsIsTooltip">
+                            &nbsp; <FontIcon aria-describedby="tmplUseAsIsTooltip" iconName="Error" />
+                          </TooltipHost>
+                        )}
                       </Column>
                     )}
                   </Row>
@@ -202,7 +210,11 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
                     <Column lg="4" direction="row">
                       <Spacing margin={{ top: 'small', bottom: 'normal' }}>
                         <Text variant="bold">Policies</Text>
-                        &nbsp; <FontIcon iconName="Error" />
+                        {response?.policies?.info && (
+                          <TooltipHost content={response?.policies?.info} id="policiesTooltip">
+                            &nbsp; <FontIcon aria-describedby="policiesTooltip" iconName="Error" />
+                          </TooltipHost>
+                        )}
                       </Spacing>
                     </Column>
                   </Row>
@@ -241,7 +253,11 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
                     <Column lg="4" direction="row">
                       <Spacing margin={{ top: 'small', bottom: 'normal' }}>
                         <Text variant="bold">Specialization</Text>
-                        &nbsp; <FontIcon iconName="Error" />
+                        {response?.specializations?.info && (
+                          <TooltipHost content={response?.specializations?.info} id="specializationTooltip">
+                            &nbsp; <FontIcon aria-describedby="specializationTooltip" iconName="Error" />
+                          </TooltipHost>
+                        )}
                       </Spacing>
                     </Column>
                   </Row>
@@ -277,25 +293,43 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
               </Spacing>
 
               {response?.includeAllSubOrgs?.visible && (
-                <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                <Column lg="6" direction="row">
                   <Checkbox
                     label={response?.includeAllSubOrgs?.label}
                     onChange={(event, includeAllSubOrgs) => setState({ ...state, includeAllSubOrgs })}
-                  />
-                </Spacing>
+                  />{' '}
+                  {response?.includeAllSubOrgs?.info && (
+                    <TooltipHost content={response?.includeAllSubOrgs?.info} id="includeAllSubOrgsTooltip">
+                      &nbsp; <FontIcon aria-describedby="includeAllSubOrgsTooltip" iconName="Error" />
+                    </TooltipHost>
+                  )}
+                </Column>
               )}
 
               {response?.includeOrgSids?.visible && (
                 <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                   <Row bottom>
                     <Column lg="12">
-                      <InputText
-                        label={response?.includeOrgSids.label}
-                        placeholder="Type to Search"
-                        disabled
-                        value={state.policyName}
-                        onChange={({ target }) => setState({ ...state, policyName: target.value })}
-                      />
+                      <div className={rootClass}>
+                        <strong>{response?.includeOrgSids.label}</strong>
+                        {response?.includeOrgSids?.info && (
+                          <TooltipHost content={response?.includeOrgSids?.info} id="includeOrgSidsTooltip">
+                            &nbsp; <FontIcon aria-describedby="includeOrgSidsTooltip" iconName="Error" />
+                          </TooltipHost>
+                        )}
+                        <TagPicker
+                          removeButtonAriaLabel="Remove"
+                          selectionAriaLabel="Selected Orgs"
+                          onResolveSuggestions={filterSuggestedTags}
+                          getTextFromItem={getTextFromItem}
+                          pickerSuggestionsProps={pickerSuggestionsProps}
+                          onItemSelected={onItemSelected}
+                          itemLimit={4}
+                          inputProps={{
+                            id: 'pickerId',
+                          }}
+                        />
+                      </div>
                     </Column>
                   </Row>
                 </Spacing>
@@ -307,6 +341,11 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
                     <Column lg="12">
                       <div className={rootClass}>
                         <strong>{response?.excludeOrgSids?.label}</strong>
+                        {response?.excludeOrgSids?.info && (
+                          <TooltipHost content={response?.excludeOrgSids?.info} id="excludeOrgSidsTooltip">
+                            &nbsp; <FontIcon aria-describedby="excludeOrgSidsTooltip" iconName="Error" />
+                          </TooltipHost>
+                        )}
                         <TagPicker
                           removeButtonAriaLabel="Remove"
                           selectionAriaLabel="Selected Orgs"
