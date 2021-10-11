@@ -347,13 +347,26 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, onUpdateGrou
                 <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                   <Row bottom>
                     <Column lg="12">
-                      <InputText
-                        label={response?.includeOrgSids.label}
-                        placeholder="Type to Search"
-                        disabled
-                        value={state.policyName}
-                        onChange={({ target }) => setState({ ...state, policyName: target.value })}
-                      />
+                      <div className={rootClass}>
+                        <strong>{response?.includeOrgSids.label}</strong>
+                        {response?.includeOrgSids?.info && (
+                          <TooltipHost content={response?.includeOrgSids?.info} id="includeOrgSidsTooltip">
+                            &nbsp; <FontIcon aria-describedby="includeOrgSidsTooltip" iconName="Error" />
+                          </TooltipHost>
+                        )}
+                        <TagPicker
+                          removeButtonAriaLabel="Remove"
+                          selectionAriaLabel="Selected Orgs"
+                          onResolveSuggestions={filterSuggestedTags}
+                          getTextFromItem={getTextFromItem}
+                          pickerSuggestionsProps={pickerSuggestionsProps}
+                          onItemSelected={onItemSelected}
+                          itemLimit={4}
+                          inputProps={{
+                            id: 'pickerId',
+                          }}
+                        />
+                      </div>
                     </Column>
                   </Row>
                 </Spacing>
@@ -365,6 +378,11 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, onUpdateGrou
                     <Column lg="12">
                       <div className={rootClass}>
                         <strong>{response?.excludeOrgSids?.label}</strong>
+                        {response?.excludeOrgSids?.info && (
+                          <TooltipHost content={response?.excludeOrgSids?.info} id="excludeOrgSidsTooltip">
+                            &nbsp; <FontIcon aria-describedby="excludeOrgSidsTooltip" iconName="Error" />
+                          </TooltipHost>
+                        )}
                         <TagPicker
                           removeButtonAriaLabel="Remove"
                           selectionAriaLabel="Selected Orgs"
