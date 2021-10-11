@@ -38,12 +38,6 @@ describe('E2E - Organization Navigation Test', () => {
     await adminMenu.openMenu('Organizations', 'Active Orgs');
   });
 
-  it('Check first Active Org (Farm Hop)', async () => {
-    const activeOrgs = new P_ActivityOrgs(cdxApp.page);
-    await activeOrgs.expectOnPage();
-    await activeOrgs.waitForSelector('a.FMHP');
-  });
-
   it('Click on first Active Org (Farm Hop)', async () => {
     const activeOrgs = new P_ActivityOrgs(cdxApp.page);
     await activeOrgs.expectOnPage();

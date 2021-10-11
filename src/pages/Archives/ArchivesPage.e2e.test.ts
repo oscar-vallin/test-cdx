@@ -4,10 +4,10 @@ import P_MainMenu from '../../teste2e/pages/P_MainMenu';
 import P_Archives from '../../teste2e/pages/P_Archives';
 
 const testConstants = {
-  clientFile: 'K2UFKE-HealthyPet-UAT.txt',
-  vendorFile: '2021-10-09-165745580001',
-  planSponsor: 'K2UFKE',
-  vendor: 'HealthyPet',
+  clientFile: 'ADENA-Cigna-Elig-TEST.txt',
+  vendorFile: '2020-11-04-022911102con001',
+  planSponsor: 'ADENA',
+  vendor: 'Trustmark',
 };
 
 const inputSelector = '#TableArchive__Card__Row__Input-Search';
@@ -64,10 +64,10 @@ describe('E2E - Archives Navigation Test', () => {
     await fileStatus.expectOnPage();
   });
 
-  it('Table Should have 1 row', async () => {
+  it('Table Should have 17 rows', async () => {
     const page = new P_Archives(cdxApp.page);
     await page.expectOnPage();
-    await page.expectTableRecords('.ms-DetailsRow-fields', 1);
+    await page.expectTableRecords('.ms-DetailsRow-fields', 17);
   });
 
   it('Should not have records when search input filled with wrong value', async () => {
@@ -84,7 +84,7 @@ describe('E2E - Archives Navigation Test', () => {
     await page.expectInput(inputSelector, inputValue, () => page.expectTextOnFirstRow(inputValue, 0, 3));
   });
 
-  it('Should have 1 record when searching by Plan Sponsor', async () => {
+  it('Should have 3 records when searching by Plan Sponsor', async () => {
     const inputValue = testConstants.planSponsor;
     const page = new P_Archives(cdxApp.page);
     await page.expectOnPage();

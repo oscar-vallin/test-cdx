@@ -4,10 +4,10 @@ import P_MainMenu from '../../teste2e/pages/P_MainMenu';
 import P_Errors from '../../teste2e/pages/P_Errors';
 
 const testConstants = {
-  clientFile: 'K2UFKE-HealthyPet-UAT.txt',
-  workStep: 'Processing',
-  planSponsor: 'K2UFKE',
-  vendor: 'HealthyPet',
+  clientFile: 'ADENA-Cigna-Elig-TEST.txt',
+  workStep: 'Quality Check Failed',
+  planSponsor: 'ADENA',
+  vendor: 'Trustmark',
 };
 
 describe('E2E - Errors Navigation Test', () => {
@@ -23,12 +23,6 @@ describe('E2E - Errors Navigation Test', () => {
     await loginPage.expectOnActiveOrgsPage();
   });
 
-  it('Check first Active Org (ABC Co)', async () => {
-    const activeOrgs = new P_ActivityOrgs(cdxApp.page);
-    await activeOrgs.expectOnPage();
-    await activeOrgs.waitForSelector('a.ABC');
-  });
-
   it('Click K2UIS Active Org (Known2U Implementation Services)', async () => {
     const activeOrgs = new P_ActivityOrgs(cdxApp.page);
     await activeOrgs.expectOnPage();
@@ -38,12 +32,6 @@ describe('E2E - Errors Navigation Test', () => {
   it('Navigate to Active Orgs', async () => {
     const adminMenu = cdxApp.getAdminMenu();
     await adminMenu.openMenu('Organizations', 'Active Orgs');
-  });
-
-  it('Check first Active Org (Farm Hop)', async () => {
-    const activeOrgs = new P_ActivityOrgs(cdxApp.page);
-    await activeOrgs.expectOnPage();
-    await activeOrgs.waitForSelector('a.FMHP');
   });
 
   it('Click on first Active Org (Farm Hop)', async () => {
@@ -57,15 +45,15 @@ describe('E2E - Errors Navigation Test', () => {
     await mainMenu.clickErrors();
   });
 
-  it('Should redirect to Erros Page', async () => {
+  it('Should redirect to Errors Page', async () => {
     const fileStatus = new P_Errors(cdxApp.page);
     await fileStatus.expectOnPage();
   });
 
-  it('Table Should have 1 row', async () => {
+  it('Table Should have 17 rows', async () => {
     const page = new P_Errors(cdxApp.page);
     await page.expectOnPage();
-    await page.expectTableRecords('.ms-DetailsRow-fields', 1);
+    await page.expectTableRecords('.ms-DetailsRow-fields', 17);
   });
 
   it('Should not have records when search input filled with wrong value', async () => {
@@ -95,7 +83,7 @@ describe('E2E - Errors Navigation Test', () => {
     );
   });
 
-  it('Should have 1 record when searching by Plan Sponsor', async () => {
+  it('Should have 3 records when searching by Plan Sponsor', async () => {
     const inputValue = testConstants.planSponsor;
     const page = new P_Errors(cdxApp.page);
     await page.expectOnPage();
