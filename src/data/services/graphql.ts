@@ -31,6 +31,7 @@ export type AccessPolicy = {
   permissions?: Maybe<Array<Maybe<Permission>>>;
   tmpl?: Maybe<Scalars['Boolean']>;
   tmplUseAsIs?: Maybe<Scalars['Boolean']>;
+  applicableOrgTypes?: Maybe<Array<Maybe<OrgType>>>;
 };
 
 export type AccessPolicyConnection = {
@@ -47,6 +48,7 @@ export type AccessPolicyForm = {
   permissions?: Maybe<UiSelectManyField>;
   tmpl?: Maybe<UiBooleanField>;
   tmplUseAsIs?: Maybe<UiBooleanField>;
+  applicableOrgTypes?: Maybe<UiSelectManyField>;
   options?: Maybe<Array<Maybe<UiOptions>>>;
   response: GqOperationResponse;
   errCode?: Maybe<Scalars['String']>;
@@ -61,6 +63,7 @@ export type AccessPolicyGroup = {
   description?: Maybe<Scalars['String']>;
   tmpl?: Maybe<Scalars['Boolean']>;
   tmplUseAsIs?: Maybe<Scalars['Boolean']>;
+  applicableOrgTypes?: Maybe<Array<Maybe<OrgType>>>;
   policies?: Maybe<Array<Maybe<AccessPolicy>>>;
 };
 
@@ -78,6 +81,7 @@ export type AccessPolicyGroupForm = {
   organization: UiReadOnlyField;
   tmpl?: Maybe<UiBooleanField>;
   tmplUseAsIs?: Maybe<UiBooleanField>;
+  applicableOrgTypes?: Maybe<UiSelectManyField>;
   policies?: Maybe<UiSelectManyField>;
   specializations?: Maybe<UiSelectManyField>;
   /** Apply policies and specializations of this group to all sub organizations to the Primary Organization */
@@ -212,6 +216,7 @@ export type CreateAccessPolicyGroupInput = {
   description?: Maybe<Scalars['String']>;
   tmpl?: Maybe<Scalars['Boolean']>;
   tmplUseAsIs?: Maybe<Scalars['Boolean']>;
+  applicableOrgTypes?: Maybe<Array<Maybe<OrgType>>>;
   policySids?: Maybe<Array<Maybe<Scalars['ID']>>>;
   specializationSids?: Maybe<Array<Maybe<Scalars['ID']>>>;
   includeAllSubOrgs?: Maybe<Scalars['Boolean']>;
@@ -225,6 +230,7 @@ export type CreateAccessPolicyInput = {
   permissions?: Maybe<Array<Maybe<Permission>>>;
   tmpl?: Maybe<Scalars['Boolean']>;
   tmplUseAsIs?: Maybe<Scalars['Boolean']>;
+  applicableOrgTypes?: Maybe<Array<Maybe<OrgType>>>;
 };
 
 export type CreateAccessSpecializationInput = {
@@ -561,6 +567,7 @@ export type Mutation = {
   passwordLogin?: Maybe<LoginStep>;
   updateOwnPassword?: Maybe<UserSession>;
   createOrg?: Maybe<Organization>;
+  deactivateOrg?: Maybe<GqOperationResponse>;
   createAccessPolicy?: Maybe<AccessPolicyForm>;
   updateAccessPolicy?: Maybe<AccessPolicyForm>;
   deleteAccessPolicies?: Maybe<GqOperationResponse>;
@@ -610,6 +617,11 @@ export type MutationUpdateOwnPasswordArgs = {
 
 export type MutationCreateOrgArgs = {
   orgInfo: CreateOrgInput;
+};
+
+
+export type MutationDeactivateOrgArgs = {
+  orgSid: Scalars['ID'];
 };
 
 
@@ -944,6 +956,7 @@ export enum Permission {
   K2UExchangeList = 'K2U_EXCHANGE_LIST',
   K2UExchangeRead = 'K2U_EXCHANGE_READ',
   K2UExchangeDownload = 'K2U_EXCHANGE_DOWNLOAD',
+  K2UExchangeDownloadSteps = 'K2U_EXCHANGE_DOWNLOAD_STEPS',
   K2UExchangeRestart = 'K2U_EXCHANGE_RESTART',
   K2UExchangeCancel = 'K2U_EXCHANGE_CANCEL',
   K2UExchangeArchiveRead = 'K2U_EXCHANGE_ARCHIVE_READ',
@@ -951,6 +964,7 @@ export enum Permission {
   TestExchangeList = 'TEST_EXCHANGE_LIST',
   TestExchangeRead = 'TEST_EXCHANGE_READ',
   TestExchangeDownload = 'TEST_EXCHANGE_DOWNLOAD',
+  TestExchangeDownloadSteps = 'TEST_EXCHANGE_DOWNLOAD_STEPS',
   TestExchangeRestart = 'TEST_EXCHANGE_RESTART',
   TestExchangeCancel = 'TEST_EXCHANGE_CANCEL',
   TestExchangeArchiveRead = 'TEST_EXCHANGE_ARCHIVE_READ',
@@ -958,6 +972,7 @@ export enum Permission {
   UatExchangeList = 'UAT_EXCHANGE_LIST',
   UatExchangeRead = 'UAT_EXCHANGE_READ',
   UatExchangeDownload = 'UAT_EXCHANGE_DOWNLOAD',
+  UatExchangeDownloadSteps = 'UAT_EXCHANGE_DOWNLOAD_STEPS',
   UatExchangeRestart = 'UAT_EXCHANGE_RESTART',
   UatExchangeCancel = 'UAT_EXCHANGE_CANCEL',
   UatExchangeArchiveRead = 'UAT_EXCHANGE_ARCHIVE_READ',
@@ -965,6 +980,7 @@ export enum Permission {
   ProdExchangeList = 'PROD_EXCHANGE_LIST',
   ProdExchangeRead = 'PROD_EXCHANGE_READ',
   ProdExchangeDownload = 'PROD_EXCHANGE_DOWNLOAD',
+  ProdExchangeDownloadSteps = 'PROD_EXCHANGE_DOWNLOAD_STEPS',
   ProdExchangeRestart = 'PROD_EXCHANGE_RESTART',
   ProdExchangeCancel = 'PROD_EXCHANGE_CANCEL',
   ProdExchangeArchiveRead = 'PROD_EXCHANGE_ARCHIVE_READ',
@@ -1606,6 +1622,7 @@ export type UpdateAccessPolicyGroupInput = {
   description?: Maybe<Scalars['String']>;
   tmpl?: Maybe<Scalars['Boolean']>;
   tmplUseAsIs?: Maybe<Scalars['Boolean']>;
+  applicableOrgTypes?: Maybe<Array<Maybe<OrgType>>>;
   policySids?: Maybe<Array<Maybe<Scalars['ID']>>>;
   specializationSids?: Maybe<Array<Maybe<Scalars['ID']>>>;
   includeAllSubOrgs?: Maybe<Scalars['Boolean']>;
@@ -1617,6 +1634,9 @@ export type UpdateAccessPolicyInput = {
   policySid: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
   permissions?: Maybe<Array<Maybe<Permission>>>;
+  tmpl?: Maybe<Scalars['Boolean']>;
+  tmplUseAsIs?: Maybe<Scalars['Boolean']>;
+  applicableOrgTypes?: Maybe<Array<Maybe<OrgType>>>;
 };
 
 export type UpdateAccessSpecializationInput = {
@@ -2080,7 +2100,7 @@ export type UnionNvpFragment = UnionNvp_NvpStr_Fragment | UnionNvp_NvpId_Fragmen
 
 export type FragmentAccessPolicyFragment = (
   { __typename?: 'AccessPolicy' }
-  & Pick<AccessPolicy, 'sid' | 'name' | 'permissions' | 'tmpl' | 'tmplUseAsIs'>
+  & Pick<AccessPolicy, 'sid' | 'name' | 'permissions' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes'>
 );
 
 export type FragmentWebCommandFragment = (
@@ -2397,7 +2417,7 @@ export type UsersForOrgQuery = (
           & Pick<Person, 'sid' | 'firstNm' | 'lastNm'>
         )>, accessPolicyGroups?: Maybe<Array<Maybe<(
           { __typename?: 'AccessPolicyGroup' }
-          & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs'>
+          & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes'>
           & { policies?: Maybe<Array<Maybe<(
             { __typename?: 'AccessPolicy' }
             & FragmentAccessPolicyFragment
@@ -2503,7 +2523,7 @@ export type FindUserByEmailQuery = (
       & Pick<Person, 'sid' | 'firstNm' | 'lastNm'>
     )>, accessPolicyGroups?: Maybe<Array<Maybe<(
       { __typename?: 'AccessPolicyGroup' }
-      & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs'>
+      & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes'>
       & { policies?: Maybe<Array<Maybe<(
         { __typename?: 'AccessPolicy' }
         & FragmentAccessPolicyFragment
@@ -2608,7 +2628,7 @@ export type AccessPolicyQuery = (
   { __typename?: 'Query' }
   & { accessPolicy?: Maybe<(
     { __typename?: 'AccessPolicy' }
-    & Pick<AccessPolicy, 'sid' | 'name' | 'permissions' | 'tmpl' | 'tmplUseAsIs'>
+    & Pick<AccessPolicy, 'sid' | 'name' | 'permissions' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes'>
   )> }
 );
 
@@ -2671,7 +2691,7 @@ export type AccessPolicyGroupsForOrgQuery = (
       & FragmentPaginationInfoFragment
     ), nodes?: Maybe<Array<Maybe<(
       { __typename?: 'AccessPolicyGroup' }
-      & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs'>
+      & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes'>
       & { policies?: Maybe<Array<Maybe<(
         { __typename?: 'AccessPolicy' }
         & FragmentAccessPolicyFragment
@@ -2689,7 +2709,7 @@ export type SystemTemplateAccessPolicyGroupByNameQuery = (
   { __typename?: 'Query' }
   & { systemTemplateAccessPolicyGroupByName?: Maybe<Array<Maybe<(
     { __typename?: 'AccessPolicyGroup' }
-    & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs'>
+    & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes'>
     & { policies?: Maybe<Array<Maybe<(
       { __typename?: 'AccessPolicy' }
       & FragmentAccessPolicyFragment
@@ -2722,6 +2742,9 @@ export type AccessPolicyFormQuery = (
     )>, tmplUseAsIs?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & Pick<UiBooleanField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, applicableOrgTypes?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
@@ -2758,6 +2781,9 @@ export type FindAccessPolicyQuery = (
     )>, tmplUseAsIs?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & Pick<UiBooleanField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, applicableOrgTypes?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
@@ -2869,6 +2895,9 @@ export type AccessPolicyGroupFormQuery = (
     )>, tmplUseAsIs?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & Pick<UiBooleanField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, applicableOrgTypes?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, policies?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
@@ -2920,6 +2949,9 @@ export type FindAccessPolicyGroupQuery = (
     )>, tmplUseAsIs?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & Pick<UiBooleanField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, applicableOrgTypes?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, policies?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
@@ -3381,6 +3413,16 @@ export type CreateOrgMutation = (
   )> }
 );
 
+export type DeactivateOrgMutationVariables = Exact<{
+  orgSid: Scalars['ID'];
+}>;
+
+
+export type DeactivateOrgMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deactivateOrg'>
+);
+
 export type CreateAccessPolicyMutationVariables = Exact<{
   createAccessPolicyInput: CreateAccessPolicyInput;
 }>;
@@ -3406,6 +3448,9 @@ export type CreateAccessPolicyMutation = (
     )>, tmplUseAsIs?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & Pick<UiBooleanField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, applicableOrgTypes?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
@@ -3442,6 +3487,9 @@ export type UpdateAccessPolicyMutation = (
     )>, tmplUseAsIs?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & Pick<UiBooleanField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, applicableOrgTypes?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
@@ -3582,6 +3630,9 @@ export type CreateAccessPolicyGroupMutation = (
     )>, tmplUseAsIs?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & Pick<UiBooleanField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, applicableOrgTypes?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, policies?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
@@ -3633,6 +3684,9 @@ export type UpdateAccessPolicyGroupMutation = (
     )>, tmplUseAsIs?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & Pick<UiBooleanField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, applicableOrgTypes?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, policies?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
@@ -3765,7 +3819,7 @@ export type UpdateUserAccessPolicyGroupsMutation = (
   { __typename?: 'Mutation' }
   & { updateUserAccessPolicyGroups?: Maybe<Array<Maybe<(
     { __typename?: 'AccessPolicyGroup' }
-    & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs'>
+    & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes'>
     & { policies?: Maybe<Array<Maybe<(
       { __typename?: 'AccessPolicy' }
       & FragmentAccessPolicyFragment
@@ -4126,6 +4180,7 @@ export const FragmentAccessPolicyFragmentDoc = gql`
   permissions
   tmpl
   tmplUseAsIs
+  applicableOrgTypes
 }
     `;
 export const FragmentPaginationInfoFragmentDoc = gql`
@@ -4719,6 +4774,7 @@ export const UsersForOrgDocument = gql`
           description
           tmpl
           tmplUseAsIs
+          applicableOrgTypes
           policies {
             ...fragmentAccessPolicy
           }
@@ -4967,6 +5023,7 @@ export const FindUserByEmailDocument = gql`
       description
       tmpl
       tmplUseAsIs
+      applicableOrgTypes
       policies {
         ...fragmentAccessPolicy
       }
@@ -5248,6 +5305,7 @@ export const AccessPolicyDocument = gql`
     permissions
     tmpl
     tmplUseAsIs
+    applicableOrgTypes
   }
 }
     `;
@@ -5375,6 +5433,7 @@ export const AccessPolicyGroupsForOrgDocument = gql`
       description
       tmpl
       tmplUseAsIs
+      applicableOrgTypes
       policies {
         ...fragmentAccessPolicy
       }
@@ -5418,6 +5477,7 @@ export const SystemTemplateAccessPolicyGroupByNameDocument = gql`
     description
     tmpl
     tmplUseAsIs
+    applicableOrgTypes
     policies {
       ...fragmentAccessPolicy
     }
@@ -5505,6 +5565,18 @@ export const AccessPolicyFormDocument = gql`
       info
       required
       visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    applicableOrgTypes {
+      value
+      label
+      info
+      required
+      visible
+      options
+      query
       errCode
       errMsg
       errSeverity
@@ -5605,6 +5677,18 @@ export const FindAccessPolicyDocument = gql`
       info
       required
       visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    applicableOrgTypes {
+      value
+      label
+      info
+      required
+      visible
+      options
+      query
       errCode
       errMsg
       errSeverity
@@ -5905,6 +5989,18 @@ export const AccessPolicyGroupFormDocument = gql`
       errMsg
       errSeverity
     }
+    applicableOrgTypes {
+      value
+      label
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
     policies {
       value
       label
@@ -6060,6 +6156,18 @@ export const FindAccessPolicyGroupDocument = gql`
       info
       required
       visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    applicableOrgTypes {
+      value
+      label
+      info
+      required
+      visible
+      options
+      query
       errCode
       errMsg
       errSeverity
@@ -7390,6 +7498,36 @@ export function useCreateOrgMutation(baseOptions?: Apollo.MutationHookOptions<Cr
 export type CreateOrgMutationHookResult = ReturnType<typeof useCreateOrgMutation>;
 export type CreateOrgMutationResult = Apollo.MutationResult<CreateOrgMutation>;
 export type CreateOrgMutationOptions = Apollo.BaseMutationOptions<CreateOrgMutation, CreateOrgMutationVariables>;
+export const DeactivateOrgDocument = gql`
+    mutation DeactivateOrg($orgSid: ID!) {
+  deactivateOrg(orgSid: $orgSid)
+}
+    `;
+export type DeactivateOrgMutationFn = Apollo.MutationFunction<DeactivateOrgMutation, DeactivateOrgMutationVariables>;
+
+/**
+ * __useDeactivateOrgMutation__
+ *
+ * To run a mutation, you first call `useDeactivateOrgMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeactivateOrgMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deactivateOrgMutation, { data, loading, error }] = useDeactivateOrgMutation({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *   },
+ * });
+ */
+export function useDeactivateOrgMutation(baseOptions?: Apollo.MutationHookOptions<DeactivateOrgMutation, DeactivateOrgMutationVariables>) {
+        return Apollo.useMutation<DeactivateOrgMutation, DeactivateOrgMutationVariables>(DeactivateOrgDocument, baseOptions);
+      }
+export type DeactivateOrgMutationHookResult = ReturnType<typeof useDeactivateOrgMutation>;
+export type DeactivateOrgMutationResult = Apollo.MutationResult<DeactivateOrgMutation>;
+export type DeactivateOrgMutationOptions = Apollo.BaseMutationOptions<DeactivateOrgMutation, DeactivateOrgMutationVariables>;
 export const CreateAccessPolicyDocument = gql`
     mutation CreateAccessPolicy($createAccessPolicyInput: CreateAccessPolicyInput!) {
   createAccessPolicy(createAccessPolicyInput: $createAccessPolicyInput) {
@@ -7445,6 +7583,18 @@ export const CreateAccessPolicyDocument = gql`
       info
       required
       visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    applicableOrgTypes {
+      value
+      label
+      info
+      required
+      visible
+      options
+      query
       errCode
       errMsg
       errSeverity
@@ -7544,6 +7694,18 @@ export const UpdateAccessPolicyDocument = gql`
       info
       required
       visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    applicableOrgTypes {
+      value
+      label
+      info
+      required
+      visible
+      options
+      query
       errCode
       errMsg
       errSeverity
@@ -7935,6 +8097,18 @@ export const CreateAccessPolicyGroupDocument = gql`
       errMsg
       errSeverity
     }
+    applicableOrgTypes {
+      value
+      label
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
     policies {
       value
       label
@@ -8088,6 +8262,18 @@ export const UpdateAccessPolicyGroupDocument = gql`
       info
       required
       visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    applicableOrgTypes {
+      value
+      label
+      info
+      required
+      visible
+      options
+      query
       errCode
       errMsg
       errSeverity
@@ -8469,6 +8655,7 @@ export const UpdateUserAccessPolicyGroupsDocument = gql`
     description
     tmpl
     tmplUseAsIs
+    applicableOrgTypes
     policies {
       ...fragmentAccessPolicy
     }
