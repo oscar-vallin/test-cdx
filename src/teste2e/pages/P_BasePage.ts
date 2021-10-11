@@ -51,4 +51,40 @@ export default class P_BasePage {
 
     expect(result[tableRow][tableCol]).toContain(text);
   }
+
+  async expectTableRecords(selector: string, numRecords: number) {
+    await this.page.waitForTimeout(1000);
+
+    const result = await this.page.$$eval(selector, (rows) => {
+      return rows.length;
+    });
+
+    expect(result).toEqual(numRecords);
+  }
+
+  async expectInputValue(selector: string, value: string) {
+    await this.page.waitForSelector(selector);
+    await this.page.waitForTimeout(1000);
+    await this.page.type(selector, value);
+  }
+
+  async expectInputBackspace(selector: string, counter: number) {
+    await this.page.waitForSelector(selector);
+
+    await this.page.focus(selector);
+    for (let i = 0; i < counter; i++) {
+      this.page.keyboard.press('Backspace');
+    }
+  }
+
+  async expectInput(selector: string, value: string, expectFunction: Function) {
+    await this.page.waitForSelector(selector);
+    await this.page.type(selector, value);
+    await this.page.waitForTimeout(1000);
+    await expectFunction();
+    await this.page.focus(selector);
+    for (let i = 0; i < value.length; i++) {
+      this.page.keyboard.press('Backspace');
+    }
+  }
 }
