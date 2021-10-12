@@ -1,17 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react';
 
-import {
-  IconButton,
-  MessageBar,
-  Label,
-  ComboBox,
-  Checkbox,
-  Panel,
-  PanelType,
-  DetailsList,
-  SelectionMode,
-} from 'office-ui-fabric-react';
+import { SpinnerSize, MessageBar, Label, Checkbox, Panel, PanelType, Spinner } from 'office-ui-fabric-react';
 import _ from 'lodash';
 
 import { Spacing } from '../../../../../components/spacings/Spacing';
@@ -40,8 +30,8 @@ const INITIAL_STATE = {
   permissions: [],
 };
 
-const groupPermissions = ([permissions, ...opts]) => {
-  const { values } = permissions;
+const groupPermissions = (opts) => {
+  const { values } = opts.find((opt) => opt.key === 'Permission');
   const { K2U, COLORPALETTE, ACCESS, ORG, PASSWORD, PROD, SSOIDP, TEST, THEME, UAT, USER } = _.groupBy(
     values,
     (item) => {
@@ -50,23 +40,23 @@ const groupPermissions = ([permissions, ...opts]) => {
   );
 
   const exchangeStatus = [
-    { label: 'ASD', options: K2U },
-    { label: 'ASD', options: TEST },
-    { label: 'ASD', options: UAT },
-    { label: 'ASD', options: PROD },
+    { label: 'K2U Exchanges', options: K2U },
+    { label: 'Test Exchanges', options: TEST },
+    { label: 'UAT Exchanges', options: UAT },
+    { label: 'Production Exchanges', options: PROD },
   ];
 
   const accessManagement = [
-    { label: 'ASD', options: USER },
-    { label: 'ASD', options: ACCESS },
-    { label: 'ASD', options: ORG },
+    { label: 'Users', options: USER },
+    { label: 'Access Management', options: ACCESS },
+    { label: 'Organization', options: ORG },
   ];
 
   const siteSettings = [
-    { label: 'ASD', options: PASSWORD },
-    { label: 'ASD', options: COLORPALETTE },
-    { label: 'ASD', options: THEME },
-    { label: 'ASD', options: SSOIDP },
+    { label: 'Password', options: PASSWORD },
+    { label: 'Color Palettes', options: COLORPALETTE },
+    { label: 'Theme', options: THEME },
+    { label: 'SSO', options: SSOIDP },
   ];
 
   return [
@@ -82,7 +72,7 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
   const [policyForm, setPolicyForm] = useState({});
   const [permissions, setPermissions] = useState([]);
 
-  const [fetchPolicyForm, { data: form }] = useQueryHandler(useAccessPolicyFormLazyQuery);
+  const [fetchPolicyForm, { data: form, loading: isLoadingForm }] = useQueryHandler(useAccessPolicyFormLazyQuery);
   const [createPolicy, { data: createdPolicy, loading: isCreatingPolicy }] = useCreateAccessPolicyMutation();
   // const [fetchPolicy, { data: policy }] = useAccessPolicyLazyQuery();
   const [updatePolicy] = useUpdateAccessPolicyMutation();
@@ -148,161 +138,173 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
       <>
         <Row>
           <Column lg="12">
-            <Spacing margin={{ top: 'normal' }}>
-              <Row bottom>
-                <Column lg="6">
-                  {policyForm.name?.visible && (
-                    <InputText
-                      label={policyForm.name?.label}
-                      minLength={policyForm.name?.min}
-                      maxLength={policyForm.name?.max}
-                      value={state.policyName}
-                      required={policyForm.name?.required}
-                      onChange={({ target }) => setState({ ...state, policyName: target.value })}
-                    />
-                  )}
-                </Column>
+            {isLoadingForm ? (
+              <>
+                <Spacing margin={{ top: 'normal', bottom: 'double' }}>
+                  <Separator />
+                </Spacing>
 
-                <Column lg="6">
-                  <Row>
-                    <Column lg="4">
-                      <Spacing margin={{ bottom: 'small' }}>
-                        {policyForm.tmpl?.visible && (
-                          <Checkbox
-                            label={policyForm.tmpl?.label}
-                            required={policyForm.tmpl?.required}
-                            checked={state.isTemplate}
-                            onChange={(event, isTemplate) => setState({ ...state, isTemplate })}
-                          />
-                        )}
-                      </Spacing>
-                    </Column>
-                    {state.isTemplate && (
-                      <Column lg="8">
+                <Spacing>
+                  <Spinner size={SpinnerSize.large} label="Loading policy form" />
+                </Spacing>
+              </>
+            ) : (
+              <Spacing margin={{ top: 'normal' }}>
+                <Row bottom>
+                  <Column lg="6">
+                    {policyForm.name?.visible && (
+                      <InputText
+                        label={policyForm.name?.label}
+                        minLength={policyForm.name?.min}
+                        maxLength={policyForm.name?.max}
+                        value={state.policyName}
+                        required={policyForm.name?.required}
+                        onChange={({ target }) => setState({ ...state, policyName: target.value })}
+                      />
+                    )}
+                  </Column>
+
+                  <Column lg="6">
+                    <Row>
+                      <Column lg="4">
                         <Spacing margin={{ bottom: 'small' }}>
-                          {policyForm.tmplUseAsIs?.visible && (
+                          {policyForm.tmpl?.visible && (
                             <Checkbox
-                              label={policyForm.tmplUseAsIs?.label}
-                              required={policyForm.tmplUseAsIs?.required}
-                              checked={state.usedAsIs}
-                              onChange={(event, usedAsIs) => setState({ ...state, usedAsIs })}
+                              label={policyForm.tmpl?.label}
+                              required={policyForm.tmpl?.required}
+                              checked={state.isTemplate}
+                              onChange={(event, isTemplate) => setState({ ...state, isTemplate })}
                             />
                           )}
                         </Spacing>
                       </Column>
-                    )}
-                  </Row>
-                </Column>
-              </Row>
-
-              {policyForm.organization?.visible && (
-                <Spacing margin={{ top: 'normal' }}>
-                  <Label>Organization</Label>
-                  <p>{policyForm.organization?.label}</p>
-                </Spacing>
-              )}
-
-              {policyForm.permissions?.visible && (
-                <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                  <Row>
-                    <Column lg="12">
-                      <Spacing margin={{ top: 'small' }}>
-                        <Text variant="bold">Permissions</Text>
-                      </Spacing>
-                    </Column>
-                  </Row>
-
-                  <Row>
-                    <Column lg="12">
-                      {permissions.map((group) => (
-                        <Collapse label={group.label} expanded>
-                          <Spacing padding={{ top: 'normal', bottom: 'normal' }}>
-                            <Row>
-                              <Column lg="12">
-                                <Card elevation="none" spacing="none">
-                                  <Row top>
-                                    {group.permissions.map((permission) => (
-                                      <Column lg="3">
-                                        <Card elevation="none">
-                                          <Spacing margin={{ bottom: 'normal' }}>
-                                            <Label>{permission.label}</Label>
-                                          </Spacing>
-
-                                          {permission.options.map((option) => (
-                                            <Spacing margin={{ top: 'small' }}>
-                                              <Checkbox
-                                                label={option.label}
-                                                checked={state.permissions.includes(option.value)}
-                                                onChange={(event, checked) =>
-                                                  setState({
-                                                    ...state,
-                                                    permissions: checked
-                                                      ? [...state.permissions, option.value]
-                                                      : state.permissions.filter((value) => value !== option.value),
-                                                  })
-                                                }
-                                              />
-                                            </Spacing>
-                                          ))}
-                                        </Card>
-                                      </Column>
-                                    ))}
-                                  </Row>
-                                </Card>
-                              </Column>
-                            </Row>
+                      {state.isTemplate && (
+                        <Column lg="8">
+                          <Spacing margin={{ bottom: 'small' }}>
+                            {policyForm.tmplUseAsIs?.visible && (
+                              <Checkbox
+                                label={policyForm.tmplUseAsIs?.label}
+                                required={policyForm.tmplUseAsIs?.required}
+                                checked={state.usedAsIs}
+                                onChange={(event, usedAsIs) => setState({ ...state, usedAsIs })}
+                              />
+                            )}
                           </Spacing>
-                        </Collapse>
-                      ))}
-                    </Column>
-                  </Row>
+                        </Column>
+                      )}
+                    </Row>
+                  </Column>
+                </Row>
+
+                {policyForm.organization?.visible && (
+                  <Spacing margin={{ top: 'normal' }}>
+                    <Label>Organization</Label>
+                    <p>{policyForm.organization?.label}</p>
+                  </Spacing>
+                )}
+
+                {policyForm.permissions?.visible && (
+                  <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                    <Row>
+                      <Column lg="12">
+                        <Spacing margin={{ top: 'small' }}>
+                          <Text variant="bold">Permissions</Text>
+                        </Spacing>
+                      </Column>
+                    </Row>
+
+                    <Row>
+                      <Column lg="12">
+                        {permissions.map((group) => (
+                          <Collapse label={group.label} expanded>
+                            <Spacing padding={{ top: 'normal', bottom: 'normal' }}>
+                              <Row>
+                                <Column lg="12">
+                                  <Card elevation="none" spacing="none">
+                                    <Row top>
+                                      {group.permissions?.map((permission) => (
+                                        <Column lg="3" key={Symbol(permission).toString()}>
+                                          <Card elevation="none">
+                                            <Spacing margin={{ bottom: 'normal' }}>
+                                              <Label>{permission.label}</Label>
+                                            </Spacing>
+
+                                            {permission.options?.map((option) => (
+                                              <Spacing margin={{ top: 'small' }} key={Symbol(option).toString()}>
+                                                <Checkbox
+                                                  label={option.label}
+                                                  checked={state.permissions.includes(option.value)}
+                                                  onChange={(event, checked) =>
+                                                    setState({
+                                                      ...state,
+                                                      permissions: checked
+                                                        ? [...state.permissions, option.value]
+                                                        : state.permissions.filter((value) => value !== option.value),
+                                                    })
+                                                  }
+                                                />
+                                              </Spacing>
+                                            ))}
+                                          </Card>
+                                        </Column>
+                                      ))}
+                                    </Row>
+                                  </Card>
+                                </Column>
+                              </Row>
+                            </Spacing>
+                          </Collapse>
+                        ))}
+                      </Column>
+                    </Row>
+                  </Spacing>
+                )}
+
+                <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                  <Separator />
                 </Spacing>
-              )}
 
-              <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                <Separator />
-              </Spacing>
+                <Row>
+                  <Column lg="12">
+                    <Button
+                      variant="primary"
+                      disabled={isCreatingPolicy}
+                      onClick={() => {
+                        const callback = !state.policySid ? createPolicy : updatePolicy;
 
-              <Row>
-                <Column lg="12">
-                  <Button
-                    variant="primary"
-                    disabled={isCreatingPolicy}
-                    onClick={() => {
-                      const callback = !state.policySid ? createPolicy : updatePolicy;
-
-                      callback({
-                        variables: {
-                          [!state.policySid ? 'policyInfo' : 'updateAMPolicyInput']: {
-                            ...(state.policySid ? { policySid: state.policySid } : {}),
-                            name: state.policyName,
-                            orgOwnerId: 1,
-                            permissions: state.permissions.map((permission) => ({
-                              policySid: state.policySid,
-                              effect: permission.effect,
-                              actions: permission.actions.map((action) => ({
-                                permissionSid: permission.permissionSid,
-                                service: action.service.key,
-                                facet: action.facet.key,
-                                verb: action.verb.key,
+                        callback({
+                          variables: {
+                            [!state.policySid ? 'policyInfo' : 'updateAMPolicyInput']: {
+                              ...(state.policySid ? { policySid: state.policySid } : {}),
+                              name: state.policyName,
+                              orgOwnerId: 1,
+                              permissions: state.permissions.map((permission) => ({
+                                policySid: state.policySid,
+                                effect: permission.effect,
+                                actions: permission.actions.map((action) => ({
+                                  permissionSid: permission.permissionSid,
+                                  service: action.service.key,
+                                  facet: action.facet.key,
+                                  verb: action.verb.key,
+                                })),
+                                predicate: permission.predicateName,
+                                predVar1: permission.parameterVariable,
+                                predParam1: permission.parameterValue,
                               })),
-                              predicate: permission.predicateName,
-                              predVar1: permission.parameterVariable,
-                              predParam1: permission.parameterValue,
-                            })),
-                            tmpl: state.isTemplate,
-                            tmplUseAsIs: state.usedAsIs,
-                            ...(state.serviceType !== '' ? { tmplServiceType: state.serviceType } : {}),
+                              tmpl: state.isTemplate,
+                              tmplUseAsIs: state.usedAsIs,
+                              ...(state.serviceType !== '' ? { tmplServiceType: state.serviceType } : {}),
+                            },
                           },
-                        },
-                      });
-                    }}
-                  >
-                    Save policy
-                  </Button>
-                </Column>
-              </Row>
-            </Spacing>
+                        });
+                      }}
+                    >
+                      Save policy
+                    </Button>
+                  </Column>
+                </Row>
+              </Spacing>
+            )}
           </Column>
         </Row>
       </>
