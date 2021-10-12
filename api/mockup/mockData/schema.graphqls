@@ -91,7 +91,9 @@ type Query {
 type Mutation {
   passwordLogin(userId: String!, password: String!) : LoginStep
   updateOwnPassword(updatePasswordInput: UpdatePasswordInput!) : UserSession
+
   createOrg(orgInfo: CreateOrgInput!): Organization
+  deactivateOrg(orgSid: ID!): GQOperationResponse
 
   createAccessPolicy(createAccessPolicyInput: CreateAccessPolicyInput!) : AccessPolicyForm
   updateAccessPolicy(updateAccessPolicyInput : UpdateAccessPolicyInput) : AccessPolicyForm
@@ -722,6 +724,7 @@ type AccessPolicy @fragment {
   permissions: [Permission]
   tmpl: Boolean
   tmplUseAsIs: Boolean
+  applicableOrgTypes: [OrgType]
 }
 
 type AccessPolicyForm {
@@ -731,6 +734,7 @@ type AccessPolicyForm {
   permissions: UISelectManyField
   tmpl: UIBooleanField
   tmplUseAsIs: UIBooleanField
+  applicableOrgTypes: UISelectManyField
   options: [UIOptions]
   response: GQOperationResponse!
   errCode: String
@@ -744,12 +748,16 @@ input CreateAccessPolicyInput{
   permissions: [Permission]
   tmpl: Boolean
   tmplUseAsIs: Boolean
+  applicableOrgTypes: [OrgType]
 }
 
 input UpdateAccessPolicyInput{
   policySid: ID!
   name: String
   permissions: [Permission]
+  tmpl: Boolean
+  tmplUseAsIs: Boolean
+  applicableOrgTypes: [OrgType]
 }
 
 input DeleteAccessPoliciesInput{
@@ -835,6 +843,7 @@ type AccessPolicyGroup{
   description: String
   tmpl: Boolean
   tmplUseAsIs: Boolean
+  applicableOrgTypes: [OrgType]
   policies: [AccessPolicy]
 }
 
@@ -845,6 +854,7 @@ type AccessPolicyGroupForm {
   organization: UIReadOnlyField!
   tmpl: UIBooleanField
   tmplUseAsIs: UIBooleanField
+  applicableOrgTypes: UISelectManyField
   policies: UISelectManyField
   specializations: UISelectManyField
   """
@@ -866,6 +876,7 @@ input CreateAccessPolicyGroupInput{
   description: String
   tmpl: Boolean
   tmplUseAsIs: Boolean
+  applicableOrgTypes: [OrgType]
   policySids: [ID]
   specializationSids: [ID]
   includeAllSubOrgs: Boolean
@@ -879,6 +890,7 @@ input UpdateAccessPolicyGroupInput{
   description: String
   tmpl: Boolean
   tmplUseAsIs: Boolean
+  applicableOrgTypes: [OrgType]
   policySids: [ID]
   specializationSids: [ID]
   includeAllSubOrgs: Boolean

@@ -135,6 +135,22 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "applicableOrgTypes",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "OrgType",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "inputFields": null,
@@ -281,6 +297,18 @@
             "deprecationReason": null
           },
           {
+            "name": "applicableOrgTypes",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "UISelectManyField",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "options",
             "description": null,
             "args": [],
@@ -419,6 +447,22 @@
               "kind": "SCALAR",
               "name": "Boolean",
               "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "applicableOrgTypes",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "OrgType",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -572,6 +616,18 @@
             "type": {
               "kind": "OBJECT",
               "name": "UIBooleanField",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "applicableOrgTypes",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "UISelectManyField",
               "ofType": null
             },
             "isDeprecated": false,
@@ -1538,6 +1594,22 @@
             "deprecationReason": null
           },
           {
+            "name": "applicableOrgTypes",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "OrgType",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "policySids",
             "description": null,
             "type": {
@@ -1691,6 +1763,22 @@
               "kind": "SCALAR",
               "name": "Boolean",
               "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "applicableOrgTypes",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "OrgType",
+                "ofType": null
+              }
             },
             "defaultValue": null,
             "isDeprecated": false,
@@ -4689,6 +4777,35 @@
             "deprecationReason": null
           },
           {
+            "name": "deactivateOrg",
+            "description": null,
+            "args": [
+              {
+                "name": "orgSid",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "ENUM",
+              "name": "GQOperationResponse",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "createAccessPolicy",
             "description": null,
             "args": [
@@ -6865,6 +6982,12 @@
             "deprecationReason": null
           },
           {
+            "name": "K2U_EXCHANGE_DOWNLOAD_STEPS",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "K2U_EXCHANGE_RESTART",
             "description": null,
             "isDeprecated": false,
@@ -6902,6 +7025,12 @@
           },
           {
             "name": "TEST_EXCHANGE_DOWNLOAD",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "TEST_EXCHANGE_DOWNLOAD_STEPS",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
@@ -6949,6 +7078,12 @@
             "deprecationReason": null
           },
           {
+            "name": "UAT_EXCHANGE_DOWNLOAD_STEPS",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "UAT_EXCHANGE_RESTART",
             "description": null,
             "isDeprecated": false,
@@ -6986,6 +7121,12 @@
           },
           {
             "name": "PROD_EXCHANGE_DOWNLOAD",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PROD_EXCHANGE_DOWNLOAD_STEPS",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
@@ -11445,6 +11586,22 @@
             "deprecationReason": null
           },
           {
+            "name": "applicableOrgTypes",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "OrgType",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "policySids",
             "description": null,
             "type": {
@@ -11568,6 +11725,46 @@
               "ofType": {
                 "kind": "ENUM",
                 "name": "Permission",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "tmpl",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "tmplUseAsIs",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "applicableOrgTypes",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "OrgType",
                 "ofType": null
               }
             },
