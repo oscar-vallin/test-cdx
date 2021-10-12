@@ -126,8 +126,16 @@ const _AccessManagementGroupsPage = () => {
 
       <CreateGroupPanel
         isOpen={isPanelOpen}
-        onCreatePolicy={(createdPolicy) => {
-          setGroups([...groups, createdPolicy]);
+        onCreateGroupPolicy={(createdPolicy) => {
+          setGroups([
+            ...groups,
+            {
+              sid: createdPolicy.sid,
+              name: createdPolicy.name.value,
+              tmpl: createdPolicy.tmpl.value,
+              tmplUseAsIs: createdPolicy.tmplUseAsIs.value,
+            },
+          ]);
         }}
         onDismiss={() => {
           setIsPanelOpen(false);

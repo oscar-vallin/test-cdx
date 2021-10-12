@@ -98,6 +98,14 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
     }
   }, [isOpen, orgsData]);
 
+  useEffect(() => {
+    if (createdPolicyGroup) {
+      console.log(createdPolicyGroup.createAccessPolicyGroup);
+      onCreateGroupPolicy(createdPolicyGroup.createAccessPolicyGroup);
+      onDismiss();
+    }
+  }, [createdPolicyGroup]);
+
   const rootClass = mergeStyles({
     width: '100%',
   });
@@ -125,10 +133,13 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
 
   const getTextFromItem = (item) => item.name;
 
-  const onItemSelected = React.useCallback((item) => {
-    setState({ ...state, excludeOrgSids: [...state.excludeOrgSids, item] });
-    return item;
-  }, []);
+  const onIncludedOrgsSelected = (item) => {
+    setState({ ...state, includeOrgSids: item.map((org) => org.key) });
+  };
+
+  const onExcludedOrgsSelected = (item) => {
+    setState({ ...state, excludeOrgSids: item.map((org) => org.key) });
+  };
 
   return (
     <Panel
@@ -174,7 +185,9 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
                       <Column lg="6" direction="row">
                         <Checkbox
                           label={response?.tmpl?.label}
-                          onChange={(event, tmpl) => setState({ ...state, tmpl })}
+                          onChange={(_event, tmpl) =>
+                            setState({ ...state, tmpl, tmplUseAsIs: tmpl ? state.tmplUseAsIs : false })
+                          }
                         />
                         {response?.tmpl?.info && (
                           <TooltipHost content={response?.tmpl?.info} id="tmplTooltip">
@@ -230,7 +243,9 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
                                 onChange={(event, policy) => {
                                   setState({
                                     ...state,
-                                    policies: policy ? [...state.policySids, item.sid] : [...state.policySids],
+                                    policySids: policy
+                                      ? [...state.policySids, item.sid]
+                                      : state.policySids.filter((polItem) => polItem !== item.sid),
                                   });
                                 }}
                               />
@@ -273,9 +288,9 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
                                 onChange={(event, specialization) => {
                                   setState({
                                     ...state,
-                                    specialization: specialization
+                                    specializationSids: specialization
                                       ? [...state.specializationSids, item.sid]
-                                      : [...state.specializationSids],
+                                      : state.specializationSids.filter((specItem) => specItem !== item.sid),
                                   });
                                 }}
                               />
@@ -323,10 +338,10 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
                           onResolveSuggestions={filterSuggestedTags}
                           getTextFromItem={getTextFromItem}
                           pickerSuggestionsProps={pickerSuggestionsProps}
-                          onItemSelected={onItemSelected}
+                          onChange={onIncludedOrgsSelected}
                           itemLimit={4}
                           inputProps={{
-                            id: 'pickerId',
+                            id: 'includeOrgsId',
                           }}
                         />
                       </div>
@@ -352,10 +367,10 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
                           onResolveSuggestions={filterSuggestedTags}
                           getTextFromItem={getTextFromItem}
                           pickerSuggestionsProps={pickerSuggestionsProps}
-                          onItemSelected={onItemSelected}
+                          onChange={onExcludedOrgsSelected}
                           itemLimit={4}
                           inputProps={{
-                            id: 'pickerId',
+                            id: 'excludeOrgsId',
                           }}
                         />
                       </div>
@@ -372,14 +387,17 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
                     onClick={() => {
                       createPolicyGroup({
                         variables: {
-                          name: state.name,
-                          organizationSid: '1',
-                          policies: state.policySids,
-                          specializations: state.specializationSids,
-                          tmpl: state.tmpl,
-                          tmplUseAsIs: state.tmplUseAsIs,
-                          includeAllSubOrgs: state.includeAllSubOrgs,
-                          excludeOrgSids: state.excludeOrgSids,
+                          createAccessPolicyInput: {
+                            name: state.name,
+                            tmpl: state.tmpl,
+                            tmplUseAsIs: state.tmplUseAsIs,
+                            organizationSid: '1',
+                            policySids: state.policySids,
+                            specializationSids: state.specializationSids,
+                            includeAllSubOrgs: state.includeAllSubOrgs,
+                            includeOrgSids: state.includeOrgSids,
+                            excludeOrgSids: state.excludeOrgSids,
+                          },
                         },
                       });
                     }}
