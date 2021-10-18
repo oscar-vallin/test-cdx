@@ -1,5 +1,5 @@
 import { FileProgressBar } from './FileProgressBar.js';
-import { STEP_COLOR_PURPLE } from '../../../data/constants/FileStatusConstants.js';
+import { STEP_COLOR_PURPLE } from '../../../data/constants/FileStatusConstants';
 import { mountWithTheme } from '../../../utils/testUtils';
 
 const defaultProps = {
