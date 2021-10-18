@@ -61,4 +61,13 @@ export default class P_LoginPage extends P_BasePage {
     await activeOrgsPage.expectOnPage();
     return activeOrgsPage;
   }
+
+  async navigateToFakerFileStatus(): Promise<P_ExchangeStatus> {
+    const activeOrgs = new P_ActivityOrgs(this.page);
+    await activeOrgs.expectOnPage();
+    await activeOrgs.clickOnOrg('K2UFKE', 'K2U Faker Data');
+    const fileStatus = new P_ExchangeStatus(this.page);
+    await fileStatus.expectOnPage();
+    return fileStatus;
+  }
 }
