@@ -29,6 +29,7 @@ const TableArchive = ({
   const { tableProps } = useTableTemplate(
     TABLE_NAMES.ARCHIVES,
     urlParams?.orgSid,
+      localInput.value,
     { rangeStart: startDate.value, rangeEnd: endDate.value },
     localInput.value,
     '',

@@ -3,7 +3,7 @@ import { FontIcon } from '@fluentui/react/lib/Icon';
 import { ROUTES } from '../../data/constants/RouteConstants';
 import { Row, Column, Container } from '../../components/layouts';
 import { Spacing } from '../../components/spacings/Spacing';
-import { Text } from '../../components/typography/Text';
+import { Text } from '../../components/typography';
 import { PageHeader } from '../../containers/headers/PageHeader';
 import { LayoutDashboard } from '../../layouts/LayoutDashboard';
 import { TableFileStatus } from '../../containers/tables/TableFileStatus';

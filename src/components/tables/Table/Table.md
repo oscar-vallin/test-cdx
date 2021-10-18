@@ -56,9 +56,9 @@ const _onRenderTableHeader = () => {
 To correctly define the structure of the tables it is found in the constants file and the function that brings this information must be imported.
 
 ```jsx
-import {getTableStructure} from '../../../data/constants/TableConstants';
+import {getTableStructure} from './TableConstants';
 
-structure = {getTableStructure (tableId)}
+structure = {getTableStructure(tableId)}
 ```
 
 Below is an example of how the structure should be configured in the table of records. In the array, you configure a name or identifier for the table.

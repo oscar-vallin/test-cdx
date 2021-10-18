@@ -1526,7 +1526,7 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "organizationSid",
+            "name": "orgSid",
             "description": null,
             "type": {
               "kind": "NON_NULL",
@@ -1713,7 +1713,7 @@
             "deprecationReason": null
           },
           {
-            "name": "organizationSid",
+            "name": "orgSid",
             "description": null,
             "type": {
               "kind": "NON_NULL",
@@ -1796,7 +1796,7 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "orgOwnerSid",
+            "name": "orgSid",
             "description": null,
             "type": {
               "kind": "NON_NULL",
@@ -2415,7 +2415,7 @@
             "deprecationReason": null
           },
           {
-            "name": "organizationSids",
+            "name": "orgSids",
             "description": null,
             "type": {
               "kind": "LIST",
@@ -2549,7 +2549,7 @@
             "deprecationReason": null
           },
           {
-            "name": "organizationSid",
+            "name": "orgSid",
             "description": null,
             "type": {
               "kind": "NON_NULL",
@@ -4007,6 +4007,41 @@
       },
       {
         "kind": "ENUM",
+        "name": "Environment",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "K2U",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "TEST",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "UAT",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PROD",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
         "name": "ErrorSeverity",
         "description": null,
         "fields": null,
@@ -5001,7 +5036,7 @@
             "description": null,
             "args": [
               {
-                "name": "createAccessPolicyInput",
+                "name": "createAccessPolicyGroupInput",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",
@@ -5030,7 +5065,7 @@
             "description": null,
             "args": [
               {
-                "name": "updateAccessPolicyInput",
+                "name": "updateAccessPolicyGroupInput",
                 "description": null,
                 "type": {
                   "kind": "INPUT_OBJECT",
@@ -7946,6 +7981,18 @@
                 "deprecationReason": null
               },
               {
+                "name": "searchText",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
                 "name": "dateRange",
                 "description": null,
                 "type": {
@@ -7958,12 +8005,16 @@
                 "deprecationReason": null
               },
               {
-                "name": "filter",
+                "name": "pageableInput",
                 "description": null,
                 "type": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "WorkPacketStatusFilter",
-                  "ofType": null
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "PageableInput",
+                    "ofType": null
+                  }
                 },
                 "defaultValue": null,
                 "isDeprecated": false,
@@ -7971,13 +8022,9 @@
               }
             ],
             "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "WorkPacketStatus",
-                "ofType": null
-              }
+              "kind": "OBJECT",
+              "name": "WorkPacketStatusConnection",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -9510,6 +9557,29 @@
       },
       {
         "kind": "ENUM",
+        "name": "RestartReason",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "INTERNAL",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "EXTERNAL",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
         "name": "SchedOccurStatusEnum",
         "description": null,
         "fields": null,
@@ -10031,7 +10101,7 @@
             "deprecationReason": null
           },
           {
-            "name": "organizationSids",
+            "name": "orgSids",
             "description": null,
             "args": [],
             "type": {
@@ -10086,7 +10156,7 @@
             "deprecationReason": null
           },
           {
-            "name": "organizationSids",
+            "name": "orgSids",
             "description": null,
             "args": [],
             "type": {
@@ -12519,7 +12589,7 @@
             "deprecationReason": null
           },
           {
-            "name": "organizationSids",
+            "name": "orgSids",
             "description": null,
             "type": {
               "kind": "LIST",
@@ -14139,6 +14209,34 @@
               "name": "String",
               "ofType": null
             },
+            "isDeprecated": true,
+            "deprecationReason": "No longer supported"
+          },
+          {
+            "name": "orgId",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "orgSid",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -14163,8 +14261,8 @@
               "name": "String",
               "ofType": null
             },
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "No longer supported"
           },
           {
             "name": "inboundFilename",
@@ -14195,7 +14293,7 @@
             "deprecationReason": null
           },
           {
-            "name": "step",
+            "name": "vendorSid",
             "description": null,
             "args": [],
             "type": {
@@ -14203,7 +14301,23 @@
               "name": null,
               "ofType": {
                 "kind": "SCALAR",
-                "name": "Int",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "step",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "WorkStep",
                 "ofType": null
               }
             },
@@ -14218,8 +14332,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
+                "kind": "ENUM",
+                "name": "WorkStatus",
                 "ofType": null
               }
             },
@@ -14228,14 +14342,14 @@
           },
           {
             "name": "packetStatus",
-            "description": null,
+            "description": "Make Enumeration @see OrigWorkPacketStatusConverter",
             "args": [],
             "type": {
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
+                "kind": "ENUM",
+                "name": "WorkStatus",
                 "ofType": null
               }
             },
@@ -14244,7 +14358,7 @@
           },
           {
             "name": "reprocessedBy",
-            "description": null,
+            "description": "User email address",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -14255,12 +14369,12 @@
             "deprecationReason": null
           },
           {
-            "name": "reprocessAction",
+            "name": "restartReason",
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Int",
+              "kind": "ENUM",
+              "name": "RestartReason",
               "ofType": null
             },
             "isDeprecated": false,
@@ -14295,8 +14409,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
+              "kind": "ENUM",
+              "name": "ErrorSeverity",
               "ofType": null
             },
             "isDeprecated": false,
@@ -14304,7 +14418,7 @@
           },
           {
             "name": "clientFileArchivePath",
-            "description": null,
+            "description": "The next three options only are returned when the user has the *_EXCHANGE_ARCHIVE_READ Permission",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -14344,7 +14458,7 @@
           },
           {
             "name": "archiveOnly",
-            "description": null,
+            "description": "Indicates this file didn't get delivered anywhere. Is only archived and is accessible from the CDX Dashboard",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -14362,6 +14476,61 @@
               "kind": "SCALAR",
               "name": "Boolean",
               "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "environment",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "Environment",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "WorkPacketStatusConnection",
+        "description": null,
+        "fields": [
+          {
+            "name": "paginationInfo",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "PaginationInfo",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "nodes",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "WorkPacketStatus",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -14596,6 +14765,112 @@
         ],
         "interfaces": null,
         "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "WorkStatus",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "QUEUED",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PROCESSING",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "COMPLETE",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ERROR",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SUBMITTED",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "WARNING",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HOLD",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CANCELED",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "QUALITY_CHECK_FAILED",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "NO_RECORDS",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "TECH_MIGRATION_CHECK_FAILED",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "WorkStep",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "ENQUEUE_EXTRACT",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "TRANSFORM_EXTRACT",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "TRANSMIT_FILE",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
         "possibleTypes": null
       },
       {

@@ -151,7 +151,12 @@ export const useQueryTable = (tableID, tableArguments) => {
     const [apiCall, { data, loading, error }] = useWorkPacketStatusesLazyQuery({
       variables: {
         orgSid: tableArguments.orgId ?? 1,
+        searchText: tableArguments.searchText,
         dateRange: tableArguments.dateRange,
+        pageableInput: {
+          pageNumber: 0,
+          pageSize: 100,
+        },
       },
     });
 

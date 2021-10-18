@@ -23,7 +23,7 @@ export const fileStatusColumns = [
 ];
 
 export const getFileStatusItems = (data) =>
-  data?.workPacketStatuses.map((item) => {
+  data?.workPacketStatuses.nodes.map((item) => {
     const datetime = format(new Date(item.timestamp), 'MM/dd/yyyy hh:mm a');
     const stepStatusLabel = getStepStatusLabel(item.stepStatus);
 
@@ -36,7 +36,11 @@ export const getFileStatusItems = (data) =>
         formatField(
           <>
             {item.recordHighlightCount && (
-              <HighlightCounter type={item.recordHighlightType} href={`/file-status/${item.workOrderId}*#quality`}>
+              <HighlightCounter
+                id="__FileStatus_Highlight_Counter"
+                type={item.recordHighlightType}
+                href={`/file-status/${item.workOrderId}*#quality`}
+              >
                 {item.recordHighlightCount}
               </HighlightCounter>
             )}

@@ -211,7 +211,7 @@ export enum CdxWebPivot {
 }
 
 export type CreateAccessPolicyGroupInput = {
-  organizationSid: Scalars['ID'];
+  orgSid: Scalars['ID'];
   name: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   tmpl?: Maybe<Scalars['Boolean']>;
@@ -226,7 +226,7 @@ export type CreateAccessPolicyGroupInput = {
 
 export type CreateAccessPolicyInput = {
   name: Scalars['String'];
-  organizationSid: Scalars['ID'];
+  orgSid: Scalars['ID'];
   permissions?: Maybe<Array<Maybe<Permission>>>;
   tmpl?: Maybe<Scalars['Boolean']>;
   tmplUseAsIs?: Maybe<Scalars['Boolean']>;
@@ -234,7 +234,7 @@ export type CreateAccessPolicyInput = {
 };
 
 export type CreateAccessSpecializationInput = {
-  orgOwnerSid: Scalars['ID'];
+  orgSid: Scalars['ID'];
   name: Scalars['String'];
   filters?: Maybe<Array<Maybe<CreateSpecializationFilterInput>>>;
 };
@@ -292,7 +292,7 @@ export type CreatePersonInput = {
 
 export type CreateSpecializationFilterInput = {
   permission: Permission;
-  organizationSids?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  orgSids?: Maybe<Array<Maybe<Scalars['ID']>>>;
 };
 
 export type CreateUserDashThemeInput = {
@@ -306,7 +306,7 @@ export type CreateUserDashThemeInput = {
 export type CreateUserInput = {
   email: Scalars['String'];
   password?: Maybe<Scalars['String']>;
-  organizationSid: Scalars['ID'];
+  orgSid: Scalars['ID'];
   accessPolicyGroupSids?: Maybe<Array<Maybe<Scalars['ID']>>>;
 };
 
@@ -468,6 +468,13 @@ export type EnrollmentStat = {
   excludedPlanInsuredStat?: Maybe<Array<Maybe<PlanInsuredStat>>>;
   planInsuredStat?: Maybe<Array<Maybe<PlanInsuredStat>>>;
 };
+
+export enum Environment {
+  K2U = 'K2U',
+  Test = 'TEST',
+  Uat = 'UAT',
+  Prod = 'PROD'
+}
 
 export enum ErrorSeverity {
   Error = 'ERROR',
@@ -661,12 +668,12 @@ export type MutationDeleteAccessSpecializationArgs = {
 
 
 export type MutationCreateAccessPolicyGroupArgs = {
-  createAccessPolicyInput: CreateAccessPolicyGroupInput;
+  createAccessPolicyGroupInput: CreateAccessPolicyGroupInput;
 };
 
 
 export type MutationUpdateAccessPolicyGroupArgs = {
-  updateAccessPolicyInput?: Maybe<UpdateAccessPolicyGroupInput>;
+  updateAccessPolicyGroupInput?: Maybe<UpdateAccessPolicyGroupInput>;
 };
 
 
@@ -1061,7 +1068,7 @@ export type Query = {
   exchangeActivityErrored?: Maybe<OrganizationLinkConnection>;
   workPacketStatusDetails?: Maybe<WorkPacketStatusDetails>;
   workPacketStatus?: Maybe<WorkPacketStatus>;
-  workPacketStatuses?: Maybe<Array<Maybe<WorkPacketStatus>>>;
+  workPacketStatuses?: Maybe<WorkPacketStatusConnection>;
   dashboardPeriods?: Maybe<DashboardPeriods>;
   usersForOrg?: Maybe<UserConnection>;
   changeOwnPasswordPage?: Maybe<PasswordPage>;
@@ -1147,8 +1154,9 @@ export type QueryWorkPacketStatusArgs = {
 
 export type QueryWorkPacketStatusesArgs = {
   orgSid: Scalars['ID'];
+  searchText?: Maybe<Scalars['String']>;
   dateRange?: Maybe<DateTimeRangeInput>;
-  filter?: Maybe<WorkPacketStatusFilter>;
+  pageableInput: PageableInput;
 };
 
 
@@ -1371,6 +1379,11 @@ export type RecordCreationEvent = {
   information?: Maybe<Array<Maybe<FieldCreationEvent>>>;
 };
 
+export enum RestartReason {
+  Internal = 'INTERNAL',
+  External = 'EXTERNAL'
+}
+
 export enum SchedOccurStatusEnum {
   Scheduled = 'SCHEDULED',
   InRunWindow = 'IN_RUN_WINDOW',
@@ -1444,14 +1457,14 @@ export type SpecializationFilter = {
   __typename?: 'SpecializationFilter';
   sid: Scalars['ID'];
   permission: Permission;
-  organizationSids?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  orgSids?: Maybe<Array<Maybe<Scalars['ID']>>>;
 };
 
 export type SpecializationFilterForm = {
   __typename?: 'SpecializationFilterForm';
   sid?: Maybe<Scalars['ID']>;
   permission: UiSelectOneField;
-  organizationSids?: Maybe<UiSelectManyField>;
+  orgSids?: Maybe<UiSelectManyField>;
   errCode?: Maybe<Scalars['String']>;
   errMsg?: Maybe<Scalars['String']>;
   errSeverity?: Maybe<ErrorSeverity>;
@@ -1695,7 +1708,7 @@ export type UpdatePasswordInput = {
 export type UpdateSpecializationFilterInput = {
   sid?: Maybe<Scalars['ID']>;
   permission: Permission;
-  organizationSids?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  orgSids?: Maybe<Array<Maybe<Scalars['ID']>>>;
 };
 
 export type UpdateUserAccessPolicyGroupsInput = {
@@ -1888,24 +1901,40 @@ export type WorkPacketStatus = {
   __typename?: 'WorkPacketStatus';
   workOrderId: Scalars['String'];
   timestamp: Scalars['DateTime'];
+  /** @deprecated Field no longer supported */
   planSponsorId?: Maybe<Scalars['String']>;
+  orgId?: Maybe<Scalars['String']>;
+  orgSid: Scalars['ID'];
   detailsPath?: Maybe<Scalars['String']>;
+  /** @deprecated Field no longer supported */
   subClientPath?: Maybe<Scalars['String']>;
   inboundFilename: Scalars['String'];
   vendorId?: Maybe<Scalars['String']>;
-  step: Scalars['Int'];
-  stepStatus: Scalars['String'];
-  packetStatus: Scalars['String'];
+  vendorSid: Scalars['ID'];
+  step: WorkStep;
+  stepStatus: WorkStatus;
+  /** Make Enumeration @see OrigWorkPacketStatusConverter */
+  packetStatus: WorkStatus;
+  /** User email address */
   reprocessedBy?: Maybe<Scalars['String']>;
-  reprocessAction?: Maybe<Scalars['Int']>;
+  restartReason?: Maybe<RestartReason>;
   recordHighlightCount?: Maybe<Scalars['Int']>;
   populationCount?: Maybe<Scalars['Int']>;
-  recordHighlightType?: Maybe<Scalars['String']>;
+  recordHighlightType?: Maybe<ErrorSeverity>;
+  /** The next three options only are returned when the user has the *_EXCHANGE_ARCHIVE_READ Permission */
   clientFileArchivePath?: Maybe<Scalars['String']>;
   vendorFileArchivePath?: Maybe<Scalars['String']>;
   supplementalFilesArchivePaths?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Indicates this file didn't get delivered anywhere. Is only archived and is accessible from the CDX Dashboard */
   archiveOnly?: Maybe<Scalars['Boolean']>;
   hasErrors?: Maybe<Scalars['Boolean']>;
+  environment?: Maybe<Environment>;
+};
+
+export type WorkPacketStatusConnection = {
+  __typename?: 'WorkPacketStatusConnection';
+  paginationInfo: PaginationInfo;
+  nodes?: Maybe<Array<Maybe<WorkPacketStatus>>>;
 };
 
 export type WorkPacketStatusDetails = {
@@ -1930,6 +1959,26 @@ export type WorkPacketStatusDetails = {
 export type WorkPacketStatusFilter = {
   excludedEnvs?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
+
+export enum WorkStatus {
+  Queued = 'QUEUED',
+  Processing = 'PROCESSING',
+  Complete = 'COMPLETE',
+  Error = 'ERROR',
+  Submitted = 'SUBMITTED',
+  Warning = 'WARNING',
+  Hold = 'HOLD',
+  Canceled = 'CANCELED',
+  QualityCheckFailed = 'QUALITY_CHECK_FAILED',
+  NoRecords = 'NO_RECORDS',
+  TechMigrationCheckFailed = 'TECH_MIGRATION_CHECK_FAILED'
+}
+
+export enum WorkStep {
+  EnqueueExtract = 'ENQUEUE_EXTRACT',
+  TransformExtract = 'TRANSFORM_EXTRACT',
+  TransmitFile = 'TRANSMIT_FILE'
+}
 
 export type WorkStepStatus = {
   __typename?: 'WorkStepStatus';
@@ -2336,23 +2385,30 @@ export type WorkPacketStatusQuery = (
   { __typename?: 'Query' }
   & { workPacketStatus?: Maybe<(
     { __typename?: 'WorkPacketStatus' }
-    & Pick<WorkPacketStatus, 'workOrderId' | 'timestamp' | 'planSponsorId' | 'detailsPath' | 'subClientPath' | 'inboundFilename' | 'vendorId' | 'step' | 'stepStatus' | 'packetStatus' | 'reprocessedBy' | 'reprocessAction' | 'recordHighlightCount' | 'populationCount' | 'recordHighlightType' | 'clientFileArchivePath' | 'vendorFileArchivePath' | 'supplementalFilesArchivePaths' | 'archiveOnly' | 'hasErrors'>
+    & Pick<WorkPacketStatus, 'workOrderId' | 'timestamp' | 'planSponsorId' | 'orgId' | 'orgSid' | 'detailsPath' | 'subClientPath' | 'inboundFilename' | 'vendorId' | 'vendorSid' | 'step' | 'stepStatus' | 'packetStatus' | 'reprocessedBy' | 'restartReason' | 'recordHighlightCount' | 'populationCount' | 'recordHighlightType' | 'clientFileArchivePath' | 'vendorFileArchivePath' | 'supplementalFilesArchivePaths' | 'archiveOnly' | 'hasErrors' | 'environment'>
   )> }
 );
 
 export type WorkPacketStatusesQueryVariables = Exact<{
   orgSid: Scalars['ID'];
+  searchText?: Maybe<Scalars['String']>;
   dateRange?: Maybe<DateTimeRangeInput>;
-  filter?: Maybe<WorkPacketStatusFilter>;
+  pageableInput: PageableInput;
 }>;
 
 
 export type WorkPacketStatusesQuery = (
   { __typename?: 'Query' }
-  & { workPacketStatuses?: Maybe<Array<Maybe<(
-    { __typename?: 'WorkPacketStatus' }
-    & Pick<WorkPacketStatus, 'workOrderId' | 'timestamp' | 'planSponsorId' | 'detailsPath' | 'subClientPath' | 'inboundFilename' | 'vendorId' | 'step' | 'stepStatus' | 'packetStatus' | 'reprocessedBy' | 'reprocessAction' | 'recordHighlightCount' | 'populationCount' | 'recordHighlightType' | 'clientFileArchivePath' | 'vendorFileArchivePath' | 'supplementalFilesArchivePaths' | 'archiveOnly' | 'hasErrors'>
-  )>>> }
+  & { workPacketStatuses?: Maybe<(
+    { __typename?: 'WorkPacketStatusConnection' }
+    & { paginationInfo: (
+      { __typename?: 'PaginationInfo' }
+      & FragmentPaginationInfoFragment
+    ), nodes?: Maybe<Array<Maybe<(
+      { __typename?: 'WorkPacketStatus' }
+      & Pick<WorkPacketStatus, 'workOrderId' | 'timestamp' | 'planSponsorId' | 'orgId' | 'orgSid' | 'detailsPath' | 'subClientPath' | 'inboundFilename' | 'vendorId' | 'vendorSid' | 'step' | 'stepStatus' | 'packetStatus' | 'reprocessedBy' | 'restartReason' | 'recordHighlightCount' | 'populationCount' | 'recordHighlightType' | 'clientFileArchivePath' | 'vendorFileArchivePath' | 'supplementalFilesArchivePaths' | 'archiveOnly' | 'hasErrors' | 'environment'>
+    )>>> }
+  )> }
 );
 
 export type DashboardPeriodsQueryVariables = Exact<{
@@ -2670,7 +2726,7 @@ export type AccessSpecializationsForOrgQuery = (
       & Pick<AccessSpecialization, 'sid' | 'name'>
       & { filters?: Maybe<Array<Maybe<(
         { __typename?: 'SpecializationFilter' }
-        & Pick<SpecializationFilter, 'sid' | 'permission' | 'organizationSids'>
+        & Pick<SpecializationFilter, 'sid' | 'permission' | 'orgSids'>
       )>>> }
     )>>> }
   )> }
@@ -2817,7 +2873,7 @@ export type AccessSpecializationFormQuery = (
       & { permission: (
         { __typename?: 'UISelectOneField' }
         & Pick<UiSelectOneField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      ), organizationSids?: Maybe<(
+      ), orgSids?: Maybe<(
         { __typename?: 'UISelectManyField' }
         & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
       )> }
@@ -2854,7 +2910,7 @@ export type FindAccessSpecializationQuery = (
       & { permission: (
         { __typename?: 'UISelectOneField' }
         & Pick<UiSelectOneField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      ), organizationSids?: Maybe<(
+      ), orgSids?: Maybe<(
         { __typename?: 'UISelectManyField' }
         & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
       )> }
@@ -3543,7 +3599,7 @@ export type CreateAccessSpecializationMutation = (
       & { permission: (
         { __typename?: 'UISelectOneField' }
         & Pick<UiSelectOneField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      ), organizationSids?: Maybe<(
+      ), orgSids?: Maybe<(
         { __typename?: 'UISelectManyField' }
         & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
       )> }
@@ -3580,7 +3636,7 @@ export type UpdateAccessSpecializationMutation = (
       & { permission: (
         { __typename?: 'UISelectOneField' }
         & Pick<UiSelectOneField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      ), organizationSids?: Maybe<(
+      ), orgSids?: Maybe<(
         { __typename?: 'UISelectManyField' }
         & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
       )> }
@@ -3606,7 +3662,7 @@ export type DeleteAccessSpecializationMutation = (
 );
 
 export type CreateAccessPolicyGroupMutationVariables = Exact<{
-  createAccessPolicyInput: CreateAccessPolicyGroupInput;
+  createAccessPolicyGroupInput: CreateAccessPolicyGroupInput;
 }>;
 
 
@@ -3660,7 +3716,7 @@ export type CreateAccessPolicyGroupMutation = (
 );
 
 export type UpdateAccessPolicyGroupMutationVariables = Exact<{
-  updateAccessPolicyInput?: Maybe<UpdateAccessPolicyGroupInput>;
+  updateAccessPolicyGroupInput?: Maybe<UpdateAccessPolicyGroupInput>;
 }>;
 
 
@@ -4592,15 +4648,18 @@ export const WorkPacketStatusDocument = gql`
     workOrderId
     timestamp
     planSponsorId
+    orgId
+    orgSid
     detailsPath
     subClientPath
     inboundFilename
     vendorId
+    vendorSid
     step
     stepStatus
     packetStatus
     reprocessedBy
-    reprocessAction
+    restartReason
     recordHighlightCount
     populationCount
     recordHighlightType
@@ -4609,6 +4668,7 @@ export const WorkPacketStatusDocument = gql`
     supplementalFilesArchivePaths
     archiveOnly
     hasErrors
+    environment
   }
 }
     `;
@@ -4640,31 +4700,45 @@ export type WorkPacketStatusQueryHookResult = ReturnType<typeof useWorkPacketSta
 export type WorkPacketStatusLazyQueryHookResult = ReturnType<typeof useWorkPacketStatusLazyQuery>;
 export type WorkPacketStatusQueryResult = Apollo.QueryResult<WorkPacketStatusQuery, WorkPacketStatusQueryVariables>;
 export const WorkPacketStatusesDocument = gql`
-    query WorkPacketStatuses($orgSid: ID!, $dateRange: DateTimeRangeInput, $filter: WorkPacketStatusFilter) {
-  workPacketStatuses(orgSid: $orgSid, dateRange: $dateRange, filter: $filter) {
-    workOrderId
-    timestamp
-    planSponsorId
-    detailsPath
-    subClientPath
-    inboundFilename
-    vendorId
-    step
-    stepStatus
-    packetStatus
-    reprocessedBy
-    reprocessAction
-    recordHighlightCount
-    populationCount
-    recordHighlightType
-    clientFileArchivePath
-    vendorFileArchivePath
-    supplementalFilesArchivePaths
-    archiveOnly
-    hasErrors
+    query WorkPacketStatuses($orgSid: ID!, $searchText: String, $dateRange: DateTimeRangeInput, $pageableInput: PageableInput!) {
+  workPacketStatuses(
+    orgSid: $orgSid
+    searchText: $searchText
+    dateRange: $dateRange
+    pageableInput: $pageableInput
+  ) {
+    paginationInfo {
+      ...fragmentPaginationInfo
+    }
+    nodes {
+      workOrderId
+      timestamp
+      planSponsorId
+      orgId
+      orgSid
+      detailsPath
+      subClientPath
+      inboundFilename
+      vendorId
+      vendorSid
+      step
+      stepStatus
+      packetStatus
+      reprocessedBy
+      restartReason
+      recordHighlightCount
+      populationCount
+      recordHighlightType
+      clientFileArchivePath
+      vendorFileArchivePath
+      supplementalFilesArchivePaths
+      archiveOnly
+      hasErrors
+      environment
+    }
   }
 }
-    `;
+    ${FragmentPaginationInfoFragmentDoc}`;
 
 /**
  * __useWorkPacketStatusesQuery__
@@ -4679,8 +4753,9 @@ export const WorkPacketStatusesDocument = gql`
  * const { data, loading, error } = useWorkPacketStatusesQuery({
  *   variables: {
  *      orgSid: // value for 'orgSid'
+ *      searchText: // value for 'searchText'
  *      dateRange: // value for 'dateRange'
- *      filter: // value for 'filter'
+ *      pageableInput: // value for 'pageableInput'
  *   },
  * });
  */
@@ -5388,7 +5463,7 @@ export const AccessSpecializationsForOrgDocument = gql`
       filters {
         sid
         permission
-        organizationSids
+        orgSids
       }
     }
   }
@@ -5775,7 +5850,7 @@ export const AccessSpecializationFormDocument = gql`
         errMsg
         errSeverity
       }
-      organizationSids {
+      orgSids {
         value
         label
         info
@@ -5873,7 +5948,7 @@ export const FindAccessSpecializationDocument = gql`
         errMsg
         errSeverity
       }
-      organizationSids {
+      orgSids {
         value
         label
         info
@@ -7853,7 +7928,7 @@ export const CreateAccessSpecializationDocument = gql`
         errMsg
         errSeverity
       }
-      organizationSids {
+      orgSids {
         value
         label
         info
@@ -7952,7 +8027,7 @@ export const UpdateAccessSpecializationDocument = gql`
         errMsg
         errSeverity
       }
-      organizationSids {
+      orgSids {
         value
         label
         info
@@ -8039,8 +8114,10 @@ export type DeleteAccessSpecializationMutationHookResult = ReturnType<typeof use
 export type DeleteAccessSpecializationMutationResult = Apollo.MutationResult<DeleteAccessSpecializationMutation>;
 export type DeleteAccessSpecializationMutationOptions = Apollo.BaseMutationOptions<DeleteAccessSpecializationMutation, DeleteAccessSpecializationMutationVariables>;
 export const CreateAccessPolicyGroupDocument = gql`
-    mutation CreateAccessPolicyGroup($createAccessPolicyInput: CreateAccessPolicyGroupInput!) {
-  createAccessPolicyGroup(createAccessPolicyInput: $createAccessPolicyInput) {
+    mutation CreateAccessPolicyGroup($createAccessPolicyGroupInput: CreateAccessPolicyGroupInput!) {
+  createAccessPolicyGroup(
+    createAccessPolicyGroupInput: $createAccessPolicyGroupInput
+  ) {
     sid
     name {
       value
@@ -8197,7 +8274,7 @@ export type CreateAccessPolicyGroupMutationFn = Apollo.MutationFunction<CreateAc
  * @example
  * const [createAccessPolicyGroupMutation, { data, loading, error }] = useCreateAccessPolicyGroupMutation({
  *   variables: {
- *      createAccessPolicyInput: // value for 'createAccessPolicyInput'
+ *      createAccessPolicyGroupInput: // value for 'createAccessPolicyGroupInput'
  *   },
  * });
  */
@@ -8208,8 +8285,10 @@ export type CreateAccessPolicyGroupMutationHookResult = ReturnType<typeof useCre
 export type CreateAccessPolicyGroupMutationResult = Apollo.MutationResult<CreateAccessPolicyGroupMutation>;
 export type CreateAccessPolicyGroupMutationOptions = Apollo.BaseMutationOptions<CreateAccessPolicyGroupMutation, CreateAccessPolicyGroupMutationVariables>;
 export const UpdateAccessPolicyGroupDocument = gql`
-    mutation UpdateAccessPolicyGroup($updateAccessPolicyInput: UpdateAccessPolicyGroupInput) {
-  updateAccessPolicyGroup(updateAccessPolicyInput: $updateAccessPolicyInput) {
+    mutation UpdateAccessPolicyGroup($updateAccessPolicyGroupInput: UpdateAccessPolicyGroupInput) {
+  updateAccessPolicyGroup(
+    updateAccessPolicyGroupInput: $updateAccessPolicyGroupInput
+  ) {
     sid
     name {
       value
@@ -8366,7 +8445,7 @@ export type UpdateAccessPolicyGroupMutationFn = Apollo.MutationFunction<UpdateAc
  * @example
  * const [updateAccessPolicyGroupMutation, { data, loading, error }] = useUpdateAccessPolicyGroupMutation({
  *   variables: {
- *      updateAccessPolicyInput: // value for 'updateAccessPolicyInput'
+ *      updateAccessPolicyGroupInput: // value for 'updateAccessPolicyGroupInput'
  *   },
  * });
  */
