@@ -69,7 +69,7 @@ export default class P_BasePage {
 
   async clearField(selector: string) {
     await this.page.waitForSelector(selector);
-    const inputValue = await this.page.$eval(selector, (el) => el.value);
+    const inputValue = await this.page.$eval(selector, (el) => (<HTMLInputElement>el).value);
     await this.page.focus(selector);
     for (let i = 0; i < inputValue.length; i++) {
       await this.page.keyboard.press('Backspace');
