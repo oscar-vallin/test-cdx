@@ -1,22 +1,22 @@
 export const STATUSES_DEFAULT = { label: '', value: '' };
 
 export const STATUSES = [
-  { label: 'Queued', value: '0' },
-  { label: 'Processing', value: '1' },
-  { label: 'Complete', value: '2' },
-  { label: 'Error', value: '3' },
-  { label: 'Submitted', value: '4' },
-  { label: 'Warning', value: '5' },
-  { label: 'Hold', value: '6' },
-  { label: 'Canceled', value: '7' },
-  { label: 'Quality Check Failed', value: 'a' },
-  { label: 'No Records', value: 'b' },
-  { label: 'Tech migration Check Failed', value: 'c' },
+  { label: 'Queued', value: 'QUEUED' },
+  { label: 'Processing', value: 'PROCESSING' },
+  { label: 'Complete', value: 'COMPLETE' },
+  { label: 'Error', value: 'ERROR' },
+  { label: 'Submitted', value: 'SUBMITTED' },
+  { label: 'Warning', value: 'WARNING' },
+  { label: 'Hold', value: 'HOLD' },
+  { label: 'Canceled', value: 'CANCELED' },
+  { label: 'Quality Check Failed', value: 'QUALITY_CHECK_FAILED' },
+  { label: 'No Records', value: 'NO_RECORDS' },
+  { label: 'Tech migration Check Failed', value: 'TECH_MIGRATION_CHECK_FAILED' },
 ];
 
-const STEP_RECEIVE = 0;
-const STEP_TRANSFORM = 1;
-const STEP_TRANSMIT = 2;
+const STEP_RECEIVE = 'ENQUEUE_EXTRACT';
+const STEP_TRANSFORM = 'TRANSFORM_EXTRACT';
+const STEP_TRANSMIT = 'TRANSMIT_FILE';
 
 export const STEP_COLOR_GREEN = '#29c891';
 export const STEP_COLOR_YELLOW = '#e5d64f';
@@ -112,7 +112,7 @@ export const STEP_STATUS = [
 
 export const getProgressItemByString = (argStringValues) => {
   const stringVal = argStringValues.split(',');
-  const _step = parseInt(stringVal[0], 10);
+  const _step = stringVal[0];
   const _stepStatus = stringVal[1];
 
   return (
@@ -129,7 +129,7 @@ export const getColorsByString = (argStringValues) => {
 };
 
 export const getStepStatusLabel = (stepStatusId) => {
-  return STEP_STATUS.find((step) => step.stepStatus.value === stepStatusId).stepStatus.label;
+  return STEP_STATUS.find((step) => step?.stepStatus?.value === stepStatusId)?.stepStatus.label;
 };
 
 const getStepStatus = (stepId, stepStatusId) => {

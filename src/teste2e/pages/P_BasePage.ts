@@ -62,29 +62,31 @@ export default class P_BasePage {
     expect(result).toEqual(numRecords);
   }
 
-  async expectInputValue(selector: string, value: string) {
-    await this.page.waitForSelector(selector);
-    await this.page.waitForTimeout(1000);
+  async inputValue(selector: string, value: string) {
+    await this.clearField(selector);
     await this.page.type(selector, value);
   }
 
-  async expectInputBackspace(selector: string, counter: number) {
+  async clearField(selector: string) {
+    await this.page.waitForSelector(selector);
+    const inputValue = await this.page.$eval(selector, (el) => (<HTMLInputElement>el).value);
+    await this.page.focus(selector);
+    for (let i = 0; i < inputValue.length; i++) {
+      await this.page.keyboard.press('Backspace');
+    }
+  }
+
+  async inputBackspace(selector: string, counter: number) {
     await this.page.waitForSelector(selector);
 
     await this.page.focus(selector);
     for (let i = 0; i < counter; i++) {
-      this.page.keyboard.press('Backspace');
+      await this.page.keyboard.press('Backspace');
     }
   }
 
   async expectInput(selector: string, value: string, expectFunction: Function) {
-    await this.page.waitForSelector(selector);
-    await this.page.type(selector, value);
-    await this.page.waitForTimeout(1000);
+    await this.inputValue(selector, value);
     await expectFunction();
-    await this.page.focus(selector);
-    for (let i = 0; i < value.length; i++) {
-      this.page.keyboard.press('Backspace');
-    }
   }
 }

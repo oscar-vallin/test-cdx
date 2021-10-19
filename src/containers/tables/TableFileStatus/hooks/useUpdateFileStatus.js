@@ -7,14 +7,20 @@ export const useUpdateFileStatus = () => {
   const [apiData, setApiData] = useState();
   const [_error, setError] = useState();
 
+  let argSearchText;
   let argDateRange;
   let argFilter;
 
   const [_apiCall, { data, loading, error }] = useWorkPacketStatusesLazyQuery({
     variables: {
       orgSid: 1,
+      searchText: argSearchText,
       dateRange: argDateRange,
       filter: argFilter,
+      pageableInput: {
+        pageNumber: 0,
+        pageSize: 100,
+      },
     },
   });
 

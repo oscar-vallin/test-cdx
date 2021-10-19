@@ -5,21 +5,22 @@ import { isTodayInRange } from '../helpers/tableHelpers';
 import { useRefresh } from './useRefresh';
 
 //
-export const useTableTemplate = (tableId, argOrgSid, argDateRange, argFilter) => {
+export const useTableTemplate = (tableId, argOrgSid, argSearchText, argDateRange, argFilter) => {
   const [items, setItems] = useState([]);
   const structure = getTableStructure(tableId);
 
-  const { apiCall, data, loading, error } = useQueryTable(tableId, {
+  const queryTable = useQueryTable(tableId, {
     orgId: argOrgSid,
+    searchText: argSearchText,
     dateRange: argDateRange,
     filter: argFilter,
   });
 
-  const { enableRefresh, disableRefresh } = useRefresh(tableId, apiCall);
+  const { enableRefresh, disableRefresh } = useRefresh(tableId, queryTable?.apiCall);
 
   // * Component Did Mount.
   useEffect(() => {
-    apiCall();
+    queryTable?.apiCall();
 
     return function unmount() {
       disableRefresh();
@@ -33,25 +34,25 @@ export const useTableTemplate = (tableId, argOrgSid, argDateRange, argFilter) =>
   }, [argFilter, argDateRange.rangeStart, argDateRange.rangeEnd]);
 
   useEffect(() => {
-    if (error) {
+    if (queryTable?.error) {
       // authLogout('Session Expired');
       // history.push('/');
     }
-  }, [error]);
+  }, [queryTable?.error]);
 
   useEffect(() => {
-    if (data) {
-      setItems(structure.items(data));
+    if (queryTable?.data) {
+      setItems(structure.items(queryTable?.data));
     }
-  }, [data]);
+  }, [queryTable?.data]);
 
   return {
     tableProps: {
       items,
       columns: structure.columns,
       structure,
-      loading,
+      loading: queryTable?.loading,
     },
-    error,
+    error: queryTable?.error,
   };
 };

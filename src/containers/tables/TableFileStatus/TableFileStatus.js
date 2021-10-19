@@ -3,12 +3,12 @@ import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Label } from '@fluentui/react/lib/Label';
 import { useParams, useLocation } from 'react-router-dom';
-import { Table } from '../../../components/tables/Table';
+import { Table } from '../../../components/tables';
 
 import { Box, StyledRow, Column, Container, FilterSection } from './TableFileStatus.styles';
 import { InputText } from '../../../components/inputs/InputText';
 import { InputDateRange } from '../../../components/inputs/InputDateRange';
-import { Card } from '../../../components/cards/Card';
+import { Card } from '../../../components/cards';
 import { Spacing } from '../../../components/spacings/Spacing';
 import { Spinner } from '../../../components/spinners/Spinner';
 import { useTableFilters } from '../../../hooks/useTableFilters';
@@ -33,6 +33,7 @@ const TableFileStatus = ({
   const { tableProps } = useTableTemplate(
     TABLE_NAMES.FILE_STATUS,
     urlParams?.orgSid,
+      localInput.value,
     { rangeStart: startDate.value, rangeEnd: endDate.value },
     localInput.value,
     '',

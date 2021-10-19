@@ -1,52 +1,30 @@
 import P_CDXApp from '../../teste2e/pages/P_CDXApp';
-import P_ActivityOrgs from '../../teste2e/pages/P_ActivityOrgs';
 import P_ExchangeStatus from '../../teste2e/pages/P_ExchangeStatus';
 
 const testConstants = {
   sponsor: 'ADENA',
-  vendor: 'Anthem',
+  vendor: 'ANTHEM',
   extractName: 'GOLD-CareCentral-TEST.txt.pgp',
 };
 
-describe('E2E - Organization Navigation Test', () => {
+describe('E2E - File Status Test', () => {
   let cdxApp: P_CDXApp;
 
   beforeAll(async () => {
-    cdxApp = await P_CDXApp.startBrowser('E2E - Organization Navigation Test');
+    cdxApp = await P_CDXApp.startBrowser('E2E - File Status Test');
   });
 
-  it('Login', async () => {
+  it('Login and Go to Faker Data', async () => {
     const loginPage = await cdxApp.toLoginPage();
     await loginPage.loginAsAdmin();
-    await loginPage.expectOnActiveOrgsPage();
-  });
-
-  it('Check first Active Org (ABC Co)', async () => {
-    const activeOrgs = new P_ActivityOrgs(cdxApp.page);
-    await activeOrgs.expectOnPage();
-    await activeOrgs.waitForSelector('a.ABC');
-  });
-
-  it('Click K2UIS Active Org (Known2U Implementation Services)', async () => {
-    const activeOrgs = new P_ActivityOrgs(cdxApp.page);
-    await activeOrgs.expectOnPage();
-    await activeOrgs.clickOnOrg('K2UIS', 'Known2U Implementation Services');
-  });
-
-  it('Navigate to Active Orgs', async () => {
-    const adminMenu = cdxApp.getAdminMenu();
-    await adminMenu.openMenu('Organizations', 'Active Orgs');
-  });
-
-  it('Click on first Active Org (Farm Hop)', async () => {
-    const activeOrgs = new P_ActivityOrgs(cdxApp.page);
-    await activeOrgs.expectOnPage();
-    await activeOrgs.clickOnOrg('FMHP', 'Farm Hop');
+    await loginPage.navigateToFakerFileStatus();
   });
 
   it('Table Should have 17 rows', async () => {
     const fileStatus = new P_ExchangeStatus(cdxApp.page);
     await fileStatus.expectOnPage();
+    // Filter to November Nov 3, 2020 to Nov 5, 2020
+    await fileStatus.setDateRange('Tue Nov 03 2020', 'Thu Nov 05 2020');
     await fileStatus.expectTableRecords('.ms-DetailsRow-fields', 17);
   });
 
@@ -54,41 +32,30 @@ describe('E2E - Organization Navigation Test', () => {
     const wrongValue = 'WrongSearch';
     const fileStatus = new P_ExchangeStatus(cdxApp.page);
     await fileStatus.expectOnPage();
-    await fileStatus.expectInput('#TableFileStatus__Card__Row__Input-Search', wrongValue, () =>
-      fileStatus.expectTableRecords('.ms-DetailsRow-fields', 0)
-    );
+    await fileStatus.search(wrongValue);
+    await fileStatus.expectTableRecords('.ms-DetailsRow-fields', 0);
   });
 
-  it('Should have at least 1 record when searching by Vendor', async () => {
+  it('Should have 2 record when searching by Vendor', async () => {
     const inputValue = testConstants.vendor;
     const fileStatus = new P_ExchangeStatus(cdxApp.page);
     await fileStatus.expectOnPage();
-    await fileStatus.expectInput('#TableFileStatus__Card__Row__Input-Search', inputValue, () =>
-      fileStatus.expectTextOnFirstRow(inputValue, 0, 1)
-    );
-  });
-
-  it('Should have at least 1 record when searching by Sponsor', async () => {
-    const inputValue = testConstants.sponsor;
-    const fileStatus = new P_ExchangeStatus(cdxApp.page);
-    await fileStatus.expectOnPage();
-    await fileStatus.expectInput('#TableFileStatus__Card__Row__Input-Search', inputValue, () =>
-      fileStatus.expectTextOnFirstRow(inputValue, 0, 2)
-    );
+    await fileStatus.search(inputValue);
+    await fileStatus.expectTextOnFirstRow(inputValue, 0, 1);
   });
 
   it('Should have at least 1 record when searching by Extract Name', async () => {
     const inputValue = testConstants.extractName;
     const fileStatus = new P_ExchangeStatus(cdxApp.page);
     await fileStatus.expectOnPage();
-    await fileStatus.expectInput('#TableFileStatus__Card__Row__Input-Search', inputValue, () =>
-      fileStatus.expectTextOnFirstRow(inputValue, 0, 3)
-    );
+    await fileStatus.search(inputValue);
+    await fileStatus.expectTextOnFirstRow(inputValue, 0, 3);
   });
 
   it('Click on Received On to sort asc the table', async () => {
     const fileStatus = new P_ExchangeStatus(cdxApp.page);
     await fileStatus.expectOnPage();
+    await fileStatus.search('');
     await fileStatus.clickOnHeader('Received__On', 'Received On');
   });
 

@@ -10,7 +10,7 @@ export const columns = [
 ];
 
 export const getItems = (data) =>
-  data?.workPacketStatuses?.map((item) => {
+  data?.workPacketStatuses?.nodes?.map((item) => {
     const datetime = format(new Date(item.timestamp), 'MM/dd/yyyy hh:mm a');
 
     return [
