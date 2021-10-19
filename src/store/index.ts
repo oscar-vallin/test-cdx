@@ -1,5 +1,6 @@
 import { thunkOn, createStore, persist } from 'easy-peasy';
 
+import { ApplicationStore } from './ApplicationStore';
 import { SessionStore } from './SessionStore';
 import { ActiveDomainStore } from './ActiveDomainStore';
 import { ThemeStore } from './ThemeStore';
@@ -11,6 +12,7 @@ const resetStores = async (actions, target, { getStoreActions }) => {
   const StoreActions = await getStoreActions();
 
   if (!target.payload.token) {
+    StoreActions.ApplicationStore.reset();
     StoreActions.ActiveDomainStore.reset();
     StoreActions.ThemeStore.reset();
     StoreActions.QueryParamStore.reset();
@@ -20,6 +22,7 @@ const resetStores = async (actions, target, { getStoreActions }) => {
 const model = {
   ThemeStore,
   QueryParamStore,
+  ApplicationStore,
   SessionStore: persist(SessionStore),
   ActiveDomainStore: persist(ActiveDomainStore),
   onSessionChange: thunkOn(onSetCurrentSession, resetStores),

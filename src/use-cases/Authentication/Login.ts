@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useSessionStore } from '../../store/SessionStore';
 import { useBeginLoginLazyQuery, usePasswordLoginMutation } from '../../data/services/graphql';
 import { useActiveDomainStore } from '../../store/ActiveDomainStore';
+import { useApplicationStore } from '../../store/ApplicationStore';
 
 type LoginState = {
   step: string;
@@ -23,6 +24,7 @@ const INITIAL_STATE: LoginState = {
 export const useLoginUseCase = () => {
   const SessionStore = useSessionStore();
   const ActiveDomainStore = useActiveDomainStore();
+  const ApplicationStore = useApplicationStore();
 
   const [state, setState] = useState({ ...INITIAL_STATE });
 
@@ -59,7 +61,19 @@ export const useLoginUseCase = () => {
 
   useEffect(() => {
     if (userIdVerificationError) {
-      setState({ ...state, loading: false, error: 'Please provide a valid email address to proceed', reset: false });
+      switch (userIdVerificationError.message) {
+        case 'Failed to fetch':
+          ApplicationStore.setIsOffline(true);
+          break;
+        default:
+          setState({
+            ...state,
+            loading: false,
+            error: 'Please provide a valid email address to proceed',
+            reset: false,
+          });
+          break;
+      }
     }
   }, [userIdVerificationError]);
 
