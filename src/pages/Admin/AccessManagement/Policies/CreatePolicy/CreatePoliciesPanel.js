@@ -80,24 +80,52 @@ const groupPermissions = ([permissions, ...opts]) => {
 const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicyId }) => {
   const { orgSid } = useOrgSid();
   const [state, setState] = useState({ ...INITIAL_STATE });
-  const [policyForm, setPolicyForm] = useState({});
-  const [permissions, setPermissions] = useState([]);
 
-  const [fetchPolicyForm, { data: form }] = useQueryHandler(useAccessPolicyFormLazyQuery);
+  const [options, setOptions] = useState({ ...INITIAL_OPTIONS });
+
+  const [apiUseAccessPolicyForm, { data }] = useAccessPolicyFormLazyQuery();
   const [createPolicy, { data: createdPolicy, loading: isCreatingPolicy }] = useCreateAccessPolicyMutation();
-  // const [fetchPolicy, { data: policy }] = useAccessPolicyLazyQuery();
+  const [fetchPolicy, { data: policy }] = useAccessPolicyLazyQuery();
   const [updatePolicy] = useUpdateAccessPolicyMutation();
 
-  // useEffect(() => {
-  //   if (isOpen && selectedPolicyId) {
-  //     fetchPolicy({
-  //       variables: {
-  //         orgSid,
-  //         policySid: selectedPolicyId,
-  //       },
-  //     });
-  //   }
-  // }, [selectedPolicyId, isOpen]);
+  useEffect(() => {
+    if (isOpen && selectedPolicyId) {
+      fetchPolicy({
+        variables: {
+          orgSid,
+          policySid: selectedPolicyId,
+        },
+      });
+    }
+  }, [selectedPolicyId, isOpen]);
+
+  useEffect(() => {
+    if (policy) {
+      const { amPolicy } = policy;
+
+      setState({
+        ...state,
+        policySid: amPolicy.id,
+        policyName: amPolicy.name,
+        isTemplate: amPolicy.tmpl,
+        usedAsIs: amPolicy.tmplUseAsIs,
+        serviceType: amPolicy.tmplServiceType,
+        permissions: (amPolicy.permissions || []).map((permission) => ({
+          policySid: amPolicy.id,
+          effect: permission.effect,
+          predicateName: permission.predicate,
+          parameterVariable: permission.predVar1,
+          parameterValue: permission.predParam1,
+          actions: (permission.actions || []).map((action) => ({
+            facet: { key: action.facet },
+            service: { key: action.service },
+            verb: { key: action.verb },
+            permissionSid: permission.id,
+          })),
+        })),
+      });
+    }
+  }, [policy]);
 
   // useEffect(() => {
   //   if (policy) {
