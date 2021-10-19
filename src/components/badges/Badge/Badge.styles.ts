@@ -13,7 +13,7 @@ const getVariant = (theme, variant) => {
   return Variants[variant];
 };
 
-export const StyledSpan = styled.span`
+export const StyledSpan = styled.span<StyledSpanProps>`
   align-items: center;
   background: ${({ theme, variant }) => getVariant(theme, variant).background};
   border-radius: ${({ theme }) => theme.radius.large};
@@ -26,3 +26,8 @@ export const StyledSpan = styled.span`
     pill ? `${theme.radius.normal} ${theme.radius.medium}` : `${theme.radius.normal} 6px`};
   white-space: nowrap;
 `;
+
+type StyledSpanProps = {
+  variant: string;
+  pill: boolean;
+};
