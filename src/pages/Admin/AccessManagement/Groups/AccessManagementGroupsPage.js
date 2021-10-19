@@ -13,10 +13,7 @@ import { Text } from '../../../../components/typography/Text';
 import { CreateGroupPanel } from './CreateGroup';
 import { Separator } from '../../../../components/separators/Separator';
 
-import {
-  useAccessPolicyGroupsForOrgLazyQuery,
-  useAccessPolicyGroupFormLazyQuery,
-} from '../../../../data/services/graphql';
+import { useAccessPolicyGroupsForOrgLazyQuery } from '../../../../data/services/graphql';
 import { StyledColumn, StyledCommandButton } from './AccessManagementGroupsPage.styles';
 
 import { useOrgSid } from '../../../../hooks/useOrgSid';
@@ -73,7 +70,6 @@ const _AccessManagementGroupsPage = () => {
           <StyledCommandButton
             iconProps={{ iconName: 'Edit' }}
             onClick={() => {
-              console.log(item);
               setSelectedGroupId(item.sid);
               setIsPanelOpen(true);
             }}
@@ -158,6 +154,18 @@ const _AccessManagementGroupsPage = () => {
               name: createdPolicy.name.value,
               tmpl: createdPolicy.tmpl.value,
               tmplUseAsIs: createdPolicy.tmplUseAsIs.value,
+            },
+          ]);
+        }}
+        onUpdateGroupPolicy={(updatedPolicy) => {
+          const filteredGroups = groups.filter((group) => group.sid !== updatedPolicy.sid);
+          setGroups([
+            ...filteredGroups,
+            {
+              sid: updatedPolicy.sid,
+              name: updatedPolicy.name.value,
+              tmpl: updatedPolicy.tmpl.value,
+              tmplUseAsIs: updatedPolicy.tmplUseAsIs.value,
             },
           ]);
         }}

@@ -23,6 +23,7 @@ import {
   useDirectOrganizationsLazyQuery,
   useCreateAccessPolicyGroupMutation,
   useFindAccessPolicyGroupLazyQuery,
+  useUpdateAccessPolicyGroupMutation,
 } from '../../../../../data/services/graphql';
 import { useOrgSid } from '../../../../../hooks/useOrgSid';
 
@@ -43,7 +44,7 @@ const INITIAL_OPTIONS = {
   templateServices: [],
 };
 
-const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGroupId }) => {
+const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, onUpdateGroupPolicy, selectedGroupId }) => {
   const { orgSid } = useOrgSid();
   const [state, setState] = useState({ ...INITIAL_STATE });
 
@@ -61,6 +62,7 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
   const [createPolicyGroup, { data: createdPolicyGroup, loading: isCreatingPolicyGroup }] =
     useCreateAccessPolicyGroupMutation();
   const [fetchPolicyGroup, { data: policyGroup }] = useFindAccessPolicyGroupLazyQuery();
+  const [updatePolicyGroup, { data: updatedPolicyGroup }] = useUpdateAccessPolicyGroupMutation();
 
   useEffect(() => {
     if (isOpen) {
@@ -130,13 +132,18 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
   }, [isOpen, orgsData]);
 
   useEffect(() => {
-    console.log('createdPolicyGroup');
-    console.log(createdPolicyGroup);
     if (createdPolicyGroup) {
-      // onCreateGroupPolicy(createdPolicyGroup.createAccessPolicyGroup);
+      onCreateGroupPolicy(createdPolicyGroup.createAccessPolicyGroup);
       onDismiss();
     }
   }, [createdPolicyGroup]);
+
+  useEffect(() => {
+    if (updatedPolicyGroup) {
+      onUpdateGroupPolicy(updatedPolicyGroup.updateAccessPolicyGroup);
+      onDismiss();
+    }
+  }, [updatedPolicyGroup]);
 
   const rootClass = mergeStyles({
     width: '100%',
@@ -217,6 +224,7 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
                       <Column lg="6" direction="row">
                         <Checkbox
                           label={response?.tmpl?.label}
+                          checked={state.tmpl}
                           onChange={(_event, tmpl) =>
                             setState({ ...state, tmpl, tmplUseAsIs: tmpl ? state.tmplUseAsIs : false })
                           }
@@ -232,7 +240,8 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
                       <Column lg="6" direction="row">
                         <Checkbox
                           label={response?.tmplUseAsIs?.label}
-                          onChange={(event, tmplUseAsIs) => setState({ ...state, tmplUseAsIs })}
+                          checked={state.tmplUseAsIs}
+                          onChange={(_event, tmplUseAsIs) => setState({ ...state, tmplUseAsIs })}
                         />
                         {response?.tmplUseAsIs?.info && (
                           <TooltipHost content={response?.tmplUseAsIs?.info} id="tmplUseAsIsTooltip">
@@ -272,6 +281,7 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
                             <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                               <Checkbox
                                 label={item.name}
+                                checked={state.policySids.includes(item.sid)}
                                 onChange={(event, policy) => {
                                   setState({
                                     ...state,
@@ -317,6 +327,7 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
                             <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                               <Checkbox
                                 label={item.name}
+                                checked={state.specializationSids.includes(item.sid)}
                                 onChange={(event, specialization) => {
                                   setState({
                                     ...state,
@@ -343,7 +354,8 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
                 <Column lg="6" direction="row">
                   <Checkbox
                     label={response?.includeAllSubOrgs?.label}
-                    onChange={(event, includeAllSubOrgs) => setState({ ...state, includeAllSubOrgs })}
+                    checked={state.includeAllSubOrgs}
+                    onChange={(_event, includeAllSubOrgs) => setState({ ...state, includeAllSubOrgs })}
                   />{' '}
                   {response?.includeAllSubOrgs?.info && (
                     <TooltipHost content={response?.includeAllSubOrgs?.info} id="includeAllSubOrgsTooltip">
@@ -375,6 +387,9 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
                           inputProps={{
                             id: 'includeOrgsId',
                           }}
+                          selectedItems={organizationTags.filter((items) =>
+                            state.includeOrgSids.some((f) => f === items.key)
+                          )}
                         />
                       </div>
                     </Column>
@@ -404,6 +419,9 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
                           inputProps={{
                             id: 'excludeOrgsId',
                           }}
+                          selectedItems={organizationTags.filter((items) =>
+                            state.excludeOrgSids.some((f) => f === items.key)
+                          )}
                         />
                       </div>
                     </Column>
@@ -417,13 +435,16 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
                     variant="primary"
                     disabled={isLoadingPolicy}
                     onClick={() => {
-                      createPolicyGroup({
+                      const callback = !state.policyGroupSid ? createPolicyGroup : updatePolicyGroup;
+
+                      callback({
                         variables: {
-                          createAccessPolicyInput: {
+                          [!state.policyGroupSid ? 'createAccessPolicyGroupInput' : 'updateAccessPolicyGroupInput']: {
+                            ...(state.policyGroupSid ? { sid: state.policyGroupSid } : {}),
+                            ...(state.policyGroupSid ? {} : { orgSid }),
                             name: state.name,
                             tmpl: state.tmpl,
                             tmplUseAsIs: state.tmplUseAsIs,
-                            organizationSid: '1',
                             policySids: state.policySids,
                             specializationSids: state.specializationSids,
                             includeAllSubOrgs: state.includeAllSubOrgs,
@@ -434,7 +455,7 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
                       });
                     }}
                   >
-                    Save
+                    {state.policyGroupSid ? 'Update Group' : 'Save Group'}
                   </Button>
                 </Column>
               </Row>
