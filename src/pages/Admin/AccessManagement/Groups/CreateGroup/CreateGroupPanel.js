@@ -124,6 +124,8 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, onUpdateGrou
   }, [isOpen, orgsData]);
 
   useEffect(() => {
+    console.log('createdPolicyGroup');
+    console.log(createdPolicyGroup);
     if (createdPolicyGroup) {
       onCreateGroupPolicy(createdPolicyGroup.createAccessPolicyGroup);
       onDismiss();
