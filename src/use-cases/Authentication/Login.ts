@@ -4,6 +4,7 @@ import { useSessionStore } from '../../store/SessionStore';
 import { useBeginLoginLazyQuery, usePasswordLoginMutation } from '../../data/services/graphql';
 import { useActiveDomainStore } from '../../store/ActiveDomainStore';
 import { useApplicationStore } from '../../store/ApplicationStore';
+import { useQueryHandler } from '../../hooks/useQueryHandler';
 
 type LoginState = {
   step: string;
@@ -29,12 +30,12 @@ export const useLoginUseCase = () => {
   const [state, setState] = useState({ ...INITIAL_STATE });
 
   const [verifyUserId, { data: verifiedUserId, loading: isVerifyingUserId, error: userIdVerificationError }] =
-    useBeginLoginLazyQuery();
+    useQueryHandler(useBeginLoginLazyQuery);
 
   const [
     verifyUserCredentials,
     { data: userSession, loading: isVerifyingCredentials, error: credentialsVerificationError },
-  ] = usePasswordLoginMutation();
+  ] = useQueryHandler(usePasswordLoginMutation);
 
   const performUserIdVerification = ({ userId }) =>
     verifyUserId({
@@ -62,9 +63,6 @@ export const useLoginUseCase = () => {
   useEffect(() => {
     if (userIdVerificationError) {
       switch (userIdVerificationError.message) {
-        case 'Failed to fetch':
-          ApplicationStore.setIsOffline(true);
-          break;
         default:
           setState({
             ...state,

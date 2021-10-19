@@ -33,7 +33,7 @@ const TableFileStatus = ({
   const { tableProps } = useTableTemplate(
     TABLE_NAMES.FILE_STATUS,
     urlParams?.orgSid,
-      localInput.value,
+    localInput.value,
     { rangeStart: startDate.value, rangeEnd: endDate.value },
     localInput.value,
     '',

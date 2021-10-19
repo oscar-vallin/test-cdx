@@ -14,7 +14,7 @@ export const useQueryHandler = (lazyQuery) => {
   useEffect(() => {
     if (error) {
       const { message } = error;
-      const { extensions = null } = error?.graphQLErrors.shift();
+      const { extensions = null } = error?.graphQLErrors?.shift() || {};
 
       if (extensions) {
         if (extensions.errorSubType === 'NEED_AUTH') {
@@ -24,7 +24,7 @@ export const useQueryHandler = (lazyQuery) => {
         }
       } else if (message === 'Failed to fetch') {
         ApplicationStore.setIsOffline(true);
-      } // TODO: else add generic "unkown error" to the application store
+      } // TODO: else add generic "unknown error" to the application store
     }
   }, [error]);
 

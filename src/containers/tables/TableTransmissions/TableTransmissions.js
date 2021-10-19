@@ -29,7 +29,7 @@ const TableTransmissions = ({
   const { tableProps } = useTableTemplate(
     TABLE_NAMES.TRANSMISSIONS,
     urlParams?.orgSid,
-      localInput.value,
+    localInput.value,
     { rangeStart: startDate.value, rangeEnd: endDate.value },
     localInput.value,
     '',
