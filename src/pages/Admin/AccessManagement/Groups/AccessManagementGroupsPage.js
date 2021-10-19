@@ -13,8 +13,11 @@ import { Text } from '../../../../components/typography/Text';
 import { CreateGroupPanel } from './CreateGroup';
 import { Separator } from '../../../../components/separators/Separator';
 
-import { useAccessPolicyGroupsForOrgLazyQuery } from '../../../../data/services/graphql';
-import { StyledColumn } from './AccessManagementGroupsPage.styles';
+import {
+  useAccessPolicyGroupsForOrgLazyQuery,
+  useAccessPolicyGroupFormLazyQuery,
+} from '../../../../data/services/graphql';
+import { StyledColumn, StyledCommandButton } from './AccessManagementGroupsPage.styles';
 
 import { useOrgSid } from '../../../../hooks/useOrgSid';
 import { useQueryHandler } from '../../../../hooks/useQueryHandler';
@@ -29,19 +32,18 @@ const generateColumns = () => {
     minWidth: 225,
   });
 
-  return [createColumn({ name: 'Name', key: 'name' }), createColumn({ name: 'Template', key: 'tmpl' })];
-};
-
-const onRenderItemColumn = (item, index, column) => {
-  if (column.key === 'tmpl') return <FontIcon iconName={item.tmpl ? 'CheckMark' : 'Cancel'} />;
-
-  return item[column.key];
+  return [
+    createColumn({ name: 'Name', key: 'name' }),
+    createColumn({ name: 'Template', key: 'tmpl' }),
+    createColumn({ name: '', key: 'actions' }),
+  ];
 };
 
 const _AccessManagementGroupsPage = () => {
   const { orgSid } = useOrgSid();
   const [groups, setGroups] = useState([]);
   const columns = generateColumns();
+  // const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   const [apiAmGroupsForOrg, { data, loading }] = useQueryHandler(useAccessPolicyGroupsForOrgLazyQuery);
@@ -59,6 +61,28 @@ const _AccessManagementGroupsPage = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading]);
+
+  const onRenderItemColumn = (item, index, column) => {
+    if (column.key === 'tmpl') {
+      return <FontIcon iconName={item.tmpl ? 'CheckMark' : 'Cancel'} />;
+    }
+    if (column.key === 'actions') {
+      return (
+        <>
+          &nbsp;
+          <StyledCommandButton
+            iconProps={{ iconName: 'Edit' }}
+            onClick={() => {
+              console.log(item);
+              setSelectedGroupId(item.sid);
+              setIsPanelOpen(true);
+            }}
+          />
+        </>
+      );
+    }
+    return item[column.key];
+  };
 
   const renderList = () => {
     return groups.length > 0 ? (

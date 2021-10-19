@@ -22,6 +22,7 @@ import {
   useAccessPoliciesForOrgLazyQuery,
   useDirectOrganizationsLazyQuery,
   useCreateAccessPolicyGroupMutation,
+  useFindAccessPolicyGroupLazyQuery,
 } from '../../../../../data/services/graphql';
 import { useOrgSid } from '../../../../../hooks/useOrgSid';
 
@@ -42,7 +43,7 @@ const INITIAL_OPTIONS = {
   templateServices: [],
 };
 
-const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGroupPolicyId }) => {
+const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGroupId }) => {
   const { orgSid } = useOrgSid();
   const [state, setState] = useState({ ...INITIAL_STATE });
 
@@ -59,6 +60,7 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
   const [fetchOrganizations, { data: orgsData, loading: loadingOrgs }] = useDirectOrganizationsLazyQuery();
   const [createPolicyGroup, { data: createdPolicyGroup, loading: isCreatingPolicyGroup }] =
     useCreateAccessPolicyGroupMutation();
+  const [fetchPolicyGroup, { data: policyGroup }] = useFindAccessPolicyGroupLazyQuery();
 
   useEffect(() => {
     if (isOpen) {
@@ -73,6 +75,35 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
       });
     }
   }, [isOpen]);
+
+  useEffect(() => {
+    if (isOpen && selectedGroupId) {
+      fetchPolicyGroup({
+        variables: {
+          policyGroupSid: selectedGroupId,
+        },
+      });
+    }
+  }, [selectedGroupId, isOpen]);
+
+  useEffect(() => {
+    if (policyGroup) {
+      const { findAccessPolicyGroup } = policyGroup;
+      setResponse(findAccessPolicyGroup);
+      setState({
+        ...state,
+        policyGroupSid: findAccessPolicyGroup.sid,
+        name: findAccessPolicyGroup.name.value,
+        tmpl: findAccessPolicyGroup.tmpl.value,
+        tmplUseAsIs: findAccessPolicyGroup.tmplUseAsIs.value,
+        includeAllSubOrgs: findAccessPolicyGroup.includeAllSubOrgs.value,
+        policySids: findAccessPolicyGroup.policies.value,
+        specializationSids: findAccessPolicyGroup.specializations.value,
+        includeOrgSids: findAccessPolicyGroup.includeOrgSids.value,
+        excludeOrgSids: findAccessPolicyGroup.excludeOrgSids.value,
+      });
+    }
+  }, [policyGroup]);
 
   useEffect(() => {
     if (isOpen && data) {
@@ -99,9 +130,10 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
   }, [isOpen, orgsData]);
 
   useEffect(() => {
+    console.log('createdPolicyGroup');
+    console.log(createdPolicyGroup);
     if (createdPolicyGroup) {
-      console.log(createdPolicyGroup.createAccessPolicyGroup);
-      onCreateGroupPolicy(createdPolicyGroup.createAccessPolicyGroup);
+      // onCreateGroupPolicy(createdPolicyGroup.createAccessPolicyGroup);
       onDismiss();
     }
   }, [createdPolicyGroup]);
@@ -145,7 +177,7 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, selectedGrou
     <Panel
       closeButtonAriaLabel="Close"
       type={PanelType.large}
-      headerText={!state.policySid ? 'New Access Policy Group' : 'Update Policy Group'}
+      headerText={!state.policyGroupSid ? 'New Access Policy Group' : 'Update Policy Group'}
       isOpen={isOpen}
       onDismiss={() => {
         setState({ ...INITIAL_STATE });
