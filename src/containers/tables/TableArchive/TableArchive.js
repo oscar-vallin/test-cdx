@@ -1,19 +1,18 @@
-import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Label } from '@fluentui/react/lib/Label';
 import { useParams, useLocation } from 'react-router-dom';
-import queryString from 'query-string';
-import { Table } from '../../../components/tables/Table';
+import { Table } from '../../../components/tables';
 
 import { Box, StyledRow, Column, Container, FilterSection } from './TableArchive.styles';
 import { InputText } from '../../../components/inputs/InputText';
 import { InputDateRange } from '../../../components/inputs/InputDateRange';
-import { Card } from '../../../components/cards/Card';
+import { Card } from '../../../components/cards';
 import { Spacing } from '../../../components/spacings/Spacing';
 import { Spinner } from '../../../components/spinners/Spinner';
 import { useTableTemplate } from '../../../hooks/useTableTemplate';
 import { TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { useTableFilters } from '../../../hooks/useTableFilters';
+import { useQueryParams } from '../../../hooks/useQueryParams';
 
 const TableArchive = ({
   idPage = 'TableArchive',
@@ -21,19 +20,20 @@ const TableArchive = ({
     return null;
   },
 }) => {
+  const QueryParams = useQueryParams();
   const { localInput, startDate, endDate } = useTableFilters('Extract Name,  Status, Vendor, etc.', useParams());
 
   const location = useLocation();
-  const [urlParams] = useState(queryString.parse(location.search));
+  const urlParams = QueryParams.parse(location.search);
 
   const { tableProps } = useTableTemplate(
-    TABLE_NAMES.ARCHIVES,
-    urlParams?.orgSid,
+      TABLE_NAMES.ARCHIVES,
+      urlParams?.orgSid,
       localInput.value,
-    { rangeStart: startDate.value, rangeEnd: endDate.value },
-    localInput.value,
-    '',
-    localInput.value
+      { rangeStart: startDate.value, rangeEnd: endDate.value },
+      localInput.value,
+      '',
+      localInput.value
   );
 
   // Component did mount

@@ -10,7 +10,7 @@ export const useTableTemplate = (tableId, argOrgSid, argSearchText, argDateRange
   const structure = getTableStructure(tableId);
 
   const queryTable = useQueryTable(tableId, {
-    orgId: argOrgSid,
+    orgSid: argOrgSid,
     searchText: argSearchText,
     dateRange: argDateRange,
     filter: argFilter,
