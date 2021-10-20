@@ -36,7 +36,7 @@ const dayPickerStrings = {
   yearPickerHeaderAriaLabel: '{0}, select to change the month',
 };
 
-let dateRangeString = null;
+let dateRangeString = null as any;
 
 export const MonthPicker = ({
   open = false,
@@ -55,8 +55,8 @@ export const MonthPicker = ({
   firstDayOfWeek = DayOfWeek.Monday,
   ...props
 }) => {
-  const [selectedDateRange, setSelectedDateRange] = useState();
-  const [selectedDate, setSelectedDate] = useState();
+  const [selectedDateRange, setSelectedDateRange] = useState<Date>();
+  const [selectedDate, setSelectedDate] = useState<Date>();
 
   const onSelectDate = (date, dateRangeArray) => {
     setSelectedDate(date);
@@ -82,7 +82,7 @@ export const MonthPicker = ({
   const goNext = () => {
     const goNextSelectedDate = selectedDate || new Date();
     const dateRangeArray = getDateRangeArray(goNextSelectedDate, props.dateRangeType, DayOfWeek.Sunday);
-    const newSelectedDate = addDays(dateRangeArray.pop(), 1);
+    const newSelectedDate = addDays(dateRangeArray.pop() as Date, 1);
 
     return {
       goNextSelectedDate: newSelectedDate,
@@ -94,8 +94,8 @@ export const MonthPicker = ({
   };
 
   if (selectedDateRange) {
-    const rangeStart = selectedDateRange[0];
-    const rangeEnd = selectedDateRange[selectedDateRange.length - 1];
+    const rangeStart = selectedDateRange[0] as Date;
+    const rangeEnd = selectedDateRange[selectedDateRange.length - 1] as Date;
     dateRangeString = `${rangeStart.toLocaleDateString()}-${rangeEnd.toLocaleDateString()}`;
   }
 
