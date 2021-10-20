@@ -1,6 +1,19 @@
 import { ReactElement } from 'react';
 import { StyledSpan } from './Badge.styles';
 
+const defaultProps = {
+  id: '',
+  variant: 'primary',
+};
+
+type CDXBadgeProps = {
+  id?: string;
+  variant?: string;
+  pill: boolean;
+  label?: string;
+  children?: ReactElement | string;
+} & typeof defaultProps;
+
 const CDXBadge = ({ id, variant = 'primary', pill, label, children }: CDXBadgeProps): ReactElement => {
   return (
     <StyledSpan id={id} variant={variant} pill={pill}>
@@ -9,12 +22,6 @@ const CDXBadge = ({ id, variant = 'primary', pill, label, children }: CDXBadgePr
   );
 };
 
-type CDXBadgeProps = {
-  id: string;
-  variant: string;
-  pill: boolean;
-  label?: string;
-  children?: ReactElement | string;
-};
+CDXBadge.defaultProps = defaultProps;
 
 export { CDXBadge };

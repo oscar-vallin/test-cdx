@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { ReactElement } from 'react';
 import { getClassNames } from '../../../helpers/helperStyles';
 import { CardStyled } from './Card.styles';
