@@ -1,46 +1,8 @@
-import { ReactElement } from 'react';
+import PropTypes from 'prop-types';
 import { getClassNames } from '../../../helpers/helperStyles';
 import { DivStyled } from './Row.styles';
 
-const defaultProps = {
-  id: '',
-  variant: 'normal',
-  children: <></>,
-  center: '',
-  right: '',
-  top: '',
-  bottom: '',
-  between: '',
-  evenly: '',
-  around: '',
-};
-
-type RowProps = {
-  id?: string;
-  variant?: string;
-  children?: ReactElement | any;
-  center?: string;
-  right?: string;
-  top?: string;
-  bottom?: string;
-  between?: string;
-  evenly?: string;
-  around?: string;
-} & typeof defaultProps;
-
-const Row = ({
-  id,
-  variant = 'normal',
-  children,
-  center,
-  right,
-  top,
-  bottom,
-  between,
-  evenly,
-  around,
-  ...props
-}: RowProps): ReactElement => {
+const Row = ({ id, variant = 'normal', children, center, right, top, bottom, between, evenly, around, ...props }) => {
   return (
     <DivStyled
       id={id}
@@ -59,6 +21,10 @@ const Row = ({
   );
 };
 
-Row.defaultProps = defaultProps;
+Row.propTypes = {
+  id: PropTypes.string,
+  variant: PropTypes.string,
+  children: PropTypes.node,
+};
 
 export { Row };
