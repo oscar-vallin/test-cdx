@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { StyleConstants } from '../../../data/constants/StyleConstants';
 
-export const ComponentStyled = styled.div`
+export const ComponentStyled = styled.div<ComponentStyledProps>`
   display: flex;
   justify-content: ${({ direction, top, bottom }) => {
     if (direction !== StyleConstants.DIRECTION_COLUMN) return 'center';
@@ -24,3 +24,11 @@ export const ComponentStyled = styled.div`
   flex-direction: ${({ direction }) => direction};
   padding: 0px;
 `;
+
+type ComponentStyledProps = {
+  direction: string;
+  left: string;
+  right: string;
+  top: string;
+  bottom: string;
+};
