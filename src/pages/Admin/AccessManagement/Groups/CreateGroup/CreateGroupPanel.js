@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 
+import { useLocation } from 'react-router-dom';
 import { Panel, PanelType } from '@fluentui/react/lib/Panel';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { TagPicker } from '@fluentui/react/lib/Pickers';
@@ -15,6 +16,7 @@ import { Separator } from '../../../../../components/separators/Separator';
 import { Text } from '../../../../../components/typography';
 import { InputText } from '../../../../../components/inputs/InputText';
 import { StyledContainer } from './CreateGroupPanel.styles';
+import { QueryParams } from '../../../../../utils/QueryParams';
 
 import {
   useAccessPolicyGroupFormLazyQuery,
@@ -25,7 +27,6 @@ import {
   useFindAccessPolicyGroupLazyQuery,
   useUpdateAccessPolicyGroupMutation,
 } from '../../../../../data/services/graphql';
-import { useOrgSid } from '../../../../../hooks/useOrgSid';
 
 const INITIAL_STATE = {
   name: '',
@@ -39,7 +40,8 @@ const INITIAL_STATE = {
 };
 
 const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, onUpdateGroupPolicy, selectedGroupId }) => {
-  const { orgSid } = useOrgSid();
+  const location = useLocation();
+  const { orgSid } = QueryParams.parse(location.search);
   const [state, setState] = useState({ ...INITIAL_STATE });
   const [policies, setPolicies] = useState([]);
   const [specializations, setSpecializations] = useState([]);
