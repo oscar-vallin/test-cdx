@@ -12,6 +12,7 @@ export const StyledMessageBar = styled(MessageBar)`
   transform: translateX(-50%);
   transition: opacity 1s ease-out;
   width: 100%;
+  z-index: 9000000;
 
   @keyframes fadeInDown {
     from {

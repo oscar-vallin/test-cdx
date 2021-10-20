@@ -23,14 +23,16 @@ export const App: React.FC = (): React.ReactElement => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.orgSid]);
 
+  useEffect(ApplicationStore.initStatusCheck, []);
+
   useEffect(() => {
     if (ApplicationStore.status.isOffline) {
-      Toast.error({ text: 'Our servers are down. Please try again in a few minutes' });
+      // Toast.error({ text: 'Our servers are down. Please try again in a few minutes' });
     }
 
-    setTimeout(() => {
-      ApplicationStore.setIsOffline(false);
-    }, 5000);
+    // setTimeout(() => {
+    //   ApplicationStore.setIsOffline(false);
+    // }, 5000);
   }, [ApplicationStore.status]);
 
   return <Routes />;

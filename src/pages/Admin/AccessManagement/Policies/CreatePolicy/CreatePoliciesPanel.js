@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react';
 
-import { SpinnerSize, MessageBar, Label, Checkbox, Panel, PanelType, Spinner } from 'office-ui-fabric-react';
+import { SpinnerSize, Checkbox, Panel, PanelType, Spinner } from 'office-ui-fabric-react';
 import _ from 'lodash';
 
 import { Spacing } from '../../../../../components/spacings/Spacing';
@@ -13,7 +13,7 @@ import { Text } from '../../../../../components/typography';
 import { InputText } from '../../../../../components/inputs/InputText';
 import { Collapse } from '../../../../../components/collapses/Collapse';
 import { useQueryHandler } from '../../../../../hooks/useQueryHandler';
-import { StyledCommandButton, StyledColumn } from './CreatePoliciesPanel.styles';
+import { Label } from '../../../../../components/labels/Label';
 
 import {
   useAccessPolicyFormLazyQuery,
@@ -22,6 +22,7 @@ import {
   useAccessPolicyLazyQuery,
 } from '../../../../../data/services/graphql';
 import { useOrgSid } from '../../../../../hooks/useOrgSid';
+import { TagPicker } from '../../../../../components/pickers/TagPicker';
 
 const INITIAL_STATE = {
   policyName: '',
@@ -71,11 +72,14 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
   const [state, setState] = useState({ ...INITIAL_STATE });
   const [policyForm, setPolicyForm] = useState({});
   const [permissions, setPermissions] = useState([]);
+  const [applicableOrgTypes, setApplicableOrgTypes] = useState([]);
 
   const [fetchPolicyForm, { data: form, loading: isLoadingForm }] = useQueryHandler(useAccessPolicyFormLazyQuery);
-  const [createPolicy, { data: createdPolicy, loading: isCreatingPolicy }] = useCreateAccessPolicyMutation();
+  const [createPolicy, { data: createdPolicy, loading: isCreatingPolicy }] =
+    useQueryHandler(useCreateAccessPolicyMutation);
+  const [updatePolicy] = useQueryHandler(useUpdateAccessPolicyMutation);
+
   // const [fetchPolicy, { data: policy }] = useAccessPolicyLazyQuery();
-  const [updatePolicy] = useUpdateAccessPolicyMutation();
 
   // useEffect(() => {
   //   if (isOpen && selectedPolicyId) {
@@ -88,20 +92,6 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
   //   }
   // }, [selectedPolicyId, isOpen]);
 
-  // useEffect(() => {
-  //   if (policy) {
-  //     const { amPolicy } = policy;
-
-  //     setState({
-  //       ...state,
-  //       policySid: amPolicy.id,
-  //       policyName: amPolicy.name,
-  //       isTemplate: amPolicy.tmpl,
-  //       usedAsIs: amPolicy.tmplUseAsIs,
-  //     });
-  //   }
-  // }, [policy]);
-
   useEffect(() => {
     if (createdPolicy) {
       onCreatePolicy(createdPolicy.createAccessPolicy);
@@ -112,6 +102,11 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
   useEffect(() => {
     if (isOpen) {
       fetchPolicyForm({ variables: { orgSid } });
+    } else {
+      setState({ ...INITIAL_STATE });
+      setPermissions([]);
+      setApplicableOrgTypes([]);
+      setPolicyForm({});
     }
   }, [isOpen]);
 
@@ -151,7 +146,7 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
             ) : (
               <Spacing margin={{ top: 'normal' }}>
                 <Row bottom>
-                  <Column lg="6">
+                  <Column lg="6" sm="12">
                     {policyForm.name?.visible && (
                       <InputText
                         label={policyForm.name?.label}
@@ -164,7 +159,7 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
                     )}
                   </Column>
 
-                  <Column lg="6">
+                  <Column lg="6" sm="12">
                     <Row>
                       <Column lg="4">
                         <Spacing margin={{ bottom: 'small' }}>
@@ -196,12 +191,35 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
                   </Column>
                 </Row>
 
-                {policyForm.organization?.visible && (
-                  <Spacing margin={{ top: 'normal' }}>
-                    <Label>Organization</Label>
-                    <p>{policyForm.organization?.label}</p>
-                  </Spacing>
-                )}
+                <Spacing margin={{ top: 'normal' }}>
+                  <Row>
+                    <Column lg="6">
+                      <Label>Organization</Label>
+                      <p>{policyForm.organization?.label}</p>
+                    </Column>
+
+                    {policyForm.applicableOrgTypes?.visible && state.isTemplate && (
+                      <Column lg="6">
+                        <Label text={policyForm.applicableOrgTypes?.label} info={policyForm.applicableOrgTypes?.info} />
+
+                        <TagPicker
+                          options={
+                            policyForm.options
+                              ?.find((opt) => opt.key === 'OrgType')
+                              ?.values.map(({ label, value }) => ({ key: value, name: label })) || []
+                          }
+                          value={applicableOrgTypes}
+                          onRemoveItem={({ key }) =>
+                            setApplicableOrgTypes(applicableOrgTypes.filter((item) => item.key === key))
+                          }
+                          onItemSelected={(item) => {
+                            setApplicableOrgTypes([...applicableOrgTypes, item]);
+                          }}
+                        />
+                      </Column>
+                    )}
+                  </Row>
+                </Spacing>
 
                 {policyForm.permissions?.visible && (
                   <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
@@ -215,22 +233,25 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
 
                     <Row>
                       <Column lg="12">
-                        {permissions.map((group) => (
-                          <Collapse label={group.label} expanded>
+                        {permissions.map((group, groupIndex) => (
+                          <Collapse label={group.label} expanded key={groupIndex}>
                             <Spacing padding={{ top: 'normal', bottom: 'normal' }}>
                               <Row>
                                 <Column lg="12">
                                   <Card elevation="none" spacing="none">
                                     <Row top>
-                                      {group.permissions?.map((permission) => (
-                                        <Column lg="3" key={Symbol(permission).toString()}>
+                                      {group.permissions?.map((permission, pIndex) => (
+                                        <Column lg="3" key={`${groupIndex}-${pIndex}`}>
                                           <Card elevation="none">
                                             <Spacing margin={{ bottom: 'normal' }}>
                                               <Label>{permission.label}</Label>
                                             </Spacing>
 
-                                            {permission.options?.map((option) => (
-                                              <Spacing margin={{ top: 'small' }} key={Symbol(option).toString()}>
+                                            {permission.options?.map((option, optIndex) => (
+                                              <Spacing
+                                                margin={{ top: 'small' }}
+                                                key={`${groupIndex}-${pIndex}-${optIndex}`}
+                                              >
                                                 <Checkbox
                                                   label={option.label}
                                                   checked={state.permissions.includes(option.value)}
@@ -270,36 +291,21 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
                       variant="primary"
                       disabled={isCreatingPolicy}
                       onClick={() => {
-                        const callback = !state.policySid ? createPolicy : updatePolicy;
-
-                        callback({
+                        createPolicy({
                           variables: {
-                            [!state.policySid ? 'policyInfo' : 'updateAMPolicyInput']: {
-                              ...(state.policySid ? { policySid: state.policySid } : {}),
+                            createAccessPolicyInput: {
+                              orgSid,
                               name: state.policyName,
-                              orgOwnerId: 1,
-                              permissions: state.permissions.map((permission) => ({
-                                policySid: state.policySid,
-                                effect: permission.effect,
-                                actions: permission.actions.map((action) => ({
-                                  permissionSid: permission.permissionSid,
-                                  service: action.service.key,
-                                  facet: action.facet.key,
-                                  verb: action.verb.key,
-                                })),
-                                predicate: permission.predicateName,
-                                predVar1: permission.parameterVariable,
-                                predParam1: permission.parameterValue,
-                              })),
+                              permissions: state.permissions,
                               tmpl: state.isTemplate,
                               tmplUseAsIs: state.usedAsIs,
-                              ...(state.serviceType !== '' ? { tmplServiceType: state.serviceType } : {}),
+                              applicableOrgTypes: applicableOrgTypes.map(({ key }) => key),
                             },
                           },
                         });
                       }}
                     >
-                      Save policy
+                      Create policy
                     </Button>
                   </Column>
                 </Row>

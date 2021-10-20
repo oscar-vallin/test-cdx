@@ -150,7 +150,7 @@ export const useQueryTable = (tableID, tableArguments) => {
   if (tableID === TABLE_NAMES.ARCHIVES || tableID === TABLE_NAMES.ERRORS || tableID === TABLE_NAMES.FILE_STATUS) {
     const [apiCall, { data, loading, error }] = useWorkPacketStatusesLazyQuery({
       variables: {
-        orgSid: tableArguments.orgId ?? 1,
+        orgSid: tableArguments.orgSid ?? -1,
         searchText: tableArguments.searchText,
         dateRange: tableArguments.dateRange,
         pageableInput: {

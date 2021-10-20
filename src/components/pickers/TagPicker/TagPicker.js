@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { TagPicker } from '@fluentui/react/lib/Pickers';
 import { Label } from '@fluentui/react/lib-commonjs/Label';
 
@@ -18,27 +18,23 @@ const CDXTagPicker = ({
   required,
   id,
 }) => {
+  const [selectedItems, setSelectedItems] = useState(value);
+  const [items, setItems] = useState(options);
   const picker = useRef(null);
   const getTextFromItem = ({ name }) => name;
   const filterSelectedTags = (filterText) =>
-    filterText ? options.filter((tag) => tag.name.toLowerCase().indexOf(filterText.toLowerCase()) === 0) : [];
+    filterText ? items.filter((tag) => tag.name.toLowerCase().indexOf(filterText.toLowerCase()) === 0) : [];
 
   const listContainsTagList = (tag, tagList) => {
     if (!tagList || !tagList.length || tagList.length === 0) {
       return false;
     }
+
     return tagList.some((compareTag) => compareTag.key === tag.key);
   };
 
-  const handleItemSelection = useCallback((item) => {
-    onItemSelected(item);
-
-    if (picker.current && listContainsTagList(item, picker.current.items)) {
-      return null;
-    }
-
-    return item;
-  }, []);
+  useEffect(() => setItems(options), [options]);
+  useEffect(() => setSelectedItems(value), [value]);
 
   return (
     <>
@@ -46,18 +42,22 @@ const CDXTagPicker = ({
 
       <TagPicker
         onResolveSuggestions={onResolveSuggestions || filterSelectedTags}
-        onItemSelected={handleItemSelection}
-        onRemoveItem={onRemoveItem}
+        onItemSelected={(item) => {
+          if (!listContainsTagList(item, value)) {
+            onItemSelected(item);
+          }
+        }}
+        // onRemoveItem={onRemoveItem}
         getTextFromItem={getTextFromItem}
         componentRef={picker}
         itemLimit={itemLimit}
         disabled={disabled}
-        selectedItems={value}
+        selectedItems={selectedItems}
         resolveDelay={debounce}
         pickerSuggestionsProps={
           pickerProps || {
-            suggestionsHeaderText: 'Suggested tags',
-            noResultsFoundText: 'No color tags found',
+            suggestionsHeaderText: 'Suggestions',
+            noResultsFoundText: 'No items found',
           }
         }
         inputProps={{
