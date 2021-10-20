@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { Breadcrumb } from '@fluentui/react/lib-commonjs/Breadcrumb';
 import { ROUTE_DASHBOARD } from '../../../data/constants/RouteConstants';
 
-const parseBreadcrumbItems = (routes, onClick = () => null) =>
+const parseBreadcrumbItems = (routes, onClick = (param: any) => param) =>
   routes.map((route, index) => {
     const path = { text: route.TITLE, key: route.ID };
 
