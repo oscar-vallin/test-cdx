@@ -38,29 +38,19 @@ const INITIAL_STATE = {
   excludeOrgSids: [],
 };
 
-const INITIAL_OPTIONS = {
-  permissionServices: [],
-  predicates: [],
-  templateServices: [],
-};
-
 const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, onUpdateGroupPolicy, selectedGroupId }) => {
   const { orgSid } = useOrgSid();
   const [state, setState] = useState({ ...INITIAL_STATE });
-
-  const [options, setOptions] = useState({ ...INITIAL_OPTIONS });
   const [policies, setPolicies] = useState([]);
   const [specializations, setSpecializations] = useState([]);
   const [organizations, setOrganizations] = useState([]);
-
   const [response, setResponse] = useState({});
 
   const [apiUseAccessPolicyForm, { data, loading: isLoadingPolicy }] = useAccessPolicyGroupFormLazyQuery();
   const [fetchPolicies, { data: policiesData }] = useAccessPoliciesForOrgLazyQuery();
   const [fetchSpecializations, { data: specializationsData }] = useAccessSpecializationsForOrgLazyQuery();
-  const [fetchOrganizations, { data: orgsData, loading: loadingOrgs }] = useDirectOrganizationsLazyQuery();
-  const [createPolicyGroup, { data: createdPolicyGroup, loading: isCreatingPolicyGroup }] =
-    useCreateAccessPolicyGroupMutation();
+  const [fetchOrganizations, { data: orgsData }] = useDirectOrganizationsLazyQuery();
+  const [createPolicyGroup, { data: createdPolicyGroup }] = useCreateAccessPolicyGroupMutation();
   const [fetchPolicyGroup, { data: policyGroup }] = useFindAccessPolicyGroupLazyQuery();
   const [updatePolicyGroup, { data: updatedPolicyGroup }] = useUpdateAccessPolicyGroupMutation();
 
@@ -188,8 +178,6 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, onUpdateGrou
       isOpen={isOpen}
       onDismiss={() => {
         setState({ ...INITIAL_STATE });
-        setOptions({ ...INITIAL_OPTIONS });
-
         onDismiss();
       }}
     >
