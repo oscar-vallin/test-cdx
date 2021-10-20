@@ -1,4 +1,4 @@
-import { PropTypes } from 'prop-types';
+import PropTypes from 'prop-types';
 import { getClassNames } from '../../../helpers/helperStyles';
 import { CardStyled } from './Card.styles';
 
