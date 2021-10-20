@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { FontIcon } from '@fluentui/react/lib-commonjs/Icon';
 import { StyledDiv, StyledButton } from './Collapse.styles';
@@ -7,8 +8,8 @@ const CDXCollapse = ({
   children,
   className = '',
   expanded = false,
-  onToggle = () => {
-    return {};
+  onToggle = (expandedValue: boolean) => {
+    return {} as any;
   },
   ...props
 }) => {
@@ -41,6 +42,13 @@ const CDXCollapse = ({
       )}
     </StyledDiv>
   );
+};
+
+CDXCollapse.propTypes = {
+  label: PropTypes.string,
+  className: PropTypes.string,
+  expanded: PropTypes.bool,
+  onToggle: PropTypes.func,
 };
 
 export default CDXCollapse;
