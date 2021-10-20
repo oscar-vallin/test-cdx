@@ -8,6 +8,10 @@ export const StyledButton = styled(Button)`
   border: none;
 `;
 
-export const StyledFontIcon = styled(FontIcon)`
+export const StyledFontIcon = styled(FontIcon)<StyledButtonProps>`
   font-size: ${({ size }) => (size ? `${size}px` : '1.25rem')};
 `;
+
+type StyledButtonProps = {
+  size: boolean;
+};
