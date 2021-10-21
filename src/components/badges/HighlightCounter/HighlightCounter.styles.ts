@@ -36,5 +36,5 @@ export const StyledLink = styled(Link)`
 `;
 
 type StyledContainerProps = {
-  type: number;
+  type: number | null;
 };

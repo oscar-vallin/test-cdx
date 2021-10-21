@@ -1,8 +1,8 @@
-import PropTypes from 'prop-types';
+import { ReactElement } from 'react';
 
 import { StyledContainer, StyledLink } from './HighlightCounter.styles';
 
-const HighlightCounter = ({ id, type, href = '#', children, ...props }) => {
+const HighlightCounter = ({ id, type, href = '#', children, ...props }: HighlightCounterProps): ReactElement => {
   return (
     <StyledContainer id={id} type={type} {...props}>
       <StyledLink to={href} {...props}>
@@ -12,10 +12,12 @@ const HighlightCounter = ({ id, type, href = '#', children, ...props }) => {
   );
 };
 
-HighlightCounter.propTypes = {
-  id: PropTypes.string,
-  variant: PropTypes.string,
-  label: PropTypes.string,
+type HighlightCounterProps = {
+  id: string;
+  type: number | null;
+  href?: string;
+  theme?: object;
+  children?: ReactElement | any;
 };
 
 export { HighlightCounter };

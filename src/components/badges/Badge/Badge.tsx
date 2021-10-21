@@ -1,8 +1,7 @@
-import PropTypes from 'prop-types';
-
+import { ReactElement } from 'react';
 import { StyledSpan } from './Badge.styles';
 
-const CDXBadge = ({ id, variant = 'primary', pill, label, children }) => {
+const CDXBadge = ({ id, variant = 'primary', pill, label, children }: CDXBadgeProps): ReactElement => {
   return (
     <StyledSpan id={id} variant={variant} pill={pill}>
       {label || children}
@@ -10,10 +9,12 @@ const CDXBadge = ({ id, variant = 'primary', pill, label, children }) => {
   );
 };
 
-CDXBadge.propTypes = {
-  id: PropTypes.string,
-  variant: PropTypes.string,
-  label: PropTypes.string,
+type CDXBadgeProps = {
+  id: string;
+  variant: string;
+  pill: boolean;
+  label?: string;
+  children?: ReactElement | string;
 };
 
 export { CDXBadge };
