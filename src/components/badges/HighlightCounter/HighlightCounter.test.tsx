@@ -9,7 +9,7 @@ const baseProps = {
 
 const defaultProps = {
   ...baseProps,
-  href: '/',
+  href: '#',
 };
 
 const theme = {
@@ -50,7 +50,7 @@ describe('Highlight Counter Testing Unit...', () => {
   });
 
   it('Default props values, Should have a props', () => {
-    const baseTree = shallow(<HighlightCounter {...baseProps} theme={theme}></HighlightCounter>);
+    const baseTree = shallow(<HighlightCounter {...defaultProps} theme={theme}></HighlightCounter>);
     expect(baseTree.props().id).not.toBeNaN();
     expect(baseTree.props().type).toEqual(0);
     expect(baseTree.children().text()).not.toBeNull();
