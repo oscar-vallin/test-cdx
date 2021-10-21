@@ -9,7 +9,7 @@ const FileProgress = ({ id, step, stepStatus }) => {
   if (!progressItem) return null;
 
   return (
-    <Box id={id} left>
+    <Box left={true}>
       <FileProgressBar colors={progressItem.colors} />
       <Text>{progressItem.stepStatus.label}</Text>
     </Box>

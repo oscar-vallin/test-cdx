@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { StyledDiv } from './Spacing.styles';
 
-const CDXSpacing = ({ id, children, margin = {}, padding = {}, block, inline, ...props }) => {
+const CDXSpacing = ({ id = '', children = {}, margin = {}, padding = {}, block = '', inline = false, ...props }) => {
   return (
     <StyledDiv id={`${id}`} margin={margin} padding={padding} block={block} inline={inline} {...props}>
       {children}

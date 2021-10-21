@@ -7,7 +7,7 @@ const InputText = ({
   disabled = false,
   onChange,
   autofocus = true,
-  errorMessage,
+  errorMessage = '',
   onKeyDown,
   onKeyEnter,
   value,
