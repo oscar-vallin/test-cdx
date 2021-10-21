@@ -1,8 +1,16 @@
-import PropTypes from 'prop-types';
+import { ReactElement } from 'react';
 import { getClassNames } from '../../../helpers/helperStyles';
 import { CardStyled } from './Card.styles';
 
-const Card = ({ id, variant = 'normal', elevation = 'normal', spacing = 'normal', onClick, children, ...props }) => {
+const Card = ({
+  id,
+  variant = 'normal',
+  elevation = 'normal',
+  spacing = 'normal',
+  onClick,
+  children,
+  ...props
+}: CardProps): ReactElement => {
   return (
     <CardStyled
       id={id}
@@ -18,11 +26,13 @@ const Card = ({ id, variant = 'normal', elevation = 'normal', spacing = 'normal'
   );
 };
 
-Card.propTypes = {
-  id: PropTypes.string,
-  variant: PropTypes.string,
-  elevation: PropTypes.string,
-  children: PropTypes.node,
+type CardProps = {
+  id: string;
+  variant: string;
+  elevation: string;
+  spacing: string;
+  onClick?: any | null;
+  children?: ReactElement | string;
 };
 
 export { Card };
