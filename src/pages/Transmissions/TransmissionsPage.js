@@ -7,7 +7,6 @@ import { Spacing } from '../../components/spacings/Spacing';
 import { Text } from '../../components/typography/Text';
 import { PageHeader } from '../../containers/headers/PageHeader';
 import { TableTransmissions } from '../../containers/tables/TableTransmissions';
-import { data } from './TransmissionsPage.service';
 
 const _TransmissionsPage = () => {
   const [tableMeta, setTableMeta] = useState({ count: null, loading: null });
