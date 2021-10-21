@@ -1,9 +1,12 @@
-import PropTypes from 'prop-types';
+import { ReactElement } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Breadcrumb } from '@fluentui/react/lib-commonjs/Breadcrumb';
 import { ROUTE_DASHBOARD } from '../../../data/constants/RouteConstants';
 
-const parseBreadcrumbItems = (routes, onClick = (param: any) => param) =>
+const parseBreadcrumbItems = (
+  routes: parseBreadcrumbItemsProps[],
+  onClick = (param: any) => param
+): parseBreadcrumbItemsReturnProps[] =>
   routes.map((route, index) => {
     const path = { text: route.TITLE, key: route.ID };
 
@@ -17,7 +20,7 @@ const parseBreadcrumbItems = (routes, onClick = (param: any) => param) =>
     };
   });
 
-const CDXBreadcrumb = ({ id, items = [], onClick = () => null, ...props }) => {
+const CDXBreadcrumb = ({ id, items = [], onClick = () => null, ...props }: CDXBreadcrumbProps): ReactElement => {
   const history = useHistory();
 
   return (
@@ -25,8 +28,26 @@ const CDXBreadcrumb = ({ id, items = [], onClick = () => null, ...props }) => {
   );
 };
 
-CDXBreadcrumb.propTypes = {
-  id: PropTypes.string,
+type parseBreadcrumbItemsProps = {
+  TITLE: string;
+  ID: string;
+  isCurrentItem?: boolean;
+  URL: string;
+  MAIN_MENU: boolean;
+  API_ID: string;
+};
+
+type parseBreadcrumbItemsReturnProps = {
+  text: string;
+  key: string;
+  isCurrentItem?: boolean;
+  as?: 'h4';
+};
+
+type CDXBreadcrumbProps = {
+  id: string;
+  items: parseBreadcrumbItemsProps[];
+  onClick: any | undefined;
 };
 
 export { CDXBreadcrumb };
