@@ -7,18 +7,22 @@ export const StyledDiv = styled.div`
   .collapse__trigger {
     background: none;
     border: none;
-    color: ${({ theme }) => theme.colors.themeTertiary};
+    color: ${({ theme }) => theme.colors.black};
     display: block;
     font: ${({ theme }) => theme.fontStyles.normal};
     font-size: ${({ theme }) => theme.fontSizes.normal};
     outline: none;
-    text-align: center;
+    text-align: left;
     width: 100%;
 
-    &:hover,
-    &:focus {
+    &:hover {
       color: ${({ theme }) => theme.colors.themePrimary};
       cursor: pointer;
+    }
+
+    [data-icon-name*='Chevron'] {
+      font-size: 0.75em;
+      transform: translateY(2px);
     }
   }
 `;

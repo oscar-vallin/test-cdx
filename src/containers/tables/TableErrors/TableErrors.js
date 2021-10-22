@@ -27,7 +27,7 @@ const TableErrors = ({
   const { tableProps } = useTableTemplate(
     TABLE_NAMES.ERRORS,
     urlParams?.orgSid,
-      localInput.value,
+    localInput.value,
     { rangeStart: startDate.value, rangeEnd: endDate.value },
     localInput.value,
     '',

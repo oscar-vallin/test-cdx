@@ -11,6 +11,7 @@ import { Row, Column } from '../../../../components/layouts';
 import { Spacing } from '../../../../components/spacings/Spacing';
 import { Text } from '../../../../components/typography';
 import { Separator } from '../../../../components/separators/Separator';
+import { TagPicker } from '../../../../components/pickers/TagPicker';
 
 import { useDirectOrganizationsLazyQuery } from '../../../../data/services/graphql';
 import { StyledColumn } from './ActiveOrgsPage.styles';
@@ -37,6 +38,7 @@ const generateColumns = () => {
 const _ActiveOrgsPage = () => {
   const ActiveDomainStore = useActiveDomainStore();
   const [orgs, setOrgs] = useState([]);
+  const [asd, setAsd] = useState([]);
   const columns = generateColumns();
 
   const [directOrganizationsFQuery, { data, loading }] = useQueryHandler(useDirectOrganizationsLazyQuery);

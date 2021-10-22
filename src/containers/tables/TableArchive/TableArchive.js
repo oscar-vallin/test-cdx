@@ -27,13 +27,13 @@ const TableArchive = ({
   const urlParams = QueryParams.parse(location.search);
 
   const { tableProps } = useTableTemplate(
-      TABLE_NAMES.ARCHIVES,
-      urlParams?.orgSid,
-      localInput.value,
-      { rangeStart: startDate.value, rangeEnd: endDate.value },
-      localInput.value,
-      '',
-      localInput.value
+    TABLE_NAMES.ARCHIVES,
+    urlParams?.orgSid,
+    localInput.value,
+    { rangeStart: startDate.value, rangeEnd: endDate.value },
+    localInput.value,
+    '',
+    localInput.value
   );
 
   // Component did mount

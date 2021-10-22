@@ -1099,8 +1099,6 @@ export type Query = {
   organizationForm?: Maybe<OrganizationForm>;
   findOrganization?: Maybe<OrganizationForm>;
   searchOrganizations?: Maybe<OrganizationConnection>;
-  organizationQuickSearch?: Maybe<Array<Maybe<Organization>>>;
-  vendorQuickSearch?: Maybe<Array<Maybe<Organization>>>;
   dashThemeColorForOrg?: Maybe<DashThemeColorConnection>;
   dashSiteForOrg?: Maybe<DashSite>;
   dashThemeColor?: Maybe<DashThemeColor>;
@@ -1226,11 +1224,6 @@ export type QuerySystemTemplateAccessPolicyGroupByNameArgs = {
 };
 
 
-export type QueryAccessPolicyFormArgs = {
-  templatePolicySid?: Maybe<Scalars['ID']>;
-};
-
-
 export type QueryFindAccessPolicyArgs = {
   policySid: Scalars['ID'];
 };
@@ -1248,7 +1241,6 @@ export type QueryFindAccessSpecializationArgs = {
 
 export type QueryAccessPolicyGroupFormArgs = {
   orgSid: Scalars['ID'];
-  templateGroupSid?: Maybe<Scalars['ID']>;
 };
 
 
@@ -1306,18 +1298,6 @@ export type QuerySearchOrganizationsArgs = {
   orgOwnerSid: Scalars['ID'];
   orgFilter?: Maybe<OrgFilterInput>;
   pageableInput?: Maybe<PageableInput>;
-};
-
-
-export type QueryOrganizationQuickSearchArgs = {
-  searchText: Scalars['String'];
-  orgOwnerSid: Scalars['ID'];
-};
-
-
-export type QueryVendorQuickSearchArgs = {
-  searchText: Scalars['String'];
-  orgOwnerSid: Scalars['ID'];
 };
 
 
@@ -2773,9 +2753,7 @@ export type SystemTemplateAccessPolicyGroupByNameQuery = (
   )>>> }
 );
 
-export type AccessPolicyFormQueryVariables = Exact<{
-  templatePolicySid?: Maybe<Scalars['ID']>;
-}>;
+export type AccessPolicyFormQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type AccessPolicyFormQuery = (
@@ -2927,7 +2905,6 @@ export type FindAccessSpecializationQuery = (
 
 export type AccessPolicyGroupFormQueryVariables = Exact<{
   orgSid: Scalars['ID'];
-  templateGroupSid?: Maybe<Scalars['ID']>;
 }>;
 
 
@@ -3233,34 +3210,6 @@ export type SearchOrganizationsQuery = (
       & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType'>
     )>>> }
   )> }
-);
-
-export type OrganizationQuickSearchQueryVariables = Exact<{
-  searchText: Scalars['String'];
-  orgOwnerSid: Scalars['ID'];
-}>;
-
-
-export type OrganizationQuickSearchQuery = (
-  { __typename?: 'Query' }
-  & { organizationQuickSearch?: Maybe<Array<Maybe<(
-    { __typename?: 'Organization' }
-    & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType'>
-  )>>> }
-);
-
-export type VendorQuickSearchQueryVariables = Exact<{
-  searchText: Scalars['String'];
-  orgOwnerSid: Scalars['ID'];
-}>;
-
-
-export type VendorQuickSearchQuery = (
-  { __typename?: 'Query' }
-  & { vendorQuickSearch?: Maybe<Array<Maybe<(
-    { __typename?: 'Organization' }
-    & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType'>
-  )>>> }
 );
 
 export type DashThemeColorForOrgQueryVariables = Exact<{
@@ -5586,8 +5535,8 @@ export type SystemTemplateAccessPolicyGroupByNameQueryHookResult = ReturnType<ty
 export type SystemTemplateAccessPolicyGroupByNameLazyQueryHookResult = ReturnType<typeof useSystemTemplateAccessPolicyGroupByNameLazyQuery>;
 export type SystemTemplateAccessPolicyGroupByNameQueryResult = Apollo.QueryResult<SystemTemplateAccessPolicyGroupByNameQuery, SystemTemplateAccessPolicyGroupByNameQueryVariables>;
 export const AccessPolicyFormDocument = gql`
-    query AccessPolicyForm($templatePolicySid: ID) {
-  accessPolicyForm(templatePolicySid: $templatePolicySid) {
+    query AccessPolicyForm {
+  accessPolicyForm {
     sid
     name {
       value
@@ -5684,7 +5633,6 @@ export const AccessPolicyFormDocument = gql`
  * @example
  * const { data, loading, error } = useAccessPolicyFormQuery({
  *   variables: {
- *      templatePolicySid: // value for 'templatePolicySid'
  *   },
  * });
  */
@@ -6006,8 +5954,8 @@ export type FindAccessSpecializationQueryHookResult = ReturnType<typeof useFindA
 export type FindAccessSpecializationLazyQueryHookResult = ReturnType<typeof useFindAccessSpecializationLazyQuery>;
 export type FindAccessSpecializationQueryResult = Apollo.QueryResult<FindAccessSpecializationQuery, FindAccessSpecializationQueryVariables>;
 export const AccessPolicyGroupFormDocument = gql`
-    query AccessPolicyGroupForm($orgSid: ID!, $templateGroupSid: ID) {
-  accessPolicyGroupForm(orgSid: $orgSid, templateGroupSid: $templateGroupSid) {
+    query AccessPolicyGroupForm($orgSid: ID!) {
+  accessPolicyGroupForm(orgSid: $orgSid) {
     sid
     name {
       value
@@ -6163,7 +6111,6 @@ export const AccessPolicyGroupFormDocument = gql`
  * const { data, loading, error } = useAccessPolicyGroupFormQuery({
  *   variables: {
  *      orgSid: // value for 'orgSid'
- *      templateGroupSid: // value for 'templateGroupSid'
  *   },
  * });
  */
@@ -6857,80 +6804,6 @@ export function useSearchOrganizationsLazyQuery(baseOptions?: Apollo.LazyQueryHo
 export type SearchOrganizationsQueryHookResult = ReturnType<typeof useSearchOrganizationsQuery>;
 export type SearchOrganizationsLazyQueryHookResult = ReturnType<typeof useSearchOrganizationsLazyQuery>;
 export type SearchOrganizationsQueryResult = Apollo.QueryResult<SearchOrganizationsQuery, SearchOrganizationsQueryVariables>;
-export const OrganizationQuickSearchDocument = gql`
-    query OrganizationQuickSearch($searchText: String!, $orgOwnerSid: ID!) {
-  organizationQuickSearch(searchText: $searchText, orgOwnerSid: $orgOwnerSid) {
-    sid
-    name
-    orgId
-    orgType
-  }
-}
-    `;
-
-/**
- * __useOrganizationQuickSearchQuery__
- *
- * To run a query within a React component, call `useOrganizationQuickSearchQuery` and pass it any options that fit your needs.
- * When your component renders, `useOrganizationQuickSearchQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useOrganizationQuickSearchQuery({
- *   variables: {
- *      searchText: // value for 'searchText'
- *      orgOwnerSid: // value for 'orgOwnerSid'
- *   },
- * });
- */
-export function useOrganizationQuickSearchQuery(baseOptions: Apollo.QueryHookOptions<OrganizationQuickSearchQuery, OrganizationQuickSearchQueryVariables>) {
-        return Apollo.useQuery<OrganizationQuickSearchQuery, OrganizationQuickSearchQueryVariables>(OrganizationQuickSearchDocument, baseOptions);
-      }
-export function useOrganizationQuickSearchLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OrganizationQuickSearchQuery, OrganizationQuickSearchQueryVariables>) {
-          return Apollo.useLazyQuery<OrganizationQuickSearchQuery, OrganizationQuickSearchQueryVariables>(OrganizationQuickSearchDocument, baseOptions);
-        }
-export type OrganizationQuickSearchQueryHookResult = ReturnType<typeof useOrganizationQuickSearchQuery>;
-export type OrganizationQuickSearchLazyQueryHookResult = ReturnType<typeof useOrganizationQuickSearchLazyQuery>;
-export type OrganizationQuickSearchQueryResult = Apollo.QueryResult<OrganizationQuickSearchQuery, OrganizationQuickSearchQueryVariables>;
-export const VendorQuickSearchDocument = gql`
-    query VendorQuickSearch($searchText: String!, $orgOwnerSid: ID!) {
-  vendorQuickSearch(searchText: $searchText, orgOwnerSid: $orgOwnerSid) {
-    sid
-    name
-    orgId
-    orgType
-  }
-}
-    `;
-
-/**
- * __useVendorQuickSearchQuery__
- *
- * To run a query within a React component, call `useVendorQuickSearchQuery` and pass it any options that fit your needs.
- * When your component renders, `useVendorQuickSearchQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useVendorQuickSearchQuery({
- *   variables: {
- *      searchText: // value for 'searchText'
- *      orgOwnerSid: // value for 'orgOwnerSid'
- *   },
- * });
- */
-export function useVendorQuickSearchQuery(baseOptions: Apollo.QueryHookOptions<VendorQuickSearchQuery, VendorQuickSearchQueryVariables>) {
-        return Apollo.useQuery<VendorQuickSearchQuery, VendorQuickSearchQueryVariables>(VendorQuickSearchDocument, baseOptions);
-      }
-export function useVendorQuickSearchLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<VendorQuickSearchQuery, VendorQuickSearchQueryVariables>) {
-          return Apollo.useLazyQuery<VendorQuickSearchQuery, VendorQuickSearchQueryVariables>(VendorQuickSearchDocument, baseOptions);
-        }
-export type VendorQuickSearchQueryHookResult = ReturnType<typeof useVendorQuickSearchQuery>;
-export type VendorQuickSearchLazyQueryHookResult = ReturnType<typeof useVendorQuickSearchLazyQuery>;
-export type VendorQuickSearchQueryResult = Apollo.QueryResult<VendorQuickSearchQuery, VendorQuickSearchQueryVariables>;
 export const DashThemeColorForOrgDocument = gql`
     query DashThemeColorForOrg($ownedInput: OwnedInput, $pageableInput: PageableInput) {
   dashThemeColorForOrg(ownedInput: $ownedInput, pageableInput: $pageableInput) {

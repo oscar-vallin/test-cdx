@@ -160,8 +160,18 @@ const _AccessManagementPoliciesPage = () => {
 
       <CreatePoliciesPanel
         isOpen={isPanelOpen}
-        onCreatePolicy={(createdPolicy) => {
-          setPolicies([...policies, createdPolicy]);
+        onCreatePolicy={({ name, permissions, sid, tmpl, tmplUseAsIs, applicableOrgTypes }) => {
+          setPolicies([
+            ...policies,
+            {
+              applicableOrgTypes: applicableOrgTypes.value,
+              name: name.value,
+              permissions: permissions.value,
+              sid: sid.value,
+              tmpl: tmpl.value,
+              tmplUseAsIs: tmplUseAsIs.value,
+            },
+          ]);
         }}
         onDismiss={() => {
           setIsPanelOpen(false);

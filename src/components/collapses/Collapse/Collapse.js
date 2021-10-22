@@ -12,8 +12,8 @@ const CDXCollapse = ({
   },
   ...props
 }) => {
-  const [isExpanded, setIsExpanded] = useState(expanded);
-  const [isAnimating, setIsAnimating] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(!!expanded);
+  const [isAnimating, setIsAnimating] = useState(!!expanded);
 
   const handleClick = () => {
     if (isExpanded) {
@@ -33,7 +33,7 @@ const CDXCollapse = ({
   return (
     <StyledDiv className={`collapse ${className}`} {...props}>
       <StyledButton className="collapse__trigger" onClick={handleClick} {...props}>
-        {label} &nbsp; <FontIcon iconName="ChevronDown" />
+        {label} &nbsp; <FontIcon iconName={!isExpanded ? 'ChevronRight' : 'ChevronDown'} />
       </StyledButton>
 
       {isExpanded && (

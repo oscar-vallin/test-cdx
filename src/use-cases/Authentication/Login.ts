@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import { useSessionStore } from '../../store/SessionStore';
 import { useBeginLoginLazyQuery, usePasswordLoginMutation } from '../../data/services/graphql';
 import { useActiveDomainStore } from '../../store/ActiveDomainStore';
+import { useApplicationStore } from '../../store/ApplicationStore';
+import { useQueryHandler } from '../../hooks/useQueryHandler';
 
 type LoginState = {
   step: string;
@@ -23,16 +25,17 @@ const INITIAL_STATE: LoginState = {
 export const useLoginUseCase = () => {
   const SessionStore = useSessionStore();
   const ActiveDomainStore = useActiveDomainStore();
+  const ApplicationStore = useApplicationStore();
 
   const [state, setState] = useState({ ...INITIAL_STATE });
 
   const [verifyUserId, { data: verifiedUserId, loading: isVerifyingUserId, error: userIdVerificationError }] =
-    useBeginLoginLazyQuery();
+    useQueryHandler(useBeginLoginLazyQuery);
 
   const [
     verifyUserCredentials,
     { data: userSession, loading: isVerifyingCredentials, error: credentialsVerificationError },
-  ] = usePasswordLoginMutation();
+  ] = useQueryHandler(usePasswordLoginMutation);
 
   const performUserIdVerification = ({ userId }) =>
     verifyUserId({
@@ -59,7 +62,16 @@ export const useLoginUseCase = () => {
 
   useEffect(() => {
     if (userIdVerificationError) {
-      setState({ ...state, loading: false, error: 'Please provide a valid email address to proceed', reset: false });
+      switch (userIdVerificationError.message) {
+        default:
+          setState({
+            ...state,
+            loading: false,
+            error: 'Please provide a valid email address to proceed',
+            reset: false,
+          });
+          break;
+      }
     }
   }, [userIdVerificationError]);
 
