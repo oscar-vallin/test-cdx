@@ -5,7 +5,7 @@ import { validateDirection } from './Box.handlers';
 import { ComponentStyled } from './Box.styles';
 
 const Box = ({
-  id = 'Box',
+  id = '',
   children,
   direction = StyleConstants.DIRECTION_COLUMN,
   left,
