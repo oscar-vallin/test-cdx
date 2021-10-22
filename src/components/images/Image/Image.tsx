@@ -3,6 +3,20 @@ import { StyledImage } from './Image.styles';
 
 import imgLogo from '../../../assets/images/known2u-logo.png';
 
+const defaultProps = {
+  id: '',
+  name: '',
+  src: '',
+  alt: '',
+};
+
+type ImageProps = {
+  id?: string;
+  name?: string;
+  src?: string;
+  alt?: string;
+} & typeof defaultProps;
+
 const images = {
   logo: imgLogo,
 };
@@ -13,11 +27,6 @@ const Image = ({ id, name, src, alt }: ImageProps): ReactElement => {
   return <StyledImage id={id} src={_src} alt={alt} />;
 };
 
-type ImageProps = {
-  id: string;
-  name: string;
-  src: string;
-  alt: string;
-};
+Image.defaultProps = defaultProps;
 
 export { Image };
