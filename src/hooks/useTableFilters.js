@@ -3,7 +3,7 @@ import { useStoreState } from 'easy-peasy';
 import { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useDateValue } from './useDateValue';
-import {useDelayedInputValue} from './useInputValue';
+import { useDelayedInputValue } from './useInputValue';
 import { useQueryParams } from './useQueryParams';
 
 //

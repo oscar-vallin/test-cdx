@@ -9,6 +9,7 @@ import {
 } from 'office-ui-fabric-react/lib-commonjs/DetailsList';
 import { mergeStyleSets } from 'office-ui-fabric-react/lib-commonjs/Styling';
 
+import { useLocation } from 'react-router-dom';
 import { StyledContainer, StyledSpacing, StyledText } from '../../../components/tables/Table/Table.styles';
 import { Box, Column, Container, FilterSection, StyledRow } from '../WorkPacketTable.styles';
 import { InputText } from '../../../components/inputs/InputText';
@@ -23,7 +24,6 @@ import {
   useWorkPacketStatusesLazyQuery,
   WorkPacketStatus,
 } from '../../../data/services/graphql';
-import { useOrgSid } from '../../../hooks/useOrgSid';
 import { useWorkPacketColumns } from '../WorkPacketColumns';
 
 const TableFileStatus = ({ idPage = 'TableFileStatus' }) => {
@@ -36,7 +36,9 @@ const TableFileStatus = ({ idPage = 'TableFileStatus' }) => {
   });
 
   const doNothing = () => {};
-  const { orgSid } = useOrgSid();
+  const location = useLocation();
+  const urlParams = new URLSearchParams(location.search);
+  const orgSid = urlParams.get('orgSid') ?? '-1';
 
   const { localInput, startDate, endDate } = useTableFilters('Extract Name,  Status, Vendor, etc.');
 

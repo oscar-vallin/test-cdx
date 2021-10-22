@@ -5,8 +5,8 @@ import P_Archives from '../../teste2e/pages/P_Archives';
 const testConstants = {
   clientFile: 'ADENA-Cigna-Elig-TEST.txt',
   vendorFile: '2020-11-04-022911102con001',
-  planSponsor: 'ADENA',
-  vendor: 'Trustmark',
+  planSponsor: 'K2UKFE',
+  vendor: 'TRUSTMARK',
 };
 
 const inputSelector = '#TableArchive__Card__Row__Input-Search';
@@ -32,13 +32,18 @@ describe('E2E - Archives Navigation Test', () => {
   });
 
   it('Should redirect to Archives Page', async () => {
-    const fileStatus = new P_Archives(cdxApp.page);
-    await fileStatus.expectOnPage();
+    const page = new P_Archives(cdxApp.page);
+    await page.expectOnPage();
+    // Filter to November Nov 3, 2020 to Nov 5, 2020
+    await page.setDateRange('Tue Nov 03 2020', 'Thu Nov 05 2020');
+    await page.expectTableRecords('.ms-DetailsRow-fields', 14);
   });
 
   it('Table Should have 17 rows', async () => {
     const page = new P_Archives(cdxApp.page);
     await page.expectOnPage();
+    // Filter to November Nov 3, 2020 to Nov 6, 2020
+    await page.setDateRange('Tue Nov 03 2020', 'Thu Nov 06 2020');
     await page.expectTableRecords('.ms-DetailsRow-fields', 17);
   });
 
@@ -54,13 +59,6 @@ describe('E2E - Archives Navigation Test', () => {
     const page = new P_Archives(cdxApp.page);
     await page.expectOnPage();
     await page.expectInput(inputSelector, inputValue, () => page.expectTextOnFirstRow(inputValue, 0, 3));
-  });
-
-  it('Should have 3 records when searching by Plan Sponsor', async () => {
-    const inputValue = testConstants.planSponsor;
-    const page = new P_Archives(cdxApp.page);
-    await page.expectOnPage();
-    await page.expectInput(inputSelector, inputValue, () => page.expectTextOnFirstRow(inputValue, 0, 2));
   });
 
   it('Should have 1 record when searching by Vendor', async () => {

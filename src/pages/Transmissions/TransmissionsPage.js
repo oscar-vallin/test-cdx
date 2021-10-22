@@ -8,6 +8,99 @@ import { Text } from '../../components/typography';
 import { PageHeader } from '../../containers/headers/PageHeader';
 import { TableTransmissions } from '../../containers/tables/TableTransmissions';
 
+const data = [
+  {
+    timestamp: 1608067551,
+    fileName: 'filestatus/CHO-Boston-OracleHours.txt',
+    file: 'CHO-Boston-OracleHours.txt',
+    workStep: 'Transform',
+    plan: 'CHO',
+    vendor: 'TheHatford',
+    message: 'Error',
+  },
+  {
+    timestamp: 1608067551,
+    fileName: 'filestatus/CHO-Boston-OracleHours.txt',
+    file: 'CHO-Boston-OracleHours.txt',
+    workStep: 'Transform',
+    plan: 'CHO',
+    vendor: 'TheHatford',
+    message: 'Error',
+  },
+  {
+    timestamp: 1608067551,
+    fileName: 'filestatus/CHO-Boston-OracleHours.txt',
+    file: 'CHO-Boston-OracleHours.txt',
+    workStep: 'Transform',
+    plan: 'CHO',
+    vendor: 'TheHatford',
+    message: 'Error',
+  },
+  {
+    timestamp: 1608068919,
+    fileName: 'filestatus/CHO-Boston-OracleHours.txt',
+    file: 'CHO-Boston-OracleHours.txt',
+    workStep: 'Transform',
+    plan: 'CHO',
+    vendor: 'TheHatford',
+    message: 'Error',
+  },
+  {
+    timestamp: 1608068919,
+    fileName: 'filestatus/CHO-Boston-OracleHours.txt',
+    file: 'CHO-Boston-OracleHours.txt',
+    workStep: 'Transform',
+    plan: 'CHO',
+    vendor: 'TheHatford',
+    message: 'Error',
+  },
+  {
+    timestamp: 1608068919,
+    fileName: 'filestatus/CHO-Boston-OracleHours.txt',
+    file: 'CHO-Boston-OracleHours.txt',
+    workStep: 'Transform',
+    plan: 'CHO',
+    vendor: 'TheHatford',
+    message: 'Error',
+  },
+  {
+    timestamp: 1608068919,
+    fileName: 'filestatus/CHO-Boston-OracleHours.txt',
+    file: 'CHO-Boston-OracleHours.txt',
+    workStep: 'Transform',
+    plan: 'CHO',
+    vendor: 'TheHatford',
+    message: 'Error',
+  },
+  {
+    timestamp: 1608068919,
+    fileName: 'filestatus/CHO-Boston-OracleHours.txt',
+    file: 'CHO-Boston-OracleHours.txt',
+    workStep: 'Transform',
+    plan: 'CHO',
+    vendor: 'TheHatford',
+    message: 'Error',
+  },
+  {
+    timestamp: 1608068919,
+    fileName: 'filestatus/CHO-Boston-OracleHours.txt',
+    file: 'CHO-Boston-OracleHours.txt',
+    workStep: 'Transform',
+    plan: 'CHO',
+    vendor: 'TheHatford',
+    message: 'Error',
+  },
+  {
+    timestamp: 1608068919,
+    fileName: 'filestatus/CHO-Boston-OracleHours.txt',
+    file: 'CHO-Boston-OracleHours.txt',
+    workStep: 'Transform',
+    plan: 'CHO',
+    vendor: 'TheHatford',
+    message: 'Error',
+  },
+];
+
 const _TransmissionsPage = () => {
   const [tableMeta, setTableMeta] = useState({ count: null, loading: null });
 

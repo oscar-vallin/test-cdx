@@ -1,19 +1,14 @@
-import P_BasePage from './P_BasePage';
+import P_ExchangeStatus from './P_ExchangeStatus';
 
-export default class P_Archives extends P_BasePage {
+export default class P_Archives extends P_ExchangeStatus {
   pageTitle = '#__Text_Archives-Text';
 
   secondaryTitle = '#__Text_Advanced-search-Text';
 
+  searchInput = '#TableArchive__Card__Row__Input-Search';
+
   async expectOnPage() {
     await this.expectTextOnPage(this.pageTitle, 'Archives');
     await this.expectTextOnPage(this.secondaryTitle, '  — Advanced search');
-  }
-
-  async clickOnHeader(id: string, btnName: string) {
-    const selector = `#${id}`;
-    await this.page.waitForTimeout(1000);
-    await this.expectTextOnPage(selector, btnName);
-    await this.page.click(selector);
   }
 }
