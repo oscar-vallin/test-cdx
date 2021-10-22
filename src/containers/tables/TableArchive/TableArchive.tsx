@@ -26,7 +26,7 @@ import {
 import { useOrgSid } from '../../../hooks/useOrgSid';
 import { useWorkPacketColumns } from '../WorkPacketColumns';
 
-const TableFileStatus = ({ idPage = 'TableFileStatus' }) => {
+const TableArchive = ({ idPage = 'TableArchive' }) => {
   const [pagingParams, setPagingParams] = useState<PageableInput>({
     pageNumber: 0,
     pageSize: 100,
@@ -78,16 +78,14 @@ const TableFileStatus = ({ idPage = 'TableFileStatus' }) => {
     setColumns(newColumns);
   };
 
-  const { timeStampCol, vendorCol, stepStatusCol, fileNameCol, planSponsorCol, progressCol } =
-    useWorkPacketColumns(_doSort);
+  const { timeStampCol, vendorCol, planSponsorCol, clientFileCol, vendorFileCol } = useWorkPacketColumns(_doSort);
 
   const [columns, setColumns] = useState<IColumn[]>([
     timeStampCol,
     vendorCol,
     planSponsorCol,
-    fileNameCol,
-    stepStatusCol,
-    progressCol,
+    clientFileCol,
+    vendorFileCol,
   ]);
 
   useEffect(() => {
@@ -178,11 +176,11 @@ const TableFileStatus = ({ idPage = 'TableFileStatus' }) => {
   );
 };
 
-TableFileStatus.propTypes = {
+TableArchive.propTypes = {
   id: PropTypes.string,
   orgSid: PropTypes.string,
   dateRange: PropTypes.array,
   filter: PropTypes.string,
 };
 
-export { TableFileStatus };
+export { TableArchive };

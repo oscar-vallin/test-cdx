@@ -4,7 +4,7 @@ import { ROUTES } from '../../data/constants/RouteConstants';
 import { LayoutDashboard } from '../../layouts/LayoutDashboard';
 import { Row, Column, Container } from '../../components/layouts';
 import { Spacing } from '../../components/spacings/Spacing';
-import { Text } from '../../components/typography/Text';
+import { Text } from '../../components/typography';
 import { PageHeader } from '../../containers/headers/PageHeader';
 import { TableTransmissions } from '../../containers/tables/TableTransmissions';
 

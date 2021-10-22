@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Box as LayoutBox, Row as LayoutRow, Column as LayoutColumn } from '../../../components/layouts';
+import { Box as LayoutBox, Row as LayoutRow, Column as LayoutColumn } from '../../components/layouts';
 
 export const Container = styled(LayoutBox)`
   margin: 0 auto;

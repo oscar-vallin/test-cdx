@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { Label } from '@fluentui/react/lib/Label';
 import { useParams, useLocation } from 'react-router-dom';
 import queryString from 'query-string';
-import { Table } from '../../../components/tables/Table';
+import { Table } from '../../../components/tables';
 
-import { Box, StyledRow, Column, Container, FilterSection } from './TableErrors.styles';
-import { Card } from '../../../components/cards/Card';
+import { Box, Column, Container, FilterSection, StyledRow } from '../WorkPacketTable.styles';
+import { Card } from '../../../components/cards';
 import { Spacing } from '../../../components/spacings/Spacing';
 import { Spinner } from '../../../components/spinners/Spinner';
 import { InputText } from '../../../components/inputs/InputText';
