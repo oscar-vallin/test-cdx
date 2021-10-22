@@ -18,6 +18,8 @@ const MainMenu = ({ id, left, changeCollapse }) => {
   const ActiveDomainStore = useActiveDomainStore();
   const history = useHistory();
   const location = useLocation();
+  const urlParams = new URLSearchParams(location.search);
+  const orgSid = urlParams.get('orgSid') ?? '-1';
 
   const [collapse, setCollapse] = useState();
 
@@ -40,7 +42,7 @@ const MainMenu = ({ id, left, changeCollapse }) => {
             selected={location.pathname === opt.URL}
             collapse={collapse}
             onClick={() => {
-              history.push(opt.URL);
+              history.push(`${opt.URL}?orgSid=${orgSid}`);
             }}
           >
             {menuOption.label}
