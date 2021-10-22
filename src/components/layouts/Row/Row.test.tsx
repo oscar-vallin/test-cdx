@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom';
 import toJSON from 'enzyme-to-json';
 import { shallow } from 'enzyme';
-import { Row as Component } from './Row.js';
+import { Row as Component } from './Row';
 
 const defaultProps = {
   id: '__Row',

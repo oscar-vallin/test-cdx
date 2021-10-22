@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+import { ReactElement } from 'react';
 import { getClassNames } from '../../../helpers/helperStyles';
 import { StyleConstants } from '../../../data/constants/StyleConstants';
 import { validateDirection } from './Box.handlers';
@@ -13,7 +13,7 @@ const Box = ({
   top,
   bottom,
   ...props
-}) => {
+}: BoxProps): ReactElement => {
   return (
     <ComponentStyled
       id={id}
@@ -29,9 +29,14 @@ const Box = ({
   );
 };
 
-Box.propTypes = {
-  id: PropTypes.string,
-  children: PropTypes.node,
+type BoxProps = {
+  id: string;
+  children: React.ReactNode;
+  direction: string;
+  left: string;
+  right: string;
+  top: string;
+  bottom: string;
 };
 
 export { Box };
