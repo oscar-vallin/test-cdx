@@ -1,8 +1,8 @@
-import PropTypes from 'prop-types';
+import { ReactElement } from 'react';
 import { PersonaInitialsColor, PersonaSize } from 'office-ui-fabric-react/lib-commonjs/Persona';
 import { StyledPersona } from './UserToken.styles';
 
-const UserToken = ({ id, name }) => {
+const UserToken = ({ id, name }: UserTokenProps): ReactElement => {
   return (
     <StyledPersona
       id={id}
@@ -15,8 +15,9 @@ const UserToken = ({ id, name }) => {
   );
 };
 
-UserToken.propTypes = {
-  id: PropTypes.string,
+type UserTokenProps = {
+  id: string;
+  name: string;
 };
 
 export { UserToken };
