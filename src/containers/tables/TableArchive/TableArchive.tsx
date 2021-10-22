@@ -146,7 +146,7 @@ const TableArchive = ({ idPage = 'TableArchive' }) => {
     <>
       <FilterSection id={`${idPage}-filters`}>
         <Container>
-          <Card id={`${idPage}__SearchCard`} elevation="smallest" onClick="">
+          <Card id={`${idPage}__SearchCard`} elevation="smallest">
             <StyledRow>
               <Column lg="6">
                 <Label>Search</Label>

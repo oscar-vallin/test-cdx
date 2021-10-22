@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { ReactElement } from 'react';
 import { getClassNames } from '../../../helpers/helperStyles';
 import { CardStyled } from './Card.styles';
@@ -18,7 +17,7 @@ type CardProps = {
   elevation?: string;
   spacing?: string;
   onClick?: any | null;
-  children?: ReactElement | string;
+  children?: any | null;
 } & typeof defaultProps;
 
 const Card = ({

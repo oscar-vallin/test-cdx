@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { ErrorSeverity, Maybe } from '../../../data/services/graphql';
 
 export const StyledContainer = styled.div<StyledContainerProps>`
   display: flex;
@@ -36,5 +37,5 @@ export const StyledLink = styled(Link)`
 `;
 
 type StyledContainerProps = {
-  type: number | null;
+  type: number | Maybe<ErrorSeverity> | undefined;
 };

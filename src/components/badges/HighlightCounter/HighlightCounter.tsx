@@ -1,6 +1,7 @@
 import { ReactElement } from 'react';
 
 import { StyledContainer, StyledLink } from './HighlightCounter.styles';
+import { ErrorSeverity, Maybe } from '../../../data/services/graphql';
 
 const defaultProps = {
   id: '',
@@ -9,7 +10,7 @@ const defaultProps = {
 
 type HighlightCounterProps = {
   id: string;
-  type: number | null;
+  type: number | Maybe<ErrorSeverity> | undefined;
   href?: string;
   theme?: object;
   children?: ReactElement | any;
