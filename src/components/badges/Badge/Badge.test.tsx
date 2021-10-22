@@ -2,7 +2,7 @@ import { CDXBadge } from './Badge';
 import { mountWithTheme } from '../../../utils/testUtils';
 
 const defaultProps = {
-  id: '__CDXBadge_Id',
+  id: '',
   label: '',
   pill: false,
   variant: 'info',
