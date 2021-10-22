@@ -5,7 +5,7 @@ import { Container as Component } from './Container';
 
 const defaultProps = {
   id: '__ContainerBox_ID',
-  children: '',
+  children: <></>,
   direction: 'rigth',
   left: 'normal',
   right: 'normal',

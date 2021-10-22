@@ -2,6 +2,32 @@ import { ReactElement } from 'react';
 import { getClassNames } from '../../../helpers/helperStyles';
 import { DivStyled } from './Row.styles';
 
+const defaultProps = {
+  id: '',
+  variant: 'normal',
+  children: <></>,
+  center: '',
+  right: '',
+  top: '',
+  bottom: '',
+  between: '',
+  evenly: '',
+  around: '',
+};
+
+type RowProps = {
+  id?: string;
+  variant?: string;
+  children?: ReactElement | null;
+  center?: string;
+  right?: string;
+  top?: string;
+  bottom?: string;
+  between?: string;
+  evenly?: string;
+  around?: string;
+} & typeof defaultProps;
+
 const Row = ({
   id,
   variant = 'normal',
@@ -33,23 +59,6 @@ const Row = ({
   );
 };
 
-// Row.propTypes = {
-//   id: PropTypes.string,
-//   variant: PropTypes.string,
-//   children: PropTypes.node,
-// };
-
-type RowProps = {
-  id: string;
-  variant: string;
-  children: ReactElement | null;
-  center: string;
-  right: string;
-  top: string;
-  bottom: string;
-  between: string;
-  evenly: string;
-  around: string;
-};
+Row.defaultProps = defaultProps;
 
 export { Row };

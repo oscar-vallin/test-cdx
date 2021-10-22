@@ -7,7 +7,7 @@ const defaultProps = {
   id: '__Column',
   variant: 'normal',
   direction: 'column',
-  children: null,
+  children: <></>,
   center: 'center',
   right: 'center',
   top: 'center',

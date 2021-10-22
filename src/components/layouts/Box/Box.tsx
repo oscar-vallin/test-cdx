@@ -4,6 +4,26 @@ import { StyleConstants } from '../../../data/constants/StyleConstants';
 import { validateDirection } from './Box.handlers';
 import { ComponentStyled } from './Box.styles';
 
+const defaultProps = {
+  id: 'Box',
+  children: <></>,
+  direction: '',
+  left: '',
+  right: '',
+  top: '',
+  bottom: '',
+};
+
+type BoxProps = {
+  id?: string;
+  children: React.ReactNode;
+  direction?: string;
+  left?: string;
+  right?: string;
+  top?: string;
+  bottom?: string;
+} & typeof defaultProps;
+
 const Box = ({
   id = '',
   children,
@@ -29,14 +49,6 @@ const Box = ({
   );
 };
 
-type BoxProps = {
-  id: string;
-  children: React.ReactNode;
-  direction: string;
-  left: string;
-  right: string;
-  top: string;
-  bottom: string;
-};
+Box.defaultProps = defaultProps;
 
 export { Box };

@@ -6,7 +6,7 @@ import { Row as Component } from './Row';
 const defaultProps = {
   id: '__Row',
   variant: 'normal',
-  children: null,
+  children: <></>,
   center: 'center',
   right: 'center',
   top: 'center',
