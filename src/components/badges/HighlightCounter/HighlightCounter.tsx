@@ -1,6 +1,18 @@
 import { ReactElement } from 'react';
-
 import { StyledContainer, StyledLink } from './HighlightCounter.styles';
+
+const defaultProps = {
+  id: '',
+  href: '#',
+};
+
+type HighlightCounterProps = {
+  id: string;
+  type: number | null;
+  href?: string;
+  theme?: object;
+  children?: ReactElement | any;
+} & typeof defaultProps;
 
 const HighlightCounter = ({ id, type, href = '#', children, ...props }: HighlightCounterProps): ReactElement => {
   return (
@@ -12,12 +24,6 @@ const HighlightCounter = ({ id, type, href = '#', children, ...props }: Highligh
   );
 };
 
-type HighlightCounterProps = {
-  id: string;
-  type: number | null;
-  href?: string;
-  theme?: object;
-  children?: ReactElement | any;
-};
+HighlightCounter.defaultProps = defaultProps;
 
 export { HighlightCounter };
