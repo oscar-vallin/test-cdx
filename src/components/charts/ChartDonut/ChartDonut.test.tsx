@@ -1,18 +1,18 @@
 import { render, shallow } from 'enzyme';
 import toJSON from 'enzyme-to-json';
-import { ChartDonut as Component } from './index.js';
+import { ChartDonut as Component } from './index';
 
 const defaultProps = {
   id: '__ChartDonut',
   label: 'label',
   size: 50,
   data: [
-    { name: 'Group A', value: 400 },
-    { name: 'Group B', value: 300 },
-    { name: 'Group C', value: 300 },
-    { name: 'Group D', value: 200 },
-    { name: 'Group E', value: 278 },
-    { name: 'Group F', value: 189 },
+    { name: 'Group A', value: 400, color: '' },
+    { name: 'Group B', value: 300, color: '' },
+    { name: 'Group C', value: 300, color: '' },
+    { name: 'Group D', value: 200, color: '' },
+    { name: 'Group E', value: 278, color: '' },
+    { name: 'Group F', value: 189, color: '' },
   ],
 };
 
@@ -37,12 +37,12 @@ describe('Basic Input Component', () => {
 
   it('Renders legend when all the values are 0', () => {
     const emptyData = [
-      { name: 'Group A', value: 0 },
-      { name: 'Group B', value: 0 },
-      { name: 'Group C', value: 0 },
-      { name: 'Group D', value: 0 },
-      { name: 'Group E', value: 0 },
-      { name: 'Group F', value: 0 },
+      { name: 'Group A', value: 0, color: '' },
+      { name: 'Group B', value: 0, color: '' },
+      { name: 'Group C', value: 0, color: '' },
+      { name: 'Group D', value: 0, color: '' },
+      { name: 'Group E', value: 0, color: '' },
+      { name: 'Group F', value: 0, color: '' },
     ];
     const wrapper = render(<Component {...defaultProps} data={emptyData} />);
 

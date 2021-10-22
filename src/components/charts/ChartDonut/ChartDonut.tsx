@@ -1,10 +1,34 @@
-import PropTypes from 'prop-types';
-
+import { ReactElement } from 'react';
 import { PieChart, Pie, Cell, Label } from 'recharts';
+
+const defaultProps = {
+  id: '',
+  label: '',
+  size: 50,
+  data: [
+    { name: '', value: 0 },
+    { name: '', value: 0 },
+    { name: '', value: 0 },
+    { name: '', value: 0 },
+    { name: '', value: 0 },
+    { name: '', value: 0 },
+  ],
+};
+
+type ChartDonutProps = {
+  id?: string;
+  label?: string;
+  size?: number;
+  data?: {
+    name: string;
+    value: number;
+    color?: string;
+  }[];
+} & typeof defaultProps;
 
 const COLORS = ['#0088FE', '#D0D0D0', '#FFAAAA', '#AADD00', '#EEAA00', '#DDCCFF', '#00AAAA'];
 
-const ChartDonut = ({ id, label, size = 50, data }) => {
+const ChartDonut = ({ id, label, size = 50, data }: ChartDonutProps): ReactElement => {
   const _data = data;
 
   return (
@@ -22,16 +46,13 @@ const ChartDonut = ({ id, label, size = 50, data }) => {
       >
         <Label value={label} position="center" className="label" fontSize="1rem" />;
         {_data.map((entry, index) => (
-          <Cell key={index} fill={data[index % data.length].color ?? COLORS[index % COLORS.length]} />
+          <Cell key={index} fill={data[index % data.length]?.color ?? COLORS[index % COLORS.length]} />
         ))}
       </Pie>
     </PieChart>
   );
 };
 
-ChartDonut.propTypes = {
-  id: PropTypes.string,
-  label: PropTypes.string,
-};
+ChartDonut.defaultProps = defaultProps;
 
 export { ChartDonut };
