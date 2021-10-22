@@ -1,7 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react';
 
-import { SpinnerSize, Checkbox, Panel, PanelType, Spinner } from 'office-ui-fabric-react';
+import {
+  IconButton,
+  MessageBar,
+  Label,
+  ComboBox,
+  Checkbox,
+  Panel,
+  PanelType,
+  DetailsList,
+  SelectionMode,
+} from 'office-ui-fabric-react';
 import _ from 'lodash';
 
 import { Spacing } from '../../../../../components/spacings/Spacing';
@@ -13,7 +23,7 @@ import { Text } from '../../../../../components/typography';
 import { InputText } from '../../../../../components/inputs/InputText';
 import { Collapse } from '../../../../../components/collapses/Collapse';
 import { useQueryHandler } from '../../../../../hooks/useQueryHandler';
-import { Label } from '../../../../../components/labels/Label';
+import { StyledCommandButton, StyledColumn } from './CreatePoliciesPanel.styles';
 
 import {
   useAccessPolicyFormLazyQuery,
@@ -31,8 +41,8 @@ const INITIAL_STATE = {
   permissions: [],
 };
 
-const groupPermissions = (opts) => {
-  const { values } = opts.find((opt) => opt.key === 'Permission');
+const groupPermissions = ([permissions, ...opts]) => {
+  const { values } = permissions;
   const { K2U, COLORPALETTE, ACCESS, ORG, PASSWORD, PROD, SSOIDP, TEST, THEME, UAT, USER } = _.groupBy(
     values,
     (item) => {
@@ -41,23 +51,23 @@ const groupPermissions = (opts) => {
   );
 
   const exchangeStatus = [
-    { label: 'K2U Exchanges', options: K2U },
-    { label: 'Test Exchanges', options: TEST },
-    { label: 'UAT Exchanges', options: UAT },
-    { label: 'Production Exchanges', options: PROD },
+    { label: 'ASD', options: K2U },
+    { label: 'ASD', options: TEST },
+    { label: 'ASD', options: UAT },
+    { label: 'ASD', options: PROD },
   ];
 
   const accessManagement = [
-    { label: 'Users', options: USER },
-    { label: 'Access Management', options: ACCESS },
-    { label: 'Organization', options: ORG },
+    { label: 'ASD', options: USER },
+    { label: 'ASD', options: ACCESS },
+    { label: 'ASD', options: ORG },
   ];
 
   const siteSettings = [
-    { label: 'Password', options: PASSWORD },
-    { label: 'Color Palettes', options: COLORPALETTE },
-    { label: 'Theme', options: THEME },
-    { label: 'SSO', options: SSOIDP },
+    { label: 'ASD', options: PASSWORD },
+    { label: 'ASD', options: COLORPALETTE },
+    { label: 'ASD', options: THEME },
+    { label: 'ASD', options: SSOIDP },
   ];
 
   return [
@@ -72,14 +82,11 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
   const [state, setState] = useState({ ...INITIAL_STATE });
   const [policyForm, setPolicyForm] = useState({});
   const [permissions, setPermissions] = useState([]);
-  const [applicableOrgTypes, setApplicableOrgTypes] = useState([]);
 
-  const [fetchPolicyForm, { data: form, loading: isLoadingForm }] = useQueryHandler(useAccessPolicyFormLazyQuery);
-  const [createPolicy, { data: createdPolicy, loading: isCreatingPolicy }] =
-    useQueryHandler(useCreateAccessPolicyMutation);
-  const [updatePolicy] = useQueryHandler(useUpdateAccessPolicyMutation);
-
+  const [fetchPolicyForm, { data: form }] = useQueryHandler(useAccessPolicyFormLazyQuery);
+  const [createPolicy, { data: createdPolicy, loading: isCreatingPolicy }] = useCreateAccessPolicyMutation();
   // const [fetchPolicy, { data: policy }] = useAccessPolicyLazyQuery();
+  const [updatePolicy] = useUpdateAccessPolicyMutation();
 
   // useEffect(() => {
   //   if (isOpen && selectedPolicyId) {
@@ -92,6 +99,34 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
   //   }
   // }, [selectedPolicyId, isOpen]);
 
+  // useEffect(() => {
+  //   if (policy) {
+  //     const { amPolicy } = policy;
+
+  //     setState({
+  //       ...state,
+  //       policySid: amPolicy.id,
+  //       policyName: amPolicy.name,
+  //       isTemplate: amPolicy.tmpl,
+  //       usedAsIs: amPolicy.tmplUseAsIs,
+  //     });
+  //   }
+  // }, [policy]);
+
+  // useEffect(() => {
+  //   if (policy) {
+  //     const { amPolicy } = policy;
+
+  //     setState({
+  //       ...state,
+  //       policySid: amPolicy.id,
+  //       policyName: amPolicy.name,
+  //       isTemplate: amPolicy.tmpl,
+  //       usedAsIs: amPolicy.tmplUseAsIs,
+  //     });
+  //   }
+  // }, [policy]);
+
   useEffect(() => {
     if (createdPolicy) {
       onCreatePolicy(createdPolicy.createAccessPolicy);
@@ -102,11 +137,6 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
   useEffect(() => {
     if (isOpen) {
       fetchPolicyForm({ variables: { orgSid } });
-    } else {
-      setState({ ...INITIAL_STATE });
-      setPermissions([]);
-      setApplicableOrgTypes([]);
-      setPolicyForm({});
     }
   }, [isOpen]);
 
@@ -133,184 +163,161 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
       <>
         <Row>
           <Column lg="12">
-            {isLoadingForm ? (
-              <>
-                <Spacing margin={{ top: 'normal', bottom: 'double' }}>
-                  <Separator />
-                </Spacing>
+            <Spacing margin={{ top: 'normal' }}>
+              <Row bottom>
+                <Column lg="6">
+                  {policyForm.name?.visible && (
+                    <InputText
+                      label={policyForm.name?.label}
+                      minLength={policyForm.name?.min}
+                      maxLength={policyForm.name?.max}
+                      value={state.policyName}
+                      required={policyForm.name?.required}
+                      onChange={({ target }) => setState({ ...state, policyName: target.value })}
+                    />
+                  )}
+                </Column>
 
-                <Spacing>
-                  <Spinner size={SpinnerSize.large} label="Loading policy form" />
-                </Spacing>
-              </>
-            ) : (
-              <Spacing margin={{ top: 'normal' }}>
-                <Row bottom>
-                  <Column lg="6" sm="12">
-                    {policyForm.name?.visible && (
-                      <InputText
-                        label={policyForm.name?.label}
-                        minLength={policyForm.name?.min}
-                        maxLength={policyForm.name?.max}
-                        value={state.policyName}
-                        required={policyForm.name?.required}
-                        onChange={({ target }) => setState({ ...state, policyName: target.value })}
-                      />
-                    )}
-                  </Column>
-
-                  <Column lg="6" sm="12">
-                    <Row>
-                      <Column lg="4">
+                <Column lg="6">
+                  <Row>
+                    <Column lg="4">
+                      <Spacing margin={{ bottom: 'small' }}>
+                        {policyForm.tmpl?.visible && (
+                          <Checkbox
+                            label={policyForm.tmpl?.label}
+                            required={policyForm.tmpl?.required}
+                            checked={state.isTemplate}
+                            onChange={(event, isTemplate) => setState({ ...state, isTemplate })}
+                          />
+                        )}
+                      </Spacing>
+                    </Column>
+                    {state.isTemplate && (
+                      <Column lg="8">
                         <Spacing margin={{ bottom: 'small' }}>
-                          {policyForm.tmpl?.visible && (
+                          {policyForm.tmplUseAsIs?.visible && (
                             <Checkbox
-                              label={policyForm.tmpl?.label}
-                              required={policyForm.tmpl?.required}
-                              checked={state.isTemplate}
-                              onChange={(event, isTemplate) => setState({ ...state, isTemplate })}
+                              label={policyForm.tmplUseAsIs?.label}
+                              required={policyForm.tmplUseAsIs?.required}
+                              checked={state.usedAsIs}
+                              onChange={(event, usedAsIs) => setState({ ...state, usedAsIs })}
                             />
                           )}
                         </Spacing>
                       </Column>
-                      {state.isTemplate && (
-                        <Column lg="8">
-                          <Spacing margin={{ bottom: 'small' }}>
-                            {policyForm.tmplUseAsIs?.visible && (
-                              <Checkbox
-                                label={policyForm.tmplUseAsIs?.label}
-                                required={policyForm.tmplUseAsIs?.required}
-                                checked={state.usedAsIs}
-                                onChange={(event, usedAsIs) => setState({ ...state, usedAsIs })}
-                              />
-                            )}
-                          </Spacing>
-                        </Column>
-                      )}
-                    </Row>
-                  </Column>
-                </Row>
-
-                <Spacing margin={{ top: 'normal' }}>
-                  <Row>
-                    <Column lg="6">
-                      <Label>Organization</Label>
-                      <p>{policyForm.organization?.label}</p>
-                    </Column>
-
-                    {policyForm.applicableOrgTypes?.visible && state.isTemplate && (
-                      <Column lg="6">
-                        <Label text={policyForm.applicableOrgTypes?.label} info={policyForm.applicableOrgTypes?.info} />
-
-                        <TagPicker
-                          options={
-                            policyForm.options
-                              ?.find((opt) => opt.key === 'OrgType')
-                              ?.values.map(({ label, value }) => ({ key: value, name: label })) || []
-                          }
-                          value={applicableOrgTypes}
-                          onRemoveItem={({ key }) =>
-                            setApplicableOrgTypes(applicableOrgTypes.filter((item) => item.key === key))
-                          }
-                          onItemSelected={(item) => {
-                            setApplicableOrgTypes([...applicableOrgTypes, item]);
-                          }}
-                        />
-                      </Column>
                     )}
                   </Row>
+                </Column>
+              </Row>
+
+              {policyForm.organization?.visible && (
+                <Spacing margin={{ top: 'normal' }}>
+                  <Label>Organization</Label>
+                  <p>{policyForm.organization?.label}</p>
                 </Spacing>
+              )}
 
-                {policyForm.permissions?.visible && (
-                  <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                    <Row>
-                      <Column lg="12">
-                        <Spacing margin={{ top: 'small' }}>
-                          <Text variant="bold">Permissions</Text>
-                        </Spacing>
-                      </Column>
-                    </Row>
-
-                    <Row>
-                      <Column lg="12">
-                        {permissions.map((group, groupIndex) => (
-                          <Collapse label={group.label} expanded key={groupIndex}>
-                            <Spacing padding={{ top: 'normal', bottom: 'normal' }}>
-                              <Row>
-                                <Column lg="12">
-                                  <Card elevation="none" spacing="none">
-                                    <Row top>
-                                      {group.permissions?.map((permission, pIndex) => (
-                                        <Column lg="3" key={`${groupIndex}-${pIndex}`}>
-                                          <Card elevation="none">
-                                            <Spacing margin={{ bottom: 'normal' }}>
-                                              <Label>{permission.label}</Label>
-                                            </Spacing>
-
-                                            {permission.options?.map((option, optIndex) => (
-                                              <Spacing
-                                                margin={{ top: 'small' }}
-                                                key={`${groupIndex}-${pIndex}-${optIndex}`}
-                                              >
-                                                <Checkbox
-                                                  label={option.label}
-                                                  checked={state.permissions.includes(option.value)}
-                                                  onChange={(event, checked) =>
-                                                    setState({
-                                                      ...state,
-                                                      permissions: checked
-                                                        ? [...state.permissions, option.value]
-                                                        : state.permissions.filter((value) => value !== option.value),
-                                                    })
-                                                  }
-                                                />
-                                              </Spacing>
-                                            ))}
-                                          </Card>
-                                        </Column>
-                                      ))}
-                                    </Row>
-                                  </Card>
-                                </Column>
-                              </Row>
-                            </Spacing>
-                          </Collapse>
-                        ))}
-                      </Column>
-                    </Row>
-                  </Spacing>
-                )}
-
+              {policyForm.permissions?.visible && (
                 <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                  <Separator />
-                </Spacing>
+                  <Row>
+                    <Column lg="12">
+                      <Spacing margin={{ top: 'small' }}>
+                        <Text variant="bold">Permissions</Text>
+                      </Spacing>
+                    </Column>
+                  </Row>
 
-                <Row>
-                  <Column lg="12">
-                    <Button
-                      variant="primary"
-                      disabled={isCreatingPolicy}
-                      onClick={() => {
-                        createPolicy({
-                          variables: {
-                            createAccessPolicyInput: {
-                              orgSid,
-                              name: state.policyName,
-                              permissions: state.permissions,
-                              tmpl: state.isTemplate,
-                              tmplUseAsIs: state.usedAsIs,
-                              applicableOrgTypes: applicableOrgTypes.map(({ key }) => key),
-                            },
-                          },
-                        });
-                      }}
-                    >
-                      Create policy
-                    </Button>
-                  </Column>
-                </Row>
+                  <Row>
+                    <Column lg="12">
+                      {permissions.map((group) => (
+                        <Collapse label={group.label} expanded>
+                          <Spacing padding={{ top: 'normal', bottom: 'normal' }}>
+                            <Row>
+                              <Column lg="12">
+                                <Card elevation="none" spacing="none">
+                                  <Row top>
+                                    {group.permissions.map((permission) => (
+                                      <Column lg="3">
+                                        <Card elevation="none">
+                                          <Spacing margin={{ bottom: 'normal' }}>
+                                            <Label>{permission.label}</Label>
+                                          </Spacing>
+
+                                          {permission.options.map((option) => (
+                                            <Spacing margin={{ top: 'small' }}>
+                                              <Checkbox
+                                                label={option.label}
+                                                checked={state.permissions.includes(option.value)}
+                                                onChange={(event, checked) =>
+                                                  setState({
+                                                    ...state,
+                                                    permissions: checked
+                                                      ? [...state.permissions, option.value]
+                                                      : state.permissions.filter((value) => value !== option.value),
+                                                  })
+                                                }
+                                              />
+                                            </Spacing>
+                                          ))}
+                                        </Card>
+                                      </Column>
+                                    ))}
+                                  </Row>
+                                </Card>
+                              </Column>
+                            </Row>
+                          </Spacing>
+                        </Collapse>
+                      ))}
+                    </Column>
+                  </Row>
+                </Spacing>
+              )}
+
+              <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                <Separator />
               </Spacing>
-            )}
+
+              <Row>
+                <Column lg="12">
+                  <Button
+                    variant="primary"
+                    disabled={isCreatingPolicy}
+                    onClick={() => {
+                      const callback = !state.policySid ? createPolicy : updatePolicy;
+
+                      callback({
+                        variables: {
+                          [!state.policySid ? 'policyInfo' : 'updateAMPolicyInput']: {
+                            ...(state.policySid ? { policySid: state.policySid } : {}),
+                            name: state.policyName,
+                            orgOwnerId: 1,
+                            permissions: state.permissions.map((permission) => ({
+                              policySid: state.policySid,
+                              effect: permission.effect,
+                              actions: permission.actions.map((action) => ({
+                                permissionSid: permission.permissionSid,
+                                service: action.service.key,
+                                facet: action.facet.key,
+                                verb: action.verb.key,
+                              })),
+                              predicate: permission.predicateName,
+                              predVar1: permission.parameterVariable,
+                              predParam1: permission.parameterValue,
+                            })),
+                            tmpl: state.isTemplate,
+                            tmplUseAsIs: state.usedAsIs,
+                            ...(state.serviceType !== '' ? { tmplServiceType: state.serviceType } : {}),
+                          },
+                        },
+                      });
+                    }}
+                  >
+                    Save policy
+                  </Button>
+                </Column>
+              </Row>
+            </Spacing>
           </Column>
         </Row>
       </>

@@ -1,7 +1,9 @@
-import { CDXBadge } from './Badge.js';
+import { CDXBadge } from './Badge';
 import { mountWithTheme } from '../../../utils/testUtils';
 
 const defaultProps = {
+  id: '',
+  label: '',
   pill: false,
   variant: 'info',
 };
@@ -19,7 +21,7 @@ describe('Badge Testing Unit...', () => {
 
   it('Should render the label property if provided', () => {
     const wrapper = mountWithTheme(
-      <CDXBadge label="Test" {...defaultProps}>
+      <CDXBadge {...defaultProps} label="Test">
         Content
       </CDXBadge>
     );

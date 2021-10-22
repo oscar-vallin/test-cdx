@@ -1,8 +1,13 @@
-import { Card } from './Card.js';
+import { Card } from './Card';
 import { mountWithTheme } from '../../../utils/testUtils';
 
 const defaultProps = {
-  onClick: null,
+  id: 'CardId',
+  variant: 'normal',
+  elevation: 'normal',
+  spacing: 'strnormaling',
+  children: '',
+  onClick: () => null,
 };
 
 describe('Card Testing Unit...', () => {
@@ -22,10 +27,14 @@ describe('Card Testing Unit...', () => {
   });
 
   it('Should trigger the onClick callback if provided', () => {
-    const wrapper = mountWithTheme(<Card onClick={mockFn}>Content</Card>);
-    
+    const wrapper = mountWithTheme(
+      <Card {...defaultProps} id="Is" onClick={mockFn}>
+        Content
+      </Card>
+    );
+
     wrapper.simulate('click');
-    
+
     expect(mockFn).toHaveBeenCalled();
   });
 });

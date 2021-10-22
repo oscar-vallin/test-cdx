@@ -7,12 +7,14 @@ import { MessageBar } from 'office-ui-fabric-react';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { Row, Column } from '../../../../components/layouts';
 import { Spacing } from '../../../../components/spacings/Spacing';
+import { Button } from '../../../../components/buttons';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Text } from '../../../../components/typography/Text';
+import { CreateGroupPanel } from './CreateGroup';
 import { Separator } from '../../../../components/separators/Separator';
 
 import { useAccessPolicyGroupsForOrgLazyQuery } from '../../../../data/services/graphql';
-import { StyledColumn } from './AccessManagementGroupsPage.styles';
+import { StyledColumn, StyledCommandButton } from './AccessManagementGroupsPage.styles';
 
 import { useOrgSid } from '../../../../hooks/useOrgSid';
 import { useQueryHandler } from '../../../../hooks/useQueryHandler';
@@ -27,21 +29,24 @@ const generateColumns = () => {
     minWidth: 225,
   });
 
-  return [createColumn({ name: 'Name', key: 'name' }), createColumn({ name: 'Template', key: 'tmpl' })];
-};
-
-const onRenderItemColumn = (item, index, column) => {
-  if (column.key === 'tmpl') return <FontIcon iconName={item.tmpl ? 'CheckMark' : 'Cancel'} />;
-
-  return item[column.key];
+  return [
+    createColumn({ name: 'Name', key: 'name' }),
+    createColumn({ name: 'Template', key: 'tmpl' }),
+    createColumn({ name: '', key: 'actions' }),
+  ];
 };
 
 const _AccessManagementGroupsPage = () => {
   const { orgSid } = useOrgSid();
   const [groups, setGroups] = useState([]);
   const columns = generateColumns();
+  // const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   const [apiAmGroupsForOrg, { data, loading }] = useQueryHandler(useAccessPolicyGroupsForOrgLazyQuery);
+  const [selectedGroupId, setSelectedGroupId] = useState(0);
+
+  // const [policies, setGroups] = useState([]);
 
   useEffect(() => {
     apiAmGroupsForOrg({ variables: { orgSid } });
@@ -53,6 +58,27 @@ const _AccessManagementGroupsPage = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading]);
+
+  const onRenderItemColumn = (item, index, column) => {
+    if (column.key === 'tmpl') {
+      return <FontIcon iconName={item.tmpl ? 'CheckMark' : 'Cancel'} />;
+    }
+    if (column.key === 'actions') {
+      return (
+        <>
+          &nbsp;
+          <StyledCommandButton
+            iconProps={{ iconName: 'Edit' }}
+            onClick={() => {
+              setSelectedGroupId(item.sid);
+              setIsPanelOpen(true);
+            }}
+          />
+        </>
+      );
+    }
+    return item[column.key];
+  };
 
   const renderList = () => {
     return groups.length > 0 ? (
@@ -69,6 +95,12 @@ const _AccessManagementGroupsPage = () => {
     );
   };
 
+  // useEffect(() => {
+  //   if (data) {
+  //     setGroups(data.accessPoliciesForOrg.nodes);
+  //   }
+  // }, [data]);
+
   return (
     <LayoutAdmin id="PageAdmin" sidebarOptionSelected="AM_GROUPS">
       <Spacing margin="double">
@@ -79,6 +111,17 @@ const _AccessManagementGroupsPage = () => {
                 <Spacing margin={{ top: 'small' }}>
                   <Text variant="bold">Groups</Text>
                 </Spacing>
+              </Column>
+
+              <Column lg="8" right>
+                <Button
+                  variant="primary"
+                  onClick={() => {
+                    setIsPanelOpen(true);
+                  }}
+                >
+                  Create Group
+                </Button>
               </Column>
             </Row>
 
@@ -100,6 +143,38 @@ const _AccessManagementGroupsPage = () => {
           </Column>
         </Row>
       </Spacing>
+
+      <CreateGroupPanel
+        isOpen={isPanelOpen}
+        onCreateGroupPolicy={(createdPolicy) => {
+          setGroups([
+            ...groups,
+            {
+              sid: createdPolicy.sid,
+              name: createdPolicy.name.value,
+              tmpl: createdPolicy.tmpl.value,
+              tmplUseAsIs: createdPolicy.tmplUseAsIs.value,
+            },
+          ]);
+        }}
+        onUpdateGroupPolicy={(updatedPolicy) => {
+          const filteredGroups = groups.filter((group) => group.sid !== updatedPolicy.sid);
+          setGroups([
+            ...filteredGroups,
+            {
+              sid: updatedPolicy.sid,
+              name: updatedPolicy.name.value,
+              tmpl: updatedPolicy.tmpl.value,
+              tmplUseAsIs: updatedPolicy.tmplUseAsIs.value,
+            },
+          ]);
+        }}
+        onDismiss={() => {
+          setIsPanelOpen(false);
+          setSelectedGroupId(0);
+        }}
+        selectedGroupId={selectedGroupId}
+      />
     </LayoutAdmin>
   );
 };

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { DocumentCard } from '@fluentui/react';
 
-export const CardStyled = styled(DocumentCard)`
+export const CardStyled = styled(DocumentCard)<CardStyledProps>`
   background: ${({ theme }) => theme.colors.neutralLighter};
   box-shadow: ${({ theme, elevation }) => theme.boxShadows[elevation]};
   border: none;
@@ -23,3 +23,8 @@ export const CardStyled = styled(DocumentCard)`
     }
   }
 `;
+
+type CardStyledProps = {
+  elevation: string;
+  spacing: string;
+};
