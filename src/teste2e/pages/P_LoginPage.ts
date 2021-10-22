@@ -23,6 +23,8 @@ export default class P_LoginPage extends P_BasePage {
   async loginAsAdmin() {
     const { page } = this;
 
+    await page.waitForTimeout(1000);
+    await page.waitForSelector(this.loginId);
     await page.type(this.loginId, this.adminEmail);
 
     await page.click(this.loginButton);

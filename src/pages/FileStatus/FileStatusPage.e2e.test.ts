@@ -17,6 +17,10 @@ describe('E2E - File Status Test', () => {
   it('Login and Go to Faker Data', async () => {
     const loginPage = await cdxApp.toLoginPage();
     await loginPage.loginAsAdmin();
+    await loginPage.expectOnActiveOrgsPage();
+  });
+
+  it('Navigate to Faker File Status', async () => {
     await cdxApp.navigateToFakerFileStatus();
   });
 
