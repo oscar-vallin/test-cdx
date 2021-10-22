@@ -41,13 +41,4 @@ const ButtonAction = ({ id, children, icon, disabled = false, onClick, ...props 
   );
 };
 
-// ButtonAction.propTypes = {
-//   id: PropTypes.string,
-//   children: PropTypes.node,
-//   primary: PropTypes.bool,
-//   disabled: PropTypes.bool,
-//   onClick: PropTypes.func,
-//   icon: PropTypes.string,
-// };
-
 export { ButtonAction };

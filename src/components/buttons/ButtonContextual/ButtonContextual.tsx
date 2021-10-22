@@ -1,8 +1,33 @@
-import PropTypes from 'prop-types';
+import { ReactElement, ReactNode } from 'react';
 import { useConst } from '@uifabric/react-hooks';
 import { StyledButton } from './ButtonContextual.styles';
 
-const ButtonContextual = ({ id, children, items }) => {
+const defaultProps = {
+  id: '',
+  items: [
+    {
+      id: '',
+      key: '',
+      text: '',
+      onClick: () => null,
+    },
+  ],
+};
+
+type itemsProps = {
+  id?: string;
+  key?: string;
+  text?: string;
+  onClick?: () => void;
+};
+
+type ButtonContextualProps = {
+  id?: string;
+  children?: ReactNode;
+  items?: itemsProps[];
+} & typeof defaultProps;
+
+const ButtonContextual = ({ id, children, items }: ButtonContextualProps): ReactElement => {
   const menuProps = useConst(() => ({
     shouldFocusOnMount: true,
     items,
@@ -13,12 +38,6 @@ const ButtonContextual = ({ id, children, items }) => {
       {children}
     </StyledButton>
   );
-};
-
-ButtonContextual.propTypes = {
-  id: PropTypes.string,
-  children: PropTypes.node,
-  items: PropTypes.array,
 };
 
 export { ButtonContextual };

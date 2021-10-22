@@ -9,5 +9,5 @@ export const StyledButton = styled(DefaultButton)<StyledButtonProps>`
 `;
 
 type StyledButtonProps = {
-  items: { key: string; text: string; onClick: () => void }[];
+  items: { id?: string; key: string; text: string; onClick: () => void }[];
 };
