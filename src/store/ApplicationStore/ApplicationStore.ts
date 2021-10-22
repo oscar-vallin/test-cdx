@@ -18,7 +18,7 @@ const setIsOffline = (state, payload) => {
 };
 
 const reset = (state) => {
-  state = { ...DEFAULT_APPLICATION_STATE };
+  state.status = { ...DEFAULT_APPLICATION_STATE.status };
 };
 
 const INITIAL_APPLICATION_STATE = {
