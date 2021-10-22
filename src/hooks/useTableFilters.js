@@ -3,7 +3,7 @@ import { useStoreState } from 'easy-peasy';
 import { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useDateValue } from './useDateValue';
-import { useInputValue } from './useInputValue';
+import {useDelayedInputValue} from './useInputValue';
 import { useQueryParams } from './useQueryParams';
 
 //
@@ -17,7 +17,7 @@ export const useTableFilters = (placeholder) => {
   const hour = getHours(new Date());
   const startDate = useDateValue('Start Date...', hour < 9 ? subDays(new Date(), 1) : new Date());
   const endDate = useDateValue('End Date...', hour < 9 ? new Date() : addDays(new Date(), 1));
-  const localInput = useInputValue('', placeholder, '', '');
+  const localInput = useDelayedInputValue('', placeholder, '', '');
 
   const [urlParams] = useState(QueryParams.parse(location.search));
 

@@ -23,7 +23,7 @@ describe('E2E - Archives Navigation Test', () => {
     await loginPage.loginAsAdmin();
     await loginPage.expectOnActiveOrgsPage();
 
-    await loginPage.navigateToFakerFileStatus();
+    await cdxApp.navigateToFakerFileStatus();
   });
 
   it('Click on Archives', async () => {

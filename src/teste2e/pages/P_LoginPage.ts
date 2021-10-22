@@ -32,7 +32,7 @@ export default class P_LoginPage extends P_BasePage {
 
     await page.click(this.loginButton);
 
-    await page.waitForSelector(this.loginButton, { hidden: true });
+    await page.waitForTimeout(1000);
   }
 
   async login(email: string, password: string) {
@@ -60,14 +60,5 @@ export default class P_LoginPage extends P_BasePage {
     const activeOrgsPage = new P_ActivityOrgs(this.page);
     await activeOrgsPage.expectOnPage();
     return activeOrgsPage;
-  }
-
-  async navigateToFakerFileStatus(): Promise<P_ExchangeStatus> {
-    const activeOrgs = new P_ActivityOrgs(this.page);
-    await activeOrgs.expectOnPage();
-    await activeOrgs.clickOnOrg('K2UFKE', 'K2U Faker Data');
-    const fileStatus = new P_ExchangeStatus(this.page);
-    await fileStatus.expectOnPage();
-    return fileStatus;
   }
 }

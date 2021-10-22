@@ -2,6 +2,8 @@ import puppeteer, { Browser, ElementHandle, Page } from 'puppeteer';
 import P_LoginPage from './P_LoginPage';
 import P_AdminMenu from './P_AdminMenu';
 import P_MainMenu from './P_MainMenu';
+import P_ExchangeStatus from './P_ExchangeStatus';
+import P_ActivityOrgs from './P_ActivityOrgs';
 
 // Starting point for all scripted Puppeteer tests
 
@@ -41,6 +43,15 @@ export default class P_CDXApp {
     const loginPage = new P_LoginPage(page);
     await loginPage.expectOnPage();
     return loginPage;
+  }
+
+  async navigateToFakerFileStatus(): Promise<P_ExchangeStatus> {
+    const activeOrgs = new P_ActivityOrgs(this.page);
+    await activeOrgs.expectOnPage();
+    await activeOrgs.clickOnOrg('K2UFKE', 'K2U Faker Data');
+    const fileStatus = new P_ExchangeStatus(this.page);
+    await fileStatus.expectOnPage();
+    return fileStatus;
   }
 
   async returnToMyOrganization() {
