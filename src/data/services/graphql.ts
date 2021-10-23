@@ -5324,6 +5324,7 @@ export const FragmentCdxPageInfoFragmentDoc = gql`
         ...unionNVP
       }
     }
+    commandType
   }
   ${FragmentWebCommandFragmentDoc}
   ${UnionNvpFragmentDoc}
@@ -8533,20 +8534,18 @@ export const DirectOrganizationsDocument = gql`
 `;
 
 /**
- * __useDirectOrganizationsQuery__
+ * __useAccessPolicyGroupFormQuery__
  *
- * To run a query within a React component, call `useDirectOrganizationsQuery` and pass it any options that fit your needs.
- * When your component renders, `useDirectOrganizationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useAccessPolicyGroupFormQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAccessPolicyGroupFormQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useDirectOrganizationsQuery({
+ * const { data, loading, error } = useAccessPolicyGroupFormQuery({
  *   variables: {
  *      orgSid: // value for 'orgSid'
- *      orgFilter: // value for 'orgFilter'
- *      pageableInput: // value for 'pageableInput'
  *   },
  * });
  */
@@ -8782,20 +8781,18 @@ export const DashThemeColorForOrgDocument = gql`
 `;
 
 /**
- * __useWpProcessErrorsQuery__
+ * __useFindAccessPolicyGroupQuery__
  *
- * To run a query within a React component, call `useWpProcessErrorsQuery` and pass it any options that fit your needs.
- * When your component renders, `useWpProcessErrorsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useFindAccessPolicyGroupQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindAccessPolicyGroupQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useWpProcessErrorsQuery({
+ * const { data, loading, error } = useFindAccessPolicyGroupQuery({
  *   variables: {
- *      orgSid: // value for 'orgSid'
- *      dateRange: // value for 'dateRange'
- *      pageableInput: // value for 'pageableInput'
+ *      policyGroupSid: // value for 'policyGroupSid'
  *   },
  * });
  */
@@ -8840,20 +8837,19 @@ export const WpTransmissionsDocument = gql`
 `;
 
 /**
- * __useWpTransmissionsQuery__
+ * __useOrgByIdQuery__
  *
- * To run a query within a React component, call `useWpTransmissionsQuery` and pass it any options that fit your needs.
- * When your component renders, `useWpTransmissionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useOrgByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOrgByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useWpTransmissionsQuery({
+ * const { data, loading, error } = useOrgByIdQuery({
  *   variables: {
  *      orgSid: // value for 'orgSid'
- *      dateRange: // value for 'dateRange'
- *      pageableInput: // value for 'pageableInput'
+ *      orgId: // value for 'orgId'
  *   },
  * });
  */
@@ -8893,19 +8889,19 @@ export const ScheduleOccurrencesDocument = gql`
 `;
 
 /**
- * __useScheduleOccurrencesQuery__
+ * __useDirectOrganizationsQuery__
  *
- * To run a query within a React component, call `useScheduleOccurrencesQuery` and pass it any options that fit your needs.
- * When your component renders, `useScheduleOccurrencesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useDirectOrganizationsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDirectOrganizationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useScheduleOccurrencesQuery({
+ * const { data, loading, error } = useDirectOrganizationsQuery({
  *   variables: {
  *      orgSid: // value for 'orgSid'
- *      dateRange: // value for 'dateRange'
+ *      orgFilter: // value for 'orgFilter'
  *      pageableInput: // value for 'pageableInput'
  *   },
  * });
@@ -8962,18 +8958,20 @@ export const DashThemeColorForOrgDocument = gql`
 `;
 
 /**
- * __useFindOrganizationQuery__
+ * __useWpTransmissionsQuery__
  *
- * To run a query within a React component, call `useFindOrganizationQuery` and pass it any options that fit your needs.
- * When your component renders, `useFindOrganizationQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useWpTransmissionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWpTransmissionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useFindOrganizationQuery({
+ * const { data, loading, error } = useWpTransmissionsQuery({
  *   variables: {
  *      orgSid: // value for 'orgSid'
+ *      dateRange: // value for 'dateRange'
+ *      pageableInput: // value for 'pageableInput'
  *   },
  * });
  */
@@ -9021,20 +9019,19 @@ export const SearchOrganizationsDocument = gql`
 `;
 
 /**
- * __useSearchOrganizationsQuery__
+ * __useScheduleOccurrencesQuery__
  *
- * To run a query within a React component, call `useSearchOrganizationsQuery` and pass it any options that fit your needs.
- * When your component renders, `useSearchOrganizationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useScheduleOccurrencesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useScheduleOccurrencesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useSearchOrganizationsQuery({
+ * const { data, loading, error } = useScheduleOccurrencesQuery({
  *   variables: {
- *      searchText: // value for 'searchText'
- *      orgOwnerSid: // value for 'orgOwnerSid'
- *      orgFilter: // value for 'orgFilter'
+ *      orgSid: // value for 'orgSid'
+ *      dateRange: // value for 'dateRange'
  *      pageableInput: // value for 'pageableInput'
  *   },
  * });
@@ -9061,6 +9058,101 @@ export type SearchOrganizationsQueryResult = Apollo.QueryResult<
   SearchOrganizationsQuery,
   SearchOrganizationsQueryVariables
 >;
+export const OrganizationQuickSearchDocument = gql`
+  query OrganizationQuickSearch($searchText: String!, $orgOwnerSid: ID!) {
+    organizationQuickSearch(searchText: $searchText, orgOwnerSid: $orgOwnerSid) {
+      sid
+      name
+      orgId
+      orgType
+    }
+  }
+`;
+
+/**
+ * __useOrganizationQuickSearchQuery__
+ *
+ * To run a query within a React component, call `useOrganizationQuickSearchQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOrganizationQuickSearchQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOrganizationQuickSearchQuery({
+ *   variables: {
+ *      searchText: // value for 'searchText'
+ *      orgOwnerSid: // value for 'orgOwnerSid'
+ *   },
+ * });
+ */
+export function useOrganizationQuickSearchQuery(
+  baseOptions: Apollo.QueryHookOptions<OrganizationQuickSearchQuery, OrganizationQuickSearchQueryVariables>
+) {
+  return Apollo.useQuery<OrganizationQuickSearchQuery, OrganizationQuickSearchQueryVariables>(
+    OrganizationQuickSearchDocument,
+    baseOptions
+  );
+}
+export function useOrganizationQuickSearchLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<OrganizationQuickSearchQuery, OrganizationQuickSearchQueryVariables>
+) {
+  return Apollo.useLazyQuery<OrganizationQuickSearchQuery, OrganizationQuickSearchQueryVariables>(
+    OrganizationQuickSearchDocument,
+    baseOptions
+  );
+}
+export type OrganizationQuickSearchQueryHookResult = ReturnType<typeof useOrganizationQuickSearchQuery>;
+export type OrganizationQuickSearchLazyQueryHookResult = ReturnType<typeof useOrganizationQuickSearchLazyQuery>;
+export type OrganizationQuickSearchQueryResult = Apollo.QueryResult<
+  OrganizationQuickSearchQuery,
+  OrganizationQuickSearchQueryVariables
+>;
+export const VendorQuickSearchDocument = gql`
+  query VendorQuickSearch($searchText: String!, $orgOwnerSid: ID!) {
+    vendorQuickSearch(searchText: $searchText, orgOwnerSid: $orgOwnerSid) {
+      sid
+      name
+      orgId
+      orgType
+    }
+  }
+`;
+
+/**
+ * __useVendorQuickSearchQuery__
+ *
+ * To run a query within a React component, call `useVendorQuickSearchQuery` and pass it any options that fit your needs.
+ * When your component renders, `useVendorQuickSearchQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOrganizationFormQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useVendorQuickSearchQuery(
+  baseOptions: Apollo.QueryHookOptions<VendorQuickSearchQuery, VendorQuickSearchQueryVariables>
+) {
+  return Apollo.useQuery<VendorQuickSearchQuery, VendorQuickSearchQueryVariables>(
+    VendorQuickSearchDocument,
+    baseOptions
+  );
+}
+export function useVendorQuickSearchLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<VendorQuickSearchQuery, VendorQuickSearchQueryVariables>
+) {
+  return Apollo.useLazyQuery<VendorQuickSearchQuery, VendorQuickSearchQueryVariables>(
+    VendorQuickSearchDocument,
+    baseOptions
+  );
+}
+export type VendorQuickSearchQueryHookResult = ReturnType<typeof useVendorQuickSearchQuery>;
+export type VendorQuickSearchLazyQueryHookResult = ReturnType<typeof useVendorQuickSearchLazyQuery>;
+export type VendorQuickSearchQueryResult = Apollo.QueryResult<VendorQuickSearchQuery, VendorQuickSearchQueryVariables>;
 export const DashThemeColorForOrgDocument = gql`
   query DashThemeColorForOrg($ownedInput: OwnedInput, $pageableInput: PageableInput) {
     dashThemeColorForOrg(ownedInput: $ownedInput, pageableInput: $pageableInput) {
@@ -9102,16 +9194,16 @@ export const DashThemeColorForOrgDocument = gql`
     `;
 
 /**
- * __useDashThemeColorQuery__
+ * __useFindOrganizationQuery__
  *
- * To run a query within a React component, call `useDashThemeColorQuery` and pass it any options that fit your needs.
- * When your component renders, `useDashThemeColorQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useFindOrganizationQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindOrganizationQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useDashThemeColorQuery({
+ * const { data, loading, error } = useFindOrganizationQuery({
  *   variables: {
  *      ownedInputSid: // value for 'ownedInputSid'
  *   },
@@ -9440,18 +9532,18 @@ export const DefaultDashThemeForSitePageDocument = gql`
 `;
 
 /**
- * __useDefaultDashThemeForSitePageQuery__
+ * __useDashThemeColorQuery__
  *
- * To run a query within a React component, call `useDefaultDashThemeForSitePageQuery` and pass it any options that fit your needs.
- * When your component renders, `useDefaultDashThemeForSitePageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useDashThemeColorQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDashThemeColorQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useDefaultDashThemeForSitePageQuery({
+ * const { data, loading, error } = useDashThemeColorQuery({
  *   variables: {
- *      ownedInput: // value for 'ownedInput'
+ *      ownedInputSid: // value for 'ownedInputSid'
  *   },
  * });
  */
@@ -9660,6 +9752,7 @@ export const SimulateSessionExpirDocument = gql`
  * @example
  * const { data, loading, error } = useSimulateSessionExpirQuery({
  *   variables: {
+ *      ownedInput: // value for 'ownedInput'
  *   },
  * });
  */
@@ -10765,20 +10858,19 @@ export const UpdateAccessPolicyGroupDocument = gql`
         info
         required
         visible
-        options
-        query
+        min
+        max
         errCode
         errMsg
         errSeverity
       }
       specializations {
         value
+        description
         label
         info
         required
         visible
-        options
-        query
         errCode
         errMsg
         errSeverity
@@ -10799,20 +10891,19 @@ export const UpdateAccessPolicyGroupDocument = gql`
         info
         required
         visible
-        options
-        query
+        min
+        max
         errCode
         errMsg
         errSeverity
       }
       excludeOrgSids {
         value
+        description
         label
         info
         required
         visible
-        options
-        query
         errCode
         errMsg
         errSeverity
