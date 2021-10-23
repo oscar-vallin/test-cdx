@@ -63,11 +63,11 @@
     "test:coverage": "react-scripts test --coverage --runInBand --watchAll=false --updateSnapshot",
     "format": "prettier --write src/**/*.{ts,tsx}",
     "lint": "yarn lint:fix",
-    "eject": "react-scripts eject",
     "clean": "rm -rf build",
     "extract-routes": "node --experimental-modules internals/route-extractor.mjs",
     "prettify": "prettier --write \"src/**/*.{js,jsx,ts,tsx,css}\"",
     "lint:fix": "eslint \"src/**/*.{js,ts,tsx}\" --color --fix",
+    "prepare": "yarn clean && yarn prettify && yarn lint && yarn build && yarn test:forbuild && yarn test:e2e:local",
     "isready": "yarn run format && yarn run lint && yarn run test:coverage && yarn run build"
   },
   "eslintConfig": {
