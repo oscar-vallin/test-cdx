@@ -12369,6 +12369,7 @@ export type CreateOrgMutationFn = Apollo.MutationFunction<CreateOrgMutation, Cre
  * @example
  * const { data, loading, error } = useCurrentUserDashThemePageQuery({
  *   variables: {
+ *      ownedInput: // value for 'ownedInput'
  *   },
  * });
  */
@@ -13621,20 +13622,19 @@ export const UpdateAccessPolicyGroupDocument = gql`
         info
         required
         visible
-        options
-        query
+        min
+        max
         errCode
         errMsg
         errSeverity
       }
       specializations {
         value
+        description
         label
         info
         required
         visible
-        options
-        query
         errCode
         errMsg
         errSeverity
@@ -13655,20 +13655,19 @@ export const UpdateAccessPolicyGroupDocument = gql`
         info
         required
         visible
-        options
-        query
+        min
+        max
         errCode
         errMsg
         errSeverity
       }
       excludeOrgSids {
         value
+        description
         label
         info
         required
         visible
-        options
-        query
         errCode
         errMsg
         errSeverity
