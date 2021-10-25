@@ -48,6 +48,6 @@ export const StyledButton = styled(PrimaryButton)<StyledButtonProps>`
 `;
 
 type StyledButtonProps = {
-  variant: string;
-  block: boolean;
+  variant?: string;
+  block?: boolean;
 };

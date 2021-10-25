@@ -1,18 +1,14 @@
-import { shallow } from 'enzyme';
-import { ButtonIcon } from './ButtonIcon.js';
+import { shallowWithTheme } from 'src/utils/testUtils';
+import { ButtonIcon } from './ButtonIcon';
 import { StyledFontIcon } from './ButtonIcon.styles';
 
 const defaultProps = {
-  size: '10',
-};
-
-const theme = {
-  colors: { white: '#fff', size: 10 },
+  size: 10,
 };
 
 describe('ButtonIcon', () => {
   const mockFn = jest.fn();
-  const tree = shallow(
+  const tree = shallowWithTheme(
     <ButtonIcon {...defaultProps} icon="edit" onClick={mockFn}>
       Button Contextual
     </ButtonIcon>
@@ -27,17 +23,13 @@ describe('ButtonIcon', () => {
   });
 
   it('Should have a click function', () => {
-    tree.simulate('click');
+    tree.children().simulate('click');
     expect(mockFn).toHaveBeenCalled();
   });
 
-  it('Should have a children with the icon prop', () => {
-    expect(tree.children().props().iconName).toEqual('edit');
-  });
-
   it('Test styled ButtonIcon component', () => {
-    const testTree = shallow(
-      <ButtonIcon {...defaultProps} theme={theme} size={10} icon="edit" onClick={mockFn}>
+    const testTree = shallowWithTheme(
+      <ButtonIcon {...defaultProps} size={10} icon="edit" onClick={mockFn}>
         Button Contextual
       </ButtonIcon>
     ).dive();
@@ -45,7 +37,7 @@ describe('ButtonIcon', () => {
   });
 
   it('Test styled StyledFontIcon component', () => {
-    const testTree = shallow(<StyledFontIcon size={10} />).dive();
+    const testTree = shallowWithTheme(<StyledFontIcon size={10} />).dive();
     expect(testTree).toMatchSnapshot();
   });
 });

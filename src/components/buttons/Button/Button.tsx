@@ -12,12 +12,12 @@ const defaultProps = {
 
 type ButtonProps = {
   id?: string;
-  text?: string | null;
+  text?: any;
   children?: ReactNode;
-  variant: string;
-  disabled: boolean;
+  variant?: string;
+  disabled?: boolean;
   onClick?: () => null;
-  block: boolean;
+  block?: boolean;
 } & typeof defaultProps;
 
 const Button = ({

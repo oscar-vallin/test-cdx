@@ -35,7 +35,7 @@ const ButtonAction = ({ id, children, icon, disabled = false, onClick, ...props 
   const _icon = { iconName: buttonIcons[icon] };
 
   return (
-    <StyledButtonAction id={id} disabled={disabled} onClick={onClick} iconProps={_icon} {...props}>
+    <StyledButtonAction id={id} disabled={disabled} onClick={onClick} {...props} iconProps={_icon}>
       {children}
     </StyledButtonAction>
   );
