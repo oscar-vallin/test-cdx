@@ -1,8 +1,19 @@
+import { ReactElement } from 'react';
 import { Label } from '@fluentui/react/lib-commonjs/Label';
 import { InputDate } from '../InputDate';
 import { Row, Column } from './InputDateRange.styles';
 
-const InputDateRange = ({ startDate, endDate }) => {
+const defaultProps = {
+  startDate: 0,
+  endDate: 0,
+};
+
+type InputDateRangeProps = {
+  startDate?: any;
+  endDate?: any;
+} & typeof defaultProps;
+
+const InputDateRange = ({ startDate, endDate }: InputDateRangeProps): ReactElement => {
   return (
     <Row id="InputDateRange--Row">
       <Column id="InputDateRange--Column--From" lg="6">
@@ -16,5 +27,7 @@ const InputDateRange = ({ startDate, endDate }) => {
     </Row>
   );
 };
+
+InputDateRange.defaultProps = defaultProps;
 
 export { InputDateRange };

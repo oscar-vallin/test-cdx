@@ -6,7 +6,7 @@ import { DayOfWeek } from 'office-ui-fabric-react/lib-commonjs/DatePicker';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { addDays, addMonths, addYears } from '@fluentui/date-time-utilities';
 import { getHours, startOfSecond, addSeconds } from 'date-fns';
-import { InputDate as Component } from './index.js';
+import { InputDate as Component } from './index';
 
 const today = new Date();
 const yesterday = addDays(today, -1);

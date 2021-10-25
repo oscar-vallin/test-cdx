@@ -1,9 +1,50 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useState } from 'react';
+import { ReactElement, useState } from 'react';
 import { Calendar, DayOfWeek, DateRangeType } from 'office-ui-fabric-react/lib-commonjs/Calendar';
 import { DefaultButton } from 'office-ui-fabric-react/lib-commonjs/Button';
 import { addDays, getDateRangeArray } from '@fluentui/date-time-utilities';
 import { Container } from './MonthPicker.styles';
+
+const defaultProps = {
+  open: false,
+  onSelect: () => null,
+  showDates: false,
+  isMonthPickerVisible: true,
+  dateRangeType: DateRangeType.Month,
+  autoNavigateOnSelection: true,
+  showGoToToday: true,
+  showNavigateButtons: true,
+  highlightCurrentMonth: true,
+  highlightSelectedMonth: true,
+  isDayPickerVisible: false,
+  showMonthPickerAsOverlay: true,
+  showWeekNumbers: false,
+  firstDayOfWeek: 0,
+};
+
+type MonthPickerProps = {
+  open?: boolean;
+  onSelect?: any | null;
+  showDates?: boolean;
+  isMonthPickerVisible?: boolean;
+  dateRangeType?: any;
+  autoNavigateOnSelection?: boolean;
+  showGoToToday?: boolean;
+  showNavigateButtons?: boolean;
+  highlightCurrentMonth?: boolean;
+  highlightSelectedMonth?: boolean;
+  isDayPickerVisible?: boolean;
+  showMonthPickerAsOverlay?: boolean;
+  showWeekNumbers?: boolean;
+  firstDayOfWeek?: any;
+  /// /////////////////
+  minDate?: any;
+  maxDate?: any;
+  restrictedDates?: any;
+  showSixWeeksByDefault?: any;
+  workWeekDays?: any;
+  theme?: any;
+} & typeof defaultProps;
 
 const dayPickerStrings = {
   months: [
@@ -54,7 +95,7 @@ export const MonthPicker = ({
   showWeekNumbers = false,
   firstDayOfWeek = DayOfWeek.Monday,
   ...props
-}) => {
+}: MonthPickerProps): ReactElement => {
   const [selectedDateRange, setSelectedDateRange] = useState<Date>();
   const [selectedDate, setSelectedDate] = useState<Date>();
 
@@ -177,3 +218,5 @@ export const MonthPicker = ({
     </Container>
   );
 };
+
+MonthPicker.defaultProps = defaultProps;

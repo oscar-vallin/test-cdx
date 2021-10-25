@@ -18,4 +18,5 @@ export const Container = styled.div<ContainerProps>`
 
 type ContainerProps = {
   show: boolean;
+  value: string;
 };
