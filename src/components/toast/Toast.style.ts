@@ -40,5 +40,8 @@ export const StyledMessageBar = styled(MessageBar)<StyledMessageBarProps>`
 `;
 
 type StyledMessageBarProps = {
-  visible: string;
+  visible: boolean;
+  messageBarType: number;
+  isMultiline: boolean;
+  dismissButtonAriaLabel: string;
 };

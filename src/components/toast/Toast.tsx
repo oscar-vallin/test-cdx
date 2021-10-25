@@ -1,20 +1,20 @@
-import { ReactElement } from 'react';
+import { ReactNode } from 'react';
 import { MessageBarType } from '@fluentui/react';
 import { StyledMessageBar } from './Toast.style';
 
 const defaultProps = {
-  type: MessageBarType.info,
-  visible: true,
+  type: 'info',
+  visible: false,
   text: '',
 };
 
 type ToastProps = {
-  type?: MessageBarType;
+  type?: string;
   visible?: boolean;
   text?: string;
 } & typeof defaultProps;
 
-export const Toast = ({ type, visible, text }: ToastProps): React.ReactNode => {
+export const Toast = ({ type, visible, text }: ToastProps): ReactNode | any => {
   return (
     visible && (
       <StyledMessageBar
