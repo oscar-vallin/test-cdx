@@ -9,8 +9,15 @@ const defaultProps = {
   onClickTab: () => null,
 };
 
+type itemsProps = {
+  title: string;
+  content: ReactElement;
+  badge: { variant?: string; label?: string };
+  hash: () => null;
+};
+
 type CDXTabsProps = {
-  items?: { title: string; content: string; badge: string; hash: string }[];
+  items?: { title: string; content: string; badge: string; hash: string }[] | any;
   selectedKey?: string;
   onClickTab?: any | null;
 } & typeof defaultProps;
@@ -18,11 +25,11 @@ type CDXTabsProps = {
 const CDXTabs = ({ items, selectedKey, onClickTab }: CDXTabsProps): ReactElement => {
   return (
     <StyledPivot defaultSelectedKey={selectedKey}>
-      {items.map(({ title, content, badge, hash }, index) => (
+      {items.map(({ title, content, badge, hash }: itemsProps, index) => (
         <PivotItem
           headerText={title}
           key={index}
-          onRenderItemLink={(link, defaultRenderer) => (
+          onRenderItemLink={(link: any, defaultRenderer: any): any => (
             <StyledSpan onClick={() => onClickTab(hash)}>
               {defaultRenderer(link)}
               {badge && <Badge variant={badge.variant} label={badge.label?.toString()} />}
