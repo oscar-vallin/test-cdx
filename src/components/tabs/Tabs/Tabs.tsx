@@ -1,8 +1,21 @@
+import { ReactElement } from 'react';
 import { PivotItem } from 'office-ui-fabric-react/lib-commonjs/Pivot';
 import { Badge } from '../../badges/Badge';
 import { StyledPivot, StyledSpan } from './Tabs.styles';
 
-const CDXTabs = ({ items, selectedKey, onClickTab }) => {
+const defaultProps = {
+  items: [],
+  selectedKey: '',
+  onClickTab: () => null,
+};
+
+type CDXTabsProps = {
+  items?: { title: string; content: string; badge: string; hash: string }[];
+  selectedKey?: string;
+  onClickTab?: any | null;
+} & typeof defaultProps;
+
+const CDXTabs = ({ items, selectedKey, onClickTab }: CDXTabsProps): ReactElement => {
   return (
     <StyledPivot defaultSelectedKey={selectedKey}>
       {items.map(({ title, content, badge, hash }, index) => (
@@ -22,5 +35,7 @@ const CDXTabs = ({ items, selectedKey, onClickTab }) => {
     </StyledPivot>
   );
 };
+
+CDXTabs.defaultProps = defaultProps;
 
 export { CDXTabs };

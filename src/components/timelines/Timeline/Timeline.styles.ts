@@ -7,7 +7,7 @@ export const StyledUl = styled.ul`
   padding: 0;
 `;
 
-export const StyledLi = styled.li`
+export const StyledLi = styled.li<StyledLiProps>`
   display: flex;
   padding: ${({ theme }) => `${theme.spacing.normal} 0`};
   position: relative;
@@ -62,3 +62,8 @@ export const StyledLi = styled.li`
     }
   }
 `;
+
+type StyledLiProps = {
+  status: string;
+  active: boolean;
+};
