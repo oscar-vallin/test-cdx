@@ -1,5 +1,25 @@
-import PropTypes from 'prop-types';
+import { ReactElement } from 'react';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react';
+
+const defaultProps = {
+  id: '',
+  type: '',
+  multiline: true,
+  truncated: true,
+  content: '',
+  actions: true,
+  children: '',
+};
+
+type CDXMessageBarProps = {
+  id?: string;
+  type?: string;
+  multiline?: boolean;
+  truncated?: boolean;
+  content?: string;
+  actions?: any;
+  children?: ReactElement | string;
+} & typeof defaultProps;
 
 const CDXMessageBar = ({
   id,
@@ -10,7 +30,7 @@ const CDXMessageBar = ({
   actions,
   children,
   ...props
-}) => {
+}: CDXMessageBarProps): ReactElement => {
   return (
     <MessageBar
       id={id}
@@ -25,12 +45,7 @@ const CDXMessageBar = ({
   );
 };
 
-CDXMessageBar.propTypes = {
-  id: PropTypes.string,
-  type: PropTypes.string,
-  multiline: PropTypes.bool,
-  truncated: PropTypes.bool,
-};
+CDXMessageBar.defaultProps = defaultProps;
 
 export { CDXMessageBar };
 export default CDXMessageBar;
