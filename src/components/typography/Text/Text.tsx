@@ -25,6 +25,7 @@ type TextProps = {
   top?: any;
   bottom?: string;
   breakWord?: string;
+  bold?: boolean;
 } & typeof defaultProps;
 
 const Text = ({
