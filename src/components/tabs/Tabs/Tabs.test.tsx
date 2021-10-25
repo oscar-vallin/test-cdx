@@ -1,4 +1,4 @@
-import { CDXTabs } from './Tabs.js';
+import { CDXTabs } from './Tabs';
 import { renderWithTheme } from '../../../utils/testUtils';
 
 const defaultProps = {
