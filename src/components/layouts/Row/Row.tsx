@@ -18,7 +18,7 @@ const defaultProps = {
 type RowProps = {
   id?: string;
   variant?: string;
-  children?: ReactElement | null;
+  children?: ReactElement | any;
   center?: string;
   right?: string;
   top?: string;
