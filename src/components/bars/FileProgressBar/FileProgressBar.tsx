@@ -9,10 +9,10 @@ const defaultProps = {
 
 type FileProgressBarProps = {
   id?: string;
-  colors?: string[];
+  colors?: string[] | any;
 } & typeof defaultProps;
 
-const FileProgressBar = ({ id, colors = [] }: FileProgressBarProps): ReactElement => {
+const FileProgressBar = ({ id, colors }: FileProgressBarProps): ReactElement => {
   return (
     <Box id={id}>
       {colors.map((color, index) => {

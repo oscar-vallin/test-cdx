@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import { ReactElement, ReactNode } from 'react';
 import { getClassNames } from '../../../helpers/helperStyles';
 import { StyleConstants } from '../../../data/constants/StyleConstants';
 import { validateDirection } from './Box.handlers';
@@ -16,7 +16,7 @@ const defaultProps = {
 
 type BoxProps = {
   id?: string;
-  children: React.ReactNode;
+  children?: React.ReactNode | any;
   direction?: string;
   left?: string;
   right?: string;

@@ -3,7 +3,7 @@ import { STEP_COLOR_PURPLE } from '../../../data/constants/FileStatusConstants';
 import { mountWithTheme } from '../../../utils/testUtils';
 
 const defaultProps = {
-  id: 'box',
+  id: 'Box',
   colors: ['#29c891'],
 };
 
