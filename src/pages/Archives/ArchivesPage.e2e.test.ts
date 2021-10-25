@@ -36,7 +36,13 @@ describe('E2E - Archives Navigation Test', () => {
     await page.expectOnPage();
     // Filter to November Nov 3, 2020 to Nov 5, 2020
     await page.setDateRange('Tue Nov 03 2020', 'Thu Nov 05 2020');
-    await page.expectTableRecords('.ms-DetailsRow-fields', 14);
+    const tzOffset = new Date().getTimezoneOffset();
+    if (tzOffset == 240) {
+      await page.expectTableRecords('.ms-DetailsRow-fields', 14);
+    }
+    if (tzOffset == 0) {
+      await page.expectTableRecords('.ms-DetailsRow-fields', 12);
+    }
   });
 
   it('Table Should have 17 rows', async () => {

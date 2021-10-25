@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import P_CDXApp from '../../teste2e/pages/P_CDXApp';
 import P_ExchangeStatus from '../../teste2e/pages/P_ExchangeStatus';
 
@@ -29,7 +30,13 @@ describe('E2E - File Status Test', () => {
     await fileStatus.expectOnPage();
     // Filter to November Nov 3, 2020 to Nov 5, 2020
     await fileStatus.setDateRange('Tue Nov 03 2020', 'Thu Nov 05 2020');
-    await fileStatus.expectTableRecords('.ms-DetailsRow-fields', 14);
+    const tzOffset = new Date().getTimezoneOffset();
+    if (tzOffset == 240) {
+      await fileStatus.expectTableRecords('.ms-DetailsRow-fields', 14);
+    }
+    if (tzOffset == 0) {
+      await fileStatus.expectTableRecords('.ms-DetailsRow-fields', 12);
+    }
   });
 
   it('Table Should have 17 rows', async () => {
@@ -69,7 +76,11 @@ describe('E2E - File Status Test', () => {
     await fileStatus.expectOnPage();
     await fileStatus.search('');
     await fileStatus.sortAsc(fileStatus.receivedOnCol);
-    await fileStatus.expectTextOnFirstRow('11/04/2020 02:10 AM', 0, 0);
+
+    const expectedTimeStr = getLocalDateString(2020, 11, 4, 7, 10, 40);
+
+    await fileStatus.expectTextOnFirstRow(expectedTimeStr, 0, 0);
+    await fileStatus.expectTextOnFirstRow('GOLD-Anthem-BG-PROD.txt.pgp', 0, 3);
   });
 
   it('Sort By Received On Desc', async () => {
@@ -77,7 +88,11 @@ describe('E2E - File Status Test', () => {
     await fileStatus.expectOnPage();
     await fileStatus.search('');
     await fileStatus.sortDesc(fileStatus.receivedOnCol);
-    await fileStatus.expectTextOnFirstRow('11/05/2020 02:31 AM', 0, 0);
+
+    const expectedTimeStr = getLocalDateString(2020, 11, 5, 7, 31, 11);
+
+    await fileStatus.expectTextOnFirstRow(expectedTimeStr, 0, 0);
+    await fileStatus.expectTextOnFirstRow('GOLD-Fidelity-HSA-PROD.txt.pgp', 0, 3);
   });
 
   it('Sort By Vendor Asc', async () => {
@@ -144,3 +159,27 @@ describe('E2E - File Status Test', () => {
     await cdxApp.closeBrowser();
   });
 });
+
+/**
+ * Get a Locale specific date string for the given UTC Date
+ * @param year
+ * @param month
+ * @param day
+ * @param hour
+ * @param minute
+ * @param second
+ */
+const getLocalDateString = (
+  year: number,
+  month: number,
+  day: number,
+  hour: number,
+  minute: number,
+  second: number
+): string => {
+  const date = new Date(Date.UTC(year, month - 1, day, hour, minute, second));
+
+  const tzDate = new Date(date.toLocaleString('en-US', { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone }));
+
+  return format(tzDate, 'MM/dd/yyyy hh:mm a');
+};
