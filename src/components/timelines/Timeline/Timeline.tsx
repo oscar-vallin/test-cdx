@@ -10,7 +10,7 @@ const defaultProps = {
 };
 
 type CDXTimelineProps = {
-  items?: { status: string; content: { title: string; description: string } }[];
+  items?: { status: string; content: { title: string; description: string } }[] | any;
   activeIndex?: number;
   onClick?: any | null;
 } & typeof defaultProps;
