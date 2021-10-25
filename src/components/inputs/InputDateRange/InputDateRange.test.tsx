@@ -2,6 +2,9 @@ import ReactDOM from 'react-dom';
 import toJSON from 'enzyme-to-json';
 import { shallow } from 'enzyme';
 import { InputDateRange as Component } from './InputDateRange.js';
+import {initializeIcons} from "office-ui-fabric-react/lib/Icons";
+
+initializeIcons()
 
 const defaultProps = {
   startDate: new Date(),
