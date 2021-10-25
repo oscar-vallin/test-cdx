@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const StyledText = styled.span`
+export const StyledText = styled.span<StyledTextProps>`
   color: ${({ theme, variant }) => (variant === 'muted' ? theme.colors.themeTertiary : theme.colors.neutralPrimary)};
   display: inline-block;
   font: ${({ theme }) => theme.fontStyles.normal};
@@ -16,3 +16,14 @@ export const StyledText = styled.span`
   word-break: ${({ breakWord }) => `break-${breakWord}`};
   width: ${({ center, right }) => (center || right ? '100%' : 'auto')};
 `;
+
+type StyledTextProps = {
+  variant: string;
+  center: string;
+  right: string;
+  size: string;
+  transform: string;
+  breakWord: string;
+  top: string;
+  bottom: string;
+};
