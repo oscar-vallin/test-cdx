@@ -18,7 +18,8 @@ type ColumnProps = {
   id?: string;
   variant?: string;
   direction?: string;
-  children?: ReactElement | null;
+  children?: ReactElement | any;
+  lg?: string;
   center?: string;
   right?: string;
   top?: string;
