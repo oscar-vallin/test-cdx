@@ -3,9 +3,9 @@ import { MessageBar, MessageBarType } from 'office-ui-fabric-react';
 
 const defaultProps = {
   id: '',
-  type: '',
-  multiline: true,
-  truncated: true,
+  type: 'info',
+  multiline: false,
+  truncated: false,
   content: '',
   actions: true,
   children: '',
