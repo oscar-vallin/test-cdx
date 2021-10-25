@@ -2,7 +2,7 @@ import { ElementHandle, Page } from 'puppeteer';
 import * as process from 'process';
 
 // Base page for all puppeteer test pages
-export default class P_BasePage {
+export default class PuppetBasePage {
   url: string;
 
   browser: any;

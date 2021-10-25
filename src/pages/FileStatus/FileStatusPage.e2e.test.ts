@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
-import P_CDXApp from '../../teste2e/pages/P_CDXApp';
-import P_ExchangeStatus from '../../teste2e/pages/P_ExchangeStatus';
+import PuppetCDXApp from '../../teste2e/pages/PuppetCDXApp';
+import PuppetExchangeStatus from '../../teste2e/pages/PuppetExchangeStatus';
 
 const testConstants = {
   sponsor: 'K2UFKE',
@@ -9,10 +9,10 @@ const testConstants = {
 };
 
 describe('E2E - File Status Test', () => {
-  let cdxApp: P_CDXApp;
+  let cdxApp: PuppetCDXApp;
 
   beforeAll(async () => {
-    cdxApp = await P_CDXApp.startBrowser('E2E - File Status Test');
+    cdxApp = await PuppetCDXApp.startBrowser('E2E - File Status Test');
   });
 
   it('Login and Go to Faker Data', async () => {
@@ -26,7 +26,7 @@ describe('E2E - File Status Test', () => {
   });
 
   it('Filter by Date', async () => {
-    const fileStatus = new P_ExchangeStatus(cdxApp.page);
+    const fileStatus = new PuppetExchangeStatus(cdxApp.page);
     await fileStatus.expectOnPage();
     // Filter to November Nov 3, 2020 to Nov 5, 2020
     await fileStatus.setDateRange('Tue Nov 03 2020', 'Thu Nov 05 2020');
@@ -40,7 +40,7 @@ describe('E2E - File Status Test', () => {
   });
 
   it('Table Should have 17 rows', async () => {
-    const fileStatus = new P_ExchangeStatus(cdxApp.page);
+    const fileStatus = new PuppetExchangeStatus(cdxApp.page);
     await fileStatus.expectOnPage();
     // Filter to November Nov 3, 2020 to Nov 6, 2020
     await fileStatus.setDateRange('Tue Nov 03 2020', 'Thu Nov 06 2020');
@@ -49,7 +49,7 @@ describe('E2E - File Status Test', () => {
 
   it('Should not have records when search input filled with wrong value', async () => {
     const wrongValue = 'WrongSearch';
-    const fileStatus = new P_ExchangeStatus(cdxApp.page);
+    const fileStatus = new PuppetExchangeStatus(cdxApp.page);
     await fileStatus.expectOnPage();
     await fileStatus.search(wrongValue);
     await fileStatus.expectTableRecords('.ms-DetailsRow-fields', 0);
@@ -57,7 +57,7 @@ describe('E2E - File Status Test', () => {
 
   it('Should have 2 record when searching by Vendor', async () => {
     const inputValue = testConstants.vendor;
-    const fileStatus = new P_ExchangeStatus(cdxApp.page);
+    const fileStatus = new PuppetExchangeStatus(cdxApp.page);
     await fileStatus.expectOnPage();
     await fileStatus.search(inputValue);
     await fileStatus.expectTextOnFirstRow(inputValue, 0, 1);
@@ -65,14 +65,14 @@ describe('E2E - File Status Test', () => {
 
   it('Should have at least 1 record when searching by Extract Name', async () => {
     const inputValue = testConstants.extractName;
-    const fileStatus = new P_ExchangeStatus(cdxApp.page);
+    const fileStatus = new PuppetExchangeStatus(cdxApp.page);
     await fileStatus.expectOnPage();
     await fileStatus.search(inputValue);
     await fileStatus.expectTextOnFirstRow(inputValue, 0, 3);
   });
 
   it('Sort By Received On Asc', async () => {
-    const fileStatus = new P_ExchangeStatus(cdxApp.page);
+    const fileStatus = new PuppetExchangeStatus(cdxApp.page);
     await fileStatus.expectOnPage();
     await fileStatus.search('');
     await fileStatus.sortAsc(fileStatus.receivedOnCol);
@@ -84,7 +84,7 @@ describe('E2E - File Status Test', () => {
   });
 
   it('Sort By Received On Desc', async () => {
-    const fileStatus = new P_ExchangeStatus(cdxApp.page);
+    const fileStatus = new PuppetExchangeStatus(cdxApp.page);
     await fileStatus.expectOnPage();
     await fileStatus.search('');
     await fileStatus.sortDesc(fileStatus.receivedOnCol);
@@ -96,56 +96,56 @@ describe('E2E - File Status Test', () => {
   });
 
   it('Sort By Vendor Asc', async () => {
-    const fileStatus = new P_ExchangeStatus(cdxApp.page);
+    const fileStatus = new PuppetExchangeStatus(cdxApp.page);
     await fileStatus.expectOnPage();
     await fileStatus.sortAsc(fileStatus.vendorCol);
     await fileStatus.expectTextOnFirstRow('ANTHEM', 0, 1);
   });
 
   it('Sort By Vendor Desc', async () => {
-    const fileStatus = new P_ExchangeStatus(cdxApp.page);
+    const fileStatus = new PuppetExchangeStatus(cdxApp.page);
     await fileStatus.expectOnPage();
     await fileStatus.sortDesc(fileStatus.vendorCol);
     await fileStatus.expectTextOnFirstRow('VSP', 0, 1);
   });
 
   it('Sort By Sponsor Asc', async () => {
-    const fileStatus = new P_ExchangeStatus(cdxApp.page);
+    const fileStatus = new PuppetExchangeStatus(cdxApp.page);
     await fileStatus.expectOnPage();
     await fileStatus.sortAsc(fileStatus.sponsorCol);
     await fileStatus.expectTextOnFirstRow(testConstants.sponsor, 0, 2);
   });
 
   it('Sort By Sponsor Desc', async () => {
-    const fileStatus = new P_ExchangeStatus(cdxApp.page);
+    const fileStatus = new PuppetExchangeStatus(cdxApp.page);
     await fileStatus.expectOnPage();
     await fileStatus.sortDesc(fileStatus.sponsorCol);
     await fileStatus.expectTextOnFirstRow('K2UFKE', 0, 2);
   });
 
   it('Sort By Extract Name Asc', async () => {
-    const fileStatus = new P_ExchangeStatus(cdxApp.page);
+    const fileStatus = new PuppetExchangeStatus(cdxApp.page);
     await fileStatus.expectOnPage();
     await fileStatus.sortAsc(fileStatus.fileNameCol);
     await fileStatus.expectTextOnFirstRow('ADENA-Cigna-Elig-KNTU', 0, 3);
   });
 
   it('Sort By Extract Name Desc', async () => {
-    const fileStatus = new P_ExchangeStatus(cdxApp.page);
+    const fileStatus = new PuppetExchangeStatus(cdxApp.page);
     await fileStatus.expectOnPage();
     await fileStatus.sortDesc(fileStatus.fileNameCol);
     await fileStatus.expectTextOnFirstRow('SSTAR-VirginPulse-KNTU.pgp', 0, 3);
   });
 
   it('Sort By Overall Status Asc', async () => {
-    const fileStatus = new P_ExchangeStatus(cdxApp.page);
+    const fileStatus = new PuppetExchangeStatus(cdxApp.page);
     await fileStatus.expectOnPage();
     await fileStatus.sortAsc(fileStatus.statusCol);
     await fileStatus.expectTextOnFirstRow('Complete', 0, 4);
   });
 
   it('Sort By Overall Status Desc', async () => {
-    const fileStatus = new P_ExchangeStatus(cdxApp.page);
+    const fileStatus = new PuppetExchangeStatus(cdxApp.page);
     await fileStatus.expectOnPage();
     await fileStatus.sortDesc(fileStatus.statusCol);
     await fileStatus.expectTextOnFirstRow('Quality Check Failed', 0, 4);

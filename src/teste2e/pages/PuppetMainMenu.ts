@@ -1,7 +1,7 @@
-import P_BasePage from './P_BasePage';
+import PuppetBasePage from './PuppetBasePage';
 
 // represents the left hand admin menu
-export default class P_MainMenu extends P_BasePage {
+export default class PuppetMainMenu extends PuppetBasePage {
   dashboard = '#__MainMenu__MainMenu__Row-dashboard-0';
 
   fileStatus = '#__MainMenu__MainMenu__Row-file-status-1';

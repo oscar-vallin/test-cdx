@@ -94,7 +94,7 @@ const TableFileStatus = ({ idPage = 'TableFileStatus' }) => {
 
   useEffect(() => {
     apiCall();
-  }, [apiCall]);
+  }, [orgSid, localInput.delayedValue, startDate.value, endDate.value, pagingParams]);
 
   const renderTable = () => {
     const classNames = mergeStyleSets({

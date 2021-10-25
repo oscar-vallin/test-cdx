@@ -1,12 +1,12 @@
-import P_BasePage from './P_BasePage';
+import PuppetBasePage from './PuppetBasePage';
 
-export default class P_Errors extends P_BasePage {
-  pageTitle = '#__Text_Errors-Text';
+export default class PuppetTransmissions extends PuppetBasePage {
+  pageTitle = '#__Text_Transmissions-Text';
 
   secondaryTitle = '#__Text_Advanced-search-Text';
 
   async expectOnPage() {
-    await this.expectTextOnPage(this.pageTitle, 'Errors');
+    await this.expectTextOnPage(this.pageTitle, 'Transmissions');
     await this.expectTextOnPage(this.secondaryTitle, '  — Advanced search');
   }
 

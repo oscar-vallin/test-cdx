@@ -1,6 +1,6 @@
-import P_ExchangeStatus from './P_ExchangeStatus';
+import PuppetExchangeStatus from './PuppetExchangeStatus';
 
-export default class P_Archives extends P_ExchangeStatus {
+export default class PuppetArchivesPage extends PuppetExchangeStatus {
   pageTitle = '#__Text_Archives-Text';
 
   secondaryTitle = '#__Text_Advanced-search-Text';

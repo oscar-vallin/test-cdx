@@ -1,9 +1,9 @@
-import P_BasePage from './P_BasePage';
-import P_ExchangeStatus from './P_ExchangeStatus';
-import P_ActivityOrgs from './P_ActivityOrgs';
+import PuppetBasePage from './PuppetBasePage';
+import PuppetExchangeStatus from './PuppetExchangeStatus';
+import PuppetActiveOrgs from './PuppetActiveOrgs';
 
 // Puppeteer test page representing the Login page
-export default class P_LoginPage extends P_BasePage {
+export default class PuppetLoginPage extends PuppetBasePage {
   loginId = '#__FormLogin__Card__Row__Input-Email';
 
   loginPassword = '#__FormLogin__Card__Row__Input-Password';
@@ -52,14 +52,14 @@ export default class P_LoginPage extends P_BasePage {
     await page.waitForSelector(this.loginButton, { hidden: true });
   }
 
-  async expectOnExchangeStatusPage(): Promise<P_ExchangeStatus> {
-    const exchangeStatusPage = new P_ExchangeStatus(this.page);
+  async expectOnExchangeStatusPage(): Promise<PuppetExchangeStatus> {
+    const exchangeStatusPage = new PuppetExchangeStatus(this.page);
     await exchangeStatusPage.expectOnPage();
     return exchangeStatusPage;
   }
 
-  async expectOnActiveOrgsPage(): Promise<P_ActivityOrgs> {
-    const activeOrgsPage = new P_ActivityOrgs(this.page);
+  async expectOnActiveOrgsPage(): Promise<PuppetActiveOrgs> {
+    const activeOrgsPage = new PuppetActiveOrgs(this.page);
     await activeOrgsPage.expectOnPage();
     return activeOrgsPage;
   }

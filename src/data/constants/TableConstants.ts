@@ -32,7 +32,7 @@ export const TABLES = {
   TRANSMISSIONS_VENDOR: {
     header: {
       type: 'dashboard',
-      title: 'Transmissions / BUS by Vendor',
+      title: 'Transmissions / BUs by Vendor',
       url: './transmissions',
       buttons: ['Sort', 'Specs'],
     },
@@ -49,7 +49,7 @@ export const TABLES = {
   TRANSMISSIONS_FILES: {
     header: {
       type: 'dashboard',
-      title: 'Transmissions / BUS by Files',
+      title: 'Transmissions / BUs by Files',
       url: './errors',
     },
     polling: 1 / 3,

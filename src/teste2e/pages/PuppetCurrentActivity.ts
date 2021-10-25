@@ -1,6 +1,6 @@
-import P_BasePage from './P_BasePage';
+import PuppetBasePage from './PuppetBasePage';
 
-export default class P_CurrentActivity extends P_BasePage {
+export default class PuppetCurrentActivity extends PuppetBasePage {
   pageTitle = '#__Current_Activity_Text-Text';
 
   tableInProcess = '#__Table__In__Proccess';

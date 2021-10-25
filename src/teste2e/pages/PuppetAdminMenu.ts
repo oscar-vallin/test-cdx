@@ -1,8 +1,8 @@
 import { ElementHandle } from 'puppeteer';
-import P_BasePage from './P_BasePage';
+import PuppetBasePage from './PuppetBasePage';
 
 // represents the left hand admin menu
-export default class P_AdminMenu extends P_BasePage {
+export default class PuppetAdminMenu extends PuppetBasePage {
   menuParent = 'div.ms-Nav-group';
 
   async openMenu(...menuItems: string[]) {

@@ -1,6 +1,6 @@
-import P_CDXApp from '../../teste2e/pages/P_CDXApp';
-import P_MainMenu from '../../teste2e/pages/P_MainMenu';
-import P_Archives from '../../teste2e/pages/P_Archives';
+import PuppetCDXApp from '../../teste2e/pages/PuppetCDXApp';
+import PuppetMainMenu from '../../teste2e/pages/PuppetMainMenu';
+import PuppetArchivesPage from '../../teste2e/pages/PuppetArchivesPage';
 
 const testConstants = {
   clientFile: 'ADENA-Cigna-Elig-TEST.txt',
@@ -12,10 +12,10 @@ const testConstants = {
 const inputSelector = '#TableArchive__Card__Row__Input-Search';
 
 describe('E2E - Archives Navigation Test', () => {
-  let cdxApp: P_CDXApp;
+  let cdxApp: PuppetCDXApp;
 
   beforeAll(async () => {
-    cdxApp = await P_CDXApp.startBrowser('E2E - Archives Navigation Test');
+    cdxApp = await PuppetCDXApp.startBrowser('E2E - Archives Navigation Test');
   });
 
   it('Login', async () => {
@@ -27,12 +27,12 @@ describe('E2E - Archives Navigation Test', () => {
   });
 
   it('Click on Archives', async () => {
-    const mainMenu = new P_MainMenu(cdxApp.page);
+    const mainMenu = new PuppetMainMenu(cdxApp.page);
     await mainMenu.clickArchives();
   });
 
   it('Should redirect to Archives Page', async () => {
-    const page = new P_Archives(cdxApp.page);
+    const page = new PuppetArchivesPage(cdxApp.page);
     await page.expectOnPage();
     // Filter to November Nov 3, 2020 to Nov 5, 2020
     await page.setDateRange('Tue Nov 03 2020', 'Thu Nov 05 2020');
@@ -46,7 +46,7 @@ describe('E2E - Archives Navigation Test', () => {
   });
 
   it('Table Should have 17 rows', async () => {
-    const page = new P_Archives(cdxApp.page);
+    const page = new PuppetArchivesPage(cdxApp.page);
     await page.expectOnPage();
     // Filter to November Nov 3, 2020 to Nov 6, 2020
     await page.setDateRange('Tue Nov 03 2020', 'Thu Nov 06 2020');
@@ -55,21 +55,21 @@ describe('E2E - Archives Navigation Test', () => {
 
   it('Should not have records when search input filled with wrong value', async () => {
     const wrongValue = 'WrongSearch';
-    const page = new P_Archives(cdxApp.page);
+    const page = new PuppetArchivesPage(cdxApp.page);
     await page.expectOnPage();
     await page.expectInput(inputSelector, wrongValue, () => page.expectTableRecords('.ms-DetailsRow-fields', 0));
   });
 
   it('Should have 1 record when searching by Client File', async () => {
     const inputValue = testConstants.clientFile;
-    const page = new P_Archives(cdxApp.page);
+    const page = new PuppetArchivesPage(cdxApp.page);
     await page.expectOnPage();
     await page.expectInput(inputSelector, inputValue, () => page.expectTextOnFirstRow(inputValue, 0, 3));
   });
 
   it('Should have 1 record when searching by Vendor', async () => {
     const inputValue = testConstants.vendor;
-    const page = new P_Archives(cdxApp.page);
+    const page = new PuppetArchivesPage(cdxApp.page);
     await page.expectOnPage();
     await page.expectInput(inputSelector, inputValue, () => page.expectTextOnFirstRow(inputValue, 0, 1));
   });

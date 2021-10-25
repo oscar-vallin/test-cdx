@@ -1,13 +1,13 @@
 import puppeteer, { Browser, ElementHandle, Page } from 'puppeteer';
-import P_LoginPage from './P_LoginPage';
-import P_AdminMenu from './P_AdminMenu';
-import P_MainMenu from './P_MainMenu';
-import P_ExchangeStatus from './P_ExchangeStatus';
-import P_ActivityOrgs from './P_ActivityOrgs';
+import PuppetLoginPage from './PuppetLoginPage';
+import PuppetAdminMenu from './PuppetAdminMenu';
+import PuppetMainMenu from './PuppetMainMenu';
+import PuppetExchangeStatus from './PuppetExchangeStatus';
+import PuppetActiveOrgs from './PuppetActiveOrgs';
 
 // Starting point for all scripted Puppeteer tests
 
-export default class P_CDXApp {
+export default class PuppetCDXApp {
   profileMenu = '#__UserToken';
 
   logoutButton = '#__Logout_button';
@@ -24,13 +24,13 @@ export default class P_CDXApp {
     this.testTitle = testTitle;
   }
 
-  async toLoginPage(): Promise<P_LoginPage> {
-    const loginPage = new P_LoginPage(this.page);
+  async toLoginPage(): Promise<PuppetLoginPage> {
+    const loginPage = new PuppetLoginPage(this.page);
     await loginPage.visit();
     return loginPage;
   }
 
-  async logout(): Promise<P_LoginPage> {
+  async logout(): Promise<PuppetLoginPage> {
     const { page } = this;
     await page.waitForTimeout(1000);
     const menu = await this.waitForSelector(this.profileMenu);
@@ -40,16 +40,16 @@ export default class P_CDXApp {
     const logOut = await page.waitForSelector(this.logoutButton);
     await logOut?.click();
 
-    const loginPage = new P_LoginPage(page);
+    const loginPage = new PuppetLoginPage(page);
     await loginPage.expectOnPage();
     return loginPage;
   }
 
-  async navigateToFakerFileStatus(): Promise<P_ExchangeStatus> {
-    const activeOrgs = new P_ActivityOrgs(this.page);
+  async navigateToFakerFileStatus(): Promise<PuppetExchangeStatus> {
+    const activeOrgs = new PuppetActiveOrgs(this.page);
     await activeOrgs.expectOnPage();
     await activeOrgs.clickOnOrg('K2UFKE', 'K2U Faker Data');
-    const fileStatus = new P_ExchangeStatus(this.page);
+    const fileStatus = new PuppetExchangeStatus(this.page);
     await fileStatus.expectOnPage();
     return fileStatus;
   }
@@ -63,12 +63,12 @@ export default class P_CDXApp {
     returnButton?.click();
   }
 
-  getAdminMenu(): P_AdminMenu {
-    return new P_AdminMenu(this.page);
+  getAdminMenu(): PuppetAdminMenu {
+    return new PuppetAdminMenu(this.page);
   }
 
-  getMainMenu(): P_MainMenu {
-    return new P_MainMenu(this.page);
+  getMainMenu(): PuppetMainMenu {
+    return new PuppetMainMenu(this.page);
   }
 
   async waitForSelector(selector: string): Promise<ElementHandle | null> {
@@ -88,7 +88,7 @@ export default class P_CDXApp {
     await this.browser.close();
   }
 
-  static async startBrowser(testTitle: string): Promise<P_CDXApp> {
+  static async startBrowser(testTitle: string): Promise<PuppetCDXApp> {
     const browser = await puppeteer.launch({
       headless: !(!!process.env.npm_config_headless || !!process.env.IS_HEADLESS),
       args: ['--no-sandbox'],
@@ -96,6 +96,6 @@ export default class P_CDXApp {
     const page = await browser.newPage();
     await page.setViewport({ width: 1600, height: 1080 });
 
-    return new P_CDXApp(browser, page, testTitle);
+    return new PuppetCDXApp(browser, page, testTitle);
   }
 }

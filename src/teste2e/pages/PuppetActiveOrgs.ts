@@ -1,6 +1,6 @@
-import P_BasePage from './P_BasePage';
+import PuppetBasePage from './PuppetBasePage';
 
-export default class P_ActivityOrgs extends P_BasePage {
+export default class PuppetActiveOrgs extends PuppetBasePage {
   pageTitle = '#__Page-Title-Text';
 
   async expectOnPage() {

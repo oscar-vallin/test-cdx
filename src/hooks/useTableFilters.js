@@ -37,10 +37,6 @@ export const useTableFilters = (placeholder) => {
     return () => null;
   };
 
-  if (urlParams?.filter) {
-    localInput.setValue(urlParams.filter);
-  }
-
   const addParamIfExists = (key, value) => (key ? { [key]: value } : {});
 
   const pushQueryString = () => {

@@ -30,6 +30,7 @@ import {
 } from './Table.styles';
 
 import { TableHeader } from '../TableHeader';
+import {useLocation} from "react-router-dom";
 
 const _buildColumns = (
   items,
@@ -124,6 +125,10 @@ const Table = ({
   onItemsListChange,
   loading = true,
 }) => {
+  const location = useLocation();
+  const urlParams = new URLSearchParams(location.search);
+  const orgSid = urlParams.get('orgSid') ?? '-1';
+
   const [sortLabel, setSortLabel] = useState();
   const [sortedItems, setSortedItems] = useState([]);
   const [sortedGroups, setSortedGroups] = useState();
@@ -300,7 +305,7 @@ const Table = ({
           return (
             <CellItemRow>
               <Link>
-                <RouteLink to={`${fieldItem.text}?filter=${filterInput}`}>{fieldContent}</RouteLink>
+                <RouteLink to={`${fieldItem.text}?filter=${filterInput}&orgSid=${orgSid}`}>{fieldContent}</RouteLink>
               </Link>
               {fieldItem.child.value}
             </CellItemRow>
@@ -345,7 +350,7 @@ const Table = ({
             <StyledCell left>
               <Link>
                 <RouteLink
-                  to={`/file-status?filter=${fieldContent}&startDate=${startFormatted}&endDate=${endFormatted}`}
+                  to={`/file-status?filter=${fieldContent}&orgSid=${orgSid}&startDate=${startFormatted}&endDate=${endFormatted}`}
                 >
                   {fieldContent}
                 </RouteLink>
