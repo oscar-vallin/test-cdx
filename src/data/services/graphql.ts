@@ -1175,11 +1175,6 @@ export type QuerySystemTemplateAccessPolicyGroupByNameArgs = {
   name: Scalars['String'];
 };
 
-
-export type QueryAccessPolicyFormArgs = {
-  templatePolicySid?: Maybe<Scalars['ID']>;
-};
-
 export type QueryFindAccessPolicyArgs = {
   policySid: Scalars['ID'];
 };
@@ -1243,17 +1238,6 @@ export type QuerySearchOrganizationsArgs = {
   orgOwnerSid: Scalars['ID'];
   orgFilter?: Maybe<OrgFilterInput>;
   pageableInput?: Maybe<PageableInput>;
-};
-
-
-export type QueryOrganizationQuickSearchArgs = {
-  searchText: Scalars['String'];
-  orgOwnerSid: Scalars['ID'];
-};
-
-export type QueryVendorQuickSearchArgs = {
-  searchText: Scalars['String'];
-  orgOwnerSid: Scalars['ID'];
 };
 
 export type QueryDashThemeColorForOrgArgs = {
@@ -2330,14 +2314,37 @@ export type WorkPacketStatusQueryVariables = Exact<{
   workOrderId: Scalars['String'];
 }>;
 
-
-export type WorkPacketStatusQuery = (
-  { __typename?: 'Query' }
-  & { workPacketStatus?: Maybe<(
-    { __typename?: 'WorkPacketStatus' }
-    & Pick<WorkPacketStatus, 'workOrderId' | 'timestamp' | 'planSponsorId' | 'orgId' | 'orgSid' | 'detailsPath' | 'subClientPath' | 'inboundFilename' | 'vendorId' | 'vendorSid' | 'step' | 'stepStatus' | 'packetStatus' | 'reprocessedBy' | 'restartReason' | 'recordHighlightCount' | 'populationCount' | 'recordHighlightType' | 'clientFileArchivePath' | 'vendorFileArchivePath' | 'supplementalFilesArchivePaths' | 'archiveOnly' | 'hasErrors' | 'environment'>
-  )> }
-);
+export type WorkPacketStatusQuery = { __typename?: 'Query' } & {
+  workPacketStatus?: Maybe<
+    { __typename?: 'WorkPacketStatus' } & Pick<
+      WorkPacketStatus,
+      | 'workOrderId'
+      | 'timestamp'
+      | 'planSponsorId'
+      | 'orgId'
+      | 'orgSid'
+      | 'detailsPath'
+      | 'subClientPath'
+      | 'inboundFilename'
+      | 'vendorId'
+      | 'vendorSid'
+      | 'step'
+      | 'stepStatus'
+      | 'packetStatus'
+      | 'reprocessedBy'
+      | 'restartReason'
+      | 'recordHighlightCount'
+      | 'populationCount'
+      | 'recordHighlightType'
+      | 'clientFileArchivePath'
+      | 'vendorFileArchivePath'
+      | 'supplementalFilesArchivePaths'
+      | 'archiveOnly'
+      | 'hasErrors'
+      | 'environment'
+    >
+  >;
+};
 
 export type WorkPacketStatusesQueryVariables = Exact<{
   orgSid: Scalars['ID'];
@@ -2346,20 +2353,46 @@ export type WorkPacketStatusesQueryVariables = Exact<{
   pageableInput: PageableInput;
 }>;
 
-
-export type WorkPacketStatusesQuery = (
-  { __typename?: 'Query' }
-  & { workPacketStatuses?: Maybe<(
-    { __typename?: 'WorkPacketStatusConnection' }
-    & { paginationInfo: (
-      { __typename?: 'PaginationInfo' }
-      & FragmentPaginationInfoFragment
-    ), nodes?: Maybe<Array<Maybe<(
-      { __typename?: 'WorkPacketStatus' }
-      & Pick<WorkPacketStatus, 'workOrderId' | 'timestamp' | 'planSponsorId' | 'orgId' | 'orgSid' | 'detailsPath' | 'subClientPath' | 'inboundFilename' | 'vendorId' | 'vendorSid' | 'step' | 'stepStatus' | 'packetStatus' | 'reprocessedBy' | 'restartReason' | 'recordHighlightCount' | 'populationCount' | 'recordHighlightType' | 'clientFileArchivePath' | 'vendorFileArchivePath' | 'supplementalFilesArchivePaths' | 'archiveOnly' | 'hasErrors' | 'environment'>
-    )>>> }
-  )> }
-);
+export type WorkPacketStatusesQuery = { __typename?: 'Query' } & {
+  workPacketStatuses?: Maybe<
+    { __typename?: 'WorkPacketStatusConnection' } & {
+      paginationInfo: { __typename?: 'PaginationInfo' } & FragmentPaginationInfoFragment;
+      nodes?: Maybe<
+        Array<
+          Maybe<
+            { __typename?: 'WorkPacketStatus' } & Pick<
+              WorkPacketStatus,
+              | 'workOrderId'
+              | 'timestamp'
+              | 'planSponsorId'
+              | 'orgId'
+              | 'orgSid'
+              | 'detailsPath'
+              | 'subClientPath'
+              | 'inboundFilename'
+              | 'vendorId'
+              | 'vendorSid'
+              | 'step'
+              | 'stepStatus'
+              | 'packetStatus'
+              | 'reprocessedBy'
+              | 'restartReason'
+              | 'recordHighlightCount'
+              | 'populationCount'
+              | 'recordHighlightType'
+              | 'clientFileArchivePath'
+              | 'vendorFileArchivePath'
+              | 'supplementalFilesArchivePaths'
+              | 'archiveOnly'
+              | 'hasErrors'
+              | 'environment'
+            >
+          >
+        >
+      >;
+    }
+  >;
+};
 
 export type DashboardPeriodsQueryVariables = Exact<{
   orgSid: Scalars['ID'];
@@ -2793,6 +2826,18 @@ export type SystemTemplateAccessPolicyGroupByNameQueryVariables = Exact<{
   name: Scalars['String'];
 }>;
 
+export type SystemTemplateAccessPolicyGroupByNameQuery = { __typename?: 'Query' } & {
+  systemTemplateAccessPolicyGroupByName?: Maybe<
+    Array<
+      Maybe<
+        { __typename?: 'AccessPolicyGroup' } & Pick<
+          AccessPolicyGroup,
+          'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes'
+        > & { policies?: Maybe<Array<Maybe<{ __typename?: 'AccessPolicy' } & FragmentAccessPolicyFragment>>> }
+      >
+    >
+  >;
+};
 
 export type SystemTemplateAccessPolicyGroupByNameQuery = (
   { __typename?: 'Query' }
@@ -3543,31 +3588,94 @@ export type OrganizationQuickSearchQueryVariables = Exact<{
   orgOwnerSid: Scalars['ID'];
 }>;
 
-export type OrganizationQuickSearchQuery = { __typename?: 'Query' } & {
-  organizationQuickSearch?: Maybe<
-    Array<Maybe<{ __typename?: 'Organization' } & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType'>>>
+export type DashThemeColorForOrgQuery = { __typename?: 'Query' } & {
+  dashThemeColorForOrg?: Maybe<
+    { __typename?: 'DashThemeColorConnection' } & {
+      paginationInfo: { __typename?: 'PaginationInfo' } & FragmentPaginationInfoFragment;
+      nodes?: Maybe<
+        Array<
+          Maybe<
+            { __typename?: 'DashThemeColor' } & Pick<
+              DashThemeColor,
+              | 'id'
+              | 'defaultPalette'
+              | 'themeColorMode'
+              | 'allowDark'
+              | 'paletteNm'
+              | 'themePrimary'
+              | 'themeLighterAlt'
+              | 'themeLighter'
+              | 'themeLight'
+              | 'themeTertiary'
+              | 'themeSecondary'
+              | 'themeDarkAlt'
+              | 'themeDark'
+              | 'themeDarker'
+              | 'neutralLighterAlt'
+              | 'neutralLighter'
+              | 'neutralLight'
+              | 'neutralQuaternaryAlt'
+              | 'neutralQuaternary'
+              | 'neutralTertiaryAlt'
+              | 'neutralTertiary'
+              | 'neutralSecondary'
+              | 'neutralPrimaryAlt'
+              | 'neutralPrimary'
+              | 'neutralDark'
+              | 'black'
+              | 'white'
+            >
+          >
+        >
+      >;
+    }
   >;
 };
 
-export type VendorQuickSearchQueryVariables = Exact<{
-  searchText: Scalars['String'];
-  orgOwnerSid: Scalars['ID'];
+export type DashSiteForOrgQueryVariables = Exact<{
+  orgSidInput?: Maybe<OrgSidInput>;
 }>;
 
-export type VendorQuickSearchQuery = { __typename?: 'Query' } & {
-  vendorQuickSearch?: Maybe<
-    Array<Maybe<{ __typename?: 'Organization' } & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType'>>>
-  >;
+export type DashSiteForOrgQuery = { __typename?: 'Query' } & {
+  dashSiteForOrg?: Maybe<{ __typename?: 'DashSite' } & Pick<DashSite, 'id' | 'active'>>;
 };
 
-export type OrganizationQuickSearchQueryVariables = Exact<{
-  searchText: Scalars['String'];
-  orgOwnerSid: Scalars['ID'];
+export type DashThemeColorQueryVariables = Exact<{
+  ownedInputSid?: Maybe<OwnedInputSid>;
 }>;
 
-export type OrganizationQuickSearchQuery = { __typename?: 'Query' } & {
-  organizationQuickSearch?: Maybe<
-    Array<Maybe<{ __typename?: 'Organization' } & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType'>>>
+export type DashThemeColorQuery = { __typename?: 'Query' } & {
+  dashThemeColor?: Maybe<
+    { __typename?: 'DashThemeColor' } & Pick<
+      DashThemeColor,
+      | 'id'
+      | 'defaultPalette'
+      | 'themeColorMode'
+      | 'allowDark'
+      | 'paletteNm'
+      | 'themePrimary'
+      | 'themeLighterAlt'
+      | 'themeLighter'
+      | 'themeLight'
+      | 'themeTertiary'
+      | 'themeSecondary'
+      | 'themeDarkAlt'
+      | 'themeDark'
+      | 'themeDarker'
+      | 'neutralLighterAlt'
+      | 'neutralLighter'
+      | 'neutralLight'
+      | 'neutralQuaternaryAlt'
+      | 'neutralQuaternary'
+      | 'neutralTertiaryAlt'
+      | 'neutralTertiary'
+      | 'neutralSecondary'
+      | 'neutralPrimaryAlt'
+      | 'neutralPrimary'
+      | 'neutralDark'
+      | 'black'
+      | 'white'
+    >
   >;
 };
 
@@ -5303,6 +5411,7 @@ export const FragmentCdxPageInfoFragmentDoc = gql`
         ...unionNVP
       }
     }
+    commandType
   }
   ${FragmentWebCommandFragmentDoc}
   ${UnionNvpFragmentDoc}
@@ -6020,21 +6129,19 @@ export const WorkPacketStatusesDocument = gql`
 `;
 
 /**
- * __useWorkPacketStatusesQuery__
+ * __useWorkPacketStatusQuery__
  *
- * To run a query within a React component, call `useWorkPacketStatusesQuery` and pass it any options that fit your needs.
- * When your component renders, `useWorkPacketStatusesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useWorkPacketStatusQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWorkPacketStatusQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useWorkPacketStatusesQuery({
+ * const { data, loading, error } = useWorkPacketStatusQuery({
  *   variables: {
  *      orgSid: // value for 'orgSid'
- *      searchText: // value for 'searchText'
- *      dateRange: // value for 'dateRange'
- *      pageableInput: // value for 'pageableInput'
+ *      workOrderId: // value for 'workOrderId'
  *   },
  * });
  */
@@ -7150,6 +7257,16 @@ export const AccessPolicyFormDocument = gql`
         errMsg
         errSeverity
       }
+      tmplUseAsIs {
+        value
+        label
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
       applicableOrgTypes {
         value
         label
@@ -7245,8 +7362,25 @@ export const FindAccessPolicyDocument = gql`
       tmplUseAsIs {
         value
         label
-        value
         info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      organization {
+        value
+        description
+        label
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
       }
       options {
         key
@@ -7791,8 +7925,8 @@ export const FindAccessPolicyDocument = gql`
         info
         required
         visible
-        options
-        query
+        min
+        max
         errCode
         errMsg
         errSeverity
@@ -7843,12 +7977,11 @@ export const FindAccessPolicyDocument = gql`
       }
       policies {
         value
+        description
         label
         info
         required
         visible
-        options
-        query
         errCode
         errMsg
         errSeverity
@@ -7920,13 +8053,8 @@ export const FindAccessPolicyDocument = gql`
         info
       }
     }
-    response
-    errCode
-    errMsg
-    errSeverity
   }
-}
-    `;
+`;
 
 /**
  * __useFindAccessPolicyQuery__
@@ -9440,106 +9568,41 @@ export const OrganizationQuickSearchDocument = gql`
 export function useOrganizationQuickSearchQuery(
   baseOptions: Apollo.QueryHookOptions<OrganizationQuickSearchQuery, OrganizationQuickSearchQueryVariables>
 ) {
-  return Apollo.useQuery<OrganizationQuickSearchQuery, OrganizationQuickSearchQueryVariables>(
-    OrganizationQuickSearchDocument,
+  return Apollo.useQuery<DirectOrganizationsQuery, DirectOrganizationsQueryVariables>(
+    DirectOrganizationsDocument,
     baseOptions
   );
 }
-export function useOrganizationQuickSearchLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<OrganizationQuickSearchQuery, OrganizationQuickSearchQueryVariables>
+export function useDirectOrganizationsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<DirectOrganizationsQuery, DirectOrganizationsQueryVariables>
 ) {
-  return Apollo.useLazyQuery<OrganizationQuickSearchQuery, OrganizationQuickSearchQueryVariables>(
-    OrganizationQuickSearchDocument,
+  return Apollo.useLazyQuery<DirectOrganizationsQuery, DirectOrganizationsQueryVariables>(
+    DirectOrganizationsDocument,
     baseOptions
   );
 }
-export type OrganizationQuickSearchQueryHookResult = ReturnType<typeof useOrganizationQuickSearchQuery>;
-export type OrganizationQuickSearchLazyQueryHookResult = ReturnType<typeof useOrganizationQuickSearchLazyQuery>;
-export type OrganizationQuickSearchQueryResult = Apollo.QueryResult<
-  OrganizationQuickSearchQuery,
-  OrganizationQuickSearchQueryVariables
+export type DirectOrganizationsQueryHookResult = ReturnType<typeof useDirectOrganizationsQuery>;
+export type DirectOrganizationsLazyQueryHookResult = ReturnType<typeof useDirectOrganizationsLazyQuery>;
+export type DirectOrganizationsQueryResult = Apollo.QueryResult<
+  DirectOrganizationsQuery,
+  DirectOrganizationsQueryVariables
 >;
-export const VendorQuickSearchDocument = gql`
-  query VendorQuickSearch($searchText: String!, $orgOwnerSid: ID!) {
-    vendorQuickSearch(searchText: $searchText, orgOwnerSid: $orgOwnerSid) {
-      sid
-      name
-      orgId
-      orgType
-    }
-  }
-`;
-
-/**
- * __useVendorQuickSearchQuery__
- *
- * To run a query within a React component, call `useVendorQuickSearchQuery` and pass it any options that fit your needs.
- * When your component renders, `useVendorQuickSearchQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useVendorQuickSearchQuery({
- *   variables: {
- *      searchText: // value for 'searchText'
- *      orgOwnerSid: // value for 'orgOwnerSid'
- *   },
- * });
- */
-export function useVendorQuickSearchQuery(
-  baseOptions: Apollo.QueryHookOptions<VendorQuickSearchQuery, VendorQuickSearchQueryVariables>
-) {
-  return Apollo.useQuery<VendorQuickSearchQuery, VendorQuickSearchQueryVariables>(
-    VendorQuickSearchDocument,
-    baseOptions
-  );
-}
-export function useVendorQuickSearchLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<VendorQuickSearchQuery, VendorQuickSearchQueryVariables>
-) {
-  return Apollo.useLazyQuery<VendorQuickSearchQuery, VendorQuickSearchQueryVariables>(
-    VendorQuickSearchDocument,
-    baseOptions
-  );
-}
-export type VendorQuickSearchQueryHookResult = ReturnType<typeof useVendorQuickSearchQuery>;
-export type VendorQuickSearchLazyQueryHookResult = ReturnType<typeof useVendorQuickSearchLazyQuery>;
-export type VendorQuickSearchQueryResult = Apollo.QueryResult<VendorQuickSearchQuery, VendorQuickSearchQueryVariables>;
-export const DashThemeColorForOrgDocument = gql`
-  query DashThemeColorForOrg($ownedInput: OwnedInput, $pageableInput: PageableInput) {
-    dashThemeColorForOrg(ownedInput: $ownedInput, pageableInput: $pageableInput) {
+export const WpProcessErrorsDocument = gql`
+  query WpProcessErrors($orgSid: ID!, $dateRange: DateTimeRangeInput, $pageableInput: PageableInput) {
+    wpProcessErrors(orgSid: $orgSid, dateRange: $dateRange, pageableInput: $pageableInput) {
       paginationInfo {
         ...fragmentPaginationInfo
       }
       nodes {
         id
-        defaultPalette
-        themeColorMode
-        allowDark
-        paletteNm
-        themePrimary
-        themeLighterAlt
-        themeLighter
-        themeLight
-        themeTertiary
-        themeSecondary
-        themeDarkAlt
-        themeDark
-        themeDarker
-        neutralLighterAlt
-        neutralLighter
-        neutralLight
-        neutralQuaternaryAlt
-        neutralQuaternary
-        neutralTertiaryAlt
-        neutralTertiary
-        neutralSecondary
-        neutralPrimaryAlt
-        neutralPrimary
-        neutralDark
-        black
-        white
+        workOrderId
+        startTime
+        stepName
+        planSponsorId
+        vendorId
+        msg
+        inboundFilename
+        clientFileArchivePath
       }
     }
   }
@@ -9622,12 +9685,16 @@ export const WpTransmissionsDocument = gql`
  *   },
  * });
  */
-export function useWpTransmissionsQuery(baseOptions: Apollo.QueryHookOptions<WpTransmissionsQuery, WpTransmissionsQueryVariables>) {
-        return Apollo.useQuery<WpTransmissionsQuery, WpTransmissionsQueryVariables>(WpTransmissionsDocument, baseOptions);
-      }
-export function useWpTransmissionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WpTransmissionsQuery, WpTransmissionsQueryVariables>) {
-          return Apollo.useLazyQuery<WpTransmissionsQuery, WpTransmissionsQueryVariables>(WpTransmissionsDocument, baseOptions);
-        }
+export function useWpTransmissionsQuery(
+  baseOptions: Apollo.QueryHookOptions<WpTransmissionsQuery, WpTransmissionsQueryVariables>
+) {
+  return Apollo.useQuery<WpTransmissionsQuery, WpTransmissionsQueryVariables>(WpTransmissionsDocument, baseOptions);
+}
+export function useWpTransmissionsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<WpTransmissionsQuery, WpTransmissionsQueryVariables>
+) {
+  return Apollo.useLazyQuery<WpTransmissionsQuery, WpTransmissionsQueryVariables>(WpTransmissionsDocument, baseOptions);
+}
 export type WpTransmissionsQueryHookResult = ReturnType<typeof useWpTransmissionsQuery>;
 export type WpTransmissionsLazyQueryHookResult = ReturnType<typeof useWpTransmissionsLazyQuery>;
 export type WpTransmissionsQueryResult = Apollo.QueryResult<WpTransmissionsQuery, WpTransmissionsQueryVariables>;
@@ -9657,8 +9724,8 @@ export const ScheduleOccurrencesDocument = gql`
       errSeverity
     }
   }
-}
-    ${FragmentPaginationInfoFragmentDoc}`;
+  ${FragmentPaginationInfoFragmentDoc}
+`;
 
 /**
  * __useDirectOrganizationsQuery__
@@ -9678,49 +9745,63 @@ export const ScheduleOccurrencesDocument = gql`
  *   },
  * });
  */
-export function useSearchOrganizationsQuery(baseOptions: Apollo.QueryHookOptions<SearchOrganizationsQuery, SearchOrganizationsQueryVariables>) {
-        return Apollo.useQuery<SearchOrganizationsQuery, SearchOrganizationsQueryVariables>(SearchOrganizationsDocument, baseOptions);
-      }
-export function useSearchOrganizationsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchOrganizationsQuery, SearchOrganizationsQueryVariables>) {
-          return Apollo.useLazyQuery<SearchOrganizationsQuery, SearchOrganizationsQueryVariables>(SearchOrganizationsDocument, baseOptions);
-        }
+export function useSearchOrganizationsQuery(
+  baseOptions: Apollo.QueryHookOptions<SearchOrganizationsQuery, SearchOrganizationsQueryVariables>
+) {
+  return Apollo.useQuery<SearchOrganizationsQuery, SearchOrganizationsQueryVariables>(
+    SearchOrganizationsDocument,
+    baseOptions
+  );
+}
+export function useSearchOrganizationsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<SearchOrganizationsQuery, SearchOrganizationsQueryVariables>
+) {
+  return Apollo.useLazyQuery<SearchOrganizationsQuery, SearchOrganizationsQueryVariables>(
+    SearchOrganizationsDocument,
+    baseOptions
+  );
+}
 export type SearchOrganizationsQueryHookResult = ReturnType<typeof useSearchOrganizationsQuery>;
 export type SearchOrganizationsLazyQueryHookResult = ReturnType<typeof useSearchOrganizationsLazyQuery>;
-export type SearchOrganizationsQueryResult = Apollo.QueryResult<SearchOrganizationsQuery, SearchOrganizationsQueryVariables>;
+export type SearchOrganizationsQueryResult = Apollo.QueryResult<
+  SearchOrganizationsQuery,
+  SearchOrganizationsQueryVariables
+>;
 export const DashThemeColorForOrgDocument = gql`
-    query DashThemeColorForOrg($ownedInput: OwnedInput, $pageableInput: PageableInput) {
-  dashThemeColorForOrg(ownedInput: $ownedInput, pageableInput: $pageableInput) {
-    paginationInfo {
-      ...fragmentPaginationInfo
-    }
-    nodes {
-      id
-      defaultPalette
-      themeColorMode
-      allowDark
-      paletteNm
-      themePrimary
-      themeLighterAlt
-      themeLighter
-      themeLight
-      themeTertiary
-      themeSecondary
-      themeDarkAlt
-      themeDark
-      themeDarker
-      neutralLighterAlt
-      neutralLighter
-      neutralLight
-      neutralQuaternaryAlt
-      neutralQuaternary
-      neutralTertiaryAlt
-      neutralTertiary
-      neutralSecondary
-      neutralPrimaryAlt
-      neutralPrimary
-      neutralDark
-      black
-      white
+  query DashThemeColorForOrg($ownedInput: OwnedInput, $pageableInput: PageableInput) {
+    dashThemeColorForOrg(ownedInput: $ownedInput, pageableInput: $pageableInput) {
+      paginationInfo {
+        ...fragmentPaginationInfo
+      }
+      nodes {
+        id
+        defaultPalette
+        themeColorMode
+        allowDark
+        paletteNm
+        themePrimary
+        themeLighterAlt
+        themeLighter
+        themeLight
+        themeTertiary
+        themeSecondary
+        themeDarkAlt
+        themeDark
+        themeDarker
+        neutralLighterAlt
+        neutralLighter
+        neutralLight
+        neutralQuaternaryAlt
+        neutralQuaternary
+        neutralTertiaryAlt
+        neutralTertiary
+        neutralSecondary
+        neutralPrimaryAlt
+        neutralPrimary
+        neutralDark
+        black
+        white
+      }
     }
   }
 `;
@@ -10303,19 +10384,18 @@ export const DefaultDashThemeForSitePageDocument = gql`
 `;
 
 /**
- * __useDashThemeColorForOrgQuery__
+ * __useDashThemeColorByNameQuery__
  *
- * To run a query within a React component, call `useDashThemeColorForOrgQuery` and pass it any options that fit your needs.
- * When your component renders, `useDashThemeColorForOrgQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useDashThemeColorByNameQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDashThemeColorByNameQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useDashThemeColorForOrgQuery({
+ * const { data, loading, error } = useDashThemeColorByNameQuery({
  *   variables: {
- *      ownedInput: // value for 'ownedInput'
- *      pageableInput: // value for 'pageableInput'
+ *      ownedInputName: // value for 'ownedInputName'
  *   },
  * });
  */
@@ -10513,18 +10593,18 @@ export const SimulateSessionExpirDocument = gql`
 `;
 
 /**
- * __useDashSiteForOrgQuery__
+ * __useDefaultDashThemeForSiteQuery__
  *
- * To run a query within a React component, call `useDashSiteForOrgQuery` and pass it any options that fit your needs.
- * When your component renders, `useDashSiteForOrgQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useDefaultDashThemeForSiteQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDefaultDashThemeForSiteQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useDashSiteForOrgQuery({
+ * const { data, loading, error } = useDefaultDashThemeForSiteQuery({
  *   variables: {
- *      orgSidInput: // value for 'orgSidInput'
+ *      ownedInput: // value for 'ownedInput'
  *   },
  * });
  */
@@ -10637,26 +10717,34 @@ export type PasswordLoginMutationFn = Apollo.MutationFunction<PasswordLoginMutat
  *   },
  * });
  */
-export function usePasswordLoginMutation(baseOptions?: Apollo.MutationHookOptions<PasswordLoginMutation, PasswordLoginMutationVariables>) {
-        return Apollo.useMutation<PasswordLoginMutation, PasswordLoginMutationVariables>(PasswordLoginDocument, baseOptions);
-      }
+export function usePasswordLoginMutation(
+  baseOptions?: Apollo.MutationHookOptions<PasswordLoginMutation, PasswordLoginMutationVariables>
+) {
+  return Apollo.useMutation<PasswordLoginMutation, PasswordLoginMutationVariables>(PasswordLoginDocument, baseOptions);
+}
 export type PasswordLoginMutationHookResult = ReturnType<typeof usePasswordLoginMutation>;
 export type PasswordLoginMutationResult = Apollo.MutationResult<PasswordLoginMutation>;
-export type PasswordLoginMutationOptions = Apollo.BaseMutationOptions<PasswordLoginMutation, PasswordLoginMutationVariables>;
+export type PasswordLoginMutationOptions = Apollo.BaseMutationOptions<
+  PasswordLoginMutation,
+  PasswordLoginMutationVariables
+>;
 export const UpdateOwnPasswordDocument = gql`
-    mutation UpdateOwnPassword($updatePasswordInput: UpdatePasswordInput!) {
-  updateOwnPassword(updatePasswordInput: $updatePasswordInput) {
-    id
-    orgId
-    orgSid
-    userId
-    firstNm
-    pollInterval
-    defaultAuthorities
+  mutation UpdateOwnPassword($updatePasswordInput: UpdatePasswordInput!) {
+    updateOwnPassword(updatePasswordInput: $updatePasswordInput) {
+      id
+      orgId
+      orgSid
+      userId
+      firstNm
+      pollInterval
+      defaultAuthorities
+    }
   }
-}
-    `;
-export type UpdateOwnPasswordMutationFn = Apollo.MutationFunction<UpdateOwnPasswordMutation, UpdateOwnPasswordMutationVariables>;
+`;
+export type UpdateOwnPasswordMutationFn = Apollo.MutationFunction<
+  UpdateOwnPasswordMutation,
+  UpdateOwnPasswordMutationVariables
+>;
 
 /**
  * __useDashThemeColorQuery__
@@ -10712,15 +10800,17 @@ export const CreateAccessPolicyDocument = gql`
         errMsg
         errSeverity
       }
+      response
+      errCode
+      errMsg
+      errSeverity
     }
-    response
-    errCode
-    errMsg
-    errSeverity
   }
-}
-    `;
-export type CreateAccessPolicyMutationFn = Apollo.MutationFunction<CreateAccessPolicyMutation, CreateAccessPolicyMutationVariables>;
+`;
+export type CreateAccessPolicyMutationFn = Apollo.MutationFunction<
+  CreateAccessPolicyMutation,
+  CreateAccessPolicyMutationVariables
+>;
 
 /**
  * __useDashThemeColorByNameQuery__
@@ -11117,87 +11207,99 @@ export type CreateAccessSpecializationMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useCreateAccessSpecializationMutation(baseOptions?: Apollo.MutationHookOptions<CreateAccessSpecializationMutation, CreateAccessSpecializationMutationVariables>) {
-        return Apollo.useMutation<CreateAccessSpecializationMutation, CreateAccessSpecializationMutationVariables>(CreateAccessSpecializationDocument, baseOptions);
-      }
+export function useCreateAccessSpecializationMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateAccessSpecializationMutation,
+    CreateAccessSpecializationMutationVariables
+  >
+) {
+  return Apollo.useMutation<CreateAccessSpecializationMutation, CreateAccessSpecializationMutationVariables>(
+    CreateAccessSpecializationDocument,
+    baseOptions
+  );
+}
 export type CreateAccessSpecializationMutationHookResult = ReturnType<typeof useCreateAccessSpecializationMutation>;
 export type CreateAccessSpecializationMutationResult = Apollo.MutationResult<CreateAccessSpecializationMutation>;
-export type CreateAccessSpecializationMutationOptions = Apollo.BaseMutationOptions<CreateAccessSpecializationMutation, CreateAccessSpecializationMutationVariables>;
+export type CreateAccessSpecializationMutationOptions = Apollo.BaseMutationOptions<
+  CreateAccessSpecializationMutation,
+  CreateAccessSpecializationMutationVariables
+>;
 export const UpdateAccessSpecializationDocument = gql`
-    mutation UpdateAccessSpecialization($updateAccessSpecializationInput: UpdateAccessSpecializationInput) {
-  updateAccessSpecialization(
-    updateAccessSpecializationInput: $updateAccessSpecializationInput
-  ) {
-    sid
-    name {
-      value
-      label
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
-    }
-    organization {
-      value
-      description
-      label
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
-    }
-    filters {
+  mutation UpdateAccessSpecialization($updateAccessSpecializationInput: UpdateAccessSpecializationInput) {
+    updateAccessSpecialization(updateAccessSpecializationInput: $updateAccessSpecializationInput) {
       sid
-      permission {
+      name {
         value
         label
         info
         required
         visible
-        options
-        query
+        min
+        max
         errCode
         errMsg
         errSeverity
       }
-      orgSids {
+      organization {
         value
+        description
         label
         info
         required
         visible
-        options
-        query
         errCode
         errMsg
         errSeverity
       }
+      filters {
+        sid
+        permission {
+          value
+          label
+          info
+          required
+          visible
+          options
+          query
+          errCode
+          errMsg
+          errSeverity
+        }
+        orgSids {
+          value
+          label
+          info
+          required
+          visible
+          options
+          query
+          errCode
+          errMsg
+          errSeverity
+        }
+        errCode
+        errMsg
+        errSeverity
+      }
+      options {
+        key
+        values {
+          label
+          value
+          info
+        }
+      }
+      response
       errCode
       errMsg
       errSeverity
     }
-    options {
-      key
-      values {
-        label
-        value
-        info
-      }
-    }
-    response
-    errCode
-    errMsg
-    errSeverity
   }
-}
-    `;
-export type UpdateAccessSpecializationMutationFn = Apollo.MutationFunction<UpdateAccessSpecializationMutation, UpdateAccessSpecializationMutationVariables>;
+`;
+export type UpdateAccessSpecializationMutationFn = Apollo.MutationFunction<
+  UpdateAccessSpecializationMutation,
+  UpdateAccessSpecializationMutationVariables
+>;
 
 /**
  * __useCreateOrgMutation__
@@ -11216,12 +11318,23 @@ export type UpdateAccessSpecializationMutationFn = Apollo.MutationFunction<Updat
  *   },
  * });
  */
-export function useUpdateAccessSpecializationMutation(baseOptions?: Apollo.MutationHookOptions<UpdateAccessSpecializationMutation, UpdateAccessSpecializationMutationVariables>) {
-        return Apollo.useMutation<UpdateAccessSpecializationMutation, UpdateAccessSpecializationMutationVariables>(UpdateAccessSpecializationDocument, baseOptions);
-      }
+export function useUpdateAccessSpecializationMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateAccessSpecializationMutation,
+    UpdateAccessSpecializationMutationVariables
+  >
+) {
+  return Apollo.useMutation<UpdateAccessSpecializationMutation, UpdateAccessSpecializationMutationVariables>(
+    UpdateAccessSpecializationDocument,
+    baseOptions
+  );
+}
 export type UpdateAccessSpecializationMutationHookResult = ReturnType<typeof useUpdateAccessSpecializationMutation>;
 export type UpdateAccessSpecializationMutationResult = Apollo.MutationResult<UpdateAccessSpecializationMutation>;
-export type UpdateAccessSpecializationMutationOptions = Apollo.BaseMutationOptions<UpdateAccessSpecializationMutation, UpdateAccessSpecializationMutationVariables>;
+export type UpdateAccessSpecializationMutationOptions = Apollo.BaseMutationOptions<
+  UpdateAccessSpecializationMutation,
+  UpdateAccessSpecializationMutationVariables
+>;
 export const DeleteAccessSpecializationDocument = gql`
     mutation DeleteAccessSpecialization($specializationSid: ID!) {
   deleteAccessSpecialization(specializationSid: $specializationSid)
@@ -11643,9 +11756,117 @@ export const CreateAccessSpecializationDocument = gql`
       errMsg
       errSeverity
     }
-    options {
-      key
-      values {
+  }
+`;
+export type CreateAccessPolicyGroupMutationFn = Apollo.MutationFunction<
+  CreateAccessPolicyGroupMutation,
+  CreateAccessPolicyGroupMutationVariables
+>;
+
+/**
+ * __useCreateAccessPolicyGroupMutation__
+ *
+ * To run a mutation, you first call `useCreateAccessPolicyGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateAccessPolicyGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createAccessPolicyGroupMutation, { data, loading, error }] = useCreateAccessPolicyGroupMutation({
+ *   variables: {
+ *      createAccessPolicyGroupInput: // value for 'createAccessPolicyGroupInput'
+ *   },
+ * });
+ */
+export function useCreateAccessPolicyGroupMutation(
+  baseOptions?: Apollo.MutationHookOptions<CreateAccessPolicyGroupMutation, CreateAccessPolicyGroupMutationVariables>
+) {
+  return Apollo.useMutation<CreateAccessPolicyGroupMutation, CreateAccessPolicyGroupMutationVariables>(
+    CreateAccessPolicyGroupDocument,
+    baseOptions
+  );
+}
+export type CreateAccessPolicyGroupMutationHookResult = ReturnType<typeof useCreateAccessPolicyGroupMutation>;
+export type CreateAccessPolicyGroupMutationResult = Apollo.MutationResult<CreateAccessPolicyGroupMutation>;
+export type CreateAccessPolicyGroupMutationOptions = Apollo.BaseMutationOptions<
+  CreateAccessPolicyGroupMutation,
+  CreateAccessPolicyGroupMutationVariables
+>;
+export const UpdateAccessPolicyGroupDocument = gql`
+  mutation UpdateAccessPolicyGroup($updateAccessPolicyGroupInput: UpdateAccessPolicyGroupInput) {
+    updateAccessPolicyGroup(updateAccessPolicyGroupInput: $updateAccessPolicyGroupInput) {
+      sid
+      name {
+        value
+        label
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      description {
+        value
+        label
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      organization {
+        value
+        description
+        label
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      tmpl {
+        value
+        label
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      tmplUseAsIs {
+        value
+        label
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      applicableOrgTypes {
+        value
+        label
+        info
+        required
+        visible
+        options
+        query
+        errCode
+        errMsg
+        errSeverity
+      }
+      policies {
+        value
         label
         info
         required
@@ -11670,6 +11891,7 @@ export const CreateAccessSpecializationDocument = gql`
         value
         label
         value
+        label
         info
         required
         visible
