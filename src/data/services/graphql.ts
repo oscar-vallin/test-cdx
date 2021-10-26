@@ -1099,6 +1099,8 @@ export type Query = {
   organizationForm?: Maybe<OrganizationForm>;
   findOrganization?: Maybe<OrganizationForm>;
   searchOrganizations?: Maybe<OrganizationConnection>;
+  organizationQuickSearch?: Maybe<Array<Maybe<Organization>>>;
+  vendorQuickSearch?: Maybe<Array<Maybe<Organization>>>;
   dashThemeColorForOrg?: Maybe<DashThemeColorConnection>;
   dashSiteForOrg?: Maybe<DashSite>;
   dashThemeColor?: Maybe<DashThemeColor>;
@@ -1245,6 +1247,7 @@ export type QueryFindAccessSpecializationArgs = {
 
 export type QueryAccessPolicyGroupFormArgs = {
   orgSid: Scalars['ID'];
+  templateGroupSid?: Maybe<Scalars['ID']>;
 };
 
 
@@ -1918,6 +1921,10 @@ export type WorkPacketStatus = {
   /** The next three options only are returned when the user has the *_EXCHANGE_ARCHIVE_READ Permission */
   clientFileArchivePath?: Maybe<Scalars['String']>;
   vendorFileArchivePath?: Maybe<Scalars['String']>;
+  feedType?: Maybe<Scalars['String']>;
+  inboundDataType?: Maybe<Scalars['String']>;
+  inboundDataSize?: Maybe<Scalars['Int']>;
+  version?: Maybe<Scalars['String']>;
   supplementalFilesArchivePaths?: Maybe<Array<Maybe<Scalars['String']>>>;
   /** Indicates this file didn't get delivered anywhere. Is only archived and is accessible from the CDX Dashboard */
   archiveOnly?: Maybe<Scalars['Boolean']>;
@@ -2919,6 +2926,7 @@ export type FindAccessSpecializationQuery = (
 
 export type AccessPolicyGroupFormQueryVariables = Exact<{
   orgSid: Scalars['ID'];
+  templateGroupSid?: Maybe<Scalars['ID']>;
 }>;
 
 
@@ -3212,23 +3220,31 @@ export type SearchOrganizationsQueryVariables = Exact<{
 }>;
 
 
-export type SearchOrganizationsQuery = (
-  { __typename?: 'Query' }
-  & { searchOrganizations?: Maybe<(
-    { __typename?: 'OrganizationConnection' }
-    & { paginationInfo: (
-      { __typename?: 'PaginationInfo' }
-      & FragmentPaginationInfoFragment
-    ), nodes?: Maybe<Array<Maybe<(
-      { __typename?: 'Organization' }
-      & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType'>
-    )>>> }
-  )> }
-);
-
 export type OrganizationQuickSearchQueryVariables = Exact<{
   searchText: Scalars['String'];
   orgOwnerSid: Scalars['ID'];
+}>;
+
+export type OrganizationQuickSearchQuery = { __typename?: 'Query' } & {
+  organizationQuickSearch?: Maybe<
+    Array<Maybe<{ __typename?: 'Organization' } & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType'>>>
+  >;
+};
+
+export type VendorQuickSearchQueryVariables = Exact<{
+  searchText: Scalars['String'];
+  orgOwnerSid: Scalars['ID'];
+}>;
+
+export type VendorQuickSearchQuery = { __typename?: 'Query' } & {
+  vendorQuickSearch?: Maybe<
+    Array<Maybe<{ __typename?: 'Organization' } & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType'>>>
+  >;
+};
+
+export type DashThemeColorForOrgQueryVariables = Exact<{
+  ownedInput?: Maybe<OwnedInput>;
+  pageableInput?: Maybe<PageableInput>;
 }>;
 
 export type OrganizationQuickSearchQuery = { __typename?: 'Query' } & {
@@ -4740,6 +4756,10 @@ export const WorkPacketStatusesDocument = gql`
       recordHighlightType
       clientFileArchivePath
       vendorFileArchivePath
+      feedType
+      inboundDataType
+      inboundDataSize
+      version
       supplementalFilesArchivePaths
       archiveOnly
       hasErrors
@@ -5861,6 +5881,7 @@ export const AccessPolicyFormDocument = gql`
  * @example
  * const { data, loading, error } = useAccessPolicyFormQuery({
  *   variables: {
+ *      templatePolicySid: // value for 'templatePolicySid'
  *   },
  * });
  */
