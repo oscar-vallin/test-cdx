@@ -1,6 +1,42 @@
-import { useCallback, useRef } from 'react';
+import { ReactElement, useCallback, useRef } from 'react';
 import { TagPicker } from '@fluentui/react/lib/Pickers';
 import { Label } from '@fluentui/react/lib-commonjs/Label';
+
+const defaultProps = {
+  label: '',
+  disabled: '',
+  itemLimit: '',
+  pickerProps: '',
+  value: [],
+  options: [],
+  onItemSelected: () => {},
+  onRemoveItem: () => {},
+  onResolveSuggestions: () => null,
+  debounce: 300,
+  onBlur: () => null,
+  onFocus: () => null,
+  required: true,
+  id: '',
+};
+
+type CDXTagPickerProps = {
+  label?: string;
+  disabled?: any;
+  itemLimit?: any;
+  pickerProps?: any;
+  value?: string[];
+  options?: string[];
+  onItemSelected?: any | null;
+  onRemoveItem?: ReactElement;
+  onResolveSuggestions?: any | null;
+  debounce?: number;
+  onBlur?: any | null;
+  onFocus?: any | null;
+  required?: boolean;
+  id?: string;
+  diseable?: any;
+  name?: string;
+} & typeof defaultProps;
 
 const CDXTagPicker = ({
   label,
@@ -17,7 +53,7 @@ const CDXTagPicker = ({
   onFocus,
   required,
   id,
-}) => {
+}: CDXTagPickerProps): ReactElement => {
   const picker = useRef(null);
   const getTextFromItem = ({ name }) => name;
   const filterSelectedTags = (filterText) =>
@@ -70,6 +106,6 @@ const CDXTagPicker = ({
   );
 };
 
-CDXTagPicker.propTypes = {};
+CDXTagPicker.defaultProps = defaultProps;
 
 export { CDXTagPicker };
