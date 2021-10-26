@@ -12521,19 +12521,19 @@ export const CreateAccessSpecializationDocument = gql`
 export type CreateAccessSpecializationMutationFn = Apollo.MutationFunction<CreateAccessSpecializationMutation, CreateAccessSpecializationMutationVariables>;
 
 /**
- * __useCreateAccessSpecializationMutation__
+ * __useCreateAccessPolicyMutation__
  *
- * To run a mutation, you first call `useCreateAccessSpecializationMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateAccessSpecializationMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useCreateAccessPolicyMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateAccessPolicyMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [createAccessSpecializationMutation, { data, loading, error }] = useCreateAccessSpecializationMutation({
+ * const [createAccessPolicyMutation, { data, loading, error }] = useCreateAccessPolicyMutation({
  *   variables: {
- *      createAccessSpecializationInput: // value for 'createAccessSpecializationInput'
+ *      createAccessPolicyInput: // value for 'createAccessPolicyInput'
  *   },
  * });
  */
@@ -12620,19 +12620,19 @@ export const UpdateAccessSpecializationDocument = gql`
 export type UpdateAccessSpecializationMutationFn = Apollo.MutationFunction<UpdateAccessSpecializationMutation, UpdateAccessSpecializationMutationVariables>;
 
 /**
- * __useUpdateAccessSpecializationMutation__
+ * __useUpdateAccessPolicyMutation__
  *
- * To run a mutation, you first call `useUpdateAccessSpecializationMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateAccessSpecializationMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useUpdateAccessPolicyMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateAccessPolicyMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [updateAccessSpecializationMutation, { data, loading, error }] = useUpdateAccessSpecializationMutation({
+ * const [updateAccessPolicyMutation, { data, loading, error }] = useUpdateAccessPolicyMutation({
  *   variables: {
- *      updateAccessSpecializationInput: // value for 'updateAccessSpecializationInput'
+ *      updateAccessPolicyInput: // value for 'updateAccessPolicyInput'
  *   },
  * });
  */
@@ -12650,19 +12650,19 @@ export const DeleteAccessSpecializationDocument = gql`
 export type DeleteAccessSpecializationMutationFn = Apollo.MutationFunction<DeleteAccessSpecializationMutation, DeleteAccessSpecializationMutationVariables>;
 
 /**
- * __useDeleteAccessSpecializationMutation__
+ * __useDeleteAccessPoliciesMutation__
  *
- * To run a mutation, you first call `useDeleteAccessSpecializationMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteAccessSpecializationMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useDeleteAccessPoliciesMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteAccessPoliciesMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [deleteAccessSpecializationMutation, { data, loading, error }] = useDeleteAccessSpecializationMutation({
+ * const [deleteAccessPoliciesMutation, { data, loading, error }] = useDeleteAccessPoliciesMutation({
  *   variables: {
- *      specializationSid: // value for 'specializationSid'
+ *      deleteAccessPoliciesInput: // value for 'deleteAccessPoliciesInput'
  *   },
  * });
  */
