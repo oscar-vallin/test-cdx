@@ -5700,25 +5700,8 @@ export const AccessPolicyFormDocument = gql`
       name {
         value
         label
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
-      }
-      organization {
         value
-        description
-        label
         info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
       }
       permissions {
         value
@@ -6863,8 +6846,8 @@ export const WpProcessErrorsDocument = gql`
       ...fragmentPaginationInfo
     }
   }
-  ${FragmentPaginationInfoFragmentDoc}
-`;
+}
+    ${FragmentPaginationInfoFragmentDoc}`;
 
 /**
  * __useSearchOrganizationsQuery__
@@ -7445,24 +7428,26 @@ export const DashThemeColorForOrgDocument = gql`
       black
       white
     }
+    response
+    errCode
+    errMsg
+    errSeverity
   }
 }
     ${FragmentPaginationInfoFragmentDoc}`;
 
 /**
- * __useDashThemeColorForOrgQuery__
+ * __useOrganizationFormQuery__
  *
- * To run a query within a React component, call `useDashThemeColorForOrgQuery` and pass it any options that fit your needs.
- * When your component renders, `useDashThemeColorForOrgQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useOrganizationFormQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOrganizationFormQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useDashThemeColorForOrgQuery({
+ * const { data, loading, error } = useOrganizationFormQuery({
  *   variables: {
- *      ownedInput: // value for 'ownedInput'
- *      pageableInput: // value for 'pageableInput'
  *   },
  * });
  */
@@ -7485,18 +7470,18 @@ export const DashSiteForOrgDocument = gql`
     `;
 
 /**
- * __useDashSiteForOrgQuery__
+ * __useFindOrganizationQuery__
  *
- * To run a query within a React component, call `useDashSiteForOrgQuery` and pass it any options that fit your needs.
- * When your component renders, `useDashSiteForOrgQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useFindOrganizationQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindOrganizationQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useDashSiteForOrgQuery({
+ * const { data, loading, error } = useFindOrganizationQuery({
  *   variables: {
- *      orgSidInput: // value for 'orgSidInput'
+ *      orgSid: // value for 'orgSid'
  *   },
  * });
  */
@@ -7544,18 +7529,21 @@ export const DashThemeColorDocument = gql`
     `;
 
 /**
- * __useDashThemeColorQuery__
+ * __useSearchOrganizationsQuery__
  *
- * To run a query within a React component, call `useDashThemeColorQuery` and pass it any options that fit your needs.
- * When your component renders, `useDashThemeColorQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useSearchOrganizationsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchOrganizationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useDashThemeColorQuery({
+ * const { data, loading, error } = useSearchOrganizationsQuery({
  *   variables: {
- *      ownedInputSid: // value for 'ownedInputSid'
+ *      searchText: // value for 'searchText'
+ *      orgOwnerSid: // value for 'orgOwnerSid'
+ *      orgFilter: // value for 'orgFilter'
+ *      pageableInput: // value for 'pageableInput'
  *   },
  * });
  */
@@ -7730,18 +7718,19 @@ export const DefaultDashThemeForSitePageDocument = gql`
     `;
 
 /**
- * __useDefaultDashThemeForSitePageQuery__
+ * __useDashThemeColorForOrgQuery__
  *
- * To run a query within a React component, call `useDefaultDashThemeForSitePageQuery` and pass it any options that fit your needs.
- * When your component renders, `useDefaultDashThemeForSitePageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useDashThemeColorForOrgQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDashThemeColorForOrgQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useDefaultDashThemeForSitePageQuery({
+ * const { data, loading, error } = useDashThemeColorForOrgQuery({
  *   variables: {
  *      ownedInput: // value for 'ownedInput'
+ *      pageableInput: // value for 'pageableInput'
  *   },
  * });
  */
@@ -7827,17 +7816,18 @@ export const CurrentUserDashThemePageDocument = gql`
     `;
 
 /**
- * __useCurrentUserDashThemePageQuery__
+ * __useDashSiteForOrgQuery__
  *
- * To run a query within a React component, call `useCurrentUserDashThemePageQuery` and pass it any options that fit your needs.
- * When your component renders, `useCurrentUserDashThemePageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useDashSiteForOrgQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDashSiteForOrgQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useCurrentUserDashThemePageQuery({
+ * const { data, loading, error } = useDashSiteForOrgQuery({
  *   variables: {
+ *      orgSidInput: // value for 'orgSidInput'
  *   },
  * });
  */
@@ -7860,24 +7850,59 @@ export const NavigateToNewDomainDocument = gql`
       subNavItems {
         ...fragmentWebNav
       }
-    }
+export function useDashSiteForOrgLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DashSiteForOrgQuery, DashSiteForOrgQueryVariables>) {
+          return Apollo.useLazyQuery<DashSiteForOrgQuery, DashSiteForOrgQueryVariables>(DashSiteForOrgDocument, baseOptions);
+        }
+export type DashSiteForOrgQueryHookResult = ReturnType<typeof useDashSiteForOrgQuery>;
+export type DashSiteForOrgLazyQueryHookResult = ReturnType<typeof useDashSiteForOrgLazyQuery>;
+export type DashSiteForOrgQueryResult = Apollo.QueryResult<DashSiteForOrgQuery, DashSiteForOrgQueryVariables>;
+export const DashThemeColorDocument = gql`
+    query DashThemeColor($ownedInputSid: OwnedInputSid) {
+  dashThemeColor(ownedInputSid: $ownedInputSid) {
+    id
+    defaultPalette
+    themeColorMode
+    allowDark
+    paletteNm
+    themePrimary
+    themeLighterAlt
+    themeLighter
+    themeLight
+    themeTertiary
+    themeSecondary
+    themeDarkAlt
+    themeDark
+    themeDarker
+    neutralLighterAlt
+    neutralLighter
+    neutralLight
+    neutralQuaternaryAlt
+    neutralQuaternary
+    neutralTertiaryAlt
+    neutralTertiary
+    neutralSecondary
+    neutralPrimaryAlt
+    neutralPrimary
+    neutralDark
+    black
+    white
   }
 }
     ${FragmentWebNavFragmentDoc}`;
 
 /**
- * __useNavigateToNewDomainQuery__
+ * __useDashThemeColorQuery__
  *
- * To run a query within a React component, call `useNavigateToNewDomainQuery` and pass it any options that fit your needs.
- * When your component renders, `useNavigateToNewDomainQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useDashThemeColorQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDashThemeColorQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useNavigateToNewDomainQuery({
+ * const { data, loading, error } = useDashThemeColorQuery({
  *   variables: {
- *      domainNavInput: // value for 'domainNavInput'
+ *      ownedInputSid: // value for 'ownedInputSid'
  *   },
  * });
  */
@@ -7899,17 +7924,18 @@ export const SimulateSessionExpirDocument = gql`
     `;
 
 /**
- * __useSimulateSessionExpirQuery__
+ * __useDashThemeColorByNameQuery__
  *
- * To run a query within a React component, call `useSimulateSessionExpirQuery` and pass it any options that fit your needs.
- * When your component renders, `useSimulateSessionExpirQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useDashThemeColorByNameQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDashThemeColorByNameQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useSimulateSessionExpirQuery({
+ * const { data, loading, error } = useDashThemeColorByNameQuery({
  *   variables: {
+ *      ownedInputName: // value for 'ownedInputName'
  *   },
  * });
  */
@@ -7956,20 +7982,18 @@ export const PasswordLoginDocument = gql`
 export type PasswordLoginMutationFn = Apollo.MutationFunction<PasswordLoginMutation, PasswordLoginMutationVariables>;
 
 /**
- * __usePasswordLoginMutation__
+ * __useDefaultDashThemeForSiteQuery__
  *
- * To run a mutation, you first call `usePasswordLoginMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `usePasswordLoginMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
+ * To run a query within a React component, call `useDefaultDashThemeForSiteQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDefaultDashThemeForSiteQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const [passwordLoginMutation, { data, loading, error }] = usePasswordLoginMutation({
+ * const { data, loading, error } = useDefaultDashThemeForSiteQuery({
  *   variables: {
- *      userId: // value for 'userId'
- *      password: // value for 'password'
+ *      ownedInput: // value for 'ownedInput'
  *   },
  * });
  */
@@ -8030,19 +8054,18 @@ export const CreateOrgDocument = gql`
 export type CreateOrgMutationFn = Apollo.MutationFunction<CreateOrgMutation, CreateOrgMutationVariables>;
 
 /**
- * __useCreateOrgMutation__
+ * __useDefaultDashThemeForSitePageQuery__
  *
- * To run a mutation, you first call `useCreateOrgMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateOrgMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
+ * To run a query within a React component, call `useDefaultDashThemeForSitePageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDefaultDashThemeForSitePageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const [createOrgMutation, { data, loading, error }] = useCreateOrgMutation({
+ * const { data, loading, error } = useDefaultDashThemeForSitePageQuery({
  *   variables: {
- *      orgInfo: // value for 'orgInfo'
+ *      ownedInput: // value for 'ownedInput'
  *   },
  * });
  */
@@ -8060,19 +8083,17 @@ export const DeactivateOrgDocument = gql`
 export type DeactivateOrgMutationFn = Apollo.MutationFunction<DeactivateOrgMutation, DeactivateOrgMutationVariables>;
 
 /**
- * __useDeactivateOrgMutation__
+ * __useCurrentUserDashThemePageQuery__
  *
- * To run a mutation, you first call `useDeactivateOrgMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeactivateOrgMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
+ * To run a query within a React component, call `useCurrentUserDashThemePageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCurrentUserDashThemePageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const [deactivateOrgMutation, { data, loading, error }] = useDeactivateOrgMutation({
+ * const { data, loading, error } = useCurrentUserDashThemePageQuery({
  *   variables: {
- *      orgSid: // value for 'orgSid'
  *   },
  * });
  */
@@ -8171,19 +8192,18 @@ export const CreateAccessPolicyDocument = gql`
 export type CreateAccessPolicyMutationFn = Apollo.MutationFunction<CreateAccessPolicyMutation, CreateAccessPolicyMutationVariables>;
 
 /**
- * __useCreateAccessPolicyMutation__
+ * __useNavigateToNewDomainQuery__
  *
- * To run a mutation, you first call `useCreateAccessPolicyMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateAccessPolicyMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
+ * To run a query within a React component, call `useNavigateToNewDomainQuery` and pass it any options that fit your needs.
+ * When your component renders, `useNavigateToNewDomainQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const [createAccessPolicyMutation, { data, loading, error }] = useCreateAccessPolicyMutation({
+ * const { data, loading, error } = useNavigateToNewDomainQuery({
  *   variables: {
- *      createAccessPolicyInput: // value for 'createAccessPolicyInput'
+ *      domainNavInput: // value for 'domainNavInput'
  *   },
  * });
  */
@@ -8312,19 +8332,19 @@ export const DeleteAccessPoliciesDocument = gql`
 export type DeleteAccessPoliciesMutationFn = Apollo.MutationFunction<DeleteAccessPoliciesMutation, DeleteAccessPoliciesMutationVariables>;
 
 /**
- * __useDeleteAccessPoliciesMutation__
+ * __useUpdateOwnPasswordMutation__
  *
- * To run a mutation, you first call `useDeleteAccessPoliciesMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteAccessPoliciesMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useUpdateOwnPasswordMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateOwnPasswordMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [deleteAccessPoliciesMutation, { data, loading, error }] = useDeleteAccessPoliciesMutation({
+ * const [updateOwnPasswordMutation, { data, loading, error }] = useUpdateOwnPasswordMutation({
  *   variables: {
- *      deleteAccessPoliciesInput: // value for 'deleteAccessPoliciesInput'
+ *      updatePasswordInput: // value for 'updatePasswordInput'
  *   },
  * });
  */
@@ -8342,19 +8362,19 @@ export const DeleteAccessPolicyDocument = gql`
 export type DeleteAccessPolicyMutationFn = Apollo.MutationFunction<DeleteAccessPolicyMutation, DeleteAccessPolicyMutationVariables>;
 
 /**
- * __useDeleteAccessPolicyMutation__
+ * __useCreateOrgMutation__
  *
- * To run a mutation, you first call `useDeleteAccessPolicyMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteAccessPolicyMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useCreateOrgMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateOrgMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [deleteAccessPolicyMutation, { data, loading, error }] = useDeleteAccessPolicyMutation({
+ * const [createOrgMutation, { data, loading, error }] = useCreateOrgMutation({
  *   variables: {
- *      policySid: // value for 'policySid'
+ *      orgInfo: // value for 'orgInfo'
  *   },
  * });
  */
@@ -8441,19 +8461,19 @@ export const CreateAccessSpecializationDocument = gql`
 export type CreateAccessSpecializationMutationFn = Apollo.MutationFunction<CreateAccessSpecializationMutation, CreateAccessSpecializationMutationVariables>;
 
 /**
- * __useCreateAccessSpecializationMutation__
+ * __useCreateAccessPolicyMutation__
  *
- * To run a mutation, you first call `useCreateAccessSpecializationMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateAccessSpecializationMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useCreateAccessPolicyMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateAccessPolicyMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [createAccessSpecializationMutation, { data, loading, error }] = useCreateAccessSpecializationMutation({
+ * const [createAccessPolicyMutation, { data, loading, error }] = useCreateAccessPolicyMutation({
  *   variables: {
- *      createAccessSpecializationInput: // value for 'createAccessSpecializationInput'
+ *      createAccessPolicyInput: // value for 'createAccessPolicyInput'
  *   },
  * });
  */
@@ -8540,19 +8560,19 @@ export const UpdateAccessSpecializationDocument = gql`
 export type UpdateAccessSpecializationMutationFn = Apollo.MutationFunction<UpdateAccessSpecializationMutation, UpdateAccessSpecializationMutationVariables>;
 
 /**
- * __useUpdateAccessSpecializationMutation__
+ * __useUpdateAccessPolicyMutation__
  *
- * To run a mutation, you first call `useUpdateAccessSpecializationMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateAccessSpecializationMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useUpdateAccessPolicyMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateAccessPolicyMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [updateAccessSpecializationMutation, { data, loading, error }] = useUpdateAccessSpecializationMutation({
+ * const [updateAccessPolicyMutation, { data, loading, error }] = useUpdateAccessPolicyMutation({
  *   variables: {
- *      updateAccessSpecializationInput: // value for 'updateAccessSpecializationInput'
+ *      updateAccessPolicyInput: // value for 'updateAccessPolicyInput'
  *   },
  * });
  */
@@ -8570,19 +8590,19 @@ export const DeleteAccessSpecializationDocument = gql`
 export type DeleteAccessSpecializationMutationFn = Apollo.MutationFunction<DeleteAccessSpecializationMutation, DeleteAccessSpecializationMutationVariables>;
 
 /**
- * __useDeleteAccessSpecializationMutation__
+ * __useDeleteAccessPoliciesMutation__
  *
- * To run a mutation, you first call `useDeleteAccessSpecializationMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteAccessSpecializationMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useDeleteAccessPoliciesMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteAccessPoliciesMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [deleteAccessSpecializationMutation, { data, loading, error }] = useDeleteAccessSpecializationMutation({
+ * const [deleteAccessPoliciesMutation, { data, loading, error }] = useDeleteAccessPoliciesMutation({
  *   variables: {
- *      specializationSid: // value for 'specializationSid'
+ *      deleteAccessPoliciesInput: // value for 'deleteAccessPoliciesInput'
  *   },
  * });
  */
