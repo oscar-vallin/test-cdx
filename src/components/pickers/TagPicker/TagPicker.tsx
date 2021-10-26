@@ -9,8 +9,8 @@ const defaultProps = {
   pickerProps: '',
   value: [],
   options: [],
-  onItemSelected: () => {},
-  onRemoveItem: () => {},
+  onItemSelected: () => null,
+  onRemoveItem: () => null,
   onResolveSuggestions: () => null,
   debounce: 300,
   onBlur: () => null,
@@ -25,7 +25,7 @@ type CDXTagPickerProps = {
   itemLimit?: any;
   pickerProps?: any;
   value?: string[];
-  options?: string[];
+  options?: { name: string }[];
   onItemSelected?: any | null;
   onRemoveItem?: ReactElement;
   onResolveSuggestions?: any | null;
@@ -35,7 +35,6 @@ type CDXTagPickerProps = {
   required?: boolean;
   id?: string;
   diseable?: any;
-  name?: string;
 } & typeof defaultProps;
 
 const CDXTagPicker = ({
@@ -45,8 +44,8 @@ const CDXTagPicker = ({
   pickerProps,
   value = [],
   options = [],
-  onItemSelected = () => {},
-  onRemoveItem = () => {},
+  onItemSelected = () => null,
+  // onRemoveItem = () => {},
   onResolveSuggestions,
   debounce = 300,
   onBlur,
@@ -54,7 +53,7 @@ const CDXTagPicker = ({
   required,
   id,
 }: CDXTagPickerProps): ReactElement => {
-  const picker = useRef(null);
+  const picker = useRef(null) as any;
   const getTextFromItem = ({ name }) => name;
   const filterSelectedTags = (filterText) =>
     filterText ? options.filter((tag) => tag.name.toLowerCase().indexOf(filterText.toLowerCase()) === 0) : [];
@@ -83,7 +82,7 @@ const CDXTagPicker = ({
       <TagPicker
         onResolveSuggestions={onResolveSuggestions || filterSelectedTags}
         onItemSelected={handleItemSelection}
-        onRemoveItem={onRemoveItem}
+        // onRemoveItem={onRemoveItem}
         getTextFromItem={getTextFromItem}
         componentRef={picker}
         itemLimit={itemLimit}
