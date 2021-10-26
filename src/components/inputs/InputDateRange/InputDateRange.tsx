@@ -4,8 +4,8 @@ import { InputDate } from '../InputDate';
 import { Row, Column } from './InputDateRange.styles';
 
 const defaultProps = {
-  startDate: 0,
-  endDate: 0,
+  startDate: '',
+  endDate: '',
 };
 
 type InputDateRangeProps = {

@@ -4,12 +4,12 @@ import { shallow } from 'enzyme';
 import { InputDateRange as Component } from './InputDateRange';
 
 const defaultProps = {
-  startDate: new Date(),
-  endDate: new Date(),
+  startDate: { value: new Date() },
+  endDate: { value: new Date() },
 };
 
 test('Matches Snapshot', () => {
-  const wrapper = shallow(<Component startDate={new Date()} endDate={new Date()} />);
+  const wrapper = shallow(<Component {...defaultProps} />);
   expect(toJSON(wrapper)).toMatchSnapshot();
 });
 
