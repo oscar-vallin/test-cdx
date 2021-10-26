@@ -94,9 +94,14 @@ export const MonthPicker = ({
   showMonthPickerAsOverlay = true,
   showWeekNumbers = false,
   firstDayOfWeek = DayOfWeek.Monday,
+  minDate,
+  maxDate,
+  restrictedDates,
+  showSixWeeksByDefault,
+  workWeekDays,
   ...props
 }: MonthPickerProps): ReactElement => {
-  const [selectedDateRange, setSelectedDateRange] = useState<Date>();
+  const [selectedDateRange, setSelectedDateRange] = useState<Date[]>();
   const [selectedDate, setSelectedDate] = useState<Date>();
 
   const onSelectDate = (date, dateRangeArray) => {
@@ -107,10 +112,10 @@ export const MonthPicker = ({
 
   const goPrevious = () => {
     const goPreviousSelectedDate = selectedDate || new Date();
-    const dateRangeArray = getDateRangeArray(goPreviousSelectedDate, props.dateRangeType, DayOfWeek.Sunday);
+    const dateRangeArray = getDateRangeArray(goPreviousSelectedDate, dateRangeType, DayOfWeek.Sunday);
     let subtractFrom = dateRangeArray[0];
     let daysToSubtract = dateRangeArray.length;
-    if (props.dateRangeType === DateRangeType.Month) {
+    if (dateRangeType === DateRangeType.Month) {
       subtractFrom = new Date(subtractFrom.getFullYear(), subtractFrom.getMonth(), 1);
       daysToSubtract = 1;
     }
@@ -122,7 +127,7 @@ export const MonthPicker = ({
 
   const goNext = () => {
     const goNextSelectedDate = selectedDate || new Date();
-    const dateRangeArray = getDateRangeArray(goNextSelectedDate, props.dateRangeType, DayOfWeek.Sunday);
+    const dateRangeArray = getDateRangeArray(goNextSelectedDate, dateRangeType, DayOfWeek.Sunday);
     const newSelectedDate = addDays(dateRangeArray.pop() as Date, 1);
 
     return {
@@ -154,24 +159,21 @@ export const MonthPicker = ({
           </div>
         </>
       )}
-      {(props.minDate || props.maxDate) && (
+      {(minDate || maxDate) && (
         <div>
           Date boundary:
           <span>
             {' '}
-            {props.minDate ? props.minDate.toLocaleDateString() : 'Not set'}-
-            {props.maxDate ? props.maxDate.toLocaleDateString() : 'Not set'}
+            {minDate ? minDate.toLocaleDateString() : 'Not set'}-{maxDate ? maxDate.toLocaleDateString() : 'Not set'}
           </span>
         </div>
       )}
-      {props.restrictedDates && (
+      {restrictedDates && (
         <div>
           Disabled date(s):
           <span>
             {' '}
-            {props.restrictedDates.length > 0
-              ? props.restrictedDates.map((d) => d.toLocaleDateString()).join(', ')
-              : 'Not set'}
+            {restrictedDates.length > 0 ? restrictedDates.map((d) => d.toLocaleDateString()).join(', ') : 'Not set'}
           </span>
         </div>
       )}
@@ -182,24 +184,24 @@ export const MonthPicker = ({
         // eslint-disable-next-line react/jsx-no-bind
         onDismiss={onDismiss}
         isMonthPickerVisible
-        dateRangeType={props.dateRangeType}
-        autoNavigateOnSelection={props.autoNavigateOnSelection}
-        showGoToToday={props.showGoToToday}
-        value={selectedDate ?? ''}
+        dateRangeType={dateRangeType}
+        autoNavigateOnSelection={autoNavigateOnSelection}
+        showGoToToday={showGoToToday}
+        value={selectedDate ?? new Date()}
         firstDayOfWeek={DayOfWeek.Monday}
         strings={dayPickerStrings}
-        highlightCurrentMonth={props.highlightCurrentMonth}
-        highlightSelectedMonth={props.highlightSelectedMonth}
+        highlightCurrentMonth={highlightCurrentMonth}
+        highlightSelectedMonth={highlightSelectedMonth}
         isDayPickerVisible={false}
-        showMonthPickerAsOverlay={props.showMonthPickerAsOverlay}
+        showMonthPickerAsOverlay={showMonthPickerAsOverlay}
         showWeekNumbers={false}
-        minDate={props.minDate}
-        maxDate={props.maxDate}
-        restrictedDates={props.restrictedDates}
-        showSixWeeksByDefault={props.showSixWeeksByDefault}
-        workWeekDays={props.workWeekDays}
+        minDate={minDate}
+        maxDate={maxDate}
+        restrictedDates={restrictedDates}
+        showSixWeeksByDefault={showSixWeeksByDefault}
+        workWeekDays={workWeekDays}
       />
-      {props.showNavigateButtons && (
+      {showNavigateButtons && (
         <div>
           <DefaultButton
             data-testid="__PrevioustBtn"

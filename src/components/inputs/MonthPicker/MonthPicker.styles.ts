@@ -17,6 +17,6 @@ export const Container = styled.div<ContainerProps>`
 `;
 
 type ContainerProps = {
-  show: boolean;
-  value: string;
+  show?: boolean;
+  value?: string;
 };
