@@ -24,6 +24,7 @@ type InputTextProps = {
   onKeyEnter?: any | null;
   value?: string;
   placeholder?: string;
+  autoFocus?: boolean;
 } & typeof defaultProps;
 
 const InputText = ({
