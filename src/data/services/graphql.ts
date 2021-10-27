@@ -6311,236 +6311,6 @@ export const FindAccessPolicyGroupDocument = gql`
       key
       values {
         label
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      tmplUseAsIs {
-        value
-        label
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      applicableOrgTypes {
-        value
-        label
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      policies {
-        value
-        label
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      specializations {
-        value
-        label
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      includeAllSubOrgs {
-        value
-        label
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      includeOrgSids {
-        value
-        label
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      excludeOrgSids {
-        value
-        label
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      options {
-        key
-        values {
-          label
-          value
-          info
-        }
-export type AccessPolicyGroupFormQueryHookResult = ReturnType<typeof useAccessPolicyGroupFormQuery>;
-export type AccessPolicyGroupFormLazyQueryHookResult = ReturnType<typeof useAccessPolicyGroupFormLazyQuery>;
-export type AccessPolicyGroupFormQueryResult = Apollo.QueryResult<AccessPolicyGroupFormQuery, AccessPolicyGroupFormQueryVariables>;
-export const FindAccessPolicyGroupDocument = gql`
-    query FindAccessPolicyGroup($policyGroupSid: ID!) {
-  findAccessPolicyGroup(policyGroupSid: $policyGroupSid) {
-    sid
-    name {
-      value
-      label
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
-    }
-    description {
-      value
-      label
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
-    }
-    organization {
-      value
-      description
-      label
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
-    }
-    tmpl {
-      value
-      label
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
-    }
-    tmplUseAsIs {
-      value
-      label
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
-    }
-    applicableOrgTypes {
-      value
-      label
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
-    }
-    policies {
-      value
-      label
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
-    }
-    specializations {
-      value
-      label
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
-    }
-    includeAllSubOrgs {
-      value
-      label
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
-    }
-    includeOrgSids {
-      value
-      label
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
-    }
-    excludeOrgSids {
-      value
-      label
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
-    }
-    options {
-      key
-      values {
-        label
         value
         info
       }
@@ -6689,54 +6459,24 @@ export const DirectOrganizationsDocument = gql`
  *   },
  * });
  */
-export function useScheduleOccurrencesQuery(baseOptions: Apollo.QueryHookOptions<ScheduleOccurrencesQuery, ScheduleOccurrencesQueryVariables>) {
-        return Apollo.useQuery<ScheduleOccurrencesQuery, ScheduleOccurrencesQueryVariables>(ScheduleOccurrencesDocument, baseOptions);
+export function useDirectOrganizationsQuery(baseOptions: Apollo.QueryHookOptions<DirectOrganizationsQuery, DirectOrganizationsQueryVariables>) {
+        return Apollo.useQuery<DirectOrganizationsQuery, DirectOrganizationsQueryVariables>(DirectOrganizationsDocument, baseOptions);
       }
-export function useScheduleOccurrencesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ScheduleOccurrencesQuery, ScheduleOccurrencesQueryVariables>) {
-          return Apollo.useLazyQuery<ScheduleOccurrencesQuery, ScheduleOccurrencesQueryVariables>(ScheduleOccurrencesDocument, baseOptions);
+export function useDirectOrganizationsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DirectOrganizationsQuery, DirectOrganizationsQueryVariables>) {
+          return Apollo.useLazyQuery<DirectOrganizationsQuery, DirectOrganizationsQueryVariables>(DirectOrganizationsDocument, baseOptions);
         }
-export type ScheduleOccurrencesQueryHookResult = ReturnType<typeof useScheduleOccurrencesQuery>;
-export type ScheduleOccurrencesLazyQueryHookResult = ReturnType<typeof useScheduleOccurrencesLazyQuery>;
-export type ScheduleOccurrencesQueryResult = Apollo.QueryResult<ScheduleOccurrencesQuery, ScheduleOccurrencesQueryVariables>;
-export const OrganizationFormDocument = gql`
-    query OrganizationForm {
-  organizationForm {
-    sid
-    name {
-      value
-      label
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
-    }
-    orgId {
-      value
-      label
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
-    }
-    orgType {
-      value
-      label
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
+export type DirectOrganizationsQueryHookResult = ReturnType<typeof useDirectOrganizationsQuery>;
+export type DirectOrganizationsLazyQueryHookResult = ReturnType<typeof useDirectOrganizationsLazyQuery>;
+export type DirectOrganizationsQueryResult = Apollo.QueryResult<DirectOrganizationsQuery, DirectOrganizationsQueryVariables>;
+export const WpProcessErrorsDocument = gql`
+    query WpProcessErrors($orgSid: ID!, $dateRange: DateTimeRangeInput, $pageableInput: PageableInput) {
+  wpProcessErrors(
+    orgSid: $orgSid
+    dateRange: $dateRange
+    pageableInput: $pageableInput
+  ) {
+    paginationInfo {
+      ...fragmentPaginationInfo
     }
   }
   ${FragmentPaginationInfoFragmentDoc}
@@ -7047,49 +6787,162 @@ export const ScheduleOccurrencesDocument = gql`
  *   },
  * });
  */
-export function useSearchOrganizationsQuery(baseOptions: Apollo.QueryHookOptions<SearchOrganizationsQuery, SearchOrganizationsQueryVariables>) {
-        return Apollo.useQuery<SearchOrganizationsQuery, SearchOrganizationsQueryVariables>(SearchOrganizationsDocument, baseOptions);
+export function useScheduleOccurrencesQuery(baseOptions: Apollo.QueryHookOptions<ScheduleOccurrencesQuery, ScheduleOccurrencesQueryVariables>) {
+        return Apollo.useQuery<ScheduleOccurrencesQuery, ScheduleOccurrencesQueryVariables>(ScheduleOccurrencesDocument, baseOptions);
       }
-export function useSearchOrganizationsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchOrganizationsQuery, SearchOrganizationsQueryVariables>) {
-          return Apollo.useLazyQuery<SearchOrganizationsQuery, SearchOrganizationsQueryVariables>(SearchOrganizationsDocument, baseOptions);
+export function useScheduleOccurrencesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ScheduleOccurrencesQuery, ScheduleOccurrencesQueryVariables>) {
+          return Apollo.useLazyQuery<ScheduleOccurrencesQuery, ScheduleOccurrencesQueryVariables>(ScheduleOccurrencesDocument, baseOptions);
         }
-export type SearchOrganizationsQueryHookResult = ReturnType<typeof useSearchOrganizationsQuery>;
-export type SearchOrganizationsLazyQueryHookResult = ReturnType<typeof useSearchOrganizationsLazyQuery>;
-export type SearchOrganizationsQueryResult = Apollo.QueryResult<SearchOrganizationsQuery, SearchOrganizationsQueryVariables>;
-export const DashThemeColorForOrgDocument = gql`
-    query DashThemeColorForOrg($ownedInput: OwnedInput, $pageableInput: PageableInput) {
-  dashThemeColorForOrg(ownedInput: $ownedInput, pageableInput: $pageableInput) {
-    paginationInfo {
-      ...fragmentPaginationInfo
+export type ScheduleOccurrencesQueryHookResult = ReturnType<typeof useScheduleOccurrencesQuery>;
+export type ScheduleOccurrencesLazyQueryHookResult = ReturnType<typeof useScheduleOccurrencesLazyQuery>;
+export type ScheduleOccurrencesQueryResult = Apollo.QueryResult<ScheduleOccurrencesQuery, ScheduleOccurrencesQueryVariables>;
+export const OrganizationFormDocument = gql`
+    query OrganizationForm {
+  organizationForm {
+    sid
+    name {
+      value
+      label
+      info
+      required
+      visible
+      min
+      max
+      errCode
+      errMsg
+      errSeverity
     }
-    nodes {
-      id
-      defaultPalette
-      themeColorMode
-      allowDark
-      paletteNm
-      themePrimary
-      themeLighterAlt
-      themeLighter
-      themeLight
-      themeTertiary
-      themeSecondary
-      themeDarkAlt
-      themeDark
-      themeDarker
-      neutralLighterAlt
-      neutralLighter
-      neutralLight
-      neutralQuaternaryAlt
-      neutralQuaternary
-      neutralTertiaryAlt
-      neutralTertiary
-      neutralSecondary
-      neutralPrimaryAlt
-      neutralPrimary
-      neutralDark
-      black
-      white
+    orgId {
+      value
+      label
+      info
+      required
+      visible
+      min
+      max
+      errCode
+      errMsg
+      errSeverity
+    }
+    orgType {
+      value
+      label
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    active {
+      value
+      label
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    options {
+      key
+      values {
+        label
+        value
+        info
+      }
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    `;
+
+/**
+ * __useOrganizationFormQuery__
+ *
+ * To run a query within a React component, call `useOrganizationFormQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOrganizationFormQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOrganizationFormQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useOrganizationFormQuery(baseOptions?: Apollo.QueryHookOptions<OrganizationFormQuery, OrganizationFormQueryVariables>) {
+        return Apollo.useQuery<OrganizationFormQuery, OrganizationFormQueryVariables>(OrganizationFormDocument, baseOptions);
+      }
+export function useOrganizationFormLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OrganizationFormQuery, OrganizationFormQueryVariables>) {
+          return Apollo.useLazyQuery<OrganizationFormQuery, OrganizationFormQueryVariables>(OrganizationFormDocument, baseOptions);
+        }
+export type OrganizationFormQueryHookResult = ReturnType<typeof useOrganizationFormQuery>;
+export type OrganizationFormLazyQueryHookResult = ReturnType<typeof useOrganizationFormLazyQuery>;
+export type OrganizationFormQueryResult = Apollo.QueryResult<OrganizationFormQuery, OrganizationFormQueryVariables>;
+export const FindOrganizationDocument = gql`
+    query FindOrganization($orgSid: ID!) {
+  findOrganization(orgSid: $orgSid) {
+    sid
+    name {
+      value
+      label
+      info
+      required
+      visible
+      min
+      max
+      errCode
+      errMsg
+      errSeverity
+    }
+    orgId {
+      value
+      label
+      info
+      required
+      visible
+      min
+      max
+      errCode
+      errMsg
+      errSeverity
+    }
+    orgType {
+      value
+      label
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    active {
+      value
+      label
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    options {
+      key
+      values {
+        label
+        value
+        info
+      }
     }
     response
     errCode
