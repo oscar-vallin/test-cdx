@@ -2787,18 +2787,18 @@ export type SystemTemplateAccessPolicyGroupByNameQueryVariables = Exact<{
   name: Scalars['String'];
 }>;
 
-export type SystemTemplateAccessPolicyGroupByNameQuery = { __typename?: 'Query' } & {
-  systemTemplateAccessPolicyGroupByName?: Maybe<
-    Array<
-      Maybe<
-        { __typename?: 'AccessPolicyGroup' } & Pick<
-          AccessPolicyGroup,
-          'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes'
-        > & { policies?: Maybe<Array<Maybe<{ __typename?: 'AccessPolicy' } & FragmentAccessPolicyFragment>>> }
-      >
-    >
-  >;
-};
+
+export type SystemTemplateAccessPolicyGroupByNameQuery = (
+  { __typename?: 'Query' }
+  & { systemTemplateAccessPolicyGroupByName?: Maybe<Array<Maybe<(
+    { __typename?: 'AccessPolicyGroup' }
+    & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes'>
+    & { policies?: Maybe<Array<Maybe<(
+      { __typename?: 'AccessPolicy' }
+      & FragmentAccessPolicyFragment
+    )>>> }
+  )>>> }
+);
 
 export type SystemTemplateAccessPolicyGroupByNameQuery = (
   { __typename?: 'Query' }
@@ -3360,11 +3360,34 @@ export type FindOrganizationQueryVariables = Exact<{
   orgSid: Scalars['ID'];
 }>;
 
-export type OrganizationQuickSearchQuery = { __typename?: 'Query' } & {
-  organizationQuickSearch?: Maybe<
-    Array<Maybe<{ __typename?: 'Organization' } & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType'>>>
-  >;
-};
+
+export type FindOrganizationQuery = (
+  { __typename?: 'Query' }
+  & { findOrganization?: Maybe<(
+    { __typename?: 'OrganizationForm' }
+    & Pick<OrganizationForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { name: (
+      { __typename?: 'UIStringField' }
+      & Pick<UiStringField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), orgId: (
+      { __typename?: 'UIStringField' }
+      & Pick<UiStringField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), orgType?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & Pick<UiSelectOneField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, active: (
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), options?: Maybe<Array<Maybe<(
+      { __typename?: 'UIOptions' }
+      & Pick<UiOptions, 'key'>
+      & { values?: Maybe<Array<Maybe<(
+        { __typename?: 'UIOption' }
+        & Pick<UiOption, 'label' | 'value' | 'info'>
+      )>>> }
+    )>>> }
+  )> }
+);
 
 export type SearchOrganizationsQueryVariables = Exact<{
   searchText: Scalars['String'];
@@ -3373,11 +3396,20 @@ export type SearchOrganizationsQueryVariables = Exact<{
   pageableInput?: Maybe<PageableInput>;
 }>;
 
-export type VendorQuickSearchQuery = { __typename?: 'Query' } & {
-  vendorQuickSearch?: Maybe<
-    Array<Maybe<{ __typename?: 'Organization' } & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType'>>>
-  >;
-};
+
+export type SearchOrganizationsQuery = (
+  { __typename?: 'Query' }
+  & { searchOrganizations?: Maybe<(
+    { __typename?: 'OrganizationConnection' }
+    & { paginationInfo: (
+      { __typename?: 'PaginationInfo' }
+      & FragmentPaginationInfoFragment
+    ), nodes?: Maybe<Array<Maybe<(
+      { __typename?: 'Organization' }
+      & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType'>
+    )>>> }
+  )> }
+);
 
 export type OrganizationQuickSearchQueryVariables = Exact<{
   searchText: Scalars['String'];
@@ -4496,7 +4528,6 @@ export const FragmentCdxPageInfoFragmentDoc = gql`
     lookupPairs {
       ...unionNVP
     }
-    commandType
   }
 }
     ${FragmentWebCommandFragmentDoc}
@@ -4869,8 +4900,74 @@ export type WorkPacketStatusDetailsQueryHookResult = ReturnType<typeof useWorkPa
 export type WorkPacketStatusDetailsLazyQueryHookResult = ReturnType<typeof useWorkPacketStatusDetailsLazyQuery>;
 export type WorkPacketStatusDetailsQueryResult = Apollo.QueryResult<WorkPacketStatusDetailsQuery, WorkPacketStatusDetailsQueryVariables>;
 export const WorkPacketStatusDocument = gql`
-  query WorkPacketStatus($orgSid: ID!, $workOrderId: String!) {
-    workPacketStatus(orgSid: $orgSid, workOrderId: $workOrderId) {
+    query WorkPacketStatus($orgSid: ID!, $workOrderId: String!) {
+  workPacketStatus(orgSid: $orgSid, workOrderId: $workOrderId) {
+    workOrderId
+    timestamp
+    planSponsorId
+    orgId
+    orgSid
+    detailsPath
+    subClientPath
+    inboundFilename
+    vendorId
+    vendorSid
+    step
+    stepStatus
+    packetStatus
+    reprocessedBy
+    restartReason
+    recordHighlightCount
+    populationCount
+    recordHighlightType
+    clientFileArchivePath
+    vendorFileArchivePath
+    supplementalFilesArchivePaths
+    archiveOnly
+    hasErrors
+    environment
+  }
+}
+    `;
+
+/**
+ * __useWorkPacketStatusQuery__
+ *
+ * To run a query within a React component, call `useWorkPacketStatusQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWorkPacketStatusQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useWorkPacketStatusQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *      workOrderId: // value for 'workOrderId'
+ *   },
+ * });
+ */
+export function useWorkPacketStatusQuery(baseOptions: Apollo.QueryHookOptions<WorkPacketStatusQuery, WorkPacketStatusQueryVariables>) {
+        return Apollo.useQuery<WorkPacketStatusQuery, WorkPacketStatusQueryVariables>(WorkPacketStatusDocument, baseOptions);
+      }
+export function useWorkPacketStatusLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WorkPacketStatusQuery, WorkPacketStatusQueryVariables>) {
+          return Apollo.useLazyQuery<WorkPacketStatusQuery, WorkPacketStatusQueryVariables>(WorkPacketStatusDocument, baseOptions);
+        }
+export type WorkPacketStatusQueryHookResult = ReturnType<typeof useWorkPacketStatusQuery>;
+export type WorkPacketStatusLazyQueryHookResult = ReturnType<typeof useWorkPacketStatusLazyQuery>;
+export type WorkPacketStatusQueryResult = Apollo.QueryResult<WorkPacketStatusQuery, WorkPacketStatusQueryVariables>;
+export const WorkPacketStatusesDocument = gql`
+    query WorkPacketStatuses($orgSid: ID!, $searchText: String, $dateRange: DateTimeRangeInput, $pageableInput: PageableInput!) {
+  workPacketStatuses(
+    orgSid: $orgSid
+    searchText: $searchText
+    dateRange: $dateRange
+    pageableInput: $pageableInput
+  ) {
+    paginationInfo {
+      ...fragmentPaginationInfo
+    }
+    nodes {
       workOrderId
       timestamp
       planSponsorId
@@ -12495,24 +12592,20 @@ export const UpdateAccessSpecializationDocument = gql`
         info
         required
         visible
-        min
-        max
+        options
+        query
         errCode
         errMsg
         errSeverity
       }
-      specializations {
-        value
-        description
+      errCode
+      errMsg
+      errSeverity
+    }
+    options {
+      key
+      values {
         label
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      includeAllSubOrgs {
         value
         info
       }
@@ -12714,25 +12807,8 @@ export const CreateAccessPolicyGroupDocument = gql`
       key
       values {
         label
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
-      }
-      excludeOrgSids {
         value
-        description
-        label
         info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
       }
     }
     response
