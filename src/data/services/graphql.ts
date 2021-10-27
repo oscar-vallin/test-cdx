@@ -1175,9 +1175,6 @@ export type QuerySystemTemplateAccessPolicyGroupByNameArgs = {
   name: Scalars['String'];
 };
 
-export type QueryAccessPolicyFormArgs = {
-  templatePolicySid?: Maybe<Scalars['ID']>;
-};
 
 export type QueryAccessPolicyFormArgs = {
   templatePolicySid?: Maybe<Scalars['ID']>;
@@ -1248,15 +1245,6 @@ export type QuerySearchOrganizationsArgs = {
   pageableInput?: Maybe<PageableInput>;
 };
 
-export type QueryOrganizationQuickSearchArgs = {
-  searchText: Scalars['String'];
-  orgOwnerSid: Scalars['ID'];
-};
-
-export type QueryVendorQuickSearchArgs = {
-  searchText: Scalars['String'];
-  orgOwnerSid: Scalars['ID'];
-};
 
 export type QueryOrganizationQuickSearchArgs = {
   searchText: Scalars['String'];
@@ -2342,41 +2330,14 @@ export type WorkPacketStatusQueryVariables = Exact<{
   workOrderId: Scalars['String'];
 }>;
 
-export type WorkPacketStatusQuery = { __typename?: 'Query' } & {
-  workPacketStatus?: Maybe<
-    { __typename?: 'WorkPacketStatus' } & Pick<
-      WorkPacketStatus,
-      | 'workOrderId'
-      | 'timestamp'
-      | 'planSponsorId'
-      | 'orgId'
-      | 'orgSid'
-      | 'detailsPath'
-      | 'subClientPath'
-      | 'inboundFilename'
-      | 'vendorId'
-      | 'vendorSid'
-      | 'step'
-      | 'stepStatus'
-      | 'packetStatus'
-      | 'reprocessedBy'
-      | 'restartReason'
-      | 'recordHighlightCount'
-      | 'populationCount'
-      | 'recordHighlightType'
-      | 'clientFileArchivePath'
-      | 'vendorFileArchivePath'
-      | 'feedType'
-      | 'inboundDataType'
-      | 'inboundDataSize'
-      | 'version'
-      | 'supplementalFilesArchivePaths'
-      | 'archiveOnly'
-      | 'hasErrors'
-      | 'environment'
-    >
-  >;
-};
+
+export type WorkPacketStatusQuery = (
+  { __typename?: 'Query' }
+  & { workPacketStatus?: Maybe<(
+    { __typename?: 'WorkPacketStatus' }
+    & Pick<WorkPacketStatus, 'workOrderId' | 'timestamp' | 'planSponsorId' | 'orgId' | 'orgSid' | 'detailsPath' | 'subClientPath' | 'inboundFilename' | 'vendorId' | 'vendorSid' | 'step' | 'stepStatus' | 'packetStatus' | 'reprocessedBy' | 'restartReason' | 'recordHighlightCount' | 'populationCount' | 'recordHighlightType' | 'clientFileArchivePath' | 'vendorFileArchivePath' | 'supplementalFilesArchivePaths' | 'archiveOnly' | 'hasErrors' | 'environment'>
+  )> }
+);
 
 export type WorkPacketStatusesQueryVariables = Exact<{
   orgSid: Scalars['ID'];
@@ -2385,50 +2346,20 @@ export type WorkPacketStatusesQueryVariables = Exact<{
   pageableInput: PageableInput;
 }>;
 
-export type WorkPacketStatusesQuery = { __typename?: 'Query' } & {
-  workPacketStatuses?: Maybe<
-    { __typename?: 'WorkPacketStatusConnection' } & {
-      paginationInfo: { __typename?: 'PaginationInfo' } & FragmentPaginationInfoFragment;
-      nodes?: Maybe<
-        Array<
-          Maybe<
-            { __typename?: 'WorkPacketStatus' } & Pick<
-              WorkPacketStatus,
-              | 'workOrderId'
-              | 'timestamp'
-              | 'planSponsorId'
-              | 'orgId'
-              | 'orgSid'
-              | 'detailsPath'
-              | 'subClientPath'
-              | 'inboundFilename'
-              | 'vendorId'
-              | 'vendorSid'
-              | 'step'
-              | 'stepStatus'
-              | 'packetStatus'
-              | 'reprocessedBy'
-              | 'restartReason'
-              | 'recordHighlightCount'
-              | 'populationCount'
-              | 'recordHighlightType'
-              | 'clientFileArchivePath'
-              | 'vendorFileArchivePath'
-              | 'feedType'
-              | 'inboundDataType'
-              | 'inboundDataSize'
-              | 'version'
-              | 'supplementalFilesArchivePaths'
-              | 'archiveOnly'
-              | 'hasErrors'
-              | 'environment'
-            >
-          >
-        >
-      >;
-    }
-  >;
-};
+
+export type WorkPacketStatusesQuery = (
+  { __typename?: 'Query' }
+  & { workPacketStatuses?: Maybe<(
+    { __typename?: 'WorkPacketStatusConnection' }
+    & { paginationInfo: (
+      { __typename?: 'PaginationInfo' }
+      & FragmentPaginationInfoFragment
+    ), nodes?: Maybe<Array<Maybe<(
+      { __typename?: 'WorkPacketStatus' }
+      & Pick<WorkPacketStatus, 'workOrderId' | 'timestamp' | 'planSponsorId' | 'orgId' | 'orgSid' | 'detailsPath' | 'subClientPath' | 'inboundFilename' | 'vendorId' | 'vendorSid' | 'step' | 'stepStatus' | 'packetStatus' | 'reprocessedBy' | 'restartReason' | 'recordHighlightCount' | 'populationCount' | 'recordHighlightType' | 'clientFileArchivePath' | 'vendorFileArchivePath' | 'supplementalFilesArchivePaths' | 'archiveOnly' | 'hasErrors' | 'environment'>
+    )>>> }
+  )> }
+);
 
 export type DashboardPeriodsQueryVariables = Exact<{
   orgSid: Scalars['ID'];
@@ -2862,93 +2793,57 @@ export type SystemTemplateAccessPolicyGroupByNameQueryVariables = Exact<{
   name: Scalars['String'];
 }>;
 
-export type SystemTemplateAccessPolicyGroupByNameQuery = { __typename?: 'Query' } & {
-  systemTemplateAccessPolicyGroupByName?: Maybe<
-    Array<
-      Maybe<
-        { __typename?: 'AccessPolicyGroup' } & Pick<
-          AccessPolicyGroup,
-          'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes'
-        > & { policies?: Maybe<Array<Maybe<{ __typename?: 'AccessPolicy' } & FragmentAccessPolicyFragment>>> }
-      >
-    >
-  >;
-};
+
+export type SystemTemplateAccessPolicyGroupByNameQuery = (
+  { __typename?: 'Query' }
+  & { systemTemplateAccessPolicyGroupByName?: Maybe<Array<Maybe<(
+    { __typename?: 'AccessPolicyGroup' }
+    & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes'>
+    & { policies?: Maybe<Array<Maybe<(
+      { __typename?: 'AccessPolicy' }
+      & FragmentAccessPolicyFragment
+    )>>> }
+  )>>> }
+);
 
 export type AccessPolicyFormQueryVariables = Exact<{
   templatePolicySid?: Maybe<Scalars['ID']>;
 }>;
 
-export type AccessPolicyFormQuery = { __typename?: 'Query' } & {
-  accessPolicyForm?: Maybe<
-    { __typename?: 'AccessPolicyForm' } & Pick<
-      AccessPolicyForm,
-      'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'
-    > & {
-        name: { __typename?: 'UIStringField' } & Pick<
-          UiStringField,
-          'value' | 'label' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'
-        >;
-        organization: { __typename?: 'UIReadOnlyField' } & Pick<
-          UiReadOnlyField,
-          'value' | 'description' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-        >;
-        permissions?: Maybe<
-          { __typename?: 'UISelectManyField' } & Pick<
-            UiSelectManyField,
-            | 'value'
-            | 'label'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'options'
-            | 'query'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          >
-        >;
-        tmpl?: Maybe<
-          { __typename?: 'UIBooleanField' } & Pick<
-            UiBooleanField,
-            'value' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-          >
-        >;
-        tmplUseAsIs?: Maybe<
-          { __typename?: 'UIBooleanField' } & Pick<
-            UiBooleanField,
-            'value' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-          >
-        >;
-        applicableOrgTypes?: Maybe<
-          { __typename?: 'UISelectManyField' } & Pick<
-            UiSelectManyField,
-            | 'value'
-            | 'label'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'options'
-            | 'query'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          >
-        >;
-        options?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'UIOptions' } & Pick<UiOptions, 'key'> & {
-                  values?: Maybe<
-                    Array<Maybe<{ __typename?: 'UIOption' } & Pick<UiOption, 'label' | 'value' | 'info'>>>
-                  >;
-                }
-            >
-          >
-        >;
-      }
-  >;
-};
+
+export type AccessPolicyFormQuery = (
+  { __typename?: 'Query' }
+  & { accessPolicyForm?: Maybe<(
+    { __typename?: 'AccessPolicyForm' }
+    & Pick<AccessPolicyForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { name: (
+      { __typename?: 'UIStringField' }
+      & Pick<UiStringField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), organization: (
+      { __typename?: 'UIReadOnlyField' }
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), permissions?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, tmpl?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, tmplUseAsIs?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, applicableOrgTypes?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, options?: Maybe<Array<Maybe<(
+      { __typename?: 'UIOptions' }
+      & Pick<UiOptions, 'key'>
+      & { values?: Maybe<Array<Maybe<(
+        { __typename?: 'UIOption' }
+        & Pick<UiOption, 'label' | 'value' | 'info'>
+      )>>> }
+    )>>> }
+  )> }
+);
 
 export type FindAccessPolicyQueryVariables = Exact<{
   policySid: Scalars['ID'];
