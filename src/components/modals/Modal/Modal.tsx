@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { StyledModal } from './Modal.styles';
 
@@ -28,6 +29,14 @@ const CDXModal = ({
       {footer && <DialogFooter>{footer}</DialogFooter>}
     </StyledModal>
   );
+};
+
+CDXModal.propTypes = {
+  title: PropTypes.string,
+  subText: PropTypes.string,
+  hidden: PropTypes.bool,
+  isBlocking: PropTypes.bool,
+  onDismiss: PropTypes.func,
 };
 
 export { CDXModal };

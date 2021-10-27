@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const DivStyled = styled.div`
+export const DivStyled = styled.div<DivStyledProps>`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -21,3 +21,14 @@ export const DivStyled = styled.div`
   }};
   width: 100%;
 `;
+
+type DivStyledProps = {
+  center: string;
+  right: string;
+  around: string;
+  evenly: string;
+  between: string;
+  bottom: string;
+  variant: string;
+  top: string;
+};

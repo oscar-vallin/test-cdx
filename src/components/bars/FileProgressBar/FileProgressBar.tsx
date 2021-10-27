@@ -1,8 +1,18 @@
-import PropTypes from 'prop-types';
+import { ReactElement } from 'react';
 import { Box, Bar, BarAnimated } from './FileProgressBar.styles';
 import { STEP_COLOR_PURPLE } from '../../../data/constants/FileStatusConstants';
 
-const FileProgressBar = ({ id, colors = [] }) => {
+const defaultProps = {
+  id: '',
+  colors: [],
+};
+
+type FileProgressBarProps = {
+  id?: string;
+  colors?: string[] | any;
+} & typeof defaultProps;
+
+const FileProgressBar = ({ id, colors }: FileProgressBarProps): ReactElement => {
   return (
     <Box id={id}>
       {colors.map((color, index) => {
@@ -19,8 +29,6 @@ const FileProgressBar = ({ id, colors = [] }) => {
   );
 };
 
-FileProgressBar.propTypes = {
-  id: PropTypes.string,
-};
+FileProgressBar.defaultProps = defaultProps;
 
 export { FileProgressBar };

@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import { Text as Component } from './index.js';
+import { Text as Component } from './index';
 
 const defaultProps = { left: 'star', right: 'end', top: 'center', bottom: 'center' };
 

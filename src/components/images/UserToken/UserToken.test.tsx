@@ -1,7 +1,8 @@
-import { UserToken } from './UserToken.js';
+import { UserToken } from './UserToken';
 import { renderWithTheme } from '../../../utils/testUtils';
 
 const defaultProps = {
+  id: 'UserTokenId',
   name: 'Test',
 };
 

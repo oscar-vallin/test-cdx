@@ -1,8 +1,20 @@
-import PropTypes from 'prop-types';
+import { ReactNode } from 'react';
 import { MessageBarType } from '@fluentui/react';
 import { StyledMessageBar } from './Toast.style';
 
-export const Toast = ({ type, visible, text }) => {
+const defaultProps = {
+  type: 'info',
+  visible: false,
+  text: '',
+};
+
+type ToastProps = {
+  type?: string;
+  visible?: boolean;
+  text?: string;
+} & typeof defaultProps;
+
+export const Toast = ({ type, visible, text }: ToastProps): ReactNode | any => {
   return (
     visible && (
       <StyledMessageBar
@@ -17,8 +29,6 @@ export const Toast = ({ type, visible, text }) => {
   );
 };
 
-Toast.propTypes = {
-  text: PropTypes.string.isRequired,
-};
+Toast.defaultProps = defaultProps;
 
 export default Toast;

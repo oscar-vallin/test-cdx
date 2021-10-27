@@ -9,3 +9,7 @@ export const StyledBox = styled(Box)`
   max-width: 1366px;
   width: 75%;
 `;
+
+// type Props = {
+//   children: React.ReactNode;
+// };

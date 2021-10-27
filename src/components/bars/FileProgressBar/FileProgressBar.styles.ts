@@ -7,7 +7,7 @@ export const Box = styled(LayoutBox)`
   flex-direction: row;
 `;
 
-export const Bar = styled(LayoutBox)`
+export const Bar = styled(LayoutBox)<BarProps>`
   background: ${({ color }) => color};
   height: 100%;
   min-height: 16px;
@@ -32,3 +32,8 @@ export const BarAnimated = styled(LayoutBox)`
   background: repeating-linear-gradient(45deg, #9e89fa, #9e89fa 10px, #ac9afa 10px, #ac9afa 20px);
   background-size: 200% 200%;
 `;
+
+type BarProps = {
+  color: string;
+  order: number;
+};

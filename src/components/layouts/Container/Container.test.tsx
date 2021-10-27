@@ -1,10 +1,16 @@
 import ReactDOM from 'react-dom';
 import toJSON from 'enzyme-to-json';
 import { shallow } from 'enzyme';
-import { Container as Component } from './Container.js';
+import { Container as Component } from './Container';
 
 const defaultProps = {
-  children: null,
+  id: '__ContainerBox_ID',
+  children: <></>,
+  direction: 'rigth',
+  left: 'normal',
+  right: 'normal',
+  top: 'normal',
+  bottom: 'normal',
 };
 
 test('Matches Snapshot', () => {

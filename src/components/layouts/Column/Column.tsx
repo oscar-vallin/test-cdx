@@ -1,6 +1,31 @@
-import PropTypes from 'prop-types';
+import { ReactElement } from 'react';
 import { getClassNames } from '../../../helpers/helperStyles';
 import { DivStyled } from './Column.styles';
+
+const defaultProps = {
+  id: '',
+  variant: '',
+  direction: '',
+  children: <></>,
+  center: '',
+  right: '',
+  top: '',
+  bottom: '',
+  centerV: '',
+};
+
+type ColumnProps = {
+  id?: string;
+  variant?: string;
+  direction?: string;
+  children?: ReactElement | any;
+  lg?: string;
+  center?: string;
+  right?: string;
+  top?: string;
+  bottom?: string;
+  centerV?: string;
+} & typeof defaultProps;
 
 const Column = ({
   id,
@@ -13,7 +38,7 @@ const Column = ({
   bottom,
   centerV,
   ...props
-}) => {
+}: ColumnProps): ReactElement => {
   return (
     <DivStyled
       id={id}
@@ -31,10 +56,6 @@ const Column = ({
   );
 };
 
-Column.propTypes = {
-  id: PropTypes.string,
-  variant: PropTypes.string,
-  children: PropTypes.node,
-};
+Column.defaultProps = defaultProps;
 
 export { Column };

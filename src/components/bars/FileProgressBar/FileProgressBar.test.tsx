@@ -1,13 +1,14 @@
-import { FileProgressBar } from './FileProgressBar.js';
+import { FileProgressBar } from './FileProgressBar';
 import { STEP_COLOR_PURPLE } from '../../../data/constants/FileStatusConstants';
 import { mountWithTheme } from '../../../utils/testUtils';
 
 const defaultProps = {
+  id: 'Box',
   colors: ['#29c891'],
 };
 
 describe('FileProgressBar Testing Unit...', () => {
-  const tree = mountWithTheme(<FileProgressBar id={'Box'} {...defaultProps} />);
+  const tree = mountWithTheme(<FileProgressBar {...defaultProps} />);
 
   it('Should be defined', () => {
     expect(FileProgressBar).toBeDefined();

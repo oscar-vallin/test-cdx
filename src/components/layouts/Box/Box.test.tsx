@@ -2,11 +2,11 @@ import ReactDOM from 'react-dom';
 import toJSON from 'enzyme-to-json';
 import { shallow } from 'enzyme';
 import { StyleConstants } from '../../../data/constants/StyleConstants.js';
-import { Box as Component } from './Box.js';
+import { Box as Component } from './Box';
 
 const defaultProps = {
   id: 'Box',
-  children: null,
+  children: <></>,
   direction: StyleConstants.DIRECTION_COLUMN,
   left: 'center',
   right: 'center',
@@ -38,11 +38,7 @@ describe('Layout Box Component', () => {
   });
 
   it('Should renders children when passed in', () => {
-    const wrapper = shallow(
-      <Component {...defaultProps}>
-        <div className="children" />
-      </Component>
-    );
+    const wrapper = shallow(<Component {...defaultProps} children={<div className="children" />}></Component>);
     expect(wrapper.contains(<div className="children" />)).toEqual(true);
   });
 });

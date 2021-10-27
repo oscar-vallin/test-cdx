@@ -1,4 +1,4 @@
-import CDXTimeline from './Timeline.js';
+import CDXTimeline from './Timeline';
 import { mountWithTheme } from '../../../utils/testUtils';
 
 const defaultProps = {
