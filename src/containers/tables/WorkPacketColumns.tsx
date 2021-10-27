@@ -126,10 +126,11 @@ export const useWorkPacketColumns = (onSort?: (ev: React.MouseEvent<HTMLElement>
     sortDescendingAriaLabel: 'Sorted Z to A',
     onColumnClick: onSort,
     onRender: (item: WorkPacketStatus) => {
+      const idx = item.clientFileArchivePath?.lastIndexOf('/') ?? -1;
       return (
         <CellItemRow>
           <Link>
-            <RouteLink to={`${item.clientFileArchivePath}`}>{item.inboundFilename}</RouteLink>
+            <RouteLink to={`${item.clientFileArchivePath}`}>{item.clientFileArchivePath?.substring(idx + 1)}</RouteLink>
           </Link>
         </CellItemRow>
       );
@@ -149,10 +150,11 @@ export const useWorkPacketColumns = (onSort?: (ev: React.MouseEvent<HTMLElement>
     sortDescendingAriaLabel: 'Sorted Z to A',
     onColumnClick: onSort,
     onRender: (item: WorkPacketStatus) => {
+      const idx = item.vendorFileArchivePath?.lastIndexOf('/') ?? -1;
       return (
         <CellItemRow>
           <Link>
-            <RouteLink to={`${item.vendorFileArchivePath}`}>{item.workOrderId}</RouteLink>
+            <RouteLink to={`${item.vendorFileArchivePath}`}>{item.vendorFileArchivePath?.substring(idx + 1)}</RouteLink>
           </Link>
         </CellItemRow>
       );
