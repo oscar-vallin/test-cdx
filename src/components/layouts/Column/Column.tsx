@@ -4,8 +4,8 @@ import { DivStyled } from './Column.styles';
 
 const defaultProps = {
   id: '',
-  variant: '',
-  direction: '',
+  variant: 'normal',
+  direction: 'column',
   children: <></>,
   center: '',
   right: '',
