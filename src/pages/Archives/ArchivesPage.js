@@ -1,12 +1,14 @@
-import { memo, useState } from 'react';
+import React, { memo, useState } from 'react';
 import { FontIcon } from '@fluentui/react/lib/Icon';
 import { ROUTES } from '../../data/constants/RouteConstants';
 import { Row, Column, Container } from '../../components/layouts';
 import { Spacing } from '../../components/spacings/Spacing';
-import { Text } from '../../components/typography/Text';
+import { Text } from '../../components/typography';
 import { PageHeader } from '../../containers/headers/PageHeader';
 import { LayoutDashboard } from '../../layouts/LayoutDashboard';
-import { TableArchive } from '../../containers/tables/TableArchive';
+import { WorkPacketTable } from '../../containers/tables/WorkPacketTable';
+import { WorkPacketColumns } from '../../containers/tables/WorkPacketColumns';
+import { NullHandling, SortDirection, useWorkPacketStatusesLazyQuery } from '../../data/services/graphql';
 
 const _ArchivePage = () => {
   const [tableMeta, setTableMeta] = useState({ count: null, loading: null });
@@ -37,7 +39,27 @@ const _ArchivePage = () => {
         </Container>
       </PageHeader>
 
-      <TableArchive onItemsListChange={setTableMeta} />
+      {/* <TableArchive onItemsListChange={setTableMeta} /> */}
+      <WorkPacketTable
+        id="TableArchive"
+        cols={[
+          WorkPacketColumns.TIMESTAMP,
+          WorkPacketColumns.VENDOR,
+          WorkPacketColumns.PLAN_SPONSOR,
+          WorkPacketColumns.CLIENT_FILE,
+          WorkPacketColumns.VENDOR_FILE,
+        ]}
+        lazyQuery={useWorkPacketStatusesLazyQuery}
+        searchTextPlaceholder="Extract Name,  Status, Vendor, etc."
+        defaultSort={[
+          {
+            property: 'timestamp',
+            direction: SortDirection.Desc,
+            nullHandling: NullHandling.NullsFirst,
+            ignoreCase: true,
+          },
+        ]}
+      />
     </LayoutDashboard>
   );
 };
