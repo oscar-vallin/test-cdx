@@ -90,7 +90,7 @@ const _AccessManagementPoliciesPage = () => {
 
   useEffect(() => {
     if (!isRemovingPolicy && removeResponse) {
-      setPolicies(policies.filter(({ id }) => id !== selectedPolicyId));
+      setPolicies(policies.filter(({ sid }) => sid !== selectedPolicyId));
     }
   }, [isRemovingPolicy, removeResponse]);
 
@@ -186,7 +186,9 @@ const _AccessManagementPoliciesPage = () => {
         dialogContentProps={{
           type: DialogType.normal,
           title: 'Remove policy',
-          subText: `Do you really want to remove "${policies.find(({ id }) => selectedPolicyId === id)?.name || ''}"?`,
+          subText: `Do you really want to remove "${
+            policies.find(({ sid }) => selectedPolicyId === sid)?.name || ''
+          }"?`,
         }}
         modalProps={{ isBlocking: true, isDraggable: false }}
       >

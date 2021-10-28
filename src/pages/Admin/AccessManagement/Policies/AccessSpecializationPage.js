@@ -86,7 +86,7 @@ const _AccessManagementSpecializationPage = () => {
 
   useEffect(() => {
     if (!isRemovingSpecialization && removeResponse) {
-      setSpecializations(specializations.filter(({ id }) => id !== selectedAccessId));
+      setSpecializations(specializations.filter(({ sid }) => sid !== selectedAccessId));
     }
   }, [isRemovingSpecialization, removeResponse]);
 
@@ -160,8 +160,8 @@ const _AccessManagementSpecializationPage = () => {
           setSpecializations([
             ...specializations,
             {
-              name: name.value,
-              sid: sid.value,
+              name: name?.value || '',
+              sid: sid?.value || null,
             },
           ]);
         }}
@@ -179,7 +179,7 @@ const _AccessManagementSpecializationPage = () => {
           type: DialogType.normal,
           title: 'Remove policy',
           subText: `Do you really want to remove "${
-            specializations.find(({ id }) => selectedAccessId === id)?.name || ''
+            specializations.find(({ sid }) => selectedAccessId === sid)?.name || ''
           }"?`,
         }}
         modalProps={{ isBlocking: true, isDraggable: false }}
@@ -189,7 +189,7 @@ const _AccessManagementSpecializationPage = () => {
             onClick={() => {
               removeSpecialization({
                 variables: {
-                  policySid: selectedAccessId,
+                  specializationSid: selectedAccessId,
                 },
               });
 

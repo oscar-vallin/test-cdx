@@ -81,7 +81,7 @@ const CreateAccessSpecializationPanel = ({ isOpen, onDismiss, onCreateSpecializa
 
   useEffect(() => {
     if (createdSpecialization) {
-      onCreateSpecialization(createdSpecialization.createAccessPolicy);
+      onCreateSpecialization(createdSpecialization.createAccessSpecialization);
       onDismiss();
     }
   }, [createdSpecialization]);
@@ -99,7 +99,7 @@ const CreateAccessSpecializationPanel = ({ isOpen, onDismiss, onCreateSpecializa
   useEffect(() => {
     if (isOpen && form) {
       setAccessForm(form.accessSpecializationForm);
-      setAccessFilters(groupSpecializations(form.accessSpecializationForm.options));
+      // setAccessFilters(groupSpecializations(form.accessSpecializationForm.options));
     }
   }, [form, isOpen]);
 
@@ -138,9 +138,9 @@ const CreateAccessSpecializationPanel = ({ isOpen, onDismiss, onCreateSpecializa
                         label={accessForm.name?.label}
                         minLength={accessForm.name?.min}
                         maxLength={accessForm.name?.max}
-                        value={state.policyName}
+                        value={state.name}
                         required={accessForm.name?.required}
-                        onChange={({ target }) => setState({ ...state, policyName: target.value })}
+                        onChange={({ target }) => setState({ ...state, name: target.value })}
                       />
                     )}
                   </Column>
