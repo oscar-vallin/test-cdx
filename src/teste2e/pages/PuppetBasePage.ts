@@ -42,14 +42,17 @@ export default class PuppetBasePage {
 
   async expectTextOnFirstRow(text: string, tableRow: number, tableCol: number) {
     await this.page.waitForTimeout(1000);
-    const result = await this.page.$$eval('.ms-DetailsRow-fields', (rows) => {
-      return Array.from(rows, (row: any) => {
-        const columns = row.querySelectorAll('.ms-DetailsRow-cell');
-        return Array.from(columns, (column: any) => column.innerText);
+    try {
+      const result = await this.page.$$eval('.ms-DetailsRow-fields', (rows) => {
+        return Array.from(rows, (row: any) => {
+          const columns = row.querySelectorAll('.ms-DetailsRow-cell');
+          return Array.from(columns, (column: any) => column.innerText);
+        });
       });
-    });
-
-    expect(result[tableRow][tableCol]).toContain(text);
+      expect(result[tableRow][tableCol]).toContain(text);
+    } catch (err) {
+      throw Error(`Did not find "${text} on Row [${tableRow}] Column [${tableCol}]`);
+    }
   }
 
   async expectTableRecords(selector: string, numRecords: number) {
