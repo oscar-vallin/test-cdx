@@ -1,4 +1,4 @@
-import { ReactElement, ReactNode } from 'react';
+import { ReactElement } from 'react';
 import { getClassNames } from '../../../helpers/helperStyles';
 import { StyleConstants } from '../../../data/constants/StyleConstants';
 import { validateDirection } from './Box.handlers';
@@ -7,7 +7,7 @@ import { ComponentStyled } from './Box.styles';
 const defaultProps = {
   id: '',
   children: <></>,
-  direction: '',
+  direction: StyleConstants.DIRECTION_COLUMN,
   left: '',
   right: '',
   top: '',
