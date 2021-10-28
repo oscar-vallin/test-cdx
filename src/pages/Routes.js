@@ -12,13 +12,17 @@ import { AdminPage } from './Admin';
 import { NotFoundPage } from './NotFound';
 import { FileStatusPage } from './FileStatus';
 import { FileStatusDetailsPage } from './FileStatusDetails';
-import { AccessManagementGroupsPage, AccessManagementPoliciesPage } from './Admin/AccessManagement';
 import { ActiveOrgsPage } from './Admin/Organizations';
 import { CurrentActivityPage } from './Admin/Activity';
 import { ColorPalettesPage, DefaultThemePage } from './Admin/DashboardSite';
 import { ActiveUsersPage } from './Admin/Users/ActiveUsers';
 import { DeletedUsersPage } from './Admin/Users/DeletedUsers';
 import { FtpTestPage } from './Admin/FtpTest';
+import {
+  AccessManagementGroupsPage,
+  AccessManagementPoliciesPage,
+  AccessManagementSpecializationPage,
+} from './Admin/AccessManagement';
 
 import AuthRoute from './AuthRoute';
 import UnauthRoute from './UnauthRoute';
@@ -66,6 +70,9 @@ export const Routes = () => {
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_ACCESS_MANAGEMENT_POLICIES.URL}>
         <AccessManagementPoliciesPage />
+      </AuthRoute>
+      <AuthRoute path={ROUTES.ROUTE_ACCESS_MANAGEMENT_SPECIALIZATION.URL}>
+        <AccessManagementSpecializationPage />
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_ACTIVE_ORGS.URL}>
         <ActiveOrgsPage />

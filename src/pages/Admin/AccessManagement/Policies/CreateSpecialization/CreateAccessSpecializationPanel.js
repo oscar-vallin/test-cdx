@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { SpinnerSize, Checkbox, Panel, PanelType, Spinner } from 'office-ui-fabric-react';
 import _ from 'lodash';
 
+import { access } from 'fs';
 import { Spacing } from '../../../../../components/spacings/Spacing';
 import { Card } from '../../../../../components/cards';
 import { Button } from '../../../../../components/buttons';
@@ -16,22 +17,18 @@ import { useQueryHandler } from '../../../../../hooks/useQueryHandler';
 import { Label } from '../../../../../components/labels/Label';
 
 import {
-  useAccessPolicyFormLazyQuery,
-  useCreateAccessPolicyMutation,
-  useUpdateAccessPolicyMutation,
-  useAccessPolicyLazyQuery,
+  useAccessSpecializationFormLazyQuery,
+  useCreateAccessSpecializationMutation,
+  useUpdateAccessSpecializationMutation,
 } from '../../../../../data/services/graphql';
 import { useOrgSid } from '../../../../../hooks/useOrgSid';
 import { TagPicker } from '../../../../../components/pickers/TagPicker';
 
 const INITIAL_STATE = {
-  policyName: '',
-  isTemplate: false,
-  usedAsIs: false,
-  permissions: [],
+  name: '',
 };
 
-const groupPermissions = (opts) => {
+const groupSpecializations = (opts) => {
   const { values } = opts.find((opt) => opt.key === 'Permission');
   const { K2U, COLORPALETTE, ACCESS, ORG, PASSWORD, PROD, SSOIDP, TEST, THEME, UAT, USER } = _.groupBy(
     values,
@@ -40,80 +37,69 @@ const groupPermissions = (opts) => {
     }
   );
 
-  const exchangeStatus = [
-    { label: 'K2U Exchanges', options: K2U },
-    { label: 'Test Exchanges', options: TEST },
-    { label: 'UAT Exchanges', options: UAT },
-    { label: 'Production Exchanges', options: PROD },
-  ];
+  // const exchangeStatus = [
+  //   { label: 'K2U Exchanges', options: K2U },
+  //   { label: 'Test Exchanges', options: TEST },
+  //   { label: 'UAT Exchanges', options: UAT },
+  //   { label: 'Production Exchanges', options: PROD },
+  // ];
 
-  const accessManagement = [
-    { label: 'Users', options: USER },
-    { label: 'Access Management', options: ACCESS },
-    { label: 'Organization', options: ORG },
-  ];
+  // const accessManagement = [
+  //   { label: 'Users', options: USER },
+  //   { label: 'Access Management', options: ACCESS },
+  //   { label: 'Organization', options: ORG },
+  // ];
 
-  const siteSettings = [
-    { label: 'Password', options: PASSWORD },
-    { label: 'Color Palettes', options: COLORPALETTE },
-    { label: 'Theme', options: THEME },
-    { label: 'SSO', options: SSOIDP },
-  ];
+  // const siteSettings = [
+  //   { label: 'Password', options: PASSWORD },
+  //   { label: 'Color Palettes', options: COLORPALETTE },
+  //   { label: 'Theme', options: THEME },
+  //   { label: 'SSO', options: SSOIDP },
+  // ];
 
-  return [
-    { label: 'Exchange Status', permissions: exchangeStatus },
-    { label: 'Access Management', permissions: accessManagement },
-    { label: 'Site Settings', permissions: siteSettings },
-  ];
+  // return [
+  //   { label: 'Exchange Status', permissions: [] },
+  //   { label: 'Access Management', permissions: [] },
+  //   { label: 'Site Settings', permissions: siteSettings },
+  // ];
 };
 
-const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicyId }) => {
+const CreateAccessSpecializationPanel = ({ isOpen, onDismiss, onCreateSpecialization, selectedAccessId }) => {
   const { orgSid } = useOrgSid();
   const [state, setState] = useState({ ...INITIAL_STATE });
-  const [policyForm, setPolicyForm] = useState({});
-  const [permissions, setPermissions] = useState([]);
-  const [applicableOrgTypes, setApplicableOrgTypes] = useState([]);
+  const [accessForm, setAccessForm] = useState({});
+  const [accessFilters, setAccessFilters] = useState([]);
 
-  const [fetchPolicyForm, { data: form, loading: isLoadingForm }] = useQueryHandler(useAccessPolicyFormLazyQuery);
-  const [createPolicy, { data: createdPolicy, loading: isCreatingPolicy }] =
-    useQueryHandler(useCreateAccessPolicyMutation);
-  const [updatePolicy] = useQueryHandler(useUpdateAccessPolicyMutation);
+  const [fetchAccessForm, { data: form, loading: isLoadingForm }] = useQueryHandler(
+    useAccessSpecializationFormLazyQuery
+  );
+  const [createSpecialization, { data: createdSpecialization, loading: isCreatingSpecialization }] = useQueryHandler(
+    useCreateAccessSpecializationMutation
+  );
 
-  // const [fetchPolicy, { data: policy }] = useAccessPolicyLazyQuery();
-
-  // useEffect(() => {
-  //   if (isOpen && selectedPolicyId) {
-  //     fetchPolicy({
-  //       variables: {
-  //         orgSid,
-  //         policySid: selectedPolicyId,
-  //       },
-  //     });
-  //   }
-  // }, [selectedPolicyId, isOpen]);
+  // const [updateSpecialization] = useQueryHandler(useUpdateAccessSpecializationMutation);
 
   useEffect(() => {
-    if (createdPolicy) {
-      onCreatePolicy(createdPolicy.createAccessPolicy);
+    if (createdSpecialization) {
+      onCreateSpecialization(createdSpecialization.createAccessPolicy);
       onDismiss();
     }
-  }, [createdPolicy]);
+  }, [createdSpecialization]);
 
   useEffect(() => {
     if (isOpen) {
-      fetchPolicyForm({ variables: { orgSid } });
+      fetchAccessForm({ variables: { orgSid } });
     } else {
       setState({ ...INITIAL_STATE });
-      setPermissions([]);
-      setApplicableOrgTypes([]);
-      setPolicyForm({});
+      setAccessFilters([]);
+      setAccessForm({});
     }
   }, [isOpen]);
 
   useEffect(() => {
     if (isOpen && form) {
-      setPolicyForm(form.accessPolicyForm);
-      setPermissions(groupPermissions(form.accessPolicyForm.options));
+      setAccessForm(form.accessSpecializationForm);
+      setAccessFilters(groupSpecializations(form.accessSpecializationForm.options));
     }
   }, [form, isOpen]);
 
@@ -121,7 +107,7 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
     <Panel
       closeButtonAriaLabel="Close"
       type={PanelType.large}
-      headerText={!state.policySid ? 'New Access Policy' : 'Update Access Policy'}
+      headerText={!state.policySid ? 'New Access Specialization' : 'Update Access Specialization'}
       isOpen={isOpen}
       onDismiss={() => {
         setState({ ...INITIAL_STATE });
@@ -146,82 +132,30 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
             ) : (
               <Spacing margin={{ top: 'normal' }}>
                 <Row bottom>
-                  <Column lg="6" sm="12">
-                    {policyForm.name?.visible && (
+                  <Column lg="12">
+                    {accessForm.name?.visible && (
                       <InputText
-                        label={policyForm.name?.label}
-                        minLength={policyForm.name?.min}
-                        maxLength={policyForm.name?.max}
+                        label={accessForm.name?.label}
+                        minLength={accessForm.name?.min}
+                        maxLength={accessForm.name?.max}
                         value={state.policyName}
-                        required={policyForm.name?.required}
+                        required={accessForm.name?.required}
                         onChange={({ target }) => setState({ ...state, policyName: target.value })}
                       />
                     )}
-                  </Column>
-
-                  <Column lg="6" sm="12">
-                    <Row>
-                      <Column lg="4">
-                        <Spacing margin={{ bottom: 'small' }}>
-                          {policyForm.tmpl?.visible && (
-                            <Checkbox
-                              label={policyForm.tmpl?.label}
-                              required={policyForm.tmpl?.required}
-                              checked={state.isTemplate}
-                              onChange={(event, isTemplate) => setState({ ...state, isTemplate })}
-                            />
-                          )}
-                        </Spacing>
-                      </Column>
-                      {state.isTemplate && (
-                        <Column lg="8">
-                          <Spacing margin={{ bottom: 'small' }}>
-                            {policyForm.tmplUseAsIs?.visible && (
-                              <Checkbox
-                                label={policyForm.tmplUseAsIs?.label}
-                                required={policyForm.tmplUseAsIs?.required}
-                                checked={state.usedAsIs}
-                                onChange={(event, usedAsIs) => setState({ ...state, usedAsIs })}
-                              />
-                            )}
-                          </Spacing>
-                        </Column>
-                      )}
-                    </Row>
                   </Column>
                 </Row>
 
                 <Spacing margin={{ top: 'normal' }}>
                   <Row>
-                    <Column lg="6">
+                    <Column lg="12">
                       <Label>Organization</Label>
-                      <p>{policyForm.organization?.label}</p>
+                      <p>{accessForm.organization?.label}</p>
                     </Column>
-
-                    {policyForm.applicableOrgTypes?.visible && state.isTemplate && (
-                      <Column lg="6">
-                        <Label text={policyForm.applicableOrgTypes?.label} info={policyForm.applicableOrgTypes?.info} />
-
-                        <TagPicker
-                          options={
-                            policyForm.options
-                              ?.find((opt) => opt.key === 'OrgType')
-                              ?.values.map(({ label, value }) => ({ key: value, name: label })) || []
-                          }
-                          value={applicableOrgTypes}
-                          onRemoveItem={({ key }) =>
-                            setApplicableOrgTypes(applicableOrgTypes.filter((item) => item.key === key))
-                          }
-                          onItemSelected={(item) => {
-                            setApplicableOrgTypes([...applicableOrgTypes, item]);
-                          }}
-                        />
-                      </Column>
-                    )}
                   </Row>
                 </Spacing>
 
-                {policyForm.permissions?.visible && (
+                {accessForm.permissions?.visible && (
                   <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                     <Row>
                       <Column lg="12">
@@ -233,7 +167,8 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
 
                     <Row>
                       <Column lg="12">
-                        {permissions.map((group, groupIndex) => (
+                        {accessFilters}
+                        {accessFilters.map((group, groupIndex) => (
                           <Collapse label={group.label} expanded key={groupIndex}>
                             <Spacing padding={{ top: 'normal', bottom: 'normal' }}>
                               <Row>
@@ -289,17 +224,14 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
                   <Column lg="12">
                     <Button
                       variant="primary"
-                      disabled={isCreatingPolicy}
+                      disabled={isCreatingSpecialization}
                       onClick={() => {
-                        createPolicy({
+                        createSpecialization({
                           variables: {
-                            createAccessPolicyInput: {
+                            createAccessSpecializationInput: {
                               orgSid,
-                              name: state.policyName,
-                              permissions: state.permissions,
-                              tmpl: state.isTemplate,
-                              tmplUseAsIs: state.usedAsIs,
-                              applicableOrgTypes: applicableOrgTypes.map(({ key }) => key),
+                              name: state.name,
+                              filters: accessFilters.map(({ key }) => key),
                             },
                           },
                         });
@@ -318,4 +250,4 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
   );
 };
 
-export default CreatePoliciesPanel;
+export default CreateAccessSpecializationPanel;
