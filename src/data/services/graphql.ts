@@ -1817,6 +1817,7 @@ export type WpProcessError = {
   msg?: Maybe<Scalars['String']>;
   inboundFilename?: Maybe<Scalars['String']>;
   clientFileArchivePath?: Maybe<Scalars['String']>;
+  environment?: Maybe<Environment>;
 };
 
 export type WpProcessErrorConnection = {
@@ -1841,6 +1842,7 @@ export type WpTransmission = {
   totalRecords?: Maybe<Scalars['Int']>;
   extractType?: Maybe<Scalars['String']>;
   extractVersion?: Maybe<Scalars['String']>;
+  environment?: Maybe<Environment>;
 };
 
 export type WpTransmissionConnection = {
@@ -3102,7 +3104,7 @@ export type WpProcessErrorsQuery = (
       & FragmentPaginationInfoFragment
     ), nodes?: Maybe<Array<Maybe<(
       { __typename?: 'WPProcessError' }
-      & Pick<WpProcessError, 'id' | 'workOrderId' | 'startTime' | 'stepName' | 'planSponsorId' | 'vendorId' | 'msg' | 'inboundFilename' | 'clientFileArchivePath'>
+      & Pick<WpProcessError, 'id' | 'workOrderId' | 'startTime' | 'stepName' | 'planSponsorId' | 'vendorId' | 'msg' | 'inboundFilename' | 'clientFileArchivePath' | 'environment'>
     )>>> }
   )> }
 );
@@ -3123,7 +3125,7 @@ export type WpTransmissionsQuery = (
       & FragmentPaginationInfoFragment
     ), nodes?: Maybe<Array<Maybe<(
       { __typename?: 'WPTransmission' }
-      & Pick<WpTransmission, 'id' | 'workOrderId' | 'deliveredOn' | 'planSponsorId' | 'vendorId' | 'specId' | 'implementation' | 'inboundFilename' | 'outboundFilename' | 'outboundFilesize' | 'billingCount' | 'totalRecords' | 'extractType' | 'extractVersion'>
+      & Pick<WpTransmission, 'id' | 'workOrderId' | 'deliveredOn' | 'planSponsorId' | 'vendorId' | 'specId' | 'implementation' | 'inboundFilename' | 'outboundFilename' | 'outboundFilesize' | 'billingCount' | 'totalRecords' | 'extractType' | 'extractVersion' | 'environment'>
     )>>> }
   )> }
 );
@@ -6498,6 +6500,7 @@ export const WpProcessErrorsDocument = gql`
       msg
       inboundFilename
       clientFileArchivePath
+      environment
     }
   }
 }
@@ -6555,6 +6558,7 @@ export const WpTransmissionsDocument = gql`
       totalRecords
       extractType
       extractVersion
+      environment
     }
   }
 }
