@@ -4,7 +4,7 @@ import toJSON from 'enzyme-to-json';
 import { shallow } from 'enzyme';
 import { DayOfWeek } from 'office-ui-fabric-react/lib-commonjs/DatePicker';
 import { render, screen } from '@testing-library/react';
-import { DateSelector as Component } from './DateSelector.js';
+import { DateSelector as Component } from './DateSelector';
 
 const today = new Date();
 const firstDayOfWeek = DayOfWeek.Sunday;

@@ -1,17 +1,22 @@
-import { shallow } from 'enzyme';
-import { ButtonContextual } from './ButtonContextual.js';
+import { shallowWithTheme } from '../../../../src/utils/testUtils';
+import { ButtonContextual } from './ButtonContextual';
 
-const items = [
+const itemsData = [
   {
+    id: '1',
     key: 'ProfileMenu_UserSettings',
     text: 'Settings',
     onClick: () => null,
   },
-  { key: 'ProfileMenu_Logout', text: 'Logout', onClick: () => null },
+  { id: '2', key: 'ProfileMenu_Logout', text: 'Logout', onClick: () => null },
 ];
 
 describe('ButtonContextual', () => {
-  const tree = shallow(<ButtonContextual items={items}>Button Contextual</ButtonContextual>);
+  const tree = shallowWithTheme(
+    <ButtonContextual id="__ButtonContextual" items={itemsData}>
+      Button Contextual
+    </ButtonContextual>
+  );
 
   it('Should be defined', () => {
     expect(ButtonContextual).toBeDefined();
@@ -22,16 +27,16 @@ describe('ButtonContextual', () => {
   });
 
   it('Should have items', () => {
-    expect(tree.props().items).toEqual(items);
+    expect(tree.children().props().items).toEqual(itemsData);
   });
 
   it('Should renders children', () => {
-    expect(tree.contains('Button Contextual')).toEqual(true);
+    expect(tree.children().contains('Button Contextual')).toEqual(true);
   });
 
   it('Should renders children when passed in', () => {
-    const wrapper = shallow(
-      <ButtonContextual>
+    const wrapper = shallowWithTheme(
+      <ButtonContextual id="" items={[]}>
         <div className="children" />
       </ButtonContextual>
     );
@@ -39,8 +44,8 @@ describe('ButtonContextual', () => {
   });
 
   it('Test styled ButtonContextual component', () => {
-    const wrapper = shallow(
-      <ButtonContextual>
+    const wrapper = shallowWithTheme(
+      <ButtonContextual id="" items={[]}>
         <div className="children" />
       </ButtonContextual>
     ).dive();

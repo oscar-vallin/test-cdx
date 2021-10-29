@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
+export const Container = styled.div<ContainerProps>`
   display: ${({ show }) => (show ? 'block' : 'none')};
   position: absolute;
   top: 0;
@@ -15,3 +15,8 @@ export const Container = styled.div`
   padding: 10px;
   font-family: 'Open Sans', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
 `;
+
+type ContainerProps = {
+  show?: boolean;
+  value?: string;
+};

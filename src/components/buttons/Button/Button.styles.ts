@@ -18,7 +18,7 @@ const getVariant = (theme, variant) => {
   return VARIANTS[variant];
 };
 
-export const StyledButton = styled(PrimaryButton)`
+export const StyledButton = styled(PrimaryButton)<StyledButtonProps>`
   font-size: 0.875rem;
   width: ${({ block }) => (block ? '100%' : 'auto')};
 
@@ -46,3 +46,8 @@ export const StyledButton = styled(PrimaryButton)`
     }
   }
 `;
+
+type StyledButtonProps = {
+  variant?: string;
+  block?: boolean;
+};

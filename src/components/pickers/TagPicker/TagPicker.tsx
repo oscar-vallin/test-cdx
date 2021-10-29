@@ -1,6 +1,41 @@
-import { useCallback, useRef } from 'react';
+import { ReactElement, useCallback, useRef } from 'react';
 import { TagPicker } from '@fluentui/react/lib/Pickers';
 import { Label } from '@fluentui/react/lib-commonjs/Label';
+
+const defaultProps = {
+  label: '',
+  disabled: '',
+  itemLimit: '',
+  pickerProps: '',
+  value: [],
+  options: [],
+  onItemSelected: () => null,
+  onRemoveItem: () => null,
+  onResolveSuggestions: () => null,
+  debounce: 300,
+  onBlur: () => null,
+  onFocus: () => null,
+  required: true,
+  id: '',
+};
+
+type CDXTagPickerProps = {
+  label?: string;
+  disabled?: any;
+  itemLimit?: any;
+  pickerProps?: any;
+  value?: string[];
+  options?: { name: string }[];
+  onItemSelected?: any | null;
+  onRemoveItem?: ReactElement;
+  onResolveSuggestions?: any | null;
+  debounce?: number;
+  onBlur?: any | null;
+  onFocus?: any | null;
+  required?: boolean;
+  id?: string;
+  diseable?: any;
+} & typeof defaultProps;
 
 const CDXTagPicker = ({
   label,
@@ -9,16 +44,16 @@ const CDXTagPicker = ({
   pickerProps,
   value = [],
   options = [],
-  onItemSelected = () => {},
-  onRemoveItem = () => {},
+  onItemSelected = () => null,
+  // onRemoveItem = () => {},
   onResolveSuggestions,
   debounce = 300,
   onBlur,
   onFocus,
   required,
   id,
-}) => {
-  const picker = useRef(null);
+}: CDXTagPickerProps): ReactElement => {
+  const picker = useRef(null) as any;
   const getTextFromItem = ({ name }) => name;
   const filterSelectedTags = (filterText) =>
     filterText ? options.filter((tag) => tag.name.toLowerCase().indexOf(filterText.toLowerCase()) === 0) : [];
@@ -47,7 +82,7 @@ const CDXTagPicker = ({
       <TagPicker
         onResolveSuggestions={onResolveSuggestions || filterSelectedTags}
         onItemSelected={handleItemSelection}
-        onRemoveItem={onRemoveItem}
+        // onRemoveItem={onRemoveItem}
         getTextFromItem={getTextFromItem}
         componentRef={picker}
         itemLimit={itemLimit}
@@ -70,6 +105,6 @@ const CDXTagPicker = ({
   );
 };
 
-CDXTagPicker.propTypes = {};
+CDXTagPicker.defaultProps = defaultProps;
 
 export { CDXTagPicker };
