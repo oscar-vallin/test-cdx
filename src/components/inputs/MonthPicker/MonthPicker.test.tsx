@@ -3,7 +3,7 @@ import { mount, shallow } from 'enzyme';
 import { DayOfWeek } from 'office-ui-fabric-react/lib-commonjs/DatePicker';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { Calendar, DateRangeType } from 'office-ui-fabric-react/lib-commonjs/Calendar';
-import { MonthPicker as Component } from './index.js';
+import { MonthPicker as Component } from './index';
 import { Container } from './MonthPicker.styles';
 import { DefaultButton } from 'office-ui-fabric-react/lib-commonjs/Button';
 
@@ -48,9 +48,9 @@ describe('Basic MonthPicker Component', () => {
     expect(wrapper.prop('open')).toBeFalsy();
     expect(wrapper.prop('showDates')).toBeFalsy();
     expect(wrapper.prop('isMonthPickerVisible')).toBeFalsy();
-    expect(wrapper.children().prop('showGoToToday')).toBeTruthy();
-    expect(wrapper.children().prop('showWeekNumbers')).toBeFalsy();
-    expect(wrapper.children().prop('firstDayOfWeek')).toBeTruthy();
+    expect(wrapper.children().at(0).prop('showGoToToday')).toBeTruthy();
+    expect(wrapper.children().at(0).prop('showWeekNumbers')).toBeFalsy();
+    expect(wrapper.children().at(0).prop('firstDayOfWeek')).toBeTruthy();
   });
 
   it('Test styled Container component', () => {

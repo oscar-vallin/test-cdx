@@ -5,7 +5,7 @@ import toJSON from 'enzyme-to-json';
 import { shallow, mount } from 'enzyme';
 import { fireEvent, render, screen } from '@testing-library/react';
 //
-import { InputText as Component } from './index.js';
+import { InputText as Component } from './index';
 
 const placeholderText = 'This is a placeholder';
 

@@ -13,6 +13,7 @@ import {
   buildColumns,
   DetailsHeader,
 } from 'office-ui-fabric-react/lib-commonjs/DetailsList';
+import { useLocation } from 'react-router-dom';
 import { getDates } from '../../../helpers/tableHelpers';
 import { Spinner } from '../../spinners/Spinner';
 
@@ -30,7 +31,6 @@ import {
 } from './Table.styles';
 
 import { TableHeader } from '../TableHeader';
-import {useLocation} from "react-router-dom";
 
 const _buildColumns = (
   items,

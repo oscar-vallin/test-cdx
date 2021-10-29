@@ -1,6 +1,23 @@
+import { ReactElement } from 'react';
 import { addDays, addYears } from '@fluentui/date-time-utilities';
 import { DatePicker, DayOfWeek } from 'office-ui-fabric-react/lib-commonjs/DatePicker';
 import { getHours } from 'date-fns';
+
+const defaultProps = {
+  id: '',
+  placeholder: 'Select a Date...',
+  value: 8,
+  onChange: () => null,
+  required: true,
+};
+
+type InputDateProps = {
+  id?: string;
+  placeholder?: string;
+  value?: Date | number | any;
+  onChange?: any | null;
+  required?: boolean;
+} & typeof defaultProps;
 
 const today = new Date();
 const yesterday = addDays(today, -1);
@@ -55,7 +72,13 @@ const getValue = (value) => {
   return today;
 };
 
-const InputDate = ({ id, placeholder = 'Select a Date...', value, onChange, required }) => {
+const InputDate = ({
+  id,
+  placeholder = 'Select a Date...',
+  value,
+  onChange,
+  required,
+}: InputDateProps): ReactElement => {
   return (
     <DatePicker
       id={id}
@@ -71,5 +94,7 @@ const InputDate = ({ id, placeholder = 'Select a Date...', value, onChange, requ
     />
   );
 };
+
+InputDate.defaultProps = defaultProps;
 
 export { InputDate };

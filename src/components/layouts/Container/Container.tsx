@@ -4,7 +4,7 @@ import { StyledBox } from './Container.styles';
 const defaultProps = {
   id: '',
   children: <></>,
-  direction: '',
+  direction: 'column',
   left: '',
   right: '',
   top: '',

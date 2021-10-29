@@ -1,5 +1,18 @@
+import { ReactElement } from 'react';
 import { addYears } from '@fluentui/date-time-utilities';
 import { DatePicker, DayOfWeek } from 'office-ui-fabric-react/lib-commonjs/DatePicker';
+
+const defaultProps = {
+  id: '',
+  onChange: () => null,
+  required: true,
+};
+
+type DateSelectorProps = {
+  id?: string;
+  onChange?: any | null;
+  required?: boolean;
+} & typeof defaultProps;
 
 const today = new Date(Date.now());
 const maxDate = addYears(today, 1);
@@ -44,7 +57,7 @@ const DayPickerStrings = {
 
 const firstDayOfWeek = DayOfWeek.Sunday;
 
-export const DateSelector = ({ id, onChange, required }) => {
+export const DateSelector = ({ id, onChange, required }: DateSelectorProps): ReactElement => {
   return (
     <DatePicker
       id={id}
@@ -61,5 +74,7 @@ export const DateSelector = ({ id, onChange, required }) => {
     </DatePicker>
   );
 };
+
+DateSelector.defaultProps = defaultProps;
 
 export default DateSelector;
