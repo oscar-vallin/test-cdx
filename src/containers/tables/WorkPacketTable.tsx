@@ -32,12 +32,13 @@ import { useQueryHandler } from '../../hooks/useQueryHandler';
 type WorkPacketParams = {
   id: string;
   cols: WorkPacketColumns[];
-  lazyQuery: any;
+  lazyQuery: any; // lazy query from the generated Apollo graphql.ts
+  getItems: (data: any) => any[];
   searchTextPlaceholder: string;
   defaultSort?: SortOrderInput[];
 };
 
-const WorkPacketTable = ({ id, cols, lazyQuery, searchTextPlaceholder, defaultSort }: WorkPacketParams) => {
+const WorkPacketTable = ({ id, cols, lazyQuery, getItems, searchTextPlaceholder, defaultSort }: WorkPacketParams) => {
   const doNothing = () => {};
 
   const QueryParams = useQueryParams();
@@ -103,51 +104,9 @@ const WorkPacketTable = ({ id, cols, lazyQuery, searchTextPlaceholder, defaultSo
     setPagingParams(sortParam);
   };
 
-  const {
-    timeStampCol,
-    vendorCol,
-    stepStatusCol,
-    fileNameCol,
-    planSponsorCol,
-    progressCol,
-    clientFileCol,
-    vendorFileCol,
-  } = useWorkPacketColumns(_doSort);
+  const { initialColumns } = useWorkPacketColumns(cols, _doSort);
 
-  const initCols = (): IColumn[] => {
-    const initCols: IColumn[] = [];
-    cols.forEach((value: WorkPacketColumns) => {
-      switch (value) {
-        case WorkPacketColumns.TIMESTAMP:
-          initCols.push(timeStampCol);
-          break;
-        case WorkPacketColumns.VENDOR:
-          initCols.push(vendorCol);
-          break;
-        case WorkPacketColumns.PLAN_SPONSOR:
-          initCols.push(planSponsorCol);
-          break;
-        case WorkPacketColumns.FILENAME:
-          initCols.push(fileNameCol);
-          break;
-        case WorkPacketColumns.STEP_STATUS:
-          initCols.push(stepStatusCol);
-          break;
-        case WorkPacketColumns.PROGRESS:
-          initCols.push(progressCol);
-          break;
-        case WorkPacketColumns.CLIENT_FILE:
-          initCols.push(clientFileCol);
-          break;
-        case WorkPacketColumns.VENDOR_FILE:
-          initCols.push(vendorFileCol);
-          break;
-      }
-    });
-    return initCols;
-  };
-
-  const [columns, setColumns] = useState<IColumn[]>(initCols);
+  const [columns, setColumns] = useState<IColumn[]>(initialColumns);
 
   // Initialization
   useEffect(() => {
@@ -205,12 +164,7 @@ const WorkPacketTable = ({ id, cols, lazyQuery, searchTextPlaceholder, defaultSo
       );
     }
 
-    const items: WorkPacketStatus[] = [];
-    data?.workPacketStatuses?.nodes?.map((value) => {
-      if (value) {
-        items.push(value);
-      }
-    });
+    const items: WorkPacketStatus[] = getItems(data);
 
     if (items && items.length > 0) {
       return (

@@ -13,6 +13,16 @@ import { WorkPacketColumns } from '../../containers/tables/WorkPacketColumns';
 const _FileStatusPage = () => {
   const [tableMeta, setTableMeta] = useState({ count: null, loading: null });
 
+  const mapData = (data) => {
+    const items = [];
+    data?.workPacketStatuses?.nodes?.map((value) => {
+      if (value) {
+        items.push(value);
+      }
+    });
+    return items;
+  }
+
   return (
     <LayoutDashboard
       id="PageFileStatus"
@@ -48,11 +58,12 @@ const _FileStatusPage = () => {
           WorkPacketColumns.TIMESTAMP,
           WorkPacketColumns.VENDOR,
           WorkPacketColumns.PLAN_SPONSOR,
-          WorkPacketColumns.FILENAME,
+          WorkPacketColumns.INBOUND_FILENAME,
           WorkPacketColumns.STEP_STATUS,
           WorkPacketColumns.PROGRESS,
         ]}
         lazyQuery={useWorkPacketStatusesLazyQuery}
+        getItems={mapData}
         searchTextPlaceholder="Extract Name,  Status, Vendor, etc."
         defaultSort={[
           {

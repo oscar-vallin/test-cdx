@@ -13,6 +13,16 @@ import { NullHandling, SortDirection, useWorkPacketStatusesLazyQuery } from '../
 const _ArchivePage = () => {
   const [tableMeta, setTableMeta] = useState({ count: null, loading: null });
 
+  const mapData = (data) => {
+    const items = [];
+    data?.workPacketStatuses?.nodes?.map((value) => {
+      if (value) {
+        items.push(value);
+      }
+    });
+    return items;
+  }
+
   return (
     <LayoutDashboard id="PageArchive" menuOptionSelected={ROUTES.ROUTE_FILE_STATUS.ID}>
       <PageHeader spacing="0">
@@ -50,6 +60,7 @@ const _ArchivePage = () => {
           WorkPacketColumns.VENDOR_FILE,
         ]}
         lazyQuery={useWorkPacketStatusesLazyQuery}
+        getItems={mapData}
         searchTextPlaceholder="Extract Name,  Status, Vendor, etc."
         defaultSort={[
           {

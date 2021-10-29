@@ -1069,6 +1069,9 @@ export type Query = {
   workPacketStatusDetails?: Maybe<WorkPacketStatusDetails>;
   workPacketStatus?: Maybe<WorkPacketStatus>;
   workPacketStatuses?: Maybe<WorkPacketStatusConnection>;
+  wpProcessErrors?: Maybe<WpProcessErrorConnection>;
+  wpTransmissions?: Maybe<WpTransmissionConnection>;
+  scheduleOccurrences?: Maybe<ScheduleOccurrenceConnection>;
   dashboardPeriods?: Maybe<DashboardPeriods>;
   usersForOrg?: Maybe<UserConnection>;
   changeOwnPasswordPage?: Maybe<PasswordPage>;
@@ -1093,9 +1096,6 @@ export type Query = {
   topLevelOrgsByType?: Maybe<Array<Maybe<Organization>>>;
   orgById?: Maybe<Organization>;
   directOrganizations?: Maybe<OrganizationConnection>;
-  wpProcessErrors?: Maybe<WpProcessErrorConnection>;
-  wpTransmissions?: Maybe<WpTransmissionConnection>;
-  scheduleOccurrences?: Maybe<ScheduleOccurrenceConnection>;
   organizationForm?: Maybe<OrganizationForm>;
   findOrganization?: Maybe<OrganizationForm>;
   searchOrganizations?: Maybe<OrganizationConnection>;
@@ -1157,6 +1157,29 @@ export type QueryWorkPacketStatusesArgs = {
   searchText?: Maybe<Scalars['String']>;
   dateRange?: Maybe<DateTimeRangeInput>;
   pageableInput: PageableInput;
+};
+
+
+export type QueryWpProcessErrorsArgs = {
+  orgSid: Scalars['ID'];
+  searchText?: Maybe<Scalars['String']>;
+  dateRange?: Maybe<DateTimeRangeInput>;
+  pageableInput?: Maybe<PageableInput>;
+};
+
+
+export type QueryWpTransmissionsArgs = {
+  orgSid: Scalars['ID'];
+  searchText?: Maybe<Scalars['String']>;
+  dateRange?: Maybe<DateTimeRangeInput>;
+  pageableInput?: Maybe<PageableInput>;
+};
+
+
+export type QueryScheduleOccurrencesArgs = {
+  orgSid: Scalars['ID'];
+  dateRange?: Maybe<DateTimeRangeInput>;
+  pageableInput?: Maybe<PageableInput>;
 };
 
 
@@ -1271,27 +1294,6 @@ export type QueryOrgByIdArgs = {
 export type QueryDirectOrganizationsArgs = {
   orgSid: Scalars['ID'];
   orgFilter?: Maybe<OrgFilterInput>;
-  pageableInput?: Maybe<PageableInput>;
-};
-
-
-export type QueryWpProcessErrorsArgs = {
-  orgSid: Scalars['ID'];
-  dateRange?: Maybe<DateTimeRangeInput>;
-  pageableInput?: Maybe<PageableInput>;
-};
-
-
-export type QueryWpTransmissionsArgs = {
-  orgSid: Scalars['ID'];
-  dateRange?: Maybe<DateTimeRangeInput>;
-  pageableInput?: Maybe<PageableInput>;
-};
-
-
-export type QueryScheduleOccurrencesArgs = {
-  orgSid: Scalars['ID'];
-  dateRange?: Maybe<DateTimeRangeInput>;
   pageableInput?: Maybe<PageableInput>;
 };
 
@@ -2417,6 +2419,75 @@ export type WorkPacketStatusesQuery = (
   )> }
 );
 
+export type WpProcessErrorsQueryVariables = Exact<{
+  orgSid: Scalars['ID'];
+  searchText?: Maybe<Scalars['String']>;
+  dateRange?: Maybe<DateTimeRangeInput>;
+  pageableInput?: Maybe<PageableInput>;
+}>;
+
+
+export type WpProcessErrorsQuery = (
+  { __typename?: 'Query' }
+  & { wpProcessErrors?: Maybe<(
+    { __typename?: 'WPProcessErrorConnection' }
+    & { paginationInfo: (
+      { __typename?: 'PaginationInfo' }
+      & FragmentPaginationInfoFragment
+    ), nodes?: Maybe<Array<Maybe<(
+      { __typename?: 'WPProcessError' }
+      & Pick<WpProcessError, 'id' | 'workOrderId' | 'startTime' | 'stepName' | 'planSponsorId' | 'vendorId' | 'msg' | 'inboundFilename' | 'clientFileArchivePath' | 'environment'>
+    )>>> }
+  )> }
+);
+
+export type WpTransmissionsQueryVariables = Exact<{
+  orgSid: Scalars['ID'];
+  searchText?: Maybe<Scalars['String']>;
+  dateRange?: Maybe<DateTimeRangeInput>;
+  pageableInput?: Maybe<PageableInput>;
+}>;
+
+
+export type WpTransmissionsQuery = (
+  { __typename?: 'Query' }
+  & { wpTransmissions?: Maybe<(
+    { __typename?: 'WPTransmissionConnection' }
+    & { paginationInfo: (
+      { __typename?: 'PaginationInfo' }
+      & FragmentPaginationInfoFragment
+    ), nodes?: Maybe<Array<Maybe<(
+      { __typename?: 'WPTransmission' }
+      & Pick<WpTransmission, 'id' | 'workOrderId' | 'deliveredOn' | 'planSponsorId' | 'vendorId' | 'specId' | 'implementation' | 'inboundFilename' | 'outboundFilename' | 'outboundFilesize' | 'billingCount' | 'totalRecords' | 'extractType' | 'extractVersion' | 'environment'>
+    )>>> }
+  )> }
+);
+
+export type ScheduleOccurrencesQueryVariables = Exact<{
+  orgSid: Scalars['ID'];
+  dateRange?: Maybe<DateTimeRangeInput>;
+  pageableInput?: Maybe<PageableInput>;
+}>;
+
+
+export type ScheduleOccurrencesQuery = (
+  { __typename?: 'Query' }
+  & { scheduleOccurrences?: Maybe<(
+    { __typename?: 'ScheduleOccurrenceConnection' }
+    & { paginationInfo: (
+      { __typename?: 'PaginationInfo' }
+      & FragmentPaginationInfoFragment
+    ), nodes?: Maybe<Array<Maybe<(
+      { __typename?: 'ScheduleOccurrence' }
+      & Pick<ScheduleOccurrence, 'resource' | 'scheduleId' | 'timeScheduled' | 'schedOccurStatus'>
+      & { runOccurrences?: Maybe<Array<Maybe<(
+        { __typename?: 'ScheduleRunOccurrence' }
+        & Pick<ScheduleRunOccurrence, 'workOrderId' | 'timeRan' | 'status'>
+      )>>> }
+    )>>> }
+  )> }
+);
+
 export type DashboardPeriodsQueryVariables = Exact<{
   orgSid: Scalars['ID'];
 }>;
@@ -3084,73 +3155,6 @@ export type DirectOrganizationsQuery = (
     ), nodes?: Maybe<Array<Maybe<(
       { __typename?: 'Organization' }
       & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType'>
-    )>>> }
-  )> }
-);
-
-export type WpProcessErrorsQueryVariables = Exact<{
-  orgSid: Scalars['ID'];
-  dateRange?: Maybe<DateTimeRangeInput>;
-  pageableInput?: Maybe<PageableInput>;
-}>;
-
-
-export type WpProcessErrorsQuery = (
-  { __typename?: 'Query' }
-  & { wpProcessErrors?: Maybe<(
-    { __typename?: 'WPProcessErrorConnection' }
-    & { paginationInfo: (
-      { __typename?: 'PaginationInfo' }
-      & FragmentPaginationInfoFragment
-    ), nodes?: Maybe<Array<Maybe<(
-      { __typename?: 'WPProcessError' }
-      & Pick<WpProcessError, 'id' | 'workOrderId' | 'startTime' | 'stepName' | 'planSponsorId' | 'vendorId' | 'msg' | 'inboundFilename' | 'clientFileArchivePath' | 'environment'>
-    )>>> }
-  )> }
-);
-
-export type WpTransmissionsQueryVariables = Exact<{
-  orgSid: Scalars['ID'];
-  dateRange?: Maybe<DateTimeRangeInput>;
-  pageableInput?: Maybe<PageableInput>;
-}>;
-
-
-export type WpTransmissionsQuery = (
-  { __typename?: 'Query' }
-  & { wpTransmissions?: Maybe<(
-    { __typename?: 'WPTransmissionConnection' }
-    & { paginationInfo: (
-      { __typename?: 'PaginationInfo' }
-      & FragmentPaginationInfoFragment
-    ), nodes?: Maybe<Array<Maybe<(
-      { __typename?: 'WPTransmission' }
-      & Pick<WpTransmission, 'id' | 'workOrderId' | 'deliveredOn' | 'planSponsorId' | 'vendorId' | 'specId' | 'implementation' | 'inboundFilename' | 'outboundFilename' | 'outboundFilesize' | 'billingCount' | 'totalRecords' | 'extractType' | 'extractVersion' | 'environment'>
-    )>>> }
-  )> }
-);
-
-export type ScheduleOccurrencesQueryVariables = Exact<{
-  orgSid: Scalars['ID'];
-  dateRange?: Maybe<DateTimeRangeInput>;
-  pageableInput?: Maybe<PageableInput>;
-}>;
-
-
-export type ScheduleOccurrencesQuery = (
-  { __typename?: 'Query' }
-  & { scheduleOccurrences?: Maybe<(
-    { __typename?: 'ScheduleOccurrenceConnection' }
-    & { paginationInfo: (
-      { __typename?: 'PaginationInfo' }
-      & FragmentPaginationInfoFragment
-    ), nodes?: Maybe<Array<Maybe<(
-      { __typename?: 'ScheduleOccurrence' }
-      & Pick<ScheduleOccurrence, 'resource' | 'scheduleId' | 'timeScheduled' | 'schedOccurStatus'>
-      & { runOccurrences?: Maybe<Array<Maybe<(
-        { __typename?: 'ScheduleRunOccurrence' }
-        & Pick<ScheduleRunOccurrence, 'workOrderId' | 'timeRan' | 'status'>
-      )>>> }
     )>>> }
   )> }
 );
@@ -4782,6 +4786,173 @@ export function useWorkPacketStatusesLazyQuery(baseOptions?: Apollo.LazyQueryHoo
 export type WorkPacketStatusesQueryHookResult = ReturnType<typeof useWorkPacketStatusesQuery>;
 export type WorkPacketStatusesLazyQueryHookResult = ReturnType<typeof useWorkPacketStatusesLazyQuery>;
 export type WorkPacketStatusesQueryResult = Apollo.QueryResult<WorkPacketStatusesQuery, WorkPacketStatusesQueryVariables>;
+export const WpProcessErrorsDocument = gql`
+    query WpProcessErrors($orgSid: ID!, $searchText: String, $dateRange: DateTimeRangeInput, $pageableInput: PageableInput) {
+  wpProcessErrors(
+    orgSid: $orgSid
+    searchText: $searchText
+    dateRange: $dateRange
+    pageableInput: $pageableInput
+  ) {
+    paginationInfo {
+      ...fragmentPaginationInfo
+    }
+    nodes {
+      id
+      workOrderId
+      startTime
+      stepName
+      planSponsorId
+      vendorId
+      msg
+      inboundFilename
+      clientFileArchivePath
+      environment
+    }
+  }
+}
+    ${FragmentPaginationInfoFragmentDoc}`;
+
+/**
+ * __useWpProcessErrorsQuery__
+ *
+ * To run a query within a React component, call `useWpProcessErrorsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWpProcessErrorsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useWpProcessErrorsQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *      searchText: // value for 'searchText'
+ *      dateRange: // value for 'dateRange'
+ *      pageableInput: // value for 'pageableInput'
+ *   },
+ * });
+ */
+export function useWpProcessErrorsQuery(baseOptions: Apollo.QueryHookOptions<WpProcessErrorsQuery, WpProcessErrorsQueryVariables>) {
+        return Apollo.useQuery<WpProcessErrorsQuery, WpProcessErrorsQueryVariables>(WpProcessErrorsDocument, baseOptions);
+      }
+export function useWpProcessErrorsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WpProcessErrorsQuery, WpProcessErrorsQueryVariables>) {
+          return Apollo.useLazyQuery<WpProcessErrorsQuery, WpProcessErrorsQueryVariables>(WpProcessErrorsDocument, baseOptions);
+        }
+export type WpProcessErrorsQueryHookResult = ReturnType<typeof useWpProcessErrorsQuery>;
+export type WpProcessErrorsLazyQueryHookResult = ReturnType<typeof useWpProcessErrorsLazyQuery>;
+export type WpProcessErrorsQueryResult = Apollo.QueryResult<WpProcessErrorsQuery, WpProcessErrorsQueryVariables>;
+export const WpTransmissionsDocument = gql`
+    query WpTransmissions($orgSid: ID!, $searchText: String, $dateRange: DateTimeRangeInput, $pageableInput: PageableInput) {
+  wpTransmissions(
+    orgSid: $orgSid
+    searchText: $searchText
+    dateRange: $dateRange
+    pageableInput: $pageableInput
+  ) {
+    paginationInfo {
+      ...fragmentPaginationInfo
+    }
+    nodes {
+      id
+      workOrderId
+      deliveredOn
+      planSponsorId
+      vendorId
+      specId
+      implementation
+      inboundFilename
+      outboundFilename
+      outboundFilesize
+      billingCount
+      totalRecords
+      extractType
+      extractVersion
+      environment
+    }
+  }
+}
+    ${FragmentPaginationInfoFragmentDoc}`;
+
+/**
+ * __useWpTransmissionsQuery__
+ *
+ * To run a query within a React component, call `useWpTransmissionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWpTransmissionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useWpTransmissionsQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *      searchText: // value for 'searchText'
+ *      dateRange: // value for 'dateRange'
+ *      pageableInput: // value for 'pageableInput'
+ *   },
+ * });
+ */
+export function useWpTransmissionsQuery(baseOptions: Apollo.QueryHookOptions<WpTransmissionsQuery, WpTransmissionsQueryVariables>) {
+        return Apollo.useQuery<WpTransmissionsQuery, WpTransmissionsQueryVariables>(WpTransmissionsDocument, baseOptions);
+      }
+export function useWpTransmissionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WpTransmissionsQuery, WpTransmissionsQueryVariables>) {
+          return Apollo.useLazyQuery<WpTransmissionsQuery, WpTransmissionsQueryVariables>(WpTransmissionsDocument, baseOptions);
+        }
+export type WpTransmissionsQueryHookResult = ReturnType<typeof useWpTransmissionsQuery>;
+export type WpTransmissionsLazyQueryHookResult = ReturnType<typeof useWpTransmissionsLazyQuery>;
+export type WpTransmissionsQueryResult = Apollo.QueryResult<WpTransmissionsQuery, WpTransmissionsQueryVariables>;
+export const ScheduleOccurrencesDocument = gql`
+    query ScheduleOccurrences($orgSid: ID!, $dateRange: DateTimeRangeInput, $pageableInput: PageableInput) {
+  scheduleOccurrences(
+    orgSid: $orgSid
+    dateRange: $dateRange
+    pageableInput: $pageableInput
+  ) {
+    paginationInfo {
+      ...fragmentPaginationInfo
+    }
+    nodes {
+      resource
+      scheduleId
+      timeScheduled
+      schedOccurStatus
+      runOccurrences {
+        workOrderId
+        timeRan
+        status
+      }
+    }
+  }
+}
+    ${FragmentPaginationInfoFragmentDoc}`;
+
+/**
+ * __useScheduleOccurrencesQuery__
+ *
+ * To run a query within a React component, call `useScheduleOccurrencesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useScheduleOccurrencesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useScheduleOccurrencesQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *      dateRange: // value for 'dateRange'
+ *      pageableInput: // value for 'pageableInput'
+ *   },
+ * });
+ */
+export function useScheduleOccurrencesQuery(baseOptions: Apollo.QueryHookOptions<ScheduleOccurrencesQuery, ScheduleOccurrencesQueryVariables>) {
+        return Apollo.useQuery<ScheduleOccurrencesQuery, ScheduleOccurrencesQueryVariables>(ScheduleOccurrencesDocument, baseOptions);
+      }
+export function useScheduleOccurrencesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ScheduleOccurrencesQuery, ScheduleOccurrencesQueryVariables>) {
+          return Apollo.useLazyQuery<ScheduleOccurrencesQuery, ScheduleOccurrencesQueryVariables>(ScheduleOccurrencesDocument, baseOptions);
+        }
+export type ScheduleOccurrencesQueryHookResult = ReturnType<typeof useScheduleOccurrencesQuery>;
+export type ScheduleOccurrencesLazyQueryHookResult = ReturnType<typeof useScheduleOccurrencesLazyQuery>;
+export type ScheduleOccurrencesQueryResult = Apollo.QueryResult<ScheduleOccurrencesQuery, ScheduleOccurrencesQueryVariables>;
 export const DashboardPeriodsDocument = gql`
     query DashboardPeriods($orgSid: ID!) {
   dashboardPeriods(orgSid: $orgSid) {
@@ -6480,169 +6651,6 @@ export function useDirectOrganizationsLazyQuery(baseOptions?: Apollo.LazyQueryHo
 export type DirectOrganizationsQueryHookResult = ReturnType<typeof useDirectOrganizationsQuery>;
 export type DirectOrganizationsLazyQueryHookResult = ReturnType<typeof useDirectOrganizationsLazyQuery>;
 export type DirectOrganizationsQueryResult = Apollo.QueryResult<DirectOrganizationsQuery, DirectOrganizationsQueryVariables>;
-export const WpProcessErrorsDocument = gql`
-    query WpProcessErrors($orgSid: ID!, $dateRange: DateTimeRangeInput, $pageableInput: PageableInput) {
-  wpProcessErrors(
-    orgSid: $orgSid
-    dateRange: $dateRange
-    pageableInput: $pageableInput
-  ) {
-    paginationInfo {
-      ...fragmentPaginationInfo
-    }
-    nodes {
-      id
-      workOrderId
-      startTime
-      stepName
-      planSponsorId
-      vendorId
-      msg
-      inboundFilename
-      clientFileArchivePath
-      environment
-    }
-  }
-}
-    ${FragmentPaginationInfoFragmentDoc}`;
-
-/**
- * __useWpProcessErrorsQuery__
- *
- * To run a query within a React component, call `useWpProcessErrorsQuery` and pass it any options that fit your needs.
- * When your component renders, `useWpProcessErrorsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useWpProcessErrorsQuery({
- *   variables: {
- *      orgSid: // value for 'orgSid'
- *      dateRange: // value for 'dateRange'
- *      pageableInput: // value for 'pageableInput'
- *   },
- * });
- */
-export function useWpProcessErrorsQuery(baseOptions: Apollo.QueryHookOptions<WpProcessErrorsQuery, WpProcessErrorsQueryVariables>) {
-        return Apollo.useQuery<WpProcessErrorsQuery, WpProcessErrorsQueryVariables>(WpProcessErrorsDocument, baseOptions);
-      }
-export function useWpProcessErrorsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WpProcessErrorsQuery, WpProcessErrorsQueryVariables>) {
-          return Apollo.useLazyQuery<WpProcessErrorsQuery, WpProcessErrorsQueryVariables>(WpProcessErrorsDocument, baseOptions);
-        }
-export type WpProcessErrorsQueryHookResult = ReturnType<typeof useWpProcessErrorsQuery>;
-export type WpProcessErrorsLazyQueryHookResult = ReturnType<typeof useWpProcessErrorsLazyQuery>;
-export type WpProcessErrorsQueryResult = Apollo.QueryResult<WpProcessErrorsQuery, WpProcessErrorsQueryVariables>;
-export const WpTransmissionsDocument = gql`
-    query WpTransmissions($orgSid: ID!, $dateRange: DateTimeRangeInput, $pageableInput: PageableInput) {
-  wpTransmissions(
-    orgSid: $orgSid
-    dateRange: $dateRange
-    pageableInput: $pageableInput
-  ) {
-    paginationInfo {
-      ...fragmentPaginationInfo
-    }
-    nodes {
-      id
-      workOrderId
-      deliveredOn
-      planSponsorId
-      vendorId
-      specId
-      implementation
-      inboundFilename
-      outboundFilename
-      outboundFilesize
-      billingCount
-      totalRecords
-      extractType
-      extractVersion
-      environment
-    }
-  }
-}
-    ${FragmentPaginationInfoFragmentDoc}`;
-
-/**
- * __useWpTransmissionsQuery__
- *
- * To run a query within a React component, call `useWpTransmissionsQuery` and pass it any options that fit your needs.
- * When your component renders, `useWpTransmissionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useWpTransmissionsQuery({
- *   variables: {
- *      orgSid: // value for 'orgSid'
- *      dateRange: // value for 'dateRange'
- *      pageableInput: // value for 'pageableInput'
- *   },
- * });
- */
-export function useWpTransmissionsQuery(baseOptions: Apollo.QueryHookOptions<WpTransmissionsQuery, WpTransmissionsQueryVariables>) {
-        return Apollo.useQuery<WpTransmissionsQuery, WpTransmissionsQueryVariables>(WpTransmissionsDocument, baseOptions);
-      }
-export function useWpTransmissionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WpTransmissionsQuery, WpTransmissionsQueryVariables>) {
-          return Apollo.useLazyQuery<WpTransmissionsQuery, WpTransmissionsQueryVariables>(WpTransmissionsDocument, baseOptions);
-        }
-export type WpTransmissionsQueryHookResult = ReturnType<typeof useWpTransmissionsQuery>;
-export type WpTransmissionsLazyQueryHookResult = ReturnType<typeof useWpTransmissionsLazyQuery>;
-export type WpTransmissionsQueryResult = Apollo.QueryResult<WpTransmissionsQuery, WpTransmissionsQueryVariables>;
-export const ScheduleOccurrencesDocument = gql`
-    query ScheduleOccurrences($orgSid: ID!, $dateRange: DateTimeRangeInput, $pageableInput: PageableInput) {
-  scheduleOccurrences(
-    orgSid: $orgSid
-    dateRange: $dateRange
-    pageableInput: $pageableInput
-  ) {
-    paginationInfo {
-      ...fragmentPaginationInfo
-    }
-    nodes {
-      resource
-      scheduleId
-      timeScheduled
-      schedOccurStatus
-      runOccurrences {
-        workOrderId
-        timeRan
-        status
-      }
-    }
-  }
-}
-    ${FragmentPaginationInfoFragmentDoc}`;
-
-/**
- * __useScheduleOccurrencesQuery__
- *
- * To run a query within a React component, call `useScheduleOccurrencesQuery` and pass it any options that fit your needs.
- * When your component renders, `useScheduleOccurrencesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useScheduleOccurrencesQuery({
- *   variables: {
- *      orgSid: // value for 'orgSid'
- *      dateRange: // value for 'dateRange'
- *      pageableInput: // value for 'pageableInput'
- *   },
- * });
- */
-export function useScheduleOccurrencesQuery(baseOptions: Apollo.QueryHookOptions<ScheduleOccurrencesQuery, ScheduleOccurrencesQueryVariables>) {
-        return Apollo.useQuery<ScheduleOccurrencesQuery, ScheduleOccurrencesQueryVariables>(ScheduleOccurrencesDocument, baseOptions);
-      }
-export function useScheduleOccurrencesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ScheduleOccurrencesQuery, ScheduleOccurrencesQueryVariables>) {
-          return Apollo.useLazyQuery<ScheduleOccurrencesQuery, ScheduleOccurrencesQueryVariables>(ScheduleOccurrencesDocument, baseOptions);
-        }
-export type ScheduleOccurrencesQueryHookResult = ReturnType<typeof useScheduleOccurrencesQuery>;
-export type ScheduleOccurrencesLazyQueryHookResult = ReturnType<typeof useScheduleOccurrencesLazyQuery>;
-export type ScheduleOccurrencesQueryResult = Apollo.QueryResult<ScheduleOccurrencesQuery, ScheduleOccurrencesQueryVariables>;
 export const OrganizationFormDocument = gql`
     query OrganizationForm {
   organizationForm {
