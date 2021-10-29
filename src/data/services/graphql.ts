@@ -194,6 +194,7 @@ export enum CdxWebPage {
   DeletedUsers = 'DELETED_USERS',
   AmGroups = 'AM_GROUPS',
   AmPolicies = 'AM_POLICIES',
+  AmSpecialization = 'AM_SPECIALIZATION',
   FtpTest = 'FTP_TEST',
   ImplDeploy = 'IMPL_DEPLOY',
   UserAccountRules = 'USER_ACCOUNT_RULES',
@@ -1464,8 +1465,8 @@ export type SpecializationFilter = {
 
 export type SpecializationFilterForm = {
   __typename?: 'SpecializationFilterForm';
-  sid?: Maybe<Scalars['ID']>;
-  permission: UiSelectOneField;
+  permission: Permission;
+  label?: Maybe<Scalars['String']>;
   orgSids?: Maybe<UiSelectManyField>;
   errCode?: Maybe<Scalars['String']>;
   errMsg?: Maybe<Scalars['String']>;
@@ -2946,11 +2947,8 @@ export type AccessSpecializationFormQuery = (
       & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), filters?: Maybe<Array<Maybe<(
       { __typename?: 'SpecializationFilterForm' }
-      & Pick<SpecializationFilterForm, 'sid' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { permission: (
-        { __typename?: 'UISelectOneField' }
-        & Pick<UiSelectOneField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      ), orgSids?: Maybe<(
+      & Pick<SpecializationFilterForm, 'permission' | 'label' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { orgSids?: Maybe<(
         { __typename?: 'UISelectManyField' }
         & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
       )> }
@@ -2983,11 +2981,8 @@ export type FindAccessSpecializationQuery = (
       & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), filters?: Maybe<Array<Maybe<(
       { __typename?: 'SpecializationFilterForm' }
-      & Pick<SpecializationFilterForm, 'sid' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { permission: (
-        { __typename?: 'UISelectOneField' }
-        & Pick<UiSelectOneField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      ), orgSids?: Maybe<(
+      & Pick<SpecializationFilterForm, 'permission' | 'label' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { orgSids?: Maybe<(
         { __typename?: 'UISelectManyField' }
         & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
       )> }
@@ -3605,11 +3600,8 @@ export type CreateAccessSpecializationMutation = (
       & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), filters?: Maybe<Array<Maybe<(
       { __typename?: 'SpecializationFilterForm' }
-      & Pick<SpecializationFilterForm, 'sid' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { permission: (
-        { __typename?: 'UISelectOneField' }
-        & Pick<UiSelectOneField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      ), orgSids?: Maybe<(
+      & Pick<SpecializationFilterForm, 'permission' | 'label' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { orgSids?: Maybe<(
         { __typename?: 'UISelectManyField' }
         & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
       )> }
@@ -3642,11 +3634,8 @@ export type UpdateAccessSpecializationMutation = (
       & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), filters?: Maybe<Array<Maybe<(
       { __typename?: 'SpecializationFilterForm' }
-      & Pick<SpecializationFilterForm, 'sid' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { permission: (
-        { __typename?: 'UISelectOneField' }
-        & Pick<UiSelectOneField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      ), orgSids?: Maybe<(
+      & Pick<SpecializationFilterForm, 'permission' | 'label' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { orgSids?: Maybe<(
         { __typename?: 'UISelectManyField' }
         & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
       )> }
@@ -6022,19 +6011,8 @@ export const AccessSpecializationFormDocument = gql`
       errSeverity
     }
     filters {
-      sid
-      permission {
-        value
-        label
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
+      permission
+      label
       orgSids {
         value
         label
@@ -6120,19 +6098,8 @@ export const FindAccessSpecializationDocument = gql`
       errSeverity
     }
     filters {
-      sid
-      permission {
-        value
-        label
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
+      permission
+      label
       orgSids {
         value
         label
@@ -7939,19 +7906,8 @@ export const CreateAccessSpecializationDocument = gql`
       errSeverity
     }
     filters {
-      sid
-      permission {
-        value
-        label
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
+      permission
+      label
       orgSids {
         value
         label
@@ -8038,19 +7994,8 @@ export const UpdateAccessSpecializationDocument = gql`
       errSeverity
     }
     filters {
-      sid
-      permission {
-        value
-        label
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
+      permission
+      label
       orgSids {
         value
         label

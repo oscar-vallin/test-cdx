@@ -1440,6 +1440,12 @@
             "deprecationReason": null
           },
           {
+            "name": "AM_SPECIALIZATION",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "FTP_TEST",
             "description": null,
             "isDeprecated": false,
@@ -10152,18 +10158,6 @@
         "description": null,
         "fields": [
           {
-            "name": "sid",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "ID",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "permission",
             "description": null,
             "args": [],
@@ -10171,10 +10165,22 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "OBJECT",
-                "name": "UISelectOneField",
+                "kind": "ENUM",
+                "name": "Permission",
                 "ofType": null
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "label",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
