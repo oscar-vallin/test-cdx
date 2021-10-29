@@ -6,10 +6,22 @@ import { Spacing } from '../../components/spacings/Spacing';
 import { Text } from '../../components/typography';
 import { PageHeader } from '../../containers/headers/PageHeader';
 import { LayoutDashboard } from '../../layouts/LayoutDashboard';
-import { TableFileStatus } from '../../containers/tables/TableFileStatus';
+import { WorkPacketTable } from '../../containers/tables/WorkPacketTable';
+import { NullHandling, SortDirection, useWorkPacketStatusesLazyQuery } from '../../data/services/graphql';
+import { WorkPacketColumns } from '../../containers/tables/WorkPacketColumns';
 
 const _FileStatusPage = () => {
   const [tableMeta, setTableMeta] = useState({ count: null, loading: null });
+
+  const mapData = (data) => {
+    const items = [];
+    data?.workPacketStatuses?.nodes?.map((value) => {
+      if (value) {
+        items.push(value);
+      }
+    });
+    return items;
+  }
 
   return (
     <LayoutDashboard
@@ -40,7 +52,28 @@ const _FileStatusPage = () => {
         </Container>
       </PageHeader>
 
-      <TableFileStatus onItemsListChange={setTableMeta} />
+      <WorkPacketTable
+        id="TableFileStatus"
+        cols={[
+          WorkPacketColumns.TIMESTAMP,
+          WorkPacketColumns.VENDOR,
+          WorkPacketColumns.PLAN_SPONSOR,
+          WorkPacketColumns.INBOUND_FILENAME,
+          WorkPacketColumns.STEP_STATUS,
+          WorkPacketColumns.PROGRESS,
+        ]}
+        lazyQuery={useWorkPacketStatusesLazyQuery}
+        getItems={mapData}
+        searchTextPlaceholder="Extract Name,  Status, Vendor, etc."
+        defaultSort={[
+          {
+            property: 'timestamp',
+            direction: SortDirection.Desc,
+            nullHandling: NullHandling.NullsFirst,
+            ignoreCase: true,
+          },
+        ]}
+      />
     </LayoutDashboard>
   );
 };

@@ -1,4 +1,4 @@
-import CDXCollapse from './Collapse.js';
+import CDXCollapse from './Collapse';
 import { mountWithTheme } from '../../../utils/testUtils';
 import { shallow } from 'enzyme';
 

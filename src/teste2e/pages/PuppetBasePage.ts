@@ -22,33 +22,32 @@ export default class PuppetBasePage {
 
   async expectTextOnPage(selector: string, expectedText: string) {
     const { page } = this;
-    try {
-      await this.waitForSelector(selector);
-      const actualText = await page.$eval(selector, (e) => e.textContent);
-
-      expect(actualText).toContain(expectedText);
-    } catch (err) {
+    await this.waitForSelector(selector).catch(() => {
       throw Error(`Did not find element ${selector} within the time limit`);
-    }
+    });
+    const actualText = await page.$eval(selector, (e) => e.textContent);
+
+    expect(actualText).toContain(expectedText);
   }
 
   async waitForSelector(selector: string): Promise<ElementHandle | null> {
-    try {
-      return await this.page.waitForSelector(selector);
-    } catch (err) {
+    return await this.page.waitForSelector(selector).catch(() => {
       throw Error(`Did not find element ${selector} within the time limit`);
-    }
+    });
   }
 
   async expectTextOnFirstRow(text: string, tableRow: number, tableCol: number) {
     await this.page.waitForTimeout(1000);
-    const result = await this.page.$$eval('.ms-DetailsRow-fields', (rows) => {
-      return Array.from(rows, (row: any) => {
-        const columns = row.querySelectorAll('.ms-DetailsRow-cell');
-        return Array.from(columns, (column: any) => column.innerText);
+    const result = await this.page
+      .$$eval('.ms-DetailsRow-fields', (rows) => {
+        return Array.from(rows, (row: any) => {
+          const columns = row.querySelectorAll('.ms-DetailsRow-cell');
+          return Array.from(columns, (column: any) => column.innerText);
+        });
+      })
+      .catch(() => {
+        throw Error(`Did not find "${text} on Row [${tableRow}] Column [${tableCol}]`);
       });
-    });
-
     expect(result[tableRow][tableCol]).toContain(text);
   }
 

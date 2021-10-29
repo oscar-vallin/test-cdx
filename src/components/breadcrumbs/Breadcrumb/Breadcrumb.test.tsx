@@ -1,5 +1,5 @@
 import { mount, render, shallow } from 'enzyme';
-import { CDXBreadcrumb } from './Breadcrumb.js';
+import { CDXBreadcrumb } from './Breadcrumb';
 
 const baseProps = {
   id: 'Breadcrumb_UnitTest',
@@ -7,7 +7,8 @@ const baseProps = {
 
 const defaultProps = {
   ...baseProps,
-  items: [{ ID: 'test', TITLE: 'Test' }],
+  items: [{ ID: 'test', TITLE: 'Test', URL: '', MAIN_MENU: true, API_ID: '' }],
+  onClick: () => {},
 };
 
 describe('Breadcrumb Testing Unit...', () => {
@@ -44,16 +45,12 @@ describe('Breadcrumb Testing Unit...', () => {
   });
 
   it('Breadcrumb Default Props', () => {
-    const wrapper = shallow(<CDXBreadcrumb {...baseProps}>1</CDXBreadcrumb>);
+    const wrapper = shallow(<CDXBreadcrumb {...defaultProps} />);
     expect(wrapper).toMatchSnapshot();
   });
 
   it('Breadcrumb Variants', () => {
-    const wrapper = shallow(
-      <CDXBreadcrumb {...baseProps} onClick={undefined}>
-        1
-      </CDXBreadcrumb>
-    );
+    const wrapper = shallow(<CDXBreadcrumb {...defaultProps} onClick={undefined} />);
     expect(wrapper).toMatchSnapshot();
   });
 });

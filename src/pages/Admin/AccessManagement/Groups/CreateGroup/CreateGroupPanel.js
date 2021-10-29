@@ -337,8 +337,106 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, onUpdateGrou
               )}
 
               <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                <Separator />
+                <Checkbox
+                  label="Policies Applies to All Sub Organizations except for those explicitly exclude"
+                  onChange={(event, _stepWise) => setStepWise(_stepWise)}
+                />
               </Spacing>
+
+              <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                <Row bottom>
+                  <Column lg="12">
+                    <InputText
+                      label="Policies apply to the following Organizations"
+                      placeholder="Type to Search"
+                      disabled
+                      value={state.policyName}
+                      onChange={({ target }) => setState({ ...state, policyName: target.value })}
+                    />
+                  </Column>
+                </Row>
+              </Spacing>
+
+              {response?.excludeOrgSids?.visible && (
+                <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                  <Row bottom>
+                    <Column lg="12">
+                      <div className={rootClass}>
+                        <strong>{response?.excludeOrgSids?.label}</strong>
+                        <TagPicker
+                          removeButtonAriaLabel="Remove"
+                          selectionAriaLabel="Selected colors"
+                          onResolveSuggestions={filterSuggestedTags}
+                          getTextFromItem={getTextFromItem}
+                          pickerSuggestionsProps={pickerSuggestionsProps}
+                          itemLimit={4}
+                          inputProps={{
+                            id: 'pickerId',
+                          }}
+                        />
+                      </div>
+                    </Column>
+                  </Row>
+                </Spacing>
+              )}
+
+              {response?.includeOrgSids?.visible && (
+                <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                  <Row bottom>
+                    <Column lg="12">
+                      <div className={rootClass}>
+                        <strong>{response?.includeOrgSids.label}</strong>
+                        {response?.includeOrgSids?.info && (
+                          <TooltipHost content={response?.includeOrgSids?.info} id="includeOrgSidsTooltip">
+                            &nbsp; <FontIcon aria-describedby="includeOrgSidsTooltip" iconName="Error" />
+                          </TooltipHost>
+                        )}
+                        <TagPicker
+                          removeButtonAriaLabel="Remove"
+                          selectionAriaLabel="Selected Orgs"
+                          onResolveSuggestions={filterSuggestedTags}
+                          getTextFromItem={getTextFromItem}
+                          pickerSuggestionsProps={pickerSuggestionsProps}
+                          onItemSelected={onItemSelected}
+                          itemLimit={4}
+                          inputProps={{
+                            id: 'pickerId',
+                          }}
+                        />
+                      </div>
+                    </Column>
+                  </Row>
+                </Spacing>
+              )}
+
+              {response?.excludeOrgSids?.visible && (
+                <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                  <Row bottom>
+                    <Column lg="12">
+                      <div className={rootClass}>
+                        <strong>{response?.excludeOrgSids?.label}</strong>
+                        {response?.excludeOrgSids?.info && (
+                          <TooltipHost content={response?.excludeOrgSids?.info} id="excludeOrgSidsTooltip">
+                            &nbsp; <FontIcon aria-describedby="excludeOrgSidsTooltip" iconName="Error" />
+                          </TooltipHost>
+                        )}
+                        <TagPicker
+                          removeButtonAriaLabel="Remove"
+                          selectionAriaLabel="Selected Orgs"
+                          onResolveSuggestions={filterSuggestedTags}
+                          getTextFromItem={getTextFromItem}
+                          pickerSuggestionsProps={pickerSuggestionsProps}
+                          onItemSelected={onItemSelected}
+                          itemLimit={4}
+                          inputProps={{
+                            id: 'pickerId',
+                          }}
+                        />
+                      </div>
+                    </Column>
+                  </Row>
+                </Spacing>
+              )}
 
               {response?.includeAllSubOrgs?.visible && (
                 <Column lg="6" direction="row">

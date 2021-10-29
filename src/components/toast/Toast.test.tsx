@@ -1,10 +1,10 @@
 import { mount } from 'enzyme';
 import { MessageBarType } from '@fluentui/react';
-import { Toast } from './Toast.js';
+import { Toast } from './Toast';
 
 const defaultProps = {
   text: 'content',
-  type: MessageBarType.info,
+  type: 'info',
   visible: false,
 };
 
@@ -24,7 +24,7 @@ describe('Toast Testing Unit...', () => {
   });
 
   it('Should match the type property', () => {
-    expect(tree.props().type).toEqual(MessageBarType.info);
+    expect(tree.props().type).toEqual(defaultProps.type);
   });
 
   it('Should be hidden by default', () => {

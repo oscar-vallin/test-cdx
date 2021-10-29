@@ -1,18 +1,17 @@
-import { shallow } from 'enzyme';
-import { ButtonAction } from './ButtonAction.js';
+import { shallowWithTheme } from '../../../../src/utils/testUtils';
+import { ButtonAction } from './ButtonAction';
 
 const defaultProps = {
-  icon: 'edit',
+  id: '',
+  icon: '',
+  disabled: false,
   onClick: () => null,
-};
-
-const theme = {
-  colors: { themePrimary: '#fff' },
+  iconProps: '',
 };
 
 describe('ButtonAction', () => {
   const mockFn = jest.fn();
-  const tree = shallow(
+  const tree = shallowWithTheme(
     <ButtonAction {...defaultProps} onClick={mockFn} iconProps="edit">
       Testing ButtonAction
     </ButtonAction>
@@ -27,20 +26,20 @@ describe('ButtonAction', () => {
   });
 
   it('Should have a click function', () => {
-    tree.simulate('click');
+    tree.children().simulate('click');
     expect(mockFn).toHaveBeenCalled();
   });
 
   it('Should have an icon', () => {
-    expect(tree.props().iconProps).toEqual('edit');
+    expect(tree.children().props().iconProps).toEqual('edit');
   });
 
   it('Should renders children', () => {
-    expect(tree.contains('Testing ButtonAction')).toEqual(true);
+    expect(tree.children().contains('Testing ButtonAction')).toEqual(true);
   });
 
   it('Should renders children when passed in', () => {
-    const wrapper = shallow(
+    const wrapper = shallowWithTheme(
       <ButtonAction {...defaultProps}>
         <div className="children" />
       </ButtonAction>
@@ -49,8 +48,8 @@ describe('ButtonAction', () => {
   });
 
   it('Test styled ButtonAction component', () => {
-    const wrapper = shallow(
-      <ButtonAction {...defaultProps} theme={theme}>
+    const wrapper = shallowWithTheme(
+      <ButtonAction {...defaultProps}>
         <div className="children" />
       </ButtonAction>
     ).dive();

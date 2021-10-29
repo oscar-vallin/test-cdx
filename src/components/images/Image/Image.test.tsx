@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
-import { Image as Component } from './index.js';
+import { Image as Component } from './index';
 
-const defaultProps = { name: 'Image', src: '', alt: 'Alt Img' };
+const defaultProps = { id: 'ImageId', name: 'Image', src: '', alt: 'Alt Img' };
 
 describe('Image', () => {
   const tree = shallow(<Component {...defaultProps} src="http://image.com/test.png" />);

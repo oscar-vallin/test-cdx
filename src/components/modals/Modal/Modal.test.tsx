@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import Component from './Modal.js';
+import Component from './Modal';
 
 const defaultChildren = 'ChildrenText';
 const defaultTitle = 'Title';

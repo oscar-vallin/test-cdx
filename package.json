@@ -63,7 +63,6 @@
     "test:coverage": "react-scripts test --coverage --runInBand --watchAll=false --updateSnapshot",
     "format": "prettier --write src/**/*.{ts,tsx}",
     "lint": "yarn lint:fix",
-    "eject": "react-scripts eject",
     "clean": "rm -rf build",
     "extract-routes": "node --experimental-modules internals/route-extractor.mjs",
     "prettify": "prettier --write \"src/**/*.{js,jsx,ts,tsx,css}\"",

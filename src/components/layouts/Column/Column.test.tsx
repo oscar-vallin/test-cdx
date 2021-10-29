@@ -1,13 +1,13 @@
 import ReactDOM from 'react-dom';
 import toJSON from 'enzyme-to-json';
 import { shallow } from 'enzyme';
-import { Column as Component } from './Column.js';
+import { Column as Component } from './Column';
 
 const defaultProps = {
   id: '__Column',
   variant: 'normal',
   direction: 'column',
-  children: null,
+  children: <></>,
   center: 'center',
   right: 'center',
   top: 'center',

@@ -1,19 +1,19 @@
-import { shallow } from 'enzyme';
-import { Link } from './ButtonLink.js';
+import { shallowWithTheme } from 'src/utils/testUtils';
+import { Link } from './ButtonLink';
 
-const theme = {
-  colors: { themePrimary: '#fff', custom: { error: '#000  ' } },
-  fontStyles: {
-    link: `normal ${400} ${10}/${1} ${'Segoe UI'}, ${'Source Sans Pro'}, sans-serif`,
-  },
+const defaultProps = {
+  id: '__Link_Id',
+  onClick: jest.fn(),
+  // children: '',
+  href: '#',
+  target: '_blank',
+  rel: 'noopener',
 };
 
 describe('Link', () => {
   const mockFn = jest.fn();
-  const tree = shallow(
-    <Link onClick={mockFn} href="http://testlink.com">
-      Testing ButtonLink
-    </Link>
+  const tree = shallowWithTheme(
+    <Link {...defaultProps} children={'Testing ButtonLink'} onClick={mockFn} href="http://testlink.com" />
   );
 
   it('Should be defined', () => {
@@ -25,34 +25,32 @@ describe('Link', () => {
   });
 
   it('Should have a click function', () => {
-    tree.simulate('click');
+    tree.children().simulate('click');
     expect(mockFn).toHaveBeenCalled();
   });
 
   it('Should renders children', () => {
-    expect(tree.contains('Testing ButtonLink')).toEqual(true);
+    expect(tree.children().contains('Testing ButtonLink')).toEqual(true);
   });
 
   it('Should renders children when passed in', () => {
-    const wrapper = shallow(
-      <Link onClick={mockFn} href="http://testlink.com">
-        <div className="children" />
-      </Link>
+    const wrapper = shallowWithTheme(
+      <Link {...defaultProps} onClick={mockFn} children={<div className="children" />} href="http://testlink.com" />
     );
     expect(wrapper.contains(<div className="children" />)).toEqual(true);
   });
 
   it('Should have a href prop', () => {
-    expect(tree.props().href).toEqual('http://testlink.com');
+    expect(tree.children().props().href).toEqual('http://testlink.com');
   });
 
   it('Should have a traget blank prop', () => {
-    expect(tree.props().target).toEqual('_blank');
+    expect(tree.children().props().target).toEqual('_blank');
   });
 
   it('Test styled Button component', () => {
-    const testTemp = shallow(
-      <Link onClick={mockFn} href="http://testlink.com" theme={theme}>
+    const testTemp = shallowWithTheme(
+      <Link {...defaultProps} onClick={mockFn} href="http://testlink.com">
         Testing ButtonLink
       </Link>
     ).dive();
