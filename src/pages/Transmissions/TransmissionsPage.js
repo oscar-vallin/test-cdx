@@ -6,13 +6,9 @@ import { Row, Column, Container } from '../../components/layouts';
 import { Spacing } from '../../components/spacings/Spacing';
 import { Text } from '../../components/typography';
 import { PageHeader } from '../../containers/headers/PageHeader';
-import {WorkPacketTable} from "../../containers/tables/WorkPacketTable";
-import {WorkPacketColumns} from "../../containers/tables/WorkPacketColumns";
-import {
-  NullHandling,
-  SortDirection,
-  useWpTransmissionsLazyQuery
-} from "../../data/services/graphql";
+import { WorkPacketTable } from '../../containers/tables/WorkPacketTable';
+import { WorkPacketColumns } from '../../containers/tables/WorkPacketColumns';
+import { NullHandling, SortDirection, useWpTransmissionsLazyQuery } from '../../data/services/graphql';
 
 const _TransmissionsPage = () => {
   const [tableMeta, setTableMeta] = useState({ count: null, loading: null });
@@ -25,7 +21,7 @@ const _TransmissionsPage = () => {
       }
     });
     return items;
-  }
+  };
 
   return (
     <LayoutDashboard id="PageTransmissions" menuOptionSelected={ROUTES.ROUTE_ADMIN.API_ID}>
@@ -52,7 +48,7 @@ const _TransmissionsPage = () => {
         </Container>
       </PageHeader>
 
-      {/*<TableTransmissions data={data} onItemsListChange={setTableMeta} />*/}
+      {/* <TableTransmissions data={data} onItemsListChange={setTableMeta} /> */}
       <WorkPacketTable
         id="TableTransmissions"
         cols={[
@@ -67,7 +63,7 @@ const _TransmissionsPage = () => {
           WorkPacketColumns.BILLING_COUNT,
           WorkPacketColumns.TOTAL_RECORDS,
           WorkPacketColumns.EXTRACT_TYPE,
-          WorkPacketColumns.EXTRACT_VERSION
+          WorkPacketColumns.EXTRACT_VERSION,
         ]}
         lazyQuery={useWpTransmissionsLazyQuery}
         getItems={mapData}
@@ -81,7 +77,6 @@ const _TransmissionsPage = () => {
           },
         ]}
       />
-
     </LayoutDashboard>
   );
 };

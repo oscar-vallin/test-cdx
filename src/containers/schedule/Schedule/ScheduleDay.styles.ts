@@ -1,9 +1,8 @@
 import styled from 'styled-components';
 import { Box as LayoutBox, Row as LayoutRow, Column as LayoutColumn } from '../../../components/layouts';
 import { Button } from '../../../components/buttons/Button';
-import { ButtonAction } from '../../../components/buttons/ButtonAction';
 
-// const COLOR_MAIN = 'rgb(0, 90, 158)';
+// const COLOR_MAIN = '#1a8fff';
 // const COLOR_TEXT = '#333';
 // const COLOR_TEXT_LIGHT = '#CCC';
 // const COLOR_BG = '#F9F9F9';
@@ -24,16 +23,17 @@ const COLOR_BORDER = ({ theme }) => theme.colors.neutralLight;
 // --bg-color: #f9f9f9;
 // --neutral-color: #fff;
 
-export const Container = styled(LayoutBox)`
-  width: 80%;
-`;
-
 export const Box = styled(LayoutBox)`
   width: 100%;
 `;
 
-export const Row = styled(LayoutRow)`
+export const WeekRow = styled(LayoutRow)`
   width: 100%;
+  /* height: calc(80vh); */
+  background-color: #fff;
+  /* margin-left: --50px; */
+  font-family: 'Open Sans', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+  margin-bottom: 50px;
 `;
 
 export const Column = styled(LayoutColumn)`
@@ -49,23 +49,21 @@ export const CalendarColumn = styled(LayoutColumn)`
   width: calc(100% / 7);
 `;
 
-export const HeaderButtonView = styled(Button)`
-  background: ${({ selected, theme }) => (selected ? theme.colors.themePrimary : theme.colors.infoBackground)};
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  color: ${({ selected, theme }) => (selected ? theme.colors.white : theme.colors.themePrimary)};
-  font-weight: ${({ selected, theme }) => (selected ? theme.fontWeights.bold : theme.fontWeights.normal)};
-  transition: all 0.15s ease-out;
-  width: 100%;
+type StyledHeaderButtonViewProps = {
+  selected?: boolean | undefined;
+};
 
-  && {
-    border: none;
-  }
-`;
-
-export const HeaderButtonTitle = styled(Button)`
+export const HeaderButtonView = styled(Button)<StyledHeaderButtonViewProps>`
   /* background-color: ${({ selected }) => (selected ? 'gray' : 'white')}; */
-  background: transparent;
-  border: none;
+  &&& {
+    background: ${({ selected, theme }) => (selected ? theme.colors.themePrimary : theme.colors.neutralLight)};
+    color: ${({ selected, theme }) => (selected ? theme.colors.neutralLight : theme.colors.themePrimary)};
+    font-weight: ${({ selected, theme }) => (selected ? theme.fontWeights.bold : theme.fontWeights.normal)};
+  }
+
+  &:hover {
+    border-color: ${({ theme }) => theme.colors.themePrimary};
+  }
 `;
 
 export const ScheduleColumn = styled.img`
@@ -221,7 +219,12 @@ export const CalendarDays = styled.div`
   border-bottom: 1px solid var(--border-color);
 `;
 
-export const CalendarBodyCell = styled.div`
+type StyledDayOfWeekContainerProps = {
+  isSameMonth?: boolean | undefined;
+  isSameDay?: boolean | undefined;
+};
+
+export const DayOfWeekContainer = styled.div<StyledDayOfWeekContainerProps>`
   /* position: relative;
   height: 5em;
   border-right: 1px solid var(--border-color);
@@ -236,11 +239,11 @@ export const CalendarBodyCell = styled.div`
   } */
 
   /* background-color: blue; */
-  border-right: ${`1px solid ${COLOR_BORDER}`};
+  border: ${`1px solid ${COLOR_BORDER}`};
   cursor: pointer;
   background: ${COLOR_NEUTRAL};
-  width: calc(100% / 7);
-  height: 100%;
+  width: 100%;
+  height: 80px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -259,7 +262,7 @@ export const CalendarBodyRow = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
-  height: calc(80vh / 5);
+  height: 80px;
 `;
 
 export const LayoutBase = styled.div`
@@ -279,36 +282,21 @@ export const RowHeader = styled(LayoutBase)`
   margin: 1em;
 `;
 
-export const FillerHours = styled.div`
-  height: 100%;
-  width: 50px;
-`;
-
 export const RowHeaderItem = styled(LayoutBase)`
   flex-direction: row;
-  justify-content: space-between;
-`;
-
-export const UpDownContainer = styled(LayoutBase)`
-  flex-direction: row;
-  margin-right: 10px;
-`;
-
-export const MonthYearContainer = styled(LayoutBase)`
-  flex-direction: row;
-  height: 40px;
-  align-items: center;
-  position: relative;
 `;
 
 export const HeaderTextLarge = styled.span`
   font-family: Segoe UI;
-  font-size: 0.875rem;
-  color: ${COLOR_MAIN};
+  font-size: 0.75rem;
+  margin-bottom: 5px;
+  color: #c2c2c2;
 `;
 
-export const HeaderMonth = styled(HeaderTextLarge)`
-  margin-right: 0.2em;
+export const DayOfWeek = styled(HeaderTextLarge)`
+  font-weight: bold;
+  margin-left: 5px;
+  width: calc((100% - 35px) / 7);
 `;
 
 export const HeaderYear = styled(HeaderTextLarge)`
@@ -329,6 +317,12 @@ export const CalendarBodyDisabled = styled.div`
   pointer-events: none;
 `;
 
+export const Container = styled.div`
+  /* margin-left: -50px; */
+  width: 100%;
+  height: 100%;
+`;
+
 export const CalendarBodyCellBg = styled.span`
   font-weight: 700;
   line-height: 1;
@@ -341,6 +335,40 @@ export const CalendarBodyCellBg = styled.span`
   letter-spacing: -0.07em;
 `;
 
+export const SWeekHourContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  padding-top: -10px;
+  height: 80px;
+  background: transparent;
+  width: 50px;
+  margin-left: -50px;
+`;
+
+export const SWeekHour = styled.span`
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: ${({ theme }) => theme.colors.neutralSecondary};
+  height: 100%;
+  margin-right: 5px;
+  margin-top: -8px;
+`;
+
+export const CellItem = styled.div`
+  font-size: 0.625rem;
+  width: 90%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background: #808080;
+  color: white;
+  border-radius: 3px;
+  margin-left: 5%;
+  padding: 0 5%;
+  margin-bottom: 5px;
+`;
+
 // .calendar .body .cell:hover .bg, .calendar .body .selected .bg  {
 //   opacity: 0.05;
 //   transition: .5s ease-in;
@@ -350,8 +378,4 @@ export const CalendarBodyCol = styled.div`
   flex-grow: 0;
   flex-basis: calc(100% / 7);
   width: calc(100% / 7);
-`;
-
-export const StyledButtonAction = styled(ButtonAction)`
-  color: #005a9e;
 `;

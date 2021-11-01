@@ -1,7 +1,19 @@
-import { useRef, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import { ReactElement, useRef, useEffect } from 'react';
 
-const useOutsideComponent = (ref, collapseClick, hide) => {
+const defaultProps = {
+  id: '',
+  hide: false,
+  children: '',
+};
+
+type OutsideComponentProps = {
+  id?: string;
+  hide?: boolean;
+  collapseClick?: any;
+  children?: any;
+} & typeof defaultProps;
+
+const useOutsideComponent = (ref: { current: any }, collapseClick: any, hide: boolean) => {
   useEffect(() => {
     function handleClickOutside(event) {
       if (ref.current && !ref.current.contains(event.target) && hide === true) {
@@ -16,8 +28,8 @@ const useOutsideComponent = (ref, collapseClick, hide) => {
   }, [ref, hide]);
 };
 
-export const OutsideComponent = ({ id, hide, collapseClick, children }) => {
-  const wrapperRef = useRef(null);
+export const OutsideComponent = ({ id, hide, collapseClick, children }: OutsideComponentProps): ReactElement => {
+  const wrapperRef = useRef<any>({ current: '' });
   useOutsideComponent(wrapperRef, collapseClick, hide);
 
   return (
@@ -27,8 +39,4 @@ export const OutsideComponent = ({ id, hide, collapseClick, children }) => {
   );
 };
 
-OutsideComponent.propTypes = {
-  id: PropTypes.string,
-  collapseClick: PropTypes.func.isRequired,
-  children: PropTypes.element.isRequired,
-};
+OutsideComponent.defaultProps = defaultProps;

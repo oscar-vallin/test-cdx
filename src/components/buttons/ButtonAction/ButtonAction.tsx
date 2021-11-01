@@ -6,16 +6,14 @@ const defaultProps = {
   icon: '',
   disabled: false,
   onClick: () => null,
-  iconProps: '',
 };
 
 type ButtonActionProps = {
   id?: string;
   children: ReactNode;
-  disabled: boolean;
+  disabled?: boolean;
   onClick?: () => null;
   icon: string;
-  iconProps?: string;
 } & typeof defaultProps;
 
 const buttonIcons = {
@@ -31,11 +29,11 @@ const buttonIcons = {
   desc: 'SortDown',
 };
 
-const ButtonAction = ({ id, children, icon, disabled = false, onClick, ...props }: ButtonActionProps) => {
+const ButtonAction = ({ id, children, icon, disabled = false, onClick }: ButtonActionProps) => {
   const _icon = { iconName: buttonIcons[icon] };
 
   return (
-    <StyledButtonAction id={id} disabled={disabled} onClick={onClick} {...props} iconProps={_icon}>
+    <StyledButtonAction id={id} disabled={disabled} onClick={onClick} iconProps={_icon}>
       {children}
     </StyledButtonAction>
   );

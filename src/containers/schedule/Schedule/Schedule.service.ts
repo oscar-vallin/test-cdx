@@ -1,11 +1,17 @@
 import { useState, useEffect } from 'react';
-import { useScheduleOccurrencesQuery } from '../../../data/services/graphql';
+import { SchedOccurStatusEnum, useScheduleOccurrencesQuery } from '../../../data/services/graphql';
 // import { useInputValue } from '../../../hooks/useInputValue';
+
+type itemsType = {
+  datetime: string | null;
+  label: string | undefined;
+  status: SchedOccurStatusEnum | undefined;
+};
 
 //
 export const useScheduleItems = (argOrgSid, argDateRange) => {
   const [, setLoading] = useState(true);
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState<itemsType[] | undefined>([]);
 
   const { data, loading, error } = useScheduleOccurrencesQuery({
     variables: {
@@ -24,20 +30,21 @@ export const useScheduleItems = (argOrgSid, argDateRange) => {
 
   useEffect(() => {
     if (error) {
-      /* TODO: Refactor to logout use-case */
+      // !TODO: Refactor to logout use-case */
       // authLogout(error.message);
       // history.push('/');
+      // }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
 
   useEffect(() => {
     const doEffect = () => {
-      const _items = data.scheduleOccurrences.nodes.map((item) => {
+      const _items = data?.scheduleOccurrences?.nodes?.map((item) => {
         return {
-          datetime: item.timeScheduled,
-          label: item.resource,
-          status: item.schedOccurStatus,
+          datetime: item?.timeScheduled,
+          label: item?.resource,
+          status: item?.schedOccurStatus,
         };
       });
 
