@@ -21,7 +21,7 @@ const _FileStatusPage = () => {
       }
     });
     return items;
-  }
+  };
 
   return (
     <LayoutDashboard
