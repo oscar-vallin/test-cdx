@@ -6,16 +6,14 @@ const defaultProps = {
   icon: '',
   disabled: false,
   onClick: () => null,
-  iconProps: '',
 };
 
 type ButtonActionProps = {
   id?: string;
   children: ReactNode;
-  disabled: boolean;
+  disabled?: boolean;
   onClick?: () => null;
   icon: string;
-  iconProps?: string;
 } & typeof defaultProps;
 
 const buttonIcons = {

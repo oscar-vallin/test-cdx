@@ -49,7 +49,11 @@ export const CalendarColumn = styled(LayoutColumn)`
   width: calc(100% / 7);
 `;
 
-export const HeaderButtonView = styled(Button)`
+type StyledHeaderButtonViewProps = {
+  selected?: boolean | undefined;
+};
+
+export const HeaderButtonView = styled(Button)<StyledHeaderButtonViewProps>`
   /* background-color: ${({ selected }) => (selected ? 'gray' : 'white')}; */
   &&& {
     background: ${({ selected, theme }) => (selected ? theme.colors.themePrimary : theme.colors.neutralLight)};
@@ -215,7 +219,12 @@ export const CalendarDays = styled.div`
   border-bottom: 1px solid var(--border-color);
 `;
 
-export const DayOfWeekContainer = styled.div`
+type StyledDayOfWeekContainerProps = {
+  isSameMonth?: boolean | undefined;
+  isSameDay: boolean | undefined;
+};
+
+export const DayOfWeekContainer = styled.div<StyledDayOfWeekContainerProps>`
   /* position: relative;
   height: 5em;
   border-right: 1px solid var(--border-color);

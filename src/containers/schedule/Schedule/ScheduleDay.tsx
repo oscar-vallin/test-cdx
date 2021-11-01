@@ -1,4 +1,5 @@
 import { addHours, format, isSameDay, startOfDay } from 'date-fns';
+import { ReactElement } from 'react';
 
 import {
   WeekRow,
@@ -12,7 +13,7 @@ import {
 export const ScheduleDay = ({ currentDate, selectedDate }) => {
   const currentSelectedDate = selectedDate ?? currentDate;
 
-  const rows = [];
+  const rows: ReactElement[] = [];
 
   let formattedHour = '';
   let hour = startOfDay(currentSelectedDate);
@@ -27,9 +28,7 @@ export const ScheduleDay = ({ currentDate, selectedDate }) => {
       rows.push(
         <CalendarBodyRow id="CalendarBodyRow" key={formattedHour}>
           <SWeekHourContainer>{h > 1 && <SWeekHour>{formattedHour}</SWeekHour>}</SWeekHourContainer>
-          <DayOfWeekContainer id="CalendarBodyCell" isSameDay={isSameDay(new Date(), currentSelectedDate)}>
-            {/* <CalendarBodyCellNumber id="CalendarBodyCellNumber">{renderItems(hour, items)}</CalendarBodyCellNumber> */}
-          </DayOfWeekContainer>
+          <DayOfWeekContainer id="CalendarBodyCell" isSameDay={isSameDay(new Date(), currentSelectedDate)} />
         </CalendarBodyRow>
       );
 

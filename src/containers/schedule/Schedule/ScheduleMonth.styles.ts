@@ -34,7 +34,11 @@ export const CalendarColumn = styled(LayoutColumn)`
   width: calc(100% / 7);
 `;
 
-export const HeaderButtonView = styled(Button)`
+type StyledHeaderButtonViewProps = {
+  selected?: boolean | undefined;
+};
+
+export const HeaderButtonView = styled(Button)<StyledHeaderButtonViewProps>`
   background: ${({ selected, theme }) => (selected ? theme.colors.themePrimary : theme.colors.neutralPrimary)};
   color: ${({ selected, theme }) => (selected ? theme.colors.neutralPrimary : theme.colors.themePrimary)};
   font-weight: ${({ selected, theme }) => (selected ? theme.fontWeights.bold : theme.fontWeights.normal)};
@@ -186,7 +190,13 @@ export const CalendarDays = styled.div`
   border-bottom: 1px solid var(--border-color);
 `;
 
-export const CalendarBodyCell = styled.div`
+type StyledCalendarBodyCellProps = {
+  isSelectedDate?: boolean | undefined;
+  isSameDay?: boolean | undefined;
+  isSameMonth?: boolean | undefined;
+};
+
+export const CalendarBodyCell = styled.div<StyledCalendarBodyCellProps>`
   border-color: ${({ isSelectedDate }) => (isSelectedDate ? COLOR_MAIN : COLOR_BORDER)};
   border-width: ${({ isSelectedDate }) => (isSelectedDate ? `5px 0px 0px` : `1px`)};
   border-style: solid;

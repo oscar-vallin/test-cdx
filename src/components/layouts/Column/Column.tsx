@@ -7,10 +7,10 @@ const defaultProps = {
   variant: 'normal',
   direction: 'column',
   children: <></>,
-  center: '',
-  right: '',
-  top: '',
-  bottom: '',
+  center: false,
+  right: false,
+  top: false,
+  bottom: false,
   centerV: '',
 };
 
@@ -20,10 +20,10 @@ type ColumnProps = {
   direction?: string;
   children?: ReactElement | any;
   lg?: string;
-  center?: string;
-  right?: string;
-  top?: string;
-  bottom?: string;
+  center?: boolean;
+  right?: boolean;
+  top?: boolean;
+  bottom?: boolean;
   centerV?: string;
 } & typeof defaultProps;
 

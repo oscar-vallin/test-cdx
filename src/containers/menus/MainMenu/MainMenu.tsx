@@ -71,7 +71,6 @@ const MainMenu = ({ id, left, changeCollapse }: MainMenuProps): ReactElement => 
               history.push(`${opt.URL}?orgSid=${orgSid}`);
               return null;
             }}
-            iconProps="MainMenu"
           >
             {menuOption.label}
           </StyledMenuButton>
