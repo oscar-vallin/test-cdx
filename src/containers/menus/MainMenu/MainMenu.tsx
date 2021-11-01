@@ -1,7 +1,6 @@
 /* eslint-disable no-shadow */
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useState } from 'react';
-import PropTypes from 'prop-types';
+import { ReactElement, useState } from 'react';
 // Components
 
 // Hooks
@@ -14,23 +13,47 @@ import { getRouteByApiId } from '../../../data/constants/RouteConstants';
 import { OutsideComponent } from './OutsideComponent';
 import { useActiveDomainStore } from '../../../store/ActiveDomainStore';
 
-const MainMenu = ({ id, left, changeCollapse }) => {
+const defaultProps = {
+  id: '',
+  left: false,
+  changeCollapse: () => null,
+  option: '',
+};
+
+type MainMenuProps = {
+  id?: string;
+  left?: boolean;
+  changeCollapse?: any | null;
+  option?: string;
+} & typeof defaultProps;
+
+const MainMenu = ({ id, left, changeCollapse }: MainMenuProps): ReactElement => {
   const ActiveDomainStore = useActiveDomainStore();
   const history = useHistory();
   const location = useLocation();
   const urlParams = new URLSearchParams(location.search);
   const orgSid = urlParams.get('orgSid') ?? '-1';
 
-  const [collapse, setCollapse] = useState();
+  const [collapse, setCollapse] = useState(false);
 
   const collapseNavMenu = () => {
     setCollapse(!collapse);
     changeCollapse();
+
+    return null;
   };
 
   const renderOptions = () => {
-    return ActiveDomainStore.nav.dashboard.map((menuOption, index) => {
-      const opt = getRouteByApiId(menuOption.label !== 'Admin' ? menuOption.destination : 'ADMIN');
+    return ActiveDomainStore.nav.dashboard.map((menuOption: { label: string; destination: string }, index: any) => {
+      const opt:
+        | {
+            ID?: string;
+            TITLE?: string;
+            URL?: string;
+            MAIN_MENU?: boolean;
+            API_ID?: string;
+          }
+        | any = getRouteByApiId(menuOption.label !== 'Admin' ? menuOption.destination : 'ADMIN');
 
       return opt.MAIN_MENU ? (
         <StyledColumn
@@ -40,10 +63,15 @@ const MainMenu = ({ id, left, changeCollapse }) => {
         >
           <StyledMenuButton
             selected={location.pathname === opt.URL}
+            id="__MainMenuId"
             collapse={collapse}
+            icon="MainMenu"
+            disabled={false}
             onClick={() => {
               history.push(`${opt.URL}?orgSid=${orgSid}`);
+              return null;
             }}
+            iconProps="MainMenu"
           >
             {menuOption.label}
           </StyledMenuButton>
@@ -55,7 +83,7 @@ const MainMenu = ({ id, left, changeCollapse }) => {
   // Render
   return (
     <OutsideComponent id={id} collapseClick={collapseNavMenu} hide={collapse}>
-      <StyledRow id={`${id}__MainMenu--Row`} left={left} collapse={collapse}>
+      <StyledRow id={`${id}__MainMenu--Row`} collapse={collapse}>
         <StyledButtonIcon
           icon="BulletedListText"
           disabled={false}
@@ -63,16 +91,12 @@ const MainMenu = ({ id, left, changeCollapse }) => {
           size={18}
           onClick={collapseNavMenu}
         />
-
         {renderOptions()}
       </StyledRow>
     </OutsideComponent>
   );
 };
 
-MainMenu.propTypes = {
-  changeCollapse: PropTypes.func,
-  id: PropTypes.string,
-};
+MainMenu.defaultProps = defaultProps;
 
 export { MainMenu };

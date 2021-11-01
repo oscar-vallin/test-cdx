@@ -20,7 +20,7 @@ type ButtonIconProps = {
   children?: any;
   text?: string;
   variant?: string;
-  onClick?: () => void;
+  onClick?: () => null;
   block?: boolean;
 } & typeof defaultProps;
 
