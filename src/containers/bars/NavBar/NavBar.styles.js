@@ -161,7 +161,6 @@ export const StyledButtonOrg = styled(DefaultButton)`
   background: none;
   border: none;
   color: ${({ theme }) => {
-    console.log('theme.colors.white: ', theme.colors.white);
     return theme.colors.white;
   }};
   margin: 0 5px 0 0;
