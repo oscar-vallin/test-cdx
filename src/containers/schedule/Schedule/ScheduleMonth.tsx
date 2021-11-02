@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ReactElement } from 'react';
 import {
   addDays,
   endOfMonth,
@@ -62,10 +62,10 @@ export const ScheduleMonth = ({ id, currentDate, selectedDate, onChangeDate, ite
   //
   const _renderBody = () => {
     const dateFormat = 'dd';
-    const rows = [];
+    const rows: ReactElement[] = [];
 
     let day = dates.startDate;
-    let days = [];
+    let days: ReactElement[] = [];
     let formattedDate = '';
     let formattedDateNotValid = '';
 
@@ -85,7 +85,7 @@ export const ScheduleMonth = ({ id, currentDate, selectedDate, onChangeDate, ite
             isSameMonth={isSameMonth(day, dates.monthStart)}
             isSameDay={isSameDay(day, currentDate)}
             isSelectedDate={isSameDay(day, dates.selectedDate)}
-            key={day}
+            key={`${day}`}
             onClick={() => handleChangeDate(cloneDay)}
           >
             <CalendarBodyCellNumber id="CalendarBodyCellNumber">
@@ -100,7 +100,7 @@ export const ScheduleMonth = ({ id, currentDate, selectedDate, onChangeDate, ite
         day = addDays(day, 1);
       }
       rows.push(
-        <CalendarBodyRow id="CalendarBodyRow" key={day}>
+        <CalendarBodyRow id="CalendarBodyRow" key={`${day}`}>
           {days}
         </CalendarBodyRow>
       );

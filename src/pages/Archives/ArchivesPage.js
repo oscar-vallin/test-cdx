@@ -21,7 +21,7 @@ const _ArchivePage = () => {
       }
     });
     return items;
-  }
+  };
 
   return (
     <LayoutDashboard id="PageArchive" menuOptionSelected={ROUTES.ROUTE_FILE_STATUS.ID}>

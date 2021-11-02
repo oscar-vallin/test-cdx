@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ReactElement } from 'react';
 import { addDays, endOfMonth, endOfWeek, format, isSameDay, isSameMonth, startOfMonth, startOfWeek } from 'date-fns';
 
 import {
@@ -45,7 +45,7 @@ export const ScheduleSubHeader = ({ id, currentView, currentDate, selectedDate }
 
   const _renderSubHeader = () => {
     const dateFormat = 'EEEE';
-    const days = [];
+    const days: ReactElement[] = [];
     let day = dates.startDate;
     const _currentDay = selectedDate ?? currentDate;
 

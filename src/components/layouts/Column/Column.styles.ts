@@ -21,9 +21,9 @@ export const DivStyled = styled.div<DivStyledProps>`
 type DivStyledProps = {
   variant: string;
   direction: string;
-  center: string;
-  bottom: string;
+  center: boolean;
+  bottom: boolean;
   centerV: string;
-  right: string;
-  top: string;
+  right: boolean;
+  top: boolean;
 };

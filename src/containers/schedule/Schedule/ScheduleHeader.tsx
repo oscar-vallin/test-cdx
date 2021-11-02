@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { addDays, addMonths, endOfWeek, format, startOfWeek } from 'date-fns';
 
 import { addWeeks } from '@fluentui/react';
@@ -42,6 +42,7 @@ export const ScheduleHeader = ({ id, currentView, currentDate, onChangeDate, onC
     const _currentDay = addDays(currentDay, -1);
 
     handleChangeDate(_currentDay);
+    return null;
   };
 
   //
@@ -49,6 +50,7 @@ export const ScheduleHeader = ({ id, currentView, currentDate, onChangeDate, onC
     const _currentDay = addDays(currentDay, 1);
 
     handleChangeDate(_currentDay);
+    return null;
   };
 
   //
@@ -56,6 +58,7 @@ export const ScheduleHeader = ({ id, currentView, currentDate, onChangeDate, onC
     const _currentWeek = addWeeks(currentWeek, -1);
 
     handleChangeDate(_currentWeek);
+    return null;
   };
 
   //
@@ -63,6 +66,7 @@ export const ScheduleHeader = ({ id, currentView, currentDate, onChangeDate, onC
     const _currentWeek = addWeeks(currentWeek, 1);
 
     handleChangeDate(_currentWeek);
+    return null;
   };
 
   //
@@ -70,6 +74,7 @@ export const ScheduleHeader = ({ id, currentView, currentDate, onChangeDate, onC
     const _currentMonth = addMonths(currentMonth, -1);
 
     handleChangeDate(_currentMonth);
+    return null;
   };
 
   //
@@ -77,21 +82,30 @@ export const ScheduleHeader = ({ id, currentView, currentDate, onChangeDate, onC
     const _currentMonth = addMonths(currentMonth, 1);
 
     handleChangeDate(_currentMonth);
+    return null;
   };
 
   const handleChangeView = (_newView) => {
-    if (_newView === currentView) return;
+    if (_newView === currentView) return null;
 
     onChangeView(_newView);
+    return null;
   };
 
   const handleSelectToday = () => {
     handleChangeDate(new Date());
+    return null;
+  };
+
+  //
+  const handleCalendarOpen = (open: boolean) => {
+    setCalendarOpen(!!open);
+    return null;
   };
 
   const renderTodayButton = () => {
     return (
-      <StyledButtonAction id="ButtonToday" onClick={handleSelectToday} icon="today">
+      <StyledButtonAction id="ButtonToday" onClick={handleSelectToday} icon="today" disabled={false}>
         Today
       </StyledButtonAction>
     );
@@ -126,7 +140,14 @@ export const ScheduleHeader = ({ id, currentView, currentDate, onChangeDate, onC
     return (
       <MonthYearContainer>
         {calendarOpen && <MonthPicker open={calendarOpen} onSelect={handleChangeDate} />}
-        <HeaderButtonTitle onClick={() => setCalendarOpen(true)}>
+        <HeaderButtonTitle
+          id="__HeaderButtonTitle_Id"
+          variant="secondary"
+          disabled={false}
+          block={false}
+          onClick={() => handleCalendarOpen(true)}
+          text=""
+        >
           <HeaderMonth>{format(currentMonth, headerMonthFormat)}</HeaderMonth>
           <HeaderYear>{format(currentMonth, headerYearFormat)}</HeaderYear>
         </HeaderButtonTitle>
@@ -141,20 +162,50 @@ export const ScheduleHeader = ({ id, currentView, currentDate, onChangeDate, onC
       <UpDownContainer>
         {isCurrentViewDay(currentView) && (
           <>
-            <StyledButtonAction id="ButtonPrev" onClick={handlePrevDay} icon="chromeBack" />
-            <StyledButtonAction id="ButtonNext" onClick={handleNextDay} icon="chromeNext" />
+            <StyledButtonAction
+              id="ButtonPrev"
+              onClick={handlePrevDay}
+              icon="chromeBack"
+              disabled={false}
+              children={null}
+            />
+            <StyledButtonAction
+              id="ButtonNext"
+              onClick={handleNextDay}
+              icon="chromeNext"
+              disabled={false}
+              children={null}
+            />
           </>
         )}
         {isCurrentViewWeek(currentView) && (
           <>
-            <StyledButtonAction id="ButtonPrev" onClick={handlePrevWeek} icon="chromeBack" />
-            <StyledButtonAction id="ButtonNext" onClick={handleNextWeek} icon="chromeNext" />
+            <StyledButtonAction
+              id="ButtonPrev"
+              onClick={handlePrevWeek}
+              icon="chromeBack"
+              disabled={false}
+              children={null}
+            />
+            <StyledButtonAction
+              id="ButtonNext"
+              onClick={handleNextWeek}
+              icon="chromeNext"
+              disabled={false}
+              children={null}
+            />
           </>
         )}
         {isCurrentViewMonth(currentView) && (
           <>
-            <StyledButtonAction id="ButtonUp" onClick={handlePrevMonth} icon="up" />
-            <StyledButtonAction id="ButtonDown" onClick={handleNextMonth} icon="down" />
+            <StyledButtonAction id="ButtonUp" onClick={handlePrevMonth} icon="up" disabled={false} children={null} />
+            <StyledButtonAction
+              id="ButtonDown"
+              onClick={handleNextMonth}
+              icon="down"
+              disabled={false}
+              children={null}
+            />
           </>
         )}
       </UpDownContainer>
@@ -175,9 +226,14 @@ export const ScheduleHeader = ({ id, currentView, currentDate, onChangeDate, onC
         <Column lg="4" direction="row" right>
           <Spacing margin={{ left: 'normal' }}>
             <HeaderButtonView
+              id="__HeaderButtonView_Button-MonthView_Id"
+              variant="secondary"
+              disabled={false}
+              block={false}
               key="Button-MonthView"
               selected={isCurrentViewMonth(currentView)}
               onClick={() => handleChangeView('month')}
+              text=""
             >
               Month
             </HeaderButtonView>
@@ -185,9 +241,14 @@ export const ScheduleHeader = ({ id, currentView, currentDate, onChangeDate, onC
 
           <Spacing margin={{ left: 'normal' }}>
             <HeaderButtonView
+              id="__HeaderButtonView_Button-WeekView_Id"
+              variant="secondary"
+              disabled={false}
+              block={false}
               key="Button-WeekView"
               selected={isCurrentViewWeek(currentView)}
               onClick={() => handleChangeView('week')}
+              text=""
             >
               Week
             </HeaderButtonView>
@@ -195,9 +256,14 @@ export const ScheduleHeader = ({ id, currentView, currentDate, onChangeDate, onC
 
           <Spacing margin={{ left: 'normal' }}>
             <HeaderButtonView
+              id="__HeaderButtonView_Button-DayView_Id"
+              variant="secondary"
+              disabled={false}
+              block={false}
               key="Button-DayView"
               selected={isCurrentViewDay(currentView)}
               onClick={() => handleChangeView('day')}
+              text=""
             >
               Day
             </HeaderButtonView>

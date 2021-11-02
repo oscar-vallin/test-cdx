@@ -10,7 +10,7 @@ export const StyledCard = styled(Card)`
   /* max-width: 30%; */
 `;
 
-export const StyledRow = styled(LayoutRow)`
+export const StyledRow = styled(LayoutRow)<StyledRowProps>`
   && {
     padding: 0px 8px;
     @media (max-width: 1400px) {
@@ -26,13 +26,21 @@ export const StyledRow = styled(LayoutRow)`
   }
 `;
 
-export const StyledColumn = styled(LayoutColumn)`
+type StyledRowProps = {
+  collapse?: boolean;
+};
+
+export const StyledColumn = styled(LayoutColumn)<StyledColumnProps>`
   && {
     padding: 0px 8px;
   }
 `;
 
-export const StyledMenuButton = styled(ButtonAction)`
+type StyledColumnProps = {
+  noStyle?: boolean;
+};
+
+export const StyledMenuButton = styled(ButtonAction)<StyledMenuButtonProps>`
   color: #fff;
   border-bottom: white;
   border-bottom-width: 2px;
@@ -51,6 +59,11 @@ export const StyledMenuButton = styled(ButtonAction)`
     font-size: 0.875rem;
   }
 `;
+
+type StyledMenuButtonProps = {
+  selected?: boolean;
+  collapse?: boolean;
+};
 
 export const StyledButtonIcon = styled(ButtonIcon)`
   && {

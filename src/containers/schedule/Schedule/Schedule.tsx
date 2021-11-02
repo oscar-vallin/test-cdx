@@ -35,11 +35,13 @@ const Schedule = ({ id }) => {
   //
   const handleChangeView = (_newView) => {
     setCurrentView(_newView);
+    return null;
   };
 
   //
   const handleChangeDate = (_newDate) => {
     setSelectedDate(_newDate);
+    return null;
   };
 
   return (
@@ -48,6 +50,7 @@ const Schedule = ({ id }) => {
         <Container>
           <Spacing margin={{ top: 'double' }}>
             <ScheduleHeader
+              id={id}
               currentDate={currentDate}
               currentView={currentView}
               onChangeView={handleChangeView}
@@ -61,10 +64,16 @@ const Schedule = ({ id }) => {
         <StyledRow>
           <Column lg="12">
             <Card elevation="smallest">
-              <ScheduleSubHeader currentDate={currentDate} currentView={currentView} selectedDate={selectedDate} />
+              <ScheduleSubHeader
+                id={id}
+                currentDate={currentDate}
+                currentView={currentView}
+                selectedDate={selectedDate}
+              />
 
               {!!isCurrentViewMonth(currentView) && (
                 <ScheduleMonth
+                  id={id}
                   selectedDate={selectedDate}
                   currentDate={currentDate}
                   onChangeDate={handleChangeDate}
@@ -73,21 +82,9 @@ const Schedule = ({ id }) => {
                 />
               )}
               {!!isCurrentViewWeek(currentView) && (
-                <ScheduleWeek
-                  selectedDate={selectedDate}
-                  currentDate={currentDate}
-                  onChangeDate={handleChangeDate}
-                  items={items}
-                />
+                <ScheduleWeek selectedDate={selectedDate} currentDate={currentDate} items={items} />
               )}
-              {!!isCurrentViewDay(currentView) && (
-                <ScheduleDay
-                  selectedDate={selectedDate}
-                  currentDate={currentDate}
-                  onChangeDate={handleChangeDate}
-                  items={items}
-                />
-              )}
+              {!!isCurrentViewDay(currentView) && <ScheduleDay selectedDate={selectedDate} currentDate={currentDate} />}
             </Card>
           </Column>
         </StyledRow>
