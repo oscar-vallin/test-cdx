@@ -1320,7 +1320,6 @@ export type QueryOrganizationQuickSearchArgs = {
 
 export type QueryVendorQuickSearchArgs = {
   searchText: Scalars['String'];
-  orgOwnerSid: Scalars['ID'];
 };
 
 
@@ -3256,7 +3255,6 @@ export type OrganizationQuickSearchQuery = (
 
 export type VendorQuickSearchQueryVariables = Exact<{
   searchText: Scalars['String'];
-  orgOwnerSid: Scalars['ID'];
 }>;
 
 
@@ -6886,8 +6884,8 @@ export type OrganizationQuickSearchQueryHookResult = ReturnType<typeof useOrgani
 export type OrganizationQuickSearchLazyQueryHookResult = ReturnType<typeof useOrganizationQuickSearchLazyQuery>;
 export type OrganizationQuickSearchQueryResult = Apollo.QueryResult<OrganizationQuickSearchQuery, OrganizationQuickSearchQueryVariables>;
 export const VendorQuickSearchDocument = gql`
-    query VendorQuickSearch($searchText: String!, $orgOwnerSid: ID!) {
-  vendorQuickSearch(searchText: $searchText, orgOwnerSid: $orgOwnerSid) {
+    query VendorQuickSearch($searchText: String!) {
+  vendorQuickSearch(searchText: $searchText) {
     sid
     name
     orgId
@@ -6909,7 +6907,6 @@ export const VendorQuickSearchDocument = gql`
  * const { data, loading, error } = useVendorQuickSearchQuery({
  *   variables: {
  *      searchText: // value for 'searchText'
- *      orgOwnerSid: // value for 'orgOwnerSid'
  *   },
  * });
  */
