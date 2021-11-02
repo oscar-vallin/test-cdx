@@ -160,7 +160,10 @@ export const StyledChoiceGroup = styled(ChoiceGroup)`
 export const StyledButtonOrg = styled(DefaultButton)`
   background: none;
   border: none;
-  color: ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => {
+    console.log('theme.colors.white: ', theme.colors.white);
+    return theme.colors.white;
+  }};
   margin: 0 5px 0 0;
   transition: all 0.15s ease-out;
 

@@ -29,5 +29,7 @@ export const SessionContextProvider = ({ children }) => {
     }
   }, [SessionStore.user.token, isRehydrated]);
 
-  return <SessionContext.Provider>{!isRehydrated ? <div>Loading</div> : children}</SessionContext.Provider>;
+  return (
+    <SessionContext.Provider value={null}>{!isRehydrated ? <div>Loading</div> : children}</SessionContext.Provider>
+  );
 };

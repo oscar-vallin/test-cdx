@@ -297,12 +297,10 @@ export const useWorkPacketColumns = (
   const initialColumns = (): IColumn[] => {
     const initCols: IColumn[] = [];
     selectedColumns.forEach((sCol: WorkPacketColumns) => {
-      console.log(`Building Columns ${sCol}`);
       const matching = columnOptions.find((colOpt: IColumn) => {
         return colOpt.data === sCol;
       });
       if (matching != null) {
-        console.log(`Found matching column ${matching.key}: ${matching.name}`);
         initCols.push(matching);
       } else {
         console.error(`Could not find a Work Packet column for ${sCol}`);
