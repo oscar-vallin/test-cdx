@@ -5,6 +5,7 @@ export const CardStyled = styled(DocumentCard)<CardStyledProps>`
   background: ${({ theme }) => theme.colors.neutralLighter};
   box-shadow: ${({ theme, elevation }) => theme.boxShadows[elevation]};
   border: none;
+  border-radius: ${({ theme }) => theme.radius.normal};
   font: ${({ theme }) => theme.fontStyles.normal};
   min-width: unset;
   max-width: unset;

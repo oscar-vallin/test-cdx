@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 import { SpinnerSize, Checkbox, Panel, PanelType, Spinner } from 'office-ui-fabric-react';
 import _ from 'lodash';
 
-import { access } from 'fs';
+import { useNotification } from 'src/hooks/useNotification';
+import { useSessionStore } from 'src/store/SessionStore';
 import { Spacing } from '../../../../../components/spacings/Spacing';
 import { Card } from '../../../../../components/cards';
 import { Button } from '../../../../../components/buttons';
@@ -20,6 +21,8 @@ import {
   useAccessSpecializationFormLazyQuery,
   useCreateAccessSpecializationMutation,
   useUpdateAccessSpecializationMutation,
+  useVendorQuickSearchLazyQuery,
+  useOrganizationQuickSearchLazyQuery,
 } from '../../../../../data/services/graphql';
 import { useOrgSid } from '../../../../../hooks/useOrgSid';
 import { TagPicker } from '../../../../../components/pickers/TagPicker';
@@ -29,46 +32,27 @@ const INITIAL_STATE = {
 };
 
 const groupSpecializations = (opts) => {
-  const { values } = opts.find((opt) => opt.key === 'Permission');
-  const { K2U, COLORPALETTE, ACCESS, ORG, PASSWORD, PROD, SSOIDP, TEST, THEME, UAT, USER } = _.groupBy(
-    values,
-    (item) => {
-      return item.value.split('_').shift();
-    }
-  );
+  const groups = _.groupBy(opts, ({ orgSids }) => orgSids.label);
+  const [orgKey, vendorKey] = Object.keys(groups);
 
-  // const exchangeStatus = [
-  //   { label: 'K2U Exchanges', options: K2U },
-  //   { label: 'Test Exchanges', options: TEST },
-  //   { label: 'UAT Exchanges', options: UAT },
-  //   { label: 'Production Exchanges', options: PROD },
-  // ];
+  const exchangeStatus = [...groups[orgKey]];
+  const accessManagement = [...groups[vendorKey]];
 
-  // const accessManagement = [
-  //   { label: 'Users', options: USER },
-  //   { label: 'Access Management', options: ACCESS },
-  //   { label: 'Organization', options: ORG },
-  // ];
-
-  // const siteSettings = [
-  //   { label: 'Password', options: PASSWORD },
-  //   { label: 'Color Palettes', options: COLORPALETTE },
-  //   { label: 'Theme', options: THEME },
-  //   { label: 'SSO', options: SSOIDP },
-  // ];
-
-  // return [
-  //   { label: 'Exchange Status', permissions: [] },
-  //   { label: 'Access Management', permissions: [] },
-  //   { label: 'Site Settings', permissions: siteSettings },
-  // ];
+  return [
+    { label: 'Exchange Status', labelKey: 'Exchanges', valueKey: vendorKey, options: exchangeStatus },
+    { label: 'Access Management', labelKey: 'Permission', valueKey: orgKey, options: accessManagement },
+  ];
 };
 
 const CreateAccessSpecializationPanel = ({ isOpen, onDismiss, onCreateSpecialization, selectedAccessId }) => {
+  const Toast = useNotification();
+  const SessionStore = useSessionStore();
+
   const { orgSid } = useOrgSid();
   const [state, setState] = useState({ ...INITIAL_STATE });
   const [accessForm, setAccessForm] = useState({});
   const [accessFilters, setAccessFilters] = useState([]);
+  const [specializations, setSpecializations] = useState([]);
 
   const [fetchAccessForm, { data: form, loading: isLoadingForm }] = useQueryHandler(
     useAccessSpecializationFormLazyQuery
@@ -77,18 +61,31 @@ const CreateAccessSpecializationPanel = ({ isOpen, onDismiss, onCreateSpecializa
     useCreateAccessSpecializationMutation
   );
 
+  const [fetchVendors, { data: vendors, loading: isFetchingVendors }] = useQueryHandler(useVendorQuickSearchLazyQuery);
+
+  const [fetchOrgs, { data: orgs, loading: isFetchingOrgs }] = useQueryHandler(useOrganizationQuickSearchLazyQuery);
+
   // const [updateSpecialization] = useQueryHandler(useUpdateAccessSpecializationMutation);
 
   useEffect(() => {
     if (createdSpecialization) {
-      onCreateSpecialization(createdSpecialization.createAccessSpecialization);
-      onDismiss();
+      const { createAccessSpecialization } = createdSpecialization;
+
+      if (createAccessSpecialization.response === 'FAIL') {
+        Toast.error({ text: 'Please, check the highlighted fields and try again' });
+      } else {
+        onCreateSpecialization(createAccessSpecialization);
+        Toast.success({ text: 'Access specialization created successfully' });
+        onDismiss();
+      }
     }
   }, [createdSpecialization]);
 
   useEffect(() => {
     if (isOpen) {
       fetchAccessForm({ variables: { orgSid } });
+      fetchOrgs({ variables: { searchText: '', orgOwnerSid: SessionStore.user.id } });
+      fetchVendors({ variables: { searchText: '', orgOwnerSid: SessionStore.user.id } });
     } else {
       setState({ ...INITIAL_STATE });
       setAccessFilters([]);
@@ -99,7 +96,7 @@ const CreateAccessSpecializationPanel = ({ isOpen, onDismiss, onCreateSpecializa
   useEffect(() => {
     if (isOpen && form) {
       setAccessForm(form.accessSpecializationForm);
-      // setAccessFilters(groupSpecializations(form.accessSpecializationForm.options));
+      setAccessFilters(groupSpecializations(form.accessSpecializationForm.filters));
     }
   }, [form, isOpen]);
 
@@ -155,66 +152,75 @@ const CreateAccessSpecializationPanel = ({ isOpen, onDismiss, onCreateSpecializa
                   </Row>
                 </Spacing>
 
-                {accessForm.permissions?.visible && (
-                  <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                    <Row>
-                      <Column lg="12">
-                        <Spacing margin={{ top: 'small' }}>
-                          <Text variant="bold">Permissions</Text>
-                        </Spacing>
-                      </Column>
-                    </Row>
+                <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                  <Row>
+                    <Column lg="12">
+                      <Spacing margin={{ top: 'small' }}>
+                        <Text variant="bold">Specializations</Text>
+                      </Spacing>
+                    </Column>
+                  </Row>
 
-                    <Row>
-                      <Column lg="12">
-                        {accessFilters}
-                        {accessFilters.map((group, groupIndex) => (
-                          <Collapse label={group.label} expanded key={groupIndex}>
-                            <Spacing padding={{ top: 'normal', bottom: 'normal' }}>
+                  <Row>
+                    <Column lg="12">
+                      {accessFilters.map((group, groupIndex) => (
+                        <Collapse label={group.label} expanded key={groupIndex}>
+                          <Card elevation="none" spacing="none">
+                            <Spacing padding="normal">
                               <Row>
                                 <Column lg="12">
-                                  <Card elevation="none" spacing="none">
-                                    <Row top>
-                                      {group.permissions?.map((permission, pIndex) => (
-                                        <Column lg="3" key={`${groupIndex}-${pIndex}`}>
-                                          <Card elevation="none">
-                                            <Spacing margin={{ bottom: 'normal' }}>
-                                              <Label>{permission.label}</Label>
-                                            </Spacing>
-
-                                            {permission.options?.map((option, optIndex) => (
-                                              <Spacing
-                                                margin={{ top: 'small' }}
-                                                key={`${groupIndex}-${pIndex}-${optIndex}`}
-                                              >
-                                                <Checkbox
-                                                  label={option.label}
-                                                  checked={state.permissions.includes(option.value)}
-                                                  onChange={(event, checked) =>
-                                                    setState({
-                                                      ...state,
-                                                      permissions: checked
-                                                        ? [...state.permissions, option.value]
-                                                        : state.permissions.filter((value) => value !== option.value),
-                                                    })
-                                                  }
-                                                />
-                                              </Spacing>
-                                            ))}
-                                          </Card>
-                                        </Column>
-                                      ))}
+                                  <Spacing margin={{ bottom: 'normal' }}>
+                                    <Row>
+                                      <Column lg="3">
+                                        <Text variant="bold">{group.labelKey}</Text>
+                                      </Column>
+                                      <Column lg="9">
+                                        <Text variant="bold">{group.valueKey}</Text>
+                                      </Column>
                                     </Row>
-                                  </Card>
+                                  </Spacing>
+
+                                  {group.options?.map((option, optIndex) => (
+                                    <Spacing margin={{ top: 'small', bottom: 'small' }}>
+                                      <Row center>
+                                        <Column lg="3" key={`${groupIndex}-${optIndex}-left`}>
+                                          {option.label}
+                                        </Column>
+
+                                        <Column lg="9" key={`${groupIndex}-${optIndex}-right`}>
+                                          <TagPicker
+                                            apiQuery={(text) => {
+                                              const data = {
+                                                variables: { searchText: text, orgOwnerSid: orgSid },
+                                              };
+
+                                              option.orgSids.query === 'vendorQuickSearch'
+                                                ? fetchVendors(data)
+                                                : fetchOrgs(data);
+                                            }}
+                                            options={option.orgSids.query === 'vendorQuickSearch' ? vendors : orgs}
+                                            value={specializations}
+                                            // disabled={isFetchingVendors || isFetchingOrgs}
+                                            onRemoveItem={({ key }) => {
+                                              setSpecializations(specializations.filter((item) => item.key === key));
+                                            }}
+                                            onItemSelected={(item) => {
+                                              setSpecializations([...specializations, item]);
+                                            }}
+                                          />
+                                        </Column>
+                                      </Row>
+                                    </Spacing>
+                                  ))}
                                 </Column>
                               </Row>
                             </Spacing>
-                          </Collapse>
-                        ))}
-                      </Column>
-                    </Row>
-                  </Spacing>
-                )}
+                          </Card>
+                        </Collapse>
+                      ))}
+                    </Column>
+                  </Row>
+                </Spacing>
 
                 <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                   <Separator />

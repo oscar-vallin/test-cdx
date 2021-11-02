@@ -112,7 +112,7 @@ const _AccessManagementSpecializationPage = () => {
   };
 
   return (
-    <LayoutAdmin id="PageAdmin" sidebarOptionSelected="AM_SPECIALIZATIONS">
+    <LayoutAdmin id="PageAdmin" sidebarOptionSelected="AM_SPECIALIZATION">
       <Spacing margin="double">
         <Row>
           <Column lg="8">

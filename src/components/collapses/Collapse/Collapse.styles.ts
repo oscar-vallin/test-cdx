@@ -12,6 +12,7 @@ export const StyledDiv = styled.div`
     font: ${({ theme }) => theme.fontStyles.normal};
     font-size: ${({ theme }) => theme.fontSizes.normal};
     outline: none;
+    margin: 0 0 10px;
     text-align: left;
     width: 100%;
 
