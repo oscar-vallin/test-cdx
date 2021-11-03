@@ -13,6 +13,7 @@ const ProfileMenu = ({ id, onUserSettings }) => {
 
   const items = [
     {
+      id: '__ProfileMenu_UserSettingsId',
       key: 'ProfileMenu_UserSettings',
       text: 'Settings',
       onClick: (event) => {
