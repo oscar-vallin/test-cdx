@@ -49,7 +49,7 @@ export const getClassNames = (initialClasses, props) => {
   if (props.pullXxl) classes.push(`${classesFluent.pullXxl}${props.pullXxl}`);
   if (props.pullXxxl) classes.push(`${classesFluent.pullXxxl}${props.pullXxxl}`);
 
-  if (props.hiddenAt) classes.push(`${classesFluent.hidden}${props.hiddenAt}`);
+  if (props.hiddenAt) classes.push(`${classesFluent.hiddenAt}${props.hiddenAt}`);
 
   if (!props.sm && !props.noStyle) {
     classes.push(`${classesFluent.sm}12`);

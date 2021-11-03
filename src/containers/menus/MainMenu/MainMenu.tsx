@@ -27,7 +27,7 @@ type MainMenuProps = {
   option?: string;
 } & typeof defaultProps;
 
-const MainMenu = ({ id, left, changeCollapse }: MainMenuProps): ReactElement => {
+const MainMenu = ({ id, left, changeCollapse, option }: MainMenuProps): ReactElement => {
   const ActiveDomainStore = useActiveDomainStore();
   const history = useHistory();
   const location = useLocation();
@@ -63,7 +63,7 @@ const MainMenu = ({ id, left, changeCollapse }: MainMenuProps): ReactElement => 
         >
           <StyledMenuButton
             selected={location.pathname === opt.URL}
-            id="__MainMenuId"
+            id={`__MainMenuId-${menuOption.label}`}
             collapse={collapse}
             icon="MainMenu"
             disabled={false}

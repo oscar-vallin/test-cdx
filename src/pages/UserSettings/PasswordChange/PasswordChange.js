@@ -43,6 +43,7 @@ const PasswordChange = ({ state, validations = [], onChange }) => {
       <Row>
         <Column>
           <InputText
+            id="currentPassword"
             required
             type="password"
             label="Existing password"
@@ -53,6 +54,7 @@ const PasswordChange = ({ state, validations = [], onChange }) => {
           />
 
           <InputText
+            id="newPassword"
             required
             type="password"
             label="Password"
@@ -63,6 +65,7 @@ const PasswordChange = ({ state, validations = [], onChange }) => {
           />
 
           <InputText
+            id="confirmPassword"
             required
             type="password"
             label="Retype new password"

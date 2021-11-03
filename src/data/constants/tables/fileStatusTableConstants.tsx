@@ -45,18 +45,22 @@ export const getFileStatusItems = (data) =>
               </HighlightCounter>
             )}
           </>,
-          'highlight'
+          'highlight',
+          '',
+          '',
+          ''
         )
       ),
-      formatField(item.vendorId, 'vendor', item.vendorId),
-      formatField(item.planSponsorId, 'planSponsor', item.planSponsorId),
-      formatField(item.inboundFilename, 'extractName', item.inboundFilename),
-      formatField(stepStatusLabel, 'overall', stepStatusLabel),
+      formatField(item.vendorId, 'vendor', item.vendorId, '', ''),
+      formatField(item.planSponsorId, 'planSponsor', item.planSponsorId, '', ''),
+      formatField(item.inboundFilename, 'extractName', item.inboundFilename, '', ''),
+      formatField(stepStatusLabel, 'overall', stepStatusLabel, '', ''),
       formatField(
         <FileProgress step={item.step} stepStatus={item.stepStatus} />,
         'progress',
         stepStatusLabel,
-        item.step
+        item.step,
+        ''
       ),
     ];
   });

@@ -16,7 +16,7 @@ import {
 } from 'date-fns';
 
 //
-export const formatField = (value, columnId, text, sublabel, child) => {
+export const formatField = (value: any, columnId: string, text: any, sublabel: string, child: any) => {
   return {
     id: columnId,
     value,
@@ -70,7 +70,7 @@ export const getStartDay = (date) => {
       return startOfDay(_newDate);
 
     case 'yesterday':
-      return startOfYesterday(_newDate);
+      return startOfYesterday();
 
     case 'thisMonth':
       return startOfMonth(_newDate);
@@ -94,7 +94,7 @@ export const getEndDay = (date) => {
       return addDays(_newDate, 1);
 
     case 'yesterday':
-      return endOfYesterday(_newDate);
+      return endOfYesterday();
 
     case 'thisMonth':
       return endOfMonth(_newDate);
@@ -109,8 +109,8 @@ export const getEndDay = (date) => {
 
 export const getDates = (date) => {
   const _newDate = new Date();
-  let startDate = '';
-  let endDate = '';
+  let startDate: any = '';
+  let endDate: any = '';
 
   switch (date) {
     case 'today':
@@ -118,8 +118,8 @@ export const getDates = (date) => {
       endDate = startOfDay(_newDate);
       break;
     case 'yesterday':
-      startDate = startOfYesterday(_newDate);
-      endDate = endOfYesterday(_newDate);
+      startDate = startOfYesterday();
+      endDate = endOfYesterday();
       break;
     case 'thisMonth':
       startDate = startOfMonth(_newDate);
