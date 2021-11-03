@@ -43,7 +43,7 @@ export const useCurrentUserTheme = () => {
         ...(updatedTheme?.createOrUpdateOwnDashTheme || {}),
       };
 
-      const { dashThemeColor, themeColorMode, themeFontSize } = data;
+      const { dashThemeColor, themeColorMode, themeFontSize }: any = data;
 
       const palette = themeColorMode
         ? {
