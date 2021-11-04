@@ -33,14 +33,14 @@ const _FileStatusPage = () => {
         <Container>
           <Spacing margin={{ top: 'double' }}>
             <Row>
-              <Column lg="6" direction="row">
+              <Column direction="row">
                 <FontIcon iconName="FilterSolid" />
                 <Text id="__Text_File-Status" variant="bold">
                   File Status
                 </Text>
                 <Text id="__Text_Advanced-search">&nbsp; — Advanced search</Text>
               </Column>
-              <Column lg="6" right>
+              <Column right>
                 <Text right>
                   {!tableMeta.loading && tableMeta.count !== null && (
                     <Text>{tableMeta.count > 0 ? `${tableMeta.count} results found` : 'No results were found'}</Text>
