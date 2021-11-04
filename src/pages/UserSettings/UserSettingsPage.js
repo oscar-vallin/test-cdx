@@ -27,7 +27,7 @@ const _UserSettingsPage = () => {
   return (
     <LayoutDashboard id="USER_SETTINGS">
       <PageHeader>
-        <Breadcrumb items={[ROUTE_USER_SETTINGS]} />
+        <Breadcrumb id="__UserSetingsId" items={[ROUTE_USER_SETTINGS]} />
       </PageHeader>
 
       <StyledBox>

@@ -174,7 +174,7 @@ const PasswordRules = ({ validations, password, onChange }) => {
 
   return (
     <>
-      <StyledTitle>Password rules</StyledTitle>
+      <StyledTitle id="__userSettings_Password_rules">Password rules</StyledTitle>
 
       <Spacing margin={{ top: 'normal' }}>
         {loading ? (

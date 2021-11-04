@@ -1,3 +1,4 @@
+import React, { ReactElement } from 'react';
 import { MessageBarType } from '@fluentui/react';
 import { MessageBar } from 'office-ui-fabric-react';
 import { useHistory } from 'react-router-dom';
@@ -9,13 +10,32 @@ import { getRouteByApiId } from '../../../data/constants/RouteConstants';
 
 import { useActiveDomainStore } from '../../../store/ActiveDomainStore';
 
-const parseLinks = (links = [], sidebarOpt) => {
-  return links.map(({ type, label, destination, subNavItems }) => ({
+const defaultProps = {
+  id: 'AdminErrorBoundary',
+  menuOptionSelected: 'admin',
+  sidebarOptionSelected: '',
+};
+
+type CDXBadgeProps = {
+  id?: string;
+  menuOptionSelected?: string;
+  sidebarOptionSelected?: string;
+} & typeof defaultProps;
+
+type parseLinksProps = {
+  type?: string;
+  label?: string;
+  destination?: string;
+  subNavItems?: string[] | any;
+};
+
+const parseLinks = (links = [], sidebarOpt: string) => {
+  return links.map(({ type, label, destination, subNavItems }: parseLinksProps) => ({
     name: label,
     ...(subNavItems
       ? {
-          isExpanded: subNavItems.find((item) => item.type === sidebarOpt),
-          links: parseLinks(subNavItems),
+          isExpanded: subNavItems.find((item: { type: string }) => item.type === sidebarOpt),
+          links: parseLinks(subNavItems, sidebarOpt),
         }
       : {}),
     ...(destination
@@ -33,7 +53,7 @@ const AdminErrorBoundary = ({
   id = 'AdminErrorBoundary',
   menuOptionSelected = 'admin',
   sidebarOptionSelected = '',
-}) => {
+}: CDXBadgeProps): ReactElement => {
   const history = useHistory();
   const ActiveDomainStore = useActiveDomainStore();
 
@@ -43,7 +63,7 @@ const AdminErrorBoundary = ({
         <StyledNav
           selectedKey={sidebarOptionSelected}
           groups={[{ links: parseLinks(ActiveDomainStore.nav.admin, sidebarOptionSelected) }]}
-          onLinkClick={(evt, route) => {
+          onLinkClick={(evt: any, route: any) => {
             evt.preventDefault();
 
             if (!route.links) {
@@ -56,7 +76,7 @@ const AdminErrorBoundary = ({
           <Row>
             <StyledColumn>
               <MessageBar messageBarType={MessageBarType.error}>
-                <strong variant="bold">An error occurred</strong>
+                <strong>An error occurred</strong>
                 <span>&nbsp; — The desired page could not be retrieved. Please try again.</span>
               </MessageBar>
             </StyledColumn>
@@ -66,5 +86,7 @@ const AdminErrorBoundary = ({
     </LayoutDashboard>
   );
 };
+
+AdminErrorBoundary.defaultProps = defaultProps;
 
 export default AdminErrorBoundary;

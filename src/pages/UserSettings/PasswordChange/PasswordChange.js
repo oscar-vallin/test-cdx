@@ -38,7 +38,7 @@ const PasswordChange = ({ state, validations = [], onChange }) => {
 
   return (
     <>
-      <StyledTitle>Change password</StyledTitle>
+      <StyledTitle id="__userSettings_Change_Password">Change password</StyledTitle>
 
       <Row>
         <Column>

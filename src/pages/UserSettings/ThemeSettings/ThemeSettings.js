@@ -93,7 +93,7 @@ const ThemeSettings = () => {
     </Spacing>
   ) : (
     <>
-      <StyledTitle>Theme</StyledTitle>
+      <StyledTitle id="__userSettings_Theme">Theme</StyledTitle>
 
       <StyledDiv>
         <Text size="normal" className={`text ${(palettes || []).length > 1 && 'text--centered'}`}>
@@ -126,7 +126,10 @@ const ThemeSettings = () => {
           ) : (
             <StyledChoiceGroup
               selectedKey={themeColorMode}
-              options={[{ key: 'LIGHT', text: 'Light' }, ...(palette.allowDark ? [{ key: 'DARK', text: 'Dark' }] : [])]}
+              options={[
+                { key: 'LIGHT', text: 'Light', id: '__userSetting_Light_Theme' },
+                ...(palette.allowDark ? [{ key: 'DARK', text: 'Dark', id: '__userSetting_Dark_Theme' }] : []),
+              ]}
               disabled={!palette.allowDark}
               onChange={(evt, { key }) => {
                 setThemeColorMode(key);
@@ -140,6 +143,7 @@ const ThemeSettings = () => {
         <Column>
           <Spacing margin={{ top: 'normal' }}>
             <Button
+              id="__userSetting_Save_Theme"
               variant="primary"
               text={isHandlingTheme ? 'Processing...' : 'Save theme'}
               onClick={() => {

@@ -5,6 +5,8 @@ import {
   useUpdateDashThemeColorMutation,
   useRemoveDashThemeColorMutation,
   useDashThemeColorForOrgLazyQuery,
+  DashThemeColor,
+  Maybe,
 } from '../data/services/graphql';
 import { useSessionStore } from '../store/SessionStore';
 import { useOrgSid } from './useOrgSid';
@@ -24,12 +26,49 @@ export const useColorPalettes = () => {
     useRemoveDashThemeColorMutation();
 
   const [palettesUpdated, setPalettesUpdated] = useState(false);
-  const [colorPalettes, setColorPalettes] = useState([]);
+  const [colorPalettes, setColorPalettes] = useState<
+    Maybe<
+      Array<
+        Maybe<
+          { __typename?: 'DashThemeColor' } & Pick<
+            DashThemeColor,
+            | 'id'
+            | 'defaultPalette'
+            | 'themeColorMode'
+            | 'allowDark'
+            | 'paletteNm'
+            | 'themePrimary'
+            | 'themeLighterAlt'
+            | 'themeLighter'
+            | 'themeLight'
+            | 'themeTertiary'
+            | 'themeSecondary'
+            | 'themeDarkAlt'
+            | 'themeDark'
+            | 'themeDarker'
+            | 'neutralLighterAlt'
+            | 'neutralLighter'
+            | 'neutralLight'
+            | 'neutralQuaternaryAlt'
+            | 'neutralQuaternary'
+            | 'neutralTertiaryAlt'
+            | 'neutralTertiary'
+            | 'neutralSecondary'
+            | 'neutralPrimaryAlt'
+            | 'neutralPrimary'
+            | 'neutralDark'
+            | 'black'
+            | 'white'
+          >
+        >
+      >
+    >
+  >([]);
   const [isProcessingPalettes, setIsProcessingPalettes] = useState(false);
 
   useEffect(() => {
     if (palettes && !isLoadingPalettes) {
-      setColorPalettes(palettes?.dashThemeColorForOrg?.nodes);
+      setColorPalettes([] || palettes?.dashThemeColorForOrg?.nodes);
       setPalettesUpdated(false);
     }
   }, [palettes, isLoadingPalettes]);

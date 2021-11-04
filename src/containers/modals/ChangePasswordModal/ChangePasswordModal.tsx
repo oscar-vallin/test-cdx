@@ -1,20 +1,48 @@
 /* eslint-disable no-alert */
+import { ReactElement } from 'react';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { Button } from '../../../components/buttons/Button';
 import { Modal } from '../../../components/modals/Modal';
 import { Spacing } from '../../../components/spacings/Spacing';
 import { StyledDiv } from './ChangePasswordModal.styles';
 
-const ChangePasswordModal = ({ hidden = false, ...props }) => {
+const defaultProps = {
+  hidden: false,
+};
+
+type ChangePasswordModalProps = {
+  hidden?: boolean;
+} & typeof defaultProps;
+
+const ChangePasswordModal = ({ hidden = false, ...props }: ChangePasswordModalProps): ReactElement => {
+  const handleAlert = (message: string): null => {
+    alert(message);
+    return null;
+  };
+
   const ModalFooter = () => {
     return (
       <>
         <StyledDiv>
           <Spacing margin={{ right: 'small' }}>
-            <Button text="Cancel" onClick={() => alert('Cancel')} />
+            <Button
+              id="__ChangePasswordModalID"
+              text="Cancel"
+              variant="secondary"
+              disabled={false}
+              block={false}
+              onClick={() => handleAlert('Cancel')}
+            />
           </Spacing>
 
-          <Button variant="primary" text="Save" onClick={() => alert('Save')} />
+          <Button
+            id="__ChangePasswordModalID"
+            variant="primary"
+            text="Save"
+            disabled={false}
+            block={false}
+            onClick={() => handleAlert('Save')}
+          />
         </StyledDiv>
       </>
     );
@@ -32,5 +60,7 @@ const ChangePasswordModal = ({ hidden = false, ...props }) => {
     </Modal>
   );
 };
+
+ChangePasswordModal.defaultProps = defaultProps;
 
 export { ChangePasswordModal };
