@@ -24,7 +24,7 @@ export const DivStyled = styled.div<DivStyledProps>`
 
 type DivStyledProps = {
   center: string;
-  right: string;
+  right?: boolean;
   around: string;
   evenly: string;
   between: string;
