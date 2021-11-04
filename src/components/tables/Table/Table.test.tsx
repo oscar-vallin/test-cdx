@@ -4,12 +4,11 @@ import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fab
 import { Table as Component } from './index.js';
 import { TableHeader } from '../TableHeader';
 
-
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
   useLocation: () => ({
-    pathname: "localhost:3000/file-status?orgSid=1"
-  })
+    pathname: 'localhost:3000/file-status?orgSid=1',
+  }),
 }));
 
 const defaultProps = {
@@ -168,7 +167,7 @@ describe('Basic Table Component', () => {
     const tree = shallow(<Component {...defaultProps} />);
     const list = tree.find(DetailsList);
 
-    expect(list.prop('className')).toEqual('root-40');
+    expect(list.prop('className')).toEqual('root-109');
     expect(list.prop('id')).toEqual('TableDetailedList');
     expect(list.prop('selectionMode')).toEqual(SelectionMode.none);
     expect(list.prop('layoutMode')).toEqual(DetailsListLayoutMode.justified);
@@ -190,7 +189,7 @@ describe('Basic Table Component', () => {
       />
     );
     const list = tree.find(DetailsList);
-    expect(list.prop('className')).toEqual('root-40');
+    expect(list.prop('className')).toEqual('root-109');
     expect(list.prop('id')).toEqual('TableDetailedList');
     expect(list.prop('selectionMode')).toEqual(SelectionMode.none);
     expect(list.prop('layoutMode')).toEqual(DetailsListLayoutMode.justified);

@@ -18,7 +18,7 @@ import { PasswordValidator, ValidationMessages, ValidationRulesParser } from '..
 const isArrayOfArrays = (arr) => arr.filter((item) => Array.isArray(item)).length > 0;
 
 const validateRulesets = (value, ruleSets) => {
-  return ruleSets.map((ruleSet) => {
+  return ruleSets?.map((ruleSet) => {
     if (ruleSet.rules) {
       return validateRulesets(value, ruleSet.rules)
         .filter((validation) => validation.length > 0)
@@ -29,9 +29,14 @@ const validateRulesets = (value, ruleSets) => {
   });
 };
 
-const validateRulesArr = (value, data) =>
+const validateRulesArr = (value, data) => {
+  if (!data || data.length === 0 || data[0].length === 0) {
+    return [];
+  }
+
   data.map((ruleSet) => {
     const validationResults = validateRulesets(value, ruleSet.rules);
+
     const rootValidations = Array.from(
       new Set(
         validationResults
@@ -95,6 +100,7 @@ const validateRulesArr = (value, data) =>
 
     return { ...ruleObj, isCurrentLevelValid };
   });
+};
 
 const PasswordRules = ({ validations, password, onChange }) => {
   const [rules, setRules] = useState([]);

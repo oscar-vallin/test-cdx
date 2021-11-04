@@ -41,7 +41,6 @@ type StyledColumnProps = {
 };
 
 export const StyledMenuButton = styled(ButtonAction)<StyledMenuButtonProps>`
-  color: #fff;
   border-bottom: white;
   border-bottom-width: 2px;
   border-bottom-style: ${({ selected }) => (selected ? 'double' : 'none')};
@@ -57,6 +56,10 @@ export const StyledMenuButton = styled(ButtonAction)<StyledMenuButtonProps>`
   @media (max-width: 1400px) {
     display: ${({ collapse }) => (collapse ? 'inline-block' : 'none')};
     font-size: 0.875rem;
+  }
+
+  && {
+    color: ${({ theme }) => theme.colors.white};
   }
 `;
 

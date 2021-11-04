@@ -86,5 +86,5 @@ export const ActiveDomainContextProvider = ({ children }) => {
     }
   }, [ActiveDomainStore.domainOrg.current.destination]);
 
-  return <ActiveDomainContext.Provider>{children}</ActiveDomainContext.Provider>;
+  return <ActiveDomainContext.Provider value={children}>{children}</ActiveDomainContext.Provider>;
 };
