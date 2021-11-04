@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { Label } from '@fluentui/react/lib-commonjs/Label';
 import { StyledTagPicker } from './TagPicker.styles';
 
@@ -21,47 +21,47 @@ const CDXTagPicker = ({
 }) => {
   const picker = useRef(null);
   const getTextFromItem = ({ name }) => name;
-  const filterSelectedTags = (filterText) =>
-    filterText ? options.filter((tag) => tag.name.toLowerCase().indexOf(filterText.toLowerCase()) === 0) : [];
 
-  const listContainsTagList = (tag, tagList) => {
-    if (!tagList || !tagList.length || tagList.length === 0) {
+  const filterSelectedTags = (filterText) => {
+    return options.filter(({ key }) => !value.includes(key));
+  };
+
+  const listContainsTag = (tag, tagList) => {
+    if (!tagList || !tagList.length) {
       return false;
     }
+
     return tagList.some((compareTag) => compareTag.key === tag.key);
   };
 
-  const handleItemSelection = useCallback((item) => {
-    onItemSelected(item);
-
-    if (picker.current && listContainsTagList(item, picker.current.items)) {
-      return null;
-    }
-
-    return item;
-  }, []);
+  const handleItemSelection = useCallback(
+    (item) => {
+      if (!listContainsTag(item, value)) {
+        onItemSelected(item);
+      }
+    },
+    [value]
+  );
 
   return (
     <>
       {label && <Label required={required}>{label}</Label>}
 
       <StyledTagPicker
-        style={{ width: '100%' }}
-        onResolveSuggestions={onResolveSuggestions || filterSelectedTags}
         onItemSelected={handleItemSelection}
-        onRemoveItem={onRemoveItem}
+        onRemoveItem={(x) => console.log(x)}
         getTextFromItem={getTextFromItem}
         componentRef={picker}
         itemLimit={itemLimit}
         disabled={disabled}
         selectedItems={value}
         resolveDelay={debounce}
-        onResolveSuggestions={(text, selectedItems) => {
+        onResolveSuggestions={(text) => {
           if (apiQuery) {
             apiQuery(text);
           }
 
-          return selectedItems;
+          return filterSelectedTags(text);
         }}
         pickerSuggestionsProps={
           pickerProps || {

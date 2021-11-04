@@ -44,6 +44,8 @@ const groupSpecializations = (opts) => {
   ];
 };
 
+const parseToPickerOpts = (arr = []) => arr.map(({ name, sid }) => ({ name, key: sid }));
+
 const CreateAccessSpecializationPanel = ({ isOpen, onDismiss, onCreateSpecialization, selectedAccessId }) => {
   const Toast = useNotification();
   const SessionStore = useSessionStore();
@@ -52,11 +54,13 @@ const CreateAccessSpecializationPanel = ({ isOpen, onDismiss, onCreateSpecializa
   const [state, setState] = useState({ ...INITIAL_STATE });
   const [accessForm, setAccessForm] = useState({});
   const [accessFilters, setAccessFilters] = useState([]);
-  const [specializations, setSpecializations] = useState([]);
+  const [specializations, setSpecializations] = useState({});
+  const [currentItem, setCurrentItem] = useState(null);
 
   const [fetchAccessForm, { data: form, loading: isLoadingForm }] = useQueryHandler(
     useAccessSpecializationFormLazyQuery
   );
+
   const [createSpecialization, { data: createdSpecialization, loading: isCreatingSpecialization }] = useQueryHandler(
     useCreateAccessSpecializationMutation
   );
@@ -95,10 +99,19 @@ const CreateAccessSpecializationPanel = ({ isOpen, onDismiss, onCreateSpecializa
 
   useEffect(() => {
     if (isOpen && form) {
+      const { filters } = form.accessSpecializationForm;
+
       setAccessForm(form.accessSpecializationForm);
-      setAccessFilters(groupSpecializations(form.accessSpecializationForm.filters));
+      setAccessFilters(groupSpecializations(filters));
+      setSpecializations(filters.reduce((obj, item) => ({ ...obj, [item.permission]: [] }), {}));
     }
   }, [form, isOpen]);
+
+  useEffect(() => {
+    const value = { ...specializations, ...currentItem };
+
+    setSpecializations(value);
+  }, [currentItem]);
 
   return (
     <Panel
@@ -190,22 +203,41 @@ const CreateAccessSpecializationPanel = ({ isOpen, onDismiss, onCreateSpecializa
                                         <Column lg="9" key={`${groupIndex}-${optIndex}-right`}>
                                           <TagPicker
                                             apiQuery={(text) => {
+                                              const isVendor = option.orgSids.query === 'vendorQuickSearch';
+
                                               const data = {
-                                                variables: { searchText: text, orgOwnerSid: orgSid },
+                                                variables: {
+                                                  searchText: text,
+                                                  ...(!isVendor ? { orgOwnerSid: orgSid } : {}),
+                                                },
                                               };
 
                                               option.orgSids.query === 'vendorQuickSearch'
                                                 ? fetchVendors(data)
                                                 : fetchOrgs(data);
                                             }}
-                                            options={option.orgSids.query === 'vendorQuickSearch' ? vendors : orgs}
-                                            value={specializations}
+                                            options={parseToPickerOpts(
+                                              option.orgSids.query === 'vendorQuickSearch'
+                                                ? vendors?.vendorQuickSearch
+                                                : orgs?.organizationQuickSearch
+                                            )}
+                                            value={specializations[option.permission]}
                                             // disabled={isFetchingVendors || isFetchingOrgs}
                                             onRemoveItem={({ key }) => {
-                                              setSpecializations(specializations.filter((item) => item.key === key));
+                                              const { permission } = option;
+
+                                              setCurrentItem({
+                                                [permission]: specializations[permission].filter(
+                                                  (item) => item.key === key
+                                                ),
+                                              });
                                             }}
                                             onItemSelected={(item) => {
-                                              setSpecializations([...specializations, item]);
+                                              const { permission } = option;
+
+                                              setCurrentItem({
+                                                [permission]: [...specializations[permission], item],
+                                              });
                                             }}
                                           />
                                         </Column>
@@ -237,13 +269,18 @@ const CreateAccessSpecializationPanel = ({ isOpen, onDismiss, onCreateSpecializa
                             createAccessSpecializationInput: {
                               orgSid,
                               name: state.name,
-                              filters: accessFilters.map(({ key }) => key),
+                              filters: Object.keys(specializations)
+                                .map((permission) => ({
+                                  permission,
+                                  orgSids: specializations[permission].map((item) => item.key),
+                                }))
+                                .reduce((arr, item) => [...arr, item], []),
                             },
                           },
                         });
                       }}
                     >
-                      Create policy
+                      Create specialization
                     </Button>
                   </Column>
                 </Row>

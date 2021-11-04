@@ -161,7 +161,7 @@ const _AccessManagementSpecializationPage = () => {
             ...specializations,
             {
               name: name?.value || '',
-              sid: sid?.value || null,
+              sid: sid || null,
             },
           ]);
         }}
