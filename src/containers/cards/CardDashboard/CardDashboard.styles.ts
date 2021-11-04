@@ -1,3 +1,4 @@
+// import { ReactElement } from 'react';
 import styled from 'styled-components';
 import { Column as LayoutColumn } from '../../../components/layouts';
 import { Text } from '../../../components/typography';
@@ -6,7 +7,7 @@ export const StyledColumn = styled(LayoutColumn)`
   width: 100%;
 `;
 
-export const StyledTitle = styled(Text)`
+export const StyledTitle = styled(Text)<StyledTitleProps>`
   &&& {
     color: ${({ theme }) => theme.colors.black};
     text-align: ${({ noData }) => (noData ? 'center' : 'left')};
@@ -30,3 +31,8 @@ export const StyledValues = styled(Text)`
     font-weight: 700;
   }
 `;
+
+type StyledTitleProps = {
+  noData?: boolean;
+  children?: React.ReactNode | any;
+};

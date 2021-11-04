@@ -22,7 +22,7 @@ export const StyledCard = styled(Card)`
   width: 45vw;
 `;
 
-export const StyledRow = styled(LayoutRow)`
+export const StyledRow = styled(LayoutRow)<StyledRowProps>`
   && {
     margin-top: ${({ marginTop }) => (marginTop ? `${marginTop}px` : '15px')};
 
@@ -30,7 +30,11 @@ export const StyledRow = styled(LayoutRow)`
   }
 `;
 
-export const StyledRowBottom = styled(LayoutRow)`
+type StyledRowProps = {
+  marginTop?: boolean;
+};
+
+export const StyledRowBottom = styled(LayoutRow)<StyledRowBottomProps>`
   && {
     margin-bottom: ${({ marginBottom }) => (marginBottom ? `${marginBottom}px` : '15px')};
 
@@ -38,13 +42,25 @@ export const StyledRowBottom = styled(LayoutRow)`
   }
 `;
 
+type StyledRowBottomProps = {
+  marginBottom?: boolean;
+};
+
 export const StyledButton = styled(Button)`
   margin-top: ${(props) => props.theme.spacing.normal};
 
   width: 100%;
 `;
 
+// type StyledButtonProps = {
+//   onClick?: () => null;
+// };
+
 export const StyledButtonIcon = styled(ButtonAction)``;
+
+// type StyledButtonIconProps = {
+//   onClick?: () => null;
+// };
 
 export const StyledImage = styled(Image)`
   width: 100%;
