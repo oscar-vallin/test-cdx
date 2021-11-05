@@ -71,8 +71,8 @@ const _ArchivePage = () => {
           },
         ]}
         onItemsListChange={(data, loading) => {
-          const total = data?.workPacketStatuses?.paginationInfo?.totalElements ?? 0
-          setTableMeta({count: total, loading: loading})
+          const total = data?.workPacketStatuses?.paginationInfo?.totalElements ?? 0;
+          setTableMeta({ count: total, loading });
         }}
       />
     </LayoutDashboard>
