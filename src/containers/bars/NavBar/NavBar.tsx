@@ -1,4 +1,5 @@
 /* eslint-disable no-nested-ternary */
+import { ReactElement } from 'react';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { ContextualMenuItemType } from '@fluentui/react/lib/ContextualMenu';
@@ -26,7 +27,21 @@ import { useSessionStore } from '../../../store/SessionStore';
 import { useActiveDomainStore } from '../../../store/ActiveDomainStore';
 import { useThemeStore } from '../../../store/ThemeStore';
 
-const NavBar = ({ id, menuOptionSelected = 'dashboard', onUserSettings, visible }) => {
+const defaultProps = {
+  id: '',
+  menuOptionSelected: 'dashboard',
+  onUserSettings: () => null,
+  visible: true,
+};
+
+type CDXBadgeProps = {
+  id?: string;
+  menuOptionSelected?: string;
+  onUserSettings?: any | null;
+  visible?: boolean;
+} & typeof defaultProps;
+
+const NavBar = ({ id, menuOptionSelected = 'dashboard', onUserSettings, visible }: CDXBadgeProps): ReactElement => {
   const SessionStore = useSessionStore();
   const ActiveDomainStore = useActiveDomainStore();
   const ThemeStore = useThemeStore();
@@ -34,7 +49,7 @@ const NavBar = ({ id, menuOptionSelected = 'dashboard', onUserSettings, visible 
   const Toast = useNotification();
   const authData = SessionStore.user;
 
-  const [collapse, setCollapse] = useState('false');
+  const [collapse, setCollapse] = useState(false);
   const { setOwnDashFontSize } = useCurrentUserTheme();
 
   const { setOrgSid } = useOrgSid();
@@ -142,8 +157,6 @@ const NavBar = ({ id, menuOptionSelected = 'dashboard', onUserSettings, visible 
   );
 };
 
-NavBar.propTypes = {
-  id: PropTypes.string,
-};
+NavBar.defaultProps = defaultProps;
 
 export { NavBar };
