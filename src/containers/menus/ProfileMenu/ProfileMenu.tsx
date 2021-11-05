@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+import { ReactElement } from 'react';
 import { UserToken } from '../../../components/images/UserToken';
 
 import { StyledBox } from './ProfileMenu.styles';
@@ -7,22 +7,44 @@ import { ButtonContextual } from '../../../components/buttons/ButtonContextual';
 import { useLogoutUseCase } from '../../../use-cases/Authentication';
 import { useSessionStore } from '../../../store/SessionStore';
 
-const ProfileMenu = ({ id, onUserSettings }) => {
+const defaultProps = {
+  id: '',
+  onUserSettings: () => null,
+};
+
+type ProfileMenuProps = {
+  id?: string;
+  onUserSettings?: any | null;
+} & typeof defaultProps;
+
+const ProfileMenu = ({ id, onUserSettings }: ProfileMenuProps): ReactElement => {
   const SessionStore = useSessionStore();
   const { performUserLogout } = useLogoutUseCase();
 
+  const handleLogout = () => {
+    performUserLogout();
+    return null;
+  };
+
+  const handleSettings = () => {
+    onUserSettings();
+    return null;
+  };
+
   const items = [
     {
-      id: '__ProfileMenu_UserSettingsId',
+      id: '__Logout_button',
       key: 'ProfileMenu_UserSettings',
       text: 'Settings',
-      onClick: (event) => {
-        event.preventDefault();
+      // onClick: (event: any): null => {
+      //   event.preventDefault();
 
-        onUserSettings();
-      },
+      //   onUserSettings();
+      //   return null;
+      // },
+      onClick: handleSettings,
     },
-    { id: '__Logout_button', key: 'ProfileMenu_Logout', text: 'Logout', onClick: performUserLogout },
+    { id: '__Logout_button', key: 'ProfileMenu_Logout', text: 'Logout', onClick: handleLogout },
   ];
 
   // Render
@@ -35,8 +57,6 @@ const ProfileMenu = ({ id, onUserSettings }) => {
   );
 };
 
-ProfileMenu.propTypes = {
-  id: PropTypes.string,
-};
+ProfileMenu.defaultProps = defaultProps;
 
 export { ProfileMenu };
