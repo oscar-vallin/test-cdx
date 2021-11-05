@@ -85,9 +85,9 @@ export const StyledColumnLogoR = styled(StyledColumn)`
 export const StyledTitle = styled(Text)`
   font: ${({ theme }) => theme.fontStyles.headerTitle};
   color: ${({ theme }) => theme.colors.white};
-  /* max-width: 20vw; */
-  @media (max-width: 1400px) {
-    font-size: 15px;
+
+  @media all and (min-width: 1400px) {
+    font-size: 1.25rem;
   }
 `;
 

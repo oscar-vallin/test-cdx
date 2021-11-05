@@ -10,18 +10,18 @@ import { useOrgSid } from '../../hooks/useOrgSid';
 import { useActiveDomainStore } from '../../store/ActiveDomainStore';
 
 const parseLinks = (links = [], sidebarOpt) => {
-  return links.map(({ type, label, destination, subNavItems }) => ({
+  return links.map(({ label, destination, subNavItems }) => ({
     name: label,
     ...(subNavItems
       ? {
-          isExpanded: subNavItems.find((item) => item.type === sidebarOpt),
+          isExpanded: subNavItems.find((item) => item.destination === sidebarOpt),
           links: parseLinks(subNavItems),
         }
       : {}),
     ...(destination
       ? {
           url: getRouteByApiId(destination)?.URL,
-          key: type,
+          key: destination,
           // params: page.parameters,
           // commands: page.commands,
         }
