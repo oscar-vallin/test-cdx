@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import { ROUTE_USER_SETTINGS } from '../../data/constants/RouteConstants';
+import {ROUTE_ACTIVITY_CURRENT, ROUTE_USER_SETTINGS} from '../../data/constants/RouteConstants';
 
 import { NavBar } from '../../containers/bars/NavBar';
 import { StyleConstants } from '../../data/constants/StyleConstants';
 import { BoxStyled } from './LayoutDashboard.styles';
 
-const LayoutDashboard = ({ id, menuOptionSelected = 'dashboard', showMenu = true, routeId, children }) => {
+const LayoutDashboard = ({ id, menuOptionSelected = 'dashboard', showMenu = true, routeId = ROUTE_ACTIVITY_CURRENT, children }) => {
   const history = useHistory();
 
   return (
