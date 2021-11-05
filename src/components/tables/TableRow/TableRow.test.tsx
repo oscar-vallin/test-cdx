@@ -1,8 +1,8 @@
 import { shallow } from 'enzyme';
 import toJSON from 'enzyme-to-json';
 
-import { TableRow as Component } from './index.js';
-import { StyledTableRow } from './TableRow.styles.js';
+import { TableRow as Component } from './index';
+import { StyledTableRow } from './TableRow.styles';
 
 const defaultProps = {
   id: '__TableRow',
