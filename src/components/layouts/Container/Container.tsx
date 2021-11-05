@@ -5,9 +5,9 @@ const defaultProps = {
   id: '',
   children: <></>,
   direction: 'column',
-  left: '',
-  right: '',
-  top: '',
+  left: false,
+  right: false,
+  top: false,
   bottom: '',
 };
 
@@ -15,9 +15,9 @@ type ContainerProps = {
   id?: string;
   children?: ReactNode;
   direction?: string;
-  left?: string;
-  right?: string;
-  top?: string;
+  left?: boolean;
+  right?: boolean;
+  top?: boolean;
   bottom?: string;
 } & typeof defaultProps;
 

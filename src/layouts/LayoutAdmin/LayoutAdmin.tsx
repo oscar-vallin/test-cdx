@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+import { ReactElement } from 'react';
 import { useHistory } from 'react-router-dom';
 import { StyledBox, StyledNav } from './LayoutAdmin.styles';
 import { LayoutDashboard } from '../LayoutDashboard';
@@ -9,13 +9,34 @@ import { Spacing } from '../../components/spacings/Spacing';
 import { useOrgSid } from '../../hooks/useOrgSid';
 import { useActiveDomainStore } from '../../store/ActiveDomainStore';
 
-const parseLinks = (links = [], sidebarOpt) => {
-  return links.map(({ type, label, destination, subNavItems }) => ({
+const defaultProps = {
+  id: '',
+  // menuOptionSelected: 'admin',
+  // sidebarOptionSelected: '',
+  // children: '',
+};
+
+type LayoutAdminProps = {
+  id?: string;
+  menuOptionSelected?: string;
+  sidebarOptionSelected?: string;
+  children?: ReactElement | string;
+} & typeof defaultProps;
+
+type mapProps = {
+  type?: string;
+  label?: string;
+  destination?: string;
+  subNavItems?: { type: string }[] | any;
+};
+
+const parseLinks = (links = [], sidebarOpt: string) => {
+  return links.map(({ type, label, destination, subNavItems }: mapProps) => ({
     name: label,
     ...(subNavItems
       ? {
           isExpanded: subNavItems.find((item) => item.type === sidebarOpt),
-          links: parseLinks(subNavItems),
+          links: parseLinks(subNavItems, ''),
         }
       : {}),
     ...(destination
@@ -29,7 +50,12 @@ const parseLinks = (links = [], sidebarOpt) => {
   }));
 };
 
-const LayoutAdmin = ({ id, menuOptionSelected = 'admin', sidebarOptionSelected = '', children }) => {
+const LayoutAdmin = ({
+  id,
+  menuOptionSelected = 'admin',
+  sidebarOptionSelected = '',
+  children,
+}: LayoutAdminProps): ReactElement => {
   const { orgSid } = useOrgSid();
   const history = useHistory();
   const ActiveDomainStore = useActiveDomainStore();
@@ -47,7 +73,7 @@ const LayoutAdmin = ({ id, menuOptionSelected = 'admin', sidebarOptionSelected =
           <StyledNav
             selectedKey={sidebarOptionSelected}
             groups={[{ links: parseLinks(ActiveDomainStore.nav.admin, sidebarOptionSelected) }]}
-            onLinkClick={(evt, route) => {
+            onLinkClick={(evt: any, route: { links: string; url: string }) => {
               evt.preventDefault();
 
               if (!route.links) {
@@ -63,9 +89,6 @@ const LayoutAdmin = ({ id, menuOptionSelected = 'admin', sidebarOptionSelected =
   );
 };
 
-LayoutAdmin.propTypes = {
-  id: PropTypes.string.isRequired,
-  children: PropTypes.node.isRequired,
-};
+LayoutAdmin.defaultProps = defaultProps;
 
 export { LayoutAdmin };

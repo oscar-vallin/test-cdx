@@ -27,8 +27,8 @@ export const ComponentStyled = styled.div<ComponentStyledProps>`
 
 type ComponentStyledProps = {
   direction: string;
-  left: string;
-  right: string;
-  top: string;
+  left: boolean;
+  right: boolean;
+  top?: boolean;
   bottom: string;
 };
