@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { SpinnerSize, Checkbox, Panel, PanelType, Spinner } from 'office-ui-fabric-react';
 import _ from 'lodash';
 
+import { useNotification } from 'src/hooks/useNotification';
 import { Spacing } from '../../../../../components/spacings/Spacing';
 import { Card } from '../../../../../components/cards';
 import { Button } from '../../../../../components/buttons';
@@ -69,6 +70,7 @@ const groupPermissions = (opts) => {
 
 const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicyId }) => {
   const { orgSid } = useOrgSid();
+  const Toast = useNotification();
   const [state, setState] = useState({ ...INITIAL_STATE });
   const [policyForm, setPolicyForm] = useState({});
   const [permissions, setPermissions] = useState([]);
@@ -77,6 +79,7 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
   const [fetchPolicyForm, { data: form, loading: isLoadingForm }] = useQueryHandler(useAccessPolicyFormLazyQuery);
   const [createPolicy, { data: createdPolicy, loading: isCreatingPolicy }] =
     useQueryHandler(useCreateAccessPolicyMutation);
+
   const [updatePolicy] = useQueryHandler(useUpdateAccessPolicyMutation);
 
   // const [fetchPolicy, { data: policy }] = useAccessPolicyLazyQuery();
@@ -94,8 +97,15 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
 
   useEffect(() => {
     if (createdPolicy) {
-      onCreatePolicy(createdPolicy.createAccessPolicy);
-      onDismiss();
+      const { createAccessPolicy } = createdPolicy;
+
+      if (createAccessPolicy.response === 'FAIL') {
+        Toast.error({ text: 'Please check the highlighted fields and try again' });
+      } else {
+        onCreatePolicy(createAccessPolicy);
+        Toast.success({ text: 'Access Policy created successfully' });
+        onDismiss();
+      }
     }
   }, [createdPolicy]);
 
@@ -155,6 +165,7 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
                         value={state.policyName}
                         required={policyForm.name?.required}
                         onChange={({ target }) => setState({ ...state, policyName: target.value })}
+                        errorMessage={createdPolicy?.createAccessPolicy?.response === 'FAIL' ? 'Required field' : ''}
                       />
                     )}
                   </Column>

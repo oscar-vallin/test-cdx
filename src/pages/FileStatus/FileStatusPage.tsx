@@ -46,7 +46,7 @@ const _FileStatusPage = () => {
         <Container>
           <Spacing margin={{ top: 'double' }}>
             <Row>
-              <Column lg="6" direction="row">
+              <Column direction="row">
                 <FontIcon iconName="FilterSolid" />
                 <Text id="__Text_File-Status" variant="bold">
                   File Status

@@ -9,7 +9,7 @@ import { useQueryParams } from './useQueryParams';
 //
 export const useTableFilters = (placeholder) => {
   const QueryParams = useQueryParams();
-  const params = useStoreState(({ QueryParamStore }) => QueryParamStore.params);
+  const params = useStoreState(({ QueryParamStore }: any) => QueryParamStore.params);
 
   const history = useHistory();
   const location = useLocation();
@@ -19,7 +19,7 @@ export const useTableFilters = (placeholder) => {
   const endDate = useDateValue('End Date...', hour < 9 ? new Date() : addDays(new Date(), 1));
   const localInput = useDelayedInputValue('', placeholder, '', '');
 
-  const [urlParams] = useState(QueryParams.parse(location.search));
+  const [urlParams]: any = useState(QueryParams.parse(location.search));
 
   const setDates = () => {
     if (urlParams.filter) {
@@ -34,7 +34,7 @@ export const useTableFilters = (placeholder) => {
       endDate.setValue(new Date(urlParams.endDate));
     }
 
-    return () => null;
+    return () => undefined;
   };
 
   const addParamIfExists = (key, value) => (key ? { [key]: value } : {});

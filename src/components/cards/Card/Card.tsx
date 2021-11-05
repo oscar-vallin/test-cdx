@@ -7,7 +7,7 @@ const defaultProps = {
   variant: 'normal',
   elevation: 'normal',
   spacing: 'normal',
-  onClick: () => null,
+  onClick: null,
   children: '',
 };
 

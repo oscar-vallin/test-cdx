@@ -3,7 +3,7 @@ import { Box as LayoutBox, Row as LayoutRow, Column as LayoutColumn } from '../.
 
 export const Container = styled(LayoutBox)`
   margin: 0 auto;
-  width: 75%;
+  width: 95%;
 `;
 
 export const Box = styled(LayoutBox)`
