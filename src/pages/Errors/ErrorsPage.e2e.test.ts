@@ -1,20 +1,20 @@
-import P_CDXApp from '../../teste2e/pages/P_CDXApp';
-import P_ActivityOrgs from '../../teste2e/pages/P_ActivityOrgs';
-import P_MainMenu from '../../teste2e/pages/P_MainMenu';
-import P_Errors from '../../teste2e/pages/P_Errors';
+import PuppetCDXApp from '../../teste2e/pages/PuppetCDXApp';
+import PuppetActiveOrgs from '../../teste2e/pages/PuppetActiveOrgs';
+import PuppetMainMenu from '../../teste2e/pages/PuppetMainMenu';
+import PuppetErrors from '../../teste2e/pages/PuppetErrors';
 
 const testConstants = {
-  clientFile: 'ADENA-Cigna-Elig-TEST.txt',
-  workStep: 'Quality Check Failed',
-  planSponsor: 'ADENA',
-  vendor: 'Trustmark',
+  clientFile: 'FMHP-CIGNA-PROD.xml.pgp',
+  workStep: 'Transform',
+  planSponsor: 'FMHP',
+  vendor: 'CARECENTRAL',
 };
 
 describe('E2E - Errors Navigation Test', () => {
-  let cdxApp: P_CDXApp;
+  let cdxApp: PuppetCDXApp;
 
   beforeAll(async () => {
-    cdxApp = await P_CDXApp.startBrowser('E2E - Errors Navigation Test');
+    cdxApp = await PuppetCDXApp.startBrowser('E2E - Errors Navigation Test');
   });
 
   it('Login', async () => {
@@ -24,7 +24,7 @@ describe('E2E - Errors Navigation Test', () => {
   });
 
   it('Click K2UIS Active Org (Known2U Implementation Services)', async () => {
-    const activeOrgs = new P_ActivityOrgs(cdxApp.page);
+    const activeOrgs = new PuppetActiveOrgs(cdxApp.page);
     await activeOrgs.expectOnPage();
     await activeOrgs.clickOnOrg('K2UIS', 'Known2U Implementation Services');
   });
@@ -35,70 +35,66 @@ describe('E2E - Errors Navigation Test', () => {
   });
 
   it('Click on first Active Org (Farm Hop)', async () => {
-    const activeOrgs = new P_ActivityOrgs(cdxApp.page);
+    const activeOrgs = new PuppetActiveOrgs(cdxApp.page);
     await activeOrgs.expectOnPage();
     await activeOrgs.clickOnOrg('FMHP', 'Farm Hop');
   });
 
   it('Click on Errors', async () => {
-    const mainMenu = new P_MainMenu(cdxApp.page);
+    const mainMenu = new PuppetMainMenu(cdxApp.page);
     await mainMenu.clickErrors();
   });
 
   it('Should redirect to Errors Page', async () => {
-    const fileStatus = new P_Errors(cdxApp.page);
+    const fileStatus = new PuppetErrors(cdxApp.page);
     await fileStatus.expectOnPage();
   });
 
-  it('Table Should have 17 rows', async () => {
-    const page = new P_Errors(cdxApp.page);
+  it('Table Should have 6 rows', async () => {
+    const page = new PuppetErrors(cdxApp.page);
+    await page.setDateRange('Sun Aug 15 2021', 'Wed Sep 15 2021');
     await page.expectOnPage();
-    await page.expectTableRecords('.ms-DetailsRow-fields', 17);
+    await page.expectTableRecords('.ms-DetailsRow-fields', 6);
   });
 
   it('Should not have records when search input filled with wrong value', async () => {
     const wrongValue = 'WrongSearch';
-    const page = new P_Errors(cdxApp.page);
+    const page = new PuppetErrors(cdxApp.page);
     await page.expectOnPage();
-    await page.expectInput('#TableErrors__Card__Row__Input-Search', wrongValue, () =>
-      page.expectTableRecords('.ms-DetailsRow-fields', 0)
-    );
+    await page.search(wrongValue);
+    await page.expectTableRecords('.ms-DetailsRow-fields', 0);
   });
 
   it('Should have 1 record when searching by Client File', async () => {
     const inputValue = testConstants.clientFile;
-    const page = new P_Errors(cdxApp.page);
+    const page = new PuppetErrors(cdxApp.page);
     await page.expectOnPage();
-    await page.expectInput('#TableErrors__Card__Row__Input-Search', inputValue, () =>
-      page.expectTextOnFirstRow(inputValue, 0, 1)
-    );
+    await page.search(inputValue);
+    await page.expectTextOnFirstRow(inputValue, 0, 1);
   });
 
   it('Should have 1 record when searching by Work Step', async () => {
     const inputValue = testConstants.workStep;
-    const page = new P_Errors(cdxApp.page);
+    const page = new PuppetErrors(cdxApp.page);
     await page.expectOnPage();
-    await page.expectInput('#TableErrors__Card__Row__Input-Search', inputValue, () =>
-      page.expectTextOnFirstRow(inputValue, 0, 2)
-    );
+    await page.search(inputValue);
+    await page.expectTextOnFirstRow(inputValue, 0, 2);
   });
 
-  it('Should have 3 records when searching by Plan Sponsor', async () => {
+  it('Should have 6 records when searching by Plan Sponsor', async () => {
     const inputValue = testConstants.planSponsor;
-    const page = new P_Errors(cdxApp.page);
+    const page = new PuppetErrors(cdxApp.page);
     await page.expectOnPage();
-    await page.expectInput('#TableErrors__Card__Row__Input-Search', inputValue, () =>
-      page.expectTextOnFirstRow(inputValue, 0, 3)
-    );
+    await page.search(inputValue);
+    await page.expectTextOnFirstRow(inputValue, 0, 3);
   });
 
   it('Should have 1 record when searching by Vendor', async () => {
     const inputValue = testConstants.vendor;
-    const page = new P_Errors(cdxApp.page);
+    const page = new PuppetErrors(cdxApp.page);
     await page.expectOnPage();
-    await page.expectInput('#TableErrors__Card__Row__Input-Search', inputValue, () =>
-      page.expectTextOnFirstRow(inputValue, 0, 4)
-    );
+    await page.search(inputValue);
+    await page.expectTextOnFirstRow(inputValue, 0, 4);
   });
 
   it('Logout', async () => {

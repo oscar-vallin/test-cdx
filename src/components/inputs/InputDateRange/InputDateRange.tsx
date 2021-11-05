@@ -1,5 +1,4 @@
 import { ReactElement } from 'react';
-import { Label } from '@fluentui/react/lib-commonjs/Label';
 import { InputDate } from '../InputDate';
 import { Row, Column } from './InputDateRange.styles';
 
@@ -17,12 +16,10 @@ const InputDateRange = ({ startDate, endDate }: InputDateRangeProps): ReactEleme
   return (
     <Row id="InputDateRange--Row">
       <Column id="InputDateRange--Column--From" lg="6">
-        <Label>From</Label>
-        <InputDate id="Input__From__Date" {...startDate} />
+        <InputDate id="Input__From__Date" label="From" {...startDate} required={false} />
       </Column>
       <Column id="InputDateRange--Column--To" lg="6">
-        <Label>To</Label>
-        <InputDate id="Input__To__Date" {...endDate} />
+        <InputDate id="Input__To__Date" label="To" {...endDate} required={false} />
       </Column>
     </Row>
   );

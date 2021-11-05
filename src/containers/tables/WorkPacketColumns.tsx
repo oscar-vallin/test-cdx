@@ -2,7 +2,7 @@ import React from 'react';
 import { IColumn } from 'office-ui-fabric-react/lib-commonjs/DetailsList';
 import { format } from 'date-fns';
 import { Link } from 'office-ui-fabric-react/lib-commonjs/Link';
-import { WorkPacketStatus, WpTransmission } from '../../data/services/graphql';
+import { WorkPacketStatus, WpProcessError, WpTransmission } from '../../data/services/graphql';
 import { CellItemRow, RouteLink, StyledCell } from '../../components/tables/Table/Table.styles';
 import { HighlightCounter } from '../../components/badges/HighlightCounter';
 import { getStepStatusLabel } from '../../data/constants/FileStatusConstants';
@@ -63,6 +63,25 @@ export const useWorkPacketColumns = (
       onColumnClick: onSort,
       onRender: (item: WpTransmission) => {
         const timestamp = format(new Date(item.deliveredOn), 'MM/dd/yyyy hh:mm a');
+        return <span>{timestamp}</span>;
+      },
+    },
+    {
+      key: 'startTime',
+      name: 'Start Time',
+      className: 'Datetime',
+      targetWidthProportion: 1,
+      minWidth: 140,
+      maxWidth: 150,
+      fieldName: 'startTime',
+      isSorted: true,
+      isSortedDescending: true,
+      sortAscendingAriaLabel: 'Sorted Oldest to Most Recent',
+      sortDescendingAriaLabel: 'Sorted Most Recent to Oldest',
+      data: WorkPacketColumns.START_TIME,
+      onColumnClick: onSort,
+      onRender: (item: WpProcessError) => {
+        const timestamp = format(new Date(item.startTime), 'MM/dd/yyyy hh:mm a');
         return <span>{timestamp}</span>;
       },
     },
@@ -187,6 +206,22 @@ export const useWorkPacketColumns = (
       },
     },
     {
+      key: 'step',
+      name: 'Work Step',
+      targetWidthProportion: 1,
+      minWidth: 80,
+      maxWidth: 120,
+      fieldName: 'step',
+      sortAscendingAriaLabel: 'Sorted A to Z',
+      sortDescendingAriaLabel: 'Sorted Z to A',
+      isPadded: true,
+      data: WorkPacketColumns.STEP,
+      onColumnClick: onSort,
+      onRender: (item: WpProcessError) => {
+        return <span>{item.stepName}</span>;
+      },
+    },
+    {
       key: 'progress',
       name: 'Progress',
       targetWidthProportion: 2,
@@ -292,6 +327,19 @@ export const useWorkPacketColumns = (
       data: WorkPacketColumns.EXTRACT_VERSION,
       onColumnClick: onSort,
     },
+    {
+      key: 'msg',
+      name: 'Message',
+      targetWidthProportion: 1,
+      minWidth: 100,
+      maxWidth: 300,
+      fieldName: 'msg',
+      sortAscendingAriaLabel: 'Sorted A to Z',
+      sortDescendingAriaLabel: 'Sorted Z to A',
+      isPadded: true,
+      data: WorkPacketColumns.MESSAGE,
+      onColumnClick: onSort,
+    },
   ];
 
   const initialColumns = (): IColumn[] => {
@@ -317,6 +365,7 @@ export const useWorkPacketColumns = (
 export enum WorkPacketColumns {
   TIMESTAMP,
   DATETIME,
+  START_TIME,
   VENDOR,
   PLAN_SPONSOR,
   INBOUND_FILENAME,
@@ -325,6 +374,7 @@ export enum WorkPacketColumns {
   SPEC_ID,
   IMPLEMENTATION,
   BILLING_COUNT,
+  STEP,
   STEP_STATUS,
   PROGRESS,
   CLIENT_FILE,
@@ -332,4 +382,5 @@ export enum WorkPacketColumns {
   TOTAL_RECORDS,
   EXTRACT_TYPE,
   EXTRACT_VERSION,
+  MESSAGE,
 }
