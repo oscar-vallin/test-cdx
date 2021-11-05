@@ -28,6 +28,7 @@ import { useDateValue } from '../../hooks/useDateValue';
 import { useDelayedInputValue } from '../../hooks/useInputValue';
 import { useQueryParams } from '../../hooks/useQueryParams';
 import { useQueryHandler } from '../../hooks/useQueryHandler';
+import { useOrgSid } from '../../hooks/useOrgSid';
 
 type WorkPacketParams = {
   id: string;
@@ -54,7 +55,7 @@ const WorkPacketTable = ({
   const history = useHistory();
   const location = useLocation();
   const urlParams = new URLSearchParams(location.search);
-  const orgSid = urlParams.get('orgSid') ?? '-1';
+  const { orgSid } = useOrgSid();
 
   const hour = getHours(new Date());
   const startDate = useDateValue('Start Date...', hour < 9 ? subDays(new Date(), 1) : new Date());

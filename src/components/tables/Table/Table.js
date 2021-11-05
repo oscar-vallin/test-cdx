@@ -31,6 +31,7 @@ import {
 } from './Table.styles';
 
 import { TableHeader } from '../TableHeader';
+import {useOrgSid} from "../../../hooks/useOrgSid";
 
 const _buildColumns = (
   items,
@@ -125,9 +126,7 @@ const Table = ({
   onItemsListChange,
   loading = true,
 }) => {
-  const location = useLocation();
-  const urlParams = new URLSearchParams(location.search);
-  const orgSid = urlParams.get('orgSid') ?? '-1';
+  const { orgSid } = useOrgSid();
 
   const [sortLabel, setSortLabel] = useState();
   const [sortedItems, setSortedItems] = useState([]);
@@ -395,7 +394,7 @@ const Table = ({
 
   // * Click on Row.
   const _onItemInvoked = () => {
-    // alert(`Item ${item.name} at index ${index} has been invoked.`);
+
   };
 
   //
