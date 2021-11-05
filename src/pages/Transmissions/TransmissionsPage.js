@@ -11,7 +11,7 @@ import { WorkPacketColumns } from '../../containers/tables/WorkPacketColumns';
 import { NullHandling, SortDirection, useWpTransmissionsLazyQuery } from '../../data/services/graphql';
 
 const _TransmissionsPage = () => {
-  const [tableMeta, setTableMeta] = useState({ count: null, loading: null });
+  const [tableMeta, setTableMeta] = useState({ count: 0, loading: true });
 
   const mapData = (data) => {
     const items = [];
@@ -24,19 +24,19 @@ const _TransmissionsPage = () => {
   };
 
   return (
-    <LayoutDashboard id="PageTransmissions" menuOptionSelected={ROUTES.ROUTE_ADMIN.API_ID}>
-      <PageHeader spacing="0">
+    <LayoutDashboard id='PageTransmissions' menuOptionSelected={ROUTES.ROUTE_ADMIN.API_ID}>
+      <PageHeader spacing='0'>
         <Container>
           <Spacing margin={{ top: 'double' }}>
             <Row>
-              <Column lg="6" direction="row">
-                <FontIcon iconName="FilterSolid" />
-                <Text id="__Text_Transmissions" variant="bold">
+              <Column lg='6' direction='row'>
+                <FontIcon iconName='FilterSolid' />
+                <Text id='__Text_Transmissions' variant='bold'>
                   Transmissions
                 </Text>
-                <Text id="__Text_Advanced-search">&nbsp; — Advanced search</Text>
+                <Text id='__Text_Advanced-search'>&nbsp; — Advanced search</Text>
               </Column>
-              <Column lg="6" right>
+              <Column lg='6' right>
                 <Text right>
                   {!tableMeta.loading && tableMeta.count !== null && (
                     <Text>{tableMeta.count > 0 ? `${tableMeta.count} results found` : 'No results were found'}</Text>
@@ -48,7 +48,6 @@ const _TransmissionsPage = () => {
         </Container>
       </PageHeader>
 
-      {/* <TableTransmissions data={data} onItemsListChange={setTableMeta} /> */}
       <WorkPacketTable
         id="TableTransmissions"
         cols={[
@@ -67,7 +66,7 @@ const _TransmissionsPage = () => {
         ]}
         lazyQuery={useWpTransmissionsLazyQuery}
         getItems={mapData}
-        searchTextPlaceholder="Extract Name,  Status, Vendor, etc."
+        searchTextPlaceholder='Extract Name,  Status, Vendor, etc.'
         defaultSort={[
           {
             property: 'deliveredOn',
@@ -76,6 +75,10 @@ const _TransmissionsPage = () => {
             ignoreCase: true,
           },
         ]}
+        onItemsListChange={(data, loading)=> {
+          const total = data?.wpTransmissions?.paginationInfo?.totalElements ?? 0;
+          setTableMeta({count: total, loading: loading});
+        }}
       />
     </LayoutDashboard>
   );

@@ -5831,6 +5831,12 @@
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "GLOBAL_VENDOR",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "possibleTypes": null
@@ -8220,7 +8226,7 @@
           },
           {
             "name": "dashboardPeriods",
-            "description": null,
+            "description": "Get the dashboard period counts for a fixed set of common periods, (today, yesterday, this month, last month)",
             "args": [
               {
                 "name": "orgSid",
@@ -8242,6 +8248,47 @@
             "type": {
               "kind": "OBJECT",
               "name": "DashboardPeriods",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "dashboardPeriodCounts",
+            "description": "Get the dashboard period counts for a specific date range",
+            "args": [
+              {
+                "name": "orgSid",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "dateRange",
+                "description": null,
+                "type": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "DateTimeRangeInput",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "DashboardPeriodCounts",
               "ofType": null
             },
             "isDeprecated": false,

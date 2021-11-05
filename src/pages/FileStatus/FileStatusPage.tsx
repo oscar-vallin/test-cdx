@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ReactElement, useState } from 'react';
 import { FontIcon } from '@fluentui/react/lib/Icon';
 import { ROUTES } from '../../data/constants/RouteConstants';
 import { Row, Column, Container } from '../../components/layouts';
@@ -7,20 +7,33 @@ import { Text } from '../../components/typography';
 import { PageHeader } from '../../containers/headers/PageHeader';
 import { LayoutDashboard } from '../../layouts/LayoutDashboard';
 import { WorkPacketTable } from '../../containers/tables/WorkPacketTable';
-import { NullHandling, SortDirection, useWorkPacketStatusesLazyQuery } from '../../data/services/graphql';
+import {
+  NullHandling,
+  SortDirection,
+  useWorkPacketStatusesLazyQuery,
+  WorkPacketStatus,
+} from '../../data/services/graphql';
 import { WorkPacketColumns } from '../../containers/tables/WorkPacketColumns';
 
 const _FileStatusPage = () => {
-  const [tableMeta, setTableMeta] = useState({ count: null, loading: null });
+  const [tableMeta, setTableMeta] = useState({ count: 0, loading: true });
 
   const mapData = (data) => {
-    const items = [];
+    const items: WorkPacketStatus[] = [];
     data?.workPacketStatuses?.nodes?.map((value) => {
       if (value) {
         items.push(value);
       }
     });
     return items;
+  };
+
+  const renderTotalRecords = (): ReactElement => {
+    if (!tableMeta.loading && tableMeta.count !== null) {
+      return <Text>{tableMeta.count > 0 ? `${tableMeta.count} results found` : 'No results were found'}</Text>;
+    }
+
+    return <span />;
   };
 
   return (
@@ -41,11 +54,7 @@ const _FileStatusPage = () => {
                 <Text id="__Text_Advanced-search">&nbsp; — Advanced search</Text>
               </Column>
               <Column lg="6" right>
-                <Text right>
-                  {!tableMeta.loading && tableMeta.count !== null && (
-                    <Text>{tableMeta.count > 0 ? `${tableMeta.count} results found` : 'No results were found'}</Text>
-                  )}
-                </Text>
+                <Text right="true">{renderTotalRecords()}</Text>
               </Column>
             </Row>
           </Spacing>
@@ -73,6 +82,10 @@ const _FileStatusPage = () => {
             ignoreCase: true,
           },
         ]}
+        onItemsListChange={(data, loading) => {
+          const total = data?.workPacketStatuses?.paginationInfo?.totalElements ?? 0;
+          setTableMeta({ count: total, loading });
+        }}
       />
     </LayoutDashboard>
   );

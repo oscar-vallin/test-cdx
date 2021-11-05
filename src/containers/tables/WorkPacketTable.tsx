@@ -36,9 +36,18 @@ type WorkPacketParams = {
   getItems: (data: any) => any[];
   searchTextPlaceholder: string;
   defaultSort?: SortOrderInput[];
+  onItemsListChange: (data: any, loading: boolean) => void;
 };
 
-const WorkPacketTable = ({ id, cols, lazyQuery, getItems, searchTextPlaceholder, defaultSort }: WorkPacketParams) => {
+const WorkPacketTable = ({
+  id,
+  cols,
+  lazyQuery,
+  getItems,
+  searchTextPlaceholder,
+  defaultSort,
+  onItemsListChange,
+}: WorkPacketParams) => {
   const doNothing = () => {};
 
   const QueryParams = useQueryParams();
@@ -139,6 +148,10 @@ const WorkPacketTable = ({ id, cols, lazyQuery, getItems, searchTextPlaceholder,
       },
     });
   }, [orgSid, localInput.delayedValue, startDate.value, endDate.value, pagingParams]);
+
+  useEffect(() => {
+    onItemsListChange(data, loading);
+  }, [data, loading]);
 
   const renderTable = () => {
     const classNames = mergeStyleSets({
