@@ -15,7 +15,7 @@ export const StyledDropdown = styled(IconButton)`
   color: ${({ theme }) => theme.colors.white};
 `;
 
-export const StyledRow = styled(LayoutRow)`
+export const StyledRow = styled(LayoutRow)<StyledRowProps>`
   && {
     align-items: center;
     display: flex;
@@ -25,7 +25,14 @@ export const StyledRow = styled(LayoutRow)`
     }
   }
 `;
-export const StyledColumn = styled(LayoutColumn)`
+
+type StyledRowProps = {
+  left?: boolean;
+  right?: boolean;
+  sm?: number;
+};
+
+export const StyledColumn = styled(LayoutColumn)<StyledColumnProps>`
   && {
     align-items: center;
     display: flex;
@@ -35,13 +42,25 @@ export const StyledColumn = styled(LayoutColumn)`
     }
   }
 `;
-export const StyledColumnCont = styled(LayoutColumn)`
+
+type StyledColumnProps = {
+  noPadding?: boolean;
+};
+
+export const StyledColumnCont = styled(LayoutColumn)<StyledColumnContProps>`
   @media (max-width: 1400px) {
     width: 50%;
   }
 `;
 
-export const StyledColumnNav = styled(StyledColumn)`
+type StyledColumnContProps = {
+  sm?: number;
+  left?: boolean;
+  right?: boolean;
+  container?: boolean;
+};
+
+export const StyledColumnNav = styled(StyledColumn)<StyledColumnNavProps>`
   @media (max-width: 1400px) {
     width: 15%;
   }
@@ -60,7 +79,11 @@ export const StyledColumnNav = styled(StyledColumn)`
   }
 `;
 
-export const StyledColumnLogoL = styled(StyledColumn)`
+type StyledColumnNavProps = {
+  sm?: number;
+};
+
+export const StyledColumnLogoL = styled(StyledColumn)<StyledColumnLogoLProps>`
   && {
     display: inline-block;
 
@@ -70,7 +93,12 @@ export const StyledColumnLogoL = styled(StyledColumn)`
   }
 `;
 
-export const StyledColumnLogoR = styled(StyledColumn)`
+type StyledColumnLogoLProps = {
+  sm?: number;
+  noPadding?: boolean;
+};
+
+export const StyledColumnLogoR = styled(StyledColumn)<StyledColumnLogoRProps>`
   && {
     align-items: flex-start;
     display: none;
@@ -82,6 +110,11 @@ export const StyledColumnLogoR = styled(StyledColumn)`
   }
 `;
 
+type StyledColumnLogoRProps = {
+  sm?: number;
+  collapse?: boolean;
+};
+
 export const StyledTitle = styled(Text)`
   font: ${({ theme }) => theme.fontStyles.headerTitle};
   color: ${({ theme }) => theme.colors.white};
@@ -91,7 +124,7 @@ export const StyledTitle = styled(Text)`
   }
 `;
 
-export const StyledButtonProfile = styled(ButtonAction)`
+export const StyledButtonProfile = styled(ButtonAction)<StyledButtonProfileProps>`
   && {
     width: 45vw;
     max-width: 500px;
@@ -100,6 +133,10 @@ export const StyledButtonProfile = styled(ButtonAction)`
     padding: 0px 8px;
   }
 `;
+
+type StyledButtonProfileProps = {
+  marginBottom?: string;
+};
 
 export const StyledIconButton = styled(IconButton)`
   && {
@@ -160,9 +197,7 @@ export const StyledChoiceGroup = styled(ChoiceGroup)`
 export const StyledButtonOrg = styled(DefaultButton)`
   background: none;
   border: none;
-  color: ${({ theme }) => {
-    return theme.colors.white;
-  }};
+  color: ${({ theme }) => theme.colors.white};
   margin: 0 5px 0 0;
   transition: all 0.15s ease-out;
 

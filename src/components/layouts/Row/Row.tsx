@@ -7,7 +7,7 @@ const defaultProps = {
   variant: 'normal',
   children: <></>,
   center: '',
-  right: '',
+  right: false,
   top: '',
   bottom: '',
   between: '',
@@ -20,7 +20,8 @@ type RowProps = {
   variant?: string;
   children?: ReactElement | any;
   center?: string;
-  right?: string;
+  right?: boolean;
+  left?: boolean;
   top?: string;
   bottom?: string;
   between?: string;
