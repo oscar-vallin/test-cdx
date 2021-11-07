@@ -1,22 +1,22 @@
-import React, { ReactElement, useState } from 'react';
-import { FontIcon } from '@fluentui/react/lib/Icon';
-import { ROUTES } from '../../data/constants/RouteConstants';
-import { Row, Column, Container } from '../../components/layouts';
-import { Spacing } from '../../components/spacings/Spacing';
-import { Text } from '../../components/typography';
-import { PageHeader } from '../../containers/headers/PageHeader';
-import { LayoutDashboard } from '../../layouts/LayoutDashboard';
-import { WorkPacketTable } from '../../containers/tables/WorkPacketTable';
+import React, {ReactElement, useState} from 'react';
+import {FontIcon} from '@fluentui/react/lib/Icon';
+import {ROUTES} from '../../data/constants/RouteConstants';
+import {Column, Container, Row} from '../../components/layouts';
+import {Spacing} from '../../components/spacings/Spacing';
+import {Text} from '../../components/typography';
+import {PageHeader} from '../../containers/headers/PageHeader';
+import {LayoutDashboard} from '../../layouts/LayoutDashboard';
+import {WorkPacketTable} from '../../containers/tables/WorkPacketTable';
 import {
   NullHandling,
   SortDirection,
   useWorkPacketStatusesLazyQuery,
   WorkPacketStatus,
 } from '../../data/services/graphql';
-import { WorkPacketColumns } from '../../containers/tables/WorkPacketColumns';
+import {WorkPacketColumns} from '../../containers/tables/WorkPacketColumns';
 
 const _FileStatusPage = () => {
-  const [tableMeta, setTableMeta] = useState({ count: 0, loading: true });
+  const [tableMeta, setTableMeta] = useState({count: 0, loading: true});
 
   const mapData = (data) => {
     const items: WorkPacketStatus[] = [];
@@ -42,7 +42,7 @@ const _FileStatusPage = () => {
     <LayoutDashboard
       id="PageFileStatus"
       menuOptionSelected={ROUTES.ROUTE_FILE_STATUS.ID}
-      routeId={ROUTES.ROUTE_FILE_STATUS}
+        /*routeId={ROUTES.ROUTE_FILE_STATUS}*/
     >
       <PageHeader spacing="0">
         <Container>
