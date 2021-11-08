@@ -1,7 +1,7 @@
 import { mount, shallow, render } from 'enzyme';
 import toJSON from 'enzyme-to-json';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib-commonjs/DetailsList';
-import { Table as Component } from './index.js';
+import { Table as Component } from './index';
 import { TableHeader } from '../TableHeader';
 
 jest.mock('react-router-dom', () => ({

@@ -2,7 +2,7 @@ import { shallow } from 'enzyme';
 import toJSON from 'enzyme-to-json';
 import { HeaderTable, StyledMenuButton } from './TableHeader.styles.js';
 
-import { TableHeader as Component } from './index.js';
+import { TableHeader as Component } from './index';
 
 const defaultProps = {
   id: '__TableHeader',

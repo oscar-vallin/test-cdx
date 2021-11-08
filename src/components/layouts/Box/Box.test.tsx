@@ -1,16 +1,16 @@
 import ReactDOM from 'react-dom';
 import toJSON from 'enzyme-to-json';
 import { shallow } from 'enzyme';
-import { StyleConstants } from '../../../data/constants/StyleConstants.js';
+import { StyleConstants } from '../../../data/constants/StyleConstants';
 import { Box as Component } from './Box';
 
 const defaultProps = {
   id: 'Box',
   children: <></>,
   direction: StyleConstants.DIRECTION_COLUMN,
-  left: 'center',
-  right: 'center',
-  top: 'center',
+  left: false,
+  right: false,
+  top: false,
   bottom: 'center',
 };
 

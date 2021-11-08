@@ -8,19 +8,19 @@ const defaultProps = {
   id: '',
   children: <></>,
   direction: StyleConstants.DIRECTION_COLUMN,
-  left: '',
-  right: '',
-  top: '',
+  left: false,
+  right: false,
+  top: false,
   bottom: '',
 };
 
 type BoxProps = {
   id?: string;
-  children?: React.ReactNode | any;
+  children?: React.ReactNode | ReactElement | any;
   direction?: string;
-  left?: string;
-  right?: string;
-  top?: string;
+  left?: boolean;
+  right?: boolean;
+  top?: boolean;
   bottom?: string;
 } & typeof defaultProps;
 

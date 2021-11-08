@@ -6,9 +6,13 @@ import { ButtonAction } from '../../../components/buttons/ButtonAction';
 import { Image } from '../../../components/images/Image';
 import { Text } from '../../../components/typography/Text';
 
-export const StyledBox = styled(Box)`
+export const StyledBox = styled(Box)<StyledBoxProps>`
   padding: 0px 0px;
 `;
+
+type StyledBoxProps = {
+  noStyle: boolean;
+};
 
 export const StyledCard = styled(Card)`
   /* max-width: 30%; */
@@ -25,7 +29,7 @@ export const StyledColumn = styled(LayoutColumn)`
   }
 `;
 
-export const StyledRowBottom = styled(LayoutRow)`
+export const StyledRowBottom = styled(LayoutRow)<StyledRowBottomProps>`
   && {
     width: 45vw;
     max-width: 500px;
@@ -34,6 +38,10 @@ export const StyledRowBottom = styled(LayoutRow)`
     padding: 0px 8px;
   }
 `;
+
+type StyledRowBottomProps = {
+  marginBottom: boolean;
+};
 
 export const StyledButton = styled(Button)`
   min-width: 0;

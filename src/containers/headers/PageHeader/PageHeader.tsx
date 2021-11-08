@@ -1,9 +1,21 @@
-import PropTypes from 'prop-types';
+import { ReactElement } from 'react';
 import { Row, Column } from '../../../components/layouts';
 
 import { StyledBox } from './PageHeader.styles';
 
-const PageHeader = ({ id, spacing, children }) => {
+const defaultProps = {
+  id: '',
+  spacing: 'primary',
+  children: '',
+};
+
+type PageHeaderProps = {
+  id?: string;
+  spacing?: string;
+  children?: any;
+} & typeof defaultProps;
+
+const PageHeader = ({ id, spacing, children }: PageHeaderProps): ReactElement => {
   return (
     <StyledBox id={id} spacing={spacing}>
       <Row id={`${id}__Nav`} left>
@@ -15,8 +27,6 @@ const PageHeader = ({ id, spacing, children }) => {
   );
 };
 
-PageHeader.propTypes = {
-  id: PropTypes.string,
-};
+PageHeader.defaultProps = defaultProps;
 
 export { PageHeader };
