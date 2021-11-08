@@ -18,11 +18,11 @@ export const getErrorsItems = (data) =>
     const stepStatusLabel = getStepStatusLabel(item.stepStatus);
 
     return [
-      formatField(datetime, 'datetime', datetime),
-      formatField(item.inboundFilename, 'clientFile', item.clientFileArchivePath, '(Details)'),
-      formatField(stepStatusLabel, 'workStep', stepStatusLabel),
-      formatField(item.planSponsorId, 'planSponsor', item.planSponsorId),
-      formatField(item.vendorId, 'vendor', item.vendorId),
-      formatField(message, 'message', message),
+      formatField(datetime, 'datetime', datetime, '', null),
+      formatField(item.inboundFilename, 'clientFile', item.clientFileArchivePath, '(Details)', null),
+      formatField(stepStatusLabel, 'workStep', stepStatusLabel, '', null),
+      formatField(item.planSponsorId, 'planSponsor', item.planSponsorId, '', null),
+      formatField(item.vendorId, 'vendor', item.vendorId, '', null),
+      formatField(message, 'message', message, '', null),
     ];
   });
