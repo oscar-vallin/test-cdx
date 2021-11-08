@@ -19,7 +19,7 @@ const _FileStatusPage = () => {
   const [tableMeta, setTableMeta] = useState({ count: 0, loading: true });
 
   const mapData = (data) => {
-    const items: object[] = [];
+    const items: WorkPacketStatus[] = [];
     data?.workPacketStatuses?.nodes?.map((value) => {
       if (value) {
         items.push(value);
@@ -46,7 +46,7 @@ const _FileStatusPage = () => {
         <Container>
           <Spacing margin={{ top: 'double' }}>
             <Row>
-              <Column direction="row">
+              <Column lg="6" direction="row">
                 <FontIcon iconName="FilterSolid" />
                 <Text id="__Text_File-Status" variant="bold">
                   File Status
@@ -73,7 +73,7 @@ const _FileStatusPage = () => {
         ]}
         lazyQuery={useWorkPacketStatusesLazyQuery}
         getItems={mapData}
-        searchTextPlaceholder="Extract Name,  Status, Vendor, etc."
+        searchTextPlaceholder="Extract Name,· Status, Vendor, etc."
         defaultSort={[
           {
             property: 'timestamp',
@@ -82,6 +82,10 @@ const _FileStatusPage = () => {
             ignoreCase: true,
           },
         ]}
+        onItemsListChange={(data, loading) => {
+          const total = data?.workPacketStatuses?.paginationInfo?.totalElements ?? 0;
+          setTableMeta({ count: total, loading });
+        }}
       />
     </LayoutDashboard>
   );
