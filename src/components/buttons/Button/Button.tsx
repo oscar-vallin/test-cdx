@@ -20,6 +20,8 @@ type ButtonProps = {
   block?: boolean;
   key?: string;
   selected?: boolean;
+  split?: boolean;
+  menuProps?: any;
 } & typeof defaultProps;
 
 const Button = ({
