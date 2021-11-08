@@ -4,13 +4,13 @@ import { BoxStyled } from './LayoutLogin.styles';
 
 const defaultProps = {
   id: '',
-  children: '',
+  // children: '',
   direction: StyleConstants.DIRECTION_COLUMN,
 };
 
 type LayoutLoginProps = {
   id?: string;
-  children?: ReactElement | string;
+  children?: ReactElement | Element | string;
   direction?: string;
 } & typeof defaultProps;
 

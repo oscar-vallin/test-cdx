@@ -4,29 +4,13 @@ import { ROUTES } from '../../data/constants/RouteConstants';
 import { LayoutDashboard } from '../../layouts/LayoutDashboard';
 import { Row, Column, Container } from '../../components/layouts';
 import { Spacing } from '../../components/spacings/Spacing';
-import { Text } from '../../components/typography';
+import { Text } from '../../components/typography/Text';
 import { PageHeader } from '../../containers/headers/PageHeader';
 
-import { WorkPacketTable } from '../../containers/tables/WorkPacketTable';
-import { WorkPacketColumns } from '../../containers/tables/WorkPacketColumns';
-import {
-  NullHandling,
-  SortDirection,
-  useWpProcessErrorsLazyQuery,
-  WorkPacketStatus,
-} from '../../data/services/graphql';
+import { TableErrors } from '../../containers/tables/TableErrors';
 
 const _ErrorsPage = () => {
-  const [tableMeta, setTableMeta] = useState({ count: 0, loading: true });
-  const mapData = (data) => {
-    const items: WorkPacketStatus[] = [];
-    data?.wpProcessErrors?.nodes?.map((value) => {
-      if (value) {
-        items.push(value);
-      }
-    });
-    return items;
-  };
+  const [tableMeta, setTableMeta]: any = useState({ count: null, loading: null });
 
   return (
     <LayoutDashboard id="PageErrors" menuOptionSelected={ROUTES.ROUTE_ERRORS.API_ID}>
@@ -53,32 +37,7 @@ const _ErrorsPage = () => {
         </Container>
       </PageHeader>
 
-      <WorkPacketTable
-        id="TableFileStatus"
-        cols={[
-          WorkPacketColumns.START_TIME,
-          WorkPacketColumns.INBOUND_FILENAME,
-          WorkPacketColumns.STEP,
-          WorkPacketColumns.PLAN_SPONSOR,
-          WorkPacketColumns.VENDOR,
-          WorkPacketColumns.MESSAGE,
-        ]}
-        lazyQuery={useWpProcessErrorsLazyQuery}
-        getItems={mapData}
-        searchTextPlaceholder="Extract Name,  Status, Vendor, etc."
-        defaultSort={[
-          {
-            property: 'timestamp',
-            direction: SortDirection.Desc,
-            nullHandling: NullHandling.NullsFirst,
-            ignoreCase: true,
-          },
-        ]}
-        onItemsListChange={(data, loading) => {
-          const total = data?.wpProcessErrors?.paginationInfo?.totalElements ?? 0;
-          setTableMeta({ count: total, loading });
-        }}
-      />
+      <TableErrors onItemsListChange={setTableMeta} />
     </LayoutDashboard>
   );
 };

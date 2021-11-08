@@ -14,7 +14,7 @@ const _TransmissionsPage = () => {
   const [tableMeta, setTableMeta] = useState({ count: 0, loading: true });
 
   const mapData = (data) => {
-    const items = [];
+    const items: object[] = [];
     data?.wpTransmissions?.nodes?.map((value) => {
       if (value) {
         items.push(value);

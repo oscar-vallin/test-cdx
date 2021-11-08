@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-import { useDashboardPeriodsLazyQuery } from '../../data/services/graphql';
+import { DashboardPeriodCounts, useDashboardPeriodsLazyQuery } from '../../data/services/graphql';
 
 export const DATE_OPTION_NAME = {
   today: 'today',
@@ -25,7 +25,7 @@ export const useDashboardService = (initOrgSid) => {
   const [setOrgSid] = useState(initOrgSid);
   const [dateId, setDateId] = useState(DATE_OPTION_NAME.today);
   const [datesOptions, setDateOptions] = useState(DATES_OPTIONS);
-  const [dataCounters, setDataCounters] = useState();
+  const [dataCounters, setDataCounters] = useState<DashboardPeriodCounts | null | undefined>();
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingData, setIsLoadingData] = useState(true);
 
