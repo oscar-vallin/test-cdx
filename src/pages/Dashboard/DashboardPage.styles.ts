@@ -9,7 +9,7 @@ export const StyledRow = styled(LayoutRow)`
 
 export const StyledRowDate = styled(StyledRow)``;
 
-export const StyledButton = styled(Button)`
+export const StyledButton = styled(Button)<StyledRowDateProps>`
   background: ${({ selected, theme }) => (selected ? theme.colors.themePrimary : theme.colors.infoBackground)};
   border: none;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -18,6 +18,10 @@ export const StyledButton = styled(Button)`
 
   width: 100%;
 `;
+
+type StyledRowDateProps = {
+  selected?: boolean;
+};
 
 export const StyledSpinner = styled(Text)`
   font-weight: ${({ theme }) => theme.fontWeights.bold};

@@ -11,10 +11,10 @@ import { WorkPacketColumns } from '../../containers/tables/WorkPacketColumns';
 import { NullHandling, SortDirection, useWorkPacketStatusesLazyQuery } from '../../data/services/graphql';
 
 const _ArchivePage = () => {
-  const [tableMeta, setTableMeta] = useState({ count: 0, loading: true });
+  const [tableMeta, setTableMeta] = useState({ count: null, loading: null });
 
   const mapData = (data) => {
-    const items = [];
+    const items: object[] = [];
     data?.workPacketStatuses?.nodes?.map((value) => {
       if (value) {
         items.push(value);
@@ -70,10 +70,6 @@ const _ArchivePage = () => {
             ignoreCase: true,
           },
         ]}
-        onItemsListChange={(data, loading) => {
-          const total = data?.workPacketStatuses?.paginationInfo?.totalElements ?? 0;
-          setTableMeta({ count: total, loading });
-        }}
       />
     </LayoutDashboard>
   );

@@ -25,13 +25,13 @@ import { useOrgSid } from '../../hooks/useOrgSid';
 const _DashboardPage = () => {
   const { orgSid } = useOrgSid();
   const location = useLocation();
-  const [urlParams] = useState(queryString.parse(location.search));
+  const [urlParams]: any = useState(queryString.parse(location.search));
   const service = useDashboardService(orgSid);
-  const { isLoadingData, datesOptions, dataCounters } = service;
+  const { isLoadingData, datesOptions, dataCounters }: any = service;
   const { setDateId, dateId } = service;
   const history = useHistory();
 
-  useEffect(() => {
+  useEffect((): any => {
     if (urlParams?.date) {
       setDateId(urlParams.date);
     }
@@ -48,7 +48,7 @@ const _DashboardPage = () => {
     }
   }, [location]);
 
-  const handleChangeDate = (date) => {
+  const handleChangeDate: any = (date) => {
     setDateId(date);
     history.push(`?date=${date}`);
   };
@@ -146,6 +146,7 @@ const _DashboardPage = () => {
                 id="__Table_Errors_Vendor"
                 tableId={TABLE_NAMES.DASHBOARD_ERRORS_VENDOR}
                 data={dataCounters?.vendorProcessErrors}
+                altData={[]}
                 date={dateId}
                 loading={isLoadingData}
                 title="Failed Files by Vendor"
@@ -160,6 +161,7 @@ const _DashboardPage = () => {
                 id="__Table_Transmissions_Files"
                 tableId={TABLE_NAMES.DASHBOARD_TRANSMISSIONS_FILES}
                 data={dataCounters?.fileTransmissions}
+                altData={[]}
                 date={dateId}
                 loading={isLoadingData}
                 title="Transmissions / BUs by File"
@@ -171,6 +173,7 @@ const _DashboardPage = () => {
                 id="__Table_Errors_Files"
                 tableId={TABLE_NAMES.DASHBOARD_ERRORS_FILES}
                 data={dataCounters?.fileProcessErrors}
+                altData={[]}
                 date={dateId}
                 loading={isLoadingData}
                 title="Failed Files by File"

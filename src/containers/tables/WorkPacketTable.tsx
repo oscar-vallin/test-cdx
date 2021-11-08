@@ -9,8 +9,11 @@ import {
 import { mergeStyleSets } from 'office-ui-fabric-react/lib-commonjs/Styling';
 
 import { useHistory, useLocation } from 'react-router-dom';
-import { addDays, format, getHours, subDays } from 'date-fns';
+
 import { SpinnerSize } from '@fluentui/react';
+
+import { addDays, format, getHours, subDays } from 'date-fns';
+
 import { StyledContainer, StyledSpacing, StyledText } from '../../components/tables/Table/Table.styles';
 import { Box, Column, Container, FilterSection, StyledRow } from './WorkPacketTable.styles';
 import { InputText } from '../../components/inputs/InputText';
@@ -39,7 +42,7 @@ type WorkPacketParams = {
   getItems: (data: any) => any[];
   searchTextPlaceholder: string;
   defaultSort?: SortOrderInput[];
-  onItemsListChange: (data: any, loading: boolean) => void;
+  onItemsListChange?: (data: any, loading: boolean) => void;
 };
 
 const WorkPacketTable = ({
@@ -153,7 +156,9 @@ const WorkPacketTable = ({
   }, [orgSid, localInput.delayedValue, startDate.value, endDate.value, pagingParams]);
 
   useEffect(() => {
-    onItemsListChange(data, loading);
+    if (onItemsListChange) {
+      onItemsListChange(data, loading);
+    }
   }, [data, loading]);
 
   const renderTable = () => {

@@ -13,7 +13,7 @@ export const StyledText = styled.span<StyledTextProps>`
 
 type StyledTextProps = {
   left: string;
-  right: string;
+  right: boolean;
   variant: string;
   top: string;
   bottom: string;

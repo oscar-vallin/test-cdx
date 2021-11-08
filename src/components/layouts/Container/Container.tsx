@@ -3,7 +3,7 @@ import { StyledBox } from './Container.styles';
 
 const defaultProps = {
   id: '',
-  children: <></>,
+  // children: <></>,
   direction: 'column',
   left: false,
   right: false,
