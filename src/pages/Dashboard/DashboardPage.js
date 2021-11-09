@@ -138,6 +138,7 @@ const _DashboardPage = () => {
                 date={dateId}
                 loading={isLoadingData}
                 title="Transmissions / BUs by Vendor"
+                emptyMessage="None"
               />
             </Column>
             <Column lg="6">
@@ -148,6 +149,7 @@ const _DashboardPage = () => {
                 date={dateId}
                 loading={isLoadingData}
                 title="Failed Files by Vendor"
+                emptyMessage="None"
               />
             </Column>
           </Row>
@@ -161,6 +163,7 @@ const _DashboardPage = () => {
                 date={dateId}
                 loading={isLoadingData}
                 title="Transmissions / BUs by File"
+                emptyMessage="None"
               />
             </Column>
             <Column lg="6">
@@ -171,6 +174,7 @@ const _DashboardPage = () => {
                 date={dateId}
                 loading={isLoadingData}
                 title="Failed Files by File"
+                emptyMessage="None"
               />
             </Column>
           </Row>

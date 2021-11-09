@@ -128,6 +128,7 @@ const Table = ({
   onItemsListChange,
   loading = true,
   title,
+  emptyMessage = 'No data',
 }) => {
   const { orgSid } = useOrgSid();
 
@@ -534,7 +535,7 @@ const Table = ({
       );
     }
 
-    return <EmptyState title={title} description="None" />;
+    return <EmptyState title={title} description={emptyMessage} />;
   };
 
   //
@@ -578,7 +579,7 @@ const Table = ({
       );
     }
 
-    return <EmptyState description="None" />;
+    return <EmptyState description={emptyMessage} />;
   };
 
   if (sortedItems)
