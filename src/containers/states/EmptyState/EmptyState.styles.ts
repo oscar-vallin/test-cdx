@@ -21,11 +21,11 @@ export const StyledDiv = styled.div<StyledDivProps>`
 export const StyledImg = styled.img``;
 
 export const StyledTitle = styled.h3`
-  margin-bottom: ${({ theme }) => theme.spacing.double};
+  margin-bottom: ${({ theme }) => theme.spacing.normal};
 `;
 
 export const StyledText = styled.p`
-  margin-bottom: ${({ theme }) => theme.spacing.normal};
+  margin: ${({ theme }) => `${theme.spacing.normal} 0`};
 `;
 
 export const StyledActions = styled.div`

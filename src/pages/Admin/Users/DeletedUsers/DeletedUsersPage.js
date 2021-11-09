@@ -7,6 +7,7 @@ import { DetailsList, DetailsListLayoutMode, SelectionMode, Selection } from 'of
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { MarqueeSelection } from '@fluentui/react/lib/MarqueeSelection';
 import { SpinnerSize } from '@fluentui/react';
+import { EmptyState } from 'src/containers/states';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Row, Column } from '../../../../components/layouts';
 import { Spacing } from '../../../../components/spacings/Spacing';
@@ -113,46 +114,62 @@ const _DeletedUsersPage = () => {
   return (
     <LayoutAdmin id="PageDeletedUsers" sidebarOptionSelected="DELETED_USERS">
       <Spacing margin="double">
+        {users.length > 0 && (
+          <Row>
+            <Column lg="6">
+              <Spacing margin={{ top: 'small' }}>
+                <Text variant="bold">Deleted Users</Text>
+              </Spacing>
+            </Column>
+            <Column lg="6" right>
+              <Button
+                variant="primary"
+                onClick={() => {
+                  if (selectedItems.length > 0) {
+                    setIsConfirmationHidden(false);
+                  } else {
+                    alert('Please select at least one user');
+                  }
+                }}
+              >
+                Enable Users
+              </Button>
+            </Column>
+          </Row>
+        )}
+
+        {users.length > 0 && (
+          <Row>
+            <Column lg="12">
+              <Spacing margin={{ top: 'normal' }}>
+                <Separator />
+              </Spacing>
+            </Column>
+          </Row>
+        )}
+
         <Row>
-          <Column lg="8">
-            <Row>
-              <Column lg="8">
-                <Spacing margin={{ top: 'small' }}>
-                  <Text variant="bold">Deleted Users</Text>
-                </Spacing>
-              </Column>
-              <Column lg="4" right>
-                <Button
-                  variant="primary"
-                  onClick={() => {
-                    if (selectedItems.length > 0) {
-                      setIsConfirmationHidden(false);
-                    } else {
-                      alert('Please select at least one user');
-                    }
-                  }}
-                >
-                  Enable Users
-                </Button>
-              </Column>
-            </Row>
-
-            <Spacing margin={{ top: 'normal' }}>
-              <Separator />
-            </Spacing>
-
-            <Row>
-              <StyledColumn>
-                {!loading ? (
-                  renderList()
-                ) : (
-                  <Spacing margin={{ top: 'double' }}>
-                    <Spinner size={SpinnerSize.large} label="Loading deleted users" />
-                  </Spacing>
-                )}
-              </StyledColumn>
-            </Row>
-          </Column>
+          <StyledColumn>
+            {loading ? (
+              <Spacing margin={{ top: 'double' }}>
+                <Spinner size={SpinnerSize.large} label="Loading deleted users" />
+              </Spacing>
+            ) : !users.length ? (
+              <EmptyState description="No deleted users" />
+            ) : (
+              <MarqueeSelection selection={selection}>
+                <DetailsList
+                  items={users}
+                  columns={columns}
+                  layoutMode={DetailsListLayoutMode.justified}
+                  onRenderItemColumn={onRenderItemColumn}
+                  selection={selection}
+                  selectionPreservedOnEmptyClick
+                  isHeaderVisible
+                />
+              </MarqueeSelection>
+            )}
+          </StyledColumn>
         </Row>
       </Spacing>
 

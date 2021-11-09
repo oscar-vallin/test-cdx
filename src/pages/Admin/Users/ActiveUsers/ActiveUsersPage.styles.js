@@ -5,7 +5,8 @@ import { Column } from '../../../../components/layouts';
 import { Button } from '../../../../components/buttons/Button';
 
 export const StyledColumn = styled(Column)`
-  .ms-Viewport {
+  .ms-Viewport,
+  & > [class*='root'] {
     width: 100%;
   }
 `;

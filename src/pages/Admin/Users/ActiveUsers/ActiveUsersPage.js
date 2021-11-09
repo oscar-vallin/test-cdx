@@ -7,6 +7,7 @@ import { PrimaryButton, DefaultButton, MessageBar } from 'office-ui-fabric-react
 import { DetailsList, DetailsListLayoutMode, SelectionMode, Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { SpinnerSize } from '@fluentui/react';
+import { EmptyState } from 'src/containers/states';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Button } from '../../../../components/buttons';
 import { Row, Column } from '../../../../components/layouts';
@@ -96,37 +97,19 @@ const _ActiveUsersPage = () => {
     }
   }, [isDisablingUser, disableResponse]);
 
-  const renderList = () => {
-    return users.length > 0 ? (
-      <MarqueeSelection selection={selection}>
-        <DetailsList
-          items={users}
-          columns={columns}
-          layoutMode={DetailsListLayoutMode.justified}
-          onRenderItemColumn={onRenderItemColumn}
-          selection={selection}
-          selectionPreservedOnEmptyClick
-          isHeaderVisible
-        />
-      </MarqueeSelection>
-    ) : (
-      <MessageBar>No active users</MessageBar>
-    );
-  };
-
   return (
     <LayoutAdmin id="PageActiveUsers" sidebarOptionSelected="ACTIVE_USERS">
       <Spacing margin="double">
-        <Row>
-          <Column lg="8">
-            <Row center>
-              <Column lg="8">
-                <Spacing margin={{ top: 'small' }}>
-                  <Text variant="bold">Active Users</Text>
-                </Spacing>
-              </Column>
+        {users.length > 0 && (
+          <Row center>
+            <Column lg="6">
+              <Spacing margin={{ top: 'small' }}>
+                <Text variant="bold">Active Users</Text>
+              </Spacing>
+            </Column>
 
-              <Column lg="2" right>
+            <Column lg="6" right>
+              <span>
                 <Button
                   variant="primary"
                   onClick={() => {
@@ -135,9 +118,7 @@ const _ActiveUsersPage = () => {
                 >
                   Create user
                 </Button>
-              </Column>
-
-              <Column lg="2" right>
+                &nbsp; &nbsp;
                 <Button
                   variant="primary"
                   onClick={() => {
@@ -150,25 +131,56 @@ const _ActiveUsersPage = () => {
                 >
                   Disable Users
                 </Button>
-              </Column>
-            </Row>
+              </span>
+            </Column>
+          </Row>
+        )}
 
-            <Spacing margin={{ top: 'normal' }}>
-              <Separator />
-            </Spacing>
+        {users.length > 0 && (
+          <Row>
+            <Column lg="12">
+              <Spacing margin={{ top: 'normal' }}>
+                <Separator />
+              </Spacing>
+            </Column>
+          </Row>
+        )}
 
-            <Row>
-              <StyledColumn>
-                {!loading ? (
-                  renderList()
-                ) : (
-                  <Spacing margin={{ top: 'double' }}>
-                    <Spinner size={SpinnerSize.large} label="Loading active users" />
-                  </Spacing>
-                )}
-              </StyledColumn>
-            </Row>
-          </Column>
+        <Row>
+          <StyledColumn>
+            {loading ? (
+              <Spacing margin={{ top: 'double' }}>
+                <Spinner size={SpinnerSize.large} label="Loading active users" />
+              </Spacing>
+            ) : !users.length ? (
+              <EmptyState
+                title="No users found"
+                description="You haven't created a user yet. Click the button below to create a new user."
+                actions={
+                  <Button
+                    variant="primary"
+                    onClick={() => {
+                      setIsPanelOpen(true);
+                    }}
+                  >
+                    Create user
+                  </Button>
+                }
+              />
+            ) : (
+              <MarqueeSelection selection={selection}>
+                <DetailsList
+                  items={users}
+                  columns={columns}
+                  layoutMode={DetailsListLayoutMode.justified}
+                  onRenderItemColumn={onRenderItemColumn}
+                  selection={selection}
+                  selectionPreservedOnEmptyClick
+                  isHeaderVisible
+                />
+              </MarqueeSelection>
+            )}
+          </StyledColumn>
         </Row>
       </Spacing>
 
