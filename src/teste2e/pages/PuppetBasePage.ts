@@ -61,6 +61,10 @@ export default class PuppetBasePage {
     expect(result).toEqual(numRecords);
   }
 
+  async waitForTimeout(miliseconds: number) {
+    await this.page.waitForTimeout(miliseconds);
+  }
+
   async inputValue(selector: string, value: string) {
     await this.clearField(selector);
     await this.page.type(selector, value);

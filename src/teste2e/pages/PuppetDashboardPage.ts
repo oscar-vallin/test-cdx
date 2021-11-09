@@ -45,7 +45,7 @@ export default class PuppetDashboardPage extends PuppetBasePage {
   }
 
   async expectNoTransmissionsByVendor() {
-    await this.expectTextOnPage(this.transmissionsByVendorTable, 'No data');
+    await this.expectTextOnPage(this.transmissionsByVendorTable, 'Transmissions / BUs by VendorNone');
   }
 
   async getFirstTransmissionByVendorCell(): Promise<string> {

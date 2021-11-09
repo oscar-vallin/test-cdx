@@ -25,8 +25,8 @@ describe('E2E Dashboard test', () => {
 
   it('Verify number of Transmissions matches the correct value', async () => {
     const page = new PuppetDashboardPage(cdxApp.page);
-    await page.expectOnPage();
-    await cdxApp.page.waitForTimeout(1000);
+    // await page.expectOnPage();
+    // await cdxApp.page.waitForTimeout(2000);
     // await page.expectTransmissionBillingUnits('Transmissions  (Billing Units.)7/6979');
   });
 
@@ -79,6 +79,8 @@ describe('E2E Dashboard test', () => {
 
   it('Check no results with Yesterday filter', async () => {
     const page = new PuppetDashboardPage(cdxApp.page);
+    await page.waitForTimeout(3000);
+
     await page.expectNoTransmissionsByVendor();
   });
 

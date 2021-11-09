@@ -27,7 +27,7 @@ describe('Breadcrumb Testing Unit...', () => {
   it('Should render the default dashboard button', () => {
     const text = tree.find('.ms-TooltipHost').first().text();
 
-    expect(text).toEqual('Dashboard');
+    expect(text).toEqual('CDX Dashboard');
   });
 
   it('Should render the breadcrumb buttons', () => {
