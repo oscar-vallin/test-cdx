@@ -42,7 +42,7 @@ const _ErrorsPage = () => {
                 <Text id="__Text_Advanced-search">&nbsp; — Advanced search</Text>
               </Column>
               <Column lg="6" right>
-                <Text right="true">
+                <Text right>
                   {!tableMeta.loading && tableMeta.count !== null && (
                     <Text>{tableMeta.count > 0 ? `${tableMeta.count} results found` : 'No results were found'}</Text>
                   )}

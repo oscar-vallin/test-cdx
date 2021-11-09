@@ -30,9 +30,7 @@ const _FileStatusPage = () => {
 
   const renderTotalRecords = (): ReactElement => {
     if (!tableMeta.loading && tableMeta.count !== null) {
-      return (
-        <Text right="true">{tableMeta.count > 0 ? `${tableMeta.count} results found` : 'No results were found'}</Text>
-      );
+      return <Text right>{tableMeta.count > 0 ? `${tableMeta.count} results found` : 'No results were found'}</Text>;
     }
 
     return <span />;
@@ -56,7 +54,7 @@ const _FileStatusPage = () => {
                 <Text id="__Text_Advanced-search">&nbsp; — Advanced search</Text>
               </Column>
               <Column lg="6" right>
-                <Text right="true">{renderTotalRecords()}</Text>
+                <Text right>{renderTotalRecords()}</Text>
               </Column>
             </Row>
           </Spacing>

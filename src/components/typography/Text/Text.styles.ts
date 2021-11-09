@@ -20,7 +20,7 @@ export const StyledText = styled.span<StyledTextProps>`
 type StyledTextProps = {
   variant: string;
   center: string;
-  right: string;
+  right: boolean;
   size: string;
   transform: string;
   breakWord: string;

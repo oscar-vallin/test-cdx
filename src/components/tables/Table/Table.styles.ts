@@ -17,7 +17,14 @@ export const StyledBox = styled(LayoutBox)`
   width: 100%;
 `;
 
-export const StyledRow = styled(LayoutRow)`
+type RowProps = {
+  left?: boolean;
+  marginH?: boolean;
+  paddingLeft?: boolean;
+};
+
+// styled(LayoutBox)<BoxProps>`
+export const StyledRow = styled(LayoutRow)<RowProps>`
   width: 100%;
   margin-left: ${({ marginH }) => (marginH ? `${marginH}px` : '0px')};
   margin-right: ${({ marginH }) => (marginH ? `${marginH}px` : '0px')};
@@ -26,14 +33,14 @@ export const StyledRow = styled(LayoutRow)`
   border-bottom-style: solid;
 `;
 
-export const StyledCell = styled(LayoutRow)`
+export const StyledCell = styled(LayoutRow)<RowProps>`
   font-size: 0.75rem;
   width: 100%;
   margin-left: ${({ marginH }) => (marginH ? `${marginH}px` : '0px')};
   margin-right: ${({ marginH }) => (marginH ? `${marginH}px` : '0px')};
 `;
 
-export const StyledColumn = styled(LayoutColumn)`
+export const StyledColumn = styled(LayoutColumn)<RowProps>`
   width: 100%;
   padding-left: ${({ paddingLeft }) => (paddingLeft ? `${paddingLeft}px` : '0px')};
   margin-left: ${({ marginH }) => (marginH ? `${marginH}px` : '0px')};
@@ -49,11 +56,15 @@ export const HeaderColumn = styled(LayoutColumn)`
   width: 100%;
 `;
 
-export const StyledText = styled(Text)`
+type TextProps = {
+  left?: boolean;
+};
+
+export const StyledText = styled(Text)<TextProps>`
   display: flex;
   width: 100%;
   font-size: 0.875rem;
-  font-weight: ${({ bold, theme }) => (bold ? theme.fontWeights.bold : theme.fontWeights.normal)};
+  font-weight: ${({ theme, bold }) => (bold ? '700' : '400')};
   justify-content: ${({ left, right }) => {
     if (left) return 'flex-start';
 

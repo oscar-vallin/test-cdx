@@ -8,7 +8,7 @@ const defaultProps = {
   transform: 'none',
   size: 'normal',
   center: '',
-  right: '',
+  right: false,
   top: '',
   bottom: '',
   breakWord: 'word',
@@ -21,7 +21,7 @@ type TextProps = {
   transform?: string;
   size?: string;
   center?: string;
-  right?: string;
+  right?: boolean;
   top?: any;
   bottom?: string;
   breakWord?: string;

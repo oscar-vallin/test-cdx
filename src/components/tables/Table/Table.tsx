@@ -12,8 +12,8 @@ import {
   SelectionMode,
   buildColumns,
   DetailsHeader,
+  IColumn,
 } from 'office-ui-fabric-react/lib-commonjs/DetailsList';
-import { useLocation } from 'react-router-dom';
 import { EmptyState } from 'src/containers/states';
 import { SpinnerSize } from '@fluentui/react';
 import { getDates } from '../../../helpers/tableHelpers';
@@ -97,7 +97,7 @@ const _buildColumns = (
     } else if (column.key === 'key') {
       column.columnActionsMode = ColumnActionsMode.disabled;
       column.onRender = ({ key }) => (
-        <Link className={classNames.linkField} href="https://microsoft.com" target="_blank" rel="noopener">
+        <Link className={classNames?.root} href="https://microsoft.com" target="_blank" rel="noopener">
           {key}
         </Link>
       );
@@ -132,10 +132,10 @@ const Table = ({
 }) => {
   const { orgSid } = useOrgSid();
 
-  const [sortLabel, setSortLabel] = useState();
+  const [sortLabel, setSortLabel] = useState<string | undefined>();
   const [sortedItems, setSortedItems] = useState([]);
   const [sortedGroups, setSortedGroups] = useState();
-  const [tablecolumns, setColumns] = useState([]);
+  const [tablecolumns, setColumns] = useState<IColumn[]>();
   const [filterInput, setFilterInput] = useState(searchInput);
   const [option, setOption] = useState(false);
   const [sort, setSort] = useState('asc');
@@ -226,7 +226,7 @@ const Table = ({
       }
 
       const _items = _buildItems();
-      const _columns = _buildColumns(_items, columns);
+      const _columns: IColumn[] = _buildColumns(_items, columns, true, null, null, false, null, null);
       setColumns(_columns);
     };
 
@@ -243,7 +243,7 @@ const Table = ({
 
       _filterItems(searchInput);
     } else if (!searchInput && !!filterInput) {
-      setFilterInput();
+      setFilterInput(searchInput);
       _buildItems();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -415,6 +415,8 @@ const Table = ({
         alert('Sorting unavailable for a multi-page table');
       }
     }
+
+    return null;
   };
 
   //
@@ -437,16 +439,17 @@ const Table = ({
           {...props}
           onColumnClick={(_ev, column) => _onSort(column.key)}
           onRenderColumnHeaderTooltip={(_props) => {
-            if (_props.column.key === 'progress') {
+            if (_props?.column?.key === 'progress') {
               return _props.children;
             }
 
-            if (_props.column.key === currentKeySort) {
+            if (_props?.column?.key === currentKeySort) {
               return (
                 <StyledMenuButton
                   id={_props.column.name.replaceAll(' ', '__')}
-                  onClick={() => _onSort(_props.column.key)}
+                  onClick={() => _onSort(_props?.column?.key)}
                   icon={sort}
+                  disabled={false}
                 >
                   {_props.children}
                 </StyledMenuButton>
@@ -455,21 +458,23 @@ const Table = ({
 
             return (
               <div
-                onMouseOver={() => handleMouseOver(_props.column.key)}
+                onMouseOver={() => handleMouseOver(_props?.column?.key)}
                 onMouseOut={handleMouseOut}
                 onFocus={() => null}
                 onBlur={() => null}
               >
-                {isHovering && currentHover === _props.column.key ? (
-                  <StyledMenuIcon icon="sort" onClick={() => _onSort(_props.column.key)}>
+                {isHovering && currentHover === _props?.column?.key ? (
+                  <StyledMenuIcon id="" icon="sort" onClick={() => _onSort(_props?.column?.key)} disabled={false}>
                     {_props.children}
                   </StyledMenuIcon>
                 ) : (
                   <StyledMenuButton
-                    id={_props.column.name.replaceAll(' ', '__')}
-                    onClick={() => _onSort(_props.column.key)}
+                    id={_props?.column?.name.replaceAll(' ', '__') ?? ''}
+                    icon={sort}
+                    onClick={() => _onSort(_props?.column?.key)}
+                    disabled={false}
                   >
-                    {_props.children}
+                    {_props?.children}
                   </StyledMenuButton>
                 )}
               </div>
@@ -481,11 +486,13 @@ const Table = ({
 
     return (
       <TableHeader
+        id="header"
         header={structure.header}
         sortLabel={sortLabel}
         onSort={_onSort}
         onOption={_onShowSpecs}
         date={date}
+        {...props}
       />
     );
   };
@@ -520,7 +527,6 @@ const Table = ({
       return (
         <DetailsList
           className={classNames.root}
-          id="TableDetailedList"
           items={sortedItems}
           columns={tablecolumns}
           selectionMode={SelectionMode.none}
@@ -564,7 +570,6 @@ const Table = ({
       return (
         <DetailsList
           className={classNames.root}
-          id="TableDetailedList"
           items={renderItems()}
           columns={tablecolumns}
           selectionMode={SelectionMode.none}
@@ -572,7 +577,7 @@ const Table = ({
           layoutMode={DetailsListLayoutMode.justified}
           isHeaderVisible
           onItemInvoked={_onItemInvoked}
-          onRenderDetailsHeader={structure.header.type === 'file_status' ? _onRenderTableHeader : null}
+          onRenderDetailsHeader={structure.header.type === 'file_status' ? _onRenderTableHeader : undefined}
           onRenderItemColumn={_renderItemColumn}
           groups={sortedGroups}
         />
