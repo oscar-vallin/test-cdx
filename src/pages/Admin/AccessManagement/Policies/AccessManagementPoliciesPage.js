@@ -9,6 +9,7 @@ import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { EmptyState } from 'src/containers/states';
 import { SpinnerSize } from '@fluentui/react';
+import { useNotification } from 'src/hooks/useNotification';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Spacing } from '../../../../components/spacings/Spacing';
 import { Button } from '../../../../components/buttons';
@@ -44,6 +45,7 @@ const _AccessManagementPoliciesPage = () => {
   const { orgSid } = useOrgSid();
   const columns = generateColumns();
   const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const Toast = useNotification();
 
   const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);
   const [selectedPolicyId, setSelectedPolicyId] = useState(0);
@@ -92,7 +94,12 @@ const _AccessManagementPoliciesPage = () => {
 
   useEffect(() => {
     if (!isRemovingPolicy && removeResponse) {
+      const name = policies.find(({ sid }) => selectedPolicyId === sid)?.name || '';
+
+      Toast.success({ text: `Access policy "${name}" deleted successfully` });
+
       setPolicies(policies.filter(({ sid }) => sid !== selectedPolicyId));
+      setSelectedPolicyId(0);
     }
   }, [isRemovingPolicy, removeResponse]);
 
