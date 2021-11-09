@@ -28,4 +28,6 @@ export const StyledText = styled.p`
   margin-bottom: ${({ theme }) => theme.spacing.normal};
 `;
 
-export const StyledActions = styled.div``;
+export const StyledActions = styled.div`
+  margin-top: ${({ theme }) => theme.spacing.small};
+`;

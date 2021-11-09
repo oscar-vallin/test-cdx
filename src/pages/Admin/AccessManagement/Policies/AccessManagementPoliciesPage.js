@@ -104,38 +104,10 @@ const _AccessManagementPoliciesPage = () => {
     }
   }, [data]);
 
-  const renderList = () => {
-    return policies.length ? (
-      <DetailsList
-        items={policies}
-        selectionMode={SelectionMode.none}
-        columns={columns}
-        layoutMode={DetailsListLayoutMode.justified}
-        onRenderItemColumn={onRenderItemColumn}
-        isHeaderVisible
-      />
-    ) : (
-      <EmptyState
-        title="No policies found"
-        description="You haven't created an access policy yet. Click the button below to create a new policy."
-        actions={
-          <Button
-            variant="primary"
-            onClick={() => {
-              setIsPanelOpen(true);
-            }}
-          >
-            Create policy
-          </Button>
-        }
-      />
-    );
-  };
-
   return (
     <LayoutAdmin id="PageAdmin" sidebarOptionSelected="AM_POLICIES">
       <Spacing margin="double">
-        {policies.length && (
+        {policies.length > 0 && (
           <Row>
             <Column lg="3">
               <Spacing margin={{ top: 'small' }}>
@@ -156,7 +128,7 @@ const _AccessManagementPoliciesPage = () => {
           </Row>
         )}
 
-        {policies.length && (
+        {policies.length > 0 && (
           <Row>
             <Column lg="6">
               <Spacing margin={{ top: 'normal' }}>
@@ -168,12 +140,34 @@ const _AccessManagementPoliciesPage = () => {
 
         <Row>
           <Column lg="12">
-            {!loading ? (
-              renderList()
-            ) : (
+            {loading ? (
               <Spacing margin={{ top: 'double' }}>
                 <Spinner size={SpinnerSize.large} label="Loading policies" />
               </Spacing>
+            ) : !policies.length ? (
+              <EmptyState
+                title="No policies found"
+                description="You haven't created an access policy yet. Click the button below to create a new policy."
+                actions={
+                  <Button
+                    variant="primary"
+                    onClick={() => {
+                      setIsPanelOpen(true);
+                    }}
+                  >
+                    Create policy
+                  </Button>
+                }
+              />
+            ) : (
+              <DetailsList
+                items={policies}
+                selectionMode={SelectionMode.none}
+                columns={columns}
+                layoutMode={DetailsListLayoutMode.justified}
+                onRenderItemColumn={onRenderItemColumn}
+                isHeaderVisible
+              />
             )}
           </Column>
         </Row>

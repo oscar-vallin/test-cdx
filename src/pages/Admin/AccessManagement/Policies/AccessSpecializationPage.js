@@ -98,74 +98,71 @@ const _AccessManagementSpecializationPage = () => {
     }
   }, [data]);
 
-  const renderList = () => {
-    return specializations.length ? (
-      <DetailsList
-        items={specializations}
-        selectionMode={SelectionMode.none}
-        columns={columns}
-        layoutMode={DetailsListLayoutMode.justified}
-        onRenderItemColumn={onRenderItemColumn}
-        isHeaderVisible
-      />
-    ) : (
-      <EmptyState
-        title="No access specializations found"
-        description="You haven't created an access specialization yet. Click the button below to create a new specialization."
-        actions={
-          <Button
-            variant="primary"
-            onClick={() => {
-              setIsPanelOpen(true);
-            }}
-          >
-            Create specialization
-          </Button>
-        }
-      />
-    );
-  };
-
   return (
     <LayoutAdmin id="PageAdmin" sidebarOptionSelected="AM_SPECIALIZATION">
       <Spacing margin="double">
+        {specializations.length > 0 && (
+          <Row center>
+            <Column lg="3">
+              <Spacing margin={{ top: 'small' }}>
+                <Text variant="bold">Access Specializations</Text>
+              </Spacing>
+            </Column>
+
+            <Column lg="3" right>
+              <Button
+                variant="primary"
+                onClick={() => {
+                  setIsPanelOpen(true);
+                }}
+              >
+                Create specialization
+              </Button>
+            </Column>
+          </Row>
+        )}
+
+        {specializations.length > 0 && (
+          <Row>
+            <Column lg="6">
+              <Spacing margin={{ top: 'normal' }}>
+                <Separator />
+              </Spacing>
+            </Column>
+          </Row>
+        )}
         <Row>
-          <Column lg="8">
-            <Row center>
-              <Column lg="4">
-                <Spacing margin={{ top: 'small' }}>
-                  <Text variant="bold">Access Specializations</Text>
-                </Spacing>
-              </Column>
-
-              <Column lg="8" right>
-                <Button
-                  variant="primary"
-                  onClick={() => {
-                    setIsPanelOpen(true);
-                  }}
-                >
-                  Create specialization
-                </Button>
-              </Column>
-            </Row>
-
-            <Spacing margin={{ top: 'normal' }}>
-              <Separator />
-            </Spacing>
-
-            <Row>
-              <StyledColumn lg="12">
-                {!loading ? (
-                  renderList()
-                ) : (
-                  <Spacing margin={{ top: 'double' }}>
-                    <Spinner size={SpinnerSize.large} label="Loading access specializations" />
-                  </Spacing>
-                )}
-              </StyledColumn>
-            </Row>
-          </Column>
+          <StyledColumn lg="12">
+            {loading ? (
+              <Spacing margin={{ top: 'double' }}>
+                <Spinner size={SpinnerSize.large} label="Loading access specializations" />
+              </Spacing>
+            ) : !specializations.length ? (
+              <EmptyState
+                title="No access specializations found"
+                description="You haven't created an access specialization yet. Click the button below to create a new specialization."
+                actions={
+                  <Button
+                    variant="primary"
+                    onClick={() => {
+                      setIsPanelOpen(true);
+                    }}
+                  >
+                    Create specialization
+                  </Button>
+                }
+              />
+            ) : (
+              <DetailsList
+                items={specializations}
+                selectionMode={SelectionMode.none}
+                columns={columns}
+                layoutMode={DetailsListLayoutMode.justified}
+                onRenderItemColumn={onRenderItemColumn}
+                isHeaderVisible
+              />
+            )}
+          </StyledColumn>
         </Row>
       </Spacing>
 
