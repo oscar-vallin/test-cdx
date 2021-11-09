@@ -17,10 +17,10 @@ describe('E2E - Organization Navigation Test', () => {
     await loginPage.expectOnActiveOrgsPage();
   });
 
-  it('Check first Active Org (ABC Co)', async () => {
+  it('Check first Active Org (K2UIS)', async () => {
     const activeOrgs = new PuppetActiveOrgs(cdxApp.page);
     await activeOrgs.expectOnPage();
-    await activeOrgs.waitForSelector('a.ABC');
+    await activeOrgs.waitForSelector('a.K2UIS');
   });
 
   it('Go to Exchange Status page', async () => {
@@ -41,10 +41,10 @@ describe('E2E - Organization Navigation Test', () => {
     await adminMenu.openMenu('Organizations', 'Active Orgs');
   });
 
-  it('Check first Active Org (ABC Co)', async () => {
+  it('Check first Active Org (CDX Global Vendors)', async () => {
     const activeOrgs = new PuppetActiveOrgs(cdxApp.page);
     await activeOrgs.expectOnPage();
-    await activeOrgs.waitForSelector('a.ABC');
+    await activeOrgs.waitForSelector('a.CDXGVENDOR');
   });
 
   it('Check Known2U Implementation Services', async () => {
@@ -67,10 +67,10 @@ describe('E2E - Organization Navigation Test', () => {
     await adminMenu.openMenu('Organizations', 'Active Orgs');
   });
 
-  it('Click on first Active Org (ABC Co)', async () => {
+  it('Click on K2U Faker Data', async () => {
     const activeOrgs = new PuppetActiveOrgs(cdxApp.page);
     await activeOrgs.expectOnPage();
-    await activeOrgs.clickOnOrg('ABC', 'ABC Co');
+    await activeOrgs.clickOnOrg('K2UFKE', 'K2U Faker Data');
   });
 
   it('Should redirect to File Status Page', async () => {

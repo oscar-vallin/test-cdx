@@ -801,7 +801,8 @@ export enum OrgType {
   Cdx = 'CDX',
   Template = 'TEMPLATE',
   OutsidePromoter = 'OUTSIDE_PROMOTER',
-  SalesProspect = 'SALES_PROSPECT'
+  SalesProspect = 'SALES_PROSPECT',
+  GlobalVendor = 'GLOBAL_VENDOR'
 }
 
 export type Organization = {
@@ -1073,7 +1074,10 @@ export type Query = {
   wpProcessErrors?: Maybe<WpProcessErrorConnection>;
   wpTransmissions?: Maybe<WpTransmissionConnection>;
   scheduleOccurrences?: Maybe<ScheduleOccurrenceConnection>;
+  /** Get the dashboard period counts for a fixed set of common periods, (today, yesterday, this month, last month) */
   dashboardPeriods?: Maybe<DashboardPeriods>;
+  /** Get the dashboard period counts for a specific date range */
+  dashboardPeriodCounts?: Maybe<DashboardPeriodCounts>;
   usersForOrg?: Maybe<UserConnection>;
   changeOwnPasswordPage?: Maybe<PasswordPage>;
   currentUser?: Maybe<CurrentUserInfo>;
@@ -1186,6 +1190,12 @@ export type QueryScheduleOccurrencesArgs = {
 
 export type QueryDashboardPeriodsArgs = {
   orgSid: Scalars['ID'];
+};
+
+
+export type QueryDashboardPeriodCountsArgs = {
+  orgSid: Scalars['ID'];
+  dateRange?: Maybe<DateTimeRangeInput>;
 };
 
 
@@ -2510,6 +2520,42 @@ export type DashboardPeriodsQuery = (
       { __typename?: 'DashboardPeriodCounts' }
       & FragmentDashboardPeriodCountsFragment
     )> }
+  )> }
+);
+
+export type DashboardPeriodCountsQueryVariables = Exact<{
+  orgSid: Scalars['ID'];
+  dateRange?: Maybe<DateTimeRangeInput>;
+}>;
+
+
+export type DashboardPeriodCountsQuery = (
+  { __typename?: 'Query' }
+  & { dashboardPeriodCounts?: Maybe<(
+    { __typename?: 'DashboardPeriodCounts' }
+    & Pick<DashboardPeriodCounts, 'transmissionCount' | 'billingUnitCount' | 'processErrorCount'>
+    & { vendorTransmissions?: Maybe<Array<Maybe<(
+      { __typename?: 'DashboardPeriodCount' }
+      & Pick<DashboardPeriodCount, 'name' | 'secondaryDescr' | 'count' | 'total'>
+    )>>>, vendorTransmissionsBySpec?: Maybe<Array<Maybe<(
+      { __typename?: 'DashboardPeriodCount' }
+      & Pick<DashboardPeriodCount, 'name' | 'secondaryDescr' | 'count' | 'total'>
+    )>>>, planSponsorTransmissions?: Maybe<Array<Maybe<(
+      { __typename?: 'DashboardPeriodCount' }
+      & Pick<DashboardPeriodCount, 'name' | 'secondaryDescr' | 'count' | 'total'>
+    )>>>, fileTransmissions?: Maybe<Array<Maybe<(
+      { __typename?: 'DashboardPeriodCount' }
+      & Pick<DashboardPeriodCount, 'name' | 'secondaryDescr' | 'count' | 'total'>
+    )>>>, vendorProcessErrors?: Maybe<Array<Maybe<(
+      { __typename?: 'DashboardPeriodCount' }
+      & Pick<DashboardPeriodCount, 'name' | 'secondaryDescr' | 'count' | 'total'>
+    )>>>, planSponsorProcessErrors?: Maybe<Array<Maybe<(
+      { __typename?: 'DashboardPeriodCount' }
+      & Pick<DashboardPeriodCount, 'name' | 'secondaryDescr' | 'count' | 'total'>
+    )>>>, fileProcessErrors?: Maybe<Array<Maybe<(
+      { __typename?: 'DashboardPeriodCount' }
+      & Pick<DashboardPeriodCount, 'name' | 'secondaryDescr' | 'count' | 'total'>
+    )>>> }
   )> }
 );
 
@@ -4984,6 +5030,84 @@ export function useDashboardPeriodsLazyQuery(baseOptions?: Apollo.LazyQueryHookO
 export type DashboardPeriodsQueryHookResult = ReturnType<typeof useDashboardPeriodsQuery>;
 export type DashboardPeriodsLazyQueryHookResult = ReturnType<typeof useDashboardPeriodsLazyQuery>;
 export type DashboardPeriodsQueryResult = Apollo.QueryResult<DashboardPeriodsQuery, DashboardPeriodsQueryVariables>;
+export const DashboardPeriodCountsDocument = gql`
+    query DashboardPeriodCounts($orgSid: ID!, $dateRange: DateTimeRangeInput) {
+  dashboardPeriodCounts(orgSid: $orgSid, dateRange: $dateRange) {
+    vendorTransmissions {
+      name
+      secondaryDescr
+      count
+      total
+    }
+    vendorTransmissionsBySpec {
+      name
+      secondaryDescr
+      count
+      total
+    }
+    planSponsorTransmissions {
+      name
+      secondaryDescr
+      count
+      total
+    }
+    fileTransmissions {
+      name
+      secondaryDescr
+      count
+      total
+    }
+    vendorProcessErrors {
+      name
+      secondaryDescr
+      count
+      total
+    }
+    planSponsorProcessErrors {
+      name
+      secondaryDescr
+      count
+      total
+    }
+    fileProcessErrors {
+      name
+      secondaryDescr
+      count
+      total
+    }
+    transmissionCount
+    billingUnitCount
+    processErrorCount
+  }
+}
+    `;
+
+/**
+ * __useDashboardPeriodCountsQuery__
+ *
+ * To run a query within a React component, call `useDashboardPeriodCountsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDashboardPeriodCountsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useDashboardPeriodCountsQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *      dateRange: // value for 'dateRange'
+ *   },
+ * });
+ */
+export function useDashboardPeriodCountsQuery(baseOptions: Apollo.QueryHookOptions<DashboardPeriodCountsQuery, DashboardPeriodCountsQueryVariables>) {
+        return Apollo.useQuery<DashboardPeriodCountsQuery, DashboardPeriodCountsQueryVariables>(DashboardPeriodCountsDocument, baseOptions);
+      }
+export function useDashboardPeriodCountsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DashboardPeriodCountsQuery, DashboardPeriodCountsQueryVariables>) {
+          return Apollo.useLazyQuery<DashboardPeriodCountsQuery, DashboardPeriodCountsQueryVariables>(DashboardPeriodCountsDocument, baseOptions);
+        }
+export type DashboardPeriodCountsQueryHookResult = ReturnType<typeof useDashboardPeriodCountsQuery>;
+export type DashboardPeriodCountsLazyQueryHookResult = ReturnType<typeof useDashboardPeriodCountsLazyQuery>;
+export type DashboardPeriodCountsQueryResult = Apollo.QueryResult<DashboardPeriodCountsQuery, DashboardPeriodCountsQueryVariables>;
 export const UsersForOrgDocument = gql`
     query UsersForOrg($orgSid: ID!, $userFilter: UserFilterInput, $pageableInput: PageableInput) {
   usersForOrg(

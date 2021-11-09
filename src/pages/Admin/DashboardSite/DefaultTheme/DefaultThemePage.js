@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, memo } from 'react';
 
+import { SpinnerSize } from '@fluentui/react';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Button } from '../../../../components/buttons/Button';
 import { Separator } from '../../../../components/separators/Separator';
@@ -107,7 +108,7 @@ const _DefaultThemePage = () => {
           <Column lg="12">
             {isLoadingPalettes || isLoadingDefaultTheme ? (
               <Spacing margin={{ top: 'double' }}>
-                <Spinner size="lg" label="Loading theme settings" />
+                <Spinner size={SpinnerSize.large} label="Loading theme settings" />
               </Spacing>
             ) : (
               <>

@@ -1,6 +1,6 @@
-import PuppetBasePage from './PuppetBasePage';
+import PuppetExchangeStatus from './PuppetExchangeStatus';
 
-export default class PuppetErrors extends PuppetBasePage {
+export default class PuppetErrors extends PuppetExchangeStatus {
   pageTitle = '#__Text_Errors-Text';
 
   secondaryTitle = '#__Text_Advanced-search-Text';

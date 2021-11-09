@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { MessageBar } from 'office-ui-fabric-react';
+import { SpinnerSize } from '@fluentui/react';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Row, Column } from '../../../../components/layouts';
 import { Spacing } from '../../../../components/spacings/Spacing';
@@ -119,7 +120,7 @@ const _ActiveOrgsPage = () => {
               renderList()
             ) : (
               <Spacing margin={{ top: 'double' }}>
-                <Spinner size="lg" label="Loading active orgs" />
+                <Spinner size={SpinnerSize.large} label="Loading active orgs" />
               </Spacing>
             )}
           </StyledColumn>

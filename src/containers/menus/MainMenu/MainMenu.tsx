@@ -12,6 +12,7 @@ import { StyledRow, StyledColumn, StyledMenuButton, StyledButtonIcon } from './M
 import { getRouteByApiId } from '../../../data/constants/RouteConstants';
 import { OutsideComponent } from './OutsideComponent';
 import { useActiveDomainStore } from '../../../store/ActiveDomainStore';
+import { useOrgSid } from '../../../hooks/useOrgSid';
 
 const defaultProps = {
   id: '',
@@ -31,8 +32,7 @@ const MainMenu = ({ id, left, changeCollapse, option }: MainMenuProps): ReactEle
   const ActiveDomainStore = useActiveDomainStore();
   const history = useHistory();
   const location = useLocation();
-  const urlParams = new URLSearchParams(location.search);
-  const orgSid = urlParams.get('orgSid') ?? '-1';
+  const { orgSid } = useOrgSid();
 
   const [collapse, setCollapse] = useState(false);
 

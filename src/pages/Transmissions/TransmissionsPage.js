@@ -11,7 +11,7 @@ import { WorkPacketColumns } from '../../containers/tables/WorkPacketColumns';
 import { NullHandling, SortDirection, useWpTransmissionsLazyQuery } from '../../data/services/graphql';
 
 const _TransmissionsPage = () => {
-  const [tableMeta, setTableMeta] = useState({ count: null, loading: null });
+  const [tableMeta, setTableMeta] = useState({ count: 0, loading: true });
 
   const mapData = (data) => {
     const items = [];
@@ -48,7 +48,6 @@ const _TransmissionsPage = () => {
         </Container>
       </PageHeader>
 
-      {/* <TableTransmissions data={data} onItemsListChange={setTableMeta} /> */}
       <WorkPacketTable
         id="TableTransmissions"
         cols={[
@@ -76,6 +75,10 @@ const _TransmissionsPage = () => {
             ignoreCase: true,
           },
         ]}
+        onItemsListChange={(data, loading) => {
+          const total = data?.wpTransmissions?.paginationInfo?.totalElements ?? 0;
+          setTableMeta({ count: total, loading });
+        }}
       />
     </LayoutDashboard>
   );

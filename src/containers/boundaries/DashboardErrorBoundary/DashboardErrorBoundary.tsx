@@ -1,3 +1,4 @@
+import { ReactElement } from 'react';
 import { Row, Column, Container } from '../../../components/layouts';
 import { Card } from '../../../components/cards/Card';
 import { Spacing } from '../../../components/spacings/Spacing';
@@ -8,18 +9,26 @@ import { StyledErrorIcon, StyledDiv } from './DashboardErrorBoundary.styles';
 import { LayoutAdmin } from '../../../layouts/LayoutAdmin';
 import { LayoutDashboard } from '../../../layouts/LayoutDashboard';
 
-const DashboardErrorBoundary = ({ type }) => {
+const defaultProps = {
+  type: '',
+};
+
+type DashboardErrorBoundaryProps = {
+  type?: string;
+} & typeof defaultProps;
+
+const DashboardErrorBoundary = ({ type }: DashboardErrorBoundaryProps): ReactElement => {
   const isAdmin = type === 'ADMIN';
   const Layout = isAdmin ? LayoutAdmin : LayoutDashboard;
 
   return (
-    <Layout>
+    <Layout id="__DashboardErrorBoundaryId">
       {!isAdmin ? (
         <PageHeader spacing="0">
           <Container>
             <Spacing margin={{ top: 'double' }}>
               <StyledDiv>
-                <Card elevantion="smallest">
+                <Card elevation="smallest">
                   <Row>
                     <Column lg="12" direction="row">
                       <StyledErrorIcon iconName="ErrorBadge" />
@@ -33,7 +42,7 @@ const DashboardErrorBoundary = ({ type }) => {
           </Container>
         </PageHeader>
       ) : (
-        <Card elevantion="smallest">
+        <Card elevation="smallest">
           <Row>
             <Column lg="12" direction="row">
               <StyledErrorIcon iconName="ErrorBadge" />
@@ -46,5 +55,7 @@ const DashboardErrorBoundary = ({ type }) => {
     </Layout>
   );
 };
+
+DashboardErrorBoundary.defaultProps = defaultProps;
 
 export default DashboardErrorBoundary;

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, memo } from 'react';
 
-import { Checkbox } from '@fluentui/react';
+import { Checkbox, SpinnerSize } from '@fluentui/react';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Button } from '../../../../components/buttons/Button';
 import { Separator } from '../../../../components/separators/Separator';
@@ -155,7 +155,7 @@ const _ColorPalettesPage = () => {
       <Spacing margin="double">
         {isLoadingPalettes ? (
           <Spacing margin={{ top: 'double' }}>
-            <Spinner size="lg" label="Loading color palettes" />
+            <Spinner size={SpinnerSize.large} label="Loading color palettes" />
           </Spacing>
         ) : (
           <>
@@ -184,7 +184,7 @@ const _ColorPalettesPage = () => {
 
             {isCreatingPalette ? (
               <Spacing margin={{ top: 'double' }}>
-                <Spinner size="lg" label="Loading color palette" />
+                <Spinner size={SpinnerSize.large} label="Loading color palette" />
               </Spacing>
             ) : (
               <>

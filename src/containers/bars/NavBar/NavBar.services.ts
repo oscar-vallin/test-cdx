@@ -3,8 +3,8 @@ import { useInputValue } from '../../../hooks/useInputValue';
 
 // useEmailField
 export const useLogin = () => {
-  const email = useInputValue('Email', '');
-  const password = useInputValue('Password', '');
+  const email = useInputValue('Email', '', '', 'email');
+  const password = useInputValue('Password', '', '', 'password');
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [validationError, setValidationError] = useState('');
@@ -16,7 +16,7 @@ export const useLogin = () => {
 
   const emailValidation = () => {
     setIsProcessing(true);
-    setValidationError();
+    setValidationError('Email Error');
 
     setTimeout(() => {
       // eslint-disable-next-line
@@ -32,7 +32,7 @@ export const useLogin = () => {
   };
 
   const submitLogin = () => {
-    setValidationError();
+    setValidationError('');
     setIsProcessing(true);
 
     setTimeout(() => {

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import PasswordStrengthBar from 'react-password-strength-bar';
 import _ from 'lodash';
 
-import { List } from '@fluentui/react';
+import { List, SpinnerSize } from '@fluentui/react';
 import { useChangeOwnPasswordPageQuery } from '../../../data/services/graphql';
 
 import { Spacing } from '../../../components/spacings/Spacing';
@@ -174,12 +174,12 @@ const PasswordRules = ({ validations, password, onChange }) => {
 
   return (
     <>
-      <StyledTitle>Password rules</StyledTitle>
+      <StyledTitle id="__userSettings_Password_rules">Password rules</StyledTitle>
 
       <Spacing margin={{ top: 'normal' }}>
         {loading ? (
           <Spacing margin={{ top: 'normal' }}>
-            <Spinner size="lg" label="Loading rules" />
+            <Spinner size={SpinnerSize.large} label="Loading rules" />
           </Spacing>
         ) : (
           <List items={validations} onRenderCell={onRenderCell} />

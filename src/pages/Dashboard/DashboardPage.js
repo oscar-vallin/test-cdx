@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 // components
 import { useHistory, useLocation } from 'react-router-dom';
 import queryString from 'query-string';
+import { SpinnerSize } from '@fluentui/react';
 import { CardDashboard } from '../../containers/cards/CardDashboard';
 import { TableDashboard } from '../../containers/tables/TableDashboard';
 
@@ -74,7 +75,7 @@ const _DashboardPage = () => {
   const pageFallBack = () => {
     return (
       <Spacing margin={{ top: 'double' }}>
-        <Spinner size="lg" label="Fetching dashboard data" />
+        <Spinner size={SpinnerSize.large} label="Fetching dashboard data" />
       </Spacing>
     );
   };

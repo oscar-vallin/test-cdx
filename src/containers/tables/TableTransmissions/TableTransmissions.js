@@ -66,7 +66,7 @@ const TableTransmissions = ({
         <Box id={`${idPage}`}>
           {tableProps.loading ? (
             <Spacing margin={{ top: 'double' }}>
-              <Spinner size="lg" label="Fetching transmissions" />
+              <Spinner size={SpinnerSize.large} label="Fetching transmissions" />
             </Spacing>
           ) : (
             <Table

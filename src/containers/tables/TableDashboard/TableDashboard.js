@@ -14,7 +14,7 @@ const TableDashboard = ({ id, tableId = TABLE_NAMES.DASHBOARD_TRANSMISSIONS_VEND
   const [, setTableData] = useState();
 
   const getNoData = () => {
-    return [{ vendor: 'No data available', bus: '...' }];
+    return [{ vendor: 'No data', bus: '...' }];
   };
 
   const getTable = () => {

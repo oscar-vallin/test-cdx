@@ -10,11 +10,13 @@ import { mergeStyleSets } from 'office-ui-fabric-react/lib-commonjs/Styling';
 
 import { useHistory, useLocation } from 'react-router-dom';
 import { addDays, format, getHours, subDays } from 'date-fns';
+import { SpinnerSize } from '@fluentui/react';
 import { StyledContainer, StyledSpacing, StyledText } from '../../components/tables/Table/Table.styles';
 import { Box, Column, Container, FilterSection, StyledRow } from './WorkPacketTable.styles';
 import { InputText } from '../../components/inputs/InputText';
 import { InputDateRange } from '../../components/inputs/InputDateRange';
 import { Card } from '../../components/cards';
+import { EmptyState } from '../states';
 import { Spinner } from '../../components/spinners/Spinner';
 import {
   NullHandling,
@@ -28,6 +30,7 @@ import { useDateValue } from '../../hooks/useDateValue';
 import { useDelayedInputValue } from '../../hooks/useInputValue';
 import { useQueryParams } from '../../hooks/useQueryParams';
 import { useQueryHandler } from '../../hooks/useQueryHandler';
+import { useOrgSid } from '../../hooks/useOrgSid';
 
 type WorkPacketParams = {
   id: string;
@@ -36,16 +39,25 @@ type WorkPacketParams = {
   getItems: (data: any) => any[];
   searchTextPlaceholder: string;
   defaultSort?: SortOrderInput[];
+  onItemsListChange: (data: any, loading: boolean) => void;
 };
 
-const WorkPacketTable = ({ id, cols, lazyQuery, getItems, searchTextPlaceholder, defaultSort }: WorkPacketParams) => {
+const WorkPacketTable = ({
+  id,
+  cols,
+  lazyQuery,
+  getItems,
+  searchTextPlaceholder,
+  defaultSort,
+  onItemsListChange,
+}: WorkPacketParams) => {
   const doNothing = () => {};
 
   const QueryParams = useQueryParams();
   const history = useHistory();
   const location = useLocation();
   const urlParams = new URLSearchParams(location.search);
-  const orgSid = urlParams.get('orgSid') ?? '-1';
+  const { orgSid } = useOrgSid();
 
   const hour = getHours(new Date());
   const startDate = useDateValue('Start Date...', hour < 9 ? subDays(new Date(), 1) : new Date());
@@ -140,6 +152,10 @@ const WorkPacketTable = ({ id, cols, lazyQuery, getItems, searchTextPlaceholder,
     });
   }, [orgSid, localInput.delayedValue, startDate.value, endDate.value, pagingParams]);
 
+  useEffect(() => {
+    onItemsListChange(data, loading);
+  }, [data, loading]);
+
   const renderTable = () => {
     const classNames = mergeStyleSets({
       root: {
@@ -159,7 +175,7 @@ const WorkPacketTable = ({ id, cols, lazyQuery, getItems, searchTextPlaceholder,
     if (loading) {
       return (
         <StyledSpacing margin={{ top: 'double' }}>
-          <Spinner size="lg" label="Loading data" />
+          <Spinner size={SpinnerSize.large} label="Loading data" />
         </StyledSpacing>
       );
     }
@@ -180,7 +196,7 @@ const WorkPacketTable = ({ id, cols, lazyQuery, getItems, searchTextPlaceholder,
       );
     }
 
-    return <StyledText bold>No data available</StyledText>;
+    return <EmptyState title="No data" filled={false} />;
   };
 
   return (

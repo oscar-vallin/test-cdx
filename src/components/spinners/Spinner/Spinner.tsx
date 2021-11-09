@@ -11,7 +11,7 @@ const defaultProps = {
 
 type SpinnerProps = {
   id?: string;
-  size?: string;
+  size?: any;
   label?: string;
 } & typeof defaultProps;
 

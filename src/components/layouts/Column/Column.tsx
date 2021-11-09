@@ -25,6 +25,7 @@ type ColumnProps = {
   top?: boolean;
   bottom?: boolean;
   centerV?: string;
+  sm?: number;
 } & typeof defaultProps;
 
 const Column = ({

@@ -1,5 +1,5 @@
 import { useState, memo, useEffect } from 'react';
-import { Checkbox } from '@fluentui/react';
+import { Checkbox, SpinnerSize } from '@fluentui/react';
 import { TextField } from '@fluentui/react/lib/TextField';
 import { LayoutAdmin } from '../../../layouts/LayoutAdmin';
 import { Button } from '../../../components/buttons/Button';
@@ -39,7 +39,7 @@ const _FtpTestPage = () => {
   const renderForm = () => {
     return loading ? (
       <Spacing margin={{ top: 'double' }}>
-        <Spinner size="lg" label="Loading color palette" />
+        <Spinner size={SpinnerSize.large} label="Loading color palette" />
       </Spacing>
     ) : (
       <>
@@ -143,7 +143,7 @@ const _FtpTestPage = () => {
       <Spacing margin="double">
         {loading ? (
           <Spacing margin={{ top: 'double' }}>
-            <Spinner size="lg" label="Loading color palettes" />
+            <Spinner size={SpinnerSize.large} label="Loading color palettes" />
           </Spacing>
         ) : (
           <>{renderForm()}</>

@@ -16,7 +16,7 @@ const defaultProps = {
 
 type TextProps = {
   id?: string;
-  children?: ReactElement | string;
+  children?: any;
   variant?: string;
   transform?: string;
   size?: string;

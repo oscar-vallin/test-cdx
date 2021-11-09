@@ -6,6 +6,7 @@ import { PrimaryButton, DefaultButton, MessageBar } from 'office-ui-fabric-react
 import { DetailsList, DetailsListLayoutMode, SelectionMode, Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { MarqueeSelection } from '@fluentui/react/lib/MarqueeSelection';
+import { SpinnerSize } from '@fluentui/react';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Row, Column } from '../../../../components/layouts';
 import { Spacing } from '../../../../components/spacings/Spacing';
@@ -146,7 +147,7 @@ const _DeletedUsersPage = () => {
                   renderList()
                 ) : (
                   <Spacing margin={{ top: 'double' }}>
-                    <Spinner size="lg" label="Loading deleted users" />
+                    <Spinner size={SpinnerSize.large} label="Loading deleted users" />
                   </Spacing>
                 )}
               </StyledColumn>

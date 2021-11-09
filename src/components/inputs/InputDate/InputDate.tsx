@@ -14,6 +14,7 @@ const defaultProps = {
 type InputDateProps = {
   id?: string;
   placeholder?: string;
+  label?: string;
   value?: Date | number | any;
   onChange?: any | null;
   required?: boolean;
@@ -75,6 +76,7 @@ const getValue = (value) => {
 const InputDate = ({
   id,
   placeholder = 'Select a Date...',
+  label,
   value,
   onChange,
   required,
@@ -82,6 +84,7 @@ const InputDate = ({
   return (
     <DatePicker
       id={id}
+      label={label}
       isRequired={required}
       firstDayOfWeek={firstDayOfWeek}
       strings={DayPickerStrings}

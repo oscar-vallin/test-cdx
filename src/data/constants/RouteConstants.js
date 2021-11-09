@@ -84,7 +84,7 @@ export const ROUTE_LOGIN = {
 
 export const ROUTE_DASHBOARD = {
   ID: ROUTES_ID.DASHBOARD,
-  TITLE: 'Dashboard',
+  TITLE: 'CDX Dashboard',
   URL: URL_ROUTES.DASHBOARD,
   MAIN_MENU: true,
   API_ID: 'DASHBOARD',

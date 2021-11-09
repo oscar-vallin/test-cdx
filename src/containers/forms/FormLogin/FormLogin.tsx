@@ -1,6 +1,7 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect } from 'react';
+import { ReactElement, useState, useEffect } from 'react';
+import { SpinnerSize } from '@fluentui/react';
 import { Column } from '../../../components/layouts';
 import { InputText } from '../../../components/inputs/InputText';
 import { Spacing } from '../../../components/spacings/Spacing';
@@ -22,9 +23,17 @@ import { useSessionStore } from '../../../store/SessionStore';
 import { useLoginUseCase } from '../../../use-cases/Authentication';
 import { useNotification } from '../../../hooks/useNotification';
 
+const defaultProps = {
+  id: '',
+};
+
+type FormLoginProps = {
+  id?: string;
+} & typeof defaultProps;
+
 const INITIAL_STATE = { userId: '', password: '' };
 
-const FormLogin = ({ id }) => {
+const FormLogin = ({ id }: FormLoginProps): ReactElement => {
   const SessionStore = useSessionStore();
   const Toast = useNotification();
 
@@ -45,6 +54,11 @@ const FormLogin = ({ id }) => {
     }
   }, [state]);
 
+  const handleReturnToInitialStep = (): null => {
+    returnToInitialStep();
+    return null;
+  };
+
   return (
     <StyledBox id={id}>
       <StyledRowBottom id={`${id}__Card--Row`}>
@@ -57,7 +71,7 @@ const FormLogin = ({ id }) => {
           <StyledCard id={`${id}-Card`}>
             {SessionStore.isRehydrating ? (
               <Spacing margin={{ top: 'normal' }}>
-                <Spinner size="lg" label="Checking current user session" />
+                <Spinner size={SpinnerSize.large} label="Checking current user session" />
               </Spacing>
             ) : (
               <>
@@ -76,7 +90,7 @@ const FormLogin = ({ id }) => {
                     <InputText
                       id={`${id}__Card__Row__Input-Email`}
                       autoFocus
-                      label="Email"
+                      placeholder="Email"
                       disabled={state.loading || isValidEmail}
                       value={values.userId}
                       onKeyEnter={() => performUserIdVerification(values)}
@@ -88,7 +102,7 @@ const FormLogin = ({ id }) => {
                       <StyledButtonIcon
                         id={`${id}__Card__Row__Column__Button--Edit`}
                         disabled={state.loading}
-                        onClick={returnToInitialStep}
+                        onClick={handleReturnToInitialStep}
                         icon="edit"
                       >
                         Edit
@@ -102,7 +116,7 @@ const FormLogin = ({ id }) => {
                       <InputText
                         id={`${id}__Card__Row__Input-Password`}
                         autoFocus
-                        label="Password"
+                        placeholder="Password"
                         type="password"
                         value={values.password}
                         onKeyEnter={() => performUserAuthentication(values)}
@@ -115,7 +129,10 @@ const FormLogin = ({ id }) => {
                   <Column id={`${id}__Card__Row__Column--Email`}>
                     <StyledButton
                       id={`${id}__Card__Row__Column__Button--Button`}
+                      variant="secondary"
                       disabled={state.loading}
+                      block={false}
+                      text=""
                       onClick={() => {
                         return isValidEmail ? performUserAuthentication(values) : performUserIdVerification(values);
                       }}
@@ -133,6 +150,6 @@ const FormLogin = ({ id }) => {
   );
 };
 
-FormLogin.propTypes = {};
+FormLogin.defaultProps = defaultProps;
 
 export { FormLogin };

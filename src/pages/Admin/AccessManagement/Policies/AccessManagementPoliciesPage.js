@@ -7,6 +7,10 @@ import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
 
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
+import { EmptyState } from 'src/containers/states';
+import { ROUTE_ACCESS_MANAGEMENT_POLICIES, ROUTE_ADMIN } from 'src/data/constants/RouteConstants';
+import { Breadcrumb } from 'src/components/breadcrumbs/Breadcrumb';
+import { SpinnerSize } from '@fluentui/react';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Spacing } from '../../../../components/spacings/Spacing';
 import { Button } from '../../../../components/buttons';
@@ -17,7 +21,7 @@ import { CreatePoliciesPanel } from './CreatePolicy';
 
 import { useAccessPoliciesForOrgLazyQuery, useDeleteAccessPolicyMutation } from '../../../../data/services/graphql';
 
-import { StyledColumn, StyledCommandButton } from './AccessManagementPoliciesPage.styles';
+import { StyledCommandButton } from './AccessManagementPoliciesPage.styles';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
 import { useQueryHandler } from '../../../../hooks/useQueryHandler';
 
@@ -111,49 +115,66 @@ const _AccessManagementPoliciesPage = () => {
         isHeaderVisible
       />
     ) : (
-      <MessageBar>No policies found</MessageBar>
+      <EmptyState
+        title="No policies found"
+        description="You haven't created an access policy yet. Click the button below to create a new policy."
+        actions={
+          <Button
+            variant="primary"
+            onClick={() => {
+              setIsPanelOpen(true);
+            }}
+          >
+            Create policy
+          </Button>
+        }
+      />
     );
   };
 
   return (
     <LayoutAdmin id="PageAdmin" sidebarOptionSelected="AM_POLICIES">
       <Spacing margin="double">
+        {policies.length && (
+          <Row>
+            <Column lg="3">
+              <Spacing margin={{ top: 'small' }}>
+                <Text variant="bold">Policies</Text>
+              </Spacing>
+            </Column>
+
+            <Column lg="3" right>
+              <Button
+                variant="primary"
+                onClick={() => {
+                  setIsPanelOpen(true);
+                }}
+              >
+                Create policy
+              </Button>
+            </Column>
+          </Row>
+        )}
+
+        {policies.length && (
+          <Row>
+            <Column lg="6">
+              <Spacing margin={{ top: 'normal' }}>
+                <Separator />
+              </Spacing>
+            </Column>
+          </Row>
+        )}
+
         <Row>
-          <Column lg="8">
-            <Row center>
-              <Column lg="4">
-                <Spacing margin={{ top: 'small' }}>
-                  <Text variant="bold">Policies</Text>
-                </Spacing>
-              </Column>
-
-              <Column lg="8" right>
-                <Button
-                  variant="primary"
-                  onClick={() => {
-                    setIsPanelOpen(true);
-                  }}
-                >
-                  Create policy
-                </Button>
-              </Column>
-            </Row>
-
-            <Spacing margin={{ top: 'normal' }}>
-              <Separator />
-            </Spacing>
-
-            <Row>
-              <StyledColumn lg="12">
-                {!loading ? (
-                  renderList()
-                ) : (
-                  <Spacing margin={{ top: 'double' }}>
-                    <Spinner size="lg" label="Loading policies" />
-                  </Spacing>
-                )}
-              </StyledColumn>
-            </Row>
+          <Column lg="12">
+            {!loading ? (
+              renderList()
+            ) : (
+              <Spacing margin={{ top: 'double' }}>
+                <Spinner size={SpinnerSize.large} label="Loading policies" />
+              </Spacing>
+            )}
           </Column>
         </Row>
       </Spacing>

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, useMemo, useContext, createContext } from 'react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
-import { Customizer, loadTheme } from '@fluentui/react';
+import { Customizer, loadTheme, SpinnerSize } from '@fluentui/react';
 
 import 'office-ui-fabric-react/dist/css/fabric.css';
 import { theme as styledComponentsTheme } from '../styles/themes/theme';
@@ -99,7 +99,7 @@ export const ThemeContextProvider = ({ children }) => {
             <LayoutLogin id="ThemeContext">
               <StyledCard>
                 <Spacing margin={{ top: 'normal' }}>
-                  <Spinner size="lg" label="Fetching your preferences" />
+                  <Spinner size={SpinnerSize.large} label="Fetching your preferences" />
                 </Spacing>
               </StyledCard>
             </LayoutLogin>

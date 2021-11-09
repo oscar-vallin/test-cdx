@@ -14,6 +14,8 @@ import {
   DetailsHeader,
 } from 'office-ui-fabric-react/lib-commonjs/DetailsList';
 import { useLocation } from 'react-router-dom';
+import { EmptyState } from 'src/containers/states';
+import { SpinnerSize } from '@fluentui/react';
 import { getDates } from '../../../helpers/tableHelpers';
 import { Spinner } from '../../spinners/Spinner';
 
@@ -31,6 +33,7 @@ import {
 } from './Table.styles';
 
 import { TableHeader } from '../TableHeader';
+import { useOrgSid } from '../../../hooks/useOrgSid';
 
 const _buildColumns = (
   items,
@@ -125,9 +128,7 @@ const Table = ({
   onItemsListChange,
   loading = true,
 }) => {
-  const location = useLocation();
-  const urlParams = new URLSearchParams(location.search);
-  const orgSid = urlParams.get('orgSid') ?? '-1';
+  const { orgSid } = useOrgSid();
 
   const [sortLabel, setSortLabel] = useState();
   const [sortedItems, setSortedItems] = useState([]);
@@ -394,9 +395,7 @@ const Table = ({
   };
 
   // * Click on Row.
-  const _onItemInvoked = () => {
-    // alert(`Item ${item.name} at index ${index} has been invoked.`);
-  };
+  const _onItemInvoked = () => {};
 
   //
   const _onSort = (key) => {
@@ -510,7 +509,7 @@ const Table = ({
     if (loading) {
       return (
         <StyledSpacing margin={{ top: 'double' }}>
-          <Spinner size="lg" label="Loading data" />
+          <Spinner size={SpinnerSize.large} label="Loading data" />
         </StyledSpacing>
       );
     }
@@ -534,7 +533,7 @@ const Table = ({
       );
     }
 
-    return <StyledText bold>No data available</StyledText>;
+    return <EmptyState title="No data" />;
   };
 
   //
@@ -554,7 +553,7 @@ const Table = ({
     if (loading) {
       return (
         <StyledSpacing margin={{ top: 'double' }}>
-          <Spinner size="lg" label="Loading data" />
+          <Spinner size={SpinnerSize.large} label="Loading data" />
         </StyledSpacing>
       );
     }
@@ -578,7 +577,7 @@ const Table = ({
       );
     }
 
-    return <StyledText bold>No data available</StyledText>;
+    return <EmptyState title="No data" />;
   };
 
   if (sortedItems)

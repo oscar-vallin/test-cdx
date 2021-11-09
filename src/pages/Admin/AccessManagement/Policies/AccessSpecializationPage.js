@@ -7,6 +7,8 @@ import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
 
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
+import { EmptyState } from 'src/containers/states';
+import { SpinnerSize } from '@fluentui/react';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Spacing } from '../../../../components/spacings/Spacing';
 import { Button } from '../../../../components/buttons';
@@ -107,7 +109,20 @@ const _AccessManagementSpecializationPage = () => {
         isHeaderVisible
       />
     ) : (
-      <MessageBar>No access specializations found</MessageBar>
+      <EmptyState
+        title="No access specializations found"
+        description="You haven't created an access specialization yet. Click the button below to create a new specialization."
+        actions={
+          <Button
+            variant="primary"
+            onClick={() => {
+              setIsPanelOpen(true);
+            }}
+          >
+            Create specialization
+          </Button>
+        }
+      />
     );
   };
 
@@ -145,7 +160,7 @@ const _AccessManagementSpecializationPage = () => {
                   renderList()
                 ) : (
                   <Spacing margin={{ top: 'double' }}>
-                    <Spinner size="lg" label="Loading access specializations" />
+                    <Spinner size={SpinnerSize.large} label="Loading access specializations" />
                   </Spacing>
                 )}
               </StyledColumn>

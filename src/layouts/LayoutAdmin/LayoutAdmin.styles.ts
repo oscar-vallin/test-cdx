@@ -11,7 +11,7 @@ export const StyledBox = styled(LayoutBox)`
   width: 100%;
 `;
 
-export const StyledNav = styled(Nav)`
+export const StyledNav = styled(Nav)<StyledNavProps>`
   background: ${({ theme }) => theme.colors.neutralLighter};
   height: calc(100vh - 48px);
 
@@ -36,3 +36,7 @@ export const StyledNav = styled(Nav)`
     }
   }
 `;
+
+type StyledNavProps = {
+  onLinkClick: any | null;
+};

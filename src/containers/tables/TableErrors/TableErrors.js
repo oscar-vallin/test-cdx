@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Label } from '@fluentui/react/lib/Label';
 import { useParams, useLocation } from 'react-router-dom';
 import queryString from 'query-string';
+import { SpinnerSize } from '@fluentui/react';
 import { Table } from '../../../components/tables';
 
 import { Box, Column, Container, FilterSection, StyledRow } from '../WorkPacketTable.styles';
@@ -56,7 +57,7 @@ const TableErrors = ({
         <Box id={`${idPage}`}>
           {tableProps.loading ? (
             <Spacing margin={{ top: 'double' }}>
-              <Spinner size="lg" label="Fetching errors" />
+              <Spinner size={SpinnerSize.large} label="Fetching errors" />
             </Spacing>
           ) : (
             <Table

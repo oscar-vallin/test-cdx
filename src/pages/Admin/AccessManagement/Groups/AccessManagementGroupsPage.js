@@ -5,6 +5,7 @@ import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fab
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { MessageBar } from 'office-ui-fabric-react';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
+import { SpinnerSize } from '@fluentui/react';
 import { Row, Column } from '../../../../components/layouts';
 import { Spacing } from '../../../../components/spacings/Spacing';
 import { Button } from '../../../../components/buttons';
@@ -135,7 +136,7 @@ const _AccessManagementGroupsPage = () => {
                   renderList()
                 ) : (
                   <Spacing margin={{ top: 'double' }}>
-                    <Spinner size="lg" label="Loading groups" />
+                    <Spinner size={SpinnerSize.large} label="Loading groups" />
                   </Spacing>
                 )}
               </StyledColumn>
