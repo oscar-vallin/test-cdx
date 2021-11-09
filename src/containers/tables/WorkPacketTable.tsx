@@ -196,7 +196,7 @@ const WorkPacketTable = ({
       );
     }
 
-    return <EmptyState title="No data" filled={false} />;
+    return <EmptyState description="None" filled={false} />;
   };
 
   return (

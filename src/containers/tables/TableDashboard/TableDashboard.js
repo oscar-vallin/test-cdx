@@ -8,7 +8,15 @@ import { useTable } from './TableDashboard.service';
 import { Table } from '../../../components/tables/Table';
 // import { Table } from '../../../components/tables/_Table';
 
-const TableDashboard = ({ id, tableId = TABLE_NAMES.DASHBOARD_TRANSMISSIONS_VENDOR, data, altData, date, loading }) => {
+const TableDashboard = ({
+  id,
+  tableId = TABLE_NAMES.DASHBOARD_TRANSMISSIONS_VENDOR,
+  data,
+  altData,
+  date,
+  loading,
+  title,
+}) => {
   const { tableProps, specs, setSpecs } = useTable(data, tableId, date, altData);
 
   const [, setTableData] = useState();
@@ -67,7 +75,7 @@ const TableDashboard = ({ id, tableId = TABLE_NAMES.DASHBOARD_TRANSMISSIONS_VEND
   if (tableProps) {
     return (
       <TableBox id={`${id}`}>
-        <Table id={`${id}`} date={date} onOption={onChangeOption} loading={loading} {...tableProps} />
+        <Table id={`${id}`} date={date} onOption={onChangeOption} loading={loading} title={title} {...tableProps} />
       </TableBox>
     );
   }

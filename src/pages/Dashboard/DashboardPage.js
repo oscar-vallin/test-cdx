@@ -137,6 +137,7 @@ const _DashboardPage = () => {
                 altData={dataCounters?.vendorTransmissionsBySpec}
                 date={dateId}
                 loading={isLoadingData}
+                title="Transmissions / BUs by Vendor"
               />
             </Column>
             <Column lg="6">
@@ -146,6 +147,7 @@ const _DashboardPage = () => {
                 data={dataCounters?.vendorProcessErrors}
                 date={dateId}
                 loading={isLoadingData}
+                title="Failed Files by Vendor"
               />
             </Column>
           </Row>
@@ -158,6 +160,7 @@ const _DashboardPage = () => {
                 data={dataCounters?.fileTransmissions}
                 date={dateId}
                 loading={isLoadingData}
+                title="Transmissions / BUs by File"
               />
             </Column>
             <Column lg="6">
@@ -167,6 +170,7 @@ const _DashboardPage = () => {
                 data={dataCounters?.fileProcessErrors}
                 date={dateId}
                 loading={isLoadingData}
+                title="Failed Files by File"
               />
             </Column>
           </Row>

@@ -22,36 +22,56 @@ type CardDashboardProps = {
 const CardDashboard = ({ id, title, subtitle, value, total }: CardDashboardProps): ReactElement => {
   const isNotData = (total ?? 0) === 0;
 
-  return (
+  return !isNotData ? (
     <Card id={id} elevation="smallest">
-      {isNotData && (
-        <Row>
-          <Column direction="column">
-            <Text variant="bold">No data available</Text>
-          </Column>
-        </Row>
-      )}
+      <Row>
+        <Column>
+          <Row>
+            <Column direction="column">
+              <Spacing margin={{ bottom: 'small' }}>
+                <StyledTitle>
+                  {title} &nbsp;
+                  {subtitle && <StyledSubtitle>({subtitle})</StyledSubtitle>}
+                </StyledTitle>
+              </Spacing>
 
-      {!isNotData && (
-        <Row>
-          <Column>
-            <Row>
-              <Column direction="column">
-                <Spacing margin={{ bottom: 'small' }}>
-                  <StyledTitle>
-                    {title} &nbsp;
-                    {subtitle && <StyledSubtitle>({subtitle})</StyledSubtitle>}
-                  </StyledTitle>
-                </Spacing>
-
-                {(value ?? -1) >= 0 && (total ?? -1) > 0 && <StyledValues>{`${value}/${total}`}</StyledValues>}
-              </Column>
-            </Row>
-          </Column>
-        </Row>
-      )}
+              {(value ?? -1) >= 0 && (total ?? -1) > 0 && <StyledValues>{`${value}/${total}`}</StyledValues>}
+            </Column>
+          </Row>
+        </Column>
+      </Row>
     </Card>
+  ) : (
+    <Spacing margin={{ bottom: 'normal' }} />
   );
+  // <Card id={id} elevation="smallest">
+  //   {isNotData && (
+  //     <Row>
+  //       <Column direction="column">
+  //         <Text variant="bold">No data available</Text>
+  //       </Column>
+  //     </Row>
+  //   )}
+
+  //   {!isNotData && (
+  //     <Row>
+  //       <Column>
+  //         <Row>
+  //           <Column direction="column">
+  //             <Spacing margin={{ bottom: 'small' }}>
+  //               <StyledTitle>
+  //                 {title} &nbsp;
+  //                 {subtitle && <StyledSubtitle>({subtitle})</StyledSubtitle>}
+  //               </StyledTitle>
+  //             </Spacing>
+
+  //             {(value ?? -1) >= 0 && (total ?? -1) > 0 && <StyledValues>{`${value}/${total}`}</StyledValues>}
+  //           </Column>
+  //         </Row>
+  //       </Column>
+  //     </Row>
+  //   )}
+  // </Card>
 };
 
 CardDashboard.defaultProps = defaultProps;
