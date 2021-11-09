@@ -33,7 +33,7 @@ const ProfileMenu = ({ id, onUserSettings }: ProfileMenuProps): ReactElement => 
 
   const items = [
     {
-      id: '__Logout_button',
+      id: '__ProfileMenu_UserSettingsId',
       key: 'ProfileMenu_UserSettings',
       text: 'Settings',
       // onClick: (event: any): null => {
