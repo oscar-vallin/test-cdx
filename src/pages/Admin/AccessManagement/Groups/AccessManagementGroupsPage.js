@@ -6,6 +6,7 @@ import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { MessageBar } from 'office-ui-fabric-react';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { SpinnerSize } from '@fluentui/react';
+import { EmptyState } from 'src/containers/states';
 import { Row, Column } from '../../../../components/layouts';
 import { Spacing } from '../../../../components/spacings/Spacing';
 import { Button } from '../../../../components/buttons';
@@ -81,67 +82,72 @@ const _AccessManagementGroupsPage = () => {
     return item[column.key];
   };
 
-  const renderList = () => {
-    return groups.length > 0 ? (
-      <DetailsList
-        items={groups}
-        selectionMode={SelectionMode.none}
-        columns={columns}
-        layoutMode={DetailsListLayoutMode.justified}
-        onRenderItemColumn={onRenderItemColumn}
-        isHeaderVisible
-      />
-    ) : (
-      <MessageBar>No groups added</MessageBar>
-    );
-  };
-
-  // useEffect(() => {
-  //   if (data) {
-  //     setGroups(data.accessPoliciesForOrg.nodes);
-  //   }
-  // }, [data]);
-
   return (
     <LayoutAdmin id="PageAdmin" sidebarOptionSelected="AM_GROUPS">
       <Spacing margin="double">
+        {groups.length > 0 && (
+          <Row>
+            <Column lg="6">
+              <Spacing margin={{ top: 'small' }}>
+                <Text variant="bold">Groups</Text>
+              </Spacing>
+            </Column>
+
+            <Column lg="6" right>
+              <Button
+                variant="primary"
+                onClick={() => {
+                  setIsPanelOpen(true);
+                }}
+              >
+                Create group
+              </Button>
+            </Column>
+          </Row>
+        )}
+
+        {groups.length > 0 && (
+          <Row>
+            <Column lg="12">
+              <Spacing margin={{ top: 'normal' }}>
+                <Separator />
+              </Spacing>
+            </Column>
+          </Row>
+        )}
+
         <Row>
-          <Column lg="8">
-            <Row>
-              <Column lg="4">
-                <Spacing margin={{ top: 'small' }}>
-                  <Text variant="bold">Groups</Text>
-                </Spacing>
-              </Column>
-
-              <Column lg="8" right>
-                <Button
-                  variant="primary"
-                  onClick={() => {
-                    setIsPanelOpen(true);
-                  }}
-                >
-                  Create Group
-                </Button>
-              </Column>
-            </Row>
-
-            <Spacing margin={{ top: 'normal' }}>
-              <Separator />
-            </Spacing>
-
-            <Row>
-              <StyledColumn>
-                {!loading ? (
-                  renderList()
-                ) : (
-                  <Spacing margin={{ top: 'double' }}>
-                    <Spinner size={SpinnerSize.large} label="Loading groups" />
-                  </Spacing>
-                )}
-              </StyledColumn>
-            </Row>
-          </Column>
+          <StyledColumn lg="12">
+            {loading ? (
+              <Spacing margin={{ top: 'double' }}>
+                <Spinner size={SpinnerSize.large} label="Loading groups" />
+              </Spacing>
+            ) : !groups.length ? (
+              <EmptyState
+                title="No access groups found"
+                description="You haven't created an access group yet. Click the button below to create a new group."
+                actions={
+                  <Button
+                    variant="primary"
+                    onClick={() => {
+                      setIsPanelOpen(true);
+                    }}
+                  >
+                    Create group
+                  </Button>
+                }
+              />
+            ) : (
+              <DetailsList
+                items={groups}
+                selectionMode={SelectionMode.none}
+                columns={columns}
+                layoutMode={DetailsListLayoutMode.justified}
+                onRenderItemColumn={onRenderItemColumn}
+                isHeaderVisible
+              />
+            )}
+          </StyledColumn>
         </Row>
       </Spacing>
 

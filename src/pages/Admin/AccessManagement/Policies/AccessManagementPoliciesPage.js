@@ -8,8 +8,6 @@ import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { EmptyState } from 'src/containers/states';
-import { ROUTE_ACCESS_MANAGEMENT_POLICIES, ROUTE_ADMIN } from 'src/data/constants/RouteConstants';
-import { Breadcrumb } from 'src/components/breadcrumbs/Breadcrumb';
 import { SpinnerSize } from '@fluentui/react';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Spacing } from '../../../../components/spacings/Spacing';
@@ -21,7 +19,7 @@ import { CreatePoliciesPanel } from './CreatePolicy';
 
 import { useAccessPoliciesForOrgLazyQuery, useDeleteAccessPolicyMutation } from '../../../../data/services/graphql';
 
-import { StyledCommandButton } from './AccessManagementPoliciesPage.styles';
+import { StyledColumn, StyledCommandButton } from './AccessManagementPoliciesPage.styles';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
 import { useQueryHandler } from '../../../../hooks/useQueryHandler';
 
@@ -109,13 +107,13 @@ const _AccessManagementPoliciesPage = () => {
       <Spacing margin="double">
         {policies.length > 0 && (
           <Row>
-            <Column lg="3">
+            <Column lg="6">
               <Spacing margin={{ top: 'small' }}>
                 <Text variant="bold">Policies</Text>
               </Spacing>
             </Column>
 
-            <Column lg="3" right>
+            <Column lg="6" right>
               <Button
                 variant="primary"
                 onClick={() => {
@@ -130,7 +128,7 @@ const _AccessManagementPoliciesPage = () => {
 
         {policies.length > 0 && (
           <Row>
-            <Column lg="6">
+            <Column lg="12">
               <Spacing margin={{ top: 'normal' }}>
                 <Separator />
               </Spacing>
@@ -139,7 +137,7 @@ const _AccessManagementPoliciesPage = () => {
         )}
 
         <Row>
-          <Column lg="12">
+          <StyledColumn lg="12">
             {loading ? (
               <Spacing margin={{ top: 'double' }}>
                 <Spinner size={SpinnerSize.large} label="Loading policies" />
@@ -169,7 +167,7 @@ const _AccessManagementPoliciesPage = () => {
                 isHeaderVisible
               />
             )}
-          </Column>
+          </StyledColumn>
         </Row>
       </Spacing>
 

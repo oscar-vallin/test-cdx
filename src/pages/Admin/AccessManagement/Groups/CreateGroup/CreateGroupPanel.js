@@ -8,6 +8,7 @@ import { TagPicker } from '@fluentui/react/lib/Pickers';
 import { mergeStyles } from '@fluentui/react/lib/Styling';
 import { FontIcon } from '@fluentui/react/lib/Icon';
 import { TooltipHost } from '@fluentui/react/lib/Tooltip';
+import { useQueryHandler } from 'src/hooks/useQueryHandler';
 
 import { Spacing } from '../../../../../components/spacings/Spacing';
 import { Button } from '../../../../../components/buttons';
@@ -48,13 +49,17 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, onUpdateGrou
   const [organizations, setOrganizations] = useState([]);
   const [response, setResponse] = useState({});
 
-  const [apiUseAccessPolicyForm, { data, loading: isLoadingPolicy }] = useAccessPolicyGroupFormLazyQuery();
-  const [fetchPolicies, { data: policiesData }] = useAccessPoliciesForOrgLazyQuery();
-  const [fetchSpecializations, { data: specializationsData }] = useAccessSpecializationsForOrgLazyQuery();
-  const [fetchOrganizations, { data: orgsData }] = useDirectOrganizationsLazyQuery();
-  const [createPolicyGroup, { data: createdPolicyGroup }] = useCreateAccessPolicyGroupMutation();
-  const [fetchPolicyGroup, { data: policyGroup }] = useFindAccessPolicyGroupLazyQuery();
-  const [updatePolicyGroup, { data: updatedPolicyGroup }] = useUpdateAccessPolicyGroupMutation();
+  const [apiUseAccessPolicyForm, { data, loading: isLoadingPolicy }] = useQueryHandler(
+    useAccessPolicyGroupFormLazyQuery
+  );
+  const [fetchPolicies, { data: policiesData }] = useQueryHandler(useAccessPoliciesForOrgLazyQuery);
+  const [fetchSpecializations, { data: specializationsData }] = useQueryHandler(
+    useAccessSpecializationsForOrgLazyQuery
+  );
+  const [fetchOrganizations, { data: orgsData }] = useQueryHandler(useDirectOrganizationsLazyQuery);
+  const [createPolicyGroup, { data: createdPolicyGroup }] = useQueryHandler(useCreateAccessPolicyGroupMutation);
+  const [fetchPolicyGroup, { data: policyGroup }] = useQueryHandler(useFindAccessPolicyGroupLazyQuery);
+  const [updatePolicyGroup, { data: updatedPolicyGroup }] = useQueryHandler(useUpdateAccessPolicyGroupMutation);
 
   useEffect(() => {
     if (isOpen) {
@@ -397,7 +402,7 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, onUpdateGrou
                           onResolveSuggestions={filterSuggestedTags}
                           getTextFromItem={getTextFromItem}
                           pickerSuggestionsProps={pickerSuggestionsProps}
-                          onItemSelected={onItemSelected}
+                          onItemSelected={() => {}}
                           itemLimit={4}
                           inputProps={{
                             id: 'pickerId',
@@ -426,7 +431,7 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, onUpdateGrou
                           onResolveSuggestions={filterSuggestedTags}
                           getTextFromItem={getTextFromItem}
                           pickerSuggestionsProps={pickerSuggestionsProps}
-                          onItemSelected={onItemSelected}
+                          onItemSelected={() => {}}
                           itemLimit={4}
                           inputProps={{
                             id: 'pickerId',

@@ -103,13 +103,13 @@ const _AccessManagementSpecializationPage = () => {
       <Spacing margin="double">
         {specializations.length > 0 && (
           <Row center>
-            <Column lg="3">
+            <Column lg="6">
               <Spacing margin={{ top: 'small' }}>
                 <Text variant="bold">Access Specializations</Text>
               </Spacing>
             </Column>
 
-            <Column lg="3" right>
+            <Column lg="6" right>
               <Button
                 variant="primary"
                 onClick={() => {
@@ -124,13 +124,14 @@ const _AccessManagementSpecializationPage = () => {
 
         {specializations.length > 0 && (
           <Row>
-            <Column lg="6">
+            <Column lg="12">
               <Spacing margin={{ top: 'normal' }}>
                 <Separator />
               </Spacing>
             </Column>
           </Row>
         )}
+
         <Row>
           <StyledColumn lg="12">
             {loading ? (
