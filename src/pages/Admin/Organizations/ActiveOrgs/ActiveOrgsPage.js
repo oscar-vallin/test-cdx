@@ -7,6 +7,7 @@ import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fab
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { MessageBar } from 'office-ui-fabric-react';
 import { SpinnerSize } from '@fluentui/react';
+import { EmptyState } from 'src/containers/states';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Row, Column } from '../../../../components/layouts';
 import { Spacing } from '../../../../components/spacings/Spacing';
@@ -82,46 +83,48 @@ const _ActiveOrgsPage = () => {
     }
   }, [loading]);
 
-  const renderList = () => {
-    return orgs.length > 0 ? (
-      <DetailsList
-        items={orgs}
-        selectionMode={SelectionMode.none}
-        columns={columns}
-        layoutMode={DetailsListLayoutMode.justified}
-        onRenderItemColumn={onRenderItemColumn}
-        isHeaderVisible
-      />
-    ) : (
-      <MessageBar>No active orgs</MessageBar>
-    );
-  };
-
   return (
     <LayoutAdmin id="PageActiveOrgs" sidebarOptionSelected="ACTIVE_ORGS">
       <Spacing margin="double">
-        <Row>
-          <Column lg="4">
-            <Spacing margin={{ top: 'small' }}>
-              <Text id="__Page-Title" variant="bold">
-                Active orgs
-              </Text>
-            </Spacing>
-          </Column>
-        </Row>
+        {orgs.length > 0 && (
+          <Row>
+            <Column lg="4">
+              <Spacing margin={{ top: 'small' }}>
+                <Text id="__Page-Title" variant="bold">
+                  Active orgs
+                </Text>
+              </Spacing>
+            </Column>
+          </Row>
+        )}
 
-        <Spacing margin={{ top: 'normal' }}>
-          <Separator />
-        </Spacing>
+        {orgs.length > 0 && (
+          <Row>
+            <Column lg="12">
+              <Spacing margin={{ top: 'normal' }}>
+                <Separator />
+              </Spacing>
+            </Column>
+          </Row>
+        )}
 
         <Row>
           <StyledColumn>
-            {!loading ? (
-              renderList()
-            ) : (
+            {loading ? (
               <Spacing margin={{ top: 'double' }}>
                 <Spinner size={SpinnerSize.large} label="Loading active orgs" />
               </Spacing>
+            ) : !orgs.length ? (
+              <EmptyState description="No active orgs found" />
+            ) : (
+              <DetailsList
+                items={orgs}
+                selectionMode={SelectionMode.none}
+                columns={columns}
+                layoutMode={DetailsListLayoutMode.justified}
+                onRenderItemColumn={onRenderItemColumn}
+                isHeaderVisible
+              />
             )}
           </StyledColumn>
         </Row>
