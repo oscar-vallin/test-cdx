@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import chroma from 'chroma-js';
 import { Text } from '../../../../components/typography/Text';
 
-export const StyledDiv = styled.div`
+export const StyledDiv = styled.div<StyledDivProps>`
   background: ${({ theme }) => theme.colors.neutralLighter};
   border: ${({ theme, level }) => `1px solid ${chroma(theme.colors.neutralTertiaryAlt).darken(0.25 * level)}`};
   border-radius: 5px;
@@ -30,7 +30,11 @@ export const StyledDiv = styled.div`
   }
 `;
 
-export const StyledText = styled(Text)`
+type StyledDivProps = {
+  level: number;
+};
+
+export const StyledText = styled(Text)<StyledTextProps>`
   align-items: center;
   background: ${({ theme }) => theme.colors.neutralLighter};
   border: ${({ theme, level }) => `1px solid ${chroma(theme.colors.neutralTertiaryAlt).darken(0.25 * level)}`};
@@ -40,3 +44,7 @@ export const StyledText = styled(Text)`
   position: absolute;
   top: -15px;
 `;
+
+type StyledTextProps = {
+  level: number;
+};

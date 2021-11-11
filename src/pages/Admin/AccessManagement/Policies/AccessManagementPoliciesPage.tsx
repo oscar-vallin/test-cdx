@@ -6,10 +6,7 @@ import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fab
 import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
 
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
-import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
-import { EmptyState } from 'src/containers/states';
-import { SpinnerSize } from '@fluentui/react';
-import { useNotification } from 'src/hooks/useNotification';
+import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Spacing } from '../../../../components/spacings/Spacing';
 import { Button } from '../../../../components/buttons';
@@ -45,12 +42,11 @@ const _AccessManagementPoliciesPage = () => {
   const { orgSid } = useOrgSid();
   const columns = generateColumns();
   const [isPanelOpen, setIsPanelOpen] = useState(false);
-  const Toast = useNotification();
 
   const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);
   const [selectedPolicyId, setSelectedPolicyId] = useState(0);
 
-  const [policies, setPolicies] = useState([]);
+  const [policies, setPolicies]: any = useState([]);
   const [accessPoliciesForOrg, { data, loading }] = useQueryHandler(useAccessPoliciesForOrgLazyQuery);
   // Linter Issue.  useRemoveAmPolicyMutation??
   const [removeAccessPolicy, { data: removeResponse, loading: isRemovingPolicy }] =
@@ -94,12 +90,7 @@ const _AccessManagementPoliciesPage = () => {
 
   useEffect(() => {
     if (!isRemovingPolicy && removeResponse) {
-      const name = policies.find(({ sid }) => selectedPolicyId === sid)?.name || '';
-
-      Toast.success({ text: `Access policy "${name}" deleted successfully` });
-
       setPolicies(policies.filter(({ sid }) => sid !== selectedPolicyId));
-      setSelectedPolicyId(0);
     }
   }, [isRemovingPolicy, removeResponse]);
 
@@ -109,125 +100,118 @@ const _AccessManagementPoliciesPage = () => {
     }
   }, [data]);
 
+  const renderList = () => {
+    return policies.length ? (
+      <DetailsList
+        items={policies}
+        selectionMode={SelectionMode.none}
+        columns={columns}
+        layoutMode={DetailsListLayoutMode.justified}
+        onRenderItemColumn={onRenderItemColumn}
+        isHeaderVisible
+      />
+    ) : (
+      <MessageBar>No policies found</MessageBar>
+    );
+  };
+
   return (
     <LayoutAdmin id="PageAdmin" sidebarOptionSelected="AM_POLICIES">
-      <Spacing margin="double">
-        {policies.length > 0 && (
+      <>
+        <Spacing margin="double">
           <Row>
-            <Column lg="6">
-              <Spacing margin={{ top: 'small' }}>
-                <Text variant="bold">Policies</Text>
-              </Spacing>
-            </Column>
+            <Column lg="8">
+              <Row center>
+                <Column lg="4">
+                  <Spacing margin={{ top: 'small' }}>
+                    <Text variant="bold">Policies</Text>
+                  </Spacing>
+                </Column>
 
-            <Column lg="6" right>
-              <Button
-                variant="primary"
-                onClick={() => {
-                  setIsPanelOpen(true);
-                }}
-              >
-                Create policy
-              </Button>
-            </Column>
-          </Row>
-        )}
-
-        {policies.length > 0 && (
-          <Row>
-            <Column lg="12">
-              <Spacing margin={{ top: 'normal' }}>
-                <Separator />
-              </Spacing>
-            </Column>
-          </Row>
-        )}
-
-        <Row>
-          <StyledColumn lg="12">
-            {loading ? (
-              <Spacing margin={{ top: 'double' }}>
-                <Spinner size={SpinnerSize.large} label="Loading policies" />
-              </Spacing>
-            ) : !policies.length ? (
-              <EmptyState
-                title="No policies found"
-                description="You haven't created an access policy yet. Click the button below to create a new policy."
-                actions={
+                <Column lg="8" right>
                   <Button
+                    id="__AccessManagementPoliciesPageId"
                     variant="primary"
                     onClick={() => {
                       setIsPanelOpen(true);
+                      return null;
                     }}
                   >
                     Create policy
                   </Button>
-                }
-              />
-            ) : (
-              <DetailsList
-                items={policies}
-                selectionMode={SelectionMode.none}
-                columns={columns}
-                layoutMode={DetailsListLayoutMode.justified}
-                onRenderItemColumn={onRenderItemColumn}
-                isHeaderVisible
-              />
-            )}
-          </StyledColumn>
-        </Row>
-      </Spacing>
+                </Column>
+              </Row>
 
-      <CreatePoliciesPanel
-        isOpen={isPanelOpen}
-        onCreatePolicy={({ name, permissions, sid, tmpl, tmplUseAsIs, applicableOrgTypes }) => {
-          setPolicies([
-            ...policies,
-            {
-              applicableOrgTypes: applicableOrgTypes.value,
-              name: name.value,
-              permissions: permissions.value,
-              sid: sid.value,
-              tmpl: tmpl.value,
-              tmplUseAsIs: tmplUseAsIs.value,
-            },
-          ]);
-        }}
-        onDismiss={() => {
-          setIsPanelOpen(false);
-          setSelectedPolicyId(0);
-        }}
-        selectedPolicyId={selectedPolicyId}
-      />
+              <Spacing margin={{ top: 'normal' }}>
+                <Separator />
+              </Spacing>
 
-      <Dialog
-        hidden={isConfirmationHidden}
-        onDismiss={hideConfirmation}
-        dialogContentProps={{
-          type: DialogType.normal,
-          title: 'Remove policy',
-          subText: `Do you really want to remove "${
-            policies.find(({ sid }) => selectedPolicyId === sid)?.name || ''
-          }"?`,
-        }}
-        modalProps={{ isBlocking: true, isDraggable: false }}
-      >
-        <DialogFooter>
-          <PrimaryButton
-            onClick={() => {
-              removeAccessPolicy({
-                variables: {
-                  policySid: selectedPolicyId,
-                },
-              });
+              <Row>
+                <StyledColumn lg="12">
+                  {!loading ? (
+                    renderList()
+                  ) : (
+                    <Spacing margin={{ top: 'double' }}>
+                      <Spinner size={SpinnerSize.large} label="Loading policies" />
+                    </Spacing>
+                  )}
+                </StyledColumn>
+              </Row>
+            </Column>
+          </Row>
+        </Spacing>
 
-              setIsConfirmationHidden(true);
-            }}
-            text="Remove"
-          />
-          <DefaultButton onClick={hideConfirmation} text="Cancel" />
-        </DialogFooter>
-      </Dialog>
+        <CreatePoliciesPanel
+          isOpen={isPanelOpen}
+          onCreatePolicy={({ name, permissions, sid, tmpl, tmplUseAsIs, applicableOrgTypes }) => {
+            setPolicies([
+              ...policies,
+              {
+                applicableOrgTypes: applicableOrgTypes.value,
+                name: name.value,
+                permissions: permissions.value,
+                sid: sid.value,
+                tmpl: tmpl.value,
+                tmplUseAsIs: tmplUseAsIs.value,
+              },
+            ]);
+          }}
+          onDismiss={() => {
+            setIsPanelOpen(false);
+            setSelectedPolicyId(0);
+          }}
+          selectedPolicyId={selectedPolicyId}
+        />
+
+        <Dialog
+          hidden={isConfirmationHidden}
+          onDismiss={hideConfirmation}
+          dialogContentProps={{
+            type: DialogType.normal,
+            title: 'Remove policy',
+            subText: `Do you really want to remove "${
+              policies.find(({ sid }: any) => selectedPolicyId === sid)?.name || ''
+            }"?`,
+          }}
+          modalProps={{ isBlocking: true }}
+        >
+          <DialogFooter>
+            <PrimaryButton
+              onClick={() => {
+                removeAccessPolicy({
+                  variables: {
+                    policySid: selectedPolicyId,
+                  },
+                });
+
+                setIsConfirmationHidden(true);
+              }}
+              text="Remove"
+            />
+            <DefaultButton onClick={hideConfirmation} text="Cancel" />
+          </DialogFooter>
+        </Dialog>
+      </>
     </LayoutAdmin>
   );
 };

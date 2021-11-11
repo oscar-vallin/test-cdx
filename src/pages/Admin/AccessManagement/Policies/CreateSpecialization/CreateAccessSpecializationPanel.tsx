@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect } from 'react';
+import { ReactElement, useState, useEffect } from 'react';
 
 import { SpinnerSize, Checkbox, Panel, PanelType, Spinner } from 'office-ui-fabric-react';
 import _ from 'lodash';
@@ -31,7 +31,7 @@ const INITIAL_STATE = {
   name: '',
 };
 
-const groupSpecializations = (opts) => {
+const groupSpecializations: any = (opts) => {
   const groups = _.groupBy(opts, ({ orgSids }) => orgSids.label);
   const [orgKey, vendorKey] = Object.keys(groups);
 
@@ -46,16 +46,34 @@ const groupSpecializations = (opts) => {
 
 const parseToPickerOpts = (arr = []) => arr.map(({ name, sid }) => ({ name, key: sid }));
 
-const CreateAccessSpecializationPanel = ({ isOpen, onDismiss, onCreateSpecialization, selectedAccessId }) => {
+const defaultProps = {
+  isOpen: false,
+  onDismiss: () => null,
+  onCreateSpecialization: () => null,
+};
+
+type CreateAccessSpecializationPanelProps = {
+  isOpen?: boolean;
+  onDismiss?: any | null;
+  onCreateSpecialization?: any | null;
+  selectedAccessId?: any;
+} & typeof defaultProps;
+
+const CreateAccessSpecializationPanel = ({
+  isOpen,
+  onDismiss,
+  onCreateSpecialization,
+  selectedAccessId,
+}: CreateAccessSpecializationPanelProps): ReactElement => {
   const Toast = useNotification();
   const SessionStore = useSessionStore();
 
   const { orgSid } = useOrgSid();
-  const [state, setState] = useState({ ...INITIAL_STATE });
-  const [accessForm, setAccessForm] = useState({});
+  const [state, setState]: any = useState({ ...INITIAL_STATE });
+  const [accessForm, setAccessForm]: any = useState({});
   const [accessFilters, setAccessFilters] = useState([]);
   const [specializations, setSpecializations] = useState({});
-  const [currentItem, setCurrentItem] = useState(null);
+  const [currentItem, setCurrentItem]: any = useState(null);
 
   const [fetchAccessForm, { data: form, loading: isLoadingForm }] = useQueryHandler(
     useAccessSpecializationFormLazyQuery
@@ -176,7 +194,7 @@ const CreateAccessSpecializationPanel = ({ isOpen, onDismiss, onCreateSpecializa
 
                   <Row>
                     <Column lg="12">
-                      {accessFilters.map((group, groupIndex) => (
+                      {accessFilters.map((group: any, groupIndex) => (
                         <Collapse label={group.label} expanded key={groupIndex}>
                           <Card elevation="none" spacing="none">
                             <Spacing padding="normal">
@@ -202,6 +220,16 @@ const CreateAccessSpecializationPanel = ({ isOpen, onDismiss, onCreateSpecializa
 
                                         <Column lg="9" key={`${groupIndex}-${optIndex}-right`}>
                                           <TagPicker
+                                            label
+                                            disabled={false}
+                                            itemLimit
+                                            pickerProps
+                                            debounce={500}
+                                            onBlur={() => null}
+                                            onFocus={() => null}
+                                            required={false}
+                                            id="__CreateAccessSpecializationPanelId"
+                                            onResolveSuggestions={() => null}
                                             apiQuery={(text) => {
                                               const isVendor = option.orgSids.query === 'vendorQuickSearch';
 
@@ -261,6 +289,7 @@ const CreateAccessSpecializationPanel = ({ isOpen, onDismiss, onCreateSpecializa
                 <Row>
                   <Column lg="12">
                     <Button
+                      id="__CreateAccessSpecializationPanelId"
                       variant="primary"
                       disabled={isCreatingSpecialization}
                       onClick={() => {
@@ -274,10 +303,11 @@ const CreateAccessSpecializationPanel = ({ isOpen, onDismiss, onCreateSpecializa
                                   permission,
                                   orgSids: specializations[permission].map((item) => item.key),
                                 }))
-                                .reduce((arr, item) => [...arr, item], []),
+                                .reduce((arr, item): any => [...arr, item], []),
                             },
                           },
                         });
+                        return null;
                       }}
                     >
                       Create specialization
@@ -292,5 +322,7 @@ const CreateAccessSpecializationPanel = ({ isOpen, onDismiss, onCreateSpecializa
     </Panel>
   );
 };
+
+CreateAccessSpecializationPanel.defaultProps = defaultProps;
 
 export default CreateAccessSpecializationPanel;

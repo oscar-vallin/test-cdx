@@ -69,7 +69,7 @@ export const StyledColorPicker = styled(ColorPicker)`
   }
 `;
 
-export const StyledPreview = styled.div`
+export const StyledPreview = styled.div<StyledPreviewProps>`
   border: 1px solid ${({ theme }) => theme.colors.neutralTertiary};
   margin: ${({ theme }) => theme.spacing.normal} 0;
 
@@ -86,3 +86,7 @@ export const StyledPreview = styled.div`
     }
   }
 `;
+
+type StyledPreviewProps = {
+  colors?: any;
+};

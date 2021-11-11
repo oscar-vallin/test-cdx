@@ -166,7 +166,7 @@ const PasswordRules = ({ validations, password, onChange }) => {
 
   useEffect(() => {
     if (!loading && data) {
-      setRules(ValidationRulesParser.parse([data.changeOwnPasswordPage.ruleGroup]));
+      setRules(ValidationRulesParser.parse([data?.changeOwnPasswordPage?.ruleGroup]));
     }
   }, [loading, data]);
 

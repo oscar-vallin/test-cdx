@@ -1,8 +1,10 @@
-import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
+import { ReactElement } from 'react';
+import { DetailsList, DetailsListLayoutMode, SelectionMode, IGroup } from 'office-ui-fabric-react/lib/DetailsList';
 import { Spacing } from '../../../components/spacings/Spacing';
 import { StyledHeaderRow, StyledHeader, StyledRow } from '../FileStatusDetails.styles';
+// import { IColumn } from 'office-ui-fabric-react/lib-commonjs/DetailsList';
 
-const COLUMNS = [
+const COLUMNS: any = [
   { key: 'planCode', name: 'Plan Code', fieldName: 'planCode' },
   { key: 'activeSubscribers', name: 'Active', fieldName: 'activeSubscribers' },
   { key: 'endedSubscribers', name: 'Ended', fieldName: 'endedSubscribers' },
@@ -26,7 +28,15 @@ const onRenderRow = (props) => {
   return <StyledRow {...props} />;
 };
 
-const EnrollmentStatsTab = ({ items }) => {
+const defaultProps = {
+  items: '',
+};
+
+type EnrollmentStatsTabProps = {
+  items?: any;
+} & typeof defaultProps;
+
+const EnrollmentStatsTab = ({ items }: EnrollmentStatsTabProps): ReactElement => {
   const data = [...items.planInsuredStat, ...items.excludedPlanInsuredStat].map((plan) => ({
     planCode: plan.planCode,
     activeSubscribers: plan.subscribers?.active?.value || 0,
@@ -35,11 +45,12 @@ const EnrollmentStatsTab = ({ items }) => {
     endedDependents: plan.dependents?.active?.value || 0,
   }));
 
-  const GROUPS = [
+  const GROUPS: IGroup[] = [
     {
       count: items.planInsuredStat.length,
       key: 'insuredStats',
       name: 'Included Subscribers / Enrollments',
+      startIndex: [],
       level: 0,
     },
     {
@@ -67,5 +78,7 @@ const EnrollmentStatsTab = ({ items }) => {
     </Spacing>
   );
 };
+
+EnrollmentStatsTab.defaultProps = defaultProps;
 
 export default EnrollmentStatsTab;

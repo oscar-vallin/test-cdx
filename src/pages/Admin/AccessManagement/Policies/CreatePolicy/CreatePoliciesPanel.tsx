@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect } from 'react';
+import { ReactElement, useState, useEffect } from 'react';
 
 import { SpinnerSize, Checkbox, Panel, PanelType, Spinner } from 'office-ui-fabric-react';
 import _ from 'lodash';
@@ -32,7 +32,7 @@ const INITIAL_STATE = {
   permissions: [],
 };
 
-const groupPermissions = (opts) => {
+const groupPermissions: any = (opts) => {
   const { values } = opts.find((opt) => opt.key === 'Permission');
   const { K2U, COLORPALETTE, ACCESS, ORG, PASSWORD, PROD, SSOIDP, TEST, THEME, UAT, USER } = _.groupBy(
     values,
@@ -68,13 +68,31 @@ const groupPermissions = (opts) => {
   ];
 };
 
-const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicyId }) => {
+const defaultProps = {
+  isOpen: false,
+  onDismiss: () => null,
+  onCreatePolicy: () => null,
+};
+
+type CreatePoliciesPanelProps = {
+  isOpen?: boolean;
+  onDismiss?: any | null;
+  onCreatePolicy?: any | null;
+  selectedPolicyId?: any;
+} & typeof defaultProps;
+
+const CreatePoliciesPanel = ({
+  isOpen,
+  onDismiss,
+  onCreatePolicy,
+  selectedPolicyId,
+}: CreatePoliciesPanelProps): ReactElement => {
   const { orgSid } = useOrgSid();
   const Toast = useNotification();
-  const [state, setState] = useState({ ...INITIAL_STATE });
-  const [policyForm, setPolicyForm] = useState({});
+  const [state, setState]: any = useState({ ...INITIAL_STATE });
+  const [policyForm, setPolicyForm]: any = useState({});
   const [permissions, setPermissions] = useState([]);
-  const [applicableOrgTypes, setApplicableOrgTypes] = useState([]);
+  const [applicableOrgTypes, setApplicableOrgTypes]: any = useState([]);
 
   const [fetchPolicyForm, { data: form, loading: isLoadingForm }] = useQueryHandler(useAccessPolicyFormLazyQuery);
   const [createPolicy, { data: createdPolicy, loading: isCreatingPolicy }] =
@@ -177,7 +195,7 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
                           {policyForm.tmpl?.visible && (
                             <Checkbox
                               label={policyForm.tmpl?.label}
-                              required={policyForm.tmpl?.required}
+                              // required={policyForm.tmpl?.required}
                               checked={state.isTemplate}
                               onChange={(event, isTemplate) => setState({ ...state, isTemplate })}
                             />
@@ -190,7 +208,7 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
                             {policyForm.tmplUseAsIs?.visible && (
                               <Checkbox
                                 label={policyForm.tmplUseAsIs?.label}
-                                required={policyForm.tmplUseAsIs?.required}
+                                // required={policyForm.tmplUseAsIs?.required}
                                 checked={state.usedAsIs}
                                 onChange={(event, usedAsIs) => setState({ ...state, usedAsIs })}
                               />
@@ -214,14 +232,25 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
                         <Label text={policyForm.applicableOrgTypes?.label} info={policyForm.applicableOrgTypes?.info} />
 
                         <TagPicker
+                          label
+                          disabled={false}
+                          itemLimit
+                          pickerProps
+                          onBlur={() => null}
+                          onFocus={() => null}
+                          required={false}
+                          id="__CreatePoliciesPanelId"
+                          onResolveSuggestions={() => null}
                           options={
                             policyForm.options
                               ?.find((opt) => opt.key === 'OrgType')
                               ?.values.map(({ label, value }) => ({ key: value, name: label })) || []
                           }
                           value={applicableOrgTypes}
+                          debounce={500}
+                          apiQuery={() => null}
                           onRemoveItem={({ key }) =>
-                            setApplicableOrgTypes(applicableOrgTypes.filter((item) => item.key === key))
+                            setApplicableOrgTypes(applicableOrgTypes.filter((item: any) => item.key === key))
                           }
                           onItemSelected={(item) => {
                             setApplicableOrgTypes([...applicableOrgTypes, item]);
@@ -244,7 +273,7 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
 
                     <Row>
                       <Column lg="12">
-                        {permissions.map((group, groupIndex) => (
+                        {permissions.map((group: any, groupIndex) => (
                           <Collapse label={group.label} expanded key={groupIndex}>
                             <Spacing padding={{ top: 'normal', bottom: 'normal' }}>
                               <Row>
@@ -299,6 +328,7 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
                 <Row>
                   <Column lg="12">
                     <Button
+                      id="__CreatePoliciesPanelId"
                       variant="primary"
                       disabled={isCreatingPolicy}
                       onClick={() => {
@@ -314,6 +344,7 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
                             },
                           },
                         });
+                        return null;
                       }}
                     >
                       Create policy
@@ -328,5 +359,7 @@ const CreatePoliciesPanel = ({ isOpen, onDismiss, onCreatePolicy, selectedPolicy
     </Panel>
   );
 };
+
+CreatePoliciesPanel.defaultProps = defaultProps;
 
 export default CreatePoliciesPanel;

@@ -30,5 +30,5 @@ type DivStyledProps = {
   between: string;
   bottom: boolean;
   variant: string;
-  top: string;
+  top: boolean;
 };

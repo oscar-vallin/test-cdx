@@ -28,7 +28,7 @@ const isFormInvalid = (passwords) => {
   return !passwords.current || !passwords.new || !passwords.confirmation || passwords.new !== passwords.confirmation;
 };
 
-const PasswordChange = ({ state, validations = [], onChange }) => {
+const PasswordChange = ({ state, validations = [], onChange }: any) => {
   const [
     updateOwnPasswordMutation,
     { data: passwordUpdateResult, loading: isUpdatingPassword, error: passwordUpdateError },
@@ -91,6 +91,7 @@ const PasswordChange = ({ state, validations = [], onChange }) => {
         <Column>
           <Spacing margin={{ top: 'normal' }}>
             <Button
+              id="__PasswordChangeId"
               variant="primary"
               text={isUpdatingPassword ? 'Processing...' : 'Save password'}
               disabled={isFormInvalid(state) || !validations[0]?.isCurrentLevelValid || isUpdatingPassword}
@@ -104,6 +105,7 @@ const PasswordChange = ({ state, validations = [], onChange }) => {
                     },
                   },
                 });
+                return null;
               }}
             />
           </Spacing>
@@ -118,7 +120,7 @@ const PasswordChange = ({ state, validations = [], onChange }) => {
                 type={!passwordUpdateResult?.updateOwnPassword ? 'error' : 'success'}
                 content={
                   !passwordUpdateResult?.updateOwnPassword
-                    ? passwordUpdateError.message
+                    ? passwordUpdateError?.message
                     : 'Password updated successfully.'
                 }
               />

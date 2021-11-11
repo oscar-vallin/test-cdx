@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ReactElement } from 'react';
 
 import { useLocation } from 'react-router-dom';
 import { Panel, PanelType } from '@fluentui/react/lib/Panel';
@@ -8,7 +8,6 @@ import { TagPicker } from '@fluentui/react/lib/Pickers';
 import { mergeStyles } from '@fluentui/react/lib/Styling';
 import { FontIcon } from '@fluentui/react/lib/Icon';
 import { TooltipHost } from '@fluentui/react/lib/Tooltip';
-import { useQueryHandler } from 'src/hooks/useQueryHandler';
 
 import { Spacing } from '../../../../../components/spacings/Spacing';
 import { Button } from '../../../../../components/buttons';
@@ -40,26 +39,43 @@ const INITIAL_STATE = {
   excludeOrgSids: [],
 };
 
-const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, onUpdateGroupPolicy, selectedGroupId }) => {
+const defaultProps = {
+  isOpen: false,
+  onDismiss: () => null,
+  onCreateGroupPolicy: () => null,
+  onUpdateGroupPolicy: '',
+};
+
+type CreateGroupPanelProps = {
+  isOpen?: boolean;
+  onDismiss?: any | null;
+  onCreateGroupPolicy?: any | null;
+  onUpdateGroupPolicy?: any | null;
+  selectedGroupId?: any;
+} & typeof defaultProps;
+
+const CreateGroupPanel = ({
+  isOpen,
+  onDismiss,
+  onCreateGroupPolicy,
+  onUpdateGroupPolicy,
+  selectedGroupId,
+}: CreateGroupPanelProps): ReactElement => {
   const location = useLocation();
-  const { orgSid } = QueryParams.parse(location.search);
-  const [state, setState] = useState({ ...INITIAL_STATE });
+  const { orgSid }: any = QueryParams.parse(location.search);
+  const [state, setState]: any = useState({ ...INITIAL_STATE });
   const [policies, setPolicies] = useState([]);
   const [specializations, setSpecializations] = useState([]);
   const [organizations, setOrganizations] = useState([]);
-  const [response, setResponse] = useState({});
+  const [response, setResponse]: any = useState({});
 
-  const [apiUseAccessPolicyForm, { data, loading: isLoadingPolicy }] = useQueryHandler(
-    useAccessPolicyGroupFormLazyQuery
-  );
-  const [fetchPolicies, { data: policiesData }] = useQueryHandler(useAccessPoliciesForOrgLazyQuery);
-  const [fetchSpecializations, { data: specializationsData }] = useQueryHandler(
-    useAccessSpecializationsForOrgLazyQuery
-  );
-  const [fetchOrganizations, { data: orgsData }] = useQueryHandler(useDirectOrganizationsLazyQuery);
-  const [createPolicyGroup, { data: createdPolicyGroup }] = useQueryHandler(useCreateAccessPolicyGroupMutation);
-  const [fetchPolicyGroup, { data: policyGroup }] = useQueryHandler(useFindAccessPolicyGroupLazyQuery);
-  const [updatePolicyGroup, { data: updatedPolicyGroup }] = useQueryHandler(useUpdateAccessPolicyGroupMutation);
+  const [apiUseAccessPolicyForm, { data, loading: isLoadingPolicy }]: any = useAccessPolicyGroupFormLazyQuery();
+  const [fetchPolicies, { data: policiesData }]: any = useAccessPoliciesForOrgLazyQuery();
+  const [fetchSpecializations, { data: specializationsData }]: any = useAccessSpecializationsForOrgLazyQuery();
+  const [fetchOrganizations, { data: orgsData }]: any = useDirectOrganizationsLazyQuery();
+  const [createPolicyGroup, { data: createdPolicyGroup }] = useCreateAccessPolicyGroupMutation();
+  const [fetchPolicyGroup, { data: policyGroup }] = useFindAccessPolicyGroupLazyQuery();
+  const [updatePolicyGroup, { data: updatedPolicyGroup }] = useUpdateAccessPolicyGroupMutation();
 
   useEffect(() => {
     if (isOpen) {
@@ -87,7 +103,7 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, onUpdateGrou
 
   useEffect(() => {
     if (policyGroup) {
-      const { findAccessPolicyGroup } = policyGroup;
+      const { findAccessPolicyGroup }: any = policyGroup;
       setResponse(findAccessPolicyGroup);
       setState({
         ...state,
@@ -157,7 +173,7 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, onUpdateGrou
     return tagList.some((compareTag) => compareTag.key === tag.key);
   };
 
-  const organizationTags = organizations.map((item) => ({ key: item.sid, name: item.name }));
+  const organizationTags = organizations.map((item: any) => ({ key: item.sid, name: item.name }));
 
   const filterSuggestedTags = (filterText, tagList) => {
     return filterText
@@ -169,11 +185,11 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, onUpdateGrou
 
   const getTextFromItem = (item) => item.name;
 
-  const onIncludedOrgsSelected = (item) => {
+  const onIncludedOrgsSelected = (item): any => {
     setState({ ...state, includeOrgSids: item.map((org) => org.key) });
   };
 
-  const onExcludedOrgsSelected = (item) => {
+  const onExcludedOrgsSelected = (item): any => {
     setState({ ...state, excludeOrgSids: item.map((org) => org.key) });
   };
 
@@ -220,7 +236,7 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, onUpdateGrou
                         <Checkbox
                           label={response?.tmpl?.label}
                           checked={state.tmpl}
-                          onChange={(_event, tmpl) =>
+                          onChange={(_event, tmpl: any) =>
                             setState({ ...state, tmpl, tmplUseAsIs: tmpl ? state.tmplUseAsIs : false })
                           }
                         />
@@ -236,7 +252,7 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, onUpdateGrou
                         <Checkbox
                           label={response?.tmplUseAsIs?.label}
                           checked={state.tmplUseAsIs}
-                          onChange={(_event, tmplUseAsIs) => setState({ ...state, tmplUseAsIs })}
+                          onChange={(_event, tmplUseAsIs: any) => setState({ ...state, tmplUseAsIs })}
                         />
                         {response?.tmplUseAsIs?.info && (
                           <TooltipHost content={response?.tmplUseAsIs?.info} id="tmplUseAsIsTooltip">
@@ -271,7 +287,7 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, onUpdateGrou
                   <StyledContainer>
                     <Row>
                       <Column lg="6">
-                        {policies.map((item) => {
+                        {policies.map((item: { name: any; sid: never }) => {
                           return (
                             <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                               <Checkbox
@@ -317,7 +333,7 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, onUpdateGrou
                   <StyledContainer>
                     <Row>
                       <Column lg="6">
-                        {specializations.map((item) => {
+                        {specializations.map((item: { name: any; sid: never }) => {
                           return (
                             <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                               <Checkbox
@@ -344,7 +360,7 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, onUpdateGrou
               <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                 <Checkbox
                   label="Policies Applies to All Sub Organizations except for those explicitly exclude"
-                  onChange={(event, _stepWise) => setStepWise(_stepWise)}
+                  onChange={(event, _stepWise) => setState({ ...state, _stepWise })}
                 />
               </Spacing>
 
@@ -370,7 +386,7 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, onUpdateGrou
                         <strong>{response?.excludeOrgSids?.label}</strong>
                         <TagPicker
                           removeButtonAriaLabel="Remove"
-                          selectionAriaLabel="Selected colors"
+                          // selectionAriaLabel="Selected colors"
                           onResolveSuggestions={filterSuggestedTags}
                           getTextFromItem={getTextFromItem}
                           pickerSuggestionsProps={pickerSuggestionsProps}
@@ -398,11 +414,11 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, onUpdateGrou
                         )}
                         <TagPicker
                           removeButtonAriaLabel="Remove"
-                          selectionAriaLabel="Selected Orgs"
+                          // selectionAriaLabel="Selected Orgs"
                           onResolveSuggestions={filterSuggestedTags}
                           getTextFromItem={getTextFromItem}
                           pickerSuggestionsProps={pickerSuggestionsProps}
-                          onItemSelected={() => {}}
+                          onItemSelected={onIncludedOrgsSelected}
                           itemLimit={4}
                           inputProps={{
                             id: 'pickerId',
@@ -427,11 +443,11 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, onUpdateGrou
                         )}
                         <TagPicker
                           removeButtonAriaLabel="Remove"
-                          selectionAriaLabel="Selected Orgs"
+                          // selectionAriaLabel="Selected Orgs"
                           onResolveSuggestions={filterSuggestedTags}
                           getTextFromItem={getTextFromItem}
                           pickerSuggestionsProps={pickerSuggestionsProps}
-                          onItemSelected={() => {}}
+                          onItemSelected={onExcludedOrgsSelected}
                           itemLimit={4}
                           inputProps={{
                             id: 'pickerId',
@@ -471,7 +487,7 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, onUpdateGrou
                         )}
                         <TagPicker
                           removeButtonAriaLabel="Remove"
-                          selectionAriaLabel="Selected Orgs"
+                          // selectionAriaLabel="Selected Orgs"
                           onResolveSuggestions={filterSuggestedTags}
                           getTextFromItem={getTextFromItem}
                           pickerSuggestionsProps={pickerSuggestionsProps}
@@ -503,7 +519,7 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, onUpdateGrou
                         )}
                         <TagPicker
                           removeButtonAriaLabel="Remove"
-                          selectionAriaLabel="Selected Orgs"
+                          // selectionAriaLabel="Selected Orgs"
                           onResolveSuggestions={filterSuggestedTags}
                           getTextFromItem={getTextFromItem}
                           pickerSuggestionsProps={pickerSuggestionsProps}
@@ -525,10 +541,11 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, onUpdateGrou
               <Row>
                 <Column lg="12">
                   <Button
+                    id="__CreateGroupPanelId"
                     variant="primary"
                     disabled={isLoadingPolicy}
                     onClick={() => {
-                      const callback = !state.policyGroupSid ? createPolicyGroup : updatePolicyGroup;
+                      const callback: any = !state.policyGroupSid ? createPolicyGroup : updatePolicyGroup;
 
                       callback({
                         variables: {
@@ -546,6 +563,7 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, onUpdateGrou
                           },
                         },
                       });
+                      return null;
                     }}
                   >
                     {state.policyGroupSid ? 'Update Group' : 'Save Group'}
@@ -559,5 +577,7 @@ const CreateGroupPanel = ({ isOpen, onDismiss, onCreateGroupPolicy, onUpdateGrou
     </Panel>
   );
 };
+
+CreateGroupPanel.defaultProps = defaultProps;
 
 export default CreateGroupPanel;
