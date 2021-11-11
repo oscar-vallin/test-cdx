@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, memo } from 'react';
 
-import { SpinnerSize } from '@fluentui/react';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Button } from '../../../../components/buttons/Button';
 import { Separator } from '../../../../components/separators/Separator';
@@ -42,8 +41,8 @@ const _DefaultThemePage = () => {
     apiDefaultDashThemeQuery({ variables: { ownedInput } });
   }, []);
 
-  const { changeTheme } = useThemeContext();
-  const [palettes, setPalettes] = useState([
+  const { changeTheme }: any = useThemeContext();
+  const [palettes, setPalettes]: any = useState([
     {
       id: null,
       paletteNm: 'Default',
@@ -54,14 +53,14 @@ const _DefaultThemePage = () => {
     },
   ]);
 
-  const [palette, setPalette] = useState({});
-  const [selectedPaletteId, setSelectedPaletteId] = useState(null);
-  const [themeColorMode, setThemeColorMode] = useState(null);
+  const [palette, setPalette]: any = useState({});
+  const [selectedPaletteId, setSelectedPaletteId]: any = useState(null);
+  const [themeColorMode, setThemeColorMode]: any = useState(null);
 
-  const [createDefaultDashThemeMutation, { data: themeCreated, loading: isCreatingTheme }] =
+  const [createDefaultDashThemeMutation, { data: themeCreated, loading: isCreatingTheme }]: any =
     useCreateDefaultDashThemeMutation();
 
-  const [updateDefaultDashThemeMutation, { data: themeUpdated, loading: isUpdatingTheme }] =
+  const [updateDefaultDashThemeMutation, { data: themeUpdated, loading: isUpdatingTheme }]: any =
     useUpdateDefaultDashThemeMutation();
 
   useEffect(() => {
@@ -76,7 +75,7 @@ const _DefaultThemePage = () => {
 
       const finalPalette = defaultDashThemeForSite
         ? { ...defaultDashThemeForSite, ...defaultDashThemeForSite.dashThemeColor }
-        : colorPalettes.find(({ defaultPalette }) => defaultPalette);
+        : colorPalettes.find(({ defaultPalette }: any) => defaultPalette);
 
       setPalettes([...palettes, ...colorPalettes]);
       setSelectedPaletteId(finalPalette?.id);
@@ -85,13 +84,18 @@ const _DefaultThemePage = () => {
   }, [colorPalettes, defaultTheme]);
 
   useEffect(() => {
-    const selectedPalette = palettes.find(({ palleteId }) => palleteId === selectedPaletteId) || {};
+    const selectedPalette: any = palettes.find(({ palleteId }) => palleteId === selectedPaletteId) || {};
     const { themePrimary } = selectedPalette;
 
     const variant = themeColorMode
       ? Theming.getVariant({
-          ...(themeColorMode === 'LIGHT' ? defaultTheme : darkTheme),
           themePrimary,
+          neutralPrimary:
+            themeColorMode === 'LIGHT'
+              ? defaultTheme?.defaultDashThemeForSite?.dashThemeColor?.neutralPrimary
+              : darkTheme.neutralPrimary,
+          white:
+            themeColorMode === 'LIGHT' ? defaultTheme?.defaultDashThemeForSite?.dashThemeColor?.white : darkTheme.white,
         })
       : selectedPalette;
 
@@ -108,7 +112,7 @@ const _DefaultThemePage = () => {
           <Column lg="12">
             {isLoadingPalettes || isLoadingDefaultTheme ? (
               <Spacing margin={{ top: 'double' }}>
-                <Spinner size={SpinnerSize.large} label="Loading theme settings" />
+                <Spinner size="lg" label="Loading theme settings" />
               </Spacing>
             ) : (
               <>
@@ -127,7 +131,7 @@ const _DefaultThemePage = () => {
                           text: item.paletteNm,
                         })) || []
                       }
-                      onChange={(evt, { key }) => setSelectedPaletteId(key)}
+                      onChange={(evt, { key }: any) => setSelectedPaletteId(key)}
                     />
                   )}
                 </StyledDiv>
@@ -149,7 +153,7 @@ const _DefaultThemePage = () => {
                             { key: 'LIGHT', text: 'Light' },
                             ...(palette.allowDark ? [{ key: 'DARK', text: 'Dark' }] : []),
                           ]}
-                          onChange={(evt, { key }) => {
+                          onChange={(evt, { key }: any) => {
                             setThemeColorMode(key);
                           }}
                         />
@@ -163,6 +167,7 @@ const _DefaultThemePage = () => {
                 </Spacing>
 
                 <Button
+                  id="__DefaultThemePageId"
                   variant="primary"
                   text={
                     !(isCreatingTheme || isUpdatingTheme)
@@ -196,6 +201,8 @@ const _DefaultThemePage = () => {
                         },
                       });
                     }
+
+                    return null;
                   }}
                 />
               </>

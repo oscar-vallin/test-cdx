@@ -1,9 +1,22 @@
+import { ReactElement } from 'react';
 import { ChoiceGroup } from '@fluentui/react';
 import { StyledColorPreview, StyledPreview } from '../ColorPalettesPage.styles';
 
 const labels = ['Primary color', 'Text color', 'Background color'];
 
-const PaletteColors = ({ type, colors, selected, onChange }) => {
+const defaultProps = {
+  type: '',
+  onChange: () => null,
+};
+
+type PaletteColorsProps = {
+  type?: string;
+  colors?: any;
+  selected?: any;
+  onChange?: any | null;
+} & typeof defaultProps;
+
+const PaletteColors = ({ type, colors, selected, onChange }: PaletteColorsProps): ReactElement => {
   return (
     <ChoiceGroup
       label="Color Palette"
@@ -11,9 +24,10 @@ const PaletteColors = ({ type, colors, selected, onChange }) => {
       options={Object.keys(colors)
         .filter((key) => (type === 'EXTEND' ? key === 'themePrimary' : true))
         .map((key, index) => ({
+          text: '',
           key,
           label: labels[index],
-          onRenderField: (props, render) => {
+          onRenderField: (props: any, render: any) => {
             const colorKey = props.id.split('-').pop();
 
             return (
@@ -27,9 +41,11 @@ const PaletteColors = ({ type, colors, selected, onChange }) => {
             );
           },
         }))}
-      onChange={(evt, { key }) => onChange({ key, color: colors[key] })}
+      onChange={(evt, { key }: any) => onChange({ key, color: colors[key] })}
     />
   );
 };
+
+PaletteColors.defaultProps = defaultProps;
 
 export default PaletteColors;

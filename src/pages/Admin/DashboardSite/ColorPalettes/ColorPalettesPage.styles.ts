@@ -7,7 +7,7 @@ export const StyledDiv = styled.div`
   width: 100%;
 `;
 
-export const StyledChoiceGroup = styled(ChoiceGroup)`
+export const StyledChoiceGroup = styled(ChoiceGroup)<StyledChoiceGroupProps>`
   .ms-ChoiceFieldGroup-flexContainer {
     align-items: flex-end;
     display: ${({ inline }) => (inline ? 'flex' : 'block')};
@@ -22,6 +22,10 @@ export const StyledChoiceGroup = styled(ChoiceGroup)`
     }
   }
 `;
+
+type StyledChoiceGroupProps = {
+  inline?: boolean;
+};
 
 export const StyledColorPicker = styled(ColorPicker)`
   max-width: 100%;

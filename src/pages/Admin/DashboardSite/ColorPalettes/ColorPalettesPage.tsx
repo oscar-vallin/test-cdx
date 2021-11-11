@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, memo } from 'react';
 
-import { Checkbox, SpinnerSize } from '@fluentui/react';
+import { Checkbox } from '@fluentui/react';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Button } from '../../../../components/buttons/Button';
 import { Separator } from '../../../../components/separators/Separator';
@@ -30,7 +30,7 @@ const getThemeVariant = ({ themePrimary, neutralPrimary, white }) => ({
 
 const _ColorPalettesPage = () => {
   const Toast = useNotification();
-  const { changeTheme, themeConfig } = useThemeContext();
+  const { changeTheme, themeConfig }: any = useThemeContext();
   const {
     colorPalettes,
     isLoadingPalettes,
@@ -41,10 +41,10 @@ const _ColorPalettesPage = () => {
     createColorPalette,
     updateColorPalette,
     removeColorPalette,
-  } = useColorPalettes();
+  }: any = useColorPalettes();
 
   const [wantsReset, setWantsReset] = useState(false);
-  const [selectedPaletteId, setSelectedPaletteId] = useState(null);
+  const [selectedPaletteId, setSelectedPaletteId]: any = useState(null);
 
   const [paletteType, setPaletteType] = useState('EXTEND');
   const [enableDarkMode, setEnableDarkMode] = useState(true);
@@ -52,7 +52,7 @@ const _ColorPalettesPage = () => {
   const [paletteName, setPaletteName] = useState('');
   const [isDefaultPalette, setIsDefaultPalette] = useState(false);
 
-  const [colors, setColors] = useState({
+  const [colors, setColors]: any = useState({
     themePrimary: (themeConfig.themeColorPalettes || [])[0],
   });
 
@@ -74,7 +74,7 @@ const _ColorPalettesPage = () => {
   /* PALETTE TYPE -------------- */
   useEffect(() => {
     const defaultVariant = defaultTheme;
-    const currentVariant = colorPalettes.find(({ id }) => id === selectedPaletteId) || {};
+    const currentVariant = colorPalettes.find(({ id }: any) => id === selectedPaletteId) || {};
 
     const isExtendingPalette = paletteType === 'EXTEND';
     const paletteColors = {
@@ -155,7 +155,7 @@ const _ColorPalettesPage = () => {
       <Spacing margin="double">
         {isLoadingPalettes ? (
           <Spacing margin={{ top: 'double' }}>
-            <Spinner size={SpinnerSize.large} label="Loading color palettes" />
+            <Spinner size="lg" label="Loading color palettes" />
           </Spacing>
         ) : (
           <>
@@ -168,7 +168,7 @@ const _ColorPalettesPage = () => {
                       label="Color palettes"
                       selectedKey={selectedPaletteId}
                       disabled={false}
-                      onChange={(evt, { key }) => setSelectedPaletteId(key)}
+                      onChange={(evt, { key }: any) => setSelectedPaletteId(key)}
                       options={colorPalettes?.map((item) => ({ key: item.id, text: item.paletteNm })) || []}
                     />
                   ) : (
@@ -184,7 +184,7 @@ const _ColorPalettesPage = () => {
 
             {isCreatingPalette ? (
               <Spacing margin={{ top: 'double' }}>
-                <Spinner size={SpinnerSize.large} label="Loading color palette" />
+                <Spinner size="lg" label="Loading color palette" />
               </Spacing>
             ) : (
               <>
@@ -210,7 +210,7 @@ const _ColorPalettesPage = () => {
                         <Checkbox
                           label="Set as the default palette for the organization"
                           checked={isDefaultPalette}
-                          onChange={(event, isDefault) => setIsDefaultPalette(isDefault)}
+                          onChange={(event, isDefault: any) => setIsDefaultPalette(isDefault)}
                         />
                       </Spacing>
                     </Spacing>
@@ -233,7 +233,7 @@ const _ColorPalettesPage = () => {
                         { key: 'EXTEND', text: 'Customize the original palette' },
                         { key: 'CUSTOM', text: 'Create a palette from scratch' },
                       ]}
-                      onChange={(evt, { key }) => setPaletteType(key)}
+                      onChange={(evt, { key }: any) => setPaletteType(key)}
                     />
                   </Column>
 
@@ -248,7 +248,7 @@ const _ColorPalettesPage = () => {
                       <Checkbox
                         label="Enable dark mode for this palette"
                         checked={enableDarkMode}
-                        onChange={(event, enabled) => setEnableDarkMode(enabled)}
+                        onChange={(event, enabled: any) => setEnableDarkMode(enabled)}
                       />
                     </Column>
                   )}
@@ -283,6 +283,7 @@ const _ColorPalettesPage = () => {
                   <Column lg="9">
                     <StyledDiv>
                       <Button
+                        id="__ColorPalettesPageId"
                         variant="primary"
                         disabled={isProcessingPalettes}
                         text={!selectedPaletteId ? 'Create palette' : 'Update palette'}
@@ -301,28 +302,35 @@ const _ColorPalettesPage = () => {
                           } else {
                             updateColorPalette(selectedPaletteId, params);
                           }
+                          return null;
                         }}
                       />
 
                       <span>&nbsp;</span>
 
                       <Button
+                        id="__ColorPalettesPageId"
                         variant="secondary"
                         text="Discard changes"
                         disabled={isProcessingPalettes}
-                        onClick={() => setWantsReset(true)}
+                        onClick={() => {
+                          setWantsReset(true);
+                          return null;
+                        }}
                       />
 
                       <span>&nbsp;</span>
 
                       {selectedPaletteId && (
                         <Button
+                          id="__ColorPalettesPageId"
                           variant="danger"
                           disabled={isProcessingPalettes}
                           text="Delete palette"
                           onClick={() => {
                             removeColorPalette(selectedPaletteId);
                             setWantsReset(true);
+                            return null;
                           }}
                         />
                       )}
