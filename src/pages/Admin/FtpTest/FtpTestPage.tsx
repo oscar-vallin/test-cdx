@@ -1,5 +1,5 @@
 import { useState, memo, useEffect } from 'react';
-import { Checkbox, SpinnerSize } from '@fluentui/react';
+import { Checkbox } from '@fluentui/react';
 import { TextField } from '@fluentui/react/lib/TextField';
 import { LayoutAdmin } from '../../../layouts/LayoutAdmin';
 import { Button } from '../../../components/buttons/Button';
@@ -36,10 +36,15 @@ const _FtpTestPage = () => {
 
   useEffect(() => setLoading(false), []);
 
+  const handleOnTestBtn = () => {
+    onTestBtn();
+    return null;
+  };
+
   const renderForm = () => {
     return loading ? (
       <Spacing margin={{ top: 'double' }}>
-        <Spinner size={SpinnerSize.large} label="Loading color palette" />
+        <Spinner size="lg" label="Loading color palette" />
       </Spacing>
     ) : (
       <>
@@ -101,10 +106,13 @@ const _FtpTestPage = () => {
               />
             </Spacing>
             <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-              <Checkbox label="Step Wise" onChange={(event, _stepWise) => setStepWise(_stepWise)} />
+              <Checkbox label="Step Wise" onChange={(event, _stepWise: any) => setStepWise(_stepWise)} />
             </Spacing>
             <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-              <Checkbox label="Send a test file" onChange={(_event, _sendFileTest) => setSendFileTest(_sendFileTest)} />
+              <Checkbox
+                label="Send a test file"
+                onChange={(_event, _sendFileTest: any) => setSendFileTest(_sendFileTest)}
+              />
             </Spacing>
             {sendFileTest && (
               <Spacing margin={{ bottom: 'normal' }}>
@@ -122,7 +130,7 @@ const _FtpTestPage = () => {
                     placeholder="Put the text you want in the file here, if you leave blank the text 'Connection Test' will be used for the file's contents."
                     multiline
                     value={textFileContent}
-                    onChange={({ target }) => setTextFileContent(target.value)}
+                    onChange={({ target }: any) => setTextFileContent(target.value)}
                     rows={10}
                   />
                 </Spacing>
@@ -130,7 +138,7 @@ const _FtpTestPage = () => {
             )}
 
             <Spacing margin={{ bottom: 'normal' }}>
-              <Button variant="primary" disabled={false} text="Test" onClick={onTestBtn} />
+              <Button id="__FtpTestPageId" variant="primary" disabled={false} text="Test" onClick={handleOnTestBtn} />
             </Spacing>
           </Column>
         </Row>
@@ -143,7 +151,7 @@ const _FtpTestPage = () => {
       <Spacing margin="double">
         {loading ? (
           <Spacing margin={{ top: 'double' }}>
-            <Spinner size={SpinnerSize.large} label="Loading color palettes" />
+            <Spinner size="lg" label="Loading color palettes" />
           </Spacing>
         ) : (
           <>{renderForm()}</>
