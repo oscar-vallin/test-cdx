@@ -1,14 +1,23 @@
+import { ReactElement } from 'react';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Row, Column } from '../../../../components/layouts';
 import { Spacing } from '../../../../components/spacings/Spacing';
 import { Separator } from '../../../../components/separators/Separator';
 import { Text } from '../../../../components/typography/Text';
 import { TablesCurrentActivity } from '../../../../containers/tables/TableCurrentActivity';
-import { NAV_ITEMS } from '../../SideMenu';
+// import { NAV_ITEMS } from '../../SideMenu';
 
-export const CurrentActivityPage = ({ id }) => {
+const defaultProps = {
+  id: '',
+};
+
+type CurrentActivityPageProps = {
+  id?: string;
+} & typeof defaultProps;
+
+export const CurrentActivityPage = ({ id }: CurrentActivityPageProps): ReactElement => {
   return (
-    <LayoutAdmin id={id} sidebar={NAV_ITEMS} sidebarOptionSelected="ORG_ACTIVITY">
+    <LayoutAdmin id={id} sidebarOptionSelected="ORG_ACTIVITY">
       <Spacing margin="double">
         <Row>
           <Column lg="4">
@@ -23,12 +32,12 @@ export const CurrentActivityPage = ({ id }) => {
         <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
           <Separator />
         </Spacing>
-        <TablesCurrentActivity />
+        <TablesCurrentActivity id="TableCurrentActivity" argOrgSid={1} argDateRange argFilter />
       </Spacing>
     </LayoutAdmin>
   );
 };
 
-CurrentActivityPage.propTypes = {};
+CurrentActivityPage.defaultProps = defaultProps;
 
 export default CurrentActivityPage;

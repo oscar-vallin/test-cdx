@@ -1,3 +1,4 @@
+import { ReactElement } from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import { useSessionStore } from '../store/SessionStore';
 
@@ -18,7 +19,16 @@ function querystring(name, url = window.location.href) {
 }
 
 //
-export default function UnauthenticatedRoute({ children, ...rest }) {
+const defaultProps = {
+  children: <></>,
+};
+
+type UnauthenticatedRouteProps = {
+  children?: ReactElement | string;
+  path?: string;
+} & typeof defaultProps;
+
+export default function UnauthenticatedRoute({ children, ...rest }: UnauthenticatedRouteProps): ReactElement {
   const { status } = useSessionStore();
   const redirect = querystring('redirect');
 
@@ -28,3 +38,5 @@ export default function UnauthenticatedRoute({ children, ...rest }) {
     </Route>
   );
 }
+
+UnauthenticatedRoute.defaultProps = defaultProps;
