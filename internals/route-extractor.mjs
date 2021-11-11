@@ -3,7 +3,7 @@
 import fs from 'fs';
 import path from 'path';
 //import chalk from 'chalk';
-import { URL_ROUTES } from './../src/data/constants/RouteConstants';
+import { URL_ROUTES } from '../src/data/constants/RouteConstants.js';
 
 (async () => {
   //console.log(chalk.blue('Extracting top level routes (URL_ROUTES) from RouteContants.js'))

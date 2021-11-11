@@ -312,3 +312,5 @@ export const getRouteByApiId = (_apiId) => {
 
   return routeResult;
 };
+
+export default URL_ROUTES;
