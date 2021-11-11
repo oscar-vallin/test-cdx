@@ -1,4 +1,5 @@
 /* eslint-disable no-alert */
+import { ReactElement } from 'react';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 
 import { Badge } from '../../../components/badges/Badge';
@@ -10,7 +11,7 @@ import { Spacing } from '../../../components/spacings/Spacing';
 import { MessageBar } from '../../../components/notifications/MessageBar';
 import { Separator } from '../../../components/separators/Separator';
 
-const COLUMNS = [
+const COLUMNS: any = [
   { key: 'status', name: 'Status', fieldName: 'status' },
   { key: 'employeeId', name: 'Employee ID', fieldName: 'employeeId' },
   { key: 'employee', name: 'Employee', fieldName: 'employee' },
@@ -57,7 +58,15 @@ const onRenderItemColumn = (item, index, column) => {
   }
 };
 
-const QualityChecksTab = ({ items }) => {
+const defaultProps = {
+  items: '',
+};
+
+type QualityChecksTabProps = {
+  items?: any;
+} & typeof defaultProps;
+
+const QualityChecksTab = ({ items }: QualityChecksTabProps): ReactElement => {
   const chartInfo = items
     .map(({ recordCreationEvent }) => ({
       errors: recordCreationEvent.map((item) => item.error.length).reduce((sum, i) => sum + i, 0),
@@ -72,10 +81,10 @@ const QualityChecksTab = ({ items }) => {
     );
 
   const data = items
-    .map(({ recordCreationEvent }) =>
+    .map(({ recordCreationEvent }): any =>
       recordCreationEvent
-        .map((evt) => {
-          const arr = [];
+        .map((evt): any => {
+          const arr: any = [];
 
           const parse = (status) => (item) => ({
             status,
@@ -102,11 +111,6 @@ const QualityChecksTab = ({ items }) => {
     )
     .reduce((arr, item) => [...arr, ...(Array.isArray(item) ? item : [item])], []);
 
-  const handleAlert = () => {
-    alert('Click');
-    return null;
-  };
-
   return (
     <Spacing padding="normal">
       {items.length > 0 && (
@@ -129,8 +133,8 @@ const QualityChecksTab = ({ items }) => {
               <ChartDonut
                 size={70}
                 data={[
-                  { key: 0, name: 'Errors', value: chartInfo.errors, color: '#fde7e9' },
-                  { key: 1, name: 'Warnings', value: chartInfo.warnings, color: '#fff4ce' },
+                  { name: '', key: 0, label: 'Errors', value: chartInfo.errors, color: '#fde7e9' },
+                  { name: '', key: 1, label: 'Warnings', value: chartInfo.warnings, color: '#fff4ce' },
                 ]}
               />
             </div>
@@ -139,7 +143,7 @@ const QualityChecksTab = ({ items }) => {
               <Separator />
             </Spacing>
 
-            <Button id="_Download_Button" variant="light" block onClick={() => null}>
+            <Button id="__QualityChecksTabId" variant="light" block onClick={() => null}>
               Download errors
             </Button>
           </Card>
@@ -160,17 +164,22 @@ const QualityChecksTab = ({ items }) => {
             <Separator />
 
             <div>
-              <Button id="_Button_Continue" variant="primary" onClick={() => null}>
+              <Button id="__QualityChecksTabId" variant="primary" onClick={() => null}>
                 Continue processing
               </Button>{' '}
               &nbsp;
               <Button
-                id="_Button_Cancel"
-                variant="secondary"
+                id="__QualityChecksTabId"
+                variant=""
                 split
                 text="Cancel processing"
-                menuProps={{ items: [{ text: 'Error out', key: 'ErrorOut' }] }}
-                onClick={handleAlert}
+                onClick={() => {
+                  alert('Click');
+                  return null;
+                }}
+                menuProps={{
+                  items: [{ text: 'Error out', key: 'ErrorOut' }],
+                }}
               >
                 Cancel processing
               </Button>
@@ -181,5 +190,7 @@ const QualityChecksTab = ({ items }) => {
     </Spacing>
   );
 };
+
+QualityChecksTab.defaultProps = defaultProps;
 
 export default QualityChecksTab;

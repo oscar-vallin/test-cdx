@@ -13,6 +13,7 @@ type SpinnerProps = {
   id?: string;
   size?: any;
   label?: string;
+  style?: { justifySelf: string };
 } & typeof defaultProps;
 
 const Spinner = ({

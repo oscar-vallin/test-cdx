@@ -1,8 +1,9 @@
+import { ReactElement } from 'react';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { Spacing } from '../../../components/spacings/Spacing';
 import { StyledRow, StyledVendorHeaderRow, StyledFooter } from '../FileStatusDetails.styles';
 
-const COLUMNS = [
+const COLUMNS: any = [
   { key: 'name', name: 'Record Name', fieldName: 'name' },
   { key: 'count', name: 'Count', fieldName: 'count' },
 ].map((col) => ({ ...col, data: 'string', isPadded: true }));
@@ -21,7 +22,7 @@ const onRenderDetailsHeader = (props) => {
   );
 };
 
-const onRenderDetailsFooter = (count) => {
+const onRenderDetailsFooter: any = (count) => {
   return (
     <StyledFooter>
       <div>Total</div>
@@ -30,7 +31,15 @@ const onRenderDetailsFooter = (count) => {
   );
 };
 
-const VendorCountStatsTab = ({ items }) => {
+const defaultProps = {
+  items: '',
+};
+
+type VendorCountStatsTabProps = {
+  items?: any;
+} & typeof defaultProps;
+
+const VendorCountStatsTab = ({ items }: VendorCountStatsTabProps): ReactElement => {
   return (
     <Spacing padding="normal">
       <DetailsList
@@ -47,5 +56,7 @@ const VendorCountStatsTab = ({ items }) => {
     </Spacing>
   );
 };
+
+VendorCountStatsTab.defaultProps = defaultProps;
 
 export default VendorCountStatsTab;

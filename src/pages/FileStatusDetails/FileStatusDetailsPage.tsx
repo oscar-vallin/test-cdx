@@ -33,21 +33,21 @@ import { useFsPacketStatusDetails } from './hooks/useFsPacketStatusDetails';
 const getReadableDate = (date) => new Date(date).toLocaleString().replace(',', '');
 
 const _FileStatusDetailsPage = () => {
-  const { id } = useParams();
-  const [packet, setPacket] = useState({});
+  const { id }: any = useParams();
+  const [packet, setPacket]: any = useState({});
   const { hash, search } = useLocation();
   const filter = new URLSearchParams(search).get('filter');
   const realId = id.replace('*', '');
-  const history = useHistory();
+  const history: any = useHistory();
 
-  const { fSPacketStatusQuery, apiData: list, loadingFs: lWorkPacketStatus } = useFsDetailsPacketStatus();
-  const { enableRefresh, disableRefresh } = useRefresh(TABLE_NAMES.DETAIL_ENROLLMENT, fSPacketStatusQuery);
+  const { fSPacketStatusQuery, apiData: list, loadingFs: lWorkPacketStatus }: any = useFsDetailsPacketStatus();
+  const { enableRefresh, disableRefresh } = useRefresh(TABLE_NAMES.FILE_STATUS_DETAIL_ENROLLMENT, fSPacketStatusQuery);
 
   const {
     fSPacketStatusDetailQuery,
     apiData: query,
     loadingPacketDetail: lWorkPacketDetails,
-  } = useFsPacketStatusDetails(realId);
+  }: any = useFsPacketStatusDetails(realId);
 
   const breadcrumbItems = [
     {
@@ -106,7 +106,7 @@ const _FileStatusDetailsPage = () => {
 
   return (
     <LayoutDashboard id="PageFileStatusDetails" menuOptionSelected={ROUTES.ROUTE_FILE_STATUS.ID}>
-      <PageHeader>
+      <PageHeader spacing="primary">
         <Breadcrumb items={breadcrumbItems} />
       </PageHeader>
 
@@ -222,12 +222,12 @@ const _FileStatusDetailsPage = () => {
                           </Spacing>
 
                           <Spacing margin={{ bottom: 'small' }}>
-                            <Button variant="primary" block>
+                            <Button id="__FileStatusDetailsPageId" variant="primary" block onClick={() => null}>
                               Re-transmit over FTP
                             </Button>
                           </Spacing>
 
-                          <Button variant="danger" block>
+                          <Button id="__FileStatusDetailsPageId" variant="danger" block onClick={() => null}>
                             Delete
                           </Button>
                         </Collapse>

@@ -1,5 +1,5 @@
 /* eslint-disable no-alert */
-import { useState } from 'react';
+import { ReactElement, useState } from 'react';
 import { MessageBar } from 'office-ui-fabric-react';
 
 import { Button } from '../../../components/buttons/Button';
@@ -21,7 +21,15 @@ const parseSteps = (steps) => {
   }));
 };
 
-const WorkStepsTab = ({ steps }) => {
+const defaultProps = {
+  steps: '',
+};
+
+type WorkStepsTabProps = {
+  steps?: any;
+} & typeof defaultProps;
+
+const WorkStepsTab = ({ steps }: WorkStepsTabProps): ReactElement => {
   const items = parseSteps(steps);
 
   const [activeIndex, setActiveIndex] = useState(0);
@@ -58,7 +66,9 @@ const WorkStepsTab = ({ steps }) => {
                 <Separator />
 
                 <div>
-                  <Button>Redo</Button>
+                  <Button id="__WorkStepsTabId" variant="" onClick={() => null}>
+                    Redo
+                  </Button>
                 </div>
               </>
             )}
@@ -70,8 +80,12 @@ const WorkStepsTab = ({ steps }) => {
 
       <Spacing margin={{ top: 'normal' }}>
         <Button
+          id="__WorkStepsTabId"
           split
-          onClick={() => alert('Click')}
+          onClick={() => {
+            alert('Click');
+            return null;
+          }}
           text="Re-process file"
           variant="primary"
           menuProps={{
@@ -82,5 +96,7 @@ const WorkStepsTab = ({ steps }) => {
     </Spacing>
   );
 };
+
+WorkStepsTab.defaultProps = defaultProps;
 
 export default WorkStepsTab;

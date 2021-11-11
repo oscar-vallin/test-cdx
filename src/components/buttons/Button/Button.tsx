@@ -30,7 +30,7 @@ const Button = ({
   children,
   variant = 'secondary',
   disabled = false,
-  onClick,
+  onClick = () => null,
   block = false,
   ...props
 }: ButtonProps): ReactElement => {
