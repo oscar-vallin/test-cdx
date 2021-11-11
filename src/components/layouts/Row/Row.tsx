@@ -9,7 +9,7 @@ const defaultProps = {
   center: false,
   right: false,
   top: '',
-  bottom: '',
+  bottom: false,
   between: '',
   evenly: '',
   around: '',
@@ -23,7 +23,7 @@ type RowProps = {
   right?: boolean;
   left?: boolean;
   top?: string;
-  bottom?: string;
+  bottom?: boolean;
   between?: string;
   evenly?: string;
   around?: string;

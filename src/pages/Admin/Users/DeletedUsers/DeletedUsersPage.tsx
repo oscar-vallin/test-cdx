@@ -4,10 +4,8 @@ import { useState, useEffect, useMemo, memo } from 'react';
 import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
 import { PrimaryButton, DefaultButton, MessageBar } from 'office-ui-fabric-react';
 import { DetailsList, DetailsListLayoutMode, SelectionMode, Selection } from 'office-ui-fabric-react/lib/DetailsList';
-import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
+import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { MarqueeSelection } from '@fluentui/react/lib/MarqueeSelection';
-import { SpinnerSize } from '@fluentui/react';
-import { EmptyState } from 'src/containers/states';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Row, Column } from '../../../../components/layouts';
 import { Spacing } from '../../../../components/spacings/Spacing';
@@ -47,10 +45,10 @@ const _DeletedUsersPage = () => {
   const [selectedItems, setSelectedItems] = useState([]);
   const columns = generateColumns();
 
-  const [apiUsersForOrgFpLazy, { data, loading }] = useUsersForOrgLazyQuery();
+  const [apiUsersForOrgFpLazy, { data, loading }]: any = useUsersForOrgLazyQuery();
   const [enableUser, { data: enableResponse, loading: isEnablingUser }] = useActivateUsersMutation();
 
-  const selection = useMemo(
+  const selection: any = useMemo(
     () =>
       new Selection({
         onSelectionChanged: () => {
@@ -82,14 +80,14 @@ const _DeletedUsersPage = () => {
   }, [loading]);
 
   const selectedUserIds = () => {
-    return selectedItems.map((node) => {
+    return selectedItems.map((node: any) => {
       return node.item.id;
     });
   };
 
   useEffect(() => {
     if (!isEnablingUser && enableResponse) {
-      setUsers(users.filter(({ item }) => !selectedUserIds().includes(item.id)));
+      setUsers(users.filter(({ item }: any) => !selectedUserIds().includes(item.id)));
     }
   }, [isEnablingUser, enableResponse]);
 
@@ -113,91 +111,80 @@ const _DeletedUsersPage = () => {
 
   return (
     <LayoutAdmin id="PageDeletedUsers" sidebarOptionSelected="DELETED_USERS">
-      <Spacing margin="double">
-        {users.length > 0 && (
+      <>
+        <Spacing margin="double">
           <Row>
-            <Column lg="6">
-              <Spacing margin={{ top: 'small' }}>
-                <Text variant="bold">Deleted Users</Text>
-              </Spacing>
-            </Column>
-            <Column lg="6" right>
-              <Button
-                variant="primary"
-                onClick={() => {
-                  if (selectedItems.length > 0) {
-                    setIsConfirmationHidden(false);
-                  } else {
-                    alert('Please select at least one user');
-                  }
-                }}
-              >
-                Enable Users
-              </Button>
-            </Column>
-          </Row>
-        )}
+            <Column lg="8">
+              <Row>
+                <Column lg="8">
+                  <Spacing margin={{ top: 'small' }}>
+                    <Text variant="bold">Deleted Users</Text>
+                  </Spacing>
+                </Column>
+                <Column lg="4" right>
+                  <Button
+                    id="__DeletedUsersPageId"
+                    variant="primary"
+                    onClick={() => {
+                      if (selectedItems.length > 0) {
+                        setIsConfirmationHidden(false);
+                      } else {
+                        alert('Please select at least one user');
+                      }
 
-        {users.length > 0 && (
-          <Row>
-            <Column lg="12">
+                      return null;
+                    }}
+                  >
+                    Enable Users
+                  </Button>
+                </Column>
+              </Row>
+
               <Spacing margin={{ top: 'normal' }}>
                 <Separator />
               </Spacing>
+
+              <Row>
+                <StyledColumn>
+                  {!loading ? (
+                    renderList()
+                  ) : (
+                    <Spacing margin={{ top: 'double' }}>
+                      <Spinner size={SpinnerSize.large} label="Loading deleted users" />
+                    </Spacing>
+                  )}
+                </StyledColumn>
+              </Row>
             </Column>
           </Row>
-        )}
+        </Spacing>
 
-        <Row>
-          <StyledColumn>
-            {loading ? (
-              <Spacing margin={{ top: 'double' }}>
-                <Spinner size={SpinnerSize.large} label="Loading deleted users" />
-              </Spacing>
-            ) : !users.length ? (
-              <EmptyState description="No deleted users" />
-            ) : (
-              <MarqueeSelection selection={selection}>
-                <DetailsList
-                  items={users}
-                  columns={columns}
-                  layoutMode={DetailsListLayoutMode.justified}
-                  onRenderItemColumn={onRenderItemColumn}
-                  selection={selection}
-                  selectionPreservedOnEmptyClick
-                  isHeaderVisible
-                />
-              </MarqueeSelection>
-            )}
-          </StyledColumn>
-        </Row>
-      </Spacing>
-
-      <Dialog
-        hidden={isConfirmationHidden}
-        onDismiss={hideConfirmation}
-        dialogContentProps={{
-          type: DialogType.normal,
-          title: 'Enable user',
-          subText: `Do you really want to enable the selected user ?`,
-        }}
-        modalProps={{ isBlocking: true, isDraggable: false }}
-      >
-        <DialogFooter>
-          <PrimaryButton
-            onClick={() => {
-              enableUser({
-                variables: {
-                  sidsInput: { sids: selectedUserIds() },
-                },
-              });
-              setIsConfirmationHidden(true);
-            }}
-            text="Enable"
-          />
-          <DefaultButton onClick={hideConfirmation} text="Cancel" />
-        </DialogFooter>
-      </Dialog>
+        <Dialog
+          hidden={isConfirmationHidden}
+          onDismiss={hideConfirmation}
+          dialogContentProps={{
+            type: DialogType.normal,
+            title: 'Enable user',
+            subText: `Do you really want to enable the selected user ?`,
+          }}
+          modalProps={{ isBlocking: true }}
+        >
+          <DialogFooter>
+            <PrimaryButton
+              onClick={() => {
+                enableUser({
+                  variables: {
+                    sidsInput: { sids: selectedUserIds() },
+                  },
+                });
+                setIsConfirmationHidden(true);
+              }}
+              text="Enable"
+            />
+            <DefaultButton onClick={hideConfirmation} text="Cancel" />
+          </DialogFooter>
+        </Dialog>
+      </>
     </LayoutAdmin>
   );
 };

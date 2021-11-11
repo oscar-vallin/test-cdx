@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect } from 'react';
+import { ReactElement, useState, useEffect } from 'react';
 import { Panel, PanelType } from '@fluentui/react/lib/Panel';
 
 import { Spacing } from '../../../../components/spacings/Spacing';
@@ -12,21 +12,34 @@ import { useCreateUserMutation } from '../../../../data/services/graphql';
 
 import { useOrgSid } from '../../../../hooks/useOrgSid';
 
-const CreateUsersPanel = ({ isOpen, onDismiss, onCreateUser }) => {
+const defaultProps = {
+  isOpen: false,
+  onDismiss: () => null,
+  onCreateUser: () => null,
+};
+
+type CreateUsersPanelProps = {
+  isOpen?: boolean;
+  onDismiss?: any | null;
+  onCreateUser?: any | null;
+} & typeof defaultProps;
+
+const CreateUsersPanel = ({ isOpen, onDismiss, onCreateUser }: CreateUsersPanelProps): ReactElement => {
   const { orgSid } = useOrgSid();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [groupIds, setGroupIds] = useState(0);
+  const [groupIds, setGroupIds]: any = useState(0);
 
   const [_apiCall, { data, loading }] = useCreateUserMutation({
     variables: {
       userInfo: {
         email,
         password,
-        orgOwnerId: orgSid,
-        groupIds,
+        orgSid,
+        // orgOwnerId: orgSid,
+        // groupIds,
       },
       personInfo: {
         firstNm: firstName,
@@ -118,6 +131,7 @@ const CreateUsersPanel = ({ isOpen, onDismiss, onCreateUser }) => {
             <Row>
               <Column lg="12">
                 <Button
+                  id="__CreateUsersPanelId"
                   variant="primary"
                   disabled={loading}
                   onClick={() => {
@@ -127,6 +141,8 @@ const CreateUsersPanel = ({ isOpen, onDismiss, onCreateUser }) => {
                       // eslint-disable-next-line no-alert
                       alert('Please check the provided data');
                     }
+
+                    return null;
                   }}
                 >
                   Save user
@@ -139,5 +155,7 @@ const CreateUsersPanel = ({ isOpen, onDismiss, onCreateUser }) => {
     </Panel>
   );
 };
+
+CreateUsersPanel.defaultProps = defaultProps;
 
 export default CreateUsersPanel;
