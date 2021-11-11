@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react';
 
-import { SpinnerSize } from '@fluentui/react';
 import { Button } from '../../../components/buttons/Button';
 import { MessageBar } from '../../../components/notifications/MessageBar';
 import { Text } from '../../../components/typography/Text';
@@ -20,18 +19,18 @@ import { useNotification } from '../../../hooks/useNotification';
 import { useOrgSid } from '../../../hooks/useOrgSid';
 
 const ThemeSettings = () => {
-  const [apiUserThemeQuery, { data: theme, loading: isLoadingTheme }] = useUserThemeLazyQuery();
+  const [apiUserThemeQuery, { data: theme, loading: isLoadingTheme }]: any = useUserThemeLazyQuery();
 
   useEffect(() => {
     apiUserThemeQuery({ variables: { themeColorMode: null } });
   }, []);
 
   const Toast = useNotification();
-  const { changeTheme } = useThemeContext();
+  const { changeTheme }: any = useThemeContext();
   const { colorPalettes, isLoadingPalettes, fetchColorPalettes } = useColorPalettes();
   const [createOrUpdateOwnDashTheme, { data: themeResponse, loading: isHandlingTheme }] =
     useCreateOrUpdateOwnDashThemeMutation();
-  const [palettes, setPalettes] = useState([
+  const [palettes, setPalettes]: any = useState([
     {
       id: null,
       paletteNm: 'Default',
@@ -48,10 +47,10 @@ const ThemeSettings = () => {
       Toast.success({ text: 'Theme saved successfully' });
     }
   }, [themeResponse]);
-  const [palette, setPalette] = useState({});
+  const [palette, setPalette]: any = useState({});
 
-  const [selectedPaletteId, setSelectedPaletteId] = useState();
-  const [themeColorMode, setThemeColorMode] = useState();
+  const [selectedPaletteId, setSelectedPaletteId]: any = useState();
+  const [themeColorMode, setThemeColorMode]: any = useState();
 
   useEffect(fetchColorPalettes, [orgSid]);
 
@@ -65,7 +64,8 @@ const ThemeSettings = () => {
   useEffect(() => {
     if (colorPalettes && !isLoadingPalettes) {
       const selectedPalette = theme?.userTheme
-        ? colorPalettes.find(({ paletteNm }) => paletteNm === theme?.userTheme.dashThemeColor.paletteNm)?.id || null
+        ? colorPalettes.find(({ paletteNm }: any) => paletteNm === theme?.userTheme.dashThemeColor.paletteNm)?.id ||
+          null
         : null;
 
       setPalettes(Array.from(new Set([...palettes, ...colorPalettes])));
@@ -74,8 +74,8 @@ const ThemeSettings = () => {
   }, [colorPalettes, isLoadingPalettes, theme, orgSid]);
 
   useEffect(() => {
-    const finalPalette = palettes.find(({ id }) => id === selectedPaletteId) || {};
-    const { themePrimary } = finalPalette;
+    const finalPalette = palettes.find(({ id }): any => id === selectedPaletteId) || {};
+    const { themePrimary }: any = finalPalette;
 
     const variant = finalPalette.themeColorMode
       ? Theming.getVariant({
@@ -90,7 +90,7 @@ const ThemeSettings = () => {
 
   return isLoadingPalettes || isLoadingTheme ? (
     <Spacing padding="Double">
-      <Spinner size={SpinnerSize.large} label="Loading theme settings" />
+      <Spinner size="lg" label="Loading theme settings" />
     </Spacing>
   ) : (
     <>
@@ -111,7 +111,7 @@ const ThemeSettings = () => {
                 text: item.paletteNm,
               })) || []
             }
-            onChange={(evt, { key }) => setSelectedPaletteId(key)}
+            onChange={(evt, { key }: any) => setSelectedPaletteId(key)}
           />
         )}
       </StyledDiv>
@@ -132,7 +132,7 @@ const ThemeSettings = () => {
                 ...(palette.allowDark ? [{ key: 'DARK', text: 'Dark', id: '__userSetting_Dark_Theme' }] : []),
               ]}
               disabled={!palette.allowDark}
-              onChange={(evt, { key }) => {
+              onChange={(evt, { key }: any) => {
                 setThemeColorMode(key);
               }}
             />
@@ -156,6 +156,7 @@ const ThemeSettings = () => {
                     },
                   },
                 });
+                return null;
               }}
             />
           </Spacing>
