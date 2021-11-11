@@ -28,7 +28,7 @@ const defaultProps = {
 
 type CDXBreadcrumbProps = {
   id?: string;
-  items?: parseBreadcrumbItemsProps[];
+  items?: parseBreadcrumbItemsProps[] | any;
   onClick?: any | undefined;
 } & typeof defaultProps;
 

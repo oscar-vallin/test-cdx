@@ -27,6 +27,9 @@ type InputTextProps = {
   autoFocus?: boolean;
   required?: boolean;
   canRevealPassword?: boolean;
+  label?: string;
+  maxLength?: number;
+  minLength?: number;
 } & typeof defaultProps;
 
 const InputText = ({
@@ -35,10 +38,12 @@ const InputText = ({
   disabled = false,
   onChange,
   autofocus = true,
+
   errorMessage = '',
   onKeyDown,
   onKeyEnter,
   value,
+
   ...props
 }: InputTextProps): ReactElement => {
   const handleKey = (key) => {

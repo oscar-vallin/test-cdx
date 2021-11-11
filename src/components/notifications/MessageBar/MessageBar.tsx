@@ -16,7 +16,7 @@ type CDXMessageBarProps = {
   type?: string;
   multiline?: boolean;
   truncated?: boolean;
-  content?: string;
+  content?: any;
   actions?: any;
   children?: ReactElement | string;
 } & typeof defaultProps;

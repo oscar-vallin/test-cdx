@@ -28,7 +28,7 @@ type DivStyledProps = {
   around: string;
   evenly: string;
   between: string;
-  bottom: string;
+  bottom: boolean;
   variant: string;
-  top: string;
+  top: boolean;
 };

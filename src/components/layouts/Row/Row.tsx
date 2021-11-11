@@ -8,8 +8,8 @@ const defaultProps = {
   children: <></>,
   center: false,
   right: false,
-  top: '',
-  bottom: '',
+  top: false,
+  bottom: false,
   between: '',
   evenly: '',
   around: '',
@@ -22,8 +22,8 @@ type RowProps = {
   center?: boolean;
   right?: boolean;
   left?: boolean;
-  top?: string;
-  bottom?: string;
+  top?: boolean;
+  bottom?: boolean;
   between?: string;
   evenly?: string;
   around?: string;

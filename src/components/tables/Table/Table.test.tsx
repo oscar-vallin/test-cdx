@@ -3,6 +3,9 @@ import toJSON from 'enzyme-to-json';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib-commonjs/DetailsList';
 import { Table as Component } from './index';
 import { TableHeader } from '../TableHeader';
+import { StoreProvider } from 'easy-peasy';
+import store from '../../../store/index';
+import { mountWithTheme, shallowWithTheme } from 'src/utils/testUtils';
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -114,6 +117,8 @@ const defaultProps = {
   date: 'today',
   onItemsListChange: () => null,
   loading: false,
+  title: '',
+  emptyMessage: 'No data',
 };
 
 const defaultHeaderProps = {
@@ -128,11 +133,14 @@ const defaultHeaderProps = {
   date: 'today',
 };
 
-// test('Matches Snapshot - Table', () => {
-//   const wrapper = shallow(<Component {...defaultProps} />);
-
-//   expect(toJSON(wrapper)).toMatchSnapshot();
-// });
+test('Matches Snapshot - Table', () => {
+  const wrapper = shallow(
+    <StoreProvider store={store}>
+      <Component {...defaultProps} />
+    </StoreProvider>
+  );
+  expect(toJSON(wrapper)).toMatchSnapshot();
+});
 
 describe('Basic Table Component', () => {
   it('Should be defined', () => {
@@ -149,19 +157,21 @@ describe('Basic Table Component', () => {
     expect(tree.prop('id')).toEqual('__TableHeader-HeaderTable_dashboard');
   });
 
-  // it('Should render table correctly', () => {
-  //   const tree = shallow(
-  //     <Component
-  //       {...defaultProps}
-  //       structure={{
-  //         header: {
-  //           type: 'other',
-  //         },
-  //       }}
-  //     />
-  //   );
-  //   expect(tree.prop('id')).toEqual('Table_Detailed');
-  // });
+  it('Should render table correctly', () => {
+    const tree = render(
+      <StoreProvider store={store}>
+        <Component
+          {...defaultProps}
+          structure={{
+            header: {
+              type: 'other',
+            },
+          }}
+        />
+      </StoreProvider>
+    );
+    expect(tree.prop('id')).toEqual('Table_Detailed');
+  });
 
   // it('Should render dashboard list item with props', () => {
   //   const tree = shallow(<Component {...defaultProps} />);
@@ -200,9 +210,9 @@ describe('Basic Table Component', () => {
   //   expect(typeof list.prop('onRenderItemColumn')).toBe('function');
   // });
 
-  // it('Should has items with props', () => {
-  //   const tree = shallow(<Component {...defaultProps} />);
-  //   const list = tree.find(DetailsList);
-  //   expect(list.prop('items')).toEqual([]);
-  // });
+  it('Should has items with props', () => {
+    const tree = shallowWithTheme(<Component {...defaultProps} />);
+    const list = tree.children();
+    expect(list.prop('items')).toEqual(defaultProps.items);
+  });
 });
