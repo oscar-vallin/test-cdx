@@ -3,11 +3,11 @@ import { StyledButton } from './Button.styles';
 
 const defaultProps = {
   id: '',
-  text: '',
+  // text: '',
   variant: 'secondary',
-  disabled: false,
+  // disabled: false,
   onClick: () => null,
-  block: false,
+  // block: false,
 };
 
 type ButtonProps = {
@@ -18,6 +18,10 @@ type ButtonProps = {
   disabled?: boolean;
   onClick?: () => null;
   block?: boolean;
+  key?: string;
+  selected?: boolean;
+  split?: boolean;
+  menuProps?: any;
 } & typeof defaultProps;
 
 const Button = ({

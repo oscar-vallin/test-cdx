@@ -20,6 +20,7 @@ type ChartDonutProps = {
   label?: string;
   size?: number;
   data?: {
+    key?: string | number;
     name: string;
     value: number;
     color?: string;

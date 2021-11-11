@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import { ReactElement, ReactNode } from 'react';
 import { StyledText } from './Text.styles';
 
 const defaultProps = {
@@ -6,17 +6,17 @@ const defaultProps = {
   children: <></>,
   variant: 'normal',
   left: '',
-  right: '',
+  right: false,
   top: '',
   bottom: '',
 };
 
 type TextProps = {
   id?: string;
-  children?: ReactElement | string | any;
+  children?: ReactNode | string;
   variant?: any;
   left?: string;
-  right?: string;
+  right?: boolean;
   top?: string;
   bottom?: string;
 } & typeof defaultProps;

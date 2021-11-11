@@ -25,6 +25,8 @@ type InputTextProps = {
   value?: string;
   placeholder?: string;
   autoFocus?: boolean;
+  required?: boolean;
+  canRevealPassword?: boolean;
 } & typeof defaultProps;
 
 const InputText = ({

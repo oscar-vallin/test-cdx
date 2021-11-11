@@ -73,7 +73,7 @@ const _FileStatusPage = () => {
         ]}
         lazyQuery={useWorkPacketStatusesLazyQuery}
         getItems={mapData}
-        searchTextPlaceholder="Extract Name,  Status, Vendor, etc."
+        searchTextPlaceholder="Extract Name,· Status, Vendor, etc."
         defaultSort={[
           {
             property: 'timestamp',

@@ -14,9 +14,12 @@ const defaultProps = {
 type CardDashboardProps = {
   id?: string;
   title?: string;
-  subtitle?: boolean;
+  subtitle?: string;
   value?: number;
   total?: number;
+  color?: string;
+  noDataLabel?: string;
+  loading?: boolean;
 } & typeof defaultProps;
 
 const CardDashboard = ({ id, title, subtitle, value, total }: CardDashboardProps): ReactElement => {

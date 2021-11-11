@@ -37,7 +37,7 @@ export const useTable = (data, tableName, date, altData) => {
         { key: 'total', label: 'Total', id: 'total', style: 'total' },
       ];
 
-      const _items = dataItems.map((item) => {
+      const _items = dataItems?.map((item) => {
         const countAndTotal = `${item.count}/${item.total}`;
 
         return [

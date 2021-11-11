@@ -21,17 +21,17 @@ export const getItems = (data) =>
     const datetime = format(new Date(item.deliveredOn), 'MM/dd/yyyy hh:mm a');
 
     return [
-      formatField(datetime, 'datetime', datetime),
-      formatField(item.planSponsorId, 'planSponsor', item.planSponsorId),
-      formatField(item.vendorId, 'vendorId', item.vendorId),
-      formatField(item.specId, 'specId', item.specId),
-      formatField(item.implementation, 'implementation', item.implementation),
-      formatField(item.inboundFilename, 'inboundFilename', item.inboundFilename),
-      formatField(item.outboundFilename, 'outboundFilename', item.outboundFilename),
-      formatField(item.outboundFilesize, 'outboundFilesize', item.outboundFilesize),
-      formatField(item.billingCount, 'billingCount', item.billingCount),
-      formatField(item.totalRecords, 'totalRecords', item.totalRecords),
-      formatField(item.extractType, 'extractType', item.extractType),
-      formatField(item.extractVersion, 'extractVersion', item.extractVersion),
+      formatField(datetime, 'datetime', datetime, '', null),
+      formatField(item.planSponsorId, 'planSponsor', item.planSponsorId, '', null),
+      formatField(item.vendorId, 'vendorId', item.vendorId, '', null),
+      formatField(item.specId, 'specId', item.specId, '', null),
+      formatField(item.implementation, 'implementation', item.implementation, '', null),
+      formatField(item.inboundFilename, 'inboundFilename', item.inboundFilename, '', null),
+      formatField(item.outboundFilename, 'outboundFilename', item.outboundFilename, '', null),
+      formatField(item.outboundFilesize, 'outboundFilesize', item.outboundFilesize, '', null),
+      formatField(item.billingCount, 'billingCount', item.billingCount, '', null),
+      formatField(item.totalRecords, 'totalRecords', item.totalRecords, '', null),
+      formatField(item.extractType, 'extractType', item.extractType, '', null),
+      formatField(item.extractVersion, 'extractVersion', item.extractVersion, '', null),
     ];
   });

@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 import { FontIcon } from '@fluentui/react/lib/Icon';
 import { ROUTES } from '../../data/constants/RouteConstants';
-import { LayoutDashboard } from '../../layouts/LayoutDashboard';
 import { Row, Column, Container } from '../../components/layouts';
 import { Spacing } from '../../components/spacings/Spacing';
 import { Text } from '../../components/typography';
 import { PageHeader } from '../../containers/headers/PageHeader';
+import { LayoutDashboard } from '../../layouts/LayoutDashboard';
 import { WorkPacketTable } from '../../containers/tables/WorkPacketTable';
 import { WorkPacketColumns } from '../../containers/tables/WorkPacketColumns';
-import { NullHandling, SortDirection, useWpTransmissionsLazyQuery } from '../../data/services/graphql';
+import { NullHandling, SortDirection, useWorkPacketStatusesLazyQuery } from '../../data/services/graphql';
 
-const _TransmissionsPage = () => {
-  const [tableMeta, setTableMeta] = useState({ count: 0, loading: true });
+const _ArchivePage = () => {
+  const [tableMeta, setTableMeta] = useState({ count: null, loading: null });
 
   const mapData = (data) => {
-    const items = [];
-    data?.wpTransmissions?.nodes?.map((value) => {
+    const items: object[] = [];
+    data?.workPacketStatuses?.nodes?.map((value) => {
       if (value) {
         items.push(value);
       }
@@ -24,15 +24,16 @@ const _TransmissionsPage = () => {
   };
 
   return (
-    <LayoutDashboard id="PageTransmissions" menuOptionSelected={ROUTES.ROUTE_ADMIN.API_ID}>
+    <LayoutDashboard id="PageArchive" menuOptionSelected={ROUTES.ROUTE_FILE_STATUS.ID}>
       <PageHeader spacing="0">
         <Container>
           <Spacing margin={{ top: 'double' }}>
             <Row>
               <Column lg="6" direction="row">
                 <FontIcon iconName="FilterSolid" />
-                <Text id="__Text_Transmissions" variant="bold">
-                  Transmissions
+
+                <Text id="__Text_Archives" variant="bold">
+                  Archives
                 </Text>
                 <Text id="__Text_Advanced-search">&nbsp; — Advanced search</Text>
               </Column>
@@ -48,42 +49,32 @@ const _TransmissionsPage = () => {
         </Container>
       </PageHeader>
 
+      {/* <TableArchive onItemsListChange={setTableMeta} /> */}
       <WorkPacketTable
-        id="TableTransmissions"
+        id="TableArchive"
         cols={[
-          WorkPacketColumns.DATETIME,
-          WorkPacketColumns.PLAN_SPONSOR,
+          WorkPacketColumns.TIMESTAMP,
           WorkPacketColumns.VENDOR,
-          WorkPacketColumns.SPEC_ID,
-          WorkPacketColumns.IMPLEMENTATION,
-          WorkPacketColumns.INBOUND_FILENAME,
-          WorkPacketColumns.OUTBOUND_FILENAME,
-          WorkPacketColumns.OUTBOUND_FILESIZE,
-          WorkPacketColumns.BILLING_COUNT,
-          WorkPacketColumns.TOTAL_RECORDS,
-          WorkPacketColumns.EXTRACT_TYPE,
-          WorkPacketColumns.EXTRACT_VERSION,
+          WorkPacketColumns.PLAN_SPONSOR,
+          WorkPacketColumns.CLIENT_FILE,
+          WorkPacketColumns.VENDOR_FILE,
         ]}
-        lazyQuery={useWpTransmissionsLazyQuery}
+        lazyQuery={useWorkPacketStatusesLazyQuery}
         getItems={mapData}
         searchTextPlaceholder="Extract Name,  Status, Vendor, etc."
         defaultSort={[
           {
-            property: 'deliveredOn',
+            property: 'timestamp',
             direction: SortDirection.Desc,
             nullHandling: NullHandling.NullsFirst,
             ignoreCase: true,
           },
         ]}
-        onItemsListChange={(data, loading) => {
-          const total = data?.wpTransmissions?.paginationInfo?.totalElements ?? 0;
-          setTableMeta({ count: total, loading });
-        }}
       />
     </LayoutDashboard>
   );
 };
 
-const TransmissionsPage = React.memo(_TransmissionsPage);
+const ArchivePage = memo(_ArchivePage);
 
-export { TransmissionsPage };
+export { ArchivePage };

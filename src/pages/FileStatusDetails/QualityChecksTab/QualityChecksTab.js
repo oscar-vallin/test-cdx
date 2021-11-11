@@ -102,6 +102,11 @@ const QualityChecksTab = ({ items }) => {
     )
     .reduce((arr, item) => [...arr, ...(Array.isArray(item) ? item : [item])], []);
 
+  const handleAlert = () => {
+    alert('Click');
+    return null;
+  };
+
   return (
     <Spacing padding="normal">
       {items.length > 0 && (
@@ -124,8 +129,8 @@ const QualityChecksTab = ({ items }) => {
               <ChartDonut
                 size={70}
                 data={[
-                  { key: 0, label: 'Errors', value: chartInfo.errors, color: '#fde7e9' },
-                  { key: 1, label: 'Warnings', value: chartInfo.warnings, color: '#fff4ce' },
+                  { key: 0, name: 'Errors', value: chartInfo.errors, color: '#fde7e9' },
+                  { key: 1, name: 'Warnings', value: chartInfo.warnings, color: '#fff4ce' },
                 ]}
               />
             </div>
@@ -134,7 +139,7 @@ const QualityChecksTab = ({ items }) => {
               <Separator />
             </Spacing>
 
-            <Button variant="light" block>
+            <Button id="_Download_Button" variant="light" block onClick={() => null}>
               Download errors
             </Button>
           </Card>
@@ -155,14 +160,17 @@ const QualityChecksTab = ({ items }) => {
             <Separator />
 
             <div>
-              <Button variant="primary">Continue processing</Button> &nbsp;
+              <Button id="_Button_Continue" variant="primary" onClick={() => null}>
+                Continue processing
+              </Button>{' '}
+              &nbsp;
               <Button
+                id="_Button_Cancel"
+                variant="secondary"
                 split
                 text="Cancel processing"
-                onClick={() => alert('Click')}
-                menuProps={{
-                  items: [{ text: 'Error out', key: 'ErrorOut' }],
-                }}
+                menuProps={{ items: [{ text: 'Error out', key: 'ErrorOut' }] }}
+                onClick={handleAlert}
               >
                 Cancel processing
               </Button>
