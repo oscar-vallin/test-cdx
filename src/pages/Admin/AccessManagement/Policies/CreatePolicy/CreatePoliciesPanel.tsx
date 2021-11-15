@@ -98,20 +98,21 @@ const CreatePoliciesPanel = ({
   const [createPolicy, { data: createdPolicy, loading: isCreatingPolicy }] =
     useQueryHandler(useCreateAccessPolicyMutation);
 
-  const [updatePolicy] = useQueryHandler(useUpdateAccessPolicyMutation);
+  const [updatePolicy, { data: updatedPolicy, loading: isUpdatingPolicy }] =
+    useQueryHandler(useUpdateAccessPolicyMutation);
 
-  // const [fetchPolicy, { data: policy }] = useAccessPolicyLazyQuery();
+  const [fetchPolicy, { data: policy, loading: isLoadingPolicy }] = useQueryHandler(useAccessPolicyLazyQuery);
 
-  // useEffect(() => {
-  //   if (isOpen && selectedPolicyId) {
-  //     fetchPolicy({
-  //       variables: {
-  //         orgSid,
-  //         policySid: selectedPolicyId,
-  //       },
-  //     });
-  //   }
-  // }, [selectedPolicyId, isOpen]);
+  useEffect(() => {
+    if (isOpen && selectedPolicyId) {
+      fetchPolicy({
+        variables: {
+          orgSid,
+          policySid: selectedPolicyId,
+        },
+      });
+    }
+  }, [selectedPolicyId, isOpen]);
 
   useEffect(() => {
     if (createdPolicy) {
@@ -145,11 +146,36 @@ const CreatePoliciesPanel = ({
     }
   }, [form, isOpen]);
 
+  useEffect(() => {
+    if (isOpen && form) {
+      const orgTypes = policyForm.options?.find((opt) => opt.key === 'OrgType');
+
+      if (policy) {
+        const { name, applicableOrgTypes, permissions, sid, tmpl, tmplUseAsIs } = policy.accessPolicy;
+
+        const values =
+          orgTypes?.values
+            .filter(({ value }) => applicableOrgTypes.includes(value))
+            .map(({ label, value }) => ({ key: value, name: label })) || [];
+
+        setState({
+          sid,
+          permissions,
+          policyName: name,
+          isTemplate: tmpl,
+          usedAsIs: tmplUseAsIs,
+        });
+
+        setApplicableOrgTypes(values);
+      }
+    }
+  }, [policy, isOpen, form]);
+
   return (
     <Panel
       closeButtonAriaLabel="Close"
       type={PanelType.large}
-      headerText={!state.policySid ? 'New Access Policy' : 'Update Access Policy'}
+      headerText={!selectedPolicyId ? 'New access policy' : 'Update access policy'}
       isOpen={isOpen}
       onDismiss={() => {
         setState({ ...INITIAL_STATE });
@@ -161,7 +187,7 @@ const CreatePoliciesPanel = ({
       <>
         <Row>
           <Column lg="12">
-            {isLoadingForm ? (
+            {isLoadingForm || isLoadingPolicy ? (
               <>
                 <Spacing margin={{ top: 'normal', bottom: 'double' }}>
                   <Separator />
@@ -250,8 +276,7 @@ const CreatePoliciesPanel = ({
                           debounce={500}
                           apiQuery={() => null}
                           onRemoveItem={({ key }) =>
-                            setApplicableOrgTypes(applicableOrgTypes.filter((item: any) => item.key === key))
-                          }
+                            setApplicableOrgTypes(applicableOrgTypes.filter((item: any) => item.key === key))}
                           onItemSelected={(item) => {
                             setApplicableOrgTypes([...applicableOrgTypes, item]);
                           }}
@@ -301,8 +326,7 @@ const CreatePoliciesPanel = ({
                                                       permissions: checked
                                                         ? [...state.permissions, option.value]
                                                         : state.permissions.filter((value) => value !== option.value),
-                                                    })
-                                                  }
+                                                    })}
                                                 />
                                               </Spacing>
                                             ))}
@@ -330,24 +354,40 @@ const CreatePoliciesPanel = ({
                     <Button
                       id="__CreatePoliciesPanelId"
                       variant="primary"
-                      disabled={isCreatingPolicy}
+                      disabled={isCreatingPolicy || isUpdatingPolicy}
                       onClick={() => {
-                        createPolicy({
-                          variables: {
-                            createAccessPolicyInput: {
-                              orgSid,
-                              name: state.policyName,
-                              permissions: state.permissions,
-                              tmpl: state.isTemplate,
-                              tmplUseAsIs: state.usedAsIs,
-                              applicableOrgTypes: applicableOrgTypes.map(({ key }) => key),
+                        const params = {
+                          name: state.policyName,
+                          permissions: state.permissions,
+                          tmpl: state.isTemplate,
+                          tmplUseAsIs: state.usedAsIs,
+                          applicableOrgTypes: state.isTemplate ? applicableOrgTypes.map(({ key }) => key) : [],
+                        };
+
+                        if (!selectedPolicyId) {
+                          createPolicy({
+                            variables: {
+                              createAccessPolicyInput: {
+                                orgSid,
+                                ...params,
+                              },
                             },
-                          },
-                        });
+                          });
+                        } else {
+                          updatePolicy({
+                            variables: {
+                              updateAccessPolicyInput: {
+                                policySid: selectedPolicyId,
+                                ...params,
+                              },
+                            },
+                          });
+                        }
+
                         return null;
                       }}
                     >
-                      Create policy
+                      {!selectedPolicyId ? 'Create' : 'Update'} policy
                     </Button>
                   </Column>
                 </Row>

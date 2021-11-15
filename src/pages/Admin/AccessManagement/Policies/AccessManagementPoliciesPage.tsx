@@ -14,6 +14,7 @@ import { Row, Column } from '../../../../components/layouts';
 import { Separator } from '../../../../components/separators/Separator';
 import { Text } from '../../../../components/typography';
 import { CreatePoliciesPanel } from './CreatePolicy';
+import { Link } from '../../../../components/buttons/Link';
 
 import { useAccessPoliciesForOrgLazyQuery, useDeleteAccessPolicyMutation } from '../../../../data/services/graphql';
 
@@ -60,6 +61,17 @@ const _AccessManagementPoliciesPage = () => {
 
   const onRenderItemColumn = (item, index, column) => {
     switch (column.key) {
+      case 'name':
+        return (
+          <Link
+            onClick={() => {
+              setSelectedPolicyId(item.sid);
+              setIsPanelOpen(true);
+            }}
+          >
+            {item.name}
+          </Link>
+        );
       case 'tmpl':
         return <FontIcon iconName={item.tmpl ? 'CheckMark' : 'Cancel'} />;
       case 'actions':
