@@ -127,6 +127,15 @@ const _AccessManagementPoliciesPage = () => {
     );
   };
 
+  const createPolicyObj = (policy) => ({
+    applicableOrgTypes: policy.applicableOrgTypes.value,
+    name: policy.name.value,
+    permissions: policy.permissions.value,
+    sid: policy.sid.value,
+    tmpl: policy.tmpl.value,
+    tmplUseAsIs: policy.tmplUseAsIs.value,
+  });
+
   return (
     <LayoutAdmin id="PageAdmin" sidebarOptionSelected="AM_POLICIES">
       <>
@@ -175,18 +184,17 @@ const _AccessManagementPoliciesPage = () => {
 
         <CreatePoliciesPanel
           isOpen={isPanelOpen}
-          onCreatePolicy={({ name, permissions, sid, tmpl, tmplUseAsIs, applicableOrgTypes }) => {
-            setPolicies([
-              ...policies,
-              {
-                applicableOrgTypes: applicableOrgTypes.value,
-                name: name.value,
-                permissions: permissions.value,
-                sid: sid.value,
-                tmpl: tmpl.value,
-                tmplUseAsIs: tmplUseAsIs.value,
-              },
-            ]);
+          onCreatePolicy={(newPolicy) => setPolicies([...policies, createPolicyObj(newPolicy)])}
+          onUpdatePolicy={(updatedPolicy) => {
+            setPolicies(
+              policies.map((policy) => {
+                if (policy.sid !== updatedPolicy.sid) {
+                  return policy;
+                }
+
+                return createPolicyObj(updatedPolicy);
+              })
+            );
           }}
           onDismiss={() => {
             setIsPanelOpen(false);

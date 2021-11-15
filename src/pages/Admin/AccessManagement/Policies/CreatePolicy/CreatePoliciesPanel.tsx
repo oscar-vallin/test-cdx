@@ -78,13 +78,15 @@ type CreatePoliciesPanelProps = {
   isOpen?: boolean;
   onDismiss?: any | null;
   onCreatePolicy?: any | null;
+  onUpdatePolicy?: any | null;
   selectedPolicyId?: any;
 } & typeof defaultProps;
 
 const CreatePoliciesPanel = ({
   isOpen,
   onDismiss,
-  onCreatePolicy,
+  onCreatePolicy = () => {},
+  onUpdatePolicy = () => {},
   selectedPolicyId,
 }: CreatePoliciesPanelProps): ReactElement => {
   const { orgSid } = useOrgSid();
@@ -104,7 +106,7 @@ const CreatePoliciesPanel = ({
   const [fetchPolicy, { data: policy, loading: isLoadingPolicy }] = useQueryHandler(useAccessPolicyLazyQuery);
 
   useEffect(() => {
-    if (isOpen && selectedPolicyId) {
+    if (isOpen && selectedPolicyId > 0) {
       fetchPolicy({
         variables: {
           orgSid,
@@ -126,7 +128,19 @@ const CreatePoliciesPanel = ({
         onDismiss();
       }
     }
-  }, [createdPolicy]);
+
+    if (updatedPolicy) {
+      const { updateAccessPolicy } = updatedPolicy;
+
+      if (updateAccessPolicy?.response && updateAccessPolicy?.response === 'FAIL') {
+        Toast.error({ text: 'Please check the highlighted fields and try again' });
+      } else {
+        onUpdatePolicy(updateAccessPolicy);
+        Toast.success({ text: 'Access Policy updated successfully' });
+        onDismiss();
+      }
+    }
+  }, [createdPolicy, updatedPolicy]);
 
   useEffect(() => {
     if (isOpen) {
@@ -147,7 +161,7 @@ const CreatePoliciesPanel = ({
   }, [form, isOpen]);
 
   useEffect(() => {
-    if (isOpen && form) {
+    if (policyForm.options) {
       const orgTypes = policyForm.options?.find((opt) => opt.key === 'OrgType');
 
       if (policy) {
@@ -169,7 +183,7 @@ const CreatePoliciesPanel = ({
         setApplicableOrgTypes(values);
       }
     }
-  }, [policy, isOpen, form]);
+  }, [policy, policyForm]);
 
   return (
     <Panel
