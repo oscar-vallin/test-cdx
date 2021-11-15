@@ -6,7 +6,7 @@ export const useCurrentUser = () => {
   const [isCurrentUserLogged, setLoggedIn] = useState(false);
 
   //
-  const [_apiCall, { data, loading, error }] = useCurrentUserLazyQuery({
+  const [_apiCall, { data, loading, error }]: any = useCurrentUserLazyQuery({
     variables: {},
   });
 
