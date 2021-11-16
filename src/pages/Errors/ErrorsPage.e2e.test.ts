@@ -12,6 +12,7 @@ const testConstants = {
 };
 
 describe('E2E - Errors Navigation Test', () => {
+  jest.setTimeout(10000);
   let cdxApp: PuppetCDXApp;
 
   beforeAll(async () => {
