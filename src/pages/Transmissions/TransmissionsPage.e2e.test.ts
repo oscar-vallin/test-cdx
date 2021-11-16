@@ -97,7 +97,7 @@ describe('E2E - Transmissions Navigation Test', () => {
     await transmissions.setDateRange('Sun Jan 01 2017', 'Tue Nov 16 2021');
     await transmissions.sortAsc(transmissions.deliveredOnCol);
 
-    const expectedTimeStr = getLocalDateString(2019, 12, 4, 8, 12, 0);
+    const expectedTimeStr = getLocalDateString(2019, 12, 5, 1, 12, 0);
 
     await transmissions.expectTextOnFirstRow(expectedTimeStr, 0, 0);
     await transmissions.expectTextOnFirstRow('ABC', 0, 3);
