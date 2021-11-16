@@ -1,39 +1,47 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Label } from '@fluentui/react/lib/Label';
 import { useParams, useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 import { SpinnerSize } from '@fluentui/react';
 import { Table } from '../../../components/tables';
-
 import { Box, Column, Container, FilterSection, StyledRow } from '../WorkPacketTable.styles';
 import { Card } from '../../../components/cards';
 import { Spacing } from '../../../components/spacings/Spacing';
 import { Spinner } from '../../../components/spinners/Spinner';
 import { InputText } from '../../../components/inputs/InputText';
 import { InputDateRange } from '../../../components/inputs/InputDateRange';
-import { TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { useTableFilters } from '../../../hooks/useTableFilters';
+import { TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { useTableTemplate } from '../../../hooks/useTableTemplate';
 
-const TableErrors = ({
-  idPage = 'TableErrors',
+const TableTransmissions = ({
+  idPage = 'TableTransmissions',
   onItemsListChange = () => {
     return null;
   },
 }) => {
-  const location = useLocation();
-  const [urlParams] = useState(queryString.parse(location.search));
-  const { localInput, startDate, endDate } = useTableFilters('Extract Name,  Status, Vendor, etc.', useParams());
+  const { localInput, startDate, endDate } = useTableFilters('Extract Name,  Status, Vendor, etc.');
+  const { search } = useLocation();
+  const paramsDate = new URLSearchParams(search).get('date');
+  const [date] = useState(paramsDate);
+  const [urlParams] = useState(queryString.parse(search));
+
   const { tableProps } = useTableTemplate(
-    TABLE_NAMES.ERRORS,
+    TABLE_NAMES.TRANSMISSIONS,
     urlParams?.orgSid,
     localInput.value,
     { rangeStart: startDate.value, rangeEnd: endDate.value },
-    localInput.value,
-    '',
     localInput.value
   );
+
+  useEffect(() => {
+    if (urlParams.startDate && urlParams.endDate) {
+      startDate.setValue(new Date(`${urlParams.startDate} 00:00:00`));
+      endDate.setValue(new Date(`${urlParams.endDate} 00:00:00`));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -57,18 +65,16 @@ const TableErrors = ({
         <Box id={`${idPage}`}>
           {tableProps.loading ? (
             <Spacing margin={{ top: 'double' }}>
-              <Spinner size={SpinnerSize.large} label="Fetching errors" />
+              <Spinner size={SpinnerSize.large} label="Fetching transmissions" />
             </Spacing>
           ) : (
             <Table
               id={`${idPage}`}
               onOption={() => null}
               searchInput={localInput.value}
+              date={date}
               onItemsListChange={(items) => {
-                onItemsListChange({
-                  count: items.length,
-                  loading: tableProps.loading,
-                });
+                onItemsListChange();
               }}
               {...tableProps}
             />
@@ -79,11 +85,11 @@ const TableErrors = ({
   );
 };
 
-TableErrors.propTypes = {
+TableTransmissions.propTypes = {
   id: PropTypes.string,
   _orgSid: PropTypes.string,
   dateRange: PropTypes.array,
   filter: PropTypes.string,
 };
 
-export { TableErrors };
+export { TableTransmissions };
