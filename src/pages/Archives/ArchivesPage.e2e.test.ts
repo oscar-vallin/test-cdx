@@ -12,6 +12,8 @@ const testConstants = {
 const inputSelector = '#TableArchive__Card__Row__Input-Search';
 
 describe('E2E - Archives Navigation Test', () => {
+  jest.setTimeout(10000);
+
   let cdxApp: PuppetCDXApp;
 
   beforeAll(async () => {
