@@ -6,7 +6,7 @@ import { getStepStatusLabel } from '../../../data/constants/FileStatusConstants'
 import { useInputValue } from '../../../hooks/useInputValue';
 
 //
-export const useTable = (argOrgSid, argDateRange, argFilter) => {
+export const useTable = (argOrgSid, argDateRange) => {
   const [_loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
   const [columns, setColumns] = useState([]);
@@ -16,7 +16,10 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
     variables: {
       orgSid: argOrgSid,
       dateRange: argDateRange,
-      filter: argFilter,
+      pageableInput: {
+        pageNumber: 0,
+        pageSize: 100,
+      },
     },
   });
 
@@ -57,19 +60,19 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
         { key: 'message', label: 'Message', id: 'message', style: 'text' },
       ];
 
-      const _items = data.workPacketStatuses.map(
+      const _items = data?.workPacketStatuses?.nodes?.map(
         ({ timestamp, clientFileArchivePath, inboundFilename, stepStatus, planSponsorId, vendorId, hasErrors }) => {
           const datetime = format(new Date(timestamp), 'MM/dd/yyyy hh:mm a');
           const message = hasErrors ? 'Error' : '';
           const stepStatusLabel = getStepStatusLabel(stepStatus);
 
           return [
-            formatField(datetime, 'text', 'datetime', datetime),
+            formatField(datetime, 'text', 'datetime', datetime, null),
             formatField(inboundFilename, 'link', 'clientFile', clientFileArchivePath, '(Details)'),
-            formatField(stepStatusLabel, 'text', 'workStep', stepStatusLabel),
-            formatField(planSponsorId, 'text', 'planSponsor', planSponsorId),
-            formatField(vendorId, 'text', 'vendor', vendorId),
-            formatField(message, 'text', 'message', message),
+            formatField(stepStatusLabel, 'text', 'workStep', stepStatusLabel, null),
+            formatField(planSponsorId, 'text', 'planSponsor', planSponsorId, null),
+            formatField(vendorId, 'text', 'vendor', vendorId, null),
+            formatField(message, 'text', 'message', message, null),
           ];
         }
       );

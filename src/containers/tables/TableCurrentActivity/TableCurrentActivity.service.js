@@ -21,10 +21,10 @@ export const useTable = () => {
 
   useEffect(() => {
     const doEffect = () => {
-      const _itemsProcess = dataProcess.exchangeActivityInProcess.nodes.map(({ name, activityTime }) => {
+      const _itemsProcess = dataProcess?.exchangeActivityInProcess?.nodes?.map(({ name, activityTime }) => {
         const datetime = format(new Date(activityTime), 'MM/dd/yyyy hh:mm a');
 
-        return [formatField(name, 'name', name), formatField(datetime, 'activity', datetime)];
+        return [formatField(name, 'name', name, '', null), formatField(datetime, 'activity', datetime, '', null)];
       });
 
       setItemsProc(_itemsProcess);
@@ -32,15 +32,15 @@ export const useTable = () => {
       const _itemsComplete = dataComplete.exchangeActivityTransmitted.nodes.map(({ name, activityTime }) => {
         const datetime = format(new Date(activityTime), 'MM/dd/yyyy hh:mm a');
 
-        return [formatField(name, 'name', name), formatField(datetime, 'activity', datetime)];
+        return [formatField(name, 'name', name, '', null), formatField(datetime, 'activity', datetime, '', null)];
       });
 
       setItemsComp(_itemsComplete);
 
-      const _itemsErrored = dataError.exchangeActivityErrored.nodes.map(({ name, activityTime }) => {
+      const _itemsErrored = dataError?.exchangeActivityErrored?.nodes?.map(({ name, activityTime }) => {
         const datetime = format(new Date(activityTime), 'MM/dd/yyyy hh:mm a');
 
-        return [formatField(name, 'name', name), formatField(datetime, 'activity', datetime)];
+        return [formatField(name, 'name', name, '', null), formatField(datetime, 'activity', datetime, '', null)];
       });
 
       setItemsError(_itemsErrored);

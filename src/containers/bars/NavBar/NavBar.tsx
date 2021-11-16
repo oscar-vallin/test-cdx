@@ -101,7 +101,7 @@ const NavBar = ({ id, menuOptionSelected = 'dashboard', onUserSettings, visible 
                 <MainMenu id="__MainMenu" left option={menuOptionSelected} changeCollapse={changeCollapse} />
               )}
             </StyledColumnNav>
-            <StyledColumnLogoR id={`${id}__Left-Row__Logo`} sm={2} noPadding collapse>
+            <StyledColumnLogoR id={`${id}__Right-Row__Logo`} sm={2} noPadding collapse>
               <StyledTitle>CDX DASHBOARD</StyledTitle>
             </StyledColumnLogoR>
           </StyledRow>

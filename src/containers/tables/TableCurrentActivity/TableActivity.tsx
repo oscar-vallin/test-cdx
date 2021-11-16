@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { ReactElement, useState, useEffect } from 'react';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { Row, Column } from '../../../components/layouts';
@@ -17,12 +17,28 @@ const generateColumns = () => {
   return [createColumn({ name: 'Client Name', key: 'name' }), createColumn({ name: 'Last Activity', key: 'activity' })];
 };
 
-const TableActivity = ({ id, items, loading, tableName, color }) => {
+const defaultProps = {
+  id: '',
+  items: [],
+  loading: false,
+  tableName: '',
+  color: '',
+};
+
+type TableActivityProps = {
+  id?: string;
+  items?: any[];
+  loading?: boolean;
+  tableName?: any;
+  color?: any;
+} & typeof defaultProps;
+
+const TableActivity = ({ id, items, loading, tableName, color }: TableActivityProps): ReactElement => {
   const columns = generateColumns();
-  const [sortedItems, setSortedItems] = useState('initialState');
+  const [sortedItems, setSortedItems]: any = useState('initialState');
 
   const _buildItems = () => {
-    const iItems = items.map((rowItem) => {
+    const iItems: any = items.map((rowItem) => {
       const objItem = {};
 
       rowItem.forEach((rowColItem) => {
@@ -66,5 +82,7 @@ const TableActivity = ({ id, items, loading, tableName, color }) => {
     </Row>
   );
 };
+
+TableActivity.defaultProps = defaultProps;
 
 export { TableActivity };
