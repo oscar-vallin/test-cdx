@@ -37,6 +37,7 @@ export type AccessPolicy = {
 export type AccessPolicyConnection = {
   __typename?: 'AccessPolicyConnection';
   paginationInfo: PaginationInfo;
+  listPageInfo?: Maybe<ListPageInfo>;
   nodes?: Maybe<Array<Maybe<AccessPolicy>>>;
 };
 
@@ -70,6 +71,7 @@ export type AccessPolicyGroup = {
 export type AccessPolicyGroupConnection = {
   __typename?: 'AccessPolicyGroupConnection';
   paginationInfo: PaginationInfo;
+  listPageInfo?: Maybe<ListPageInfo>;
   nodes?: Maybe<Array<Maybe<AccessPolicyGroup>>>;
 };
 
@@ -105,6 +107,7 @@ export type AccessSpecialization = {
 export type AccessSpecializationConnection = {
   __typename?: 'AccessSpecializationConnection';
   paginationInfo: PaginationInfo;
+  listPageInfo?: Maybe<ListPageInfo>;
   nodes?: Maybe<Array<Maybe<AccessSpecialization>>>;
 };
 
@@ -178,7 +181,9 @@ export enum CdxWebCommandType {
   Deactivate = 'DEACTIVATE',
   Activate = 'ACTIVATE',
   Add = 'ADD',
-  Update = 'UPDATE'
+  Update = 'UPDATE',
+  Delete = 'DELETE',
+  Create = 'CREATE'
 }
 
 export enum CdxWebPage {
@@ -210,6 +215,86 @@ export enum CdxWebPivot {
   Activity = 'ACTIVITY',
   InProgress = 'IN_PROGRESS'
 }
+
+export type CompositePasswordRuleSet = {
+  __typename?: 'CompositePasswordRuleSet';
+  enabled?: Maybe<Scalars['Boolean']>;
+  minPasswordComplexity?: Maybe<PasswordComplexity>;
+  requiredNumPassingRules?: Maybe<Scalars['Int']>;
+  mustNotContainWhiteSpace?: Maybe<Scalars['Boolean']>;
+  mustNotContainUserName?: Maybe<Scalars['Boolean']>;
+  mustNotContainNumericSequence?: Maybe<Scalars['Boolean']>;
+  mustFollowLengthRequirements?: Maybe<Scalars['Boolean']>;
+  minLength?: Maybe<Scalars['Int']>;
+  maxLength?: Maybe<Scalars['Int']>;
+  mustContainUpperCaseLetters?: Maybe<Scalars['Boolean']>;
+  minUpperCaseLetters?: Maybe<Scalars['Int']>;
+  mustContainLowerCaseLetters?: Maybe<Scalars['Boolean']>;
+  minLowerCaseLetters?: Maybe<Scalars['Int']>;
+  mustContainNumericDigits?: Maybe<Scalars['Boolean']>;
+  minNumericDigits?: Maybe<Scalars['Int']>;
+  mustContainSpecialCharacters?: Maybe<Scalars['Boolean']>;
+  minSpecialCharacters?: Maybe<Scalars['Int']>;
+  mustNotRepeatCharacters?: Maybe<Scalars['Boolean']>;
+  maxAllowedRepeatedChars?: Maybe<Scalars['Int']>;
+  mustNotReusePasswords?: Maybe<Scalars['Boolean']>;
+  minPasswordHistoryVariations?: Maybe<Scalars['Int']>;
+  mustNotMatchExactDictionaryWord?: Maybe<Scalars['Boolean']>;
+  mustNotMatchPartialDictionaryWord?: Maybe<Scalars['Boolean']>;
+};
+
+export type CompositePasswordRuleSetForm = PasswordRuleSet & {
+  __typename?: 'CompositePasswordRuleSetForm';
+  enabled?: Maybe<UiBooleanField>;
+  minPasswordComplexity?: Maybe<UiSelectOneField>;
+  requiredNumPassingRules?: Maybe<UiIntField>;
+  mustNotContainWhiteSpace?: Maybe<UiBooleanField>;
+  mustNotContainUserName?: Maybe<UiBooleanField>;
+  mustNotContainNumericSequence?: Maybe<UiBooleanField>;
+  mustFollowLengthRequirements?: Maybe<UiBooleanField>;
+  minLength?: Maybe<UiIntField>;
+  maxLength?: Maybe<UiIntField>;
+  mustContainUpperCaseLetters?: Maybe<UiBooleanField>;
+  minUpperCaseLetters?: Maybe<UiIntField>;
+  mustContainLowerCaseLetters?: Maybe<UiBooleanField>;
+  minLowerCaseLetters?: Maybe<UiIntField>;
+  mustContainNumericDigits?: Maybe<UiBooleanField>;
+  minNumericDigits?: Maybe<UiIntField>;
+  mustContainSpecialCharacters?: Maybe<UiBooleanField>;
+  minSpecialCharacters?: Maybe<UiIntField>;
+  mustNotRepeatCharacters?: Maybe<UiBooleanField>;
+  maxAllowedRepeatedChars?: Maybe<UiIntField>;
+  mustNotReusePasswords?: Maybe<UiBooleanField>;
+  minPasswordHistoryVariations?: Maybe<UiIntField>;
+  mustNotMatchExactDictionaryWord?: Maybe<UiBooleanField>;
+  mustNotMatchPartialDictionaryWord?: Maybe<UiBooleanField>;
+};
+
+export type CompositePasswordRuleSetInput = {
+  enabled?: Maybe<Scalars['Boolean']>;
+  minPasswordComplexity?: Maybe<PasswordComplexity>;
+  requiredNumPassingRules?: Maybe<Scalars['Int']>;
+  mustNotContainWhiteSpace?: Maybe<Scalars['Boolean']>;
+  mustNotContainUserName?: Maybe<Scalars['Boolean']>;
+  mustNotContainNumericSequence?: Maybe<Scalars['Boolean']>;
+  mustFollowLengthRequirements?: Maybe<Scalars['Boolean']>;
+  minLength?: Maybe<Scalars['Int']>;
+  maxLength?: Maybe<Scalars['Int']>;
+  mustContainUpperCaseLetters?: Maybe<Scalars['Boolean']>;
+  minUpperCaseLetters?: Maybe<Scalars['Int']>;
+  mustContainLowerCaseLetters?: Maybe<Scalars['Boolean']>;
+  minLowerCaseLetters?: Maybe<Scalars['Int']>;
+  mustContainNumericDigits?: Maybe<Scalars['Boolean']>;
+  minNumericDigits?: Maybe<Scalars['Int']>;
+  mustContainSpecialCharacters?: Maybe<Scalars['Boolean']>;
+  minSpecialCharacters?: Maybe<Scalars['Int']>;
+  mustNotRepeatCharacters?: Maybe<Scalars['Boolean']>;
+  maxAllowedRepeatedChars?: Maybe<Scalars['Int']>;
+  mustNotReusePasswords?: Maybe<Scalars['Boolean']>;
+  minPasswordHistoryVariations?: Maybe<Scalars['Int']>;
+  mustNotMatchExactDictionaryWord?: Maybe<Scalars['Boolean']>;
+  mustNotMatchPartialDictionaryWord?: Maybe<Scalars['Boolean']>;
+};
 
 export type CreateAccessPolicyGroupInput = {
   orgSid: Scalars['ID'];
@@ -609,6 +694,7 @@ export type Mutation = {
    */
   createOrUpdateOwnDashTheme?: Maybe<DashTheme>;
   setOwnDashThemeFontSize?: Maybe<DashTheme>;
+  updatePasswordRules?: Maybe<PasswordRulesForm>;
 };
 
 
@@ -763,6 +849,11 @@ export type MutationSetOwnDashThemeFontSizeArgs = {
   dashThemeInput?: Maybe<DashThemeInput>;
 };
 
+
+export type MutationUpdatePasswordRulesArgs = {
+  passwordRulesInput?: Maybe<PasswordRulesInput>;
+};
+
 export type Nvp = NvpStr | NvpId;
 
 export type NvpId = {
@@ -816,6 +907,7 @@ export type Organization = {
 export type OrganizationConnection = {
   __typename?: 'OrganizationConnection';
   paginationInfo: PaginationInfo;
+  listPageInfo?: Maybe<ListPageInfo>;
   nodes?: Maybe<Array<Maybe<Organization>>>;
 };
 
@@ -900,6 +992,12 @@ export enum PasswordCharacterType {
   Special = 'SPECIAL'
 }
 
+export enum PasswordComplexity {
+  Weak = 'WEAK',
+  Strong = 'STRONG',
+  VeryStrong = 'VERY_STRONG'
+}
+
 export type PasswordLengthRule = {
   __typename?: 'PasswordLengthRule';
   minLength?: Maybe<Scalars['Int']>;
@@ -925,26 +1023,59 @@ export type PasswordRuleGroup = {
 };
 
 export type PasswordRuleSet = {
-  __typename?: 'PasswordRuleSet';
-  mustNotContainWhiteSpace?: Maybe<Scalars['Boolean']>;
-  mustNotContainUserName?: Maybe<Scalars['Boolean']>;
-  mustNotContainNumericSequence?: Maybe<Scalars['Boolean']>;
-  minLength?: Maybe<Scalars['Int']>;
-  maxLength?: Maybe<Scalars['Int']>;
-  minUpperCaseLetters?: Maybe<Scalars['Int']>;
-  minLowerCaseLetters?: Maybe<Scalars['Int']>;
-  minNumericDigits?: Maybe<Scalars['Int']>;
-  minSpecialCharacters?: Maybe<Scalars['Int']>;
-  maxAllowedRepeatedChars?: Maybe<Scalars['Int']>;
-  minPasswordHistoryVariations?: Maybe<Scalars['Int']>;
-  mustNotMatchExactDictionaryWord?: Maybe<Scalars['Boolean']>;
-  mustNotMatchPartialDictionaryWord?: Maybe<Scalars['Boolean']>;
+  mustNotContainWhiteSpace?: Maybe<UiBooleanField>;
+  mustNotContainUserName?: Maybe<UiBooleanField>;
+  mustNotContainNumericSequence?: Maybe<UiBooleanField>;
+  mustFollowLengthRequirements?: Maybe<UiBooleanField>;
+  minLength?: Maybe<UiIntField>;
+  maxLength?: Maybe<UiIntField>;
+  mustContainUpperCaseLetters?: Maybe<UiBooleanField>;
+  minUpperCaseLetters?: Maybe<UiIntField>;
+  mustContainLowerCaseLetters?: Maybe<UiBooleanField>;
+  minLowerCaseLetters?: Maybe<UiIntField>;
+  mustContainNumericDigits?: Maybe<UiBooleanField>;
+  minNumericDigits?: Maybe<UiIntField>;
+  mustContainSpecialCharacters?: Maybe<UiBooleanField>;
+  minSpecialCharacters?: Maybe<UiIntField>;
+  mustNotRepeatCharacters?: Maybe<UiBooleanField>;
+  maxAllowedRepeatedChars?: Maybe<UiIntField>;
+  mustNotReusePasswords?: Maybe<UiBooleanField>;
+  minPasswordHistoryVariations?: Maybe<UiIntField>;
+  mustNotMatchExactDictionaryWord?: Maybe<UiBooleanField>;
+  mustNotMatchPartialDictionaryWord?: Maybe<UiBooleanField>;
 };
 
 export type PasswordRules = {
   __typename?: 'PasswordRules';
-  mustAlwaysBeMet?: Maybe<PasswordRuleSet>;
-  someMustBeMet?: Maybe<PasswordRuleSet>;
+  orgSid: Scalars['ID'];
+  mustAlwaysBeMet?: Maybe<RequiredPasswordRuleSet>;
+  someMustBeMet?: Maybe<CompositePasswordRuleSet>;
+  autoLockAccount?: Maybe<Scalars['Boolean']>;
+  autoLockAfterFailedAttempts?: Maybe<Scalars['Int']>;
+  autoUnlockAccount?: Maybe<Scalars['Boolean']>;
+  autoUnlockAccountDelayMinutes?: Maybe<Scalars['Int']>;
+};
+
+export type PasswordRulesForm = {
+  __typename?: 'PasswordRulesForm';
+  organization: UiReadOnlyField;
+  mustAlwaysBeMet?: Maybe<RequiredPasswordRuleSetForm>;
+  someMustBeMet?: Maybe<CompositePasswordRuleSetForm>;
+  autoLockAccount?: Maybe<UiBooleanField>;
+  autoLockAfterFailedAttempts?: Maybe<UiIntField>;
+  autoUnlockAccount?: Maybe<UiBooleanField>;
+  autoUnlockAccountDelayMinutes?: Maybe<UiIntField>;
+  response: GqOperationResponse;
+  options?: Maybe<Array<Maybe<UiOptions>>>;
+  errCode?: Maybe<Scalars['String']>;
+  errMsg?: Maybe<Scalars['String']>;
+  errSeverity?: Maybe<ErrorSeverity>;
+};
+
+export type PasswordRulesInput = {
+  orgSid: Scalars['ID'];
+  mustAlwaysBeMet?: Maybe<RequiredPasswordRuleSetInput>;
+  someMustBeMet?: Maybe<CompositePasswordRuleSetInput>;
   autoLockAccount?: Maybe<Scalars['Boolean']>;
   autoLockAfterFailedAttempts?: Maybe<Scalars['Int']>;
   autoUnlockAccount?: Maybe<Scalars['Boolean']>;
@@ -1116,6 +1247,7 @@ export type Query = {
   currentUserDashThemePage?: Maybe<UserDashThemePage>;
   navigateToNewDomain?: Maybe<WebAppDomain>;
   simulateSessionExpir?: Maybe<LogOutInfo>;
+  passwordRulesForm?: Maybe<PasswordRulesForm>;
 };
 
 
@@ -1368,6 +1500,11 @@ export type QueryNavigateToNewDomainArgs = {
   domainNavInput?: Maybe<DomainNavInput>;
 };
 
+
+export type QueryPasswordRulesFormArgs = {
+  orgSid: Scalars['ID'];
+};
+
 export type RecordCount = {
   __typename?: 'RecordCount';
   name: Scalars['String'];
@@ -1389,6 +1526,77 @@ export type RecordCreationEvent = {
   error?: Maybe<Array<Maybe<FieldCreationEvent>>>;
   warning?: Maybe<Array<Maybe<FieldCreationEvent>>>;
   information?: Maybe<Array<Maybe<FieldCreationEvent>>>;
+};
+
+export type RequiredPasswordRuleSet = {
+  __typename?: 'RequiredPasswordRuleSet';
+  mustNotContainWhiteSpace?: Maybe<Scalars['Boolean']>;
+  mustNotContainUserName?: Maybe<Scalars['Boolean']>;
+  mustNotContainNumericSequence?: Maybe<Scalars['Boolean']>;
+  mustFollowLengthRequirements?: Maybe<Scalars['Boolean']>;
+  minLength?: Maybe<Scalars['Int']>;
+  maxLength?: Maybe<Scalars['Int']>;
+  mustContainUpperCaseLetters?: Maybe<Scalars['Boolean']>;
+  minUpperCaseLetters?: Maybe<Scalars['Int']>;
+  mustContainLowerCaseLetters?: Maybe<Scalars['Boolean']>;
+  minLowerCaseLetters?: Maybe<Scalars['Int']>;
+  mustContainNumericDigits?: Maybe<Scalars['Boolean']>;
+  minNumericDigits?: Maybe<Scalars['Int']>;
+  mustContainSpecialCharacters?: Maybe<Scalars['Boolean']>;
+  minSpecialCharacters?: Maybe<Scalars['Int']>;
+  mustNotRepeatCharacters?: Maybe<Scalars['Boolean']>;
+  maxAllowedRepeatedChars?: Maybe<Scalars['Int']>;
+  mustNotReusePasswords?: Maybe<Scalars['Boolean']>;
+  minPasswordHistoryVariations?: Maybe<Scalars['Int']>;
+  mustNotMatchExactDictionaryWord?: Maybe<Scalars['Boolean']>;
+  mustNotMatchPartialDictionaryWord?: Maybe<Scalars['Boolean']>;
+};
+
+export type RequiredPasswordRuleSetForm = PasswordRuleSet & {
+  __typename?: 'RequiredPasswordRuleSetForm';
+  mustNotContainWhiteSpace?: Maybe<UiBooleanField>;
+  mustNotContainUserName?: Maybe<UiBooleanField>;
+  mustNotContainNumericSequence?: Maybe<UiBooleanField>;
+  mustFollowLengthRequirements?: Maybe<UiBooleanField>;
+  minLength?: Maybe<UiIntField>;
+  maxLength?: Maybe<UiIntField>;
+  mustContainUpperCaseLetters?: Maybe<UiBooleanField>;
+  minUpperCaseLetters?: Maybe<UiIntField>;
+  mustContainLowerCaseLetters?: Maybe<UiBooleanField>;
+  minLowerCaseLetters?: Maybe<UiIntField>;
+  mustContainNumericDigits?: Maybe<UiBooleanField>;
+  minNumericDigits?: Maybe<UiIntField>;
+  mustContainSpecialCharacters?: Maybe<UiBooleanField>;
+  minSpecialCharacters?: Maybe<UiIntField>;
+  mustNotRepeatCharacters?: Maybe<UiBooleanField>;
+  maxAllowedRepeatedChars?: Maybe<UiIntField>;
+  mustNotReusePasswords?: Maybe<UiBooleanField>;
+  minPasswordHistoryVariations?: Maybe<UiIntField>;
+  mustNotMatchExactDictionaryWord?: Maybe<UiBooleanField>;
+  mustNotMatchPartialDictionaryWord?: Maybe<UiBooleanField>;
+};
+
+export type RequiredPasswordRuleSetInput = {
+  mustNotContainWhiteSpace?: Maybe<Scalars['Boolean']>;
+  mustNotContainUserName?: Maybe<Scalars['Boolean']>;
+  mustNotContainNumericSequence?: Maybe<Scalars['Boolean']>;
+  mustFollowLengthRequirements?: Maybe<Scalars['Boolean']>;
+  minLength?: Maybe<Scalars['Int']>;
+  maxLength?: Maybe<Scalars['Int']>;
+  mustContainUpperCaseLetters?: Maybe<Scalars['Boolean']>;
+  minUpperCaseLetters?: Maybe<Scalars['Int']>;
+  mustContainLowerCaseLetters?: Maybe<Scalars['Boolean']>;
+  minLowerCaseLetters?: Maybe<Scalars['Int']>;
+  mustContainNumericDigits?: Maybe<Scalars['Boolean']>;
+  minNumericDigits?: Maybe<Scalars['Int']>;
+  mustContainSpecialCharacters?: Maybe<Scalars['Boolean']>;
+  minSpecialCharacters?: Maybe<Scalars['Int']>;
+  mustNotRepeatCharacters?: Maybe<Scalars['Boolean']>;
+  maxAllowedRepeatedChars?: Maybe<Scalars['Int']>;
+  mustNotReusePasswords?: Maybe<Scalars['Boolean']>;
+  minPasswordHistoryVariations?: Maybe<Scalars['Int']>;
+  mustNotMatchExactDictionaryWord?: Maybe<Scalars['Boolean']>;
+  mustNotMatchPartialDictionaryWord?: Maybe<Scalars['Boolean']>;
 };
 
 export enum RestartReason {
@@ -1514,6 +1722,7 @@ export type UiBooleanField = UiField & {
   __typename?: 'UIBooleanField';
   value?: Maybe<Scalars['Boolean']>;
   label: Scalars['String'];
+  readOnly?: Maybe<Scalars['Boolean']>;
   info?: Maybe<Scalars['String']>;
   required: Scalars['Boolean'];
   visible: Scalars['Boolean'];
@@ -1526,6 +1735,7 @@ export type UiDateField = UiField & {
   __typename?: 'UIDateField';
   value?: Maybe<Scalars['Date']>;
   label: Scalars['String'];
+  readOnly?: Maybe<Scalars['Boolean']>;
   info?: Maybe<Scalars['String']>;
   required: Scalars['Boolean'];
   visible: Scalars['Boolean'];
@@ -1536,15 +1746,20 @@ export type UiDateField = UiField & {
 
 export type UiField = {
   label: Scalars['String'];
+  readOnly?: Maybe<Scalars['Boolean']>;
   info?: Maybe<Scalars['String']>;
   required: Scalars['Boolean'];
   visible: Scalars['Boolean'];
+  errCode?: Maybe<Scalars['String']>;
+  errMsg?: Maybe<Scalars['String']>;
+  errSeverity?: Maybe<ErrorSeverity>;
 };
 
 export type UiIntField = UiField & {
   __typename?: 'UIIntField';
   value?: Maybe<Scalars['Int']>;
   label: Scalars['String'];
+  readOnly?: Maybe<Scalars['Boolean']>;
   info?: Maybe<Scalars['String']>;
   required: Scalars['Boolean'];
   visible: Scalars['Boolean'];
@@ -1559,6 +1774,7 @@ export type UiLongField = UiField & {
   __typename?: 'UILongField';
   value?: Maybe<Scalars['Int']>;
   label: Scalars['String'];
+  readOnly?: Maybe<Scalars['Boolean']>;
   info?: Maybe<Scalars['String']>;
   required: Scalars['Boolean'];
   visible: Scalars['Boolean'];
@@ -1587,6 +1803,7 @@ export type UiReadOnlyField = UiField & {
   value?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   label: Scalars['String'];
+  readOnly?: Maybe<Scalars['Boolean']>;
   info?: Maybe<Scalars['String']>;
   required: Scalars['Boolean'];
   visible: Scalars['Boolean'];
@@ -1599,6 +1816,7 @@ export type UiSelectManyField = UiField & {
   __typename?: 'UISelectManyField';
   value?: Maybe<Array<Maybe<Scalars['String']>>>;
   label: Scalars['String'];
+  readOnly?: Maybe<Scalars['Boolean']>;
   info?: Maybe<Scalars['String']>;
   required: Scalars['Boolean'];
   visible: Scalars['Boolean'];
@@ -1615,6 +1833,7 @@ export type UiSelectOneField = UiField & {
   __typename?: 'UISelectOneField';
   value?: Maybe<Scalars['String']>;
   label: Scalars['String'];
+  readOnly?: Maybe<Scalars['Boolean']>;
   info?: Maybe<Scalars['String']>;
   required: Scalars['Boolean'];
   visible: Scalars['Boolean'];
@@ -1631,6 +1850,7 @@ export type UiStringField = UiField & {
   __typename?: 'UIStringField';
   value?: Maybe<Scalars['String']>;
   label: Scalars['String'];
+  readOnly?: Maybe<Scalars['Boolean']>;
   info?: Maybe<Scalars['String']>;
   required: Scalars['Boolean'];
   visible: Scalars['Boolean'];
@@ -2723,26 +2943,26 @@ export type UserAccountFormQuery = (
     & Pick<UserAccountForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { email?: Maybe<(
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, active?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, person?: Maybe<(
       { __typename?: 'PersonForm' }
       & Pick<PersonForm, 'sid' | 'errCode' | 'errMsg' | 'errSeverity'>
       & { firstNm: (
         { __typename?: 'UIStringField' }
-        & Pick<UiStringField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
       ), lastNm: (
         { __typename?: 'UIStringField' }
-        & Pick<UiStringField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
       ) }
     )>, organization: (
       { __typename?: 'UIReadOnlyField' }
-      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), accessPolicyGroups?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
@@ -2766,26 +2986,26 @@ export type FindUserAccountQuery = (
     & Pick<UserAccountForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { email?: Maybe<(
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, active?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, person?: Maybe<(
       { __typename?: 'PersonForm' }
       & Pick<PersonForm, 'sid' | 'errCode' | 'errMsg' | 'errSeverity'>
       & { firstNm: (
         { __typename?: 'UIStringField' }
-        & Pick<UiStringField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
       ), lastNm: (
         { __typename?: 'UIStringField' }
-        & Pick<UiStringField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
       ) }
     )>, organization: (
       { __typename?: 'UIReadOnlyField' }
-      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), accessPolicyGroups?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
@@ -2824,7 +3044,20 @@ export type AccessPoliciesForOrgQuery = (
     & { paginationInfo: (
       { __typename?: 'PaginationInfo' }
       & FragmentPaginationInfoFragment
-    ), nodes?: Maybe<Array<Maybe<(
+    ), listPageInfo?: Maybe<(
+      { __typename?: 'ListPageInfo' }
+      & Pick<ListPageInfo, 'pageHeaderLabel'>
+      & { pageCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>>, listItemCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>>, listItemBulkCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>> }
+    )>, nodes?: Maybe<Array<Maybe<(
       { __typename?: 'AccessPolicy' }
       & FragmentAccessPolicyFragment
     )>>> }
@@ -2844,7 +3077,20 @@ export type AccessSpecializationsForOrgQuery = (
     & { paginationInfo: (
       { __typename?: 'PaginationInfo' }
       & FragmentPaginationInfoFragment
-    ), nodes?: Maybe<Array<Maybe<(
+    ), listPageInfo?: Maybe<(
+      { __typename?: 'ListPageInfo' }
+      & Pick<ListPageInfo, 'pageHeaderLabel'>
+      & { pageCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>>, listItemCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>>, listItemBulkCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>> }
+    )>, nodes?: Maybe<Array<Maybe<(
       { __typename?: 'AccessSpecialization' }
       & Pick<AccessSpecialization, 'sid' | 'name'>
       & { filters?: Maybe<Array<Maybe<(
@@ -2868,7 +3114,20 @@ export type AccessPolicyGroupsForOrgQuery = (
     & { paginationInfo: (
       { __typename?: 'PaginationInfo' }
       & FragmentPaginationInfoFragment
-    ), nodes?: Maybe<Array<Maybe<(
+    ), listPageInfo?: Maybe<(
+      { __typename?: 'ListPageInfo' }
+      & Pick<ListPageInfo, 'pageHeaderLabel'>
+      & { pageCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>>, listItemCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>>, listItemBulkCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>> }
+    )>, nodes?: Maybe<Array<Maybe<(
       { __typename?: 'AccessPolicyGroup' }
       & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes'>
       & { policies?: Maybe<Array<Maybe<(
@@ -2908,22 +3167,22 @@ export type AccessPolicyFormQuery = (
     & Pick<AccessPolicyForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { name: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), organization: (
       { __typename?: 'UIReadOnlyField' }
-      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), permissions?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, tmpl?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, tmplUseAsIs?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, applicableOrgTypes?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
@@ -2947,22 +3206,22 @@ export type FindAccessPolicyQuery = (
     & Pick<AccessPolicyForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { name: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), organization: (
       { __typename?: 'UIReadOnlyField' }
-      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), permissions?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, tmpl?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, tmplUseAsIs?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, applicableOrgTypes?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
@@ -2986,16 +3245,16 @@ export type AccessSpecializationFormQuery = (
     & Pick<AccessSpecializationForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { name: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), organization: (
       { __typename?: 'UIReadOnlyField' }
-      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), filters?: Maybe<Array<Maybe<(
       { __typename?: 'SpecializationFilterForm' }
       & Pick<SpecializationFilterForm, 'permission' | 'label' | 'errCode' | 'errMsg' | 'errSeverity'>
       & { orgSids?: Maybe<(
         { __typename?: 'UISelectManyField' }
-        & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
       )> }
     )>>>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
@@ -3020,16 +3279,16 @@ export type FindAccessSpecializationQuery = (
     & Pick<AccessSpecializationForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { name: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), organization: (
       { __typename?: 'UIReadOnlyField' }
-      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), filters?: Maybe<Array<Maybe<(
       { __typename?: 'SpecializationFilterForm' }
       & Pick<SpecializationFilterForm, 'permission' | 'label' | 'errCode' | 'errMsg' | 'errSeverity'>
       & { orgSids?: Maybe<(
         { __typename?: 'UISelectManyField' }
-        & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
       )> }
     )>>>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
@@ -3055,37 +3314,37 @@ export type AccessPolicyGroupFormQuery = (
     & Pick<AccessPolicyGroupForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { name: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), description: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), organization: (
       { __typename?: 'UIReadOnlyField' }
-      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), tmpl?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, tmplUseAsIs?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, applicableOrgTypes?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, policies?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, specializations?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, includeAllSubOrgs?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, includeOrgSids?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, excludeOrgSids?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
@@ -3109,37 +3368,37 @@ export type FindAccessPolicyGroupQuery = (
     & Pick<AccessPolicyGroupForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { name: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), description: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), organization: (
       { __typename?: 'UIReadOnlyField' }
-      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), tmpl?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, tmplUseAsIs?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, applicableOrgTypes?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, policies?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, specializations?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, includeAllSubOrgs?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, includeOrgSids?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, excludeOrgSids?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
@@ -3192,7 +3451,20 @@ export type DirectOrganizationsQuery = (
     & { paginationInfo: (
       { __typename?: 'PaginationInfo' }
       & FragmentPaginationInfoFragment
-    ), nodes?: Maybe<Array<Maybe<(
+    ), listPageInfo?: Maybe<(
+      { __typename?: 'ListPageInfo' }
+      & Pick<ListPageInfo, 'pageHeaderLabel'>
+      & { pageCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>>, listItemCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>>, listItemBulkCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>> }
+    )>, nodes?: Maybe<Array<Maybe<(
       { __typename?: 'Organization' }
       & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType'>
     )>>> }
@@ -3209,16 +3481,16 @@ export type OrganizationFormQuery = (
     & Pick<OrganizationForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { name: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), orgId: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), orgType?: Maybe<(
       { __typename?: 'UISelectOneField' }
-      & Pick<UiSelectOneField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectOneField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, active: (
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
@@ -3242,16 +3514,16 @@ export type FindOrganizationQuery = (
     & Pick<OrganizationForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { name: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), orgId: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), orgType?: Maybe<(
       { __typename?: 'UISelectOneField' }
-      & Pick<UiSelectOneField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectOneField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, active: (
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
@@ -3278,7 +3550,20 @@ export type SearchOrganizationsQuery = (
     & { paginationInfo: (
       { __typename?: 'PaginationInfo' }
       & FragmentPaginationInfoFragment
-    ), nodes?: Maybe<Array<Maybe<(
+    ), listPageInfo?: Maybe<(
+      { __typename?: 'ListPageInfo' }
+      & Pick<ListPageInfo, 'pageHeaderLabel'>
+      & { pageCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>>, listItemCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>>, listItemBulkCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>> }
+    )>, nodes?: Maybe<Array<Maybe<(
       { __typename?: 'Organization' }
       & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType'>
     )>>> }
@@ -3459,6 +3744,177 @@ export type SimulateSessionExpirQuery = (
   )> }
 );
 
+export type PasswordRulesFormQueryVariables = Exact<{
+  orgSid: Scalars['ID'];
+}>;
+
+
+export type PasswordRulesFormQuery = (
+  { __typename?: 'Query' }
+  & { passwordRulesForm?: Maybe<(
+    { __typename?: 'PasswordRulesForm' }
+    & Pick<PasswordRulesForm, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { organization: (
+      { __typename?: 'UIReadOnlyField' }
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), mustAlwaysBeMet?: Maybe<(
+      { __typename?: 'RequiredPasswordRuleSetForm' }
+      & { mustNotContainWhiteSpace?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotContainUserName?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotContainNumericSequence?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustFollowLengthRequirements?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minLength?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, maxLength?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustContainUpperCaseLetters?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minUpperCaseLetters?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustContainLowerCaseLetters?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minLowerCaseLetters?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustContainNumericDigits?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minNumericDigits?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustContainSpecialCharacters?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minSpecialCharacters?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotRepeatCharacters?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, maxAllowedRepeatedChars?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotReusePasswords?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minPasswordHistoryVariations?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotMatchExactDictionaryWord?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotMatchPartialDictionaryWord?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )> }
+    )>, someMustBeMet?: Maybe<(
+      { __typename?: 'CompositePasswordRuleSetForm' }
+      & { enabled?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minPasswordComplexity?: Maybe<(
+        { __typename?: 'UISelectOneField' }
+        & Pick<UiSelectOneField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, requiredNumPassingRules?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotContainWhiteSpace?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotContainUserName?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotContainNumericSequence?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustFollowLengthRequirements?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minLength?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, maxLength?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustContainUpperCaseLetters?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minUpperCaseLetters?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustContainLowerCaseLetters?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minLowerCaseLetters?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustContainNumericDigits?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minNumericDigits?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustContainSpecialCharacters?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minSpecialCharacters?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotRepeatCharacters?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, maxAllowedRepeatedChars?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotReusePasswords?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minPasswordHistoryVariations?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotMatchExactDictionaryWord?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotMatchPartialDictionaryWord?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )> }
+    )>, autoLockAccount?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, autoLockAfterFailedAttempts?: Maybe<(
+      { __typename?: 'UIIntField' }
+      & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, autoUnlockAccount?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, autoUnlockAccountDelayMinutes?: Maybe<(
+      { __typename?: 'UIIntField' }
+      & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, options?: Maybe<Array<Maybe<(
+      { __typename?: 'UIOptions' }
+      & Pick<UiOptions, 'key'>
+      & { values?: Maybe<Array<Maybe<(
+        { __typename?: 'UIOption' }
+        & Pick<UiOption, 'label' | 'value' | 'info'>
+      )>>> }
+    )>>> }
+  )> }
+);
+
 export type PasswordLoginMutationVariables = Exact<{
   userId: Scalars['String'];
   password: Scalars['String'];
@@ -3540,22 +3996,22 @@ export type CreateAccessPolicyMutation = (
     & Pick<AccessPolicyForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { name: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), organization: (
       { __typename?: 'UIReadOnlyField' }
-      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), permissions?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, tmpl?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, tmplUseAsIs?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, applicableOrgTypes?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
@@ -3579,22 +4035,22 @@ export type UpdateAccessPolicyMutation = (
     & Pick<AccessPolicyForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { name: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), organization: (
       { __typename?: 'UIReadOnlyField' }
-      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), permissions?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, tmpl?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, tmplUseAsIs?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, applicableOrgTypes?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
@@ -3638,16 +4094,16 @@ export type CreateAccessSpecializationMutation = (
     & Pick<AccessSpecializationForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { name: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), organization: (
       { __typename?: 'UIReadOnlyField' }
-      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), filters?: Maybe<Array<Maybe<(
       { __typename?: 'SpecializationFilterForm' }
       & Pick<SpecializationFilterForm, 'permission' | 'label' | 'errCode' | 'errMsg' | 'errSeverity'>
       & { orgSids?: Maybe<(
         { __typename?: 'UISelectManyField' }
-        & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
       )> }
     )>>>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
@@ -3672,16 +4128,16 @@ export type UpdateAccessSpecializationMutation = (
     & Pick<AccessSpecializationForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { name: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), organization: (
       { __typename?: 'UIReadOnlyField' }
-      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), filters?: Maybe<Array<Maybe<(
       { __typename?: 'SpecializationFilterForm' }
       & Pick<SpecializationFilterForm, 'permission' | 'label' | 'errCode' | 'errMsg' | 'errSeverity'>
       & { orgSids?: Maybe<(
         { __typename?: 'UISelectManyField' }
-        & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
       )> }
     )>>>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
@@ -3716,37 +4172,37 @@ export type CreateAccessPolicyGroupMutation = (
     & Pick<AccessPolicyGroupForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { name: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), description: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), organization: (
       { __typename?: 'UIReadOnlyField' }
-      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), tmpl?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, tmplUseAsIs?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, applicableOrgTypes?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, policies?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, specializations?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, includeAllSubOrgs?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, includeOrgSids?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, excludeOrgSids?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
@@ -3770,37 +4226,37 @@ export type UpdateAccessPolicyGroupMutation = (
     & Pick<AccessPolicyGroupForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { name: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), description: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), organization: (
       { __typename?: 'UIReadOnlyField' }
-      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), tmpl?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, tmplUseAsIs?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, applicableOrgTypes?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, policies?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, specializations?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, includeAllSubOrgs?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, includeOrgSids?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, excludeOrgSids?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
@@ -3835,26 +4291,26 @@ export type CreateUserMutation = (
     & Pick<UserAccountForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { email?: Maybe<(
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, active?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, person?: Maybe<(
       { __typename?: 'PersonForm' }
       & Pick<PersonForm, 'sid' | 'errCode' | 'errMsg' | 'errSeverity'>
       & { firstNm: (
         { __typename?: 'UIStringField' }
-        & Pick<UiStringField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
       ), lastNm: (
         { __typename?: 'UIStringField' }
-        & Pick<UiStringField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
       ) }
     )>, organization: (
       { __typename?: 'UIReadOnlyField' }
-      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), accessPolicyGroups?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
@@ -3878,26 +4334,26 @@ export type UpdateUserMutation = (
     & Pick<UserAccountForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { email?: Maybe<(
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, active?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, person?: Maybe<(
       { __typename?: 'PersonForm' }
       & Pick<PersonForm, 'sid' | 'errCode' | 'errMsg' | 'errSeverity'>
       & { firstNm: (
         { __typename?: 'UIStringField' }
-        & Pick<UiStringField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
       ), lastNm: (
         { __typename?: 'UIStringField' }
-        & Pick<UiStringField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
       ) }
     )>, organization: (
       { __typename?: 'UIReadOnlyField' }
-      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), accessPolicyGroups?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
@@ -4090,6 +4546,177 @@ export type SetOwnDashThemeFontSizeMutation = (
       { __typename?: 'DashThemeColor' }
       & Pick<DashThemeColor, 'id' | 'defaultPalette' | 'themeColorMode' | 'allowDark' | 'paletteNm' | 'themePrimary' | 'themeLighterAlt' | 'themeLighter' | 'themeLight' | 'themeTertiary' | 'themeSecondary' | 'themeDarkAlt' | 'themeDark' | 'themeDarker' | 'neutralLighterAlt' | 'neutralLighter' | 'neutralLight' | 'neutralQuaternaryAlt' | 'neutralQuaternary' | 'neutralTertiaryAlt' | 'neutralTertiary' | 'neutralSecondary' | 'neutralPrimaryAlt' | 'neutralPrimary' | 'neutralDark' | 'black' | 'white'>
     )> }
+  )> }
+);
+
+export type UpdatePasswordRulesMutationVariables = Exact<{
+  passwordRulesInput?: Maybe<PasswordRulesInput>;
+}>;
+
+
+export type UpdatePasswordRulesMutation = (
+  { __typename?: 'Mutation' }
+  & { updatePasswordRules?: Maybe<(
+    { __typename?: 'PasswordRulesForm' }
+    & Pick<PasswordRulesForm, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { organization: (
+      { __typename?: 'UIReadOnlyField' }
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), mustAlwaysBeMet?: Maybe<(
+      { __typename?: 'RequiredPasswordRuleSetForm' }
+      & { mustNotContainWhiteSpace?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotContainUserName?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotContainNumericSequence?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustFollowLengthRequirements?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minLength?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, maxLength?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustContainUpperCaseLetters?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minUpperCaseLetters?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustContainLowerCaseLetters?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minLowerCaseLetters?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustContainNumericDigits?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minNumericDigits?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustContainSpecialCharacters?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minSpecialCharacters?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotRepeatCharacters?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, maxAllowedRepeatedChars?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotReusePasswords?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minPasswordHistoryVariations?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotMatchExactDictionaryWord?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotMatchPartialDictionaryWord?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )> }
+    )>, someMustBeMet?: Maybe<(
+      { __typename?: 'CompositePasswordRuleSetForm' }
+      & { enabled?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minPasswordComplexity?: Maybe<(
+        { __typename?: 'UISelectOneField' }
+        & Pick<UiSelectOneField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, requiredNumPassingRules?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotContainWhiteSpace?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotContainUserName?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotContainNumericSequence?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustFollowLengthRequirements?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minLength?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, maxLength?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustContainUpperCaseLetters?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minUpperCaseLetters?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustContainLowerCaseLetters?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minLowerCaseLetters?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustContainNumericDigits?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minNumericDigits?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustContainSpecialCharacters?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minSpecialCharacters?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotRepeatCharacters?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, maxAllowedRepeatedChars?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotReusePasswords?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minPasswordHistoryVariations?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotMatchExactDictionaryWord?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotMatchPartialDictionaryWord?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )> }
+    )>, autoLockAccount?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, autoLockAfterFailedAttempts?: Maybe<(
+      { __typename?: 'UIIntField' }
+      & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, autoUnlockAccount?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, autoUnlockAccountDelayMinutes?: Maybe<(
+      { __typename?: 'UIIntField' }
+      & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, options?: Maybe<Array<Maybe<(
+      { __typename?: 'UIOptions' }
+      & Pick<UiOptions, 'key'>
+      & { values?: Maybe<Array<Maybe<(
+        { __typename?: 'UIOption' }
+        & Pick<UiOption, 'label' | 'value' | 'info'>
+      )>>> }
+    )>>> }
   )> }
 );
 
@@ -5435,6 +6062,7 @@ export const UserAccountFormDocument = gql`
     email {
       value
       label
+      readOnly
       info
       required
       visible
@@ -5447,6 +6075,7 @@ export const UserAccountFormDocument = gql`
     active {
       value
       label
+      readOnly
       info
       required
       visible
@@ -5459,6 +6088,7 @@ export const UserAccountFormDocument = gql`
       firstNm {
         value
         label
+        readOnly
         info
         required
         visible
@@ -5471,6 +6101,7 @@ export const UserAccountFormDocument = gql`
       lastNm {
         value
         label
+        readOnly
         info
         required
         visible
@@ -5488,6 +6119,7 @@ export const UserAccountFormDocument = gql`
       value
       description
       label
+      readOnly
       info
       required
       visible
@@ -5498,6 +6130,7 @@ export const UserAccountFormDocument = gql`
     accessPolicyGroups {
       value
       label
+      readOnly
       info
       required
       visible
@@ -5555,6 +6188,7 @@ export const FindUserAccountDocument = gql`
     email {
       value
       label
+      readOnly
       info
       required
       visible
@@ -5567,6 +6201,7 @@ export const FindUserAccountDocument = gql`
     active {
       value
       label
+      readOnly
       info
       required
       visible
@@ -5579,6 +6214,7 @@ export const FindUserAccountDocument = gql`
       firstNm {
         value
         label
+        readOnly
         info
         required
         visible
@@ -5591,6 +6227,7 @@ export const FindUserAccountDocument = gql`
       lastNm {
         value
         label
+        readOnly
         info
         required
         visible
@@ -5608,6 +6245,7 @@ export const FindUserAccountDocument = gql`
       value
       description
       label
+      readOnly
       info
       required
       visible
@@ -5618,6 +6256,7 @@ export const FindUserAccountDocument = gql`
     accessPolicyGroups {
       value
       label
+      readOnly
       info
       required
       visible
@@ -5713,12 +6352,25 @@ export const AccessPoliciesForOrgDocument = gql`
     paginationInfo {
       ...fragmentPaginationInfo
     }
+    listPageInfo {
+      pageHeaderLabel
+      pageCommands {
+        ...fragmentWebCommand
+      }
+      listItemCommands {
+        ...fragmentWebCommand
+      }
+      listItemBulkCommands {
+        ...fragmentWebCommand
+      }
+    }
     nodes {
       ...fragmentAccessPolicy
     }
   }
 }
     ${FragmentPaginationInfoFragmentDoc}
+${FragmentWebCommandFragmentDoc}
 ${FragmentAccessPolicyFragmentDoc}`;
 
 /**
@@ -5753,6 +6405,18 @@ export const AccessSpecializationsForOrgDocument = gql`
     paginationInfo {
       ...fragmentPaginationInfo
     }
+    listPageInfo {
+      pageHeaderLabel
+      pageCommands {
+        ...fragmentWebCommand
+      }
+      listItemCommands {
+        ...fragmentWebCommand
+      }
+      listItemBulkCommands {
+        ...fragmentWebCommand
+      }
+    }
     nodes {
       sid
       name
@@ -5764,7 +6428,8 @@ export const AccessSpecializationsForOrgDocument = gql`
     }
   }
 }
-    ${FragmentPaginationInfoFragmentDoc}`;
+    ${FragmentPaginationInfoFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
 
 /**
  * __useAccessSpecializationsForOrgQuery__
@@ -5798,6 +6463,18 @@ export const AccessPolicyGroupsForOrgDocument = gql`
     paginationInfo {
       ...fragmentPaginationInfo
     }
+    listPageInfo {
+      pageHeaderLabel
+      pageCommands {
+        ...fragmentWebCommand
+      }
+      listItemCommands {
+        ...fragmentWebCommand
+      }
+      listItemBulkCommands {
+        ...fragmentWebCommand
+      }
+    }
     nodes {
       sid
       name
@@ -5812,6 +6489,7 @@ export const AccessPolicyGroupsForOrgDocument = gql`
   }
 }
     ${FragmentPaginationInfoFragmentDoc}
+${FragmentWebCommandFragmentDoc}
 ${FragmentAccessPolicyFragmentDoc}`;
 
 /**
@@ -5888,6 +6566,7 @@ export const AccessPolicyFormDocument = gql`
     name {
       value
       label
+      readOnly
       info
       required
       visible
@@ -5901,6 +6580,7 @@ export const AccessPolicyFormDocument = gql`
       value
       description
       label
+      readOnly
       info
       required
       visible
@@ -5911,6 +6591,7 @@ export const AccessPolicyFormDocument = gql`
     permissions {
       value
       label
+      readOnly
       info
       required
       visible
@@ -5923,6 +6604,7 @@ export const AccessPolicyFormDocument = gql`
     tmpl {
       value
       label
+      readOnly
       info
       required
       visible
@@ -5933,6 +6615,7 @@ export const AccessPolicyFormDocument = gql`
     tmplUseAsIs {
       value
       label
+      readOnly
       info
       required
       visible
@@ -5943,6 +6626,7 @@ export const AccessPolicyFormDocument = gql`
     applicableOrgTypes {
       value
       label
+      readOnly
       info
       required
       visible
@@ -6000,6 +6684,7 @@ export const FindAccessPolicyDocument = gql`
     name {
       value
       label
+      readOnly
       info
       required
       visible
@@ -6013,6 +6698,7 @@ export const FindAccessPolicyDocument = gql`
       value
       description
       label
+      readOnly
       info
       required
       visible
@@ -6023,6 +6709,7 @@ export const FindAccessPolicyDocument = gql`
     permissions {
       value
       label
+      readOnly
       info
       required
       visible
@@ -6035,6 +6722,7 @@ export const FindAccessPolicyDocument = gql`
     tmpl {
       value
       label
+      readOnly
       info
       required
       visible
@@ -6045,6 +6733,7 @@ export const FindAccessPolicyDocument = gql`
     tmplUseAsIs {
       value
       label
+      readOnly
       info
       required
       visible
@@ -6055,6 +6744,7 @@ export const FindAccessPolicyDocument = gql`
     applicableOrgTypes {
       value
       label
+      readOnly
       info
       required
       visible
@@ -6112,6 +6802,7 @@ export const AccessSpecializationFormDocument = gql`
     name {
       value
       label
+      readOnly
       info
       required
       visible
@@ -6125,6 +6816,7 @@ export const AccessSpecializationFormDocument = gql`
       value
       description
       label
+      readOnly
       info
       required
       visible
@@ -6138,6 +6830,7 @@ export const AccessSpecializationFormDocument = gql`
       orgSids {
         value
         label
+        readOnly
         info
         required
         visible
@@ -6199,6 +6892,7 @@ export const FindAccessSpecializationDocument = gql`
     name {
       value
       label
+      readOnly
       info
       required
       visible
@@ -6212,6 +6906,7 @@ export const FindAccessSpecializationDocument = gql`
       value
       description
       label
+      readOnly
       info
       required
       visible
@@ -6225,6 +6920,7 @@ export const FindAccessSpecializationDocument = gql`
       orgSids {
         value
         label
+        readOnly
         info
         required
         visible
@@ -6286,6 +6982,7 @@ export const AccessPolicyGroupFormDocument = gql`
     name {
       value
       label
+      readOnly
       info
       required
       visible
@@ -6298,6 +6995,7 @@ export const AccessPolicyGroupFormDocument = gql`
     description {
       value
       label
+      readOnly
       info
       required
       visible
@@ -6311,6 +7009,7 @@ export const AccessPolicyGroupFormDocument = gql`
       value
       description
       label
+      readOnly
       info
       required
       visible
@@ -6321,6 +7020,7 @@ export const AccessPolicyGroupFormDocument = gql`
     tmpl {
       value
       label
+      readOnly
       info
       required
       visible
@@ -6331,6 +7031,7 @@ export const AccessPolicyGroupFormDocument = gql`
     tmplUseAsIs {
       value
       label
+      readOnly
       info
       required
       visible
@@ -6341,6 +7042,7 @@ export const AccessPolicyGroupFormDocument = gql`
     applicableOrgTypes {
       value
       label
+      readOnly
       info
       required
       visible
@@ -6353,6 +7055,7 @@ export const AccessPolicyGroupFormDocument = gql`
     policies {
       value
       label
+      readOnly
       info
       required
       visible
@@ -6365,6 +7068,7 @@ export const AccessPolicyGroupFormDocument = gql`
     specializations {
       value
       label
+      readOnly
       info
       required
       visible
@@ -6377,6 +7081,7 @@ export const AccessPolicyGroupFormDocument = gql`
     includeAllSubOrgs {
       value
       label
+      readOnly
       info
       required
       visible
@@ -6387,6 +7092,7 @@ export const AccessPolicyGroupFormDocument = gql`
     includeOrgSids {
       value
       label
+      readOnly
       info
       required
       visible
@@ -6399,6 +7105,7 @@ export const AccessPolicyGroupFormDocument = gql`
     excludeOrgSids {
       value
       label
+      readOnly
       info
       required
       visible
@@ -6457,6 +7164,7 @@ export const FindAccessPolicyGroupDocument = gql`
     name {
       value
       label
+      readOnly
       info
       required
       visible
@@ -6469,6 +7177,7 @@ export const FindAccessPolicyGroupDocument = gql`
     description {
       value
       label
+      readOnly
       info
       required
       visible
@@ -6482,6 +7191,7 @@ export const FindAccessPolicyGroupDocument = gql`
       value
       description
       label
+      readOnly
       info
       required
       visible
@@ -6492,6 +7202,7 @@ export const FindAccessPolicyGroupDocument = gql`
     tmpl {
       value
       label
+      readOnly
       info
       required
       visible
@@ -6502,6 +7213,7 @@ export const FindAccessPolicyGroupDocument = gql`
     tmplUseAsIs {
       value
       label
+      readOnly
       info
       required
       visible
@@ -6512,6 +7224,7 @@ export const FindAccessPolicyGroupDocument = gql`
     applicableOrgTypes {
       value
       label
+      readOnly
       info
       required
       visible
@@ -6524,6 +7237,7 @@ export const FindAccessPolicyGroupDocument = gql`
     policies {
       value
       label
+      readOnly
       info
       required
       visible
@@ -6536,6 +7250,7 @@ export const FindAccessPolicyGroupDocument = gql`
     specializations {
       value
       label
+      readOnly
       info
       required
       visible
@@ -6548,6 +7263,7 @@ export const FindAccessPolicyGroupDocument = gql`
     includeAllSubOrgs {
       value
       label
+      readOnly
       info
       required
       visible
@@ -6558,6 +7274,7 @@ export const FindAccessPolicyGroupDocument = gql`
     includeOrgSids {
       value
       label
+      readOnly
       info
       required
       visible
@@ -6570,6 +7287,7 @@ export const FindAccessPolicyGroupDocument = gql`
     excludeOrgSids {
       value
       label
+      readOnly
       info
       required
       visible
@@ -6703,6 +7421,18 @@ export const DirectOrganizationsDocument = gql`
     paginationInfo {
       ...fragmentPaginationInfo
     }
+    listPageInfo {
+      pageHeaderLabel
+      pageCommands {
+        ...fragmentWebCommand
+      }
+      listItemCommands {
+        ...fragmentWebCommand
+      }
+      listItemBulkCommands {
+        ...fragmentWebCommand
+      }
+    }
     nodes {
       sid
       name
@@ -6711,7 +7441,8 @@ export const DirectOrganizationsDocument = gql`
     }
   }
 }
-    ${FragmentPaginationInfoFragmentDoc}`;
+    ${FragmentPaginationInfoFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
 
 /**
  * __useDirectOrganizationsQuery__
@@ -6747,6 +7478,7 @@ export const OrganizationFormDocument = gql`
     name {
       value
       label
+      readOnly
       info
       required
       visible
@@ -6759,6 +7491,7 @@ export const OrganizationFormDocument = gql`
     orgId {
       value
       label
+      readOnly
       info
       required
       visible
@@ -6771,6 +7504,7 @@ export const OrganizationFormDocument = gql`
     orgType {
       value
       label
+      readOnly
       info
       required
       visible
@@ -6783,6 +7517,7 @@ export const OrganizationFormDocument = gql`
     active {
       value
       label
+      readOnly
       info
       required
       visible
@@ -6837,6 +7572,7 @@ export const FindOrganizationDocument = gql`
     name {
       value
       label
+      readOnly
       info
       required
       visible
@@ -6849,6 +7585,7 @@ export const FindOrganizationDocument = gql`
     orgId {
       value
       label
+      readOnly
       info
       required
       visible
@@ -6861,6 +7598,7 @@ export const FindOrganizationDocument = gql`
     orgType {
       value
       label
+      readOnly
       info
       required
       visible
@@ -6873,6 +7611,7 @@ export const FindOrganizationDocument = gql`
     active {
       value
       label
+      readOnly
       info
       required
       visible
@@ -6932,6 +7671,18 @@ export const SearchOrganizationsDocument = gql`
     paginationInfo {
       ...fragmentPaginationInfo
     }
+    listPageInfo {
+      pageHeaderLabel
+      pageCommands {
+        ...fragmentWebCommand
+      }
+      listItemCommands {
+        ...fragmentWebCommand
+      }
+      listItemBulkCommands {
+        ...fragmentWebCommand
+      }
+    }
     nodes {
       sid
       name
@@ -6940,7 +7691,8 @@ export const SearchOrganizationsDocument = gql`
     }
   }
 }
-    ${FragmentPaginationInfoFragmentDoc}`;
+    ${FragmentPaginationInfoFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
 
 /**
  * __useSearchOrganizationsQuery__
@@ -7555,6 +8307,623 @@ export function useSimulateSessionExpirLazyQuery(baseOptions?: Apollo.LazyQueryH
 export type SimulateSessionExpirQueryHookResult = ReturnType<typeof useSimulateSessionExpirQuery>;
 export type SimulateSessionExpirLazyQueryHookResult = ReturnType<typeof useSimulateSessionExpirLazyQuery>;
 export type SimulateSessionExpirQueryResult = Apollo.QueryResult<SimulateSessionExpirQuery, SimulateSessionExpirQueryVariables>;
+export const PasswordRulesFormDocument = gql`
+    query PasswordRulesForm($orgSid: ID!) {
+  passwordRulesForm(orgSid: $orgSid) {
+    organization {
+      value
+      description
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    mustAlwaysBeMet {
+      mustNotContainWhiteSpace {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotContainUserName {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotContainNumericSequence {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustFollowLengthRequirements {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minLength {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      maxLength {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustContainUpperCaseLetters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minUpperCaseLetters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustContainLowerCaseLetters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minLowerCaseLetters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustContainNumericDigits {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minNumericDigits {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustContainSpecialCharacters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minSpecialCharacters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotRepeatCharacters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      maxAllowedRepeatedChars {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotReusePasswords {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minPasswordHistoryVariations {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotMatchExactDictionaryWord {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotMatchPartialDictionaryWord {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+    }
+    someMustBeMet {
+      enabled {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minPasswordComplexity {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        options
+        query
+        errCode
+        errMsg
+        errSeverity
+      }
+      requiredNumPassingRules {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotContainWhiteSpace {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotContainUserName {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotContainNumericSequence {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustFollowLengthRequirements {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minLength {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      maxLength {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustContainUpperCaseLetters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minUpperCaseLetters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustContainLowerCaseLetters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minLowerCaseLetters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustContainNumericDigits {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minNumericDigits {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustContainSpecialCharacters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minSpecialCharacters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotRepeatCharacters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      maxAllowedRepeatedChars {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotReusePasswords {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minPasswordHistoryVariations {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotMatchExactDictionaryWord {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotMatchPartialDictionaryWord {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+    }
+    autoLockAccount {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    autoLockAfterFailedAttempts {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
+      errCode
+      errMsg
+      errSeverity
+    }
+    autoUnlockAccount {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    autoUnlockAccountDelayMinutes {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
+      errCode
+      errMsg
+      errSeverity
+    }
+    response
+    options {
+      key
+      values {
+        label
+        value
+        info
+      }
+    }
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    `;
+
+/**
+ * __usePasswordRulesFormQuery__
+ *
+ * To run a query within a React component, call `usePasswordRulesFormQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePasswordRulesFormQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePasswordRulesFormQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *   },
+ * });
+ */
+export function usePasswordRulesFormQuery(baseOptions: Apollo.QueryHookOptions<PasswordRulesFormQuery, PasswordRulesFormQueryVariables>) {
+        return Apollo.useQuery<PasswordRulesFormQuery, PasswordRulesFormQueryVariables>(PasswordRulesFormDocument, baseOptions);
+      }
+export function usePasswordRulesFormLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PasswordRulesFormQuery, PasswordRulesFormQueryVariables>) {
+          return Apollo.useLazyQuery<PasswordRulesFormQuery, PasswordRulesFormQueryVariables>(PasswordRulesFormDocument, baseOptions);
+        }
+export type PasswordRulesFormQueryHookResult = ReturnType<typeof usePasswordRulesFormQuery>;
+export type PasswordRulesFormLazyQueryHookResult = ReturnType<typeof usePasswordRulesFormLazyQuery>;
+export type PasswordRulesFormQueryResult = Apollo.QueryResult<PasswordRulesFormQuery, PasswordRulesFormQueryVariables>;
 export const PasswordLoginDocument = gql`
     mutation PasswordLogin($userId: String!, $password: String!) {
   passwordLogin(userId: $userId, password: $password) {
@@ -7722,6 +9091,7 @@ export const CreateAccessPolicyDocument = gql`
     name {
       value
       label
+      readOnly
       info
       required
       visible
@@ -7735,6 +9105,7 @@ export const CreateAccessPolicyDocument = gql`
       value
       description
       label
+      readOnly
       info
       required
       visible
@@ -7745,6 +9116,7 @@ export const CreateAccessPolicyDocument = gql`
     permissions {
       value
       label
+      readOnly
       info
       required
       visible
@@ -7757,6 +9129,7 @@ export const CreateAccessPolicyDocument = gql`
     tmpl {
       value
       label
+      readOnly
       info
       required
       visible
@@ -7767,6 +9140,7 @@ export const CreateAccessPolicyDocument = gql`
     tmplUseAsIs {
       value
       label
+      readOnly
       info
       required
       visible
@@ -7777,6 +9151,7 @@ export const CreateAccessPolicyDocument = gql`
     applicableOrgTypes {
       value
       label
+      readOnly
       info
       required
       visible
@@ -7833,6 +9208,7 @@ export const UpdateAccessPolicyDocument = gql`
     name {
       value
       label
+      readOnly
       info
       required
       visible
@@ -7846,6 +9222,7 @@ export const UpdateAccessPolicyDocument = gql`
       value
       description
       label
+      readOnly
       info
       required
       visible
@@ -7856,6 +9233,7 @@ export const UpdateAccessPolicyDocument = gql`
     permissions {
       value
       label
+      readOnly
       info
       required
       visible
@@ -7868,6 +9246,7 @@ export const UpdateAccessPolicyDocument = gql`
     tmpl {
       value
       label
+      readOnly
       info
       required
       visible
@@ -7878,6 +9257,7 @@ export const UpdateAccessPolicyDocument = gql`
     tmplUseAsIs {
       value
       label
+      readOnly
       info
       required
       visible
@@ -7888,6 +9268,7 @@ export const UpdateAccessPolicyDocument = gql`
     applicableOrgTypes {
       value
       label
+      readOnly
       info
       required
       visible
@@ -8006,6 +9387,7 @@ export const CreateAccessSpecializationDocument = gql`
     name {
       value
       label
+      readOnly
       info
       required
       visible
@@ -8019,6 +9401,7 @@ export const CreateAccessSpecializationDocument = gql`
       value
       description
       label
+      readOnly
       info
       required
       visible
@@ -8032,6 +9415,7 @@ export const CreateAccessSpecializationDocument = gql`
       orgSids {
         value
         label
+        readOnly
         info
         required
         visible
@@ -8094,6 +9478,7 @@ export const UpdateAccessSpecializationDocument = gql`
     name {
       value
       label
+      readOnly
       info
       required
       visible
@@ -8107,6 +9492,7 @@ export const UpdateAccessSpecializationDocument = gql`
       value
       description
       label
+      readOnly
       info
       required
       visible
@@ -8120,6 +9506,7 @@ export const UpdateAccessSpecializationDocument = gql`
       orgSids {
         value
         label
+        readOnly
         info
         required
         visible
@@ -8212,6 +9599,7 @@ export const CreateAccessPolicyGroupDocument = gql`
     name {
       value
       label
+      readOnly
       info
       required
       visible
@@ -8224,6 +9612,7 @@ export const CreateAccessPolicyGroupDocument = gql`
     description {
       value
       label
+      readOnly
       info
       required
       visible
@@ -8237,6 +9626,7 @@ export const CreateAccessPolicyGroupDocument = gql`
       value
       description
       label
+      readOnly
       info
       required
       visible
@@ -8247,6 +9637,7 @@ export const CreateAccessPolicyGroupDocument = gql`
     tmpl {
       value
       label
+      readOnly
       info
       required
       visible
@@ -8257,6 +9648,7 @@ export const CreateAccessPolicyGroupDocument = gql`
     tmplUseAsIs {
       value
       label
+      readOnly
       info
       required
       visible
@@ -8267,6 +9659,7 @@ export const CreateAccessPolicyGroupDocument = gql`
     applicableOrgTypes {
       value
       label
+      readOnly
       info
       required
       visible
@@ -8279,6 +9672,7 @@ export const CreateAccessPolicyGroupDocument = gql`
     policies {
       value
       label
+      readOnly
       info
       required
       visible
@@ -8291,6 +9685,7 @@ export const CreateAccessPolicyGroupDocument = gql`
     specializations {
       value
       label
+      readOnly
       info
       required
       visible
@@ -8303,6 +9698,7 @@ export const CreateAccessPolicyGroupDocument = gql`
     includeAllSubOrgs {
       value
       label
+      readOnly
       info
       required
       visible
@@ -8313,6 +9709,7 @@ export const CreateAccessPolicyGroupDocument = gql`
     includeOrgSids {
       value
       label
+      readOnly
       info
       required
       visible
@@ -8325,6 +9722,7 @@ export const CreateAccessPolicyGroupDocument = gql`
     excludeOrgSids {
       value
       label
+      readOnly
       info
       required
       visible
@@ -8383,6 +9781,7 @@ export const UpdateAccessPolicyGroupDocument = gql`
     name {
       value
       label
+      readOnly
       info
       required
       visible
@@ -8395,6 +9794,7 @@ export const UpdateAccessPolicyGroupDocument = gql`
     description {
       value
       label
+      readOnly
       info
       required
       visible
@@ -8408,6 +9808,7 @@ export const UpdateAccessPolicyGroupDocument = gql`
       value
       description
       label
+      readOnly
       info
       required
       visible
@@ -8418,6 +9819,7 @@ export const UpdateAccessPolicyGroupDocument = gql`
     tmpl {
       value
       label
+      readOnly
       info
       required
       visible
@@ -8428,6 +9830,7 @@ export const UpdateAccessPolicyGroupDocument = gql`
     tmplUseAsIs {
       value
       label
+      readOnly
       info
       required
       visible
@@ -8438,6 +9841,7 @@ export const UpdateAccessPolicyGroupDocument = gql`
     applicableOrgTypes {
       value
       label
+      readOnly
       info
       required
       visible
@@ -8450,6 +9854,7 @@ export const UpdateAccessPolicyGroupDocument = gql`
     policies {
       value
       label
+      readOnly
       info
       required
       visible
@@ -8462,6 +9867,7 @@ export const UpdateAccessPolicyGroupDocument = gql`
     specializations {
       value
       label
+      readOnly
       info
       required
       visible
@@ -8474,6 +9880,7 @@ export const UpdateAccessPolicyGroupDocument = gql`
     includeAllSubOrgs {
       value
       label
+      readOnly
       info
       required
       visible
@@ -8484,6 +9891,7 @@ export const UpdateAccessPolicyGroupDocument = gql`
     includeOrgSids {
       value
       label
+      readOnly
       info
       required
       visible
@@ -8496,6 +9904,7 @@ export const UpdateAccessPolicyGroupDocument = gql`
     excludeOrgSids {
       value
       label
+      readOnly
       info
       required
       visible
@@ -8582,6 +9991,7 @@ export const CreateUserDocument = gql`
     email {
       value
       label
+      readOnly
       info
       required
       visible
@@ -8594,6 +10004,7 @@ export const CreateUserDocument = gql`
     active {
       value
       label
+      readOnly
       info
       required
       visible
@@ -8606,6 +10017,7 @@ export const CreateUserDocument = gql`
       firstNm {
         value
         label
+        readOnly
         info
         required
         visible
@@ -8618,6 +10030,7 @@ export const CreateUserDocument = gql`
       lastNm {
         value
         label
+        readOnly
         info
         required
         visible
@@ -8635,6 +10048,7 @@ export const CreateUserDocument = gql`
       value
       description
       label
+      readOnly
       info
       required
       visible
@@ -8645,6 +10059,7 @@ export const CreateUserDocument = gql`
     accessPolicyGroups {
       value
       label
+      readOnly
       info
       required
       visible
@@ -8702,6 +10117,7 @@ export const UpdateUserDocument = gql`
     email {
       value
       label
+      readOnly
       info
       required
       visible
@@ -8714,6 +10130,7 @@ export const UpdateUserDocument = gql`
     active {
       value
       label
+      readOnly
       info
       required
       visible
@@ -8726,6 +10143,7 @@ export const UpdateUserDocument = gql`
       firstNm {
         value
         label
+        readOnly
         info
         required
         visible
@@ -8738,6 +10156,7 @@ export const UpdateUserDocument = gql`
       lastNm {
         value
         label
+        readOnly
         info
         required
         visible
@@ -8755,6 +10174,7 @@ export const UpdateUserDocument = gql`
       value
       description
       label
+      readOnly
       info
       required
       visible
@@ -8765,6 +10185,7 @@ export const UpdateUserDocument = gql`
     accessPolicyGroups {
       value
       label
+      readOnly
       info
       required
       visible
@@ -9468,3 +10889,619 @@ export function useSetOwnDashThemeFontSizeMutation(baseOptions?: Apollo.Mutation
 export type SetOwnDashThemeFontSizeMutationHookResult = ReturnType<typeof useSetOwnDashThemeFontSizeMutation>;
 export type SetOwnDashThemeFontSizeMutationResult = Apollo.MutationResult<SetOwnDashThemeFontSizeMutation>;
 export type SetOwnDashThemeFontSizeMutationOptions = Apollo.BaseMutationOptions<SetOwnDashThemeFontSizeMutation, SetOwnDashThemeFontSizeMutationVariables>;
+export const UpdatePasswordRulesDocument = gql`
+    mutation UpdatePasswordRules($passwordRulesInput: PasswordRulesInput) {
+  updatePasswordRules(passwordRulesInput: $passwordRulesInput) {
+    organization {
+      value
+      description
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    mustAlwaysBeMet {
+      mustNotContainWhiteSpace {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotContainUserName {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotContainNumericSequence {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustFollowLengthRequirements {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minLength {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      maxLength {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustContainUpperCaseLetters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minUpperCaseLetters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustContainLowerCaseLetters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minLowerCaseLetters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustContainNumericDigits {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minNumericDigits {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustContainSpecialCharacters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minSpecialCharacters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotRepeatCharacters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      maxAllowedRepeatedChars {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotReusePasswords {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minPasswordHistoryVariations {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotMatchExactDictionaryWord {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotMatchPartialDictionaryWord {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+    }
+    someMustBeMet {
+      enabled {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minPasswordComplexity {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        options
+        query
+        errCode
+        errMsg
+        errSeverity
+      }
+      requiredNumPassingRules {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotContainWhiteSpace {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotContainUserName {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotContainNumericSequence {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustFollowLengthRequirements {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minLength {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      maxLength {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustContainUpperCaseLetters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minUpperCaseLetters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustContainLowerCaseLetters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minLowerCaseLetters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustContainNumericDigits {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minNumericDigits {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustContainSpecialCharacters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minSpecialCharacters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotRepeatCharacters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      maxAllowedRepeatedChars {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotReusePasswords {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minPasswordHistoryVariations {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotMatchExactDictionaryWord {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotMatchPartialDictionaryWord {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+    }
+    autoLockAccount {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    autoLockAfterFailedAttempts {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
+      errCode
+      errMsg
+      errSeverity
+    }
+    autoUnlockAccount {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    autoUnlockAccountDelayMinutes {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
+      errCode
+      errMsg
+      errSeverity
+    }
+    response
+    options {
+      key
+      values {
+        label
+        value
+        info
+      }
+    }
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    `;
+export type UpdatePasswordRulesMutationFn = Apollo.MutationFunction<UpdatePasswordRulesMutation, UpdatePasswordRulesMutationVariables>;
+
+/**
+ * __useUpdatePasswordRulesMutation__
+ *
+ * To run a mutation, you first call `useUpdatePasswordRulesMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdatePasswordRulesMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updatePasswordRulesMutation, { data, loading, error }] = useUpdatePasswordRulesMutation({
+ *   variables: {
+ *      passwordRulesInput: // value for 'passwordRulesInput'
+ *   },
+ * });
+ */
+export function useUpdatePasswordRulesMutation(baseOptions?: Apollo.MutationHookOptions<UpdatePasswordRulesMutation, UpdatePasswordRulesMutationVariables>) {
+        return Apollo.useMutation<UpdatePasswordRulesMutation, UpdatePasswordRulesMutationVariables>(UpdatePasswordRulesDocument, baseOptions);
+      }
+export type UpdatePasswordRulesMutationHookResult = ReturnType<typeof useUpdatePasswordRulesMutation>;
+export type UpdatePasswordRulesMutationResult = Apollo.MutationResult<UpdatePasswordRulesMutation>;
+export type UpdatePasswordRulesMutationOptions = Apollo.BaseMutationOptions<UpdatePasswordRulesMutation, UpdatePasswordRulesMutationVariables>;
