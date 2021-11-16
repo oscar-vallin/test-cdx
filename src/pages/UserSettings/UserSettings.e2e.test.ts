@@ -26,7 +26,7 @@ describe('E2E - User Settings Test', () => {
 
   it('check the text Dashboard', async () => {
     const userSettingsPage = new PuppetUserSettings(cdxApp.page);
-    await userSettingsPage.expectOnPage('#__UserSetingsId', 'Dashboard');
+    await userSettingsPage.expectOnPage('#__UserSettingsBreadCrumb', 'Dashboard');
   });
 
   it('check the text Change password', async () => {

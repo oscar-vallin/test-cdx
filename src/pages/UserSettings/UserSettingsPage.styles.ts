@@ -6,7 +6,7 @@ import { Card } from '../../components/cards';
 
 export const StyledBox = styled(LayoutBox)`
   padding: ${({ theme }) => `0 ${theme.spacing.double}`};
-  transform: ${({ theme }) => `translateY(-${theme.spacing.triple})`};
+  transform: none;
 `;
 
 export const StyledRow = styled(Row)`
