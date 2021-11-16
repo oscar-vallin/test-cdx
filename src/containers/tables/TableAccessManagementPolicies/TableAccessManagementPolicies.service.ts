@@ -13,7 +13,10 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
     variables: {
       orgSid: argOrgSid,
       dateRange: argDateRange,
-      filter: argFilter,
+      pageableInput: {
+        pageNumber: 0,
+        pageSize: 100,
+      },
     },
   });
 

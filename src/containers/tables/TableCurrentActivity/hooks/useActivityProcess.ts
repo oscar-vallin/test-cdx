@@ -1,12 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { ApolloError } from '@apollo/client';
 import { useState, useEffect } from 'react';
-import { useExchangeActivityInProcessLazyQuery } from '../../../../data/services/graphql';
+import {
+  ExchangeActivityInProcessQuery,
+  useExchangeActivityInProcessLazyQuery,
+} from '../../../../data/services/graphql';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
 
 export const useActivityProcess = () => {
   const [loadingProc, setLoadingProc] = useState(true);
-  const [dataProcess, setData] = useState();
-  const [apiError, setApiError] = useState();
+  const [dataProcess, setData] = useState<ExchangeActivityInProcessQuery>();
+  const [apiError, setApiError] = useState<ApolloError | undefined>();
   const { orgSid } = useOrgSid();
   const [apiExchangeActivityInProcessLazy, { data, loading, error }] = useExchangeActivityInProcessLazyQuery();
 
