@@ -4,7 +4,7 @@ import { useWorkPacketStatusesQuery } from '../../../data/services/graphql';
 import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { useInputValue } from '../../../hooks/useInputValue';
 
-export const useTable = (argOrgSid, argDateRange, argFilter) => {
+export const useTable = (argOrgSid, argDateRange) => {
   const [_loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
   const structure = getTableStructure(TABLE_NAMES.ARCHIVES);
@@ -13,7 +13,10 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
     variables: {
       orgSid: argOrgSid,
       dateRange: argDateRange,
-      filter: argFilter,
+      pageableInput: {
+        pageNumber: 0,
+        pageSize: 100,
+      },
     },
   });
 

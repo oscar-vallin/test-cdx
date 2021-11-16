@@ -1,12 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { ApolloError } from '@apollo/client';
 import { useState, useEffect } from 'react';
-import { useExchangeActivityTransmittedLazyQuery } from '../../../../data/services/graphql';
+import {
+  ExchangeActivityTransmittedQuery,
+  useExchangeActivityTransmittedLazyQuery,
+} from '../../../../data/services/graphql';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
 
 export const useActivityComplete = () => {
   const [loadingComp, setLoadingComp] = useState(true);
-  const [dataComplete, setDataComp] = useState();
-  const [apiError, setApiError] = useState();
+  const [dataComplete, setDataComp] = useState<ExchangeActivityTransmittedQuery | undefined>();
+  const [apiError, setApiError] = useState<ApolloError | undefined>();
   const { orgSid } = useOrgSid();
   const [apiExchangeActivityTransmittedLazy, { data, loading, error }] = useExchangeActivityTransmittedLazyQuery();
 

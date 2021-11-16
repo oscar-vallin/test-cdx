@@ -1,10 +1,10 @@
 /* eslint-disable react/void-dom-elements-no-children */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { useEffect, useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import { Link } from 'office-ui-fabric-react/lib-commonjs/Link';
 import { mergeStyles, mergeStyleSets } from 'office-ui-fabric-react/lib-commonjs/Styling';
 import { format } from 'date-fns';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import {
   ColumnActionsMode,
   DetailsList,
@@ -16,6 +16,7 @@ import {
 } from 'office-ui-fabric-react/lib-commonjs/DetailsList';
 import { EmptyState } from 'src/containers/states';
 import { SpinnerSize } from '@fluentui/react';
+import { StyleConstants } from '../../../data/constants/StyleConstants';
 import { getDates } from '../../../helpers/tableHelpers';
 import { Spinner } from '../../spinners/Spinner';
 
@@ -117,6 +118,30 @@ const _buildColumns = (
  * @param {Array} groups Group values to group rows.
  * @param {string} searchIntput String.typing filter locally in the table. Data not modified, just view after filter.
  * */
+
+const defaultProps = {
+  loading: true,
+  // variant: 'primary',
+  // pill: true,
+  // label: '',
+  // children: '',
+};
+
+type TableProps = {
+  id?: string;
+  items?: any;
+  columns?: any;
+  structure?: any;
+  onOption?: any | null;
+  groups?: any;
+  searchInput?: any;
+  date?: any;
+  onItemsListChange?: any | null;
+  loading?: boolean;
+  title?: string;
+  emptyMessage?: string;
+} & typeof defaultProps;
+
 const Table = ({
   items,
   columns,
@@ -129,7 +154,7 @@ const Table = ({
   loading = true,
   title,
   emptyMessage = 'No data',
-}) => {
+}: TableProps): ReactElement => {
   const { orgSid } = useOrgSid();
 
   const [sortLabel, setSortLabel] = useState<string | undefined>();
@@ -518,7 +543,7 @@ const Table = ({
     if (loading) {
       return (
         <StyledSpacing margin={{ top: 'double' }}>
-          <Spinner size={SpinnerSize.large} label="Loading data" />
+          <Spinner size={StyleConstants.SPINNER_LARGE} label="Loading data" />
         </StyledSpacing>
       );
     }
@@ -561,7 +586,7 @@ const Table = ({
     if (loading) {
       return (
         <StyledSpacing margin={{ top: 'double' }}>
-          <Spinner size={SpinnerSize.large} label="Loading data" />
+          <Spinner size={StyleConstants.SPINNER_LARGE} label="Loading data" />
         </StyledSpacing>
       );
     }
@@ -603,10 +628,6 @@ const Table = ({
   );
 };
 
-Table.propTypes = {
-  structure: PropTypes.any,
-  columns: PropTypes.array,
-  items: PropTypes.array,
-};
+Table.defaultProps = defaultProps;
 
 export { Table };
