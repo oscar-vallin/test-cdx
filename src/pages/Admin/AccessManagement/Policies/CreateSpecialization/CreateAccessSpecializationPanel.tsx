@@ -39,8 +39,8 @@ const groupSpecializations: any = (opts) => {
   const accessManagement = [...groups[vendorKey]];
 
   return [
-    { label: 'Exchange Status', labelKey: 'Exchanges', valueKey: vendorKey, options: exchangeStatus },
-    { label: 'Access Management', labelKey: 'Permission', valueKey: orgKey, options: accessManagement },
+    { label: 'Exchange Status', labelKey: 'Exchanges', valueKey: orgKey, options: exchangeStatus },
+    { label: 'Access Management', labelKey: 'Permission', valueKey: vendorKey, options: accessManagement },
   ];
 };
 

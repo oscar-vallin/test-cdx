@@ -5,6 +5,7 @@ import { SpinnerSize, Checkbox, Panel, PanelType, Spinner } from 'office-ui-fabr
 import _ from 'lodash';
 
 import { useNotification } from 'src/hooks/useNotification';
+import { Multiselect } from 'src/components/selects/Multiselect';
 import { Spacing } from '../../../../../components/spacings/Spacing';
 import { Card } from '../../../../../components/cards';
 import { Button } from '../../../../../components/buttons';
@@ -167,10 +168,10 @@ const CreatePoliciesPanel = ({
       if (policy) {
         const { name, applicableOrgTypes, permissions, sid, tmpl, tmplUseAsIs } = policy.accessPolicy;
 
-        const values =
-          orgTypes?.values
-            .filter(({ value }) => applicableOrgTypes.includes(value))
-            .map(({ label, value }) => ({ key: value, name: label })) || [];
+        // const values =
+        //   orgTypes?.values
+        //     .filter(({ value }) => applicableOrgTypes.includes(value))
+        //     .map(({ label, value }) => ({ key: value, name: label })) || [];
 
         setState({
           sid,
@@ -180,7 +181,7 @@ const CreatePoliciesPanel = ({
           usedAsIs: tmplUseAsIs,
         });
 
-        setApplicableOrgTypes(values);
+        setApplicableOrgTypes(applicableOrgTypes);
       }
     }
   }, [policy, policyForm]);
@@ -230,7 +231,7 @@ const CreatePoliciesPanel = ({
 
                   <Column lg="6" sm="12">
                     <Row>
-                      <Column lg="4">
+                      <Column lg="6">
                         <Spacing margin={{ bottom: 'small' }}>
                           {policyForm.tmpl?.visible && (
                             <Checkbox
@@ -243,7 +244,7 @@ const CreatePoliciesPanel = ({
                         </Spacing>
                       </Column>
                       {state.isTemplate && (
-                        <Column lg="8">
+                        <Column lg="6">
                           <Spacing margin={{ bottom: 'small' }}>
                             {policyForm.tmplUseAsIs?.visible && (
                               <Checkbox
@@ -271,28 +272,19 @@ const CreatePoliciesPanel = ({
                       <Column lg="6">
                         <Label text={policyForm.applicableOrgTypes?.label} info={policyForm.applicableOrgTypes?.info} />
 
-                        <TagPicker
-                          label
-                          disabled={false}
-                          itemLimit
-                          pickerProps
-                          onBlur={() => null}
-                          onFocus={() => null}
-                          required={false}
-                          id="__CreatePoliciesPanelId"
-                          onResolveSuggestions={() => null}
+                        <Multiselect
+                          value={applicableOrgTypes}
                           options={
                             policyForm.options
                               ?.find((opt) => opt.key === 'OrgType')
-                              ?.values.map(({ label, value }) => ({ key: value, name: label })) || []
+                              ?.values.map(({ label, value }) => ({ key: value, text: label })) || []
                           }
-                          value={applicableOrgTypes}
-                          debounce={500}
-                          apiQuery={() => null}
-                          onRemoveItem={({ key }) =>
-                            setApplicableOrgTypes(applicableOrgTypes.filter((item: any) => item.key === key))}
-                          onItemSelected={(item) => {
-                            setApplicableOrgTypes([...applicableOrgTypes, item]);
+                          onChange={(evt, item) => {
+                            const opts = item.selected
+                              ? [...applicableOrgTypes, item.key as string]
+                              : applicableOrgTypes.filter((key) => key !== item.key);
+
+                            setApplicableOrgTypes(opts);
                           }}
                         />
                       </Column>
@@ -340,7 +332,8 @@ const CreatePoliciesPanel = ({
                                                       permissions: checked
                                                         ? [...state.permissions, option.value]
                                                         : state.permissions.filter((value) => value !== option.value),
-                                                    })}
+                                                    })
+                                                  }
                                                 />
                                               </Spacing>
                                             ))}
@@ -375,7 +368,7 @@ const CreatePoliciesPanel = ({
                           permissions: state.permissions,
                           tmpl: state.isTemplate,
                           tmplUseAsIs: state.usedAsIs,
-                          applicableOrgTypes: state.isTemplate ? applicableOrgTypes.map(({ key }) => key) : [],
+                          applicableOrgTypes: state.isTemplate ? applicableOrgTypes : [],
                         };
 
                         if (!selectedPolicyId) {
