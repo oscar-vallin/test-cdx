@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect, useMemo, useContext } from 'react';
+import { ReactElement, ReactNode, createContext, useState, useEffect, useMemo, useContext } from 'react';
 import { ApolloProvider, ApolloClient, InMemoryCache, HttpLink, ApolloLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { useSessionStore } from '../store/SessionStore';
@@ -11,7 +11,15 @@ export const ApolloContext = createContext(() => {
   // i18n.changeLanguage(localStorage.getItem('local.language'));
 });
 
-export const ApolloContextProvider = ({ children }) => {
+const defaultProps = {
+  // children: '',
+};
+
+type ApolloContextProviderProps = {
+  children?: ReactElement | ReactNode | string;
+} & typeof defaultProps;
+
+export const ApolloContextProvider = ({ children }: ApolloContextProviderProps): ReactElement => {
   const SessionStore = useSessionStore();
   // LocalState
   const [isApolloLoading] = useState(true);
@@ -65,7 +73,7 @@ export const ApolloContextProvider = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const values = useMemo(() => ({ isApolloLoading, client }), [isApolloLoading, client]);
+  const values: any = useMemo(() => ({ isApolloLoading, client }), [isApolloLoading, client]);
 
   // Finally, return the interface that we want to expose to our other components
   return (
@@ -81,3 +89,5 @@ export function useApolloContext() {
 
   return context;
 }
+
+ApolloContextProvider.defaultProps = defaultProps;

@@ -1,7 +1,7 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { ReactElement, ReactNode, useEffect, useReducer } from 'react';
 import { Toast } from '../components/toast';
 
-export const NotificationContext = React.createContext(() => {
+export const NotificationContext = React.createContext<any>(() => {
   return {};
 });
 
@@ -23,8 +23,16 @@ const reducer = (state, { type, payload }) => {
   }
 };
 
-export const NotificationContextProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
+const defaultProps = {
+  // children: '',
+};
+
+type NotificationContextProviderProps = {
+  children?: ReactElement | ReactNode | string;
+} & typeof defaultProps;
+
+export const NotificationContextProvider = ({ children }: NotificationContextProviderProps): ReactElement => {
+  const [state, dispatch]: any = useReducer(reducer, INITIAL_STATE);
 
   useEffect(() => {
     if (state.visible) {
@@ -40,3 +48,5 @@ export const NotificationContextProvider = ({ children }) => {
     </NotificationContext.Provider>
   );
 };
+
+NotificationContextProvider.defaultProps = defaultProps;

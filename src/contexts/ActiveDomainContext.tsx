@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, createContext } from 'react';
+import { ReactElement, useEffect, createContext, ReactNode } from 'react';
 import { useHistory } from 'react-router';
 
 import { URL_ROUTES } from '../data/constants/RouteConstants';
@@ -11,7 +11,15 @@ export const ActiveDomainContext = createContext(() => {
   return null;
 });
 
-export const ActiveDomainContextProvider = ({ children }) => {
+const defaultProps = {
+  // children: '',
+};
+
+type ActiveDomainContextProviderProps = {
+  children?: ReactNode | ReactElement | string | any;
+} & typeof defaultProps;
+
+export const ActiveDomainContextProvider = ({ children }: ActiveDomainContextProviderProps): ReactElement => {
   const history = useHistory();
   const SessionStore = useSessionStore();
   const ActiveDomainStore = useActiveDomainStore();
@@ -88,3 +96,5 @@ export const ActiveDomainContextProvider = ({ children }) => {
 
   return <ActiveDomainContext.Provider value={children}>{children}</ActiveDomainContext.Provider>;
 };
+
+ActiveDomainContextProvider.defaultProps = defaultProps;

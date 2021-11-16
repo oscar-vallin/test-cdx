@@ -30,7 +30,7 @@ export const ThemeContextProvider = ({ children }) => {
   const ThemeStore = useThemeStore();
 
   const { isLoadingTheme, fetchTheme } = useCurrentUserTheme();
-  const [currentTheme, setTheme] = useState(styledComponentsTheme);
+  const [currentTheme, setTheme]: any = useState(styledComponentsTheme);
   const [styledTheme, setStyledTheme] = useState(styledComponentsTheme);
   const themeConfig = {};
 
@@ -42,7 +42,7 @@ export const ThemeContextProvider = ({ children }) => {
     }
   }, [SessionStore.status.isAuthenticated]);
 
-  const GlobalStyle = createGlobalStyle`
+  const GlobalStyle = createGlobalStyle<GlobalStyleProps>`
     * {
       margin: 0;
       padding: 0;
@@ -62,6 +62,10 @@ export const ThemeContextProvider = ({ children }) => {
     }
   `;
 
+  type GlobalStyleProps = {
+    fontSize: any;
+  };
+
   const changeTheme = (theme = {}) => {
     const customizedTheme = {
       ...styledTheme,
@@ -79,7 +83,7 @@ export const ThemeContextProvider = ({ children }) => {
   }, [ThemeStore.themes.current]);
 
   // eslint-disable-next-line
-  const values = useMemo(
+  const values: any = useMemo(
     () => ({
       // isContextLoading: isLoadingCurrentUserThemeParams,
       changeTheme,
