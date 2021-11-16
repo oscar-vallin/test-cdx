@@ -4,8 +4,16 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
 import { MarqueeSelection } from '@fluentui/react/lib/MarqueeSelection';
 import { PrimaryButton, DefaultButton, MessageBar } from 'office-ui-fabric-react';
-import { DetailsList, DetailsListLayoutMode, SelectionMode, Selection } from 'office-ui-fabric-react/lib/DetailsList';
-import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+import {
+  DetailsList,
+  DetailsListLayoutMode,
+  SelectionMode,
+  Selection,
+  IObjectWithKey,
+} from 'office-ui-fabric-react/lib/DetailsList';
+import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
+import { SpinnerSize } from '@fluentui/react';
+import { EmptyState } from 'src/containers/states';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Button } from '../../../../components/buttons';
 import { Row, Column } from '../../../../components/layouts';
@@ -14,13 +22,13 @@ import { Text } from '../../../../components/typography';
 import { Separator } from '../../../../components/separators/Separator';
 
 import { CreateUsersPanel } from '../CreateUsers';
-import { useUsersForOrgLazyQuery, useDeactivateUsersMutation } from '../../../../data/services/graphql';
+import { useUsersForOrgLazyQuery, useDeactivateUsersMutation, ActiveEnum } from '../../../../data/services/graphql';
 import { StyledColumn } from './ActiveUsersPage.styles';
 
 import { useOrgSid } from '../../../../hooks/useOrgSid';
 
 const generateColumns = () => {
-  const createColumn: any = ({ name, key }: any) => ({
+  const createColumn = ({ name, key }) => ({
     name,
     key,
     fieldName: key,
@@ -42,26 +50,26 @@ const onRenderItemColumn = (node, _index, column) => {
 
 const _ActiveUsersPage = () => {
   const { orgSid } = useOrgSid();
-  const [users, setUsers]: any = useState([]);
+  const [users, setUsers] = useState<any[] | null | undefined>([]);
   const columns = generateColumns();
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);
-  const [selectedUserId]: any = useState(0);
-  const [apiUsersForOrgFpLazy, { data, loading }]: any = useUsersForOrgLazyQuery();
-  const [selectedItems, setSelectedItems] = useState([]);
+  const [selectedUserId] = useState(0);
+  const [apiUsersForOrgFpLazy, { data, loading }] = useUsersForOrgLazyQuery();
+  const [selectedItems, setSelectedItems] = useState<any[]>([]);
 
-  const [disableUser, { data: disableResponse, loading: isDisablingUser }]: any = useDeactivateUsersMutation();
+  const [disableUser, { data: disableResponse, loading: isDisablingUser }] = useDeactivateUsersMutation();
 
   useEffect(() => {
     apiUsersForOrgFpLazy({
       variables: {
         orgSid,
-        userFilter: { activeFilter: 'ACTIVE' },
+        userFilter: { activeFilter: ActiveEnum.Active },
       },
     });
   }, [orgSid]);
 
-  const selection: any = useMemo(
+  const selection = useMemo(
     () =>
       new Selection({
         onSelectionChanged: () => {
@@ -79,56 +87,40 @@ const _ActiveUsersPage = () => {
 
   useEffect(() => {
     if (!loading && data) {
-      setUsers(data.usersForOrg.nodes);
+      // const _users = data?.usersForOrg?.nodes?.map((user) => ({}))
+
+      setUsers(data?.usersForOrg?.nodes);
     }
   }, [loading]);
 
   const selectedUserIds = () => {
-    return selectedItems.map((node: any) => {
-      return node.item.sid;
+    return selectedItems.map((node) => {
+      return node?.item?.sid;
     });
   };
 
   useEffect(() => {
     if (!isDisablingUser && disableResponse) {
-      setUsers(users.filter(({ item }) => !selectedUserIds().includes(item.sid)));
+      setUsers(users?.filter(({ item }) => !selectedUserIds().includes(item.sid)));
     }
   }, [isDisablingUser, disableResponse]);
-
-  const renderList = () => {
-    return users.length > 0 ? (
-      <MarqueeSelection selection={selection}>
-        <DetailsList
-          items={users}
-          columns={columns}
-          layoutMode={DetailsListLayoutMode.justified}
-          onRenderItemColumn={onRenderItemColumn}
-          selection={selection}
-          selectionPreservedOnEmptyClick
-          isHeaderVisible
-        />
-      </MarqueeSelection>
-    ) : (
-      <MessageBar>No active users</MessageBar>
-    );
-  };
 
   return (
     <LayoutAdmin id="PageActiveUsers" sidebarOptionSelected="ACTIVE_USERS">
       <>
         <Spacing margin="double">
-          <Row>
-            <Column lg="8">
-              <Row center>
-                <Column lg="8">
-                  <Spacing margin={{ top: 'small' }}>
-                    <Text variant="bold">Active Users</Text>
-                  </Spacing>
-                </Column>
+          {!!users && users.length > 0 && (
+            <Row center>
+              <Column lg="6">
+                <Spacing margin={{ top: 'small' }}>
+                  <Text variant="bold">Active Users</Text>
+                </Spacing>
+              </Column>
 
-                <Column lg="2" right>
+              <Column lg="6" right>
+                <span>
                   <Button
-                    id="__ActiveUsersPageId"
+                    id="create-user"
                     variant="primary"
                     onClick={() => {
                       setIsPanelOpen(true);
@@ -137,11 +129,9 @@ const _ActiveUsersPage = () => {
                   >
                     Create user
                   </Button>
-                </Column>
-
-                <Column lg="2" right>
+                  &nbsp; &nbsp;
                   <Button
-                    id="__ActiveUsersPageId"
+                    id="DeactivateUsers"
                     variant="primary"
                     onClick={() => {
                       if (selectedItems.length > 0) {
@@ -154,25 +144,58 @@ const _ActiveUsersPage = () => {
                   >
                     Disable Users
                   </Button>
-                </Column>
-              </Row>
+                </span>
+              </Column>
+            </Row>
+          )}
 
-              <Spacing margin={{ top: 'normal' }}>
-                <Separator />
-              </Spacing>
+          {users && users?.length > 0 && (
+            <Row>
+              <Column lg="12">
+                <Spacing margin={{ top: 'normal' }}>
+                  <Separator />
+                </Spacing>
+              </Column>
+            </Row>
+          )}
 
-              <Row>
-                <StyledColumn>
-                  {!loading ? (
-                    renderList()
-                  ) : (
-                    <Spacing margin={{ top: 'double' }}>
-                      <Spinner size={SpinnerSize.large} label="Loading active users" />
-                    </Spacing>
-                  )}
-                </StyledColumn>
-              </Row>
-            </Column>
+          <Row>
+            <StyledColumn>
+              {loading ? (
+                <Spacing margin={{ top: 'double' }}>
+                  <Spinner size={SpinnerSize.large} label="Loading active users" />
+                </Spacing>
+              ) : !users?.length ? (
+                <EmptyState
+                  title="No users found"
+                  description="You haven't created a user yet. Click the button below to create a new user."
+                  actions={
+                    <Button
+                      id="CreateUser"
+                      variant="primary"
+                      onClick={() => {
+                        setIsPanelOpen(true);
+                        return null;
+                      }}
+                    >
+                      Create user
+                    </Button>
+                  }
+                />
+              ) : (
+                <MarqueeSelection selection={selection}>
+                  <DetailsList
+                    items={users}
+                    columns={columns}
+                    layoutMode={DetailsListLayoutMode.justified}
+                    onRenderItemColumn={onRenderItemColumn}
+                    selection={selection}
+                    selectionPreservedOnEmptyClick
+                    isHeaderVisible
+                  />
+                </MarqueeSelection>
+              )}
+            </StyledColumn>
           </Row>
         </Spacing>
 
@@ -180,12 +203,13 @@ const _ActiveUsersPage = () => {
           isOpen={isPanelOpen}
           onCreateUser={(createdUser) => {
             setSelectedItems([]);
-            setUsers([...users, { item: createdUser.model }]);
+
+            if (users) setUsers([...users, { item: createdUser.model }]);
           }}
           onDismiss={() => {
             setIsPanelOpen(false);
           }}
-          // selectedUserId={selectedUserId}
+          selectedUserId={selectedUserId}
         />
 
         <Dialog
