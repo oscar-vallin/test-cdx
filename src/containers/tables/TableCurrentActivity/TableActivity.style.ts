@@ -19,7 +19,11 @@ export const StyledBox = styled(LayoutBox)`
   width: 100%;
 `;
 
-export const TableName = styled(Text)`
+type StyledTableProps = {
+  color: string;
+};
+
+export const TableName = styled(Text)<StyledTableProps>`
   text-transform: uppercase;
   color: ${({ color }) => {
     switch (color) {

@@ -5,15 +5,18 @@ import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableCon
 
 export const useTable = (argOrgSid, argDateRange, argFilter) => {
   const [_loading, setLoading] = useState(true);
-  const [items, setItems] = useState([]);
-  const [columns, setColumns] = useState([]);
+  const [items, setItems] = useState<any[] | undefined>([]);
+  const [columns, setColumns] = useState<any[] | undefined>([]);
   const structure = getTableStructure(TABLE_NAMES.ARCHIVES);
 
   const { data, loading, error } = useWpTransmissionsQuery({
     variables: {
       orgSid: argOrgSid,
       dateRange: argDateRange,
-      filter: argFilter,
+      pageableInput: {
+        pageNumber: 0,
+        pageSize: 100,
+      },
     },
   });
 
@@ -60,22 +63,22 @@ export const useTable = (argOrgSid, argDateRange, argFilter) => {
         { key: 'extractVersion', label: 'Version', style: 'text' },
       ];
 
-      const _items = data.wpTransmissions.nodes.map((item) => {
-        const datetime = format(new Date(item.deliveredOn), 'MM/dd/yyyy hh:mm a');
+      const _items = data?.wpTransmissions?.nodes?.map((item) => {
+        const datetime = format(new Date(item?.deliveredOn), 'MM/dd/yyyy hh:mm a');
 
         return [
-          formatField(datetime, 'text', 'datetime', datetime),
-          formatField(item.planSponsorId, 'text', 'planSponsor', item.planSponsorId),
-          formatField(item.vendorId, 'text', 'vendorId', item.vendorId),
-          formatField(item.specId, 'text', 'specId', item.specId),
-          formatField(item.implementation, 'text', 'implementation', item.implementation),
-          formatField(item.inboundFilename, 'link', 'inboundFilename', item.inboundFilename),
-          formatField(item.outboundFilename, 'link', 'outboundFilename', item.outboundFilename),
-          formatField(item.outboundFilesize, 'text', 'outboundFilesize', item.outboundFilesize),
-          formatField(item.billingCount, 'text', 'billingCount', item.billingCount),
-          formatField(item.totalRecords, 'text', 'totalRecords', item.totalRecords),
-          formatField(item.extractType, 'text', 'extractType', item.extractType),
-          formatField(item.extractVersion, 'text', 'extractVersion', item.extractVersion),
+          formatField(datetime, 'text', 'datetime', datetime, null),
+          formatField(item?.planSponsorId, 'text', 'planSponsor', item?.planSponsorId, null),
+          formatField(item?.vendorId, 'text', 'vendorId', item?.vendorId, null),
+          formatField(item?.specId, 'text', 'specId', item?.specId, null),
+          formatField(item?.implementation, 'text', 'implementation', item?.implementation, null),
+          formatField(item?.inboundFilename, 'link', 'inboundFilename', item?.inboundFilename, null),
+          formatField(item?.outboundFilename, 'link', 'outboundFilename', item?.outboundFilename, null),
+          formatField(item?.outboundFilesize, 'text', 'outboundFilesize', item?.outboundFilesize, null),
+          formatField(item?.billingCount, 'text', 'billingCount', item?.billingCount, null),
+          formatField(item?.totalRecords, 'text', 'totalRecords', item?.totalRecords, null),
+          formatField(item?.extractType, 'text', 'extractType', item?.extractType, null),
+          formatField(item?.extractVersion, 'text', 'extractVersion', item?.extractVersion, null),
         ];
       });
 

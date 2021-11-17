@@ -6,7 +6,7 @@ import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableCon
 export const useTable = (data) => {
   const [_loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
-  const [columns, setColumns] = useState([]);
+  const [columns, setColumns] = useState<any[] | undefined>([]);
   const structure = getTableStructure(TABLE_NAMES.ERRORS);
 
   // const [data, setData] = useState();

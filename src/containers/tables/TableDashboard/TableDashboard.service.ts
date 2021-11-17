@@ -6,7 +6,7 @@ import { formatField } from '../../../helpers/tableHelpers';
 export const useTable = (data, tableName, date, altData) => {
   const [loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
-  const [columns, setColumns] = useState([]);
+  const [columns, setColumns] = useState<any[]>([]);
   const [specs, setSpecs] = useState(false);
   const [dataItems, setDataItems] = useState(data);
 
@@ -46,9 +46,9 @@ export const useTable = (data, tableName, date, altData) => {
             'vendor',
             `file-status/filter/${item.name}*${date}`,
             item.secondaryDescr,
-            formatField(item.secondaryDescr, 'specs', item.secondaryDescr)
+            formatField(item.secondaryDescr, 'specs', item.secondaryDescr, '', null)
           ),
-          formatField(countAndTotal, 'total', countAndTotal),
+          formatField(countAndTotal, 'total', countAndTotal, '', null),
         ];
       });
 
