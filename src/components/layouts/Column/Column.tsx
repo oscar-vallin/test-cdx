@@ -32,8 +32,8 @@ type ColumnProps = {
 
 const Column = ({
   id,
-  variant = 'normal',
-  direction = 'column',
+  variant,
+  direction,
   children,
   center,
   right,

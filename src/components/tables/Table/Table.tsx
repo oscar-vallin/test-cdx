@@ -4,7 +4,7 @@ import { ReactElement, useEffect, useState } from 'react';
 import { Link } from 'office-ui-fabric-react/lib-commonjs/Link';
 import { mergeStyles, mergeStyleSets } from 'office-ui-fabric-react/lib-commonjs/Styling';
 import { format } from 'date-fns';
-// import PropTypes from 'prop-types';
+
 import {
   ColumnActionsMode,
   DetailsList,

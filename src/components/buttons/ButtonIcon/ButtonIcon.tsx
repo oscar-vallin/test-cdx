@@ -24,7 +24,7 @@ type ButtonIconProps = {
   block?: boolean;
 } & typeof defaultProps;
 
-const ButtonIcon = ({ id, disabled = true, icon, size, onClick, ...props }: ButtonIconProps): ReactElement => {
+const ButtonIcon = ({ id, disabled, icon, size, onClick, ...props }: ButtonIconProps): ReactElement => {
   return (
     <StyledButton id={id} disabled={disabled} onClick={onClick} {...props}>
       <StyledFontIcon iconName={icon} size={size} />

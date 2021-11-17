@@ -8,7 +8,3 @@ export const StyledBox = styled(Box)`
   margin: 0 auto;
   width: 95%;
 `;
-
-// type Props = {
-//   children: React.ReactNode;
-// };

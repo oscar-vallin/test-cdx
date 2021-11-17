@@ -69,16 +69,6 @@ const InputText = ({
   );
 };
 
-// InputText.propTypes = {
-//   id: PropTypes.string,
-//   type: PropTypes.string,
-//   disabled: PropTypes.bool,
-//   autofocus: PropTypes.bool,
-//   onChange: PropTypes.func,
-//   errorMessage: PropTypes.string,
-//   value: PropTypes.string,
-// };
-
 InputText.defaultProps = defaultProps;
 
 export { InputText };

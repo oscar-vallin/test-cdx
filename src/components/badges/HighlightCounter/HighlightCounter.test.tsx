@@ -23,7 +23,6 @@ const theme = {
 };
 
 describe('Highlight Counter Testing Unit...', () => {
-  const mockFn = jest.fn();
   const tree = shallow(
     <HighlightCounter {...defaultProps} theme={theme}>
       1

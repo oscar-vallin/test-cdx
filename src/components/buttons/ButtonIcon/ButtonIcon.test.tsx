@@ -40,4 +40,14 @@ describe('ButtonIcon', () => {
     const testTree = shallowWithTheme(<StyledFontIcon size={10} />).dive();
     expect(testTree).toMatchSnapshot();
   });
+
+  it('Default props values, Should have a props', () => {
+    const defaultTree = shallowWithTheme(<ButtonIcon id={'__ButtonIcon'} />);
+    expect(defaultTree).toMatchSnapshot();
+
+    expect(defaultTree.children().props().id).toEqual('__ButtonIcon');
+    expect(defaultTree.children().props().icon).toEqual('');
+    expect(defaultTree.children().props().disabled).toBeTruthy();
+    defaultTree.children().simulate('click');
+  });
 });

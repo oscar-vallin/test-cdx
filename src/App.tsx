@@ -12,7 +12,6 @@ export const App: React.FC = (): React.ReactElement => {
   const history = useHistory();
   const location = useLocation();
   const ApplicationStore = useApplicationStore();
-  const Toast = useNotification();
 
   const QueryParams = useQueryParams();
 
@@ -27,12 +26,9 @@ export const App: React.FC = (): React.ReactElement => {
 
   useEffect(() => {
     if (ApplicationStore.status.isOffline) {
-      // Toast.error({ text: 'Our servers are down. Please try again in a few minutes' });
+      // eslint-disable-next-line no-console
+      // !Todo: add offline notification
     }
-
-    // setTimeout(() => {
-    //   ApplicationStore.setIsOffline(false);
-    // }, 5000);
   }, [ApplicationStore.status]);
 
   return <Routes />;

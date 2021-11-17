@@ -40,4 +40,6 @@ const ButtonContextual = ({ id, children, items }: ButtonContextualProps): React
   );
 };
 
+ButtonContextual.defaultProps = defaultProps;
+
 export { ButtonContextual };

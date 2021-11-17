@@ -13,7 +13,6 @@ const defaultProps = {
 
 describe('Button Testing Unit...', () => {
   const mockFn = jest.fn();
-  const noFn = () => null;
   const tree = shallowWithTheme(<Button {...defaultProps} id={'__Button'} onClick={mockFn}></Button>);
 
   it('Should be defined', () => {

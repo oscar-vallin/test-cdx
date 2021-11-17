@@ -71,13 +71,6 @@ describe('Basic Input Component', () => {
     expect(input).toHaveValue('searchString');
   });
 
-  it('@Testing: Input Text', () => {
-    render(<Component {...defaultProps} placeholder={placeholderText} />);
-    const input = screen.getByRole('textbox');
-    fireEvent.keyPress(input, { target: { value: 'searchString' } });
-    expect(input).toHaveValue('searchString');
-  });
-
   it('@Testing: Check call function when key press = Enter', () => {
     const mockFn = jest.fn();
     const mockFn2 = jest.fn();
@@ -112,7 +105,7 @@ describe('Basic Input Component', () => {
 
   it('@Testing: Check call function when key press', () => {
     const mockFn = jest.fn();
-    const mockFn2 = jest.fn();
+
     render(
       <Component
         {...defaultProps}

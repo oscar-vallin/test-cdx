@@ -208,9 +208,3 @@ export const StyledButtonOrg = styled(DefaultButton)`
 `;
 
 export const StyledButton = styled.button``;
-
-// export const StyledButtonProfile = styled(ButtonProfile)`
-//   && {
-//     padding: 0px 8px;
-//   }
-// `;

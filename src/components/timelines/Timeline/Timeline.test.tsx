@@ -23,7 +23,7 @@ const defaultProps = {
 
 describe('Timeline Testing Unit...', () => {
   const mockFn = jest.fn();
-  const [STEP_DONE, STEP_PROGRESS] = defaultProps.items;
+  const [STEP_DONE] = defaultProps.items;
   const tree = mountWithTheme(<CDXTimeline {...defaultProps} onClick={mockFn} />);
 
   it('Should be defined', () => {

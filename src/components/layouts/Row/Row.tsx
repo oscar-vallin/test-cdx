@@ -31,7 +31,7 @@ type RowProps = {
 
 const Row = ({
   id,
-  variant = 'normal',
+  variant,
   children,
   center,
   right,

@@ -51,4 +51,12 @@ describe('ButtonContextual', () => {
     ).dive();
     expect(wrapper).toMatchSnapshot();
   });
+
+  it('Default props values, Should have a props', () => {
+    const defaultTree = shallowWithTheme(<ButtonContextual id={'__ButtonContextual'} />);
+    expect(defaultTree).toMatchSnapshot();
+
+    expect(defaultTree.children().props().id).toEqual('__ButtonContextual');
+    defaultTree.children().simulate('click');
+  });
 });

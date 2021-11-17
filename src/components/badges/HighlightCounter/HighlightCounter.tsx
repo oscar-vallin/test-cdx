@@ -16,7 +16,7 @@ type HighlightCounterProps = {
   children?: ReactElement | any;
 } & typeof defaultProps;
 
-const HighlightCounter = ({ id, type, href = '#', children, ...props }: HighlightCounterProps): ReactElement => {
+const HighlightCounter = ({ id, type, href, children, ...props }: HighlightCounterProps): ReactElement => {
   return (
     <StyledContainer id={id} type={type} {...props}>
       <StyledLink to={href} {...props}>
