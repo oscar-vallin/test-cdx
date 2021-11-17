@@ -65,7 +65,6 @@ describe('Button Testing Unit...', () => {
     expect(defaultTree.children().props().disabled).toBeFalsy();
     expect(defaultTree.children().props().block).toBeFalsy();
     expect(defaultTree.children().children().text()).toEqual('Button Text');
-    console.log(defaultTree.children().children().text());
     defaultTree.children().simulate('click');
   });
 
