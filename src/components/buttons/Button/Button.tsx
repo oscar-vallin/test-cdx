@@ -3,11 +3,11 @@ import { StyledButton } from './Button.styles';
 
 const defaultProps = {
   id: '',
-  // text: '',
+  text: null,
   variant: 'secondary',
-  // disabled: false,
+  disabled: false,
   onClick: () => null,
-  // block: false,
+  block: false,
 };
 
 type ButtonProps = {
@@ -24,21 +24,14 @@ type ButtonProps = {
   menuProps?: any;
 } & typeof defaultProps;
 
-const Button = ({
-  id,
-  text,
-  children,
-  variant = 'secondary',
-  disabled = false,
-  onClick = () => null,
-  block = false,
-  ...props
-}: ButtonProps): ReactElement => {
+const Button = ({ id, text, children, variant, disabled, onClick, block, ...props }: ButtonProps): ReactElement => {
   return (
     <StyledButton id={id} variant={variant} disabled={disabled} onClick={onClick} block={block} {...props}>
       {text || children}
     </StyledButton>
   );
 };
+
+Button.defaultProps = defaultProps;
 
 export { Button };
