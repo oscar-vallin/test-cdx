@@ -17,12 +17,14 @@ type LinkProps = {
   rel?: string;
 };
 
-const Link = ({ id, children, href, onClick, target = '_blank', rel = 'noopener', ...props }: LinkProps) => {
+const Link = ({ id, children, href, onClick, target, rel, ...props }: LinkProps) => {
   return (
     <StyledLink id={id} onClick={onClick} href={href} target={target} rel={rel} {...props}>
       {children}
     </StyledLink>
   );
 };
+
+Link.defaultProps = defaultProps;
 
 export { Link };

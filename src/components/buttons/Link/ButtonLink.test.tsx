@@ -1,10 +1,10 @@
+import { shallow } from 'enzyme';
 import { shallowWithTheme } from 'src/utils/testUtils';
 import { Link } from './ButtonLink';
 
 const defaultProps = {
   id: '__Link_Id',
   onClick: jest.fn(),
-  // children: '',
   href: '#',
   target: '_blank',
   rel: 'noopener',
@@ -44,16 +44,22 @@ describe('Link', () => {
     expect(tree.children().props().href).toEqual('https://testlink.com');
   });
 
-  it('Should have a traget blank prop', () => {
+  it('Should have a target blank prop', () => {
     expect(tree.children().props().target).toEqual('_blank');
   });
 
-  it('Test styled Button component', () => {
-    const testTemp = shallowWithTheme(
-      <Link {...defaultProps} onClick={mockFn} href="https://testlink.com">
-        Testing ButtonLink
-      </Link>
-    ).dive();
-    expect(testTemp).toMatchSnapshot();
+  it('Should have a target blank prop', () => {
+    expect(tree.children().props().target).toEqual('_blank');
+  });
+
+  it('Default props values, Should have a props', () => {
+    const defaultTree = shallowWithTheme(<Link id={'__Link'}>Link Text</Link>);
+    expect(defaultTree).toMatchSnapshot();
+
+    expect(defaultTree.children().props().id).toEqual('__Link');
+    expect(defaultTree.children().props().target).toEqual('_blank');
+    expect(defaultTree.children().props().rel).toEqual('noopener');
+    expect(defaultTree.children().children().text()).toEqual('Link Text');
+    defaultTree.children().simulate('click');
   });
 });
