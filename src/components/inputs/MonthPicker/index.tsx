@@ -19,7 +19,7 @@ const defaultProps = {
   isDayPickerVisible: false,
   showMonthPickerAsOverlay: true,
   showWeekNumbers: false,
-  firstDayOfWeek: 0,
+  firstDayOfWeek: DayOfWeek.Monday,
 };
 
 type MonthPickerProps = {
@@ -80,20 +80,20 @@ const dayPickerStrings = {
 let dateRangeString = null as any;
 
 export const MonthPicker = ({
-  open = false,
+  open,
   onSelect,
-  showDates = false,
-  isMonthPickerVisible = true,
-  dateRangeType = DateRangeType.Month,
-  autoNavigateOnSelection = true,
-  showGoToToday = true,
-  showNavigateButtons = true,
-  highlightCurrentMonth = true,
-  highlightSelectedMonth = true,
-  isDayPickerVisible = false,
-  showMonthPickerAsOverlay = true,
-  showWeekNumbers = false,
-  firstDayOfWeek = DayOfWeek.Monday,
+  showDates,
+  isMonthPickerVisible,
+  dateRangeType,
+  autoNavigateOnSelection,
+  showGoToToday,
+  showNavigateButtons,
+  highlightCurrentMonth,
+  highlightSelectedMonth,
+  isDayPickerVisible,
+  showMonthPickerAsOverlay,
+  showWeekNumbers,
+  firstDayOfWeek,
   minDate,
   maxDate,
   restrictedDates,

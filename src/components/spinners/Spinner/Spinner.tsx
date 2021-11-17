@@ -5,7 +5,7 @@ import { StyledSpinner } from './Spinner.styles';
 
 const defaultProps = {
   id: '',
-  size: '',
+  size: StyleConstants.SPINNER_SMALL,
   label: '',
 };
 
@@ -16,12 +16,7 @@ type SpinnerProps = {
   style?: { justifySelf: string };
 } & typeof defaultProps;
 
-const Spinner = ({
-  id = '',
-  size = StyleConstants.SPINNER_SMALL,
-  label = '',
-  ...props
-}: SpinnerProps): ReactElement => {
+const Spinner = ({ id, size, label, ...props }: SpinnerProps): ReactElement => {
   return <StyledSpinner id={id} size={getSpinnerSize(size)} label={label} {...props} />;
 };
 
