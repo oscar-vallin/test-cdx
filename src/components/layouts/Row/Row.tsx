@@ -12,7 +12,7 @@ const defaultProps = {
   bottom: false,
   between: '',
   evenly: '',
-  around: '',
+  around: false,
 };
 
 type RowProps = {
@@ -26,7 +26,7 @@ type RowProps = {
   bottom?: boolean;
   between?: string;
   evenly?: string;
-  around?: string;
+  around?: boolean;
 } & typeof defaultProps;
 
 const Row = ({

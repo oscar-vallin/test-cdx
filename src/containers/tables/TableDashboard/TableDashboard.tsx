@@ -80,7 +80,6 @@ const TableDashboard = ({
           id={`${id}`}
           date={date}
           onOption={onChangeOption}
-          loading={loading}
           title={title}
           emptyMessage={emptyMessage}
           {...tableProps}

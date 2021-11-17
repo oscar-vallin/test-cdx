@@ -12,7 +12,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 
 import { SpinnerSize } from '@fluentui/react';
 
-import { addDays, format, getHours, subDays } from 'date-fns';
+import { addDays, format, getHours, subDays, isValid } from 'date-fns';
 
 import { StyledContainer, StyledSpacing, StyledText } from '../../components/tables/Table/Table.styles';
 import { Box, Column, Container, FilterSection, StyledRow } from './WorkPacketTable.styles';
@@ -63,8 +63,13 @@ const WorkPacketTable = ({
   const { orgSid } = useOrgSid();
 
   const hour = getHours(new Date());
-  const startDate = useDateValue('Start Date...', hour < 9 ? subDays(new Date(), 1) : new Date());
-  const endDate = useDateValue('End Date...', hour < 9 ? new Date() : addDays(new Date(), 1));
+
+  const initialStartDate = hour < 9 ? subDays(new Date(), 1) : new Date();
+  const initialEndDate = hour < 9 ? new Date() : addDays(new Date(), 1);
+
+  const startDate = useDateValue('Start Date...', initialStartDate);
+  const endDate = useDateValue('End Date...', initialEndDate);
+
   const localInput = useDelayedInputValue('', searchTextPlaceholder, '', '');
 
   const [pagingParams, setPagingParams] = useState<PageableInput>({
@@ -78,11 +83,14 @@ const WorkPacketTable = ({
   const _addParamIfExists = (key, value) => (key ? { [key]: value } : {});
 
   const _pushQueryString = () => {
+    const startDateToFormat = isValid(startDate.value) ? startDate.value : initialStartDate;
+    const endDateToFormat = isValid(endDate.value) ? endDate.value : initialEndDate;
+
     const xParams = {
       ..._addParamIfExists('orgSid', orgSid),
       ..._addParamIfExists('filter', localInput.value),
-      ..._addParamIfExists('startDate', format(startDate.value, 'yyyy-MM-dd')),
-      ..._addParamIfExists('endDate', format(endDate.value, 'yyyy-MM-dd')),
+      ..._addParamIfExists('startDate', format(startDateToFormat, 'yyyy-MM-dd')),
+      ..._addParamIfExists('endDate', format(endDateToFormat, 'yyyy-MM-dd')),
     };
 
     location.search = QueryParams.stringify(xParams);
@@ -145,11 +153,14 @@ const WorkPacketTable = ({
   }, [localInput.value, startDate.value, endDate.value]);
 
   useEffect(() => {
+    const finalStartDate = isValid(startDate.value) ? startDate.value : initialStartDate;
+    const finalEndDate = isValid(endDate.value) ? endDate.value : initialEndDate;
+
     apiCall({
       variables: {
         orgSid,
         searchText: localInput.delayedValue,
-        dateRange: { rangeStart: startDate.value, rangeEnd: endDate.value },
+        dateRange: { rangeStart: finalStartDate, rangeEnd: finalEndDate },
         pageableInput: pagingParams,
       },
     });
@@ -174,7 +185,7 @@ const WorkPacketTable = ({
     });
 
     if (error) {
-      return <span>Error: {error}</span>;
+      return <span>Error: {error?.message || 'Something went wrong'}</span>;
     }
 
     if (loading) {

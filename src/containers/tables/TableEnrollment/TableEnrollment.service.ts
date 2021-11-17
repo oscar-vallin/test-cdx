@@ -4,8 +4,8 @@ import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableCon
 
 export const useTable = (argOrgSid, argWorkerId) => {
   const [_loading, setLoading] = useState(true);
-  const [tableItems, setTableItems] = useState();
-  const [tableGroups, setTableGroups] = useState();
+  const [tableItems, setTableItems] = useState<any[] | undefined>([]);
+  const [tableGroups, setTableGroups] = useState<any[] | undefined>([]);
   const [excludedCounter, setExcludedCounter] = useState(0);
   const [includedCounter, setIncludedCounter] = useState(0);
   const structure = getTableStructure(TABLE_NAMES.FILE_STATUS_DETAIL_ENROLLMENT);
@@ -87,10 +87,12 @@ export const useTable = (argOrgSid, argWorkerId) => {
   };
 
   const buildGroups = () => {
-    setTableGroups([
+    const arrayGroups = [
       [{ id: 1, name: 'Included Subscribers / Enrollments', startIndex: 0, count: 5, level: 0 }],
       [{ id: 2, name: 'Excluded Subscribers / Enrollments', startIndex: 0, count: 5, level: 0 }],
-    ]);
+    ];
+
+    setTableGroups(arrayGroups);
 
     return [
       { id: 1, name: 'Included Subscribers / Enrollments', startIndex: 0, count: 5, level: 0 },

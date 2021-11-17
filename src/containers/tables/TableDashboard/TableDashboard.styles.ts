@@ -6,7 +6,11 @@ export const StyledBox = styled(LayoutBox)`
   width: 100%;
 `;
 
-export const StyledRow = styled(LayoutRow)`
+type StyledRowProps = {
+  line: boolean;
+};
+
+export const StyledRow = styled(LayoutRow)<StyledRowProps>`
   padding-bottom: ${({ line }) => (line ? '10px' : '0px')};
   border-bottom: ${({ line, theme }) => (line ? `1px solid ${theme.colors.black}` : 'none')};
 `;
