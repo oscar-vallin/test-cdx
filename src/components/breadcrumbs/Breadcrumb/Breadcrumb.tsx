@@ -20,6 +20,7 @@ const parseBreadcrumbItems = (
     };
   });
 
+//
 const defaultProps = {
   id: '',
   items: [{ ID: '', TITLE: '', URL: '', MAIN_MENU: true, API_ID: '' }],
@@ -32,11 +33,15 @@ type CDXBreadcrumbProps = {
   onClick?: any | undefined;
 } & typeof defaultProps;
 
-const CDXBreadcrumb = ({ id, items = [], onClick = () => null, ...props }: CDXBreadcrumbProps): ReactElement => {
+const CDXBreadcrumb = ({ id, items, onClick, ...props }: CDXBreadcrumbProps): ReactElement => {
   const history = useHistory();
 
   return (
-    <Breadcrumb items={parseBreadcrumbItems([ROUTE_DASHBOARD, ...items], onClick || history.push)} id={id} {...props} />
+    <Breadcrumb
+      items={parseBreadcrumbItems([ROUTE_DASHBOARD, ...items], onClick || history?.push)}
+      id={id}
+      {...props}
+    />
   );
 };
 

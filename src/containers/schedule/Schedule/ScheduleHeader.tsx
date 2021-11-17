@@ -85,10 +85,12 @@ export const ScheduleHeader = ({ id, currentView, currentDate, onChangeDate, onC
     return null;
   };
 
+  // * Refactored (SonarQube)
   const handleChangeView = (_newView) => {
-    if (_newView === currentView) return null;
+    if (_newView !== currentView) {
+      onChangeView(_newView);
+    }
 
-    onChangeView(_newView);
     return null;
   };
 

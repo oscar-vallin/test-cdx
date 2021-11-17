@@ -8,7 +8,7 @@ const baseProps = {
 const defaultProps = {
   ...baseProps,
   items: [{ ID: 'test', TITLE: 'Test', URL: '', MAIN_MENU: true, API_ID: '' }],
-  onClick: () => {},
+  onClick: () => null,
 };
 
 describe('Breadcrumb Testing Unit...', () => {
@@ -45,8 +45,12 @@ describe('Breadcrumb Testing Unit...', () => {
   });
 
   it('Breadcrumb Default Props', () => {
-    const wrapper = shallow(<CDXBreadcrumb {...defaultProps} />);
+    const wrapper = shallow(<CDXBreadcrumb onClick={null} />);
+    const mounted = mount(<CDXBreadcrumb onClick={null} />);
+    const mountedDef = mount(<CDXBreadcrumb />);
     expect(wrapper).toMatchSnapshot();
+    mounted.find('.ms-Breadcrumb-itemLink').last().simulate('click');
+    mountedDef.find('.ms-Breadcrumb-itemLink').last().simulate('click');
   });
 
   it('Breadcrumb Variants', () => {

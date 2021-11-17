@@ -13,7 +13,7 @@ const defaultProps = {
 describe('Link', () => {
   const mockFn = jest.fn();
   const tree = shallowWithTheme(
-    <Link {...defaultProps} children={'Testing ButtonLink'} onClick={mockFn} href="http://testlink.com" />
+    <Link {...defaultProps} children={'Testing ButtonLink'} onClick={mockFn} href="https://testlink.com" />
   );
 
   it('Should be defined', () => {
@@ -35,13 +35,13 @@ describe('Link', () => {
 
   it('Should renders children when passed in', () => {
     const wrapper = shallowWithTheme(
-      <Link {...defaultProps} onClick={mockFn} children={<div className="children" />} href="http://testlink.com" />
+      <Link {...defaultProps} onClick={mockFn} children={<div className="children" />} href="https://testlink.com" />
     );
     expect(wrapper.contains(<div className="children" />)).toEqual(true);
   });
 
   it('Should have a href prop', () => {
-    expect(tree.children().props().href).toEqual('http://testlink.com');
+    expect(tree.children().props().href).toEqual('https://testlink.com');
   });
 
   it('Should have a traget blank prop', () => {
@@ -50,7 +50,7 @@ describe('Link', () => {
 
   it('Test styled Button component', () => {
     const testTemp = shallowWithTheme(
-      <Link {...defaultProps} onClick={mockFn} href="http://testlink.com">
+      <Link {...defaultProps} onClick={mockFn} href="https://testlink.com">
         Testing ButtonLink
       </Link>
     ).dive();
