@@ -26,42 +26,40 @@ const _UserSettingsPage = () => {
 
   return (
     <LayoutDashboard id="USER_SETTINGS">
-      <>
-        <PageHeader spacing="primary">
-          <Breadcrumb id="__UserSetingsId" items={[ROUTE_USER_SETTINGS]} />
+      <StyledBox>
+        <PageHeader id="__UserSettingsHeader" spacing="primary">
+          <Breadcrumb id="__UserSettingsBreadCrumb" items={[ROUTE_USER_SETTINGS]} />
         </PageHeader>
 
-        <StyledBox>
-          <StyledRow>
-            <Column lg="6">
-              <StyledCard elevation="smallest">
-                <Spacing padding={{ left: 'small' }}>
-                  <PasswordChange state={passwords} onChange={setPasswords} validations={validations} />
-                </Spacing>
-              </StyledCard>
-            </Column>
-            <Column lg="6">
-              <StyledCard elevation="smallest">
-                <Spacing padding={{ left: 'small' }}>
-                  <PasswordRules password={passwords.new} validations={validations} onChange={setValidations} />
-                </Spacing>
-              </StyledCard>
-            </Column>
-          </StyledRow>
+        <StyledRow>
+          <Column lg="6">
+            <StyledCard elevation="smallest">
+              <Spacing padding={{ left: 'small' }}>
+                <PasswordChange state={passwords} onChange={setPasswords} validations={validations} />
+              </Spacing>
+            </StyledCard>
+          </Column>
+          <Column lg="6">
+            <StyledCard elevation="smallest">
+              <Spacing padding={{ left: 'small' }}>
+                <PasswordRules password={passwords.new} validations={validations} onChange={setValidations} />
+              </Spacing>
+            </StyledCard>
+          </Column>
+        </StyledRow>
 
-          <br />
+        <br />
 
-          <StyledRow>
-            <Column>
-              <StyledCard elevation="smallest">
-                <Spacing padding={{ left: 'small' }}>
-                  <ThemeSettings />
-                </Spacing>
-              </StyledCard>
-            </Column>
-          </StyledRow>
-        </StyledBox>
-      </>
+        <StyledRow>
+          <Column>
+            <StyledCard elevation="smallest">
+              <Spacing padding={{ left: 'small' }}>
+                <ThemeSettings />
+              </Spacing>
+            </StyledCard>
+          </Column>
+        </StyledRow>
+      </StyledBox>
     </LayoutDashboard>
   );
 };
