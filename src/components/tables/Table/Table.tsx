@@ -422,7 +422,7 @@ const Table = ({
   };
 
   // * Click on Row.
-  const _onItemInvoked = () => {};
+  const _onItemInvoked = () => null;
 
   //
   const _onSort = (key) => {

@@ -86,8 +86,8 @@ type CreatePoliciesPanelProps = {
 const CreatePoliciesPanel = ({
   isOpen,
   onDismiss,
-  onCreatePolicy = () => {},
-  onUpdatePolicy = () => {},
+  onCreatePolicy = () => null,
+  onUpdatePolicy = () => null,
   selectedPolicyId,
 }: CreatePoliciesPanelProps): ReactElement => {
   const { orgSid } = useOrgSid();

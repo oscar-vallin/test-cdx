@@ -54,7 +54,7 @@ const WorkPacketTable = ({
   defaultSort,
   onItemsListChange,
 }: WorkPacketParams) => {
-  const doNothing = () => {};
+  const doNothing = () => null;
 
   const QueryParams = useQueryParams();
   const history = useHistory();

@@ -243,6 +243,8 @@ const CreateAccessSpecializationPanel = ({
                                               option.orgSids.query === 'vendorQuickSearch'
                                                 ? fetchVendors(data)
                                                 : fetchOrgs(data);
+
+                                              return null;
                                             }}
                                             options={parseToPickerOpts(
                                               option.orgSids.query === 'vendorQuickSearch'
@@ -259,6 +261,8 @@ const CreateAccessSpecializationPanel = ({
                                                   (item) => item.key === key
                                                 ),
                                               });
+
+                                              return null;
                                             }}
                                             onItemSelected={(item) => {
                                               const { permission } = option;
@@ -266,6 +270,8 @@ const CreateAccessSpecializationPanel = ({
                                               setCurrentItem({
                                                 [permission]: [...specializations[permission], item],
                                               });
+
+                                              return null;
                                             }}
                                           />
                                         </Column>

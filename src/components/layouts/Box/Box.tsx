@@ -24,16 +24,7 @@ type BoxProps = {
   bottom?: string;
 } & typeof defaultProps;
 
-const Box = ({
-  id = '',
-  children,
-  direction = StyleConstants.DIRECTION_COLUMN,
-  left,
-  right,
-  top,
-  bottom,
-  ...props
-}: BoxProps): ReactElement => {
+const Box = ({ id, children, direction, left, right, top, bottom, ...props }: BoxProps): ReactElement => {
   return (
     <ComponentStyled
       id={id}
