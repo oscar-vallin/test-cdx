@@ -1814,7 +1814,7 @@ export type UiReadOnlyField = UiField & {
 
 export type UiSelectManyField = UiField & {
   __typename?: 'UISelectManyField';
-  value?: Maybe<Array<Maybe<Scalars['String']>>>;
+  value?: Maybe<Array<Maybe<NvpStr>>>;
   label: Scalars['String'];
   readOnly?: Maybe<Scalars['Boolean']>;
   info?: Maybe<Scalars['String']>;
@@ -1831,7 +1831,7 @@ export type UiSelectManyField = UiField & {
 
 export type UiSelectOneField = UiField & {
   __typename?: 'UISelectOneField';
-  value?: Maybe<Scalars['String']>;
+  value?: Maybe<NvpStr>;
   label: Scalars['String'];
   readOnly?: Maybe<Scalars['Boolean']>;
   info?: Maybe<Scalars['String']>;
@@ -2962,7 +2962,11 @@ export type UserAccountFormQuery = (
       & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), accessPolicyGroups?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
     )>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
@@ -3005,7 +3009,11 @@ export type FindUserAccountQuery = (
       & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), accessPolicyGroups?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
     )>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
@@ -3173,7 +3181,11 @@ export type AccessPolicyFormQuery = (
       & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), permissions?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
     )>, tmpl?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
@@ -3182,7 +3194,11 @@ export type AccessPolicyFormQuery = (
       & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, applicableOrgTypes?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
     )>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
@@ -3212,7 +3228,11 @@ export type FindAccessPolicyQuery = (
       & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), permissions?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
     )>, tmpl?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
@@ -3221,7 +3241,11 @@ export type FindAccessPolicyQuery = (
       & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, applicableOrgTypes?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
     )>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
@@ -3254,7 +3278,11 @@ export type AccessSpecializationFormQuery = (
       & Pick<SpecializationFilterForm, 'permission' | 'label' | 'errCode' | 'errMsg' | 'errSeverity'>
       & { orgSids?: Maybe<(
         { __typename?: 'UISelectManyField' }
-        & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & { value?: Maybe<Array<Maybe<(
+          { __typename?: 'NVPStr' }
+          & Pick<NvpStr, 'name' | 'value'>
+        )>>> }
       )> }
     )>>>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
@@ -3288,7 +3316,11 @@ export type FindAccessSpecializationQuery = (
       & Pick<SpecializationFilterForm, 'permission' | 'label' | 'errCode' | 'errMsg' | 'errSeverity'>
       & { orgSids?: Maybe<(
         { __typename?: 'UISelectManyField' }
-        & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & { value?: Maybe<Array<Maybe<(
+          { __typename?: 'NVPStr' }
+          & Pick<NvpStr, 'name' | 'value'>
+        )>>> }
       )> }
     )>>>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
@@ -3329,22 +3361,42 @@ export type AccessPolicyGroupFormQuery = (
       & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, applicableOrgTypes?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
     )>, policies?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
     )>, specializations?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
     )>, includeAllSubOrgs?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, includeOrgSids?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
     )>, excludeOrgSids?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
     )>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
@@ -3383,22 +3435,42 @@ export type FindAccessPolicyGroupQuery = (
       & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, applicableOrgTypes?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
     )>, policies?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
     )>, specializations?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
     )>, includeAllSubOrgs?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, includeOrgSids?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
     )>, excludeOrgSids?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
     )>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
@@ -3487,7 +3559,11 @@ export type OrganizationFormQuery = (
       & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), orgType?: Maybe<(
       { __typename?: 'UISelectOneField' }
-      & Pick<UiSelectOneField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectOneField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )> }
     )>, active: (
       { __typename?: 'UIBooleanField' }
       & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
@@ -3520,7 +3596,11 @@ export type FindOrganizationQuery = (
       & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), orgType?: Maybe<(
       { __typename?: 'UISelectOneField' }
-      & Pick<UiSelectOneField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectOneField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )> }
     )>, active: (
       { __typename?: 'UIBooleanField' }
       & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
@@ -3827,7 +3907,11 @@ export type PasswordRulesFormQuery = (
         & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
       )>, minPasswordComplexity?: Maybe<(
         { __typename?: 'UISelectOneField' }
-        & Pick<UiSelectOneField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & Pick<UiSelectOneField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & { value?: Maybe<(
+          { __typename?: 'NVPStr' }
+          & Pick<NvpStr, 'name' | 'value'>
+        )> }
       )>, requiredNumPassingRules?: Maybe<(
         { __typename?: 'UIIntField' }
         & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
@@ -4002,7 +4086,11 @@ export type CreateAccessPolicyMutation = (
       & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), permissions?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
     )>, tmpl?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
@@ -4011,7 +4099,11 @@ export type CreateAccessPolicyMutation = (
       & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, applicableOrgTypes?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
     )>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
@@ -4041,7 +4133,11 @@ export type UpdateAccessPolicyMutation = (
       & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), permissions?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
     )>, tmpl?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
@@ -4050,7 +4146,11 @@ export type UpdateAccessPolicyMutation = (
       & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, applicableOrgTypes?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
     )>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
@@ -4103,7 +4203,11 @@ export type CreateAccessSpecializationMutation = (
       & Pick<SpecializationFilterForm, 'permission' | 'label' | 'errCode' | 'errMsg' | 'errSeverity'>
       & { orgSids?: Maybe<(
         { __typename?: 'UISelectManyField' }
-        & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & { value?: Maybe<Array<Maybe<(
+          { __typename?: 'NVPStr' }
+          & Pick<NvpStr, 'name' | 'value'>
+        )>>> }
       )> }
     )>>>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
@@ -4137,7 +4241,11 @@ export type UpdateAccessSpecializationMutation = (
       & Pick<SpecializationFilterForm, 'permission' | 'label' | 'errCode' | 'errMsg' | 'errSeverity'>
       & { orgSids?: Maybe<(
         { __typename?: 'UISelectManyField' }
-        & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & { value?: Maybe<Array<Maybe<(
+          { __typename?: 'NVPStr' }
+          & Pick<NvpStr, 'name' | 'value'>
+        )>>> }
       )> }
     )>>>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
@@ -4187,22 +4295,42 @@ export type CreateAccessPolicyGroupMutation = (
       & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, applicableOrgTypes?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
     )>, policies?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
     )>, specializations?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
     )>, includeAllSubOrgs?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, includeOrgSids?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
     )>, excludeOrgSids?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
     )>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
@@ -4241,22 +4369,42 @@ export type UpdateAccessPolicyGroupMutation = (
       & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, applicableOrgTypes?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
     )>, policies?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
     )>, specializations?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
     )>, includeAllSubOrgs?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, includeOrgSids?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
     )>, excludeOrgSids?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
     )>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
@@ -4310,7 +4458,11 @@ export type CreateUserMutation = (
       & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), accessPolicyGroups?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
     )>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
@@ -4353,7 +4505,11 @@ export type UpdateUserMutation = (
       & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), accessPolicyGroups?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
     )>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
@@ -4632,7 +4788,11 @@ export type UpdatePasswordRulesMutation = (
         & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
       )>, minPasswordComplexity?: Maybe<(
         { __typename?: 'UISelectOneField' }
-        & Pick<UiSelectOneField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & Pick<UiSelectOneField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & { value?: Maybe<(
+          { __typename?: 'NVPStr' }
+          & Pick<NvpStr, 'name' | 'value'>
+        )> }
       )>, requiredNumPassingRules?: Maybe<(
         { __typename?: 'UIIntField' }
         & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
@@ -6128,7 +6288,10 @@ export const UserAccountFormDocument = gql`
       errSeverity
     }
     accessPolicyGroups {
-      value
+      value {
+        name
+        value
+      }
       label
       readOnly
       info
@@ -6254,7 +6417,10 @@ export const FindUserAccountDocument = gql`
       errSeverity
     }
     accessPolicyGroups {
-      value
+      value {
+        name
+        value
+      }
       label
       readOnly
       info
@@ -6589,7 +6755,10 @@ export const AccessPolicyFormDocument = gql`
       errSeverity
     }
     permissions {
-      value
+      value {
+        name
+        value
+      }
       label
       readOnly
       info
@@ -6624,7 +6793,10 @@ export const AccessPolicyFormDocument = gql`
       errSeverity
     }
     applicableOrgTypes {
-      value
+      value {
+        name
+        value
+      }
       label
       readOnly
       info
@@ -6707,7 +6879,10 @@ export const FindAccessPolicyDocument = gql`
       errSeverity
     }
     permissions {
-      value
+      value {
+        name
+        value
+      }
       label
       readOnly
       info
@@ -6742,7 +6917,10 @@ export const FindAccessPolicyDocument = gql`
       errSeverity
     }
     applicableOrgTypes {
-      value
+      value {
+        name
+        value
+      }
       label
       readOnly
       info
@@ -6828,7 +7006,10 @@ export const AccessSpecializationFormDocument = gql`
       permission
       label
       orgSids {
-        value
+        value {
+          name
+          value
+        }
         label
         readOnly
         info
@@ -6918,7 +7099,10 @@ export const FindAccessSpecializationDocument = gql`
       permission
       label
       orgSids {
-        value
+        value {
+          name
+          value
+        }
         label
         readOnly
         info
@@ -7040,7 +7224,10 @@ export const AccessPolicyGroupFormDocument = gql`
       errSeverity
     }
     applicableOrgTypes {
-      value
+      value {
+        name
+        value
+      }
       label
       readOnly
       info
@@ -7053,7 +7240,10 @@ export const AccessPolicyGroupFormDocument = gql`
       errSeverity
     }
     policies {
-      value
+      value {
+        name
+        value
+      }
       label
       readOnly
       info
@@ -7066,7 +7256,10 @@ export const AccessPolicyGroupFormDocument = gql`
       errSeverity
     }
     specializations {
-      value
+      value {
+        name
+        value
+      }
       label
       readOnly
       info
@@ -7090,7 +7283,10 @@ export const AccessPolicyGroupFormDocument = gql`
       errSeverity
     }
     includeOrgSids {
-      value
+      value {
+        name
+        value
+      }
       label
       readOnly
       info
@@ -7103,7 +7299,10 @@ export const AccessPolicyGroupFormDocument = gql`
       errSeverity
     }
     excludeOrgSids {
-      value
+      value {
+        name
+        value
+      }
       label
       readOnly
       info
@@ -7222,7 +7421,10 @@ export const FindAccessPolicyGroupDocument = gql`
       errSeverity
     }
     applicableOrgTypes {
-      value
+      value {
+        name
+        value
+      }
       label
       readOnly
       info
@@ -7235,7 +7437,10 @@ export const FindAccessPolicyGroupDocument = gql`
       errSeverity
     }
     policies {
-      value
+      value {
+        name
+        value
+      }
       label
       readOnly
       info
@@ -7248,7 +7453,10 @@ export const FindAccessPolicyGroupDocument = gql`
       errSeverity
     }
     specializations {
-      value
+      value {
+        name
+        value
+      }
       label
       readOnly
       info
@@ -7272,7 +7480,10 @@ export const FindAccessPolicyGroupDocument = gql`
       errSeverity
     }
     includeOrgSids {
-      value
+      value {
+        name
+        value
+      }
       label
       readOnly
       info
@@ -7285,7 +7496,10 @@ export const FindAccessPolicyGroupDocument = gql`
       errSeverity
     }
     excludeOrgSids {
-      value
+      value {
+        name
+        value
+      }
       label
       readOnly
       info
@@ -7502,7 +7716,10 @@ export const OrganizationFormDocument = gql`
       errSeverity
     }
     orgType {
-      value
+      value {
+        name
+        value
+      }
       label
       readOnly
       info
@@ -7596,7 +7813,10 @@ export const FindOrganizationDocument = gql`
       errSeverity
     }
     orgType {
-      value
+      value {
+        name
+        value
+      }
       label
       readOnly
       info
@@ -8573,7 +8793,10 @@ export const PasswordRulesFormDocument = gql`
         errSeverity
       }
       minPasswordComplexity {
-        value
+        value {
+          name
+          value
+        }
         label
         readOnly
         info
@@ -9114,7 +9337,10 @@ export const CreateAccessPolicyDocument = gql`
       errSeverity
     }
     permissions {
-      value
+      value {
+        name
+        value
+      }
       label
       readOnly
       info
@@ -9149,7 +9375,10 @@ export const CreateAccessPolicyDocument = gql`
       errSeverity
     }
     applicableOrgTypes {
-      value
+      value {
+        name
+        value
+      }
       label
       readOnly
       info
@@ -9231,7 +9460,10 @@ export const UpdateAccessPolicyDocument = gql`
       errSeverity
     }
     permissions {
-      value
+      value {
+        name
+        value
+      }
       label
       readOnly
       info
@@ -9266,7 +9498,10 @@ export const UpdateAccessPolicyDocument = gql`
       errSeverity
     }
     applicableOrgTypes {
-      value
+      value {
+        name
+        value
+      }
       label
       readOnly
       info
@@ -9413,7 +9648,10 @@ export const CreateAccessSpecializationDocument = gql`
       permission
       label
       orgSids {
-        value
+        value {
+          name
+          value
+        }
         label
         readOnly
         info
@@ -9504,7 +9742,10 @@ export const UpdateAccessSpecializationDocument = gql`
       permission
       label
       orgSids {
-        value
+        value {
+          name
+          value
+        }
         label
         readOnly
         info
@@ -9657,7 +9898,10 @@ export const CreateAccessPolicyGroupDocument = gql`
       errSeverity
     }
     applicableOrgTypes {
-      value
+      value {
+        name
+        value
+      }
       label
       readOnly
       info
@@ -9670,7 +9914,10 @@ export const CreateAccessPolicyGroupDocument = gql`
       errSeverity
     }
     policies {
-      value
+      value {
+        name
+        value
+      }
       label
       readOnly
       info
@@ -9683,7 +9930,10 @@ export const CreateAccessPolicyGroupDocument = gql`
       errSeverity
     }
     specializations {
-      value
+      value {
+        name
+        value
+      }
       label
       readOnly
       info
@@ -9707,7 +9957,10 @@ export const CreateAccessPolicyGroupDocument = gql`
       errSeverity
     }
     includeOrgSids {
-      value
+      value {
+        name
+        value
+      }
       label
       readOnly
       info
@@ -9720,7 +9973,10 @@ export const CreateAccessPolicyGroupDocument = gql`
       errSeverity
     }
     excludeOrgSids {
-      value
+      value {
+        name
+        value
+      }
       label
       readOnly
       info
@@ -9839,7 +10095,10 @@ export const UpdateAccessPolicyGroupDocument = gql`
       errSeverity
     }
     applicableOrgTypes {
-      value
+      value {
+        name
+        value
+      }
       label
       readOnly
       info
@@ -9852,7 +10111,10 @@ export const UpdateAccessPolicyGroupDocument = gql`
       errSeverity
     }
     policies {
-      value
+      value {
+        name
+        value
+      }
       label
       readOnly
       info
@@ -9865,7 +10127,10 @@ export const UpdateAccessPolicyGroupDocument = gql`
       errSeverity
     }
     specializations {
-      value
+      value {
+        name
+        value
+      }
       label
       readOnly
       info
@@ -9889,7 +10154,10 @@ export const UpdateAccessPolicyGroupDocument = gql`
       errSeverity
     }
     includeOrgSids {
-      value
+      value {
+        name
+        value
+      }
       label
       readOnly
       info
@@ -9902,7 +10170,10 @@ export const UpdateAccessPolicyGroupDocument = gql`
       errSeverity
     }
     excludeOrgSids {
-      value
+      value {
+        name
+        value
+      }
       label
       readOnly
       info
@@ -10057,7 +10328,10 @@ export const CreateUserDocument = gql`
       errSeverity
     }
     accessPolicyGroups {
-      value
+      value {
+        name
+        value
+      }
       label
       readOnly
       info
@@ -10183,7 +10457,10 @@ export const UpdateUserDocument = gql`
       errSeverity
     }
     accessPolicyGroups {
-      value
+      value {
+        name
+        value
+      }
       label
       readOnly
       info
@@ -11155,7 +11432,10 @@ export const UpdatePasswordRulesDocument = gql`
         errSeverity
       }
       minPasswordComplexity {
-        value
+        value {
+          name
+          value
+        }
         label
         readOnly
         info

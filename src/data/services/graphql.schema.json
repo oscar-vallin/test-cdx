@@ -13573,8 +13573,8 @@
               "kind": "LIST",
               "name": null,
               "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
+                "kind": "OBJECT",
+                "name": "NVPStr",
                 "ofType": null
               }
             },
@@ -13735,8 +13735,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
+              "kind": "OBJECT",
+              "name": "NVPStr",
               "ofType": null
             },
             "isDeprecated": false,
