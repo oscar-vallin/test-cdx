@@ -23,9 +23,9 @@ type CDXMessageBarProps = {
 
 const CDXMessageBar = ({
   id,
-  type = 'info',
-  multiline = false,
-  truncated = false,
+  type,
+  multiline,
+  truncated,
   content,
   actions,
   children,
