@@ -22,6 +22,7 @@ type CreateUsersPanelProps = {
   isOpen?: boolean;
   onDismiss?: any | null;
   onCreateUser?: any | null;
+  selectedUserId?: any | null;
 } & typeof defaultProps;
 
 const CreateUsersPanel = ({ isOpen, onDismiss, onCreateUser }: CreateUsersPanelProps): ReactElement => {

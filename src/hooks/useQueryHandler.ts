@@ -2,10 +2,10 @@
 import { useEffect } from 'react';
 import { useApplicationStore } from '../store/ApplicationStore';
 import { useLogoutUseCase } from '../use-cases/Authentication';
-// import { useNotification } from './useNotification';
+import { useNotification } from './useNotification';
 
 export const useQueryHandler = (lazyQuery) => {
-  // const Toast = useNotification();
+  const Toast = useNotification();
   const ApplicationStore = useApplicationStore();
   const { performUserLogout } = useLogoutUseCase();
 
@@ -18,7 +18,7 @@ export const useQueryHandler = (lazyQuery) => {
 
       if (extensions) {
         if (extensions.errorSubType === 'NEED_AUTH') {
-          // Toast.error({ text: message });
+          Toast.error({ text: message });
 
           setTimeout(performUserLogout, 3000);
         }

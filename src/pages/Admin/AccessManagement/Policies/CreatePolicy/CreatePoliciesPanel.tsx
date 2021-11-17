@@ -145,14 +145,16 @@ const CreatePoliciesPanel = ({
 
   useEffect(() => {
     if (isOpen) {
-      fetchPolicyForm({ variables: { orgSid } });
-    } else {
-      setState({ ...INITIAL_STATE });
-      setPermissions([]);
-      setApplicableOrgTypes([]);
-      setPolicyForm({});
+      if (!selectedPolicyId) {
+        setApplicableOrgTypes([]);
+        setPolicyForm({});
+        setPermissions([]);
+        setState({ ...INITIAL_STATE });
+      } else {
+        fetchPolicyForm({ variables: { orgSid } });
+      }
     }
-  }, [isOpen]);
+  }, [isOpen, selectedPolicyId]);
 
   useEffect(() => {
     if (isOpen && form) {
@@ -163,15 +165,8 @@ const CreatePoliciesPanel = ({
 
   useEffect(() => {
     if (policyForm.options) {
-      const orgTypes = policyForm.options?.find((opt) => opt.key === 'OrgType');
-
       if (policy) {
         const { name, applicableOrgTypes, permissions, sid, tmpl, tmplUseAsIs } = policy.accessPolicy;
-
-        // const values =
-        //   orgTypes?.values
-        //     .filter(({ value }) => applicableOrgTypes.includes(value))
-        //     .map(({ label, value }) => ({ key: value, name: label })) || [];
 
         setState({
           sid,
@@ -194,7 +189,6 @@ const CreatePoliciesPanel = ({
       isOpen={isOpen}
       onDismiss={() => {
         setState({ ...INITIAL_STATE });
-        // setOptions({ ...INITIAL_OPTIONS });
 
         onDismiss();
       }}

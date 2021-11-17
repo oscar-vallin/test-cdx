@@ -4,15 +4,17 @@ import { useState, useEffect, useMemo, memo } from 'react';
 import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
 import { PrimaryButton, DefaultButton, MessageBar } from 'office-ui-fabric-react';
 import { DetailsList, DetailsListLayoutMode, SelectionMode, Selection } from 'office-ui-fabric-react/lib/DetailsList';
-import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { MarqueeSelection } from '@fluentui/react/lib/MarqueeSelection';
+import { SpinnerSize } from '@fluentui/react';
+import { EmptyState } from 'src/containers/states';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Row, Column } from '../../../../components/layouts';
 import { Spacing } from '../../../../components/spacings/Spacing';
 import { Text } from '../../../../components/typography';
 import { Separator } from '../../../../components/separators/Separator';
 import { Button } from '../../../../components/buttons';
-import { useUsersForOrgLazyQuery, useActivateUsersMutation } from '../../../../data/services/graphql';
+import { useUsersForOrgLazyQuery, useActivateUsersMutation, ActiveEnum } from '../../../../data/services/graphql';
 import { StyledColumn } from './DeletedUsersPage.styles';
 
 import { useOrgSid } from '../../../../hooks/useOrgSid';
@@ -40,15 +42,15 @@ const onRenderItemColumn = (node, _index, column) => {
 
 const _DeletedUsersPage = () => {
   const { orgSid } = useOrgSid();
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<any[] | null | undefined>([]);
   const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);
-  const [selectedItems, setSelectedItems] = useState([]);
+  const [selectedItems, setSelectedItems] = useState<any[] | null | undefined>([]);
   const columns = generateColumns();
 
-  const [apiUsersForOrgFpLazy, { data, loading }]: any = useUsersForOrgLazyQuery();
+  const [apiUsersForOrgFpLazy, { data, loading }] = useUsersForOrgLazyQuery();
   const [enableUser, { data: enableResponse, loading: isEnablingUser }] = useActivateUsersMutation();
 
-  const selection: any = useMemo(
+  const selection = useMemo(
     () =>
       new Selection({
         onSelectionChanged: () => {
@@ -68,94 +70,93 @@ const _DeletedUsersPage = () => {
     apiUsersForOrgFpLazy({
       variables: {
         orgSid,
-        userFilter: { activeFilter: 'INACTIVE' },
+        userFilter: { activeFilter: ActiveEnum.Inactive },
       },
     });
   }, [orgSid]);
 
   useEffect(() => {
     if (!loading && data) {
-      setUsers(data.usersForOrg.nodes);
+      setUsers(data?.usersForOrg?.nodes);
     }
   }, [loading]);
 
   const selectedUserIds = () => {
-    return selectedItems.map((node: any) => {
+    if (!selectedItems) return [];
+
+    return selectedItems?.map((node) => {
       return node.item.id;
     });
   };
 
   useEffect(() => {
     if (!isEnablingUser && enableResponse) {
-      setUsers(users.filter(({ item }: any) => !selectedUserIds().includes(item.id)));
+      setUsers(users?.filter(({ item }) => !selectedUserIds()?.includes(item.id)));
     }
   }, [isEnablingUser, enableResponse]);
-
-  const renderList = () => {
-    return users.length > 0 ? (
-      <MarqueeSelection selection={selection}>
-        <DetailsList
-          items={users}
-          columns={columns}
-          layoutMode={DetailsListLayoutMode.justified}
-          onRenderItemColumn={onRenderItemColumn}
-          selection={selection}
-          selectionPreservedOnEmptyClick
-          isHeaderVisible
-        />
-      </MarqueeSelection>
-    ) : (
-      <MessageBar>No deleted users</MessageBar>
-    );
-  };
 
   return (
     <LayoutAdmin id="PageDeletedUsers" sidebarOptionSelected="DELETED_USERS">
       <>
         <Spacing margin="double">
+          {users && users.length > 0 && (
+            <Row>
+              <Column lg="6">
+                <Spacing margin={{ top: 'small' }}>
+                  <Text variant="bold">Deleted Users</Text>
+                </Spacing>
+              </Column>
+              <Column lg="6" right>
+                <Button
+                  id="btn-restore-users"
+                  variant="primary"
+                  onClick={() => {
+                    if (!!selectedItems && selectedItems?.length > 0) {
+                      setIsConfirmationHidden(false);
+                    } else {
+                      alert('Please select at least one user');
+                    }
+                    return null;
+                  }}
+                >
+                  Enable Users
+                </Button>
+              </Column>
+            </Row>
+          )}
+
+          {!!users && users.length > 0 && (
+            <Row>
+              <Column lg="12">
+                <Spacing margin={{ top: 'normal' }}>
+                  <Separator />
+                </Spacing>
+              </Column>
+            </Row>
+          )}
+
           <Row>
-            <Column lg="8">
-              <Row>
-                <Column lg="8">
-                  <Spacing margin={{ top: 'small' }}>
-                    <Text variant="bold">Deleted Users</Text>
-                  </Spacing>
-                </Column>
-                <Column lg="4" right>
-                  <Button
-                    id="__DeletedUsersPageId"
-                    variant="primary"
-                    onClick={() => {
-                      if (selectedItems.length > 0) {
-                        setIsConfirmationHidden(false);
-                      } else {
-                        alert('Please select at least one user');
-                      }
-
-                      return null;
-                    }}
-                  >
-                    Enable Users
-                  </Button>
-                </Column>
-              </Row>
-
-              <Spacing margin={{ top: 'normal' }}>
-                <Separator />
-              </Spacing>
-
-              <Row>
-                <StyledColumn>
-                  {!loading ? (
-                    renderList()
-                  ) : (
-                    <Spacing margin={{ top: 'double' }}>
-                      <Spinner size={SpinnerSize.large} label="Loading deleted users" />
-                    </Spacing>
-                  )}
-                </StyledColumn>
-              </Row>
-            </Column>
+            <StyledColumn>
+              {loading ? (
+                <Spacing margin={{ top: 'double' }}>
+                  <Spinner size={SpinnerSize.large} label="Loading deleted users" />
+                </Spacing>
+              ) : !users ? (
+                <EmptyState description="No deleted users" />
+              ) : (
+                <MarqueeSelection selection={selection}>
+                  <DetailsList
+                    items={users}
+                    columns={columns}
+                    layoutMode={DetailsListLayoutMode.justified}
+                    onRenderItemColumn={onRenderItemColumn}
+                    selection={selection}
+                    selectionPreservedOnEmptyClick
+                    isHeaderVisible
+                  />
+                </MarqueeSelection>
+              )}
+            </StyledColumn>
           </Row>
         </Spacing>
 
