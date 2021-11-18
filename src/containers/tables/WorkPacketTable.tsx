@@ -8,13 +8,9 @@ import {
 } from 'office-ui-fabric-react/lib-commonjs/DetailsList';
 import { mergeStyleSets } from 'office-ui-fabric-react/lib-commonjs/Styling';
 
-import { useHistory, useLocation } from 'react-router-dom';
-
 import { SpinnerSize } from '@fluentui/react';
 
-import { addDays, format, getHours, subDays, isValid } from 'date-fns';
-
-import { StyledContainer, StyledSpacing, StyledText } from '../../components/tables/Table/Table.styles';
+import { StyledContainer, StyledSpacing } from '../../components/tables/Table/Table.styles';
 import { Box, Column, Container, FilterSection, StyledRow } from './WorkPacketTable.styles';
 import { InputText } from '../../components/inputs/InputText';
 import { InputDateRange } from '../../components/inputs/InputDateRange';
@@ -29,11 +25,9 @@ import {
   WorkPacketStatus,
 } from '../../data/services/graphql';
 import { useWorkPacketColumns, WorkPacketColumns } from './WorkPacketColumns';
-import { useDateValue } from '../../hooks/useDateValue';
-import { useDelayedInputValue } from '../../hooks/useInputValue';
-import { useQueryParams } from '../../hooks/useQueryParams';
 import { useQueryHandler } from '../../hooks/useQueryHandler';
 import { useOrgSid } from '../../hooks/useOrgSid';
+import { useTableFilters } from '../../hooks/useTableFilters';
 
 type WorkPacketParams = {
   id: string;
@@ -54,23 +48,9 @@ const WorkPacketTable = ({
   defaultSort,
   onItemsListChange,
 }: WorkPacketParams) => {
-  const doNothing = () => null;
-
-  const QueryParams = useQueryParams();
-  const history = useHistory();
-  const location = useLocation();
-  const urlParams = new URLSearchParams(location.search);
   const { orgSid } = useOrgSid();
 
-  const hour = getHours(new Date());
-
-  const initialStartDate = hour < 9 ? subDays(new Date(), 1) : new Date();
-  const initialEndDate = hour < 9 ? new Date() : addDays(new Date(), 1);
-
-  const startDate = useDateValue('Start Date...', initialStartDate);
-  const endDate = useDateValue('End Date...', initialEndDate);
-
-  const localInput = useDelayedInputValue('', searchTextPlaceholder, '', '');
+  const { searchText, startDate, endDate } = useTableFilters(searchTextPlaceholder);
 
   const [pagingParams, setPagingParams] = useState<PageableInput>({
     pageNumber: 0,
@@ -79,24 +59,6 @@ const WorkPacketTable = ({
   });
 
   const [apiCall, { data, loading, error }] = useQueryHandler(lazyQuery);
-
-  const _addParamIfExists = (key, value) => (key ? { [key]: value } : {});
-
-  const _pushQueryString = () => {
-    const startDateToFormat = isValid(startDate.value) ? startDate.value : initialStartDate;
-    const endDateToFormat = isValid(endDate.value) ? endDate.value : initialEndDate;
-
-    const xParams = {
-      ..._addParamIfExists('orgSid', orgSid),
-      ..._addParamIfExists('filter', localInput.value),
-      ..._addParamIfExists('startDate', format(startDateToFormat, 'yyyy-MM-dd')),
-      ..._addParamIfExists('endDate', format(endDateToFormat, 'yyyy-MM-dd')),
-    };
-
-    location.search = QueryParams.stringify(xParams);
-
-    history.replace(QueryParams.merge(location, xParams));
-  };
 
   const _doSort = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
     const newColumns: IColumn[] = columns.slice();
@@ -131,40 +93,16 @@ const WorkPacketTable = ({
 
   const [columns, setColumns] = useState<IColumn[]>(initialColumns);
 
-  // Initialization
   useEffect(() => {
-    if (urlParams.get('filter') != null) {
-      localInput.setValue(urlParams.get('filter'));
-    }
-
-    const startDateParam = urlParams.get('startDate');
-    if (startDateParam != null) {
-      startDate.setValue(new Date(startDateParam));
-    }
-
-    const endDateParam = urlParams.get('endDate');
-    if (endDateParam != null) {
-      endDate.setValue(new Date(endDateParam));
-    }
-  }, []);
-
-  useEffect(() => {
-    _pushQueryString();
-  }, [localInput.value, startDate.value, endDate.value]);
-
-  useEffect(() => {
-    const finalStartDate = isValid(startDate.value) ? startDate.value : initialStartDate;
-    const finalEndDate = isValid(endDate.value) ? endDate.value : initialEndDate;
-
     apiCall({
       variables: {
         orgSid,
-        searchText: localInput.delayedValue,
-        dateRange: { rangeStart: finalStartDate, rangeEnd: finalEndDate },
+        searchText: searchText.delayedValue,
+        dateRange: { rangeStart: startDate.value, rangeEnd: endDate.value },
         pageableInput: pagingParams,
       },
     });
-  }, [orgSid, localInput.delayedValue, startDate.value, endDate.value, pagingParams]);
+  }, [orgSid, searchText.delayedValue, startDate.value, endDate.value, pagingParams]);
 
   useEffect(() => {
     if (onItemsListChange) {
@@ -223,14 +161,7 @@ const WorkPacketTable = ({
             <StyledRow>
               <Column lg="6">
                 <Label>Search</Label>
-                <InputText
-                  id={`${id}__Card__Row__Input-Search`}
-                  onKeyDown={doNothing}
-                  onKeyEnter={doNothing}
-                  autoFocus
-                  disabled={false}
-                  {...localInput}
-                />
+                <InputText id={`${id}__Card__Row__Input-Search`} autoFocus disabled={false} {...searchText} />
               </Column>
               <Column lg="6">
                 <InputDateRange startDate={startDate} endDate={endDate} />

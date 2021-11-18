@@ -3,7 +3,7 @@ import PuppetBasePage from './PuppetBasePage';
 export default class PuppetCurrentActivity extends PuppetBasePage {
   pageTitle = '#__Current_Activity_Text-Text';
 
-  tableInProcess = '#__Table__In__Proccess';
+  tableInProcess = '#__Table__In__Process';
 
   tableCompleted = '#__Table__Completed';
 
