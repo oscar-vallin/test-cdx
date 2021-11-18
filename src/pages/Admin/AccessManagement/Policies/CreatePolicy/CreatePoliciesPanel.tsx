@@ -24,7 +24,6 @@ import {
   useAccessPolicyLazyQuery,
 } from '../../../../../data/services/graphql';
 import { useOrgSid } from '../../../../../hooks/useOrgSid';
-import { TagPicker } from '../../../../../components/pickers/TagPicker';
 
 const INITIAL_STATE = {
   policyName: '',
@@ -326,8 +325,7 @@ const CreatePoliciesPanel = ({
                                                       permissions: checked
                                                         ? [...state.permissions, option.value]
                                                         : state.permissions.filter((value) => value !== option.value),
-                                                    })
-                                                  }
+                                                    })}
                                                 />
                                               </Spacing>
                                             ))}

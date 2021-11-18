@@ -16,6 +16,7 @@ import { Row, Column } from '../../../../components/layouts';
 import { Separator } from '../../../../components/separators/Separator';
 import { Text } from '../../../../components/typography';
 import { CreateAccessSpecializationPanel } from './CreateSpecialization';
+import { Link } from '../../../../components/buttons/Link';
 
 import {
   useAccessSpecializationsForOrgLazyQuery,
@@ -60,6 +61,17 @@ const _AccessManagementSpecializationPage = () => {
 
   const onRenderItemColumn = (item, index, column) => {
     switch (column.key) {
+      case 'name':
+        return (
+          <Link
+            onClick={() => {
+              setSelectedAccessId(item.sid);
+              setIsPanelOpen(true);
+            }}
+          >
+            {item.name}
+          </Link>
+        );
       case 'actions':
         return (
           <>
