@@ -7,7 +7,7 @@ import {
 } from '../../../../data/services/graphql';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
 
-export const useActivityComplete = () => {
+export const useActivityComplete = (startDate: Date, endDate: Date) => {
   const [loadingComp, setLoadingComp] = useState(true);
   const [dataComplete, setDataComp] = useState<ExchangeActivityTransmittedQuery | undefined>();
   const [apiError, setApiError] = useState<ApolloError | undefined>();
@@ -18,7 +18,7 @@ export const useActivityComplete = () => {
     apiExchangeActivityTransmittedLazy({
       variables: {
         orgSidInput: { orgSid },
-        dateRange: { rangeStart: '2021-08-15T00:00:00.000Z', rangeEnd: '2021-09-15T23:59:59.000Z' },
+        dateRange: { rangeStart: startDate, rangeEnd: endDate },
         pageableInput: {
           pageNumber: 0,
           pageSize: 100,

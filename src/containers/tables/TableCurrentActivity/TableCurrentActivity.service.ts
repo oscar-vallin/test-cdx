@@ -16,7 +16,7 @@ type AllActivityData = {
   tableError: ActivityData;
 };
 
-export const useTable = (): AllActivityData => {
+export const useTable = (startDate: Date, endDate: Date): AllActivityData => {
   const [_loadingProc, setLoadingProc] = useState(true);
   const [_loadingComp, setLoadingComp] = useState(true);
   const [_loadingError, setLoadingError] = useState(true);
@@ -24,9 +24,9 @@ export const useTable = (): AllActivityData => {
   const [itemsComp, setItemsComp] = useState<OrganizationLink[]>([]);
   const [itemsError, setItemsError] = useState<OrganizationLink[]>([]);
 
-  const { dataComplete, loadingComp } = useActivityComplete();
-  const { dataError, loadingError } = useActivityErrored();
-  const { dataProcess, loadingProc } = useActivityProcess();
+  const { dataComplete, loadingComp } = useActivityComplete(startDate, endDate);
+  const { dataError, loadingError } = useActivityErrored(startDate, endDate);
+  const { dataProcess, loadingProc } = useActivityProcess(startDate, endDate);
 
   // * Component Did Mount.
 

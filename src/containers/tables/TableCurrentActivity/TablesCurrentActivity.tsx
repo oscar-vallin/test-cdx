@@ -9,7 +9,7 @@ import { Row, Column } from '../../../components/layouts';
 
 const TablesCurrentActivity = ({ id = 'TableCurrentActivity' }) => {
   const { searchText, startDate, endDate } = useTableFilters('Name, Id, Last Activity');
-  const { tableProc, tableComp, tableError } = useTable();
+  const { tableProc, tableComp, tableError } = useTable(startDate.value, endDate.value);
 
   return (
     <Container id={id}>

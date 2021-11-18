@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { ExchangeActivityErroredQuery, useExchangeActivityErroredLazyQuery } from '../../../../data/services/graphql';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
 
-export const useActivityErrored = () => {
+export const useActivityErrored = (startDate: Date, endDate: Date) => {
   const [loadingError, setLoadingError] = useState(true);
   const [dataError, setDataError] = useState<ExchangeActivityErroredQuery>();
   const [apiError, setApiError] = useState<ApolloError | undefined>();
@@ -15,7 +15,7 @@ export const useActivityErrored = () => {
     apiExchangeActivityErroredLazy({
       variables: {
         orgSidInput: { orgSid },
-        dateRange: { rangeStart: '2021-08-15T00:00:00.000Z', rangeEnd: '2021-09-15T23:59:59.000Z' },
+        dateRange: { rangeStart: startDate, rangeEnd: endDate },
         pageableInput: {
           pageNumber: 0,
           pageSize: 100,

@@ -2,8 +2,8 @@ import { ReactElement } from 'react';
 import { IColumn, DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { format } from 'date-fns';
-import { Column, Row } from '../../../components/layouts';
-import { TableName } from './TableActivity.style';
+import { Column } from '../../../components/layouts';
+import { TableName, TableWrap } from './TableActivity.style';
 import { OrganizationLink } from '../../../data/services/graphql';
 
 const columns: IColumn[] = [
@@ -16,6 +16,7 @@ const columns: IColumn[] = [
     minWidth: 225,
     maxWidth: 1000,
     targetWidthProportion: 1,
+    flexGrow: 1,
   },
   {
     name: 'Last Activity',
@@ -26,6 +27,7 @@ const columns: IColumn[] = [
     minWidth: 225,
     maxWidth: 1000,
     targetWidthProportion: 1,
+    flexGrow: 1,
     onRender: (itm: OrganizationLink) => {
       return format(new Date(itm.activityTime), 'MM/dd/yyyy hh:mm a');
     },
@@ -49,7 +51,7 @@ type TableActivityProps = {
 
 const TableActivity = ({ id, items, loading, tableName, color }: TableActivityProps): ReactElement => {
   return (
-    <Row id={id}>
+    <TableWrap id={id}>
       <Column>
         <TableName variant="bold" color={color}>
           {tableName}
@@ -68,7 +70,7 @@ const TableActivity = ({ id, items, loading, tableName, color }: TableActivityPr
           <Spinner label="Loading Activity" />
         )}
       </Column>
-    </Row>
+    </TableWrap>
   );
 };
 
