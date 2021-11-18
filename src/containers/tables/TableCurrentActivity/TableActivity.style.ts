@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Box as LayoutBox, Row as LayoutRow, Column as LayoutColumn } from '../../../components/layouts';
-import { Text } from '../../../components/typography/Text';
+import { Text } from '../../../components/typography';
 
 export const Container = styled.div`
   width: 100%;
@@ -8,11 +8,13 @@ export const Container = styled.div`
 
 export const TableContainer = styled.div`
   height: 70vh;
-  margin: 2vw;
+  margin-left: 2vw;
+  margin-right: 2vw;
   overflow-y: scroll;
   ::-webkit-scrollbar {
     display: none;
   }
+  width: 100%;
 `;
 
 export const StyledBox = styled(LayoutBox)`

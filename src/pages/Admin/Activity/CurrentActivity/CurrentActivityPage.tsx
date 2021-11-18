@@ -3,7 +3,7 @@ import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Row, Column } from '../../../../components/layouts';
 import { Spacing } from '../../../../components/spacings/Spacing';
 import { Separator } from '../../../../components/separators/Separator';
-import { Text } from '../../../../components/typography/Text';
+import { Text } from '../../../../components/typography';
 import { TablesCurrentActivity } from '../../../../containers/tables/TableCurrentActivity';
 // import { NAV_ITEMS } from '../../SideMenu';
 
@@ -32,7 +32,7 @@ export const CurrentActivityPage = ({ id }: CurrentActivityPageProps): ReactElem
         <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
           <Separator />
         </Spacing>
-        <TablesCurrentActivity id="TableCurrentActivity" argOrgSid={1} argDateRange argFilter />
+        <TablesCurrentActivity id="TableCurrentActivity" />
       </Spacing>
     </LayoutAdmin>
   );

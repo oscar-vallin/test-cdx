@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
-import { format } from 'date-fns';
-import { useActivityComplete } from './hooks/useActivityComplete';
-import { useActivityErrored } from './hooks/useActivityErrored';
-import { useActivityProcess } from './hooks/useActivityProcess';
-import { formatField } from '../../../helpers/tableHelpers';
+import {useState, useEffect} from 'react';
+import {format} from 'date-fns';
+import {useActivityComplete} from './hooks/useActivityComplete';
+import {useActivityErrored} from './hooks/useActivityErrored';
+import {useActivityProcess} from './hooks/useActivityProcess';
+import {formatField} from '../../../helpers/tableHelpers';
 
 export const useTable = () => {
   const [_loadingProc, setLoadingProc] = useState(true);
@@ -13,35 +13,30 @@ export const useTable = () => {
   const [itemsComp, setItemsComp] = useState([]);
   const [itemsError, setItemsError] = useState([]);
 
-  const { dataComplete, loadingComp } = useActivityComplete();
-  const { dataError, loadingError } = useActivityErrored();
-  const { dataProcess, loadingProc, apiError } = useActivityProcess();
+  const {dataComplete, loadingComp} = useActivityComplete();
+  const {dataError, loadingError} = useActivityErrored();
+  const {dataProcess, loadingProc, apiError} = useActivityProcess();
 
   // * Component Did Mount.
 
   useEffect(() => {
-    const doEffect = () => {
-      const _itemsProcess = dataProcess?.exchangeActivityInProcess?.nodes?.map(({ name, activityTime }) => {
-        const datetime = format(new Date(activityTime), 'MM/dd/yyyy hh:mm a');
 
-        return [formatField(name, 'name', name, '', null), formatField(datetime, 'activity', datetime, '', null)];
-      });
+    const mapFields = ({name, activityTime}) => {
+      const datetime = format(new Date(activityTime), 'MM/dd/yyyy hh:mm a');
+
+      return [formatField(name, 'name', name, '', null), formatField(datetime, 'activity', datetime, '', null)];
+    }
+
+    const doEffect = () => {
+      const _itemsProcess = dataProcess?.exchangeActivityInProcess?.nodes?.map(mapFields);
 
       setItemsProc(_itemsProcess);
 
-      const _itemsComplete = dataComplete.exchangeActivityTransmitted.nodes.map(({ name, activityTime }) => {
-        const datetime = format(new Date(activityTime), 'MM/dd/yyyy hh:mm a');
-
-        return [formatField(name, 'name', name, '', null), formatField(datetime, 'activity', datetime, '', null)];
-      });
+      const _itemsComplete = dataComplete?.exchangeActivityTransmitted?.nodes?.map(mapFields);
 
       setItemsComp(_itemsComplete);
 
-      const _itemsErrored = dataError?.exchangeActivityErrored?.nodes?.map(({ name, activityTime }) => {
-        const datetime = format(new Date(activityTime), 'MM/dd/yyyy hh:mm a');
-
-        return [formatField(name, 'name', name, '', null), formatField(datetime, 'activity', datetime, '', null)];
-      });
+      const _itemsErrored = dataError?.exchangeActivityErrored?.nodes?.map(mapFields);
 
       setItemsError(_itemsErrored);
     };

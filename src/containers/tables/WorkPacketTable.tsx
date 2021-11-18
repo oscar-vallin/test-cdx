@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Label } from '@fluentui/react/lib/Label';
 import {
   DetailsList,
   DetailsListLayoutMode,
@@ -11,12 +10,10 @@ import { mergeStyleSets } from 'office-ui-fabric-react/lib-commonjs/Styling';
 import { SpinnerSize } from '@fluentui/react';
 
 import { StyledContainer, StyledSpacing } from '../../components/tables/Table/Table.styles';
-import { Box, Column, Container, FilterSection, StyledRow } from './WorkPacketTable.styles';
-import { InputText } from '../../components/inputs/InputText';
-import { InputDateRange } from '../../components/inputs/InputDateRange';
-import { Card } from '../../components/cards';
+import { Box, Container } from './WorkPacketTable.styles';
 import { EmptyState } from '../states';
 import { Spinner } from '../../components/spinners/Spinner';
+import { TableFilters } from './TableFilters';
 import {
   NullHandling,
   PageableInput,
@@ -155,21 +152,7 @@ const WorkPacketTable = ({
 
   return (
     <>
-      <FilterSection id={`${id}-filters`}>
-        <Container>
-          <Card id={`${id}__SearchCard`} elevation="smallest" onClick="">
-            <StyledRow>
-              <Column lg="6">
-                <Label>Search</Label>
-                <InputText id={`${id}__Card__Row__Input-Search`} autoFocus disabled={false} {...searchText} />
-              </Column>
-              <Column lg="6">
-                <InputDateRange startDate={startDate} endDate={endDate} />
-              </Column>
-            </StyledRow>
-          </Card>
-        </Container>
-      </FilterSection>
+      <TableFilters id={id} searchText={searchText} startDate={startDate} endDate={endDate} />
 
       <Container>
         <Box id={`${id}_TableWrap`}>

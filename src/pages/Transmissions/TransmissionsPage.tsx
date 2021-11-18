@@ -66,7 +66,7 @@ const _TransmissionsPage = () => {
         ]}
         lazyQuery={useWpTransmissionsLazyQuery}
         getItems={mapData}
-        searchTextPlaceholder="Extract Name,  Status, Vendor, etc."
+        searchTextPlaceholder="Extract Name, Status, Vendor, etc."
         defaultSort={[
           {
             property: 'deliveredOn',

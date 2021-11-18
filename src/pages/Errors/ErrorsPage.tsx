@@ -65,7 +65,7 @@ const _ErrorsPage = () => {
         ]}
         lazyQuery={useWpProcessErrorsLazyQuery}
         getItems={mapData}
-        searchTextPlaceholder="Extract Name,· Status, Vendor, etc."
+        searchTextPlaceholder="Extract Name, Status, Vendor, etc."
         defaultSort={[
           {
             property: 'timestamp',
