@@ -18,6 +18,7 @@ import { useQueryHandler } from '../../../../../hooks/useQueryHandler';
 import { Label } from '../../../../../components/labels/Label';
 
 import {
+  useFindAccessSpecializationLazyQuery,
   useAccessSpecializationFormLazyQuery,
   useCreateAccessSpecializationMutation,
   useUpdateAccessSpecializationMutation,
@@ -56,6 +57,7 @@ type CreateAccessSpecializationPanelProps = {
   isOpen?: boolean;
   onDismiss?: any | null;
   onCreateSpecialization?: any | null;
+  onUpdateSpecialization?: any | null;
   selectedAccessId?: any;
 } & typeof defaultProps;
 
@@ -63,6 +65,7 @@ const CreateAccessSpecializationPanel = ({
   isOpen,
   onDismiss,
   onCreateSpecialization,
+  onUpdateSpecialization,
   selectedAccessId,
 }: CreateAccessSpecializationPanelProps): ReactElement => {
   const Toast = useNotification();
@@ -78,16 +81,27 @@ const CreateAccessSpecializationPanel = ({
   const [fetchAccessForm, { data: form, loading: isLoadingForm }] = useQueryHandler(
     useAccessSpecializationFormLazyQuery
   );
-
+  const [fetchSpecialization, { data: specialization, loading: isLoadingSpecialization }] = useQueryHandler(
+    useFindAccessSpecializationLazyQuery
+  );
   const [createSpecialization, { data: createdSpecialization, loading: isCreatingSpecialization }] = useQueryHandler(
     useCreateAccessSpecializationMutation
   );
-
+  const [updateSpecialization, { data: updatedSpecialization, loading: isUpdatingSpecialization }] = useQueryHandler(
+    useUpdateAccessSpecializationMutation
+  );
   const [fetchVendors, { data: vendors, loading: isFetchingVendors }] = useQueryHandler(useVendorQuickSearchLazyQuery);
-
   const [fetchOrgs, { data: orgs, loading: isFetchingOrgs }] = useQueryHandler(useOrganizationQuickSearchLazyQuery);
 
-  // const [updateSpecialization] = useQueryHandler(useUpdateAccessSpecializationMutation);
+  useEffect(() => {
+    if (isOpen && selectedAccessId > 0) {
+      fetchSpecialization({
+        variables: {
+          specializationSid: selectedAccessId,
+        },
+      });
+    }
+  }, [selectedAccessId, isOpen]);
 
   useEffect(() => {
     if (createdSpecialization) {
@@ -101,19 +115,33 @@ const CreateAccessSpecializationPanel = ({
         onDismiss();
       }
     }
-  }, [createdSpecialization]);
+
+    if (updatedSpecialization) {
+      const { updateAccessSpecialization } = updatedSpecialization;
+
+      if (updateAccessSpecialization?.response && updateAccessSpecialization?.response === 'FAIL') {
+        Toast.error({ text: 'Please check the highlighted fields and try again' });
+      } else {
+        onUpdateSpecialization(updateAccessSpecialization);
+        Toast.success({ text: 'Access specialization updated successfully' });
+        onDismiss();
+      }
+    }
+  }, [createdSpecialization, updatedSpecialization]);
 
   useEffect(() => {
     if (isOpen) {
-      fetchAccessForm({ variables: { orgSid } });
-      fetchOrgs({ variables: { searchText: '', orgOwnerSid: SessionStore.user.id } });
-      fetchVendors({ variables: { searchText: '', orgOwnerSid: SessionStore.user.id } });
+      if (!selectedAccessId) {
+        setState({ ...INITIAL_STATE });
+        setAccessFilters([]);
+        fetchAccessForm({ variables: { orgSid } });
+      }
+      // fetchOrgs({ variables: { searchText: '', orgOwnerSid: SessionStore.user.id } });
+      // fetchVendors({ variables: { searchText: '', orgOwnerSid: SessionStore.user.id } });
     } else {
-      setState({ ...INITIAL_STATE });
-      setAccessFilters([]);
       setAccessForm({});
     }
-  }, [isOpen]);
+  }, [isOpen, selectedAccessId]);
 
   useEffect(() => {
     if (isOpen && form) {
@@ -131,6 +159,25 @@ const CreateAccessSpecializationPanel = ({
     setSpecializations(value);
   }, [currentItem]);
 
+  useEffect(() => {
+    if (specialization) {
+      const { name, filters, ...form } = specialization.findAccessSpecialization;
+
+      const opts = filters.reduce(
+        (obj, item) => ({
+          ...obj,
+          [item.permission]: item.orgSids.value?.map(({ name, value }) => ({ name, key: value })) || [],
+        }),
+        {}
+      );
+
+      setState({ name: name.value });
+      setAccessFilters(groupSpecializations(filters));
+      setAccessForm({ name, filters, ...form });
+      setSpecializations(opts);
+    }
+  }, [specialization]);
+
   return (
     <Panel
       closeButtonAriaLabel="Close"
@@ -139,7 +186,6 @@ const CreateAccessSpecializationPanel = ({
       isOpen={isOpen}
       onDismiss={() => {
         setState({ ...INITIAL_STATE });
-        // setOptions({ ...INITIAL_OPTIONS });
 
         onDismiss();
       }}
@@ -147,7 +193,7 @@ const CreateAccessSpecializationPanel = ({
       <>
         <Row>
           <Column lg="12">
-            {isLoadingForm ? (
+            {isLoadingForm || isLoadingSpecialization ? (
               <>
                 <Spacing margin={{ top: 'normal', bottom: 'double' }}>
                   <Separator />
@@ -299,24 +345,40 @@ const CreateAccessSpecializationPanel = ({
                       variant="primary"
                       disabled={isCreatingSpecialization}
                       onClick={() => {
-                        createSpecialization({
-                          variables: {
-                            createAccessSpecializationInput: {
-                              orgSid,
-                              name: state.name,
-                              filters: Object.keys(specializations)
-                                .map((permission) => ({
-                                  permission,
-                                  orgSids: specializations[permission].map((item) => item.key),
-                                }))
-                                .reduce((arr, item): any => [...arr, item], []),
+                        const params = {
+                          name: state.name,
+                          filters: Object.keys(specializations)
+                            .map((permission) => ({
+                              permission,
+                              orgSids: specializations[permission].map((item) => item.key),
+                            }))
+                            .reduce((arr, item): any => [...arr, item], []),
+                        };
+
+                        if (!selectedAccessId) {
+                          createSpecialization({
+                            variables: {
+                              createAccessSpecializationInput: {
+                                orgSid,
+                                ...params,
+                              },
                             },
-                          },
-                        });
+                          });
+                        } else {
+                          updateSpecialization({
+                            variables: {
+                              updateAccessSpecializationInput: {
+                                sid: selectedAccessId,
+                                ...params,
+                              },
+                            },
+                          });
+                        }
+
                         return null;
                       }}
                     >
-                      Create specialization
+                      {!selectedAccessId ? 'Create' : 'Update'} specialization
                     </Button>
                   </Column>
                 </Row>
