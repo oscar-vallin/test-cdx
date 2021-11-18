@@ -18,7 +18,7 @@ export const useActivityComplete = () => {
     apiExchangeActivityTransmittedLazy({
       variables: {
         orgSidInput: { orgSid },
-        dateRange: { rangeStart: '2020-01-01T00:00:00-08:00', rangeEnd: '2020-01-01T23:59:59-08:00' },
+        dateRange: { rangeStart: '2021-08-15T00:00:00.000Z', rangeEnd: '2021-09-15T23:59:59.000Z' },
         pageableInput: {
           pageNumber: 0,
           pageSize: 100,
