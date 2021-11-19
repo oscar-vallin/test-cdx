@@ -17,6 +17,7 @@ import { TableFilters } from './TableFilters';
 import {
   NullHandling,
   PageableInput,
+  PaginationInfo,
   SortDirection,
   SortOrderInput,
   WorkPacketStatus,
@@ -25,6 +26,7 @@ import { useWorkPacketColumns, WorkPacketColumns } from './WorkPacketColumns';
 import { useQueryHandler } from '../../hooks/useQueryHandler';
 import { useOrgSid } from '../../hooks/useOrgSid';
 import { useTableFilters } from '../../hooks/useTableFilters';
+import { Paginator } from '../../components/tables/Paginator';
 
 type WorkPacketParams = {
   id: string;
@@ -48,6 +50,13 @@ const WorkPacketTable = ({
   const { orgSid } = useOrgSid();
 
   const { searchText, startDate, endDate } = useTableFilters(searchTextPlaceholder);
+
+  const [pagingInfo, setPagingInfo] = useState<PaginationInfo>({
+    pageNumber: 0,
+    pageSize: 100,
+    totalElements: 0,
+    totalPages: 0,
+  });
 
   const [pagingParams, setPagingParams] = useState<PageableInput>({
     pageNumber: 0,
@@ -86,9 +95,27 @@ const WorkPacketTable = ({
     setPagingParams(sortParam);
   };
 
+  const onPageChange = (pageNumber: number) => {
+    pagingParams.pageNumber = pageNumber;
+    setPagingParams({
+      pageNumber,
+      pageSize: 100,
+      sort: pagingParams.sort,
+    });
+  };
+
   const { initialColumns } = useWorkPacketColumns(cols, _doSort);
 
   const [columns, setColumns] = useState<IColumn[]>(initialColumns);
+
+  useEffect(() => {
+    // Reset the page number when any filtering occurs
+    setPagingParams({
+      pageNumber: 0,
+      pageSize: 100,
+      sort: pagingParams.sort,
+    });
+  }, [orgSid, searchText.delayedValue, startDate.value, endDate.value]);
 
   useEffect(() => {
     apiCall({
@@ -99,11 +126,18 @@ const WorkPacketTable = ({
         pageableInput: pagingParams,
       },
     });
-  }, [orgSid, searchText.delayedValue, startDate.value, endDate.value, pagingParams]);
+  }, [orgSid, pagingParams]);
 
   useEffect(() => {
-    if (onItemsListChange) {
-      onItemsListChange(data, loading);
+    if (!loading) {
+      if (onItemsListChange) {
+        onItemsListChange(data, loading);
+      }
+      // update the paging info
+      const pagingInfo = data?.workPacketStatuses?.paginationInfo;
+      if (pagingInfo) {
+        setPagingInfo(pagingInfo);
+      }
     }
   }, [data, loading]);
 
@@ -158,6 +192,7 @@ const WorkPacketTable = ({
         <Box id={`${id}_TableWrap`}>
           <StyledContainer id="Table_Detailed" style={{ width: '100%' }}>
             {renderTable()}
+            <Paginator pagingInfo={pagingInfo} onPageChange={onPageChange} />
           </StyledContainer>
         </Box>
       </Container>

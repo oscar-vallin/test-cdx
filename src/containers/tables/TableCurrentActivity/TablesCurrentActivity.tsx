@@ -67,7 +67,6 @@ const TablesCurrentActivity = ({ id = 'TableCurrentActivity' }) => {
 
   useEffect(() => {
     if (!loadingInProcess) {
-      console.log(dataInProcess);
       setInProcessItems(dataInProcess?.exchangeActivityInProcess?.nodes ?? []);
     }
   }, [dataInProcess, loadingInProcess]);
