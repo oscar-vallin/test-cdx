@@ -3,7 +3,6 @@ import { StyledText } from './Text.styles';
 
 const defaultProps = {
   id: '',
-  // children: '',
   variant: 'normal',
   transform: 'none',
   size: 'normal',
@@ -32,14 +31,14 @@ type TextProps = {
 const Text = ({
   id,
   children,
-  variant = 'normal',
-  transform = 'none',
-  size = 'normal',
+  variant,
+  transform,
+  size,
   center,
   right,
   top,
   bottom,
-  breakWord = 'word',
+  breakWord,
   ...props
 }: TextProps): ReactElement => {
   return (

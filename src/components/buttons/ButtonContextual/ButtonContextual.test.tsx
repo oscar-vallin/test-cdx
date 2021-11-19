@@ -1,4 +1,4 @@
-import { shallowWithTheme } from '../../../../src/utils/testUtils';
+import { mountWithTheme, shallowWithTheme } from '../../../../src/utils/testUtils';
 import { ButtonContextual } from './ButtonContextual';
 
 const itemsData = [
@@ -54,9 +54,11 @@ describe('ButtonContextual', () => {
 
   it('Default props values, Should have a props', () => {
     const defaultTree = shallowWithTheme(<ButtonContextual id={'__ButtonContextual'} />);
+    const mountTree = mountWithTheme(<ButtonContextual id={'__ButtonContextual'} />);
     expect(defaultTree).toMatchSnapshot();
 
     expect(defaultTree.children().props().id).toEqual('__ButtonContextual');
     defaultTree.children().simulate('click');
+    mountTree.children().simulate('click');
   });
 });
