@@ -36,6 +36,7 @@ const TablesCurrentActivity = ({ id = 'TableCurrentActivity' }) => {
     apiInProcess({
       variables: {
         orgSidInput: { orgSid },
+        searchText: searchText.delayedValue,
         dateRange: { rangeStart: startDate.value, rangeEnd: endDate.value },
         pageableInput: {
           pageNumber: 0,
@@ -46,6 +47,7 @@ const TablesCurrentActivity = ({ id = 'TableCurrentActivity' }) => {
     apiCompleted({
       variables: {
         orgSidInput: { orgSid },
+        searchText: searchText.delayedValue,
         dateRange: { rangeStart: startDate.value, rangeEnd: endDate.value },
         pageableInput: {
           pageNumber: 0,
@@ -56,6 +58,7 @@ const TablesCurrentActivity = ({ id = 'TableCurrentActivity' }) => {
     apiErrored({
       variables: {
         orgSidInput: { orgSid },
+        searchText: searchText.delayedValue,
         dateRange: { rangeStart: startDate.value, rangeEnd: endDate.value },
         pageableInput: {
           pageNumber: 0,

@@ -1258,6 +1258,7 @@ export type QueryBeginLoginArgs = {
 
 export type QueryExchangeActivityInProcessArgs = {
   orgSidInput: OrgSidInput;
+  searchText?: Maybe<Scalars['String']>;
   dateRange: DateTimeRangeInput;
   pageableInput: PageableInput;
 };
@@ -1265,6 +1266,7 @@ export type QueryExchangeActivityInProcessArgs = {
 
 export type QueryExchangeActivityTransmittedArgs = {
   orgSidInput: OrgSidInput;
+  searchText?: Maybe<Scalars['String']>;
   dateRange: DateTimeRangeInput;
   pageableInput: PageableInput;
 };
@@ -1272,6 +1274,7 @@ export type QueryExchangeActivityTransmittedArgs = {
 
 export type QueryExchangeActivityErroredArgs = {
   orgSidInput: OrgSidInput;
+  searchText?: Maybe<Scalars['String']>;
   dateRange: DateTimeRangeInput;
   pageableInput: PageableInput;
 };
@@ -2464,6 +2467,7 @@ export type LogOutQuery = (
 
 export type ExchangeActivityInProcessQueryVariables = Exact<{
   orgSidInput: OrgSidInput;
+  searchText?: Maybe<Scalars['String']>;
   dateRange: DateTimeRangeInput;
   pageableInput: PageableInput;
 }>;
@@ -2485,6 +2489,7 @@ export type ExchangeActivityInProcessQuery = (
 
 export type ExchangeActivityTransmittedQueryVariables = Exact<{
   orgSidInput: OrgSidInput;
+  searchText?: Maybe<Scalars['String']>;
   dateRange: DateTimeRangeInput;
   pageableInput: PageableInput;
 }>;
@@ -2506,6 +2511,7 @@ export type ExchangeActivityTransmittedQuery = (
 
 export type ExchangeActivityErroredQueryVariables = Exact<{
   orgSidInput: OrgSidInput;
+  searchText?: Maybe<Scalars['String']>;
   dateRange: DateTimeRangeInput;
   pageableInput: PageableInput;
 }>;
@@ -5204,9 +5210,10 @@ export type LogOutQueryHookResult = ReturnType<typeof useLogOutQuery>;
 export type LogOutLazyQueryHookResult = ReturnType<typeof useLogOutLazyQuery>;
 export type LogOutQueryResult = Apollo.QueryResult<LogOutQuery, LogOutQueryVariables>;
 export const ExchangeActivityInProcessDocument = gql`
-    query ExchangeActivityInProcess($orgSidInput: OrgSidInput!, $dateRange: DateTimeRangeInput!, $pageableInput: PageableInput!) {
+    query ExchangeActivityInProcess($orgSidInput: OrgSidInput!, $searchText: String, $dateRange: DateTimeRangeInput!, $pageableInput: PageableInput!) {
   exchangeActivityInProcess(
     orgSidInput: $orgSidInput
+    searchText: $searchText
     dateRange: $dateRange
     pageableInput: $pageableInput
   ) {
@@ -5237,6 +5244,7 @@ export const ExchangeActivityInProcessDocument = gql`
  * const { data, loading, error } = useExchangeActivityInProcessQuery({
  *   variables: {
  *      orgSidInput: // value for 'orgSidInput'
+ *      searchText: // value for 'searchText'
  *      dateRange: // value for 'dateRange'
  *      pageableInput: // value for 'pageableInput'
  *   },
@@ -5252,9 +5260,10 @@ export type ExchangeActivityInProcessQueryHookResult = ReturnType<typeof useExch
 export type ExchangeActivityInProcessLazyQueryHookResult = ReturnType<typeof useExchangeActivityInProcessLazyQuery>;
 export type ExchangeActivityInProcessQueryResult = Apollo.QueryResult<ExchangeActivityInProcessQuery, ExchangeActivityInProcessQueryVariables>;
 export const ExchangeActivityTransmittedDocument = gql`
-    query ExchangeActivityTransmitted($orgSidInput: OrgSidInput!, $dateRange: DateTimeRangeInput!, $pageableInput: PageableInput!) {
+    query ExchangeActivityTransmitted($orgSidInput: OrgSidInput!, $searchText: String, $dateRange: DateTimeRangeInput!, $pageableInput: PageableInput!) {
   exchangeActivityTransmitted(
     orgSidInput: $orgSidInput
+    searchText: $searchText
     dateRange: $dateRange
     pageableInput: $pageableInput
   ) {
@@ -5285,6 +5294,7 @@ export const ExchangeActivityTransmittedDocument = gql`
  * const { data, loading, error } = useExchangeActivityTransmittedQuery({
  *   variables: {
  *      orgSidInput: // value for 'orgSidInput'
+ *      searchText: // value for 'searchText'
  *      dateRange: // value for 'dateRange'
  *      pageableInput: // value for 'pageableInput'
  *   },
@@ -5300,9 +5310,10 @@ export type ExchangeActivityTransmittedQueryHookResult = ReturnType<typeof useEx
 export type ExchangeActivityTransmittedLazyQueryHookResult = ReturnType<typeof useExchangeActivityTransmittedLazyQuery>;
 export type ExchangeActivityTransmittedQueryResult = Apollo.QueryResult<ExchangeActivityTransmittedQuery, ExchangeActivityTransmittedQueryVariables>;
 export const ExchangeActivityErroredDocument = gql`
-    query ExchangeActivityErrored($orgSidInput: OrgSidInput!, $dateRange: DateTimeRangeInput!, $pageableInput: PageableInput!) {
+    query ExchangeActivityErrored($orgSidInput: OrgSidInput!, $searchText: String, $dateRange: DateTimeRangeInput!, $pageableInput: PageableInput!) {
   exchangeActivityErrored(
     orgSidInput: $orgSidInput
+    searchText: $searchText
     dateRange: $dateRange
     pageableInput: $pageableInput
   ) {
@@ -5333,6 +5344,7 @@ export const ExchangeActivityErroredDocument = gql`
  * const { data, loading, error } = useExchangeActivityErroredQuery({
  *   variables: {
  *      orgSidInput: // value for 'orgSidInput'
+ *      searchText: // value for 'searchText'
  *      dateRange: // value for 'dateRange'
  *      pageableInput: // value for 'pageableInput'
  *   },
