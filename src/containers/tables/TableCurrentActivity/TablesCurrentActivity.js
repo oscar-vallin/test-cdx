@@ -2,7 +2,7 @@ import { Label } from '@fluentui/react/lib/Label';
 import { Spacing } from '../../../components/spacings/Spacing';
 import { Separator } from '../../../components/separators/Separator';
 import { TableActivity } from './TableActivity';
-import { Container, TableContainer, Row, Column, RightColumn } from './TableActivity.style';
+import { Container, TableContainer, Row, Column, RightColumn } from './TableActivity.styles';
 
 // import { useTable } from './TableFileStatus.service';
 import { InputText } from '../../../components/inputs/InputText';

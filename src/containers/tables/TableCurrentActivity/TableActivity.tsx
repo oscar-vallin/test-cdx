@@ -2,7 +2,7 @@ import { ReactElement, useState, useEffect } from 'react';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { Row, Column } from '../../../components/layouts';
-import { TableName } from './TableActivity.style';
+import { TableName } from './TableActivity.styles';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
