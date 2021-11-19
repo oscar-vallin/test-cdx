@@ -1,5 +1,10 @@
 import { ReactElement } from 'react';
-import { DetailsList, DetailsListLayoutMode, SelectionMode, IGroup } from 'office-ui-fabric-react/lib/DetailsList';
+import {
+  DetailsList,
+  DetailsListLayoutMode,
+  SelectionMode,
+  IGroup,
+} from 'office-ui-fabric-react/lib-commonjs/DetailsList';
 import { Spacing } from '../../../components/spacings/Spacing';
 import { StyledHeaderRow, StyledHeader, StyledRow } from '../FileStatusDetails.styles';
 // import { IColumn } from 'office-ui-fabric-react/lib-commonjs/DetailsList';

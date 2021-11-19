@@ -2,12 +2,12 @@
 import { ReactElement, useState } from 'react';
 import { MessageBar } from 'office-ui-fabric-react';
 
-import { Button } from '../../../components/buttons/Button';
-import { Card } from '../../../components/cards/Card';
+import { Button } from '../../../components/buttons';
+import { Card } from '../../../components/cards';
 import { Row, Column } from '../../../components/layouts';
 import { Spacing } from '../../../components/spacings/Spacing';
 import { Separator } from '../../../components/separators/Separator';
-import { Text } from '../../../components/typography/Text';
+import { Text } from '../../../components/typography';
 import { Timeline } from '../../../components/timelines/Timeline';
 
 const parseSteps = (steps) => {

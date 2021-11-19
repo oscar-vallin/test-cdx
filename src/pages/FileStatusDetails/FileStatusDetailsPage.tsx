@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 
-import { useParams, useLocation, useHistory } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { TABLE_NAMES } from '../../data/constants/TableConstants';
 
 import { ROUTES, ROUTE_FILE_STATUS } from '../../data/constants/RouteConstants';
@@ -29,6 +29,7 @@ import VendorCountStatsTab from './VendorCountStatsTab/VendorCountStatsTab';
 import { useRefresh } from '../../hooks/useRefresh';
 import { useFsDetailsPacketStatus } from './hooks/useFsDetailsPacketStatus';
 import { useFsPacketStatusDetails } from './hooks/useFsPacketStatusDetails';
+import { DeliveredFile } from '../../data/services/graphql';
 
 const getReadableDate = (date) => new Date(date).toLocaleString().replace(',', '');
 
@@ -38,7 +39,6 @@ const _FileStatusDetailsPage = () => {
   const { hash, search } = useLocation();
   const filter = new URLSearchParams(search).get('filter');
   const realId = id.replace('*', '');
-  const history: any = useHistory();
 
   const { fSPacketStatusQuery, apiData: list, loadingFs: lWorkPacketStatus }: any = useFsDetailsPacketStatus();
   const { enableRefresh, disableRefresh } = useRefresh(TABLE_NAMES.FILE_STATUS_DETAIL_ENROLLMENT, fSPacketStatusQuery);
@@ -62,10 +62,10 @@ const _FileStatusDetailsPage = () => {
   const selectedTab = tabs.indexOf(hash);
 
   useEffect(() => {
-    history.replace({
-      hash: hash || tabs[0],
-      search: search || undefined,
-    });
+    // history.replace({
+    //   hash: hash || tabs[0],
+    //   search: search || undefined,
+    // });
   }, []);
 
   useEffect(() => {
@@ -99,18 +99,20 @@ const _FileStatusDetailsPage = () => {
   }, [packet.step, packet.stepStatus, packet.packetStatus]);
 
   const changeUrlHash = (_hash) => {
-    history.replace({
-      _hash,
-    });
+    console.log(_hash);
+    // history.replace({
+    //   _hash,
+    // });
   };
+
+  const deliveredFile: DeliveredFile | undefined = query?.workPacketStatusDetails?.deliveredFile;
 
   return (
     <LayoutDashboard id="PageFileStatusDetails" menuOptionSelected={ROUTES.ROUTE_FILE_STATUS.ID}>
-      <PageHeader spacing="primary">
-        <Breadcrumb items={breadcrumbItems} />
-      </PageHeader>
-
       <StyledBox>
+        <PageHeader spacing="primary">
+          <Breadcrumb items={breadcrumbItems} />
+        </PageHeader>
         <Row>
           <Column xl={3} xxl={2}>
             <Card elevation="smallest">
@@ -167,20 +169,17 @@ const _FileStatusDetailsPage = () => {
 
                             <div>
                               <Text variant="bold">Filename: &nbsp;</Text> <br />
-                              <Text breakWord="all">{query.workPacketStatusDetails.deliveredFile?.filename}</Text>
+                              <Text breakWord="all">{deliveredFile?.filename ?? 'File Not Found'}</Text>
                             </div>
 
                             <div>
                               <Text variant="bold">Delivered at: &nbsp;</Text>
-                              <Text>{getReadableDate(query.workPacketStatusDetails.deliveredFile?.timeDelivered)}</Text>
+                              <Text>{getReadableDate(deliveredFile?.timeDelivered)}</Text>
                             </div>
 
                             <div>
                               <Text variant="bold">Size: &nbsp;</Text>
-                              <Text>
-                                {query.workPacketStatusDetails.deliveredFile?.fileSizeInBytes} bytes (without
-                                encryption)
-                              </Text>
+                              <Text>{deliveredFile?.fileSizeInBytes} bytes (without encryption)</Text>
                             </div>
                           </div>
 
@@ -191,29 +190,29 @@ const _FileStatusDetailsPage = () => {
 
                             <div>
                               <Text variant="bold">Protocol: &nbsp;</Text>
-                              <Text>{query.workPacketStatusDetails.deliveredFile?.ftp.protocol}</Text>
+                              <Text>{deliveredFile?.ftp?.protocol}</Text>
                             </div>
 
-                            {query.workPacketStatusDetails.deliveredFile?.ftp.port && (
+                            {deliveredFile?.ftp?.port && (
                               <div>
                                 <Text variant="bold">Port: &nbsp;</Text>
-                                <Text>{query.workPacketStatusDetails.deliveredFile?.ftp.port}</Text>
+                                <Text>{deliveredFile?.ftp?.port}</Text>
                               </div>
                             )}
 
                             <div>
                               <Text variant="bold">User: &nbsp;</Text>
-                              <Text>{query.workPacketStatusDetails.deliveredFile?.ftp.username}</Text>
+                              <Text>{deliveredFile?.ftp?.username}</Text>
                             </div>
 
                             <div>
                               <Text variant="bold">Host: &nbsp;</Text>
-                              <Text>{query.workPacketStatusDetails.deliveredFile?.ftp.host}</Text>
+                              <Text>{deliveredFile?.ftp?.host}</Text>
                             </div>
 
                             <div>
                               <Text variant="bold">Folder: &nbsp;</Text>
-                              <Text>{query.workPacketStatusDetails.deliveredFile?.ftp.folder}</Text>
+                              <Text>{deliveredFile?.ftp?.folder}</Text>
                             </div>
                           </div>
 
@@ -290,29 +289,32 @@ const _FileStatusDetailsPage = () => {
                         items={[
                           {
                             title: 'Enrollment Stats',
-                            content: <EnrollmentStatsTab items={query.workPacketStatusDetails.enrollmentStats} />,
+                            content: <EnrollmentStatsTab items={query?.workPacketStatusDetails?.enrollmentStats} />,
                             hash: '#enrollment',
                           },
                           {
                             title: 'Vendor Count Stats',
-                            content: <VendorCountStatsTab items={query.workPacketStatusDetails.outboundRecordCounts} />,
+                            content: (
+                              <VendorCountStatsTab items={query?.workPacketStatusDetails?.outboundRecordCounts} />
+                            ),
                             hash: '#vendor',
                           },
                           {
                             title: 'Work Steps',
-                            content: <WorkStepsTab steps={query.workPacketStatusDetails.workStepStatus} />,
+                            content: <WorkStepsTab steps={query?.workPacketStatusDetails?.workStepStatus} />,
                             hash: '#work',
                           },
                           {
                             title: 'Quality Checks',
                             content: (
                               <QualityChecksTab
-                                items={query.workPacketStatusDetails.qualityChecks?.sequenceCreationEvent || []}
+                                items={query?.workPacketStatusDetails?.qualityChecks?.sequenceCreationEvent || []}
                               />
                             ),
                             badge: {
                               variant: 'severe',
-                              label: query.workPacketStatusDetails.qualityChecks?.sequenceCreationEvent.length || '0',
+                              label:
+                                query?.workPacketStatusDetails?.qualityChecks?.sequenceCreationEvent?.length || '0',
                             },
                             hash: '#quality',
                           },

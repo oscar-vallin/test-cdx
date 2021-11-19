@@ -1,12 +1,17 @@
 import { ReactElement } from 'react';
-import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
+import {
+  IColumn,
+  DetailsList,
+  DetailsListLayoutMode,
+  SelectionMode,
+} from 'office-ui-fabric-react/lib-commonjs/DetailsList';
 import { Spacing } from '../../../components/spacings/Spacing';
 import { StyledRow, StyledVendorHeaderRow, StyledFooter } from '../FileStatusDetails.styles';
 
-const COLUMNS: any = [
+const COLUMNS: IColumn[] = [
   { key: 'name', name: 'Record Name', fieldName: 'name' },
   { key: 'count', name: 'Count', fieldName: 'count' },
-].map((col) => ({ ...col, data: 'string', isPadded: true }));
+].map((col) => ({ ...col, data: 'string', isPadded: true, minWidth: 100 }));
 
 const onRenderRow = (props) => {
   return <StyledRow {...props} />;

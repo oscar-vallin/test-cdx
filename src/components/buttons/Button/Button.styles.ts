@@ -15,7 +15,7 @@ const getVariant = (theme, variant) => {
     error: { background: theme.colors.custom.severeError, color: theme.colors.white },
   };
 
-  return VARIANTS[variant];
+  return VARIANTS[variant] ?? VARIANTS.primary;
 };
 
 export const StyledButton = styled(PrimaryButton)<StyledButtonProps>`
