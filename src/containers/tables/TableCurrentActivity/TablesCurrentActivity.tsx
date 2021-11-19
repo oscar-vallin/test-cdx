@@ -1,6 +1,6 @@
 import { Spacing } from '../../../components/spacings/Spacing';
 import { TableActivity } from './TableActivity';
-import { Container, TableContainer } from './TableActivity.style';
+import { Container, TableContainer } from './TableActivity.styles';
 
 import { useTable } from './TableCurrentActivity.service';
 import { useTableFilters } from '../../../hooks/useTableFilters';

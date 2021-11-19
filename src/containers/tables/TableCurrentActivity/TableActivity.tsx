@@ -3,7 +3,7 @@ import { IColumn, DetailsList, DetailsListLayoutMode, SelectionMode } from 'offi
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { format } from 'date-fns';
 import { Column } from '../../../components/layouts';
-import { TableName, TableWrap } from './TableActivity.style';
+import { TableName, TableWrap } from './TableActivity.styles';
 import { OrganizationLink } from '../../../data/services/graphql';
 
 const columns: IColumn[] = [
