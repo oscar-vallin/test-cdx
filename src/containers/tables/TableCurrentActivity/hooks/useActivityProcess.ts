@@ -6,13 +6,16 @@ import {
   useExchangeActivityInProcessLazyQuery,
 } from '../../../../data/services/graphql';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
+import { useQueryHandler } from '../../../../hooks/useQueryHandler';
 
 export const useActivityProcess = (startDate: Date, endDate: Date) => {
   const [loadingProc, setLoadingProc] = useState(true);
   const [dataProcess, setData] = useState<ExchangeActivityInProcessQuery>();
   const [apiError, setApiError] = useState<ApolloError | undefined>();
   const { orgSid } = useOrgSid();
-  const [apiExchangeActivityInProcessLazy, { data, loading, error }] = useExchangeActivityInProcessLazyQuery();
+  const [apiExchangeActivityInProcessLazy, { data, loading, error }] = useQueryHandler(
+    useExchangeActivityInProcessLazyQuery
+  );
 
   useEffect(() => {
     apiExchangeActivityInProcessLazy({

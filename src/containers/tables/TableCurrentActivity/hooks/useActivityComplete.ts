@@ -6,13 +6,16 @@ import {
   useExchangeActivityTransmittedLazyQuery,
 } from '../../../../data/services/graphql';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
+import { useQueryHandler } from '../../../../hooks/useQueryHandler';
 
 export const useActivityComplete = (startDate: Date, endDate: Date) => {
   const [loadingComp, setLoadingComp] = useState(true);
   const [dataComplete, setDataComp] = useState<ExchangeActivityTransmittedQuery | undefined>();
   const [apiError, setApiError] = useState<ApolloError | undefined>();
   const { orgSid } = useOrgSid();
-  const [apiExchangeActivityTransmittedLazy, { data, loading, error }] = useExchangeActivityTransmittedLazyQuery();
+  const [apiExchangeActivityTransmittedLazy, { data, loading, error }] = useQueryHandler(
+    useExchangeActivityTransmittedLazyQuery
+  );
 
   useEffect(() => {
     apiExchangeActivityTransmittedLazy({
