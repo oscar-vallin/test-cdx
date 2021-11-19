@@ -64,8 +64,8 @@ type CreateAccessSpecializationPanelProps = {
 const CreateAccessSpecializationPanel = ({
   isOpen,
   onDismiss,
-  onCreateSpecialization,
-  onUpdateSpecialization,
+  onCreateSpecialization = () => {},
+  onUpdateSpecialization = () => {},
   selectedAccessId,
 }: CreateAccessSpecializationPanelProps): ReactElement => {
   const Toast = useNotification();

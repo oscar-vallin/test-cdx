@@ -9,6 +9,7 @@ import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { EmptyState } from 'src/containers/states';
 import { SpinnerSize } from '@fluentui/react';
+import { useNotification } from 'src/hooks/useNotification';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Spacing } from '../../../../components/spacings/Spacing';
 import { Button } from '../../../../components/buttons';
@@ -42,6 +43,7 @@ const generateColumns = () => {
 
 const _AccessManagementSpecializationPage = () => {
   const { orgSid } = useOrgSid();
+  const Toast = useNotification();
   const columns = generateColumns();
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 
@@ -100,7 +102,12 @@ const _AccessManagementSpecializationPage = () => {
 
   useEffect(() => {
     if (!isRemovingSpecialization && removeResponse) {
+      const name = specializations.find(({ sid }) => selectedAccessId === sid)?.name || '';
+
+      Toast.success({ text: `Access specialization "${name}" deleted successfully` });
+
       setSpecializations(specializations.filter(({ sid }) => sid !== selectedAccessId));
+      setSelectedAccessId(0);
     }
   }, [isRemovingSpecialization, removeResponse]);
 
@@ -194,6 +201,20 @@ const _AccessManagementSpecializationPage = () => {
                 sid: sid || null,
               },
             ]);
+          }}
+          onUpdateSpecialization={(updatedSpecialization) => {
+            setSpecializations(
+              specializations.map((specialization) => {
+                if (specialization.sid !== updatedSpecialization.sid) {
+                  return specialization;
+                }
+
+                return {
+                  name: updatedSpecialization?.name?.value || '',
+                  sid: updatedSpecialization?.sid || null,
+                };
+              })
+            );
           }}
           onDismiss={() => {
             setIsPanelOpen(false);
