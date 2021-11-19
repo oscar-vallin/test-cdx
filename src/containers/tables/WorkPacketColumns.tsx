@@ -32,7 +32,7 @@ export const useWorkPacketColumns = (
         return (
           <CellItemRow>
             <Link>
-              <RouteLink to={`/file-status/${item.workOrderId}`}>{timestamp}</RouteLink>
+              <RouteLink to={`/file-status/${item.workOrderId}?orgSid=${item.orgSid}`}>{timestamp}</RouteLink>
             </Link>
             {item.recordHighlightCount && (
               <HighlightCounter
