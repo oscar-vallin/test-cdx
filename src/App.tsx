@@ -4,7 +4,6 @@ import { useStoreState } from 'easy-peasy';
 import { Routes } from './pages/Routes';
 import { useQueryParams } from './hooks/useQueryParams';
 import { useApplicationStore } from './store/ApplicationStore';
-import { useNotification } from './hooks/useNotification';
 
 const getQueryParams = ({ QueryParamStore }) => QueryParamStore.params;
 

@@ -12,7 +12,7 @@ const defaultProps = {
 };
 
 type CardProps = {
-  id?: string;
+  id?: string | null | undefined;
   variant?: string;
   elevation?: string;
   spacing?: string;
@@ -20,15 +20,7 @@ type CardProps = {
   children?: any | null;
 } & typeof defaultProps;
 
-const Card = ({
-  id,
-  variant = 'normal',
-  elevation = 'normal',
-  spacing = 'normal',
-  onClick,
-  children,
-  ...props
-}: CardProps): ReactElement => {
+const Card = ({ id, variant, elevation, spacing, onClick, children, ...props }: CardProps): ReactElement => {
   return (
     <CardStyled
       id={id}

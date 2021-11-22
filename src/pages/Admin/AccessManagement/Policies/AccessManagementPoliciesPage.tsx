@@ -50,8 +50,10 @@ const _AccessManagementPoliciesPage = () => {
 
   const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);
   const [selectedPolicyId, setSelectedPolicyId] = useState(0);
+  const [selectedTemplateId, setSelectedTemplateId] = useState(0);
 
   const [policies, setPolicies] = useState<any[]>([]);
+  const [templatePolicies, setTemplatePolicies] = useState<any[]>([]);
   const [accessPoliciesForOrg, { data, loading }] = useQueryHandler(useAccessPoliciesForOrgLazyQuery);
   // Linter Issue.  useRemoveAmPolicyMutation??
   const [removeAccessPolicy, { data: removeResponse, loading: isRemovingPolicy }] =
@@ -105,6 +107,22 @@ const _AccessManagementPoliciesPage = () => {
   }, [orgSid]);
 
   useEffect(() => {
+    const templates =
+      policies
+        ?.filter((policy) => policy.tmpl)
+        .map((policy) => ({
+          key: policy.sid,
+          text: policy.name,
+          onClick: (event, item) => {
+            setSelectedTemplateId(item.key);
+            setIsPanelOpen(true);
+          },
+        })) || [];
+
+    setTemplatePolicies(templates);
+  }, [policies]);
+
+  useEffect(() => {
     if (!isRemovingPolicy && removeResponse) {
       const name = policies.find(({ sid }) => selectedPolicyId === sid)?.name || '';
 
@@ -144,12 +162,14 @@ const _AccessManagementPoliciesPage = () => {
 
               <Column lg="6" right>
                 <Button
+                  split
                   id="CreatePolicyButton"
                   variant="primary"
                   onClick={() => {
                     setIsPanelOpen(true);
                     return null;
                   }}
+                  {...(templatePolicies.length > 0 ? { menuProps: { items: templatePolicies } } : {})}
                 >
                   Create policy
                 </Button>
@@ -221,8 +241,10 @@ const _AccessManagementPoliciesPage = () => {
           onDismiss={() => {
             setIsPanelOpen(false);
             setSelectedPolicyId(0);
+            setSelectedTemplateId(0);
           }}
           selectedPolicyId={selectedPolicyId}
+          selectedTemplateId={selectedTemplateId}
         />
 
         <Dialog

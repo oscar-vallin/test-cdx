@@ -64,8 +64,8 @@ type CreateAccessSpecializationPanelProps = {
 const CreateAccessSpecializationPanel = ({
   isOpen,
   onDismiss,
-  onCreateSpecialization,
-  onUpdateSpecialization,
+  onCreateSpecialization = () => {},
+  onUpdateSpecialization = () => {},
   selectedAccessId,
 }: CreateAccessSpecializationPanelProps): ReactElement => {
   const Toast = useNotification();
@@ -136,8 +136,6 @@ const CreateAccessSpecializationPanel = ({
         setAccessFilters([]);
         fetchAccessForm({ variables: { orgSid } });
       }
-      // fetchOrgs({ variables: { searchText: '', orgOwnerSid: SessionStore.user.id } });
-      // fetchVendors({ variables: { searchText: '', orgOwnerSid: SessionStore.user.id } });
     } else {
       setAccessForm({});
     }
@@ -268,14 +266,12 @@ const CreateAccessSpecializationPanel = ({
                                           <TagPicker
                                             label
                                             disabled={false}
-                                            itemLimit
                                             pickerProps
                                             debounce={500}
                                             onBlur={() => null}
                                             onFocus={() => null}
                                             required={false}
                                             id="__CreateAccessSpecializationPanelId"
-                                            onResolveSuggestions={() => null}
                                             apiQuery={(text) => {
                                               const isVendor = option.orgSids.query === 'vendorQuickSearch';
 
@@ -298,23 +294,11 @@ const CreateAccessSpecializationPanel = ({
                                                 : orgs?.organizationQuickSearch
                                             )}
                                             value={specializations[option.permission]}
-                                            // disabled={isFetchingVendors || isFetchingOrgs}
-                                            onRemoveItem={({ key }) => {
+                                            onChange={(items) => {
                                               const { permission } = option;
 
                                               setCurrentItem({
-                                                [permission]: specializations[permission].filter(
-                                                  (item) => item.key === key
-                                                ),
-                                              });
-
-                                              return null;
-                                            }}
-                                            onItemSelected={(item) => {
-                                              const { permission } = option;
-
-                                              setCurrentItem({
-                                                [permission]: [...specializations[permission], item],
+                                                [permission]: items,
                                               });
 
                                               return null;
