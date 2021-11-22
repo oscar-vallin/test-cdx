@@ -5,7 +5,7 @@ import { Spacing } from '../../../components/spacings/Spacing';
 import { StyledTitle, StyledSubtitle, StyledValues } from './CardDashboard.styles';
 
 export const defaultProps = {
-  id: null,
+  id: '',
   title: '',
   subtitle: '',
   value: undefined,
