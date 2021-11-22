@@ -5,13 +5,10 @@ import { StyledTagPicker } from './TagPicker.styles';
 const CDXTagPicker = ({
   label,
   disabled,
-  itemLimit,
   pickerProps,
   value = [],
   options = [],
-  onItemSelected = (param) => null,
-  onRemoveItem = (param) => null,
-  onResolveSuggestions,
+  onChange = (param) => null,
   apiQuery = (param) => null,
   debounce = 500,
   onBlur,
@@ -20,42 +17,35 @@ const CDXTagPicker = ({
   id,
 }) => {
   const picker = useRef(null);
-  const getTextFromItem = ({ name }) => name;
 
-  const filterSelectedTags = (filterText) => {
-    return options.filter(({ key }) => !value.includes(key));
-  };
-
-  const listContainsTag = (tag, tagList) => {
-    if (!tagList || !tagList.length) {
-      return false;
+  const handleItemSelection = useCallback((item) => {
+    if (picker.current && listContainsTagList(item, picker.current.items)) {
+      return null;
     }
 
+    return item;
+  }, []);
+
+  const listContainsTagList = (tag, tagList) => {
+    if (!tagList || !tagList.length || tagList.length === 0) {
+      return false;
+    }
     return tagList.some((compareTag) => compareTag.key === tag.key);
   };
 
-  const handleItemSelection = useCallback(
-    (item) => {
-      if (!listContainsTag(item, value)) {
-        onItemSelected(item);
-      }
-    },
-    [value]
-  );
+  const filterSelectedTags = (filterText, tagList) => {
+    return filterText ? options.filter((tag) => tag.name.toLowerCase().indexOf(filterText.toLowerCase()) === 0) : [];
+  };
+
+  const getTextFromItem = (item) => item.name;
 
   return (
     <>
       {label && <Label required={required}>{label}</Label>}
 
       <StyledTagPicker
-        onItemSelected={handleItemSelection}
-        onRemoveItem={(x) => console.log(x)}
-        getTextFromItem={getTextFromItem}
+        removeButtonAriaLabel="Remove"
         componentRef={picker}
-        itemLimit={itemLimit}
-        disabled={disabled}
-        selectedItems={value}
-        resolveDelay={debounce}
         onResolveSuggestions={(text) => {
           if (apiQuery) {
             apiQuery(text);
@@ -63,12 +53,18 @@ const CDXTagPicker = ({
 
           return filterSelectedTags(text);
         }}
+        selectedItems={value}
+        onItemSelected={handleItemSelection}
+        onChange={onChange}
+        resolveDelay={debounce}
+        getTextFromItem={getTextFromItem}
         pickerSuggestionsProps={
           pickerProps || {
             suggestionsHeaderText: 'Search',
             noResultsFoundText: 'No results found',
           }
         }
+        disabled={disabled}
         inputProps={{
           ...(onBlur ? { onBlur } : {}),
           ...(onFocus ? { onFocus } : {}),

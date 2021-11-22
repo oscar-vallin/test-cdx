@@ -268,14 +268,12 @@ const CreateAccessSpecializationPanel = ({
                                           <TagPicker
                                             label
                                             disabled={false}
-                                            itemLimit
                                             pickerProps
                                             debounce={500}
                                             onBlur={() => null}
                                             onFocus={() => null}
                                             required={false}
                                             id="__CreateAccessSpecializationPanelId"
-                                            onResolveSuggestions={() => null}
                                             apiQuery={(text) => {
                                               const isVendor = option.orgSids.query === 'vendorQuickSearch';
 
@@ -298,23 +296,11 @@ const CreateAccessSpecializationPanel = ({
                                                 : orgs?.organizationQuickSearch
                                             )}
                                             value={specializations[option.permission]}
-                                            // disabled={isFetchingVendors || isFetchingOrgs}
-                                            onRemoveItem={({ key }) => {
+                                            onChange={(items) => {
                                               const { permission } = option;
 
                                               setCurrentItem({
-                                                [permission]: specializations[permission].filter(
-                                                  (item) => item.key === key
-                                                ),
-                                              });
-
-                                              return null;
-                                            }}
-                                            onItemSelected={(item) => {
-                                              const { permission } = option;
-
-                                              setCurrentItem({
-                                                [permission]: [...specializations[permission], item],
+                                                [permission]: items,
                                               });
 
                                               return null;
