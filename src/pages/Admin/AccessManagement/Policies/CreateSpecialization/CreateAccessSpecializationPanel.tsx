@@ -136,8 +136,6 @@ const CreateAccessSpecializationPanel = ({
         setAccessFilters([]);
         fetchAccessForm({ variables: { orgSid } });
       }
-      // fetchOrgs({ variables: { searchText: '', orgOwnerSid: SessionStore.user.id } });
-      // fetchVendors({ variables: { searchText: '', orgOwnerSid: SessionStore.user.id } });
     } else {
       setAccessForm({});
     }

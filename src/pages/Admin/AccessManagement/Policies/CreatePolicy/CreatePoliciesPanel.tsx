@@ -21,7 +21,7 @@ import {
   useAccessPolicyFormLazyQuery,
   useCreateAccessPolicyMutation,
   useUpdateAccessPolicyMutation,
-  useAccessPolicyLazyQuery,
+  useFindAccessPolicyLazyQuery,
 } from '../../../../../data/services/graphql';
 import { useOrgSid } from '../../../../../hooks/useOrgSid';
 
@@ -80,6 +80,7 @@ type CreatePoliciesPanelProps = {
   onCreatePolicy?: any | null;
   onUpdatePolicy?: any | null;
   selectedPolicyId?: any;
+  selectedTemplateId?: any;
 } & typeof defaultProps;
 
 const CreatePoliciesPanel = ({
@@ -88,6 +89,7 @@ const CreatePoliciesPanel = ({
   onCreatePolicy = () => null,
   onUpdatePolicy = () => null,
   selectedPolicyId,
+  selectedTemplateId,
 }: CreatePoliciesPanelProps): ReactElement => {
   const { orgSid } = useOrgSid();
   const Toast = useNotification();
@@ -103,13 +105,12 @@ const CreatePoliciesPanel = ({
   const [updatePolicy, { data: updatedPolicy, loading: isUpdatingPolicy }] =
     useQueryHandler(useUpdateAccessPolicyMutation);
 
-  const [fetchPolicy, { data: policy, loading: isLoadingPolicy }] = useQueryHandler(useAccessPolicyLazyQuery);
+  const [fetchPolicy, { data: policy, loading: isLoadingPolicy }] = useQueryHandler(useFindAccessPolicyLazyQuery);
 
   useEffect(() => {
     if (isOpen && selectedPolicyId > 0) {
       fetchPolicy({
         variables: {
-          orgSid,
           policySid: selectedPolicyId,
         },
       });
@@ -146,39 +147,52 @@ const CreatePoliciesPanel = ({
     if (isOpen) {
       if (!selectedPolicyId) {
         setApplicableOrgTypes([]);
-        setPolicyForm({});
         setPermissions([]);
         setState({ ...INITIAL_STATE });
+        fetchPolicyForm({
+          variables: { orgSid, ...(selectedTemplateId ? { templatePolicySid: selectedTemplateId } : {}) },
+        });
       } else {
-        fetchPolicyForm({ variables: { orgSid } });
+        setPolicyForm({});
       }
     }
-  }, [isOpen, selectedPolicyId]);
+  }, [isOpen, selectedPolicyId, selectedTemplateId]);
 
   useEffect(() => {
     if (isOpen && form) {
       setPolicyForm(form.accessPolicyForm);
       setPermissions(groupPermissions(form.accessPolicyForm.options));
+
+      if (selectedTemplateId) {
+        const { applicableOrgTypes, permissions } = form?.accessPolicyForm || {};
+
+        setState({
+          ...state,
+          permissions: permissions.value?.map(({ value }) => value) || [],
+        });
+
+        setApplicableOrgTypes(applicableOrgTypes.value?.map(({ value }) => value) || []);
+      }
     }
   }, [form, isOpen]);
 
   useEffect(() => {
-    if (policyForm.options) {
-      if (policy) {
-        const { name, applicableOrgTypes, permissions, sid, tmpl, tmplUseAsIs } = policy.accessPolicy;
+    if (policy) {
+      const { name, applicableOrgTypes, permissions, sid, tmpl, tmplUseAsIs, options } = policy.findAccessPolicy;
 
-        setState({
-          sid,
-          permissions,
-          policyName: name,
-          isTemplate: tmpl,
-          usedAsIs: tmplUseAsIs,
-        });
+      setPolicyForm(policy.findAccessPolicy);
+      setPermissions(groupPermissions(options));
+      setApplicableOrgTypes(applicableOrgTypes.value.map(({ value }) => value));
 
-        setApplicableOrgTypes(applicableOrgTypes);
-      }
+      setState({
+        sid,
+        permissions: permissions.value?.map(({ value }) => value) || [],
+        policyName: name.value,
+        isTemplate: tmpl.value,
+        usedAsIs: tmplUseAsIs.value,
+      });
     }
-  }, [policy, policyForm]);
+  }, [policy]);
 
   return (
     <Panel
@@ -325,7 +339,8 @@ const CreatePoliciesPanel = ({
                                                       permissions: checked
                                                         ? [...state.permissions, option.value]
                                                         : state.permissions.filter((value) => value !== option.value),
-                                                    })}
+                                                    })
+                                                  }
                                                 />
                                               </Spacing>
                                             ))}
