@@ -9,9 +9,9 @@ import { ROUTES, ROUTE_FILE_STATUS } from '../../data/constants/RouteConstants';
 import { LayoutDashboard } from '../../layouts/LayoutDashboard';
 import { PageHeader } from '../../containers/headers/PageHeader';
 import { Breadcrumb } from '../../components/breadcrumbs/Breadcrumb';
-import { Button } from '../../components/buttons/Button';
+import { Button } from '../../components/buttons';
 import { Badge } from '../../components/badges/Badge';
-import { Card } from '../../components/cards/Card';
+import { Card } from '../../components/cards';
 import { Collapse } from '../../components/collapses/Collapse';
 import { Row, Column } from '../../components/layouts';
 import { Spacing } from '../../components/spacings/Spacing';
@@ -19,7 +19,7 @@ import { Spinner } from '../../components/spinners/Spinner';
 import { Separator } from '../../components/separators/Separator';
 import { StyledBox } from './FileStatusDetails.styles';
 import { Tabs } from '../../components/tabs/Tabs';
-import { Text } from '../../components/typography/Text';
+import { Text } from '../../components/typography';
 
 import QualityChecksTab from './QualityChecksTab/QualityChecksTab';
 import WorkStepsTab from './WorkStepsTab/WorkStepsTab';
@@ -70,7 +70,7 @@ const _FileStatusDetailsPage = () => {
 
   useEffect(() => {
     if (list && query) {
-      const _packet = list.workPacketStatuses.find((item) => item.workOrderId === realId);
+      const _packet = list.workPacketStatuses.nodes.find((item) => item.workOrderId === realId);
 
       setPacket({
         ..._packet,

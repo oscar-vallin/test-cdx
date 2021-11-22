@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Label } from '@fluentui/react/lib/Label';
 import {
   DetailsList,
   DetailsListLayoutMode,
@@ -8,32 +7,26 @@ import {
 } from 'office-ui-fabric-react/lib-commonjs/DetailsList';
 import { mergeStyleSets } from 'office-ui-fabric-react/lib-commonjs/Styling';
 
-import { useHistory, useLocation } from 'react-router-dom';
-
 import { SpinnerSize } from '@fluentui/react';
 
-import { addDays, format, getHours, subDays, isValid } from 'date-fns';
-
-import { StyledContainer, StyledSpacing, StyledText } from '../../components/tables/Table/Table.styles';
-import { Box, Column, Container, FilterSection, StyledRow } from './WorkPacketTable.styles';
-import { InputText } from '../../components/inputs/InputText';
-import { InputDateRange } from '../../components/inputs/InputDateRange';
-import { Card } from '../../components/cards';
+import { StyledContainer, StyledSpacing } from '../../components/tables/Table/Table.styles';
+import { Box, Container } from './WorkPacketTable.styles';
 import { EmptyState } from '../states';
 import { Spinner } from '../../components/spinners/Spinner';
+import { TableFilters } from './TableFilters';
 import {
   NullHandling,
   PageableInput,
+  PaginationInfo,
   SortDirection,
   SortOrderInput,
   WorkPacketStatus,
 } from '../../data/services/graphql';
 import { useWorkPacketColumns, WorkPacketColumns } from './WorkPacketColumns';
-import { useDateValue } from '../../hooks/useDateValue';
-import { useDelayedInputValue } from '../../hooks/useInputValue';
-import { useQueryParams } from '../../hooks/useQueryParams';
 import { useQueryHandler } from '../../hooks/useQueryHandler';
 import { useOrgSid } from '../../hooks/useOrgSid';
+import { useTableFilters } from '../../hooks/useTableFilters';
+import { Paginator } from '../../components/tables/Paginator';
 
 type WorkPacketParams = {
   id: string;
@@ -54,23 +47,16 @@ const WorkPacketTable = ({
   defaultSort,
   onItemsListChange,
 }: WorkPacketParams) => {
-  const doNothing = () => null;
-
-  const QueryParams = useQueryParams();
-  const history = useHistory();
-  const location = useLocation();
-  const urlParams = new URLSearchParams(location.search);
   const { orgSid } = useOrgSid();
 
-  const hour = getHours(new Date());
+  const { searchText, startDate, endDate } = useTableFilters(searchTextPlaceholder);
 
-  const initialStartDate = hour < 9 ? subDays(new Date(), 1) : new Date();
-  const initialEndDate = hour < 9 ? new Date() : addDays(new Date(), 1);
-
-  const startDate = useDateValue('Start Date...', initialStartDate);
-  const endDate = useDateValue('End Date...', initialEndDate);
-
-  const localInput = useDelayedInputValue('', searchTextPlaceholder, '', '');
+  const [pagingInfo, setPagingInfo] = useState<PaginationInfo>({
+    pageNumber: 0,
+    pageSize: 100,
+    totalElements: 0,
+    totalPages: 0,
+  });
 
   const [pagingParams, setPagingParams] = useState<PageableInput>({
     pageNumber: 0,
@@ -79,24 +65,6 @@ const WorkPacketTable = ({
   });
 
   const [apiCall, { data, loading, error }] = useQueryHandler(lazyQuery);
-
-  const _addParamIfExists = (key, value) => (key ? { [key]: value } : {});
-
-  const _pushQueryString = () => {
-    const startDateToFormat = isValid(startDate.value) ? startDate.value : initialStartDate;
-    const endDateToFormat = isValid(endDate.value) ? endDate.value : initialEndDate;
-
-    const xParams = {
-      ..._addParamIfExists('orgSid', orgSid),
-      ..._addParamIfExists('filter', localInput.value),
-      ..._addParamIfExists('startDate', format(startDateToFormat, 'yyyy-MM-dd')),
-      ..._addParamIfExists('endDate', format(endDateToFormat, 'yyyy-MM-dd')),
-    };
-
-    location.search = QueryParams.stringify(xParams);
-
-    history.replace(QueryParams.merge(location, xParams));
-  };
 
   const _doSort = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
     const newColumns: IColumn[] = columns.slice();
@@ -127,48 +95,49 @@ const WorkPacketTable = ({
     setPagingParams(sortParam);
   };
 
+  const onPageChange = (pageNumber: number) => {
+    pagingParams.pageNumber = pageNumber;
+    setPagingParams({
+      pageNumber,
+      pageSize: 100,
+      sort: pagingParams.sort,
+    });
+  };
+
   const { initialColumns } = useWorkPacketColumns(cols, _doSort);
 
   const [columns, setColumns] = useState<IColumn[]>(initialColumns);
 
-  // Initialization
   useEffect(() => {
-    if (urlParams.get('filter') != null) {
-      localInput.setValue(urlParams.get('filter'));
-    }
-
-    const startDateParam = urlParams.get('startDate');
-    if (startDateParam != null) {
-      startDate.setValue(new Date(startDateParam));
-    }
-
-    const endDateParam = urlParams.get('endDate');
-    if (endDateParam != null) {
-      endDate.setValue(new Date(endDateParam));
-    }
-  }, []);
+    // Reset the page number when any filtering occurs
+    setPagingParams({
+      pageNumber: 0,
+      pageSize: 100,
+      sort: pagingParams.sort,
+    });
+  }, [orgSid, searchText.delayedValue, startDate.value, endDate.value]);
 
   useEffect(() => {
-    _pushQueryString();
-  }, [localInput.value, startDate.value, endDate.value]);
-
-  useEffect(() => {
-    const finalStartDate = isValid(startDate.value) ? startDate.value : initialStartDate;
-    const finalEndDate = isValid(endDate.value) ? endDate.value : initialEndDate;
-
     apiCall({
       variables: {
         orgSid,
-        searchText: localInput.delayedValue,
-        dateRange: { rangeStart: finalStartDate, rangeEnd: finalEndDate },
+        searchText: searchText.delayedValue,
+        dateRange: { rangeStart: startDate.value, rangeEnd: endDate.value },
         pageableInput: pagingParams,
       },
     });
-  }, [orgSid, localInput.delayedValue, startDate.value, endDate.value, pagingParams]);
+  }, [orgSid, pagingParams]);
 
   useEffect(() => {
-    if (onItemsListChange) {
-      onItemsListChange(data, loading);
+    if (!loading) {
+      if (onItemsListChange) {
+        onItemsListChange(data, loading);
+      }
+      // update the paging info
+      const pagingInfo = data?.workPacketStatuses?.paginationInfo;
+      if (pagingInfo) {
+        setPagingInfo(pagingInfo);
+      }
     }
   }, [data, loading]);
 
@@ -217,33 +186,13 @@ const WorkPacketTable = ({
 
   return (
     <>
-      <FilterSection id={`${id}-filters`}>
-        <Container>
-          <Card id={`${id}__SearchCard`} elevation="smallest" onClick="">
-            <StyledRow>
-              <Column lg="6">
-                <Label>Search</Label>
-                <InputText
-                  id={`${id}__Card__Row__Input-Search`}
-                  onKeyDown={doNothing}
-                  onKeyEnter={doNothing}
-                  autoFocus
-                  disabled={false}
-                  {...localInput}
-                />
-              </Column>
-              <Column lg="6">
-                <InputDateRange startDate={startDate} endDate={endDate} />
-              </Column>
-            </StyledRow>
-          </Card>
-        </Container>
-      </FilterSection>
+      <TableFilters id={id} searchText={searchText} startDate={startDate} endDate={endDate} />
 
       <Container>
         <Box id={`${id}_TableWrap`}>
           <StyledContainer id="Table_Detailed" style={{ width: '100%' }}>
             {renderTable()}
+            <Paginator pagingInfo={pagingInfo} onPageChange={onPageChange} />
           </StyledContainer>
         </Box>
       </Container>

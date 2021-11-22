@@ -6,6 +6,7 @@ import { Calendar, DateRangeType } from 'office-ui-fabric-react/lib-commonjs/Cal
 import { MonthPicker as Component } from './index';
 import { Container } from './MonthPicker.styles';
 import { DefaultButton } from 'office-ui-fabric-react/lib-commonjs/Button';
+import { mountWithTheme } from 'src/utils/testUtils';
 
 const baseProps = {
   onSelect: () => null,
@@ -70,5 +71,38 @@ describe('Basic MonthPicker Component', () => {
   it('Test default props MonthPicker component', () => {
     const wrapper = shallow(<Component {...baseProps} theme={theme} restrictedDates={[new Date()]} />);
     expect(toJSON(wrapper)).toMatchSnapshot();
+  });
+
+  it('Match Snapshot sending showDates property', () => {
+    const wrapper = shallow(<Component {...defaultProps} showDates />);
+    expect(wrapper).toMatchSnapshot();
+  });
+
+  it('Match Snapshot sending minDate property', () => {
+    const wrapper = shallow(<Component {...defaultProps} minDate={new Date()} />);
+    expect(wrapper).toMatchSnapshot();
+  });
+
+  it('Press button of today in the MonthPicker and calls onSelect', () => {
+    const mockFn = jest.fn();
+    const wrapper = mountWithTheme(<Component {...defaultProps} onSelect={mockFn} />);
+    const today = wrapper.find('.ms-DatePicker-day--today');
+    today.simulate('click');
+    expect(today.length).toBe(1);
+    expect(mockFn).toBeCalled();
+  });
+
+  it('Test press the Previous button in the MonthPicker', () => {
+    const wrapper = mountWithTheme(<Component {...defaultProps} />);
+    const goBackButton = wrapper.find('button[data-testid="__PrevioustBtn"]');
+    goBackButton.simulate('click');
+    expect(goBackButton.length).toBe(1);
+  });
+
+  it('Test press the Next button in the MonthPicker', () => {
+    const wrapper = mountWithTheme(<Component {...defaultProps} />);
+    const goNextButton = wrapper.find('button[data-testid="__NextBtn"]');
+    goNextButton.simulate('click');
+    expect(goNextButton.length).toBe(1);
   });
 });

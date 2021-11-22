@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { Box as LayoutBox, Row as LayoutRow, Column as LayoutColumn } from '../../../components/layouts';
-import { Text } from '../../../components/typography/Text';
+import { Box as LayoutBox, Row as LayoutRow } from '../../../components/layouts';
+import { Text } from '../../../components/typography';
 
 export const Container = styled.div`
   width: 100%;
@@ -8,11 +8,13 @@ export const Container = styled.div`
 
 export const TableContainer = styled.div`
   height: 70vh;
-  margin: 2vw;
+  margin-left: 2vw;
+  margin-right: 2vw;
   overflow-y: scroll;
   ::-webkit-scrollbar {
     display: none;
   }
+  width: 100%;
 `;
 
 export const StyledBox = styled(LayoutBox)`
@@ -37,18 +39,9 @@ export const TableName = styled(Text)<StyledTableProps>`
         return '#0078D4';
     }
   }};
+  padding-left: 12px;
 `;
 
-export const Row = styled(LayoutRow)`
-  width: 100%;
-  margin: 25px 10px;
-`;
-
-export const Column = styled(LayoutColumn)`
-  width: 35%;
-  max-width: 300px;
-`;
-
-export const RightColumn = styled(LayoutColumn)`
-  width: 35%;
+export const TableWrap = styled(LayoutRow)`
+  margin-top: 15px;
 `;

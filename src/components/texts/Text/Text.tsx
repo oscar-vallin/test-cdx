@@ -13,7 +13,7 @@ const defaultProps = {
 
 type TextProps = {
   id?: string;
-  children?: ReactNode | string;
+  children?: ReactNode | Element | string;
   variant?: any;
   left?: string;
   right?: boolean;
@@ -21,7 +21,7 @@ type TextProps = {
   bottom?: string;
 } & typeof defaultProps;
 
-const Text = ({ id, children, variant = 'normal', left, right, top, bottom, ...props }: TextProps): ReactElement => {
+const Text = ({ id, children, variant, left, right, top, bottom, ...props }: TextProps): ReactElement => {
   return (
     <StyledText id={`${id}-Text`} variant={variant} left={left} right={right} top={top} bottom={bottom} {...props}>
       {children}

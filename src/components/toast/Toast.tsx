@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { MessageBarType } from '@fluentui/react';
-import { StyledMessageBar } from './Toast.style';
+import { StyledMessageBar } from './Toast.styles';
 
 const defaultProps = {
   type: 'info',

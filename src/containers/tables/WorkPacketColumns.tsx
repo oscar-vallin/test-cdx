@@ -32,7 +32,7 @@ export const useWorkPacketColumns = (
         return (
           <CellItemRow>
             <Link>
-              <RouteLink to={`/file-status/${item.workOrderId}`}>{timestamp}</RouteLink>
+              <RouteLink to={`/file-status/${item.workOrderId}?orgSid=${item.orgSid}`}>{timestamp}</RouteLink>
             </Link>
             {item.recordHighlightCount && (
               <HighlightCounter
@@ -116,7 +116,7 @@ export const useWorkPacketColumns = (
       name: 'Extract Name',
       targetWidthProportion: 2,
       minWidth: 100,
-      maxWidth: 300,
+      maxWidth: 500,
       fieldName: 'inboundFilename',
       sortAscendingAriaLabel: 'Sorted A to Z',
       sortDescendingAriaLabel: 'Sorted Z to A',
@@ -129,7 +129,7 @@ export const useWorkPacketColumns = (
       name: 'Vendor File',
       targetWidthProportion: 2,
       minWidth: 100,
-      maxWidth: 300,
+      maxWidth: 500,
       fieldName: 'outboundFilename',
       sortAscendingAriaLabel: 'Sorted A to Z',
       sortDescendingAriaLabel: 'Sorted Z to A',
@@ -225,8 +225,8 @@ export const useWorkPacketColumns = (
       key: 'progress',
       name: 'Progress',
       targetWidthProportion: 2,
-      minWidth: 100,
-      maxWidth: 250,
+      minWidth: 150,
+      maxWidth: 300,
       data: WorkPacketColumns.PROGRESS,
       onRender: (item: WorkPacketStatus) => {
         return (

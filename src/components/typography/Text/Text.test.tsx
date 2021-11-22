@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import { Text as Component } from './Text';
 
-const defaultProps = { left: 'star', right: 'end', top: 'center', bottom: 'center' };
+const defaultProps = { left: 'star', right: false, top: 'center', bottom: 'center' };
 
 describe('Text', () => {
   const tree = shallow(
@@ -40,7 +40,7 @@ describe('Text', () => {
   });
 
   it('Should have rigth property', () => {
-    expect(tree.props().right).toEqual('end');
+    expect(tree.props().right).toBeFalsy();
   });
 
   it('Should have top property', () => {

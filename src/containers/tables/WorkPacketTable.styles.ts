@@ -21,7 +21,7 @@ export const FilterSection = styled(LayoutRow)`
 `;
 
 export const StyledRow = styled(LayoutRow)`
-  padding: 15px;
+  // padding: 15px;
 `;
 
 export const Column = styled(LayoutColumn)``;
