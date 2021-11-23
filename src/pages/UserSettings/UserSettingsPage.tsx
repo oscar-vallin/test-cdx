@@ -1,4 +1,4 @@
-import { useState, memo } from 'react';
+import { useState, memo, useEffect } from 'react';
 
 import { ROUTE_USER_SETTINGS } from '../../data/constants/RouteConstants';
 
@@ -10,19 +10,33 @@ import { Spacing } from '../../components/spacings/Spacing';
 import { PasswordChange } from './PasswordChange';
 import { PasswordRules } from './PasswordRules';
 import { ThemeSettings } from './ThemeSettings';
-// import { useCurrentUserTheme } from '../../hooks/useCurrentUserTheme';
 
 import { StyledBox, StyledRow, StyledCard } from './UserSettingsPage.styles';
+import { useSessionStore } from '../../store/SessionStore';
+import { PasswordState } from './PasswordChange/PasswordChange';
 
 const _UserSettingsPage = () => {
-  // const { userTheme }: any = useCurrentUserTheme();
+  const { user } = useSessionStore();
 
-  const [validations, setValidations] = useState([]);
-  const [passwords, setPasswords] = useState({
+  const [validationPassed, setValidationPassed] = useState<boolean>(false);
+  const [passwords, setPasswords] = useState<PasswordState>({
     current: '',
     new: '',
     confirmation: '',
   });
+
+  const [delayedPassword, setDelayedPassword] = useState('');
+
+  const passwordValidationStateChange = (passes: boolean) => {
+    setValidationPassed(passes);
+  };
+
+  useEffect(() => {
+    const timeOutId = setTimeout(() => {
+      setDelayedPassword(passwords.new);
+    }, 500);
+    return () => clearTimeout(timeOutId);
+  }, [passwords.new]);
 
   return (
     <LayoutDashboard id="USER_SETTINGS">
@@ -35,14 +49,18 @@ const _UserSettingsPage = () => {
           <Column lg="6">
             <StyledCard elevation="smallest">
               <Spacing padding={{ left: 'small' }}>
-                <PasswordChange state={passwords} onChange={setPasswords} validations={validations} />
+                <PasswordChange state={passwords} onChange={setPasswords} validationPassed={validationPassed} />
               </Spacing>
             </StyledCard>
           </Column>
           <Column lg="6">
             <StyledCard elevation="smallest">
               <Spacing padding={{ left: 'small' }}>
-                <PasswordRules password={passwords.new} validations={validations} onChange={setValidations} />
+                <PasswordRules
+                  username={user.userId}
+                  password={delayedPassword}
+                  onChange={passwordValidationStateChange}
+                />
               </Spacing>
             </StyledCard>
           </Column>

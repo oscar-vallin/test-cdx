@@ -1,4 +1,4 @@
-import { Button } from '../../../components/buttons/Button';
+import { Button } from '../../../components/buttons';
 import { InputText } from '../../../components/inputs/InputText';
 import { Row, Column } from '../../../components/layouts';
 import { Spacing } from '../../../components/spacings/Spacing';
@@ -8,7 +8,13 @@ import { useUpdateOwnPasswordMutation } from '../../../data/services/graphql';
 
 import { StyledTitle } from '../UserSettingsPage.styles';
 
-const getValidationMessage = (passwords, isValid) => {
+export type PasswordState = {
+  current: string;
+  new: string;
+  confirmation: string;
+};
+
+const getValidationMessage = (passwords: PasswordState, isValid: boolean) => {
   if (!passwords.current || !passwords.new || !passwords.confirmation) {
     return 'Please fill all the required fields';
   }
@@ -24,11 +30,17 @@ const getValidationMessage = (passwords, isValid) => {
   return null;
 };
 
-const isFormInvalid = (passwords) => {
+const isFormInvalid = (passwords: PasswordState) => {
   return !passwords.current || !passwords.new || !passwords.confirmation || passwords.new !== passwords.confirmation;
 };
 
-const PasswordChange = ({ state, validations = [], onChange }: any) => {
+type PasswordChangeParam = {
+  state: any;
+  onChange: any;
+  validationPassed: boolean;
+};
+
+const PasswordChange = ({ state, onChange, validationPassed }: PasswordChangeParam) => {
   const [
     updateOwnPasswordMutation,
     { data: passwordUpdateResult, loading: isUpdatingPassword, error: passwordUpdateError },
@@ -77,11 +89,11 @@ const PasswordChange = ({ state, validations = [], onChange }: any) => {
         </Column>
       </Row>
 
-      {(isFormInvalid(state) || !validations[0]?.isCurrentLevelValid) && (
+      {(isFormInvalid(state) || !validationPassed) && (
         <Row>
           <Column>
             <Spacing margin={{ top: 'normal' }}>
-              <MessageBar type="warning" content={getValidationMessage(state, validations[0]?.isCurrentLevelValid)} />
+              <MessageBar type="warning" content={getValidationMessage(state, validationPassed)} />
             </Spacing>
           </Column>
         </Row>
@@ -94,7 +106,7 @@ const PasswordChange = ({ state, validations = [], onChange }: any) => {
               id="__PasswordChangeId"
               variant="primary"
               text={isUpdatingPassword ? 'Processing...' : 'Save password'}
-              disabled={isFormInvalid(state) || !validations[0]?.isCurrentLevelValid || isUpdatingPassword}
+              disabled={isFormInvalid(state) || !validationPassed || isUpdatingPassword}
               onClick={() => {
                 updateOwnPasswordMutation({
                   variables: {
@@ -104,6 +116,7 @@ const PasswordChange = ({ state, validations = [], onChange }: any) => {
                       verifyPassword: state.confirmation,
                     },
                   },
+                  errorPolicy: 'all',
                 });
                 return null;
               }}

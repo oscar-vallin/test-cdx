@@ -1,28 +1,26 @@
+import { ReactElement } from 'react';
 import { Spacing } from '../../../../components/spacings/Spacing';
 
 import { StyledIcon } from '../../UserSettingsPage.styles';
 import { StyledDiv, StyledText } from './RuleGroup.styles';
 
-const RuleGroup = ({ item, children, ...props }) => {
+type RuleGroupParams = {
+  title: string | ReactElement;
+  passes: boolean;
+  children: any;
+};
+
+const RuleGroup = ({ title, passes, children }: RuleGroupParams) => {
   const renderIcon = (value) => {
     return value ? <StyledIcon iconName="StatusCircleCheckmark" /> : <StyledIcon iconName="StatusCircleErrorX" />;
   };
 
-  const renderText = () => {
-    if (item.level === 0) return 'all';
-
-    return item.level === 1 ? 'any' : item.expectation;
-  };
-
   return (
-    <StyledDiv level={item.level} {...props}>
+    <StyledDiv level={1}>
       <Spacing margin={{ top: 'small', bottom: 'normal' }}>
-        <StyledText level={item.level}>
-          {renderIcon(item.rules ? item.isCurrentLevelValid : item.isValid)}
-
-          <div>
-            Meet <strong>{renderText()}</strong> of these
-          </div>
+        <StyledText level={1}>
+          {renderIcon(passes)}
+          <div>{title}</div>
         </StyledText>
       </Spacing>
 

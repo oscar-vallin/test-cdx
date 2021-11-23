@@ -45,6 +45,10 @@ export const StyledButton = styled(PrimaryButton)<StyledButtonProps>`
       color: ${({ theme, variant }) => getVariant(theme, variant).color};
     }
   }
+
+  &:disabled {
+    background: ${({ theme }) => theme.colors.neutralTertiaryAlt};
+  }
 `;
 
 type StyledButtonProps = {

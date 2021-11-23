@@ -1,13 +1,6 @@
 {
   "possibleTypes": {
     "NVP": ["NVPStr", "NVPId"],
-    "PasswordRule": [
-      "PasswordLengthRule",
-      "PasswordWhitespaceRule",
-      "PasswordCharacterRule",
-      "PasswordStrengthRule",
-      "PasswordRuleGroup"
-    ],
     "PasswordRuleSet": ["CompositePasswordRuleSetForm", "RequiredPasswordRuleSetForm"],
     "UIField": [
       "UIBooleanField",

@@ -979,48 +979,11 @@ export type PaginationInfo = {
   pageSize?: Maybe<Scalars['Int']>;
 };
 
-export type PasswordCharacterRule = {
-  __typename?: 'PasswordCharacterRule';
-  characterType?: Maybe<PasswordCharacterType>;
-  numberOfCharacters?: Maybe<Scalars['Int']>;
-};
-
-export enum PasswordCharacterType {
-  UpperCase = 'UPPER_CASE',
-  LowerCase = 'LOWER_CASE',
-  Digit = 'DIGIT',
-  Special = 'SPECIAL'
-}
-
 export enum PasswordComplexity {
   Weak = 'WEAK',
   Strong = 'STRONG',
   VeryStrong = 'VERY_STRONG'
 }
-
-export type PasswordLengthRule = {
-  __typename?: 'PasswordLengthRule';
-  minLength?: Maybe<Scalars['Int']>;
-  maxLength?: Maybe<Scalars['Int']>;
-};
-
-export type PasswordPage = {
-  __typename?: 'PasswordPage';
-  ruleGroup: PasswordRuleGroup;
-};
-
-export type PasswordRule = PasswordLengthRule | PasswordWhitespaceRule | PasswordCharacterRule | PasswordStrengthRule | PasswordRuleGroup;
-
-export type PasswordRuleGroup = {
-  __typename?: 'PasswordRuleGroup';
-  /**
-   * number of rule predicates that must be true for the group to pass
-   * if numberOfCharacteristics is omitted all rules are required
-   */
-  numberOfCharacteristics?: Maybe<Scalars['Int']>;
-  /** list of rules or rule sub groups */
-  rules?: Maybe<Array<Maybe<PasswordRule>>>;
-};
 
 export type PasswordRuleSet = {
   mustNotContainWhiteSpace?: Maybe<UiBooleanField>;
@@ -1082,14 +1045,31 @@ export type PasswordRulesInput = {
   autoUnlockAccountDelayMinutes?: Maybe<Scalars['Int']>;
 };
 
-export type PasswordStrengthRule = {
-  __typename?: 'PasswordStrengthRule';
-  requiredStrengthLevel: Scalars['Int'];
+export type PasswordValidation = {
+  __typename?: 'PasswordValidation';
+  passes: Scalars['Boolean'];
+  mustAlwaysBeMet?: Maybe<PasswordValidationGroup>;
+  passwordStrength?: Maybe<PasswordValidationStrengthRule>;
+  someMustBeMet?: Maybe<PasswordValidationGroup>;
 };
 
-export type PasswordWhitespaceRule = {
-  __typename?: 'PasswordWhitespaceRule';
-  allowedWhitespace?: Maybe<WhitespaceRuleType>;
+export type PasswordValidationGroup = {
+  __typename?: 'PasswordValidationGroup';
+  requiredNumPassingRules?: Maybe<Scalars['Int']>;
+  passes: Scalars['Boolean'];
+  rules: Array<Maybe<PasswordValidationRule>>;
+};
+
+export type PasswordValidationRule = {
+  __typename?: 'PasswordValidationRule';
+  passes: Scalars['Boolean'];
+  label: Scalars['String'];
+};
+
+export type PasswordValidationStrengthRule = {
+  __typename?: 'PasswordValidationStrengthRule';
+  passes: Scalars['Boolean'];
+  minPasswordComplexity: PasswordComplexity;
 };
 
 export enum Permission {
@@ -1210,7 +1190,6 @@ export type Query = {
   /** Get the dashboard period counts for a specific date range */
   dashboardPeriodCounts?: Maybe<DashboardPeriodCounts>;
   usersForOrg?: Maybe<UserConnection>;
-  changeOwnPasswordPage?: Maybe<PasswordPage>;
   currentUser?: Maybe<CurrentUserInfo>;
   currentOrgNav?: Maybe<WebNav>;
   userTheme?: Maybe<DashTheme>;
@@ -1248,6 +1227,11 @@ export type Query = {
   navigateToNewDomain?: Maybe<WebAppDomain>;
   simulateSessionExpir?: Maybe<LogOutInfo>;
   passwordRulesForm?: Maybe<PasswordRulesForm>;
+  /**
+   * Used to validate a given password against the configured Password Rules for the given Org Sid
+   * Returns information as to which rules specifically pass and do not pass.
+   */
+  passwordValidation?: Maybe<PasswordValidation>;
 };
 
 
@@ -1506,6 +1490,13 @@ export type QueryNavigateToNewDomainArgs = {
 
 export type QueryPasswordRulesFormArgs = {
   orgSid: Scalars['ID'];
+};
+
+
+export type QueryPasswordValidationArgs = {
+  orgSid: Scalars['ID'];
+  userName: Scalars['String'];
+  password: Scalars['String'];
 };
 
 export type RecordCount = {
@@ -2129,10 +2120,6 @@ export type WebPivot = {
   label?: Maybe<Scalars['String']>;
   type: CdxWebPivot;
 };
-
-export enum WhitespaceRuleType {
-  None = 'NONE'
-}
 
 export type WorkPacketStatus = {
   __typename?: 'WorkPacketStatus';
@@ -2833,20 +2820,6 @@ export type UsersForOrgQuery = (
         & FragmentWebCommandFragment
       )>>> }
     )>>> }
-  )> }
-);
-
-export type ChangeOwnPasswordPageQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type ChangeOwnPasswordPageQuery = (
-  { __typename?: 'Query' }
-  & { changeOwnPasswordPage?: Maybe<(
-    { __typename?: 'PasswordPage' }
-    & { ruleGroup: (
-      { __typename?: 'PasswordRuleGroup' }
-      & Pick<PasswordRuleGroup, 'numberOfCharacteristics'>
-    ) }
   )> }
 );
 
@@ -4002,6 +3975,39 @@ export type PasswordRulesFormQuery = (
         & Pick<UiOption, 'label' | 'value' | 'info'>
       )>>> }
     )>>> }
+  )> }
+);
+
+export type PasswordValidationQueryVariables = Exact<{
+  orgSid: Scalars['ID'];
+  userName: Scalars['String'];
+  password: Scalars['String'];
+}>;
+
+
+export type PasswordValidationQuery = (
+  { __typename?: 'Query' }
+  & { passwordValidation?: Maybe<(
+    { __typename?: 'PasswordValidation' }
+    & Pick<PasswordValidation, 'passes'>
+    & { mustAlwaysBeMet?: Maybe<(
+      { __typename?: 'PasswordValidationGroup' }
+      & Pick<PasswordValidationGroup, 'requiredNumPassingRules' | 'passes'>
+      & { rules: Array<Maybe<(
+        { __typename?: 'PasswordValidationRule' }
+        & Pick<PasswordValidationRule, 'passes' | 'label'>
+      )>> }
+    )>, passwordStrength?: Maybe<(
+      { __typename?: 'PasswordValidationStrengthRule' }
+      & Pick<PasswordValidationStrengthRule, 'passes' | 'minPasswordComplexity'>
+    )>, someMustBeMet?: Maybe<(
+      { __typename?: 'PasswordValidationGroup' }
+      & Pick<PasswordValidationGroup, 'requiredNumPassingRules' | 'passes'>
+      & { rules: Array<Maybe<(
+        { __typename?: 'PasswordValidationRule' }
+        & Pick<PasswordValidationRule, 'passes' | 'label'>
+      )>> }
+    )> }
   )> }
 );
 
@@ -5987,40 +5993,6 @@ export function useUsersForOrgLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type UsersForOrgQueryHookResult = ReturnType<typeof useUsersForOrgQuery>;
 export type UsersForOrgLazyQueryHookResult = ReturnType<typeof useUsersForOrgLazyQuery>;
 export type UsersForOrgQueryResult = Apollo.QueryResult<UsersForOrgQuery, UsersForOrgQueryVariables>;
-export const ChangeOwnPasswordPageDocument = gql`
-    query ChangeOwnPasswordPage {
-  changeOwnPasswordPage {
-    ruleGroup {
-      numberOfCharacteristics
-    }
-  }
-}
-    `;
-
-/**
- * __useChangeOwnPasswordPageQuery__
- *
- * To run a query within a React component, call `useChangeOwnPasswordPageQuery` and pass it any options that fit your needs.
- * When your component renders, `useChangeOwnPasswordPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useChangeOwnPasswordPageQuery({
- *   variables: {
- *   },
- * });
- */
-export function useChangeOwnPasswordPageQuery(baseOptions?: Apollo.QueryHookOptions<ChangeOwnPasswordPageQuery, ChangeOwnPasswordPageQueryVariables>) {
-        return Apollo.useQuery<ChangeOwnPasswordPageQuery, ChangeOwnPasswordPageQueryVariables>(ChangeOwnPasswordPageDocument, baseOptions);
-      }
-export function useChangeOwnPasswordPageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ChangeOwnPasswordPageQuery, ChangeOwnPasswordPageQueryVariables>) {
-          return Apollo.useLazyQuery<ChangeOwnPasswordPageQuery, ChangeOwnPasswordPageQueryVariables>(ChangeOwnPasswordPageDocument, baseOptions);
-        }
-export type ChangeOwnPasswordPageQueryHookResult = ReturnType<typeof useChangeOwnPasswordPageQuery>;
-export type ChangeOwnPasswordPageLazyQueryHookResult = ReturnType<typeof useChangeOwnPasswordPageLazyQuery>;
-export type ChangeOwnPasswordPageQueryResult = Apollo.QueryResult<ChangeOwnPasswordPageQuery, ChangeOwnPasswordPageQueryVariables>;
 export const CurrentUserDocument = gql`
     query CurrentUser {
   currentUser {
@@ -9159,6 +9131,61 @@ export function usePasswordRulesFormLazyQuery(baseOptions?: Apollo.LazyQueryHook
 export type PasswordRulesFormQueryHookResult = ReturnType<typeof usePasswordRulesFormQuery>;
 export type PasswordRulesFormLazyQueryHookResult = ReturnType<typeof usePasswordRulesFormLazyQuery>;
 export type PasswordRulesFormQueryResult = Apollo.QueryResult<PasswordRulesFormQuery, PasswordRulesFormQueryVariables>;
+export const PasswordValidationDocument = gql`
+    query PasswordValidation($orgSid: ID!, $userName: String!, $password: String!) {
+  passwordValidation(orgSid: $orgSid, userName: $userName, password: $password) {
+    passes
+    mustAlwaysBeMet {
+      requiredNumPassingRules
+      passes
+      rules {
+        passes
+        label
+      }
+    }
+    passwordStrength {
+      passes
+      minPasswordComplexity
+    }
+    someMustBeMet {
+      requiredNumPassingRules
+      passes
+      rules {
+        passes
+        label
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __usePasswordValidationQuery__
+ *
+ * To run a query within a React component, call `usePasswordValidationQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePasswordValidationQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePasswordValidationQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *      userName: // value for 'userName'
+ *      password: // value for 'password'
+ *   },
+ * });
+ */
+export function usePasswordValidationQuery(baseOptions: Apollo.QueryHookOptions<PasswordValidationQuery, PasswordValidationQueryVariables>) {
+        return Apollo.useQuery<PasswordValidationQuery, PasswordValidationQueryVariables>(PasswordValidationDocument, baseOptions);
+      }
+export function usePasswordValidationLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PasswordValidationQuery, PasswordValidationQueryVariables>) {
+          return Apollo.useLazyQuery<PasswordValidationQuery, PasswordValidationQueryVariables>(PasswordValidationDocument, baseOptions);
+        }
+export type PasswordValidationQueryHookResult = ReturnType<typeof usePasswordValidationQuery>;
+export type PasswordValidationLazyQueryHookResult = ReturnType<typeof usePasswordValidationLazyQuery>;
+export type PasswordValidationQueryResult = Apollo.QueryResult<PasswordValidationQuery, PasswordValidationQueryVariables>;
 export const PasswordLoginDocument = gql`
     mutation PasswordLogin($userId: String!, $password: String!) {
   passwordLogin(userId: $userId, password: $password) {

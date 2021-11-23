@@ -1,190 +1,98 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react/no-danger */
-import { useState, useEffect } from 'react';
-import PasswordStrengthBar from 'react-password-strength-bar';
-import _ from 'lodash';
+import { useEffect, useState } from 'react';
+import {
+  PasswordValidation,
+  PasswordValidationRule,
+  usePasswordValidationLazyQuery,
+} from '../../../data/services/graphql';
 
-import { List, SpinnerSize } from '@fluentui/react';
-import { useChangeOwnPasswordPageQuery } from '../../../data/services/graphql';
-
-import { Spacing } from '../../../components/spacings/Spacing';
-import { Spinner } from '../../../components/spinners/Spinner';
-
-import { StyledTitle, StyledIcon } from '../UserSettingsPage.styles';
+import { StyledTitle } from '../UserSettingsPage.styles';
 import { RuleGroup } from './RuleGroup';
 
-import { PasswordValidator, ValidationMessages, ValidationRulesParser } from '../../../utils/PasswordValidation';
+import { useOrgSid } from '../../../hooks/useOrgSid';
+import { Column, Row } from '../../../components/layouts';
+import { RuleItems } from './RuleItems';
 
-const isArrayOfArrays = (arr) => arr.filter((item) => Array.isArray(item)).length > 0;
-
-const validateRulesets = (value, ruleSets) => {
-  return ruleSets?.map((ruleSet) => {
-    if (ruleSet.rules) {
-      return validateRulesets(value, ruleSet.rules)
-        .filter((validation) => validation.length > 0)
-        .reduce((arr, item) => [...arr, ...(item || [])], []);
-    }
-
-    return PasswordValidator.validate(value, ruleSet);
-  });
+type PasswordRulesParam = {
+  username: string;
+  password: string;
+  onChange: (passes: boolean) => void;
 };
 
-const validateRulesArr = (value, data) => {
-  if (!data || data.length === 0 || data[0].length === 0) {
-    return [];
-  }
+const PasswordRules = ({ username, password, onChange }: PasswordRulesParam) => {
+  const { orgSid } = useOrgSid();
+  const [rules, setRules] = useState<PasswordValidation>();
+  const [apiCall, { data, loading }] = usePasswordValidationLazyQuery();
 
-  data.map((ruleSet) => {
-    const validationResults = validateRulesets(value, ruleSet.rules);
-
-    const rootValidations = Array.from(
-      new Set(
-        validationResults
-          .filter((validation) => !isArrayOfArrays(validation))
-          .reduce((rules, rule) => [...rules, ...rule], [])
-      )
-    );
-
-    const ruleObj = {
-      ...ruleSet,
-      validations: rootValidations,
-      rules: ruleSet.rules
-        .map((rule, index) => {
-          const item = Array.isArray(rule) ? rule : [rule];
-
-          return item.map((itemRule) => {
-            if (itemRule.rules) {
-              return validateRulesArr(value, item);
-            }
-
-            const validations = isArrayOfArrays(validationResults[index])
-              ? validationResults[index].reduce((rules, validationRule) => [...rules, ...validationRule], [])
-              : validationResults[index];
-
-            const isValid = !validations.includes(itemRule.characteristic);
-
-            return {
-              ...itemRule,
-              isValid,
-              message: ValidationMessages[itemRule.characteristic](itemRule.condition),
-              ...(itemRule.rules
-                ? {
-                    validations: Array.from(
-                      new Set(validations.map((validation) => validation.includes(itemRule.characteristic)))
-                    ),
-                  }
-                : {}),
-            };
-          });
-        })
-        .reduce((rules, rule) => [...rules, ...rule], []),
-    };
-
-    const currentLevelRules = ruleObj.rules.filter((rule) => !Array.isArray(rule)).map((rule) => rule.characteristic);
-    const childRules = _.flatten(ruleObj.rules.filter((rule) => Array.isArray(rule)));
-
-    const currentLevelValidations = ruleObj.validations.filter((validation) => currentLevelRules.includes(validation));
-
-    const currentValidationResults = childRules.length
-      ? [
-          currentLevelValidations.length <=
-            currentLevelRules.length - (ruleObj.expectation - (ruleObj.level === 0 ? 1 : 0)),
-          ...[childRules[0]?.isCurrentLevelValid],
-        ]
-      : [currentLevelValidations.length <= currentLevelRules.length - ruleObj.expectation];
-
-    const isCurrentLevelValid = !childRules.length
-      ? currentValidationResults[0]
-      : _.flattenDeep(currentValidationResults).filter(Boolean).length >=
-        ruleObj.expectation - (ruleObj.level === 0 ? 1 : 0);
-
-    return { ...ruleObj, isCurrentLevelValid };
-  });
-};
-
-const PasswordRules = ({ validations, password, onChange }) => {
-  const [rules, setRules] = useState([]);
-  const { data, loading } = useChangeOwnPasswordPageQuery();
-
-  const onRenderCell = (item, index) => {
+  const mustBeMetTitle = () => {
     return (
-      <RuleGroup item={item} key={index}>
-        {item.rules ? (
-          item.rules.map((rule, ruleIndex) => {
-            if (Array.isArray(rule)) {
-              return rule.map(onRenderCell);
-            }
-            if (rule.characteristic === 'strength') {
-              return (
-                <div key={ruleIndex}>
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                    }}
-                  >
-                    {!item.validations.includes(rule.characteristic) ? (
-                      <StyledIcon iconName="StatusCircleCheckmark" />
-                    ) : (
-                      <StyledIcon iconName="StatusCircleErrorX" />
-                    )}
+      <span>
+        Meet <strong>all</strong> of these
+      </span>
+    );
+  };
 
-                    <div dangerouslySetInnerHTML={{ __html: rule.message }} />
-                  </div>
-
-                  <PasswordStrengthBar password={password} style={{ margin: '15px 0 0', width: '50%' }} />
-                </div>
-              );
-            }
-
-            return (
-              <div key={ruleIndex} style={{ display: 'flex', alignItems: 'center' }}>
-                {!item.validations.includes(rule.characteristic) ? (
-                  <StyledIcon iconName="StatusCircleCheckmark" />
-                ) : (
-                  <StyledIcon iconName="StatusCircleErrorX" />
-                )}
-
-                {rule.message}
-              </div>
-            );
-          })
-        ) : (
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            {item.isValid ? (
-              <StyledIcon iconName="StatusCircleCheckmark" />
-            ) : (
-              <StyledIcon iconName="StatusCircleErrorX" />
-            )}
-
-            {item.message}
-          </div>
-        )}
-      </RuleGroup>
+  const someMustBeMetTitle = (requiredNumPassingRules: number) => {
+    return (
+      <span>
+        Meet <strong>{requiredNumPassingRules}</strong> of these
+      </span>
     );
   };
 
   useEffect(() => {
+    apiCall({
+      variables: {
+        orgSid,
+        userName: username,
+        password,
+      },
+    });
+  }, [orgSid, username, password]);
+
+  useEffect(() => {
     if (!loading && data) {
-      setRules(ValidationRulesParser.parse([data?.changeOwnPasswordPage?.ruleGroup]));
+      const passwordValidation = data.passwordValidation ?? {
+        passes: false,
+      };
+      setRules(passwordValidation);
+      onChange(passwordValidation.passes);
     }
   }, [loading, data]);
 
-  useEffect(() => onChange(validateRulesArr(password, rules)), [password, rules]);
+  const passwordStrengthRuleItems = (): PasswordValidationRule[] => {
+    const rule: PasswordValidationRule = {
+      passes: rules?.passwordStrength?.passes ?? false,
+      label: `Minimum Strength: ${rules?.passwordStrength?.minPasswordComplexity}`,
+    };
+
+    return [rule];
+  };
 
   return (
     <>
       <StyledTitle id="__userSettings_Password_rules">Password rules</StyledTitle>
-
-      <Spacing margin={{ top: 'normal' }}>
-        {loading ? (
-          <Spacing margin={{ top: 'normal' }}>
-            <Spinner size={SpinnerSize.large} label="Loading rules" />
-          </Spacing>
-        ) : (
-          <List items={validations} onRenderCell={onRenderCell} />
-        )}
-      </Spacing>
+      <Row>
+        <Column lg="12">
+          <RuleGroup title={mustBeMetTitle()} passes={rules?.mustAlwaysBeMet?.passes ?? false}>
+            <RuleItems items={(rules?.mustAlwaysBeMet?.rules ?? []) as PasswordValidationRule[]} />
+          </RuleGroup>
+        </Column>
+      </Row>
+      <Row>
+        <Column lg="6">
+          <RuleGroup title="Meet strength level" passes={rules?.passwordStrength?.passes ?? false}>
+            <RuleItems items={passwordStrengthRuleItems()} />
+          </RuleGroup>
+        </Column>
+        <Column lg="6">
+          <RuleGroup
+            title={someMustBeMetTitle(rules?.someMustBeMet?.requiredNumPassingRules ?? 1)}
+            passes={rules?.someMustBeMet?.passes ?? false}
+          >
+            <RuleItems items={(rules?.someMustBeMet?.rules ?? []) as PasswordValidationRule[]} />
+          </RuleGroup>
+        </Column>
+      </Row>
     </>
   );
 };
