@@ -17,7 +17,6 @@ import { useOrgSid } from '../../../hooks/useOrgSid';
 const defaultProps = {
   id: '',
   left: false,
-  changeCollapse: () => null,
   option: '',
 };
 
