@@ -1198,8 +1198,10 @@ export type Query = {
   findUserAccount?: Maybe<UserAccountForm>;
   accessPolicy?: Maybe<AccessPolicy>;
   accessPoliciesForOrg?: Maybe<AccessPolicyConnection>;
+  accessPolicyTemplates?: Maybe<Array<Maybe<UiOption>>>;
   accessSpecializationsForOrg?: Maybe<AccessSpecializationConnection>;
   accessPolicyGroupsForOrg?: Maybe<AccessPolicyGroupConnection>;
+  accessPolicyGroupTemplates?: Maybe<Array<Maybe<UiOption>>>;
   systemTemplateAccessPolicyGroupByName?: Maybe<Array<Maybe<AccessPolicyGroup>>>;
   accessPolicyForm?: Maybe<AccessPolicyForm>;
   findAccessPolicy?: Maybe<AccessPolicyForm>;
@@ -1362,6 +1364,11 @@ export type QueryAccessPoliciesForOrgArgs = {
 };
 
 
+export type QueryAccessPolicyTemplatesArgs = {
+  orgSid: Scalars['ID'];
+};
+
+
 export type QueryAccessSpecializationsForOrgArgs = {
   orgSid: Scalars['ID'];
   pageableInput?: Maybe<PageableInput>;
@@ -1371,6 +1378,11 @@ export type QueryAccessSpecializationsForOrgArgs = {
 export type QueryAccessPolicyGroupsForOrgArgs = {
   orgSid: Scalars['ID'];
   pageableInput?: Maybe<PageableInput>;
+};
+
+
+export type QueryAccessPolicyGroupTemplatesArgs = {
+  orgSid: Scalars['ID'];
 };
 
 
@@ -3051,6 +3063,19 @@ export type AccessPoliciesForOrgQuery = (
   )> }
 );
 
+export type AccessPolicyTemplatesQueryVariables = Exact<{
+  orgSid: Scalars['ID'];
+}>;
+
+
+export type AccessPolicyTemplatesQuery = (
+  { __typename?: 'Query' }
+  & { accessPolicyTemplates?: Maybe<Array<Maybe<(
+    { __typename?: 'UIOption' }
+    & Pick<UiOption, 'label' | 'value' | 'info'>
+  )>>> }
+);
+
 export type AccessSpecializationsForOrgQueryVariables = Exact<{
   orgSid: Scalars['ID'];
   pageableInput?: Maybe<PageableInput>;
@@ -3123,6 +3148,19 @@ export type AccessPolicyGroupsForOrgQuery = (
       )>>> }
     )>>> }
   )> }
+);
+
+export type AccessPolicyGroupTemplatesQueryVariables = Exact<{
+  orgSid: Scalars['ID'];
+}>;
+
+
+export type AccessPolicyGroupTemplatesQuery = (
+  { __typename?: 'Query' }
+  & { accessPolicyGroupTemplates?: Maybe<Array<Maybe<(
+    { __typename?: 'UIOption' }
+    & Pick<UiOption, 'label' | 'value' | 'info'>
+  )>>> }
 );
 
 export type SystemTemplateAccessPolicyGroupByNameQueryVariables = Exact<{
@@ -6549,6 +6587,41 @@ export function useAccessPoliciesForOrgLazyQuery(baseOptions?: Apollo.LazyQueryH
 export type AccessPoliciesForOrgQueryHookResult = ReturnType<typeof useAccessPoliciesForOrgQuery>;
 export type AccessPoliciesForOrgLazyQueryHookResult = ReturnType<typeof useAccessPoliciesForOrgLazyQuery>;
 export type AccessPoliciesForOrgQueryResult = Apollo.QueryResult<AccessPoliciesForOrgQuery, AccessPoliciesForOrgQueryVariables>;
+export const AccessPolicyTemplatesDocument = gql`
+    query AccessPolicyTemplates($orgSid: ID!) {
+  accessPolicyTemplates(orgSid: $orgSid) {
+    label
+    value
+    info
+  }
+}
+    `;
+
+/**
+ * __useAccessPolicyTemplatesQuery__
+ *
+ * To run a query within a React component, call `useAccessPolicyTemplatesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAccessPolicyTemplatesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAccessPolicyTemplatesQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *   },
+ * });
+ */
+export function useAccessPolicyTemplatesQuery(baseOptions: Apollo.QueryHookOptions<AccessPolicyTemplatesQuery, AccessPolicyTemplatesQueryVariables>) {
+        return Apollo.useQuery<AccessPolicyTemplatesQuery, AccessPolicyTemplatesQueryVariables>(AccessPolicyTemplatesDocument, baseOptions);
+      }
+export function useAccessPolicyTemplatesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AccessPolicyTemplatesQuery, AccessPolicyTemplatesQueryVariables>) {
+          return Apollo.useLazyQuery<AccessPolicyTemplatesQuery, AccessPolicyTemplatesQueryVariables>(AccessPolicyTemplatesDocument, baseOptions);
+        }
+export type AccessPolicyTemplatesQueryHookResult = ReturnType<typeof useAccessPolicyTemplatesQuery>;
+export type AccessPolicyTemplatesLazyQueryHookResult = ReturnType<typeof useAccessPolicyTemplatesLazyQuery>;
+export type AccessPolicyTemplatesQueryResult = Apollo.QueryResult<AccessPolicyTemplatesQuery, AccessPolicyTemplatesQueryVariables>;
 export const AccessSpecializationsForOrgDocument = gql`
     query AccessSpecializationsForOrg($orgSid: ID!, $pageableInput: PageableInput) {
   accessSpecializationsForOrg(orgSid: $orgSid, pageableInput: $pageableInput) {
@@ -6668,6 +6741,41 @@ export function useAccessPolicyGroupsForOrgLazyQuery(baseOptions?: Apollo.LazyQu
 export type AccessPolicyGroupsForOrgQueryHookResult = ReturnType<typeof useAccessPolicyGroupsForOrgQuery>;
 export type AccessPolicyGroupsForOrgLazyQueryHookResult = ReturnType<typeof useAccessPolicyGroupsForOrgLazyQuery>;
 export type AccessPolicyGroupsForOrgQueryResult = Apollo.QueryResult<AccessPolicyGroupsForOrgQuery, AccessPolicyGroupsForOrgQueryVariables>;
+export const AccessPolicyGroupTemplatesDocument = gql`
+    query AccessPolicyGroupTemplates($orgSid: ID!) {
+  accessPolicyGroupTemplates(orgSid: $orgSid) {
+    label
+    value
+    info
+  }
+}
+    `;
+
+/**
+ * __useAccessPolicyGroupTemplatesQuery__
+ *
+ * To run a query within a React component, call `useAccessPolicyGroupTemplatesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAccessPolicyGroupTemplatesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAccessPolicyGroupTemplatesQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *   },
+ * });
+ */
+export function useAccessPolicyGroupTemplatesQuery(baseOptions: Apollo.QueryHookOptions<AccessPolicyGroupTemplatesQuery, AccessPolicyGroupTemplatesQueryVariables>) {
+        return Apollo.useQuery<AccessPolicyGroupTemplatesQuery, AccessPolicyGroupTemplatesQueryVariables>(AccessPolicyGroupTemplatesDocument, baseOptions);
+      }
+export function useAccessPolicyGroupTemplatesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AccessPolicyGroupTemplatesQuery, AccessPolicyGroupTemplatesQueryVariables>) {
+          return Apollo.useLazyQuery<AccessPolicyGroupTemplatesQuery, AccessPolicyGroupTemplatesQueryVariables>(AccessPolicyGroupTemplatesDocument, baseOptions);
+        }
+export type AccessPolicyGroupTemplatesQueryHookResult = ReturnType<typeof useAccessPolicyGroupTemplatesQuery>;
+export type AccessPolicyGroupTemplatesLazyQueryHookResult = ReturnType<typeof useAccessPolicyGroupTemplatesLazyQuery>;
+export type AccessPolicyGroupTemplatesQueryResult = Apollo.QueryResult<AccessPolicyGroupTemplatesQuery, AccessPolicyGroupTemplatesQueryVariables>;
 export const SystemTemplateAccessPolicyGroupByNameDocument = gql`
     query SystemTemplateAccessPolicyGroupByName($name: String!) {
   systemTemplateAccessPolicyGroupByName(name: $name) {
