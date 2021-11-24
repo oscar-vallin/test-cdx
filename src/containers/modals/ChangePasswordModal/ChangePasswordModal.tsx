@@ -14,7 +14,7 @@ type ChangePasswordModalProps = {
   hidden?: boolean;
 } & typeof defaultProps;
 
-const ChangePasswordModal = ({ hidden = false, ...props }: ChangePasswordModalProps): ReactElement => {
+const ChangePasswordModal = ({ hidden, ...props }: ChangePasswordModalProps): ReactElement => {
   const handleAlert = (message: string): null => {
     alert(message);
     return null;

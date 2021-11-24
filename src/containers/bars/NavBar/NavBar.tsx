@@ -2,7 +2,7 @@
 import { ReactElement } from 'react';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { ContextualMenuItemType } from '@fluentui/react/lib/ContextualMenu';
+import { ContextualMenuItemType } from '@fluentui/react/lib-commonjs/ContextualMenu';
 
 import { ProfileMenu } from '../../menus/ProfileMenu';
 
@@ -30,7 +30,6 @@ import { useThemeStore } from '../../../store/ThemeStore';
 const defaultProps = {
   id: '',
   menuOptionSelected: 'dashboard',
-  onUserSettings: () => null,
   visible: true,
 };
 
@@ -41,7 +40,7 @@ type CDXBadgeProps = {
   visible?: boolean;
 } & typeof defaultProps;
 
-const NavBar = ({ id, menuOptionSelected = 'dashboard', onUserSettings, visible }: CDXBadgeProps): ReactElement => {
+const NavBar = ({ id, menuOptionSelected, onUserSettings, visible }: CDXBadgeProps): ReactElement => {
   const SessionStore = useSessionStore();
   const ActiveDomainStore = useActiveDomainStore();
   const ThemeStore = useThemeStore();
@@ -68,18 +67,21 @@ const NavBar = ({ id, menuOptionSelected = 'dashboard', onUserSettings, visible 
 
   const settingsMenu = [
     {
+      id: '__Small_Font_Size_Btn',
       key: 'SMALL',
       iconProps: { iconName: 'FontDecrease' },
       text: 'Small font size',
       onClick: () => updateThemeFontSize('SMALL'),
     },
     {
+      id: '__Medium_Font_Size_Btn',
       key: 'MEDIUM',
       iconProps: { iconName: 'FontColorA' },
       text: 'Medium font size (default)',
       onClick: () => updateThemeFontSize('MEDIUM'),
     },
     {
+      id: '__Large_Font_Size_Btn',
       key: 'LARGE',
       iconProps: { iconName: 'FontIncrease' },
       text: 'Large font size',
@@ -147,7 +149,12 @@ const NavBar = ({ id, menuOptionSelected = 'dashboard', onUserSettings, visible 
               })}
             />
 
-            <StyledIconButton iconProps={{ iconName: 'Font' }} title="Font sizes" menuProps={{ items: settingsMenu }} />
+            <StyledIconButton
+              id="__ProfileMenu_Font_Buttons"
+              iconProps={{ iconName: 'Font' }}
+              title="Font sizes"
+              menuProps={{ items: settingsMenu }}
+            />
 
             <ProfileMenu id="__ProfileMenu" onUserSettings={onUserSettings} />
           </StyledRow>

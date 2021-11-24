@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { DefaultButton, IconButton } from '@fluentui/react/lib/Button';
+import { DefaultButton, IconButton } from '@fluentui/react/lib-commonjs/Button';
 import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { Box, Row as LayoutRow, Column as LayoutColumn } from '../../../components/layouts';
 import { ButtonAction } from '../../../components/buttons/ButtonAction';

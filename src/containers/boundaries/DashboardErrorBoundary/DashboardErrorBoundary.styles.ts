@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FontIcon } from '@fluentui/react/lib/Icon';
+import { FontIcon } from '@fluentui/react/lib-commonjs/Icon';
 
 export const StyledErrorIcon = styled(FontIcon)`
   color: red;

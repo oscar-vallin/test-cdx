@@ -9,7 +9,6 @@ import { useSessionStore } from '../../../store/SessionStore';
 
 const defaultProps = {
   id: '',
-  onUserSettings: () => null,
 };
 
 type ProfileMenuProps = {

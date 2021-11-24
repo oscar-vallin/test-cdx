@@ -49,11 +49,7 @@ const parseLinks = (links = [], sidebarOpt: string) => {
   }));
 };
 
-const AdminErrorBoundary = ({
-  id = 'AdminErrorBoundary',
-  menuOptionSelected = 'admin',
-  sidebarOptionSelected = '',
-}: CDXBadgeProps): ReactElement => {
+const AdminErrorBoundary = ({ id, menuOptionSelected, sidebarOptionSelected }: CDXBadgeProps): ReactElement => {
   const history = useHistory();
   const ActiveDomainStore = useActiveDomainStore();
 

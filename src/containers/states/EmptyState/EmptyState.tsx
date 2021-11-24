@@ -1,6 +1,11 @@
 import { ReactElement } from 'react';
 import { StyledDiv, StyledImg, StyledTitle, StyledText, StyledActions } from './EmptyState.styles';
 
+const defaultProps = {
+  id: '',
+  filled: true,
+};
+
 type EmptyStateProps = {
   id?: string;
   filled?: boolean;
@@ -8,7 +13,7 @@ type EmptyStateProps = {
   image?: string;
   description?: string;
   actions?: any;
-};
+} & typeof defaultProps;
 
 const EmptyState = ({ title, description, actions, image, filled = true }: EmptyStateProps): ReactElement => {
   return (
@@ -20,5 +25,7 @@ const EmptyState = ({ title, description, actions, image, filled = true }: Empty
     </StyledDiv>
   );
 };
+
+EmptyState.defaultProps = defaultProps;
 
 export default EmptyState;
