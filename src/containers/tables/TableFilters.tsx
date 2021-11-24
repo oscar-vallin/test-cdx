@@ -1,5 +1,5 @@
 import React from 'react';
-import { Label } from '@fluentui/react/lib/Label';
+import { Label } from '@fluentui/react/lib-commonjs/Label';
 import { Column, Container, FilterSection, StyledRow } from './WorkPacketTable.styles';
 import { Card } from '../../components/cards';
 import { InputText } from '../../components/inputs/InputText';
@@ -31,3 +31,5 @@ export const TableFilters = ({ id, searchText, startDate, endDate }: TableFilter
     </FilterSection>
   );
 };
+
+export default TableFilters;

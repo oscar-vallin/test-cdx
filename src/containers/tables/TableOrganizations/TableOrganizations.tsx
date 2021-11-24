@@ -26,3 +26,4 @@ TableOrganizations.propTypes = {
 };
 
 export { TableOrganizations };
+export default TableOrganizations;

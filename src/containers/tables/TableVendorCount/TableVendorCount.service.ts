@@ -4,8 +4,8 @@ import { getTableStructure, TABLE_NAMES } from '../../../data/constants/TableCon
 
 export const useTable = (argOrgSid, argWorkerId) => {
   const [_loading, setLoading] = useState(true);
-  const [tableItems, setTableItems] = useState([]);
-  const [tableTotals, setTableTotals] = useState([]);
+  const [tableItems, setTableItems] = useState<any[] | never>([]);
+  const [tableTotals, setTableTotals] = useState<any[] | never>([]);
 
   const structure = getTableStructure(TABLE_NAMES.FILE_STATUS_DETAIL_VENDOR_COUNT);
 

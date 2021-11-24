@@ -51,3 +51,4 @@ TableEnrollment.propTypes = {
 };
 
 export { TableEnrollment };
+export default TableEnrollment;

@@ -22,3 +22,4 @@ TableVendorCount.propTypes = {
 };
 
 export { TableVendorCount };
+export default TableVendorCount;

@@ -38,7 +38,7 @@ type WorkPacketParams = {
   onItemsListChange?: (data: any, loading: boolean) => void;
 };
 
-const WorkPacketTable = ({
+export const WorkPacketTable = ({
   id,
   cols,
   lazyQuery,
@@ -200,4 +200,4 @@ const WorkPacketTable = ({
   );
 };
 
-export { WorkPacketTable };
+export default WorkPacketTable;

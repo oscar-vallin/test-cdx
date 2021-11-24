@@ -21,3 +21,4 @@ TableQualityChecks.propTypes = {
 };
 
 export { TableQualityChecks };
+export default TableQualityChecks;
