@@ -57,6 +57,8 @@ export const StyledChoiceGroup = styled(ChoiceGroup)`
 `;
 
 export const StyledIcon = styled(Icon)`
+  font-size: 20px;
+  font-weight: 800;
   color: ${({ theme, iconName }) =>
     iconName === 'StatusCircleCheckmark' ? theme.colors.custom.success : theme.colors.custom.error};
 `;
@@ -85,6 +87,12 @@ export const StyledPreview = styled.div<StyledPreviewProps>`
       background: ${({ colors }) => colors.themePrimary};
     }
   }
+`;
+
+export const CompositeRulesSeparator = styled.div`
+  margin: auto;
+  margin-top: 50px;
+  font-weight: 500;
 `;
 
 type StyledPreviewProps = {

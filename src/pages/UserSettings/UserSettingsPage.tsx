@@ -56,11 +56,7 @@ const _UserSettingsPage = () => {
           <Column lg="6">
             <StyledCard elevation="smallest">
               <Spacing padding={{ left: 'small' }}>
-                <PasswordRules
-                  username={user.userId}
-                  password={delayedPassword}
-                  onChange={passwordValidationStateChange}
-                />
+                <PasswordRules user={user} password={delayedPassword} onChange={passwordValidationStateChange} />
               </Spacing>
             </StyledCard>
           </Column>

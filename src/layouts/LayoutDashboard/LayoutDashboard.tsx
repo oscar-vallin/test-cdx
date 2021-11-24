@@ -1,10 +1,11 @@
 import { ReactElement, ReactNode } from 'react';
 import { useHistory } from 'react-router-dom';
-import { ROUTE_ACTIVITY_CURRENT, ROUTE_USER_SETTINGS } from '../../data/constants/RouteConstants';
+import { ROUTE_USER_SETTINGS } from '../../data/constants/RouteConstants';
 
 import { NavBar } from '../../containers/bars/NavBar';
 import { StyleConstants } from '../../data/constants/StyleConstants';
 import { BoxStyled } from './LayoutDashboard.styles';
+import { useSessionStore } from '../../store/SessionStore';
 
 const defaultProps = {
   id: '',
@@ -25,6 +26,7 @@ const LayoutDashboard = ({
   showMenu = true,
   children,
 }: LayoutDashboardProps): ReactElement => {
+  const { user } = useSessionStore();
   const history = useHistory();
 
   return (
@@ -34,7 +36,7 @@ const LayoutDashboard = ({
           id="__NavBar"
           visible={showMenu}
           menuOptionSelected={menuOptionSelected}
-          onUserSettings={() => history.push(ROUTE_USER_SETTINGS.URL)}
+          onUserSettings={() => history.push(`${ROUTE_USER_SETTINGS.URL}?orgSid=${user.orgSid}`)}
         />
 
         {children}

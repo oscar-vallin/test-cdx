@@ -5,21 +5,20 @@ import {
   usePasswordValidationLazyQuery,
 } from '../../../data/services/graphql';
 
-import { StyledTitle } from '../UserSettingsPage.styles';
+import { CompositeRulesSeparator, StyledTitle } from '../UserSettingsPage.styles';
 import { RuleGroup } from './RuleGroup';
 
-import { useOrgSid } from '../../../hooks/useOrgSid';
 import { Column, Row } from '../../../components/layouts';
 import { RuleItems } from './RuleItems';
+import { SessionUser } from '../../../store/SessionStore/SessionTypes';
 
 type PasswordRulesParam = {
-  username: string;
+  user: SessionUser;
   password: string;
   onChange: (passes: boolean) => void;
 };
 
-const PasswordRules = ({ username, password, onChange }: PasswordRulesParam) => {
-  const { orgSid } = useOrgSid();
+const PasswordRules = ({ user, password, onChange }: PasswordRulesParam) => {
   const [rules, setRules] = useState<PasswordValidation>();
   const [apiCall, { data, loading }] = usePasswordValidationLazyQuery();
 
@@ -42,12 +41,12 @@ const PasswordRules = ({ username, password, onChange }: PasswordRulesParam) => 
   useEffect(() => {
     apiCall({
       variables: {
-        orgSid,
-        userName: username,
+        orgSid: user.orgSid ?? '',
+        userName: user.userId ?? '',
         password,
       },
     });
-  }, [orgSid, username, password]);
+  }, [user, password]);
 
   useEffect(() => {
     if (!loading && data) {
@@ -79,12 +78,15 @@ const PasswordRules = ({ username, password, onChange }: PasswordRulesParam) => 
         </Column>
       </Row>
       <Row>
-        <Column lg="6">
+        <Column lg="5">
           <RuleGroup title="Meet strength level" passes={rules?.passwordStrength?.passes ?? false}>
             <RuleItems items={passwordStrengthRuleItems()} />
           </RuleGroup>
         </Column>
-        <Column lg="6">
+        <Column lg="2">
+          <CompositeRulesSeparator>or</CompositeRulesSeparator>
+        </Column>
+        <Column lg="5">
           <RuleGroup
             title={someMustBeMetTitle(rules?.someMustBeMet?.requiredNumPassingRules ?? 1)}
             passes={rules?.someMustBeMet?.passes ?? false}
