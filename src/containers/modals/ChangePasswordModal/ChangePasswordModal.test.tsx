@@ -5,7 +5,7 @@ const defaultProps = {
   hidden: true,
 };
 
-describe('Badge Testing Unit...', () => {
+describe('Change Password Container Testing Unit...', () => {
   const tree = mountWithTheme(<ChangePasswordModal {...defaultProps}></ChangePasswordModal>);
 
   it('Should be defined', () => {

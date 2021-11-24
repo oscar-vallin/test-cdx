@@ -1,5 +1,5 @@
-import { Label } from '@fluentui/react/lib/Label';
 import React from 'react';
+import { Label } from '@fluentui/react/lib/Label';
 import { Column, Container, FilterSection, StyledRow } from './WorkPacketTable.styles';
 import { Card } from '../../components/cards';
 import { InputText } from '../../components/inputs/InputText';

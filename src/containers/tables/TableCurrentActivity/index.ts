@@ -1,3 +1,3 @@
-import { TablesCurrentActivity } from './TablesCurrentActivity';
+import { TablesCurrentActivity } from './TableCurrentActivity';
 
 export { TablesCurrentActivity };

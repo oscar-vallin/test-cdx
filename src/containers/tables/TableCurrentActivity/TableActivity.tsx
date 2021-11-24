@@ -77,3 +77,4 @@ const TableActivity = ({ id, items, loading, tableName, color }: TableActivityPr
 TableActivity.defaultProps = defaultProps;
 
 export { TableActivity };
+export default TableActivity;

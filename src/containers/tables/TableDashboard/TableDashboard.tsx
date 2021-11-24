@@ -96,3 +96,4 @@ TableDashboard.propTypes = {
 };
 
 export { TableDashboard };
+export default TableDashboard;
