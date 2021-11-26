@@ -47,4 +47,4 @@ const LayoutDashboard = ({
 
 LayoutDashboard.defaultProps = defaultProps;
 
-export { LayoutDashboard };
+export default LayoutDashboard;

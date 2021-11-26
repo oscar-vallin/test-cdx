@@ -14,7 +14,11 @@ type LayoutLoginProps = {
   direction?: string;
 } & typeof defaultProps;
 
-const LayoutLogin = ({ id, children, direction = StyleConstants.DIRECTION_COLUMN }: LayoutLoginProps): ReactElement => {
+export const LayoutLogin = ({
+  id,
+  children,
+  direction = StyleConstants.DIRECTION_COLUMN,
+}: LayoutLoginProps): ReactElement => {
   return (
     <BoxStyled id={id} direction={direction}>
       {children}
@@ -24,4 +28,4 @@ const LayoutLogin = ({ id, children, direction = StyleConstants.DIRECTION_COLUMN
 
 LayoutLogin.defaultProps = defaultProps;
 
-export { LayoutLogin };
+export default LayoutLogin;

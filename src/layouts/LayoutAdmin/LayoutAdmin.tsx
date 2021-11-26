@@ -51,7 +51,7 @@ const parseLinks = (links = [], sidebarOpt: string) => {
   }));
 };
 
-const LayoutAdmin = ({
+export const LayoutAdmin = ({
   id,
   menuOptionSelected = 'admin',
   sidebarOptionSelected = '',
@@ -92,4 +92,4 @@ const LayoutAdmin = ({
 
 LayoutAdmin.defaultProps = defaultProps;
 
-export { LayoutAdmin };
+export default LayoutAdmin;
