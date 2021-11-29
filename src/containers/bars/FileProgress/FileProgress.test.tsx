@@ -7,8 +7,10 @@ const defaultProps = {
   stepStatus: 0,
 };
 
-describe('Badge Testing Unit...', () => {
-  const tree = mountWithTheme(<FileProgress {...defaultProps}></FileProgress>);
+describe('FileProgress Testing Unit...', () => {
+  const tree = mountWithTheme(
+    <FileProgress {...defaultProps} step="" stepStatus={{ label: '', value: '' }}></FileProgress>
+  );
 
   it('Should be defined', () => {
     expect(FileProgress).toBeDefined();

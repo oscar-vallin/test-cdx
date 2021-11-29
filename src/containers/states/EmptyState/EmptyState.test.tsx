@@ -3,14 +3,14 @@ import EmptyState from './EmptyState';
 
 const defaultProps = { id: 'ImageId', filled: true, title: '', image: 'Alt Img', description: '' };
 
-describe('Image', () => {
+describe('Empty State Testing Unit...', () => {
   const tree = shallow(<EmptyState {...defaultProps} />);
 
   it('Should be defined', () => {
-    expect(EmptyState).toBeDefined();
+    expect(tree).toBeDefined();
   });
 
   it('Should render correctly', () => {
-    expect(EmptyState).toMatchSnapshot();
+    expect(tree).toMatchSnapshot();
   });
 });

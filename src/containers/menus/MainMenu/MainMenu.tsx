@@ -83,6 +83,7 @@ const MainMenu = ({ id, left, changeCollapse, option }: MainMenuProps): ReactEle
     <OutsideComponent id={id} collapseClick={collapseNavMenu} hide={collapse}>
       <StyledRow id={`${id}__MainMenu--Row`} collapse={collapse}>
         <StyledButtonIcon
+          id="__MainMenu"
           icon="BulletedListText"
           disabled={false}
           variant="navbar"

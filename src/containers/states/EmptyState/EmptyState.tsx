@@ -15,7 +15,7 @@ type EmptyStateProps = {
   actions?: any;
 } & typeof defaultProps;
 
-const EmptyState = ({ title, description, actions, image, filled = true }: EmptyStateProps): ReactElement => {
+const EmptyState = ({ title, description, actions, image, filled }: EmptyStateProps): ReactElement => {
   return (
     <StyledDiv filled={filled}>
       {image && <StyledImg src={image} />}

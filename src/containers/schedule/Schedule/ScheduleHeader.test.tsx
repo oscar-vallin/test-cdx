@@ -31,4 +31,36 @@ describe('ButtonAction', () => {
     expect(WeekContainer).toBeDefined();
     expect(themedMount).toBeDefined();
   });
+
+  it('Should sink in the button MonthView', () => {
+    const themedComponent = mountWithTheme(<Component {...defaultProps} />);
+
+    const btns = themedComponent.find('button[id="__HeaderButtonView_Button-MonthView_Id"]');
+    btns.simulate('click');
+    expect(btns.length).toBe(1);
+  });
+
+  it('Should sink in the button HeaderTitle', () => {
+    const themedComponent = mountWithTheme(<Component {...defaultProps} />);
+
+    const btns = themedComponent.find('button[id="__HeaderButtonTitle_Id"]');
+    btns.simulate('click');
+    expect(btns.length).toBe(1);
+  });
+
+  it('Should sink in the button WeekView', () => {
+    const themedComponent = mountWithTheme(<Component {...defaultProps} />);
+
+    const btns = themedComponent.find('button[id="__HeaderButtonView_Button-WeekView_Id"]');
+    btns.simulate('click');
+    expect(btns.length).toBe(1);
+  });
+
+  it('Should sink in the button DayView', () => {
+    const themedComponent = mountWithTheme(<Component {...defaultProps} />);
+
+    const btns = themedComponent.find('button[id="__HeaderButtonView_Button-DayView_Id"]');
+    btns.simulate('click');
+    expect(btns.length).toBe(1);
+  });
 });

@@ -81,7 +81,7 @@ export const ScheduleMonth = ({ id, currentDate, selectedDate, onChangeDate, ite
 
         days.push(
           <CalendarBodyCell
-            id="CalendarBodyCell"
+            id={`CalendarBodyCell-${day.getDate()}`}
             isSameMonth={isSameMonth(day, dates.monthStart)}
             isSameDay={isSameDay(day, currentDate)}
             isSelectedDate={isSameDay(day, dates.selectedDate)}

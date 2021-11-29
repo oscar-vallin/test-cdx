@@ -6,7 +6,7 @@ const defaultProps = {
   type: 'ADMIN',
 };
 
-describe('Badge Testing Unit...', () => {
+describe('DashboardErrorBoundary Testing Unit...', () => {
   const tree = shallowWithTheme(<DashboardErrorBoundary type="ADMIN"></DashboardErrorBoundary>);
 
   it('Should be defined', () => {

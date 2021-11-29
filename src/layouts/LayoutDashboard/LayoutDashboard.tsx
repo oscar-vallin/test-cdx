@@ -20,7 +20,7 @@ type LayoutDashboardProps = {
   children?: ReactNode | string;
 } & typeof defaultProps;
 
-const LayoutDashboard = ({
+export const LayoutDashboard = ({
   id,
   menuOptionSelected = 'dashboard',
   showMenu = true,

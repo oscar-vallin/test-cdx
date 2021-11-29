@@ -10,7 +10,7 @@ const defaultProps = {
   sidebarOptionSelected: '',
 };
 
-describe('Badge Testing Unit...', () => {
+describe('AdminErrorBoundary Testing Unit...', () => {
   const tree = shallowWithTheme(
     <StoreProvider store={store}>
       <AdminErrorBoundary {...defaultProps}></AdminErrorBoundary>

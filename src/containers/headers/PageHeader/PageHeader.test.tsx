@@ -3,7 +3,7 @@ import { PageHeader as Component } from './PageHeader';
 
 const defaultProps = { id: '', spacing: 'primary', children: '' };
 
-describe('Image', () => {
+describe('PageHeader Testing Unit...', () => {
   const tree = shallow(<Component {...defaultProps} />);
 
   it('Should be defined', () => {

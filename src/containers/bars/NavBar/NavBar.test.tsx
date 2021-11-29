@@ -13,7 +13,7 @@ const defaultProps = {
   visible: true,
 };
 
-describe('Badge Testing Unit...', () => {
+describe('NavBar Testing Unit...', () => {
   const tree = shallowWithTheme(
     <StoreProvider store={store}>
       <NavBar {...defaultProps}></NavBar>

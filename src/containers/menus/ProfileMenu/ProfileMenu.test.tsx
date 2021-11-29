@@ -1,12 +1,15 @@
 import { ProfileMenu } from './ProfileMenu';
-import { shallowWithTheme } from '../../../utils/testUtils';
+import { shallowWithTheme, mountWithTheme } from '../../../utils/testUtils';
+import store from '../../../../src/store/index';
+import { StoreProvider } from 'easy-peasy';
+import { ROUTE_ACTIVITY_CURRENT, ROUTE_USER_SETTINGS } from '../../../data/constants/RouteConstants';
 
 const defaultProps = {
-  id: 'ProfileMenuId',
+  id: '__ButtonContext',
   onUserSettings: () => {},
 };
 
-describe('Badge Testing Unit...', () => {
+describe('Profile Menu Testing Unit...', () => {
   const tree = shallowWithTheme(<ProfileMenu {...defaultProps}></ProfileMenu>);
 
   it('Should be defined', () => {
@@ -15,5 +18,17 @@ describe('Badge Testing Unit...', () => {
 
   it('Should render correctly', () => {
     expect(tree).toMatchSnapshot();
+  });
+
+  it('Should sink in the button ButtonContext', () => {
+    const tree = mountWithTheme(
+      <StoreProvider store={store}>
+        <ProfileMenu {...defaultProps}></ProfileMenu>);
+      </StoreProvider>
+    );
+
+    const btns = tree.find('button[id="__ButtonContext"]');
+    btns.simulate('click');
+    expect(btns.length).toBe(1);
   });
 });
