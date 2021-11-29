@@ -17,7 +17,7 @@ import {
 import { EmptyState } from 'src/containers/states';
 import { SpinnerSize } from '@fluentui/react';
 import { StyleConstants } from '../../../data/constants/StyleConstants';
-import { getDates } from '../../../helpers/tableHelpers';
+import { getDates } from '../../../helpers/tableHelpers.service';
 import { Spinner } from '../../spinners/Spinner';
 
 import {

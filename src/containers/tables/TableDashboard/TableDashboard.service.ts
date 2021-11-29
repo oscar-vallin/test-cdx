@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getTableStructure } from '../../../data/constants/TableConstants';
-import { formatField } from '../../../helpers/tableHelpers';
+import { formatField } from '../../../helpers/tableHelpers.service';
 
 //
 export const useTable = (data, tableName, date, altData) => {

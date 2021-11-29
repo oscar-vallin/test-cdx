@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { formatField } from '../../../helpers/tableHelpers';
+import { formatField } from '../../../helpers/tableHelpers.service';
 import { getStepStatusLabel } from '../FileStatusConstants';
 
 export const errorColumns = [

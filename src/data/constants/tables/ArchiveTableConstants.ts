@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { formatField } from '../../../helpers/tableHelpers';
+import { formatField } from '../../../helpers/tableHelpers.service';
 
 export const columns = [
   { key: 'datetime', label: 'Received On', id: 'datetime', style: 'text' },

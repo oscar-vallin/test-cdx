@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import { getTableStructure, useQueryTable } from '../data/constants/TableConstants';
-import { isTodayInRange } from '../helpers/tableHelpers';
+import { isTodayInRange } from '../helpers/tableHelpers.service';
 import { useRefresh } from './useRefresh';
 
 //

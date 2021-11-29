@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { DetailsHeader } from 'office-ui-fabric-react/lib-commonjs/DetailsList';
 import { useHistory } from 'react-router-dom';
 import { format } from 'date-fns';
-import { getDates } from '../../../helpers/tableHelpers';
+import { getDates } from '../../../helpers/tableHelpers.service';
 
 import {
   HeaderTable,
