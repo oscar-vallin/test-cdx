@@ -56,7 +56,7 @@
     "test:e2e:url:file": "REACT_TEMP_URL=\"$npm_config_url\" && echo \"Parsing: $REACT_TEMP_URL\" && npm run e2e:file",
     "test": "react-scripts test --verbose --updateSnapshot --transformIgnorePatterns \"node_modules/(?!react-ts)/\"",
     "test:local": "react-scripts test --verbose --updateSnapshot --transformIgnorePatterns \"node_modules/(?!react-ts)/\" --silent",
-    "test:forbuild": "react-scripts test --coverage --watchAll=false --updateSnapshot --reporters=default --reporters=jest-junit --testPathIgnorePatterns \"^.+\\.e2e\\.test\\.(js|ts)\"",
+    "test:forbuild": "react-scripts --max_old_space_size=4096 test --coverage --watchAll=false --updateSnapshot --reporters=default --reporters=jest-junit --testPathIgnorePatterns \"^.+\\.e2e\\.test\\.(js|ts)\"",
     "test:unit:coverage": "react-scripts test --coverage --watchAll=false --updateSnapshot --reporters=default --reporters=jest-junit --testPathIgnorePatterns \"^.+\\.e2e\\.test\\.(js|ts)\"",
     "test:coverage": "react-scripts test --coverage --runInBand --watchAll=false --updateSnapshot",
     "format": "prettier --write src/**/*.{ts,tsx}",

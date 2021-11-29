@@ -78,3 +78,4 @@ const CDXTagPicker = ({
 CDXTagPicker.propTypes = {};
 
 export { CDXTagPicker };
+export default CDXTagPicker;

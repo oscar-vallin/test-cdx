@@ -123,3 +123,4 @@ const TablesCurrentActivity = ({ id = 'TableCurrentActivity' }) => {
 TablesCurrentActivity.propTypes = {};
 
 export { TablesCurrentActivity };
+export default TablesCurrentActivity;

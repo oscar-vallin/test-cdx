@@ -1,4 +1,4 @@
-import Component from './TableActivity';
+import Component from './TableCurrentActivity';
 import { mountWithTheme, shallowWithTheme } from '../../../utils/testUtils';
 import { OrganizationLink } from 'src/data/services/graphql';
 

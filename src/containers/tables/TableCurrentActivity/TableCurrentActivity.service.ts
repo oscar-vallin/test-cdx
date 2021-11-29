@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { useActivityComplete } from './hooks/useActivityComplete';
-import { useActivityErrored } from './hooks/useActivityErrored';
-import { useActivityProcess } from './hooks/useActivityProcess';
+import { useActivityComplete } from './hooks/useActivityComplete.service';
+import { useActivityErrored } from './hooks/useActivityErrored.service';
+import { useActivityProcess } from './hooks/useActivityProcess.service';
 import { OrganizationLink } from '../../../data/services/graphql';
 // import {ApolloError} from "@apollo/client";
 

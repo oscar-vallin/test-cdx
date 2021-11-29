@@ -10,3 +10,4 @@ TableAccessManagementGroups.propTypes = {
 };
 
 export { TableAccessManagementGroups };
+export default TableAccessManagementGroups;

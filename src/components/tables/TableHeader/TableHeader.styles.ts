@@ -8,7 +8,12 @@ export const StyledBox = styled(LayoutBox)`
   width: 100%;
 `;
 
-export const StyledRow = styled(LayoutRow)`
+type RowProps = {
+  marginH?: boolean;
+  noBorder?: boolean;
+};
+
+export const StyledRow = styled(LayoutRow)<RowProps>`
   width: 100%;
   margin-left: ${({ marginH }) => (marginH ? `${marginH}px` : '0px')};
   margin-right: ${({ marginH }) => (marginH ? `${marginH}px` : '0px')};
@@ -17,7 +22,12 @@ export const StyledRow = styled(LayoutRow)`
   border-bottom-style: solid;
 `;
 
-export const StyledColumn = styled(LayoutColumn)`
+type ColumnProps = {
+  marginH?: boolean;
+  paddingLeft?: boolean;
+};
+
+export const StyledColumn = styled(LayoutColumn)<ColumnProps>`
   padding-left: ${({ paddingLeft }) => (paddingLeft ? `${paddingLeft}px` : '0px')};
   margin-left: ${({ marginH }) => (marginH ? `${marginH}px` : '0px')};
   margin-right: ${({ marginH }) => (marginH ? `${marginH}px` : '0px')};
@@ -32,7 +42,11 @@ export const HeaderTable = styled(StyledRow)`
   min-height: 38px;
 `;
 
-export const StyledText = styled(Text)`
+type TextProps = {
+  left?: boolean;
+};
+
+export const StyledText = styled(Text)<TextProps>`
   display: flex;
   width: 100%;
   font-weight: ${({ bold, theme }) => (bold ? theme.fontWeights.bold : theme.fontWeights.normal)};
