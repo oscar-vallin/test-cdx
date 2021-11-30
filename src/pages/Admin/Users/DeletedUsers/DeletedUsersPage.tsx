@@ -1,11 +1,11 @@
 /* eslint-disable no-alert */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, useMemo, memo } from 'react';
-import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
+import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib-commonjs/Dialog';
 import { PrimaryButton, DefaultButton, MessageBar } from 'office-ui-fabric-react';
 import { DetailsList, DetailsListLayoutMode, SelectionMode, Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
-import { MarqueeSelection } from '@fluentui/react/lib/MarqueeSelection';
+import { MarqueeSelection } from '@fluentui/react/lib-commonjs/MarqueeSelection';
 import { SpinnerSize } from '@fluentui/react';
 import { EmptyState } from 'src/containers/states';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';

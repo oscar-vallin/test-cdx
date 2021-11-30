@@ -1,8 +1,8 @@
 /* eslint-disable no-alert */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useMemo } from 'react';
-import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
-import { MarqueeSelection } from '@fluentui/react/lib/MarqueeSelection';
+import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib-commonjs/Dialog';
+import { MarqueeSelection } from '@fluentui/react/lib-commonjs/MarqueeSelection';
 import { PrimaryButton, DefaultButton, MessageBar } from 'office-ui-fabric-react';
 import {
   DetailsList,

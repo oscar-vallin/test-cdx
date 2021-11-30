@@ -2,12 +2,12 @@
 import React, { useState, useEffect, ReactElement } from 'react';
 
 import { useLocation } from 'react-router-dom';
-import { Panel, PanelType } from '@fluentui/react/lib/Panel';
+import { Panel, PanelType } from '@fluentui/react/lib-commonjs/Panel';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { TagPicker } from '@fluentui/react/lib-commonjs/Pickers';
-import { mergeStyles } from '@fluentui/react/lib/Styling';
+import { mergeStyles } from '@fluentui/react/lib-commonjs/Styling';
 import { FontIcon } from '@fluentui/react/lib-commonjs/Icon';
-import { TooltipHost } from '@fluentui/react/lib/Tooltip';
+import { TooltipHost } from '@fluentui/react/lib-commonjs/Tooltip';
 
 import { Spacing } from '../../../../../components/spacings/Spacing';
 import { Button } from '../../../../../components/buttons';
