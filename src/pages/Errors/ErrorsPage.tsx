@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FontIcon } from '@fluentui/react/lib/Icon';
+import { FontIcon } from '@fluentui/react/lib-commonjs/Icon';
 import { ROUTES } from '../../data/constants/RouteConstants';
 import { LayoutDashboard } from '../../layouts/LayoutDashboard';
 import { Row, Column, Container } from '../../components/layouts';

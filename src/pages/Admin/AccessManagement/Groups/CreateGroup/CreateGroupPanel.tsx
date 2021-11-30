@@ -4,9 +4,9 @@ import React, { useState, useEffect, ReactElement } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Panel, PanelType } from '@fluentui/react/lib/Panel';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
-import { TagPicker } from '@fluentui/react/lib/Pickers';
+import { TagPicker } from '@fluentui/react/lib-commonjs/Pickers';
 import { mergeStyles } from '@fluentui/react/lib/Styling';
-import { FontIcon } from '@fluentui/react/lib/Icon';
+import { FontIcon } from '@fluentui/react/lib-commonjs/Icon';
 import { TooltipHost } from '@fluentui/react/lib/Tooltip';
 
 import { Spacing } from '../../../../../components/spacings/Spacing';

@@ -1,5 +1,5 @@
 import React, { memo, useState } from 'react';
-import { FontIcon } from '@fluentui/react/lib/Icon';
+import { FontIcon } from '@fluentui/react/lib-commonjs/Icon';
 import { ROUTES } from '../../data/constants/RouteConstants';
 import { Row, Column, Container } from '../../components/layouts';
 import { Spacing } from '../../components/spacings/Spacing';
