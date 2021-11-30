@@ -21,7 +21,9 @@ describe('FileProgress Testing Unit...', () => {
   });
 
   it('Should return null if progressItem does not exist', () => {
-    const tree = mountWithTheme(<FileProgress {...defaultProps} step="a" stepStatus="b"></FileProgress>);
+    const tree = mountWithTheme(
+      <FileProgress {...defaultProps} step="" stepStatus={{ label: '', value: '' }}></FileProgress>
+    );
     expect(tree).toEqual({});
   });
 });

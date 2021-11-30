@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { ReactElement, useState, useEffect } from 'react';
-import { Panel, PanelType } from '@fluentui/react/lib/Panel';
+import { Panel, PanelType } from '@fluentui/react/lib-commonjs/Panel';
 
 import { Spacing } from '../../../../components/spacings/Spacing';
 import { Button } from '../../../../components/buttons/Button';

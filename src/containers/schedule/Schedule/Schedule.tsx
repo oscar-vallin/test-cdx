@@ -73,7 +73,7 @@ const Schedule = ({ id }) => {
 
               {!!isCurrentViewMonth(currentView) && (
                 <ScheduleMonth
-                  id={id}
+                  id={`${id}-Month`}
                   selectedDate={selectedDate}
                   currentDate={currentDate}
                   onChangeDate={handleChangeDate}

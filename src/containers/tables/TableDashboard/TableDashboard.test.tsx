@@ -37,7 +37,7 @@ describe('Table Dashboard Testing Unit...', () => {
         </Router>
       </StoreProvider>
     );
-    expect(tree).toMatchSnapshot();
+    expect(wrapper).toMatchSnapshot();
   });
 
   it('Should render the label property if provided', () => {
@@ -48,7 +48,7 @@ describe('Table Dashboard Testing Unit...', () => {
         </Router>
       </StoreProvider>
     );
-    expect(tree).toMatchSnapshot();
+    expect(wrapper).toMatchSnapshot();
   });
 
   it('Should render the label property if provided', () => {
@@ -62,6 +62,6 @@ describe('Table Dashboard Testing Unit...', () => {
         </Router>
       </StoreProvider>
     ).dive();
-    expect(tree).toMatchSnapshot();
+    expect(wrapper).toMatchSnapshot();
   });
 });

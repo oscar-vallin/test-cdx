@@ -1,4 +1,4 @@
-import Component from './TableCurrentActivity';
+import Component from './TableActivity';
 import { mountWithTheme, shallowWithTheme } from '../../../utils/testUtils';
 import { OrganizationLink } from 'src/data/services/graphql';
 
@@ -27,5 +27,11 @@ describe('Table Current Activity Container Testing Unit...', () => {
 
   it('Should render correctly', () => {
     expect(mountedComponent).toMatchSnapshot();
+  });
+
+  it('Should Render Table', () => {
+    const wrapper = mountWithTheme(<Component {...defaultProps} />);
+    const input = wrapper.find('Table[id="__Table__In__Process"]').first();
+    expect(input).toMatchSnapshot();
   });
 });

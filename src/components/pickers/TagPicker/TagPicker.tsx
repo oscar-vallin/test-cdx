@@ -1,22 +1,45 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { ReactElement, useCallback, useEffect, useRef } from 'react';
 import { Label } from '@fluentui/react/lib-commonjs/Label';
 import { StyledTagPicker } from './TagPicker.styles';
+
+const defaultProps = {
+  value: [],
+  options: [],
+  // onChange: (param) => null,
+  // apiQuery: (param) => null,
+  debounce: 500,
+};
+
+type CDXTagPickerProps = {
+  id?: string;
+  label?: boolean;
+  disabled?: any;
+  pickerProps?: any;
+  value?: any[];
+  options?: any;
+  onChange?: any | null;
+  apiQuery?: any | null;
+  debounce?: number;
+  onBlur?: any | null;
+  onFocus?: any | null;
+  required?: any;
+} & typeof defaultProps;
 
 const CDXTagPicker = ({
   label,
   disabled,
   pickerProps,
-  value = [],
-  options = [],
-  onChange = (param) => null,
-  apiQuery = (param) => null,
-  debounce = 500,
+  value,
+  options,
+  onChange,
+  apiQuery,
+  debounce,
   onBlur,
   onFocus,
   required,
   id,
-}) => {
-  const picker = useRef(null);
+}: CDXTagPickerProps): ReactElement => {
+  const picker: any = useRef(null);
 
   const handleItemSelection = useCallback((item) => {
     if (picker.current && listContainsTagList(item, picker.current.items)) {
@@ -33,7 +56,7 @@ const CDXTagPicker = ({
     return tagList.some((compareTag) => compareTag.key === tag.key);
   };
 
-  const filterSelectedTags = (filterText, tagList) => {
+  const filterSelectedTags: any = (filterText, tagList) => {
     return filterText ? options.filter((tag) => tag.name.toLowerCase().indexOf(filterText.toLowerCase()) === 0) : [];
   };
 
@@ -75,7 +98,6 @@ const CDXTagPicker = ({
   );
 };
 
-CDXTagPicker.propTypes = {};
+CDXTagPicker.defaultProps = defaultProps;
 
 export { CDXTagPicker };
-export default CDXTagPicker;

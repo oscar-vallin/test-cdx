@@ -1,31 +1,23 @@
-import { mountWithTheme, shallowWithTheme } from '../../../utils/testUtils';
+import { shallow } from 'enzyme';
 import { CDXTagPicker as Component } from './TagPicker';
+import { mountWithTheme } from '../../../utils/testUtils';
 
-const defaultProps = {
-  label: 'Label',
-  disabled: false,
-  debounce: 500,
-  pickerProps: {} as any,
-  onBlur: () => null,
-  onFocus: () => null,
-  required: false,
-  id: '__TestTagPicker',
-  apiQuery: () => null,
-  options: [],
-  value: [],
-  onChange: () => null,
-};
+const defaultProps = { value: [], options: [], onChange: (param) => null, apiQuery: (param) => null, debounce: 500 };
 
-describe('TagPicker Test...', () => {
-  const themedComponent = shallowWithTheme(<Component {...defaultProps} />);
-  const themedMount = mountWithTheme(<Component {...defaultProps} />);
+describe('TagPicker unit test', () => {
+  const tree = shallow(<Component {...defaultProps} />);
 
   it('Should be defined', () => {
-    expect(themedComponent).toBeDefined();
-    expect(themedMount).toBeDefined();
+    expect(Component).toBeDefined();
   });
 
-  it('Tag Picker, Should be defined', () => {
-    expect(themedComponent).toMatchSnapshot();
+  it('Should render correctly', () => {
+    expect(Component).toMatchSnapshot();
+  });
+
+  it('Should find input with Id __CreateAccessSpecializationPanelId', () => {
+    const wrapper = mountWithTheme(<Component {...defaultProps} apiQuery={jest.fn()} />);
+    const input = wrapper.find('input[id="__CreateAccessSpecializationPanelId"]').first();
+    expect(input).toMatchSnapshot();
   });
 });
