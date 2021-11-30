@@ -14,8 +14,8 @@ phases:
     commands:
     - echo In the pre_build phase...
     - echo https://services.gradle.org/distributions/
-    - wget https://services.gradle.org/distributions/gradle-6.8.3-all.zip
-    - unzip -d /opt/gradle gradle-6.8.3-all.zip
+    - wget https://services.gradle.org/distributions/gradle-7.3-all.zip
+    - unzip -d /opt/gradle gradle-7.3-all.zip
     - export AWS_ACCESS_KEY_ID=$ACCESSKEYID
     - export AWS_SECRET_ACCESS_KEY=$ACCESSKEYSECRET
     - wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip
@@ -30,8 +30,8 @@ phases:
     - pwd
     - whereis gradle
     - which gradle
-    - /opt/gradle/gradle-6.8.3/bin/gradle -version
-    - /opt/gradle/gradle-6.8.3/bin/gradle clean jar yarnTest publish
+    - /opt/gradle/gradle-7.3/bin/gradle -version
+    - /opt/gradle/gradle-7.3/bin/gradle clean jar yarnTest publish
     - /opt/sonar/sonar-scanner-4.6.2.2472-linux/bin/sonar-scanner -D"sonar.projectKey=$PROJECT" -D"sonar.sources=src" -D"sonar.host.url=$HOST" -D"sonar.login=$LOGIN"
   post_build:
     commands:
