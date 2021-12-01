@@ -7,19 +7,25 @@ import { MessageBar } from 'office-ui-fabric-react';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { SpinnerSize } from '@fluentui/react';
 import { EmptyState } from 'src/containers/states';
+import { id } from 'date-fns/locale';
+import { getItemStyles } from '@fluentui/react/lib/components/ContextualMenu/ContextualMenu.classNames';
 import { Row, Column } from '../../../../components/layouts';
 import { Spacing } from '../../../../components/spacings/Spacing';
-import { Button } from '../../../../components/buttons';
+import { Button, Link } from '../../../../components/buttons';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Text } from '../../../../components/typography/Text';
 import { CreateGroupPanel } from './CreateGroup';
 import { Separator } from '../../../../components/separators/Separator';
 
-import { useAccessPolicyGroupsForOrgLazyQuery } from '../../../../data/services/graphql';
+import {
+  useAccessPolicyGroupsForOrgLazyQuery,
+  useDeleteAccessPolicyGroupMutation,
+} from '../../../../data/services/graphql';
 import { StyledColumn, StyledCommandButton } from './AccessManagementGroupsPage.styles';
 
 import { useOrgSid } from '../../../../hooks/useOrgSid';
 import { useQueryHandler } from '../../../../hooks/useQueryHandler';
+import { useAccessManagementGroupsPageService } from './AccessManagementGroupsPage.service';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -47,6 +53,8 @@ const _AccessManagementGroupsPage = () => {
   const [apiAmGroupsForOrg, { data, loading }] = useQueryHandler(useAccessPolicyGroupsForOrgLazyQuery);
   const [selectedGroupId, setSelectedGroupId] = useState(0);
 
+  const { deleteAccessPolicyGroup, deleteLoading, deleteError, deleteData } = useAccessManagementGroupsPageService();
+
   useEffect(() => {
     apiAmGroupsForOrg({ variables: { orgSid } });
   }, [orgSid]);
@@ -58,6 +66,22 @@ const _AccessManagementGroupsPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading]);
 
+  // Handle delete.
+  useEffect(() => {
+    if (deleteData) {
+      if (deleteData.deleteAccessPolicyGroup === 'SUCCESS') {
+        setGroups(groups.filter(({ sid }) => sid !== selectedGroupId));
+      }
+    }
+  }, [deleteData]);
+
+  // Handle Delete function.
+  const handleDeleteGroup = (id) => {
+    setSelectedGroupId(id);
+
+    deleteAccessPolicyGroup(id);
+  };
+
   const onRenderItemColumn = (item, index, column) => {
     if (column.key === 'tmpl') {
       return <FontIcon iconName={item.tmpl ? 'CheckMark' : 'Cancel'} />;
@@ -67,12 +91,27 @@ const _AccessManagementGroupsPage = () => {
         <>
           &nbsp;
           <StyledCommandButton
-            iconProps={{ iconName: 'Edit' }}
+            iconProps={{ iconName: 'Delete' }}
+            onClick={() => {
+              handleDeleteGroup(item.sid);
+            }}
+          />
+        </>
+      );
+    }
+
+    if (column.key === 'name') {
+      return (
+        <>
+          &nbsp;
+          <Link
             onClick={() => {
               setSelectedGroupId(item.sid);
               setIsPanelOpen(true);
             }}
-          />
+          >
+            {item.name}
+          </Link>
         </>
       );
     }

@@ -56,7 +56,7 @@ export const ScheduleSubHeader = ({ id, currentView, currentDate, selectedDate }
       const isEndMonth = !!isSameDay(_currentDay, endOfMonth(_currentDay));
 
       return (
-        <RowWeek id={id}>
+        <RowWeek id={id} key={id}>
           <DayViewContainer key={_currentDay} isSameDay={isCurrentDate} isSameMonth={isCurrentMonth}>
             <WeekViewNumber>
               {isCurrentDate || isStartMonth || isEndMonth ? format(_currentDay, 'MMM d') : format(_currentDay, 'd')}

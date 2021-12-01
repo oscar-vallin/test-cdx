@@ -99,7 +99,6 @@ const _FileStatusDetailsPage = () => {
   }, [packet.step, packet.stepStatus, packet.packetStatus]);
 
   const changeUrlHash = (_hash) => {
-    console.log(_hash);
     // history.replace({
     //   _hash,
     // });
