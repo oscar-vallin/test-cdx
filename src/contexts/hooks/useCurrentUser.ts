@@ -12,7 +12,6 @@ export const useCurrentUser = () => {
 
   useEffect(() => {
     if (error) {
-      // console.log('We have an error');
       // authLogout('Session Expired');
       // history.push('/');
     }
