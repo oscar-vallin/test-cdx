@@ -19,11 +19,6 @@ export const useAccessManagementGroupsPageService = () => {
         policyGroupSid: groupId,
       },
     });
-
-    console.log(
-      '🚀 ~ file: AccessManagementGroupsPage.service.ts ~ line 8 ~ useAccessManagementGroupsPageService ~ deleteData',
-      deleteData
-    );
   };
 
   return { deleteAccessPolicyGroup, deleteData, deleteLoading, deleteError, setPolicyGroupSid };

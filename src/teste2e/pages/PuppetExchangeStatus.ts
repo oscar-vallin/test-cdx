@@ -57,6 +57,20 @@ export default class PuppetExchangeStatus extends PuppetBasePage {
     await this.page.waitForTimeout(1000);
   }
 
+  async clickDateRange(selector: string) {
+    const header = `${selector}`;
+    await this.waitForSelector(header);
+    await this.page.click(header);
+    await this.page.waitForTimeout(1000);
+  }
+
+  async compareDate(selector: string, date: string) {
+    await this.page.waitForTimeout(1000);
+    await this.waitForSelector(selector);
+    const inputDate = await this.page.$eval(selector, (e) => e.getAttribute('value'));
+    expect(inputDate).toContain(date);
+  }
+
   async isSortedAsc(selector: string): Promise<boolean> {
     try {
       const icon = await this.page.$(`${selector} i[data-icon-name="SortUp"]`);
