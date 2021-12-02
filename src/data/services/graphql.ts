@@ -19,11 +19,6 @@ export type Scalars = {
 
 
 
-export type AmPasswordConfigInput = {
-  allowForgotten?: Maybe<Scalars['Boolean']>;
-  orgUnitOwner?: Maybe<Scalars['ID']>;
-};
-
 export type AccessPolicy = {
   __typename?: 'AccessPolicy';
   sid?: Maybe<Scalars['ID']>;
@@ -134,40 +129,6 @@ export type ArchiveFileType = {
   __typename?: 'ArchiveFileType';
   value: Scalars['String'];
   label?: Maybe<Scalars['String']>;
-};
-
-export enum CdxFacet {
-  All = 'ALL',
-  Archive = 'ARCHIVE',
-  Status = 'STATUS',
-  AmPolicy = 'AM_POLICY',
-  AmUser = 'AM_USER',
-  Organization = 'ORGANIZATION'
-}
-
-export type CdxFacetNvp = {
-  __typename?: 'CDXFacetNVP';
-  name: Scalars['String'];
-  value: CdxFacet;
-};
-
-export type CdxPageInfo = {
-  __typename?: 'CDXPageInfo';
-  orgSid?: Maybe<Scalars['ID']>;
-  formInfo?: Maybe<Array<Maybe<FormInfo>>>;
-  lookupData?: Maybe<Array<Maybe<LookupData>>>;
-};
-
-export enum CdxService {
-  Cdx = 'CDX',
-  Integration = 'INTEGRATION',
-  AccessManagement = 'ACCESS_MANAGEMENT'
-}
-
-export type CdxServiceNvp = {
-  __typename?: 'CDXServiceNVP';
-  name: Scalars['String'];
-  value?: Maybe<CdxService>;
 };
 
 export enum CdxWebAppDomain {
@@ -592,12 +553,6 @@ export type FieldCreationEvent = {
   type?: Maybe<Scalars['String']>;
 };
 
-export type FormInfo = {
-  __typename?: 'FormInfo';
-  label?: Maybe<Scalars['String']>;
-  formCommands?: Maybe<Array<Maybe<WebCommand>>>;
-};
-
 export enum GqOperationResponse {
   Success = 'SUCCESS',
   Fail = 'FAIL'
@@ -648,12 +603,6 @@ export enum LoginStepType {
   Password = 'PASSWORD',
   Complete = 'COMPLETE'
 }
-
-export type LookupData = {
-  __typename?: 'LookupData';
-  key?: Maybe<Scalars['String']>;
-  lookupPairs?: Maybe<Array<Maybe<Nvp>>>;
-};
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -1075,36 +1024,36 @@ export type PasswordValidationStrengthRule = {
 export enum Permission {
   K2UExchangeList = 'K2U_EXCHANGE_LIST',
   K2UExchangeRead = 'K2U_EXCHANGE_READ',
-  K2UExchangeDownload = 'K2U_EXCHANGE_DOWNLOAD',
-  K2UExchangeDownloadSteps = 'K2U_EXCHANGE_DOWNLOAD_STEPS',
-  K2UExchangeRestart = 'K2U_EXCHANGE_RESTART',
+  K2UExchangeUpdate = 'K2U_EXCHANGE_UPDATE',
+  K2UExchangeExecute = 'K2U_EXCHANGE_EXECUTE',
   K2UExchangeCancel = 'K2U_EXCHANGE_CANCEL',
   K2UExchangeArchiveRead = 'K2U_EXCHANGE_ARCHIVE_READ',
   K2UExchangeArchiveStepsRead = 'K2U_EXCHANGE_ARCHIVE_STEPS_READ',
+  K2UExchangeDelete = 'K2U_EXCHANGE_DELETE',
   TestExchangeList = 'TEST_EXCHANGE_LIST',
   TestExchangeRead = 'TEST_EXCHANGE_READ',
-  TestExchangeDownload = 'TEST_EXCHANGE_DOWNLOAD',
-  TestExchangeDownloadSteps = 'TEST_EXCHANGE_DOWNLOAD_STEPS',
-  TestExchangeRestart = 'TEST_EXCHANGE_RESTART',
+  TestExchangeUpdate = 'TEST_EXCHANGE_UPDATE',
+  TestExchangeExecute = 'TEST_EXCHANGE_EXECUTE',
   TestExchangeCancel = 'TEST_EXCHANGE_CANCEL',
   TestExchangeArchiveRead = 'TEST_EXCHANGE_ARCHIVE_READ',
   TestExchangeArchiveStepsRead = 'TEST_EXCHANGE_ARCHIVE_STEPS_READ',
+  TestExchangeDelete = 'TEST_EXCHANGE_DELETE',
   UatExchangeList = 'UAT_EXCHANGE_LIST',
   UatExchangeRead = 'UAT_EXCHANGE_READ',
-  UatExchangeDownload = 'UAT_EXCHANGE_DOWNLOAD',
-  UatExchangeDownloadSteps = 'UAT_EXCHANGE_DOWNLOAD_STEPS',
-  UatExchangeRestart = 'UAT_EXCHANGE_RESTART',
+  UatExchangeUpdate = 'UAT_EXCHANGE_UPDATE',
+  UatExchangeExecute = 'UAT_EXCHANGE_EXECUTE',
   UatExchangeCancel = 'UAT_EXCHANGE_CANCEL',
   UatExchangeArchiveRead = 'UAT_EXCHANGE_ARCHIVE_READ',
   UatExchangeArchiveStepsRead = 'UAT_EXCHANGE_ARCHIVE_STEPS_READ',
+  UatExchangeDelete = 'UAT_EXCHANGE_DELETE',
   ProdExchangeList = 'PROD_EXCHANGE_LIST',
   ProdExchangeRead = 'PROD_EXCHANGE_READ',
-  ProdExchangeDownload = 'PROD_EXCHANGE_DOWNLOAD',
-  ProdExchangeDownloadSteps = 'PROD_EXCHANGE_DOWNLOAD_STEPS',
-  ProdExchangeRestart = 'PROD_EXCHANGE_RESTART',
+  ProdExchangeUpdate = 'PROD_EXCHANGE_UPDATE',
+  ProdExchangeExecute = 'PROD_EXCHANGE_EXECUTE',
   ProdExchangeCancel = 'PROD_EXCHANGE_CANCEL',
   ProdExchangeArchiveRead = 'PROD_EXCHANGE_ARCHIVE_READ',
   ProdExchangeArchiveStepsRead = 'PROD_EXCHANGE_ARCHIVE_STEPS_READ',
+  ProdExchangeDelete = 'PROD_EXCHANGE_DELETE',
   UserCreate = 'USER_CREATE',
   UserRead = 'USER_READ',
   UserUpdate = 'USER_UPDATE',
@@ -1138,7 +1087,8 @@ export enum Permission {
   ThemeCreate = 'THEME_CREATE',
   ThemeRead = 'THEME_READ',
   ThemeUpdate = 'THEME_UPDATE',
-  ThemeDelete = 'THEME_DELETE'
+  ThemeDelete = 'THEME_DELETE',
+  ImplementationDeploy = 'IMPLEMENTATION_DEPLOY'
 }
 
 export type Person = {
@@ -2018,14 +1968,6 @@ export type UserItem = {
   listItemCommands?: Maybe<Array<Maybe<WebCommand>>>;
 };
 
-export type UserResponse = {
-  __typename?: 'UserResponse';
-  response: GqOperationResponse;
-  msg?: Maybe<Scalars['String']>;
-  model?: Maybe<UserAccount>;
-  nextPage?: Maybe<UserWebPage>;
-};
-
 export type UserSession = {
   __typename?: 'UserSession';
   id: Scalars['ID'];
@@ -2037,12 +1979,6 @@ export type UserSession = {
   pollInterval?: Maybe<Scalars['Int']>;
   defaultAuthorities?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
-
-export enum UserWebPage {
-  AmGroup = 'AM_GROUP',
-  GenPass = 'GEN_PASS',
-  RegLink = 'REG_LINK'
-}
 
 export type WpProcessError = {
   __typename?: 'WPProcessError';
@@ -2407,29 +2343,6 @@ export type FragmentWebCommandFragment = (
 export type FragmentPaginationInfoFragment = (
   { __typename?: 'PaginationInfo' }
   & Pick<PaginationInfo, 'totalPages' | 'totalElements' | 'pageNumber' | 'pageSize'>
-);
-
-export type FragmentCdxPageInfoFragment = (
-  { __typename?: 'CDXPageInfo' }
-  & Pick<CdxPageInfo, 'orgSid'>
-  & { formInfo?: Maybe<Array<Maybe<(
-    { __typename?: 'FormInfo' }
-    & Pick<FormInfo, 'label'>
-    & { formCommands?: Maybe<Array<Maybe<(
-      { __typename?: 'WebCommand' }
-      & FragmentWebCommandFragment
-    )>>> }
-  )>>>, lookupData?: Maybe<Array<Maybe<(
-    { __typename?: 'LookupData' }
-    & Pick<LookupData, 'key'>
-    & { lookupPairs?: Maybe<Array<Maybe<(
-      { __typename?: 'NVPStr' }
-      & UnionNvp_NvpStr_Fragment
-    ) | (
-      { __typename?: 'NVPId' }
-      & UnionNvp_NvpId_Fragment
-    )>>> }
-  )>>> }
 );
 
 export type VersionQueryVariables = Exact<{ [key: string]: never; }>;
@@ -5119,14 +5032,6 @@ export const FragmentAccessPolicyFragmentDoc = gql`
   applicableOrgTypes
 }
     `;
-export const FragmentPaginationInfoFragmentDoc = gql`
-    fragment fragmentPaginationInfo on PaginationInfo {
-  totalPages
-  totalElements
-  pageNumber
-  pageSize
-}
-    `;
 export const FragmentWebCommandFragmentDoc = gql`
     fragment fragmentWebCommand on WebCommand {
   endPoint
@@ -5137,24 +5042,14 @@ export const FragmentWebCommandFragmentDoc = gql`
   commandType
 }
     ${UnionNvpFragmentDoc}`;
-export const FragmentCdxPageInfoFragmentDoc = gql`
-    fragment fragmentCDXPageInfo on CDXPageInfo {
-  orgSid
-  formInfo {
-    label
-    formCommands {
-      ...fragmentWebCommand
-    }
-  }
-  lookupData {
-    key
-    lookupPairs {
-      ...unionNVP
-    }
-  }
+export const FragmentPaginationInfoFragmentDoc = gql`
+    fragment fragmentPaginationInfo on PaginationInfo {
+  totalPages
+  totalElements
+  pageNumber
+  pageSize
 }
-    ${FragmentWebCommandFragmentDoc}
-${UnionNvpFragmentDoc}`;
+    `;
 export const VersionDocument = gql`
     query Version {
   version
