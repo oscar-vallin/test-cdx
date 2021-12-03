@@ -18,7 +18,26 @@ import { InputText } from '../../../../../components/inputs/InputText';
 import { StyledContainer } from './CreateGroupPanel.styles';
 import { QueryParams } from '../../../../../utils/QueryParams';
 
-import { useCreateGroupPanel } from './CreateGroupPanel.service';
+import {
+  useAccessPolicyGroupFormLazyQuery,
+  useAccessSpecializationsForOrgLazyQuery,
+  useAccessPoliciesForOrgLazyQuery,
+  useDirectOrganizationsLazyQuery,
+  useCreateAccessPolicyGroupMutation,
+  useFindAccessPolicyGroupLazyQuery,
+  useUpdateAccessPolicyGroupMutation,
+} from '../../../../../data/services/graphql';
+
+const INITIAL_STATE = {
+  name: '',
+  tmpl: false,
+  tmplUseAsIs: false,
+  includeAllSubOrgs: false,
+  policySids: [],
+  specializationSids: [],
+  includeOrgSids: [],
+  excludeOrgSids: [],
+};
 
 const defaultProps = {
   isOpen: false,
@@ -35,13 +54,6 @@ type CreateGroupPanelProps = {
   selectedGroupId?: any;
 } & typeof defaultProps;
 
-const rootClass = mergeStyles({
-  width: '100%',
-});
-
-// * ------------------------------------------------------------------
-// * --- CreateGroupPanel ---
-// * ------------------------------------------------------------------
 const CreateGroupPanel = ({
   isOpen,
   onDismiss,
@@ -51,30 +63,144 @@ const CreateGroupPanel = ({
 }: CreateGroupPanelProps): ReactElement => {
   const location = useLocation();
   const { orgSid }: any = QueryParams.parse(location.search);
+  const [state, setState]: any = useState({ ...INITIAL_STATE });
+  const [policies, setPolicies] = useState([]);
+  const [specializations, setSpecializations] = useState([]);
+  const [organizations, setOrganizations] = useState([]);
+  const [response, setResponse]: any = useState({});
 
-  const accessManagementGroupService = useCreateGroupPanel(orgSid, selectedGroupId);
-  const { policies, specializations, organizations } = accessManagementGroupService;
-  const { accessPolicyForm, accessPolicyFormRaw } = accessManagementGroupService;
-  const { clearAccessPolicyForm, addToAccessPolicyForm } = accessManagementGroupService;
-  const { onIncludedOrgsSelected, onExcludedOrgsSelected } = accessManagementGroupService;
-  const { filterSuggestedTags, getTextFromItem } = accessManagementGroupService;
-  const { organizationTags } = accessManagementGroupService;
-  const { loadingPolicies } = accessManagementGroupService;
-  const { createPolicyGroup, updatePolicyGroup } = accessManagementGroupService;
+  const [apiUseAccessPolicyForm, { data, loading: isLoadingPolicy }]: any = useAccessPolicyGroupFormLazyQuery();
+  const [fetchPolicies, { data: policiesData }]: any = useAccessPoliciesForOrgLazyQuery();
+  const [fetchSpecializations, { data: specializationsData }]: any = useAccessSpecializationsForOrgLazyQuery();
+  const [fetchOrganizations, { data: orgsData }]: any = useDirectOrganizationsLazyQuery();
+  const [createPolicyGroup, { data: createdPolicyGroup }] = useCreateAccessPolicyGroupMutation();
+  const [fetchPolicyGroup, { data: policyGroup }] = useFindAccessPolicyGroupLazyQuery();
+  const [updatePolicyGroup, { data: updatedPolicyGroup }] = useUpdateAccessPolicyGroupMutation();
+
+  useEffect(() => {
+    if (isOpen) {
+      apiUseAccessPolicyForm({ variables: { orgSid } });
+      fetchPolicies({ variables: { orgSid } });
+      fetchSpecializations({ variables: { orgSid } });
+      fetchOrganizations({
+        variables: {
+          orgSid,
+          orgFilter: { activeFilter: 'ACTIVE' },
+        },
+      });
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (isOpen && selectedGroupId) {
+      fetchPolicyGroup({
+        variables: {
+          policyGroupSid: selectedGroupId,
+        },
+      });
+    }
+  }, [selectedGroupId, isOpen]);
+
+  useEffect(() => {
+    if (policyGroup) {
+      const { findAccessPolicyGroup }: any = policyGroup;
+      setResponse(findAccessPolicyGroup);
+      setState({
+        ...state,
+        policyGroupSid: findAccessPolicyGroup.sid,
+        name: findAccessPolicyGroup.name.value,
+        tmpl: findAccessPolicyGroup.tmpl.value,
+        tmplUseAsIs: findAccessPolicyGroup.tmplUseAsIs.value,
+        includeAllSubOrgs: findAccessPolicyGroup.includeAllSubOrgs.value,
+        policySids: findAccessPolicyGroup.policies.value,
+        specializationSids: findAccessPolicyGroup.specializations.value,
+        includeOrgSids: findAccessPolicyGroup.includeOrgSids.value,
+        excludeOrgSids: findAccessPolicyGroup.excludeOrgSids.value,
+      });
+    }
+  }, [policyGroup]);
+
+  useEffect(() => {
+    if (isOpen && data) {
+      setResponse(data.accessPolicyGroupForm);
+    }
+  }, [data, isOpen]);
+
+  useEffect(() => {
+    if (isOpen && policiesData) {
+      setPolicies(policiesData.accessPoliciesForOrg.nodes);
+    }
+  }, [isOpen, policiesData]);
+
+  useEffect(() => {
+    if (isOpen && specializationsData) {
+      setSpecializations(specializationsData.accessSpecializationsForOrg.nodes);
+    }
+  }, [isOpen, specializationsData]);
+
+  useEffect(() => {
+    if (isOpen && orgsData) {
+      setOrganizations(orgsData.directOrganizations.nodes);
+    }
+  }, [isOpen, orgsData]);
+
+  useEffect(() => {
+    if (createdPolicyGroup) {
+      onCreateGroupPolicy(createdPolicyGroup.createAccessPolicyGroup);
+      onDismiss();
+    }
+  }, [createdPolicyGroup]);
+
+  useEffect(() => {
+    if (updatedPolicyGroup) {
+      onUpdateGroupPolicy(updatedPolicyGroup.updateAccessPolicyGroup);
+      onDismiss();
+    }
+  }, [updatedPolicyGroup]);
+
+  const rootClass = mergeStyles({
+    width: '100%',
+  });
 
   const pickerSuggestionsProps = {
     suggestionsHeaderText: 'Suggested Organizations',
     noResultsFoundText: 'No organization tags found',
+  };
+  const listContainsTagList = (tag, tagList) => {
+    if (!tagList || !tagList.length || tagList.length === 0) {
+      return false;
+    }
+    return tagList.some((compareTag) => compareTag.key === tag.key);
+  };
+
+  const organizationTags = organizations.map((item: any) => ({ key: item.sid, name: item.name }));
+
+  const filterSuggestedTags = (filterText, tagList) => {
+    return filterText
+      ? organizationTags.filter(
+          (tag) => tag.name.toLowerCase().indexOf(filterText.toLowerCase()) === 0 && !listContainsTagList(tag, tagList)
+        )
+      : [];
+  };
+
+  const getTextFromItem = (item) => item.name;
+
+  const onIncludedOrgsSelected = (item): any => {
+    setState({ ...state, includeOrgSids: item.map((org) => org.key) });
+  };
+
+  const onExcludedOrgsSelected = (item): any => {
+    setState({ ...state, excludeOrgSids: item.map((org) => org.key) });
   };
 
   return (
     <Panel
       closeButtonAriaLabel="Close"
       type={PanelType.large}
-      headerText={!accessPolicyForm.policyGroupSid ? 'New Access Policy Group' : 'Update Policy Group'}
+      headerText={!state.policyGroupSid ? 'New Access Policy Group' : 'Update Policy Group'}
       isOpen={isOpen}
       onDismiss={() => {
-        clearAccessPolicyForm();
+        setState({ ...INITIAL_STATE });
         onDismiss();
       }}
     >
@@ -88,13 +214,13 @@ const CreateGroupPanel = ({
                     required
                     label="Name"
                     placeholder="Please enter a Unifique Name"
-                    value={accessPolicyForm.name}
-                    onChange={({ target }) => addToAccessPolicyForm({ name: target.value })}
+                    value={state.name}
+                    onChange={({ target }) => setState({ ...state, name: target.value })}
                   />
                 </Column>
               </Row>
 
-              {accessPolicyFormRaw?.organization?.visible && (
+              {response?.organization?.visible && (
                 <>
                   <Row>
                     <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
@@ -102,34 +228,34 @@ const CreateGroupPanel = ({
                     </Spacing>
 
                     <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                      <Text variant="normal">{accessPolicyFormRaw?.organization?.label}</Text>
+                      <Text variant="normal">{response?.organization?.label}</Text>
                     </Spacing>
 
-                    {accessPolicyFormRaw?.tmpl?.visible && (
+                    {response?.tmpl?.visible && (
                       <Column lg="6" direction="row">
                         <Checkbox
-                          label={accessPolicyFormRaw?.tmpl?.label}
-                          checked={accessPolicyForm.tmpl}
+                          label={response?.tmpl?.label}
+                          checked={state.tmpl}
                           onChange={(_event, tmpl: any) =>
-                            addToAccessPolicyForm({ tmpl, tmplUseAsIs: tmpl ? accessPolicyForm.tmplUseAsIs : false })
+                            setState({ ...state, tmpl, tmplUseAsIs: tmpl ? state.tmplUseAsIs : false })
                           }
                         />
-                        {accessPolicyFormRaw?.tmpl?.info && (
-                          <TooltipHost content={accessPolicyFormRaw?.tmpl?.info} id="tmplTooltip">
+                        {response?.tmpl?.info && (
+                          <TooltipHost content={response?.tmpl?.info} id="tmplTooltip">
                             &nbsp; <FontIcon aria-describedby="tmplTooltip" iconName="Error" />
                           </TooltipHost>
                         )}
                       </Column>
                     )}
-                    {accessPolicyForm.tmpl && accessPolicyFormRaw?.tmplUseAsIs?.visible && (
+                    {state.tmpl && response?.tmplUseAsIs?.visible && (
                       <Column lg="6" direction="row">
                         <Checkbox
-                          label={accessPolicyFormRaw?.tmplUseAsIs?.label}
-                          checked={accessPolicyForm.tmplUseAsIs}
-                          onChange={(_event, tmplUseAsIs: any) => addToAccessPolicyForm({ tmplUseAsIs })}
+                          label={response?.tmplUseAsIs?.label}
+                          checked={state.tmplUseAsIs}
+                          onChange={(_event, tmplUseAsIs: any) => setState({ ...state, tmplUseAsIs })}
                         />
-                        {accessPolicyFormRaw?.tmplUseAsIs?.info && (
-                          <TooltipHost content={accessPolicyFormRaw?.tmplUseAsIs?.info} id="tmplUseAsIsTooltip">
+                        {response?.tmplUseAsIs?.info && (
+                          <TooltipHost content={response?.tmplUseAsIs?.info} id="tmplUseAsIsTooltip">
                             &nbsp; <FontIcon aria-describedby="tmplUseAsIsTooltip" iconName="Error" />
                           </TooltipHost>
                         )}
@@ -143,14 +269,14 @@ const CreateGroupPanel = ({
                 <Separator />
               </Spacing>
 
-              {accessPolicyFormRaw?.policies?.visible && (
+              {response?.policies?.visible && (
                 <>
-                  <Row id="Policies-Section">
+                  <Row>
                     <Column lg="4" direction="row">
                       <Spacing margin={{ top: 'small', bottom: 'normal' }}>
                         <Text variant="bold">Policies</Text>
-                        {accessPolicyFormRaw?.policies?.info && (
-                          <TooltipHost content={accessPolicyFormRaw?.policies?.info} id="policiesTooltip">
+                        {response?.policies?.info && (
+                          <TooltipHost content={response?.policies?.info} id="policiesTooltip">
                             &nbsp; <FontIcon aria-describedby="policiesTooltip" iconName="Error" />
                           </TooltipHost>
                         )}
@@ -166,12 +292,13 @@ const CreateGroupPanel = ({
                             <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                               <Checkbox
                                 label={item.name}
-                                checked={accessPolicyForm.policySids.includes(item.sid)}
+                                checked={state.policySids.includes(item.sid)}
                                 onChange={(event, policy) => {
-                                  addToAccessPolicyForm({
+                                  setState({
+                                    ...state,
                                     policySids: policy
-                                      ? [...accessPolicyForm.policySids, item.sid]
-                                      : accessPolicyForm.policySids.filter((polItem) => polItem !== item.sid),
+                                      ? [...state.policySids, item.sid]
+                                      : state.policySids.filter((polItem) => polItem !== item.sid),
                                   });
                                 }}
                               />
@@ -188,14 +315,14 @@ const CreateGroupPanel = ({
                 <Separator />
               </Spacing>
 
-              {accessPolicyFormRaw?.specializations?.visible && (
+              {response?.specializations?.visible && (
                 <>
                   <Row>
                     <Column lg="4" direction="row">
                       <Spacing margin={{ top: 'small', bottom: 'normal' }}>
                         <Text variant="bold">Specialization</Text>
-                        {accessPolicyFormRaw?.specializations?.info && (
-                          <TooltipHost content={accessPolicyFormRaw?.specializations?.info} id="specializationTooltip">
+                        {response?.specializations?.info && (
+                          <TooltipHost content={response?.specializations?.info} id="specializationTooltip">
                             &nbsp; <FontIcon aria-describedby="specializationTooltip" iconName="Error" />
                           </TooltipHost>
                         )}
@@ -211,12 +338,13 @@ const CreateGroupPanel = ({
                             <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                               <Checkbox
                                 label={item.name}
-                                checked={accessPolicyForm.specializationSids.includes(item.sid)}
+                                checked={state.specializationSids.includes(item.sid)}
                                 onChange={(event, specialization) => {
-                                  addToAccessPolicyForm({
+                                  setState({
+                                    ...state,
                                     specializationSids: specialization
-                                      ? [...accessPolicyForm.specializationSids, item.sid]
-                                      : accessPolicyForm.specializationSids.filter((specItem) => specItem !== item.sid),
+                                      ? [...state.specializationSids, item.sid]
+                                      : state.specializationSids.filter((specItem) => specItem !== item.sid),
                                   });
                                 }}
                               />
@@ -232,7 +360,7 @@ const CreateGroupPanel = ({
               <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                 <Checkbox
                   label="Policies Applies to All Sub Organizations except for those explicitly exclude"
-                  onChange={(event, _stepWise) => addToAccessPolicyForm({ _stepWise })}
+                  onChange={(event, _stepWise) => setState({ ...state, _stepWise })}
                 />
               </Spacing>
 
@@ -243,19 +371,19 @@ const CreateGroupPanel = ({
                       label="Policies apply to the following Organizations"
                       placeholder="Type to Search"
                       disabled
-                      value={accessPolicyForm.policyName}
-                      onChange={({ target }) => addToAccessPolicyForm({ policyName: target.value })}
+                      value={state.policyName}
+                      onChange={({ target }) => setState({ ...state, policyName: target.value })}
                     />
                   </Column>
                 </Row>
               </Spacing>
 
-              {accessPolicyFormRaw?.excludeOrgSids?.visible && (
+              {response?.excludeOrgSids?.visible && (
                 <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                   <Row bottom>
                     <Column lg="12">
                       <div className={rootClass}>
-                        <strong>{accessPolicyFormRaw?.excludeOrgSids?.label}</strong>
+                        <strong>{response?.excludeOrgSids?.label}</strong>
                         <TagPicker
                           removeButtonAriaLabel="Remove"
                           // selectionAriaLabel="Selected colors"
@@ -273,14 +401,14 @@ const CreateGroupPanel = ({
                 </Spacing>
               )}
 
-              {accessPolicyFormRaw?.includeOrgSids?.visible && (
+              {response?.includeOrgSids?.visible && (
                 <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                   <Row bottom>
                     <Column lg="12">
                       <div className={rootClass}>
-                        <strong>{accessPolicyFormRaw?.includeOrgSids.label}</strong>
-                        {accessPolicyFormRaw?.includeOrgSids?.info && (
-                          <TooltipHost content={accessPolicyFormRaw?.includeOrgSids?.info} id="includeOrgSidsTooltip">
+                        <strong>{response?.includeOrgSids.label}</strong>
+                        {response?.includeOrgSids?.info && (
+                          <TooltipHost content={response?.includeOrgSids?.info} id="includeOrgSidsTooltip">
                             &nbsp; <FontIcon aria-describedby="includeOrgSidsTooltip" iconName="Error" />
                           </TooltipHost>
                         )}
@@ -302,14 +430,14 @@ const CreateGroupPanel = ({
                 </Spacing>
               )}
 
-              {accessPolicyFormRaw?.excludeOrgSids?.visible && (
+              {response?.excludeOrgSids?.visible && (
                 <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                   <Row bottom>
                     <Column lg="12">
                       <div className={rootClass}>
-                        <strong>{accessPolicyFormRaw?.excludeOrgSids?.label}</strong>
-                        {accessPolicyFormRaw?.excludeOrgSids?.info && (
-                          <TooltipHost content={accessPolicyFormRaw?.excludeOrgSids?.info} id="excludeOrgSidsTooltip">
+                        <strong>{response?.excludeOrgSids?.label}</strong>
+                        {response?.excludeOrgSids?.info && (
+                          <TooltipHost content={response?.excludeOrgSids?.info} id="excludeOrgSidsTooltip">
                             &nbsp; <FontIcon aria-describedby="excludeOrgSidsTooltip" iconName="Error" />
                           </TooltipHost>
                         )}
@@ -331,29 +459,29 @@ const CreateGroupPanel = ({
                 </Spacing>
               )}
 
-              {accessPolicyFormRaw?.includeAllSubOrgs?.visible && (
+              {response?.includeAllSubOrgs?.visible && (
                 <Column lg="6" direction="row">
                   <Checkbox
-                    label={accessPolicyFormRaw?.includeAllSubOrgs?.label}
-                    checked={accessPolicyForm.includeAllSubOrgs}
-                    onChange={(_event, includeAllSubOrgs) => addToAccessPolicyForm({ includeAllSubOrgs })}
+                    label={response?.includeAllSubOrgs?.label}
+                    checked={state.includeAllSubOrgs}
+                    onChange={(_event, includeAllSubOrgs) => setState({ ...state, includeAllSubOrgs })}
                   />{' '}
-                  {accessPolicyFormRaw?.includeAllSubOrgs?.info && (
-                    <TooltipHost content={accessPolicyFormRaw?.includeAllSubOrgs?.info} id="includeAllSubOrgsTooltip">
+                  {response?.includeAllSubOrgs?.info && (
+                    <TooltipHost content={response?.includeAllSubOrgs?.info} id="includeAllSubOrgsTooltip">
                       &nbsp; <FontIcon aria-describedby="includeAllSubOrgsTooltip" iconName="Error" />
                     </TooltipHost>
                   )}
                 </Column>
               )}
 
-              {accessPolicyFormRaw?.includeOrgSids?.visible && (
+              {response?.includeOrgSids?.visible && (
                 <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                   <Row bottom>
                     <Column lg="12">
                       <div className={rootClass}>
-                        <strong>{accessPolicyFormRaw?.includeOrgSids.label}</strong>
-                        {accessPolicyFormRaw?.includeOrgSids?.info && (
-                          <TooltipHost content={accessPolicyFormRaw?.includeOrgSids?.info} id="includeOrgSidsTooltip">
+                        <strong>{response?.includeOrgSids.label}</strong>
+                        {response?.includeOrgSids?.info && (
+                          <TooltipHost content={response?.includeOrgSids?.info} id="includeOrgSidsTooltip">
                             &nbsp; <FontIcon aria-describedby="includeOrgSidsTooltip" iconName="Error" />
                           </TooltipHost>
                         )}
@@ -369,7 +497,7 @@ const CreateGroupPanel = ({
                             id: 'includeOrgsId',
                           }}
                           selectedItems={organizationTags.filter((items) =>
-                            accessPolicyForm.includeOrgSids.some((f) => f === items.key)
+                            state.includeOrgSids.some((f) => f === items.key)
                           )}
                         />
                       </div>
@@ -378,14 +506,14 @@ const CreateGroupPanel = ({
                 </Spacing>
               )}
 
-              {accessPolicyFormRaw?.excludeOrgSids?.visible && (
+              {response?.excludeOrgSids?.visible && (
                 <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                   <Row bottom>
                     <Column lg="12">
                       <div className={rootClass}>
-                        <strong>{accessPolicyFormRaw?.excludeOrgSids?.label}</strong>
-                        {accessPolicyFormRaw?.excludeOrgSids?.info && (
-                          <TooltipHost content={accessPolicyFormRaw?.excludeOrgSids?.info} id="excludeOrgSidsTooltip">
+                        <strong>{response?.excludeOrgSids?.label}</strong>
+                        {response?.excludeOrgSids?.info && (
+                          <TooltipHost content={response?.excludeOrgSids?.info} id="excludeOrgSidsTooltip">
                             &nbsp; <FontIcon aria-describedby="excludeOrgSidsTooltip" iconName="Error" />
                           </TooltipHost>
                         )}
@@ -401,7 +529,7 @@ const CreateGroupPanel = ({
                             id: 'excludeOrgsId',
                           }}
                           selectedItems={organizationTags.filter((items) =>
-                            accessPolicyForm.excludeOrgSids.some((f) => f === items.key)
+                            state.excludeOrgSids.some((f) => f === items.key)
                           )}
                         />
                       </div>
@@ -415,31 +543,30 @@ const CreateGroupPanel = ({
                   <Button
                     id="__CreateGroupPanelId"
                     variant="primary"
-                    disabled={loadingPolicies}
+                    disabled={isLoadingPolicy}
                     onClick={() => {
-                      const commonVariables = {
-                        tmpl: accessPolicyForm.tmpl,
-                        tmplUseAsIs: accessPolicyForm.tmplUseAsIs,
-                        policySids: accessPolicyForm.policySids,
-                        specializationSids: accessPolicyForm.specializationSids,
-                        includeAllSubOrgs: accessPolicyForm.includeAllSubOrgs,
-                        includeOrgSids: accessPolicyForm.includeOrgSids,
-                        excludeOrgSids: accessPolicyForm.excludeOrgSids,
-                      };
+                      const callback: any = !state.policyGroupSid ? createPolicyGroup : updatePolicyGroup;
 
-                      if (accessPolicyForm.policyGroupSid) {
-                        updatePolicyGroup({
-                          updateAccessPolicyGroupInput: { sid: accessPolicyForm.policyGroupSid, ...commonVariables },
-                        });
-                      } else {
-                        createPolicyGroup({
-                          createAccessPolicyGroupInput: { orgSid, ...commonVariables },
-                        });
-                      }
+                      callback({
+                        variables: {
+                          [!state.policyGroupSid ? 'createAccessPolicyGroupInput' : 'updateAccessPolicyGroupInput']: {
+                            ...(state.policyGroupSid ? { sid: state.policyGroupSid } : {}),
+                            ...(state.policyGroupSid ? {} : { orgSid }),
+                            name: state.name,
+                            tmpl: state.tmpl,
+                            tmplUseAsIs: state.tmplUseAsIs,
+                            policySids: state.policySids,
+                            specializationSids: state.specializationSids,
+                            includeAllSubOrgs: state.includeAllSubOrgs,
+                            includeOrgSids: state.includeOrgSids,
+                            excludeOrgSids: state.excludeOrgSids,
+                          },
+                        },
+                      });
                       return null;
                     }}
                   >
-                    {accessPolicyForm.policyGroupSid ? 'Update Group' : 'Save Group'}
+                    {state.policyGroupSid ? 'Update Group' : 'Save Group'}
                   </Button>
                 </Column>
               </Row>
