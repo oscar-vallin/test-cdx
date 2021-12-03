@@ -26,6 +26,7 @@ import {
 
 import AuthRoute from './AuthRoute';
 import UnauthRoute from './UnauthRoute';
+import { ImplementationDeployPage } from './Admin/ImplDeploy';
 
 export const Routes = () => {
   return (
@@ -98,7 +99,9 @@ export const Routes = () => {
       <AuthRoute path={ROUTES.ROUTE_FTP_TEST.URL}>
         <FtpTestPage />
       </AuthRoute>
-
+      <AuthRoute path={ROUTES.ROUTE_IMPL_DEPLOY.URL}>
+        <ImplementationDeployPage />
+      </AuthRoute>
       <AuthRoute>
         <NotFoundPage />
       </AuthRoute>

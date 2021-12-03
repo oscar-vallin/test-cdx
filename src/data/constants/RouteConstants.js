@@ -20,6 +20,7 @@ export const ROUTES_ID = {
   ACTIVE_USERS: 'active-users',
   DELETED_USERS: 'deleted-users',
   FTP_TEST: 'ftp-test',
+  IMPL_DEPLOY: 'implementation-deploy',
 };
 
 export const URL_ROUTES = {
@@ -46,27 +47,8 @@ export const URL_ROUTES = {
   ACTIVE_USERS: `/${ROUTES_ID.ACTIVE_USERS}`,
   DELETED_USERS: `/${ROUTES_ID.DELETED_USERS}`,
   FTP_TEST: `/${ROUTES_ID.FTP_TEST}`,
+  IMPL_DEPLOY: `/${ROUTES_ID.IMPL_DEPLOY}`,
 };
-
-// DASHBOARD;
-// FILE_STATUS;
-// ARCHIVES;
-// SCHEDULE;
-// TRANSMISSIONS;
-// ERRORS;
-// ORG_ACTIVITY;
-// ACTIVE_ORGS;
-// ACTIVE_USERS;
-// DELETED_USERS;
-// AM_GROUPS;
-// AM_POLICIES;
-// FTP_TEST;
-// IMPL_DEPLOY;
-// USER_ACCOUNT_RULES;
-// PASSWORD_RULES;
-// SSO_CONFIG;
-// ADD_ORG;
-// ADD_USER;
 
 export const ROUTE_HOME = {
   ID: ROUTES_ID.HOME,
@@ -251,6 +233,14 @@ export const ROUTE_FTP_TEST = {
   API_ID: 'FTP_TEST',
 };
 
+export const ROUTE_IMPL_DEPLOY = {
+  ID: ROUTES_ID.IMPL_DEPLOY,
+  TITLE: 'Implementation Deploy',
+  URL: URL_ROUTES.IMPL_DEPLOY,
+  MAIN_MENU: false,
+  API_ID: 'IMPL_DEPLOY',
+}
+
 export const ROUTES = {
   ROUTE_HOME,
   ROUTE_LOGIN,
@@ -275,6 +265,7 @@ export const ROUTES = {
   ROUTE_ACTIVE_USERS,
   ROUTE_DELETED_USERS,
   ROUTE_FTP_TEST,
+  ROUTE_IMPL_DEPLOY,
 };
 
 export const ROUTES_ARRAY = [
@@ -301,6 +292,7 @@ export const ROUTES_ARRAY = [
   ROUTE_ACTIVE_USERS,
   ROUTE_DELETED_USERS,
   ROUTE_FTP_TEST,
+  ROUTE_IMPL_DEPLOY,
 ];
 
 export const getRouteByApiId = (_apiId) => {
