@@ -3,7 +3,7 @@ import { useState, useEffect, memo } from 'react';
 
 import { PrimaryButton, DefaultButton, MessageBar } from 'office-ui-fabric-react';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
-import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
+import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib-commonjs/Dialog';
 
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
@@ -167,7 +167,7 @@ const _AccessManagementSpecializationPage = () => {
                 <EmptyState
                   title="No access specializations found"
                   description="You haven't created an access specialization yet. Click the button below to create a new specialization."
-                  actions={(
+                  actions={
                     <Button
                       id="create-access-specialization"
                       variant="primary"
@@ -178,7 +178,7 @@ const _AccessManagementSpecializationPage = () => {
                     >
                       Create specialization
                     </Button>
-                  )}
+                  }
                 />
               ) : (
                 <DetailsList
