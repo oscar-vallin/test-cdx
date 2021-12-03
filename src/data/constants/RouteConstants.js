@@ -239,7 +239,7 @@ export const ROUTE_IMPL_DEPLOY = {
   URL: URL_ROUTES.IMPL_DEPLOY,
   MAIN_MENU: false,
   API_ID: 'IMPL_DEPLOY',
-}
+};
 
 export const ROUTES = {
   ROUTE_HOME,
