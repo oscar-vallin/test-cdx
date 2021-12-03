@@ -558,6 +558,14 @@ export enum GqOperationResponse {
   Fail = 'FAIL'
 }
 
+export type ImplementationDeployResponse = {
+  __typename?: 'ImplementationDeployResponse';
+  response: GqOperationResponse;
+  timestamp: Scalars['DateTime'];
+  references?: Maybe<Array<Maybe<Scalars['String']>>>;
+  changes?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
 export type InsuredStat = {
   __typename?: 'InsuredStat';
   subscribers?: Maybe<InsuredStatCount>;
@@ -644,6 +652,7 @@ export type Mutation = {
   createOrUpdateOwnDashTheme?: Maybe<DashTheme>;
   setOwnDashThemeFontSize?: Maybe<DashTheme>;
   updatePasswordRules?: Maybe<PasswordRulesForm>;
+  implementationDeploy?: Maybe<ImplementationDeployResponse>;
 };
 
 
@@ -4840,6 +4849,17 @@ export type UpdatePasswordRulesMutation = (
         & Pick<UiOption, 'label' | 'value' | 'info'>
       )>>> }
     )>>> }
+  )> }
+);
+
+export type ImplementationDeployMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ImplementationDeployMutation = (
+  { __typename?: 'Mutation' }
+  & { implementationDeploy?: Maybe<(
+    { __typename?: 'ImplementationDeployResponse' }
+    & Pick<ImplementationDeployResponse, 'response' | 'timestamp' | 'references' | 'changes'>
   )> }
 );
 
@@ -11827,3 +11847,37 @@ export function useUpdatePasswordRulesMutation(baseOptions?: Apollo.MutationHook
 export type UpdatePasswordRulesMutationHookResult = ReturnType<typeof useUpdatePasswordRulesMutation>;
 export type UpdatePasswordRulesMutationResult = Apollo.MutationResult<UpdatePasswordRulesMutation>;
 export type UpdatePasswordRulesMutationOptions = Apollo.BaseMutationOptions<UpdatePasswordRulesMutation, UpdatePasswordRulesMutationVariables>;
+export const ImplementationDeployDocument = gql`
+    mutation ImplementationDeploy {
+  implementationDeploy {
+    response
+    timestamp
+    references
+    changes
+  }
+}
+    `;
+export type ImplementationDeployMutationFn = Apollo.MutationFunction<ImplementationDeployMutation, ImplementationDeployMutationVariables>;
+
+/**
+ * __useImplementationDeployMutation__
+ *
+ * To run a mutation, you first call `useImplementationDeployMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useImplementationDeployMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [implementationDeployMutation, { data, loading, error }] = useImplementationDeployMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useImplementationDeployMutation(baseOptions?: Apollo.MutationHookOptions<ImplementationDeployMutation, ImplementationDeployMutationVariables>) {
+        return Apollo.useMutation<ImplementationDeployMutation, ImplementationDeployMutationVariables>(ImplementationDeployDocument, baseOptions);
+      }
+export type ImplementationDeployMutationHookResult = ReturnType<typeof useImplementationDeployMutation>;
+export type ImplementationDeployMutationResult = Apollo.MutationResult<ImplementationDeployMutation>;
+export type ImplementationDeployMutationOptions = Apollo.BaseMutationOptions<ImplementationDeployMutation, ImplementationDeployMutationVariables>;
