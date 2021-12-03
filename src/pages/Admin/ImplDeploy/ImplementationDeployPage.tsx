@@ -1,6 +1,5 @@
 import { memo, useState } from 'react';
-import { SpinnerSize } from '@fluentui/react';
-import { List } from '@fluentui/react/lib/List';
+import { SpinnerSize, List } from '@fluentui/react';
 import { format } from 'date-fns';
 import { LayoutAdmin } from '../../../layouts/LayoutAdmin/LayoutAdmin';
 import { Spacing } from '../../../components/spacings/Spacing';
