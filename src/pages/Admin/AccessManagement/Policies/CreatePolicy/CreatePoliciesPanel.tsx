@@ -196,6 +196,7 @@ const CreatePoliciesPanel = ({
 
   return (
     <Panel
+      id="CreatePoliciesPanel"
       closeButtonAriaLabel="Close"
       type={PanelType.large}
       headerText={!selectedPolicyId ? 'New access policy' : 'Update access policy'}
@@ -225,6 +226,7 @@ const CreatePoliciesPanel = ({
                   <Column lg="6" sm="12">
                     {policyForm.name?.visible && (
                       <InputText
+                        id="PolicyInput__Name"
                         label={policyForm.name?.label}
                         minLength={policyForm.name?.min}
                         maxLength={policyForm.name?.max}

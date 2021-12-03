@@ -79,6 +79,7 @@ const _AccessManagementPoliciesPage = () => {
       case 'name':
         return (
           <Link
+            id={`__${item.name.split(' ').join('_')}`}
             onClick={() => {
               setSelectedPolicyId(item.sid);
               setIsPanelOpen(true);
@@ -212,7 +213,7 @@ const _AccessManagementPoliciesPage = () => {
                 <EmptyState
                   title="No policies found"
                   description="You haven't created an access policy yet. Click the button below to create a new policy."
-                  actions={(
+                  actions={
                     <Button
                       id="CreatePolicyButton"
                       variant="primary"
@@ -223,7 +224,7 @@ const _AccessManagementPoliciesPage = () => {
                     >
                       Create policy
                     </Button>
-                  )}
+                  }
                 />
               ) : (
                 <DetailsList
