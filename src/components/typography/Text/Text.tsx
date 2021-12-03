@@ -43,7 +43,7 @@ const Text = ({
 }: TextProps): ReactElement => {
   return (
     <StyledText
-      id={`${id}-Text`}
+      id={id ? `${id}-Text` : undefined}
       variant={variant}
       center={center}
       right={right}

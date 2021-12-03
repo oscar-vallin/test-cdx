@@ -1,6 +1,10 @@
-import Component from './TableActivity';
+import Component from './TableCurrentActivity';
 import { mountWithTheme, shallowWithTheme } from '../../../utils/testUtils';
+import { StoreProvider } from 'easy-peasy';
+import store from '../../../store/index';
 import { OrganizationLink } from 'src/data/services/graphql';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { ApolloContextProvider } from '../../../contexts/ApolloContext';
 
 const items: OrganizationLink[] = [
   {
@@ -29,8 +33,16 @@ describe('Table Current Activity Container Testing Unit...', () => {
     expect(mountedComponent).toMatchSnapshot();
   });
 
-  it('Should Render Table', () => {
-    const wrapper = mountWithTheme(<Component {...defaultProps} />);
+  it('Should find table with Id __Table__In__Process', () => {
+    const wrapper = mountWithTheme(
+      <StoreProvider store={store}>
+        <ApolloContextProvider>
+          <Router>
+            <Component {...defaultProps} />
+          </Router>
+        </ApolloContextProvider>
+      </StoreProvider>
+    );
     const input = wrapper.find('Table[id="__Table__In__Process"]').first();
     expect(input).toMatchSnapshot();
   });

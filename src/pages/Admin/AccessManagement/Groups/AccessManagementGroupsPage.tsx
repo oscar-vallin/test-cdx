@@ -9,6 +9,8 @@ import { SpinnerSize } from '@fluentui/react';
 import { EmptyState } from 'src/containers/states';
 import { id } from 'date-fns/locale';
 import { getItemStyles } from '@fluentui/react/lib/components/ContextualMenu/ContextualMenu.classNames';
+import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
+import { useNotification } from 'src/hooks/useNotification';
 import { Row, Column } from '../../../../components/layouts';
 import { Spacing } from '../../../../components/spacings/Spacing';
 import { Button, Link } from '../../../../components/buttons';
@@ -49,6 +51,8 @@ const _AccessManagementGroupsPage = () => {
   const [groups, setGroups] = useState<any[]>([]);
   const columns = generateColumns();
   const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const [isDialog, setDialog] = useState(false);
+  const Toast = useNotification();
 
   const [apiAmGroupsForOrg, { data, loading }] = useQueryHandler(useAccessPolicyGroupsForOrgLazyQuery);
   const [selectedGroupId, setSelectedGroupId] = useState(0);
@@ -70,7 +74,11 @@ const _AccessManagementGroupsPage = () => {
   useEffect(() => {
     if (deleteData) {
       if (deleteData.deleteAccessPolicyGroup === 'SUCCESS') {
+        if (selectedGroupId === 0 || groups.length === 0) return;
+
+        const text = `Access Policy Group ${groups.find(({ sid }) => sid === selectedGroupId).name} Deleted.`;
         setGroups(groups.filter(({ sid }) => sid !== selectedGroupId));
+        Toast.info({ text, duration: 3000 });
       }
     }
   }, [deleteData]);
@@ -79,7 +87,7 @@ const _AccessManagementGroupsPage = () => {
   const handleDeleteGroup = (id) => {
     setSelectedGroupId(id);
 
-    deleteAccessPolicyGroup(id);
+    setDialog(true);
   };
 
   const onRenderItemColumn = (item, index, column) => {
@@ -191,6 +199,23 @@ const _AccessManagementGroupsPage = () => {
             </StyledColumn>
           </Row>
         </Spacing>
+
+        {isDialog && (
+          <DialogYesNo
+            open={isDialog}
+            highlightNo
+            title="Delete Group"
+            message="Are you sure?"
+            onYes={() => {
+              deleteAccessPolicyGroup(selectedGroupId.toString());
+              return null;
+            }}
+            onClose={() => {
+              setDialog(false);
+              return null;
+            }}
+          />
+        )}
 
         <CreateGroupPanel
           isOpen={isPanelOpen}
