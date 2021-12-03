@@ -19,9 +19,13 @@ import { Text } from '../../../../components/typography';
 import { CreatePoliciesPanel } from './CreatePolicy';
 import { Link } from '../../../../components/buttons/Link';
 
-import { useAccessPoliciesForOrgLazyQuery, useDeleteAccessPolicyMutation } from '../../../../data/services/graphql';
+import {
+  useAccessPolicyTemplatesLazyQuery,
+  useAccessPoliciesForOrgLazyQuery,
+  useDeleteAccessPolicyMutation,
+} from '../../../../data/services/graphql';
 
-import { StyledColumn, StyledCommandButton } from './AccessManagementPoliciesPage.styles';
+import { StyledColumn, StyledCommandButton } from '../AccessManagement.styles';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
 import { useQueryHandler } from '../../../../hooks/useQueryHandler';
 
@@ -53,7 +57,12 @@ const _AccessManagementPoliciesPage = () => {
   const [selectedTemplateId, setSelectedTemplateId] = useState(0);
 
   const [policies, setPolicies] = useState<any[]>([]);
-  const [templatePolicies, setTemplatePolicies] = useState<any[]>([]);
+  const [fetchTemplatePolicies, { data: templatePolicies, loading: isLoadingTemplatePolicies }] = useQueryHandler(
+    useAccessPolicyTemplatesLazyQuery
+  );
+
+  const [templatePolicyMenu, setTemplatePolicyMenu] = useState([]);
+
   const [accessPoliciesForOrg, { data, loading }] = useQueryHandler(useAccessPoliciesForOrgLazyQuery);
   // Linter Issue.  useRemoveAmPolicyMutation??
   const [removeAccessPolicy, { data: removeResponse, loading: isRemovingPolicy }] =
@@ -104,23 +113,27 @@ const _AccessManagementPoliciesPage = () => {
         orgSid,
       },
     });
+
+    fetchTemplatePolicies({
+      variables: {
+        orgSid,
+      },
+    });
   }, [orgSid]);
 
   useEffect(() => {
     const templates =
-      policies
-        ?.filter((policy) => policy.tmpl)
-        .map((policy) => ({
-          key: policy.sid,
-          text: policy.name,
-          onClick: (event, item) => {
-            setSelectedTemplateId(item.key);
-            setIsPanelOpen(true);
-          },
-        })) || [];
+      templatePolicies?.accessPolicyTemplates?.map((policy) => ({
+        key: policy.value,
+        text: policy.label,
+        onClick: (event, item) => {
+          setSelectedTemplateId(item.key);
+          setIsPanelOpen(true);
+        },
+      })) || [];
 
-    setTemplatePolicies(templates);
-  }, [policies]);
+    setTemplatePolicyMenu(templates);
+  }, [templatePolicies, isLoadingTemplatePolicies]);
 
   useEffect(() => {
     if (!isRemovingPolicy && removeResponse) {
@@ -169,7 +182,9 @@ const _AccessManagementPoliciesPage = () => {
                     setIsPanelOpen(true);
                     return null;
                   }}
-                  {...(templatePolicies.length > 0 ? { menuProps: { items: templatePolicies } } : {})}
+                  {...(!isLoadingTemplatePolicies && templatePolicyMenu.length > 0
+                    ? { menuProps: { items: templatePolicyMenu } }
+                    : {})}
                 >
                   Create policy
                 </Button>
@@ -197,7 +212,7 @@ const _AccessManagementPoliciesPage = () => {
                 <EmptyState
                   title="No policies found"
                   description="You haven't created an access policy yet. Click the button below to create a new policy."
-                  actions={
+                  actions={(
                     <Button
                       id="CreatePolicyButton"
                       variant="primary"
@@ -208,7 +223,7 @@ const _AccessManagementPoliciesPage = () => {
                     >
                       Create policy
                     </Button>
-                  }
+                  )}
                 />
               ) : (
                 <DetailsList

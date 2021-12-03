@@ -3,7 +3,7 @@ import { useState, useEffect, memo } from 'react';
 
 import { PrimaryButton, DefaultButton, MessageBar } from 'office-ui-fabric-react';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
-import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib-commonjs/Dialog';
+import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
 
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
@@ -24,7 +24,7 @@ import {
   useDeleteAccessSpecializationMutation,
 } from '../../../../data/services/graphql';
 
-import { StyledColumn, StyledCommandButton } from './AccessManagementPoliciesPage.styles';
+import { StyledColumn, StyledCommandButton } from '../AccessManagement.styles';
 import { useOrgSid } from '../../../../hooks/useOrgSid';
 import { useQueryHandler } from '../../../../hooks/useQueryHandler';
 
@@ -66,6 +66,7 @@ const _AccessManagementSpecializationPage = () => {
       case 'name':
         return (
           <Link
+            id={`__AccessSpecialization__Name_Field_${index + 1}`}
             onClick={() => {
               setSelectedAccessId(item.sid);
               setIsPanelOpen(true);
@@ -125,7 +126,9 @@ const _AccessManagementSpecializationPage = () => {
             <Row center>
               <Column lg="6">
                 <Spacing margin={{ top: 'small' }}>
-                  <Text variant="bold">Access Specializations</Text>
+                  <Text variant="bold" id="__Page-Title">
+                    Access Specializations
+                  </Text>
                 </Spacing>
               </Column>
 
@@ -164,7 +167,7 @@ const _AccessManagementSpecializationPage = () => {
                 <EmptyState
                   title="No access specializations found"
                   description="You haven't created an access specialization yet. Click the button below to create a new specialization."
-                  actions={
+                  actions={(
                     <Button
                       id="create-access-specialization"
                       variant="primary"
@@ -175,7 +178,7 @@ const _AccessManagementSpecializationPage = () => {
                     >
                       Create specialization
                     </Button>
-                  }
+                  )}
                 />
               ) : (
                 <DetailsList

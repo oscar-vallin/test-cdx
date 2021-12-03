@@ -178,6 +178,7 @@ const CreateAccessSpecializationPanel = ({
 
   return (
     <Panel
+      id="create-specialization-panel"
       closeButtonAriaLabel="Close"
       type={PanelType.large}
       headerText={!state.policySid ? 'New Access Specialization' : 'Update Access Specialization'}
@@ -207,6 +208,7 @@ const CreateAccessSpecializationPanel = ({
                   <Column lg="12">
                     {accessForm.name?.visible && (
                       <InputText
+                        id="specialization-name"
                         label={accessForm.name?.label}
                         minLength={accessForm.name?.min}
                         maxLength={accessForm.name?.max}

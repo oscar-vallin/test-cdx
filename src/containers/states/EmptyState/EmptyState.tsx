@@ -17,11 +17,11 @@ type EmptyStateProps = {
 
 const EmptyState = ({ title, description, actions, image, filled }: EmptyStateProps): ReactElement => {
   return (
-    <StyledDiv filled={filled}>
-      {image && <StyledImg src={image} />}
-      {title && <StyledTitle>{title}</StyledTitle>}
-      {description && <StyledText>{description}</StyledText>}
-      <StyledActions>{actions}</StyledActions>
+    <StyledDiv filled={filled} id="EmptyState">
+      {image && <StyledImg id="EmptyState__image" src={image} />}
+      {title && <StyledTitle id="EmptyState__title">{title}</StyledTitle>}
+      {description && <StyledText id="EmptyState__description">{description}</StyledText>}
+      <StyledActions id="EmptyState__actions">{actions}</StyledActions>
     </StyledDiv>
   );
 };
