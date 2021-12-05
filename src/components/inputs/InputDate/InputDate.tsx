@@ -94,6 +94,7 @@ const InputDate = ({
       onSelectDate={onChange}
       value={getValue(value)}
       allowTextInput
+      style={{ width: '100%' }}
     />
   );
 };

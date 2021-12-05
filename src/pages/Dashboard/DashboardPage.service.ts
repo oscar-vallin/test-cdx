@@ -1,12 +1,18 @@
 import { useState, useEffect } from 'react';
+import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
 
-import { DashboardPeriodCounts, useDashboardPeriodsLazyQuery } from '../../data/services/graphql';
+import {
+  DashboardPeriodCounts,
+  useDashboardPeriodsLazyQuery,
+  useDashboardPeriodCountsLazyQuery,
+} from '../../data/services/graphql';
 
 export const DATE_OPTION_NAME = {
   today: 'today',
   yesterday: 'yesterday',
   thisMonth: 'thisMonth',
   lastMonth: 'lastMonth',
+  custom: 'custom',
 };
 
 const DATES_OPTIONS = [
@@ -14,15 +20,19 @@ const DATES_OPTIONS = [
   { id: DATE_OPTION_NAME.yesterday, name: 'Yesterday', selected: false },
   { id: DATE_OPTION_NAME.thisMonth, name: 'Month', selected: false },
   { id: DATE_OPTION_NAME.lastMonth, name: 'Last Month', selected: false },
+  { id: DATE_OPTION_NAME.custom, name: 'Custom', selected: false },
 ];
 
 const isToday = (id) => id === DATE_OPTION_NAME.today;
 const isYesterday = (id) => id === DATE_OPTION_NAME.yesterday;
 const isThisMonth = (id) => id === DATE_OPTION_NAME.thisMonth;
 const isLastMonth = (id) => id === DATE_OPTION_NAME.lastMonth;
+const isCustom = (id) => id === DATE_OPTION_NAME.custom;
 
 export const useDashboardService = (initOrgSid) => {
+  const ActiveDomainStore = useActiveDomainStore();
   const [setOrgSid] = useState(initOrgSid);
+
   const [dateId, setDateId] = useState(DATE_OPTION_NAME.today);
   const [datesOptions, setDateOptions] = useState(DATES_OPTIONS);
   const [dataCounters, setDataCounters] = useState<DashboardPeriodCounts | null | undefined>();
@@ -30,13 +40,19 @@ export const useDashboardService = (initOrgSid) => {
   const [isLoadingData, setIsLoadingData] = useState(true);
 
   const [apiDashboardPeriodsQuery, { data, loading, error }] = useDashboardPeriodsLazyQuery();
+  const [customPeriodQuery, { data: period, loading: isLoadingPeriod, error: periodError }] =
+    useDashboardPeriodCountsLazyQuery();
 
   useEffect(() => {
-    if (initOrgSid) {
-      apiDashboardPeriodsQuery({ variables: { orgSid: initOrgSid } });
+    if (ActiveDomainStore.domainOrg.current.orgSid) {
+      apiDashboardPeriodsQuery({
+        variables: {
+          orgSid: ActiveDomainStore.domainOrg.current.orgSid,
+        },
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initOrgSid]);
+  }, [ActiveDomainStore.domainOrg.current.orgSid]);
 
   useEffect(() => {
     if (error) {
@@ -48,9 +64,13 @@ export const useDashboardService = (initOrgSid) => {
 
   // * Set Data Counters.
   const getData = () => {
-    if (!datesOptions || !data?.dashboardPeriods) return null;
+    if (!datesOptions || !(isCustom(dateId) ? period?.dashboardPeriodCounts : data?.dashboardPeriods)) return null;
 
-    const { dailyCounts, yesterdayCounts, monthlyCounts, lastMonthlyCounts } = data.dashboardPeriods;
+    if (isCustom(dateId)) {
+      return period?.dashboardPeriodCounts;
+    }
+
+    const { dailyCounts, yesterdayCounts, monthlyCounts, lastMonthlyCounts } = data?.dashboardPeriods || {};
 
     if (isToday(dateId)) {
       return dailyCounts;
@@ -76,9 +96,9 @@ export const useDashboardService = (initOrgSid) => {
   }, []);
 
   // * Loading Data
-  useEffect(() => {
-    setIsLoadingData(loading);
-  }, [loading]);
+  // useEffect(() => {
+  //   setIsLoadingData(loading);
+  // }, [loading]);
 
   // * When Data changes then fill the Data Object to Show.
   useEffect(() => {
@@ -87,6 +107,27 @@ export const useDashboardService = (initOrgSid) => {
     setDataCounters(getData());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
+
+  useEffect(() => {
+    if (period) setIsLoadingData(false);
+
+    setDataCounters(getData());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [period]);
+
+  const getPeriodCounts = ({ startDate, endDate }) => {
+    if (startDate && endDate) {
+      customPeriodQuery({
+        variables: {
+          orgSid: ActiveDomainStore.domainOrg.current.orgSid,
+          dateRange: {
+            rangeStart: startDate,
+            rangeEnd: endDate,
+          },
+        },
+      });
+    }
+  };
 
   //* When Change Date Id, then update Work-Data-Counters Object.
   useEffect(() => {
@@ -98,8 +139,9 @@ export const useDashboardService = (initOrgSid) => {
       })
     );
 
-    setDataCounters(getData()); // Set Work Data Counters Object.
-    setIsLoadingData(true);
+    if (dateId !== DATE_OPTION_NAME.custom) {
+      setDataCounters(getData()); // Set Work Data Counters Object.
+    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dateId]);
@@ -116,5 +158,7 @@ export const useDashboardService = (initOrgSid) => {
     setOrgSid,
     setDateId,
     dateId,
+    getPeriodCounts,
+    setIsLoadingData,
   };
 };

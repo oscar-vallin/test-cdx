@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 import { SpinnerSize } from '@fluentui/react';
+import { InputDate } from 'src/components/inputs/InputDate';
 import { CardDashboard } from '../../containers/cards/CardDashboard';
 import { TableDashboard } from '../../containers/tables/TableDashboard';
 
@@ -27,9 +28,13 @@ const _DashboardPage = () => {
   const location = useLocation();
   const [urlParams]: any = useState(queryString.parse(location.search));
   const service = useDashboardService(orgSid);
-  const { isLoadingData, datesOptions, dataCounters }: any = service;
+  const { isLoadingData, datesOptions, dataCounters, getPeriodCounts }: any = service;
   const { setDateId, dateId } = service;
   const history = useHistory();
+  const [dateRange, setDateRange] = useState({
+    startDate: new Date(),
+    endDate: new Date(),
+  });
 
   useEffect((): any => {
     if (urlParams?.date) {
@@ -48,10 +53,25 @@ const _DashboardPage = () => {
     }
   }, [location]);
 
+  useEffect(() => {
+    history.push(
+      `?startDate=${dateRange.startDate?.toISOString()}&endDate=${dateRange.endDate?.toISOString()}&orgSid=${orgSid}`
+    );
+  }, [dateRange]);
+
   const handleChangeDate: any = (date) => {
     setDateId(date);
-    history.push(`?date=${date}`);
+
+    if (date !== 'custom') {
+      history.push(`?date=${date}`);
+    }
   };
+
+  useEffect(() => {
+    if (dateId === 'custom') {
+      getPeriodCounts(dateRange);
+    }
+  }, [dateRange, dateId]);
 
   // Render Buttons Bar
   const renderDateButtons = () => {
@@ -95,6 +115,32 @@ const _DashboardPage = () => {
                   {renderDateButtons()}
                 </Column>
               </Row>
+
+              <br />
+
+              {dateId === 'custom' && (
+                <Row>
+                  <Column lg="6" />
+                  <Column lg="6">
+                    <Row right>
+                      <Column lg="3" right>
+                        <InputDate
+                          value={dateRange.startDate}
+                          onChange={(date) => setDateRange({ ...dateRange, startDate: date })}
+                          required={false}
+                        />
+                      </Column>
+                      <Column lg="3" right>
+                        <InputDate
+                          value={dateRange.endDate}
+                          onChange={(date) => setDateRange({ ...dateRange, endDate: date })}
+                          required={false}
+                        />
+                      </Column>
+                    </Row>
+                  </Column>
+                </Row>
+              )}
             </Spacing>
           </Container>
         </PageHeader>
