@@ -90,8 +90,16 @@ const _AccessManagementGroupsPage = () => {
   // * Handle Delete function.
   const handleDeleteGroup = (id) => {
     setSelectedGroupId(id);
-
     setDialog(true);
+  };
+
+  // *
+  // * Handle Create Function.
+  const handleCreateGroup = () => {
+    setIsPanelOpen(true);
+    setSelectedGroupId(0);
+
+    return null;
   };
 
   const onRenderItemColumn = (item, index, column) => {
@@ -148,14 +156,7 @@ const _AccessManagementGroupsPage = () => {
         title="No access groups found"
         description="You haven't created an access group yet. Click the button below to create a new group."
         actions={
-          <Button
-            id="CreateGroupButton"
-            variant="primary"
-            onClick={() => {
-              setIsPanelOpen(true);
-              return null;
-            }}
-          >
+          <Button id="CreateGroupButton" variant="primary" onClick={handleCreateGroup}>
             Create group
           </Button>
         }

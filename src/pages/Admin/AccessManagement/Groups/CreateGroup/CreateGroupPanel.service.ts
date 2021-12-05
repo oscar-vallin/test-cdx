@@ -21,9 +21,9 @@ export const formInitialState = {
   excludeOrgSids: [],
 };
 
-export const useCreateGroupPanel = (initialOrgSid, selectedGroupId) => {
+export const useCreateGroupPanel = (isOpen, initialOrgSid, selectedGroupId) => {
   const [orgSid, setOrgSid] = useState(initialOrgSid);
-  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isFormOpen, setIsFormOpen] = useState(isOpen);
   // Data sets.
   const [policies, setPolicies] = useState<any>([]);
   const [specializations, setSpecializations] = useState<any>([]);
@@ -33,7 +33,8 @@ export const useCreateGroupPanel = (initialOrgSid, selectedGroupId) => {
   const [apiAccessPoliciesForOrg, { data: policiesData }] = useAccessPoliciesForOrgLazyQuery();
   const [apiAccessSpecializationsForOrg, { data: specializationsData }] = useAccessSpecializationsForOrgLazyQuery();
   const [apiDirectOrganizations, { data: orgsData }] = useDirectOrganizationsLazyQuery();
-  const [apiCreateAccessPolicyGroup, { data: createdPolicyGroup }] = useCreateAccessPolicyGroupMutation();
+  const [apiCreateAccessPolicyGroup, { data: createdPolicyGroup, loading: creatingGroup }] =
+    useCreateAccessPolicyGroupMutation();
   const [apiFindAccessPolicyGroup, { data: policyGroup }] = useFindAccessPolicyGroupLazyQuery();
   const [apiUpdateAccessPolicyGroup, { data: updatedPolicyGroup }] = useUpdateAccessPolicyGroupMutation();
   // State for Form Definition.
@@ -45,6 +46,8 @@ export const useCreateGroupPanel = (initialOrgSid, selectedGroupId) => {
   // Functions
   // * Fetch All Data
   const fetchAllData = async () => {
+    if (!orgSid) return;
+
     await apiUseAccessPolicyForm({ variables: { orgSid } });
     await apiAccessPoliciesForOrg({ variables: { orgSid } });
     await apiAccessSpecializationsForOrg({ variables: { orgSid } });
@@ -56,17 +59,22 @@ export const useCreateGroupPanel = (initialOrgSid, selectedGroupId) => {
     });
   };
 
+  useEffect(() => {
+    if (isOpen !== isFormOpen) setIsFormOpen(isOpen);
+
+    if (orgSid !== initialOrgSid) setOrgSid(initialOrgSid);
+  }, [isOpen, initialOrgSid]);
+
+  useEffect(() => {
+    if (isFormOpen && orgSid) {
+      fetchAllData();
+    }
+  }, [isFormOpen, orgSid]);
+
   //
   // * Effects
   // * Component Mounted.
   useEffect(() => {}, []);
-
-  // * Form is Open? Fetch Data.
-  useEffect(() => {
-    if (isFormOpen) {
-      fetchAllData();
-    }
-  }, [isFormOpen]);
 
   // * When Policy Group is fetched, set the data.
   useEffect(() => {
@@ -99,7 +107,7 @@ export const useCreateGroupPanel = (initialOrgSid, selectedGroupId) => {
   //
 
   useEffect(() => {
-    if (isFormOpen && data) {
+    if (isFormOpen && data && orgSid) {
       setAcessPolicyFormRaw(data.accessPolicyGroupForm);
     }
   }, [data, isFormOpen]);
@@ -111,13 +119,13 @@ export const useCreateGroupPanel = (initialOrgSid, selectedGroupId) => {
   }, [isFormOpen, policiesData]);
 
   useEffect(() => {
-    if (isFormOpen && specializationsData) {
+    if (isFormOpen && specializationsData && orgSid) {
       setSpecializations(specializationsData?.accessSpecializationsForOrg?.nodes);
     }
   }, [isFormOpen, specializationsData]);
 
   useEffect(() => {
-    if (isFormOpen && orgsData) {
+    if (isFormOpen && orgsData && orgSid) {
       setOrganizations(orgsData?.directOrganizations?.nodes);
     }
   }, [isFormOpen, orgsData]);
@@ -126,6 +134,7 @@ export const useCreateGroupPanel = (initialOrgSid, selectedGroupId) => {
     if (createdPolicyGroup) {
       //   onCreateGroupPolicy(createdPolicyGroup.createAccessPolicyGroup);
       //   onDismiss();
+      setIsFormOpen(false);
     }
   }, [createdPolicyGroup]);
 
@@ -143,10 +152,6 @@ export const useCreateGroupPanel = (initialOrgSid, selectedGroupId) => {
     }
     return tagList.some((compareTag) => compareTag.key === tag.key);
   };
-
-  // Helper Functions
-  const openForm = () => setIsFormOpen(true);
-  const closeForm = () => setIsFormOpen(false);
 
   const getFormData = () => {
     apiUseAccessPolicyForm();
@@ -196,8 +201,6 @@ export const useCreateGroupPanel = (initialOrgSid, selectedGroupId) => {
 
   return {
     isFormOpen,
-    openForm,
-    closeForm,
     getFormData,
     organizationTags,
     filterSuggestedTags,
@@ -215,5 +218,7 @@ export const useCreateGroupPanel = (initialOrgSid, selectedGroupId) => {
     accessPolicyFormRaw,
     createPolicyGroup,
     updatePolicyGroup,
+    creatingGroup,
+    createdPolicyGroup,
   };
 };

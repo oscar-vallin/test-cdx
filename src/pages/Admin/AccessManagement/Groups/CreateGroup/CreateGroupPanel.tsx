@@ -9,6 +9,7 @@ import { mergeStyles } from '@fluentui/react/lib-commonjs/Styling';
 import { FontIcon } from '@fluentui/react/lib-commonjs/Icon';
 import { TooltipHost } from '@fluentui/react/lib-commonjs/Tooltip';
 
+import { useOrgSid } from 'src/hooks/useOrgSid';
 import { Spacing } from '../../../../../components/spacings/Spacing';
 import { Button } from '../../../../../components/buttons';
 import { Row, Column } from '../../../../../components/layouts';
@@ -49,10 +50,9 @@ const CreateGroupPanel = ({
   onUpdateGroupPolicy,
   selectedGroupId,
 }: CreateGroupPanelProps): ReactElement => {
-  const location = useLocation();
-  const { orgSid }: any = QueryParams.parse(location.search);
+  const { orgSid } = useOrgSid();
 
-  const accessManagementGroupService = useCreateGroupPanel(orgSid, selectedGroupId);
+  const accessManagementGroupService = useCreateGroupPanel(isOpen, orgSid, selectedGroupId);
   const { policies, specializations, organizations } = accessManagementGroupService;
   const { accessPolicyForm, accessPolicyFormRaw } = accessManagementGroupService;
   const { clearAccessPolicyForm, addToAccessPolicyForm } = accessManagementGroupService;
@@ -61,11 +61,33 @@ const CreateGroupPanel = ({
   const { organizationTags } = accessManagementGroupService;
   const { loadingPolicies } = accessManagementGroupService;
   const { createPolicyGroup, updatePolicyGroup } = accessManagementGroupService;
+  const { isFormOpen } = accessManagementGroupService;
+  const { createdPolicyGroup } = accessManagementGroupService;
 
   const pickerSuggestionsProps = {
     suggestionsHeaderText: 'Suggested Organizations',
     noResultsFoundText: 'No organization tags found',
   };
+
+  // * Dismiss the panel
+  const handleDismiss = () => {
+    clearAccessPolicyForm();
+    onDismiss();
+  };
+
+  useEffect(() => {
+    if (!isFormOpen && createdPolicyGroup) {
+      clearAccessPolicyForm();
+      onCreateGroupPolicy(createdPolicyGroup.createAccessPolicyGroup);
+      handleDismiss();
+    }
+  }, [isFormOpen, createdPolicyGroup]);
+
+  useEffect(() => {
+    if (isOpen) {
+      clearAccessPolicyForm();
+    }
+  }, [isOpen]);
 
   return (
     <Panel
@@ -73,10 +95,7 @@ const CreateGroupPanel = ({
       type={PanelType.large}
       headerText={!accessPolicyForm.policyGroupSid ? 'New Access Policy Group' : 'Update Policy Group'}
       isOpen={isOpen}
-      onDismiss={() => {
-        clearAccessPolicyForm();
-        onDismiss();
-      }}
+      onDismiss={handleDismiss}
     >
       <>
         <Row>
@@ -418,6 +437,7 @@ const CreateGroupPanel = ({
                     disabled={loadingPolicies}
                     onClick={() => {
                       const commonVariables = {
+                        name: accessPolicyForm.name,
                         tmpl: accessPolicyForm.tmpl,
                         tmplUseAsIs: accessPolicyForm.tmplUseAsIs,
                         policySids: accessPolicyForm.policySids,
