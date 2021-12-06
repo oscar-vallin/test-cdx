@@ -1,4 +1,3 @@
-import { shallow } from 'enzyme';
 import { mountWithTheme, shallowWithTheme } from '../../../utils/testUtils';
 import { defaultProps, CardDashboard as Component } from './CardDashboard';
 
@@ -11,6 +10,23 @@ const testProps = {
   color: '#219653',
   noDataLabel: 'No Transmissions',
   loading: false,
+};
+
+const seconTestProps = {
+  id: '__Transmissions__Billing_Units',
+  title: 'Transmissions',
+  subtitle: 'Billing Units.',
+  value: 50,
+  total: 0,
+  color: '#219653',
+  noDataLabel: 'No Transmissions',
+  loading: false,
+};
+
+const theme = {
+  colors: {
+    black: 'black',
+  },
 };
 
 describe('CardBoard Container - Testing Unit...', () => {
@@ -62,5 +78,11 @@ describe('CardBoard Container - Testing Unit...', () => {
     expect(mountedComponent.children().props().subtitle).toEqual(defaultProps.subtitle);
     expect(mountedComponent.children().props().value).toEqual(defaultProps.value);
     expect(mountedComponent.children().props().total).toEqual(defaultProps.total);
+  });
+
+  it('Should find the Id __Transmissions__Billing_Units', () => {
+    const wrapper = mountWithTheme(<Component {...testProps} id="__Transmissions__Billing_Units" />);
+    const searchId = wrapper.find('#__Transmissions__Billing_Units').first();
+    expect(searchId.length).toBe(1);
   });
 });

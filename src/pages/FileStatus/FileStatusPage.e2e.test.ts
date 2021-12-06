@@ -34,6 +34,13 @@ describe('E2E - File Status Test', () => {
     await fileStatus.compareDate('#Input__From__Date-label', `${new Date().toDateString()}`);
   });
 
+  it('Should verify that the current date appears in the input when incorrect dates are entered', async () => {
+    const fileStatus = new PuppetExchangeStatus(cdxApp.page);
+    await fileStatus.expectOnPage();
+    await fileStatus.setDateRange('Tue Nov 40 2020', 'Thu Dec 00 2020');
+    await fileStatus.compareDate('#Input__From__Date-label', `${new Date().toDateString()}`);
+  });
+
   it('Filter by Date', async () => {
     const fileStatus = new PuppetExchangeStatus(cdxApp.page);
     await fileStatus.expectOnPage();
