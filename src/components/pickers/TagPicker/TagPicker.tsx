@@ -12,7 +12,7 @@ const defaultProps = {
 
 type CDXTagPickerProps = {
   id?: string;
-  label?: boolean;
+  label?: string;
   disabled?: any;
   pickerProps?: any;
   value?: any[];
@@ -64,7 +64,11 @@ const CDXTagPicker = ({
 
   return (
     <>
-      {label && <Label required={required}>{label}</Label>}
+      {label && (
+        <Label id="__TagPickerLabel" required={required}>
+          {label}
+        </Label>
+      )}
 
       <StyledTagPicker
         removeButtonAriaLabel="Remove"

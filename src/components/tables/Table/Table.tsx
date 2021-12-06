@@ -343,7 +343,7 @@ const Table = ({
         if (option) {
           return (
             <>
-              <link>
+              <link id="__RouteLink">
                 <RouteLink to={`${fieldItem.text}`}>{fieldContent}</RouteLink>
               </link>
               <StyledSublabel>{`Spec: ${fieldItem.sublabel}`}</StyledSublabel>
@@ -415,7 +415,7 @@ const Table = ({
         return <StyledCell id="Progress">{fieldContent}</StyledCell>;
 
       default:
-        return <span>{fieldContent}</span>;
+        return <span id="__defaultCaseNode">{fieldContent}</span>;
     }
 
     return <span>{fieldContent}</span>;
@@ -483,6 +483,7 @@ const Table = ({
 
             return (
               <div
+                id="__onRenderTableHeaderId"
                 onMouseOver={() => handleMouseOver(_props?.column?.key)}
                 onMouseOut={handleMouseOut}
                 onFocus={() => null}
