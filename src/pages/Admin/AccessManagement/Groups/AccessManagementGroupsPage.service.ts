@@ -23,3 +23,9 @@ export const useAccessManagementGroupsPageService = () => {
 
   return { deleteAccessPolicyGroup, deleteData, deleteLoading, deleteError, setPolicyGroupSid };
 };
+
+// *
+// * Get Groups by Sid
+export const getGroupBySid = (groups, sid: string) => {
+  return groups.find(({ sid: groupSid }) => groupSid === sid);
+};

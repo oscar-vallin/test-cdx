@@ -38,7 +38,7 @@ const TableHeader = ({ id, header = {}, sortLabel, onSort, onOption, date, ...pr
             <StyledRow noBorder>
               <StyledColumn sm={6}>
                 <StyledMenuButton
-                  icon="sort"
+                  id="__SortButton"
                   onClick={() => {
                     onSort();
                   }}
@@ -48,6 +48,7 @@ const TableHeader = ({ id, header = {}, sortLabel, onSort, onOption, date, ...pr
               </StyledColumn>
               <StyledColumn sm={6}>
                 <StyledMenuButton
+                  id="__EyeButton"
                   icon="eye"
                   onClick={() => {
                     onOption();
