@@ -1,9 +1,9 @@
 import PuppetExchangeStatus from './PuppetExchangeStatus';
 
 export default class PuppetArchivesPage extends PuppetExchangeStatus {
-  pageTitle = '#__Text_Archives-Text';
+  pageTitle = '#__Archives_Title-Text';
 
-  secondaryTitle = '#__Text_Advanced-search-Text';
+  secondaryTitle = '#__Archives_Title_SubTitle-Text';
 
   searchInput = '#TableArchive__Card__Row__Input-Search';
 
@@ -19,7 +19,7 @@ export default class PuppetArchivesPage extends PuppetExchangeStatus {
 
   async expectOnPage() {
     await this.expectTextOnPage(this.pageTitle, 'Archives');
-    await this.expectTextOnPage(this.secondaryTitle, '  — Advanced search');
+    await this.expectTextOnPage(this.secondaryTitle, 'Advanced search');
   }
 
   async search(searchText: string) {

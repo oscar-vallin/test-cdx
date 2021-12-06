@@ -4,7 +4,7 @@ import { format } from 'date-fns';
 import { LayoutAdmin } from '../../../layouts/LayoutAdmin/LayoutAdmin';
 import { Spacing } from '../../../components/spacings/Spacing';
 import { Column } from '../../../components/layouts';
-import { Text } from '../../../components/typography';
+import { PageTitle, Text } from '../../../components/typography';
 import { ImplementationDeployMutation, useImplementationDeployMutation } from '../../../data/services/graphql';
 import { Spinner } from '../../../components/spinners/Spinner';
 import { Label } from '../../../components/labels/Label';
@@ -99,9 +99,8 @@ const _ImplementationDeployPage = () => {
       <Spacing margin="double">
         <Row>
           <Column>
-            <Spacing margin={{ bottom: 'normal' }}>
-              <Text variant="bold">Implementation Deploy</Text>
-            </Spacing>
+            <PageTitle id="__Impl_Deploy_Title" title="Implementation Deploy"
+            />
           </Column>
         </Row>
         {renderDeploymentResult()}

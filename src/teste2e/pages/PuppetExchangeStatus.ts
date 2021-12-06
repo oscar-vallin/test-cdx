@@ -1,9 +1,9 @@
 import PuppetBasePage from './PuppetBasePage';
 
 export default class PuppetExchangeStatus extends PuppetBasePage {
-  pageTitle = '#__Text_File-Status-Text';
+  pageTitle = '#__File-Status_Title-Text';
 
-  secondaryTitle = '#__Text_Advanced-search-Text';
+  secondaryTitle = '#__File-Status_Title_SubTitle-Text';
 
   searchInput = '#TableFileStatus__Card__Row__Input-Search';
 
@@ -23,7 +23,7 @@ export default class PuppetExchangeStatus extends PuppetBasePage {
 
   async expectOnPage() {
     await this.expectTextOnPage(this.pageTitle, 'File Status');
-    await this.expectTextOnPage(this.secondaryTitle, '  — Advanced search');
+    await this.expectTextOnPage(this.secondaryTitle, 'Advanced search');
   }
 
   async setDateRange(dateFrom: string, dateTo: string) {

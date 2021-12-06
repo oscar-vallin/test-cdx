@@ -1,9 +1,9 @@
 import PuppetBasePage from './PuppetBasePage';
 
 export default class PuppetTransmissions extends PuppetBasePage {
-  pageTitle = '#__Text_Transmissions-Text';
+  pageTitle = '#__Transmissions_Title-Text';
 
-  secondaryTitle = '#__Text_Advanced-search-Text';
+  secondaryTitle = '#__Transmissions_Title_SubTitle-Text';
 
   searchInput = '#TableTransmissions__Card__Row__Input-Search';
 
@@ -37,7 +37,7 @@ export default class PuppetTransmissions extends PuppetBasePage {
 
   async expectOnPage() {
     await this.expectTextOnPage(this.pageTitle, 'Transmissions');
-    await this.expectTextOnPage(this.secondaryTitle, '  — Advanced search');
+    await this.expectTextOnPage(this.secondaryTitle, 'Advanced search');
   }
 
   async setDateRange(dateFrom: string, dateTo: string) {

@@ -1,9 +1,8 @@
 import React, { memo, useState } from 'react';
-import { FontIcon } from '@fluentui/react/lib-commonjs/Icon';
 import { ROUTES } from '../../data/constants/RouteConstants';
-import { Row, Column, Container } from '../../components/layouts';
+import { Column, Container, Row } from '../../components/layouts';
 import { Spacing } from '../../components/spacings/Spacing';
-import { Text } from '../../components/typography';
+import { PageTitle, Text } from '../../components/typography';
 import { PageHeader } from '../../containers/headers/PageHeader';
 import { LayoutDashboard } from '../../layouts/LayoutDashboard';
 import { WorkPacketTable } from '../../containers/tables/WorkPacketTable';
@@ -30,12 +29,8 @@ const _ArchivePage = () => {
           <Spacing margin={{ top: 'double' }}>
             <Row>
               <Column lg="6" direction="row">
-                <FontIcon iconName="FilterSolid" />
-
-                <Text id="__Text_Archives" variant="bold">
-                  Archives
-                </Text>
-                <Text id="__Text_Advanced-search">&nbsp; — Advanced search</Text>
+                <PageTitle id="__Archives_Title" title="Archives" subTitle="Advanced search" icon="FilterSolid"
+                />
               </Column>
               <Column lg="6" right>
                 <Text right>

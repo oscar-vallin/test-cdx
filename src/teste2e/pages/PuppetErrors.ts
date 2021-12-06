@@ -1,9 +1,9 @@
 import PuppetExchangeStatus from './PuppetExchangeStatus';
 
 export default class PuppetErrors extends PuppetExchangeStatus {
-  pageTitle = '#__Text_Errors-Text';
+  pageTitle = '#__Errors_Title-Text';
 
-  secondaryTitle = '#__Text_Advanced-search-Text';
+  secondaryTitle = '#__Errors_Title_SubTitle-Text';
 
   startTmeCol = 'div[data-item-key="startTime"]';
 
@@ -19,7 +19,7 @@ export default class PuppetErrors extends PuppetExchangeStatus {
 
   async expectOnPage() {
     await this.expectTextOnPage(this.pageTitle, 'Errors');
-    await this.expectTextOnPage(this.secondaryTitle, '  — Advanced search');
+    await this.expectTextOnPage(this.secondaryTitle, 'Advanced search');
   }
 
   async clickOnHeader(id: string, btnName: string) {

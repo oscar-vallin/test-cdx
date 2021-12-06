@@ -1,9 +1,8 @@
 import React, { ReactElement, useState } from 'react';
-import { FontIcon } from '@fluentui/react/lib-commonjs/Icon';
 import { ROUTES } from '../../data/constants/RouteConstants';
 import { Column, Container, Row } from '../../components/layouts';
 import { Spacing } from '../../components/spacings/Spacing';
-import { Text } from '../../components/typography';
+import { PageTitle, Text } from '../../components/typography';
 import { PageHeader } from '../../containers/headers/PageHeader';
 import { LayoutDashboard } from '../../layouts/LayoutDashboard';
 import { WorkPacketTable } from '../../containers/tables/WorkPacketTable';
@@ -47,11 +46,8 @@ const _FileStatusPage = () => {
           <Spacing margin={{ top: 'double' }}>
             <Row>
               <Column lg="6" direction="row">
-                <FontIcon iconName="FilterSolid" />
-                <Text id="__Text_File-Status" variant="bold">
-                  File Status
-                </Text>
-                <Text id="__Text_Advanced-search">&nbsp; — Advanced search</Text>
+                <PageTitle id="__File-Status_Title" title="File Status" subTitle="Advanced search" icon="FilterSolid"
+                />
               </Column>
               <Column lg="6" right>
                 <Text right>{renderTotalRecords()}</Text>
