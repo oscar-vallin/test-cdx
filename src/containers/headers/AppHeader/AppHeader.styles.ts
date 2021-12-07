@@ -4,14 +4,42 @@ import styled, { StyledComponent } from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Icon } from '@fluentui/react/lib-commonjs/Icon';
 import { IconButton } from '@fluentui/react/lib-commonjs/Button';
+import { Nav } from 'office-ui-fabric-react/lib/Nav';
 
+interface ToggableProps {
+  open?: boolean;
+}
 interface StyledNavButtonProps {
   selected?: boolean;
 }
 
-export const StyledContainer = styled.div`
+type StyledSubNavProps = {
+  onLinkClick?: any | null;
+};
+
+export const StyledContainer = styled.div<ToggableProps>`
+  position: relative;
+  z-index: 100;
+
+  &::before {
+    background: rgba(0, 0, 0, 0.25);
+    content: '';
+    height: 100vh;
+    left: 0;
+    opacity: ${({ open }) => (open ? '1' : '0')};
+    position: fixed;
+    top: 0;
+    transition: all 0.25s ease-out;
+    visibility: ${({ open }) => (open ? 'visible' : 'hidden')};
+    width: 100vw;
+    z-index: -1;
+  }
+`;
+
+export const StyledHeader = styled.header`
   align-items: stretch;
   background: ${({ theme }) => theme.colors.themePrimary};
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.15);
   color: ${({ theme }) => theme.colors.white};
   display: flex;
   font: ${({ theme }) => theme.fontStyles.normal};
@@ -22,9 +50,9 @@ export const StyledContainer = styled.div`
   }
 `;
 
-export const StyledButton = styled.button`
+export const StyledButton = styled.button<ToggableProps>`
+  background: ${({ open }) => (open ? 'rgba(0, 0, 0, 0.05)' : 'none')};
   align-items: center;
-  background: none;
   border: none;
   color: ${({ theme }) => theme.colors.white};
   cursor: pointer;
@@ -47,7 +75,7 @@ export const StyledButton = styled.button`
 `;
 
 export const StyledNavIcon = styled(Icon)`
-  margin: ${({ theme }) => `0 ${theme.spacing.normal} 0 0`};
+  margin: ${({ theme }) => `0 ${theme.spacing.small} 0 0`};
 `;
 
 export const StyledChevronDown = styled(Icon)`
@@ -129,4 +157,44 @@ export const StyledDiv = styled.div`
   justify-content: flex-end;
   padding: ${({ theme }) => `0 ${theme.spacing.normal} 0 0`};
   width: 100%;
+`;
+
+export const StyledPanel = styled.div<ToggableProps>`
+  background: ${({ theme }) => theme.colors.neutralLighter} !important;
+  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
+  display: flex;
+  font: ${({ theme }) => theme.fontStyles.normal};
+  height: calc(100% - 58px);
+  padding: ${({ theme }) => `0 ${theme.spacing.small}`};
+  position: fixed;
+  transform: ${({ open }) => (open ? 'translateX(0)' : 'translateX(-100%)')};
+  transition: transform 0.25s ease-out;
+  top: 58px;
+  width: auto;
+  z-index: -1;
+`;
+
+export const StyledSubNav = styled(Nav)<StyledSubNavProps>`
+  height: calc(100vh - 58px);
+
+  .ms-Nav-compositeLink {
+    .ms-Button {
+      font-size: 0.75rem;
+
+      &:hover {
+        background: ${({ theme }) => theme.colors.neutralLighter};
+      }
+    }
+
+    .ms-Nav-chevronButton {
+      position: absolute;
+      width: 100%;
+      z-index: 2;
+
+      & + .ms-Button {
+        font-size: 0.75rem;
+        pointer-events: none;
+      }
+    }
+  }
 `;

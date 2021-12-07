@@ -71,18 +71,6 @@ export const LayoutAdmin = ({
         </Spacing>
       ) : (
         <StyledBox>
-          <StyledNav
-            selectedKey={sidebarOptionSelected}
-            groups={[{ links: parseLinks(ActiveDomainStore.nav.admin, sidebarOptionSelected) }]}
-            onLinkClick={(evt: any, route: { links: string; url: string }) => {
-              evt.preventDefault();
-
-              if (!route.links) {
-                history.push(`${route.url}?orgSid=${orgSid}`);
-              }
-            }}
-          />
-
           <StyledBox>{children}</StyledBox>
         </StyledBox>
       )}

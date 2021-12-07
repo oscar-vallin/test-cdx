@@ -50,7 +50,12 @@ export const ThemeContextProvider = ({ children }) => {
     }
 
     html {
-      font-size: ${({ fontSize }) => sizes[fontSize]}
+      font-size: ${({ fontSize }) => sizes[fontSize]};
+    }
+
+    body {
+      overflow-x: auto;
+      overflow-y: hidden;
     }
 
     [class*="ms-DetailsHeader"] {

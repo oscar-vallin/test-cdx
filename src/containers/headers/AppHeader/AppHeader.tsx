@@ -1,4 +1,5 @@
-import { ReactElement } from 'react';
+import { ReactElement, useState } from 'react';
+import OutsideClickHandler from 'react-outside-click-handler';
 import { useHistory, useLocation } from 'react-router';
 import { Icon } from '@fluentui/react/lib-commonjs/Icon';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
@@ -18,6 +19,9 @@ import {
   StyledNavButton,
   StyledDiv,
   StyledIconButton,
+  StyledPanel,
+  StyledHeader,
+  StyledSubNav,
 } from './AppHeader.styles';
 
 const defaultProps = {
@@ -29,15 +33,25 @@ type AppHeaderProps = {
   id?: string;
   children?: any;
   onUserSettings?: any;
+  sidebarOptionSelected?: any;
 };
 
-const AppHeader = ({ id, onUserSettings, children }: AppHeaderProps): ReactElement => {
+const AppHeader = ({ id, onUserSettings, sidebarOptionSelected, children }: AppHeaderProps): ReactElement => {
   const history = useHistory();
   const location = useLocation();
-  const { orgSid, setOrgSid } = useOrgSid();
+  const { orgSid } = useOrgSid();
   const ThemeStore = useThemeStore();
   const ActiveDomainStore = useActiveDomainStore();
+
+  const [isOpen, setIsOpen] = useState(false);
   const { setOwnDashFontSize } = useCurrentUserTheme();
+
+  type mapProps = {
+    type?: string;
+    label?: string;
+    destination?: string;
+    subNavItems?: { type: string }[] | any;
+  };
 
   const updateThemeFontSize = (key) => {
     const fontSize = { themeFontSize: key };
@@ -71,6 +85,26 @@ const AppHeader = ({ id, onUserSettings, children }: AppHeaderProps): ReactEleme
     },
   ];
 
+  const parseLinks = (links = [], sidebarOpt: string) => {
+    return links.map(({ label, destination, subNavItems }: mapProps) => ({
+      name: label,
+      ...(subNavItems
+        ? {
+            isExpanded: subNavItems.find((item) => item.destination === sidebarOpt),
+            links: parseLinks(subNavItems, ''),
+          }
+        : {}),
+      ...(destination
+        ? {
+            url: getRouteByApiId(destination)?.URL,
+            key: destination,
+            // params: page.parameters,
+            // commands: page.commands,
+          }
+        : {}),
+    }));
+  };
+
   const renderNavButtons = () => {
     return ActiveDomainStore.nav.dashboard.map((menuOption: { label: string; destination: string }, index: any) => {
       const opt:
@@ -99,46 +133,64 @@ const AppHeader = ({ id, onUserSettings, children }: AppHeaderProps): ReactEleme
   };
 
   return (
-    <StyledContainer id={id} className="AppHeader" data-e2e="AppHeader">
-      <StyledButton>
-        <StyledNavIcon iconName="GlobalNavButton" />
+    <StyledContainer id={id} open={isOpen}>
+      <StyledHeader data-e2e="AppHeader">
+        <StyledButton open={isOpen} onClick={() => setIsOpen(true)}>
+          <StyledNavIcon iconName="GlobalNavButton" />
 
-        <div className="HeaderBtnText">
-          <div>
-            <h2 className="HeaderBtnText__title">
-              {ActiveDomainStore.domainOrg.current.label
-                .split('')
-                .filter((letter) => letter.match(/^[A-Z]*$/))
-                .join('')}
-            </h2>
+          <div className="HeaderBtnText">
+            <div>
+              <h2 className="HeaderBtnText__title">
+                {ActiveDomainStore.domainOrg.current.label
+                  .split('')
+                  .filter((letter) => letter.match(/^[A-Z]*$/))
+                  .join('')}
+              </h2>
 
-            <small className="HeaderBtnText__description">{ActiveDomainStore.domainOrg.current.label}</small>
+              <small className="HeaderBtnText__description">{ActiveDomainStore.domainOrg.current.label}</small>
+            </div>
+
+            {/* <StyledChevronDown iconName="ChevronDown" /> */}
           </div>
+        </StyledButton>
 
-          <StyledChevronDown iconName="ChevronDown" />
-        </div>
-      </StyledButton>
+        <StyledNavButton
+          onClick={() => {
+            ActiveDomainStore.setCurrentOrg(ActiveDomainStore.domainOrg.origin);
+          }}
+        >
+          <Icon iconName="Home" />
+        </StyledNavButton>
 
-      <StyledNavButton
-        onClick={() => {
-          ActiveDomainStore.setCurrentOrg(ActiveDomainStore.domainOrg.origin);
-        }}
-      >
-        <Icon iconName="Home" />
-      </StyledNavButton>
+        <StyledNav>{renderNavButtons()}</StyledNav>
 
-      <StyledNav>{renderNavButtons()}</StyledNav>
+        <StyledDiv>
+          <StyledIconButton
+            id="__ProfileMenu_Font_Buttons"
+            iconProps={{ iconName: 'Font' }}
+            title="Font sizes"
+            menuProps={{ items: settingsMenu }}
+          />
 
-      <StyledDiv>
-        <StyledIconButton
-          id="__ProfileMenu_Font_Buttons"
-          iconProps={{ iconName: 'Font' }}
-          title="Font sizes"
-          menuProps={{ items: settingsMenu }}
-        />
+          <ProfileMenu id="__ProfileMenu" onUserSettings={onUserSettings} />
+        </StyledDiv>
+      </StyledHeader>
 
-        <ProfileMenu id="__ProfileMenu" onUserSettings={onUserSettings} />
-      </StyledDiv>
+      <OutsideClickHandler onOutsideClick={() => setIsOpen(false)}>
+        <StyledPanel open={isOpen}>
+          <StyledSubNav
+            selectedKey={sidebarOptionSelected}
+            groups={[{ links: parseLinks(ActiveDomainStore.nav.admin, sidebarOptionSelected) }]}
+            onLinkClick={(evt: any, route: { links: string; url: string }) => {
+              evt.preventDefault();
+
+              if (!route.links) {
+                history.push(`${route.url}?orgSid=${orgSid}`);
+              }
+            }}
+          />
+        </StyledPanel>
+      </OutsideClickHandler>
     </StyledContainer>
   );
 };
