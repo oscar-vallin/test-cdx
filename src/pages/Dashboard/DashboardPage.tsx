@@ -7,18 +7,18 @@ import { InputDate } from 'src/components/inputs/InputDate';
 import { CardDashboard } from '../../containers/cards/CardDashboard';
 import { TableDashboard } from '../../containers/tables/TableDashboard';
 
-import { Row, Column, Container } from '../../components/layouts';
+import { Column, Container, Row } from '../../components/layouts';
 import { Spacing } from '../../components/spacings/Spacing';
 import { Spinner } from '../../components/spinners/Spinner';
-import { Text } from '../../components/typography/Text';
 import { PageHeader } from '../../containers/headers/PageHeader';
 
 import { LayoutDashboard } from '../../layouts/LayoutDashboard';
-import { StyledRow, StyledButton } from './DashboardPage.styles';
+import { StyledButton, StyledRow } from './DashboardPage.styles';
 import { useDashboardService } from './DashboardPage.service';
 
 import { TABLE_NAMES } from '../../data/constants/TableConstants';
 import { useOrgSid } from '../../hooks/useOrgSid';
+import { PageTitle } from '../../components/typography';
 
 // TODO: Change for Session organization ID.
 // const ORG_SID = 1;
@@ -108,8 +108,8 @@ const _DashboardPage = () => {
             <Spacing margin={{ top: 'double' }}>
               <Row center>
                 <Column lg="6" direction="row">
-                  <Text variant="bold">Dashboard</Text>
-                  <Text>&nbsp; — Summary</Text>
+                  <PageTitle id="__Dashboard_Title" title="Dashboard" subTitle="Summary"
+                  />
                 </Column>
                 <Column lg="6" direction="row" right>
                   {renderDateButtons()}

@@ -83,11 +83,23 @@ const _AccessManagementGroupsPage = () => {
     }
   }, [deleteData]);
 
-  // Handle Delete function.
+  // * ---------------------------------------------------
+  // * ---------------------------------------------------
+
+  // *
+  // * Handle Delete function.
   const handleDeleteGroup = (id) => {
     setSelectedGroupId(id);
-
     setDialog(true);
+  };
+
+  // *
+  // * Handle Create Function.
+  const handleCreateGroup = () => {
+    setIsPanelOpen(true);
+    setSelectedGroupId(0);
+
+    return null;
   };
 
   const onRenderItemColumn = (item, index, column) => {
@@ -126,66 +138,80 @@ const _AccessManagementGroupsPage = () => {
     return item[column.key];
   };
 
+  //
+  // Render Loading Records
+  const renderLoadingRecords = () => {
+    return (
+      <Spacing margin={{ top: 'double' }}>
+        <Spinner size={SpinnerSize.large} label="Loading groups" />
+      </Spacing>
+    );
+  };
+
+  //
+  // Render No Records found
+  const renderNoRecords = () => {
+    return (
+      <EmptyState
+        title="No access groups found"
+        description="You haven't created an access group yet. Click the button below to create a new group."
+        actions={
+          <Button id="CreateGroupButton" variant="primary" onClick={handleCreateGroup}>
+            Create group
+          </Button>
+        }
+      />
+    );
+  };
+
+  const renderCreateGroupButton = () => {
+    return (
+      <>
+        <Row>
+          <Column lg="6">
+            <Spacing margin={{ top: 'small' }}>
+              <Text variant="bold">Groups</Text>
+            </Spacing>
+          </Column>
+
+          <Column lg="6" right>
+            <Button
+              id="CreateGroupButton"
+              variant="primary"
+              onClick={() => {
+                setIsPanelOpen(true);
+                return null;
+              }}
+            >
+              Create group
+            </Button>
+          </Column>
+        </Row>
+        <Row>
+          <Column lg="12">
+            <Spacing margin={{ top: 'normal' }}>
+              <Separator />
+            </Spacing>
+          </Column>
+        </Row>
+      </>
+    );
+  };
+
+  //
+  // !Render Page
+  //
   return (
     <LayoutAdmin id="PageAdmin" sidebarOptionSelected="AM_GROUPS">
       <>
         <Spacing margin="double">
-          {groups.length > 0 && (
-            <Row>
-              <Column lg="6">
-                <Spacing margin={{ top: 'small' }}>
-                  <Text variant="bold">Groups</Text>
-                </Spacing>
-              </Column>
-
-              <Column lg="6" right>
-                <Button
-                  id="CreateGroupButton"
-                  variant="primary"
-                  onClick={() => {
-                    setIsPanelOpen(true);
-                    return null;
-                  }}
-                >
-                  Create group
-                </Button>
-              </Column>
-            </Row>
-          )}
-
-          {groups.length > 0 && (
-            <Row>
-              <Column lg="12">
-                <Spacing margin={{ top: 'normal' }}>
-                  <Separator />
-                </Spacing>
-              </Column>
-            </Row>
-          )}
-
+          {groups.length > 0 && renderCreateGroupButton()}
           <Row>
             <StyledColumn lg="12">
               {loading ? (
-                <Spacing margin={{ top: 'double' }}>
-                  <Spinner size={SpinnerSize.large} label="Loading groups" />
-                </Spacing>
+                () => renderLoadingRecords()
               ) : !groups.length ? (
-                <EmptyState
-                  title="No access groups found"
-                  description="You haven't created an access group yet. Click the button below to create a new group."
-                  actions={
-                    <Button
-                      id="CreateGroupButton"
-                      variant="primary"
-                      onClick={() => {
-                        setIsPanelOpen(true);
-                        return null;
-                      }}
-                    >
-                      Create group
-                    </Button>
-                  }
-                />
+                renderNoRecords()
               ) : (
                 <DetailsList
                   items={groups}
@@ -231,7 +257,7 @@ const _AccessManagementGroupsPage = () => {
             ]);
           }}
           onUpdateGroupPolicy={(updatedPolicy) => {
-            const filteredGroups = groups.filter((group) => group?.sid !== updatedPolicy.sid);
+            const filteredGroups = groups.filter(({ sid }) => sid !== updatedPolicy.sid);
             setGroups([
               ...filteredGroups,
               {

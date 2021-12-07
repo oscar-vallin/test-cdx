@@ -154,12 +154,12 @@ export const WorkPacketTable = ({
     });
 
     if (error) {
-      return <span>Error: {error?.message || 'Something went wrong'}</span>;
+      return <span id="__spanError">Error: {error?.message || 'Something went wrong'}</span>;
     }
 
     if (loading) {
       return (
-        <StyledSpacing margin={{ top: 'double' }}>
+        <StyledSpacing id="__StyledSpacingId" margin={{ top: 'double' }}>
           <Spinner size={SpinnerSize.large} label="Loading data" />
         </StyledSpacing>
       );

@@ -266,7 +266,6 @@ const CreateAccessSpecializationPanel = ({
 
                                         <Column lg="9" key={`${groupIndex}-${optIndex}-right`}>
                                           <TagPicker
-                                            label
                                             disabled={false}
                                             pickerProps
                                             debounce={500}

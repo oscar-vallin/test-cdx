@@ -15,7 +15,6 @@ import {
   IColumn,
 } from 'office-ui-fabric-react/lib-commonjs/DetailsList';
 import { EmptyState } from 'src/containers/states';
-import { SpinnerSize } from '@fluentui/react';
 import { StyleConstants } from '../../../data/constants/StyleConstants';
 import { getDates } from '../../../helpers/tableHelpers.service';
 import { Spinner } from '../../spinners/Spinner';
@@ -343,7 +342,7 @@ const Table = ({
         if (option) {
           return (
             <>
-              <link>
+              <link id="__RouteLink">
                 <RouteLink to={`${fieldItem.text}`}>{fieldContent}</RouteLink>
               </link>
               <StyledSublabel>{`Spec: ${fieldItem.sublabel}`}</StyledSublabel>
@@ -394,7 +393,7 @@ const Table = ({
       case 'color':
         return (
           <span
-            data-selection-disabled
+            data-selection-disabled="true"
             className={mergeStyles({ color: fieldContent, height: '100%', display: 'block' })}
           >
             {fieldContent}
@@ -415,7 +414,7 @@ const Table = ({
         return <StyledCell id="Progress">{fieldContent}</StyledCell>;
 
       default:
-        return <span>{fieldContent}</span>;
+        return <span id="__defaultCaseNode">{fieldContent}</span>;
     }
 
     return <span>{fieldContent}</span>;
@@ -471,7 +470,7 @@ const Table = ({
             if (_props?.column?.key === currentKeySort) {
               return (
                 <StyledMenuButton
-                  id={_props.column.name.replaceAll(' ', '__')}
+                  id={_props?.column?.name?.replace(' ', '__')}
                   onClick={() => _onSort(_props?.column?.key)}
                   icon={sort}
                   disabled={false}
@@ -483,6 +482,7 @@ const Table = ({
 
             return (
               <div
+                id="__onRenderTableHeaderId"
                 onMouseOver={() => handleMouseOver(_props?.column?.key)}
                 onMouseOut={handleMouseOut}
                 onFocus={() => null}

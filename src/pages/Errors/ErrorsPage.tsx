@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { FontIcon } from '@fluentui/react/lib-commonjs/Icon';
 import { ROUTES } from '../../data/constants/RouteConstants';
 import { LayoutDashboard } from '../../layouts/LayoutDashboard';
-import { Row, Column, Container } from '../../components/layouts';
+import { Column, Container, Row } from '../../components/layouts';
 import { Spacing } from '../../components/spacings/Spacing';
-import { Text } from '../../components/typography';
+import { PageTitle, Text } from '../../components/typography';
 import { PageHeader } from '../../containers/headers/PageHeader';
 
 import { WorkPacketTable } from '../../containers/tables/WorkPacketTable';
@@ -35,11 +34,8 @@ const _ErrorsPage = () => {
           <Spacing margin={{ top: 'double' }}>
             <Row>
               <Column lg="6" direction="row">
-                <FontIcon iconName="FilterSolid" />
-                <Text id="__Text_Errors" variant="bold">
-                  Errors
-                </Text>
-                <Text id="__Text_Advanced-search">&nbsp; — Advanced search</Text>
+                <PageTitle id="__Errors_Title" title="Errors" subTitle="Advanced search" icon="FilterSolid"
+                />
               </Column>
               <Column lg="6" right>
                 <Text right>

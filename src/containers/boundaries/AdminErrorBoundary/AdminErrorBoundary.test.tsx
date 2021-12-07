@@ -1,7 +1,9 @@
 import AdminErrorBoundary from './AdminErrorBoundary';
-import { shallowWithTheme } from '../../../utils/testUtils';
+import { mountWithTheme, shallowWithTheme } from '../../../utils/testUtils';
 import { StoreProvider } from 'easy-peasy';
+import { ApolloContextProvider } from '../../../contexts/ApolloContext';
 import { shallow } from 'enzyme';
+import { BrowserRouter as Router } from 'react-router-dom';
 import store from '../../../store/index';
 
 const defaultProps = {
@@ -25,13 +27,17 @@ describe('AdminErrorBoundary Testing Unit...', () => {
     expect(tree).toMatchSnapshot();
   });
 
-  it('Should show an alert with message "Save" when click on Save button', () => {
-    const wrapper = shallow(
+  it('Should find the Id AdminErrorBoundary', () => {
+    const wrapper = mountWithTheme(
       <StoreProvider store={store}>
-        <AdminErrorBoundary></AdminErrorBoundary>
+        <ApolloContextProvider>
+          <Router>
+            <AdminErrorBoundary {...defaultProps}></AdminErrorBoundary>
+          </Router>
+        </ApolloContextProvider>
       </StoreProvider>
     );
-    wrapper.find('LayoutDashboard[id="AdminErrorBoundary"]');
-    expect(wrapper).toMatchSnapshot();
+    const searchId = wrapper.find('#AdminErrorBoundary').first();
+    expect(searchId.length).toBe(1);
   });
 });
