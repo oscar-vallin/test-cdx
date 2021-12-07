@@ -6,7 +6,7 @@ import { Icon } from '@fluentui/react/lib-commonjs/Icon';
 import { IconButton } from '@fluentui/react/lib-commonjs/Button';
 
 interface StyledNavButtonProps {
-  selected: boolean;
+  selected?: boolean;
 }
 
 export const StyledContainer = styled.div`

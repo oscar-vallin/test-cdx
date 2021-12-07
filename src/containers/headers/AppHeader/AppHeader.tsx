@@ -34,7 +34,7 @@ type AppHeaderProps = {
 const AppHeader = ({ id, onUserSettings, children }: AppHeaderProps): ReactElement => {
   const history = useHistory();
   const location = useLocation();
-  const { orgSid } = useOrgSid();
+  const { orgSid, setOrgSid } = useOrgSid();
   const ThemeStore = useThemeStore();
   const ActiveDomainStore = useActiveDomainStore();
   const { setOwnDashFontSize } = useCurrentUserTheme();
@@ -105,18 +105,27 @@ const AppHeader = ({ id, onUserSettings, children }: AppHeaderProps): ReactEleme
 
         <div className="HeaderBtnText">
           <div>
-            <h2 className="HeaderBtnText__title">PW</h2>
+            <h2 className="HeaderBtnText__title">
+              {ActiveDomainStore.domainOrg.current.label
+                .split('')
+                .filter((letter) => letter.match(/^[A-Z]*$/))
+                .join('')}
+            </h2>
 
-            <small className="HeaderBtnText__description">Poseidon Watches</small>
+            <small className="HeaderBtnText__description">{ActiveDomainStore.domainOrg.current.label}</small>
           </div>
 
           <StyledChevronDown iconName="ChevronDown" />
         </div>
       </StyledButton>
 
-      <StyledLink to={getRouteByApiId(ActiveDomainStore.domainOrg.origin.destination)?.URL || ''}>
+      <StyledNavButton
+        onClick={() => {
+          ActiveDomainStore.setCurrentOrg(ActiveDomainStore.domainOrg.origin);
+        }}
+      >
         <Icon iconName="Home" />
-      </StyledLink>
+      </StyledNavButton>
 
       <StyledNav>{renderNavButtons()}</StyledNav>
 
