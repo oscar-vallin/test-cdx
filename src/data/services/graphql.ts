@@ -2053,6 +2053,7 @@ export type WebCommand = {
 
 export type WebNav = {
   __typename?: 'WebNav';
+  orgId?: Maybe<Scalars['String']>;
   label?: Maybe<Scalars['String']>;
   /** page: WebPage to nave to, blank if this only has subnavs */
   page?: Maybe<WebPage>;
@@ -2311,7 +2312,7 @@ export type FragmentWebPageFragment = (
 
 export type FragmentWebNavFragment = (
   { __typename?: 'WebNav' }
-  & Pick<WebNav, 'label' | 'appDomain'>
+  & Pick<WebNav, 'orgId' | 'label' | 'appDomain'>
   & { page?: Maybe<(
     { __typename?: 'WebPage' }
     & FragmentWebPageFragment
@@ -2792,7 +2793,7 @@ export type CurrentOrgNavQuery = (
   { __typename?: 'Query' }
   & { currentOrgNav?: Maybe<(
     { __typename?: 'WebNav' }
-    & Pick<WebNav, 'label' | 'appDomain'>
+    & Pick<WebNav, 'orgId' | 'label' | 'appDomain'>
     & { page?: Maybe<(
       { __typename?: 'WebPage' }
       & FragmentWebPageFragment
@@ -5035,6 +5036,7 @@ export const FragmentWebPageFragmentDoc = gql`
     ${UnionNvpFragmentDoc}`;
 export const FragmentWebNavFragmentDoc = gql`
     fragment fragmentWebNav on WebNav {
+  orgId
   label
   page {
     ...fragmentWebPage
@@ -6000,6 +6002,7 @@ export type CurrentUserQueryResult = Apollo.QueryResult<CurrentUserQuery, Curren
 export const CurrentOrgNavDocument = gql`
     query CurrentOrgNav($orgInput: OrgSidInput) {
   currentOrgNav(orgInput: $orgInput) {
+    orgId
     label
     page {
       ...fragmentWebPage
