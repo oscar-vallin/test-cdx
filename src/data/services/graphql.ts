@@ -354,6 +354,8 @@ export type CreateUserInput = {
   email: Scalars['String'];
   password?: Maybe<Scalars['String']>;
   orgSid: Scalars['ID'];
+  /** Indicates that an email should be sent to the user with an activation link. */
+  sendActivationEmail?: Maybe<Scalars['Boolean']>;
   accessPolicyGroupSids?: Maybe<Array<Maybe<Scalars['ID']>>>;
 };
 
