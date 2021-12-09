@@ -3,10 +3,14 @@ import PuppetBasePage from './PuppetBasePage';
 
 // represents the left hand admin menu
 export default class PuppetAdminMenu extends PuppetBasePage {
-  menuParent = 'div.ms-Nav-group';
+  menuParent = '[data-e2e="AdminNav"]';
+
+  menuTrigger = '[data-e2e="AdminNavBtn"]';
 
   async openMenu(...menuItems: string[]) {
-    await this.page.waitForTimeout(500);
+    await this.page.click(this.menuTrigger);
+    await this.page.waitForTimeout(5000);
+
     if (menuItems.length > 1) {
       // expand all of the top level menus first
       for (let i = 0; i < menuItems.length - 1; i++) {

@@ -21,10 +21,23 @@ export default class PuppetActiveOrgs extends PuppetBasePage {
     await this.expectTextOnPage(panelSelector, 'New access policy');
   }
 
-  async clickOnPolicy(id: string, name) {
+  async clickOnPolicy(id: string) {
     const selector = `#__${id}`;
-    await this.expectTextOnPage(selector, name);
+
+    await this.page.waitForSelector(selector);
+
     await this.page.click(selector);
+  }
+
+  async expectPolicyTemplates() {
+    const dropdownBtnSelector = '#CreatePolicyButton + .ms-Button';
+    const dropdownItemSelector = '.ms-ContextualMenu-itemText';
+
+    await this.page.waitForSelector(dropdownBtnSelector);
+    await this.page.click(dropdownBtnSelector);
+
+    await this.page.waitForSelector(dropdownItemSelector);
+    await this.expectTextOnPage(dropdownItemSelector, 'Exchange Administrator');
   }
 
   async createPolicy() {
@@ -39,11 +52,11 @@ export default class PuppetActiveOrgs extends PuppetBasePage {
     await this.page.click(createBtnSelector);
   }
 
-  async updatePolicy() {
+  async updatePolicy(id: string) {
     const nameInputSelector = '#PolicyInput__Name';
     const createBtnSelector = '#__CreatePoliciesPanelId';
 
-    await this.clickOnPolicy('CDX_E2E_Policy', 'CDX E2E Policy');
+    await this.clickOnPolicy(id);
 
     await this.page.waitForSelector(nameInputSelector);
 
@@ -51,5 +64,16 @@ export default class PuppetActiveOrgs extends PuppetBasePage {
     await this.inputValue(nameInputSelector, 'CDX E2E Test');
 
     await this.page.click(createBtnSelector);
+  }
+
+  async deletePolicy(id: string) {
+    const deleteBtnSelector = `#DeleteBtn__${id}`;
+    const confirmationSelector = '#ConfirmationBtn';
+
+    await this.page.waitForSelector(deleteBtnSelector);
+    await this.page.click(deleteBtnSelector);
+
+    await this.page.waitForSelector(confirmationSelector, { visible: true });
+    await this.page.click(confirmationSelector);
   }
 }

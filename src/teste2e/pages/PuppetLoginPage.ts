@@ -2,6 +2,8 @@ import PuppetBasePage from './PuppetBasePage';
 import PuppetExchangeStatus from './PuppetExchangeStatus';
 import PuppetActiveOrgs from './PuppetActiveOrgs';
 
+jest.setTimeout(999999999);
+
 // Puppeteer test page representing the Login page
 export default class PuppetLoginPage extends PuppetBasePage {
   loginId = '#__FormLogin__Card__Row__Input-Email';

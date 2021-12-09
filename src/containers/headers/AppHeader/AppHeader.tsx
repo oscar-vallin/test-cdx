@@ -6,7 +6,8 @@ import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
 import { ProfileMenu } from 'src/containers/menus/ProfileMenu';
 import { useCurrentUserTheme } from 'src/hooks/useCurrentUserTheme';
 import { useThemeStore } from 'src/store/ThemeStore';
-import { getRouteByApiId } from '../../../data/constants/RouteConstants';
+import { useSessionStore } from 'src/store/SessionStore';
+import { getRouteByApiId, ROUTE_USER_SETTINGS } from '../../../data/constants/RouteConstants';
 import { useOrgSid } from '../../../hooks/useOrgSid';
 
 import {
@@ -41,6 +42,7 @@ const AppHeader = ({ id, onUserSettings, sidebarOptionSelected, children }: AppH
   const location = useLocation();
   const { orgSid } = useOrgSid();
   const ThemeStore = useThemeStore();
+  const { user } = useSessionStore();
   const ActiveDomainStore = useActiveDomainStore();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -119,6 +121,7 @@ const AppHeader = ({ id, onUserSettings, sidebarOptionSelected, children }: AppH
 
       return opt.MAIN_MENU ? (
         <StyledNavButton
+          data-e2e={menuOption.destination}
           selected={location.pathname === opt.URL}
           onClick={() => {
             history.push(`${opt.URL}?orgSid=${orgSid}`);
@@ -135,7 +138,7 @@ const AppHeader = ({ id, onUserSettings, sidebarOptionSelected, children }: AppH
   return (
     <StyledContainer id={id} open={isOpen}>
       <StyledHeader data-e2e="AppHeader">
-        <StyledButton open={isOpen} onClick={() => setIsOpen(true)}>
+        <StyledButton open={isOpen} onClick={() => setIsOpen(true)} data-e2e="AdminNavBtn">
           <StyledNavIcon iconName="GlobalNavButton" />
 
           <div className="HeaderBtnText">
@@ -172,12 +175,15 @@ const AppHeader = ({ id, onUserSettings, sidebarOptionSelected, children }: AppH
             menuProps={{ items: settingsMenu }}
           />
 
-          <ProfileMenu id="__ProfileMenu" onUserSettings={onUserSettings} />
+          <ProfileMenu
+            id="__ProfileMenu"
+            onUserSettings={() => history.push(`${ROUTE_USER_SETTINGS.URL}?orgSid=${user.orgSid}`)}
+          />
         </StyledDiv>
       </StyledHeader>
 
       <OutsideClickHandler onOutsideClick={() => setIsOpen(false)}>
-        <StyledPanel open={isOpen}>
+        <StyledPanel open={isOpen} data-e2e="AdminNav">
           <StyledSubNav
             selectedKey={sidebarOptionSelected}
             groups={[{ links: parseLinks(ActiveDomainStore.nav.admin, sidebarOptionSelected) }]}
