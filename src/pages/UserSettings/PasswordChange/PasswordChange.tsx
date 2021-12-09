@@ -45,7 +45,7 @@ const PasswordChange = ({ state, onChange, validationPassed }: PasswordChangePar
     updateOwnPasswordMutation,
     { data: passwordUpdateResult, loading: isUpdatingPassword, error: passwordUpdateError },
   ] = useUpdateOwnPasswordMutation({
-    variables: { updatePasswordInput: state.password },
+    variables: { updateOwnPasswordInput: state.password },
   });
 
   return (
@@ -110,7 +110,7 @@ const PasswordChange = ({ state, onChange, validationPassed }: PasswordChangePar
               onClick={() => {
                 updateOwnPasswordMutation({
                   variables: {
-                    updatePasswordInput: {
+                    updateOwnPasswordInput: {
                       originalPassword: state.current,
                       newPassword: state.new,
                       verifyPassword: state.confirmation,

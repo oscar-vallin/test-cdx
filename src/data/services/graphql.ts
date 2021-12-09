@@ -617,7 +617,12 @@ export enum LoginStepType {
 export type Mutation = {
   __typename?: 'Mutation';
   passwordLogin?: Maybe<LoginStep>;
+  /** Update your own password.  This is based on the current session of the logged in user. */
   updateOwnPassword?: Maybe<UserSession>;
+  /** Initiate a password reset for a user, by creating an account activation link for the user to reset their password with. */
+  resetPassword?: Maybe<GqOperationResponse>;
+  /** Update a user's password given a password reset token which was emailed to the user. */
+  updatePassword?: Maybe<GqOperationResponse>;
   createOrg?: Maybe<Organization>;
   deactivateOrg?: Maybe<GqOperationResponse>;
   createAccessPolicy?: Maybe<AccessPolicyForm>;
@@ -665,6 +670,16 @@ export type MutationPasswordLoginArgs = {
 
 
 export type MutationUpdateOwnPasswordArgs = {
+  updateOwnPasswordInput: UpdateOwnPasswordInput;
+};
+
+
+export type MutationResetPasswordArgs = {
+  userSid: Scalars['ID'];
+};
+
+
+export type MutationUpdatePasswordArgs = {
   updatePasswordInput: UpdatePasswordInput;
 };
 
@@ -1137,6 +1152,7 @@ export type Query = {
   version?: Maybe<Scalars['String']>;
   beginLogin?: Maybe<LoginStep>;
   logOut?: Maybe<LogOutInfo>;
+  verifyPasswordResetToken?: Maybe<GqOperationResponse>;
   exchangeActivityInProcess?: Maybe<OrganizationLinkConnection>;
   exchangeActivityTransmitted?: Maybe<OrganizationLinkConnection>;
   exchangeActivityErrored?: Maybe<OrganizationLinkConnection>;
@@ -1163,7 +1179,6 @@ export type Query = {
   accessSpecializationsForOrg?: Maybe<AccessSpecializationConnection>;
   accessPolicyGroupsForOrg?: Maybe<AccessPolicyGroupConnection>;
   accessPolicyGroupTemplates?: Maybe<Array<Maybe<UiOption>>>;
-  systemTemplateAccessPolicyGroupByName?: Maybe<Array<Maybe<AccessPolicyGroup>>>;
   accessPolicyForm?: Maybe<AccessPolicyForm>;
   findAccessPolicy?: Maybe<AccessPolicyForm>;
   accessSpecializationForm?: Maybe<AccessSpecializationForm>;
@@ -1200,6 +1215,11 @@ export type Query = {
 
 export type QueryBeginLoginArgs = {
   userId: Scalars['String'];
+};
+
+
+export type QueryVerifyPasswordResetTokenArgs = {
+  token: Scalars['String'];
 };
 
 
@@ -1344,11 +1364,6 @@ export type QueryAccessPolicyGroupsForOrgArgs = {
 
 export type QueryAccessPolicyGroupTemplatesArgs = {
   orgSid: Scalars['ID'];
-};
-
-
-export type QuerySystemTemplateAccessPolicyGroupByNameArgs = {
-  name: Scalars['String'];
 };
 
 
@@ -1898,8 +1913,14 @@ export type UpdateDefaultDashThemeInput = {
   themeColorSid?: Maybe<Scalars['ID']>;
 };
 
-export type UpdatePasswordInput = {
+export type UpdateOwnPasswordInput = {
   originalPassword: Scalars['String'];
+  newPassword: Scalars['String'];
+  verifyPassword: Scalars['String'];
+};
+
+export type UpdatePasswordInput = {
+  token: Scalars['String'];
   newPassword: Scalars['String'];
   verifyPassword: Scalars['String'];
 };
@@ -2387,6 +2408,16 @@ export type LogOutQuery = (
     { __typename?: 'LogOutInfo' }
     & Pick<LogOutInfo, 'successful'>
   )> }
+);
+
+export type VerifyPasswordResetTokenQueryVariables = Exact<{
+  token: Scalars['String'];
+}>;
+
+
+export type VerifyPasswordResetTokenQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'verifyPasswordResetToken'>
 );
 
 export type ExchangeActivityInProcessQueryVariables = Exact<{
@@ -3085,23 +3116,6 @@ export type AccessPolicyGroupTemplatesQuery = (
   & { accessPolicyGroupTemplates?: Maybe<Array<Maybe<(
     { __typename?: 'UIOption' }
     & Pick<UiOption, 'label' | 'value' | 'info'>
-  )>>> }
-);
-
-export type SystemTemplateAccessPolicyGroupByNameQueryVariables = Exact<{
-  name: Scalars['String'];
-}>;
-
-
-export type SystemTemplateAccessPolicyGroupByNameQuery = (
-  { __typename?: 'Query' }
-  & { systemTemplateAccessPolicyGroupByName?: Maybe<Array<Maybe<(
-    { __typename?: 'AccessPolicyGroup' }
-    & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes'>
-    & { policies?: Maybe<Array<Maybe<(
-      { __typename?: 'AccessPolicy' }
-      & FragmentAccessPolicyFragment
-    )>>> }
   )>>> }
 );
 
@@ -4008,7 +4022,7 @@ export type PasswordLoginMutation = (
 );
 
 export type UpdateOwnPasswordMutationVariables = Exact<{
-  updatePasswordInput: UpdatePasswordInput;
+  updateOwnPasswordInput: UpdateOwnPasswordInput;
 }>;
 
 
@@ -4018,6 +4032,26 @@ export type UpdateOwnPasswordMutation = (
     { __typename?: 'UserSession' }
     & Pick<UserSession, 'id' | 'orgId' | 'orgSid' | 'userId' | 'firstNm' | 'pollInterval' | 'defaultAuthorities'>
   )> }
+);
+
+export type ResetPasswordMutationVariables = Exact<{
+  userSid: Scalars['ID'];
+}>;
+
+
+export type ResetPasswordMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'resetPassword'>
+);
+
+export type UpdatePasswordMutationVariables = Exact<{
+  updatePasswordInput: UpdatePasswordInput;
+}>;
+
+
+export type UpdatePasswordMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'updatePassword'>
 );
 
 export type CreateOrgMutationVariables = Exact<{
@@ -5172,6 +5206,37 @@ export function useLogOutLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Log
 export type LogOutQueryHookResult = ReturnType<typeof useLogOutQuery>;
 export type LogOutLazyQueryHookResult = ReturnType<typeof useLogOutLazyQuery>;
 export type LogOutQueryResult = Apollo.QueryResult<LogOutQuery, LogOutQueryVariables>;
+export const VerifyPasswordResetTokenDocument = gql`
+    query VerifyPasswordResetToken($token: String!) {
+  verifyPasswordResetToken(token: $token)
+}
+    `;
+
+/**
+ * __useVerifyPasswordResetTokenQuery__
+ *
+ * To run a query within a React component, call `useVerifyPasswordResetTokenQuery` and pass it any options that fit your needs.
+ * When your component renders, `useVerifyPasswordResetTokenQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useVerifyPasswordResetTokenQuery({
+ *   variables: {
+ *      token: // value for 'token'
+ *   },
+ * });
+ */
+export function useVerifyPasswordResetTokenQuery(baseOptions: Apollo.QueryHookOptions<VerifyPasswordResetTokenQuery, VerifyPasswordResetTokenQueryVariables>) {
+        return Apollo.useQuery<VerifyPasswordResetTokenQuery, VerifyPasswordResetTokenQueryVariables>(VerifyPasswordResetTokenDocument, baseOptions);
+      }
+export function useVerifyPasswordResetTokenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<VerifyPasswordResetTokenQuery, VerifyPasswordResetTokenQueryVariables>) {
+          return Apollo.useLazyQuery<VerifyPasswordResetTokenQuery, VerifyPasswordResetTokenQueryVariables>(VerifyPasswordResetTokenDocument, baseOptions);
+        }
+export type VerifyPasswordResetTokenQueryHookResult = ReturnType<typeof useVerifyPasswordResetTokenQuery>;
+export type VerifyPasswordResetTokenLazyQueryHookResult = ReturnType<typeof useVerifyPasswordResetTokenLazyQuery>;
+export type VerifyPasswordResetTokenQueryResult = Apollo.QueryResult<VerifyPasswordResetTokenQuery, VerifyPasswordResetTokenQueryVariables>;
 export const ExchangeActivityInProcessDocument = gql`
     query ExchangeActivityInProcess($orgSidInput: OrgSidInput!, $searchText: String, $dateRange: DateTimeRangeInput!, $pageableInput: PageableInput!) {
   exchangeActivityInProcess(
@@ -6696,47 +6761,6 @@ export function useAccessPolicyGroupTemplatesLazyQuery(baseOptions?: Apollo.Lazy
 export type AccessPolicyGroupTemplatesQueryHookResult = ReturnType<typeof useAccessPolicyGroupTemplatesQuery>;
 export type AccessPolicyGroupTemplatesLazyQueryHookResult = ReturnType<typeof useAccessPolicyGroupTemplatesLazyQuery>;
 export type AccessPolicyGroupTemplatesQueryResult = Apollo.QueryResult<AccessPolicyGroupTemplatesQuery, AccessPolicyGroupTemplatesQueryVariables>;
-export const SystemTemplateAccessPolicyGroupByNameDocument = gql`
-    query SystemTemplateAccessPolicyGroupByName($name: String!) {
-  systemTemplateAccessPolicyGroupByName(name: $name) {
-    sid
-    name
-    description
-    tmpl
-    tmplUseAsIs
-    applicableOrgTypes
-    policies {
-      ...fragmentAccessPolicy
-    }
-  }
-}
-    ${FragmentAccessPolicyFragmentDoc}`;
-
-/**
- * __useSystemTemplateAccessPolicyGroupByNameQuery__
- *
- * To run a query within a React component, call `useSystemTemplateAccessPolicyGroupByNameQuery` and pass it any options that fit your needs.
- * When your component renders, `useSystemTemplateAccessPolicyGroupByNameQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useSystemTemplateAccessPolicyGroupByNameQuery({
- *   variables: {
- *      name: // value for 'name'
- *   },
- * });
- */
-export function useSystemTemplateAccessPolicyGroupByNameQuery(baseOptions: Apollo.QueryHookOptions<SystemTemplateAccessPolicyGroupByNameQuery, SystemTemplateAccessPolicyGroupByNameQueryVariables>) {
-        return Apollo.useQuery<SystemTemplateAccessPolicyGroupByNameQuery, SystemTemplateAccessPolicyGroupByNameQueryVariables>(SystemTemplateAccessPolicyGroupByNameDocument, baseOptions);
-      }
-export function useSystemTemplateAccessPolicyGroupByNameLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SystemTemplateAccessPolicyGroupByNameQuery, SystemTemplateAccessPolicyGroupByNameQueryVariables>) {
-          return Apollo.useLazyQuery<SystemTemplateAccessPolicyGroupByNameQuery, SystemTemplateAccessPolicyGroupByNameQueryVariables>(SystemTemplateAccessPolicyGroupByNameDocument, baseOptions);
-        }
-export type SystemTemplateAccessPolicyGroupByNameQueryHookResult = ReturnType<typeof useSystemTemplateAccessPolicyGroupByNameQuery>;
-export type SystemTemplateAccessPolicyGroupByNameLazyQueryHookResult = ReturnType<typeof useSystemTemplateAccessPolicyGroupByNameLazyQuery>;
-export type SystemTemplateAccessPolicyGroupByNameQueryResult = Apollo.QueryResult<SystemTemplateAccessPolicyGroupByNameQuery, SystemTemplateAccessPolicyGroupByNameQueryVariables>;
 export const AccessPolicyFormDocument = gql`
     query AccessPolicyForm($templatePolicySid: ID) {
   accessPolicyForm(templatePolicySid: $templatePolicySid) {
@@ -9272,8 +9296,8 @@ export type PasswordLoginMutationHookResult = ReturnType<typeof usePasswordLogin
 export type PasswordLoginMutationResult = Apollo.MutationResult<PasswordLoginMutation>;
 export type PasswordLoginMutationOptions = Apollo.BaseMutationOptions<PasswordLoginMutation, PasswordLoginMutationVariables>;
 export const UpdateOwnPasswordDocument = gql`
-    mutation UpdateOwnPassword($updatePasswordInput: UpdatePasswordInput!) {
-  updateOwnPassword(updatePasswordInput: $updatePasswordInput) {
+    mutation UpdateOwnPassword($updateOwnPasswordInput: UpdateOwnPasswordInput!) {
+  updateOwnPassword(updateOwnPasswordInput: $updateOwnPasswordInput) {
     id
     orgId
     orgSid
@@ -9299,7 +9323,7 @@ export type UpdateOwnPasswordMutationFn = Apollo.MutationFunction<UpdateOwnPassw
  * @example
  * const [updateOwnPasswordMutation, { data, loading, error }] = useUpdateOwnPasswordMutation({
  *   variables: {
- *      updatePasswordInput: // value for 'updatePasswordInput'
+ *      updateOwnPasswordInput: // value for 'updateOwnPasswordInput'
  *   },
  * });
  */
@@ -9309,6 +9333,66 @@ export function useUpdateOwnPasswordMutation(baseOptions?: Apollo.MutationHookOp
 export type UpdateOwnPasswordMutationHookResult = ReturnType<typeof useUpdateOwnPasswordMutation>;
 export type UpdateOwnPasswordMutationResult = Apollo.MutationResult<UpdateOwnPasswordMutation>;
 export type UpdateOwnPasswordMutationOptions = Apollo.BaseMutationOptions<UpdateOwnPasswordMutation, UpdateOwnPasswordMutationVariables>;
+export const ResetPasswordDocument = gql`
+    mutation ResetPassword($userSid: ID!) {
+  resetPassword(userSid: $userSid)
+}
+    `;
+export type ResetPasswordMutationFn = Apollo.MutationFunction<ResetPasswordMutation, ResetPasswordMutationVariables>;
+
+/**
+ * __useResetPasswordMutation__
+ *
+ * To run a mutation, you first call `useResetPasswordMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useResetPasswordMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [resetPasswordMutation, { data, loading, error }] = useResetPasswordMutation({
+ *   variables: {
+ *      userSid: // value for 'userSid'
+ *   },
+ * });
+ */
+export function useResetPasswordMutation(baseOptions?: Apollo.MutationHookOptions<ResetPasswordMutation, ResetPasswordMutationVariables>) {
+        return Apollo.useMutation<ResetPasswordMutation, ResetPasswordMutationVariables>(ResetPasswordDocument, baseOptions);
+      }
+export type ResetPasswordMutationHookResult = ReturnType<typeof useResetPasswordMutation>;
+export type ResetPasswordMutationResult = Apollo.MutationResult<ResetPasswordMutation>;
+export type ResetPasswordMutationOptions = Apollo.BaseMutationOptions<ResetPasswordMutation, ResetPasswordMutationVariables>;
+export const UpdatePasswordDocument = gql`
+    mutation UpdatePassword($updatePasswordInput: UpdatePasswordInput!) {
+  updatePassword(updatePasswordInput: $updatePasswordInput)
+}
+    `;
+export type UpdatePasswordMutationFn = Apollo.MutationFunction<UpdatePasswordMutation, UpdatePasswordMutationVariables>;
+
+/**
+ * __useUpdatePasswordMutation__
+ *
+ * To run a mutation, you first call `useUpdatePasswordMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdatePasswordMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updatePasswordMutation, { data, loading, error }] = useUpdatePasswordMutation({
+ *   variables: {
+ *      updatePasswordInput: // value for 'updatePasswordInput'
+ *   },
+ * });
+ */
+export function useUpdatePasswordMutation(baseOptions?: Apollo.MutationHookOptions<UpdatePasswordMutation, UpdatePasswordMutationVariables>) {
+        return Apollo.useMutation<UpdatePasswordMutation, UpdatePasswordMutationVariables>(UpdatePasswordDocument, baseOptions);
+      }
+export type UpdatePasswordMutationHookResult = ReturnType<typeof useUpdatePasswordMutation>;
+export type UpdatePasswordMutationResult = Apollo.MutationResult<UpdatePasswordMutation>;
+export type UpdatePasswordMutationOptions = Apollo.BaseMutationOptions<UpdatePasswordMutation, UpdatePasswordMutationVariables>;
 export const CreateOrgDocument = gql`
     mutation CreateOrg($orgInfo: CreateOrgInput!) {
   createOrg(orgInfo: $orgInfo) {
