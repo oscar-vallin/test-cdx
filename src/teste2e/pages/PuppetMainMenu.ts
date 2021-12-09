@@ -2,19 +2,19 @@ import PuppetBasePage from './PuppetBasePage';
 
 // represents the left hand admin menu
 export default class PuppetMainMenu extends PuppetBasePage {
-  dashboard = '#__MainMenu__MainMenu__Row-dashboard-0';
+  dashboard = '[data-e2e="DASHBOARD"]';
 
-  fileStatus = '#__MainMenu__MainMenu__Row-file-status-1';
+  fileStatus = '[data-e2e="FILE_STATUS"]';
 
-  archives = '#__MainMenu__MainMenu__Row-archives-2';
+  archives = '[data-e2e="ARCHIVES"]';
 
-  schedule = '#__MainMenu__MainMenu__Row-schedule-3';
+  schedule = '[data-e2e="SCHEDULE"]';
 
-  transmissions = '#__MainMenu__MainMenu__Row-transmissions-4';
+  transmissions = '[data-e2e="TRANSMISSIONS"]';
 
-  errors = '#__MainMenu__MainMenu__Row-errors-5';
+  errors = '[data-e2e="ERRORS"]';
 
-  admin = '#__MainMenu__MainMenu__Row-admin-6';
+  admin = '[data-e2e="ADMIN"]';
 
   async clickDashboard() {
     const itm = await this.waitForSelector(this.dashboard);

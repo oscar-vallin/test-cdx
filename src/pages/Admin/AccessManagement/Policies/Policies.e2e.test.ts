@@ -24,27 +24,36 @@ describe('E2E - Access Policies Test', () => {
     await accessPolicies.expectSuperUserPolicy();
   });
 
-  it('Click on Create Policy button', async () => {
-    const accessPolicies = new PuppetAccessPolicies(cdxApp.page);
+  // it('Click on Create Policy button', async () => {
+  //   const accessPolicies = new PuppetAccessPolicies(cdxApp.page);
 
-    await accessPolicies.expectSuperUserPolicy();
-    await accessPolicies.clickOnCreatePolicy();
-  });
+  //   await accessPolicies.expectSuperUserPolicy();
+  //   await accessPolicies.clickOnCreatePolicy();
+  // });
 
-  it('Create policy', async () => {
-    const selector = '#__CDX_E2E_Policy';
-    const accessPolicies = new PuppetAccessPolicies(cdxApp.page);
+  // it('Load the available policy templates', async () => {
+  //   const accessPolicies = new PuppetAccessPolicies(cdxApp.page);
 
-    await accessPolicies.createPolicy();
-    await accessPolicies.expectTextOnPage(selector, 'CDX E2E Policy');
-  });
+  //   await accessPolicies.expectPolicyTemplates();
+  // });
 
-  it.skip('Update policy', async () => {
-    const selector = '#__CDX_E2E_Test';
-    const accessPolicies = new PuppetAccessPolicies(cdxApp.page);
-
-    await accessPolicies.updatePolicy();
-    await accessPolicies.expectTextOnPage(selector, 'CDX E2E Test');
+  describe('CRUD Operations', () => {
+    // beforeEach(async () => {
+    //   const accessPolicies = new PuppetAccessPolicies(cdxApp.page);
+    //   await accessPolicies.deletePolicy('CDX_E2E_Policy');
+    // });
+    // it('Create policy', async () => {
+    //   const selector = '#__CDX_E2E_Policy';
+    //   const accessPolicies = new PuppetAccessPolicies(cdxApp.page);
+    //   await accessPolicies.createPolicy();
+    //   await accessPolicies.expectTextOnPage(selector, 'CDX E2E Policy');
+    // });
+    // it('Update policy', async () => {
+    //   const selector = '#__CDX_E2E_Test';
+    //   const accessPolicies = new PuppetAccessPolicies(cdxApp.page);
+    //   await accessPolicies.updatePolicy('CDX_E2E_Policy');
+    //   await accessPolicies.expectTextOnPage(selector, 'CDX E2E Test');
+    // });
   });
 
   afterAll(async () => {

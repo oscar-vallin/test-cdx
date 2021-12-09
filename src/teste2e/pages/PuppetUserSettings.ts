@@ -6,7 +6,7 @@ export default class PuppetUserSettings extends PuppetBasePage {
   itemSettingButton = '#__ProfileMenu_UserSettingsId';
 
   async clickOnSettings() {
-    await this.page.waitForTimeout(1000);
+    await this.page.waitForTimeout(5000);
     await this.page.click(this.settingsButton);
   }
 

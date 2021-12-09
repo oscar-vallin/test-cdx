@@ -13,10 +13,10 @@ describe('E2E Dashboard test', () => {
     await loginPage.loginAsAdmin();
   });
 
-  it('Click Exchange Status', async () => {
-    const adminMenu = cdxApp.getAdminMenu();
-    await adminMenu.openMenu('Exchange Statuses');
-  });
+  // it('Click Exchange Status', async () => {
+  //   const adminMenu = cdxApp.getAdminMenu();
+  //   await adminMenu.openMenu('Exchange Statuses');
+  // });
 
   it('Click Dashboard', async () => {
     const mainMenu = cdxApp.getMainMenu();
