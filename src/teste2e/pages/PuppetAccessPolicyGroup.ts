@@ -27,106 +27,33 @@ export default class PuppetAccessPolicyGroup extends PuppetBasePage {
 
     const checkBoxTempleteGroup = '#__checkBoxTemplateGroup';
     const checkBoxUseAsIs = '#__checkBoxUseAsIs';
-    const checkBoxSuperPolicy = '#__checkBoxPolicies_1';
-    const checkBoxSpecialization = '#__checkBoxPolicies_2';
-    const checkBoxPoliciesApplies = '#__checkBoxPoliciesApplies';
-    const checkBoxPolicies = '#__checkBoxIncludeAllSubOrgs';
+    const checkBoxSuperPolicy = '#__checkBoxSuperPolicy';
+    const checkBoxSpecialization = '#__checkBoxSpecialization';
+    const checkBoxPolicies = '#__checkBoxPolicies';
 
     await this.clickOnCreateGroup();
 
     await this.page.waitForSelector(nameInputSelector);
     await this.inputValue(nameInputSelector, 'CDX E2E Group');
 
-    await this.page.waitForTimeout(1000);
+    await this.page.waitForTimeout(3000);
     await this.page.waitForSelector(checkBoxTempleteGroup);
     await this.page.click(checkBoxTempleteGroup);
 
-    await this.page.waitForTimeout(1000);
+    await this.page.waitForTimeout(3000);
     await this.page.waitForSelector(checkBoxUseAsIs);
     await this.page.click(checkBoxUseAsIs);
 
-    // await this.page.waitForTimeout(1000);
-    // await this.page.waitForSelector(checkBoxSuperPolicy);
-    // await this.page.click(checkBoxSuperPolicy);
-
-    // await this.page.waitForTimeout(1000);
-    // await this.page.waitForSelector(checkBoxSpecialization);
-    // await this.page.click(checkBoxSpecialization);
-
-    // await this.page.waitForTimeout(1000);
-    // await this.page.waitForSelector(checkBoxPoliciesApplies);
-    // await this.page.click(checkBoxPoliciesApplies);
-
-    // await this.page.waitForTimeout(1000);
-    // await this.page.waitForSelector(tagPicker1);
-    // await this.inputValue(tagPicker1, 'CDX Global Vendors');
-
-    // await this.page.waitForSelector(tagPicker2);
-    // await this.inputValue(tagPicker2, 'CDX Global Vendors');
-
-    // await this.page.waitForSelector(tagPicker3);
-    // await this.inputValue(tagPicker3, 'CDX Global Vendors');
-
-    // await this.page.waitForTimeout(3000);
-    // await this.page.waitForSelector(checkBoxPolicies);
-    // await this.page.click(checkBoxPolicies);
-
-    // await this.page.waitForTimeout(1000);
-    // await this.page.waitForSelector(tagPicker4);
-    // await this.inputValue(tagPicker4, 'CDX Global Vendors');
-
-    // await this.page.waitForTimeout(1000);
-    // await this.page.waitForSelector(tagPicker5);
-    // await this.inputValue(tagPicker5, 'CDX Global Vendors');
-
-    await this.page.click(createBtnSelector);
-  }
-
-  async createGroupTempleteCancel() {
-    const nameInputSelector = '#__groupInputName';
-    const createBtnSelector = '#__CreateGroupPanelId';
-
-    const tagPicker1 = '#__pickerPoliciesNotApply';
-    // const tagPicker2 = '#__pickerPoliciesApply';
-    // const tagPicker3 = '#__pickerPoliciesNotApplyTwo';
-    const tagPicker4 = '#includeOrgsId';
-    const tagPicker5 = '#excludeOrgsId';
-
-    const checkBoxTempleteGroup = '#__checkBoxTemplateGroup';
-    const checkBoxUseAsIs = '#__checkBoxUseAsIs';
-    const checkBoxSuperPolicy = '#__checkBoxPolicies_1';
-    const checkBoxSpecialization = '#__checkBoxPolicies_2';
-    const checkBoxPoliciesApplies = '#__checkBoxPoliciesApplies';
-    const checkBoxPolicies = '#__checkBoxIncludeAllSubOrgs';
-
-    await this.clickOnCreateGroup();
-
-    await this.page.waitForSelector(nameInputSelector);
-    await this.inputValue(nameInputSelector, 'CDX E2E Group');
-
-    // await this.page.waitForTimeout(1000);
-    // await this.page.waitForSelector(checkBoxTempleteGroup);
-    // await this.page.click(checkBoxTempleteGroup);
-
-    // await this.page.waitForTimeout(1000);
-    // await this.page.waitForSelector(checkBoxUseAsIs);
-    // await this.page.click(checkBoxUseAsIs);
-
-    await this.page.waitForTimeout(1000);
+    await this.page.waitForTimeout(3000);
     await this.page.waitForSelector(checkBoxSuperPolicy);
     await this.page.click(checkBoxSuperPolicy);
 
-    await this.page.waitForTimeout(1000);
+    await this.page.waitForTimeout(3000);
     await this.page.waitForSelector(checkBoxSpecialization);
     await this.page.click(checkBoxSpecialization);
 
-    await this.page.waitForTimeout(1000);
-    await this.page.waitForSelector(checkBoxPoliciesApplies);
-    await this.page.click(checkBoxPoliciesApplies);
-
-    // await this.page.waitForTimeout(1000);
-    // await this.page.waitForSelector(tagPicker1);
-    // await this.inputValue(tagPicker1, 'CDX Global Vendors');
+    await this.page.waitForSelector(tagPicker1);
+    await this.inputValue(tagPicker1, 'CDX Global Vendors');
 
     // await this.page.waitForSelector(tagPicker2);
     // await this.inputValue(tagPicker2, 'CDX Global Vendors');
@@ -134,17 +61,15 @@ export default class PuppetAccessPolicyGroup extends PuppetBasePage {
     // await this.page.waitForSelector(tagPicker3);
     // await this.inputValue(tagPicker3, 'CDX Global Vendors');
 
-    await this.page.waitForTimeout(2000);
+    await this.page.waitForTimeout(3000);
     await this.page.waitForSelector(checkBoxPolicies);
     await this.page.click(checkBoxPolicies);
 
-    // await this.page.waitForTimeout(1000);
-    // await this.page.waitForSelector(tagPicker4);
-    // await this.inputValue(tagPicker4, 'CDX Global Vendors');
+    await this.page.waitForSelector(tagPicker4);
+    await this.inputValue(tagPicker4, 'CDX Global Vendors');
 
-    // await this.page.waitForTimeout(1000);
-    // await this.page.waitForSelector(tagPicker5);
-    // await this.inputValue(tagPicker5, 'CDX Global Vendors');
+    await this.page.waitForSelector(tagPicker5);
+    await this.inputValue(tagPicker5, 'CDX Global Vendors');
 
     await this.page.click(createBtnSelector);
   }
@@ -169,10 +94,10 @@ export default class PuppetAccessPolicyGroup extends PuppetBasePage {
     await this.page.waitForSelector(nameInputSelector);
 
     await this.clearField(nameInputSelector);
-    await this.page.waitForTimeout(1000);
+    await this.page.waitForTimeout(3000);
     await this.inputValue(nameInputSelector, 'CDX E2E Group Two Test');
 
-    await this.page.waitForTimeout(1000);
+    await this.page.waitForTimeout(3000);
     await this.page.waitForSelector(checkBoxTempleteGroup);
     await this.page.click(checkBoxTempleteGroup);
 
@@ -185,7 +110,7 @@ export default class PuppetAccessPolicyGroup extends PuppetBasePage {
     await this.page.waitForSelector(tagPicker5);
     await this.inputValue(tagPicker5, 'CDX Global Vendors');
 
-    await this.page.waitForTimeout(1000);
+    await this.page.waitForTimeout(3000);
     await this.page.waitForSelector(createBtnSelector);
     await this.page.click(createBtnSelector);
   }
@@ -193,7 +118,7 @@ export default class PuppetAccessPolicyGroup extends PuppetBasePage {
   async deleteGroup(deleteButtonIndex: string) {
     await this.page.waitForTimeout(3000);
     const deleteBtnSelector = `#__deleteGroup_${deleteButtonIndex}`;
-    const optionYesDeleteBtnSelector = '#__optionDialogYes';
+    const optionYesDeleteBtnSelector = '#__optionYesDelete';
 
     await this.page.waitForSelector(deleteBtnSelector);
     await this.page.click(deleteBtnSelector);

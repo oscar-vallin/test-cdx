@@ -3,6 +3,7 @@ import {
   ActiveEnum,
   useAccessPoliciesForOrgLazyQuery,
   useAccessPolicyGroupFormLazyQuery,
+  useAccessPolicyGroupTemplatesLazyQuery,
   useAccessSpecializationsForOrgLazyQuery,
   useCreateAccessPolicyGroupMutation,
   useDirectOrganizationsLazyQuery,
@@ -21,7 +22,7 @@ export const formInitialState = {
   excludeOrgSids: [],
 };
 
-export const useCreateGroupPanel = (isOpen, initialOrgSid, selectedGroupId) => {
+export const useCreateGroupPanel = (isOpen, initialOrgSid, selectedGroupId, templateId) => {
   const [orgSid, setOrgSid] = useState(initialOrgSid);
   const [isFormOpen, setIsFormOpen] = useState(isOpen);
   // Data sets.
@@ -37,6 +38,7 @@ export const useCreateGroupPanel = (isOpen, initialOrgSid, selectedGroupId) => {
     useCreateAccessPolicyGroupMutation();
   const [apiFindAccessPolicyGroup, { data: policyGroup }] = useFindAccessPolicyGroupLazyQuery();
   const [apiUpdateAccessPolicyGroup, { data: updatedPolicyGroup }] = useUpdateAccessPolicyGroupMutation();
+
   // State for Form Definition.
   const [accessPolicyForm, setAccessPolicyForm] = useState<any>({ ...formInitialState });
   const [accessPolicyFormRaw, setAcessPolicyFormRaw] = useState<any>({});
@@ -48,7 +50,7 @@ export const useCreateGroupPanel = (isOpen, initialOrgSid, selectedGroupId) => {
   const fetchAllData = async () => {
     if (!orgSid) return;
 
-    await apiUseAccessPolicyForm({ variables: { orgSid } });
+    await apiUseAccessPolicyForm({ variables: { orgSid, templateGroupSid: templateId } });
     await apiAccessPoliciesForOrg({ variables: { orgSid } });
     await apiAccessSpecializationsForOrg({ variables: { orgSid } });
     await apiDirectOrganizations({
@@ -101,14 +103,36 @@ export const useCreateGroupPanel = (isOpen, initialOrgSid, selectedGroupId) => {
   useEffect(() => {
     if (isFormOpen && selectedGroupId) {
       apiFindAccessPolicyGroup({ variables: { policyGroupSid: selectedGroupId } });
+      return;
     }
-  }, [selectedGroupId, isFormOpen]);
+
+    if (isFormOpen && templateId) {
+      console.log('Loading TemplateId: ', templateId);
+      apiUseAccessPolicyForm({ variables: { orgSid, templateGroupSid: templateId } });
+    }
+  }, [selectedGroupId, isFormOpen, templateId]);
 
   //
 
   useEffect(() => {
     if (isFormOpen && data && orgSid) {
+      console.log('🚀 ~ file: CreateGroupPanel.service.ts ~ line 120 ~ useEffect ~ data', data);
+
       setAcessPolicyFormRaw(data.accessPolicyGroupForm);
+
+      if (templateId) {
+        console.log('🚀 ~ file: CreateGroupPanel.service.ts ~ line 125 ~ useEffect ~ templateId', templateId);
+        setAccessPolicyForm({
+          ...accessPolicyForm,
+          tmpl: data.accessPolicyGroupForm?.tmpl?.value,
+          tmplUseAsIs: data.accessPolicyGroupForm?.tmplUseAsIs?.value,
+          includeAllSubOrgs: data.accessPolicyGroupForm?.includeAllSubOrgs?.value,
+          policySids: data.accessPolicyGroupForm?.policies?.value,
+          specializationSids: data.accessPolicyGroupForm?.specializations?.value,
+          includeOrgSids: data.accessPolicyGroupForm?.includeOrgSids?.value,
+          excludeOrgSids: data.accessPolicyGroupForm?.excludeOrgSids?.value,
+        });
+      }
     }
   }, [data, isFormOpen]);
 
@@ -132,8 +156,6 @@ export const useCreateGroupPanel = (isOpen, initialOrgSid, selectedGroupId) => {
 
   useEffect(() => {
     if (createdPolicyGroup) {
-      //   onCreateGroupPolicy(createdPolicyGroup.createAccessPolicyGroup);
-      //   onDismiss();
       setIsFormOpen(false);
     }
   }, [createdPolicyGroup]);
@@ -150,10 +172,6 @@ export const useCreateGroupPanel = (isOpen, initialOrgSid, selectedGroupId) => {
       return false;
     }
     return tagList.some((compareTag) => compareTag.key === tag.key);
-  };
-
-  const getFormData = () => {
-    apiUseAccessPolicyForm();
   };
 
   const organizationTags = organizations.map((item: any) => ({ key: item.sid, name: item.name }));
@@ -200,7 +218,6 @@ export const useCreateGroupPanel = (isOpen, initialOrgSid, selectedGroupId) => {
 
   return {
     isFormOpen,
-    getFormData,
     organizationTags,
     filterSuggestedTags,
     getTextFromItem,

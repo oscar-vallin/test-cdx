@@ -21,6 +21,7 @@ import { Separator } from '../../../../components/separators/Separator';
 
 import {
   useAccessPolicyGroupsForOrgLazyQuery,
+  useAccessPolicyGroupTemplatesLazyQuery,
   useDeleteAccessPolicyGroupMutation,
 } from '../../../../data/services/graphql';
 import { StyledColumn, StyledCommandButton } from './AccessManagementGroupsPage.styles';
@@ -46,21 +47,32 @@ const generateColumns = () => {
   ];
 };
 
-const _AccessManagementGroupsPage = () => {
+const AccessManagementGroupsContainer = () => {
   const { orgSid } = useOrgSid();
   const [groups, setGroups] = useState<any[]>([]);
   const columns = generateColumns();
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [isDialog, setDialog] = useState(false);
   const Toast = useNotification();
+  const [templateId, setTemplateId] = useState();
 
   const [apiAmGroupsForOrg, { data, loading }] = useQueryHandler(useAccessPolicyGroupsForOrgLazyQuery);
   const [selectedGroupId, setSelectedGroupId] = useState(0);
+
+  const [fetchTemplates, { data: templatesData, loading: templatesLoading, error: templatesError }] =
+    useAccessPolicyGroupTemplatesLazyQuery({
+      variables: {
+        orgSid,
+      },
+    });
 
   const { deleteAccessPolicyGroup, deleteLoading, deleteError, deleteData } = useAccessManagementGroupsPageService();
 
   useEffect(() => {
     apiAmGroupsForOrg({ variables: { orgSid } });
+    if (orgSid) {
+      fetchTemplates({ variables: { orgSid } });
+    }
   }, [orgSid]);
 
   useEffect(() => {
@@ -95,9 +107,10 @@ const _AccessManagementGroupsPage = () => {
 
   // *
   // * Handle Create Function.
-  const handleCreateGroup = () => {
+  const handleCreateGroup = (templateId) => {
     setIsPanelOpen(true);
     setSelectedGroupId(0);
+    setTemplateId(templateId);
 
     return null;
   };
@@ -157,33 +170,48 @@ const _AccessManagementGroupsPage = () => {
       <EmptyState
         title="No access groups found"
         description="You haven't created an access group yet. Click the button below to create a new group."
-        actions={
-          <Button id="CreateGroupButton" variant="primary" onClick={handleCreateGroup}>
-            Create group
-          </Button>
-        }
+        actions={renderCreateGroupButton(templatesData, true)}
       />
     );
   };
 
-  const renderCreateGroupButton = () => {
+  const renderCreateGroupButton = (templates, noRecords) => {
+    const { accessPolicyGroupTemplates: groupTemplates } = templates ?? {};
+
+    const numTemplates = groupTemplates?.length ?? 0;
+
+    const createMenuProps =
+      !!groupTemplates && numTemplates
+        ? {
+            items: groupTemplates?.map((template) => {
+              return { text: template.label, key: template.value, onClick: () => handleCreateGroup(template.value) };
+            }),
+          }
+        : null;
+
     return (
       <>
         <Row>
-          <Column lg="6">
-            <Spacing id="__containerSpanTitle" margin={{ top: 'small' }}>
-              <Text variant="bold">Groups</Text>
-            </Spacing>
-          </Column>
+          {!noRecords && (
+            <Column lg="6">
+              <Spacing id="__containerSpanTitle" margin={{ top: 'small' }}>
+                <Text variant="bold">Groups</Text>
+              </Spacing>
+            </Column>
+          )}
 
-          <Column lg="6" right>
+          <Column lg={noRecords ? '12' : '6'} right={!noRecords}>
             <Button
               id="CreateGroupButton"
+              split={Boolean(!!groupTemplates && numTemplates)}
+              // split={true}
               variant="primary"
               onClick={() => {
                 setIsPanelOpen(true);
                 return null;
               }}
+              menuProps={createMenuProps}
+              block={false}
             >
               Create group
             </Button>
@@ -207,7 +235,7 @@ const _AccessManagementGroupsPage = () => {
     <LayoutAdmin id="PageAdmin" sidebarOptionSelected="AM_GROUPS">
       <>
         <Spacing margin="double">
-          {groups.length > 0 && renderCreateGroupButton()}
+          {groups.length > 0 && renderCreateGroupButton(templatesData, false)}
           <Row>
             <StyledColumn lg="12">
               {loading ? (
@@ -275,12 +303,13 @@ const _AccessManagementGroupsPage = () => {
             setSelectedGroupId(0);
           }}
           selectedGroupId={selectedGroupId}
+          templateId={templateId}
         />
       </>
     </LayoutAdmin>
   );
 };
 
-const AccessManagementGroupsPage = memo(_AccessManagementGroupsPage);
+const AccessManagementGroupsPage = memo(AccessManagementGroupsContainer);
 
 export { AccessManagementGroupsPage };
