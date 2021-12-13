@@ -80,6 +80,7 @@ const _AccessManagementSpecializationPage = () => {
           <>
             &nbsp;
             <StyledCommandButton
+              id={`DeleteBtn__${index + 1}`}
               iconProps={{ iconName: 'Delete' }}
               onClick={() => {
                 setSelectedAccessId(item.sid);
@@ -240,6 +241,7 @@ const _AccessManagementSpecializationPage = () => {
         >
           <DialogFooter>
             <PrimaryButton
+              id="ConfirmationBtn"
               onClick={() => {
                 removeSpecialization({
                   variables: {

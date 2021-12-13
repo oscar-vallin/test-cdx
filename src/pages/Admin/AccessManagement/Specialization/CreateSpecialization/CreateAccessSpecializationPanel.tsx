@@ -326,7 +326,7 @@ const CreateAccessSpecializationPanel = ({
                 <Row>
                   <Column lg="12">
                     <Button
-                      id="__CreateAccessSpecializationPanelId"
+                      id="__CreateAccessSpecializationBtnId"
                       variant="primary"
                       disabled={isCreatingSpecialization}
                       onClick={() => {

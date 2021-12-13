@@ -32,20 +32,29 @@ describe('E2E - Access Specialization Test', () => {
     await accessSpecialization.clickOnCreateSpecialization();
   });
 
-  it.skip('Create specialization', async () => {
+  it('Create specialization', async () => {
     const selector = '#__AccessSpecialization__Name_Field_1';
     const accessSpecialization = new PuppetAccessSpecialization(cdxApp.page);
 
     await accessSpecialization.createSpecialization();
+
+    await accessSpecialization.waitForTimeout(2000);
     await accessSpecialization.expectTextOnPage(selector, 'Test A');
   });
 
-  it.skip('Update specialization', async () => {
+  it('Update specialization', async () => {
     const selector = '#__AccessSpecialization__Name_Field_1';
     const accessSpecialization = new PuppetAccessSpecialization(cdxApp.page);
 
     await accessSpecialization.updateSpecialization();
+
+    await accessSpecialization.waitForTimeout(2000);
     await accessSpecialization.expectTextOnPage(selector, 'Test B');
+  });
+
+  it('Delete specialization', async () => {
+    const accessSpecialization = new PuppetAccessSpecialization(cdxApp.page);
+    await accessSpecialization.deleteSpecialization('1');
   });
 
   afterAll(async () => {
