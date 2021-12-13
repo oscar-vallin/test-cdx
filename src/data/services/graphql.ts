@@ -617,6 +617,7 @@ export enum LoginStepType {
 export type Mutation = {
   __typename?: 'Mutation';
   passwordLogin?: Maybe<LoginStep>;
+  logOut?: Maybe<LogOutInfo>;
   /** Update your own password.  This is based on the current session of the logged in user. */
   updateOwnPassword?: Maybe<UserSession>;
   /** Initiate a password reset for a user, by creating an account activation link for the user to reset their password with. */
@@ -637,7 +638,7 @@ export type Mutation = {
   deleteAccessPolicyGroup?: Maybe<GqOperationResponse>;
   createUser?: Maybe<UserAccountForm>;
   updateUser?: Maybe<UserAccountForm>;
-  updateUserAccessPolicyGroups?: Maybe<Array<Maybe<AccessPolicyGroup>>>;
+  updateUserAccessPolicyGroups?: Maybe<UserAccountForm>;
   deactivateUser?: Maybe<GqOperationResponse>;
   deactivateUsers?: Maybe<GqOperationResponse>;
   activateUser?: Maybe<GqOperationResponse>;
@@ -1151,7 +1152,6 @@ export type Query = {
   __typename?: 'Query';
   version?: Maybe<Scalars['String']>;
   beginLogin?: Maybe<LoginStep>;
-  logOut?: Maybe<LogOutInfo>;
   verifyPasswordResetToken?: Maybe<GqOperationResponse>;
   exchangeActivityInProcess?: Maybe<OrganizationLinkConnection>;
   exchangeActivityTransmitted?: Maybe<OrganizationLinkConnection>;
@@ -1173,6 +1173,7 @@ export type Query = {
   findUserByEmail?: Maybe<UserAccount>;
   userAccountForm?: Maybe<UserAccountForm>;
   findUserAccount?: Maybe<UserAccountForm>;
+  userAccountAuditLogs?: Maybe<UserAccountLogConnection>;
   accessPolicy?: Maybe<AccessPolicy>;
   accessPoliciesForOrg?: Maybe<AccessPolicyConnection>;
   accessPolicyTemplates?: Maybe<Array<Maybe<UiOption>>>;
@@ -1330,6 +1331,15 @@ export type QueryUserAccountFormArgs = {
 
 export type QueryFindUserAccountArgs = {
   userSid: Scalars['ID'];
+};
+
+
+export type QueryUserAccountAuditLogsArgs = {
+  orgSid: Scalars['ID'];
+  userSid?: Maybe<Scalars['ID']>;
+  events?: Maybe<Array<Maybe<UserAccountAuditEvent>>>;
+  dateRange: DateTimeRangeInput;
+  pageableInput?: Maybe<PageableInput>;
 };
 
 
@@ -1960,6 +1970,29 @@ export type UserAccount = {
   accessPolicyGroups?: Maybe<Array<Maybe<AccessPolicyGroup>>>;
 };
 
+export enum UserAccountAuditEvent {
+  AccountCreation = 'ACCOUNT_CREATION',
+  ResetPasswordRequested = 'RESET_PASSWORD_REQUESTED',
+  PasswordUpdate = 'PASSWORD_UPDATE',
+  GroupAssignmentUpdate = 'GROUP_ASSIGNMENT_UPDATE',
+  Deactivation = 'DEACTIVATION',
+  Activation = 'ACTIVATION',
+  ProfileUpdate = 'PROFILE_UPDATE',
+  LoginSuccess = 'LOGIN_SUCCESS',
+  LoginFail = 'LOGIN_FAIL',
+  Logout = 'LOGOUT'
+}
+
+export type UserAccountAuditLog = {
+  __typename?: 'UserAccountAuditLog';
+  auditDateTime: Scalars['DateTime'];
+  event: UserAccountAuditEvent;
+  orgSid: Scalars['ID'];
+  userAccount?: Maybe<UserAccount>;
+  oldValue?: Maybe<Scalars['String']>;
+  newValue?: Maybe<Scalars['String']>;
+};
+
 export type UserAccountForm = {
   __typename?: 'UserAccountForm';
   sid?: Maybe<Scalars['ID']>;
@@ -1973,6 +2006,13 @@ export type UserAccountForm = {
   errCode?: Maybe<Scalars['String']>;
   errMsg?: Maybe<Scalars['String']>;
   errSeverity?: Maybe<ErrorSeverity>;
+};
+
+export type UserAccountLogConnection = {
+  __typename?: 'UserAccountLogConnection';
+  paginationInfo: PaginationInfo;
+  listPageInfo?: Maybe<ListPageInfo>;
+  nodes?: Maybe<Array<Maybe<UserAccountAuditLog>>>;
 };
 
 export type UserConnection = {
@@ -2396,17 +2436,6 @@ export type BeginLoginQuery = (
   & { beginLogin?: Maybe<(
     { __typename?: 'LoginStep' }
     & Pick<LoginStep, 'userId' | 'step' | 'redirectPath' | 'allowLostPassword'>
-  )> }
-);
-
-export type LogOutQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type LogOutQuery = (
-  { __typename?: 'Query' }
-  & { logOut?: Maybe<(
-    { __typename?: 'LogOutInfo' }
-    & Pick<LogOutInfo, 'successful'>
   )> }
 );
 
@@ -2968,6 +2997,50 @@ export type FindUserAccountQuery = (
         { __typename?: 'UIOption' }
         & Pick<UiOption, 'label' | 'value' | 'info'>
       )>>> }
+    )>>> }
+  )> }
+);
+
+export type UserAccountAuditLogsQueryVariables = Exact<{
+  orgSid: Scalars['ID'];
+  userSid?: Maybe<Scalars['ID']>;
+  events?: Maybe<Array<Maybe<UserAccountAuditEvent>> | Maybe<UserAccountAuditEvent>>;
+  dateRange: DateTimeRangeInput;
+  pageableInput?: Maybe<PageableInput>;
+}>;
+
+
+export type UserAccountAuditLogsQuery = (
+  { __typename?: 'Query' }
+  & { userAccountAuditLogs?: Maybe<(
+    { __typename?: 'UserAccountLogConnection' }
+    & { paginationInfo: (
+      { __typename?: 'PaginationInfo' }
+      & FragmentPaginationInfoFragment
+    ), listPageInfo?: Maybe<(
+      { __typename?: 'ListPageInfo' }
+      & Pick<ListPageInfo, 'pageHeaderLabel'>
+      & { pageCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>>, listItemCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>>, listItemBulkCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>> }
+    )>, nodes?: Maybe<Array<Maybe<(
+      { __typename?: 'UserAccountAuditLog' }
+      & Pick<UserAccountAuditLog, 'auditDateTime' | 'event' | 'orgSid' | 'oldValue' | 'newValue'>
+      & { userAccount?: Maybe<(
+        { __typename?: 'UserAccount' }
+        & Pick<UserAccount, 'sid' | 'email'>
+        & { person?: Maybe<(
+          { __typename?: 'Person' }
+          & Pick<Person, 'sid' | 'firstNm' | 'lastNm'>
+        )> }
+      )> }
     )>>> }
   )> }
 );
@@ -4021,6 +4094,17 @@ export type PasswordLoginMutation = (
   )> }
 );
 
+export type LogOutMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type LogOutMutation = (
+  { __typename?: 'Mutation' }
+  & { logOut?: Maybe<(
+    { __typename?: 'LogOutInfo' }
+    & Pick<LogOutInfo, 'successful'>
+  )> }
+);
+
 export type UpdateOwnPasswordMutationVariables = Exact<{
   updateOwnPasswordInput: UpdateOwnPasswordInput;
 }>;
@@ -4537,14 +4621,44 @@ export type UpdateUserAccessPolicyGroupsMutationVariables = Exact<{
 
 export type UpdateUserAccessPolicyGroupsMutation = (
   { __typename?: 'Mutation' }
-  & { updateUserAccessPolicyGroups?: Maybe<Array<Maybe<(
-    { __typename?: 'AccessPolicyGroup' }
-    & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes'>
-    & { policies?: Maybe<Array<Maybe<(
-      { __typename?: 'AccessPolicy' }
-      & FragmentAccessPolicyFragment
+  & { updateUserAccessPolicyGroups?: Maybe<(
+    { __typename?: 'UserAccountForm' }
+    & Pick<UserAccountForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { email?: Maybe<(
+      { __typename?: 'UIStringField' }
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, active?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, person?: Maybe<(
+      { __typename?: 'PersonForm' }
+      & Pick<PersonForm, 'sid' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { firstNm: (
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      ), lastNm: (
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      ) }
+    )>, organization: (
+      { __typename?: 'UIReadOnlyField' }
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), accessPolicyGroups?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
+    )>, options?: Maybe<Array<Maybe<(
+      { __typename?: 'UIOptions' }
+      & Pick<UiOptions, 'key'>
+      & { values?: Maybe<Array<Maybe<(
+        { __typename?: 'UIOption' }
+        & Pick<UiOption, 'label' | 'value' | 'info'>
+      )>>> }
     )>>> }
-  )>>> }
+  )> }
 );
 
 export type DeactivateUserMutationVariables = Exact<{
@@ -5174,38 +5288,6 @@ export function useBeginLoginLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type BeginLoginQueryHookResult = ReturnType<typeof useBeginLoginQuery>;
 export type BeginLoginLazyQueryHookResult = ReturnType<typeof useBeginLoginLazyQuery>;
 export type BeginLoginQueryResult = Apollo.QueryResult<BeginLoginQuery, BeginLoginQueryVariables>;
-export const LogOutDocument = gql`
-    query LogOut {
-  logOut {
-    successful
-  }
-}
-    `;
-
-/**
- * __useLogOutQuery__
- *
- * To run a query within a React component, call `useLogOutQuery` and pass it any options that fit your needs.
- * When your component renders, `useLogOutQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useLogOutQuery({
- *   variables: {
- *   },
- * });
- */
-export function useLogOutQuery(baseOptions?: Apollo.QueryHookOptions<LogOutQuery, LogOutQueryVariables>) {
-        return Apollo.useQuery<LogOutQuery, LogOutQueryVariables>(LogOutDocument, baseOptions);
-      }
-export function useLogOutLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LogOutQuery, LogOutQueryVariables>) {
-          return Apollo.useLazyQuery<LogOutQuery, LogOutQueryVariables>(LogOutDocument, baseOptions);
-        }
-export type LogOutQueryHookResult = ReturnType<typeof useLogOutQuery>;
-export type LogOutLazyQueryHookResult = ReturnType<typeof useLogOutLazyQuery>;
-export type LogOutQueryResult = Apollo.QueryResult<LogOutQuery, LogOutQueryVariables>;
 export const VerifyPasswordResetTokenDocument = gql`
     query VerifyPasswordResetToken($token: String!) {
   verifyPasswordResetToken(token: $token)
@@ -6480,6 +6562,80 @@ export function useFindUserAccountLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
 export type FindUserAccountQueryHookResult = ReturnType<typeof useFindUserAccountQuery>;
 export type FindUserAccountLazyQueryHookResult = ReturnType<typeof useFindUserAccountLazyQuery>;
 export type FindUserAccountQueryResult = Apollo.QueryResult<FindUserAccountQuery, FindUserAccountQueryVariables>;
+export const UserAccountAuditLogsDocument = gql`
+    query UserAccountAuditLogs($orgSid: ID!, $userSid: ID, $events: [UserAccountAuditEvent], $dateRange: DateTimeRangeInput!, $pageableInput: PageableInput) {
+  userAccountAuditLogs(
+    orgSid: $orgSid
+    userSid: $userSid
+    events: $events
+    dateRange: $dateRange
+    pageableInput: $pageableInput
+  ) {
+    paginationInfo {
+      ...fragmentPaginationInfo
+    }
+    listPageInfo {
+      pageHeaderLabel
+      pageCommands {
+        ...fragmentWebCommand
+      }
+      listItemCommands {
+        ...fragmentWebCommand
+      }
+      listItemBulkCommands {
+        ...fragmentWebCommand
+      }
+    }
+    nodes {
+      auditDateTime
+      event
+      orgSid
+      userAccount {
+        sid
+        email
+        person {
+          sid
+          firstNm
+          lastNm
+        }
+      }
+      oldValue
+      newValue
+    }
+  }
+}
+    ${FragmentPaginationInfoFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
+
+/**
+ * __useUserAccountAuditLogsQuery__
+ *
+ * To run a query within a React component, call `useUserAccountAuditLogsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserAccountAuditLogsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserAccountAuditLogsQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *      userSid: // value for 'userSid'
+ *      events: // value for 'events'
+ *      dateRange: // value for 'dateRange'
+ *      pageableInput: // value for 'pageableInput'
+ *   },
+ * });
+ */
+export function useUserAccountAuditLogsQuery(baseOptions: Apollo.QueryHookOptions<UserAccountAuditLogsQuery, UserAccountAuditLogsQueryVariables>) {
+        return Apollo.useQuery<UserAccountAuditLogsQuery, UserAccountAuditLogsQueryVariables>(UserAccountAuditLogsDocument, baseOptions);
+      }
+export function useUserAccountAuditLogsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserAccountAuditLogsQuery, UserAccountAuditLogsQueryVariables>) {
+          return Apollo.useLazyQuery<UserAccountAuditLogsQuery, UserAccountAuditLogsQueryVariables>(UserAccountAuditLogsDocument, baseOptions);
+        }
+export type UserAccountAuditLogsQueryHookResult = ReturnType<typeof useUserAccountAuditLogsQuery>;
+export type UserAccountAuditLogsLazyQueryHookResult = ReturnType<typeof useUserAccountAuditLogsLazyQuery>;
+export type UserAccountAuditLogsQueryResult = Apollo.QueryResult<UserAccountAuditLogsQuery, UserAccountAuditLogsQueryVariables>;
 export const AccessPolicyDocument = gql`
     query AccessPolicy($orgSid: ID!, $policySid: ID!) {
   accessPolicy(orgSid: $orgSid, policySid: $policySid) {
@@ -9295,6 +9451,37 @@ export function usePasswordLoginMutation(baseOptions?: Apollo.MutationHookOption
 export type PasswordLoginMutationHookResult = ReturnType<typeof usePasswordLoginMutation>;
 export type PasswordLoginMutationResult = Apollo.MutationResult<PasswordLoginMutation>;
 export type PasswordLoginMutationOptions = Apollo.BaseMutationOptions<PasswordLoginMutation, PasswordLoginMutationVariables>;
+export const LogOutDocument = gql`
+    mutation LogOut {
+  logOut {
+    successful
+  }
+}
+    `;
+export type LogOutMutationFn = Apollo.MutationFunction<LogOutMutation, LogOutMutationVariables>;
+
+/**
+ * __useLogOutMutation__
+ *
+ * To run a mutation, you first call `useLogOutMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLogOutMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [logOutMutation, { data, loading, error }] = useLogOutMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useLogOutMutation(baseOptions?: Apollo.MutationHookOptions<LogOutMutation, LogOutMutationVariables>) {
+        return Apollo.useMutation<LogOutMutation, LogOutMutationVariables>(LogOutDocument, baseOptions);
+      }
+export type LogOutMutationHookResult = ReturnType<typeof useLogOutMutation>;
+export type LogOutMutationResult = Apollo.MutationResult<LogOutMutation>;
+export type LogOutMutationOptions = Apollo.BaseMutationOptions<LogOutMutation, LogOutMutationVariables>;
 export const UpdateOwnPasswordDocument = gql`
     mutation UpdateOwnPassword($updateOwnPasswordInput: UpdateOwnPasswordInput!) {
   updateOwnPassword(updateOwnPasswordInput: $updateOwnPasswordInput) {
@@ -10669,17 +10856,105 @@ export const UpdateUserAccessPolicyGroupsDocument = gql`
     userAccessPolicyGroupUpdate: $userAccessPolicyGroupUpdate
   ) {
     sid
-    name
-    description
-    tmpl
-    tmplUseAsIs
-    applicableOrgTypes
-    policies {
-      ...fragmentAccessPolicy
+    email {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
+      errCode
+      errMsg
+      errSeverity
     }
+    active {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    person {
+      sid
+      firstNm {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      lastNm {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      errCode
+      errMsg
+      errSeverity
+    }
+    organization {
+      value
+      description
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    accessPolicyGroups {
+      value {
+        name
+        value
+      }
+      label
+      readOnly
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    response
+    options {
+      key
+      values {
+        label
+        value
+        info
+      }
+    }
+    errCode
+    errMsg
+    errSeverity
   }
 }
-    ${FragmentAccessPolicyFragmentDoc}`;
+    `;
 export type UpdateUserAccessPolicyGroupsMutationFn = Apollo.MutationFunction<UpdateUserAccessPolicyGroupsMutation, UpdateUserAccessPolicyGroupsMutationVariables>;
 
 /**

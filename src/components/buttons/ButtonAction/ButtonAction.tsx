@@ -13,7 +13,7 @@ type ButtonActionProps = {
   children: ReactNode;
   disabled?: boolean;
   onClick?: () => null;
-  icon: string;
+  icon?: string;
 } & typeof defaultProps;
 
 const buttonIcons = {

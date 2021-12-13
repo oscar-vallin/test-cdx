@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import { useSessionStore } from '../../store/SessionStore';
-import { useLogOutLazyQuery } from '../../data/services/graphql';
+import { useLogOutMutation } from '../../data/services/graphql';
 
 type LogoutState = {
   loading: boolean;
@@ -19,7 +19,7 @@ export const useLogoutUseCase = () => {
   const SessionStore = useSessionStore();
   const [state, setState] = useState({ ...INITIAL_STATE });
 
-  const [logoutUser, { data: logoutStatus, loading: isLoggingOut, error: logoutError }] = useLogOutLazyQuery();
+  const [logoutUser, { data: logoutStatus, loading: isLoggingOut, error: logoutError }] = useLogOutMutation();
 
   useEffect(() => {
     setState({ ...state, loading: isLoggingOut, error: null });
