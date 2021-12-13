@@ -183,6 +183,44 @@ const AppHeader = ({ id, onUserSettings, sidebarOptionSelected, children }: AppH
 
       <OutsideClickHandler onOutsideClick={() => setIsOpen(false)}>
         <StyledPanel open={isOpen} data-e2e="AdminNav">
+          {ActiveDomainStore?.domainOrg?.current && (
+            <StyledSubNav
+              highlight
+              selectedKey={sidebarOptionSelected}
+              groups={[
+                {
+                  links: [
+                    {
+                      name: ActiveDomainStore.domainOrg.current.label,
+                      isExpanded: ActiveDomainStore.domainOrg.current.subNavItems?.length > 1,
+                      url: '',
+                      links:
+                        ActiveDomainStore.domainOrg.current.subNavItems?.length > 1
+                          ? [
+                              ...ActiveDomainStore.domainOrg.current.subNavItems.map((item) => ({
+                                name: item.label,
+                                ...item,
+                              })),
+                              {
+                                name: 'Return to my organization',
+                                home: true,
+                              },
+                            ]
+                          : [],
+                    },
+                  ],
+                },
+              ]}
+              onLinkClick={(evt: any, route: any) => {
+                evt.preventDefault();
+
+                ActiveDomainStore.setCurrentOrg(route.home ? ActiveDomainStore.domainOrg.origin : route);
+
+                setIsOpen(false);
+              }}
+            />
+          )}
+
           <StyledSubNav
             selectedKey={sidebarOptionSelected}
             groups={[{ links: parseLinks(ActiveDomainStore.nav.admin, sidebarOptionSelected) }]}
