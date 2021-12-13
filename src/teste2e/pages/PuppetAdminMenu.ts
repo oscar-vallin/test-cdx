@@ -9,7 +9,8 @@ export default class PuppetAdminMenu extends PuppetBasePage {
 
   async openMenu(...menuItems: string[]) {
     await this.page.click(this.menuTrigger);
-    await this.page.waitForTimeout(5000);
+    await this.page.waitForSelector(this.menuParent, { visible: true });
+    await this.page.waitForTimeout(1000);
 
     if (menuItems.length > 1) {
       // expand all of the top level menus first
@@ -19,6 +20,8 @@ export default class PuppetAdminMenu extends PuppetBasePage {
     }
     const lastMenuItem = await this.getMenuItem(menuItems[menuItems.length - 1]);
     await lastMenuItem?.click();
+    await this.page.waitForSelector(this.menuParent, { visible: false });
+    await this.page.waitForTimeout(1000);
   }
 
   private async expandMenu(name: string) {

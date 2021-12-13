@@ -14,8 +14,6 @@ import {
   StyledContainer,
   StyledButton,
   StyledNavIcon,
-  StyledChevronDown,
-  StyledLink,
   StyledNav,
   StyledNavButton,
   StyledDiv,
@@ -121,6 +119,7 @@ const AppHeader = ({ id, onUserSettings, sidebarOptionSelected, children }: AppH
 
       return opt.MAIN_MENU ? (
         <StyledNavButton
+          key={menuOption.destination}
           data-e2e={menuOption.destination}
           selected={location.pathname === opt.URL}
           onClick={() => {
@@ -138,7 +137,7 @@ const AppHeader = ({ id, onUserSettings, sidebarOptionSelected, children }: AppH
   return (
     <StyledContainer id={id} open={isOpen}>
       <StyledHeader data-e2e="AppHeader">
-        <StyledButton open={isOpen} onClick={() => setIsOpen(true)} data-e2e="AdminNavBtn">
+        <StyledButton open={isOpen} onClick={() => setIsOpen(!isOpen)} data-e2e="AdminNavBtn">
           <StyledNavIcon iconName="GlobalNavButton" />
 
           <div className="HeaderBtnText">
@@ -193,6 +192,7 @@ const AppHeader = ({ id, onUserSettings, sidebarOptionSelected, children }: AppH
               if (!route.links) {
                 history.push(`${route.url}?orgSid=${orgSid}`);
               }
+              setIsOpen(false);
             }}
           />
         </StyledPanel>
