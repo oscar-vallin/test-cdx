@@ -30,6 +30,8 @@ export default class PuppetActiveOrgs extends PuppetBasePage {
   }
 
   async expectPolicyTemplates() {
+    await this.page.waitForTimeout(2000);
+
     const dropdownBtnSelector = '#CreatePolicyButton + .ms-Button';
     const dropdownItemSelector = '.ms-ContextualMenu-itemText';
 
@@ -70,10 +72,10 @@ export default class PuppetActiveOrgs extends PuppetBasePage {
     const deleteBtnSelector = `#DeleteBtn__${id}`;
     const confirmationSelector = '#ConfirmationBtn';
 
-    await this.page.waitForSelector(deleteBtnSelector);
+    await this.page.waitForTimeout(2000);
     await this.page.click(deleteBtnSelector);
 
-    await this.page.waitForSelector(confirmationSelector, { visible: true });
+    await this.page.waitForTimeout(2000);
     await this.page.click(confirmationSelector);
   }
 }
