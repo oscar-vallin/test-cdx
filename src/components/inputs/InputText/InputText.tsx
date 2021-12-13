@@ -5,11 +5,8 @@ const defaultProps = {
   id: '',
   type: 'text',
   disabled: false,
-  onChange: () => null,
   autofocus: true,
   errorMessage: '',
-  onKeyDown: () => null,
-  onKeyEnter: () => null,
   value: '',
 };
 
@@ -34,12 +31,11 @@ type InputTextProps = {
 
 const InputText = ({
   id,
-  type = 'text',
-  disabled = false,
+  type,
+  disabled,
   onChange,
-  autofocus = true,
-
-  errorMessage = '',
+  autofocus,
+  errorMessage,
   onKeyDown,
   onKeyEnter,
   value,

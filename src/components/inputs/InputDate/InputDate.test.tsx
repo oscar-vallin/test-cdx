@@ -7,6 +7,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { addDays, addMonths, addYears } from '@fluentui/date-time-utilities';
 import { getHours, startOfSecond, addSeconds } from 'date-fns';
 import { InputDate as Component } from './index';
+import { mountWithTheme, shallowWithTheme } from 'src/utils/testUtils';
 
 const today = new Date();
 const yesterday = addDays(today, -1);
@@ -68,5 +69,11 @@ describe('Basic InputDate Component', () => {
     const input = screen.getByRole('combobox');
     fireEvent.click(input);
     expect(input).toHaveValue(today.toDateString());
+  });
+
+  it('Should send empty value property', () => {
+    render(<Component {...defaultProps} value={''} placeholder={placeholderText} />);
+    const input = screen.getByRole('combobox');
+    expect(input).toBeInTheDocument();
   });
 });

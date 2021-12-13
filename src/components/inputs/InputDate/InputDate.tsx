@@ -7,7 +7,6 @@ const defaultProps = {
   id: '',
   placeholder: 'Select a Date...',
   value: 8,
-  onChange: () => null,
   required: true,
 };
 
@@ -73,14 +72,7 @@ const getValue = (value) => {
   return today;
 };
 
-const InputDate = ({
-  id,
-  placeholder = 'Select a Date...',
-  label,
-  value,
-  onChange,
-  required,
-}: InputDateProps): ReactElement => {
+const InputDate = ({ id, placeholder, label, value, onChange, required }: InputDateProps): ReactElement => {
   return (
     <DatePicker
       id={id}
