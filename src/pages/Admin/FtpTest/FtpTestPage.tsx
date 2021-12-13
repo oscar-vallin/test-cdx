@@ -60,6 +60,7 @@ const _FtpTestPage = () => {
           <Column xxl="6" xl="12">
             <Spacing margin={{ bottom: 'normal' }}>
               <InputText
+                id="host"
                 required
                 label="Host"
                 placeholder="host"
@@ -69,6 +70,7 @@ const _FtpTestPage = () => {
             </Spacing>
             <Spacing margin={{ bottom: 'normal' }}>
               <InputText
+                id="user"
                 required
                 label="User"
                 placeholder="user"
@@ -78,6 +80,7 @@ const _FtpTestPage = () => {
             </Spacing>
             <Spacing margin={{ bottom: 'normal' }}>
               <InputText
+                id="password"
                 required
                 label="Password"
                 type="password"
@@ -88,6 +91,7 @@ const _FtpTestPage = () => {
             </Spacing>
             <Spacing margin={{ bottom: 'normal' }}>
               <InputText
+                id="folder"
                 required
                 label="Folder"
                 placeholder="folder"
@@ -97,6 +101,7 @@ const _FtpTestPage = () => {
             </Spacing>
             <Spacing margin={{ bottom: 'normal' }}>
               <InputText
+                id="port"
                 required
                 label="Port"
                 type="number"
@@ -106,10 +111,11 @@ const _FtpTestPage = () => {
               />
             </Spacing>
             <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-              <Checkbox label="Step Wise" onChange={(event, _stepWise: any) => setStepWise(_stepWise)} />
+              <Checkbox id="stepWise" label="Step Wise" onChange={(event, _stepWise: any) => setStepWise(_stepWise)} />
             </Spacing>
             <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
               <Checkbox
+                id="sendFileTest"
                 label="Send a test file"
                 onChange={(_event, _sendFileTest: any) => setSendFileTest(_sendFileTest)}
               />
@@ -118,6 +124,7 @@ const _FtpTestPage = () => {
               <Spacing margin={{ bottom: 'normal' }}>
                 <Spacing margin={{ bottom: 'normal' }}>
                   <InputText
+                    id="vendorFileName"
                     required
                     label="Vendor File Name"
                     value={vendorFileName}
@@ -126,6 +133,7 @@ const _FtpTestPage = () => {
                 </Spacing>
                 <Spacing margin={{ bottom: 'normal' }}>
                   <TextField
+                    id="textFileContent"
                     label="Text File Contents"
                     placeholder="Put the text you want in the file here, if you leave blank the text 'Connection Test' will be used for the file's contents."
                     multiline
@@ -151,7 +159,7 @@ const _FtpTestPage = () => {
       <Spacing margin="double">
         {loading ? (
           <Spacing margin={{ top: 'double' }}>
-            <Spinner size="lg" label="Loading color palettes" />
+            <Spinner id="__FtpTestPageId_Spinner" size="lg" label="Loading color palettes" />
           </Spacing>
         ) : (
           <>{renderForm()}</>
@@ -164,3 +172,4 @@ const _FtpTestPage = () => {
 const FtpTestPage = memo(_FtpTestPage);
 
 export { FtpTestPage };
+export default FtpTestPage;

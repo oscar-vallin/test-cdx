@@ -2,6 +2,7 @@
 import { ReactElement, useState, useEffect } from 'react';
 import { Panel, PanelType } from '@fluentui/react/lib-commonjs/Panel';
 
+import { Tabs } from 'src/components/tabs/Tabs';
 import { Spacing } from '../../../../components/spacings/Spacing';
 import { Button } from '../../../../components/buttons/Button';
 import { Row, Column } from '../../../../components/layouts';
@@ -11,6 +12,11 @@ import { InputText } from '../../../../components/inputs/InputText';
 import { useCreateUserMutation } from '../../../../data/services/graphql';
 
 import { useOrgSid } from '../../../../hooks/useOrgSid';
+import { useCreateUsersPanel } from './CreateUsersPanel.service';
+import { SectionAccount } from './SectionAccount';
+import SectionAccessManagement from './SectionAccessManagement';
+import SectionAuthentication from './SectionAuthentication';
+import SectionSummary from './SectionSummary';
 
 const defaultProps = {
   isOpen: false,
@@ -25,133 +31,75 @@ type CreateUsersPanelProps = {
   selectedUserId?: any | null;
 } & typeof defaultProps;
 
+const tabs = ['#account', '#access', '#auth', '#summary'];
+const enum Tab {
+  Account = 0,
+  Access = 1,
+  Auth = 2,
+  Summary = 3,
+}
+
 const CreateUsersPanel = ({ isOpen, onDismiss, onCreateUser }: CreateUsersPanelProps): ReactElement => {
-  const { orgSid } = useOrgSid();
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [groupIds, setGroupIds]: any = useState(0);
+  const CreateUserService = useCreateUsersPanel();
+  const [step, setStep] = useState(0);
+  const [selectedTab, setSelectedTab] = useState(Tab.Account);
 
-  const [_apiCall, { data, loading }] = useCreateUserMutation({
-    variables: {
-      userInfo: {
-        email,
-        password,
-        orgSid,
-        // orgOwnerId: orgSid,
-        // groupIds,
-      },
-      personInfo: {
-        firstNm: firstName,
-        lastNm: lastName,
-      },
-    },
-  });
+  const handleCreateUser = (): void => {
+    CreateUserService.createUserCall();
+    onCreateUser();
+    onDismiss();
+  };
 
-  useEffect(() => {
-    if (data) {
-      onCreateUser(data.createUser);
-      onDismiss();
-      setFirstName('');
-      setLastName('');
-      setEmail('');
-      setPassword('');
-      setGroupIds(0);
-    }
-  }, [data]);
+  const handleNext = (): void => {
+    setStep(step + 1);
+  };
+
+  const handlePrev = (): void => {
+    setStep(step - 1);
+  };
 
   return (
     <Panel
       closeButtonAriaLabel="Close"
       type={PanelType.medium}
-      headerText="Update user"
+      headerText="New User"
       isOpen={isOpen}
       onDismiss={() => {
         onDismiss();
       }}
     >
       <>
-        <Row>
-          <Column lg="12">
-            <Spacing margin={{ top: 'normal' }}>
-              <Row bottom>
-                <Column lg="12">
-                  <InputText
-                    label="Person First Name"
-                    value={firstName}
-                    onChange={({ target }) => setFirstName(target.value)}
-                  />
-                </Column>
-              </Row>
-              <Row bottom>
-                <Column lg="12">
-                  <InputText
-                    label="Person Last Name"
-                    value={lastName}
-                    onChange={({ target }) => setLastName(target.value)}
-                  />
-                </Column>
-              </Row>
-              <Row bottom>
-                <Column lg="12">
-                  <InputText
-                    label="Email"
-                    value={email}
-                    type="email"
-                    onChange={({ target }) => setEmail(target.value)}
-                  />
-                </Column>
-              </Row>
-              <Row bottom>
-                <Column lg="12">
-                  <InputText
-                    label="Password"
-                    value={password}
-                    type="password"
-                    onChange={({ target }) => setPassword(target.value)}
-                  />
-                </Column>
-              </Row>
-              <Row bottom>
-                <Column lg="12">
-                  <InputText
-                    label="Group Ids"
-                    value={groupIds}
-                    type="number"
-                    onChange={({ target }) => setGroupIds(target.value)}
-                  />
-                </Column>
-              </Row>
-            </Spacing>
-
-            <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-              <Separator />
-            </Spacing>
-
-            <Row>
-              <Column lg="12">
-                <Button
-                  id="__CreateUsersPanelId"
-                  variant="primary"
-                  disabled={loading}
-                  onClick={() => {
-                    if (firstName && lastName && password && email && groupIds !== 0) {
-                      _apiCall();
-                    } else {
-                      // eslint-disable-next-line no-alert
-                      alert('Please check the provided data');
-                    }
-
-                    return null;
-                  }}
-                >
-                  Save user
-                </Button>
-              </Column>
-            </Row>
-          </Column>
-        </Row>
+        <Tabs
+          items={[
+            {
+              title: 'Account',
+              content: <SectionAccount data={CreateUserService.infoAccess} onNext={handleNext} />,
+              hash: '#account',
+            },
+            {
+              title: 'Vendor Count Stats',
+              content: (
+                <SectionAccessManagement data={CreateUserService.infoAccess} onPrev={handlePrev} onNext={handleNext} />
+              ),
+              hash: '#access',
+            },
+            {
+              title: 'Work Steps',
+              content: (
+                <SectionAuthentication data={CreateUserService.infoAccess} onPrev={handlePrev} onNext={handleNext} />
+              ),
+              hash: '#auth',
+            },
+            {
+              title: 'Quality Checks',
+              content: (
+                <SectionSummary data={CreateUserService.infoAccess} onPrev={handlePrev} onSubmit={handleCreateUser} />
+              ),
+              hash: '#quality',
+            },
+          ]}
+          selectedKey={selectedTab < 0 ? Tab.Account.toString() : selectedTab.toString()}
+        />
       </>
     </Panel>
   );
