@@ -200,6 +200,7 @@ const _ActiveUsersPage = () => {
         </Spacing>
 
         <CreateUsersPanel
+          orgSid={orgSid}
           isOpen={isPanelOpen}
           onCreateUser={(createdUser) => {
             setSelectedItems([]);

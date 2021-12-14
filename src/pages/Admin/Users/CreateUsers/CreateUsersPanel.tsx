@@ -3,6 +3,7 @@ import { ReactElement, useState, useEffect } from 'react';
 import { Panel, PanelType } from '@fluentui/react/lib-commonjs/Panel';
 
 import { Tabs } from 'src/components/tabs/Tabs';
+import { Text } from 'src/components/typography';
 import { Spacing } from '../../../../components/spacings/Spacing';
 import { Button } from '../../../../components/buttons/Button';
 import { Row, Column } from '../../../../components/layouts';
@@ -25,6 +26,7 @@ const defaultProps = {
 };
 
 type CreateUsersPanelProps = {
+  orgSid: string;
   isOpen?: boolean;
   onDismiss?: any | null;
   onCreateUser?: any | null;
@@ -39,10 +41,14 @@ const enum Tab {
   Summary = 3,
 }
 
-const CreateUsersPanel = ({ isOpen, onDismiss, onCreateUser }: CreateUsersPanelProps): ReactElement => {
-  const CreateUserService = useCreateUsersPanel();
+const CreateUsersPanel = ({ orgSid, isOpen, onDismiss, onCreateUser }: CreateUsersPanelProps): ReactElement => {
+  const CreateUserService = useCreateUsersPanel(orgSid);
+
   const [step, setStep] = useState(0);
   const [selectedTab, setSelectedTab] = useState(Tab.Account);
+  const { userAccountForm, userAccountLoading } = CreateUserService ?? {};
+  // console.log('🚀 ~ file: CreateUsersPanel.tsx ~ line 46 ~ CreateUsersPanel ~ CreateUserService', CreateUserService);
+  // console.log('🚀 ~ file: CreateUsersPanel.tsx ~ line 49 ~ CreateUsersPanel ~ userAccountForm', userAccountForm);
 
   const handleCreateUser = (): void => {
     CreateUserService.createUserCall();
@@ -69,37 +75,57 @@ const CreateUsersPanel = ({ isOpen, onDismiss, onCreateUser }: CreateUsersPanelP
       }}
     >
       <>
-        <Tabs
-          items={[
-            {
-              title: 'Account',
-              content: <SectionAccount data={CreateUserService.infoAccess} onNext={handleNext} />,
-              hash: '#account',
-            },
-            {
-              title: 'Vendor Count Stats',
-              content: (
-                <SectionAccessManagement data={CreateUserService.infoAccess} onPrev={handlePrev} onNext={handleNext} />
-              ),
-              hash: '#access',
-            },
-            {
-              title: 'Work Steps',
-              content: (
-                <SectionAuthentication data={CreateUserService.infoAccess} onPrev={handlePrev} onNext={handleNext} />
-              ),
-              hash: '#auth',
-            },
-            {
-              title: 'Quality Checks',
-              content: (
-                <SectionSummary data={CreateUserService.infoAccess} onPrev={handlePrev} onSubmit={handleCreateUser} />
-              ),
-              hash: '#quality',
-            },
-          ]}
-          selectedKey={selectedTab < 0 ? Tab.Account.toString() : selectedTab.toString()}
-        />
+        {userAccountLoading && <Text>Loading...</Text>}
+        {!userAccountLoading && (
+          <Tabs
+            items={[
+              {
+                title: 'Account',
+                content: (
+                  <SectionAccount form={userAccountForm} data={CreateUserService.infoAccess} onNext={handleNext} />
+                ),
+                hash: '#account',
+              },
+              {
+                title: 'Access Management',
+                content: (
+                  <SectionAccessManagement
+                    form={userAccountForm}
+                    data={CreateUserService.infoAccess}
+                    onPrev={handlePrev}
+                    onNext={handleNext}
+                  />
+                ),
+                hash: '#access',
+              },
+              {
+                title: 'Authentication',
+                content: (
+                  <SectionAuthentication
+                    form={userAccountForm}
+                    data={CreateUserService.infoAuthentication}
+                    onPrev={handlePrev}
+                    onNext={handleNext}
+                  />
+                ),
+                hash: '#auth',
+              },
+              {
+                title: 'Summary',
+                content: (
+                  <SectionSummary
+                    form={userAccountForm}
+                    data={CreateUserService}
+                    onPrev={handlePrev}
+                    onSubmit={handleCreateUser}
+                  />
+                ),
+                hash: '#summary',
+              },
+            ]}
+            selectedKey={selectedTab < 0 ? Tab.Account.toString() : selectedTab.toString()}
+          />
+        )}
       </>
     </Panel>
   );

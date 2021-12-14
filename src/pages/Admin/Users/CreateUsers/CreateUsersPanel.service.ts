@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { useCreateUserMutation } from 'src/data/services/graphql';
+import { useEffect, useState } from 'react';
+import { useCreateUserMutation, useUserAccountFormLazyQuery } from 'src/data/services/graphql';
 import { useInputValue } from 'src/hooks/useInputValue';
 
-export const useCreateUsersPanel = () => {
+export const useCreateUsersPanel = (orgSid) => {
   const firstName = useInputValue('First Name', '', '', 'text');
   const lastName = useInputValue('Last Name', '', '', 'text');
   const email = useInputValue('Username and Email Address', '', '', 'email');
@@ -12,6 +12,14 @@ export const useCreateUsersPanel = () => {
   const [userAdminSubOrgs, setUserAdminSubOrgs] = useState(false);
   const [sendAccountActivation, setSendAccountActivation] = useState(false);
   const [organizationId, setOrganizationId] = useState();
+  const [userAccountForm, setUserAccountForm] = useState<any>();
+
+  const [apiUserAccountForm, { data: dataUserAccountForm, loading: userAccountLoading, error: userAccountError }] =
+    useUserAccountFormLazyQuery({
+      variables: {
+        orgSid,
+      },
+    });
 
   const [apiCall, { data, loading }] = useCreateUserMutation({
     variables: {
@@ -26,7 +34,31 @@ export const useCreateUsersPanel = () => {
     },
   });
 
+  //
+  // * When the organizationId changes, we need to re-fetch the user account form.
+  useEffect(() => {
+    console.log('useCreateUsersPanel.useEffect: organizationId changed', orgSid);
+    if (orgSid) {
+      apiUserAccountForm({
+        variables: {
+          orgSid,
+        },
+      });
+    }
+  }, [orgSid]);
+
+  useEffect(() => {
+    if (dataUserAccountForm) {
+      setUserAccountForm(dataUserAccountForm?.userAccountForm);
+    }
+  }, [dataUserAccountForm]);
+
+  //
+  // * Return the state of the form.
   return {
+    userAccountForm,
+    userAccountLoading,
+    userAccountError,
     infoAccount: { firstName, lastName, email },
     infoAccess: {
       exchangeReaderAll,

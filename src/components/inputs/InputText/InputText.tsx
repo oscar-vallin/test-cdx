@@ -1,4 +1,5 @@
 import { ReactElement } from 'react';
+import FormLabel from 'src/components/labels/FormLabel';
 import { StyledTextField } from './InputText.styles';
 
 const defaultProps = {
@@ -27,6 +28,7 @@ type InputTextProps = {
   label?: string;
   maxLength?: number;
   minLength?: number;
+  info?: string;
 } & typeof defaultProps;
 
 const InputText = ({
@@ -39,7 +41,7 @@ const InputText = ({
   onKeyDown,
   onKeyEnter,
   value,
-
+  info,
   ...props
 }: InputTextProps): ReactElement => {
   const handleKey = (key) => {
@@ -49,6 +51,8 @@ const InputText = ({
 
     return null;
   };
+
+  const onRenderLabel = () => <FormLabel {...props} />;
 
   return (
     <StyledTextField
@@ -60,6 +64,7 @@ const InputText = ({
       onKeyDown={({ key }) => handleKey(key)}
       value={value}
       errorMessage={errorMessage}
+      onRenderLabel={info ? onRenderLabel : undefined}
       {...props}
     />
   );
