@@ -12,6 +12,8 @@ export default class PuppetLoginPage extends PuppetBasePage {
 
   loginButton = '#__FormLogin__Card__Row__Column__Button--Button';
 
+  errorContainer = '.ms-MessageBar-innerText';
+
   async expectOnPage() {
     await this.page.waitForSelector(this.loginId);
   }
@@ -39,17 +41,33 @@ export default class PuppetLoginPage extends PuppetBasePage {
     await page.waitForTimeout(1000);
   }
 
+  async typeEmail(email: string) {
+    await this.page.type(this.loginId, email);
+  }
+
+  async clickLoginButton() {
+    await this.page.click(this.loginButton);
+  }
+
+  async waitForPasswordField() {
+    await this.page.waitForSelector(this.loginPassword);
+  }
+
+  async typePassword(password: string) {
+    await this.page.type(this.loginPassword, password);
+  }
+
   async login(email: string, password: string) {
     const { page } = this;
 
-    await page.type(this.loginId, email);
+    await this.typeEmail(email);
 
-    await page.click(this.loginButton);
+    await this.clickLoginButton();
+    await this.waitForPasswordField();
 
-    await page.waitForSelector(this.loginPassword);
-    await page.type(this.loginPassword, password);
+    await this.typePassword(password);
 
-    await page.click(this.loginButton);
+    await this.clickLoginButton();
 
     await page.waitForSelector(this.loginButton, { hidden: true });
   }
@@ -64,5 +82,12 @@ export default class PuppetLoginPage extends PuppetBasePage {
     const activeOrgsPage = new PuppetActiveOrgs(this.page);
     await activeOrgsPage.expectOnPage();
     return activeOrgsPage;
+  }
+
+  async expectError(message: string) {
+    await this.page.waitForSelector(this.errorContainer);
+    const errorMessage = await this.page.$eval(this.errorContainer, (e) => e.textContent);
+
+    expect(errorMessage).toEqual(message);
   }
 }

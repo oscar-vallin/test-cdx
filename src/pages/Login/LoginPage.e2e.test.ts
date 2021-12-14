@@ -1,128 +1,60 @@
-import puppeteer from 'puppeteer';
+import PuppetCDXApp from '../../teste2e/pages/PuppetCDXApp';
 
-describe('LoginPage.js', () => {
-  const url = process.env.npm_config_url || process.env.REACT_TEMP_URL || process.env.REACT_TEST_URL;
-  let browser;
-  let page;
-  const email = process.env.REACT_E2E_USER_CREDENTIALS_LOGIN;
-  const password = process.env.REACT_E2E_PASS_CREDENTIALS_LOGIN;
+describe('Login Tests', () => {
+  let cdxApp: PuppetCDXApp;
+
+  const email = process.env.REACT_E2E_USER_CREDENTIALS_LOGIN || '';
   const wrongEmail = 'foo@bar.com';
   const wrongPassword = 'foobarpass';
-  let isLogout = false;
 
   beforeAll(async () => {
-    browser = await puppeteer.launch({
-      headless: !(!!process.env.npm_config_headless || !!process.env.IS_HEADLESS),
-      args: ['--no-sandbox'],
-    });
-    page = await browser.newPage();
+    cdxApp = await PuppetCDXApp.startBrowser('Login Tests');
   });
 
-  it('contains the CDX DASHBOARD text', async () => {
-    await page.goto(url);
-    await page.waitForSelector('#PageLogin');
-    const text = await page.$eval('#PageLogin', (e) => e.textContent);
-    expect(text).toContain('CDX DASHBOARD');
-  });
-
-  it('contains the CDX DASHBOARD text', async () => {
-    await page.waitForSelector('#__FormLogin__Card__Row__Column--label');
-    const text = await page.$eval('#__FormLogin__Card__Row__Column--label', (e) => e.textContent);
-    expect(text).toContain('CDX DASHBOARD');
-  });
-
-  it('contains the CDX DASHBOARD text', async () => {
-    await page.waitForSelector('#__FormLogin__Card__Row__Column--sublabel');
-    const text = await page.$eval('#__FormLogin__Card__Row__Column--sublabel', (e) => e.textContent);
-    expect(text).toContain('Sign in to access your dashboard');
-  });
-
-  it('Should render Next Button', async () => {
-    const nextButton = await page.$eval('#__FormLogin__Card__Row__Column__Button--Button', (e) => e.textContent);
-
-    expect(nextButton).toContain('Next');
+  it('Assert Expected Text on Page', async () => {
+    const loginPage = await cdxApp.toLoginPage();
+    await loginPage.expectTextOnPage('#PageLogin', 'CDX DASHBOARD');
+    await loginPage.expectTextOnPage('#__FormLogin__Card__Row__Column--label', 'CDX DASHBOARD');
+    await loginPage.expectTextOnPage('#__FormLogin__Card__Row__Column--sublabel', 'Sign in to access your dashboard');
+    await loginPage.expectTextOnPage('#__FormLogin__Card__Row__Column__Button--Button', 'Next');
   });
 
   it('Should render Login Button', async () => {
-    await page.waitForSelector('#__FormLogin__Card__Row__Input-Email');
-    await page.type('#__FormLogin__Card__Row__Input-Email', email);
-
-    await page.click('#__FormLogin__Card__Row__Column__Button--Button');
-
-    await page.waitForSelector('#__FormLogin__Card__Row__Input-Password');
-    await page.type('#__FormLogin__Card__Row__Input-Password', email);
-
-    const loginButton = await page.$eval('#__FormLogin__Card__Row__Column__Button--Button', (e) => e.textContent);
-
-    expect(loginButton).toContain('Login');
+    const loginPage = await cdxApp.toLoginPage();
+    await loginPage.typeEmail(email);
+    await loginPage.clickLoginButton();
+    await loginPage.waitForPasswordField();
+    await loginPage.expectTextOnPage(loginPage.loginButton, 'Login');
   });
 
-  it('Should render error message when email is not valid', async () => {
-    await page.goto(url);
-    await page.waitForSelector('#__FormLogin__Card__Row__Input-Email');
-    await page.type('#__FormLogin__Card__Row__Input-Email', wrongEmail);
+  it('Entering an invalid email', async () => {
+    const loginPage = await cdxApp.toLoginPage();
+    await loginPage.typeEmail(wrongEmail);
 
-    await page.click('#__FormLogin__Card__Row__Column__Button--Button');
+    await loginPage.clickLoginButton();
 
-    await page.waitForSelector('.ms-MessageBar-innerText');
-    const errorMessage = await page.$eval('.ms-MessageBar-innerText', (e) => e.textContent);
-
-    expect(errorMessage).toEqual('Please provide a valid email address to proceed');
+    await loginPage.expectError('Please provide a valid email address to proceed');
   });
 
-  it('Fill credentials form and login', async () => {
-    await page.goto(url);
-    await page.waitForSelector('#__FormLogin__Card__Row__Input-Email');
-    await page.type('#__FormLogin__Card__Row__Input-Email', email);
-
-    await page.click('#__FormLogin__Card__Row__Column__Button--Button');
-
-    await page.waitForSelector('#__FormLogin__Card__Row__Input-Password');
-    await page.type('#__FormLogin__Card__Row__Input-Password', wrongPassword);
-
-    await page.click('#__FormLogin__Card__Row__Column__Button--Button');
-
-    await page.waitForSelector('.ms-MessageBar-innerText');
-    const errorMessage = await page.$eval('.ms-MessageBar-innerText', (e) => e.textContent);
-
-    expect(errorMessage).toEqual('Invalid credentials');
+  it('Entering a wrong password', async () => {
+    const loginPage = await cdxApp.toLoginPage();
+    await loginPage.typeEmail(email);
+    await loginPage.clickLoginButton();
+    await loginPage.waitForPasswordField();
+    await loginPage.typePassword(wrongPassword);
+    await loginPage.clickLoginButton();
+    await loginPage.expectError('Invalid credentials');
   });
 
-  it('Fill credentials form and login', async () => {
-    await page.goto(url);
-    await page.waitForSelector('#__FormLogin__Card__Row__Input-Email');
-    await page.type('#__FormLogin__Card__Row__Input-Email', email);
+  it('Positive Login', async () => {
+    const loginPage = await cdxApp.toLoginPage();
+    await loginPage.loginAsAdmin();
+    await loginPage.expectOnActiveOrgsPage();
 
-    await page.click('#__FormLogin__Card__Row__Column__Button--Button');
-
-    await page.waitForSelector('#__FormLogin__Card__Row__Input-Password');
-    await page.type('#__FormLogin__Card__Row__Input-Password', password);
-
-    await page.click('#__FormLogin__Card__Row__Column__Button--Button');
-
-    await page.waitForSelector('div[name="Exchange Statuses"]');
-    const loginButton = await page.$eval('div[name="Exchange Statuses"]', (e) => e.textContent);
-
-    expect(loginButton).toContain('Exchange Statuses');
+    await cdxApp.logout();
   });
 
-  it('Logout and check requests', async () => {
-    isLogout = true;
-    await page.waitForSelector('#__UserToken');
-    await page.click('#__UserToken');
-
-    await page.waitForTimeout(1000);
-
-    await page.waitForSelector('#__Logout_button');
-    await page.click('#__Logout_button');
+  afterAll(async () => {
+    await cdxApp.closeBrowser();
   });
-
-  it('check login page', async () => {
-    await page.waitForTimeout(3000);
-    await page.waitForSelector('#PageLogin');
-    const text = await page.$eval('#PageLogin', (e) => e.textContent);
-    expect(text).toContain('CDX DASHBOARD');
-  });
-
-  afterAll(() => browser.close());
 });
