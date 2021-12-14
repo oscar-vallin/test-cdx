@@ -23,14 +23,14 @@ const _ArchivePage = () => {
   };
 
   return (
-    <LayoutDashboard id="PageArchive" menuOptionSelected={ROUTES.ROUTE_FILE_STATUS.ID}>
+    <LayoutDashboard id="PageArchive" menuOptionSelected={ROUTES.ROUTE_ARCHIVES.ID}>
       <PageHeader spacing="0">
         <Container>
           <Spacing margin={{ top: 'double' }}>
             <Row>
               <Column lg="6" direction="row">
-                <PageTitle id="__Archives_Title" title="Archives" subTitle="Advanced search" icon="FilterSolid"
-                />
+                <PageTitle
+id="__Archives_Title" title="Archives" subTitle="Advanced search" icon="FilterSolid" />
               </Column>
               <Column lg="6" right>
                 <Text right>

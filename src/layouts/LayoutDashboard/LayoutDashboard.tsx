@@ -32,7 +32,7 @@ export const LayoutDashboard = ({
   return (
     <>
       <BoxStyled id={`${id}__Box`} direction={StyleConstants.DIRECTION_COLUMN} top>
-        <AppHeader />
+        <AppHeader menuOptionSelected={menuOptionSelected} />
 
         {children}
       </BoxStyled>

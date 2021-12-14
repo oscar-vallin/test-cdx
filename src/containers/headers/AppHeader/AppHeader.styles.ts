@@ -46,9 +46,6 @@ export const StyledHeader = styled.header`
   font: ${({ theme }) => theme.fontStyles.normal};
   white-space: nowrap;
   width: 100vw;
-
-  @media all and (min-width: 1400px) {
-  }
 `;
 
 export const StyledButton = styled.button<ToggableProps>`
@@ -99,7 +96,7 @@ export const StyledLink = styled(Link)`
 export const StyledNav = styled.nav`
   display: none;
 
-  @media all and (min-width: 1400px) {
+  @media all and (min-width: 1024px) {
     align-items: stretch;
     display: flex;
     font-size: 0.875rem;
@@ -185,6 +182,10 @@ export const StyledSubNav = styled(Nav)<StyledSubNavProps>`
   height: auto;
   overflow-x: hidden;
 
+  &.AppHeader__MobileNav {
+    display: block;
+  }
+
   .ms-Nav-groupContent {
     margin: 0;
   }
@@ -208,6 +209,12 @@ export const StyledSubNav = styled(Nav)<StyledSubNavProps>`
         font-weight: ${({ highlight }) => (highlight ? 700 : 400)};
         pointer-events: none;
       }
+    }
+  }
+
+  @media all and (min-width: 1024px) {
+    &.AppHeader__MobileNav {
+      display: none;
     }
   }
 `;

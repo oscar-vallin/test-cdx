@@ -23,7 +23,7 @@ const _TransmissionsPage = () => {
   };
 
   return (
-    <LayoutDashboard id="PageTransmissions" menuOptionSelected={ROUTES.ROUTE_ADMIN.API_ID}>
+    <LayoutDashboard id="PageTransmissions" menuOptionSelected={ROUTES.ROUTE_TRANSMISSIONS.API_ID}>
       <PageHeader spacing="0">
         <Container>
           <Spacing margin={{ top: 'double' }}>

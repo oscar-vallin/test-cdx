@@ -32,10 +32,17 @@ type AppHeaderProps = {
   id?: string;
   children?: any;
   onUserSettings?: any;
+  menuOptionSelected?: any;
   sidebarOptionSelected?: any;
 };
 
-const AppHeader = ({ id, onUserSettings, sidebarOptionSelected, children }: AppHeaderProps): ReactElement => {
+const AppHeader = ({
+  id,
+  onUserSettings,
+  menuOptionSelected,
+  sidebarOptionSelected,
+  children,
+}: AppHeaderProps): ReactElement => {
   const history = useHistory();
   const location = useLocation();
   const { orgSid } = useOrgSid();
@@ -221,6 +228,20 @@ const AppHeader = ({ id, onUserSettings, sidebarOptionSelected, children }: AppH
               }}
             />
           )}
+
+          <StyledSubNav
+            className="AppHeader__MobileNav"
+            selectedKey={menuOptionSelected.replace('-', '_').toUpperCase()}
+            groups={[{ links: parseLinks(ActiveDomainStore.nav.dashboard, menuOptionSelected) }]}
+            onLinkClick={(evt: any, route: { links: string; url: string }) => {
+              evt.preventDefault();
+
+              if (!route.links) {
+                history.push(`${route.url}?orgSid=${orgSid}`);
+              }
+              setIsOpen(false);
+            }}
+          />
 
           <StyledSubNav
             selectedKey={sidebarOptionSelected}
