@@ -119,6 +119,7 @@ const AppHeader = ({ id, onUserSettings, sidebarOptionSelected, children }: AppH
 
       return opt.MAIN_MENU ? (
         <StyledNavButton
+          id={`__${menuOption.destination}_Tab`}
           key={menuOption.destination}
           data-e2e={menuOption.destination}
           selected={location.pathname === opt.URL}
@@ -137,7 +138,7 @@ const AppHeader = ({ id, onUserSettings, sidebarOptionSelected, children }: AppH
   return (
     <StyledContainer id={id} open={isOpen}>
       <StyledHeader data-e2e="AppHeader">
-        <StyledButton open={isOpen} onClick={() => setIsOpen(!isOpen)} data-e2e="AdminNavBtn">
+        <StyledButton id="__AdminNavBtn" open={isOpen} onClick={() => setIsOpen(!isOpen)} data-e2e="AdminNavBtn">
           <StyledNavIcon iconName="GlobalNavButton" />
 
           <div className="HeaderBtnText">
@@ -182,7 +183,7 @@ const AppHeader = ({ id, onUserSettings, sidebarOptionSelected, children }: AppH
       </StyledHeader>
 
       <OutsideClickHandler onOutsideClick={() => setIsOpen(false)}>
-        <StyledPanel open={isOpen} data-e2e="AdminNav">
+        <StyledPanel id="__AdminNav" open={isOpen} data-e2e="AdminNav">
           {ActiveDomainStore?.domainOrg?.current && (
             <StyledSubNav
               highlight

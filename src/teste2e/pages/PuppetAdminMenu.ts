@@ -3,9 +3,9 @@ import PuppetBasePage from './PuppetBasePage';
 
 // represents the left hand admin menu
 export default class PuppetAdminMenu extends PuppetBasePage {
-  menuParent = '[data-e2e="AdminNav"]';
+  menuParent = '#__AdminNav';
 
-  menuTrigger = '[data-e2e="AdminNavBtn"]';
+  menuTrigger = '#__AdminNavBtn';
 
   async openMenu(...menuItems: string[]) {
     await this.page.click(this.menuTrigger);

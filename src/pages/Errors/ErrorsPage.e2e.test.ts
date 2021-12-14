@@ -48,8 +48,8 @@ describe('E2E - Errors Navigation Test', () => {
   });
 
   it('Should redirect to Errors Page', async () => {
-    const fileStatus = new PuppetErrors(cdxApp.page);
-    await fileStatus.expectOnPage();
+    const errorPage = new PuppetErrors(cdxApp.page);
+    await errorPage.expectOnPage();
   });
 
   it('Table Should have 6 rows', async () => {
