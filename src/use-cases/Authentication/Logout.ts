@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useSessionStore } from '../../store/SessionStore';
 import { useLogOutMutation } from '../../data/services/graphql';
+import { useCSRFToken } from '../../hooks/useCSRFToken';
 
 type LogoutState = {
   loading: boolean;
@@ -18,8 +19,13 @@ const INITIAL_STATE: LogoutState = {
 export const useLogoutUseCase = () => {
   const SessionStore = useSessionStore();
   const [state, setState] = useState({ ...INITIAL_STATE });
+  const { setCSRFToken, setAuthToken } = useCSRFToken();
 
   const [logoutUser, { data: logoutStatus, loading: isLoggingOut, error: logoutError }] = useLogOutMutation();
+  const clearCSRFToken = () => {
+    setCSRFToken('');
+    setAuthToken('');
+  };
 
   useEffect(() => {
     setState({ ...state, loading: isLoggingOut, error: null });
@@ -34,7 +40,7 @@ export const useLogoutUseCase = () => {
   useEffect(() => {
     if (logoutStatus?.logOut?.successful) {
       SessionStore.setCurrentSession({ token: null });
-
+      clearCSRFToken();
       setState({ ...INITIAL_STATE });
     }
   }, [logoutStatus]);

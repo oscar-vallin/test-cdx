@@ -2,6 +2,7 @@ import { ReactElement, ReactNode, createContext, useState, useEffect, useMemo, u
 import { ApolloProvider, ApolloClient, InMemoryCache, HttpLink, ApolloLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { useSessionStore } from '../store/SessionStore';
+import { useCSRFToken } from '../hooks/useCSRFToken';
 
 const SERVER_URL = process.env.REACT_APP_API_SERVER;
 
@@ -30,20 +31,22 @@ export const ApolloContextProvider = ({ children }: ApolloContextProviderProps):
     // credentials: 'same-origin',
   });
 
+  const { getCSRFToken, getAuthToken } = useCSRFToken();
+
   const authLink = setContext((_, { headers }) => {
     // get the authentication token from local storage if it exists
     // const token = localStorage.getItem('token');
     // return the headers to the context so httpLink can read them
     let authToken = SessionStore.user.token || '';
     if (authToken.trim().length == 0) {
-      authToken = window.sessionStorage.getItem('_initSession') || '';
+      authToken = getAuthToken() || '';
     }
 
     return {
       headers: {
         ...headers,
         'x-auth-token': authToken,
-        'X-XSRF-Token': document.head?.querySelector('meta[name="_csrf"]')?.getAttribute('content') || '',
+        'X-XSRF-Token': getCSRFToken() || '',
       },
     };
   });

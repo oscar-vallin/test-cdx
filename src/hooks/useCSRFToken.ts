@@ -14,6 +14,10 @@ export const useCSRFToken = () => {
     document.head?.querySelector('meta[name="_csrf"]')?.setAttribute('content', token);
   };
 
+  const getAuthToken = () => {
+    return window.sessionStorage.getItem('_initSession');
+  };
+
   const setAuthToken = (token: string) => {
     // Save the auth token in session storage which needs to be in a separate location than the CSRF token
     window.sessionStorage.setItem('_initSession', token);
@@ -42,5 +46,5 @@ export const useCSRFToken = () => {
     }
   };
 
-  return { callCSRFController };
+  return { callCSRFController, getCSRFToken, setCSRFToken, getAuthToken, setAuthToken };
 };
