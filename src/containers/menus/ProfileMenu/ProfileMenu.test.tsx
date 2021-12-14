@@ -2,7 +2,7 @@ import { ProfileMenu } from './ProfileMenu';
 import { shallowWithTheme, mountWithTheme } from '../../../utils/testUtils';
 import store from '../../../../src/store/index';
 import { StoreProvider } from 'easy-peasy';
-import { ROUTE_ACTIVITY_CURRENT, ROUTE_USER_SETTINGS } from '../../../data/constants/RouteConstants';
+import { ApolloProvider, ApolloClient } from '@apollo/client';
 
 const defaultProps = {
   id: '__ButtonContext',
@@ -21,10 +21,13 @@ describe('Profile Menu Testing Unit...', () => {
   });
 
   it('Should sink in the button ButtonContext', () => {
+    const dummyClient = {} as ApolloClient<any>;
     const tree = mountWithTheme(
-      <StoreProvider store={store}>
-        <ProfileMenu {...defaultProps}></ProfileMenu>);
-      </StoreProvider>
+      <ApolloProvider client={dummyClient}>
+        <StoreProvider store={store}>
+          <ProfileMenu {...defaultProps}></ProfileMenu>);
+        </StoreProvider>
+      </ApolloProvider>
     );
 
     const btns = tree.find('button[id="__ButtonContext"]');
