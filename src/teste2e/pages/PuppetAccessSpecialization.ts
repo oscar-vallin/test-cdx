@@ -23,7 +23,7 @@ export default class PuppetActiveOrgs extends PuppetBasePage {
 
   async createSpecialization() {
     const nameInputSelector = '#specialization-name';
-    const createBtnSelector = '#__CreateAccessSpecializationPanelId';
+    const createBtnSelector = '#__CreateAccessSpecializationBtnId';
 
     await this.clickOnCreateSpecialization();
 
@@ -41,9 +41,9 @@ export default class PuppetActiveOrgs extends PuppetBasePage {
 
   async updateSpecialization() {
     const nameInputSelector = '#specialization-name';
-    const createBtnSelector = '#__CreateAccessSpecializationPanelId';
+    const createBtnSelector = '#__CreateAccessSpecializationBtnId';
 
-    await this.clickOnSpecialization('1', 'Test C');
+    await this.clickOnSpecialization('1', 'Test A');
 
     await this.page.waitForSelector(nameInputSelector);
 
@@ -51,5 +51,16 @@ export default class PuppetActiveOrgs extends PuppetBasePage {
     await this.inputValue(nameInputSelector, 'Test B');
 
     await this.page.click(createBtnSelector);
+  }
+
+  async deleteSpecialization(id: string) {
+    const deleteBtnSelector = `#DeleteBtn__${id}`;
+    const confirmationSelector = '#ConfirmationBtn';
+
+    await this.page.waitForTimeout(2000);
+    await this.page.click(deleteBtnSelector);
+
+    await this.page.waitForTimeout(2000);
+    await this.page.click(confirmationSelector);
   }
 }

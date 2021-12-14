@@ -15,6 +15,7 @@ interface StyledNavButtonProps {
 
 type StyledSubNavProps = {
   onLinkClick?: any | null;
+  highlight?: boolean;
 };
 
 export const StyledContainer = styled.div<ToggableProps>`
@@ -163,8 +164,10 @@ export const StyledPanel = styled.div<ToggableProps>`
   background: ${({ theme }) => theme.colors.neutralLighter} !important;
   box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
   display: flex;
+  flex-direction: column;
   font: ${({ theme }) => theme.fontStyles.normal};
   height: calc(100% - 58px);
+  justify-content: flex-start;
   padding: ${({ theme }) => `0 ${theme.spacing.small}`};
   position: fixed;
   transform: ${({ open }) => (open ? 'translateX(0)' : 'translateX(-100%)')};
@@ -175,7 +178,11 @@ export const StyledPanel = styled.div<ToggableProps>`
 `;
 
 export const StyledSubNav = styled(Nav)<StyledSubNavProps>`
-  height: calc(100vh - 58px);
+  height: auto;
+
+  .ms-Nav-groupContent {
+    margin: 0;
+  }
 
   .ms-Nav-compositeLink {
     .ms-Button {
@@ -193,6 +200,7 @@ export const StyledSubNav = styled(Nav)<StyledSubNavProps>`
 
       & + .ms-Button {
         font-size: 0.75rem;
+        font-weight: ${({ highlight }) => (highlight ? 700 : 400)};
         pointer-events: none;
       }
     }

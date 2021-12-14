@@ -23,19 +23,6 @@ describe('E2E - Organization Navigation Test', () => {
     await activeOrgs.waitForSelector('a.K2UIS');
   });
 
-  // it('Go to Exchange Status page', async () => {
-  //   const adminMenu = cdxApp.getAdminMenu();
-  //   await adminMenu.openMenu('Exchange Statuses');
-
-  //   const exchangeStatus = new PuppetExchangeStatus(cdxApp.page);
-  //   await exchangeStatus.expectOnPage();
-  // });
-
-  // it('Click on Admin', async () => {
-  //   const mainMenu = new PuppetMainMenu(cdxApp.page);
-  //   await mainMenu.clickAdmin();
-  // });
-
   it('Navigate to Active Orgs', async () => {
     const adminMenu = cdxApp.getAdminMenu();
     await adminMenu.openMenu('Organizations', 'Active Orgs');
@@ -58,8 +45,9 @@ describe('E2E - Organization Navigation Test', () => {
     await currentActivity.expectOnPage();
   });
 
-  it.skip('Go back up to CDX Organization', async () => {
-    await cdxApp.returnToMyOrganization();
+  it('Go back up to CDX Organization', async () => {
+    const adminMenu = cdxApp.getAdminMenu();
+    await adminMenu.openMenu('Known2U Implementation Services', 'Return to my organization');
   });
 
   it('Click on Active Orgs', async () => {

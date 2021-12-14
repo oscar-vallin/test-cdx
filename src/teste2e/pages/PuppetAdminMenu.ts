@@ -24,6 +24,20 @@ export default class PuppetAdminMenu extends PuppetBasePage {
     await this.page.waitForTimeout(1000);
   }
 
+  async navigateToOrg(orgName) {
+    const button = await this.page.$x(`//div[@class='ms-Nav-navItem']/button[contains(., '${orgName}')]`);
+
+    await this.page.click(this.menuTrigger);
+
+    button[0].click();
+
+    await this.page.waitForTimeout(1000);
+  }
+
+  async returnToMyOrg() {
+    await this.navigateToOrg('Return to my organization');
+  }
+
   private async expandMenu(name: string) {
     const menuItm = await this.getMenuItem(name);
     const cssClasses = await menuItm?.getProperty('className');
