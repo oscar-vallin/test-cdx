@@ -57,12 +57,7 @@ export default class PuppetCDXApp {
   }
 
   async returnToMyOrganization() {
-    await this.page.waitForTimeout(3000);
-    const menuButton = await this.waitForSelector('#__Organization__Button');
-    menuButton?.click();
-    await this.page.waitForTimeout(1000);
-    const returnButton = await this.waitForSelector('#__Return__Organization');
-    returnButton?.click();
+    await this.getAdminMenu().returnToMyOrg();
   }
 
   getAdminMenu(): PuppetAdminMenu {

@@ -192,7 +192,7 @@ const AppHeader = ({ id, onUserSettings, sidebarOptionSelected, children }: AppH
                   links: [
                     {
                       name: ActiveDomainStore.domainOrg.current.label,
-                      isExpanded: ActiveDomainStore.domainOrg.current.subNavItems?.length > 1,
+                      isExpanded: false,
                       url: '',
                       links:
                         ActiveDomainStore.domainOrg.current.subNavItems?.length > 1
