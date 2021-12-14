@@ -5,6 +5,7 @@ import 'office-ui-fabric-react/dist/css/fabric.css';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import { StoreProvider } from 'easy-peasy';
 
+import MetaTags from 'react-meta-tags';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { ApolloContextProvider } from './contexts/ApolloContext';
@@ -17,23 +18,29 @@ import store from './store/index';
 initializeIcons();
 
 ReactDOM.render(
-  <React.StrictMode>
-    <StoreProvider store={store}>
-      <ApolloContextProvider>
-        <Router>
-          <SessionContextProvider>
-            <ActiveDomainContextProvider>
-              <ThemeContextProvider>
-                <NotificationContextProvider>
-                  <App />
-                </NotificationContextProvider>
-              </ThemeContextProvider>
-            </ActiveDomainContextProvider>
-          </SessionContextProvider>
-        </Router>
-      </ApolloContextProvider>
-    </StoreProvider>
-  </React.StrictMode>,
+  <>
+    <MetaTags>
+      <title>CDX</title>
+      <meta name="_csrf" content="" />
+    </MetaTags>
+    <React.StrictMode>
+      <StoreProvider store={store}>
+        <ApolloContextProvider>
+          <Router>
+            <SessionContextProvider>
+              <ActiveDomainContextProvider>
+                <ThemeContextProvider>
+                  <NotificationContextProvider>
+                    <App />
+                  </NotificationContextProvider>
+                </ThemeContextProvider>
+              </ActiveDomainContextProvider>
+            </SessionContextProvider>
+          </Router>
+        </ApolloContextProvider>
+      </StoreProvider>
+    </React.StrictMode>
+  </>,
   document.getElementById('app')
 );
 

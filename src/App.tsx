@@ -4,6 +4,7 @@ import { useStoreState } from 'easy-peasy';
 import { Routes } from './pages/Routes';
 import { useQueryParams } from './hooks/useQueryParams';
 import { useApplicationStore } from './store/ApplicationStore';
+import { useCSRFToken } from './hooks/useCSRFToken';
 
 const getQueryParams = ({ QueryParamStore }) => QueryParamStore.params;
 
@@ -11,6 +12,7 @@ export const App: React.FC = (): React.ReactElement => {
   const history = useHistory();
   const location = useLocation();
   const ApplicationStore = useApplicationStore();
+  const { callCSRFController } = useCSRFToken();
 
   const QueryParams = useQueryParams();
 
@@ -29,6 +31,10 @@ export const App: React.FC = (): React.ReactElement => {
       // !Todo: add offline notification
     }
   }, [ApplicationStore.status]);
+
+  useEffect(() => {
+    callCSRFController();
+  }, []);
 
   return <Routes />;
 };

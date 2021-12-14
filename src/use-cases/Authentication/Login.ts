@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { useSessionStore } from '../../store/SessionStore';
 import { useBeginLoginLazyQuery, usePasswordLoginMutation } from '../../data/services/graphql';
 import { useActiveDomainStore } from '../../store/ActiveDomainStore';
-import { useApplicationStore } from '../../store/ApplicationStore';
 import { useQueryHandler } from '../../hooks/useQueryHandler';
 
 type LoginState = {
@@ -25,7 +24,6 @@ const INITIAL_STATE: LoginState = {
 export const useLoginUseCase = () => {
   const SessionStore = useSessionStore();
   const ActiveDomainStore = useActiveDomainStore();
-  const ApplicationStore = useApplicationStore();
 
   const [state, setState] = useState({ ...INITIAL_STATE });
 
