@@ -165,6 +165,7 @@ export const StyledPanel = styled.div<ToggableProps>`
   font: ${({ theme }) => theme.fontStyles.normal};
   height: calc(100% - 58px);
   justify-content: flex-start;
+  overflow-y: auto;
   padding: ${({ theme }) => `0 ${theme.spacing.small}`};
   position: fixed;
   transform: ${({ open }) => (open ? 'translateX(0)' : 'translateX(-100%)')};
