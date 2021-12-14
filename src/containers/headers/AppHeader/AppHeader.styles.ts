@@ -173,12 +173,17 @@ export const StyledPanel = styled.div<ToggableProps>`
   transform: ${({ open }) => (open ? 'translateX(0)' : 'translateX(-100%)')};
   transition: transform 0.25s ease-out;
   top: 58px;
-  width: auto;
+  width: 100vw;
   z-index: -1;
+
+  @media all and (min-width: 768px) {
+    width: auto;
+  }
 `;
 
 export const StyledSubNav = styled(Nav)<StyledSubNavProps>`
   height: auto;
+  overflow-x: hidden;
 
   .ms-Nav-groupContent {
     margin: 0;
