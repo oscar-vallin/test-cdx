@@ -21,10 +21,21 @@ export const useLogoutUseCase = () => {
   const [state, setState] = useState({ ...INITIAL_STATE });
   const { setCSRFToken, setAuthToken } = useCSRFToken();
 
-  const [logoutUser, { data: logoutStatus, loading: isLoggingOut, error: logoutError }] = useLogOutMutation();
-  const clearCSRFToken = () => {
+  const [apiCall, { loading: isLoggingOut, error: logoutError }] = useLogOutMutation();
+
+  const clearTokens = () => {
+    SessionStore.setCurrentSession({ token: null });
     setCSRFToken('');
     setAuthToken('');
+    setState({ ...INITIAL_STATE });
+  };
+
+  const logoutUser = () => {
+    apiCall()
+      .catch((reason: any) => {
+        // catch any error and just reset the tokens regardless
+      })
+      .finally(clearTokens);
   };
 
   useEffect(() => {
@@ -36,14 +47,6 @@ export const useLogoutUseCase = () => {
       setState({ ...state, loading: false, error: 'An error occurred while ending your session. Please, try again.' });
     }
   }, [logoutError]);
-
-  useEffect(() => {
-    if (logoutStatus?.logOut?.successful) {
-      SessionStore.setCurrentSession({ token: null });
-      clearCSRFToken();
-      setState({ ...INITIAL_STATE });
-    }
-  }, [logoutStatus]);
 
   return { performUserLogout: logoutUser, state };
 };
