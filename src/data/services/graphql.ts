@@ -592,6 +592,24 @@ export type ListPageInfo = {
   listItemBulkCommands?: Maybe<Array<Maybe<WebCommand>>>;
 };
 
+export enum LogLevel {
+  Trace = 'TRACE',
+  Debug = 'DEBUG',
+  Info = 'INFO',
+  Warn = 'WARN',
+  Error = 'ERROR',
+  Fatal = 'FATAL'
+}
+
+export type LogMessage = {
+  __typename?: 'LogMessage';
+  timeStamp: Scalars['DateTime'];
+  severity: LogLevel;
+  name: Scalars['String'];
+  body?: Maybe<Scalars['String']>;
+  attributes?: Maybe<Array<Maybe<Nvp>>>;
+};
+
 export type LogOutInfo = {
   __typename?: 'LogOutInfo';
   successful: Scalars['Boolean'];
@@ -661,6 +679,7 @@ export type Mutation = {
   setOwnDashThemeFontSize?: Maybe<DashTheme>;
   updatePasswordRules?: Maybe<PasswordRulesForm>;
   implementationDeploy?: Maybe<ImplementationDeployResponse>;
+  ftpTestM?: Maybe<SftpConfigSubscriptionResponse>;
 };
 
 
@@ -828,6 +847,12 @@ export type MutationSetOwnDashThemeFontSizeArgs = {
 
 export type MutationUpdatePasswordRulesArgs = {
   passwordRulesInput?: Maybe<PasswordRulesInput>;
+};
+
+
+export type MutationFtpTestMArgs = {
+  xpsftp: XsftpInput;
+  genTestFile?: Maybe<SftpTestGenerateTestFile>;
 };
 
 export type Nvp = NvpStr | NvpId;
@@ -1211,6 +1236,7 @@ export type Query = {
    * Returns information as to which rules specifically pass and do not pass.
    */
   passwordValidation?: Maybe<PasswordValidation>;
+  xpsftpTest?: Maybe<XpsftpTestPage>;
 };
 
 
@@ -1497,6 +1523,11 @@ export type QueryPasswordValidationArgs = {
   password: Scalars['String'];
 };
 
+
+export type QueryXpsftpTestArgs = {
+  orgSid?: Maybe<Scalars['ID']>;
+};
+
 export type RecordCount = {
   __typename?: 'RecordCount';
   name: Scalars['String'];
@@ -1596,6 +1627,31 @@ export enum RestartReason {
   External = 'EXTERNAL'
 }
 
+export type SftpConfigSubscriptionResponse = {
+  __typename?: 'SFTPConfigSubscriptionResponse';
+  status: WorkStatus;
+  logMessage: LogMessage;
+  allMessages?: Maybe<Array<Maybe<LogMessage>>>;
+  clientProfileSnippet?: Maybe<Scalars['String']>;
+  csvLog?: Maybe<Scalars['String']>;
+  xpSFTPForm?: Maybe<XpsftpForm>;
+  genTestFileForm?: Maybe<SftpTestGenerateTestFileForm>;
+  includeFileUpload?: Maybe<Scalars['Boolean']>;
+};
+
+export type SftpTestGenerateTestFile = {
+  generate: Scalars['Boolean'];
+  fileName?: Maybe<Scalars['String']>;
+  fileBody?: Maybe<Scalars['String']>;
+};
+
+export type SftpTestGenerateTestFileForm = {
+  __typename?: 'SFTPTestGenerateTestFileForm';
+  generate?: Maybe<UiBooleanField>;
+  fileName?: Maybe<UiStringField>;
+  fileBody?: Maybe<UiStringField>;
+};
+
 export enum SchedOccurStatusEnum {
   Scheduled = 'SCHEDULED',
   InRunWindow = 'IN_RUN_WINDOW',
@@ -1691,6 +1747,17 @@ export type StatInt = {
   __typename?: 'StatInt';
   prior?: Maybe<Scalars['Int']>;
   value?: Maybe<Scalars['Int']>;
+};
+
+export type Subscription = {
+  __typename?: 'Subscription';
+  ftpTest?: Maybe<SftpConfigSubscriptionResponse>;
+};
+
+
+export type SubscriptionFtpTestArgs = {
+  xpsftp: XsftpInput;
+  genTestFile?: Maybe<SftpTestGenerateTestFile>;
 };
 
 export enum ThemeColorMode {
@@ -1988,9 +2055,10 @@ export type UserAccountAuditLog = {
   auditDateTime: Scalars['DateTime'];
   event: UserAccountAuditEvent;
   orgSid: Scalars['ID'];
-  userAccount?: Maybe<UserAccount>;
+  userAccount: UserAccount;
   oldValue?: Maybe<Scalars['String']>;
   newValue?: Maybe<Scalars['String']>;
+  changedByUserAccount?: Maybe<UserAccount>;
 };
 
 export type UserAccountForm = {
@@ -2239,6 +2307,36 @@ export type WorkStepStatus = {
   recordCounts?: Maybe<RecordCounts>;
   stepFile?: Maybe<Array<Maybe<ArchiveFileType>>>;
   nvp?: Maybe<Array<Maybe<NvpStr>>>;
+};
+
+export type XpsftpForm = {
+  __typename?: 'XPSFTPForm';
+  host?: Maybe<UiStringField>;
+  port?: Maybe<UiIntField>;
+  user?: Maybe<UiStringField>;
+  password?: Maybe<UiStringField>;
+  folder?: Maybe<UiStringField>;
+  stepWise?: Maybe<UiBooleanField>;
+  response: GqOperationResponse;
+  errCode?: Maybe<Scalars['String']>;
+  errMsg?: Maybe<Scalars['String']>;
+  errSeverity?: Maybe<ErrorSeverity>;
+};
+
+export type XpsftpTestPage = {
+  __typename?: 'XPSFTPTestPage';
+  xpSFTPForm: XpsftpForm;
+  genTestFileForm?: Maybe<SftpTestGenerateTestFileForm>;
+  includeFileUpload?: Maybe<Scalars['Boolean']>;
+};
+
+export type XsftpInput = {
+  host: Scalars['String'];
+  port?: Maybe<Scalars['Int']>;
+  user: Scalars['String'];
+  password?: Maybe<Scalars['String']>;
+  folder?: Maybe<Scalars['String']>;
+  stepWise?: Maybe<Scalars['Boolean']>;
 };
 
 export type RecordCountsFragmentFragment = (
@@ -3033,7 +3131,14 @@ export type UserAccountAuditLogsQuery = (
     )>, nodes?: Maybe<Array<Maybe<(
       { __typename?: 'UserAccountAuditLog' }
       & Pick<UserAccountAuditLog, 'auditDateTime' | 'event' | 'orgSid' | 'oldValue' | 'newValue'>
-      & { userAccount?: Maybe<(
+      & { userAccount: (
+        { __typename?: 'UserAccount' }
+        & Pick<UserAccount, 'sid' | 'email'>
+        & { person?: Maybe<(
+          { __typename?: 'Person' }
+          & Pick<Person, 'sid' | 'firstNm' | 'lastNm'>
+        )> }
+      ), changedByUserAccount?: Maybe<(
         { __typename?: 'UserAccount' }
         & Pick<UserAccount, 'sid' | 'email'>
         & { person?: Maybe<(
@@ -4061,6 +4166,54 @@ export type PasswordValidationQuery = (
   )> }
 );
 
+export type XpsftpTestQueryVariables = Exact<{
+  orgSid?: Maybe<Scalars['ID']>;
+}>;
+
+
+export type XpsftpTestQuery = (
+  { __typename?: 'Query' }
+  & { xpsftpTest?: Maybe<(
+    { __typename?: 'XPSFTPTestPage' }
+    & Pick<XpsftpTestPage, 'includeFileUpload'>
+    & { xpSFTPForm: (
+      { __typename?: 'XPSFTPForm' }
+      & Pick<XpsftpForm, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { host?: Maybe<(
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, port?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, user?: Maybe<(
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, password?: Maybe<(
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, folder?: Maybe<(
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, stepWise?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )> }
+    ), genTestFileForm?: Maybe<(
+      { __typename?: 'SFTPTestGenerateTestFileForm' }
+      & { generate?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, fileName?: Maybe<(
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, fileBody?: Maybe<(
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )> }
+    )> }
+  )> }
+);
+
 export type PasswordLoginMutationVariables = Exact<{
   userId: Scalars['String'];
   password: Scalars['String'];
@@ -5011,6 +5164,75 @@ export type ImplementationDeployMutation = (
   & { implementationDeploy?: Maybe<(
     { __typename?: 'ImplementationDeployResponse' }
     & Pick<ImplementationDeployResponse, 'response' | 'timestamp' | 'references' | 'changes'>
+  )> }
+);
+
+export type FtpTestMMutationVariables = Exact<{
+  xpsftp: XsftpInput;
+  genTestFile?: Maybe<SftpTestGenerateTestFile>;
+}>;
+
+
+export type FtpTestMMutation = (
+  { __typename?: 'Mutation' }
+  & { ftpTestM?: Maybe<(
+    { __typename?: 'SFTPConfigSubscriptionResponse' }
+    & Pick<SftpConfigSubscriptionResponse, 'status' | 'clientProfileSnippet' | 'csvLog' | 'includeFileUpload'>
+    & { logMessage: (
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>>> }
+    ), allMessages?: Maybe<Array<Maybe<(
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>>> }
+    )>>>, xpSFTPForm?: Maybe<(
+      { __typename?: 'XPSFTPForm' }
+      & Pick<XpsftpForm, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { host?: Maybe<(
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, port?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, user?: Maybe<(
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, password?: Maybe<(
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, folder?: Maybe<(
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, stepWise?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )> }
+    )>, genTestFileForm?: Maybe<(
+      { __typename?: 'SFTPTestGenerateTestFileForm' }
+      & { generate?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, fileName?: Maybe<(
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, fileBody?: Maybe<(
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )> }
+    )> }
   )> }
 );
 
@@ -6601,6 +6823,15 @@ export const UserAccountAuditLogsDocument = gql`
       }
       oldValue
       newValue
+      changedByUserAccount {
+        sid
+        email
+        person {
+          sid
+          firstNm
+          lastNm
+        }
+      }
     }
   }
 }
@@ -9394,6 +9625,173 @@ export function usePasswordValidationLazyQuery(baseOptions?: Apollo.LazyQueryHoo
 export type PasswordValidationQueryHookResult = ReturnType<typeof usePasswordValidationQuery>;
 export type PasswordValidationLazyQueryHookResult = ReturnType<typeof usePasswordValidationLazyQuery>;
 export type PasswordValidationQueryResult = Apollo.QueryResult<PasswordValidationQuery, PasswordValidationQueryVariables>;
+export const XpsftpTestDocument = gql`
+    query XpsftpTest($orgSid: ID) {
+  xpsftpTest(orgSid: $orgSid) {
+    xpSFTPForm {
+      host {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      port {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      user {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      password {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      port {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      folder {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      stepWise {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      response
+      errCode
+      errMsg
+      errSeverity
+    }
+    genTestFileForm {
+      generate {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      fileName {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      fileBody {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+    }
+    includeFileUpload
+  }
+}
+    `;
+
+/**
+ * __useXpsftpTestQuery__
+ *
+ * To run a query within a React component, call `useXpsftpTestQuery` and pass it any options that fit your needs.
+ * When your component renders, `useXpsftpTestQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useXpsftpTestQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *   },
+ * });
+ */
+export function useXpsftpTestQuery(baseOptions?: Apollo.QueryHookOptions<XpsftpTestQuery, XpsftpTestQueryVariables>) {
+        return Apollo.useQuery<XpsftpTestQuery, XpsftpTestQueryVariables>(XpsftpTestDocument, baseOptions);
+      }
+export function useXpsftpTestLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<XpsftpTestQuery, XpsftpTestQueryVariables>) {
+          return Apollo.useLazyQuery<XpsftpTestQuery, XpsftpTestQueryVariables>(XpsftpTestDocument, baseOptions);
+        }
+export type XpsftpTestQueryHookResult = ReturnType<typeof useXpsftpTestQuery>;
+export type XpsftpTestLazyQueryHookResult = ReturnType<typeof useXpsftpTestLazyQuery>;
+export type XpsftpTestQueryResult = Apollo.QueryResult<XpsftpTestQuery, XpsftpTestQueryVariables>;
 export const PasswordLoginDocument = gql`
     mutation PasswordLogin($userId: String!, $password: String!) {
   passwordLogin(userId: $userId, password: $password) {
@@ -12245,3 +12643,191 @@ export function useImplementationDeployMutation(baseOptions?: Apollo.MutationHoo
 export type ImplementationDeployMutationHookResult = ReturnType<typeof useImplementationDeployMutation>;
 export type ImplementationDeployMutationResult = Apollo.MutationResult<ImplementationDeployMutation>;
 export type ImplementationDeployMutationOptions = Apollo.BaseMutationOptions<ImplementationDeployMutation, ImplementationDeployMutationVariables>;
+export const FtpTestMDocument = gql`
+    mutation FtpTestM($xpsftp: XSFTPInput!, $genTestFile: SFTPTestGenerateTestFile) {
+  ftpTestM(xpsftp: $xpsftp, genTestFile: $genTestFile) {
+    status
+    logMessage {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
+      }
+    }
+    allMessages {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
+      }
+    }
+    clientProfileSnippet
+    csvLog
+    xpSFTPForm {
+      host {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      port {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      user {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      password {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      port {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      folder {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      stepWise {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      response
+      errCode
+      errMsg
+      errSeverity
+    }
+    genTestFileForm {
+      generate {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      fileName {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      fileBody {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+    }
+    includeFileUpload
+  }
+}
+    ${UnionNvpFragmentDoc}`;
+export type FtpTestMMutationFn = Apollo.MutationFunction<FtpTestMMutation, FtpTestMMutationVariables>;
+
+/**
+ * __useFtpTestMMutation__
+ *
+ * To run a mutation, you first call `useFtpTestMMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useFtpTestMMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [ftpTestMMutation, { data, loading, error }] = useFtpTestMMutation({
+ *   variables: {
+ *      xpsftp: // value for 'xpsftp'
+ *      genTestFile: // value for 'genTestFile'
+ *   },
+ * });
+ */
+export function useFtpTestMMutation(baseOptions?: Apollo.MutationHookOptions<FtpTestMMutation, FtpTestMMutationVariables>) {
+        return Apollo.useMutation<FtpTestMMutation, FtpTestMMutationVariables>(FtpTestMDocument, baseOptions);
+      }
+export type FtpTestMMutationHookResult = ReturnType<typeof useFtpTestMMutation>;
+export type FtpTestMMutationResult = Apollo.MutationResult<FtpTestMMutation>;
+export type FtpTestMMutationOptions = Apollo.BaseMutationOptions<FtpTestMMutation, FtpTestMMutationVariables>;
