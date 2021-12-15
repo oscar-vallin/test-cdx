@@ -18,10 +18,12 @@ type FormLabelProps = {
   arial?: string;
 } & typeof defaultProps;
 
-const FormLabel = ({ id, label, required, info, iconName, arial }: FormLabelProps): ReactElement => {
+const FormLabel = ({ id, label, required, info, iconName, arial, ...props }: FormLabelProps): ReactElement => {
   return (
     <LabelTooltip id={id}>
-      <Label id={id ? `${id}-Label` : undefined}>{label}</Label>
+      <Label {...props} id={id ? `${id}-Label` : undefined}>
+        {label}
+      </Label>
       {required && <Required id={id ? `${id}-Required` : undefined}>&nbsp;*</Required>}
       {info && (
         <TooltipHost id={id ? `${id}-TooltipHost` : undefined} content={info}>

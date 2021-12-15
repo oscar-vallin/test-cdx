@@ -6,6 +6,7 @@ import { shallow, mount } from 'enzyme';
 import { fireEvent, render, screen } from '@testing-library/react';
 //
 import { InputText as Component } from './index';
+import { mountWithTheme } from 'src/utils/testUtils';
 
 const placeholderText = 'This is a placeholder';
 
@@ -21,6 +22,11 @@ const defaultProps = {
   onKeyDown: null,
   onKeyEnter: null,
   value: '',
+};
+
+const defaultTestProps = {
+  ...defaultProps,
+  info: jest.fn(),
 };
 
 test('Matches Snapshot', () => {
@@ -106,16 +112,15 @@ describe('Basic Input Component', () => {
   it('@Testing: Check call function when key press', () => {
     const mockFn = jest.fn();
 
-    render(
-      <Component
-        {...defaultProps}
-        placeholder={placeholderText}
-        // onKeyDown={(key) => mockFn(key)}
-        // onKeyEnter={mockFn2}
-      />
-    );
+    render(<Component {...defaultProps} placeholder={placeholderText} />);
     const input = screen.getByRole('textbox');
     fireEvent.keyDown(input);
     expect(mockFn).not.toHaveBeenCalled();
+  });
+
+  it('Should send the property info to the component', () => {
+    const mockFn = jest.fn();
+    const tree = mountWithTheme(<Component {...defaultTestProps} info="Tooltip info"></Component>);
+    expect(tree).toMatchSnapshot();
   });
 });

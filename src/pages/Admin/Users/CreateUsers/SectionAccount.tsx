@@ -15,7 +15,7 @@ const defaultProps = {
 const SectionAccount = ({ form, data, onNext }) => {
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
 
-  const { firstNm, lastNm } = form?.person;
+  const { firstNm, lastNm } = form?.person ?? {};
   const { email } = form;
   const { organization } = form;
 
@@ -53,7 +53,7 @@ const SectionAccount = ({ form, data, onNext }) => {
     <>
       <Spacing margin={{ top: 'normal' }} />
       <Row bottom>
-        {firstNm.visible && (
+        {firstNm?.visible && (
           <Column lg={lastNm.visible ? '6' : '12'}>
             <InputText
               {...data.firstName}
@@ -67,7 +67,7 @@ const SectionAccount = ({ form, data, onNext }) => {
             />
           </Column>
         )}
-        {lastNm.visible && (
+        {lastNm?.visible && (
           <Column lg={firstNm.visible ? '6' : '12'}>
             <InputText
               {...data.lastName}
@@ -82,7 +82,7 @@ const SectionAccount = ({ form, data, onNext }) => {
         )}
       </Row>
       <Row bottom>
-        {email.visible && (
+        {email?.visible && (
           <Column lg="12">
             <InputText
               {...data.email}
@@ -103,7 +103,7 @@ const SectionAccount = ({ form, data, onNext }) => {
       </Row>
 
       <Row bottom>
-        <Column lg="12">Primary Organization</Column>
+        <Column lg="12">{organization.value}</Column>
       </Row>
 
       <CreateUsersFooter onNext={handleNext} errorMessage={errorMessage} />
