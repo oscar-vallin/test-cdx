@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 export const LabelTooltip = styled(Row)`
   margin: 0;
-  padding: 5px 0;
+  padding: 5px 0 5px 8px;
   align-items: center;
 `;
 

@@ -1,9 +1,17 @@
+import { ReactElement } from 'react';
 import { Button } from 'src/components/buttons';
 import { Row, Column } from 'src/components/layouts';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { Text } from 'src/components/typography/Text';
 
-const CreateUsersFooter = (onNext, onPrev, onSubmit, errorMessage) => {
+type CreateUsersFooterProps = {
+  onNext?: () => null;
+  onPrev?: () => null;
+  onSubmit?: () => null;
+  errorMessage?: string;
+};
+
+const CreateUsersFooter = ({ onNext, onPrev, onSubmit, errorMessage }: CreateUsersFooterProps): ReactElement => {
   return (
     <>
       <Spacing margin={{ top: 'double' }} />
@@ -27,7 +35,7 @@ const CreateUsersFooter = (onNext, onPrev, onSubmit, errorMessage) => {
             )}
             {onSubmit && (
               <Column lg="3">
-                <Button onClick={onNext} variant="primary">
+                <Button onClick={onSubmit} variant="primary">
                   Finish and Create User
                 </Button>
               </Column>

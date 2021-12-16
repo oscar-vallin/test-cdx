@@ -91,7 +91,7 @@ const SectionAccount = ({ form, data, onNext }) => {
               maxLength={email.max}
               required={email.required}
               disabled={email.readOnly}
-              info={lastNm.info}
+              info={email.info}
             />
           </Column>
         )}
@@ -103,7 +103,7 @@ const SectionAccount = ({ form, data, onNext }) => {
       </Row>
 
       <Row bottom>
-        <Column lg="12">{organization.value}</Column>
+        <Column lg="12">{organization.description}</Column>
       </Row>
 
       <CreateUsersFooter onNext={handleNext} errorMessage={errorMessage} />
