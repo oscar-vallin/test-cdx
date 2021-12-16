@@ -39,7 +39,7 @@ export const useTableFilters = (searchTextPlaceholder) => {
   const startDate = useDateValue('Start Date...', deriveStartDate());
   const endDate = useDateValue('End Date...', deriveEndDate());
 
-  const searchText = useDelayedInputValue('', searchTextPlaceholder, urlParams.get('filter'), '');
+  const searchText = useDelayedInputValue('', searchTextPlaceholder, urlParams.get('filter') || '', '');
 
   const _addParamIfExists = (key, value) => (key ? { [key]: value } : {});
 
