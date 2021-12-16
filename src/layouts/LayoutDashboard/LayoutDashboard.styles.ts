@@ -4,8 +4,10 @@ import { Box } from '../../components/layouts/Box';
 export const BoxStyled = styled(Box)`
   background: ${({ theme }) => theme.colors.white};
   color: ${({ theme }) => theme.colors.black};
+  height: 100vh;
+  overflow: auto;
+  padding: 58px 0 0;
   width: 100vw;
-  min-height: 100vh;
 
   [data-icon-name='FilterSolid'] {
     margin: 3px 10px 0 0;

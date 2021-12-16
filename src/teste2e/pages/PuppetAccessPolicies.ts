@@ -29,6 +29,26 @@ export default class PuppetActiveOrgs extends PuppetBasePage {
     await this.page.click(selector);
   }
 
+  async clickOnPolicyTemplate(name: string) {
+    const nameInputSelector = '#PolicyInput__Name';
+    const createBtnSelector = '#__CreatePoliciesPanelId';
+
+    const button = await this.page.$x(`//button[@class='ms-ContextualMenu-link']/span[contains(., '${name}')]`);
+
+    button[0].click();
+
+    await this.page.waitForTimeout(1000);
+    await this.page.waitForSelector(nameInputSelector);
+
+    const checkbox = await this.page.$x(`//input[@id='checkbox-2545']`);
+
+    expect(checkbox[0]).toBeChecked();
+
+    await this.inputValue(nameInputSelector, 'CDX E2E Template');
+
+    await this.page.click(createBtnSelector);
+  }
+
   async expectPolicyTemplates() {
     await this.page.waitForTimeout(2000);
 
@@ -50,6 +70,17 @@ export default class PuppetActiveOrgs extends PuppetBasePage {
 
     await this.page.waitForSelector(nameInputSelector);
     await this.inputValue(nameInputSelector, 'CDX E2E Policy');
+
+    await this.page.click(createBtnSelector);
+  }
+
+  async createPolicyFromTemplate() {
+    const nameInputSelector = '#PolicyInput__Name';
+    const createBtnSelector = '#__CreatePoliciesPanelId';
+
+    await this.clickOnPolicyTemplate('Exchange Administrator');
+
+    await this.inputValue(nameInputSelector, 'CDX E2E Template');
 
     await this.page.click(createBtnSelector);
   }

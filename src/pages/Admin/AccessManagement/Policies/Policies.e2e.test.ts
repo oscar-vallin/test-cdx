@@ -58,6 +58,13 @@ describe('E2E - Access Policies Test', () => {
       const accessPolicies = new PuppetAccessPolicies(cdxApp.page);
       await accessPolicies.deletePolicy('CDX_E2E_Test');
     });
+
+    // it('Create policy from template', async () => {
+    //   const selector = '#__CDX_E2E_Policy';
+    //   const accessPolicies = new PuppetAccessPolicies(cdxApp.page);
+    //   await accessPolicies.createPolicyFromTemplate();
+    //   await accessPolicies.expectTextOnPage(selector, 'CDX E2E Template');
+    // });
   });
 
   afterAll(async () => {

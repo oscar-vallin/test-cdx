@@ -44,6 +44,9 @@ export const StyledHeader = styled.header`
   color: ${({ theme }) => theme.colors.white};
   display: flex;
   font: ${({ theme }) => theme.fontStyles.normal};
+  left: 0;
+  position: fixed;
+  top: 0;
   white-space: nowrap;
   width: 100vw;
 `;
@@ -165,6 +168,7 @@ export const StyledPanel = styled.div<ToggableProps>`
   font: ${({ theme }) => theme.fontStyles.normal};
   height: calc(100% - 58px);
   justify-content: flex-start;
+  left: 0;
   overflow-y: auto;
   padding: ${({ theme }) => `0 ${theme.spacing.small}`};
   position: fixed;
