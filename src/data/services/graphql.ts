@@ -2111,9 +2111,9 @@ export type UserItem = {
 export type UserSession = {
   __typename?: 'UserSession';
   id: Scalars['ID'];
-  /** orgId is deprecated prefer orgSid instead */
-  orgId?: Maybe<Scalars['ID']>;
+  orgId: Scalars['String'];
   orgSid: Scalars['ID'];
+  orgName: Scalars['String'];
   userId: Scalars['String'];
   firstNm: Scalars['String'];
   pollInterval?: Maybe<Scalars['Int']>;
@@ -2938,7 +2938,7 @@ export type CurrentUserQuery = (
       & Pick<TokenUser, 'token'>
       & { session?: Maybe<(
         { __typename?: 'UserSession' }
-        & Pick<UserSession, 'id' | 'orgId' | 'orgSid' | 'userId' | 'firstNm' | 'pollInterval' | 'defaultAuthorities'>
+        & Pick<UserSession, 'id' | 'orgId' | 'orgSid' | 'orgName' | 'userId' | 'firstNm' | 'pollInterval' | 'defaultAuthorities'>
       )> }
     )> }
   )> }
@@ -4241,7 +4241,7 @@ export type PasswordLoginMutation = (
       & Pick<TokenUser, 'token'>
       & { session?: Maybe<(
         { __typename?: 'UserSession' }
-        & Pick<UserSession, 'id' | 'orgId' | 'orgSid' | 'userId' | 'firstNm' | 'pollInterval' | 'defaultAuthorities'>
+        & Pick<UserSession, 'id' | 'orgId' | 'orgSid' | 'orgName' | 'userId' | 'firstNm' | 'pollInterval' | 'defaultAuthorities'>
       )> }
     )> }
   )> }
@@ -4267,7 +4267,7 @@ export type UpdateOwnPasswordMutation = (
   { __typename?: 'Mutation' }
   & { updateOwnPassword?: Maybe<(
     { __typename?: 'UserSession' }
-    & Pick<UserSession, 'id' | 'orgId' | 'orgSid' | 'userId' | 'firstNm' | 'pollInterval' | 'defaultAuthorities'>
+    & Pick<UserSession, 'id' | 'orgId' | 'orgSid' | 'orgName' | 'userId' | 'firstNm' | 'pollInterval' | 'defaultAuthorities'>
   )> }
 );
 
@@ -6335,6 +6335,7 @@ export const CurrentUserDocument = gql`
         id
         orgId
         orgSid
+        orgName
         userId
         firstNm
         pollInterval
@@ -9814,6 +9815,7 @@ export const PasswordLoginDocument = gql`
         id
         orgId
         orgSid
+        orgName
         userId
         firstNm
         pollInterval
@@ -9886,6 +9888,7 @@ export const UpdateOwnPasswordDocument = gql`
     id
     orgId
     orgSid
+    orgName
     userId
     firstNm
     pollInterval
