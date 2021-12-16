@@ -92,7 +92,13 @@ const TablesCurrentActivity = ({ id = 'TableCurrentActivity' }) => {
       <TableContainer>
         <Row>
           <Column lg="6">
-            <TableActivity id="__Table__In__Process" tableName="In Process" items={inProcessItems} loading={false} />
+            <TableActivity
+              id="__Table__In__Process"
+              tableName="In Process"
+              items={inProcessItems}
+              loading={false}
+              emptyMessage="There are no clients with files In Process in this date range"
+            />
           </Column>
           <Column lg="6">
             <TableActivity
@@ -101,6 +107,7 @@ const TablesCurrentActivity = ({ id = 'TableCurrentActivity' }) => {
               color="complete"
               items={completedItems}
               loading={false}
+              emptyMessage="There are no clients with Completed files in this date range"
             />
           </Column>
         </Row>
@@ -112,6 +119,7 @@ const TablesCurrentActivity = ({ id = 'TableCurrentActivity' }) => {
               color="error"
               items={erroredItems}
               loading={false}
+              emptyMessage="There are no clients with files in Error in this date range"
             />
           </Column>
         </Row>

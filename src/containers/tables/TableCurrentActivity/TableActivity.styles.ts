@@ -42,6 +42,13 @@ export const TableName = styled(Text)<StyledTableProps>`
   padding-left: 12px;
 `;
 
+export const EmptyMessage = styled(Text)`
+  padding-left: 12px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  color: ${({ theme }) => theme.colors.neutralTertiaryAlt};
+`;
+
 export const TableWrap = styled(LayoutRow)`
   margin-top: 15px;
 `;

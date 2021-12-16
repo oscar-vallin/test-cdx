@@ -3,7 +3,7 @@ import { IColumn, DetailsList, DetailsListLayoutMode, SelectionMode } from 'offi
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { format } from 'date-fns';
 import { Column } from '../../../components/layouts';
-import { TableName, TableWrap } from './TableActivity.styles';
+import { TableName, TableWrap, EmptyMessage } from './TableActivity.styles';
 import { OrganizationLink } from '../../../data/services/graphql';
 
 const columns: IColumn[] = [
@@ -39,6 +39,7 @@ const defaultProps = {
   loading: false,
   tableName: '',
   color: '',
+  emptyMessage: '(None)',
 };
 
 type TableActivityProps = {
@@ -47,9 +48,10 @@ type TableActivityProps = {
   loading: boolean;
   tableName?: any;
   color?: any;
+  emptyMessage: string;
 } & typeof defaultProps;
 
-const TableActivity = ({ id, items, loading, tableName, color }: TableActivityProps): ReactElement => {
+const TableActivity = ({ id, items, loading, tableName, color, emptyMessage }: TableActivityProps): ReactElement => {
   return (
     <TableWrap id={id}>
       <Column>
@@ -59,13 +61,17 @@ const TableActivity = ({ id, items, loading, tableName, color }: TableActivityPr
       </Column>
       <Column>
         {!loading ? (
-          <DetailsList
-            items={items}
-            selectionMode={SelectionMode.none}
-            columns={columns}
-            layoutMode={DetailsListLayoutMode.justified}
-            isHeaderVisible
-          />
+          items.length > 0 ? (
+            <DetailsList
+              items={items}
+              selectionMode={SelectionMode.none}
+              columns={columns}
+              layoutMode={DetailsListLayoutMode.justified}
+              isHeaderVisible
+            />
+          ) : (
+            <EmptyMessage>{emptyMessage}</EmptyMessage>
+          )
         ) : (
           <Spinner label="Loading Activity" />
         )}
