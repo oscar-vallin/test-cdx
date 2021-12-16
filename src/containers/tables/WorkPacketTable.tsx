@@ -7,12 +7,9 @@ import {
 } from 'office-ui-fabric-react/lib-commonjs/DetailsList';
 import { mergeStyleSets } from 'office-ui-fabric-react/lib-commonjs/Styling';
 
-import { SpinnerSize } from '@fluentui/react';
-
-import { StyledContainer, StyledSpacing } from '../../components/tables/Table/Table.styles';
+import { StyledContainer } from '../../components/tables/Table/Table.styles';
 import { Box, Container } from './WorkPacketTable.styles';
 import { EmptyState } from '../states';
-import { Spinner } from '../../components/spinners/Spinner';
 import { TableFilters } from './TableFilters';
 import {
   NullHandling,
@@ -20,7 +17,6 @@ import {
   PaginationInfo,
   SortDirection,
   SortOrderInput,
-  WorkPacketStatus,
 } from '../../data/services/graphql';
 import { useWorkPacketColumns, WorkPacketColumns } from './WorkPacketColumns';
 import { useQueryHandler } from '../../hooks/useQueryHandler';
@@ -107,6 +103,7 @@ export const WorkPacketTable = ({
   const { initialColumns } = useWorkPacketColumns(cols, _doSort);
 
   const [columns, setColumns] = useState<IColumn[]>(initialColumns);
+  const [items, setItems] = useState<any[]>([]);
 
   useEffect(() => {
     // Reset the page number when any filtering occurs
@@ -133,6 +130,9 @@ export const WorkPacketTable = ({
       if (onItemsListChange) {
         onItemsListChange(data, loading);
       }
+      const transFormedItems = getItems(data);
+      setItems(transFormedItems);
+
       // update the paging info
       const pagingInfo = data?.workPacketStatuses?.paginationInfo;
       if (pagingInfo) {
@@ -156,16 +156,6 @@ export const WorkPacketTable = ({
     if (error) {
       return <span id="__spanError">Error: {error?.message || 'Something went wrong'}</span>;
     }
-
-    if (loading) {
-      return (
-        <StyledSpacing id="__StyledSpacingId" margin={{ top: 'double' }}>
-          <Spinner size={SpinnerSize.large} label="Loading data" />
-        </StyledSpacing>
-      );
-    }
-
-    const items: WorkPacketStatus[] = getItems(data);
 
     if (items && items.length > 0) {
       return (

@@ -13,18 +13,24 @@ export const useQueryHandler = (lazyQuery) => {
 
   useEffect(() => {
     if (error) {
-      const { message } = error;
-      const { extensions = null } = error?.graphQLErrors?.shift() || {};
+      if (error?.networkError?.statusCode == 403) {
+        Toast.error({ text: 'Your session has expired please login again.' });
 
-      if (extensions) {
-        if (extensions.errorSubType === 'NEED_AUTH') {
-          Toast.error({ text: message });
+        setTimeout(performUserLogout, 3000);
+      } else {
+        const { message } = error;
+        const { extensions = null } = error?.graphQLErrors?.shift() || {};
 
-          setTimeout(performUserLogout, 3000);
-        }
-      } else if (message === 'Failed to fetch') {
-        ApplicationStore.setIsOffline(true);
-      } // TODO: else add generic "unknown error" to the application store
+        if (extensions) {
+          if (extensions.errorSubType === 'NEED_AUTH') {
+            Toast.error({ text: message });
+
+            setTimeout(performUserLogout, 3000);
+          }
+        } else if (message === 'Failed to fetch') {
+          ApplicationStore.setIsOffline(true);
+        } // TODO: else add generic "unknown error" to the application store
+      }
     }
   }, [error]);
 

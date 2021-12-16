@@ -26,7 +26,7 @@ export const useCSRFToken = () => {
   const callCSRFController = () => {
     const currentToken = getCSRFToken() || '';
     if (currentToken.trim().length == 0) {
-      const authToken = SessionStore.user?.token || '';
+      const authToken = SessionStore.user?.token || getAuthToken() || '';
       const opts: RequestInit = {
         headers: { 'x-auth-token': authToken },
       };
