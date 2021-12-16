@@ -150,12 +150,7 @@ const AppHeader = ({
 
           <div className="HeaderBtnText">
             <div>
-              <h2 className="HeaderBtnText__title">
-                {ActiveDomainStore.domainOrg.current.label
-                  .split('')
-                  .filter((letter) => letter.match(/^[A-Z]*$/))
-                  .join('')}
-              </h2>
+              <h2 className="HeaderBtnText__title">{ActiveDomainStore.domainOrg.current.orgId}</h2>
 
               <small className="HeaderBtnText__description">{ActiveDomainStore.domainOrg.current.label}</small>
             </div>

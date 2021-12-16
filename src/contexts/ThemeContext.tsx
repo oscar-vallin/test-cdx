@@ -54,8 +54,7 @@ export const ThemeContextProvider = ({ children }) => {
     }
 
     body {
-      overflow-x: auto;
-      overflow-y: hidden;
+      overflow: auto;
     }
 
     [class*="ms-DetailsHeader"] {

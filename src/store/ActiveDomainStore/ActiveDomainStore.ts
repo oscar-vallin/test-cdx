@@ -9,6 +9,7 @@ export const INITIAL_NAV_STATE = {
 export const INITIAL_ORG_STATE = {
   type: 'DASHBOARD',
   orgSid: null,
+  orgId: '',
   destination: '',
   label: '',
   subNavItems: [],
