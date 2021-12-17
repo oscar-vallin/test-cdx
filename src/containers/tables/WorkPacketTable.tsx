@@ -23,6 +23,7 @@ import { useQueryHandler } from '../../hooks/useQueryHandler';
 import { useOrgSid } from '../../hooks/useOrgSid';
 import { useTableFilters } from '../../hooks/useTableFilters';
 import { Paginator } from '../../components/tables/Paginator';
+import { ErrorHandler } from '../../utils/ErrorHandler';
 
 type WorkPacketParams = {
   id: string;
@@ -46,6 +47,7 @@ export const WorkPacketTable = ({
   onItemsListChange,
 }: WorkPacketParams) => {
   const { orgSid } = useOrgSid();
+  const handleError = ErrorHandler();
 
   const { searchText, startDate, endDate } = useTableFilters(searchTextPlaceholder);
 
@@ -66,7 +68,7 @@ export const WorkPacketTable = ({
 
   const [apiCall, { data, loading, error }] = useQueryHandler(lazyQuery);
 
-  const { data: pollingData } = pollingQuery
+  const { data: pollingData, error: pollingError } = pollingQuery
     ? pollingQuery({
         variables: {
           orgSid,
@@ -162,6 +164,10 @@ export const WorkPacketTable = ({
       setLastUpdated(new Date());
     }
   }, [pollingData]);
+
+  useEffect(() => {
+    handleError(pollingError);
+  }, [pollingError]);
 
   const renderTable = () => {
     const classNames = mergeStyleSets({
