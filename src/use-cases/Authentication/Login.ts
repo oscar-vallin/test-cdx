@@ -92,7 +92,8 @@ export const useLoginUseCase = () => {
         type: passwordLogin?.loginCompleteDomain?.type,
         orgSid: passwordLogin?.tokenUser?.session?.orgSid,
         destination: passwordLogin?.loginCompleteDomain?.selectedPage,
-        label: '',
+        label: passwordLogin?.tokenUser?.session?.orgName,
+        orgId: passwordLogin?.tokenUser?.session?.orgId,
         subNavItems: [],
       };
 
