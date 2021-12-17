@@ -21,6 +21,7 @@ import {
   StyledPanel,
   StyledHeader,
   StyledSubNav,
+  StyledMenuItem,
 } from './AppHeader.styles';
 
 const defaultProps = {
@@ -174,7 +175,14 @@ const AppHeader = ({
             id="__ProfileMenu_Font_Buttons"
             iconProps={{ iconName: 'Font' }}
             title="Font sizes"
-            menuProps={{ items: settingsMenu }}
+            menuProps={{
+              items: settingsMenu,
+              contextualMenuItemAs: (props) => (
+                <StyledMenuItem selected={ThemeStore.themes.user.themeFontSize === props.item.key}>
+                  {props.item.text}
+                </StyledMenuItem>
+              ),
+            }}
           />
 
           <ProfileMenu

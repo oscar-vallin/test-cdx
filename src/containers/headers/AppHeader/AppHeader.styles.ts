@@ -9,7 +9,7 @@ import { Nav } from 'office-ui-fabric-react/lib/Nav';
 interface ToggableProps {
   open?: boolean;
 }
-interface StyledNavButtonProps {
+interface SelectableProps {
   selected?: boolean;
 }
 
@@ -106,7 +106,7 @@ export const StyledNav = styled.nav`
   }
 `;
 
-export const StyledNavButton = styled.button<StyledNavButtonProps>`
+export const StyledNavButton = styled.button<SelectableProps>`
   align-items: center;
   background: none;
   border: none;
@@ -158,6 +158,11 @@ export const StyledDiv = styled.div`
   justify-content: flex-end;
   padding: ${({ theme }) => `0 ${theme.spacing.normal} 0 0`};
   width: 100%;
+`;
+
+export const StyledMenuItem = styled.div<SelectableProps>`
+  color: ${({ selected, theme }) => (selected ? theme.colors.themePrimary : theme.colors.black)};
+  font-weight: ${({ selected }) => (selected ? '700' : '400')};
 `;
 
 export const StyledPanel = styled.div<ToggableProps>`
