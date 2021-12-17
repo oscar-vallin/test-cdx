@@ -16119,6 +16119,18 @@
             "deprecationReason": null
           },
           {
+            "name": "lastLogin",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "UIReadOnlyField",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "response",
             "description": null,
             "args": [],

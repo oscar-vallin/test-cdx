@@ -2079,6 +2079,7 @@ export type UserAccountForm = {
   person?: Maybe<PersonForm>;
   organization: UiReadOnlyField;
   accessPolicyGroups?: Maybe<UiSelectManyField>;
+  lastLogin?: Maybe<UiReadOnlyField>;
   response: GqOperationResponse;
   options?: Maybe<Array<Maybe<UiOptions>>>;
   errCode?: Maybe<Scalars['String']>;
@@ -3064,6 +3065,9 @@ export type UserAccountFormQuery = (
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
       )>>> }
+    )>, lastLogin?: Maybe<(
+      { __typename?: 'UIReadOnlyField' }
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
@@ -3111,6 +3115,9 @@ export type FindUserAccountQuery = (
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
       )>>> }
+    )>, lastLogin?: Maybe<(
+      { __typename?: 'UIReadOnlyField' }
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
@@ -4732,6 +4739,9 @@ export type CreateUserMutation = (
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
       )>>> }
+    )>, lastLogin?: Maybe<(
+      { __typename?: 'UIReadOnlyField' }
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
@@ -4779,6 +4789,9 @@ export type UpdateUserMutation = (
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
       )>>> }
+    )>, lastLogin?: Maybe<(
+      { __typename?: 'UIReadOnlyField' }
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
@@ -4826,6 +4839,9 @@ export type UpdateUserAccessPolicyGroupsMutation = (
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
       )>>> }
+    )>, lastLogin?: Maybe<(
+      { __typename?: 'UIReadOnlyField' }
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
@@ -6677,6 +6693,18 @@ export const UserAccountFormDocument = gql`
       errMsg
       errSeverity
     }
+    lastLogin {
+      value
+      description
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
     response
     options {
       key
@@ -6802,6 +6830,18 @@ export const FindUserAccountDocument = gql`
       visible
       options
       query
+      errCode
+      errMsg
+      errSeverity
+    }
+    lastLogin {
+      value
+      description
+      label
+      readOnly
+      info
+      required
+      visible
       errCode
       errMsg
       errSeverity
@@ -11144,6 +11184,18 @@ export const CreateUserDocument = gql`
       errMsg
       errSeverity
     }
+    lastLogin {
+      value
+      description
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
     response
     options {
       key
@@ -11269,6 +11321,18 @@ export const UpdateUserDocument = gql`
       visible
       options
       query
+      errCode
+      errMsg
+      errSeverity
+    }
+    lastLogin {
+      value
+      description
+      label
+      readOnly
+      info
+      required
+      visible
       errCode
       errMsg
       errSeverity
@@ -11399,6 +11463,18 @@ export const UpdateUserAccessPolicyGroupsDocument = gql`
       visible
       options
       query
+      errCode
+      errMsg
+      errSeverity
+    }
+    lastLogin {
+      value
+      description
+      label
+      readOnly
+      info
+      required
+      visible
       errCode
       errMsg
       errSeverity
