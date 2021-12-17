@@ -7,7 +7,12 @@ import { PageHeader } from '../../containers/headers/PageHeader';
 import { LayoutDashboard } from '../../layouts/LayoutDashboard';
 import { WorkPacketTable } from '../../containers/tables/WorkPacketTable';
 import { WorkPacketColumns } from '../../containers/tables/WorkPacketColumns';
-import { NullHandling, SortDirection, useWorkPacketStatusesLazyQuery } from '../../data/services/graphql';
+import {
+  NullHandling,
+  SortDirection,
+  useWorkPacketStatusesLazyQuery,
+  useWorkPacketStatusesPollQuery,
+} from '../../data/services/graphql';
 
 const _ArchivePage = () => {
   const [tableMeta, setTableMeta] = useState({ count: 0, loading: true });
@@ -55,6 +60,7 @@ id="__Archives_Title" title="Archives" subTitle="Advanced search" icon="FilterSo
           WorkPacketColumns.VENDOR_FILE,
         ]}
         lazyQuery={useWorkPacketStatusesLazyQuery}
+        pollingQuery={useWorkPacketStatusesPollQuery}
         getItems={mapData}
         searchTextPlaceholder="Extract Name, Status, Vendor, etc."
         defaultSort={[

@@ -1184,6 +1184,8 @@ export type Query = {
   workPacketStatusDetails?: Maybe<WorkPacketStatusDetails>;
   workPacketStatus?: Maybe<WorkPacketStatus>;
   workPacketStatuses?: Maybe<WorkPacketStatusConnection>;
+  /** Get the number of Work Packet Statuses which have been updated after the given last updated date time */
+  workPacketStatusesPoll?: Maybe<Scalars['Int']>;
   wpProcessErrors?: Maybe<WpProcessErrorConnection>;
   wpTransmissions?: Maybe<WpTransmissionConnection>;
   scheduleOccurrences?: Maybe<ScheduleOccurrenceConnection>;
@@ -1291,6 +1293,14 @@ export type QueryWorkPacketStatusesArgs = {
   searchText?: Maybe<Scalars['String']>;
   dateRange?: Maybe<DateTimeRangeInput>;
   pageableInput: PageableInput;
+};
+
+
+export type QueryWorkPacketStatusesPollArgs = {
+  orgSid: Scalars['ID'];
+  searchText?: Maybe<Scalars['String']>;
+  dateRange?: Maybe<DateTimeRangeInput>;
+  lastUpdated: Scalars['DateTime'];
 };
 
 
@@ -2735,6 +2745,19 @@ export type WorkPacketStatusesQuery = (
       & Pick<WorkPacketStatus, 'workOrderId' | 'timestamp' | 'planSponsorId' | 'orgId' | 'orgSid' | 'detailsPath' | 'subClientPath' | 'inboundFilename' | 'vendorId' | 'vendorSid' | 'step' | 'stepStatus' | 'packetStatus' | 'reprocessedBy' | 'restartReason' | 'recordHighlightCount' | 'populationCount' | 'recordHighlightType' | 'clientFileArchivePath' | 'vendorFileArchivePath' | 'feedType' | 'inboundDataType' | 'inboundDataSize' | 'version' | 'supplementalFilesArchivePaths' | 'archiveOnly' | 'hasErrors' | 'environment'>
     )>>> }
   )> }
+);
+
+export type WorkPacketStatusesPollQueryVariables = Exact<{
+  orgSid: Scalars['ID'];
+  searchText?: Maybe<Scalars['String']>;
+  dateRange?: Maybe<DateTimeRangeInput>;
+  lastUpdated: Scalars['DateTime'];
+}>;
+
+
+export type WorkPacketStatusesPollQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'workPacketStatusesPoll'>
 );
 
 export type WpProcessErrorsQueryVariables = Exact<{
@@ -5950,6 +5973,45 @@ export function useWorkPacketStatusesLazyQuery(baseOptions?: Apollo.LazyQueryHoo
 export type WorkPacketStatusesQueryHookResult = ReturnType<typeof useWorkPacketStatusesQuery>;
 export type WorkPacketStatusesLazyQueryHookResult = ReturnType<typeof useWorkPacketStatusesLazyQuery>;
 export type WorkPacketStatusesQueryResult = Apollo.QueryResult<WorkPacketStatusesQuery, WorkPacketStatusesQueryVariables>;
+export const WorkPacketStatusesPollDocument = gql`
+    query WorkPacketStatusesPoll($orgSid: ID!, $searchText: String, $dateRange: DateTimeRangeInput, $lastUpdated: DateTime!) {
+  workPacketStatusesPoll(
+    orgSid: $orgSid
+    searchText: $searchText
+    dateRange: $dateRange
+    lastUpdated: $lastUpdated
+  )
+}
+    `;
+
+/**
+ * __useWorkPacketStatusesPollQuery__
+ *
+ * To run a query within a React component, call `useWorkPacketStatusesPollQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWorkPacketStatusesPollQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useWorkPacketStatusesPollQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *      searchText: // value for 'searchText'
+ *      dateRange: // value for 'dateRange'
+ *      lastUpdated: // value for 'lastUpdated'
+ *   },
+ * });
+ */
+export function useWorkPacketStatusesPollQuery(baseOptions: Apollo.QueryHookOptions<WorkPacketStatusesPollQuery, WorkPacketStatusesPollQueryVariables>) {
+        return Apollo.useQuery<WorkPacketStatusesPollQuery, WorkPacketStatusesPollQueryVariables>(WorkPacketStatusesPollDocument, baseOptions);
+      }
+export function useWorkPacketStatusesPollLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WorkPacketStatusesPollQuery, WorkPacketStatusesPollQueryVariables>) {
+          return Apollo.useLazyQuery<WorkPacketStatusesPollQuery, WorkPacketStatusesPollQueryVariables>(WorkPacketStatusesPollDocument, baseOptions);
+        }
+export type WorkPacketStatusesPollQueryHookResult = ReturnType<typeof useWorkPacketStatusesPollQuery>;
+export type WorkPacketStatusesPollLazyQueryHookResult = ReturnType<typeof useWorkPacketStatusesPollLazyQuery>;
+export type WorkPacketStatusesPollQueryResult = Apollo.QueryResult<WorkPacketStatusesPollQuery, WorkPacketStatusesPollQueryVariables>;
 export const WpProcessErrorsDocument = gql`
     query WpProcessErrors($orgSid: ID!, $searchText: String, $dateRange: DateTimeRangeInput, $pageableInput: PageableInput) {
   wpProcessErrors(

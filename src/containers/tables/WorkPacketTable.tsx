@@ -28,6 +28,7 @@ type WorkPacketParams = {
   id: string;
   cols: WorkPacketColumns[];
   lazyQuery: any; // lazy query from the generated Apollo graphql.ts
+  pollingQuery?: any; // lazy query to poll if there are any changes
   getItems: (data: any) => any[];
   searchTextPlaceholder: string;
   defaultSort?: SortOrderInput[];
@@ -38,6 +39,7 @@ export const WorkPacketTable = ({
   id,
   cols,
   lazyQuery,
+  pollingQuery,
   getItems,
   searchTextPlaceholder,
   defaultSort,
@@ -60,7 +62,21 @@ export const WorkPacketTable = ({
     sort: defaultSort,
   });
 
+  const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+
   const [apiCall, { data, loading, error }] = useQueryHandler(lazyQuery);
+
+  const { data: pollingData } = pollingQuery
+    ? pollingQuery({
+        variables: {
+          orgSid,
+          searchText: searchText.delayedValue,
+          dateRange: { rangeStart: startDate.value, rangeEnd: endDate.value },
+          lastUpdated,
+        },
+        pollInterval: 20000,
+      })
+    : useState({});
 
   const _doSort = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
     const newColumns: IColumn[] = columns.slice();
@@ -123,7 +139,7 @@ export const WorkPacketTable = ({
         pageableInput: pagingParams,
       },
     });
-  }, [orgSid, pagingParams]);
+  }, [orgSid, pagingParams, lastUpdated]);
 
   useEffect(() => {
     if (!loading) {
@@ -140,6 +156,12 @@ export const WorkPacketTable = ({
       }
     }
   }, [data, loading]);
+
+  useEffect(() => {
+    if (pollingData && pollingData.workPacketStatusesPoll && pollingData.workPacketStatusesPoll > 0) {
+      setLastUpdated(new Date());
+    }
+  }, [pollingData]);
 
   const renderTable = () => {
     const classNames = mergeStyleSets({

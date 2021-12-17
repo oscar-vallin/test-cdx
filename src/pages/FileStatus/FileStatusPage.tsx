@@ -10,6 +10,7 @@ import {
   NullHandling,
   SortDirection,
   useWorkPacketStatusesLazyQuery,
+  useWorkPacketStatusesPollQuery,
   WorkPacketStatus,
 } from '../../data/services/graphql';
 import { WorkPacketColumns } from '../../containers/tables/WorkPacketColumns';
@@ -68,6 +69,7 @@ const _FileStatusPage = () => {
           WorkPacketColumns.PROGRESS,
         ]}
         lazyQuery={useWorkPacketStatusesLazyQuery}
+        pollingQuery={useWorkPacketStatusesPollQuery}
         getItems={mapData}
         searchTextPlaceholder="Extract Name, Status, Vendor, etc."
         defaultSort={[
