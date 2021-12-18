@@ -111,3 +111,21 @@ export const ContainerPagination = styled(CellItemRow)`
 export const StyledMenuIcon = styled(ButtonAction)`
   color: ${({ theme }) => theme.colors.black};
 `;
+
+export const StyledEmptyTable = styled.div`
+  font: ${({ theme }) => theme.fontStyles.normal};
+
+  .EmptyTable__title {
+    color: ${({ theme }) => theme.colors.themePrimary};
+    font-size: 1rem;
+    text-decoration: underline;
+    padding: 15px;
+    border-bottom: ${({ theme }) => `1px solid ${theme.colors.neutralLighter}`};
+  }
+
+  .EmptyTable__message {
+    font-weight: 700;
+    padding: 30px 0;
+    text-align: center;
+  }
+`;

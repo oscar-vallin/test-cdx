@@ -29,7 +29,7 @@ type CardDashboardProps = {
 const CardDashboard = ({ id, title, subtitle, value, total }: CardDashboardProps): ReactElement => {
   const isNotData = (total ?? 0) === 0;
 
-  return !isNotData ? (
+  return (
     <Card id={id} elevation="smallest">
       <Row>
         <Column>
@@ -42,14 +42,14 @@ const CardDashboard = ({ id, title, subtitle, value, total }: CardDashboardProps
                 </StyledTitle>
               </Spacing>
 
-              {(value ?? -1) >= 0 && (total ?? -1) > 0 && <StyledValues>{`${value}/${total}`}</StyledValues>}
+              <StyledValues>
+                {(value ?? -1) >= 0 && (total ?? -1) > 0 ? `${value}/${total}` : <small>None</small>}
+              </StyledValues>
             </Column>
           </Row>
         </Column>
       </Row>
     </Card>
-  ) : (
-    <Spacing margin={{ bottom: 'normal' }} />
   );
 };
 

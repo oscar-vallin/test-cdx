@@ -27,7 +27,7 @@ export const StyledValues = styled(Text)`
   &&& {
     text-align: left;
     color: ${({ theme }) => theme.colors.black};
-    font-size: 2.25rem;
+    font-size: 1.75rem;
     font-weight: 700;
   }
 `;

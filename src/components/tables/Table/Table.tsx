@@ -30,6 +30,7 @@ import {
   StyledMenuButton,
   StyledMenuIcon,
   StyledSpacing,
+  StyledEmptyTable,
 } from './Table.styles';
 
 import { TableHeader } from '../TableHeader';
@@ -565,8 +566,12 @@ const Table = ({
         />
       );
     }
-
-    return <EmptyState title={title} description={emptyMessage} />;
+    return (
+      <StyledEmptyTable>
+        <h1 className="EmptyTable__title">{title}</h1>
+        <div className="EmptyTable__message">{emptyMessage}</div>
+      </StyledEmptyTable>
+    );
   };
 
   //
