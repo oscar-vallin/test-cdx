@@ -64,6 +64,10 @@ const _DashboardPage = () => {
 
     if (date !== 'custom') {
       history.push(`?date=${date}`);
+    } else {
+      history.push(
+        `?startDate=${dateRange.startDate?.toISOString()}&endDate=${dateRange.endDate?.toISOString()}&orgSid=${orgSid}`
+      );
     }
   };
 
@@ -108,8 +112,7 @@ const _DashboardPage = () => {
             <Spacing margin={{ top: 'double' }}>
               <Row center>
                 <Column lg="6" direction="row">
-                  <PageTitle id="__Dashboard_Title" title="Dashboard" subTitle="Summary"
-                  />
+                  <PageTitle id="__Dashboard_Title" title="Dashboard" subTitle="Summary" />
                 </Column>
                 <Column lg="6" direction="row" right>
                   {renderDateButtons()}
@@ -125,6 +128,7 @@ const _DashboardPage = () => {
                     <Row right>
                       <Column lg="3" right>
                         <InputDate
+                          id="CustomFilter__StartDate"
                           value={dateRange.startDate}
                           onChange={(date) => setDateRange({ ...dateRange, startDate: date })}
                           required={false}
@@ -132,6 +136,7 @@ const _DashboardPage = () => {
                       </Column>
                       <Column lg="3" right>
                         <InputDate
+                          id="CustomFilter__EndDate"
                           value={dateRange.endDate}
                           onChange={(date) => setDateRange({ ...dateRange, endDate: date })}
                           required={false}

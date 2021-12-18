@@ -64,7 +64,7 @@ describe('E2E - Access Policies Test', () => {
       const accessPolicies = new PuppetAccessPolicies(cdxApp.page);
 
       await accessPolicies.createPolicyFromTemplate();
-      // await accessPolicies.expectTextOnPage(selector, 'CDX E2E Template');
+      await accessPolicies.expectTextOnPage(selector, 'CDX E2E Template');
     });
   });
 

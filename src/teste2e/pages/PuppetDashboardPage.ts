@@ -21,6 +21,8 @@ export default class PuppetDashboardPage extends PuppetBasePage {
 
   buttonLastMonth = '#__Button-lastMonth';
 
+  buttonCustom = '#__Button-custom';
+
   async expectOnPage() {
     await this.page.waitForSelector(this.transmissionBillingUnits);
     await this.page.waitForSelector(this.failedFilesBillingUnits);
@@ -88,5 +90,15 @@ export default class PuppetDashboardPage extends PuppetBasePage {
   async clickLastMonthFilter() {
     await this.page.waitForSelector(this.buttonLastMonth);
     await this.page.click(this.buttonLastMonth);
+  }
+
+  async clickCustomFilter() {
+    const DatePickerSelector = '#CustomFilter';
+
+    await this.page.waitForSelector(this.buttonCustom);
+    await this.page.click(this.buttonCustom);
+
+    await this.page.waitForSelector(`${DatePickerSelector}__StartDate`);
+    await this.page.waitForSelector(`${DatePickerSelector}__EndDate`);
   }
 }

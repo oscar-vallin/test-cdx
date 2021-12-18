@@ -103,6 +103,14 @@ describe('E2E Dashboard test', () => {
     expect(cdxApp.page.url()).toContain('?date=lastMonth');
   });
 
+  it('Click on Custom filter', async () => {
+    const page = new PuppetDashboardPage(cdxApp.page);
+    await page.clickCustomFilter();
+
+    expect(cdxApp.page.url()).toContain('?startDate=');
+    expect(cdxApp.page.url()).toContain('&endDate=');
+  });
+
   it('Check results in table with last month filter', async () => {
     const page = new PuppetDashboardPage(cdxApp.page);
     const firstCell = await page.getFirstTransmissionByVendorCell();
