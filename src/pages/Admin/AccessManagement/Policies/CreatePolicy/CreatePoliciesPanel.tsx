@@ -335,14 +335,14 @@ const CreatePoliciesPanel = ({
                                                 <Checkbox
                                                   label={option.label}
                                                   checked={state.permissions.includes(option.value)}
+                                                  id={option.value}
                                                   onChange={(event, checked) =>
                                                     setState({
                                                       ...state,
                                                       permissions: checked
                                                         ? [...state.permissions, option.value]
                                                         : state.permissions.filter((value) => value !== option.value),
-                                                    })
-                                                  }
+                                                    })}
                                                 />
                                               </Spacing>
                                             ))}

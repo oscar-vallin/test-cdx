@@ -29,31 +29,27 @@ export default class PuppetActiveOrgs extends PuppetBasePage {
     await this.page.click(selector);
   }
 
-  async clickOnPolicyTemplate(name: string) {
+  async clickOnPolicyTemplate() {
     const nameInputSelector = '#PolicyInput__Name';
-    const createBtnSelector = '#__CreatePoliciesPanelId';
 
-    const button = await this.page.$x(`//button[@class='ms-ContextualMenu-link']/span[contains(., '${name}')]`);
+    await this.page.waitForTimeout(2000);
 
-    button[0].click();
+    const dropdownBtnSelector = '#CreatePolicyButton + .ms-Button';
+    const dropdownItemSelector = '#PolicyTemplate__3';
 
-    await this.page.waitForTimeout(1000);
-    await this.page.waitForSelector(nameInputSelector);
+    await this.page.click(dropdownBtnSelector);
+    await this.page.waitForTimeout(2000);
 
-    const checkbox = await this.page.$x(`//input[@id='checkbox-2545']`);
+    await this.page.waitForSelector(dropdownItemSelector);
 
-    expect(checkbox[0]).toBeChecked();
-
-    await this.inputValue(nameInputSelector, 'CDX E2E Template');
-
-    await this.page.click(createBtnSelector);
+    await this.page.click(dropdownItemSelector);
   }
 
   async expectPolicyTemplates() {
     await this.page.waitForTimeout(2000);
 
     const dropdownBtnSelector = '#CreatePolicyButton + .ms-Button';
-    const dropdownItemSelector = '.ms-ContextualMenu-itemText';
+    const dropdownItemSelector = '#PolicyTemplate__3';
 
     await this.page.waitForSelector(dropdownBtnSelector);
     await this.page.click(dropdownBtnSelector);
@@ -78,8 +74,11 @@ export default class PuppetActiveOrgs extends PuppetBasePage {
     const nameInputSelector = '#PolicyInput__Name';
     const createBtnSelector = '#__CreatePoliciesPanelId';
 
-    await this.clickOnPolicyTemplate('Exchange Administrator');
+    await this.clickOnPolicyTemplate();
 
+    await this.page.waitForTimeout(2000);
+
+    await this.page.waitForSelector(nameInputSelector);
     await this.inputValue(nameInputSelector, 'CDX E2E Template');
 
     await this.page.click(createBtnSelector);

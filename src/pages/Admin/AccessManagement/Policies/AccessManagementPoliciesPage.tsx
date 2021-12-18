@@ -185,7 +185,14 @@ const _AccessManagementPoliciesPage = () => {
                     return null;
                   }}
                   {...(!isLoadingTemplatePolicies && templatePolicyMenu.length > 0
-                    ? { menuProps: { items: templatePolicyMenu } }
+                    ? {
+                        menuProps: {
+                          items: templatePolicyMenu,
+                          contextualMenuItemAs: (props) => (
+                            <div id={`PolicyTemplate__${props.item.key}`}>{props.item.text}</div>
+                          ),
+                        },
+                      }
                     : {})}
                 >
                   Create policy
@@ -214,7 +221,7 @@ const _AccessManagementPoliciesPage = () => {
                 <EmptyState
                   title="No policies found"
                   description="You haven't created an access policy yet. Click the button below to create a new policy."
-                  actions={(
+                  actions={
                     <Button
                       id="CreatePolicyButton"
                       variant="primary"
@@ -225,7 +232,7 @@ const _AccessManagementPoliciesPage = () => {
                     >
                       Create policy
                     </Button>
-                  )}
+                  }
                 />
               ) : (
                 <DetailsList

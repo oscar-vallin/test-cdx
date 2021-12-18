@@ -113,6 +113,7 @@ export const StyledNavButton = styled.button<SelectableProps>`
   color: ${({ theme }) => theme.colors.white};
   cursor: pointer;
   display: flex;
+  font-size: 0.875rem;
   font-weight: ${({ selected }) => (selected ? '600' : '400')};
   opacity: ${({ selected }) => (selected ? '1' : '.75')};
   padding: ${({ theme }) => `0 ${theme.spacing.normal}`};
