@@ -11,7 +11,7 @@ const defaultProps = {
   email: '',
 };
 
-const SectionAuthentication = (data, onNext) => {
+const SectionAuthentication = (data, onPrev, onNext) => {
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
 
   const handleNext = () => {
@@ -19,6 +19,8 @@ const SectionAuthentication = (data, onNext) => {
     else if (!data.lastName.value) setErrorMessage('Last name is required');
     else if (!data.email.value) setErrorMessage('Email is required');
     else onNext();
+
+    return null;
   };
 
   return (
@@ -29,6 +31,7 @@ const SectionAuthentication = (data, onNext) => {
           <InputText {...data.firstName} />
         </Column>
         <Column lg="12">
+          xw
           <InputText {...data.lastName} />
         </Column>
       </Row>
@@ -40,7 +43,7 @@ const SectionAuthentication = (data, onNext) => {
       <Row bottom>
         <Column lg="12">Primary Organization</Column>
       </Row>
-      <CreateUsersFooter onNext={handleNext} errorMessage={errorMessage} />
+      <CreateUsersFooter onPrev={onPrev} onNext={handleNext} errorMessage={errorMessage} />
     </>
   );
 };

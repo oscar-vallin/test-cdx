@@ -11,14 +11,19 @@ const defaultProps = {
   email: '',
 };
 
-const SectionAccessManagement = (data, onNext) => {
+const SectionAccessManagement = ({ form, data, onPrev, onNext }) => {
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
 
+  const handlePrev = () => {
+    onPrev();
+
+    return null;
+  };
+
   const handleNext = () => {
-    if (!data.firstName.value) setErrorMessage('First name is required');
-    else if (!data.lastName.value) setErrorMessage('Last name is required');
-    else if (!data.email.value) setErrorMessage('Email is required');
-    else onNext();
+    onNext();
+
+    return null;
   };
 
   return (
@@ -40,7 +45,7 @@ const SectionAccessManagement = (data, onNext) => {
       <Row bottom>
         <Column lg="12">Primary Organization</Column>
       </Row>
-      <CreateUsersFooter onNext={handleNext} errorMessage={errorMessage} />
+      <CreateUsersFooter onPrev={handlePrev} onNext={handleNext} errorMessage={errorMessage} />
     </>
   );
 };

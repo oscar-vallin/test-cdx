@@ -44,24 +44,46 @@ const enum Tab {
 const CreateUsersPanel = ({ orgSid, isOpen, onDismiss, onCreateUser }: CreateUsersPanelProps): ReactElement => {
   const CreateUserService = useCreateUsersPanel(orgSid);
 
-  const [step, setStep] = useState(0);
-  const [selectedTab, setSelectedTab] = useState(Tab.Account);
+  const [step, setStep] = useState(Tab.Account);
+  const [selectedTab, setSelectedTab] = useState(tabs[Tab.Account]);
   const { userAccountForm, userAccountLoading } = CreateUserService ?? {};
   // console.log('🚀 ~ file: CreateUsersPanel.tsx ~ line 46 ~ CreateUsersPanel ~ CreateUserService', CreateUserService);
   // console.log('🚀 ~ file: CreateUsersPanel.tsx ~ line 49 ~ CreateUsersPanel ~ userAccountForm', userAccountForm);
 
-  const handleCreateUser = (): void => {
+  useEffect(() => {
+    console.log('🚀 ~ file: CreateUsersPanel.tsx ~ line 55 ~ useEffect ~ step', step);
+    if (step >= 0 && step < 4) {
+      console.log('STEP IS IN RANGE');
+      console.log('STEP =', step.toString());
+      setSelectedTab(tabs[step]);
+    }
+  }, [step]);
+
+  const handleCreateUser = (): null => {
     CreateUserService.createUserCall();
     onCreateUser();
     onDismiss();
+    return null;
   };
 
-  const handleNext = (): void => {
+  const handleNext = (): null => {
+    console.log('createpanel handleNext');
+
     setStep(step + 1);
+    console.log('🚀 ~ file: CreateUsersPanel.tsx ~ line 64 ~ handleNext ~ step', step);
+    return null;
   };
 
-  const handlePrev = (): void => {
+  const handlePrev = (): null => {
+    console.log('createpanel handlePrev');
+
     setStep(step - 1);
+    return null;
+  };
+
+  const handleTabChange = (hash): void => {
+    setStep(tabs.indexOf(hash));
+    setSelectedTab(hash);
   };
 
   return (
@@ -123,7 +145,8 @@ const CreateUsersPanel = ({ orgSid, isOpen, onDismiss, onCreateUser }: CreateUse
                 hash: '#summary',
               },
             ]}
-            selectedKey={selectedTab < 0 ? Tab.Account.toString() : selectedTab.toString()}
+            selectedKey={step < 0 ? '0' : step.toString()}
+            onClickTab={handleTabChange}
           />
         )}
       </>

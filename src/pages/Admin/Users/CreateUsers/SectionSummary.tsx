@@ -11,14 +11,16 @@ const defaultProps = {
   email: '',
 };
 
-const SectionSummary = (data, onNext) => {
+const SectionSummary = (data, onPrev, onSubmit) => {
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
 
-  const handleNext = () => {
+  const handleSubmit = () => {
     if (!data.firstName.value) setErrorMessage('First name is required');
     else if (!data.lastName.value) setErrorMessage('Last name is required');
     else if (!data.email.value) setErrorMessage('Email is required');
-    else onNext();
+    else onSubmit();
+
+    return null;
   };
 
   return (
@@ -40,7 +42,7 @@ const SectionSummary = (data, onNext) => {
       <Row bottom>
         <Column lg="12">Primary Organization</Column>
       </Row>
-      <CreateUsersFooter onNext={handleNext} errorMessage={errorMessage} />
+      <CreateUsersFooter onPrev={() => onPrev()} onSubmit={handleSubmit} errorMessage={errorMessage} />
     </>
   );
 };

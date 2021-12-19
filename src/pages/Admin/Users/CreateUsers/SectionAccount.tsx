@@ -24,10 +24,8 @@ const SectionAccount = ({ form, data, onNext }) => {
   console.log('🚀 ~ file: SectionAccount.tsx ~ line 20 ~ SectionAccount ~ email', email);
 
   const handleNext = () => {
-    if (!data.firstName.value) setErrorMessage('First name is required');
-    else if (!data.lastName.value) setErrorMessage('Last name is required');
-    else if (!data.email.value) setErrorMessage('Email is required');
-    else onNext();
+    console.log('handleNext');
+    return onNext();
   };
 
   // rCode: null;
