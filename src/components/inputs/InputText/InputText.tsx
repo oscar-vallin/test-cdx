@@ -11,7 +11,7 @@ const defaultProps = {
   value: '',
 };
 
-type InputTextProps = {
+export type InputTextProps = {
   id?: string;
   type?: string;
   disabled?: boolean;
@@ -42,6 +42,7 @@ const InputText = ({
   onKeyEnter,
   value,
   info,
+  required,
   ...props
 }: InputTextProps): ReactElement => {
   const handleKey = (key) => {

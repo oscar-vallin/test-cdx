@@ -23,6 +23,26 @@ const SectionAuthentication = (data, onPrev, onNext) => {
     return null;
   };
 
+  //   options: [{key: "AccessPolicyGroup",…}, {key: "DashTheme", values: [], __typename: "UIOptions"}]
+  // 0: {key: "AccessPolicyGroup",…}
+  // key: "AccessPolicyGroup"
+  // values: [{label: "Auditor", value: "2", info: null, __typename: "UIOption"},…]
+  // 0: {label: "Auditor", value: "2", info: null, __typename: "UIOption"}
+  // info: null
+  // label: "Auditor"
+  // value: "2"
+  // __typename: "UIOption"
+  // 1: {label: "Organization Admin", value: "3", info: null, __typename: "UIOption"}
+  // info: null
+  // label: "Organization Admin"
+  // value: "3"
+  // __typename: "UIOption"
+  // __typename: "UIOptions"
+  // 1: {key: "DashTheme", values: [], __typename: "UIOptions"}
+  // key: "DashTheme"
+  // values: []
+  // __typename: "UIOptions"
+
   return (
     <>
       <Spacing margin={{ top: 'normal' }} />

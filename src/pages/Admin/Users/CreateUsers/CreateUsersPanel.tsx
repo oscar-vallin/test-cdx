@@ -103,9 +103,7 @@ const CreateUsersPanel = ({ orgSid, isOpen, onDismiss, onCreateUser }: CreateUse
             items={[
               {
                 title: 'Account',
-                content: (
-                  <SectionAccount form={userAccountForm} data={CreateUserService.infoAccess} onNext={handleNext} />
-                ),
+                content: <SectionAccount form={CreateUserService.form} onNext={handleNext} />,
                 hash: '#account',
               },
               {
