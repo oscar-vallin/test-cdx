@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import { useSessionStore } from '../../store/SessionStore';
-import { useBeginLoginLazyQuery, usePasswordLoginMutation } from '../../data/services/graphql';
+import { useBeginLoginMutation, usePasswordLoginMutation } from '../../data/services/graphql';
 import { useActiveDomainStore } from '../../store/ActiveDomainStore';
 import { useQueryHandler } from '../../hooks/useQueryHandler';
 
@@ -28,7 +28,7 @@ export const useLoginUseCase = () => {
   const [state, setState] = useState({ ...INITIAL_STATE });
 
   const [verifyUserId, { data: verifiedUserId, loading: isVerifyingUserId, error: userIdVerificationError }] =
-    useQueryHandler(useBeginLoginLazyQuery);
+    useQueryHandler(useBeginLoginMutation);
 
   const [
     verifyUserCredentials,
@@ -40,7 +40,7 @@ export const useLoginUseCase = () => {
       variables: {
         userId,
       },
-    });
+    }).catch(() => null);
 
   const performUserAuthentication = ({ userId, password }) =>
     verifyUserCredentials({

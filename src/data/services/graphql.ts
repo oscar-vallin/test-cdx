@@ -634,6 +634,7 @@ export enum LoginStepType {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  beginLogin?: Maybe<LoginStep>;
   passwordLogin?: Maybe<LoginStep>;
   logOut?: Maybe<LogOutInfo>;
   /** Update your own password.  This is based on the current session of the logged in user. */
@@ -680,6 +681,11 @@ export type Mutation = {
   updatePasswordRules?: Maybe<PasswordRulesForm>;
   implementationDeploy?: Maybe<ImplementationDeployResponse>;
   ftpTestM?: Maybe<SftpConfigSubscriptionResponse>;
+};
+
+
+export type MutationBeginLoginArgs = {
+  userId: Scalars['String'];
 };
 
 
@@ -1176,7 +1182,6 @@ export type QualityChecks = {
 export type Query = {
   __typename?: 'Query';
   version?: Maybe<Scalars['String']>;
-  beginLogin?: Maybe<LoginStep>;
   verifyPasswordResetToken?: Maybe<GqOperationResponse>;
   exchangeActivityInProcess?: Maybe<OrganizationLinkConnection>;
   exchangeActivityTransmitted?: Maybe<OrganizationLinkConnection>;
@@ -1239,11 +1244,6 @@ export type Query = {
    */
   passwordValidation?: Maybe<PasswordValidation>;
   xpsftpTest?: Maybe<XpsftpTestPage>;
-};
-
-
-export type QueryBeginLoginArgs = {
-  userId: Scalars['String'];
 };
 
 
@@ -2057,6 +2057,8 @@ export enum UserAccountAuditEvent {
   ProfileUpdate = 'PROFILE_UPDATE',
   LoginSuccess = 'LOGIN_SUCCESS',
   LoginFail = 'LOGIN_FAIL',
+  InactiveLoginAttempt = 'INACTIVE_LOGIN_ATTEMPT',
+  LockedLoginAttempt = 'LOCKED_LOGIN_ATTEMPT',
   Logout = 'LOGOUT'
 }
 
@@ -2535,19 +2537,6 @@ export type VersionQueryVariables = Exact<{ [key: string]: never; }>;
 export type VersionQuery = (
   { __typename?: 'Query' }
   & Pick<Query, 'version'>
-);
-
-export type BeginLoginQueryVariables = Exact<{
-  userId: Scalars['String'];
-}>;
-
-
-export type BeginLoginQuery = (
-  { __typename?: 'Query' }
-  & { beginLogin?: Maybe<(
-    { __typename?: 'LoginStep' }
-    & Pick<LoginStep, 'userId' | 'step' | 'redirectPath' | 'allowLostPassword'>
-  )> }
 );
 
 export type VerifyPasswordResetTokenQueryVariables = Exact<{
@@ -4252,6 +4241,34 @@ export type XpsftpTestQuery = (
   )> }
 );
 
+export type BeginLoginMutationVariables = Exact<{
+  userId: Scalars['String'];
+}>;
+
+
+export type BeginLoginMutation = (
+  { __typename?: 'Mutation' }
+  & { beginLogin?: Maybe<(
+    { __typename?: 'LoginStep' }
+    & Pick<LoginStep, 'userId' | 'step' | 'redirectPath' | 'allowLostPassword'>
+    & { loginCompleteDomain?: Maybe<(
+      { __typename?: 'WebAppDomain' }
+      & Pick<WebAppDomain, 'type' | 'selectedPage'>
+      & { navItems?: Maybe<Array<Maybe<(
+        { __typename?: 'WebNav' }
+        & FragmentWebNavFragment
+      )>>> }
+    )>, tokenUser?: Maybe<(
+      { __typename?: 'TokenUser' }
+      & Pick<TokenUser, 'token'>
+      & { session?: Maybe<(
+        { __typename?: 'UserSession' }
+        & Pick<UserSession, 'id' | 'orgId' | 'orgSid' | 'orgName' | 'userId' | 'firstNm' | 'pollInterval' | 'defaultAuthorities'>
+      )> }
+    )> }
+  )> }
+);
+
 export type PasswordLoginMutationVariables = Exact<{
   userId: Scalars['String'];
   password: Scalars['String'];
@@ -5530,42 +5547,6 @@ export function useVersionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ve
 export type VersionQueryHookResult = ReturnType<typeof useVersionQuery>;
 export type VersionLazyQueryHookResult = ReturnType<typeof useVersionLazyQuery>;
 export type VersionQueryResult = Apollo.QueryResult<VersionQuery, VersionQueryVariables>;
-export const BeginLoginDocument = gql`
-    query BeginLogin($userId: String!) {
-  beginLogin(userId: $userId) {
-    userId
-    step
-    redirectPath
-    allowLostPassword
-  }
-}
-    `;
-
-/**
- * __useBeginLoginQuery__
- *
- * To run a query within a React component, call `useBeginLoginQuery` and pass it any options that fit your needs.
- * When your component renders, `useBeginLoginQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useBeginLoginQuery({
- *   variables: {
- *      userId: // value for 'userId'
- *   },
- * });
- */
-export function useBeginLoginQuery(baseOptions: Apollo.QueryHookOptions<BeginLoginQuery, BeginLoginQueryVariables>) {
-        return Apollo.useQuery<BeginLoginQuery, BeginLoginQueryVariables>(BeginLoginDocument, baseOptions);
-      }
-export function useBeginLoginLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BeginLoginQuery, BeginLoginQueryVariables>) {
-          return Apollo.useLazyQuery<BeginLoginQuery, BeginLoginQueryVariables>(BeginLoginDocument, baseOptions);
-        }
-export type BeginLoginQueryHookResult = ReturnType<typeof useBeginLoginQuery>;
-export type BeginLoginLazyQueryHookResult = ReturnType<typeof useBeginLoginLazyQuery>;
-export type BeginLoginQueryResult = Apollo.QueryResult<BeginLoginQuery, BeginLoginQueryVariables>;
 export const VerifyPasswordResetTokenDocument = gql`
     query VerifyPasswordResetToken($token: String!) {
   verifyPasswordResetToken(token: $token)
@@ -9934,6 +9915,61 @@ export function useXpsftpTestLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type XpsftpTestQueryHookResult = ReturnType<typeof useXpsftpTestQuery>;
 export type XpsftpTestLazyQueryHookResult = ReturnType<typeof useXpsftpTestLazyQuery>;
 export type XpsftpTestQueryResult = Apollo.QueryResult<XpsftpTestQuery, XpsftpTestQueryVariables>;
+export const BeginLoginDocument = gql`
+    mutation BeginLogin($userId: String!) {
+  beginLogin(userId: $userId) {
+    userId
+    step
+    redirectPath
+    allowLostPassword
+    loginCompleteDomain {
+      type
+      selectedPage
+      navItems {
+        ...fragmentWebNav
+      }
+    }
+    tokenUser {
+      token
+      session {
+        id
+        orgId
+        orgSid
+        orgName
+        userId
+        firstNm
+        pollInterval
+        defaultAuthorities
+      }
+    }
+  }
+}
+    ${FragmentWebNavFragmentDoc}`;
+export type BeginLoginMutationFn = Apollo.MutationFunction<BeginLoginMutation, BeginLoginMutationVariables>;
+
+/**
+ * __useBeginLoginMutation__
+ *
+ * To run a mutation, you first call `useBeginLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useBeginLoginMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [beginLoginMutation, { data, loading, error }] = useBeginLoginMutation({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useBeginLoginMutation(baseOptions?: Apollo.MutationHookOptions<BeginLoginMutation, BeginLoginMutationVariables>) {
+        return Apollo.useMutation<BeginLoginMutation, BeginLoginMutationVariables>(BeginLoginDocument, baseOptions);
+      }
+export type BeginLoginMutationHookResult = ReturnType<typeof useBeginLoginMutation>;
+export type BeginLoginMutationResult = Apollo.MutationResult<BeginLoginMutation>;
+export type BeginLoginMutationOptions = Apollo.BaseMutationOptions<BeginLoginMutation, BeginLoginMutationVariables>;
 export const PasswordLoginDocument = gql`
     mutation PasswordLogin($userId: String!, $password: String!) {
   passwordLogin(userId: $userId, password: $password) {
