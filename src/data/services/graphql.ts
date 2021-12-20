@@ -2079,6 +2079,8 @@ export type UserAccountForm = {
   person?: Maybe<PersonForm>;
   organization: UiReadOnlyField;
   accessPolicyGroups?: Maybe<UiSelectManyField>;
+  /** Indicates that an email should be sent to the user with an activation link. */
+  sendActivationEmail?: Maybe<UiBooleanField>;
   lastLogin?: Maybe<UiReadOnlyField>;
   response: GqOperationResponse;
   options?: Maybe<Array<Maybe<UiOptions>>>;
@@ -3065,6 +3067,9 @@ export type UserAccountFormQuery = (
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
       )>>> }
+    )>, sendActivationEmail?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
       & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
@@ -3115,6 +3120,9 @@ export type FindUserAccountQuery = (
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
       )>>> }
+    )>, sendActivationEmail?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
       & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
@@ -4739,6 +4747,9 @@ export type CreateUserMutation = (
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
       )>>> }
+    )>, sendActivationEmail?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
       & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
@@ -4789,6 +4800,9 @@ export type UpdateUserMutation = (
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
       )>>> }
+    )>, sendActivationEmail?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
       & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
@@ -4839,6 +4853,9 @@ export type UpdateUserAccessPolicyGroupsMutation = (
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
       )>>> }
+    )>, sendActivationEmail?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
       & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
@@ -6693,6 +6710,17 @@ export const UserAccountFormDocument = gql`
       errMsg
       errSeverity
     }
+    sendActivationEmail {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
     lastLogin {
       value
       description
@@ -6830,6 +6858,17 @@ export const FindUserAccountDocument = gql`
       visible
       options
       query
+      errCode
+      errMsg
+      errSeverity
+    }
+    sendActivationEmail {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
       errCode
       errMsg
       errSeverity
@@ -11184,6 +11223,17 @@ export const CreateUserDocument = gql`
       errMsg
       errSeverity
     }
+    sendActivationEmail {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
     lastLogin {
       value
       description
@@ -11321,6 +11371,17 @@ export const UpdateUserDocument = gql`
       visible
       options
       query
+      errCode
+      errMsg
+      errSeverity
+    }
+    sendActivationEmail {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
       errCode
       errMsg
       errSeverity
@@ -11463,6 +11524,17 @@ export const UpdateUserAccessPolicyGroupsDocument = gql`
       visible
       options
       query
+      errCode
+      errMsg
+      errSeverity
+    }
+    sendActivationEmail {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
       errCode
       errMsg
       errSeverity

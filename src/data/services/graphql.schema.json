@@ -16119,6 +16119,18 @@
             "deprecationReason": null
           },
           {
+            "name": "sendActivationEmail",
+            "description": "Indicates that an email should be sent to the user with an activation link.",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "UIBooleanField",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "lastLogin",
             "description": null,
             "args": [],
