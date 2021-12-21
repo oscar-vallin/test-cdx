@@ -2,7 +2,7 @@ import { access } from 'fs';
 import { useEffect, useState } from 'react';
 import { InputTextProps } from 'src/components/inputs/InputText/InputText';
 import { useCreateUserMutation, useUserAccountFormLazyQuery } from 'src/data/services/graphql';
-import { CheckType } from 'src/hooks/useCheckValue';
+import useCheckValue, { CheckType } from 'src/hooks/useCheckValue';
 import { InputType, useInputValue } from 'src/hooks/useInputValue';
 
 export type OptionType = CheckType;
@@ -25,10 +25,12 @@ export type FormUserType = {
   access: {
     title: FormTitle;
     options: OptionType[] | undefined;
+    values: any;
   };
   auth: {
     title: FormTitle;
     options: OptionType[] | undefined;
+    values: any;
   };
 };
 
@@ -36,7 +38,7 @@ export const useCreateUsersPanel = (orgSid) => {
   const firstName = useInputValue('First Name', '', '', 'text');
   const lastName = useInputValue('Last Name', '', '', 'text');
   const email = useInputValue('Username and Email Address', '', '', 'email');
-  const [opts, setOpts] = useState<boolean[]>([]);
+  const [accessOption, setAccessOption] = useState<boolean>(false);
 
   const [exchangeReaderAll, setExchangeReaderAll] = useState(false);
   const [exchangeAdminVendor, setExchangeAdminVendor] = useState(false);
@@ -46,6 +48,7 @@ export const useCreateUsersPanel = (orgSid) => {
   const [organizationId, setOrganizationId] = useState();
   const [userAccountForm, setUserAccountForm] = useState<any>();
   const [form, setForm] = useState<FormUserType>();
+  const [groupOption, setGroupOption] = useState<boolean[]>([]);
 
   const [apiUserAccountForm, { data: dataUserAccountForm, loading: userAccountLoading, error: userAccountError }] =
     useUserAccountFormLazyQuery({
@@ -80,6 +83,12 @@ export const useCreateUsersPanel = (orgSid) => {
     }
   }, [orgSid]);
 
+  const handleGroupOption = (index: number) => {
+    const newGroupOption = [...groupOption];
+    newGroupOption[index] = !newGroupOption[index];
+    setGroupOption(newGroupOption);
+  };
+
   //  //accessPolicyGroups: {value: null, label: "Access Groups", readOnly: false, info: null, required: false, visible: true,…}
   // errCode: null;
   // errMsg: null;
@@ -104,8 +113,6 @@ export const useCreateUsersPanel = (orgSid) => {
       );
 
       // Set Maps
-      setOpts(new Array((accessOptions?.values?.length ?? 0) + 1).fill(false));
-
       const newForm: FormUserType = {
         account: {
           title: {
@@ -148,7 +155,7 @@ export const useCreateUsersPanel = (orgSid) => {
               type: 'text',
               placeholder: undefined,
               errorMessage: '',
-              id: 'firstNm',
+              id: 'email',
               autofocus: false,
               maxLength: userAccountForm?.email?.max,
               minLength: userAccountForm?.email?.min,
@@ -164,17 +171,16 @@ export const useCreateUsersPanel = (orgSid) => {
             info: accessPolicyGroups?.info,
           },
           options: accessOptions?.values?.map((option, index) => {
+            console.log('option', option);
+            console.log('index xxx = ', index);
             return {
               label: option?.label ?? '',
               id: option?.value ?? '0',
-              checked: opts[index],
-              onChange: (index) => {
-                const newOpts = [...opts];
-                newOpts[index] = !newOpts[index];
-                setOpts(newOpts);
-              },
+              checked: groupOption[index] ?? false,
+              onChange: () => handleGroupOption(index),
             };
           }),
+          values: 
         },
         auth: {
           title: {
@@ -186,14 +192,12 @@ export const useCreateUsersPanel = (orgSid) => {
             {
               label: 'Send an Account Activation Link',
               id: 'activation-link-checkbox',
-              checked: opts[opts.length - 1],
-              onChange: () => {
-                const newOpts = [...opts];
-                newOpts[opts.length - 1] = !newOpts[opts.length - 1];
-                setOpts(newOpts);
-              },
+              checked: accessOption,
+              onChange: () => {},
             },
           ],
+          values: [accessOption, setAccessOption],
+
         },
       };
 

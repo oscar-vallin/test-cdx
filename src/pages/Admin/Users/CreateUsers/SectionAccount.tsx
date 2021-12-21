@@ -25,6 +25,8 @@ const SectionAccount = ({ form, onNext }: SectionAccountProps) => {
     return onNext();
   };
 
+  console.log('Form [Account]', form);
+
   return (
     <>
       <Spacing margin={{ top: 'normal' }} />

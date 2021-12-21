@@ -109,12 +109,7 @@ const CreateUsersPanel = ({ orgSid, isOpen, onDismiss, onCreateUser }: CreateUse
               {
                 title: 'Access Management',
                 content: (
-                  <SectionAccessManagement
-                    form={userAccountForm}
-                    data={CreateUserService.infoAccess}
-                    onPrev={handlePrev}
-                    onNext={handleNext}
-                  />
+                  <SectionAccessManagement form={CreateUserService.form} onPrev={handlePrev} onNext={handleNext} />
                 ),
                 hash: '#access',
               },
