@@ -63,7 +63,7 @@ const _DashboardPage = () => {
     setDateId(date);
 
     if (date !== 'custom') {
-      history.push(`?date=${date}`);
+      history.push(`?date=${date}&orgSid=${orgSid}`);
     } else {
       history.push(
         `?startDate=${dateRange.startDate?.toISOString()}&endDate=${dateRange.endDate?.toISOString()}&orgSid=${orgSid}`
