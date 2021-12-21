@@ -19,7 +19,7 @@ export default class PuppetExchangeStatus extends PuppetBasePage {
 
   fileNameCol = 'div[data-item-key="inboundFilename"]';
 
-  statusCol = 'div[data-item-key="stepStatus"]';
+  statusCol = 'div[data-item-key="packetStatus"]';
 
   async expectOnPage() {
     await this.expectTextOnPage(this.pageTitle, 'File Status');

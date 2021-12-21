@@ -164,7 +164,7 @@ describe('E2E - File Status Test', () => {
     const fileStatus = new PuppetExchangeStatus(cdxApp.page);
     await fileStatus.expectOnPage();
     await fileStatus.sortDesc(fileStatus.statusCol);
-    await fileStatus.expectTextOnFirstRow('Quality Check Failed', 0, 4);
+    await fileStatus.expectTextOnFirstRow('Hold', 0, 4);
   });
 
   it('Logout', async () => {
