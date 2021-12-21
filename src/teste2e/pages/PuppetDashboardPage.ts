@@ -1,6 +1,4 @@
-import { ElementHandle } from 'puppeteer';
 import PuppetBasePage from './PuppetBasePage';
-import PuppetTransmissions from './PuppetTransmissions';
 import PuppetExchangeStatus from './PuppetExchangeStatus';
 
 // Represents the Dashboard page
@@ -22,6 +20,10 @@ export default class PuppetDashboardPage extends PuppetBasePage {
   buttonLastMonth = '#__Button-lastMonth';
 
   buttonCustom = '#__Button-custom';
+
+  customFromDate = '#CustomFilter__StartDate-label';
+
+  customToDate = '#CustomFilter__EndDate-label';
 
   async expectOnPage() {
     await this.page.waitForSelector(this.transmissionBillingUnits);
@@ -100,5 +102,14 @@ export default class PuppetDashboardPage extends PuppetBasePage {
 
     await this.page.waitForSelector(`${DatePickerSelector}__StartDate`);
     await this.page.waitForSelector(`${DatePickerSelector}__EndDate`);
+  }
+
+  async setCustomDateRange(fromDate: string, toDate: string) {
+    await this.clickCustomFilter();
+    await super.inputValue(this.customFromDate, fromDate);
+    await super.inputValue(this.customToDate, toDate);
+
+    // Wait for the first row to show up
+    await this.waitForSelector(`${this.transmissionsByVendorTable} div.ms-DetailsRow-cell`);
   }
 }

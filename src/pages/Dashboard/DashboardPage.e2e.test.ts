@@ -1,5 +1,6 @@
 import PuppetCDXApp from '../../teste2e/pages/PuppetCDXApp';
 import PuppetDashboardPage from '../../teste2e/pages/PuppetDashboardPage';
+import PuppetActiveOrgs from '../../teste2e/pages/PuppetActiveOrgs';
 
 describe('E2E Dashboard test', () => {
   let cdxApp: PuppetCDXApp;
@@ -11,40 +12,39 @@ describe('E2E Dashboard test', () => {
   it('Login', async () => {
     const loginPage = await cdxApp.toLoginPage();
     await loginPage.loginAsAdmin();
+    await loginPage.expectOnActiveOrgsPage();
   });
 
-  // it('Click Exchange Status', async () => {
-  //   const adminMenu = cdxApp.getAdminMenu();
-  //   await adminMenu.openMenu('Exchange Statuses');
-  // });
+  it('Navigate to K2UIS', async () => {
+    const activeOrgs = new PuppetActiveOrgs(cdxApp.page);
+    await activeOrgs.expectOnPage();
+    await activeOrgs.clickOnOrg('K2UIS', 'Known2U Implementation Services');
+  });
 
   it('Click Dashboard', async () => {
     const mainMenu = cdxApp.getMainMenu();
     await mainMenu.clickDashboard();
   });
 
-  it('Verify number of Transmissions matches the correct value', async () => {
+  it('Verify headers matches the expected values', async () => {
     const page = new PuppetDashboardPage(cdxApp.page);
-    // await page.expectOnPage();
-    // await cdxApp.page.waitForTimeout(2000);
-    // await page.expectTransmissionBillingUnits('Transmissions  (Billing Units.)7/6979');
-  });
+    await page.expectOnPage();
+    await page.setCustomDateRange('Wed Aug 11 2021', 'Wed Sep 15 2021');
 
-  it('Verify number of Failed Files  matches the correct value', async () => {
-    const page = new PuppetDashboardPage(cdxApp.page);
-    // await page.expectFailedFilesBillingUnits('Failed Files  (Billing Units.)0/6979');
+    await page.expectTransmissionBillingUnits('Transmissions  (Billing Units.)116/116');
+    await page.expectFailedFilesBillingUnits('Failed Files  (Billing Units.)13/116');
   });
 
   it('Check count items in transmission vendor table', async () => {
     const page = new PuppetDashboardPage(cdxApp.page);
-    // await page.expectTransmissionsByVendorCount(6);
+    await page.expectTransmissionsByVendorCount(10);
   });
 
   it('Check first item in transmission vendor table', async () => {
     const page = new PuppetDashboardPage(cdxApp.page);
     const firstCell = await page.getFirstTransmissionByVendorCell();
 
-    // expect(firstCell).toEqual('BenefitResourceInc');
+    expect(firstCell).toEqual('ANTHEM');
   });
 
   it('Click on first element in transmission table', async () => {
