@@ -190,19 +190,19 @@ export const useWorkPacketColumns = (
       onColumnClick: onSort,
     },
     {
-      key: 'stepStatus',
+      key: 'packetStatus',
       name: 'Overall',
       targetWidthProportion: 1,
       minWidth: 80,
       maxWidth: 120,
-      fieldName: 'stepStatus',
+      fieldName: 'packetStatus',
       sortAscendingAriaLabel: 'Sorted A to Z',
       sortDescendingAriaLabel: 'Sorted Z to A',
       isPadded: true,
-      data: WorkPacketColumns.STEP_STATUS,
+      data: WorkPacketColumns.PACKET_STATUS,
       onColumnClick: onSort,
       onRender: (item: WorkPacketStatus) => {
-        return <span>{getStepStatusLabel(item.stepStatus)}</span>;
+        return <span>{getStepStatusLabel(item.packetStatus)}</span>;
       },
     },
     {
@@ -375,7 +375,7 @@ export enum WorkPacketColumns {
   IMPLEMENTATION,
   BILLING_COUNT,
   STEP,
-  STEP_STATUS,
+  PACKET_STATUS,
   PROGRESS,
   CLIENT_FILE,
   VENDOR_FILE,

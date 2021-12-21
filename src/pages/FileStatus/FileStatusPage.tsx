@@ -65,7 +65,7 @@ const _FileStatusPage = () => {
           WorkPacketColumns.VENDOR,
           WorkPacketColumns.PLAN_SPONSOR,
           WorkPacketColumns.INBOUND_FILENAME,
-          WorkPacketColumns.STEP_STATUS,
+          WorkPacketColumns.PACKET_STATUS,
           WorkPacketColumns.PROGRESS,
         ]}
         lazyQuery={useWorkPacketStatusesLazyQuery}
