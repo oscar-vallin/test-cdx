@@ -34,18 +34,10 @@ export const ApolloContextProvider = ({ children }: ApolloContextProviderProps):
   const { getCSRFToken, getAuthToken } = useCSRFToken();
 
   const authLink = setContext((_, { headers }) => {
-    // get the authentication token from local storage if it exists
-    // const token = localStorage.getItem('token');
-    // return the headers to the context so httpLink can read them
-    let authToken = SessionStore.user.token || '';
-    if (authToken.trim().length == 0) {
-      authToken = getAuthToken() || '';
-    }
-
     return {
+      credentials: 'include',
       headers: {
         ...headers,
-        'x-auth-token': authToken,
         'X-XSRF-Token': getCSRFToken() || '',
       },
     };

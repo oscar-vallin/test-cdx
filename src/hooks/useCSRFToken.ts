@@ -28,7 +28,10 @@ export const useCSRFToken = () => {
     if (currentToken.trim().length == 0) {
       const authToken = SessionStore.user?.token || getAuthToken() || '';
       const opts: RequestInit = {
-        headers: { 'x-auth-token': authToken },
+        headers: {
+          'x-auth-token': authToken,
+        },
+        credentials: 'include',
       };
 
       // A CSRF token is tied to the session which is denoted by session ID
