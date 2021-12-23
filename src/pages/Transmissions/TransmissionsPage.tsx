@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { ReactElement, useState } from 'react';
+import { Icon } from 'office-ui-fabric-react';
 import { ROUTES } from '../../data/constants/RouteConstants';
 import { LayoutDashboard } from '../../layouts/LayoutDashboard';
 import { Column, Container, Row } from '../../components/layouts';
@@ -8,10 +9,13 @@ import { PageHeader } from '../../containers/headers/PageHeader';
 import { WorkPacketTable } from '../../containers/tables/WorkPacketTable';
 import { WorkPacketColumns } from '../../containers/tables/WorkPacketColumns';
 import { NullHandling, SortDirection, useWpTransmissionsLazyQuery } from '../../data/services/graphql';
-import { useTableFilters } from '../../hooks/useTableFilters';
+import { tableFiltersToQueryParams, useTableFilters } from '../../hooks/useTableFilters';
+import { DownloadLink } from '../../containers/tables/WorkPacketTable.styles';
+import { useOrgSid } from '../../hooks/useOrgSid';
 
 const _TransmissionsPage = () => {
   const [tableMeta, setTableMeta] = useState({ count: 0, loading: true });
+  const { orgSid } = useOrgSid();
   const tableFilters = useTableFilters('Extract Name, Status, Vendor, etc.', [
     {
       property: 'deliveredOn',
@@ -31,6 +35,34 @@ const _TransmissionsPage = () => {
     return items;
   };
 
+  const renderTotalRecords = (): ReactElement => {
+    if (!tableMeta.loading && tableMeta.count !== null) {
+      return <span>{tableMeta.count > 0 ? `${tableMeta.count} results found` : 'No results were found'}</span>;
+    }
+
+    return <span />;
+  };
+
+  const renderDownloadLink = (): ReactElement => {
+    const graphQLUrl = process.env.REACT_APP_API_SERVER;
+    const serverUrl = graphQLUrl?.replace('/graphql', '') ?? '';
+
+    if (!tableMeta.loading && tableMeta.count > 0) {
+      const filterString = tableFiltersToQueryParams(tableFilters);
+      return (
+        <DownloadLink
+          target="_new"
+          href={`${serverUrl}excel/transmissions?orgSid=${orgSid}${filterString}`}
+          title="Download results as Excel"
+        >
+          <Icon iconName="ExcelDocument" />
+        </DownloadLink>
+      );
+    }
+
+    return <span />;
+  };
+
   return (
     <LayoutDashboard id="PageTransmissions" menuOptionSelected={ROUTES.ROUTE_TRANSMISSIONS.API_ID}>
       <PageHeader spacing="0">
@@ -47,9 +79,8 @@ const _TransmissionsPage = () => {
               </Column>
               <Column lg="6" right>
                 <Text right>
-                  {!tableMeta.loading && tableMeta.count !== null && (
-                    <Text>{tableMeta.count > 0 ? `${tableMeta.count} results found` : 'No results were found'}</Text>
-                  )}
+                  {renderDownloadLink()}
+                  {renderTotalRecords()}
                 </Text>
               </Column>
             </Row>

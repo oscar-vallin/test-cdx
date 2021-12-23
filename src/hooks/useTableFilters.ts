@@ -15,13 +15,26 @@ export type TableFiltersType = {
   setPagingParams: React.Dispatch<any>;
 };
 
+export const toUTC = (date: Date): Date => {
+  const ts = Date.UTC(
+    date.getUTCFullYear(),
+    date.getUTCMonth(),
+    date.getUTCDate(),
+    date.getUTCHours(),
+    date.getUTCMinutes(),
+    date.getUTCSeconds()
+  );
+  const newTS = new Date(ts);
+  return new Date(newTS.toLocaleString('en-US', { timeZone: 'UTC' }));
+};
+
 /**
  * Convert the given table filters into a query string to be
  * sent into a GET request. This was built to craft a URL to an Excel Download link
  * @param filters Table Filters
  */
 export const tableFiltersToQueryParams = (filters: TableFiltersType): string => {
-  const dateFormat = "yyyy-MM-dd'T'hh:mm:ss";
+  const dateFormat = "yyyy-MM-dd'T'HH:mm:ss";
 
   const sortToString = (sort: Maybe<Array<Maybe<SortOrderInput>>>): string | null => {
     if (!sort) {
@@ -42,18 +55,6 @@ export const tableFiltersToQueryParams = (filters: TableFiltersType): string => 
       }
     });
     return sortString;
-  };
-
-  const toUTC = (date: Date): Date => {
-    const ts = Date.UTC(
-      date.getUTCFullYear(),
-      date.getUTCMonth(),
-      date.getUTCDate(),
-      date.getUTCHours(),
-      date.getUTCMinutes(),
-      date.getUTCSeconds()
-    );
-    return new Date(ts);
   };
 
   // Convert to UTC. The backend assumes a UTC Date
