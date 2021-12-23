@@ -1,6 +1,5 @@
 import React, { ReactElement, useState } from 'react';
 import { Icon } from 'office-ui-fabric-react';
-import { format } from 'date-fns';
 import { ROUTES } from '../../data/constants/RouteConstants';
 import { Column, Container, Row } from '../../components/layouts';
 import { Spacing } from '../../components/spacings/Spacing';
@@ -17,13 +16,20 @@ import {
 } from '../../data/services/graphql';
 import { WorkPacketColumns } from '../../containers/tables/WorkPacketColumns';
 import { useOrgSid } from '../../hooks/useOrgSid';
-import { useTableFilters } from '../../hooks/useTableFilters';
+import { tableFiltersToQueryParams, useTableFilters } from '../../hooks/useTableFilters';
 import { DownloadLink } from '../../containers/tables/WorkPacketTable.styles';
 
 const _FileStatusPage = () => {
   const [tableMeta, setTableMeta] = useState({ count: 0, loading: true });
   const { orgSid } = useOrgSid();
-  const tableFilters = useTableFilters('Extract Name, Status, Vendor, etc.');
+  const tableFilters = useTableFilters('Extract Name, Status, Vendor, etc.', [
+    {
+      property: 'timestamp',
+      direction: SortDirection.Desc,
+      nullHandling: NullHandling.NullsFirst,
+      ignoreCase: true,
+    },
+  ]);
 
   const mapData = (data) => {
     const items: WorkPacketStatus[] = [];
@@ -46,16 +52,13 @@ const _FileStatusPage = () => {
   const renderDownloadLink = (): ReactElement => {
     const graphQLUrl = process.env.REACT_APP_API_SERVER;
     const serverUrl = graphQLUrl?.replace('/graphql', '') ?? '';
-    const dateFormat = "yyyy-MM-dd'T'hh:mm:ss";
 
     if (!tableMeta.loading && tableMeta.count > 0) {
-      // TODO: Convert to UTC
-      const rangeStart = format(tableFilters.startDate.value, dateFormat);
-      const rangeEnd = format(tableFilters.endDate.value, dateFormat);
+      const filterString = tableFiltersToQueryParams(tableFilters);
       return (
         <DownloadLink
           target="_new"
-          href={`${serverUrl}excel/fileStatus?orgSid=${orgSid}&searchText=${tableFilters.searchText.delayedValue}&rangeStart=${rangeStart}&rangeEnd=${rangeEnd}`}
+          href={`${serverUrl}excel/fileStatus?orgSid=${orgSid}${filterString}`}
           title="Download results as Excel"
         >
           <Icon iconName="ExcelDocument" />
@@ -105,14 +108,6 @@ const _FileStatusPage = () => {
         pollingQuery={useWorkPacketStatusesPollQuery}
         getItems={mapData}
         tableFilters={tableFilters}
-        defaultSort={[
-          {
-            property: 'timestamp',
-            direction: SortDirection.Desc,
-            nullHandling: NullHandling.NullsFirst,
-            ignoreCase: true,
-          },
-        ]}
         onItemsListChange={(data, loading) => {
           const total = data?.workPacketStatuses?.paginationInfo?.totalElements ?? 0;
           setTableMeta({ count: total, loading });

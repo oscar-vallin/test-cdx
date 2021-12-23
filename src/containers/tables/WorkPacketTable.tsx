@@ -11,13 +11,7 @@ import { StyledContainer } from '../../components/tables/Table/Table.styles';
 import { Box, Container } from './WorkPacketTable.styles';
 import { EmptyState } from '../states';
 import { TableFilters } from './TableFilters';
-import {
-  NullHandling,
-  PageableInput,
-  PaginationInfo,
-  SortDirection,
-  SortOrderInput,
-} from '../../data/services/graphql';
+import { NullHandling, PageableInput, PaginationInfo, SortDirection } from '../../data/services/graphql';
 import { useWorkPacketColumns, WorkPacketColumns } from './WorkPacketColumns';
 import { useQueryHandler } from '../../hooks/useQueryHandler';
 import { useOrgSid } from '../../hooks/useOrgSid';
@@ -32,7 +26,6 @@ type WorkPacketParams = {
   pollingQuery?: any; // lazy query to poll if there are any changes
   getItems: (data: any) => any[];
   tableFilters: TableFiltersType;
-  defaultSort?: SortOrderInput[];
   onItemsListChange?: (data: any, loading: boolean) => void;
 };
 
@@ -43,7 +36,6 @@ export const WorkPacketTable = ({
   pollingQuery,
   getItems,
   tableFilters,
-  defaultSort,
   onItemsListChange,
 }: WorkPacketParams) => {
   const { orgSid } = useOrgSid();
@@ -54,12 +46,6 @@ export const WorkPacketTable = ({
     pageSize: 100,
     totalElements: 0,
     totalPages: 0,
-  });
-
-  const [pagingParams, setPagingParams] = useState<PageableInput>({
-    pageNumber: 0,
-    pageSize: 100,
-    sort: defaultSort,
   });
 
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
@@ -81,7 +67,7 @@ export const WorkPacketTable = ({
   const _doSort = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
     const newColumns: IColumn[] = columns.slice();
     const currColumn: IColumn = newColumns.filter((currCol) => column.key === currCol.key)[0];
-    let sortParam: PageableInput = pagingParams;
+    let sortParam: PageableInput = tableFilters.pagingParams;
     newColumns.forEach((newCol: IColumn) => {
       if (newCol === currColumn) {
         currColumn.isSortedDescending = !currColumn.isSortedDescending;
@@ -104,15 +90,15 @@ export const WorkPacketTable = ({
       }
     });
     setColumns(newColumns);
-    setPagingParams(sortParam);
+    tableFilters.setPagingParams(sortParam);
   };
 
   const onPageChange = (pageNumber: number) => {
-    pagingParams.pageNumber = pageNumber;
-    setPagingParams({
+    tableFilters.pagingParams.pageNumber = pageNumber;
+    tableFilters.setPagingParams({
       pageNumber,
       pageSize: 100,
-      sort: pagingParams.sort,
+      sort: tableFilters.pagingParams.sort,
     });
   };
 
@@ -123,10 +109,10 @@ export const WorkPacketTable = ({
 
   useEffect(() => {
     // Reset the page number when any filtering occurs
-    setPagingParams({
+    tableFilters.setPagingParams({
       pageNumber: 0,
       pageSize: 100,
-      sort: pagingParams.sort,
+      sort: tableFilters.pagingParams.sort,
     });
   }, [orgSid, tableFilters.searchText.delayedValue, tableFilters.startDate.value, tableFilters.endDate.value]);
 
@@ -136,10 +122,10 @@ export const WorkPacketTable = ({
         orgSid,
         searchText: tableFilters.searchText.delayedValue,
         dateRange: { rangeStart: tableFilters.startDate.value, rangeEnd: tableFilters.endDate.value },
-        pageableInput: pagingParams,
+        pageableInput: tableFilters.pagingParams,
       },
     });
-  }, [orgSid, pagingParams, lastUpdated]);
+  }, [orgSid, tableFilters.pagingParams, lastUpdated]);
 
   useEffect(() => {
     if (!loading) {

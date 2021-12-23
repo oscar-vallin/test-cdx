@@ -12,7 +12,14 @@ import { useTableFilters } from '../../hooks/useTableFilters';
 
 const _TransmissionsPage = () => {
   const [tableMeta, setTableMeta] = useState({ count: 0, loading: true });
-  const tableFilters = useTableFilters('Extract Name, Status, Vendor, etc.');
+  const tableFilters = useTableFilters('Extract Name, Status, Vendor, etc.', [
+    {
+      property: 'deliveredOn',
+      direction: SortDirection.Desc,
+      nullHandling: NullHandling.NullsFirst,
+      ignoreCase: true,
+    },
+  ]);
 
   const mapData = (data) => {
     const items: object[] = [];
@@ -69,14 +76,6 @@ const _TransmissionsPage = () => {
         lazyQuery={useWpTransmissionsLazyQuery}
         getItems={mapData}
         tableFilters={tableFilters}
-        defaultSort={[
-          {
-            property: 'deliveredOn',
-            direction: SortDirection.Desc,
-            nullHandling: NullHandling.NullsFirst,
-            ignoreCase: true,
-          },
-        ]}
         onItemsListChange={(data, loading) => {
           const total = data?.wpTransmissions?.paginationInfo?.totalElements ?? 0;
           setTableMeta({ count: total, loading });

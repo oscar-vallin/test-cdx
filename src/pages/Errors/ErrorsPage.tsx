@@ -18,7 +18,14 @@ import { useTableFilters } from '../../hooks/useTableFilters';
 
 const _ErrorsPage = () => {
   const [tableMeta, setTableMeta] = useState({ count: 0, loading: true });
-  const tableFilters = useTableFilters('Extract Name, Status, Vendor, etc.');
+  const tableFilters = useTableFilters('Extract Name, Status, Vendor, etc.', [
+    {
+      property: 'timestamp',
+      direction: SortDirection.Desc,
+      nullHandling: NullHandling.NullsFirst,
+      ignoreCase: true,
+    },
+  ]);
   const mapData = (data) => {
     const items: WorkPacketStatus[] = [];
     data?.wpProcessErrors?.nodes?.map((value) => {
@@ -64,14 +71,6 @@ const _ErrorsPage = () => {
         lazyQuery={useWpProcessErrorsLazyQuery}
         getItems={mapData}
         tableFilters={tableFilters}
-        defaultSort={[
-          {
-            property: 'timestamp',
-            direction: SortDirection.Desc,
-            nullHandling: NullHandling.NullsFirst,
-            ignoreCase: true,
-          },
-        ]}
         onItemsListChange={(data, loading) => {
           const total = data?.wpProcessErrors?.paginationInfo?.totalElements ?? 0;
           setTableMeta({ count: total, loading });
