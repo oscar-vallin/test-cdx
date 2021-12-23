@@ -21,7 +21,7 @@ import {
 import { useWorkPacketColumns, WorkPacketColumns } from './WorkPacketColumns';
 import { useQueryHandler } from '../../hooks/useQueryHandler';
 import { useOrgSid } from '../../hooks/useOrgSid';
-import { useTableFilters } from '../../hooks/useTableFilters';
+import { TableFiltersType } from '../../hooks/useTableFilters';
 import { Paginator } from '../../components/tables/Paginator';
 import { ErrorHandler } from '../../utils/ErrorHandler';
 
@@ -31,7 +31,7 @@ type WorkPacketParams = {
   lazyQuery: any; // lazy query from the generated Apollo graphql.ts
   pollingQuery?: any; // lazy query to poll if there are any changes
   getItems: (data: any) => any[];
-  searchTextPlaceholder: string;
+  tableFilters: TableFiltersType;
   defaultSort?: SortOrderInput[];
   onItemsListChange?: (data: any, loading: boolean) => void;
 };
@@ -42,14 +42,12 @@ export const WorkPacketTable = ({
   lazyQuery,
   pollingQuery,
   getItems,
-  searchTextPlaceholder,
+  tableFilters,
   defaultSort,
   onItemsListChange,
 }: WorkPacketParams) => {
   const { orgSid } = useOrgSid();
   const handleError = ErrorHandler();
-
-  const { searchText, startDate, endDate } = useTableFilters(searchTextPlaceholder);
 
   const [pagingInfo, setPagingInfo] = useState<PaginationInfo>({
     pageNumber: 0,
@@ -72,8 +70,8 @@ export const WorkPacketTable = ({
     ? pollingQuery({
         variables: {
           orgSid,
-          searchText: searchText.delayedValue,
-          dateRange: { rangeStart: startDate.value, rangeEnd: endDate.value },
+          searchText: tableFilters.searchText.delayedValue,
+          dateRange: { rangeStart: tableFilters.startDate.value, rangeEnd: tableFilters.endDate.value },
           lastUpdated,
         },
         pollInterval: 20000,
@@ -130,14 +128,14 @@ export const WorkPacketTable = ({
       pageSize: 100,
       sort: pagingParams.sort,
     });
-  }, [orgSid, searchText.delayedValue, startDate.value, endDate.value]);
+  }, [orgSid, tableFilters.searchText.delayedValue, tableFilters.startDate.value, tableFilters.endDate.value]);
 
   useEffect(() => {
     apiCall({
       variables: {
         orgSid,
-        searchText: searchText.delayedValue,
-        dateRange: { rangeStart: startDate.value, rangeEnd: endDate.value },
+        searchText: tableFilters.searchText.delayedValue,
+        dateRange: { rangeStart: tableFilters.startDate.value, rangeEnd: tableFilters.endDate.value },
         pageableInput: pagingParams,
       },
     });
@@ -204,7 +202,12 @@ export const WorkPacketTable = ({
 
   return (
     <>
-      <TableFilters id={id} searchText={searchText} startDate={startDate} endDate={endDate} />
+      <TableFilters
+        id={id}
+        searchText={tableFilters.searchText}
+        startDate={tableFilters.startDate}
+        endDate={tableFilters.endDate}
+      />
 
       <Container>
         <Box id={`${id}_TableWrap`}>

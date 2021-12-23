@@ -1,13 +1,19 @@
 import { getHours, subDays, format, addDays, isValid } from 'date-fns';
 import { useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { useDateValue } from './useDateValue';
-import { useDelayedInputValue } from './useInputValue';
+import { DateState, useDateValue } from './useDateValue';
+import { DelayedInput, useDelayedInputValue } from './useInputValue';
 import { useQueryParams } from './useQueryParams';
 import { useOrgSid } from './useOrgSid';
 
+export type TableFiltersType = {
+  searchText: DelayedInput;
+  startDate: DateState;
+  endDate: DateState;
+};
+
 //
-export const useTableFilters = (searchTextPlaceholder) => {
+export const useTableFilters = (searchTextPlaceholder): TableFiltersType => {
   const QueryParams = useQueryParams();
   const history = useHistory();
   const location = useLocation();

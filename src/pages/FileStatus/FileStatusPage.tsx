@@ -1,4 +1,6 @@
 import React, { ReactElement, useState } from 'react';
+import { Icon } from 'office-ui-fabric-react';
+import { format } from 'date-fns';
 import { ROUTES } from '../../data/constants/RouteConstants';
 import { Column, Container, Row } from '../../components/layouts';
 import { Spacing } from '../../components/spacings/Spacing';
@@ -14,9 +16,14 @@ import {
   WorkPacketStatus,
 } from '../../data/services/graphql';
 import { WorkPacketColumns } from '../../containers/tables/WorkPacketColumns';
+import { useOrgSid } from '../../hooks/useOrgSid';
+import { useTableFilters } from '../../hooks/useTableFilters';
+import { DownloadLink } from '../../containers/tables/WorkPacketTable.styles';
 
 const _FileStatusPage = () => {
   const [tableMeta, setTableMeta] = useState({ count: 0, loading: true });
+  const { orgSid } = useOrgSid();
+  const tableFilters = useTableFilters('Extract Name, Status, Vendor, etc.');
 
   const mapData = (data) => {
     const items: WorkPacketStatus[] = [];
@@ -30,7 +37,30 @@ const _FileStatusPage = () => {
 
   const renderTotalRecords = (): ReactElement => {
     if (!tableMeta.loading && tableMeta.count !== null) {
-      return <Text right>{tableMeta.count > 0 ? `${tableMeta.count} results found` : 'No results were found'}</Text>;
+      return <span>{tableMeta.count > 0 ? `${tableMeta.count} results found` : 'No results were found'}</span>;
+    }
+
+    return <span />;
+  };
+
+  const renderDownloadLink = (): ReactElement => {
+    const graphQLUrl = process.env.REACT_APP_API_SERVER;
+    const serverUrl = graphQLUrl?.replace('/graphql', '') ?? '';
+    const dateFormat = "yyyy-MM-dd'T'hh:mm:ss";
+
+    if (!tableMeta.loading && tableMeta.count > 0) {
+      // TODO: Convert to UTC
+      const rangeStart = format(tableFilters.startDate.value, dateFormat);
+      const rangeEnd = format(tableFilters.endDate.value, dateFormat);
+      return (
+        <DownloadLink
+          target="_new"
+          href={`${serverUrl}excel/fileStatus?orgSid=${orgSid}&searchText=${tableFilters.searchText.delayedValue}&rangeStart=${rangeStart}&rangeEnd=${rangeEnd}`}
+          title="Download results as Excel"
+        >
+          <Icon iconName="ExcelDocument" />
+        </DownloadLink>
+      );
     }
 
     return <span />;
@@ -51,7 +81,10 @@ const _FileStatusPage = () => {
                 />
               </Column>
               <Column lg="6" right>
-                <Text right>{renderTotalRecords()}</Text>
+                <Text right>
+                  {renderDownloadLink()}
+                  {renderTotalRecords()}
+                </Text>
               </Column>
             </Row>
           </Spacing>
@@ -71,7 +104,7 @@ const _FileStatusPage = () => {
         lazyQuery={useWorkPacketStatusesLazyQuery}
         pollingQuery={useWorkPacketStatusesPollQuery}
         getItems={mapData}
-        searchTextPlaceholder="Extract Name, Status, Vendor, etc."
+        tableFilters={tableFilters}
         defaultSort={[
           {
             property: 'timestamp',

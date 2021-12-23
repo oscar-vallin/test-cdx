@@ -13,9 +13,11 @@ import {
   useWorkPacketStatusesLazyQuery,
   useWorkPacketStatusesPollQuery,
 } from '../../data/services/graphql';
+import { useTableFilters } from '../../hooks/useTableFilters';
 
 const _ArchivePage = () => {
   const [tableMeta, setTableMeta] = useState({ count: 0, loading: true });
+  const tableFilters = useTableFilters('Extract Name, Status, Vendor, etc.');
 
   const mapData = (data) => {
     const items: object[] = [];
@@ -62,7 +64,7 @@ id="__Archives_Title" title="Archives" subTitle="Advanced search" icon="FilterSo
         lazyQuery={useWorkPacketStatusesLazyQuery}
         pollingQuery={useWorkPacketStatusesPollQuery}
         getItems={mapData}
-        searchTextPlaceholder="Extract Name, Status, Vendor, etc."
+        tableFilters={tableFilters}
         defaultSort={[
           {
             property: 'timestamp',

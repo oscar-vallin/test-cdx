@@ -14,9 +14,11 @@ import {
   useWpProcessErrorsLazyQuery,
   WorkPacketStatus,
 } from '../../data/services/graphql';
+import { useTableFilters } from '../../hooks/useTableFilters';
 
 const _ErrorsPage = () => {
   const [tableMeta, setTableMeta] = useState({ count: 0, loading: true });
+  const tableFilters = useTableFilters('Extract Name, Status, Vendor, etc.');
   const mapData = (data) => {
     const items: WorkPacketStatus[] = [];
     data?.wpProcessErrors?.nodes?.map((value) => {
@@ -61,7 +63,7 @@ const _ErrorsPage = () => {
         ]}
         lazyQuery={useWpProcessErrorsLazyQuery}
         getItems={mapData}
-        searchTextPlaceholder="Extract Name, Status, Vendor, etc."
+        tableFilters={tableFilters}
         defaultSort={[
           {
             property: 'timestamp',

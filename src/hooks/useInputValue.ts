@@ -1,6 +1,16 @@
 import { useEffect, useState } from 'react';
 import * as React from 'react';
 
+export type DelayedInput = {
+  label: string;
+  placeholder: string;
+  type: string;
+  value: string;
+  setValue: React.Dispatch<any>;
+  delayedValue: string;
+  onChange: (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => void;
+};
+
 const useInputValue = (label, placeholder, initialValue, type) => {
   const [value, setValue] = useState(initialValue);
   const onChange = (e) => {
@@ -10,7 +20,7 @@ const useInputValue = (label, placeholder, initialValue, type) => {
   return { label, placeholder, type, value, onChange, setValue };
 };
 
-const useDelayedInputValue = (label, placeholder, initialValue, type) => {
+const useDelayedInputValue = (label, placeholder, initialValue, type): DelayedInput => {
   const [delayedValue, setDelayedValue] = useState(initialValue);
   const [value, setValue] = useState(initialValue);
 

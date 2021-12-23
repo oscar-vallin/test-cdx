@@ -8,9 +8,11 @@ import { PageHeader } from '../../containers/headers/PageHeader';
 import { WorkPacketTable } from '../../containers/tables/WorkPacketTable';
 import { WorkPacketColumns } from '../../containers/tables/WorkPacketColumns';
 import { NullHandling, SortDirection, useWpTransmissionsLazyQuery } from '../../data/services/graphql';
+import { useTableFilters } from '../../hooks/useTableFilters';
 
 const _TransmissionsPage = () => {
   const [tableMeta, setTableMeta] = useState({ count: 0, loading: true });
+  const tableFilters = useTableFilters('Extract Name, Status, Vendor, etc.');
 
   const mapData = (data) => {
     const items: object[] = [];
@@ -66,7 +68,7 @@ const _TransmissionsPage = () => {
         ]}
         lazyQuery={useWpTransmissionsLazyQuery}
         getItems={mapData}
-        searchTextPlaceholder="Extract Name, Status, Vendor, etc."
+        tableFilters={tableFilters}
         defaultSort={[
           {
             property: 'deliveredOn',

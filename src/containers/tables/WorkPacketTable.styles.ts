@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Link } from 'office-ui-fabric-react';
 import { Box as LayoutBox, Row as LayoutRow, Column as LayoutColumn } from '../../components/layouts';
 
 export const Container = styled(LayoutBox)`
@@ -27,3 +28,7 @@ export const StyledRow = styled(LayoutRow)`
 export const Column = styled(LayoutColumn)``;
 
 export const RightColumn = styled(LayoutColumn)``;
+
+export const DownloadLink = styled(Link)`
+  padding-right: 10px;
+`;
