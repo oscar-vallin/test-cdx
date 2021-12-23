@@ -25,7 +25,7 @@ export type FormUserType = {
   access: {
     title: FormTitle;
     options: OptionType[] | undefined;
-    values: any;
+    setOptions: any;
   };
   auth: {
     title: FormTitle;
@@ -48,7 +48,7 @@ export const useCreateUsersPanel = (orgSid) => {
   const [organizationId, setOrganizationId] = useState();
   const [userAccountForm, setUserAccountForm] = useState<any>();
   const [form, setForm] = useState<FormUserType>();
-  const [groupOption, setGroupOption] = useState<boolean[]>([]);
+  const [groupOption, setGroupOption] = useState<any | undefined[]>([]);
 
   const [apiUserAccountForm, { data: dataUserAccountForm, loading: userAccountLoading, error: userAccountError }] =
     useUserAccountFormLazyQuery({
@@ -112,6 +112,16 @@ export const useCreateUsersPanel = (orgSid) => {
         (option) => option?.key === accessPolicyGroups?.options
       );
 
+      const newAccessOptions = accessOptions?.values?.map((option, index) => {
+        return {
+          label: option?.label ?? '',
+          id: option?.value ?? '0',
+          checked: groupOption[index] ?? false,
+        };
+      });
+
+      setGroupOption(newAccessOptions);
+
       // Set Maps
       const newForm: FormUserType = {
         account: {
@@ -170,17 +180,8 @@ export const useCreateUsersPanel = (orgSid) => {
             required: accessPolicyGroups?.required,
             info: accessPolicyGroups?.info,
           },
-          options: accessOptions?.values?.map((option, index) => {
-            console.log('option', option);
-            console.log('index xxx = ', index);
-            return {
-              label: option?.label ?? '',
-              id: option?.value ?? '0',
-              checked: groupOption[index] ?? false,
-              onChange: () => handleGroupOption(index),
-            };
-          }),
-          values: 
+          options: groupOption,
+          setOptions: setGroupOption,
         },
         auth: {
           title: {
@@ -197,7 +198,6 @@ export const useCreateUsersPanel = (orgSid) => {
             },
           ],
           values: [accessOption, setAccessOption],
-
         },
       };
 
