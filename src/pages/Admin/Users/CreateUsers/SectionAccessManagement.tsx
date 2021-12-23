@@ -13,14 +13,23 @@ type SectionAccessProps = {
   form: FormUserType | undefined;
   onPrev: () => null;
   onNext: () => null;
+  saveOptions: any;
 };
 
-const SectionAccessManagement = ({ form, onPrev, onNext }: SectionAccessProps) => {
+const SectionAccessManagement = ({ form, onPrev, onNext, saveOptions }: SectionAccessProps) => {
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
-  const [groupOption, setGroupOption] = useState<boolean[]>([]);
+  const [groupOption, setGroupOption] = useState<any[] | undefined>([]);
+
+  useEffect(() => {
+    if (form?.auth?.options) {
+      setGroupOption(form.auth.options);
+    }
+  }, [form]);
 
   const handlePrev = () => {
     onPrev();
+    const newForm = { ...form, access: { ...form?.access, options: groupOption } };
+    saveOptions(newForm);
 
     return null;
   };
@@ -32,39 +41,14 @@ const SectionAccessManagement = ({ form, onPrev, onNext }: SectionAccessProps) =
   };
 
   const handleGroupOption = (index: number) => {
-    const newGroupOption = [...groupOption];
-    newGroupOption[index] = !newGroupOption[index];
+    const newGroupOption = groupOption?.map((item, i) => {
+      if (i === index) {
+        return { ...item, checked: !item.checked };
+      }
+      return item;
+    });
     setGroupOption(newGroupOption);
   };
-
-
-
-  // accessPolicyGroups: {value: null, label: "Access Groups", readOnly: false, info: null, required: false, visible: true,…}
-  // errCode: null;
-  // errMsg: null;
-  // errSeverity: null;
-  // info: null;
-  // label: 'Access Groups';
-  // options: 'AccessPolicyGroup';
-  // query: null;
-  // readOnly: false;
-  // required: false;
-  // value: null;
-  // visible: tru;
-
-  // 0: {key: "AccessPolicyGroup",…}
-  // key: "AccessPolicyGroup"
-  // values: [{label: "Auditor", value: "2", info: null, __typename: "UIOption"},…]
-  // 0: {label: "Auditor", value: "2", info: null, __typename: "UIOption"}
-  // info: null
-  // label: "Auditor"
-  // value: "2"
-  // __typename: "UIOption"
-  // 1: {label: "Organization Admin", value: "3", info: null, __typename: "UIOption"}
-  // info: null
-  // label: "Organization Admin"
-  // value: "3"
-  // __typename: "UIOption"
 
   return (
     <>
@@ -79,9 +63,7 @@ const SectionAccessManagement = ({ form, onPrev, onNext }: SectionAccessProps) =
       {form?.access?.options?.map((group, index) => (
         <StyledOptionRow key={`accessPolicyGroups-${index}`} bottom>
           <Column lg="12">
-            <Checkbox label={group.label} checked={groupOption[index]} onChange={() => form.access.options?.values} />
-            {/* <Checkbox label={group.label} checked={groupOption[index]} onChange={() => handleGroupOption(index)} /> */}
-            {/* <Checkbox {...group} onChange={() => form?.access?.values?.setGroupOption()} /> */}
+            <Checkbox label={group.label} checked={group[index].checked} onChange={() => handleGroupOption(index)} />
           </Column>
         </StyledOptionRow>
       ))}

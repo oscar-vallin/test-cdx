@@ -2,10 +2,14 @@ import { access } from 'fs';
 import { useEffect, useState } from 'react';
 import { InputTextProps } from 'src/components/inputs/InputText/InputText';
 import { useCreateUserMutation, useUserAccountFormLazyQuery } from 'src/data/services/graphql';
-import useCheckValue, { CheckType } from 'src/hooks/useCheckValue';
+import { CheckType } from 'src/hooks/useCheckValue';
 import { InputType, useInputValue } from 'src/hooks/useInputValue';
 
-export type OptionType = CheckType;
+export type OptionType = {
+  id?: string;
+  label: string;
+  checked: boolean;
+};
 
 export type FormTitle = {
   label: string | undefined;
@@ -25,12 +29,10 @@ export type FormUserType = {
   access: {
     title: FormTitle;
     options: OptionType[] | undefined;
-    setOptions: any;
   };
   auth: {
     title: FormTitle;
     options: OptionType[] | undefined;
-    values: any;
   };
 };
 
@@ -38,17 +40,15 @@ export const useCreateUsersPanel = (orgSid) => {
   const firstName = useInputValue('First Name', '', '', 'text');
   const lastName = useInputValue('Last Name', '', '', 'text');
   const email = useInputValue('Username and Email Address', '', '', 'email');
-  const [accessOption, setAccessOption] = useState<boolean>(false);
+  const [opts, setOpts] = useState<boolean[]>([]);
 
   const [exchangeReaderAll, setExchangeReaderAll] = useState(false);
   const [exchangeAdminVendor, setExchangeAdminVendor] = useState(false);
   const [userAdminAllOrgs, setUserAdminAllOrgs] = useState(false);
   const [userAdminSubOrgs, setUserAdminSubOrgs] = useState(false);
-  const [sendAccountActivation, setSendAccountActivation] = useState(false);
-  const [organizationId, setOrganizationId] = useState();
   const [userAccountForm, setUserAccountForm] = useState<any>();
   const [form, setForm] = useState<FormUserType>();
-  const [groupOption, setGroupOption] = useState<any | undefined[]>([]);
+  const [isUserCreated, setUserCreated] = useState(false);
 
   const [apiUserAccountForm, { data: dataUserAccountForm, loading: userAccountLoading, error: userAccountError }] =
     useUserAccountFormLazyQuery({
@@ -57,18 +57,7 @@ export const useCreateUsersPanel = (orgSid) => {
       },
     });
 
-  const [apiCall, { data, loading }] = useCreateUserMutation({
-    variables: {
-      userInfo: {
-        email: email.value,
-        orgSid: organizationId ?? '',
-      },
-      personInfo: {
-        firstNm: firstName.value,
-        lastNm: lastName.value,
-      },
-    },
-  });
+  const [apiCall, { data: userCreatedData, loading: creatingUserLoading }] = useCreateUserMutation();
 
   //
   // * When the organizationId changes, we need to re-fetch the user account form.
@@ -83,12 +72,6 @@ export const useCreateUsersPanel = (orgSid) => {
     }
   }, [orgSid]);
 
-  const handleGroupOption = (index: number) => {
-    const newGroupOption = [...groupOption];
-    newGroupOption[index] = !newGroupOption[index];
-    setGroupOption(newGroupOption);
-  };
-
   //  //accessPolicyGroups: {value: null, label: "Access Groups", readOnly: false, info: null, required: false, visible: true,…}
   // errCode: null;
   // errMsg: null;
@@ -102,6 +85,37 @@ export const useCreateUsersPanel = (orgSid) => {
   // value: null;
   // visible: tru;
 
+  const clearUserCreation = () => {
+    setUserCreated(false);
+  };
+
+  const handleCreateUser = async () => {
+    setUserCreated(false);
+    const accountFirstName = form?.account?.fields?.find(({ id }) => id === 'firstNm')?.value ?? '';
+    const accountLastName = form?.account?.fields?.find(({ id }) => id === 'lastNm')?.value ?? '';
+    const accountEmail = form?.account?.fields?.find(({ id }) => id === 'email')?.value ?? '';
+    const sendAccountActivation =
+      form?.auth?.options?.find(({ id }) => id === 'activation-link-checkbox')?.checked ?? false;
+    const accessPolicyGroupsOpts =
+      form?.access?.options?.filter(({ checked }) => checked)?.map((opt) => opt.label) ?? [];
+
+    console.log('handleCreateUser');
+    const { data } = await apiCall({
+      variables: {
+        userInfo: {
+          email: accountEmail,
+          orgSid,
+          sendActivationEmail: sendAccountActivation,
+          accessPolicyGroupSids: accessPolicyGroupsOpts,
+        },
+        personInfo: {
+          firstNm: accountFirstName,
+          lastNm: accountLastName,
+        },
+      },
+    });
+  };
+
   //
   useEffect(() => {
     if (dataUserAccountForm) {
@@ -112,17 +126,9 @@ export const useCreateUsersPanel = (orgSid) => {
         (option) => option?.key === accessPolicyGroups?.options
       );
 
-      const newAccessOptions = accessOptions?.values?.map((option, index) => {
-        return {
-          label: option?.label ?? '',
-          id: option?.value ?? '0',
-          checked: groupOption[index] ?? false,
-        };
-      });
-
-      setGroupOption(newAccessOptions);
-
       // Set Maps
+      setOpts(new Array((accessOptions?.values?.length ?? 0) + 1).fill(false));
+
       const newForm: FormUserType = {
         account: {
           title: {
@@ -180,8 +186,13 @@ export const useCreateUsersPanel = (orgSid) => {
             required: accessPolicyGroups?.required,
             info: accessPolicyGroups?.info,
           },
-          options: groupOption,
-          setOptions: setGroupOption,
+          options: accessOptions?.values?.map((option, index) => {
+            return {
+              label: option?.label ?? '',
+              id: option?.value ?? '0',
+              checked: opts[index],
+            };
+          }),
         },
         auth: {
           title: {
@@ -193,11 +204,9 @@ export const useCreateUsersPanel = (orgSid) => {
             {
               label: 'Send an Account Activation Link',
               id: 'activation-link-checkbox',
-              checked: accessOption,
-              onChange: () => {},
+              checked: opts[opts.length - 1],
             },
           ],
-          values: [accessOption, setAccessOption],
         },
       };
 
@@ -209,6 +218,7 @@ export const useCreateUsersPanel = (orgSid) => {
   // * Return the state of the form.
   return {
     form,
+    setForm,
     userAccountForm,
     userAccountLoading,
     userAccountError,
@@ -223,10 +233,10 @@ export const useCreateUsersPanel = (orgSid) => {
       setUserAdminAllOrgs,
       setUserAdminSubOrgs,
     },
-    infoAuthentication: { sendAccountActivation, setSendAccountActivation },
-    createUserCall: apiCall,
-    responseCreateUser: data,
-    loadingCreateUser: loading,
-    setOrganizationId,
+    createUserCall: handleCreateUser,
+    responseCreateUser: userCreatedData,
+    loadingCreateUser: creatingUserLoading,
+    isUserCreated,
+    clearUserCreation,
   };
 };

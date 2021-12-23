@@ -86,6 +86,12 @@ const CreateUsersPanel = ({ orgSid, isOpen, onDismiss, onCreateUser }: CreateUse
     setSelectedTab(hash);
   };
 
+  useEffect(() => {
+    if (CreateUserService.isUserCreated && CreateUserService.responseCreateUser) {
+      onDismiss();
+    }
+  }, [CreateUserService.isUserCreated]);
+
   return (
     <Panel
       closeButtonAriaLabel="Close"
@@ -109,7 +115,12 @@ const CreateUsersPanel = ({ orgSid, isOpen, onDismiss, onCreateUser }: CreateUse
               {
                 title: 'Access Management',
                 content: (
-                  <SectionAccessManagement form={CreateUserService.form} onPrev={handlePrev} onNext={handleNext} />
+                  <SectionAccessManagement
+                    form={CreateUserService.form}
+                    onPrev={handlePrev}
+                    onNext={handleNext}
+                    saveOptions={CreateUserService.setForm}
+                  />
                 ),
                 hash: '#access',
               },
@@ -118,23 +129,16 @@ const CreateUsersPanel = ({ orgSid, isOpen, onDismiss, onCreateUser }: CreateUse
                 content: (
                   <SectionAuthentication
                     form={userAccountForm}
-                    data={CreateUserService.infoAuthentication}
                     onPrev={handlePrev}
                     onNext={handleNext}
+                    saveOptions={CreateUserService.setForm}
                   />
                 ),
                 hash: '#auth',
               },
               {
                 title: 'Summary',
-                content: (
-                  <SectionSummary
-                    form={userAccountForm}
-                    data={CreateUserService}
-                    onPrev={handlePrev}
-                    onSubmit={handleCreateUser}
-                  />
-                ),
+                content: <SectionSummary form={userAccountForm} onPrev={handlePrev} onSubmit={handleCreateUser} />,
                 hash: '#summary',
               },
             ]}
