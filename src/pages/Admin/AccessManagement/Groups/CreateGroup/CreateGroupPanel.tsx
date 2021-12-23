@@ -184,10 +184,11 @@ const CreateGroupPanel = ({
                   <StyledContainer>
                     <Row>
                       <Column lg="6">
-                        {policies.map((item: { name: any; sid: never }) => {
+                        {policies.map((item: { name: any; sid: never }, index) => {
                           return (
                             <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                               <Checkbox
+                                id={`__checkBoxPolicies_${index + 1}`}
                                 label={item.name}
                                 checked={accessPolicyForm.policySids.includes(item.sid)}
                                 onChange={(event, policy) => {
@@ -255,6 +256,7 @@ const CreateGroupPanel = ({
 
               <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                 <Checkbox
+                  id="__checkBoxPoliciesApplies"
                   label="Policies Applies to All Sub Organizations except for those explicitly exclude"
                   onChange={(event, _stepWise) => addToAccessPolicyForm({ _stepWise })}
                 />

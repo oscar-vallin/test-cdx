@@ -104,7 +104,7 @@ const _AccessManagementGroupsPage = () => {
 
   const onRenderItemColumn = (item, index, column) => {
     if (column.key === 'tmpl') {
-      return <FontIcon iconName={item.tmpl ? 'CheckMark' : 'Cancel'} />;
+      return <FontIcon id={`__template_${index + 1}`} iconName={item.tmpl ? 'CheckMark' : 'Cancel'} />;
     }
     if (column.key === 'actions') {
       return (

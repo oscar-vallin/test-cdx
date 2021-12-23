@@ -89,10 +89,10 @@ export const useCreateGroupPanel = (isOpen, initialOrgSid, selectedGroupId) => {
         tmpl: findAccessPolicyGroup?.tmpl?.value,
         tmplUseAsIs: findAccessPolicyGroup?.tmplUseAsIs?.value,
         includeAllSubOrgs: findAccessPolicyGroup?.includeAllSubOrgs?.value,
-        policySids: findAccessPolicyGroup?.policies?.value,
-        specializationSids: findAccessPolicyGroup?.specializations?.value,
-        includeOrgSids: findAccessPolicyGroup?.includeOrgSids?.value,
-        excludeOrgSids: findAccessPolicyGroup?.excludeOrgSids?.value,
+        policySids: findAccessPolicyGroup?.policies?.value || [],
+        specializationSids: findAccessPolicyGroup?.specializations?.value || [],
+        includeOrgSids: findAccessPolicyGroup?.includeOrgSids?.value || [],
+        excludeOrgSids: findAccessPolicyGroup?.excludeOrgSids?.value || [],
       });
     }
   }, [policyGroup]);
