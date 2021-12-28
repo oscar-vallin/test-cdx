@@ -107,7 +107,6 @@ export const useCreateGroupPanel = (isOpen, initialOrgSid, selectedGroupId, temp
     }
 
     if (isFormOpen && templateId) {
-      console.log('Loading TemplateId: ', templateId);
       apiUseAccessPolicyForm({ variables: { orgSid, templateGroupSid: templateId } });
     }
   }, [selectedGroupId, isFormOpen, templateId]);
@@ -116,12 +115,9 @@ export const useCreateGroupPanel = (isOpen, initialOrgSid, selectedGroupId, temp
 
   useEffect(() => {
     if (isFormOpen && data && orgSid) {
-      console.log('🚀 ~ file: CreateGroupPanel.service.ts ~ line 120 ~ useEffect ~ data', data);
-
       setAcessPolicyFormRaw(data.accessPolicyGroupForm);
 
       if (templateId) {
-        console.log('🚀 ~ file: CreateGroupPanel.service.ts ~ line 125 ~ useEffect ~ templateId', templateId);
         setAccessPolicyForm({
           ...accessPolicyForm,
           tmpl: data.accessPolicyGroupForm?.tmpl?.value,

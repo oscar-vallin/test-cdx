@@ -199,7 +199,6 @@ const CreateGroupPanel = ({
                                 label={item.name}
                                 checked={accessPolicyForm.policySids.find((policy) => policy.value === item.sid)}
                                 onChange={(event, policy) => {
-                                  console.log('accessPolicyForm.policySids: ', accessPolicyForm.policySids);
                                   addToAccessPolicyForm({
                                     policySids: policy
                                       ? [...accessPolicyForm.policySids, item]

@@ -83,16 +83,11 @@ const CreateUsersPanel = ({ orgSid, isOpen, onDismiss, onCreateUser }: CreateUse
   };
 
   const handleNext = (): null => {
-    console.log('createpanel handleNext');
-
     setStep(step + 1);
-    console.log('🚀 ~ file: CreateUsersPanel.tsx ~ line 64 ~ handleNext ~ step', step);
     return null;
   };
 
   const handlePrev = (): null => {
-    console.log('createpanel handlePrev');
-
     setStep(step - 1);
     return null;
   };

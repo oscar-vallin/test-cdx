@@ -213,41 +213,8 @@ const _ActiveUsersPage = () => {
           isOpen={isPanelOpen}
           onCreateUser={(createdUser) => {
             setSelectedItems([]);
-            // console.log('🚀 ~ file: ActiveUsersPage.tsx ~ line 212 ~ createdUser', createdUser);
-            // console.log('users', users);
 
             fetchUsers();
-
-            // acessPolicyGroups: Array(1)
-            // 0: {sid: '2', name: 'AUDITOR', description: 'Auditor', tmpl: true, tmplUseAsIs: true, …}
-            // length: 1
-            // [[Prototype]]: Array(0)
-            // email: "edison.sanchez@known2u.com"
-            // person: {sid: '3', firstNm: 'Edison', lastNm: 'Sanchez', __typename: 'Person'}
-            // sid: "3"
-
-            // if (users) {
-            //   const newUsers = [
-            //     ...users,
-            //     {
-            //       ...users[users.length - 1],
-            //       item: {
-            //         sid: createdUser.sid,
-            //         email: createdUser.email.value,
-            //         person: {
-            //           sid: createdUser.person.sid,
-            //           firstNm: createdUser.person.firstNm,
-            //           lastNm: createdUser.person.lastNm,
-            //         },
-            //         acessPolicyGroups: createdUser.accessPolicyGroups.value,
-            //       },
-            //       listItemCommands: null,
-            //     },
-            //   ];
-            //   console.log('🚀 ~ file: ActiveUsersPage.tsx ~ line 234 ~ newUsers', newUsers);
-
-            //   setUsers(newUsers);
-            // }
           }}
           onDismiss={() => {
             setIsPanelOpen(false);

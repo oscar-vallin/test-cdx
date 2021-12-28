@@ -22,7 +22,6 @@ const SectionAccessManagement = ({ form, onPrev, onNext, saveOptions }: SectionA
   const [isLoading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    console.log('🚀 ~ file: SectionAccessManagement.tsx ~ line 26 ~ useEffect ~ form', form);
     if (form?.auth) {
       if (form?.auth?.options) {
         setGroupOption(form?.auth?.options.map((option) => option.checked));
@@ -42,8 +41,6 @@ const SectionAccessManagement = ({ form, onPrev, onNext, saveOptions }: SectionA
       },
     };
 
-    console.log('🚀 ~ file: SectionAccessManagement.tsx ~ line 37 ~ handlePrev ~ newForm', newForm);
-
     saveOptions(newForm);
     return newForm;
   };
@@ -57,7 +54,7 @@ const SectionAccessManagement = ({ form, onPrev, onNext, saveOptions }: SectionA
 
   const handleNext = () => {
     const newForm = handleSave();
-    console.log('🚀 ~ file: SectionAccessManagement.tsx ~ line 60 ~ handleNext ~ newForm', newForm);
+
     saveOptions(newForm);
     onNext();
 
@@ -85,8 +82,6 @@ const SectionAccessManagement = ({ form, onPrev, onNext, saveOptions }: SectionA
           </Row>
           {groupOption?.length &&
             form?.access?.options?.map((group, index) => {
-              console.log('group', group);
-              console.log('index', index);
               return (
                 <StyledOptionRow key={`accessPolicyGroups-${index}`} bottom>
                   <Column lg="12">

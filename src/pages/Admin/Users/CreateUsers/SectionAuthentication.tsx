@@ -22,7 +22,6 @@ const SectionAuthentication = ({ form, onPrev, onNext, saveOptions }: SectionAut
   const [isLoading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    console.log('🚀 ~ file: SectionAuthentication.tsx ~ line 27 ~ useEffect ~ form?.auth', form?.auth);
     if (form?.auth) {
       setLoading(false);
 
