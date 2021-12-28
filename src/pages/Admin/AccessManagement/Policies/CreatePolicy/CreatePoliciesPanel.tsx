@@ -6,6 +6,7 @@ import _ from 'lodash';
 
 import { useNotification } from 'src/hooks/useNotification';
 import { Multiselect } from 'src/components/selects/Multiselect';
+import { isJSDocNonNullableType } from 'typescript';
 import { Spacing } from '../../../../../components/spacings/Spacing';
 import { Card } from '../../../../../components/cards';
 import { Button } from '../../../../../components/buttons';
@@ -129,8 +130,10 @@ const CreatePoliciesPanel = ({
         onDismiss();
       }
     }
+  }, [createdPolicy]);
 
-    if (updatedPolicy) {
+  useEffect(() => {
+    if (updatedPolicy && selectedPolicyId) {
       const { updateAccessPolicy } = updatedPolicy;
 
       if (updateAccessPolicy?.response && updateAccessPolicy?.response === 'FAIL') {
@@ -141,17 +144,17 @@ const CreatePoliciesPanel = ({
         onDismiss();
       }
     }
-  }, [createdPolicy, updatedPolicy]);
+  }, [updatedPolicy]);
 
   useEffect(() => {
     if (isOpen) {
-      if (!selectedPolicyId) {
+      if (!selectedPolicyId || selectedTemplateId) {
         setApplicableOrgTypes([]);
         setPermissions([]);
-        setState({ ...INITIAL_STATE });
         fetchPolicyForm({
           variables: { orgSid, ...(selectedTemplateId ? { templatePolicySid: selectedTemplateId } : {}) },
         });
+        setState({ ...INITIAL_STATE });
       } else {
         setPolicyForm({});
       }
@@ -167,7 +170,7 @@ const CreatePoliciesPanel = ({
         const { applicableOrgTypes, permissions } = form?.accessPolicyForm || {};
 
         setState({
-          ...state,
+          ...INITIAL_STATE,
           permissions: permissions.value?.map(({ value }) => value) || [],
         });
 
@@ -342,7 +345,8 @@ const CreatePoliciesPanel = ({
                                                       permissions: checked
                                                         ? [...state.permissions, option.value]
                                                         : state.permissions.filter((value) => value !== option.value),
-                                                    })}
+                                                    })
+                                                  }
                                                 />
                                               </Spacing>
                                             ))}

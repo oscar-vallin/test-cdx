@@ -221,7 +221,7 @@ const _AccessManagementPoliciesPage = () => {
                 <EmptyState
                   title="No policies found"
                   description="You haven't created an access policy yet. Click the button below to create a new policy."
-                  actions={
+                  actions={(
                     <Button
                       id="CreatePolicyButton"
                       variant="primary"
@@ -232,7 +232,7 @@ const _AccessManagementPoliciesPage = () => {
                     >
                       Create policy
                     </Button>
-                  }
+                  )}
                 />
               ) : (
                 <DetailsList
@@ -247,6 +247,8 @@ const _AccessManagementPoliciesPage = () => {
             </StyledColumn>
           </Row>
         </Spacing>
+
+        {selectedPolicyId}
 
         <CreatePoliciesPanel
           isOpen={isPanelOpen}
