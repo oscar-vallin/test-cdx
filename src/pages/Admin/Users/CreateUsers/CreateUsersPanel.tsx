@@ -43,26 +43,42 @@ const enum Tab {
 
 const CreateUsersPanel = ({ orgSid, isOpen, onDismiss, onCreateUser }: CreateUsersPanelProps): ReactElement => {
   const CreateUserService = useCreateUsersPanel(orgSid);
+  const [errorMessage, setErrorMessage] = useState<string | undefined>();
 
   const [step, setStep] = useState(Tab.Account);
   const [selectedTab, setSelectedTab] = useState(tabs[Tab.Account]);
   const { userAccountForm, userAccountLoading } = CreateUserService ?? {};
-  // console.log('🚀 ~ file: CreateUsersPanel.tsx ~ line 46 ~ CreateUsersPanel ~ CreateUserService', CreateUserService);
-  // console.log('🚀 ~ file: CreateUsersPanel.tsx ~ line 49 ~ CreateUsersPanel ~ userAccountForm', userAccountForm);
+  const [isProcessing, setProcessing] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log('🚀 ~ file: CreateUsersPanel.tsx ~ line 55 ~ useEffect ~ step', step);
     if (step >= 0 && step < 4) {
-      console.log('STEP IS IN RANGE');
-      console.log('STEP =', step.toString());
       setSelectedTab(tabs[step]);
     }
   }, [step]);
 
-  const handleCreateUser = (): null => {
-    CreateUserService.createUserCall();
-    onCreateUser();
-    onDismiss();
+  const handleCreateUser = async () => {
+    setProcessing(true);
+    const responseCreate = await CreateUserService.createUserCall();
+    setProcessing(false);
+    //
+    if (responseCreate?.createUser) {
+      if (responseCreate?.createUser?.response.toLocaleUpperCase() === 'SUCCESS') {
+        onCreateUser(responseCreate.createUser);
+        onDismiss();
+        return;
+      }
+
+      setErrorMessage(
+        responseCreate?.createUser?.errMsg ?? responseCreate?.createUser?.response ?? 'Error Creating User'
+      );
+
+      setTimeout(() => {
+        setErrorMessage(undefined);
+      }, 3000);
+    }
+
+    //
+
     return null;
   };
 
@@ -105,46 +121,67 @@ const CreateUsersPanel = ({ orgSid, isOpen, onDismiss, onCreateUser }: CreateUse
       <>
         {userAccountLoading && <Text>Loading...</Text>}
         {!userAccountLoading && (
-          <Tabs
-            items={[
-              {
-                title: 'Account',
-                content: <SectionAccount form={CreateUserService.form} onNext={handleNext} />,
-                hash: '#account',
-              },
-              {
-                title: 'Access Management',
-                content: (
-                  <SectionAccessManagement
-                    form={CreateUserService.form}
-                    onPrev={handlePrev}
-                    onNext={handleNext}
-                    saveOptions={CreateUserService.setForm}
-                  />
-                ),
-                hash: '#access',
-              },
-              {
-                title: 'Authentication',
-                content: (
-                  <SectionAuthentication
-                    form={userAccountForm}
-                    onPrev={handlePrev}
-                    onNext={handleNext}
-                    saveOptions={CreateUserService.setForm}
-                  />
-                ),
-                hash: '#auth',
-              },
-              {
-                title: 'Summary',
-                content: <SectionSummary form={userAccountForm} onPrev={handlePrev} onSubmit={handleCreateUser} />,
-                hash: '#summary',
-              },
-            ]}
-            selectedKey={step < 0 ? '0' : step.toString()}
-            onClickTab={handleTabChange}
-          />
+          <>
+            <Tabs
+              items={[
+                {
+                  title: 'Account',
+                  content: (
+                    <SectionAccount
+                      form={CreateUserService.form}
+                      onNext={handleNext}
+                      saveOptions={CreateUserService.setForm}
+                    />
+                  ),
+                  hash: '#account',
+                },
+                {
+                  title: 'Access Management',
+                  content: (
+                    <SectionAccessManagement
+                      form={CreateUserService.form}
+                      onPrev={handlePrev}
+                      onNext={handleNext}
+                      saveOptions={CreateUserService.setForm}
+                    />
+                  ),
+                  hash: '#access',
+                },
+                {
+                  title: 'Authentication',
+                  content: (
+                    <SectionAuthentication
+                      form={CreateUserService.form}
+                      onPrev={handlePrev}
+                      onNext={handleNext}
+                      saveOptions={CreateUserService.setForm}
+                    />
+                  ),
+                  hash: '#auth',
+                },
+                {
+                  title: 'Summary',
+                  content: (
+                    <SectionSummary
+                      form={CreateUserService.form}
+                      onPrev={handlePrev}
+                      onSubmit={handleCreateUser}
+                      isProcessing={isProcessing}
+                    />
+                  ),
+                  hash: '#summary',
+                },
+              ]}
+              selectedKey={step < 0 ? '0' : step.toString()}
+              onClickTab={handleTabChange}
+            />
+            {errorMessage && (
+              <>
+                <Spacing margin={{ top: 'double' }} />
+                <Text>{errorMessage}</Text>
+              </>
+            )}
+          </>
         )}
       </>
     </Panel>

@@ -18,11 +18,17 @@ type SectionAuthProps = {
 
 const SectionAuthentication = ({ form, onPrev, onNext, saveOptions }: SectionAuthProps) => {
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
-  const [groupOption, setGroupOption] = useState<any[] | undefined>([]);
+  const [groupOption, setGroupOption] = useState<boolean[] | undefined>([]);
+  const [isLoading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    if (form?.auth?.options) {
-      setGroupOption(form.auth.options);
+    console.log('🚀 ~ file: SectionAuthentication.tsx ~ line 27 ~ useEffect ~ form?.auth', form?.auth);
+    if (form?.auth) {
+      setLoading(false);
+
+      if (form?.auth?.options) {
+        setGroupOption(form?.auth?.options.map((option) => option.checked));
+      }
     }
   }, [form]);
 
@@ -47,33 +53,39 @@ const SectionAuthentication = ({ form, onPrev, onNext, saveOptions }: SectionAut
   };
 
   const handleGroupOption = (index: number) => {
-    const newGroupOption = groupOption?.map((item, i) => {
-      if (i === index) {
-        return { ...item, checked: !item.checked };
-      }
-      return item;
-    });
+    const newGroupOption = groupOption?.map((item, i) => (i === index ? !item : item));
+
     setGroupOption(newGroupOption);
   };
 
   return (
     <>
       <Spacing margin={{ top: 'normal' }} />
-      <Row bottom>
-        {form?.access && (
-          <Column lg="12">
-            <FormLabel {...form.access.title} />
-          </Column>
-        )}
-      </Row>
-      {form?.auth?.options?.map((group, index) => (
-        <StyledOptionRow key={`AuthenticationOptions-${index}`} bottom>
-          <Column lg="12">
-            <Checkbox label={group.label} checked={group[index].checked} onChange={() => handleGroupOption(index)} />
-          </Column>
-        </StyledOptionRow>
-      ))}
-      <CreateUsersFooter onPrev={handlePrev} onNext={handleNext} errorMessage={errorMessage} />
+      {isLoading && <> Loading... </>}
+      {!isLoading && (
+        <>
+          <Row bottom>
+            {form?.access && (
+              <Column lg="12">
+                <FormLabel {...form.access.title} />
+              </Column>
+            )}
+          </Row>
+          {groupOption?.length &&
+            form?.auth?.options?.map((group, index) => (
+              <StyledOptionRow key={`AuthenticationOptions-${index}`} bottom>
+                <Column lg="12">
+                  <Checkbox
+                    label={group.label}
+                    checked={groupOption[index] ?? false}
+                    onChange={() => handleGroupOption(index)}
+                  />
+                </Column>
+              </StyledOptionRow>
+            ))}
+          <CreateUsersFooter onPrev={handlePrev} onNext={handleNext} errorMessage={errorMessage} />
+        </>
+      )}
     </>
   );
 };

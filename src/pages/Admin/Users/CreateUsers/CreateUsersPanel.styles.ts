@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { CommandBarButton } from '@fluentui/react';
+import { Text } from 'src/components/typography';
 import { Column, Row } from '../../../../components/layouts';
 
 export const StyledCommandButton = styled(CommandBarButton)`
@@ -19,4 +20,8 @@ export const StyledColumn = styled(Column)`
 
 export const StyledOptionRow = styled(Row)`
   padding: 8px 16px;
+`;
+
+export const StyledText = styled(Text)`
+  padding: 0px 8px 24px;
 `;

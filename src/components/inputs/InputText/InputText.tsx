@@ -53,7 +53,7 @@ const InputText = ({
     return null;
   };
 
-  const onRenderLabel = () => <FormLabel {...props} />;
+  const onRenderLabel = () => <FormLabel required={required} info={info} {...props} />;
 
   return (
     <StyledTextField

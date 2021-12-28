@@ -18,56 +18,90 @@ type SectionAccessProps = {
 
 const SectionAccessManagement = ({ form, onPrev, onNext, saveOptions }: SectionAccessProps) => {
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
-  const [groupOption, setGroupOption] = useState<any[] | undefined>([]);
+  const [groupOption, setGroupOption] = useState<boolean[] | undefined>([]);
+  const [isLoading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    if (form?.auth?.options) {
-      setGroupOption(form.auth.options);
+    console.log('🚀 ~ file: SectionAccessManagement.tsx ~ line 26 ~ useEffect ~ form', form);
+    if (form?.auth) {
+      if (form?.auth?.options) {
+        setGroupOption(form?.auth?.options.map((option) => option.checked));
+      }
+      setLoading(false);
     }
   }, [form]);
 
-  const handlePrev = () => {
-    onPrev();
-    const newForm = { ...form, access: { ...form?.access, options: groupOption } };
+  const handleSave = () => {
+    const newForm = {
+      ...form,
+      access: {
+        ...form?.access,
+        options: form?.access?.options?.map((opt, index) => {
+          return { ...opt, checked: groupOption ? groupOption[index] ?? false : false };
+        }),
+      },
+    };
+
+    console.log('🚀 ~ file: SectionAccessManagement.tsx ~ line 37 ~ handlePrev ~ newForm', newForm);
+
     saveOptions(newForm);
+    return newForm;
+  };
+
+  const handlePrev = () => {
+    handleSave();
+    onPrev();
 
     return null;
   };
 
   const handleNext = () => {
+    const newForm = handleSave();
+    console.log('🚀 ~ file: SectionAccessManagement.tsx ~ line 60 ~ handleNext ~ newForm', newForm);
+    saveOptions(newForm);
     onNext();
 
     return null;
   };
 
   const handleGroupOption = (index: number) => {
-    const newGroupOption = groupOption?.map((item, i) => {
-      if (i === index) {
-        return { ...item, checked: !item.checked };
-      }
-      return item;
-    });
+    const newGroupOption = groupOption?.map((item, i) => (i === index ? !item : item));
+
     setGroupOption(newGroupOption);
   };
 
   return (
     <>
       <Spacing margin={{ top: 'normal' }} />
-      <Row bottom>
-        {form?.access && (
-          <Column lg="12">
-            <FormLabel {...form.access.title} />
-          </Column>
-        )}
-      </Row>
-      {form?.access?.options?.map((group, index) => (
-        <StyledOptionRow key={`accessPolicyGroups-${index}`} bottom>
-          <Column lg="12">
-            <Checkbox label={group.label} checked={group[index].checked} onChange={() => handleGroupOption(index)} />
-          </Column>
-        </StyledOptionRow>
-      ))}
-      <CreateUsersFooter onPrev={handlePrev} onNext={handleNext} errorMessage={errorMessage} />
+      {isLoading && <> Loading... </>}
+      {!isLoading && (
+        <>
+          <Row bottom>
+            {form?.access && (
+              <Column lg="12">
+                <FormLabel {...form.access.title} />
+              </Column>
+            )}
+          </Row>
+          {groupOption?.length &&
+            form?.access?.options?.map((group, index) => {
+              console.log('group', group);
+              console.log('index', index);
+              return (
+                <StyledOptionRow key={`accessPolicyGroups-${index}`} bottom>
+                  <Column lg="12">
+                    <Checkbox
+                      label={group.label}
+                      checked={groupOption[index] ?? false}
+                      onChange={() => handleGroupOption(index)}
+                    />
+                  </Column>
+                </StyledOptionRow>
+              );
+            })}
+          <CreateUsersFooter onPrev={handlePrev} onNext={handleNext} errorMessage={errorMessage} />
+        </>
+      )}
     </>
   );
 };

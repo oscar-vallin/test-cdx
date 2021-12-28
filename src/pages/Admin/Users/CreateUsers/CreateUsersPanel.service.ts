@@ -17,29 +17,40 @@ export type FormTitle = {
   info: any | undefined;
 };
 
-export type FormInput = InputTextProps & {
-  visible: boolean | undefined;
+export type FormInput = {
+  id?: string;
+  type?: string;
+  disabled?: boolean;
+  onChange?: any | null;
+  autofocus?: boolean;
+  errorMessage?: any | string;
+  onKeyDown?: any | null;
+  onKeyEnter?: any | null;
+  value?: string | undefined;
+  placeholder?: string;
+  autoFocus?: boolean;
+  required?: boolean;
+  canRevealPassword?: boolean;
+  label?: string;
+  maxLength?: number;
+  minLength?: number;
+  info?: string;
+  visible?: boolean;
 };
 
 export type FormUserType = {
-  account: {
-    title: FormTitle & { description: string | undefined };
-    fields: FormInput[];
-  };
-  access: {
-    title: FormTitle;
+  account?: { title: FormTitle & { description: string | undefined }; fields: FormInput[] } | undefined;
+  access?: {
+    title?: FormTitle;
     options: OptionType[] | undefined;
   };
-  auth: {
+  auth?: {
     title: FormTitle;
     options: OptionType[] | undefined;
   };
 };
 
 export const useCreateUsersPanel = (orgSid) => {
-  const firstName = useInputValue('First Name', '', '', 'text');
-  const lastName = useInputValue('Last Name', '', '', 'text');
-  const email = useInputValue('Username and Email Address', '', '', 'email');
   const [opts, setOpts] = useState<boolean[]>([]);
 
   const [exchangeReaderAll, setExchangeReaderAll] = useState(false);
@@ -94,12 +105,12 @@ export const useCreateUsersPanel = (orgSid) => {
     const accountFirstName = form?.account?.fields?.find(({ id }) => id === 'firstNm')?.value ?? '';
     const accountLastName = form?.account?.fields?.find(({ id }) => id === 'lastNm')?.value ?? '';
     const accountEmail = form?.account?.fields?.find(({ id }) => id === 'email')?.value ?? '';
+
     const sendAccountActivation =
       form?.auth?.options?.find(({ id }) => id === 'activation-link-checkbox')?.checked ?? false;
-    const accessPolicyGroupsOpts =
-      form?.access?.options?.filter(({ checked }) => checked)?.map((opt) => opt.label) ?? [];
+    const accessPolicyGroupsOpts: string[] =
+      form?.access?.options?.filter(({ checked }) => checked)?.map((opt) => opt.id ?? '') ?? [];
 
-    console.log('handleCreateUser');
     const { data } = await apiCall({
       variables: {
         userInfo: {
@@ -114,6 +125,8 @@ export const useCreateUsersPanel = (orgSid) => {
         },
       },
     });
+
+    return data;
   };
 
   //
@@ -139,7 +152,8 @@ export const useCreateUsersPanel = (orgSid) => {
           },
           fields: [
             {
-              ...firstName,
+              value: '',
+              label: userAccountForm?.person?.firstNm?.label,
               required: userAccountForm?.person?.firstNm?.required,
               disabled: !!userAccountForm?.person?.firstNm?.readOnly,
               type: 'text',
@@ -152,7 +166,8 @@ export const useCreateUsersPanel = (orgSid) => {
               visible: userAccountForm?.person?.firstNm?.visible,
             },
             {
-              ...lastName,
+              value: '',
+              label: userAccountForm?.person?.lastNm?.label,
               required: userAccountForm?.person?.lastNm?.required,
               disabled: !!userAccountForm?.person?.lastNm?.readOnly,
               type: 'text',
@@ -165,7 +180,8 @@ export const useCreateUsersPanel = (orgSid) => {
               visible: userAccountForm?.person?.lastNm?.visible,
             },
             {
-              ...email,
+              value: '',
+              label: userAccountForm?.email?.label,
               required: userAccountForm?.email?.required,
               disabled: !!userAccountForm?.email?.readOnly,
               type: 'text',
@@ -222,7 +238,6 @@ export const useCreateUsersPanel = (orgSid) => {
     userAccountForm,
     userAccountLoading,
     userAccountError,
-    infoAccount: { firstName, lastName, email },
     infoAccess: {
       exchangeReaderAll,
       exchangeAdminVendor,
