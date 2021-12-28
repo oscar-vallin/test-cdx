@@ -140,8 +140,7 @@ export const useCreateGroupPanel = (isOpen, initialOrgSid, selectedGroupId) => {
 
   useEffect(() => {
     if (updatedPolicyGroup) {
-      //   onUpdateGroupPolicy(updatedPolicyGroup.updateAccessPolicyGroup);
-      //   onDismiss();
+      setIsFormOpen(false);
     }
   }, [updatedPolicyGroup]);
 
@@ -220,5 +219,6 @@ export const useCreateGroupPanel = (isOpen, initialOrgSid, selectedGroupId) => {
     updatePolicyGroup,
     creatingGroup,
     createdPolicyGroup,
+    updatedPolicyGroup,
   };
 };

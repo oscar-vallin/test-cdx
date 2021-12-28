@@ -111,6 +111,7 @@ const _AccessManagementGroupsPage = () => {
         <>
           &nbsp;
           <StyledCommandButton
+            id={`__deleteGroup_${index + 1}`}
             iconProps={{ iconName: 'Delete' }}
             onClick={() => {
               handleDeleteGroup(item.sid);
@@ -125,6 +126,7 @@ const _AccessManagementGroupsPage = () => {
         <>
           &nbsp;
           <Link
+            id={`__AccessManagement__Name_Field_${index + 1}`}
             onClick={() => {
               setSelectedGroupId(item.sid);
               setIsPanelOpen(true);
@@ -169,7 +171,7 @@ const _AccessManagementGroupsPage = () => {
       <>
         <Row>
           <Column lg="6">
-            <Spacing margin={{ top: 'small' }}>
+            <Spacing id="__containerSpanTitle" margin={{ top: 'small' }}>
               <Text variant="bold">Groups</Text>
             </Spacing>
           </Column>

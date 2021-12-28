@@ -91,6 +91,7 @@ const CreateGroupPanel = ({
 
   return (
     <Panel
+      id="__createGroupPanel"
       closeButtonAriaLabel="Close"
       type={PanelType.large}
       headerText={!accessPolicyForm.policyGroupSid ? 'New Access Policy Group' : 'Update Policy Group'}
@@ -104,6 +105,7 @@ const CreateGroupPanel = ({
               <Row bottom>
                 <Column lg="12">
                   <InputText
+                    id="__groupInputName"
                     required
                     label="Name"
                     placeholder="Please enter a Unifique Name"
@@ -127,6 +129,7 @@ const CreateGroupPanel = ({
                     {accessPolicyFormRaw?.tmpl?.visible && (
                       <Column lg="6" direction="row">
                         <Checkbox
+                          id="__checkBoxTemplateGroup"
                           label={accessPolicyFormRaw?.tmpl?.label}
                           checked={accessPolicyForm.tmpl}
                           onChange={(_event, tmpl: any) =>
@@ -143,6 +146,7 @@ const CreateGroupPanel = ({
                     {accessPolicyForm.tmpl && accessPolicyFormRaw?.tmplUseAsIs?.visible && (
                       <Column lg="6" direction="row">
                         <Checkbox
+                          id="__checkBoxUseAsIs"
                           label={accessPolicyFormRaw?.tmplUseAsIs?.label}
                           checked={accessPolicyForm.tmplUseAsIs}
                           onChange={(_event, tmplUseAsIs: any) => addToAccessPolicyForm({ tmplUseAsIs })}
@@ -225,10 +229,11 @@ const CreateGroupPanel = ({
                   <StyledContainer>
                     <Row>
                       <Column lg="6">
-                        {specializations.map((item: { name: any; sid: never }) => {
+                        {specializations.map((item: { name: any; sid: never }, index) => {
                           return (
                             <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                               <Checkbox
+                                id={`__checkBoxSuperPolicy_${index + 1}`}
                                 label={item.name}
                                 checked={accessPolicyForm.specializationSids.includes(item.sid)}
                                 onChange={(event, specialization) => {
@@ -283,7 +288,7 @@ const CreateGroupPanel = ({
                           pickerSuggestionsProps={pickerSuggestionsProps}
                           itemLimit={4}
                           inputProps={{
-                            id: 'pickerId',
+                            id: '__pickerPoliciesNotApply',
                           }}
                         />
                       </div>
@@ -312,7 +317,7 @@ const CreateGroupPanel = ({
                           onItemSelected={onIncludedOrgsSelected}
                           itemLimit={4}
                           inputProps={{
-                            id: 'pickerId',
+                            id: '__pickerPoliciesApply',
                           }}
                         />
                       </div>
@@ -341,7 +346,7 @@ const CreateGroupPanel = ({
                           onItemSelected={onExcludedOrgsSelected}
                           itemLimit={4}
                           inputProps={{
-                            id: 'pickerId',
+                            id: '__pickerPoliciesNotApplyTwo',
                           }}
                         />
                       </div>
@@ -353,6 +358,7 @@ const CreateGroupPanel = ({
               {accessPolicyFormRaw?.includeAllSubOrgs?.visible && (
                 <Column lg="6" direction="row">
                   <Checkbox
+                    id="__checkBoxIncludeAllSubOrgs"
                     label={accessPolicyFormRaw?.includeAllSubOrgs?.label}
                     checked={accessPolicyForm.includeAllSubOrgs}
                     onChange={(_event, includeAllSubOrgs) => addToAccessPolicyForm({ includeAllSubOrgs })}

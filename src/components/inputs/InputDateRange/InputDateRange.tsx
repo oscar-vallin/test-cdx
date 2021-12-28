@@ -16,10 +16,10 @@ const InputDateRange = ({ startDate, endDate }: InputDateRangeProps): ReactEleme
   return (
     <Row id="InputDateRange--Row">
       <Column id="InputDateRange--Column--From" lg="6">
-        <InputDate id="Input__From__Date" label="From" {...startDate} required={false} />
+        <InputDate id="Input__From__Date" label="From" {...startDate} required />
       </Column>
       <Column id="InputDateRange--Column--To" lg="6">
-        <InputDate id="Input__To__Date" label="To" {...endDate} required={false} />
+        <InputDate id="Input__To__Date" label="To" {...endDate} required />
       </Column>
     </Row>
   );

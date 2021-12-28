@@ -117,14 +117,16 @@ export const WorkPacketTable = ({
   }, [orgSid, tableFilters.searchText.delayedValue, tableFilters.startDate.value, tableFilters.endDate.value]);
 
   useEffect(() => {
-    apiCall({
-      variables: {
-        orgSid,
-        searchText: tableFilters.searchText.delayedValue,
-        dateRange: { rangeStart: tableFilters.startDate.value, rangeEnd: tableFilters.endDate.value },
-        pageableInput: tableFilters.pagingParams,
-      },
-    });
+    if (tableFilters.startDate.value && tableFilters.endDate.value) {
+      apiCall({
+        variables: {
+          orgSid,
+          searchText: tableFilters.searchText.delayedValue,
+          dateRange: { rangeStart: tableFilters.startDate.value, rangeEnd: tableFilters.endDate.value },
+          pageableInput: tableFilters.pagingParams,
+        },
+      });
+    }
   }, [orgSid, tableFilters.pagingParams, lastUpdated]);
 
   useEffect(() => {
