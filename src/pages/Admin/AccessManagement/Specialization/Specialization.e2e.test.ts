@@ -2,8 +2,6 @@ import PuppetCDXApp from '../../../../teste2e/pages/PuppetCDXApp';
 import PuppetAccessSpecialization from '../../../../teste2e/pages/PuppetAccessSpecialization';
 import PuppetAdminMenu from '../../../../teste2e/pages/PuppetAdminMenu';
 
-jest.setTimeout(999999999);
-
 describe('E2E - Access Specialization Test', () => {
   let cdxApp: PuppetCDXApp;
 
