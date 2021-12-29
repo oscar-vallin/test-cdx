@@ -84,6 +84,8 @@ export default class PuppetCDXApp {
   }
 
   static async startBrowser(testTitle: string): Promise<PuppetCDXApp> {
+    jest.setTimeout(30000);
+
     const browser = await puppeteer.launch({
       headless: !(!!process.env.npm_config_headless || !!process.env.IS_HEADLESS),
       args: ['--no-sandbox'],
