@@ -34,6 +34,7 @@ type CreateGroupPanelProps = {
   onCreateGroupPolicy?: any | null;
   onUpdateGroupPolicy?: any | null;
   selectedGroupId?: any;
+  templateId?: any;
 } & typeof defaultProps;
 
 const rootClass = mergeStyles({
@@ -49,10 +50,11 @@ const CreateGroupPanel = ({
   onCreateGroupPolicy,
   onUpdateGroupPolicy,
   selectedGroupId,
+  templateId,
 }: CreateGroupPanelProps): ReactElement => {
   const { orgSid } = useOrgSid();
 
-  const accessManagementGroupService = useCreateGroupPanel(isOpen, orgSid, selectedGroupId);
+  const accessManagementGroupService = useCreateGroupPanel(isOpen, orgSid, selectedGroupId, templateId);
   const { policies, specializations, organizations } = accessManagementGroupService;
   const { accessPolicyForm, accessPolicyFormRaw } = accessManagementGroupService;
   const { clearAccessPolicyForm, addToAccessPolicyForm } = accessManagementGroupService;
@@ -62,7 +64,7 @@ const CreateGroupPanel = ({
   const { loadingPolicies } = accessManagementGroupService;
   const { createPolicyGroup, updatePolicyGroup } = accessManagementGroupService;
   const { isFormOpen } = accessManagementGroupService;
-  const { createdPolicyGroup } = accessManagementGroupService;
+  const { createdPolicyGroup, updatedPolicyGroup } = accessManagementGroupService;
 
   const pickerSuggestionsProps = {
     suggestionsHeaderText: 'Suggested Organizations',
@@ -76,12 +78,17 @@ const CreateGroupPanel = ({
   };
 
   useEffect(() => {
-    if (!isFormOpen && createdPolicyGroup) {
+    if (!isFormOpen && (createdPolicyGroup || updatedPolicyGroup)) {
       clearAccessPolicyForm();
-      onCreateGroupPolicy(createdPolicyGroup.createAccessPolicyGroup);
+
+      if (createdPolicyGroup) {
+        onCreateGroupPolicy(createdPolicyGroup.createAccessPolicyGroup);
+      } else {
+        onUpdateGroupPolicy(updatedPolicyGroup?.updateAccessPolicyGroup);
+      }
       handleDismiss();
     }
-  }, [isFormOpen, createdPolicyGroup]);
+  }, [isFormOpen, createdPolicyGroup, updatedPolicyGroup]);
 
   useEffect(() => {
     if (isOpen) {
@@ -184,17 +191,18 @@ const CreateGroupPanel = ({
                   <StyledContainer>
                     <Row>
                       <Column lg="6">
-                        {policies.map((item: { name: any; sid: never }) => {
+                        {policies.map((item: { name: any; sid: never }, index) => {
                           return (
                             <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                               <Checkbox
+                                id={`__checkBoxPolicies_${index + 1}`}
                                 label={item.name}
-                                checked={accessPolicyForm.policySids.includes(item.sid)}
+                                checked={accessPolicyForm.policySids.find((policy) => policy.value === item.sid)}
                                 onChange={(event, policy) => {
                                   addToAccessPolicyForm({
                                     policySids: policy
-                                      ? [...accessPolicyForm.policySids, item.sid]
-                                      : accessPolicyForm.policySids.filter((polItem) => polItem !== item.sid),
+                                      ? [...accessPolicyForm.policySids, item]
+                                      : accessPolicyForm.policySids.filter((polItem) => polItem.value !== item.sid),
                                   });
                                 }}
                               />
@@ -255,6 +263,7 @@ const CreateGroupPanel = ({
 
               <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                 <Checkbox
+                  id="__checkBoxPoliciesApplies"
                   label="Policies Applies to All Sub Organizations except for those explicitly exclude"
                   onChange={(event, _stepWise) => addToAccessPolicyForm({ _stepWise })}
                 />

@@ -3,6 +3,7 @@ import { ReactElement, useState, useEffect } from 'react';
 import { Panel, PanelType } from '@fluentui/react/lib-commonjs/Panel';
 
 import { Tabs } from 'src/components/tabs/Tabs';
+import { Text } from 'src/components/typography';
 import { Spacing } from '../../../../components/spacings/Spacing';
 import { Button } from '../../../../components/buttons/Button';
 import { Row, Column } from '../../../../components/layouts';
@@ -25,6 +26,7 @@ const defaultProps = {
 };
 
 type CreateUsersPanelProps = {
+  orgSid: string;
   isOpen?: boolean;
   onDismiss?: any | null;
   onCreateUser?: any | null;
@@ -39,24 +41,67 @@ const enum Tab {
   Summary = 3,
 }
 
-const CreateUsersPanel = ({ isOpen, onDismiss, onCreateUser }: CreateUsersPanelProps): ReactElement => {
-  const CreateUserService = useCreateUsersPanel();
-  const [step, setStep] = useState(0);
-  const [selectedTab, setSelectedTab] = useState(Tab.Account);
+const CreateUsersPanel = ({ orgSid, isOpen, onDismiss, onCreateUser }: CreateUsersPanelProps): ReactElement => {
+  const CreateUserService = useCreateUsersPanel(orgSid);
+  const [errorMessage, setErrorMessage] = useState<string | undefined>();
 
-  const handleCreateUser = (): void => {
-    CreateUserService.createUserCall();
-    onCreateUser();
-    onDismiss();
+  const [step, setStep] = useState(Tab.Account);
+  const [selectedTab, setSelectedTab] = useState(tabs[Tab.Account]);
+  const { userAccountForm, userAccountLoading } = CreateUserService ?? {};
+  const [isProcessing, setProcessing] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (step >= 0 && step < 4) {
+      setSelectedTab(tabs[step]);
+    }
+  }, [step]);
+
+  const handleCreateUser = async () => {
+    setProcessing(true);
+    const responseCreate = await CreateUserService.createUserCall();
+    setProcessing(false);
+    //
+    if (responseCreate?.createUser) {
+      if (responseCreate?.createUser?.response.toLocaleUpperCase() === 'SUCCESS') {
+        onCreateUser(responseCreate.createUser);
+        onDismiss();
+        return;
+      }
+
+      setErrorMessage(
+        responseCreate?.createUser?.errMsg ?? responseCreate?.createUser?.response ?? 'Error Creating User'
+      );
+
+      setTimeout(() => {
+        setErrorMessage(undefined);
+      }, 3000);
+    }
+
+    //
+
+    return null;
   };
 
-  const handleNext = (): void => {
+  const handleNext = (): null => {
     setStep(step + 1);
+    return null;
   };
 
-  const handlePrev = (): void => {
+  const handlePrev = (): null => {
     setStep(step - 1);
+    return null;
   };
+
+  const handleTabChange = (hash): void => {
+    setStep(tabs.indexOf(hash));
+    setSelectedTab(hash);
+  };
+
+  useEffect(() => {
+    if (CreateUserService.isUserCreated && CreateUserService.responseCreateUser) {
+      onDismiss();
+    }
+  }, [CreateUserService.isUserCreated]);
 
   return (
     <Panel
@@ -69,37 +114,70 @@ const CreateUsersPanel = ({ isOpen, onDismiss, onCreateUser }: CreateUsersPanelP
       }}
     >
       <>
-        <Tabs
-          items={[
-            {
-              title: 'Account',
-              content: <SectionAccount data={CreateUserService.infoAccess} onNext={handleNext} />,
-              hash: '#account',
-            },
-            {
-              title: 'Vendor Count Stats',
-              content: (
-                <SectionAccessManagement data={CreateUserService.infoAccess} onPrev={handlePrev} onNext={handleNext} />
-              ),
-              hash: '#access',
-            },
-            {
-              title: 'Work Steps',
-              content: (
-                <SectionAuthentication data={CreateUserService.infoAccess} onPrev={handlePrev} onNext={handleNext} />
-              ),
-              hash: '#auth',
-            },
-            {
-              title: 'Quality Checks',
-              content: (
-                <SectionSummary data={CreateUserService.infoAccess} onPrev={handlePrev} onSubmit={handleCreateUser} />
-              ),
-              hash: '#quality',
-            },
-          ]}
-          selectedKey={selectedTab < 0 ? Tab.Account.toString() : selectedTab.toString()}
-        />
+        {userAccountLoading && <Text>Loading...</Text>}
+        {!userAccountLoading && (
+          <>
+            <Tabs
+              items={[
+                {
+                  title: 'Account',
+                  content: (
+                    <SectionAccount
+                      form={CreateUserService.form}
+                      onNext={handleNext}
+                      saveOptions={CreateUserService.setForm}
+                    />
+                  ),
+                  hash: '#account',
+                },
+                {
+                  title: 'Access Management',
+                  content: (
+                    <SectionAccessManagement
+                      form={CreateUserService.form}
+                      onPrev={handlePrev}
+                      onNext={handleNext}
+                      saveOptions={CreateUserService.setForm}
+                    />
+                  ),
+                  hash: '#access',
+                },
+                {
+                  title: 'Authentication',
+                  content: (
+                    <SectionAuthentication
+                      form={CreateUserService.form}
+                      onPrev={handlePrev}
+                      onNext={handleNext}
+                      saveOptions={CreateUserService.setForm}
+                    />
+                  ),
+                  hash: '#auth',
+                },
+                {
+                  title: 'Summary',
+                  content: (
+                    <SectionSummary
+                      form={CreateUserService.form}
+                      onPrev={handlePrev}
+                      onSubmit={handleCreateUser}
+                      isProcessing={isProcessing}
+                    />
+                  ),
+                  hash: '#summary',
+                },
+              ]}
+              selectedKey={step < 0 ? '0' : step.toString()}
+              onClickTab={handleTabChange}
+            />
+            {errorMessage && (
+              <>
+                <Spacing margin={{ top: 'double' }} />
+                <Text>{errorMessage}</Text>
+              </>
+            )}
+          </>
+        )}
       </>
     </Panel>
   );

@@ -24,7 +24,7 @@ type CDXTabsProps = {
 
 const CDXTabs = ({ items, selectedKey, onClickTab }: CDXTabsProps): ReactElement => {
   return (
-    <StyledPivot defaultSelectedKey={selectedKey}>
+    <StyledPivot selectedKey={String(selectedKey)}>
       {items.map(({ title, content, badge, hash }: itemsProps, index) => (
         <PivotItem
           headerText={title}

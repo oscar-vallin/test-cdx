@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { CommandBarButton } from '@fluentui/react';
-import { Column } from '../../../../components/layouts';
+import { Text } from 'src/components/typography';
+import { Column, Row } from '../../../../components/layouts';
 
 export const StyledCommandButton = styled(CommandBarButton)`
   background: transparent;
@@ -15,4 +16,12 @@ export const StyledColumn = styled(Column)`
   [class*='ms-Details'] {
     background: transparent;
   }
+`;
+
+export const StyledOptionRow = styled(Row)`
+  padding: 8px 16px;
+`;
+
+export const StyledText = styled(Text)`
+  padding: 0px 8px 24px;
 `;

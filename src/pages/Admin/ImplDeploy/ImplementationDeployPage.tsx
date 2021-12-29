@@ -99,8 +99,7 @@ const _ImplementationDeployPage = () => {
       <Spacing margin="double">
         <Row>
           <Column>
-            <PageTitle id="__Impl_Deploy_Title" title="Implementation Deploy"
-            />
+            <PageTitle id="__Impl_Deploy_Title" title="Implementation Deploy" />
           </Column>
         </Row>
         {renderDeploymentResult()}

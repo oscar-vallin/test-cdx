@@ -85,6 +85,15 @@ const _ActiveUsersPage = () => {
     setSelectedItems([]);
   };
 
+  const fetchUsers = async () => {
+    apiUsersForOrgFpLazy({
+      variables: {
+        orgSid,
+        userFilter: { activeFilter: ActiveEnum.Active },
+      },
+    });
+  };
+
   useEffect(() => {
     if (!loading && data) {
       // const _users = data?.usersForOrg?.nodes?.map((user) => ({}))
@@ -200,11 +209,12 @@ const _ActiveUsersPage = () => {
         </Spacing>
 
         <CreateUsersPanel
+          orgSid={orgSid}
           isOpen={isPanelOpen}
           onCreateUser={(createdUser) => {
             setSelectedItems([]);
 
-            if (users) setUsers([...users, { item: createdUser.model }]);
+            fetchUsers();
           }}
           onDismiss={() => {
             setIsPanelOpen(false);

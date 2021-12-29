@@ -43,8 +43,7 @@ const _ErrorsPage = () => {
           <Spacing margin={{ top: 'double' }}>
             <Row>
               <Column lg="6" direction="row">
-                <PageTitle id="__Errors_Title" title="Errors" subTitle="Advanced search" icon="FilterSolid"
-                />
+                <PageTitle id="__Errors_Title" title="Errors" subTitle="Advanced search" icon="FilterSolid" />
               </Column>
               <Column lg="6" right>
                 <Text right>

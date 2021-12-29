@@ -28,7 +28,7 @@ describe('TagPicker unit test', () => {
       <Component {...defaultProps} id="__CreateAccessSpecializationPanelId" apiQuery={jest.fn()} />
     );
     const input = wrapper.find('#__CreateAccessSpecializationPanelId').first();
-    console.log(input);
+
     expect(input.length).toBe(1);
   });
 
