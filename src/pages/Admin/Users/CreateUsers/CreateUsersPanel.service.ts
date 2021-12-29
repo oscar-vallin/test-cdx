@@ -1,9 +1,5 @@
-import { access } from 'fs';
 import { useEffect, useState } from 'react';
-import { InputTextProps } from 'src/components/inputs/InputText/InputText';
 import { useCreateUserMutation, useUserAccountFormLazyQuery } from 'src/data/services/graphql';
-import { CheckType } from 'src/hooks/useCheckValue';
-import { InputType, useInputValue } from 'src/hooks/useInputValue';
 
 export type OptionType = {
   id?: string;

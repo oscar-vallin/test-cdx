@@ -93,8 +93,6 @@ export default class PuppetCDXApp {
     const page = await browser.newPage();
     await page.setViewport({ width: 1600, height: 1080 });
 
-    jest.setTimeout(30000);
-
     return new PuppetCDXApp(browser, page, testTitle);
   }
 }
