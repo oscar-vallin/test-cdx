@@ -2,6 +2,7 @@ import PuppetCDXApp from '../../teste2e/pages/PuppetCDXApp';
 import PuppetUserSettings from '../../teste2e/pages/PuppetUserSettings';
 
 describe('E2E - User Settings Test', () => {
+  jest.setTimeout(30000);
   let cdxApp: PuppetCDXApp;
 
   beforeAll(async () => {
