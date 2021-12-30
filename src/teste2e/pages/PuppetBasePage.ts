@@ -92,4 +92,59 @@ export default class PuppetBasePage {
     await this.inputValue(selector, value);
     await expectFunction();
   }
+
+  async clickOnCreateGroup() {
+    const btnSelector = '#CreateGroupButton';
+    const panelSelector = '#__createGroupPanel';
+
+    await this.page.click(btnSelector);
+    await this.expectTextOnPage(panelSelector, 'New Access Policy Group');
+  }
+
+  async createGroupTempleteCancel() {
+    const nameInputSelector = '#__groupInputName';
+    const createBtnSelector = '#__CreateGroupPanelId';
+
+    const tagPicker1 = '#__pickerPoliciesNotApply';
+    // const tagPicker2 = '#__pickerPoliciesApply';
+    // const tagPicker3 = '#__pickerPoliciesNotApplyTwo';
+    const tagPicker4 = '#includeOrgsId';
+    const tagPicker5 = '#excludeOrgsId';
+
+    const checkBoxTempleteGroup = '#__checkBoxTemplateGroup';
+    const checkBoxUseAsIs = '#__checkBoxUseAsIs';
+    const checkBoxSuperPolicy = '#__checkBoxPolicies_1';
+    const checkBoxSpecialization = '#__checkBoxPolicies_2';
+    const checkBoxPoliciesApplies = '#__checkBoxPoliciesApplies';
+    const checkBoxPolicies = '#__checkBoxIncludeAllSubOrgs';
+
+    await this.clickOnCreateGroup();
+
+    await this.page.waitForSelector(nameInputSelector);
+    await this.inputValue(nameInputSelector, 'CDX E2E Group');
+
+    await this.page.waitForTimeout(1000);
+    await this.page.waitForSelector(checkBoxSuperPolicy);
+    await this.page.click(checkBoxSuperPolicy);
+
+    await this.page.waitForTimeout(1000);
+    await this.page.waitForSelector(checkBoxSpecialization);
+    await this.page.click(checkBoxSpecialization);
+
+    await this.page.waitForTimeout(1000);
+    await this.page.waitForSelector(checkBoxPoliciesApplies);
+    await this.page.click(checkBoxPoliciesApplies);
+
+    await this.page.waitForTimeout(2000);
+    await this.page.waitForSelector(checkBoxPolicies);
+    await this.page.click(checkBoxPolicies);
+
+    await this.page.click(createBtnSelector);
+  }
+
+  async clickOnGroup(specializationId: string, name: string) {
+    const selector = `#__AccessManagement__Name_Field_${specializationId}`;
+    await this.expectTextOnPage(selector, name);
+    await this.page.click(selector);
+  }
 }
