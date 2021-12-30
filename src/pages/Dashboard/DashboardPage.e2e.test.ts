@@ -3,6 +3,7 @@ import PuppetDashboardPage from '../../teste2e/pages/PuppetDashboardPage';
 import PuppetActiveOrgs from '../../teste2e/pages/PuppetActiveOrgs';
 
 describe('E2E Dashboard test', () => {
+  jest.setTimeout(30000);
   let cdxApp: PuppetCDXApp;
 
   beforeAll(async () => {
