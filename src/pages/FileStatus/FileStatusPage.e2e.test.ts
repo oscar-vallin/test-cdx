@@ -32,7 +32,7 @@ describe('E2E - File Status Test', () => {
     await fileStatus.setDateRange('Tue Nov 40 2020', 'Thu Dec 00 2020');
     await fileStatus.waitForTimeout(1000);
 
-    const expectedTimeStr = getTodayDateString();
+    const expectedTimeStr = getTodayDateString('E..EEE MMM dd yyyy');
 
     await fileStatus.compareDate('#Input__From__Date-label', expectedTimeStr);
   });
@@ -205,9 +205,9 @@ const getLocalDateString = (
   return format(tzDate, 'MM/dd/yyyy hh:mm a');
 };
 
-const getTodayDateString = (): string => {
+const getTodayDateString = (formatConfig: string): string => {
   const date = new Date();
   const tzDate = new Date(date.toLocaleString('en-US', { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone }));
 
-  return format(tzDate, 'MM/dd/yyyy');
+  return format(tzDate, formatConfig);
 };
