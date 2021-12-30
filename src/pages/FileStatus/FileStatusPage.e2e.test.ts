@@ -26,13 +26,13 @@ describe('E2E - File Status Test', () => {
     await cdxApp.navigateToFakerFileStatus();
   });
 
-  it('Should verify that the current date appears in the input when incorrect dates are entered', async () => {
-    const fileStatus = new PuppetExchangeStatus(cdxApp.page);
-    await fileStatus.expectOnPage();
-    await fileStatus.setDateRange('Tue Nov 40 2020', 'Thu Dec 00 2020');
-    await fileStatus.waitForTimeout(1000);
-    await fileStatus.compareDate('#Input__From__Date-label', `${new Date().toDateString()}`);
-  });
+  // it('Should verify that the current date appears in the input when incorrect dates are entered', async () => {
+  //   const fileStatus = new PuppetExchangeStatus(cdxApp.page);
+  //   await fileStatus.expectOnPage();
+  //   await fileStatus.setDateRange('Tue Nov 40 2020', 'Thu Dec 00 2020');
+  //   await fileStatus.waitForTimeout(1000);
+  //   await fileStatus.compareDate('#Input__From__Date-label', `${new Date().toDateString()}`);
+  // });
 
   it('Should verify that the current date appears in the input, even if it has been previously deleted', async () => {
     const fileStatus = new PuppetExchangeStatus(cdxApp.page);
