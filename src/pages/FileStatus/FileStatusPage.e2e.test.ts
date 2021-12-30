@@ -26,13 +26,16 @@ describe('E2E - File Status Test', () => {
     await cdxApp.navigateToFakerFileStatus();
   });
 
-  // it('Should verify that the current date appears in the input when incorrect dates are entered', async () => {
-  //   const fileStatus = new PuppetExchangeStatus(cdxApp.page);
-  //   await fileStatus.expectOnPage();
-  //   await fileStatus.setDateRange('Tue Nov 40 2020', 'Thu Dec 00 2020');
-  //   await fileStatus.waitForTimeout(1000);
-  //   await fileStatus.compareDate('#Input__From__Date-label', `${new Date().toDateString()}`);
-  // });
+  it('Should verify that the current date appears in the input when incorrect dates are entered', async () => {
+    const fileStatus = new PuppetExchangeStatus(cdxApp.page);
+    await fileStatus.expectOnPage();
+    await fileStatus.setDateRange('Tue Nov 40 2020', 'Thu Dec 00 2020');
+    await fileStatus.waitForTimeout(1000);
+
+    const expectedTimeStr = getTodayDateString();
+
+    await fileStatus.compareDate('#Input__From__Date-label', expectedTimeStr);
+  });
 
   it('Should verify that the current date appears in the input, even if it has been previously deleted', async () => {
     const fileStatus = new PuppetExchangeStatus(cdxApp.page);
@@ -200,4 +203,11 @@ const getLocalDateString = (
   const tzDate = new Date(date.toLocaleString('en-US', { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone }));
 
   return format(tzDate, 'MM/dd/yyyy hh:mm a');
+};
+
+const getTodayDateString = (): string => {
+  const date = new Date();
+  const tzDate = new Date(date.toLocaleString('en-US', { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone }));
+
+  return format(tzDate, 'MM/dd/yyyy');
 };
