@@ -2,7 +2,7 @@ import PuppetCDXApp from '../../../../teste2e/pages/PuppetCDXApp';
 import PuppetAccessPolicyGroup from '../../../../teste2e/pages/PuppetAccessPolicyGroup';
 
 describe('E2E - Access Policy Group Test', () => {
-  jest.setTimeout(30000);
+  jest.setTimeout(60000);
   let cdxApp: PuppetCDXApp;
 
   beforeAll(async () => {
