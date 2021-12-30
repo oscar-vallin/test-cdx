@@ -9,6 +9,7 @@ const testConstants = {
 };
 
 describe('E2E - File Status Test', () => {
+  jest.setTimeout(30000);
   let cdxApp: PuppetCDXApp;
 
   beforeAll(async () => {
