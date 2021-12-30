@@ -32,7 +32,7 @@ describe('E2E - File Status Test', () => {
     await fileStatus.setDateRange('Tue Nov 40 2020', 'Thu Dec 00 2020');
     await fileStatus.waitForTimeout(1000);
 
-    const expectedTimeStr = getTodayDateString('E..EEE MMM dd yyyy');
+    const expectedTimeStr = getTodayDateString('EEE MMM dd yyyy');
 
     await fileStatus.compareDate('#Input__From__Date-label', expectedTimeStr);
   });
