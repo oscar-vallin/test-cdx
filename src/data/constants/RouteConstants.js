@@ -21,6 +21,7 @@ export const ROUTES_ID = {
   DELETED_USERS: 'deleted-users',
   FTP_TEST: 'ftp-test',
   IMPL_DEPLOY: 'implementation-deploy',
+  PASSWORD_RULES: 'password-rules',
 };
 
 export const URL_ROUTES = {
@@ -48,6 +49,7 @@ export const URL_ROUTES = {
   DELETED_USERS: `/${ROUTES_ID.DELETED_USERS}`,
   FTP_TEST: `/${ROUTES_ID.FTP_TEST}`,
   IMPL_DEPLOY: `/${ROUTES_ID.IMPL_DEPLOY}`,
+  PASSWORD_RULES: `/${ROUTES_ID.PASSWORD_RULES}`,
 };
 
 export const ROUTE_HOME = {
@@ -241,6 +243,14 @@ export const ROUTE_IMPL_DEPLOY = {
   API_ID: 'IMPL_DEPLOY',
 };
 
+export const ROUTE_PASSWORD_RULES = {
+  ID: ROUTES_ID.PASSWORD_RULES,
+  TITLE: 'Password Rules',
+  URL: URL_ROUTES.PASSWORD_RULES,
+  MAIN_MENU: false,
+  API_ID: 'PASSWORD_RULES',
+};
+
 export const ROUTES = {
   ROUTE_HOME,
   ROUTE_LOGIN,
@@ -266,6 +276,7 @@ export const ROUTES = {
   ROUTE_DELETED_USERS,
   ROUTE_FTP_TEST,
   ROUTE_IMPL_DEPLOY,
+  ROUTE_PASSWORD_RULES,
 };
 
 export const ROUTES_ARRAY = [
@@ -293,6 +304,7 @@ export const ROUTES_ARRAY = [
   ROUTE_DELETED_USERS,
   ROUTE_FTP_TEST,
   ROUTE_IMPL_DEPLOY,
+  ROUTE_PASSWORD_RULES,
 ];
 
 export const getRouteByApiId = (_apiId) => {
