@@ -1,7 +1,12 @@
 import styled from 'styled-components';
 
+const variants = (theme) => ({
+  muted: theme.colors.themeTertiary,
+  error: theme.colors.custom.error,
+});
+
 export const StyledText = styled.span<StyledTextProps>`
-  color: ${({ theme, variant }) => (variant === 'muted' ? theme.colors.themeTertiary : theme.colors.neutralPrimary)};
+  color: ${({ theme, variant }) => variants(theme)[variant] || theme.colors.neutralPrimary};
   display: inline-block;
   font: ${({ theme }) => theme.fontStyles.normal};
   font-size: ${({ theme, size }) => theme.fontSizes[size]};

@@ -12,9 +12,7 @@ export const StyledDiv = styled.div`
   display: flex;
   margin: 8px 0;
 
-  .ms-Label {
-    margin: 0;
-    padding: 0;
-    font-weight: 400;
+  .Text {
+    font-size: 0.875rem;
   }
 `;

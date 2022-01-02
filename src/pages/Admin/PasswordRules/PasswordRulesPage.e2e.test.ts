@@ -21,16 +21,28 @@ describe('E2E - Password Rules Navigation Test', () => {
   });
 
   it('Check for password rules form', async () => {
-    const activeOrgs = new PuppetPasswordRules(cdxApp.page);
+    const passwordRules = new PuppetPasswordRules(cdxApp.page);
 
-    await activeOrgs.waitForSelector('#__PasswordRules-Form');
+    await passwordRules.waitForSelector('#__PasswordRules-Form');
   });
 
-  it('Click on the save button', async () => {
-    const accessPolicies = new PuppetPasswordRules(cdxApp.page);
+  it('Saves password rules sucessfully', async () => {
+    const passwordRules = new PuppetPasswordRules(cdxApp.page);
 
-    await accessPolicies.clickOnSave();
-    await accessPolicies.expectSuccessMessage();
+    await passwordRules.fillCorrectInfo();
+    await passwordRules.clickOnSave();
+    await passwordRules.expectSuccessMessage();
+  });
+
+  it('Handles error while saving password rules', async () => {
+    const passwordRules = new PuppetPasswordRules(cdxApp.page);
+
+    await passwordRules.waitForTimeout(6000);
+
+    await passwordRules.fillWrongInfo();
+
+    await passwordRules.clickOnSave();
+    await passwordRules.expectErrorMessage();
   });
 
   it('Logout', async () => {

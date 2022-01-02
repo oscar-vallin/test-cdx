@@ -3,7 +3,7 @@ import { useState, useEffect, memo } from 'react';
 
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
-import { Label, SpinnerSize } from '@fluentui/react';
+import { SpinnerSize } from '@fluentui/react';
 import { Card } from '../../../components/cards';
 import { EmptyState } from '../../../containers/states';
 import { Button } from '../../../components/buttons';
@@ -15,6 +15,7 @@ import { Text } from '../../../components/typography';
 import { Separator } from '../../../components/separators/Separator';
 import { LayoutAdmin } from '../../../layouts/LayoutAdmin';
 import { Spacing } from '../../../components/spacings/Spacing';
+import { InputText } from '../../../components/inputs/InputText';
 
 import { StyledColumn, StyledDiv } from './PasswordRulesPage.styles';
 import { usePasswordRulesFormLazyQuery, useUpdatePasswordRulesMutation } from '../../../data/services/graphql';
@@ -77,11 +78,14 @@ const _PasswordRulesPage = () => {
   // const history = useHistory();
   const ActiveDomainStore = useActiveDomainStore();
   const Toast = useNotification();
-  const [fetchPageForm, { data: form, loading: isLoadingForm }] = useQueryHandler(usePasswordRulesFormLazyQuery);
+  const [fetchPageForm, { data, loading: isLoadingForm }] = useQueryHandler(usePasswordRulesFormLazyQuery);
   const [updatePasswordRules, { data: updatedRules, loading: isUpdatingRules, error: updateError }] =
     useQueryHandler(useUpdatePasswordRulesMutation);
 
   const [state, setState] = useState({ ...INITIAL_STATE });
+  const [form, setForm] = useState({});
+
+  const replaceInputs = (string, inputs) => string.split(' ').map((token) => inputs[token] || `${token} `);
 
   useEffect(() => {
     fetchPageForm({
@@ -92,7 +96,7 @@ const _PasswordRulesPage = () => {
   }, [ActiveDomainStore.domainOrg.current.orgSid]);
 
   useEffect(() => {
-    if (form) {
+    if (data) {
       const values = {};
 
       Object.keys(INITIAL_STATE).forEach((key) => {
@@ -102,20 +106,19 @@ const _PasswordRulesPage = () => {
               ...(values[key] || {}),
               [subKey]:
                 subKey === 'minPasswordComplexity'
-                  ? form.passwordRulesForm[key][subKey]?.value?.value || 'STRONG'
-                  : form.passwordRulesForm[key][subKey]?.value || false,
+                  ? data.passwordRulesForm[key][subKey]?.value?.value || 'STRONG'
+                  : data.passwordRulesForm[key][subKey]?.value || false,
             };
           });
         } else {
-          values[key] = form.passwordRulesForm[key]?.value || false;
+          values[key] = data.passwordRulesForm[key]?.value || false;
         }
       });
 
-      console.log(values);
-
       setState({ ...state, ...values });
+      setForm(data);
     }
-  }, [form]);
+  }, [data]);
 
   // useEffect(() => {
   //   if (!state.someMustBeMet.enabled) {
@@ -131,10 +134,14 @@ const _PasswordRulesPage = () => {
 
   useEffect(() => {
     if (updatedRules) {
-      if (updatedRules.response === 'FAIL') {
+      if (updatedRules.updatePasswordRules.response === 'FAIL') {
         Toast.error({ text: 'Please, check the highlighted fields and try again' });
       } else {
         Toast.success({ text: 'Password rules updated sucessfully' });
+
+        setForm({
+          passwordRulesForm: updatedRules.updatePasswordRules,
+        });
       }
     }
   }, [updatedRules]);
@@ -142,7 +149,7 @@ const _PasswordRulesPage = () => {
   return (
     <LayoutAdmin id="PageAdmin">
       <Spacing margin="double">
-        {(isLoadingForm || form) && (
+        {(isLoadingForm || data) && (
           <Row>
             <Column lg="4">
               <Spacing margin={{ top: 'small' }}>
@@ -154,7 +161,7 @@ const _PasswordRulesPage = () => {
           </Row>
         )}
 
-        {(isLoadingForm || form) && (
+        {(isLoadingForm || data) && (
           <Row>
             <Column lg="12">
               <Spacing margin={{ top: 'normal' }}>
@@ -218,10 +225,14 @@ const _PasswordRulesPage = () => {
                                 })}
                             />
 
-                            <Label>
+                            <Text
+                              {...(form?.passwordRulesForm?.mustAlwaysBeMet?.mustNotContainWhiteSpace?.errMsg
+                                ? { variant: 'error' }
+                                : {})}
+                            >
                               {form?.passwordRulesForm?.mustAlwaysBeMet?.mustNotContainWhiteSpace?.label ||
                                 'Missing label from form'}
-                            </Label>
+                            </Text>
                           </StyledDiv>
                         )}
 
@@ -241,10 +252,14 @@ const _PasswordRulesPage = () => {
                               }
                             />
 
-                            <Label>
+                            <Text
+                              {...(form?.passwordRulesForm?.mustAlwaysBeMet?.mustFollowLengthRequirements?.errMsg
+                                ? { variant: 'error' }
+                                : {})}
+                            >
                               {form?.passwordRulesForm?.mustAlwaysBeMet?.mustFollowLengthRequirements?.label ||
                                 'Missing label from form'}
-                            </Label>
+                            </Text>
                           </StyledDiv>
                         )}
 
@@ -264,10 +279,14 @@ const _PasswordRulesPage = () => {
                               }
                             />
 
-                            <Label>
+                            <Text
+                              {...(form?.passwordRulesForm?.mustAlwaysBeMet?.mustContainUpperCaseLetters?.errMsg
+                                ? { variant: 'error' }
+                                : {})}
+                            >
                               {form?.passwordRulesForm?.mustAlwaysBeMet?.mustContainUpperCaseLetters?.label ||
                                 'Missing label from form'}
-                            </Label>
+                            </Text>
                           </StyledDiv>
                         )}
 
@@ -287,10 +306,14 @@ const _PasswordRulesPage = () => {
                               }
                             />
 
-                            <Label>
+                            <Text
+                              {...(form?.passwordRulesForm?.mustAlwaysBeMet?.mustContainLowerCaseLetters?.errMsg
+                                ? { variant: 'error' }
+                                : {})}
+                            >
                               {form?.passwordRulesForm?.mustAlwaysBeMet?.mustContainLowerCaseLetters?.label ||
                                 'Missing label from form'}
-                            </Label>
+                            </Text>
                           </StyledDiv>
                         )}
 
@@ -310,10 +333,33 @@ const _PasswordRulesPage = () => {
                               }
                             />
 
-                            <Label>
-                              {form?.passwordRulesForm?.mustAlwaysBeMet?.mustContainNumericDigits?.label ||
-                                'Missing label from form'}
-                            </Label>
+                            <Text
+                              {...(form?.passwordRulesForm?.mustAlwaysBeMet?.mustContainNumericDigits?.errMsg
+                                ? { variant: 'error' }
+                                : {})}
+                            >
+                              {form?.passwordRulesForm?.mustAlwaysBeMet?.mustContainNumericDigits?.label
+                                ? replaceInputs(
+                                    form?.passwordRulesForm?.mustAlwaysBeMet?.mustContainNumericDigits?.label,
+                                    {
+                                      '{0}': (
+                                        <InputText
+                                          id="__inputMustDigit"
+                                          value={state.mustAlwaysBeMet.minNumericDigits}
+                                          onChange={({ target }) =>
+                                            setState({
+                                              ...state,
+                                              mustAlwaysBeMet: {
+                                                ...state.mustAlwaysBeMet,
+                                                minNumericDigits: target.value,
+                                              },
+                                            })}
+                                        />
+                                      ),
+                                    }
+                                  )
+                                : 'Missing label from form'}
+                            </Text>
                           </StyledDiv>
                         )}
 
@@ -333,10 +379,14 @@ const _PasswordRulesPage = () => {
                               }
                             />
 
-                            <Label>
+                            <Text
+                              {...(form?.passwordRulesForm?.mustAlwaysBeMet?.mustContainSpecialCharacters?.errMsg
+                                ? { variant: 'error' }
+                                : {})}
+                            >
                               {form?.passwordRulesForm?.mustAlwaysBeMet?.mustContainSpecialCharacters?.label ||
                                 'Missing label from form'}
-                            </Label>
+                            </Text>
                           </StyledDiv>
                         )}
                       </Column>
@@ -357,10 +407,14 @@ const _PasswordRulesPage = () => {
                               }
                             />
 
-                            <Label>
+                            <Text
+                              {...(form?.passwordRulesForm?.mustAlwaysBeMet?.mustNotContainNumericSequence?.errMsg
+                                ? { variant: 'error' }
+                                : {})}
+                            >
                               {form?.passwordRulesForm?.mustAlwaysBeMet?.mustNotContainNumericSequence?.label ||
                                 'Missing label from form'}
-                            </Label>
+                            </Text>
                           </StyledDiv>
                         )}
 
@@ -380,10 +434,14 @@ const _PasswordRulesPage = () => {
                               }
                             />
 
-                            <Label>
+                            <Text
+                              {...(form?.passwordRulesForm?.mustAlwaysBeMet?.mustNotRepeatCharacters?.errMsg
+                                ? { variant: 'error' }
+                                : {})}
+                            >
                               {form?.passwordRulesForm?.mustAlwaysBeMet?.mustNotRepeatCharacters?.label ||
                                 'Missing label from form'}
-                            </Label>
+                            </Text>
                           </StyledDiv>
                         )}
 
@@ -403,10 +461,14 @@ const _PasswordRulesPage = () => {
                               }
                             />
 
-                            <Label>
+                            <Text
+                              {...(form?.passwordRulesForm?.mustAlwaysBeMet?.mustNotReusePasswords?.errMsg
+                                ? { variant: 'error' }
+                                : {})}
+                            >
                               {form?.passwordRulesForm?.mustAlwaysBeMet?.mustNotReusePasswords?.label ||
                                 'Missing label from form'}
-                            </Label>
+                            </Text>
                           </StyledDiv>
                         )}
 
@@ -426,10 +488,14 @@ const _PasswordRulesPage = () => {
                               }
                             />
 
-                            <Label>
+                            <Text
+                              {...(form?.passwordRulesForm?.mustAlwaysBeMet?.mustNotMatchExactDictionaryWord?.errMsg
+                                ? { variant: 'error' }
+                                : {})}
+                            >
                               {form?.passwordRulesForm?.mustAlwaysBeMet?.mustNotMatchExactDictionaryWord?.label ||
                                 'Missing label from form'}
-                            </Label>
+                            </Text>
                           </StyledDiv>
                         )}
 
@@ -449,10 +515,14 @@ const _PasswordRulesPage = () => {
                               }
                             />
 
-                            <Label>
+                            <Text
+                              {...(form?.passwordRulesForm?.mustAlwaysBeMet?.mustNotMatchPartialDictionaryWord?.errMsg
+                                ? { variant: 'error' }
+                                : {})}
+                            >
                               {form?.passwordRulesForm?.mustAlwaysBeMet?.mustNotMatchPartialDictionaryWord?.label ||
                                 'Missing label from form'}
-                            </Label>
+                            </Text>
                           </StyledDiv>
                         )}
                       </Column>
@@ -478,10 +548,10 @@ const _PasswordRulesPage = () => {
                               }
                             />
 
-                            <Label>
+                            <Text>
                               <strong>Must be a password of</strong> X <strong>complexity OR Match</strong> X
                               <strong>of the following rules</strong>
-                            </Label>
+                            </Text>
                           </StyledDiv>
                         </Column>
                       </Row>
@@ -507,10 +577,14 @@ const _PasswordRulesPage = () => {
                                       }
                                     />
 
-                                    <Label>
+                                    <Text
+                                      {...(form?.passwordRulesForm?.someMustBeMet?.mustNotContainWhiteSpace?.errMsg
+                                        ? { variant: 'error' }
+                                        : {})}
+                                    >
                                       {form?.passwordRulesForm?.someMustBeMet?.mustNotContainWhiteSpace?.label ||
                                         'Missing label from form'}
-                                    </Label>
+                                    </Text>
                                   </StyledDiv>
                                 )}
 
@@ -530,10 +604,14 @@ const _PasswordRulesPage = () => {
                                       }
                                     />
 
-                                    <Label>
+                                    <Text
+                                      {...(form?.passwordRulesForm?.someMustBeMet?.mustFollowLengthRequirements?.errMsg
+                                        ? { variant: 'error' }
+                                        : {})}
+                                    >
                                       {form?.passwordRulesForm?.someMustBeMet?.mustFollowLengthRequirements?.label ||
                                         'Missing label from form'}
-                                    </Label>
+                                    </Text>
                                   </StyledDiv>
                                 )}
 
@@ -553,10 +631,14 @@ const _PasswordRulesPage = () => {
                                       }
                                     />
 
-                                    <Label>
+                                    <Text
+                                      {...(form?.passwordRulesForm?.someMustBeMet?.mustContainUpperCaseLetters?.errMsg
+                                        ? { variant: 'error' }
+                                        : {})}
+                                    >
                                       {form?.passwordRulesForm?.someMustBeMet?.mustContainUpperCaseLetters?.label ||
                                         'Missing label from form'}
-                                    </Label>
+                                    </Text>
                                   </StyledDiv>
                                 )}
 
@@ -576,10 +658,14 @@ const _PasswordRulesPage = () => {
                                       }
                                     />
 
-                                    <Label>
+                                    <Text
+                                      {...(form?.passwordRulesForm?.someMustBeMet?.mustContainLowerCaseLetters?.errMsg
+                                        ? { variant: 'error' }
+                                        : {})}
+                                    >
                                       {form?.passwordRulesForm?.someMustBeMet?.mustContainLowerCaseLetters?.label ||
                                         'Missing label from form'}
-                                    </Label>
+                                    </Text>
                                   </StyledDiv>
                                 )}
 
@@ -599,10 +685,14 @@ const _PasswordRulesPage = () => {
                                       }
                                     />
 
-                                    <Label>
+                                    <Text
+                                      {...(form?.passwordRulesForm?.someMustBeMet?.mustContainNumericDigits?.errMsg
+                                        ? { variant: 'error' }
+                                        : {})}
+                                    >
                                       {form?.passwordRulesForm?.someMustBeMet?.mustContainNumericDigits?.label ||
                                         'Missing label from form'}
-                                    </Label>
+                                    </Text>
                                   </StyledDiv>
                                 )}
 
@@ -622,10 +712,14 @@ const _PasswordRulesPage = () => {
                                       }
                                     />
 
-                                    <Label>
+                                    <Text
+                                      {...(form?.passwordRulesForm?.someMustBeMet?.mustContainSpecialCharacters?.errMsg
+                                        ? { variant: 'error' }
+                                        : {})}
+                                    >
                                       {form?.passwordRulesForm?.someMustBeMet?.mustContainSpecialCharacters?.label ||
                                         'Missing label from form'}
-                                    </Label>
+                                    </Text>
                                   </StyledDiv>
                                 )}
                               </Column>
@@ -646,10 +740,14 @@ const _PasswordRulesPage = () => {
                                       }
                                     />
 
-                                    <Label>
+                                    <Text
+                                      {...(form?.passwordRulesForm?.someMustBeMet?.mustNotContainNumericSequence?.errMsg
+                                        ? { variant: 'error' }
+                                        : {})}
+                                    >
                                       {form?.passwordRulesForm?.someMustBeMet?.mustNotContainNumericSequence?.label ||
                                         'Missing label from form'}
-                                    </Label>
+                                    </Text>
                                   </StyledDiv>
                                 )}
 
@@ -669,10 +767,14 @@ const _PasswordRulesPage = () => {
                                       }
                                     />
 
-                                    <Label>
+                                    <Text
+                                      {...(form?.passwordRulesForm?.someMustBeMet?.mustNotRepeatCharacters?.errMsg
+                                        ? { variant: 'error' }
+                                        : {})}
+                                    >
                                       {form?.passwordRulesForm?.someMustBeMet?.mustNotRepeatCharacters?.label ||
                                         'Missing label from form'}
-                                    </Label>
+                                    </Text>
                                   </StyledDiv>
                                 )}
 
@@ -692,10 +794,14 @@ const _PasswordRulesPage = () => {
                                       }
                                     />
 
-                                    <Label>
+                                    <Text
+                                      {...(form?.passwordRulesForm?.someMustBeMet?.mustNotReusePasswords?.errMsg
+                                        ? { variant: 'error' }
+                                        : {})}
+                                    >
                                       {form?.passwordRulesForm?.someMustBeMet?.mustNotReusePasswords?.label ||
                                         'Missing label from form'}
-                                    </Label>
+                                    </Text>
                                   </StyledDiv>
                                 )}
 
@@ -715,10 +821,15 @@ const _PasswordRulesPage = () => {
                                       }
                                     />
 
-                                    <Label>
+                                    <Text
+                                      {...(form?.passwordRulesForm?.someMustBeMet?.mustNotMatchExactDictionaryWord
+                                        ?.errMsg
+                                        ? { variant: 'error' }
+                                        : {})}
+                                    >
                                       {form?.passwordRulesForm?.someMustBeMet?.mustNotMatchExactDictionaryWord?.label ||
                                         'Missing label from form'}
-                                    </Label>
+                                    </Text>
                                   </StyledDiv>
                                 )}
 
@@ -738,10 +849,15 @@ const _PasswordRulesPage = () => {
                                       }
                                     />
 
-                                    <Label>
+                                    <Text
+                                      {...(form?.passwordRulesForm?.someMustBeMet?.mustNotMatchPartialDictionaryWord
+                                        ?.errMsg
+                                        ? { variant: 'error' }
+                                        : {})}
+                                    >
                                       {form?.passwordRulesForm?.someMustBeMet?.mustNotMatchPartialDictionaryWord
                                         ?.label || 'Missing label from form'}
-                                    </Label>
+                                    </Text>
                                   </StyledDiv>
                                 )}
                               </Column>
@@ -770,12 +886,12 @@ const _PasswordRulesPage = () => {
                                 }
                               />
 
-                              <Label>
+                              <Text {...(form?.passwordRulesForm?.autoLockAccount?.errMsg ? { variant: 'error' } : {})}>
                                 <span>
                                   {form?.passwordRulesForm?.autoLockAccount?.label || 'Missing label from form'}{' '}
                                 </span>
                                 {form?.passwordRulesForm?.autoLockAfterFailedAttempts.label}
-                              </Label>
+                              </Text>
                             </StyledDiv>
                           </Column>
                         </Row>
@@ -796,12 +912,14 @@ const _PasswordRulesPage = () => {
                                 }
                               />
 
-                              <Label>
+                              <Text
+                                {...(form?.passwordRulesForm?.autoUnlockAccount?.errMsg ? { variant: 'error' } : {})}
+                              >
                                 <span>
                                   {form?.passwordRulesForm?.autoUnlockAccount?.label || 'Missing label from form'}{' '}
                                 </span>
                                 {form?.passwordRulesForm?.autoUnlockAccountDelayMinutes.label}
-                              </Label>
+                              </Text>
                             </StyledDiv>
                           </Column>
                         </Row>
@@ -823,6 +941,10 @@ const _PasswordRulesPage = () => {
                                 ...state,
                               },
                             },
+                          }).catch(() => {
+                            Toast.error({
+                              text: 'An error occurred while updating the password rules. Please, try again.',
+                            });
                           });
 
                           return null;

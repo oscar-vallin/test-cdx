@@ -52,6 +52,7 @@ const Text = ({
       transform={transform}
       breakWord={breakWord}
       size={size}
+      className="Text"
       {...props}
     >
       {children}

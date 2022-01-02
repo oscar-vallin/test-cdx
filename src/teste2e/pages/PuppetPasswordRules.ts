@@ -9,10 +9,12 @@ export default class PuppetActiveOrgs extends PuppetBasePage {
     await this.expectTextOnPage(this.pageTitle, 'Password Rules');
   }
 
-  async fillForm() {
-    // const selector = `a.${orgId}`;
-    // await this.expectTextOnPage(selector, orgName);
-    // await this.page.click(selector);
+  async fillCorrectInfo() {
+    await this.inputValue('#__inputMustDigit', '2');
+  }
+
+  async fillWrongInfo() {
+    await this.inputValue('#__inputMustDigit', '-1');
   }
 
   async clickOnSave() {
@@ -26,5 +28,12 @@ export default class PuppetActiveOrgs extends PuppetBasePage {
     const errorMessage = await this.page.$eval(this.messageContainer, (e) => e.textContent);
 
     expect(errorMessage).toEqual('Password rules updated sucessfully');
+  }
+
+  async expectErrorMessage() {
+    await this.page.waitForSelector(this.messageContainer);
+    const errorMessage = await this.page.$eval(this.messageContainer, (e) => e.textContent);
+
+    expect(errorMessage).toEqual('An error occurred while updating the password rules. Please, try again.');
   }
 }
