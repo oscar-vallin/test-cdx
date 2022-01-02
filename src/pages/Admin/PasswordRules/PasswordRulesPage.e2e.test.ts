@@ -3,6 +3,7 @@ import PuppetPasswordRules from '../../../teste2e/pages/PuppetPasswordRules';
 
 describe('E2E - Password Rules Navigation Test', () => {
   let cdxApp: PuppetCDXApp;
+  jest.setTimeout(60000);
 
   beforeAll(async () => {
     cdxApp = await PuppetCDXApp.startBrowser('E2E - Password Rules Navigation Test');
@@ -29,6 +30,7 @@ describe('E2E - Password Rules Navigation Test', () => {
     const accessPolicies = new PuppetPasswordRules(cdxApp.page);
 
     await accessPolicies.clickOnSave();
+    await accessPolicies.expectSuccessMessage();
   });
 
   it('Logout', async () => {

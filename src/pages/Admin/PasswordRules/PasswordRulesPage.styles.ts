@@ -15,5 +15,6 @@ export const StyledDiv = styled.div`
   .ms-Label {
     margin: 0;
     padding: 0;
+    font-weight: 400;
   }
 `;

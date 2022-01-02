@@ -22,8 +22,6 @@ export default class PuppetCDXApp {
     this.browser = browser;
     this.page = page;
     this.testTitle = testTitle;
-
-    jest.setTimeout(30000);
   }
 
   async toLoginPage(): Promise<PuppetLoginPage> {
