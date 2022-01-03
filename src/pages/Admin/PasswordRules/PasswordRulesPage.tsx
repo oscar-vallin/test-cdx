@@ -268,7 +268,7 @@ const _PasswordRulesPage = () => {
                                           }}
                                           mask="***"
                                           maskChar=""
-                                          id="__inputMustDigit"
+                                          id="__inputMustMinLength"
                                           value={state.mustAlwaysBeMet.minLength.toString()}
                                           onChange={({ target }) =>
                                             setState({
@@ -287,7 +287,7 @@ const _PasswordRulesPage = () => {
                                           }}
                                           mask="***"
                                           maskChar=""
-                                          id="__inputMustDigit"
+                                          id="__inputMustMaxLength"
                                           value={state.mustAlwaysBeMet.maxLength.toString()}
                                           onChange={({ target }) =>
                                             setState({
@@ -338,7 +338,7 @@ const _PasswordRulesPage = () => {
                                           }}
                                           mask="***"
                                           maskChar=""
-                                          id="__inputMustDigit"
+                                          id="__inputMustUppercase"
                                           value={state.mustAlwaysBeMet.minUpperCaseLetters.toString()}
                                           onChange={({ target }) =>
                                             setState({
@@ -389,7 +389,7 @@ const _PasswordRulesPage = () => {
                                           }}
                                           mask="***"
                                           maskChar=""
-                                          id="__inputMustDigit"
+                                          id="__inputMustLowercase"
                                           value={state.mustAlwaysBeMet.minLowerCaseLetters.toString()}
                                           onChange={({ target }) =>
                                             setState({
@@ -491,7 +491,7 @@ const _PasswordRulesPage = () => {
                                           }}
                                           mask="***"
                                           maskChar=""
-                                          id="__inputMustDigit"
+                                          id="__inputMustSpecialChars"
                                           value={state.mustAlwaysBeMet.minSpecialCharacters.toString()}
                                           onChange={({ target }) =>
                                             setState({
@@ -570,7 +570,7 @@ const _PasswordRulesPage = () => {
                                           }}
                                           mask="***"
                                           maskChar=""
-                                          id="__inputMustDigit"
+                                          id="__inputMustRepeatedChars"
                                           value={state.mustAlwaysBeMet.maxAllowedRepeatedChars.toString()}
                                           onChange={({ target }) =>
                                             setState({
@@ -621,7 +621,7 @@ const _PasswordRulesPage = () => {
                                           }}
                                           mask="***"
                                           maskChar=""
-                                          id="__inputMustDigit"
+                                          id="__inputMustVariations"
                                           value={state.mustAlwaysBeMet.minPasswordHistoryVariations.toString()}
                                           onChange={({ target }) =>
                                             setState({
@@ -748,7 +748,7 @@ const _PasswordRulesPage = () => {
                                 }}
                                 mask="***"
                                 maskChar=""
-                                id="__inputMustDigit"
+                                id="__inputMustPassingRules"
                                 value={state.someMustBeMet.requiredNumPassingRules.toString()}
                                 onChange={({ target }) =>
                                   setState({
@@ -829,7 +829,7 @@ const _PasswordRulesPage = () => {
                                                   }}
                                                   mask="***"
                                                   maskChar=""
-                                                  id="__inputMustDigit"
+                                                  id="__inputSomeMinLength"
                                                   value={state.someMustBeMet.minLength.toString()}
                                                   onChange={({ target }) =>
                                                     setState({
@@ -848,7 +848,7 @@ const _PasswordRulesPage = () => {
                                                   }}
                                                   mask="***"
                                                   maskChar=""
-                                                  id="__inputMustDigit"
+                                                  id="__inputSomeMaxLength"
                                                   value={state.someMustBeMet.maxLength.toString()}
                                                   onChange={({ target }) =>
                                                     setState({
@@ -899,7 +899,7 @@ const _PasswordRulesPage = () => {
                                                   }}
                                                   mask="***"
                                                   maskChar=""
-                                                  id="__inputMustDigit"
+                                                  id="__inputSomeUppercase"
                                                   value={state.someMustBeMet.minUpperCaseLetters.toString()}
                                                   onChange={({ target }) =>
                                                     setState({
@@ -950,7 +950,7 @@ const _PasswordRulesPage = () => {
                                                   }}
                                                   mask="***"
                                                   maskChar=""
-                                                  id="__inputMustDigit"
+                                                  id="__inputSomeLowercase"
                                                   value={state.someMustBeMet.minLowerCaseLetters.toString()}
                                                   onChange={({ target }) =>
                                                     setState({
@@ -1001,7 +1001,7 @@ const _PasswordRulesPage = () => {
                                                   }}
                                                   mask="***"
                                                   maskChar=""
-                                                  id="__inputMustDigit"
+                                                  id="__inputSomeDigit"
                                                   value={state.someMustBeMet.minNumericDigits.toString()}
                                                   onChange={({ target }) =>
                                                     setState({
@@ -1052,7 +1052,7 @@ const _PasswordRulesPage = () => {
                                                   }}
                                                   mask="***"
                                                   maskChar=""
-                                                  id="__inputMustDigit"
+                                                  id="__inputSomeSpecialChars"
                                                   value={state.someMustBeMet.minSpecialCharacters.toString()}
                                                   onChange={({ target }) =>
                                                     setState({
@@ -1131,7 +1131,7 @@ const _PasswordRulesPage = () => {
                                                   }}
                                                   mask="***"
                                                   maskChar=""
-                                                  id="__inputMustDigit"
+                                                  id="__inputSomeRepeatedChars"
                                                   value={state.someMustBeMet.maxAllowedRepeatedChars.toString()}
                                                   onChange={({ target }) =>
                                                     setState({
@@ -1182,7 +1182,7 @@ const _PasswordRulesPage = () => {
                                                   }}
                                                   mask="***"
                                                   maskChar=""
-                                                  id="__inputMustDigit"
+                                                  id="__inputSomeVariations"
                                                   value={state.someMustBeMet.minPasswordHistoryVariations.toString()}
                                                   onChange={({ target }) =>
                                                     setState({
@@ -1296,7 +1296,7 @@ const _PasswordRulesPage = () => {
                                           }}
                                           mask="***"
                                           maskChar=""
-                                          id="__inputMustDigit"
+                                          id="__inputAutoLock"
                                           value={state.autoLockAfterFailedAttempts.toString()}
                                           onChange={({ target }) =>
                                             setState({
@@ -1344,7 +1344,7 @@ const _PasswordRulesPage = () => {
                                           }}
                                           mask="***"
                                           maskChar=""
-                                          id="__inputMustDigit"
+                                          id="__inputAutoUnlock"
                                           value={state.autoUnlockAccountDelayMinutes.toString()}
                                           onChange={({ target }) =>
                                             setState({

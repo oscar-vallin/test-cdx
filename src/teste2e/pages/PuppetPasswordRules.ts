@@ -10,11 +10,15 @@ export default class PuppetActiveOrgs extends PuppetBasePage {
   }
 
   async fillCorrectInfo() {
+    await this.inputValue('#__inputMustMinLength', '2');
+    await this.inputValue('#__inputMustMaxLength', '10');
     await this.inputValue('#__inputMustDigit', '2');
+    await this.inputValue('#__inputMustVariations', '3');
+    await this.inputValue('#__inputAutoUnlock', '120');
   }
 
   async fillWrongInfo() {
-    await this.inputValue('#__inputMustDigit', '-1');
+    await this.inputValue('#__inputMustMinLength', '256');
   }
 
   async clickOnSave() {
