@@ -4,6 +4,7 @@ import { useState, useEffect, memo } from 'react';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { SpinnerSize } from '@fluentui/react';
+import { MaskedTextField } from '@fluentui/react/lib-commonjs/TextField';
 import { Card } from '../../../components/cards';
 import { EmptyState } from '../../../containers/states';
 import { Button } from '../../../components/buttons';
@@ -15,9 +16,8 @@ import { Text } from '../../../components/typography';
 import { Separator } from '../../../components/separators/Separator';
 import { LayoutAdmin } from '../../../layouts/LayoutAdmin';
 import { Spacing } from '../../../components/spacings/Spacing';
-import { InputText } from '../../../components/inputs/InputText';
 
-import { StyledColumn, StyledDiv } from './PasswordRulesPage.styles';
+import { StyledColumn, StyledDiv, StyledComboBox } from './PasswordRulesPage.styles';
 import { usePasswordRulesFormLazyQuery, useUpdatePasswordRulesMutation } from '../../../data/services/graphql';
 
 const INITIAL_STATE = {
@@ -172,7 +172,7 @@ const _PasswordRulesPage = () => {
         )}
 
         <Row>
-          <StyledColumn lg={form ? '6' : '12'}>
+          <StyledColumn sm="12" xxl={form ? '8' : '12'}>
             <Spacing margin={{ top: !form ? 'normal' : 'double' }}>
               {isLoadingForm ? (
                 <Spinner size={SpinnerSize.large} label="Loading password rules" />
@@ -209,7 +209,7 @@ const _PasswordRulesPage = () => {
 
                   <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                     <Row>
-                      <Column lg="6">
+                      <Column lg="12" xl="6">
                         {form?.passwordRulesForm?.mustAlwaysBeMet?.mustNotContainWhiteSpace?.visible && (
                           <StyledDiv>
                             <Checkbox
@@ -257,8 +257,51 @@ const _PasswordRulesPage = () => {
                                 ? { variant: 'error' }
                                 : {})}
                             >
-                              {form?.passwordRulesForm?.mustAlwaysBeMet?.mustFollowLengthRequirements?.label ||
-                                'Missing label from form'}
+                              {form?.passwordRulesForm?.mustAlwaysBeMet?.mustFollowLengthRequirements?.label
+                                ? replaceInputs(
+                                    form?.passwordRulesForm?.mustAlwaysBeMet?.mustFollowLengthRequirements?.label,
+                                    {
+                                      '{0}': (
+                                        <MaskedTextField
+                                          maskFormat={{
+                                            '*': /[0-9_]/,
+                                          }}
+                                          mask="***"
+                                          maskChar=""
+                                          id="__inputMustDigit"
+                                          value={state.mustAlwaysBeMet.minLength.toString()}
+                                          onChange={({ target }) =>
+                                            setState({
+                                              ...state,
+                                              mustAlwaysBeMet: {
+                                                ...state.mustAlwaysBeMet,
+                                                minLength: target.value,
+                                              },
+                                            })}
+                                        />
+                                      ),
+                                      '{1}': (
+                                        <MaskedTextField
+                                          maskFormat={{
+                                            '*': /[0-9_]/,
+                                          }}
+                                          mask="***"
+                                          maskChar=""
+                                          id="__inputMustDigit"
+                                          value={state.mustAlwaysBeMet.maxLength.toString()}
+                                          onChange={({ target }) =>
+                                            setState({
+                                              ...state,
+                                              mustAlwaysBeMet: {
+                                                ...state.mustAlwaysBeMet,
+                                                maxLength: target.value,
+                                              },
+                                            })}
+                                        />
+                                      ),
+                                    }
+                                  )
+                                : 'Missing label from form'}
                             </Text>
                           </StyledDiv>
                         )}
@@ -284,8 +327,32 @@ const _PasswordRulesPage = () => {
                                 ? { variant: 'error' }
                                 : {})}
                             >
-                              {form?.passwordRulesForm?.mustAlwaysBeMet?.mustContainUpperCaseLetters?.label ||
-                                'Missing label from form'}
+                              {form?.passwordRulesForm?.mustAlwaysBeMet?.mustContainUpperCaseLetters?.label
+                                ? replaceInputs(
+                                    form?.passwordRulesForm?.mustAlwaysBeMet?.mustContainUpperCaseLetters?.label,
+                                    {
+                                      '{0}': (
+                                        <MaskedTextField
+                                          maskFormat={{
+                                            '*': /[0-9_]/,
+                                          }}
+                                          mask="***"
+                                          maskChar=""
+                                          id="__inputMustDigit"
+                                          value={state.mustAlwaysBeMet.minUpperCaseLetters.toString()}
+                                          onChange={({ target }) =>
+                                            setState({
+                                              ...state,
+                                              mustAlwaysBeMet: {
+                                                ...state.mustAlwaysBeMet,
+                                                minUpperCaseLetters: target.value,
+                                              },
+                                            })}
+                                        />
+                                      ),
+                                    }
+                                  )
+                                : 'Missing label from form'}
                             </Text>
                           </StyledDiv>
                         )}
@@ -311,8 +378,32 @@ const _PasswordRulesPage = () => {
                                 ? { variant: 'error' }
                                 : {})}
                             >
-                              {form?.passwordRulesForm?.mustAlwaysBeMet?.mustContainLowerCaseLetters?.label ||
-                                'Missing label from form'}
+                              {form?.passwordRulesForm?.mustAlwaysBeMet?.mustContainLowerCaseLetters?.label
+                                ? replaceInputs(
+                                    form?.passwordRulesForm?.mustAlwaysBeMet?.mustContainLowerCaseLetters?.label,
+                                    {
+                                      '{0}': (
+                                        <MaskedTextField
+                                          maskFormat={{
+                                            '*': /[0-9_]/,
+                                          }}
+                                          mask="***"
+                                          maskChar=""
+                                          id="__inputMustDigit"
+                                          value={state.mustAlwaysBeMet.minLowerCaseLetters.toString()}
+                                          onChange={({ target }) =>
+                                            setState({
+                                              ...state,
+                                              mustAlwaysBeMet: {
+                                                ...state.mustAlwaysBeMet,
+                                                minLowerCaseLetters: target.value,
+                                              },
+                                            })}
+                                        />
+                                      ),
+                                    }
+                                  )
+                                : 'Missing label from form'}
                             </Text>
                           </StyledDiv>
                         )}
@@ -343,9 +434,14 @@ const _PasswordRulesPage = () => {
                                     form?.passwordRulesForm?.mustAlwaysBeMet?.mustContainNumericDigits?.label,
                                     {
                                       '{0}': (
-                                        <InputText
+                                        <MaskedTextField
+                                          maskFormat={{
+                                            '*': /[0-9_]/,
+                                          }}
+                                          mask="***"
+                                          maskChar=""
                                           id="__inputMustDigit"
-                                          value={state.mustAlwaysBeMet.minNumericDigits}
+                                          value={state.mustAlwaysBeMet.minNumericDigits.toString()}
                                           onChange={({ target }) =>
                                             setState({
                                               ...state,
@@ -384,13 +480,37 @@ const _PasswordRulesPage = () => {
                                 ? { variant: 'error' }
                                 : {})}
                             >
-                              {form?.passwordRulesForm?.mustAlwaysBeMet?.mustContainSpecialCharacters?.label ||
-                                'Missing label from form'}
+                              {form?.passwordRulesForm?.mustAlwaysBeMet?.mustContainSpecialCharacters?.label
+                                ? replaceInputs(
+                                    form?.passwordRulesForm?.mustAlwaysBeMet?.mustContainSpecialCharacters?.label,
+                                    {
+                                      '{0}': (
+                                        <MaskedTextField
+                                          maskFormat={{
+                                            '*': /[0-9_]/,
+                                          }}
+                                          mask="***"
+                                          maskChar=""
+                                          id="__inputMustDigit"
+                                          value={state.mustAlwaysBeMet.minSpecialCharacters.toString()}
+                                          onChange={({ target }) =>
+                                            setState({
+                                              ...state,
+                                              mustAlwaysBeMet: {
+                                                ...state.mustAlwaysBeMet,
+                                                minSpecialCharacters: target.value,
+                                              },
+                                            })}
+                                        />
+                                      ),
+                                    }
+                                  )
+                                : 'Missing label from form'}
                             </Text>
                           </StyledDiv>
                         )}
                       </Column>
-                      <Column lg="6">
+                      <Column lg="12" xl="6">
                         {form?.passwordRulesForm?.mustAlwaysBeMet?.mustNotContainNumericSequence?.visible && (
                           <StyledDiv>
                             <Checkbox
@@ -439,8 +559,32 @@ const _PasswordRulesPage = () => {
                                 ? { variant: 'error' }
                                 : {})}
                             >
-                              {form?.passwordRulesForm?.mustAlwaysBeMet?.mustNotRepeatCharacters?.label ||
-                                'Missing label from form'}
+                              {form?.passwordRulesForm?.mustAlwaysBeMet?.mustNotRepeatCharacters?.label
+                                ? replaceInputs(
+                                    form?.passwordRulesForm?.mustAlwaysBeMet?.mustNotRepeatCharacters?.label,
+                                    {
+                                      '{0}': (
+                                        <MaskedTextField
+                                          maskFormat={{
+                                            '*': /[0-9_]/,
+                                          }}
+                                          mask="***"
+                                          maskChar=""
+                                          id="__inputMustDigit"
+                                          value={state.mustAlwaysBeMet.maxAllowedRepeatedChars.toString()}
+                                          onChange={({ target }) =>
+                                            setState({
+                                              ...state,
+                                              mustAlwaysBeMet: {
+                                                ...state.mustAlwaysBeMet,
+                                                maxAllowedRepeatedChars: target.value,
+                                              },
+                                            })}
+                                        />
+                                      ),
+                                    }
+                                  )
+                                : 'Missing label from form'}
                             </Text>
                           </StyledDiv>
                         )}
@@ -466,8 +610,32 @@ const _PasswordRulesPage = () => {
                                 ? { variant: 'error' }
                                 : {})}
                             >
-                              {form?.passwordRulesForm?.mustAlwaysBeMet?.mustNotReusePasswords?.label ||
-                                'Missing label from form'}
+                              {form?.passwordRulesForm?.mustAlwaysBeMet?.mustNotReusePasswords?.label
+                                ? replaceInputs(
+                                    form?.passwordRulesForm?.mustAlwaysBeMet?.mustNotReusePasswords?.label,
+                                    {
+                                      '{0}': (
+                                        <MaskedTextField
+                                          maskFormat={{
+                                            '*': /[0-9_]/,
+                                          }}
+                                          mask="***"
+                                          maskChar=""
+                                          id="__inputMustDigit"
+                                          value={state.mustAlwaysBeMet.minPasswordHistoryVariations.toString()}
+                                          onChange={({ target }) =>
+                                            setState({
+                                              ...state,
+                                              mustAlwaysBeMet: {
+                                                ...state.mustAlwaysBeMet,
+                                                minPasswordHistoryVariations: target.value,
+                                              },
+                                            })}
+                                        />
+                                      ),
+                                    }
+                                  )
+                                : 'Missing label from form'}
                             </Text>
                           </StyledDiv>
                         )}
@@ -549,7 +717,48 @@ const _PasswordRulesPage = () => {
                             />
 
                             <Text>
-                              <strong>Must be a password of</strong> X <strong>complexity OR Match</strong> X
+                              <strong>Must be a password of</strong>
+
+                              <StyledComboBox
+                                selectedKey={state.someMustBeMet.minPasswordComplexity}
+                                options={
+                                  form.passwordRulesForm?.options
+                                    ?.find((opt) => opt.key === 'PasswordComplexity')
+                                    ?.values?.map(({ label, value }) => ({
+                                      key: value,
+                                      text: label,
+                                    })) || []
+                                }
+                                onChange={(event, option) => {
+                                  setState({
+                                    ...state,
+                                    someMustBeMet: {
+                                      ...state.someMustBeMet,
+                                      minPasswordComplexity: option.key,
+                                    },
+                                  });
+                                }}
+                              />
+
+                              <strong>complexity OR Match</strong>
+
+                              <MaskedTextField
+                                maskFormat={{
+                                  '*': /[0-9_]/,
+                                }}
+                                mask="***"
+                                maskChar=""
+                                id="__inputMustDigit"
+                                value={state.someMustBeMet.requiredNumPassingRules.toString()}
+                                onChange={({ target }) =>
+                                  setState({
+                                    ...state,
+                                    someMustBeMet: {
+                                      ...state.someMustBeMet,
+                                      requiredNumPassingRules: target.value,
+                                    },
+                                  })}
+                              />
                               <strong>of the following rules</strong>
                             </Text>
                           </StyledDiv>
@@ -560,7 +769,7 @@ const _PasswordRulesPage = () => {
                         <Column>
                           <Card elevation="none">
                             <Row>
-                              <Column lg="6">
+                              <Column lg="12" xl="6">
                                 {form?.passwordRulesForm?.someMustBeMet?.mustNotContainWhiteSpace?.visible && (
                                   <StyledDiv>
                                     <Checkbox
@@ -609,8 +818,51 @@ const _PasswordRulesPage = () => {
                                         ? { variant: 'error' }
                                         : {})}
                                     >
-                                      {form?.passwordRulesForm?.someMustBeMet?.mustFollowLengthRequirements?.label ||
-                                        'Missing label from form'}
+                                      {form?.passwordRulesForm?.someMustBeMet?.mustFollowLengthRequirements?.label
+                                        ? replaceInputs(
+                                            form?.passwordRulesForm?.someMustBeMet?.mustFollowLengthRequirements?.label,
+                                            {
+                                              '{0}': (
+                                                <MaskedTextField
+                                                  maskFormat={{
+                                                    '*': /[0-9_]/,
+                                                  }}
+                                                  mask="***"
+                                                  maskChar=""
+                                                  id="__inputMustDigit"
+                                                  value={state.someMustBeMet.minLength.toString()}
+                                                  onChange={({ target }) =>
+                                                    setState({
+                                                      ...state,
+                                                      someMustBeMet: {
+                                                        ...state.someMustBeMet,
+                                                        minLength: target.value,
+                                                      },
+                                                    })}
+                                                />
+                                              ),
+                                              '{1}': (
+                                                <MaskedTextField
+                                                  maskFormat={{
+                                                    '*': /[0-9_]/,
+                                                  }}
+                                                  mask="***"
+                                                  maskChar=""
+                                                  id="__inputMustDigit"
+                                                  value={state.someMustBeMet.maxLength.toString()}
+                                                  onChange={({ target }) =>
+                                                    setState({
+                                                      ...state,
+                                                      someMustBeMet: {
+                                                        ...state.someMustBeMet,
+                                                        maxLength: target.value,
+                                                      },
+                                                    })}
+                                                />
+                                              ),
+                                            }
+                                          )
+                                        : 'Missing label from form'}
                                     </Text>
                                   </StyledDiv>
                                 )}
@@ -636,8 +888,32 @@ const _PasswordRulesPage = () => {
                                         ? { variant: 'error' }
                                         : {})}
                                     >
-                                      {form?.passwordRulesForm?.someMustBeMet?.mustContainUpperCaseLetters?.label ||
-                                        'Missing label from form'}
+                                      {form?.passwordRulesForm?.someMustBeMet?.mustContainUpperCaseLetters?.label
+                                        ? replaceInputs(
+                                            form?.passwordRulesForm?.someMustBeMet?.mustContainUpperCaseLetters?.label,
+                                            {
+                                              '{0}': (
+                                                <MaskedTextField
+                                                  maskFormat={{
+                                                    '*': /[0-9_]/,
+                                                  }}
+                                                  mask="***"
+                                                  maskChar=""
+                                                  id="__inputMustDigit"
+                                                  value={state.someMustBeMet.minUpperCaseLetters.toString()}
+                                                  onChange={({ target }) =>
+                                                    setState({
+                                                      ...state,
+                                                      someMustBeMet: {
+                                                        ...state.someMustBeMet,
+                                                        minUpperCaseLetters: target.value,
+                                                      },
+                                                    })}
+                                                />
+                                              ),
+                                            }
+                                          )
+                                        : 'Missing label from form'}
                                     </Text>
                                   </StyledDiv>
                                 )}
@@ -663,8 +939,32 @@ const _PasswordRulesPage = () => {
                                         ? { variant: 'error' }
                                         : {})}
                                     >
-                                      {form?.passwordRulesForm?.someMustBeMet?.mustContainLowerCaseLetters?.label ||
-                                        'Missing label from form'}
+                                      {form?.passwordRulesForm?.someMustBeMet?.mustContainLowerCaseLetters?.label
+                                        ? replaceInputs(
+                                            form?.passwordRulesForm?.someMustBeMet?.mustContainLowerCaseLetters?.label,
+                                            {
+                                              '{0}': (
+                                                <MaskedTextField
+                                                  maskFormat={{
+                                                    '*': /[0-9_]/,
+                                                  }}
+                                                  mask="***"
+                                                  maskChar=""
+                                                  id="__inputMustDigit"
+                                                  value={state.someMustBeMet.minLowerCaseLetters.toString()}
+                                                  onChange={({ target }) =>
+                                                    setState({
+                                                      ...state,
+                                                      someMustBeMet: {
+                                                        ...state.someMustBeMet,
+                                                        minLowerCaseLetters: target.value,
+                                                      },
+                                                    })}
+                                                />
+                                              ),
+                                            }
+                                          )
+                                        : 'Missing label from form'}
                                     </Text>
                                   </StyledDiv>
                                 )}
@@ -690,8 +990,32 @@ const _PasswordRulesPage = () => {
                                         ? { variant: 'error' }
                                         : {})}
                                     >
-                                      {form?.passwordRulesForm?.someMustBeMet?.mustContainNumericDigits?.label ||
-                                        'Missing label from form'}
+                                      {form?.passwordRulesForm?.someMustBeMet?.mustContainNumericDigits?.label
+                                        ? replaceInputs(
+                                            form?.passwordRulesForm?.someMustBeMet?.mustContainNumericDigits?.label,
+                                            {
+                                              '{0}': (
+                                                <MaskedTextField
+                                                  maskFormat={{
+                                                    '*': /[0-9_]/,
+                                                  }}
+                                                  mask="***"
+                                                  maskChar=""
+                                                  id="__inputMustDigit"
+                                                  value={state.someMustBeMet.minNumericDigits.toString()}
+                                                  onChange={({ target }) =>
+                                                    setState({
+                                                      ...state,
+                                                      someMustBeMet: {
+                                                        ...state.someMustBeMet,
+                                                        minNumericDigits: target.value,
+                                                      },
+                                                    })}
+                                                />
+                                              ),
+                                            }
+                                          )
+                                        : 'Missing label from form'}
                                     </Text>
                                   </StyledDiv>
                                 )}
@@ -717,13 +1041,37 @@ const _PasswordRulesPage = () => {
                                         ? { variant: 'error' }
                                         : {})}
                                     >
-                                      {form?.passwordRulesForm?.someMustBeMet?.mustContainSpecialCharacters?.label ||
-                                        'Missing label from form'}
+                                      {form?.passwordRulesForm?.someMustBeMet?.mustContainSpecialCharacters?.label
+                                        ? replaceInputs(
+                                            form?.passwordRulesForm?.someMustBeMet?.mustContainSpecialCharacters?.label,
+                                            {
+                                              '{0}': (
+                                                <MaskedTextField
+                                                  maskFormat={{
+                                                    '*': /[0-9_]/,
+                                                  }}
+                                                  mask="***"
+                                                  maskChar=""
+                                                  id="__inputMustDigit"
+                                                  value={state.someMustBeMet.minSpecialCharacters.toString()}
+                                                  onChange={({ target }) =>
+                                                    setState({
+                                                      ...state,
+                                                      someMustBeMet: {
+                                                        ...state.someMustBeMet,
+                                                        minSpecialCharacters: target.value,
+                                                      },
+                                                    })}
+                                                />
+                                              ),
+                                            }
+                                          )
+                                        : 'Missing label from form'}
                                     </Text>
                                   </StyledDiv>
                                 )}
                               </Column>
-                              <Column lg="6">
+                              <Column lg="12" xl="6">
                                 {form?.passwordRulesForm?.someMustBeMet?.mustNotContainNumericSequence?.visible && (
                                   <StyledDiv>
                                     <Checkbox
@@ -772,8 +1120,32 @@ const _PasswordRulesPage = () => {
                                         ? { variant: 'error' }
                                         : {})}
                                     >
-                                      {form?.passwordRulesForm?.someMustBeMet?.mustNotRepeatCharacters?.label ||
-                                        'Missing label from form'}
+                                      {form?.passwordRulesForm?.someMustBeMet?.mustNotRepeatCharacters?.label
+                                        ? replaceInputs(
+                                            form?.passwordRulesForm?.someMustBeMet?.mustNotRepeatCharacters?.label,
+                                            {
+                                              '{0}': (
+                                                <MaskedTextField
+                                                  maskFormat={{
+                                                    '*': /[0-9_]/,
+                                                  }}
+                                                  mask="***"
+                                                  maskChar=""
+                                                  id="__inputMustDigit"
+                                                  value={state.someMustBeMet.maxAllowedRepeatedChars.toString()}
+                                                  onChange={({ target }) =>
+                                                    setState({
+                                                      ...state,
+                                                      someMustBeMet: {
+                                                        ...state.someMustBeMet,
+                                                        maxAllowedRepeatedChars: target.value,
+                                                      },
+                                                    })}
+                                                />
+                                              ),
+                                            }
+                                          )
+                                        : 'Missing label from form'}
                                     </Text>
                                   </StyledDiv>
                                 )}
@@ -799,8 +1171,32 @@ const _PasswordRulesPage = () => {
                                         ? { variant: 'error' }
                                         : {})}
                                     >
-                                      {form?.passwordRulesForm?.someMustBeMet?.mustNotReusePasswords?.label ||
-                                        'Missing label from form'}
+                                      {form?.passwordRulesForm?.someMustBeMet?.mustNotReusePasswords?.label
+                                        ? replaceInputs(
+                                            form?.passwordRulesForm?.someMustBeMet?.mustNotReusePasswords?.label,
+                                            {
+                                              '{0}': (
+                                                <MaskedTextField
+                                                  maskFormat={{
+                                                    '*': /[0-9_]/,
+                                                  }}
+                                                  mask="***"
+                                                  maskChar=""
+                                                  id="__inputMustDigit"
+                                                  value={state.someMustBeMet.minPasswordHistoryVariations.toString()}
+                                                  onChange={({ target }) =>
+                                                    setState({
+                                                      ...state,
+                                                      someMustBeMet: {
+                                                        ...state.someMustBeMet,
+                                                        minPasswordHistoryVariations: target.value,
+                                                      },
+                                                    })}
+                                                />
+                                              ),
+                                            }
+                                          )
+                                        : 'Missing label from form'}
                                     </Text>
                                   </StyledDiv>
                                 )}
@@ -888,9 +1284,29 @@ const _PasswordRulesPage = () => {
 
                               <Text {...(form?.passwordRulesForm?.autoLockAccount?.errMsg ? { variant: 'error' } : {})}>
                                 <span>
-                                  {form?.passwordRulesForm?.autoLockAccount?.label || 'Missing label from form'}{' '}
+                                  {form?.passwordRulesForm?.autoLockAccount?.label || 'Missing label from form'}
                                 </span>
-                                {form?.passwordRulesForm?.autoLockAfterFailedAttempts.label}
+
+                                {form?.passwordRulesForm?.autoLockAfterFailedAttempts.label
+                                  ? replaceInputs(form?.passwordRulesForm?.autoLockAfterFailedAttempts.label, {
+                                      '{0}': (
+                                        <MaskedTextField
+                                          maskFormat={{
+                                            '*': /[0-9_]/,
+                                          }}
+                                          mask="***"
+                                          maskChar=""
+                                          id="__inputMustDigit"
+                                          value={state.autoLockAfterFailedAttempts.toString()}
+                                          onChange={({ target }) =>
+                                            setState({
+                                              ...state,
+                                              autoLockAfterFailedAttempts: target.value,
+                                            })}
+                                        />
+                                      ),
+                                    })
+                                  : 'Missing label from form'}
                               </Text>
                             </StyledDiv>
                           </Column>
@@ -916,9 +1332,29 @@ const _PasswordRulesPage = () => {
                                 {...(form?.passwordRulesForm?.autoUnlockAccount?.errMsg ? { variant: 'error' } : {})}
                               >
                                 <span>
-                                  {form?.passwordRulesForm?.autoUnlockAccount?.label || 'Missing label from form'}{' '}
+                                  {form?.passwordRulesForm?.autoUnlockAccount?.label || 'Missing label from form'}
                                 </span>
-                                {form?.passwordRulesForm?.autoUnlockAccountDelayMinutes.label}
+
+                                {form?.passwordRulesForm?.autoUnlockAccountDelayMinutes.label
+                                  ? replaceInputs(form?.passwordRulesForm?.autoUnlockAccountDelayMinutes.label, {
+                                      '{0}': (
+                                        <MaskedTextField
+                                          maskFormat={{
+                                            '*': /[0-9_]/,
+                                          }}
+                                          mask="***"
+                                          maskChar=""
+                                          id="__inputMustDigit"
+                                          value={state.autoUnlockAccountDelayMinutes.toString()}
+                                          onChange={({ target }) =>
+                                            setState({
+                                              ...state,
+                                              autoUnlockAccountDelayMinutes: target.value,
+                                            })}
+                                        />
+                                      ),
+                                    })
+                                  : 'Missing label from form'}
                               </Text>
                             </StyledDiv>
                           </Column>
