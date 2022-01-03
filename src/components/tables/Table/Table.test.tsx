@@ -1,11 +1,10 @@
 import { mount, shallow, render } from 'enzyme';
 import toJSON from 'enzyme-to-json';
-import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib-commonjs/DetailsList';
 import { Table as Component } from './index';
 import { TableHeader } from '../TableHeader';
 import { StoreProvider } from 'easy-peasy';
 import store from '../../../store/index';
-import { mountWithTheme, renderWithTheme, shallowWithTheme } from 'src/utils/testUtils';
+import { mountWithTheme, shallowWithTheme } from 'src/utils/testUtils';
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -277,7 +276,7 @@ describe('Basic Table Component', () => {
         />
       </StoreProvider>
     );
-    expect(tree.prop('id')).toEqual('Table_Detailed');
+    expect(tree.prop('id')).toBeUndefined();
   });
 
   // it('Should render dashboard list item with props', () => {
@@ -330,15 +329,6 @@ describe('Basic Table Component', () => {
     );
     const searchId = wrapper.find('#header');
     expect(searchId.length).toBe(1);
-  });
-
-  it('Should render the component sending the loading property', () => {
-    const wrapper = mountWithTheme(
-      <StoreProvider store={store}>
-        <Component {...defaultProps} loading={true} />
-      </StoreProvider>
-    );
-    expect(wrapper).toMatchSnapshot();
   });
 
   it('Should render the component sending the property structure, loading and items', () => {

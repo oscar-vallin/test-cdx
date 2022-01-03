@@ -1,5 +1,5 @@
 import { TableDashboard } from './TableDashboard';
-import { mountWithTheme, shallowWithTheme } from '../../../utils/testUtils';
+import { mountWithTheme } from '../../../utils/testUtils';
 import { TABLE_NAMES } from '../../../data/constants/TableConstants';
 import { StoreProvider } from 'easy-peasy';
 import store from '../../../store/index';
@@ -40,28 +40,31 @@ describe('Table Dashboard Testing Unit...', () => {
     expect(wrapper).toMatchSnapshot();
   });
 
-  it('Should render the label property if provided', () => {
-    const wrapper = mountWithTheme(
-      <StoreProvider store={store}>
-        <Router>
-          <TableDashboard {...defaultProps} data={[{ name: 'Name', count: 0, total: 0 }]}></TableDashboard>
-        </Router>
-      </StoreProvider>
-    );
-    expect(wrapper).toMatchSnapshot();
-  });
+  // I don't know what these are supposed to be testing.
+  // These look like cut paste tests which don't actually test anything.
 
-  it('Should render the label property if provided', () => {
-    const wrapper = shallowWithTheme(
-      <StoreProvider store={store}>
-        <Router>
-          <TableDashboard
-            {...defaultProps}
-            altData={[{ name: 'Name', secondaryDescr: 'k', count: 0, total: 0 }]}
-          ></TableDashboard>
-        </Router>
-      </StoreProvider>
-    ).dive();
-    expect(wrapper).toMatchSnapshot();
-  });
+  // it('Should render the label property if provided', () => {
+  //   const wrapper = mountWithTheme(
+  //     <StoreProvider store={store}>
+  //       <Router>
+  //         <TableDashboard {...defaultProps} data={[{ name: 'Name', count: 0, total: 0 }]}></TableDashboard>
+  //       </Router>
+  //     </StoreProvider>
+  //   );
+  //   expect(wrapper).toMatchSnapshot();
+  // });
+  //
+  // it('Should render the label property if provided', () => {
+  //   const wrapper = shallowWithTheme(
+  //     <StoreProvider store={store}>
+  //       <Router>
+  //         <TableDashboard
+  //           {...defaultProps}
+  //           altData={[{ name: 'Name', secondaryDescr: 'k', count: 0, total: 0 }]}
+  //         ></TableDashboard>
+  //       </Router>
+  //     </StoreProvider>
+  //   ).dive();
+  //   expect(wrapper).toMatchSnapshot();
+  // });
 });
