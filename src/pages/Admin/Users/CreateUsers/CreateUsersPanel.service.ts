@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useCreateUserMutation, useUserAccountFormLazyQuery } from 'src/data/services/graphql';
+import {
+  useCreateUserMutation,
+  useFindUserAccountLazyQuery,
+  useResetPasswordMutation,
+  useUserAccountFormLazyQuery,
+} from 'src/data/services/graphql';
 
 export type OptionType = {
   id?: string;
@@ -56,6 +61,7 @@ export const useCreateUsersPanel = (orgSid) => {
   const [userAccountForm, setUserAccountForm] = useState<any>();
   const [form, setForm] = useState<FormUserType>();
   const [isUserCreated, setUserCreated] = useState(false);
+  const [userSid, setUserSid] = useState<string | undefined>();
 
   const [apiUserAccountForm, { data: dataUserAccountForm, loading: userAccountLoading, error: userAccountError }] =
     useUserAccountFormLazyQuery({
@@ -65,6 +71,17 @@ export const useCreateUsersPanel = (orgSid) => {
     });
 
   const [apiCall, { data: userCreatedData, loading: creatingUserLoading }] = useCreateUserMutation();
+  const [apiGetUSer, { data: userData, loading: userLoading, error: userError }] = useFindUserAccountLazyQuery({
+    variables: {
+      userSid: userSid ?? '',
+    },
+  });
+  const [apiResetPassword, { data: resetUserPasswordData, loading: resetUserPasswordLoading }] =
+    useResetPasswordMutation({
+      variables: {
+        userSid: userSid ?? '',
+      },
+    });
 
   //
   // * When the organizationId changes, we need to re-fetch the user account form.
@@ -78,6 +95,16 @@ export const useCreateUsersPanel = (orgSid) => {
     }
   }, [orgSid]);
 
+  useEffect(() => {
+    if (userSid) {
+      apiGetUSer({
+        variables: {
+          userSid: userSid ?? '',
+        },
+      });
+    }
+  }, [userSid]);
+
   //  //accessPolicyGroups: {value: null, label: "Access Groups", readOnly: false, info: null, required: false, visible: true,…}
   // errCode: null;
   // errMsg: null;
@@ -90,6 +117,20 @@ export const useCreateUsersPanel = (orgSid) => {
   // required: false;
   // value: null;
   // visible: tru;
+
+  const handleResetPassword = async (userSid) => {
+    const { data } = await apiResetPassword({
+      variables: {
+        userSid,
+      },
+    });
+
+    if (data) {
+      console.log('reset password', data);
+    }
+
+    return data;
+  };
 
   const clearUserCreation = () => {
     setUserCreated(false);
@@ -248,5 +289,8 @@ export const useCreateUsersPanel = (orgSid) => {
     loadingCreateUser: creatingUserLoading,
     isUserCreated,
     clearUserCreation,
+    setUserSid,
+    apiGetUSer,
+    handleResetPassword,
   };
 };
