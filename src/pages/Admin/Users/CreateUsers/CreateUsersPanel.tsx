@@ -4,15 +4,9 @@ import { Panel, PanelType } from '@fluentui/react/lib-commonjs/Panel';
 
 import { Tabs } from 'src/components/tabs/Tabs';
 import { Text } from 'src/components/typography';
+import { Link } from 'src/components/buttons/Link/ButtonLink';
 import { Spacing } from '../../../../components/spacings/Spacing';
-import { Button } from '../../../../components/buttons/Button';
-import { Row, Column } from '../../../../components/layouts';
-import { Separator } from '../../../../components/separators/Separator';
-import { InputText } from '../../../../components/inputs/InputText';
 
-import { useCreateUserMutation } from '../../../../data/services/graphql';
-
-import { useOrgSid } from '../../../../hooks/useOrgSid';
 import { useCreateUsersPanel } from './CreateUsersPanel.service';
 import { SectionAccount } from './SectionAccount';
 import SectionAccessManagement from './SectionAccessManagement';
@@ -41,7 +35,13 @@ const enum Tab {
   Summary = 3,
 }
 
-const CreateUsersPanel = ({ orgSid, isOpen, onDismiss, onCreateUser }: CreateUsersPanelProps): ReactElement => {
+const CreateUsersPanel = ({
+  orgSid,
+  isOpen,
+  onDismiss,
+  onCreateUser,
+  selectedUserId,
+}: CreateUsersPanelProps): ReactElement => {
   const CreateUserService = useCreateUsersPanel(orgSid);
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
 
@@ -55,6 +55,10 @@ const CreateUsersPanel = ({ orgSid, isOpen, onDismiss, onCreateUser }: CreateUse
       setSelectedTab(tabs[step]);
     }
   }, [step]);
+
+  useEffect(() => {
+    CreateUserService.setUserSid(selectedUserId);
+  }, [selectedUserId]);
 
   const handleCreateUser = async () => {
     setProcessing(true);
@@ -82,6 +86,19 @@ const CreateUsersPanel = ({ orgSid, isOpen, onDismiss, onCreateUser }: CreateUse
     return null;
   };
 
+  const handleResetPassword = async () => {
+    setProcessing(true);
+    const responseReset = await CreateUserService.handleResetPassword(selectedUserId);
+    setProcessing(false);
+    //
+    if (responseReset?.resetPassword) {
+      if (responseReset?.resetPassword === 'SUCCESS') {
+        onCreateUser(responseReset.resetPassword);
+        onDismiss();
+      }
+    }
+  };
+
   const handleNext = (): null => {
     setStep(step + 1);
     return null;
@@ -107,7 +124,7 @@ const CreateUsersPanel = ({ orgSid, isOpen, onDismiss, onCreateUser }: CreateUse
     <Panel
       closeButtonAriaLabel="Close"
       type={PanelType.medium}
-      headerText="New User"
+      headerText={selectedUserId ? 'New User' : 'Edit User'}
       isOpen={isOpen}
       onDismiss={() => {
         onDismiss();
@@ -117,6 +134,16 @@ const CreateUsersPanel = ({ orgSid, isOpen, onDismiss, onCreateUser }: CreateUse
         {userAccountLoading && <Text>Loading...</Text>}
         {!userAccountLoading && (
           <>
+            {selectedUserId && (
+              <Link
+                id="__CreateUsersPanel__ResetPassword_Field"
+                onClick={() => {
+                  handleResetPassword();
+                }}
+              >
+                Reset Password
+              </Link>
+            )}
             <Tabs
               items={[
                 {

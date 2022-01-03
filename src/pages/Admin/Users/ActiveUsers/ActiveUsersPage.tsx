@@ -4,18 +4,12 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib-commonjs/Dialog';
 import { MarqueeSelection } from '@fluentui/react/lib-commonjs/MarqueeSelection';
 import { PrimaryButton, DefaultButton, MessageBar } from 'office-ui-fabric-react';
-import {
-  DetailsList,
-  DetailsListLayoutMode,
-  SelectionMode,
-  Selection,
-  IObjectWithKey,
-} from 'office-ui-fabric-react/lib/DetailsList';
+import { DetailsList, DetailsListLayoutMode, SelectionMode, Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { SpinnerSize } from '@fluentui/react';
 import { EmptyState } from 'src/containers/states';
 import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
-import { Button } from '../../../../components/buttons';
+import { Button, Link } from '../../../../components/buttons';
 import { Row, Column } from '../../../../components/layouts';
 import { Spacing } from '../../../../components/spacings/Spacing';
 import { Text } from '../../../../components/typography';
@@ -44,21 +38,39 @@ const generateColumns = () => {
   ];
 };
 
-const onRenderItemColumn = (node, _index, column) => {
-  return node.item[column.key] || node.item.person[column.key];
-};
-
 const _ActiveUsersPage = () => {
   const { orgSid } = useOrgSid();
   const [users, setUsers] = useState<any[] | null | undefined>([]);
   const columns = generateColumns();
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);
-  const [selectedUserId] = useState(0);
+  const [selectedUserId, setSelectedUserId] = useState(0);
   const [apiUsersForOrgFpLazy, { data, loading }] = useUsersForOrgLazyQuery();
   const [selectedItems, setSelectedItems] = useState<any[]>([]);
 
   const [disableUser, { data: disableResponse, loading: isDisablingUser }] = useDeactivateUsersMutation();
+
+  const onRenderItemColumn = (node, itemIndex, column) => {
+    if (column.key === 'email') {
+      return (
+        <>
+          &nbsp;
+          <Link
+            id={`__ActiveUsersPage__Email_Field_${itemIndex + 1}`}
+            onClick={() => {
+              setSelectedItems([node]);
+              setSelectedUserId(node.id);
+              setIsPanelOpen(true);
+            }}
+          >
+            {node.email}
+          </Link>
+        </>
+      );
+    }
+
+    return node.item[column.key] || node.item.person[column.key];
+  };
 
   useEffect(() => {
     apiUsersForOrgFpLazy({
@@ -198,8 +210,9 @@ const _ActiveUsersPage = () => {
                     columns={columns}
                     layoutMode={DetailsListLayoutMode.justified}
                     onRenderItemColumn={onRenderItemColumn}
-                    selection={selection}
-                    selectionPreservedOnEmptyClick
+                    // selection={selection}
+                    // selectionPreservedOnEmptyClick
+                    selectionMode={SelectionMode.none}
                     isHeaderVisible
                   />
                 </MarqueeSelection>
@@ -213,7 +226,6 @@ const _ActiveUsersPage = () => {
           isOpen={isPanelOpen}
           onCreateUser={(createdUser) => {
             setSelectedItems([]);
-
             fetchUsers();
           }}
           onDismiss={() => {
