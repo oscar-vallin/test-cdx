@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+/* tslint-disable */
 import { useState, useEffect, memo } from 'react';
 
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
@@ -29,7 +30,7 @@ const _PasswordRulesPage = () => {
     useQueryHandler(useUpdatePasswordRulesMutation);
 
   const [state, setState] = useState({ ...DEFAULT_FORM });
-  const [form, setForm] = useState({});
+  const [form, setForm]: any = useState({});
 
   useEffect(() => {
     fetchPageForm({
@@ -110,7 +111,7 @@ const _PasswordRulesPage = () => {
                 <EmptyState
                   title="An error occurred"
                   description="The password rules form could not be loaded. Please, try again in a few minutes."
-                  actions={(
+                  actions={
                     <Button
                       id="__ReloadFormButton"
                       variant="primary"
@@ -127,7 +128,7 @@ const _PasswordRulesPage = () => {
                     >
                       Reload
                     </Button>
-                  )}
+                  }
                 />
               ) : (
                 <div id="__PasswordRules-Form">
@@ -161,8 +162,7 @@ const _PasswordRulesPage = () => {
                                     ...state.someMustBeMet,
                                     enabled: !!checked,
                                   },
-                                })
-                              }
+                                })}
                             />
 
                             <Text>
@@ -183,7 +183,7 @@ const _PasswordRulesPage = () => {
                                     ...state,
                                     someMustBeMet: {
                                       ...state.someMustBeMet,
-                                      minPasswordComplexity: option.key,
+                                      minPasswordComplexity: option?.key?.toString() || '',
                                     },
                                   });
                                 }}
@@ -235,8 +235,7 @@ const _PasswordRulesPage = () => {
                                   setState({
                                     ...state,
                                     autoLockAccount: !!checked,
-                                  })
-                                }
+                                  })}
                               />
 
                               <Text {...(form?.passwordRulesForm?.autoLockAccount?.errMsg ? { variant: 'error' } : {})}>
@@ -274,8 +273,7 @@ const _PasswordRulesPage = () => {
                                   setState({
                                     ...state,
                                     autoUnlockAccount: !!checked,
-                                  })
-                                }
+                                  })}
                               />
 
                               <Text
