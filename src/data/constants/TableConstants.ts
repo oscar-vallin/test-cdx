@@ -15,6 +15,8 @@ export const TABLE_NAMES = {
   DASHBOARD_ERRORS_VENDOR: 'ERRORS_VENDOR',
   DASHBOARD_TRANSMISSIONS_FILES: 'TRANSMISSIONS_FILES',
   DASHBOARD_ERRORS_FILES: 'ERRORS_FILES',
+  DASHBOARD_TRANSMISSIONS_PLANSPONSOR: 'TRANSMISSIONS_PLANSPONSOR',
+  DASHBOARD_ERRORS_PLANSPONSOR: 'ERRORS_PLANSPONSOR',
   FILE_STATUS: 'FILE_STATUS',
   FILE_STATUS_DETAIL_ENROLLMENT: 'DETAIL_ENROLLMENT',
   FILE_STATUS_DETAIL_VENDOR_COUNT: 'DETAIL_VENDOR_COUNT',
@@ -58,6 +60,22 @@ export const TABLES = {
     header: {
       type: 'dashboard',
       title: 'Failed Files by Files',
+      url: './errors',
+    },
+    polling: 1 / 3,
+  },
+  TRANSMISSIONS_PLANSPONSOR: {
+    header: {
+      type: 'dashboard',
+      title: 'Transmissions / BUs by Plan Sponsor',
+      url: './errors',
+    },
+    polling: 1 / 3,
+  },
+  ERRORS_PLANSPONSOR: {
+    header: {
+      type: 'dashboard',
+      title: 'Failed Files by Plan Sponsor',
       url: './errors',
     },
     polling: 1 / 3,

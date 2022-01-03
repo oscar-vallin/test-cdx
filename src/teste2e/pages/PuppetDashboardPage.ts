@@ -7,11 +7,19 @@ export default class PuppetDashboardPage extends PuppetBasePage {
 
   failedFilesBillingUnits = '#__Failed__Files__Billing_Units';
 
-  transmissionsByVendorTable = '#__Table_Transmissions_Vendor';
+  errorsByVendor = '#__Table_Errors_Vendor';
+
+  errorsByFile = '#__Table_Errors_Files';
+
+  errorsByPlanSponsor = '#__Table_Errors_PlanSponsor';
+
+  transmissionsByVendor = '#__Table_Transmissions_Vendor';
 
   transmissionsByVendorTableRows = '#__Table_Transmissions_Vendor .ms-List-cell';
 
-  transmissionsByFilesTable = '#__Table_Transmissions_Files';
+  transmissionsByFiles = '#__Table_Transmissions_Files';
+
+  transmissionsByPlanSponsor = '#__Table_Transmissions_PlanSponsor';
 
   buttonYesterday = '#__Button-yesterday';
 
@@ -28,7 +36,7 @@ export default class PuppetDashboardPage extends PuppetBasePage {
   async expectOnPage() {
     await this.page.waitForSelector(this.transmissionBillingUnits);
     await this.page.waitForSelector(this.failedFilesBillingUnits);
-    await this.page.waitForSelector(this.transmissionsByVendorTable);
+    await this.page.waitForSelector(this.transmissionsByVendor);
   }
 
   async expectTransmissionBillingUnits(text: string) {
@@ -40,7 +48,7 @@ export default class PuppetDashboardPage extends PuppetBasePage {
   }
 
   async expectTransmissionsByVendorCount(count: number) {
-    await this.page.waitForSelector(this.transmissionsByVendorTable);
+    await this.page.waitForSelector(this.transmissionsByVendor);
     const result = await this.page.$$eval(this.transmissionsByVendorTableRows, (rows) => {
       return rows.length;
     });
@@ -49,15 +57,45 @@ export default class PuppetDashboardPage extends PuppetBasePage {
   }
 
   async expectNoTransmissionsByVendor() {
-    await this.expectTextOnPage(this.transmissionsByVendorTable, 'Transmissions / BUs by VendorNone');
+    await this.expectTextOnPage(this.transmissionsByVendor, 'Transmissions / BUs by VendorNone');
+  }
+
+  async expectNoErrorsByVendor() {
+    await this.expectTextOnPage(this.errorsByVendor, 'Failed Files by VendorNone');
+  }
+
+  async expectNoTransmissionsByPlanSponsor() {
+    await this.expectTextOnPage(this.transmissionsByPlanSponsor, 'Transmissions / BUs by Plan SponsorNone');
+  }
+
+  async expectNoErrorsByPlanSponsor() {
+    await this.expectTextOnPage(this.errorsByPlanSponsor, 'Failed Files by Plan SponsorNone');
+  }
+
+  async expectNoTransmissionsByFile() {
+    await this.expectTextOnPage(this.transmissionsByFiles, 'Transmissions / BUs by FilesNone');
+  }
+
+  async expectNoErrorsByFile() {
+    await this.expectTextOnPage(this.errorsByFile, 'Failed Files by FilesNone');
+  }
+
+  async expectCountsByPlanSponsorNotRendered() {
+    await super.expectElementNotRendered(this.transmissionsByPlanSponsor);
+    await super.expectElementNotRendered(this.errorsByPlanSponsor);
+  }
+
+  async expectCountsByFileNotRendered() {
+    await super.expectElementNotRendered(this.transmissionsByFiles);
+    await super.expectElementNotRendered(this.errorsByFile);
   }
 
   async getFirstTransmissionByVendorCell(): Promise<string> {
-    return this.getFirstTableCell(this.transmissionsByVendorTable);
+    return this.getFirstTableCell(this.transmissionsByVendor);
   }
 
   async clickFirstVendorTransmission(): Promise<PuppetExchangeStatus> {
-    await this.page.waitForSelector(this.transmissionsByVendorTable);
+    await this.page.waitForSelector(this.transmissionsByVendor);
     await this.page.click(`${this.transmissionsByVendorTableRows} a`);
     const page = new PuppetExchangeStatus(this.page);
     await page.expectOnPage();
@@ -65,7 +103,11 @@ export default class PuppetDashboardPage extends PuppetBasePage {
   }
 
   async getFirstTransmissionByFileCell(): Promise<string> {
-    return this.getFirstTableCell(this.transmissionsByFilesTable);
+    return this.getFirstTableCell(this.transmissionsByFiles);
+  }
+
+  async getFirstTransmissionByPlanSponsorCell(): Promise<string> {
+    return this.getFirstTableCell(this.transmissionsByPlanSponsor);
   }
 
   async getFirstTableCell(selector: string): Promise<string> {
@@ -110,6 +152,6 @@ export default class PuppetDashboardPage extends PuppetBasePage {
     await super.inputValue(this.customToDate, toDate);
 
     // Wait for the first row to show up
-    await this.waitForSelector(`${this.transmissionsByVendorTable} div.ms-DetailsRow-cell`);
+    await this.waitForSelector(`${this.transmissionsByVendor} div.ms-DetailsRow-cell`);
   }
 }

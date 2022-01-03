@@ -30,6 +30,14 @@ describe('E2E Dashboard test', () => {
   it('Verify headers matches the expected values', async () => {
     const page = new PuppetDashboardPage(cdxApp.page);
     await page.expectOnPage();
+    // By Default this company will have a bunch of empty tables for today's date
+    await page.expectNoTransmissionsByVendor();
+    await page.expectNoTransmissionsByPlanSponsor();
+    await page.expectNoErrorsByVendor();
+    await page.expectNoErrorsByPlanSponsor();
+
+    await page.expectCountsByFileNotRendered();
+
     await page.setCustomDateRange('Wed Aug 11 2021', 'Wed Sep 15 2021');
 
     await page.expectTransmissionBillingUnits('Transmissions  (Billing Units.)116/116');
@@ -65,37 +73,35 @@ describe('E2E Dashboard test', () => {
   //   await cdxApp.page.waitForTimeout(1000);
   // });
 
-  it('Check first item in transmission files table', async () => {
+  it('Check first item in transmission plan sponsors table', async () => {
     const page = new PuppetDashboardPage(cdxApp.page);
-    const firstCell = await page.getFirstTransmissionByFileCell();
+    const firstCell = await page.getFirstTransmissionByPlanSponsorCell();
 
-    // expect(firstCell).toEqual('BBC-BCBS-PROD');
+    expect(firstCell).toEqual('PW');
   });
 
   it('Click in Yesterday filter', async () => {
     const page = new PuppetDashboardPage(cdxApp.page);
     await page.clickYesterdayFilter();
     expect(cdxApp.page.url()).toContain('?date=yesterday');
-  });
-
-  it('Check no results with Yesterday filter', async () => {
-    const page = new PuppetDashboardPage(cdxApp.page);
-    await page.waitForTimeout(3000);
-
     await page.expectNoTransmissionsByVendor();
+    await page.expectNoTransmissionsByPlanSponsor();
+    await page.expectNoErrorsByVendor();
+    await page.expectNoErrorsByPlanSponsor();
+
+    await page.expectCountsByFileNotRendered();
   });
 
   it('Click on This Month filter ', async () => {
     const page = new PuppetDashboardPage(cdxApp.page);
     await page.clickMonthFilter();
     expect(cdxApp.page.url()).toContain('?date=thisMonth');
-  });
+    await page.expectNoTransmissionsByVendor();
+    await page.expectNoTransmissionsByPlanSponsor();
+    await page.expectNoErrorsByVendor();
+    await page.expectNoErrorsByPlanSponsor();
 
-  it('Check results in table with this month filter', async () => {
-    const page = new PuppetDashboardPage(cdxApp.page);
-    const firstCell = await page.getFirstTransmissionByVendorCell();
-
-    // expect(firstCell).toEqual('BenefitResourceInc');
+    await page.expectCountsByFileNotRendered();
   });
 
   it('Click on Last Month filter', async () => {
@@ -112,11 +118,31 @@ describe('E2E Dashboard test', () => {
     expect(cdxApp.page.url()).toContain('&endDate=');
   });
 
-  it('Check results in table with last month filter', async () => {
-    const page = new PuppetDashboardPage(cdxApp.page);
-    const firstCell = await page.getFirstTransmissionByVendorCell();
+  it('Navigate to Farm Hop', async () => {
+    const adminMenu = cdxApp.getAdminMenu();
+    await adminMenu.openMenu('Organizations', 'Active Orgs');
+    const activeOrgsPage = new PuppetActiveOrgs(cdxApp.page);
+    await activeOrgsPage.clickOnOrg('FMHP', 'Farm Hop');
+  });
 
-    // expect(firstCell).toEqual('BCBSofMA');
+  it('Navigate to the Farm Hop Dashboard', async () => {
+    const mainMenu = cdxApp.getMainMenu();
+    await mainMenu.clickDashboard();
+    const page = new PuppetDashboardPage(cdxApp.page);
+    await page.expectOnPage();
+
+    // By Default this company will have a bunch of empty tables for today's date
+    await page.expectNoTransmissionsByVendor();
+    await page.expectNoTransmissionsByFile();
+    await page.expectNoErrorsByVendor();
+    await page.expectNoErrorsByFile();
+
+    await page.expectCountsByPlanSponsorNotRendered();
+
+    await page.setCustomDateRange('Wed Aug 11 2021', 'Wed Sep 15 2021');
+
+    await page.expectTransmissionBillingUnits('Transmissions  (Billing Units.)35/35');
+    await page.expectFailedFilesBillingUnits('Failed Files  (Billing Units.)6/35');
   });
 
   it('Logout', async () => {

@@ -15,9 +15,7 @@ import {
   IColumn,
 } from 'office-ui-fabric-react/lib-commonjs/DetailsList';
 import { EmptyState } from 'src/containers/states';
-import { StyleConstants } from '../../../data/constants/StyleConstants';
 import { getDates } from '../../../helpers/tableHelpers.service';
-import { Spinner } from '../../spinners/Spinner';
 
 import {
   StyledText,
@@ -29,7 +27,6 @@ import {
   RouteLink,
   StyledMenuButton,
   StyledMenuIcon,
-  StyledSpacing,
   StyledEmptyTable,
 } from './Table.styles';
 
@@ -541,14 +538,6 @@ const Table = ({
       },
     });
 
-    if (loading) {
-      return (
-        <StyledSpacing margin={{ top: 'double' }}>
-          <Spinner size={StyleConstants.SPINNER_LARGE} label="Loading data" />
-        </StyledSpacing>
-      );
-    }
-
     if (items?.length > 0) {
       return (
         <DetailsList
@@ -568,7 +557,18 @@ const Table = ({
     }
     return (
       <StyledEmptyTable>
-        <h1 className="EmptyTable__title">{title}</h1>
+        <TableHeader
+          id="header"
+          header={{
+            type: structure.header.type,
+            title: structure.header.title,
+            url: structure.header.url,
+          }}
+          sortLabel={sortLabel}
+          onSort={_onSort}
+          onOption={_onShowSpecs}
+          date={date}
+        />
         <div className="EmptyTable__message">{emptyMessage}</div>
       </StyledEmptyTable>
     );
@@ -587,14 +587,6 @@ const Table = ({
         height: '100%',
       },
     });
-
-    if (loading) {
-      return (
-        <StyledSpacing margin={{ top: 'double' }}>
-          <Spinner size={StyleConstants.SPINNER_LARGE} label="Loading data" />
-        </StyledSpacing>
-      );
-    }
 
     if (items?.length > 0) {
       return (
@@ -619,18 +611,10 @@ const Table = ({
 
   if (sortedItems)
     if (structure.header.type === 'dashboard') {
-      return (
-        <StyledContainer id="Table_Detailed" style={{ width: '100%' }}>
-          {renderSortedItem()}
-        </StyledContainer>
-      );
+      return <StyledContainer style={{ width: '100%' }}>{renderSortedItem()}</StyledContainer>;
     }
 
-  return (
-    <StyledContainer id="Table_Detailed" style={{ width: '100%' }}>
-      {renderItem()}
-    </StyledContainer>
-  );
+  return <StyledContainer style={{ width: '100%' }}>{renderItem()}</StyledContainer>;
 };
 
 Table.defaultProps = defaultProps;

@@ -20,9 +20,6 @@ import { TABLE_NAMES } from '../../data/constants/TableConstants';
 import { useOrgSid } from '../../hooks/useOrgSid';
 import { PageTitle } from '../../components/typography';
 
-// TODO: Change for Session organization ID.
-// const ORG_SID = 1;
-
 const _DashboardPage = () => {
   const { orgSid } = useOrgSid();
   const location = useLocation();
@@ -101,6 +98,76 @@ const _DashboardPage = () => {
       <Spacing margin={{ top: 'double' }}>
         <Spinner size={SpinnerSize.large} label="Fetching dashboard data" />
       </Spacing>
+    );
+  };
+
+  const renderCountsByFile = () => {
+    if (dataCounters?.showCountsByFile != true) {
+      return <span />;
+    }
+
+    return (
+      <Row>
+        <Column lg="6">
+          <TableDashboard
+            id="__Table_Transmissions_Files"
+            tableId={TABLE_NAMES.DASHBOARD_TRANSMISSIONS_FILES}
+            data={dataCounters?.fileTransmissions}
+            altData={[]}
+            date={dateId}
+            loading={isLoadingData}
+            title="Transmissions / BUs by File"
+            emptyMessage="None"
+          />
+        </Column>
+        <Column lg="6">
+          <TableDashboard
+            id="__Table_Errors_Files"
+            tableId={TABLE_NAMES.DASHBOARD_ERRORS_FILES}
+            data={dataCounters?.fileProcessErrors}
+            altData={[]}
+            date={dateId}
+            loading={isLoadingData}
+            title="Failed Files by File"
+            emptyMessage="None"
+          />
+        </Column>
+      </Row>
+    );
+  };
+
+  const renderCountsByPlanSponsor = () => {
+    if (dataCounters?.showCountsByPlanSponsor != true) {
+      return <span />;
+    }
+
+    return (
+      <Row>
+        <Column lg="6">
+          <TableDashboard
+            id="__Table_Transmissions_PlanSponsor"
+            tableId={TABLE_NAMES.DASHBOARD_TRANSMISSIONS_PLANSPONSOR}
+            data={dataCounters?.planSponsorTransmissions}
+            altData={[]}
+            date={dateId}
+            loading={isLoadingData}
+            title="Transmissions / BUs by Plan Sponsor"
+            emptyMessage="None"
+          />
+        </Column>
+        <Column lg="6">
+          <TableDashboard
+            id="__Table_Errors_PlanSponsor"
+            tableId={TABLE_NAMES.DASHBOARD_ERRORS_PLANSPONSOR}
+            data={dataCounters?.planSponsorProcessErrors}
+            altData={[]}
+            date={dateId}
+            loading={isLoadingData}
+            title="Failed Files by Plan Sponsor"
+            emptyMessage="None"
+          />
+        </Column>
+      </Row>
     );
   };
 
@@ -206,32 +273,9 @@ const _DashboardPage = () => {
             </Column>
           </Row>
 
-          <Row>
-            <Column lg="6">
-              <TableDashboard
-                id="__Table_Transmissions_Files"
-                tableId={TABLE_NAMES.DASHBOARD_TRANSMISSIONS_FILES}
-                data={dataCounters?.fileTransmissions}
-                altData={[]}
-                date={dateId}
-                loading={isLoadingData}
-                title="Transmissions / BUs by File"
-                emptyMessage="None"
-              />
-            </Column>
-            <Column lg="6">
-              <TableDashboard
-                id="__Table_Errors_Files"
-                tableId={TABLE_NAMES.DASHBOARD_ERRORS_FILES}
-                data={dataCounters?.fileProcessErrors}
-                altData={[]}
-                date={dateId}
-                loading={isLoadingData}
-                title="Failed Files by File"
-                emptyMessage="None"
-              />
-            </Column>
-          </Row>
+          {renderCountsByFile()}
+
+          {renderCountsByPlanSponsor()}
         </Container>
       </React.Suspense>
     </LayoutDashboard>

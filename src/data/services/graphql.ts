@@ -448,6 +448,8 @@ export type DashboardPeriodCounts = {
   vendorProcessErrors?: Maybe<Array<Maybe<DashboardPeriodCount>>>;
   planSponsorProcessErrors?: Maybe<Array<Maybe<DashboardPeriodCount>>>;
   fileProcessErrors?: Maybe<Array<Maybe<DashboardPeriodCount>>>;
+  showCountsByPlanSponsor?: Maybe<Scalars['Boolean']>;
+  showCountsByFile?: Maybe<Scalars['Boolean']>;
   transmissionCount?: Maybe<Scalars['Int']>;
   billingUnitCount?: Maybe<Scalars['Int']>;
   processErrorCount?: Maybe<Scalars['Int']>;
@@ -2375,7 +2377,7 @@ export type FieldCreationFragmentFragment = (
 
 export type FragmentDashboardPeriodCountsFragment = (
   { __typename?: 'DashboardPeriodCounts' }
-  & Pick<DashboardPeriodCounts, 'transmissionCount' | 'billingUnitCount' | 'processErrorCount'>
+  & Pick<DashboardPeriodCounts, 'showCountsByPlanSponsor' | 'showCountsByFile' | 'transmissionCount' | 'billingUnitCount' | 'processErrorCount'>
   & { vendorTransmissions?: Maybe<Array<Maybe<(
     { __typename?: 'DashboardPeriodCount' }
     & Pick<DashboardPeriodCount, 'name' | 'secondaryDescr' | 'count' | 'total'>
@@ -2856,7 +2858,7 @@ export type DashboardPeriodCountsQuery = (
   { __typename?: 'Query' }
   & { dashboardPeriodCounts?: Maybe<(
     { __typename?: 'DashboardPeriodCounts' }
-    & Pick<DashboardPeriodCounts, 'transmissionCount' | 'billingUnitCount' | 'processErrorCount'>
+    & Pick<DashboardPeriodCounts, 'showCountsByPlanSponsor' | 'showCountsByFile' | 'transmissionCount' | 'billingUnitCount' | 'processErrorCount'>
     & { vendorTransmissions?: Maybe<Array<Maybe<(
       { __typename?: 'DashboardPeriodCount' }
       & Pick<DashboardPeriodCount, 'name' | 'secondaryDescr' | 'count' | 'total'>
@@ -5380,6 +5382,8 @@ export const FragmentDashboardPeriodCountsFragmentDoc = gql`
     count
     total
   }
+  showCountsByPlanSponsor
+  showCountsByFile
   transmissionCount
   billingUnitCount
   processErrorCount
@@ -6282,6 +6286,8 @@ export const DashboardPeriodCountsDocument = gql`
       count
       total
     }
+    showCountsByPlanSponsor
+    showCountsByFile
     transmissionCount
     billingUnitCount
     processErrorCount

@@ -30,6 +30,19 @@ export default class PuppetBasePage {
     expect(actualText).toContain(expectedText);
   }
 
+  async expectElementNotRendered(selector: string) {
+    const { page } = this;
+    return page
+      .waitForSelector(selector, { timeout: 5000 })
+      .then(() => {
+        throw Error(`Element ${selector} was rendered when it was expected not to`);
+      })
+      .catch(() => {
+        // This is good
+        console.log('element was correctly not found');
+      });
+  }
+
   async waitForSelector(selector: string): Promise<ElementHandle | null> {
     return await this.page.waitForSelector(selector).catch(() => {
       throw Error(`Did not find element ${selector} within the time limit`);
