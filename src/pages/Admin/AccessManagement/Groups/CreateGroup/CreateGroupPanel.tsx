@@ -9,12 +9,12 @@ import { FontIcon } from '@fluentui/react/lib-commonjs/Icon';
 import { TooltipHost } from '@fluentui/react/lib-commonjs/Tooltip';
 
 import { useOrgSid } from 'src/hooks/useOrgSid';
-import { Spacing } from '../../../../../components/spacings/Spacing';
-import { Button } from '../../../../../components/buttons';
-import { Row, Column } from '../../../../../components/layouts';
-import { Separator } from '../../../../../components/separators/Separator';
-import { Text } from '../../../../../components/typography';
-import { InputText } from '../../../../../components/inputs/InputText';
+import { Spacing } from 'src/components/spacings/Spacing';
+import { Button } from 'src/components/buttons';
+import { Row, Column } from 'src/components/layouts';
+import { Separator } from 'src/components/separators/Separator';
+import { Text } from 'src/components/typography';
+import { InputText } from 'src/components/inputs/InputText';
 import { StyledContainer } from './CreateGroupPanel.styles';
 
 import { useCreateGroupPanel } from './CreateGroupPanel.service';

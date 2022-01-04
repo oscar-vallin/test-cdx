@@ -179,7 +179,7 @@ describe('Basic Input Component', () => {
     )
 
     expect(wrapper.find('UIFormLabel')).toHaveLength(1);
-    expect(wrapper.find('Text')).toHaveLength(1);
+    expect(wrapper.contains('Kerman')).toEqual(true);
     expect(wrapper.find('InputText')).toHaveLength(0);
     expect(wrapper.find('UIInputTextReadOnly')).toHaveLength(0);
   });

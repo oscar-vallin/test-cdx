@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { Row } from '.';
 
 export const DivStyled = styled.div<DivStyledProps>`
   display: flex;
@@ -23,8 +22,14 @@ export const DivStyled = styled.div<DivStyledProps>`
   width: 100%;
 `;
 
-export const FormRow = styled(Row)`
+export const FormRow = styled.div`
   margin-top: 15px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: 'flex-start';
+  align-items: 'flex-end';
+  width: 100%;
 `;
 
 type DivStyledProps = {

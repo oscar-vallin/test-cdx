@@ -6,7 +6,7 @@ import store from '../../../../../store/index';
 const defaultProps = {
   isOpen: false,
   onDismiss: () => null,
-  sronCreateGroupPolicyc: () => null,
+  onCreateGroupPolicy: () => null,
   onUpdateGroupPolicy: () => null,
   selectedGroupId: '48',
   templateId: '',
