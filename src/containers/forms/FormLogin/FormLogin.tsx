@@ -89,12 +89,12 @@ const FormLogin = ({ id }: FormLoginProps): ReactElement => {
                   <Column id={`${id}__Card__Row__Column--Email`}>
                     <InputText
                       id={`${id}__Card__Row__Input-Email`}
-                      autoFocus
+                      autofocus
                       placeholder="Email"
                       disabled={state.loading || isValidEmail}
                       value={values.userId}
                       onKeyEnter={() => performUserIdVerification(values)}
-                      onChange={({ target }) => setValues({ ...values, userId: target.value })}
+                      onChange={(event, newValue) => setValues({ ...values, userId: newValue ?? '' })}
                     />
                   </Column>
                   {isValidEmail && (
@@ -115,12 +115,12 @@ const FormLogin = ({ id }: FormLoginProps): ReactElement => {
                     <Column id={`${id}__Card__Row__Column--Password`}>
                       <InputText
                         id={`${id}__Card__Row__Input-Password`}
-                        autoFocus
+                        autofocus={false}
                         placeholder="Password"
                         type="password"
                         value={values.password}
                         onKeyEnter={() => performUserAuthentication(values)}
-                        onChange={({ target }) => setValues({ ...values, password: target.value })}
+                        onChange={(event, newValue) => setValues({ ...values, password: newValue ?? '' })}
                       />
                     </Column>
                   </StyledRow>

@@ -1,4 +1,4 @@
-import { FormLabel } from './FormLabel';
+import { FormLabel, UIFormLabel } from './FormLabel';
 
-export { FormLabel };
+export { FormLabel, UIFormLabel };
 export default FormLabel;

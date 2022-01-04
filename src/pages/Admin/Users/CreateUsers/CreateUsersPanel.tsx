@@ -4,7 +4,6 @@ import { Panel, PanelType } from '@fluentui/react/lib-commonjs/Panel';
 
 import { Tabs } from 'src/components/tabs/Tabs';
 import { Text } from 'src/components/typography';
-import { Link } from 'src/components/buttons/Link/ButtonLink';
 import { Spacing } from '../../../../components/spacings/Spacing';
 
 import { useCreateUsersPanel } from './CreateUsersPanel.service';
@@ -42,27 +41,16 @@ const CreateUsersPanel = ({
   onCreateUser,
   selectedUserId,
 }: CreateUsersPanelProps): ReactElement => {
-  const CreateUserService = useCreateUsersPanel(orgSid);
+  const createUserService = useCreateUsersPanel(orgSid);
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
 
   const [step, setStep] = useState(Tab.Account);
-  const [selectedTab, setSelectedTab] = useState(tabs[Tab.Account]);
-  const { userAccountForm, userAccountLoading } = CreateUserService ?? {};
+  const { userAccountForm, userAccountLoading } = createUserService ?? {};
   const [isProcessing, setProcessing] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (step >= 0 && step < 4) {
-      setSelectedTab(tabs[step]);
-    }
-  }, [step]);
-
-  useEffect(() => {
-    CreateUserService.setUserSid(selectedUserId);
-  }, [selectedUserId]);
 
   const handleCreateUser = async () => {
     setProcessing(true);
-    const responseCreate = await CreateUserService.createUserCall();
+    const responseCreate = await createUserService.createUserCall();
     setProcessing(false);
     //
     if (responseCreate?.createUser) {
@@ -86,18 +74,18 @@ const CreateUsersPanel = ({
     return null;
   };
 
-  const handleResetPassword = async () => {
-    setProcessing(true);
-    const responseReset = await CreateUserService.handleResetPassword(selectedUserId);
-    setProcessing(false);
-    //
-    if (responseReset?.resetPassword) {
-      if (responseReset?.resetPassword === 'SUCCESS') {
-        onCreateUser(responseReset.resetPassword);
-        onDismiss();
-      }
-    }
-  };
+  // const handleResetPassword = async () => {
+  //   setProcessing(true);
+  //   const responseReset = await createUserService.handleResetPassword(selectedUserId);
+  //   setProcessing(false);
+  //   //
+  //   if (responseReset?.resetPassword) {
+  //     if (responseReset?.resetPassword === 'SUCCESS') {
+  //       onCreateUser(responseReset.resetPassword);
+  //       onDismiss();
+  //     }
+  //   }
+  // };
 
   const handleNext = (): null => {
     setStep(step + 1);
@@ -111,22 +99,25 @@ const CreateUsersPanel = ({
 
   const handleTabChange = (hash): void => {
     setStep(tabs.indexOf(hash));
-    setSelectedTab(hash);
   };
 
   useEffect(() => {
-    if (CreateUserService.isUserCreated && CreateUserService.responseCreateUser) {
+    if (createUserService.isUserCreated && createUserService.responseCreateUser) {
       onDismiss();
     }
-  }, [CreateUserService.isUserCreated]);
+  }, [createUserService.isUserCreated]);
 
   return (
     <Panel
       closeButtonAriaLabel="Close"
       type={PanelType.medium}
-      headerText={selectedUserId ? 'New User' : 'Edit User'}
+      headerText="New User"
       isOpen={isOpen}
       onDismiss={() => {
+        // Reset the form
+        createUserService.resetForm().then();
+        // Set it back to the first tab
+        setStep(Tab.Account);
         onDismiss();
       }}
     >
@@ -134,25 +125,25 @@ const CreateUsersPanel = ({
         {userAccountLoading && <Text>Loading...</Text>}
         {!userAccountLoading && (
           <>
-            {selectedUserId && (
-              <Link
-                id="__CreateUsersPanel__ResetPassword_Field"
-                onClick={() => {
-                  handleResetPassword();
-                }}
-              >
-                Reset Password
-              </Link>
-            )}
+            {/* {selectedUserId > 0 ?? ( */}
+            {/*  <Link */}
+            {/*    id="__CreateUsersPanel__ResetPassword_Field" */}
+            {/*    onClick={() => { */}
+            {/*      handleResetPassword(); */}
+            {/*    }} */}
+            {/*  > */}
+            {/*    Reset Password */}
+            {/*  </Link> */}
+            {/* )} */}
             <Tabs
               items={[
                 {
                   title: 'Account',
                   content: (
                     <SectionAccount
-                      form={CreateUserService.form}
+                      form={createUserService.userAccountForm}
                       onNext={handleNext}
-                      saveOptions={CreateUserService.setForm}
+                      saveOptions={createUserService.updateAccountInfo}
                     />
                   ),
                   hash: '#account',
@@ -161,10 +152,10 @@ const CreateUsersPanel = ({
                   title: 'Access Management',
                   content: (
                     <SectionAccessManagement
-                      form={CreateUserService.form}
+                      form={createUserService.userAccountForm}
                       onPrev={handlePrev}
                       onNext={handleNext}
-                      saveOptions={CreateUserService.setForm}
+                      saveOptions={createUserService.updateAccessPolicyGroups}
                     />
                   ),
                   hash: '#access',
@@ -173,10 +164,10 @@ const CreateUsersPanel = ({
                   title: 'Authentication',
                   content: (
                     <SectionAuthentication
-                      form={CreateUserService.form}
+                      form={createUserService.userAccountForm}
                       onPrev={handlePrev}
                       onNext={handleNext}
-                      saveOptions={CreateUserService.setForm}
+                      saveOptions={createUserService.setSendAccountActivation}
                     />
                   ),
                   hash: '#auth',
@@ -185,7 +176,7 @@ const CreateUsersPanel = ({
                   title: 'Summary',
                   content: (
                     <SectionSummary
-                      form={CreateUserService.form}
+                      form={createUserService.userAccountForm}
                       onPrev={handlePrev}
                       onSubmit={handleCreateUser}
                       isProcessing={isProcessing}

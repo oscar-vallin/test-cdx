@@ -1,13 +1,13 @@
 import { useState, memo, useEffect } from 'react';
 import { Checkbox } from '@fluentui/react';
 import { TextField } from '@fluentui/react/lib-commonjs/TextField';
-import { LayoutAdmin } from '../../../layouts/LayoutAdmin';
-import { Button } from '../../../components/buttons/Button';
-import { Spacing } from '../../../components/spacings/Spacing';
-import { Spinner } from '../../../components/spinners/Spinner';
-import { Row, Column } from '../../../components/layouts';
-import { InputText } from '../../../components/inputs/InputText';
-import { Text } from '../../../components/typography/Text';
+import { LayoutAdmin } from 'src/layouts/LayoutAdmin';
+import { Button } from 'src/components/buttons';
+import { Spacing } from 'src/components/spacings/Spacing';
+import { Spinner } from 'src/components/spinners/Spinner';
+import { Row, Column } from 'src/components/layouts';
+import { InputText } from 'src/components/inputs/InputText';
+import { Text } from 'src/components/typography';
 
 const _FtpTestPage = () => {
   const [host, setHost] = useState('');
@@ -65,7 +65,7 @@ const _FtpTestPage = () => {
                 label="Host"
                 placeholder="host"
                 value={host}
-                onChange={({ target }) => setHost(target.value)}
+                onChange={(event, newValue) => setHost(newValue ?? '')}
               />
             </Spacing>
             <Spacing margin={{ bottom: 'normal' }}>
@@ -75,7 +75,7 @@ const _FtpTestPage = () => {
                 label="User"
                 placeholder="user"
                 value={user}
-                onChange={({ target }) => setUser(target.value)}
+                onChange={(event, newValue) => setUser(newValue ?? '')}
               />
             </Spacing>
             <Spacing margin={{ bottom: 'normal' }}>
@@ -86,7 +86,7 @@ const _FtpTestPage = () => {
                 type="password"
                 placeholder="password"
                 value={password}
-                onChange={({ target }) => setPassword(target.value)}
+                onChange={(event, newValue) => setPassword(newValue ?? '')}
               />
             </Spacing>
             <Spacing margin={{ bottom: 'normal' }}>
@@ -96,7 +96,7 @@ const _FtpTestPage = () => {
                 label="Folder"
                 placeholder="folder"
                 value={folder}
-                onChange={({ target }) => setFolder(target.value)}
+                onChange={(event, newValue) => setFolder(newValue ?? '')}
               />
             </Spacing>
             <Spacing margin={{ bottom: 'normal' }}>
@@ -107,7 +107,7 @@ const _FtpTestPage = () => {
                 type="number"
                 placeholder="port"
                 value={port}
-                onChange={({ target }) => setPort(target.value)}
+                onChange={(event, newValue) => setPort(newValue ?? '')}
               />
             </Spacing>
             <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
@@ -128,7 +128,7 @@ const _FtpTestPage = () => {
                     required
                     label="Vendor File Name"
                     value={vendorFileName}
-                    onChange={({ target }) => setVendorFileName(target.value)}
+                    onChange={(event, newValue) => setVendorFileName(newValue ?? '')}
                   />
                 </Spacing>
                 <Spacing margin={{ bottom: 'normal' }}>
@@ -138,7 +138,7 @@ const _FtpTestPage = () => {
                     placeholder="Put the text you want in the file here, if you leave blank the text 'Connection Test' will be used for the file's contents."
                     multiline
                     value={textFileContent}
-                    onChange={({ target }: any) => setTextFileContent(target.value)}
+                    onChange={(event, newValue: any) => setTextFileContent(newValue ?? '')}
                     rows={10}
                   />
                 </Spacing>

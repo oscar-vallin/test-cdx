@@ -2,25 +2,24 @@
 import { useState, useEffect, memo } from 'react';
 
 import { Checkbox } from '@fluentui/react';
-import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
-import { Button } from '../../../../components/buttons/Button';
-import { Separator } from '../../../../components/separators/Separator';
-import { Spacing } from '../../../../components/spacings/Spacing';
-import { Spinner } from '../../../../components/spinners/Spinner';
-import { Row, Column } from '../../../../components/layouts';
-import { InputText } from '../../../../components/inputs/InputText';
-import { MessageBar } from '../../../../components/notifications/MessageBar';
-import { Text } from '../../../../components/typography/Text';
-import { PaletteColors } from './PaletteColors';
+import { LayoutAdmin } from 'src/layouts/LayoutAdmin';
+import { Button } from 'src/components/buttons';
+import { Separator } from 'src/components/separators/Separator';
+import { Spacing } from 'src/components/spacings/Spacing';
+import { Spinner } from 'src/components/spinners/Spinner';
+import { Row, Column } from 'src/components/layouts';
+import { InputText } from 'src/components/inputs/InputText';
+import { MessageBar } from 'src/components/notifications/MessageBar';
+import { Text } from 'src/components/typography';
 
+import { useThemeContext } from 'src/contexts/ThemeContext';
+import { useColorPalettes } from 'src/hooks/useColorPalettes';
+import { defaultTheme } from 'src/styles/themes';
+
+import Theming from 'src/utils/Theming';
+import { useNotification } from 'src/hooks/useNotification';
 import { StyledDiv, StyledChoiceGroup, StyledColorPicker } from './ColorPalettesPage.styles';
-
-import { useThemeContext } from '../../../../contexts/ThemeContext';
-import { useColorPalettes } from '../../../../hooks/useColorPalettes';
-import { defaultTheme } from '../../../../styles/themes';
-
-import Theming from '../../../../utils/Theming';
-import { useNotification } from '../../../../hooks/useNotification';
+import { PaletteColors } from './PaletteColors';
 
 const getThemeVariant = ({ themePrimary, neutralPrimary, white }) => ({
   ...Theming.generate.primary(themePrimary),
@@ -203,7 +202,7 @@ const _ColorPalettesPage = () => {
                         required
                         label="Palette name"
                         value={paletteName}
-                        onChange={({ target }) => setPaletteName(target.value)}
+                        onChange={(event, newValue) => setPaletteName(newValue ?? '')}
                       />
 
                       <Spacing margin={{ top: 'normal' }}>

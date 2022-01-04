@@ -25,3 +25,8 @@ export const StyledOptionRow = styled(Row)`
 export const StyledText = styled(Text)`
   padding: 0px 8px 24px;
 `;
+
+export const WizardBody = styled.div`
+  margin-top: 1em;
+  height: 24em;
+`;

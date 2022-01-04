@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib-commonjs/Dialog';
 import { MarqueeSelection } from '@fluentui/react/lib-commonjs/MarqueeSelection';
-import { PrimaryButton, DefaultButton, MessageBar } from 'office-ui-fabric-react';
+import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react';
 import { DetailsList, DetailsListLayoutMode, SelectionMode, Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { SpinnerSize } from '@fluentui/react';
@@ -12,7 +12,7 @@ import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
 import { Button, Link } from '../../../../components/buttons';
 import { Row, Column } from '../../../../components/layouts';
 import { Spacing } from '../../../../components/spacings/Spacing';
-import { Text } from '../../../../components/typography';
+import { PageTitle } from '../../../../components/typography';
 import { Separator } from '../../../../components/separators/Separator';
 
 import { CreateUsersPanel } from '../CreateUsers';
@@ -54,7 +54,6 @@ const _ActiveUsersPage = () => {
     if (column.key === 'email') {
       return (
         <>
-          &nbsp;
           <Link
             id={`__ActiveUsersPage__Email_Field_${itemIndex + 1}`}
             onClick={() => {
@@ -134,26 +133,26 @@ const _ActiveUsersPage = () => {
             <Row center>
               <Column lg="6">
                 <Spacing margin={{ top: 'small' }}>
-                  <Text variant="bold">Active Users</Text>
+                  <PageTitle id="__Page_Title" title="Active Users" />
                 </Spacing>
               </Column>
 
               <Column lg="6" right>
                 <span>
-                  <Button
-                    id="create-user"
-                    variant="primary"
+                  <PrimaryButton
+                    id="__Create-User"
+                    iconProps={{ iconName: 'AddFriend' }}
                     onClick={() => {
                       setIsPanelOpen(true);
                       return null;
                     }}
                   >
                     Create user
-                  </Button>
+                  </PrimaryButton>
                   &nbsp; &nbsp;
-                  <Button
-                    id="DeactivateUsers"
-                    variant="primary"
+                  <PrimaryButton
+                    id="__Deactivate-Users"
+                    iconProps={{ iconName: 'UserRemove' }}
                     onClick={() => {
                       if (selectedItems.length > 0) {
                         setIsConfirmationHidden(false);
@@ -164,7 +163,7 @@ const _ActiveUsersPage = () => {
                     }}
                   >
                     Disable Users
-                  </Button>
+                  </PrimaryButton>
                 </span>
               </Column>
             </Row>

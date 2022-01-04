@@ -1,31 +1,26 @@
-import { Icon } from '@fluentui/react/lib-commonjs/Icon';
 import { ReactElement, useEffect, useState } from 'react';
-import FormLabel from 'src/components/labels/FormLabel';
-import { Row, Column } from 'src/components/layouts';
-import { Spacing } from 'src/components/spacings/Spacing';
+import FormLabel, { UIFormLabel } from 'src/components/labels/FormLabel';
+import { Column, Row } from 'src/components/layouts';
 
+import { Maybe, UiOption, UserAccountForm } from 'src/data/services/graphql';
+import { CheckboxItem } from 'src/data/Types';
+import { UIInputTextReadOnly } from 'src/components/inputs/InputText/InputText';
+import { FontIcon } from '@fluentui/react';
+import { FormRow } from 'src/components/layouts/Row/Row.styles';
+import { FieldValue } from 'src/components/inputs/InputText/InputText.styles';
+import { WizardBody } from './CreateUsersPanel.styles';
 import CreateUsersFooter from './CreateUsersFooter';
-import { FormUserType } from './CreateUsersPanel.service';
-import { StyledText } from './CreateUsersPanel.styles';
 
 type SectionSummaryPropsType = {
-  form: FormUserType | undefined;
+  form: UserAccountForm;
   onPrev: () => null;
   onSubmit: () => any;
   isProcessing?: boolean;
 };
 
-type SummaryItemType = {
-  id: string;
-  label: string;
-  value: string | undefined;
-  row: boolean;
-  check?: boolean;
-};
-
 const SectionSummary = ({ form, onPrev, onSubmit, isProcessing }: SectionSummaryPropsType): ReactElement => {
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
-  const [summary, setSummary] = useState<SummaryItemType[] | undefined>([]);
+  const [groupOptions, setGroupOptions] = useState<CheckboxItem[]>([]);
 
   const handlePrev = () => {
     onPrev();
@@ -41,66 +36,83 @@ const SectionSummary = ({ form, onPrev, onSubmit, isProcessing }: SectionSummary
 
   useEffect(() => {
     if (form) {
-      const firstNm = form?.account?.fields.find(({ id }) => id === 'firstNm');
-      const lastNm = form?.account?.fields.find(({ id }) => id === 'lastNm');
-      const email = form?.account?.fields.find(({ id }) => id === 'email');
-      const organization = form?.account?.title;
-      const accessOptions: string | undefined = form?.access?.options
-        ?.filter(({ checked }) => checked)
-        .map((item) => item.label)
-        .join(', ');
+      const formOpts: Maybe<UiOption>[] =
+        form?.options?.find((itm) => {
+          return itm?.key == form?.accessPolicyGroups?.options;
+        })?.values ?? [];
+      const groupSids = form?.accessPolicyGroups?.value?.map((nvp) => nvp?.value) ?? [];
 
-      const authOption = form?.auth?.options ?? [];
+      const groupOptions: CheckboxItem[] = [];
+      formOpts.forEach((opt) => {
+        if (opt) {
+          if (groupSids.includes(opt.value)) {
+            groupOptions.push({
+              ...opt,
+              checked: true,
+            });
+          }
+        }
+      });
 
-      const summary: SummaryItemType[] = [
-        { id: 'firstNm', label: firstNm?.label ?? 'First Name', value: firstNm?.value, row: false },
-        { id: 'lastNm', label: lastNm?.label ?? 'Last Name', value: lastNm?.value, row: false },
-        { id: 'email', label: email?.label ?? 'Username and email Address', value: email?.value, row: true },
-        {
-          id: 'organization',
-          label: organization?.label ?? 'Primary Organization',
-          value: organization?.description,
-          row: true,
-        },
-        { id: 'access', label: 'Access Granted to', value: accessOptions ?? 'No Access Granted.', row: true },
-        {
-          id: 'auth',
-          label: 'Activation Email will be sent upon creation of this User.',
-          value: `${authOption[0].checked ?? (false && '1')}`,
-          row: true,
-          check: authOption[0].checked ?? false,
-        },
-      ];
-      setSummary(summary);
+      setGroupOptions(groupOptions);
     }
 
     return () => {
-      setSummary([]);
+      setGroupOptions([]);
     };
   }, [form]);
 
+  const renderSelectedGroups = () => {
+    if (groupOptions.length > 0) {
+      return groupOptions.map((opt) => opt.label).join(', ');
+    }
+    return 'No Access Groups Assigned';
+  };
+
   return (
     <>
-      <Spacing margin={{ top: 'normal' }} />
+      <WizardBody>
+        <FormRow>
+          {form.person?.firstNm?.visible && (
+            <Column lg={form.person?.lastNm?.visible ? '6' : '12'}>
+              <UIInputTextReadOnly uiStringField={form.person?.firstNm} />
+            </Column>
+          )}
+          {form.person?.lastNm?.visible && (
+            <Column lg={form.person?.firstNm?.visible ? '6' : '12'}>
+              <UIInputTextReadOnly uiStringField={form.person?.lastNm} />
+            </Column>
+          )}
+        </FormRow>
+        <FormRow>
+          {form.email?.visible && (
+            <Column lg="12">
+              <UIInputTextReadOnly uiStringField={form.email} />
+            </Column>
+          )}
+        </FormRow>
 
-      {summary?.map((item) => (
-        <Column>
-          <Row key={`itemSummary${item.label}`}>
-            {item.id === 'auth' && item.check && (
-              <>
-                <Icon iconName="CheckMark" className="icon-check" color="green" />
-                <StyledText>{item.label}</StyledText>
-              </>
-            )}
-            {item.id !== 'auth' && (
-              <>
-                <FormLabel label={item.label} />
-                <StyledText>{item.value}</StyledText>
-              </>
-            )}
-          </Row>
-        </Column>
-      ))}
+        <FormRow>
+          <UIFormLabel uiField={form.organization} />
+        </FormRow>
+        <Row bottom>
+          <FieldValue>{form.organization?.description}</FieldValue>
+        </Row>
+
+        <FormRow>
+          <FormLabel label="Access Granted To" />
+        </FormRow>
+        <Row bottom>
+          <FieldValue>{renderSelectedGroups()}</FieldValue>
+        </Row>
+
+        {form.sendActivationEmail?.value == true && (
+          <FormRow>
+            <FontIcon iconName="CheckMark" />
+            <UIFormLabel uiField={form.sendActivationEmail} />
+          </FormRow>
+        )}
+      </WizardBody>
       {isProcessing && <>Processing</>}
       {!isProcessing && <CreateUsersFooter onPrev={handlePrev} onSubmit={handleSubmit} errorMessage={errorMessage} />}
     </>

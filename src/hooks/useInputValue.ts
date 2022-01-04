@@ -11,6 +11,15 @@ export type DelayedInput = {
   onChange: (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => void;
 };
 
+const useFormInputValue = (initialValue: string) => {
+  const [value, setValue] = useState(initialValue);
+  const onChange = (e) => {
+    setValue(e?.target?.value ?? '');
+  };
+
+  return { value, onChange, setValue };
+};
+
 const useInputValue = (label, placeholder, initialValue, type) => {
   const [value, setValue] = useState(initialValue);
   const onChange = (e) => {
@@ -38,4 +47,4 @@ const useDelayedInputValue = (label, placeholder, initialValue, type): DelayedIn
   return { label, placeholder, type, value, onChange, setValue, delayedValue };
 };
 
-export { useInputValue, useDelayedInputValue };
+export { useInputValue, useDelayedInputValue, useFormInputValue };

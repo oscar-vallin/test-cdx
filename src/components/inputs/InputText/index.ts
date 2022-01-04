@@ -1,3 +1,3 @@
-import { InputText } from './InputText';
+import { InputText, UIInputText } from './InputText';
 
-export { InputText };
+export { InputText, UIInputText };

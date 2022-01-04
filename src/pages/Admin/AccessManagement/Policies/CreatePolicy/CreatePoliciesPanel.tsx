@@ -6,25 +6,24 @@ import _ from 'lodash';
 
 import { useNotification } from 'src/hooks/useNotification';
 import { Multiselect } from 'src/components/selects/Multiselect';
-import { isJSDocNonNullableType } from 'typescript';
-import { Spacing } from '../../../../../components/spacings/Spacing';
-import { Card } from '../../../../../components/cards';
-import { Button } from '../../../../../components/buttons';
-import { Row, Column } from '../../../../../components/layouts';
-import { Separator } from '../../../../../components/separators/Separator';
-import { Text } from '../../../../../components/typography';
-import { InputText } from '../../../../../components/inputs/InputText';
-import { Collapse } from '../../../../../components/collapses/Collapse';
-import { useQueryHandler } from '../../../../../hooks/useQueryHandler';
-import { Label } from '../../../../../components/labels/Label';
+import { Spacing } from 'src/components/spacings/Spacing';
+import { Card } from 'src/components/cards';
+import { Button } from 'src/components/buttons';
+import { Row, Column } from 'src/components/layouts';
+import { Separator } from 'src/components/separators/Separator';
+import { Text } from 'src/components/typography';
+import { InputText } from 'src/components/inputs/InputText';
+import { Collapse } from 'src/components/collapses/Collapse';
+import { useQueryHandler } from 'src/hooks/useQueryHandler';
+import { Label } from 'src/components/labels/Label';
 
 import {
   useAccessPolicyFormLazyQuery,
   useCreateAccessPolicyMutation,
   useUpdateAccessPolicyMutation,
   useFindAccessPolicyLazyQuery,
-} from '../../../../../data/services/graphql';
-import { useOrgSid } from '../../../../../hooks/useOrgSid';
+} from 'src/data/services/graphql';
+import { useOrgSid } from 'src/hooks/useOrgSid';
 
 const INITIAL_STATE = {
   policyName: '',
@@ -235,7 +234,7 @@ const CreatePoliciesPanel = ({
                         maxLength={policyForm.name?.max}
                         value={state.policyName}
                         required={policyForm.name?.required}
-                        onChange={({ target }) => setState({ ...state, policyName: target.value })}
+                        onChange={(event, newValue) => setState({ ...state, policyName: newValue })}
                         errorMessage={createdPolicy?.createAccessPolicy?.response === 'FAIL' ? 'Required field' : ''}
                       />
                     )}

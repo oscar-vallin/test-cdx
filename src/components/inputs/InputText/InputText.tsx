@@ -1,35 +1,27 @@
-import { ReactElement } from 'react';
-import FormLabel from 'src/components/labels/FormLabel';
-import { StyledTextField } from './InputText.styles';
-
-const defaultProps = {
-  id: '',
-  type: 'text',
-  disabled: false,
-  autofocus: true,
-  errorMessage: '',
-  value: '',
-};
+import React, { ReactElement } from 'react';
+import FormLabel, { UIFormLabel } from 'src/components/labels/FormLabel';
+import { UiStringField } from 'src/data/services/graphql';
+import { FieldValue, StyledTextField } from './InputText.styles';
+import { Row } from '../../layouts';
 
 export type InputTextProps = {
   id?: string;
   type?: string;
   disabled?: boolean;
-  onChange?: any | null;
+  onChange?: (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => void | null;
   autofocus?: boolean;
-  errorMessage?: any | string;
+  errorMessage?: string;
   onKeyDown?: any | null;
   onKeyEnter?: any | null;
   value?: string;
   placeholder?: string;
-  autoFocus?: boolean;
   required?: boolean;
   canRevealPassword?: boolean;
   label?: string;
   maxLength?: number;
   minLength?: number;
   info?: string;
-} & typeof defaultProps;
+};
 
 const InputText = ({
   id,
@@ -59,11 +51,11 @@ const InputText = ({
     <StyledTextField
       id={id}
       type={type}
-      autofocus={autofocus}
+      autofocus={autofocus ?? false}
       disabled={disabled}
       onChange={onChange}
       onKeyDown={({ key }) => handleKey(key)}
-      value={value}
+      value={value ?? ''}
       errorMessage={errorMessage}
       onRenderLabel={info ? onRenderLabel : undefined}
       {...props}
@@ -71,6 +63,44 @@ const InputText = ({
   );
 };
 
-InputText.defaultProps = defaultProps;
+type UIInputTextType = {
+  uiStringField?: UiStringField;
+  onChange?: (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => void | null;
+  value?: string;
+};
 
-export { InputText };
+const UIInputTextReadOnly = ({ uiStringField }: UIInputTextType) => {
+  return (
+    <>
+      <Row>
+        <UIFormLabel uiField={uiStringField} />
+      </Row>
+      <Row>
+        <FieldValue>{uiStringField?.value}</FieldValue>
+      </Row>
+    </>
+  );
+};
+
+const UIInputText = ({ uiStringField, onChange, value }: UIInputTextType) => {
+  if (uiStringField?.readOnly == true) {
+    return <UIInputTextReadOnly uiStringField={uiStringField} />;
+  }
+  return (
+    <InputText
+      type="text"
+      value={value}
+      disabled={uiStringField?.readOnly ?? false}
+      autofocus={false}
+      label={uiStringField?.label}
+      errorMessage={uiStringField?.errMsg ?? undefined}
+      info={uiStringField?.info ?? undefined}
+      required={uiStringField?.required ?? false}
+      onChange={onChange}
+      minLength={uiStringField?.min}
+      maxLength={uiStringField?.max}
+    />
+  );
+};
+
+export { InputText, UIInputText, UIInputTextReadOnly };

@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, ReactElement } from 'react';
+import React, { useEffect, ReactElement } from 'react';
 
-import { useLocation } from 'react-router-dom';
 import { Panel, PanelType } from '@fluentui/react/lib-commonjs/Panel';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { TagPicker } from '@fluentui/react/lib-commonjs/Pickers';
@@ -17,7 +16,6 @@ import { Separator } from '../../../../../components/separators/Separator';
 import { Text } from '../../../../../components/typography';
 import { InputText } from '../../../../../components/inputs/InputText';
 import { StyledContainer } from './CreateGroupPanel.styles';
-import { QueryParams } from '../../../../../utils/QueryParams';
 
 import { useCreateGroupPanel } from './CreateGroupPanel.service';
 
@@ -55,7 +53,7 @@ const CreateGroupPanel = ({
   const { orgSid } = useOrgSid();
 
   const accessManagementGroupService = useCreateGroupPanel(isOpen, orgSid, selectedGroupId, templateId);
-  const { policies, specializations, organizations } = accessManagementGroupService;
+  const { policies, specializations } = accessManagementGroupService;
   const { accessPolicyForm, accessPolicyFormRaw } = accessManagementGroupService;
   const { clearAccessPolicyForm, addToAccessPolicyForm } = accessManagementGroupService;
   const { onIncludedOrgsSelected, onExcludedOrgsSelected } = accessManagementGroupService;
@@ -117,7 +115,7 @@ const CreateGroupPanel = ({
                     label="Name"
                     placeholder="Please enter a Unifique Name"
                     value={accessPolicyForm.name}
-                    onChange={({ target }) => addToAccessPolicyForm({ name: target.value })}
+                    onChange={(event, newValue) => addToAccessPolicyForm({ name: newValue })}
                   />
                 </Column>
               </Row>
@@ -277,7 +275,7 @@ const CreateGroupPanel = ({
                       placeholder="Type to Search"
                       disabled
                       value={accessPolicyForm.policyName}
-                      onChange={({ target }) => addToAccessPolicyForm({ policyName: target.value })}
+                      onChange={(event, newValue) => addToAccessPolicyForm({ policyName: newValue })}
                     />
                   </Column>
                 </Row>

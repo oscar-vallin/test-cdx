@@ -20,7 +20,7 @@ export const TableFilters = ({ id, searchText, startDate, endDate }: TableFilter
           <StyledRow>
             <Column lg="6">
               <Label>Search</Label>
-              <InputText id={`${id}__Card__Row__Input-Search`} autoFocus disabled={false} {...searchText} />
+              <InputText id={`${id}__Card__Row__Input-Search`} autofocus disabled={false} {...searchText} />
             </Column>
             <Column lg="6">
               <InputDateRange startDate={startDate} endDate={endDate} />

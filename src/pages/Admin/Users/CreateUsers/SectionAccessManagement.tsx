@@ -1,48 +1,59 @@
 import { Checkbox } from '@fluentui/react/lib-commonjs/Checkbox';
 import { useEffect, useState } from 'react';
-import { InputText } from 'src/components/inputs/InputText';
-import FormLabel from 'src/components/labels/FormLabel';
+import { UIFormLabel } from 'src/components/labels/FormLabel';
 import { Row, Column } from 'src/components/layouts';
-import { Spacing } from 'src/components/spacings/Spacing';
 
 import CreateUsersFooter from './CreateUsersFooter';
-import { FormUserType } from './CreateUsersPanel.service';
-import { StyledOptionRow } from './CreateUsersPanel.styles';
+import { StyledOptionRow, WizardBody } from './CreateUsersPanel.styles';
+import { Maybe, UiOption, UserAccountForm } from '../../../../data/services/graphql';
 
 type SectionAccessProps = {
-  form: FormUserType | undefined;
+  form?: UserAccountForm;
   onPrev: () => null;
   onNext: () => null;
-  saveOptions: any;
+  saveOptions: (sids: string[]) => void;
+};
+
+type CheckboxItem = UiOption & {
+  checked: boolean;
 };
 
 const SectionAccessManagement = ({ form, onPrev, onNext, saveOptions }: SectionAccessProps) => {
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
-  const [groupOption, setGroupOption] = useState<boolean[] | undefined>([]);
-  const [isLoading, setLoading] = useState<boolean>(true);
+  const [selectedSids, setSelectedSids] = useState<string[]>([]);
+  const [groupOptions, setGroupOptions] = useState<CheckboxItem[]>([]);
 
   useEffect(() => {
-    if (form?.auth) {
-      if (form?.auth?.options) {
-        setGroupOption(form?.auth?.options.map((option) => option.checked));
-      }
-      setLoading(false);
+    if (form) {
+      const groupSids: string[] =
+        form?.accessPolicyGroups?.value
+          ?.filter((grp) => grp && grp.value)
+          ?.map((grp) => {
+            return grp?.value || '';
+          }) ?? [];
+      setSelectedSids(groupSids);
+
+      const formOpts: Maybe<UiOption>[] =
+        form?.options?.find((itm) => {
+          return itm?.key == form?.accessPolicyGroups?.options;
+        })?.values ?? [];
+
+      const groupOpts: CheckboxItem[] = [];
+      formOpts.forEach((opt) => {
+        if (opt) {
+          groupOpts.push({
+            ...opt,
+            checked: selectedSids.includes(opt.value),
+          });
+        }
+      });
+
+      setGroupOptions(groupOpts);
     }
   }, [form]);
 
   const handleSave = () => {
-    const newForm = {
-      ...form,
-      access: {
-        ...form?.access,
-        options: form?.access?.options?.map((opt, index) => {
-          return { ...opt, checked: groupOption ? groupOption[index] ?? false : false };
-        }),
-      },
-    };
-
-    saveOptions(newForm);
-    return newForm;
+    saveOptions(selectedSids);
   };
 
   const handlePrev = () => {
@@ -53,50 +64,47 @@ const SectionAccessManagement = ({ form, onPrev, onNext, saveOptions }: SectionA
   };
 
   const handleNext = () => {
-    const newForm = handleSave();
-
-    saveOptions(newForm);
+    handleSave();
     onNext();
-
     return null;
   };
 
-  const handleGroupOption = (index: number) => {
-    const newGroupOption = groupOption?.map((item, i) => (i === index ? !item : item));
-
-    setGroupOption(newGroupOption);
+  const onItemCheck = (sid: string) => {
+    const idx = selectedSids.indexOf(sid);
+    const checked = idx > -1;
+    const option = groupOptions.find((opt) => opt.value == sid);
+    if (option) {
+      option.checked = !checked;
+    }
+    selectedSids.splice(idx, 1);
+    setSelectedSids(selectedSids);
+    setGroupOptions(groupOptions);
   };
 
   return (
     <>
-      <Spacing margin={{ top: 'normal' }} />
-      {isLoading && <> Loading... </>}
-      {!isLoading && (
-        <>
-          <Row bottom>
-            {form?.access && (
+      <WizardBody>
+        <Row bottom>
+          <Column lg="12">
+            <UIFormLabel uiField={form?.accessPolicyGroups ?? undefined} />
+          </Column>
+        </Row>
+        {groupOptions.map((item, index) => {
+          return (
+            <StyledOptionRow key={`accessPolicyGroups-${index}`} bottom>
               <Column lg="12">
-                <FormLabel {...form.access.title} />
+                <Checkbox
+                  key="chk-idx"
+                  label={item.label}
+                  checked={item.checked ?? false}
+                  onChange={() => onItemCheck(item.value)}
+                />
               </Column>
-            )}
-          </Row>
-          {groupOption?.length &&
-            form?.access?.options?.map((group, index) => {
-              return (
-                <StyledOptionRow key={`accessPolicyGroups-${index}`} bottom>
-                  <Column lg="12">
-                    <Checkbox
-                      label={group.label}
-                      checked={groupOption[index] ?? false}
-                      onChange={() => handleGroupOption(index)}
-                    />
-                  </Column>
-                </StyledOptionRow>
-              );
-            })}
-          <CreateUsersFooter onPrev={handlePrev} onNext={handleNext} errorMessage={errorMessage} />
-        </>
-      )}
+            </StyledOptionRow>
+          );
+        })}
+      </WizardBody>
+      <CreateUsersFooter onPrev={handlePrev} onNext={handleNext} errorMessage={errorMessage} />
     </>
   );
 };

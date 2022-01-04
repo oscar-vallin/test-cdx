@@ -1,10 +1,10 @@
-import { Button } from '../../../components/buttons';
-import { InputText } from '../../../components/inputs/InputText';
-import { Row, Column } from '../../../components/layouts';
-import { Spacing } from '../../../components/spacings/Spacing';
-import { MessageBar } from '../../../components/notifications/MessageBar';
+import { Button } from 'src/components/buttons';
+import { InputText } from 'src/components/inputs/InputText';
+import { Row, Column } from 'src/components/layouts';
+import { Spacing } from 'src/components/spacings/Spacing';
+import { MessageBar } from 'src/components/notifications/MessageBar';
 
-import { useUpdateOwnPasswordMutation } from '../../../data/services/graphql';
+import { useUpdateOwnPasswordMutation } from 'src/data/services/graphql';
 
 import { StyledTitle } from '../UserSettingsPage.styles';
 
@@ -62,7 +62,7 @@ const PasswordChange = ({ state, onChange, validationPassed }: PasswordChangePar
             value={state.current}
             disabled={isUpdatingPassword}
             canRevealPassword
-            onChange={({ target }) => onChange({ ...state, current: target.value })}
+            onChange={(event, newValue) => onChange({ ...state, current: newValue ?? '' })}
           />
 
           <InputText
@@ -73,7 +73,7 @@ const PasswordChange = ({ state, onChange, validationPassed }: PasswordChangePar
             value={state.new}
             disabled={isUpdatingPassword}
             canRevealPassword
-            onChange={({ target }) => onChange({ ...state, new: target.value })}
+            onChange={(event, newValue) => onChange({ ...state, new: newValue ?? '' })}
           />
 
           <InputText
@@ -84,7 +84,7 @@ const PasswordChange = ({ state, onChange, validationPassed }: PasswordChangePar
             canRevealPassword
             disabled={isUpdatingPassword}
             value={state.confirmation}
-            onChange={({ target }) => onChange({ ...state, confirmation: target.value })}
+            onChange={(event, newValue) => onChange({ ...state, confirmation: newValue ?? '' })}
           />
         </Column>
       </Row>
@@ -117,7 +117,7 @@ const PasswordChange = ({ state, onChange, validationPassed }: PasswordChangePar
                     },
                   },
                   errorPolicy: 'all',
-                });
+                }).then();
                 return null;
               }}
             />

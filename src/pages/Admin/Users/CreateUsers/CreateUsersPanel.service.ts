@@ -1,67 +1,61 @@
 import { useEffect, useState } from 'react';
 import {
+  GqOperationResponse,
   useCreateUserMutation,
-  useFindUserAccountLazyQuery,
-  useResetPasswordMutation,
+  UserAccount,
+  UserAccountForm,
   useUserAccountFormLazyQuery,
 } from 'src/data/services/graphql';
-
-export type OptionType = {
-  id?: string;
-  label: string;
-  checked: boolean;
-};
-
-export type FormTitle = {
-  label: string | undefined;
-  required: boolean | undefined;
-  info: any | undefined;
-};
-
-export type FormInput = {
-  id?: string;
-  type?: string;
-  disabled?: boolean;
-  onChange?: any | null;
-  autofocus?: boolean;
-  errorMessage?: any | string;
-  onKeyDown?: any | null;
-  onKeyEnter?: any | null;
-  value?: string | undefined;
-  placeholder?: string;
-  autoFocus?: boolean;
-  required?: boolean;
-  canRevealPassword?: boolean;
-  label?: string;
-  maxLength?: number;
-  minLength?: number;
-  info?: string;
-  visible?: boolean;
-};
-
-export type FormUserType = {
-  account?: { title: FormTitle & { description: string | undefined }; fields: FormInput[] } | undefined;
-  access?: {
-    title?: FormTitle;
-    options: OptionType[] | undefined;
-  };
-  auth?: {
-    title: FormTitle;
-    options: OptionType[] | undefined;
-  };
-};
+import { ErrorHandler } from '../../../../utils/ErrorHandler';
 
 export const useCreateUsersPanel = (orgSid) => {
-  const [opts, setOpts] = useState<boolean[]>([]);
+  const defaultForm = {
+    sid: null,
+    email: {
+      label: 'Email',
+      required: true,
+      visible: true,
+      min: 0,
+      max: 255,
+    },
+    person: {
+      firstNm: {
+        label: 'First Name',
+        required: true,
+        visible: true,
+        min: 0,
+        max: 60,
+      },
+      lastNm: {
+        label: 'Last Name',
+        required: true,
+        visible: true,
+        min: 0,
+        max: 60,
+      },
+    },
+    organization: {
+      label: 'Primary Organization',
+      required: false,
+      visible: true,
+    },
+    accessPolicyGroups: {
+      label: 'Access Policy Groups',
+      required: false,
+      visible: true,
+    },
+    response: GqOperationResponse.Success,
+  };
 
   const [exchangeReaderAll, setExchangeReaderAll] = useState(false);
   const [exchangeAdminVendor, setExchangeAdminVendor] = useState(false);
   const [userAdminAllOrgs, setUserAdminAllOrgs] = useState(false);
   const [userAdminSubOrgs, setUserAdminSubOrgs] = useState(false);
-  const [userAccountForm, setUserAccountForm] = useState<any>();
-  const [form, setForm] = useState<FormUserType>();
+  const [userAccountForm, setUserAccountForm] = useState<UserAccountForm>(defaultForm);
+
+  const [sendAccountActivation, setSendAccountActivation] = useState(true);
   const [isUserCreated, setUserCreated] = useState(false);
-  const [userSid, setUserSid] = useState<string | undefined>();
+  const handleError = ErrorHandler();
 
   const [apiUserAccountForm, { data: dataUserAccountForm, loading: userAccountLoading, error: userAccountError }] =
     useUserAccountFormLazyQuery({
@@ -70,18 +64,40 @@ export const useCreateUsersPanel = (orgSid) => {
       },
     });
 
-  const [apiCall, { data: userCreatedData, loading: creatingUserLoading }] = useCreateUserMutation();
-  const [apiGetUSer, { data: userData, loading: userLoading, error: userError }] = useFindUserAccountLazyQuery({
-    variables: {
-      userSid: userSid ?? '',
-    },
-  });
-  const [apiResetPassword, { data: resetUserPasswordData, loading: resetUserPasswordLoading }] =
-    useResetPasswordMutation({
-      variables: {
-        userSid: userSid ?? '',
+  const [callCreateUser, { data: userCreatedData, loading: creatingUserLoading, error: createUserError }] =
+    useCreateUserMutation();
+
+  const updateAccountInfo = (updates: UserAccount) => {
+    userAccountForm.email = {
+      ...(userAccountForm?.email ?? defaultForm.email),
+      value: updates.email,
+    };
+    userAccountForm.person = {
+      firstNm: {
+        ...(userAccountForm?.person?.firstNm ?? defaultForm.person?.firstNm),
+        value: updates.person?.firstNm,
       },
-    });
+      lastNm: {
+        ...(userAccountForm?.person?.lastNm ?? defaultForm.person?.lastNm),
+        value: updates.person?.lastNm,
+      },
+    };
+    setUserAccountForm(userAccountForm);
+  };
+
+  const updateAccessPolicyGroups = (sids: string[]) => {
+    userAccountForm.accessPolicyGroups = {
+      ...(userAccountForm.accessPolicyGroups ?? defaultForm.accessPolicyGroups),
+      value: sids.map((sid) => {
+        return {
+          name: '',
+          value: sid,
+        };
+      }),
+    };
+
+    setUserAccountForm(userAccountForm);
+  };
 
   //
   // * When the organizationId changes, we need to re-fetch the user account form.
@@ -96,41 +112,22 @@ export const useCreateUsersPanel = (orgSid) => {
   }, [orgSid]);
 
   useEffect(() => {
-    if (userSid) {
-      apiGetUSer({
-        variables: {
-          userSid: userSid ?? '',
-        },
-      });
-    }
-  }, [userSid]);
+    handleError(createUserError);
+  }, [createUserError]);
 
-  //  //accessPolicyGroups: {value: null, label: "Access Groups", readOnly: false, info: null, required: false, visible: true,…}
-  // errCode: null;
-  // errMsg: null;
-  // errSeverity: null;
-  // info: null;
-  // label: 'Access Groups';
-  // options: 'AccessPolicyGroup';
-  // query: null;
-  // readOnly: false;
-  // required: false;
-  // value: null;
-  // visible: tru;
+  useEffect(() => {
+    handleError(userAccountError);
+  }, [userAccountError]);
 
-  const handleResetPassword = async (userSid) => {
-    const { data } = await apiResetPassword({
-      variables: {
-        userSid,
-      },
-    });
-
-    if (data) {
-      console.log('reset password', data);
-    }
-
-    return data;
-  };
+  // useEffect(() => {
+  //   if (userSid) {
+  //     apiGetUSer({
+  //       variables: {
+  //         userSid: userSid ?? '',
+  //       },
+  //     });
+  //   }
+  // }, [userSid]);
 
   const clearUserCreation = () => {
     setUserCreated(false);
@@ -138,26 +135,25 @@ export const useCreateUsersPanel = (orgSid) => {
 
   const handleCreateUser = async () => {
     setUserCreated(false);
-    const accountFirstName = form?.account?.fields?.find(({ id }) => id === 'firstNm')?.value ?? '';
-    const accountLastName = form?.account?.fields?.find(({ id }) => id === 'lastNm')?.value ?? '';
-    const accountEmail = form?.account?.fields?.find(({ id }) => id === 'email')?.value ?? '';
 
-    const sendAccountActivation =
-      form?.auth?.options?.find(({ id }) => id === 'activation-link-checkbox')?.checked ?? false;
-    const accessPolicyGroupsOpts: string[] =
-      form?.access?.options?.filter(({ checked }) => checked)?.map((opt) => opt.id ?? '') ?? [];
+    const accessPolicyGroupSids: string[] =
+      userAccountForm.accessPolicyGroups?.value
+        ?.filter((opt) => opt != null && opt?.value != null)
+        ?.map((opt) => opt?.value ?? '') ?? [];
+    // const accessPolicyGroupsOpts: string[] =
+    //   form?.access?.options?.filter(({ checked }) => checked)?.map((opt) => opt.id ?? '') ?? [];
 
-    const { data } = await apiCall({
+    const { data } = await callCreateUser({
       variables: {
         userInfo: {
-          email: accountEmail,
+          email: userAccountForm.email?.value ?? '',
           orgSid,
           sendActivationEmail: sendAccountActivation,
-          accessPolicyGroupSids: accessPolicyGroupsOpts,
+          accessPolicyGroupSids,
         },
         personInfo: {
-          firstNm: accountFirstName,
-          lastNm: accountLastName,
+          firstNm: userAccountForm.person?.firstNm.value ?? '',
+          lastNm: userAccountForm.person?.lastNm.value ?? '',
         },
       },
     });
@@ -165,112 +161,26 @@ export const useCreateUsersPanel = (orgSid) => {
     return data;
   };
 
+  const resetForm = async () => {
+    if (orgSid) {
+      apiUserAccountForm({
+        variables: {
+          orgSid,
+        },
+      });
+    }
+  };
+
   //
   useEffect(() => {
     if (dataUserAccountForm) {
-      const userAccountForm = dataUserAccountForm?.userAccountForm;
-      setUserAccountForm(dataUserAccountForm?.userAccountForm);
-      const accessPolicyGroups = dataUserAccountForm?.userAccountForm?.accessPolicyGroups;
-      const accessOptions = dataUserAccountForm?.userAccountForm?.options?.find(
-        (option) => option?.key === accessPolicyGroups?.options
-      );
-
-      // Set Maps
-      setOpts(new Array((accessOptions?.values?.length ?? 0) + 1).fill(false));
-
-      const newForm: FormUserType = {
-        account: {
-          title: {
-            label: userAccountForm?.organization?.label,
-            required: userAccountForm?.organization?.required,
-            info: userAccountForm?.organization?.info,
-            description: userAccountForm?.organization?.description ?? '',
-          },
-          fields: [
-            {
-              value: '',
-              label: userAccountForm?.person?.firstNm?.label,
-              required: userAccountForm?.person?.firstNm?.required,
-              disabled: !!userAccountForm?.person?.firstNm?.readOnly,
-              type: 'text',
-              placeholder: undefined,
-              errorMessage: '',
-              id: 'firstNm',
-              autofocus: false,
-              maxLength: userAccountForm?.person?.firstNm?.max,
-              minLength: userAccountForm?.person?.firstNm?.min,
-              visible: userAccountForm?.person?.firstNm?.visible,
-            },
-            {
-              value: '',
-              label: userAccountForm?.person?.lastNm?.label,
-              required: userAccountForm?.person?.lastNm?.required,
-              disabled: !!userAccountForm?.person?.lastNm?.readOnly,
-              type: 'text',
-              placeholder: undefined,
-              errorMessage: '',
-              id: 'lastNm',
-              autofocus: false,
-              maxLength: userAccountForm?.person?.lastNm?.max,
-              minLength: userAccountForm?.person?.lastNm?.min,
-              visible: userAccountForm?.person?.lastNm?.visible,
-            },
-            {
-              value: '',
-              label: userAccountForm?.email?.label,
-              required: userAccountForm?.email?.required,
-              disabled: !!userAccountForm?.email?.readOnly,
-              type: 'text',
-              placeholder: undefined,
-              errorMessage: '',
-              id: 'email',
-              autofocus: false,
-              maxLength: userAccountForm?.email?.max,
-              minLength: userAccountForm?.email?.min,
-              visible: userAccountForm?.person?.lastNm?.visible,
-            },
-          ],
-        },
-
-        access: {
-          title: {
-            label: accessPolicyGroups?.label,
-            required: accessPolicyGroups?.required,
-            info: accessPolicyGroups?.info,
-          },
-          options: accessOptions?.values?.map((option, index) => {
-            return {
-              label: option?.label ?? '',
-              id: option?.value ?? '0',
-              checked: opts[index],
-            };
-          }),
-        },
-        auth: {
-          title: {
-            label: 'Authentication',
-            required: true,
-            info: null,
-          },
-          options: [
-            {
-              label: 'Send an Account Activation Link',
-              id: 'activation-link-checkbox',
-              checked: opts[opts.length - 1],
-            },
-          ],
-        },
-      };
-
-      setForm(newForm);
+      setUserAccountForm(dataUserAccountForm?.userAccountForm ?? defaultForm);
     }
   }, [dataUserAccountForm]);
 
   //
   // * Return the state of the form.
   return {
-    form,
-    setForm,
     userAccountForm,
     userAccountLoading,
     userAccountError,
@@ -289,8 +199,9 @@ export const useCreateUsersPanel = (orgSid) => {
     loadingCreateUser: creatingUserLoading,
     isUserCreated,
     clearUserCreation,
-    setUserSid,
-    apiGetUSer,
-    handleResetPassword,
+    resetForm,
+    updateAccountInfo,
+    updateAccessPolicyGroups,
+    setSendAccountActivation,
   };
 };

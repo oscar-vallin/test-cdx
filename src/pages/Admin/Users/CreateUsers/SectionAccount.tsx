@@ -1,105 +1,73 @@
-import { useEffect, useState } from 'react';
-import { InputText } from 'src/components/inputs/InputText';
-import FormLabel from 'src/components/labels/FormLabel';
+import { useState } from 'react';
+import { UIInputText } from 'src/components/inputs/InputText';
+import { UIFormLabel } from 'src/components/labels/FormLabel';
 import { Row, Column } from 'src/components/layouts';
-import { Spacing } from 'src/components/spacings/Spacing';
-import { useInputValue } from 'src/hooks/useInputValue';
+import { useFormInputValue } from 'src/hooks/useInputValue';
 
+import { FormRow } from 'src/components/layouts/Row/Row.styles';
+import { FieldValue } from 'src/components/inputs/InputText/InputText.styles';
 import CreateUsersFooter from './CreateUsersFooter';
-import { FormUserType } from './CreateUsersPanel.service';
+import { WizardBody } from './CreateUsersPanel.styles';
+import { UserAccount, UserAccountForm } from '../../../../data/services/graphql';
 
 type SectionAccountProps = {
-  form: FormUserType | undefined;
+  form: UserAccountForm;
   onNext: () => null;
-  saveOptions: (newForm: FormUserType) => void;
+  saveOptions: (userAccount: UserAccount) => void;
 };
 
 const SectionAccount = ({ form, onNext, saveOptions }: SectionAccountProps) => {
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
-  const formFirstName = useInputValue('First Name', '', '', 'text');
-  const formLastName = useInputValue('Last Name', '', '', 'text');
-  const formEmail = useInputValue('Username / Email', '', '', 'text');
-
-  const [firstNm, setFormFirstName] = useState<any | undefined>();
-  const [lastNm, setFormLastName] = useState<any | undefined>();
-  const [email, setFormEmail] = useState<any | undefined>();
-  const [organization, setOrganization] = useState<any | undefined>();
-  const [loading, setLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    if (form) {
-      setFormFirstName(form?.account?.fields.find((field) => field.id === 'firstNm') ?? undefined);
-      setFormLastName(form?.account?.fields.find((field) => field.id === 'lastNm') ?? undefined);
-      setFormEmail(form?.account?.fields.find((field) => field.id === 'email') ?? undefined);
-      setOrganization(form?.account?.title ?? '');
-      setLoading(false);
-    }
-
-    return () => {
-      setLoading(true);
-      setFormFirstName(undefined);
-      setFormLastName(undefined);
-      setFormEmail(undefined);
-    };
-  }, [form]);
+  const formFirstName = useFormInputValue(form.person?.firstNm?.value ?? '');
+  const formLastName = useFormInputValue(form.person?.lastNm?.value ?? '');
+  const formEmail = useFormInputValue(form.email?.value ?? '');
 
   const handleNext = () => {
-    const newForm = {
-      ...form,
-      account: {
-        ...form?.account,
-        title: organization,
-        fields: [
-          { ...firstNm, value: formFirstName.value },
-          { ...lastNm, value: formLastName.value },
-          { ...email, value: formEmail.value },
-        ],
+    const user: UserAccount = {
+      sid: '',
+      email: formEmail.value,
+      person: {
+        sid: '',
+        firstNm: formFirstName.value,
+        lastNm: formLastName.value,
       },
     };
-
-    saveOptions(newForm);
+    saveOptions(user);
 
     return onNext();
   };
 
   return (
     <>
-      {loading && <> Loading... </>}
-      {!loading && (
-        <>
-          <Spacing margin={{ top: 'normal' }} />
-          <Row bottom>
-            {firstNm?.visible && (
-              <Column lg={lastNm?.visible ? '6' : '12'}>
-                <InputText {...firstNm} {...formFirstName} label={firstNm.label} />
-              </Column>
-            )}
-            {lastNm?.visible && (
-              <Column lg={firstNm?.visible ? '6' : '12'}>
-                <InputText {...lastNm} {...formLastName} label={lastNm.label} />
-              </Column>
-            )}
-          </Row>
-          <Row bottom>
-            {email?.visible && (
-              <Column lg="12">
-                <InputText {...email} {...formEmail} label={email.label} />
-              </Column>
-            )}
-          </Row>
+      <WizardBody>
+        <FormRow>
+          {form.person?.firstNm?.visible && (
+            <Column lg={form.person?.lastNm?.visible ? '6' : '12'}>
+              <UIInputText uiStringField={form.person?.firstNm} {...formFirstName} />
+            </Column>
+          )}
+          {form.person?.lastNm?.visible && (
+            <Column lg={form.person?.firstNm?.visible ? '6' : '12'}>
+              <UIInputText uiStringField={form.person?.lastNm} {...formLastName} />
+            </Column>
+          )}
+        </FormRow>
+        <FormRow>
+          {form.email?.visible && (
+            <Column lg="12">
+              <UIInputText uiStringField={form.email ?? undefined} {...formEmail} />
+            </Column>
+          )}
+        </FormRow>
 
-          <Row bottom>
-            <Spacing margin={{ top: 'double' }} />
-            <FormLabel label={organization?.label} />
-          </Row>
-
-          <Row bottom>
-            <Column lg="12">{organization?.description}</Column>
-          </Row>
-
-          <CreateUsersFooter onNext={handleNext} errorMessage={errorMessage} />
-        </>
-      )}
+        <FormRow>
+          <UIFormLabel uiField={form.organization} />
+        </FormRow>
+        <Row bottom>
+          <FieldValue>{form.organization?.description}</FieldValue>
+        </Row>
+      </WizardBody>
+      <CreateUsersFooter onNext={handleNext} errorMessage={errorMessage} />
     </>
   );
 };

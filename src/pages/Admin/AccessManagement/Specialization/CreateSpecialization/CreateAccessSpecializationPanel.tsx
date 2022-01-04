@@ -1,21 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { ReactElement, useState, useEffect } from 'react';
 
-import { SpinnerSize, Checkbox, Panel, PanelType, Spinner } from 'office-ui-fabric-react';
+import { SpinnerSize, Panel, PanelType, Spinner } from 'office-ui-fabric-react';
 import _ from 'lodash';
 
 import { useNotification } from 'src/hooks/useNotification';
-import { useSessionStore } from 'src/store/SessionStore';
-import { Spacing } from '../../../../../components/spacings/Spacing';
-import { Card } from '../../../../../components/cards';
-import { Button } from '../../../../../components/buttons';
-import { Row, Column } from '../../../../../components/layouts';
-import { Separator } from '../../../../../components/separators/Separator';
-import { Text } from '../../../../../components/typography';
-import { InputText } from '../../../../../components/inputs/InputText';
-import { Collapse } from '../../../../../components/collapses/Collapse';
-import { useQueryHandler } from '../../../../../hooks/useQueryHandler';
-import { Label } from '../../../../../components/labels/Label';
+import { Spacing } from 'src/components/spacings/Spacing';
+import { Card } from 'src/components/cards';
+import { Button } from 'src/components/buttons';
+import { Row, Column } from 'src/components/layouts';
+import { Separator } from 'src/components/separators/Separator';
+import { Text } from 'src/components/typography';
+import { InputText } from 'src/components/inputs/InputText';
+import { Collapse } from 'src/components/collapses/Collapse';
+import { useQueryHandler } from 'src/hooks/useQueryHandler';
+import { Label } from 'src/components/labels/Label';
 
 import {
   useFindAccessSpecializationLazyQuery,
@@ -69,7 +68,6 @@ const CreateAccessSpecializationPanel = ({
   selectedAccessId,
 }: CreateAccessSpecializationPanelProps): ReactElement => {
   const Toast = useNotification();
-  const SessionStore = useSessionStore();
 
   const { orgSid } = useOrgSid();
   const [state, setState]: any = useState({ ...INITIAL_STATE });
@@ -214,7 +212,7 @@ const CreateAccessSpecializationPanel = ({
                         maxLength={accessForm.name?.max}
                         value={state.name}
                         required={accessForm.name?.required}
-                        onChange={({ target }) => setState({ ...state, name: target.value })}
+                        onChange={(event, newValue) => setState({ ...state, name: newValue })}
                       />
                     )}
                   </Column>
