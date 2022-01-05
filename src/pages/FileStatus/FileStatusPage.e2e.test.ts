@@ -207,6 +207,11 @@ const getLocalDateString = (
 
 const getTodayDateString = (formatConfig: string): string => {
   const date = new Date();
+  // If the current time is before 9:00 AM, then the default from date should be yesterday
+  // otherwise it should be today.
+  if (date.getHours() < 9) {
+    date.setDate(date.getDate() - 1);
+  }
   const tzDate = new Date(date.toLocaleString('en-US', { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone }));
 
   return format(tzDate, formatConfig);
