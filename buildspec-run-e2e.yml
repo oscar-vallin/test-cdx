@@ -30,7 +30,7 @@ phases:
       - echo REACT_APP_API_SERVER='https://x2-terraform-loadbalancer.k2u.xyz/graphql/' >> .env
       - echo REACT_TEST_URL = 'https://x2-terraform-loadbalancer.k2u.xyz' >> .env
       - echo REACT_E2E_USER_CREDENTIALS_LOGIN = 'joe.admin@example.com' >> .env
-      - echo REACT_E2E_PASS_CREDENTIALS_LOGIN = 'changeBen21' >> .env
+      - echo REACT_E2E_PASS_CREDENTIALS_LOGIN = 'hQkV3e8gEr^' >> .env
   build:
     commands:
       - echo Started on `date`
