@@ -1,6 +1,6 @@
 import { ReactElement, useEffect, useState } from 'react';
 import FormLabel, { UIFormLabel } from 'src/components/labels/FormLabel';
-import { Column, Row } from 'src/components/layouts';
+import { Column } from 'src/components/layouts';
 
 import { Maybe, UiOption, UserAccountForm } from 'src/data/services/graphql';
 import { CheckboxItem } from 'src/data/Types';
@@ -94,17 +94,13 @@ const SectionSummary = ({ form, onPrev, onSubmit, isProcessing }: SectionSummary
 
         <FormRow>
           <UIFormLabel uiField={form.organization} />
-        </FormRow>
-        <Row bottom>
           <FieldValue>{form.organization?.description}</FieldValue>
-        </Row>
+        </FormRow>
 
         <FormRow>
           <FormLabel label="Access Granted To" />
-        </FormRow>
-        <Row bottom>
           <FieldValue>{renderSelectedGroups()}</FieldValue>
-        </Row>
+        </FormRow>
 
         {form.sendActivationEmail?.value == true && (
           <FormRow>

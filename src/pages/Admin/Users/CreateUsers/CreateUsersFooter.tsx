@@ -1,7 +1,6 @@
 import { ReactElement } from 'react';
 import { Button } from 'src/components/buttons';
 import { Row, Column } from 'src/components/layouts';
-import { Spacing } from 'src/components/spacings/Spacing';
 import { Text } from 'src/components/typography/Text';
 
 type CreateUsersFooterProps = {
@@ -14,7 +13,6 @@ type CreateUsersFooterProps = {
 const CreateUsersFooter = ({ onNext, onPrev, onSubmit, errorMessage }: CreateUsersFooterProps): ReactElement => {
   return (
     <>
-      <Spacing margin={{ top: 'double' }} />
       <Row>{errorMessage && <Text>{errorMessage}</Text>}</Row>
       <Row left>
         <Column lg="12">

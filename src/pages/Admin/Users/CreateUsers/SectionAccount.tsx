@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { UIInputText } from 'src/components/inputs/InputText';
 import { UIFormLabel } from 'src/components/labels/FormLabel';
-import { Row, Column } from 'src/components/layouts';
+import { Column } from 'src/components/layouts';
 import { useFormInputValue } from 'src/hooks/useInputValue';
 
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
@@ -62,10 +62,8 @@ const SectionAccount = ({ form, onNext, saveOptions }: SectionAccountProps) => {
 
         <FormRow>
           <UIFormLabel uiField={form.organization} />
-        </FormRow>
-        <Row bottom>
           <FieldValue>{form.organization?.description}</FieldValue>
-        </Row>
+        </FormRow>
       </WizardBody>
       <CreateUsersFooter onNext={handleNext} errorMessage={errorMessage} />
     </>
