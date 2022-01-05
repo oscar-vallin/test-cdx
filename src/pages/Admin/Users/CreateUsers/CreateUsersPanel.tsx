@@ -5,13 +5,13 @@ import { Panel, PanelType } from '@fluentui/react/lib-commonjs/Panel';
 import { Tabs } from 'src/components/tabs/Tabs';
 import { Text } from 'src/components/typography';
 import { PanelBody } from 'src/layouts/Panels/Panels.styles';
-import { Spacing } from '../../../../components/spacings/Spacing';
 
 import { useCreateUsersPanel } from './CreateUsersPanel.service';
 import { SectionAccount } from './SectionAccount';
 import SectionAccessManagement from './SectionAccessManagement';
 import SectionAuthentication from './SectionAuthentication';
 import SectionSummary from './SectionSummary';
+import { useNotification } from "../../../../hooks/useNotification";
 
 const defaultProps = {
   isOpen: false,
@@ -39,15 +39,14 @@ const CreateUsersPanel = ({
   orgSid,
   isOpen,
   onDismiss,
-  onCreateUser,
-  selectedUserId,
+  onCreateUser
 }: CreateUsersPanelProps): ReactElement => {
   const createUserService = useCreateUsersPanel(orgSid);
-  const [errorMessage, setErrorMessage] = useState<string | undefined>();
 
   const [step, setStep] = useState(Tab.Account);
   const { userAccountLoading } = createUserService ?? {};
   const [isProcessing, setProcessing] = useState<boolean>(false);
+  const Toast = useNotification();
 
   const handleCreateUser = async () => {
     setProcessing(true);
@@ -57,22 +56,13 @@ const CreateUsersPanel = ({
     if (responseCreate?.createUser) {
       if (responseCreate?.createUser?.response.toLocaleUpperCase() === 'SUCCESS') {
         onCreateUser(responseCreate.createUser);
-        onDismiss();
+        onPanelClose();
         return;
       }
 
-      setErrorMessage(
-        responseCreate?.createUser?.errMsg ?? responseCreate?.createUser?.response ?? 'Error Creating User'
-      );
-
-      setTimeout(() => {
-        setErrorMessage(undefined);
-      }, 3000);
+      const errorMsg = responseCreate?.createUser?.errMsg ?? responseCreate?.createUser?.response ?? 'Error Creating User';
+      Toast.error({text: errorMsg });
     }
-
-    //
-
-    return null;
   };
 
   // const handleResetPassword = async () => {
@@ -108,19 +98,21 @@ const CreateUsersPanel = ({
     }
   }, [createUserService.isUserCreated]);
 
+  const onPanelClose = () => {
+    // Reset the form
+    createUserService.resetForm();
+    // Set it back to the first tab
+    setStep(Tab.Account);
+    onDismiss();
+  }
+
   return (
     <Panel
       closeButtonAriaLabel="Close"
       type={PanelType.medium}
       headerText="New User"
       isOpen={isOpen}
-      onDismiss={() => {
-        // Reset the form
-        createUserService.resetForm();
-        // Set it back to the first tab
-        setStep(Tab.Account);
-        onDismiss();
-      }}
+      onDismiss={onPanelClose}
     >
       <PanelBody>
         {userAccountLoading && <Text>Loading...</Text>}
@@ -189,12 +181,6 @@ const CreateUsersPanel = ({
               selectedKey={step < 0 ? '0' : step.toString()}
               onClickTab={handleTabChange}
             />
-            {errorMessage && (
-              <>
-                <Spacing margin={{ top: 'double' }} />
-                <Text>{errorMessage}</Text>
-              </>
-            )}
           </>
         )}
       </PanelBody>

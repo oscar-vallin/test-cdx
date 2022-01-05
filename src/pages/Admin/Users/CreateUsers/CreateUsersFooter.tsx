@@ -1,20 +1,16 @@
 import { ReactElement } from 'react';
 import { Button } from 'src/components/buttons';
-import { Row } from 'src/components/layouts';
-import { Text } from 'src/components/typography/Text';
 import { WizardButtonRow } from './CreateUsersPanel.styles';
 
 type CreateUsersFooterProps = {
   onNext?: () => null;
   onPrev?: () => null;
   onSubmit?: () => null;
-  errorMessage?: string;
 };
 
-const CreateUsersFooter = ({ onNext, onPrev, onSubmit, errorMessage }: CreateUsersFooterProps): ReactElement => {
+const CreateUsersFooter = ({ onNext, onPrev, onSubmit }: CreateUsersFooterProps): ReactElement => {
   return (
     <>
-      <Row>{errorMessage && <Text>{errorMessage}</Text>}</Row>
       <WizardButtonRow>
         {onPrev && (
           <span>

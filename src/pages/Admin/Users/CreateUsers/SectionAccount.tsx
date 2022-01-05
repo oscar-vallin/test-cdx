@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { UIInputText } from 'src/components/inputs/InputText';
 import { Column } from 'src/components/layouts';
 import { useFormInputValue } from 'src/hooks/useInputValue';
@@ -16,7 +15,6 @@ type SectionAccountProps = {
 };
 
 const SectionAccount = ({ form, onNext, saveOptions }: SectionAccountProps) => {
-  const [errorMessage, setErrorMessage] = useState<string | undefined>();
   const formFirstName = useFormInputValue(form.person?.firstNm?.value ?? '');
   const formLastName = useFormInputValue(form.person?.lastNm?.value ?? '');
   const formEmail = useFormInputValue(form.email?.value ?? '');
@@ -65,7 +63,7 @@ const SectionAccount = ({ form, onNext, saveOptions }: SectionAccountProps) => {
           </Column>
         </FormRow>
       </WizardBody>
-      <CreateUsersFooter onNext={handleNext} errorMessage={errorMessage} />
+      <CreateUsersFooter onNext={handleNext} />
     </>
   );
 };

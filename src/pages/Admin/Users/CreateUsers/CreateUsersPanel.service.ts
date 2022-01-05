@@ -169,6 +169,10 @@ export const useCreateUsersPanel = (orgSid) => {
       },
     });
 
+    if (data?.createUser) {
+      setUserAccountForm(data?.createUser);
+    }
+
     return data;
   };
 

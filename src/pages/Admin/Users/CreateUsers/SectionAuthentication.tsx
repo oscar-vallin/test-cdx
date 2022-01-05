@@ -14,7 +14,6 @@ type SectionAuthProps = {
 };
 
 const SectionAuthentication = ({ form, onPrev, onNext, saveOptions }: SectionAuthProps) => {
-  const [errorMessage, setErrorMessage] = useState<string | undefined>();
   const [sendEmail, setSendEmail] = useState<boolean>(form.sendActivationEmail?.value ?? true);
 
   useEffect(() => {
@@ -53,7 +52,7 @@ const SectionAuthentication = ({ form, onPrev, onNext, saveOptions }: SectionAut
           </Column>
         </StyledOptionRow>
       </WizardBody>
-      <CreateUsersFooter onPrev={handlePrev} onNext={handleNext} errorMessage={errorMessage} />
+      <CreateUsersFooter onPrev={handlePrev} onNext={handleNext} />
     </>
   );
 };

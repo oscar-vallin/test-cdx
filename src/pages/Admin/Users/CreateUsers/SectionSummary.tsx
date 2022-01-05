@@ -19,7 +19,6 @@ type SectionSummaryPropsType = {
 };
 
 const SectionSummary = ({ form, onPrev, onSubmit, isProcessing }: SectionSummaryPropsType): ReactElement => {
-  const [errorMessage, setErrorMessage] = useState<string | undefined>();
   const [groupOptions, setGroupOptions] = useState<CheckboxItem[]>([]);
 
   const handlePrev = () => {
@@ -117,7 +116,7 @@ const SectionSummary = ({ form, onPrev, onSubmit, isProcessing }: SectionSummary
         )}
       </WizardBody>
       {isProcessing && <>Processing</>}
-      {!isProcessing && <CreateUsersFooter onPrev={handlePrev} onSubmit={handleSubmit} errorMessage={errorMessage} />}
+      {!isProcessing && <CreateUsersFooter onPrev={handlePrev} onSubmit={handleSubmit} />}
     </>
   );
 };

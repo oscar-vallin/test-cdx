@@ -43,7 +43,6 @@ const SectionAccessManagement = ({ form, onPrev, onNext, saveOptions }: SectionA
     );
   };
 
-  const [errorMessage, setErrorMessage] = useState<string | undefined>();
   const [selectedSids, setSelectedSids] = useState<string[]>(getSelectedAccessGroupSids(form));
   const [groupOptions, setGroupOptions] = useState<UiOption[]>(getAccessGroupOptions(form));
 
@@ -86,7 +85,7 @@ const SectionAccessManagement = ({ form, onPrev, onNext, saveOptions }: SectionA
           </Column>
         </FormRow>
       </WizardBody>
-      <CreateUsersFooter onPrev={handlePrev} onNext={handleNext} errorMessage={errorMessage} />
+      <CreateUsersFooter onPrev={handlePrev} onNext={handleNext} />
     </>
   );
 };
