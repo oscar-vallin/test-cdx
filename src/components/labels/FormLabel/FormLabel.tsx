@@ -1,7 +1,7 @@
 import { FontIcon } from '@fluentui/react/lib-commonjs/Icon';
 import { TooltipHost } from '@fluentui/react/lib-commonjs/Tooltip';
 import { ReactElement } from 'react';
-import { LabelTooltip, Label, Required } from './FormLabel.styles';
+import { LabelRow, Label, Required } from './FormLabel.styles';
 import { UiField } from '../../../data/services/graphql';
 
 const defaultProps = {
@@ -21,7 +21,7 @@ type FormLabelProps = {
 
 const FormLabel = ({ id, label, required, info, errorMessage, arial, ...props }: FormLabelProps): ReactElement => {
   return (
-    <LabelTooltip id={id}>
+    <LabelRow id={id}>
       <Label {...props} id={id ? `${id}-Label` : undefined}>
         {label}
       </Label>
@@ -36,7 +36,7 @@ const FormLabel = ({ id, label, required, info, errorMessage, arial, ...props }:
           &nbsp; <FontIcon id={id ? `${id}-Error-Icon` : undefined} iconName="Warning" />
         </TooltipHost>
       )}
-    </LabelTooltip>
+    </LabelRow>
   );
 };
 

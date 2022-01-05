@@ -1,8 +1,7 @@
 import React, { ReactElement } from 'react';
 import FormLabel, { UIFormLabel } from 'src/components/labels/FormLabel';
-import { UiStringField } from 'src/data/services/graphql';
+import { UiField, UiStringField } from 'src/data/services/graphql';
 import { FieldValue, StyledTextField } from './InputText.styles';
-import { Row } from '../../layouts';
 
 export type InputTextProps = {
   id?: string;
@@ -45,7 +44,7 @@ const InputText = ({
     return null;
   };
 
-  const onRenderLabel = () => <FormLabel required={required} info={info} {...props} />;
+  const onRenderLabel = () => <FormLabel required={required} info={info} errorMessage={errorMessage} {...props} />;
 
   return (
     <StyledTextField
@@ -57,9 +56,32 @@ const InputText = ({
       onKeyDown={({ key }) => handleKey(key)}
       value={value ?? ''}
       errorMessage={errorMessage}
-      onRenderLabel={info ? onRenderLabel : undefined}
+      onRenderLabel={onRenderLabel}
       {...props}
     />
+  );
+};
+
+type UIReadOnlyType = {
+  uiField: UiField;
+};
+
+const UIInputTextReadOnly = ({ uiField }: UIReadOnlyType) => {
+  const getValue = (): string => {
+    if (uiField.hasOwnProperty('description')) {
+      return uiField.description;
+    }
+    if (uiField.hasOwnProperty('value')) {
+      return uiField.value;
+    }
+    return '';
+  };
+
+  return (
+    <>
+      <UIFormLabel uiField={uiField} />
+      <FieldValue>{getValue()}</FieldValue>
+    </>
   );
 };
 
@@ -69,22 +91,9 @@ type UIInputTextType = {
   value?: string;
 };
 
-const UIInputTextReadOnly = ({ uiStringField }: UIInputTextType) => {
-  return (
-    <>
-      <Row>
-        <UIFormLabel uiField={uiStringField} />
-      </Row>
-      <Row>
-        <FieldValue>{uiStringField?.value}</FieldValue>
-      </Row>
-    </>
-  );
-};
-
 const UIInputText = ({ uiStringField, onChange, value }: UIInputTextType) => {
   if (uiStringField?.readOnly == true) {
-    return <UIInputTextReadOnly uiStringField={uiStringField} />;
+    return <UIInputTextReadOnly uiField={uiStringField} />;
   }
   return (
     <InputText

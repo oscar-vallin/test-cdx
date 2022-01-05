@@ -1,9 +1,7 @@
 import React  from 'react';
-import ReactDOM from 'react-dom';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import toJSON from 'enzyme-to-json';
 import { shallow } from 'enzyme';
-import { fireEvent, render, screen } from '@testing-library/react';
 //
 import { InputText, UIInputText } from './index';
 import { mountWithTheme } from 'src/utils/testUtils';
@@ -49,9 +47,8 @@ test('Matches Snapshot', () => {
 
 describe('Basic Input Component', () => {
   it('Should renders InputText Component', () => {
-    const div = document.createElement('div');
-    ReactDOM.render(<InputText {...defaultProps} />, div);
-    ReactDOM.unmountComponentAtNode(div);
+    const wrapper = mountWithTheme(<InputText {...defaultProps} />);
+    expect(wrapper.find('input')).toHaveLength(1);
   });
 
   it('Should renders InputText with placeholder', () => {
@@ -71,28 +68,31 @@ describe('Basic Input Component', () => {
   });
 
   it('@Testing: Render Input', () => {
-    render(<InputText {...defaultProps} placeholder={placeholderText} />);
-    const input = screen.getByPlaceholderText(placeholderText);
-    expect(input).toBeInTheDocument();
+    const wrapper = mountWithTheme(<InputText {...defaultProps} placeholder={placeholderText} />);
+    expect(wrapper.html().indexOf(placeholderText)).toBeGreaterThan(-1);
   });
 
   it('@Testing: Render by Role', () => {
-    render(<InputText {...defaultProps} placeholder={placeholderText} />);
-    const input = screen.getByRole('textbox');
-    expect(input).toBeInTheDocument();
+    const wrapper = mountWithTheme(<InputText {...defaultProps} placeholder={placeholderText} />);
+    expect(wrapper.html().indexOf('type="text"')).toBeGreaterThan(-1);
   });
 
   it('@Testing: Input Text', () => {
-    render(<InputText {...defaultProps} placeholder={placeholderText} />);
-    const input = screen.getByRole('textbox');
-    fireEvent.keyPress(input, { target: { value: 'searchString' } });
-    expect(input).toHaveValue('searchString');
+    let updatedValue = '';
+    const onChange = (e, newValue) => {
+      updatedValue = newValue;
+    };
+
+    const wrapper = mountWithTheme(<InputText {...defaultProps} onChange={onChange} />);
+    expect(wrapper.find('input')).toHaveLength(1);
+    wrapper.find('input').simulate('change',{ target: { value: 'searchString' }});
+    expect(updatedValue).toEqual('searchString');
   });
 
   it('@Testing: Check call function when key press = Enter', () => {
     const mockFn = jest.fn();
     const mockFn2 = jest.fn();
-    render(
+    const wrapper = mountWithTheme(
       <InputText
         {...defaultProps}
         placeholder={placeholderText}
@@ -100,15 +100,15 @@ describe('Basic Input Component', () => {
         onKeyEnter={mockFn2}
       />
     );
-    const input = screen.getByRole('textbox');
-    fireEvent.keyDown(input, { key: 'Enter', code: 13 });
+    wrapper.find('input').simulate('keyDown', {key: 'Enter'});
+
     expect(mockFn2).toHaveBeenCalled();
   });
 
   it('@Testing: Check call function when key press', () => {
     const mockFn = jest.fn();
     const mockFn2 = jest.fn();
-    render(
+    const wrapper = mountWithTheme(
       <InputText
         {...defaultProps}
         placeholder={placeholderText}
@@ -116,17 +116,20 @@ describe('Basic Input Component', () => {
         onKeyEnter={mockFn2}
       />
     );
-    const input = screen.getByRole('textbox');
-    fireEvent.keyDown(input, { key: 'K' });
+    wrapper.find('input').simulate('keyDown', {key: 'K'});
+
     expect(mockFn).toHaveBeenCalled();
   });
 
   it('@Testing: Check call function when key press', () => {
     const mockFn = jest.fn();
 
-    render(<InputText {...defaultProps} placeholder={placeholderText} />);
-    const input = screen.getByRole('textbox');
-    fireEvent.keyDown(input);
+    const wrapper = mountWithTheme(
+      <InputText {...defaultProps} placeholder={placeholderText} />
+    );
+
+    wrapper.find('input').simulate('keyDown');
+
     expect(mockFn).not.toHaveBeenCalled();
   });
 
@@ -175,7 +178,7 @@ describe('Basic Input Component', () => {
     };
 
     const wrapper = shallow(
-      <UIInputTextReadOnly uiStringField={roNickName}/>
+      <UIInputTextReadOnly uiField={roNickName}/>
     )
 
     expect(wrapper.find('UIFormLabel')).toHaveLength(1);

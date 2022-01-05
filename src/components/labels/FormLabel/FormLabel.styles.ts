@@ -2,9 +2,9 @@ import { Row } from 'src/components/layouts';
 import { Text } from 'src/components/typography';
 import styled from 'styled-components';
 
-export const LabelTooltip = styled(Row)`
+export const LabelRow = styled(Row)`
   margin: 0;
-  padding: 5px 0 5px 8px;
+  padding: 5px 0 5px 0;
   align-items: center;
 `;
 

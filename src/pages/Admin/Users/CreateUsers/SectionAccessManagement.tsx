@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react';
 import { UIFormLabel } from 'src/components/labels/FormLabel';
 
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
+import { CheckboxList } from 'src/components/inputs/CheckboxList';
+import { Column } from 'src/components/layouts';
 import CreateUsersFooter from './CreateUsersFooter';
 import { WizardBody } from './CreateUsersPanel.styles';
 import { Maybe, UiOption, UserAccountForm } from '../../../../data/services/graphql';
-import { CheckboxList } from '../../../../components/inputs/CheckboxList';
 
 type SectionAccessProps = {
   form?: UserAccountForm;
@@ -74,15 +75,15 @@ const SectionAccessManagement = ({ form, onPrev, onNext, saveOptions }: SectionA
     <>
       <WizardBody>
         <FormRow>
-          <UIFormLabel uiField={form?.accessPolicyGroups ?? undefined} />
-        </FormRow>
-        <FormRow>
-          <CheckboxList
-            id="__Access_Groups_List"
-            items={groupOptions}
-            value={selectedSids}
-            onChange={setSelectedSids}
-          />
+          <Column lg="12">
+            <UIFormLabel uiField={form?.accessPolicyGroups ?? undefined} />
+            <CheckboxList
+              id="__Access_Groups_List"
+              items={groupOptions}
+              value={selectedSids}
+              onChange={setSelectedSids}
+            />
+          </Column>
         </FormRow>
       </WizardBody>
       <CreateUsersFooter onPrev={handlePrev} onNext={handleNext} errorMessage={errorMessage} />

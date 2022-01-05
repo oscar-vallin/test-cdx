@@ -75,39 +75,44 @@ const SectionSummary = ({ form, onPrev, onSubmit, isProcessing }: SectionSummary
         <FormRow>
           {form.person?.firstNm?.visible && (
             <Column lg={form.person?.lastNm?.visible ? '6' : '12'}>
-              <UIInputTextReadOnly uiStringField={form.person?.firstNm} />
+              <UIInputTextReadOnly uiField={form.person?.firstNm} />
             </Column>
           )}
           {form.person?.lastNm?.visible && (
             <Column lg={form.person?.firstNm?.visible ? '6' : '12'}>
-              <UIInputTextReadOnly uiStringField={form.person?.lastNm} />
+              <UIInputTextReadOnly uiField={form.person?.lastNm} />
             </Column>
           )}
         </FormRow>
         <FormRow>
           {form.email?.visible && (
             <Column lg="12">
-              <UIInputTextReadOnly uiStringField={form.email} />
+              <UIInputTextReadOnly uiField={form.email} />
             </Column>
           )}
         </FormRow>
 
         <FormRow>
-          <UIFormLabel uiField={form.organization} />
-          <FieldValue>{form.organization?.description}</FieldValue>
+          <Column lg="12">
+            <UIInputTextReadOnly uiField={form.organization} />
+          </Column>
         </FormRow>
 
         <FormRow>
-          <FormLabel label="Access Granted To" />
-          <FieldValue>{renderSelectedGroups()}</FieldValue>
+          <Column lg="12">
+            <FormLabel label="Access Granted To" />
+            <FieldValue>{renderSelectedGroups()}</FieldValue>
+          </Column>
         </FormRow>
 
         {form.sendActivationEmail?.value == true && (
           <FormRow>
-            <UIFormLabel uiField={form.sendActivationEmail} />
-            <FieldValue>
-              <FontIcon iconName="CheckMark" />
-            </FieldValue>
+            <Column lg="12">
+              <UIFormLabel uiField={form.sendActivationEmail} />
+              <FieldValue>
+                <FontIcon iconName="CheckMark" />
+              </FieldValue>
+            </Column>
           </FormRow>
         )}
       </WizardBody>

@@ -1,14 +1,13 @@
 import { useState } from 'react';
 import { UIInputText } from 'src/components/inputs/InputText';
-import { UIFormLabel } from 'src/components/labels/FormLabel';
 import { Column } from 'src/components/layouts';
 import { useFormInputValue } from 'src/hooks/useInputValue';
 
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
-import { FieldValue } from 'src/components/inputs/InputText/InputText.styles';
 import CreateUsersFooter from './CreateUsersFooter';
 import { WizardBody } from './CreateUsersPanel.styles';
 import { UserAccount, UserAccountForm } from '../../../../data/services/graphql';
+import { UIInputTextReadOnly } from '../../../../components/inputs/InputText/InputText';
 
 type SectionAccountProps = {
   form: UserAccountForm;
@@ -61,8 +60,9 @@ const SectionAccount = ({ form, onNext, saveOptions }: SectionAccountProps) => {
         </FormRow>
 
         <FormRow>
-          <UIFormLabel uiField={form.organization} />
-          <FieldValue>{form.organization?.description}</FieldValue>
+          <Column lg="12">
+            <UIInputTextReadOnly uiField={form.organization} />
+          </Column>
         </FormRow>
       </WizardBody>
       <CreateUsersFooter onNext={handleNext} errorMessage={errorMessage} />

@@ -116,7 +116,7 @@ const CreateUsersPanel = ({
       isOpen={isOpen}
       onDismiss={() => {
         // Reset the form
-        createUserService.resetForm().then();
+        createUserService.resetForm();
         // Set it back to the first tab
         setStep(Tab.Account);
         onDismiss();

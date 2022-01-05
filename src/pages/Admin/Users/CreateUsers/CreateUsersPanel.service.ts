@@ -172,7 +172,7 @@ export const useCreateUsersPanel = (orgSid) => {
     return data;
   };
 
-  const resetForm = async () => {
+  const resetForm = () => {
     if (orgSid) {
       apiUserAccountForm({
         variables: {

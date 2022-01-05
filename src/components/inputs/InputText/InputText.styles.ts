@@ -7,11 +7,14 @@ type StyledTextFieldProps = {
 };
 
 export const FieldValue = styled.div`
-  padding: 0 0 5px 8px;
+  padding: 0 0 5px 0;
   font-size: 1em;
   font-weight: normal;
 `;
 
 export const StyledTextField = styled(TextField)<StyledTextFieldProps>`
   width: 100%;
+  FormLabel {
+    padding-left: 0;
+  }
 `;
