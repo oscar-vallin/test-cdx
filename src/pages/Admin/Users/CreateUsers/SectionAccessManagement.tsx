@@ -1,11 +1,11 @@
-import { Checkbox } from '@fluentui/react/lib-commonjs/Checkbox';
 import { useEffect, useState } from 'react';
 import { UIFormLabel } from 'src/components/labels/FormLabel';
-import { Row, Column } from 'src/components/layouts';
 
+import { FormRow } from 'src/components/layouts/Row/Row.styles';
 import CreateUsersFooter from './CreateUsersFooter';
-import { StyledOptionRow, WizardBody } from './CreateUsersPanel.styles';
+import { WizardBody } from './CreateUsersPanel.styles';
 import { Maybe, UiOption, UserAccountForm } from '../../../../data/services/graphql';
+import { CheckboxList } from '../../../../components/inputs/CheckboxList';
 
 type SectionAccessProps = {
   form?: UserAccountForm;
@@ -14,41 +14,42 @@ type SectionAccessProps = {
   saveOptions: (sids: string[]) => void;
 };
 
-type CheckboxItem = UiOption & {
-  checked: boolean;
-};
-
 const SectionAccessManagement = ({ form, onPrev, onNext, saveOptions }: SectionAccessProps) => {
+  const getAccessGroupOptions = (form?: UserAccountForm): UiOption[] => {
+    const formOpts: Maybe<UiOption>[] =
+      form?.options?.find((itm) => {
+        return itm?.key == form?.accessPolicyGroups?.options;
+      })?.values ?? [];
+
+    const groupOpts: UiOption[] = [];
+    formOpts.forEach((opt) => {
+      if (opt) {
+        groupOpts.push({
+          ...opt,
+        });
+      }
+    });
+    return groupOpts;
+  };
+
+  const getSelectedAccessGroupSids = (form?: UserAccountForm): string[] => {
+    return (
+      form?.accessPolicyGroups?.value
+        ?.filter((grp) => grp && grp.value)
+        ?.map((grp) => {
+          return grp?.value || '';
+        }) ?? []
+    );
+  };
+
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
-  const [selectedSids, setSelectedSids] = useState<string[]>([]);
-  const [groupOptions, setGroupOptions] = useState<CheckboxItem[]>([]);
+  const [selectedSids, setSelectedSids] = useState<string[]>(getSelectedAccessGroupSids(form));
+  const [groupOptions, setGroupOptions] = useState<UiOption[]>(getAccessGroupOptions(form));
 
   useEffect(() => {
     if (form) {
-      const groupSids: string[] =
-        form?.accessPolicyGroups?.value
-          ?.filter((grp) => grp && grp.value)
-          ?.map((grp) => {
-            return grp?.value || '';
-          }) ?? [];
-      setSelectedSids(groupSids);
-
-      const formOpts: Maybe<UiOption>[] =
-        form?.options?.find((itm) => {
-          return itm?.key == form?.accessPolicyGroups?.options;
-        })?.values ?? [];
-
-      const groupOpts: CheckboxItem[] = [];
-      formOpts.forEach((opt) => {
-        if (opt) {
-          groupOpts.push({
-            ...opt,
-            checked: selectedSids.includes(opt.value),
-          });
-        }
-      });
-
-      setGroupOptions(groupOpts);
+      setSelectedSids(getSelectedAccessGroupSids(form));
+      setGroupOptions(getAccessGroupOptions(form));
     }
   }, [form]);
 
@@ -69,40 +70,20 @@ const SectionAccessManagement = ({ form, onPrev, onNext, saveOptions }: SectionA
     return null;
   };
 
-  const onItemCheck = (sid: string) => {
-    const idx = selectedSids.indexOf(sid);
-    const checked = idx > -1;
-    const option = groupOptions.find((opt) => opt.value == sid);
-    if (option) {
-      option.checked = !checked;
-    }
-    selectedSids.splice(idx, 1);
-    setSelectedSids(selectedSids);
-    setGroupOptions(groupOptions);
-  };
-
   return (
     <>
       <WizardBody>
-        <Row bottom>
-          <Column lg="12">
-            <UIFormLabel uiField={form?.accessPolicyGroups ?? undefined} />
-          </Column>
-        </Row>
-        {groupOptions.map((item, index) => {
-          return (
-            <StyledOptionRow key={`accessPolicyGroups-${index}`} bottom>
-              <Column lg="12">
-                <Checkbox
-                  key="chk-idx"
-                  label={item.label}
-                  checked={item.checked ?? false}
-                  onChange={() => onItemCheck(item.value)}
-                />
-              </Column>
-            </StyledOptionRow>
-          );
-        })}
+        <FormRow>
+          <UIFormLabel uiField={form?.accessPolicyGroups ?? undefined} />
+        </FormRow>
+        <FormRow>
+          <CheckboxList
+            id="__Access_Groups_List"
+            items={groupOptions}
+            value={selectedSids}
+            onChange={setSelectedSids}
+          />
+        </FormRow>
       </WizardBody>
       <CreateUsersFooter onPrev={handlePrev} onNext={handleNext} errorMessage={errorMessage} />
     </>

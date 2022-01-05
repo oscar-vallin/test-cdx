@@ -104,8 +104,10 @@ const SectionSummary = ({ form, onPrev, onSubmit, isProcessing }: SectionSummary
 
         {form.sendActivationEmail?.value == true && (
           <FormRow>
-            <FontIcon iconName="CheckMark" />
             <UIFormLabel uiField={form.sendActivationEmail} />
+            <FieldValue>
+              <FontIcon iconName="CheckMark" />
+            </FieldValue>
           </FormRow>
         )}
       </WizardBody>

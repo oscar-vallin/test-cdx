@@ -28,5 +28,11 @@ export const StyledText = styled(Text)`
 
 export const WizardBody = styled.div`
   margin-top: 1em;
-  height: 24em;
+  height: 28em;
+`;
+
+export const WizardButtonRow = styled.div`
+  button {
+    margin-left: 10px;
+  }
 `;

@@ -1,9 +1,8 @@
 import { Checkbox } from '@fluentui/react/lib-commonjs/Checkbox';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Column } from 'src/components/layouts';
 
 import { UserAccountForm } from 'src/data/services/graphql';
-import { CheckboxItem } from 'src/data/Types';
 import CreateUsersFooter from './CreateUsersFooter';
 import { StyledOptionRow, WizardBody } from './CreateUsersPanel.styles';
 
@@ -16,7 +15,12 @@ type SectionAuthProps = {
 
 const SectionAuthentication = ({ form, onPrev, onNext, saveOptions }: SectionAuthProps) => {
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
-  const [sendEmail, setSendEmail] = useState<boolean>(true);
+  const [sendEmail, setSendEmail] = useState<boolean>(form.sendActivationEmail?.value ?? true);
+
+  useEffect(() => {
+    const checked = form.sendActivationEmail?.value ?? true;
+    setSendEmail(checked);
+  }, [form]);
 
   const handleSaveChanges = () => {
     saveOptions(sendEmail);

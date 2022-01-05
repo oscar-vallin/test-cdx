@@ -44,6 +44,11 @@ export const useCreateUsersPanel = (orgSid) => {
       required: false,
       visible: true,
     },
+    sendActivationEmail: {
+      label: 'Send Activation Email',
+      required: false,
+      visible: true,
+    },
     response: GqOperationResponse.Success,
   };
 
@@ -53,7 +58,6 @@ export const useCreateUsersPanel = (orgSid) => {
   const [userAdminSubOrgs, setUserAdminSubOrgs] = useState(false);
   const [userAccountForm, setUserAccountForm] = useState<UserAccountForm>(defaultForm);
 
-  const [sendAccountActivation, setSendAccountActivation] = useState(true);
   const [isUserCreated, setUserCreated] = useState(false);
   const handleError = ErrorHandler();
 
@@ -97,6 +101,13 @@ export const useCreateUsersPanel = (orgSid) => {
     };
 
     setUserAccountForm(userAccountForm);
+  };
+
+  const setSendAccountActivation = (sendEmail: boolean) => {
+    userAccountForm.sendActivationEmail = {
+      ...(userAccountForm.sendActivationEmail ?? defaultForm.sendActivationEmail),
+      value: sendEmail,
+    };
   };
 
   //
@@ -148,7 +159,7 @@ export const useCreateUsersPanel = (orgSid) => {
         userInfo: {
           email: userAccountForm.email?.value ?? '',
           orgSid,
-          sendActivationEmail: sendAccountActivation,
+          sendActivationEmail: userAccountForm.sendActivationEmail?.value ?? true,
           accessPolicyGroupSids,
         },
         personInfo: {

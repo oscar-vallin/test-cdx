@@ -14,7 +14,8 @@ import { Button } from 'src/components/buttons';
 import { Row, Column } from 'src/components/layouts';
 import { Separator } from 'src/components/separators/Separator';
 import { Text } from 'src/components/typography';
-import { InputText } from 'src/components/inputs/InputText';
+import { InputText, UIInputText } from 'src/components/inputs/InputText';
+import { FormRow } from 'src/components/layouts/Row/Row.styles';
 import { StyledContainer } from './CreateGroupPanel.styles';
 
 import { useCreateGroupPanel } from './CreateGroupPanel.service';
@@ -113,12 +114,19 @@ const CreateGroupPanel = ({
                     id="__groupInputName"
                     required
                     label="Name"
-                    placeholder="Please enter a Unifique Name"
+                    placeholder="Please enter a Unique Name"
                     value={accessPolicyForm.name}
                     onChange={(event, newValue) => addToAccessPolicyForm({ name: newValue })}
                   />
                 </Column>
               </Row>
+              <FormRow>
+                <UIInputText
+                  uiStringField={accessPolicyForm.description}
+                  value={accessPolicyForm.description?.value ?? ''}
+                  onChange={(event, newValue) => addToAccessPolicyForm({ description: newValue })}
+                />
+              </FormRow>
 
               {accessPolicyFormRaw?.organization?.visible && (
                 <>
@@ -194,6 +202,7 @@ const CreateGroupPanel = ({
                             <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                               <Checkbox
                                 id={`__checkBoxPolicies_${index + 1}`}
+                                key={`policies_${index}`}
                                 label={item.name}
                                 checked={accessPolicyForm.policySids.find((policy) => policy.value === item.sid)}
                                 onChange={(event, policy) => {
@@ -240,6 +249,7 @@ const CreateGroupPanel = ({
                             <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                               <Checkbox
                                 id={`__checkBoxSuperPolicy_${index + 1}`}
+                                key={`superPolicies_${index}`}
                                 label={item.name}
                                 checked={accessPolicyForm.specializationSids.includes(item.sid)}
                                 onChange={(event, specialization) => {

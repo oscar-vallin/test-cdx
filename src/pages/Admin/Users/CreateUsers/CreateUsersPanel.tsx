@@ -4,6 +4,7 @@ import { Panel, PanelType } from '@fluentui/react/lib-commonjs/Panel';
 
 import { Tabs } from 'src/components/tabs/Tabs';
 import { Text } from 'src/components/typography';
+import { PanelBody } from 'src/layouts/Panels/Panels.styles';
 import { Spacing } from '../../../../components/spacings/Spacing';
 
 import { useCreateUsersPanel } from './CreateUsersPanel.service';
@@ -45,7 +46,7 @@ const CreateUsersPanel = ({
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
 
   const [step, setStep] = useState(Tab.Account);
-  const { userAccountForm, userAccountLoading } = createUserService ?? {};
+  const { userAccountLoading } = createUserService ?? {};
   const [isProcessing, setProcessing] = useState<boolean>(false);
 
   const handleCreateUser = async () => {
@@ -121,7 +122,7 @@ const CreateUsersPanel = ({
         onDismiss();
       }}
     >
-      <>
+      <PanelBody>
         {userAccountLoading && <Text>Loading...</Text>}
         {!userAccountLoading && (
           <>
@@ -196,7 +197,7 @@ const CreateUsersPanel = ({
             )}
           </>
         )}
-      </>
+      </PanelBody>
     </Panel>
   );
 };

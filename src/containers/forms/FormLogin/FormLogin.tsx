@@ -115,7 +115,7 @@ const FormLogin = ({ id }: FormLoginProps): ReactElement => {
                     <Column id={`${id}__Card__Row__Column--Password`}>
                       <InputText
                         id={`${id}__Card__Row__Input-Password`}
-                        autofocus={false}
+                        autofocus
                         placeholder="Password"
                         type="password"
                         value={values.password}

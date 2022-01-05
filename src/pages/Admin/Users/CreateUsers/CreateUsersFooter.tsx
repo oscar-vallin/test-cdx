@@ -1,7 +1,8 @@
 import { ReactElement } from 'react';
 import { Button } from 'src/components/buttons';
-import { Row, Column } from 'src/components/layouts';
+import { Row } from 'src/components/layouts';
 import { Text } from 'src/components/typography/Text';
+import { WizardButtonRow } from './CreateUsersPanel.styles';
 
 type CreateUsersFooterProps = {
   onNext?: () => null;
@@ -14,33 +15,29 @@ const CreateUsersFooter = ({ onNext, onPrev, onSubmit, errorMessage }: CreateUse
   return (
     <>
       <Row>{errorMessage && <Text>{errorMessage}</Text>}</Row>
-      <Row left>
-        <Column lg="12">
-          <Row>
-            {onPrev && (
-              <Column lg="3">
-                <Button onClick={onPrev} variant="secondary">
-                  Previous
-                </Button>
-              </Column>
-            )}
-            {onNext && (
-              <Column lg="3">
-                <Button onClick={onNext} variant="primary">
-                  Next
-                </Button>
-              </Column>
-            )}
-            {onSubmit && (
-              <Column lg="3">
-                <Button onClick={onSubmit} variant="primary">
-                  Finish and Create User
-                </Button>
-              </Column>
-            )}
-          </Row>
-        </Column>
-      </Row>
+      <WizardButtonRow>
+        {onPrev && (
+          <span>
+            <Button id="__Prev_Button" onClick={onPrev} variant="secondary">
+              Previous
+            </Button>
+          </span>
+        )}
+        {onNext && (
+          <span>
+            <Button id="__Next_Button" onClick={onNext} variant="primary">
+              Next
+            </Button>
+          </span>
+        )}
+        {onSubmit && (
+          <span>
+            <Button id="__Submit_Button" onClick={onSubmit} variant="primary">
+              Finish and Create User
+            </Button>
+          </span>
+        )}
+      </WizardButtonRow>
     </>
   );
 };
