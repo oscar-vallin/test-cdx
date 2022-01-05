@@ -14,4 +14,6 @@ export const Row = styled(LayoutRow)`
   }
 `;
 
-export const Column = styled(LayoutColumn)``;
+export const Column = styled(LayoutColumn)`
+  margin-top: 10px;
+`;

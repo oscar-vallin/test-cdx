@@ -1,5 +1,4 @@
 import React from 'react';
-import { Label } from '@fluentui/react/lib-commonjs/Label';
 import { Column, Container, FilterSection, StyledRow } from './WorkPacketTable.styles';
 import { Card } from '../../components/cards';
 import { InputText } from '../../components/inputs/InputText';
@@ -19,8 +18,11 @@ export const TableFilters = ({ id, searchText, startDate, endDate }: TableFilter
         <Card id={`${id}__SearchCard`} elevation="smallest" onClick="">
           <StyledRow>
             <Column lg="6">
-              <Label>Search</Label>
-              <InputText id={`${id}__Card__Row__Input-Search`} autofocus disabled={false} {...searchText} />
+              <InputText id={`${id}__Card__Row__Input-Search`}
+                         autofocus={true}
+                         disabled={false}
+                         {...searchText}
+                         label="Search"/>
             </Column>
             <Column lg="6">
               <InputDateRange startDate={startDate} endDate={endDate} />
