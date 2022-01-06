@@ -559,7 +559,8 @@ export type FieldCreationEvent = {
 
 export enum GqOperationResponse {
   Success = 'SUCCESS',
-  Fail = 'FAIL'
+  Fail = 'FAIL',
+  PartialSuccess = 'PARTIAL_SUCCESS'
 }
 
 export type ImplementationDeployResponse = {

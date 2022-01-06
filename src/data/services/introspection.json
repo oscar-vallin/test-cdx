@@ -1,7 +1,13 @@
 {
   "possibleTypes": {
-    "NVP": ["NVPStr", "NVPId"],
-    "PasswordRuleSet": ["CompositePasswordRuleSetForm", "RequiredPasswordRuleSetForm"],
+    "NVP": [
+      "NVPStr",
+      "NVPId"
+    ],
+    "PasswordRuleSet": [
+      "CompositePasswordRuleSetForm",
+      "RequiredPasswordRuleSetForm"
+    ],
     "UIField": [
       "UIBooleanField",
       "UIDateField",

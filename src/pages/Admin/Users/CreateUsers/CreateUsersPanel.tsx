@@ -1,17 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { ReactElement, useState, useEffect } from 'react';
-import { Panel, PanelType } from '@fluentui/react/lib-commonjs/Panel';
+import {ReactElement, useEffect, useState} from 'react';
+import {Panel, PanelType} from '@fluentui/react/lib-commonjs/Panel';
 
-import { Tabs } from 'src/components/tabs/Tabs';
-import { Text } from 'src/components/typography';
-import { PanelBody } from 'src/layouts/Panels/Panels.styles';
+import {Tabs} from 'src/components/tabs/Tabs';
+import {Text} from 'src/components/typography';
+import {PanelBody} from 'src/layouts/Panels/Panels.styles';
 
-import { useCreateUsersPanel } from './CreateUsersPanel.service';
-import { SectionAccount } from './SectionAccount';
+import {useCreateUsersPanel} from './CreateUsersPanel.service';
+import {SectionAccount} from './SectionAccount';
 import SectionAccessManagement from './SectionAccessManagement';
 import SectionAuthentication from './SectionAuthentication';
 import SectionSummary from './SectionSummary';
-import { useNotification } from "../../../../hooks/useNotification";
+import {useNotification} from "../../../../hooks/useNotification";
+import {GqOperationResponse} from "../../../../data/services/graphql";
 
 const defaultProps = {
   isOpen: false,
@@ -54,14 +55,17 @@ const CreateUsersPanel = ({
     setProcessing(false);
     //
     if (responseCreate?.createUser) {
-      if (responseCreate?.createUser?.response.toLocaleUpperCase() === 'SUCCESS') {
-        onCreateUser(responseCreate.createUser);
-        onPanelClose();
-        return;
+      const responseCode = responseCreate?.createUser?.response
+
+      if (responseCode === GqOperationResponse.Fail || responseCode === GqOperationResponse.PartialSuccess) {
+        const errorMsg = responseCreate?.createUser?.errMsg ?? responseCreate?.createUser?.response ?? 'Error Creating User';
+        Toast.error({text: errorMsg });
       }
 
-      const errorMsg = responseCreate?.createUser?.errMsg ?? responseCreate?.createUser?.response ?? 'Error Creating User';
-      Toast.error({text: errorMsg });
+      if (responseCode === GqOperationResponse.Success || responseCode === GqOperationResponse.PartialSuccess) {
+        onCreateUser(responseCreate.createUser);
+        onPanelClose();
+      }
     }
   };
 

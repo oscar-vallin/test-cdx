@@ -1,6 +1,7 @@
 import { Row } from 'src/components/layouts';
 import { Text } from 'src/components/typography';
 import styled from 'styled-components';
+import { FontIcon } from "@fluentui/react";
 
 export const LabelRow = styled(Row)`
   margin: 0;
@@ -29,3 +30,8 @@ export const Label = styled(Text)`
   padding: 5px 0px;
   overflow-wrap: break-word;
 `;
+
+export const ErrorIcon = styled(FontIcon)`
+  color: #a4262c;
+  font-weight: bold;
+`
