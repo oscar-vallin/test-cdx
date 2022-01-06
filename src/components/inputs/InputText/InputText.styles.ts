@@ -12,6 +12,10 @@ export const FieldValue = styled.div`
   font-weight: normal;
 `;
 
+export const EmptyValue = styled.span`
+  color: ${({ theme }) => theme.colors.neutralTertiary};
+`
+
 export const StyledTextField = styled(TextField)<StyledTextFieldProps>`
   width: 100%;
   FormLabel {

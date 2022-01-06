@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import FormLabel, { UIFormLabel } from 'src/components/labels/FormLabel';
 import { UiField, UiStringField } from 'src/data/services/graphql';
-import { FieldValue, StyledTextField } from './InputText.styles';
+import {EmptyValue, FieldValue, StyledTextField } from './InputText.styles';
 
 export type InputTextProps = {
   id?: string;
@@ -67,14 +67,17 @@ type UIReadOnlyType = {
 };
 
 const UIInputTextReadOnly = ({ uiField }: UIReadOnlyType) => {
-  const getValue = (): string => {
+  const getValue = () => {
+    let text = '';
     if (uiField.hasOwnProperty('description')) {
-      return uiField['description'];
+      text = uiField['description'];
+    } else if (uiField.hasOwnProperty('value')) {
+      text = uiField['value'];
     }
-    if (uiField.hasOwnProperty('value')) {
-      return uiField['value'];
+    if (text && text.length > 0) {
+      return text;
     }
-    return '';
+    return <EmptyValue>&lt;empty&gt;</EmptyValue>;
   };
 
   return (

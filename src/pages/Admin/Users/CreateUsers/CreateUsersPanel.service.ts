@@ -154,7 +154,7 @@ export const useCreateUsersPanel = (orgSid) => {
     // const accessPolicyGroupsOpts: string[] =
     //   form?.access?.options?.filter(({ checked }) => checked)?.map((opt) => opt.id ?? '') ?? [];
 
-    const { data } = await callCreateUser({
+    const { data, errors } = await callCreateUser({
       variables: {
         userInfo: {
           email: userAccountForm.email?.value ?? '',
@@ -167,10 +167,25 @@ export const useCreateUsersPanel = (orgSid) => {
           lastNm: userAccountForm.person?.lastNm.value ?? '',
         },
       },
+      errorPolicy: 'all'
     });
 
     if (data?.createUser) {
       setUserAccountForm(data?.createUser);
+    }
+    if (data && errors && errors.length > 0) {
+      // Set errors into the objet itself
+      data.createUser = {
+        sid: null,
+        organization: {
+          label: 'Primary Organization',
+          required: false,
+          visible: true
+        },
+        response: GqOperationResponse.Fail,
+        errCode: 'INTERNAL_ERROR',
+        errMsg: 'An internal server error has occurred.  Please contact your administrator.'
+      }
     }
 
     return data;

@@ -46,7 +46,7 @@ export const EmptyMessage = styled(Text)`
   padding-left: 12px;
   padding-top: 20px;
   padding-bottom: 20px;
-  color: ${({ theme }) => theme.colors.neutralTertiaryAlt};
+  color: ${({ theme }) => theme.colors.neutralTertiary};
 `;
 
 export const TableWrap = styled(LayoutRow)`
