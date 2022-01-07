@@ -1,3 +1,4 @@
 import UpdateUserPanel from './UpdateUserPanel';
+import { useUpdateUserPanel } from "./useUpdateUserPanel";
 
-export { UpdateUserPanel };
+export { UpdateUserPanel, useUpdateUserPanel };

@@ -5,7 +5,7 @@ import { Link, Panel, PanelType } from '@fluentui/react';
 import { Tabs } from 'src/components/tabs/Tabs';
 import { PanelBody } from 'src/layouts/Panels/Panels.styles';
 
-import { useUpdateUsersPanel } from './UpdateUsersPanel.service';
+import { UseUpdateUserPanel } from 'src/pages/Admin/Users/UpdateUsers/useUpdateUserPanel';
 import { SectionAccount } from './SectionAccount';
 import SectionAccessManagement from './SectionAccessManagement';
 import { useNotification } from "src/hooks/useNotification";
@@ -20,9 +20,7 @@ const defaultProps = {
 };
 
 type UpdateUserPanelProps = {
-  userAccountSid: string;
-  orgSid: string;
-  isOpen?: boolean;
+  useUpdateUserPanel: UseUpdateUserPanel
   onDismiss?: () => void;
   onUpdateUser?: (form?: UserAccountForm) => void;
 } & typeof defaultProps;
@@ -34,12 +32,10 @@ const enum Tab {
   Access = 1
 }
 
-const UpdateUserPanel = ({ userAccountSid,
-                           isOpen,
+const UpdateUserPanel = ({ useUpdateUserPanel,
                            onDismiss,
                            onUpdateUser
                          }: UpdateUserPanelProps): ReactElement => {
-  const userAccountService = useUpdateUsersPanel(userAccountSid);
 
   const [step, setStep] = useState(Tab.Account);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
@@ -50,8 +46,7 @@ const UpdateUserPanel = ({ userAccountSid,
   };
 
   const handleUpdateUser = async (userAccount: UserAccount) => {
-    userAccountService.updateAccountInfo(userAccount);
-    const responseCreate = await userAccountService.callUpdateUser();
+     const responseCreate = await useUpdateUserPanel.callUpdateUser(userAccount);
     //
     if (responseCreate?.updateUser) {
       const responseCode = responseCreate?.updateUser?.response;
@@ -69,8 +64,7 @@ const UpdateUserPanel = ({ userAccountSid,
   };
 
   const handleAssignGroups = async (sids: string[]) => {
-    userAccountService.updateAccessPolicyGroups(sids);
-    const response = await userAccountService.callAssignGroups();
+    const response = await useUpdateUserPanel.callAssignGroups(sids);
     if (response?.updateUserAccessPolicyGroups) {
       const responseCode = response.updateUserAccessPolicyGroups?.response;
       if (responseCode === GqOperationResponse.Fail || responseCode === GqOperationResponse.PartialSuccess) {
@@ -101,19 +95,22 @@ const UpdateUserPanel = ({ userAccountSid,
   // };
 
   useEffect(() => {
-    if (userAccountService.responseCreateUser?.updateUser?.response === GqOperationResponse.Success) {
+    if (useUpdateUserPanel.responseCreateUser?.updateUser?.response === GqOperationResponse.Success) {
       setUnsavedChanges(false);
     }
-  }, [userAccountService.responseCreateUser]);
+  }, [useUpdateUserPanel.responseCreateUser]);
 
   const onPanelClose = () => {
+    // Set it back to the first tab
+    setStep(Tab.Account);
     // Reset the form
-    userAccountService.resetForm();
+    useUpdateUserPanel.resetForm();
+    useUpdateUserPanel.closePanel();
     onDismiss();
   }
 
   const userName = () => {
-    const person = userAccountService.userAccountForm.person;
+    const person = useUpdateUserPanel.userAccountForm.person;
     const firstNm = person?.firstNm?.value;
     const lastNm = person?.lastNm?.value;
     if (!firstNm && !lastNm) {
@@ -127,7 +124,7 @@ const UpdateUserPanel = ({ userAccountSid,
       closeButtonAriaLabel="Close"
       type={PanelType.medium}
       headerText={userName()}
-      isOpen={isOpen}
+      isOpen={useUpdateUserPanel.isPanelOpen}
       onDismiss={onPanelClose}
     >
       <PanelBody>
@@ -145,7 +142,7 @@ const UpdateUserPanel = ({ userAccountSid,
               title: 'Account',
               content: (
                 <SectionAccount
-                  form={userAccountService.userAccountForm}
+                  form={useUpdateUserPanel.userAccountForm}
                   onSave={handleUpdateUser}
                 />
               ),
@@ -155,7 +152,7 @@ const UpdateUserPanel = ({ userAccountSid,
               title: 'Access Management',
               content: (
                 <SectionAccessManagement
-                  form={userAccountService.userAccountForm}
+                  form={useUpdateUserPanel.userAccountForm}
                   onSave={handleAssignGroups}
                 />
               ),

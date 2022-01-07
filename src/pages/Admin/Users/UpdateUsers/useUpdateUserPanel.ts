@@ -5,52 +5,68 @@ import {
   UserAccount,
   UserAccountForm,
   useUpdateUserMutation,
-  useUpdateUserAccessPolicyGroupsMutation
+  useUpdateUserAccessPolicyGroupsMutation,
+  UpdateUserMutation,
+  UpdateAccessPolicyGroupMutation,
+  UpdateUserAccessPolicyGroupsMutation
 } from 'src/data/services/graphql';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { defaultForm, updateForm } from '../UserAccountFormUtil';
+import { ApolloError } from "@apollo/client";
 
-export const useUpdateUsersPanel = (userSid: string) => {
+export type UseUpdateUserPanel = {
+  isPanelOpen: boolean,
+  showPanel: (userSid: string) => void,
+  closePanel: () => void,
+  userAccountForm: UserAccountForm,
+  findUserAccountError: ApolloError | undefined,
+  callUpdateUser: (updates: UserAccount) => Promise<UpdateUserMutation | null | undefined>,
+  responseCreateUser: UpdateUserMutation | null | undefined ,
+  callAssignGroups: (sids: string[]) => Promise<UpdateUserAccessPolicyGroupsMutation | null | undefined>,
+  responseAssignGroups: UpdateAccessPolicyGroupMutation | null | undefined,
+  resetForm: () => void
+}
 
+export const useUpdateUserPanel = (): UseUpdateUserPanel => {
+
+  const [panelOpen, setPanelOpen] = useState(false);
+  const [userSid, setUserSid] = useState('');
   const [userAccountForm, setUserAccountForm] = useState<UserAccountForm>(defaultForm);
 
   const handleError = ErrorHandler();
 
-  const [callFindUserAccount, { data: dataFindUserAccount, loading: findUserAccountLoading, error: findUserAccountError }] =
-    useFindUserAccountLazyQuery({
+  const [callFindUserAccount, { data: dataFindUserAccount, error: findUserAccountError }] =
+    useFindUserAccountLazyQuery();
+
+  const [callUpdateUser, { data: dataUpdateUser, error: updateUserError }] =
+    useUpdateUserMutation();
+
+  const [callAssignGroups, { data: dataAssignGroups, error: assignGroupsError }] =
+    useUpdateUserAccessPolicyGroupsMutation();
+
+  const showPanel = (userSid: string) => {
+    setUserSid(userSid);
+    callFindUserAccount({
       variables: {
         userSid,
       },
-    });
-
-  const [callUpdateUser, { data: dataUpdateUser, loading: updateUserLoading, error: updateUserError }] =
-    useUpdateUserMutation();
-
-  const [callAssignGroups, { data: dataAssignGroups, loading: assignGroupsLoading, error: assignGroupsError }] =
-    useUpdateUserAccessPolicyGroupsMutation();
-
-
-  const updateAccountInfo = (updates: UserAccount) => {
-    const updated = updateForm(userAccountForm, updates);
-    setUserAccountForm(updated);
+    })
   };
 
-  const updateAccessPolicyGroups = (sids: string[]) => {
-    const updated = updateForm(userAccountForm, undefined, sids);
-    setUserAccountForm(updated);
-  };
+  const closePanel = () => {
+    setPanelOpen(false);
+  }
 
   // Refresh the form when the userSid changes
-  useEffect(() => {
-    if (userSid) {
-      console.log(`UserId changed to ${userSid}`)
-      callFindUserAccount({
-        variables: {
-          userSid,
-        },
-      });
-    }
-  }, [userSid]);
+  // useEffect(() => {
+  //   if (userSid) {
+  //     callFindUserAccount({
+  //       variables: {
+  //         userSid,
+  //       },
+  //     });
+  //   }
+  // }, [userSid]);
 
   useEffect(() => {
     handleError(updateUserError);
@@ -76,16 +92,13 @@ export const useUpdateUsersPanel = (userSid: string) => {
     errMsg: 'An internal server error has occurred.  Please contact your administrator.'
   };
 
-  const handleUpdateUserGroups = async () => {
-    const accessPolicyGroupSids: string[] =
-      userAccountForm.accessPolicyGroups?.value
-        ?.filter((opt) => opt != null && opt?.value != null)
-        ?.map((opt) => opt?.value ?? '') ?? [];
+  const handleUpdateUserGroups = async (sids: string[]) => {
+    updateForm(userAccountForm, undefined, sids);
     const { data, errors } = await callAssignGroups({
       variables: {
         userAccessPolicyGroupUpdate: {
           userAccountSid: userSid,
-          accessPolicyGroupSids: accessPolicyGroupSids
+          accessPolicyGroupSids: sids
         }
       }
     });
@@ -101,14 +114,15 @@ export const useUpdateUsersPanel = (userSid: string) => {
     return data;
   };
 
-  const handleUpdateUser = async () => {
+  const handleUpdateUser = async (userAccount: UserAccount) => {
+    updateForm(userAccountForm, userAccount);
     const { data, errors } = await callUpdateUser({
       variables: {
         userInfo: {
           sid: userSid,
-          email: userAccountForm.email?.value ?? '',
-          firstNm: userAccountForm.person?.firstNm?.value ?? '',
-          lastNm: userAccountForm.person?.lastNm?.value ?? ''
+          email: userAccount.email,
+          firstNm: userAccount.person?.firstNm ?? '',
+          lastNm: userAccount.person?.lastNm ?? ''
         },
       },
       errorPolicy: 'all'
@@ -134,25 +148,23 @@ export const useUpdateUsersPanel = (userSid: string) => {
   //
   useEffect(() => {
     if (dataFindUserAccount?.findUserAccount) {
-      console.log(`Updating User Account Form`)
       setUserAccountForm(dataFindUserAccount?.findUserAccount ?? defaultForm);
+      setPanelOpen(true);
     }
   }, [dataFindUserAccount]);
 
   //
   // * Return the state of the form.
   return {
+    isPanelOpen: panelOpen,
+    showPanel,
+    closePanel,
     userAccountForm,
-    findUserAccountLoading,
     findUserAccountError,
     callUpdateUser: handleUpdateUser,
     responseCreateUser: dataUpdateUser,
-    loadingCreateUser: updateUserLoading,
     callAssignGroups: handleUpdateUserGroups,
     responseAssignGroups: dataAssignGroups,
-    loadingAssignGroups: assignGroupsLoading,
-    resetForm,
-    updateAccountInfo,
-    updateAccessPolicyGroups,
+    resetForm
   };
 };

@@ -24,7 +24,7 @@ import { PageTitle } from 'src/components/typography';
 import { Separator } from 'src/components/separators/Separator';
 
 import { CreateUsersPanel } from '../CreateUsers';
-import { UpdateUserPanel } from '../UpdateUsers';
+import { UpdateUserPanel, useUpdateUserPanel } from '../UpdateUsers';
 import {
   useUsersForOrgLazyQuery,
   useDeactivateUsersMutation,
@@ -66,14 +66,14 @@ const _ActiveUsersPage = () => {
   const { orgSid } = useOrgSid();
   const [users, setUsers] = useState<UserItem[] | null | undefined>([]);
   const [isCreateUserPanelOpen, setIsCreateUserPanelOpen] = useState(false);
-  const [isUpdateUserPanelOpen, setIsUpdateUserPanelOpen] = useState(false);
   const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);
-  const [selectedUserId, setSelectedUserId] = useState('');
   const [apiUsersForOrgFpLazy, { data, loading, error }] = useUsersForOrgLazyQuery();
   const [selectedItems, setSelectedItems] = useState<UserItem[]>([]);
 
   const [disableUser, { data: disableResponse, loading: isDisablingUser }] = useDeactivateUsersMutation();
   const handleError = ErrorHandler();
+
+  const updateUserPanel = useUpdateUserPanel();
 
   const onRenderItemColumn = (node?: UserItem, itemIndex?: number, column?: IColumn) => {
     if (column?.key === 'email') {
@@ -83,9 +83,9 @@ const _ActiveUsersPage = () => {
             id={`__ActiveUsersPage__Email_Field_${(itemIndex ?? 0) + 1}`}
             onClick={() => {
               if (node) {
-                setSelectedItems([node]);
-                setSelectedUserId(node?.item?.sid);
-                setIsUpdateUserPanelOpen(true);
+                //setSelectedItems([node]);
+                //setSelectedUserId(node?.item?.sid);
+                updateUserPanel.showPanel(node?.item?.sid);
               }
             }}>
             {node?.item?.email}
@@ -277,15 +277,10 @@ const _ActiveUsersPage = () => {
         />
 
         <UpdateUserPanel
-          userAccountSid={selectedUserId}
-          orgSid={orgSid}
-          isOpen={isUpdateUserPanelOpen}
+          useUpdateUserPanel={updateUserPanel}
           onUpdateUser={() => {
             setSelectedItems([]);
             fetchUsers().then();
-          }}
-          onDismiss={() => {
-            setIsUpdateUserPanelOpen(false);
           }}
         />
 
