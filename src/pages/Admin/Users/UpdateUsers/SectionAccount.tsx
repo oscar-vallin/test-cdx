@@ -3,23 +3,22 @@ import { Column } from 'src/components/layouts';
 import { useFormInputValue } from 'src/hooks/useInputValue';
 
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
-import CreateUsersFooter from './CreateUsersFooter';
+import UpdateUserFooter from './UpdateUserFooter';
 import { UserAccount, UserAccountForm } from 'src/data/services/graphql';
 import { UIInputTextReadOnly } from 'src/components/inputs/InputText/InputText';
 import { WizardBody } from "src/layouts/Panels/Panels.styles";
 
 type SectionAccountProps = {
   form: UserAccountForm;
-  onNext: () => null;
-  saveOptions: (userAccount: UserAccount) => void;
+  onSave: (userAccount: UserAccount) => any;
 };
 
-const SectionAccount = ({ form, onNext, saveOptions }: SectionAccountProps) => {
+const SectionAccount = ({ form, onSave }: SectionAccountProps) => {
   const formFirstName = useFormInputValue(form.person?.firstNm?.value ?? '');
   const formLastName = useFormInputValue(form.person?.lastNm?.value ?? '');
   const formEmail = useFormInputValue(form.email?.value ?? '');
 
-  const handleNext = () => {
+  const handleSave = () => {
     const user: UserAccount = {
       sid: '',
       email: formEmail.value,
@@ -29,9 +28,7 @@ const SectionAccount = ({ form, onNext, saveOptions }: SectionAccountProps) => {
         lastNm: formLastName.value,
       },
     };
-    saveOptions(user);
-
-    return onNext();
+    onSave(user);
   };
 
   return (
@@ -56,14 +53,20 @@ const SectionAccount = ({ form, onNext, saveOptions }: SectionAccountProps) => {
             </Column>
           )}
         </FormRow>
-
         <FormRow>
           <Column lg="12">
             <UIInputTextReadOnly uiField={form.organization} />
           </Column>
         </FormRow>
+        {form.lastLogin ?
+          <FormRow>
+            <Column lg="12">
+              <UIInputTextReadOnly uiField={form.lastLogin } />
+            </Column>
+          </FormRow> : ''
+        }
       </WizardBody>
-      <CreateUsersFooter onNext={handleNext} />
+      <UpdateUserFooter onSave={handleSave} />
     </>
   );
 };

@@ -1,11 +1,11 @@
 import { ReactElement } from 'react';
 import { Button } from 'src/components/buttons';
-import { WizardButtonRow } from './CreateUsersPanel.styles';
+import {WizardButtonRow} from "src/layouts/Panels/Panels.styles";
 
 type CreateUsersFooterProps = {
   onNext?: () => null;
   onPrev?: () => null;
-  onSubmit?: () => null;
+  onSubmit?: () => any;
 };
 
 const CreateUsersFooter = ({ onNext, onPrev, onSubmit }: CreateUsersFooterProps): ReactElement => {

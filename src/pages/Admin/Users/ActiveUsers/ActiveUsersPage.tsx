@@ -1,74 +1,108 @@
 /* eslint-disable no-alert */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useMemo } from 'react';
-import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib-commonjs/Dialog';
-import { MarqueeSelection } from '@fluentui/react/lib-commonjs/MarqueeSelection';
-import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react';
-import { DetailsList, DetailsListLayoutMode, SelectionMode, Selection } from 'office-ui-fabric-react/lib/DetailsList';
-import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
-import { SpinnerSize } from '@fluentui/react';
+import React, { useState, useEffect } from 'react';
+import {
+  Dialog,
+  DialogType,
+  DialogFooter,
+  DetailsList,
+  IColumn,
+  DetailsListLayoutMode,
+  SelectionMode,
+  Spinner,
+  SpinnerSize,
+  Link,
+  PrimaryButton,
+  DefaultButton
+} from '@fluentui/react';
 import { EmptyState } from 'src/containers/states';
-import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
-import { Button, Link } from '../../../../components/buttons';
-import { Row, Column } from '../../../../components/layouts';
-import { Spacing } from '../../../../components/spacings/Spacing';
-import { PageTitle } from '../../../../components/typography';
-import { Separator } from '../../../../components/separators/Separator';
+import { LayoutAdmin } from 'src/layouts/LayoutAdmin';
+import { Button } from 'src/components/buttons';
+import { Row, Column } from 'src/components/layouts';
+import { Spacing } from 'src/components/spacings/Spacing';
+import { PageTitle } from 'src/components/typography';
+import { Separator } from 'src/components/separators/Separator';
 
 import { CreateUsersPanel } from '../CreateUsers';
-import { useUsersForOrgLazyQuery, useDeactivateUsersMutation, ActiveEnum } from '../../../../data/services/graphql';
+import { UpdateUserPanel } from '../UpdateUsers';
+import {
+  useUsersForOrgLazyQuery,
+  useDeactivateUsersMutation,
+  ActiveEnum,
+  UserItem
+} from 'src/data/services/graphql';
 import { StyledColumn } from './ActiveUsersPage.styles';
 
-import { useOrgSid } from '../../../../hooks/useOrgSid';
+import { useOrgSid } from 'src/hooks/useOrgSid';
+import { ErrorHandler } from "src/utils/ErrorHandler";
 
-const generateColumns = () => {
-  const createColumn = ({ name, key }) => ({
-    name,
-    key,
-    fieldName: key,
-    data: 'string',
-    isPadded: true,
-    minWidth: 225,
-  });
-
-  return [
-    createColumn({ name: 'First Name', key: 'firstNm' }),
-    createColumn({ name: 'Last Name', key: 'lastNm' }),
-    createColumn({ name: 'Email', key: 'email' }),
-  ];
-};
+const userColumns: IColumn[] = [
+  {
+    name: 'First Name',
+    key: 'firstNm',
+    fieldName: 'person.firstNm',
+    minWidth: 100,
+    maxWidth: 255,
+    isPadded: true
+  },
+  {
+    name: 'Last Name',
+    key: 'lastNm',
+    fieldName: 'person.lastNm',
+    minWidth: 100,
+    maxWidth: 255,
+    isPadded: true
+  },
+  {
+    name: 'Email',
+    key: 'email',
+    fieldName: 'email',
+    minWidth: 255,
+    isPadded: true
+  }
+];
 
 const _ActiveUsersPage = () => {
   const { orgSid } = useOrgSid();
-  const [users, setUsers] = useState<any[] | null | undefined>([]);
-  const columns = generateColumns();
-  const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const [users, setUsers] = useState<UserItem[] | null | undefined>([]);
+  const [isCreateUserPanelOpen, setIsCreateUserPanelOpen] = useState(false);
+  const [isUpdateUserPanelOpen, setIsUpdateUserPanelOpen] = useState(false);
   const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);
-  const [selectedUserId, setSelectedUserId] = useState(0);
-  const [apiUsersForOrgFpLazy, { data, loading }] = useUsersForOrgLazyQuery();
-  const [selectedItems, setSelectedItems] = useState<any[]>([]);
+  const [selectedUserId, setSelectedUserId] = useState('');
+  const [apiUsersForOrgFpLazy, { data, loading, error }] = useUsersForOrgLazyQuery();
+  const [selectedItems, setSelectedItems] = useState<UserItem[]>([]);
 
   const [disableUser, { data: disableResponse, loading: isDisablingUser }] = useDeactivateUsersMutation();
+  const handleError = ErrorHandler();
 
-  const onRenderItemColumn = (node, itemIndex, column) => {
-    if (column.key === 'email') {
+  const onRenderItemColumn = (node?: UserItem, itemIndex?: number, column?: IColumn) => {
+    if (column?.key === 'email') {
       return (
         <>
           <Link
-            id={`__ActiveUsersPage__Email_Field_${itemIndex + 1}`}
+            id={`__ActiveUsersPage__Email_Field_${(itemIndex ?? 0) + 1}`}
             onClick={() => {
-              setSelectedItems([node]);
-              setSelectedUserId(node.id);
-              setIsPanelOpen(true);
-            }}
-          >
-            {node.email}
+              if (node) {
+                setSelectedItems([node]);
+                setSelectedUserId(node?.item?.sid);
+                setIsUpdateUserPanelOpen(true);
+              }
+            }}>
+            {node?.item?.email}
           </Link>
         </>
       );
     }
 
-    return node.item[column.key] || node.item.person[column.key];
+    if (column) {
+      let personProp;
+      const person = node?.item?.person;
+      if (person) {
+        personProp = person[column?.key];
+      }
+      return node?.item[column?.key] || personProp;
+    }
+    return '';
   };
 
   useEffect(() => {
@@ -80,16 +114,20 @@ const _ActiveUsersPage = () => {
     });
   }, [orgSid]);
 
-  const selection = useMemo(
-    () =>
-      new Selection({
-        onSelectionChanged: () => {
-          setSelectedItems(selection.getSelection());
-        },
-        selectionMode: SelectionMode.multiple,
-      }),
-    []
-  );
+  useEffect(() => {
+    handleError(error);
+  }, [error])
+
+  // const selection = useMemo(
+  //   () =>
+  //     new Selection<UserItem>({
+  //       onSelectionChanged: () => {
+  //         setSelectedItems(selection.getSelection());
+  //       },
+  //       selectionMode: SelectionMode.multiple,
+  //     }),
+  //   []
+  // );
 
   const hideConfirmation = () => {
     setIsConfirmationHidden(true);
@@ -107,9 +145,15 @@ const _ActiveUsersPage = () => {
 
   useEffect(() => {
     if (!loading && data) {
-      // const _users = data?.usersForOrg?.nodes?.map((user) => ({}))
+      const users = data?.usersForOrg?.nodes ?? [];
+      const items: UserItem[] = [];
+      users.forEach((user) => {
+        if (user) {
+          items.push(user as UserItem);
+        }
+      });
 
-      setUsers(data?.usersForOrg?.nodes);
+      setUsers(items);
     }
   }, [loading]);
 
@@ -143,7 +187,7 @@ const _ActiveUsersPage = () => {
                     id="__Create-User"
                     iconProps={{ iconName: 'AddFriend' }}
                     onClick={() => {
-                      setIsPanelOpen(true);
+                      setIsCreateUserPanelOpen(true);
                       return null;
                     }}
                   >
@@ -194,7 +238,7 @@ const _ActiveUsersPage = () => {
                       id="CreateUser"
                       variant="primary"
                       onClick={() => {
-                        setIsPanelOpen(true);
+                        setIsCreateUserPanelOpen(true);
                         return null;
                       }}
                     >
@@ -203,10 +247,10 @@ const _ActiveUsersPage = () => {
                   }
                 />
               ) : (
-                <MarqueeSelection selection={selection}>
+                // <MarqueeSelection selection={selection}>
                   <DetailsList
                     items={users}
-                    columns={columns}
+                    columns={userColumns}
                     layoutMode={DetailsListLayoutMode.justified}
                     onRenderItemColumn={onRenderItemColumn}
                     // selection={selection}
@@ -214,7 +258,7 @@ const _ActiveUsersPage = () => {
                     selectionMode={SelectionMode.none}
                     isHeaderVisible
                   />
-                </MarqueeSelection>
+                // </MarqueeSelection>
               )}
             </StyledColumn>
           </Row>
@@ -222,15 +266,27 @@ const _ActiveUsersPage = () => {
 
         <CreateUsersPanel
           orgSid={orgSid}
-          isOpen={isPanelOpen}
-          onCreateUser={(createdUser) => {
+          isOpen={isCreateUserPanelOpen}
+          onCreateUser={() => {
             setSelectedItems([]);
-            fetchUsers();
+            fetchUsers().then();
           }}
           onDismiss={() => {
-            setIsPanelOpen(false);
+            setIsCreateUserPanelOpen(false);
           }}
-          selectedUserId={selectedUserId}
+        />
+
+        <UpdateUserPanel
+          userAccountSid={selectedUserId}
+          orgSid={orgSid}
+          isOpen={isUpdateUserPanelOpen}
+          onUpdateUser={() => {
+            setSelectedItems([]);
+            fetchUsers().then();
+          }}
+          onDismiss={() => {
+            setIsUpdateUserPanelOpen(false);
+          }}
         />
 
         <Dialog
@@ -241,8 +297,7 @@ const _ActiveUsersPage = () => {
             title: 'Disable user',
             subText: `Do you really want to disable the selected user(s) ?`,
           }}
-          modalProps={{ isBlocking: true }}
-        >
+          modalProps={{ isBlocking: true }}>
           <DialogFooter>
             <PrimaryButton
               onClick={() => {
@@ -250,7 +305,7 @@ const _ActiveUsersPage = () => {
                   variables: {
                     sidsInput: { sids: selectedUserIds() },
                   },
-                });
+                }).then();
                 setIsConfirmationHidden(true);
               }}
               text="Disable"

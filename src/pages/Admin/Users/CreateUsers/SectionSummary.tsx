@@ -8,8 +8,8 @@ import { UIInputTextReadOnly } from 'src/components/inputs/InputText/InputText';
 import { FontIcon } from '@fluentui/react';
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
 import { FieldValue } from 'src/components/inputs/InputText/InputText.styles';
-import { WizardBody } from './CreateUsersPanel.styles';
 import CreateUsersFooter from './CreateUsersFooter';
+import { WizardBody } from "src/layouts/Panels/Panels.styles";
 
 type SectionSummaryPropsType = {
   form: UserAccountForm;

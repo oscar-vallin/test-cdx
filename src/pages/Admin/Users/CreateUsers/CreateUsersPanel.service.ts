@@ -6,62 +6,18 @@ import {
   UserAccountForm,
   useUserAccountFormLazyQuery,
 } from 'src/data/services/graphql';
-import { ErrorHandler } from '../../../../utils/ErrorHandler';
+import { ErrorHandler } from 'src/utils/ErrorHandler';
+import { defaultForm, updateForm } from '../UserAccountFormUtil';
 
-export const useCreateUsersPanel = (orgSid) => {
-  const defaultForm = {
-    sid: null,
-    email: {
-      label: 'Email',
-      required: true,
-      visible: true,
-      min: 0,
-      max: 255,
-    },
-    person: {
-      firstNm: {
-        label: 'First Name',
-        required: true,
-        visible: true,
-        min: 0,
-        max: 60,
-      },
-      lastNm: {
-        label: 'Last Name',
-        required: true,
-        visible: true,
-        min: 0,
-        max: 60,
-      },
-    },
-    organization: {
-      label: 'Primary Organization',
-      required: false,
-      visible: true,
-    },
-    accessPolicyGroups: {
-      label: 'Access Policy Groups',
-      required: false,
-      visible: true,
-    },
-    sendActivationEmail: {
-      label: 'Send Activation Email',
-      required: false,
-      visible: true,
-    },
-    response: GqOperationResponse.Success,
-  };
 
-  const [exchangeReaderAll, setExchangeReaderAll] = useState(false);
-  const [exchangeAdminVendor, setExchangeAdminVendor] = useState(false);
-  const [userAdminAllOrgs, setUserAdminAllOrgs] = useState(false);
-  const [userAdminSubOrgs, setUserAdminSubOrgs] = useState(false);
+export const useCreateUsersPanel = (orgSid: string) => {
+
   const [userAccountForm, setUserAccountForm] = useState<UserAccountForm>(defaultForm);
 
   const [isUserCreated, setUserCreated] = useState(false);
   const handleError = ErrorHandler();
 
-  const [apiUserAccountForm, { data: dataUserAccountForm, loading: userAccountLoading, error: userAccountError }] =
+  const [callUserAccountForm, { data: dataUserAccountForm, loading: userAccountLoading, error: userAccountError }] =
     useUserAccountFormLazyQuery({
       variables: {
         orgSid,
@@ -72,35 +28,13 @@ export const useCreateUsersPanel = (orgSid) => {
     useCreateUserMutation();
 
   const updateAccountInfo = (updates: UserAccount) => {
-    userAccountForm.email = {
-      ...(userAccountForm?.email ?? defaultForm.email),
-      value: updates.email,
-    };
-    userAccountForm.person = {
-      firstNm: {
-        ...(userAccountForm?.person?.firstNm ?? defaultForm.person?.firstNm),
-        value: updates.person?.firstNm,
-      },
-      lastNm: {
-        ...(userAccountForm?.person?.lastNm ?? defaultForm.person?.lastNm),
-        value: updates.person?.lastNm,
-      },
-    };
-    setUserAccountForm(userAccountForm);
+    const updated = updateForm(userAccountForm, updates);
+    setUserAccountForm(updated);
   };
 
   const updateAccessPolicyGroups = (sids: string[]) => {
-    userAccountForm.accessPolicyGroups = {
-      ...(userAccountForm.accessPolicyGroups ?? defaultForm.accessPolicyGroups),
-      value: sids.map((sid) => {
-        return {
-          name: '',
-          value: sid,
-        };
-      }),
-    };
-
-    setUserAccountForm(userAccountForm);
+    const updated = updateForm(userAccountForm, undefined, sids);
+    setUserAccountForm(updated);
   };
 
   const setSendAccountActivation = (sendEmail: boolean) => {
@@ -114,7 +48,7 @@ export const useCreateUsersPanel = (orgSid) => {
   // * When the organizationId changes, we need to re-fetch the user account form.
   useEffect(() => {
     if (orgSid) {
-      apiUserAccountForm({
+      callUserAccountForm({
         variables: {
           orgSid,
         },
@@ -130,16 +64,6 @@ export const useCreateUsersPanel = (orgSid) => {
     handleError(userAccountError);
   }, [userAccountError]);
 
-  // useEffect(() => {
-  //   if (userSid) {
-  //     apiGetUSer({
-  //       variables: {
-  //         userSid: userSid ?? '',
-  //       },
-  //     });
-  //   }
-  // }, [userSid]);
-
   const clearUserCreation = () => {
     setUserCreated(false);
   };
@@ -151,8 +75,6 @@ export const useCreateUsersPanel = (orgSid) => {
       userAccountForm.accessPolicyGroups?.value
         ?.filter((opt) => opt != null && opt?.value != null)
         ?.map((opt) => opt?.value ?? '') ?? [];
-    // const accessPolicyGroupsOpts: string[] =
-    //   form?.access?.options?.filter(({ checked }) => checked)?.map((opt) => opt.id ?? '') ?? [];
 
     const { data, errors } = await callCreateUser({
       variables: {
@@ -193,7 +115,7 @@ export const useCreateUsersPanel = (orgSid) => {
 
   const resetForm = () => {
     if (orgSid) {
-      apiUserAccountForm({
+      callUserAccountForm({
         variables: {
           orgSid,
         },
@@ -214,17 +136,7 @@ export const useCreateUsersPanel = (orgSid) => {
     userAccountForm,
     userAccountLoading,
     userAccountError,
-    infoAccess: {
-      exchangeReaderAll,
-      exchangeAdminVendor,
-      userAdminAllOrgs,
-      userAdminSubOrgs,
-      setExchangeReaderAll,
-      setExchangeAdminVendor,
-      setUserAdminAllOrgs,
-      setUserAdminSubOrgs,
-    },
-    createUserCall: handleCreateUser,
+    callUpdateUser: handleCreateUser,
     responseCreateUser: userCreatedData,
     loadingCreateUser: creatingUserLoading,
     isUserCreated,

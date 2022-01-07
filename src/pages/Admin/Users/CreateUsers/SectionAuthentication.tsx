@@ -4,7 +4,8 @@ import { Column } from 'src/components/layouts';
 
 import { UserAccountForm } from 'src/data/services/graphql';
 import CreateUsersFooter from './CreateUsersFooter';
-import { StyledOptionRow, WizardBody } from './CreateUsersPanel.styles';
+import { StyledOptionRow} from './CreateUsersPanel.styles';
+import { WizardBody } from "src/layouts/Panels/Panels.styles";
 
 type SectionAuthProps = {
   form: UserAccountForm;

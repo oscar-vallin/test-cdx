@@ -1,18 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {ReactElement, useEffect, useState} from 'react';
-import {Panel, PanelType} from '@fluentui/react/lib-commonjs/Panel';
+import { ReactElement, useEffect, useState } from 'react';
+import { Panel, PanelType } from '@fluentui/react';
 
-import {Tabs} from 'src/components/tabs/Tabs';
-import {Text} from 'src/components/typography';
-import {PanelBody} from 'src/layouts/Panels/Panels.styles';
+import { Tabs } from 'src/components/tabs/Tabs';
+import { Text } from 'src/components/typography';
+import { PanelBody } from 'src/layouts/Panels/Panels.styles';
 
-import {useCreateUsersPanel} from './CreateUsersPanel.service';
-import {SectionAccount} from './SectionAccount';
+import { useCreateUsersPanel} from './CreateUsersPanel.service';
+import { SectionAccount } from './SectionAccount';
 import SectionAccessManagement from './SectionAccessManagement';
 import SectionAuthentication from './SectionAuthentication';
 import SectionSummary from './SectionSummary';
-import {useNotification} from "../../../../hooks/useNotification";
-import {GqOperationResponse} from "../../../../data/services/graphql";
+import { useNotification } from "src/hooks/useNotification";
+import { GqOperationResponse } from "src/data/services/graphql";
 
 const defaultProps = {
   isOpen: false,
@@ -25,7 +25,6 @@ type CreateUsersPanelProps = {
   isOpen?: boolean;
   onDismiss?: any | null;
   onCreateUser?: any | null;
-  selectedUserId?: any | null;
 } & typeof defaultProps;
 
 const tabs = ['#account', '#access', '#auth', '#summary'];
@@ -51,7 +50,7 @@ const CreateUsersPanel = ({
 
   const handleCreateUser = async () => {
     setProcessing(true);
-    const responseCreate = await createUserService.createUserCall();
+    const responseCreate = await createUserService.callUpdateUser();
     setProcessing(false);
     //
     if (responseCreate?.createUser) {
@@ -68,19 +67,6 @@ const CreateUsersPanel = ({
       }
     }
   };
-
-  // const handleResetPassword = async () => {
-  //   setProcessing(true);
-  //   const responseReset = await createUserService.handleResetPassword(selectedUserId);
-  //   setProcessing(false);
-  //   //
-  //   if (responseReset?.resetPassword) {
-  //     if (responseReset?.resetPassword === 'SUCCESS') {
-  //       onCreateUser(responseReset.resetPassword);
-  //       onDismiss();
-  //     }
-  //   }
-  // };
 
   const handleNext = (): null => {
     setStep(step + 1);

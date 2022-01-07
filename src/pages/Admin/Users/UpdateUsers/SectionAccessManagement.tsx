@@ -4,18 +4,16 @@ import { UIFormLabel } from 'src/components/labels/FormLabel';
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
 import { CheckboxList } from 'src/components/inputs/CheckboxList';
 import { Column } from 'src/components/layouts';
-import CreateUsersFooter from './CreateUsersFooter';
+import UpdateUserFooter from './UpdateUserFooter';
 import { Maybe, UiOption, UserAccountForm } from 'src/data/services/graphql';
 import { WizardBody } from "src/layouts/Panels/Panels.styles";
 
 type SectionAccessProps = {
   form?: UserAccountForm;
-  onPrev: () => null;
-  onNext: () => null;
-  saveOptions: (sids: string[]) => void;
+  onSave: (sids: string[]) => any;
 };
 
-const SectionAccessManagement = ({ form, onPrev, onNext, saveOptions }: SectionAccessProps) => {
+const SectionAccessManagement = ({ form, onSave }: SectionAccessProps) => {
   const getAccessGroupOptions = (form?: UserAccountForm): UiOption[] => {
     const formOpts: Maybe<UiOption>[] =
       form?.options?.find((itm) => {
@@ -54,20 +52,7 @@ const SectionAccessManagement = ({ form, onPrev, onNext, saveOptions }: SectionA
   }, [form]);
 
   const handleSave = () => {
-    saveOptions(selectedSids);
-  };
-
-  const handlePrev = () => {
-    handleSave();
-    onPrev();
-
-    return null;
-  };
-
-  const handleNext = () => {
-    handleSave();
-    onNext();
-    return null;
+    onSave(selectedSids);
   };
 
   return (
@@ -85,12 +70,10 @@ const SectionAccessManagement = ({ form, onPrev, onNext, saveOptions }: SectionA
           </Column>
         </FormRow>
       </WizardBody>
-      <CreateUsersFooter onPrev={handlePrev} onNext={handleNext} />
+      <UpdateUserFooter onSave={handleSave} />
     </>
   );
 };
-
-// SectionAccessManagement.defaultProps = defaultProps;
 
 export { SectionAccessManagement };
 export default SectionAccessManagement;
