@@ -1,5 +1,12 @@
 import styled from 'styled-components';
+import { Text } from 'src/components/typography/Text';
 
+export const PanelHeader = styled(Text)`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  padding-left: 30px;
+`
 export const PanelBody = styled.div`
   margin-top: 15px;
 `;

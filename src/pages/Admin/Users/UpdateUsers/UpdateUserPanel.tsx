@@ -1,15 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { ReactElement, useEffect, useState } from 'react';
-import { Link, Panel, PanelType } from '@fluentui/react';
+import React, { ReactElement, useEffect, useState } from 'react';
+import { Panel, PanelType, Stack } from '@fluentui/react';
 
 import { Tabs } from 'src/components/tabs/Tabs';
-import { PanelBody } from 'src/layouts/Panels/Panels.styles';
+import { PanelBody, PanelHeader } from 'src/layouts/Panels/Panels.styles';
 
 import { UseUpdateUserPanel } from 'src/pages/Admin/Users/UpdateUsers/useUpdateUserPanel';
 import { SectionAccount } from './SectionAccount';
 import SectionAccessManagement from './SectionAccessManagement';
 import { useNotification } from "src/hooks/useNotification";
 import { GqOperationResponse, UserAccountForm, UserAccount } from "src/data/services/graphql";
+import { Column, Row } from "src/components/layouts";
+import { CommandButton } from 'office-ui-fabric-react';
 
 const defaultProps = {
   isOpen: false,
@@ -119,23 +121,31 @@ const UpdateUserPanel = ({ useUpdateUserPanel,
     return `${firstNm ?? ''} ${lastNm ?? ''}`;
   };
 
+  const renderPanelHeader = () => (
+      <Row>
+        <Column lg="6">
+          <Stack horizontal styles={ {root: {height: 44} }}>
+            <PanelHeader id="__UserUpdate_Panel_Title" variant="bold">{userName()}</PanelHeader>
+          </Stack>
+        </Column>
+        <Column lg="6">
+            <CommandButton id="__ResetPassword_Button"
+                           iconProps={{iconName: 'Permissions'}}
+                           text="Reset Password"/>
+        </Column>
+      </Row>
+  );
+
   return (
     <Panel
       closeButtonAriaLabel="Close"
-      type={PanelType.medium}
       headerText={userName()}
+      type={PanelType.medium}
+      onRenderHeader={renderPanelHeader}
       isOpen={useUpdateUserPanel.isPanelOpen}
       onDismiss={onPanelClose}
     >
       <PanelBody>
-        <Link
-          id="__CreateUsersPanel__ResetPassword_Field"
-          onClick={() => {
-            //handleResetPassword();
-          }}
-        >
-          Reset Password
-        </Link>
         <Tabs
           items={[
             {
