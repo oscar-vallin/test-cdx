@@ -85,16 +85,16 @@ const DialogYesNo = (props: DialogYesNoProps): ReactElement => {
     >
       <DialogFooter>
         <Button
-          id="__optionDialogNo"
-          onClick={handleNo}
-          text={props.messageNo}
-          variant={props.highlightNo ? 'primary' : undefined}
-        />
-        <Button
           id="__optionDialogYes"
           onClick={handleYes}
           text={props.messageYes}
           variant={props.highlightYes ? 'primary' : undefined}
+        />
+        <Button
+          id="__optionDialogNo"
+          onClick={handleNo}
+          text={props.messageNo}
+          variant={props.highlightNo ? 'primary' : undefined}
         />
       </DialogFooter>
     </Dialog>

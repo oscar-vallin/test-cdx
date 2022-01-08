@@ -11,9 +11,10 @@ import { WizardBody } from "src/layouts/Panels/Panels.styles";
 type SectionAccessProps = {
   form?: UserAccountForm;
   onSave: (sids: string[]) => any;
+  onFormChange: () => any;
 };
 
-const SectionAccessManagement = ({ form, onSave }: SectionAccessProps) => {
+const SectionAccessManagement = ({ form, onSave, onFormChange }: SectionAccessProps) => {
   const getAccessGroupOptions = (form?: UserAccountForm): UiOption[] => {
     const formOpts: Maybe<UiOption>[] =
       form?.options?.find((itm) => {
@@ -65,7 +66,10 @@ const SectionAccessManagement = ({ form, onSave }: SectionAccessProps) => {
               id="__Access_Groups_List"
               items={groupOptions}
               value={selectedSids}
-              onChange={setSelectedSids}
+              onChange={(sids) => {
+                onFormChange();
+                setSelectedSids(sids);
+              }}
             />
           </Column>
         </FormRow>

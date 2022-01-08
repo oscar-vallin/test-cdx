@@ -11,9 +11,10 @@ import { WizardBody } from "src/layouts/Panels/Panels.styles";
 type SectionAccountProps = {
   form: UserAccountForm;
   onSave: (userAccount: UserAccount) => any;
+  onFormChange: () => any;
 };
 
-const SectionAccount = ({ form, onSave }: SectionAccountProps) => {
+const SectionAccount = ({ form, onSave, onFormChange }: SectionAccountProps) => {
   const formFirstName = useFormInputValue(form.person?.firstNm?.value ?? '');
   const formLastName = useFormInputValue(form.person?.lastNm?.value ?? '');
   const formEmail = useFormInputValue(form.email?.value ?? '');
@@ -37,19 +38,36 @@ const SectionAccount = ({ form, onSave }: SectionAccountProps) => {
         <FormRow>
           {form.person?.firstNm?.visible && (
             <Column lg={form.person?.lastNm?.visible ? '6' : '12'}>
-              <UIInputText uiStringField={form.person?.firstNm} {...formFirstName} />
+              <UIInputText uiStringField={form.person?.firstNm}
+                           value={formFirstName.value}
+                           onChange={(e) => {
+                             onFormChange();
+                             formFirstName.onChange(e);
+                           }}
+              />
             </Column>
           )}
           {form.person?.lastNm?.visible && (
             <Column lg={form.person?.firstNm?.visible ? '6' : '12'}>
-              <UIInputText uiStringField={form.person?.lastNm} {...formLastName} />
+              <UIInputText uiStringField={form.person?.lastNm}
+                           value={formLastName.value}
+                           onChange={(e) => {
+                             onFormChange();
+                             formLastName.onChange(e);
+                           }}/>
             </Column>
           )}
         </FormRow>
         <FormRow>
           {form.email?.visible && (
             <Column lg="12">
-              <UIInputText uiStringField={form.email ?? undefined} {...formEmail} />
+              <UIInputText uiStringField={form.email ?? undefined}
+                           value={formEmail.value}
+                           onChange={(e) => {
+                             onFormChange();
+                             formEmail.onChange(e);
+                           }}
+              />
             </Column>
           )}
         </FormRow>

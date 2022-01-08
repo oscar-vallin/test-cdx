@@ -12,12 +12,13 @@ import { useNotification } from "src/hooks/useNotification";
 import { GqOperationResponse, UserAccountForm, UserAccount } from "src/data/services/graphql";
 import { Column, Row } from "src/components/layouts";
 import { CommandButton } from 'office-ui-fabric-react';
+import { DialogYesNo } from "src/containers/modals/DialogYesNo";
 
 const defaultProps = {
   isOpen: false,
   onDismiss: () => {
   },
-  onUpdateUser: (form?: UserAccountForm) => {
+  onUpdateUser: () => {
   },
 };
 
@@ -40,6 +41,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel,
                          }: UpdateUserPanelProps): ReactElement => {
 
   const [step, setStep] = useState(Tab.Account);
+  const [showDialog, setShowDialog] = useState(false);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const Toast = useNotification();
 
@@ -83,6 +85,11 @@ const UpdateUserPanel = ({ useUpdateUserPanel,
     }
   };
 
+  const onFormChange = () => {
+    console.log('form changed');
+    setUnsavedChanges(true);
+  }
+
   // const handleResetPassword = async () => {
   //   const responseReset = await userAccountService.handleResetPassword(userAccountSid);
   //   //
@@ -103,6 +110,15 @@ const UpdateUserPanel = ({ useUpdateUserPanel,
   }, [useUpdateUserPanel.responseCreateUser]);
 
   const onPanelClose = () => {
+    if (unsavedChanges) {
+      setShowDialog(true);
+    } else {
+      doClosePanel();
+    }
+  }
+
+  const doClosePanel = () => {
+    setUnsavedChanges(false);
     // Set it back to the first tab
     setStep(Tab.Account);
     // Reset the form
@@ -137,43 +153,62 @@ const UpdateUserPanel = ({ useUpdateUserPanel,
   );
 
   return (
-    <Panel
-      closeButtonAriaLabel="Close"
-      headerText={userName()}
-      type={PanelType.medium}
-      onRenderHeader={renderPanelHeader}
-      isOpen={useUpdateUserPanel.isPanelOpen}
-      onDismiss={onPanelClose}
-    >
-      <PanelBody>
-        <Tabs
-          items={[
-            {
-              title: 'Account',
-              content: (
-                <SectionAccount
-                  form={useUpdateUserPanel.userAccountForm}
-                  onSave={handleUpdateUser}
-                />
-              ),
-              hash: '#account',
-            },
-            {
-              title: 'Access Management',
-              content: (
-                <SectionAccessManagement
-                  form={useUpdateUserPanel.userAccountForm}
-                  onSave={handleAssignGroups}
-                />
-              ),
-              hash: '#access',
-            }
-          ]}
-          selectedKey={step < 0 ? '0' : step.toString()}
-          onClickTab={handleTabChange}
-        />
-      </PanelBody>
-    </Panel>
+    <>
+      <Panel
+        closeButtonAriaLabel="Close"
+        headerText={userName()}
+        type={PanelType.medium}
+        onRenderHeader={renderPanelHeader}
+        isOpen={useUpdateUserPanel.isPanelOpen}
+        onDismiss={onPanelClose}
+      >
+        <PanelBody>
+          <Tabs
+            items={[
+              {
+                title: 'Account',
+                content: (
+                  <SectionAccount
+                    form={useUpdateUserPanel.userAccountForm}
+                    onSave={handleUpdateUser}
+                    onFormChange={onFormChange}
+                  />
+                ),
+                hash: '#account',
+              },
+              {
+                title: 'Access Management',
+                content: (
+                  <SectionAccessManagement
+                    form={useUpdateUserPanel.userAccountForm}
+                    onSave={handleAssignGroups}
+                    onFormChange={onFormChange}
+                  />
+                ),
+                hash: '#access',
+              }
+            ]}
+            selectedKey={step < 0 ? '0' : step.toString()}
+            onClickTab={handleTabChange}
+          />
+        </PanelBody>
+      </Panel>
+      <DialogYesNo
+        open={showDialog}
+        highlightNo
+        title="You have unsaved changes"
+        message="You are about to lose changes made to this user's profile. Are you sure you want to undo these changes?"
+        onYes={() => {
+          setShowDialog(false);
+          doClosePanel();
+          return null;
+        }}
+        onClose={() => {
+          setShowDialog(false);
+          return null;
+        }}
+      />
+    </>
   );
 };
 
