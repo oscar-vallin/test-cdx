@@ -76,33 +76,35 @@ const _ActiveUsersPage = () => {
   const updateUserPanel = useUpdateUserPanel();
 
   const onRenderItemColumn = (node?: UserItem, itemIndex?: number, column?: IColumn) => {
+
+    let columnVal: string | undefined;
     if (column?.key === 'email') {
-      return (
-        <>
-          <Link
-            id={`__ActiveUsersPage__Email_Field_${(itemIndex ?? 0) + 1}`}
-            onClick={() => {
-              if (node) {
-                //setSelectedItems([node]);
-                //setSelectedUserId(node?.item?.sid);
-                updateUserPanel.showPanel(node?.item?.sid);
-              }
-            }}>
-            {node?.item?.email}
-          </Link>
-        </>
-      );
+      columnVal = node?.item?.email;
+    } else if (column) {
+        let personProp;
+        const person = node?.item?.person;
+        if (person) {
+          personProp = person[column?.key];
+        }
+        columnVal = node?.item[column?.key] || personProp;
+    } else {
+      columnVal = '';
     }
 
-    if (column) {
-      let personProp;
-      const person = node?.item?.person;
-      if (person) {
-        personProp = person[column?.key];
-      }
-      return node?.item[column?.key] || personProp;
-    }
-    return '';
+    return (
+      <>
+        <Link
+          id={`__ActiveUsersPage__Email_Field_${(itemIndex ?? 0) + 1}`}
+          onClick={() => {
+            if (node) {
+              updateUserPanel.showPanel(node?.item?.sid);
+            }
+          }}>
+          {columnVal}
+        </Link>
+      </>
+    );
+
   };
 
   useEffect(() => {
@@ -192,21 +194,6 @@ const _ActiveUsersPage = () => {
                     }}
                   >
                     Create user
-                  </PrimaryButton>
-                  &nbsp; &nbsp;
-                  <PrimaryButton
-                    id="__Deactivate-Users"
-                    iconProps={{ iconName: 'UserRemove' }}
-                    onClick={() => {
-                      if (selectedItems.length > 0) {
-                        setIsConfirmationHidden(false);
-                      } else {
-                        alert('Please select at least one user');
-                      }
-                      return null;
-                    }}
-                  >
-                    Disable Users
                   </PrimaryButton>
                 </span>
               </Column>
