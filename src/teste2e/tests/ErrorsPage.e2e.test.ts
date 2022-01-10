@@ -1,8 +1,8 @@
 import { format } from 'date-fns';
-import PuppetCDXApp from '../../teste2e/pages/PuppetCDXApp';
-import PuppetActiveOrgs from '../../teste2e/pages/PuppetActiveOrgs';
-import PuppetMainMenu from '../../teste2e/pages/PuppetMainMenu';
-import PuppetErrors from '../../teste2e/pages/PuppetErrors';
+import PuppetCDXApp from 'src/teste2e/pages/PuppetCDXApp';
+import PuppetActiveOrgs from 'src/teste2e/pages/PuppetActiveOrgs';
+import PuppetMainMenu from 'src/teste2e/pages/PuppetMainMenu';
+import PuppetErrors from 'src/teste2e/pages/PuppetErrors';
 
 const testConstants = {
   clientFile: 'FMHP-CIGNA-PROD.xml.pgp',

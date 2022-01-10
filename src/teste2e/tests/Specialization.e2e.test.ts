@@ -1,6 +1,5 @@
-import PuppetCDXApp from '../../../../teste2e/pages/PuppetCDXApp';
-import PuppetAccessSpecialization from '../../../../teste2e/pages/PuppetAccessSpecialization';
-import PuppetAdminMenu from '../../../../teste2e/pages/PuppetAdminMenu';
+import PuppetCDXApp from 'src/teste2e/pages/PuppetCDXApp';
+import PuppetAccessSpecialization from 'src/teste2e/pages/PuppetAccessSpecialization';
 
 describe('E2E - Access Specialization Test', () => {
   let cdxApp: PuppetCDXApp;

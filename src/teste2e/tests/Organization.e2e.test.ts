@@ -1,8 +1,7 @@
-import PuppetCDXApp from '../../../teste2e/pages/PuppetCDXApp';
-import PuppetActiveOrgs from '../../../teste2e/pages/PuppetActiveOrgs';
-import PuppetExchangeStatus from '../../../teste2e/pages/PuppetExchangeStatus';
-import PuppetCurrentActivity from '../../../teste2e/pages/PuppetCurrentActivity';
-import PuppetMainMenu from '../../../teste2e/pages/PuppetMainMenu';
+import PuppetCDXApp from 'src/teste2e/pages/PuppetCDXApp';
+import PuppetActiveOrgs from 'src/teste2e/pages/PuppetActiveOrgs';
+import PuppetExchangeStatus from 'src/teste2e/pages/PuppetExchangeStatus';
+import PuppetCurrentActivity from 'src/teste2e/pages/PuppetCurrentActivity';
 
 describe('E2E - Organization Navigation Test', () => {
   let cdxApp: PuppetCDXApp;

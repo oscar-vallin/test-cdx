@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
-import PuppetCDXApp from '../../teste2e/pages/PuppetCDXApp';
-import PuppetMainMenu from '../../teste2e/pages/PuppetMainMenu';
-import PuppetTransmissions from '../../teste2e/pages/PuppetTransmissions';
+import PuppetCDXApp from 'src/teste2e/pages/PuppetCDXApp';
+import PuppetMainMenu from 'src/teste2e/pages/PuppetMainMenu';
+import PuppetTransmissions from 'src/teste2e/pages/PuppetTransmissions';
 
 const testConstants = {
   clientFile: 'K2UFKE-HealthyPet-UAT.txt',

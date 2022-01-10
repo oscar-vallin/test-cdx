@@ -1,4 +1,4 @@
-import PuppetCDXApp from '../../teste2e/pages/PuppetCDXApp';
+import PuppetCDXApp from 'src/teste2e/pages/PuppetCDXApp';
 
 describe('Login Tests', () => {
   let cdxApp: PuppetCDXApp;

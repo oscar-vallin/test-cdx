@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
-import PuppetCDXApp from '../../teste2e/pages/PuppetCDXApp';
-import PuppetExchangeStatus from '../../teste2e/pages/PuppetExchangeStatus';
+import PuppetCDXApp from 'src/teste2e/pages/PuppetCDXApp';
+import PuppetExchangeStatus from 'src/teste2e/pages/PuppetExchangeStatus';
 
 const testConstants = {
   sponsor: 'K2UFKE',

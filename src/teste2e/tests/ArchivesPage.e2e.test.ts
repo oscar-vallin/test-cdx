@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
-import PuppetCDXApp from '../../teste2e/pages/PuppetCDXApp';
-import PuppetMainMenu from '../../teste2e/pages/PuppetMainMenu';
-import PuppetArchivesPage from '../../teste2e/pages/PuppetArchivesPage';
+import PuppetCDXApp from 'src/teste2e/pages/PuppetCDXApp';
+import PuppetMainMenu from 'src/teste2e/pages/PuppetMainMenu';
+import PuppetArchivesPage from 'src/teste2e/pages/PuppetArchivesPage';
 
 const testConstants = {
   clientFile: 'ADENA-Cigna-Elig-TEST.txt',

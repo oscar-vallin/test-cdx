@@ -1,5 +1,5 @@
-import PuppetCDXApp from '../../../../teste2e/pages/PuppetCDXApp';
-import PuppetAccessPolicyGroup from '../../../../teste2e/pages/PuppetAccessPolicyGroup';
+import PuppetCDXApp from 'src/teste2e/pages/PuppetCDXApp';
+import PuppetAccessPolicyGroup from 'src/teste2e/pages/PuppetAccessPolicyGroup';
 
 describe('E2E - Access Policy Group Test', () => {
   jest.setTimeout(60000);

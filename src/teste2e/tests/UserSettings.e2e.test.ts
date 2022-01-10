@@ -1,5 +1,5 @@
-import PuppetCDXApp from '../../teste2e/pages/PuppetCDXApp';
-import PuppetUserSettings from '../../teste2e/pages/PuppetUserSettings';
+import PuppetCDXApp from 'src/teste2e/pages/PuppetCDXApp';
+import PuppetUserSettings from 'src/teste2e/pages/PuppetUserSettings';
 
 describe('E2E - User Settings Test', () => {
   jest.setTimeout(30000);
