@@ -1,4 +1,4 @@
-import { mount, shallow, render } from 'enzyme';
+import { shallow, render } from 'enzyme';
 import toJSON from 'enzyme-to-json';
 import { Table as Component } from './index';
 import { TableHeader } from '../TableHeader';
@@ -12,6 +12,14 @@ jest.mock('react-router-dom', () => ({
     pathname: 'localhost:3000/file-status?orgSid=1',
   }),
 }));
+
+jest.mock('src/hooks/useOrgSid', () => ({
+  useOrgSid: () => ({
+    orgSid: 1,
+    setOrgSid: jest.fn()
+  })
+}));
+
 
 const items = [
   [
@@ -125,6 +133,7 @@ const columns = [
 ];
 
 const defaultProps = {
+  id: 'default',
   items: [
     [
       {
@@ -327,7 +336,7 @@ describe('Basic Table Component', () => {
         <Component {...defaultProps} />
       </StoreProvider>
     );
-    const searchId = wrapper.find('#header');
+    const searchId = wrapper.find('#default_header');
     expect(searchId.length).toBe(1);
   });
 

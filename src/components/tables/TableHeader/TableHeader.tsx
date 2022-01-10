@@ -12,7 +12,7 @@ import {
   StyledMenuButton,
   StyledRow,
 } from './TableHeader.styles';
-import { useOrgSid } from "src/hooks/useOrgSid";
+import { useOrgSid } from 'src/hooks/useOrgSid';
 
 const TableHeader = ({ id, header, sortLabel, onSort, onOption, date, ...props }) => {
   const { orgSid } = useOrgSid();

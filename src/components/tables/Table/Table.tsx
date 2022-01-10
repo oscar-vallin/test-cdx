@@ -15,7 +15,7 @@ import {
   IColumn,
 } from 'office-ui-fabric-react/lib-commonjs/DetailsList';
 import { EmptyState } from 'src/containers/states';
-import { getDates } from '../../../helpers/tableHelpers.service';
+import { getDates } from 'src/helpers/tableHelpers.service';
 
 import {
   StyledText,
@@ -31,7 +31,7 @@ import {
 } from './Table.styles';
 
 import { TableHeader } from '../TableHeader';
-import { useOrgSid } from '../../../hooks/useOrgSid';
+import { useOrgSid } from 'src/hooks/useOrgSid';
 
 const _buildColumns = (
   items,
@@ -140,6 +140,7 @@ type TableProps = {
 } & typeof defaultProps;
 
 const Table = ({
+  id,
   items,
   columns,
   structure,
@@ -509,7 +510,7 @@ const Table = ({
 
     return (
       <TableHeader
-        id="header"
+        id={`${id}_header`}
         header={structure.header}
         sortLabel={sortLabel}
         onSort={_onSort}
@@ -558,7 +559,7 @@ const Table = ({
     return (
       <StyledEmptyTable>
         <TableHeader
-          id="header"
+          id={`${id}_header`}
           header={{
             type: structure.header.type,
             title: structure.header.title,

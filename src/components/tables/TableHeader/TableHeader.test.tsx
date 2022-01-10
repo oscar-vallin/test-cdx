@@ -20,6 +20,13 @@ const theme = {
   colors: 'black',
 };
 
+jest.mock('src/hooks/useOrgSid', () => ({
+  useOrgSid: () => ({
+    orgSid: 1,
+    setOrgSid: jest.fn()
+  })
+}));
+
 test('Matches Snapshot', () => {
   const wrapper = shallow(<Component {...defaultProps} />);
 
