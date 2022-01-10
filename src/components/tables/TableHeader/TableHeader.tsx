@@ -1,22 +1,24 @@
 import PropTypes from 'prop-types';
-import { DetailsHeader } from 'office-ui-fabric-react/lib-commonjs/DetailsList';
+import { DetailsHeader, DetailsListLayoutMode } from 'office-ui-fabric-react/lib-commonjs/DetailsList';
 import { useHistory } from 'react-router-dom';
 import { format } from 'date-fns';
-import { getDates } from '../../../helpers/tableHelpers.service';
+import { getDates } from 'src/helpers/tableHelpers.service';
 
 import {
   HeaderTable,
   StyledColumn,
-  StyledRow,
-  StyledMenuButton,
-  StyledLink,
   StyledColumnTitle,
+  StyledLink,
+  StyledMenuButton,
+  StyledRow,
 } from './TableHeader.styles';
+import { useOrgSid } from "src/hooks/useOrgSid";
 
-const TableHeader = ({ id, header = {}, sortLabel, onSort, onOption, date, ...props }) => {
+const TableHeader = ({ id, header, sortLabel, onSort, onOption, date, ...props }) => {
+  const { orgSid } = useOrgSid();
   const history = useHistory();
   if ((!header || !header.type || header.type === 'default') && props) {
-    return <DetailsHeader {...props} ariaLabelForToggleAllGroupsButton="Toggle selection" />;
+    return <DetailsHeader layoutMode={DetailsListLayoutMode.justified} {...props} ariaLabelForToggleAllGroupsButton="Toggle selection" />;
   }
 
   const formatDatesURL = 'yyyy-MM-dd';
@@ -26,9 +28,9 @@ const TableHeader = ({ id, header = {}, sortLabel, onSort, onOption, date, ...pr
   if (header.type === 'dashboard') {
     return (
       <HeaderTable id={`${id}-HeaderTable_dashboard`}>
-        <StyledColumnTitle left center paddingLeft={12} sm={6}>
+        <StyledColumnTitle center paddingLeft={true} sm={6}>
           <StyledLink
-            onClick={() => history.push(`/transmissions?startDate=${startFormatted}&endDate=${endFormatted}`)}
+            onClick={() => history.push(`/transmissions?startDate=${startFormatted}&endDate=${endFormatted}&orgSid=${orgSid}`)}
           >
             {header.title}
           </StyledLink>
@@ -42,6 +44,7 @@ const TableHeader = ({ id, header = {}, sortLabel, onSort, onOption, date, ...pr
                   icon="sort"
                   onClick={() => {
                     onSort();
+                    return null;
                   }}
                 >
                   {sortLabel}
@@ -53,6 +56,7 @@ const TableHeader = ({ id, header = {}, sortLabel, onSort, onOption, date, ...pr
                   icon="eye"
                   onClick={() => {
                     onOption();
+                    return null;
                   }}
                 >
                   {header.buttons[1]}
