@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import { renderWithTheme } from 'src/utils/testUtils';
 import { FormLabel, UIFormLabel } from './FormLabel';
-import { UiField } from "../../../data/services/graphql";
+import { UiField } from "src/data/services/graphql";
 
 const defaultProps = { label: 'Label Text' };
 
@@ -55,7 +55,7 @@ describe('Label Testing...', () => {
       errMsg: 'You need to be more positive'
     }
     const wrapper = shallow(
-      <UIFormLabel uiField={field}/>
+      <UIFormLabel id="foo" uiField={field}/>
     )
     expect(wrapper.find('FormLabel')).toHaveLength(1);
     expect(wrapper.find('FormLabel').get(0).props.label).toEqual('Disposition');

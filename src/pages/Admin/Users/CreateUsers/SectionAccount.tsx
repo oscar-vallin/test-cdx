@@ -40,26 +40,26 @@ const SectionAccount = ({ form, onNext, saveOptions }: SectionAccountProps) => {
         <FormRow>
           {form.person?.firstNm?.visible && (
             <Column lg={form.person?.lastNm?.visible ? '6' : '12'}>
-              <UIInputText uiStringField={form.person?.firstNm} {...formFirstName} />
+              <UIInputText id="__userFirstNm" uiStringField={form.person?.firstNm} {...formFirstName} />
             </Column>
           )}
           {form.person?.lastNm?.visible && (
             <Column lg={form.person?.firstNm?.visible ? '6' : '12'}>
-              <UIInputText uiStringField={form.person?.lastNm} {...formLastName} />
+              <UIInputText id="__userLastNm" uiStringField={form.person?.lastNm} {...formLastName} />
             </Column>
           )}
         </FormRow>
         <FormRow>
           {form.email?.visible && (
             <Column lg="12">
-              <UIInputText uiStringField={form.email ?? undefined} {...formEmail} />
+              <UIInputText id="__userEmail" uiStringField={form.email ?? undefined} {...formEmail} />
             </Column>
           )}
         </FormRow>
 
         <FormRow>
           <Column lg="12">
-            <UIInputTextReadOnly uiField={form.organization} />
+            <UIInputTextReadOnly id="__userOrg" uiField={form.organization} />
           </Column>
         </FormRow>
       </WizardBody>

@@ -30,22 +30,46 @@ export default class PuppetBasePage {
     expect(actualText).toContain(expectedText);
   }
 
+  async expectFormFieldValue(selector: string, expectedText: string) {
+    const { page } = this;
+    await this.waitForSelector(selector).catch(() => {
+      throw Error(`Did not find input element ${selector} within the time limit`);
+    });
+    const actualText = await page.$eval(selector, (e) => e['value']);
+
+    expect(actualText).toEqual(expectedText);
+  }
+
+  async expectFieldRequired(selector: string) {
+    await this.waitForSelector(`${selector}_lbl-Required-Text`).catch(() => {
+      console.log(`Field ${selector} was not flagged as required`);
+    });
+  }
+
+  async expectFieldError(selector: string) {
+    await this.waitForSelector(`${selector}_lbl-Error-Icon`).catch(() => {
+      console.log(`Field ${selector} was not flagged with an error`);
+    });
+  }
+
+
   async expectElementNotRendered(selector: string) {
     const { page } = this;
     return page
-      .waitForSelector(selector, { timeout: 5000 })
-      .then(() => {
-        throw Error(`Element ${selector} was rendered when it was expected not to`);
-      })
+      .waitForSelector(selector, { hidden: true, timeout: 5000 })
       .catch(() => {
         // This is good
-        console.log('element was correctly not found');
+        console.error(`Element ${selector} was rendered when it was expected not to`);
       });
   }
 
   async waitForSelector(selector: string): Promise<ElementHandle | null> {
-    return await this.page.waitForSelector(selector).catch(() => {
-      throw Error(`Did not find element ${selector} within the time limit`);
+    return await this.page.waitForSelector(selector, {
+      visible: true,
+      hidden: false
+    }).catch(() => {
+      console.error(`Did not find element ${selector} within the time limit`)
+      return null;
     });
   }
 
@@ -84,7 +108,7 @@ export default class PuppetBasePage {
   }
 
   async clearField(selector: string) {
-    await this.page.waitForSelector(selector);
+    await this.waitForSelector(selector);
     const inputValue = await this.page.$eval(selector, (el) => (<HTMLInputElement>el).value);
     await this.page.focus(selector);
     for (let i = 0; i < inputValue.length; i++) {
@@ -93,7 +117,7 @@ export default class PuppetBasePage {
   }
 
   async inputBackspace(selector: string, counter: number) {
-    await this.page.waitForSelector(selector);
+    await this.waitForSelector(selector);
 
     await this.page.focus(selector);
     for (let i = 0; i < counter; i++) {
@@ -104,6 +128,31 @@ export default class PuppetBasePage {
   async expectInput(selector: string, value: string, expectFunction: Function) {
     await this.inputValue(selector, value);
     await expectFunction();
+  }
+
+  async click(selector: string) {
+    await this.waitForSelector(selector);
+    await this.page.click(selector);
+  }
+
+  async isChecked(selector: string): Promise<boolean> {
+    await this.waitForSelector(selector);
+    const checked = await this.page.$eval(selector, (el) => (<HTMLInputElement>el).checked);
+    return checked ?? false;
+  }
+
+  async checkBox(selector: string) {
+    const checked = await this.isChecked(selector);
+    if (!checked) {
+      await this.click(selector);
+    }
+  }
+
+  async uncheckBox(selector: string) {
+    const checked = await this.isChecked(selector);
+    if (checked) {
+      await this.click(selector);
+    }
   }
 
   async clickOnCreateGroup() {

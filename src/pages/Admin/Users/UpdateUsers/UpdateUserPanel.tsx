@@ -86,7 +86,6 @@ const UpdateUserPanel = ({ useUpdateUserPanel,
   };
 
   const onFormChange = () => {
-    console.log('form changed');
     setUnsavedChanges(true);
   }
 

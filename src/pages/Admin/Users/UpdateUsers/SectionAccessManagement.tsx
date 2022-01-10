@@ -61,7 +61,7 @@ const SectionAccessManagement = ({ form, onSave, onFormChange }: SectionAccessPr
       <WizardBody>
         <FormRow>
           <Column lg="12">
-            <UIFormLabel uiField={form?.accessPolicyGroups ?? undefined} />
+            <UIFormLabel  id='__Access_Group_List' uiField={form?.accessPolicyGroups ?? undefined} />
             <CheckboxList
               id="__Access_Groups_List"
               items={groupOptions}

@@ -49,7 +49,7 @@ const SectionAuthentication = ({ form, onPrev, onNext, saveOptions }: SectionAut
       <WizardBody>
         <StyledOptionRow bottom>
           <Column lg="12">
-            <Checkbox label={form?.sendActivationEmail?.label} checked={sendEmail} onChange={onCheck} />
+            <Checkbox id="__userSendActivation" label={form?.sendActivationEmail?.label} checked={sendEmail} onChange={onCheck} />
           </Column>
         </StyledOptionRow>
       </WizardBody>

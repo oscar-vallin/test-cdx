@@ -38,7 +38,8 @@ const SectionAccount = ({ form, onSave, onFormChange }: SectionAccountProps) => 
         <FormRow>
           {form.person?.firstNm?.visible && (
             <Column lg={form.person?.lastNm?.visible ? '6' : '12'}>
-              <UIInputText uiStringField={form.person?.firstNm}
+              <UIInputText id="__userFirstNm"
+                           uiStringField={form.person?.firstNm}
                            value={formFirstName.value}
                            onChange={(e) => {
                              onFormChange();
@@ -49,7 +50,8 @@ const SectionAccount = ({ form, onSave, onFormChange }: SectionAccountProps) => 
           )}
           {form.person?.lastNm?.visible && (
             <Column lg={form.person?.firstNm?.visible ? '6' : '12'}>
-              <UIInputText uiStringField={form.person?.lastNm}
+              <UIInputText id="__userLastNm"
+                           uiStringField={form.person?.lastNm}
                            value={formLastName.value}
                            onChange={(e) => {
                              onFormChange();
@@ -61,7 +63,8 @@ const SectionAccount = ({ form, onSave, onFormChange }: SectionAccountProps) => 
         <FormRow>
           {form.email?.visible && (
             <Column lg="12">
-              <UIInputText uiStringField={form.email ?? undefined}
+              <UIInputText id="__userEmail"
+                           uiStringField={form.email ?? undefined}
                            value={formEmail.value}
                            onChange={(e) => {
                              onFormChange();
@@ -73,13 +76,13 @@ const SectionAccount = ({ form, onSave, onFormChange }: SectionAccountProps) => 
         </FormRow>
         <FormRow>
           <Column lg="12">
-            <UIInputTextReadOnly uiField={form.organization} />
+            <UIInputTextReadOnly id="__userOrg" uiField={form.organization} />
           </Column>
         </FormRow>
         {form.lastLogin ?
           <FormRow>
             <Column lg="12">
-              <UIInputTextReadOnly uiField={form.lastLogin } />
+              <UIInputTextReadOnly id="__userLastLogin" uiField={form.lastLogin } />
             </Column>
           </FormRow> : ''
         }

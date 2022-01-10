@@ -44,7 +44,7 @@ const InputText = ({
     return null;
   };
 
-  const onRenderLabel = () => <FormLabel required={required} info={info} errorMessage={errorMessage} {...props} />;
+  const onRenderLabel = () => <FormLabel id={`${id}_lbl`} required={required} info={info} errorMessage={errorMessage} {...props} />;
 
   return (
     <StyledTextField
@@ -63,10 +63,11 @@ const InputText = ({
 };
 
 type UIReadOnlyType = {
+  id: string;
   uiField: UiField;
 };
 
-const UIInputTextReadOnly = ({ uiField }: UIReadOnlyType) => {
+const UIInputTextReadOnly = ({id, uiField }: UIReadOnlyType) => {
   const getValue = () => {
     let text = '';
     if (uiField.hasOwnProperty('description')) {
@@ -82,24 +83,26 @@ const UIInputTextReadOnly = ({ uiField }: UIReadOnlyType) => {
 
   return (
     <>
-      <UIFormLabel uiField={uiField} />
-      <FieldValue>{getValue()}</FieldValue>
+      <UIFormLabel id={`${id}_lbl`} uiField={uiField} />
+      <FieldValue id={id}>{getValue()}</FieldValue>
     </>
   );
 };
 
 type UIInputTextType = {
+  id: string;
   uiStringField?: UiStringField;
   onChange?: (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => void | null;
   value?: string;
 };
 
-const UIInputText = ({ uiStringField, onChange, value }: UIInputTextType) => {
+const UIInputText = ({ id, uiStringField, onChange, value }: UIInputTextType) => {
   if (uiStringField?.readOnly == true) {
-    return <UIInputTextReadOnly uiField={uiStringField} />;
+    return <UIInputTextReadOnly id={id} uiField={uiStringField} />;
   }
   return (
     <InputText
+      id={id}
       type="text"
       value={value}
       disabled={uiStringField?.readOnly ?? false}

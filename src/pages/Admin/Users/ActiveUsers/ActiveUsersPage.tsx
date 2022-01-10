@@ -94,7 +94,7 @@ const _ActiveUsersPage = () => {
     return (
       <>
         <Link
-          id={`__ActiveUsersPage__Email_Field_${(itemIndex ?? 0) + 1}`}
+          id={`__ActiveUsersPage__${column?.key}_${(itemIndex ?? 0) + 1}`}
           onClick={() => {
             if (node) {
               updateUserPanel.showPanel(node?.item?.sid);

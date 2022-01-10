@@ -74,40 +74,40 @@ const SectionSummary = ({ form, onPrev, onSubmit, isProcessing }: SectionSummary
         <FormRow>
           {form.person?.firstNm?.visible && (
             <Column lg={form.person?.lastNm?.visible ? '6' : '12'}>
-              <UIInputTextReadOnly uiField={form.person?.firstNm} />
+              <UIInputTextReadOnly id="__userFirstNm_summary" uiField={form.person?.firstNm} />
             </Column>
           )}
           {form.person?.lastNm?.visible && (
             <Column lg={form.person?.firstNm?.visible ? '6' : '12'}>
-              <UIInputTextReadOnly uiField={form.person?.lastNm} />
+              <UIInputTextReadOnly id="__userLastNm_summary" uiField={form.person?.lastNm} />
             </Column>
           )}
         </FormRow>
         <FormRow>
           {form.email?.visible && (
             <Column lg="12">
-              <UIInputTextReadOnly uiField={form.email} />
+              <UIInputTextReadOnly id="__userEmail_summary" uiField={form.email} />
             </Column>
           )}
         </FormRow>
 
         <FormRow>
           <Column lg="12">
-            <UIInputTextReadOnly uiField={form.organization} />
+            <UIInputTextReadOnly id="__userOrg_summary" uiField={form.organization} />
           </Column>
         </FormRow>
 
         <FormRow>
           <Column lg="12">
             <FormLabel label="Access Granted To" />
-            <FieldValue>{renderSelectedGroups()}</FieldValue>
+            <FieldValue id="__accessGroupsList_summary">{renderSelectedGroups()}</FieldValue>
           </Column>
         </FormRow>
 
         {form.sendActivationEmail?.value == true && (
           <FormRow>
             <Column lg="12">
-              <UIFormLabel uiField={form.sendActivationEmail} />
+              <UIFormLabel id='__sendActivation_summary' uiField={form.sendActivationEmail} />
               <FieldValue>
                 <FontIcon iconName="CheckMark" />
               </FieldValue>

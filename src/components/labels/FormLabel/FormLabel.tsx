@@ -2,7 +2,7 @@ import { FontIcon } from '@fluentui/react/lib-commonjs/Icon';
 import { TooltipHost } from '@fluentui/react/lib-commonjs/Tooltip';
 import { ReactElement } from 'react';
 import { LabelRow, Label, Required, ErrorIcon } from './FormLabel.styles';
-import { UiField } from '../../../data/services/graphql';
+import { UiField } from 'src/data/services/graphql';
 
 const defaultProps = {
   required: false,
@@ -43,12 +43,14 @@ const FormLabel = ({ id, label, required, info, errorMessage, arial, ...props }:
 FormLabel.defaultProps = defaultProps;
 
 type UIFormLabelType = {
+  id: string;
   uiField?: UiField;
 };
 
-const UIFormLabel = ({ uiField }: UIFormLabelType) => {
+const UIFormLabel = ({id, uiField }: UIFormLabelType) => {
   return (
     <FormLabel
+      id={`${id}`}
       label={uiField?.label ?? ''}
       required={uiField?.required ?? false}
       info={uiField?.info ?? undefined}

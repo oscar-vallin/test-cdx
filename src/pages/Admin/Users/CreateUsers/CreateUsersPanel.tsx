@@ -108,16 +108,6 @@ const CreateUsersPanel = ({
         {userAccountLoading && <Text>Loading...</Text>}
         {!userAccountLoading && (
           <>
-            {/* {selectedUserId > 0 ?? ( */}
-            {/*  <Link */}
-            {/*    id="__CreateUsersPanel__ResetPassword_Field" */}
-            {/*    onClick={() => { */}
-            {/*      handleResetPassword(); */}
-            {/*    }} */}
-            {/*  > */}
-            {/*    Reset Password */}
-            {/*  </Link> */}
-            {/* )} */}
             <Tabs
               items={[
                 {

@@ -122,6 +122,7 @@ const CreateGroupPanel = ({
               </Row>
               <FormRow>
                 <UIInputText
+                  id="__policyDescription"
                   uiStringField={accessPolicyForm.description}
                   value={accessPolicyForm.description?.value ?? ''}
                   onChange={(event, newValue) => addToAccessPolicyForm({ description: newValue })}

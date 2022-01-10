@@ -2,10 +2,9 @@ import React  from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import toJSON from 'enzyme-to-json';
 import { shallow } from 'enzyme';
-//
 import { InputText, UIInputText } from './index';
 import { mountWithTheme } from 'src/utils/testUtils';
-import { UiStringField } from "../../../data/services/graphql";
+import { UiStringField } from "src/data/services/graphql";
 import { UIInputTextReadOnly } from "./InputText";
 
 const placeholderText = 'This is a placeholder';
@@ -140,7 +139,7 @@ describe('Basic Input Component', () => {
   
   it('UIInput Text Rendering', () => {
     const wrapper = shallow(
-      <UIInputText uiStringField={nickName} value='Jimbo'/>
+      <UIInputText id="nickname" uiStringField={nickName} value='Jimbo'/>
     )
 
     expect(wrapper.find('InputText')).toHaveLength(1);
@@ -161,7 +160,7 @@ describe('Basic Input Component', () => {
     };
 
     const wrapper = mountWithTheme(
-      <UIInputText uiStringField={nickName} value='RZA' onChange={onChange}/>
+      <UIInputText id="foo" uiStringField={nickName} value='RZA' onChange={onChange}/>
     )
 
     expect(wrapper.find('input')).toHaveLength(1);
@@ -178,7 +177,7 @@ describe('Basic Input Component', () => {
     };
 
     const wrapper = shallow(
-      <UIInputTextReadOnly uiField={roNickName}/>
+      <UIInputTextReadOnly id="foo" uiField={roNickName}/>
     )
 
     expect(wrapper.find('UIFormLabel')).toHaveLength(1);
@@ -195,7 +194,7 @@ describe('Basic Input Component', () => {
     };
 
     const wrapper = shallow(
-      <UIInputText uiStringField={roNickName} value='Jimbo'/>
+      <UIInputText id="foo" uiStringField={roNickName} value='Jimbo'/>
     )
 
     expect(wrapper.find('InputText')).toHaveLength(0);
