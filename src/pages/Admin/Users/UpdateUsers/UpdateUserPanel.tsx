@@ -11,6 +11,7 @@ import SectionAccessManagement from './SectionAccessManagement';
 import { GqOperationResponse, UserAccount, UserAccountForm } from 'src/data/services/graphql';
 import { Column } from 'src/components/layouts';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
+import { ActiveIcon, InactiveIcon } from './UpdateUserPanel.styles';
 
 const defaultProps = {
   isOpen: false,
@@ -113,14 +114,27 @@ const UpdateUserPanel = ({ useUpdateUserPanel,
 
   const handleResetPassword = async () => {
     const responseReset = await useUpdateUserPanel.callResetPassword();
-    //
     if (responseReset?.resetPassword) {
       if (responseReset?.resetPassword === GqOperationResponse.Success) {
         setMessageType(MessageBarType.success);
         setMessage('Password Reset link has been sent');
       } else {
         setMessageType(MessageBarType.error);
-        setMessage('An error occurred resetting this user\'s password.  Please contact your administrator');
+        setMessage('An error occurred resetting this user\'s password.  Please contact your administrator.');
+      }
+    }
+  };
+
+  const handleInactivateUser = async () => {
+    const responseReset = await useUpdateUserPanel.callInactivateUser();
+    if (responseReset?.deactivateUser) {
+      if (responseReset?.deactivateUser === GqOperationResponse.Success) {
+        onUpdateUser();
+        setMessageType(MessageBarType.success);
+        setMessage('User has been inactivated');
+      } else {
+        setMessageType(MessageBarType.error);
+        setMessage('An error occurred inactivating this user.  Please contact your administrator.');
       }
     }
   };
@@ -150,6 +164,21 @@ const UpdateUserPanel = ({ useUpdateUserPanel,
     updatedDialog.message = 'You are about to send a password reset link to this user\'s email? Are you sure you want to continue?';
     updatedDialog.onYes = () => {
       handleResetPassword().then();
+      hideDialog();
+    };
+    updatedDialog.onClose = () => {
+      hideDialog();
+    };
+    setDialogProps(updatedDialog);
+    setShowDialog(true);
+  };
+
+  const showInactivateUserDialog = () => {
+    const updatedDialog = Object.assign({}, defaultDialogProps);
+    updatedDialog.title = 'Inactivate User?';
+    updatedDialog.message = 'You are about to inactivate this user which will prevent this user from logging in. Are you sure you want to continue?';
+    updatedDialog.onYes = () => {
+      handleInactivateUser().then();
       hideDialog();
     };
     updatedDialog.onClose = () => {
@@ -192,7 +221,14 @@ const UpdateUserPanel = ({ useUpdateUserPanel,
       <PanelHeader>
         <Column lg='6'>
           <Stack horizontal styles={ {root: {height: 44} }}>
-            <PanelTitle id='__UserUpdate_Panel_Title' variant='bold'>{userName()}</PanelTitle>
+            <PanelTitle id='__UserUpdate_Panel_Title' variant='bold'>
+              {userName()}
+              {useUpdateUserPanel.userAccountForm.active?.value ? (
+                <ActiveIcon iconName='CompletedSolid' title='Active'/>
+              ): (
+                <InactiveIcon iconName='StatusErrorFull' title='Inactive'/>
+              )}
+            </PanelTitle>
           </Stack>
         </Column>
         <Column lg='6' right={true}>
@@ -203,7 +239,8 @@ const UpdateUserPanel = ({ useUpdateUserPanel,
                            onClick={showResetPasswordDialog}/>
             <CommandButton id='__InactivateUser_Button'
                            iconProps={{iconName: 'UserRemove'}}
-                           text='Inactivate User'/>
+                           text='Inactivate User'
+                           onClick={showInactivateUserDialog}/>
           </Stack>
         </Column>
       </PanelHeader>
