@@ -5,6 +5,8 @@ export default class PuppetCreateUserPanel extends PuppetBasePage {
   private prevButton = '#__Prev_Button';
   private submitButton = '#__Submit_Button';
 
+  private messageField = '#__CreateUser_Error';
+
   private firstNameField = '#__userFirstNm';
   private lastNameField = '#__userLastNm';
   private emailField = '#__userEmail';
@@ -74,12 +76,15 @@ export default class PuppetCreateUserPanel extends PuppetBasePage {
   }
 
   async expectFirstNameEmailError() {
+    await this.expectTextOnPage(this.messageField, 'Please fill out all required* fields');
+
     await this.expectFieldError(this.firstNameField);
     await this.expectFieldError(this.emailField);
-
   }
 
   async expectSummaryFirstNameEmailError() {
+    await this.expectTextOnPage(this.messageField, 'Please fill out all required* fields');
+
     await this.expectFieldError(this.firstNameSummaryField);
     await this.expectFieldError(this.emailSummaryField);
   }
@@ -95,11 +100,13 @@ export default class PuppetCreateUserPanel extends PuppetBasePage {
     await this.expectElementNotRendered(this.lastNameField);
     await this.expectElementNotRendered(this.emailField);
     await this.expectElementNotRendered(this.orgField);
+    await this.expectElementNotRendered(this.accessGroupsListField);
 
     await this.expectElementNotRendered(this.firstNameSummaryField);
     await this.expectElementNotRendered(this.lastNameSummaryField);
     await this.expectElementNotRendered(this.emailSummaryField);
     await this.expectElementNotRendered(this.orgSummaryField);
+    await this.expectElementNotRendered(this.accessGroupsListReadOnly);
   }
 
 }

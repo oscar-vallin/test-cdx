@@ -34,9 +34,13 @@ type NotificationContextProviderProps = {
 export const NotificationContextProvider = ({ children }: NotificationContextProviderProps): ReactElement => {
   const [state, dispatch]: any = useReducer(reducer, INITIAL_STATE);
 
+  const hide = () => {
+    dispatch({ type: 'TOAST_HIDE' })
+  }
+
   useEffect(() => {
     if (state.visible) {
-      setTimeout(() => dispatch({ type: 'TOAST_HIDE' }), state.duration);
+      setTimeout(hide, state.duration);
     }
   }, [state]);
 
@@ -44,7 +48,7 @@ export const NotificationContextProvider = ({ children }: NotificationContextPro
     <NotificationContext.Provider value={{ state, dispatch }}>
       {children}
 
-      <Toast visible={state.visible} text={state.text} type={state.type} />
+      <Toast id="__Top_Message" visible={state.visible} text={state.text} type={state.type} onDismiss={hide}/>
     </NotificationContext.Provider>
   );
 };

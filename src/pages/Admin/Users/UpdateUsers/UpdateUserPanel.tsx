@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { ReactElement, useEffect, useState } from 'react';
-import { Panel, PanelType, Stack } from '@fluentui/react';
+import { MessageBar, MessageBarType, Panel, PanelType, Stack } from '@fluentui/react';
 
 import { Tabs } from 'src/components/tabs/Tabs';
 import { PanelBody, PanelHeader } from 'src/layouts/Panels/Panels.styles';
@@ -8,8 +8,7 @@ import { PanelBody, PanelHeader } from 'src/layouts/Panels/Panels.styles';
 import { UseUpdateUserPanel } from 'src/pages/Admin/Users/UpdateUsers/useUpdateUserPanel';
 import { SectionAccount } from './SectionAccount';
 import SectionAccessManagement from './SectionAccessManagement';
-import { useNotification } from "src/hooks/useNotification";
-import { GqOperationResponse, UserAccountForm, UserAccount } from "src/data/services/graphql";
+import { GqOperationResponse, UserAccount, UserAccountForm } from "src/data/services/graphql";
 import { Column, Row } from "src/components/layouts";
 import { CommandButton } from 'office-ui-fabric-react';
 import { DialogYesNo } from "src/containers/modals/DialogYesNo";
@@ -43,7 +42,8 @@ const UpdateUserPanel = ({ useUpdateUserPanel,
   const [step, setStep] = useState(Tab.Account);
   const [showDialog, setShowDialog] = useState(false);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
-  const Toast = useNotification();
+  const [messageType, setMessageType] = useState<MessageBarType>(MessageBarType.info);
+  const [message, setMessage] = useState<string | undefined>();
 
   const handleTabChange = (hash): void => {
     setStep(tabs.indexOf(hash));
@@ -57,12 +57,14 @@ const UpdateUserPanel = ({ useUpdateUserPanel,
 
       if (responseCode === GqOperationResponse.Fail || responseCode === GqOperationResponse.PartialSuccess) {
         const errorMsg = responseCreate?.updateUser?.errMsg ?? responseCreate?.updateUser?.response ?? 'Error Updating User';
-        Toast.error({text: errorMsg});
+        setMessageType(MessageBarType.error);
+        setMessage(errorMsg);
       }
 
       if (responseCode === GqOperationResponse.Success || responseCode === GqOperationResponse.PartialSuccess) {
         onUpdateUser(responseCreate.updateUser);
-        Toast.info({text: 'User Profile Saved'});
+        setMessageType(MessageBarType.success);
+        setMessage('User Profile Saved');
       }
     }
   };
@@ -75,12 +77,14 @@ const UpdateUserPanel = ({ useUpdateUserPanel,
         const errorMsg = response?.updateUserAccessPolicyGroups?.errMsg ??
           response?.updateUserAccessPolicyGroups?.response ??
           'Error Updating Assigned Access Policy Groups';
-        Toast.error({text: errorMsg});
+        setMessageType(MessageBarType.error);
+        setMessage(errorMsg);
       }
 
       if (responseCode === GqOperationResponse.Success || responseCode === GqOperationResponse.PartialSuccess) {
         onUpdateUser(response.updateUserAccessPolicyGroups);
-        Toast.info({text: 'User Profile Saved'});
+        setMessageType(MessageBarType.success);
+        setMessage('User Profile Saved');
       }
     }
   };
@@ -118,6 +122,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel,
 
   const doClosePanel = () => {
     setUnsavedChanges(false);
+    setMessage(undefined);
     // Set it back to the first tab
     setStep(Tab.Account);
     // Reset the form
@@ -162,6 +167,12 @@ const UpdateUserPanel = ({ useUpdateUserPanel,
         onDismiss={onPanelClose}
       >
         <PanelBody>
+          {message && (
+            <MessageBar id="__UpdateUser_Msg"
+                        messageBarType={messageType}
+                        isMultiline={true}
+                        onDismiss={() => setMessage(undefined)}>{message}</MessageBar>
+          )}
           <Tabs
             items={[
               {

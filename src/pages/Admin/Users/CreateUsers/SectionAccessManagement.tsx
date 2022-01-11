@@ -53,6 +53,11 @@ const SectionAccessManagement = ({ form, onPrev, onNext, saveOptions }: SectionA
     }
   }, [form]);
 
+  const onChange = (selectedSids: string[]) => {
+    setSelectedSids(selectedSids);
+    saveOptions(selectedSids);
+  }
+
   const handleSave = () => {
     saveOptions(selectedSids);
   };
@@ -80,7 +85,7 @@ const SectionAccessManagement = ({ form, onPrev, onNext, saveOptions }: SectionA
               id='__Access_Groups_List'
               items={groupOptions}
               value={selectedSids}
-              onChange={setSelectedSids}
+              onChange={onChange}
             />
           </Column>
         </FormRow>

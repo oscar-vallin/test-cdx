@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { ReactElement, useEffect, useState } from 'react';
-import { Panel, PanelType } from '@fluentui/react';
+import { MessageBar, MessageBarType, Panel, PanelType } from '@fluentui/react';
 
 import { Tabs } from 'src/components/tabs/Tabs';
 import { Text } from 'src/components/typography';
 import { PanelBody } from 'src/layouts/Panels/Panels.styles';
 
-import { useCreateUsersPanel} from './CreateUsersPanel.service';
+import { useCreateUsersPanel } from './CreateUsersPanel.service';
 import { SectionAccount } from './SectionAccount';
 import SectionAccessManagement from './SectionAccessManagement';
 import SectionAuthentication from './SectionAuthentication';
@@ -46,6 +46,7 @@ const CreateUsersPanel = ({
   const [step, setStep] = useState(Tab.Account);
   const { userAccountLoading } = createUserService ?? {};
   const [isProcessing, setProcessing] = useState<boolean>(false);
+  const [errorMsg, setErrorMsg] = useState<string | undefined>();
   const Toast = useNotification();
 
   const handleCreateUser = async () => {
@@ -56,9 +57,19 @@ const CreateUsersPanel = ({
     if (responseCreate?.createUser) {
       const responseCode = responseCreate?.createUser?.response
 
-      if (responseCode === GqOperationResponse.Fail || responseCode === GqOperationResponse.PartialSuccess) {
+      if (responseCode === GqOperationResponse.Fail) {
         const errorMsg = responseCreate?.createUser?.errMsg ?? responseCreate?.createUser?.response ?? 'Error Creating User';
-        Toast.error({text: errorMsg });
+        setErrorMsg(errorMsg);
+      } else {
+        setErrorMsg(undefined);
+      }
+
+      if (responseCode === GqOperationResponse.Success) {
+        Toast.success({text: 'User Account Successfully Created'});
+      }
+      if (responseCode === GqOperationResponse.PartialSuccess) {
+        const errorMsg = responseCreate?.createUser?.errMsg ?? responseCreate?.createUser?.response ?? 'Error Creating User';
+        Toast.warning({text: errorMsg });
       }
 
       if (responseCode === GqOperationResponse.Success || responseCode === GqOperationResponse.PartialSuccess) {
@@ -89,6 +100,7 @@ const CreateUsersPanel = ({
   }, [createUserService.isUserCreated]);
 
   const onPanelClose = () => {
+    setErrorMsg(undefined);
     // Reset the form
     createUserService.resetForm();
     // Set it back to the first tab
@@ -105,6 +117,12 @@ const CreateUsersPanel = ({
       onDismiss={onPanelClose}
     >
       <PanelBody>
+        {errorMsg && (
+          <MessageBar id="__CreateUser_Error"
+                      messageBarType={MessageBarType.error}
+                      isMultiline={true}
+                      onDismiss={() => setErrorMsg(undefined)}>{errorMsg}</MessageBar>
+        )}
         {userAccountLoading && <Text>Loading...</Text>}
         {!userAccountLoading && (
           <>

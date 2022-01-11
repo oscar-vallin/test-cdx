@@ -1,5 +1,6 @@
 import PuppetBasePage from './PuppetBasePage';
 import PuppetCreateUserPanel from "src/teste2e/pages/PuppetCreateUserPanel";
+import PuppetUpdateUserPanel from "src/teste2e/pages/PuppetUpdateUserPanel";
 
 export default class PuppetActiveUsers extends PuppetBasePage {
   pageTitle = '#__Page_Title-Text';
@@ -10,11 +11,16 @@ export default class PuppetActiveUsers extends PuppetBasePage {
     await this.expectTextOnPage(this.pageTitle, 'Active Users');
   }
 
-  // async clickOnUser(orgId: string, orgName: string) {
-  //   const selector = `a.${orgId}`;
-  //   await this.expectTextOnPage(selector, orgName);
-  //   await this.page.click(selector);
-  // }
+  async clickOnUser(email: string): Promise<PuppetUpdateUserPanel> {
+    await this.waitForSelector('.ms-DetailsRow-fields');
+    const [button] = await this.page.$x(`//button[contains(., '${email}')]`);
+    if (button) {
+      await button.click();
+      return new PuppetUpdateUserPanel(this.page);
+    }
+
+    throw Error(`Did not find "${email} on the Active Users Page`);
+  }
 
   async createUser(): Promise<PuppetCreateUserPanel> {
     await this.click(this.createUserButton);

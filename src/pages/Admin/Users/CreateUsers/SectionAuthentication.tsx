@@ -41,7 +41,9 @@ const SectionAuthentication = ({ form, onPrev, onNext, saveOptions }: SectionAut
   };
 
   const onCheck = () => {
-    setSendEmail(!sendEmail);
+    const toggle = !sendEmail;
+    setSendEmail(toggle);
+    saveOptions(toggle);
   };
 
   return (

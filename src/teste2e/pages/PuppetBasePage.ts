@@ -3,6 +3,9 @@ import * as process from 'process';
 
 // Base page for all puppeteer test pages
 export default class PuppetBasePage {
+
+  topMessageBar = '#__Top_Message';
+
   url: string;
 
   browser: any;
@@ -96,6 +99,14 @@ export default class PuppetBasePage {
     });
 
     expect(result).toEqual(numRecords);
+  }
+
+  async expectToasterPopup(message: string) {
+    await this.page.waitForTimeout(1000);
+    await this.expectTextOnPage(this.topMessageBar, message);
+    // // wait for this to go away
+    // await this.page.waitForTimeout(2000);
+    // await this.expectElementNotRendered(this.messageBar);
   }
 
   async waitForTimeout(miliseconds: number) {

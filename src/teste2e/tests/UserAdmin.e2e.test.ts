@@ -25,6 +25,16 @@ describe('User Administration Testing', () => {
     await menu.openMenu('Users', 'Active Users');
   });
 
+  it ('Test User Details', async () => {
+    const page = new PuppetActiveUsers(cdxApp.page);
+    await page.expectOnPage();
+
+    const panel = await page.clickOnUser('joe.admin@example.com');
+    await panel.expectPanelShows('Joe', 'Admin', 'joe.admin@example.com');
+
+    await panel.closePanel();
+  });
+
   it('Test Required Fields', async () => {
     const page = new PuppetActiveUsers(cdxApp.page);
     await page.expectOnPage();
@@ -45,8 +55,6 @@ describe('User Administration Testing', () => {
     await panel.prev();
 
     await panel.expectFirstNameEmailError();
-
-    // assert the error message
 
     await panel.closePanel();
   });
@@ -69,6 +77,7 @@ describe('User Administration Testing', () => {
 
     await panel.expectSummary(firstName, lastName, email, 'Cloud Data eXchange', 'Auditor');
     await panel.submit();
+    await page.expectToasterPopup('User Account Successfully Created');
 
     // Panel should hide
     await panel.expectHidden();
@@ -87,6 +96,25 @@ describe('User Administration Testing', () => {
     const panel = await page.createUser();
 
     await panel.closePanel();
+  });
+
+  it('Update the newly created user', async () => {
+    const page = new PuppetActiveUsers(cdxApp.page);
+    await page.expectOnPage();
+
+    const panel = await page.clickOnUser(email);
+    await panel.expectPanelShows(firstName, lastName, email);
+
+    await panel.setFirstName(`${firstName}_U`);
+    await panel.save();
+    await panel.expectMessage('User Profile Saved');
+
+    await panel.closePanel();
+
+    // Make sure page refreshed and the change took effect.
+    await page.waitForTimeout(1000);
+    await page.waitForSelector('.ms-DetailsRow-cell');
+    await page.expectUser(`${firstName}_U`, lastName, email);
   });
 
   it('Logout', async () => {

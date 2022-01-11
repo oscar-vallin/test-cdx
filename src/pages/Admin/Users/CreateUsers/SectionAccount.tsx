@@ -7,6 +7,7 @@ import CreateUsersFooter from './CreateUsersFooter';
 import { UserAccount, UserAccountForm } from 'src/data/services/graphql';
 import { UIInputTextReadOnly } from 'src/components/inputs/InputText/InputText';
 import { WizardBody } from "src/layouts/Panels/Panels.styles";
+import { useEffect } from "react";
 
 type SectionAccountProps = {
   form: UserAccountForm;
@@ -20,6 +21,10 @@ const SectionAccount = ({ form, onNext, saveOptions }: SectionAccountProps) => {
   const formEmail = useFormInputValue(form.email?.value ?? '');
 
   const handleNext = () => {
+    return onNext();
+  };
+
+  const saveFields = () => {
     const user: UserAccount = {
       sid: '',
       email: formEmail.value,
@@ -30,9 +35,11 @@ const SectionAccount = ({ form, onNext, saveOptions }: SectionAccountProps) => {
       },
     };
     saveOptions(user);
+  }
 
-    return onNext();
-  };
+  useEffect(() => {
+    saveFields();
+  }, [formFirstName.value, formLastName.value, formEmail.value]);
 
   return (
     <>
