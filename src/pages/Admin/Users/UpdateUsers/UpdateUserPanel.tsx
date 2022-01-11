@@ -3,13 +3,13 @@ import React, { ReactElement, useEffect, useState } from 'react';
 import { MessageBar, MessageBarType, Panel, PanelType, Stack } from '@fluentui/react';
 
 import { Tabs } from 'src/components/tabs/Tabs';
-import { PanelBody, PanelHeader } from 'src/layouts/Panels/Panels.styles';
+import { PanelBody, PanelTitle, PanelHeader } from 'src/layouts/Panels/Panels.styles';
 
 import { UseUpdateUserPanel } from 'src/pages/Admin/Users/UpdateUsers/useUpdateUserPanel';
 import { SectionAccount } from './SectionAccount';
 import SectionAccessManagement from './SectionAccessManagement';
 import { GqOperationResponse, UserAccount, UserAccountForm } from "src/data/services/graphql";
-import { Column, Row } from "src/components/layouts";
+import { Column } from "src/components/layouts";
 import { CommandButton } from 'office-ui-fabric-react';
 import { DialogYesNo } from "src/containers/modals/DialogYesNo";
 
@@ -142,18 +142,23 @@ const UpdateUserPanel = ({ useUpdateUserPanel,
   };
 
   const renderPanelHeader = () => (
-      <Row>
+      <PanelHeader>
         <Column lg="6">
           <Stack horizontal styles={ {root: {height: 44} }}>
-            <PanelHeader id="__UserUpdate_Panel_Title" variant="bold">{userName()}</PanelHeader>
+            <PanelTitle id="__UserUpdate_Panel_Title" variant="bold">{userName()}</PanelTitle>
           </Stack>
         </Column>
-        <Column lg="6">
+        <Column lg="6" right={true}>
+          <Stack horizontal>
             <CommandButton id="__ResetPassword_Button"
                            iconProps={{iconName: 'Permissions'}}
                            text="Reset Password"/>
+            <CommandButton id="__InactivateUser_Button"
+                           iconProps={{iconName: 'UserRemove'}}
+                           text="Inactivate User"/>
+          </Stack>
         </Column>
-      </Row>
+      </PanelHeader>
   );
 
   return (

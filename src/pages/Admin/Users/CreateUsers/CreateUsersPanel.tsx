@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { ReactElement, useEffect, useState } from 'react';
-import { MessageBar, MessageBarType, Panel, PanelType } from '@fluentui/react';
+import { MessageBar, MessageBarType, Panel, PanelType, Stack } from '@fluentui/react';
 
 import { Tabs } from 'src/components/tabs/Tabs';
 import { Text } from 'src/components/typography';
-import { PanelBody } from 'src/layouts/Panels/Panels.styles';
+import { PanelBody, PanelHeader, PanelTitle } from 'src/layouts/Panels/Panels.styles';
 
 import { useCreateUsersPanel } from './CreateUsersPanel.service';
 import { SectionAccount } from './SectionAccount';
@@ -14,6 +14,7 @@ import SectionSummary from './SectionSummary';
 import { useNotification } from "src/hooks/useNotification";
 import { GqOperationResponse } from "src/data/services/graphql";
 import { DialogYesNo } from "src/containers/modals/DialogYesNo";
+import { Column } from "src/components/layouts";
 
 const defaultProps = {
   isOpen: false,
@@ -121,12 +122,23 @@ const CreateUsersPanel = ({
     onDismiss();
   }
 
+  const renderPanelHeader = () => (
+    <PanelHeader>
+      <Column lg="12">
+        <Stack horizontal styles={ {root: {height: 44} }}>
+          <PanelTitle id="__CreateUser_Panel_Title" variant="bold">New User</PanelTitle>
+        </Stack>
+      </Column>
+    </PanelHeader>
+  );
+
   return (
     <>
       <Panel
         closeButtonAriaLabel="Close"
         type={PanelType.medium}
         headerText="New User"
+        onRenderHeader={renderPanelHeader}
         isOpen={isOpen}
         onDismiss={onPanelClose}
       >
