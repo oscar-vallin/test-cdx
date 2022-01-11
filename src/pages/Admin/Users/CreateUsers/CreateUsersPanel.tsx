@@ -141,6 +141,7 @@ const CreateUsersPanel = ({
         onRenderHeader={renderPanelHeader}
         isOpen={isOpen}
         onDismiss={onPanelClose}
+        onOuterClick={() => {}}
       >
         <PanelBody>
           {errorMsg && (

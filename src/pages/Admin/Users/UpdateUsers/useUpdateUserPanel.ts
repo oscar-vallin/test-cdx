@@ -7,23 +7,19 @@ import {
   useUpdateUserMutation,
   useUpdateUserAccessPolicyGroupsMutation,
   UpdateUserMutation,
-  UpdateAccessPolicyGroupMutation,
-  UpdateUserAccessPolicyGroupsMutation
+  UpdateUserAccessPolicyGroupsMutation, useResetPasswordMutation, ResetPasswordMutation
 } from 'src/data/services/graphql';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { defaultForm, updateForm } from '../UserAccountFormUtil';
-import { ApolloError } from "@apollo/client";
 
 export type UseUpdateUserPanel = {
   isPanelOpen: boolean,
   showPanel: (userSid: string) => void,
   closePanel: () => void,
   userAccountForm: UserAccountForm,
-  findUserAccountError: ApolloError | undefined,
   callUpdateUser: (updates: UserAccount) => Promise<UpdateUserMutation | null | undefined>,
-  responseCreateUser: UpdateUserMutation | null | undefined ,
   callAssignGroups: (sids: string[]) => Promise<UpdateUserAccessPolicyGroupsMutation | null | undefined>,
-  responseAssignGroups: UpdateAccessPolicyGroupMutation | null | undefined,
+  callResetPassword: () => Promise<ResetPasswordMutation | null | undefined>
   resetForm: () => void
 }
 
@@ -38,11 +34,14 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
   const [callFindUserAccount, { data: dataFindUserAccount, error: findUserAccountError }] =
     useFindUserAccountLazyQuery();
 
-  const [callUpdateUser, { data: dataUpdateUser, error: updateUserError }] =
+  const [callUpdateUser, { error: updateUserError }] =
     useUpdateUserMutation();
 
-  const [callAssignGroups, { data: dataAssignGroups, error: assignGroupsError }] =
+  const [callAssignGroups, { error: assignGroupsError }] =
     useUpdateUserAccessPolicyGroupsMutation();
+
+  const [callResetPassword, { error: resetPasswordError }] =
+    useResetPasswordMutation();
 
   const showPanel = (userSid: string) => {
     setUserSid(userSid);
@@ -57,17 +56,6 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
     setPanelOpen(false);
   }
 
-  // Refresh the form when the userSid changes
-  // useEffect(() => {
-  //   if (userSid) {
-  //     callFindUserAccount({
-  //       variables: {
-  //         userSid,
-  //       },
-  //     });
-  //   }
-  // }, [userSid]);
-
   useEffect(() => {
     handleError(updateUserError);
   }, [updateUserError]);
@@ -79,6 +67,10 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
   useEffect(() => {
     handleError(assignGroupsError);
   }, [assignGroupsError]);
+
+  useEffect(() => {
+    handleError(resetPasswordError);
+  }, [resetPasswordError])
 
   const internalServerError = {
     sid: null,
@@ -139,6 +131,17 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
     return data;
   };
 
+  const handleResetPassword = async () => {
+    const {data} = await callResetPassword({
+      variables: {
+        userSid: userSid
+      },
+      errorPolicy: 'all'
+    });
+
+    return data;
+  }
+
   const resetForm = () => {
     if (userSid) {
       //setUserAccountForm(defaultForm);
@@ -160,11 +163,9 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
     showPanel,
     closePanel,
     userAccountForm,
-    findUserAccountError,
     callUpdateUser: handleUpdateUser,
-    responseCreateUser: dataUpdateUser,
     callAssignGroups: handleUpdateUserGroups,
-    responseAssignGroups: dataAssignGroups,
+    callResetPassword: handleResetPassword,
     resetForm
   };
 };

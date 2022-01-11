@@ -1,5 +1,5 @@
 import Component from './DialogYesNo';
-import { mountWithTheme } from '../../../utils/testUtils';
+import { mountWithTheme } from 'src/utils/testUtils';
 
 const defaultProps = {
   open: true,
@@ -15,7 +15,7 @@ const defaultProps = {
 };
 
 describe('Dialog Yes/No Container Testing Unit...', () => {
-  const mountedComponent = mountWithTheme(<Component {...defaultProps}></Component>);
+  const mountedComponent = mountWithTheme(<Component {...defaultProps}/>);
 
   it('Should be defined', () => {
     expect(mountedComponent.children()).toBeDefined();

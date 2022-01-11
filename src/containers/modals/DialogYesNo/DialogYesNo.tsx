@@ -10,12 +10,12 @@ const defaultPropsDialogYesNo = {
   messageNo: 'No',
   onYesNo: () => null,
   onYes: () => {},
-  onNo: () => null,
+  onNo: () => {},
   closeOnNo: true,
   closeOnYes: true,
   highlightNo: false,
   highlightYes: false,
-  onClose: () => null,
+  onClose: () => {},
 };
 
 export type DialogYesNoProps = {
@@ -25,13 +25,13 @@ export type DialogYesNoProps = {
   messageYes?: string;
   messageNo?: string;
   onYesNo?: () => void;
-  onYes?: () => null;
-  onNo?: () => null;
+  onYes?: () => any;
+  onNo?: () => any;
   closeOnNo?: boolean;
   closeOnYes?: boolean;
   highlightNo?: boolean;
   highlightYes?: boolean;
-  onClose?: () => null;
+  onClose?: () => any;
 } & typeof defaultPropsDialogYesNo;
 
 //
