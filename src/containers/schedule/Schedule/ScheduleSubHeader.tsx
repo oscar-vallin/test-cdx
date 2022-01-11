@@ -12,7 +12,7 @@ import {
   WeekHourSpace,
 } from './ScheduleSubHeader.styles';
 import { isCurrentViewDay, isCurrentViewWeek } from './helpers';
-import { Text } from '../../../components/typography';
+import { Text } from 'src/components/typography';
 
 export const ScheduleSubHeader = ({ id, currentView, currentDate, selectedDate }) => {
   const _currentDate = startOfWeek(currentDate);
@@ -50,10 +50,10 @@ export const ScheduleSubHeader = ({ id, currentView, currentDate, selectedDate }
     const _currentDay = selectedDate ?? currentDate;
 
     if (isCurrentViewDay(currentView)) {
-      const isCurrentDate = !!isSameDay(_currentDay, currentDate);
-      const isCurrentMonth = !!isSameMonth(_currentDay, currentDate);
-      const isStartMonth = !!isSameDay(_currentDay, startOfMonth(_currentDay));
-      const isEndMonth = !!isSameDay(_currentDay, endOfMonth(_currentDay));
+      const isCurrentDate = isSameDay(_currentDay, currentDate);
+      const isCurrentMonth = isSameMonth(_currentDay, currentDate);
+      const isStartMonth = isSameDay(_currentDay, startOfMonth(_currentDay));
+      const isEndMonth = isSameDay(_currentDay, endOfMonth(_currentDay));
 
       return (
         <RowWeek id={id} key={id}>
@@ -73,14 +73,14 @@ export const ScheduleSubHeader = ({ id, currentView, currentDate, selectedDate }
 
     for (let i = 0; i < 7; i++) {
       if (isCurrentViewWeek(currentView)) {
-        const isCurrentDate = !!isSameDay(day, currentDate);
+        const isCurrentDate = isSameDay(day, currentDate);
         // isSameMonth(day, dates.monthStart);
-        const isCurrentMonth = !!isSameMonth(day, currentDate);
-        const isStartMonth = !!isSameDay(day, startOfMonth(_currentDate));
-        const isEndMonth = !!isSameDay(day, endOfMonth(dates.selectedDate));
+        const isCurrentMonth = isSameMonth(day, currentDate);
+        const isStartMonth = isSameDay(day, startOfMonth(_currentDate));
+        const isEndMonth = isSameDay(day, endOfMonth(dates.selectedDate));
 
         days.push(
-          <WeekViewContainer key={i} isSameDay={isCurrentDate} isSameMonth={isCurrentMonth}>
+          <WeekViewContainer key={`day_${i}`} isSameDay={isCurrentDate} isSameMonth={isCurrentMonth}>
             <WeekViewNumber>
               {isCurrentDate || isStartMonth || isEndMonth ? format(day, 'MMM d') : format(day, 'd')}
             </WeekViewNumber>
@@ -89,7 +89,7 @@ export const ScheduleSubHeader = ({ id, currentView, currentDate, selectedDate }
         );
       } else {
         days.push(
-          <DayOfWeek key={i}>
+          <DayOfWeek key={`day_${i}`}>
             <Text size="small">{format(day, dateFormat)}</Text>
           </DayOfWeek>
         );

@@ -1,4 +1,4 @@
-import { FontIcon, TooltipHost } from 'office-ui-fabric-react';
+import { FontIcon, TooltipHost } from '@fluentui/react';
 
 const CDXInfoIcon = ({ content }) => {
   return (

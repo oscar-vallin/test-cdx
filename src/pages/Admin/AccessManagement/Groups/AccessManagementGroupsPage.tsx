@@ -1,33 +1,33 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, memo } from 'react';
 
-import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
-import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
-import { MessageBar } from 'office-ui-fabric-react';
-import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
-import { SpinnerSize } from '@fluentui/react';
+import {
+  DetailsList,
+  DetailsListLayoutMode,
+  SelectionMode,
+  Spinner,
+  FontIcon,
+  SpinnerSize
+} from '@fluentui/react';
 import { EmptyState } from 'src/containers/states';
-import { id } from 'date-fns/locale';
-import { getItemStyles } from '@fluentui/react/lib/components/ContextualMenu/ContextualMenu.classNames';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
 import { useNotification } from 'src/hooks/useNotification';
-import { Row, Column } from '../../../../components/layouts';
+import { Row, Column } from 'src/components/layouts';
 import { Spacing } from '../../../../components/spacings/Spacing';
-import { Button, Link } from '../../../../components/buttons';
-import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
-import { Text } from '../../../../components/typography/Text';
+import { Button, Link } from 'src/components/buttons';
+import { LayoutAdmin } from 'src/layouts/LayoutAdmin';
+import { Text } from 'src/components/typography';
 import { CreateGroupPanel } from './CreateGroup';
-import { Separator } from '../../../../components/separators/Separator';
+import { Separator } from 'src/components/separators/Separator';
 
 import {
   useAccessPolicyGroupsForOrgLazyQuery,
   useAccessPolicyGroupTemplatesLazyQuery,
-  useDeleteAccessPolicyGroupMutation,
-} from '../../../../data/services/graphql';
+} from 'src/data/services/graphql';
 import { StyledColumn, StyledCommandButton } from './AccessManagementGroupsPage.styles';
 
-import { useOrgSid } from '../../../../hooks/useOrgSid';
-import { useQueryHandler } from '../../../../hooks/useQueryHandler';
+import { useOrgSid } from 'src/hooks/useOrgSid';
+import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { useAccessManagementGroupsPageService } from './AccessManagementGroupsPage.service';
 
 const generateColumns = () => {

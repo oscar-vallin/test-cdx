@@ -1,17 +1,17 @@
 import React, { ReactElement, useState } from 'react';
-import { Icon } from 'office-ui-fabric-react';
-import { ROUTES } from '../../data/constants/RouteConstants';
-import { LayoutDashboard } from '../../layouts/LayoutDashboard';
-import { Column, Container, Row } from '../../components/layouts';
-import { Spacing } from '../../components/spacings/Spacing';
-import { PageTitle, Text } from '../../components/typography';
-import { PageHeader } from '../../containers/headers/PageHeader';
-import { WorkPacketTable } from '../../containers/tables/WorkPacketTable';
-import { WorkPacketColumns } from '../../containers/tables/WorkPacketColumns';
-import { NullHandling, SortDirection, useWpTransmissionsLazyQuery } from '../../data/services/graphql';
-import { tableFiltersToQueryParams, useTableFilters } from '../../hooks/useTableFilters';
-import { DownloadLink } from '../../containers/tables/WorkPacketTable.styles';
-import { useOrgSid } from '../../hooks/useOrgSid';
+import { Icon } from '@fluentui/react';
+import { ROUTES } from 'src/data/constants/RouteConstants';
+import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
+import { Column, Container, Row } from 'src/components/layouts';
+import { Spacing } from 'src/components/spacings/Spacing';
+import { PageTitle, Text } from 'src/components/typography';
+import { PageHeader } from 'src/containers/headers/PageHeader';
+import { WorkPacketTable } from 'src/containers/tables/WorkPacketTable';
+import { WorkPacketColumns } from 'src/containers/tables/WorkPacketColumns';
+import { NullHandling, SortDirection, useWpTransmissionsLazyQuery } from 'src/data/services/graphql';
+import { tableFiltersToQueryParams, useTableFilters } from 'src/hooks/useTableFilters';
+import { DownloadLink } from 'src/containers/tables/WorkPacketTable.styles';
+import { useOrgSid } from 'src/hooks/useOrgSid';
 
 const _TransmissionsPage = () => {
   const [tableMeta, setTableMeta] = useState({ count: 0, loading: true });

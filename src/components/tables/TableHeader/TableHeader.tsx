@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { DetailsHeader, DetailsListLayoutMode } from 'office-ui-fabric-react/lib-commonjs/DetailsList';
+import { DetailsHeader, DetailsListLayoutMode } from '@fluentui/react';
 import { useHistory } from 'react-router-dom';
 import { format } from 'date-fns';
 import { getDates } from 'src/helpers/tableHelpers.service';

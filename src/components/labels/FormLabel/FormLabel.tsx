@@ -1,5 +1,4 @@
-import { FontIcon } from '@fluentui/react/lib-commonjs/Icon';
-import { TooltipHost } from '@fluentui/react/lib-commonjs/Tooltip';
+import { FontIcon, TooltipHost } from '@fluentui/react';
 import { ReactElement } from 'react';
 import { LabelRow, Label, Required, ErrorIcon } from './FormLabel.styles';
 import { UiField } from 'src/data/services/graphql';

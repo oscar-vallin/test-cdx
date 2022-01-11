@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { Nav } from 'office-ui-fabric-react/lib/Nav';
-import { Box as LayoutBox } from '../../components/layouts';
+import { Nav } from '@fluentui/react';
+import { Box as LayoutBox } from 'src/components/layouts';
 
 export const StyledBox = styled(LayoutBox)`
   align-items: flex-start;

@@ -1,5 +1,5 @@
 import { ReactElement } from 'react';
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react';
+import { MessageBar, MessageBarType } from '@fluentui/react';
 
 const defaultProps = {
   id: '',

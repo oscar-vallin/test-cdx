@@ -4,20 +4,20 @@ import {
   DetailsListLayoutMode,
   IColumn,
   SelectionMode,
-} from 'office-ui-fabric-react/lib-commonjs/DetailsList';
-import { mergeStyleSets } from 'office-ui-fabric-react/lib-commonjs/Styling';
+  mergeStyleSets
+} from '@fluentui/react';
 
-import { StyledContainer } from '../../components/tables/Table/Table.styles';
+import { StyledContainer } from 'src/components/tables/Table/Table.styles';
 import { Box, Container } from './WorkPacketTable.styles';
 import { EmptyState } from '../states';
 import { TableFilters } from './TableFilters';
-import { NullHandling, PageableInput, PaginationInfo, SortDirection } from '../../data/services/graphql';
+import { NullHandling, PageableInput, PaginationInfo, SortDirection } from 'src/data/services/graphql';
 import { useWorkPacketColumns, WorkPacketColumns } from './WorkPacketColumns';
-import { useQueryHandler } from '../../hooks/useQueryHandler';
-import { useOrgSid } from '../../hooks/useOrgSid';
-import { TableFiltersType } from '../../hooks/useTableFilters';
-import { Paginator } from '../../components/tables/Paginator';
-import { ErrorHandler } from '../../utils/ErrorHandler';
+import { useQueryHandler } from 'src/hooks/useQueryHandler';
+import { useOrgSid } from 'src/hooks/useOrgSid';
+import { TableFiltersType } from 'src/hooks/useTableFilters';
+import { Paginator } from 'src/components/tables/Paginator';
+import { ErrorHandler } from 'src/utils/ErrorHandler';
 
 type WorkPacketParams = {
   id: string;

@@ -4,8 +4,8 @@ import {
   DetailsList,
   DetailsListLayoutMode,
   SelectionMode,
-} from 'office-ui-fabric-react/lib-commonjs/DetailsList';
-import { Spacing } from '../../../components/spacings/Spacing';
+} from '@fluentui/react';
+import { Spacing } from 'src/components/spacings/Spacing';
 import { StyledRow, StyledVendorHeaderRow, StyledFooter } from '../FileStatusDetails.styles';
 
 const COLUMNS: IColumn[] = [

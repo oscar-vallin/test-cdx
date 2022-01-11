@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Pivot } from 'office-ui-fabric-react/lib-commonjs/Pivot';
+import { Pivot } from '@fluentui/react';
 
 export const StyledPivot = styled(Pivot)`
   width: 100%;

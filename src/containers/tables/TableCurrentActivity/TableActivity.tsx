@@ -1,10 +1,15 @@
 import { ReactElement } from 'react';
-import { IColumn, DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
-import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
+import {
+  IColumn,
+  DetailsList,
+  DetailsListLayoutMode,
+  SelectionMode,
+  Spinner
+} from '@fluentui/react';
 import { format } from 'date-fns';
-import { Column } from '../../../components/layouts';
+import { Column } from 'src/components/layouts';
 import { TableName, TableWrap, EmptyMessage } from './TableActivity.styles';
-import { OrganizationLink } from '../../../data/services/graphql';
+import { OrganizationLink } from 'src/data/services/graphql';
 
 const columns: IColumn[] = [
   {

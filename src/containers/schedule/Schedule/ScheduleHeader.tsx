@@ -15,10 +15,10 @@ import {
 } from './ScheduleHeader.styles';
 
 import { isCurrentViewDay, isCurrentViewMonth, isCurrentViewWeek } from './helpers';
-import { MonthPicker } from '../../../components/inputs/MonthPicker';
+import { MonthPicker } from 'src/components/inputs/MonthPicker';
 
-import { Spacing } from '../../../components/spacings/Spacing';
-import { Row, Column } from '../../../components/layouts';
+import { Spacing } from 'src/components/spacings/Spacing';
+import { Row, Column } from 'src/components/layouts';
 
 export const ScheduleHeader = ({ id, currentView, currentDate, onChangeDate, onChangeView }) => {
   const [currentMonth, setCurrentMonth] = useState(currentDate ?? new Date());
@@ -29,7 +29,7 @@ export const ScheduleHeader = ({ id, currentView, currentDate, onChangeDate, onC
   const [calendarOpen, setCalendarOpen] = useState(false);
 
   //
-  const handleChangeDate = (_newDate) => {
+  const handleChangeDate = (_newDate?: Date) => {
     setCalendarOpen(false);
     setCurrentMonth(_newDate);
     setCurrentWeek(_newDate);
@@ -101,7 +101,7 @@ export const ScheduleHeader = ({ id, currentView, currentDate, onChangeDate, onC
 
   //
   const handleCalendarOpen = (open: boolean) => {
-    setCalendarOpen(!!open);
+    setCalendarOpen(open);
     return null;
   };
 

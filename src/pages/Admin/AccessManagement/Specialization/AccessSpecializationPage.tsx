@@ -1,32 +1,38 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, memo } from 'react';
 
-import { PrimaryButton, DefaultButton, MessageBar } from 'office-ui-fabric-react';
-import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
-import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib-commonjs/Dialog';
+import {
+  PrimaryButton,
+  DefaultButton,
+  DetailsList,
+  DetailsListLayoutMode,
+  SelectionMode,
+  Dialog,
+  DialogType,
+  DialogFooter,
+  Spinner,
+  SpinnerSize
+} from '@fluentui/react';
 
-import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
-import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { EmptyState } from 'src/containers/states';
-import { SpinnerSize } from '@fluentui/react';
 import { useNotification } from 'src/hooks/useNotification';
-import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
+import { LayoutAdmin } from 'src/layouts/LayoutAdmin';
 import { Spacing } from '../../../../components/spacings/Spacing';
-import { Button } from '../../../../components/buttons';
-import { Row, Column } from '../../../../components/layouts';
-import { Separator } from '../../../../components/separators/Separator';
-import { Text } from '../../../../components/typography';
+import { Button } from 'src/components/buttons';
+import { Row, Column } from 'src/components/layouts';
+import { Separator } from 'src/components/separators/Separator';
+import { Text } from 'src/components/typography';
 import { CreateAccessSpecializationPanel } from './CreateSpecialization';
-import { Link } from '../../../../components/buttons/Link';
+import { Link } from 'src/components/buttons';
 
 import {
   useAccessSpecializationsForOrgLazyQuery,
   useDeleteAccessSpecializationMutation,
-} from '../../../../data/services/graphql';
+} from 'src/data/services/graphql';
 
 import { StyledColumn, StyledCommandButton } from '../AccessManagement.styles';
-import { useOrgSid } from '../../../../hooks/useOrgSid';
-import { useQueryHandler } from '../../../../hooks/useQueryHandler';
+import { useOrgSid } from 'src/hooks/useOrgSid';
+import { useQueryHandler } from 'src/hooks/useQueryHandler';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({

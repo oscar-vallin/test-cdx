@@ -4,10 +4,9 @@ import {
   DetailsListLayoutMode,
   SelectionMode,
   IGroup,
-} from 'office-ui-fabric-react/lib-commonjs/DetailsList';
-import { Spacing } from '../../../components/spacings/Spacing';
+} from '@fluentui/react';
+import { Spacing } from 'src/components/spacings/Spacing';
 import { StyledHeaderRow, StyledHeader, StyledRow } from '../FileStatusDetails.styles';
-// import { IColumn } from 'office-ui-fabric-react/lib-commonjs/DetailsList';
 
 const COLUMNS: any = [
   { key: 'planCode', name: 'Plan Code', fieldName: 'planCode' },

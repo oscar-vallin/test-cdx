@@ -1,5 +1,5 @@
 import { useState, useEffect, ReactElement } from 'react';
-import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib-commonjs/Dialog';
+import { Dialog, DialogType, DialogFooter } from '@fluentui/react';
 import { Button } from 'src/components/buttons';
 
 const defaultPropsDialogYesNo = {

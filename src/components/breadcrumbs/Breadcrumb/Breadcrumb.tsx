@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Breadcrumb } from '@fluentui/react/lib-commonjs/Breadcrumb';
-import { ROUTE_DASHBOARD } from '../../../data/constants/RouteConstants';
+import { Breadcrumb } from '@fluentui/react';
+import { ROUTE_DASHBOARD } from 'src/data/constants/RouteConstants';
 
 const parseBreadcrumbItems = (
   routes: parseBreadcrumbItemsProps[],

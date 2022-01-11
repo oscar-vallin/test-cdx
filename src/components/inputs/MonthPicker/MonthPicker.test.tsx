@@ -1,11 +1,8 @@
 import toJSON from 'enzyme-to-json';
-import { mount, shallow } from 'enzyme';
-import { DayOfWeek } from 'office-ui-fabric-react/lib-commonjs/DatePicker';
-import { fireEvent, render, screen } from '@testing-library/react';
-import { Calendar, DateRangeType } from 'office-ui-fabric-react/lib-commonjs/Calendar';
+import { shallow } from 'enzyme';
+import { DayOfWeek, DateRangeType } from '@fluentui/react';
 import { MonthPicker as Component } from './index';
 import { Container } from './MonthPicker.styles';
-import { DefaultButton } from 'office-ui-fabric-react/lib-commonjs/Button';
 import { mountWithTheme } from 'src/utils/testUtils';
 
 const baseProps = {
@@ -83,12 +80,18 @@ describe('Basic MonthPicker Component', () => {
     expect(wrapper).toMatchSnapshot();
   });
 
-  it('Press button of today in the MonthPicker and calls onSelect', () => {
+  it('Press a calendar day calls onSelect', () => {
     const mockFn = jest.fn();
     const wrapper = mountWithTheme(<Component {...defaultProps} onSelect={mockFn} />);
-    const today = wrapper.find('.ms-DatePicker-day--today');
-    today.simulate('click');
-    expect(today.length).toBe(1);
+
+    const nextMonth = wrapper.find('#MonthPickerModal i[data-icon-name="Down"]');
+    expect(nextMonth.length).toBe(1);
+    nextMonth.simulate('click');
+
+    const thirdDay = wrapper.find('#MonthPickerModal table tr td button').at(12);
+    expect(thirdDay.length).toBe(1);
+    thirdDay.simulate('click');
+
     expect(mockFn).toBeCalled();
   });
 
@@ -114,15 +117,6 @@ describe('Basic MonthPicker Component', () => {
   it('Match Snapshot sending minDate property', () => {
     const wrapper = shallow(<Component {...defaultProps} minDate={new Date()} />);
     expect(wrapper).toMatchSnapshot();
-  });
-
-  it('Press button of today in the MonthPicker and calls onSelect', () => {
-    const mockFn = jest.fn();
-    const wrapper = mountWithTheme(<Component {...defaultProps} onSelect={mockFn} />);
-    const today = wrapper.find('.ms-DatePicker-day--today');
-    today.simulate('click');
-    expect(today.length).toBe(1);
-    expect(mockFn).toBeCalled();
   });
 
   it('Test press the Previous button in the MonthPicker', () => {

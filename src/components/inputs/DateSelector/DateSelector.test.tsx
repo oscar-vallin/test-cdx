@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import toJSON from 'enzyme-to-json';
 import { shallow } from 'enzyme';
-import { DayOfWeek } from 'office-ui-fabric-react/lib-commonjs/DatePicker';
+import { DayOfWeek } from '@fluentui/react';
 import { render, screen } from '@testing-library/react';
 import { DateSelector as Component } from './DateSelector';
 
-const today = new Date();
 const firstDayOfWeek = DayOfWeek.Sunday;
 
 const defaultProps = {

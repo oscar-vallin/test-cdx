@@ -1,14 +1,14 @@
 /* eslint-disable no-alert */
 import { ReactElement, useState } from 'react';
-import { MessageBar } from 'office-ui-fabric-react';
+import { MessageBar } from '@fluentui/react';
 
-import { Button } from '../../../components/buttons';
-import { Card } from '../../../components/cards';
-import { Row, Column } from '../../../components/layouts';
-import { Spacing } from '../../../components/spacings/Spacing';
-import { Separator } from '../../../components/separators/Separator';
-import { Text } from '../../../components/typography';
-import { Timeline } from '../../../components/timelines/Timeline';
+import { Button } from 'src/components/buttons';
+import { Card } from 'src/components/cards';
+import { Row, Column } from 'src/components/layouts';
+import { Spacing } from 'src/components/spacings/Spacing';
+import { Separator } from 'src/components/separators/Separator';
+import { Text } from 'src/components/typography';
+import { Timeline } from 'src/components/timelines/Timeline';
 
 const parseSteps = (steps) => {
   return steps.map((step) => ({

@@ -1,6 +1,6 @@
 import { ReactElement } from 'react';
 import { addYears } from '@fluentui/date-time-utilities';
-import { DatePicker, DayOfWeek } from 'office-ui-fabric-react/lib-commonjs/DatePicker';
+import { DatePicker, DayOfWeek } from '@fluentui/react';
 
 const defaultProps = {
   id: '',

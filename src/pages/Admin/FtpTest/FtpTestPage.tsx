@@ -1,6 +1,5 @@
 import { useState, memo, useEffect } from 'react';
-import { Checkbox } from '@fluentui/react';
-import { TextField } from '@fluentui/react/lib-commonjs/TextField';
+import { Checkbox, TextField } from '@fluentui/react';
 import { LayoutAdmin } from 'src/layouts/LayoutAdmin';
 import { Button } from 'src/components/buttons';
 import { Spacing } from 'src/components/spacings/Spacing';

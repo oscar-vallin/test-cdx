@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 import { PageTitle as Component } from './PageTitle';
-import { FontIcon } from '@fluentui/react/lib-commonjs/Icon';
+import { FontIcon } from '@fluentui/react';
 
 describe('PageTitle', () => {
   it('Should be defined', () => {

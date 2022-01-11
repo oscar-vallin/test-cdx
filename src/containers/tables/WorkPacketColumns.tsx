@@ -1,11 +1,10 @@
 import React from 'react';
-import { IColumn } from 'office-ui-fabric-react/lib-commonjs/DetailsList';
+import { IColumn, Link } from '@fluentui/react';
 import { format } from 'date-fns';
-import { Link } from 'office-ui-fabric-react/lib-commonjs/Link';
-import { WorkPacketStatus, WpProcessError, WpTransmission } from '../../data/services/graphql';
-import { CellItemRow, RouteLink, StyledCell } from '../../components/tables/Table/Table.styles';
-import { HighlightCounter } from '../../components/badges/HighlightCounter';
-import { getStepStatusLabel } from '../../data/constants/FileStatusConstants';
+import { WorkPacketStatus, WpProcessError, WpTransmission } from 'src/data/services/graphql';
+import { CellItemRow, RouteLink, StyledCell } from 'src/components/tables/Table/Table.styles';
+import { HighlightCounter } from 'src/components/badges/HighlightCounter';
+import { getStepStatusLabel } from 'src/data/constants/FileStatusConstants';
 import { FileProgress } from '../bars/FileProgress';
 
 export const useWorkPacketColumns = (

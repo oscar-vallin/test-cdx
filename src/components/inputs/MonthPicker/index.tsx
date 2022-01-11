@@ -1,17 +1,19 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ReactElement, useState } from 'react';
-import { Calendar, DayOfWeek, DateRangeType } from 'office-ui-fabric-react/lib-commonjs/Calendar';
-import { DefaultButton } from 'office-ui-fabric-react/lib-commonjs/Button';
+import {
+  Calendar,
+  DayOfWeek,
+  DateRangeType,
+  DefaultButton
+} from '@fluentui/react';
 import { addDays, getDateRangeArray } from '@fluentui/date-time-utilities';
 import { Container } from './MonthPicker.styles';
 
 const defaultProps = {
   open: false,
-  onSelect: () => null,
+  onSelect: () => {},
   showDates: false,
   isMonthPickerVisible: true,
   dateRangeType: DateRangeType.Month,
-  autoNavigateOnSelection: true,
   showGoToToday: true,
   showNavigateButtons: true,
   highlightCurrentMonth: true,
@@ -24,11 +26,10 @@ const defaultProps = {
 
 type MonthPickerProps = {
   open?: boolean;
-  onSelect?: any | null;
+  onSelect?: (date: Date) => void;
   showDates?: boolean;
   isMonthPickerVisible?: boolean;
   dateRangeType?: any;
-  autoNavigateOnSelection?: boolean;
   showGoToToday?: boolean;
   showNavigateButtons?: boolean;
   highlightCurrentMonth?: boolean;
@@ -83,28 +84,22 @@ export const MonthPicker = ({
   open,
   onSelect,
   showDates,
-  isMonthPickerVisible,
   dateRangeType,
-  autoNavigateOnSelection,
   showGoToToday,
   showNavigateButtons,
   highlightCurrentMonth,
   highlightSelectedMonth,
-  isDayPickerVisible,
   showMonthPickerAsOverlay,
-  showWeekNumbers,
-  firstDayOfWeek,
   minDate,
   maxDate,
   restrictedDates,
   showSixWeeksByDefault,
-  workWeekDays,
-  ...props
+  workWeekDays
 }: MonthPickerProps): ReactElement => {
   const [selectedDateRange, setSelectedDateRange] = useState<Date[]>();
   const [selectedDate, setSelectedDate] = useState<Date>();
 
-  const onSelectDate = (date, dateRangeArray) => {
+  const onSelectDate = (date: Date, dateRangeArray?: Date[]) => {
     setSelectedDate(date);
     setSelectedDateRange(dateRangeArray);
     onSelect(date);
@@ -179,13 +174,10 @@ export const MonthPicker = ({
       )}
       <Calendar
         data-testid="Calendar"
-        // eslint-disable-next-line react/jsx-no-bind
         onSelectDate={onSelectDate}
-        // eslint-disable-next-line react/jsx-no-bind
         onDismiss={onDismiss}
         isMonthPickerVisible
         dateRangeType={dateRangeType}
-        autoNavigateOnSelection={autoNavigateOnSelection}
         showGoToToday={showGoToToday}
         value={selectedDate ?? new Date()}
         firstDayOfWeek={DayOfWeek.Monday}
@@ -205,13 +197,11 @@ export const MonthPicker = ({
         <div>
           <DefaultButton
             data-testid="__PrevioustBtn"
-            // eslint-disable-next-line react/jsx-no-bind
             onClick={goPrevious}
             text="Previous"
           />
           <DefaultButton
             data-testid="__NextBtn"
-            // eslint-disable-next-line react/jsx-no-bind
             onClick={goNext}
             text="Next"
           />

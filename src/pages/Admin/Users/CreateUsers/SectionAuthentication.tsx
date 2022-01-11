@@ -1,4 +1,4 @@
-import { Checkbox } from '@fluentui/react/lib-commonjs/Checkbox';
+import { Checkbox } from '@fluentui/react';
 import { useEffect, useState } from 'react';
 import { Column } from 'src/components/layouts';
 

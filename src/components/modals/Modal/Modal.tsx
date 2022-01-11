@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
+import { DialogType, DialogFooter } from '@fluentui/react';
 import { StyledModal } from './Modal.styles';
 
 const CDXModal = ({

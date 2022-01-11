@@ -1,14 +1,14 @@
 import { ReactElement, useState } from 'react';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { useHistory, useLocation } from 'react-router';
-import { Icon } from '@fluentui/react/lib-commonjs/Icon';
+import { Icon } from '@fluentui/react';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
 import { ProfileMenu } from 'src/containers/menus/ProfileMenu';
 import { useCurrentUserTheme } from 'src/hooks/useCurrentUserTheme';
 import { useThemeStore } from 'src/store/ThemeStore';
 import { useSessionStore } from 'src/store/SessionStore';
-import { getRouteByApiId, ROUTE_USER_SETTINGS } from '../../../data/constants/RouteConstants';
-import { useOrgSid } from '../../../hooks/useOrgSid';
+import { getRouteByApiId, ROUTE_USER_SETTINGS } from 'src/data/constants/RouteConstants';
+import { useOrgSid } from 'src/hooks/useOrgSid';
 
 import {
   StyledContainer,

@@ -1,14 +1,13 @@
 import React, { ReactElement } from 'react';
-import { MessageBarType } from '@fluentui/react';
-import { MessageBar } from 'office-ui-fabric-react';
+import { MessageBarType, MessageBar } from '@fluentui/react';
 import { useHistory } from 'react-router-dom';
-import { StyledBox, StyledNav } from '../../../layouts/LayoutAdmin/LayoutAdmin.styles';
+import { StyledBox, StyledNav } from 'src/layouts/LayoutAdmin/LayoutAdmin.styles';
 import { StyledColumn } from './AdminErrorBoundary.styles';
-import { LayoutDashboard } from '../../../layouts/LayoutDashboard';
-import { Row } from '../../../components/layouts';
-import { getRouteByApiId } from '../../../data/constants/RouteConstants';
+import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
+import { Row } from 'src/components/layouts';
+import { getRouteByApiId } from 'src/data/constants/RouteConstants';
 
-import { useActiveDomainStore } from '../../../store/ActiveDomainStore';
+import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
 
 const defaultProps = {
   id: 'AdminErrorBoundary',

@@ -1,15 +1,15 @@
 /* eslint-disable no-alert */
 import { ReactElement } from 'react';
-import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
+import { DetailsList, DetailsListLayoutMode, SelectionMode } from '@fluentui/react';
 
-import { Badge } from '../../../components/badges/Badge';
-import { Button } from '../../../components/buttons/Button';
-import { Card } from '../../../components/cards/Card';
-import { ChartDonut } from '../../../components/charts/ChartDonut';
-import { Row, Column } from '../../../components/layouts';
-import { Spacing } from '../../../components/spacings/Spacing';
-import { MessageBar } from '../../../components/notifications/MessageBar';
-import { Separator } from '../../../components/separators/Separator';
+import { Badge } from 'src/components/badges/Badge';
+import { Button } from 'src/components/buttons/Button';
+import { Card } from 'src/components/cards/Card';
+import { ChartDonut } from 'src/components/charts/ChartDonut';
+import { Row, Column } from 'src/components/layouts';
+import { Spacing } from 'src/components/spacings/Spacing';
+import { MessageBar } from 'src/components/notifications/MessageBar';
+import { Separator } from 'src/components/separators/Separator';
 
 const COLUMNS: any = [
   { key: 'status', name: 'Status', fieldName: 'status' },

@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { ReactElement, useState } from 'react';
-import { MessageBar, MessageBarType, Panel, PanelType, Stack } from '@fluentui/react';
+import { MessageBar, MessageBarType, Panel, PanelType, Stack, CommandButton } from '@fluentui/react';
 
 import { Tabs } from 'src/components/tabs/Tabs';
 import { PanelBody, PanelHeader, PanelTitle } from 'src/layouts/Panels/Panels.styles';
@@ -10,7 +10,6 @@ import { SectionAccount } from './SectionAccount';
 import SectionAccessManagement from './SectionAccessManagement';
 import { GqOperationResponse, UserAccount, UserAccountForm } from 'src/data/services/graphql';
 import { Column } from 'src/components/layouts';
-import { CommandButton } from 'office-ui-fabric-react';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 
 const defaultProps = {

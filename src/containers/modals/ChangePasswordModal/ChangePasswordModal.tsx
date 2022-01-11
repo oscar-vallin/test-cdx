@@ -1,9 +1,9 @@
 /* eslint-disable no-alert */
 import { ReactElement } from 'react';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { Button } from '../../../components/buttons/Button';
-import { Modal } from '../../../components/modals/Modal';
-import { Spacing } from '../../../components/spacings/Spacing';
+import { TextField } from '@fluentui/react';
+import { Button } from 'src/components/buttons';
+import { Modal } from 'src/components/modals/Modal';
+import { Spacing } from 'src/components/spacings/Spacing';
 import { StyledDiv } from './ChangePasswordModal.styles';
 
 const defaultProps = {

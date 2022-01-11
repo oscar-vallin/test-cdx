@@ -1,14 +1,21 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, memo } from 'react';
 
-import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react';
-import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
-import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib-commonjs/Dialog';
+import {
+  PrimaryButton,
+  DefaultButton,
+  DetailsList,
+  DetailsListLayoutMode,
+  SelectionMode,
+  Dialog,
+  DialogType,
+  DialogFooter,
+  FontIcon,
+  Spinner,
+  SpinnerSize
+} from '@fluentui/react';
 
-import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
-import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { EmptyState } from 'src/containers/states';
-import { SpinnerSize } from '@fluentui/react';
 import { useNotification } from 'src/hooks/useNotification';
 import { LayoutAdmin } from 'src/layouts/LayoutAdmin';
 import { Spacing } from 'src/components/spacings/Spacing';

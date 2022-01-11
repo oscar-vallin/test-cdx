@@ -3,22 +3,24 @@ import { useState, useEffect, memo } from 'react';
 
 import { Link } from 'react-router-dom';
 
-import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
-import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
-import { MessageBar } from 'office-ui-fabric-react';
-import { SpinnerSize } from '@fluentui/react';
+import {
+  DetailsList,
+  DetailsListLayoutMode,
+  SelectionMode,
+  Spinner,
+  SpinnerSize
+} from '@fluentui/react';
 import { EmptyState } from 'src/containers/states';
-import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
-import { Row, Column } from '../../../../components/layouts';
-import { Spacing } from '../../../../components/spacings/Spacing';
-import { Text } from '../../../../components/typography';
-import { Separator } from '../../../../components/separators/Separator';
-import { TagPicker } from '../../../../components/pickers/TagPicker';
+import { LayoutAdmin } from 'src/layouts/LayoutAdmin';
+import { Row, Column } from 'src/components/layouts';
+import { Spacing } from 'src/components/spacings/Spacing';
+import { Text } from 'src/components/typography';
+import { Separator } from 'src/components/separators/Separator';
 
-import { useDirectOrganizationsLazyQuery } from '../../../../data/services/graphql';
+import { useDirectOrganizationsLazyQuery } from 'src/data/services/graphql';
 import { StyledColumn } from './ActiveOrgsPage.styles';
-import { useActiveDomainStore } from '../../../../store/ActiveDomainStore';
-import { useQueryHandler } from '../../../../hooks/useQueryHandler';
+import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
+import { useQueryHandler } from 'src/hooks/useQueryHandler';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -40,7 +42,6 @@ const generateColumns = () => {
 const _ActiveOrgsPage = () => {
   const ActiveDomainStore = useActiveDomainStore();
   const [orgs, setOrgs] = useState([]);
-  const [asd, setAsd] = useState([]);
   const columns = generateColumns();
 
   const [directOrganizationsFQuery, { data, loading }] = useQueryHandler(useDirectOrganizationsLazyQuery);

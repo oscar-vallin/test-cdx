@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
-import { FontIcon } from 'office-ui-fabric-react/lib-commonjs/Icon';
+import { FontIcon } from '@fluentui/react';
 import { StyledUl, StyledLi } from './Timeline.styles';
-import { Spinner } from '../../spinners/Spinner';
+import { Spinner } from 'src/components/spinners/Spinner';
 
 const defaultProps = {
   items: [],

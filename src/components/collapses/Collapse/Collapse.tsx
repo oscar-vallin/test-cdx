@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
-import { FontIcon } from '@fluentui/react/lib-commonjs/Icon';
+import { FontIcon } from '@fluentui/react';
 import { StyledDiv, StyledButton } from './Collapse.styles';
 
 const CDXCollapse = ({

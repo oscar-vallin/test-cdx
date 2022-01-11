@@ -1,23 +1,31 @@
 /* eslint-disable no-alert */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, useMemo, memo } from 'react';
-import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib-commonjs/Dialog';
-import { PrimaryButton, DefaultButton, MessageBar } from 'office-ui-fabric-react';
-import { DetailsList, DetailsListLayoutMode, SelectionMode, Selection } from 'office-ui-fabric-react/lib/DetailsList';
-import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
-import { MarqueeSelection } from '@fluentui/react/lib-commonjs/MarqueeSelection';
-import { SpinnerSize } from '@fluentui/react';
+import {
+  Dialog,
+  DialogType,
+  DialogFooter,
+  SpinnerSize,
+  PrimaryButton,
+  DefaultButton,
+  DetailsList,
+  DetailsListLayoutMode,
+  SelectionMode,
+  Selection,
+  Spinner,
+  MarqueeSelection
+} from '@fluentui/react';
 import { EmptyState } from 'src/containers/states';
-import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
-import { Row, Column } from '../../../../components/layouts';
-import { Spacing } from '../../../../components/spacings/Spacing';
-import { Text } from '../../../../components/typography';
-import { Separator } from '../../../../components/separators/Separator';
-import { Button } from '../../../../components/buttons';
-import { useUsersForOrgLazyQuery, useActivateUsersMutation, ActiveEnum } from '../../../../data/services/graphql';
+import { LayoutAdmin } from 'src/layouts/LayoutAdmin';
+import { Row, Column } from 'src/components/layouts';
+import { Spacing } from 'src/components/spacings/Spacing';
+import { Text } from 'src/components/typography';
+import { Separator } from 'src/components/separators/Separator';
+import { Button } from 'src/components/buttons';
+import { useUsersForOrgLazyQuery, useActivateUsersMutation, ActiveEnum } from 'src/data/services/graphql';
 import { StyledColumn } from './DeletedUsersPage.styles';
 
-import { useOrgSid } from '../../../../hooks/useOrgSid';
+import { useOrgSid } from 'src/hooks/useOrgSid';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -103,7 +111,7 @@ const _DeletedUsersPage = () => {
             <Row>
               <Column lg="6">
                 <Spacing margin={{ top: 'small' }}>
-                  <Text variant="bold">Deleted Users</Text>
+                  <Text variant="bold">Inactive Users</Text>
                 </Spacing>
               </Column>
               <Column lg="6" right>
@@ -177,7 +185,7 @@ const _DeletedUsersPage = () => {
                   variables: {
                     sidsInput: { sids: selectedUserIds() },
                   },
-                });
+                }).then();
                 setIsConfirmationHidden(true);
               }}
               text="Enable"

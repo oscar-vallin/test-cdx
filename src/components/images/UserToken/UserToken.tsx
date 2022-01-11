@@ -1,5 +1,5 @@
 import { ReactElement } from 'react';
-import { PersonaInitialsColor, PersonaSize } from 'office-ui-fabric-react/lib-commonjs/Persona';
+import { PersonaInitialsColor, PersonaSize } from '@fluentui/react';
 import { StyledPersona } from './UserToken.styles';
 
 const defaultProps = {

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { ReactElement, useState, useEffect } from 'react';
 
-import { SpinnerSize, Panel, PanelType, Spinner } from 'office-ui-fabric-react';
+import { SpinnerSize, Panel, PanelType, Spinner } from '@fluentui/react';
 import _ from 'lodash';
 
 import { useNotification } from 'src/hooks/useNotification';
@@ -23,9 +23,9 @@ import {
   useUpdateAccessSpecializationMutation,
   useVendorQuickSearchLazyQuery,
   useOrganizationQuickSearchLazyQuery,
-} from '../../../../../data/services/graphql';
-import { useOrgSid } from '../../../../../hooks/useOrgSid';
-import { TagPicker } from '../../../../../components/pickers/TagPicker';
+} from 'src/data/services/graphql';
+import { useOrgSid } from 'src/hooks/useOrgSid';
+import { TagPicker } from 'src/components/pickers/TagPicker';
 
 const INITIAL_STATE = {
   name: '',

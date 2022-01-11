@@ -1,4 +1,4 @@
-import { FontIcon } from '@fluentui/react/lib-commonjs/Icon';
+import { FontIcon } from '@fluentui/react';
 import React from 'react';
 import { Text } from '../Text';
 

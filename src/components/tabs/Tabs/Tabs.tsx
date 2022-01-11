@@ -1,6 +1,6 @@
 import { ReactElement } from 'react';
-import { PivotItem } from 'office-ui-fabric-react/lib-commonjs/Pivot';
-import { Badge } from '../../badges/Badge';
+import { PivotItem } from '@fluentui/react';
+import { Badge } from 'src/components/badges/Badge';
 import { StyledPivot, StyledSpan } from './Tabs.styles';
 
 const defaultProps = {

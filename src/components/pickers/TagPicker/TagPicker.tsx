@@ -1,5 +1,5 @@
-import { ReactElement, useCallback, useEffect, useRef } from 'react';
-import { Label } from '@fluentui/react/lib-commonjs/Label';
+import { ReactElement, useCallback, useRef } from 'react';
+import { Label } from '@fluentui/react';
 import { StyledTagPicker } from './TagPicker.styles';
 
 const defaultProps = {

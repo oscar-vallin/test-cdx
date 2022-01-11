@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import toJSON from 'enzyme-to-json';
 import { shallow } from 'enzyme';
-import { DayOfWeek } from 'office-ui-fabric-react/lib-commonjs/DatePicker';
+import { DayOfWeek } from '@fluentui/react';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { addDays, addMonths, addYears } from '@fluentui/date-time-utilities';
-import { getHours, startOfSecond, addSeconds } from 'date-fns';
+import { addDays } from '@fluentui/date-time-utilities';
+import { getHours } from 'date-fns';
 import { InputDate as Component } from './index';
-import { mountWithTheme, shallowWithTheme } from 'src/utils/testUtils';
 
 const today = new Date();
 const yesterday = addDays(today, -1);

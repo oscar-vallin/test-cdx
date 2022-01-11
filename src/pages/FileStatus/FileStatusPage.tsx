@@ -1,23 +1,23 @@
 import React, { ReactElement, useState } from 'react';
-import { Icon } from 'office-ui-fabric-react';
-import { ROUTES } from '../../data/constants/RouteConstants';
-import { Column, Container, Row } from '../../components/layouts';
+import { Icon } from '@fluentui/react';
+import { ROUTES } from 'src/data/constants/RouteConstants';
+import { Column, Container, Row } from 'src/components/layouts';
 import { Spacing } from '../../components/spacings/Spacing';
-import { PageTitle, Text } from '../../components/typography';
-import { PageHeader } from '../../containers/headers/PageHeader';
-import { LayoutDashboard } from '../../layouts/LayoutDashboard';
-import { WorkPacketTable } from '../../containers/tables/WorkPacketTable';
+import { PageTitle, Text } from 'src/components/typography';
+import { PageHeader } from 'src/containers/headers/PageHeader';
+import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
+import { WorkPacketTable } from 'src/containers/tables/WorkPacketTable';
 import {
   NullHandling,
   SortDirection,
   useWorkPacketStatusesLazyQuery,
   useWorkPacketStatusesPollQuery,
   WorkPacketStatus,
-} from '../../data/services/graphql';
-import { WorkPacketColumns } from '../../containers/tables/WorkPacketColumns';
-import { useOrgSid } from '../../hooks/useOrgSid';
-import { tableFiltersToQueryParams, useTableFilters } from '../../hooks/useTableFilters';
-import { DownloadLink } from '../../containers/tables/WorkPacketTable.styles';
+} from 'src/data/services/graphql';
+import { WorkPacketColumns } from 'src/containers/tables/WorkPacketColumns';
+import { useOrgSid } from 'src/hooks/useOrgSid';
+import { tableFiltersToQueryParams, useTableFilters } from 'src/hooks/useTableFilters';
+import { DownloadLink } from 'src/containers/tables/WorkPacketTable.styles';
 
 const _FileStatusPage = () => {
   const [tableMeta, setTableMeta] = useState({ count: 0, loading: true });

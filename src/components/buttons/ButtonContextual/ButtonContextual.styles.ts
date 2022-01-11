@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { DefaultButton } from 'office-ui-fabric-react/lib-commonjs/Button';
+import { DefaultButton } from '@fluentui/react';
 
 export const StyledButton = styled(DefaultButton)<StyledButtonProps>`
   background: transparent;

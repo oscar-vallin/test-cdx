@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Dialog } from 'office-ui-fabric-react/lib/Dialog';
+import { Dialog } from '@fluentui/react';
 
 export const StyledModal = styled(Dialog)`
   .ms-Dialog-main {

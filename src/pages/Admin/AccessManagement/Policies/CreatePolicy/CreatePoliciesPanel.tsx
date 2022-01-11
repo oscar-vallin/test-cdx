@@ -1,7 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { ReactElement, useState, useEffect } from 'react';
 
-import { SpinnerSize, Checkbox, Panel, PanelType, Spinner } from 'office-ui-fabric-react';
+import {
+  SpinnerSize,
+  Checkbox,
+  Panel,
+  PanelType,
+  Spinner
+} from '@fluentui/react';
 import _ from 'lodash';
 
 import { useNotification } from 'src/hooks/useNotification';
@@ -33,8 +39,8 @@ const INITIAL_STATE = {
 };
 
 const groupPermissions: any = (opts) => {
-  const { values } = opts.find((opt) => opt.key === 'Permission');
-  const { K2U, COLORPALETTE, ACCESS, ORG, PASSWORD, PROD, SSOIDP, TEST, THEME, UAT, USER } = _.groupBy(
+  const {values} = opts.find((opt) => opt.key === 'Permission');
+  const {K2U, COLORPALETTE, ACCESS, ORG, PASSWORD, PROD, SSOIDP, TEST, THEME, UAT, USER} = _.groupBy(
     values,
     (item) => {
       return item.value.split('_').shift();
@@ -42,29 +48,29 @@ const groupPermissions: any = (opts) => {
   );
 
   const exchangeStatus = [
-    { label: 'K2U Exchanges', options: K2U },
-    { label: 'Test Exchanges', options: TEST },
-    { label: 'UAT Exchanges', options: UAT },
-    { label: 'Production Exchanges', options: PROD },
+    {label: 'K2U Exchanges', options: K2U},
+    {label: 'Test Exchanges', options: TEST},
+    {label: 'UAT Exchanges', options: UAT},
+    {label: 'Production Exchanges', options: PROD},
   ];
 
   const accessManagement = [
-    { label: 'Users', options: USER },
-    { label: 'Access Management', options: ACCESS },
-    { label: 'Organization', options: ORG },
+    {label: 'Users', options: USER},
+    {label: 'Access Management', options: ACCESS},
+    {label: 'Organization', options: ORG},
   ];
 
   const siteSettings = [
-    { label: 'Password', options: PASSWORD },
-    { label: 'Color Palettes', options: COLORPALETTE },
-    { label: 'Theme', options: THEME },
-    { label: 'SSO', options: SSOIDP },
+    {label: 'Password', options: PASSWORD},
+    {label: 'Color Palettes', options: COLORPALETTE},
+    {label: 'Theme', options: THEME},
+    {label: 'SSO', options: SSOIDP},
   ];
 
   return [
-    { label: 'Exchange Status', permissions: exchangeStatus },
-    { label: 'Access Management', permissions: accessManagement },
-    { label: 'Site Settings', permissions: siteSettings },
+    {label: 'Exchange Status', permissions: exchangeStatus},
+    {label: 'Access Management', permissions: accessManagement},
+    {label: 'Site Settings', permissions: siteSettings},
   ];
 };
 
@@ -84,28 +90,28 @@ type CreatePoliciesPanelProps = {
 } & typeof defaultProps;
 
 const CreatePoliciesPanel = ({
-  isOpen,
-  onDismiss,
-  onCreatePolicy = () => null,
-  onUpdatePolicy = () => null,
-  selectedPolicyId,
-  selectedTemplateId,
-}: CreatePoliciesPanelProps): ReactElement => {
-  const { orgSid } = useOrgSid();
+                               isOpen,
+                               onDismiss,
+                               onCreatePolicy = () => null,
+                               onUpdatePolicy = () => null,
+                               selectedPolicyId,
+                               selectedTemplateId,
+                             }: CreatePoliciesPanelProps): ReactElement => {
+  const {orgSid} = useOrgSid();
   const Toast = useNotification();
-  const [state, setState]: any = useState({ ...INITIAL_STATE });
+  const [state, setState]: any = useState({...INITIAL_STATE});
   const [policyForm, setPolicyForm]: any = useState({});
   const [permissions, setPermissions] = useState([]);
   const [applicableOrgTypes, setApplicableOrgTypes]: any = useState([]);
 
-  const [fetchPolicyForm, { data: form, loading: isLoadingForm }] = useQueryHandler(useAccessPolicyFormLazyQuery);
-  const [createPolicy, { data: createdPolicy, loading: isCreatingPolicy }] =
+  const [fetchPolicyForm, {data: form, loading: isLoadingForm}] = useQueryHandler(useAccessPolicyFormLazyQuery);
+  const [createPolicy, {data: createdPolicy, loading: isCreatingPolicy}] =
     useQueryHandler(useCreateAccessPolicyMutation);
 
-  const [updatePolicy, { data: updatedPolicy, loading: isUpdatingPolicy }] =
+  const [updatePolicy, {data: updatedPolicy, loading: isUpdatingPolicy}] =
     useQueryHandler(useUpdateAccessPolicyMutation);
 
-  const [fetchPolicy, { data: policy, loading: isLoadingPolicy }] = useQueryHandler(useFindAccessPolicyLazyQuery);
+  const [fetchPolicy, {data: policy, loading: isLoadingPolicy}] = useQueryHandler(useFindAccessPolicyLazyQuery);
 
   useEffect(() => {
     if (isOpen && selectedPolicyId > 0) {
@@ -119,13 +125,13 @@ const CreatePoliciesPanel = ({
 
   useEffect(() => {
     if (createdPolicy) {
-      const { createAccessPolicy } = createdPolicy;
+      const {createAccessPolicy} = createdPolicy;
 
       if (createAccessPolicy.response === 'FAIL') {
-        Toast.error({ text: 'Please check the highlighted fields and try again' });
+        Toast.error({text: 'Please check the highlighted fields and try again'});
       } else {
         onCreatePolicy(createAccessPolicy);
-        Toast.success({ text: 'Access Policy created successfully' });
+        Toast.success({text: 'Access Policy created successfully'});
         onDismiss();
       }
     }
@@ -133,13 +139,13 @@ const CreatePoliciesPanel = ({
 
   useEffect(() => {
     if (updatedPolicy && selectedPolicyId) {
-      const { updateAccessPolicy } = updatedPolicy;
+      const {updateAccessPolicy} = updatedPolicy;
 
       if (updateAccessPolicy?.response && updateAccessPolicy?.response === 'FAIL') {
-        Toast.error({ text: 'Please check the highlighted fields and try again' });
+        Toast.error({text: 'Please check the highlighted fields and try again'});
       } else {
         onUpdatePolicy(updateAccessPolicy);
-        Toast.success({ text: 'Access Policy updated successfully' });
+        Toast.success({text: 'Access Policy updated successfully'});
         onDismiss();
       }
     }
@@ -151,9 +157,9 @@ const CreatePoliciesPanel = ({
         setApplicableOrgTypes([]);
         setPermissions([]);
         fetchPolicyForm({
-          variables: { orgSid, ...(selectedTemplateId ? { templatePolicySid: selectedTemplateId } : {}) },
+          variables: {orgSid, ...(selectedTemplateId ? {templatePolicySid: selectedTemplateId} : {})},
         });
-        setState({ ...INITIAL_STATE });
+        setState({...INITIAL_STATE});
       } else {
         setPolicyForm({});
       }
@@ -166,29 +172,29 @@ const CreatePoliciesPanel = ({
       setPermissions(groupPermissions(form.accessPolicyForm.options));
 
       if (selectedTemplateId) {
-        const { applicableOrgTypes, permissions } = form?.accessPolicyForm || {};
+        const {applicableOrgTypes, permissions} = form?.accessPolicyForm || {};
 
         setState({
           ...INITIAL_STATE,
-          permissions: permissions.value?.map(({ value }) => value) || [],
+          permissions: permissions.value?.map(({value}) => value) || [],
         });
 
-        setApplicableOrgTypes(applicableOrgTypes.value?.map(({ value }) => value) || []);
+        setApplicableOrgTypes(applicableOrgTypes.value?.map(({value}) => value) || []);
       }
     }
   }, [form, isOpen]);
 
   useEffect(() => {
     if (policy) {
-      const { name, applicableOrgTypes, permissions, sid, tmpl, tmplUseAsIs, options } = policy.findAccessPolicy;
+      const {name, applicableOrgTypes, permissions, sid, tmpl, tmplUseAsIs, options} = policy.findAccessPolicy;
 
       setPolicyForm(policy.findAccessPolicy);
       setPermissions(groupPermissions(options));
-      setApplicableOrgTypes(applicableOrgTypes.value.map(({ value }) => value));
+      setApplicableOrgTypes(applicableOrgTypes.value.map(({value}) => value));
 
       setState({
         sid,
-        permissions: permissions.value?.map(({ value }) => value) || [],
+        permissions: permissions.value?.map(({value}) => value) || [],
         policyName: name.value,
         isTemplate: tmpl.value,
         usedAsIs: tmplUseAsIs.value,
@@ -204,7 +210,7 @@ const CreatePoliciesPanel = ({
       headerText={!selectedPolicyId ? 'New access policy' : 'Update access policy'}
       isOpen={isOpen}
       onDismiss={() => {
-        setState({ ...INITIAL_STATE });
+        setState({...INITIAL_STATE});
 
         onDismiss();
       }}
@@ -214,16 +220,16 @@ const CreatePoliciesPanel = ({
           <Column lg="12">
             {isLoadingForm || isLoadingPolicy ? (
               <>
-                <Spacing margin={{ top: 'normal', bottom: 'double' }}>
-                  <Separator />
+                <Spacing margin={{top: 'normal', bottom: 'double'}}>
+                  <Separator/>
                 </Spacing>
 
                 <Spacing>
-                  <Spinner size={SpinnerSize.large} label="Loading policy form" />
+                  <Spinner size={SpinnerSize.large} label="Loading policy form"/>
                 </Spacing>
               </>
             ) : (
-              <Spacing margin={{ top: 'normal' }}>
+              <Spacing margin={{top: 'normal'}}>
                 <Row bottom>
                   <Column lg="6" sm="12">
                     {policyForm.name?.visible && (
@@ -234,7 +240,7 @@ const CreatePoliciesPanel = ({
                         maxLength={policyForm.name?.max}
                         value={state.policyName}
                         required={policyForm.name?.required}
-                        onChange={(event, newValue) => setState({ ...state, policyName: newValue })}
+                        onChange={(event, newValue) => setState({...state, policyName: newValue})}
                         errorMessage={createdPolicy?.createAccessPolicy?.response === 'FAIL' ? 'Required field' : ''}
                       />
                     )}
@@ -243,26 +249,26 @@ const CreatePoliciesPanel = ({
                   <Column lg="6" sm="12">
                     <Row>
                       <Column lg="6">
-                        <Spacing margin={{ bottom: 'small' }}>
+                        <Spacing margin={{bottom: 'small'}}>
                           {policyForm.tmpl?.visible && (
                             <Checkbox
                               label={policyForm.tmpl?.label}
                               // required={policyForm.tmpl?.required}
                               checked={state.isTemplate}
-                              onChange={(event, isTemplate) => setState({ ...state, isTemplate })}
+                              onChange={(event, isTemplate) => setState({...state, isTemplate})}
                             />
                           )}
                         </Spacing>
                       </Column>
                       {state.isTemplate && (
                         <Column lg="6">
-                          <Spacing margin={{ bottom: 'small' }}>
+                          <Spacing margin={{bottom: 'small'}}>
                             {policyForm.tmplUseAsIs?.visible && (
                               <Checkbox
                                 label={policyForm.tmplUseAsIs?.label}
                                 // required={policyForm.tmplUseAsIs?.required}
                                 checked={state.usedAsIs}
-                                onChange={(event, usedAsIs) => setState({ ...state, usedAsIs })}
+                                onChange={(event, usedAsIs) => setState({...state, usedAsIs})}
                               />
                             )}
                           </Spacing>
@@ -272,7 +278,7 @@ const CreatePoliciesPanel = ({
                   </Column>
                 </Row>
 
-                <Spacing margin={{ top: 'normal' }}>
+                <Spacing margin={{top: 'normal'}}>
                   <Row>
                     <Column lg="6">
                       <Label>Organization</Label>
@@ -281,14 +287,14 @@ const CreatePoliciesPanel = ({
 
                     {policyForm.applicableOrgTypes?.visible && state.isTemplate && (
                       <Column lg="6">
-                        <Label text={policyForm.applicableOrgTypes?.label} info={policyForm.applicableOrgTypes?.info} />
+                        <Label text={policyForm.applicableOrgTypes?.label} info={policyForm.applicableOrgTypes?.info}/>
 
                         <Multiselect
                           value={applicableOrgTypes}
                           options={
                             policyForm.options
                               ?.find((opt) => opt.key === 'OrgType')
-                              ?.values.map(({ label, value }) => ({ key: value, text: label })) || []
+                              ?.values.map(({label, value}) => ({key: value, text: label})) || []
                           }
                           onChange={(evt, item) => {
                             const opts = item.selected
@@ -304,10 +310,10 @@ const CreatePoliciesPanel = ({
                 </Spacing>
 
                 {policyForm.permissions?.visible && (
-                  <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                  <Spacing margin={{top: 'normal', bottom: 'normal'}}>
                     <Row>
                       <Column lg="12">
-                        <Spacing margin={{ top: 'small' }}>
+                        <Spacing margin={{top: 'small'}}>
                           <Text variant="bold">Permissions</Text>
                         </Spacing>
                       </Column>
@@ -317,7 +323,7 @@ const CreatePoliciesPanel = ({
                       <Column lg="12">
                         {permissions.map((group: any, groupIndex) => (
                           <Collapse label={group.label} expanded key={groupIndex}>
-                            <Spacing padding={{ top: 'normal', bottom: 'normal' }}>
+                            <Spacing padding={{top: 'normal', bottom: 'normal'}}>
                               <Row>
                                 <Column lg="12">
                                   <Card elevation="none" spacing="none">
@@ -325,13 +331,13 @@ const CreatePoliciesPanel = ({
                                       {group.permissions?.map((permission, pIndex) => (
                                         <Column lg="3" key={`${groupIndex}-${pIndex}`}>
                                           <Card elevation="none">
-                                            <Spacing margin={{ bottom: 'normal' }}>
+                                            <Spacing margin={{bottom: 'normal'}}>
                                               <Label>{permission.label}</Label>
                                             </Spacing>
 
                                             {permission.options?.map((option, optIndex) => (
                                               <Spacing
-                                                margin={{ top: 'small' }}
+                                                margin={{top: 'small'}}
                                                 key={`${groupIndex}-${pIndex}-${optIndex}`}
                                               >
                                                 <Checkbox
@@ -364,8 +370,8 @@ const CreatePoliciesPanel = ({
                   </Spacing>
                 )}
 
-                <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                  <Separator />
+                <Spacing margin={{top: 'normal', bottom: 'normal'}}>
+                  <Separator/>
                 </Spacing>
 
                 <Row>

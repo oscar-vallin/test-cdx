@@ -1,6 +1,6 @@
 import { ReactElement } from 'react';
 import { StyledIcon } from '../UserSettingsPage.styles';
-import { PasswordValidationRule } from '../../../data/services/graphql';
+import { PasswordValidationRule } from 'src/data/services/graphql';
 
 type RuleItemParam = {
   item: PasswordValidationRule;
@@ -12,16 +12,17 @@ type RuleItemsParam = {
 
 const RuleItems = ({ items }: RuleItemsParam) => {
   const rows: ReactElement[] = [];
+  let idx = 0;
   for (const item of items) {
-    rows.push(RuleItem({ item }));
+    rows.push(RuleItem(idx++,{ item }));
   }
 
   return <div>{rows}</div>;
 };
 
-const RuleItem = ({ item }: RuleItemParam) => {
+const RuleItem = (idx: number, { item }: RuleItemParam) => {
   return (
-    <div style={{ display: 'flex', alignItems: 'center' }}>
+    <div key={`ruleItem_${idx}`} style={{ display: 'flex', alignItems: 'center' }}>
       {item.passes ? <StyledIcon iconName="StatusCircleCheckmark" /> : <StyledIcon iconName="StatusCircleErrorX" />}
       {item.label}
     </div>

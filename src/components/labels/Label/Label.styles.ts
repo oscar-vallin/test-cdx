@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Label } from 'office-ui-fabric-react';
+import { Label } from '@fluentui/react';
 
 export const StyledLabel = styled(Label)`
   .ms-Icon {

@@ -1,11 +1,12 @@
 /* eslint-disable react/void-dom-elements-no-children */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { ReactElement, useEffect, useState } from 'react';
-import { Link } from 'office-ui-fabric-react/lib-commonjs/Link';
-import { mergeStyles, mergeStyleSets } from 'office-ui-fabric-react/lib-commonjs/Styling';
 import { format } from 'date-fns';
 
 import {
+  Link,
+  mergeStyles,
+  mergeStyleSets,
   ColumnActionsMode,
   DetailsList,
   DetailsListLayoutMode,
@@ -13,7 +14,7 @@ import {
   buildColumns,
   DetailsHeader,
   IColumn,
-} from 'office-ui-fabric-react/lib-commonjs/DetailsList';
+} from '@fluentui/react';
 import { EmptyState } from 'src/containers/states';
 import { getDates } from 'src/helpers/tableHelpers.service';
 

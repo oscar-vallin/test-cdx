@@ -219,7 +219,7 @@ export const ROUTE_ACTIVE_USERS = {
 
 export const ROUTE_DELETED_USERS = {
   ID: ROUTES_ID.DELETED_USERS,
-  TITLE: 'Deleted Users',
+  TITLE: 'Inactive Users',
   URL: URL_ROUTES.DELETED_USERS,
   MAIN_MENU: false,
   API_ID: 'DELETED_USERS',

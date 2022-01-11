@@ -1,12 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, ReactElement } from 'react';
 
-import { Panel, PanelType } from '@fluentui/react/lib-commonjs/Panel';
-import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
-import { TagPicker } from '@fluentui/react/lib-commonjs/Pickers';
-import { mergeStyles } from '@fluentui/react/lib-commonjs/Styling';
-import { FontIcon } from '@fluentui/react/lib-commonjs/Icon';
-import { TooltipHost } from '@fluentui/react/lib-commonjs/Tooltip';
+import {
+  Panel,
+  PanelType,
+  Checkbox,
+  TagPicker,
+  mergeStyles,
+  FontIcon,
+  TooltipHost
+} from '@fluentui/react';
 
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { Spacing } from 'src/components/spacings/Spacing';
@@ -474,11 +477,11 @@ const CreateGroupPanel = ({
                       if (accessPolicyForm.policyGroupSid) {
                         updatePolicyGroup({
                           updateAccessPolicyGroupInput: { sid: accessPolicyForm.policyGroupSid, ...commonVariables },
-                        });
+                        }).then();
                       } else {
                         createPolicyGroup({
                           createAccessPolicyGroupInput: { orgSid, ...commonVariables },
-                        });
+                        }).then();
                       }
                       return null;
                     }}

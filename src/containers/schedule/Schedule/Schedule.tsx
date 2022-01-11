@@ -14,8 +14,8 @@ import { ScheduleMonth } from './ScheduleMonth';
 import { ScheduleDay } from './ScheduleDay';
 import { useScheduleItems } from './Schedule.service';
 
-import { Column, Container } from '../../../components/layouts';
-import { Card } from '../../../components/cards/Card';
+import { Column, Container } from 'src/components/layouts';
+import { Card } from 'src/components/cards';
 import { PageHeader } from '../../headers/PageHeader';
 import { Spacing } from '../../../components/spacings/Spacing';
 
@@ -70,8 +70,7 @@ const Schedule = ({ id }) => {
                 currentView={currentView}
                 selectedDate={selectedDate}
               />
-
-              {!!isCurrentViewMonth(currentView) && (
+              {isCurrentViewMonth(currentView) && (
                 <ScheduleMonth
                   id={`${id}-Month`}
                   selectedDate={selectedDate}
@@ -81,10 +80,10 @@ const Schedule = ({ id }) => {
                   items={items}
                 />
               )}
-              {!!isCurrentViewWeek(currentView) && (
+              {isCurrentViewWeek(currentView) && (
                 <ScheduleWeek selectedDate={selectedDate} currentDate={currentDate} items={items} />
               )}
-              {!!isCurrentViewDay(currentView) && <ScheduleDay selectedDate={selectedDate} currentDate={currentDate} />}
+              {isCurrentViewDay(currentView) && <ScheduleDay selectedDate={selectedDate} currentDate={currentDate} />}
             </Card>
           </Column>
         </StyledRow>

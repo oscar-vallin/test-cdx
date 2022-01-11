@@ -1,10 +1,8 @@
 /* tslint:disable */
 
-import styled, { StyledComponent } from 'styled-components';
+import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { Icon } from '@fluentui/react/lib-commonjs/Icon';
-import { IconButton } from '@fluentui/react/lib-commonjs/Button';
-import { Nav } from 'office-ui-fabric-react/lib/Nav';
+import { Icon, IconButton, Nav } from '@fluentui/react';
 
 interface ToggableProps {
   open?: boolean;

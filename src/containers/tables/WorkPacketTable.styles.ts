@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { Link } from 'office-ui-fabric-react';
-import { Box as LayoutBox, Row as LayoutRow, Column as LayoutColumn } from '../../components/layouts';
+import { Link } from '@fluentui/react';
+import { Box as LayoutBox, Row as LayoutRow, Column as LayoutColumn } from 'src/components/layouts';
 
 export const Container = styled(LayoutBox)`
   margin: 0 auto;
