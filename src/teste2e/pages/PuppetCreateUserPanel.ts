@@ -1,4 +1,5 @@
 import PuppetBasePage from './PuppetBasePage';
+import PuppetDialogYesNo from "src/teste2e/pages/PuppetDialogYesNo";
 
 export default class PuppetCreateUserPanel extends PuppetBasePage {
   private nextButton = '#__Next_Button';
@@ -93,6 +94,17 @@ export default class PuppetCreateUserPanel extends PuppetBasePage {
     await this.click(this.closePanelButton);
     await this.page.waitForTimeout(1000);
     await this.expectHidden();
+  }
+
+  async closePanelDismissDialog() {
+    await this.click(this.closePanelButton);
+    const dialog = new PuppetDialogYesNo(this.page);
+    await dialog.expectVisible();
+    await dialog.expectTitle('You have unsaved changes');
+    await dialog.clickYes();
+    await this.page.waitForTimeout(1000);
+    await this.expectHidden();
+
   }
 
   async expectHidden() {

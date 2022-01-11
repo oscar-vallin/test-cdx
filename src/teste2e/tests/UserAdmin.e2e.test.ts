@@ -56,7 +56,7 @@ describe('User Administration Testing', () => {
 
     await panel.expectFirstNameEmailError();
 
-    await panel.closePanel();
+    await panel.closePanelDismissDialog();
   });
 
   it('Create new user - Happy Path',async () => {

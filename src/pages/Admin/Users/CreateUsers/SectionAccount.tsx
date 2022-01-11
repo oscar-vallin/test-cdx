@@ -7,7 +7,6 @@ import CreateUsersFooter from './CreateUsersFooter';
 import { UserAccount, UserAccountForm } from 'src/data/services/graphql';
 import { UIInputTextReadOnly } from 'src/components/inputs/InputText/InputText';
 import { WizardBody } from "src/layouts/Panels/Panels.styles";
-import { useEffect } from "react";
 
 type SectionAccountProps = {
   form: UserAccountForm;
@@ -24,22 +23,18 @@ const SectionAccount = ({ form, onNext, saveOptions }: SectionAccountProps) => {
     return onNext();
   };
 
-  const saveFields = () => {
+  const saveFields = (firstName: string, lastName: string, email: string) => {
     const user: UserAccount = {
       sid: '',
-      email: formEmail.value,
+      email: email,
       person: {
         sid: '',
-        firstNm: formFirstName.value,
-        lastNm: formLastName.value,
+        firstNm: firstName,
+        lastNm: lastName
       },
     };
     saveOptions(user);
   }
-
-  useEffect(() => {
-    saveFields();
-  }, [formFirstName.value, formLastName.value, formEmail.value]);
 
   return (
     <>
@@ -47,19 +42,37 @@ const SectionAccount = ({ form, onNext, saveOptions }: SectionAccountProps) => {
         <FormRow>
           {form.person?.firstNm?.visible && (
             <Column lg={form.person?.lastNm?.visible ? '6' : '12'}>
-              <UIInputText id="__userFirstNm" uiStringField={form.person?.firstNm} {...formFirstName} />
+              <UIInputText id="__userFirstNm"
+                           uiStringField={form.person?.firstNm}
+                           value={formFirstName.value}
+                           onChange={(e, newValue) => {
+                             formFirstName.onChange(e);
+                             saveFields(newValue ?? '', formLastName.value, formEmail.value);
+                           }}/>
             </Column>
           )}
           {form.person?.lastNm?.visible && (
             <Column lg={form.person?.firstNm?.visible ? '6' : '12'}>
-              <UIInputText id="__userLastNm" uiStringField={form.person?.lastNm} {...formLastName} />
+              <UIInputText id="__userLastNm"
+                           uiStringField={form.person?.lastNm}
+                           value={formLastName.value}
+                           onChange={(e, newValue) => {
+                             formLastName.onChange(e);
+                             saveFields(formFirstName.value, newValue ?? '',formEmail.value);
+                           }}/>
             </Column>
           )}
         </FormRow>
         <FormRow>
           {form.email?.visible && (
             <Column lg="12">
-              <UIInputText id="__userEmail" uiStringField={form.email ?? undefined} {...formEmail} />
+              <UIInputText id="__userEmail"
+                           uiStringField={form.email ?? undefined}
+                           value={formEmail.value}
+                           onChange={(e, newValue) => {
+                             formEmail.onChange(e);
+                             saveFields(formFirstName.value, formLastName.value, newValue ?? '');
+                           }}/>
             </Column>
           )}
         </FormRow>

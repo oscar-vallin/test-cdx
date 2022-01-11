@@ -81,7 +81,11 @@ const DialogYesNo = (props: DialogYesNoProps): ReactElement => {
         title: props.title,
         subText: props.message,
       }}
-      modalProps={{ isBlocking: true }}
+      modalProps={
+        { isBlocking: true,
+          containerClassName: 'dialog-yes-no'
+        }
+      }
     >
       <DialogFooter>
         <Button
