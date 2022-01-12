@@ -6,7 +6,7 @@ export const useNotification = () => {
 
   const notify =
     (type) =>
-    ({ text, duration = 50000 }) =>
+    ({ text, duration = 5000 }) =>
       dispatch({
         type: 'TOAST_SHOW',
         payload: { type, text, duration },
