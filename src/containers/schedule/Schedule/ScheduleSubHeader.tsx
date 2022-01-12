@@ -1,6 +1,7 @@
 import { useState, useEffect, ReactElement } from 'react';
 import { addDays, endOfMonth, endOfWeek, format, isSameDay, isSameMonth, startOfMonth, startOfWeek } from 'date-fns';
 
+import { Text } from 'src/components/typography';
 import {
   Row,
   DayOfWeek,
@@ -12,7 +13,6 @@ import {
   WeekHourSpace,
 } from './ScheduleSubHeader.styles';
 import { isCurrentViewDay, isCurrentViewWeek } from './helpers';
-import { Text } from 'src/components/typography';
 
 export const ScheduleSubHeader = ({ id, currentView, currentDate, selectedDate }) => {
   const _currentDate = startOfWeek(currentDate);

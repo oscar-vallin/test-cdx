@@ -1,7 +1,7 @@
 import { FontIcon, TooltipHost } from '@fluentui/react';
 import { ReactElement } from 'react';
-import { LabelRow, Label, Required, ErrorIcon } from './FormLabel.styles';
 import { UiField } from 'src/data/services/graphql';
+import { LabelRow, Label, Required, ErrorIcon } from './FormLabel.styles';
 
 const defaultProps = {
   required: false,
@@ -46,7 +46,7 @@ type UIFormLabelType = {
   uiField?: UiField;
 };
 
-const UIFormLabel = ({id, uiField }: UIFormLabelType) => {
+const UIFormLabel = ({ id, uiField }: UIFormLabelType) => {
   return (
     <FormLabel
       id={`${id}`}

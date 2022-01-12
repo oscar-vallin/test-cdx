@@ -1,10 +1,5 @@
 import { ReactElement } from 'react';
-import {
-  IColumn,
-  DetailsList,
-  DetailsListLayoutMode,
-  SelectionMode,
-} from '@fluentui/react';
+import { IColumn, DetailsList, DetailsListLayoutMode, SelectionMode } from '@fluentui/react';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { StyledRow, StyledVendorHeaderRow, StyledFooter } from '../FileStatusDetails.styles';
 

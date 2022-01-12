@@ -1,13 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Dialog,
-  DialogType,
-  DialogFooter,
-  SpinnerSize,
-  PrimaryButton,
-  DefaultButton,
-  Spinner
-} from '@fluentui/react';
+import { Dialog, DialogType, DialogFooter, SpinnerSize, PrimaryButton, DefaultButton, Spinner } from '@fluentui/react';
 import { EmptyState } from 'src/containers/states';
 import { LayoutAdmin } from 'src/layouts/LayoutAdmin';
 import { Row, Column } from 'src/components/layouts';
@@ -16,12 +8,11 @@ import { PageTitle } from 'src/components/typography';
 import { Separator } from 'src/components/separators/Separator';
 import { Button } from 'src/components/buttons';
 import { ActiveEnum, useActivateUsersMutation, UserItem } from 'src/data/services/graphql';
+
+import { UpdateUserPanel, useUpdateUserPanel } from 'src/pages/Admin/Users/UpdateUsers';
+import { UsersTable } from 'src/pages/Admin/Users/UsersTable';
+import { useUsersLists } from 'src/pages/Admin/Users/useUsersList';
 import { StyledColumn } from './DeletedUsersPage.styles';
-
-import { UpdateUserPanel, useUpdateUserPanel } from "src/pages/Admin/Users/UpdateUsers";
-import { UsersTable } from "src/pages/Admin/Users/UsersTable";
-import { useUsersLists } from "src/pages/Admin/Users/useUsersList";
-
 
 const DeletedUsersPage = () => {
   const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);
@@ -66,7 +57,8 @@ const DeletedUsersPage = () => {
                       setIsConfirmationHidden(false);
                     }
                     return null;
-                  }}>
+                  }}
+                >
                   Enable Users
                 </Button>
               </Column>
@@ -90,9 +82,12 @@ const DeletedUsersPage = () => {
                   <Spinner size={SpinnerSize.large} label="Loading inactive users" />
                 </Spacing>
               ) : !userService.users?.length ? (
-                <EmptyState title="No inactive users" description="There aren't any inactive users in this organization" />
+                <EmptyState
+                  title="No inactive users"
+                  description="There aren't any inactive users in this organization"
+                />
               ) : (
-                <UsersTable users={userService.users} onClickUser={updateUserPanel.showPanel}/>
+                <UsersTable users={userService.users} onClickUser={updateUserPanel.showPanel} />
               )}
             </StyledColumn>
           </Row>

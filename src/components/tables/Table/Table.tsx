@@ -18,6 +18,7 @@ import {
 import { EmptyState } from 'src/containers/states';
 import { getDates } from 'src/helpers/tableHelpers.service';
 
+import { useOrgSid } from 'src/hooks/useOrgSid';
 import {
   StyledText,
   StyledContainer,
@@ -32,7 +33,6 @@ import {
 } from './Table.styles';
 
 import { TableHeader } from '../TableHeader';
-import { useOrgSid } from 'src/hooks/useOrgSid';
 
 const _buildColumns = (
   items,

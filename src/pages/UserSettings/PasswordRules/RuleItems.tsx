@@ -1,6 +1,6 @@
 import { ReactElement } from 'react';
-import { StyledIcon } from '../UserSettingsPage.styles';
 import { PasswordValidationRule } from 'src/data/services/graphql';
+import { StyledIcon } from '../UserSettingsPage.styles';
 
 type RuleItemParam = {
   item: PasswordValidationRule;
@@ -14,7 +14,7 @@ const RuleItems = ({ items }: RuleItemsParam) => {
   const rows: ReactElement[] = [];
   let idx = 0;
   for (const item of items) {
-    rows.push(RuleItem(idx++,{ item }));
+    rows.push(RuleItem(idx++, { item }));
   }
 
   return <div>{rows}</div>;

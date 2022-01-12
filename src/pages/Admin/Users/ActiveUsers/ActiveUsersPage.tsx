@@ -8,14 +8,14 @@ import { Spacing } from 'src/components/spacings/Spacing';
 import { PageTitle } from 'src/components/typography';
 import { Separator } from 'src/components/separators/Separator';
 
-import { CreateUsersPanel } from '../CreateUsers';
-import { UpdateUserPanel, useUpdateUserPanel } from '../UpdateUsers';
 import { ActiveEnum, useDeactivateUsersMutation, UserItem } from 'src/data/services/graphql';
-import { StyledColumn } from './ActiveUsersPage.styles';
 
 import { useOrgSid } from 'src/hooks/useOrgSid';
-import { UsersTable } from "src/pages/Admin/Users/UsersTable";
-import { useUsersLists } from "src/pages/Admin/Users/useUsersList";
+import { UsersTable } from 'src/pages/Admin/Users/UsersTable';
+import { useUsersLists } from 'src/pages/Admin/Users/useUsersList';
+import { StyledColumn } from './ActiveUsersPage.styles';
+import { UpdateUserPanel, useUpdateUserPanel } from '../UpdateUsers';
+import { CreateUsersPanel } from '../CreateUsers';
 
 const ActiveUsersPage = () => {
   const { orgSid } = useOrgSid();
@@ -103,7 +103,7 @@ const ActiveUsersPage = () => {
                   }
                 />
               ) : (
-                <UsersTable users={userService.users} onClickUser={updateUserPanel.showPanel}/>
+                <UsersTable users={userService.users} onClickUser={updateUserPanel.showPanel} />
               )}
             </StyledColumn>
           </Row>
@@ -137,7 +137,8 @@ const ActiveUsersPage = () => {
             title: 'Disable user',
             subText: `Do you really want to disable the selected user(s) ?`,
           }}
-          modalProps={{ isBlocking: true }}>
+          modalProps={{ isBlocking: true }}
+        >
           <DialogFooter>
             <PrimaryButton
               onClick={() => {

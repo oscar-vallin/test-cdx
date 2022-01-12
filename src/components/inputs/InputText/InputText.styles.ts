@@ -14,7 +14,7 @@ export const FieldValue = styled.div`
 
 export const EmptyValue = styled.span`
   color: ${({ theme }) => theme.colors.neutralTertiary};
-`
+`;
 
 export const StyledTextField = styled(TextField)<StyledTextFieldProps>`
   width: 100%;

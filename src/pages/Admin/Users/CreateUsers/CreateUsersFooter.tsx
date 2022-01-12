@@ -1,6 +1,6 @@
 import { ReactElement } from 'react';
 import { Button } from 'src/components/buttons';
-import {WizardButtonRow} from "src/layouts/Panels/Panels.styles";
+import { WizardButtonRow } from 'src/layouts/Panels/Panels.styles';
 
 type CreateUsersFooterProps = {
   onNext?: () => null;

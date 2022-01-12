@@ -3,7 +3,6 @@ import * as process from 'process';
 
 // Base page for all puppeteer test pages
 export default class PuppetBasePage {
-
   topMessageBar = '#__Top_Message';
 
   url: string;
@@ -55,25 +54,24 @@ export default class PuppetBasePage {
     });
   }
 
-
   async expectElementNotRendered(selector: string) {
     const { page } = this;
-    return page
-      .waitForSelector(selector, { hidden: true, timeout: 5000 })
-      .catch(() => {
-        // This is good
-        console.error(`Element ${selector} was rendered when it was expected not to`);
-      });
+    return page.waitForSelector(selector, { hidden: true, timeout: 5000 }).catch(() => {
+      // This is good
+      console.error(`Element ${selector} was rendered when it was expected not to`);
+    });
   }
 
   async waitForSelector(selector: string): Promise<ElementHandle | null> {
-    return await this.page.waitForSelector(selector, {
-      visible: true,
-      hidden: false
-    }).catch(() => {
-      console.error(`Did not find element ${selector} within the time limit`)
-      return null;
-    });
+    return await this.page
+      .waitForSelector(selector, {
+        visible: true,
+        hidden: false,
+      })
+      .catch(() => {
+        console.error(`Did not find element ${selector} within the time limit`);
+        return null;
+      });
   }
 
   async expectTextOnFirstRow(text: string, tableRow: number, tableCol: number) {

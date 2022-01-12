@@ -2,6 +2,12 @@ import { useState } from 'react';
 import { addDays, addMonths, endOfWeek, format, startOfWeek } from 'date-fns';
 
 import { addWeeks } from '@fluentui/react';
+
+import { MonthPicker } from 'src/components/inputs/MonthPicker';
+
+import { Spacing } from 'src/components/spacings/Spacing';
+import { Row, Column } from 'src/components/layouts';
+import { isCurrentViewDay, isCurrentViewMonth, isCurrentViewWeek } from './helpers';
 import {
   RowHeaderItem,
   HeaderMonth,
@@ -13,12 +19,6 @@ import {
   HeaderButtonTitle,
   FillerHours,
 } from './ScheduleHeader.styles';
-
-import { isCurrentViewDay, isCurrentViewMonth, isCurrentViewWeek } from './helpers';
-import { MonthPicker } from 'src/components/inputs/MonthPicker';
-
-import { Spacing } from 'src/components/spacings/Spacing';
-import { Row, Column } from 'src/components/layouts';
 
 export const ScheduleHeader = ({ id, currentView, currentDate, onChangeDate, onChangeView }) => {
   const [currentMonth, setCurrentMonth] = useState(currentDate ?? new Date());

@@ -3,10 +3,10 @@ import { Column } from 'src/components/layouts';
 import { useFormInputValue } from 'src/hooks/useInputValue';
 
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
-import UpdateUserFooter from './UpdateUserFooter';
 import { UserAccount, UserAccountForm } from 'src/data/services/graphql';
 import { UIInputTextReadOnly } from 'src/components/inputs/InputText/InputText';
-import { WizardBody } from "src/layouts/Panels/Panels.styles";
+import { WizardBody } from 'src/layouts/Panels/Panels.styles';
+import UpdateUserFooter from './UpdateUserFooter';
 
 type SectionAccountProps = {
   form: UserAccountForm;
@@ -38,38 +38,42 @@ const SectionAccount = ({ form, onSave, onFormChange }: SectionAccountProps) => 
         <FormRow>
           {form.person?.firstNm?.visible && (
             <Column lg={form.person?.lastNm?.visible ? '6' : '12'}>
-              <UIInputText id="__userFirstNm"
-                           uiStringField={form.person?.firstNm}
-                           value={formFirstName.value}
-                           onChange={(e) => {
-                             onFormChange();
-                             formFirstName.onChange(e);
-                           }}
+              <UIInputText
+                id="__userFirstNm"
+                uiStringField={form.person?.firstNm}
+                value={formFirstName.value}
+                onChange={(e) => {
+                  onFormChange();
+                  formFirstName.onChange(e);
+                }}
               />
             </Column>
           )}
           {form.person?.lastNm?.visible && (
             <Column lg={form.person?.firstNm?.visible ? '6' : '12'}>
-              <UIInputText id="__userLastNm"
-                           uiStringField={form.person?.lastNm}
-                           value={formLastName.value}
-                           onChange={(e) => {
-                             onFormChange();
-                             formLastName.onChange(e);
-                           }}/>
+              <UIInputText
+                id="__userLastNm"
+                uiStringField={form.person?.lastNm}
+                value={formLastName.value}
+                onChange={(e) => {
+                  onFormChange();
+                  formLastName.onChange(e);
+                }}
+              />
             </Column>
           )}
         </FormRow>
         <FormRow>
           {form.email?.visible && (
             <Column lg="12">
-              <UIInputText id="__userEmail"
-                           uiStringField={form.email ?? undefined}
-                           value={formEmail.value}
-                           onChange={(e) => {
-                             onFormChange();
-                             formEmail.onChange(e);
-                           }}
+              <UIInputText
+                id="__userEmail"
+                uiStringField={form.email ?? undefined}
+                value={formEmail.value}
+                onChange={(e) => {
+                  onFormChange();
+                  formEmail.onChange(e);
+                }}
               />
             </Column>
           )}
@@ -79,13 +83,15 @@ const SectionAccount = ({ form, onSave, onFormChange }: SectionAccountProps) => 
             <UIInputTextReadOnly id="__userOrg" uiField={form.organization} />
           </Column>
         </FormRow>
-        {form.lastLogin ?
+        {form.lastLogin ? (
           <FormRow>
             <Column lg="12">
-              <UIInputTextReadOnly id="__userLastLogin" uiField={form.lastLogin } />
+              <UIInputTextReadOnly id="__userLastLogin" uiField={form.lastLogin} />
             </Column>
-          </FormRow> : ''
-        }
+          </FormRow>
+        ) : (
+          ''
+        )}
       </WizardBody>
       <UpdateUserFooter onSave={handleSave} />
     </>

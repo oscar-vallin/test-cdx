@@ -1,5 +1,5 @@
-import { FontIcon } from "@fluentui/react";
-import styled from "styled-components";
+import { FontIcon } from '@fluentui/react';
+import styled from 'styled-components';
 
 export const ActiveIcon = styled(FontIcon)`
   color: ${({ theme }) => theme.colors.custom.success ?? '#107C10'};

@@ -3,13 +3,7 @@ import { useState, useEffect, memo } from 'react';
 
 import { Link } from 'react-router-dom';
 
-import {
-  DetailsList,
-  DetailsListLayoutMode,
-  SelectionMode,
-  Spinner,
-  SpinnerSize
-} from '@fluentui/react';
+import { DetailsList, DetailsListLayoutMode, SelectionMode, Spinner, SpinnerSize } from '@fluentui/react';
 import { EmptyState } from 'src/containers/states';
 import { LayoutAdmin } from 'src/layouts/LayoutAdmin';
 import { Row, Column } from 'src/components/layouts';
@@ -18,9 +12,9 @@ import { Text } from 'src/components/typography';
 import { Separator } from 'src/components/separators/Separator';
 
 import { useDirectOrganizationsLazyQuery } from 'src/data/services/graphql';
-import { StyledColumn } from './ActiveOrgsPage.styles';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
+import { StyledColumn } from './ActiveOrgsPage.styles';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({

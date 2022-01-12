@@ -4,7 +4,6 @@ import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { Customizer, loadTheme, SpinnerSize } from '@fluentui/react';
 
 import 'office-ui-fabric-react/dist/css/fabric.css';
-import { theme as styledComponentsTheme } from '../styles/themes/theme';
 
 import { useCurrentUserTheme } from 'src/hooks/useCurrentUserTheme';
 import { LayoutLogin } from 'src/layouts/LayoutLogin';
@@ -14,6 +13,7 @@ import { StyledCard } from 'src/containers/forms/FormLogin/FormLogin.styles';
 import Theming from 'src/utils/Theming';
 import { useSessionStore } from 'src/store/SessionStore';
 import { useThemeStore } from 'src/store/ThemeStore';
+import { theme as styledComponentsTheme } from '../styles/themes/theme';
 
 export const ThemeContext = createContext(() => {
   return {};

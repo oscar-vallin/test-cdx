@@ -5,33 +5,33 @@ import {
   GqOperationResponse,
   ResetPasswordMutation,
   UpdateUserAccessPolicyGroupsMutation,
-  UpdateUserMutation, useActivateUserMutation,
+  UpdateUserMutation,
+  useActivateUserMutation,
   useDeactivateUserMutation,
   useFindUserAccountLazyQuery,
   UserAccount,
   UserAccountForm,
   useResetPasswordMutation,
   useUpdateUserAccessPolicyGroupsMutation,
-  useUpdateUserMutation
+  useUpdateUserMutation,
 } from 'src/data/services/graphql';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { defaultForm, updateForm } from '../UserAccountFormUtil';
 
 export type UseUpdateUserPanel = {
-  isPanelOpen: boolean,
-  showPanel: (userSid: string) => void,
-  closePanel: () => void,
-  userAccountForm: UserAccountForm,
-  callUpdateUser: (updates: UserAccount) => Promise<UpdateUserMutation | null | undefined>,
-  callAssignGroups: (sids: string[]) => Promise<UpdateUserAccessPolicyGroupsMutation | null | undefined>,
-  callResetPassword: () => Promise<ResetPasswordMutation | null | undefined>,
-  callInactivateUser: () => Promise<DeactivateUserMutation | null | undefined>,
-  callActivateUser: () => Promise<ActivateUserMutation | null | undefined>,
-  resetForm: () => void
-}
+  isPanelOpen: boolean;
+  showPanel: (userSid: string) => void;
+  closePanel: () => void;
+  userAccountForm: UserAccountForm;
+  callUpdateUser: (updates: UserAccount) => Promise<UpdateUserMutation | null | undefined>;
+  callAssignGroups: (sids: string[]) => Promise<UpdateUserAccessPolicyGroupsMutation | null | undefined>;
+  callResetPassword: () => Promise<ResetPasswordMutation | null | undefined>;
+  callInactivateUser: () => Promise<DeactivateUserMutation | null | undefined>;
+  callActivateUser: () => Promise<ActivateUserMutation | null | undefined>;
+  resetForm: () => void;
+};
 
 export const useUpdateUserPanel = (): UseUpdateUserPanel => {
-
   const [panelOpen, setPanelOpen] = useState(false);
   const [userSid, setUserSid] = useState('');
   const [userAccountForm, setUserAccountForm] = useState<UserAccountForm>(defaultForm);
@@ -41,20 +41,15 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
   const [callFindUserAccount, { data: dataFindUserAccount, error: findUserAccountError }] =
     useFindUserAccountLazyQuery();
 
-  const [callUpdateUser, { error: updateUserError }] =
-    useUpdateUserMutation();
+  const [callUpdateUser, { error: updateUserError }] = useUpdateUserMutation();
 
-  const [callAssignGroups, { error: assignGroupsError }] =
-    useUpdateUserAccessPolicyGroupsMutation();
+  const [callAssignGroups, { error: assignGroupsError }] = useUpdateUserAccessPolicyGroupsMutation();
 
-  const [callResetPassword, { error: resetPasswordError }] =
-    useResetPasswordMutation();
+  const [callResetPassword, { error: resetPasswordError }] = useResetPasswordMutation();
 
-  const [callInactivateUser, { error: inactivateUserError}] =
-    useDeactivateUserMutation();
+  const [callInactivateUser, { error: inactivateUserError }] = useDeactivateUserMutation();
 
-  const [callActivateUser, { error: activateUserError}] =
-    useActivateUserMutation();
+  const [callActivateUser, { error: activateUserError }] = useActivateUserMutation();
 
   const showPanel = (userSid: string) => {
     setUserSid(userSid);
@@ -98,11 +93,11 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
     organization: {
       label: 'Primary Organization',
       required: false,
-      visible: true
+      visible: true,
     },
     response: GqOperationResponse.Fail,
     errCode: 'INTERNAL_ERROR',
-    errMsg: 'An internal server error has occurred.  Please contact your administrator.'
+    errMsg: 'An internal server error has occurred.  Please contact your administrator.',
   };
 
   const handleUpdateUserGroups = async (sids: string[]) => {
@@ -111,9 +106,9 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
       variables: {
         userAccessPolicyGroupUpdate: {
           userAccountSid: userSid,
-          accessPolicyGroupSids: sids
-        }
-      }
+          accessPolicyGroupSids: sids,
+        },
+      },
     });
 
     if (data?.updateUserAccessPolicyGroups) {
@@ -135,10 +130,10 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
           sid: userSid,
           email: userAccount.email,
           firstNm: userAccount.person?.firstNm ?? '',
-          lastNm: userAccount.person?.lastNm ?? ''
+          lastNm: userAccount.person?.lastNm ?? '',
         },
       },
-      errorPolicy: 'all'
+      errorPolicy: 'all',
     });
 
     if (data?.updateUser) {
@@ -153,24 +148,24 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
   };
 
   const handleResetPassword = async () => {
-    const {data} = await callResetPassword({
+    const { data } = await callResetPassword({
       variables: {
-        userSid: userSid
+        userSid,
       },
-      errorPolicy: 'all'
+      errorPolicy: 'all',
     });
 
     return data;
   };
 
-  const handleInactivateUser = async() => {
-    const {data} = await callInactivateUser({
+  const handleInactivateUser = async () => {
+    const { data } = await callInactivateUser({
       variables: {
         sidInput: {
-          sid: userSid
-        }
+          sid: userSid,
+        },
       },
-      errorPolicy: 'all'
+      errorPolicy: 'all',
     });
 
     if (data?.deactivateUser === GqOperationResponse.Success) {
@@ -185,14 +180,14 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
     return data;
   };
 
-  const handleActivateUser = async() => {
-    const {data} = await callActivateUser({
+  const handleActivateUser = async () => {
+    const { data } = await callActivateUser({
       variables: {
         sidInput: {
-          sid: userSid
-        }
+          sid: userSid,
+        },
       },
-      errorPolicy: 'all'
+      errorPolicy: 'all',
     });
 
     if (data?.activateUser === GqOperationResponse.Success) {
@@ -209,7 +204,7 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
 
   const resetForm = () => {
     if (userSid) {
-      //setUserAccountForm(defaultForm);
+      // setUserAccountForm(defaultForm);
     }
   };
 
@@ -233,6 +228,6 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
     callResetPassword: handleResetPassword,
     callInactivateUser: handleInactivateUser,
     callActivateUser: handleActivateUser,
-    resetForm
+    resetForm,
   };
 };

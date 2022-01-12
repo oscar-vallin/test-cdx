@@ -4,9 +4,9 @@ import { UIFormLabel } from 'src/components/labels/FormLabel';
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
 import { CheckboxList } from 'src/components/inputs/CheckboxList';
 import { Column } from 'src/components/layouts';
-import UpdateUserFooter from './UpdateUserFooter';
 import { Maybe, UiOption, UserAccountForm } from 'src/data/services/graphql';
-import { WizardBody } from "src/layouts/Panels/Panels.styles";
+import { WizardBody } from 'src/layouts/Panels/Panels.styles';
+import UpdateUserFooter from './UpdateUserFooter';
 
 type SectionAccessProps = {
   form?: UserAccountForm;
@@ -61,7 +61,7 @@ const SectionAccessManagement = ({ form, onSave, onFormChange }: SectionAccessPr
       <WizardBody>
         <FormRow>
           <Column lg="12">
-            <UIFormLabel  id='__Access_Group_List' uiField={form?.accessPolicyGroups ?? undefined} />
+            <UIFormLabel id="__Access_Group_List" uiField={form?.accessPolicyGroups ?? undefined} />
             <CheckboxList
               id="__Access_Groups_List"
               items={groupOptions}

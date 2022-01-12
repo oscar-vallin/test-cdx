@@ -9,9 +9,7 @@ import {
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { defaultForm, updateForm } from '../UserAccountFormUtil';
 
-
 export const useCreateUsersPanel = (orgSid: string) => {
-
   const [userAccountForm, setUserAccountForm] = useState<UserAccountForm>(defaultForm);
 
   const [isUserCreated, setUserCreated] = useState(false);
@@ -89,7 +87,7 @@ export const useCreateUsersPanel = (orgSid: string) => {
           lastNm: userAccountForm.person?.lastNm.value ?? '',
         },
       },
-      errorPolicy: 'all'
+      errorPolicy: 'all',
     });
 
     if (data?.createUser) {
@@ -102,12 +100,12 @@ export const useCreateUsersPanel = (orgSid: string) => {
         organization: {
           label: 'Primary Organization',
           required: false,
-          visible: true
+          visible: true,
         },
         response: GqOperationResponse.Fail,
         errCode: 'INTERNAL_ERROR',
-        errMsg: 'An internal server error has occurred.  Please contact your administrator.'
-      }
+        errMsg: 'An internal server error has occurred.  Please contact your administrator.',
+      };
     }
 
     return data;

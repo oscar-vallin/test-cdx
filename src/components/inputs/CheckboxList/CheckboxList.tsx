@@ -1,8 +1,8 @@
 import { Checkbox } from '@fluentui/react';
 import { useEffect, useState } from 'react';
 import { CheckboxItem } from 'src/data/Types';
-import { OptionRow } from './CheckboxList.styles';
 import { UiOption } from 'src/data/services/graphql';
+import { OptionRow } from './CheckboxList.styles';
 
 type CheckboxListType = {
   id?: string;

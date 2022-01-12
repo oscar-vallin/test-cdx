@@ -1,10 +1,5 @@
 import { ReactElement, useState } from 'react';
-import {
-  Calendar,
-  DayOfWeek,
-  DateRangeType,
-  DefaultButton
-} from '@fluentui/react';
+import { Calendar, DayOfWeek, DateRangeType, DefaultButton } from '@fluentui/react';
 import { addDays, getDateRangeArray } from '@fluentui/date-time-utilities';
 import { Container } from './MonthPicker.styles';
 
@@ -94,7 +89,7 @@ export const MonthPicker = ({
   maxDate,
   restrictedDates,
   showSixWeeksByDefault,
-  workWeekDays
+  workWeekDays,
 }: MonthPickerProps): ReactElement => {
   const [selectedDateRange, setSelectedDateRange] = useState<Date[]>();
   const [selectedDate, setSelectedDate] = useState<Date>();
@@ -195,16 +190,8 @@ export const MonthPicker = ({
       />
       {showNavigateButtons && (
         <div>
-          <DefaultButton
-            data-testid="__PrevioustBtn"
-            onClick={goPrevious}
-            text="Previous"
-          />
-          <DefaultButton
-            data-testid="__NextBtn"
-            onClick={goNext}
-            text="Next"
-          />
+          <DefaultButton data-testid="__PrevioustBtn" onClick={goPrevious} text="Previous" />
+          <DefaultButton data-testid="__NextBtn" onClick={goNext} text="Next" />
         </div>
       )}
     </Container>

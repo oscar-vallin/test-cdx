@@ -2,12 +2,12 @@ import React, { ReactElement } from 'react';
 import { MessageBarType, MessageBar } from '@fluentui/react';
 import { useHistory } from 'react-router-dom';
 import { StyledBox, StyledNav } from 'src/layouts/LayoutAdmin/LayoutAdmin.styles';
-import { StyledColumn } from './AdminErrorBoundary.styles';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Row } from 'src/components/layouts';
 import { getRouteByApiId } from 'src/data/constants/RouteConstants';
 
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
+import { StyledColumn } from './AdminErrorBoundary.styles';
 
 const defaultProps = {
   id: 'AdminErrorBoundary',

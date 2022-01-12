@@ -1,23 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import {
-  DetailsList,
-  DetailsListLayoutMode,
-  IColumn,
-  SelectionMode,
-  mergeStyleSets
-} from '@fluentui/react';
+import { DetailsList, DetailsListLayoutMode, IColumn, SelectionMode, mergeStyleSets } from '@fluentui/react';
 
 import { StyledContainer } from 'src/components/tables/Table/Table.styles';
-import { Box, Container } from './WorkPacketTable.styles';
-import { EmptyState } from '../states';
-import { TableFilters } from './TableFilters';
 import { NullHandling, PageableInput, PaginationInfo, SortDirection } from 'src/data/services/graphql';
-import { useWorkPacketColumns, WorkPacketColumns } from './WorkPacketColumns';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { TableFiltersType } from 'src/hooks/useTableFilters';
 import { Paginator } from 'src/components/tables/Paginator';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
+import { useWorkPacketColumns, WorkPacketColumns } from './WorkPacketColumns';
+import { TableFilters } from './TableFilters';
+import { EmptyState } from '../states';
+import { Box, Container } from './WorkPacketTable.styles';
 
 type WorkPacketParams = {
   id: string;

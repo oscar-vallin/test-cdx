@@ -1,15 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, ReactElement } from 'react';
 
-import {
-  Panel,
-  PanelType,
-  Checkbox,
-  TagPicker,
-  mergeStyles,
-  FontIcon,
-  TooltipHost
-} from '@fluentui/react';
+import { Panel, PanelType, Checkbox, TagPicker, mergeStyles, FontIcon, TooltipHost } from '@fluentui/react';
 
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { Spacing } from 'src/components/spacings/Spacing';

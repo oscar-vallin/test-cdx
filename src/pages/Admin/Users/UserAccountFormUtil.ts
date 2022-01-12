@@ -1,9 +1,4 @@
-import {
-  GqOperationResponse,
-  UserAccount,
-  UserAccountForm
-} from "src/data/services/graphql";
-
+import { GqOperationResponse, UserAccount, UserAccountForm } from 'src/data/services/graphql';
 
 export const defaultForm = {
   sid: null,
@@ -52,7 +47,7 @@ export const updateForm = (
   userAccountForm: UserAccountForm,
   userAccount?: UserAccount,
   accessPolicyGroupSids?: string[]
-  ): UserAccountForm => {
+): UserAccountForm => {
   if (userAccount) {
     userAccountForm.email = {
       ...(userAccountForm?.email ?? defaultForm.email),

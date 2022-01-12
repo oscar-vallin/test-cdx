@@ -35,8 +35,8 @@ export const NotificationContextProvider = ({ children }: NotificationContextPro
   const [state, dispatch]: any = useReducer(reducer, INITIAL_STATE);
 
   const hide = () => {
-    dispatch({ type: 'TOAST_HIDE' })
-  }
+    dispatch({ type: 'TOAST_HIDE' });
+  };
 
   useEffect(() => {
     if (state.visible) {
@@ -48,7 +48,7 @@ export const NotificationContextProvider = ({ children }: NotificationContextPro
     <NotificationContext.Provider value={{ state, dispatch }}>
       {children}
 
-      <Toast id="__Top_Message" visible={state.visible} text={state.text} type={state.type} onDismiss={hide}/>
+      <Toast id="__Top_Message" visible={state.visible} text={state.text} type={state.type} onDismiss={hide} />
     </NotificationContext.Provider>
   );
 };

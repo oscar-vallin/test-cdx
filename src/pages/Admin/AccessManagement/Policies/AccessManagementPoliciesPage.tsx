@@ -12,7 +12,7 @@ import {
   DialogFooter,
   FontIcon,
   Spinner,
-  SpinnerSize
+  SpinnerSize,
 } from '@fluentui/react';
 
 import { EmptyState } from 'src/containers/states';

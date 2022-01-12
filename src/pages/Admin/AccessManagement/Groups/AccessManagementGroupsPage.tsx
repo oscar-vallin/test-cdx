@@ -1,33 +1,26 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, memo } from 'react';
 
-import {
-  DetailsList,
-  DetailsListLayoutMode,
-  SelectionMode,
-  Spinner,
-  FontIcon,
-  SpinnerSize
-} from '@fluentui/react';
+import { DetailsList, DetailsListLayoutMode, SelectionMode, Spinner, FontIcon, SpinnerSize } from '@fluentui/react';
 import { EmptyState } from 'src/containers/states';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
 import { useNotification } from 'src/hooks/useNotification';
 import { Row, Column } from 'src/components/layouts';
-import { Spacing } from '../../../../components/spacings/Spacing';
 import { Button, Link } from 'src/components/buttons';
 import { LayoutAdmin } from 'src/layouts/LayoutAdmin';
 import { Text } from 'src/components/typography';
-import { CreateGroupPanel } from './CreateGroup';
 import { Separator } from 'src/components/separators/Separator';
 
 import {
   useAccessPolicyGroupsForOrgLazyQuery,
   useAccessPolicyGroupTemplatesLazyQuery,
 } from 'src/data/services/graphql';
-import { StyledColumn, StyledCommandButton } from './AccessManagementGroupsPage.styles';
 
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
+import { StyledColumn, StyledCommandButton } from './AccessManagementGroupsPage.styles';
+import { CreateGroupPanel } from './CreateGroup';
+import { Spacing } from '../../../../components/spacings/Spacing';
 import { useAccessManagementGroupsPageService } from './AccessManagementGroupsPage.service';
 
 const generateColumns = () => {

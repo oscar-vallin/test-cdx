@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import FormLabel, { UIFormLabel } from 'src/components/labels/FormLabel';
 import { UiField, UiStringField } from 'src/data/services/graphql';
-import {EmptyValue, FieldValue, StyledTextField } from './InputText.styles';
+import { EmptyValue, FieldValue, StyledTextField } from './InputText.styles';
 
 export type InputTextProps = {
   id?: string;
@@ -44,7 +44,9 @@ const InputText = ({
     return null;
   };
 
-  const onRenderLabel = () => <FormLabel id={`${id}_lbl`} required={required} info={info} errorMessage={errorMessage} {...props} />;
+  const onRenderLabel = () => (
+    <FormLabel id={`${id}_lbl`} required={required} info={info} errorMessage={errorMessage} {...props} />
+  );
 
   return (
     <StyledTextField
@@ -67,7 +69,7 @@ type UIReadOnlyType = {
   uiField: UiField;
 };
 
-const UIInputTextReadOnly = ({id, uiField }: UIReadOnlyType) => {
+const UIInputTextReadOnly = ({ id, uiField }: UIReadOnlyType) => {
   const getValue = () => {
     let text = '';
     if (uiField.hasOwnProperty('description')) {

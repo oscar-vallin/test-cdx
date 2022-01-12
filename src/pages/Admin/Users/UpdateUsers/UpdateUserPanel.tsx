@@ -6,23 +6,21 @@ import { Tabs } from 'src/components/tabs/Tabs';
 import { PanelBody, PanelHeader, PanelTitle } from 'src/layouts/Panels/Panels.styles';
 
 import { UseUpdateUserPanel } from 'src/pages/Admin/Users/UpdateUsers/useUpdateUserPanel';
-import { SectionAccount } from './SectionAccount';
 import SectionAccessManagement from './SectionAccessManagement';
 import { GqOperationResponse, UserAccount, UserAccountForm } from 'src/data/services/graphql';
 import { Column } from 'src/components/layouts';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
+import { SectionAccount } from './SectionAccount';
 import { ActiveIcon, InactiveIcon } from './UpdateUserPanel.styles';
 
 const defaultProps = {
   isOpen: false,
-  onDismiss: () => {
-  },
-  onUpdateUser: () => {
-  },
+  onDismiss: () => {},
+  onUpdateUser: () => {},
 };
 
 type UpdateUserPanelProps = {
-  useUpdateUserPanel: UseUpdateUserPanel
+  useUpdateUserPanel: UseUpdateUserPanel;
   onDismiss?: () => void;
   onUpdateUser?: (form?: UserAccountForm) => void;
 } & typeof defaultProps;
@@ -31,7 +29,7 @@ const tabs = ['#account', '#access'];
 
 const enum Tab {
   Account = 0,
-  Access = 1
+  Access = 1,
 }
 
 const defaultDialogProps: DialogYesNoProps = {
@@ -47,14 +45,10 @@ const defaultDialogProps: DialogYesNoProps = {
   closeOnYes: true,
   highlightNo: true,
   highlightYes: false,
-  onClose: () => null
-}
+  onClose: () => null,
+};
 
-const UpdateUserPanel = ({ useUpdateUserPanel,
-                           onDismiss,
-                           onUpdateUser
-                         }: UpdateUserPanelProps): ReactElement => {
-
+const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: UpdateUserPanelProps): ReactElement => {
   const [step, setStep] = useState(Tab.Account);
   const [showDialog, setShowDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
@@ -67,13 +61,14 @@ const UpdateUserPanel = ({ useUpdateUserPanel,
   };
 
   const handleUpdateUser = async (userAccount: UserAccount) => {
-     const responseCreate = await useUpdateUserPanel.callUpdateUser(userAccount);
+    const responseCreate = await useUpdateUserPanel.callUpdateUser(userAccount);
     //
     if (responseCreate?.updateUser) {
       const responseCode = responseCreate?.updateUser?.response;
 
       if (responseCode === GqOperationResponse.Fail || responseCode === GqOperationResponse.PartialSuccess) {
-        const errorMsg = responseCreate?.updateUser?.errMsg ?? responseCreate?.updateUser?.response ?? 'Error Updating User';
+        const errorMsg =
+          responseCreate?.updateUser?.errMsg ?? responseCreate?.updateUser?.response ?? 'Error Updating User';
         setMessageType(MessageBarType.error);
         setMessage(errorMsg);
       }
@@ -92,7 +87,8 @@ const UpdateUserPanel = ({ useUpdateUserPanel,
     if (response?.updateUserAccessPolicyGroups) {
       const responseCode = response.updateUserAccessPolicyGroups?.response;
       if (responseCode === GqOperationResponse.Fail || responseCode === GqOperationResponse.PartialSuccess) {
-        const errorMsg = response?.updateUserAccessPolicyGroups?.errMsg ??
+        const errorMsg =
+          response?.updateUserAccessPolicyGroups?.errMsg ??
           response?.updateUserAccessPolicyGroups?.response ??
           'Error Updating Assigned Access Policy Groups';
         setMessageType(MessageBarType.error);
@@ -110,7 +106,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel,
 
   const onFormChange = () => {
     setUnsavedChanges(true);
-  }
+  };
 
   const handleResetPassword = async () => {
     const responseReset = await useUpdateUserPanel.callResetPassword();
@@ -120,7 +116,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel,
         setMessage('Password Reset link has been sent');
       } else {
         setMessageType(MessageBarType.error);
-        setMessage('An error occurred resetting this user\'s password.  Please contact your administrator.');
+        setMessage("An error occurred resetting this user's password.  Please contact your administrator.");
       }
     }
   };
@@ -155,12 +151,13 @@ const UpdateUserPanel = ({ useUpdateUserPanel,
 
   const hideDialog = () => {
     setShowDialog(false);
-  }
+  };
 
   const showUnsavedChangesDialog = () => {
-    const updatedDialog = Object.assign({}, defaultDialogProps);
+    const updatedDialog = { ...defaultDialogProps};
     updatedDialog.title = 'You have unsaved changes';
-    updatedDialog.message = 'You are about to lose changes made to this user\'s profile. Are you sure you want to undo these changes?';
+    updatedDialog.message =
+      "You are about to lose changes made to this user's profile. Are you sure you want to undo these changes?";
     updatedDialog.onYes = () => {
       hideDialog();
       doClosePanel();
@@ -173,9 +170,10 @@ const UpdateUserPanel = ({ useUpdateUserPanel,
   };
 
   const showResetPasswordDialog = () => {
-    const updatedDialog = Object.assign({}, defaultDialogProps);
-    updatedDialog.title = 'Reset this user\'s password?';
-    updatedDialog.message = 'You are about to send a password reset link to this user\'s email? Are you sure you want to continue?';
+    const updatedDialog = { ...defaultDialogProps};
+    updatedDialog.title = "Reset this user's password?";
+    updatedDialog.message =
+      "You are about to send a password reset link to this user's email? Are you sure you want to continue?";
     updatedDialog.onYes = () => {
       handleResetPassword().then();
       hideDialog();
@@ -188,9 +186,10 @@ const UpdateUserPanel = ({ useUpdateUserPanel,
   };
 
   const showInactivateUserDialog = () => {
-    const updatedDialog = Object.assign({}, defaultDialogProps);
+    const updatedDialog = { ...defaultDialogProps};
     updatedDialog.title = 'Inactivate User?';
-    updatedDialog.message = 'You are about to inactivate this user which will prevent this user from logging in. Are you sure you want to continue?';
+    updatedDialog.message =
+      'You are about to inactivate this user which will prevent this user from logging in. Are you sure you want to continue?';
     updatedDialog.onYes = () => {
       handleInactivateUser().then();
       hideDialog();
@@ -203,9 +202,10 @@ const UpdateUserPanel = ({ useUpdateUserPanel,
   };
 
   const showActivateUserDialog = () => {
-    const updatedDialog = Object.assign({}, defaultDialogProps);
+    const updatedDialog = { ...defaultDialogProps};
     updatedDialog.title = 'Activate User?';
-    updatedDialog.message = 'You are about to activate this user which will allow this user to log in. Are you sure you want to continue?';
+    updatedDialog.message =
+      'You are about to activate this user which will allow this user to log in. Are you sure you want to continue?';
     updatedDialog.onYes = () => {
       handleActivateUser().then();
       hideDialog();
@@ -223,7 +223,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel,
     } else {
       doClosePanel();
     }
-  }
+  };
 
   const doClosePanel = () => {
     setUnsavedChanges(false);
@@ -234,10 +234,10 @@ const UpdateUserPanel = ({ useUpdateUserPanel,
     useUpdateUserPanel.resetForm();
     useUpdateUserPanel.closePanel();
     onDismiss();
-  }
+  };
 
   const userName = () => {
-    const person = useUpdateUserPanel.userAccountForm.person;
+    const {person} = useUpdateUserPanel.userAccountForm;
     const firstNm = person?.firstNm?.value;
     const lastNm = person?.lastNm?.value;
     if (!firstNm && !lastNm) {
@@ -247,47 +247,50 @@ const UpdateUserPanel = ({ useUpdateUserPanel,
   };
 
   const renderPanelHeader = () => (
-      <PanelHeader>
-        <Column lg='6'>
-          <Stack horizontal styles={ {root: {height: 44} }}>
-            <PanelTitle id='__UserUpdate_Panel_Title' variant='bold'>
-              {userName()}
-              {useUpdateUserPanel.userAccountForm.active?.value ? (
-                <ActiveIcon iconName='CompletedSolid' title='Active'/>
-              ): (
-                <InactiveIcon iconName='StatusErrorFull' title='Inactive'/>
-              )}
-            </PanelTitle>
-          </Stack>
-        </Column>
-        <Column lg='6' right={true}>
-          <Stack horizontal>
+    <PanelHeader>
+      <Column lg="6">
+        <Stack horizontal styles={{ root: { height: 44 } }}>
+          <PanelTitle id="__UserUpdate_Panel_Title" variant="bold">
+            {userName()}
             {useUpdateUserPanel.userAccountForm.active?.value ? (
-              <>
-                <CommandButton id='__ResetPassword_Button'
-                               iconProps={{iconName: 'Permissions'}}
-                               text='Reset Password'
-                               onClick={showResetPasswordDialog}/>
-                <CommandButton id='__InactivateUser_Button'
-                               iconProps={{iconName: 'UserRemove'}}
-                               text='Inactivate User'
-                               onClick={showInactivateUserDialog}/>
-              </>
+              <ActiveIcon iconName="CompletedSolid" title="Active" />
             ) : (
-              <CommandButton id='__ActivateUser_Button'
-                             iconProps={{iconName: 'UserFollowed'}}
-                             text='Activate User'
-                             onClick={showActivateUserDialog}/>
+              <InactiveIcon iconName="StatusErrorFull" title="Inactive" />
             )}
-          </Stack>
-        </Column>
-      </PanelHeader>
+          </PanelTitle>
+        </Stack>
+      </Column>
+      <Column lg="6" right>
+        <Stack horizontal>
+          {useUpdateUserPanel.userAccountForm.active?.value ? (
+            <>
+              <CommandButton
+                id="__ResetPassword_Button"
+                  iconProps={{iconName: 'Permissions'}}
+                  text='Reset Password'
+                  onClick={showResetPasswordDialog} />
+              <CommandButton
+                id="__InactivateUser_Button"
+                  iconProps={{iconName: 'UserRemove'}}
+                  text='Inactivate User'
+                  onClick={showInactivateUserDialog} />
+            </>
+          ) : (
+            <CommandButton
+              id="__ActivateUser_Button"
+                iconProps={{iconName: 'UserFollowed'}}
+                text='Activate User'
+                onClick={showActivateUserDialog} />
+          )}
+        </Stack>
+      </Column>
+    </PanelHeader>
   );
 
   return (
     <>
       <Panel
-        closeButtonAriaLabel='Close'
+        closeButtonAriaLabel="Close"
         headerText={userName()}
         type={PanelType.medium}
         onRenderHeader={renderPanelHeader}
@@ -300,10 +303,13 @@ const UpdateUserPanel = ({ useUpdateUserPanel,
       >
         <PanelBody>
           {message && (
-            <MessageBar id='__UpdateUser_Msg'
-                        messageBarType={messageType}
-                        isMultiline={true}
-                        onDismiss={() => setMessage(undefined)}>{message}</MessageBar>
+            <MessageBar
+              id='__UpdateUser_Msg'
+              messageBarType={messageType}
+              isMultiline
+              onDismiss={() => setMessage(undefined)}
+            >{message}
+            </MessageBar>
           )}
           <Tabs
             items={[
@@ -328,7 +334,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel,
                   />
                 ),
                 hash: '#access',
-              }
+              },
             ]}
             selectedKey={step < 0 ? '0' : step.toString()}
             onClickTab={handleTabChange}

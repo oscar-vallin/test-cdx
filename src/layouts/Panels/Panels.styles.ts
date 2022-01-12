@@ -6,7 +6,7 @@ export const PanelTitle = styled(Text)`
   top: 50%;
   transform: translateY(-50%);
   padding-left: 15px;
-`
+`;
 export const PanelBody = styled.div`
   margin-top: 15px;
 `;

@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 import { Column } from 'src/components/layouts';
 
 import { UserAccountForm } from 'src/data/services/graphql';
+import { WizardBody } from 'src/layouts/Panels/Panels.styles';
 import CreateUsersFooter from './CreateUsersFooter';
-import { StyledOptionRow} from './CreateUsersPanel.styles';
-import { WizardBody } from "src/layouts/Panels/Panels.styles";
+import { StyledOptionRow } from './CreateUsersPanel.styles';
 
 type SectionAuthProps = {
   form: UserAccountForm;
@@ -51,7 +51,12 @@ const SectionAuthentication = ({ form, onPrev, onNext, saveOptions }: SectionAut
       <WizardBody>
         <StyledOptionRow bottom>
           <Column lg="12">
-            <Checkbox id="__userSendActivation" label={form?.sendActivationEmail?.label} checked={sendEmail} onChange={onCheck} />
+            <Checkbox
+              id="__userSendActivation"
+              label={form?.sendActivationEmail?.label}
+              checked={sendEmail}
+              onChange={onCheck}
+            />
           </Column>
         </StyledOptionRow>
       </WizardBody>

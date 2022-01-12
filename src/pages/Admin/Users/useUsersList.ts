@@ -1,8 +1,7 @@
-import { ActiveEnum, UserItem, useUsersForOrgLazyQuery } from "src/data/services/graphql";
-import { useEffect, useState } from "react";
-import { ErrorHandler } from "src/utils/ErrorHandler";
-import { useOrgSid } from "src/hooks/useOrgSid";
-
+import { ActiveEnum, UserItem, useUsersForOrgLazyQuery } from 'src/data/services/graphql';
+import { useEffect, useState } from 'react';
+import { ErrorHandler } from 'src/utils/ErrorHandler';
+import { useOrgSid } from 'src/hooks/useOrgSid';
 
 export const useUsersLists = (activeFilter: ActiveEnum) => {
   const [users, setUsers] = useState<UserItem[] | null | undefined>([]);
@@ -18,7 +17,7 @@ export const useUsersLists = (activeFilter: ActiveEnum) => {
     apiUsersForOrgFpLazy({
       variables: {
         orgSid,
-        userFilter: { activeFilter: activeFilter },
+        userFilter: { activeFilter },
       },
     });
   };
@@ -46,4 +45,4 @@ export const useUsersLists = (activeFilter: ActiveEnum) => {
     loading,
     fetchUsers,
   };
-}
+};

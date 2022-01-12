@@ -1,15 +1,9 @@
 import { ReactElement } from 'react';
-import {
-  IColumn,
-  DetailsList,
-  DetailsListLayoutMode,
-  SelectionMode,
-  Spinner
-} from '@fluentui/react';
+import { IColumn, DetailsList, DetailsListLayoutMode, SelectionMode, Spinner } from '@fluentui/react';
 import { format } from 'date-fns';
 import { Column } from 'src/components/layouts';
-import { TableName, TableWrap, EmptyMessage } from './TableActivity.styles';
 import { OrganizationLink } from 'src/data/services/graphql';
+import { TableName, TableWrap, EmptyMessage } from './TableActivity.styles';
 
 const columns: IColumn[] = [
   {

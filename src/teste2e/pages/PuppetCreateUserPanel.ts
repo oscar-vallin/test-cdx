@@ -1,16 +1,21 @@
+import PuppetDialogYesNo from 'src/teste2e/pages/PuppetDialogYesNo';
 import PuppetBasePage from './PuppetBasePage';
-import PuppetDialogYesNo from "src/teste2e/pages/PuppetDialogYesNo";
 
 export default class PuppetCreateUserPanel extends PuppetBasePage {
   private nextButton = '#__Next_Button';
+
   private prevButton = '#__Prev_Button';
+
   private submitButton = '#__Submit_Button';
 
   private messageField = '#__CreateUser_Error';
 
   private firstNameField = '#__userFirstNm';
+
   private lastNameField = '#__userLastNm';
+
   private emailField = '#__userEmail';
+
   private orgField = '#__userOrg';
 
   private accessGroupsListField = '#__Access_Groups_List';
@@ -18,9 +23,13 @@ export default class PuppetCreateUserPanel extends PuppetBasePage {
   private sendActivationField = '#__userSendActivation';
 
   private firstNameSummaryField = '#__userFirstNm_summary';
+
   private lastNameSummaryField = '#__userLastNm_summary';
+
   private emailSummaryField = '#__userEmail_summary';
+
   private orgSummaryField = '#__userOrg_summary';
+
   private accessGroupsListReadOnly = '#__accessGroupsList_summary';
 
   private closePanelButton = 'button.ms-Panel-closeButton';
@@ -104,7 +113,6 @@ export default class PuppetCreateUserPanel extends PuppetBasePage {
     await dialog.clickYes();
     await this.page.waitForTimeout(1000);
     await this.expectHidden();
-
   }
 
   async expectHidden() {
@@ -120,5 +128,4 @@ export default class PuppetCreateUserPanel extends PuppetBasePage {
     await this.expectElementNotRendered(this.orgSummaryField);
     await this.expectElementNotRendered(this.accessGroupsListReadOnly);
   }
-
 }

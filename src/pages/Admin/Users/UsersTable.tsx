@@ -1,13 +1,13 @@
-import React from "react";
-import { DetailsList, DetailsListLayoutMode, IColumn, Link, SelectionMode } from "@fluentui/react";
-import { UserItem } from "src/data/services/graphql";
+import React from 'react';
+import { DetailsList, DetailsListLayoutMode, IColumn, Link, SelectionMode } from '@fluentui/react';
+import { UserItem } from 'src/data/services/graphql';
 
 type UsersTableType = {
-  users: UserItem[],
-  onClickUser: (userSid: string) => any
-}
+  users: UserItem[];
+  onClickUser: (userSid: string) => any;
+};
 
-export const UsersTable = ({users, onClickUser}: UsersTableType) => {
+export const UsersTable = ({ users, onClickUser }: UsersTableType) => {
   const userColumns: IColumn[] = [
     {
       name: 'First Name',
@@ -15,7 +15,7 @@ export const UsersTable = ({users, onClickUser}: UsersTableType) => {
       fieldName: 'person.firstNm',
       minWidth: 100,
       maxWidth: 255,
-      isPadded: true
+      isPadded: true,
     },
     {
       name: 'Last Name',
@@ -23,19 +23,18 @@ export const UsersTable = ({users, onClickUser}: UsersTableType) => {
       fieldName: 'person.lastNm',
       minWidth: 100,
       maxWidth: 255,
-      isPadded: true
+      isPadded: true,
     },
     {
       name: 'Email',
       key: 'email',
       fieldName: 'email',
       minWidth: 255,
-      isPadded: true
-    }
+      isPadded: true,
+    },
   ];
 
   const onRenderItemColumn = (node?: UserItem, itemIndex?: number, column?: IColumn) => {
-
     let columnVal: string | undefined;
     if (column?.key === 'email') {
       columnVal = node?.item?.email;
@@ -58,13 +57,13 @@ export const UsersTable = ({users, onClickUser}: UsersTableType) => {
             if (node) {
               onClickUser(node?.item?.sid);
             }
-          }}>
+          }}
+        >
           {columnVal}
         </Link>
       </>
     );
   };
-
 
   return (
     <DetailsList
@@ -76,4 +75,4 @@ export const UsersTable = ({users, onClickUser}: UsersTableType) => {
       isHeaderVisible
     />
   );
-}
+};

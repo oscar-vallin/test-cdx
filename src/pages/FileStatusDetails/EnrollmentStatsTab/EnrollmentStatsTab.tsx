@@ -1,10 +1,5 @@
 import { ReactElement } from 'react';
-import {
-  DetailsList,
-  DetailsListLayoutMode,
-  SelectionMode,
-  IGroup,
-} from '@fluentui/react';
+import { DetailsList, DetailsListLayoutMode, SelectionMode, IGroup } from '@fluentui/react';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { StyledHeaderRow, StyledHeader, StyledRow } from '../FileStatusDetails.styles';
 

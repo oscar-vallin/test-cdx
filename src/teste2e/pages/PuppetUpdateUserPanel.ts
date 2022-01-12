@@ -2,12 +2,17 @@ import PuppetBasePage from './PuppetBasePage';
 
 export default class PuppetUpdateUserPanel extends PuppetBasePage {
   private saveButton = '#__User_Save_Button';
+
   private messageField = '#__UpdateUser_Msg';
 
   private firstNameField = '#__userFirstNm';
+
   private lastNameField = '#__userLastNm';
+
   private emailField = '#__userEmail';
+
   private orgField = '#__userOrg';
+
   private lastLoginField = '#__userLastLogin';
 
   private accessGroupsListField = '#__Access_Groups_List';
@@ -68,5 +73,4 @@ export default class PuppetUpdateUserPanel extends PuppetBasePage {
 
     await this.expectElementNotRendered(this.accessGroupsListField);
   }
-
 }

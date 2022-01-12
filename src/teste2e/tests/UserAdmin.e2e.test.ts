@@ -1,13 +1,12 @@
-import { randomString } from "src/utils/testUtils";
-import PuppetCDXApp from "src/teste2e/pages/PuppetCDXApp";
-import PuppetActiveUsers from "src/teste2e/pages/PuppetActiveUsers";
+import { randomString } from 'src/utils/testUtils';
+import PuppetCDXApp from 'src/teste2e/pages/PuppetCDXApp';
+import PuppetActiveUsers from 'src/teste2e/pages/PuppetActiveUsers';
 
 const firstName = randomString(20);
 const lastName = `Test-${randomString(20)}`;
 const email = `${firstName}.${lastName}@known2u.com`;
 
 describe('User Administration Testing', () => {
-
   let cdxApp: PuppetCDXApp;
 
   beforeAll(async () => {
@@ -25,7 +24,7 @@ describe('User Administration Testing', () => {
     await menu.openMenu('Users', 'Active Users');
   });
 
-  it ('Test User Details', async () => {
+  it('Test User Details', async () => {
     const page = new PuppetActiveUsers(cdxApp.page);
     await page.expectOnPage();
 
@@ -59,7 +58,7 @@ describe('User Administration Testing', () => {
     await panel.closePanelDismissDialog();
   });
 
-  it('Create new user - Happy Path',async () => {
+  it('Create new user - Happy Path', async () => {
     const page = new PuppetActiveUsers(cdxApp.page);
     await page.expectOnPage();
     const panel = await page.createUser();

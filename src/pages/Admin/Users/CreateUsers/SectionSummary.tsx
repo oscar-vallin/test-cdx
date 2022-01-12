@@ -8,8 +8,8 @@ import { UIInputTextReadOnly } from 'src/components/inputs/InputText/InputText';
 import { FontIcon } from '@fluentui/react';
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
 import { FieldValue } from 'src/components/inputs/InputText/InputText.styles';
+import { WizardBody } from 'src/layouts/Panels/Panels.styles';
 import CreateUsersFooter from './CreateUsersFooter';
-import { WizardBody } from "src/layouts/Panels/Panels.styles";
 
 type SectionSummaryPropsType = {
   form: UserAccountForm;
@@ -107,7 +107,7 @@ const SectionSummary = ({ form, onPrev, onSubmit, isProcessing }: SectionSummary
         {form.sendActivationEmail?.value == true && (
           <FormRow>
             <Column lg="12">
-              <UIFormLabel id='__sendActivation_summary' uiField={form.sendActivationEmail} />
+              <UIFormLabel id="__sendActivation_summary" uiField={form.sendActivationEmail} />
               <FieldValue>
                 <FontIcon iconName="CheckMark" />
               </FieldValue>

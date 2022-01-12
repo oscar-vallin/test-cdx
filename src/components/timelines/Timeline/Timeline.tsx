@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
 import { FontIcon } from '@fluentui/react';
-import { StyledUl, StyledLi } from './Timeline.styles';
 import { Spinner } from 'src/components/spinners/Spinner';
+import { StyledUl, StyledLi } from './Timeline.styles';
 
 const defaultProps = {
   items: [],

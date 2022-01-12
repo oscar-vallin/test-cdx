@@ -6,7 +6,7 @@ const defaultProps = {
   type: 'info',
   visible: false,
   text: '',
-  onDismiss: () => {}
+  onDismiss: () => {},
 };
 
 type ToastProps = {
@@ -17,7 +17,7 @@ type ToastProps = {
   onDismiss?: () => void;
 } & typeof defaultProps;
 
-export const Toast = ({id, type, visible, text, onDismiss }: ToastProps): ReactNode | any => {
+export const Toast = ({ id, type, visible, text, onDismiss }: ToastProps): ReactNode | any => {
   return (
     visible && (
       <StyledMessageBar

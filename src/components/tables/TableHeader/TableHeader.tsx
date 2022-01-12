@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { format } from 'date-fns';
 import { getDates } from 'src/helpers/tableHelpers.service';
 
+import { useOrgSid } from 'src/hooks/useOrgSid';
 import {
   HeaderTable,
   StyledColumn,
@@ -12,13 +13,18 @@ import {
   StyledMenuButton,
   StyledRow,
 } from './TableHeader.styles';
-import { useOrgSid } from 'src/hooks/useOrgSid';
 
 const TableHeader = ({ id, header, sortLabel, onSort, onOption, date, ...props }) => {
   const { orgSid } = useOrgSid();
   const history = useHistory();
   if ((!header || !header.type || header.type === 'default') && props) {
-    return <DetailsHeader layoutMode={DetailsListLayoutMode.justified} {...props} ariaLabelForToggleAllGroupsButton="Toggle selection" />;
+    return (
+      <DetailsHeader
+        layoutMode={DetailsListLayoutMode.justified}
+        {...props}
+        ariaLabelForToggleAllGroupsButton="Toggle selection"
+      />
+    );
   }
 
   const formatDatesURL = 'yyyy-MM-dd';
@@ -28,9 +34,10 @@ const TableHeader = ({ id, header, sortLabel, onSort, onOption, date, ...props }
   if (header.type === 'dashboard') {
     return (
       <HeaderTable id={`${id}-HeaderTable_dashboard`}>
-        <StyledColumnTitle center paddingLeft={true} sm={6}>
+        <StyledColumnTitle center paddingLeft sm={6}>
           <StyledLink
-            onClick={() => history.push(`/transmissions?startDate=${startFormatted}&endDate=${endFormatted}&orgSid=${orgSid}`)}
+            onClick={() =>
+              history.push(`/transmissions?startDate=${startFormatted}&endDate=${endFormatted}&orgSid=${orgSid}`)}
           >
             {header.title}
           </StyledLink>

@@ -4,6 +4,8 @@ import { endOfMonth, startOfMonth } from 'date-fns';
 import { useLocation } from 'react-router-dom';
 
 import queryString from 'query-string';
+import { Column, Container } from 'src/components/layouts';
+import { Card } from 'src/components/cards';
 import { StyledRow } from './Schedule.styles';
 
 import { ScheduleHeader } from './ScheduleHeader';
@@ -14,8 +16,6 @@ import { ScheduleMonth } from './ScheduleMonth';
 import { ScheduleDay } from './ScheduleDay';
 import { useScheduleItems } from './Schedule.service';
 
-import { Column, Container } from 'src/components/layouts';
-import { Card } from 'src/components/cards';
 import { PageHeader } from '../../headers/PageHeader';
 import { Spacing } from '../../../components/spacings/Spacing';
 

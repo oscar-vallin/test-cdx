@@ -1,6 +1,6 @@
+import PuppetCreateUserPanel from 'src/teste2e/pages/PuppetCreateUserPanel';
+import PuppetUpdateUserPanel from 'src/teste2e/pages/PuppetUpdateUserPanel';
 import PuppetBasePage from './PuppetBasePage';
-import PuppetCreateUserPanel from "src/teste2e/pages/PuppetCreateUserPanel";
-import PuppetUpdateUserPanel from "src/teste2e/pages/PuppetUpdateUserPanel";
 
 export default class PuppetActiveUsers extends PuppetBasePage {
   pageTitle = '#__Page_Title-Text';
@@ -43,9 +43,7 @@ export default class PuppetActiveUsers extends PuppetBasePage {
 
     let found = false;
     for (let i = 0; i < result.length; i++) {
-      if (result[i][0] === firstName
-          && result[i][1] === lastName
-          && result[i][2] === email) {
+      if (result[i][0] === firstName && result[i][1] === lastName && result[i][2] === email) {
         found = true;
         break;
       }

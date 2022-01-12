@@ -6,15 +6,15 @@ import { Tabs } from 'src/components/tabs/Tabs';
 import { Text } from 'src/components/typography';
 import { PanelBody, PanelHeader, PanelTitle } from 'src/layouts/Panels/Panels.styles';
 
+import { useNotification } from 'src/hooks/useNotification';
+import { GqOperationResponse } from 'src/data/services/graphql';
+import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
+import { Column } from 'src/components/layouts';
 import { useCreateUsersPanel } from './CreateUsersPanel.service';
 import { SectionAccount } from './SectionAccount';
 import SectionAccessManagement from './SectionAccessManagement';
 import SectionAuthentication from './SectionAuthentication';
 import SectionSummary from './SectionSummary';
-import { useNotification } from "src/hooks/useNotification";
-import { GqOperationResponse } from "src/data/services/graphql";
-import { DialogYesNo } from "src/containers/modals/DialogYesNo";
-import { Column } from "src/components/layouts";
 
 const defaultProps = {
   isOpen: false,
@@ -37,12 +37,7 @@ const enum Tab {
   Summary = 3,
 }
 
-const CreateUsersPanel = ({
-  orgSid,
-  isOpen,
-  onDismiss,
-  onCreateUser
-}: CreateUsersPanelProps): ReactElement => {
+const CreateUsersPanel = ({ orgSid, isOpen, onDismiss, onCreateUser }: CreateUsersPanelProps): ReactElement => {
   const createUserService = useCreateUsersPanel(orgSid);
 
   const [step, setStep] = useState(Tab.Account);
@@ -59,21 +54,23 @@ const CreateUsersPanel = ({
     setProcessing(false);
     //
     if (responseCreate?.createUser) {
-      const responseCode = responseCreate?.createUser?.response
+      const responseCode = responseCreate?.createUser?.response;
 
       if (responseCode === GqOperationResponse.Fail) {
-        const errorMsg = responseCreate?.createUser?.errMsg ?? responseCreate?.createUser?.response ?? 'Error Creating User';
+        const errorMsg =
+          responseCreate?.createUser?.errMsg ?? responseCreate?.createUser?.response ?? 'Error Creating User';
         setErrorMsg(errorMsg);
       } else {
         setErrorMsg(undefined);
       }
 
       if (responseCode === GqOperationResponse.Success) {
-        Toast.success({text: 'User Account Successfully Created'});
+        Toast.success({ text: 'User Account Successfully Created' });
       }
       if (responseCode === GqOperationResponse.PartialSuccess) {
-        const errorMsg = responseCreate?.createUser?.errMsg ?? responseCreate?.createUser?.response ?? 'Error Creating User';
-        Toast.warning({text: errorMsg });
+        const errorMsg =
+          responseCreate?.createUser?.errMsg ?? responseCreate?.createUser?.response ?? 'Error Creating User';
+        Toast.warning({ text: errorMsg });
       }
 
       if (responseCode === GqOperationResponse.Success || responseCode === GqOperationResponse.PartialSuccess) {
@@ -109,7 +106,7 @@ const CreateUsersPanel = ({
     } else {
       doClosePanel();
     }
-  }
+  };
 
   const doClosePanel = () => {
     setErrorMsg(undefined);
@@ -120,13 +117,15 @@ const CreateUsersPanel = ({
     setShowDialog(false);
     setUnsavedChanges(false);
     onDismiss();
-  }
+  };
 
   const renderPanelHeader = () => (
     <PanelHeader>
       <Column lg="12">
-        <Stack horizontal styles={ {root: {height: 44} }}>
-          <PanelTitle id="__CreateUser_Panel_Title" variant="bold">New User</PanelTitle>
+        <Stack horizontal styles={{ root: { height: 44 } }}>
+          <PanelTitle id="__CreateUser_Panel_Title" variant="bold">
+            New User
+          </PanelTitle>
         </Stack>
       </Column>
     </PanelHeader>
@@ -145,10 +144,14 @@ const CreateUsersPanel = ({
       >
         <PanelBody>
           {errorMsg && (
-            <MessageBar id="__CreateUser_Error"
-                        messageBarType={MessageBarType.error}
-                        isMultiline={true}
-                        onDismiss={() => setErrorMsg(undefined)}>{errorMsg}</MessageBar>
+            <MessageBar
+              id="__CreateUser_Error"
+              messageBarType={MessageBarType.error}
+              isMultiline
+              onDismiss={() => setErrorMsg(undefined)}
+            >
+              {errorMsg}
+            </MessageBar>
           )}
           {userAccountLoading && <Text>Loading...</Text>}
           {!userAccountLoading && (
@@ -234,8 +237,8 @@ const CreateUsersPanel = ({
           return null;
         }}
       />
-  </>
-);
+    </>
+  );
 };
 
 CreateUsersPanel.defaultProps = defaultProps;

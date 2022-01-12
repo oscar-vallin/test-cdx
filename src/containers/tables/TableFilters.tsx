@@ -1,8 +1,8 @@
 import React from 'react';
 import { Column, Container, FilterSection, StyledRow } from './WorkPacketTable.styles';
-import { Card } from '../../components/cards';
-import { InputText } from '../../components/inputs/InputText';
-import { InputDateRange } from '../../components/inputs/InputDateRange';
+import { Card } from 'src/components/cards';
+import { InputText } from 'src/components/inputs/InputText';
+import { InputDateRange } from 'src/components/inputs/InputDateRange';
 
 type TableFilterParams = {
   id: string;
@@ -18,11 +18,13 @@ export const TableFilters = ({ id, searchText, startDate, endDate }: TableFilter
         <Card id={`${id}__SearchCard`} elevation="smallest" onClick="">
           <StyledRow>
             <Column lg="6">
-              <InputText id={`${id}__Card__Row__Input-Search`}
-                         autofocus={true}
-                         disabled={false}
-                         {...searchText}
-                         label="Search"/>
+              <InputText
+                id={`${id}__Card__Row__Input-Search`}
+                autofocus
+                disabled={false}
+                {...searchText}
+                label="Search"
+              />
             </Column>
             <Column lg="6">
               <InputDateRange startDate={startDate} endDate={endDate} />
