@@ -2,34 +2,34 @@
 import React, { useState, useEffect } from 'react';
 
 import { useParams, useLocation } from 'react-router-dom';
-import { TABLE_NAMES } from '../../data/constants/TableConstants';
+import { TABLE_NAMES } from 'src/data/constants/TableConstants';
 
-import { ROUTES, ROUTE_FILE_STATUS } from '../../data/constants/RouteConstants';
+import { ROUTES, ROUTE_FILE_STATUS } from 'src/data/constants/RouteConstants';
 
-import { LayoutDashboard } from '../../layouts/LayoutDashboard';
-import { PageHeader } from '../../containers/headers/PageHeader';
-import { Breadcrumb } from '../../components/breadcrumbs/Breadcrumb';
-import { Button } from '../../components/buttons';
-import { Badge } from '../../components/badges/Badge';
-import { Card } from '../../components/cards';
-import { Collapse } from '../../components/collapses/Collapse';
-import { Row, Column } from '../../components/layouts';
-import { Spacing } from '../../components/spacings/Spacing';
-import { Spinner } from '../../components/spinners/Spinner';
-import { Separator } from '../../components/separators/Separator';
+import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
+import { PageHeader } from 'src/containers/headers/PageHeader';
+import { Breadcrumb } from 'src/components/breadcrumbs/Breadcrumb';
+import { Button } from 'src/components/buttons';
+import { Badge } from 'src/components/badges/Badge';
+import { Card } from 'src/components/cards';
+import { Collapse } from 'src/components/collapses/Collapse';
+import { Row, Column } from 'src/components/layouts';
+import { Spacing } from 'src/components/spacings/Spacing';
+import { Spinner } from 'src/components/spinners/Spinner';
+import { Separator } from 'src/components/separators/Separator';
 import { StyledBox } from './FileStatusDetails.styles';
-import { Tabs } from '../../components/tabs/Tabs';
-import { Text } from '../../components/typography';
+import { Tabs } from 'src/components/tabs/Tabs';
+import { Text } from 'src/components/typography';
 
 import QualityChecksTab from './QualityChecksTab/QualityChecksTab';
 import WorkStepsTab from './WorkStepsTab/WorkStepsTab';
 import EnrollmentStatsTab from './EnrollmentStatsTab/EnrollmentStatsTab';
 import VendorCountStatsTab from './VendorCountStatsTab/VendorCountStatsTab';
 
-import { useRefresh } from '../../hooks/useRefresh';
+import { useRefresh } from 'src/hooks/useRefresh';
 import { useFsDetailsPacketStatus } from './hooks/useFsDetailsPacketStatus';
 import { useFsPacketStatusDetails } from './hooks/useFsPacketStatusDetails';
-import { DeliveredFile } from '../../data/services/graphql';
+import { DeliveredFile } from 'src/data/services/graphql';
 
 const getReadableDate = (date) => new Date(date).toLocaleString().replace(',', '');
 

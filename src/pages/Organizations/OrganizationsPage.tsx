@@ -1,8 +1,8 @@
 import { memo } from 'react';
-import { ROUTES } from '../../data/constants/RouteConstants';
+import { ROUTES } from 'src/data/constants/RouteConstants';
 
-import { LayoutDashboard } from '../../layouts/LayoutDashboard';
-import { TableOrganizations } from '../../containers/tables/TableOrganizations';
+import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
+import { TableOrganizations } from 'src/containers/tables/TableOrganizations';
 
 const _OrganizationsPage = () => {
   return (

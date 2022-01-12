@@ -1,14 +1,10 @@
 import { ReactElement } from 'react';
-import { useHistory } from 'react-router-dom';
 import { SpinnerSize } from '@fluentui/react';
-import { StyledBox, StyledNav } from './LayoutAdmin.styles';
+import { StyledBox } from './LayoutAdmin.styles';
 import { LayoutDashboard } from '../LayoutDashboard';
-import { getRouteByApiId } from '../../data/constants/RouteConstants';
-import { Spinner } from '../../components/spinners/Spinner';
-import { Spacing } from '../../components/spacings/Spacing';
-
-import { useOrgSid } from '../../hooks/useOrgSid';
-import { useActiveDomainStore } from '../../store/ActiveDomainStore';
+import { getRouteByApiId } from 'src/data/constants/RouteConstants';
+import { Spinner } from 'src/components/spinners/Spinner';
+import { Spacing } from 'src/components/spacings/Spacing';
 
 const defaultProps = {
   id: '',
@@ -54,12 +50,8 @@ const parseLinks = (links = [], sidebarOpt: string) => {
 export const LayoutAdmin = ({
   id,
   menuOptionSelected = 'admin',
-  sidebarOptionSelected = '',
   children,
 }: LayoutAdminProps): ReactElement => {
-  const { orgSid } = useOrgSid();
-  const history = useHistory();
-  const ActiveDomainStore = useActiveDomainStore();
 
   const isFetchingOrgNav = false;
 

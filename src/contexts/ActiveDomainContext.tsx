@@ -2,7 +2,7 @@
 import { ReactElement, useEffect, createContext, ReactNode } from 'react';
 import { useHistory } from 'react-router';
 
-import { URL_ROUTES } from '../data/constants/RouteConstants';
+import { URL_ROUTES } from 'src/data/constants/RouteConstants';
 import { useActiveDomainStore } from '../store/ActiveDomainStore';
 import { useSessionStore } from '../store/SessionStore';
 import { useActiveDomainUseCase } from '../use-cases/ActiveDomain';

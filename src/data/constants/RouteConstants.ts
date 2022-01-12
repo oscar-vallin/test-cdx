@@ -50,7 +50,15 @@ export const URL_ROUTES = {
   IMPL_DEPLOY: `/${ROUTES_ID.IMPL_DEPLOY}`,
 };
 
-export const ROUTE_HOME = {
+type RouteType = {
+  ID: string;
+  TITLE: string;
+  URL: string;
+  MAIN_MENU: boolean;
+  API_ID: string;
+}
+
+export const ROUTE_HOME: RouteType = {
   ID: ROUTES_ID.HOME,
   TITLE: '',
   URL: URL_ROUTES.HOME,
@@ -58,7 +66,7 @@ export const ROUTE_HOME = {
   API_ID: 'HOME',
 };
 
-export const ROUTE_LOGIN = {
+export const ROUTE_LOGIN: RouteType = {
   ID: ROUTES_ID.LOGIN,
   TITLE: 'Login',
   URL: URL_ROUTES.LOGIN,
@@ -66,7 +74,7 @@ export const ROUTE_LOGIN = {
   API_ID: 'LOGIN',
 };
 
-export const ROUTE_DASHBOARD = {
+export const ROUTE_DASHBOARD: RouteType = {
   ID: ROUTES_ID.DASHBOARD,
   TITLE: 'CDX Dashboard',
   URL: URL_ROUTES.DASHBOARD,
@@ -74,7 +82,7 @@ export const ROUTE_DASHBOARD = {
   API_ID: 'DASHBOARD',
 };
 
-export const ROUTE_USER_SETTINGS = {
+export const ROUTE_USER_SETTINGS: RouteType = {
   ID: ROUTES_ID.USER_SETTINGS,
   TITLE: 'User Settings',
   URL: URL_ROUTES.USER_SETTINGS,
@@ -82,7 +90,7 @@ export const ROUTE_USER_SETTINGS = {
   API_ID: 'USER_SETTINGS',
 };
 
-export const ROUTE_FILE_STATUS = {
+export const ROUTE_FILE_STATUS: RouteType = {
   ID: ROUTES_ID.FILE_STATUS,
   TITLE: 'File Status',
   URL: URL_ROUTES.FILE_STATUS,
@@ -90,7 +98,7 @@ export const ROUTE_FILE_STATUS = {
   API_ID: 'FILE_STATUS',
 };
 
-export const ROUTE_FILE_STATUS_DETAILS = {
+export const ROUTE_FILE_STATUS_DETAILS: RouteType = {
   ID: ROUTES_ID.FILE_STATUS,
   TITLE: 'File Status Details',
   URL: URL_ROUTES.FILE_STATUS_DETAILS,
@@ -98,7 +106,7 @@ export const ROUTE_FILE_STATUS_DETAILS = {
   API_ID: 'DASHBOARD',
 };
 
-export const ROUTE_ARCHIVES = {
+export const ROUTE_ARCHIVES: RouteType = {
   ID: ROUTES_ID.ARCHIVES,
   TITLE: 'Archives',
   URL: URL_ROUTES.ARCHIVES,
@@ -106,7 +114,7 @@ export const ROUTE_ARCHIVES = {
   API_ID: 'ARCHIVES',
 };
 
-export const ROUTE_SCHEDULE = {
+export const ROUTE_SCHEDULE: RouteType = {
   ID: ROUTES_ID.SCHEDULE,
   TITLE: 'Schedule',
   URL: URL_ROUTES.SCHEDULE,
@@ -114,7 +122,7 @@ export const ROUTE_SCHEDULE = {
   API_ID: 'SCHEDULE',
 };
 
-export const ROUTE_TRANSMISSIONS = {
+export const ROUTE_TRANSMISSIONS: RouteType = {
   ID: ROUTES_ID.TRANSMISSIONS,
   TITLE: 'Transmissions',
   URL: URL_ROUTES.TRANSMISSIONS,
@@ -122,7 +130,7 @@ export const ROUTE_TRANSMISSIONS = {
   API_ID: 'TRANSMISSIONS',
 };
 
-export const ROUTE_ERRORS = {
+export const ROUTE_ERRORS: RouteType = {
   ID: ROUTES_ID.ERRORS,
   TITLE: 'Errors',
   URL: URL_ROUTES.ERRORS,
@@ -130,7 +138,7 @@ export const ROUTE_ERRORS = {
   API_ID: 'ERRORS',
 };
 
-export const ROUTE_ADMIN = {
+export const ROUTE_ADMIN: RouteType = {
   ID: ROUTES_ID.ADMIN,
   TITLE: 'Admin',
   URL: URL_ROUTES.ADMIN,
@@ -138,7 +146,7 @@ export const ROUTE_ADMIN = {
   API_ID: 'ADMIN',
 };
 
-export const ROUTE_ACCESS_MANAGEMENT_GROUPS = {
+export const ROUTE_ACCESS_MANAGEMENT_GROUPS: RouteType = {
   ID: ROUTES_ID.ACCESS_MANAGEMENT_GROUPS,
   TITLE: 'Groups',
   URL: URL_ROUTES.ACCESS_MANAGEMENT_GROUPS,
@@ -146,7 +154,7 @@ export const ROUTE_ACCESS_MANAGEMENT_GROUPS = {
   API_ID: 'AM_GROUPS',
 };
 
-export const ROUTE_ACCESS_MANAGEMENT_POLICIES = {
+export const ROUTE_ACCESS_MANAGEMENT_POLICIES: RouteType = {
   ID: ROUTES_ID.ACCESS_MANAGEMENT_POLICIES,
   TITLE: 'Policies',
   URL: URL_ROUTES.ACCESS_MANAGEMENT_POLICIES,
@@ -154,7 +162,7 @@ export const ROUTE_ACCESS_MANAGEMENT_POLICIES = {
   API_ID: 'AM_POLICIES',
 };
 
-export const ROUTE_ACCESS_MANAGEMENT_SPECIALIZATION = {
+export const ROUTE_ACCESS_MANAGEMENT_SPECIALIZATION: RouteType = {
   ID: ROUTES_ID.ACCESS_MANAGEMENT_SPECIALIZATION,
   TITLE: 'Access Specialization',
   URL: URL_ROUTES.ACCESS_MANAGEMENT_SPECIALIZATION,
@@ -162,15 +170,7 @@ export const ROUTE_ACCESS_MANAGEMENT_SPECIALIZATION = {
   API_ID: 'AM_SPECIALIZATION',
 };
 
-export const ROUTE_CREATE_POLICIES = {
-  ID: ROUTES_ID.CREATE_POLICIES,
-  TITLE: 'Create policy',
-  URL: URL_ROUTES.CREATE_POLICIES,
-  MAIN_MENU: false,
-  API_ID: null,
-};
-
-export const ROUTE_ACTIVE_ORGS = {
+export const ROUTE_ACTIVE_ORGS: RouteType = {
   ID: ROUTES_ID.ACTIVE_ORGS,
   TITLE: 'Active Orgs',
   URL: URL_ROUTES.ACTIVE_ORGS,
@@ -178,14 +178,15 @@ export const ROUTE_ACTIVE_ORGS = {
   API_ID: 'ACTIVE_ORGS',
 };
 
-export const ROUTE_ACTIVITY_CURRENT = {
+export const ROUTE_ACTIVITY_CURRENT: RouteType = {
   ID: ROUTES_ID.CURRENT_ACTIVITY,
   TITLE: 'Current Activity',
   URL: URL_ROUTES.CURRENT_ACTIVITY,
+  MAIN_MENU: false,
   API_ID: 'ORG_ACTIVITY',
 };
 
-export const ROUTE_COLOR_PALETTES = {
+export const ROUTE_COLOR_PALETTES: RouteType = {
   ID: ROUTES_ID.COLOR_PALETTES,
   TITLE: 'Color Palettes',
   URL: URL_ROUTES.COLOR_PALETTES,
@@ -193,7 +194,7 @@ export const ROUTE_COLOR_PALETTES = {
   API_ID: 'COLOR_PALETTES',
 };
 
-export const ROUTE_DEFAULT_THEME = {
+export const ROUTE_DEFAULT_THEME: RouteType = {
   ID: ROUTES_ID.DEFAULT_THEME,
   TITLE: 'Default Theme',
   URL: URL_ROUTES.DEFAULT_THEME,
@@ -201,7 +202,7 @@ export const ROUTE_DEFAULT_THEME = {
   API_ID: 'THEME',
 };
 
-export const ROUTE_DASHBOARD_TO_FILE_STATUS = {
+export const ROUTE_DASHBOARD_TO_FILE_STATUS: RouteType = {
   ID: ROUTES_ID.FILE_STATUS,
   TITLE: 'File Status',
   URL: URL_ROUTES.DASHBOARD_TO_FILE_STATUS,
@@ -209,7 +210,7 @@ export const ROUTE_DASHBOARD_TO_FILE_STATUS = {
   API_ID: 'DASHBOARD_TO_FILE_STATUS',
 };
 
-export const ROUTE_ACTIVE_USERS = {
+export const ROUTE_ACTIVE_USERS: RouteType = {
   ID: ROUTES_ID.ACTIVE_USERS,
   TITLE: 'Active Users',
   URL: URL_ROUTES.ACTIVE_USERS,
@@ -217,7 +218,7 @@ export const ROUTE_ACTIVE_USERS = {
   API_ID: 'ACTIVE_USERS',
 };
 
-export const ROUTE_DELETED_USERS = {
+export const ROUTE_DELETED_USERS: RouteType = {
   ID: ROUTES_ID.DELETED_USERS,
   TITLE: 'Inactive Users',
   URL: URL_ROUTES.DELETED_USERS,
@@ -225,7 +226,7 @@ export const ROUTE_DELETED_USERS = {
   API_ID: 'DELETED_USERS',
 };
 
-export const ROUTE_FTP_TEST = {
+export const ROUTE_FTP_TEST: RouteType = {
   ID: ROUTES_ID.FTP_TEST,
   TITLE: 'FTP Test',
   URL: URL_ROUTES.FTP_TEST,
@@ -233,7 +234,7 @@ export const ROUTE_FTP_TEST = {
   API_ID: 'FTP_TEST',
 };
 
-export const ROUTE_IMPL_DEPLOY = {
+export const ROUTE_IMPL_DEPLOY: RouteType = {
   ID: ROUTES_ID.IMPL_DEPLOY,
   TITLE: 'Implementation Deploy',
   URL: URL_ROUTES.IMPL_DEPLOY,
@@ -257,7 +258,6 @@ export const ROUTES = {
   ROUTE_ACCESS_MANAGEMENT_GROUPS,
   ROUTE_ACCESS_MANAGEMENT_POLICIES,
   ROUTE_ACCESS_MANAGEMENT_SPECIALIZATION,
-  ROUTE_CREATE_POLICIES,
   ROUTE_ACTIVE_ORGS,
   ROUTE_ACTIVITY_CURRENT,
   ROUTE_COLOR_PALETTES,
@@ -268,7 +268,7 @@ export const ROUTES = {
   ROUTE_IMPL_DEPLOY,
 };
 
-export const ROUTES_ARRAY = [
+export const ROUTES_ARRAY: RouteType[] = [
   ROUTE_HOME,
   ROUTE_LOGIN,
   ROUTE_USER_SETTINGS,
@@ -281,7 +281,6 @@ export const ROUTES_ARRAY = [
   ROUTE_TRANSMISSIONS,
   ROUTE_ERRORS,
   ROUTE_ADMIN,
-  ROUTE_CREATE_POLICIES,
   ROUTE_ACCESS_MANAGEMENT_GROUPS,
   ROUTE_ACCESS_MANAGEMENT_POLICIES,
   ROUTE_ACCESS_MANAGEMENT_SPECIALIZATION,
@@ -304,5 +303,3 @@ export const getRouteByApiId = (_apiId) => {
 
   return routeResult;
 };
-
-export default URL_ROUTES;

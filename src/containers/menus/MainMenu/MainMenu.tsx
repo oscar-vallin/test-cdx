@@ -9,10 +9,10 @@ import { useHistory, useLocation } from 'react-router-dom';
 // Styles
 import { StyledRow, StyledColumn, StyledMenuButton, StyledButtonIcon } from './MainMenu.styles';
 
-import { getRouteByApiId } from '../../../data/constants/RouteConstants';
+import { getRouteByApiId } from 'src/data/constants/RouteConstants';
 import { OutsideComponent } from './OutsideComponent';
-import { useActiveDomainStore } from '../../../store/ActiveDomainStore';
-import { useOrgSid } from '../../../hooks/useOrgSid';
+import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
+import { useOrgSid } from 'src/hooks/useOrgSid';
 
 const defaultProps = {
   id: '',
@@ -27,7 +27,7 @@ type MainMenuProps = {
   option?: string;
 } & typeof defaultProps;
 
-const MainMenu = ({ id, left, changeCollapse, option }: MainMenuProps): ReactElement => {
+const MainMenu = ({ id, changeCollapse }: MainMenuProps): ReactElement => {
   const ActiveDomainStore = useActiveDomainStore();
   const history = useHistory();
   const location = useLocation();

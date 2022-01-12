@@ -1,18 +1,18 @@
 import { useState, memo, useEffect } from 'react';
 
-import { ROUTE_USER_SETTINGS } from '../../data/constants/RouteConstants';
+import { ROUTE_USER_SETTINGS } from 'src/data/constants/RouteConstants';
 
-import { LayoutDashboard } from '../../layouts/LayoutDashboard';
-import { PageHeader } from '../../containers/headers/PageHeader';
-import { Breadcrumb } from '../../components/breadcrumbs/Breadcrumb';
-import { Column } from '../../components/layouts';
-import { Spacing } from '../../components/spacings/Spacing';
+import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
+import { PageHeader } from 'src/containers/headers/PageHeader';
+import { Breadcrumb } from 'src/components/breadcrumbs/Breadcrumb';
+import { Column } from 'src/components/layouts';
+import { Spacing } from 'src/components/spacings/Spacing';
 import { PasswordChange } from './PasswordChange';
 import { PasswordRules } from './PasswordRules';
 import { ThemeSettings } from './ThemeSettings';
 
 import { StyledBox, StyledRow, StyledCard } from './UserSettingsPage.styles';
-import { useSessionStore } from '../../store/SessionStore';
+import { useSessionStore } from 'src/store/SessionStore';
 import { PasswordState } from './PasswordChange/PasswordChange';
 
 const _UserSettingsPage = () => {

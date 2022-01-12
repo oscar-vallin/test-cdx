@@ -1,5 +1,5 @@
 import { Switch } from 'react-router-dom';
-import { ROUTES } from '../data/constants/RouteConstants';
+import { ROUTES } from 'src/data/constants/RouteConstants';
 // Routes
 import { LoginPage } from './Login';
 import { UserSettingsPage } from './UserSettings';

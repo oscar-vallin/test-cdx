@@ -1,12 +1,12 @@
+// noinspection ES6PreferShortImport
+
 'use strict';
 
 import fs from 'fs';
-import path from 'path';
-//import chalk from 'chalk';
 import { URL_ROUTES } from '../src/data/constants/RouteConstants.js';
 
 (async () => {
-  //console.log(chalk.blue('Extracting top level routes (URL_ROUTES) from RouteContants.js'))
+  //console.log(chalk.blue('Extracting top level routes (URL_ROUTES) from RouteConstants.js'))
 
   const routes = Object.entries(URL_ROUTES)
     .filter(([key, value]) => value.split('/').filter((val) => val !== '').length === 1)

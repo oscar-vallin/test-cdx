@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
-import { ROUTES } from '../../data/constants/RouteConstants';
-import { LayoutDashboard } from '../../layouts/LayoutDashboard';
-import { Column, Container, Row } from '../../components/layouts';
+import { ROUTES } from 'src/data/constants/RouteConstants';
+import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
+import { Column, Container, Row } from 'src/components/layouts';
 import { Spacing } from '../../components/spacings/Spacing';
-import { PageTitle, Text } from '../../components/typography';
-import { PageHeader } from '../../containers/headers/PageHeader';
+import { PageTitle, Text } from 'src/components/typography';
+import { PageHeader } from 'src/containers/headers/PageHeader';
 
-import { WorkPacketTable } from '../../containers/tables/WorkPacketTable';
-import { WorkPacketColumns } from '../../containers/tables/WorkPacketColumns';
+import { WorkPacketTable } from 'src/containers/tables/WorkPacketTable';
+import { WorkPacketColumns } from 'src/containers/tables/WorkPacketColumns';
 import {
   NullHandling,
   SortDirection,
   useWpProcessErrorsLazyQuery,
   WorkPacketStatus,
-} from '../../data/services/graphql';
-import { useTableFilters } from '../../hooks/useTableFilters';
+} from 'src/data/services/graphql';
+import { useTableFilters } from 'src/hooks/useTableFilters';
 
 const _ErrorsPage = () => {
   const [tableMeta, setTableMeta] = useState({ count: 0, loading: true });

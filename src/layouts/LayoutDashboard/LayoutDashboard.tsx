@@ -1,11 +1,8 @@
 import { ReactElement, ReactNode } from 'react';
-import { useHistory } from 'react-router-dom';
 import { AppHeader } from 'src/containers/headers/AppHeader';
-import { ROUTE_USER_SETTINGS } from '../../data/constants/RouteConstants';
 
-import { StyleConstants } from '../../data/constants/StyleConstants';
+import { StyleConstants } from 'src/data/constants/StyleConstants';
 import { BoxStyled } from './LayoutDashboard.styles';
-import { useSessionStore } from '../../store/SessionStore';
 
 const defaultProps = {
   id: '',
@@ -26,8 +23,6 @@ export const LayoutDashboard = ({
   showMenu = true,
   children,
 }: LayoutDashboardProps): ReactElement => {
-  const { user } = useSessionStore();
-  const history = useHistory();
 
   return (
     <>

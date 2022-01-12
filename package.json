@@ -44,7 +44,8 @@
     "recharts": "^2.0.6",
     "styled-components": "^5.2.0",
     "subscriptions-transport-ws": "^0.9.18",
-    "typescript": "^4.1.2",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.4",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
@@ -64,7 +65,7 @@
     "format": "prettier --write src/**/*.{ts,tsx}",
     "lint": "eslint \"src/**/*.{js,ts,tsx}\" --color",
     "clean": "rm -rf build",
-    "extract-routes": "node --experimental-modules internals/route-extractor.mjs",
+    "extract-routes": "node --loader ts-node/esm internals/route-extractor.ts",
     "prettify": "prettier --write \"src/**/*.{js,jsx,ts,tsx,css}\"",
     "lint:fix": "eslint \"src/**/*.{js,ts,tsx}\" --color",
     "isready": "yarn run format && yarn run lint && yarn run test:coverage && yarn run build"
