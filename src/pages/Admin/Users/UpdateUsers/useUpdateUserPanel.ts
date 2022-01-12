@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import {
+  ActivateUserMutation,
   DeactivateUserMutation,
   GqOperationResponse,
   ResetPasswordMutation,
   UpdateUserAccessPolicyGroupsMutation,
-  UpdateUserMutation,
+  UpdateUserMutation, useActivateUserMutation,
   useDeactivateUserMutation,
   useFindUserAccountLazyQuery,
   UserAccount,
@@ -25,6 +26,7 @@ export type UseUpdateUserPanel = {
   callAssignGroups: (sids: string[]) => Promise<UpdateUserAccessPolicyGroupsMutation | null | undefined>,
   callResetPassword: () => Promise<ResetPasswordMutation | null | undefined>,
   callInactivateUser: () => Promise<DeactivateUserMutation | null | undefined>,
+  callActivateUser: () => Promise<ActivateUserMutation | null | undefined>,
   resetForm: () => void
 }
 
@@ -51,6 +53,9 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
   const [callInactivateUser, { error: inactivateUserError}] =
     useDeactivateUserMutation();
 
+  const [callActivateUser, { error: activateUserError}] =
+    useActivateUserMutation();
+
   const showPanel = (userSid: string) => {
     setUserSid(userSid);
     callFindUserAccount({
@@ -62,7 +67,7 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
 
   const closePanel = () => {
     setPanelOpen(false);
-  }
+  };
 
   useEffect(() => {
     handleError(updateUserError);
@@ -83,6 +88,10 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
   useEffect(() => {
     handleError(inactivateUserError);
   }, [inactivateUserError]);
+
+  useEffect(() => {
+    handleError(activateUserError);
+  }, [activateUserError]);
 
   const internalServerError = {
     sid: null,
@@ -152,7 +161,7 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
     });
 
     return data;
-  }
+  };
 
   const handleInactivateUser = async() => {
     const {data} = await callInactivateUser({
@@ -174,7 +183,29 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
     }
 
     return data;
-  }
+  };
+
+  const handleActivateUser = async() => {
+    const {data} = await callActivateUser({
+      variables: {
+        sidInput: {
+          sid: userSid
+        }
+      },
+      errorPolicy: 'all'
+    });
+
+    if (data?.activateUser === GqOperationResponse.Success) {
+      // Update the form
+      callFindUserAccount({
+        variables: {
+          userSid,
+        },
+      });
+    }
+
+    return data;
+  };
 
   const resetForm = () => {
     if (userSid) {
@@ -201,6 +232,7 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
     callAssignGroups: handleUpdateUserGroups,
     callResetPassword: handleResetPassword,
     callInactivateUser: handleInactivateUser,
+    callActivateUser: handleActivateUser,
     resetForm
   };
 };

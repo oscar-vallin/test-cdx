@@ -139,6 +139,20 @@ const UpdateUserPanel = ({ useUpdateUserPanel,
     }
   };
 
+  const handleActivateUser = async () => {
+    const responseReset = await useUpdateUserPanel.callActivateUser();
+    if (responseReset?.activateUser) {
+      if (responseReset?.activateUser === GqOperationResponse.Success) {
+        onUpdateUser();
+        setMessageType(MessageBarType.success);
+        setMessage('User has been activated');
+      } else {
+        setMessageType(MessageBarType.error);
+        setMessage('An error occurred activating this user.  Please contact your administrator.');
+      }
+    }
+  };
+
   const hideDialog = () => {
     setShowDialog(false);
   }
@@ -179,6 +193,21 @@ const UpdateUserPanel = ({ useUpdateUserPanel,
     updatedDialog.message = 'You are about to inactivate this user which will prevent this user from logging in. Are you sure you want to continue?';
     updatedDialog.onYes = () => {
       handleInactivateUser().then();
+      hideDialog();
+    };
+    updatedDialog.onClose = () => {
+      hideDialog();
+    };
+    setDialogProps(updatedDialog);
+    setShowDialog(true);
+  };
+
+  const showActivateUserDialog = () => {
+    const updatedDialog = Object.assign({}, defaultDialogProps);
+    updatedDialog.title = 'Activate User?';
+    updatedDialog.message = 'You are about to activate this user which will allow this user to log in. Are you sure you want to continue?';
+    updatedDialog.onYes = () => {
+      handleActivateUser().then();
       hideDialog();
     };
     updatedDialog.onClose = () => {
@@ -233,14 +262,23 @@ const UpdateUserPanel = ({ useUpdateUserPanel,
         </Column>
         <Column lg='6' right={true}>
           <Stack horizontal>
-            <CommandButton id='__ResetPassword_Button'
-                           iconProps={{iconName: 'Permissions'}}
-                           text='Reset Password'
-                           onClick={showResetPasswordDialog}/>
-            <CommandButton id='__InactivateUser_Button'
-                           iconProps={{iconName: 'UserRemove'}}
-                           text='Inactivate User'
-                           onClick={showInactivateUserDialog}/>
+            {useUpdateUserPanel.userAccountForm.active?.value ? (
+              <>
+                <CommandButton id='__ResetPassword_Button'
+                               iconProps={{iconName: 'Permissions'}}
+                               text='Reset Password'
+                               onClick={showResetPasswordDialog}/>
+                <CommandButton id='__InactivateUser_Button'
+                               iconProps={{iconName: 'UserRemove'}}
+                               text='Inactivate User'
+                               onClick={showInactivateUserDialog}/>
+              </>
+            ) : (
+              <CommandButton id='__ActivateUser_Button'
+                             iconProps={{iconName: 'UserFollowed'}}
+                             text='Activate User'
+                             onClick={showActivateUserDialog}/>
+            )}
           </Stack>
         </Column>
       </PanelHeader>
