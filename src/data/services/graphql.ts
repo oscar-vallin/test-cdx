@@ -563,6 +563,14 @@ export enum GqOperationResponse {
   PartialSuccess = 'PARTIAL_SUCCESS'
 }
 
+export type GenericResponse = {
+  __typename?: 'GenericResponse';
+  response?: Maybe<GqOperationResponse>;
+  errCode?: Maybe<Scalars['String']>;
+  errMsg?: Maybe<Scalars['String']>;
+  errSeverity?: Maybe<ErrorSeverity>;
+};
+
 export type ImplementationDeployResponse = {
   __typename?: 'ImplementationDeployResponse';
   response: GqOperationResponse;
@@ -645,7 +653,7 @@ export type Mutation = {
   /** Initiate a password reset for a user, by creating an account activation link for the user to reset their password with. */
   resetPassword?: Maybe<GqOperationResponse>;
   /** Update a user's password given a password reset token which was emailed to the user. */
-  updatePassword?: Maybe<GqOperationResponse>;
+  updatePassword?: Maybe<GenericResponse>;
   createOrg?: Maybe<Organization>;
   deactivateOrg?: Maybe<GqOperationResponse>;
   createAccessPolicy?: Maybe<AccessPolicyForm>;
@@ -935,14 +943,6 @@ export type OrganizationForm = {
   errSeverity?: Maybe<ErrorSeverity>;
 };
 
-/**
- * input DashThemeColorModeInput{
- * orgSid: ID!
- * ownerId: ID!
- * sid: ID!
- * themeColorMode: ThemeColorMode!
- * }
- */
 export type OrganizationLink = {
   __typename?: 'OrganizationLink';
   id: Scalars['ID'];
@@ -994,6 +994,24 @@ export enum PasswordComplexity {
   Strong = 'STRONG',
   VeryStrong = 'VERY_STRONG'
 }
+
+/**
+ * input DashThemeColorModeInput{
+ * orgSid: ID!
+ * ownerId: ID!
+ * sid: ID!
+ * themeColorMode: ThemeColorMode!
+ * }
+ */
+export type PasswordResetTokenResponse = {
+  __typename?: 'PasswordResetTokenResponse';
+  orgSid?: Maybe<Scalars['ID']>;
+  userSid?: Maybe<Scalars['ID']>;
+  response?: Maybe<GqOperationResponse>;
+  errCode?: Maybe<Scalars['String']>;
+  errMsg?: Maybe<Scalars['String']>;
+  errSeverity?: Maybe<ErrorSeverity>;
+};
 
 export type PasswordRuleSet = {
   mustNotContainWhiteSpace?: Maybe<UiBooleanField>;
@@ -1185,7 +1203,7 @@ export type QualityChecks = {
 export type Query = {
   __typename?: 'Query';
   version?: Maybe<Scalars['String']>;
-  verifyPasswordResetToken?: Maybe<GqOperationResponse>;
+  verifyPasswordResetToken?: Maybe<PasswordResetTokenResponse>;
   exchangeActivityInProcess?: Maybe<OrganizationLinkConnection>;
   exchangeActivityTransmitted?: Maybe<OrganizationLinkConnection>;
   exchangeActivityErrored?: Maybe<OrganizationLinkConnection>;
@@ -1532,7 +1550,7 @@ export type QueryPasswordRulesFormArgs = {
 
 export type QueryPasswordValidationArgs = {
   orgSid: Scalars['ID'];
-  userName: Scalars['String'];
+  userSid: Scalars['ID'];
   password: Scalars['String'];
 };
 
@@ -2549,7 +2567,10 @@ export type VerifyPasswordResetTokenQueryVariables = Exact<{
 
 export type VerifyPasswordResetTokenQuery = (
   { __typename?: 'Query' }
-  & Pick<Query, 'verifyPasswordResetToken'>
+  & { verifyPasswordResetToken?: Maybe<(
+    { __typename?: 'PasswordResetTokenResponse' }
+    & Pick<PasswordResetTokenResponse, 'orgSid' | 'userSid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+  )> }
 );
 
 export type ExchangeActivityInProcessQueryVariables = Exact<{
@@ -4165,7 +4186,7 @@ export type PasswordRulesFormQuery = (
 
 export type PasswordValidationQueryVariables = Exact<{
   orgSid: Scalars['ID'];
-  userName: Scalars['String'];
+  userSid: Scalars['ID'];
   password: Scalars['String'];
 }>;
 
@@ -4346,7 +4367,10 @@ export type UpdatePasswordMutationVariables = Exact<{
 
 export type UpdatePasswordMutation = (
   { __typename?: 'Mutation' }
-  & Pick<Mutation, 'updatePassword'>
+  & { updatePassword?: Maybe<(
+    { __typename?: 'GenericResponse' }
+    & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+  )> }
 );
 
 export type CreateOrgMutationVariables = Exact<{
@@ -5554,7 +5578,14 @@ export type VersionLazyQueryHookResult = ReturnType<typeof useVersionLazyQuery>;
 export type VersionQueryResult = Apollo.QueryResult<VersionQuery, VersionQueryVariables>;
 export const VerifyPasswordResetTokenDocument = gql`
     query VerifyPasswordResetToken($token: String!) {
-  verifyPasswordResetToken(token: $token)
+  verifyPasswordResetToken(token: $token) {
+    orgSid
+    userSid
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
 }
     `;
 
@@ -9701,8 +9732,8 @@ export type PasswordRulesFormQueryHookResult = ReturnType<typeof usePasswordRule
 export type PasswordRulesFormLazyQueryHookResult = ReturnType<typeof usePasswordRulesFormLazyQuery>;
 export type PasswordRulesFormQueryResult = Apollo.QueryResult<PasswordRulesFormQuery, PasswordRulesFormQueryVariables>;
 export const PasswordValidationDocument = gql`
-    query PasswordValidation($orgSid: ID!, $userName: String!, $password: String!) {
-  passwordValidation(orgSid: $orgSid, userName: $userName, password: $password) {
+    query PasswordValidation($orgSid: ID!, $userSid: ID!, $password: String!) {
+  passwordValidation(orgSid: $orgSid, userSid: $userSid, password: $password) {
     passes
     mustAlwaysBeMet {
       requiredNumPassingRules
@@ -9741,7 +9772,7 @@ export const PasswordValidationDocument = gql`
  * const { data, loading, error } = usePasswordValidationQuery({
  *   variables: {
  *      orgSid: // value for 'orgSid'
- *      userName: // value for 'userName'
+ *      userSid: // value for 'userSid'
  *      password: // value for 'password'
  *   },
  * });
@@ -10137,7 +10168,12 @@ export type ResetPasswordMutationResult = Apollo.MutationResult<ResetPasswordMut
 export type ResetPasswordMutationOptions = Apollo.BaseMutationOptions<ResetPasswordMutation, ResetPasswordMutationVariables>;
 export const UpdatePasswordDocument = gql`
     mutation UpdatePassword($updatePasswordInput: UpdatePasswordInput!) {
-  updatePassword(updatePasswordInput: $updatePasswordInput)
+  updatePassword(updatePasswordInput: $updatePasswordInput) {
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
 }
     `;
 export type UpdatePasswordMutationFn = Apollo.MutationFunction<UpdatePasswordMutation, UpdatePasswordMutationVariables>;

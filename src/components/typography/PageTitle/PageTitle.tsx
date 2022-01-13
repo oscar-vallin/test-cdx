@@ -14,6 +14,7 @@ const PageTitle = ({ id, title, subTitle, icon }: PageTitleParams) => {
     if (icon) {
       return <FontIcon iconName={icon} />;
     }
+    return '';
   };
 
   const renderSubTitle = () => {
@@ -24,6 +25,7 @@ const PageTitle = ({ id, title, subTitle, icon }: PageTitleParams) => {
         </>
       );
     }
+    return '';
   };
 
   return (

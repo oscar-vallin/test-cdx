@@ -5008,6 +5008,65 @@
       },
       {
         "kind": "OBJECT",
+        "name": "GenericResponse",
+        "description": null,
+        "fields": [
+          {
+            "name": "response",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "GQOperationResponse",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "errCode",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "errMsg",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "errSeverity",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "ErrorSeverity",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
         "name": "ImplementationDeployResponse",
         "description": null,
         "fields": [
@@ -5722,8 +5781,8 @@
               }
             ],
             "type": {
-              "kind": "ENUM",
-              "name": "GQOperationResponse",
+              "kind": "OBJECT",
+              "name": "GenericResponse",
               "ofType": null
             },
             "isDeprecated": false,
@@ -7132,7 +7191,7 @@
       {
         "kind": "OBJECT",
         "name": "OrganizationLink",
-        "description": "input DashThemeColorModeInput{\norgSid: ID!\nownerId: ID!\nsid: ID!\nthemeColorMode: ThemeColorMode!\n}",
+        "description": null,
         "fields": [
           {
             "name": "id",
@@ -7549,6 +7608,89 @@
             "deprecationReason": null
           }
         ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "PasswordResetTokenResponse",
+        "description": "input DashThemeColorModeInput{\norgSid: ID!\nownerId: ID!\nsid: ID!\nthemeColorMode: ThemeColorMode!\n}",
+        "fields": [
+          {
+            "name": "orgSid",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ID",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "userSid",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ID",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "response",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "GQOperationResponse",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "errCode",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "errMsg",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "errSeverity",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "ErrorSeverity",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
         "possibleTypes": null
       },
       {
@@ -9070,8 +9212,8 @@
               }
             ],
             "type": {
-              "kind": "ENUM",
-              "name": "GQOperationResponse",
+              "kind": "OBJECT",
+              "name": "PasswordResetTokenResponse",
               "ofType": null
             },
             "isDeprecated": false,
@@ -11060,14 +11202,14 @@
                 "deprecationReason": null
               },
               {
-                "name": "userName",
+                "name": "userSid",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
                     "kind": "SCALAR",
-                    "name": "String",
+                    "name": "ID",
                     "ofType": null
                   }
                 },

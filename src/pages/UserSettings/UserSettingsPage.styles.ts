@@ -90,8 +90,6 @@ export const StyledPreview = styled.div<StyledPreviewProps>`
 `;
 
 export const CompositeRulesSeparator = styled.div`
-  margin: auto;
-  margin-top: 50px;
   font-weight: 500;
 `;
 

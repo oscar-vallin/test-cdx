@@ -9,9 +9,9 @@ export const useOrgSid = () => {
   const urlParams = new URLSearchParams(location.search);
   const orgSid = urlParams.get('orgSid') ?? '-1';
 
-  const updateOrgSid = (orgSid) => {
-    ActiveDomainStore.setCurrentOrg({ orgSid, destination: null });
-    urlParams.set('orgSid', orgSid);
+  const updateOrgSid = (sid) => {
+    ActiveDomainStore.setCurrentOrg({ orgSid: sid, destination: null });
+    urlParams.set('orgSid', sid);
     location.search = urlParams.toString();
     history.push(`${location.pathname}?${location.search}`);
   };

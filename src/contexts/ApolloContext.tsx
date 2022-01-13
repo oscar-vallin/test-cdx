@@ -1,7 +1,6 @@
-import { ReactElement, ReactNode, createContext, useState, useEffect, useMemo, useContext } from 'react';
+import { ReactElement, ReactNode, createContext, useState, useEffect, useMemo } from 'react';
 import { ApolloProvider, ApolloClient, InMemoryCache, HttpLink, ApolloLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
-import { useSessionStore } from '../store/SessionStore';
 import { useCSRFToken } from '../hooks/useCSRFToken';
 
 const SERVER_URL = process.env.REACT_APP_API_SERVER;
@@ -21,7 +20,6 @@ type ApolloContextProviderProps = {
 } & typeof defaultProps;
 
 export const ApolloContextProvider = ({ children }: ApolloContextProviderProps): ReactElement => {
-  const SessionStore = useSessionStore();
   // LocalState
   const [isApolloLoading] = useState(true);
   // const [sessionID, setSessionID] = useState('');
@@ -31,7 +29,7 @@ export const ApolloContextProvider = ({ children }: ApolloContextProviderProps):
     // credentials: 'same-origin',
   });
 
-  const { getCSRFToken, getAuthToken } = useCSRFToken();
+  const { getCSRFToken } = useCSRFToken();
 
   const authLink = setContext((_, { headers }) => {
     return {
@@ -83,12 +81,5 @@ export const ApolloContextProvider = ({ children }: ApolloContextProviderProps):
     </ApolloProvider>
   );
 };
-
-//
-export function useApolloContext() {
-  const context = useContext(ApolloContext);
-
-  return context;
-}
 
 ApolloContextProvider.defaultProps = defaultProps;

@@ -2,26 +2,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { ReactElement, useState, useEffect } from 'react';
 import { SpinnerSize } from '@fluentui/react';
-import { Column } from '../../../components/layouts';
-import { InputText } from '../../../components/inputs/InputText';
-import { Spacing } from '../../../components/spacings/Spacing';
-import { Spinner } from '../../../components/spinners/Spinner';
+import { BigTitle, Card500, CenteredWrapper, K2ULogo, LogoRow } from 'src/layouts/LayoutLogin/LayoutLogin.styles';
+import { Column } from 'src/components/layouts';
+import { InputText } from 'src/components/inputs/InputText';
+import { Spacing } from 'src/components/spacings/Spacing';
+import { Spinner } from 'src/components/spinners/Spinner';
 
-import {
-  StyledBox,
-  StyledRow,
-  StyledButton,
-  StyledCard,
-  StyledImage,
-  StyledText,
-  StyledTitle,
-  StyledRowBottom,
-  StyledButtonIcon,
+import { StyledRow, StyledButton, StyledText, StyledButtonIcon,
 } from './FormLogin.styles';
 
-import { useSessionStore } from '../../../store/SessionStore';
-import { useLoginUseCase } from '../../../use-cases/Authentication';
-import { useNotification } from '../../../hooks/useNotification';
+import { useSessionStore } from 'src/store/SessionStore';
+import { useLoginUseCase } from 'src/use-cases/Authentication';
+import { useNotification } from 'src/hooks/useNotification';
 
 const defaultProps = {
   id: '',
@@ -60,15 +52,15 @@ const FormLogin = ({ id }: FormLoginProps): ReactElement => {
   };
 
   return (
-    <StyledBox id={id}>
-      <StyledRowBottom id={`${id}__Card--Row`}>
-        <Column id={`${id}__Card__Row-Column`}>
-          <StyledImage name="logo" alt="Known2U Logo" />
+    <CenteredWrapper id={id}>
+      <LogoRow id={`${id}__Logo--Row`}>
+        <Column id={`${id}__Logo__Row-Column`}>
+          <K2ULogo name='logo' alt='Known2U Logo' />
         </Column>
-      </StyledRowBottom>
+      </LogoRow>
       <StyledRow id={`${id}--Row`}>
         <Column id={`${id}__Row-Column`}>
-          <StyledCard id={`${id}-Card`}>
+          <Card500 id={`${id}-Card`}>
             {SessionStore.isRehydrating ? (
               <Spacing margin={{ top: 'normal' }}>
                 <Spinner size={SpinnerSize.large} label="Checking current user session" />
@@ -77,7 +69,7 @@ const FormLogin = ({ id }: FormLoginProps): ReactElement => {
               <>
                 <StyledRow id={`${id}__Card__Row--label`}>
                   <Column id={`${id}__Card__Row__Column--label`}>
-                    <StyledTitle>CDX DASHBOARD</StyledTitle>
+                    <BigTitle>CDX DASHBOARD</BigTitle>
                   </Column>
                 </StyledRow>
                 <StyledRow id={`${id}__Card__Row--sublabel`}>
@@ -125,8 +117,8 @@ const FormLogin = ({ id }: FormLoginProps): ReactElement => {
                     </Column>
                   </StyledRow>
                 )}
-                <StyledRow id={`${id}__Card__Row--Email`}>
-                  <Column id={`${id}__Card__Row__Column--Email`}>
+                <StyledRow>
+                  <Column>
                     <StyledButton
                       id={`${id}__Card__Row__Column__Button--Button`}
                       variant="secondary"
@@ -143,10 +135,10 @@ const FormLogin = ({ id }: FormLoginProps): ReactElement => {
                 </StyledRow>
               </>
             )}
-          </StyledCard>
+          </Card500>
         </Column>
       </StyledRow>
-    </StyledBox>
+    </CenteredWrapper>
   );
 };
 

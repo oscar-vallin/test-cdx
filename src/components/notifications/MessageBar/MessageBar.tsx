@@ -18,7 +18,7 @@ type CDXMessageBarProps = {
   truncated?: boolean;
   content?: any;
   actions?: any;
-  children?: ReactElement | string;
+  children?: Element | ReactElement | string;
 } & typeof defaultProps;
 
 const CDXMessageBar = ({

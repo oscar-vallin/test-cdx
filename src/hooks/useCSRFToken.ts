@@ -7,11 +7,11 @@ export const useCSRFToken = () => {
   const SessionStore = useSessionStore();
 
   const getCSRFToken = () => {
-    return document.head?.querySelector('meta[name="_csrf"]')?.getAttribute('content');
+    return document.getElementById('__csrf_token')?.getAttribute('content');
   };
 
   const setCSRFToken = (token: string) => {
-    document.head?.querySelector('meta[name="_csrf"]')?.setAttribute('content', token);
+    document.getElementById('__csrf_token')?.setAttribute('content', token);
   };
 
   const getAuthToken = () => {
@@ -25,7 +25,7 @@ export const useCSRFToken = () => {
 
   const callCSRFController = () => {
     const currentToken = getCSRFToken() || '';
-    if (currentToken.trim().length == 0) {
+    if (currentToken.trim().length === 0) {
       const authToken = SessionStore.user?.token || getAuthToken() || '';
       const opts: RequestInit = {
         headers: {

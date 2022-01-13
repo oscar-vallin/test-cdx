@@ -9,11 +9,11 @@ import { useCurrentUserTheme } from 'src/hooks/useCurrentUserTheme';
 import { LayoutLogin } from 'src/layouts/LayoutLogin';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { Spinner } from 'src/components/spinners/Spinner';
-import { StyledCard } from 'src/containers/forms/FormLogin/FormLogin.styles';
 import Theming from 'src/utils/Theming';
 import { useSessionStore } from 'src/store/SessionStore';
 import { useThemeStore } from 'src/store/ThemeStore';
 import { theme as styledComponentsTheme } from '../styles/themes/theme';
+import { Card500 } from 'src/layouts/LayoutLogin/LayoutLogin.styles';
 
 export const ThemeContext = createContext(() => {
   return {};
@@ -106,11 +106,11 @@ export const ThemeContextProvider = ({ children }) => {
 
           {isLoadingTheme ? (
             <LayoutLogin id="ThemeContext">
-              <StyledCard>
+              <Card500>
                 <Spacing margin={{ top: 'normal' }}>
                   <Spinner size={SpinnerSize.large} label="Fetching your preferences" />
                 </Spacing>
-              </StyledCard>
+              </Card500>
             </LayoutLogin>
           ) : (
             children

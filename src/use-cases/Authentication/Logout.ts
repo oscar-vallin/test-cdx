@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
-import { useSessionStore } from '../../store/SessionStore';
-import { useLogOutMutation } from '../../data/services/graphql';
-import { useCSRFToken } from '../../hooks/useCSRFToken';
+import { useSessionStore } from 'src/store/SessionStore';
+import { useLogOutMutation } from 'src/data/services/graphql';
+import { useCSRFToken } from 'src/hooks/useCSRFToken';
 
 type LogoutState = {
   loading: boolean;
@@ -32,7 +32,7 @@ export const useLogoutUseCase = () => {
 
   const logoutUser = () => {
     apiCall()
-      .catch((reason: any) => {
+      .catch(() => {
         // catch any error and just reset the tokens regardless
       })
       .finally(clearTokens);

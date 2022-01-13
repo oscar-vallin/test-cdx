@@ -1,6 +1,7 @@
 import { Switch } from 'react-router-dom';
 import { ROUTES } from 'src/data/constants/RouteConstants';
 // Routes
+import { PasswordResetPage } from 'src/pages/PasswordReset';
 import { LoginPage } from './Login';
 import { UserSettingsPage } from './UserSettings';
 import { DashboardPage } from './Dashboard';
@@ -33,6 +34,9 @@ export const Routes = () => {
     <Switch>
       <UnauthRoute path="/login">
         <LoginPage />
+      </UnauthRoute>
+      <UnauthRoute path={ROUTES.ROUTE_PASSWORD_RESET.URL}>
+        <PasswordResetPage />
       </UnauthRoute>
 
       <AuthRoute exact path="/">

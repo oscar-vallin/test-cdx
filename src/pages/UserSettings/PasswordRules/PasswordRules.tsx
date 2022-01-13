@@ -3,14 +3,15 @@ import {
   PasswordValidation,
   PasswordValidationRule,
   usePasswordValidationLazyQuery,
-} from '../../../data/services/graphql';
+} from 'src/data/services/graphql';
 
 import { CompositeRulesSeparator, StyledTitle } from '../UserSettingsPage.styles';
 import { RuleGroup } from './RuleGroup';
 
-import { Column, Row } from '../../../components/layouts';
+import { Column, Row } from 'src/components/layouts';
 import { RuleItems } from './RuleItems';
-import { SessionUser } from '../../../store/SessionStore/SessionTypes';
+import { SessionUser } from 'src/store/SessionStore/SessionTypes';
+import { IStackItemStyles, IStackTokens, Stack } from '@fluentui/react';
 
 type PasswordRulesParam = {
   user: SessionUser;
@@ -42,7 +43,7 @@ const PasswordRules = ({ user, password, onChange }: PasswordRulesParam) => {
     apiCall({
       variables: {
         orgSid: user.orgSid ?? '',
-        userName: user.userId ?? '',
+        userSid: user.userId ?? '',
         password,
       },
     });
@@ -67,6 +68,28 @@ const PasswordRules = ({ user, password, onChange }: PasswordRulesParam) => {
     return [rule];
   };
 
+  const stackItemStyles: IStackItemStyles = {
+    root: {
+      alignItems: 'top',
+      display: 'flex',
+      justifyContent: 'center',
+    },
+  };
+
+  const compositeRuleSepStyle: IStackItemStyles = {
+    root: {
+      alignItems: 'center',
+      display: 'flex',
+      justifyContent: 'center',
+    },
+  };
+
+  // Tokens definition
+  const stackTokens: IStackTokens = {
+    childrenGap: 10,
+    padding: 10,
+  };
+
   return (
     <>
       <StyledTitle id="__userSettings_Password_rules">Password rules</StyledTitle>
@@ -78,22 +101,23 @@ const PasswordRules = ({ user, password, onChange }: PasswordRulesParam) => {
         </Column>
       </Row>
       <Row>
-        <Column lg="5">
-          <RuleGroup title="Meet strength level" passes={rules?.passwordStrength?.passes ?? false}>
-            <RuleItems items={passwordStrengthRuleItems()} />
-          </RuleGroup>
-        </Column>
-        <Column lg="2">
-          <CompositeRulesSeparator>or</CompositeRulesSeparator>
-        </Column>
-        <Column lg="5">
-          <RuleGroup
-            title={someMustBeMetTitle(rules?.someMustBeMet?.requiredNumPassingRules ?? 1)}
-            passes={rules?.someMustBeMet?.passes ?? false}
-          >
-            <RuleItems items={(rules?.someMustBeMet?.rules ?? []) as PasswordValidationRule[]} />
-          </RuleGroup>
-        </Column>
+        <Stack horizontal={true} tokens={stackTokens}>
+          <Stack.Item grow={3} styles={stackItemStyles}>
+            <RuleGroup title="Meet strength level" passes={rules?.passwordStrength?.passes ?? false}>
+              <RuleItems items={passwordStrengthRuleItems()} />
+            </RuleGroup>
+          </Stack.Item>
+          <Stack.Item disableShrink={true} styles={compositeRuleSepStyle}>
+            <CompositeRulesSeparator>or</CompositeRulesSeparator>
+          </Stack.Item>
+          <Stack.Item grow={3} styles={stackItemStyles}>
+            <RuleGroup
+              title={someMustBeMetTitle(rules?.someMustBeMet?.requiredNumPassingRules ?? 1)}
+              passes={rules?.someMustBeMet?.passes ?? false}>
+              <RuleItems items={(rules?.someMustBeMet?.rules ?? []) as PasswordValidationRule[]} />
+            </RuleGroup>
+          </Stack.Item>
+        </Stack>
       </Row>
     </>
   );

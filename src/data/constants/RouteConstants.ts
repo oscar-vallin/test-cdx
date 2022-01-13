@@ -12,7 +12,6 @@ export const ROUTES_ID = {
   ACCESS_MANAGEMENT_GROUPS: 'access-management-groups',
   ACCESS_MANAGEMENT_POLICIES: 'access-management-policies',
   ACCESS_MANAGEMENT_SPECIALIZATION: 'access-management-specialization',
-  CREATE_POLICIES: 'create-policy',
   ACTIVE_ORGS: 'active-orgs',
   CURRENT_ACTIVITY: 'current-activity',
   COLOR_PALETTES: 'color-palettes',
@@ -21,6 +20,7 @@ export const ROUTES_ID = {
   DELETED_USERS: 'deleted-users',
   FTP_TEST: 'ftp-test',
   IMPL_DEPLOY: 'implementation-deploy',
+  PASSWORD_RESET: 'password-reset',
 };
 
 export const URL_ROUTES = {
@@ -43,11 +43,11 @@ export const URL_ROUTES = {
   CURRENT_ACTIVITY: `/${ROUTES_ID.ADMIN}/organizations/current-activity`,
   COLOR_PALETTES: `/${ROUTES_ID.ADMIN}/dashboard-site/color-palettes`,
   DEFAULT_THEME: `/${ROUTES_ID.ADMIN}/dashboard-site/default-theme`,
-  CREATE_POLICIES: `/${ROUTES_ID.ADMIN}/access-management/create-policies`,
   ACTIVE_USERS: `/${ROUTES_ID.ACTIVE_USERS}`,
   DELETED_USERS: `/${ROUTES_ID.DELETED_USERS}`,
   FTP_TEST: `/${ROUTES_ID.FTP_TEST}`,
   IMPL_DEPLOY: `/${ROUTES_ID.IMPL_DEPLOY}`,
+  PASSWORD_RESET: `/ua/${ROUTES_ID.PASSWORD_RESET}/:token`
 };
 
 type RouteType = {
@@ -242,6 +242,14 @@ export const ROUTE_IMPL_DEPLOY: RouteType = {
   API_ID: 'IMPL_DEPLOY',
 };
 
+export const ROUTE_PASSWORD_RESET: RouteType = {
+  ID: ROUTES_ID.PASSWORD_RESET,
+  TITLE: 'Password Reset',
+  URL: URL_ROUTES.PASSWORD_RESET,
+  MAIN_MENU: false,
+  API_ID: 'N/A',
+};
+
 export const ROUTES = {
   ROUTE_HOME,
   ROUTE_LOGIN,
@@ -266,6 +274,7 @@ export const ROUTES = {
   ROUTE_DELETED_USERS,
   ROUTE_FTP_TEST,
   ROUTE_IMPL_DEPLOY,
+  ROUTE_PASSWORD_RESET,
 };
 
 export const ROUTES_ARRAY: RouteType[] = [
@@ -292,6 +301,7 @@ export const ROUTES_ARRAY: RouteType[] = [
   ROUTE_DELETED_USERS,
   ROUTE_FTP_TEST,
   ROUTE_IMPL_DEPLOY,
+  ROUTE_PASSWORD_RESET,
 ];
 
 export const getRouteByApiId = (_apiId) => {

@@ -1,15 +1,13 @@
-import React, { memo } from 'react';
-import { LayoutLogin } from '../../layouts/LayoutLogin';
-import { FormLogin } from '../../containers/forms/FormLogin';
+import React from 'react';
+import { LayoutLogin } from 'src/layouts/LayoutLogin';
+import { FormLogin } from 'src/containers/forms/FormLogin';
 
-const _LoginPage = () => {
+const LoginPage = () => {
   return (
     <LayoutLogin id="PageLogin">
       <FormLogin id="__FormLogin" />
     </LayoutLogin>
   );
 };
-
-const LoginPage = memo(_LoginPage);
 
 export { LoginPage };

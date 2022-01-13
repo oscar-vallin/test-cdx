@@ -42,12 +42,12 @@ export const tableFiltersToQueryParams = (filters: TableFiltersType): string => 
     }
     let sortString = '';
     sort.forEach((value) => {
-      if (value?.direction == SortDirection.Asc) {
+      if (value?.direction === SortDirection.Asc) {
         if (sortString.length > 0) {
           sortString += ',';
         }
         sortString += `asc(${value.property})`;
-      } else if (value?.direction == SortDirection.Desc) {
+      } else if (value?.direction === SortDirection.Desc) {
         if (sortString.length > 0) {
           sortString += ',';
         }

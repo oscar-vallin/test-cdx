@@ -9,7 +9,7 @@ export const ErrorHandler = () => {
 
   return (error?: any) => {
     if (error) {
-      if (error?.networkError?.statusCode == 403) {
+      if (error?.networkError?.statusCode === 403) {
         Toast.error({ text: 'Your session has expired please login again.' });
 
         setTimeout(performUserLogout, 3000);
