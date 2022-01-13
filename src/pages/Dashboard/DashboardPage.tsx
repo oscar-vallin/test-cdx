@@ -20,7 +20,7 @@ import { TABLE_NAMES } from 'src/data/constants/TableConstants';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { PageTitle } from 'src/components/typography';
 
-const _DashboardPage = () => {
+const DashboardPage = () => {
   const { orgSid } = useOrgSid();
   const location = useLocation();
   const [urlParams]: any = useState(queryString.parse(location.search));
@@ -281,7 +281,5 @@ const _DashboardPage = () => {
     </LayoutDashboard>
   );
 };
-
-const DashboardPage = React.memo(_DashboardPage);
 
 export { DashboardPage };

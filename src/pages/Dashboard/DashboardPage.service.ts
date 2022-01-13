@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
-import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
 
 import {
   DashboardPeriodCounts,
   useDashboardPeriodsLazyQuery,
   useDashboardPeriodCountsLazyQuery,
-} from '../../data/services/graphql';
+} from 'src/data/services/graphql';
 
 export const DATE_OPTION_NAME = {
   today: 'today',
@@ -29,9 +28,7 @@ const isThisMonth = (id) => id === DATE_OPTION_NAME.thisMonth;
 const isLastMonth = (id) => id === DATE_OPTION_NAME.lastMonth;
 const isCustom = (id) => id === DATE_OPTION_NAME.custom;
 
-export const useDashboardService = (initOrgSid) => {
-  const ActiveDomainStore = useActiveDomainStore();
-  const [setOrgSid] = useState(initOrgSid);
+export const useDashboardService = (orgSid: string) => {
 
   const [dateId, setDateId] = useState(DATE_OPTION_NAME.today);
   const [datesOptions, setDateOptions] = useState(DATES_OPTIONS);
@@ -40,19 +37,19 @@ export const useDashboardService = (initOrgSid) => {
   const [isLoadingData, setIsLoadingData] = useState(true);
 
   const [apiDashboardPeriodsQuery, { data, loading, error }] = useDashboardPeriodsLazyQuery();
-  const [customPeriodQuery, { data: period, loading: isLoadingPeriod, error: periodError }] =
+  const [customPeriodQuery, { data: period }] =
     useDashboardPeriodCountsLazyQuery();
 
   useEffect(() => {
-    if (ActiveDomainStore.domainOrg.current.orgSid) {
+    if (orgSid) {
       apiDashboardPeriodsQuery({
         variables: {
-          orgSid: ActiveDomainStore.domainOrg.current.orgSid,
+          orgSid: orgSid,
         },
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ActiveDomainStore.domainOrg.current.orgSid]);
+  }, [orgSid]);
 
   useEffect(() => {
     if (error) {
@@ -119,7 +116,7 @@ export const useDashboardService = (initOrgSid) => {
     if (startDate && endDate) {
       customPeriodQuery({
         variables: {
-          orgSid: ActiveDomainStore.domainOrg.current.orgSid,
+          orgSid: orgSid,
           dateRange: {
             rangeStart: startDate,
             rangeEnd: endDate,
@@ -149,13 +146,11 @@ export const useDashboardService = (initOrgSid) => {
   return {
     isLoading,
     isLoadingData,
-    initOrgSid,
     loading,
     error,
     datesOptions,
     dataCounters,
     getOption,
-    setOrgSid,
     setDateId,
     dateId,
     getPeriodCounts,
