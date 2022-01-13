@@ -17,19 +17,19 @@ import { Row, Column } from 'src/components/layouts';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { Spinner } from 'src/components/spinners/Spinner';
 import { Separator } from 'src/components/separators/Separator';
-import { StyledBox } from './FileStatusDetails.styles';
 import { Tabs } from 'src/components/tabs/Tabs';
 import { Text } from 'src/components/typography';
+import { useRefresh } from 'src/hooks/useRefresh';
+import { DeliveredFile } from 'src/data/services/graphql';
+import { StyledBox } from './FileStatusDetails.styles';
 
 import QualityChecksTab from './QualityChecksTab/QualityChecksTab';
 import WorkStepsTab from './WorkStepsTab/WorkStepsTab';
 import EnrollmentStatsTab from './EnrollmentStatsTab/EnrollmentStatsTab';
 import VendorCountStatsTab from './VendorCountStatsTab/VendorCountStatsTab';
 
-import { useRefresh } from 'src/hooks/useRefresh';
 import { useFsDetailsPacketStatus } from './hooks/useFsDetailsPacketStatus';
 import { useFsPacketStatusDetails } from './hooks/useFsPacketStatusDetails';
-import { DeliveredFile } from 'src/data/services/graphql';
 
 const getReadableDate = (date) => new Date(date).toLocaleString().replace(',', '');
 

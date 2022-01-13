@@ -1,8 +1,8 @@
 import React from 'react';
-import { Column, Container, FilterSection, StyledRow } from './WorkPacketTable.styles';
 import { Card } from 'src/components/cards';
 import { InputText } from 'src/components/inputs/InputText';
 import { InputDateRange } from 'src/components/inputs/InputDateRange';
+import { Column, Container, FilterSection, StyledRow } from './WorkPacketTable.styles';
 
 type TableFilterParams = {
   id: string;

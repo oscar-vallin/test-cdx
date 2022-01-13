@@ -23,7 +23,6 @@ export const LayoutDashboard = ({
   showMenu = true,
   children,
 }: LayoutDashboardProps): ReactElement => {
-
   return (
     <>
       <BoxStyled id={`${id}__Box`} direction={StyleConstants.DIRECTION_COLUMN} top>

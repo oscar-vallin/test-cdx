@@ -2,19 +2,14 @@ import React, { useState } from 'react';
 import { ROUTES } from 'src/data/constants/RouteConstants';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Column, Container, Row } from 'src/components/layouts';
-import { Spacing } from '../../components/spacings/Spacing';
 import { PageTitle, Text } from 'src/components/typography';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 
 import { WorkPacketTable } from 'src/containers/tables/WorkPacketTable';
 import { WorkPacketColumns } from 'src/containers/tables/WorkPacketColumns';
-import {
-  NullHandling,
-  SortDirection,
-  useWpProcessErrorsLazyQuery,
-  WorkPacketStatus,
-} from 'src/data/services/graphql';
+import { NullHandling, SortDirection, useWpProcessErrorsLazyQuery, WorkPacketStatus } from 'src/data/services/graphql';
 import { useTableFilters } from 'src/hooks/useTableFilters';
+import { Spacing } from '../../components/spacings/Spacing';
 
 const _ErrorsPage = () => {
   const [tableMeta, setTableMeta] = useState({ count: 0, loading: true });

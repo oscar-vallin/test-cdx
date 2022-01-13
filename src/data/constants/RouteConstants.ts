@@ -47,7 +47,7 @@ export const URL_ROUTES = {
   DELETED_USERS: `/${ROUTES_ID.DELETED_USERS}`,
   FTP_TEST: `/${ROUTES_ID.FTP_TEST}`,
   IMPL_DEPLOY: `/${ROUTES_ID.IMPL_DEPLOY}`,
-  PASSWORD_RESET: `/ua/${ROUTES_ID.PASSWORD_RESET}/:token`
+  PASSWORD_RESET: `/ua/${ROUTES_ID.PASSWORD_RESET}/:token`,
 };
 
 type RouteType = {
@@ -56,7 +56,7 @@ type RouteType = {
   URL: string;
   MAIN_MENU: boolean;
   API_ID: string;
-}
+};
 
 export const ROUTE_HOME: RouteType = {
   ID: ROUTES_ID.HOME,

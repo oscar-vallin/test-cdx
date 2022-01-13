@@ -6,10 +6,10 @@ import { Tabs } from 'src/components/tabs/Tabs';
 import { PanelBody, PanelHeader, PanelTitle } from 'src/layouts/Panels/Panels.styles';
 
 import { UseUpdateUserPanel } from 'src/pages/Admin/Users/UpdateUsers/useUpdateUserPanel';
-import SectionAccessManagement from './SectionAccessManagement';
 import { GqOperationResponse, UserAccount, UserAccountForm } from 'src/data/services/graphql';
 import { Column } from 'src/components/layouts';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
+import SectionAccessManagement from './SectionAccessManagement';
 import { SectionAccount } from './SectionAccount';
 import { ActiveIcon, InactiveIcon } from './UpdateUserPanel.styles';
 
@@ -154,7 +154,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
   };
 
   const showUnsavedChangesDialog = () => {
-    const updatedDialog = { ...defaultDialogProps};
+    const updatedDialog = { ...defaultDialogProps };
     updatedDialog.title = 'You have unsaved changes';
     updatedDialog.message =
       "You are about to lose changes made to this user's profile. Are you sure you want to undo these changes?";
@@ -170,7 +170,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
   };
 
   const showResetPasswordDialog = () => {
-    const updatedDialog = { ...defaultDialogProps};
+    const updatedDialog = { ...defaultDialogProps };
     updatedDialog.title = "Reset this user's password?";
     updatedDialog.message =
       "You are about to send a password reset link to this user's email? Are you sure you want to continue?";
@@ -186,7 +186,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
   };
 
   const showInactivateUserDialog = () => {
-    const updatedDialog = { ...defaultDialogProps};
+    const updatedDialog = { ...defaultDialogProps };
     updatedDialog.title = 'Inactivate User?';
     updatedDialog.message =
       'You are about to inactivate this user which will prevent this user from logging in. Are you sure you want to continue?';
@@ -202,7 +202,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
   };
 
   const showActivateUserDialog = () => {
-    const updatedDialog = { ...defaultDialogProps};
+    const updatedDialog = { ...defaultDialogProps };
     updatedDialog.title = 'Activate User?';
     updatedDialog.message =
       'You are about to activate this user which will allow this user to log in. Are you sure you want to continue?';
@@ -237,7 +237,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
   };
 
   const userName = () => {
-    const {person} = useUpdateUserPanel.userAccountForm;
+    const { person } = useUpdateUserPanel.userAccountForm;
     const firstNm = person?.firstNm?.value;
     const lastNm = person?.lastNm?.value;
     if (!firstNm && !lastNm) {
@@ -266,21 +266,24 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
             <>
               <CommandButton
                 id="__ResetPassword_Button"
-                  iconProps={{iconName: 'Permissions'}}
-                  text='Reset Password'
-                  onClick={showResetPasswordDialog} />
+                iconProps={{ iconName: 'Permissions' }}
+                text="Reset Password"
+                onClick={showResetPasswordDialog}
+              />
               <CommandButton
                 id="__InactivateUser_Button"
-                  iconProps={{iconName: 'UserRemove'}}
-                  text='Inactivate User'
-                  onClick={showInactivateUserDialog} />
+                iconProps={{ iconName: 'UserRemove' }}
+                text="Inactivate User"
+                onClick={showInactivateUserDialog}
+              />
             </>
           ) : (
             <CommandButton
               id="__ActivateUser_Button"
-                iconProps={{iconName: 'UserFollowed'}}
-                text='Activate User'
-                onClick={showActivateUserDialog} />
+              iconProps={{ iconName: 'UserFollowed' }}
+              text="Activate User"
+              onClick={showActivateUserDialog}
+            />
           )}
         </Stack>
       </Column>
@@ -304,11 +307,12 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
         <PanelBody>
           {message && (
             <MessageBar
-              id='__UpdateUser_Msg'
+              id="__UpdateUser_Msg"
               messageBarType={messageType}
               isMultiline
               onDismiss={() => setMessage(undefined)}
-            >{message}
+            >
+              {message}
             </MessageBar>
           )}
           <Tabs

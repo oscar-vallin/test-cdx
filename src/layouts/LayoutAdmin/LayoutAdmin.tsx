@@ -1,10 +1,10 @@
 import { ReactElement } from 'react';
 import { SpinnerSize } from '@fluentui/react';
-import { StyledBox } from './LayoutAdmin.styles';
-import { LayoutDashboard } from '../LayoutDashboard';
 import { getRouteByApiId } from 'src/data/constants/RouteConstants';
 import { Spinner } from 'src/components/spinners/Spinner';
 import { Spacing } from 'src/components/spacings/Spacing';
+import { LayoutDashboard } from '../LayoutDashboard';
+import { StyledBox } from './LayoutAdmin.styles';
 
 const defaultProps = {
   id: '',
@@ -47,12 +47,7 @@ const parseLinks = (links = [], sidebarOpt: string) => {
   }));
 };
 
-export const LayoutAdmin = ({
-  id,
-  menuOptionSelected = 'admin',
-  children,
-}: LayoutAdminProps): ReactElement => {
-
+export const LayoutAdmin = ({ id, menuOptionSelected = 'admin', children }: LayoutAdminProps): ReactElement => {
   const isFetchingOrgNav = false;
 
   return (

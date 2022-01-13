@@ -1,6 +1,13 @@
 import { LayoutLogin } from 'src/layouts/LayoutLogin';
 import React, { useEffect, useState } from 'react';
-import { BigTitle, Card500, CenteredWrapper, K2ULogo, LogoRow, PrimaryButton100 } from 'src/layouts/LayoutLogin/LayoutLogin.styles';
+import {
+  BigTitle,
+  Card500,
+  CenteredWrapper,
+  K2ULogo,
+  LogoRow,
+  PrimaryButton100,
+} from 'src/layouts/LayoutLogin/LayoutLogin.styles';
 import { Column } from 'src/components/layouts';
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
 import { Text } from 'src/components/typography/Text';
@@ -49,9 +56,11 @@ export const PasswordResetPage = () => {
 
   const token = getToken();
 
-  const [callVerifyToken, { data: dataVerifyToken, loading: loadingVerifyToken }] = useVerifyPasswordResetTokenLazyQuery();
+  const [callVerifyToken, { data: dataVerifyToken, loading: loadingVerifyToken }] =
+    useVerifyPasswordResetTokenLazyQuery();
 
-  const [callUpdatePassword, {data: dataUpdatePassword, loading: dataUpdatePasswordLoading}] = useUpdatePasswordMutation();
+  const [callUpdatePassword, { data: dataUpdatePassword, loading: dataUpdatePasswordLoading }] =
+    useUpdatePasswordMutation();
 
   // Wait for the CSRF Token to be retrieved and set first
   useEffect(() => {
@@ -64,7 +73,7 @@ export const PasswordResetPage = () => {
           setCSRFTokenRetrieved(true);
         }
       });
-      observer.observe(csrfTokenNode, {attributes: true})
+      observer.observe(csrfTokenNode, { attributes: true });
     }
 
     return () => {
@@ -76,7 +85,7 @@ export const PasswordResetPage = () => {
     if (csrfTokenRetrieved) {
       callVerifyToken({
         variables: {
-          token: token
+          token,
         },
       });
     }
@@ -92,7 +101,7 @@ export const PasswordResetPage = () => {
           token: '',
           defaultAuthorities: [],
           firstName: '',
-          orgSid: dataVerifyToken?.verifyPasswordResetToken?.orgSid
+          orgSid: dataVerifyToken?.verifyPasswordResetToken?.orgSid,
         });
         setPageState(PageState.SHOW_FORM);
       } else {
@@ -123,8 +132,10 @@ export const PasswordResetPage = () => {
       if (dataUpdatePassword?.updatePassword?.response === GqOperationResponse.Success) {
         setPageState(PageState.COMPLETE);
       } else {
-        setValidationMessage(dataUpdatePassword?.updatePassword?.errMsg ??
-          'An internal error occurred updating your password. Please contact your administrator.');
+        setValidationMessage(
+          dataUpdatePassword?.updatePassword?.errMsg ??
+            'An internal error occurred updating your password. Please contact your administrator.'
+        );
       }
     }
   }, [dataUpdatePassword, dataUpdatePasswordLoading]);
@@ -133,7 +144,7 @@ export const PasswordResetPage = () => {
     await callUpdatePassword({
       variables: {
         updatePasswordInput: {
-          token: token,
+          token,
           newPassword: newPassword.value,
           verifyPassword: confirmPassword.value,
         },
@@ -156,14 +167,12 @@ export const PasswordResetPage = () => {
       <>
         <FormRow>
           <Column>
-            <Text>
-              Your Password has been successfully updated.
-            </Text>
+            <Text>Your Password has been successfully updated.</Text>
           </Column>
         </FormRow>
         <FormRow>
           <Column>
-            <PrimaryButton100 id='__ReturnToLogin_Btn' href='/login'>
+            <PrimaryButton100 id="__ReturnToLogin_Btn" href="/login">
               Login to CDX Dashboard
             </PrimaryButton100>
           </Column>
@@ -175,7 +184,7 @@ export const PasswordResetPage = () => {
   const renderInvalidToken = () => {
     return (
       <FormRow>
-        <MessageBar id='__Invalid_Token_Msg' messageBarType={MessageBarType.error} isMultiline={true}>
+        <MessageBar id="__Invalid_Token_Msg" messageBarType={MessageBarType.error} isMultiline>
           <Text>The given token is invalid or has expired.</Text>
           <Text>Please contact your administrator to Reset your Password and have another token sent to you.</Text>
         </MessageBar>
@@ -194,34 +203,23 @@ export const PasswordResetPage = () => {
           </FormRow>
           <FormRow>
             <Column>
-              <InputText
-                id='__New_Password'
-                autofocus={true}
-                canRevealPassword={true}
-                required={true}
-                {...newPassword}
-              />
+              <InputText id="__New_Password" autofocus canRevealPassword required {...newPassword} />
             </Column>
             <Column>
-              <InputText
-                id='__Confirm_Password'
-                autofocus={true}
-                canRevealPassword={true}
-                required={true}
-                {...confirmPassword}
-              />
+              <InputText id="__Confirm_Password" autofocus canRevealPassword required {...confirmPassword} />
             </Column>
           </FormRow>
           <FormRow>
             <Column>
-              <PasswordRules user={user} password={newPassword.delayedValue} onChange={passwordValidationStateChange}/>
+              <PasswordRules user={user} password={newPassword.delayedValue} onChange={passwordValidationStateChange} />
             </Column>
           </FormRow>
           <FormRow>
             <Column>
-              <PrimaryButton100 id="__Save_Button"
-                                disabled={validationMessage !== null}
-                                onClick={handleUpdatePassword}>Save</PrimaryButton100>
+              <PrimaryButton100 id="__Save_Button" disabled={validationMessage !== null} onClick={handleUpdatePassword}
+              >
+                Save
+              </PrimaryButton100>
             </Column>
           </FormRow>
         </>
@@ -245,15 +243,15 @@ export const PasswordResetPage = () => {
   };
 
   return (
-    <LayoutLogin id='PagePasswordReset'>
-      <CenteredWrapper id='__FormWrap'>
-        <LogoRow id='__Logo--Row'>
-          <Column id='__Logo__Row-Column'>
-            <K2ULogo name='logo' alt='Known2U Logo'/>
+    <LayoutLogin id="PagePasswordReset">
+      <CenteredWrapper id="__FormWrap">
+        <LogoRow id="__Logo--Row">
+          <Column id="__Logo__Row-Column">
+            <K2ULogo name="logo" alt="Known2U Logo" />
           </Column>
         </LogoRow>
         <FormRow>
-          <Column id='__FormBody'>
+          <Column id="__FormBody">
             <Card500>
               <FormRow>
                 <Column>
@@ -263,7 +261,7 @@ export const PasswordResetPage = () => {
               {validationMessage && (
                 <FormRow>
                   <Column>
-                    <MessageBar id='__Validation_Message' messageBarType={MessageBarType.warning} isMultiline={true}>
+                    <MessageBar id="__Validation_Message" messageBarType={MessageBarType.warning} isMultiline>
                       {validationMessage}
                     </MessageBar>
                   </Column>
@@ -273,7 +271,6 @@ export const PasswordResetPage = () => {
             </Card500>
           </Column>
         </FormRow>
-
       </CenteredWrapper>
     </LayoutLogin>
   );

@@ -7,12 +7,12 @@ import { PageHeader } from 'src/containers/headers/PageHeader';
 import { Breadcrumb } from 'src/components/breadcrumbs/Breadcrumb';
 import { Column } from 'src/components/layouts';
 import { Spacing } from 'src/components/spacings/Spacing';
+import { useSessionStore } from 'src/store/SessionStore';
 import { PasswordChange } from './PasswordChange';
 import { PasswordRules } from './PasswordRules';
 import { ThemeSettings } from './ThemeSettings';
 
 import { StyledBox, StyledRow, StyledCard } from './UserSettingsPage.styles';
-import { useSessionStore } from 'src/store/SessionStore';
 import { PasswordState } from './PasswordChange/PasswordChange';
 
 const _UserSettingsPage = () => {

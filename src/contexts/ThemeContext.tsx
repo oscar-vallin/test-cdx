@@ -12,8 +12,8 @@ import { Spinner } from 'src/components/spinners/Spinner';
 import Theming from 'src/utils/Theming';
 import { useSessionStore } from 'src/store/SessionStore';
 import { useThemeStore } from 'src/store/ThemeStore';
-import { theme as styledComponentsTheme } from '../styles/themes/theme';
 import { Card500 } from 'src/layouts/LayoutLogin/LayoutLogin.styles';
+import { theme as styledComponentsTheme } from '../styles/themes/theme';
 
 export const ThemeContext = createContext(() => {
   return {};

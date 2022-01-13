@@ -8,12 +8,10 @@ import { InputText } from 'src/components/inputs/InputText';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { Spinner } from 'src/components/spinners/Spinner';
 
-import { StyledRow, StyledButton, StyledText, StyledButtonIcon,
-} from './FormLogin.styles';
-
 import { useSessionStore } from 'src/store/SessionStore';
 import { useLoginUseCase } from 'src/use-cases/Authentication';
 import { useNotification } from 'src/hooks/useNotification';
+import { StyledRow, StyledButton, StyledText, StyledButtonIcon } from './FormLogin.styles';
 
 const defaultProps = {
   id: '',
@@ -55,7 +53,7 @@ const FormLogin = ({ id }: FormLoginProps): ReactElement => {
     <CenteredWrapper id={id}>
       <LogoRow id={`${id}__Logo--Row`}>
         <Column id={`${id}__Logo__Row-Column`}>
-          <K2ULogo name='logo' alt='Known2U Logo' />
+          <K2ULogo name="logo" alt="Known2U Logo" />
         </Column>
       </LogoRow>
       <StyledRow id={`${id}--Row`}>

@@ -7,12 +7,12 @@ import { ReactElement, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 
 // Styles
-import { StyledRow, StyledColumn, StyledMenuButton, StyledButtonIcon } from './MainMenu.styles';
 
 import { getRouteByApiId } from 'src/data/constants/RouteConstants';
-import { OutsideComponent } from './OutsideComponent';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
 import { useOrgSid } from 'src/hooks/useOrgSid';
+import { OutsideComponent } from './OutsideComponent';
+import { StyledRow, StyledColumn, StyledMenuButton, StyledButtonIcon } from './MainMenu.styles';
 
 const defaultProps = {
   id: '',

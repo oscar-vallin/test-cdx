@@ -1,17 +1,13 @@
 import { useEffect, useState } from 'react';
-import {
-  PasswordValidation,
-  PasswordValidationRule,
-  usePasswordValidationLazyQuery,
-} from 'src/data/services/graphql';
+import { PasswordValidation, PasswordValidationRule, usePasswordValidationLazyQuery } from 'src/data/services/graphql';
 
+import { Column, Row } from 'src/components/layouts';
+import { SessionUser } from 'src/store/SessionStore/SessionTypes';
+import { IStackItemStyles, IStackTokens, Stack } from '@fluentui/react';
 import { CompositeRulesSeparator, StyledTitle } from '../UserSettingsPage.styles';
 import { RuleGroup } from './RuleGroup';
 
-import { Column, Row } from 'src/components/layouts';
 import { RuleItems } from './RuleItems';
-import { SessionUser } from 'src/store/SessionStore/SessionTypes';
-import { IStackItemStyles, IStackTokens, Stack } from '@fluentui/react';
 
 type PasswordRulesParam = {
   user: SessionUser;
@@ -101,19 +97,20 @@ const PasswordRules = ({ user, password, onChange }: PasswordRulesParam) => {
         </Column>
       </Row>
       <Row>
-        <Stack horizontal={true} tokens={stackTokens}>
+        <Stack horizontal tokens={stackTokens}>
           <Stack.Item grow={3} styles={stackItemStyles}>
             <RuleGroup title="Meet strength level" passes={rules?.passwordStrength?.passes ?? false}>
               <RuleItems items={passwordStrengthRuleItems()} />
             </RuleGroup>
           </Stack.Item>
-          <Stack.Item disableShrink={true} styles={compositeRuleSepStyle}>
+          <Stack.Item disableShrink styles={compositeRuleSepStyle}>
             <CompositeRulesSeparator>or</CompositeRulesSeparator>
           </Stack.Item>
           <Stack.Item grow={3} styles={stackItemStyles}>
             <RuleGroup
               title={someMustBeMetTitle(rules?.someMustBeMet?.requiredNumPassingRules ?? 1)}
-              passes={rules?.someMustBeMet?.passes ?? false}>
+              passes={rules?.someMustBeMet?.passes ?? false}
+            >
               <RuleItems items={(rules?.someMustBeMet?.rules ?? []) as PasswordValidationRule[]} />
             </RuleGroup>
           </Stack.Item>

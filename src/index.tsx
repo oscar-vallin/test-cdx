@@ -21,7 +21,7 @@ ReactDOM.render(
   <>
     <MetaTags>
       <title>CDX</title>
-      <meta id='__csrf_token' name='_csrf' content='' />
+      <meta id="__csrf_token" name="_csrf" content="" />
     </MetaTags>
     <React.StrictMode>
       <StoreProvider store={store}>

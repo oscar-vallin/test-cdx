@@ -3,9 +3,9 @@ import { ReactElement, ReactNode, useEffect, createContext } from 'react';
 import { useHistory } from 'react-router';
 import { useStoreRehydrated } from 'easy-peasy';
 
+import { useLocation } from 'react-router-dom';
 import { SessionStages } from '../store/SessionStore/SessionTypes';
 import { useSessionStore } from '../store/SessionStore';
-import { useLocation } from 'react-router-dom';
 
 export const SessionContext = createContext<any>(() => {
   return null;
@@ -34,7 +34,7 @@ export const SessionContextProvider = ({ children }: SessionContextProviderProps
   }, [isRehydrated, SessionStore.user.token]);
 
   useEffect(() => {
-    if (isRehydrated && !SessionStore.user.token && (location.pathname.indexOf('ua/password-reset') < 0)) {
+    if (isRehydrated && !SessionStore.user.token && location.pathname.indexOf('ua/password-reset') < 0) {
       history.push('/login');
     }
   }, [SessionStore.user.token, isRehydrated]);
