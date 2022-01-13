@@ -41,6 +41,13 @@ const CDXTagPicker = ({
 }: CDXTagPickerProps): ReactElement => {
   const picker: any = useRef(null);
 
+  const listContainsTagList = (tag, tagList) => {
+    if (!tagList || !tagList.length || tagList.length === 0) {
+      return false;
+    }
+    return tagList.some((compareTag) => compareTag.key === tag.key);
+  };
+
   const handleItemSelection = useCallback((item) => {
     if (picker.current && listContainsTagList(item, picker.current.items)) {
       return null;
@@ -49,14 +56,7 @@ const CDXTagPicker = ({
     return item;
   }, []);
 
-  const listContainsTagList = (tag, tagList) => {
-    if (!tagList || !tagList.length || tagList.length === 0) {
-      return false;
-    }
-    return tagList.some((compareTag) => compareTag.key === tag.key);
-  };
-
-  const filterSelectedTags: any = (filterText, tagList) => {
+  const filterSelectedTags: any = (filterText) => {
     return filterText ? options.filter((tag) => tag.name.toLowerCase().indexOf(filterText.toLowerCase()) === 0) : [];
   };
 

@@ -14,7 +14,6 @@ import { SectionAccount } from './SectionAccount';
 import { ActiveIcon, InactiveIcon } from './UpdateUserPanel.styles';
 
 const defaultProps = {
-  isOpen: false,
   onDismiss: () => {},
   onUpdateUser: () => {},
 };
@@ -153,6 +152,17 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
     setShowDialog(false);
   };
 
+  const doClosePanel = () => {
+    setUnsavedChanges(false);
+    setMessage(undefined);
+    // Set it back to the first tab
+    setStep(Tab.Account);
+    // Reset the form
+    useUpdateUserPanel.resetForm();
+    useUpdateUserPanel.closePanel();
+    onDismiss();
+  };
+
   const showUnsavedChangesDialog = () => {
     const updatedDialog = { ...defaultDialogProps };
     updatedDialog.title = 'You have unsaved changes';
@@ -223,17 +233,6 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
     } else {
       doClosePanel();
     }
-  };
-
-  const doClosePanel = () => {
-    setUnsavedChanges(false);
-    setMessage(undefined);
-    // Set it back to the first tab
-    setStep(Tab.Account);
-    // Reset the form
-    useUpdateUserPanel.resetForm();
-    useUpdateUserPanel.closePanel();
-    onDismiss();
   };
 
   const userName = () => {

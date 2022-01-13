@@ -15,10 +15,10 @@ type SectionAccessProps = {
 };
 
 const SectionAccessManagement = ({ form, onSave, onFormChange }: SectionAccessProps) => {
-  const getAccessGroupOptions = (form?: UserAccountForm): UiOption[] => {
+  const getAccessGroupOptions = (userAccountForm?: UserAccountForm): UiOption[] => {
     const formOpts: Maybe<UiOption>[] =
-      form?.options?.find((itm) => {
-        return itm?.key == form?.accessPolicyGroups?.options;
+      userAccountForm?.options?.find((itm) => {
+        return itm?.key === userAccountForm?.accessPolicyGroups?.options;
       })?.values ?? [];
 
     const groupOpts: UiOption[] = [];
@@ -32,9 +32,9 @@ const SectionAccessManagement = ({ form, onSave, onFormChange }: SectionAccessPr
     return groupOpts;
   };
 
-  const getSelectedAccessGroupSids = (form?: UserAccountForm): string[] => {
+  const getSelectedAccessGroupSids = (userAccountForm?: UserAccountForm): string[] => {
     return (
-      form?.accessPolicyGroups?.value
+      userAccountForm?.accessPolicyGroups?.value
         ?.filter((grp) => grp && grp.value)
         ?.map((grp) => {
           return grp?.value || '';

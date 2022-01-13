@@ -51,11 +51,11 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
 
   const [callActivateUser, { error: activateUserError }] = useActivateUserMutation();
 
-  const showPanel = (userSid: string) => {
-    setUserSid(userSid);
+  const showPanel = (userAccountSid: string) => {
+    setUserSid(userAccountSid);
     callFindUserAccount({
       variables: {
-        userSid,
+        userSid: userAccountSid,
       },
     });
   };

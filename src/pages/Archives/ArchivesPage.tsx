@@ -11,7 +11,7 @@ import {
   NullHandling,
   SortDirection,
   useWorkPacketStatusesLazyQuery,
-  useWorkPacketStatusesPollQuery,
+  useWorkPacketStatusesPollQuery, WorkPacketStatus,
 } from 'src/data/services/graphql';
 import { useTableFilters } from 'src/hooks/useTableFilters';
 
@@ -27,7 +27,7 @@ const _ArchivePage = () => {
   ]);
 
   const mapData = (data) => {
-    const items: object[] = [];
+    const items: WorkPacketStatus[] = [];
     data?.workPacketStatuses?.nodes?.map((value) => {
       if (value) {
         items.push(value);

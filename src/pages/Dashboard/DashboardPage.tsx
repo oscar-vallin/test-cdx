@@ -4,21 +4,21 @@ import { useHistory, useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 import { SpinnerSize } from '@fluentui/react';
 import { InputDate } from 'src/components/inputs/InputDate';
-import { CardDashboard } from '../../containers/cards/CardDashboard';
-import { TableDashboard } from '../../containers/tables/TableDashboard';
+import { CardDashboard } from 'src/containers/cards/CardDashboard';
+import { TableDashboard } from 'src/containers/tables/TableDashboard';
 
-import { Column, Container, Row } from '../../components/layouts';
-import { Spacing } from '../../components/spacings/Spacing';
-import { Spinner } from '../../components/spinners/Spinner';
-import { PageHeader } from '../../containers/headers/PageHeader';
+import { Column, Container, Row } from 'src/components/layouts';
+import { Spacing } from 'src/components/spacings/Spacing';
+import { Spinner } from 'src/components/spinners/Spinner';
+import { PageHeader } from 'src/containers/headers/PageHeader';
 
-import { LayoutDashboard } from '../../layouts/LayoutDashboard';
+import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { StyledButton, StyledRow } from './DashboardPage.styles';
 import { useDashboardService } from './DashboardPage.service';
 
-import { TABLE_NAMES } from '../../data/constants/TableConstants';
-import { useOrgSid } from '../../hooks/useOrgSid';
-import { PageTitle } from '../../components/typography';
+import { TABLE_NAMES } from 'src/data/constants/TableConstants';
+import { useOrgSid } from 'src/hooks/useOrgSid';
+import { PageTitle } from 'src/components/typography';
 
 const _DashboardPage = () => {
   const { orgSid } = useOrgSid();
@@ -102,7 +102,7 @@ const _DashboardPage = () => {
   };
 
   const renderCountsByFile = () => {
-    if (dataCounters?.showCountsByFile != true) {
+    if (dataCounters?.showCountsByFile !== true) {
       return <span />;
     }
 
@@ -137,7 +137,7 @@ const _DashboardPage = () => {
   };
 
   const renderCountsByPlanSponsor = () => {
-    if (dataCounters?.showCountsByPlanSponsor != true) {
+    if (dataCounters?.showCountsByPlanSponsor !== true) {
       return <span />;
     }
 

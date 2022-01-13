@@ -8,7 +8,7 @@ import { PageTitle, Text } from 'src/components/typography';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { WorkPacketTable } from 'src/containers/tables/WorkPacketTable';
 import { WorkPacketColumns } from 'src/containers/tables/WorkPacketColumns';
-import { NullHandling, SortDirection, useWpTransmissionsLazyQuery } from 'src/data/services/graphql';
+import { NullHandling, SortDirection, useWpTransmissionsLazyQuery, WpTransmission } from 'src/data/services/graphql';
 import { tableFiltersToQueryParams, useTableFilters } from 'src/hooks/useTableFilters';
 import { DownloadLink } from 'src/containers/tables/WorkPacketTable.styles';
 import { useOrgSid } from 'src/hooks/useOrgSid';
@@ -26,7 +26,7 @@ const _TransmissionsPage = () => {
   ]);
 
   const mapData = (data) => {
-    const items: object[] = [];
+    const items: WpTransmission[] = [];
     data?.wpTransmissions?.nodes?.map((value) => {
       if (value) {
         items.push(value);

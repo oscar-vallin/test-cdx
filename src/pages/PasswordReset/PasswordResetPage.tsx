@@ -68,8 +68,8 @@ export const PasswordResetPage = () => {
     let observer: MutationObserver;
     if (csrfTokenNode) {
       observer = new MutationObserver(() => {
-        const token = csrfTokenNode.getAttribute('content');
-        if (token) {
+        const csrfToken = csrfTokenNode.getAttribute('content');
+        if (csrfToken) {
           setCSRFTokenRetrieved(true);
         }
       });

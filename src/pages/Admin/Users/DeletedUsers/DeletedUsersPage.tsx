@@ -35,6 +35,25 @@ const DeletedUsersPage = () => {
     });
   };
 
+  const renderBody = () => {
+    if (userService.loading) {
+     return (
+       <Spacing margin={{ top: 'double' }}>
+         <Spinner size={SpinnerSize.large} label="Loading inactive users" />
+       </Spacing>
+     );
+    } else if (!userService.users?.length) {
+      return (
+        <EmptyState
+          title="No inactive users"
+          description="There aren't any inactive users in this organization"
+        />
+      );
+    } else {
+      return <UsersTable users={userService.users} onClickUser={updateUserPanel.showPanel} />;
+    }
+  }
+
   return (
     <LayoutAdmin id="PageDeletedUsers" sidebarOptionSelected="DELETED_USERS">
       <>
@@ -77,18 +96,7 @@ const DeletedUsersPage = () => {
 
           <Row>
             <StyledColumn>
-              {userService.loading ? (
-                <Spacing margin={{ top: 'double' }}>
-                  <Spinner size={SpinnerSize.large} label="Loading inactive users" />
-                </Spacing>
-              ) : !userService.users?.length ? (
-                <EmptyState
-                  title="No inactive users"
-                  description="There aren't any inactive users in this organization"
-                />
-              ) : (
-                <UsersTable users={userService.users} onClickUser={updateUserPanel.showPanel} />
-              )}
+              {renderBody()}
             </StyledColumn>
           </Row>
         </Spacing>

@@ -9,10 +9,6 @@ export const useUsersLists = (activeFilter: ActiveEnum) => {
   const [apiUsersForOrgFpLazy, { data, loading, error }] = useUsersForOrgLazyQuery();
   const handleError = ErrorHandler();
 
-  useEffect(() => {
-    fetchUsers().then();
-  }, [orgSid]);
-
   const fetchUsers = async () => {
     apiUsersForOrgFpLazy({
       variables: {
@@ -21,6 +17,10 @@ export const useUsersLists = (activeFilter: ActiveEnum) => {
       },
     });
   };
+
+  useEffect(() => {
+    fetchUsers().then();
+  }, [orgSid]);
 
   useEffect(() => {
     handleError(error);
