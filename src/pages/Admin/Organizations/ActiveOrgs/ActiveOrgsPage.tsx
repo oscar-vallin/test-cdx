@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 
 import { Link } from 'react-router-dom';
 
-import { DetailsList, DetailsListLayoutMode, SelectionMode, Spinner, SpinnerSize } from '@fluentui/react';
+import { DetailsList, DetailsListLayoutMode, IColumn, SelectionMode, Spinner, SpinnerSize } from '@fluentui/react';
 import { EmptyState } from 'src/containers/states';
 import { LayoutAdmin } from 'src/layouts/LayoutAdmin';
 import { Row, Column } from 'src/components/layouts';
@@ -17,28 +17,40 @@ import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { StyledColumn } from './ActiveOrgsPage.styles';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 
-const generateColumns = () => {
-  const createColumn = ({ name, key }) => ({
-    name,
-    key,
-    fieldName: key,
+const columns: IColumn[] = [
+  {
+    name: 'Name',
+    key: 'name',
+    fieldName: 'name',
     data: 'string',
     isPadded: true,
-    minWidth: 225,
-  });
-
-  return [
-    createColumn({ name: 'Name', key: 'name' }),
-    createColumn({ name: 'Org ID', key: 'orgId' }),
-    createColumn({ name: 'Org Type', key: 'orgType' }),
-  ];
-};
+    minWidth: 50,
+    maxWidth: 600,
+  },
+  {
+    name: 'Org ID',
+    key: 'orgId',
+    fieldName: 'orgId',
+    data: 'string',
+    isPadded: true,
+    minWidth: 50,
+    maxWidth: 400,
+  },
+  {
+    name: 'Org Type',
+    key: 'orgType',
+    fieldName: 'orgType',
+    data: 'string',
+    isPadded: true,
+    minWidth: 50,
+    maxWidth: 400,
+  }
+];
 
 const ActiveOrgsPage = () => {
   const { orgSid } = useOrgSid();
   const ActiveDomainStore = useActiveDomainStore();
   const [orgs, setOrgs] = useState([]);
-  const columns = generateColumns();
 
   const [directOrganizationsFQuery, { data, loading }] = useQueryHandler(useDirectOrganizationsLazyQuery);
 
@@ -80,6 +92,29 @@ const ActiveOrgsPage = () => {
     }
   }, [loading]);
 
+  const renderBody = () => {
+    if (loading) {
+      return (
+        <Spacing margin={{ top: 'double' }}>
+          <Spinner size={SpinnerSize.large} label="Loading active orgs" />
+        </Spacing>
+      );
+    } else if (!orgs.length) {
+      return <EmptyState description="No active orgs found" />;
+    } else {
+      return (
+        <DetailsList
+          items={orgs}
+          selectionMode={SelectionMode.none}
+          columns={columns}
+          layoutMode={DetailsListLayoutMode.justified}
+          onRenderItemColumn={onRenderItemColumn}
+          isHeaderVisible
+        />
+      );
+    }
+  };
+
   return (
     <LayoutAdmin id="PageActiveOrgs" sidebarOptionSelected="ACTIVE_ORGS">
       <Spacing margin="double">
@@ -107,22 +142,7 @@ const ActiveOrgsPage = () => {
 
         <Row>
           <StyledColumn>
-            {loading ? (
-              <Spacing margin={{ top: 'double' }}>
-                <Spinner size={SpinnerSize.large} label="Loading active orgs" />
-              </Spacing>
-            ) : !orgs.length ? (
-              <EmptyState description="No active orgs found" />
-            ) : (
-              <DetailsList
-                items={orgs}
-                selectionMode={SelectionMode.none}
-                columns={columns}
-                layoutMode={DetailsListLayoutMode.justified}
-                onRenderItemColumn={onRenderItemColumn}
-                isHeaderVisible
-              />
-            )}
+            {renderBody()}
           </StyledColumn>
         </Row>
       </Spacing>
