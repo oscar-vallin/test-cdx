@@ -20,7 +20,7 @@ java {
 
 node {
     download.set(true)
-    version.set("14.17.5")
+    version.set("14.18.0")
     yarnVersion.set("1.22.11")
 
 }
@@ -28,6 +28,11 @@ task<YarnTask>("yarnInstall") {
     dependsOn(tasks.yarnSetup)
     yarnCommand.set(listOf("install"))
 }
+
+task<YarnTask>("yarnTSNode") {
+    yarnCommand.set(listOf("add", "ts-node"))
+}
+
 
 task<YarnTask>("buildReact") {
     dependsOn("yarnInstall", "extractRoutes")
@@ -59,6 +64,7 @@ tasks.clean {
 }
 
 task<YarnTask>("extractRoutes"){
+    dependsOn("yarnTSNode")
     //args = ['run', 'extract-routes']
     yarnCommand.set(listOf("run", "extract-routes"))
     doLast{
