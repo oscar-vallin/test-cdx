@@ -1,4 +1,17 @@
-import { Action, ThunkOn } from 'easy-peasy';
+import { Action } from 'easy-peasy';
+
+export type DomainNavItem = {
+  orgSid?: string | null;
+  destination: string;
+  label: string;
+  type?: string;
+  subNavItems?: DomainNavItem[];
+};
+
+export type DomainNav = {
+  dashboard: DomainNavItem[];
+  admin: DomainNavItem[];
+};
 
 export interface ActiveDomainModel {
   nav: DomainNav;
@@ -11,18 +24,4 @@ export interface ActiveDomainModel {
   setOriginOrg: Action<ActiveDomainModel, DomainNavItem>;
   setCurrentOrg: Action<ActiveDomainModel, DomainNavItem>;
   reset: Action<ActiveDomainModel>;
-  onCurrentOrgUpdate: ThunkOn<ActiveDomainModel>;
 }
-
-export type DomainNav = {
-  dashboard: DomainNavItem[];
-  admin: DomainNavItem[];
-};
-
-export type DomainNavItem = {
-  orgSid?: string | null;
-  destination: string;
-  label: string;
-  type?: string;
-  subNavItems?: DomainNavItem[];
-};

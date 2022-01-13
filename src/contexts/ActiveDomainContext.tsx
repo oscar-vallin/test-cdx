@@ -90,8 +90,7 @@ export const ActiveDomainContextProvider = ({ children }: ActiveDomainContextPro
 
     if (destination) {
       ActiveDomainStore.setCurrentOrg({ destination: null });
-
-      history.push(URL_ROUTES[destination]);
+      history.push(`${URL_ROUTES[destination]}?orgSid=${ActiveDomainStore.domainOrg.current.orgSid}`);
     }
   }, [ActiveDomainStore.domainOrg.current.destination]);
 

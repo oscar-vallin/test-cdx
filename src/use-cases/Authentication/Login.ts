@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
-import { useSessionStore } from '../../store/SessionStore';
-import { useBeginLoginMutation, usePasswordLoginMutation } from '../../data/services/graphql';
-import { useActiveDomainStore } from '../../store/ActiveDomainStore';
-import { useQueryHandler } from '../../hooks/useQueryHandler';
+import { useSessionStore } from 'src/store/SessionStore';
+import { useBeginLoginMutation, usePasswordLoginMutation } from 'src/data/services/graphql';
+import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
+import { useQueryHandler } from 'src/hooks/useQueryHandler';
 
 type LoginState = {
   step: string;

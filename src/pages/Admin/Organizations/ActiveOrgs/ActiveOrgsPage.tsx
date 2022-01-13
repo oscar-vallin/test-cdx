@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect, memo } from 'react';
+import { useState, useEffect } from 'react';
 
 import { Link } from 'react-router-dom';
 
@@ -15,6 +15,7 @@ import { useDirectOrganizationsLazyQuery } from 'src/data/services/graphql';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { StyledColumn } from './ActiveOrgsPage.styles';
+import { useOrgSid } from 'src/hooks/useOrgSid';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -33,7 +34,8 @@ const generateColumns = () => {
   ];
 };
 
-const _ActiveOrgsPage = () => {
+const ActiveOrgsPage = () => {
+  const { orgSid } = useOrgSid();
   const ActiveDomainStore = useActiveDomainStore();
   const [orgs, setOrgs] = useState([]);
   const columns = generateColumns();
@@ -43,11 +45,11 @@ const _ActiveOrgsPage = () => {
   useEffect(() => {
     directOrganizationsFQuery({
       variables: {
-        orgSid: ActiveDomainStore.domainOrg.current.orgSid,
+        orgSid: orgSid,
         orgFilter: { activeFilter: 'ACTIVE' },
       },
     });
-  }, [ActiveDomainStore.domainOrg.current.orgSid]);
+  }, [orgSid]);
 
   const changeActiveOrg = ({ sid, orgType }) => {
     ActiveDomainStore.setCurrentOrg({
@@ -127,7 +129,5 @@ const _ActiveOrgsPage = () => {
     </LayoutAdmin>
   );
 };
-
-const ActiveOrgsPage = memo(_ActiveOrgsPage);
 
 export { ActiveOrgsPage };
