@@ -13,7 +13,7 @@ export const ROUTES_ID = {
   ACCESS_MANAGEMENT_POLICIES: 'access-management-policies',
   ACCESS_MANAGEMENT_SPECIALIZATION: 'access-management-specialization',
   ACTIVE_ORGS: 'active-orgs',
-  CURRENT_ACTIVITY: 'current-activity',
+  ORG_ACTIVITY: 'current-activity',
   COLOR_PALETTES: 'color-palettes',
   DEFAULT_THEME: 'default-theme',
   ACTIVE_USERS: 'active-users',
@@ -40,7 +40,7 @@ export const URL_ROUTES = {
   ACCESS_MANAGEMENT_POLICIES: `/${ROUTES_ID.ADMIN}/access-management/policies`,
   ACCESS_MANAGEMENT_SPECIALIZATION: `/${ROUTES_ID.ADMIN}/access-management/specialization`,
   ACTIVE_ORGS: `/${ROUTES_ID.ADMIN}/organizations/active-orgs`,
-  CURRENT_ACTIVITY: `/${ROUTES_ID.ADMIN}/organizations/current-activity`,
+  ORG_ACTIVITY: `/${ROUTES_ID.ADMIN}/organizations/current-activity`,
   COLOR_PALETTES: `/${ROUTES_ID.ADMIN}/dashboard-site/color-palettes`,
   DEFAULT_THEME: `/${ROUTES_ID.ADMIN}/dashboard-site/default-theme`,
   ACTIVE_USERS: `/${ROUTES_ID.ACTIVE_USERS}`,
@@ -179,9 +179,9 @@ export const ROUTE_ACTIVE_ORGS: RouteType = {
 };
 
 export const ROUTE_ACTIVITY_CURRENT: RouteType = {
-  ID: ROUTES_ID.CURRENT_ACTIVITY,
+  ID: ROUTES_ID.ORG_ACTIVITY,
   TITLE: 'Current Activity',
-  URL: URL_ROUTES.CURRENT_ACTIVITY,
+  URL: URL_ROUTES.ORG_ACTIVITY,
   MAIN_MENU: false,
   API_ID: 'ORG_ACTIVITY',
 };

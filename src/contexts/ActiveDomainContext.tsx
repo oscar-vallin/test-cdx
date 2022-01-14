@@ -88,6 +88,7 @@ export const ActiveDomainContextProvider = ({ children }: ActiveDomainContextPro
   useEffect(() => {
     const { destination } = ActiveDomainStore.domainOrg.current;
 
+    console.log(`setting destination ${destination}`);
     if (destination) {
       ActiveDomainStore.setCurrentOrg({ destination: null });
       history.push(`${URL_ROUTES[destination]}?orgSid=${ActiveDomainStore.domainOrg.current.orgSid}`);

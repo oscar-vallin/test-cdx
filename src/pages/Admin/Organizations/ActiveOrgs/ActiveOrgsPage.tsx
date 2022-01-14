@@ -66,7 +66,7 @@ const ActiveOrgsPage = () => {
   const changeActiveOrg = ({ sid, orgType }) => {
     ActiveDomainStore.setCurrentOrg({
       orgSid: sid,
-      destination: orgType === 'INTEGRATION_SPONSOR' ? 'FILE_STATUS' : 'CURRENT_ACTIVITY',
+      destination: orgType === 'INTEGRATION_SPONSOR' ? 'FILE_STATUS' : 'ORG_ACTIVITY',
     });
   };
 
