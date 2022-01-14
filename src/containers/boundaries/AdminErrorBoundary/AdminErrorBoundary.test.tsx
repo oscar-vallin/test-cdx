@@ -1,10 +1,9 @@
 import AdminErrorBoundary from './AdminErrorBoundary';
-import { mountWithTheme, shallowWithTheme } from '../../../utils/testUtils';
+import { mountWithTheme, shallowWithTheme } from 'src/utils/testUtils';
 import { StoreProvider } from 'easy-peasy';
-import { ApolloContextProvider } from '../../../contexts/ApolloContext';
-import { shallow } from 'enzyme';
+import { ApolloContextProvider } from 'src/contexts/ApolloContext';
 import { BrowserRouter as Router } from 'react-router-dom';
-import store from '../../../store/index';
+import store from 'src/store/index';
 
 const defaultProps = {
   id: 'AdminErrorBoundary',
@@ -15,7 +14,7 @@ const defaultProps = {
 describe('AdminErrorBoundary Testing Unit...', () => {
   const tree = shallowWithTheme(
     <StoreProvider store={store}>
-      <AdminErrorBoundary {...defaultProps}></AdminErrorBoundary>
+      <AdminErrorBoundary {...defaultProps}/>
     </StoreProvider>
   );
 
@@ -30,9 +29,9 @@ describe('AdminErrorBoundary Testing Unit...', () => {
   it('Should find the Id AdminErrorBoundary', () => {
     const wrapper = mountWithTheme(
       <StoreProvider store={store}>
-        <ApolloContextProvider>
+        <ApolloContextProvider bypassLoading={true}>
           <Router>
-            <AdminErrorBoundary {...defaultProps}></AdminErrorBoundary>
+            <AdminErrorBoundary {...defaultProps}/>
           </Router>
         </ApolloContextProvider>
       </StoreProvider>

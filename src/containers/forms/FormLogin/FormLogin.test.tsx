@@ -1,11 +1,10 @@
 import { FormLogin } from './FormLogin';
-import { shallowWithTheme, mountWithTheme } from '../../../utils/testUtils';
-import { SessionContextProvider } from '../../../contexts/SessionContext';
+import { shallowWithTheme, mountWithTheme } from 'src/utils/testUtils';
 import { shallow } from 'enzyme';
-import { ApolloContextProvider } from '../../../contexts/ApolloContext';
+import { ApolloContextProvider } from 'src/contexts/ApolloContext';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { StoreProvider } from 'easy-peasy';
-import store from '../../../store/index';
+import store from 'src/store/index';
 
 const defaultProps = {
   id: '__FormLogin',
@@ -14,7 +13,7 @@ const defaultProps = {
 describe('FormLogin Testing Unit...', () => {
   const tree = shallowWithTheme(
     <StoreProvider store={store}>
-      <FormLogin {...defaultProps}></FormLogin>
+      <FormLogin {...defaultProps}/>
     </StoreProvider>
   );
 
@@ -29,7 +28,7 @@ describe('FormLogin Testing Unit...', () => {
   it('Should show an alert with message "Save" when click on Save button', () => {
     const wrapper = shallow(
       <StoreProvider store={store}>
-        <FormLogin {...defaultProps}></FormLogin>
+        <FormLogin {...defaultProps}/>
       </StoreProvider>
     );
     wrapper.find('StyledBox[id="FormLoginId"]');
@@ -39,13 +38,13 @@ describe('FormLogin Testing Unit...', () => {
   it('Should find the input to enter the Email', () => {
     const wrapper = mountWithTheme(
       <StoreProvider store={store}>
-        <ApolloContextProvider>
-          <FormLogin {...defaultProps} id="__FormLogin"></FormLogin>
+        <ApolloContextProvider bypassLoading={true}>
+          <FormLogin {...defaultProps} id="__FormLogin"/>
         </ApolloContextProvider>
       </StoreProvider>
     );
     const inputValue = 'user@email.com';
-    const input = wrapper.find('input[id="__FormLogin__Card__Row__Input-Email"]').first();
+    const input = wrapper.find('#__FormLogin__Card__Row__Input-Email').first();
     input.simulate('change', {
       target: { value: inputValue },
     });
@@ -55,9 +54,9 @@ describe('FormLogin Testing Unit...', () => {
   it('Should sink in the button Next', () => {
     const wrapper = mountWithTheme(
       <StoreProvider store={store}>
-        <ApolloContextProvider>
+        <ApolloContextProvider bypassLoading={true}>
           <Router>
-            <FormLogin {...defaultProps}></FormLogin>
+            <FormLogin {...defaultProps}/>
           </Router>
         </ApolloContextProvider>
       </StoreProvider>

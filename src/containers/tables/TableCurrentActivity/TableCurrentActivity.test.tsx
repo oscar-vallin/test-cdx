@@ -1,10 +1,10 @@
 import Component from './TableCurrentActivity';
-import { mountWithTheme, shallowWithTheme } from '../../../utils/testUtils';
+import { mountWithTheme, shallowWithTheme } from 'src/utils/testUtils';
 import { StoreProvider } from 'easy-peasy';
-import store from '../../../store/index';
+import store from 'src/store/index';
 import { OrganizationLink } from 'src/data/services/graphql';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { ApolloContextProvider } from '../../../contexts/ApolloContext';
+import { ApolloContextProvider } from 'src/contexts/ApolloContext';
 
 const items: OrganizationLink[] = [
   {
@@ -23,7 +23,7 @@ const defaultProps = {
 };
 
 describe('Table Current Activity Container Testing Unit...', () => {
-  const mountedComponent = shallowWithTheme(<Component {...defaultProps}></Component>);
+  const mountedComponent = shallowWithTheme(<Component {...defaultProps}/>);
 
   it('Should be defined', () => {
     expect(mountedComponent).toBeDefined();
@@ -36,7 +36,7 @@ describe('Table Current Activity Container Testing Unit...', () => {
   it('Should find table with Id __Table__In__Process', () => {
     const wrapper = mountWithTheme(
       <StoreProvider store={store}>
-        <ApolloContextProvider>
+        <ApolloContextProvider bypassLoading={true}>
           <Router>
             <Component {...defaultProps} />
           </Router>

@@ -1,5 +1,5 @@
 import Component from './LayoutDashboard';
-import { mountWithTheme, shallowWithTheme } from '../../utils/testUtils';
+import { mountWithTheme, shallowWithTheme } from 'src/utils/testUtils';
 import { StoreProvider } from 'easy-peasy';
 import store from 'src/store';
 import { ApolloContextProvider } from 'src/contexts/ApolloContext';
@@ -12,9 +12,9 @@ const defaultProps = {
 describe('Layout Login Container Testing Unit...', () => {
   const themedComponent = shallowWithTheme(
     <StoreProvider store={store}>
-      <ApolloContextProvider>
+      <ApolloContextProvider bypassLoading={true}>
         <Router>
-          <Component {...defaultProps}></Component>
+          <Component {...defaultProps}/>
         </Router>
       </ApolloContextProvider>
     </StoreProvider>
@@ -23,7 +23,7 @@ describe('Layout Login Container Testing Unit...', () => {
     <StoreProvider store={store}>
       <ApolloContextProvider>
         <Router>
-          <Component {...defaultProps}></Component>
+          <Component {...defaultProps}/>
         </Router>
       </ApolloContextProvider>
     </StoreProvider>

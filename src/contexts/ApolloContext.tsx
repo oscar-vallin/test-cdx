@@ -18,10 +18,11 @@ const defaultProps = {
 };
 
 type ApolloContextProviderProps = {
+  bypassLoading?: boolean;
   children?: ReactElement | ReactNode | string;
 } & typeof defaultProps;
 
-export const ApolloContextProvider = ({ children }: ApolloContextProviderProps): ReactElement => {
+export const ApolloContextProvider = ({bypassLoading, children }: ApolloContextProviderProps): ReactElement => {
   // LocalState
   const [isApolloLoading] = useState(true);
   // const [sessionID, setSessionID] = useState('');
@@ -83,7 +84,7 @@ export const ApolloContextProvider = ({ children }: ApolloContextProviderProps):
 
 
   const renderBody = (hasToken: boolean) => {
-    if (!hasToken) {
+    if (!hasToken && !bypassLoading) {
       return <LoadingPage/>;
     } else {
       return (
