@@ -4,6 +4,7 @@ import { Image } from 'src/components/images/Image';
 import { Text } from 'src/components/typography';
 import { Card } from 'src/components/cards';
 import { PrimaryButton } from '@fluentui/react';
+import { device } from 'src/styles/GlobalStyles';
 
 export const BoxStyled = styled(Box)`
   background: linear-gradient(45deg, rgba(0, 166, 202, 1) 0%, rgba(0, 107, 181, 1) 35%, rgba(0, 46, 99, 1) 100%);
@@ -15,11 +16,17 @@ export const CenteredWrapper = styled(Box)`
   justify-content: center;
   min-width: 300px;
   max-width: 600px;
-  width: 45vw;
+  
+  @media ${device.tablet} {
+    width: 45vw;
+    padding-bottom: 10%;  
+  }
 `;
 
 export const K2ULogo = styled(Image)`
   width: 100%;
+  max-width: fit-content;
+  max-height: fit-content;
 `;
 export const BigTitle = styled(Text)`
   font: ${({ theme }) => theme.fontStyles.logo};
@@ -46,7 +53,10 @@ export const Card500 = styled(Card)`
   padding-bottom: 30px;
   min-width: 300px;
   max-width: 600px;
-  width: 45vw;
+
+  @media ${device.tablet} {
+    width: 45vw;
+  }
 `;
 
 export const PrimaryButton100 = styled(PrimaryButton)`
