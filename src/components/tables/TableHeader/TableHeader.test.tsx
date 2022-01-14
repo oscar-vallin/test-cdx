@@ -22,8 +22,7 @@ const theme = {
 
 jest.mock('src/hooks/useOrgSid', () => ({
   useOrgSid: () => ({
-    orgSid: 1,
-    setOrgSid: jest.fn()
+    orgSid: 1
   })
 }));
 

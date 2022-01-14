@@ -1,23 +1,22 @@
-import { useHistory, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useActiveDomainStore } from '../store/ActiveDomainStore';
+import { useEffect } from 'react';
 
 export const useOrgSid = () => {
   const ActiveDomainStore = useActiveDomainStore();
 
-  const history = useHistory();
   const location = useLocation();
   const urlParams = new URLSearchParams(location.search);
   const orgSid = urlParams.get('orgSid') ?? '-1';
 
-  const updateOrgSid = (sid) => {
-    ActiveDomainStore.setCurrentOrg({ orgSid: sid, destination: null });
-    urlParams.set('orgSid', sid);
-    location.search = urlParams.toString();
-    history.push(`${location.pathname}?${location.search}`);
-  };
+  // If the orgSid is different than what is in session, update the session
+  useEffect(() => {
+    if (orgSid && orgSid !== ActiveDomainStore?.currentOrg?.orgSid) {
+      ActiveDomainStore.setCurrentOrg({ orgSid: orgSid, destination: null });
+    }
+  }, [orgSid]);
 
   return {
-    orgSid,
-    setOrgSid: updateOrgSid,
+    orgSid
   };
 };
