@@ -16,10 +16,10 @@ export const CenteredWrapper = styled(Box)`
   justify-content: center;
   min-width: 300px;
   max-width: 600px;
-  
+
   @media ${device.tablet} {
     width: 45vw;
-    padding-bottom: 10%;  
+    padding-bottom: 10%;
   }
 `;
 

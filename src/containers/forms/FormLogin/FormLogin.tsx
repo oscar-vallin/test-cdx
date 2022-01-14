@@ -79,7 +79,7 @@ const FormLogin = ({ id }: FormLoginProps): ReactElement => {
                   <Column id={`${id}__Card__Row__Column--Email`}>
                     <InputText
                       id={`${id}__Card__Row__Input-Email`}
-                      autofocus={true}
+                      autofocus
                       placeholder="Email"
                       disabled={state.loading || isValidEmail}
                       value={values.userId}
@@ -105,7 +105,7 @@ const FormLogin = ({ id }: FormLoginProps): ReactElement => {
                     <Column id={`${id}__Card__Row__Column--Password`}>
                       <InputText
                         id={`${id}__Card__Row__Input-Password`}
-                        autofocus={true}
+                        autofocus
                         placeholder="Password"
                         type="password"
                         value={values.password}

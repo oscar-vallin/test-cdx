@@ -9,8 +9,8 @@ import { useCurrentUserTheme } from 'src/hooks/useCurrentUserTheme';
 import Theming from 'src/utils/Theming';
 import { useSessionStore } from 'src/store/SessionStore';
 import { useThemeStore } from 'src/store/ThemeStore';
-import { theme as styledComponentsTheme } from '../styles/themes/theme';
 import { LoadingPage } from 'src/pages/Loading/LoadingPage';
+import { theme as styledComponentsTheme } from '../styles/themes/theme';
 
 export const ThemeContext = createContext(() => {
   return {};
@@ -100,7 +100,7 @@ export const ThemeContextProvider = ({ children }) => {
       <ThemeProvider theme={styledTheme}>
         <ThemeContext.Provider value={values}>
           {isLoadingTheme ? (
-            <LoadingPage/>
+            <LoadingPage />
           ) : (
             <>
               <GlobalStyle fontSize={ThemeStore.themes.current.themeFontSize} />

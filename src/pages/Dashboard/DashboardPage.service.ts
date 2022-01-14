@@ -29,7 +29,6 @@ const isLastMonth = (id) => id === DATE_OPTION_NAME.lastMonth;
 const isCustom = (id) => id === DATE_OPTION_NAME.custom;
 
 export const useDashboardService = (orgSid: string) => {
-
   const [dateId, setDateId] = useState(DATE_OPTION_NAME.today);
   const [datesOptions, setDateOptions] = useState(DATES_OPTIONS);
   const [dataCounters, setDataCounters] = useState<DashboardPeriodCounts | null | undefined>();
@@ -37,14 +36,13 @@ export const useDashboardService = (orgSid: string) => {
   const [isLoadingData, setIsLoadingData] = useState(true);
 
   const [apiDashboardPeriodsQuery, { data, loading, error }] = useDashboardPeriodsLazyQuery();
-  const [customPeriodQuery, { data: period }] =
-    useDashboardPeriodCountsLazyQuery();
+  const [customPeriodQuery, { data: period }] = useDashboardPeriodCountsLazyQuery();
 
   useEffect(() => {
     if (orgSid) {
       apiDashboardPeriodsQuery({
         variables: {
-          orgSid: orgSid,
+          orgSid,
         },
       });
     }
@@ -116,7 +114,7 @@ export const useDashboardService = (orgSid: string) => {
     if (startDate && endDate) {
       customPeriodQuery({
         variables: {
-          orgSid: orgSid,
+          orgSid,
           dateRange: {
             rangeStart: startDate,
             rangeEnd: endDate,

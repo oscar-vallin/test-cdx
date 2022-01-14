@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom';
-import { useActiveDomainStore } from '../store/ActiveDomainStore';
 import { useEffect } from 'react';
+import { useActiveDomainStore } from '../store/ActiveDomainStore';
 
 export const useOrgSid = () => {
   const ActiveDomainStore = useActiveDomainStore();
@@ -12,11 +12,11 @@ export const useOrgSid = () => {
   // If the orgSid is different than what is in session, update the session
   useEffect(() => {
     if (orgSid && orgSid !== ActiveDomainStore?.currentOrg?.orgSid) {
-      ActiveDomainStore.setCurrentOrg({ orgSid: orgSid, destination: null });
+      ActiveDomainStore.setCurrentOrg({ orgSid, destination: null });
     }
   }, [orgSid]);
 
   return {
-    orgSid
+    orgSid,
   };
 };

@@ -9,7 +9,6 @@ import { Row, Column } from 'src/components/layouts';
 import { MessageBar } from 'src/components/notifications/MessageBar';
 import { Spinner } from 'src/components/spinners/Spinner';
 import { Text } from 'src/components/typography/Text';
-import { StyledChoiceGroup, StyledDiv } from './DefaultThemePage.styles';
 
 import { useThemeContext } from 'src/contexts/ThemeContext';
 import { useColorPalettes } from 'src/hooks/useColorPalettes';
@@ -24,6 +23,7 @@ import {
 import { useNotification } from 'src/hooks/useNotification';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useSessionStore } from 'src/store/SessionStore';
+import { StyledChoiceGroup, StyledDiv } from './DefaultThemePage.styles';
 
 const _DefaultThemePage = () => {
   const SessionStore = useSessionStore();

@@ -14,8 +14,8 @@ import { Separator } from 'src/components/separators/Separator';
 import { useDirectOrganizationsLazyQuery } from 'src/data/services/graphql';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
-import { StyledColumn } from './ActiveOrgsPage.styles';
 import { useOrgSid } from 'src/hooks/useOrgSid';
+import { StyledColumn } from './ActiveOrgsPage.styles';
 
 const columns: IColumn[] = [
   {
@@ -44,7 +44,7 @@ const columns: IColumn[] = [
     isPadded: true,
     minWidth: 50,
     maxWidth: 400,
-  }
+  },
 ];
 
 const ActiveOrgsPage = () => {
@@ -57,7 +57,7 @@ const ActiveOrgsPage = () => {
   useEffect(() => {
     directOrganizationsFQuery({
       variables: {
-        orgSid: orgSid,
+        orgSid,
         orgFilter: { activeFilter: 'ACTIVE' },
       },
     });
@@ -99,20 +99,20 @@ const ActiveOrgsPage = () => {
           <Spinner size={SpinnerSize.large} label="Loading active orgs" />
         </Spacing>
       );
-    } else if (!orgs.length) {
-      return <EmptyState description="No active orgs found" />;
-    } else {
-      return (
-        <DetailsList
-          items={orgs}
-          selectionMode={SelectionMode.none}
-          columns={columns}
-          layoutMode={DetailsListLayoutMode.justified}
-          onRenderItemColumn={onRenderItemColumn}
-          isHeaderVisible
-        />
-      );
     }
+    if (!orgs.length) {
+      return <EmptyState description="No active orgs found" />;
+    }
+    return (
+      <DetailsList
+        items={orgs}
+        selectionMode={SelectionMode.none}
+        columns={columns}
+        layoutMode={DetailsListLayoutMode.justified}
+        onRenderItemColumn={onRenderItemColumn}
+        isHeaderVisible
+      />
+    );
   };
 
   return (
@@ -141,9 +141,7 @@ const ActiveOrgsPage = () => {
         )}
 
         <Row>
-          <StyledColumn>
-            {renderBody()}
-          </StyledColumn>
+          <StyledColumn>{renderBody()}</StyledColumn>
         </Row>
       </Spacing>
     </LayoutAdmin>

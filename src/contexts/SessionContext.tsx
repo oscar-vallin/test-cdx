@@ -4,9 +4,9 @@ import { useHistory } from 'react-router';
 import { useStoreRehydrated } from 'easy-peasy';
 
 import { useLocation } from 'react-router-dom';
+import { LoadingPage } from 'src/pages/Loading/LoadingPage';
 import { SessionStages } from '../store/SessionStore/SessionTypes';
 import { useSessionStore } from '../store/SessionStore';
-import { LoadingPage } from 'src/pages/Loading/LoadingPage';
 
 export const SessionContext = createContext<any>(() => {
   return null;
@@ -40,9 +40,7 @@ export const SessionContextProvider = ({ children }: SessionContextProviderProps
     }
   }, [SessionStore.user.token, isRehydrated]);
 
-  return (
-    <SessionContext.Provider value={null}>{!isRehydrated ? <LoadingPage/> : children}</SessionContext.Provider>
-  );
+  return <SessionContext.Provider value={null}>{!isRehydrated ? <LoadingPage /> : children}</SessionContext.Provider>;
 };
 
 SessionContextProvider.defaultProps = defaultProps;

@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 
-
 export const useWatchCSRFToken = () => {
   const [csrfTokenRetrieved, setCSRFTokenRetrieved] = useState(false);
 
@@ -27,7 +26,7 @@ export const useWatchCSRFToken = () => {
         if (csrfToken) {
           setCSRFTokenRetrieved(true);
         }
-      })
+      });
       observer.observe(document.head, { childList: true, subtree: true, attributes: true });
     }
 
@@ -37,4 +36,4 @@ export const useWatchCSRFToken = () => {
   }, []);
 
   return { csrfTokenRetrieved };
-}
+};

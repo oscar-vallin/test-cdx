@@ -1,5 +1,4 @@
-import React, { memo } from 'react';
-import { Text } from 'src/components/typography';
+import React, { ReactElement } from 'react';
 import { LayoutLogin } from 'src/layouts/LayoutLogin';
 import { Card500, CenteredWrapper, K2ULogo, LogoRow } from 'src/layouts/LayoutLogin/LayoutLogin.styles';
 import { Column } from 'src/components/layouts';
@@ -7,38 +6,34 @@ import { FormRow } from 'src/components/layouts/Row/Row.styles';
 import { Button } from 'src/components/buttons';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
 
-const PageNotFound = () => {
+type AppErrorLayoutType = {
+  id: string;
+  children?: ReactElement | any;
+};
 
+const AppErrorLayout = ({ id, children }: AppErrorLayoutType) => {
   const ActiveDomainStore = useActiveDomainStore();
 
   return (
-    <LayoutLogin id="NotFoundContainer">
+    <LayoutLogin id={`${id}_Container`}>
       <CenteredWrapper id="__FormWrap">
         <LogoRow id="__Logo--Row">
           <Column id="__Logo__Row-Column">
-            <K2ULogo name="logo" alt="Known2U Logo"/>
+            <K2ULogo name="logo" alt="Known2U Logo" />
           </Column>
         </LogoRow>
         <FormRow>
           <Column id="__FormBody">
             <Card500>
-              <FormRow>
-                <Column>
-                  <Text>The Page you are looking for cannot be found.</Text>
-                </Column>
-              </FormRow>
-              <FormRow>
-                <Column>
-                  <Text>Please contact your administrator of this issue persists.</Text>
-                </Column>
-              </FormRow>
+              {children}
               <FormRow>
                 <Column>
                   <Button
                     onClick={() => {
                       ActiveDomainStore.setCurrentOrg(ActiveDomainStore.domainOrg.origin);
                       return null;
-                    }}>
+                    }}
+                  >
                     Click here to return home
                   </Button>
                 </Column>
@@ -51,6 +46,4 @@ const PageNotFound = () => {
   );
 };
 
-const NotFoundPage = memo(PageNotFound);
-
-export { NotFoundPage };
+export { AppErrorLayout };

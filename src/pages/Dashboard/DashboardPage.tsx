@@ -13,12 +13,12 @@ import { Spinner } from 'src/components/spinners/Spinner';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
-import { StyledButton, StyledRow } from './DashboardPage.styles';
-import { useDashboardService } from './DashboardPage.service';
 
 import { TABLE_NAMES } from 'src/data/constants/TableConstants';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { PageTitle } from 'src/components/typography';
+import { useDashboardService } from './DashboardPage.service';
+import { StyledButton, StyledRow } from './DashboardPage.styles';
 
 const DashboardPage = () => {
   const { orgSid } = useOrgSid();

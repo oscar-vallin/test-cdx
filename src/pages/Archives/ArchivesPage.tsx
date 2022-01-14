@@ -11,7 +11,8 @@ import {
   NullHandling,
   SortDirection,
   useWorkPacketStatusesLazyQuery,
-  useWorkPacketStatusesPollQuery, WorkPacketStatus,
+  useWorkPacketStatusesPollQuery,
+  WorkPacketStatus,
 } from 'src/data/services/graphql';
 import { useTableFilters } from 'src/hooks/useTableFilters';
 

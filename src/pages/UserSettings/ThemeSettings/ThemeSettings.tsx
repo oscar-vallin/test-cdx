@@ -13,10 +13,10 @@ import { useColorPalettes } from 'src/hooks/useColorPalettes';
 import Theming from 'src/utils/Theming';
 import { useCreateOrUpdateOwnDashThemeMutation, useUserThemeLazyQuery } from 'src/data/services/graphql';
 
-import { StyledDiv, StyledTitle, StyledChoiceGroup } from '../UserSettingsPage.styles';
 import { defaultTheme, darkTheme } from 'src/styles/themes';
 import { useNotification } from 'src/hooks/useNotification';
 import { useOrgSid } from 'src/hooks/useOrgSid';
+import { StyledDiv, StyledTitle, StyledChoiceGroup } from '../UserSettingsPage.styles';
 
 const ThemeSettings = () => {
   const [apiUserThemeQuery, { data: theme, loading: isLoadingTheme }]: any = useUserThemeLazyQuery();

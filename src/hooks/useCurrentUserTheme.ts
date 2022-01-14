@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react';
-import { defaultTheme, darkTheme } from '../styles/themes';
 import Theming from 'src/utils/Theming';
+import { defaultTheme, darkTheme } from '../styles/themes';
 
 import {
   useUserThemeLazyQuery,

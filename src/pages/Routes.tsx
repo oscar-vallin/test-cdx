@@ -10,7 +10,7 @@ import { SchedulePage } from './Schedule';
 import { TransmissionsPage } from './Transmissions';
 import { ErrorsPage } from './Errors';
 import { AdminPage } from './Admin';
-import { NotFoundPage } from './NotFound';
+import { PageNotFound } from './ErrorHandling';
 import { FileStatusPage } from './FileStatus';
 import { FileStatusDetailsPage } from './FileStatusDetails';
 import { ActiveOrgsPage } from './Admin/Organizations';
@@ -107,7 +107,7 @@ export const Routes = () => {
         <ImplementationDeployPage />
       </AuthRoute>
       <AuthRoute>
-        <NotFoundPage />
+        <PageNotFound />
       </AuthRoute>
     </Switch>
   );
