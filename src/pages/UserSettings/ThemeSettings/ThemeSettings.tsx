@@ -1,22 +1,22 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react';
 
-import { Button } from '../../../components/buttons/Button';
-import { MessageBar } from '../../../components/notifications/MessageBar';
-import { Text } from '../../../components/typography/Text';
-import { Row, Column } from '../../../components/layouts';
-import { Spacing } from '../../../components/spacings/Spacing';
-import { Spinner } from '../../../components/spinners/Spinner';
+import { Button } from 'src/components/buttons';
+import { MessageBar } from 'src/components/notifications/MessageBar';
+import { Text } from 'src/components/typography';
+import { Row, Column } from 'src/components/layouts';
+import { Spacing } from 'src/components/spacings/Spacing';
+import { Spinner } from 'src/components/spinners/Spinner';
 
-import { useThemeContext } from '../../../contexts/ThemeContext';
-import { useColorPalettes } from '../../../hooks/useColorPalettes';
-import Theming from '../../../utils/Theming';
-import { useCreateOrUpdateOwnDashThemeMutation, useUserThemeLazyQuery } from '../../../data/services/graphql';
+import { useThemeContext } from 'src/contexts/ThemeContext';
+import { useColorPalettes } from 'src/hooks/useColorPalettes';
+import Theming from 'src/utils/Theming';
+import { useCreateOrUpdateOwnDashThemeMutation, useUserThemeLazyQuery } from 'src/data/services/graphql';
 
 import { StyledDiv, StyledTitle, StyledChoiceGroup } from '../UserSettingsPage.styles';
-import { defaultTheme, darkTheme } from '../../../styles/themes';
-import { useNotification } from '../../../hooks/useNotification';
-import { useOrgSid } from '../../../hooks/useOrgSid';
+import { defaultTheme, darkTheme } from 'src/styles/themes';
+import { useNotification } from 'src/hooks/useNotification';
+import { useOrgSid } from 'src/hooks/useOrgSid';
 
 const ThemeSettings = () => {
   const [apiUserThemeQuery, { data: theme, loading: isLoadingTheme }]: any = useUserThemeLazyQuery();

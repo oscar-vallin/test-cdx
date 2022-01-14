@@ -1,29 +1,29 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, memo } from 'react';
 
-import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
-import { Button } from '../../../../components/buttons/Button';
-import { Separator } from '../../../../components/separators/Separator';
-import { Spacing } from '../../../../components/spacings/Spacing';
-import { Row, Column } from '../../../../components/layouts';
-import { MessageBar } from '../../../../components/notifications/MessageBar';
-import { Spinner } from '../../../../components/spinners/Spinner';
-import { Text } from '../../../../components/typography/Text';
+import { LayoutAdmin } from 'src/layouts/LayoutAdmin';
+import { Button } from 'src/components/buttons/Button';
+import { Separator } from 'src/components/separators/Separator';
+import { Spacing } from 'src/components/spacings/Spacing';
+import { Row, Column } from 'src/components/layouts';
+import { MessageBar } from 'src/components/notifications/MessageBar';
+import { Spinner } from 'src/components/spinners/Spinner';
+import { Text } from 'src/components/typography/Text';
 import { StyledChoiceGroup, StyledDiv } from './DefaultThemePage.styles';
 
-import { useThemeContext } from '../../../../contexts/ThemeContext';
-import { useColorPalettes } from '../../../../hooks/useColorPalettes';
-import Theming from '../../../../utils/Theming';
-import { darkTheme } from '../../../../styles/themes';
+import { useThemeContext } from 'src/contexts/ThemeContext';
+import { useColorPalettes } from 'src/hooks/useColorPalettes';
+import Theming from 'src/utils/Theming';
+import { darkTheme } from 'src/styles/themes';
 
 import {
   useCreateDefaultDashThemeMutation,
   useUpdateDefaultDashThemeMutation,
   useDefaultDashThemeForSiteLazyQuery,
-} from '../../../../data/services/graphql';
-import { useNotification } from '../../../../hooks/useNotification';
-import { useOrgSid } from '../../../../hooks/useOrgSid';
-import { useSessionStore } from '../../../../store/SessionStore';
+} from 'src/data/services/graphql';
+import { useNotification } from 'src/hooks/useNotification';
+import { useOrgSid } from 'src/hooks/useOrgSid';
+import { useSessionStore } from 'src/store/SessionStore';
 
 const _DefaultThemePage = () => {
   const SessionStore = useSessionStore();

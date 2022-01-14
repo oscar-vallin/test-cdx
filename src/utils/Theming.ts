@@ -1,8 +1,9 @@
 import chroma from 'chroma-js';
+import { defaultTheme } from 'src/styles/themes';
 
 export default class Theming {
   static generate = {
-    primary(hex = '#1ca9eb') {
+    primary(hex = defaultTheme.themePrimary) {
       return {
         themeDarker: chroma.mix(hex, '#fff', 0.4).hex(),
         themeDark: chroma.mix(hex, '#fff', 0.225).hex(),
@@ -16,7 +17,7 @@ export default class Theming {
       };
     },
 
-    foreground(hex = '#323130', white = '#fff') {
+    foreground(hex = defaultTheme.neutralPrimary, white = defaultTheme.white) {
       return {
         black: chroma.mix(hex, '#000', 0.055).hex(),
         neutralDark: chroma.mix(hex, '#000', 0.085).hex(),
@@ -28,7 +29,7 @@ export default class Theming {
       };
     },
 
-    background(hex = '#fff') {
+    background(hex = defaultTheme.white) {
       return {
         neutralTertiaryAlt: chroma.mix(hex, '#000', 0.4).hex(),
         neutralQuaternaryAlt: chroma.mix(hex, '#000', 0.275).hex(),

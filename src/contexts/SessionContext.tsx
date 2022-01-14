@@ -6,6 +6,7 @@ import { useStoreRehydrated } from 'easy-peasy';
 import { useLocation } from 'react-router-dom';
 import { SessionStages } from '../store/SessionStore/SessionTypes';
 import { useSessionStore } from '../store/SessionStore';
+import { LoadingPage } from 'src/pages/Loading/LoadingPage';
 
 export const SessionContext = createContext<any>(() => {
   return null;
@@ -40,7 +41,7 @@ export const SessionContextProvider = ({ children }: SessionContextProviderProps
   }, [SessionStore.user.token, isRehydrated]);
 
   return (
-    <SessionContext.Provider value={null}>{!isRehydrated ? <div>Loading</div> : children}</SessionContext.Provider>
+    <SessionContext.Provider value={null}>{!isRehydrated ? <LoadingPage/> : children}</SessionContext.Provider>
   );
 };
 

@@ -2,6 +2,8 @@ import { ReactElement, ReactNode, createContext, useState, useEffect, useMemo } 
 import { ApolloProvider, ApolloClient, InMemoryCache, HttpLink, ApolloLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { useCSRFToken } from '../hooks/useCSRFToken';
+import { useWatchCSRFToken } from 'src/hooks/useWatchCSRFToken';
+import { LoadingPage } from 'src/pages/Loading/LoadingPage';
 
 const SERVER_URL = process.env.REACT_APP_API_SERVER;
 
@@ -29,7 +31,12 @@ export const ApolloContextProvider = ({ children }: ApolloContextProviderProps):
     // credentials: 'same-origin',
   });
 
-  const { getCSRFToken } = useCSRFToken();
+  const { getCSRFToken, callCSRFController } = useCSRFToken();
+  const { csrfTokenRetrieved } = useWatchCSRFToken();
+
+  useEffect(() => {
+    callCSRFController();
+  }, []);
 
   const authLink = setContext((_, { headers }) => {
     return {
@@ -74,12 +81,22 @@ export const ApolloContextProvider = ({ children }: ApolloContextProviderProps):
 
   const values: any = useMemo(() => ({ isApolloLoading, client }), [isApolloLoading, client]);
 
+
+  const renderBody = (hasToken: boolean) => {
+    if (!hasToken) {
+      return <LoadingPage/>;
+    } else {
+      return (
+        <ApolloProvider client={client}>
+          <ApolloContext.Provider value={values}>{children}</ApolloContext.Provider>
+        </ApolloProvider>
+      );
+    }
+  }
+
+
   // Finally, return the interface that we want to expose to our other components
-  return (
-    <ApolloProvider client={client}>
-      <ApolloContext.Provider value={values}>{children}</ApolloContext.Provider>
-    </ApolloProvider>
-  );
+  return renderBody(csrfTokenRetrieved);
 };
 
 ApolloContextProvider.defaultProps = defaultProps;

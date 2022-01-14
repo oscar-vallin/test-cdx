@@ -31,8 +31,6 @@ export const PasswordResetPage = () => {
     COMPLETE,
   }
 
-  // Wait for the CSRF Token to be set before verifying the token on page load
-  const [csrfTokenRetrieved, setCSRFTokenRetrieved] = useState(false);
   const [user, setUser] = useState<SessionUser>();
   const newPassword = useDelayedInputValue('New Password', 'Create a new password', '', 'password');
   const confirmPassword = useInputValue('Retype new password', 'Re-enter the new password', '', 'password');
@@ -62,34 +60,13 @@ export const PasswordResetPage = () => {
   const [callUpdatePassword, { data: dataUpdatePassword, loading: dataUpdatePasswordLoading }] =
     useUpdatePasswordMutation();
 
-  // Wait for the CSRF Token to be retrieved and set first
   useEffect(() => {
-    const csrfTokenNode = document.getElementById('__csrf_token');
-    let observer: MutationObserver;
-    if (csrfTokenNode) {
-      observer = new MutationObserver(() => {
-        const csrfToken = csrfTokenNode.getAttribute('content');
-        if (csrfToken) {
-          setCSRFTokenRetrieved(true);
-        }
-      });
-      observer.observe(csrfTokenNode, { attributes: true });
-    }
-
-    return () => {
-      observer?.disconnect();
-    };
-  }, []);
-
-  useEffect(() => {
-    if (csrfTokenRetrieved) {
-      callVerifyToken({
-        variables: {
-          token,
-        },
-      });
-    }
-  }, [csrfTokenRetrieved, token]);
+    callVerifyToken({
+      variables: {
+        token,
+      },
+    });
+  }, [token]);
 
   useEffect(() => {
     if (!loadingVerifyToken && dataVerifyToken) {

@@ -1,19 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, useMemo, useContext, createContext } from 'react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
-import { Customizer, loadTheme, SpinnerSize } from '@fluentui/react';
+import { Customizer, loadTheme } from '@fluentui/react';
 
 import 'office-ui-fabric-react/dist/css/fabric.css';
 
 import { useCurrentUserTheme } from 'src/hooks/useCurrentUserTheme';
-import { LayoutLogin } from 'src/layouts/LayoutLogin';
-import { Spacing } from 'src/components/spacings/Spacing';
-import { Spinner } from 'src/components/spinners/Spinner';
 import Theming from 'src/utils/Theming';
 import { useSessionStore } from 'src/store/SessionStore';
 import { useThemeStore } from 'src/store/ThemeStore';
-import { Card500 } from 'src/layouts/LayoutLogin/LayoutLogin.styles';
 import { theme as styledComponentsTheme } from '../styles/themes/theme';
+import { LoadingPage } from 'src/pages/Loading/LoadingPage';
 
 export const ThemeContext = createContext(() => {
   return {};
@@ -102,18 +99,13 @@ export const ThemeContextProvider = ({ children }) => {
     <Customizer {...loadTheme({ palette: currentTheme || {} })}>
       <ThemeProvider theme={styledTheme}>
         <ThemeContext.Provider value={values}>
-          <GlobalStyle fontSize={ThemeStore.themes.current.themeFontSize} />
-
           {isLoadingTheme ? (
-            <LayoutLogin id="ThemeContext">
-              <Card500>
-                <Spacing margin={{ top: 'normal' }}>
-                  <Spinner size={SpinnerSize.large} label="Fetching your preferences" />
-                </Spacing>
-              </Card500>
-            </LayoutLogin>
+            <LoadingPage/>
           ) : (
-            children
+            <>
+              <GlobalStyle fontSize={ThemeStore.themes.current.themeFontSize} />
+              {children}
+            </>
           )}
         </ThemeContext.Provider>
       </ThemeProvider>
