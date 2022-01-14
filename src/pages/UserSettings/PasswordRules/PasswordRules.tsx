@@ -39,7 +39,7 @@ const PasswordRules = ({ user, password, onChange }: PasswordRulesParam) => {
     apiCall({
       variables: {
         orgSid: user.orgSid ?? '',
-        userSid: user.userId ?? '',
+        userSid: user.id ?? '',
         password,
       },
     });
