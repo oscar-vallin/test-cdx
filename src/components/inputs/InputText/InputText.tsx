@@ -99,7 +99,7 @@ type UIInputTextType = {
 };
 
 const UIInputText = ({ id, uiStringField, onChange, value }: UIInputTextType) => {
-  if (uiStringField?.readOnly == true) {
+  if (uiStringField?.readOnly === true) {
     return <UIInputTextReadOnly id={id} uiField={uiStringField} />;
   }
   return (

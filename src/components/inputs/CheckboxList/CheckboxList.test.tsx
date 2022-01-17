@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { CheckboxList } from "./CheckboxList";
-import {UiOption} from "../../../data/services/graphql";
+import { UiOption } from "src/data/services/graphql";
 
 const items: UiOption[] = [
   {

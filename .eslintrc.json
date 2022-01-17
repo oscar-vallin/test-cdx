@@ -54,7 +54,8 @@
     "react/no-unused-prop-types": "off",
     "react/forbid-prop-types": "off",
     "react/no-array-index-key": "off",
-    "no-plusplus": "off"
+    "no-plusplus": "off",
+    "dot-notation": "off"
   },
   "settings": {
     "import/resolver": {

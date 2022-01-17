@@ -12,6 +12,8 @@ type CheckboxListType = {
 };
 
 const CheckboxList = ({ id, items, value, onChange }: CheckboxListType) => {
+  const [selectedValues, setSelectedValues] = useState<string[]>(Object.assign([], value));
+
   const clone = (checkboxItems: UiOption[]): CheckboxItem[] => {
     const copy: CheckboxItem[] = [];
     checkboxItems.forEach((itm) => {
@@ -23,7 +25,6 @@ const CheckboxList = ({ id, items, value, onChange }: CheckboxListType) => {
     return copy;
   };
 
-  const [selectedValues, setSelectedValues] = useState<string[]>(Object.assign([], value));
   const [options, setOptions] = useState<CheckboxItem[]>(clone(items));
 
   useEffect(() => {

@@ -74,7 +74,7 @@ export default class PuppetExchangeStatus extends PuppetBasePage {
   async isSortedAsc(selector: string): Promise<boolean> {
     try {
       const icon = await this.page.$(`${selector} i[data-icon-name="SortUp"]`);
-      return icon != undefined;
+      return icon !== undefined;
     } catch (err) {
       return false;
     }
@@ -83,7 +83,7 @@ export default class PuppetExchangeStatus extends PuppetBasePage {
   async isSortedDesc(selector: string): Promise<boolean> {
     try {
       const icon = await this.page.$(`${selector} i[data-icon-name="SortDown"]`);
-      return icon != undefined;
+      return icon !== undefined;
     } catch (err) {
       return false;
     }

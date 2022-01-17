@@ -16,8 +16,11 @@ import { useCreateOrUpdateOwnDashThemeMutation, useUserThemeLazyQuery } from 'sr
 import { defaultTheme, darkTheme } from 'src/styles/themes';
 import { useNotification } from 'src/hooks/useNotification';
 import { useOrgSid } from 'src/hooks/useOrgSid';
-import { StyledDiv, StyledTitle, StyledChoiceGroup } from 'src/pages/Admin/DashboardSite/DefaultTheme/DefaultThemePage.styles';
-
+import {
+  StyledDiv,
+  StyledTitle,
+  StyledChoiceGroup,
+} from 'src/pages/Admin/DashboardSite/DefaultTheme/DefaultThemePage.styles';
 
 const ThemeSettings = () => {
   const [apiUserThemeQuery, { data: theme, loading: isLoadingTheme }]: any = useUserThemeLazyQuery();

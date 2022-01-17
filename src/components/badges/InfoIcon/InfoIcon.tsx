@@ -6,13 +6,13 @@ type InfoIconType = {
   leftPad?: boolean;
 };
 
-export const InfoIcon = ({id, tooltip, leftPad = true}: InfoIconType) => {
+export const InfoIcon = ({ id, tooltip, leftPad = true }: InfoIconType) => {
   const charPad = (): string => {
     if (leftPad) {
       return '\xa0';
     }
     return '';
-  }
+  };
 
   if (tooltip) {
     return (

@@ -8,12 +8,12 @@ import { Breadcrumb } from 'src/components/breadcrumbs/Breadcrumb';
 import { Column } from 'src/components/layouts';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { useSessionStore } from 'src/store/SessionStore';
+import { StyledRow, StyledCard } from 'src/pages/Admin/DashboardSite/DefaultTheme/DefaultThemePage.styles';
 import { PasswordChange } from './PasswordChange';
 import { PasswordRules } from './PasswordRules';
 import { ThemeSettings } from './ThemeSettings';
 
 import { StyledBox } from './UserSettingsPage.styles';
-import { StyledRow, StyledCard } from 'src/pages/Admin/DashboardSite/DefaultTheme/DefaultThemePage.styles';
 import { PasswordState } from './PasswordChange/PasswordChange';
 
 const _UserSettingsPage = () => {

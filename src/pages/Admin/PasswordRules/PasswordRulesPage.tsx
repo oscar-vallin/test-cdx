@@ -14,11 +14,11 @@ import { Separator } from 'src/components/separators/Separator';
 import { LayoutAdmin } from 'src/layouts/LayoutAdmin';
 import { Spacing } from 'src/components/spacings/Spacing';
 
-import { StyledColumn, StyledDiv, StyledComboBox } from './PasswordRulesPage.styles';
 import { usePasswordRulesFormLazyQuery, useUpdatePasswordRulesMutation } from 'src/data/services/graphql';
-import { DEFAULT_FORM, FormOptions, FormInput, extractFormValues, replaceInputs } from './PasswordRulesFormUtils';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { InfoIcon } from 'src/components/badges/InfoIcon';
+import { DEFAULT_FORM, FormOptions, FormInput, extractFormValues, replaceInputs } from './PasswordRulesFormUtils';
+import { StyledColumn, StyledDiv, StyledComboBox } from './PasswordRulesPage.styles';
 
 const _PasswordRulesPage = () => {
   // const history = useHistory();
@@ -48,7 +48,7 @@ const _PasswordRulesPage = () => {
   }, [data]);
 
   useEffect(() => {
-    //console.log(state);
+    // console.log(state);
   }, [state]);
 
   useEffect(() => {
@@ -82,11 +82,11 @@ const _PasswordRulesPage = () => {
   }, [updatedRules]);
 
   return (
-    <LayoutAdmin id='PageAdmin'>
-      <Spacing margin='double'>
+    <LayoutAdmin id="PageAdmin">
+      <Spacing margin="double">
         <Row>
           <Column lg="4">
-            <PageTitle id='__Page_Title' title='Password Rules'/>
+            <PageTitle id="__Page_Title" title="Password Rules" />
           </Column>
         </Row>
         <Row>
@@ -130,8 +130,10 @@ const _PasswordRulesPage = () => {
                     <Column>
                       <div>
                         <Text variant="bold">Must always be met</Text>
-                        <InfoIcon id="mustAlwaysTooltip"
-                                  tooltip="Newly created passwords must always conform to the following selected rules" />
+                        <InfoIcon
+                          id="mustAlwaysTooltip"
+                          tooltip="Newly created passwords must always conform to the following selected rules"
+                        />
                       </div>
                     </Column>
                   </Row>
@@ -188,9 +190,11 @@ const _PasswordRulesPage = () => {
                               />
 
                               <strong>complexity</strong>
-                              <InfoIcon id="passComplexityTooltip"
-                                        tooltip={form?.passwordRulesForm?.someMustBeMet?.minPasswordComplexity?.info}
-                                        leftPad={false}/>
+                              <InfoIcon
+                                id="passComplexityTooltip"
+                                tooltip={form?.passwordRulesForm?.someMustBeMet?.minPasswordComplexity?.info}
+                                leftPad={false}
+                              />
                               <strong>&nbsp;OR Match</strong>
 
                               <FormInput
