@@ -1,25 +1,23 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* tslint-disable */
 import { useState, useEffect, memo } from 'react';
 
-import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
-import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
-import { SpinnerSize } from '@fluentui/react';
-import { Card } from '../../../components/cards';
-import { EmptyState } from '../../../containers/states';
-import { Button } from '../../../components/buttons';
-import { useQueryHandler } from '../../../hooks/useQueryHandler';
-import { useActiveDomainStore } from '../../../store/ActiveDomainStore';
-import { useNotification } from '../../../hooks/useNotification';
-import { Row, Column } from '../../../components/layouts';
-import { Text } from '../../../components/typography';
-import { Separator } from '../../../components/separators/Separator';
-import { LayoutAdmin } from '../../../layouts/LayoutAdmin';
-import { Spacing } from '../../../components/spacings/Spacing';
+import { Checkbox, Spinner, SpinnerSize } from '@fluentui/react';
+import { Card } from 'src/components/cards';
+import { EmptyState } from 'src/containers/states';
+import { Button } from 'src/components/buttons';
+import { useQueryHandler } from 'src/hooks/useQueryHandler';
+import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
+import { useNotification } from 'src/hooks/useNotification';
+import { Row, Column } from 'src/components/layouts';
+import { PageTitle, Text } from 'src/components/typography';
+import { Separator } from 'src/components/separators/Separator';
+import { LayoutAdmin } from 'src/layouts/LayoutAdmin';
+import { Spacing } from 'src/components/spacings/Spacing';
 
 import { StyledColumn, StyledDiv, StyledComboBox } from './PasswordRulesPage.styles';
-import { usePasswordRulesFormLazyQuery, useUpdatePasswordRulesMutation } from '../../../data/services/graphql';
+import { usePasswordRulesFormLazyQuery, useUpdatePasswordRulesMutation } from 'src/data/services/graphql';
 import { DEFAULT_FORM, FormOptions, FormInput, extractFormValues, replaceInputs } from './PasswordRulesFormUtils';
+import { ErrorHandler } from 'src/utils/ErrorHandler';
 
 const _PasswordRulesPage = () => {
   // const history = useHistory();
@@ -31,6 +29,7 @@ const _PasswordRulesPage = () => {
 
   const [state, setState] = useState({ ...DEFAULT_FORM });
   const [form, setForm]: any = useState({});
+  const handleError = ErrorHandler();
 
   useEffect(() => {
     fetchPageForm({
@@ -48,8 +47,12 @@ const _PasswordRulesPage = () => {
   }, [data]);
 
   useEffect(() => {
-    console.log(state);
+    //console.log(state);
   }, [state]);
+
+  useEffect(() => {
+    handleError(updateError);
+  }, [updateError]);
 
   // useEffect(() => {
   //   if (!state.someMustBeMet.enabled) {
@@ -68,7 +71,7 @@ const _PasswordRulesPage = () => {
       if (updatedRules.updatePasswordRules.response === 'FAIL') {
         Toast.error({ text: 'Please, check the highlighted fields and try again' });
       } else {
-        Toast.success({ text: 'Password rules updated sucessfully' });
+        Toast.success({ text: 'Password rules updated successfully' });
 
         setForm({
           passwordRulesForm: updatedRules.updatePasswordRules,
@@ -78,30 +81,20 @@ const _PasswordRulesPage = () => {
   }, [updatedRules]);
 
   return (
-    <LayoutAdmin id="PageAdmin">
-      <Spacing margin="double">
-        {(isLoadingForm || data) && (
-          <Row>
-            <Column lg="4">
-              <Spacing margin={{ top: 'small' }}>
-                <Text id="__Page-Title" variant="bold">
-                  Password Rules
-                </Text>
-              </Spacing>
-            </Column>
-          </Row>
-        )}
-
-        {(isLoadingForm || data) && (
-          <Row>
-            <Column lg="12">
-              <Spacing margin={{ top: 'normal' }}>
-                <Separator />
-              </Spacing>
-            </Column>
-          </Row>
-        )}
-
+    <LayoutAdmin id='PageAdmin'>
+      <Spacing margin='double'>
+        <Row>
+          <Column lg="4">
+            <PageTitle id='__Page_Title' title='PasswordRules'/>
+          </Column>
+        </Row>
+        <Row>
+          <Column lg="12">
+            <Spacing margin={{ top: 'normal' }}>
+              <Separator />
+            </Spacing>
+          </Column>
+        </Row>
         <Row>
           <StyledColumn sm="12" xxl={form ? '8' : '12'}>
             <Spacing margin={{ top: !form ? 'normal' : 'double' }}>
@@ -193,6 +186,7 @@ const _PasswordRulesPage = () => {
 
                               <FormInput
                                 id="__inputMustPassingRules"
+                                key="__inputMustPassingRules"
                                 group="someMustBeMet"
                                 option="requiredNumPassingRules"
                                 state={state}
@@ -248,6 +242,7 @@ const _PasswordRulesPage = () => {
                                       '{0}': (
                                         <FormInput
                                           id="__inputAutoLock"
+                                          key="__inputAutoLock"
                                           option="autoLockAfterFailedAttempts"
                                           state={state}
                                           value={state.autoLockAfterFailedAttempts}
@@ -288,6 +283,7 @@ const _PasswordRulesPage = () => {
                                       '{0}': (
                                         <FormInput
                                           id="__inputAutoUnlock"
+                                          key="__inputAutoUnLock"
                                           option="autoUnlockAccountDelayMinutes"
                                           state={state}
                                           value={state.autoUnlockAccountDelayMinutes}

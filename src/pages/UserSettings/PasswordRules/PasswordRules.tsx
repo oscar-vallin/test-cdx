@@ -4,7 +4,8 @@ import { PasswordValidation, PasswordValidationRule, usePasswordValidationLazyQu
 import { Column, Row } from 'src/components/layouts';
 import { SessionUser } from 'src/store/SessionStore/SessionTypes';
 import { IStackItemStyles, IStackTokens, Stack } from '@fluentui/react';
-import { CompositeRulesSeparator, StyledTitle } from '../UserSettingsPage.styles';
+import { CompositeRulesSeparator } from '../UserSettingsPage.styles';
+import { StyledTitle } from 'src/pages/Admin/DashboardSite/DefaultTheme/DefaultThemePage.styles'
 import { RuleGroup } from './RuleGroup';
 
 import { RuleItems } from './RuleItems';

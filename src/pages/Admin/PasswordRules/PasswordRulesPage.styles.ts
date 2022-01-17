@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { ComboBox } from 'office-ui-fabric-react/lib/ComboBox';
-import { Column } from '../../../components/layouts';
+import { ComboBox } from '@fluentui/react';
+import { Column } from 'src/components/layouts';
 
 export const StyledColumn = styled(Column)`
   .ms-Viewport {

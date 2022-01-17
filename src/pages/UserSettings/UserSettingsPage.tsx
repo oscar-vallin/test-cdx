@@ -12,7 +12,8 @@ import { PasswordChange } from './PasswordChange';
 import { PasswordRules } from './PasswordRules';
 import { ThemeSettings } from './ThemeSettings';
 
-import { StyledBox, StyledRow, StyledCard } from './UserSettingsPage.styles';
+import { StyledBox } from './UserSettingsPage.styles';
+import { StyledRow, StyledCard } from 'src/pages/Admin/DashboardSite/DefaultTheme/DefaultThemePage.styles';
 import { PasswordState } from './PasswordChange/PasswordChange';
 
 const _UserSettingsPage = () => {

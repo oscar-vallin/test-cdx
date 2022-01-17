@@ -6,7 +6,7 @@ import { MessageBar } from 'src/components/notifications/MessageBar';
 
 import { useUpdateOwnPasswordMutation } from 'src/data/services/graphql';
 
-import { StyledTitle } from '../UserSettingsPage.styles';
+import { StyledTitle } from 'src/pages/Admin/DashboardSite/DefaultTheme/DefaultThemePage.styles';
 
 export type PasswordState = {
   current: string;

@@ -1,7 +1,6 @@
-import { MaskedTextField } from '@fluentui/react/lib-commonjs/TextField';
-import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
-import { Row, Column } from '../../../components/layouts';
-import { Text } from '../../../components/typography';
+import { MaskedTextField, Checkbox } from '@fluentui/react';
+import { Row, Column } from 'src/components/layouts';
+import { Text } from 'src/components/typography';
 import { StyledDiv } from './PasswordRulesPage.styles';
 
 export const DEFAULT_FORM = {
@@ -161,6 +160,7 @@ export const FormOptions = ({ form = {}, group = '_', state, onChange }) => {
                     '{0}': (
                       <FormInput
                         id={`${baseInputId}MinLength`}
+                        key={`${baseInputId}MinLength`}
                         group="mustAlwaysBeMet"
                         option="minLength"
                         state={state}
@@ -171,6 +171,7 @@ export const FormOptions = ({ form = {}, group = '_', state, onChange }) => {
                     '{1}': (
                       <FormInput
                         id={`${baseInputId}MaxLength`}
+                        key={`${baseInputId}MaxLength`}
                         group="mustAlwaysBeMet"
                         option="maxLength"
                         state={state}
@@ -205,6 +206,7 @@ export const FormOptions = ({ form = {}, group = '_', state, onChange }) => {
                     '{0}': (
                       <FormInput
                         id={`${baseInputId}Uppercase`}
+                        key={`${baseInputId}Uppercase`}
                         group="mustAlwaysBeMet"
                         option="minUpperCaseLetters"
                         state={state}
@@ -239,6 +241,7 @@ export const FormOptions = ({ form = {}, group = '_', state, onChange }) => {
                     '{0}': (
                       <FormInput
                         id={`${baseInputId}Lowercase`}
+                        key={`${baseInputId}Lowercase`}
                         group="mustAlwaysBeMet"
                         option="minLowerCaseLetters"
                         state={state}
@@ -273,6 +276,7 @@ export const FormOptions = ({ form = {}, group = '_', state, onChange }) => {
                     '{0}': (
                       <FormInput
                         id={`${baseInputId}Digit`}
+                        key={`${baseInputId}Digit`}
                         group="mustAlwaysBeMet"
                         option="minNumericDigits"
                         state={state}
@@ -307,6 +311,7 @@ export const FormOptions = ({ form = {}, group = '_', state, onChange }) => {
                     '{0}': (
                       <FormInput
                         id={`${baseInputId}SpecialChars`}
+                        key={`${baseInputId}SpecialChars`}
                         group="mustAlwaysBeMet"
                         option="minSpecialCharacters"
                         state={state}
@@ -363,6 +368,7 @@ export const FormOptions = ({ form = {}, group = '_', state, onChange }) => {
                     '{0}': (
                       <FormInput
                         id={`${baseInputId}RepeatedChars`}
+                        key={`${baseInputId}RepeatedChars`}
                         group="mustAlwaysBeMet"
                         option="maxAllowedRepeatedChars"
                         state={state}
@@ -397,6 +403,7 @@ export const FormOptions = ({ form = {}, group = '_', state, onChange }) => {
                     '{0}': (
                       <FormInput
                         id={`${baseInputId}Variations`}
+                        key={`${baseInputId}Variations`}
                         group="mustAlwaysBeMet"
                         option="minPasswordHistoryVariations"
                         state={state}
