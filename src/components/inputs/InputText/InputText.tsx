@@ -72,9 +72,9 @@ type UIReadOnlyType = {
 const UIInputTextReadOnly = ({ id, uiField }: UIReadOnlyType) => {
   const getValue = () => {
     let text = '';
-    if (uiField.hasOwnProperty('description')) {
+    if (uiField?.hasOwnProperty('description')) {
       text = uiField['description'];
-    } else if (uiField.hasOwnProperty('value')) {
+    } else if (uiField?.hasOwnProperty('value')) {
       text = uiField['value'];
     }
     if (text && text.length > 0) {

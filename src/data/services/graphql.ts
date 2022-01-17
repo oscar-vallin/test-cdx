@@ -1437,6 +1437,7 @@ export type QueryAccessPolicyGroupTemplatesArgs = {
 
 
 export type QueryAccessPolicyFormArgs = {
+  orgSid: Scalars['ID'];
   templatePolicySid?: Maybe<Scalars['ID']>;
 };
 
@@ -3351,6 +3352,7 @@ export type AccessPolicyGroupTemplatesQuery = (
 );
 
 export type AccessPolicyFormQueryVariables = Exact<{
+  orgSid: Scalars['ID'];
   templatePolicySid?: Maybe<Scalars['ID']>;
 }>;
 
@@ -7312,8 +7314,8 @@ export type AccessPolicyGroupTemplatesQueryHookResult = ReturnType<typeof useAcc
 export type AccessPolicyGroupTemplatesLazyQueryHookResult = ReturnType<typeof useAccessPolicyGroupTemplatesLazyQuery>;
 export type AccessPolicyGroupTemplatesQueryResult = Apollo.QueryResult<AccessPolicyGroupTemplatesQuery, AccessPolicyGroupTemplatesQueryVariables>;
 export const AccessPolicyFormDocument = gql`
-    query AccessPolicyForm($templatePolicySid: ID) {
-  accessPolicyForm(templatePolicySid: $templatePolicySid) {
+    query AccessPolicyForm($orgSid: ID!, $templatePolicySid: ID) {
+  accessPolicyForm(orgSid: $orgSid, templatePolicySid: $templatePolicySid) {
     sid
     name {
       value
@@ -7422,11 +7424,12 @@ export const AccessPolicyFormDocument = gql`
  * @example
  * const { data, loading, error } = useAccessPolicyFormQuery({
  *   variables: {
+ *      orgSid: // value for 'orgSid'
  *      templatePolicySid: // value for 'templatePolicySid'
  *   },
  * });
  */
-export function useAccessPolicyFormQuery(baseOptions?: Apollo.QueryHookOptions<AccessPolicyFormQuery, AccessPolicyFormQueryVariables>) {
+export function useAccessPolicyFormQuery(baseOptions: Apollo.QueryHookOptions<AccessPolicyFormQuery, AccessPolicyFormQueryVariables>) {
         return Apollo.useQuery<AccessPolicyFormQuery, AccessPolicyFormQueryVariables>(AccessPolicyFormDocument, baseOptions);
       }
 export function useAccessPolicyFormLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AccessPolicyFormQuery, AccessPolicyFormQueryVariables>) {

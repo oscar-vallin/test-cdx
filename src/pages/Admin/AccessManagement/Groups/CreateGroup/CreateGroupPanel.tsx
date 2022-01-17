@@ -14,6 +14,7 @@ import { FormRow } from 'src/components/layouts/Row/Row.styles';
 import { StyledContainer } from './CreateGroupPanel.styles';
 
 import { useCreateGroupPanel } from './CreateGroupPanel.service';
+import { UIInputTextReadOnly } from 'src/components/inputs/InputText/InputText';
 
 const defaultProps = {
   isOpen: false,
@@ -126,15 +127,13 @@ const CreateGroupPanel = ({
 
               {accessPolicyFormRaw?.organization?.visible && (
                 <>
-                  <Row>
-                    <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                      <Text variant="bold">Organizations</Text>
-                    </Spacing>
-
-                    <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                      <Text variant="normal">{accessPolicyFormRaw?.organization?.label}</Text>
-                    </Spacing>
-
+                  <FormRow>
+                    <Text variant="bold">Organizations</Text>
+                  </FormRow>
+                  <FormRow>
+                    <UIInputTextReadOnly id={'primaryOrg'} uiField={accessPolicyFormRaw?.organization}/>
+                  </FormRow>
+                  <FormRow>
                     {accessPolicyFormRaw?.tmpl?.visible && (
                       <Column lg="6" direction="row">
                         <Checkbox
@@ -167,7 +166,7 @@ const CreateGroupPanel = ({
                         )}
                       </Column>
                     )}
-                  </Row>
+                  </FormRow>
                 </>
               )}
 

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { ReactElement, useState, useEffect } from 'react';
 
-import { SpinnerSize, Checkbox, Panel, PanelType, Spinner } from '@fluentui/react';
+import { SpinnerSize, Checkbox, Panel, PanelType, Spinner, Label } from '@fluentui/react';
 import _ from 'lodash';
 
 import { useNotification } from 'src/hooks/useNotification';
@@ -15,7 +15,6 @@ import { Text } from 'src/components/typography';
 import { InputText } from 'src/components/inputs/InputText';
 import { Collapse } from 'src/components/collapses/Collapse';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
-import { Label } from 'src/components/labels/Label';
 
 import {
   useAccessPolicyFormLazyQuery,
@@ -24,6 +23,8 @@ import {
   useFindAccessPolicyLazyQuery,
 } from 'src/data/services/graphql';
 import { useOrgSid } from 'src/hooks/useOrgSid';
+import { UIInputTextReadOnly } from 'src/components/inputs/InputText/InputText';
+import { UIFormLabel } from 'src/components/labels/FormLabel';
 
 const INITIAL_STATE = {
   policyName: '',
@@ -275,13 +276,12 @@ const CreatePoliciesPanel = ({
                 <Spacing margin={{ top: 'normal' }}>
                   <Row>
                     <Column lg="6">
-                      <Label>Organization</Label>
-                      <p>{policyForm.organization?.label}</p>
+                      <UIInputTextReadOnly id='Organization' uiField={policyForm.organization}/>
                     </Column>
 
                     {policyForm.applicableOrgTypes?.visible && state.isTemplate && (
                       <Column lg="6">
-                        <Label text={policyForm.applicableOrgTypes?.label} info={policyForm.applicableOrgTypes?.info} />
+                        <UIFormLabel id='applicableOrgTypes' uiField={policyForm.applicableOrgTypes}/>
 
                         <Multiselect
                           value={applicableOrgTypes}

@@ -1,5 +1,5 @@
 import { memo, useState } from 'react';
-import { SpinnerSize, List } from '@fluentui/react';
+import { SpinnerSize, List, Label } from '@fluentui/react';
 import { format } from 'date-fns';
 import { LayoutAdmin } from 'src/layouts/LayoutAdmin';
 import { Column } from 'src/components/layouts';
@@ -7,7 +7,6 @@ import { PageTitle, Text } from 'src/components/typography';
 import { ImplementationDeployMutation, useImplementationDeployMutation } from 'src/data/services/graphql';
 import { Spinner } from 'src/components/spinners/Spinner';
 import { Spacing } from 'src/components/spacings/Spacing';
-import { Label } from 'src/components/labels/Label';
 import { DeployButton, Row } from './ImplementationDeployPage.styles';
 
 const _ImplementationDeployPage = () => {

@@ -14,7 +14,6 @@ import { Text } from 'src/components/typography';
 import { InputText } from 'src/components/inputs/InputText';
 import { Collapse } from 'src/components/collapses/Collapse';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
-import { Label } from 'src/components/labels/Label';
 
 import {
   useFindAccessSpecializationLazyQuery,
@@ -22,10 +21,11 @@ import {
   useCreateAccessSpecializationMutation,
   useUpdateAccessSpecializationMutation,
   useVendorQuickSearchLazyQuery,
-  useOrganizationQuickSearchLazyQuery,
+  useOrganizationQuickSearchLazyQuery, AccessSpecializationForm,
 } from 'src/data/services/graphql';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { TagPicker } from 'src/components/pickers/TagPicker';
+import { UIInputTextReadOnly } from 'src/components/inputs/InputText/InputText';
 
 const INITIAL_STATE = {
   name: '',
@@ -71,7 +71,7 @@ const CreateAccessSpecializationPanel = ({
 
   const { orgSid } = useOrgSid();
   const [state, setState]: any = useState({ ...INITIAL_STATE });
-  const [accessForm, setAccessForm]: any = useState({});
+  const [accessForm, setAccessForm]: any = useState<AccessSpecializationForm>();
   const [accessFilters, setAccessFilters] = useState([]);
   const [specializations, setSpecializations] = useState({});
   const [currentItem, setCurrentItem]: any = useState(null);
@@ -190,7 +190,7 @@ const CreateAccessSpecializationPanel = ({
       <>
         <Row>
           <Column lg="12">
-            {isLoadingForm || isLoadingSpecialization ? (
+            {!accessForm || isLoadingForm || isLoadingSpecialization ? (
               <>
                 <Spacing margin={{ top: 'normal', bottom: 'double' }}>
                   <Separator />
@@ -221,8 +221,7 @@ const CreateAccessSpecializationPanel = ({
                 <Spacing margin={{ top: 'normal' }}>
                   <Row>
                     <Column lg="12">
-                      <Label>Organization</Label>
-                      <p>{accessForm.organization?.label}</p>
+                      <UIInputTextReadOnly id='__Organization' uiField={accessForm.organization}/>
                     </Column>
                   </Row>
                 </Spacing>

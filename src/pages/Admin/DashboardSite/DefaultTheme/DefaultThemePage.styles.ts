@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import { ChoiceGroup, Icon, ColorPicker } from '@fluentui/react';
+import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
+import { Icon, ColorPicker } from '@fluentui/react';
 
 import { Box as LayoutBox, Row } from 'src/components/layouts';
 import { Card } from 'src/components/cards';
