@@ -26,6 +26,7 @@ type ColumnProps = {
   bottom?: boolean;
   centerV?: string;
   sm?: number | string;
+  md?: number | string;
   xl?: number | string;
   xxl?: number | string;
 } & typeof defaultProps;

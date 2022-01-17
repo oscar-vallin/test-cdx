@@ -23,12 +23,6 @@ describe('E2E - Access Policies Test', () => {
     await accessPolicies.expectSuperUserPolicy();
   });
 
-  // it('Load the available policy templates', async () => {
-  //   const accessPolicies = new PuppetAccessPolicies(cdxApp.page);
-
-  //   await accessPolicies.expectPolicyTemplates();
-  // });
-
   it('Click on Create Policy button', async () => {
     const accessPolicies = new PuppetAccessPolicies(cdxApp.page);
 
