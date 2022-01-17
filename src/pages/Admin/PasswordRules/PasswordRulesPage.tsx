@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 
 import { Checkbox, Spinner, SpinnerSize } from '@fluentui/react';
 import { Card } from 'src/components/cards';
@@ -18,6 +18,7 @@ import { StyledColumn, StyledDiv, StyledComboBox } from './PasswordRulesPage.sty
 import { usePasswordRulesFormLazyQuery, useUpdatePasswordRulesMutation } from 'src/data/services/graphql';
 import { DEFAULT_FORM, FormOptions, FormInput, extractFormValues, replaceInputs } from './PasswordRulesFormUtils';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
+import { InfoIcon } from 'src/components/badges/InfoIcon';
 
 const _PasswordRulesPage = () => {
   // const history = useHistory();
@@ -85,7 +86,7 @@ const _PasswordRulesPage = () => {
       <Spacing margin='double'>
         <Row>
           <Column lg="4">
-            <PageTitle id='__Page_Title' title='PasswordRules'/>
+            <PageTitle id='__Page_Title' title='Password Rules'/>
           </Column>
         </Row>
         <Row>
@@ -96,7 +97,7 @@ const _PasswordRulesPage = () => {
           </Column>
         </Row>
         <Row>
-          <StyledColumn sm="12" xxl={form ? '8' : '12'}>
+          <StyledColumn sm="12" xxl={form ? '10' : '12'}>
             <Spacing margin={{ top: !form ? 'normal' : 'double' }}>
               {isLoadingForm ? (
                 <Spinner size={SpinnerSize.large} label="Loading password rules" />
@@ -127,7 +128,11 @@ const _PasswordRulesPage = () => {
                 <div id="__PasswordRules-Form">
                   <Row>
                     <Column>
-                      <Text variant="bold">Must always be met</Text>
+                      <div>
+                        <Text variant="bold">Must always be met</Text>
+                        <InfoIcon id="mustAlwaysTooltip"
+                                  tooltip="Newly created passwords must always conform to the following selected rules" />
+                      </div>
                     </Column>
                   </Row>
 
@@ -182,7 +187,11 @@ const _PasswordRulesPage = () => {
                                 }}
                               />
 
-                              <strong>complexity OR Match</strong>
+                              <strong>complexity</strong>
+                              <InfoIcon id="passComplexityTooltip"
+                                        tooltip={form?.passwordRulesForm?.someMustBeMet?.minPasswordComplexity?.info}
+                                        leftPad={false}/>
+                              <strong>&nbsp;OR Match</strong>
 
                               <FormInput
                                 id="__inputMustPassingRules"

@@ -326,6 +326,29 @@ export const FormOptions = ({ form = {}, group = '_', state, onChange }) => {
         )}
       </Column>
       <Column lg="12" xl="6">
+
+        {form[group].mustNotContainUserName?.visible && (
+          <StyledDiv>
+            <Checkbox
+              id={`${baseCheckboxId}NoUserName`}
+              checked={state[group].mustNotContainUserName}
+              onChange={(event, checked) =>
+                onChange({
+                  ...state,
+                  [group]: {
+                    ...state[group],
+                    mustNotContainUserName: !!checked,
+                  },
+                })
+              }
+            />
+
+            <Text {...(form[group]?.mustNotContainUserName?.errMsg ? { variant: 'error' } : {})}>
+              {form[group]?.mustNotContainUserName?.label || 'Missing label from form'}
+            </Text>
+          </StyledDiv>
+        )}
+
         {form[group]?.mustNotContainNumericSequence?.visible && (
           <StyledDiv>
             <Checkbox
