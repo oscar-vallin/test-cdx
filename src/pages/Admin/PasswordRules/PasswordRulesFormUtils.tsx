@@ -326,7 +326,7 @@ export const FormOptions = ({ form = {}, group = '_', state, onChange }) => {
         )}
       </Column>
       <Column lg="12" xl="6">
-        {form[group].mustNotContainUserName?.visible && (
+        {form[group]?.mustNotContainUserName?.visible && (
           <StyledDiv>
             <Checkbox
               id={`${baseCheckboxId}NoUserName`}
