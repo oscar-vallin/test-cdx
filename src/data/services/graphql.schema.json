@@ -7596,6 +7596,18 @@
             "deprecationReason": null
           },
           {
+            "name": "FAIR",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "GOOD",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "STRONG",
             "description": null,
             "isDeprecated": false,
