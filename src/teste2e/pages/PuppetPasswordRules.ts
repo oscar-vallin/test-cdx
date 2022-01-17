@@ -31,7 +31,7 @@ export default class PuppetActiveOrgs extends PuppetBasePage {
     await this.page.waitForSelector(this.messageContainer);
     const errorMessage = await this.page.$eval(this.messageContainer, (e) => e.textContent);
 
-    expect(errorMessage).toEqual('Password rules updated sucessfully');
+    expect(errorMessage).toEqual('Password rules updated successfully');
   }
 
   async expectErrorMessage() {
