@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, memo } from 'react';
 
-import { DetailsList, DetailsListLayoutMode, SelectionMode, Spinner, FontIcon, SpinnerSize } from '@fluentui/react';
+import { DetailsList, DetailsListLayoutMode, SelectionMode, Spinner, FontIcon, SpinnerSize, Link } from '@fluentui/react';
 import { EmptyState } from 'src/containers/states';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
 import { useNotification } from 'src/hooks/useNotification';
 import { Row, Column } from 'src/components/layouts';
-import { Button, Link } from 'src/components/buttons';
+import { Button } from 'src/components/buttons';
 import { LayoutAdmin } from 'src/layouts/LayoutAdmin';
 import { Text } from 'src/components/typography';
 import { Separator } from 'src/components/separators/Separator';
@@ -110,7 +110,7 @@ const AccessManagementGroupsContainer = () => {
 
   const onRenderItemColumn = (item, index, column) => {
     if (column.key === 'tmpl') {
-      return <FontIcon id={`__template_${index + 1}`} iconName={item.tmpl ? 'CheckMark' : 'Cancel'} />;
+      return item.tmpl ? <FontIcon id={`__template_${index + 1}`} iconName='Completed' /> : <span/>;
     }
     if (column.key === 'actions') {
       return (

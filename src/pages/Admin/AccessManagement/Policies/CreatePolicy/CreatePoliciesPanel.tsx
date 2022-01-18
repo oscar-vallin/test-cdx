@@ -12,7 +12,7 @@ import { Button } from 'src/components/buttons';
 import { Row, Column } from 'src/components/layouts';
 import { Separator } from 'src/components/separators/Separator';
 import { Text } from 'src/components/typography';
-import { InputText } from 'src/components/inputs/InputText';
+import { UIInputText } from 'src/components/inputs/InputText';
 import { Collapse } from 'src/components/collapses/Collapse';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 
@@ -20,11 +20,13 @@ import {
   useAccessPolicyFormLazyQuery,
   useCreateAccessPolicyMutation,
   useUpdateAccessPolicyMutation,
-  useFindAccessPolicyLazyQuery,
+  useFindAccessPolicyLazyQuery, GqOperationResponse, AccessPolicyForm,
 } from 'src/data/services/graphql';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { UIInputTextReadOnly } from 'src/components/inputs/InputText/InputText';
 import { UIFormLabel } from 'src/components/labels/FormLabel';
+import { UIInputCheck } from 'src/components/inputs/InputCheck';
+import { FormRow } from 'src/components/layouts/Row/Row.styles';
 
 const INITIAL_STATE = {
   policyName: '',
@@ -95,7 +97,7 @@ const CreatePoliciesPanel = ({
   const { orgSid } = useOrgSid();
   const Toast = useNotification();
   const [state, setState]: any = useState({ ...INITIAL_STATE });
-  const [policyForm, setPolicyForm]: any = useState({});
+  const [policyForm, setPolicyForm]: any = useState<AccessPolicyForm>();
   const [permissions, setPermissions] = useState([]);
   const [applicableOrgTypes, setApplicableOrgTypes]: any = useState([]);
 
@@ -122,9 +124,11 @@ const CreatePoliciesPanel = ({
     if (createdPolicy) {
       const { createAccessPolicy } = createdPolicy;
 
-      if (createAccessPolicy.response === 'FAIL') {
-        Toast.error({ text: 'Please check the highlighted fields and try again' });
-      } else {
+      if (createAccessPolicy?.response === GqOperationResponse.Fail) {
+        const errorMsg =
+          createAccessPolicy?.errMsg ?? createAccessPolicy?.response ?? 'Please check the highlighted fields and try again';
+        Toast.error({ text: errorMsg });
+      } else if (createdPolicy?.sid) {
         onCreatePolicy(createAccessPolicy);
         Toast.success({ text: 'Access Policy created successfully' });
         onDismiss();
@@ -136,9 +140,11 @@ const CreatePoliciesPanel = ({
     if (updatedPolicy && selectedPolicyId) {
       const { updateAccessPolicy } = updatedPolicy;
 
-      if (updateAccessPolicy?.response && updateAccessPolicy?.response === 'FAIL') {
-        Toast.error({ text: 'Please check the highlighted fields and try again' });
-      } else {
+      if (updateAccessPolicy?.response === GqOperationResponse.Fail) {
+          const errorMsg =
+            updateAccessPolicy?.errMsg ?? updateAccessPolicy?.response ?? 'Please check the highlighted fields and try again';
+          Toast.error({ text: errorMsg });
+      } else if (updateAccessPolicy?.sid) {
         onUpdatePolicy(updateAccessPolicy);
         Toast.success({ text: 'Access Policy updated successfully' });
         onDismiss();
@@ -152,7 +158,12 @@ const CreatePoliciesPanel = ({
         setApplicableOrgTypes([]);
         setPermissions([]);
         fetchPolicyForm({
-          variables: { orgSid, ...(selectedTemplateId ? { templatePolicySid: selectedTemplateId } : {}) },
+          variables: {
+            orgSid,
+            ...(selectedTemplateId ? {
+              templatePolicySid: selectedTemplateId } : {})
+          },
+          errorPolicy: 'all',
         });
         setState({ ...INITIAL_STATE });
       } else {
@@ -197,6 +208,174 @@ const CreatePoliciesPanel = ({
     }
   }, [policy]);
 
+  const renderBody = () => {
+    return (
+      <Spacing margin={{ top: 'normal' }}>
+        <FormRow>
+          <Column lg="6" sm="12">
+            <UIInputText id="PolicyInput__Name"
+                         uiStringField={policyForm?.name}
+                         value={state.policyName}
+                         onChange={(event, newValue) => setState({ ...state, policyName: newValue })}/>
+          </Column>
+          <Column lg="3" sm="6">
+            <UIInputCheck id="PolicyTmpl__Check"
+                          uiField={policyForm?.tmpl}
+                          value={state.isTemplate}
+                          onChange={(event, isTemplate) => setState({ ...state, isTemplate })}/>
+          </Column>
+          <Column lg="3" sm="6">
+            {state.isTemplate && (
+              <UIInputCheck id="UseAsIs__Check"
+                            uiField={policyForm?.tmplUseAsIs}
+                            value={state.usedAsIs}
+                            onChange={(event, usedAsIs) => setState({ ...state, usedAsIs })}/>
+            )}
+          </Column>
+        </FormRow>
+        <FormRow>
+          <Column lg="6">
+            <UIInputTextReadOnly id='Organization' uiField={policyForm?.organization}/>
+          </Column>
+
+          <Column lg="6">
+            {policyForm?.applicableOrgTypes?.visible && state.isTemplate && (
+              <>
+                <UIFormLabel id='applicableOrgTypes' uiField={policyForm?.applicableOrgTypes}/>
+
+                <Multiselect
+                  value={applicableOrgTypes}
+                  options={
+                    policyForm.options
+                      ?.find((opt) => opt.key === 'OrgType')
+                      ?.values.map(({ label, value }) => ({ key: value, text: label })) || []
+                  }
+                  onChange={(evt, item) => {
+                    const opts = item.selected
+                      ? [...applicableOrgTypes, item.key as string]
+                      : applicableOrgTypes.filter((key) => key !== item.key);
+
+                    setApplicableOrgTypes(opts);
+                  }}
+                />
+              </>
+            )}
+          </Column>
+        </FormRow>
+
+        {policyForm?.permissions?.visible && (
+          <>
+            <FormRow>
+              <Column lg="12">
+                <Spacing margin={{ top: 'small' }}>
+                  <Text variant="bold">Permissions</Text>
+                </Spacing>
+              </Column>
+            </FormRow>
+
+            <FormRow>
+              <Column lg="12">
+                {permissions.map((group: any, groupIndex) => (
+                  <Collapse label={group.label} expanded key={groupIndex}>
+                    <Spacing padding={{ top: 'normal', bottom: 'normal' }}>
+                      <Row>
+                        <Column lg="12">
+                          <Card elevation="none" spacing="none">
+                            <Row top>
+                              {group.permissions?.map((permission, pIndex) => (
+                                <Column lg="3" key={`${groupIndex}-${pIndex}`}>
+                                  <Card elevation="none">
+                                    <Spacing margin={{ bottom: 'normal' }}>
+                                      <Label>{permission.label}</Label>
+                                    </Spacing>
+
+                                    {permission.options?.map((option, optIndex) => (
+                                      <Spacing
+                                        margin={{ top: 'small' }}
+                                        key={`${groupIndex}-${pIndex}-${optIndex}`}
+                                      >
+                                        <Checkbox
+                                          label={option.label}
+                                          checked={state.permissions.includes(option.value)}
+                                          id={option.value}
+                                          onChange={(event, checked) =>
+                                            setState({
+                                              ...state,
+                                              permissions: checked
+                                                ? [...state.permissions, option.value]
+                                                : state.permissions.filter((value) => value !== option.value),
+                                            })
+                                          }
+                                        />
+                                      </Spacing>
+                                    ))}
+                                  </Card>
+                                </Column>
+                              ))}
+                            </Row>
+                          </Card>
+                        </Column>
+                      </Row>
+                    </Spacing>
+                  </Collapse>
+                ))}
+              </Column>
+            </FormRow>
+          </>
+        )}
+
+        <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+          <Separator />
+        </Spacing>
+
+        <FormRow>
+          <Column lg="12">
+            <Button
+              id="__CreatePoliciesPanelId"
+              variant="primary"
+              disabled={isCreatingPolicy || isUpdatingPolicy}
+              onClick={() => {
+                const params = {
+                  name: state.policyName,
+                  permissions: state.permissions,
+                  tmpl: state.isTemplate,
+                  tmplUseAsIs: state.usedAsIs,
+                  applicableOrgTypes: state.isTemplate ? applicableOrgTypes : [],
+                };
+
+                if (!selectedPolicyId) {
+                  createPolicy({
+                    variables: {
+                      createAccessPolicyInput: {
+                        orgSid,
+                        ...params,
+                      },
+                    },
+                    errorPolicy: 'all',
+                  });
+                } else {
+                  updatePolicy({
+                    variables: {
+                      updateAccessPolicyInput: {
+                        policySid: selectedPolicyId,
+                        ...params,
+                      },
+                    },
+                    errorPolicy: 'all',
+                  });
+                }
+
+                return null;
+              }}
+            >
+              {!selectedPolicyId ? 'Create' : 'Update'} policy
+            </Button>
+          </Column>
+        </FormRow>
+      </Spacing>
+    );
+  };
+
   return (
     <Panel
       id="CreatePoliciesPanel"
@@ -224,193 +403,7 @@ const CreatePoliciesPanel = ({
                 </Spacing>
               </>
             ) : (
-              <Spacing margin={{ top: 'normal' }}>
-                <Row bottom>
-                  <Column lg="6" sm="12">
-                    {policyForm.name?.visible && (
-                      <InputText
-                        id="PolicyInput__Name"
-                        label={policyForm.name?.label}
-                        minLength={policyForm.name?.min}
-                        maxLength={policyForm.name?.max}
-                        value={state.policyName}
-                        required={policyForm.name?.required}
-                        onChange={(event, newValue) => setState({ ...state, policyName: newValue })}
-                        errorMessage={createdPolicy?.createAccessPolicy?.response === 'FAIL' ? 'Required field' : ''}
-                      />
-                    )}
-                  </Column>
-
-                  <Column lg="6" sm="12">
-                    <Row>
-                      <Column lg="6">
-                        <Spacing margin={{ bottom: 'small' }}>
-                          {policyForm.tmpl?.visible && (
-                            <Checkbox
-                              label={policyForm.tmpl?.label}
-                              // required={policyForm.tmpl?.required}
-                              checked={state.isTemplate}
-                              onChange={(event, isTemplate) => setState({ ...state, isTemplate })}
-                            />
-                          )}
-                        </Spacing>
-                      </Column>
-                      {state.isTemplate && (
-                        <Column lg="6">
-                          <Spacing margin={{ bottom: 'small' }}>
-                            {policyForm.tmplUseAsIs?.visible && (
-                              <Checkbox
-                                label={policyForm.tmplUseAsIs?.label}
-                                // required={policyForm.tmplUseAsIs?.required}
-                                checked={state.usedAsIs}
-                                onChange={(event, usedAsIs) => setState({ ...state, usedAsIs })}
-                              />
-                            )}
-                          </Spacing>
-                        </Column>
-                      )}
-                    </Row>
-                  </Column>
-                </Row>
-
-                <Spacing margin={{ top: 'normal' }}>
-                  <Row>
-                    <Column lg="6">
-                      <UIInputTextReadOnly id='Organization' uiField={policyForm.organization}/>
-                    </Column>
-
-                    {policyForm.applicableOrgTypes?.visible && state.isTemplate && (
-                      <Column lg="6">
-                        <UIFormLabel id='applicableOrgTypes' uiField={policyForm.applicableOrgTypes}/>
-
-                        <Multiselect
-                          value={applicableOrgTypes}
-                          options={
-                            policyForm.options
-                              ?.find((opt) => opt.key === 'OrgType')
-                              ?.values.map(({ label, value }) => ({ key: value, text: label })) || []
-                          }
-                          onChange={(evt, item) => {
-                            const opts = item.selected
-                              ? [...applicableOrgTypes, item.key as string]
-                              : applicableOrgTypes.filter((key) => key !== item.key);
-
-                            setApplicableOrgTypes(opts);
-                          }}
-                        />
-                      </Column>
-                    )}
-                  </Row>
-                </Spacing>
-
-                {policyForm.permissions?.visible && (
-                  <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                    <Row>
-                      <Column lg="12">
-                        <Spacing margin={{ top: 'small' }}>
-                          <Text variant="bold">Permissions</Text>
-                        </Spacing>
-                      </Column>
-                    </Row>
-
-                    <Row>
-                      <Column lg="12">
-                        {permissions.map((group: any, groupIndex) => (
-                          <Collapse label={group.label} expanded key={groupIndex}>
-                            <Spacing padding={{ top: 'normal', bottom: 'normal' }}>
-                              <Row>
-                                <Column lg="12">
-                                  <Card elevation="none" spacing="none">
-                                    <Row top>
-                                      {group.permissions?.map((permission, pIndex) => (
-                                        <Column lg="3" key={`${groupIndex}-${pIndex}`}>
-                                          <Card elevation="none">
-                                            <Spacing margin={{ bottom: 'normal' }}>
-                                              <Label>{permission.label}</Label>
-                                            </Spacing>
-
-                                            {permission.options?.map((option, optIndex) => (
-                                              <Spacing
-                                                margin={{ top: 'small' }}
-                                                key={`${groupIndex}-${pIndex}-${optIndex}`}
-                                              >
-                                                <Checkbox
-                                                  label={option.label}
-                                                  checked={state.permissions.includes(option.value)}
-                                                  id={option.value}
-                                                  onChange={(event, checked) =>
-                                                    setState({
-                                                      ...state,
-                                                      permissions: checked
-                                                        ? [...state.permissions, option.value]
-                                                        : state.permissions.filter((value) => value !== option.value),
-                                                    })
-                                                  }
-                                                />
-                                              </Spacing>
-                                            ))}
-                                          </Card>
-                                        </Column>
-                                      ))}
-                                    </Row>
-                                  </Card>
-                                </Column>
-                              </Row>
-                            </Spacing>
-                          </Collapse>
-                        ))}
-                      </Column>
-                    </Row>
-                  </Spacing>
-                )}
-
-                <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                  <Separator />
-                </Spacing>
-
-                <Row>
-                  <Column lg="12">
-                    <Button
-                      id="__CreatePoliciesPanelId"
-                      variant="primary"
-                      disabled={isCreatingPolicy || isUpdatingPolicy}
-                      onClick={() => {
-                        const params = {
-                          name: state.policyName,
-                          permissions: state.permissions,
-                          tmpl: state.isTemplate,
-                          tmplUseAsIs: state.usedAsIs,
-                          applicableOrgTypes: state.isTemplate ? applicableOrgTypes : [],
-                        };
-
-                        if (!selectedPolicyId) {
-                          createPolicy({
-                            variables: {
-                              createAccessPolicyInput: {
-                                orgSid,
-                                ...params,
-                              },
-                            },
-                          });
-                        } else {
-                          updatePolicy({
-                            variables: {
-                              updateAccessPolicyInput: {
-                                policySid: selectedPolicyId,
-                                ...params,
-                              },
-                            },
-                          });
-                        }
-
-                        return null;
-                      }}
-                    >
-                      {!selectedPolicyId ? 'Create' : 'Update'} policy
-                    </Button>
-                  </Column>
-                </Row>
-              </Spacing>
+              renderBody()
             )}
           </Column>
         </Row>

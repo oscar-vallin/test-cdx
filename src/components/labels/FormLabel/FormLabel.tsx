@@ -1,7 +1,8 @@
-import { FontIcon, TooltipHost } from '@fluentui/react';
 import { ReactElement } from 'react';
 import { UiField } from 'src/data/services/graphql';
-import { LabelRow, Label, Required, ErrorIcon } from './FormLabel.styles';
+import { LabelRow, Label, Required } from './FormLabel.styles';
+import { InfoIcon } from 'src/components/badges/InfoIcon';
+import { ErrorIcon } from 'src/components/badges/ErrorIcon';
 
 const defaultProps = {
   required: false,
@@ -25,16 +26,8 @@ const FormLabel = ({ id, label, required, info, errorMessage, arial, ...props }:
         {label}
       </Label>
       {required && <Required id={id ? `${id}-Required` : undefined}>&nbsp;*</Required>}
-      {info && (
-        <TooltipHost id={id ? `${id}-Info` : undefined} content={info}>
-          &nbsp; <FontIcon id={id ? `${id}-Info-Icon` : undefined} iconName="Info" />
-        </TooltipHost>
-      )}
-      {errorMessage && (
-        <TooltipHost id={id ? `${id}-ErrorMsg` : undefined} content={errorMessage}>
-          &nbsp; <ErrorIcon id={id ? `${id}-Error-Icon` : undefined} iconName="Warning" />
-        </TooltipHost>
-      )}
+      <InfoIcon id={`${id}-Info`} tooltip={info}/>
+      <ErrorIcon id={`${id}-ErrorMsg`} errorMessage={errorMessage}/>
     </LabelRow>
   );
 };
@@ -59,4 +52,3 @@ const UIFormLabel = ({ id, uiField }: UIFormLabelType) => {
 };
 
 export { FormLabel, UIFormLabel };
-export default FormLabel;

@@ -12,12 +12,13 @@ import {
   DialogFooter,
   Spinner,
   SpinnerSize,
+  Link,
 } from '@fluentui/react';
 
 import { EmptyState } from 'src/containers/states';
 import { useNotification } from 'src/hooks/useNotification';
 import { LayoutAdmin } from 'src/layouts/LayoutAdmin';
-import { Button, Link } from 'src/components/buttons';
+import { Button } from 'src/components/buttons';
 import { Row, Column } from 'src/components/layouts';
 import { Separator } from 'src/components/separators/Separator';
 import { Text } from 'src/components/typography';

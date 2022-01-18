@@ -2,7 +2,7 @@ import { FontIcon, TooltipHost } from '@fluentui/react';
 
 type InfoIconType = {
   id: string;
-  tooltip?: string;
+  tooltip?: string | null;
   leftPad?: boolean;
 };
 

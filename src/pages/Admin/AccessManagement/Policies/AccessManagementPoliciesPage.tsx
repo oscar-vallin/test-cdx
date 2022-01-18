@@ -13,13 +13,14 @@ import {
   FontIcon,
   Spinner,
   SpinnerSize,
+  Link, IColumn,
 } from '@fluentui/react';
 
 import { EmptyState } from 'src/containers/states';
 import { useNotification } from 'src/hooks/useNotification';
 import { LayoutAdmin } from 'src/layouts/LayoutAdmin';
 import { Spacing } from 'src/components/spacings/Spacing';
-import { Button, Link } from 'src/components/buttons';
+import { Button } from 'src/components/buttons';
 import { Row, Column } from 'src/components/layouts';
 import { Separator } from 'src/components/separators/Separator';
 import { Text } from 'src/components/typography';
@@ -27,7 +28,7 @@ import { Text } from 'src/components/typography';
 import {
   useAccessPolicyTemplatesLazyQuery,
   useAccessPoliciesForOrgLazyQuery,
-  useDeleteAccessPolicyMutation,
+  useDeleteAccessPolicyMutation, AccessPolicyForm, AccessPolicy,
 } from 'src/data/services/graphql';
 
 import { useOrgSid } from 'src/hooks/useOrgSid';
@@ -59,8 +60,8 @@ const _AccessManagementPoliciesPage = () => {
   const Toast = useNotification();
 
   const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);
-  const [selectedPolicyId, setSelectedPolicyId] = useState(0);
-  const [selectedTemplateId, setSelectedTemplateId] = useState(0);
+  const [selectedPolicyId, setSelectedPolicyId] = useState<string | null>();
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>();
 
   const [policies, setPolicies] = useState<any[]>([]);
   const [fetchTemplatePolicies, { data: templatePolicies, loading: isLoadingTemplatePolicies }] = useQueryHandler(
@@ -77,42 +78,46 @@ const _AccessManagementPoliciesPage = () => {
 
   const hideConfirmation = () => {
     setIsConfirmationHidden(true);
-    setSelectedPolicyId(0);
+    setSelectedPolicyId(null);
   };
 
-  const onRenderItemColumn = (item, index, column) => {
-    switch (column.key) {
+  const onRenderItemColumn = (item?: AccessPolicy, index?: number, column?: IColumn) => {
+    const key = column?.key ?? '';
+    switch (key) {
       case 'name':
         return (
           <Link
-            id={`__${item.name.split(' ').join('_')}`}
+            id={`__${item?.name?.split(' ').join('_')}`}
             onClick={() => {
-              setSelectedPolicyId(item.sid);
+              setSelectedPolicyId(item?.sid);
               setIsPanelOpen(true);
             }}
           >
-            {item.name}
+            {item?.name}
           </Link>
         );
       case 'tmpl':
-        return <FontIcon iconName={item.tmpl ? 'CheckMark' : 'Cancel'} />;
+        return item?.tmpl ? <FontIcon iconName='Completed' /> : <span/>;
       case 'actions':
         return (
           <>
             &nbsp;
             <StyledCommandButton
-              id={`DeleteBtn__${item.name.split(' ').join('_')}`}
+              id={`DeleteBtn__${item?.name?.split(' ').join('_')}`}
               iconProps={{ iconName: 'Delete' }}
               onClick={() => {
-                setSelectedPolicyId(item.sid);
+                setSelectedPolicyId(item?.sid);
                 setIsConfirmationHidden(false);
               }}
             />
           </>
         );
       default:
-        return item[column.key];
+        if (item) {
+          return item[key];
+        }
     }
+    return <span/>;
   };
 
   useEffect(() => {
@@ -150,7 +155,7 @@ const _AccessManagementPoliciesPage = () => {
       Toast.success({ text: `Access policy "${name}" deleted successfully` });
 
       setPolicies(policies.filter(({ sid }) => sid !== selectedPolicyId));
-      setSelectedPolicyId(0);
+      setSelectedPolicyId(null);
     }
   }, [isRemovingPolicy, removeResponse]);
 
@@ -160,13 +165,13 @@ const _AccessManagementPoliciesPage = () => {
     }
   }, [data]);
 
-  const createPolicyObj = (policy) => ({
-    sid: policy.sid,
-    name: policy.name.value,
-    tmpl: policy.tmpl.value,
-    tmplUseAsIs: policy.tmplUseAsIs.value,
-    permissions: policy.permissions.value,
-    applicableOrgTypes: policy.applicableOrgTypes.value,
+  const createPolicyObj = (policy?: AccessPolicyForm) => ({
+    sid: policy?.sid,
+    name: policy?.name?.value,
+    tmpl: policy?.tmpl?.value,
+    tmplUseAsIs: policy?.tmplUseAsIs?.value,
+    permissions: policy?.permissions?.value,
+    applicableOrgTypes: policy?.applicableOrgTypes?.value,
   });
 
   return (
@@ -183,7 +188,7 @@ const _AccessManagementPoliciesPage = () => {
 
               <Column lg="6" right>
                 <Button
-                  split
+                  split={!isLoadingTemplatePolicies && templatePolicyMenu.length > 0}
                   id="CreatePolicyButton"
                   variant="primary"
                   onClick={() => {
@@ -270,8 +275,8 @@ const _AccessManagementPoliciesPage = () => {
           }}
           onDismiss={() => {
             setIsPanelOpen(false);
-            setSelectedPolicyId(0);
-            setSelectedTemplateId(0);
+            setSelectedPolicyId(null);
+            setSelectedTemplateId(null);
           }}
           selectedPolicyId={selectedPolicyId}
           selectedTemplateId={selectedTemplateId}

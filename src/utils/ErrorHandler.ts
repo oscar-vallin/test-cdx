@@ -15,17 +15,21 @@ export const ErrorHandler = () => {
         setTimeout(performUserLogout, 3000);
       } else {
         const { message } = error;
-        const { extensions = null } = error?.graphQLErrors?.shift() || {};
+        const { extensions = null } = error?.graphQLErrors?.shift() || null;
 
         if (extensions) {
           if (extensions.errorSubType === 'NEED_AUTH') {
             Toast.error({ text: message });
 
             setTimeout(performUserLogout, 3000);
+          } else {
+            Toast.error({ text: 'An internal server error has occurred. Please contact your administrator.' });
           }
         } else if (message === 'Failed to fetch') {
           ApplicationStore.setIsOffline(true);
-        } // TODO: else add generic "unknown error" to the application store
+        } else {
+          Toast.error({ text: 'An internal server error has occurred. Please contact your administrator.' });
+        }
       }
     }
   };
