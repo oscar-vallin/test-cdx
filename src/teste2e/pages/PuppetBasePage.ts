@@ -49,7 +49,7 @@ export default class PuppetBasePage {
   }
 
   async expectFieldError(selector: string) {
-    await this.waitForSelector(`${selector}_lbl-Error-Icon`).catch(() => {
+    await this.waitForSelector(`${selector}_lbl i[data-icon-name="Warning12"]`).catch(() => {
       console.log(`Field ${selector} was not flagged with an error`);
     });
   }
