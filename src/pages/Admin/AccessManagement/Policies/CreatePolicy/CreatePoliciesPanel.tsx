@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { ReactElement, useState, useEffect } from 'react';
+import React, { ReactElement, useState, useEffect } from 'react';
 
-import { SpinnerSize, Checkbox, Panel, PanelType, Spinner, Label } from '@fluentui/react';
+import { SpinnerSize, Checkbox, Panel, PanelType, Spinner, Label, Stack } from '@fluentui/react';
 import _ from 'lodash';
 
 import { useNotification } from 'src/hooks/useNotification';
@@ -27,6 +27,8 @@ import { UIInputTextReadOnly } from 'src/components/inputs/InputText/InputText';
 import { UIFormLabel } from 'src/components/labels/FormLabel';
 import { UIInputCheck } from 'src/components/inputs/InputCheck';
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
+import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
+import { PanelHeader, PanelTitle } from 'src/layouts/Panels/Panels.styles';
 
 const INITIAL_STATE = {
   policyName: '',
@@ -96,6 +98,8 @@ const CreatePoliciesPanel = ({
 }: CreatePoliciesPanelProps): ReactElement => {
   const { orgSid } = useOrgSid();
   const Toast = useNotification();
+  const [showDialog, setShowDialog] = useState(false);
+  const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [state, setState]: any = useState({ ...INITIAL_STATE });
   const [policyForm, setPolicyForm]: any = useState<AccessPolicyForm>();
   const [permissions, setPermissions] = useState([]);
@@ -125,6 +129,7 @@ const CreatePoliciesPanel = ({
       const { createAccessPolicy } = createdPolicy;
 
       if (createAccessPolicy?.response === GqOperationResponse.Fail) {
+        setPolicyForm(createAccessPolicy);
         const errorMsg =
           createAccessPolicy?.errMsg ?? createAccessPolicy?.response ?? 'Please check the highlighted fields and try again';
         Toast.error({ text: errorMsg });
@@ -141,7 +146,8 @@ const CreatePoliciesPanel = ({
       const { updateAccessPolicy } = updatedPolicy;
 
       if (updateAccessPolicy?.response === GqOperationResponse.Fail) {
-          const errorMsg =
+        setPolicyForm(updateAccessPolicy);
+        const errorMsg =
             updateAccessPolicy?.errMsg ?? updateAccessPolicy?.response ?? 'Please check the highlighted fields and try again';
           Toast.error({ text: errorMsg });
       } else if (updateAccessPolicy?.sid) {
@@ -167,7 +173,7 @@ const CreatePoliciesPanel = ({
         });
         setState({ ...INITIAL_STATE });
       } else {
-        setPolicyForm({});
+        setPolicyForm(null);
       }
     }
   }, [isOpen, selectedPolicyId, selectedTemplateId]);
@@ -208,6 +214,36 @@ const CreatePoliciesPanel = ({
     }
   }, [policy]);
 
+  const doClosePanel = () => {
+    setState({ ...INITIAL_STATE });
+
+    // Reset the form
+    setPolicyForm(null);
+    setShowDialog(false);
+    setUnsavedChanges(false);
+    onDismiss();
+  };
+
+  const onPanelClose = () => {
+    if (unsavedChanges) {
+      setShowDialog(true);
+    } else {
+      doClosePanel();
+    }
+  };
+
+  const renderPanelHeader = () => (
+    <PanelHeader>
+      <Column lg="12">
+        <Stack horizontal styles={{ root: { height: 44 } }}>
+          <PanelTitle id="__CreatePolicy_Panel_Title" variant="bold">
+            {!selectedPolicyId ? 'New access policy' : 'Update access policy'}
+          </PanelTitle>
+        </Stack>
+      </Column>
+    </PanelHeader>
+  );
+
   const renderBody = () => {
     return (
       <Spacing margin={{ top: 'normal' }}>
@@ -216,20 +252,30 @@ const CreatePoliciesPanel = ({
             <UIInputText id="PolicyInput__Name"
                          uiStringField={policyForm?.name}
                          value={state.policyName}
-                         onChange={(event, newValue) => setState({ ...state, policyName: newValue })}/>
+                         onChange={(event, newValue) => {
+                           setUnsavedChanges(true);
+                           setState({ ...state, policyName: newValue });
+                         }}/>
+
           </Column>
           <Column lg="3" sm="6">
             <UIInputCheck id="PolicyTmpl__Check"
                           uiField={policyForm?.tmpl}
                           value={state.isTemplate}
-                          onChange={(event, isTemplate) => setState({ ...state, isTemplate })}/>
+                          onChange={(event, isTemplate) => {
+                            setUnsavedChanges(true);
+                            setState({ ...state, isTemplate });
+                          }}/>
           </Column>
           <Column lg="3" sm="6">
             {state.isTemplate && (
               <UIInputCheck id="UseAsIs__Check"
                             uiField={policyForm?.tmplUseAsIs}
                             value={state.usedAsIs}
-                            onChange={(event, usedAsIs) => setState({ ...state, usedAsIs })}/>
+                            onChange={(event, usedAsIs) => {
+                              setUnsavedChanges(true);
+                              setState({ ...state, usedAsIs });
+                            }}/>
             )}
           </Column>
         </FormRow>
@@ -251,6 +297,8 @@ const CreatePoliciesPanel = ({
                       ?.values.map(({ label, value }) => ({ key: value, text: label })) || []
                   }
                   onChange={(evt, item) => {
+                    setUnsavedChanges(true);
+
                     const opts = item.selected
                       ? [...applicableOrgTypes, item.key as string]
                       : applicableOrgTypes.filter((key) => key !== item.key);
@@ -298,14 +346,16 @@ const CreatePoliciesPanel = ({
                                           label={option.label}
                                           checked={state.permissions.includes(option.value)}
                                           id={option.value}
-                                          onChange={(event, checked) =>
+                                          onChange={(event, checked) => {
+                                            setUnsavedChanges(true);
+
                                             setState({
                                               ...state,
                                               permissions: checked
                                                 ? [...state.permissions, option.value]
                                                 : state.permissions.filter((value) => value !== option.value),
-                                            })
-                                          }
+                                            });
+                                          }}
                                         />
                                       </Spacing>
                                     ))}
@@ -377,38 +427,53 @@ const CreatePoliciesPanel = ({
   };
 
   return (
-    <Panel
-      id="CreatePoliciesPanel"
-      closeButtonAriaLabel="Close"
-      type={PanelType.large}
-      headerText={!selectedPolicyId ? 'New access policy' : 'Update access policy'}
-      isOpen={isOpen}
-      onDismiss={() => {
-        setState({ ...INITIAL_STATE });
+    <>
+      <Panel
+        id="CreatePoliciesPanel"
+        closeButtonAriaLabel="Close"
+        type={PanelType.large}
+        headerText={!selectedPolicyId ? 'New access policy' : 'Update access policy'}
+        onRenderHeader={renderPanelHeader}
+        isOpen={isOpen}
+        onDismiss={onPanelClose}
+        onOuterClick={() => {}}
+      >
+        <>
+          <Row>
+            <Column lg="12">
+              {isLoadingForm || isLoadingPolicy ? (
+                <>
+                  <Spacing margin={{ top: 'normal', bottom: 'double' }}>
+                    <Separator />
+                  </Spacing>
 
-        onDismiss();
-      }}
-    >
-      <>
-        <Row>
-          <Column lg="12">
-            {isLoadingForm || isLoadingPolicy ? (
-              <>
-                <Spacing margin={{ top: 'normal', bottom: 'double' }}>
-                  <Separator />
-                </Spacing>
-
-                <Spacing>
-                  <Spinner size={SpinnerSize.large} label="Loading policy form" />
-                </Spacing>
-              </>
-            ) : (
-              renderBody()
-            )}
-          </Column>
-        </Row>
-      </>
-    </Panel>
+                  <Spacing>
+                    <Spinner size={SpinnerSize.large} label="Loading policy form" />
+                  </Spacing>
+                </>
+              ) : (
+                renderBody()
+              )}
+            </Column>
+          </Row>
+        </>
+      </Panel>
+      <DialogYesNo
+        open={showDialog}
+        highlightNo
+        title="You have unsaved changes"
+        message="You are about lose all changes made to this Access Policy. Are you sure you want to continue?"
+        onYes={() => {
+          setShowDialog(false);
+          doClosePanel();
+          return null;
+        }}
+        onClose={() => {
+          setShowDialog(false);
+          return null;
+        }}
+      />
+    </>
   );
 };
 

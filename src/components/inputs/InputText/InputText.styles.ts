@@ -8,7 +8,7 @@ type StyledTextFieldProps = {
 
 export const FieldValue = styled.div`
   padding: 0 0 5px 0;
-  font-size: 1em;
+  font-size: ${({ theme }) => theme.fontSizes.normal ?? '1em'};
   font-weight: normal;
 `;
 

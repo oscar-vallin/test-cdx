@@ -23,10 +23,8 @@ describe('Label Testing...', () => {
                  info="A common test word"/>
     );
     expect(wrapper.contains('Foo')).toEqual(true);
-    expect(wrapper.find('FontIcon')).toHaveLength(1);
-    expect(wrapper.find('FontIcon').get(0).props.iconName).toEqual('Info');
-    expect(wrapper.find('StyledTooltipHostBase')).toHaveLength(1);
-    expect(wrapper.find('StyledTooltipHostBase').get(0).props.content).toEqual('A common test word');
+    expect(wrapper.find('InfoIcon')).toHaveLength(1);
+    expect(wrapper.find('InfoIcon').get(0).props.tooltip).toEqual('A common test word');
   });
 
   it('Should render error icon', () => {
@@ -35,10 +33,8 @@ describe('Label Testing...', () => {
                  errorMessage="This is a required field"/>
     );
     expect(wrapper.contains('Foo')).toEqual(true);
-    expect(wrapper.find('Styled(FontIcon)')).toHaveLength(1);
-    expect(wrapper.find('Styled(FontIcon)').get(0).props.iconName).toEqual('Warning');
-    expect(wrapper.find('StyledTooltipHostBase')).toHaveLength(1);
-    expect(wrapper.find('StyledTooltipHostBase').get(0).props.content).toEqual('This is a required field');
+    expect(wrapper.find('ErrorIcon')).toHaveLength(1);
+    expect(wrapper.find('ErrorIcon').get(0).props.errorMessage).toEqual('This is a required field');
   });
 
   it('Should render the Required styles', () => {
