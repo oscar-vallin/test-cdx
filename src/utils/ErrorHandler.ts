@@ -15,7 +15,7 @@ export const ErrorHandler = () => {
         setTimeout(performUserLogout, 3000);
       } else {
         const { message } = error;
-        const { extensions = null } = error?.graphQLErrors?.shift() || null;
+        const { extensions = null } = error?.graphQLErrors?.shift() || {};
 
         if (extensions) {
           if (extensions.errorSubType === 'NEED_AUTH') {
