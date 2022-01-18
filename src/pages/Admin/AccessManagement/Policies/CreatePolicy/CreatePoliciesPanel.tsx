@@ -133,10 +133,10 @@ const CreatePoliciesPanel = ({
         const errorMsg =
           createAccessPolicy?.errMsg ?? createAccessPolicy?.response ?? 'Please check the highlighted fields and try again';
         Toast.error({ text: errorMsg });
-      } else if (createdPolicy?.sid) {
+      } else if (createAccessPolicy?.sid) {
         onCreatePolicy(createAccessPolicy);
         Toast.success({ text: 'Access Policy created successfully' });
-        onDismiss();
+        doClosePanel();
       }
     }
   }, [createdPolicy]);
@@ -153,7 +153,7 @@ const CreatePoliciesPanel = ({
       } else if (updateAccessPolicy?.sid) {
         onUpdatePolicy(updateAccessPolicy);
         Toast.success({ text: 'Access Policy updated successfully' });
-        onDismiss();
+        doClosePanel();
       }
     }
   }, [updatedPolicy]);
