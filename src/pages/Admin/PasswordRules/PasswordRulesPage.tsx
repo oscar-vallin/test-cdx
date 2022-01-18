@@ -1,44 +1,48 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, memo } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 
 import { Checkbox, Spinner, SpinnerSize } from '@fluentui/react';
 import { Card } from 'src/components/cards';
 import { EmptyState } from 'src/containers/states';
 import { Button } from 'src/components/buttons';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
-import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
 import { useNotification } from 'src/hooks/useNotification';
-import { Row, Column } from 'src/components/layouts';
+import { Column, Row } from 'src/components/layouts';
 import { PageTitle, Text } from 'src/components/typography';
 import { Separator } from 'src/components/separators/Separator';
 import { LayoutAdmin } from 'src/layouts/LayoutAdmin';
 import { Spacing } from 'src/components/spacings/Spacing';
 
-import { usePasswordRulesFormLazyQuery, useUpdatePasswordRulesMutation } from 'src/data/services/graphql';
+import {
+  PasswordComplexity,
+  PasswordRules,
+  usePasswordRulesFormLazyQuery,
+  useUpdatePasswordRulesMutation
+} from 'src/data/services/graphql';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { InfoIcon } from 'src/components/badges/InfoIcon';
-import { DEFAULT_FORM, FormOptions, FormInput, extractFormValues, replaceInputs } from './PasswordRulesFormUtils';
-import { StyledColumn, StyledDiv, StyledComboBox } from './PasswordRulesPage.styles';
+import { DEFAULT_FORM, extractFormValues, FormInput, FormOptions, replaceInputs } from './PasswordRulesFormUtils';
+import { StyledColumn, StyledComboBox, StyledDiv } from './PasswordRulesPage.styles';
+import { useOrgSid } from 'src/hooks/useOrgSid';
 
 const _PasswordRulesPage = () => {
-  // const history = useHistory();
-  const ActiveDomainStore = useActiveDomainStore();
+  const { orgSid } = useOrgSid();
   const Toast = useNotification();
   const [fetchPageForm, { data, loading: isLoadingForm }] = useQueryHandler(usePasswordRulesFormLazyQuery);
   const [updatePasswordRules, { data: updatedRules, loading: isUpdatingRules, error: updateError }] =
     useQueryHandler(useUpdatePasswordRulesMutation);
 
-  const [state, setState] = useState({ ...DEFAULT_FORM });
+  const [state, setState] = useState<PasswordRules>({ ...DEFAULT_FORM });
   const [form, setForm]: any = useState({});
   const handleError = ErrorHandler();
 
   useEffect(() => {
     fetchPageForm({
       variables: {
-        orgSid: ActiveDomainStore.domainOrg.current.orgSid,
+        orgSid: orgSid,
       },
     });
-  }, [ActiveDomainStore.domainOrg.current.orgSid]);
+  }, [orgSid]);
 
   useEffect(() => {
     if (data) {
@@ -69,15 +73,15 @@ const _PasswordRulesPage = () => {
 
   useEffect(() => {
     if (updatedRules) {
-      if (updatedRules.updatePasswordRules.response === 'FAIL') {
-        Toast.error({ text: 'Please, check the highlighted fields and try again' });
+      if (updatedRules.updatePasswordRules?.response === 'FAIL') {
+        const errorMessage = updatedRules.updatePasswordRules?.errMsg ?? 'Please, check the highlighted fields and try again';
+        Toast.error({ text: errorMessage });
       } else {
         Toast.success({ text: 'Password rules updated successfully' });
-
-        setForm({
-          passwordRulesForm: updatedRules.updatePasswordRules,
-        });
       }
+      setForm({
+        passwordRulesForm: updatedRules.updatePasswordRules,
+      });
     }
   }, [updatedRules]);
 
@@ -112,7 +116,7 @@ const _PasswordRulesPage = () => {
                       onClick={() => {
                         fetchPageForm({
                           variables: {
-                            orgSid: ActiveDomainStore.domainOrg.current.orgSid,
+                            orgSid: orgSid,
                           },
                         });
 
@@ -154,7 +158,7 @@ const _PasswordRulesPage = () => {
                           <StyledDiv>
                             <Checkbox
                               id="__checkBoxSomeMustBeMet"
-                              checked={state.someMustBeMet.enabled}
+                              checked={state.someMustBeMet?.enabled ?? false}
                               onChange={(event, checked) =>
                                 setState({
                                   ...state,
@@ -169,7 +173,7 @@ const _PasswordRulesPage = () => {
                               <strong>Must be a password of</strong>
 
                               <StyledComboBox
-                                selectedKey={state.someMustBeMet.minPasswordComplexity}
+                                selectedKey={state?.someMustBeMet?.minPasswordComplexity}
                                 options={
                                   form.passwordRulesForm?.options
                                     ?.find((opt) => opt.key === 'PasswordComplexity')
@@ -183,7 +187,7 @@ const _PasswordRulesPage = () => {
                                     ...state,
                                     someMustBeMet: {
                                       ...state.someMustBeMet,
-                                      minPasswordComplexity: option?.key?.toString() || '',
+                                      minPasswordComplexity: PasswordComplexity[option?.key?.toString() ?? 'ANY'] ,
                                     },
                                   });
                                 }}
@@ -203,7 +207,8 @@ const _PasswordRulesPage = () => {
                                 group="someMustBeMet"
                                 option="requiredNumPassingRules"
                                 state={state}
-                                value={state.someMustBeMet.requiredNumPassingRules}
+                                errorMessage={form?.passwordRulesForm?.someMustBeMet?.requiredNumPassingRules?.errMsg}
+                                value={state?.someMustBeMet?.requiredNumPassingRules}
                                 onChange={setState}
                               />
 
@@ -237,7 +242,7 @@ const _PasswordRulesPage = () => {
                             <StyledDiv>
                               <Checkbox
                                 id="__checkBoxAutoLock"
-                                checked={state.autoLockAccount}
+                                checked={state?.autoLockAccount ?? false}
                                 onChange={(event, checked) =>
                                   setState({
                                     ...state,
@@ -258,6 +263,7 @@ const _PasswordRulesPage = () => {
                                           key="__inputAutoLock"
                                           option="autoLockAfterFailedAttempts"
                                           state={state}
+                                          errorMessage={form?.passwordRulesForm?.autoLockAfterFailedAttempts?.errMsg}
                                           value={state.autoLockAfterFailedAttempts}
                                           onChange={setState}
                                         />
@@ -276,7 +282,7 @@ const _PasswordRulesPage = () => {
                             <StyledDiv>
                               <Checkbox
                                 id="__checkBoxAutoUnlock"
-                                checked={state.autoUnlockAccount}
+                                checked={state?.autoUnlockAccount ?? false}
                                 onChange={(event, checked) =>
                                   setState({
                                     ...state,
@@ -299,6 +305,7 @@ const _PasswordRulesPage = () => {
                                           key="__inputAutoUnLock"
                                           option="autoUnlockAccountDelayMinutes"
                                           state={state}
+                                          errorMessage={form?.passwordRulesForm?.autoUnlockAccountDelayMinutes?.errMsg}
                                           value={state.autoUnlockAccountDelayMinutes}
                                           onChange={setState}
                                         />
@@ -323,9 +330,10 @@ const _PasswordRulesPage = () => {
                           updatePasswordRules({
                             variables: {
                               passwordRulesInput: {
-                                orgSid: ActiveDomainStore.domainOrg.current.orgSid,
                                 ...state,
+                                orgSid: orgSid,
                               },
+                              errorPolicy: 'all'
                             },
                           }).catch(() => {
                             Toast.error({

@@ -1,9 +1,11 @@
-import { MaskedTextField, Checkbox } from '@fluentui/react';
-import { Row, Column } from 'src/components/layouts';
+import { Checkbox, MaskedTextField } from '@fluentui/react';
+import { Column, Row } from 'src/components/layouts';
 import { Text } from 'src/components/typography';
 import { StyledDiv } from './PasswordRulesPage.styles';
+import { PasswordComplexity, PasswordRules } from 'src/data/services/graphql';
 
-export const DEFAULT_FORM = {
+export const DEFAULT_FORM: PasswordRules = {
+  orgSid: '',
   autoLockAccount: false,
   autoLockAfterFailedAttempts: 0,
   autoUnlockAccount: false,
@@ -37,7 +39,7 @@ export const DEFAULT_FORM = {
     minLength: 10,
     minLowerCaseLetters: 1,
     minNumericDigits: 1,
-    minPasswordComplexity: 'STRONG',
+    minPasswordComplexity: PasswordComplexity.Strong,
     minPasswordHistoryVariations: 1,
     minSpecialCharacters: 1,
     minUpperCaseLetters: 1,
@@ -54,7 +56,7 @@ export const DEFAULT_FORM = {
     mustNotRepeatCharacters: false,
     mustNotReusePasswords: false,
     requiredNumPassingRules: 3,
-  },
+  }
 };
 
 type FormInputProps = {
@@ -63,10 +65,11 @@ type FormInputProps = {
   state?: any;
   group?: any;
   option?: any;
+  errorMessage?: string;
   onChange?: any;
 };
 
-export const FormInput = ({ id, value, state, group, option, onChange }: FormInputProps) => (
+export const FormInput = ({ id, value, state, group, option, errorMessage, onChange }: FormInputProps) => (
   <MaskedTextField
     maskFormat={{
       '*': /[0-9_]/,
@@ -75,14 +78,15 @@ export const FormInput = ({ id, value, state, group, option, onChange }: FormInp
     maskChar=""
     id={id}
     value={value?.toString()}
-    onChange={({ target }: any) =>
+    errorMessage={errorMessage}
+    onChange={({ target }: any) => {
       onChange({
         ...state,
         ...(group
           ? { [group]: { ...state[group], [option]: target.value.toString() } }
           : { [option]: target.value.toString() }),
       })
-    }
+    }}
   />
 );
 
@@ -161,9 +165,10 @@ export const FormOptions = ({ form = {}, group = '_', state, onChange }) => {
                       <FormInput
                         id={`${baseInputId}MinLength`}
                         key={`${baseInputId}MinLength`}
-                        group="mustAlwaysBeMet"
+                        group={group}
                         option="minLength"
                         state={state}
+                        errorMessage={form[group]?.minLength?.errMsg}
                         value={state[group].minLength}
                         onChange={onChange}
                       />
@@ -172,9 +177,10 @@ export const FormOptions = ({ form = {}, group = '_', state, onChange }) => {
                       <FormInput
                         id={`${baseInputId}MaxLength`}
                         key={`${baseInputId}MaxLength`}
-                        group="mustAlwaysBeMet"
+                        group={group}
                         option="maxLength"
                         state={state}
+                        errorMessage={form[group]?.maxLength?.errMsg}
                         value={state[group].maxLength}
                         onChange={onChange}
                       />
@@ -207,9 +213,10 @@ export const FormOptions = ({ form = {}, group = '_', state, onChange }) => {
                       <FormInput
                         id={`${baseInputId}Uppercase`}
                         key={`${baseInputId}Uppercase`}
-                        group="mustAlwaysBeMet"
+                        group={group}
                         option="minUpperCaseLetters"
                         state={state}
+                        errorMessage={form[group]?.minUpperCaseLetters?.errMsg}
                         value={state[group].minUpperCaseLetters}
                         onChange={onChange}
                       />
@@ -242,9 +249,10 @@ export const FormOptions = ({ form = {}, group = '_', state, onChange }) => {
                       <FormInput
                         id={`${baseInputId}Lowercase`}
                         key={`${baseInputId}Lowercase`}
-                        group="mustAlwaysBeMet"
+                        group={group}
                         option="minLowerCaseLetters"
                         state={state}
+                        errorMessage={form[group]?.minLowerCaseLetters?.errMsg}
                         value={state[group].minLowerCaseLetters}
                         onChange={onChange}
                       />
@@ -277,9 +285,10 @@ export const FormOptions = ({ form = {}, group = '_', state, onChange }) => {
                       <FormInput
                         id={`${baseInputId}Digit`}
                         key={`${baseInputId}Digit`}
-                        group="mustAlwaysBeMet"
+                        group={group}
                         option="minNumericDigits"
                         state={state}
+                        errorMessage={form[group]?.minNumericDigits?.errMsg}
                         value={state[group].minNumericDigits}
                         onChange={onChange}
                       />
@@ -312,9 +321,10 @@ export const FormOptions = ({ form = {}, group = '_', state, onChange }) => {
                       <FormInput
                         id={`${baseInputId}SpecialChars`}
                         key={`${baseInputId}SpecialChars`}
-                        group="mustAlwaysBeMet"
+                        group={group}
                         option="minSpecialCharacters"
                         state={state}
+                        errorMessage={form[group]?.minSpecialCharacters?.errMsg}
                         value={state[group].minSpecialCharacters}
                         onChange={onChange}
                       />
@@ -391,9 +401,10 @@ export const FormOptions = ({ form = {}, group = '_', state, onChange }) => {
                       <FormInput
                         id={`${baseInputId}RepeatedChars`}
                         key={`${baseInputId}RepeatedChars`}
-                        group="mustAlwaysBeMet"
+                        group={group}
                         option="maxAllowedRepeatedChars"
                         state={state}
+                        errorMessage={form[group]?.maxAllowedRepeatedChars?.errMsg}
                         value={state[group].maxAllowedRepeatedChars}
                         onChange={onChange}
                       />
@@ -426,9 +437,10 @@ export const FormOptions = ({ form = {}, group = '_', state, onChange }) => {
                       <FormInput
                         id={`${baseInputId}Variations`}
                         key={`${baseInputId}Variations`}
-                        group="mustAlwaysBeMet"
+                        group={group}
                         option="minPasswordHistoryVariations"
                         state={state}
+                        errorMessage={form[group]?.minPasswordHistoryVariations?.errMsg}
                         value={state[group].minPasswordHistoryVariations}
                         onChange={onChange}
                       />

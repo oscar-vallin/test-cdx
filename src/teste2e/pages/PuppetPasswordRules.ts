@@ -38,6 +38,6 @@ export default class PuppetActiveOrgs extends PuppetBasePage {
     await this.page.waitForSelector(this.messageContainer);
     const errorMessage = await this.page.$eval(this.messageContainer, (e) => e.textContent);
 
-    expect(errorMessage).toEqual('An error occurred while updating the password rules. Please, try again.');
+    expect(errorMessage).toEqual('Please correct the highlighted errors');
   }
 }
