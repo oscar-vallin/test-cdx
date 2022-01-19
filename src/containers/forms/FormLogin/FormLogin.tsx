@@ -124,7 +124,12 @@ const FormLogin = ({ id }: FormLoginProps): ReactElement => {
                       block={false}
                       text=""
                       onClick={() => {
-                        return isValidEmail ? performUserAuthentication(values) : performUserIdVerification(values);
+                        if (isValidEmail) {
+                          performUserAuthentication(values).then();
+                        } else {
+                          performUserIdVerification(values);
+                        }
+                        return null;
                       }}
                     >
                       {state.loading ? <Spinner /> : !isValidEmail ? 'Next' : 'Login'}

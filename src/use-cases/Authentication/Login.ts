@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useSessionStore } from 'src/store/SessionStore';
 import { useBeginLoginMutation, usePasswordLoginMutation } from 'src/data/services/graphql';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
-import { useQueryHandler } from 'src/hooks/useQueryHandler';
+import { useCSRFToken } from 'src/hooks/useCSRFToken';
 
 type LoginState = {
   step: string;
@@ -24,23 +24,29 @@ const INITIAL_STATE: LoginState = {
 export const useLoginUseCase = () => {
   const SessionStore = useSessionStore();
   const ActiveDomainStore = useActiveDomainStore();
+  const { callCSRFController } = useCSRFToken();
 
   const [state, setState] = useState({ ...INITIAL_STATE });
+  const [userId, setUserId] = useState<string>();
 
   const [verifyUserId, { data: verifiedUserId, loading: isVerifyingUserId, error: userIdVerificationError }] =
-    useQueryHandler(useBeginLoginMutation);
+    useBeginLoginMutation();
 
   const [
     verifyUserCredentials,
     { data: userSession, loading: isVerifyingCredentials, error: credentialsVerificationError },
-  ] = useQueryHandler(usePasswordLoginMutation);
+  ] = usePasswordLoginMutation();
 
-  const performUserIdVerification = ({ userId }) =>
+  const performUserIdVerification = ({ userId }) => {
+    setUserId(userId);
+
     verifyUserId({
       variables: {
         userId,
       },
+      errorPolicy: 'all'
     }).catch(() => null);
+  }
 
   const performUserAuthentication = ({ userId, password }) =>
     verifyUserCredentials({
@@ -48,6 +54,7 @@ export const useLoginUseCase = () => {
         userId,
         password,
       },
+      errorPolicy: 'all'
     }).catch(() => null);
 
   const returnToInitialStep = () => {
@@ -60,15 +67,24 @@ export const useLoginUseCase = () => {
 
   useEffect(() => {
     if (userIdVerificationError) {
-      switch (userIdVerificationError.message) {
-        default:
-          setState({
-            ...state,
-            loading: false,
-            error: 'Please provide a valid email address to proceed',
-            reset: false,
-          });
-          break;
+      console.log(userIdVerificationError);
+      const networkError = userIdVerificationError.networkError
+      if (networkError && ('statusCode' in networkError) && (networkError.statusCode === 403)) {
+        console.log('It\'s a 403')
+        console.log(networkError);
+        // This means the CSRF Token has expired and we need to retrieve it
+        callCSRFController();
+        // retry
+        performUserIdVerification({ userId });
+      } else {
+        console.log('Generic issue')
+        setState({
+          ...state,
+          step: 'USER_ID',
+          loading: false,
+          error: 'Please provide a valid email address to proceed',
+          reset: false,
+        });
       }
     }
   }, [userIdVerificationError]);
@@ -80,7 +96,7 @@ export const useLoginUseCase = () => {
   }, [credentialsVerificationError]);
 
   useEffect(() => {
-    if (verifiedUserId) {
+    if (verifiedUserId && verifiedUserId.beginLogin?.step === 'PASSWORD') {
       setState({ step: 'PASSWORD', data: verifiedUserId.beginLogin, loading: false, error: null, reset: false });
     }
   }, [verifiedUserId]);
