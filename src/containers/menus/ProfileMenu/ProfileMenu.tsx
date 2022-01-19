@@ -1,11 +1,11 @@
 import { ReactElement } from 'react';
-import { UserToken } from '../../../components/images/UserToken';
+import { UserToken } from 'src/components/images/UserToken';
 
 import { StyledBox } from './ProfileMenu.styles';
-import { ButtonContextual } from '../../../components/buttons/ButtonContextual';
+import { ButtonContextual } from 'src/components/buttons/ButtonContextual';
 
-import { useLogoutUseCase } from '../../../use-cases/Authentication';
-import { useSessionStore } from '../../../store/SessionStore';
+import { useLogoutUseCase } from 'src/use-cases/Authentication';
+import { useSessionStore } from 'src/store/SessionStore';
 
 const defaultProps = {
   id: '',
