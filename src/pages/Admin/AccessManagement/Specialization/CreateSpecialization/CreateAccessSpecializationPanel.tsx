@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { ReactElement, useState, useEffect } from 'react';
+import React, { ReactElement, useState, useEffect } from 'react';
 
 import { SpinnerSize, Panel, PanelType, Spinner } from '@fluentui/react';
 import _ from 'lodash';
@@ -11,7 +11,7 @@ import { Button } from 'src/components/buttons';
 import { Row, Column } from 'src/components/layouts';
 import { Separator } from 'src/components/separators/Separator';
 import { Text } from 'src/components/typography';
-import { InputText } from 'src/components/inputs/InputText';
+import { UIInputText } from 'src/components/inputs/InputText';
 import { Collapse } from 'src/components/collapses/Collapse';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 
@@ -26,12 +26,21 @@ import {
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { TagPicker } from 'src/components/pickers/TagPicker';
 import { UIInputTextReadOnly } from 'src/components/inputs/InputText/InputText';
+import { FormRow } from 'src/components/layouts/Row/Row.styles';
+import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
+
+type SpecializationGroup = {
+  label: string;
+  labelKey: string;
+  valueKey: string;
+  options: any[];
+}
 
 const INITIAL_STATE = {
   name: '',
 };
 
-const groupSpecializations: any = (opts) => {
+const groupSpecializations = (opts): SpecializationGroup[] => {
   const groups = _.groupBy(opts, ({ orgSids }) => orgSids.label);
   const [orgKey, vendorKey] = Object.keys(groups);
 
@@ -71,8 +80,10 @@ const CreateAccessSpecializationPanel = ({
 
   const { orgSid } = useOrgSid();
   const [state, setState]: any = useState({ ...INITIAL_STATE });
+  const [showDialog, setShowDialog] = useState(false);
+  const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [accessForm, setAccessForm]: any = useState<AccessSpecializationForm>();
-  const [accessFilters, setAccessFilters] = useState([]);
+  const [accessFilters, setAccessFilters] = useState<SpecializationGroup[]>([]);
   const [specializations, setSpecializations] = useState({});
   const [currentItem, setCurrentItem]: any = useState(null);
 
@@ -85,11 +96,11 @@ const CreateAccessSpecializationPanel = ({
   const [createSpecialization, { data: createdSpecialization, loading: isCreatingSpecialization }] = useQueryHandler(
     useCreateAccessSpecializationMutation
   );
-  const [updateSpecialization, { data: updatedSpecialization, loading: isUpdatingSpecialization }] = useQueryHandler(
+  const [updateSpecialization, { data: updatedSpecialization }] = useQueryHandler(
     useUpdateAccessSpecializationMutation
   );
-  const [fetchVendors, { data: vendors, loading: isFetchingVendors }] = useQueryHandler(useVendorQuickSearchLazyQuery);
-  const [fetchOrgs, { data: orgs, loading: isFetchingOrgs }] = useQueryHandler(useOrganizationQuickSearchLazyQuery);
+  const [fetchVendors, { data: vendors }] = useQueryHandler(useVendorQuickSearchLazyQuery);
+  const [fetchOrgs, { data: orgs }] = useQueryHandler(useOrganizationQuickSearchLazyQuery);
 
   useEffect(() => {
     if (isOpen && selectedAccessId > 0) {
@@ -103,29 +114,35 @@ const CreateAccessSpecializationPanel = ({
 
   useEffect(() => {
     if (createdSpecialization) {
-      const { createAccessSpecialization } = createdSpecialization;
+      const {createAccessSpecialization} = createdSpecialization;
 
       if (createAccessSpecialization.response === 'FAIL') {
-        Toast.error({ text: 'Please, check the highlighted fields and try again' });
+        setAccessForm(createAccessSpecialization);
+        const errorMsg = createAccessSpecialization.errMsg ?? 'Please, check the highlighted fields and try again';
+        Toast.error({text: errorMsg});
       } else {
         onCreateSpecialization(createAccessSpecialization);
-        Toast.success({ text: 'Access specialization created successfully' });
+        Toast.success({text: 'Access specialization created successfully'});
         onDismiss();
       }
     }
+  }, [createdSpecialization]);
 
+  useEffect(() => {
     if (updatedSpecialization) {
       const { updateAccessSpecialization } = updatedSpecialization;
 
       if (updateAccessSpecialization?.response && updateAccessSpecialization?.response === 'FAIL') {
-        Toast.error({ text: 'Please check the highlighted fields and try again' });
+        setAccessForm(updateAccessSpecialization);
+        const errorMsg = updateAccessSpecialization.errMsg ?? 'Please, check the highlighted fields and try again';
+        Toast.error({text: errorMsg});
       } else {
         onUpdateSpecialization(updateAccessSpecialization);
         Toast.success({ text: 'Access specialization updated successfully' });
         onDismiss();
       }
     }
-  }, [createdSpecialization, updatedSpecialization]);
+  }, [updatedSpecialization]);
 
   useEffect(() => {
     if (isOpen) {
@@ -174,202 +191,233 @@ const CreateAccessSpecializationPanel = ({
     }
   }, [specialization]);
 
-  return (
-    <Panel
-      id="create-specialization-panel"
-      closeButtonAriaLabel="Close"
-      type={PanelType.large}
-      headerText={!state.policySid ? 'New Access Specialization' : 'Update Access Specialization'}
-      isOpen={isOpen}
-      onDismiss={() => {
-        setState({ ...INITIAL_STATE });
+  const onPanelClose = () => {
+    if (unsavedChanges) {
+      setShowDialog(true);
+    } else {
+      doClosePanel();
+    }
+  };
 
-        onDismiss();
-      }}
-    >
+  const doClosePanel = () => {
+    setState({ ...INITIAL_STATE });
+
+    // Reset the form
+    setAccessForm(null);
+    setShowDialog(false);
+    setUnsavedChanges(false);
+    onDismiss();
+  };
+
+  const renderBody = () => {
+    return (
       <>
+        <FormRow>
+          <Column lg="12">
+            <UIInputText id="__Specialization_Name"
+                         uiStringField={accessForm?.name}
+                         value={state.name}
+                         onChange={(event, newValue) => {
+                           setUnsavedChanges(true);
+                           setState({ ...state, name: newValue });
+                         }}
+                         />
+          </Column>
+        </FormRow>
+
+        <FormRow>
+          <Column lg="12">
+            <UIInputTextReadOnly id='__Organization' uiField={accessForm.organization}/>
+          </Column>
+        </FormRow>
+
+        <FormRow>
+          <Column lg="12">
+            <Spacing margin={{ top: 'small' }}>
+              <Text variant="bold">Specializations</Text>
+            </Spacing>
+          </Column>
+        </FormRow>
+
+        <FormRow>
+          <Column lg="12">
+            {accessFilters.map((group: any, groupIndex) => (
+              <Collapse label={group.label} expanded key={groupIndex}>
+                <Card elevation="none" spacing="none" key={`card_${groupIndex}`}>
+                  <Spacing padding="normal" key={`space_${groupIndex}`}>
+                    <Row>
+                      <Column lg="12">
+                        <Spacing margin={{ bottom: 'normal' }}>
+                          <Row>
+                            <Column lg="3">
+                              <Text variant="bold">{group.labelKey}</Text>
+                            </Column>
+                            <Column lg="9">
+                              <Text variant="bold">{group.valueKey}</Text>
+                            </Column>
+                          </Row>
+                        </Spacing>
+
+                        {group.options?.map((option, optIndex) => (
+                          <Spacing margin={{ top: 'small', bottom: 'small' }} key={`group_${optIndex}`}>
+                            <Row center>
+                              <Column lg="3" key={`${groupIndex}-${optIndex}-left`}>
+                                {option.label}
+                              </Column>
+
+                              <Column lg="9" key={`${groupIndex}-${optIndex}-right`}>
+                                <TagPicker
+                                  disabled={false}
+                                  pickerProps
+                                  debounce={500}
+                                  onBlur={() => null}
+                                  onFocus={() => null}
+                                  required={false}
+                                  id="__CreateAccessSpecializationPanelId"
+                                  apiQuery={(text) => {
+                                    const isVendor = option.orgSids.query === 'vendorQuickSearch';
+
+                                    const data = {
+                                      variables: {
+                                        searchText: text,
+                                        ...(!isVendor ? { orgOwnerSid: orgSid } : {}),
+                                      },
+                                    };
+
+                                    option.orgSids.query === 'vendorQuickSearch'
+                                      ? fetchVendors(data)
+                                      : fetchOrgs(data);
+
+                                    return null;
+                                  }}
+                                  options={parseToPickerOpts(
+                                    option.orgSids.query === 'vendorQuickSearch'
+                                      ? vendors?.vendorQuickSearch
+                                      : orgs?.organizationQuickSearch
+                                  )}
+                                  value={specializations[option.permission]}
+                                  onChange={(items) => {
+                                    setUnsavedChanges(true);
+
+                                    const { permission } = option;
+
+                                    setCurrentItem({
+                                      [permission]: items,
+                                    });
+
+                                    return null;
+                                  }}
+                                />
+                              </Column>
+                            </Row>
+                          </Spacing>
+                        ))}
+                      </Column>
+                    </Row>
+                  </Spacing>
+                </Card>
+              </Collapse>
+            ))}
+          </Column>
+        </FormRow>
+
+        <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+          <Separator />
+        </Spacing>
+
         <Row>
           <Column lg="12">
-            {!accessForm || isLoadingForm || isLoadingSpecialization ? (
-              <>
-                <Spacing margin={{ top: 'normal', bottom: 'double' }}>
-                  <Separator />
-                </Spacing>
+            <Button
+              id="__CreateAccessSpecializationBtnId"
+              variant="primary"
+              disabled={isCreatingSpecialization}
+              onClick={() => {
+                const params = {
+                  name: state.name,
+                  filters: Object.keys(specializations)
+                    .map((permission) => ({
+                      permission,
+                      orgSids: specializations[permission].map((item) => item.key),
+                    }))
+                    .reduce((arr, item): any => [...arr, item], []),
+                };
 
-                <Spacing>
-                  <Spinner size={SpinnerSize.large} label="Loading policy form" />
-                </Spacing>
-              </>
-            ) : (
-              <Spacing margin={{ top: 'normal' }}>
-                <Row bottom>
-                  <Column lg="12">
-                    {accessForm.name?.visible && (
-                      <InputText
-                        id="specialization-name"
-                        label={accessForm.name?.label}
-                        minLength={accessForm.name?.min}
-                        maxLength={accessForm.name?.max}
-                        value={state.name}
-                        required={accessForm.name?.required}
-                        onChange={(event, newValue) => setState({ ...state, name: newValue })}
-                      />
-                    )}
-                  </Column>
-                </Row>
+                if (!selectedAccessId) {
+                  createSpecialization({
+                    variables: {
+                      createAccessSpecializationInput: {
+                        orgSid,
+                        ...params,
+                      },
+                    },
+                  });
+                } else {
+                  updateSpecialization({
+                    variables: {
+                      updateAccessSpecializationInput: {
+                        sid: selectedAccessId,
+                        ...params,
+                      },
+                    },
+                  });
+                }
 
-                <Spacing margin={{ top: 'normal' }}>
-                  <Row>
-                    <Column lg="12">
-                      <UIInputTextReadOnly id='__Organization' uiField={accessForm.organization}/>
-                    </Column>
-                  </Row>
-                </Spacing>
-
-                <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                  <Row>
-                    <Column lg="12">
-                      <Spacing margin={{ top: 'small' }}>
-                        <Text variant="bold">Specializations</Text>
-                      </Spacing>
-                    </Column>
-                  </Row>
-
-                  <Row>
-                    <Column lg="12">
-                      {accessFilters.map((group: any, groupIndex) => (
-                        <Collapse label={group.label} expanded key={groupIndex}>
-                          <Card elevation="none" spacing="none">
-                            <Spacing padding="normal">
-                              <Row>
-                                <Column lg="12">
-                                  <Spacing margin={{ bottom: 'normal' }}>
-                                    <Row>
-                                      <Column lg="3">
-                                        <Text variant="bold">{group.labelKey}</Text>
-                                      </Column>
-                                      <Column lg="9">
-                                        <Text variant="bold">{group.valueKey}</Text>
-                                      </Column>
-                                    </Row>
-                                  </Spacing>
-
-                                  {group.options?.map((option, optIndex) => (
-                                    <Spacing margin={{ top: 'small', bottom: 'small' }}>
-                                      <Row center>
-                                        <Column lg="3" key={`${groupIndex}-${optIndex}-left`}>
-                                          {option.label}
-                                        </Column>
-
-                                        <Column lg="9" key={`${groupIndex}-${optIndex}-right`}>
-                                          <TagPicker
-                                            disabled={false}
-                                            pickerProps
-                                            debounce={500}
-                                            onBlur={() => null}
-                                            onFocus={() => null}
-                                            required={false}
-                                            id="__CreateAccessSpecializationPanelId"
-                                            apiQuery={(text) => {
-                                              const isVendor = option.orgSids.query === 'vendorQuickSearch';
-
-                                              const data = {
-                                                variables: {
-                                                  searchText: text,
-                                                  ...(!isVendor ? { orgOwnerSid: orgSid } : {}),
-                                                },
-                                              };
-
-                                              option.orgSids.query === 'vendorQuickSearch'
-                                                ? fetchVendors(data)
-                                                : fetchOrgs(data);
-
-                                              return null;
-                                            }}
-                                            options={parseToPickerOpts(
-                                              option.orgSids.query === 'vendorQuickSearch'
-                                                ? vendors?.vendorQuickSearch
-                                                : orgs?.organizationQuickSearch
-                                            )}
-                                            value={specializations[option.permission]}
-                                            onChange={(items) => {
-                                              const { permission } = option;
-
-                                              setCurrentItem({
-                                                [permission]: items,
-                                              });
-
-                                              return null;
-                                            }}
-                                          />
-                                        </Column>
-                                      </Row>
-                                    </Spacing>
-                                  ))}
-                                </Column>
-                              </Row>
-                            </Spacing>
-                          </Card>
-                        </Collapse>
-                      ))}
-                    </Column>
-                  </Row>
-                </Spacing>
-
-                <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                  <Separator />
-                </Spacing>
-
-                <Row>
-                  <Column lg="12">
-                    <Button
-                      id="__CreateAccessSpecializationBtnId"
-                      variant="primary"
-                      disabled={isCreatingSpecialization}
-                      onClick={() => {
-                        const params = {
-                          name: state.name,
-                          filters: Object.keys(specializations)
-                            .map((permission) => ({
-                              permission,
-                              orgSids: specializations[permission].map((item) => item.key),
-                            }))
-                            .reduce((arr, item): any => [...arr, item], []),
-                        };
-
-                        if (!selectedAccessId) {
-                          createSpecialization({
-                            variables: {
-                              createAccessSpecializationInput: {
-                                orgSid,
-                                ...params,
-                              },
-                            },
-                          });
-                        } else {
-                          updateSpecialization({
-                            variables: {
-                              updateAccessSpecializationInput: {
-                                sid: selectedAccessId,
-                                ...params,
-                              },
-                            },
-                          });
-                        }
-
-                        return null;
-                      }}
-                    >
-                      {!selectedAccessId ? 'Create' : 'Update'} specialization
-                    </Button>
-                  </Column>
-                </Row>
-              </Spacing>
-            )}
+                return null;
+              }}
+            >
+              {!selectedAccessId ? 'Create' : 'Update'} specialization
+            </Button>
           </Column>
         </Row>
       </>
-    </Panel>
+    );
+  }
+
+  return (
+    <>
+      <Panel
+        id="create-specialization-panel"
+        closeButtonAriaLabel="Close"
+        type={PanelType.large}
+        headerText={!state.policySid ? 'New Access Specialization' : 'Update Access Specialization'}
+        isOpen={isOpen}
+        onDismiss={onPanelClose}
+        onOuterClick={() => {}}
+      >
+        <>
+          <Row>
+            <Column lg="12">
+              {!accessForm || isLoadingForm || isLoadingSpecialization ? (
+                <>
+                  <Spacing margin={{ top: 'normal', bottom: 'double' }}>
+                    <Separator />
+                  </Spacing>
+
+                  <Spacing>
+                    <Spinner size={SpinnerSize.large} label="Loading policy form" />
+                  </Spacing>
+                </>
+              ) : renderBody() }
+            </Column>
+          </Row>
+        </>
+      </Panel>
+      <DialogYesNo
+        open={showDialog}
+        highlightNo
+        title="You have unsaved changes"
+        message="You are about lose all changes made to this Access Specialization. Are you sure you want to continue?"
+        onYes={() => {
+          setShowDialog(false);
+          doClosePanel();
+          return null;
+        }}
+        onClose={() => {
+          setShowDialog(false);
+          return null;
+        }}
+      />
+    </>
   );
 };
 

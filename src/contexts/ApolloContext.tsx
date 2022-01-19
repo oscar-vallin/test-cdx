@@ -65,6 +65,12 @@ export const ApolloContextProvider = ({ bypassLoading, children }: ApolloContext
       watchQuery: {
         fetchPolicy: 'no-cache',
       },
+      query: {
+        errorPolicy: 'all'
+      },
+      mutate: {
+        errorPolicy: 'all'
+      }
     },
   });
 
