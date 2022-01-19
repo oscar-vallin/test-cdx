@@ -67,17 +67,13 @@ export const useLoginUseCase = () => {
 
   useEffect(() => {
     if (userIdVerificationError) {
-      console.log(userIdVerificationError);
       const networkError = userIdVerificationError.networkError
       if (networkError && ('statusCode' in networkError) && (networkError.statusCode === 403)) {
-        console.log('It\'s a 403')
-        console.log(networkError);
         // This means the CSRF Token has expired and we need to retrieve it
         callCSRFController();
         // retry
         performUserIdVerification({ userId });
       } else {
-        console.log('Generic issue')
         setState({
           ...state,
           step: 'USER_ID',
