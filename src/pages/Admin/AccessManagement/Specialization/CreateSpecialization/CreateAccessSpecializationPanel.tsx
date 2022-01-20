@@ -275,12 +275,11 @@ const CreateAccessSpecializationPanel = ({
                                   required={false}
                                   id="__CreateAccessSpecializationPanelId"
                                   apiQuery={(text) => {
-                                    const isVendor = option.orgSids.query === 'vendorQuickSearch';
 
                                     const data = {
                                       variables: {
+                                        orgOwnerSid: orgSid,
                                         searchText: text,
-                                        ...(!isVendor ? { orgOwnerSid: orgSid } : {}),
                                       },
                                     };
 
