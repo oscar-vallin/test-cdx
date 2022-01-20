@@ -22,6 +22,7 @@ import { StyledColumn, StyledCommandButton } from './AccessManagementGroupsPage.
 import { CreateGroupPanel } from './CreateGroup';
 import { Spacing } from '../../../../components/spacings/Spacing';
 import { useAccessManagementGroupsPageService } from './AccessManagementGroupsPage.service';
+import { ErrorHandler } from 'src/utils/ErrorHandler';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -51,15 +52,16 @@ const AccessManagementGroupsContainer = () => {
 
   const [apiAmGroupsForOrg, { data, loading }] = useQueryHandler(useAccessPolicyGroupsForOrgLazyQuery);
   const [selectedGroupId, setSelectedGroupId] = useState(0);
+  const handleError = ErrorHandler();
 
-  const [fetchTemplates, { data: templatesData, loading: templatesLoading, error: templatesError }] =
+  const [fetchTemplates, { data: templatesData, error: templatesError }] =
     useAccessPolicyGroupTemplatesLazyQuery({
       variables: {
         orgSid,
       },
     });
 
-  const { deleteAccessPolicyGroup, deleteLoading, deleteError, deleteData } = useAccessManagementGroupsPageService();
+  const { deleteAccessPolicyGroup, deleteError, deleteData } = useAccessManagementGroupsPageService();
 
   useEffect(() => {
     apiAmGroupsForOrg({ variables: { orgSid } });
@@ -87,6 +89,18 @@ const AccessManagementGroupsContainer = () => {
       }
     }
   }, [deleteData]);
+
+  useEffect(() => {
+    if (templatesError) {
+      handleError(templatesError);
+    }
+  }, [templatesError])
+
+  useEffect(() => {
+    if (deleteError) {
+      handleError(deleteError);
+    }
+  }, [deleteError]);
 
   // * ---------------------------------------------------
   // * ---------------------------------------------------
@@ -221,6 +235,25 @@ const AccessManagementGroupsContainer = () => {
     );
   };
 
+  const renderBody = () => {
+    if (loading) {
+      return renderLoadingRecords();
+    } else if (!groups.length) {
+      return renderNoRecords();
+    } else {
+      return (
+        <DetailsList
+          items={groups}
+          selectionMode={SelectionMode.none}
+          columns={columns}
+          layoutMode={DetailsListLayoutMode.justified}
+          onRenderItemColumn={onRenderItemColumn}
+          isHeaderVisible
+        />
+      );
+    }
+  }
+
   //
   // !Render Page
   //
@@ -231,20 +264,7 @@ const AccessManagementGroupsContainer = () => {
           {groups.length > 0 && renderCreateGroupButton(templatesData, false)}
           <Row>
             <StyledColumn lg="12">
-              {loading ? (
-                () => renderLoadingRecords()
-              ) : !groups.length ? (
-                renderNoRecords()
-              ) : (
-                <DetailsList
-                  items={groups}
-                  selectionMode={SelectionMode.none}
-                  columns={columns}
-                  layoutMode={DetailsListLayoutMode.justified}
-                  onRenderItemColumn={onRenderItemColumn}
-                  isHeaderVisible
-                />
-              )}
+              {renderBody()}
             </StyledColumn>
           </Row>
         </Spacing>
@@ -256,7 +276,7 @@ const AccessManagementGroupsContainer = () => {
             title="Delete Group"
             message="Are you sure?"
             onYes={() => {
-              deleteAccessPolicyGroup(selectedGroupId.toString());
+              deleteAccessPolicyGroup(selectedGroupId.toString()).then();
               return null;
             }}
             onClose={() => {
