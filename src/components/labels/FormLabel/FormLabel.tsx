@@ -36,7 +36,7 @@ FormLabel.defaultProps = defaultProps;
 
 type UIFormLabelType = {
   id: string;
-  uiField?: UiField;
+  uiField?: UiField | null;
 };
 
 const UIFormLabel = ({ id, uiField }: UIFormLabelType) => {
