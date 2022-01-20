@@ -5,6 +5,10 @@ export default class PuppetActiveOrgs extends PuppetBasePage {
 
   emptyState = '#EmptyState';
 
+  nameInput = '#__Specialization_Name';
+
+  createBtnSelector = '#__CreateAccessSpecializationBtnId';
+
   // async expectOnPage() {
   //   await this.expectTextOnPage(this.emptyState, 'No access specializations found');
   // }
@@ -22,15 +26,12 @@ export default class PuppetActiveOrgs extends PuppetBasePage {
   }
 
   async createSpecialization() {
-    const nameInputSelector = '#specialization-name';
-    const createBtnSelector = '#__CreateAccessSpecializationBtnId';
 
     await this.clickOnCreateSpecialization();
 
-    await this.page.waitForSelector(nameInputSelector);
-    await this.inputValue(nameInputSelector, 'Test A');
+    await this.inputValue(this.nameInput, 'Test A');
 
-    await this.page.click(createBtnSelector);
+    await this.page.click(this.createBtnSelector);
   }
 
   async clickOnSpecialization(specializationId: string, name: string) {
@@ -40,17 +41,10 @@ export default class PuppetActiveOrgs extends PuppetBasePage {
   }
 
   async updateSpecialization() {
-    const nameInputSelector = '#specialization-name';
-    const createBtnSelector = '#__CreateAccessSpecializationBtnId';
-
     await this.clickOnSpecialization('1', 'Test A');
+    await this.inputValue(this.nameInput, 'Test B');
 
-    await this.page.waitForSelector(nameInputSelector);
-
-    await this.clearField(nameInputSelector);
-    await this.inputValue(nameInputSelector, 'Test B');
-
-    await this.page.click(createBtnSelector);
+    await this.page.click(this.createBtnSelector);
   }
 
   async deleteSpecialization(id: string) {
