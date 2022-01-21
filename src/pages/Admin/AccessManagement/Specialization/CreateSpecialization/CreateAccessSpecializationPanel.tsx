@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { ReactElement, useState, useEffect } from 'react';
 
-import { SpinnerSize, Panel, PanelType, Spinner } from '@fluentui/react';
+import { SpinnerSize, Panel, PanelType, Spinner, ITag } from '@fluentui/react';
 import _ from 'lodash';
 
 import { useNotification } from 'src/hooks/useNotification';
@@ -21,7 +21,7 @@ import {
   useCreateAccessSpecializationMutation,
   useUpdateAccessSpecializationMutation,
   useVendorQuickSearchLazyQuery,
-  useOrganizationQuickSearchLazyQuery, AccessSpecializationForm,
+  useOrganizationQuickSearchLazyQuery, AccessSpecializationForm, Organization,
 } from 'src/data/services/graphql';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { TagPicker } from 'src/components/inputs/TagPicker';
@@ -53,7 +53,9 @@ const groupSpecializations = (opts): SpecializationGroup[] => {
   ];
 };
 
-const parseToPickerOpts = (arr = []) => arr.map(({ name, sid }) => ({ name, key: sid }));
+const parseToPickerOpts = (arr: Organization[] = []): ITag[] => {
+  return arr.map(({ name, sid }) => ({ name: name ?? '', key: sid ?? '' }));
+};
 
 const defaultProps = {
   isOpen: false,
@@ -269,7 +271,6 @@ const CreateAccessSpecializationPanel = ({
                                 <TagPicker
                                   disabled={false}
                                   debounce={500}
-                                  required={false}
                                   id={`__Specialization_${option.permission}`}
                                   apiQuery={(text) => {
 

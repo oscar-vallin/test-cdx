@@ -8,7 +8,7 @@ import { useNotification } from 'src/hooks/useNotification';
 import { Row, Column } from 'src/components/layouts';
 import { Button } from 'src/components/buttons';
 import { LayoutAdmin } from 'src/layouts/LayoutAdmin';
-import { Text } from 'src/components/typography';
+import { PageTitle } from 'src/components/typography';
 import { Separator } from 'src/components/separators/Separator';
 
 import {
@@ -63,11 +63,15 @@ const AccessManagementGroupsContainer = () => {
 
   const { deleteAccessPolicyGroup, deleteError, deleteData } = useAccessManagementGroupsPageService();
 
-  useEffect(() => {
+  const fetchData = () => {
     apiAmGroupsForOrg({ variables: { orgSid } });
     if (orgSid) {
       fetchTemplates({ variables: { orgSid } });
     }
+  }
+
+  useEffect(() => {
+    fetchData();
   }, [orgSid]);
 
   useEffect(() => {
@@ -201,9 +205,7 @@ const AccessManagementGroupsContainer = () => {
         <Row>
           {!noRecords && (
             <Column lg="6">
-              <Spacing id="__containerSpanTitle" margin={{ top: 'small' }}>
-                <Text variant="bold">Groups</Text>
-              </Spacing>
+              <PageTitle id='__PageTitle' title='Access Policy Groups'/>
             </Column>
           )}
 
@@ -220,7 +222,7 @@ const AccessManagementGroupsContainer = () => {
               menuProps={createMenuProps}
               block={false}
             >
-              Create group
+              Create Group
             </Button>
           </Column>
         </Row>
@@ -274,7 +276,7 @@ const AccessManagementGroupsContainer = () => {
             open={isDialog}
             highlightNo
             title="Delete Group"
-            message="Are you sure?"
+            message="Are you sure you want to delete this Access Policy Group?"
             onYes={() => {
               deleteAccessPolicyGroup(selectedGroupId.toString()).then();
               return null;
@@ -288,28 +290,11 @@ const AccessManagementGroupsContainer = () => {
 
         <CreateGroupPanel
           isOpen={isPanelOpen}
-          onCreateGroupPolicy={(createdPolicy) => {
-            setGroups([
-              ...groups,
-              {
-                sid: createdPolicy.sid,
-                name: createdPolicy.name.value,
-                tmpl: createdPolicy.tmpl.value,
-                tmplUseAsIs: createdPolicy.tmplUseAsIs.value,
-              },
-            ]);
+          onCreateGroupPolicy={() => {
+            fetchData();
           }}
-          onUpdateGroupPolicy={(updatedPolicy) => {
-            const filteredGroups = groups.filter(({ sid }) => sid !== updatedPolicy.sid);
-            setGroups([
-              ...filteredGroups,
-              {
-                sid: updatedPolicy.sid,
-                name: updatedPolicy.name.value,
-                tmpl: updatedPolicy.tmpl.value,
-                tmplUseAsIs: updatedPolicy.tmplUseAsIs.value,
-              },
-            ]);
+          onUpdateGroupPolicy={() => {
+            fetchData();
           }}
           onDismiss={() => {
             setIsPanelOpen(false);

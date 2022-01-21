@@ -265,7 +265,8 @@ const CreatePoliciesPanel = ({
                           onChange={(event, isTemplate) => {
                             setUnsavedChanges(true);
                             setState({ ...state, isTemplate });
-                          }}/>
+                          }}
+                          alignBottom={true}/>
           </Column>
           <Column lg="3" sm="6">
             {state.isTemplate && (
@@ -275,7 +276,8 @@ const CreatePoliciesPanel = ({
                             onChange={(event, usedAsIs) => {
                               setUnsavedChanges(true);
                               setState({ ...state, usedAsIs });
-                            }}/>
+                            }}
+                            alignBottom={true}/>
             )}
           </Column>
         </FormRow>

@@ -2,29 +2,21 @@ import { ReactElement, useCallback, useRef } from 'react';
 import { StyledTagPicker } from 'src/components/inputs/TagPicker/TagPicker.styles';
 import { UiField } from 'src/data/services/graphql';
 import { UIFormLabel } from 'src/components/labels/FormLabel';
-
-const defaultProps = {
-  value: [],
-  options: [],
-  // onChange: (param) => null,
-  // apiQuery: (param) => null,
-  debounce: 500,
-};
+import { ITag } from '@fluentui/react';
 
 type CDXTagPickerProps = {
   id?: string;
-  uiField?: UiField;
+  uiField?: UiField | null;
   disabled?: any;
   pickerProps?: any;
-  value?: any[];
-  options?: any;
-  onChange?: any | null;
+  value?: ITag[];
+  options?: ITag[];
+  onChange?: (items?: ITag[]) => void | null;
   apiQuery?: (searchText: string) => void | null;
   debounce?: number;
   onBlur?: any | null;
   onFocus?: any | null;
-  required?: any;
-} & typeof defaultProps;
+};
 
 const CDXTagPicker = ({
   uiField,
@@ -34,7 +26,7 @@ const CDXTagPicker = ({
   options,
   onChange,
   apiQuery,
-  debounce,
+  debounce = 500,
   onBlur,
   onFocus,
   id,
@@ -56,8 +48,8 @@ const CDXTagPicker = ({
     return item;
   }, []);
 
-  const filterSelectedTags: any = (filterText) => {
-    return filterText ? options.filter((tag) => tag.name.toLowerCase().indexOf(filterText.toLowerCase()) === 0) : [];
+  const filterSelectedTags: any = (filterText?: string) => {
+    return filterText ? options?.filter((tag) => tag.name.toLowerCase().indexOf(filterText.toLowerCase()) === 0) : [];
   };
 
   const getTextFromItem = (item) => item.name;
@@ -102,7 +94,5 @@ const CDXTagPicker = ({
     </>
   );
 };
-
-CDXTagPicker.defaultProps = defaultProps;
 
 export { CDXTagPicker };

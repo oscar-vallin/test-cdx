@@ -1,11 +1,5 @@
 import styled from 'styled-components';
-import { CommandBarButton } from '@fluentui/react';
-import { Column } from '../../../../../components/layouts';
-
-export const StyledCommandButton = styled(CommandBarButton)`
-  background: transparent;
-  padding: 8px 16px;
-`;
+import { Column } from 'src/components/layouts';
 
 export const StyledColumn = styled(Column)`
   .ms-Viewport {
@@ -18,6 +12,7 @@ export const StyledColumn = styled(Column)`
 `;
 
 export const StyledContainer = styled.div`
-  background-color: #f3f2f1;
+  background-color: ${({ theme }) => theme.colors.neutralLighter};
   padding: 10px;
+  width: 100%;
 `;

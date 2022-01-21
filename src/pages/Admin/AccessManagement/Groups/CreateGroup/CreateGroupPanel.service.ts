@@ -1,20 +1,40 @@
 import { useState, useEffect } from 'react';
 import {
-  ActiveEnum,
-  useAccessPoliciesForOrgLazyQuery,
+  AccessPolicyGroupForm,
+  Maybe,
+  NvpStr,
+  Organization,
+  OrgType,
+  UiOption,
   useAccessPolicyGroupFormLazyQuery,
-  useAccessPolicyGroupTemplatesLazyQuery,
-  useAccessSpecializationsForOrgLazyQuery,
   useCreateAccessPolicyGroupMutation,
-  useDirectOrganizationsLazyQuery,
-  useFindAccessPolicyGroupLazyQuery,
+  useFindAccessPolicyGroupLazyQuery, useOrganizationQuickSearchLazyQuery,
   useUpdateAccessPolicyGroupMutation,
 } from 'src/data/services/graphql';
+import { useQueryHandler } from 'src/hooks/useQueryHandler';
+import { ITag } from '@fluentui/react';
 
-export const formInitialState = {
+export type AccessGroupState = {
+  sid?: string;
+  orgSid?: string;
+  name: string;
+  description: string;
+  tmpl: boolean;
+  tmplUseAsIs: boolean;
+  applicableOrgTypes: OrgType[];
+  includeAllSubOrgs: boolean;
+  policySids: string[];
+  specializationSids: string[];
+  includeOrgSids: ITag[];
+  excludeOrgSids: ITag[];
+};
+
+export const formInitialState: AccessGroupState = {
   name: '',
+  description: '',
   tmpl: false,
   tmplUseAsIs: false,
+  applicableOrgTypes: [],
   includeAllSubOrgs: false,
   policySids: [],
   specializationSids: [],
@@ -26,22 +46,19 @@ export const useCreateGroupPanel = (isOpen, initialOrgSid, selectedGroupId, temp
   const [orgSid, setOrgSid] = useState(initialOrgSid);
   const [isFormOpen, setIsFormOpen] = useState(isOpen);
   // Data sets.
-  const [policies, setPolicies] = useState<any>([]);
-  const [specializations, setSpecializations] = useState<any>([]);
-  const [organizations, setOrganizations] = useState<any>([]);
+  const [policies, setPolicies] = useState<UiOption[]>([]);
+  const [specializations, setSpecializations] = useState<UiOption[]>([]);
   // Hooks to Fetches.
-  const [apiUseAccessPolicyForm, { data, loading: loadingPolicies }] = useAccessPolicyGroupFormLazyQuery();
-  const [apiAccessPoliciesForOrg, { data: policiesData }] = useAccessPoliciesForOrgLazyQuery();
-  const [apiAccessSpecializationsForOrg, { data: specializationsData }] = useAccessSpecializationsForOrgLazyQuery();
-  const [apiDirectOrganizations, { data: orgsData }] = useDirectOrganizationsLazyQuery();
+  const [apiUseAccessPolicyForm, { data, loading: loadingPolicies }] = useQueryHandler(useAccessPolicyGroupFormLazyQuery);
   const [apiCreateAccessPolicyGroup, { data: createdPolicyGroup, loading: creatingGroup }] =
-    useCreateAccessPolicyGroupMutation();
-  const [apiFindAccessPolicyGroup, { data: policyGroup }] = useFindAccessPolicyGroupLazyQuery();
-  const [apiUpdateAccessPolicyGroup, { data: updatedPolicyGroup }] = useUpdateAccessPolicyGroupMutation();
+    useQueryHandler(useCreateAccessPolicyGroupMutation);
+  const [apiFindAccessPolicyGroup, { data: policyGroup }] = useQueryHandler(useFindAccessPolicyGroupLazyQuery);
+  const [apiUpdateAccessPolicyGroup, { data: updatedPolicyGroup }] = useQueryHandler(useUpdateAccessPolicyGroupMutation);
+  const [apiOrgQuickSearch, { data: orgs }] = useQueryHandler(useOrganizationQuickSearchLazyQuery);
 
   // State for Form Definition.
-  const [accessPolicyForm, setAccessPolicyForm] = useState<any>({ ...formInitialState });
-  const [accessPolicyFormRaw, setAcessPolicyFormRaw] = useState<any>({});
+  const [accessPolicyData, setAccessPolicyData] = useState<AccessGroupState>({ ...formInitialState });
+  const [accessPolicyForm, setAccessPolicyForm] = useState<AccessPolicyGroupForm | null>();
   // Constants
   //   const orgSidVariables = {variables: {orgSid}};
 
@@ -51,14 +68,20 @@ export const useCreateGroupPanel = (isOpen, initialOrgSid, selectedGroupId, temp
     if (!orgSid) return;
 
     await apiUseAccessPolicyForm({ variables: { orgSid, templateGroupSid: templateId } });
-    await apiAccessPoliciesForOrg({ variables: { orgSid } });
-    await apiAccessSpecializationsForOrg({ variables: { orgSid } });
-    await apiDirectOrganizations({
-      variables: {
-        orgSid,
-        orgFilter: { activeFilter: ActiveEnum.Active },
-      },
+  };
+
+  const removeEmptyOptions = (uiOptions: Maybe<UiOption>[]): UiOption[] => {
+    const cleaned: UiOption[] = [];
+    uiOptions.forEach((uiOption) => {
+      if (uiOption) {
+        cleaned.push(uiOption);
+      }
     });
+    return cleaned;
+  }
+
+  const nvpStrToITag = (nvps?: NvpStr[]): ITag[] => {
+    return nvps ? nvps.map((value) => ({key: value.value, name: value.name})) : [];
   };
 
   useEffect(() => {
@@ -69,7 +92,7 @@ export const useCreateGroupPanel = (isOpen, initialOrgSid, selectedGroupId, temp
 
   useEffect(() => {
     if (isFormOpen && orgSid) {
-      fetchAllData();
+      fetchAllData().then();
     }
   }, [isFormOpen, orgSid]);
 
@@ -83,10 +106,10 @@ export const useCreateGroupPanel = (isOpen, initialOrgSid, selectedGroupId, temp
     if (policyGroup) {
       const { findAccessPolicyGroup } = policyGroup;
 
-      setAcessPolicyFormRaw(findAccessPolicyGroup);
-      setAccessPolicyForm({
-        ...accessPolicyForm,
-        policyGroupSid: findAccessPolicyGroup?.sid,
+      setAccessPolicyForm(findAccessPolicyGroup);
+      setAccessPolicyData({
+        ...accessPolicyData,
+        sid: findAccessPolicyGroup?.sid,
         name: findAccessPolicyGroup?.name?.value,
         tmpl: findAccessPolicyGroup?.tmpl?.value,
         tmplUseAsIs: findAccessPolicyGroup?.tmplUseAsIs?.value,
@@ -115,40 +138,38 @@ export const useCreateGroupPanel = (isOpen, initialOrgSid, selectedGroupId, temp
 
   useEffect(() => {
     if (isFormOpen && data && orgSid) {
-      setAcessPolicyFormRaw(data.accessPolicyGroupForm);
+      setAccessPolicyForm(data.accessPolicyGroupForm);
+
+      const form = data.accessPolicyGroupForm;
+      if (form) {
+        const options = form.options;
+        const policyField = form.policies;
+        const policyOptions = options?.find((value) => value?.key === policyField?.options)?.values;
+        if (policyOptions) {
+          setPolicies(removeEmptyOptions(policyOptions));
+        }
+        const specializationField = form.specializations
+        const specializationOptions = options?.find((value) => value?.key === specializationField?.options)?.values;
+        if (specializationOptions) {
+          setSpecializations(removeEmptyOptions(specializationOptions));
+        }
+      }
 
       if (templateId) {
-        setAccessPolicyForm({
-          ...accessPolicyForm,
+        setAccessPolicyData({
+          ...accessPolicyData,
           tmpl: data.accessPolicyGroupForm?.tmpl?.value,
           tmplUseAsIs: data.accessPolicyGroupForm?.tmplUseAsIs?.value,
           includeAllSubOrgs: data.accessPolicyGroupForm?.includeAllSubOrgs?.value,
-          policySids: data.accessPolicyGroupForm?.policies?.value,
-          specializationSids: data.accessPolicyGroupForm?.specializations?.value,
-          includeOrgSids: data.accessPolicyGroupForm?.includeOrgSids?.value,
-          excludeOrgSids: data.accessPolicyGroupForm?.excludeOrgSids?.value,
+          policySids: data.accessPolicyGroupForm?.policies?.value?.map((nvp) => (nvp.value)),
+          specializationSids: data.accessPolicyGroupForm?.specializations?.value?.map((nvp) => (nvp.value)),
+          includeOrgSids: nvpStrToITag(data.accessPolicyGroupForm?.includeOrgSids?.value),
+          excludeOrgSids: nvpStrToITag(data.accessPolicyGroupForm?.excludeOrgSids?.value),
         });
       }
     }
   }, [data, isFormOpen]);
 
-  useEffect(() => {
-    if (isFormOpen && policiesData) {
-      setPolicies(policiesData?.accessPoliciesForOrg?.nodes);
-    }
-  }, [isFormOpen, policiesData]);
-
-  useEffect(() => {
-    if (isFormOpen && specializationsData && orgSid) {
-      setSpecializations(specializationsData?.accessSpecializationsForOrg?.nodes);
-    }
-  }, [isFormOpen, specializationsData]);
-
-  useEffect(() => {
-    if (isFormOpen && orgsData && orgSid) {
-      setOrganizations(orgsData?.directOrganizations?.nodes);
-    }
-  }, [isFormOpen, orgsData]);
 
   useEffect(() => {
     if (createdPolicyGroup) {
@@ -162,72 +183,53 @@ export const useCreateGroupPanel = (isOpen, initialOrgSid, selectedGroupId, temp
     }
   }, [updatedPolicyGroup]);
 
-  //
-  const listContainsTagList = (tag, tagList) => {
-    if (!tagList || !tagList.length || tagList.length === 0) {
-      return false;
+  const organizationTags = (): ITag[] => {
+    if (orgs) {
+      return orgs.organizationQuickSearch.map((item: Organization) => ({ key: item.sid, name: item.name }));
     }
-    return tagList.some((compareTag) => compareTag.key === tag.key);
-  };
-
-  const organizationTags = organizations.map((item: any) => ({ key: item.sid, name: item.name }));
-
-  const filterSuggestedTags = (filterText, tagList) => {
-    return filterText
-      ? organizationTags.filter(
-          (tag) => tag.name.toLowerCase().indexOf(filterText.toLowerCase()) === 0 && !listContainsTagList(tag, tagList)
-        )
-      : [];
+    return [];
   };
 
   const getTextFromItem = (item) => item.name;
 
-  const onIncludedOrgsSelected = (item): any => {
-    setAccessPolicyForm({
-      ...accessPolicyForm,
-      includeOrgSids: item.map((org) => org.key),
+  const orgQuickSearch = (searchText: string) => {
+    apiOrgQuickSearch({
+      variables: {
+        orgOwnerSid: orgSid,
+        searchText: searchText,
+      },
     });
   };
 
-  const onExcludedOrgsSelected = (item): any => {
-    setAccessPolicyForm({
-      ...accessPolicyForm,
-      excludeOrgSids: item.map((org) => org.key),
-    });
-  };
+  const clearAccessPolicyForm = () => setAccessPolicyData({ ...formInitialState });
 
-  const clearAccessPolicyForm = () => setAccessPolicyForm({ ...formInitialState });
-
-  const addToAccessPolicyForm = (_data) => setAccessPolicyForm({ ...accessPolicyForm, ..._data });
+  const addToAccessPolicyData = (_data) => setAccessPolicyData({ ...accessPolicyData, ..._data });
 
   const createPolicyGroup = async (variables) => {
-    apiCreateAccessPolicyGroup({
+    await apiCreateAccessPolicyGroup({
       variables,
     });
   };
 
   const updatePolicyGroup = async (variables) => {
-    apiUpdateAccessPolicyGroup({
+    await apiUpdateAccessPolicyGroup({
       variables,
     });
   };
 
   return {
     isFormOpen,
+    orgQuickSearch,
     organizationTags,
-    filterSuggestedTags,
     getTextFromItem,
-    onIncludedOrgsSelected,
-    onExcludedOrgsSelected,
     clearAccessPolicyForm,
-    addToAccessPolicyForm,
+    addToAccessPolicyData,
     data,
     loadingPolicies,
     policies,
     specializations,
-    organizations,
+    accessPolicyData,
     accessPolicyForm,
-    accessPolicyFormRaw,
     createPolicyGroup,
     updatePolicyGroup,
     creatingGroup,
