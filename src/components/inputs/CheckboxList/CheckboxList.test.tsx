@@ -43,4 +43,14 @@ describe('Checkbox List Component', () => {
     expect(selected.includes('2')).toEqual(false);
     expect(selected.includes('3')).toEqual(true);
   });
+
+  it('Test Default Empty Message', () => {
+    const wrapper = shallow(<CheckboxList items={[]} value={['1']} onChange={jest.fn()} emptyMessage='Custom Empty Message'/>);
+    expect(wrapper.html()).toContain('Custom Empty Message');
+  });
+
+  it('Test Default Empty Message', () => {
+    const wrapper = shallow(<CheckboxList items={[]} value={['1']} onChange={jest.fn()}/>);
+    expect(wrapper.html()).toContain('No options available');
+  });
 });

@@ -8,10 +8,11 @@ type CheckboxListType = {
   id?: string;
   items: UiOption[];
   value: string[];
+  emptyMessage?: String;
   onChange: (selectedValues: string[]) => void;
 };
 
-const CheckboxList = ({ id, items, value, onChange }: CheckboxListType) => {
+const CheckboxList = ({ id, items, value, emptyMessage = 'No options available', onChange }: CheckboxListType) => {
   const [selectedValues, setSelectedValues] = useState<string[]>(Object.assign([], value));
 
   const clone = (checkboxItems: UiOption[]): CheckboxItem[] => {
@@ -54,6 +55,10 @@ const CheckboxList = ({ id, items, value, onChange }: CheckboxListType) => {
     setOptions(newOptions);
     onChange(selectedValues);
   };
+
+  if (options.length === 0) {
+    return <div id={id}>{emptyMessage}</div>
+  }
 
   return (
     <div id={id}>
