@@ -1,6 +1,7 @@
 import { ReactElement, useCallback, useRef } from 'react';
-import { Label } from '@fluentui/react';
-import { StyledTagPicker } from './TagPicker.styles';
+import { StyledTagPicker } from 'src/components/inputs/TagPicker/TagPicker.styles';
+import { UiField } from 'src/data/services/graphql';
+import { UIFormLabel } from 'src/components/labels/FormLabel';
 
 const defaultProps = {
   value: [],
@@ -12,13 +13,13 @@ const defaultProps = {
 
 type CDXTagPickerProps = {
   id?: string;
-  label?: string;
+  uiField?: UiField;
   disabled?: any;
   pickerProps?: any;
   value?: any[];
   options?: any;
   onChange?: any | null;
-  apiQuery?: any | null;
+  apiQuery?: (searchText: string) => void | null;
   debounce?: number;
   onBlur?: any | null;
   onFocus?: any | null;
@@ -26,7 +27,7 @@ type CDXTagPickerProps = {
 } & typeof defaultProps;
 
 const CDXTagPicker = ({
-  label,
+  uiField,
   disabled,
   pickerProps,
   value,
@@ -36,7 +37,6 @@ const CDXTagPicker = ({
   debounce,
   onBlur,
   onFocus,
-  required,
   id,
 }: CDXTagPickerProps): ReactElement => {
   const picker: any = useRef(null);
@@ -64,10 +64,9 @@ const CDXTagPicker = ({
 
   return (
     <>
-      {label && (
-        <Label id="__TagPickerLabel" required={required}>
-          {label}
-        </Label>
+      {uiField && (
+        <UIFormLabel id="__TagPickerLabel"
+                     uiField={uiField}/>
       )}
 
       <StyledTagPicker
@@ -89,13 +88,15 @@ const CDXTagPicker = ({
           pickerProps || {
             suggestionsHeaderText: 'Search',
             noResultsFoundText: 'No results found',
+            loadingText: 'Searching...',
+            searchingText: 'Searching...',
           }
         }
         disabled={disabled}
         inputProps={{
-          ...(onBlur ? { onBlur } : {}),
-          ...(onFocus ? { onFocus } : {}),
-          ...(id ? { id } : {}),
+          id,
+          onBlur,
+          onFocus,
         }}
       />
     </>

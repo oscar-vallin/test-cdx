@@ -24,7 +24,7 @@ import {
   useOrganizationQuickSearchLazyQuery, AccessSpecializationForm,
 } from 'src/data/services/graphql';
 import { useOrgSid } from 'src/hooks/useOrgSid';
-import { TagPicker } from 'src/components/pickers/TagPicker';
+import { TagPicker } from 'src/components/inputs/TagPicker';
 import { UIInputTextReadOnly } from 'src/components/inputs/InputText/InputText';
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
@@ -268,12 +268,9 @@ const CreateAccessSpecializationPanel = ({
                               <Column lg="9" key={`${groupIndex}-${optIndex}-right`}>
                                 <TagPicker
                                   disabled={false}
-                                  pickerProps
                                   debounce={500}
-                                  onBlur={() => null}
-                                  onFocus={() => null}
                                   required={false}
-                                  id="__CreateAccessSpecializationPanelId"
+                                  id={`__Specialization_${option.permission}`}
                                   apiQuery={(text) => {
 
                                     const data = {

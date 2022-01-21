@@ -1,12 +1,10 @@
-import { shallow, mount } from 'enzyme';
-import { CDXTagPicker as Component } from './TagPicker';
-import { mountWithTheme, renderWithTheme, shallowWithTheme } from '../../../utils/testUtils';
-import { fireEvent, screen } from '@testing-library/react';
+import { CDXTagPicker as Component } from 'src/components/inputs/TagPicker/TagPicker';
+import { mountWithTheme } from 'src/utils/testUtils';
+import { UiField } from 'src/data/services/graphql';
 
-const defaultProps = { value: [], options: [], onChange: (param) => null, apiQuery: (param) => null, debounce: 500 };
+const defaultProps = { value: [], options: [], onChange: jest.fn(), apiQuery: jest.fn(), debounce: 500 };
 
 describe('TagPicker unit test', () => {
-  const tree = shallow(<Component {...defaultProps} />);
 
   it('Should be defined', () => {
     expect(Component).toBeDefined();
@@ -16,10 +14,15 @@ describe('TagPicker unit test', () => {
     expect(Component).toMatchSnapshot();
   });
 
-  it('Should find label when paremeter is sent', () => {
-    const wrapper = mountWithTheme(<Component {...defaultProps} label="Tag Picker Label" />);
-    const input = wrapper.find('#__TagPickerLabel').first();
-    expect(input.length).toBe(1);
+  it('Should find label when parameter is sent', () => {
+    const field: UiField = {
+      required: false,
+      visible: true,
+      label: 'Tag Picker Label'
+    }
+    const wrapper = mountWithTheme(<Component {...defaultProps} uiField={field} />);
+    const input = wrapper.find('#__TagPickerLabel').hostNodes();
+    expect(input).toHaveLength(1);
     expect(input.text()).toEqual('Tag Picker Label');
   });
 
@@ -34,16 +37,16 @@ describe('TagPicker unit test', () => {
 
   it('Should call onBlur function when blur event', () => {
     const mockFn = jest.fn();
-    const wrapper = mountWithTheme(<Component {...defaultProps} apiQuery={jest.fn()} onBlur={mockFn} />);
-    wrapper.simulate('blur');
-    expect(mockFn).toBeCalled;
+    const wrapper = mountWithTheme(<Component value={[]} apiQuery={jest.fn()} onBlur={mockFn} />);
+    wrapper.find('input').hostNodes().simulate('blur');
+    expect(mockFn).toBeCalled();
   });
 
   it('Should call onFocus function when focus event', () => {
     const mockFn = jest.fn();
-    const wrapper = mountWithTheme(<Component {...defaultProps} apiQuery={jest.fn()} onFocus={mockFn} />);
-    wrapper.simulate('focus');
-    expect(mockFn).toBeCalled;
+    const wrapper = mountWithTheme(<Component value={[]} apiQuery={jest.fn()} onFocus={mockFn} />);
+    wrapper.find('input').hostNodes().simulate('focus');
+    expect(mockFn).toBeCalled();
   });
 
   it('Should find input with Id __CreateAccessSpecializationPanelId', () => {
@@ -53,19 +56,22 @@ describe('TagPicker unit test', () => {
     expect(input.prop('id')).toEqual('__CreateAccessSpecializationPanelId');
   });
 
-  it('Should render sugestion when type the name partially', () => {
+  it('Should render suggestion when type the name partially',  () => {
     const mockFn = jest.fn();
-    const wrapper = mount(
+    const wrapper = mountWithTheme(
       <Component
-        {...defaultProps}
         id="__CreateAccessSpecializationPanelId"
+        debounce={0}
+        value={[]}
         apiQuery={mockFn}
         options={[{ key: 'greeting', name: 'Hello' }]}
       />
     );
-    const input = wrapper.find('#__CreateAccessSpecializationPanelId').first();
-
+    const input = wrapper.find('input').hostNodes();
+    expect(input).toHaveLength(1);
     input.simulate('change', { target: { value: 'He' } });
-    expect(mockFn).toBeCalled;
+    setTimeout(() => {
+      expect(mockFn).toBeCalled()
+    }, 1000);
   });
 });
