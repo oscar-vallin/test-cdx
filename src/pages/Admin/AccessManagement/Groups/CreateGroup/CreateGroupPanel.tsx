@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, ReactElement } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 
-import { Panel, PanelType } from '@fluentui/react';
+import { MessageBar, MessageBarType, Panel, PanelType } from '@fluentui/react';
 
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { Button } from 'src/components/buttons';
@@ -15,9 +15,12 @@ import { UIInputTextReadOnly } from 'src/components/inputs/InputText/InputText';
 import { UIInputCheck } from 'src/components/inputs/InputCheck';
 import { UIFormLabel } from 'src/components/labels/FormLabel';
 import { CheckboxList } from 'src/components/inputs/CheckboxList';
-import { AccessPolicyGroupForm } from 'src/data/services/graphql';
+import { AccessPolicyGroupForm, GqOperationResponse } from 'src/data/services/graphql';
 import { UIInputMultiSelect } from 'src/components/inputs/InputMultiselect';
 import { TagPicker } from 'src/components/inputs/TagPicker';
+import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
+import { useNotification } from 'src/hooks/useNotification';
+import { PanelBody } from 'src/layouts/Panels/Panels.styles';
 
 const defaultProps = {
   isOpen: false,
@@ -48,34 +51,89 @@ const CreateGroupPanel = ({
 }: CreateGroupPanelProps): ReactElement => {
   const { orgSid } = useOrgSid();
 
+  const [showDialog, setShowDialog] = useState(false);
+  const [unsavedChanges, setUnsavedChanges] = useState(false);
   const accessManagementGroupService = useCreateGroupPanel(isOpen, orgSid, selectedGroupId, templateId);
   const { policies, specializations } = accessManagementGroupService;
-  const { accessPolicyData, accessPolicyForm } = accessManagementGroupService;
+  const { accessPolicyData, accessPolicyForm, setAccessPolicyForm } = accessManagementGroupService;
   const { clearAccessPolicyForm, addToAccessPolicyData } = accessManagementGroupService;
   const { orgQuickSearch, organizationTags } = accessManagementGroupService;
   const { loadingPolicies } = accessManagementGroupService;
   const { createPolicyGroup, updatePolicyGroup } = accessManagementGroupService;
-  const { isFormOpen } = accessManagementGroupService;
-  const { createdPolicyGroup, updatedPolicyGroup } = accessManagementGroupService;
+  const [errorMsg, setErrorMsg] = useState<string | undefined>();
+  const { createAccessPolicyGroupData, updateAccessPolicyGroupData } = accessManagementGroupService;
+  const Toast = useNotification();
 
-  // * Dismiss the panel
-  const handleDismiss = () => {
+  const onPanelClose = () => {
+    if (unsavedChanges) {
+      setShowDialog(true);
+    } else {
+      doClosePanel();
+    }
+  };
+
+  const doClosePanel = () => {
+    // Reset the form
     clearAccessPolicyForm();
+    setShowDialog(false);
+    setUnsavedChanges(false);
+    setErrorMsg(undefined);
     onDismiss();
   };
 
   useEffect(() => {
-    if (!isFormOpen && (createdPolicyGroup || updatedPolicyGroup)) {
-      clearAccessPolicyForm();
-
-      if (createdPolicyGroup) {
-        onCreateGroupPolicy(createdPolicyGroup.createAccessPolicyGroup);
+    const response: AccessPolicyGroupForm = createAccessPolicyGroupData?.createAccessPolicyGroup;
+    if (response) {
+      const responseCode = response?.response;
+      if (responseCode === GqOperationResponse.Fail) {
+        const errorMsg = response?.errMsg ?? 'Error Creating Access Policy Group';
+        setAccessPolicyForm(response);
+        setErrorMsg(errorMsg);
       } else {
-        onUpdateGroupPolicy(updatedPolicyGroup?.updateAccessPolicyGroup);
+        setErrorMsg(undefined);
       }
-      handleDismiss();
+
+      if (responseCode === GqOperationResponse.Success) {
+        Toast.success({ text: 'Access Policy Group Successfully Created' });
+      }
+      if (responseCode === GqOperationResponse.PartialSuccess) {
+        const errorMsg = response?.errMsg ?? 'Error Creating Access Policy Group';
+        Toast.warning({ text: errorMsg });
+      }
+
+      if (responseCode === GqOperationResponse.Success || responseCode === GqOperationResponse.PartialSuccess) {
+        doClosePanel();
+        onCreateGroupPolicy(response);
+      }
     }
-  }, [isFormOpen, createdPolicyGroup, updatedPolicyGroup]);
+  }, [createAccessPolicyGroupData])
+
+  useEffect(() => {
+    const response: AccessPolicyGroupForm = updateAccessPolicyGroupData?.updateAccessPolicyGroup;
+    if (response) {
+      const responseCode = response?.response;
+      if (responseCode === GqOperationResponse.Fail) {
+        const errorMsg = response?.errMsg ?? 'Error Updating Access Policy Group';
+        setAccessPolicyForm(response);
+        setErrorMsg(errorMsg);
+      } else {
+        setErrorMsg(undefined);
+      }
+
+      if (responseCode === GqOperationResponse.Success) {
+        Toast.success({ text: 'Access Policy Group Successfully Updated' });
+      }
+      if (responseCode === GqOperationResponse.PartialSuccess) {
+        const errorMsg = response?.errMsg ?? 'Error Updating Access Policy Group';
+        Toast.warning({ text: errorMsg });
+      }
+
+      if (responseCode === GqOperationResponse.Success || responseCode === GqOperationResponse.PartialSuccess) {
+        doClosePanel();
+        onUpdateGroupPolicy(response);
+      }
+    }
+  }, [updateAccessPolicyGroupData])
 
   useEffect(() => {
     if (isOpen) {
@@ -94,7 +152,10 @@ const CreateGroupPanel = ({
                   <UIInputText id='__groupInputName'
                                uiStringField={form.name}
                                value={accessPolicyData.name}
-                               onChange={(event, newValue) => addToAccessPolicyData({ name: newValue })} />
+                               onChange={(event, newValue) => {
+                                 setUnsavedChanges(true);
+                                 addToAccessPolicyData({ name: newValue });
+                               }} />
                 </Column>
               </FormRow>
               <FormRow>
@@ -103,7 +164,10 @@ const CreateGroupPanel = ({
                     id="__groupDescription"
                     uiStringField={form.description}
                     value={accessPolicyData.description}
-                    onChange={(event, newValue) => addToAccessPolicyData({ description: newValue })}
+                    onChange={(event, newValue) => {
+                      setUnsavedChanges(true);
+                      addToAccessPolicyData({ description: newValue });
+                    }}
                   />
                 </Column>
               </FormRow>
@@ -118,16 +182,20 @@ const CreateGroupPanel = ({
                   <UIInputCheck id="__checkBoxTemplateGroup"
                                 uiField={form.tmpl}
                                 value={accessPolicyData.tmpl}
-                                onChange={(_event, tmpl: any) =>
-                                  addToAccessPolicyData({ tmpl, tmplUseAsIs: tmpl ? accessPolicyData.tmplUseAsIs : false })
-                                }/>
+                                onChange={(_event, tmpl: any) => {
+                                  setUnsavedChanges(true);
+                                  addToAccessPolicyData({ tmpl, tmplUseAsIs: tmpl ? accessPolicyData.tmplUseAsIs : false });
+                                }}/>
                 </Column>
                 <Column lg="6">
                   {accessPolicyData.tmpl && form.tmplUseAsIs?.visible && (
                     <UIInputCheck id="__checkboxUseAsIs"
                                   uiField={form.tmplUseAsIs}
                                   value={accessPolicyData.tmplUseAsIs}
-                                  onChange={(_event, tmplUseAsIs: any) => addToAccessPolicyData({ tmplUseAsIs })}/>
+                                  onChange={(_event, tmplUseAsIs: any) => {
+                                    setUnsavedChanges(true);
+                                    addToAccessPolicyData({ tmplUseAsIs });
+                                  }}/>
                   )}
                 </Column>
               </FormRow>
@@ -139,6 +207,7 @@ const CreateGroupPanel = ({
                                       options={form.options ?? []}
                                       placeholder="--Applies to All Org Types--"
                                       onChange={(applicableOrgTypes) => {
+                                        setUnsavedChanges(true);
                                         addToAccessPolicyData({ applicableOrgTypes });
                                       }}/>
                 </Column>
@@ -154,6 +223,7 @@ const CreateGroupPanel = ({
                                       value={accessPolicyData.policySids}
                                       emptyMessage='No policies configured'
                                       onChange={(policySids) => {
+                                        setUnsavedChanges(true);
                                         addToAccessPolicyData( { policySids });
                                       }}
                         />
@@ -174,7 +244,8 @@ const CreateGroupPanel = ({
                                       value={accessPolicyData.specializationSids}
                                       emptyMessage='No specializations configured'
                                       onChange={(specializationSids) => {
-                                        addToAccessPolicyData({ specializationSids })
+                                        setUnsavedChanges(true);
+                                        addToAccessPolicyData({ specializationSids });
                                       }}
                         />
                       </StyledContainer>
@@ -188,7 +259,10 @@ const CreateGroupPanel = ({
                   <UIInputCheck id='__includeAllSubOrgs'
                                 uiField={form.includeAllSubOrgs}
                                 value={accessPolicyData.includeAllSubOrgs}
-                                onChange={(event, includeAllSubOrgs) => addToAccessPolicyData({ includeAllSubOrgs })}
+                                onChange={(event, includeAllSubOrgs) => {
+                                  setUnsavedChanges(true);
+                                  addToAccessPolicyData({ includeAllSubOrgs });
+                                }}
                                 alignBottom={false}/>
                 </Column>
               </FormRow>
@@ -203,6 +277,7 @@ const CreateGroupPanel = ({
                                apiQuery={orgQuickSearch}
                                options={organizationTags()}
                                onChange={(includeOrgSids) => {
+                                 setUnsavedChanges(true);
                                  addToAccessPolicyData({ includeOrgSids });
                                }}/>
 
@@ -220,6 +295,7 @@ const CreateGroupPanel = ({
                                apiQuery={orgQuickSearch}
                                options={organizationTags()}
                                onChange={(excludeOrgSids) => {
+                                 setUnsavedChanges(true);
                                  addToAccessPolicyData({ excludeOrgSids });
                                }}/>
 
@@ -239,6 +315,7 @@ const CreateGroupPanel = ({
                         description: accessPolicyData.description,
                         tmpl: accessPolicyData.tmpl,
                         tmplUseAsIs: accessPolicyData.tmplUseAsIs,
+                        applicableOrgTypes: accessPolicyData.applicableOrgTypes,
                         policySids: accessPolicyData.policySids,
                         specializationSids: accessPolicyData.specializationSids,
                         includeAllSubOrgs: accessPolicyData.includeAllSubOrgs,
@@ -270,16 +347,47 @@ const CreateGroupPanel = ({
   };
 
   return (
-    <Panel
-      id="__createGroupPanel"
-      closeButtonAriaLabel="Close"
-      type={PanelType.large}
-      headerText={!accessPolicyData.sid ? 'New Access Policy Group' : 'Update Policy Group'}
-      isOpen={isOpen}
-      onDismiss={handleDismiss}
-    >
-      { renderBody(accessPolicyForm) }
-    </Panel>
+    <>
+      <Panel
+        id="__createGroupPanel"
+        closeButtonAriaLabel="Close"
+        type={PanelType.large}
+        headerText={!accessPolicyData.sid ? 'New Access Policy Group' : 'Update Policy Group'}
+        isOpen={isOpen}
+        onDismiss={onPanelClose}
+        onOuterClick={() => {}}
+      >
+        <PanelBody>
+          {errorMsg && (
+            <MessageBar
+              id="__AccessPolicyGroup_Error"
+              messageBarType={MessageBarType.error}
+              isMultiline
+              onDismiss={() => setErrorMsg(undefined)}
+            >
+              {errorMsg}
+            </MessageBar>
+          )}
+          { renderBody(accessPolicyForm) }
+        </PanelBody>
+      </Panel>
+      <DialogYesNo
+        open={showDialog}
+        highlightNo
+        title="You have unsaved changes"
+        message="You are about lose all changes to this Access Policy Group. Are you sure you want to continue?"
+        onYes={() => {
+          setShowDialog(false);
+          doClosePanel();
+          return null;
+        }}
+        onClose={() => {
+          setShowDialog(false);
+          return null;
+        }}
+      />
+
+    </>
   );
 };
 

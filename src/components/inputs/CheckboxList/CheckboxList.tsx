@@ -1,5 +1,5 @@
 import { Checkbox } from '@fluentui/react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { CheckboxItem } from 'src/data/Types';
 import { UiOption } from 'src/data/services/graphql';
 import { OptionRow } from './CheckboxList.styles';
@@ -16,6 +16,8 @@ const CheckboxList = ({ id, items, value, emptyMessage = 'No options available',
   const [selectedValues, setSelectedValues] = useState<string[]>(Object.assign([], value));
 
   const clone = (checkboxItems: UiOption[]): CheckboxItem[] => {
+    // console.log("Selected Items")
+    // console.log(value)
     const copy: CheckboxItem[] = [];
     checkboxItems.forEach((itm) => {
       copy.push({
@@ -27,14 +29,6 @@ const CheckboxList = ({ id, items, value, emptyMessage = 'No options available',
   };
 
   const [options, setOptions] = useState<CheckboxItem[]>(clone(items));
-
-  useEffect(() => {
-    // setSelectedValues(Object.assign([], value));
-  }, [value]);
-
-  useEffect(() => {
-    // setOptions(clone(items));
-  }, [items]);
 
   const onItemCheck = (sid: string) => {
     const idx = selectedValues.indexOf(sid);
@@ -60,6 +54,8 @@ const CheckboxList = ({ id, items, value, emptyMessage = 'No options available',
     return <div id={id}>{emptyMessage}</div>
   }
 
+  // console.log('rendering options')
+  // console.log(options);
   return (
     <div id={id}>
       {options.map((item, index) => {

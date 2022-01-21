@@ -20,7 +20,7 @@ import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { StyledColumn, StyledCommandButton } from './AccessManagementGroupsPage.styles';
 import { CreateGroupPanel } from './CreateGroup';
-import { Spacing } from '../../../../components/spacings/Spacing';
+import { Spacing } from 'src/components/spacings/Spacing';
 import { useAccessManagementGroupsPageService } from './AccessManagementGroupsPage.service';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 
