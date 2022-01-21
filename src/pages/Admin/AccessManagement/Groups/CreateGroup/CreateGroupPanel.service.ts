@@ -127,12 +127,16 @@ export const useCreateGroupPanel = (isOpen, orgSid, selectedGroupId, templateId)
 
   // * If there is a selected group, fetch the data for that group.
   useEffect(() => {
-    if (selectedGroupId) {
-      apiFindAccessPolicyGroup({ variables: { policyGroupSid: selectedGroupId } });
-    } else if (templateId) {
-      apiUseAccessPolicyGroupForm({ variables: { orgSid, templateGroupSid: templateId } });
+    if (isOpen) {
+      if (selectedGroupId) {
+        apiFindAccessPolicyGroup({ variables: { policyGroupSid: selectedGroupId } });
+      } else if (templateId) {
+        apiUseAccessPolicyGroupForm({ variables: { orgSid, templateGroupSid: templateId } });
+      } else {
+        apiUseAccessPolicyGroupForm({ variables: { orgSid }});
+      }
     }
-  }, [selectedGroupId, templateId]);
+  }, [isOpen, selectedGroupId, templateId]);
 
   useEffect(() => {
     if (accessPolicyGroupFormData) {
@@ -177,7 +181,10 @@ export const useCreateGroupPanel = (isOpen, orgSid, selectedGroupId, templateId)
     });
   };
 
-  const clearAccessPolicyForm = () => setAccessPolicyData({ ...formInitialState });
+  const clearAccessPolicyForm = () => {
+    setAccessPolicyForm(null);
+    setAccessPolicyData({ ...formInitialState });
+  }
 
   const addToAccessPolicyData = (_data) => setAccessPolicyData({ ...accessPolicyData, ..._data });
 
