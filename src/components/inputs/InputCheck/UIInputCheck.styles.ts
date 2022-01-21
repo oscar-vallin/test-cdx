@@ -12,5 +12,6 @@ export const CheckBoxAlignBottom = styled(Checkbox)<CheckboxProps>`
 
 export const InlineLabel = styled(Label)`
   display: inline-block;
+  margin-left: 5px;
   font-size: ${({ theme }) => theme.fontSizes.normal ?? '1em'};
 `;
