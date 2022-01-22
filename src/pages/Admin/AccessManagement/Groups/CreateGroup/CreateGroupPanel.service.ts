@@ -46,10 +46,10 @@ export const useCreateGroupPanel = (isOpen, orgSid, selectedGroupId, templateId)
   const [policies, setPolicies] = useState<UiOption[]>([]);
   const [specializations, setSpecializations] = useState<UiOption[]>([]);
   // Hooks to Fetches.
-  const [apiUseAccessPolicyGroupForm, { data: accessPolicyGroupFormData, loading: loadingPolicies }] = useQueryHandler(useAccessPolicyGroupFormLazyQuery);
+  const [apiUseAccessPolicyGroupForm, { data: accessPolicyGroupFormData, loading: loadingForm }] = useQueryHandler(useAccessPolicyGroupFormLazyQuery);
   const [apiCreateAccessPolicyGroup, { data: createAccessPolicyGroupData, loading: creatingGroup }] =
     useQueryHandler(useCreateAccessPolicyGroupMutation);
-  const [apiFindAccessPolicyGroup, { data: findAccessPolicyGroupData }] = useQueryHandler(useFindAccessPolicyGroupLazyQuery);
+  const [apiFindAccessPolicyGroup, { data: findAccessPolicyGroupData, loading: loadingGroup }] = useQueryHandler(useFindAccessPolicyGroupLazyQuery);
   const [apiUpdateAccessPolicyGroup, { data: updateAccessPolicyGroupData }] = useQueryHandler(useUpdateAccessPolicyGroupMutation);
   const [apiOrgQuickSearch, { data: orgQuickSearchData }] = useQueryHandler(useOrganizationQuickSearchLazyQuery);
 
@@ -58,6 +58,8 @@ export const useCreateGroupPanel = (isOpen, orgSid, selectedGroupId, templateId)
   const [accessPolicyForm, setAccessPolicyForm] = useState<AccessPolicyGroupForm | null>();
   // Constants
   //   const orgSidVariables = {variables: {orgSid}};
+
+  const [loading, setLoading] = useState(true);
 
   // Functions
   // * Fetch All Data
@@ -123,7 +125,9 @@ export const useCreateGroupPanel = (isOpen, orgSid, selectedGroupId, templateId)
   //
   // * Effects
   // * Component Mounted.
-  useEffect(() => {}, []);
+  useEffect(() => {
+    setLoading(loadingGroup || loadingForm);
+  }, [loadingGroup, loadingForm])
 
   // * If there is a selected group, fetch the data for that group.
   useEffect(() => {
@@ -207,7 +211,7 @@ export const useCreateGroupPanel = (isOpen, orgSid, selectedGroupId, templateId)
     clearAccessPolicyForm,
     addToAccessPolicyData,
     accessPolicyGroupFormData,
-    loadingPolicies,
+    loadingPolicies: loading,
     policies,
     specializations,
     accessPolicyData,

@@ -21,6 +21,7 @@ import { TagPicker } from 'src/components/inputs/TagPicker';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
 import { useNotification } from 'src/hooks/useNotification';
 import { PanelBody } from 'src/layouts/Panels/Panels.styles';
+import { Text } from 'src/components/typography';
 
 const defaultProps = {
   isOpen: false,
@@ -63,6 +64,8 @@ const CreateGroupPanel = ({
   const [errorMsg, setErrorMsg] = useState<string | undefined>();
   const { createAccessPolicyGroupData, updateAccessPolicyGroupData } = accessManagementGroupService;
   const Toast = useNotification();
+
+
 
   const onPanelClose = () => {
     if (unsavedChanges) {
@@ -368,7 +371,9 @@ const CreateGroupPanel = ({
               {errorMsg}
             </MessageBar>
           )}
-          { renderBody(accessPolicyForm) }
+          {loadingPolicies ? (
+            <Text>Loading...</Text>
+          ) : renderBody(accessPolicyForm) }
         </PanelBody>
       </Panel>
       <DialogYesNo
