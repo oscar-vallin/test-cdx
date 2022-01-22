@@ -49,7 +49,6 @@ describe('Input Check UI Field', () => {
     expect(wrapper.find('input').props().checked).toEqual(true);
 
     expect(wrapper.html()).toContain('Confirm?');
-    expect(wrapper.html()).toContain('*');
 
     expect(wrapper.find('i[data-icon-name=\'Info\']')).toHaveLength(1);
     expect(wrapper.find('i[data-icon-name=\'Warning12\']')).toHaveLength(1);
