@@ -1,10 +1,10 @@
 import PuppetBasePage from './PuppetBasePage';
 
 export default class PuppetAccessPolicyGroup extends PuppetBasePage {
-  spanText = '#__containerSpanTitle';
+  spanText = '#__PageTitle-Text';
 
-  async expectSpanText() {
-    await this.expectTextOnPage(this.spanText, 'Groups');
+  async expectOnPage() {
+    await this.expectTextOnPage(this.spanText, 'Access Policy Groups');
   }
 
   async clickOnCreateGroup() {

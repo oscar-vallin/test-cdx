@@ -20,13 +20,13 @@ describe('E2E - Access Policy Group Test', () => {
     await adminMenu.openMenu('Access Management', 'Groups');
 
     const accessCreateGroup = new PuppetAccessPolicyGroup(cdxApp.page);
-    await accessCreateGroup.expectSpanText();
+    await accessCreateGroup.expectOnPage();
   });
 
   it('Click on Create Group button', async () => {
     const accessCreateGroup = new PuppetAccessPolicyGroup(cdxApp.page);
 
-    await accessCreateGroup.expectSpanText();
+    await accessCreateGroup.expectOnPage();
     await accessCreateGroup.clickOnCreateGroup();
   });
 
