@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import { useSessionStore } from 'src/store/SessionStore';
-import { useBeginLoginMutation, usePasswordLoginMutation } from 'src/data/services/graphql';
+import { LoginStepType, useBeginLoginMutation, usePasswordLoginMutation } from 'src/data/services/graphql';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
 import { useCSRFToken } from 'src/hooks/useCSRFToken';
 
@@ -26,6 +26,7 @@ export const useLoginUseCase = () => {
   const ActiveDomainStore = useActiveDomainStore();
   const { callCSRFController } = useCSRFToken();
 
+  const [retries, setRetries] = useState(0);
   const [state, setState] = useState({ ...INITIAL_STATE });
   const [userId, setUserId] = useState<string>();
 
@@ -69,16 +70,25 @@ export const useLoginUseCase = () => {
     if (userIdVerificationError) {
       const networkError = userIdVerificationError.networkError
       if (networkError && ('statusCode' in networkError) && (networkError.statusCode === 403)) {
-        // This means the CSRF Token has expired and we need to retrieve it
-        callCSRFController();
-        // retry
-        performUserIdVerification({ userId });
+        // prevent an infinite loop of calls
+        if (retries < 3) {
+          // This means the CSRF Token has expired and we need to retrieve it
+          callCSRFController();
+          // retry
+          performUserIdVerification({ userId });
+          setRetries(retries + 1);
+        } else {
+          // Just refresh the page
+          window.location.reload();
+        }
       } else {
+        const errMsg = userIdVerificationError.graphQLErrors[0].message ?? 'Please provide a valid email address to proceed'
+
         setState({
           ...state,
           step: 'USER_ID',
           loading: false,
-          error: 'Please provide a valid email address to proceed',
+          error: errMsg,
           reset: false,
         });
       }
@@ -92,13 +102,13 @@ export const useLoginUseCase = () => {
   }, [credentialsVerificationError]);
 
   useEffect(() => {
-    if (verifiedUserId && verifiedUserId.beginLogin?.step === 'PASSWORD') {
+    if (verifiedUserId && verifiedUserId.beginLogin?.step === LoginStepType.Password) {
       setState({ step: 'PASSWORD', data: verifiedUserId.beginLogin, loading: false, error: null, reset: false });
     }
   }, [verifiedUserId]);
 
   useEffect(() => {
-    if (userSession) {
+    if (userSession?.passwordLogin?.step === LoginStepType.Complete) {
       const { passwordLogin } = userSession;
       const organization = {
         type: passwordLogin?.loginCompleteDomain?.type,
