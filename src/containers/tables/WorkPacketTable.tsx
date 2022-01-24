@@ -32,6 +32,7 @@ export const WorkPacketTable = ({
   tableFilters,
   onItemsListChange,
 }: WorkPacketParams) => {
+  const POLL_INTERVAL = 20000;
   const { orgSid } = useOrgSid();
   const handleError = ErrorHandler();
 
@@ -46,7 +47,7 @@ export const WorkPacketTable = ({
 
   const [apiCall, { data, loading, error }] = useQueryHandler(lazyQuery);
 
-  const { data: pollingData, error: pollingError } = pollingQuery
+  const apiPolling = pollingQuery
     ? pollingQuery({
         variables: {
           orgSid,
@@ -54,7 +55,7 @@ export const WorkPacketTable = ({
           dateRange: { rangeStart: tableFilters.startDate.value, rangeEnd: tableFilters.endDate.value },
           lastUpdated,
         },
-        pollInterval: 20000,
+        pollInterval: POLL_INTERVAL,
       })
     : useState({});
 
@@ -108,6 +109,19 @@ export const WorkPacketTable = ({
       pageSize: 100,
       sort: tableFilters.pagingParams.sort,
     });
+    // Ticket #6 - Only poll if today is included in the date range
+    if ('stopPolling' in apiPolling) {
+      const today = new Date();
+      today.setHours(0);
+      today.setMinutes(0);
+      today.setSeconds(0);
+      today.setMilliseconds(0);
+      if (tableFilters.startDate?.value?.getTime() <= today.getTime() && tableFilters.endDate?.value?.getTime() >= today.getTime()) {
+        apiPolling?.startPolling(POLL_INTERVAL);
+      } else {
+        apiPolling?.stopPolling();
+      }
+    }
   }, [orgSid, tableFilters.searchText.delayedValue, tableFilters.startDate.value, tableFilters.endDate.value]);
 
   useEffect(() => {
@@ -140,14 +154,14 @@ export const WorkPacketTable = ({
   }, [data, loading]);
 
   useEffect(() => {
-    if (pollingData && pollingData.workPacketStatusesPoll && pollingData.workPacketStatusesPoll > 0) {
+    if (apiPolling.pollingData && apiPolling.pollingData.workPacketStatusesPoll && apiPolling.pollingData.workPacketStatusesPoll > 0) {
       setLastUpdated(new Date());
     }
-  }, [pollingData]);
+  }, [apiPolling.pollingData]);
 
   useEffect(() => {
-    handleError(pollingError);
-  }, [pollingError]);
+    handleError(apiPolling.pollingDatapollingError);
+  }, [apiPolling.pollingDatapollingError]);
 
   const renderTable = () => {
     const classNames = mergeStyleSets({
