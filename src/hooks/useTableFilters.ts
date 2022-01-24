@@ -86,7 +86,7 @@ export const useTableFilters = (searchTextPlaceholder: string, defaultSort?: Sor
 
   const deriveStartDate = (): Date => {
     const startDateParam = urlParams.get('startDate');
-    const startDate = startDateParam == null ? defaultStartDate : new Date(startDateParam);
+    const startDate = startDateParam == null ? defaultStartDate : new Date(`${startDateParam}T00:00:00`);
     if (isValid(startDate)) {
       return startDate;
     }
@@ -94,7 +94,7 @@ export const useTableFilters = (searchTextPlaceholder: string, defaultSort?: Sor
   };
   const deriveEndDate = (): Date => {
     const endDateParam = urlParams.get('endDate');
-    const endDate = endDateParam == null ? defaultEndDate : new Date(endDateParam);
+    const endDate = endDateParam == null ? defaultEndDate : new Date(`${endDateParam}T:23:59:59`);
     if (isValid(endDate)) {
       return endDate;
     }
