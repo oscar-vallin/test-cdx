@@ -100,12 +100,16 @@ const _AccessManagementSpecializationPage = () => {
     }
   };
 
-  useEffect(() => {
+  const fetchData = () => {
     accessSpecializationForOrg({
       variables: {
         orgSid,
       },
     });
+  };
+
+  useEffect(() => {
+    fetchData();
   }, [orgSid]);
 
   useEffect(() => {
@@ -203,28 +207,11 @@ const _AccessManagementSpecializationPage = () => {
 
         <CreateAccessSpecializationPanel
           isOpen={isPanelOpen}
-          onCreateSpecialization={({ name, sid }) => {
-            setSpecializations([
-              ...specializations,
-              {
-                name: name?.value || '',
-                sid: sid || null,
-              },
-            ]);
+          onCreateSpecialization={() => {
+            fetchData();
           }}
-          onUpdateSpecialization={(updatedSpecialization) => {
-            setSpecializations(
-              specializations.map((specialization) => {
-                if (specialization.sid !== updatedSpecialization.sid) {
-                  return specialization;
-                }
-
-                return {
-                  name: updatedSpecialization?.name?.value || '',
-                  sid: updatedSpecialization?.sid || null,
-                };
-              })
-            );
+          onUpdateSpecialization={() => {
+            fetchData();
           }}
           onDismiss={() => {
             setIsPanelOpen(false);
@@ -238,8 +225,8 @@ const _AccessManagementSpecializationPage = () => {
           onDismiss={hideConfirmation}
           dialogContentProps={{
             type: DialogType.normal,
-            title: 'Remove policy',
-            subText: `Do you really want to remove "${
+            title: 'Are you sure?',
+            subText: `Do you really want to delete this Specialization?"${
               specializations.find(({ sid }) => selectedAccessId === sid)?.name || ''
             }"?`,
           }}
