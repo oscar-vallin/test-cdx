@@ -116,7 +116,10 @@ export const WorkPacketTable = ({
       today.setMinutes(0);
       today.setSeconds(0);
       today.setMilliseconds(0);
-      if (tableFilters.startDate?.value?.getTime() <= today.getTime() && tableFilters.endDate?.value?.getTime() >= today.getTime()) {
+      const todayMillis = today.getTime();
+      const startDateMillis = tableFilters.startDate?.value ? tableFilters.startDate?.value?.getTime() : Number.POSITIVE_INFINITY;
+      const endDateMillis = tableFilters.endDate?.value ? tableFilters.endDate?.value?.getTime() : 0;
+      if (startDateMillis <= todayMillis && endDateMillis >= todayMillis) {
         apiPolling?.startPolling(POLL_INTERVAL);
       } else {
         apiPolling?.stopPolling();
