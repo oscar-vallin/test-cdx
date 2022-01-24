@@ -125,7 +125,7 @@ const CreateAccessSpecializationPanel = ({
       } else {
         onCreateSpecialization(createAccessSpecialization);
         Toast.success({text: 'Access specialization created successfully'});
-        onDismiss();
+        doClosePanel();
       }
     }
   }, [createdSpecialization]);
@@ -141,7 +141,7 @@ const CreateAccessSpecializationPanel = ({
       } else {
         onUpdateSpecialization(updateAccessSpecialization);
         Toast.success({ text: 'Access specialization updated successfully' });
-        onDismiss();
+        doClosePanel();
       }
     }
   }, [updatedSpecialization]);
