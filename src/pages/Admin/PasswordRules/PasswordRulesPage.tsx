@@ -173,7 +173,7 @@ const _PasswordRulesPage = () => {
                               <strong>Must be a password of</strong>
 
                               <StyledComboBox
-                                selectedKey={state?.someMustBeMet?.minPasswordComplexity}
+                                selectedKey={state?.someMustBeMet?.minPasswordComplexity?.toString()}
                                 options={
                                   form.passwordRulesForm?.options
                                     ?.find((opt) => opt.key === 'PasswordComplexity')
@@ -183,11 +183,12 @@ const _PasswordRulesPage = () => {
                                     })) || []
                                 }
                                 onChange={(event, option) => {
+                                  const complexity = Object.keys(PasswordComplexity).find((x) => PasswordComplexity[x] == option?.key?.toString()) ?? 'ANY';
                                   setState({
                                     ...state,
                                     someMustBeMet: {
                                       ...state.someMustBeMet,
-                                      minPasswordComplexity: PasswordComplexity[option?.key?.toString() ?? 'ANY'] ,
+                                      minPasswordComplexity: PasswordComplexity[complexity]
                                     },
                                   });
                                 }}
