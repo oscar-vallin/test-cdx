@@ -376,7 +376,7 @@ const CreateAccessSpecializationPanel = ({
         id="create-specialization-panel"
         closeButtonAriaLabel="Close"
         type={PanelType.large}
-        headerText={!state.policySid ? 'New Access Specialization' : 'Update Access Specialization'}
+        headerText={!selectedAccessId ? 'New Access Specialization' : 'Update Access Specialization'}
         isOpen={isOpen}
         onDismiss={onPanelClose}
         onOuterClick={() => {}}
