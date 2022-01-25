@@ -89,6 +89,7 @@ const CDXTagPicker = ({
           id,
           onBlur,
           onFocus,
+          placeholder: 'Type to Search'
         }}
       />
     </>

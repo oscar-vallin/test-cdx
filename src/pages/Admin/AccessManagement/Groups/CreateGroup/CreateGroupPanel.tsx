@@ -155,6 +155,7 @@ const CreateGroupPanel = ({
                   <UIInputText id='__groupInputName'
                                uiStringField={form.name}
                                value={accessPolicyData.name}
+                               placeholder='Please enter a Unique Name'
                                onChange={(event, newValue) => {
                                  setUnsavedChanges(true);
                                  addToAccessPolicyData({ name: newValue });
@@ -167,6 +168,7 @@ const CreateGroupPanel = ({
                     id="__groupDescription"
                     uiStringField={form.description}
                     value={accessPolicyData.description}
+                    placeholder='Please enter a Unique Description'
                     onChange={(event, newValue) => {
                       setUnsavedChanges(true);
                       addToAccessPolicyData({ description: newValue });

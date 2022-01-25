@@ -96,9 +96,10 @@ type UIInputTextType = {
   uiStringField?: UiStringField;
   onChange?: (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => void | null;
   value?: string;
+  placeholder?: string;
 };
 
-const UIInputText = ({ id, uiStringField, onChange, value }: UIInputTextType) => {
+const UIInputText = ({ id, uiStringField, onChange, value, placeholder }: UIInputTextType) => {
   if (uiStringField?.readOnly === true) {
     return <UIInputTextReadOnly id={id} uiField={uiStringField} />;
   }
@@ -114,6 +115,7 @@ const UIInputText = ({ id, uiStringField, onChange, value }: UIInputTextType) =>
       info={uiStringField?.info ?? undefined}
       required={uiStringField?.required ?? false}
       onChange={onChange}
+      placeholder={placeholder}
       minLength={uiStringField?.min}
       maxLength={uiStringField?.max}
     />
