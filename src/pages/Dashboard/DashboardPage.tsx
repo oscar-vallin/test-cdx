@@ -19,30 +19,21 @@ import { useOrgSid } from 'src/hooks/useOrgSid';
 import { PageTitle } from 'src/components/typography';
 import { useDashboardService } from './DashboardPage.service';
 import { StyledButton, StyledRow } from './DashboardPage.styles';
+import { format } from 'date-fns';
 
 const DashboardPage = () => {
-  const { orgSid } = useOrgSid();
+  const { orgSid, startDate, endDate } = useOrgSid();
   const location = useLocation();
-  const [urlParams]: any = useState(queryString.parse(location.search));
-  const service = useDashboardService(orgSid);
+  const urlParams = new URLSearchParams(location.search);
+  const dateParam = urlParams.get('date');
+  const service = useDashboardService(orgSid, startDate ? 'custom' : dateParam);
   const { isLoadingData, datesOptions, dataCounters, getPeriodCounts }: any = service;
   const { setDateId, dateId } = service;
   const history = useHistory();
   const [dateRange, setDateRange] = useState({
-    startDate: new Date(),
-    endDate: new Date(),
+    startDate: startDate ? new Date(`${startDate}T00:00:00.000`) : new Date(),
+    endDate: endDate ? new Date(`${endDate}T23:59:59.999`) : new Date(),
   });
-
-  useEffect((): any => {
-    if (urlParams?.date) {
-      setDateId(urlParams.date);
-    }
-
-    return () => {
-      return null;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   useEffect(() => {
     if (location.search) {
@@ -50,20 +41,18 @@ const DashboardPage = () => {
     }
   }, [location]);
 
-  useEffect(() => {
-    history.push(
-      `?startDate=${dateRange.startDate?.toISOString()}&endDate=${dateRange.endDate?.toISOString()}&orgSid=${orgSid}`
-    );
-  }, [dateRange]);
+  const handleChangeDate: any = (dateType: string, startDate?: Date, endDate?: Date) => {
+    setDateId(dateType);
 
-  const handleChangeDate: any = (date) => {
-    setDateId(date);
-
-    if (date !== 'custom') {
-      history.push(`?date=${date}&orgSid=${orgSid}`);
+    if (dateType !== 'custom') {
+      history.push(`?date=${dateType}&orgSid=${orgSid}`);
+    } else if (startDate && endDate) {
+      history.push(
+        `?startDate=${format(startDate, 'yyyy-MM-dd')}&endDate=${format(endDate, 'yyyy-MM-dd')}&orgSid=${orgSid}`
+      );
     } else {
       history.push(
-        `?startDate=${dateRange.startDate?.toISOString()}&endDate=${dateRange.endDate?.toISOString()}&orgSid=${orgSid}`
+        `?startDate=${format(dateRange.startDate, 'yyyy-MM-dd')}&endDate=${format(dateRange.endDate, 'yyyy-MM-dd')}&orgSid=${orgSid}`
       );
     }
   };
@@ -197,7 +186,10 @@ const DashboardPage = () => {
                         <InputDate
                           id="CustomFilter__StartDate"
                           value={dateRange.startDate}
-                          onChange={(date) => setDateRange({ ...dateRange, startDate: date })}
+                          onChange={(date) => {
+                            setDateRange({ ...dateRange, startDate: date });
+                            handleChangeDate('custom', date, dateRange.endDate);
+                          }}
                           required={false}
                         />
                       </Column>
@@ -205,7 +197,10 @@ const DashboardPage = () => {
                         <InputDate
                           id="CustomFilter__EndDate"
                           value={dateRange.endDate}
-                          onChange={(date) => setDateRange({ ...dateRange, endDate: date })}
+                          onChange={(date) => {
+                            setDateRange({ ...dateRange, endDate: date });
+                            handleChangeDate('custom', dateRange.startDate, date);
+                          }}
                           required={false}
                         />
                       </Column>

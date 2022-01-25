@@ -5,6 +5,7 @@ import {
   useDashboardPeriodsLazyQuery,
   useDashboardPeriodCountsLazyQuery,
 } from 'src/data/services/graphql';
+import { ErrorHandler } from 'src/utils/ErrorHandler';
 
 export const DATE_OPTION_NAME = {
   today: 'today',
@@ -15,7 +16,7 @@ export const DATE_OPTION_NAME = {
 };
 
 const DATES_OPTIONS = [
-  { id: DATE_OPTION_NAME.today, name: 'Today', selected: true },
+  { id: DATE_OPTION_NAME.today, name: 'Today', selected: false },
   { id: DATE_OPTION_NAME.yesterday, name: 'Yesterday', selected: false },
   { id: DATE_OPTION_NAME.thisMonth, name: 'Month', selected: false },
   { id: DATE_OPTION_NAME.lastMonth, name: 'Last Month', selected: false },
@@ -28,8 +29,8 @@ const isThisMonth = (id) => id === DATE_OPTION_NAME.thisMonth;
 const isLastMonth = (id) => id === DATE_OPTION_NAME.lastMonth;
 const isCustom = (id) => id === DATE_OPTION_NAME.custom;
 
-export const useDashboardService = (orgSid: string) => {
-  const [dateId, setDateId] = useState(DATE_OPTION_NAME.today);
+export const useDashboardService = (orgSid: string, dateRangeType?: string | null) => {
+  const [dateId, setDateId] = useState(dateRangeType ?? DATE_OPTION_NAME.today);
   const [datesOptions, setDateOptions] = useState(DATES_OPTIONS);
   const [dataCounters, setDataCounters] = useState<DashboardPeriodCounts | null | undefined>();
   const [isLoading, setIsLoading] = useState(true);
@@ -37,6 +38,7 @@ export const useDashboardService = (orgSid: string) => {
 
   const [apiDashboardPeriodsQuery, { data, loading, error }] = useDashboardPeriodsLazyQuery();
   const [customPeriodQuery, { data: period }] = useDashboardPeriodCountsLazyQuery();
+  const handleError = ErrorHandler();
 
   useEffect(() => {
     if (orgSid) {
@@ -51,8 +53,7 @@ export const useDashboardService = (orgSid: string) => {
 
   useEffect(() => {
     if (error) {
-      // authLogout();
-      // history.push('/');
+      handleError(error);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);

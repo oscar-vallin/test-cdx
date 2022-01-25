@@ -46,7 +46,7 @@ const AppHeader = ({
 }: AppHeaderProps): ReactElement => {
   const history = useHistory();
   const location = useLocation();
-  const { orgSid } = useOrgSid();
+  const { orgSid, startDate, endDate } = useOrgSid();
   const ThemeStore = useThemeStore();
   const { user } = useSessionStore();
   const ActiveDomainStore = useActiveDomainStore();
@@ -132,7 +132,14 @@ const AppHeader = ({
           data-e2e={menuOption.destination}
           selected={location.pathname === opt.URL}
           onClick={() => {
-            history.push(`${opt.URL}?orgSid=${orgSid}`);
+            let dest = `${opt.URL}?orgSid=${orgSid}`;
+            if (startDate) {
+              dest += `&startDate=${startDate}`;
+            }
+            if (endDate) {
+              dest += `&endDate=${endDate}`;
+            }
+            history.push(dest);
 
             return null;
           }}
