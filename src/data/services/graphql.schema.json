@@ -7590,6 +7590,12 @@
         "interfaces": null,
         "enumValues": [
           {
+            "name": "ANY",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "WEAK",
             "description": null,
             "isDeprecated": false,

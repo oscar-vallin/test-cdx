@@ -990,6 +990,7 @@ export type PaginationInfo = {
 };
 
 export enum PasswordComplexity {
+  Any = 'ANY',
   Weak = 'WEAK',
   Fair = 'FAIR',
   Good = 'GOOD',
