@@ -97,26 +97,27 @@ const PasswordRules = ({ user, password, onChange }: PasswordRulesParam) => {
           </RuleGroup>
         </Column>
       </Row>
-      <Row>
-        <Stack horizontal tokens={stackTokens}>
-          <Stack.Item grow={3} styles={stackItemStyles}>
-            <RuleGroup title="Meet strength level" passes={rules?.passwordStrength?.passes ?? false}>
-              <RuleItems items={passwordStrengthRuleItems()} />
-            </RuleGroup>
-          </Stack.Item>
-          <Stack.Item disableShrink styles={compositeRuleSepStyle}>
-            <CompositeRulesSeparator>or</CompositeRulesSeparator>
-          </Stack.Item>
-          <Stack.Item grow={3} styles={stackItemStyles}>
-            <RuleGroup
-              title={someMustBeMetTitle(rules?.someMustBeMet?.requiredNumPassingRules ?? 1)}
-              passes={rules?.someMustBeMet?.passes ?? false}
-            >
-              <RuleItems items={(rules?.someMustBeMet?.rules ?? []) as PasswordValidationRule[]} />
-            </RuleGroup>
-          </Stack.Item>
-        </Stack>
-      </Row>
+      {rules?.someMustBeMet?.enabled && (
+        <Row>
+          <Stack horizontal tokens={stackTokens}>
+            <Stack.Item grow={3} styles={stackItemStyles}>
+              <RuleGroup title="Meet strength level" passes={rules?.passwordStrength?.passes ?? false}>
+                <RuleItems items={passwordStrengthRuleItems()} />
+              </RuleGroup>
+            </Stack.Item>
+            <Stack.Item disableShrink styles={compositeRuleSepStyle}>
+              <CompositeRulesSeparator>or</CompositeRulesSeparator>
+            </Stack.Item>
+            <Stack.Item grow={3} styles={stackItemStyles}>
+              <RuleGroup
+                title={someMustBeMetTitle(rules?.someMustBeMet?.requiredNumPassingRules ?? 1)}
+                passes={rules?.someMustBeMet?.passes ?? false}>
+                <RuleItems items={(rules?.someMustBeMet?.rules ?? []) as PasswordValidationRule[]} />
+              </RuleGroup>
+            </Stack.Item>
+          </Stack>
+        </Row>
+      )}
     </>
   );
 };

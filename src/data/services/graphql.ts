@@ -1086,6 +1086,7 @@ export type PasswordValidation = {
 
 export type PasswordValidationGroup = {
   __typename?: 'PasswordValidationGroup';
+  enabled: Scalars['Boolean'];
   requiredNumPassingRules?: Maybe<Scalars['Int']>;
   passes: Scalars['Boolean'];
   rules: Array<Maybe<PasswordValidationRule>>;
@@ -4205,7 +4206,7 @@ export type PasswordValidationQuery = (
     & Pick<PasswordValidation, 'passes'>
     & { mustAlwaysBeMet?: Maybe<(
       { __typename?: 'PasswordValidationGroup' }
-      & Pick<PasswordValidationGroup, 'requiredNumPassingRules' | 'passes'>
+      & Pick<PasswordValidationGroup, 'enabled' | 'requiredNumPassingRules' | 'passes'>
       & { rules: Array<Maybe<(
         { __typename?: 'PasswordValidationRule' }
         & Pick<PasswordValidationRule, 'passes' | 'label'>
@@ -4215,7 +4216,7 @@ export type PasswordValidationQuery = (
       & Pick<PasswordValidationStrengthRule, 'passes' | 'minPasswordComplexity'>
     )>, someMustBeMet?: Maybe<(
       { __typename?: 'PasswordValidationGroup' }
-      & Pick<PasswordValidationGroup, 'requiredNumPassingRules' | 'passes'>
+      & Pick<PasswordValidationGroup, 'enabled' | 'requiredNumPassingRules' | 'passes'>
       & { rules: Array<Maybe<(
         { __typename?: 'PasswordValidationRule' }
         & Pick<PasswordValidationRule, 'passes' | 'label'>
@@ -9745,6 +9746,7 @@ export const PasswordValidationDocument = gql`
   passwordValidation(orgSid: $orgSid, userSid: $userSid, password: $password) {
     passes
     mustAlwaysBeMet {
+      enabled
       requiredNumPassingRules
       passes
       rules {
@@ -9757,6 +9759,7 @@ export const PasswordValidationDocument = gql`
       minPasswordComplexity
     }
     someMustBeMet {
+      enabled
       requiredNumPassingRules
       passes
       rules {
