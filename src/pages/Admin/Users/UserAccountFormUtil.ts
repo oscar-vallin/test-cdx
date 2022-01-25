@@ -26,7 +26,7 @@ export const defaultForm = {
     },
   },
   organization: {
-    label: 'Primary Organization',
+    label: 'Organization',
     required: false,
     visible: true,
   },

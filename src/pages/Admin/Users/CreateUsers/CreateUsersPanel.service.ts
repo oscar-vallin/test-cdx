@@ -98,7 +98,7 @@ export const useCreateUsersPanel = (orgSid: string) => {
       data.createUser = {
         sid: null,
         organization: {
-          label: 'Primary Organization',
+          label: 'Organization',
           required: false,
           visible: true,
         },

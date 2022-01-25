@@ -202,19 +202,21 @@ const CreateGroupPanel = ({
                   )}
                 </Column>
               </FormRow>
-              <FormRow>
-                <Column lg="12">
-                  <UIInputMultiSelect id="__applicableOrgTypes"
-                                      uiField={form.applicableOrgTypes}
-                                      value={accessPolicyData.applicableOrgTypes}
-                                      options={form.options ?? []}
-                                      placeholder="--Applies to All Org Types--"
-                                      onChange={(applicableOrgTypes) => {
-                                        setUnsavedChanges(true);
-                                        addToAccessPolicyData({ applicableOrgTypes });
-                                      }}/>
-                </Column>
-              </FormRow>
+              {accessPolicyData.tmpl && form.applicableOrgTypes?.visible && (
+                <FormRow>
+                  <Column lg="12">
+                    <UIInputMultiSelect id="__applicableOrgTypes"
+                                        uiField={form.applicableOrgTypes}
+                                        value={accessPolicyData.applicableOrgTypes}
+                                        options={form.options ?? []}
+                                        placeholder="--Applies to All Org Types--"
+                                        onChange={(applicableOrgTypes) => {
+                                          setUnsavedChanges(true);
+                                          addToAccessPolicyData({ applicableOrgTypes });
+                                        }}/>
+                  </Column>
+                </FormRow>
+              )}
               {form?.policies?.visible && (
                 <>
                   <FormRow>
@@ -355,7 +357,7 @@ const CreateGroupPanel = ({
         id="__createGroupPanel"
         closeButtonAriaLabel="Close"
         type={PanelType.large}
-        headerText={!accessPolicyData.sid ? 'New Access Policy Group' : 'Update Policy Group'}
+        headerText={!accessPolicyData.sid ? 'New Access Policy Group' : 'Update Access Policy Group'}
         isOpen={isOpen}
         onDismiss={onPanelClose}
         onOuterClick={() => {}}

@@ -91,7 +91,7 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
   const internalServerError = {
     sid: null,
     organization: {
-      label: 'Primary Organization',
+      label: 'Organization',
       required: false,
       visible: true,
     },
