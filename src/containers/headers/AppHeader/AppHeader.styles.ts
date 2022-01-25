@@ -23,7 +23,6 @@ export const StyledContainer = styled.div<ToggableProps>`
   &::before {
     background: rgba(0, 0, 0, 0.25);
     content: '';
-    height: 100vh;
     left: 0;
     opacity: ${({ open }) => (open ? '1' : '0')};
     position: fixed;

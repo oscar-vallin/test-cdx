@@ -1,10 +1,9 @@
 import styled from 'styled-components';
-import { Box } from '../../components/layouts/Box';
+import { Box } from 'src/components/layouts';
 
 export const BoxStyled = styled(Box)`
   background: ${({ theme }) => theme.colors.white};
   color: ${({ theme }) => theme.colors.black};
-  height: 100vh;
   overflow: auto;
   padding: 58px 0 0;
   width: 100vw;
