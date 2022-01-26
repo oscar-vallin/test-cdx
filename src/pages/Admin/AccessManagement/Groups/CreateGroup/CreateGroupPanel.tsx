@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { ReactElement, useEffect, useState } from 'react';
 
-import { MessageBar, MessageBarType, Panel, PanelType } from '@fluentui/react';
+import { MessageBar, MessageBarType, Panel, PanelType, Stack } from '@fluentui/react';
 
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { Button } from 'src/components/buttons';
@@ -20,7 +20,7 @@ import { UIInputMultiSelect } from 'src/components/inputs/InputMultiselect';
 import { TagPicker } from 'src/components/inputs/TagPicker';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
 import { useNotification } from 'src/hooks/useNotification';
-import { PanelBody } from 'src/layouts/Panels/Panels.styles';
+import { PanelBody, PanelHeader, PanelTitle } from 'src/layouts/Panels/Panels.styles';
 import { Text } from 'src/components/typography';
 
 const defaultProps = {
@@ -353,6 +353,18 @@ const CreateGroupPanel = ({
     }
   };
 
+  const renderPanelHeader = () => (
+    <PanelHeader id="__PanelHeader">
+      <Column lg="12">
+        <Stack horizontal styles={{ root: { height: 44 } }}>
+          <PanelTitle id="__CreateGroup_Panel_Title" variant="bold">
+            {!accessPolicyData.sid ? 'New Access Policy Group' : 'Update Access Policy Group'}
+          </PanelTitle>
+        </Stack>
+      </Column>
+    </PanelHeader>
+  );
+
   return (
     <>
       <Panel
@@ -360,6 +372,7 @@ const CreateGroupPanel = ({
         closeButtonAriaLabel="Close"
         type={PanelType.large}
         headerText={!accessPolicyData.sid ? 'New Access Policy Group' : 'Update Access Policy Group'}
+        onRenderHeader={renderPanelHeader}
         isOpen={isOpen}
         onDismiss={onPanelClose}
         onOuterClick={() => {}}

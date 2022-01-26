@@ -22,6 +22,12 @@ ReactDOM.render(
     <MetaTags>
       <title>CDX</title>
       <meta id="__csrf_token" name="_csrf" content="" />
+      <style>
+        {/*Hack for the Fluent UI Panel header to be on top*/}
+        div.ms-Panel-commands &#123;
+          z-index: 9999;
+        &#125;
+      </style>
     </MetaTags>
     <React.StrictMode>
       <StoreProvider store={store}>

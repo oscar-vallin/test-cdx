@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { ReactElement, useState, useEffect } from 'react';
 
-import { SpinnerSize, Panel, PanelType, Spinner, ITag } from '@fluentui/react';
+import { SpinnerSize, Panel, PanelType, Spinner, ITag, Stack } from '@fluentui/react';
 import _ from 'lodash';
 
 import { useNotification } from 'src/hooks/useNotification';
@@ -28,6 +28,7 @@ import { TagPicker } from 'src/components/inputs/TagPicker';
 import { UIInputTextReadOnly } from 'src/components/inputs/InputText/InputText';
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
+import { PanelHeader, PanelTitle } from 'src/layouts/Panels/Panels.styles';
 
 type SpecializationGroup = {
   label: string;
@@ -370,6 +371,18 @@ const CreateAccessSpecializationPanel = ({
     );
   }
 
+  const renderPanelHeader = () => (
+    <PanelHeader id="__PanelHeader">
+      <Column lg="12">
+        <Stack horizontal styles={{ root: { height: 44 } }}>
+          <PanelTitle id="__CreateSpec_Panel_Title" variant="bold">
+            {!selectedAccessId ? 'New Access Specialization' : 'Update Access Specialization'}
+          </PanelTitle>
+        </Stack>
+      </Column>
+    </PanelHeader>
+  );
+
   return (
     <>
       <Panel
@@ -377,6 +390,7 @@ const CreateAccessSpecializationPanel = ({
         closeButtonAriaLabel="Close"
         type={PanelType.large}
         headerText={!selectedAccessId ? 'New Access Specialization' : 'Update Access Specialization'}
+        onRenderHeader={renderPanelHeader}
         isOpen={isOpen}
         onDismiss={onPanelClose}
         onOuterClick={() => {}}
