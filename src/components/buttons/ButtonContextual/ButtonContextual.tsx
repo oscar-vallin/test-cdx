@@ -1,36 +1,18 @@
 import { ReactElement, ReactNode } from 'react';
 import { useConst } from '@uifabric/react-hooks';
 import { StyledButton } from './ButtonContextual.styles';
-
-const defaultProps = {
-  id: '',
-  items: [
-    {
-      id: '',
-      key: '',
-      text: '',
-      onClick: () => null,
-    },
-  ],
-};
-
-type itemsProps = {
-  id?: string;
-  key?: string;
-  text?: string;
-  onClick?: () => void;
-};
+import { IContextualMenuProps, IContextualMenuItem } from '@fluentui/react';
 
 type ButtonContextualProps = {
   id?: string;
   children?: ReactNode;
-  items?: itemsProps[];
-} & typeof defaultProps;
+  items: IContextualMenuItem[];
+}
 
 const ButtonContextual = ({ id, children, items }: ButtonContextualProps): ReactElement => {
-  const menuProps = useConst(() => ({
+  const menuProps: IContextualMenuProps = useConst(() => ({
     shouldFocusOnMount: true,
-    items,
+    items: items,
   }));
 
   return (
@@ -39,7 +21,5 @@ const ButtonContextual = ({ id, children, items }: ButtonContextualProps): React
     </StyledButton>
   );
 };
-
-ButtonContextual.defaultProps = defaultProps;
 
 export { ButtonContextual };

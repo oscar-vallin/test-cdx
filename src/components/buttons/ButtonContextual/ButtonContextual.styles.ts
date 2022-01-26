@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { DefaultButton } from '@fluentui/react';
+import { DefaultButton, IContextualMenuItem } from '@fluentui/react';
 
 export const StyledButton = styled(DefaultButton)<StyledButtonProps>`
   background: transparent;
@@ -9,6 +9,6 @@ export const StyledButton = styled(DefaultButton)<StyledButtonProps>`
 `;
 
 type StyledButtonProps = {
-  items: { id?: string; key: string; text: string; onClick: () => void }[];
+  items: IContextualMenuItem[];
   menuProps: any;
 };
