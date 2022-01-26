@@ -13,7 +13,7 @@ import {
   FontIcon,
   Spinner,
   SpinnerSize,
-  Link, IColumn,
+  Link, IColumn, IContextualMenuItem,
 } from '@fluentui/react';
 
 import { EmptyState } from 'src/containers/states';
@@ -68,7 +68,7 @@ const _AccessManagementPoliciesPage = () => {
     useAccessPolicyTemplatesLazyQuery
   );
 
-  const [templatePolicyMenu, setTemplatePolicyMenu] = useState([]);
+  const [templatePolicyMenu, setTemplatePolicyMenu] = useState<IContextualMenuItem[]>([]);
 
   const [accessPoliciesForOrg, { data, loading }] = useQueryHandler(useAccessPoliciesForOrgLazyQuery);
   // Linter Issue.  useRemoveAmPolicyMutation??
@@ -135,16 +135,32 @@ const _AccessManagementPoliciesPage = () => {
   }, [orgSid]);
 
   useEffect(() => {
-    const templates =
+    let templates: IContextualMenuItem[] =
       templatePolicies?.accessPolicyTemplates?.map((policy) => ({
         key: policy.value,
         text: policy.label,
+        style: {
+          padding: '0 5px 0 15px'
+        },
         onClick: (event, item) => {
           setSelectedTemplateId(item.key);
           setIsPanelOpen(true);
         },
       })) || [];
 
+    if (templates.length > 0) {
+      templates = [
+        {
+          key: '__Template_Header',
+          text: 'From Template:',
+          style: {
+            fontSize: '.75em'
+          },
+          disabled: true,
+        },
+        ...templates
+      ];
+    }
     setTemplatePolicyMenu(templates);
   }, [templatePolicies, isLoadingTemplatePolicies]);
 
@@ -174,6 +190,32 @@ const _AccessManagementPoliciesPage = () => {
     applicableOrgTypes: policy?.applicableOrgTypes?.value,
   });
 
+  const createPolicyButton = () => {
+    return (
+      <Button
+        split={!isLoadingTemplatePolicies && templatePolicyMenu.length > 0}
+        id="CreatePolicyButton"
+        variant="primary"
+        onClick={() => {
+          setIsPanelOpen(true);
+          return null;
+        }}
+        {...(!isLoadingTemplatePolicies && templatePolicyMenu.length > 0
+          ? {
+            menuProps: {
+              items: templatePolicyMenu,
+              contextualMenuItemAs: (props) => (
+                <div id={`PolicyTemplate__${props.item.key}`}>{props.item.text}</div>
+              ),
+            },
+          }
+          : {})}
+      >
+        Create policy
+      </Button>
+    )
+  }
+
   return (
     <LayoutAdmin id="PageAdmin" sidebarOptionSelected="AM_POLICIES">
       <>
@@ -187,27 +229,7 @@ const _AccessManagementPoliciesPage = () => {
               </Column>
 
               <Column lg="6" right>
-                <Button
-                  split={!isLoadingTemplatePolicies && templatePolicyMenu.length > 0}
-                  id="CreatePolicyButton"
-                  variant="primary"
-                  onClick={() => {
-                    setIsPanelOpen(true);
-                    return null;
-                  }}
-                  {...(!isLoadingTemplatePolicies && templatePolicyMenu.length > 0
-                    ? {
-                        menuProps: {
-                          items: templatePolicyMenu,
-                          contextualMenuItemAs: (props) => (
-                            <div id={`PolicyTemplate__${props.item.key}`}>{props.item.text}</div>
-                          ),
-                        },
-                      }
-                    : {})}
-                >
-                  Create policy
-                </Button>
+                {createPolicyButton()}
               </Column>
             </Row>
           )}
@@ -232,18 +254,7 @@ const _AccessManagementPoliciesPage = () => {
                 <EmptyState
                   title="No policies found"
                   description="You haven't created an access policy yet. Click the button below to create a new policy."
-                  actions={(
-                    <Button
-                      id="CreatePolicyButton"
-                      variant="primary"
-                      onClick={() => {
-                        setIsPanelOpen(true);
-                        return null;
-                      }}
-                    >
-                      Create policy
-                    </Button>
-                  )}
+                  actions={createPolicyButton()}
                 />
               ) : (
                 <DetailsList

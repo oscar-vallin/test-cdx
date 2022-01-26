@@ -1,7 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, memo } from 'react';
 
-import { DetailsList, DetailsListLayoutMode, SelectionMode, Spinner, FontIcon, SpinnerSize, Link } from '@fluentui/react';
+import {
+  DetailsList,
+  DetailsListLayoutMode,
+  SelectionMode,
+  Spinner,
+  FontIcon,
+  SpinnerSize,
+  Link,
+  IContextualMenuProps
+} from '@fluentui/react';
 import { EmptyState } from 'src/containers/states';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
 import { useNotification } from 'src/hooks/useNotification';
@@ -191,14 +200,30 @@ const AccessManagementGroupsContainer = () => {
 
     const numTemplates = groupTemplates?.length ?? 0;
 
-    const createMenuProps =
+    const createMenuProps: IContextualMenuProps | undefined =
       !!groupTemplates && numTemplates
         ? {
-            items: groupTemplates?.map((template) => {
-              return { text: template.label, key: template.value, onClick: () => handleCreateGroup(template.value) };
-            }),
+            items: [
+              {
+                key: '__Template_Header',
+                text: 'From Template:',
+                style: {
+                  fontSize: '.75em'
+                },
+                disabled: true,
+              },
+              ...groupTemplates?.map((template) => {
+                  return {
+                    text: template.label,
+                    key: template.value,
+                    style: {
+                      padding: '0 5px 0 15px'
+                    },
+                    onClick: () => handleCreateGroup(template.value) };
+                })
+            ],
           }
-        : null;
+        : undefined;
 
     return (
       <>

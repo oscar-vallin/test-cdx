@@ -1,5 +1,6 @@
 import { ReactElement, ReactNode } from 'react';
 import { StyledButton } from './Button.styles';
+import { IContextualMenuProps } from '@fluentui/react';
 
 const defaultProps = {
   id: '',
@@ -21,7 +22,7 @@ type ButtonProps = {
   key?: string;
   selected?: boolean;
   split?: boolean;
-  menuProps?: any;
+  menuProps?: IContextualMenuProps;
 } & typeof defaultProps;
 
 const Button = ({ id, text, children, variant, disabled, onClick, block, ...props }: ButtonProps): ReactElement => {

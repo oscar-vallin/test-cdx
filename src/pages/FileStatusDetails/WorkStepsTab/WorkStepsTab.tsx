@@ -89,7 +89,7 @@ const WorkStepsTab = ({ steps }: WorkStepsTabProps): ReactElement => {
           text="Re-process file"
           variant="primary"
           menuProps={{
-            items: [{ text: 'Rename & re-process' }],
+            items: [{ key: '__Rename_Reprocess', text: 'Rename & re-process' }],
           }}
         />
       </Spacing>
