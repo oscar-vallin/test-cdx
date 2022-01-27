@@ -1,6 +1,5 @@
 import { ReactElement } from 'react';
 import { SpinnerSize } from '@fluentui/react';
-import { getRouteByApiId } from 'src/data/constants/RouteConstants';
 import { Spinner } from 'src/components/spinners/Spinner';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { LayoutDashboard } from '../LayoutDashboard';
@@ -19,33 +18,6 @@ type LayoutAdminProps = {
   sidebarOptionSelected?: string;
   children?: ReactElement | string;
 } & typeof defaultProps;
-
-type mapProps = {
-  type?: string;
-  label?: string;
-  destination?: string;
-  subNavItems?: { type: string }[] | any;
-};
-
-const parseLinks = (links = [], sidebarOpt: string) => {
-  return links.map(({ label, destination, subNavItems }: mapProps) => ({
-    name: label,
-    ...(subNavItems
-      ? {
-          isExpanded: subNavItems.find((item) => item.destination === sidebarOpt),
-          links: parseLinks(subNavItems, ''),
-        }
-      : {}),
-    ...(destination
-      ? {
-          url: getRouteByApiId(destination)?.URL,
-          key: destination,
-          // params: page.parameters,
-          // commands: page.commands,
-        }
-      : {}),
-  }));
-};
 
 export const LayoutAdmin = ({ id, menuOptionSelected = 'admin', children }: LayoutAdminProps): ReactElement => {
   const isFetchingOrgNav = false;

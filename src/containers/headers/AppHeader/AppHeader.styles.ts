@@ -1,38 +1,12 @@
 /* tslint:disable */
 
 import styled from 'styled-components';
-import { Icon, IconButton, Nav } from '@fluentui/react';
+import { Icon, IconButton } from '@fluentui/react';
 import { device } from 'src/styles/GlobalStyles';
 
-interface ToggableProps {
-  open?: boolean;
-}
 interface SelectableProps {
   selected?: boolean;
 }
-
-type StyledSubNavProps = {
-  onLinkClick?: any | null;
-  highlight?: boolean;
-};
-
-export const StyledContainer = styled.div<ToggableProps>`
-  position: relative;
-  z-index: 100;
-
-  &::before {
-    background: rgba(0, 0, 0, 0.25);
-    content: '';
-    left: 0;
-    opacity: ${({ open }) => (open ? '1' : '0')};
-    position: fixed;
-    top: 0;
-    transition: all 0.25s ease-out;
-    visibility: ${({ open }) => (open ? 'visible' : 'hidden')};
-    width: 100vw;
-    z-index: -1;
-  }
-`;
 
 export const StyledHeader = styled.header`
   align-items: stretch;
@@ -48,8 +22,8 @@ export const StyledHeader = styled.header`
   width: 100vw;
 `;
 
-export const NavButton = styled.button<ToggableProps>`
-  background: ${({ open }) => (open ? 'rgba(0, 0, 0, 0.05)' : 'none')};
+export const NavButton = styled.button`
+  background: rgba(0, 0, 0, 0.05);
   align-items: center;
   border: none;
   color: ${({ theme }) => theme.colors.white};
@@ -112,7 +86,7 @@ export const StyledNavButton = styled.button<SelectableProps>`
     bottom: 0;
     content: '';
     display: ${({ selected }) => (selected ? 'block' : 'none')};
-    height: 3px;
+    height: 5px;
     left: 0;
     position: absolute;
     width: 100%;
@@ -144,69 +118,8 @@ export const StyledDiv = styled.div`
 `;
 
 export const StyledMenuItem = styled.div<SelectableProps>`
+  padding-left: 5px;
+  padding-right: 5px;
   color: ${({ selected, theme }) => (selected ? theme.colors.themePrimary : theme.colors.black)};
   font-weight: ${({ selected }) => (selected ? '700' : '400')};
-`;
-
-export const AdminNavPanel = styled.div<ToggableProps>`
-  background: ${({ theme }) => theme.colors.neutralLighter} !important;
-  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
-  display: flex;
-  flex-direction: column;
-  font: ${({ theme }) => theme.fontStyles.normal};
-  height: calc(100% - 58px);
-  justify-content: flex-start;
-  left: 0;
-  overflow-y: auto;
-  padding: ${({ theme }) => `0 ${theme.spacing.small}`};
-  position: fixed;
-  transform: ${({ open }) => (open ? 'translateX(0)' : 'translateX(-100%)')};
-  transition: transform 0.25s ease-out;
-  top: 59px;
-  width: 100vh;
-
-  @media ${device.mobileL} {
-    width: 230px;
-  }
-`;
-
-export const SubNav = styled(Nav)<StyledSubNavProps>`
-  height: auto;
-  overflow-x: hidden;
-
-  &.AppHeader__MobileNav {
-    display: block;
-  }
-
-  .ms-Nav-groupContent {
-    margin: 0;
-  }
-
-  .ms-Nav-compositeLink {
-    .ms-Button {
-      font-size: 0.75rem;
-
-      &:hover {
-        background: ${({ theme }) => theme.colors.neutralLighter};
-      }
-    }
-
-    .ms-Nav-chevronButton {
-      position: absolute;
-      width: 100%;
-      z-index: 2;
-
-      & + .ms-Button {
-        font-size: 0.75rem;
-        font-weight: ${({ highlight }) => (highlight ? 700 : 400)};
-        pointer-events: none;
-      }
-    }
-  }
-
-  @media all and ${device.laptop} {
-    &.AppHeader__MobileNav {
-      display: none;
-    }
-  }
 `;

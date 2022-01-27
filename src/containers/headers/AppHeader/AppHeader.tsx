@@ -1,4 +1,4 @@
-import { ReactElement, useState } from 'react';
+import { ReactElement } from 'react';
 import { useHistory, useLocation } from 'react-router';
 import { Icon } from '@fluentui/react';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
@@ -10,16 +10,13 @@ import { getRouteByApiId, ROUTE_USER_SETTINGS } from 'src/data/constants/RouteCo
 import { useOrgSid } from 'src/hooks/useOrgSid';
 
 import {
-  StyledContainer,
   NavButton,
   StyledNavIcon,
   StyledNav,
   StyledNavButton,
   StyledDiv,
   StyledIconButton,
-  AdminNavPanel,
   StyledHeader,
-  SubNav,
   StyledMenuItem,
 } from './AppHeader.styles';
 
@@ -29,19 +26,11 @@ const defaultProps = {
 };
 
 type AppHeaderProps = {
-  id?: string;
-  menuOptionSelected?: any;
-  sidebarOptionSelected?: any;
-  onMenuOpen: () => void;
-  onMenuClose: () => void;
+  onMenuButtonClick: () => void;
 };
 
 const AppHeader = ({
-  id,
-  menuOptionSelected,
-  sidebarOptionSelected,
-  onMenuOpen,
-  onMenuClose,
+  onMenuButtonClick,
 }: AppHeaderProps): ReactElement => {
   const history = useHistory();
   const location = useLocation();
@@ -50,7 +39,6 @@ const AppHeader = ({
   const { user } = useSessionStore();
   const ActiveDomainStore = useActiveDomainStore();
 
-  const [isOpen, setIsOpen] = useState(true);
   const { setOwnDashFontSize } = useCurrentUserTheme();
 
   type mapProps = {
@@ -160,135 +148,45 @@ const AppHeader = ({
     )
   };
 
-
-
   return (
-    <StyledContainer id={id} open={isOpen}>
-      <StyledHeader data-e2e="AppHeader">
-        <NavButton id="__AdminNavBtn" open={isOpen}
-                   onClick={() => {
-                     if (isOpen) {
-                       onMenuClose()
-                       setIsOpen(false);
-                     } else {
-                       onMenuOpen();
-                       setIsOpen(true);
-                     }
-                   }} data-e2e="AdminNavBtn">
-          <StyledNavIcon iconName="GlobalNavButton" />
-          {renderOrgName()}
-        </NavButton>
+    <StyledHeader data-e2e="AppHeader">
+      <NavButton id="__AdminNavBtn"
+                 onClick={ onMenuButtonClick } data-e2e="AdminNavBtn">
+        <StyledNavIcon iconName="GlobalNavButton" />
+        {renderOrgName()}
+      </NavButton>
 
-        <StyledNavButton
-          onClick={() => {
-            ActiveDomainStore.setCurrentOrg(ActiveDomainStore.domainOrg.origin);
-          }}
-        >
-          <Icon iconName="Home" />
-        </StyledNavButton>
+      <StyledNavButton
+        onClick={() => {
+          ActiveDomainStore.setCurrentOrg(ActiveDomainStore.domainOrg.origin);
+        }}
+      >
+        <Icon iconName="Home" />
+      </StyledNavButton>
 
-        <StyledNav>{renderTopNavButtons()}</StyledNav>
+      <StyledNav>{renderTopNavButtons()}</StyledNav>
 
-        <StyledDiv>
-          <StyledIconButton
-            id="__ProfileMenu_Font_Buttons"
-            iconProps={{ iconName: 'Font' }}
-            title="Font sizes"
-            menuProps={{
-              items: settingsMenu,
-              contextualMenuItemAs: (props) => (
-                <StyledMenuItem selected={ThemeStore.themes.user.themeFontSize === props.item.key}>
-                  {props.item.text}
-                </StyledMenuItem>
-              ),
-            }}
-          />
-
-          <ProfileMenu
-            id="__ProfileMenu"
-            onUserSettings={() => history.push(`${ROUTE_USER_SETTINGS.URL}?orgSid=${user.orgSid}`)}
-          />
-        </StyledDiv>
-      </StyledHeader>
-
-      <style>
-        div[name='Return to my organization'] button span &#123;
-          border-top: 1px solid lightgray;
-        &#125;
-      </style>
-
-      <AdminNavPanel id="__AdminNav" open={isOpen} data-e2e="AdminNav">
-        {ActiveDomainStore?.domainOrg?.current && (
-          <SubNav
-            highlight
-            selectedKey={sidebarOptionSelected}
-            groups={[
-              {
-                links: [
-                  {
-                    name: 'Navigate To...',
-                    isExpanded: false,
-                    url: '',
-                    links:
-                      ActiveDomainStore.domainOrg.current.subNavItems?.length > 1
-                        ? [
-                            ...ActiveDomainStore.domainOrg.current.subNavItems.map((item) => ({
-                              name: item.label,
-                              title: item.label,
-                              ariaLabel: item.label,
-                              ...item,
-                            })),
-                            {
-
-                              automationId: '__ReturnToOrg',
-                              name: 'Return to my organization',
-                              ariaLabel: 'Return to my organization',
-                              home: true,
-                            },
-                          ]
-                        : [],
-                  },
-                ],
-              },
-            ]}
-            onLinkClick={(evt: any, route: any) => {
-              evt.preventDefault();
-
-              ActiveDomainStore.setCurrentOrg(route.home ? ActiveDomainStore.domainOrg.origin : route);
-
-              // setIsOpen(false);
-            }}
-          />
-        )}
-
-        <SubNav
-          className="AppHeader__MobileNav"
-          selectedKey={menuOptionSelected.replace('-', '_').toUpperCase()}
-          groups={[{ links: parseLinks(ActiveDomainStore.nav.dashboard, menuOptionSelected) }]}
-          onLinkClick={(evt: any, route: { links: string; url: string }) => {
-            evt.preventDefault();
-
-            if (!route.links) {
-              history.push(`${route.url}?orgSid=${orgSid}`);
-            }
-            setIsOpen(false);
+      <StyledDiv>
+        <StyledIconButton
+          id="__ProfileMenu_Font_Buttons"
+          iconProps={{ iconName: 'Font' }}
+          title="Font sizes"
+          menuProps={{
+            items: settingsMenu,
+            contextualMenuItemAs: (props) => (
+              <StyledMenuItem selected={ThemeStore.themes.user.themeFontSize === props.item.key}>
+                {props.item.text}
+              </StyledMenuItem>
+            ),
           }}
         />
 
-        <SubNav
-          selectedKey={sidebarOptionSelected}
-          groups={[{ links: parseLinks(ActiveDomainStore.nav.admin, sidebarOptionSelected) }]}
-          onLinkClick={(evt: any, route: { links: string; url: string }) => {
-            evt.preventDefault();
-
-            if (!route.links) {
-              history.push(`${route.url}?orgSid=${orgSid}`);
-            }
-            // setIsOpen(false);
-          }}
+        <ProfileMenu
+          id="__ProfileMenu"
+          onUserSettings={() => history.push(`${ROUTE_USER_SETTINGS.URL}?orgSid=${user.orgSid}`)}
         />
-      </AdminNavPanel>
-    </StyledContainer>
+      </StyledDiv>
+    </StyledHeader>
   );
 };
 

@@ -3,6 +3,7 @@ import { AppHeader } from 'src/containers/headers/AppHeader';
 
 import { StyleConstants } from 'src/data/constants/StyleConstants';
 import { BoxStyled, DashboardBody } from './LayoutDashboard.styles';
+import { LeftNav } from 'src/containers/menus/LeftNav';
 
 const defaultProps = {
   id: '',
@@ -27,9 +28,10 @@ export const LayoutDashboard = ({
   return (
     <>
       <BoxStyled id={`${id}__Box`} direction={StyleConstants.DIRECTION_COLUMN} top>
-        <AppHeader menuOptionSelected={menuOptionSelected}
-                   onMenuOpen={() => {setMenuOpen(true)}}
-                   onMenuClose={() => {setMenuOpen(false)}} />
+        <AppHeader onMenuButtonClick={() => { setMenuOpen(!menuOpen) }}/>
+        <LeftNav menuOptionSelected={menuOptionSelected}
+                 isOpen={menuOpen}
+                 onMenuClick={() => {}}/>
         <DashboardBody id='__DashboardBody' isMenuOpen={menuOpen}>
           {children}
         </DashboardBody>
