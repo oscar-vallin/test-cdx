@@ -1,9 +1,9 @@
 import PuppetExchangeStatus from './PuppetExchangeStatus';
 
 export default class PuppetArchivesPage extends PuppetExchangeStatus {
-  pageTitle = '#__Archives_Title-Text';
+  pageTitle = '#__Page_Title-Text';
 
-  secondaryTitle = '#__Archives_Title_SubTitle-Text';
+  secondaryTitle = '#__Page_Title_SubTitle-Text';
 
   searchInput = '#TableArchive__Card__Row__Input-Search';
 

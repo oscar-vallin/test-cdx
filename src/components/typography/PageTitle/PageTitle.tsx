@@ -31,7 +31,7 @@ const PageTitle = ({ id, title, subTitle, icon }: PageTitleParams) => {
   return (
     <>
       {renderIcon()}
-      <Text id={id} variant="bold">
+      <Text id={id} variant="bold" >
         {title}
       </Text>
       {renderSubTitle()}

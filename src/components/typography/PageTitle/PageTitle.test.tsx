@@ -13,18 +13,18 @@ describe('PageTitle', () => {
   });
 
   it('Title Only', () => {
-    const wrapper = shallow(<Component id="__PageTitle" title="Page Title Only" />);
+    const wrapper = shallow(<Component id="__Page_Title" title="Page Title Only" />);
     expect(wrapper.contains('Page Title Only')).toEqual(true);
   });
 
   it('Title and Icon', () => {
-    const wrapper = shallow(<Component id="__PageTitle" title="Page Title" icon="FavoriteStar" />);
+    const wrapper = shallow(<Component id="__Page_Title" title="Page Title" icon="FavoriteStar" />);
     expect(wrapper.contains('Page Title')).toEqual(true);
     expect(wrapper.containsMatchingElement(<FontIcon iconName="FavoriteStar" />)).toEqual(true);
   });
 
   it('Title, Subtitle, and Icon', () => {
-    const wrapper = shallow(<Component id="__PageTitle" title="Page Title" subTitle="SubSub" icon="FavoriteStar" />);
+    const wrapper = shallow(<Component id="__Page_Title" title="Page Title" subTitle="SubSub" icon="FavoriteStar" />);
     expect(wrapper.contains('Page Title')).toEqual(true);
     expect(wrapper.contains('SubSub')).toEqual(true);
     expect(wrapper.containsMatchingElement(<FontIcon iconName="FavoriteStar" />)).toEqual(true);

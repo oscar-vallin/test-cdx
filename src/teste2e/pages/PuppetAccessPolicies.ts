@@ -1,7 +1,7 @@
 import PuppetBasePage from './PuppetBasePage';
 
 export default class PuppetActiveOrgs extends PuppetBasePage {
-  pageTitle = '#__Page-Title';
+  pageTitle = '#__Page_Title';
 
   defaultPolicy = '#__CDX_Super_User_Policy';
 
@@ -30,7 +30,7 @@ export default class PuppetActiveOrgs extends PuppetBasePage {
   }
 
   async clickOnPolicyTemplate() {
-    const nameInputSelector = '#PolicyInput__Name';
+    //const nameInputSelector = '#PolicyInput__Name';
 
     await this.page.waitForTimeout(2000);
 

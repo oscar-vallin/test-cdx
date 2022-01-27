@@ -3,7 +3,6 @@ import { Icon } from '@fluentui/react';
 import { ROUTES } from 'src/data/constants/RouteConstants';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Column, Container, Row } from 'src/components/layouts';
-import { Spacing } from 'src/components/spacings/Spacing';
 import { PageTitle, Text } from 'src/components/typography';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { WorkPacketTable } from 'src/containers/tables/WorkPacketTable';
@@ -65,26 +64,24 @@ const _TransmissionsPage = () => {
 
   return (
     <LayoutDashboard id="PageTransmissions" menuOptionSelected={ROUTES.ROUTE_TRANSMISSIONS.API_ID}>
-      <PageHeader spacing="0">
+      <PageHeader id="__TransmissionsHeader">
         <Container>
-          <Spacing margin={{ top: 'double' }}>
-            <Row>
-              <Column lg="6" direction="row">
-                <PageTitle
-                  id="__Transmissions_Title"
-                  title="Transmissions"
-                  subTitle="Advanced search"
-                  icon="FilterSolid"
-                />
-              </Column>
-              <Column lg="6" right>
-                <Text right>
-                  {renderDownloadLink()}
-                  {renderTotalRecords()}
-                </Text>
-              </Column>
-            </Row>
-          </Spacing>
+          <Row>
+            <Column lg="6" direction="row">
+              <PageTitle
+                id="__Page_Title"
+                title="Transmissions"
+                subTitle="Advanced search"
+                icon="FilterSolid"
+              />
+            </Column>
+            <Column lg="6" right>
+              <Text right>
+                {renderDownloadLink()}
+                {renderTotalRecords()}
+              </Text>
+            </Column>
+          </Row>
         </Container>
       </PageHeader>
 

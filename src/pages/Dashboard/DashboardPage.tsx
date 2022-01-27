@@ -20,6 +20,7 @@ import { PageTitle } from 'src/components/typography';
 import { useDashboardService } from './DashboardPage.service';
 import { StyledButton, StyledRow } from './DashboardPage.styles';
 import { format } from 'date-fns';
+import { ROUTE_DASHBOARD } from 'src/data/constants/RouteConstants';
 
 const DashboardPage = () => {
   const { orgSid, startDate, endDate } = useOrgSid();
@@ -161,7 +162,7 @@ const DashboardPage = () => {
   };
 
   return (
-    <LayoutDashboard id="PageDashboard">
+    <LayoutDashboard id="PageDashboard" menuOptionSelected={ROUTE_DASHBOARD.API_ID}>
       <React.Suspense fallback={pageFallBack()}>
         <PageHeader spacing="0">
           <Container>

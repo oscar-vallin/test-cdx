@@ -1,7 +1,7 @@
 import PuppetBasePage from './PuppetBasePage';
 
 export default class PuppetActiveOrgs extends PuppetBasePage {
-  pageTitle = '#__Page-Title';
+  pageTitle = '#__Page_Title';
 
   messageContainer = '.ms-MessageBar-innerText';
 

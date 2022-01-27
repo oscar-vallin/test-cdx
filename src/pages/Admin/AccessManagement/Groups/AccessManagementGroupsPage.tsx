@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 
 import {
   DetailsList,
@@ -14,11 +14,10 @@ import {
 import { EmptyState } from 'src/containers/states';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
 import { useNotification } from 'src/hooks/useNotification';
-import { Row, Column } from 'src/components/layouts';
+import { Row, Column, Container } from 'src/components/layouts';
 import { Button } from 'src/components/buttons';
-import { LayoutAdmin } from 'src/layouts/LayoutAdmin';
+import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { PageTitle } from 'src/components/typography';
-import { Separator } from 'src/components/separators/Separator';
 
 import {
   useAccessPolicyGroupsForOrgLazyQuery,
@@ -32,6 +31,8 @@ import { CreateGroupPanel } from './CreateGroup';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { useAccessManagementGroupsPageService } from './AccessManagementGroupsPage.service';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
+import { ROUTE_ACCESS_MANAGEMENT_GROUPS } from 'src/data/constants/RouteConstants';
+import { PageHeader } from 'src/containers/headers/PageHeader';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -190,12 +191,12 @@ const AccessManagementGroupsContainer = () => {
       <EmptyState
         title="No access groups found"
         description="You haven't created an access group yet. Click the button below to create a new group."
-        actions={renderCreateGroupButton(templatesData, true)}
+        actions={renderCreateGroupButton(templatesData)}
       />
     );
   };
 
-  const renderCreateGroupButton = (templates, noRecords) => {
+  const renderCreateGroupButton = (templates) => {
     const { accessPolicyGroupTemplates: groupTemplates } = templates ?? {};
 
     const numTemplates = groupTemplates?.length ?? 0;
@@ -226,39 +227,19 @@ const AccessManagementGroupsContainer = () => {
         : undefined;
 
     return (
-      <>
-        <Row>
-          {!noRecords && (
-            <Column lg="6">
-              <PageTitle id='__PageTitle' title='Access Policy Groups'/>
-            </Column>
-          )}
-
-          <Column lg={noRecords ? '12' : '6'} right={!noRecords}>
-            <Button
-              id="CreateGroupButton"
-              split={Boolean(!!groupTemplates && numTemplates)}
-              // split={true}
-              variant="primary"
-              onClick={() => {
-                setIsPanelOpen(true);
-                return null;
-              }}
-              menuProps={createMenuProps}
-              block={false}
-            >
-              Create Group
-            </Button>
-          </Column>
-        </Row>
-        <Row>
-          <Column lg="12">
-            <Spacing margin={{ top: 'normal' }}>
-              <Separator />
-            </Spacing>
-          </Column>
-        </Row>
-      </>
+      <Button
+        id="CreateGroupButton"
+        split={Boolean(!!groupTemplates && numTemplates)}
+        // split={true}
+        variant="primary"
+        onClick={() => {
+          setIsPanelOpen(true);
+          return null;
+        }}
+        menuProps={createMenuProps}
+        block={false}>
+        Create Group
+      </Button>
     );
   };
 
@@ -285,51 +266,62 @@ const AccessManagementGroupsContainer = () => {
   // !Render Page
   //
   return (
-    <LayoutAdmin id="PageAdmin" sidebarOptionSelected="AM_GROUPS">
-      <>
-        <Spacing margin="double">
-          {groups.length > 0 && renderCreateGroupButton(templatesData, false)}
-          <Row>
-            <StyledColumn lg="12">
-              {renderBody()}
-            </StyledColumn>
-          </Row>
-        </Spacing>
+    <LayoutDashboard id="PageAdmin" menuOptionSelected={ROUTE_ACCESS_MANAGEMENT_GROUPS.API_ID}>
+      {groups.length > 0 && (
+        <PageHeader id="__AccessGroupsHeader">
+          <Container>
+            <Row>
+              <Column lg="6" direction="row">
+                <PageTitle id="__Page_Title" title="Access Policy Groups" />
+              </Column>
+              <Column lg="6" right>
+                {renderCreateGroupButton(templatesData)}
+              </Column>
+            </Row>
+          </Container>
+        </PageHeader>
+      )}
+      <Container>
+        <Row>
+          <StyledColumn lg="12">
+            {renderBody()}
+          </StyledColumn>
+        </Row>
+      </Container>
 
-        {isDialog && (
-          <DialogYesNo
-            open={isDialog}
-            highlightNo
-            title="Delete Group"
-            message="Are you sure you want to delete this Access Policy Group?"
-            onYes={() => {
-              deleteAccessPolicyGroup(selectedGroupId.toString()).then();
-              return null;
-            }}
-            onClose={() => {
-              setDialog(false);
-              return null;
-            }}
-          />
-        )}
-
-        <CreateGroupPanel
-          isOpen={isPanelOpen}
-          onCreateGroupPolicy={() => {
-            fetchData();
+      {isDialog && (
+        <DialogYesNo
+          open={isDialog}
+          highlightNo
+          title="Delete Group"
+          message="Are you sure you want to delete this Access Policy Group?"
+          onYes={() => {
+            deleteAccessPolicyGroup(selectedGroupId.toString()).then();
+            return null;
           }}
-          onUpdateGroupPolicy={() => {
-            fetchData();
+          onClose={() => {
+            setDialog(false);
+            return null;
           }}
-          onDismiss={() => {
-            setIsPanelOpen(false);
-            setSelectedGroupId(0);
-          }}
-          selectedGroupId={selectedGroupId}
-          templateId={templateId}
         />
-      </>
-    </LayoutAdmin>
+      )}
+
+      <CreateGroupPanel
+        isOpen={isPanelOpen}
+        onCreateGroupPolicy={() => {
+          fetchData();
+        }}
+        onUpdateGroupPolicy={() => {
+          fetchData();
+        }}
+        onDismiss={() => {
+          setIsPanelOpen(false);
+          setSelectedGroupId(0);
+        }}
+        selectedGroupId={selectedGroupId}
+        templateId={templateId}
+      />
+    </LayoutDashboard>
   );
 };
 

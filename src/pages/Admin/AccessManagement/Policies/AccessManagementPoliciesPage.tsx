@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 
 import {
   PrimaryButton,
@@ -18,12 +18,11 @@ import {
 
 import { EmptyState } from 'src/containers/states';
 import { useNotification } from 'src/hooks/useNotification';
-import { LayoutAdmin } from 'src/layouts/LayoutAdmin';
+import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { Button } from 'src/components/buttons';
-import { Row, Column } from 'src/components/layouts';
-import { Separator } from 'src/components/separators/Separator';
-import { Text } from 'src/components/typography';
+import { Row, Column, Container } from 'src/components/layouts';
+import { PageTitle } from 'src/components/typography';
 
 import {
   useAccessPolicyTemplatesLazyQuery,
@@ -35,6 +34,8 @@ import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { CreatePoliciesPanel } from './CreatePolicy';
 import { StyledColumn, StyledCommandButton } from '../AccessManagement.styles';
+import { ROUTE_ACCESS_MANAGEMENT_POLICIES } from 'src/data/constants/RouteConstants';
+import { PageHeader } from 'src/containers/headers/PageHeader';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -217,33 +218,24 @@ const _AccessManagementPoliciesPage = () => {
   }
 
   return (
-    <LayoutAdmin id="PageAdmin" sidebarOptionSelected="AM_POLICIES">
+    <LayoutDashboard id="PageAdmin" menuOptionSelected={ROUTE_ACCESS_MANAGEMENT_POLICIES.API_ID}>
       <>
-        <Spacing margin="double">
-          {policies.length > 0 && (
-            <Row>
-              <Column lg="6">
-                <Spacing margin={{ top: 'small' }}>
-                  <Text variant="bold">Policies</Text>
-                </Spacing>
-              </Column>
+        {policies.length > 0 && (
+          <PageHeader id="__AccessPoliciesHeader">
+            <Container>
+              <Row>
+                <Column lg="6" direction="row">
+                  <PageTitle id="__Page_Title" title="Access Policies" />
+                </Column>
+                <Column lg="6" right>
+                  {createPolicyButton()}
+                </Column>
+              </Row>
+            </Container>
+          </PageHeader>
+        )}
 
-              <Column lg="6" right>
-                {createPolicyButton()}
-              </Column>
-            </Row>
-          )}
-
-          {policies.length > 0 && (
-            <Row>
-              <Column lg="12">
-                <Spacing margin={{ top: 'normal' }}>
-                  <Separator />
-                </Spacing>
-              </Column>
-            </Row>
-          )}
-
+        <Container>
           <Row>
             <StyledColumn lg="12">
               {loading ? (
@@ -268,7 +260,7 @@ const _AccessManagementPoliciesPage = () => {
               )}
             </StyledColumn>
           </Row>
-        </Spacing>
+        </Container>
 
         <CreatePoliciesPanel
           isOpen={isPanelOpen}
@@ -323,7 +315,7 @@ const _AccessManagementPoliciesPage = () => {
           </DialogFooter>
         </Dialog>
       </>
-    </LayoutAdmin>
+    </LayoutDashboard>
   );
 };
 

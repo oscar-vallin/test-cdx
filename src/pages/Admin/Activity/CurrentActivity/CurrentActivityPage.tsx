@@ -1,11 +1,10 @@
-import { ReactElement } from 'react';
-import { LayoutAdmin } from '../../../../layouts/LayoutAdmin';
-import { Row, Column } from '../../../../components/layouts';
-import { Spacing } from '../../../../components/spacings/Spacing';
-import { Separator } from '../../../../components/separators/Separator';
-import { Text } from '../../../../components/typography';
-import { TablesCurrentActivity } from '../../../../containers/tables/TableCurrentActivity';
-// import { NAV_ITEMS } from '../../SideMenu';
+import React, { ReactElement } from 'react';
+import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
+import { Row, Column, Container } from 'src/components/layouts';
+import { PageTitle } from 'src/components/typography';
+import { TablesCurrentActivity } from 'src/containers/tables/TableCurrentActivity';
+import { ROUTE_ACTIVITY_CURRENT } from 'src/data/constants/RouteConstants';
+import { PageHeader } from 'src/containers/headers/PageHeader';
 
 const defaultProps = {
   id: '',
@@ -17,27 +16,19 @@ type CurrentActivityPageProps = {
 
 export const CurrentActivityPage = ({ id }: CurrentActivityPageProps): ReactElement => {
   return (
-    <LayoutAdmin id={id} sidebarOptionSelected="ORG_ACTIVITY">
-      <Spacing margin="double">
-        <Row>
-          <Column lg="4">
-            <Spacing margin={{ top: 'small' }}>
-              <Text id="__Current_Activity_Text" variant="bold">
-                Current Activity
-              </Text>
-            </Spacing>
-          </Column>
-        </Row>
-
-        <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-          <Separator />
-        </Spacing>
-        <TablesCurrentActivity id="TableCurrentActivity" />
-      </Spacing>
-    </LayoutAdmin>
+    <LayoutDashboard id={id} menuOptionSelected={ROUTE_ACTIVITY_CURRENT.API_ID}>
+      <PageHeader id="__CurrentActivityHeader">
+        <Container>
+          <Row>
+            <Column lg="6" direction="row">
+              <PageTitle id="__Current_Activity_Text" title="Current Activity" />
+            </Column>
+          </Row>
+        </Container>
+      </PageHeader>
+      <TablesCurrentActivity id="TableCurrentActivity" />
+    </LayoutDashboard>
   );
 };
 
 CurrentActivityPage.defaultProps = defaultProps;
-
-export default CurrentActivityPage;

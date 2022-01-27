@@ -6,7 +6,7 @@ import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 
 const _SchedulePage = () => {
   return (
-    <LayoutDashboard id="PageSchedule" menuOptionSelected={ROUTES.ROUTE_SCHEDULE.ID}>
+    <LayoutDashboard id="PageSchedule" menuOptionSelected={ROUTES.ROUTE_SCHEDULE.API_ID}>
       <Schedule />
     </LayoutDashboard>
   );

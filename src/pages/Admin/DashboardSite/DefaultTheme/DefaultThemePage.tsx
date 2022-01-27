@@ -1,11 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, memo } from 'react';
 
-import { LayoutAdmin } from 'src/layouts/LayoutAdmin';
+import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Button } from 'src/components/buttons/Button';
 import { Separator } from 'src/components/separators/Separator';
 import { Spacing } from 'src/components/spacings/Spacing';
-import { Row, Column } from 'src/components/layouts';
+import { Row, Column, Container } from 'src/components/layouts';
 import { MessageBar } from 'src/components/notifications/MessageBar';
 import { Spinner } from 'src/components/spinners/Spinner';
 import { Text } from 'src/components/typography/Text';
@@ -24,6 +24,7 @@ import { useNotification } from 'src/hooks/useNotification';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useSessionStore } from 'src/store/SessionStore';
 import { StyledChoiceGroup, StyledDiv } from './DefaultThemePage.styles';
+import { ROUTE_DEFAULT_THEME } from 'src/data/constants/RouteConstants';
 
 const _DefaultThemePage = () => {
   const SessionStore = useSessionStore();
@@ -106,8 +107,8 @@ const _DefaultThemePage = () => {
   }, [selectedPaletteId, themeColorMode]);
 
   return (
-    <LayoutAdmin id="PageDefaultTheme" sidebarOptionSelected="THEME">
-      <Spacing margin="double">
+    <LayoutDashboard id="PageDefaultTheme" menuOptionSelected={ROUTE_DEFAULT_THEME.API_ID}>
+      <Container>
         <Row>
           <Column lg="12">
             {isLoadingPalettes || isLoadingDefaultTheme ? (
@@ -209,8 +210,8 @@ const _DefaultThemePage = () => {
             )}
           </Column>
         </Row>
-      </Spacing>
-    </LayoutAdmin>
+      </Container>
+    </LayoutDashboard>
   );
 };
 

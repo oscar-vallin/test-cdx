@@ -9,7 +9,6 @@ import { ArchivePage } from './Archives';
 import { SchedulePage } from './Schedule';
 import { TransmissionsPage } from './Transmissions';
 import { ErrorsPage } from './Errors';
-import { AdminPage } from './Admin';
 import { PageNotFound } from './ErrorHandling';
 import { FileStatusPage } from './FileStatus';
 import { FileStatusDetailsPage } from './FileStatusDetails';
@@ -91,9 +90,6 @@ export const Routes = () => {
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_DEFAULT_THEME.URL}>
         <DefaultThemePage />
-      </AuthRoute>
-      <AuthRoute path={ROUTES.ROUTE_ADMIN.URL}>
-        <AdminPage />
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_ACTIVE_USERS.URL}>
         <ActiveUsersPage />

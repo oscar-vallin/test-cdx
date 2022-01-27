@@ -1,7 +1,6 @@
 import React, { memo, useState } from 'react';
 import { ROUTES } from 'src/data/constants/RouteConstants';
 import { Column, Container, Row } from 'src/components/layouts';
-import { Spacing } from 'src/components/spacings/Spacing';
 import { PageTitle, Text } from 'src/components/typography';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
@@ -39,22 +38,20 @@ const _ArchivePage = () => {
 
   return (
     <LayoutDashboard id="PageArchive" menuOptionSelected={ROUTES.ROUTE_ARCHIVES.ID}>
-      <PageHeader spacing="0">
+      <PageHeader id="__ArchivesHeader">
         <Container>
-          <Spacing margin={{ top: 'double' }}>
-            <Row>
-              <Column lg="6" direction="row">
-                <PageTitle id="__Archives_Title" title="Archives" subTitle="Advanced search" icon="FilterSolid" />
-              </Column>
-              <Column lg="6" right>
-                <Text right>
-                  {!tableMeta.loading && tableMeta.count !== null && (
-                    <Text>{tableMeta.count > 0 ? `${tableMeta.count} results found` : 'No results were found'}</Text>
-                  )}
-                </Text>
-              </Column>
-            </Row>
-          </Spacing>
+          <Row>
+            <Column lg="6" direction="row">
+              <PageTitle id="__Page_Title" title="Archives" subTitle="Advanced search" icon="FilterSolid" />
+            </Column>
+            <Column lg="6" right>
+              <Text right>
+                {!tableMeta.loading && tableMeta.count !== null && (
+                  <Text>{tableMeta.count > 0 ? `${tableMeta.count} results found` : 'No results were found'}</Text>
+                )}
+              </Text>
+            </Column>
+          </Row>
         </Container>
       </PageHeader>
 

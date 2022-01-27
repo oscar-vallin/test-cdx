@@ -29,6 +29,7 @@ export const AdminNavPanel = styled.div<ToggableProps>`
   transition: transform 0.25s ease-out;
   top: 58px;
   width: 100vh;
+  z-index: 998;
 
   @media ${device.mobileL} {
     width: 230px;

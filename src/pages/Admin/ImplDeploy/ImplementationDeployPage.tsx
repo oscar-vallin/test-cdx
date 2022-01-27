@@ -1,13 +1,14 @@
-import { memo, useState } from 'react';
+import React, { memo, useState } from 'react';
 import { SpinnerSize, List, Label } from '@fluentui/react';
 import { format } from 'date-fns';
-import { LayoutAdmin } from 'src/layouts/LayoutAdmin';
-import { Column } from 'src/components/layouts';
+import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
+import { Column, Container } from 'src/components/layouts';
 import { PageTitle, Text } from 'src/components/typography';
 import { ImplementationDeployMutation, useImplementationDeployMutation } from 'src/data/services/graphql';
 import { Spinner } from 'src/components/spinners/Spinner';
-import { Spacing } from 'src/components/spacings/Spacing';
 import { DeployButton, Row } from './ImplementationDeployPage.styles';
+import { ROUTE_IMPL_DEPLOY } from 'src/data/constants/RouteConstants';
+import { PageHeader } from 'src/containers/headers/PageHeader';
 
 const _ImplementationDeployPage = () => {
   const onImplementationDeploy = (data: ImplementationDeployMutation) => {
@@ -94,21 +95,25 @@ const _ImplementationDeployPage = () => {
   };
 
   return (
-    <LayoutAdmin id="PageDefaultTheme" sidebarOptionSelected="FTP_TEST">
-      <Spacing margin="double">
-        <Row>
-          <Column>
-            <PageTitle id="__Impl_Deploy_Title" title="Implementation Deploy" />
-          </Column>
-        </Row>
+    <LayoutDashboard id="PageImplDeploy" menuOptionSelected={ROUTE_IMPL_DEPLOY.API_ID}>
+      <PageHeader id="__ImplDeployHeader">
+        <Container>
+          <Row>
+            <Column lg="6" direction="row">
+              <PageTitle id="__Page_Title" title="Implementation Deploy" />
+            </Column>
+          </Row>
+        </Container>
+      </PageHeader>
+      <Container>
         {renderDeploymentResult()}
         <Row>
           <Column>
             <DeployButton id="__DeployBtn" variant="primary" disabled={dataLoading} text="Deploy" onClick={doDeploy} />
           </Column>
         </Row>
-      </Spacing>
-    </LayoutAdmin>
+      </Container>
+    </LayoutDashboard>
   );
 };
 

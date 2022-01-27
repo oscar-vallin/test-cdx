@@ -1,7 +1,7 @@
 import PuppetBasePage from './PuppetBasePage';
 
 export default class PuppetActiveOrgs extends PuppetBasePage {
-  pageTitle = '#__Page-Title-Text';
+  pageTitle = '#__Page_Title-Text';
 
   async expectOnPage() {
     await this.expectTextOnPage(this.pageTitle, 'Active orgs');

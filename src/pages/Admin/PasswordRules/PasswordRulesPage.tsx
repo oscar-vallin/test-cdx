@@ -7,10 +7,10 @@ import { EmptyState } from 'src/containers/states';
 import { Button } from 'src/components/buttons';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { useNotification } from 'src/hooks/useNotification';
-import { Column, Row } from 'src/components/layouts';
+import { Column, Container, Row } from 'src/components/layouts';
 import { PageTitle, Text } from 'src/components/typography';
 import { Separator } from 'src/components/separators/Separator';
-import { LayoutAdmin } from 'src/layouts/LayoutAdmin';
+import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Spacing } from 'src/components/spacings/Spacing';
 
 import {
@@ -24,6 +24,8 @@ import { InfoIcon } from 'src/components/badges/InfoIcon';
 import { DEFAULT_FORM, extractFormValues, FormInput, FormOptions, replaceInputs } from './PasswordRulesFormUtils';
 import { StyledColumn, StyledComboBox, StyledDiv } from './PasswordRulesPage.styles';
 import { useOrgSid } from 'src/hooks/useOrgSid';
+import { ROUTE_PASSWORD_RULES } from 'src/data/constants/RouteConstants';
+import { PageHeader } from 'src/containers/headers/PageHeader';
 
 const _PasswordRulesPage = () => {
   const { orgSid } = useOrgSid();
@@ -59,18 +61,6 @@ const _PasswordRulesPage = () => {
     handleError(updateError);
   }, [updateError]);
 
-  // useEffect(() => {
-  //   if (!state.someMustBeMet.enabled) {
-  //     setState({
-  //       ...state,
-  //       someMustBeMet: {
-  //         ...state.someMustBeMet,
-  //         ...Object.keys(INITIAL_STATE.someMustBeMet).reduce((obj, key) => ({ ...obj, [key]: false }), {}),
-  //       },
-  //     });
-  //   }
-  // }, [state.someMustBeMet.enabled]);
-
   useEffect(() => {
     if (updatedRules) {
       if (updatedRules.updatePasswordRules?.response === 'FAIL') {
@@ -86,13 +76,17 @@ const _PasswordRulesPage = () => {
   }, [updatedRules]);
 
   return (
-    <LayoutAdmin id="PageAdmin">
-      <Spacing margin="double">
-        <Row>
-          <Column lg="4">
-            <PageTitle id="__Page_Title" title="Password Rules" />
-          </Column>
-        </Row>
+    <LayoutDashboard id="PageAdmin" menuOptionSelected={ROUTE_PASSWORD_RULES.API_ID}>
+      <PageHeader id="__PasswordRulesHeader">
+        <Container>
+          <Row>
+            <Column lg="6" direction="row">
+              <PageTitle id="__Page_Title" title="Password Rules" />
+            </Column>
+          </Row>
+        </Container>
+      </PageHeader>
+      <Container>
         <Row>
           <Column lg="12">
             <Spacing margin={{ top: 'normal' }}>
@@ -354,8 +348,8 @@ const _PasswordRulesPage = () => {
             </Spacing>
           </StyledColumn>
         </Row>
-      </Spacing>
-    </LayoutAdmin>
+      </Container>
+    </LayoutDashboard>
   );
 };
 

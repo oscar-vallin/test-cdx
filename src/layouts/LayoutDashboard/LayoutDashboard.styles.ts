@@ -23,7 +23,7 @@ export const BoxStyled = styled(Box)`
 
 export const DashboardBody = styled.div<DashboardBodyProps>`
   transition: all 0.15s ease-in-out;
-  margin: 0;
+  margin: 30px 0 0 0;
   width 100%;
   
   @media ${device.tablet} {

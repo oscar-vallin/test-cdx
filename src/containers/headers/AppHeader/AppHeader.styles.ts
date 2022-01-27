@@ -20,6 +20,7 @@ export const StyledHeader = styled.header`
   top: 0;
   white-space: nowrap;
   width: 100vw;
+  z-index: 999;
 `;
 
 export const NavButton = styled.button`

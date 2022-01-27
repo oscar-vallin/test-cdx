@@ -20,6 +20,7 @@ export const StyledText = styled.span<StyledTextProps>`
   text-transform: ${({ transform }) => transform};
   word-break: ${({ breakWord }) => `break-${breakWord}`};
   width: ${({ center, right }) => (center || right ? '100%' : 'auto')};
+  line-height: normal;
 `;
 
 type StyledTextProps = {

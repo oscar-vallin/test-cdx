@@ -1,9 +1,9 @@
 import PuppetBasePage from './PuppetBasePage';
 
 export default class PuppetExchangeStatus extends PuppetBasePage {
-  pageTitle = '#__File-Status_Title-Text';
+  pageTitle = '#__Page_Title-Text';
 
-  secondaryTitle = '#__File-Status_Title_SubTitle-Text';
+  secondaryTitle = '#__Page_Title_SubTitle-Text';
 
   searchInput = '#TableFileStatus__Card__Row__Input-Search';
 

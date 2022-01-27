@@ -1,12 +1,13 @@
-import { useState, memo, useEffect } from 'react';
+import React, { useState, memo } from 'react';
 import { Checkbox, TextField } from '@fluentui/react';
-import { LayoutAdmin } from 'src/layouts/LayoutAdmin';
+import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Button } from 'src/components/buttons';
 import { Spacing } from 'src/components/spacings/Spacing';
-import { Spinner } from 'src/components/spinners/Spinner';
-import { Row, Column } from 'src/components/layouts';
+import { Row, Column, Container } from 'src/components/layouts';
 import { InputText } from 'src/components/inputs/InputText';
-import { Text } from 'src/components/typography';
+import { PageTitle } from 'src/components/typography';
+import { ROUTE_FTP_TEST } from 'src/data/constants/RouteConstants';
+import { PageHeader } from 'src/containers/headers/PageHeader';
 
 const _FtpTestPage = () => {
   const [host, setHost] = useState('');
@@ -18,7 +19,6 @@ const _FtpTestPage = () => {
   const [textFileContent, setTextFileContent] = useState('');
   const [stepWise, setStepWise] = useState(false);
   const [sendFileTest, setSendFileTest] = useState(false);
-  const [loading, setLoading] = useState(true);
 
   const onTestBtn = () => {
     return {
@@ -33,28 +33,14 @@ const _FtpTestPage = () => {
     };
   };
 
-  useEffect(() => setLoading(false), []);
-
   const handleOnTestBtn = () => {
     onTestBtn();
     return null;
   };
 
   const renderForm = () => {
-    return loading ? (
-      <Spacing margin={{ top: 'double' }}>
-        <Spinner size="lg" label="Loading color palette" />
-      </Spacing>
-    ) : (
-      <>
-        <Row>
-          <Column>
-            <Spacing margin={{ bottom: 'normal' }}>
-              <Text variant="bold">SFTP TEST</Text>
-            </Spacing>
-          </Column>
-        </Row>
-
+    return (
+      <Container>
         <Row>
           <Column xxl="6" xl="12">
             <Spacing margin={{ bottom: 'normal' }}>
@@ -149,26 +135,26 @@ const _FtpTestPage = () => {
             </Spacing>
           </Column>
         </Row>
-      </>
+      </Container>
     );
   };
 
   return (
-    <LayoutAdmin id="PageDefaultTheme" sidebarOptionSelected="FTP_TEST">
-      <Spacing margin="double">
-        {loading ? (
-          <Spacing margin={{ top: 'double' }}>
-            <Spinner id="__FtpTestPageId_Spinner" size="lg" label="Loading color palettes" />
-          </Spacing>
-        ) : (
-          <>{renderForm()}</>
-        )}
-      </Spacing>
-    </LayoutAdmin>
+    <LayoutDashboard id="PageFtpTest" menuOptionSelected={ROUTE_FTP_TEST.API_ID}>
+      <PageHeader id="__FTPTestHeader">
+        <Container>
+          <Row>
+            <Column lg="6" direction="row">
+              <PageTitle id="__Page_Title" title="SFTP TEST" />
+            </Column>
+          </Row>
+        </Container>
+      </PageHeader>
+      {renderForm()}
+    </LayoutDashboard>
   );
 };
 
 const FtpTestPage = memo(_FtpTestPage);
 
 export { FtpTestPage };
-export default FtpTestPage;

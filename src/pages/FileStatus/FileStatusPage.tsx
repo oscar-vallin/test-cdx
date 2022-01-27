@@ -17,7 +17,6 @@ import { WorkPacketColumns } from 'src/containers/tables/WorkPacketColumns';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { tableFiltersToQueryParams, useTableFilters } from 'src/hooks/useTableFilters';
 import { DownloadLink } from 'src/containers/tables/WorkPacketTable.styles';
-import { Spacing } from '../../components/spacings/Spacing';
 
 const _FileStatusPage = () => {
   const [tableMeta, setTableMeta] = useState({ count: 0, loading: true });
@@ -72,24 +71,21 @@ const _FileStatusPage = () => {
   return (
     <LayoutDashboard
       id="PageFileStatus"
-      menuOptionSelected={ROUTES.ROUTE_FILE_STATUS.ID}
-      /* routeId={ROUTES.ROUTE_FILE_STATUS} */
+      menuOptionSelected={ROUTES.ROUTE_FILE_STATUS.API_ID}
     >
-      <PageHeader spacing="0">
+      <PageHeader id="__FileStatusHeader">
         <Container>
-          <Spacing margin={{ top: 'double' }}>
-            <Row>
-              <Column lg="6" direction="row">
-                <PageTitle id="__File-Status_Title" title="File Status" subTitle="Advanced search" icon="FilterSolid" />
-              </Column>
-              <Column lg="6" right>
-                <Text right>
-                  {renderDownloadLink()}
-                  {renderTotalRecords()}
-                </Text>
-              </Column>
-            </Row>
-          </Spacing>
+          <Row>
+            <Column lg="6" direction="row">
+              <PageTitle id="__Page_Title" title="File Status" subTitle="Advanced search" icon="FilterSolid" />
+            </Column>
+            <Column lg="6" right>
+              <Text right>
+                {renderDownloadLink()}
+                {renderTotalRecords()}
+              </Text>
+            </Column>
+          </Row>
         </Container>
       </PageHeader>
 

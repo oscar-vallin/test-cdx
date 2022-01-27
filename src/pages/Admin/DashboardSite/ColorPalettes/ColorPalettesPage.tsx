@@ -1,16 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 
 import { Checkbox } from '@fluentui/react';
-import { LayoutAdmin } from 'src/layouts/LayoutAdmin';
+import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Button } from 'src/components/buttons';
 import { Separator } from 'src/components/separators/Separator';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { Spinner } from 'src/components/spinners/Spinner';
-import { Row, Column } from 'src/components/layouts';
+import { Row, Column, Container } from 'src/components/layouts';
 import { InputText } from 'src/components/inputs/InputText';
 import { MessageBar } from 'src/components/notifications/MessageBar';
-import { Text } from 'src/components/typography';
+import { PageTitle, Text } from 'src/components/typography';
 
 import { useThemeContext } from 'src/contexts/ThemeContext';
 import { useColorPalettes } from 'src/hooks/useColorPalettes';
@@ -20,6 +20,8 @@ import Theming from 'src/utils/Theming';
 import { useNotification } from 'src/hooks/useNotification';
 import { StyledDiv, StyledChoiceGroup, StyledColorPicker } from './ColorPalettesPage.styles';
 import { PaletteColors } from './PaletteColors';
+import { ROUTE_COLOR_PALETTES } from 'src/data/constants/RouteConstants';
+import { PageHeader } from 'src/containers/headers/PageHeader';
 
 const getThemeVariant = ({ themePrimary, neutralPrimary, white }) => ({
   ...Theming.generate.primary(themePrimary),
@@ -150,8 +152,8 @@ const _ColorPalettesPage = () => {
   };
 
   return (
-    <LayoutAdmin id="PageDefaultTheme" sidebarOptionSelected="COLOR_PALETTES">
-      <Spacing margin="double">
+    <LayoutDashboard id="PageDefaultTheme" menuOptionSelected={ROUTE_COLOR_PALETTES.API_ID}>
+      <Container>
         {isLoadingPalettes ? (
           <Spacing margin={{ top: 'double' }}>
             <Spinner size="lg" label="Loading color palettes" />
@@ -187,13 +189,13 @@ const _ColorPalettesPage = () => {
               </Spacing>
             ) : (
               <>
-                <Row>
-                  <Column>
-                    <Spacing margin={{ bottom: 'normal' }}>
-                      <Text variant="bold">{!selectedPaletteId ? 'Create new palette' : 'Update palette'}</Text>
-                    </Spacing>
-                  </Column>
-                </Row>
+                <PageHeader id="__ActiveUsersHeader">
+                  <Row>
+                    <Column lg="6" direction="row">
+                      <PageTitle id="__Page_Title" title={!selectedPaletteId ? 'Create new palette' : 'Update palette'} />
+                    </Column>
+                  </Row>
+                </PageHeader>
 
                 <Row>
                   <Column xxl="6" xl="12">
@@ -340,8 +342,8 @@ const _ColorPalettesPage = () => {
             )}
           </>
         )}
-      </Spacing>
-    </LayoutAdmin>
+      </Container>
+    </LayoutDashboard>
   );
 };
 

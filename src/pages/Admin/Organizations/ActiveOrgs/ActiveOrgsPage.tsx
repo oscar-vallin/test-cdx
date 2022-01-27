@@ -5,17 +5,18 @@ import { Link } from 'react-router-dom';
 
 import { DetailsList, DetailsListLayoutMode, IColumn, SelectionMode, Spinner, SpinnerSize } from '@fluentui/react';
 import { EmptyState } from 'src/containers/states';
-import { LayoutAdmin } from 'src/layouts/LayoutAdmin';
-import { Row, Column } from 'src/components/layouts';
+import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
+import { Row, Column, Container } from 'src/components/layouts';
 import { Spacing } from 'src/components/spacings/Spacing';
-import { Text } from 'src/components/typography';
-import { Separator } from 'src/components/separators/Separator';
+import { PageTitle } from 'src/components/typography';
 
 import { useDirectOrganizationsLazyQuery } from 'src/data/services/graphql';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { StyledColumn } from './ActiveOrgsPage.styles';
+import { ROUTE_ACTIVE_ORGS } from 'src/data/constants/RouteConstants';
+import { PageHeader } from 'src/containers/headers/PageHeader';
 
 const columns: IColumn[] = [
   {
@@ -116,35 +117,25 @@ const ActiveOrgsPage = () => {
   };
 
   return (
-    <LayoutAdmin id="PageActiveOrgs" sidebarOptionSelected="ACTIVE_ORGS">
-      <Spacing margin="double">
-        {orgs.length > 0 && (
-          <Row>
-            <Column lg="4">
-              <Spacing margin={{ top: 'small' }}>
-                <Text id="__Page-Title" variant="bold">
-                  Active orgs
-                </Text>
-              </Spacing>
-            </Column>
-          </Row>
-        )}
+    <LayoutDashboard id="PageActiveOrgs" menuOptionSelected={ROUTE_ACTIVE_ORGS.API_ID}>
+      {orgs.length > 0 && (
+        <PageHeader id="__ActiveOrgsHeader">
+          <Container>
+            <Row>
+              <Column lg="6" direction="row">
+                <PageTitle id="__Page_Title" title="Active orgs"/>
+              </Column>
+            </Row>
+          </Container>
+        </PageHeader>
+      )}
 
-        {orgs.length > 0 && (
-          <Row>
-            <Column lg="12">
-              <Spacing margin={{ top: 'normal' }}>
-                <Separator />
-              </Spacing>
-            </Column>
-          </Row>
-        )}
-
+      <Container>
         <Row>
           <StyledColumn>{renderBody()}</StyledColumn>
         </Row>
-      </Spacing>
-    </LayoutAdmin>
+      </Container>
+    </LayoutDashboard>
   );
 };
 

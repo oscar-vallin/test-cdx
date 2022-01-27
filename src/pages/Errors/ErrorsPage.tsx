@@ -9,7 +9,6 @@ import { WorkPacketTable } from 'src/containers/tables/WorkPacketTable';
 import { WorkPacketColumns } from 'src/containers/tables/WorkPacketColumns';
 import { NullHandling, SortDirection, useWpProcessErrorsLazyQuery, WorkPacketStatus } from 'src/data/services/graphql';
 import { useTableFilters } from 'src/hooks/useTableFilters';
-import { Spacing } from '../../components/spacings/Spacing';
 
 const _ErrorsPage = () => {
   const [tableMeta, setTableMeta] = useState({ count: 0, loading: true });
@@ -33,22 +32,20 @@ const _ErrorsPage = () => {
 
   return (
     <LayoutDashboard id="PageErrors" menuOptionSelected={ROUTES.ROUTE_ERRORS.API_ID}>
-      <PageHeader spacing="0">
+      <PageHeader id="__ErrorsPageHeader">
         <Container>
-          <Spacing margin={{ top: 'double' }}>
-            <Row>
-              <Column lg="6" direction="row">
-                <PageTitle id="__Errors_Title" title="Errors" subTitle="Advanced search" icon="FilterSolid" />
-              </Column>
-              <Column lg="6" right>
-                <Text right>
-                  {!tableMeta.loading && tableMeta.count !== null && (
-                    <Text>{tableMeta.count > 0 ? `${tableMeta.count} results found` : 'No results were found'}</Text>
-                  )}
-                </Text>
-              </Column>
-            </Row>
-          </Spacing>
+          <Row>
+            <Column lg="6" direction="row">
+              <PageTitle id="__Page_Title" title="Errors" subTitle="Advanced search" icon="FilterSolid" />
+            </Column>
+            <Column lg="6" right>
+              <Text right>
+                {!tableMeta.loading && tableMeta.count !== null && (
+                  <Text>{tableMeta.count > 0 ? `${tableMeta.count} results found` : 'No results were found'}</Text>
+                )}
+              </Text>
+            </Column>
+          </Row>
         </Container>
       </PageHeader>
 

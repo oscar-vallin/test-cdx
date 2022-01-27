@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { DefaultButton, Dialog, DialogFooter, DialogType, PrimaryButton, Spinner, SpinnerSize } from '@fluentui/react';
 import { EmptyState } from 'src/containers/states';
-import { LayoutAdmin } from 'src/layouts/LayoutAdmin';
+import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Button } from 'src/components/buttons';
-import { Column, Row } from 'src/components/layouts';
+import { Column, Container, Row } from 'src/components/layouts';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { PageTitle } from 'src/components/typography';
-import { Separator } from 'src/components/separators/Separator';
 
 import { ActiveEnum, useDeactivateUsersMutation, UserItem } from 'src/data/services/graphql';
 
@@ -16,6 +15,8 @@ import { useUsersLists } from 'src/pages/Admin/Users/useUsersList';
 import { StyledColumn } from './ActiveUsersPage.styles';
 import { UpdateUserPanel, useUpdateUserPanel } from '../UpdateUsers';
 import { CreateUsersPanel } from '../CreateUsers';
+import { ROUTE_ACTIVE_USERS } from 'src/data/constants/RouteConstants';
+import { PageHeader } from 'src/containers/headers/PageHeader';
 
 const ActiveUsersPage = () => {
   const { orgSid } = useOrgSid();
@@ -41,17 +42,14 @@ const ActiveUsersPage = () => {
   };
 
   return (
-    <LayoutAdmin id="PageActiveUsers" sidebarOptionSelected="ACTIVE_USERS">
-      <>
-        <Spacing margin="double">
-          {userService.users && userService.users.length > 0 && (
-            <Row center>
-              <Column lg="6">
-                <Spacing margin={{ top: 'small' }}>
-                  <PageTitle id="__Page_Title" title="Active Users" />
-                </Spacing>
+    <LayoutDashboard id="PageActiveUsers" menuOptionSelected={ROUTE_ACTIVE_USERS.API_ID}>
+      {userService.users && userService.users.length > 0 && (
+        <PageHeader id="__ActiveUsersHeader">
+          <Container>
+            <Row>
+              <Column lg="6" direction="row">
+                <PageTitle id="__Page_Title" title="Active Users" />
               </Column>
-
               <Column lg="6" right>
                 <span>
                   <PrimaryButton
@@ -60,102 +58,91 @@ const ActiveUsersPage = () => {
                     onClick={() => {
                       setIsCreateUserPanelOpen(true);
                       return null;
-                    }}
-                  >
+                    }}>
                     Create user
                   </PrimaryButton>
                 </span>
               </Column>
             </Row>
-          )}
+          </Container>
+        </PageHeader>
+      )}
+      <Container>
+        <Row>
+          <StyledColumn>
+            {userService.loading ? (
+              <Spacing margin={{ top: 'double' }}>
+                <Spinner size={SpinnerSize.large} label="Loading active users" />
+              </Spacing>
+            ) : !userService.users?.length ? (
+              <EmptyState
+                title="No users found"
+                description="You haven't created a user yet. Click the button below to create a new user."
+                actions={
+                  <Button
+                    id="CreateUser"
+                    variant="primary"
+                    onClick={() => {
+                      setIsCreateUserPanelOpen(true);
+                      return null;
+                    }}
+                  >
+                    Create user
+                  </Button>
+                }
+              />
+            ) : (
+              <UsersTable users={userService.users} onClickUser={updateUserPanel.showPanel} />
+            )}
+          </StyledColumn>
+        </Row>
+      </Container>
+      <CreateUsersPanel
+        orgSid={orgSid}
+        isOpen={isCreateUserPanelOpen}
+        onCreateUser={() => {
+          setSelectedItems([]);
+          userService.fetchUsers().then();
+        }}
+        onDismiss={() => {
+          setIsCreateUserPanelOpen(false);
+        }}
+      />
 
-          {userService.users && userService.users?.length > 0 && (
-            <Row>
-              <Column lg="12">
-                <Spacing margin={{ top: 'normal' }}>
-                  <Separator />
-                </Spacing>
-              </Column>
-            </Row>
-          )}
+      <UpdateUserPanel
+        useUpdateUserPanel={updateUserPanel}
+        onUpdateUser={() => {
+          setSelectedItems([]);
+          userService.fetchUsers().then();
+        }}
+      />
 
-          <Row>
-            <StyledColumn>
-              {userService.loading ? (
-                <Spacing margin={{ top: 'double' }}>
-                  <Spinner size={SpinnerSize.large} label="Loading active users" />
-                </Spacing>
-              ) : !userService.users?.length ? (
-                <EmptyState
-                  title="No users found"
-                  description="You haven't created a user yet. Click the button below to create a new user."
-                  actions={
-                    <Button
-                      id="CreateUser"
-                      variant="primary"
-                      onClick={() => {
-                        setIsCreateUserPanelOpen(true);
-                        return null;
-                      }}
-                    >
-                      Create user
-                    </Button>
-                  }
-                />
-              ) : (
-                <UsersTable users={userService.users} onClickUser={updateUserPanel.showPanel} />
-              )}
-            </StyledColumn>
-          </Row>
-        </Spacing>
-
-        <CreateUsersPanel
-          orgSid={orgSid}
-          isOpen={isCreateUserPanelOpen}
-          onCreateUser={() => {
-            setSelectedItems([]);
-            userService.fetchUsers().then();
-          }}
-          onDismiss={() => {
-            setIsCreateUserPanelOpen(false);
-          }}
-        />
-
-        <UpdateUserPanel
-          useUpdateUserPanel={updateUserPanel}
-          onUpdateUser={() => {
-            setSelectedItems([]);
-            userService.fetchUsers().then();
-          }}
-        />
-
-        <Dialog
-          hidden={isConfirmationHidden}
-          onDismiss={hideConfirmation}
-          dialogContentProps={{
-            type: DialogType.normal,
-            title: 'Disable user',
-            subText: `Do you really want to disable the selected user(s) ?`,
-          }}
-          modalProps={{ isBlocking: true }}
-        >
-          <DialogFooter>
-            <PrimaryButton
-              onClick={() => {
-                disableUser({
-                  variables: {
-                    sidsInput: { sids: selectedUserIds() },
-                  },
-                }).then();
-                setIsConfirmationHidden(true);
-              }}
-              text="Disable"
-            />
-            <DefaultButton onClick={hideConfirmation} text="Cancel" />
-          </DialogFooter>
-        </Dialog>
-      </>
-    </LayoutAdmin>
+      <Dialog
+        hidden={isConfirmationHidden}
+        onDismiss={hideConfirmation}
+        dialogContentProps={{
+          type: DialogType.normal,
+          title: 'Disable user',
+          subText: `Do you really want to disable the selected user(s) ?`,
+        }}
+        modalProps={{ isBlocking: true }}
+      >
+        <DialogFooter>
+          <PrimaryButton
+            onClick={() => {
+              disableUser({
+                variables: {
+                  sidsInput: { sids: selectedUserIds() },
+                },
+              }).then();
+              setIsConfirmationHidden(true);
+            }}
+            text="Disable"
+          />
+          <DefaultButton onClick={hideConfirmation} text="Cancel" />
+        </DialogFooter>
+      </Dialog>
+    </LayoutDashboard>
   );
 };
 
