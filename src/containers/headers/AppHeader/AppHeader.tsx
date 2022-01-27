@@ -1,5 +1,4 @@
 import { ReactElement, useState } from 'react';
-import OutsideClickHandler from 'react-outside-click-handler';
 import { useHistory, useLocation } from 'react-router';
 import { Icon } from '@fluentui/react';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
@@ -12,15 +11,15 @@ import { useOrgSid } from 'src/hooks/useOrgSid';
 
 import {
   StyledContainer,
-  StyledButton,
+  NavButton,
   StyledNavIcon,
   StyledNav,
   StyledNavButton,
   StyledDiv,
   StyledIconButton,
-  StyledPanel,
+  AdminNavPanel,
   StyledHeader,
-  StyledSubNav,
+  SubNav,
   StyledMenuItem,
 } from './AppHeader.styles';
 
@@ -31,18 +30,18 @@ const defaultProps = {
 
 type AppHeaderProps = {
   id?: string;
-  children?: any;
-  onUserSettings?: any;
   menuOptionSelected?: any;
   sidebarOptionSelected?: any;
+  onMenuOpen: () => void;
+  onMenuClose: () => void;
 };
 
 const AppHeader = ({
   id,
-  onUserSettings,
   menuOptionSelected,
   sidebarOptionSelected,
-  children,
+  onMenuOpen,
+  onMenuClose,
 }: AppHeaderProps): ReactElement => {
   const history = useHistory();
   const location = useLocation();
@@ -51,7 +50,7 @@ const AppHeader = ({
   const { user } = useSessionStore();
   const ActiveDomainStore = useActiveDomainStore();
 
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const { setOwnDashFontSize } = useCurrentUserTheme();
 
   type mapProps = {
@@ -113,8 +112,8 @@ const AppHeader = ({
     }));
   };
 
-  const renderNavButtons = () => {
-    return ActiveDomainStore.nav.dashboard.map((menuOption: { label: string; destination: string }, index: any) => {
+  const renderTopNavButtons = () => {
+    return ActiveDomainStore.nav.dashboard.map((menuOption: { label: string; destination: string }) => {
       const opt:
         | {
             ID?: string;
@@ -150,22 +149,35 @@ const AppHeader = ({
     });
   };
 
+  const renderOrgName = () => {
+    return (
+      <div className="HeaderBtnText">
+        <div>
+          <h2 className="HeaderBtnText__title">{ActiveDomainStore.domainOrg.current.orgId}</h2>
+          <small className="HeaderBtnText__description">{ActiveDomainStore.domainOrg.current.label}</small>
+        </div>
+      </div>
+    )
+  };
+
+
+
   return (
     <StyledContainer id={id} open={isOpen}>
       <StyledHeader data-e2e="AppHeader">
-        <StyledButton id="__AdminNavBtn" open={isOpen} onClick={() => setIsOpen(!isOpen)} data-e2e="AdminNavBtn">
+        <NavButton id="__AdminNavBtn" open={isOpen}
+                   onClick={() => {
+                     if (isOpen) {
+                       onMenuClose()
+                       setIsOpen(false);
+                     } else {
+                       onMenuOpen();
+                       setIsOpen(true);
+                     }
+                   }} data-e2e="AdminNavBtn">
           <StyledNavIcon iconName="GlobalNavButton" />
-
-          <div className="HeaderBtnText">
-            <div>
-              <h2 className="HeaderBtnText__title">{ActiveDomainStore.domainOrg.current.orgId}</h2>
-
-              <small className="HeaderBtnText__description">{ActiveDomainStore.domainOrg.current.label}</small>
-            </div>
-
-            {/* <StyledChevronDown iconName="ChevronDown" /> */}
-          </div>
-        </StyledButton>
+          {renderOrgName()}
+        </NavButton>
 
         <StyledNavButton
           onClick={() => {
@@ -175,7 +187,7 @@ const AppHeader = ({
           <Icon iconName="Home" />
         </StyledNavButton>
 
-        <StyledNav>{renderNavButtons()}</StyledNav>
+        <StyledNav>{renderTopNavButtons()}</StyledNav>
 
         <StyledDiv>
           <StyledIconButton
@@ -199,74 +211,83 @@ const AppHeader = ({
         </StyledDiv>
       </StyledHeader>
 
-      <OutsideClickHandler onOutsideClick={() => setIsOpen(false)}>
-        <StyledPanel id="__AdminNav" open={isOpen} data-e2e="AdminNav">
-          {ActiveDomainStore?.domainOrg?.current && (
-            <StyledSubNav
-              highlight
-              selectedKey={sidebarOptionSelected}
-              groups={[
-                {
-                  links: [
-                    {
-                      name: ActiveDomainStore.domainOrg.current.label,
-                      isExpanded: false,
-                      url: '',
-                      links:
-                        ActiveDomainStore.domainOrg.current.subNavItems?.length > 1
-                          ? [
-                              ...ActiveDomainStore.domainOrg.current.subNavItems.map((item) => ({
-                                name: item.label,
-                                ...item,
-                              })),
-                              {
-                                name: 'Return to my organization',
-                                home: true,
-                              },
-                            ]
-                          : [],
-                    },
-                  ],
-                },
-              ]}
-              onLinkClick={(evt: any, route: any) => {
-                evt.preventDefault();
+      <style>
+        div[name='Return to my organization'] button span &#123;
+          border-top: 1px solid lightgray;
+        &#125;
+      </style>
 
-                ActiveDomainStore.setCurrentOrg(route.home ? ActiveDomainStore.domainOrg.origin : route);
-
-                setIsOpen(false);
-              }}
-            />
-          )}
-
-          <StyledSubNav
-            className="AppHeader__MobileNav"
-            selectedKey={menuOptionSelected.replace('-', '_').toUpperCase()}
-            groups={[{ links: parseLinks(ActiveDomainStore.nav.dashboard, menuOptionSelected) }]}
-            onLinkClick={(evt: any, route: { links: string; url: string }) => {
-              evt.preventDefault();
-
-              if (!route.links) {
-                history.push(`${route.url}?orgSid=${orgSid}`);
-              }
-              setIsOpen(false);
-            }}
-          />
-
-          <StyledSubNav
+      <AdminNavPanel id="__AdminNav" open={isOpen} data-e2e="AdminNav">
+        {ActiveDomainStore?.domainOrg?.current && (
+          <SubNav
+            highlight
             selectedKey={sidebarOptionSelected}
-            groups={[{ links: parseLinks(ActiveDomainStore.nav.admin, sidebarOptionSelected) }]}
-            onLinkClick={(evt: any, route: { links: string; url: string }) => {
+            groups={[
+              {
+                links: [
+                  {
+                    name: 'Navigate To...',
+                    isExpanded: false,
+                    url: '',
+                    links:
+                      ActiveDomainStore.domainOrg.current.subNavItems?.length > 1
+                        ? [
+                            ...ActiveDomainStore.domainOrg.current.subNavItems.map((item) => ({
+                              name: item.label,
+                              title: item.label,
+                              ariaLabel: item.label,
+                              ...item,
+                            })),
+                            {
+
+                              automationId: '__ReturnToOrg',
+                              name: 'Return to my organization',
+                              ariaLabel: 'Return to my organization',
+                              home: true,
+                            },
+                          ]
+                        : [],
+                  },
+                ],
+              },
+            ]}
+            onLinkClick={(evt: any, route: any) => {
               evt.preventDefault();
 
-              if (!route.links) {
-                history.push(`${route.url}?orgSid=${orgSid}`);
-              }
-              setIsOpen(false);
+              ActiveDomainStore.setCurrentOrg(route.home ? ActiveDomainStore.domainOrg.origin : route);
+
+              // setIsOpen(false);
             }}
           />
-        </StyledPanel>
-      </OutsideClickHandler>
+        )}
+
+        <SubNav
+          className="AppHeader__MobileNav"
+          selectedKey={menuOptionSelected.replace('-', '_').toUpperCase()}
+          groups={[{ links: parseLinks(ActiveDomainStore.nav.dashboard, menuOptionSelected) }]}
+          onLinkClick={(evt: any, route: { links: string; url: string }) => {
+            evt.preventDefault();
+
+            if (!route.links) {
+              history.push(`${route.url}?orgSid=${orgSid}`);
+            }
+            setIsOpen(false);
+          }}
+        />
+
+        <SubNav
+          selectedKey={sidebarOptionSelected}
+          groups={[{ links: parseLinks(ActiveDomainStore.nav.admin, sidebarOptionSelected) }]}
+          onLinkClick={(evt: any, route: { links: string; url: string }) => {
+            evt.preventDefault();
+
+            if (!route.links) {
+              history.push(`${route.url}?orgSid=${orgSid}`);
+            }
+            // setIsOpen(false);
+          }}
+        />
+      </AdminNavPanel>
     </StyledContainer>
   );
 };

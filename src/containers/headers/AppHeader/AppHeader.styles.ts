@@ -1,8 +1,8 @@
 /* tslint:disable */
 
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 import { Icon, IconButton, Nav } from '@fluentui/react';
+import { device } from 'src/styles/GlobalStyles';
 
 interface ToggableProps {
   open?: boolean;
@@ -48,7 +48,7 @@ export const StyledHeader = styled.header`
   width: 100vw;
 `;
 
-export const StyledButton = styled.button<ToggableProps>`
+export const NavButton = styled.button<ToggableProps>`
   background: ${({ open }) => (open ? 'rgba(0, 0, 0, 0.05)' : 'none')};
   align-items: center;
   border: none;
@@ -58,6 +58,7 @@ export const StyledButton = styled.button<ToggableProps>`
   padding: ${({ theme }) => `0 ${theme.spacing.normal}`};
   text-align: left;
   transition: background 0.15s ease-out;
+  width: 230px;
 
   .HeaderBtnText {
     align-items: center;
@@ -65,6 +66,7 @@ export const StyledButton = styled.button<ToggableProps>`
     justify-content: space-between;
     padding: ${({ theme }) => `10px ${theme.spacing.normal}`};
     padding-right: 0;
+    width: 200px;
   }
 
   &:hover {
@@ -76,27 +78,10 @@ export const StyledNavIcon = styled(Icon)`
   margin: ${({ theme }) => `0 ${theme.spacing.small} 0 0`};
 `;
 
-export const StyledChevronDown = styled(Icon)`
-  margin: ${({ theme }) => `0 0 0 ${theme.spacing.double}`};
-`;
-
-export const StyledLink = styled(Link)`
-  align-items: center;
-  color: ${({ theme }) => theme.colors.white};
-  display: flex;
-  padding: ${({ theme }) => `0 ${theme.spacing.double}`};
-  text-decoration: none;
-  transition: background 0.15s ease-out;
-
-  &:hover {
-    background: rgba(0, 0, 0, 0.15);
-  }
-`;
-
 export const StyledNav = styled.nav`
   display: none;
 
-  @media all and (min-width: 1024px) {
+  @media all and ${device.laptop} {
     align-items: stretch;
     display: flex;
     font-size: 0.875rem;
@@ -163,7 +148,7 @@ export const StyledMenuItem = styled.div<SelectableProps>`
   font-weight: ${({ selected }) => (selected ? '700' : '400')};
 `;
 
-export const StyledPanel = styled.div<ToggableProps>`
+export const AdminNavPanel = styled.div<ToggableProps>`
   background: ${({ theme }) => theme.colors.neutralLighter} !important;
   box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
   display: flex;
@@ -177,16 +162,15 @@ export const StyledPanel = styled.div<ToggableProps>`
   position: fixed;
   transform: ${({ open }) => (open ? 'translateX(0)' : 'translateX(-100%)')};
   transition: transform 0.25s ease-out;
-  top: 58px;
-  width: 100vw;
-  z-index: -1;
+  top: 59px;
+  width: 100vh;
 
-  @media all and (min-width: 768px) {
-    width: auto;
+  @media ${device.mobileL} {
+    width: 230px;
   }
 `;
 
-export const StyledSubNav = styled(Nav)<StyledSubNavProps>`
+export const SubNav = styled(Nav)<StyledSubNavProps>`
   height: auto;
   overflow-x: hidden;
 
@@ -220,7 +204,7 @@ export const StyledSubNav = styled(Nav)<StyledSubNavProps>`
     }
   }
 
-  @media all and (min-width: 1024px) {
+  @media all and ${device.laptop} {
     &.AppHeader__MobileNav {
       display: none;
     }

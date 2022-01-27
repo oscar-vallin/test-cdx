@@ -53,7 +53,7 @@ const AdminErrorBoundary = ({ id, menuOptionSelected, sidebarOptionSelected }: C
   const ActiveDomainStore = useActiveDomainStore();
 
   return (
-    <LayoutDashboard id={id} menuOptionSelected={menuOptionSelected} showMenu={false}>
+    <LayoutDashboard id={id} menuOptionSelected={menuOptionSelected}>
       <StyledBox>
         <StyledNav
           selectedKey={sidebarOptionSelected}

@@ -51,7 +51,7 @@ export const LayoutAdmin = ({ id, menuOptionSelected = 'admin', children }: Layo
   const isFetchingOrgNav = false;
 
   return (
-    <LayoutDashboard id={id} menuOptionSelected={menuOptionSelected} showMenu={false}>
+    <LayoutDashboard id={id} menuOptionSelected={menuOptionSelected}>
       {isFetchingOrgNav ? (
         <Spacing margin={{ top: 'double' }}>
           <Spinner size={SpinnerSize.large} label="Loading admin domain" />

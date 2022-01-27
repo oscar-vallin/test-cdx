@@ -1,8 +1,8 @@
-import { ReactElement, ReactNode } from 'react';
+import { ReactElement, ReactNode, useState } from 'react';
 import { AppHeader } from 'src/containers/headers/AppHeader';
 
 import { StyleConstants } from 'src/data/constants/StyleConstants';
-import { BoxStyled } from './LayoutDashboard.styles';
+import { BoxStyled, DashboardBody } from './LayoutDashboard.styles';
 
 const defaultProps = {
   id: '',
@@ -13,22 +13,26 @@ const defaultProps = {
 type LayoutDashboardProps = {
   id?: string;
   menuOptionSelected?: string;
-  showMenu?: boolean;
   children?: ReactNode | string;
 } & typeof defaultProps;
 
 export const LayoutDashboard = ({
   id,
   menuOptionSelected = 'dashboard',
-  showMenu = true,
   children,
 }: LayoutDashboardProps): ReactElement => {
+
+  const [menuOpen, setMenuOpen] = useState(true);
+
   return (
     <>
       <BoxStyled id={`${id}__Box`} direction={StyleConstants.DIRECTION_COLUMN} top>
-        <AppHeader menuOptionSelected={menuOptionSelected} />
-
-        {children}
+        <AppHeader menuOptionSelected={menuOptionSelected}
+                   onMenuOpen={() => {setMenuOpen(true)}}
+                   onMenuClose={() => {setMenuOpen(false)}} />
+        <DashboardBody id='__DashboardBody' isMenuOpen={menuOpen}>
+          {children}
+        </DashboardBody>
       </BoxStyled>
     </>
   );
