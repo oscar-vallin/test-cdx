@@ -42,7 +42,7 @@ const _UserSettingsPage = () => {
         <Container>
           <Row>
             <Column lg="6" direction="row">
-              <PageTitle id="__Page_Title" title="User Settings" />
+              <PageTitle id="__UserSettings_Title" title="User Settings" />
             </Column>
           </Row>
         </Container>

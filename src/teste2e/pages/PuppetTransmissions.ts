@@ -1,9 +1,9 @@
 import PuppetBasePage from './PuppetBasePage';
 
 export default class PuppetTransmissions extends PuppetBasePage {
-  pageTitle = '#__Page_Title-Text';
+  pageTitle = '#__Transmissions_Title-Text';
 
-  secondaryTitle = '#__Page_Title_SubTitle-Text';
+  secondaryTitle = '#__Transmissions_Title_SubTitle-Text';
 
   searchInput = '#TableTransmissions__Card__Row__Input-Search';
 

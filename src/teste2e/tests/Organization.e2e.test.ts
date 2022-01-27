@@ -46,7 +46,7 @@ describe('E2E - Organization Navigation Test', () => {
 
   it('Go back up to CDX Organization', async () => {
     const adminMenu = cdxApp.getAdminMenu();
-    await adminMenu.openMenu('Known2U Implementation Services', 'Return to my organization');
+    await adminMenu.openMenu('Navigate To...', 'Return to my organization');
   });
 
   it('Click on Active Orgs', async () => {

@@ -1,9 +1,9 @@
 import PuppetExchangeStatus from './PuppetExchangeStatus';
 
 export default class PuppetErrors extends PuppetExchangeStatus {
-  pageTitle = '#__Page_Title-Text';
+  pageTitle = '#__Errors_Title-Text';
 
-  secondaryTitle = '#__Page_Title_SubTitle-Text';
+  secondaryTitle = '#__Errors_Title_SubTitle-Text';
 
   startTmeCol = 'div[data-item-key="startTime"]';
 

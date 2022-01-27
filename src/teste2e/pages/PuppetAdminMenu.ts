@@ -8,7 +8,9 @@ export default class PuppetAdminMenu extends PuppetBasePage {
   menuTrigger = '#__AdminNavBtn';
 
   async openMenu(...menuItems: string[]) {
-    await this.page.click(this.menuTrigger);
+    // Should first check if the menu is open before clicking on the menu button
+    // const menuOpen = await this.page.$eval(this.menuParent)
+    // await this.page.click(this.menuTrigger);
     await this.page.waitForSelector(this.menuParent, { visible: true });
     await this.page.waitForTimeout(1000);
 

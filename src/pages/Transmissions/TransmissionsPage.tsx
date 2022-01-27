@@ -69,7 +69,7 @@ const _TransmissionsPage = () => {
           <Row>
             <Column lg="6" direction="row">
               <PageTitle
-                id="__Page_Title"
+                id="__Transmissions_Title"
                 title="Transmissions"
                 subTitle="Advanced search"
                 icon="FilterSolid"

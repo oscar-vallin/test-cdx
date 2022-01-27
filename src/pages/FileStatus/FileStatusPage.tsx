@@ -77,7 +77,7 @@ const _FileStatusPage = () => {
         <Container>
           <Row>
             <Column lg="6" direction="row">
-              <PageTitle id="__Page_Title" title="File Status" subTitle="Advanced search" icon="FilterSolid" />
+              <PageTitle id="__File-Status_Title" title="File Status" subTitle="Advanced search" icon="FilterSolid" />
             </Column>
             <Column lg="6" right>
               <Text right>

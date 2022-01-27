@@ -42,7 +42,7 @@ const _ArchivePage = () => {
         <Container>
           <Row>
             <Column lg="6" direction="row">
-              <PageTitle id="__Page_Title" title="Archives" subTitle="Advanced search" icon="FilterSolid" />
+              <PageTitle id="__Archives_Title" title="Archives" subTitle="Advanced search" icon="FilterSolid" />
             </Column>
             <Column lg="6" right>
               <Text right>
