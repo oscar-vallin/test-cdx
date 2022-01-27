@@ -166,50 +166,44 @@ const DashboardPage = () => {
       <React.Suspense fallback={pageFallBack()}>
         <PageHeader spacing="0">
           <Container>
-            <Spacing margin={{ top: 'double' }}>
-              <Row center>
-                <Column lg="6" direction="row">
-                  <PageTitle id="__Dashboard_Title" title="Dashboard" subTitle="Summary" />
+            <Row center>
+              <Column lg="6" direction="row">
+                <PageTitle id="__Page_Title" title="Dashboard" subTitle="Summary" />
+              </Column>
+              <Column lg="6" direction="row" right>
+                {renderDateButtons()}
+              </Column>
+            </Row>
+
+            <br />
+
+            {dateId === 'custom' && (
+              <Row>
+                <Column lg="6" />
+                <Column lg="3" right>
+                  <InputDate
+                    id="CustomFilter__StartDate"
+                    value={dateRange.startDate}
+                    onChange={(date) => {
+                      setDateRange({ ...dateRange, startDate: date });
+                      handleChangeDate('custom', date, dateRange.endDate);
+                    }}
+                    required={false}
+                  />
                 </Column>
-                <Column lg="6" direction="row" right>
-                  {renderDateButtons()}
+                <Column lg="3" right>
+                  <InputDate
+                    id="CustomFilter__EndDate"
+                    value={dateRange.endDate}
+                    onChange={(date) => {
+                      setDateRange({ ...dateRange, endDate: date });
+                      handleChangeDate('custom', dateRange.startDate, date);
+                    }}
+                    required={false}
+                  />
                 </Column>
               </Row>
-
-              <br />
-
-              {dateId === 'custom' && (
-                <Row>
-                  <Column lg="6" />
-                  <Column lg="6">
-                    <Row right>
-                      <Column lg="3" right>
-                        <InputDate
-                          id="CustomFilter__StartDate"
-                          value={dateRange.startDate}
-                          onChange={(date) => {
-                            setDateRange({ ...dateRange, startDate: date });
-                            handleChangeDate('custom', date, dateRange.endDate);
-                          }}
-                          required={false}
-                        />
-                      </Column>
-                      <Column lg="3" right>
-                        <InputDate
-                          id="CustomFilter__EndDate"
-                          value={dateRange.endDate}
-                          onChange={(date) => {
-                            setDateRange({ ...dateRange, endDate: date });
-                            handleChangeDate('custom', dateRange.startDate, date);
-                          }}
-                          required={false}
-                        />
-                      </Column>
-                    </Row>
-                  </Column>
-                </Row>
-              )}
-            </Spacing>
+            )}
           </Container>
         </PageHeader>
 
