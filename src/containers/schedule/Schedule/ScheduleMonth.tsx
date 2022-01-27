@@ -46,7 +46,7 @@ export const ScheduleMonth = ({ id, currentDate, selectedDate, onChangeDate, ite
   const renderItems = (day, allItems) => {
     const dayRows = allItems.filter((_item) => isSameDay(parseISO(_item.datetime), day));
 
-    return dayRows.map((_item) => <CellItem>{_item.label}</CellItem>);
+    return dayRows.map((_item, index) => <CellItem key={`cell_${day}_${index}`}>{_item.label}</CellItem>);
   };
 
   // *
@@ -81,14 +81,14 @@ export const ScheduleMonth = ({ id, currentDate, selectedDate, onChangeDate, ite
 
         days.push(
           <CalendarBodyCell
-            id={`CalendarBodyCell-${day.getDate()}`}
+            id={`CalendarBodyCell-${i}-${day.getDate()}`}
             isSameMonth={isSameMonth(day, dates.monthStart)}
             isSameDay={isSameDay(day, currentDate)}
             isSelectedDate={isSameDay(day, dates.selectedDate)}
-            key={`${day}`}
+            key={`day_${i}_${day}`}
             onClick={() => handleChangeDate(cloneDay)}
           >
-            <CalendarBodyCellNumber id="CalendarBodyCellNumber">
+            <CalendarBodyCellNumber id={`CalendarBodyCellNumber_${i}_${day}`} key={`cell_${i}_${day}`}>
               {isSameMonth(day, dates.monthStart) && !isSameDay(day, currentDate)
                 ? formattedDate
                 : formattedDateNotValid}
@@ -100,7 +100,7 @@ export const ScheduleMonth = ({ id, currentDate, selectedDate, onChangeDate, ite
         day = addDays(day, 1);
       }
       rows.push(
-        <CalendarBodyRow id="CalendarBodyRow" key={`${day}`}>
+        <CalendarBodyRow id={`CalendarBodyRow-${day}`} key={`week_${day}`}>
           {days}
         </CalendarBodyRow>
       );
