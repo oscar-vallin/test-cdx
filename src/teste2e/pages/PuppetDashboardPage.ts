@@ -29,9 +29,9 @@ export default class PuppetDashboardPage extends PuppetBasePage {
 
   buttonCustom = '#__Button-custom';
 
-  customFromDate = '#CustomFilter__StartDate-label';
+  customFromDate = '#Input__From__Date-label';
 
-  customToDate = '#CustomFilter__EndDate-label';
+  customToDate = '#Input__To__Date-label';
 
   async expectOnPage() {
     await this.page.waitForSelector(this.transmissionBillingUnits);
@@ -137,13 +137,11 @@ export default class PuppetDashboardPage extends PuppetBasePage {
   }
 
   async clickCustomFilter() {
-    const DatePickerSelector = '#CustomFilter';
-
     await this.page.waitForSelector(this.buttonCustom);
     await this.page.click(this.buttonCustom);
 
-    await this.page.waitForSelector(`${DatePickerSelector}__StartDate`);
-    await this.page.waitForSelector(`${DatePickerSelector}__EndDate`);
+    await this.page.waitForSelector('#Input__From__Date-label');
+    await this.page.waitForSelector('#Input__To__Date-label');
   }
 
   async setCustomDateRange(fromDate: string, toDate: string) {
