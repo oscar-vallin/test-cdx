@@ -111,7 +111,7 @@ export const useDashboardService = (orgSid: string, dateRangeType?: string | nul
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [period]);
 
-  const getPeriodCounts = ({ startDate, endDate }) => {
+  const getPeriodCounts = (startDate?: Date, endDate?: Date) => {
     if (startDate && endDate) {
       customPeriodQuery({
         variables: {

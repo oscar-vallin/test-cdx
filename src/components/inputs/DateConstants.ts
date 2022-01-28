@@ -1,23 +1,10 @@
-import { ReactElement } from 'react';
+import { DayOfWeek } from '@fluentui/react';
 import { addYears } from '@fluentui/date-time-utilities';
-import { DatePicker, DayOfWeek } from '@fluentui/react';
-
-const defaultProps = {
-  id: '',
-  onChange: () => null,
-  required: true,
-};
-
-type DateSelectorProps = {
-  id?: string;
-  onChange?: any | null;
-  required?: boolean;
-} & typeof defaultProps;
 
 const today = new Date(Date.now());
 const maxDate = addYears(today, 1);
 
-const DayPickerStrings = {
+export const DayPickerStrings = {
   months: [
     'January',
     'February',
@@ -55,26 +42,4 @@ const DayPickerStrings = {
   isOutOfBoundsErrorMessage: `Date must be between some initial date}-${maxDate.toLocaleDateString()}`,
 };
 
-const firstDayOfWeek = DayOfWeek.Sunday;
-
-export const DateSelector = ({ id, onChange, required }: DateSelectorProps): ReactElement => {
-  return (
-    <DatePicker
-      id={id}
-      isRequired={required}
-      firstDayOfWeek={firstDayOfWeek}
-      strings={DayPickerStrings}
-      // minDate={minDate}
-      maxDate={maxDate}
-      onSelectDate={onChange}
-      initialPickerDate={today}
-      allowTextInput
-    >
-      AAAAAAAA
-    </DatePicker>
-  );
-};
-
-DateSelector.defaultProps = defaultProps;
-
-export default DateSelector;
+export const firstDayOfWeek = DayOfWeek.Sunday;

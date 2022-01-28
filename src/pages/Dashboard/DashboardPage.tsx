@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 // components
 import { useHistory, useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 import { SpinnerSize } from '@fluentui/react';
-import { InputDate } from 'src/components/inputs/InputDate';
 import { CardDashboard } from 'src/containers/cards/CardDashboard';
 import { TableDashboard } from 'src/containers/tables/TableDashboard';
 
@@ -21,6 +20,8 @@ import { useDashboardService } from './DashboardPage.service';
 import { StyledButton, StyledRow } from './DashboardPage.styles';
 import { format } from 'date-fns';
 import { ROUTE_DASHBOARD } from 'src/data/constants/RouteConstants';
+import { InputDateRange } from 'src/components/inputs/InputDateRange';
+import { useDateValue } from 'src/hooks/useDateValue';
 
 const DashboardPage = () => {
   const { orgSid, startDate, endDate } = useOrgSid();
@@ -31,10 +32,8 @@ const DashboardPage = () => {
   const { isLoadingData, datesOptions, dataCounters, getPeriodCounts }: any = service;
   const { setDateId, dateId } = service;
   const history = useHistory();
-  const [dateRange, setDateRange] = useState({
-    startDate: startDate ? new Date(`${startDate}T00:00:00.000`) : new Date(),
-    endDate: endDate ? new Date(`${endDate}T23:59:59.999`) : new Date(),
-  });
+  const fromDate = useDateValue('', startDate ? new Date(`${startDate}T00:00:00.000`) : new Date());
+  const toDate = useDateValue('', endDate ? new Date(`${endDate}T23:59:59.999`) : new Date());
 
   useEffect(() => {
     if (location.search) {
@@ -53,16 +52,16 @@ const DashboardPage = () => {
       );
     } else {
       history.push(
-        `?startDate=${format(dateRange.startDate, 'yyyy-MM-dd')}&endDate=${format(dateRange.endDate, 'yyyy-MM-dd')}&orgSid=${orgSid}`
+        `?startDate=${format(fromDate.value, 'yyyy-MM-dd')}&endDate=${format(toDate.value, 'yyyy-MM-dd')}&orgSid=${orgSid}`
       );
     }
   };
 
   useEffect(() => {
     if (dateId === 'custom') {
-      getPeriodCounts(dateRange);
+      getPeriodCounts(fromDate.value, toDate.value);
     }
-  }, [dateRange, dateId]);
+  }, [fromDate.value, toDate.value, dateId]);
 
   // Render Buttons Bar
   const renderDateButtons = () => {
@@ -180,28 +179,35 @@ const DashboardPage = () => {
             {dateId === 'custom' && (
               <Row>
                 <Column lg="6" />
-                <Column lg="3" right>
-                  <InputDate
-                    id="CustomFilter__StartDate"
-                    value={dateRange.startDate}
-                    onChange={(date) => {
-                      setDateRange({ ...dateRange, startDate: date });
-                      handleChangeDate('custom', date, dateRange.endDate);
-                    }}
-                    required={false}
-                  />
+                <Column lg="6">
+                  <InputDateRange startDate={fromDate} endDate={toDate} showLabels={false}/>
                 </Column>
-                <Column lg="3" right>
-                  <InputDate
-                    id="CustomFilter__EndDate"
-                    value={dateRange.endDate}
-                    onChange={(date) => {
-                      setDateRange({ ...dateRange, endDate: date });
-                      handleChangeDate('custom', dateRange.startDate, date);
-                    }}
-                    required={false}
-                  />
-                </Column>
+                {/*<Column lg="3" right>*/}
+                {/*  <InputDate*/}
+                {/*    id="CustomFilter__StartDate"*/}
+                {/*    value={dateRange.startDate}*/}
+                {/*    onChange={(date) => {*/}
+                {/*      if (date) {*/}
+                {/*        setDateRange({ ...dateRange, startDate: date });*/}
+                {/*        handleChangeDate('custom', date, dateRange.endDate);*/}
+                {/*      }*/}
+                {/*    }}*/}
+                {/*    required={false}*/}
+                {/*  />*/}
+                {/*</Column>*/}
+                {/*<Column lg="3" right>*/}
+                {/*  <InputDate*/}
+                {/*    id="CustomFilter__EndDate"*/}
+                {/*    value={dateRange.endDate}*/}
+                {/*    onChange={(date) => {*/}
+                {/*      if (date) {*/}
+                {/*        setDateRange({ ...dateRange, endDate: date });*/}
+                {/*        handleChangeDate('custom', dateRange.startDate, date);*/}
+                {/*      }*/}
+                {/*    }}*/}
+                {/*    required={false}*/}
+                {/*  />*/}
+                {/*</Column>*/}
               </Row>
             )}
           </Container>
