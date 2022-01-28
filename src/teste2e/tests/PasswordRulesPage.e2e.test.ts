@@ -1,5 +1,5 @@
-import PuppetCDXApp from '../../../teste2e/pages/PuppetCDXApp';
-import PuppetPasswordRules from '../../../teste2e/pages/PuppetPasswordRules';
+import PuppetCDXApp from 'src/teste2e/pages/PuppetCDXApp';
+import PuppetPasswordRules from 'src/teste2e/pages/PuppetPasswordRules';
 
 describe('E2E - Password Rules Navigation Test', () => {
   let cdxApp: PuppetCDXApp;

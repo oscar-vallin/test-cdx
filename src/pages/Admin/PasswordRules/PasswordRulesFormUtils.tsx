@@ -2,7 +2,7 @@ import { Checkbox, MaskedTextField } from '@fluentui/react';
 import { Column, Row } from 'src/components/layouts';
 import { Text } from 'src/components/typography';
 import { StyledDiv } from './PasswordRulesPage.styles';
-import { PasswordComplexity, PasswordRules } from 'src/data/services/graphql';
+import { PasswordComplexity, PasswordRules, PasswordRulesForm } from 'src/data/services/graphql';
 
 export const DEFAULT_FORM: PasswordRules = {
   orgSid: '',
@@ -60,16 +60,17 @@ export const DEFAULT_FORM: PasswordRules = {
 };
 
 type FormInputProps = {
-  id?: any;
+  id?: string;
   value?: any;
-  state?: any;
-  group?: any;
-  option?: any;
-  errorMessage?: string;
-  onChange?: any;
+  state: PasswordRules;
+  group?: string;
+  option: string;
+  disabled?: boolean;
+  errorMessage?: string | null;
+  onChange: (updated: PasswordRules) => void;
 };
 
-export const FormInput = ({ id, value, state, group, option, errorMessage, onChange }: FormInputProps) => (
+export const FormInput = ({ id, value, state, group, option, disabled = false, errorMessage, onChange }: FormInputProps) => (
   <MaskedTextField
     maskFormat={{
       '*': /[0-9_]/,
@@ -78,14 +79,16 @@ export const FormInput = ({ id, value, state, group, option, errorMessage, onCha
     maskChar=""
     id={id}
     value={value?.toString()}
-    errorMessage={errorMessage}
-    onChange={({ target }: any) => {
-      onChange({
+    errorMessage={errorMessage ?? undefined}
+    disabled={disabled}
+    onChange={(event, newValue) => {
+      const updated: PasswordRules = {
         ...state,
         ...(group
-          ? { [group]: { ...state[group], [option]: target.value.toString() } }
-          : { [option]: target.value.toString() }),
-      })
+          ? { [group]: { ...state[group], [option]: newValue?.toString() } }
+          : { [option]: newValue?.toString() }),
+      };
+      onChange(updated);
     }}
   />
 );
@@ -114,7 +117,15 @@ export const extractFormValues = (defaultValues, form) => {
 
 export const replaceInputs = (string, inputs) => string.split(' ').map((token) => inputs[token] || `${token} `);
 
-export const FormOptions = ({ form = {}, group = '_', state, onChange }) => {
+type FormOptionsType = {
+  form: PasswordRulesForm;
+  group?: string;
+  state: PasswordRules;
+  disabled?: boolean;
+  onChange: (updated: PasswordRules) => void;
+};
+
+export const FormOptions = ({ form, group = '_', state, disabled = false, onChange }: FormOptionsType) => {
   const baseCheckboxId = `__checkbox${group === 'mustAlwaysBeMet' ? 'Must' : 'Some'}`;
   const baseInputId = `__input${group === 'mustAlwaysBeMet' ? 'Must' : 'Some'}`;
 
@@ -126,6 +137,7 @@ export const FormOptions = ({ form = {}, group = '_', state, onChange }) => {
             <Checkbox
               id={`${baseCheckboxId}NoWhitespaces`}
               checked={state[group].mustNotContainWhiteSpace}
+              disabled={disabled}
               onChange={(event, checked) =>
                 onChange({
                   ...state,
@@ -148,6 +160,7 @@ export const FormOptions = ({ form = {}, group = '_', state, onChange }) => {
             <Checkbox
               id={`${baseCheckboxId}PasswordLength`}
               checked={state[group].mustFollowLengthRequirements}
+              disabled={disabled}
               onChange={(event, checked) =>
                 onChange({
                   ...state,
@@ -165,6 +178,7 @@ export const FormOptions = ({ form = {}, group = '_', state, onChange }) => {
                       <FormInput
                         id={`${baseInputId}MinLength`}
                         key={`${baseInputId}MinLength`}
+                        disabled={disabled || state[group].mustFollowLengthRequirements == false}
                         group={group}
                         option="minLength"
                         state={state}
@@ -177,6 +191,7 @@ export const FormOptions = ({ form = {}, group = '_', state, onChange }) => {
                       <FormInput
                         id={`${baseInputId}MaxLength`}
                         key={`${baseInputId}MaxLength`}
+                        disabled={disabled || state[group].mustFollowLengthRequirements == false}
                         group={group}
                         option="maxLength"
                         state={state}
@@ -196,6 +211,7 @@ export const FormOptions = ({ form = {}, group = '_', state, onChange }) => {
             <Checkbox
               id={`${baseCheckboxId}Uppercase`}
               checked={state[group].mustContainUpperCaseLetters}
+              disabled={disabled}
               onChange={(event, checked) =>
                 onChange({
                   ...state,
@@ -213,6 +229,7 @@ export const FormOptions = ({ form = {}, group = '_', state, onChange }) => {
                       <FormInput
                         id={`${baseInputId}Uppercase`}
                         key={`${baseInputId}Uppercase`}
+                        disabled={disabled || state[group].mustContainUpperCaseLetters == false}
                         group={group}
                         option="minUpperCaseLetters"
                         state={state}
@@ -232,6 +249,7 @@ export const FormOptions = ({ form = {}, group = '_', state, onChange }) => {
             <Checkbox
               id={`${baseCheckboxId}Lowercase`}
               checked={state[group].mustContainLowerCaseLetters}
+              disabled={disabled}
               onChange={(event, checked) =>
                 onChange({
                   ...state,
@@ -249,6 +267,7 @@ export const FormOptions = ({ form = {}, group = '_', state, onChange }) => {
                       <FormInput
                         id={`${baseInputId}Lowercase`}
                         key={`${baseInputId}Lowercase`}
+                        disabled={disabled || state[group].mustContainLowerCaseLetters == false}
                         group={group}
                         option="minLowerCaseLetters"
                         state={state}
@@ -268,6 +287,7 @@ export const FormOptions = ({ form = {}, group = '_', state, onChange }) => {
             <Checkbox
               id={`${baseCheckboxId}Digit`}
               checked={state[group].mustContainNumericDigits}
+              disabled={disabled}
               onChange={(event, checked) =>
                 onChange({
                   ...state,
@@ -285,6 +305,7 @@ export const FormOptions = ({ form = {}, group = '_', state, onChange }) => {
                       <FormInput
                         id={`${baseInputId}Digit`}
                         key={`${baseInputId}Digit`}
+                        disabled={disabled || state[group].mustContainNumericDigits == false}
                         group={group}
                         option="minNumericDigits"
                         state={state}
@@ -304,6 +325,7 @@ export const FormOptions = ({ form = {}, group = '_', state, onChange }) => {
             <Checkbox
               id={`${baseCheckboxId}SpecialChars`}
               checked={state[group].mustContainSpecialCharacters}
+              disabled={disabled}
               onChange={(event, checked) =>
                 onChange({
                   ...state,
@@ -321,6 +343,7 @@ export const FormOptions = ({ form = {}, group = '_', state, onChange }) => {
                       <FormInput
                         id={`${baseInputId}SpecialChars`}
                         key={`${baseInputId}SpecialChars`}
+                        disabled={disabled || state[group].mustContainSpecialCharacters == false}
                         group={group}
                         option="minSpecialCharacters"
                         state={state}
@@ -341,6 +364,7 @@ export const FormOptions = ({ form = {}, group = '_', state, onChange }) => {
             <Checkbox
               id={`${baseCheckboxId}NoUserName`}
               checked={state[group].mustNotContainUserName}
+              disabled={disabled}
               onChange={(event, checked) =>
                 onChange({
                   ...state,
@@ -363,6 +387,7 @@ export const FormOptions = ({ form = {}, group = '_', state, onChange }) => {
             <Checkbox
               id={`${baseCheckboxId}Sequence`}
               checked={state[group].mustNotContainNumericSequence}
+              disabled={disabled}
               onChange={(event, checked) =>
                 onChange({
                   ...state,
@@ -384,6 +409,7 @@ export const FormOptions = ({ form = {}, group = '_', state, onChange }) => {
             <Checkbox
               id={`${baseCheckboxId}NotRepeat`}
               checked={state[group].mustNotRepeatCharacters}
+              disabled={disabled}
               onChange={(event, checked) =>
                 onChange({
                   ...state,
@@ -401,6 +427,7 @@ export const FormOptions = ({ form = {}, group = '_', state, onChange }) => {
                       <FormInput
                         id={`${baseInputId}RepeatedChars`}
                         key={`${baseInputId}RepeatedChars`}
+                        disabled={disabled || state[group].mustNotRepeatCharacters == false}
                         group={group}
                         option="maxAllowedRepeatedChars"
                         state={state}
@@ -420,6 +447,7 @@ export const FormOptions = ({ form = {}, group = '_', state, onChange }) => {
             <Checkbox
               id={`${baseCheckboxId}NotReuse`}
               checked={state[group].mustNotReusePasswords}
+              disabled={disabled}
               onChange={(event, checked) =>
                 onChange({
                   ...state,
@@ -437,6 +465,7 @@ export const FormOptions = ({ form = {}, group = '_', state, onChange }) => {
                       <FormInput
                         id={`${baseInputId}Variations`}
                         key={`${baseInputId}Variations`}
+                        disabled={disabled || state[group].mustNotReusePasswords == false}
                         group={group}
                         option="minPasswordHistoryVariations"
                         state={state}
@@ -456,6 +485,7 @@ export const FormOptions = ({ form = {}, group = '_', state, onChange }) => {
             <Checkbox
               id={`${baseCheckboxId}NoExactMatch`}
               checked={state[group].mustNotMatchExactDictionaryWord}
+              disabled={disabled}
               onChange={(event, checked) =>
                 onChange({
                   ...state,
@@ -477,6 +507,7 @@ export const FormOptions = ({ form = {}, group = '_', state, onChange }) => {
             <Checkbox
               id={`${baseCheckboxId}NoPartialMatch`}
               checked={state[group].mustNotMatchPartialDictionaryWord}
+              disabled={disabled}
               onChange={(event, checked) =>
                 onChange({
                   ...state,

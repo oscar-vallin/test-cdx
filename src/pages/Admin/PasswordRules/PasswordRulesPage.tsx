@@ -15,7 +15,7 @@ import { Spacing } from 'src/components/spacings/Spacing';
 
 import {
   PasswordComplexity,
-  PasswordRules,
+  PasswordRules, PasswordRulesForm,
   usePasswordRulesFormLazyQuery,
   useUpdatePasswordRulesMutation
 } from 'src/data/services/graphql';
@@ -30,12 +30,12 @@ import { PageHeader } from 'src/containers/headers/PageHeader';
 const _PasswordRulesPage = () => {
   const { orgSid } = useOrgSid();
   const Toast = useNotification();
-  const [fetchPageForm, { data, loading: isLoadingForm }] = useQueryHandler(usePasswordRulesFormLazyQuery);
+  const [fetchPageForm, { data, loading: isLoadingForm, error: formError }] = usePasswordRulesFormLazyQuery();
   const [updatePasswordRules, { data: updatedRules, loading: isUpdatingRules, error: updateError }] =
     useQueryHandler(useUpdatePasswordRulesMutation);
 
   const [state, setState] = useState<PasswordRules>({ ...DEFAULT_FORM });
-  const [form, setForm]: any = useState({});
+  const [form, setForm] = useState<PasswordRulesForm | null>();
   const handleError = ErrorHandler();
 
   useEffect(() => {
@@ -47,15 +47,19 @@ const _PasswordRulesPage = () => {
   }, [orgSid]);
 
   useEffect(() => {
-    if (data) {
+    if (data?.passwordRulesForm) {
       setState({ ...state, ...extractFormValues(DEFAULT_FORM, data?.passwordRulesForm || {}) });
-      setForm(data);
+      setForm(data.passwordRulesForm);
     }
   }, [data]);
 
   useEffect(() => {
     // console.log(state);
   }, [state]);
+
+  useEffect(() => {
+    handleError(formError);
+  }, [formError]);
 
   useEffect(() => {
     handleError(updateError);
@@ -69,9 +73,7 @@ const _PasswordRulesPage = () => {
       } else {
         Toast.success({ text: 'Password rules updated successfully' });
       }
-      setForm({
-        passwordRulesForm: updatedRules.updatePasswordRules,
-      });
+      setForm(updatedRules.updatePasswordRules);
     }
   }, [updatedRules]);
 
@@ -138,14 +140,14 @@ const _PasswordRulesPage = () => {
 
                   <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                     <FormOptions
-                      form={form?.passwordRulesForm}
+                      form={form}
                       group="mustAlwaysBeMet"
                       state={state}
                       onChange={setState}
                     />
                   </Spacing>
 
-                  {form?.passwordRulesForm?.someMustBeMet?.enabled?.visible && (
+                  {form?.someMustBeMet?.enabled?.visible && (
                     <Spacing margin={{ bottom: 'normal' }}>
                       <Row>
                         <Column>
@@ -168,12 +170,13 @@ const _PasswordRulesPage = () => {
 
                               <StyledComboBox
                                 selectedKey={state?.someMustBeMet?.minPasswordComplexity?.toString()}
+                                disabled={state.someMustBeMet?.enabled == false}
                                 options={
-                                  form.passwordRulesForm?.options
-                                    ?.find((opt) => opt.key === 'PasswordComplexity')
-                                    ?.values?.map(({ label, value }) => ({
-                                      key: value,
-                                      text: label,
+                                  form?.options
+                                    ?.find((opt) => opt?.key === 'PasswordComplexity')
+                                    ?.values?.map((opt) => ({
+                                      key: opt?.value ?? '',
+                                      text: opt?.label ?? '',
                                     })) || []
                                 }
                                 onChange={(event, option) => {
@@ -191,7 +194,7 @@ const _PasswordRulesPage = () => {
                               <strong>complexity</strong>
                               <InfoIcon
                                 id="passComplexityTooltip"
-                                tooltip={form?.passwordRulesForm?.someMustBeMet?.minPasswordComplexity?.info}
+                                tooltip={form?.someMustBeMet?.minPasswordComplexity?.info}
                                 leftPad={false}
                               />
                               <strong>&nbsp;OR Match</strong>
@@ -202,7 +205,8 @@ const _PasswordRulesPage = () => {
                                 group="someMustBeMet"
                                 option="requiredNumPassingRules"
                                 state={state}
-                                errorMessage={form?.passwordRulesForm?.someMustBeMet?.requiredNumPassingRules?.errMsg}
+                                disabled={state.someMustBeMet?.enabled == false}
+                                errorMessage={form?.someMustBeMet?.requiredNumPassingRules?.errMsg}
                                 value={state?.someMustBeMet?.requiredNumPassingRules}
                                 onChange={setState}
                               />
@@ -217,7 +221,8 @@ const _PasswordRulesPage = () => {
                         <Column>
                           <Card elevation="none">
                             <FormOptions
-                              form={form?.passwordRulesForm}
+                              form={form}
+                              disabled={state.someMustBeMet?.enabled == false}
                               group="someMustBeMet"
                               state={state}
                               onChange={setState}
@@ -228,10 +233,10 @@ const _PasswordRulesPage = () => {
                     </Spacing>
                   )}
 
-                  {(form?.passwordRulesForm?.autoLockAccount?.visible ||
-                    form?.passwordRulesForm?.autoUnlockAccount?.visible) && (
+                  {(form?.autoLockAccount?.visible ||
+                    form?.autoUnlockAccount?.visible) && (
                     <Spacing margin={{ bottom: 'double' }}>
-                      {form?.passwordRulesForm?.autoLockAccount?.visible && (
+                      {form?.autoLockAccount?.visible && (
                         <Row>
                           <Column>
                             <StyledDiv>
@@ -245,20 +250,21 @@ const _PasswordRulesPage = () => {
                                   })}
                               />
 
-                              <Text {...(form?.passwordRulesForm?.autoLockAccount?.errMsg ? { variant: 'error' } : {})}>
+                              <Text {...(form?.autoLockAccount?.errMsg ? { variant: 'error' } : {})}>
                                 <span>
-                                  {form?.passwordRulesForm?.autoLockAccount?.label || 'Missing label from form'}
+                                  {form?.autoLockAccount?.label || 'Missing label from form'}
                                 </span>
 
-                                {form?.passwordRulesForm?.autoLockAfterFailedAttempts.label
-                                  ? replaceInputs(form?.passwordRulesForm?.autoLockAfterFailedAttempts.label, {
+                                {form?.autoLockAfterFailedAttempts?.label
+                                  ? replaceInputs(form?.autoLockAfterFailedAttempts.label, {
                                       '{0}': (
                                         <FormInput
                                           id="__inputAutoLock"
                                           key="__inputAutoLock"
+                                          disabled={state?.autoLockAccount == false}
                                           option="autoLockAfterFailedAttempts"
                                           state={state}
-                                          errorMessage={form?.passwordRulesForm?.autoLockAfterFailedAttempts?.errMsg}
+                                          errorMessage={form?.autoLockAfterFailedAttempts?.errMsg}
                                           value={state.autoLockAfterFailedAttempts}
                                           onChange={setState}
                                         />
@@ -271,7 +277,7 @@ const _PasswordRulesPage = () => {
                         </Row>
                       )}
 
-                      {form?.passwordRulesForm?.autoUnlockAccount?.visible && (
+                      {form?.autoUnlockAccount?.visible && (
                         <Row>
                           <Column>
                             <StyledDiv>
@@ -286,21 +292,22 @@ const _PasswordRulesPage = () => {
                               />
 
                               <Text
-                                {...(form?.passwordRulesForm?.autoUnlockAccount?.errMsg ? { variant: 'error' } : {})}
+                                {...(form?.autoUnlockAccount?.errMsg ? { variant: 'error' } : {})}
                               >
                                 <span>
-                                  {form?.passwordRulesForm?.autoUnlockAccount?.label || 'Missing label from form'}
+                                  {form?.autoUnlockAccount?.label || 'Missing label from form'}
                                 </span>
 
-                                {form?.passwordRulesForm?.autoUnlockAccountDelayMinutes.label
-                                  ? replaceInputs(form?.passwordRulesForm?.autoUnlockAccountDelayMinutes.label, {
+                                {form?.autoUnlockAccountDelayMinutes?.label
+                                  ? replaceInputs(form?.autoUnlockAccountDelayMinutes.label, {
                                       '{0}': (
                                         <FormInput
                                           id="__inputAutoUnlock"
                                           key="__inputAutoUnLock"
+                                          disabled={state?.autoUnlockAccount == false}
                                           option="autoUnlockAccountDelayMinutes"
                                           state={state}
-                                          errorMessage={form?.passwordRulesForm?.autoUnlockAccountDelayMinutes?.errMsg}
+                                          errorMessage={form?.autoUnlockAccountDelayMinutes?.errMsg}
                                           value={state.autoUnlockAccountDelayMinutes}
                                           onChange={setState}
                                         />
