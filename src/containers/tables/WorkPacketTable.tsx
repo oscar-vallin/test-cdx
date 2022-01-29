@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { DetailsList, DetailsListLayoutMode, IColumn, SelectionMode, mergeStyleSets } from '@fluentui/react';
+import {
+  DetailsList,
+  DetailsListLayoutMode,
+  IColumn,
+  SelectionMode,
+  mergeStyleSets,
+  ScrollablePane, ScrollbarVisibility
+} from '@fluentui/react';
 
 import { StyledContainer } from 'src/components/tables/Table/Table.styles';
 import { NullHandling, PageableInput, PaginationInfo, SortDirection } from 'src/data/services/graphql';
@@ -184,15 +191,17 @@ export const WorkPacketTable = ({
 
     if (items && items.length > 0) {
       return (
-        <DetailsList
-          className={classNames.root}
-          items={items}
-          columns={columns}
-          selectionMode={SelectionMode.none}
-          setKey="none"
-          layoutMode={DetailsListLayoutMode.justified}
-          isHeaderVisible
-        />
+        <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto} >
+          <DetailsList
+            className={classNames.root}
+            items={items}
+            columns={columns}
+            selectionMode={SelectionMode.none}
+            setKey="none"
+            layoutMode={DetailsListLayoutMode.justified}
+            isHeaderVisible
+          />
+        </ScrollablePane>
       );
     }
 
@@ -210,10 +219,10 @@ export const WorkPacketTable = ({
 
       <Container>
         <Box id={`${id}_TableWrap`}>
-          <StyledContainer id="Table_Detailed" style={{ width: '100%' }}>
+          <StyledContainer id="Table_Detailed" style={{ width: '100%', height: 'calc(100vh - 325px)' }}>
             {renderTable()}
-            <Paginator pagingInfo={pagingInfo} onPageChange={onPageChange} />
           </StyledContainer>
+          <Paginator pagingInfo={pagingInfo} onPageChange={onPageChange} />
         </Box>
       </Container>
     </>

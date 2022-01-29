@@ -7,6 +7,7 @@ export const PaginatorWrapper = styled('div')`
   justify-content: center;
   align-items: center;
   flex-wrap: nowrap;
+  transform: translateY(42px);
 `;
 
 export const PagingInfo = styled(Text)`
