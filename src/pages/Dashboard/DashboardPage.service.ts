@@ -37,7 +37,7 @@ export const useDashboardService = (orgSid: string, dateRangeType?: string | nul
   const [isLoadingData, setIsLoadingData] = useState(true);
 
   const [apiDashboardPeriodsQuery, { data, loading, error }] = useDashboardPeriodsLazyQuery();
-  const [customPeriodQuery, { data: period }] = useDashboardPeriodCountsLazyQuery();
+  const [customPeriodQuery, { data: period, loading: customPeriodLoading, error: customPeriodError }] = useDashboardPeriodCountsLazyQuery();
   const handleError = ErrorHandler();
 
   useEffect(() => {
@@ -57,6 +57,12 @@ export const useDashboardService = (orgSid: string, dateRangeType?: string | nul
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
+
+  useEffect(() => {
+    if (customPeriodError) {
+      handleError(customPeriodError);
+    }
+  }, [customPeriodError]);
 
   // * Set Data Counters.
   const getData = () => {
@@ -88,8 +94,8 @@ export const useDashboardService = (orgSid: string, dateRangeType?: string | nul
 
   // * Component Did Mount
   useEffect(() => {
-    setIsLoading(false);
-  }, []);
+    setIsLoading(loading || customPeriodLoading);
+  }, [loading, customPeriodLoading]);
 
   // * Loading Data
   // useEffect(() => {
