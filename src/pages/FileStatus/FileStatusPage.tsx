@@ -42,7 +42,7 @@ const _FileStatusPage = () => {
 
   const renderTotalRecords = (): ReactElement => {
     if (!tableMeta.loading && tableMeta.count !== null) {
-      return <span>{tableMeta.count > 0 ? `${tableMeta.count} results found` : 'No results were found'}</span>;
+      return <span>{tableMeta.count > 0 ? `${tableMeta.count} results found` : 'No results found'}</span>;
     }
 
     return <span />;
@@ -76,10 +76,10 @@ const _FileStatusPage = () => {
       <PageHeader id="__FileStatusHeader">
         <Container>
           <Row>
-            <Column lg="6" direction="row">
+            <Column sm="6" direction="row">
               <PageTitle id="__File-Status_Title" title="File Status" subTitle="Advanced search" icon="FilterSolid" />
             </Column>
-            <Column lg="6" right>
+            <Column sm="6" right>
               <Text right>
                 {renderDownloadLink()}
                 {renderTotalRecords()}

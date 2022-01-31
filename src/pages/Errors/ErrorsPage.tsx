@@ -35,13 +35,13 @@ const _ErrorsPage = () => {
       <PageHeader id="__ErrorsPageHeader">
         <Container>
           <Row>
-            <Column lg="6" direction="row">
+            <Column sm="6" direction="row">
               <PageTitle id="__Errors_Title" title="Errors" subTitle="Advanced search" icon="FilterSolid" />
             </Column>
-            <Column lg="6" right>
+            <Column sm="6" right>
               <Text right>
                 {!tableMeta.loading && tableMeta.count !== null && (
-                  <Text>{tableMeta.count > 0 ? `${tableMeta.count} results found` : 'No results were found'}</Text>
+                  <Text>{tableMeta.count > 0 ? `${tableMeta.count} results found` : 'No results found'}</Text>
                 )}
               </Text>
             </Column>

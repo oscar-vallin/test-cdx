@@ -1,6 +1,7 @@
 import { FontIcon } from '@fluentui/react';
 import React from 'react';
 import { Text } from '../Text';
+import { SubTitle } from './PageTitle.styles';
 
 type PageTitleParams = {
   id: string;
@@ -20,9 +21,9 @@ const PageTitle = ({ id, title, subTitle, icon }: PageTitleParams) => {
   const renderSubTitle = () => {
     if (subTitle) {
       return (
-        <>
+        <SubTitle>
           &nbsp;—&nbsp;<Text id={`${id}_SubTitle`}>{subTitle}</Text>
-        </>
+        </SubTitle>
       );
     }
     return '';
