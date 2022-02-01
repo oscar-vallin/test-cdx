@@ -4,7 +4,7 @@ import { Box } from '../Box';
 export const StyledBox = styled(Box)`
   align-items: flex-start;
   justify-content: flex-start;
-  padding: 0;
+  padding: 0 20px;
   margin: 0 auto;
-  width: 95%;
+  width: 100%;
 `;

@@ -56,8 +56,8 @@ const WorkStepsTab = ({ steps }: WorkStepsTabProps): ReactElement => {
 
                 <Separator />
 
-                {items[activeIndex].nvp.map((item) => (
-                  <div>
+                {items[activeIndex].nvp.map((item, index) => (
+                  <div key={`itm_${index}`}>
                     <Text variant="bold">{item.name}: &nbsp;</Text>
                     <Text>{item.value}</Text>
                   </div>

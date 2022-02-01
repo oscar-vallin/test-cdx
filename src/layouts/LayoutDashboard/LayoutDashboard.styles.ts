@@ -23,7 +23,7 @@ export const BoxStyled = styled(Box)`
 
 export const DashboardBody = styled.div<DashboardBodyProps>`
   transition: all 0.15s ease-in-out;
-  margin: 30px 0 0 0;
+  margin: 20px 0 0 0;
   width 100%;
   height: calc(100vh - 88px);
   

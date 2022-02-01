@@ -24,6 +24,7 @@ type TextProps = {
   top?: any;
   bottom?: string;
   breakWord?: string;
+  title?: string;
   bold?: boolean;
   className?: string;
 } & typeof defaultProps;
@@ -39,6 +40,7 @@ const Text = ({
   top,
   bottom,
   breakWord,
+  title,
   ...props
 }: TextProps): ReactElement => {
   return (
@@ -51,6 +53,7 @@ const Text = ({
       bottom={bottom}
       transform={transform}
       breakWord={breakWord}
+      title={title}
       size={size}
       className="Text"
       {...props}

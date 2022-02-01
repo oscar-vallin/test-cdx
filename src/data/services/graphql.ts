@@ -2299,11 +2299,20 @@ export type WorkPacketStatusConnection = {
 export type WorkPacketStatusDetails = {
   __typename?: 'WorkPacketStatusDetails';
   workOrderId: Scalars['String'];
+  inboundFilename: Scalars['String'];
+  orgSid: Scalars['ID'];
+  orgId?: Maybe<Scalars['String']>;
+  orgName?: Maybe<Scalars['String']>;
+  vendorSid: Scalars['ID'];
+  vendorId?: Maybe<Scalars['String']>;
+  vendorName?: Maybe<Scalars['String']>;
   specId?: Maybe<Scalars['String']>;
   specImplName?: Maybe<Scalars['String']>;
   fingerPrint?: Maybe<Scalars['String']>;
+  populationCount?: Maybe<Scalars['Int']>;
   suppressBilling?: Maybe<Scalars['Boolean']>;
-  deliveredFile?: Maybe<DeliveredFile>;
+  deliveredFiles?: Maybe<Array<Maybe<DeliveredFile>>>;
+  packetStatus: WorkStatus;
   workStepStatus?: Maybe<Array<Maybe<WorkStepStatus>>>;
   extractParameters?: Maybe<ExtractParameters>;
   qualityChecks?: Maybe<QualityChecks>;
@@ -2313,6 +2322,9 @@ export type WorkPacketStatusDetails = {
   outboundRecordCounts?: Maybe<RecordCounts>;
   inboundLabel?: Maybe<Scalars['String']>;
   outboundLabel?: Maybe<Scalars['String']>;
+  clientFileArchivePath?: Maybe<Scalars['String']>;
+  vendorFileArchivePath?: Maybe<Scalars['String']>;
+  supplementalFilesArchivePaths?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
 export type WorkPacketStatusFilter = {
@@ -2655,8 +2667,8 @@ export type WorkPacketStatusDetailsQuery = (
   { __typename?: 'Query' }
   & { workPacketStatusDetails?: Maybe<(
     { __typename?: 'WorkPacketStatusDetails' }
-    & Pick<WorkPacketStatusDetails, 'workOrderId' | 'specId' | 'specImplName' | 'fingerPrint' | 'suppressBilling' | 'inboundLabel' | 'outboundLabel'>
-    & { deliveredFile?: Maybe<(
+    & Pick<WorkPacketStatusDetails, 'workOrderId' | 'inboundFilename' | 'orgSid' | 'orgId' | 'orgName' | 'vendorSid' | 'vendorId' | 'vendorName' | 'specId' | 'specImplName' | 'fingerPrint' | 'populationCount' | 'suppressBilling' | 'packetStatus' | 'inboundLabel' | 'outboundLabel' | 'clientFileArchivePath' | 'vendorFileArchivePath' | 'supplementalFilesArchivePaths'>
+    & { deliveredFiles?: Maybe<Array<Maybe<(
       { __typename?: 'DeliveredFile' }
       & Pick<DeliveredFile, 'filename' | 'fileSizeInBytes' | 'textSizeInBytes' | 'timeDelivered'>
       & { ftp?: Maybe<(
@@ -2666,7 +2678,7 @@ export type WorkPacketStatusDetailsQuery = (
         { __typename?: 'DeliveredKCURL' }
         & Pick<DeliveredKcurl, 'url'>
       )> }
-    )>, workStepStatus?: Maybe<Array<Maybe<(
+    )>>>, workStepStatus?: Maybe<Array<Maybe<(
       { __typename?: 'WorkStepStatus' }
       & Pick<WorkStepStatus, 'stepStatus' | 'stepName' | 'stepType'>
       & { populationCount?: Maybe<(
@@ -5776,11 +5788,19 @@ export const WorkPacketStatusDetailsDocument = gql`
     query WorkPacketStatusDetails($orgSid: ID!, $workOrderId: String!) {
   workPacketStatusDetails(orgSid: $orgSid, workOrderId: $workOrderId) {
     workOrderId
+    inboundFilename
+    orgSid
+    orgId
+    orgName
+    vendorSid
+    vendorId
+    vendorName
     specId
     specImplName
     fingerPrint
+    populationCount
     suppressBilling
-    deliveredFile {
+    deliveredFiles {
       filename
       fileSizeInBytes
       textSizeInBytes
@@ -5796,6 +5816,7 @@ export const WorkPacketStatusDetailsDocument = gql`
         url
       }
     }
+    packetStatus
     workStepStatus {
       stepStatus
       stepName
@@ -5864,6 +5885,9 @@ export const WorkPacketStatusDetailsDocument = gql`
     }
     inboundLabel
     outboundLabel
+    clientFileArchivePath
+    vendorFileArchivePath
+    supplementalFilesArchivePaths
   }
 }
     ${RecordCountsFragmentFragmentDoc}

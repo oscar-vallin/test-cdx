@@ -1,10 +1,19 @@
 import styled from 'styled-components';
 import { DetailsRow, DetailsHeader } from '@fluentui/react';
-import { Box as LayoutBox } from 'src/components/layouts';
 
-export const StyledBox = styled(LayoutBox)`
-  padding: ${({ theme }) => `0 ${theme.spacing.double}`};
-  transform: none;
+export const ShadowBox = styled.div`
+  box-shadow: ${({ theme }) => theme.boxShadows['smallest']};
+  border: none;
+  border-radius: ${({ theme }) => theme.radius.normal};
+  font: ${({ theme }) => theme.fontStyles.normal};
+  min-width: unset;
+  max-width: unset;
+  padding: 10px 15px 15px;
+  margin: 0 20px 20px 20px;
+`;
+
+export const FileMetaDetails = styled.div`
+  margin-left: 41px;
 `;
 
 export const StyledHeaderRow = styled.div`
@@ -77,3 +86,10 @@ export const StyledFooter = styled.div`
     }
   }
 `;
+
+export const BadgeWrapper = styled.span`
+  & span {
+    margin-left: .5em;
+    height: 1.5em;
+  }
+`

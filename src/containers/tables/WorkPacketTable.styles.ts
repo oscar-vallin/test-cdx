@@ -3,8 +3,8 @@ import { Link } from '@fluentui/react';
 import { Box as LayoutBox, Row as LayoutRow, Column as LayoutColumn } from 'src/components/layouts';
 
 export const Container = styled(LayoutBox)`
-  margin: 0 auto;
-  width: 95%;
+  padding: 0 20px;
+  width: 100%;
 `;
 
 export const Box = styled(LayoutBox)`

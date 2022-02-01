@@ -15,8 +15,8 @@ const onRenderRow = (props) => {
 const onRenderDetailsHeader = (props) => {
   return (
     <StyledVendorHeaderRow>
-      {props.columns.map((column) => (
-        <div>{column.name}</div>
+      {props.columns.map((column, index) => (
+        <div key={`col_${index}`}>{column.name}</div>
       ))}
     </StyledVendorHeaderRow>
   );

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const variants = (theme) => ({
-  muted: theme.colors.themeTertiary,
+  muted: theme.colors.neutralTertiary,
   error: theme.colors.custom.error,
 });
 

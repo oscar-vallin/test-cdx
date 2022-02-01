@@ -13,24 +13,16 @@ const getVariant = (theme, variant) => {
   return Variants[variant];
 };
 
-const getPadding = (theme, pill) => {
-  if (pill) {
-    return `${theme.radius.normal} ${theme.radius.medium}`;
-  }
-
-  return `${theme.radius.normal} 6px`;
-};
-
 export const StyledSpan = styled.span<StyledSpanProps>`
   align-items: center;
   background: ${({ theme, variant }) => getVariant(theme, variant).background};
   border-radius: ${({ theme }) => theme.radius.large};
   color: ${({ theme, variant }) => getVariant(theme, variant).color};
-  display: flex;
+  display: inline-flex;
   font-size: ${({ theme, pill }) => (pill ? theme.fontSizes.small : '0.75rem')};
   font-weight: ${({ theme, pill }) => (pill ? theme.fontWeights.normal : theme.fontWeights.bold)};
   justify-content: center;
-  padding: ${({ theme, pill }) => getPadding(theme, pill)}
+  padding: 5px;
   white-space: nowrap;
 `;
 
