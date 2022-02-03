@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { DetailsRow } from '@fluentui/react';
+import { device} from 'src/styles/GlobalStyles';
 
 export const ShadowBox = styled.div`
   box-shadow: ${({ theme }) => theme.boxShadows['smallest']};
@@ -19,10 +20,14 @@ export const FileMetaDetails = styled.div`
 
 export const FileTitle = styled.span`
   display: inline-block;
-  font-size: ${({ theme }) => theme.fontSizes.large};  
+  font-size: ${({ theme }) => theme.fontSizes.normal};  
   font-weight: ${({ theme }) => theme.fontWeights.semiBold};  
   text-overflow: ellipsis;
   white-space: nowrap;
+  
+  @media ${device.tablet} {
+    font-size: ${({ theme }) => theme.fontSizes.large};  
+  }
 `
 
 export const StyledHeaderRow = styled.div`
