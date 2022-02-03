@@ -1,23 +1,22 @@
 import CDXTimeline from './Timeline';
-import { mountWithTheme } from '../../../utils/testUtils';
+import { mountWithTheme } from 'src/utils/testUtils';
+import { WorkStepStatus } from 'src/data/services/graphql';
+
+const items: WorkStepStatus[] = [
+  {
+    stepStatus: 'DONE',
+    stepName: 'TEST_DONE',
+    stepType: 'TEST_DONE'
+  },
+  {
+    stepStatus: 'PROGRESS',
+    stepName: 'TEST_PROGRESS',
+    stepType: 'TEST_PROGRESS'
+  }
+]
 
 const defaultProps = {
-  items: [
-    {
-      status: 'DONE',
-      content: {
-        title: 'TEST_DONE',
-        description: 'TEST_DONE',
-      },
-    },
-    {
-      status: 'PROGRESS',
-      content: {
-        title: 'TEST_PROGRESS',
-        description: 'TEST_PROGRESS',
-      },
-    },
-  ],
+  items: items,
   activeIndex: 0,
 };
 
@@ -37,13 +36,13 @@ describe('Timeline Testing Unit...', () => {
   it('Should match the step title', () => {
     const title = tree.find('.title').first().text();
 
-    expect(title).toEqual(STEP_DONE.content.title);
+    expect(title).toEqual(STEP_DONE.stepName);
   });
 
   it('Should match the step description', () => {
     const description = tree.find('.description').first().text();
 
-    expect(description).toEqual(STEP_DONE.content.description);
+    expect(description).toEqual(STEP_DONE.stepType);
   });
 
   it('Should trigger the onClick callback', () => {
