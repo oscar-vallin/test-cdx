@@ -2,7 +2,7 @@ import { Text } from 'src/components/typography';
 import React from 'react';
 import { InlineLabel } from './LabelValue.styles';
 
-type LabelValueProps = {
+export type LabelValueProps = {
   label: string;
   value?: any;
   title?: string | null;

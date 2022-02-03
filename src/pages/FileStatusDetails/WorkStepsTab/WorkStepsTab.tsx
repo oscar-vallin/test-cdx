@@ -9,17 +9,18 @@ import { Timeline } from 'src/components/timelines/Timeline';
 import { Maybe, WorkStepStatus } from 'src/data/services/graphql';
 
 type WorkStepsTabProps = {
+  workOrderId?: string;
   steps?: Maybe<WorkStepStatus>[];
 };
 
-const WorkStepsTab = ({ steps }: WorkStepsTabProps): ReactElement => {
+const WorkStepsTab = ({ workOrderId, steps }: WorkStepsTabProps): ReactElement => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
     <Spacing padding="normal">
       <Row>
         <Column xl={3}>
-          <Timeline items={steps} activeIndex={activeIndex} onClick={setActiveIndex} />
+          <Timeline workOrderId={workOrderId} items={steps} activeIndex={activeIndex} onClick={setActiveIndex} />
         </Column>
       </Row>
 

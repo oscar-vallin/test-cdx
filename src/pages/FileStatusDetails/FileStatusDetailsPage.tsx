@@ -217,7 +217,7 @@ const FileStatusDetailsPage = () => {
             <VendorCountStatsTab items={packet?.outboundRecordCounts} />
           </PivotItem>
           <PivotItem headerText="Work Steps">
-            <WorkStepsTab steps={packet?.workStepStatus ?? []} />
+            <WorkStepsTab workOrderId={packet?.workOrderId} steps={packet?.workStepStatus ?? []} />
           </PivotItem>
           <PivotItem headerText="Quality Checks"
                      onRenderItemLink={(link: any, defaultRenderer: any): any => (

@@ -1,12 +1,14 @@
-import { ReactElement, useState } from 'react';
-import { Callout, DirectionalHint, FontIcon, mergeStyleSets } from '@fluentui/react';
+import React, { ReactElement, useState } from 'react';
+import { Callout, DirectionalHint, FontIcon, Link, mergeStyleSets } from '@fluentui/react';
 import { Spinner } from 'src/components/spinners/Spinner';
 import { StyledUl, StyledLi } from './Timeline.styles';
 import { Maybe, WorkStepStatus } from 'src/data/services/graphql';
 import { Text } from 'src/components/typography';
-import { LabelValue } from 'src/components/labels/LabelValue';
+import { LabelValue, LabelValueProps } from 'src/components/labels/LabelValue';
+import { InlineLabel } from 'src/components/labels/LabelValue/LabelValue.styles';
 
 type CDXTimelineProps = {
+  workOrderId?: string;
   items?: Maybe<WorkStepStatus>[];
   activeIndex?: number;
   onClick?: any | null;
@@ -39,7 +41,7 @@ const styles = mergeStyleSets({
   },
 });
 
-const CDXTimeline = ({ items = [], activeIndex = 0, onClick }: CDXTimelineProps): ReactElement => {
+const CDXTimeline = ({ workOrderId, items = [], activeIndex = 0, onClick }: CDXTimelineProps): ReactElement => {
 
   const [showCallout, setShowCallout] = useState(false);
 
@@ -65,10 +67,40 @@ const CDXTimeline = ({ items = [], activeIndex = 0, onClick }: CDXTimelineProps)
     return path.substring(path.lastIndexOf('/') + 1);
   };
 
-  const renderLabelValue = (label: string, value?: any, key?: string) => {
+  type ConditionalLabelValueType = {
+    label: string;
+    value?: any;
+  };
+
+  const ConditionalLabelValue = ({label, value}: ConditionalLabelValueType) => {
     if (value) {
-      return <LabelValue key={key} label={label} value={value}/>
+      return <LabelValue label={label} value={value}/>
     }
+    return null;
+  };
+
+  const FileValue = ({label, value}: LabelValueProps) => {
+    const graphQLUrl = process.env.REACT_APP_API_SERVER;
+    const serverUrl = graphQLUrl?.replace('/graphql', '') ?? '';
+
+    if (value) {
+      const fName = fileName(value);
+      return (
+        <div>
+          <InlineLabel>{`${label}:`}</InlineLabel>
+          <Link target="_new"
+                href={`${serverUrl}k/archive/download?workOrderID=${workOrderId}&s3Key=${value}`}
+                title={fName ?? undefined}
+                style={{
+                  fontSize: '.75rem'
+                }}>
+            {fName}
+            <FontIcon iconName='DownloadDocument' style={{paddingLeft: '.5em'}}/>
+          </Link>
+        </div>
+      );
+    }
+    return null;
   };
 
   const renderStepDetails = (item: WorkStepStatus | null) => {
@@ -77,13 +109,13 @@ const CDXTimeline = ({ items = [], activeIndex = 0, onClick }: CDXTimelineProps)
       return (
         <>
           <Text size="large">{item.stepName}</Text>
-          {renderLabelValue('Type', item.stepType)}
-          {renderLabelValue('Population Count', item.populationCount?.value)}
-          {renderLabelValue(item.transformedArchiveFile?.label ?? 'Transformed File', fileName(item.transformedArchiveFile?.value))}
-          {renderLabelValue('Record Count', item.recordCounts?.recordCount)}
-          {renderLabelValue('Total Count', item.recordCounts?.totalCount)}
+          <ConditionalLabelValue label="Type" value={item.stepType}/>
+          <ConditionalLabelValue label="Population Count" value={item.populationCount?.value}/>
+          <FileValue label={item.transformedArchiveFile?.label ?? 'Transformed File'} value={item.transformedArchiveFile?.value}/>
+          <ConditionalLabelValue label="Record Count" value={item.recordCounts?.recordCount}/>
+          <ConditionalLabelValue label="Total Count" value={item.recordCounts?.totalCount}/>
           {item.stepFile?.map((stepFile, index) =>
-            renderLabelValue(stepFile?.label ?? 'File', fileName(stepFile?.value), `stepFile_${index}`)
+            <FileValue key={`stepFile_${index}`} label={stepFile?.label ?? 'File'} value={stepFile?.value}/>
           )}
         </>
       )
