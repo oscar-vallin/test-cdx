@@ -74,13 +74,26 @@ const FileStatusDetailsPage = () => {
     // enableRefresh(condition);
   }, []);
 
+  const errorCount = (): number => {
+    let count = 0;
+    packet?.qualityChecks?.sequenceCreationEvent?.forEach((sce) => {
+      if (sce?.recordCreationEvent) {
+        sce.recordCreationEvent?.forEach((rce) => {
+          count += rce?.error?.length ?? 0
+        });
+      }
+    });
+
+    return count;
+  }
+
   const formatDate = (d?: Date): string => {
     // Check if this date has a valid time value
     if (d && (d.getTime() === d.getTime())) {
       return format(d, 'MM/dd/yyyy hh:mm a');
     }
     return '';
-  }
+  };
 
   const renderReceivedDate = (): string => {
     const lowestDate = Math.min.apply(packet?.deliveredFiles?.map((f) => f?.timeDelivered));
@@ -88,7 +101,7 @@ const FileStatusDetailsPage = () => {
       return `Received at ${formatDate(new Date(lowestDate))}`;
     }
     return '';
-  }
+  };
 
   const getBadgeVariant = (packetStatus?: WorkStatus): string => {
     if (!packetStatus) {
@@ -210,10 +223,10 @@ const FileStatusDetailsPage = () => {
                      onRenderItemLink={(link: any, defaultRenderer: any): any => (
                        <>
                          {defaultRenderer(link)}
-                         {packet?.qualityChecks?.sequenceCreationEvent && packet?.qualityChecks?.sequenceCreationEvent?.length > 0 && (
+                         {packet?.qualityChecks?.sequenceCreationEvent && errorCount() > 0 && (
                            <BadgeWrapper>
                              <Badge variant='error'
-                                    label={packet?.qualityChecks?.sequenceCreationEvent?.length.toString()}/>
+                                    label={errorCount().toString()}/>
                            </BadgeWrapper>
                          )}
                        </>
