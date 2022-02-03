@@ -2,7 +2,7 @@ import { ReactElement } from 'react';
 import {
   DetailsList,
   DetailsListLayoutMode,
-  IColumn,
+  IColumn, IDetailsColumnProps, IRenderFunction,
   SelectionMode,
   Stack
 } from '@fluentui/react';
@@ -11,13 +11,28 @@ import { Card } from 'src/components/cards';
 import { Text } from 'src/components/typography';
 import { EmptyState } from 'src/containers/states';
 
+const centerColumn = (item?: any, index?: number, column?: IColumn) => {
+  return (
+    <div style={{display: 'block', textAlign: 'center'}}>
+      {column?.fieldName && column?.fieldName in item ? item[column?.fieldName] : ''}
+    </div>
+  );
+}
+
+const centerColumnHeader:IRenderFunction<IDetailsColumnProps> = (prop?: IDetailsColumnProps) => {
+  return <div style={{display: 'block', textAlign: 'center'}}>{prop?.column.name}</div>
+}
+
+
+const commonProps = { data: 'string', isPadded: true };
+const countColProps = { minWidth: 50, flexGrow: 1, onRender: centerColumn, onRenderHeader: centerColumnHeader };
 const COLUMNS: IColumn[] = [
-  { key: 'planCode', name: 'Plan Code', fieldName: 'planCode', minWidth: 250, flexGrow: 2 },
-  { key: 'activeSubscribers', name: 'Active', fieldName: 'activeSubscribers', minWidth: 50, flexGrow: 1 },
-  { key: 'endedSubscribers', name: 'Ended', fieldName: 'endedSubscribers', minWidth: 50, flexGrow: 1 },
-  { key: 'activeDependents', name: 'Active', fieldName: 'activeDependents', minWidth: 50, flexGrow: 1 },
-  { key: 'endedDependents', name: 'Ended', fieldName: 'endedDependents', minWidth: 50, flexGrow: 1 },
-].map((col) => ({ ...col, data: 'string', isPadded: true }));
+  { key: 'planCode', name: 'Plan Code', fieldName: 'planCode', minWidth: 250, flexGrow: 2, ...commonProps },
+  { key: 'activeSubscribers', name: 'Active', fieldName: 'activeSubscribers', ...commonProps, ...countColProps},
+  { key: 'endedSubscribers', name: 'Ended', fieldName: 'endedSubscribers', ...commonProps, ...countColProps },
+  { key: 'activeDependents', name: 'Active', fieldName: 'activeDependents', ...commonProps, ...countColProps },
+  { key: 'endedDependents', name: 'Ended', fieldName: 'endedDependents', ...commonProps, ...countColProps },
+];
 
 type EnrollmentStatsTabProps = {
   packet?: WorkPacketStatusDetails;
@@ -46,7 +61,7 @@ const EnrollmentStatsTab = ({ packet }: EnrollmentStatsTabProps): ReactElement =
 
   if (insuredStats?.length > 0 || excludedInsuredStats?.length > 0) {
     return (
-      <Stack horizontal={true} verticalAlign="start" wrap={true} tokens={{childrenGap: 10}}>
+      <Stack horizontal={true} verticalAlign="start" wrap={true} tokens={{childrenGap: 15}}>
         {insuredStats?.length > 0 && (
           <Stack.Item>
             <Card>
