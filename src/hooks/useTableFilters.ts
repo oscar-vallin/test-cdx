@@ -94,7 +94,7 @@ export const useTableFilters = (searchTextPlaceholder: string, defaultSort?: Sor
   };
   const deriveEndDate = (): Date => {
     const endDateParam = urlParams.get('endDate');
-    const endDate = endDateParam == null ? defaultEndDate : new Date(`${endDateParam}T:23:59:59`);
+    const endDate = endDateParam == null ? defaultEndDate : new Date(`${endDateParam}T23:59:59`);
     if (isValid(endDate)) {
       return endDate;
     }
