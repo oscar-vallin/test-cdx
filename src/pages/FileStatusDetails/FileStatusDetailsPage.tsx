@@ -196,7 +196,7 @@ const FileStatusDetailsPage = () => {
       {renderFileMetaData()}
 
       <ShadowBox>
-        <Pivot>
+        <Pivot overflowBehavior="menu" overflowAriaLabel="more items">
           <PivotItem headerText="Enrollment Stats">
             <EnrollmentStatsTab packet={packet} />
           </PivotItem>
