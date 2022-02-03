@@ -150,7 +150,7 @@ const FileStatusDetailsPage = () => {
             <Badge variant={getBadgeVariant(packet?.packetStatus)} label={packet?.packetStatus} pill />
           </Stack.Item>
           <Stack.Item align="center">
-            <Badge variant="info" label={`Billing Units: ${packet?.populationCount}`} pill />
+            <Badge variant="info" label={`Billing Units: ${packet?.populationCount ?? 'none'}`} pill />
             {packet?.suppressBilling && (
               <><Required>*</Required><InfoIcon id='billingUnitInfo' tooltip='This exchange was not billed'/></>
             )}

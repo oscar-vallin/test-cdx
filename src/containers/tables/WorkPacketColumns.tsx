@@ -6,11 +6,14 @@ import { CellItemRow, RouteLink, StyledCell } from 'src/components/tables/Table/
 import { HighlightCounter } from 'src/components/badges/HighlightCounter';
 import { getStepStatusLabel } from 'src/data/constants/FileStatusConstants';
 import { FileProgress } from '../bars/FileProgress';
+import { useOrgSid } from 'src/hooks/useOrgSid';
 
 export const useWorkPacketColumns = (
   selectedColumns: WorkPacketColumns[],
   onSort?: (ev: React.MouseEvent<HTMLElement>, column: IColumn) => void
 ) => {
+  const { startDate, endDate } = useOrgSid();
+
   const columnOptions: IColumn[] = [
     {
       key: 'timestamp',
@@ -31,13 +34,13 @@ export const useWorkPacketColumns = (
         return (
           <CellItemRow>
             <Link>
-              <RouteLink to={`/file-status/${item.workOrderId}?orgSid=${item.orgSid}`}>{timestamp}</RouteLink>
+              <RouteLink to={`/file-status/${item.workOrderId}?orgSid=${item.orgSid}&startDate=${startDate}&endDate=${endDate}`}>{timestamp}</RouteLink>
             </Link>
             {item.recordHighlightCount && (
               <HighlightCounter
                 id={`__FileStatus_Highlight_Counter_${item.workOrderId}`}
                 type={item.recordHighlightType}
-                href={`/file-status/${item.workOrderId}*#quality`}
+                href={`/file-status/${item.workOrderId}?orgSid=${item.orgSid}&startDate=${startDate}&endDate=${endDate}*#quality`}
               >
                 {item.recordHighlightCount}
               </HighlightCounter>
