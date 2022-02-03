@@ -14,7 +14,7 @@ import {
   WorkPacketStatusDetails,
   WorkStatus
 } from 'src/data/services/graphql';
-import { ShadowBox, FileMetaDetails, BadgeWrapper } from './FileStatusDetails.styles';
+import { ShadowBox, FileMetaDetails, BadgeWrapper, FileTitle } from './FileStatusDetails.styles';
 
 import QualityChecksTab from './QualityChecksTab/QualityChecksTab';
 import WorkStepsTab from './WorkStepsTab/WorkStepsTab';
@@ -44,13 +44,6 @@ const FileStatusDetailsPage = () => {
   //const { enableRefresh, disableRefresh } = useRefresh(TABLE_NAMES.FILE_STATUS_DETAIL_ENROLLMENT, fSPacketStatusQuery);
 
   useEffect(() => {
-    // history.replace({
-    //   hash: hash || tabs[0],
-    //   search: search || undefined,
-    // });
-  }, []);
-
-  useEffect(() => {
     callGetWPDetails({
       variables: {
         orgSid: orgSid,
@@ -77,16 +70,8 @@ const FileStatusDetailsPage = () => {
   }, [data, loading]);
 
   useEffect(() => {
-    const condition = packet?.packetStatus === WorkStatus.Queued || packet?.packetStatus === WorkStatus.Processing|| packet?.packetStatus === WorkStatus.Submitted;
+    // const condition = packet?.packetStatus === WorkStatus.Queued || packet?.packetStatus === WorkStatus.Processing|| packet?.packetStatus === WorkStatus.Submitted;
     // enableRefresh(condition);
-  }, []);
-
-  useEffect(() => {
-    //fSPacketStatusQuery();
-
-    return function unmount() {
-      //disableRefresh();
-    };
   }, []);
 
   const formatDate = (d?: Date): string => {
@@ -138,7 +123,6 @@ const FileStatusDetailsPage = () => {
 
   const deliveredFile: DeliveredFile | undefined | null = packet?.deliveredFiles ? packet?.deliveredFiles[0] : undefined;
 
-
   const renderFileMetaData = () => {
     return (
       <ShadowBox id="__FileMeta">
@@ -147,16 +131,7 @@ const FileStatusDetailsPage = () => {
             <IconButton iconProps={{iconName: showDetails ? 'ChevronUp' : 'ChevronDown'}} onClick={() => setShowDetails(!showDetails)}/>
           </Stack.Item>
           <Stack.Item align="center">
-            <h3
-              title={packet?.inboundFilename}
-              style={{
-                fontWeight: 600,
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-                width: '100%',
-              }}>
-              {packet?.inboundFilename ?? packet?.workOrderId}
-            </h3>
+            <FileTitle>{packet?.inboundFilename ?? packet?.workOrderId}</FileTitle>
           </Stack.Item>
           <Stack.Item align="center">
             <Badge variant={getBadgeVariant(packet?.packetStatus)} label={packet?.packetStatus} pill />

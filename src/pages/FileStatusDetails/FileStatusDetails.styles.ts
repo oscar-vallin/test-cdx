@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { DetailsRow, DetailsHeader } from '@fluentui/react';
+import { DetailsRow } from '@fluentui/react';
 
 export const ShadowBox = styled.div`
   box-shadow: ${({ theme }) => theme.boxShadows['smallest']};
@@ -13,8 +13,17 @@ export const ShadowBox = styled.div`
 `;
 
 export const FileMetaDetails = styled.div`
+  margin-top: 10px;
   margin-left: 41px;
 `;
+
+export const FileTitle = styled.span`
+  display: inline-block;
+  font-size: ${({ theme }) => theme.fontSizes.large};  
+  font-weight: ${({ theme }) => theme.fontWeights.semiBold};  
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`
 
 export const StyledHeaderRow = styled.div`
   display: flex;
@@ -33,32 +42,22 @@ export const StyledHeaderRow = styled.div`
 
 export const StyledVendorHeaderRow = styled(StyledHeaderRow)`
   div {
+    padding-bottom: 15px;
+    
     &:first-child {
-      width: 470px;
+      width: 350px;
     }
-  }
-`;
-
-export const StyledHeader = styled(DetailsHeader)`
-  [role='columnheader'] {
-    padding: 0;
-    width: 150px !important;
-
-    &:first-child {
-      display: none;
-    }
-
+    
     &:nth-child(2) {
-      width: 500px !important;
-    }
-
-    & span {
-      padding: 0;
+      width: 150px;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
     }
   }
 `;
 
-export const StyledRow = styled(DetailsRow)`
+export const StatsRow = styled(DetailsRow)`
   .ms-DetailsRow-cell {
     align-items: center;
     display: flex;
@@ -66,12 +65,22 @@ export const StyledRow = styled(DetailsRow)`
     width: 150px !important;
 
     &:first-child {
-      width: 470px !important;
+      flex-direction: column;
+      align-items: flex-start;
+      width: 350px !important;
+    }
+    
+    &:nth-child(2) {
+      width: 150px;
+      flex-direction: column;
+      align-content: center;
+      align-items: center;
+      text-align: center;
     }
   }
 `;
 
-export const StyledFooter = styled.div`
+export const StatsFooter = styled.div`
   display: flex;
   margin: 10px 0 0;
 
@@ -82,7 +91,16 @@ export const StyledFooter = styled.div`
     width: 300px;
 
     &:first-child {
-      width: 470px;
+      flex-direction: column;
+      align-items: flex-start;
+      width: 350px;
+    }
+    
+    &:nth-child(2) {
+      width: 150px;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
     }
   }
 `;

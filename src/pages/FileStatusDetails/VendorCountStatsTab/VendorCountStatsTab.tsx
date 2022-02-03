@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
 import { IColumn, DetailsList, DetailsListLayoutMode, SelectionMode } from '@fluentui/react';
 import { Spacing } from 'src/components/spacings/Spacing';
-import { StyledRow, StyledVendorHeaderRow, StyledFooter } from '../FileStatusDetails.styles';
+import { StatsRow, StyledVendorHeaderRow, StatsFooter } from '../FileStatusDetails.styles';
 
 const COLUMNS: IColumn[] = [
   { key: 'name', name: 'Record Name', fieldName: 'name' },
@@ -9,7 +9,7 @@ const COLUMNS: IColumn[] = [
 ].map((col) => ({ ...col, data: 'string', isPadded: true, minWidth: 100 }));
 
 const onRenderRow = (props) => {
-  return <StyledRow {...props} />;
+  return <StatsRow {...props} />;
 };
 
 const onRenderDetailsHeader = (props) => {
@@ -24,10 +24,10 @@ const onRenderDetailsHeader = (props) => {
 
 const onRenderDetailsFooter: any = (count) => {
   return (
-    <StyledFooter>
+    <StatsFooter>
       <div>Total</div>
       <div>{count || '0'}</div>
-    </StyledFooter>
+    </StatsFooter>
   );
 };
 
