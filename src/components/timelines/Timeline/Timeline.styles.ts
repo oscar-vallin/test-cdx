@@ -9,21 +9,16 @@ export const StyledUl = styled.ul`
 
 export const StyledLi = styled.li<StyledLiProps>`
   display: flex;
-  padding: ${({ theme }) => `${theme.spacing.normal} 0`};
+  padding: ${({ theme }) => `${theme.spacing.normal}`};
   position: relative;
   z-index: 1;
+  background-color: ${({ theme, active }) => (active ? theme.colors.neutralLighter : 'inherit')};
+
 
   .item__status {
     align-items: center;
-    background: ${({ theme, status }) => {
-      if (status === 'DONE') return theme.colors.custom.success;
-
-      if (status === 'PROGRESS') return theme.colors.white;
-
-      return '#EEE';
-    }};
     border-radius: 50%;
-    color: ${({ theme, status }) => (status === 'DONE' ? theme.colors.white : theme.colors.black)};
+    color: ${({ theme, status }) => (status === 'DONE' ? theme.colors.custom.success : theme.colors.black)};
     display: flex;
     justify-content: center;
     min-height: 35px;
@@ -37,7 +32,7 @@ export const StyledLi = styled.li<StyledLiProps>`
     margin: ${({ theme }) => `0 0 0 ${theme.spacing.normal}`};
 
     .title {
-      color: ${({ theme, active }) => (active ? theme.colors.themePrimary : theme.colors.black)};
+      color: ${({ theme }) => (theme.colors.black)};
       font-weight: ${({ theme }) => theme.fontWeights.bold};
       margin: ${({ theme }) => `0 0 ${theme.spacing.small} 0`};
     }
@@ -54,7 +49,7 @@ export const StyledLi = styled.li<StyledLiProps>`
       content: '';
       display: block;
       height: 100%;
-      left: ${({ theme }) => theme.spacing.normal};
+      left: ${({ theme }) => theme.spacing.double};
       position: absolute;
       top: ${({ theme }) => theme.spacing.normal};
       transform: translateX(1px);
