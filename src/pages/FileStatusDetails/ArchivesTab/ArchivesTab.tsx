@@ -1,7 +1,9 @@
-import { WorkPacketStatusDetails } from 'src/data/services/graphql';
+import { WorkPacketCommandType, WorkPacketStatusDetails } from 'src/data/services/graphql';
 import { Badge } from 'src/components/badges/Badge';
 import React, { ReactElement } from 'react';
 import { FontIcon, Link, Stack } from '@fluentui/react';
+import { Text } from 'src/components/typography';
+import { theme } from 'src/styles/themes/theme';
 
 type ArchivesTabType = {
   packet?: WorkPacketStatusDetails;
@@ -9,17 +11,30 @@ type ArchivesTabType = {
 
 export const ArchivesTab = ({packet}: ArchivesTabType) => {
 
+  const downloadCommand = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.DownloadFile);
+
   const renderDownloadLink = (workOrderId: string, s3key: string | null, filename?: string): ReactElement => {
     const graphQLUrl = process.env.REACT_APP_API_SERVER;
     const serverUrl = graphQLUrl?.replace('/graphql', '') ?? '';
 
+    const fileOnly = filename?.split('/').pop();
+
+    if (downloadCommand) {
+      return (
+        <Link target="_new"
+              href={`${serverUrl}k/archive/download?workOrderID=${workOrderId}&s3Key=${s3key}`}
+              title={filename}
+              style={{
+                fontSize: theme.fontSizes.normal
+              }}>
+          <FontIcon iconName='DownloadDocument' style={{paddingRight: '.5em'}}/>
+          {fileOnly}
+        </Link>
+      );
+    }
+
     return (
-      <Link target="_new"
-            href={`${serverUrl}k/archive/download?workOrderID=${workOrderId}&s3Key=${s3key}`}
-            title={filename}>
-        <FontIcon iconName='DownloadDocument' style={{paddingRight: '.5em'}}/>
-        {filename?.split('/').pop()}
-      </Link>
+      <Text>{fileOnly}</Text>
     );
   };
 

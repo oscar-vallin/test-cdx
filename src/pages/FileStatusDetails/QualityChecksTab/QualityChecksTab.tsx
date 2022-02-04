@@ -3,7 +3,6 @@ import { ReactElement } from 'react';
 import { ActionButton, DetailsList, DetailsListLayoutMode, IColumn, SelectionMode } from '@fluentui/react';
 
 import { Badge } from 'src/components/badges/Badge';
-import { Button } from 'src/components/buttons/Button';
 import { Card } from 'src/components/cards/Card';
 import { ChartDonut } from 'src/components/charts/ChartDonut';
 import { Row, Column } from 'src/components/layouts';
@@ -11,6 +10,7 @@ import { Spacing } from 'src/components/spacings/Spacing';
 import { MessageBar } from 'src/components/notifications/MessageBar';
 import { Separator } from 'src/components/separators/Separator';
 import { FieldCreationEvent, Maybe, RecordCreationEvent, SequenceCreationEvent } from 'src/data/services/graphql';
+import { theme } from 'src/styles/themes/theme';
 
 const COLUMNS: IColumn[] = [
   { key: 'status', name: 'Status', fieldName: 'status', minWidth: 80, maxWidth: 80 },
@@ -170,7 +170,10 @@ const QualityChecksTab = ({ items = [] }: QualityChecksTabProps): ReactElement =
               <Separator />
             </Spacing>
 
-            <ActionButton id="__QualityChecksTabId" iconProps={{iconName: 'ExcelDocument'}}>
+            <ActionButton
+              id="__QualityChecksTabId"
+              iconProps={{iconName: 'ExcelDocument', style: { fontSize: theme.fontSizes.normal }}}
+              style={{ fontSize: theme.fontSizes.normal }}>
               Download errors
             </ActionButton>
           </Card>
@@ -188,29 +191,29 @@ const QualityChecksTab = ({ items = [] }: QualityChecksTabProps): ReactElement =
               isHeaderVisible
             />
 
-            <Separator />
+            {/*<Separator />*/}
 
-            <div>
-              <Button id="__QualityChecksTabId" variant="primary" onClick={() => null}>
-                Continue processing
-              </Button>{' '}
-              &nbsp;
-              <Button
-                id="__QualityChecksTabId"
-                variant=""
-                split
-                text="Cancel processing"
-                onClick={() => {
-                  alert('Click');
-                  return null;
-                }}
-                menuProps={{
-                  items: [{ text: 'Error out', key: 'ErrorOut' }],
-                }}
-              >
-                Cancel processing
-              </Button>
-            </div>
+            {/*<div>*/}
+            {/*  <Button id="__QualityChecksTabId" variant="primary" onClick={() => null}>*/}
+            {/*    Continue processing*/}
+            {/*  </Button>{' '}*/}
+            {/*  &nbsp;*/}
+            {/*  <Button*/}
+            {/*    id="__QualityChecksTabId"*/}
+            {/*    variant=""*/}
+            {/*    split*/}
+            {/*    text="Cancel processing"*/}
+            {/*    onClick={() => {*/}
+            {/*      alert('Click');*/}
+            {/*      return null;*/}
+            {/*    }}*/}
+            {/*    menuProps={{*/}
+            {/*      items: [{ text: 'Error out', key: 'ErrorOut' }],*/}
+            {/*    }}*/}
+            {/*  >*/}
+            {/*    Cancel processing*/}
+            {/*  </Button>*/}
+            {/*</div>*/}
           </Card>
         </Column>
       </Row>

@@ -10,7 +10,7 @@ import { Badge } from 'src/components/badges/Badge';
 import { Text } from 'src/components/typography';
 import {
   DeliveredFile,
-  useWorkPacketStatusDetailsLazyQuery,
+  useWorkPacketStatusDetailsLazyQuery, WorkPacketCommand, WorkPacketCommandType,
   WorkPacketStatusDetails,
   WorkStatus
 } from 'src/data/services/graphql';
@@ -29,6 +29,7 @@ import { format } from 'date-fns';
 import { Required } from 'src/components/labels/FormLabel/FormLabel.styles';
 import { LabelValue } from 'src/components/labels/LabelValue';
 import { ArchivesTab } from 'src/pages/FileStatusDetails/ArchivesTab/ArchivesTab';
+import { theme } from 'src/styles/themes/theme';
 
 const FileStatusDetailsPage = () => {
   const { orgSid } = useOrgSid();
@@ -59,13 +60,6 @@ const FileStatusDetailsPage = () => {
   useEffect(() => {
     if (data?.workPacketStatusDetails && !loading) {
       setPacket(data?.workPacketStatusDetails)
-
-      // setPacket({
-      //   ..._packet,
-      //   supplementalFiles: (query.workPacketStatusDetails.workStepStatus || [])
-      //     .map(({ stepFile }) => stepFile)
-      //     .reduce((arr, item) => [...arr, ...item], []),
-      // });
     }
   }, [data, loading]);
 
@@ -135,6 +129,34 @@ const FileStatusDetailsPage = () => {
   };
 
   const deliveredFile: DeliveredFile | undefined | null = packet?.deliveredFiles ? packet?.deliveredFiles[0] : undefined;
+  const resendCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Resend);
+  const continueCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Continue);
+  const reprocessCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Reprocess);
+  const cancelCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Cancel);
+  const deleteCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Delete);
+
+  type CommandButtonType = {
+    id: string;
+    icon: string;
+    command?: WorkPacketCommand | null;
+  }
+
+  const WorkPacketCommandButton = ({id, icon, command}: CommandButtonType) => {
+    if (command) {
+      return (
+        <Stack.Item align="center">
+          <ActionButton
+            id={id}
+            onClick={() => null}
+            iconProps={{iconName: icon, style: { fontSize: theme.fontSizes.normal }}}
+            style={{ fontSize: theme.fontSizes.normal }}>
+            {command.label}
+          </ActionButton>
+        </Stack.Item>
+      );
+    }
+    return null;
+  }
 
   const renderFileMetaData = () => {
     return (
@@ -158,16 +180,11 @@ const FileStatusDetailsPage = () => {
           <Stack.Item align="center" grow>
             <Text variant="muted">{renderReceivedDate()}</Text>
           </Stack.Item>
-          <Stack.Item align="center">
-            <ActionButton id="__RetransmitBtn" onClick={() => null} iconProps={{iconName: 'Send'}}>
-              Re-transmit over FTP
-            </ActionButton>
-          </Stack.Item>
-          <Stack.Item align="center">
-            <ActionButton id="__DeleteBtn" onClick={() => null} iconProps={{iconName: 'Delete'}}>
-              Delete
-            </ActionButton>
-          </Stack.Item>
+          <WorkPacketCommandButton id="__ResendBtn" icon="Send" command={resendCmd}/>
+          <WorkPacketCommandButton id="__ContinueBtn" icon="PlayResume" command={continueCmd}/>
+          <WorkPacketCommandButton id="__ReprocessBtn" icon="Rerun" command={reprocessCmd}/>
+          <WorkPacketCommandButton id="__CancelBtn" icon="Cancel" command={cancelCmd}/>
+          <WorkPacketCommandButton id="__DeleteBtn" icon="Delete" command={deleteCmd}/>
         </Stack>
         {showDetails && (
           <FileMetaDetails>
@@ -209,28 +226,42 @@ const FileStatusDetailsPage = () => {
       {renderFileMetaData()}
 
       <ShadowBox>
-        <Pivot overflowBehavior="menu" overflowAriaLabel="more items">
+        <Pivot
+          overflowBehavior="menu"
+          overflowAriaLabel="more items"
+          styles={{
+            link: {
+              fontSize: theme.fontSizes.normal
+            },
+            linkIsSelected: {
+              fontSize: theme.fontSizes.normal
+            },
+          }}
+          style={{ fontSize: theme.fontSizes.normal }}>
           <PivotItem headerText="Enrollment Stats">
             <EnrollmentStatsTab packet={packet} />
           </PivotItem>
           <PivotItem headerText="Vendor Count Stats">
             <VendorCountStatsTab items={packet?.outboundRecordCounts} />
           </PivotItem>
-          <PivotItem headerText="Work Steps">
-            <WorkStepsTab workOrderId={packet?.workOrderId} steps={packet?.workStepStatus ?? []} />
-          </PivotItem>
-          <PivotItem headerText="Quality Checks"
-                     onRenderItemLink={(link: any, defaultRenderer: any): any => (
-                       <>
-                         {defaultRenderer(link)}
-                         {packet?.qualityChecks?.sequenceCreationEvent && errorCount() > 0 && (
-                           <BadgeWrapper>
-                             <Badge variant='error'
-                                    label={errorCount().toString()}/>
-                           </BadgeWrapper>
-                         )}
-                       </>
-                     )}>
+          {packet?.workStepStatus && packet.workStepStatus.length > 0 && (
+            <PivotItem headerText="Work Steps">
+              <WorkStepsTab packet={packet} />
+            </PivotItem>
+          )}
+          <PivotItem
+            headerText="Quality Checks"
+            onRenderItemLink={(link: any, defaultRenderer: any): any => (
+              <>
+                {defaultRenderer(link)}
+                {packet?.qualityChecks?.sequenceCreationEvent && errorCount() > 0 && (
+                  <BadgeWrapper>
+                    <Badge variant='error'
+                           label={errorCount().toString()}/>
+                  </BadgeWrapper>
+                )}
+              </>
+            )}>
             <QualityChecksTab items={packet?.qualityChecks?.sequenceCreationEvent || []}/>
           </PivotItem>
           <PivotItem headerText="Archives">

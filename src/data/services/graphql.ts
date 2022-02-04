@@ -1202,6 +1202,17 @@ export type PlanInsuredStat = {
 export type QualityChecks = {
   __typename?: 'QualityChecks';
   sequenceCreationEvent?: Maybe<Array<Maybe<SequenceCreationEvent>>>;
+  totalRecordCount?: Maybe<Scalars['Int']>;
+  fieldCreationWarningCount?: Maybe<Scalars['Int']>;
+  fieldCreationErrorCount?: Maybe<Scalars['Int']>;
+  fieldCreationInfoCount?: Maybe<Scalars['Int']>;
+  accStructReqError?: Maybe<StatType>;
+  clientSpecificReqError?: Maybe<StatType>;
+  accStructTruncError?: Maybe<StatType>;
+  reqError?: Maybe<StatType>;
+  truncError?: Maybe<StatType>;
+  codeListMappingError?: Maybe<StatType>;
+  hashMoreEvents?: Maybe<Scalars['Boolean']>;
 };
 
 export type Query = {
@@ -1786,6 +1797,15 @@ export type StatInt = {
   value?: Maybe<Scalars['Int']>;
 };
 
+export type StatType = {
+  __typename?: 'StatType';
+  count: Scalars['Int'];
+  facetTotal?: Maybe<Scalars['Int']>;
+  inTolerance?: Maybe<Scalars['Boolean']>;
+  toleranceMsg?: Maybe<Scalars['String']>;
+  hold?: Maybe<Scalars['Boolean']>;
+};
+
 export type Subscription = {
   __typename?: 'Subscription';
   ftpTest?: Maybe<SftpConfigSubscriptionResponse>;
@@ -2252,6 +2272,23 @@ export type WebPivot = {
   type: CdxWebPivot;
 };
 
+export type WorkPacketCommand = {
+  __typename?: 'WorkPacketCommand';
+  label?: Maybe<Scalars['String']>;
+  commandType?: Maybe<WorkPacketCommandType>;
+};
+
+export enum WorkPacketCommandType {
+  DownloadFile = 'DOWNLOAD_FILE',
+  RerunStep = 'RERUN_STEP',
+  Continue = 'CONTINUE',
+  Cancel = 'CANCEL',
+  Rename = 'RENAME',
+  Reprocess = 'REPROCESS',
+  Resend = 'RESEND',
+  Delete = 'DELETE'
+}
+
 export type WorkPacketStatus = {
   __typename?: 'WorkPacketStatus';
   workOrderId: Scalars['String'];
@@ -2325,6 +2362,7 @@ export type WorkPacketStatusDetails = {
   clientFileArchivePath?: Maybe<Scalars['String']>;
   vendorFileArchivePath?: Maybe<Scalars['String']>;
   supplementalFilesArchivePaths?: Maybe<Array<Maybe<Scalars['String']>>>;
+  commands?: Maybe<Array<Maybe<WorkPacketCommand>>>;
 };
 
 export type WorkPacketStatusFilter = {
@@ -2392,6 +2430,11 @@ export type XsftpInput = {
   folder?: Maybe<Scalars['String']>;
   stepWise?: Maybe<Scalars['Boolean']>;
 };
+
+export type FragmentStatTypeFragment = (
+  { __typename?: 'StatType' }
+  & Pick<StatType, 'count' | 'facetTotal' | 'inTolerance' | 'toleranceMsg' | 'hold'>
+);
 
 export type RecordCountsFragmentFragment = (
   { __typename?: 'RecordCounts' }
@@ -2565,6 +2608,11 @@ export type FragmentWebCommandFragment = (
   )>>> }
 );
 
+export type FragmentWorkPacketCommandFragment = (
+  { __typename?: 'WorkPacketCommand' }
+  & Pick<WorkPacketCommand, 'label' | 'commandType'>
+);
+
 export type FragmentPaginationInfoFragment = (
   { __typename?: 'PaginationInfo' }
   & Pick<PaginationInfo, 'totalPages' | 'totalElements' | 'pageNumber' | 'pageSize'>
@@ -2711,6 +2759,7 @@ export type WorkPacketStatusDetailsQuery = (
       )>>> }
     )>, qualityChecks?: Maybe<(
       { __typename?: 'QualityChecks' }
+      & Pick<QualityChecks, 'totalRecordCount' | 'fieldCreationWarningCount' | 'fieldCreationErrorCount' | 'fieldCreationInfoCount' | 'hashMoreEvents'>
       & { sequenceCreationEvent?: Maybe<Array<Maybe<(
         { __typename?: 'SequenceCreationEvent' }
         & Pick<SequenceCreationEvent, 'context' | 'unitId'>
@@ -2728,7 +2777,25 @@ export type WorkPacketStatusDetailsQuery = (
             & FieldCreationFragmentFragment
           )>>> }
         )>>> }
-      )>>> }
+      )>>>, accStructReqError?: Maybe<(
+        { __typename?: 'StatType' }
+        & FragmentStatTypeFragment
+      )>, clientSpecificReqError?: Maybe<(
+        { __typename?: 'StatType' }
+        & FragmentStatTypeFragment
+      )>, accStructTruncError?: Maybe<(
+        { __typename?: 'StatType' }
+        & FragmentStatTypeFragment
+      )>, reqError?: Maybe<(
+        { __typename?: 'StatType' }
+        & FragmentStatTypeFragment
+      )>, truncError?: Maybe<(
+        { __typename?: 'StatType' }
+        & FragmentStatTypeFragment
+      )>, codeListMappingError?: Maybe<(
+        { __typename?: 'StatType' }
+        & FragmentStatTypeFragment
+      )> }
     )>, enrollmentStats?: Maybe<(
       { __typename?: 'EnrollmentStat' }
       & EnrollmentStatFragmentFragment
@@ -2741,7 +2808,10 @@ export type WorkPacketStatusDetailsQuery = (
     )>, outboundRecordCounts?: Maybe<(
       { __typename?: 'RecordCounts' }
       & RecordCountsFragmentFragment
-    )> }
+    )>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WorkPacketCommand' }
+      & FragmentWorkPacketCommandFragment
+    )>>> }
   )> }
 );
 
@@ -5356,6 +5426,15 @@ export type FtpTestMMutation = (
   )> }
 );
 
+export const FragmentStatTypeFragmentDoc = gql`
+    fragment fragmentStatType on StatType {
+  count
+  facetTotal
+  inTolerance
+  toleranceMsg
+  hold
+}
+    `;
 export const RecordCountsFragmentFragmentDoc = gql`
     fragment recordCountsFragment on RecordCounts {
   totalCount
@@ -5558,6 +5637,12 @@ export const FragmentWebCommandFragmentDoc = gql`
   commandType
 }
     ${UnionNvpFragmentDoc}`;
+export const FragmentWorkPacketCommandFragmentDoc = gql`
+    fragment fragmentWorkPacketCommand on WorkPacketCommand {
+  label
+  commandType
+}
+    `;
 export const FragmentPaginationInfoFragmentDoc = gql`
     fragment fragmentPaginationInfo on PaginationInfo {
   totalPages
@@ -5870,6 +5955,29 @@ export const WorkPacketStatusDetailsDocument = gql`
           }
         }
       }
+      totalRecordCount
+      fieldCreationWarningCount
+      fieldCreationErrorCount
+      fieldCreationInfoCount
+      accStructReqError {
+        ...fragmentStatType
+      }
+      clientSpecificReqError {
+        ...fragmentStatType
+      }
+      accStructTruncError {
+        ...fragmentStatType
+      }
+      reqError {
+        ...fragmentStatType
+      }
+      truncError {
+        ...fragmentStatType
+      }
+      codeListMappingError {
+        ...fragmentStatType
+      }
+      hashMoreEvents
     }
     enrollmentStats {
       ...enrollmentStatFragment
@@ -5888,12 +5996,17 @@ export const WorkPacketStatusDetailsDocument = gql`
     clientFileArchivePath
     vendorFileArchivePath
     supplementalFilesArchivePaths
+    commands {
+      ...fragmentWorkPacketCommand
+    }
   }
 }
     ${RecordCountsFragmentFragmentDoc}
 ${ExtractParameterFragmentFragmentDoc}
 ${FieldCreationFragmentFragmentDoc}
-${EnrollmentStatFragmentFragmentDoc}`;
+${FragmentStatTypeFragmentDoc}
+${EnrollmentStatFragmentFragmentDoc}
+${FragmentWorkPacketCommandFragmentDoc}`;
 
 /**
  * __useWorkPacketStatusDetailsQuery__
