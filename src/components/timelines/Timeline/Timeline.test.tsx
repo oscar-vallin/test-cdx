@@ -1,28 +1,35 @@
 import CDXTimeline from './Timeline';
 import { mountWithTheme } from 'src/utils/testUtils';
-import { WorkStepStatus } from 'src/data/services/graphql';
+import { WorkPacketStatusDetails, WorkStatus } from 'src/data/services/graphql';
 
-const items: WorkStepStatus[] = [
-  {
-    stepStatus: 'DONE',
-    stepName: 'TEST_DONE',
-    stepType: 'TEST_DONE'
-  },
-  {
-    stepStatus: 'PROGRESS',
-    stepName: 'TEST_PROGRESS',
-    stepType: 'TEST_PROGRESS'
-  }
-]
+
+const workPacket: WorkPacketStatusDetails = {
+  workOrderId: 'textWorkOrder345',
+  inboundFilename: 'ABC-inbound-file.zip.pgp',
+  orgSid: '1',
+  packetStatus: WorkStatus.Complete,
+  vendorSid: '',
+  workStepStatus: [
+    {
+      stepStatus: 'DONE',
+      stepName: 'TEST_DONE',
+      stepType: 'TEST'
+    },
+    {
+      stepStatus: 'PROGRESS',
+      stepName: 'TEST_PROGRESS',
+      stepType: 'TEST_PROGRESS'
+    }
+  ]
+};
 
 const defaultProps = {
-  items: items,
+  packet: workPacket,
   activeIndex: 0,
 };
 
 describe('Timeline Testing Unit...', () => {
   const mockFn = jest.fn();
-  const [STEP_DONE] = defaultProps.items;
   const tree = mountWithTheme(<CDXTimeline {...defaultProps} onClick={mockFn} />);
 
   it('Should be defined', () => {
@@ -36,13 +43,13 @@ describe('Timeline Testing Unit...', () => {
   it('Should match the step title', () => {
     const title = tree.find('.title').first().text();
 
-    expect(title).toEqual(STEP_DONE.stepName);
+    expect(title).toEqual('TEST_DONE');
   });
 
   it('Should match the step description', () => {
     const description = tree.find('.description').first().text();
 
-    expect(description).toEqual(STEP_DONE.stepType);
+    expect(description).toEqual('TEST');
   });
 
   it('Should trigger the onClick callback', () => {
