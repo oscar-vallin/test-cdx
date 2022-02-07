@@ -60,7 +60,7 @@ const SectionAccessManagement = ({ form, onSave, onFormChange }: SectionAccessPr
       <WizardBody>
         <FormRow>
           <Column lg="12">
-            <UICheckboxList id="__Access_Group_List"
+            <UICheckboxList id="__Access_Groups_List"
                             uiField={form?.accessPolicyGroups ?? undefined}
                             options={groupOptions}
                             value={selectedSids}
