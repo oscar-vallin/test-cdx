@@ -24,7 +24,7 @@ export const PanelHeader = styled.div`
 
 export const WizardBody = styled.div`
   margin-top: 1em;
-  height: 28em;
+  height: 28rem;
 `;
 export const WizardButtonRow = styled.div`
   button {

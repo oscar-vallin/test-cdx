@@ -304,6 +304,22 @@
             "deprecationReason": null
           },
           {
+            "name": "commands",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "WebCommand",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "response",
             "description": null,
             "args": [],
@@ -701,6 +717,22 @@
             "deprecationReason": null
           },
           {
+            "name": "commands",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "WebCommand",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "response",
             "description": null,
             "args": [],
@@ -954,6 +986,22 @@
             "deprecationReason": null
           },
           {
+            "name": "commands",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "WebCommand",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "response",
             "description": null,
             "args": [],
@@ -1154,6 +1202,18 @@
           },
           {
             "name": "CREATE",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ASSIGN",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RESET",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
@@ -16600,6 +16660,22 @@
             "deprecationReason": null
           },
           {
+            "name": "commands",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "WebCommand",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "response",
             "description": null,
             "args": [],
@@ -17579,8 +17655,8 @@
               "kind": "LIST",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "NVP",
+                "kind": "OBJECT",
+                "name": "NVPStr",
                 "ofType": null
               }
             },

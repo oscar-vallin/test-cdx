@@ -3,7 +3,7 @@ import { Column } from 'src/components/layouts';
 import { useFormInputValue } from 'src/hooks/useInputValue';
 
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
-import { UserAccount, UserAccountForm } from 'src/data/services/graphql';
+import { CdxWebCommandType, UserAccount, UserAccountForm } from 'src/data/services/graphql';
 import { UIInputTextReadOnly } from 'src/components/inputs/InputText/InputText';
 import { WizardBody } from 'src/layouts/Panels/Panels.styles';
 import UpdateUserFooter from './UpdateUserFooter';
@@ -93,7 +93,9 @@ const SectionAccount = ({ form, onSave, onFormChange }: SectionAccountProps) => 
           ''
         )}
       </WizardBody>
-      <UpdateUserFooter onSave={handleSave} />
+      {form.commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Update) && (
+        <UpdateUserFooter onSave={handleSave} />
+      )}
     </>
   );
 };

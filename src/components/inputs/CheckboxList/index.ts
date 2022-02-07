@@ -1,3 +1,4 @@
 import { CheckboxList } from './CheckboxList';
+import { UICheckboxList } from './UICheckboxList';
 
-export { CheckboxList };
+export { CheckboxList, UICheckboxList };

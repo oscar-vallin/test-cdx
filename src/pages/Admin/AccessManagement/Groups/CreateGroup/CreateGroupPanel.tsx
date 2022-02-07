@@ -8,13 +8,11 @@ import { Button } from 'src/components/buttons';
 import { Column } from 'src/components/layouts';
 import { UIInputText } from 'src/components/inputs/InputText';
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
-import { StyledContainer } from './CreateGroupPanel.styles';
 
 import { useCreateGroupPanel } from './CreateGroupPanel.service';
 import { UIInputTextReadOnly } from 'src/components/inputs/InputText/InputText';
 import { UIInputCheck } from 'src/components/inputs/InputCheck';
-import { UIFormLabel } from 'src/components/labels/FormLabel';
-import { CheckboxList } from 'src/components/inputs/CheckboxList';
+import { UICheckboxList } from 'src/components/inputs/CheckboxList';
 import { AccessPolicyGroupForm, GqOperationResponse } from 'src/data/services/graphql';
 import { UIInputMultiSelect } from 'src/components/inputs/InputMultiselect';
 import { TagPicker } from 'src/components/inputs/TagPicker';
@@ -223,18 +221,16 @@ const CreateGroupPanel = ({
                 <>
                   <FormRow>
                     <Column lg="12">
-                      <UIFormLabel id="__policies"
-                                   uiField={form.policies}/>
-                      <StyledContainer>
-                        <CheckboxList items={policies}
+                      <UICheckboxList id="__policies"
+                                      options={policies}
                                       value={accessPolicyData.policySids}
-                                      emptyMessage='No policies configured'
+                                      uiField={form.policies}
+                                      emptyMessage="No policies configured"
                                       onChange={(policySids) => {
                                         setUnsavedChanges(true);
                                         addToAccessPolicyData( { policySids });
                                       }}
-                        />
-                      </StyledContainer>
+                      />
                     </Column>
                   </FormRow>
                 </>
@@ -244,18 +240,16 @@ const CreateGroupPanel = ({
                 <>
                   <FormRow>
                     <Column lg="12">
-                      <UIFormLabel id="__specializations"
-                                   uiField={form.specializations}/>
-                      <StyledContainer>
-                        <CheckboxList items={specializations}
+                      <UICheckboxList id="__specializations"
+                                      uiField={form.specializations}
+                                      options={specializations}
                                       value={accessPolicyData.specializationSids}
                                       emptyMessage='No specializations configured'
                                       onChange={(specializationSids) => {
                                         setUnsavedChanges(true);
                                         addToAccessPolicyData({ specializationSids });
                                       }}
-                        />
-                      </StyledContainer>
+                      />
                     </Column>
                   </FormRow>
                 </>

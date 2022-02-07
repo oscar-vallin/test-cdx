@@ -7,7 +7,7 @@ import { Column, Container, Row } from 'src/components/layouts';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { PageTitle } from 'src/components/typography';
 
-import { ActiveEnum, useDeactivateUsersMutation, UserItem } from 'src/data/services/graphql';
+import { ActiveEnum, CdxWebCommandType, useDeactivateUsersMutation, UserItem } from 'src/data/services/graphql';
 
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { UsersTable } from 'src/pages/Admin/Users/UsersTable';
@@ -51,17 +51,19 @@ const ActiveUsersPage = () => {
                 <PageTitle id="__Page_Title" title="Active Users" />
               </Column>
               <Column lg="6" right>
-                <span>
-                  <PrimaryButton
-                    id="__Create-User"
-                    iconProps={{ iconName: 'AddFriend' }}
-                    onClick={() => {
-                      setIsCreateUserPanelOpen(true);
-                      return null;
-                    }}>
-                    Create user
-                  </PrimaryButton>
-                </span>
+                {userService.commands?.find((cmd) => cmd.commandType === CdxWebCommandType.Create) && (
+                  <span>
+                    <PrimaryButton
+                      id="__Create-User"
+                      iconProps={{ iconName: 'AddFriend' }}
+                      onClick={() => {
+                        setIsCreateUserPanelOpen(true);
+                        return null;
+                      }}>
+                      Create user
+                    </PrimaryButton>
+                  </span>
+                )}
               </Column>
             </Row>
           </Container>

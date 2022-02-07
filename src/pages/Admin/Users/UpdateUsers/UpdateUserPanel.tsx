@@ -6,7 +6,7 @@ import { Tabs } from 'src/components/tabs/Tabs';
 import { PanelBody, PanelHeader, PanelTitle } from 'src/layouts/Panels/Panels.styles';
 
 import { UseUpdateUserPanel } from 'src/pages/Admin/Users/UpdateUsers/useUpdateUserPanel';
-import { GqOperationResponse, UserAccount, UserAccountForm } from 'src/data/services/graphql';
+import { CdxWebCommandType, GqOperationResponse, UserAccount, UserAccountForm } from 'src/data/services/graphql';
 import { Column } from 'src/components/layouts';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import SectionAccessManagement from './SectionAccessManagement';
@@ -261,22 +261,23 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
       </Column>
       <Column lg="6" right>
         <Stack horizontal>
-          {useUpdateUserPanel.userAccountForm.active?.value ? (
-            <>
-              <CommandButton
-                id="__ResetPassword_Button"
-                iconProps={{ iconName: 'Permissions' }}
-                text="Reset Password"
-                onClick={showResetPasswordDialog}
-              />
-              <CommandButton
-                id="__InactivateUser_Button"
-                iconProps={{ iconName: 'UserRemove' }}
-                text="Inactivate User"
-                onClick={showInactivateUserDialog}
-              />
-            </>
-          ) : (
+          {useUpdateUserPanel.userAccountForm.commands?.find((cmd) => cmd === CdxWebCommandType.Reset) && (
+            <CommandButton
+              id="__ResetPassword_Button"
+              iconProps={{ iconName: 'Permissions' }}
+              text="Reset Password"
+              onClick={showResetPasswordDialog}
+            />
+          )}
+          {useUpdateUserPanel.userAccountForm.commands?.find((cmd) => cmd === CdxWebCommandType.Deactivate) && (
+            <CommandButton
+              id="__InactivateUser_Button"
+              iconProps={{ iconName: 'UserRemove' }}
+              text="Inactivate User"
+              onClick={showInactivateUserDialog}
+            />
+          )}
+          {useUpdateUserPanel.userAccountForm.commands?.find((cmd) => cmd === CdxWebCommandType.Activate) && (
             <CommandButton
               id="__ActivateUser_Button"
               iconProps={{ iconName: 'UserFollowed' }}

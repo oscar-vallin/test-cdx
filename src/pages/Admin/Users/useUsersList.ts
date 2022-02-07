@@ -1,10 +1,11 @@
-import { ActiveEnum, UserItem, useUsersForOrgLazyQuery } from 'src/data/services/graphql';
+import { ActiveEnum, UserItem, useUsersForOrgLazyQuery, WebCommand } from 'src/data/services/graphql';
 import { useEffect, useState } from 'react';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 
 export const useUsersLists = (activeFilter: ActiveEnum) => {
   const [users, setUsers] = useState<UserItem[] | null | undefined>([]);
+  const [commands, setCommands] = useState<WebCommand[] | null | undefined>([]);
   const { orgSid } = useOrgSid();
   const [apiUsersForOrgFpLazy, { data, loading, error }] = useUsersForOrgLazyQuery();
   const handleError = ErrorHandler();
@@ -36,12 +37,32 @@ export const useUsersLists = (activeFilter: ActiveEnum) => {
         }
       });
 
+      const commands: WebCommand[] = [];
+      const listPageInfo = data?.usersForOrg?.listPageInfo;
+      listPageInfo?.listItemBulkCommands?.forEach((cmd) => {
+        if (cmd) {
+          commands.push(cmd);
+        }
+      });
+      listPageInfo?.listItemCommands?.forEach((cmd) => {
+        if (cmd) {
+          commands.push(cmd);
+        }
+      });
+      listPageInfo?.pageCommands?.forEach((cmd) => {
+        if (cmd) {
+          commands.push(cmd);
+        }
+      });
+
+      setCommands(commands);
       setUsers(items);
     }
-  }, [loading]);
+  }, [loading, data]);
 
   return {
     users,
+    commands,
     loading,
     fetchUsers,
   };

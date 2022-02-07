@@ -10,9 +10,3 @@ export const StyledColumn = styled(Column)`
     background: transparent;
   }
 `;
-
-export const StyledContainer = styled.div`
-  background-color: ${({ theme }) => theme.colors.neutralLighter};
-  padding: 10px;
-  width: 100%;
-`;

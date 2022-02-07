@@ -46,6 +46,7 @@ export type AccessPolicyForm = {
   tmplUseAsIs?: Maybe<UiBooleanField>;
   applicableOrgTypes?: Maybe<UiSelectManyField>;
   options?: Maybe<Array<Maybe<UiOptions>>>;
+  commands?: Maybe<Array<Maybe<WebCommand>>>;
   response: GqOperationResponse;
   errCode?: Maybe<Scalars['String']>;
   errMsg?: Maybe<Scalars['String']>;
@@ -86,6 +87,7 @@ export type AccessPolicyGroupForm = {
   includeOrgSids?: Maybe<UiSelectManyField>;
   excludeOrgSids?: Maybe<UiSelectManyField>;
   options?: Maybe<Array<Maybe<UiOptions>>>;
+  commands?: Maybe<Array<Maybe<WebCommand>>>;
   response: GqOperationResponse;
   errCode?: Maybe<Scalars['String']>;
   errMsg?: Maybe<Scalars['String']>;
@@ -113,6 +115,7 @@ export type AccessSpecializationForm = {
   organization: UiReadOnlyField;
   filters?: Maybe<Array<Maybe<SpecializationFilterForm>>>;
   options?: Maybe<Array<Maybe<UiOptions>>>;
+  commands?: Maybe<Array<Maybe<WebCommand>>>;
   response: GqOperationResponse;
   errCode?: Maybe<Scalars['String']>;
   errMsg?: Maybe<Scalars['String']>;
@@ -144,7 +147,9 @@ export enum CdxWebCommandType {
   Add = 'ADD',
   Update = 'UPDATE',
   Delete = 'DELETE',
-  Create = 'CREATE'
+  Create = 'CREATE',
+  Assign = 'ASSIGN',
+  Reset = 'RESET'
 }
 
 export enum CdxWebPage {
@@ -2131,6 +2136,7 @@ export type UserAccountForm = {
   /** Indicates that an email should be sent to the user with an activation link. */
   sendActivationEmail?: Maybe<UiBooleanField>;
   lastLogin?: Maybe<UiReadOnlyField>;
+  commands?: Maybe<Array<Maybe<WebCommand>>>;
   response: GqOperationResponse;
   options?: Maybe<Array<Maybe<UiOptions>>>;
   errCode?: Maybe<Scalars['String']>;
@@ -2240,7 +2246,7 @@ export type WebCommand = {
   __typename?: 'WebCommand';
   endPoint?: Maybe<Scalars['String']>;
   label?: Maybe<Scalars['String']>;
-  parameters?: Maybe<Array<Maybe<Nvp>>>;
+  parameters?: Maybe<Array<Maybe<NvpStr>>>;
   commandType?: Maybe<CdxWebCommandType>;
 };
 
@@ -2601,10 +2607,7 @@ export type FragmentWebCommandFragment = (
   & Pick<WebCommand, 'endPoint' | 'label' | 'commandType'>
   & { parameters?: Maybe<Array<Maybe<(
     { __typename?: 'NVPStr' }
-    & UnionNvp_NvpStr_Fragment
-  ) | (
-    { __typename?: 'NVPId' }
-    & UnionNvp_NvpId_Fragment
+    & Pick<NvpStr, 'name' | 'value'>
   )>>> }
 );
 
@@ -3174,7 +3177,10 @@ export type UserAccountFormQuery = (
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
       & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
-    )>, options?: Maybe<Array<Maybe<(
+    )>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>>>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
       & { values?: Maybe<Array<Maybe<(
@@ -3227,7 +3233,10 @@ export type FindUserAccountQuery = (
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
       & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
-    )>, options?: Maybe<Array<Maybe<(
+    )>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>>>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
       & { values?: Maybe<Array<Maybe<(
@@ -3480,6 +3489,9 @@ export type AccessPolicyFormQuery = (
         { __typename?: 'UIOption' }
         & Pick<UiOption, 'label' | 'value' | 'info'>
       )>>> }
+    )>>>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
     )>>> }
   )> }
 );
@@ -3527,6 +3539,9 @@ export type FindAccessPolicyQuery = (
         { __typename?: 'UIOption' }
         & Pick<UiOption, 'label' | 'value' | 'info'>
       )>>> }
+    )>>>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
     )>>> }
   )> }
 );
@@ -3565,6 +3580,9 @@ export type AccessSpecializationFormQuery = (
         { __typename?: 'UIOption' }
         & Pick<UiOption, 'label' | 'value' | 'info'>
       )>>> }
+    )>>>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
     )>>> }
   )> }
 );
@@ -3603,6 +3621,9 @@ export type FindAccessSpecializationQuery = (
         { __typename?: 'UIOption' }
         & Pick<UiOption, 'label' | 'value' | 'info'>
       )>>> }
+    )>>>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
     )>>> }
   )> }
 );
@@ -3678,6 +3699,9 @@ export type AccessPolicyGroupFormQuery = (
         { __typename?: 'UIOption' }
         & Pick<UiOption, 'label' | 'value' | 'info'>
       )>>> }
+    )>>>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
     )>>> }
   )> }
 );
@@ -3752,6 +3776,9 @@ export type FindAccessPolicyGroupQuery = (
         { __typename?: 'UIOption' }
         & Pick<UiOption, 'label' | 'value' | 'info'>
       )>>> }
+    )>>>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
     )>>> }
   )> }
 );
@@ -4529,6 +4556,9 @@ export type CreateAccessPolicyMutation = (
         { __typename?: 'UIOption' }
         & Pick<UiOption, 'label' | 'value' | 'info'>
       )>>> }
+    )>>>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
     )>>> }
   )> }
 );
@@ -4576,6 +4606,9 @@ export type UpdateAccessPolicyMutation = (
         { __typename?: 'UIOption' }
         & Pick<UiOption, 'label' | 'value' | 'info'>
       )>>> }
+    )>>>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
     )>>> }
   )> }
 );
@@ -4634,6 +4667,9 @@ export type CreateAccessSpecializationMutation = (
         { __typename?: 'UIOption' }
         & Pick<UiOption, 'label' | 'value' | 'info'>
       )>>> }
+    )>>>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
     )>>> }
   )> }
 );
@@ -4672,6 +4708,9 @@ export type UpdateAccessSpecializationMutation = (
         { __typename?: 'UIOption' }
         & Pick<UiOption, 'label' | 'value' | 'info'>
       )>>> }
+    )>>>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
     )>>> }
   )> }
 );
@@ -4756,6 +4795,9 @@ export type CreateAccessPolicyGroupMutation = (
         { __typename?: 'UIOption' }
         & Pick<UiOption, 'label' | 'value' | 'info'>
       )>>> }
+    )>>>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
     )>>> }
   )> }
 );
@@ -4830,6 +4872,9 @@ export type UpdateAccessPolicyGroupMutation = (
         { __typename?: 'UIOption' }
         & Pick<UiOption, 'label' | 'value' | 'info'>
       )>>> }
+    )>>>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
     )>>> }
   )> }
 );
@@ -4887,7 +4932,10 @@ export type CreateUserMutation = (
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
       & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
-    )>, options?: Maybe<Array<Maybe<(
+    )>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>>>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
       & { values?: Maybe<Array<Maybe<(
@@ -4940,7 +4988,10 @@ export type UpdateUserMutation = (
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
       & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
-    )>, options?: Maybe<Array<Maybe<(
+    )>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>>>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
       & { values?: Maybe<Array<Maybe<(
@@ -4993,7 +5044,10 @@ export type UpdateUserAccessPolicyGroupsMutation = (
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
       & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
-    )>, options?: Maybe<Array<Maybe<(
+    )>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>>>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
       & { values?: Maybe<Array<Maybe<(
@@ -5632,11 +5686,12 @@ export const FragmentWebCommandFragmentDoc = gql`
   endPoint
   label
   parameters {
-    ...unionNVP
+    name
+    value
   }
   commandType
 }
-    ${UnionNvpFragmentDoc}`;
+    `;
 export const FragmentWorkPacketCommandFragmentDoc = gql`
     fragment fragmentWorkPacketCommand on WorkPacketCommand {
   label
@@ -6897,6 +6952,9 @@ export const UserAccountFormDocument = gql`
       errMsg
       errSeverity
     }
+    commands {
+      ...fragmentWebCommand
+    }
     response
     options {
       key
@@ -6911,7 +6969,7 @@ export const UserAccountFormDocument = gql`
     errSeverity
   }
 }
-    `;
+    ${FragmentWebCommandFragmentDoc}`;
 
 /**
  * __useUserAccountFormQuery__
@@ -7049,6 +7107,9 @@ export const FindUserAccountDocument = gql`
       errMsg
       errSeverity
     }
+    commands {
+      ...fragmentWebCommand
+    }
     response
     options {
       key
@@ -7063,7 +7124,7 @@ export const FindUserAccountDocument = gql`
     errSeverity
   }
 }
-    `;
+    ${FragmentWebCommandFragmentDoc}`;
 
 /**
  * __useFindUserAccountQuery__
@@ -7545,13 +7606,16 @@ export const AccessPolicyFormDocument = gql`
         info
       }
     }
+    commands {
+      ...fragmentWebCommand
+    }
     response
     errCode
     errMsg
     errSeverity
   }
 }
-    `;
+    ${FragmentWebCommandFragmentDoc}`;
 
 /**
  * __useAccessPolicyFormQuery__
@@ -7670,13 +7734,16 @@ export const FindAccessPolicyDocument = gql`
         info
       }
     }
+    commands {
+      ...fragmentWebCommand
+    }
     response
     errCode
     errMsg
     errSeverity
   }
 }
-    `;
+    ${FragmentWebCommandFragmentDoc}`;
 
 /**
  * __useFindAccessPolicyQuery__
@@ -7763,13 +7830,16 @@ export const AccessSpecializationFormDocument = gql`
         info
       }
     }
+    commands {
+      ...fragmentWebCommand
+    }
     response
     errCode
     errMsg
     errSeverity
   }
 }
-    `;
+    ${FragmentWebCommandFragmentDoc}`;
 
 /**
  * __useAccessSpecializationFormQuery__
@@ -7856,13 +7926,16 @@ export const FindAccessSpecializationDocument = gql`
         info
       }
     }
+    commands {
+      ...fragmentWebCommand
+    }
     response
     errCode
     errMsg
     errSeverity
   }
 }
-    `;
+    ${FragmentWebCommandFragmentDoc}`;
 
 /**
  * __useFindAccessSpecializationQuery__
@@ -8052,13 +8125,16 @@ export const AccessPolicyGroupFormDocument = gql`
         info
       }
     }
+    commands {
+      ...fragmentWebCommand
+    }
     response
     errCode
     errMsg
     errSeverity
   }
 }
-    `;
+    ${FragmentWebCommandFragmentDoc}`;
 
 /**
  * __useAccessPolicyGroupFormQuery__
@@ -8249,13 +8325,16 @@ export const FindAccessPolicyGroupDocument = gql`
         info
       }
     }
+    commands {
+      ...fragmentWebCommand
+    }
     response
     errCode
     errMsg
     errSeverity
   }
 }
-    `;
+    ${FragmentWebCommandFragmentDoc}`;
 
 /**
  * __useFindAccessPolicyGroupQuery__
@@ -10506,13 +10585,16 @@ export const CreateAccessPolicyDocument = gql`
         info
       }
     }
+    commands {
+      ...fragmentWebCommand
+    }
     response
     errCode
     errMsg
     errSeverity
   }
 }
-    `;
+    ${FragmentWebCommandFragmentDoc}`;
 export type CreateAccessPolicyMutationFn = Apollo.MutationFunction<CreateAccessPolicyMutation, CreateAccessPolicyMutationVariables>;
 
 /**
@@ -10629,13 +10711,16 @@ export const UpdateAccessPolicyDocument = gql`
         info
       }
     }
+    commands {
+      ...fragmentWebCommand
+    }
     response
     errCode
     errMsg
     errSeverity
   }
 }
-    `;
+    ${FragmentWebCommandFragmentDoc}`;
 export type UpdateAccessPolicyMutationFn = Apollo.MutationFunction<UpdateAccessPolicyMutation, UpdateAccessPolicyMutationVariables>;
 
 /**
@@ -10783,13 +10868,16 @@ export const CreateAccessSpecializationDocument = gql`
         info
       }
     }
+    commands {
+      ...fragmentWebCommand
+    }
     response
     errCode
     errMsg
     errSeverity
   }
 }
-    `;
+    ${FragmentWebCommandFragmentDoc}`;
 export type CreateAccessSpecializationMutationFn = Apollo.MutationFunction<CreateAccessSpecializationMutation, CreateAccessSpecializationMutationVariables>;
 
 /**
@@ -10877,13 +10965,16 @@ export const UpdateAccessSpecializationDocument = gql`
         info
       }
     }
+    commands {
+      ...fragmentWebCommand
+    }
     response
     errCode
     errMsg
     errSeverity
   }
 }
-    `;
+    ${FragmentWebCommandFragmentDoc}`;
 export type UpdateAccessSpecializationMutationFn = Apollo.MutationFunction<UpdateAccessSpecializationMutation, UpdateAccessSpecializationMutationVariables>;
 
 /**
@@ -11104,13 +11195,16 @@ export const CreateAccessPolicyGroupDocument = gql`
         info
       }
     }
+    commands {
+      ...fragmentWebCommand
+    }
     response
     errCode
     errMsg
     errSeverity
   }
 }
-    `;
+    ${FragmentWebCommandFragmentDoc}`;
 export type CreateAccessPolicyGroupMutationFn = Apollo.MutationFunction<CreateAccessPolicyGroupMutation, CreateAccessPolicyGroupMutationVariables>;
 
 /**
@@ -11301,13 +11395,16 @@ export const UpdateAccessPolicyGroupDocument = gql`
         info
       }
     }
+    commands {
+      ...fragmentWebCommand
+    }
     response
     errCode
     errMsg
     errSeverity
   }
 }
-    `;
+    ${FragmentWebCommandFragmentDoc}`;
 export type UpdateAccessPolicyGroupMutationFn = Apollo.MutationFunction<UpdateAccessPolicyGroupMutation, UpdateAccessPolicyGroupMutationVariables>;
 
 /**
@@ -11474,6 +11571,9 @@ export const CreateUserDocument = gql`
       errMsg
       errSeverity
     }
+    commands {
+      ...fragmentWebCommand
+    }
     response
     options {
       key
@@ -11488,7 +11588,7 @@ export const CreateUserDocument = gql`
     errSeverity
   }
 }
-    `;
+    ${FragmentWebCommandFragmentDoc}`;
 export type CreateUserMutationFn = Apollo.MutationFunction<CreateUserMutation, CreateUserMutationVariables>;
 
 /**
@@ -11626,6 +11726,9 @@ export const UpdateUserDocument = gql`
       errMsg
       errSeverity
     }
+    commands {
+      ...fragmentWebCommand
+    }
     response
     options {
       key
@@ -11640,7 +11743,7 @@ export const UpdateUserDocument = gql`
     errSeverity
   }
 }
-    `;
+    ${FragmentWebCommandFragmentDoc}`;
 export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, UpdateUserMutationVariables>;
 
 /**
@@ -11779,6 +11882,9 @@ export const UpdateUserAccessPolicyGroupsDocument = gql`
       errMsg
       errSeverity
     }
+    commands {
+      ...fragmentWebCommand
+    }
     response
     options {
       key
@@ -11793,7 +11899,7 @@ export const UpdateUserAccessPolicyGroupsDocument = gql`
     errSeverity
   }
 }
-    `;
+    ${FragmentWebCommandFragmentDoc}`;
 export type UpdateUserAccessPolicyGroupsMutationFn = Apollo.MutationFunction<UpdateUserAccessPolicyGroupsMutation, UpdateUserAccessPolicyGroupsMutationVariables>;
 
 /**
