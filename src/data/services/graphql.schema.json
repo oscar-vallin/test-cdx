@@ -9382,7 +9382,7 @@
             "deprecationReason": null
           },
           {
-            "name": "hashMoreEvents",
+            "name": "hasMoreEvents",
             "description": null,
             "args": [],
             "type": {

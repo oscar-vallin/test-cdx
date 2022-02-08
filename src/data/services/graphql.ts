@@ -1217,7 +1217,7 @@ export type QualityChecks = {
   reqError?: Maybe<StatType>;
   truncError?: Maybe<StatType>;
   codeListMappingError?: Maybe<StatType>;
-  hashMoreEvents?: Maybe<Scalars['Boolean']>;
+  hasMoreEvents?: Maybe<Scalars['Boolean']>;
 };
 
 export type Query = {
@@ -2762,7 +2762,7 @@ export type WorkPacketStatusDetailsQuery = (
       )>>> }
     )>, qualityChecks?: Maybe<(
       { __typename?: 'QualityChecks' }
-      & Pick<QualityChecks, 'totalRecordCount' | 'fieldCreationWarningCount' | 'fieldCreationErrorCount' | 'fieldCreationInfoCount' | 'hashMoreEvents'>
+      & Pick<QualityChecks, 'totalRecordCount' | 'fieldCreationWarningCount' | 'fieldCreationErrorCount' | 'fieldCreationInfoCount' | 'hasMoreEvents'>
       & { sequenceCreationEvent?: Maybe<Array<Maybe<(
         { __typename?: 'SequenceCreationEvent' }
         & Pick<SequenceCreationEvent, 'context' | 'unitId'>
@@ -6032,7 +6032,7 @@ export const WorkPacketStatusDetailsDocument = gql`
       codeListMappingError {
         ...fragmentStatType
       }
-      hashMoreEvents
+      hasMoreEvents
     }
     enrollmentStats {
       ...enrollmentStatFragment
