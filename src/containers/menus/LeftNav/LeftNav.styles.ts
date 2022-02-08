@@ -1,17 +1,15 @@
 /* tslint:disable */
 
 import styled from 'styled-components';
-import { Nav } from '@fluentui/react';
 import { device } from 'src/styles/GlobalStyles';
 
 interface ToggableProps {
   open?: boolean;
 }
 
-type StyledSubNavProps = {
-  onLinkClick?: any | null;
-  highlight?: boolean;
-};
+interface NavListItemProps {
+  selected: boolean;
+}
 
 export const AdminNavPanel = styled.div<ToggableProps>`
   background: ${({ theme }) => theme.colors.neutralLighter} !important;
@@ -30,49 +28,60 @@ export const AdminNavPanel = styled.div<ToggableProps>`
   top: 58px;
   width: 100vh;
   z-index: 998;
+  padding-top: 10px;
 
   @media ${device.mobileL} {
     width: 230px;
   }
 `;
 
-export const SubNav = styled(Nav)<StyledSubNavProps>`
-  height: auto;
-  overflow-x: hidden;
+export const NavList = styled.ul`
+  list-style: none;
+`;
 
-  &.AppHeader__MobileNav {
-    display: block;
+export const NavListItem = styled.li<NavListItemProps>`
+  padding-left: ${({ selected }) => (selected? '18px' : '21px')};
+  background: ${({ selected }) => (selected ? 'rgb(237, 235, 233)' : 'none')};
+  border-left: ${({ theme, selected }) => (selected ? `${theme.colors.themePrimary} solid 3px` : 'none')};
+  
+  &:hover {
+    background: ${({ theme }) => theme.colors.white};
   }
-
-  .ms-Nav-groupContent {
-    margin: 0;
+  
+  &.return-home button {
+    border-top: 1px solid lightgray;
   }
-
-  .ms-Nav-compositeLink {
-    .ms-Button {
-      font-size: 0.75rem;
-
-      &:hover {
-        background: ${({ theme }) => theme.colors.neutralLighter};
-      }
+  
+  & button {
+    width: 192px;
+  }
+  
+  & button span span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    text-align: left;
+    height: 1.5rem;
+    position: relative;
+    top: 50%;
+    transform: translate(0, -50%);
+  }
+  
+  @media ${device.mobileL} {
+    & button span span {
+      width: 166px;
     }
-
-    .ms-Nav-chevronButton {
-      position: absolute;
-      width: 100%;
-      z-index: 2;
-
-      & + .ms-Button {
-        font-size: 0.75rem;
-        font-weight: ${({ highlight }) => (highlight ? 700 : 400)};
-        pointer-events: none;
-      }
-    }
   }
+`;
 
+export const MobileTopNav = styled.div`
+  display: block;
+  
+  & ul li:last-child {
+    border-bottom: 1px solid lightgray;
+  }
+  
   @media all and ${device.laptop} {
-    &.AppHeader__MobileNav {
-      display: none;
-    }
+    display: none;
   }
 `;

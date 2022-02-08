@@ -9,7 +9,7 @@ const fontSizes = {
   xsmall: '0.625rem',
   small: '0.75rem',
   normal: '0.875rem',
-  large: '1.25rem',
+  large: '1.15rem',
   xlarge: '1.5rem',
   huge: '1.875rem',
   giant: '2.5rem',

@@ -22,18 +22,12 @@ export default class PuppetAdminMenu extends PuppetBasePage {
     }
     const lastMenuItem = await this.getMenuItem(menuItems[menuItems.length - 1]);
     await lastMenuItem?.click();
-    await this.page.waitForSelector(this.menuParent, { visible: false });
+    // await this.page.waitForSelector(this.menuParent, { visible: false });
     await this.page.waitForTimeout(1000);
   }
 
   async navigateToOrg(orgName) {
-    const button = await this.page.$x(`//div[@class='ms-Nav-navItem']/button[contains(., '${orgName}')]`);
-
-    await this.page.click(this.menuTrigger);
-
-    button[0].click();
-
-    await this.page.waitForTimeout(1000);
+    await this.openMenu('Navigate To...', orgName);
   }
 
   async returnToMyOrg() {
@@ -49,12 +43,12 @@ export default class PuppetAdminMenu extends PuppetBasePage {
     }
     const isExpanded = cssClasses?.toString().indexOf('is-expanded') > -1;
     if (!isExpanded) {
-      await menuItm?.click();
-    }
+      const button = await menuItm?.$('button');
+      await button?.click();    }
   }
 
   private async getMenuItem(name: string): Promise<ElementHandle | null> {
-    const selector = `${this.menuParent} div[name='${name}']`;
+    const selector = `${this.menuParent} div[data-name='${name}']`;
     return await this.waitForSelector(selector);
   }
 }

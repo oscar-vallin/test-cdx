@@ -30,8 +30,7 @@ export const LayoutDashboard = ({
       <BoxStyled id={`${id}__Box`} direction={StyleConstants.DIRECTION_COLUMN} top>
         <AppHeader onMenuButtonClick={() => { setMenuOpen(!menuOpen) }}/>
         <LeftNav menuOptionSelected={menuOptionSelected}
-                 isOpen={menuOpen}
-                 onMenuClick={() => {}}/>
+                 isOpen={menuOpen}/>
         <DashboardBody id='__DashboardBody' isMenuOpen={menuOpen}>
           {children}
         </DashboardBody>
