@@ -80,7 +80,7 @@ const _FileStatusPage = () => {
               <PageTitle id="__File-Status_Title" title="File Status" subTitle="Advanced search" icon="FilterSolid" />
             </Column>
             <Column sm="6" right>
-              <Text right>
+              <Text size="large" right>
                 {renderDownloadLink()}
                 {renderTotalRecords()}
               </Text>

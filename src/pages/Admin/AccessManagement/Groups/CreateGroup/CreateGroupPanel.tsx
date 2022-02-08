@@ -351,7 +351,7 @@ const CreateGroupPanel = ({
     <PanelHeader id="__PanelHeader">
       <Column lg="12">
         <Stack horizontal styles={{ root: { height: 44 } }}>
-          <PanelTitle id="__CreateGroup_Panel_Title" variant="bold">
+          <PanelTitle id="__CreateGroup_Panel_Title" variant="bold" size="large">
             {!accessPolicyData.sid ? 'New Access Policy Group' : 'Update Access Policy Group'}
           </PanelTitle>
         </Stack>

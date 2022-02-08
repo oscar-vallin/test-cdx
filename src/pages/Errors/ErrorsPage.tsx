@@ -39,10 +39,9 @@ const _ErrorsPage = () => {
               <PageTitle id="__Errors_Title" title="Errors" subTitle="Advanced search" icon="FilterSolid" />
             </Column>
             <Column sm="6" right>
-              <Text right>
-                {!tableMeta.loading && tableMeta.count !== null && (
-                  <Text>{tableMeta.count > 0 ? `${tableMeta.count} results found` : 'No results found'}</Text>
-                )}
+              <Text size="large" right>
+                {!tableMeta.loading && tableMeta.count !== null && tableMeta.count > 0
+                  ? `${tableMeta.count} results found` : 'No results found'}
               </Text>
             </Column>
           </Row>

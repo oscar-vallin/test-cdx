@@ -10,7 +10,7 @@ import Theming from 'src/utils/Theming';
 import { useSessionStore } from 'src/store/SessionStore';
 import { useThemeStore } from 'src/store/ThemeStore';
 import { LoadingPage } from 'src/pages/Loading/LoadingPage';
-import { theme as styledComponentsTheme } from '../styles/themes/theme';
+import { theme, theme as styledComponentsTheme } from '../styles/themes/theme';
 
 export const ThemeContext = createContext(() => {
   return {};
@@ -55,11 +55,11 @@ export const ThemeContextProvider = ({ children }) => {
     }
 
     [class*="ms-DetailsHeader"] {
-      font-size: .875rem;
+      font-size: ${theme.fontSizes.normal};
     }
 
     [class*="ms-DetailsRow"] {
-      font-size: .75rem;
+      font-size: ${theme.fontSizes.normal};
     }
   `;
 

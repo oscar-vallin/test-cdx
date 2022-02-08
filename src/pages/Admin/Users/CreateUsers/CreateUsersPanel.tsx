@@ -123,7 +123,7 @@ const CreateUsersPanel = ({ orgSid, isOpen, onDismiss, onCreateUser }: CreateUse
     <PanelHeader>
       <Column lg="12">
         <Stack horizontal styles={{ root: { height: 44 } }}>
-          <PanelTitle id="__CreateUser_Panel_Title" variant="bold">
+          <PanelTitle id="__CreateUser_Panel_Title" variant="bold" size="large">
             New User
           </PanelTitle>
         </Stack>

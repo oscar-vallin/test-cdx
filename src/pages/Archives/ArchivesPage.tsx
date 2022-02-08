@@ -37,7 +37,7 @@ const _ArchivePage = () => {
   };
 
   return (
-    <LayoutDashboard id="PageArchive" menuOptionSelected={ROUTES.ROUTE_ARCHIVES.ID}>
+    <LayoutDashboard id="PageArchive" menuOptionSelected={ROUTES.ROUTE_ARCHIVES.API_ID}>
       <PageHeader id="__ArchivesHeader">
         <Container>
           <Row>
@@ -45,7 +45,7 @@ const _ArchivePage = () => {
               <PageTitle id="__Archives_Title" title="Archives" subTitle="Advanced search" icon="FilterSolid" />
             </Column>
             <Column sm="6" right>
-              <Text right>
+              <Text size="large" right>
                 {!tableMeta.loading && tableMeta.count !== null && (
                   <Text>{tableMeta.count > 0 ? `${tableMeta.count} results found` : 'No results found'}</Text>
                 )}

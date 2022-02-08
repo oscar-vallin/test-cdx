@@ -249,7 +249,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
     <PanelHeader>
       <Column lg="6">
         <Stack horizontal styles={{ root: { height: 44 } }}>
-          <PanelTitle id="__UserUpdate_Panel_Title" variant="bold">
+          <PanelTitle id="__UserUpdate_Panel_Title" variant="bold" size="large">
             {userName()}
             {useUpdateUserPanel.userAccountForm.active?.value ? (
               <ActiveIcon iconName="CompletedSolid" title="Active" />

@@ -236,7 +236,7 @@ const CreatePoliciesPanel = ({
     <PanelHeader>
       <Column lg="12">
         <Stack horizontal styles={{ root: { height: 44 } }}>
-          <PanelTitle id="__CreatePolicy_Panel_Title" variant="bold">
+          <PanelTitle id="__CreatePolicy_Panel_Title" variant="bold" size="large">
             {!selectedPolicyId ? 'New access policy' : 'Update access policy'}
           </PanelTitle>
         </Stack>

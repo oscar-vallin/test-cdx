@@ -375,7 +375,7 @@ const CreateAccessSpecializationPanel = ({
     <PanelHeader id="__PanelHeader">
       <Column lg="12">
         <Stack horizontal styles={{ root: { height: 44 } }}>
-          <PanelTitle id="__CreateSpec_Panel_Title" variant="bold">
+          <PanelTitle id="__CreateSpec_Panel_Title" variant="bold" size="large">
             {!selectedAccessId ? 'New Access Specialization' : 'Update Access Specialization'}
           </PanelTitle>
         </Stack>

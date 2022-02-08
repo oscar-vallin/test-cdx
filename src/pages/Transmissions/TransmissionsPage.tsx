@@ -76,7 +76,7 @@ const _TransmissionsPage = () => {
               />
             </Column>
             <Column sm="6" right>
-              <Text right>
+              <Text size="large" right>
                 {renderDownloadLink()}
                 {renderTotalRecords()}
               </Text>
