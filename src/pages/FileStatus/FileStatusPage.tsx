@@ -94,7 +94,7 @@ const _FileStatusPage = () => {
         cols={[
           WorkPacketColumns.TIMESTAMP,
           WorkPacketColumns.VENDOR,
-          WorkPacketColumns.PLAN_SPONSOR,
+          WorkPacketColumns.ORG_ID,
           WorkPacketColumns.INBOUND_FILENAME,
           WorkPacketColumns.PACKET_STATUS,
           WorkPacketColumns.PROGRESS,

@@ -2200,6 +2200,7 @@ export type WpProcessError = {
   inboundFilename?: Maybe<Scalars['String']>;
   clientFileArchivePath?: Maybe<Scalars['String']>;
   environment?: Maybe<Environment>;
+  commands?: Maybe<Array<Maybe<WorkPacketCommand>>>;
 };
 
 export type WpProcessErrorConnection = {
@@ -2225,6 +2226,7 @@ export type WpTransmission = {
   extractType?: Maybe<Scalars['String']>;
   extractVersion?: Maybe<Scalars['String']>;
   environment?: Maybe<Environment>;
+  commands?: Maybe<Array<Maybe<WorkPacketCommand>>>;
 };
 
 export type WpTransmissionConnection = {
@@ -2285,6 +2287,7 @@ export type WorkPacketCommand = {
 };
 
 export enum WorkPacketCommandType {
+  ViewDetails = 'VIEW_DETAILS',
   DownloadFile = 'DOWNLOAD_FILE',
   RerunStep = 'RERUN_STEP',
   Continue = 'CONTINUE',
@@ -2299,13 +2302,9 @@ export type WorkPacketStatus = {
   __typename?: 'WorkPacketStatus';
   workOrderId: Scalars['String'];
   timestamp: Scalars['DateTime'];
-  /** @deprecated Field no longer supported */
-  planSponsorId?: Maybe<Scalars['String']>;
   orgId?: Maybe<Scalars['String']>;
   orgSid: Scalars['ID'];
   detailsPath?: Maybe<Scalars['String']>;
-  /** @deprecated Field no longer supported */
-  subClientPath?: Maybe<Scalars['String']>;
   inboundFilename: Scalars['String'];
   vendorId?: Maybe<Scalars['String']>;
   vendorSid: Scalars['ID'];
@@ -2331,6 +2330,7 @@ export type WorkPacketStatus = {
   archiveOnly?: Maybe<Scalars['Boolean']>;
   hasErrors?: Maybe<Scalars['Boolean']>;
   environment?: Maybe<Environment>;
+  commands?: Maybe<Array<Maybe<WorkPacketCommand>>>;
 };
 
 export type WorkPacketStatusConnection = {
@@ -2343,6 +2343,7 @@ export type WorkPacketStatusDetails = {
   __typename?: 'WorkPacketStatusDetails';
   workOrderId: Scalars['String'];
   inboundFilename: Scalars['String'];
+  timestamp: Scalars['DateTime'];
   orgSid: Scalars['ID'];
   orgId?: Maybe<Scalars['String']>;
   orgName?: Maybe<Scalars['String']>;
@@ -2718,7 +2719,7 @@ export type WorkPacketStatusDetailsQuery = (
   { __typename?: 'Query' }
   & { workPacketStatusDetails?: Maybe<(
     { __typename?: 'WorkPacketStatusDetails' }
-    & Pick<WorkPacketStatusDetails, 'workOrderId' | 'inboundFilename' | 'orgSid' | 'orgId' | 'orgName' | 'vendorSid' | 'vendorId' | 'vendorName' | 'specId' | 'specImplName' | 'fingerPrint' | 'populationCount' | 'suppressBilling' | 'packetStatus' | 'inboundLabel' | 'outboundLabel' | 'clientFileArchivePath' | 'vendorFileArchivePath' | 'supplementalFilesArchivePaths'>
+    & Pick<WorkPacketStatusDetails, 'workOrderId' | 'inboundFilename' | 'timestamp' | 'orgSid' | 'orgId' | 'orgName' | 'vendorSid' | 'vendorId' | 'vendorName' | 'specId' | 'specImplName' | 'fingerPrint' | 'populationCount' | 'suppressBilling' | 'packetStatus' | 'inboundLabel' | 'outboundLabel' | 'clientFileArchivePath' | 'vendorFileArchivePath' | 'supplementalFilesArchivePaths'>
     & { deliveredFiles?: Maybe<Array<Maybe<(
       { __typename?: 'DeliveredFile' }
       & Pick<DeliveredFile, 'filename' | 'fileSizeInBytes' | 'textSizeInBytes' | 'timeDelivered'>
@@ -2828,7 +2829,11 @@ export type WorkPacketStatusQuery = (
   { __typename?: 'Query' }
   & { workPacketStatus?: Maybe<(
     { __typename?: 'WorkPacketStatus' }
-    & Pick<WorkPacketStatus, 'workOrderId' | 'timestamp' | 'planSponsorId' | 'orgId' | 'orgSid' | 'detailsPath' | 'subClientPath' | 'inboundFilename' | 'vendorId' | 'vendorSid' | 'step' | 'stepStatus' | 'packetStatus' | 'reprocessedBy' | 'restartReason' | 'recordHighlightCount' | 'populationCount' | 'recordHighlightType' | 'clientFileArchivePath' | 'vendorFileArchivePath' | 'feedType' | 'inboundDataType' | 'inboundDataSize' | 'version' | 'supplementalFilesArchivePaths' | 'archiveOnly' | 'hasErrors' | 'environment'>
+    & Pick<WorkPacketStatus, 'workOrderId' | 'timestamp' | 'orgId' | 'orgSid' | 'detailsPath' | 'inboundFilename' | 'vendorId' | 'vendorSid' | 'step' | 'stepStatus' | 'packetStatus' | 'reprocessedBy' | 'restartReason' | 'recordHighlightCount' | 'populationCount' | 'recordHighlightType' | 'clientFileArchivePath' | 'vendorFileArchivePath' | 'feedType' | 'inboundDataType' | 'inboundDataSize' | 'version' | 'supplementalFilesArchivePaths' | 'archiveOnly' | 'hasErrors' | 'environment'>
+    & { commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WorkPacketCommand' }
+      & FragmentWorkPacketCommandFragment
+    )>>> }
   )> }
 );
 
@@ -2849,7 +2854,11 @@ export type WorkPacketStatusesQuery = (
       & FragmentPaginationInfoFragment
     ), nodes?: Maybe<Array<Maybe<(
       { __typename?: 'WorkPacketStatus' }
-      & Pick<WorkPacketStatus, 'workOrderId' | 'timestamp' | 'planSponsorId' | 'orgId' | 'orgSid' | 'detailsPath' | 'subClientPath' | 'inboundFilename' | 'vendorId' | 'vendorSid' | 'step' | 'stepStatus' | 'packetStatus' | 'reprocessedBy' | 'restartReason' | 'recordHighlightCount' | 'populationCount' | 'recordHighlightType' | 'clientFileArchivePath' | 'vendorFileArchivePath' | 'feedType' | 'inboundDataType' | 'inboundDataSize' | 'version' | 'supplementalFilesArchivePaths' | 'archiveOnly' | 'hasErrors' | 'environment'>
+      & Pick<WorkPacketStatus, 'workOrderId' | 'timestamp' | 'orgId' | 'orgSid' | 'detailsPath' | 'inboundFilename' | 'vendorId' | 'vendorSid' | 'step' | 'stepStatus' | 'packetStatus' | 'reprocessedBy' | 'restartReason' | 'recordHighlightCount' | 'populationCount' | 'recordHighlightType' | 'clientFileArchivePath' | 'vendorFileArchivePath' | 'feedType' | 'inboundDataType' | 'inboundDataSize' | 'version' | 'supplementalFilesArchivePaths' | 'archiveOnly' | 'hasErrors' | 'environment'>
+      & { commands?: Maybe<Array<Maybe<(
+        { __typename?: 'WorkPacketCommand' }
+        & FragmentWorkPacketCommandFragment
+      )>>> }
     )>>> }
   )> }
 );
@@ -2885,6 +2894,10 @@ export type WpProcessErrorsQuery = (
     ), nodes?: Maybe<Array<Maybe<(
       { __typename?: 'WPProcessError' }
       & Pick<WpProcessError, 'id' | 'workOrderId' | 'startTime' | 'stepName' | 'planSponsorId' | 'vendorId' | 'msg' | 'inboundFilename' | 'clientFileArchivePath' | 'environment'>
+      & { commands?: Maybe<Array<Maybe<(
+        { __typename?: 'WorkPacketCommand' }
+        & FragmentWorkPacketCommandFragment
+      )>>> }
     )>>> }
   )> }
 );
@@ -2907,6 +2920,10 @@ export type WpTransmissionsQuery = (
     ), nodes?: Maybe<Array<Maybe<(
       { __typename?: 'WPTransmission' }
       & Pick<WpTransmission, 'id' | 'workOrderId' | 'deliveredOn' | 'planSponsorId' | 'vendorId' | 'specId' | 'implementation' | 'inboundFilename' | 'outboundFilename' | 'outboundFilesize' | 'billingCount' | 'totalRecords' | 'extractType' | 'extractVersion' | 'environment'>
+      & { commands?: Maybe<Array<Maybe<(
+        { __typename?: 'WorkPacketCommand' }
+        & FragmentWorkPacketCommandFragment
+      )>>> }
     )>>> }
   )> }
 );
@@ -5929,6 +5946,7 @@ export const WorkPacketStatusDetailsDocument = gql`
   workPacketStatusDetails(orgSid: $orgSid, workOrderId: $workOrderId) {
     workOrderId
     inboundFilename
+    timestamp
     orgSid
     orgId
     orgName
@@ -6094,11 +6112,9 @@ export const WorkPacketStatusDocument = gql`
   workPacketStatus(orgSid: $orgSid, workOrderId: $workOrderId) {
     workOrderId
     timestamp
-    planSponsorId
     orgId
     orgSid
     detailsPath
-    subClientPath
     inboundFilename
     vendorId
     vendorSid
@@ -6120,9 +6136,12 @@ export const WorkPacketStatusDocument = gql`
     archiveOnly
     hasErrors
     environment
+    commands {
+      ...fragmentWorkPacketCommand
+    }
   }
 }
-    `;
+    ${FragmentWorkPacketCommandFragmentDoc}`;
 
 /**
  * __useWorkPacketStatusQuery__
@@ -6164,11 +6183,9 @@ export const WorkPacketStatusesDocument = gql`
     nodes {
       workOrderId
       timestamp
-      planSponsorId
       orgId
       orgSid
       detailsPath
-      subClientPath
       inboundFilename
       vendorId
       vendorSid
@@ -6190,10 +6207,14 @@ export const WorkPacketStatusesDocument = gql`
       archiveOnly
       hasErrors
       environment
+      commands {
+        ...fragmentWorkPacketCommand
+      }
     }
   }
 }
-    ${FragmentPaginationInfoFragmentDoc}`;
+    ${FragmentPaginationInfoFragmentDoc}
+${FragmentWorkPacketCommandFragmentDoc}`;
 
 /**
  * __useWorkPacketStatusesQuery__
@@ -6284,10 +6305,14 @@ export const WpProcessErrorsDocument = gql`
       inboundFilename
       clientFileArchivePath
       environment
+      commands {
+        ...fragmentWorkPacketCommand
+      }
     }
   }
 }
-    ${FragmentPaginationInfoFragmentDoc}`;
+    ${FragmentPaginationInfoFragmentDoc}
+${FragmentWorkPacketCommandFragmentDoc}`;
 
 /**
  * __useWpProcessErrorsQuery__
@@ -6344,10 +6369,14 @@ export const WpTransmissionsDocument = gql`
       extractType
       extractVersion
       environment
+      commands {
+        ...fragmentWorkPacketCommand
+      }
     }
   }
 }
-    ${FragmentPaginationInfoFragmentDoc}`;
+    ${FragmentPaginationInfoFragmentDoc}
+${FragmentWorkPacketCommandFragmentDoc}`;
 
 /**
  * __useWpTransmissionsQuery__

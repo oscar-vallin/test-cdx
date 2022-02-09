@@ -61,7 +61,7 @@ const _ArchivePage = () => {
         cols={[
           WorkPacketColumns.TIMESTAMP,
           WorkPacketColumns.VENDOR,
-          WorkPacketColumns.PLAN_SPONSOR,
+          WorkPacketColumns.ORG_ID,
           WorkPacketColumns.CLIENT_FILE,
           WorkPacketColumns.VENDOR_FILE,
         ]}
