@@ -48,17 +48,27 @@ const CDXTimeline = ({ packet, activeIndex = 0, onClick }: CDXTimelineProps): Re
   const redoCommand = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.RerunStep);
   const downloadCommand = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.DownloadFile);
 
-  const getStatusIcon = (status) => {
+  const isComplete = (workStepStatus?: WorkStepStatus | null): boolean => {
+    const stepStatus = workStepStatus?.stepStatus?.toUpperCase();
+    if (!stepStatus) {
+      // Assume no status means it's done
+      return true;
+    }
+    return stepStatus == 'DONE' || stepStatus == 'COMPLETE';
+  }
+
+  const getStatusIcon = (status: string) => {
     const ICONS = {
+      COMPLETE: <FontIcon iconName="CompletedSolid" style={{fontSize: 32}}/>,
       DONE: <FontIcon iconName="CompletedSolid" style={{fontSize: 32}}/>,
       PROGRESS: <Spinner size="md" />,
     };
 
-    return ICONS[status];
+    return ICONS[status.toUpperCase()];
   };
 
   const renderRedo = (item?: WorkStepStatus | null) => {
-    if ((!item?.stepStatus || item?.stepStatus == 'DONE') && redoCommand) {
+    if (isComplete(item) && redoCommand) {
       return (
         <Spacing margin={{top: 'normal'}}>
           <PrimaryButton onClick={() => null} iconProps={
