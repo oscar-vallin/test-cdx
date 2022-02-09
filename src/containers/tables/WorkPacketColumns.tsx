@@ -1,7 +1,14 @@
 import React from 'react';
 import { IColumn, Link } from '@fluentui/react';
 import { format } from 'date-fns';
-import { WorkPacketStatus, WpProcessError, WpTransmission } from 'src/data/services/graphql';
+import {
+  Maybe, Scalars,
+  WorkPacketCommand,
+  WorkPacketCommandType,
+  WorkPacketStatus,
+  WpProcessError,
+  WpTransmission
+} from 'src/data/services/graphql';
 import { CellItemRow, RouteLink, StyledCell } from 'src/components/tables/Table/Table.styles';
 import { HighlightCounter } from 'src/components/badges/HighlightCounter';
 import { getStepStatusLabel } from 'src/data/constants/FileStatusConstants';
@@ -12,7 +19,27 @@ export const useWorkPacketColumns = (
   selectedColumns: WorkPacketColumns[],
   onSort?: (ev: React.MouseEvent<HTMLElement>, column: IColumn) => void
 ) => {
-  const { startDate, endDate } = useOrgSid();
+  const {startDate, endDate} = useOrgSid();
+
+  const graphQLUrl = process.env.REACT_APP_API_SERVER;
+  const serverUrl = graphQLUrl?.replace('/graphql', '') ?? '';
+
+  const renderDownloadLink = (workOrderId?: string, commands?: Maybe<Array<Maybe<WorkPacketCommand>>> | undefined, filePath?: Maybe<Scalars["String"]> | undefined) => {
+
+    const idx = filePath?.lastIndexOf('/') ?? -1;
+    const fileName = filePath?.substring(idx + 1);
+    if (commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.DownloadFile)) {
+      return (
+        <CellItemRow>
+          <Link href={`${serverUrl}k/archive/download?workOrderID=${workOrderId}&s3Key=${filePath}`} target="_new">
+            {fileName}
+          </Link>
+        </CellItemRow>
+      );
+    } else {
+      return <span>{fileName}</span>;
+    }
+  };
 
   const columnOptions: IColumn[] = [
     {
@@ -21,7 +48,7 @@ export const useWorkPacketColumns = (
       className: 'Datetime',
       targetWidthProportion: 1,
       minWidth: 140,
-      maxWidth: 150,
+      maxWidth: 180,
       fieldName: 'timestamp',
       isSorted: true,
       isSortedDescending: true,
@@ -31,22 +58,40 @@ export const useWorkPacketColumns = (
       onColumnClick: onSort,
       onRender: (item: WorkPacketStatus) => {
         const timestamp = format(new Date(item.timestamp), 'MM/dd/yyyy hh:mm a');
-        return (
-          <CellItemRow>
-            <Link>
-              <RouteLink to={`/file-status/${item.workOrderId}?orgSid=${item.orgSid}&startDate=${startDate}&endDate=${endDate}`}>{timestamp}</RouteLink>
-            </Link>
-            {item.recordHighlightCount && (
-              <HighlightCounter
-                id={`__FileStatus_Highlight_Counter_${item.workOrderId}`}
-                type={item.recordHighlightType}
-                href={`/file-status/${item.workOrderId}?orgSid=${item.orgSid}&startDate=${startDate}&endDate=${endDate}*#quality`}
-              >
-                {item.recordHighlightCount}
-              </HighlightCounter>
-            )}
-          </CellItemRow>
-        );
+        if (item.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.ViewDetails)) {
+          return (
+            <CellItemRow>
+              <Link>
+                <RouteLink
+                  to={`/file-status/${item.workOrderId}?orgSid=${item.orgSid}&startDate=${startDate}&endDate=${endDate}`}>{timestamp}</RouteLink>
+              </Link>
+              {item.recordHighlightCount && (
+                <HighlightCounter
+                  id={`__FileStatus_Highlight_Counter_${item.workOrderId}`}
+                  type={item.recordHighlightType}
+                  href={`/file-status/${item.workOrderId}?orgSid=${item.orgSid}&startDate=${startDate}&endDate=${endDate}*#quality`}
+                >
+                  {item.recordHighlightCount}
+                </HighlightCounter>
+              )}
+            </CellItemRow>
+          );
+        } else {
+          return (
+            <CellItemRow>
+              <span>{timestamp}</span>
+              {item.recordHighlightCount && (
+                <HighlightCounter
+                  id={`__FileStatus_Highlight_Counter_${item.workOrderId}`}
+                  type={item.recordHighlightType}
+                >
+                  {item.recordHighlightCount}
+                </HighlightCounter>
+              )}
+            </CellItemRow>
+          );
+
+        }
       },
     },
     {
@@ -65,7 +110,16 @@ export const useWorkPacketColumns = (
       onColumnClick: onSort,
       onRender: (item: WpTransmission) => {
         const timestamp = format(new Date(item.deliveredOn), 'MM/dd/yyyy hh:mm a');
-        return <span>{timestamp}</span>;
+        if (item.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.ViewDetails)) {
+          return (
+            <Link>
+              <RouteLink
+                to={`/file-status/${item.workOrderId}?orgSid=${item.orgSid}&startDate=${startDate}&endDate=${endDate}`}>{timestamp}</RouteLink>
+            </Link>
+          );
+        } else {
+          return <span>{timestamp}</span>;
+        }
       },
     },
     {
@@ -84,7 +138,16 @@ export const useWorkPacketColumns = (
       onColumnClick: onSort,
       onRender: (item: WpProcessError) => {
         const timestamp = format(new Date(item.startTime), 'MM/dd/yyyy hh:mm a');
-        return <span>{timestamp}</span>;
+        if (item.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.ViewDetails)) {
+          return (
+            <Link>
+              <RouteLink
+                to={`/file-status/${item.workOrderId}?orgSid=${item.orgSid}&startDate=${startDate}&endDate=${endDate}`}>{timestamp}</RouteLink>
+            </Link>
+          );
+        } else {
+          return <span>{timestamp}</span>;
+        }
       },
     },
     {
@@ -246,7 +309,7 @@ export const useWorkPacketColumns = (
       onRender: (item: WorkPacketStatus) => {
         return (
           <StyledCell id={`__Progress_${item.workOrderId}`}>
-            <FileProgress step={item.step} stepStatus={item.stepStatus} />
+            <FileProgress step={item.step} stepStatus={item.stepStatus}/>
           </StyledCell>
         );
       },
@@ -264,18 +327,7 @@ export const useWorkPacketColumns = (
       sortDescendingAriaLabel: 'Sorted Z to A',
       data: WorkPacketColumns.CLIENT_FILE,
       onColumnClick: onSort,
-      onRender: (item: WorkPacketStatus) => {
-        const idx = item.clientFileArchivePath?.lastIndexOf('/') ?? -1;
-        return (
-          <CellItemRow>
-            <Link>
-              <RouteLink to={`${item.clientFileArchivePath}`}>
-                {item.clientFileArchivePath?.substring(idx + 1)}
-              </RouteLink>
-            </Link>
-          </CellItemRow>
-        );
-      },
+      onRender: (item: WorkPacketStatus) => renderDownloadLink(item.workOrderId, item.commands, item.clientFileArchivePath),
     },
     {
       key: 'vendorFileArchivePath',
@@ -290,18 +342,7 @@ export const useWorkPacketColumns = (
       sortDescendingAriaLabel: 'Sorted Z to A',
       data: WorkPacketColumns.VENDOR_FILE,
       onColumnClick: onSort,
-      onRender: (item: WorkPacketStatus) => {
-        const idx = item.vendorFileArchivePath?.lastIndexOf('/') ?? -1;
-        return (
-          <CellItemRow>
-            <Link>
-              <RouteLink to={`${item.vendorFileArchivePath}`}>
-                {item.vendorFileArchivePath?.substring(idx + 1)}
-              </RouteLink>
-            </Link>
-          </CellItemRow>
-        );
-      },
+      onRender: (item: WorkPacketStatus) => renderDownloadLink(item.workOrderId, item.commands, item.vendorFileArchivePath),
     },
     {
       key: 'totalRecords',

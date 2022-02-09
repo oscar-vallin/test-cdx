@@ -9,7 +9,7 @@ import { ArchivePage } from './Archives';
 import { SchedulePage } from './Schedule';
 import { TransmissionsPage } from './Transmissions';
 import { ErrorsPage } from './Errors';
-import { PageNotFound } from './ErrorHandling';
+import { AccessDenied, PageNotFound } from './ErrorHandling';
 import { FileStatusPage } from './FileStatus';
 import { FileStatusDetailsPage } from './FileStatusDetails';
 import { ActiveOrgsPage } from './Admin/Organizations';
@@ -105,6 +105,12 @@ export const Routes = () => {
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_PASSWORD_RULES.URL}>
         <PasswordRulesPage />
+      </AuthRoute>
+      <AuthRoute path={ROUTES.ROUTE_PAGE_NOT_FOUND.URL}>
+        <PageNotFound />
+      </AuthRoute>
+      <AuthRoute path={ROUTES.ROUTE_UNAUTHORIZED.URL}>
+        <AccessDenied/>
       </AuthRoute>
       <AuthRoute>
         <PageNotFound />

@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { ErrorSeverity, Maybe } from '../../../data/services/graphql';
+import { ErrorSeverity, Maybe } from 'src/data/services/graphql';
 
-export const StyledContainer = styled.div<StyledContainerProps>`
+export const HighlightBubble = styled.div<StyledContainerProps>`
   display: flex;
   justify-content: center;
   align-items: center;

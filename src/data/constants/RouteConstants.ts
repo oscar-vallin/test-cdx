@@ -22,6 +22,8 @@ export const ROUTES_ID = {
   IMPL_DEPLOY: 'implementation-deploy',
   PASSWORD_RULES: 'password-rules',
   PASSWORD_RESET: 'password-reset',
+  PAGE_NOT_FOUND: 'page-not-found',
+  UNAUTHORIZED: 'unauthorized',
 };
 
 export const URL_ROUTES = {
@@ -49,6 +51,8 @@ export const URL_ROUTES = {
   IMPL_DEPLOY: `/${ROUTES_ID.IMPL_DEPLOY}`,
   PASSWORD_RULES: `/${ROUTES_ID.PASSWORD_RULES}`,
   PASSWORD_RESET: `/ua/${ROUTES_ID.PASSWORD_RESET}/:token`,
+  PAGE_NOT_FOUND: `/${ROUTES_ID.PAGE_NOT_FOUND}`,
+  UNAUTHORIZED: `/${ROUTES_ID.UNAUTHORIZED}`,
 };
 
 type RouteType = {
@@ -251,6 +255,22 @@ export const ROUTE_PASSWORD_RESET: RouteType = {
   API_ID: 'N/A',
 };
 
+export const ROUTE_PAGE_NOT_FOUND: RouteType = {
+  ID: ROUTES_ID.PAGE_NOT_FOUND,
+  TITLE: 'Page not found',
+  URL: URL_ROUTES.PAGE_NOT_FOUND,
+  MAIN_MENU: false,
+  API_ID: 'N/A',
+};
+
+export const ROUTE_UNAUTHORIZED: RouteType = {
+  ID: ROUTES_ID.UNAUTHORIZED,
+  TITLE: 'Not authorized',
+  URL: URL_ROUTES.UNAUTHORIZED,
+  MAIN_MENU: false,
+  API_ID: 'N/A',
+};
+
 export const ROUTES = {
   ROUTE_HOME,
   ROUTE_LOGIN,
@@ -276,6 +296,8 @@ export const ROUTES = {
   ROUTE_IMPL_DEPLOY,
   ROUTE_PASSWORD_RULES,
   ROUTE_PASSWORD_RESET,
+  ROUTE_PAGE_NOT_FOUND,
+  ROUTE_UNAUTHORIZED,
 };
 
 export const ROUTES_ARRAY: RouteType[] = [
@@ -302,7 +324,6 @@ export const ROUTES_ARRAY: RouteType[] = [
   ROUTE_FTP_TEST,
   ROUTE_IMPL_DEPLOY,
   ROUTE_PASSWORD_RULES,
-  ROUTE_PASSWORD_RESET,
 ];
 
 export const getRouteByApiId = (_apiId) => {

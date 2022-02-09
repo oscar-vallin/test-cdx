@@ -2194,7 +2194,9 @@ export type WpProcessError = {
   workOrderId: Scalars['String'];
   startTime: Scalars['DateTime'];
   stepName?: Maybe<Scalars['String']>;
+  orgSid?: Maybe<Scalars['ID']>;
   planSponsorId?: Maybe<Scalars['String']>;
+  vendorSid?: Maybe<Scalars['ID']>;
   vendorId?: Maybe<Scalars['String']>;
   msg?: Maybe<Scalars['String']>;
   inboundFilename?: Maybe<Scalars['String']>;
@@ -2214,7 +2216,9 @@ export type WpTransmission = {
   id: Scalars['ID'];
   workOrderId: Scalars['String'];
   deliveredOn: Scalars['DateTime'];
+  orgSid?: Maybe<Scalars['ID']>;
   planSponsorId?: Maybe<Scalars['String']>;
+  vendorSid?: Maybe<Scalars['ID']>;
   vendorId?: Maybe<Scalars['String']>;
   specId?: Maybe<Scalars['String']>;
   implementation?: Maybe<Scalars['String']>;
@@ -2893,7 +2897,7 @@ export type WpProcessErrorsQuery = (
       & FragmentPaginationInfoFragment
     ), nodes?: Maybe<Array<Maybe<(
       { __typename?: 'WPProcessError' }
-      & Pick<WpProcessError, 'id' | 'workOrderId' | 'startTime' | 'stepName' | 'planSponsorId' | 'vendorId' | 'msg' | 'inboundFilename' | 'clientFileArchivePath' | 'environment'>
+      & Pick<WpProcessError, 'id' | 'workOrderId' | 'startTime' | 'stepName' | 'orgSid' | 'planSponsorId' | 'vendorSid' | 'vendorId' | 'msg' | 'inboundFilename' | 'clientFileArchivePath' | 'environment'>
       & { commands?: Maybe<Array<Maybe<(
         { __typename?: 'WorkPacketCommand' }
         & FragmentWorkPacketCommandFragment
@@ -2919,7 +2923,7 @@ export type WpTransmissionsQuery = (
       & FragmentPaginationInfoFragment
     ), nodes?: Maybe<Array<Maybe<(
       { __typename?: 'WPTransmission' }
-      & Pick<WpTransmission, 'id' | 'workOrderId' | 'deliveredOn' | 'planSponsorId' | 'vendorId' | 'specId' | 'implementation' | 'inboundFilename' | 'outboundFilename' | 'outboundFilesize' | 'billingCount' | 'totalRecords' | 'extractType' | 'extractVersion' | 'environment'>
+      & Pick<WpTransmission, 'id' | 'workOrderId' | 'deliveredOn' | 'orgSid' | 'planSponsorId' | 'vendorSid' | 'vendorId' | 'specId' | 'implementation' | 'inboundFilename' | 'outboundFilename' | 'outboundFilesize' | 'billingCount' | 'totalRecords' | 'extractType' | 'extractVersion' | 'environment'>
       & { commands?: Maybe<Array<Maybe<(
         { __typename?: 'WorkPacketCommand' }
         & FragmentWorkPacketCommandFragment
@@ -6299,7 +6303,9 @@ export const WpProcessErrorsDocument = gql`
       workOrderId
       startTime
       stepName
+      orgSid
       planSponsorId
+      vendorSid
       vendorId
       msg
       inboundFilename
@@ -6357,7 +6363,9 @@ export const WpTransmissionsDocument = gql`
       id
       workOrderId
       deliveredOn
+      orgSid
       planSponsorId
+      vendorSid
       vendorId
       specId
       implementation

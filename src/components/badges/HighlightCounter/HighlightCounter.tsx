@@ -1,12 +1,7 @@
 import { ReactElement } from 'react';
 
-import { StyledContainer, StyledLink } from './HighlightCounter.styles';
-import { ErrorSeverity, Maybe } from '../../../data/services/graphql';
-
-const defaultProps = {
-  id: '',
-  href: '#',
-};
+import { HighlightBubble, StyledLink } from './HighlightCounter.styles';
+import { ErrorSeverity, Maybe } from 'src/data/services/graphql';
 
 type HighlightCounterProps = {
   id: string;
@@ -14,18 +9,24 @@ type HighlightCounterProps = {
   href?: string;
   theme?: object;
   children?: ReactElement | any;
-} & typeof defaultProps;
-
-const HighlightCounter = ({ id, type, href, children, ...props }: HighlightCounterProps): ReactElement => {
-  return (
-    <StyledContainer id={id} type={type} {...props}>
-      <StyledLink to={href} {...props}>
-        {children}
-      </StyledLink>
-    </StyledContainer>
-  );
 };
 
-HighlightCounter.defaultProps = defaultProps;
+const HighlightCounter = ({ id, type, href, children, ...props }: HighlightCounterProps): ReactElement => {
+  if (href) {
+    return (
+      <HighlightBubble id={id} type={type} {...props}>
+        <StyledLink to={href} {...props}>
+          {children}
+        </StyledLink>
+      </HighlightBubble>
+    );
+  } else {
+    return (
+      <HighlightBubble id={id} type={type} {...props}>
+        {children}
+      </HighlightBubble>
+    );
+  }
+};
 
 export { HighlightCounter };
