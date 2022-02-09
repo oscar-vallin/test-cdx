@@ -15,7 +15,7 @@ export default class PuppetExchangeStatus extends PuppetBasePage {
 
   vendorCol = 'div[data-item-key="vendorId"]';
 
-  sponsorCol = 'div[data-item-key="planSponsorId"]';
+  sponsorCol = 'div[data-item-key="orgId"]';
 
   fileNameCol = 'div[data-item-key="inboundFilename"]';
 
