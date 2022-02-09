@@ -1,9 +1,12 @@
 import { WorkPacketCommandType, WorkPacketStatusDetails } from 'src/data/services/graphql';
 import { Badge } from 'src/components/badges/Badge';
 import React, { ReactElement } from 'react';
-import { FontIcon, Link, Stack } from '@fluentui/react';
+import { FontIcon, Link } from '@fluentui/react';
 import { Text } from 'src/components/typography';
 import { theme } from 'src/styles/themes/theme';
+import { Column } from 'src/components/layouts';
+import { FormRow } from 'src/components/layouts/Row/Row.styles';
+import { Spacing } from 'src/components/spacings/Spacing';
 
 type ArchivesTabType = {
   packet?: WorkPacketStatusDetails;
@@ -41,22 +44,20 @@ export const ArchivesTab = ({packet}: ArchivesTabType) => {
   const renderRow = (fileLabel: string, fileVariant: string, fullPath?: string | null, key?: string) => {
     if (packet?.workOrderId && fullPath) {
       return (
-        <Stack.Item key={key}>
-          <Stack horizontal wrap={true}>
-            <Stack.Item grow align="center">
-              {renderDownloadLink(packet?.workOrderId, fullPath, fullPath.split('/').pop())}
-            </Stack.Item>
-            <Stack.Item disableShrink align="center">
-              <Badge variant={fileVariant} label={fileLabel} pill/>
-            </Stack.Item>
-          </Stack>
-        </Stack.Item>
+        <FormRow key={key}>
+          <Column md="12" lg="8">
+            {renderDownloadLink(packet?.workOrderId, fullPath, fullPath.split('/').pop())}
+          </Column>
+          <Column md="12" lg="4" right={true}>
+            <Badge variant={fileVariant} label={fileLabel} pill/>
+          </Column>
+        </FormRow>
       );
     }
   };
 
   return (
-    <Stack tokens={{childrenGap: 10, padding: 10}}>
+    <Spacing padding="normal">
       {renderRow('Client file', 'primary', packet?.clientFileArchivePath)}
       {packet?.supplementalFilesArchivePaths?.map((itm, index) =>
         renderRow('Supplemental', 'primary', itm, `supp_${index}`)
@@ -70,6 +71,6 @@ export const ArchivesTab = ({packet}: ArchivesTabType) => {
         )
       ))}
       {renderRow('Sent to Vendor', 'success', packet?.vendorFileArchivePath)}
-    </Stack>
+    </Spacing>
   );
 };
