@@ -86,15 +86,11 @@ const FileStatusDetailsPage = () => {
     if (d && (d.getTime() === d.getTime())) {
       return format(d, 'MM/dd/yyyy hh:mm a');
     }
-    return '';
+    return 'N/A';
   };
 
   const renderReceivedDate = (): string => {
-    const lowestDate = Math.min.apply(packet?.deliveredFiles?.map((f) => f?.timeDelivered));
-    if (lowestDate > 0 && lowestDate != Infinity) {
-      return `Received at ${formatDate(new Date(lowestDate))}`;
-    }
-    return '';
+    return `Received on ${formatDate(new Date(packet?.timestamp))}`;
   };
 
   const getBadgeVariant = (packetStatus?: WorkStatus): string => {
@@ -200,7 +196,7 @@ const FileStatusDetailsPage = () => {
               <Stack.Item>
                 <Text size="small" variant="muted">Delivered Vendor File Details</Text>
                 <LabelValue label="Filename" value={deliveredFile?.filename ?? 'File not found'}/>
-                <LabelValue label="Delivered at" value={deliveredFile?.timeDelivered}/>
+                <LabelValue label="Delivered on" value={formatDate(new Date(deliveredFile?.timeDelivered))}/>
                 <LabelValue label="Size" value={`${deliveredFile?.fileSizeInBytes} bytes (without encryption)`}/>
               </Stack.Item>
               <Stack.Item>
