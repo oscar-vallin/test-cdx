@@ -27,7 +27,8 @@ import { PageTitle } from 'src/components/typography';
 import {
   useAccessPolicyTemplatesLazyQuery,
   useAccessPoliciesForOrgLazyQuery,
-  useDeleteAccessPolicyMutation, AccessPolicyForm, AccessPolicy,
+  useDeleteAccessPolicyMutation,
+  AccessPolicy,
 } from 'src/data/services/graphql';
 
 import { useOrgSid } from 'src/hooks/useOrgSid';
@@ -82,6 +83,20 @@ const _AccessManagementPoliciesPage = () => {
     setSelectedPolicyId(null);
   };
 
+  const fetchData = () => {
+    accessPoliciesForOrg({
+      variables: {
+        orgSid,
+      },
+    });
+
+    fetchTemplatePolicies({
+      variables: {
+        orgSid,
+      },
+    });
+  };
+
   const onRenderItemColumn = (item?: AccessPolicy, index?: number, column?: IColumn) => {
     const key = column?.key ?? '';
     switch (key) {
@@ -122,17 +137,7 @@ const _AccessManagementPoliciesPage = () => {
   };
 
   useEffect(() => {
-    accessPoliciesForOrg({
-      variables: {
-        orgSid,
-      },
-    });
-
-    fetchTemplatePolicies({
-      variables: {
-        orgSid,
-      },
-    });
+    fetchData();
   }, [orgSid]);
 
   useEffect(() => {
@@ -181,15 +186,6 @@ const _AccessManagementPoliciesPage = () => {
       setPolicies(data.accessPoliciesForOrg.nodes);
     }
   }, [data]);
-
-  const createPolicyObj = (policy?: AccessPolicyForm) => ({
-    sid: policy?.sid,
-    name: policy?.name?.value,
-    tmpl: policy?.tmpl?.value,
-    tmplUseAsIs: policy?.tmplUseAsIs?.value,
-    permissions: policy?.permissions?.value,
-    applicableOrgTypes: policy?.applicableOrgTypes?.value,
-  });
 
   const createPolicyButton = () => {
     return (
@@ -264,18 +260,8 @@ const _AccessManagementPoliciesPage = () => {
 
         <CreatePoliciesPanel
           isOpen={isPanelOpen}
-          onCreatePolicy={(newPolicy) => setPolicies([...policies, createPolicyObj(newPolicy)])}
-          onUpdatePolicy={(updatedPolicy) => {
-            setPolicies(
-              policies.map((policy) => {
-                if (policy.sid !== updatedPolicy.sid) {
-                  return policy;
-                }
-
-                return createPolicyObj(updatedPolicy);
-              })
-            );
-          }}
+          onCreatePolicy={() => fetchData()}
+          onUpdatePolicy={() => fetchData()}
           onDismiss={() => {
             setIsPanelOpen(false);
             setSelectedPolicyId(null);
