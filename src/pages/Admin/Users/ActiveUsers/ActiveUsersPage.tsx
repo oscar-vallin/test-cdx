@@ -41,6 +41,52 @@ const ActiveUsersPage = () => {
     });
   };
 
+  const renderEmptyState = () => {
+    if (userService.commands?.find((cmd) => cmd.commandType === CdxWebCommandType.Create)) {
+      return (
+        <EmptyState
+          title="No users found"
+          description="You haven't created a user yet. Click the button below to create a new user."
+          actions={
+            <Button
+              id="CreateUser"
+              variant="primary"
+              onClick={() => {
+                setIsCreateUserPanelOpen(true);
+                return null;
+              }}
+            >
+              Create user
+            </Button>
+          }
+        />
+      );
+    }
+
+    return (
+      <EmptyState
+        title="No users found"
+        description="There are no active users in this organization."
+      />
+    );
+  }
+
+  const renderBody = () => {
+    if (userService.loading) {
+      return (
+        <Spacing margin={{ top: 'double' }}>
+          <Spinner size={SpinnerSize.large} label="Loading active users" />
+        </Spacing>
+      );
+    }
+
+    if (!userService.users?.length) {
+      return renderEmptyState();
+    }
+
+    return <UsersTable users={userService.users} onClickUser={updateUserPanel.showPanel} />;
+  }
+
   return (
     <LayoutDashboard id="PageActiveUsers" menuOptionSelected={ROUTE_ACTIVE_USERS.API_ID}>
       {userService.users && userService.users.length > 0 && (
@@ -72,30 +118,7 @@ const ActiveUsersPage = () => {
       <Container>
         <Row>
           <StyledColumn>
-            {userService.loading ? (
-              <Spacing margin={{ top: 'double' }}>
-                <Spinner size={SpinnerSize.large} label="Loading active users" />
-              </Spacing>
-            ) : !userService.users?.length ? (
-              <EmptyState
-                title="No users found"
-                description="You haven't created a user yet. Click the button below to create a new user."
-                actions={
-                  <Button
-                    id="CreateUser"
-                    variant="primary"
-                    onClick={() => {
-                      setIsCreateUserPanelOpen(true);
-                      return null;
-                    }}
-                  >
-                    Create user
-                  </Button>
-                }
-              />
-            ) : (
-              <UsersTable users={userService.users} onClickUser={updateUserPanel.showPanel} />
-            )}
+            {renderBody()}
           </StyledColumn>
         </Row>
       </Container>
