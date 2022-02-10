@@ -13,7 +13,7 @@ import { useCreateGroupPanel } from './CreateGroupPanel.service';
 import { UIInputTextReadOnly } from 'src/components/inputs/InputText/InputText';
 import { UIInputCheck } from 'src/components/inputs/InputCheck';
 import { UICheckboxList } from 'src/components/inputs/CheckboxList';
-import { AccessPolicyGroupForm, GqOperationResponse } from 'src/data/services/graphql';
+import { AccessPolicyGroupForm, CdxWebCommandType, GqOperationResponse } from 'src/data/services/graphql';
 import { UIInputMultiSelect } from 'src/components/inputs/InputMultiselect';
 import { TagPicker } from 'src/components/inputs/TagPicker';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
@@ -57,7 +57,7 @@ const CreateGroupPanel = ({
   const { accessPolicyData, accessPolicyForm, setAccessPolicyForm } = accessManagementGroupService;
   const { clearAccessPolicyForm, addToAccessPolicyData } = accessManagementGroupService;
   const { orgQuickSearch, organizationTags } = accessManagementGroupService;
-  const { loadingPolicies } = accessManagementGroupService;
+  const { loading } = accessManagementGroupService;
   const { createPolicyGroup, updatePolicyGroup } = accessManagementGroupService;
   const [errorMsg, setErrorMsg] = useState<string | undefined>();
   const { createAccessPolicyGroupData, updateAccessPolicyGroupData } = accessManagementGroupService;
@@ -273,7 +273,7 @@ const CreateGroupPanel = ({
                   <Column lg="12">
                     <TagPicker id='__includeOrgSids'
                                uiField={form.includeOrgSids}
-                               disabled={accessPolicyData.includeAllSubOrgs}
+                               disabled={form.includeOrgSids?.readOnly || accessPolicyData.includeAllSubOrgs}
                                value={accessPolicyData.includeOrgSids}
                                apiQuery={orgQuickSearch}
                                options={organizationTags()}
@@ -291,7 +291,7 @@ const CreateGroupPanel = ({
                   <Column lg="12">
                     <TagPicker id='__excludeOrgSids'
                                uiField={form.excludeOrgSids}
-                               disabled={!accessPolicyData.includeAllSubOrgs}
+                               disabled={form.excludeOrgSids.readOnly || !accessPolicyData.includeAllSubOrgs}
                                value={accessPolicyData.excludeOrgSids}
                                apiQuery={orgQuickSearch}
                                options={organizationTags()}
@@ -303,43 +303,6 @@ const CreateGroupPanel = ({
                   </Column>
                 </FormRow>
               )}
-
-              <FormRow>
-                <Column lg="12">
-                  <Button
-                    id="__CreateGroupPanelId"
-                    variant="primary"
-                    disabled={loadingPolicies}
-                    onClick={() => {
-                      const commonVariables = {
-                        name: accessPolicyData.name,
-                        description: accessPolicyData.description,
-                        tmpl: accessPolicyData.tmpl,
-                        tmplUseAsIs: accessPolicyData.tmplUseAsIs,
-                        applicableOrgTypes: accessPolicyData.applicableOrgTypes,
-                        policySids: accessPolicyData.policySids,
-                        specializationSids: accessPolicyData.specializationSids,
-                        includeAllSubOrgs: accessPolicyData.includeAllSubOrgs,
-                        includeOrgSids: accessPolicyData.includeOrgSids?.map((sid) => (sid.key)),
-                        excludeOrgSids: accessPolicyData.excludeOrgSids?.map((sid) => (sid.key)),
-                      };
-
-                      if (accessPolicyData.sid) {
-                        updatePolicyGroup({
-                          updateAccessPolicyGroupInput: { sid: accessPolicyData.sid, ...commonVariables },
-                        }).then();
-                      } else {
-                        createPolicyGroup({
-                          createAccessPolicyGroupInput: { orgSid, ...commonVariables },
-                        }).then();
-                      }
-                      return null;
-                    }}
-                  >
-                    {accessPolicyData.sid ? 'Update Group' : 'Save Group'}
-                  </Button>
-                </Column>
-              </FormRow>
             </Column>
           </FormRow>
         </>
@@ -359,6 +322,51 @@ const CreateGroupPanel = ({
     </PanelHeader>
   );
 
+  const renderPanelFooter =() => {
+    const commands = accessPolicyForm?.commands;
+    const command = commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create || cmd?.commandType === CdxWebCommandType.Update);
+    if (command) {
+      return (
+        <div>
+          <Button
+            id="__CreateGroupPanelId"
+            variant="primary"
+            disabled={loading}
+            aria-label={command.label ?? undefined}
+            onClick={() => {
+              const commonVariables = {
+                name: accessPolicyData.name,
+                description: accessPolicyData.description,
+                tmpl: accessPolicyData.tmpl,
+                tmplUseAsIs: accessPolicyData.tmplUseAsIs,
+                applicableOrgTypes: accessPolicyData.applicableOrgTypes,
+                policySids: accessPolicyData.policySids,
+                specializationSids: accessPolicyData.specializationSids,
+                includeAllSubOrgs: accessPolicyData.includeAllSubOrgs,
+                includeOrgSids: accessPolicyData.includeOrgSids?.map((sid) => (sid.key)),
+                excludeOrgSids: accessPolicyData.excludeOrgSids?.map((sid) => (sid.key)),
+              };
+
+              if (accessPolicyData.sid) {
+                updatePolicyGroup({
+                  updateAccessPolicyGroupInput: { sid: accessPolicyData.sid, ...commonVariables },
+                }).then();
+              } else {
+                createPolicyGroup({
+                  createAccessPolicyGroupInput: { orgSid, ...commonVariables },
+                }).then();
+              }
+              return null;
+            }}
+          >
+            {command.label}
+          </Button>
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
     <>
       <Panel
@@ -367,6 +375,7 @@ const CreateGroupPanel = ({
         type={PanelType.large}
         headerText={!accessPolicyData.sid ? 'New Access Policy Group' : 'Update Access Policy Group'}
         onRenderHeader={renderPanelHeader}
+        onRenderFooterContent={renderPanelFooter}
         isOpen={isOpen}
         onDismiss={onPanelClose}
         onOuterClick={() => {}}
@@ -382,7 +391,7 @@ const CreateGroupPanel = ({
               {errorMsg}
             </MessageBar>
           )}
-          {loadingPolicies ? (
+          {loading ? (
             <Text>Loading...</Text>
           ) : renderBody(accessPolicyForm) }
         </PanelBody>

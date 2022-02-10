@@ -211,7 +211,7 @@ export const useCreateGroupPanel = (isOpen, orgSid, selectedGroupId, templateId)
     clearAccessPolicyForm,
     addToAccessPolicyData,
     accessPolicyGroupFormData,
-    loadingPolicies: loading,
+    loading,
     policies,
     specializations,
     accessPolicyData,
