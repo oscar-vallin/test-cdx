@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { ReactElement, useState, useEffect } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 
-import { SpinnerSize, Checkbox, Panel, PanelType, Spinner, Label, Stack } from '@fluentui/react';
+import { Checkbox, Label, Panel, PanelType, Spinner, SpinnerSize, Stack } from '@fluentui/react';
 import _ from 'lodash';
 
 import { useNotification } from 'src/hooks/useNotification';
@@ -9,7 +9,7 @@ import { Multiselect } from 'src/components/selects/Multiselect';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { Card } from 'src/components/cards';
 import { Button } from 'src/components/buttons';
-import { Row, Column } from 'src/components/layouts';
+import { Column, Row } from 'src/components/layouts';
 import { Separator } from 'src/components/separators/Separator';
 import { Text } from 'src/components/typography';
 import { UIInputText } from 'src/components/inputs/InputText';
@@ -17,10 +17,13 @@ import { Collapse } from 'src/components/collapses/Collapse';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 
 import {
+  AccessPolicyForm,
+  CdxWebCommandType,
+  GqOperationResponse, UiOption, UiOptions,
   useAccessPolicyFormLazyQuery,
   useCreateAccessPolicyMutation,
+  useFindAccessPolicyLazyQuery,
   useUpdateAccessPolicyMutation,
-  useFindAccessPolicyLazyQuery, GqOperationResponse, AccessPolicyForm,
 } from 'src/data/services/graphql';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { UIInputTextReadOnly } from 'src/components/inputs/InputText/InputText';
@@ -29,6 +32,8 @@ import { UIInputCheck } from 'src/components/inputs/InputCheck';
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
 import { PanelHeader, PanelTitle } from 'src/layouts/Panels/Panels.styles';
+import { PaddedIcon } from 'src/components/inputs/CheckboxList/CheckboxList.styles';
+import { EmptyValue } from 'src/components/inputs/InputText/InputText.styles';
 
 const INITIAL_STATE = {
   policyName: '',
@@ -37,33 +42,62 @@ const INITIAL_STATE = {
   permissions: [],
 };
 
-const groupPermissions: any = (opts) => {
-  const { values } = opts.find((opt) => opt.key === 'Permission');
-  const { K2U, COLORPALETTE, ACCESS, ORG, PASSWORD, PROD, SSOIDP, TEST, THEME, UAT, USER } = _.groupBy(
-    values,
-    (item) => {
-      return item.value.split('_').shift();
+type PermissionSubGroup = {
+  label: string;
+  options: UiOption[];
+}
+
+type PermissionGroup = {
+  label: string;
+  permissions: PermissionSubGroup[];
+};
+
+const groupPermissions = (opts: UiOptions[]): PermissionGroup[]=> {
+  const uiOptions = opts.find((opt) => opt.key === 'Permission');
+  const permGroups: any = {};
+  const getGroup = (opt: UiOption) => {
+    const permString = opt.value;
+    if (permString) {
+      const idx = permString.indexOf('_');
+      if (idx > 0) {
+        const prefix = permString.substring(0, idx);
+        let group = permGroups[prefix]
+        if (!group) {
+          group = [];
+          permGroups[prefix] = group;
+        }
+        return group;
+      }
     }
-  );
+    return [];
+  };
 
-  const exchangeStatus = [
-    { label: 'K2U Exchanges', options: K2U },
-    { label: 'Test Exchanges', options: TEST },
-    { label: 'UAT Exchanges', options: UAT },
-    { label: 'Production Exchanges', options: PROD },
+  uiOptions?.values?.forEach((opt) => {
+    if (opt) {
+      const permGroup = getGroup(opt);
+      permGroup.push(opt);
+    }
+  });
+
+  const exchangeStatus: PermissionSubGroup[] = [];
+  if (permGroups.K2U && permGroups.K2U.length > 0) {
+    exchangeStatus.push({ label: 'K2U Exchanges', options: permGroups.K2U });
+  }
+  exchangeStatus.push({ label: 'Test Exchanges', options: permGroups.TEST });
+  exchangeStatus.push({ label: 'UAT Exchanges', options: permGroups.UAT });
+  exchangeStatus.push({ label: 'Production Exchanges', options: permGroups.PROD });
+
+  const accessManagement: PermissionSubGroup[] = [
+    { label: 'Users', options: permGroups.USER },
+    { label: 'Access Management', options: permGroups.ACCESS },
+    { label: 'Organization', options: permGroups.ORG },
   ];
 
-  const accessManagement = [
-    { label: 'Users', options: USER },
-    { label: 'Access Management', options: ACCESS },
-    { label: 'Organization', options: ORG },
-  ];
-
-  const siteSettings = [
-    { label: 'Password', options: PASSWORD },
-    { label: 'Color Palettes', options: COLORPALETTE },
-    { label: 'Theme', options: THEME },
-    { label: 'SSO', options: SSOIDP },
+  const siteSettings: PermissionSubGroup[] = [
+    { label: 'Password', options: permGroups.PASSWORD },
+    { label: 'Color Palettes', options: permGroups.COLORPALETTE },
+    { label: 'Theme', options: permGroups.THEME },
+    { label: 'SSO', options: permGroups.SSOIDP },
   ];
 
   return [
@@ -101,8 +135,8 @@ const CreatePoliciesPanel = ({
   const [showDialog, setShowDialog] = useState(false);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [state, setState]: any = useState({ ...INITIAL_STATE });
-  const [policyForm, setPolicyForm]: any = useState<AccessPolicyForm>();
-  const [permissions, setPermissions] = useState([]);
+  const [policyForm, setPolicyForm] = useState<AccessPolicyForm | null>();
+  const [permissions, setPermissions] = useState<PermissionGroup[]>([]);
   const [applicableOrgTypes, setApplicableOrgTypes]: any = useState([]);
 
   const [fetchPolicyForm, { data: form, loading: isLoadingForm }] = useQueryHandler(useAccessPolicyFormLazyQuery);
@@ -244,7 +278,100 @@ const CreatePoliciesPanel = ({
     </PanelHeader>
   );
 
+  const renderSaveButton = () => {
+    const saveCmd = policyForm
+      ?.commands
+      ?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create || cmd?.commandType === CdxWebCommandType.Update);
+    if (saveCmd) {
+      return (
+        <Button
+          id="__CreatePoliciesPanelId"
+          variant="primary"
+          disabled={isCreatingPolicy || isUpdatingPolicy}
+          aria-label={saveCmd.label}
+          onClick={() => {
+            const params = {
+              name: state.policyName,
+              permissions: state.permissions,
+              tmpl: state.isTemplate,
+              tmplUseAsIs: state.usedAsIs,
+              applicableOrgTypes: state.isTemplate ? applicableOrgTypes : [],
+            };
+
+            if (!selectedPolicyId) {
+              createPolicy({
+                variables: {
+                  createAccessPolicyInput: {
+                    orgSid,
+                    ...params,
+                  },
+                },
+                errorPolicy: 'all',
+              });
+            } else {
+              updatePolicy({
+                variables: {
+                  updateAccessPolicyInput: {
+                    policySid: selectedPolicyId,
+                    ...params,
+                  },
+                },
+                errorPolicy: 'all',
+              });
+            }
+
+            return null;
+          }}
+        >
+          {saveCmd.label}
+        </Button>
+      );
+    }
+  };
+
+  const renderPermissionList = (options?: UiOption[], readOnly: boolean = true) => {
+    if (readOnly) {
+      const selectedOptions = options?.filter((option) => state.permissions.includes(option.value)) ?? [];
+      if (selectedOptions.length > 0) {
+        return selectedOptions.map((option, optIndex) => (
+          <Spacing
+            margin={{ top: 'small' }}
+            key={`perm-${optIndex}`}>
+            <Text><PaddedIcon iconName="RadioBullet"/>{option.label}</Text>
+
+          </Spacing>
+        ));
+      } else {
+        return <EmptyValue>&lt;no access&gt;</EmptyValue>;
+      }
+    }
+    return options?.map((option, optIndex) => (
+      <Spacing
+        margin={{ top: 'small' }}
+        key={`perm-${optIndex}`}>
+        <Checkbox
+          label={option.label}
+          checked={state.permissions.includes(option.value)}
+          disabled={readOnly}
+          id={option.value}
+          onChange={(event, checked) => {
+            setUnsavedChanges(true);
+
+            setState({
+              ...state,
+              permissions: checked
+                ? [...state.permissions, option.value]
+                : state.permissions.filter((value) => value !== option.value),
+            });
+          }}
+        />
+      </Spacing>
+    ));
+  };
+
   const renderBody = () => {
+    const permissionsReadOnly = policyForm?.permissions?.readOnly ?? true
+
     return (
       <Spacing margin={{ top: 'normal' }}>
         <FormRow>
@@ -293,10 +420,11 @@ const CreatePoliciesPanel = ({
 
                 <Multiselect
                   value={applicableOrgTypes}
+                  disabled={policyForm?.applicableOrgTypes?.readOnly ?? true}
                   options={
-                    policyForm.options
-                      ?.find((opt) => opt.key === 'OrgType')
-                      ?.values.map(({ label, value }) => ({ key: value, text: label })) || []
+                    policyForm?.options
+                      ?.find((opt) => opt?.key === 'OrgType')
+                      ?.values?.map((opt) => ({ key: opt?.value, text: opt?.label })) || []
                   }
                   onChange={(evt, item) => {
                     setUnsavedChanges(true);
@@ -325,7 +453,7 @@ const CreatePoliciesPanel = ({
 
             <FormRow>
               <Column lg="12">
-                {permissions.map((group: any, groupIndex) => (
+                {permissions.map((group: PermissionGroup, groupIndex) => (
                   <Collapse label={group.label} expanded key={groupIndex}>
                     <Spacing padding={{ top: 'normal', bottom: 'normal' }}>
                       <Row>
@@ -339,28 +467,8 @@ const CreatePoliciesPanel = ({
                                       <Label>{permission.label}</Label>
                                     </Spacing>
 
-                                    {permission.options?.map((option, optIndex) => (
-                                      <Spacing
-                                        margin={{ top: 'small' }}
-                                        key={`${groupIndex}-${pIndex}-${optIndex}`}
-                                      >
-                                        <Checkbox
-                                          label={option.label}
-                                          checked={state.permissions.includes(option.value)}
-                                          id={option.value}
-                                          onChange={(event, checked) => {
-                                            setUnsavedChanges(true);
+                                    {renderPermissionList(permission.options, permissionsReadOnly)}
 
-                                            setState({
-                                              ...state,
-                                              permissions: checked
-                                                ? [...state.permissions, option.value]
-                                                : state.permissions.filter((value) => value !== option.value),
-                                            });
-                                          }}
-                                        />
-                                      </Spacing>
-                                    ))}
                                   </Card>
                                 </Column>
                               ))}
@@ -375,58 +483,15 @@ const CreatePoliciesPanel = ({
             </FormRow>
           </>
         )}
-
-        <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-          <Separator />
-        </Spacing>
-
-        <FormRow>
-          <Column lg="12">
-            <Button
-              id="__CreatePoliciesPanelId"
-              variant="primary"
-              disabled={isCreatingPolicy || isUpdatingPolicy}
-              onClick={() => {
-                const params = {
-                  name: state.policyName,
-                  permissions: state.permissions,
-                  tmpl: state.isTemplate,
-                  tmplUseAsIs: state.usedAsIs,
-                  applicableOrgTypes: state.isTemplate ? applicableOrgTypes : [],
-                };
-
-                if (!selectedPolicyId) {
-                  createPolicy({
-                    variables: {
-                      createAccessPolicyInput: {
-                        orgSid,
-                        ...params,
-                      },
-                    },
-                    errorPolicy: 'all',
-                  });
-                } else {
-                  updatePolicy({
-                    variables: {
-                      updateAccessPolicyInput: {
-                        policySid: selectedPolicyId,
-                        ...params,
-                      },
-                    },
-                    errorPolicy: 'all',
-                  });
-                }
-
-                return null;
-              }}
-            >
-              {!selectedPolicyId ? 'Create' : 'Update'} policy
-            </Button>
-          </Column>
-        </FormRow>
       </Spacing>
     );
   };
+
+  const renderPanelFooter = () => (
+      <div>
+        {renderSaveButton()}
+      </div>
+  );
 
   return (
     <>
@@ -436,6 +501,8 @@ const CreatePoliciesPanel = ({
         type={PanelType.large}
         headerText={!selectedPolicyId ? 'New access policy' : 'Update access policy'}
         onRenderHeader={renderPanelHeader}
+        onRenderFooterContent={renderPanelFooter}
+        isFooterAtBottom={true}
         isOpen={isOpen}
         onDismiss={onPanelClose}
         onOuterClick={() => {}}

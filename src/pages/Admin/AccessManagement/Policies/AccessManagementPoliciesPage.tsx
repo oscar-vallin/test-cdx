@@ -11,15 +11,12 @@ import {
   DialogType,
   DialogFooter,
   FontIcon,
-  Spinner,
-  SpinnerSize,
   Link, IColumn, IContextualMenuItem,
 } from '@fluentui/react';
 
 import { EmptyState } from 'src/containers/states';
 import { useNotification } from 'src/hooks/useNotification';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
-import { Spacing } from 'src/components/spacings/Spacing';
 import { Button } from 'src/components/buttons';
 import { Row, Column, Container } from 'src/components/layouts';
 import { PageTitle } from 'src/components/typography';
@@ -28,7 +25,7 @@ import {
   useAccessPolicyTemplatesLazyQuery,
   useAccessPoliciesForOrgLazyQuery,
   useDeleteAccessPolicyMutation,
-  AccessPolicy,
+  AccessPolicy, CdxWebCommandType, Maybe, WebCommand,
 } from 'src/data/services/graphql';
 
 import { useOrgSid } from 'src/hooks/useOrgSid';
@@ -37,6 +34,7 @@ import { CreatePoliciesPanel } from './CreatePolicy';
 import { StyledColumn, StyledCommandButton } from '../AccessManagement.styles';
 import { ROUTE_ACCESS_MANAGEMENT_POLICIES } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
+import { ErrorHandler } from 'src/utils/ErrorHandler';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -65,18 +63,22 @@ const _AccessManagementPoliciesPage = () => {
   const [selectedPolicyId, setSelectedPolicyId] = useState<string | null>();
   const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>();
 
-  const [policies, setPolicies] = useState<any[]>([]);
+  const [policies, setPolicies] = useState<Maybe<AccessPolicy>[] | null>();
   const [fetchTemplatePolicies, { data: templatePolicies, loading: isLoadingTemplatePolicies }] = useQueryHandler(
     useAccessPolicyTemplatesLazyQuery
   );
 
   const [templatePolicyMenu, setTemplatePolicyMenu] = useState<IContextualMenuItem[]>([]);
 
-  const [accessPoliciesForOrg, { data, loading }] = useQueryHandler(useAccessPoliciesForOrgLazyQuery);
+  const [accessPoliciesForOrg, { data, loading, error }] = useAccessPoliciesForOrgLazyQuery();
   // Linter Issue.  useRemoveAmPolicyMutation??
   const [removeAccessPolicy, { data: removeResponse, loading: isRemovingPolicy }] =
     // eslint-disable-next-line no-undef
     useQueryHandler(useDeleteAccessPolicyMutation);
+
+  const [createCmd, setCreateCmd] = useState<WebCommand | null>();
+
+  const handleError = ErrorHandler();
 
   const hideConfirmation = () => {
     setIsConfirmationHidden(true);
@@ -115,19 +117,22 @@ const _AccessManagementPoliciesPage = () => {
       case 'tmpl':
         return item?.tmpl ? <FontIcon iconName='Completed' /> : <span/>;
       case 'actions':
-        return (
-          <>
-            &nbsp;
-            <StyledCommandButton
-              id={`DeleteBtn__${item?.name?.split(' ').join('_')}`}
-              iconProps={{ iconName: 'Delete' }}
-              onClick={() => {
-                setSelectedPolicyId(item?.sid);
-                setIsConfirmationHidden(false);
-              }}
-            />
-          </>
-        );
+        if (data?.accessPoliciesForOrg?.listPageInfo?.listItemCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Delete)) {
+          return (
+            <>
+              <StyledCommandButton
+                id={`DeleteBtn__${item?.name?.split(' ').join('_')}`}
+                iconProps={{ iconName: 'Delete' }}
+                onClick={() => {
+                  setSelectedPolicyId(item?.sid);
+                  setIsConfirmationHidden(false);
+                }}
+              />
+            </>
+          );
+        } else {
+          return <span/>;
+        }
       default:
         if (item) {
           return item[key];
@@ -172,51 +177,87 @@ const _AccessManagementPoliciesPage = () => {
 
   useEffect(() => {
     if (!isRemovingPolicy && removeResponse) {
-      const name = policies.find(({ sid }) => selectedPolicyId === sid)?.name || '';
+      const name = policies?.find((policy) => selectedPolicyId === policy?.sid)?.name || '';
 
       Toast.success({ text: `Access policy "${name}" deleted successfully` });
 
-      setPolicies(policies.filter(({ sid }) => sid !== selectedPolicyId));
+      setPolicies(policies?.filter((policy) => policy?.sid !== selectedPolicyId));
       setSelectedPolicyId(null);
     }
   }, [isRemovingPolicy, removeResponse]);
 
   useEffect(() => {
     if (data) {
-      setPolicies(data.accessPoliciesForOrg.nodes);
+      setPolicies(data?.accessPoliciesForOrg?.nodes);
+      const createCmd = data.accessPoliciesForOrg?.listPageInfo?.pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create);
+      setCreateCmd(createCmd)
     }
   }, [data]);
 
+  useEffect(() => {
+    handleError(error);
+  }, [error])
+
   const createPolicyButton = () => {
-    return (
-      <Button
-        split={!isLoadingTemplatePolicies && templatePolicyMenu.length > 0}
-        id="CreatePolicyButton"
-        variant="primary"
-        onClick={() => {
-          setIsPanelOpen(true);
-          return null;
-        }}
-        {...(!isLoadingTemplatePolicies && templatePolicyMenu.length > 0
-          ? {
-            menuProps: {
-              items: templatePolicyMenu,
-              contextualMenuItemAs: (props) => (
-                <div id={`PolicyTemplate__${props.item.key}`}>{props.item.text}</div>
-              ),
-            },
-          }
-          : {})}
-      >
-        Create policy
-      </Button>
-    )
+    if (createCmd) {
+      return (
+        <Button
+          split={!isLoadingTemplatePolicies && templatePolicyMenu.length > 0}
+          id="CreatePolicyButton"
+          variant="primary"
+          onClick={() => {
+            setIsPanelOpen(true);
+            return null;
+          }}
+          {...(!isLoadingTemplatePolicies && templatePolicyMenu.length > 0
+            ? {
+              menuProps: {
+                items: templatePolicyMenu,
+                contextualMenuItemAs: (props) => (
+                  <div id={`PolicyTemplate__${props.item.key}`}>{props.item.text}</div>
+                ),
+              },
+            }
+            : {})}
+        >
+          {createCmd.label}
+        </Button>
+      );
+    }
   }
+
+  const renderBody = () => {
+    if (!loading) {
+      if (!policies?.length) {
+        const emptyText = createCmd ?
+          "There are no Access Policies configured in this Organization. Click the button below to create a new policy."
+          : "There are no Access Policies configured in this Organization."
+        return (
+          <EmptyState
+            title="No policies found"
+            description={emptyText}
+            actions={createPolicyButton()}
+          />
+        );
+      } else {
+        return (
+          <DetailsList
+            items={policies}
+            selectionMode={SelectionMode.none}
+            columns={columns}
+            layoutMode={DetailsListLayoutMode.justified}
+            onRenderItemColumn={onRenderItemColumn}
+            isHeaderVisible
+          />
+        );
+      }
+    }
+  };
 
   return (
     <LayoutDashboard id="PageAdmin" menuOptionSelected={ROUTE_ACCESS_MANAGEMENT_POLICIES.API_ID}>
       <>
-        {policies.length > 0 && (
+        {(policies?.length ?? 0) > 0 && (
           <PageHeader id="__AccessPoliciesHeader">
             <Container>
               <Row>
@@ -234,26 +275,7 @@ const _AccessManagementPoliciesPage = () => {
         <Container>
           <Row>
             <StyledColumn lg="12">
-              {loading ? (
-                <Spacing margin={{ top: 'double' }}>
-                  <Spinner size={SpinnerSize.large} label="Loading policies" />
-                </Spacing>
-              ) : !policies.length ? (
-                <EmptyState
-                  title="No policies found"
-                  description="You haven't created an access policy yet. Click the button below to create a new policy."
-                  actions={createPolicyButton()}
-                />
-              ) : (
-                <DetailsList
-                  items={policies}
-                  selectionMode={SelectionMode.none}
-                  columns={columns}
-                  layoutMode={DetailsListLayoutMode.justified}
-                  onRenderItemColumn={onRenderItemColumn}
-                  isHeaderVisible
-                />
-              )}
+              {renderBody()}
             </StyledColumn>
           </Row>
         </Container>
@@ -278,7 +300,7 @@ const _AccessManagementPoliciesPage = () => {
             type: DialogType.normal,
             title: 'Remove policy',
             subText: `Do you really want to remove "${
-              policies.find(({ sid }) => selectedPolicyId === sid)?.name || ''
+              policies?.find((policy) => selectedPolicyId === policy?.sid)?.name || ''
             }"?`,
           }}
           modalProps={{ isBlocking: true }}

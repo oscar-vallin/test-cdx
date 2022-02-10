@@ -66,7 +66,7 @@ const InputText = ({
 
 type UIReadOnlyType = {
   id: string;
-  uiField: UiField;
+  uiField?: UiField;
 };
 
 const UIInputTextReadOnly = ({ id, uiField }: UIReadOnlyType) => {

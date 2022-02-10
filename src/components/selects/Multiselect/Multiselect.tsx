@@ -1,25 +1,24 @@
 import { ReactElement } from 'react';
 import { StyledDiv, StyledDropdown } from './Multiselect.styles';
 
-const defaultProps = {
-  value: [],
-  options: [],
-};
-
 type CDXMultiselectProps = {
   value?: any[];
   options?: any[];
   onChange?: any | null;
-} & typeof defaultProps;
+  disabled?: boolean;
+}
 
-const CDXMultiselect = ({ value, options, onChange }: CDXMultiselectProps): ReactElement => {
+const CDXMultiselect = ({ value = [], options = [], onChange, disabled = false }: CDXMultiselectProps): ReactElement => {
   return (
     <StyledDiv>
-      <StyledDropdown selectedKeys={value} onChange={onChange} options={options} multiSelect />
+      <StyledDropdown selectedKeys={value}
+                      onChange={onChange}
+                      options={options}
+                      multiSelect
+                      disabled={disabled}
+                      aria-readonly={disabled}/>
     </StyledDiv>
   );
 };
-
-CDXMultiselect.defaultProps = defaultProps;
 
 export default CDXMultiselect;
