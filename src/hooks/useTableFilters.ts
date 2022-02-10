@@ -1,4 +1,12 @@
-import { getHours, subDays, format, addDays, isValid } from 'date-fns';
+import {
+  getHours,
+  format,
+  isValid,
+  startOfYesterday,
+  startOfToday,
+  endOfToday,
+  endOfTomorrow
+} from 'date-fns';
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { DateState, useDateValue } from './useDateValue';
@@ -74,10 +82,12 @@ export const useTableFilters = (searchTextPlaceholder: string, defaultSort?: Sor
   const urlParams = new URLSearchParams(location.search);
   const { orgSid } = useOrgSid();
 
-  const hour = getHours(new Date());
+  // See Ticket #228 to see the date defaulting logic
+  const now = new Date();
+  const hour = getHours(now);
+  const defaultStartDate = hour < 9 ? startOfYesterday() : startOfToday();
+  const defaultEndDate = hour < 9 ? endOfToday() : endOfTomorrow();
 
-  const defaultStartDate = hour < 9 ? subDays(new Date(), 1) : new Date();
-  const defaultEndDate = hour < 9 ? new Date() : addDays(new Date(), 1);
   const [pagingParams, setPagingParams] = useState<PageableInput>({
     pageNumber: 0,
     pageSize: 100,
