@@ -77,6 +77,7 @@ const _AccessManagementPoliciesPage = () => {
     useQueryHandler(useDeleteAccessPolicyMutation);
 
   const [createCmd, setCreateCmd] = useState<WebCommand | null>();
+  const [deleteCmd, setDeleteCmd] = useState<WebCommand | null>();
 
   const handleError = ErrorHandler();
 
@@ -117,12 +118,13 @@ const _AccessManagementPoliciesPage = () => {
       case 'tmpl':
         return item?.tmpl ? <FontIcon iconName='Completed' /> : <span/>;
       case 'actions':
-        if (data?.accessPoliciesForOrg?.listPageInfo?.listItemCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Delete)) {
+        if (deleteCmd) {
           return (
             <>
               <StyledCommandButton
                 id={`DeleteBtn__${item?.name?.split(' ').join('_')}`}
                 iconProps={{ iconName: 'Delete' }}
+                title={deleteCmd.label ?? undefined}
                 onClick={() => {
                   setSelectedPolicyId(item?.sid);
                   setIsConfirmationHidden(false);
@@ -181,16 +183,21 @@ const _AccessManagementPoliciesPage = () => {
 
       Toast.success({ text: `Access policy "${name}" deleted successfully` });
 
-      setPolicies(policies?.filter((policy) => policy?.sid !== selectedPolicyId));
       setSelectedPolicyId(null);
+
+      fetchData();
     }
   }, [isRemovingPolicy, removeResponse]);
 
   useEffect(() => {
     if (data) {
       setPolicies(data?.accessPoliciesForOrg?.nodes);
-      const createCmd = data.accessPoliciesForOrg?.listPageInfo?.pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create);
-      setCreateCmd(createCmd)
+      const pageCommands = data.accessPoliciesForOrg?.listPageInfo?.pageCommands;
+      const createCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create);
+      setCreateCmd(createCmd);
+      const listCommands = data.accessPoliciesForOrg?.listPageInfo?.listItemCommands;
+      const deleteCmd = listCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Delete);
+      setDeleteCmd(deleteCmd);
     }
   }, [data]);
 
