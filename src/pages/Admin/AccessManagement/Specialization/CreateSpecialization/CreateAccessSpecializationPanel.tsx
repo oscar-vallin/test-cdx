@@ -21,7 +21,7 @@ import {
   useCreateAccessSpecializationMutation,
   useUpdateAccessSpecializationMutation,
   useVendorQuickSearchLazyQuery,
-  useOrganizationQuickSearchLazyQuery, AccessSpecializationForm, Organization,
+  useOrganizationQuickSearchLazyQuery, AccessSpecializationForm, Organization, CdxWebCommandType, UiSelectManyField,
 } from 'src/data/services/graphql';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { TagPicker } from 'src/components/inputs/TagPicker';
@@ -30,11 +30,17 @@ import { FormRow } from 'src/components/layouts/Row/Row.styles';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
 import { PanelHeader, PanelTitle } from 'src/layouts/Panels/Panels.styles';
 
+type SpecializationOption = {
+  label: string;
+  permission: string;
+  orgSids: UiSelectManyField;
+};
+
 type SpecializationGroup = {
   label: string;
   labelKey: string;
   valueKey: string;
-  options: any[];
+  options: SpecializationOption[];
 }
 
 const INITIAL_STATE = {
@@ -85,7 +91,7 @@ const CreateAccessSpecializationPanel = ({
   const [state, setState]: any = useState({ ...INITIAL_STATE });
   const [showDialog, setShowDialog] = useState(false);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
-  const [accessForm, setAccessForm]: any = useState<AccessSpecializationForm>();
+  const [accessForm, setAccessForm] = useState<AccessSpecializationForm | null>();
   const [accessFilters, setAccessFilters] = useState<SpecializationGroup[]>([]);
   const [specializations, setSpecializations] = useState({});
   const [currentItem, setCurrentItem]: any = useState(null);
@@ -155,7 +161,7 @@ const CreateAccessSpecializationPanel = ({
         fetchAccessForm({ variables: { orgSid } });
       }
     } else {
-      setAccessForm({});
+      setAccessForm(null);
     }
   }, [isOpen, selectedAccessId]);
 
@@ -230,7 +236,7 @@ const CreateAccessSpecializationPanel = ({
 
         <FormRow>
           <Column lg="12">
-            <UIInputTextReadOnly id='__Organization' uiField={accessForm.organization}/>
+            <UIInputTextReadOnly id='__Organization' uiField={accessForm?.organization}/>
           </Column>
         </FormRow>
 
@@ -244,7 +250,7 @@ const CreateAccessSpecializationPanel = ({
 
         <FormRow>
           <Column lg="12">
-            {accessFilters.map((group: any, groupIndex) => (
+            {accessFilters.map((group: SpecializationGroup, groupIndex) => (
               <Collapse label={group.label} expanded key={groupIndex}>
                 <Card elevation="none" spacing="none" key={`card_${groupIndex}`}>
                   <Spacing padding="normal" key={`space_${groupIndex}`}>
@@ -270,7 +276,7 @@ const CreateAccessSpecializationPanel = ({
 
                               <Column lg="9" key={`${groupIndex}-${optIndex}-right`}>
                                 <TagPicker
-                                  disabled={false}
+                                  disabled={option.orgSids.readOnly}
                                   debounce={500}
                                   id={`__Specialization_${option.permission}`}
                                   apiQuery={(text) => {
@@ -318,55 +324,6 @@ const CreateAccessSpecializationPanel = ({
             ))}
           </Column>
         </FormRow>
-
-        <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-          <Separator />
-        </Spacing>
-
-        <Row>
-          <Column lg="12">
-            <Button
-              id="__CreateAccessSpecializationBtnId"
-              variant="primary"
-              disabled={isCreatingSpecialization}
-              onClick={() => {
-                const params = {
-                  name: state.name,
-                  filters: Object.keys(specializations)
-                    .map((permission) => ({
-                      permission,
-                      orgSids: specializations[permission].map((item) => item.key),
-                    }))
-                    .reduce((arr, item): any => [...arr, item], []),
-                };
-
-                if (!selectedAccessId) {
-                  createSpecialization({
-                    variables: {
-                      createAccessSpecializationInput: {
-                        orgSid,
-                        ...params,
-                      },
-                    },
-                  });
-                } else {
-                  updateSpecialization({
-                    variables: {
-                      updateAccessSpecializationInput: {
-                        sid: selectedAccessId,
-                        ...params,
-                      },
-                    },
-                  });
-                }
-
-                return null;
-              }}
-            >
-              {!selectedAccessId ? 'Create' : 'Update'} specialization
-            </Button>
-          </Column>
-        </Row>
       </>
     );
   }
@@ -383,6 +340,60 @@ const CreateAccessSpecializationPanel = ({
     </PanelHeader>
   );
 
+  const renderPanelFooter = () => {
+    const commands = accessForm?.commands;
+    const command = commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create || cmd?.commandType === CdxWebCommandType.Update);
+    if (command) {
+      return (
+        <div>
+          <Button
+            id="__CreateAccessSpecializationBtnId"
+            variant="primary"
+            disabled={isCreatingSpecialization}
+            onClick={() => {
+              const params = {
+                name: state.name,
+                filters: Object.keys(specializations)
+                  .map((permission) => ({
+                    permission,
+                    orgSids: specializations[permission].map((item) => item.key),
+                  }))
+                  .reduce((arr, item): any => [...arr, item], []),
+              };
+
+              if (!selectedAccessId) {
+                createSpecialization({
+                  variables: {
+                    createAccessSpecializationInput: {
+                      orgSid,
+                      ...params,
+                    },
+                  },
+                });
+              } else {
+                updateSpecialization({
+                  variables: {
+                    updateAccessSpecializationInput: {
+                      sid: selectedAccessId,
+                      ...params,
+                    },
+                  },
+                });
+              }
+
+              return null;
+            }}
+          >
+            {command.label}
+          </Button>
+        </div>
+      );
+    }
+
+    return null;
+  }
+
+
   return (
     <>
       <Panel
@@ -391,6 +402,7 @@ const CreateAccessSpecializationPanel = ({
         type={PanelType.large}
         headerText={!selectedAccessId ? 'New Access Specialization' : 'Update Access Specialization'}
         onRenderHeader={renderPanelHeader}
+        onRenderFooterContent={renderPanelFooter}
         isOpen={isOpen}
         onDismiss={onPanelClose}
         onOuterClick={() => {}}

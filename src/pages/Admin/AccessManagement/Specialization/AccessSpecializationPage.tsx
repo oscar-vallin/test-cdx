@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import {
   PrimaryButton,
@@ -23,8 +23,9 @@ import { Row, Column, Container } from 'src/components/layouts';
 import { PageTitle } from 'src/components/typography';
 
 import {
+  AccessSpecialization, CdxWebCommandType, Maybe,
   useAccessSpecializationsForOrgLazyQuery,
-  useDeleteAccessSpecializationMutation,
+  useDeleteAccessSpecializationMutation, WebCommand,
 } from 'src/data/services/graphql';
 
 import { useOrgSid } from 'src/hooks/useOrgSid';
@@ -34,9 +35,10 @@ import { StyledColumn, StyledCommandButton } from '../AccessManagement.styles';
 import { Spacing } from '../../../../components/spacings/Spacing';
 import { ROUTE_ACCESS_MANAGEMENT_SPECIALIZATION } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
+import { ErrorHandler } from 'src/utils/ErrorHandler';
 
 const generateColumns = () => {
-  const createColumn = ({ name, key }) => ({
+  const createColumn = ({name, key}) => ({
     name,
     key,
     fieldName: key,
@@ -45,27 +47,32 @@ const generateColumns = () => {
     minWidth: 225,
   });
 
-  return [createColumn({ name: 'Name', key: 'name' }), createColumn({ name: '', key: 'actions' })];
+  return [createColumn({name: 'Name', key: 'name'}), createColumn({name: '', key: 'actions'})];
 };
 
-const _AccessManagementSpecializationPage = () => {
-  const { orgSid } = useOrgSid();
+const AccessManagementSpecializationPage = () => {
+  const {orgSid} = useOrgSid();
   const Toast = useNotification();
   const columns = generateColumns();
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);
-  const [selectedAccessId, setSelectedAccessId] = useState(0);
+  const [selectedAccessId, setSelectedAccessId] = useState<string | null>();
 
-  const [specializations, setSpecializations] = useState<any[]>([]);
-  const [accessSpecializationForOrg, { data, loading }] = useQueryHandler(useAccessSpecializationsForOrgLazyQuery);
-  const [removeSpecialization, { data: removeResponse, loading: isRemovingSpecialization }] = useQueryHandler(
+  const [specializations, setSpecializations] = useState<Maybe<AccessSpecialization>[] | null>();
+  const [accessSpecializationForOrg, {data, loading, error}] = useAccessSpecializationsForOrgLazyQuery();
+  const [removeSpecialization, {data: removeResponse, loading: isRemovingSpecialization}] = useQueryHandler(
     useDeleteAccessSpecializationMutation
   );
 
+  const [createCmd, setCreateCmd] = useState<WebCommand | null>();
+  const [deleteCmd, setDeleteCmd] = useState<WebCommand | null>();
+
+  const handleError = ErrorHandler();
+
   const hideConfirmation = () => {
     setIsConfirmationHidden(true);
-    setSelectedAccessId(0);
+    setSelectedAccessId(null);
   };
 
   const onRenderItemColumn = (item, index, column) => {
@@ -83,19 +90,21 @@ const _AccessManagementSpecializationPage = () => {
           </Link>
         );
       case 'actions':
-        return (
-          <>
-            &nbsp;
+        if (deleteCmd) {
+          return (
             <StyledCommandButton
               id={`DeleteBtn__${index + 1}`}
-              iconProps={{ iconName: 'Delete' }}
+              title={deleteCmd.label ?? undefined}
+              ariaLabel={deleteCmd.label ?? undefined}
+              iconProps={{iconName: 'Delete'}}
               onClick={() => {
                 setSelectedAccessId(item.sid);
                 setIsConfirmationHidden(false);
               }}
             />
-          </>
-        );
+          );
+        }
+        return <span/>;
       default:
         return item[column.key];
     }
@@ -114,41 +123,95 @@ const _AccessManagementSpecializationPage = () => {
   }, [orgSid]);
 
   useEffect(() => {
+    if (error) {
+      handleError(error);
+    }
+  }, [error]);
+
+  useEffect(() => {
     if (!isRemovingSpecialization && removeResponse) {
-      const name = specializations.find(({ sid }) => selectedAccessId === sid)?.name || '';
+      const name = specializations?.find((spec) => selectedAccessId === spec?.sid)?.name || '';
 
-      Toast.success({ text: `Access specialization "${name}" deleted successfully` });
+      Toast.success({text: `Access specialization "${name}" deleted successfully`});
 
-      setSpecializations(specializations.filter(({ sid }) => sid !== selectedAccessId));
-      setSelectedAccessId(0);
+      setSpecializations(specializations?.filter((spec) => spec?.sid !== selectedAccessId));
+      setSelectedAccessId(null);
     }
   }, [isRemovingSpecialization, removeResponse]);
 
   useEffect(() => {
     if (data) {
-      setSpecializations(data.accessSpecializationsForOrg.nodes);
+      setSpecializations(data?.accessSpecializationsForOrg?.nodes);
+      const createCmd = data?.accessSpecializationsForOrg?.listPageInfo?.pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create);
+      setCreateCmd(createCmd);
+      const deleteCmd = data?.accessSpecializationsForOrg?.listPageInfo?.listItemCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Delete);
+      setDeleteCmd(deleteCmd);
     }
   }, [data]);
 
+  const renderCreateButton = () => {
+    if (createCmd) {
+      return (
+        <Button
+          id="create-access-specialization"
+          variant="primary"
+          aria-label={createCmd.label}
+          onClick={() => {
+            setIsPanelOpen(true);
+            return null;
+          }}
+        >
+          {createCmd.label}
+        </Button>
+      );
+    }
+  }
+
+  const renderBody = () => {
+    if (loading) {
+      return (
+        <Spacing margin={{top: 'double'}}>
+          <Spinner size={SpinnerSize.large} label="Loading access specializations"/>
+        </Spacing>
+      );
+    }
+
+    if (!specializations?.length) {
+      const emptyText = createCmd ?
+        "There are no Access Specializations configured in this Organization. Click the button below to create a new specialization."
+        : "There are no Access Specializations configured in this Organization."
+      return (
+        <EmptyState
+          title="No access specializations found"
+          description={emptyText}
+          actions={renderCreateButton()}
+        />
+      );
+    }
+
+    return (
+      <DetailsList
+        items={specializations}
+        selectionMode={SelectionMode.none}
+        columns={columns}
+        layoutMode={DetailsListLayoutMode.justified}
+        onRenderItemColumn={onRenderItemColumn}
+        isHeaderVisible
+      />
+    );
+  }
+
   return (
     <LayoutDashboard id="PageAdmin" menuOptionSelected={ROUTE_ACCESS_MANAGEMENT_SPECIALIZATION.API_ID}>
-      {specializations.length > 0 && (
+      {(specializations?.length ?? 0) > 0 && (
         <PageHeader id="__AccessSpecHeader">
           <Container>
             <Row>
               <Column lg="6" direction="row">
-                <PageTitle id="__Page_Title" title="Access Specializations" />
+                <PageTitle id="__Page_Title" title="Access Specializations"/>
               </Column>
               <Column lg="6" right>
-                <Button
-                  id="create-access-specialization"
-                  variant="primary"
-                  onClick={() => {
-                    setIsPanelOpen(true);
-                    return null;
-                  }}>
-                  Create specialization
-                </Button>
+                {renderCreateButton()}
               </Column>
             </Row>
           </Container>
@@ -157,37 +220,7 @@ const _AccessManagementSpecializationPage = () => {
       <Container>
         <Row>
           <StyledColumn lg="12">
-            {loading ? (
-              <Spacing margin={{ top: 'double' }}>
-                <Spinner size={SpinnerSize.large} label="Loading access specializations" />
-              </Spacing>
-            ) : !specializations.length ? (
-              <EmptyState
-                title="No access specializations found"
-                description="You haven't created an access specialization yet. Click the button below to create a new specialization."
-                actions={
-                  <Button
-                    id="create-access-specialization"
-                    variant="primary"
-                    onClick={() => {
-                      setIsPanelOpen(true);
-                      return null;
-                    }}
-                  >
-                    Create specialization
-                  </Button>
-                }
-              />
-            ) : (
-              <DetailsList
-                items={specializations}
-                selectionMode={SelectionMode.none}
-                columns={columns}
-                layoutMode={DetailsListLayoutMode.justified}
-                onRenderItemColumn={onRenderItemColumn}
-                isHeaderVisible
-              />
-            )}
+            {renderBody()}
           </StyledColumn>
         </Row>
       </Container>
@@ -201,7 +234,7 @@ const _AccessManagementSpecializationPage = () => {
         }}
         onDismiss={() => {
           setIsPanelOpen(false);
-          setSelectedAccessId(0);
+          setSelectedAccessId(null);
         }}
         selectedAccessId={selectedAccessId}
       />
@@ -212,11 +245,11 @@ const _AccessManagementSpecializationPage = () => {
         dialogContentProps={{
           type: DialogType.normal,
           title: 'Are you sure?',
-          subText: `Do you really want to delete this Specialization?"${
-            specializations.find(({ sid }) => selectedAccessId === sid)?.name || ''
+          subText: `Do you really want to delete this Specialization "${
+            specializations?.find((spec) => selectedAccessId === spec?.sid)?.name || ''
           }"?`,
         }}
-        modalProps={{ isBlocking: true }}
+        modalProps={{isBlocking: true}}
       >
         <DialogFooter>
           <PrimaryButton
@@ -232,13 +265,11 @@ const _AccessManagementSpecializationPage = () => {
             }}
             text="Remove"
           />
-          <DefaultButton onClick={hideConfirmation} text="Cancel" />
+          <DefaultButton onClick={hideConfirmation} text="Cancel"/>
         </DialogFooter>
       </Dialog>
     </LayoutDashboard>
   );
 };
-
-const AccessManagementSpecializationPage = memo(_AccessManagementSpecializationPage);
 
 export { AccessManagementSpecializationPage };
