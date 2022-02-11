@@ -86,7 +86,7 @@ export const useTableFilters = (searchTextPlaceholder: string, defaultSort?: Sor
   const now = new Date();
   const hour = getHours(now);
   const defaultStartDate = hour < 9 ? startOfYesterday() : startOfToday();
-  const defaultEndDate = hour < 9 ? endOfToday() : endOfTomorrow();
+  const defaultEndDate = hour < 21 ? endOfToday() : endOfTomorrow();
 
   const [pagingParams, setPagingParams] = useState<PageableInput>({
     pageNumber: 0,
