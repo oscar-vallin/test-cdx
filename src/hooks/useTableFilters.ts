@@ -9,7 +9,7 @@ import {
 } from 'date-fns';
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { DateState, useDateValue } from './useDateValue';
+import { DateState, useDateValue, useEndDateValue } from './useDateValue';
 import { DelayedInput, useDelayedInputValue } from './useInputValue';
 import { useQueryParams } from './useQueryParams';
 import { useOrgSid } from './useOrgSid';
@@ -112,7 +112,7 @@ export const useTableFilters = (searchTextPlaceholder: string, defaultSort?: Sor
   };
 
   const startDate = useDateValue('Start Date...', deriveStartDate());
-  const endDate = useDateValue('End Date...', deriveEndDate());
+  const endDate = useEndDateValue('End Date...', deriveEndDate());
 
   const searchText = useDelayedInputValue('', searchTextPlaceholder, urlParams.get('filter') || '', '');
 

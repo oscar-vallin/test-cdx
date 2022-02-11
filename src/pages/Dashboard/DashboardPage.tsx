@@ -20,7 +20,7 @@ import { StyledButton, StyledRow } from './DashboardPage.styles';
 import { format } from 'date-fns';
 import { ROUTE_DASHBOARD } from 'src/data/constants/RouteConstants';
 import { InputDateRange } from 'src/components/inputs/InputDateRange';
-import { useDateValue } from 'src/hooks/useDateValue';
+import { useDateValue, useEndDateValue } from 'src/hooks/useDateValue';
 
 const DashboardPage = () => {
   const { orgSid, startDate, endDate } = useOrgSid();
@@ -32,7 +32,7 @@ const DashboardPage = () => {
   const { setDateId, dateId } = service;
   const history = useHistory();
   const fromDate = useDateValue('', startDate ? new Date(`${startDate}T00:00:00.000`) : new Date());
-  const toDate = useDateValue('', endDate ? new Date(`${endDate}T23:59:59.999`) : new Date());
+  const toDate = useEndDateValue('', endDate ? new Date(`${endDate}T23:59:59.999`) : new Date());
 
   const handleChangeDate: any = (dateType: string, startDate?: Date, endDate?: Date) => {
     setDateId(dateType);
