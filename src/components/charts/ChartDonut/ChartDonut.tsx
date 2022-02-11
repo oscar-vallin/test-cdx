@@ -3,6 +3,7 @@ import chroma from 'chroma-js';
 import { PieChart, Pie, Cell, Label, Legend, Sector } from 'recharts';
 import { Text } from 'src/components/typography';
 import { Link } from '@fluentui/react';
+import { theme } from 'src/styles/themes/theme';
 
 export type ChartDataType = {
   key?: string;
@@ -97,6 +98,13 @@ const ChartDonut = ({ id, label, size = 50, data, onClickSlice }: ChartDonutProp
           <Cell key={index} fill={data[index % data?.length]?.color ?? COLORS[index % COLORS.length]} />
         ))}
       </Pie>
+      <text x={size} y={size}
+            dx={5} dy={11}
+            textAnchor="middle"
+            fill={theme.colors.black}
+            style={{fontSize: theme.fontSizes.xlarge}}>
+        {total}
+      </text>
       <Legend layout="vertical"
               verticalAlign="middle"
               align="right"
