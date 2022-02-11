@@ -261,7 +261,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
       </Column>
       <Column lg="6" right>
         <Stack horizontal>
-          {useUpdateUserPanel.userAccountForm.commands?.find((cmd) => cmd === CdxWebCommandType.Reset) && (
+          {useUpdateUserPanel.userAccountForm.commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Reset) && (
             <CommandButton
               id="__ResetPassword_Button"
               iconProps={{ iconName: 'Permissions' }}
@@ -269,7 +269,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
               onClick={showResetPasswordDialog}
             />
           )}
-          {useUpdateUserPanel.userAccountForm.commands?.find((cmd) => cmd === CdxWebCommandType.Deactivate) && (
+          {useUpdateUserPanel.userAccountForm.commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Deactivate) && (
             <CommandButton
               id="__InactivateUser_Button"
               iconProps={{ iconName: 'UserRemove' }}
@@ -277,7 +277,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
               onClick={showInactivateUserDialog}
             />
           )}
-          {useUpdateUserPanel.userAccountForm.commands?.find((cmd) => cmd === CdxWebCommandType.Activate) && (
+          {useUpdateUserPanel.userAccountForm.commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Activate) && (
             <CommandButton
               id="__ActivateUser_Button"
               iconProps={{ iconName: 'UserFollowed' }}
