@@ -1,16 +1,31 @@
 /* eslint-disable no-alert */
-import { ReactElement } from 'react';
-import { ActionButton, DetailsList, DetailsListLayoutMode, IColumn, SelectionMode } from '@fluentui/react';
+import React, { ReactElement } from 'react';
+import {
+  ActionButton,
+  DetailsList,
+  DetailsListLayoutMode,
+  IColumn,
+  MessageBar,
+  MessageBarType,
+  SelectionMode,
+  Stack
+} from '@fluentui/react';
 
 import { Badge } from 'src/components/badges/Badge';
 import { Card } from 'src/components/cards/Card';
 import { ChartDonut } from 'src/components/charts/ChartDonut';
-import { Row, Column } from 'src/components/layouts';
 import { Spacing } from 'src/components/spacings/Spacing';
-import { MessageBar } from 'src/components/notifications/MessageBar';
 import { Separator } from 'src/components/separators/Separator';
-import { FieldCreationEvent, Maybe, RecordCreationEvent, SequenceCreationEvent } from 'src/data/services/graphql';
+import {
+  FieldCreationEvent,
+  Maybe,
+  QualityChecks,
+  RecordCreationEvent,
+  SequenceCreationEvent
+} from 'src/data/services/graphql';
 import { theme } from 'src/styles/themes/theme';
+import { ChartDataType } from 'src/components/charts/ChartDonut/ChartDonut';
+import { FormRow } from 'src/components/layouts/Row/Row.styles';
 
 const COLUMNS: IColumn[] = [
   { key: 'status', name: 'Status', fieldName: 'status', minWidth: 80, maxWidth: 80 },
@@ -72,24 +87,45 @@ const onRenderItemColumn = (item: RowType, index?: number, column?: IColumn) => 
 };
 
 type QualityChecksTabProps = {
+  qualityChecks?: QualityChecks | null;
   items?: Maybe<SequenceCreationEvent>[];
 };
 
-const QualityChecksTab = ({ items = [] }: QualityChecksTabProps): ReactElement => {
-  const chartInfo = items
-    .map((item) => ({
-      errors: item?.recordCreationEvent?.map((item) => item?.error?.length).reduce((sum, i) => (sum ?? 0) + (i ?? 0), 0),
-      warnings: item?.recordCreationEvent?.map((item) => item?.warning?.length).reduce((sum, i) => (sum ?? 0) + (i ?? 0), 0),
-      infos: item?.recordCreationEvent?.map((item) => item?.information?.length).reduce((sum, i) => (sum ?? 0) + (i ?? 0), 0),
-    }))
-    .reduce(
-      (curr, count) => ({
-        errors: (curr?.errors ?? 0) + (count.errors ?? 0),
-        warnings: (curr?.warnings ?? 0) + (count.warnings ?? 0),
-        infos: (curr?.infos ?? 0) + (count.infos ?? 0)
-      }),
-      { errors: 0, warnings: 0, infos: 0 }
-    );
+const QualityChecksTab = ({ qualityChecks }: QualityChecksTabProps): ReactElement => {
+  const items = qualityChecks?.sequenceCreationEvent ?? [];
+
+  const messages = [
+    qualityChecks?.accStructReqError?.toleranceMsg,
+    qualityChecks?.accStructTruncError?.toleranceMsg,
+    qualityChecks?.clientSpecificReqError?.toleranceMsg,
+    qualityChecks?.reqError?.toleranceMsg,
+    qualityChecks?.truncError?.toleranceMsg,
+    qualityChecks?.codeListMappingError?.toleranceMsg,
+  ].filter((msg) => msg)
+
+  const totalNumErrors = (qualityChecks?.accStructReqError?.count ?? 0) +
+    (qualityChecks?.clientSpecificReqError?.count ?? 0) +
+    (qualityChecks?.accStructTruncError?.count ?? 0) +
+    (qualityChecks?.reqError?.count ?? 0) +
+    (qualityChecks?.truncError?.count ?? 0) +
+    (qualityChecks?.codeListMappingError?.count ?? 0);
+
+  const addChartData = (data: ChartDataType[], name: string, key: string, count?: number) => {
+    if (count && count > 0) {
+      data.push({name: name, key: key, value: count})
+    }
+  };
+
+  const errorData = () => {
+    const data: ChartDataType[] = [];
+    addChartData(data, 'Missing Account Structure', 'accStructReqError', qualityChecks?.accStructReqError?.count);
+    addChartData(data, 'Missing Client Specific Mapping', 'clientSpecificReqError', qualityChecks?.clientSpecificReqError?.count);
+    addChartData(data, 'Account Structure Truncated', 'accStructTruncError', qualityChecks?.accStructTruncError?.count);
+    addChartData(data, 'Missing Required Field', 'reqError', qualityChecks?.reqError?.count);
+    addChartData(data, 'Truncated Field', 'truncError', qualityChecks?.truncError?.count);
+    addChartData(data, 'Code List Mapping', 'codeListMappingError', qualityChecks?.codeListMappingError?.count);
+    return data;
+  }
 
   const eventToRow = (status: string, recordEvent: RecordCreationEvent, fieldEvent: FieldCreationEvent): RowType => {
     return {
@@ -139,48 +175,60 @@ const QualityChecksTab = ({ items = [] }: QualityChecksTabProps): ReactElement =
 
   return (
     <Spacing padding="normal">
-      {(chartInfo?.errors ?? 0) > 0 && (
-        <Spacing margin={{ bottom: 'normal' }}>
-          <Row>
-            <Column>
-              <MessageBar
-                type="error"
-                content={`The error count (${chartInfo?.errors}) is greater than the configured ceiling of 0.`}
-              />
-            </Column>
-          </Row>
-        </Spacing>
+      {messages.length > 0 && (
+        <FormRow>
+          <MessageBar
+            id="__QualityChecks_Msg"
+            messageBarType={MessageBarType.error}
+            isMultiline
+          >
+            {messages}
+          </MessageBar>
+        </FormRow>
       )}
 
-      <Row>
-        <Column xl={3}>
-          <Card elevation="smallest">
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <ChartDonut
-                size={70}
-                data={[
-                  { name: '', key: 0, label: 'Errors', value: chartInfo.errors ?? 0, color: '#fde7e9' },
-                  { name: '', key: 1, label: 'Warnings', value: chartInfo.warnings ?? 0, color: '#fff4ce' },
-                  { name: '', key: 2, label: 'Information', value: chartInfo.infos ?? 0, color: '#005A9E' },
-                ]}
-              />
-            </div>
+      <FormRow>
+        <Card elevation="smallest">
+          <Stack horizontal wrap tokens={{childrenGap: 20}}>
+            {(qualityChecks?.totalRecordCount ?? 0) > 0 && (
+              <Stack.Item>
+                <ChartDonut
+                  id="__Quality_Overall_Donut"
+                  size={70}
+                  data={[
+                    { key: 'ERROR', name: 'Errors', value: qualityChecks?.fieldCreationErrorCount ?? 0, color: '#990000' },
+                    { key: 'WARNING', name: 'Warnings', value: qualityChecks?.fieldCreationWarningCount ?? 0, color: '#fcde54' },
+                    { key: 'INFO', name: 'Information', value: qualityChecks?.fieldCreationInfoCount ?? 0, color: '#005A9E' },
+                  ]}
+                />
+              </Stack.Item>
+            )}
+            {totalNumErrors > 0 && (
+              <Stack.Item>
+                <ChartDonut
+                  id="__Quality_Errors_Donut"
+                  size={70}
+                  data={errorData()}
+                />
+              </Stack.Item>
+            )}
+          </Stack>
 
-            <Spacing margin={{ top: 'normal' }}>
-              <Separator />
-            </Spacing>
 
-            <ActionButton
-              id="__QualityChecksTabId"
-              iconProps={{iconName: 'ExcelDocument', style: { fontSize: theme.fontSizes.normal }}}
-              style={{ fontSize: theme.fontSizes.normal }}>
-              Download errors
-            </ActionButton>
-          </Card>
-        </Column>
+          <Spacing margin={{ top: 'normal' }}>
+            <Separator />
+          </Spacing>
 
-        <Column xl={9}>
-          <Card elevation="smallest">
+          <ActionButton
+            id="__QualityChecksTabId"
+            iconProps={{iconName: 'ExcelDocument', style: { fontSize: theme.fontSizes.normal }}}
+            style={{ fontSize: theme.fontSizes.normal }}>
+            Download errors
+          </ActionButton>
+        </Card>
+      </FormRow>
+      <FormRow>
+        <Card elevation="smallest">
             <DetailsList
               compact
               items={data()}
@@ -215,8 +263,7 @@ const QualityChecksTab = ({ items = [] }: QualityChecksTabProps): ReactElement =
             {/*  </Button>*/}
             {/*</div>*/}
           </Card>
-        </Column>
-      </Row>
+      </FormRow>
     </Spacing>
   );
 };

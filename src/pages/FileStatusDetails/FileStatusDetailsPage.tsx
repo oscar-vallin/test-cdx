@@ -258,7 +258,7 @@ const FileStatusDetailsPage = () => {
                 )}
               </>
             )}>
-            <QualityChecksTab items={packet?.qualityChecks?.sequenceCreationEvent || []}/>
+            <QualityChecksTab qualityChecks={packet?.qualityChecks}/>
           </PivotItem>
           <PivotItem headerText="Archives">
             <ArchivesTab packet={packet}/>
