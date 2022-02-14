@@ -18,13 +18,19 @@ export const StyledLi = styled.li<StyledLiProps>`
   .item__status {
     align-items: center;
     border-radius: 50%;
-    color: ${({ theme, status }) => (status === 'DONE' ? theme.colors.custom.success : theme.colors.black)};
     display: flex;
     justify-content: center;
     min-height: 35px;
     max-height: 35px;
     min-width: 35px;
     max-width: 35px;
+    
+    & .success {
+      color: ${({ theme }) => theme.colors.custom.success};
+    }
+    & .error {
+      color: ${({ theme }) => theme.colors.custom.error};
+    }
   }
 
   .item__content {

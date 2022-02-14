@@ -59,8 +59,9 @@ const CDXTimeline = ({ packet, activeIndex = 0, onClick }: CDXTimelineProps): Re
 
   const getStatusIcon = (status: string) => {
     const ICONS = {
-      COMPLETE: <FontIcon iconName="CompletedSolid" style={{fontSize: 32}}/>,
-      DONE: <FontIcon iconName="CompletedSolid" style={{fontSize: 32}}/>,
+      COMPLETE: <FontIcon iconName="CompletedSolid" className="success" style={{fontSize: 32}}/>,
+      DONE: <FontIcon iconName="CompletedSolid" className="success" style={{fontSize: 32}}/>,
+      QCFAIL: <FontIcon iconName="IncidentTriangle" className="error" style={{fontSize: 32}}/>,
       PROGRESS: <Spinner size="md" />,
     };
 
