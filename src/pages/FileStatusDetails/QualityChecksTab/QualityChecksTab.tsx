@@ -1,7 +1,7 @@
 /* eslint-disable no-alert */
 import React, { ReactElement, useState } from 'react';
 import {
-  ActionButton, Checkbox,
+  Checkbox,
   DetailsList,
   DetailsListLayoutMode,
   IColumn,
@@ -26,7 +26,7 @@ import { ChartDataType } from 'src/components/charts/ChartDonut/ChartDonut';
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
 import { Text } from 'src/components/typography';
 import { ICheckboxProps } from '@fluentui/react/lib/components/Checkbox/Checkbox.types';
-import { SuperScript } from '../FileStatusDetails.styles';
+import { SuperScript, WhiteButton } from '../FileStatusDetails.styles';
 import { EmptyState } from 'src/containers/states';
 
 const COLUMNS: IColumn[] = [
@@ -274,12 +274,11 @@ const QualityChecksTab = ({ qualityChecks }: QualityChecksTabProps): ReactElemen
         <Card elevation="smallest">
           <Stack horizontal={true} tokens={{childrenGap: 10}} style={{paddingBottom: 10}} verticalAlign="center">
             <Stack.Item>
-              <ActionButton
+              <WhiteButton
                 id="__QualityChecksTabId"
-                iconProps={{iconName: 'ExcelDocument', style: { fontSize: theme.fontSizes.normal }}}
-                style={{ fontSize: theme.fontSizes.normal }}>
+                iconProps={{iconName: 'ExcelDocument', style: { fontSize: theme.fontSizes.normal }}}>
                 Download
-              </ActionButton>
+              </WhiteButton>
             </Stack.Item>
             <Stack.Item grow={1}><DarkSeparator/></Stack.Item>
             <Stack.Item >

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { DetailsRow } from '@fluentui/react';
+import { ActionButton, DetailsRow } from '@fluentui/react';
 import { device} from 'src/styles/GlobalStyles';
 import { Text } from 'src/components/typography';
 
@@ -121,4 +121,12 @@ export const BadgeWrapper = styled.span`
 export const SuperScript = styled(Text)`
   vertical-align: top;
   padding-top: .5rem;
+`
+
+export const WhiteButton = styled(ActionButton)`
+  font-size: ${({ theme }) => theme.fontSizes.normal};  
+  font-weight: ${({ theme }) => theme.fontWeights.bold};  
+  background-color: ${({ theme }) => theme.colors.white};
+  padding: 10px;
+  border-radius: 5px;
 `
