@@ -1,12 +1,10 @@
 /* eslint-disable no-alert */
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useState } from 'react';
 import {
-  ActionButton,
+  ActionButton, Checkbox,
   DetailsList,
   DetailsListLayoutMode,
   IColumn,
-  MessageBar,
-  MessageBarType,
   SelectionMode,
   Stack
 } from '@fluentui/react';
@@ -15,7 +13,7 @@ import { Badge } from 'src/components/badges/Badge';
 import { Card } from 'src/components/cards/Card';
 import { ChartDonut } from 'src/components/charts/ChartDonut';
 import { Spacing } from 'src/components/spacings/Spacing';
-import { Separator } from 'src/components/separators/Separator';
+import { DarkSeparator } from 'src/components/separators/Separator';
 import {
   FieldCreationEvent,
   Maybe,
@@ -26,6 +24,10 @@ import {
 import { theme } from 'src/styles/themes/theme';
 import { ChartDataType } from 'src/components/charts/ChartDonut/ChartDonut';
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
+import { Text } from 'src/components/typography';
+import { ICheckboxProps } from '@fluentui/react/lib/components/Checkbox/Checkbox.types';
+import { SuperScript } from '../FileStatusDetails.styles';
+import { EmptyState } from 'src/containers/states';
 
 const COLUMNS: IColumn[] = [
   { key: 'status', name: 'Status', fieldName: 'status', minWidth: 80, maxWidth: 80 },
@@ -94,21 +96,18 @@ type QualityChecksTabProps = {
 const QualityChecksTab = ({ qualityChecks }: QualityChecksTabProps): ReactElement => {
   const items = qualityChecks?.sequenceCreationEvent ?? [];
 
-  const messages = [
-    qualityChecks?.accStructReqError?.toleranceMsg,
-    qualityChecks?.accStructTruncError?.toleranceMsg,
-    qualityChecks?.clientSpecificReqError?.toleranceMsg,
-    qualityChecks?.reqError?.toleranceMsg,
-    qualityChecks?.truncError?.toleranceMsg,
-    qualityChecks?.codeListMappingError?.toleranceMsg,
-  ].filter((msg) => msg)
-
   const totalNumErrors = (qualityChecks?.accStructReqError?.count ?? 0) +
     (qualityChecks?.clientSpecificReqError?.count ?? 0) +
     (qualityChecks?.accStructTruncError?.count ?? 0) +
     (qualityChecks?.reqError?.count ?? 0) +
     (qualityChecks?.truncError?.count ?? 0) +
     (qualityChecks?.codeListMappingError?.count ?? 0);
+
+  const hasQualityCheckStats = (qualityChecks?.totalRecordCount ?? 0) > 0;
+  const hasErrors = totalNumErrors > 0;
+
+  const totalRecords = qualityChecks?.totalRecordCount ?? 0;
+  const errorPercent = totalRecords === 0 ? 0 : (totalNumErrors / totalRecords) * 100;
 
   const addChartData = (data: ChartDataType[], name: string, key: string, count?: number) => {
     if (count && count > 0) {
@@ -140,26 +139,31 @@ const QualityChecksTab = ({ qualityChecks }: QualityChecksTabProps): ReactElemen
     }
   };
 
+  // Toggles for the details table
+  const [showInfo, setShowInfo] = useState(true);
+  const [showWarn, setShowWarn] = useState(true);
+  const [showError, setShowError] = useState(true);
+
   const data = (): RowType[] => {
     const rows: RowType[] = [];
     items?.forEach((item) => {
       if (item?.recordCreationEvent) {
         item?.recordCreationEvent?.forEach((creationEvent) => {
-          if (creationEvent?.error) {
+          if (showError && creationEvent?.error) {
             creationEvent.error.forEach((fieldEvent) => {
               if (fieldEvent) {
                 rows.push(eventToRow('ERROR', creationEvent, fieldEvent));
               }
             })
           }
-          if (creationEvent?.warning) {
+          if (showWarn && creationEvent?.warning) {
             creationEvent.warning.forEach((fieldEvent) => {
               if (fieldEvent) {
                 rows.push(eventToRow('WARNING', creationEvent, fieldEvent));
               }
             })
           }
-          if (creationEvent?.information) {
+          if (showInfo && creationEvent?.information) {
             creationEvent.information.forEach((fieldEvent) => {
               if (fieldEvent) {
                 rows.push(eventToRow('INFO', creationEvent, fieldEvent));
@@ -173,98 +177,175 @@ const QualityChecksTab = ({ qualityChecks }: QualityChecksTabProps): ReactElemen
     return rows;
   }
 
-  return (
+  const renderBody = () => (
     <Spacing padding="normal">
-      {messages.length > 0 && (
+      {(hasQualityCheckStats || hasErrors) && (
         <FormRow>
-          <MessageBar
-            id="__QualityChecks_Msg"
-            messageBarType={MessageBarType.error}
-            isMultiline
-          >
-            {messages}
-          </MessageBar>
+          <Stack horizontal wrap tokens={{childrenGap: 20}}>
+            {(hasQualityCheckStats) && (
+              <Stack.Item>
+                <Card elevation="smallest">
+                  <Stack tokens={{childrenGap: 15}}>
+                    <Stack.Item>
+                      <Stack horizontal tokens={{childrenGap: 15}} verticalAlign="center">
+                        <Stack.Item>
+                          <Text size="giant">{errorPercent.toFixed(2)}</Text>
+                          <SuperScript>%</SuperScript>
+                        </Stack.Item>
+                        <Stack.Item>
+                          <Text variant="muted">of the records contain errors</Text>
+                        </Stack.Item>
+                      </Stack>
+                    </Stack.Item>
+                    <Stack.Item>
+                      <DarkSeparator/>
+                    </Stack.Item>
+                    <Stack.Item>
+                      <ChartDonut
+                        id="__Quality_Overall_Donut"
+                        size={70}
+                        data={[
+                          { key: 'ERROR', name: 'Errors', value: qualityChecks?.fieldCreationErrorCount ?? 0, color: '#990000' },
+                          { key: 'WARNING', name: 'Warnings', value: qualityChecks?.fieldCreationWarningCount ?? 0, color: '#fcde54' },
+                          { key: 'INFO', name: 'Information', value: qualityChecks?.fieldCreationInfoCount ?? 0, color: '#005A9E' },
+                        ]}
+                        totalRecords={totalRecords}
+                        onClickSlice={(key: string) => {
+                          switch (key) {
+                            case 'ERROR': {
+                              setShowInfo(false);
+                              setShowWarn(false);
+                              setShowError(true);
+                              break;
+                            }
+                            case 'WARNING': {
+                              setShowInfo(false);
+                              setShowWarn(true);
+                              setShowError(false);
+                              break;
+                            }
+                            case 'INFO': {
+                              setShowInfo(true);
+                              setShowWarn(false);
+                              setShowError(false);
+                              break;
+                            }
+                          }
+                        }}
+                      />
+                    </Stack.Item>
+                  </Stack>
+                </Card>
+              </Stack.Item>
+            )}
+            {(hasErrors) && (
+              <Stack.Item>
+                <Card elevation="smallest">
+                  <Stack tokens={{childrenGap: 15}}>
+                    <Stack.Item>
+                      <Stack horizontal tokens={{childrenGap: 15}} verticalAlign="center">
+                        <Stack.Item grow={1}>
+                          <Text variant="muted">Record error breakdown</Text>
+                        </Stack.Item>
+                        <Stack.Item>
+                          <Text size="giant">&nbsp;</Text>
+                        </Stack.Item>
+                      </Stack>
+                    </Stack.Item>
+                    <Stack.Item>
+                      <DarkSeparator/>
+                    </Stack.Item>
+                    <Stack.Item>
+                      <ChartDonut
+                        id="__Quality_Errors_Donut"
+                        size={70}
+                        data={errorData()}
+                      />
+                    </Stack.Item>
+                  </Stack>
+                </Card>
+              </Stack.Item>
+            )}
+          </Stack>
         </FormRow>
       )}
 
       <FormRow>
         <Card elevation="smallest">
-          <Stack horizontal wrap tokens={{childrenGap: 20}}>
-            {(qualityChecks?.totalRecordCount ?? 0) > 0 && (
-              <Stack.Item>
-                <ChartDonut
-                  id="__Quality_Overall_Donut"
-                  size={70}
-                  data={[
-                    { key: 'ERROR', name: 'Errors', value: qualityChecks?.fieldCreationErrorCount ?? 0, color: '#990000' },
-                    { key: 'WARNING', name: 'Warnings', value: qualityChecks?.fieldCreationWarningCount ?? 0, color: '#fcde54' },
-                    { key: 'INFO', name: 'Information', value: qualityChecks?.fieldCreationInfoCount ?? 0, color: '#005A9E' },
-                  ]}
-                />
-              </Stack.Item>
-            )}
-            {totalNumErrors > 0 && (
-              <Stack.Item>
-                <ChartDonut
-                  id="__Quality_Errors_Donut"
-                  size={70}
-                  data={errorData()}
-                />
-              </Stack.Item>
-            )}
+          <Stack horizontal={true} tokens={{childrenGap: 10}} style={{paddingBottom: 10}} verticalAlign="center">
+            <Stack.Item>
+              <ActionButton
+                id="__QualityChecksTabId"
+                iconProps={{iconName: 'ExcelDocument', style: { fontSize: theme.fontSizes.normal }}}
+                style={{ fontSize: theme.fontSizes.normal }}>
+                Download
+              </ActionButton>
+            </Stack.Item>
+            <Stack.Item grow={1}><DarkSeparator/></Stack.Item>
+            <Stack.Item >
+              <Checkbox label="Info"
+                        checked={showInfo}
+                        onChange={() => setShowInfo(!showInfo)}
+                        onRenderLabel={(props?: ICheckboxProps) => (<Text>{props?.label}</Text>)}/>
+            </Stack.Item>
+            <Stack.Item>
+              <Checkbox label="Warning"
+                        checked={showWarn}
+                        onChange={() => setShowWarn(!showWarn)}
+                        onRenderLabel={(props?: ICheckboxProps) => (<Text>{props?.label}</Text>)}/>
+            </Stack.Item>
+            <Stack.Item>
+              <Checkbox label="Error"
+                        checked={showError}
+                        onChange={() => setShowError(!showError)}
+                        onRenderLabel={(props?: ICheckboxProps) => (<Text>{props?.label}</Text>)}/>
+            </Stack.Item>
+            <Stack.Item grow={1}><DarkSeparator/></Stack.Item>
           </Stack>
+          <DetailsList
+            compact
+            items={data()}
+            columns={COLUMNS}
+            selectionMode={SelectionMode.none}
+            layoutMode={DetailsListLayoutMode.justified}
+            onRenderItemColumn={onRenderItemColumn}
+            isHeaderVisible
+          />
 
+          {/*<Separator />*/}
 
-          <Spacing margin={{ top: 'normal' }}>
-            <Separator />
-          </Spacing>
-
-          <ActionButton
-            id="__QualityChecksTabId"
-            iconProps={{iconName: 'ExcelDocument', style: { fontSize: theme.fontSizes.normal }}}
-            style={{ fontSize: theme.fontSizes.normal }}>
-            Download errors
-          </ActionButton>
+          {/*<div>*/}
+          {/*  <Button id="__QualityChecksTabId" variant="primary" onClick={() => null}>*/}
+          {/*    Continue processing*/}
+          {/*  </Button>{' '}*/}
+          {/*  &nbsp;*/}
+          {/*  <Button*/}
+          {/*    id="__QualityChecksTabId"*/}
+          {/*    variant=""*/}
+          {/*    split*/}
+          {/*    text="Cancel processing"*/}
+          {/*    onClick={() => {*/}
+          {/*      alert('Click');*/}
+          {/*      return null;*/}
+          {/*    }}*/}
+          {/*    menuProps={{*/}
+          {/*      items: [{ text: 'Error out', key: 'ErrorOut' }],*/}
+          {/*    }}*/}
+          {/*  >*/}
+          {/*    Cancel processing*/}
+          {/*  </Button>*/}
+          {/*</div>*/}
         </Card>
       </FormRow>
-      <FormRow>
-        <Card elevation="smallest">
-            <DetailsList
-              compact
-              items={data()}
-              columns={COLUMNS}
-              selectionMode={SelectionMode.none}
-              layoutMode={DetailsListLayoutMode.justified}
-              onRenderItemColumn={onRenderItemColumn}
-              isHeaderVisible
-            />
-
-            {/*<Separator />*/}
-
-            {/*<div>*/}
-            {/*  <Button id="__QualityChecksTabId" variant="primary" onClick={() => null}>*/}
-            {/*    Continue processing*/}
-            {/*  </Button>{' '}*/}
-            {/*  &nbsp;*/}
-            {/*  <Button*/}
-            {/*    id="__QualityChecksTabId"*/}
-            {/*    variant=""*/}
-            {/*    split*/}
-            {/*    text="Cancel processing"*/}
-            {/*    onClick={() => {*/}
-            {/*      alert('Click');*/}
-            {/*      return null;*/}
-            {/*    }}*/}
-            {/*    menuProps={{*/}
-            {/*      items: [{ text: 'Error out', key: 'ErrorOut' }],*/}
-            {/*    }}*/}
-            {/*  >*/}
-            {/*    Cancel processing*/}
-            {/*  </Button>*/}
-            {/*</div>*/}
-          </Card>
-      </FormRow>
     </Spacing>
+  );
+
+  if (qualityChecks) {
+    return renderBody();
+  }
+
+  return (
+    <EmptyState title="There are no Quality Checks for this Exchange"/>
   );
 };
 

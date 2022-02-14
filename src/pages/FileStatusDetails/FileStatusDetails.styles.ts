@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { DetailsRow } from '@fluentui/react';
 import { device} from 'src/styles/GlobalStyles';
+import { Text } from 'src/components/typography';
 
 export const ShadowBox = styled.div`
   box-shadow: ${({ theme }) => theme.boxShadows['smallest']};
@@ -115,4 +116,9 @@ export const BadgeWrapper = styled.span`
     margin-left: .5em;
     height: 1.5em;
   }
+`
+
+export const SuperScript = styled(Text)`
+  vertical-align: top;
+  padding-top: .5rem;
 `

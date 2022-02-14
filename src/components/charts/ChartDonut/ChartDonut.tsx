@@ -17,13 +17,19 @@ type ChartDonutProps = {
   label?: string;
   size?: number;
   data?: ChartDataType[];
+  totalRecords?: number;
   onClickSlice?: (key: string) => void;
 };
 
 const COLORS = ['#0088FE', '#D0D0D0', '#FFAAAA', '#AADD00', '#EEAA00', '#DDCCFF', '#00AAAA'];
 
-const ChartDonut = ({ id, label, size = 50, data, onClickSlice }: ChartDonutProps): ReactElement => {
-  const total = data?.reduce((sum, current) => sum + current.value, 0);
+const ChartDonut = ({ id, label, size = 50, data, totalRecords, onClickSlice }: ChartDonutProps): ReactElement => {
+  const total = totalRecords ?? data?.reduce((sum, current) => sum + current.value, 0);
+  const totalDigits = total?.toString().length ?? 0;
+  // Fix these font sizes since they are inside of the donut chart
+  // they should not adjust when font size changes in the UI
+  const totalFontSize = (totalDigits < 6) ? '1.5em' : '1.25em';
+
   const [activeIndex, setActiveIndex] = useState<number>();
 
   const onMouseOver = (data, index) => {
@@ -102,7 +108,7 @@ const ChartDonut = ({ id, label, size = 50, data, onClickSlice }: ChartDonutProp
             dx={5} dy={11}
             textAnchor="middle"
             fill={theme.colors.black}
-            style={{fontSize: theme.fontSizes.xlarge}}>
+            style={{fontSize: totalFontSize}}>
         {total}
       </text>
       <Legend layout="vertical"

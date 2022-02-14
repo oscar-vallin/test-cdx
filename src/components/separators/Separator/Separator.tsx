@@ -1,5 +1,5 @@
 import { ReactElement } from 'react';
-import { StyledSeparator } from './Separator.styles';
+import { LightSeparator } from './Separator.styles';
 
 const defaultProps = {
   id: '',
@@ -10,7 +10,7 @@ type CDXSeparatorProps = {
 } & typeof defaultProps;
 
 const CDXSeparator = ({ id }: CDXSeparatorProps): ReactElement => {
-  return <StyledSeparator id={id} />;
+  return <LightSeparator id={id} />;
 };
 
 CDXSeparator.defaultProps = defaultProps;
