@@ -69,18 +69,7 @@ const FileStatusDetailsPage = () => {
     // enableRefresh(condition);
   }, []);
 
-  const errorCount = (): number => {
-    let count = 0;
-    packet?.qualityChecks?.sequenceCreationEvent?.forEach((sce) => {
-      if (sce?.recordCreationEvent) {
-        sce.recordCreationEvent?.forEach((rce) => {
-          count += rce?.error?.length ?? 0
-        });
-      }
-    });
-
-    return count;
-  }
+  const errorCount = (): number => packet?.qualityChecks?.fieldCreationErrorCount ?? 0;
 
   const formatDate = (d?: Date): string => {
     // Check if this date has a valid time value
