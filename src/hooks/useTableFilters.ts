@@ -14,6 +14,7 @@ import { DelayedInput, useDelayedInputValue } from './useInputValue';
 import { useQueryParams } from './useQueryParams';
 import { useOrgSid } from './useOrgSid';
 import { Maybe, PageableInput, SortDirection, SortOrderInput } from '../data/services/graphql';
+import { yyyyMMdd } from 'src/utils/CDXUtils';
 
 export type TableFiltersType = {
   searchText: DelayedInput;
@@ -125,8 +126,8 @@ export const useTableFilters = (searchTextPlaceholder: string, defaultSort?: Sor
     const xParams = {
       ..._addParamIfExists('orgSid', orgSid),
       ..._addParamIfExists('filter', searchText.value),
-      ..._addParamIfExists('startDate', format(startDateToFormat, 'yyyy-MM-dd')),
-      ..._addParamIfExists('endDate', format(endDateToFormat, 'yyyy-MM-dd')),
+      ..._addParamIfExists('startDate', yyyyMMdd(startDateToFormat)),
+      ..._addParamIfExists('endDate', yyyyMMdd(endDateToFormat)),
     };
 
     location.search = QueryParams.stringify(xParams);

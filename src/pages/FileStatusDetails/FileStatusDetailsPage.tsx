@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 
 import { ROUTES } from 'src/data/constants/RouteConstants';
 
@@ -33,6 +33,7 @@ import { theme } from 'src/styles/themes/theme';
 
 const FileStatusDetailsPage = () => {
   const { orgSid } = useOrgSid();
+  const { hash } = useLocation();
 
   const { id }: any = useParams();
   const [packet, setPacket] = useState<WorkPacketStatusDetails>();
@@ -233,20 +234,22 @@ const FileStatusDetailsPage = () => {
               fontSize: theme.fontSizes.normal
             },
           }}
-          style={{ fontSize: theme.fontSizes.normal }}>
-          <PivotItem headerText="Enrollment Stats">
+          style={{ fontSize: theme.fontSizes.normal }}
+          defaultSelectedKey={hash}>
+          <PivotItem headerText="Enrollment Stats" itemKey="#enrollment">
             <EnrollmentStatsTab packet={packet} />
           </PivotItem>
-          <PivotItem headerText="Vendor Count Stats">
+          <PivotItem headerText="Vendor Count Stats" itemKey="#vendor">
             <VendorCountStatsTab items={packet?.outboundRecordCounts} />
           </PivotItem>
           {packet?.workStepStatus && packet.workStepStatus.length > 0 && (
-            <PivotItem headerText="Work Steps">
+            <PivotItem headerText="Work Steps" itemKey="#work">
               <WorkStepsTab packet={packet} />
             </PivotItem>
           )}
           <PivotItem
             headerText="Quality Checks"
+            itemKey="#quality"
             onRenderItemLink={(link: any, defaultRenderer: any): any => (
               <>
                 {defaultRenderer(link)}

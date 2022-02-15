@@ -9,7 +9,7 @@ import {
   WpProcessError,
   WpTransmission
 } from 'src/data/services/graphql';
-import { CellItemRow, RouteLink, StyledCell } from 'src/components/tables/Table/Table.styles';
+import { CellItemRow, StyledCell } from 'src/components/tables/Table/Table.styles';
 import { HighlightCounter } from 'src/components/badges/HighlightCounter';
 import { getStepStatusLabel } from 'src/data/constants/FileStatusConstants';
 import { FileProgress } from '../bars/FileProgress';
@@ -61,9 +61,8 @@ export const useWorkPacketColumns = (
         if (item.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.ViewDetails)) {
           return (
             <CellItemRow>
-              <Link>
-                <RouteLink
-                  to={`/file-status/${item.workOrderId}?orgSid=${item.orgSid}&startDate=${startDate}&endDate=${endDate}`}>{timestamp}</RouteLink>
+              <Link href={`/file-status/${item.workOrderId}?orgSid=${item.orgSid}&startDate=${startDate}&endDate=${endDate}`}>
+                {timestamp}
               </Link>
               {item.recordHighlightCount && (
                 <HighlightCounter
@@ -112,9 +111,8 @@ export const useWorkPacketColumns = (
         const timestamp = format(new Date(item.deliveredOn), 'MM/dd/yyyy hh:mm a');
         if (item.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.ViewDetails)) {
           return (
-            <Link>
-              <RouteLink
-                to={`/file-status/${item.workOrderId}?orgSid=${item.orgSid}&startDate=${startDate}&endDate=${endDate}`}>{timestamp}</RouteLink>
+            <Link href={`/file-status/${item.workOrderId}?orgSid=${item.orgSid}&startDate=${startDate}&endDate=${endDate}`}>
+              {timestamp}
             </Link>
           );
         } else {
@@ -140,9 +138,8 @@ export const useWorkPacketColumns = (
         const timestamp = format(new Date(item.startTime), 'MM/dd/yyyy hh:mm a');
         if (item.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.ViewDetails)) {
           return (
-            <Link>
-              <RouteLink
-                to={`/file-status/${item.workOrderId}?orgSid=${item.orgSid}&startDate=${startDate}&endDate=${endDate}`}>{timestamp}</RouteLink>
+            <Link href={`/file-status/${item.workOrderId}?orgSid=${item.orgSid}&startDate=${startDate}&endDate=${endDate}`}>
+              {timestamp}
             </Link>
           );
         } else {

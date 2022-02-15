@@ -17,10 +17,10 @@ import { useOrgSid } from 'src/hooks/useOrgSid';
 import { PageTitle } from 'src/components/typography';
 import { useDashboardService } from './DashboardPage.service';
 import { StyledButton, StyledRow } from './DashboardPage.styles';
-import { format } from 'date-fns';
 import { ROUTE_DASHBOARD } from 'src/data/constants/RouteConstants';
 import { InputDateRange } from 'src/components/inputs/InputDateRange';
 import { useDateValue, useEndDateValue } from 'src/hooks/useDateValue';
+import { yyyyMMdd } from 'src/utils/CDXUtils';
 
 const DashboardPage = () => {
   const { orgSid, startDate, endDate } = useOrgSid();
@@ -41,18 +41,18 @@ const DashboardPage = () => {
       history.push(`?date=${dateType}&orgSid=${orgSid}`);
     } else if (startDate && endDate) {
       history.push(
-        `?startDate=${format(startDate, 'yyyy-MM-dd')}&endDate=${format(endDate, 'yyyy-MM-dd')}&orgSid=${orgSid}`
+        `?startDate=${yyyyMMdd(startDate)}&endDate=${yyyyMMdd(endDate)}&orgSid=${orgSid}`
       );
     } else {
       history.push(
-        `?startDate=${format(fromDate.value, 'yyyy-MM-dd')}&endDate=${format(toDate.value, 'yyyy-MM-dd')}&orgSid=${orgSid}`
+        `?startDate=${yyyyMMdd(fromDate.value)}&endDate=${yyyyMMdd(toDate.value)}&orgSid=${orgSid}`
       );
     }
   };
 
   useEffect(() => {
     history.push(
-      `?startDate=${format(fromDate.value, 'yyyy-MM-dd')}&endDate=${format(toDate.value, 'yyyy-MM-dd')}&orgSid=${orgSid}`
+      `?startDate=${yyyyMMdd(fromDate.value)}&endDate=${yyyyMMdd(toDate.value)}&orgSid=${orgSid}`
     );
   }, [fromDate.value, toDate.value]);
 

@@ -1,7 +1,6 @@
 /* eslint-disable react/void-dom-elements-no-children */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { ReactElement, useEffect, useState } from 'react';
-import { format } from 'date-fns';
 
 import {
   Link,
@@ -33,6 +32,7 @@ import {
 } from './Table.styles';
 
 import { TableHeader } from '../TableHeader';
+import { yyyyMMdd } from 'src/utils/CDXUtils';
 
 const _buildColumns = (
   items,
@@ -150,8 +150,6 @@ const Table = ({
   searchInput,
   date,
   onItemsListChange,
-  loading = true,
-  title,
   emptyMessage = 'No data',
 }: TableProps): ReactElement => {
   const { orgSid } = useOrgSid();
@@ -369,9 +367,8 @@ const Table = ({
         }
 
         {
-          const formatDatesURL = 'yyyy-MM-dd';
-          const startFormatted = format(getDates(date).startDate, formatDatesURL);
-          const endFormatted = format(getDates(date).endDate, formatDatesURL);
+          const startFormatted = yyyyMMdd(getDates(date).startDate);
+          const endFormatted = yyyyMMdd(getDates(date).endDate);
 
           return (
             <StyledCell left>
