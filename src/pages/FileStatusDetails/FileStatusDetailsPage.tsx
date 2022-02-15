@@ -144,6 +144,31 @@ const FileStatusDetailsPage = () => {
     return null;
   }
 
+  const renderDeliveredFileInfo = (deliveredFile?: DeliveredFile | null) => {
+    if (deliveredFile) {
+      return (
+        <>
+          <Stack.Item>
+            <Text size="small" variant="muted">Delivered Vendor File Details</Text>
+            <LabelValue label="Filename" value={deliveredFile.filename ?? 'File not found'}/>
+            <LabelValue label="Delivered on" value={formatDate(new Date(deliveredFile.timeDelivered))}/>
+            <LabelValue label="Size" value={`${deliveredFile.fileSizeInBytes} bytes (without encryption)`}/>
+          </Stack.Item>
+          <Stack.Item>
+            <Text size="small" variant="muted">FTP details</Text>
+            <LabelValue label="Protocol" value={deliveredFile.ftp?.protocol}/>
+            {deliveredFile?.ftp?.port && (
+              <LabelValue label="Port" value={deliveredFile.ftp?.port}/>
+            )}
+            <LabelValue label="User" value="*******" title={deliveredFile.ftp?.username}/>
+            <LabelValue label="Host" value={deliveredFile.ftp?.host} />
+            <LabelValue label="Folder" value={deliveredFile.ftp?.folder} />
+          </Stack.Item>
+        </>
+      );
+    }
+  }
+
   const renderFileMetaData = () => {
     return (
       <ShadowBox id="__FileMeta">
@@ -183,22 +208,7 @@ const FileStatusDetailsPage = () => {
                 <LabelValue label="Work Order Id" value={packet?.workOrderId} />
                 <LabelValue label="Spec Id" value={packet?.specId} />
               </Stack.Item>
-              <Stack.Item>
-                <Text size="small" variant="muted">Delivered Vendor File Details</Text>
-                <LabelValue label="Filename" value={deliveredFile?.filename ?? 'File not found'}/>
-                <LabelValue label="Delivered on" value={formatDate(new Date(deliveredFile?.timeDelivered))}/>
-                <LabelValue label="Size" value={`${deliveredFile?.fileSizeInBytes} bytes (without encryption)`}/>
-              </Stack.Item>
-              <Stack.Item>
-                <Text size="small" variant="muted">FTP details</Text>
-                <LabelValue label="Protocol" value={deliveredFile?.ftp?.protocol}/>
-                {deliveredFile?.ftp?.port && (
-                  <LabelValue label="Port" value={deliveredFile?.ftp?.port}/>
-                )}
-                <LabelValue label="User" value="*******" title={deliveredFile?.ftp?.username}/>
-                <LabelValue label="Host" value={deliveredFile?.ftp?.host} />
-                <LabelValue label="Folder" value={deliveredFile?.ftp?.folder} />
-              </Stack.Item>
+              {renderDeliveredFileInfo(deliveredFile)}
             </Stack>
           </FileMetaDetails>
         )}
