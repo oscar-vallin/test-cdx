@@ -19,6 +19,7 @@ import { useWorkPacketColumns, WorkPacketColumns } from './WorkPacketColumns';
 import { TableFilters } from './TableFilters';
 import { EmptyState } from '../states';
 import { Box, Container } from './WorkPacketTable.styles';
+import { useHistory } from 'react-router-dom';
 
 type WorkPacketParams = {
   id: string;
@@ -41,6 +42,7 @@ export const WorkPacketTable = ({
 }: WorkPacketParams) => {
   const POLL_INTERVAL = 20000;
   const { orgSid } = useOrgSid();
+  const history = useHistory();
   const handleError = ErrorHandler();
 
   const [pagingInfo, setPagingInfo] = useState<PaginationInfo>({
@@ -104,7 +106,25 @@ export const WorkPacketTable = ({
     });
   };
 
-  const { initialColumns } = useWorkPacketColumns(cols, _doSort);
+  const openDetails = (orgSid?: string | null, workOrderId?: string, tab?: string) => {
+    // The rendering of the columns is only done upon initialization of the column
+    // so we can't rely on state to change the parameters of the URL.
+    // So we have to do this hack where we read the start date and end date parameters from the
+    // url every time and not use any of the utilities we have to do so.
+
+    // const startDate = yyyyMMdd(tableFilters.startDate.value);
+    // const endDate = yyyyMMdd(tableFilters.endDate.value);
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const startDate = urlParams.get('startDate');
+    const endDate = urlParams.get('endDate');
+    const hash = tab ? `#${tab}` : '';
+    history.push(
+      `/file-status/${workOrderId}?orgSid=${orgSid}&startDate=${startDate}&endDate=${endDate}${hash}`
+    );
+  }
+
+  const { initialColumns } = useWorkPacketColumns(cols, openDetails, _doSort);
 
   const [columns, setColumns] = useState<IColumn[]>(initialColumns);
   const [items, setItems] = useState<any[]>([]);

@@ -13,13 +13,12 @@ import { CellItemRow, StyledCell } from 'src/components/tables/Table/Table.style
 import { HighlightCounter } from 'src/components/badges/HighlightCounter';
 import { getStepStatusLabel } from 'src/data/constants/FileStatusConstants';
 import { FileProgress } from '../bars/FileProgress';
-import { useOrgSid } from 'src/hooks/useOrgSid';
 
 export const useWorkPacketColumns = (
   selectedColumns: WorkPacketColumns[],
+  openDetails: (orgSid?: string | null, workOrderId?: string, tab?: string) => void,
   onSort?: (ev: React.MouseEvent<HTMLElement>, column: IColumn) => void
 ) => {
-  const {startDate, endDate} = useOrgSid();
 
   const graphQLUrl = process.env.REACT_APP_API_SERVER;
   const serverUrl = graphQLUrl?.replace('/graphql', '') ?? '';
@@ -61,14 +60,14 @@ export const useWorkPacketColumns = (
         if (item.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.ViewDetails)) {
           return (
             <CellItemRow>
-              <Link href={`/file-status/${item.workOrderId}?orgSid=${item.orgSid}&startDate=${startDate}&endDate=${endDate}`}>
+              <Link onClick={() => openDetails(item.orgSid, item.workOrderId)}>
                 {timestamp}
               </Link>
               {item.recordHighlightCount && (
                 <HighlightCounter
                   id={`__FileStatus_Highlight_Counter_${item.workOrderId}`}
                   type={item.recordHighlightType}
-                  href={`/file-status/${item.workOrderId}?orgSid=${item.orgSid}&startDate=${startDate}&endDate=${endDate}*#quality`}
+                  onClick={() => openDetails(item.orgSid, item.workOrderId, 'quality')}
                 >
                   {item.recordHighlightCount}
                 </HighlightCounter>
@@ -111,7 +110,7 @@ export const useWorkPacketColumns = (
         const timestamp = format(new Date(item.deliveredOn), 'MM/dd/yyyy hh:mm a');
         if (item.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.ViewDetails)) {
           return (
-            <Link href={`/file-status/${item.workOrderId}?orgSid=${item.orgSid}&startDate=${startDate}&endDate=${endDate}`}>
+            <Link onClick={() => openDetails(item.orgSid, item.workOrderId)}>
               {timestamp}
             </Link>
           );
@@ -138,7 +137,7 @@ export const useWorkPacketColumns = (
         const timestamp = format(new Date(item.startTime), 'MM/dd/yyyy hh:mm a');
         if (item.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.ViewDetails)) {
           return (
-            <Link href={`/file-status/${item.workOrderId}?orgSid=${item.orgSid}&startDate=${startDate}&endDate=${endDate}`}>
+            <Link onClick={() => openDetails(item.orgSid, item.workOrderId)}>
               {timestamp}
             </Link>
           );
