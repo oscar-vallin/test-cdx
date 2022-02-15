@@ -3,11 +3,10 @@ import {
   AccessPolicyGroupForm,
   Maybe,
   NvpStr,
-  Organization,
   UiOption,
   useAccessPolicyGroupFormLazyQuery,
   useCreateAccessPolicyGroupMutation,
-  useFindAccessPolicyGroupLazyQuery, useOrganizationQuickSearchLazyQuery,
+  useFindAccessPolicyGroupLazyQuery,
   useUpdateAccessPolicyGroupMutation,
 } from 'src/data/services/graphql';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
@@ -51,7 +50,6 @@ export const useCreateGroupPanel = (isOpen, orgSid, selectedGroupId, templateId)
     useQueryHandler(useCreateAccessPolicyGroupMutation);
   const [apiFindAccessPolicyGroup, { data: findAccessPolicyGroupData, loading: loadingGroup }] = useQueryHandler(useFindAccessPolicyGroupLazyQuery);
   const [apiUpdateAccessPolicyGroup, { data: updateAccessPolicyGroupData }] = useQueryHandler(useUpdateAccessPolicyGroupMutation);
-  const [apiOrgQuickSearch, { data: orgQuickSearchData }] = useQueryHandler(useOrganizationQuickSearchLazyQuery);
 
   // State for Form Definition.
   const [accessPolicyData, setAccessPolicyData] = useState<AccessGroupState>({ ...formInitialState });
@@ -167,23 +165,8 @@ export const useCreateGroupPanel = (isOpen, orgSid, selectedGroupId, templateId)
     }
   }, [updateAccessPolicyGroupData]);
 
-  const organizationTags = (): ITag[] => {
-    if (orgQuickSearchData) {
-      return orgQuickSearchData.organizationQuickSearch.map((item: Organization) => ({ key: item.sid, name: item.name }));
-    }
-    return [];
-  };
 
   const getTextFromItem = (item) => item.name;
-
-  const orgQuickSearch = (searchText: string) => {
-    apiOrgQuickSearch({
-      variables: {
-        orgOwnerSid: orgSid,
-        searchText: searchText,
-      },
-    });
-  };
 
   const clearAccessPolicyForm = () => {
     setAccessPolicyForm(null);
@@ -205,8 +188,6 @@ export const useCreateGroupPanel = (isOpen, orgSid, selectedGroupId, templateId)
   };
 
   return {
-    orgQuickSearch,
-    organizationTags,
     getTextFromItem,
     clearAccessPolicyForm,
     addToAccessPolicyData,

@@ -12,7 +12,7 @@ type CDXTagPickerProps = {
   value?: ITag[];
   options?: ITag[];
   onChange?: (items?: ITag[]) => void | null;
-  apiQuery?: (searchText: string) => void | null;
+  doSearch?: (filter: string, selectedItems?: ITag[]) => ITag[] | PromiseLike<ITag[]>;
   debounce?: number;
   onBlur?: any | null;
   onFocus?: any | null;
@@ -25,7 +25,7 @@ const CDXTagPicker = ({
   value,
   options,
   onChange,
-  apiQuery,
+  doSearch,
   debounce = 500,
   onBlur,
   onFocus,
@@ -48,10 +48,6 @@ const CDXTagPicker = ({
     return item;
   }, []);
 
-  const filterSelectedTags: any = (filterText?: string) => {
-    return filterText ? options?.filter((tag) => tag.name.toLowerCase().indexOf(filterText.toLowerCase()) === 0) : [];
-  };
-
   const getTextFromItem = (item) => item.name;
 
   return (
@@ -64,13 +60,7 @@ const CDXTagPicker = ({
       <StyledTagPicker
         removeButtonAriaLabel="Remove"
         componentRef={picker}
-        onResolveSuggestions={(text) => {
-          if (apiQuery) {
-            apiQuery(text);
-          }
-
-          return filterSelectedTags(text);
-        }}
+        onResolveSuggestions={doSearch ? doSearch : () => options ?? []}
         selectedItems={value}
         onItemSelected={handleItemSelection}
         onChange={onChange}

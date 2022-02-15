@@ -28,7 +28,7 @@ describe('TagPicker unit test', () => {
 
   it('Should find input with Id __CreateAccessSpecializationPanelId', () => {
     const wrapper = mountWithTheme(
-      <Component {...defaultProps} id="__CreateAccessSpecializationPanelId" apiQuery={jest.fn()} />
+      <Component {...defaultProps} id="__CreateAccessSpecializationPanelId" doSearch={jest.fn()} />
     );
     const input = wrapper.find('#__CreateAccessSpecializationPanelId').first();
 
@@ -37,14 +37,14 @@ describe('TagPicker unit test', () => {
 
   it('Should call onBlur function when blur event', () => {
     const mockFn = jest.fn();
-    const wrapper = mountWithTheme(<Component value={[]} apiQuery={jest.fn()} onBlur={mockFn} />);
+    const wrapper = mountWithTheme(<Component value={[]} doSearch={jest.fn()} onBlur={mockFn} />);
     wrapper.find('input').hostNodes().simulate('blur');
     expect(mockFn).toBeCalled();
   });
 
   it('Should call onFocus function when focus event', () => {
     const mockFn = jest.fn();
-    const wrapper = mountWithTheme(<Component value={[]} apiQuery={jest.fn()} onFocus={mockFn} />);
+    const wrapper = mountWithTheme(<Component value={[]} doSearch={jest.fn()} onFocus={mockFn} />);
     wrapper.find('input').hostNodes().simulate('focus');
     expect(mockFn).toBeCalled();
   });
@@ -63,7 +63,7 @@ describe('TagPicker unit test', () => {
         id="__CreateAccessSpecializationPanelId"
         debounce={0}
         value={[]}
-        apiQuery={mockFn}
+        doSearch={mockFn}
         options={[{ key: 'greeting', name: 'Hello' }]}
       />
     );

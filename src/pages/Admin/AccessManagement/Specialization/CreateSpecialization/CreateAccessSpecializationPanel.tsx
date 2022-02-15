@@ -20,8 +20,9 @@ import {
   useAccessSpecializationFormLazyQuery,
   useCreateAccessSpecializationMutation,
   useUpdateAccessSpecializationMutation,
-  useVendorQuickSearchLazyQuery,
-  useOrganizationQuickSearchLazyQuery, AccessSpecializationForm, Organization, CdxWebCommandType, UiSelectManyField,
+  AccessSpecializationForm,
+  CdxWebCommandType,
+  UiSelectManyField,
 } from 'src/data/services/graphql';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { TagPicker } from 'src/components/inputs/TagPicker';
@@ -29,6 +30,9 @@ import { UIInputTextReadOnly } from 'src/components/inputs/InputText/InputText';
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
 import { PanelHeader, PanelTitle } from 'src/layouts/Panels/Panels.styles';
+import { orgQuickSearch, vendorQuickSearch } from 'src/hooks/useQuickSearch';
+import { useApolloClient } from '@apollo/client';
+import { ErrorHandler } from 'src/utils/ErrorHandler';
 
 type SpecializationOption = {
   label: string;
@@ -60,10 +64,6 @@ const groupSpecializations = (opts): SpecializationGroup[] => {
   ];
 };
 
-const parseToPickerOpts = (arr: Organization[] = []): ITag[] => {
-  return arr.map(({ name, sid }) => ({ name: name ?? '', key: sid ?? '' }));
-};
-
 const defaultProps = {
   isOpen: false,
   onDismiss: () => null,
@@ -86,7 +86,8 @@ const CreateAccessSpecializationPanel = ({
   selectedAccessId,
 }: CreateAccessSpecializationPanelProps): ReactElement => {
   const Toast = useNotification();
-
+  const client = useApolloClient();
+  const handleError = ErrorHandler();
   const { orgSid } = useOrgSid();
   const [state, setState]: any = useState({ ...INITIAL_STATE });
   const [showDialog, setShowDialog] = useState(false);
@@ -108,8 +109,6 @@ const CreateAccessSpecializationPanel = ({
   const [updateSpecialization, { data: updatedSpecialization }] = useQueryHandler(
     useUpdateAccessSpecializationMutation
   );
-  const [fetchVendors, { data: vendors }] = useQueryHandler(useVendorQuickSearchLazyQuery);
-  const [fetchOrgs, { data: orgs }] = useQueryHandler(useOrganizationQuickSearchLazyQuery);
 
   useEffect(() => {
     if (isOpen && selectedAccessId > 0) {
@@ -218,6 +217,14 @@ const CreateAccessSpecializationPanel = ({
     onDismiss();
   };
 
+  const doOrgSearch = async (option: SpecializationOption, text: string): Promise<ITag[]> => {
+    if (option.orgSids.query === 'vendorQuickSearch') {
+      return vendorQuickSearch(client, handleError, text, orgSid);
+    } else {
+      return orgQuickSearch(client, handleError, text, orgSid);
+    }
+  };
+
   const renderBody = () => {
     return (
       <>
@@ -279,26 +286,7 @@ const CreateAccessSpecializationPanel = ({
                                   disabled={option.orgSids.readOnly}
                                   debounce={500}
                                   id={`__Specialization_${option.permission}`}
-                                  apiQuery={(text) => {
-
-                                    const data = {
-                                      variables: {
-                                        orgOwnerSid: orgSid,
-                                        searchText: text,
-                                      },
-                                    };
-
-                                    option.orgSids.query === 'vendorQuickSearch'
-                                      ? fetchVendors(data)
-                                      : fetchOrgs(data);
-
-                                    return null;
-                                  }}
-                                  options={parseToPickerOpts(
-                                    option.orgSids.query === 'vendorQuickSearch'
-                                      ? vendors?.vendorQuickSearch
-                                      : orgs?.organizationQuickSearch
-                                  )}
+                                  doSearch={(searchText) => doOrgSearch(option, searchText)}
                                   value={specializations[option.permission]}
                                   onChange={(items) => {
                                     setUnsavedChanges(true);

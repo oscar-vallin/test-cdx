@@ -20,6 +20,9 @@ import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
 import { useNotification } from 'src/hooks/useNotification';
 import { PanelBody, PanelHeader, PanelTitle } from 'src/layouts/Panels/Panels.styles';
 import { Text } from 'src/components/typography';
+import { orgQuickSearch } from 'src/hooks/useQuickSearch';
+import { useApolloClient } from '@apollo/client';
+import { ErrorHandler } from 'src/utils/ErrorHandler';
 
 const defaultProps = {
   isOpen: false,
@@ -56,14 +59,13 @@ const CreateGroupPanel = ({
   const { policies, specializations } = accessManagementGroupService;
   const { accessPolicyData, accessPolicyForm, setAccessPolicyForm } = accessManagementGroupService;
   const { clearAccessPolicyForm, addToAccessPolicyData } = accessManagementGroupService;
-  const { orgQuickSearch, organizationTags } = accessManagementGroupService;
   const { loading } = accessManagementGroupService;
   const { createPolicyGroup, updatePolicyGroup } = accessManagementGroupService;
   const [errorMsg, setErrorMsg] = useState<string | undefined>();
   const { createAccessPolicyGroupData, updateAccessPolicyGroupData } = accessManagementGroupService;
   const Toast = useNotification();
-
-
+  const client = useApolloClient();
+  const handleError = ErrorHandler();
 
   const onPanelClose = () => {
     if (unsavedChanges) {
@@ -275,8 +277,7 @@ const CreateGroupPanel = ({
                                uiField={form.includeOrgSids}
                                disabled={form.includeOrgSids?.readOnly || accessPolicyData.includeAllSubOrgs}
                                value={accessPolicyData.includeOrgSids}
-                               apiQuery={orgQuickSearch}
-                               options={organizationTags()}
+                               doSearch={(searchText) => orgQuickSearch(client, handleError, searchText, orgSid)}
                                onChange={(includeOrgSids) => {
                                  setUnsavedChanges(true);
                                  addToAccessPolicyData({ includeOrgSids });
@@ -293,8 +294,7 @@ const CreateGroupPanel = ({
                                uiField={form.excludeOrgSids}
                                disabled={form.excludeOrgSids.readOnly || !accessPolicyData.includeAllSubOrgs}
                                value={accessPolicyData.excludeOrgSids}
-                               apiQuery={orgQuickSearch}
-                               options={organizationTags()}
+                               doSearch={(searchText) => orgQuickSearch(client, handleError, searchText, orgSid)}
                                onChange={(excludeOrgSids) => {
                                  setUnsavedChanges(true);
                                  addToAccessPolicyData({ excludeOrgSids });
