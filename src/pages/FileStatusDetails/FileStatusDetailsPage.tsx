@@ -258,7 +258,7 @@ const FileStatusDetailsPage = () => {
                 )}
               </>
             )}>
-            <QualityChecksTab qualityChecks={packet?.qualityChecks}/>
+            <QualityChecksTab details={packet}/>
           </PivotItem>
           <PivotItem headerText="Archives">
             <ArchivesTab packet={packet}/>

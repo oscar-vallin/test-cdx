@@ -17,9 +17,8 @@ import { DarkSeparator } from 'src/components/separators/Separator';
 import {
   FieldCreationEvent,
   Maybe,
-  QualityChecks,
   RecordCreationEvent,
-  SequenceCreationEvent
+  WorkPacketStatusDetails
 } from 'src/data/services/graphql';
 import { theme } from 'src/styles/themes/theme';
 import { ChartDataType } from 'src/components/charts/ChartDonut/ChartDonut';
@@ -50,6 +49,9 @@ type RowType = {
   value?: string;
   transformValue?: string;
 };
+
+const graphQLUrl = process.env.REACT_APP_API_SERVER;
+const serverUrl = graphQLUrl?.replace('/graphql', '') ?? '';
 
 const onRenderItemColumn = (item: RowType, index?: number, column?: IColumn) => {
   switch (column?.key) {
@@ -89,11 +91,12 @@ const onRenderItemColumn = (item: RowType, index?: number, column?: IColumn) => 
 };
 
 type QualityChecksTabProps = {
-  qualityChecks?: QualityChecks | null;
-  items?: Maybe<SequenceCreationEvent>[];
+  details?: WorkPacketStatusDetails | null;
 };
 
-const QualityChecksTab = ({ qualityChecks }: QualityChecksTabProps): ReactElement => {
+const QualityChecksTab = ({ details }: QualityChecksTabProps): ReactElement => {
+  const qualityChecks = details?.qualityChecks;
+
   const items = qualityChecks?.sequenceCreationEvent ?? [];
 
   const totalNumErrors = (qualityChecks?.accStructReqError?.count ?? 0) +
@@ -276,7 +279,8 @@ const QualityChecksTab = ({ qualityChecks }: QualityChecksTabProps): ReactElemen
             <Stack.Item>
               <WhiteButton
                 id="__QualityChecksTabId"
-                iconProps={{iconName: 'ExcelDocument', style: { fontSize: theme.fontSizes.normal }}}>
+                iconProps={{iconName: 'ExcelDocument', style: { fontSize: theme.fontSizes.normal }}}
+                href={`${serverUrl}excel/qualitychecks?orgSid=${details?.orgSid}&workOrderID=${details?.workOrderId}`}>
                 Download
               </WhiteButton>
             </Stack.Item>
