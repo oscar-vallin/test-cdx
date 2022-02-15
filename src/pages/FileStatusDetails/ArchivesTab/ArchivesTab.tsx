@@ -5,8 +5,8 @@ import { FontIcon, Link } from '@fluentui/react';
 import { Text } from 'src/components/typography';
 import { theme } from 'src/styles/themes/theme';
 import { Column } from 'src/components/layouts';
-import { FormRow } from 'src/components/layouts/Row/Row.styles';
 import { Spacing } from 'src/components/spacings/Spacing';
+import { Archive } from '../FileStatusDetails.styles';
 
 type ArchivesTabType = {
   packet?: WorkPacketStatusDetails;
@@ -44,14 +44,12 @@ export const ArchivesTab = ({packet}: ArchivesTabType) => {
   const renderRow = (fileLabel: string, fileVariant: string, fullPath?: string | null, key?: string) => {
     if (packet?.workOrderId && fullPath) {
       return (
-        <FormRow key={key}>
-          <Column md="12" lg="8">
+        <Column lg="12" xl="6">
+          <Archive key={key}>
             {renderDownloadLink(packet?.workOrderId, fullPath, fullPath.split('/').pop())}
-          </Column>
-          <Column md="12" lg="4" right={true}>
             <Badge variant={fileVariant} label={fileLabel} pill/>
-          </Column>
-        </FormRow>
+          </Archive>
+        </Column>
       );
     }
   };

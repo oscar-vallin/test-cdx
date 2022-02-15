@@ -130,3 +130,24 @@ export const WhiteButton = styled(ActionButton)`
   padding: 10px;
   border-radius: 5px;
 `
+
+export const Archive = styled.div`
+  box-shadow: ${({ theme }) => theme.boxShadows['smallest']};
+  border: none;
+  border-radius: ${({ theme }) => theme.radius.normal};
+  font: ${({ theme }) => theme.fontStyles.normal};
+  min-width: unset;
+  max-width: unset;
+  width: 100%;
+  padding: 10px 10px 0 10px;
+  margin-bottom: 10px;
+  
+  & a {
+    display: inline-block;
+    margin-bottom: 10px;
+  }
+  & span {
+    margin-left: 10px;
+    margin-bottom: 10px;
+  }
+`;
