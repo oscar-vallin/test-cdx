@@ -120,16 +120,16 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
     }
   };
 
-  const handleInactivateUser = async () => {
-    const responseReset = await useUpdateUserPanel.callInactivateUser();
+  const handleDeactivateUser = async () => {
+    const responseReset = await useUpdateUserPanel.callDeactivateUser();
     if (responseReset?.deactivateUser) {
       if (responseReset?.deactivateUser === GqOperationResponse.Success) {
         onUpdateUser();
         setMessageType(MessageBarType.success);
-        setMessage('User has been inactivated');
+        setMessage('User has been deactivated');
       } else {
         setMessageType(MessageBarType.error);
-        setMessage('An error occurred inactivating this user.  Please contact your administrator.');
+        setMessage('An error occurred deactivating this user.  Please contact your administrator.');
       }
     }
   };
@@ -195,13 +195,13 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
     setShowDialog(true);
   };
 
-  const showInactivateUserDialog = () => {
+  const showDeactivateUserDialog = () => {
     const updatedDialog = { ...defaultDialogProps };
-    updatedDialog.title = 'Inactivate User?';
+    updatedDialog.title = 'Deactivate User?';
     updatedDialog.message =
-      'You are about to inactivate this user which will prevent this user from logging in. Are you sure you want to continue?';
+      'You are about to deactivate this user which will prevent this user from logging in. Are you sure you want to continue?';
     updatedDialog.onYes = () => {
-      handleInactivateUser().then();
+      handleDeactivateUser().then();
       hideDialog();
     };
     updatedDialog.onClose = () => {
@@ -271,10 +271,10 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
           )}
           {useUpdateUserPanel.userAccountForm.commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Deactivate) && (
             <CommandButton
-              id="__InactivateUser_Button"
+              id="__DeactivateUser_Button"
               iconProps={{ iconName: 'UserRemove' }}
-              text="Inactivate User"
-              onClick={showInactivateUserDialog}
+              text="Deactivate User"
+              onClick={showDeactivateUserDialog}
             />
           )}
           {useUpdateUserPanel.userAccountForm.commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Activate) && (

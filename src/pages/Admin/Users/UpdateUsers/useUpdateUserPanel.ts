@@ -26,7 +26,7 @@ export type UseUpdateUserPanel = {
   callUpdateUser: (updates: UserAccount) => Promise<UpdateUserMutation | null | undefined>;
   callAssignGroups: (sids: string[]) => Promise<UpdateUserAccessPolicyGroupsMutation | null | undefined>;
   callResetPassword: () => Promise<ResetPasswordMutation | null | undefined>;
-  callInactivateUser: () => Promise<DeactivateUserMutation | null | undefined>;
+  callDeactivateUser: () => Promise<DeactivateUserMutation | null | undefined>;
   callActivateUser: () => Promise<ActivateUserMutation | null | undefined>;
   resetForm: () => void;
 };
@@ -47,7 +47,7 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
 
   const [callResetPassword, { error: resetPasswordError }] = useResetPasswordMutation();
 
-  const [callInactivateUser, { error: inactivateUserError }] = useDeactivateUserMutation();
+  const [callDeactivateUser, { error: deactivateUserError }] = useDeactivateUserMutation();
 
   const [callActivateUser, { error: activateUserError }] = useActivateUserMutation();
 
@@ -81,8 +81,8 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
   }, [resetPasswordError]);
 
   useEffect(() => {
-    handleError(inactivateUserError);
-  }, [inactivateUserError]);
+    handleError(deactivateUserError);
+  }, [deactivateUserError]);
 
   useEffect(() => {
     handleError(activateUserError);
@@ -158,8 +158,8 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
     return data;
   };
 
-  const handleInactivateUser = async () => {
-    const { data } = await callInactivateUser({
+  const handleDeactivateUser = async () => {
+    const { data } = await callDeactivateUser({
       variables: {
         sidInput: {
           sid: userSid,
@@ -226,7 +226,7 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
     callUpdateUser: handleUpdateUser,
     callAssignGroups: handleUpdateUserGroups,
     callResetPassword: handleResetPassword,
-    callInactivateUser: handleInactivateUser,
+    callDeactivateUser: handleDeactivateUser,
     callActivateUser: handleActivateUser,
     resetForm,
   };
