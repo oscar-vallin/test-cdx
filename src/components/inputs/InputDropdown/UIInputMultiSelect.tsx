@@ -3,6 +3,7 @@ import React from 'react';
 import { UIFormLabel } from 'src/components/labels/FormLabel';
 import { ComboBox, IComboBox, IComboBoxOption } from '@fluentui/react';
 import { EmptyValue, FieldValue } from '../InputText/InputText.styles';
+import { buildComboBoxOptions } from './DropdownCommon';
 
 type UIInputMultiSelectType = {
   id: string;
@@ -18,26 +19,6 @@ export const UIInputMultiSelect = ({id, uiField, options, value, onChange, place
   const onRenderLabel = () => (
     <UIFormLabel id={`${id}_lbl`} uiField={uiField}/>
   );
-
-  const buildComboBoxOptions = (): IComboBoxOption[] => {
-    if (uiField && uiField.options && options) {
-      // first find the matching UiOption array
-      const uiOptions = options.find((value) => value?.key === uiField.options);
-      if (uiOptions?.values) {
-        return uiOptions.values.map((value): IComboBoxOption => {
-          return {
-            key: value?.value ?? '',
-            text: value?.label ?? '',
-          };
-        });
-      }
-    }
-    return [ {
-      key: '',
-      text: '<No Options available>',
-      disabled: true
-    }];
-  }
 
   const renderReadOnlyValues = () => {
     if (uiField?.value?.length && uiField?.value?.length > 0) {
@@ -92,6 +73,6 @@ export const UIInputMultiSelect = ({id, uiField, options, value, onChange, place
       allowFreeform={false}
       autoComplete='on'
       placeholder={placeholder}
-      options={buildComboBoxOptions()} />
+      options={buildComboBoxOptions(uiField, options)} />
   );
 };

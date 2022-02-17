@@ -335,6 +335,7 @@ export type CreateOrgInput = {
   name: Scalars['String'];
   orgType: OrgType;
   orgOwnerSid?: Maybe<Scalars['ID']>;
+  whitelist?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
 export type CreatePersonInput = {
@@ -659,7 +660,8 @@ export type Mutation = {
   resetPassword?: Maybe<GqOperationResponse>;
   /** Update a user's password given a password reset token which was emailed to the user. */
   updatePassword?: Maybe<GenericResponse>;
-  createOrg?: Maybe<Organization>;
+  createOrg?: Maybe<OrganizationForm>;
+  updateOrg?: Maybe<OrganizationForm>;
   deactivateOrg?: Maybe<GqOperationResponse>;
   createAccessPolicy?: Maybe<AccessPolicyForm>;
   updateAccessPolicy?: Maybe<AccessPolicyForm>;
@@ -728,6 +730,11 @@ export type MutationUpdatePasswordArgs = {
 
 export type MutationCreateOrgArgs = {
   orgInfo: CreateOrgInput;
+};
+
+
+export type MutationUpdateOrgArgs = {
+  orgInfo: UpdateOrgInput;
 };
 
 
@@ -919,6 +926,14 @@ export enum OrgType {
   GlobalVendor = 'GLOBAL_VENDOR'
 }
 
+export type OrgWhitelistForm = {
+  __typename?: 'OrgWhitelistForm';
+  pattern?: Maybe<UiStringField>;
+  errCode?: Maybe<Scalars['String']>;
+  errMsg?: Maybe<Scalars['String']>;
+  errSeverity?: Maybe<ErrorSeverity>;
+};
+
 export type Organization = {
   __typename?: 'Organization';
   sid?: Maybe<Scalars['ID']>;
@@ -941,7 +956,9 @@ export type OrganizationForm = {
   orgId: UiStringField;
   orgType?: Maybe<UiSelectOneField>;
   active: UiBooleanField;
+  whitelist?: Maybe<Array<Maybe<OrgWhitelistForm>>>;
   options?: Maybe<Array<Maybe<UiOptions>>>;
+  commands?: Maybe<Array<Maybe<WebCommand>>>;
   response: GqOperationResponse;
   errCode?: Maybe<Scalars['String']>;
   errMsg?: Maybe<Scalars['String']>;
@@ -1504,6 +1521,11 @@ export type QueryDirectOrganizationsArgs = {
 };
 
 
+export type QueryOrganizationFormArgs = {
+  orgOwnerSid: Scalars['ID'];
+};
+
+
 export type QueryFindOrganizationArgs = {
   orgSid: Scalars['ID'];
 };
@@ -2050,6 +2072,13 @@ export type UpdateDefaultDashThemeInput = {
   themeFontSize?: Maybe<ThemeFontSize>;
   themeColorMode?: Maybe<ThemeColorMode>;
   themeColorSid?: Maybe<Scalars['ID']>;
+};
+
+export type UpdateOrgInput = {
+  orgSid: Scalars['ID'];
+  name: Scalars['String'];
+  orgType: OrgType;
+  whitelist?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
 export type UpdateOwnPasswordInput = {
@@ -3865,7 +3894,9 @@ export type DirectOrganizationsQuery = (
   )> }
 );
 
-export type OrganizationFormQueryVariables = Exact<{ [key: string]: never; }>;
+export type OrganizationFormQueryVariables = Exact<{
+  orgOwnerSid: Scalars['ID'];
+}>;
 
 
 export type OrganizationFormQuery = (
@@ -3889,13 +3920,23 @@ export type OrganizationFormQuery = (
     )>, active: (
       { __typename?: 'UIBooleanField' }
       & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
-    ), options?: Maybe<Array<Maybe<(
+    ), whitelist?: Maybe<Array<Maybe<(
+      { __typename?: 'OrgWhitelistForm' }
+      & Pick<OrgWhitelistForm, 'errCode' | 'errMsg' | 'errSeverity'>
+      & { pattern?: Maybe<(
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )> }
+    )>>>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
       & { values?: Maybe<Array<Maybe<(
         { __typename?: 'UIOption' }
         & Pick<UiOption, 'label' | 'value' | 'info'>
       )>>> }
+    )>>>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
     )>>> }
   )> }
 );
@@ -3926,13 +3967,23 @@ export type FindOrganizationQuery = (
     )>, active: (
       { __typename?: 'UIBooleanField' }
       & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
-    ), options?: Maybe<Array<Maybe<(
+    ), whitelist?: Maybe<Array<Maybe<(
+      { __typename?: 'OrgWhitelistForm' }
+      & Pick<OrgWhitelistForm, 'errCode' | 'errMsg' | 'errSeverity'>
+      & { pattern?: Maybe<(
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )> }
+    )>>>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
       & { values?: Maybe<Array<Maybe<(
         { __typename?: 'UIOption' }
         & Pick<UiOption, 'label' | 'value' | 'info'>
       )>>> }
+    )>>>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
     )>>> }
   )> }
 );
@@ -4519,8 +4570,89 @@ export type CreateOrgMutationVariables = Exact<{
 export type CreateOrgMutation = (
   { __typename?: 'Mutation' }
   & { createOrg?: Maybe<(
-    { __typename?: 'Organization' }
-    & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType'>
+    { __typename?: 'OrganizationForm' }
+    & Pick<OrganizationForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { name: (
+      { __typename?: 'UIStringField' }
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), orgId: (
+      { __typename?: 'UIStringField' }
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), orgType?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & Pick<UiSelectOneField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )> }
+    )>, active: (
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), whitelist?: Maybe<Array<Maybe<(
+      { __typename?: 'OrgWhitelistForm' }
+      & Pick<OrgWhitelistForm, 'errCode' | 'errMsg' | 'errSeverity'>
+      & { pattern?: Maybe<(
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )> }
+    )>>>, options?: Maybe<Array<Maybe<(
+      { __typename?: 'UIOptions' }
+      & Pick<UiOptions, 'key'>
+      & { values?: Maybe<Array<Maybe<(
+        { __typename?: 'UIOption' }
+        & Pick<UiOption, 'label' | 'value' | 'info'>
+      )>>> }
+    )>>>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>>> }
+  )> }
+);
+
+export type UpdateOrgMutationVariables = Exact<{
+  orgInfo: UpdateOrgInput;
+}>;
+
+
+export type UpdateOrgMutation = (
+  { __typename?: 'Mutation' }
+  & { updateOrg?: Maybe<(
+    { __typename?: 'OrganizationForm' }
+    & Pick<OrganizationForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { name: (
+      { __typename?: 'UIStringField' }
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), orgId: (
+      { __typename?: 'UIStringField' }
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), orgType?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & Pick<UiSelectOneField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )> }
+    )>, active: (
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), whitelist?: Maybe<Array<Maybe<(
+      { __typename?: 'OrgWhitelistForm' }
+      & Pick<OrgWhitelistForm, 'errCode' | 'errMsg' | 'errSeverity'>
+      & { pattern?: Maybe<(
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )> }
+    )>>>, options?: Maybe<Array<Maybe<(
+      { __typename?: 'UIOptions' }
+      & Pick<UiOptions, 'key'>
+      & { values?: Maybe<Array<Maybe<(
+        { __typename?: 'UIOption' }
+        & Pick<UiOption, 'label' | 'value' | 'info'>
+      )>>> }
+    )>>>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>>> }
   )> }
 );
 
@@ -8532,8 +8664,8 @@ export type DirectOrganizationsQueryHookResult = ReturnType<typeof useDirectOrga
 export type DirectOrganizationsLazyQueryHookResult = ReturnType<typeof useDirectOrganizationsLazyQuery>;
 export type DirectOrganizationsQueryResult = Apollo.QueryResult<DirectOrganizationsQuery, DirectOrganizationsQueryVariables>;
 export const OrganizationFormDocument = gql`
-    query OrganizationForm {
-  organizationForm {
+    query OrganizationForm($orgOwnerSid: ID!) {
+  organizationForm(orgOwnerSid: $orgOwnerSid) {
     sid
     name {
       value
@@ -8588,6 +8720,24 @@ export const OrganizationFormDocument = gql`
       errMsg
       errSeverity
     }
+    whitelist {
+      pattern {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      errCode
+      errMsg
+      errSeverity
+    }
     options {
       key
       values {
@@ -8596,13 +8746,16 @@ export const OrganizationFormDocument = gql`
         info
       }
     }
+    commands {
+      ...fragmentWebCommand
+    }
     response
     errCode
     errMsg
     errSeverity
   }
 }
-    `;
+    ${FragmentWebCommandFragmentDoc}`;
 
 /**
  * __useOrganizationFormQuery__
@@ -8616,10 +8769,11 @@ export const OrganizationFormDocument = gql`
  * @example
  * const { data, loading, error } = useOrganizationFormQuery({
  *   variables: {
+ *      orgOwnerSid: // value for 'orgOwnerSid'
  *   },
  * });
  */
-export function useOrganizationFormQuery(baseOptions?: Apollo.QueryHookOptions<OrganizationFormQuery, OrganizationFormQueryVariables>) {
+export function useOrganizationFormQuery(baseOptions: Apollo.QueryHookOptions<OrganizationFormQuery, OrganizationFormQueryVariables>) {
         return Apollo.useQuery<OrganizationFormQuery, OrganizationFormQueryVariables>(OrganizationFormDocument, baseOptions);
       }
 export function useOrganizationFormLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OrganizationFormQuery, OrganizationFormQueryVariables>) {
@@ -8685,6 +8839,24 @@ export const FindOrganizationDocument = gql`
       errMsg
       errSeverity
     }
+    whitelist {
+      pattern {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      errCode
+      errMsg
+      errSeverity
+    }
     options {
       key
       values {
@@ -8693,13 +8865,16 @@ export const FindOrganizationDocument = gql`
         info
       }
     }
+    commands {
+      ...fragmentWebCommand
+    }
     response
     errCode
     errMsg
     errSeverity
   }
 }
-    `;
+    ${FragmentWebCommandFragmentDoc}`;
 
 /**
  * __useFindOrganizationQuery__
@@ -10470,12 +10645,95 @@ export const CreateOrgDocument = gql`
     mutation CreateOrg($orgInfo: CreateOrgInput!) {
   createOrg(orgInfo: $orgInfo) {
     sid
-    name
-    orgId
-    orgType
+    name {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
+      errCode
+      errMsg
+      errSeverity
+    }
+    orgId {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
+      errCode
+      errMsg
+      errSeverity
+    }
+    orgType {
+      value {
+        name
+        value
+      }
+      label
+      readOnly
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    active {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    whitelist {
+      pattern {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      errCode
+      errMsg
+      errSeverity
+    }
+    options {
+      key
+      values {
+        label
+        value
+        info
+      }
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
   }
 }
-    `;
+    ${FragmentWebCommandFragmentDoc}`;
 export type CreateOrgMutationFn = Apollo.MutationFunction<CreateOrgMutation, CreateOrgMutationVariables>;
 
 /**
@@ -10501,6 +10759,124 @@ export function useCreateOrgMutation(baseOptions?: Apollo.MutationHookOptions<Cr
 export type CreateOrgMutationHookResult = ReturnType<typeof useCreateOrgMutation>;
 export type CreateOrgMutationResult = Apollo.MutationResult<CreateOrgMutation>;
 export type CreateOrgMutationOptions = Apollo.BaseMutationOptions<CreateOrgMutation, CreateOrgMutationVariables>;
+export const UpdateOrgDocument = gql`
+    mutation UpdateOrg($orgInfo: UpdateOrgInput!) {
+  updateOrg(orgInfo: $orgInfo) {
+    sid
+    name {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
+      errCode
+      errMsg
+      errSeverity
+    }
+    orgId {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
+      errCode
+      errMsg
+      errSeverity
+    }
+    orgType {
+      value {
+        name
+        value
+      }
+      label
+      readOnly
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    active {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    whitelist {
+      pattern {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      errCode
+      errMsg
+      errSeverity
+    }
+    options {
+      key
+      values {
+        label
+        value
+        info
+      }
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentWebCommandFragmentDoc}`;
+export type UpdateOrgMutationFn = Apollo.MutationFunction<UpdateOrgMutation, UpdateOrgMutationVariables>;
+
+/**
+ * __useUpdateOrgMutation__
+ *
+ * To run a mutation, you first call `useUpdateOrgMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateOrgMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateOrgMutation, { data, loading, error }] = useUpdateOrgMutation({
+ *   variables: {
+ *      orgInfo: // value for 'orgInfo'
+ *   },
+ * });
+ */
+export function useUpdateOrgMutation(baseOptions?: Apollo.MutationHookOptions<UpdateOrgMutation, UpdateOrgMutationVariables>) {
+        return Apollo.useMutation<UpdateOrgMutation, UpdateOrgMutationVariables>(UpdateOrgDocument, baseOptions);
+      }
+export type UpdateOrgMutationHookResult = ReturnType<typeof useUpdateOrgMutation>;
+export type UpdateOrgMutationResult = Apollo.MutationResult<UpdateOrgMutation>;
+export type UpdateOrgMutationOptions = Apollo.BaseMutationOptions<UpdateOrgMutation, UpdateOrgMutationVariables>;
 export const DeactivateOrgDocument = gql`
     mutation DeactivateOrg($orgSid: ID!) {
   deactivateOrg(orgSid: $orgSid)

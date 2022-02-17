@@ -7,4 +7,12 @@ function yyyyMMdd(date?: Date | null): string {
   return '';
 }
 
-export { yyyyMMdd }
+function getEnumByValue(enumType, enumValue?: string) {
+  const key = Object.keys(enumType).find((x) => enumType[x] == enumValue);
+  if (key) {
+    return enumType[key];
+  }
+  return null;
+}
+
+export { yyyyMMdd, getEnumByValue }

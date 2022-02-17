@@ -1,5 +1,5 @@
 import { ErrorSeverity, UiOptions, UiSelectManyField } from 'src/data/services/graphql';
-import { UIInputMultiSelect } from 'src/components/inputs/InputMultiselect/index';
+import { UIInputMultiSelect } from 'src/components/inputs/InputDropdown/index';
 import { mountWithTheme } from 'src/utils/testUtils';
 
 const fullField: UiSelectManyField = {
