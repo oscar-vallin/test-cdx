@@ -15,7 +15,7 @@ export default class PuppetActiveOrgs extends PuppetBasePage {
 
   async clickOnCreatePolicy() {
     const btnSelector = '#CreatePolicyButton';
-    const panelSelector = '#CreatePoliciesPanel';
+    const panelSelector = '#AccessPolicyPanel';
 
     await this.page.click(btnSelector);
     await this.expectTextOnPage(panelSelector, 'New access policy');

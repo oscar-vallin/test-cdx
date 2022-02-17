@@ -9,7 +9,7 @@ import { Spacing } from 'src/components/spacings/Spacing';
 import { Card } from 'src/components/cards';
 import { Button } from 'src/components/buttons';
 import { Row, Column } from 'src/components/layouts';
-import { Separator } from 'src/components/separators/Separator';
+import { LightSeparator } from 'src/components/separators/Separator';
 import { Text } from 'src/components/typography';
 import { UIInputText } from 'src/components/inputs/InputText';
 import { Collapse } from 'src/components/collapses/Collapse';
@@ -78,7 +78,7 @@ type CreateAccessSpecializationPanelProps = {
   selectedAccessId?: any;
 } & typeof defaultProps;
 
-const CreateAccessSpecializationPanel = ({
+const AccessSpecializationPanel = ({
   isOpen,
   onDismiss,
   onCreateSpecialization = () => {},
@@ -401,7 +401,7 @@ const CreateAccessSpecializationPanel = ({
               {!accessForm || isLoadingForm || isLoadingSpecialization ? (
                 <>
                   <Spacing margin={{ top: 'normal', bottom: 'double' }}>
-                    <Separator />
+                    <LightSeparator />
                   </Spacing>
 
                   <Spacing>
@@ -432,6 +432,6 @@ const CreateAccessSpecializationPanel = ({
   );
 };
 
-CreateAccessSpecializationPanel.defaultProps = defaultProps;
+AccessSpecializationPanel.defaultProps = defaultProps;
 
-export default CreateAccessSpecializationPanel;
+export default AccessSpecializationPanel;

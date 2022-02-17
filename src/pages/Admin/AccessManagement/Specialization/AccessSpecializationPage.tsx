@@ -30,7 +30,7 @@ import {
 
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
-import { CreateAccessSpecializationPanel } from './CreateSpecialization';
+import { AccessSpecializationPanel } from './AccessSpecializationPanel';
 import { StyledColumn, StyledCommandButton } from '../AccessManagement.styles';
 import { Spacing } from '../../../../components/spacings/Spacing';
 import { ROUTE_ACCESS_MANAGEMENT_SPECIALIZATION } from 'src/data/constants/RouteConstants';
@@ -224,7 +224,7 @@ const AccessManagementSpecializationPage = () => {
           </StyledColumn>
         </Row>
       </Container>
-      <CreateAccessSpecializationPanel
+      <AccessSpecializationPanel
         isOpen={isPanelOpen}
         onCreateSpecialization={() => {
           fetchData();

@@ -30,7 +30,7 @@ import {
 
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
-import { CreatePoliciesPanel } from './CreatePolicy';
+import { AccessPolicyPanel } from './AccessPolicyPanel';
 import { StyledColumn, StyledCommandButton } from '../AccessManagement.styles';
 import { ROUTE_ACCESS_MANAGEMENT_POLICIES } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
@@ -287,7 +287,7 @@ const _AccessManagementPoliciesPage = () => {
           </Row>
         </Container>
 
-        <CreatePoliciesPanel
+        <AccessPolicyPanel
           isOpen={isPanelOpen}
           onCreatePolicy={() => fetchData()}
           onUpdatePolicy={() => fetchData()}

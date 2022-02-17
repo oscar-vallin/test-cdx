@@ -4,7 +4,7 @@ import React, { useState, useEffect, memo } from 'react';
 import { Checkbox } from '@fluentui/react';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Button } from 'src/components/buttons';
-import { Separator } from 'src/components/separators/Separator';
+import { LightSeparator } from 'src/components/separators/Separator';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { Spinner } from 'src/components/spinners/Spinner';
 import { Row, Column, Container } from 'src/components/layouts';
@@ -180,7 +180,7 @@ const _ColorPalettesPage = () => {
             </Row>
 
             <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-              <Separator />
+              <LightSeparator />
             </Spacing>
 
             {isCreatingPalette ? (
@@ -277,7 +277,7 @@ const _ColorPalettesPage = () => {
                 </Spacing>
 
                 <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                  <Separator />
+                  <LightSeparator />
                 </Spacing>
 
                 <Row>

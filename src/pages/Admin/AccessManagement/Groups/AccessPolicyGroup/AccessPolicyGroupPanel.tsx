@@ -9,7 +9,7 @@ import { Column } from 'src/components/layouts';
 import { UIInputText } from 'src/components/inputs/InputText';
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
 
-import { useCreateGroupPanel } from './CreateGroupPanel.service';
+import { useCreateGroupPanel } from 'src/pages/Admin/AccessManagement/Groups/AccessPolicyGroup/AccessPolicyGroupPanel.service';
 import { UIInputTextReadOnly } from 'src/components/inputs/InputText/InputText';
 import { UIInputCheck } from 'src/components/inputs/InputCheck';
 import { UICheckboxList } from 'src/components/inputs/CheckboxList';
@@ -41,9 +41,9 @@ type CreateGroupPanelProps = {
 } & typeof defaultProps;
 
 // * ------------------------------------------------------------------
-// * --- CreateGroupPanel ---
+// * --- AccessPolicyGroupPanel ---
 // * ------------------------------------------------------------------
-const CreateGroupPanel = ({
+const AccessPolicyGroupPanel = ({
   isOpen,
   onDismiss,
   onCreateGroupPolicy,
@@ -416,6 +416,6 @@ const CreateGroupPanel = ({
   );
 };
 
-CreateGroupPanel.defaultProps = defaultProps;
+AccessPolicyGroupPanel.defaultProps = defaultProps;
 
-export default CreateGroupPanel;
+export default AccessPolicyGroupPanel;

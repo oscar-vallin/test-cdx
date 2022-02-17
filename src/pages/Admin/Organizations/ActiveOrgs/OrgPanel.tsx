@@ -1,7 +1,7 @@
 import { MessageBar, MessageBarType, Panel, PanelType, Spinner, SpinnerSize, Stack } from '@fluentui/react';
 import { Column } from 'src/components/layouts';
 import { Spacing } from 'src/components/spacings/Spacing';
-import { Separator } from 'src/components/separators/Separator';
+import { LightSeparator } from 'src/components/separators/Separator';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
 import React, { useEffect, useState } from 'react';
 import { PanelBody, PanelHeader, PanelTitle } from 'src/layouts/Panels/Panels.styles';
@@ -304,7 +304,7 @@ export const OrgPanel = ({isOpen, selectedOrgSid, onDismiss, onSave} : OrgPanelT
           {!orgForm || loadingForm || loadingOrg ? (
             <>
               <Spacing margin={{ top: 'normal', bottom: 'double' }}>
-                <Separator />
+                <LightSeparator />
               </Spacing>
 
               <Spacing>

@@ -27,7 +27,7 @@ import {
 
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { StyledColumn, StyledCommandButton } from './AccessManagementGroupsPage.styles';
-import { CreateGroupPanel } from './CreateGroup';
+import { AccessPolicyGroupPanel } from './AccessPolicyGroup';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { useAccessManagementGroupsPageService } from './AccessManagementGroupsPage.service';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
@@ -348,7 +348,7 @@ const AccessManagementGroupsContainer = () => {
         />
       )}
 
-      <CreateGroupPanel
+      <AccessPolicyGroupPanel
         isOpen={isPanelOpen}
         onCreateGroupPolicy={() => {
           fetchData();

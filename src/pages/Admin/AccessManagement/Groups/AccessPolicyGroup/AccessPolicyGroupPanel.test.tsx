@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import CreateGroupPanel from './CreateGroupPanel';
+import AccessPolicyGroupPanel from 'src/pages/Admin/AccessManagement/Groups/AccessPolicyGroup/AccessPolicyGroupPanel';
 import { StoreProvider } from 'easy-peasy';
 import store from '../../../../../store/index';
 
@@ -12,18 +12,18 @@ const defaultProps = {
   templateId: '',
 };
 
-describe('Unit test CreateGroupPanel', () => {
+describe('Unit test AccessPolicyGroupPanel', () => {
   const tree = shallow(
     <StoreProvider store={store}>
-      <CreateGroupPanel {...defaultProps} />
+      <AccessPolicyGroupPanel {...defaultProps} />
     </StoreProvider>
   );
 
   it('Should be defined', () => {
-    expect(CreateGroupPanel).toBeDefined();
+    expect(AccessPolicyGroupPanel).toBeDefined();
   });
 
   it('Should render correctly', () => {
-    expect(CreateGroupPanel).toMatchSnapshot();
+    expect(AccessPolicyGroupPanel).toMatchSnapshot();
   });
 });

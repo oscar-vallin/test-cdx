@@ -9,7 +9,7 @@ import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { useNotification } from 'src/hooks/useNotification';
 import { Column, Container, Row } from 'src/components/layouts';
 import { PageTitle, Text } from 'src/components/typography';
-import { Separator } from 'src/components/separators/Separator';
+import { LightSeparator } from 'src/components/separators/Separator';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Spacing } from 'src/components/spacings/Spacing';
 
@@ -92,7 +92,7 @@ const _PasswordRulesPage = () => {
         <Row>
           <Column lg="12">
             <Spacing margin={{ top: 'normal' }}>
-              <Separator />
+              <LightSeparator />
             </Spacing>
           </Column>
         </Row>

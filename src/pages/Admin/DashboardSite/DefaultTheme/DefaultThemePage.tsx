@@ -3,7 +3,7 @@ import { useState, useEffect, memo } from 'react';
 
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Button } from 'src/components/buttons/Button';
-import { Separator } from 'src/components/separators/Separator';
+import { LightSeparator } from 'src/components/separators/Separator';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { Row, Column, Container } from 'src/components/layouts';
 import { MessageBar } from 'src/components/notifications/MessageBar';
@@ -164,7 +164,7 @@ const _DefaultThemePage = () => {
                 )}
 
                 <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                  <Separator />
+                  <LightSeparator />
                 </Spacing>
 
                 <Button

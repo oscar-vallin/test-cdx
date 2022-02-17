@@ -10,7 +10,7 @@ import { Spacing } from 'src/components/spacings/Spacing';
 import { Card } from 'src/components/cards';
 import { Button } from 'src/components/buttons';
 import { Column, Row } from 'src/components/layouts';
-import { Separator } from 'src/components/separators/Separator';
+import { LightSeparator } from 'src/components/separators/Separator';
 import { Text } from 'src/components/typography';
 import { UIInputText } from 'src/components/inputs/InputText';
 import { Collapse } from 'src/components/collapses/Collapse';
@@ -122,7 +122,7 @@ type CreatePoliciesPanelProps = {
   selectedTemplateId?: any;
 } & typeof defaultProps;
 
-const CreatePoliciesPanel = ({
+const AccessPolicyPanel = ({
   isOpen,
   onDismiss,
   onCreatePolicy = () => null,
@@ -496,7 +496,7 @@ const CreatePoliciesPanel = ({
   return (
     <>
       <Panel
-        id="CreatePoliciesPanel"
+        id="AccessPolicyPanel"
         closeButtonAriaLabel="Close"
         type={PanelType.large}
         headerText={!selectedPolicyId ? 'New access policy' : 'Update access policy'}
@@ -513,7 +513,7 @@ const CreatePoliciesPanel = ({
               {isLoadingForm || isLoadingPolicy ? (
                 <>
                   <Spacing margin={{ top: 'normal', bottom: 'double' }}>
-                    <Separator />
+                    <LightSeparator />
                   </Spacing>
 
                   <Spacing>
@@ -546,6 +546,6 @@ const CreatePoliciesPanel = ({
   );
 };
 
-CreatePoliciesPanel.defaultProps = defaultProps;
+AccessPolicyPanel.defaultProps = defaultProps;
 
-export default CreatePoliciesPanel;
+export default AccessPolicyPanel;
