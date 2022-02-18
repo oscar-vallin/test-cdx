@@ -47,7 +47,7 @@ const _ArchivePage = () => {
             <Column sm="6" right>
               <Text size="large" right>
                 {!tableMeta.loading && tableMeta.count !== null && (
-                  <Text>{tableMeta.count > 0 ? `${tableMeta.count} results found` : 'No results found'}</Text>
+                  <span>{tableMeta.count > 0 ? `${tableMeta.count} results found` : 'No results found'}</span>
                 )}
               </Text>
             </Column>
