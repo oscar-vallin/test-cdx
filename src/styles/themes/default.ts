@@ -1,4 +1,6 @@
-export default {
+import { ThemeColorsType } from 'src/styles/themes/types';
+
+export const defaultTheme: ThemeColorsType =  {
   themePrimary: '#0078D4',
   themeLighterAlt: '#eff6fc',
   themeLighter: '#deecf9',
@@ -21,6 +23,7 @@ export default {
   neutralDark: '#201f1e',
   black: '#121829',
   white: '#fefefe',
+  red: '#a4262c',
   custom: {
     severeError: '#FA4100',
     error: '#a80000',

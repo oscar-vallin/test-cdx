@@ -5,7 +5,7 @@ export const StyledPivot = styled(Pivot)`
   width: 100%;
 
   [role='tablist'] {
-    border-bottom: 1px solid #edebe9;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.neutralLight};
     margin: ${({ theme }) => `0 0 0 ${theme.spacing.normal}`};
   }
 `;

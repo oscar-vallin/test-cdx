@@ -1,4 +1,4 @@
-import colors from './default';
+import { defaultTheme } from './default';
 
 const fonts = {
   SegoeUI: 'Segoe UI',
@@ -85,7 +85,7 @@ export const theme = {
   letterSpacings: {
     normal: 'normal',
   },
-  colors,
+  colors: defaultTheme,
   radius,
   spacing,
 

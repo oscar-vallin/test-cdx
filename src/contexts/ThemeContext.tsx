@@ -5,7 +5,6 @@ import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import 'office-ui-fabric-react/dist/css/fabric.css';
 
 import { useCurrentUserTheme } from 'src/hooks/useCurrentUserTheme';
-import Theming from 'src/utils/Theming';
 import { useSessionStore } from 'src/store/SessionStore';
 import { useThemeStore } from 'src/store/ThemeStore';
 import { LoadingPage } from 'src/pages/Loading/LoadingPage';
@@ -76,7 +75,7 @@ export const ThemeContextProvider = ({ children }) => {
 
   useEffect(() => {
     if (!isLoadingTheme) {
-      changeTheme(Theming.getVariant(ThemeStore.themes.current.dashThemeColor || {}));
+      changeTheme(ThemeStore.themes.current);
     }
   }, [ThemeStore.themes.current]);
 

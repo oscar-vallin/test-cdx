@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Box as LayoutBox, Row as LayoutRow } from '../../../components/layouts';
-import { Text } from '../../../components/typography';
+import { Text } from 'src/components/typography';
 
 export const Container = styled.div`
   width: 100%;
@@ -27,16 +27,14 @@ type StyledTableProps = {
 
 export const TableName = styled(Text)<StyledTableProps>`
   text-transform: uppercase;
-  color: ${({ color }) => {
+  color: ${({ theme, color }) => {
     switch (color) {
       case 'complete':
-        return '#3CC918';
-
+        return theme.colors.custom.success;
       case 'error':
-        return '#C32B2B';
-
+        return theme.colors.custom.error;
       default:
-        return '#0078D4';
+        return theme.colors.custom.info;
     }
   }};
   padding-left: 12px;

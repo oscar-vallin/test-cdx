@@ -1,6 +1,7 @@
 import { Row } from 'src/components/layouts';
 import { Text } from 'src/components/typography';
 import styled from 'styled-components';
+import { defaultTheme } from 'src/styles/themes';
 
 export const LabelRow = styled(Row)`
   margin: 0;
@@ -9,7 +10,7 @@ export const LabelRow = styled(Row)`
 `;
 
 export const Required = styled(Text)`
-  color: ${({ theme }) => theme.colors.red ?? '#A4262C'};
+  color: ${({ theme }) => theme.colors.red ?? defaultTheme.red};
   font-size: ${({ theme }) => theme.fontSizes.normal ?? '1em'};
   font-weight: 600;
   padding: 5px 0px;

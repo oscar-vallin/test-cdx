@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react';
-import Theming from 'src/utils/Theming';
 import { defaultTheme, darkTheme } from '../styles/themes';
 
 import {
@@ -52,11 +51,9 @@ export const useCurrentUserTheme = () => {
           }
         : dashThemeColor;
 
-      const variant = Theming.getVariant(palette);
-
       ThemeStore.setUserTheme({
         paletteNm: dashThemeColor?.paletteNm,
-        dashThemeColor: variant,
+        dashThemeColor: palette,
         themeColorMode,
         themeFontSize,
         // loading: isLoadingTheme,

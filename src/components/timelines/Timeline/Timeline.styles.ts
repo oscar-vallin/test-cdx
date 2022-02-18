@@ -51,7 +51,7 @@ export const StyledLi = styled.li<StyledLiProps>`
 
   &:not(:last-child) {
     &::before {
-      border: 1px solid #edebe9;
+      border: 1px solid ${({ theme }) => theme.colors.neutralLight};
       content: '';
       display: block;
       height: 100%;
