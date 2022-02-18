@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, useMemo, useContext, createContext } from 'react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
-import { Customizer, loadTheme } from '@fluentui/react';
 
 import 'office-ui-fabric-react/dist/css/fabric.css';
 
@@ -27,7 +26,6 @@ export const ThemeContextProvider = ({ children }) => {
   const ThemeStore = useThemeStore();
 
   const { isLoadingTheme, fetchTheme } = useCurrentUserTheme();
-  const [currentTheme, setTheme]: any = useState(styledComponentsTheme);
   const [styledTheme, setStyledTheme] = useState(styledComponentsTheme);
   const themeConfig = {};
 
@@ -73,7 +71,6 @@ export const ThemeContextProvider = ({ children }) => {
       colors: { ...styledTheme.colors, ...theme },
     };
 
-    setTheme(theme);
     setStyledTheme(customizedTheme);
   };
 
@@ -95,20 +92,18 @@ export const ThemeContextProvider = ({ children }) => {
   );
 
   return (
-    <Customizer {...loadTheme({ palette: currentTheme || {} })}>
-      <ThemeProvider theme={styledTheme}>
-        <ThemeContext.Provider value={values}>
-          {isLoadingTheme ? (
-            <LoadingPage />
-          ) : (
-            <>
-              <GlobalStyle fontSize={ThemeStore.themes.current.themeFontSize} />
-              {children}
-            </>
-          )}
-        </ThemeContext.Provider>
-      </ThemeProvider>
-    </Customizer>
+    <ThemeProvider theme={styledTheme}>
+      <ThemeContext.Provider value={values}>
+        {isLoadingTheme ? (
+          <LoadingPage />
+        ) : (
+          <>
+            <GlobalStyle fontSize={ThemeStore.themes.current.themeFontSize} />
+            {children}
+          </>
+        )}
+      </ThemeContext.Provider>
+    </ThemeProvider>
   );
 };
 
