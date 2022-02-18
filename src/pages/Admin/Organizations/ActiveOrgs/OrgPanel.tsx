@@ -1,4 +1,13 @@
-import { MessageBar, MessageBarType, Panel, PanelType, Spinner, SpinnerSize, Stack } from '@fluentui/react';
+import {
+  ActionButton,
+  MessageBar,
+  MessageBarType,
+  Panel,
+  PanelType,
+  Spinner,
+  SpinnerSize,
+  Stack
+} from '@fluentui/react';
 import { Column } from 'src/components/layouts';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { LightSeparator } from 'src/components/separators/Separator';
@@ -9,14 +18,14 @@ import {
   CdxWebCommandType,
   GqOperationResponse,
   OrganizationForm,
-  OrgType,
+  OrgType, UiStringField,
   useCreateOrgMutation,
   useFindOrganizationLazyQuery,
   useOrganizationFormLazyQuery,
   useUpdateOrgMutation,
 } from 'src/data/services/graphql';
 import { Button } from 'src/components/buttons';
-import { FormRow } from 'src/components/layouts/Row/Row.styles';
+import { FieldRow, FormRow } from 'src/components/layouts/Row/Row.styles';
 import { UIInputText } from 'src/components/inputs/InputText';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { useOrgSid } from 'src/hooks/useOrgSid';
@@ -24,6 +33,7 @@ import { UIInputSelectOne } from 'src/components/inputs/InputDropdown';
 import { getEnumByValue } from 'src/utils/CDXUtils';
 import { UIInputTextReadOnly } from 'src/components/inputs/InputText/InputText';
 import { useNotification } from 'src/hooks/useNotification';
+import { UIFormLabel } from 'src/components/labels/FormLabel';
 
 type OrgPanelType = {
   isOpen: boolean;
@@ -38,20 +48,21 @@ type OrgStateType = {
   orgId?: string;
   orgType?: OrgType;
   whitelist?: string[];
-}
+};
 
 const INITIAL_STATE: OrgStateType = {
   sid: undefined,
   name: '',
   orgId: '',
-  orgType: OrgType.IntegrationSponsor
-}
+  orgType: undefined,
+};
 
 export const OrgPanel = ({isOpen, selectedOrgSid, onDismiss, onSave} : OrgPanelType) => {
 
   const { orgSid: orgOwnerSid } = useOrgSid();
   const [orgState, setOrgState] = useState<OrgStateType>(INITIAL_STATE);
   const [orgForm, setOrgForm] = useState<OrganizationForm | null>();
+  const [whitelistFields, setWhiteListFields] = useState<UiStringField[]>([]);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
   const [messageType, setMessageType] = useState<MessageBarType>(MessageBarType.info);
@@ -89,22 +100,12 @@ export const OrgPanel = ({isOpen, selectedOrgSid, onDismiss, onSave} : OrgPanelT
 
   useEffect(() => {
     if (dataForm && !loadingForm) {
-      setOrgState({...INITIAL_STATE});
       setOrgForm(dataForm.organizationForm);
     }
   }, [dataForm, loadingForm]);
 
   useEffect(() => {
     if (dataOrg && !loadingOrg) {
-      const form = dataOrg.findOrganization;
-      const orgState: OrgStateType = {
-        sid: form?.sid ?? undefined,
-        orgId: form?.orgId?.value ?? '',
-        name: form?.name?.value ?? undefined,
-        orgType: getEnumByValue(OrgType, form?.orgType?.value?.value),
-      }
-      setOrgState(orgState);
-
       setOrgForm(dataOrg.findOrganization);
     }
   }, [dataOrg, loadingOrg]);
@@ -145,6 +146,34 @@ export const OrgPanel = ({isOpen, selectedOrgSid, onDismiss, onSave} : OrgPanelT
     }
   }, [dataUpdateOrg, loadingUpdate]);
 
+  useEffect(() => {
+    if (orgForm) {
+
+      const whitelistValues: string[] = [];
+      const whitelistFields: UiStringField[] = [];
+      orgForm.whitelist?.forEach((whitelistForm) => {
+        if (whitelistForm?.pattern) {
+          whitelistFields.push(whitelistForm.pattern);
+          whitelistValues.push(whitelistForm.pattern?.value ?? '');
+        }
+      })
+      setWhiteListFields(whitelistFields);
+
+      const orgState: OrgStateType = {
+        sid: orgForm?.sid ?? undefined,
+        orgId: orgForm?.orgId?.value ?? '',
+        name: orgForm?.name?.value ?? undefined,
+        orgType: getEnumByValue(OrgType, orgForm?.orgType?.value?.value),
+        whitelist: whitelistValues,
+      };
+
+      setOrgState(orgState);
+    } else {
+      setWhiteListFields([]);
+      setOrgState(INITIAL_STATE);
+    }
+  }, [orgForm]);
+
   const onPanelClose = () => {
     if (unsavedChanges) {
       setShowDialog(true);
@@ -171,7 +200,7 @@ export const OrgPanel = ({isOpen, selectedOrgSid, onDismiss, onSave} : OrgPanelT
     }
     return (
       <UIInputText id="__OrgID"
-                   uiStringField={orgForm?.orgId}
+                   uiField={orgForm?.orgId}
                    value={orgState.orgId}
                    onChange={(event, newValue) => {
                      setUnsavedChanges(true);
@@ -185,14 +214,26 @@ export const OrgPanel = ({isOpen, selectedOrgSid, onDismiss, onSave} : OrgPanelT
     return (
       <>
         <FormRow>
-          <Column lg="12">
+          <Column lg="6">
             {renderOrgId()}
+          </Column>
+          <Column lg="6">
+            <UIInputSelectOne id="__OrgType"
+                              uiField={orgForm?.orgType}
+                              value={orgState.orgType?.toString() ?? ''}
+                              options={orgForm?.options}
+                              onChange={(newValue) => {
+                                setUnsavedChanges(true);
+                                const orgType = getEnumByValue(OrgType, newValue);
+                                setOrgState({...orgState, orgType: orgType});
+                              }}
+            />
           </Column>
         </FormRow>
         <FormRow>
           <Column lg="12">
             <UIInputText id="__OrgName"
-                         uiStringField={orgForm?.name}
+                         uiField={orgForm?.name}
                          value={orgState.name ?? ''}
                          onChange={(event, newValue) => {
                            setUnsavedChanges(true);
@@ -203,16 +244,36 @@ export const OrgPanel = ({isOpen, selectedOrgSid, onDismiss, onSave} : OrgPanelT
         </FormRow>
         <FormRow>
           <Column lg="12">
-            <UIInputSelectOne id="__OrgType"
-                              uiField={orgForm?.orgType}
-                              value={orgState.orgType?.toString() ?? ''}
-                              options={orgForm?.options}
-                              onChange={(newValue) => {
-                           setUnsavedChanges(true);
-                           const orgType = getEnumByValue(OrgType, newValue);
-                           setOrgState({...orgState, orgType: orgType});
-                         }}
-            />
+            <UIFormLabel id="__WhiteList_lbl" uiField={whitelistFields[0]}/>
+            {whitelistFields.map((field, index) => (
+              <FieldRow key={`__Whitelist_IP_${index}`}>
+                <UIInputText id={`__Whitelist_IP_${index}`}
+                           uiField={field}
+                           value={orgState?.whitelist ? orgState?.whitelist[index] : ''}
+                           onChange={(event, newValue) => {
+                             setUnsavedChanges(true);
+                             const clone: string[] = Object.assign([], orgState?.whitelist ?? []);
+                             clone[index] = newValue ?? '';
+                             setOrgState({...orgState, whitelist: clone});
+                           }}
+                           renderLabel={false}
+                 />
+              </FieldRow>
+             ))
+            }
+            {(!whitelistFields[0]?.readOnly && whitelistFields[0]?.visible) && (
+              <ActionButton id="__Add_Whitelist"
+                            ariaLabel="Add more IP Addresses/Netmask"
+                            onClick={() => {
+                              setUnsavedChanges(true);
+                              const whitelistClone: UiStringField[] = Object.assign([], whitelistFields);
+                              const fieldClone: UiStringField = Object.assign({}, whitelistClone[0]);
+                              fieldClone.value = '';
+                              whitelistClone.push(fieldClone);
+                              setWhiteListFields(whitelistClone);
+                            }}
+              >+ Add more IP Addresses/Netmask</ActionButton>
+            )}
           </Column>
         </FormRow>
       </>
@@ -231,6 +292,38 @@ export const OrgPanel = ({isOpen, selectedOrgSid, onDismiss, onSave} : OrgPanelT
     </PanelHeader>
   );
 
+  const doSave = () => {
+    // Remove any blank values
+    const whitelist = orgState.whitelist?.filter((o) => o?.trim().length > 0)
+    orgState.whitelist = whitelist
+    if (!selectedOrgSid) {
+      createOrg({
+        variables: {
+          orgInfo: {
+            orgId: orgState.orgId ?? '',
+            name: orgState.name ?? '',
+            orgType: orgState.orgType ?? OrgType.IntegrationSponsor,
+            orgOwnerSid: orgOwnerSid,
+            whitelist: whitelist,
+          },
+        },
+      }).then();
+    } else {
+      updateOrg({
+        variables: {
+          orgInfo: {
+            orgSid: selectedOrgSid,
+            name: orgState.name ?? '',
+            orgType: orgState.orgType ?? OrgType.IntegrationSponsor,
+            whitelist: whitelist,
+          },
+        },
+      }).then();
+    }
+
+    return null;
+  };
+
   const renderPanelFooter = () => {
     const commands = orgForm?.commands;
     const command = commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create || cmd?.commandType === CdxWebCommandType.Update);
@@ -241,32 +334,7 @@ export const OrgPanel = ({isOpen, selectedOrgSid, onDismiss, onSave} : OrgPanelT
             id="__SaveOrganizationBtnId"
             variant="primary"
             disabled={loadingCreate || loadingUpdate}
-            onClick={() => {
-              if (!selectedOrgSid) {
-                createOrg({
-                  variables: {
-                    orgInfo: {
-                      orgId: orgState.orgId ?? '',
-                      name: orgState.name ?? '',
-                      orgType: orgState.orgType ?? OrgType.IntegrationSponsor,
-                      orgOwnerSid: orgOwnerSid,
-                    },
-                  },
-                }).then();
-              } else {
-                updateOrg({
-                  variables: {
-                    orgInfo: {
-                      orgSid: selectedOrgSid,
-                      name: orgState.name ?? '',
-                      orgType: orgState.orgType ?? OrgType.IntegrationSponsor,
-                    },
-                  },
-                }).then();
-              }
-
-              return null;
-            }}
+            onClick={doSave}
           >
             {command.label}
           </Button>

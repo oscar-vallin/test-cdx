@@ -87,6 +87,8 @@ const ActiveUsersPage = () => {
     return <UsersTable users={userService.users} onClickUser={updateUserPanel.showPanel} />;
   }
 
+  const createCmd = userService.commands?.find((cmd) => cmd.commandType === CdxWebCommandType.Create);
+
   return (
     <LayoutDashboard id="PageActiveUsers" menuOptionSelected={ROUTE_ACTIVE_USERS.API_ID}>
       {userService.users && userService.users.length > 0 && (
@@ -97,16 +99,16 @@ const ActiveUsersPage = () => {
                 <PageTitle id="__Page_Title" title="Active Users" />
               </Column>
               <Column lg="6" right>
-                {userService.commands?.find((cmd) => cmd.commandType === CdxWebCommandType.Create) && (
+                {createCmd && (
                   <span>
                     <PrimaryButton
                       id="__Create-User"
                       iconProps={{ iconName: 'AddFriend' }}
+                      ariaLabel={createCmd.label ?? undefined}
                       onClick={() => {
                         setIsCreateUserPanelOpen(true);
-                        return null;
                       }}>
-                      Create user
+                      {createCmd.label}
                     </PrimaryButton>
                   </span>
                 )}

@@ -231,7 +231,7 @@ const AccessSpecializationPanel = ({
         <FormRow>
           <Column lg="12">
             <UIInputText id="__Specialization_Name"
-                         uiStringField={accessForm?.name}
+                         uiField={accessForm?.name}
                          value={state.name}
                          onChange={(event, newValue) => {
                            setUnsavedChanges(true);

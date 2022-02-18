@@ -153,7 +153,7 @@ const AccessPolicyGroupPanel = ({
               <FormRow>
                 <Column lg="12">
                   <UIInputText id='__groupInputName'
-                               uiStringField={form.name}
+                               uiField={form.name}
                                value={accessPolicyData.name}
                                placeholder='Please enter a Unique Name'
                                onChange={(event, newValue) => {
@@ -166,7 +166,7 @@ const AccessPolicyGroupPanel = ({
                 <Column lg="12">
                   <UIInputText
                     id="__groupDescription"
-                    uiStringField={form.description}
+                    uiField={form.description}
                     value={accessPolicyData.description}
                     placeholder='Please enter a Unique Description'
                     onChange={(event, newValue) => {

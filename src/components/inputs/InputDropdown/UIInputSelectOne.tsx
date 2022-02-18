@@ -54,7 +54,7 @@ export const UIInputSelectOne = ({id, uiField, options, value, onChange, placeho
       }}
       label={uiField?.label}
       onRenderLabel={onRenderLabel}
-      defaultSelectedKey={value}
+      selectedKey={value}
       onChange={handleChange}
       multiSelect={false}
       allowFreeform={false}

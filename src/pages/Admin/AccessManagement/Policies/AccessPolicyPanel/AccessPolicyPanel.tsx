@@ -377,7 +377,7 @@ const AccessPolicyPanel = ({
         <FormRow>
           <Column lg="6" sm="12">
             <UIInputText id="PolicyInput__Name"
-                         uiStringField={policyForm?.name}
+                         uiField={policyForm?.name}
                          value={state.policyName}
                          onChange={(event, newValue) => {
                            setUnsavedChanges(true);

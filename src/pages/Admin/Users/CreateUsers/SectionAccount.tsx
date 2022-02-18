@@ -44,7 +44,7 @@ const SectionAccount = ({ form, onNext, saveOptions }: SectionAccountProps) => {
             <Column lg={form.person?.lastNm?.visible ? '6' : '12'}>
               <UIInputText
                 id="__userFirstNm"
-                uiStringField={form.person?.firstNm}
+                uiField={form.person?.firstNm}
                 value={formFirstName.value}
                 onChange={(e, newValue) => {
                   formFirstName.onChange(e);
@@ -57,7 +57,7 @@ const SectionAccount = ({ form, onNext, saveOptions }: SectionAccountProps) => {
             <Column lg={form.person?.firstNm?.visible ? '6' : '12'}>
               <UIInputText
                 id="__userLastNm"
-                uiStringField={form.person?.lastNm}
+                uiField={form.person?.lastNm}
                 value={formLastName.value}
                 onChange={(e, newValue) => {
                   formLastName.onChange(e);
@@ -72,7 +72,7 @@ const SectionAccount = ({ form, onNext, saveOptions }: SectionAccountProps) => {
             <Column lg="12">
               <UIInputText
                 id="__userEmail"
-                uiStringField={form.email ?? undefined}
+                uiField={form.email ?? undefined}
                 value={formEmail.value}
                 onChange={(e, newValue) => {
                   formEmail.onChange(e);

@@ -32,6 +32,11 @@ export const FormRow = styled.div`
   width: 100%;
 `;
 
+export const FieldRow = styled.div`
+  margin-bottom: 10px;
+  width: 100%;
+`;
+
 type DivStyledProps = {
   center: boolean;
   right?: boolean;

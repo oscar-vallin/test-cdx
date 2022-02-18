@@ -7,7 +7,7 @@ import {
   DetailsList,
   DetailsListLayoutMode,
   IColumn,
-  IconButton,
+  IconButton, PrimaryButton,
   SelectionMode,
   Spinner,
   SpinnerSize
@@ -31,7 +31,6 @@ import { StyledColumn } from './ActiveOrgsPage.styles';
 import { ROUTE_ACTIVE_ORGS } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { OrgPanel } from 'src/pages/Admin/Organizations/ActiveOrgs/OrgPanel';
-import { Button } from 'src/components/buttons';
 
 const ActiveOrgsPage = () => {
   const { orgSid } = useOrgSid();
@@ -146,17 +145,17 @@ const ActiveOrgsPage = () => {
   const createOrgButton = () => {
     if (createCmd) {
       return (
-        <Button
-          id="__CreateOregButton"
-          variant="primary"
+        <PrimaryButton
+          id="__CreateOrgButton"
+          iconProps={{iconName: 'AddHome'}}
           onClick={() => {
             setSelectedOrgSid(undefined);
             setIsPanelOpen(true);
-            return null;
           }}
+          ariaLabel={createCmd.label ?? undefined}
         >
           {createCmd.label}
-        </Button>
+        </PrimaryButton>
       );
     }
   }

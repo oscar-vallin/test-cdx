@@ -133,13 +133,13 @@ describe('Basic Input Component', () => {
   });
 
   it('Should send the property info to the component', () => {
-    const tree = mountWithTheme(<InputText {...defaultTestProps} info="Tooltip info"></InputText>);
+    const tree = mountWithTheme(<InputText {...defaultTestProps} info="Tooltip info"/>);
     expect(tree).toMatchSnapshot();
   });
   
   it('UIInput Text Rendering', () => {
     const wrapper = shallow(
-      <UIInputText id="nickname" uiStringField={nickName} value='Jimbo'/>
+      <UIInputText id="nickname" uiField={nickName} value='Jimbo'/>
     )
 
     expect(wrapper.find('InputText')).toHaveLength(1);
@@ -160,7 +160,7 @@ describe('Basic Input Component', () => {
     };
 
     const wrapper = mountWithTheme(
-      <UIInputText id="foo" uiStringField={nickName} value='RZA' onChange={onChange}/>
+      <UIInputText id="foo" uiField={nickName} value='RZA' onChange={onChange}/>
     )
 
     expect(wrapper.find('input')).toHaveLength(1);
@@ -194,7 +194,7 @@ describe('Basic Input Component', () => {
     };
 
     const wrapper = shallow(
-      <UIInputText id="foo" uiStringField={roNickName} value='Jimbo'/>
+      <UIInputText id="foo" uiField={roNickName} value='Jimbo'/>
     )
 
     expect(wrapper.find('InputText')).toHaveLength(0);
