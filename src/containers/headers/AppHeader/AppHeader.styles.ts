@@ -33,7 +33,7 @@ export const NavButton = styled.button`
   padding: ${({ theme }) => `0 ${theme.spacing.normal}`};
   text-align: left;
   transition: background 0.15s ease-out;
-  width: 230px;
+  width: 200px;
 
   .HeaderBtnText {
     align-items: center;
@@ -46,6 +46,10 @@ export const NavButton = styled.button`
 
   &:hover {
     background: rgba(0, 0, 0, 0.15);
+  }
+  
+  @media ${device.mobileL} {
+    width: 230px;
   }
 `;
 
