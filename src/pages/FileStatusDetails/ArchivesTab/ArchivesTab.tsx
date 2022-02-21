@@ -43,14 +43,15 @@ export const ArchivesTab = ({ packet }: ArchivesTabType) => {
   const renderRow = (fileLabel: string, fileVariant: string, fullPath?: string | null, key?: string) => {
     if (packet?.workOrderId && fullPath) {
       return (
-        <Column lg="12" xl="6">
-          <Archive key={key}>
+        <Column key={key} lg="12" xl="6">
+          <Archive>
             {renderDownloadLink(packet?.workOrderId, fullPath, fullPath.split('/').pop())}
             <Badge variant={fileVariant} label={fileLabel} pill />
           </Archive>
         </Column>
       );
     }
+    return null;
   };
 
   return (
