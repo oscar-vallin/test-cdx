@@ -24,10 +24,10 @@
     "semi": 0,
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
-    "react/function-component-definition": {
+    "react/function-component-definition": [1, {
       "namedComponents": "arrow-function",
       "unnamedComponents": "arrow-function"
-    },
+    }],
     "import/prefer-default-export": "off",
     "import/extensions": [
       "error",
