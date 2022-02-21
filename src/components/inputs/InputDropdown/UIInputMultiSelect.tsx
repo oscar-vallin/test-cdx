@@ -14,18 +14,15 @@ type UIInputMultiSelectType = {
   placeholder?: string;
 };
 
-export const UIInputMultiSelect = ({id, uiField, options, value, onChange, placeholder}: UIInputMultiSelectType) => {
-
-  const onRenderLabel = () => (
-    <UIFormLabel id={`${id}_lbl`} uiField={uiField}/>
-  );
+export const UIInputMultiSelect = ({ id, uiField, options, value, onChange, placeholder }: UIInputMultiSelectType) => {
+  const onRenderLabel = () => <UIFormLabel id={`${id}_lbl`} uiField={uiField} />;
 
   const renderReadOnlyValues = () => {
     if (uiField?.value?.length && uiField?.value?.length > 0) {
       return uiField?.value.map((value) => value?.name).join(', ');
     }
     return <EmptyValue>&lt;empty&gt;</EmptyValue>;
-  }
+  };
 
   const handleChange = (e: React.FormEvent<IComboBox>, newValue?: IComboBoxOption) => {
     if (newValue) {
@@ -44,7 +41,7 @@ export const UIInputMultiSelect = ({id, uiField, options, value, onChange, place
         onChange(clone);
       }
     }
-  }
+  };
 
   if (uiField?.visible === false) {
     return null;
@@ -63,7 +60,7 @@ export const UIInputMultiSelect = ({id, uiField, options, value, onChange, place
     <ComboBox
       id={id}
       style={{
-        width: '100%'
+        width: '100%',
       }}
       label={uiField?.label}
       onRenderLabel={onRenderLabel}
@@ -71,8 +68,9 @@ export const UIInputMultiSelect = ({id, uiField, options, value, onChange, place
       onChange={handleChange}
       multiSelect={true}
       allowFreeform={false}
-      autoComplete='on'
+      autoComplete="on"
       placeholder={placeholder}
-      options={buildComboBoxOptions(uiField, options)} />
+      options={buildComboBoxOptions(uiField, options)}
+    />
   );
 };

@@ -22,7 +22,7 @@ export const ErrorHandler = () => {
 
         if (extensions) {
           if (extensions.errorSubType === 'NEED_AUTH') {
-            Toast.error({text: message});
+            Toast.error({ text: message });
 
             setTimeout(performUserLogout, 3000);
           } else if (extensions.errorSubType === 'INSUFFICIENT_PRIVILEGES') {

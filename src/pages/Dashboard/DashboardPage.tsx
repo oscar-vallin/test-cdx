@@ -40,20 +40,14 @@ const DashboardPage = () => {
     if (dateType !== 'custom') {
       history.push(`?date=${dateType}&orgSid=${orgSid}`);
     } else if (startDate && endDate) {
-      history.push(
-        `?startDate=${yyyyMMdd(startDate)}&endDate=${yyyyMMdd(endDate)}&orgSid=${orgSid}`
-      );
+      history.push(`?startDate=${yyyyMMdd(startDate)}&endDate=${yyyyMMdd(endDate)}&orgSid=${orgSid}`);
     } else {
-      history.push(
-        `?startDate=${yyyyMMdd(fromDate.value)}&endDate=${yyyyMMdd(toDate.value)}&orgSid=${orgSid}`
-      );
+      history.push(`?startDate=${yyyyMMdd(fromDate.value)}&endDate=${yyyyMMdd(toDate.value)}&orgSid=${orgSid}`);
     }
   };
 
   useEffect(() => {
-    history.push(
-      `?startDate=${yyyyMMdd(fromDate.value)}&endDate=${yyyyMMdd(toDate.value)}&orgSid=${orgSid}`
-    );
+    history.push(`?startDate=${yyyyMMdd(fromDate.value)}&endDate=${yyyyMMdd(toDate.value)}&orgSid=${orgSid}`);
   }, [fromDate.value, toDate.value]);
 
   useEffect(() => {
@@ -179,7 +173,7 @@ const DashboardPage = () => {
               <Row>
                 <Column lg="6" />
                 <Column lg="6">
-                  <InputDateRange startDate={fromDate} endDate={toDate} showLabels={false}/>
+                  <InputDateRange startDate={fromDate} endDate={toDate} showLabels={false} />
                 </Column>
               </Row>
             )}

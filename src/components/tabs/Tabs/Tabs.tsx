@@ -25,18 +25,20 @@ type CDXTabsProps = {
 
 const CDXTabs = ({ items, selectedKey, onClickTab }: CDXTabsProps): ReactElement => {
   return (
-    <StyledPivot selectedKey={String(selectedKey)}
-                 overflowBehavior="menu"
-                 overflowAriaLabel="more items"
-                 styles={{
-                   link: {
-                     fontSize: theme.fontSizes.normal
-                   },
-                   linkIsSelected: {
-                     fontSize: theme.fontSizes.normal
-                   },
-                 }}
-                 style={{ fontSize: theme.fontSizes.normal }}>
+    <StyledPivot
+      selectedKey={String(selectedKey)}
+      overflowBehavior="menu"
+      overflowAriaLabel="more items"
+      styles={{
+        link: {
+          fontSize: theme.fontSizes.normal,
+        },
+        linkIsSelected: {
+          fontSize: theme.fontSizes.normal,
+        },
+      }}
+      style={{ fontSize: theme.fontSizes.normal }}
+    >
       {items.map(({ title, content, badge, hash }: itemsProps, index) => (
         <PivotItem
           headerText={title}

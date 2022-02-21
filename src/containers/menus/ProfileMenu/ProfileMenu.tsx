@@ -37,7 +37,7 @@ const ProfileMenu = ({ id, onUserSettings }: ProfileMenuProps): ReactElement => 
     onUserSettings();
   };
 
-  const buildMenuItems = (version: string) : IContextualMenuItem[] => {
+  const buildMenuItems = (version: string): IContextualMenuItem[] => {
     return [
       {
         id: '__ProfileMenu_UserSettingsId',
@@ -45,11 +45,7 @@ const ProfileMenu = ({ id, onUserSettings }: ProfileMenuProps): ReactElement => 
         text: 'Settings',
         onClick: handleSettings,
       },
-      { id: '__Logout_button',
-        key: 'ProfileMenu_Logout',
-        text: 'Logout',
-        onClick: handleLogout,
-      },
+      { id: '__Logout_button', key: 'ProfileMenu_Logout', text: 'Logout', onClick: handleLogout },
       {
         id: '__seperator',
         key: 'ProfileMenu_Seperator',
@@ -62,19 +58,19 @@ const ProfileMenu = ({ id, onUserSettings }: ProfileMenuProps): ReactElement => 
         text: `version ${version}`,
         disabled: true,
         style: {
-          fontSize: '.75em'
-        }
-      }
+          fontSize: '.75em',
+        },
+      },
     ];
   };
 
-  const [items, setItems] = useState<IContextualMenuItem[]>([])
+  const [items, setItems] = useState<IContextualMenuItem[]>([]);
 
   useEffect(() => {
     if (verData?.version && !verLoading) {
       setItems(buildMenuItems(verData?.version));
     }
-  }, [verData, verLoading])
+  }, [verData, verLoading]);
 
   // Render
   return (

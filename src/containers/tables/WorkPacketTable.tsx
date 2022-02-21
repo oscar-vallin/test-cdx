@@ -5,7 +5,8 @@ import {
   IColumn,
   SelectionMode,
   mergeStyleSets,
-  ScrollablePane, ScrollbarVisibility
+  ScrollablePane,
+  ScrollbarVisibility,
 } from '@fluentui/react';
 
 import { StyledContainer } from 'src/components/tables/Table/Table.styles';
@@ -119,10 +120,8 @@ export const WorkPacketTable = ({
     const startDate = urlParams.get('startDate');
     const endDate = urlParams.get('endDate');
     const hash = tab ? `#${tab}` : '';
-    history.push(
-      `/file-status/${workOrderId}?orgSid=${orgSid}&startDate=${startDate}&endDate=${endDate}${hash}`
-    );
-  }
+    history.push(`/file-status/${workOrderId}?orgSid=${orgSid}&startDate=${startDate}&endDate=${endDate}${hash}`);
+  };
 
   const { initialColumns } = useWorkPacketColumns(cols, openDetails, _doSort);
 
@@ -144,7 +143,9 @@ export const WorkPacketTable = ({
       today.setSeconds(0);
       today.setMilliseconds(0);
       const todayMillis = today.getTime();
-      const startDateMillis = tableFilters.startDate?.value ? tableFilters.startDate?.value?.getTime() : Number.POSITIVE_INFINITY;
+      const startDateMillis = tableFilters.startDate?.value
+        ? tableFilters.startDate?.value?.getTime()
+        : Number.POSITIVE_INFINITY;
       const endDateMillis = tableFilters.endDate?.value ? tableFilters.endDate?.value?.getTime() : 0;
       if (startDateMillis <= todayMillis && endDateMillis >= todayMillis) {
         apiPolling?.startPolling(POLL_INTERVAL);
@@ -184,7 +185,11 @@ export const WorkPacketTable = ({
   }, [data, loading]);
 
   useEffect(() => {
-    if (apiPolling.pollingData && apiPolling.pollingData.workPacketStatusesPoll && apiPolling.pollingData.workPacketStatusesPoll > 0) {
+    if (
+      apiPolling.pollingData &&
+      apiPolling.pollingData.workPacketStatusesPoll &&
+      apiPolling.pollingData.workPacketStatusesPoll > 0
+    ) {
       setLastUpdated(new Date());
     }
   }, [apiPolling.pollingData]);
@@ -211,7 +216,7 @@ export const WorkPacketTable = ({
 
     if (items && items.length > 0) {
       return (
-        <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto} >
+        <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
           <DetailsList
             className={classNames.root}
             items={items}

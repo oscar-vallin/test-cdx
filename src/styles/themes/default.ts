@@ -1,6 +1,6 @@
 import { ThemeColorsType } from 'src/styles/themes/types';
 
-export const defaultTheme: ThemeColorsType =  {
+export const defaultTheme: ThemeColorsType = {
   themePrimary: '#0078D4',
   themeLighterAlt: '#eff6fc',
   themeLighter: '#deecf9',

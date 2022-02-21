@@ -7,7 +7,7 @@ describe('Unit::ActiveDomainStore', () => {
   const store = createStore(ActiveDomainStore);
   const nav: DomainNavItem = {
     label: '',
-    destination: ''
+    destination: '',
   };
 
   it('Should update the dashboard navigation', async () => {

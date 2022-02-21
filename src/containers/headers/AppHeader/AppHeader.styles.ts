@@ -47,7 +47,7 @@ export const NavButton = styled.button`
   &:hover {
     background: rgba(0, 0, 0, 0.15);
   }
-  
+
   @media ${device.mobileL} {
     width: 230px;
   }

@@ -69,10 +69,7 @@ const _FileStatusPage = () => {
   };
 
   return (
-    <LayoutDashboard
-      id="PageFileStatus"
-      menuOptionSelected={ROUTES.ROUTE_FILE_STATUS.API_ID}
-    >
+    <LayoutDashboard id="PageFileStatus" menuOptionSelected={ROUTES.ROUTE_FILE_STATUS.API_ID}>
       <PageHeader id="__FileStatusHeader">
         <Container>
           <Row>

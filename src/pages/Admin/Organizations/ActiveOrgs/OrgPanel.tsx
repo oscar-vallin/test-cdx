@@ -6,7 +6,7 @@ import {
   PanelType,
   Spinner,
   SpinnerSize,
-  Stack
+  Stack,
 } from '@fluentui/react';
 import { Column } from 'src/components/layouts';
 import { Spacing } from 'src/components/spacings/Spacing';
@@ -18,7 +18,8 @@ import {
   CdxWebCommandType,
   GqOperationResponse,
   OrganizationForm,
-  OrgType, UiStringField,
+  OrgType,
+  UiStringField,
   useCreateOrgMutation,
   useFindOrganizationLazyQuery,
   useOrganizationFormLazyQuery,
@@ -57,8 +58,7 @@ const INITIAL_STATE: OrgStateType = {
   orgType: undefined,
 };
 
-export const OrgPanel = ({isOpen, selectedOrgSid, onDismiss, onSave} : OrgPanelType) => {
-
+export const OrgPanel = ({ isOpen, selectedOrgSid, onDismiss, onSave }: OrgPanelType) => {
   const { orgSid: orgOwnerSid } = useOrgSid();
   const [orgState, setOrgState] = useState<OrgStateType>(INITIAL_STATE);
   const [orgForm, setOrgForm] = useState<OrganizationForm | null>();
@@ -86,14 +86,14 @@ export const OrgPanel = ({isOpen, selectedOrgSid, onDismiss, onSave} : OrgPanelT
     if (selectedOrgSid) {
       fetchOrg({
         variables: {
-          orgSid: selectedOrgSid
-        }
+          orgSid: selectedOrgSid,
+        },
       });
     } else {
       fetchOrgForm({
         variables: {
-          orgOwnerSid: orgOwnerSid
-        }
+          orgOwnerSid: orgOwnerSid,
+        },
       });
     }
   }, [selectedOrgSid]);
@@ -116,8 +116,7 @@ export const OrgPanel = ({isOpen, selectedOrgSid, onDismiss, onSave} : OrgPanelT
 
       if (form?.response === GqOperationResponse.Fail) {
         setOrgForm(form);
-        const errorMsg =
-          form.errMsg ?? form.response ?? 'Error Saving Organization';
+        const errorMsg = form.errMsg ?? form.response ?? 'Error Saving Organization';
         setMessageType(MessageBarType.error);
         setMessage(errorMsg);
       } else if (form?.sid) {
@@ -134,8 +133,7 @@ export const OrgPanel = ({isOpen, selectedOrgSid, onDismiss, onSave} : OrgPanelT
 
       if (form?.response === GqOperationResponse.Fail) {
         setOrgForm(form);
-        const errorMsg =
-          form.errMsg ?? form.response ?? 'Error Saving Organization';
+        const errorMsg = form.errMsg ?? form.response ?? 'Error Saving Organization';
         setMessageType(MessageBarType.error);
         setMessage(errorMsg);
       } else if (form?.sid) {
@@ -148,7 +146,6 @@ export const OrgPanel = ({isOpen, selectedOrgSid, onDismiss, onSave} : OrgPanelT
 
   useEffect(() => {
     if (orgForm) {
-
       const whitelistValues: string[] = [];
       const whitelistFields: UiStringField[] = [];
       orgForm.whitelist?.forEach((whitelistForm) => {
@@ -156,7 +153,7 @@ export const OrgPanel = ({isOpen, selectedOrgSid, onDismiss, onSave} : OrgPanelT
           whitelistFields.push(whitelistForm.pattern);
           whitelistValues.push(whitelistForm.pattern?.value ?? '');
         }
-      })
+      });
       setWhiteListFields(whitelistFields);
 
       const orgState: OrgStateType = {
@@ -194,18 +191,17 @@ export const OrgPanel = ({isOpen, selectedOrgSid, onDismiss, onSave} : OrgPanelT
 
   const renderOrgId = () => {
     if (selectedOrgSid) {
-      return (
-        <UIInputTextReadOnly id="__OrgID" uiField={orgForm?.orgId}/>
-      );
+      return <UIInputTextReadOnly id="__OrgID" uiField={orgForm?.orgId} />;
     }
     return (
-      <UIInputText id="__OrgID"
-                   uiField={orgForm?.orgId}
-                   value={orgState.orgId}
-                   onChange={(event, newValue) => {
-                     setUnsavedChanges(true);
-                     setOrgState({...orgState, orgId: newValue ?? ''})
-                   }}
+      <UIInputText
+        id="__OrgID"
+        uiField={orgForm?.orgId}
+        value={orgState.orgId}
+        onChange={(event, newValue) => {
+          setUnsavedChanges(true);
+          setOrgState({ ...orgState, orgId: newValue ?? '' });
+        }}
       />
     );
   };
@@ -214,71 +210,74 @@ export const OrgPanel = ({isOpen, selectedOrgSid, onDismiss, onSave} : OrgPanelT
     return (
       <>
         <FormRow>
+          <Column lg="6">{renderOrgId()}</Column>
           <Column lg="6">
-            {renderOrgId()}
-          </Column>
-          <Column lg="6">
-            <UIInputSelectOne id="__OrgType"
-                              uiField={orgForm?.orgType}
-                              value={orgState.orgType?.toString() ?? ''}
-                              options={orgForm?.options}
-                              onChange={(newValue) => {
-                                setUnsavedChanges(true);
-                                const orgType = getEnumByValue(OrgType, newValue);
-                                setOrgState({...orgState, orgType: orgType});
-                              }}
+            <UIInputSelectOne
+              id="__OrgType"
+              uiField={orgForm?.orgType}
+              value={orgState.orgType?.toString() ?? ''}
+              options={orgForm?.options}
+              onChange={(newValue) => {
+                setUnsavedChanges(true);
+                const orgType = getEnumByValue(OrgType, newValue);
+                setOrgState({ ...orgState, orgType: orgType });
+              }}
             />
           </Column>
         </FormRow>
         <FormRow>
           <Column lg="12">
-            <UIInputText id="__OrgName"
-                         uiField={orgForm?.name}
-                         value={orgState.name ?? ''}
-                         onChange={(event, newValue) => {
-                           setUnsavedChanges(true);
-                           setOrgState({...orgState, name: newValue});
-                         }}
+            <UIInputText
+              id="__OrgName"
+              uiField={orgForm?.name}
+              value={orgState.name ?? ''}
+              onChange={(event, newValue) => {
+                setUnsavedChanges(true);
+                setOrgState({ ...orgState, name: newValue });
+              }}
             />
           </Column>
         </FormRow>
         <FormRow>
           <Column lg="12">
-            <UIFormLabel id="__WhiteList_lbl" uiField={whitelistFields[0]}/>
+            <UIFormLabel id="__WhiteList_lbl" uiField={whitelistFields[0]} />
             {whitelistFields.map((field, index) => (
               <FieldRow key={`__Whitelist_IP_${index}`}>
-                <UIInputText id={`__Whitelist_IP_${index}`}
-                           uiField={field}
-                           value={orgState?.whitelist ? orgState?.whitelist[index] : ''}
-                           onChange={(event, newValue) => {
-                             setUnsavedChanges(true);
-                             const clone: string[] = Object.assign([], orgState?.whitelist ?? []);
-                             clone[index] = newValue ?? '';
-                             setOrgState({...orgState, whitelist: clone});
-                           }}
-                           renderLabel={false}
-                 />
+                <UIInputText
+                  id={`__Whitelist_IP_${index}`}
+                  uiField={field}
+                  value={orgState?.whitelist ? orgState?.whitelist[index] : ''}
+                  onChange={(event, newValue) => {
+                    setUnsavedChanges(true);
+                    const clone: string[] = Object.assign([], orgState?.whitelist ?? []);
+                    clone[index] = newValue ?? '';
+                    setOrgState({ ...orgState, whitelist: clone });
+                  }}
+                  renderLabel={false}
+                />
               </FieldRow>
-             ))
-            }
-            {(!whitelistFields[0]?.readOnly && whitelistFields[0]?.visible) && (
-              <ActionButton id="__Add_Whitelist"
-                            ariaLabel="Add more IP Addresses/Netmask"
-                            onClick={() => {
-                              setUnsavedChanges(true);
-                              const whitelistClone: UiStringField[] = Object.assign([], whitelistFields);
-                              const fieldClone: UiStringField = Object.assign({}, whitelistClone[0]);
-                              fieldClone.value = '';
-                              whitelistClone.push(fieldClone);
-                              setWhiteListFields(whitelistClone);
-                            }}
-              >+ Add more IP Addresses/Netmask</ActionButton>
+            ))}
+            {!whitelistFields[0]?.readOnly && whitelistFields[0]?.visible && (
+              <ActionButton
+                id="__Add_Whitelist"
+                ariaLabel="Add more IP Addresses/Netmask"
+                onClick={() => {
+                  setUnsavedChanges(true);
+                  const whitelistClone: UiStringField[] = Object.assign([], whitelistFields);
+                  const fieldClone: UiStringField = Object.assign({}, whitelistClone[0]);
+                  fieldClone.value = '';
+                  whitelistClone.push(fieldClone);
+                  setWhiteListFields(whitelistClone);
+                }}
+              >
+                + Add more IP Addresses/Netmask
+              </ActionButton>
             )}
           </Column>
         </FormRow>
       </>
     );
-  }
+  };
 
   const renderPanelHeader = () => (
     <PanelHeader id="__PanelHeader">
@@ -294,8 +293,8 @@ export const OrgPanel = ({isOpen, selectedOrgSid, onDismiss, onSave} : OrgPanelT
 
   const doSave = () => {
     // Remove any blank values
-    const whitelist = orgState.whitelist?.filter((o) => o?.trim().length > 0)
-    orgState.whitelist = whitelist
+    const whitelist = orgState.whitelist?.filter((o) => o?.trim().length > 0);
+    orgState.whitelist = whitelist;
     if (!selectedOrgSid) {
       createOrg({
         variables: {
@@ -326,7 +325,9 @@ export const OrgPanel = ({isOpen, selectedOrgSid, onDismiss, onSave} : OrgPanelT
 
   const renderPanelFooter = () => {
     const commands = orgForm?.commands;
-    const command = commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create || cmd?.commandType === CdxWebCommandType.Update);
+    const command = commands?.find(
+      (cmd) => cmd?.commandType === CdxWebCommandType.Create || cmd?.commandType === CdxWebCommandType.Update
+    );
     if (command) {
       return (
         <div>
@@ -343,7 +344,7 @@ export const OrgPanel = ({isOpen, selectedOrgSid, onDismiss, onSave} : OrgPanelT
     }
 
     return null;
-  }
+  };
 
   return (
     <>
@@ -379,7 +380,9 @@ export const OrgPanel = ({isOpen, selectedOrgSid, onDismiss, onSave} : OrgPanelT
                 <Spinner size={SpinnerSize.large} label="Loading..." />
               </Spacing>
             </>
-          ) : renderBody() }
+          ) : (
+            renderBody()
+          )}
         </PanelBody>
       </Panel>
       <DialogYesNo

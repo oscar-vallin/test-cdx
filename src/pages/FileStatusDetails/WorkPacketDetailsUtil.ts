@@ -1,6 +1,5 @@
 import { WorkPacketCommandType, WorkPacketStatusDetails } from 'src/data/services/graphql';
 
-
 /**
  * Check if the given Work Packet Status Details has the given command and return it if found
  * @param workPacket Work Packet Status Details
@@ -11,5 +10,5 @@ export const getCommand = (workPacket?: WorkPacketStatusDetails, command?: WorkP
     return null;
   }
 
-  return workPacket?.commands?.find ((cmd) => cmd?.commandType == command);
+  return workPacket?.commands?.find((cmd) => cmd?.commandType == command);
 };

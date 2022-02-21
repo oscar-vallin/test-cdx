@@ -14,24 +14,21 @@ type UIInputMultiSelectType = {
   placeholder?: string;
 };
 
-export const UIInputSelectOne = ({id, uiField, options, value, onChange, placeholder}: UIInputMultiSelectType) => {
-
-  const onRenderLabel = () => (
-    <UIFormLabel id={`${id}_lbl`} uiField={uiField}/>
-  );
+export const UIInputSelectOne = ({ id, uiField, options, value, onChange, placeholder }: UIInputMultiSelectType) => {
+  const onRenderLabel = () => <UIFormLabel id={`${id}_lbl`} uiField={uiField} />;
 
   const renderReadOnlyValues = () => {
     if (uiField?.value) {
-      return uiField?.value.name ?? uiField?.value.value
+      return uiField?.value.name ?? uiField?.value.value;
     }
     return <EmptyValue>&lt;empty&gt;</EmptyValue>;
-  }
+  };
 
   const handleChange = (e: React.FormEvent<IComboBox>, newValue?: IComboBoxOption) => {
     if (onChange && newValue) {
       onChange(newValue.key.toString());
     }
-  }
+  };
 
   if (uiField?.visible === false) {
     return null;
@@ -50,7 +47,7 @@ export const UIInputSelectOne = ({id, uiField, options, value, onChange, placeho
     <ComboBox
       id={id}
       style={{
-        width: '100%'
+        width: '100%',
       }}
       label={uiField?.label}
       onRenderLabel={onRenderLabel}
@@ -58,8 +55,9 @@ export const UIInputSelectOne = ({id, uiField, options, value, onChange, placeho
       onChange={handleChange}
       multiSelect={false}
       allowFreeform={false}
-      autoComplete='on'
+      autoComplete="on"
       placeholder={placeholder}
-      options={buildComboBoxOptions(uiField, options)} />
+      options={buildComboBoxOptions(uiField, options)}
+    />
   );
 };

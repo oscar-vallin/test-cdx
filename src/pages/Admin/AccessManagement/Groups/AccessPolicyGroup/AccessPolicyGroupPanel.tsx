@@ -109,7 +109,7 @@ const AccessPolicyGroupPanel = ({
         onCreateGroupPolicy(response);
       }
     }
-  }, [createAccessPolicyGroupData])
+  }, [createAccessPolicyGroupData]);
 
   useEffect(() => {
     const response: AccessPolicyGroupForm = updateAccessPolicyGroupData?.updateAccessPolicyGroup;
@@ -136,7 +136,7 @@ const AccessPolicyGroupPanel = ({
         onUpdateGroupPolicy(response);
       }
     }
-  }, [updateAccessPolicyGroupData])
+  }, [updateAccessPolicyGroupData]);
 
   useEffect(() => {
     if (isOpen) {
@@ -152,14 +152,16 @@ const AccessPolicyGroupPanel = ({
             <Column lg="12">
               <FormRow>
                 <Column lg="12">
-                  <UIInputText id='__groupInputName'
-                               uiField={form.name}
-                               value={accessPolicyData.name}
-                               placeholder='Please enter a Unique Name'
-                               onChange={(event, newValue) => {
-                                 setUnsavedChanges(true);
-                                 addToAccessPolicyData({ name: newValue });
-                               }} />
+                  <UIInputText
+                    id="__groupInputName"
+                    uiField={form.name}
+                    value={accessPolicyData.name}
+                    placeholder="Please enter a Unique Name"
+                    onChange={(event, newValue) => {
+                      setUnsavedChanges(true);
+                      addToAccessPolicyData({ name: newValue });
+                    }}
+                  />
                 </Column>
               </FormRow>
               <FormRow>
@@ -168,7 +170,7 @@ const AccessPolicyGroupPanel = ({
                     id="__groupDescription"
                     uiField={form.description}
                     value={accessPolicyData.description}
-                    placeholder='Please enter a Unique Description'
+                    placeholder="Please enter a Unique Description"
                     onChange={(event, newValue) => {
                       setUnsavedChanges(true);
                       addToAccessPolicyData({ description: newValue });
@@ -178,44 +180,49 @@ const AccessPolicyGroupPanel = ({
               </FormRow>
               <FormRow>
                 <Column lg="12">
-                  <UIInputTextReadOnly id='primaryOrg'
-                                       uiField={form.organization}/>
+                  <UIInputTextReadOnly id="primaryOrg" uiField={form.organization} />
                 </Column>
               </FormRow>
               <FormRow>
                 <Column lg="6">
-                  <UIInputCheck id="__checkBoxTemplateGroup"
-                                uiField={form.tmpl}
-                                value={accessPolicyData.tmpl}
-                                onChange={(_event, tmpl: any) => {
-                                  setUnsavedChanges(true);
-                                  addToAccessPolicyData({ tmpl, tmplUseAsIs: tmpl ? accessPolicyData.tmplUseAsIs : false });
-                                }}/>
+                  <UIInputCheck
+                    id="__checkBoxTemplateGroup"
+                    uiField={form.tmpl}
+                    value={accessPolicyData.tmpl}
+                    onChange={(_event, tmpl: any) => {
+                      setUnsavedChanges(true);
+                      addToAccessPolicyData({ tmpl, tmplUseAsIs: tmpl ? accessPolicyData.tmplUseAsIs : false });
+                    }}
+                  />
                 </Column>
                 <Column lg="6">
                   {accessPolicyData.tmpl && form.tmplUseAsIs?.visible && (
-                    <UIInputCheck id="__checkboxUseAsIs"
-                                  uiField={form.tmplUseAsIs}
-                                  value={accessPolicyData.tmplUseAsIs}
-                                  onChange={(_event, tmplUseAsIs: any) => {
-                                    setUnsavedChanges(true);
-                                    addToAccessPolicyData({ tmplUseAsIs });
-                                  }}/>
+                    <UIInputCheck
+                      id="__checkboxUseAsIs"
+                      uiField={form.tmplUseAsIs}
+                      value={accessPolicyData.tmplUseAsIs}
+                      onChange={(_event, tmplUseAsIs: any) => {
+                        setUnsavedChanges(true);
+                        addToAccessPolicyData({ tmplUseAsIs });
+                      }}
+                    />
                   )}
                 </Column>
               </FormRow>
               {accessPolicyData.tmpl && form.applicableOrgTypes?.visible && (
                 <FormRow>
                   <Column lg="12">
-                    <UIInputMultiSelect id="__applicableOrgTypes"
-                                        uiField={form.applicableOrgTypes}
-                                        value={accessPolicyData.applicableOrgTypes}
-                                        options={form.options ?? []}
-                                        placeholder="--Applies to All Org Types--"
-                                        onChange={(applicableOrgTypes) => {
-                                          setUnsavedChanges(true);
-                                          addToAccessPolicyData({ applicableOrgTypes });
-                                        }}/>
+                    <UIInputMultiSelect
+                      id="__applicableOrgTypes"
+                      uiField={form.applicableOrgTypes}
+                      value={accessPolicyData.applicableOrgTypes}
+                      options={form.options ?? []}
+                      placeholder="--Applies to All Org Types--"
+                      onChange={(applicableOrgTypes) => {
+                        setUnsavedChanges(true);
+                        addToAccessPolicyData({ applicableOrgTypes });
+                      }}
+                    />
                   </Column>
                 </FormRow>
               )}
@@ -223,15 +230,16 @@ const AccessPolicyGroupPanel = ({
                 <>
                   <FormRow>
                     <Column lg="12">
-                      <UICheckboxList id="__policies"
-                                      options={policies}
-                                      value={accessPolicyData.policySids}
-                                      uiField={form.policies}
-                                      emptyMessage="No policies configured"
-                                      onChange={(policySids) => {
-                                        setUnsavedChanges(true);
-                                        addToAccessPolicyData( { policySids });
-                                      }}
+                      <UICheckboxList
+                        id="__policies"
+                        options={policies}
+                        value={accessPolicyData.policySids}
+                        uiField={form.policies}
+                        emptyMessage="No policies configured"
+                        onChange={(policySids) => {
+                          setUnsavedChanges(true);
+                          addToAccessPolicyData({ policySids });
+                        }}
                       />
                     </Column>
                   </FormRow>
@@ -242,15 +250,16 @@ const AccessPolicyGroupPanel = ({
                 <>
                   <FormRow>
                     <Column lg="12">
-                      <UICheckboxList id="__specializations"
-                                      uiField={form.specializations}
-                                      options={specializations}
-                                      value={accessPolicyData.specializationSids}
-                                      emptyMessage='No specializations configured'
-                                      onChange={(specializationSids) => {
-                                        setUnsavedChanges(true);
-                                        addToAccessPolicyData({ specializationSids });
-                                      }}
+                      <UICheckboxList
+                        id="__specializations"
+                        uiField={form.specializations}
+                        options={specializations}
+                        value={accessPolicyData.specializationSids}
+                        emptyMessage="No specializations configured"
+                        onChange={(specializationSids) => {
+                          setUnsavedChanges(true);
+                          addToAccessPolicyData({ specializationSids });
+                        }}
                       />
                     </Column>
                   </FormRow>
@@ -259,30 +268,33 @@ const AccessPolicyGroupPanel = ({
 
               <FormRow>
                 <Column lg="12">
-                  <UIInputCheck id='__includeAllSubOrgs'
-                                uiField={form.includeAllSubOrgs}
-                                value={accessPolicyData.includeAllSubOrgs}
-                                onChange={(event, includeAllSubOrgs) => {
-                                  setUnsavedChanges(true);
-                                  addToAccessPolicyData({ includeAllSubOrgs });
-                                }}
-                                alignBottom={false}/>
+                  <UIInputCheck
+                    id="__includeAllSubOrgs"
+                    uiField={form.includeAllSubOrgs}
+                    value={accessPolicyData.includeAllSubOrgs}
+                    onChange={(event, includeAllSubOrgs) => {
+                      setUnsavedChanges(true);
+                      addToAccessPolicyData({ includeAllSubOrgs });
+                    }}
+                    alignBottom={false}
+                  />
                 </Column>
               </FormRow>
 
               {form?.includeOrgSids?.visible && (
                 <FormRow>
                   <Column lg="12">
-                    <TagPicker id='__includeOrgSids'
-                               uiField={form.includeOrgSids}
-                               disabled={form.includeOrgSids?.readOnly || accessPolicyData.includeAllSubOrgs}
-                               value={accessPolicyData.includeOrgSids}
-                               doSearch={(searchText) => orgQuickSearch(client, handleError, searchText, orgSid)}
-                               onChange={(includeOrgSids) => {
-                                 setUnsavedChanges(true);
-                                 addToAccessPolicyData({ includeOrgSids });
-                               }}/>
-
+                    <TagPicker
+                      id="__includeOrgSids"
+                      uiField={form.includeOrgSids}
+                      disabled={form.includeOrgSids?.readOnly || accessPolicyData.includeAllSubOrgs}
+                      value={accessPolicyData.includeOrgSids}
+                      doSearch={(searchText) => orgQuickSearch(client, handleError, searchText, orgSid)}
+                      onChange={(includeOrgSids) => {
+                        setUnsavedChanges(true);
+                        addToAccessPolicyData({ includeOrgSids });
+                      }}
+                    />
                   </Column>
                 </FormRow>
               )}
@@ -290,16 +302,17 @@ const AccessPolicyGroupPanel = ({
               {form?.excludeOrgSids?.visible && (
                 <FormRow>
                   <Column lg="12">
-                    <TagPicker id='__excludeOrgSids'
-                               uiField={form.excludeOrgSids}
-                               disabled={form.excludeOrgSids.readOnly || !accessPolicyData.includeAllSubOrgs}
-                               value={accessPolicyData.excludeOrgSids}
-                               doSearch={(searchText) => orgQuickSearch(client, handleError, searchText, orgSid)}
-                               onChange={(excludeOrgSids) => {
-                                 setUnsavedChanges(true);
-                                 addToAccessPolicyData({ excludeOrgSids });
-                               }}/>
-
+                    <TagPicker
+                      id="__excludeOrgSids"
+                      uiField={form.excludeOrgSids}
+                      disabled={form.excludeOrgSids.readOnly || !accessPolicyData.includeAllSubOrgs}
+                      value={accessPolicyData.excludeOrgSids}
+                      doSearch={(searchText) => orgQuickSearch(client, handleError, searchText, orgSid)}
+                      onChange={(excludeOrgSids) => {
+                        setUnsavedChanges(true);
+                        addToAccessPolicyData({ excludeOrgSids });
+                      }}
+                    />
                   </Column>
                 </FormRow>
               )}
@@ -322,9 +335,11 @@ const AccessPolicyGroupPanel = ({
     </PanelHeader>
   );
 
-  const renderPanelFooter =() => {
+  const renderPanelFooter = () => {
     const commands = accessPolicyForm?.commands;
-    const command = commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create || cmd?.commandType === CdxWebCommandType.Update);
+    const command = commands?.find(
+      (cmd) => cmd?.commandType === CdxWebCommandType.Create || cmd?.commandType === CdxWebCommandType.Update
+    );
     if (command) {
       return (
         <div>
@@ -343,8 +358,8 @@ const AccessPolicyGroupPanel = ({
                 policySids: accessPolicyData.policySids,
                 specializationSids: accessPolicyData.specializationSids,
                 includeAllSubOrgs: accessPolicyData.includeAllSubOrgs,
-                includeOrgSids: accessPolicyData.includeOrgSids?.map((sid) => (sid.key)),
-                excludeOrgSids: accessPolicyData.excludeOrgSids?.map((sid) => (sid.key)),
+                includeOrgSids: accessPolicyData.includeOrgSids?.map((sid) => sid.key),
+                excludeOrgSids: accessPolicyData.excludeOrgSids?.map((sid) => sid.key),
               };
 
               if (accessPolicyData.sid) {
@@ -391,9 +406,7 @@ const AccessPolicyGroupPanel = ({
               {errorMsg}
             </MessageBar>
           )}
-          {loading ? (
-            <Text>Loading...</Text>
-          ) : renderBody(accessPolicyForm) }
+          {loading ? <Text>Loading...</Text> : renderBody(accessPolicyForm)}
         </PanelBody>
       </Panel>
       <DialogYesNo
@@ -411,7 +424,6 @@ const AccessPolicyGroupPanel = ({
           return null;
         }}
       />
-
     </>
   );
 };

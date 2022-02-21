@@ -11,7 +11,9 @@ import {
   DialogType,
   DialogFooter,
   FontIcon,
-  Link, IColumn, IContextualMenuItem,
+  Link,
+  IColumn,
+  IContextualMenuItem,
 } from '@fluentui/react';
 
 import { EmptyState } from 'src/containers/states';
@@ -25,7 +27,10 @@ import {
   useAccessPolicyTemplatesLazyQuery,
   useAccessPoliciesForOrgLazyQuery,
   useDeleteAccessPolicyMutation,
-  AccessPolicy, CdxWebCommandType, Maybe, WebCommand,
+  AccessPolicy,
+  CdxWebCommandType,
+  Maybe,
+  WebCommand,
 } from 'src/data/services/graphql';
 
 import { useOrgSid } from 'src/hooks/useOrgSid';
@@ -116,7 +121,7 @@ const _AccessManagementPoliciesPage = () => {
           </Link>
         );
       case 'tmpl':
-        return item?.tmpl ? <FontIcon iconName='Completed' /> : <span/>;
+        return item?.tmpl ? <FontIcon iconName="Completed" /> : <span />;
       case 'actions':
         if (deleteCmd) {
           return (
@@ -133,14 +138,14 @@ const _AccessManagementPoliciesPage = () => {
             </>
           );
         } else {
-          return <span/>;
+          return <span />;
         }
       default:
         if (item) {
           return item[key];
         }
     }
-    return <span/>;
+    return <span />;
   };
 
   useEffect(() => {
@@ -153,7 +158,7 @@ const _AccessManagementPoliciesPage = () => {
         key: policy.value,
         text: policy.label,
         style: {
-          padding: '0 5px 0 15px'
+          padding: '0 5px 0 15px',
         },
         onClick: (event, item) => {
           setSelectedTemplateId(item.key);
@@ -167,11 +172,11 @@ const _AccessManagementPoliciesPage = () => {
           key: '__Template_Header',
           text: 'From Template:',
           style: {
-            fontSize: '.75em'
+            fontSize: '.75em',
           },
           disabled: true,
         },
-        ...templates
+        ...templates,
       ];
     }
     setTemplatePolicyMenu(templates);
@@ -203,7 +208,7 @@ const _AccessManagementPoliciesPage = () => {
 
   useEffect(() => {
     handleError(error);
-  }, [error])
+  }, [error]);
 
   const createPolicyButton = () => {
     if (createCmd) {
@@ -218,34 +223,28 @@ const _AccessManagementPoliciesPage = () => {
           }}
           {...(!isLoadingTemplatePolicies && templatePolicyMenu.length > 0
             ? {
-              menuProps: {
-                items: templatePolicyMenu,
-                contextualMenuItemAs: (props) => (
-                  <div id={`PolicyTemplate__${props.item.key}`}>{props.item.text}</div>
-                ),
-              },
-            }
+                menuProps: {
+                  items: templatePolicyMenu,
+                  contextualMenuItemAs: (props) => (
+                    <div id={`PolicyTemplate__${props.item.key}`}>{props.item.text}</div>
+                  ),
+                },
+              }
             : {})}
         >
           {createCmd.label}
         </Button>
       );
     }
-  }
+  };
 
   const renderBody = () => {
     if (!loading) {
       if (!policies?.length) {
-        const emptyText = createCmd ?
-          "There are no Access Policies configured in this Organization. Click the button below to create a new policy."
-          : "There are no Access Policies configured in this Organization."
-        return (
-          <EmptyState
-            title="No policies found"
-            description={emptyText}
-            actions={createPolicyButton()}
-          />
-        );
+        const emptyText = createCmd
+          ? 'There are no Access Policies configured in this Organization. Click the button below to create a new policy.'
+          : 'There are no Access Policies configured in this Organization.';
+        return <EmptyState title="No policies found" description={emptyText} actions={createPolicyButton()} />;
       } else {
         return (
           <DetailsList
@@ -281,9 +280,7 @@ const _AccessManagementPoliciesPage = () => {
 
         <Container>
           <Row>
-            <StyledColumn lg="12">
-              {renderBody()}
-            </StyledColumn>
+            <StyledColumn lg="12">{renderBody()}</StyledColumn>
           </Row>
         </Container>
 

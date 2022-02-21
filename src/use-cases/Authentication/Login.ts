@@ -45,9 +45,9 @@ export const useLoginUseCase = () => {
       variables: {
         userId,
       },
-      errorPolicy: 'all'
+      errorPolicy: 'all',
     }).catch(() => null);
-  }
+  };
 
   const performUserAuthentication = ({ userId, password }) =>
     verifyUserCredentials({
@@ -55,7 +55,7 @@ export const useLoginUseCase = () => {
         userId,
         password,
       },
-      errorPolicy: 'all'
+      errorPolicy: 'all',
     }).catch(() => null);
 
   const returnToInitialStep = () => {
@@ -68,8 +68,8 @@ export const useLoginUseCase = () => {
 
   useEffect(() => {
     if (userIdVerificationError) {
-      const networkError = userIdVerificationError.networkError
-      if (networkError && ('statusCode' in networkError) && (networkError.statusCode === 403)) {
+      const networkError = userIdVerificationError.networkError;
+      if (networkError && 'statusCode' in networkError && networkError.statusCode === 403) {
         // prevent an infinite loop of calls
         if (retries < 3) {
           // This means the CSRF Token has expired and we need to retrieve it
@@ -82,7 +82,8 @@ export const useLoginUseCase = () => {
           window.location.reload();
         }
       } else {
-        const errMsg = userIdVerificationError.graphQLErrors[0].message ?? 'Please provide a valid email address to proceed'
+        const errMsg =
+          userIdVerificationError.graphQLErrors[0].message ?? 'Please provide a valid email address to proceed';
 
         setState({
           ...state,

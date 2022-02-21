@@ -14,7 +14,7 @@ describe('Layout Login Container Testing Unit...', () => {
     <StoreProvider store={store}>
       <ApolloContextProvider bypassLoading={true}>
         <Router>
-          <Component {...defaultProps}/>
+          <Component {...defaultProps} />
         </Router>
       </ApolloContextProvider>
     </StoreProvider>
@@ -23,7 +23,7 @@ describe('Layout Login Container Testing Unit...', () => {
     <StoreProvider store={store}>
       <ApolloContextProvider>
         <Router>
-          <Component {...defaultProps}/>
+          <Component {...defaultProps} />
         </Router>
       </ApolloContextProvider>
     </StoreProvider>

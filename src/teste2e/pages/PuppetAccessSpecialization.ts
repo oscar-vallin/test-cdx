@@ -26,7 +26,6 @@ export default class PuppetActiveOrgs extends PuppetBasePage {
   }
 
   async createSpecialization() {
-
     await this.clickOnCreateSpecialization();
 
     await this.inputValue(this.nameInput, 'Test A');

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { ActionButton, DetailsRow } from '@fluentui/react';
-import { device} from 'src/styles/GlobalStyles';
+import { device } from 'src/styles/GlobalStyles';
 import { Text } from 'src/components/typography';
 
 export const ShadowBox = styled.div`
@@ -21,15 +21,15 @@ export const FileMetaDetails = styled.div`
 
 export const FileTitle = styled.span`
   display: inline-block;
-  font-size: ${({ theme }) => theme.fontSizes.normal};  
-  font-weight: ${({ theme }) => theme.fontWeights.semiBold};  
+  font-size: ${({ theme }) => theme.fontSizes.normal};
+  font-weight: ${({ theme }) => theme.fontWeights.semiBold};
   text-overflow: ellipsis;
   white-space: nowrap;
-  
+
   @media ${device.tablet} {
-    font-size: ${({ theme }) => theme.fontSizes.large};  
+    font-size: ${({ theme }) => theme.fontSizes.large};
   }
-`
+`;
 
 export const StyledHeaderRow = styled.div`
   display: flex;
@@ -49,11 +49,11 @@ export const StyledHeaderRow = styled.div`
 export const StyledVendorHeaderRow = styled(StyledHeaderRow)`
   div {
     padding-bottom: 15px;
-    
+
     &:first-child {
       width: 350px;
     }
-    
+
     &:nth-child(2) {
       width: 150px;
       flex-direction: column;
@@ -75,7 +75,7 @@ export const StatsRow = styled(DetailsRow)`
       align-items: flex-start;
       width: 350px !important;
     }
-    
+
     &:nth-child(2) {
       width: 150px;
       flex-direction: column;
@@ -113,23 +113,23 @@ export const StatsFooter = styled.div`
 
 export const BadgeWrapper = styled.span`
   & span {
-    margin-left: .5em;
+    margin-left: 0.5em;
     height: 1.5em;
   }
-`
+`;
 
 export const SuperScript = styled(Text)`
   vertical-align: top;
-  padding-top: .5rem;
-`
+  padding-top: 0.5rem;
+`;
 
 export const WhiteButton = styled(ActionButton)`
-  font-size: ${({ theme }) => theme.fontSizes.normal};  
-  font-weight: ${({ theme }) => theme.fontWeights.bold};  
+  font-size: ${({ theme }) => theme.fontSizes.normal};
+  font-weight: ${({ theme }) => theme.fontWeights.bold};
   background-color: ${({ theme }) => theme.colors.white};
   padding: 10px;
   border-radius: 5px;
-`
+`;
 
 export const Archive = styled.div`
   box-shadow: ${({ theme }) => theme.boxShadows['smallest']};
@@ -141,7 +141,7 @@ export const Archive = styled.div`
   width: 100%;
   padding: 10px 10px 0 10px;
   margin-bottom: 10px;
-  
+
   & a {
     display: inline-block;
     margin-bottom: 10px;

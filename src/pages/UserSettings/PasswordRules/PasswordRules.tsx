@@ -111,7 +111,8 @@ const PasswordRules = ({ user, password, onChange }: PasswordRulesParam) => {
             <Stack.Item grow={3} styles={stackItemStyles}>
               <RuleGroup
                 title={someMustBeMetTitle(rules?.someMustBeMet?.requiredNumPassingRules ?? 1)}
-                passes={rules?.someMustBeMet?.passes ?? false}>
+                passes={rules?.someMustBeMet?.passes ?? false}
+              >
                 <RuleItems items={(rules?.someMustBeMet?.rules ?? []) as PasswordValidationRule[]} />
               </RuleGroup>
             </Stack.Item>

@@ -1,11 +1,11 @@
-import React  from 'react';
+import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import toJSON from 'enzyme-to-json';
 import { shallow } from 'enzyme';
 import { InputText, UIInputText } from './index';
 import { mountWithTheme } from 'src/utils/testUtils';
-import { UiStringField } from "src/data/services/graphql";
-import { UIInputTextReadOnly } from "./InputText";
+import { UiStringField } from 'src/data/services/graphql';
+import { UIInputTextReadOnly } from './InputText';
 
 const placeholderText = 'This is a placeholder';
 
@@ -31,11 +31,11 @@ const nickName: UiStringField = {
   value: '',
   required: true,
   visible: true,
-  info: 'A Name that isn\'t your name',
+  info: "A Name that isn't your name",
 
   errMsg: 'This field is Required',
   min: 0,
-  max: 60
+  max: 60,
 };
 
 test('Matches Snapshot', () => {
@@ -84,7 +84,7 @@ describe('Basic Input Component', () => {
 
     const wrapper = mountWithTheme(<InputText {...defaultProps} onChange={onChange} />);
     expect(wrapper.find('input')).toHaveLength(1);
-    wrapper.find('input').simulate('change',{ target: { value: 'searchString' }});
+    wrapper.find('input').simulate('change', { target: { value: 'searchString' } });
     expect(updatedValue).toEqual('searchString');
   });
 
@@ -99,7 +99,7 @@ describe('Basic Input Component', () => {
         onKeyEnter={mockFn2}
       />
     );
-    wrapper.find('input').simulate('keyDown', {key: 'Enter'});
+    wrapper.find('input').simulate('keyDown', { key: 'Enter' });
 
     expect(mockFn2).toHaveBeenCalled();
   });
@@ -115,7 +115,7 @@ describe('Basic Input Component', () => {
         onKeyEnter={mockFn2}
       />
     );
-    wrapper.find('input').simulate('keyDown', {key: 'K'});
+    wrapper.find('input').simulate('keyDown', { key: 'K' });
 
     expect(mockFn).toHaveBeenCalled();
   });
@@ -123,9 +123,7 @@ describe('Basic Input Component', () => {
   it('@Testing: Check call function when key press', () => {
     const mockFn = jest.fn();
 
-    const wrapper = mountWithTheme(
-      <InputText {...defaultProps} placeholder={placeholderText} />
-    );
+    const wrapper = mountWithTheme(<InputText {...defaultProps} placeholder={placeholderText} />);
 
     wrapper.find('input').simulate('keyDown');
 
@@ -133,22 +131,20 @@ describe('Basic Input Component', () => {
   });
 
   it('Should send the property info to the component', () => {
-    const tree = mountWithTheme(<InputText {...defaultTestProps} info="Tooltip info"/>);
+    const tree = mountWithTheme(<InputText {...defaultTestProps} info="Tooltip info" />);
     expect(tree).toMatchSnapshot();
   });
-  
+
   it('UIInput Text Rendering', () => {
-    const wrapper = shallow(
-      <UIInputText id="nickname" uiField={nickName} value='Jimbo'/>
-    )
+    const wrapper = shallow(<UIInputText id="nickname" uiField={nickName} value="Jimbo" />);
 
     expect(wrapper.find('InputText')).toHaveLength(1);
     expect(wrapper.find('InputText').get(0).props.autofocus).toEqual(false);
     expect(wrapper.find('InputText').get(0).props.value).toEqual('Jimbo');
     expect(wrapper.find('InputText').get(0).props.type).toEqual('text');
-    expect(wrapper.find('InputText').get(0).props.info).toEqual('A Name that isn\'t your name');
+    expect(wrapper.find('InputText').get(0).props.info).toEqual("A Name that isn't your name");
     expect(wrapper.find('InputText').get(0).props.required).toEqual(true);
-    expect(wrapper.find('InputText').get(0).props.errorMessage).toEqual( 'This field is Required');
+    expect(wrapper.find('InputText').get(0).props.errorMessage).toEqual('This field is Required');
     expect(wrapper.find('InputText').get(0).props.minLength).toEqual(0);
     expect(wrapper.find('InputText').get(0).props.maxLength).toEqual(60);
   });
@@ -159,12 +155,10 @@ describe('Basic Input Component', () => {
       update = newValue ?? '';
     };
 
-    const wrapper = mountWithTheme(
-      <UIInputText id="foo" uiField={nickName} value='RZA' onChange={onChange}/>
-    )
+    const wrapper = mountWithTheme(<UIInputText id="foo" uiField={nickName} value="RZA" onChange={onChange} />);
 
     expect(wrapper.find('input')).toHaveLength(1);
-    wrapper.find('input').simulate('change', {target: { value: 'Skylar'}})
+    wrapper.find('input').simulate('change', { target: { value: 'Skylar' } });
 
     expect(update).toEqual('Skylar');
   });
@@ -172,13 +166,11 @@ describe('Basic Input Component', () => {
   it('Test Read Only Field', () => {
     const roNickName: UiStringField = {
       ...nickName,
-      value: "Kerman",
-      readOnly: true
+      value: 'Kerman',
+      readOnly: true,
     };
 
-    const wrapper = shallow(
-      <UIInputTextReadOnly id="foo" uiField={roNickName}/>
-    )
+    const wrapper = shallow(<UIInputTextReadOnly id="foo" uiField={roNickName} />);
 
     expect(wrapper.find('UIFormLabel')).toHaveLength(1);
     expect(wrapper.contains('Kerman')).toEqual(true);
@@ -189,15 +181,13 @@ describe('Basic Input Component', () => {
   it('Automatic Read Only rendering form UI Field', () => {
     const roNickName: UiStringField = {
       ...nickName,
-      value: "Kerman",
-      readOnly: true
+      value: 'Kerman',
+      readOnly: true,
     };
 
-    const wrapper = shallow(
-      <UIInputText id="foo" uiField={roNickName} value='Jimbo'/>
-    )
+    const wrapper = shallow(<UIInputText id="foo" uiField={roNickName} value="Jimbo" />);
 
     expect(wrapper.find('InputText')).toHaveLength(0);
     expect(wrapper.find('UIInputTextReadOnly')).toHaveLength(1);
-  })
+  });
 });

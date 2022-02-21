@@ -15,4 +15,4 @@ function getEnumByValue(enumType, enumValue?: string) {
   return null;
 }
 
-export { yyyyMMdd, getEnumByValue }
+export { yyyyMMdd, getEnumByValue };

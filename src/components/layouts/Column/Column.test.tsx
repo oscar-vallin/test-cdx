@@ -12,7 +12,7 @@ const defaultProps = {
   right: false,
   top: true,
   bottom: false,
-  centerV: "center",
+  centerV: 'center',
 };
 
 test('Matches Snapshot', () => {

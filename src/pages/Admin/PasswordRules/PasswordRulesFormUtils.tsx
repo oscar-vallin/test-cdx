@@ -56,7 +56,7 @@ export const DEFAULT_FORM: PasswordRules = {
     mustNotRepeatCharacters: false,
     mustNotReusePasswords: false,
     requiredNumPassingRules: 3,
-  }
+  },
 };
 
 type FormInputProps = {
@@ -70,7 +70,16 @@ type FormInputProps = {
   onChange: (updated: PasswordRules) => void;
 };
 
-export const FormInput = ({ id, value, state, group, option, disabled = false, errorMessage, onChange }: FormInputProps) => (
+export const FormInput = ({
+  id,
+  value,
+  state,
+  group,
+  option,
+  disabled = false,
+  errorMessage,
+  onChange,
+}: FormInputProps) => (
   <MaskedTextField
     maskFormat={{
       '*': /[0-9_]/,
@@ -168,7 +177,8 @@ export const FormOptions = ({ form, group = '_', state, disabled = false, onChan
                     ...state[group],
                     mustFollowLengthRequirements: !!checked,
                   },
-                })}
+                })
+              }
             />
 
             <Text {...(form[group]?.mustFollowLengthRequirements?.errMsg ? { variant: 'error' } : {})}>
@@ -219,7 +229,8 @@ export const FormOptions = ({ form, group = '_', state, disabled = false, onChan
                     ...state[group],
                     mustContainUpperCaseLetters: !!checked,
                   },
-                })}
+                })
+              }
             />
 
             <Text {...(form[group]?.mustContainUpperCaseLetters?.errMsg ? { variant: 'error' } : {})}>
@@ -257,7 +268,8 @@ export const FormOptions = ({ form, group = '_', state, disabled = false, onChan
                     ...state[group],
                     mustContainLowerCaseLetters: !!checked,
                   },
-                })}
+                })
+              }
             />
 
             <Text {...(form[group]?.mustContainLowerCaseLetters?.errMsg ? { variant: 'error' } : {})}>
@@ -295,7 +307,8 @@ export const FormOptions = ({ form, group = '_', state, disabled = false, onChan
                     ...state[group],
                     mustContainNumericDigits: !!checked,
                   },
-                })}
+                })
+              }
             />
 
             <Text {...(form[group]?.mustContainNumericDigits?.errMsg ? { variant: 'error' } : {})}>
@@ -333,7 +346,8 @@ export const FormOptions = ({ form, group = '_', state, disabled = false, onChan
                     ...state[group],
                     mustContainSpecialCharacters: !!checked,
                   },
-                })}
+                })
+              }
             />
 
             <Text {...(form[group]?.mustContainSpecialCharacters?.errMsg ? { variant: 'error' } : {})}>
@@ -395,7 +409,8 @@ export const FormOptions = ({ form, group = '_', state, disabled = false, onChan
                     ...state[group],
                     mustNotContainNumericSequence: !!checked,
                   },
-                })}
+                })
+              }
             />
 
             <Text {...(form[group]?.mustNotContainNumericSequence?.errMsg ? { variant: 'error' } : {})}>
@@ -417,7 +432,8 @@ export const FormOptions = ({ form, group = '_', state, disabled = false, onChan
                     ...state[group],
                     mustNotRepeatCharacters: !!checked,
                   },
-                })}
+                })
+              }
             />
 
             <Text {...(form[group]?.mustNotRepeatCharacters?.errMsg ? { variant: 'error' } : {})}>
@@ -455,7 +471,8 @@ export const FormOptions = ({ form, group = '_', state, disabled = false, onChan
                     ...state[group],
                     mustNotReusePasswords: !!checked,
                   },
-                })}
+                })
+              }
             />
 
             <Text {...(form[group]?.mustNotReusePasswords?.errMsg ? { variant: 'error' } : {})}>
@@ -493,7 +510,8 @@ export const FormOptions = ({ form, group = '_', state, disabled = false, onChan
                     ...state[group],
                     mustNotMatchExactDictionaryWord: !!checked,
                   },
-                })}
+                })
+              }
             />
 
             <Text {...(form[group]?.mustNotMatchExactDictionaryWord?.errMsg ? { variant: 'error' } : {})}>
@@ -515,7 +533,8 @@ export const FormOptions = ({ form, group = '_', state, disabled = false, onChan
                     ...state[group],
                     mustNotMatchPartialDictionaryWord: !!checked,
                   },
-                })}
+                })
+              }
             />
 
             <Text {...(form[group]?.mustNotMatchPartialDictionaryWord?.errMsg ? { variant: 'error' } : {})}>

@@ -19,7 +19,9 @@ import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import {
   AccessPolicyForm,
   CdxWebCommandType,
-  GqOperationResponse, UiOption, UiOptions,
+  GqOperationResponse,
+  UiOption,
+  UiOptions,
   useAccessPolicyFormLazyQuery,
   useCreateAccessPolicyMutation,
   useFindAccessPolicyLazyQuery,
@@ -45,14 +47,14 @@ const INITIAL_STATE = {
 type PermissionSubGroup = {
   label: string;
   options: UiOption[];
-}
+};
 
 type PermissionGroup = {
   label: string;
   permissions: PermissionSubGroup[];
 };
 
-const groupPermissions = (opts: UiOptions[]): PermissionGroup[]=> {
+const groupPermissions = (opts: UiOptions[]): PermissionGroup[] => {
   const uiOptions = opts.find((opt) => opt.key === 'Permission');
   const permGroups: any = {};
   const getGroup = (opt: UiOption) => {
@@ -61,7 +63,7 @@ const groupPermissions = (opts: UiOptions[]): PermissionGroup[]=> {
       const idx = permString.indexOf('_');
       if (idx > 0) {
         const prefix = permString.substring(0, idx);
-        let group = permGroups[prefix]
+        let group = permGroups[prefix];
         if (!group) {
           group = [];
           permGroups[prefix] = group;
@@ -165,7 +167,9 @@ const AccessPolicyPanel = ({
       if (createAccessPolicy?.response === GqOperationResponse.Fail) {
         setPolicyForm(createAccessPolicy);
         const errorMsg =
-          createAccessPolicy?.errMsg ?? createAccessPolicy?.response ?? 'Please check the highlighted fields and try again';
+          createAccessPolicy?.errMsg ??
+          createAccessPolicy?.response ??
+          'Please check the highlighted fields and try again';
         Toast.error({ text: errorMsg });
       } else if (createAccessPolicy?.sid) {
         onCreatePolicy(createAccessPolicy);
@@ -182,8 +186,10 @@ const AccessPolicyPanel = ({
       if (updateAccessPolicy?.response === GqOperationResponse.Fail) {
         setPolicyForm(updateAccessPolicy);
         const errorMsg =
-            updateAccessPolicy?.errMsg ?? updateAccessPolicy?.response ?? 'Please check the highlighted fields and try again';
-          Toast.error({ text: errorMsg });
+          updateAccessPolicy?.errMsg ??
+          updateAccessPolicy?.response ??
+          'Please check the highlighted fields and try again';
+        Toast.error({ text: errorMsg });
       } else if (updateAccessPolicy?.sid) {
         onUpdatePolicy(updateAccessPolicy);
         Toast.success({ text: 'Access Policy updated successfully' });
@@ -200,8 +206,11 @@ const AccessPolicyPanel = ({
         fetchPolicyForm({
           variables: {
             orgSid,
-            ...(selectedTemplateId ? {
-              templatePolicySid: selectedTemplateId } : {})
+            ...(selectedTemplateId
+              ? {
+                  templatePolicySid: selectedTemplateId,
+                }
+              : {}),
           },
           errorPolicy: 'all',
         });
@@ -279,9 +288,9 @@ const AccessPolicyPanel = ({
   );
 
   const renderSaveButton = () => {
-    const saveCmd = policyForm
-      ?.commands
-      ?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create || cmd?.commandType === CdxWebCommandType.Update);
+    const saveCmd = policyForm?.commands?.find(
+      (cmd) => cmd?.commandType === CdxWebCommandType.Create || cmd?.commandType === CdxWebCommandType.Update
+    );
     if (saveCmd) {
       return (
         <Button
@@ -334,11 +343,11 @@ const AccessPolicyPanel = ({
       const selectedOptions = options?.filter((option) => state.permissions.includes(option.value)) ?? [];
       if (selectedOptions.length > 0) {
         return selectedOptions.map((option, optIndex) => (
-          <Spacing
-            margin={{ top: 'small' }}
-            key={`perm-${optIndex}`}>
-            <Text><PaddedIcon iconName="RadioBullet"/>{option.label}</Text>
-
+          <Spacing margin={{ top: 'small' }} key={`perm-${optIndex}`}>
+            <Text>
+              <PaddedIcon iconName="RadioBullet" />
+              {option.label}
+            </Text>
           </Spacing>
         ));
       } else {
@@ -346,9 +355,7 @@ const AccessPolicyPanel = ({
       }
     }
     return options?.map((option, optIndex) => (
-      <Spacing
-        margin={{ top: 'small' }}
-        key={`perm-${optIndex}`}>
+      <Spacing margin={{ top: 'small' }} key={`perm-${optIndex}`}>
         <Checkbox
           label={option.label}
           checked={state.permissions.includes(option.value)}
@@ -370,53 +377,58 @@ const AccessPolicyPanel = ({
   };
 
   const renderBody = () => {
-    const permissionsReadOnly = policyForm?.permissions?.readOnly ?? true
+    const permissionsReadOnly = policyForm?.permissions?.readOnly ?? true;
 
     return (
       <Spacing margin={{ top: 'normal' }}>
         <FormRow>
           <Column lg="6" sm="12">
-            <UIInputText id="PolicyInput__Name"
-                         uiField={policyForm?.name}
-                         value={state.policyName}
-                         onChange={(event, newValue) => {
-                           setUnsavedChanges(true);
-                           setState({ ...state, policyName: newValue });
-                         }}/>
-
+            <UIInputText
+              id="PolicyInput__Name"
+              uiField={policyForm?.name}
+              value={state.policyName}
+              onChange={(event, newValue) => {
+                setUnsavedChanges(true);
+                setState({ ...state, policyName: newValue });
+              }}
+            />
           </Column>
           <Column lg="3" sm="6">
-            <UIInputCheck id="PolicyTmpl__Check"
-                          uiField={policyForm?.tmpl}
-                          value={state.isTemplate}
-                          onChange={(event, isTemplate) => {
-                            setUnsavedChanges(true);
-                            setState({ ...state, isTemplate });
-                          }}
-                          alignBottom={true}/>
+            <UIInputCheck
+              id="PolicyTmpl__Check"
+              uiField={policyForm?.tmpl}
+              value={state.isTemplate}
+              onChange={(event, isTemplate) => {
+                setUnsavedChanges(true);
+                setState({ ...state, isTemplate });
+              }}
+              alignBottom={true}
+            />
           </Column>
           <Column lg="3" sm="6">
             {state.isTemplate && (
-              <UIInputCheck id="UseAsIs__Check"
-                            uiField={policyForm?.tmplUseAsIs}
-                            value={state.usedAsIs}
-                            onChange={(event, usedAsIs) => {
-                              setUnsavedChanges(true);
-                              setState({ ...state, usedAsIs });
-                            }}
-                            alignBottom={true}/>
+              <UIInputCheck
+                id="UseAsIs__Check"
+                uiField={policyForm?.tmplUseAsIs}
+                value={state.usedAsIs}
+                onChange={(event, usedAsIs) => {
+                  setUnsavedChanges(true);
+                  setState({ ...state, usedAsIs });
+                }}
+                alignBottom={true}
+              />
             )}
           </Column>
         </FormRow>
         <FormRow>
           <Column lg="6">
-            <UIInputTextReadOnly id='Organization' uiField={policyForm?.organization}/>
+            <UIInputTextReadOnly id="Organization" uiField={policyForm?.organization} />
           </Column>
 
           <Column lg="6">
             {policyForm?.applicableOrgTypes?.visible && state.isTemplate && (
               <>
-                <UIFormLabel id='applicableOrgTypes' uiField={policyForm?.applicableOrgTypes}/>
+                <UIFormLabel id="applicableOrgTypes" uiField={policyForm?.applicableOrgTypes} />
 
                 <Multiselect
                   value={applicableOrgTypes}
@@ -468,7 +480,6 @@ const AccessPolicyPanel = ({
                                     </Spacing>
 
                                     {renderPermissionList(permission.options, permissionsReadOnly)}
-
                                   </Card>
                                 </Column>
                               ))}
@@ -487,11 +498,7 @@ const AccessPolicyPanel = ({
     );
   };
 
-  const renderPanelFooter = () => (
-      <div>
-        {renderSaveButton()}
-      </div>
-  );
+  const renderPanelFooter = () => <div>{renderSaveButton()}</div>;
 
   return (
     <>

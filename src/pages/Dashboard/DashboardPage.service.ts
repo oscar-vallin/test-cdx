@@ -37,7 +37,8 @@ export const useDashboardService = (orgSid: string, dateRangeType?: string | nul
   const [isLoadingData, setIsLoadingData] = useState(true);
 
   const [apiDashboardPeriodsQuery, { data, loading, error }] = useDashboardPeriodsLazyQuery();
-  const [customPeriodQuery, { data: period, loading: customPeriodLoading, error: customPeriodError }] = useDashboardPeriodCountsLazyQuery();
+  const [customPeriodQuery, { data: period, loading: customPeriodLoading, error: customPeriodError }] =
+    useDashboardPeriodCountsLazyQuery();
   const handleError = ErrorHandler();
 
   useEffect(() => {

@@ -15,9 +15,10 @@ import { Spacing } from 'src/components/spacings/Spacing';
 
 import {
   PasswordComplexity,
-  PasswordRules, PasswordRulesForm,
+  PasswordRules,
+  PasswordRulesForm,
   usePasswordRulesFormLazyQuery,
-  useUpdatePasswordRulesMutation
+  useUpdatePasswordRulesMutation,
 } from 'src/data/services/graphql';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { InfoIcon } from 'src/components/badges/InfoIcon';
@@ -68,7 +69,8 @@ const _PasswordRulesPage = () => {
   useEffect(() => {
     if (updatedRules) {
       if (updatedRules.updatePasswordRules?.response === 'FAIL') {
-        const errorMessage = updatedRules.updatePasswordRules?.errMsg ?? 'Please, check the highlighted fields and try again';
+        const errorMessage =
+          updatedRules.updatePasswordRules?.errMsg ?? 'Please, check the highlighted fields and try again';
         Toast.error({ text: errorMessage });
       } else {
         Toast.success({ text: 'Password rules updated successfully' });
@@ -139,12 +141,7 @@ const _PasswordRulesPage = () => {
                   </Row>
 
                   <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                    <FormOptions
-                      form={form}
-                      group="mustAlwaysBeMet"
-                      state={state}
-                      onChange={setState}
-                    />
+                    <FormOptions form={form} group="mustAlwaysBeMet" state={state} onChange={setState} />
                   </Spacing>
 
                   {form?.someMustBeMet?.enabled?.visible && (
@@ -162,7 +159,8 @@ const _PasswordRulesPage = () => {
                                     ...state.someMustBeMet,
                                     enabled: !!checked,
                                   },
-                                })}
+                                })
+                              }
                             />
 
                             <Text>
@@ -180,12 +178,15 @@ const _PasswordRulesPage = () => {
                                     })) || []
                                 }
                                 onChange={(event, option) => {
-                                  const complexity = Object.keys(PasswordComplexity).find((x) => PasswordComplexity[x] == option?.key?.toString()) ?? 'ANY';
+                                  const complexity =
+                                    Object.keys(PasswordComplexity).find(
+                                      (x) => PasswordComplexity[x] == option?.key?.toString()
+                                    ) ?? 'ANY';
                                   setState({
                                     ...state,
                                     someMustBeMet: {
                                       ...state.someMustBeMet,
-                                      minPasswordComplexity: PasswordComplexity[complexity]
+                                      minPasswordComplexity: PasswordComplexity[complexity],
                                     },
                                   });
                                 }}
@@ -233,8 +234,7 @@ const _PasswordRulesPage = () => {
                     </Spacing>
                   )}
 
-                  {(form?.autoLockAccount?.visible ||
-                    form?.autoUnlockAccount?.visible) && (
+                  {(form?.autoLockAccount?.visible || form?.autoUnlockAccount?.visible) && (
                     <Spacing margin={{ bottom: 'double' }}>
                       {form?.autoLockAccount?.visible && (
                         <Row>
@@ -247,13 +247,12 @@ const _PasswordRulesPage = () => {
                                   setState({
                                     ...state,
                                     autoLockAccount: !!checked,
-                                  })}
+                                  })
+                                }
                               />
 
                               <Text {...(form?.autoLockAccount?.errMsg ? { variant: 'error' } : {})}>
-                                <span>
-                                  {form?.autoLockAccount?.label || 'Missing label from form'}
-                                </span>
+                                <span>{form?.autoLockAccount?.label || 'Missing label from form'}</span>
 
                                 {form?.autoLockAfterFailedAttempts?.label
                                   ? replaceInputs(form?.autoLockAfterFailedAttempts.label, {
@@ -288,15 +287,12 @@ const _PasswordRulesPage = () => {
                                   setState({
                                     ...state,
                                     autoUnlockAccount: !!checked,
-                                  })}
+                                  })
+                                }
                               />
 
-                              <Text
-                                {...(form?.autoUnlockAccount?.errMsg ? { variant: 'error' } : {})}
-                              >
-                                <span>
-                                  {form?.autoUnlockAccount?.label || 'Missing label from form'}
-                                </span>
+                              <Text {...(form?.autoUnlockAccount?.errMsg ? { variant: 'error' } : {})}>
+                                <span>{form?.autoUnlockAccount?.label || 'Missing label from form'}</span>
 
                                 {form?.autoUnlockAccountDelayMinutes?.label
                                   ? replaceInputs(form?.autoUnlockAccountDelayMinutes.label, {
@@ -335,7 +331,7 @@ const _PasswordRulesPage = () => {
                                 ...state,
                                 orgSid: orgSid,
                               },
-                              errorPolicy: 'all'
+                              errorPolicy: 'all',
                             },
                           }).catch(() => {
                             Toast.error({

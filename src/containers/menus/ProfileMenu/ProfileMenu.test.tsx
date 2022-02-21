@@ -6,29 +6,29 @@ import { ApolloProvider, ApolloClient } from '@apollo/client';
 
 const defaultProps = {
   id: '__ButtonContext',
-  onUserSettings: () => {
-  },
+  onUserSettings: () => {},
 };
 
-
-jest.mock('src/data/services/graphql', () => ({
-  useVersionQuery: () => ({
-    version: '2.0.0.TEST'
-  }),
-  useVersionLazyQuery: () => ({
-    version: '2.0.0.TEST'
-  }),
-})).mock('src/use-cases/Authentication', () => ({
-  useLogoutUseCase: () => ({
-    performUserLogout: jest.fn()
-  }),
-})).mock('src/utils/ErrorHandler', () => ({
-  ErrorHandler: () => jest.fn(),
-}));
-
+jest
+  .mock('src/data/services/graphql', () => ({
+    useVersionQuery: () => ({
+      version: '2.0.0.TEST',
+    }),
+    useVersionLazyQuery: () => ({
+      version: '2.0.0.TEST',
+    }),
+  }))
+  .mock('src/use-cases/Authentication', () => ({
+    useLogoutUseCase: () => ({
+      performUserLogout: jest.fn(),
+    }),
+  }))
+  .mock('src/utils/ErrorHandler', () => ({
+    ErrorHandler: () => jest.fn(),
+  }));
 
 describe('Profile Menu Testing Unit...', () => {
-  const tree = shallowWithTheme(<ProfileMenu {...defaultProps}/>);
+  const tree = shallowWithTheme(<ProfileMenu {...defaultProps} />);
 
   it('Should be defined', () => {
     expect(ProfileMenu).toBeDefined();
@@ -43,7 +43,8 @@ describe('Profile Menu Testing Unit...', () => {
     const tree = mountWithTheme(
       <ApolloProvider client={dummyClient}>
         <StoreProvider store={store}>
-          <ProfileMenu {...defaultProps}/>);
+          <ProfileMenu {...defaultProps} />
+          );
         </StoreProvider>
       </ApolloProvider>
     );

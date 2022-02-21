@@ -14,7 +14,7 @@ type PageTitleParams = {
 const PageTitle = ({ id, title, subTitle, icon }: PageTitleParams) => {
   const renderIcon = () => {
     if (icon) {
-      return <FontIcon style={{fontSize: theme.fontSizes.large}} iconName={icon} />;
+      return <FontIcon style={{ fontSize: theme.fontSizes.large }} iconName={icon} />;
     }
     return '';
   };
@@ -23,7 +23,10 @@ const PageTitle = ({ id, title, subTitle, icon }: PageTitleParams) => {
     if (subTitle) {
       return (
         <SubTitle>
-          &nbsp;—&nbsp;<Text size="large" id={`${id}_SubTitle`}>{subTitle}</Text>
+          &nbsp;—&nbsp;
+          <Text size="large" id={`${id}_SubTitle`}>
+            {subTitle}
+          </Text>
         </SubTitle>
       );
     }
@@ -33,7 +36,7 @@ const PageTitle = ({ id, title, subTitle, icon }: PageTitleParams) => {
   return (
     <>
       {renderIcon()}
-      <Text id={id} size="large" variant="bold" >
+      <Text id={id} size="large" variant="bold">
         {title}
       </Text>
       {renderSubTitle()}

@@ -28,7 +28,7 @@ const ChartDonut = ({ id, label, size = 50, data, totalRecords, onClickSlice }: 
   const totalDigits = total?.toString().length ?? 0;
   // Fix these font sizes since they are inside of the donut chart
   // they should not adjust when font size changes in the UI
-  const totalFontSize = (totalDigits < 6) ? '1.5em' : '1.25em';
+  const totalFontSize = totalDigits < 6 ? '1.5em' : '1.25em';
 
   const [activeIndex, setActiveIndex] = useState<number>();
 
@@ -48,26 +48,20 @@ const ChartDonut = ({ id, label, size = 50, data, totalRecords, onClickSlice }: 
 
   const renderLegendText = (value: string, entry: any, index: number) => {
     return (
-      <Link onMouseOver={() => onMouseOver(entry, index)}
-            onMouseLeave={() => onMouseLeave()}
-            onClick={() => onClick(entry.payload)}>
-        <Text size="small" variant={(index === activeIndex) ? 'bold' : 'normal'}>
+      <Link
+        onMouseOver={() => onMouseOver(entry, index)}
+        onMouseLeave={() => onMouseLeave()}
+        onClick={() => onClick(entry.payload)}
+      >
+        <Text size="small" variant={index === activeIndex ? 'bold' : 'normal'}>
           {value} ({entry.payload.value}/{total})
         </Text>
       </Link>
     );
   };
 
-  const renderActiveShape = props => {
-    const {
-      cx,
-      cy,
-      innerRadius,
-      outerRadius,
-      startAngle,
-      endAngle,
-      fill
-    } = props;
+  const renderActiveShape = (props) => {
+    const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } = props;
     return (
       <Sector
         cx={cx}
@@ -104,21 +98,27 @@ const ChartDonut = ({ id, label, size = 50, data, totalRecords, onClickSlice }: 
           <Cell key={index} fill={data[index % data?.length]?.color ?? COLORS[index % COLORS.length]} />
         ))}
       </Pie>
-      <text x={size} y={size}
-            dx={5} dy={11}
-            textAnchor="middle"
-            fill={theme.colors.black}
-            style={{fontSize: totalFontSize}}>
+      <text
+        x={size}
+        y={size}
+        dx={5}
+        dy={11}
+        textAnchor="middle"
+        fill={theme.colors.black}
+        style={{ fontSize: totalFontSize }}
+      >
         {total}
       </text>
-      <Legend layout="vertical"
-              verticalAlign="middle"
-              align="right"
-              wrapperStyle={{
-                position: 'absolute',
-                left: `${size * 2.4}px`
-              }}
-              formatter={renderLegendText}/>
+      <Legend
+        layout="vertical"
+        verticalAlign="middle"
+        align="right"
+        wrapperStyle={{
+          position: 'absolute',
+          left: `${size * 2.4}px`,
+        }}
+        formatter={renderLegendText}
+      />
     </PieChart>
   );
 };

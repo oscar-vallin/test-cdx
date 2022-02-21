@@ -15,7 +15,7 @@ export const Box = styled(LayoutBox)`
 `;
 
 export const FilterSection = styled(LayoutRow)`
-  margin: 15px 0; 
+  margin: 15px 0;
 `;
 
 export const StyledRow = styled(LayoutRow)`

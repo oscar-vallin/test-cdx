@@ -10,10 +10,9 @@ import { Archive } from '../FileStatusDetails.styles';
 
 type ArchivesTabType = {
   packet?: WorkPacketStatusDetails;
-}
+};
 
-export const ArchivesTab = ({packet}: ArchivesTabType) => {
-
+export const ArchivesTab = ({ packet }: ArchivesTabType) => {
   const downloadCommand = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.DownloadFile);
 
   const renderDownloadLink = (workOrderId: string, s3key: string | null, filename?: string): ReactElement => {
@@ -24,21 +23,21 @@ export const ArchivesTab = ({packet}: ArchivesTabType) => {
 
     if (downloadCommand) {
       return (
-        <Link target="_new"
-              href={`${serverUrl}k/archive/download?workOrderID=${workOrderId}&s3Key=${s3key}`}
-              title={filename}
-              style={{
-                fontSize: theme.fontSizes.normal
-              }}>
-          <FontIcon iconName='DownloadDocument' style={{paddingRight: '.5em'}}/>
+        <Link
+          target="_new"
+          href={`${serverUrl}k/archive/download?workOrderID=${workOrderId}&s3Key=${s3key}`}
+          title={filename}
+          style={{
+            fontSize: theme.fontSizes.normal,
+          }}
+        >
+          <FontIcon iconName="DownloadDocument" style={{ paddingRight: '.5em' }} />
           {fileOnly}
         </Link>
       );
     }
 
-    return (
-      <Text>{fileOnly}</Text>
-    );
+    return <Text>{fileOnly}</Text>;
   };
 
   const renderRow = (fileLabel: string, fileVariant: string, fullPath?: string | null, key?: string) => {
@@ -47,7 +46,7 @@ export const ArchivesTab = ({packet}: ArchivesTabType) => {
         <Column lg="12" xl="6">
           <Archive key={key}>
             {renderDownloadLink(packet?.workOrderId, fullPath, fullPath.split('/').pop())}
-            <Badge variant={fileVariant} label={fileLabel} pill/>
+            <Badge variant={fileVariant} label={fileLabel} pill />
           </Archive>
         </Column>
       );
@@ -60,14 +59,16 @@ export const ArchivesTab = ({packet}: ArchivesTabType) => {
       {packet?.supplementalFilesArchivePaths?.map((itm, index) =>
         renderRow('Supplemental', 'primary', itm, `supp_${index}`)
       )}
-      {packet?.workStepStatus?.map((workStep, wsIndex) => (
+      {packet?.workStepStatus?.map((workStep, wsIndex) =>
         workStep?.stepFile?.map((stepFile, stepFileIndex) =>
-          renderRow(stepFile?.label ?? workStep?.stepName ?? workStep?.stepType ?? 'Work Step',
+          renderRow(
+            stepFile?.label ?? workStep?.stepName ?? workStep?.stepType ?? 'Work Step',
             'info',
             stepFile?.value,
-            `step_${wsIndex}_${stepFileIndex}`)
+            `step_${wsIndex}_${stepFileIndex}`
+          )
         )
-      ))}
+      )}
       {renderRow('Sent to Vendor', 'success', packet?.vendorFileArchivePath)}
     </Spacing>
   );

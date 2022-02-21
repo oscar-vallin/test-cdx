@@ -79,12 +79,13 @@ const SectionAccessManagement = ({ form, onPrev, onNext, saveOptions }: SectionA
       <WizardBody>
         <FormRow>
           <Column lg="12">
-            <UICheckboxList id="__Access_Groups_List"
-                            uiField={form?.accessPolicyGroups ?? undefined}
-                            options={groupOptions}
-                            value={selectedSids}
-                            onChange={onChange}
-                            emptyMessage="No configured Access Policy Groups"
+            <UICheckboxList
+              id="__Access_Groups_List"
+              uiField={form?.accessPolicyGroups ?? undefined}
+              options={groupOptions}
+              value={selectedSids}
+              onChange={onChange}
+              emptyMessage="No configured Access Policy Groups"
             />
           </Column>
         </FormRow>

@@ -269,7 +269,9 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
               onClick={showResetPasswordDialog}
             />
           )}
-          {useUpdateUserPanel.userAccountForm.commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Deactivate) && (
+          {useUpdateUserPanel.userAccountForm.commands?.find(
+            (cmd) => cmd?.commandType === CdxWebCommandType.Deactivate
+          ) && (
             <CommandButton
               id="__DeactivateUser_Button"
               iconProps={{ iconName: 'UserRemove' }}
@@ -277,7 +279,9 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
               onClick={showDeactivateUserDialog}
             />
           )}
-          {useUpdateUserPanel.userAccountForm.commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Activate) && (
+          {useUpdateUserPanel.userAccountForm.commands?.find(
+            (cmd) => cmd?.commandType === CdxWebCommandType.Activate
+          ) && (
             <CommandButton
               id="__ActivateUser_Button"
               iconProps={{ iconName: 'UserFollowed' }}

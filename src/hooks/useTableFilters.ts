@@ -1,12 +1,4 @@
-import {
-  getHours,
-  format,
-  isValid,
-  startOfYesterday,
-  startOfToday,
-  endOfToday,
-  endOfTomorrow
-} from 'date-fns';
+import { getHours, format, isValid, startOfYesterday, startOfToday, endOfToday, endOfTomorrow } from 'date-fns';
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { DateState, useDateValue, useEndDateValue } from './useDateValue';

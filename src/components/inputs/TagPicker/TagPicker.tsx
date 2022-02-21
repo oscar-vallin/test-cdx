@@ -52,10 +52,7 @@ const CDXTagPicker = ({
 
   return (
     <>
-      {uiField && (
-        <UIFormLabel id="__TagPickerLabel"
-                     uiField={uiField}/>
-      )}
+      {uiField && <UIFormLabel id="__TagPickerLabel" uiField={uiField} />}
 
       <StyledTagPicker
         removeButtonAriaLabel="Remove"
@@ -79,7 +76,7 @@ const CDXTagPicker = ({
           id,
           onBlur,
           onFocus,
-          placeholder: disabled ? '' : 'Type to Search'
+          placeholder: disabled ? '' : 'Type to Search',
         }}
       />
     </>

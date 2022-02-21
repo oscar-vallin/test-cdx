@@ -40,22 +40,22 @@ export const NavList = styled.ul`
 `;
 
 export const NavListItem = styled.li<NavListItemProps>`
-  padding-left: ${({ selected }) => (selected? '18px' : '21px')};
+  padding-left: ${({ selected }) => (selected ? '18px' : '21px')};
   background: ${({ selected }) => (selected ? 'rgb(237, 235, 233)' : 'none')};
   border-left: ${({ theme, selected }) => (selected ? `${theme.colors.themePrimary} solid 3px` : 'none')};
-  
+
   &:hover {
     background: ${({ theme }) => theme.colors.white};
   }
-  
+
   &.return-home button {
     border-top: 1px solid lightgray;
   }
-  
+
   & button {
     width: 192px;
   }
-  
+
   & button span span {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -66,7 +66,7 @@ export const NavListItem = styled.li<NavListItemProps>`
     top: 50%;
     transform: translate(0, -50%);
   }
-  
+
   @media ${device.mobileL} {
     & button span span {
       width: 166px;
@@ -76,11 +76,11 @@ export const NavListItem = styled.li<NavListItemProps>`
 
 export const MobileTopNav = styled.div`
   display: block;
-  
+
   & ul li:last-child {
     border-bottom: 1px solid lightgray;
   }
-  
+
   @media all and ${device.laptop} {
     display: none;
   }

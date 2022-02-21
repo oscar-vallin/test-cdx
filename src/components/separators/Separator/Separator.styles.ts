@@ -14,4 +14,4 @@ export const DarkSeparator = styled.hr`
   border-bottom: 1px solid ${({ theme }) => theme.colors.neutralTertiaryAlt};
   margin: 0;
   width: 100%;
-`
+`;

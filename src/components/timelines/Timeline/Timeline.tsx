@@ -43,7 +43,6 @@ const styles = mergeStyleSets({
 });
 
 const CDXTimeline = ({ packet, activeIndex = 0, onClick }: CDXTimelineProps): ReactElement => {
-
   const [showCallout, setShowCallout] = useState(false);
   const redoCommand = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.RerunStep);
   const downloadCommand = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.DownloadFile);
@@ -55,13 +54,13 @@ const CDXTimeline = ({ packet, activeIndex = 0, onClick }: CDXTimelineProps): Re
       return true;
     }
     return stepStatus == 'DONE' || stepStatus == 'COMPLETE';
-  }
+  };
 
   const getStatusIcon = (status: string) => {
     const ICONS = {
-      COMPLETE: <FontIcon iconName="CompletedSolid" className="success" style={{fontSize: 32}}/>,
-      DONE: <FontIcon iconName="CompletedSolid" className="success" style={{fontSize: 32}}/>,
-      QCFAIL: <FontIcon iconName="IncidentTriangle" className="error" style={{fontSize: 32}}/>,
+      COMPLETE: <FontIcon iconName="CompletedSolid" className="success" style={{ fontSize: 32 }} />,
+      DONE: <FontIcon iconName="CompletedSolid" className="success" style={{ fontSize: 32 }} />,
+      QCFAIL: <FontIcon iconName="IncidentTriangle" className="error" style={{ fontSize: 32 }} />,
       PROGRESS: <Spinner size="md" />,
     };
 
@@ -71,12 +70,12 @@ const CDXTimeline = ({ packet, activeIndex = 0, onClick }: CDXTimelineProps): Re
   const renderRedo = (item?: WorkStepStatus | null) => {
     if (isComplete(item) && redoCommand) {
       return (
-        <Spacing margin={{top: 'normal'}}>
-          <PrimaryButton onClick={() => null} iconProps={
-            { iconName: 'Rerun',
-              style: { fontSize: theme.fontSizes.small }
-            }}
-            style={{ fontSize: theme.fontSizes.small }}>
+        <Spacing margin={{ top: 'normal' }}>
+          <PrimaryButton
+            onClick={() => null}
+            iconProps={{ iconName: 'Rerun', style: { fontSize: theme.fontSizes.small } }}
+            style={{ fontSize: theme.fontSizes.small }}
+          >
             {redoCommand.label}
           </PrimaryButton>
         </Spacing>
@@ -96,14 +95,14 @@ const CDXTimeline = ({ packet, activeIndex = 0, onClick }: CDXTimelineProps): Re
     value?: any;
   };
 
-  const ConditionalLabelValue = ({label, value}: ConditionalLabelValueType) => {
+  const ConditionalLabelValue = ({ label, value }: ConditionalLabelValueType) => {
     if (value) {
-      return <LabelValue label={label} value={value}/>
+      return <LabelValue label={label} value={value} />;
     }
     return null;
   };
 
-  const FileValue = ({label, value}: LabelValueProps) => {
+  const FileValue = ({ label, value }: LabelValueProps) => {
     const graphQLUrl = process.env.REACT_APP_API_SERVER;
     const serverUrl = graphQLUrl?.replace('/graphql', '') ?? '';
 
@@ -113,19 +112,21 @@ const CDXTimeline = ({ packet, activeIndex = 0, onClick }: CDXTimelineProps): Re
         return (
           <div>
             <InlineLabel>{`${label}:`}</InlineLabel>
-            <Link target="_new"
-                  href={`${serverUrl}k/archive/download?workOrderID=${packet?.workOrderId}&s3Key=${value}`}
-                  title={fName ?? undefined}
-                  style={{
-                    fontSize: '.75rem'
-                  }}>
+            <Link
+              target="_new"
+              href={`${serverUrl}k/archive/download?workOrderID=${packet?.workOrderId}&s3Key=${value}`}
+              title={fName ?? undefined}
+              style={{
+                fontSize: '.75rem',
+              }}
+            >
               {fName}
-              <FontIcon iconName='DownloadDocument' style={{paddingLeft: '.5em'}}/>
+              <FontIcon iconName="DownloadDocument" style={{ paddingLeft: '.5em' }} />
             </Link>
           </div>
         );
       } else {
-        return <LabelValue label={label} value={fName}/>
+        return <LabelValue label={label} value={fName} />;
       }
     }
     return null;
@@ -136,19 +137,22 @@ const CDXTimeline = ({ packet, activeIndex = 0, onClick }: CDXTimelineProps): Re
       return (
         <>
           <Text size="large">{item.stepName}</Text>
-          <ConditionalLabelValue label="Type" value={item.stepType}/>
-          <ConditionalLabelValue label="Population Count" value={item.populationCount?.value}/>
-          <FileValue label={item.transformedArchiveFile?.label ?? 'Transformed File'} value={item.transformedArchiveFile?.value}/>
-          <ConditionalLabelValue label="Record Count" value={item.recordCounts?.recordCount}/>
-          <ConditionalLabelValue label="Total Count" value={item.recordCounts?.totalCount}/>
-          {item.stepFile?.map((stepFile, index) =>
-            <FileValue key={`stepFile_${index}`} label={stepFile?.label ?? 'File'} value={stepFile?.value}/>
-          )}
+          <ConditionalLabelValue label="Type" value={item.stepType} />
+          <ConditionalLabelValue label="Population Count" value={item.populationCount?.value} />
+          <FileValue
+            label={item.transformedArchiveFile?.label ?? 'Transformed File'}
+            value={item.transformedArchiveFile?.value}
+          />
+          <ConditionalLabelValue label="Record Count" value={item.recordCounts?.recordCount} />
+          <ConditionalLabelValue label="Total Count" value={item.recordCounts?.totalCount} />
+          {item.stepFile?.map((stepFile, index) => (
+            <FileValue key={`stepFile_${index}`} label={stepFile?.label ?? 'File'} value={stepFile?.value} />
+          ))}
           {renderRedo(item)}
         </>
-      )
+      );
     }
-    return <div>No further information</div>
+    return <div>No further information</div>;
   };
 
   return (
@@ -176,12 +180,14 @@ const CDXTimeline = ({ packet, activeIndex = 0, onClick }: CDXTimelineProps): Re
         ))}
       </StyledUl>
       {packet?.workStepStatus && packet?.workStepStatus[activeIndex] && showCallout && (
-        <Callout target={`#step_${activeIndex}`}
-                 isBeakVisible={true}
-                 className={styles.callout}
-                 gapSpace={10}
-                 directionalHint={DirectionalHint.rightCenter}
-                 onDismiss={() => setShowCallout(false)}>
+        <Callout
+          target={`#step_${activeIndex}`}
+          isBeakVisible={true}
+          className={styles.callout}
+          gapSpace={10}
+          directionalHint={DirectionalHint.rightCenter}
+          onDismiss={() => setShowCallout(false)}
+        >
           {renderStepDetails(packet?.workStepStatus[activeIndex])}
         </Callout>
       )}

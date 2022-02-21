@@ -7,10 +7,11 @@ import {
   DetailsList,
   DetailsListLayoutMode,
   IColumn,
-  IconButton, PrimaryButton,
+  IconButton,
+  PrimaryButton,
   SelectionMode,
   Spinner,
-  SpinnerSize
+  SpinnerSize,
 } from '@fluentui/react';
 import { EmptyState } from 'src/containers/states';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
@@ -22,7 +23,7 @@ import {
   CdxWebCommandType,
   Organization,
   useDirectOrganizationsLazyQuery,
-  WebCommand
+  WebCommand,
 } from 'src/data/services/graphql';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
@@ -42,7 +43,7 @@ const ActiveOrgsPage = () => {
   const [directOrganizationsQuery, { data, loading }] = useQueryHandler(useDirectOrganizationsLazyQuery);
   const [createCmd, setCreateCmd] = useState<WebCommand | null>();
 
-  const fetchData =() => {
+  const fetchData = () => {
     directOrganizationsQuery({
       variables: {
         orgSid,
@@ -82,10 +83,14 @@ const ActiveOrgsPage = () => {
   );
 
   const onRenderAction = (item?: Organization) => (
-    <IconButton iconProps={{iconName: 'Edit'}} title="View Org Details" onClick={() => {
-      setSelectedOrgSid(item?.sid ?? undefined);
-      setIsPanelOpen(true);
-    }}/>
+    <IconButton
+      iconProps={{ iconName: 'Edit' }}
+      title="View Org Details"
+      onClick={() => {
+        setSelectedOrgSid(item?.sid ?? undefined);
+        setIsPanelOpen(true);
+      }}
+    />
   );
 
   const columns: IColumn[] = [
@@ -98,7 +103,7 @@ const ActiveOrgsPage = () => {
       minWidth: 150,
       maxWidth: 600,
       flexGrow: 1,
-      onRender: onRenderOrgName
+      onRender: onRenderOrgName,
     },
     {
       name: 'Org ID',
@@ -109,7 +114,7 @@ const ActiveOrgsPage = () => {
       minWidth: 150,
       maxWidth: 400,
       flexGrow: 1,
-      onRender: onRenderItemColumn
+      onRender: onRenderItemColumn,
     },
     {
       name: 'Org Type',
@@ -120,7 +125,7 @@ const ActiveOrgsPage = () => {
       minWidth: 150,
       maxWidth: 400,
       flexGrow: 1,
-      onRender: onRenderItemColumn
+      onRender: onRenderItemColumn,
     },
     {
       name: '',
@@ -130,14 +135,16 @@ const ActiveOrgsPage = () => {
       isPadded: true,
       minWidth: 50,
       maxWidth: 50,
-      onRender: onRenderAction
-    }
+      onRender: onRenderAction,
+    },
   ];
 
   useEffect(() => {
     if (!loading && data) {
       setOrgs(data.directOrganizations.nodes);
-      const createCmd = data?.directOrganizations?.listPageInfo?.pageCommands?.find((cmd) => cmd?.commandType == CdxWebCommandType.Create);
+      const createCmd = data?.directOrganizations?.listPageInfo?.pageCommands?.find(
+        (cmd) => cmd?.commandType == CdxWebCommandType.Create
+      );
       setCreateCmd(createCmd);
     }
   }, [data, loading]);
@@ -147,7 +154,7 @@ const ActiveOrgsPage = () => {
       return (
         <PrimaryButton
           id="__CreateOrgButton"
-          iconProps={{iconName: 'AddHome'}}
+          iconProps={{ iconName: 'AddHome' }}
           onClick={() => {
             setSelectedOrgSid(undefined);
             setIsPanelOpen(true);
@@ -158,7 +165,7 @@ const ActiveOrgsPage = () => {
         </PrimaryButton>
       );
     }
-  }
+  };
 
   const renderBody = () => {
     if (loading) {
@@ -189,7 +196,7 @@ const ActiveOrgsPage = () => {
           <Container>
             <Row>
               <Column lg="6" direction="row">
-                <PageTitle id="__Page_Title" title="Active orgs"/>
+                <PageTitle id="__Page_Title" title="Active orgs" />
               </Column>
               <Column lg="6" right>
                 {createOrgButton()}
@@ -206,10 +213,12 @@ const ActiveOrgsPage = () => {
       </Container>
 
       {isPanelOpen && (
-        <OrgPanel isOpen={isPanelOpen}
-                  selectedOrgSid={selectedOrgSid}
-                  onDismiss={() => setIsPanelOpen(false)}
-                  onSave={fetchData}/>
+        <OrgPanel
+          isOpen={isPanelOpen}
+          selectedOrgSid={selectedOrgSid}
+          onDismiss={() => setIsPanelOpen(false)}
+          onSave={fetchData}
+        />
       )}
     </LayoutDashboard>
   );

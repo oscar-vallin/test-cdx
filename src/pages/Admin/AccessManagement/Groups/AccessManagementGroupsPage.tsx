@@ -9,7 +9,7 @@ import {
   FontIcon,
   SpinnerSize,
   Link,
-  IContextualMenuProps
+  IContextualMenuProps,
 } from '@fluentui/react';
 import { EmptyState } from 'src/containers/states';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
@@ -20,9 +20,11 @@ import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { PageTitle } from 'src/components/typography';
 
 import {
-  AccessPolicyGroup, CdxWebCommandType,
+  AccessPolicyGroup,
+  CdxWebCommandType,
   useAccessPolicyGroupsForOrgLazyQuery,
-  useAccessPolicyGroupTemplatesLazyQuery, WebCommand,
+  useAccessPolicyGroupTemplatesLazyQuery,
+  WebCommand,
 } from 'src/data/services/graphql';
 
 import { useOrgSid } from 'src/hooks/useOrgSid';
@@ -60,16 +62,15 @@ const AccessManagementGroupsContainer = () => {
   const Toast = useNotification();
   const [templateId, setTemplateId] = useState();
 
-  const [apiAmGroupsForOrg, { data, loading , error}] = useAccessPolicyGroupsForOrgLazyQuery();
+  const [apiAmGroupsForOrg, { data, loading, error }] = useAccessPolicyGroupsForOrgLazyQuery();
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>();
   const handleError = ErrorHandler();
 
-  const [fetchTemplates, { data: templatesData, error: templatesError }] =
-    useAccessPolicyGroupTemplatesLazyQuery({
-      variables: {
-        orgSid,
-      },
-    });
+  const [fetchTemplates, { data: templatesData, error: templatesError }] = useAccessPolicyGroupTemplatesLazyQuery({
+    variables: {
+      orgSid,
+    },
+  });
 
   const { deleteAccessPolicyGroup, deleteError, deleteData } = useAccessManagementGroupsPageService();
 
@@ -81,7 +82,7 @@ const AccessManagementGroupsContainer = () => {
     if (orgSid) {
       fetchTemplates({ variables: { orgSid } });
     }
-  }
+  };
 
   useEffect(() => {
     fetchData();
@@ -132,7 +133,7 @@ const AccessManagementGroupsContainer = () => {
     if (templatesError) {
       handleError(templatesError);
     }
-  }, [templatesError])
+  }, [templatesError]);
 
   useEffect(() => {
     if (deleteError) {
@@ -162,7 +163,7 @@ const AccessManagementGroupsContainer = () => {
 
   const onRenderItemColumn = (item, index, column) => {
     if (column.key === 'tmpl') {
-      return item.tmpl ? <FontIcon id={`__template_${index + 1}`} iconName='Completed' /> : <span/>;
+      return item.tmpl ? <FontIcon id={`__template_${index + 1}`} iconName="Completed" /> : <span />;
     }
     if (column.key === 'actions') {
       if (deleteCmd) {
@@ -181,7 +182,7 @@ const AccessManagementGroupsContainer = () => {
           </>
         );
       } else {
-        return <span/>;
+        return <span />;
       }
     }
 
@@ -217,9 +218,9 @@ const AccessManagementGroupsContainer = () => {
   //
   // Render No Records found
   const renderNoRecords = () => {
-    const emptyText = createCmd ?
-      "There are no Access Policy Groups configured in this Organization. Click the button below to create a new group."
-      : "There are no Access Policy Groups configured in this Organization."
+    const emptyText = createCmd
+      ? 'There are no Access Policy Groups configured in this Organization. Click the button below to create a new group.'
+      : 'There are no Access Policy Groups configured in this Organization.';
 
     return (
       <EmptyState
@@ -231,7 +232,6 @@ const AccessManagementGroupsContainer = () => {
   };
 
   const renderCreateGroupButton = (templates) => {
-
     if (!createCmd) {
       return <></>;
     }
@@ -248,19 +248,20 @@ const AccessManagementGroupsContainer = () => {
                 key: '__Template_Header',
                 text: 'From Template:',
                 style: {
-                  fontSize: '.75em'
+                  fontSize: '.75em',
                 },
                 disabled: true,
               },
               ...groupTemplates?.map((template) => {
-                  return {
-                    text: template.label,
-                    key: template.value,
-                    style: {
-                      padding: '0 5px 0 15px'
-                    },
-                    onClick: () => handleCreateGroup(template.value) };
-                })
+                return {
+                  text: template.label,
+                  key: template.value,
+                  style: {
+                    padding: '0 5px 0 15px',
+                  },
+                  onClick: () => handleCreateGroup(template.value),
+                };
+              }),
             ],
           }
         : undefined;
@@ -277,7 +278,8 @@ const AccessManagementGroupsContainer = () => {
           return null;
         }}
         menuProps={createMenuProps}
-        block={false}>
+        block={false}
+      >
         {createCmd.label}
       </Button>
     );
@@ -300,7 +302,7 @@ const AccessManagementGroupsContainer = () => {
         />
       );
     }
-  }
+  };
 
   //
   // !Render Page
@@ -323,9 +325,7 @@ const AccessManagementGroupsContainer = () => {
       )}
       <Container>
         <Row>
-          <StyledColumn lg="12">
-            {renderBody()}
-          </StyledColumn>
+          <StyledColumn lg="12">{renderBody()}</StyledColumn>
         </Row>
       </Container>
 

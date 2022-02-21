@@ -23,7 +23,7 @@ const defaultProps = {
 };
 
 describe('Table Current Activity Container Testing Unit...', () => {
-  const mountedComponent = shallowWithTheme(<Component {...defaultProps}/>);
+  const mountedComponent = shallowWithTheme(<Component {...defaultProps} />);
 
   it('Should be defined', () => {
     expect(mountedComponent).toBeDefined();

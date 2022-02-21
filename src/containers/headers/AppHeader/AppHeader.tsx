@@ -29,9 +29,7 @@ type AppHeaderProps = {
   onMenuButtonClick: () => void;
 };
 
-const AppHeader = ({
-  onMenuButtonClick,
-}: AppHeaderProps): ReactElement => {
+const AppHeader = ({ onMenuButtonClick }: AppHeaderProps): ReactElement => {
   const history = useHistory();
   const location = useLocation();
   const { orgSid, startDate, endDate } = useOrgSid();
@@ -145,13 +143,12 @@ const AppHeader = ({
           <small className="HeaderBtnText__description">{ActiveDomainStore.domainOrg.current.label}</small>
         </div>
       </div>
-    )
+    );
   };
 
   return (
     <StyledHeader data-e2e="AppHeader">
-      <NavButton id="__AdminNavBtn"
-                 onClick={ onMenuButtonClick } data-e2e="AdminNavBtn">
+      <NavButton id="__AdminNavBtn" onClick={onMenuButtonClick} data-e2e="AdminNavBtn">
         <StyledNavIcon iconName="GlobalNavButton" />
         {renderOrgName()}
       </NavButton>

@@ -20,13 +20,13 @@ const fullField: UiSelectManyField = {
   info: 'Select One or More Items',
   errMsg: 'This is a required field',
   errSeverity: ErrorSeverity.Error,
-  options: 'fieldOpts'
+  options: 'fieldOpts',
 };
 
 const uiOptions: UiOptions[] = [
   {
     key: 'ignoreMe',
-    values: []
+    values: [],
   },
   {
     key: 'fieldOpts',
@@ -51,11 +51,11 @@ const uiOptions: UiOptions[] = [
         value: '5',
         label: 'Five',
       },
-    ]
+    ],
   },
   {
     key: 'ignoreMeToo',
-    values: []
+    values: [],
   },
 ];
 
@@ -64,12 +64,14 @@ describe('Multi Select UI Input', () => {
     const onChange = jest.fn();
 
     const wrapper = mountWithTheme(
-      <UIInputMultiSelect id='multiSelect'
-                          value={['1', '4']}
-                          onChange={onChange}
-                          uiField={fullField}
-                          placeholder='-- All --'
-                          options={uiOptions}/>
+      <UIInputMultiSelect
+        id="multiSelect"
+        value={['1', '4']}
+        onChange={onChange}
+        uiField={fullField}
+        placeholder="-- All --"
+        options={uiOptions}
+      />
     );
 
     const html = wrapper.html();
@@ -87,17 +89,17 @@ describe('Multi Select UI Input', () => {
     const onChange = jest.fn();
 
     const wrapper = mountWithTheme(
-      <UIInputMultiSelect id='multiSelect'
-                          value={['1', '4']}
-                          onChange={onChange}
-                          uiField={
-                            {
-                              ...fullField,
-                              visible: false,
-                            }
-                          }
-                          placeholder='-- All --'
-                          options={uiOptions}/>
+      <UIInputMultiSelect
+        id="multiSelect"
+        value={['1', '4']}
+        onChange={onChange}
+        uiField={{
+          ...fullField,
+          visible: false,
+        }}
+        placeholder="-- All --"
+        options={uiOptions}
+      />
     );
 
     const html = wrapper.html();
@@ -114,18 +116,18 @@ describe('Multi Select UI Input', () => {
     const onChange = jest.fn();
 
     const wrapper = mountWithTheme(
-      <UIInputMultiSelect id='multiSelect'
-                          value={['1', '4']}
-                          onChange={onChange}
-                          uiField={
-                            {
-                              ...fullField,
-                              readOnly: true,
-                              errMsg: null
-                            }
-                          }
-                          placeholder='-- All --'
-                          options={uiOptions}/>
+      <UIInputMultiSelect
+        id="multiSelect"
+        value={['1', '4']}
+        onChange={onChange}
+        uiField={{
+          ...fullField,
+          readOnly: true,
+          errMsg: null,
+        }}
+        placeholder="-- All --"
+        options={uiOptions}
+      />
     );
 
     const html = wrapper.html();
@@ -143,18 +145,18 @@ describe('Multi Select UI Input', () => {
     const onChange = jest.fn();
 
     const wrapper = mountWithTheme(
-      <UIInputMultiSelect id='multiSelect'
-                          value={['1', '4']}
-                          onChange={onChange}
-                          uiField={
-                            {
-                              ...fullField,
-                              readOnly: true,
-                              value: null,
-                            }
-                          }
-                          placeholder='-- All --'
-                          options={uiOptions}/>
+      <UIInputMultiSelect
+        id="multiSelect"
+        value={['1', '4']}
+        onChange={onChange}
+        uiField={{
+          ...fullField,
+          readOnly: true,
+          value: null,
+        }}
+        placeholder="-- All --"
+        options={uiOptions}
+      />
     );
 
     const html = wrapper.html();

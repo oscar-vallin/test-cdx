@@ -193,8 +193,7 @@ export const PasswordResetPage = () => {
           </FormRow>
           <FormRow>
             <Column>
-              <PrimaryButton100 id="__Save_Button" disabled={validationMessage !== null} onClick={handleUpdatePassword}
-              >
+              <PrimaryButton100 id="__Save_Button" disabled={validationMessage !== null} onClick={handleUpdatePassword}>
                 Save
               </PrimaryButton100>
             </Column>

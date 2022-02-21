@@ -68,7 +68,7 @@ export const ScheduleSubHeader = ({ id, currentView, currentDate, selectedDate }
     }
 
     if (isCurrentViewWeek(currentView)) {
-      days.push(<WeekHourSpace key="spacer"/>);
+      days.push(<WeekHourSpace key="spacer" />);
     }
 
     for (let i = 0; i < 7; i++) {

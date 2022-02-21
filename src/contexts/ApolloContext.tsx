@@ -66,11 +66,11 @@ export const ApolloContextProvider = ({ bypassLoading, children }: ApolloContext
         fetchPolicy: 'no-cache',
       },
       query: {
-        errorPolicy: 'all'
+        errorPolicy: 'all',
       },
       mutate: {
-        errorPolicy: 'all'
-      }
+        errorPolicy: 'all',
+      },
     },
   });
 

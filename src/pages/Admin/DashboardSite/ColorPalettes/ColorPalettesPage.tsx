@@ -192,7 +192,10 @@ const _ColorPalettesPage = () => {
                 <PageHeader id="__ActiveUsersHeader">
                   <Row>
                     <Column lg="6" direction="row">
-                      <PageTitle id="__Page_Title" title={!selectedPaletteId ? 'Create new palette' : 'Update palette'} />
+                      <PageTitle
+                        id="__Page_Title"
+                        title={!selectedPaletteId ? 'Create new palette' : 'Update palette'}
+                      />
                     </Column>
                   </Row>
                 </PageHeader>

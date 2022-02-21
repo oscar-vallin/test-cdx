@@ -13,7 +13,7 @@ const defaultProps = {
 describe('FormLogin Testing Unit...', () => {
   const tree = shallowWithTheme(
     <StoreProvider store={store}>
-      <FormLogin {...defaultProps}/>
+      <FormLogin {...defaultProps} />
     </StoreProvider>
   );
 
@@ -28,7 +28,7 @@ describe('FormLogin Testing Unit...', () => {
   it('Should show an alert with message "Save" when click on Save button', () => {
     const wrapper = shallow(
       <StoreProvider store={store}>
-        <FormLogin {...defaultProps}/>
+        <FormLogin {...defaultProps} />
       </StoreProvider>
     );
     wrapper.find('StyledBox[id="FormLoginId"]');
@@ -39,7 +39,7 @@ describe('FormLogin Testing Unit...', () => {
     const wrapper = mountWithTheme(
       <StoreProvider store={store}>
         <ApolloContextProvider bypassLoading={true}>
-          <FormLogin {...defaultProps} id="__FormLogin"/>
+          <FormLogin {...defaultProps} id="__FormLogin" />
         </ApolloContextProvider>
       </StoreProvider>
     );
@@ -56,7 +56,7 @@ describe('FormLogin Testing Unit...', () => {
       <StoreProvider store={store}>
         <ApolloContextProvider bypassLoading={true}>
           <Router>
-            <FormLogin {...defaultProps}/>
+            <FormLogin {...defaultProps} />
           </Router>
         </ApolloContextProvider>
       </StoreProvider>

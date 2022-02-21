@@ -18,9 +18,9 @@ describe('CDX Utility testing', () => {
   it('getEnumByValue', () => {
     expect(getEnumByValue(OrgType, 'VENDOR')).toEqual(OrgType.Vendor);
     expect(getEnumByValue(OrgType, 'INTEGRATION_SPONSOR')).toEqual(OrgType.IntegrationSponsor);
-  })
+  });
 
-  it ('getEnumByValue not found', () => {
+  it('getEnumByValue not found', () => {
     expect(getEnumByValue(OrgType, undefined)).toBeNull();
     expect(getEnumByValue(OrgType, 'NotAValue')).toBeNull();
   });

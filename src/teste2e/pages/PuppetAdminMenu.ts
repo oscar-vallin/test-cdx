@@ -44,7 +44,8 @@ export default class PuppetAdminMenu extends PuppetBasePage {
     const isExpanded = cssClasses?.toString().indexOf('is-expanded') > -1;
     if (!isExpanded) {
       const button = await menuItm?.$('button');
-      await button?.click();    }
+      await button?.click();
+    }
   }
 
   private async getMenuItem(name: string): Promise<ElementHandle | null> {

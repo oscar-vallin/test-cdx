@@ -6,17 +6,24 @@ type CDXMultiselectProps = {
   options?: any[];
   onChange?: any | null;
   disabled?: boolean;
-}
+};
 
-const CDXMultiselect = ({ value = [], options = [], onChange, disabled = false }: CDXMultiselectProps): ReactElement => {
+const CDXMultiselect = ({
+  value = [],
+  options = [],
+  onChange,
+  disabled = false,
+}: CDXMultiselectProps): ReactElement => {
   return (
     <StyledDiv>
-      <StyledDropdown selectedKeys={value}
-                      onChange={onChange}
-                      options={options}
-                      multiSelect
-                      disabled={disabled}
-                      aria-readonly={disabled}/>
+      <StyledDropdown
+        selectedKeys={value}
+        onChange={onChange}
+        options={options}
+        multiSelect
+        disabled={disabled}
+        aria-readonly={disabled}
+      />
     </StyledDiv>
   );
 };

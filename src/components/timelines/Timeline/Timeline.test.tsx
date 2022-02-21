@@ -2,7 +2,6 @@ import CDXTimeline from './Timeline';
 import { mountWithTheme } from 'src/utils/testUtils';
 import { WorkPacketStatusDetails, WorkStatus } from 'src/data/services/graphql';
 
-
 const workPacket: WorkPacketStatusDetails = {
   timestamp: '2020-11-08T05:17:32.000',
   workOrderId: 'textWorkOrder345',
@@ -14,14 +13,14 @@ const workPacket: WorkPacketStatusDetails = {
     {
       stepStatus: 'DONE',
       stepName: 'TEST_DONE',
-      stepType: 'TEST'
+      stepType: 'TEST',
     },
     {
       stepStatus: 'PROGRESS',
       stepName: 'TEST_PROGRESS',
-      stepType: 'TEST_PROGRESS'
-    }
-  ]
+      stepType: 'TEST_PROGRESS',
+    },
+  ],
 };
 
 const defaultProps = {

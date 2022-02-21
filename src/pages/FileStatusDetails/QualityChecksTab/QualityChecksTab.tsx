@@ -1,25 +1,13 @@
 /* eslint-disable no-alert */
 import React, { ReactElement, useState } from 'react';
-import {
-  Checkbox,
-  DetailsList,
-  DetailsListLayoutMode,
-  IColumn,
-  SelectionMode,
-  Stack
-} from '@fluentui/react';
+import { Checkbox, DetailsList, DetailsListLayoutMode, IColumn, SelectionMode, Stack } from '@fluentui/react';
 
 import { Badge } from 'src/components/badges/Badge';
 import { Card } from 'src/components/cards/Card';
 import { ChartDonut } from 'src/components/charts/ChartDonut';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { DarkSeparator } from 'src/components/separators/Separator';
-import {
-  FieldCreationEvent,
-  Maybe,
-  RecordCreationEvent,
-  WorkPacketStatusDetails
-} from 'src/data/services/graphql';
+import { FieldCreationEvent, Maybe, RecordCreationEvent, WorkPacketStatusDetails } from 'src/data/services/graphql';
 import { theme } from 'src/styles/themes/theme';
 import { ChartDataType } from 'src/components/charts/ChartDonut/ChartDonut';
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
@@ -30,13 +18,13 @@ import { EmptyState } from 'src/containers/states';
 
 const COLUMNS: IColumn[] = [
   { key: 'status', name: 'Status', fieldName: 'status', minWidth: 80, maxWidth: 80 },
-  { key: 'employeeId', name: 'Employee ID', fieldName: 'employeeId', minWidth: 100, maxWidth: 100},
+  { key: 'employeeId', name: 'Employee ID', fieldName: 'employeeId', minWidth: 100, maxWidth: 100 },
   { key: 'employee', name: 'Employee', fieldName: 'employee', minWidth: 100, maxWidth: 150 },
   { key: 'dependent', name: 'Dependent', fieldName: 'dependent', minWidth: 100, maxWidth: 150 },
-  { key: 'message', name: 'Message', fieldName: 'message', minWidth: 150, grow: 1},
-  { key: 'field', name: 'Field', fieldName: 'field', minWidth: 150 , grow: 1},
-  { key: 'value', name: 'Value', fieldName: 'value', minWidth: 150 , grow: 1},
-  { key: 'transformedValue', name: 'Transform value', fieldName: 'transformedValue', minWidth: 150 , grow: 1},
+  { key: 'message', name: 'Message', fieldName: 'message', minWidth: 150, grow: 1 },
+  { key: 'field', name: 'Field', fieldName: 'field', minWidth: 150, grow: 1 },
+  { key: 'value', name: 'Value', fieldName: 'value', minWidth: 150, grow: 1 },
+  { key: 'transformedValue', name: 'Transform value', fieldName: 'transformedValue', minWidth: 150, grow: 1 },
 ].map((col) => ({ ...col, data: 'string', isPadded: true }));
 
 type RowType = {
@@ -99,7 +87,8 @@ const QualityChecksTab = ({ details }: QualityChecksTabProps): ReactElement => {
 
   const items = qualityChecks?.sequenceCreationEvent ?? [];
 
-  const totalNumErrors = (qualityChecks?.accStructReqError?.count ?? 0) +
+  const totalNumErrors =
+    (qualityChecks?.accStructReqError?.count ?? 0) +
     (qualityChecks?.clientSpecificReqError?.count ?? 0) +
     (qualityChecks?.accStructTruncError?.count ?? 0) +
     (qualityChecks?.reqError?.count ?? 0) +
@@ -114,20 +103,25 @@ const QualityChecksTab = ({ details }: QualityChecksTabProps): ReactElement => {
 
   const addChartData = (data: ChartDataType[], name: string, key: string, count?: number) => {
     if (count && count > 0) {
-      data.push({name: name, key: key, value: count})
+      data.push({ name: name, key: key, value: count });
     }
   };
 
   const errorData = () => {
     const data: ChartDataType[] = [];
     addChartData(data, 'Missing Account Structure', 'accStructReqError', qualityChecks?.accStructReqError?.count);
-    addChartData(data, 'Missing Client Specific Mapping', 'clientSpecificReqError', qualityChecks?.clientSpecificReqError?.count);
+    addChartData(
+      data,
+      'Missing Client Specific Mapping',
+      'clientSpecificReqError',
+      qualityChecks?.clientSpecificReqError?.count
+    );
     addChartData(data, 'Account Structure Truncated', 'accStructTruncError', qualityChecks?.accStructTruncError?.count);
     addChartData(data, 'Missing Required Field', 'reqError', qualityChecks?.reqError?.count);
     addChartData(data, 'Truncated Field', 'truncError', qualityChecks?.truncError?.count);
     addChartData(data, 'Code List Mapping', 'codeListMappingError', qualityChecks?.codeListMappingError?.count);
     return data;
-  }
+  };
 
   const eventToRow = (status: string, recordEvent: RecordCreationEvent, fieldEvent: FieldCreationEvent): RowType => {
     return {
@@ -139,7 +133,7 @@ const QualityChecksTab = ({ details }: QualityChecksTabProps): ReactElement => {
       field: fieldEvent.name ?? '',
       value: fieldEvent.rawValue ?? '',
       transformValue: fieldEvent.value ?? '',
-    }
+    };
   };
 
   // Toggles for the details table
@@ -157,40 +151,40 @@ const QualityChecksTab = ({ details }: QualityChecksTabProps): ReactElement => {
               if (fieldEvent) {
                 rows.push(eventToRow('ERROR', creationEvent, fieldEvent));
               }
-            })
+            });
           }
           if (showWarn && creationEvent?.warning) {
             creationEvent.warning.forEach((fieldEvent) => {
               if (fieldEvent) {
                 rows.push(eventToRow('WARNING', creationEvent, fieldEvent));
               }
-            })
+            });
           }
           if (showInfo && creationEvent?.information) {
             creationEvent.information.forEach((fieldEvent) => {
               if (fieldEvent) {
                 rows.push(eventToRow('INFO', creationEvent, fieldEvent));
               }
-            })
+            });
           }
-        })
+        });
       }
     });
 
     return rows;
-  }
+  };
 
   const renderBody = () => (
     <Spacing padding="normal">
       {(hasQualityCheckStats || hasErrors) && (
         <FormRow>
-          <Stack horizontal wrap tokens={{childrenGap: 20}}>
-            {(hasQualityCheckStats) && (
+          <Stack horizontal wrap tokens={{ childrenGap: 20 }}>
+            {hasQualityCheckStats && (
               <Stack.Item>
                 <Card elevation="smallest">
-                  <Stack tokens={{childrenGap: 15}}>
+                  <Stack tokens={{ childrenGap: 15 }}>
                     <Stack.Item>
-                      <Stack horizontal tokens={{childrenGap: 15}} verticalAlign="center">
+                      <Stack horizontal tokens={{ childrenGap: 15 }} verticalAlign="center">
                         <Stack.Item>
                           <Text size="giant">{errorPercent.toFixed(2)}</Text>
                           <SuperScript>%</SuperScript>
@@ -201,16 +195,31 @@ const QualityChecksTab = ({ details }: QualityChecksTabProps): ReactElement => {
                       </Stack>
                     </Stack.Item>
                     <Stack.Item>
-                      <DarkSeparator/>
+                      <DarkSeparator />
                     </Stack.Item>
                     <Stack.Item>
                       <ChartDonut
                         id="__Quality_Overall_Donut"
                         size={70}
                         data={[
-                          { key: 'ERROR', name: 'Errors', value: qualityChecks?.fieldCreationErrorCount ?? 0, color: '#990000' },
-                          { key: 'WARNING', name: 'Warnings', value: qualityChecks?.fieldCreationWarningCount ?? 0, color: '#fcde54' },
-                          { key: 'INFO', name: 'Information', value: qualityChecks?.fieldCreationInfoCount ?? 0, color: '#005A9E' },
+                          {
+                            key: 'ERROR',
+                            name: 'Errors',
+                            value: qualityChecks?.fieldCreationErrorCount ?? 0,
+                            color: '#990000',
+                          },
+                          {
+                            key: 'WARNING',
+                            name: 'Warnings',
+                            value: qualityChecks?.fieldCreationWarningCount ?? 0,
+                            color: '#fcde54',
+                          },
+                          {
+                            key: 'INFO',
+                            name: 'Information',
+                            value: qualityChecks?.fieldCreationInfoCount ?? 0,
+                            color: '#005A9E',
+                          },
                         ]}
                         totalRecords={totalRecords}
                         onClickSlice={(key: string) => {
@@ -241,12 +250,12 @@ const QualityChecksTab = ({ details }: QualityChecksTabProps): ReactElement => {
                 </Card>
               </Stack.Item>
             )}
-            {(hasErrors) && (
+            {hasErrors && (
               <Stack.Item>
                 <Card elevation="smallest">
-                  <Stack tokens={{childrenGap: 15}}>
+                  <Stack tokens={{ childrenGap: 15 }}>
                     <Stack.Item>
-                      <Stack horizontal tokens={{childrenGap: 15}} verticalAlign="center">
+                      <Stack horizontal tokens={{ childrenGap: 15 }} verticalAlign="center">
                         <Stack.Item grow={1}>
                           <Text variant="muted">Record error breakdown</Text>
                         </Stack.Item>
@@ -256,14 +265,10 @@ const QualityChecksTab = ({ details }: QualityChecksTabProps): ReactElement => {
                       </Stack>
                     </Stack.Item>
                     <Stack.Item>
-                      <DarkSeparator/>
+                      <DarkSeparator />
                     </Stack.Item>
                     <Stack.Item>
-                      <ChartDonut
-                        id="__Quality_Errors_Donut"
-                        size={70}
-                        data={errorData()}
-                      />
+                      <ChartDonut id="__Quality_Errors_Donut" size={70} data={errorData()} />
                     </Stack.Item>
                   </Stack>
                 </Card>
@@ -275,35 +280,46 @@ const QualityChecksTab = ({ details }: QualityChecksTabProps): ReactElement => {
 
       <FormRow>
         <Card elevation="smallest">
-          <Stack horizontal={true} tokens={{childrenGap: 10}} style={{paddingBottom: 10}} verticalAlign="center">
+          <Stack horizontal={true} tokens={{ childrenGap: 10 }} style={{ paddingBottom: 10 }} verticalAlign="center">
             <Stack.Item>
               <WhiteButton
                 id="__QualityChecksTabId"
-                iconProps={{iconName: 'ExcelDocument', style: { fontSize: theme.fontSizes.normal }}}
-                href={`${serverUrl}excel/qualitychecks?orgSid=${details?.orgSid}&workOrderID=${details?.workOrderId}`}>
+                iconProps={{ iconName: 'ExcelDocument', style: { fontSize: theme.fontSizes.normal } }}
+                href={`${serverUrl}excel/qualitychecks?orgSid=${details?.orgSid}&workOrderID=${details?.workOrderId}`}
+              >
                 Download
               </WhiteButton>
             </Stack.Item>
-            <Stack.Item grow={1}><DarkSeparator/></Stack.Item>
-            <Stack.Item >
-              <Checkbox label="Info"
-                        checked={showInfo}
-                        onChange={() => setShowInfo(!showInfo)}
-                        onRenderLabel={(props?: ICheckboxProps) => (<Text>{props?.label}</Text>)}/>
+            <Stack.Item grow={1}>
+              <DarkSeparator />
             </Stack.Item>
             <Stack.Item>
-              <Checkbox label="Warning"
-                        checked={showWarn}
-                        onChange={() => setShowWarn(!showWarn)}
-                        onRenderLabel={(props?: ICheckboxProps) => (<Text>{props?.label}</Text>)}/>
+              <Checkbox
+                label="Info"
+                checked={showInfo}
+                onChange={() => setShowInfo(!showInfo)}
+                onRenderLabel={(props?: ICheckboxProps) => <Text>{props?.label}</Text>}
+              />
             </Stack.Item>
             <Stack.Item>
-              <Checkbox label="Error"
-                        checked={showError}
-                        onChange={() => setShowError(!showError)}
-                        onRenderLabel={(props?: ICheckboxProps) => (<Text>{props?.label}</Text>)}/>
+              <Checkbox
+                label="Warning"
+                checked={showWarn}
+                onChange={() => setShowWarn(!showWarn)}
+                onRenderLabel={(props?: ICheckboxProps) => <Text>{props?.label}</Text>}
+              />
             </Stack.Item>
-            <Stack.Item grow={1}><DarkSeparator/></Stack.Item>
+            <Stack.Item>
+              <Checkbox
+                label="Error"
+                checked={showError}
+                onChange={() => setShowError(!showError)}
+                onRenderLabel={(props?: ICheckboxProps) => <Text>{props?.label}</Text>}
+              />
+            </Stack.Item>
+            <Stack.Item grow={1}>
+              <DarkSeparator />
+            </Stack.Item>
           </Stack>
           <DetailsList
             compact
@@ -347,9 +363,7 @@ const QualityChecksTab = ({ details }: QualityChecksTabProps): ReactElement => {
     return renderBody();
   }
 
-  return (
-    <EmptyState title="There are no Quality Checks for this Exchange"/>
-  );
+  return <EmptyState title="There are no Quality Checks for this Exchange" />;
 };
 
 export default QualityChecksTab;

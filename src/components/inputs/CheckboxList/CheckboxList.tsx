@@ -51,7 +51,7 @@ const CheckboxList = ({ id, items, value, emptyMessage = 'No options available',
   };
 
   if (options.length === 0) {
-    return <div id={id}>{emptyMessage}</div>
+    return <div id={id}>{emptyMessage}</div>;
   }
 
   // console.log('rendering options')

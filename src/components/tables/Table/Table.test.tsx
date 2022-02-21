@@ -15,10 +15,9 @@ jest.mock('react-router-dom', () => ({
 
 jest.mock('src/hooks/useOrgSid', () => ({
   useOrgSid: () => ({
-    orgSid: 1
-  })
+    orgSid: 1,
+  }),
 }));
-
 
 const items = [
   [

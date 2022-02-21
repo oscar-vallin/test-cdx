@@ -41,7 +41,8 @@ const _ErrorsPage = () => {
             <Column sm="6" right>
               <Text size="large" right>
                 {!tableMeta.loading && tableMeta.count !== null && tableMeta.count > 0
-                  ? `${tableMeta.count} results found` : 'No results found'}
+                  ? `${tableMeta.count} results found`
+                  : 'No results found'}
               </Text>
             </Column>
           </Row>

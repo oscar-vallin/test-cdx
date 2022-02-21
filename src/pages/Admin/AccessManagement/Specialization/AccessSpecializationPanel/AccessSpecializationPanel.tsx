@@ -45,7 +45,7 @@ type SpecializationGroup = {
   labelKey: string;
   valueKey: string;
   options: SpecializationOption[];
-}
+};
 
 const INITIAL_STATE = {
   name: '',
@@ -122,15 +122,15 @@ const AccessSpecializationPanel = ({
 
   useEffect(() => {
     if (createdSpecialization) {
-      const {createAccessSpecialization} = createdSpecialization;
+      const { createAccessSpecialization } = createdSpecialization;
 
       if (createAccessSpecialization.response === 'FAIL') {
         setAccessForm(createAccessSpecialization);
         const errorMsg = createAccessSpecialization.errMsg ?? 'Please, check the highlighted fields and try again';
-        Toast.error({text: errorMsg});
+        Toast.error({ text: errorMsg });
       } else {
         onCreateSpecialization(createAccessSpecialization);
-        Toast.success({text: 'Access specialization created successfully'});
+        Toast.success({ text: 'Access specialization created successfully' });
         doClosePanel();
       }
     }
@@ -143,7 +143,7 @@ const AccessSpecializationPanel = ({
       if (updateAccessSpecialization?.response && updateAccessSpecialization?.response === 'FAIL') {
         setAccessForm(updateAccessSpecialization);
         const errorMsg = updateAccessSpecialization.errMsg ?? 'Please, check the highlighted fields and try again';
-        Toast.error({text: errorMsg});
+        Toast.error({ text: errorMsg });
       } else {
         onUpdateSpecialization(updateAccessSpecialization);
         Toast.success({ text: 'Access specialization updated successfully' });
@@ -230,20 +230,21 @@ const AccessSpecializationPanel = ({
       <>
         <FormRow>
           <Column lg="12">
-            <UIInputText id="__Specialization_Name"
-                         uiField={accessForm?.name}
-                         value={state.name}
-                         onChange={(event, newValue) => {
-                           setUnsavedChanges(true);
-                           setState({ ...state, name: newValue });
-                         }}
-                         />
+            <UIInputText
+              id="__Specialization_Name"
+              uiField={accessForm?.name}
+              value={state.name}
+              onChange={(event, newValue) => {
+                setUnsavedChanges(true);
+                setState({ ...state, name: newValue });
+              }}
+            />
           </Column>
         </FormRow>
 
         <FormRow>
           <Column lg="12">
-            <UIInputTextReadOnly id='__Organization' uiField={accessForm?.organization}/>
+            <UIInputTextReadOnly id="__Organization" uiField={accessForm?.organization} />
           </Column>
         </FormRow>
 
@@ -314,7 +315,7 @@ const AccessSpecializationPanel = ({
         </FormRow>
       </>
     );
-  }
+  };
 
   const renderPanelHeader = () => (
     <PanelHeader id="__PanelHeader">
@@ -330,7 +331,9 @@ const AccessSpecializationPanel = ({
 
   const renderPanelFooter = () => {
     const commands = accessForm?.commands;
-    const command = commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create || cmd?.commandType === CdxWebCommandType.Update);
+    const command = commands?.find(
+      (cmd) => cmd?.commandType === CdxWebCommandType.Create || cmd?.commandType === CdxWebCommandType.Update
+    );
     if (command) {
       return (
         <div>
@@ -379,8 +382,7 @@ const AccessSpecializationPanel = ({
     }
 
     return null;
-  }
-
+  };
 
   return (
     <>
@@ -408,7 +410,9 @@ const AccessSpecializationPanel = ({
                     <Spinner size={SpinnerSize.large} label="Loading policy form" />
                   </Spacing>
                 </>
-              ) : renderBody() }
+              ) : (
+                renderBody()
+              )}
             </Column>
           </Row>
         </>

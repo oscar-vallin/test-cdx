@@ -4,7 +4,6 @@ import { InfoIcon } from 'src/components/badges/InfoIcon';
 import { ErrorIcon } from 'src/components/badges/ErrorIcon';
 import { CheckBoxAlignBottom, InlineLabel } from 'src/components/inputs/InputCheck/UIInputCheck.styles';
 
-
 type UIInputCheckType = {
   id: string;
   uiField?: UiBooleanField | null;
@@ -12,14 +11,13 @@ type UIInputCheckType = {
   value?: boolean;
   alignBottom?: boolean;
 };
-export const UIInputCheck = ({id, uiField, onChange, value, alignBottom}: UIInputCheckType) => {
-
+export const UIInputCheck = ({ id, uiField, onChange, value, alignBottom }: UIInputCheckType) => {
   const renderLabel = () => {
     return (
       <span>
         <InlineLabel required={uiField?.required}>{uiField?.label}</InlineLabel>
         <InfoIcon id={`${id}_Info`} tooltip={uiField?.info} />
-        <ErrorIcon id={`${id}-ErrorMsg`} errorMessage={uiField?.errMsg}/>
+        <ErrorIcon id={`${id}-ErrorMsg`} errorMessage={uiField?.errMsg} />
       </span>
     );
   };
@@ -29,14 +27,14 @@ export const UIInputCheck = ({id, uiField, onChange, value, alignBottom}: UIInpu
   }
 
   return (
-      <CheckBoxAlignBottom
-        id={id}
-        label={uiField?.label}
-        onRenderLabel={renderLabel}
-        checked={value}
-        disabled={uiField?.readOnly || false}
-        onChange={onChange}
-        alignBottom={alignBottom}
-      />
+    <CheckBoxAlignBottom
+      id={id}
+      label={uiField?.label}
+      onRenderLabel={renderLabel}
+      checked={value}
+      disabled={uiField?.readOnly || false}
+      onChange={onChange}
+      alignBottom={alignBottom}
+    />
   );
-}
+};

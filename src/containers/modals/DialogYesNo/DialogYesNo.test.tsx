@@ -15,7 +15,7 @@ const defaultProps = {
 };
 
 describe('Dialog Yes/No Container Testing Unit...', () => {
-  const mountedComponent = mountWithTheme(<Component {...defaultProps}/>);
+  const mountedComponent = mountWithTheme(<Component {...defaultProps} />);
 
   it('Should be defined', () => {
     expect(mountedComponent.children()).toBeDefined();

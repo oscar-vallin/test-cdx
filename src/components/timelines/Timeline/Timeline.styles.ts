@@ -14,7 +14,6 @@ export const StyledLi = styled.li<StyledLiProps>`
   z-index: 1;
   background-color: ${({ theme, active }) => (active ? theme.colors.neutralLighter : 'inherit')};
 
-
   .item__status {
     align-items: center;
     border-radius: 50%;
@@ -24,7 +23,7 @@ export const StyledLi = styled.li<StyledLiProps>`
     max-height: 35px;
     min-width: 35px;
     max-width: 35px;
-    
+
     & .success {
       color: ${({ theme }) => theme.colors.custom.success};
     }
@@ -38,7 +37,7 @@ export const StyledLi = styled.li<StyledLiProps>`
     margin: ${({ theme }) => `0 0 0 ${theme.spacing.normal}`};
 
     .title {
-      color: ${({ theme }) => (theme.colors.black)};
+      color: ${({ theme }) => theme.colors.black};
       font-weight: ${({ theme }) => theme.fontWeights.bold};
       margin: ${({ theme }) => `0 0 ${theme.spacing.small} 0`};
     }

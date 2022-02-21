@@ -10,9 +10,11 @@ import { Badge } from 'src/components/badges/Badge';
 import { Text } from 'src/components/typography';
 import {
   DeliveredFile,
-  useWorkPacketStatusDetailsLazyQuery, WorkPacketCommand, WorkPacketCommandType,
+  useWorkPacketStatusDetailsLazyQuery,
+  WorkPacketCommand,
+  WorkPacketCommandType,
   WorkPacketStatusDetails,
-  WorkStatus
+  WorkStatus,
 } from 'src/data/services/graphql';
 import { ShadowBox, FileMetaDetails, BadgeWrapper, FileTitle } from './FileStatusDetails.styles';
 
@@ -49,10 +51,10 @@ const FileStatusDetailsPage = () => {
     callGetWPDetails({
       variables: {
         orgSid: orgSid,
-        workOrderId: realId
-      }
+        workOrderId: realId,
+      },
     });
-  }, [realId])
+  }, [realId]);
 
   useEffect(() => {
     handleError(error);
@@ -60,7 +62,7 @@ const FileStatusDetailsPage = () => {
 
   useEffect(() => {
     if (data?.workPacketStatusDetails && !loading) {
-      setPacket(data?.workPacketStatusDetails)
+      setPacket(data?.workPacketStatusDetails);
     }
   }, [data, loading]);
 
@@ -73,7 +75,7 @@ const FileStatusDetailsPage = () => {
 
   const formatDate = (d?: Date): string => {
     // Check if this date has a valid time value
-    if (d && (d.getTime() === d.getTime())) {
+    if (d && d.getTime() === d.getTime()) {
       return format(d, 'MM/dd/yyyy hh:mm a');
     }
     return 'N/A';
@@ -114,7 +116,9 @@ const FileStatusDetailsPage = () => {
     }
   };
 
-  const deliveredFile: DeliveredFile | undefined | null = packet?.deliveredFiles ? packet?.deliveredFiles[0] : undefined;
+  const deliveredFile: DeliveredFile | undefined | null = packet?.deliveredFiles
+    ? packet?.deliveredFiles[0]
+    : undefined;
   const resendCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Resend);
   const continueCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Continue);
   const reprocessCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Reprocess);
@@ -125,56 +129,62 @@ const FileStatusDetailsPage = () => {
     id: string;
     icon: string;
     command?: WorkPacketCommand | null;
-  }
+  };
 
-  const WorkPacketCommandButton = ({id, icon, command}: CommandButtonType) => {
+  const WorkPacketCommandButton = ({ id, icon, command }: CommandButtonType) => {
     if (command) {
       return (
         <Stack.Item align="center">
           <ActionButton
             id={id}
             onClick={() => null}
-            iconProps={{iconName: icon, style: { fontSize: theme.fontSizes.normal }}}
-            style={{ fontSize: theme.fontSizes.normal }}>
+            iconProps={{ iconName: icon, style: { fontSize: theme.fontSizes.normal } }}
+            style={{ fontSize: theme.fontSizes.normal }}
+          >
             {command.label}
           </ActionButton>
         </Stack.Item>
       );
     }
     return null;
-  }
+  };
 
   const renderDeliveredFileInfo = (deliveredFile?: DeliveredFile | null) => {
     if (deliveredFile) {
       return (
         <>
           <Stack.Item>
-            <Text size="small" variant="muted">Delivered Vendor File Details</Text>
-            <LabelValue label="Filename" value={deliveredFile.filename ?? 'File not found'}/>
-            <LabelValue label="Delivered on" value={formatDate(new Date(deliveredFile.timeDelivered))}/>
-            <LabelValue label="Size" value={`${deliveredFile.fileSizeInBytes} bytes (without encryption)`}/>
+            <Text size="small" variant="muted">
+              Delivered Vendor File Details
+            </Text>
+            <LabelValue label="Filename" value={deliveredFile.filename ?? 'File not found'} />
+            <LabelValue label="Delivered on" value={formatDate(new Date(deliveredFile.timeDelivered))} />
+            <LabelValue label="Size" value={`${deliveredFile.fileSizeInBytes} bytes (without encryption)`} />
           </Stack.Item>
           <Stack.Item>
-            <Text size="small" variant="muted">FTP details</Text>
-            <LabelValue label="Protocol" value={deliveredFile.ftp?.protocol}/>
-            {deliveredFile?.ftp?.port && (
-              <LabelValue label="Port" value={deliveredFile.ftp?.port}/>
-            )}
-            <LabelValue label="User" value="*******" title={deliveredFile.ftp?.username}/>
+            <Text size="small" variant="muted">
+              FTP details
+            </Text>
+            <LabelValue label="Protocol" value={deliveredFile.ftp?.protocol} />
+            {deliveredFile?.ftp?.port && <LabelValue label="Port" value={deliveredFile.ftp?.port} />}
+            <LabelValue label="User" value="*******" title={deliveredFile.ftp?.username} />
             <LabelValue label="Host" value={deliveredFile.ftp?.host} />
             <LabelValue label="Folder" value={deliveredFile.ftp?.folder} />
           </Stack.Item>
         </>
       );
     }
-  }
+  };
 
   const renderFileMetaData = () => {
     return (
       <ShadowBox id="__FileMeta">
-        <Stack horizontal={true} wrap={true} tokens={{childrenGap: 10}}>
+        <Stack horizontal={true} wrap={true} tokens={{ childrenGap: 10 }}>
           <Stack.Item align="center" disableShrink>
-            <IconButton iconProps={{iconName: showDetails ? 'ChevronUp' : 'ChevronDown'}} onClick={() => setShowDetails(!showDetails)}/>
+            <IconButton
+              iconProps={{ iconName: showDetails ? 'ChevronUp' : 'ChevronDown' }}
+              onClick={() => setShowDetails(!showDetails)}
+            />
           </Stack.Item>
           <Stack.Item align="center">
             <FileTitle>{packet?.inboundFilename ?? packet?.workOrderId}</FileTitle>
@@ -185,21 +195,24 @@ const FileStatusDetailsPage = () => {
           <Stack.Item align="center">
             <Badge variant="info" label={`Billing Units: ${packet?.populationCount ?? 'none'}`} pill />
             {packet?.suppressBilling && (
-              <><Required>*</Required><InfoIcon id='billingUnitInfo' tooltip='This exchange was not billed'/></>
+              <>
+                <Required>*</Required>
+                <InfoIcon id="billingUnitInfo" tooltip="This exchange was not billed" />
+              </>
             )}
           </Stack.Item>
           <Stack.Item align="center" grow>
             <Text variant="muted">{renderReceivedDate()}</Text>
           </Stack.Item>
-          <WorkPacketCommandButton id="__ResendBtn" icon="Send" command={resendCmd}/>
-          <WorkPacketCommandButton id="__ContinueBtn" icon="PlayResume" command={continueCmd}/>
-          <WorkPacketCommandButton id="__ReprocessBtn" icon="Rerun" command={reprocessCmd}/>
-          <WorkPacketCommandButton id="__CancelBtn" icon="Cancel" command={cancelCmd}/>
-          <WorkPacketCommandButton id="__DeleteBtn" icon="Delete" command={deleteCmd}/>
+          <WorkPacketCommandButton id="__ResendBtn" icon="Send" command={resendCmd} />
+          <WorkPacketCommandButton id="__ContinueBtn" icon="PlayResume" command={continueCmd} />
+          <WorkPacketCommandButton id="__ReprocessBtn" icon="Rerun" command={reprocessCmd} />
+          <WorkPacketCommandButton id="__CancelBtn" icon="Cancel" command={cancelCmd} />
+          <WorkPacketCommandButton id="__DeleteBtn" icon="Delete" command={deleteCmd} />
         </Stack>
         {showDetails && (
           <FileMetaDetails>
-            <Stack horizontal={true} wrap={true} tokens={{childrenGap: 15}}>
+            <Stack horizontal={true} wrap={true} tokens={{ childrenGap: 15 }}>
               <Stack.Item>
                 <LabelValue label="Vendor" value={packet?.vendorId} />
                 <LabelValue label="Plan Sponsor" value={packet?.orgId} />
@@ -214,11 +227,10 @@ const FileStatusDetailsPage = () => {
         )}
       </ShadowBox>
     );
-  }
+  };
 
   return (
     <LayoutDashboard id="PageFileStatusDetails" menuOptionSelected={ROUTES.ROUTE_FILE_STATUS.ID}>
-
       {renderFileMetaData()}
 
       <ShadowBox>
@@ -227,14 +239,15 @@ const FileStatusDetailsPage = () => {
           overflowAriaLabel="more items"
           styles={{
             link: {
-              fontSize: theme.fontSizes.normal
+              fontSize: theme.fontSizes.normal,
             },
             linkIsSelected: {
-              fontSize: theme.fontSizes.normal
+              fontSize: theme.fontSizes.normal,
             },
           }}
           style={{ fontSize: theme.fontSizes.normal }}
-          defaultSelectedKey={hash}>
+          defaultSelectedKey={hash}
+        >
           <PivotItem headerText="Enrollment Stats" itemKey="#enrollment">
             <EnrollmentStatsTab packet={packet} />
           </PivotItem>
@@ -254,16 +267,16 @@ const FileStatusDetailsPage = () => {
                 {defaultRenderer(link)}
                 {packet?.qualityChecks?.sequenceCreationEvent && errorCount() > 0 && (
                   <BadgeWrapper>
-                    <Badge variant='error'
-                           label={errorCount().toString()}/>
+                    <Badge variant="error" label={errorCount().toString()} />
                   </BadgeWrapper>
                 )}
               </>
-            )}>
-            <QualityChecksTab details={packet}/>
+            )}
+          >
+            <QualityChecksTab details={packet} />
           </PivotItem>
           <PivotItem headerText="Archives">
-            <ArchivesTab packet={packet}/>
+            <ArchivesTab packet={packet} />
           </PivotItem>
         </Pivot>
       </ShadowBox>

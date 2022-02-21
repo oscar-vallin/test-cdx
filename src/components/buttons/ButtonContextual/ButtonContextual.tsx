@@ -7,7 +7,7 @@ type ButtonContextualProps = {
   id?: string;
   children?: ReactNode;
   items: IContextualMenuItem[];
-}
+};
 
 const ButtonContextual = ({ id, children, items }: ButtonContextualProps): ReactElement => {
   const menuProps: IContextualMenuProps = useConst(() => ({

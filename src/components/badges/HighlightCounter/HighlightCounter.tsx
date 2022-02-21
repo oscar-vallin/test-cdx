@@ -24,11 +24,14 @@ const HighlightCounter = ({ id, type, href, onClick, children, ...props }: Highl
   } else if (onClick) {
     return (
       <HighlightBubble id={id} type={type} {...props}>
-        <StyledLink to='#' onClick={(e) => {
-          e.preventDefault();
-          onClick()
-        }}
-          {...props}>
+        <StyledLink
+          to="#"
+          onClick={(e) => {
+            e.preventDefault();
+            onClick();
+          }}
+          {...props}
+        >
           {children}
         </StyledLink>
       </HighlightBubble>

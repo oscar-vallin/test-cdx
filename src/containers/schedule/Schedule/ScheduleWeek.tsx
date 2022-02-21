@@ -48,8 +48,14 @@ export const ScheduleWeek = ({ currentDate, selectedDate, items }: ScheduleWeekP
       formattedHour = format(hour, hourFormat);
       for (let i = 0; i < 7; i++) {
         days.push(
-          <DayOfWeekContainer id={`CalendarBodyCell-${day}-${i}-${h}`} isSameDay={isSameDay(day, currentSelectedDate)} key={`dow_${day}_${i}-${h}`}>
-            <CalendarBodyCellNumber id={`CalendarBodyCellNumber-${day}-${i}-${h}`}>{renderItems(day, items)}</CalendarBodyCellNumber>
+          <DayOfWeekContainer
+            id={`CalendarBodyCell-${day}-${i}-${h}`}
+            isSameDay={isSameDay(day, currentSelectedDate)}
+            key={`dow_${day}_${i}-${h}`}
+          >
+            <CalendarBodyCellNumber id={`CalendarBodyCellNumber-${day}-${i}-${h}`}>
+              {renderItems(day, items)}
+            </CalendarBodyCellNumber>
           </DayOfWeekContainer>
         );
 

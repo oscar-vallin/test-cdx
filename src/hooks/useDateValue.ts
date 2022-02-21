@@ -24,7 +24,7 @@ const useEndDateValue = (placeholder: string, initialState: Date): DateState => 
     if (d) {
       setValue(endOfDay(d));
     } else {
-      setValue(endOfToday())
+      setValue(endOfToday());
     }
   };
 

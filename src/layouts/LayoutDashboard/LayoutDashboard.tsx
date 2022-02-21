@@ -22,16 +22,18 @@ export const LayoutDashboard = ({
   menuOptionSelected = 'dashboard',
   children,
 }: LayoutDashboardProps): ReactElement => {
-
   const [menuOpen, setMenuOpen] = useState(true);
 
   return (
     <>
       <BoxStyled id={`${id}__Box`} direction={StyleConstants.DIRECTION_COLUMN} top>
-        <AppHeader onMenuButtonClick={() => { setMenuOpen(!menuOpen) }}/>
-        <LeftNav menuOptionSelected={menuOptionSelected}
-                 isOpen={menuOpen}/>
-        <DashboardBody id='__DashboardBody' isMenuOpen={menuOpen}>
+        <AppHeader
+          onMenuButtonClick={() => {
+            setMenuOpen(!menuOpen);
+          }}
+        />
+        <LeftNav menuOptionSelected={menuOptionSelected} isOpen={menuOpen} />
+        <DashboardBody id="__DashboardBody" isMenuOpen={menuOpen}>
           {children}
         </DashboardBody>
       </BoxStyled>

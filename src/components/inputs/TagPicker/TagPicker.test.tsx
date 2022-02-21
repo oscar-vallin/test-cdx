@@ -5,7 +5,6 @@ import { UiField } from 'src/data/services/graphql';
 const defaultProps = { value: [], options: [], onChange: jest.fn(), apiQuery: jest.fn(), debounce: 500 };
 
 describe('TagPicker unit test', () => {
-
   it('Should be defined', () => {
     expect(Component).toBeDefined();
   });
@@ -18,8 +17,8 @@ describe('TagPicker unit test', () => {
     const field: UiField = {
       required: false,
       visible: true,
-      label: 'Tag Picker Label'
-    }
+      label: 'Tag Picker Label',
+    };
     const wrapper = mountWithTheme(<Component {...defaultProps} uiField={field} />);
     const input = wrapper.find('#__TagPickerLabel').hostNodes();
     expect(input).toHaveLength(1);
@@ -56,7 +55,7 @@ describe('TagPicker unit test', () => {
     expect(input.prop('id')).toEqual('__CreateAccessSpecializationPanelId');
   });
 
-  it('Should render suggestion when type the name partially',  () => {
+  it('Should render suggestion when type the name partially', () => {
     const mockFn = jest.fn();
     const wrapper = mountWithTheme(
       <Component
@@ -71,7 +70,7 @@ describe('TagPicker unit test', () => {
     expect(input).toHaveLength(1);
     input.simulate('change', { target: { value: 'He' } });
     setTimeout(() => {
-      expect(mockFn).toBeCalled()
+      expect(mockFn).toBeCalled();
     }, 1000);
   });
 });

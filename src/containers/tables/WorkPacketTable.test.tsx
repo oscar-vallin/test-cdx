@@ -63,13 +63,24 @@ const mocks: any[] = [
 
 describe('Work Packet Table Container Testing Unit...', () => {
   const mountedComponent = shallowWithTheme(
-    <WorkPacketTable tableFilters={{
-      startDate: { value: new Date(), setValue: jest.fn(), onChange: jest.fn() },
-      endDate: { value: new Date(), setValue: jest.fn(), onChange: jest.fn() },
-      searchText: { value: '', label: '', delayedValue: '', type: 'text', placeholder:'', setValue: jest.fn(), onChange: jest.fn() },
-      pagingParams: {},
-      setPagingParams: jest.fn()
-    }} {...defaultProps}/>
+    <WorkPacketTable
+      tableFilters={{
+        startDate: { value: new Date(), setValue: jest.fn(), onChange: jest.fn() },
+        endDate: { value: new Date(), setValue: jest.fn(), onChange: jest.fn() },
+        searchText: {
+          value: '',
+          label: '',
+          delayedValue: '',
+          type: 'text',
+          placeholder: '',
+          setValue: jest.fn(),
+          onChange: jest.fn(),
+        },
+        pagingParams: {},
+        setPagingParams: jest.fn(),
+      }}
+      {...defaultProps}
+    />
   );
 
   // it('renders without error', () => {

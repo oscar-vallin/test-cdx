@@ -63,13 +63,8 @@ const ActiveUsersPage = () => {
       );
     }
 
-    return (
-      <EmptyState
-        title="No users found"
-        description="There are no active users in this organization."
-      />
-    );
-  }
+    return <EmptyState title="No users found" description="There are no active users in this organization." />;
+  };
 
   const renderBody = () => {
     if (userService.loading) {
@@ -85,7 +80,7 @@ const ActiveUsersPage = () => {
     }
 
     return <UsersTable users={userService.users} onClickUser={updateUserPanel.showPanel} />;
-  }
+  };
 
   const createCmd = userService.commands?.find((cmd) => cmd.commandType === CdxWebCommandType.Create);
 
@@ -107,7 +102,8 @@ const ActiveUsersPage = () => {
                       ariaLabel={createCmd.label ?? undefined}
                       onClick={() => {
                         setIsCreateUserPanelOpen(true);
-                      }}>
+                      }}
+                    >
                       {createCmd.label}
                     </PrimaryButton>
                   </span>
@@ -119,9 +115,7 @@ const ActiveUsersPage = () => {
       )}
       <Container>
         <Row>
-          <StyledColumn>
-            {renderBody()}
-          </StyledColumn>
+          <StyledColumn>{renderBody()}</StyledColumn>
         </Row>
       </Container>
       <CreateUsersPanel

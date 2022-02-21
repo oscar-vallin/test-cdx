@@ -20,9 +20,9 @@ type NavPanelType = {
   onCollapse: () => void;
 };
 
-export const NavPanel = ({id, label, elements, expanded, onExpand, onCollapse}: NavPanelType) => {
+export const NavPanel = ({ id, label, elements, expanded, onExpand, onCollapse }: NavPanelType) => {
   const hasSelectedMenu = (): boolean => {
-    return elements.find((elem) => elem.selected) != null
+    return elements.find((elem) => elem.selected) != null;
   };
 
   const [isOpen, setIsOpen] = useState(expanded || hasSelectedMenu());
@@ -30,31 +30,29 @@ export const NavPanel = ({id, label, elements, expanded, onExpand, onCollapse}: 
   return (
     <div data-name={label} className={isOpen ? 'is-expanded' : ''}>
       <div>
-        <ActionButton id={id}
-                      iconProps={
-                        {
-                          iconName: isOpen ? 'ChevronUp' : 'ChevronDown',
-                          style: {
-                            fontSize: theme.fontSizes.small,
-                            color: theme.colors.black,
-                          }
-                        }
-                      }
-                      style={
-                        {
-                          fontSize: theme.fontSizes.normal,
-                          fontWeight: theme.fontWeights.semiBold,
-                        }
-                      }
-                      onClick={() => {
-                        if (isOpen) {
-                          setIsOpen(false);
-                          onCollapse();
-                        } else {
-                          setIsOpen(true);
-                          onExpand();
-                        }
-                      }}>
+        <ActionButton
+          id={id}
+          iconProps={{
+            iconName: isOpen ? 'ChevronUp' : 'ChevronDown',
+            style: {
+              fontSize: theme.fontSizes.small,
+              color: theme.colors.black,
+            },
+          }}
+          style={{
+            fontSize: theme.fontSizes.normal,
+            fontWeight: theme.fontWeights.semiBold,
+          }}
+          onClick={() => {
+            if (isOpen) {
+              setIsOpen(false);
+              onCollapse();
+            } else {
+              setIsOpen(true);
+              onExpand();
+            }
+          }}
+        >
           {label}
         </ActionButton>
       </div>
@@ -63,18 +61,18 @@ export const NavPanel = ({id, label, elements, expanded, onExpand, onCollapse}: 
           {elements.map((elem, index) => (
             <NavListItem key={`nav_${index}`} className={elem.className} selected={elem.selected}>
               <div data-name={elem.label}>
-                <ActionButton id={elem.id}
-                            onClick={elem.onClick}
-                            style={
-                              {
-                                fontSize: theme.fontSizes.normal,
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                                whiteSpace: 'nowrap',
-                              }
-                            }
-                            title={elem.label}
-                            ariaLabel={elem.label}>
+                <ActionButton
+                  id={elem.id}
+                  onClick={elem.onClick}
+                  style={{
+                    fontSize: theme.fontSizes.normal,
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                  }}
+                  title={elem.label}
+                  ariaLabel={elem.label}
+                >
                   {elem.label}
                 </ActionButton>
               </div>
@@ -84,4 +82,4 @@ export const NavPanel = ({id, label, elements, expanded, onExpand, onCollapse}: 
       )}
     </div>
   );
-}
+};

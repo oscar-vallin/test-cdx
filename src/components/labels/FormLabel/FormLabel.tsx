@@ -26,8 +26,8 @@ const FormLabel = ({ id, label, required, info, errorMessage, arial, ...props }:
         {label}
       </Label>
       {required && <Required id={id ? `${id}-Required` : undefined}>&nbsp;*</Required>}
-      <InfoIcon id={`${id}-Info`} tooltip={info}/>
-      <ErrorIcon id={`${id}-ErrorMsg`} errorMessage={errorMessage}/>
+      <InfoIcon id={`${id}-Info`} tooltip={info} />
+      <ErrorIcon id={`${id}-ErrorMsg`} errorMessage={errorMessage} />
     </LabelRow>
   );
 };

@@ -108,7 +108,7 @@ type UIInputTextType = {
 
 const UIInputText = ({ id, uiField, onChange, value, placeholder, renderLabel = true }: UIInputTextType) => {
   if (uiField?.readOnly === true) {
-    return <UIInputTextReadOnly id={id} uiField={uiField} renderLabel={renderLabel}/>;
+    return <UIInputTextReadOnly id={id} uiField={uiField} renderLabel={renderLabel} />;
   }
   return (
     <InputText

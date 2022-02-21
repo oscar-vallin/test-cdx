@@ -17,7 +17,7 @@ describe('Schedule tests ...', () => {
   const mountedComponent = mountWithTheme(
     <StoreProvider store={store}>
       <ApolloContextProvider bypassLoading={true}>
-        <Component {...defaultProps} id="__ScheduleMonthId"/>
+        <Component {...defaultProps} id="__ScheduleMonthId" />
       </ApolloContextProvider>
     </StoreProvider>
   );

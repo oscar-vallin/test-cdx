@@ -110,7 +110,7 @@ export const Routes = () => {
         <PageNotFound />
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_UNAUTHORIZED.URL}>
-        <AccessDenied/>
+        <AccessDenied />
       </AuthRoute>
       <AuthRoute>
         <PageNotFound />

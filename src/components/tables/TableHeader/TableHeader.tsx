@@ -36,7 +36,8 @@ const TableHeader = ({ id, header, sortLabel, onSort, onOption, date, ...props }
         <StyledColumnTitle center paddingLeft sm={6}>
           <StyledLink
             onClick={() =>
-              history.push(`/transmissions?startDate=${startFormatted}&endDate=${endFormatted}&orgSid=${orgSid}`)}
+              history.push(`/transmissions?startDate=${startFormatted}&endDate=${endFormatted}&orgSid=${orgSid}`)
+            }
           >
             {header.title}
           </StyledLink>
