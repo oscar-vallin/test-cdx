@@ -1,6 +1,8 @@
 import { ReactElement } from 'react';
 import { IColumn, DetailsList, DetailsListLayoutMode, SelectionMode } from '@fluentui/react';
 import { Spacing } from 'src/components/spacings/Spacing';
+import { Maybe, RecordCounts, WorkStepStatus } from 'src/data/services/graphql';
+import { EmptyState } from 'src/containers/states';
 import { StatsRow, StyledVendorHeaderRow, StatsFooter } from '../FileStatusDetails.styles';
 
 const COLUMNS: IColumn[] = [
@@ -31,32 +33,46 @@ const onRenderDetailsFooter: any = (count) => {
   );
 };
 
-const defaultProps = {
-  items: '',
-};
-
 type VendorCountStatsTabProps = {
-  items?: any;
-} & typeof defaultProps;
+  items?: Maybe<WorkStepStatus>[] | null;
+};
 
 const VendorCountStatsTab = ({ items }: VendorCountStatsTabProps): ReactElement => {
-  return (
-    <Spacing padding="normal">
-      <DetailsList
-        compact
-        items={items?.recordCount || []}
-        columns={COLUMNS}
-        selectionMode={SelectionMode.none}
-        layoutMode={DetailsListLayoutMode.justified}
-        onRenderRow={onRenderRow}
-        onRenderDetailsHeader={onRenderDetailsHeader}
-        onRenderDetailsFooter={(args) => onRenderDetailsFooter(items?.totalCount, args)}
-        isHeaderVisible
-      />
-    </Spacing>
-  );
-};
+  const recordCounts: RecordCounts[] = [];
+  items?.forEach((workStepStatus) => {
+    if (workStepStatus?.recordCounts) {
+      recordCounts.push(workStepStatus.recordCounts);
+    }
+  });
 
-VendorCountStatsTab.defaultProps = defaultProps;
+  if (recordCounts.length > 0) {
+    return (
+      <>
+        {recordCounts.map((recordCount, index) => {
+          if (recordCount) {
+            return (
+              <Spacing key={`vendorStats_${index}`} padding="normal">
+                <DetailsList
+                  compact
+                  items={recordCount.recordCount || []}
+                  columns={COLUMNS}
+                  selectionMode={SelectionMode.none}
+                  layoutMode={DetailsListLayoutMode.justified}
+                  onRenderRow={onRenderRow}
+                  onRenderDetailsHeader={onRenderDetailsHeader}
+                  onRenderDetailsFooter={(args) => onRenderDetailsFooter(recordCount.totalCount, args)}
+                  isHeaderVisible
+                />
+              </Spacing>
+            );
+          }
+          return null;
+        })}
+      </>
+    );
+  }
+
+  return <EmptyState title="No Vendor Count Stats for this exchange" />;
+};
 
 export default VendorCountStatsTab;

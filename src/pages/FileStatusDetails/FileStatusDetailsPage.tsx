@@ -16,12 +16,6 @@ import {
   WorkPacketStatusDetails,
   WorkStatus,
 } from 'src/data/services/graphql';
-import { ShadowBox, FileMetaDetails, BadgeWrapper, FileTitle } from './FileStatusDetails.styles';
-
-import QualityChecksTab from './QualityChecksTab/QualityChecksTab';
-import WorkStepsTab from './WorkStepsTab/WorkStepsTab';
-import EnrollmentStatsTab from './EnrollmentStatsTab/EnrollmentStatsTab';
-import VendorCountStatsTab from './VendorCountStatsTab/VendorCountStatsTab';
 
 import { ActionButton, IconButton, Pivot, PivotItem, Stack } from '@fluentui/react';
 import { useOrgSid } from 'src/hooks/useOrgSid';
@@ -30,8 +24,37 @@ import { InfoIcon } from 'src/components/badges/InfoIcon';
 import { format } from 'date-fns';
 import { Required } from 'src/components/labels/FormLabel/FormLabel.styles';
 import { LabelValue } from 'src/components/labels/LabelValue';
-import { ArchivesTab } from 'src/pages/FileStatusDetails/ArchivesTab/ArchivesTab';
 import { theme } from 'src/styles/themes/theme';
+import { ArchivesTab } from 'src/pages/FileStatusDetails/ArchivesTab/ArchivesTab';
+import QualityChecksTab from './QualityChecksTab/QualityChecksTab';
+import WorkStepsTab from './WorkStepsTab/WorkStepsTab';
+import EnrollmentStatsTab from './EnrollmentStatsTab/EnrollmentStatsTab';
+import VendorCountStatsTab from './VendorCountStatsTab/VendorCountStatsTab';
+import { ShadowBox, FileMetaDetails, BadgeWrapper, FileTitle } from './FileStatusDetails.styles';
+
+type CommandButtonType = {
+  id: string;
+  icon: string;
+  command?: WorkPacketCommand | null;
+};
+
+const WorkPacketCommandButton = ({ id, icon, command }: CommandButtonType) => {
+  if (command) {
+    return (
+      <Stack.Item align="center">
+        <ActionButton
+          id={id}
+          onClick={() => null}
+          iconProps={{ iconName: icon, style: { fontSize: theme.fontSizes.normal } }}
+          style={{ fontSize: theme.fontSizes.normal }}
+        >
+          {command.label}
+        </ActionButton>
+      </Stack.Item>
+    );
+  }
+  return null;
+};
 
 const FileStatusDetailsPage = () => {
   const { orgSid } = useOrgSid();
@@ -45,12 +68,12 @@ const FileStatusDetailsPage = () => {
   const [callGetWPDetails, { data, loading, error }] = useWorkPacketStatusDetailsLazyQuery();
   const handleError = ErrorHandler();
 
-  //const { enableRefresh, disableRefresh } = useRefresh(TABLE_NAMES.FILE_STATUS_DETAIL_ENROLLMENT, fSPacketStatusQuery);
+  // const { enableRefresh, disableRefresh } = useRefresh(TABLE_NAMES.FILE_STATUS_DETAIL_ENROLLMENT, fSPacketStatusQuery);
 
   useEffect(() => {
     callGetWPDetails({
       variables: {
-        orgSid: orgSid,
+        orgSid,
         workOrderId: realId,
       },
     });
@@ -114,6 +137,7 @@ const FileStatusDetailsPage = () => {
       case WorkStatus.TechMigrationCheckFailed:
         return 'error';
     }
+    return 'info';
   };
 
   const deliveredFile: DeliveredFile | undefined | null = packet?.deliveredFiles
@@ -125,55 +149,32 @@ const FileStatusDetailsPage = () => {
   const cancelCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Cancel);
   const deleteCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Delete);
 
-  type CommandButtonType = {
-    id: string;
-    icon: string;
-    command?: WorkPacketCommand | null;
-  };
-
-  const WorkPacketCommandButton = ({ id, icon, command }: CommandButtonType) => {
-    if (command) {
-      return (
-        <Stack.Item align="center">
-          <ActionButton
-            id={id}
-            onClick={() => null}
-            iconProps={{ iconName: icon, style: { fontSize: theme.fontSizes.normal } }}
-            style={{ fontSize: theme.fontSizes.normal }}
-          >
-            {command.label}
-          </ActionButton>
-        </Stack.Item>
-      );
-    }
-    return null;
-  };
-
-  const renderDeliveredFileInfo = (deliveredFile?: DeliveredFile | null) => {
-    if (deliveredFile) {
+  const renderDeliveredFileInfo = (fileInfo?: DeliveredFile | null) => {
+    if (fileInfo) {
       return (
         <>
           <Stack.Item>
             <Text size="small" variant="muted">
               Delivered Vendor File Details
             </Text>
-            <LabelValue label="Filename" value={deliveredFile.filename ?? 'File not found'} />
-            <LabelValue label="Delivered on" value={formatDate(new Date(deliveredFile.timeDelivered))} />
-            <LabelValue label="Size" value={`${deliveredFile.fileSizeInBytes} bytes (without encryption)`} />
+            <LabelValue label="Filename" value={fileInfo.filename ?? 'File not found'} />
+            <LabelValue label="Delivered on" value={formatDate(new Date(fileInfo.timeDelivered))} />
+            <LabelValue label="Size" value={`${fileInfo.fileSizeInBytes} bytes (without encryption)`} />
           </Stack.Item>
           <Stack.Item>
             <Text size="small" variant="muted">
               FTP details
             </Text>
-            <LabelValue label="Protocol" value={deliveredFile.ftp?.protocol} />
-            {deliveredFile?.ftp?.port && <LabelValue label="Port" value={deliveredFile.ftp?.port} />}
-            <LabelValue label="User" value="*******" title={deliveredFile.ftp?.username} />
-            <LabelValue label="Host" value={deliveredFile.ftp?.host} />
-            <LabelValue label="Folder" value={deliveredFile.ftp?.folder} />
+            <LabelValue label="Protocol" value={fileInfo.ftp?.protocol} />
+            {fileInfo?.ftp?.port && <LabelValue label="Port" value={fileInfo.ftp?.port} />}
+            <LabelValue label="User" value="*******" title={fileInfo.ftp?.username} />
+            <LabelValue label="Host" value={fileInfo.ftp?.host} />
+            <LabelValue label="Folder" value={fileInfo.ftp?.folder} />
           </Stack.Item>
         </>
       );
     }
+    return null;
   };
 
   const renderFileMetaData = () => {
@@ -252,7 +253,7 @@ const FileStatusDetailsPage = () => {
             <EnrollmentStatsTab packet={packet} />
           </PivotItem>
           <PivotItem headerText="Vendor Count Stats" itemKey="#vendor">
-            <VendorCountStatsTab items={packet?.outboundRecordCounts} />
+            <VendorCountStatsTab items={packet?.workStepStatus} />
           </PivotItem>
           {packet?.workStepStatus && packet.workStepStatus.length > 0 && (
             <PivotItem headerText="Work Steps" itemKey="#work">
