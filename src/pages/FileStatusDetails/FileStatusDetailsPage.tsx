@@ -136,8 +136,9 @@ const FileStatusDetailsPage = () => {
         return 'warning';
       case WorkStatus.TechMigrationCheckFailed:
         return 'error';
+      default:
+        return 'info';
     }
-    return 'info';
   };
 
   const deliveredFile: DeliveredFile | undefined | null = packet?.deliveredFiles
@@ -230,6 +231,17 @@ const FileStatusDetailsPage = () => {
     );
   };
 
+  const onRenderItemLink = (link: any, defaultRenderer: any): any => (
+    <>
+      {defaultRenderer(link)}
+      {packet?.qualityChecks?.sequenceCreationEvent && errorCount() > 0 && (
+        <BadgeWrapper>
+          <Badge variant="error" label={errorCount().toString()} />
+        </BadgeWrapper>
+      )}
+    </>
+  );
+
   return (
     <LayoutDashboard id="PageFileStatusDetails" menuOptionSelected={ROUTES.ROUTE_FILE_STATUS.ID}>
       {renderFileMetaData()}
@@ -260,20 +272,7 @@ const FileStatusDetailsPage = () => {
               <WorkStepsTab packet={packet} />
             </PivotItem>
           )}
-          <PivotItem
-            headerText="Quality Checks"
-            itemKey="#quality"
-            onRenderItemLink={(link: any, defaultRenderer: any): any => (
-              <>
-                {defaultRenderer(link)}
-                {packet?.qualityChecks?.sequenceCreationEvent && errorCount() > 0 && (
-                  <BadgeWrapper>
-                    <Badge variant="error" label={errorCount().toString()} />
-                  </BadgeWrapper>
-                )}
-              </>
-            )}
-          >
+          <PivotItem headerText="Quality Checks" itemKey="#quality" onRenderItemLink={onRenderItemLink}>
             <QualityChecksTab details={packet} />
           </PivotItem>
           <PivotItem headerText="Archives">
