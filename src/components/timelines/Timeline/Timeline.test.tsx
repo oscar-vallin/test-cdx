@@ -14,11 +14,21 @@ const workPacket: WorkPacketStatusDetails = {
       stepStatus: 'DONE',
       stepName: 'TEST_DONE',
       stepType: 'TEST',
+      nvp: [
+        { name: 'khcm:version', value: '9.00.022.333.3' },
+        { name: 'khcm:feed', value: 'Census' },
+        { name: 'khcm:type', value: 'Third' },
+      ]
     },
     {
       stepStatus: 'PROGRESS',
       stepName: 'TEST_PROGRESS',
       stepType: 'TEST_PROGRESS',
+    },
+    {
+      stepStatus: 'ERROR',
+      stepName: 'Doing Stuff',
+      stepType: 'STUFF',
     },
   ],
 };
@@ -46,10 +56,13 @@ describe('Timeline Testing Unit...', () => {
     expect(title).toEqual('TEST_DONE');
   });
 
-  it('Should match the step description', () => {
-    const description = tree.find('.description').first().text();
+  it('Should match the Nvp description', () => {
+    var description = tree.find('.item__content--active').childAt(1).text();
 
-    expect(description).toEqual('TEST');
+    expect(description).toEqual('khcm:version:9.00.022.333.3');
+
+    description = tree.find('.item__content--active').childAt(2).text();
+    expect(description).toEqual('khcm:feed:Census');
   });
 
   it('Should trigger the onClick callback', () => {

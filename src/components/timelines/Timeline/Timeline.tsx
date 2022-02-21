@@ -1,13 +1,13 @@
 import React, { ReactElement, useState } from 'react';
 import { Callout, DirectionalHint, FontIcon, Link, mergeStyleSets, PrimaryButton } from '@fluentui/react';
 import { Spinner } from 'src/components/spinners/Spinner';
-import { StyledUl, StyledLi } from './Timeline.styles';
 import { WorkPacketCommandType, WorkPacketStatusDetails, WorkStepStatus } from 'src/data/services/graphql';
 import { Text } from 'src/components/typography';
 import { LabelValue, LabelValueProps } from 'src/components/labels/LabelValue';
 import { InlineLabel } from 'src/components/labels/LabelValue/LabelValue.styles';
 import { theme } from 'src/styles/themes/theme';
 import { Spacing } from 'src/components/spacings/Spacing';
+import { StyledUl, StyledLi } from './Timeline.styles';
 
 type CDXTimelineProps = {
   packet?: WorkPacketStatusDetails;
@@ -42,24 +42,46 @@ const styles = mergeStyleSets({
   },
 });
 
+type ConditionalLabelValueType = {
+  label: string;
+  value?: any;
+};
+
+const ConditionalLabelValue = ({ label, value }: ConditionalLabelValueType) => {
+  if (value) {
+    return <LabelValue label={label} value={value} />;
+  }
+  return null;
+};
+
 const CDXTimeline = ({ packet, activeIndex = 0, onClick }: CDXTimelineProps): ReactElement => {
   const [showCallout, setShowCallout] = useState(false);
   const redoCommand = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.RerunStep);
   const downloadCommand = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.DownloadFile);
 
-  const isComplete = (workStepStatus?: WorkStepStatus | null): boolean => {
+  function isComplete(workStepStatus?: WorkStepStatus | null): boolean {
     const stepStatus = workStepStatus?.stepStatus?.toUpperCase();
     if (!stepStatus) {
       // Assume no status means it's done
       return true;
     }
-    return stepStatus == 'DONE' || stepStatus == 'COMPLETE';
-  };
+    return stepStatus === 'DONE' || stepStatus === 'COMPLETE';
+  }
+
+  function isError(workStepStatus?: WorkStepStatus | null): boolean {
+    const stepStatus = workStepStatus?.stepStatus?.toUpperCase();
+    if (!stepStatus) {
+      // Assume no status means it's done
+      return true;
+    }
+    return stepStatus === 'ERROR';
+  }
 
   const getStatusIcon = (status: string) => {
     const ICONS = {
       COMPLETE: <FontIcon iconName="CompletedSolid" className="success" style={{ fontSize: 32 }} />,
       DONE: <FontIcon iconName="CompletedSolid" className="success" style={{ fontSize: 32 }} />,
+      ERROR: <FontIcon iconName="IncidentTriangle" className="error" style={{ fontSize: 32 }} />,
       QCFAIL: <FontIcon iconName="IncidentTriangle" className="error" style={{ fontSize: 32 }} />,
       PROGRESS: <Spinner size="md" />,
     };
@@ -68,7 +90,7 @@ const CDXTimeline = ({ packet, activeIndex = 0, onClick }: CDXTimelineProps): Re
   };
 
   const renderRedo = (item?: WorkStepStatus | null) => {
-    if (isComplete(item) && redoCommand) {
+    if ((isComplete(item) || isError(item)) && redoCommand) {
       return (
         <Spacing margin={{ top: 'normal' }}>
           <PrimaryButton
@@ -81,6 +103,7 @@ const CDXTimeline = ({ packet, activeIndex = 0, onClick }: CDXTimelineProps): Re
         </Spacing>
       );
     }
+    return null;
   };
 
   const fileName = (path?: string) => {
@@ -90,14 +113,19 @@ const CDXTimeline = ({ packet, activeIndex = 0, onClick }: CDXTimelineProps): Re
     return path.substring(path.lastIndexOf('/') + 1);
   };
 
-  type ConditionalLabelValueType = {
-    label: string;
-    value?: any;
-  };
-
-  const ConditionalLabelValue = ({ label, value }: ConditionalLabelValueType) => {
-    if (value) {
-      return <LabelValue label={label} value={value} />;
+  /**
+   * Ticket #238
+   * render the first two NvpStr values in the Work Step
+   * @param step work step status
+   */
+  const renderStepPreview = (step?: WorkStepStatus | null) => {
+    if (step) {
+      return step.nvp?.map((value, index) => {
+        if (value && index < 2) {
+          return <LabelValue key={`nvp_${index}`} label={value.name} value={value.value} />;
+        }
+        return null;
+      });
     }
     return null;
   };
@@ -125,9 +153,8 @@ const CDXTimeline = ({ packet, activeIndex = 0, onClick }: CDXTimelineProps): Re
             </Link>
           </div>
         );
-      } else {
-        return <LabelValue label={label} value={fName} />;
       }
+      return <LabelValue label={label} value={fName} />;
     }
     return null;
   };
@@ -137,6 +164,9 @@ const CDXTimeline = ({ packet, activeIndex = 0, onClick }: CDXTimelineProps): Re
       return (
         <>
           <Text size="large">{item.stepName}</Text>
+          {item.nvp?.map((value, index) => (
+            <ConditionalLabelValue key={`nvp_${index}`} label={value?.name ?? ''} value={value?.value} />
+          ))}
           <ConditionalLabelValue label="Type" value={item.stepType} />
           <ConditionalLabelValue label="Population Count" value={item.populationCount?.value} />
           <FileValue
@@ -174,7 +204,7 @@ const CDXTimeline = ({ packet, activeIndex = 0, onClick }: CDXTimelineProps): Re
 
             <div className={`item__content ${index === activeIndex ? 'item__content--active' : ''}`}>
               <div className="title">{item?.stepName}</div>
-              {item?.stepType && <span className="description">{item?.stepType}</span>}
+              {renderStepPreview(item)}
             </div>
           </StyledLi>
         ))}
@@ -182,7 +212,7 @@ const CDXTimeline = ({ packet, activeIndex = 0, onClick }: CDXTimelineProps): Re
       {packet?.workStepStatus && packet?.workStepStatus[activeIndex] && showCallout && (
         <Callout
           target={`#step_${activeIndex}`}
-          isBeakVisible={true}
+          isBeakVisible
           className={styles.callout}
           gapSpace={10}
           directionalHint={DirectionalHint.rightCenter}
