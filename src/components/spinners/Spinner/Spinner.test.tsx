@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import { StyleConstants } from '../../../data/constants/StyleConstants';
+import { StyleConstants } from 'src/data/constants/StyleConstants';
 import Component from './Spinner';
 
 const defaultId = 'SpinnerComponentTest';
@@ -15,10 +15,6 @@ const defaultProps = {
   ...baseProps,
   size: defaultSize,
   label: defaultLabel,
-};
-
-const theme = {
-  colors: { themePrimary: '#fff', custom: { error: '#000  ' } },
 };
 
 describe('MessageBar Testing Unit...', () => {

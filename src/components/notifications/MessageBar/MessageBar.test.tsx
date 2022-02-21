@@ -20,10 +20,6 @@ const defaultProps = {
   truncated: true,
 };
 
-const theme = {
-  colors: { themePrimary: '#fff', custom: { error: '#000  ' } },
-};
-
 describe('MessageBar Testing Unit...', () => {
   const tree = shallow(<Component {...defaultProps}>{defaultChildren}</Component>);
 
