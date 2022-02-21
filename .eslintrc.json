@@ -24,7 +24,7 @@
     "semi": 0,
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
-    "react/function-component-definition": [1, {
+    "react/function-component-definition": ["warn", {
       "namedComponents": "arrow-function",
       "unnamedComponents": "arrow-function"
     }],
@@ -58,6 +58,7 @@
     "react/no-unused-prop-types": "off",
     "react/forbid-prop-types": "off",
     "react/no-array-index-key": "off",
+    "react/jsx-boolean-value": "off",
     "no-plusplus": "off",
     "dot-notation": "off"
   },
