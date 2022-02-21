@@ -1,14 +1,14 @@
 import toJSON from 'enzyme-to-json';
 import { shallow } from 'enzyme';
-import { InputDateRange as Component } from './InputDateRange';
+import { InputDateRange } from '.';
 
 const defaultProps = {
-  startDate: { value: new Date() },
-  endDate: { value: new Date() },
+  startDate: { value: new Date(), setValue: jest.fn(), onChange: jest.fn() },
+  endDate: { value: new Date(), setValue: jest.fn(), onChange: jest.fn() },
 };
 
 test('Matches Snapshot', () => {
-  const wrapper = shallow(<Component {...defaultProps} />);
+  const wrapper = shallow(<InputDateRange {...defaultProps} />);
   expect(toJSON(wrapper)).toMatchSnapshot();
 });
 

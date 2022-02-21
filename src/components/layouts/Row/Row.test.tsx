@@ -1,23 +1,23 @@
 import ReactDOM from 'react-dom';
 import toJSON from 'enzyme-to-json';
 import { shallow } from 'enzyme';
-import { Row as Component } from './Row';
+import { Row } from '.';
 
 const defaultProps = {
   id: '__Row',
   variant: 'normal',
   children: <></>,
-  center: 'center',
-  right: 'center',
-  top: 'center',
-  bottom: 'center',
+  center: true,
+  right: false,
+  top: true,
+  bottom: false,
   between: 'center',
   evenly: 'center',
-  around: 'center',
+  around: false,
 };
 
 test('Matches Snapshot', () => {
-  const wrapper = shallow(<Component {...defaultProps} />);
+  const wrapper = shallow(<Row {...defaultProps} />);
 
   expect(toJSON(wrapper)).toMatchSnapshot();
 });
@@ -25,12 +25,12 @@ test('Matches Snapshot', () => {
 describe('Layout Row Component', () => {
   it('Should renders Row Component', () => {
     const div = document.createElement('div');
-    ReactDOM.render(<Component {...defaultProps} />, div);
+    ReactDOM.render(<Row {...defaultProps} />, div);
     ReactDOM.unmountComponentAtNode(div);
   });
 
   it('Should renders Row with Props', () => {
-    const wrapper = shallow(<Component {...defaultProps} />);
+    const wrapper = shallow(<Row {...defaultProps} />);
     expect(wrapper.prop('children')).toEqual(defaultProps.children);
     expect(wrapper.prop('variant')).toEqual(defaultProps.variant);
     expect(wrapper.prop('center')).toEqual(defaultProps.center);
@@ -44,9 +44,9 @@ describe('Layout Row Component', () => {
 
   it('Should renders children when passed in', () => {
     const wrapper = shallow(
-      <Component {...defaultProps}>
+      <Row {...defaultProps}>
         <div className="children" />
-      </Component>
+      </Row>
     );
     expect(wrapper.contains(<div className="children" />)).toEqual(true);
   });

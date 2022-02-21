@@ -1,22 +1,22 @@
 import ReactDOM from 'react-dom';
 import toJSON from 'enzyme-to-json';
 import { shallow } from 'enzyme';
-import { Column as Component } from './Column';
+import { Column } from '.';
 
 const defaultProps = {
   id: '__Column',
   variant: 'normal',
   direction: 'column',
   children: <></>,
-  center: 'center',
-  right: 'center',
-  top: 'center',
-  bottom: 'center',
-  centerV: 'center',
+  center: true,
+  right: false,
+  top: true,
+  bottom: false,
+  centerV: "center",
 };
 
 test('Matches Snapshot', () => {
-  const wrapper = shallow(<Component {...defaultProps} />);
+  const wrapper = shallow(<Column {...defaultProps} />);
 
   expect(toJSON(wrapper)).toMatchSnapshot();
 });
@@ -24,12 +24,12 @@ test('Matches Snapshot', () => {
 describe('Layout Column Component', () => {
   it('Should renders Column Component', () => {
     const div = document.createElement('div');
-    ReactDOM.render(<Component {...defaultProps} />, div);
+    ReactDOM.render(<Column {...defaultProps} />, div);
     ReactDOM.unmountComponentAtNode(div);
   });
 
   it('Should renders Column with Props', () => {
-    const wrapper = shallow(<Component {...defaultProps} />);
+    const wrapper = shallow(<Column {...defaultProps} />);
     expect(wrapper.prop('id')).toEqual(defaultProps.id);
     expect(wrapper.prop('variant')).toEqual(defaultProps.variant);
     expect(wrapper.prop('direction')).toEqual(defaultProps.direction);
@@ -42,9 +42,9 @@ describe('Layout Column Component', () => {
 
   it('Should renders children when passed in', () => {
     const wrapper = shallow(
-      <Component {...defaultProps}>
+      <Column {...defaultProps}>
         <div className="children" />
-      </Component>
+      </Column>
     );
     expect(wrapper.contains(<div className="children" />)).toEqual(true);
   });

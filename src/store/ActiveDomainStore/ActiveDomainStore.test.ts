@@ -1,10 +1,14 @@
 import { createStore } from 'easy-peasy';
 
 import ActiveDomainStore, { INITIAL_NAV_STATE, INITIAL_ORG_STATE } from './ActiveDomainStore';
+import { DomainNavItem } from 'src/store/ActiveDomainStore/ActiveDomainTypes';
 
 describe('Unit::ActiveDomainStore', () => {
   const store = createStore(ActiveDomainStore);
-  const nav = [{ label: '', destination: null }];
+  const nav: DomainNavItem = {
+    label: '',
+    destination: ''
+  };
 
   it('Should update the dashboard navigation', async () => {
     store.getActions().setDashboardNav(nav);

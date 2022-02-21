@@ -1,14 +1,15 @@
-import { mountWithTheme, shallowWithTheme } from '../../../../src/utils/testUtils';
+import { mountWithTheme, shallowWithTheme } from 'src/utils/testUtils';
 import { ButtonContextual } from './ButtonContextual';
+import { IContextualMenuItem } from '@fluentui/react';
 
-const itemsData = [
+const itemsData: IContextualMenuItem[] = [
   {
     id: '1',
     key: 'ProfileMenu_UserSettings',
     text: 'Settings',
-    onClick: () => null,
+    onClick: jest.fn(),
   },
-  { id: '2', key: 'ProfileMenu_Logout', text: 'Logout', onClick: () => null },
+  { id: '2', key: 'ProfileMenu_Logout', text: 'Logout', onClick: jest.fn() },
 ];
 
 describe('ButtonContextual', () => {
@@ -53,8 +54,8 @@ describe('ButtonContextual', () => {
   });
 
   it('Default props values, Should have a props', () => {
-    const defaultTree = shallowWithTheme(<ButtonContextual id={'__ButtonContextual'} />);
-    const mountTree = mountWithTheme(<ButtonContextual id={'__ButtonContextual'} />);
+    const defaultTree = shallowWithTheme(<ButtonContextual id={'__ButtonContextual'} items={itemsData}/>);
+    const mountTree = mountWithTheme(<ButtonContextual id={'__ButtonContextual'} items={itemsData} />);
     expect(defaultTree).toMatchSnapshot();
 
     expect(defaultTree.children().props().id).toEqual('__ButtonContextual');

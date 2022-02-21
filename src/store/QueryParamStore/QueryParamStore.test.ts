@@ -17,7 +17,7 @@ describe('Unit::QueryParamStore', () => {
   });
 
   it('Should reset its state', async () => {
-    store.getActions().reset();
+    store.getActions().reset({});
 
     expect(store.getState().params).toEqual(DEFAULT_QUERY_PARAMS);
   });

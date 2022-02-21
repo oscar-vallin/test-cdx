@@ -4,6 +4,7 @@ import { WorkPacketStatusDetails, WorkStatus } from 'src/data/services/graphql';
 
 
 const workPacket: WorkPacketStatusDetails = {
+  timestamp: '2020-11-08T05:17:32.000',
   workOrderId: 'textWorkOrder345',
   inboundFilename: 'ABC-inbound-file.zip.pgp',
   orgSid: '1',
