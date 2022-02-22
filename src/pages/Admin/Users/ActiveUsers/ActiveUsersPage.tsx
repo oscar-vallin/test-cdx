@@ -12,11 +12,12 @@ import { ActiveEnum, CdxWebCommandType, useDeactivateUsersMutation, UserItem } f
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { UsersTable } from 'src/pages/Admin/Users/UsersTable';
 import { useUsersLists } from 'src/pages/Admin/Users/useUsersList';
+import { ROUTE_ACTIVE_USERS } from 'src/data/constants/RouteConstants';
+import { PageHeader } from 'src/containers/headers/PageHeader';
+import { Paginator } from 'src/components/tables/Paginator';
 import { StyledColumn } from './ActiveUsersPage.styles';
 import { UpdateUserPanel, useUpdateUserPanel } from '../UpdateUsers';
 import { CreateUsersPanel } from '../CreateUsers';
-import { ROUTE_ACTIVE_USERS } from 'src/data/constants/RouteConstants';
-import { PageHeader } from 'src/containers/headers/PageHeader';
 
 const ActiveUsersPage = () => {
   const { orgSid } = useOrgSid();
@@ -79,7 +80,12 @@ const ActiveUsersPage = () => {
       return renderEmptyState();
     }
 
-    return <UsersTable users={userService.users} onClickUser={updateUserPanel.showPanel} />;
+    return (
+      <>
+        <UsersTable users={userService.users} onClickUser={updateUserPanel.showPanel} />
+        <Paginator pagingInfo={userService.pagingInfo} onPageChange={userService.onPageChange} />
+      </>
+    );
   };
 
   const createCmd = userService.commands?.find((cmd) => cmd.commandType === CdxWebCommandType.Create);

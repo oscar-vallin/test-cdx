@@ -50,18 +50,16 @@ export const UsersTable = ({ users, onClickUser }: UsersTableType) => {
     }
 
     return (
-      <>
-        <Link
-          id={`__ActiveUsersPage__${column?.key}_${(itemIndex ?? 0) + 1}`}
-          onClick={() => {
-            if (node) {
-              onClickUser(node?.item?.sid);
-            }
-          }}
-        >
-          {columnVal}
-        </Link>
-      </>
+      <Link
+        id={`__ActiveUsersPage__${column?.key}_${(itemIndex ?? 0) + 1}`}
+        onClick={() => {
+          if (node) {
+            onClickUser(node?.item?.sid);
+          }
+        }}
+      >
+        {columnVal}
+      </Link>
     );
   };
 
