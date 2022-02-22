@@ -16,7 +16,7 @@ import { useOrgSid } from 'src/hooks/useOrgSid';
 import { TableFiltersType } from 'src/hooks/useTableFilters';
 import { Paginator } from 'src/components/tables/Paginator';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
-import { useWorkPacketColumns, WorkPacketColumns } from './WorkPacketColumns';
+import { useWorkPacketColumns, WorkPacketColumn } from './WorkPacketColumns';
 import { TableFilters } from './TableFilters';
 import { EmptyState } from '../states';
 import { Box, Container } from './WorkPacketTable.styles';
@@ -24,7 +24,7 @@ import { useHistory } from 'react-router-dom';
 
 type WorkPacketParams = {
   id: string;
-  cols: WorkPacketColumns[];
+  cols: WorkPacketColumn[];
   lazyQuery: any; // lazy query from the generated Apollo graphql.ts
   pollingQuery?: any; // lazy query to poll if there are any changes
   getItems: (data: any) => any[];
@@ -107,7 +107,7 @@ export const WorkPacketTable = ({
     });
   };
 
-  const openDetails = (orgSid?: string | null, workOrderId?: string, tab?: string) => {
+  const openDetails = (fsOrgSid?: string | null, workOrderId?: string, tab?: string) => {
     // The rendering of the columns is only done upon initialization of the column
     // so we can't rely on state to change the parameters of the URL.
     // So we have to do this hack where we read the start date and end date parameters from the
@@ -120,7 +120,7 @@ export const WorkPacketTable = ({
     const startDate = urlParams.get('startDate');
     const endDate = urlParams.get('endDate');
     const hash = tab ? `#${tab}` : '';
-    history.push(`/file-status/${workOrderId}?orgSid=${orgSid}&startDate=${startDate}&endDate=${endDate}${hash}`);
+    history.push(`/file-status/${workOrderId}?orgSid=${orgSid}&fsOrgSid=${fsOrgSid}&startDate=${startDate}&endDate=${endDate}${hash}`);
   };
 
   const { initialColumns } = useWorkPacketColumns(cols, openDetails, _doSort);

@@ -13,7 +13,7 @@ import {
   useWorkPacketStatusesPollQuery,
   WorkPacketStatus,
 } from 'src/data/services/graphql';
-import { WorkPacketColumns } from 'src/containers/tables/WorkPacketColumns';
+import { WorkPacketColumn } from 'src/containers/tables/WorkPacketColumns';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { tableFiltersToQueryParams, useTableFilters } from 'src/hooks/useTableFilters';
 import { DownloadLink } from 'src/containers/tables/WorkPacketTable.styles';
@@ -32,7 +32,7 @@ const _FileStatusPage = () => {
 
   const mapData = (data) => {
     const items: WorkPacketStatus[] = [];
-    data?.workPacketStatuses?.nodes?.map((value) => {
+    data?.workPacketStatuses?.nodes?.forEach((value) => {
       if (value) {
         items.push(value);
       }
@@ -89,12 +89,12 @@ const _FileStatusPage = () => {
       <WorkPacketTable
         id="TableFileStatus"
         cols={[
-          WorkPacketColumns.TIMESTAMP,
-          WorkPacketColumns.VENDOR,
-          WorkPacketColumns.ORG_ID,
-          WorkPacketColumns.INBOUND_FILENAME,
-          WorkPacketColumns.PACKET_STATUS,
-          WorkPacketColumns.PROGRESS,
+          WorkPacketColumn.TIMESTAMP,
+          WorkPacketColumn.VENDOR,
+          WorkPacketColumn.ORG_ID,
+          WorkPacketColumn.INBOUND_FILENAME,
+          WorkPacketColumn.PACKET_STATUS,
+          WorkPacketColumn.PROGRESS,
         ]}
         lazyQuery={useWorkPacketStatusesLazyQuery}
         pollingQuery={useWorkPacketStatusesPollQuery}

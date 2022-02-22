@@ -5,7 +5,7 @@ import { PageTitle, Text } from 'src/components/typography';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { WorkPacketTable } from 'src/containers/tables/WorkPacketTable';
-import { WorkPacketColumns } from 'src/containers/tables/WorkPacketColumns';
+import { WorkPacketColumn } from 'src/containers/tables/WorkPacketColumns';
 import {
   NullHandling,
   SortDirection,
@@ -28,7 +28,7 @@ const _ArchivePage = () => {
 
   const mapData = (data) => {
     const items: WorkPacketStatus[] = [];
-    data?.workPacketStatuses?.nodes?.map((value) => {
+    data?.workPacketStatuses?.nodes?.forEach((value) => {
       if (value) {
         items.push(value);
       }
@@ -59,11 +59,11 @@ const _ArchivePage = () => {
       <WorkPacketTable
         id="TableArchive"
         cols={[
-          WorkPacketColumns.TIMESTAMP,
-          WorkPacketColumns.VENDOR,
-          WorkPacketColumns.ORG_ID,
-          WorkPacketColumns.CLIENT_FILE,
-          WorkPacketColumns.VENDOR_FILE,
+          WorkPacketColumn.TIMESTAMP,
+          WorkPacketColumn.VENDOR,
+          WorkPacketColumn.ORG_ID,
+          WorkPacketColumn.CLIENT_FILE,
+          WorkPacketColumn.VENDOR_FILE,
         ]}
         lazyQuery={useWorkPacketStatusesLazyQuery}
         pollingQuery={useWorkPacketStatusesPollQuery}

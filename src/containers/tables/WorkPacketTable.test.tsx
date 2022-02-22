@@ -1,6 +1,6 @@
 import { WorkPacketTable } from './WorkPacketTable';
 import { shallowWithTheme } from 'src/utils/testUtils';
-import { WorkPacketColumns } from './WorkPacketColumns';
+import { WorkPacketColumn } from './WorkPacketColumns';
 import { SortDirection, useWorkPacketStatusesLazyQuery } from 'src/data/services/graphql';
 
 jest.mock('react-router-dom', () => ({
@@ -13,11 +13,11 @@ jest.mock('react-router-dom', () => ({
 const defaultProps = {
   id: '',
   cols: [
-    WorkPacketColumns.TIMESTAMP,
-    WorkPacketColumns.VENDOR,
-    WorkPacketColumns.PLAN_SPONSOR,
-    WorkPacketColumns.CLIENT_FILE,
-    WorkPacketColumns.VENDOR_FILE,
+    WorkPacketColumn.TIMESTAMP,
+    WorkPacketColumn.VENDOR,
+    WorkPacketColumn.PLAN_SPONSOR,
+    WorkPacketColumn.CLIENT_FILE,
+    WorkPacketColumn.VENDOR_FILE,
   ],
   lazyQuery: null,
   getItems: [] as any,

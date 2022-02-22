@@ -6,7 +6,7 @@ import { Column, Container, Row } from 'src/components/layouts';
 import { PageTitle, Text } from 'src/components/typography';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { WorkPacketTable } from 'src/containers/tables/WorkPacketTable';
-import { WorkPacketColumns } from 'src/containers/tables/WorkPacketColumns';
+import { WorkPacketColumn } from 'src/containers/tables/WorkPacketColumns';
 import { NullHandling, SortDirection, useWpTransmissionsLazyQuery, WpTransmission } from 'src/data/services/graphql';
 import { tableFiltersToQueryParams, useTableFilters } from 'src/hooks/useTableFilters';
 import { DownloadLink } from 'src/containers/tables/WorkPacketTable.styles';
@@ -26,7 +26,7 @@ const _TransmissionsPage = () => {
 
   const mapData = (data) => {
     const items: WpTransmission[] = [];
-    data?.wpTransmissions?.nodes?.map((value) => {
+    data?.wpTransmissions?.nodes?.forEach((value) => {
       if (value) {
         items.push(value);
       }
@@ -88,18 +88,18 @@ const _TransmissionsPage = () => {
       <WorkPacketTable
         id="TableTransmissions"
         cols={[
-          WorkPacketColumns.DATETIME,
-          WorkPacketColumns.PLAN_SPONSOR,
-          WorkPacketColumns.VENDOR,
-          WorkPacketColumns.SPEC_ID,
-          WorkPacketColumns.IMPLEMENTATION,
-          WorkPacketColumns.INBOUND_FILENAME,
-          WorkPacketColumns.OUTBOUND_FILENAME,
-          WorkPacketColumns.OUTBOUND_FILESIZE,
-          WorkPacketColumns.BILLING_COUNT,
-          WorkPacketColumns.TOTAL_RECORDS,
-          WorkPacketColumns.EXTRACT_TYPE,
-          WorkPacketColumns.EXTRACT_VERSION,
+          WorkPacketColumn.DATETIME,
+          WorkPacketColumn.PLAN_SPONSOR,
+          WorkPacketColumn.VENDOR,
+          WorkPacketColumn.SPEC_ID,
+          WorkPacketColumn.IMPLEMENTATION,
+          WorkPacketColumn.INBOUND_FILENAME,
+          WorkPacketColumn.OUTBOUND_FILENAME,
+          WorkPacketColumn.OUTBOUND_FILESIZE,
+          WorkPacketColumn.BILLING_COUNT,
+          WorkPacketColumn.TOTAL_RECORDS,
+          WorkPacketColumn.EXTRACT_TYPE,
+          WorkPacketColumn.EXTRACT_VERSION,
         ]}
         lazyQuery={useWpTransmissionsLazyQuery}
         getItems={mapData}

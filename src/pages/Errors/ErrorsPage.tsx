@@ -6,7 +6,7 @@ import { PageTitle, Text } from 'src/components/typography';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 
 import { WorkPacketTable } from 'src/containers/tables/WorkPacketTable';
-import { WorkPacketColumns } from 'src/containers/tables/WorkPacketColumns';
+import { WorkPacketColumn } from 'src/containers/tables/WorkPacketColumns';
 import { NullHandling, SortDirection, useWpProcessErrorsLazyQuery, WorkPacketStatus } from 'src/data/services/graphql';
 import { useTableFilters } from 'src/hooks/useTableFilters';
 
@@ -22,7 +22,7 @@ const _ErrorsPage = () => {
   ]);
   const mapData = (data) => {
     const items: WorkPacketStatus[] = [];
-    data?.wpProcessErrors?.nodes?.map((value) => {
+    data?.wpProcessErrors?.nodes?.forEach((value) => {
       if (value) {
         items.push(value);
       }
@@ -52,12 +52,12 @@ const _ErrorsPage = () => {
       <WorkPacketTable
         id="TableFileStatus"
         cols={[
-          WorkPacketColumns.START_TIME,
-          WorkPacketColumns.INBOUND_FILENAME,
-          WorkPacketColumns.STEP,
-          WorkPacketColumns.PLAN_SPONSOR,
-          WorkPacketColumns.VENDOR,
-          WorkPacketColumns.MESSAGE,
+          WorkPacketColumn.START_TIME,
+          WorkPacketColumn.INBOUND_FILENAME,
+          WorkPacketColumn.STEP,
+          WorkPacketColumn.PLAN_SPONSOR,
+          WorkPacketColumn.VENDOR,
+          WorkPacketColumn.MESSAGE,
         ]}
         lazyQuery={useWpProcessErrorsLazyQuery}
         getItems={mapData}
