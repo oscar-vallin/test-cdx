@@ -11,7 +11,7 @@ const workPacket: WorkPacketStatusDetails = {
   vendorSid: '',
   workStepStatus: [
     {
-      stepStatus: 'DONE',
+      stepStatus: WorkStatus.Complete,
       stepName: 'TEST_DONE',
       stepType: 'TEST',
       nvp: [
@@ -21,12 +21,12 @@ const workPacket: WorkPacketStatusDetails = {
       ]
     },
     {
-      stepStatus: 'PROGRESS',
+      stepStatus: WorkStatus.NoRecords,
       stepName: 'TEST_PROGRESS',
       stepType: 'TEST_PROGRESS',
     },
     {
-      stepStatus: 'ERROR',
+      stepStatus: WorkStatus.Error,
       stepName: 'Doing Stuff',
       stepType: 'STUFF',
     },

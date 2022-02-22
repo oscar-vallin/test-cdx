@@ -1,13 +1,13 @@
 import React, { ReactElement, useState } from 'react';
 import { Callout, DirectionalHint, FontIcon, Link, mergeStyleSets, PrimaryButton } from '@fluentui/react';
 import { Spinner } from 'src/components/spinners/Spinner';
-import { WorkPacketCommandType, WorkPacketStatusDetails, WorkStepStatus } from 'src/data/services/graphql';
+import { WorkPacketCommandType, WorkPacketStatusDetails, WorkStatus, WorkStepStatus } from 'src/data/services/graphql';
 import { Text } from 'src/components/typography';
 import { LabelValue, LabelValueProps } from 'src/components/labels/LabelValue';
 import { InlineLabel } from 'src/components/labels/LabelValue/LabelValue.styles';
 import { theme } from 'src/styles/themes/theme';
 import { Spacing } from 'src/components/spacings/Spacing';
-import { StyledUl, StyledLi } from './Timeline.styles';
+import { StyledLi, StyledUl } from './Timeline.styles';
 
 type CDXTimelineProps = {
   packet?: WorkPacketStatusDetails;
@@ -77,16 +77,27 @@ const CDXTimeline = ({ packet, activeIndex = 0, onClick }: CDXTimelineProps): Re
     return stepStatus === 'ERROR';
   }
 
-  const getStatusIcon = (status: string) => {
-    const ICONS = {
-      COMPLETE: <FontIcon iconName="CompletedSolid" className="success" style={{ fontSize: 32 }} />,
-      DONE: <FontIcon iconName="CompletedSolid" className="success" style={{ fontSize: 32 }} />,
-      ERROR: <FontIcon iconName="IncidentTriangle" className="error" style={{ fontSize: 32 }} />,
-      QCFAIL: <FontIcon iconName="IncidentTriangle" className="error" style={{ fontSize: 32 }} />,
-      PROGRESS: <Spinner size="md" />,
-    };
-
-    return ICONS[status.toUpperCase()];
+  const getStatusIcon = (status?: WorkStatus | null) => {
+    switch (status) {
+      case WorkStatus.Submitted:
+      case WorkStatus.Queued:
+      case WorkStatus.Processing:
+        return <Spinner size="md" />;
+      case WorkStatus.Error:
+      case WorkStatus.QualityCheckFailed:
+      case WorkStatus.TechMigrationCheckFailed:
+        return <FontIcon iconName="IncidentTriangle" className="error" style={{ fontSize: 32 }} />;
+      case WorkStatus.Warning:
+        return <FontIcon iconName="IncidentTriangle" className="warn" style={{ fontSize: 32 }} />;
+      case WorkStatus.Hold:
+      case WorkStatus.Canceled:
+      case WorkStatus.NoRecords:
+        return <FontIcon iconName="InfoSolid" className="info" style={{ fontSize: 32 }} />;
+      case WorkStatus.Complete:
+        return <FontIcon iconName="CompletedSolid" className="success" style={{ fontSize: 32 }} />;
+      default:
+        return <FontIcon iconName="CompletedSolid" className="success" style={{ fontSize: 32 }} />;
+    }
   };
 
   const renderRedo = (item?: WorkStepStatus | null) => {
@@ -192,7 +203,6 @@ const CDXTimeline = ({ packet, activeIndex = 0, onClick }: CDXTimelineProps): Re
           <StyledLi
             id={`step_${index}`}
             className="item"
-            status={item?.stepStatus ?? 'DONE'}
             active={index === activeIndex}
             onClick={() => {
               onClick(index);
@@ -200,7 +210,7 @@ const CDXTimeline = ({ packet, activeIndex = 0, onClick }: CDXTimelineProps): Re
             }}
             key={index}
           >
-            <div className="item__status">{getStatusIcon(item?.stepStatus ?? 'DONE')}</div>
+            <div className="item__status">{getStatusIcon(item?.stepStatus)}</div>
 
             <div className={`item__content ${index === activeIndex ? 'item__content--active' : ''}`}>
               <div className="title">{item?.stepName}</div>

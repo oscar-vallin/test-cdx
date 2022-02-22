@@ -15,6 +15,10 @@ export type Scalars = {
   DateTime: any;
 };
 
+
+
+
+
 export type AccessPolicy = {
   __typename?: 'AccessPolicy';
   sid?: Maybe<Scalars['ID']>;
@@ -121,7 +125,7 @@ export type AccessSpecializationForm = {
 export enum ActiveEnum {
   Active = 'ACTIVE',
   Inactive = 'INACTIVE',
-  All = 'ALL',
+  All = 'ALL'
 }
 
 export type ArchiveFileType = {
@@ -132,7 +136,7 @@ export type ArchiveFileType = {
 
 export enum CdxWebAppDomain {
   Dashboard = 'DASHBOARD',
-  Organization = 'ORGANIZATION',
+  Organization = 'ORGANIZATION'
 }
 
 export enum CdxWebCommandType {
@@ -145,7 +149,7 @@ export enum CdxWebCommandType {
   Delete = 'DELETE',
   Create = 'CREATE',
   Assign = 'ASSIGN',
-  Reset = 'RESET',
+  Reset = 'RESET'
 }
 
 export enum CdxWebPage {
@@ -170,12 +174,12 @@ export enum CdxWebPage {
   AddOrg = 'ADD_ORG',
   AddUser = 'ADD_USER',
   ColorPalettes = 'COLOR_PALETTES',
-  Theme = 'THEME',
+  Theme = 'THEME'
 }
 
 export enum CdxWebPivot {
   Activity = 'ACTIVITY',
-  InProgress = 'IN_PROGRESS',
+  InProgress = 'IN_PROGRESS'
 }
 
 export type CompositePasswordRuleSet = {
@@ -465,6 +469,8 @@ export type DashboardPeriods = {
   lastMonthlyCounts?: Maybe<DashboardPeriodCounts>;
 };
 
+
+
 export type DateTimeRangeInput = {
   rangeStart: Scalars['DateTime'];
   rangeEnd: Scalars['DateTime'];
@@ -524,13 +530,13 @@ export enum Environment {
   K2U = 'K2U',
   Test = 'TEST',
   Uat = 'UAT',
-  Prod = 'PROD',
+  Prod = 'PROD'
 }
 
 export enum ErrorSeverity {
   Error = 'ERROR',
   Warning = 'WARNING',
-  Info = 'INFO',
+  Info = 'INFO'
 }
 
 export type ExtractParameter = {
@@ -560,7 +566,7 @@ export type FieldCreationEvent = {
 export enum GqOperationResponse {
   Success = 'SUCCESS',
   Fail = 'FAIL',
-  PartialSuccess = 'PARTIAL_SUCCESS',
+  PartialSuccess = 'PARTIAL_SUCCESS'
 }
 
 export type GenericResponse = {
@@ -609,7 +615,7 @@ export enum LogLevel {
   Info = 'INFO',
   Warn = 'WARN',
   Error = 'ERROR',
-  Fatal = 'FATAL',
+  Fatal = 'FATAL'
 }
 
 export type LogMessage = {
@@ -640,7 +646,7 @@ export type LoginStep = {
 export enum LoginStepType {
   Username = 'USERNAME',
   Password = 'PASSWORD',
-  Complete = 'COMPLETE',
+  Complete = 'COMPLETE'
 }
 
 export type Mutation = {
@@ -695,147 +701,183 @@ export type Mutation = {
   ftpTestM?: Maybe<SftpConfigSubscriptionResponse>;
 };
 
+
 export type MutationBeginLoginArgs = {
   userId: Scalars['String'];
 };
+
 
 export type MutationPasswordLoginArgs = {
   userId: Scalars['String'];
   password: Scalars['String'];
 };
 
+
 export type MutationUpdateOwnPasswordArgs = {
   updateOwnPasswordInput: UpdateOwnPasswordInput;
 };
+
 
 export type MutationResetPasswordArgs = {
   userSid: Scalars['ID'];
 };
 
+
 export type MutationUpdatePasswordArgs = {
   updatePasswordInput: UpdatePasswordInput;
 };
+
 
 export type MutationCreateOrgArgs = {
   orgInfo: CreateOrgInput;
 };
 
+
 export type MutationUpdateOrgArgs = {
   orgInfo: UpdateOrgInput;
 };
+
 
 export type MutationDeactivateOrgArgs = {
   orgSid: Scalars['ID'];
 };
 
+
 export type MutationCreateAccessPolicyArgs = {
   createAccessPolicyInput: CreateAccessPolicyInput;
 };
+
 
 export type MutationUpdateAccessPolicyArgs = {
   updateAccessPolicyInput?: Maybe<UpdateAccessPolicyInput>;
 };
 
+
 export type MutationDeleteAccessPoliciesArgs = {
   deleteAccessPoliciesInput?: Maybe<DeleteAccessPoliciesInput>;
 };
+
 
 export type MutationDeleteAccessPolicyArgs = {
   policySid: Scalars['ID'];
 };
 
+
 export type MutationCreateAccessSpecializationArgs = {
   createAccessSpecializationInput: CreateAccessSpecializationInput;
 };
+
 
 export type MutationUpdateAccessSpecializationArgs = {
   updateAccessSpecializationInput?: Maybe<UpdateAccessSpecializationInput>;
 };
 
+
 export type MutationDeleteAccessSpecializationArgs = {
   specializationSid: Scalars['ID'];
 };
+
 
 export type MutationCreateAccessPolicyGroupArgs = {
   createAccessPolicyGroupInput: CreateAccessPolicyGroupInput;
 };
 
+
 export type MutationUpdateAccessPolicyGroupArgs = {
   updateAccessPolicyGroupInput?: Maybe<UpdateAccessPolicyGroupInput>;
 };
 
+
 export type MutationDeleteAccessPolicyGroupArgs = {
   policyGroupSid: Scalars['ID'];
 };
+
 
 export type MutationCreateUserArgs = {
   userInfo: CreateUserInput;
   personInfo: CreatePersonInput;
 };
 
+
 export type MutationUpdateUserArgs = {
   userInfo: UpdateUserInput;
 };
+
 
 export type MutationUpdateUserAccessPolicyGroupsArgs = {
   userAccessPolicyGroupUpdate?: Maybe<UpdateUserAccessPolicyGroupsInput>;
 };
 
+
 export type MutationDeactivateUserArgs = {
   sidInput: SidInput;
 };
+
 
 export type MutationDeactivateUsersArgs = {
   sidsInput: SidsInput;
 };
 
+
 export type MutationActivateUserArgs = {
   sidInput: SidInput;
 };
+
 
 export type MutationActivateUsersArgs = {
   sidsInput: SidsInput;
 };
 
+
 export type MutationCreateDashThemeColorArgs = {
   createDashThemeColorInput: CreateDashThemeColorInput;
 };
+
 
 export type MutationUpdateDashThemeColorArgs = {
   updateDashThemeColorInput: UpdateDashThemeColorInput;
 };
 
+
 export type MutationCreateDefaultDashThemeArgs = {
   createDefaultDashThemeInput?: Maybe<CreateDefaultDashThemeInput>;
 };
+
 
 export type MutationUpdateDefaultDashThemeArgs = {
   updateDefaultDashThemeInput?: Maybe<UpdateDefaultDashThemeInput>;
 };
 
+
 export type MutationRemoveDashThemeColorArgs = {
   ownedInputSid?: Maybe<OwnedInputSid>;
 };
+
 
 export type MutationRemoveDefaultDashThemeArgs = {
   ownedInputSid?: Maybe<OwnedInputSid>;
 };
 
+
 export type MutationSetDashThemeColorDefaultArgs = {
   dashThemeColorDefaultInput?: Maybe<DashThemeColorDefaultInput>;
 };
+
 
 export type MutationCreateOrUpdateOwnDashThemeArgs = {
   dashThemeInput?: Maybe<DashThemeInput>;
 };
 
+
 export type MutationSetOwnDashThemeFontSizeArgs = {
   dashThemeInput?: Maybe<DashThemeInput>;
 };
 
+
 export type MutationUpdatePasswordRulesArgs = {
   passwordRulesInput?: Maybe<PasswordRulesInput>;
 };
+
 
 export type MutationFtpTestMArgs = {
   xpsftp: XsftpInput;
@@ -858,7 +900,7 @@ export type NvpStr = {
 
 export enum NullHandling {
   NullsFirst = 'NULLS_FIRST',
-  NullsLast = 'NULLS_LAST',
+  NullsLast = 'NULLS_LAST'
 }
 
 export type OrgFilterInput = {
@@ -881,7 +923,7 @@ export enum OrgType {
   Template = 'TEMPLATE',
   OutsidePromoter = 'OUTSIDE_PROMOTER',
   SalesProspect = 'SALES_PROSPECT',
-  GlobalVendor = 'GLOBAL_VENDOR',
+  GlobalVendor = 'GLOBAL_VENDOR'
 }
 
 export type OrgWhitelistForm = {
@@ -975,7 +1017,7 @@ export enum PasswordComplexity {
   Fair = 'FAIR',
   Good = 'GOOD',
   Strong = 'STRONG',
-  VeryStrong = 'VERY_STRONG',
+  VeryStrong = 'VERY_STRONG'
 }
 
 /**
@@ -1151,7 +1193,7 @@ export enum Permission {
   ThemeRead = 'THEME_READ',
   ThemeUpdate = 'THEME_UPDATE',
   ThemeDelete = 'THEME_DELETE',
-  ImplementationDeploy = 'IMPLEMENTATION_DEPLOY',
+  ImplementationDeploy = 'IMPLEMENTATION_DEPLOY'
 }
 
 export type Person = {
@@ -1262,9 +1304,11 @@ export type Query = {
   xpsftpTest?: Maybe<XpsftpTestPage>;
 };
 
+
 export type QueryVerifyPasswordResetTokenArgs = {
   token: Scalars['String'];
 };
+
 
 export type QueryExchangeActivityInProcessArgs = {
   orgSidInput: OrgSidInput;
@@ -1273,12 +1317,14 @@ export type QueryExchangeActivityInProcessArgs = {
   pageableInput: PageableInput;
 };
 
+
 export type QueryExchangeActivityTransmittedArgs = {
   orgSidInput: OrgSidInput;
   searchText?: Maybe<Scalars['String']>;
   dateRange: DateTimeRangeInput;
   pageableInput: PageableInput;
 };
+
 
 export type QueryExchangeActivityErroredArgs = {
   orgSidInput: OrgSidInput;
@@ -1287,15 +1333,18 @@ export type QueryExchangeActivityErroredArgs = {
   pageableInput: PageableInput;
 };
 
+
 export type QueryWorkPacketStatusDetailsArgs = {
   orgSid: Scalars['ID'];
   workOrderId: Scalars['String'];
 };
 
+
 export type QueryWorkPacketStatusArgs = {
   orgSid: Scalars['ID'];
   workOrderId: Scalars['String'];
 };
+
 
 export type QueryWorkPacketStatusesArgs = {
   orgSid: Scalars['ID'];
@@ -1304,12 +1353,14 @@ export type QueryWorkPacketStatusesArgs = {
   pageableInput: PageableInput;
 };
 
+
 export type QueryWorkPacketStatusesPollArgs = {
   orgSid: Scalars['ID'];
   searchText?: Maybe<Scalars['String']>;
   dateRange?: Maybe<DateTimeRangeInput>;
   lastUpdated: Scalars['DateTime'];
 };
+
 
 export type QueryWpProcessErrorsArgs = {
   orgSid: Scalars['ID'];
@@ -1318,6 +1369,7 @@ export type QueryWpProcessErrorsArgs = {
   pageableInput?: Maybe<PageableInput>;
 };
 
+
 export type QueryWpTransmissionsArgs = {
   orgSid: Scalars['ID'];
   searchText?: Maybe<Scalars['String']>;
@@ -1325,20 +1377,24 @@ export type QueryWpTransmissionsArgs = {
   pageableInput?: Maybe<PageableInput>;
 };
 
+
 export type QueryScheduleOccurrencesArgs = {
   orgSid: Scalars['ID'];
   dateRange?: Maybe<DateTimeRangeInput>;
   pageableInput?: Maybe<PageableInput>;
 };
 
+
 export type QueryDashboardPeriodsArgs = {
   orgSid: Scalars['ID'];
 };
+
 
 export type QueryDashboardPeriodCountsArgs = {
   orgSid: Scalars['ID'];
   dateRange?: Maybe<DateTimeRangeInput>;
 };
+
 
 export type QueryUsersForOrgArgs = {
   orgSid: Scalars['ID'];
@@ -1346,25 +1402,31 @@ export type QueryUsersForOrgArgs = {
   pageableInput?: Maybe<PageableInput>;
 };
 
+
 export type QueryCurrentOrgNavArgs = {
   orgInput?: Maybe<OrgSidInput>;
 };
+
 
 export type QueryUserThemeArgs = {
   themeColorMode?: Maybe<ThemeColorMode>;
 };
 
+
 export type QueryFindUserByEmailArgs = {
   userEmail: Scalars['String'];
 };
+
 
 export type QueryUserAccountFormArgs = {
   orgSid: Scalars['ID'];
 };
 
+
 export type QueryFindUserAccountArgs = {
   userSid: Scalars['ID'];
 };
+
 
 export type QueryUserAccountAuditLogsArgs = {
   orgSid: Scalars['ID'];
@@ -1374,68 +1436,83 @@ export type QueryUserAccountAuditLogsArgs = {
   pageableInput?: Maybe<PageableInput>;
 };
 
+
 export type QueryAccessPolicyArgs = {
   orgSid: Scalars['ID'];
   policySid: Scalars['ID'];
 };
+
 
 export type QueryAccessPoliciesForOrgArgs = {
   orgSid: Scalars['ID'];
   pageableInput?: Maybe<PageableInput>;
 };
 
+
 export type QueryAccessPolicyTemplatesArgs = {
   orgSid: Scalars['ID'];
 };
+
 
 export type QueryAccessSpecializationsForOrgArgs = {
   orgSid: Scalars['ID'];
   pageableInput?: Maybe<PageableInput>;
 };
 
+
 export type QueryAccessPolicyGroupsForOrgArgs = {
   orgSid: Scalars['ID'];
   pageableInput?: Maybe<PageableInput>;
 };
 
+
 export type QueryAccessPolicyGroupTemplatesArgs = {
   orgSid: Scalars['ID'];
 };
+
 
 export type QueryAccessPolicyFormArgs = {
   orgSid: Scalars['ID'];
   templatePolicySid?: Maybe<Scalars['ID']>;
 };
 
+
 export type QueryFindAccessPolicyArgs = {
   policySid: Scalars['ID'];
 };
+
 
 export type QueryAccessSpecializationFormArgs = {
   orgSid: Scalars['ID'];
 };
 
+
 export type QueryFindAccessSpecializationArgs = {
   specializationSid: Scalars['ID'];
 };
+
 
 export type QueryAccessPolicyGroupFormArgs = {
   orgSid: Scalars['ID'];
   templateGroupSid?: Maybe<Scalars['ID']>;
 };
 
+
 export type QueryFindAccessPolicyGroupArgs = {
   policyGroupSid: Scalars['ID'];
 };
+
 
 export type QueryTopLevelOrgsByTypeArgs = {
   orgType: OrgType;
 };
 
+
 export type QueryOrgByIdArgs = {
   orgSid?: Maybe<Scalars['ID']>;
   orgId: Scalars['String'];
 };
+
 
 export type QueryDirectOrganizationsArgs = {
   orgSid: Scalars['ID'];
@@ -1443,13 +1520,16 @@ export type QueryDirectOrganizationsArgs = {
   pageableInput?: Maybe<PageableInput>;
 };
 
+
 export type QueryOrganizationFormArgs = {
   orgOwnerSid: Scalars['ID'];
 };
 
+
 export type QueryFindOrganizationArgs = {
   orgSid: Scalars['ID'];
 };
+
 
 export type QuerySearchOrganizationsArgs = {
   searchText: Scalars['String'];
@@ -1458,54 +1538,66 @@ export type QuerySearchOrganizationsArgs = {
   pageableInput?: Maybe<PageableInput>;
 };
 
+
 export type QueryOrganizationQuickSearchArgs = {
   searchText: Scalars['String'];
   orgOwnerSid: Scalars['ID'];
 };
+
 
 export type QueryVendorQuickSearchArgs = {
   orgOwnerSid: Scalars['ID'];
   searchText: Scalars['String'];
 };
 
+
 export type QueryDashThemeColorForOrgArgs = {
   ownedInput?: Maybe<OwnedInput>;
   pageableInput?: Maybe<PageableInput>;
 };
 
+
 export type QueryDashSiteForOrgArgs = {
   orgSidInput?: Maybe<OrgSidInput>;
 };
+
 
 export type QueryDashThemeColorArgs = {
   ownedInputSid?: Maybe<OwnedInputSid>;
 };
 
+
 export type QueryDashThemeColorByNameArgs = {
   ownedInputName?: Maybe<OwnedInputName>;
 };
+
 
 export type QueryDefaultDashThemeForSiteArgs = {
   ownedInput?: Maybe<OwnedInput>;
 };
 
+
 export type QueryDefaultDashThemeForSitePageArgs = {
   ownedInput?: Maybe<OwnedInput>;
 };
+
 
 export type QueryNavigateToNewDomainArgs = {
   domainNavInput?: Maybe<DomainNavInput>;
 };
 
+
 export type QueryPasswordRulesFormArgs = {
   orgSid: Scalars['ID'];
 };
+
 
 export type QueryPasswordValidationArgs = {
   orgSid: Scalars['ID'];
   userSid: Scalars['ID'];
   password: Scalars['String'];
 };
+
 
 export type QueryXpsftpTestArgs = {
   orgSid?: Maybe<Scalars['ID']>;
@@ -1607,7 +1699,7 @@ export type RequiredPasswordRuleSetInput = {
 
 export enum RestartReason {
   Internal = 'INTERNAL',
-  External = 'EXTERNAL',
+  External = 'EXTERNAL'
 }
 
 export type SftpConfigSubscriptionResponse = {
@@ -1652,7 +1744,7 @@ export enum SchedOccurStatusEnum {
   ErroredCloseToSchedule = 'ERRORED_CLOSE_TO_SCHEDULE',
   ExchangeHeld = 'EXCHANGE_HELD',
   ExchangeHeldOffSchedule = 'EXCHANGE_HELD_OFF_SCHEDULE',
-  NotScheduled = 'NOT_SCHEDULED',
+  NotScheduled = 'NOT_SCHEDULED'
 }
 
 export type ScheduleOccurrence = {
@@ -1694,7 +1786,7 @@ export type SidsInput = {
 
 export enum SortDirection {
   Asc = 'ASC',
-  Desc = 'DESC',
+  Desc = 'DESC'
 }
 
 export type SortOrderInput = {
@@ -1746,6 +1838,7 @@ export type Subscription = {
   ftpTest?: Maybe<SftpConfigSubscriptionResponse>;
 };
 
+
 export type SubscriptionFtpTestArgs = {
   xpsftp: XsftpInput;
   genTestFile?: Maybe<SftpTestGenerateTestFile>;
@@ -1753,13 +1846,13 @@ export type SubscriptionFtpTestArgs = {
 
 export enum ThemeColorMode {
   Light = 'LIGHT',
-  Dark = 'DARK',
+  Dark = 'DARK'
 }
 
 export enum ThemeFontSize {
   Small = 'SMALL',
   Medium = 'MEDIUM',
-  Large = 'LARGE',
+  Large = 'LARGE'
 }
 
 export type TokenUser = {
@@ -2047,7 +2140,7 @@ export enum UserAccountAuditEvent {
   LoginFail = 'LOGIN_FAIL',
   InactiveLoginAttempt = 'INACTIVE_LOGIN_ATTEMPT',
   LockedLoginAttempt = 'LOCKED_LOGIN_ATTEMPT',
-  Logout = 'LOGOUT',
+  Logout = 'LOGOUT'
 }
 
 export type UserAccountAuditLog = {
@@ -2235,7 +2328,7 @@ export enum WorkPacketCommandType {
   Rename = 'RENAME',
   Reprocess = 'REPROCESS',
   Resend = 'RESEND',
-  Delete = 'DELETE',
+  Delete = 'DELETE'
 }
 
 export type WorkPacketStatus = {
@@ -2327,18 +2420,18 @@ export enum WorkStatus {
   Canceled = 'CANCELED',
   QualityCheckFailed = 'QUALITY_CHECK_FAILED',
   NoRecords = 'NO_RECORDS',
-  TechMigrationCheckFailed = 'TECH_MIGRATION_CHECK_FAILED',
+  TechMigrationCheckFailed = 'TECH_MIGRATION_CHECK_FAILED'
 }
 
 export enum WorkStep {
   EnqueueExtract = 'ENQUEUE_EXTRACT',
   TransformExtract = 'TRANSFORM_EXTRACT',
-  TransmitFile = 'TRANSMIT_FILE',
+  TransmitFile = 'TRANSMIT_FILE'
 }
 
 export type WorkStepStatus = {
   __typename?: 'WorkStepStatus';
-  stepStatus?: Maybe<Scalars['String']>;
+  stepStatus?: Maybe<WorkStatus>;
   stepName?: Maybe<Scalars['String']>;
   stepType?: Maybe<Scalars['String']>;
   populationCount?: Maybe<StatCountType>;
@@ -2378,209 +2471,210 @@ export type XsftpInput = {
   stepWise?: Maybe<Scalars['Boolean']>;
 };
 
-export type FragmentStatTypeFragment = { __typename?: 'StatType' } & Pick<
-  StatType,
-  'count' | 'facetTotal' | 'inTolerance' | 'toleranceMsg' | 'hold'
->;
+export type FragmentStatTypeFragment = (
+  { __typename?: 'StatType' }
+  & Pick<StatType, 'count' | 'facetTotal' | 'inTolerance' | 'toleranceMsg' | 'hold'>
+);
 
-export type RecordCountsFragmentFragment = { __typename?: 'RecordCounts' } & Pick<
-  RecordCounts,
-  'totalCount' | 'showUser'
-> & { recordCount?: Maybe<Array<Maybe<{ __typename?: 'RecordCount' } & Pick<RecordCount, 'name' | 'count'>>>> };
+export type RecordCountsFragmentFragment = (
+  { __typename?: 'RecordCounts' }
+  & Pick<RecordCounts, 'totalCount' | 'showUser'>
+  & { recordCount?: Maybe<Array<Maybe<(
+    { __typename?: 'RecordCount' }
+    & Pick<RecordCount, 'name' | 'count'>
+  )>>> }
+);
 
-export type ExtractParameterFragmentFragment = { __typename?: 'ExtractParameter' } & Pick<
-  ExtractParameter,
-  'label' | 'name' | 'value'
->;
+export type ExtractParameterFragmentFragment = (
+  { __typename?: 'ExtractParameter' }
+  & Pick<ExtractParameter, 'label' | 'name' | 'value'>
+);
 
-export type FieldCreationFragmentFragment = { __typename?: 'FieldCreationEvent' } & Pick<
-  FieldCreationEvent,
-  'message' | 'name' | 'id' | 'value' | 'rawValue' | 'type'
->;
+export type FieldCreationFragmentFragment = (
+  { __typename?: 'FieldCreationEvent' }
+  & Pick<FieldCreationEvent, 'message' | 'name' | 'id' | 'value' | 'rawValue' | 'type'>
+);
 
-export type FragmentDashboardPeriodCountsFragment = { __typename?: 'DashboardPeriodCounts' } & Pick<
-  DashboardPeriodCounts,
-  'showCountsByPlanSponsor' | 'showCountsByFile' | 'transmissionCount' | 'billingUnitCount' | 'processErrorCount'
-> & {
-    vendorTransmissions?: Maybe<
-      Array<
-        Maybe<
-          { __typename?: 'DashboardPeriodCount' } & Pick<
-            DashboardPeriodCount,
-            'name' | 'secondaryDescr' | 'count' | 'total'
-          >
-        >
-      >
-    >;
-    vendorTransmissionsBySpec?: Maybe<
-      Array<
-        Maybe<
-          { __typename?: 'DashboardPeriodCount' } & Pick<
-            DashboardPeriodCount,
-            'name' | 'secondaryDescr' | 'count' | 'total'
-          >
-        >
-      >
-    >;
-    planSponsorTransmissions?: Maybe<
-      Array<
-        Maybe<
-          { __typename?: 'DashboardPeriodCount' } & Pick<
-            DashboardPeriodCount,
-            'name' | 'secondaryDescr' | 'count' | 'total'
-          >
-        >
-      >
-    >;
-    fileTransmissions?: Maybe<
-      Array<
-        Maybe<
-          { __typename?: 'DashboardPeriodCount' } & Pick<
-            DashboardPeriodCount,
-            'name' | 'secondaryDescr' | 'count' | 'total'
-          >
-        >
-      >
-    >;
-    vendorProcessErrors?: Maybe<
-      Array<
-        Maybe<
-          { __typename?: 'DashboardPeriodCount' } & Pick<
-            DashboardPeriodCount,
-            'name' | 'secondaryDescr' | 'count' | 'total'
-          >
-        >
-      >
-    >;
-    planSponsorProcessErrors?: Maybe<
-      Array<
-        Maybe<
-          { __typename?: 'DashboardPeriodCount' } & Pick<
-            DashboardPeriodCount,
-            'name' | 'secondaryDescr' | 'count' | 'total'
-          >
-        >
-      >
-    >;
-    fileProcessErrors?: Maybe<
-      Array<
-        Maybe<
-          { __typename?: 'DashboardPeriodCount' } & Pick<
-            DashboardPeriodCount,
-            'name' | 'secondaryDescr' | 'count' | 'total'
-          >
-        >
-      >
-    >;
-  };
+export type FragmentDashboardPeriodCountsFragment = (
+  { __typename?: 'DashboardPeriodCounts' }
+  & Pick<DashboardPeriodCounts, 'showCountsByPlanSponsor' | 'showCountsByFile' | 'transmissionCount' | 'billingUnitCount' | 'processErrorCount'>
+  & { vendorTransmissions?: Maybe<Array<Maybe<(
+    { __typename?: 'DashboardPeriodCount' }
+    & Pick<DashboardPeriodCount, 'name' | 'secondaryDescr' | 'count' | 'total'>
+  )>>>, vendorTransmissionsBySpec?: Maybe<Array<Maybe<(
+    { __typename?: 'DashboardPeriodCount' }
+    & Pick<DashboardPeriodCount, 'name' | 'secondaryDescr' | 'count' | 'total'>
+  )>>>, planSponsorTransmissions?: Maybe<Array<Maybe<(
+    { __typename?: 'DashboardPeriodCount' }
+    & Pick<DashboardPeriodCount, 'name' | 'secondaryDescr' | 'count' | 'total'>
+  )>>>, fileTransmissions?: Maybe<Array<Maybe<(
+    { __typename?: 'DashboardPeriodCount' }
+    & Pick<DashboardPeriodCount, 'name' | 'secondaryDescr' | 'count' | 'total'>
+  )>>>, vendorProcessErrors?: Maybe<Array<Maybe<(
+    { __typename?: 'DashboardPeriodCount' }
+    & Pick<DashboardPeriodCount, 'name' | 'secondaryDescr' | 'count' | 'total'>
+  )>>>, planSponsorProcessErrors?: Maybe<Array<Maybe<(
+    { __typename?: 'DashboardPeriodCount' }
+    & Pick<DashboardPeriodCount, 'name' | 'secondaryDescr' | 'count' | 'total'>
+  )>>>, fileProcessErrors?: Maybe<Array<Maybe<(
+    { __typename?: 'DashboardPeriodCount' }
+    & Pick<DashboardPeriodCount, 'name' | 'secondaryDescr' | 'count' | 'total'>
+  )>>> }
+);
 
-export type EnrollmentStatFragmentFragment = { __typename?: 'EnrollmentStat' } & {
-  insuredStat?: Maybe<{ __typename?: 'InsuredStat' } & InsuredStatFragmentFragment>;
-  excludedInsuredStat?: Maybe<{ __typename?: 'InsuredStat' } & InsuredStatFragmentFragment>;
-  excludedPlanInsuredStat?: Maybe<Array<Maybe<{ __typename?: 'PlanInsuredStat' } & PlanInsuredStatFragmentFragment>>>;
-  planInsuredStat?: Maybe<Array<Maybe<{ __typename?: 'PlanInsuredStat' } & PlanInsuredStatFragmentFragment>>>;
-};
+export type EnrollmentStatFragmentFragment = (
+  { __typename?: 'EnrollmentStat' }
+  & { insuredStat?: Maybe<(
+    { __typename?: 'InsuredStat' }
+    & InsuredStatFragmentFragment
+  )>, excludedInsuredStat?: Maybe<(
+    { __typename?: 'InsuredStat' }
+    & InsuredStatFragmentFragment
+  )>, excludedPlanInsuredStat?: Maybe<Array<Maybe<(
+    { __typename?: 'PlanInsuredStat' }
+    & PlanInsuredStatFragmentFragment
+  )>>>, planInsuredStat?: Maybe<Array<Maybe<(
+    { __typename?: 'PlanInsuredStat' }
+    & PlanInsuredStatFragmentFragment
+  )>>> }
+);
 
-export type InsuredStatFragmentFragment = { __typename?: 'InsuredStat' } & {
-  subscribers?: Maybe<{ __typename?: 'InsuredStatCount' } & InsuredStatCountFragmentFragment>;
-  dependents?: Maybe<{ __typename?: 'InsuredStatCount' } & InsuredStatCountFragmentFragment>;
-};
+export type InsuredStatFragmentFragment = (
+  { __typename?: 'InsuredStat' }
+  & { subscribers?: Maybe<(
+    { __typename?: 'InsuredStatCount' }
+    & InsuredStatCountFragmentFragment
+  )>, dependents?: Maybe<(
+    { __typename?: 'InsuredStatCount' }
+    & InsuredStatCountFragmentFragment
+  )> }
+);
 
-export type PlanInsuredStatFragmentFragment = { __typename?: 'PlanInsuredStat' } & Pick<
-  PlanInsuredStat,
-  'planCode' | 'planType'
-> & {
-    subscribers?: Maybe<{ __typename?: 'InsuredStatCount' } & InsuredStatCountFragmentFragment>;
-    dependents?: Maybe<{ __typename?: 'InsuredStatCount' } & InsuredStatCountFragmentFragment>;
-  };
+export type PlanInsuredStatFragmentFragment = (
+  { __typename?: 'PlanInsuredStat' }
+  & Pick<PlanInsuredStat, 'planCode' | 'planType'>
+  & { subscribers?: Maybe<(
+    { __typename?: 'InsuredStatCount' }
+    & InsuredStatCountFragmentFragment
+  )>, dependents?: Maybe<(
+    { __typename?: 'InsuredStatCount' }
+    & InsuredStatCountFragmentFragment
+  )> }
+);
 
-export type InsuredStatCountFragmentFragment = { __typename?: 'InsuredStatCount' } & Pick<
-  InsuredStatCount,
-  'expectedTotal' | 'inTolerance' | 'toleranceMsg' | 'hold'
-> & {
-    active?: Maybe<{ __typename?: 'StatInt' } & StatInFragmentFragment>;
-    ended?: Maybe<{ __typename?: 'StatInt' } & StatInFragmentFragment>;
-  };
+export type InsuredStatCountFragmentFragment = (
+  { __typename?: 'InsuredStatCount' }
+  & Pick<InsuredStatCount, 'expectedTotal' | 'inTolerance' | 'toleranceMsg' | 'hold'>
+  & { active?: Maybe<(
+    { __typename?: 'StatInt' }
+    & StatInFragmentFragment
+  )>, ended?: Maybe<(
+    { __typename?: 'StatInt' }
+    & StatInFragmentFragment
+  )> }
+);
 
-export type StatInFragmentFragment = { __typename?: 'StatInt' } & Pick<StatInt, 'prior' | 'value'>;
+export type StatInFragmentFragment = (
+  { __typename?: 'StatInt' }
+  & Pick<StatInt, 'prior' | 'value'>
+);
 
-export type FragmentWebPageFragment = { __typename?: 'WebPage' } & Pick<WebPage, 'type'> & {
-    parameters?: Maybe<
-      Array<
-        Maybe<
-          ({ __typename?: 'NVPStr' } & UnionNvp_NvpStr_Fragment) | ({ __typename?: 'NVPId' } & UnionNvp_NvpId_Fragment)
-        >
-      >
-    >;
-    commands?: Maybe<
-      Array<
-        Maybe<
-          { __typename?: 'WebNav' } & Pick<WebNav, 'label' | 'appDomain'> & {
-              page?: Maybe<
-                { __typename?: 'WebPage' } & Pick<WebPage, 'type'> & {
-                    parameters?: Maybe<
-                      Array<
-                        Maybe<
-                          | ({ __typename?: 'NVPStr' } & UnionNvp_NvpStr_Fragment)
-                          | ({ __typename?: 'NVPId' } & UnionNvp_NvpId_Fragment)
-                        >
-                      >
-                    >;
-                  }
-              >;
-            }
-        >
-      >
-    >;
-    pivots?: Maybe<Array<Maybe<{ __typename?: 'WebPivot' } & Pick<WebPivot, 'label' | 'type'>>>>;
-  };
+export type FragmentWebPageFragment = (
+  { __typename?: 'WebPage' }
+  & Pick<WebPage, 'type'>
+  & { parameters?: Maybe<Array<Maybe<(
+    { __typename?: 'NVPStr' }
+    & UnionNvp_NvpStr_Fragment
+  ) | (
+    { __typename?: 'NVPId' }
+    & UnionNvp_NvpId_Fragment
+  )>>>, commands?: Maybe<Array<Maybe<(
+    { __typename?: 'WebNav' }
+    & Pick<WebNav, 'label' | 'appDomain'>
+    & { page?: Maybe<(
+      { __typename?: 'WebPage' }
+      & Pick<WebPage, 'type'>
+      & { parameters?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>>> }
+    )> }
+  )>>>, pivots?: Maybe<Array<Maybe<(
+    { __typename?: 'WebPivot' }
+    & Pick<WebPivot, 'label' | 'type'>
+  )>>> }
+);
 
-export type FragmentWebNavFragment = { __typename?: 'WebNav' } & Pick<WebNav, 'orgId' | 'label' | 'appDomain'> & {
-    page?: Maybe<{ __typename?: 'WebPage' } & FragmentWebPageFragment>;
-  };
+export type FragmentWebNavFragment = (
+  { __typename?: 'WebNav' }
+  & Pick<WebNav, 'orgId' | 'label' | 'appDomain'>
+  & { page?: Maybe<(
+    { __typename?: 'WebPage' }
+    & FragmentWebPageFragment
+  )> }
+);
 
-type UnionNvp_NvpStr_Fragment = { __typename: 'NVPStr' } & Pick<NvpStr, 'name'> & { strValue: NvpStr['value'] };
+type UnionNvp_NvpStr_Fragment = (
+  { __typename: 'NVPStr' }
+  & Pick<NvpStr, 'name'>
+  & { strValue: NvpStr['value'] }
+);
 
-type UnionNvp_NvpId_Fragment = { __typename: 'NVPId' } & Pick<NvpId, 'name'> & { idValue: NvpId['value'] };
+type UnionNvp_NvpId_Fragment = (
+  { __typename: 'NVPId' }
+  & Pick<NvpId, 'name'>
+  & { idValue: NvpId['value'] }
+);
 
 export type UnionNvpFragment = UnionNvp_NvpStr_Fragment | UnionNvp_NvpId_Fragment;
 
-export type FragmentAccessPolicyFragment = { __typename?: 'AccessPolicy' } & Pick<
-  AccessPolicy,
-  'sid' | 'name' | 'permissions' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes'
->;
+export type FragmentAccessPolicyFragment = (
+  { __typename?: 'AccessPolicy' }
+  & Pick<AccessPolicy, 'sid' | 'name' | 'permissions' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes'>
+);
 
-export type FragmentWebCommandFragment = { __typename?: 'WebCommand' } & Pick<
-  WebCommand,
-  'endPoint' | 'label' | 'commandType'
-> & { parameters?: Maybe<Array<Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>>>> };
+export type FragmentWebCommandFragment = (
+  { __typename?: 'WebCommand' }
+  & Pick<WebCommand, 'endPoint' | 'label' | 'commandType'>
+  & { parameters?: Maybe<Array<Maybe<(
+    { __typename?: 'NVPStr' }
+    & Pick<NvpStr, 'name' | 'value'>
+  )>>> }
+);
 
-export type FragmentWorkPacketCommandFragment = { __typename?: 'WorkPacketCommand' } & Pick<
-  WorkPacketCommand,
-  'label' | 'commandType'
->;
+export type FragmentWorkPacketCommandFragment = (
+  { __typename?: 'WorkPacketCommand' }
+  & Pick<WorkPacketCommand, 'label' | 'commandType'>
+);
 
-export type FragmentPaginationInfoFragment = { __typename?: 'PaginationInfo' } & Pick<
-  PaginationInfo,
-  'totalPages' | 'totalElements' | 'pageNumber' | 'pageSize'
->;
+export type FragmentPaginationInfoFragment = (
+  { __typename?: 'PaginationInfo' }
+  & Pick<PaginationInfo, 'totalPages' | 'totalElements' | 'pageNumber' | 'pageSize'>
+);
 
-export type VersionQueryVariables = Exact<{ [key: string]: never }>;
+export type VersionQueryVariables = Exact<{ [key: string]: never; }>;
 
-export type VersionQuery = { __typename?: 'Query' } & Pick<Query, 'version'>;
+
+export type VersionQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'version'>
+);
 
 export type VerifyPasswordResetTokenQueryVariables = Exact<{
   token: Scalars['String'];
 }>;
 
-export type VerifyPasswordResetTokenQuery = { __typename?: 'Query' } & {
-  verifyPasswordResetToken?: Maybe<
-    { __typename?: 'PasswordResetTokenResponse' } & Pick<
-      PasswordResetTokenResponse,
-      'orgSid' | 'userSid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'
-    >
-  >;
-};
+
+export type VerifyPasswordResetTokenQuery = (
+  { __typename?: 'Query' }
+  & { verifyPasswordResetToken?: Maybe<(
+    { __typename?: 'PasswordResetTokenResponse' }
+    & Pick<PasswordResetTokenResponse, 'orgSid' | 'userSid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+  )> }
+);
 
 export type ExchangeActivityInProcessQueryVariables = Exact<{
   orgSidInput: OrgSidInput;
@@ -2589,23 +2683,20 @@ export type ExchangeActivityInProcessQueryVariables = Exact<{
   pageableInput: PageableInput;
 }>;
 
-export type ExchangeActivityInProcessQuery = { __typename?: 'Query' } & {
-  exchangeActivityInProcess?: Maybe<
-    { __typename?: 'OrganizationLinkConnection' } & {
-      paginationInfo: { __typename?: 'PaginationInfo' } & FragmentPaginationInfoFragment;
-      nodes?: Maybe<
-        Array<
-          Maybe<
-            { __typename?: 'OrganizationLink' } & Pick<
-              OrganizationLink,
-              'id' | 'orgId' | 'name' | 'type' | 'activityTime'
-            >
-          >
-        >
-      >;
-    }
-  >;
-};
+
+export type ExchangeActivityInProcessQuery = (
+  { __typename?: 'Query' }
+  & { exchangeActivityInProcess?: Maybe<(
+    { __typename?: 'OrganizationLinkConnection' }
+    & { paginationInfo: (
+      { __typename?: 'PaginationInfo' }
+      & FragmentPaginationInfoFragment
+    ), nodes?: Maybe<Array<Maybe<(
+      { __typename?: 'OrganizationLink' }
+      & Pick<OrganizationLink, 'id' | 'orgId' | 'name' | 'type' | 'activityTime'>
+    )>>> }
+  )> }
+);
 
 export type ExchangeActivityTransmittedQueryVariables = Exact<{
   orgSidInput: OrgSidInput;
@@ -2614,23 +2705,20 @@ export type ExchangeActivityTransmittedQueryVariables = Exact<{
   pageableInput: PageableInput;
 }>;
 
-export type ExchangeActivityTransmittedQuery = { __typename?: 'Query' } & {
-  exchangeActivityTransmitted?: Maybe<
-    { __typename?: 'OrganizationLinkConnection' } & {
-      paginationInfo: { __typename?: 'PaginationInfo' } & FragmentPaginationInfoFragment;
-      nodes?: Maybe<
-        Array<
-          Maybe<
-            { __typename?: 'OrganizationLink' } & Pick<
-              OrganizationLink,
-              'id' | 'orgId' | 'name' | 'type' | 'activityTime'
-            >
-          >
-        >
-      >;
-    }
-  >;
-};
+
+export type ExchangeActivityTransmittedQuery = (
+  { __typename?: 'Query' }
+  & { exchangeActivityTransmitted?: Maybe<(
+    { __typename?: 'OrganizationLinkConnection' }
+    & { paginationInfo: (
+      { __typename?: 'PaginationInfo' }
+      & FragmentPaginationInfoFragment
+    ), nodes?: Maybe<Array<Maybe<(
+      { __typename?: 'OrganizationLink' }
+      & Pick<OrganizationLink, 'id' | 'orgId' | 'name' | 'type' | 'activityTime'>
+    )>>> }
+  )> }
+);
 
 export type ExchangeActivityErroredQueryVariables = Exact<{
   orgSidInput: OrgSidInput;
@@ -2639,194 +2727,148 @@ export type ExchangeActivityErroredQueryVariables = Exact<{
   pageableInput: PageableInput;
 }>;
 
-export type ExchangeActivityErroredQuery = { __typename?: 'Query' } & {
-  exchangeActivityErrored?: Maybe<
-    { __typename?: 'OrganizationLinkConnection' } & {
-      paginationInfo: { __typename?: 'PaginationInfo' } & FragmentPaginationInfoFragment;
-      nodes?: Maybe<
-        Array<
-          Maybe<
-            { __typename?: 'OrganizationLink' } & Pick<
-              OrganizationLink,
-              'id' | 'orgId' | 'name' | 'type' | 'activityTime'
-            >
-          >
-        >
-      >;
-    }
-  >;
-};
+
+export type ExchangeActivityErroredQuery = (
+  { __typename?: 'Query' }
+  & { exchangeActivityErrored?: Maybe<(
+    { __typename?: 'OrganizationLinkConnection' }
+    & { paginationInfo: (
+      { __typename?: 'PaginationInfo' }
+      & FragmentPaginationInfoFragment
+    ), nodes?: Maybe<Array<Maybe<(
+      { __typename?: 'OrganizationLink' }
+      & Pick<OrganizationLink, 'id' | 'orgId' | 'name' | 'type' | 'activityTime'>
+    )>>> }
+  )> }
+);
 
 export type WorkPacketStatusDetailsQueryVariables = Exact<{
   orgSid: Scalars['ID'];
   workOrderId: Scalars['String'];
 }>;
 
-export type WorkPacketStatusDetailsQuery = { __typename?: 'Query' } & {
-  workPacketStatusDetails?: Maybe<
-    { __typename?: 'WorkPacketStatusDetails' } & Pick<
-      WorkPacketStatusDetails,
-      | 'workOrderId'
-      | 'inboundFilename'
-      | 'timestamp'
-      | 'orgSid'
-      | 'orgId'
-      | 'orgName'
-      | 'vendorSid'
-      | 'vendorId'
-      | 'vendorName'
-      | 'specId'
-      | 'specImplName'
-      | 'fingerPrint'
-      | 'populationCount'
-      | 'suppressBilling'
-      | 'packetStatus'
-      | 'inboundLabel'
-      | 'outboundLabel'
-      | 'clientFileArchivePath'
-      | 'vendorFileArchivePath'
-      | 'supplementalFilesArchivePaths'
-    > & {
-        deliveredFiles?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'DeliveredFile' } & Pick<
-                DeliveredFile,
-                'filename' | 'fileSizeInBytes' | 'textSizeInBytes' | 'timeDelivered'
-              > & {
-                  ftp?: Maybe<
-                    { __typename?: 'DeliveredFileFTP' } & Pick<
-                      DeliveredFileFtp,
-                      'protocol' | 'host' | 'username' | 'folder' | 'port'
-                    >
-                  >;
-                  kcurl?: Maybe<{ __typename?: 'DeliveredKCURL' } & Pick<DeliveredKcurl, 'url'>>;
-                }
-            >
-          >
-        >;
-        workStepStatus?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'WorkStepStatus' } & Pick<WorkStepStatus, 'stepStatus' | 'stepName' | 'stepType'> & {
-                  populationCount?: Maybe<{ __typename?: 'StatCountType' } & Pick<StatCountType, 'value'>>;
-                  transformedArchiveFile?: Maybe<
-                    { __typename?: 'ArchiveFileType' } & Pick<ArchiveFileType, 'value' | 'label'>
-                  >;
-                  recordCounts?: Maybe<{ __typename?: 'RecordCounts' } & RecordCountsFragmentFragment>;
-                  stepFile?: Maybe<
-                    Array<Maybe<{ __typename?: 'ArchiveFileType' } & Pick<ArchiveFileType, 'value' | 'label'>>>
-                  >;
-                  nvp?: Maybe<Array<Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>>>>;
-                }
-            >
-          >
-        >;
-        extractParameters?: Maybe<
-          { __typename?: 'ExtractParameters' } & {
-            originalParameter?: Maybe<
-              Array<Maybe<{ __typename?: 'ExtractParameter' } & ExtractParameterFragmentFragment>>
-            >;
-            overriddenParameter?: Maybe<
-              Array<Maybe<{ __typename?: 'ExtractParameter' } & ExtractParameterFragmentFragment>>
-            >;
-            derivedParameter?: Maybe<
-              Array<Maybe<{ __typename?: 'ExtractParameter' } & ExtractParameterFragmentFragment>>
-            >;
-          }
-        >;
-        qualityChecks?: Maybe<
-          { __typename?: 'QualityChecks' } & Pick<
-            QualityChecks,
-            | 'totalRecordCount'
-            | 'fieldCreationWarningCount'
-            | 'fieldCreationErrorCount'
-            | 'fieldCreationInfoCount'
-            | 'hasMoreEvents'
-          > & {
-              sequenceCreationEvent?: Maybe<
-                Array<
-                  Maybe<
-                    { __typename?: 'SequenceCreationEvent' } & Pick<SequenceCreationEvent, 'context' | 'unitId'> & {
-                        recordCreationEvent?: Maybe<
-                          Array<
-                            Maybe<
-                              { __typename?: 'RecordCreationEvent' } & Pick<
-                                RecordCreationEvent,
-                                'context' | 'outerContext' | 'unitId'
-                              > & {
-                                  error?: Maybe<
-                                    Array<Maybe<{ __typename?: 'FieldCreationEvent' } & FieldCreationFragmentFragment>>
-                                  >;
-                                  warning?: Maybe<
-                                    Array<Maybe<{ __typename?: 'FieldCreationEvent' } & FieldCreationFragmentFragment>>
-                                  >;
-                                  information?: Maybe<
-                                    Array<Maybe<{ __typename?: 'FieldCreationEvent' } & FieldCreationFragmentFragment>>
-                                  >;
-                                }
-                            >
-                          >
-                        >;
-                      }
-                  >
-                >
-              >;
-              accStructReqError?: Maybe<{ __typename?: 'StatType' } & FragmentStatTypeFragment>;
-              clientSpecificReqError?: Maybe<{ __typename?: 'StatType' } & FragmentStatTypeFragment>;
-              accStructTruncError?: Maybe<{ __typename?: 'StatType' } & FragmentStatTypeFragment>;
-              reqError?: Maybe<{ __typename?: 'StatType' } & FragmentStatTypeFragment>;
-              truncError?: Maybe<{ __typename?: 'StatType' } & FragmentStatTypeFragment>;
-              codeListMappingError?: Maybe<{ __typename?: 'StatType' } & FragmentStatTypeFragment>;
-            }
-        >;
-        enrollmentStats?: Maybe<{ __typename?: 'EnrollmentStat' } & EnrollmentStatFragmentFragment>;
-        inboundEnrollmentStats?: Maybe<{ __typename?: 'EnrollmentStat' } & EnrollmentStatFragmentFragment>;
-        outboundEnrollmentStats?: Maybe<{ __typename?: 'EnrollmentStat' } & EnrollmentStatFragmentFragment>;
-        outboundRecordCounts?: Maybe<{ __typename?: 'RecordCounts' } & RecordCountsFragmentFragment>;
-        commands?: Maybe<Array<Maybe<{ __typename?: 'WorkPacketCommand' } & FragmentWorkPacketCommandFragment>>>;
-      }
-  >;
-};
+
+export type WorkPacketStatusDetailsQuery = (
+  { __typename?: 'Query' }
+  & { workPacketStatusDetails?: Maybe<(
+    { __typename?: 'WorkPacketStatusDetails' }
+    & Pick<WorkPacketStatusDetails, 'workOrderId' | 'inboundFilename' | 'timestamp' | 'orgSid' | 'orgId' | 'orgName' | 'vendorSid' | 'vendorId' | 'vendorName' | 'specId' | 'specImplName' | 'fingerPrint' | 'populationCount' | 'suppressBilling' | 'packetStatus' | 'inboundLabel' | 'outboundLabel' | 'clientFileArchivePath' | 'vendorFileArchivePath' | 'supplementalFilesArchivePaths'>
+    & { deliveredFiles?: Maybe<Array<Maybe<(
+      { __typename?: 'DeliveredFile' }
+      & Pick<DeliveredFile, 'filename' | 'fileSizeInBytes' | 'textSizeInBytes' | 'timeDelivered'>
+      & { ftp?: Maybe<(
+        { __typename?: 'DeliveredFileFTP' }
+        & Pick<DeliveredFileFtp, 'protocol' | 'host' | 'username' | 'folder' | 'port'>
+      )>, kcurl?: Maybe<(
+        { __typename?: 'DeliveredKCURL' }
+        & Pick<DeliveredKcurl, 'url'>
+      )> }
+    )>>>, workStepStatus?: Maybe<Array<Maybe<(
+      { __typename?: 'WorkStepStatus' }
+      & Pick<WorkStepStatus, 'stepStatus' | 'stepName' | 'stepType'>
+      & { populationCount?: Maybe<(
+        { __typename?: 'StatCountType' }
+        & Pick<StatCountType, 'value'>
+      )>, transformedArchiveFile?: Maybe<(
+        { __typename?: 'ArchiveFileType' }
+        & Pick<ArchiveFileType, 'value' | 'label'>
+      )>, recordCounts?: Maybe<(
+        { __typename?: 'RecordCounts' }
+        & RecordCountsFragmentFragment
+      )>, stepFile?: Maybe<Array<Maybe<(
+        { __typename?: 'ArchiveFileType' }
+        & Pick<ArchiveFileType, 'value' | 'label'>
+      )>>>, nvp?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
+    )>>>, extractParameters?: Maybe<(
+      { __typename?: 'ExtractParameters' }
+      & { originalParameter?: Maybe<Array<Maybe<(
+        { __typename?: 'ExtractParameter' }
+        & ExtractParameterFragmentFragment
+      )>>>, overriddenParameter?: Maybe<Array<Maybe<(
+        { __typename?: 'ExtractParameter' }
+        & ExtractParameterFragmentFragment
+      )>>>, derivedParameter?: Maybe<Array<Maybe<(
+        { __typename?: 'ExtractParameter' }
+        & ExtractParameterFragmentFragment
+      )>>> }
+    )>, qualityChecks?: Maybe<(
+      { __typename?: 'QualityChecks' }
+      & Pick<QualityChecks, 'totalRecordCount' | 'fieldCreationWarningCount' | 'fieldCreationErrorCount' | 'fieldCreationInfoCount' | 'hasMoreEvents'>
+      & { sequenceCreationEvent?: Maybe<Array<Maybe<(
+        { __typename?: 'SequenceCreationEvent' }
+        & Pick<SequenceCreationEvent, 'context' | 'unitId'>
+        & { recordCreationEvent?: Maybe<Array<Maybe<(
+          { __typename?: 'RecordCreationEvent' }
+          & Pick<RecordCreationEvent, 'context' | 'outerContext' | 'unitId'>
+          & { error?: Maybe<Array<Maybe<(
+            { __typename?: 'FieldCreationEvent' }
+            & FieldCreationFragmentFragment
+          )>>>, warning?: Maybe<Array<Maybe<(
+            { __typename?: 'FieldCreationEvent' }
+            & FieldCreationFragmentFragment
+          )>>>, information?: Maybe<Array<Maybe<(
+            { __typename?: 'FieldCreationEvent' }
+            & FieldCreationFragmentFragment
+          )>>> }
+        )>>> }
+      )>>>, accStructReqError?: Maybe<(
+        { __typename?: 'StatType' }
+        & FragmentStatTypeFragment
+      )>, clientSpecificReqError?: Maybe<(
+        { __typename?: 'StatType' }
+        & FragmentStatTypeFragment
+      )>, accStructTruncError?: Maybe<(
+        { __typename?: 'StatType' }
+        & FragmentStatTypeFragment
+      )>, reqError?: Maybe<(
+        { __typename?: 'StatType' }
+        & FragmentStatTypeFragment
+      )>, truncError?: Maybe<(
+        { __typename?: 'StatType' }
+        & FragmentStatTypeFragment
+      )>, codeListMappingError?: Maybe<(
+        { __typename?: 'StatType' }
+        & FragmentStatTypeFragment
+      )> }
+    )>, enrollmentStats?: Maybe<(
+      { __typename?: 'EnrollmentStat' }
+      & EnrollmentStatFragmentFragment
+    )>, inboundEnrollmentStats?: Maybe<(
+      { __typename?: 'EnrollmentStat' }
+      & EnrollmentStatFragmentFragment
+    )>, outboundEnrollmentStats?: Maybe<(
+      { __typename?: 'EnrollmentStat' }
+      & EnrollmentStatFragmentFragment
+    )>, outboundRecordCounts?: Maybe<(
+      { __typename?: 'RecordCounts' }
+      & RecordCountsFragmentFragment
+    )>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WorkPacketCommand' }
+      & FragmentWorkPacketCommandFragment
+    )>>> }
+  )> }
+);
 
 export type WorkPacketStatusQueryVariables = Exact<{
   orgSid: Scalars['ID'];
   workOrderId: Scalars['String'];
 }>;
 
-export type WorkPacketStatusQuery = { __typename?: 'Query' } & {
-  workPacketStatus?: Maybe<
-    { __typename?: 'WorkPacketStatus' } & Pick<
-      WorkPacketStatus,
-      | 'workOrderId'
-      | 'timestamp'
-      | 'orgId'
-      | 'orgSid'
-      | 'detailsPath'
-      | 'inboundFilename'
-      | 'vendorId'
-      | 'vendorSid'
-      | 'step'
-      | 'stepStatus'
-      | 'packetStatus'
-      | 'reprocessedBy'
-      | 'restartReason'
-      | 'recordHighlightCount'
-      | 'populationCount'
-      | 'recordHighlightType'
-      | 'clientFileArchivePath'
-      | 'vendorFileArchivePath'
-      | 'feedType'
-      | 'inboundDataType'
-      | 'inboundDataSize'
-      | 'version'
-      | 'supplementalFilesArchivePaths'
-      | 'archiveOnly'
-      | 'hasErrors'
-      | 'environment'
-    > & { commands?: Maybe<Array<Maybe<{ __typename?: 'WorkPacketCommand' } & FragmentWorkPacketCommandFragment>>> }
-  >;
-};
+
+export type WorkPacketStatusQuery = (
+  { __typename?: 'Query' }
+  & { workPacketStatus?: Maybe<(
+    { __typename?: 'WorkPacketStatus' }
+    & Pick<WorkPacketStatus, 'workOrderId' | 'timestamp' | 'orgId' | 'orgSid' | 'detailsPath' | 'inboundFilename' | 'vendorId' | 'vendorSid' | 'step' | 'stepStatus' | 'packetStatus' | 'reprocessedBy' | 'restartReason' | 'recordHighlightCount' | 'populationCount' | 'recordHighlightType' | 'clientFileArchivePath' | 'vendorFileArchivePath' | 'feedType' | 'inboundDataType' | 'inboundDataSize' | 'version' | 'supplementalFilesArchivePaths' | 'archiveOnly' | 'hasErrors' | 'environment'>
+    & { commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WorkPacketCommand' }
+      & FragmentWorkPacketCommandFragment
+    )>>> }
+  )> }
+);
 
 export type WorkPacketStatusesQueryVariables = Exact<{
   orgSid: Scalars['ID'];
@@ -2835,52 +2877,24 @@ export type WorkPacketStatusesQueryVariables = Exact<{
   pageableInput: PageableInput;
 }>;
 
-export type WorkPacketStatusesQuery = { __typename?: 'Query' } & {
-  workPacketStatuses?: Maybe<
-    { __typename?: 'WorkPacketStatusConnection' } & {
-      paginationInfo: { __typename?: 'PaginationInfo' } & FragmentPaginationInfoFragment;
-      nodes?: Maybe<
-        Array<
-          Maybe<
-            { __typename?: 'WorkPacketStatus' } & Pick<
-              WorkPacketStatus,
-              | 'workOrderId'
-              | 'timestamp'
-              | 'orgId'
-              | 'orgSid'
-              | 'detailsPath'
-              | 'inboundFilename'
-              | 'vendorId'
-              | 'vendorSid'
-              | 'step'
-              | 'stepStatus'
-              | 'packetStatus'
-              | 'reprocessedBy'
-              | 'restartReason'
-              | 'recordHighlightCount'
-              | 'populationCount'
-              | 'recordHighlightType'
-              | 'clientFileArchivePath'
-              | 'vendorFileArchivePath'
-              | 'feedType'
-              | 'inboundDataType'
-              | 'inboundDataSize'
-              | 'version'
-              | 'supplementalFilesArchivePaths'
-              | 'archiveOnly'
-              | 'hasErrors'
-              | 'environment'
-            > & {
-                commands?: Maybe<
-                  Array<Maybe<{ __typename?: 'WorkPacketCommand' } & FragmentWorkPacketCommandFragment>>
-                >;
-              }
-          >
-        >
-      >;
-    }
-  >;
-};
+
+export type WorkPacketStatusesQuery = (
+  { __typename?: 'Query' }
+  & { workPacketStatuses?: Maybe<(
+    { __typename?: 'WorkPacketStatusConnection' }
+    & { paginationInfo: (
+      { __typename?: 'PaginationInfo' }
+      & FragmentPaginationInfoFragment
+    ), nodes?: Maybe<Array<Maybe<(
+      { __typename?: 'WorkPacketStatus' }
+      & Pick<WorkPacketStatus, 'workOrderId' | 'timestamp' | 'orgId' | 'orgSid' | 'detailsPath' | 'inboundFilename' | 'vendorId' | 'vendorSid' | 'step' | 'stepStatus' | 'packetStatus' | 'reprocessedBy' | 'restartReason' | 'recordHighlightCount' | 'populationCount' | 'recordHighlightType' | 'clientFileArchivePath' | 'vendorFileArchivePath' | 'feedType' | 'inboundDataType' | 'inboundDataSize' | 'version' | 'supplementalFilesArchivePaths' | 'archiveOnly' | 'hasErrors' | 'environment'>
+      & { commands?: Maybe<Array<Maybe<(
+        { __typename?: 'WorkPacketCommand' }
+        & FragmentWorkPacketCommandFragment
+      )>>> }
+    )>>> }
+  )> }
+);
 
 export type WorkPacketStatusesPollQueryVariables = Exact<{
   orgSid: Scalars['ID'];
@@ -2889,7 +2903,11 @@ export type WorkPacketStatusesPollQueryVariables = Exact<{
   lastUpdated: Scalars['DateTime'];
 }>;
 
-export type WorkPacketStatusesPollQuery = { __typename?: 'Query' } & Pick<Query, 'workPacketStatusesPoll'>;
+
+export type WorkPacketStatusesPollQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'workPacketStatusesPoll'>
+);
 
 export type WpProcessErrorsQueryVariables = Exact<{
   orgSid: Scalars['ID'];
@@ -2898,38 +2916,24 @@ export type WpProcessErrorsQueryVariables = Exact<{
   pageableInput?: Maybe<PageableInput>;
 }>;
 
-export type WpProcessErrorsQuery = { __typename?: 'Query' } & {
-  wpProcessErrors?: Maybe<
-    { __typename?: 'WPProcessErrorConnection' } & {
-      paginationInfo: { __typename?: 'PaginationInfo' } & FragmentPaginationInfoFragment;
-      nodes?: Maybe<
-        Array<
-          Maybe<
-            { __typename?: 'WPProcessError' } & Pick<
-              WpProcessError,
-              | 'id'
-              | 'workOrderId'
-              | 'startTime'
-              | 'stepName'
-              | 'orgSid'
-              | 'planSponsorId'
-              | 'vendorSid'
-              | 'vendorId'
-              | 'msg'
-              | 'inboundFilename'
-              | 'clientFileArchivePath'
-              | 'environment'
-            > & {
-                commands?: Maybe<
-                  Array<Maybe<{ __typename?: 'WorkPacketCommand' } & FragmentWorkPacketCommandFragment>>
-                >;
-              }
-          >
-        >
-      >;
-    }
-  >;
-};
+
+export type WpProcessErrorsQuery = (
+  { __typename?: 'Query' }
+  & { wpProcessErrors?: Maybe<(
+    { __typename?: 'WPProcessErrorConnection' }
+    & { paginationInfo: (
+      { __typename?: 'PaginationInfo' }
+      & FragmentPaginationInfoFragment
+    ), nodes?: Maybe<Array<Maybe<(
+      { __typename?: 'WPProcessError' }
+      & Pick<WpProcessError, 'id' | 'workOrderId' | 'startTime' | 'stepName' | 'orgSid' | 'planSponsorId' | 'vendorSid' | 'vendorId' | 'msg' | 'inboundFilename' | 'clientFileArchivePath' | 'environment'>
+      & { commands?: Maybe<Array<Maybe<(
+        { __typename?: 'WorkPacketCommand' }
+        & FragmentWorkPacketCommandFragment
+      )>>> }
+    )>>> }
+  )> }
+);
 
 export type WpTransmissionsQueryVariables = Exact<{
   orgSid: Scalars['ID'];
@@ -2938,43 +2942,24 @@ export type WpTransmissionsQueryVariables = Exact<{
   pageableInput?: Maybe<PageableInput>;
 }>;
 
-export type WpTransmissionsQuery = { __typename?: 'Query' } & {
-  wpTransmissions?: Maybe<
-    { __typename?: 'WPTransmissionConnection' } & {
-      paginationInfo: { __typename?: 'PaginationInfo' } & FragmentPaginationInfoFragment;
-      nodes?: Maybe<
-        Array<
-          Maybe<
-            { __typename?: 'WPTransmission' } & Pick<
-              WpTransmission,
-              | 'id'
-              | 'workOrderId'
-              | 'deliveredOn'
-              | 'orgSid'
-              | 'planSponsorId'
-              | 'vendorSid'
-              | 'vendorId'
-              | 'specId'
-              | 'implementation'
-              | 'inboundFilename'
-              | 'outboundFilename'
-              | 'outboundFilesize'
-              | 'billingCount'
-              | 'totalRecords'
-              | 'extractType'
-              | 'extractVersion'
-              | 'environment'
-            > & {
-                commands?: Maybe<
-                  Array<Maybe<{ __typename?: 'WorkPacketCommand' } & FragmentWorkPacketCommandFragment>>
-                >;
-              }
-          >
-        >
-      >;
-    }
-  >;
-};
+
+export type WpTransmissionsQuery = (
+  { __typename?: 'Query' }
+  & { wpTransmissions?: Maybe<(
+    { __typename?: 'WPTransmissionConnection' }
+    & { paginationInfo: (
+      { __typename?: 'PaginationInfo' }
+      & FragmentPaginationInfoFragment
+    ), nodes?: Maybe<Array<Maybe<(
+      { __typename?: 'WPTransmission' }
+      & Pick<WpTransmission, 'id' | 'workOrderId' | 'deliveredOn' | 'orgSid' | 'planSponsorId' | 'vendorSid' | 'vendorId' | 'specId' | 'implementation' | 'inboundFilename' | 'outboundFilename' | 'outboundFilesize' | 'billingCount' | 'totalRecords' | 'extractType' | 'extractVersion' | 'environment'>
+      & { commands?: Maybe<Array<Maybe<(
+        { __typename?: 'WorkPacketCommand' }
+        & FragmentWorkPacketCommandFragment
+      )>>> }
+    )>>> }
+  )> }
+);
 
 export type ScheduleOccurrencesQueryVariables = Exact<{
   orgSid: Scalars['ID'];
@@ -2982,134 +2967,85 @@ export type ScheduleOccurrencesQueryVariables = Exact<{
   pageableInput?: Maybe<PageableInput>;
 }>;
 
-export type ScheduleOccurrencesQuery = { __typename?: 'Query' } & {
-  scheduleOccurrences?: Maybe<
-    { __typename?: 'ScheduleOccurrenceConnection' } & {
-      paginationInfo: { __typename?: 'PaginationInfo' } & FragmentPaginationInfoFragment;
-      nodes?: Maybe<
-        Array<
-          Maybe<
-            { __typename?: 'ScheduleOccurrence' } & Pick<
-              ScheduleOccurrence,
-              'resource' | 'scheduleId' | 'timeScheduled' | 'schedOccurStatus'
-            > & {
-                runOccurrences?: Maybe<
-                  Array<
-                    Maybe<
-                      { __typename?: 'ScheduleRunOccurrence' } & Pick<
-                        ScheduleRunOccurrence,
-                        'workOrderId' | 'timeRan' | 'status'
-                      >
-                    >
-                  >
-                >;
-              }
-          >
-        >
-      >;
-    }
-  >;
-};
+
+export type ScheduleOccurrencesQuery = (
+  { __typename?: 'Query' }
+  & { scheduleOccurrences?: Maybe<(
+    { __typename?: 'ScheduleOccurrenceConnection' }
+    & { paginationInfo: (
+      { __typename?: 'PaginationInfo' }
+      & FragmentPaginationInfoFragment
+    ), nodes?: Maybe<Array<Maybe<(
+      { __typename?: 'ScheduleOccurrence' }
+      & Pick<ScheduleOccurrence, 'resource' | 'scheduleId' | 'timeScheduled' | 'schedOccurStatus'>
+      & { runOccurrences?: Maybe<Array<Maybe<(
+        { __typename?: 'ScheduleRunOccurrence' }
+        & Pick<ScheduleRunOccurrence, 'workOrderId' | 'timeRan' | 'status'>
+      )>>> }
+    )>>> }
+  )> }
+);
 
 export type DashboardPeriodsQueryVariables = Exact<{
   orgSid: Scalars['ID'];
 }>;
 
-export type DashboardPeriodsQuery = { __typename?: 'Query' } & {
-  dashboardPeriods?: Maybe<
-    { __typename?: 'DashboardPeriods' } & {
-      dailyCounts?: Maybe<{ __typename?: 'DashboardPeriodCounts' } & FragmentDashboardPeriodCountsFragment>;
-      yesterdayCounts?: Maybe<{ __typename?: 'DashboardPeriodCounts' } & FragmentDashboardPeriodCountsFragment>;
-      monthlyCounts?: Maybe<{ __typename?: 'DashboardPeriodCounts' } & FragmentDashboardPeriodCountsFragment>;
-      lastMonthlyCounts?: Maybe<{ __typename?: 'DashboardPeriodCounts' } & FragmentDashboardPeriodCountsFragment>;
-    }
-  >;
-};
+
+export type DashboardPeriodsQuery = (
+  { __typename?: 'Query' }
+  & { dashboardPeriods?: Maybe<(
+    { __typename?: 'DashboardPeriods' }
+    & { dailyCounts?: Maybe<(
+      { __typename?: 'DashboardPeriodCounts' }
+      & FragmentDashboardPeriodCountsFragment
+    )>, yesterdayCounts?: Maybe<(
+      { __typename?: 'DashboardPeriodCounts' }
+      & FragmentDashboardPeriodCountsFragment
+    )>, monthlyCounts?: Maybe<(
+      { __typename?: 'DashboardPeriodCounts' }
+      & FragmentDashboardPeriodCountsFragment
+    )>, lastMonthlyCounts?: Maybe<(
+      { __typename?: 'DashboardPeriodCounts' }
+      & FragmentDashboardPeriodCountsFragment
+    )> }
+  )> }
+);
 
 export type DashboardPeriodCountsQueryVariables = Exact<{
   orgSid: Scalars['ID'];
   dateRange?: Maybe<DateTimeRangeInput>;
 }>;
 
-export type DashboardPeriodCountsQuery = { __typename?: 'Query' } & {
-  dashboardPeriodCounts?: Maybe<
-    { __typename?: 'DashboardPeriodCounts' } & Pick<
-      DashboardPeriodCounts,
-      'showCountsByPlanSponsor' | 'showCountsByFile' | 'transmissionCount' | 'billingUnitCount' | 'processErrorCount'
-    > & {
-        vendorTransmissions?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'DashboardPeriodCount' } & Pick<
-                DashboardPeriodCount,
-                'name' | 'secondaryDescr' | 'count' | 'total'
-              >
-            >
-          >
-        >;
-        vendorTransmissionsBySpec?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'DashboardPeriodCount' } & Pick<
-                DashboardPeriodCount,
-                'name' | 'secondaryDescr' | 'count' | 'total'
-              >
-            >
-          >
-        >;
-        planSponsorTransmissions?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'DashboardPeriodCount' } & Pick<
-                DashboardPeriodCount,
-                'name' | 'secondaryDescr' | 'count' | 'total'
-              >
-            >
-          >
-        >;
-        fileTransmissions?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'DashboardPeriodCount' } & Pick<
-                DashboardPeriodCount,
-                'name' | 'secondaryDescr' | 'count' | 'total'
-              >
-            >
-          >
-        >;
-        vendorProcessErrors?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'DashboardPeriodCount' } & Pick<
-                DashboardPeriodCount,
-                'name' | 'secondaryDescr' | 'count' | 'total'
-              >
-            >
-          >
-        >;
-        planSponsorProcessErrors?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'DashboardPeriodCount' } & Pick<
-                DashboardPeriodCount,
-                'name' | 'secondaryDescr' | 'count' | 'total'
-              >
-            >
-          >
-        >;
-        fileProcessErrors?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'DashboardPeriodCount' } & Pick<
-                DashboardPeriodCount,
-                'name' | 'secondaryDescr' | 'count' | 'total'
-              >
-            >
-          >
-        >;
-      }
-  >;
-};
+
+export type DashboardPeriodCountsQuery = (
+  { __typename?: 'Query' }
+  & { dashboardPeriodCounts?: Maybe<(
+    { __typename?: 'DashboardPeriodCounts' }
+    & Pick<DashboardPeriodCounts, 'showCountsByPlanSponsor' | 'showCountsByFile' | 'transmissionCount' | 'billingUnitCount' | 'processErrorCount'>
+    & { vendorTransmissions?: Maybe<Array<Maybe<(
+      { __typename?: 'DashboardPeriodCount' }
+      & Pick<DashboardPeriodCount, 'name' | 'secondaryDescr' | 'count' | 'total'>
+    )>>>, vendorTransmissionsBySpec?: Maybe<Array<Maybe<(
+      { __typename?: 'DashboardPeriodCount' }
+      & Pick<DashboardPeriodCount, 'name' | 'secondaryDescr' | 'count' | 'total'>
+    )>>>, planSponsorTransmissions?: Maybe<Array<Maybe<(
+      { __typename?: 'DashboardPeriodCount' }
+      & Pick<DashboardPeriodCount, 'name' | 'secondaryDescr' | 'count' | 'total'>
+    )>>>, fileTransmissions?: Maybe<Array<Maybe<(
+      { __typename?: 'DashboardPeriodCount' }
+      & Pick<DashboardPeriodCount, 'name' | 'secondaryDescr' | 'count' | 'total'>
+    )>>>, vendorProcessErrors?: Maybe<Array<Maybe<(
+      { __typename?: 'DashboardPeriodCount' }
+      & Pick<DashboardPeriodCount, 'name' | 'secondaryDescr' | 'count' | 'total'>
+    )>>>, planSponsorProcessErrors?: Maybe<Array<Maybe<(
+      { __typename?: 'DashboardPeriodCount' }
+      & Pick<DashboardPeriodCount, 'name' | 'secondaryDescr' | 'count' | 'total'>
+    )>>>, fileProcessErrors?: Maybe<Array<Maybe<(
+      { __typename?: 'DashboardPeriodCount' }
+      & Pick<DashboardPeriodCount, 'name' | 'secondaryDescr' | 'count' | 'total'>
+    )>>> }
+  )> }
+);
 
 export type UsersForOrgQueryVariables = Exact<{
   orgSid: Scalars['ID'];
@@ -3117,406 +3053,249 @@ export type UsersForOrgQueryVariables = Exact<{
   pageableInput?: Maybe<PageableInput>;
 }>;
 
-export type UsersForOrgQuery = { __typename?: 'Query' } & {
-  usersForOrg?: Maybe<
-    { __typename?: 'UserConnection' } & {
-      paginationInfo: { __typename?: 'PaginationInfo' } & FragmentPaginationInfoFragment;
-      listPageInfo?: Maybe<
-        { __typename?: 'ListPageInfo' } & Pick<ListPageInfo, 'pageHeaderLabel'> & {
-            pageCommands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-            listItemCommands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-            listItemBulkCommands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-          }
-      >;
-      nodes?: Maybe<
-        Array<
-          Maybe<
-            { __typename?: 'UserItem' } & {
-              item: { __typename?: 'UserAccount' } & Pick<UserAccount, 'sid' | 'email'> & {
-                  person?: Maybe<{ __typename?: 'Person' } & Pick<Person, 'sid' | 'firstNm' | 'lastNm'>>;
-                  accessPolicyGroups?: Maybe<
-                    Array<
-                      Maybe<
-                        { __typename?: 'AccessPolicyGroup' } & Pick<
-                          AccessPolicyGroup,
-                          'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes'
-                        > & {
-                            policies?: Maybe<
-                              Array<Maybe<{ __typename?: 'AccessPolicy' } & FragmentAccessPolicyFragment>>
-                            >;
-                          }
-                      >
-                    >
-                  >;
-                };
-              listItemCommands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-            }
-          >
-        >
-      >;
-    }
-  >;
-};
 
-export type CurrentUserQueryVariables = Exact<{ [key: string]: never }>;
+export type UsersForOrgQuery = (
+  { __typename?: 'Query' }
+  & { usersForOrg?: Maybe<(
+    { __typename?: 'UserConnection' }
+    & { paginationInfo: (
+      { __typename?: 'PaginationInfo' }
+      & FragmentPaginationInfoFragment
+    ), listPageInfo?: Maybe<(
+      { __typename?: 'ListPageInfo' }
+      & Pick<ListPageInfo, 'pageHeaderLabel'>
+      & { pageCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>>, listItemCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>>, listItemBulkCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>> }
+    )>, nodes?: Maybe<Array<Maybe<(
+      { __typename?: 'UserItem' }
+      & { item: (
+        { __typename?: 'UserAccount' }
+        & Pick<UserAccount, 'sid' | 'email'>
+        & { person?: Maybe<(
+          { __typename?: 'Person' }
+          & Pick<Person, 'sid' | 'firstNm' | 'lastNm'>
+        )>, accessPolicyGroups?: Maybe<Array<Maybe<(
+          { __typename?: 'AccessPolicyGroup' }
+          & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes'>
+          & { policies?: Maybe<Array<Maybe<(
+            { __typename?: 'AccessPolicy' }
+            & FragmentAccessPolicyFragment
+          )>>> }
+        )>>> }
+      ), listItemCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>> }
+    )>>> }
+  )> }
+);
 
-export type CurrentUserQuery = { __typename?: 'Query' } & {
-  currentUser?: Maybe<
-    { __typename?: 'CurrentUserInfo' } & Pick<CurrentUserInfo, 'loggedIn'> & {
-        domain?: Maybe<
-          { __typename?: 'WebAppDomain' } & Pick<WebAppDomain, 'type' | 'selectedPage'> & {
-              navItems?: Maybe<Array<Maybe<{ __typename?: 'WebNav' } & FragmentWebNavFragment>>>;
-            }
-        >;
-        tokenUser?: Maybe<
-          { __typename?: 'TokenUser' } & Pick<TokenUser, 'token'> & {
-              session?: Maybe<
-                { __typename?: 'UserSession' } & Pick<
-                  UserSession,
-                  'id' | 'orgId' | 'orgSid' | 'orgName' | 'userId' | 'firstNm' | 'pollInterval' | 'defaultAuthorities'
-                >
-              >;
-            }
-        >;
-      }
-  >;
-};
+export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CurrentUserQuery = (
+  { __typename?: 'Query' }
+  & { currentUser?: Maybe<(
+    { __typename?: 'CurrentUserInfo' }
+    & Pick<CurrentUserInfo, 'loggedIn'>
+    & { domain?: Maybe<(
+      { __typename?: 'WebAppDomain' }
+      & Pick<WebAppDomain, 'type' | 'selectedPage'>
+      & { navItems?: Maybe<Array<Maybe<(
+        { __typename?: 'WebNav' }
+        & FragmentWebNavFragment
+      )>>> }
+    )>, tokenUser?: Maybe<(
+      { __typename?: 'TokenUser' }
+      & Pick<TokenUser, 'token'>
+      & { session?: Maybe<(
+        { __typename?: 'UserSession' }
+        & Pick<UserSession, 'id' | 'orgId' | 'orgSid' | 'orgName' | 'userId' | 'firstNm' | 'pollInterval' | 'defaultAuthorities'>
+      )> }
+    )> }
+  )> }
+);
 
 export type CurrentOrgNavQueryVariables = Exact<{
   orgInput?: Maybe<OrgSidInput>;
 }>;
 
-export type CurrentOrgNavQuery = { __typename?: 'Query' } & {
-  currentOrgNav?: Maybe<
-    { __typename?: 'WebNav' } & Pick<WebNav, 'orgId' | 'label' | 'appDomain'> & {
-        page?: Maybe<{ __typename?: 'WebPage' } & FragmentWebPageFragment>;
-        subNavItems?: Maybe<Array<Maybe<{ __typename?: 'WebNav' } & FragmentWebNavFragment>>>;
-      }
-  >;
-};
+
+export type CurrentOrgNavQuery = (
+  { __typename?: 'Query' }
+  & { currentOrgNav?: Maybe<(
+    { __typename?: 'WebNav' }
+    & Pick<WebNav, 'orgId' | 'label' | 'appDomain'>
+    & { page?: Maybe<(
+      { __typename?: 'WebPage' }
+      & FragmentWebPageFragment
+    )>, subNavItems?: Maybe<Array<Maybe<(
+      { __typename?: 'WebNav' }
+      & FragmentWebNavFragment
+    )>>> }
+  )> }
+);
 
 export type UserThemeQueryVariables = Exact<{
   themeColorMode?: Maybe<ThemeColorMode>;
 }>;
 
-export type UserThemeQuery = { __typename?: 'Query' } & {
-  userTheme?: Maybe<
-    { __typename?: 'DashTheme' } & Pick<DashTheme, 'id' | 'themeColorMode' | 'themeFontSize'> & {
-        dashThemeColor?: Maybe<
-          { __typename?: 'DashThemeColor' } & Pick<
-            DashThemeColor,
-            | 'id'
-            | 'defaultPalette'
-            | 'themeColorMode'
-            | 'allowDark'
-            | 'paletteNm'
-            | 'themePrimary'
-            | 'themeLighterAlt'
-            | 'themeLighter'
-            | 'themeLight'
-            | 'themeTertiary'
-            | 'themeSecondary'
-            | 'themeDarkAlt'
-            | 'themeDark'
-            | 'themeDarker'
-            | 'neutralLighterAlt'
-            | 'neutralLighter'
-            | 'neutralLight'
-            | 'neutralQuaternaryAlt'
-            | 'neutralQuaternary'
-            | 'neutralTertiaryAlt'
-            | 'neutralTertiary'
-            | 'neutralSecondary'
-            | 'neutralPrimaryAlt'
-            | 'neutralPrimary'
-            | 'neutralDark'
-            | 'black'
-            | 'white'
-          >
-        >;
-      }
-  >;
-};
+
+export type UserThemeQuery = (
+  { __typename?: 'Query' }
+  & { userTheme?: Maybe<(
+    { __typename?: 'DashTheme' }
+    & Pick<DashTheme, 'id' | 'themeColorMode' | 'themeFontSize'>
+    & { dashThemeColor?: Maybe<(
+      { __typename?: 'DashThemeColor' }
+      & Pick<DashThemeColor, 'id' | 'defaultPalette' | 'themeColorMode' | 'allowDark' | 'paletteNm' | 'themePrimary' | 'themeLighterAlt' | 'themeLighter' | 'themeLight' | 'themeTertiary' | 'themeSecondary' | 'themeDarkAlt' | 'themeDark' | 'themeDarker' | 'neutralLighterAlt' | 'neutralLighter' | 'neutralLight' | 'neutralQuaternaryAlt' | 'neutralQuaternary' | 'neutralTertiaryAlt' | 'neutralTertiary' | 'neutralSecondary' | 'neutralPrimaryAlt' | 'neutralPrimary' | 'neutralDark' | 'black' | 'white'>
+    )> }
+  )> }
+);
 
 export type FindUserByEmailQueryVariables = Exact<{
   userEmail: Scalars['String'];
 }>;
 
-export type FindUserByEmailQuery = { __typename?: 'Query' } & {
-  findUserByEmail?: Maybe<
-    { __typename?: 'UserAccount' } & Pick<UserAccount, 'sid' | 'email'> & {
-        person?: Maybe<{ __typename?: 'Person' } & Pick<Person, 'sid' | 'firstNm' | 'lastNm'>>;
-        accessPolicyGroups?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'AccessPolicyGroup' } & Pick<
-                AccessPolicyGroup,
-                'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes'
-              > & { policies?: Maybe<Array<Maybe<{ __typename?: 'AccessPolicy' } & FragmentAccessPolicyFragment>>> }
-            >
-          >
-        >;
-      }
-  >;
-};
+
+export type FindUserByEmailQuery = (
+  { __typename?: 'Query' }
+  & { findUserByEmail?: Maybe<(
+    { __typename?: 'UserAccount' }
+    & Pick<UserAccount, 'sid' | 'email'>
+    & { person?: Maybe<(
+      { __typename?: 'Person' }
+      & Pick<Person, 'sid' | 'firstNm' | 'lastNm'>
+    )>, accessPolicyGroups?: Maybe<Array<Maybe<(
+      { __typename?: 'AccessPolicyGroup' }
+      & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes'>
+      & { policies?: Maybe<Array<Maybe<(
+        { __typename?: 'AccessPolicy' }
+        & FragmentAccessPolicyFragment
+      )>>> }
+    )>>> }
+  )> }
+);
 
 export type UserAccountFormQueryVariables = Exact<{
   orgSid: Scalars['ID'];
 }>;
 
-export type UserAccountFormQuery = { __typename?: 'Query' } & {
-  userAccountForm?: Maybe<
-    { __typename?: 'UserAccountForm' } & Pick<
-      UserAccountForm,
-      'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'
-    > & {
-        email?: Maybe<
-          { __typename?: 'UIStringField' } & Pick<
-            UiStringField,
-            | 'value'
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'min'
-            | 'max'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          >
-        >;
-        active?: Maybe<
-          { __typename?: 'UIBooleanField' } & Pick<
-            UiBooleanField,
-            'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-          >
-        >;
-        person?: Maybe<
-          { __typename?: 'PersonForm' } & Pick<PersonForm, 'sid' | 'errCode' | 'errMsg' | 'errSeverity'> & {
-              firstNm: { __typename?: 'UIStringField' } & Pick<
-                UiStringField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >;
-              lastNm: { __typename?: 'UIStringField' } & Pick<
-                UiStringField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >;
-            }
-        >;
-        organization: { __typename?: 'UIReadOnlyField' } & Pick<
-          UiReadOnlyField,
-          | 'value'
-          | 'description'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        accessPolicyGroups?: Maybe<
-          { __typename?: 'UISelectManyField' } & Pick<
-            UiSelectManyField,
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'options'
-            | 'query'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          > & { value?: Maybe<Array<Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>>>> }
-        >;
-        sendActivationEmail?: Maybe<
-          { __typename?: 'UIBooleanField' } & Pick<
-            UiBooleanField,
-            'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-          >
-        >;
-        lastLogin?: Maybe<
-          { __typename?: 'UIReadOnlyField' } & Pick<
-            UiReadOnlyField,
-            | 'value'
-            | 'description'
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          >
-        >;
-        commands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-        options?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'UIOptions' } & Pick<UiOptions, 'key'> & {
-                  values?: Maybe<
-                    Array<Maybe<{ __typename?: 'UIOption' } & Pick<UiOption, 'label' | 'value' | 'info'>>>
-                  >;
-                }
-            >
-          >
-        >;
-      }
-  >;
-};
+
+export type UserAccountFormQuery = (
+  { __typename?: 'Query' }
+  & { userAccountForm?: Maybe<(
+    { __typename?: 'UserAccountForm' }
+    & Pick<UserAccountForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { email?: Maybe<(
+      { __typename?: 'UIStringField' }
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, active?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, person?: Maybe<(
+      { __typename?: 'PersonForm' }
+      & Pick<PersonForm, 'sid' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { firstNm: (
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      ), lastNm: (
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      ) }
+    )>, organization: (
+      { __typename?: 'UIReadOnlyField' }
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), accessPolicyGroups?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
+    )>, sendActivationEmail?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, lastLogin?: Maybe<(
+      { __typename?: 'UIReadOnlyField' }
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>>>, options?: Maybe<Array<Maybe<(
+      { __typename?: 'UIOptions' }
+      & Pick<UiOptions, 'key'>
+      & { values?: Maybe<Array<Maybe<(
+        { __typename?: 'UIOption' }
+        & Pick<UiOption, 'label' | 'value' | 'info'>
+      )>>> }
+    )>>> }
+  )> }
+);
 
 export type FindUserAccountQueryVariables = Exact<{
   userSid: Scalars['ID'];
 }>;
 
-export type FindUserAccountQuery = { __typename?: 'Query' } & {
-  findUserAccount?: Maybe<
-    { __typename?: 'UserAccountForm' } & Pick<
-      UserAccountForm,
-      'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'
-    > & {
-        email?: Maybe<
-          { __typename?: 'UIStringField' } & Pick<
-            UiStringField,
-            | 'value'
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'min'
-            | 'max'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          >
-        >;
-        active?: Maybe<
-          { __typename?: 'UIBooleanField' } & Pick<
-            UiBooleanField,
-            'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-          >
-        >;
-        person?: Maybe<
-          { __typename?: 'PersonForm' } & Pick<PersonForm, 'sid' | 'errCode' | 'errMsg' | 'errSeverity'> & {
-              firstNm: { __typename?: 'UIStringField' } & Pick<
-                UiStringField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >;
-              lastNm: { __typename?: 'UIStringField' } & Pick<
-                UiStringField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >;
-            }
-        >;
-        organization: { __typename?: 'UIReadOnlyField' } & Pick<
-          UiReadOnlyField,
-          | 'value'
-          | 'description'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        accessPolicyGroups?: Maybe<
-          { __typename?: 'UISelectManyField' } & Pick<
-            UiSelectManyField,
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'options'
-            | 'query'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          > & { value?: Maybe<Array<Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>>>> }
-        >;
-        sendActivationEmail?: Maybe<
-          { __typename?: 'UIBooleanField' } & Pick<
-            UiBooleanField,
-            'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-          >
-        >;
-        lastLogin?: Maybe<
-          { __typename?: 'UIReadOnlyField' } & Pick<
-            UiReadOnlyField,
-            | 'value'
-            | 'description'
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          >
-        >;
-        commands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-        options?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'UIOptions' } & Pick<UiOptions, 'key'> & {
-                  values?: Maybe<
-                    Array<Maybe<{ __typename?: 'UIOption' } & Pick<UiOption, 'label' | 'value' | 'info'>>>
-                  >;
-                }
-            >
-          >
-        >;
-      }
-  >;
-};
+
+export type FindUserAccountQuery = (
+  { __typename?: 'Query' }
+  & { findUserAccount?: Maybe<(
+    { __typename?: 'UserAccountForm' }
+    & Pick<UserAccountForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { email?: Maybe<(
+      { __typename?: 'UIStringField' }
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, active?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, person?: Maybe<(
+      { __typename?: 'PersonForm' }
+      & Pick<PersonForm, 'sid' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { firstNm: (
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      ), lastNm: (
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      ) }
+    )>, organization: (
+      { __typename?: 'UIReadOnlyField' }
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), accessPolicyGroups?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
+    )>, sendActivationEmail?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, lastLogin?: Maybe<(
+      { __typename?: 'UIReadOnlyField' }
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>>>, options?: Maybe<Array<Maybe<(
+      { __typename?: 'UIOptions' }
+      & Pick<UiOptions, 'key'>
+      & { values?: Maybe<Array<Maybe<(
+        { __typename?: 'UIOption' }
+        & Pick<UiOption, 'label' | 'value' | 'info'>
+      )>>> }
+    )>>> }
+  )> }
+);
 
 export type UserAccountAuditLogsQueryVariables = Exact<{
   orgSid: Scalars['ID'];
@@ -3526,849 +3305,560 @@ export type UserAccountAuditLogsQueryVariables = Exact<{
   pageableInput?: Maybe<PageableInput>;
 }>;
 
-export type UserAccountAuditLogsQuery = { __typename?: 'Query' } & {
-  userAccountAuditLogs?: Maybe<
-    { __typename?: 'UserAccountLogConnection' } & {
-      paginationInfo: { __typename?: 'PaginationInfo' } & FragmentPaginationInfoFragment;
-      listPageInfo?: Maybe<
-        { __typename?: 'ListPageInfo' } & Pick<ListPageInfo, 'pageHeaderLabel'> & {
-            pageCommands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-            listItemCommands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-            listItemBulkCommands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-          }
-      >;
-      nodes?: Maybe<
-        Array<
-          Maybe<
-            { __typename?: 'UserAccountAuditLog' } & Pick<
-              UserAccountAuditLog,
-              'auditDateTime' | 'event' | 'orgSid' | 'oldValue' | 'newValue'
-            > & {
-                userAccount: { __typename?: 'UserAccount' } & Pick<UserAccount, 'sid' | 'email'> & {
-                    person?: Maybe<{ __typename?: 'Person' } & Pick<Person, 'sid' | 'firstNm' | 'lastNm'>>;
-                  };
-                changedByUserAccount?: Maybe<
-                  { __typename?: 'UserAccount' } & Pick<UserAccount, 'sid' | 'email'> & {
-                      person?: Maybe<{ __typename?: 'Person' } & Pick<Person, 'sid' | 'firstNm' | 'lastNm'>>;
-                    }
-                >;
-              }
-          >
-        >
-      >;
-    }
-  >;
-};
+
+export type UserAccountAuditLogsQuery = (
+  { __typename?: 'Query' }
+  & { userAccountAuditLogs?: Maybe<(
+    { __typename?: 'UserAccountLogConnection' }
+    & { paginationInfo: (
+      { __typename?: 'PaginationInfo' }
+      & FragmentPaginationInfoFragment
+    ), listPageInfo?: Maybe<(
+      { __typename?: 'ListPageInfo' }
+      & Pick<ListPageInfo, 'pageHeaderLabel'>
+      & { pageCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>>, listItemCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>>, listItemBulkCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>> }
+    )>, nodes?: Maybe<Array<Maybe<(
+      { __typename?: 'UserAccountAuditLog' }
+      & Pick<UserAccountAuditLog, 'auditDateTime' | 'event' | 'orgSid' | 'oldValue' | 'newValue'>
+      & { userAccount: (
+        { __typename?: 'UserAccount' }
+        & Pick<UserAccount, 'sid' | 'email'>
+        & { person?: Maybe<(
+          { __typename?: 'Person' }
+          & Pick<Person, 'sid' | 'firstNm' | 'lastNm'>
+        )> }
+      ), changedByUserAccount?: Maybe<(
+        { __typename?: 'UserAccount' }
+        & Pick<UserAccount, 'sid' | 'email'>
+        & { person?: Maybe<(
+          { __typename?: 'Person' }
+          & Pick<Person, 'sid' | 'firstNm' | 'lastNm'>
+        )> }
+      )> }
+    )>>> }
+  )> }
+);
 
 export type AccessPolicyQueryVariables = Exact<{
   orgSid: Scalars['ID'];
   policySid: Scalars['ID'];
 }>;
 
-export type AccessPolicyQuery = { __typename?: 'Query' } & {
-  accessPolicy?: Maybe<
-    { __typename?: 'AccessPolicy' } & Pick<
-      AccessPolicy,
-      'sid' | 'name' | 'permissions' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes'
-    >
-  >;
-};
+
+export type AccessPolicyQuery = (
+  { __typename?: 'Query' }
+  & { accessPolicy?: Maybe<(
+    { __typename?: 'AccessPolicy' }
+    & Pick<AccessPolicy, 'sid' | 'name' | 'permissions' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes'>
+  )> }
+);
 
 export type AccessPoliciesForOrgQueryVariables = Exact<{
   orgSid: Scalars['ID'];
   pageableInput?: Maybe<PageableInput>;
 }>;
 
-export type AccessPoliciesForOrgQuery = { __typename?: 'Query' } & {
-  accessPoliciesForOrg?: Maybe<
-    { __typename?: 'AccessPolicyConnection' } & {
-      paginationInfo: { __typename?: 'PaginationInfo' } & FragmentPaginationInfoFragment;
-      listPageInfo?: Maybe<
-        { __typename?: 'ListPageInfo' } & Pick<ListPageInfo, 'pageHeaderLabel'> & {
-            pageCommands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-            listItemCommands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-            listItemBulkCommands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-          }
-      >;
-      nodes?: Maybe<Array<Maybe<{ __typename?: 'AccessPolicy' } & FragmentAccessPolicyFragment>>>;
-    }
-  >;
-};
+
+export type AccessPoliciesForOrgQuery = (
+  { __typename?: 'Query' }
+  & { accessPoliciesForOrg?: Maybe<(
+    { __typename?: 'AccessPolicyConnection' }
+    & { paginationInfo: (
+      { __typename?: 'PaginationInfo' }
+      & FragmentPaginationInfoFragment
+    ), listPageInfo?: Maybe<(
+      { __typename?: 'ListPageInfo' }
+      & Pick<ListPageInfo, 'pageHeaderLabel'>
+      & { pageCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>>, listItemCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>>, listItemBulkCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>> }
+    )>, nodes?: Maybe<Array<Maybe<(
+      { __typename?: 'AccessPolicy' }
+      & FragmentAccessPolicyFragment
+    )>>> }
+  )> }
+);
 
 export type AccessPolicyTemplatesQueryVariables = Exact<{
   orgSid: Scalars['ID'];
 }>;
 
-export type AccessPolicyTemplatesQuery = { __typename?: 'Query' } & {
-  accessPolicyTemplates?: Maybe<Array<Maybe<{ __typename?: 'UIOption' } & Pick<UiOption, 'label' | 'value' | 'info'>>>>;
-};
+
+export type AccessPolicyTemplatesQuery = (
+  { __typename?: 'Query' }
+  & { accessPolicyTemplates?: Maybe<Array<Maybe<(
+    { __typename?: 'UIOption' }
+    & Pick<UiOption, 'label' | 'value' | 'info'>
+  )>>> }
+);
 
 export type AccessSpecializationsForOrgQueryVariables = Exact<{
   orgSid: Scalars['ID'];
   pageableInput?: Maybe<PageableInput>;
 }>;
 
-export type AccessSpecializationsForOrgQuery = { __typename?: 'Query' } & {
-  accessSpecializationsForOrg?: Maybe<
-    { __typename?: 'AccessSpecializationConnection' } & {
-      paginationInfo: { __typename?: 'PaginationInfo' } & FragmentPaginationInfoFragment;
-      listPageInfo?: Maybe<
-        { __typename?: 'ListPageInfo' } & Pick<ListPageInfo, 'pageHeaderLabel'> & {
-            pageCommands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-            listItemCommands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-            listItemBulkCommands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-          }
-      >;
-      nodes?: Maybe<
-        Array<
-          Maybe<
-            { __typename?: 'AccessSpecialization' } & Pick<AccessSpecialization, 'sid' | 'name'> & {
-                filters?: Maybe<
-                  Array<
-                    Maybe<
-                      { __typename?: 'SpecializationFilter' } & Pick<
-                        SpecializationFilter,
-                        'sid' | 'permission' | 'orgSids'
-                      >
-                    >
-                  >
-                >;
-              }
-          >
-        >
-      >;
-    }
-  >;
-};
+
+export type AccessSpecializationsForOrgQuery = (
+  { __typename?: 'Query' }
+  & { accessSpecializationsForOrg?: Maybe<(
+    { __typename?: 'AccessSpecializationConnection' }
+    & { paginationInfo: (
+      { __typename?: 'PaginationInfo' }
+      & FragmentPaginationInfoFragment
+    ), listPageInfo?: Maybe<(
+      { __typename?: 'ListPageInfo' }
+      & Pick<ListPageInfo, 'pageHeaderLabel'>
+      & { pageCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>>, listItemCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>>, listItemBulkCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>> }
+    )>, nodes?: Maybe<Array<Maybe<(
+      { __typename?: 'AccessSpecialization' }
+      & Pick<AccessSpecialization, 'sid' | 'name'>
+      & { filters?: Maybe<Array<Maybe<(
+        { __typename?: 'SpecializationFilter' }
+        & Pick<SpecializationFilter, 'sid' | 'permission' | 'orgSids'>
+      )>>> }
+    )>>> }
+  )> }
+);
 
 export type AccessPolicyGroupsForOrgQueryVariables = Exact<{
   orgSid: Scalars['ID'];
   pageableInput?: Maybe<PageableInput>;
 }>;
 
-export type AccessPolicyGroupsForOrgQuery = { __typename?: 'Query' } & {
-  accessPolicyGroupsForOrg?: Maybe<
-    { __typename?: 'AccessPolicyGroupConnection' } & {
-      paginationInfo: { __typename?: 'PaginationInfo' } & FragmentPaginationInfoFragment;
-      listPageInfo?: Maybe<
-        { __typename?: 'ListPageInfo' } & Pick<ListPageInfo, 'pageHeaderLabel'> & {
-            pageCommands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-            listItemCommands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-            listItemBulkCommands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-          }
-      >;
-      nodes?: Maybe<
-        Array<
-          Maybe<
-            { __typename?: 'AccessPolicyGroup' } & Pick<
-              AccessPolicyGroup,
-              'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes'
-            > & { policies?: Maybe<Array<Maybe<{ __typename?: 'AccessPolicy' } & FragmentAccessPolicyFragment>>> }
-          >
-        >
-      >;
-    }
-  >;
-};
+
+export type AccessPolicyGroupsForOrgQuery = (
+  { __typename?: 'Query' }
+  & { accessPolicyGroupsForOrg?: Maybe<(
+    { __typename?: 'AccessPolicyGroupConnection' }
+    & { paginationInfo: (
+      { __typename?: 'PaginationInfo' }
+      & FragmentPaginationInfoFragment
+    ), listPageInfo?: Maybe<(
+      { __typename?: 'ListPageInfo' }
+      & Pick<ListPageInfo, 'pageHeaderLabel'>
+      & { pageCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>>, listItemCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>>, listItemBulkCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>> }
+    )>, nodes?: Maybe<Array<Maybe<(
+      { __typename?: 'AccessPolicyGroup' }
+      & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes'>
+      & { policies?: Maybe<Array<Maybe<(
+        { __typename?: 'AccessPolicy' }
+        & FragmentAccessPolicyFragment
+      )>>> }
+    )>>> }
+  )> }
+);
 
 export type AccessPolicyGroupTemplatesQueryVariables = Exact<{
   orgSid: Scalars['ID'];
 }>;
 
-export type AccessPolicyGroupTemplatesQuery = { __typename?: 'Query' } & {
-  accessPolicyGroupTemplates?: Maybe<
-    Array<Maybe<{ __typename?: 'UIOption' } & Pick<UiOption, 'label' | 'value' | 'info'>>>
-  >;
-};
+
+export type AccessPolicyGroupTemplatesQuery = (
+  { __typename?: 'Query' }
+  & { accessPolicyGroupTemplates?: Maybe<Array<Maybe<(
+    { __typename?: 'UIOption' }
+    & Pick<UiOption, 'label' | 'value' | 'info'>
+  )>>> }
+);
 
 export type AccessPolicyFormQueryVariables = Exact<{
   orgSid: Scalars['ID'];
   templatePolicySid?: Maybe<Scalars['ID']>;
 }>;
 
-export type AccessPolicyFormQuery = { __typename?: 'Query' } & {
-  accessPolicyForm?: Maybe<
-    { __typename?: 'AccessPolicyForm' } & Pick<
-      AccessPolicyForm,
-      'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'
-    > & {
-        name: { __typename?: 'UIStringField' } & Pick<
-          UiStringField,
-          | 'value'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'min'
-          | 'max'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        organization: { __typename?: 'UIReadOnlyField' } & Pick<
-          UiReadOnlyField,
-          | 'value'
-          | 'description'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        permissions?: Maybe<
-          { __typename?: 'UISelectManyField' } & Pick<
-            UiSelectManyField,
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'options'
-            | 'query'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          > & { value?: Maybe<Array<Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>>>> }
-        >;
-        tmpl?: Maybe<
-          { __typename?: 'UIBooleanField' } & Pick<
-            UiBooleanField,
-            'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-          >
-        >;
-        tmplUseAsIs?: Maybe<
-          { __typename?: 'UIBooleanField' } & Pick<
-            UiBooleanField,
-            'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-          >
-        >;
-        applicableOrgTypes?: Maybe<
-          { __typename?: 'UISelectManyField' } & Pick<
-            UiSelectManyField,
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'options'
-            | 'query'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          > & { value?: Maybe<Array<Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>>>> }
-        >;
-        options?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'UIOptions' } & Pick<UiOptions, 'key'> & {
-                  values?: Maybe<
-                    Array<Maybe<{ __typename?: 'UIOption' } & Pick<UiOption, 'label' | 'value' | 'info'>>>
-                  >;
-                }
-            >
-          >
-        >;
-        commands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-      }
-  >;
-};
+
+export type AccessPolicyFormQuery = (
+  { __typename?: 'Query' }
+  & { accessPolicyForm?: Maybe<(
+    { __typename?: 'AccessPolicyForm' }
+    & Pick<AccessPolicyForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { name: (
+      { __typename?: 'UIStringField' }
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), organization: (
+      { __typename?: 'UIReadOnlyField' }
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), permissions?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
+    )>, tmpl?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, tmplUseAsIs?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, applicableOrgTypes?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
+    )>, options?: Maybe<Array<Maybe<(
+      { __typename?: 'UIOptions' }
+      & Pick<UiOptions, 'key'>
+      & { values?: Maybe<Array<Maybe<(
+        { __typename?: 'UIOption' }
+        & Pick<UiOption, 'label' | 'value' | 'info'>
+      )>>> }
+    )>>>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>>> }
+  )> }
+);
 
 export type FindAccessPolicyQueryVariables = Exact<{
   policySid: Scalars['ID'];
 }>;
 
-export type FindAccessPolicyQuery = { __typename?: 'Query' } & {
-  findAccessPolicy?: Maybe<
-    { __typename?: 'AccessPolicyForm' } & Pick<
-      AccessPolicyForm,
-      'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'
-    > & {
-        name: { __typename?: 'UIStringField' } & Pick<
-          UiStringField,
-          | 'value'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'min'
-          | 'max'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        organization: { __typename?: 'UIReadOnlyField' } & Pick<
-          UiReadOnlyField,
-          | 'value'
-          | 'description'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        permissions?: Maybe<
-          { __typename?: 'UISelectManyField' } & Pick<
-            UiSelectManyField,
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'options'
-            | 'query'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          > & { value?: Maybe<Array<Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>>>> }
-        >;
-        tmpl?: Maybe<
-          { __typename?: 'UIBooleanField' } & Pick<
-            UiBooleanField,
-            'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-          >
-        >;
-        tmplUseAsIs?: Maybe<
-          { __typename?: 'UIBooleanField' } & Pick<
-            UiBooleanField,
-            'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-          >
-        >;
-        applicableOrgTypes?: Maybe<
-          { __typename?: 'UISelectManyField' } & Pick<
-            UiSelectManyField,
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'options'
-            | 'query'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          > & { value?: Maybe<Array<Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>>>> }
-        >;
-        options?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'UIOptions' } & Pick<UiOptions, 'key'> & {
-                  values?: Maybe<
-                    Array<Maybe<{ __typename?: 'UIOption' } & Pick<UiOption, 'label' | 'value' | 'info'>>>
-                  >;
-                }
-            >
-          >
-        >;
-        commands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-      }
-  >;
-};
+
+export type FindAccessPolicyQuery = (
+  { __typename?: 'Query' }
+  & { findAccessPolicy?: Maybe<(
+    { __typename?: 'AccessPolicyForm' }
+    & Pick<AccessPolicyForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { name: (
+      { __typename?: 'UIStringField' }
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), organization: (
+      { __typename?: 'UIReadOnlyField' }
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), permissions?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
+    )>, tmpl?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, tmplUseAsIs?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, applicableOrgTypes?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
+    )>, options?: Maybe<Array<Maybe<(
+      { __typename?: 'UIOptions' }
+      & Pick<UiOptions, 'key'>
+      & { values?: Maybe<Array<Maybe<(
+        { __typename?: 'UIOption' }
+        & Pick<UiOption, 'label' | 'value' | 'info'>
+      )>>> }
+    )>>>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>>> }
+  )> }
+);
 
 export type AccessSpecializationFormQueryVariables = Exact<{
   orgSid: Scalars['ID'];
 }>;
 
-export type AccessSpecializationFormQuery = { __typename?: 'Query' } & {
-  accessSpecializationForm?: Maybe<
-    { __typename?: 'AccessSpecializationForm' } & Pick<
-      AccessSpecializationForm,
-      'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'
-    > & {
-        name: { __typename?: 'UIStringField' } & Pick<
-          UiStringField,
-          | 'value'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'min'
-          | 'max'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        organization: { __typename?: 'UIReadOnlyField' } & Pick<
-          UiReadOnlyField,
-          | 'value'
-          | 'description'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        filters?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'SpecializationFilterForm' } & Pick<
-                SpecializationFilterForm,
-                'permission' | 'label' | 'errCode' | 'errMsg' | 'errSeverity'
-              > & {
-                  orgSids?: Maybe<
-                    { __typename?: 'UISelectManyField' } & Pick<
-                      UiSelectManyField,
-                      | 'label'
-                      | 'readOnly'
-                      | 'info'
-                      | 'required'
-                      | 'visible'
-                      | 'options'
-                      | 'query'
-                      | 'errCode'
-                      | 'errMsg'
-                      | 'errSeverity'
-                    > & { value?: Maybe<Array<Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>>>> }
-                  >;
-                }
-            >
-          >
-        >;
-        options?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'UIOptions' } & Pick<UiOptions, 'key'> & {
-                  values?: Maybe<
-                    Array<Maybe<{ __typename?: 'UIOption' } & Pick<UiOption, 'label' | 'value' | 'info'>>>
-                  >;
-                }
-            >
-          >
-        >;
-        commands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-      }
-  >;
-};
+
+export type AccessSpecializationFormQuery = (
+  { __typename?: 'Query' }
+  & { accessSpecializationForm?: Maybe<(
+    { __typename?: 'AccessSpecializationForm' }
+    & Pick<AccessSpecializationForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { name: (
+      { __typename?: 'UIStringField' }
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), organization: (
+      { __typename?: 'UIReadOnlyField' }
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), filters?: Maybe<Array<Maybe<(
+      { __typename?: 'SpecializationFilterForm' }
+      & Pick<SpecializationFilterForm, 'permission' | 'label' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { orgSids?: Maybe<(
+        { __typename?: 'UISelectManyField' }
+        & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & { value?: Maybe<Array<Maybe<(
+          { __typename?: 'NVPStr' }
+          & Pick<NvpStr, 'name' | 'value'>
+        )>>> }
+      )> }
+    )>>>, options?: Maybe<Array<Maybe<(
+      { __typename?: 'UIOptions' }
+      & Pick<UiOptions, 'key'>
+      & { values?: Maybe<Array<Maybe<(
+        { __typename?: 'UIOption' }
+        & Pick<UiOption, 'label' | 'value' | 'info'>
+      )>>> }
+    )>>>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>>> }
+  )> }
+);
 
 export type FindAccessSpecializationQueryVariables = Exact<{
   specializationSid: Scalars['ID'];
 }>;
 
-export type FindAccessSpecializationQuery = { __typename?: 'Query' } & {
-  findAccessSpecialization?: Maybe<
-    { __typename?: 'AccessSpecializationForm' } & Pick<
-      AccessSpecializationForm,
-      'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'
-    > & {
-        name: { __typename?: 'UIStringField' } & Pick<
-          UiStringField,
-          | 'value'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'min'
-          | 'max'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        organization: { __typename?: 'UIReadOnlyField' } & Pick<
-          UiReadOnlyField,
-          | 'value'
-          | 'description'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        filters?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'SpecializationFilterForm' } & Pick<
-                SpecializationFilterForm,
-                'permission' | 'label' | 'errCode' | 'errMsg' | 'errSeverity'
-              > & {
-                  orgSids?: Maybe<
-                    { __typename?: 'UISelectManyField' } & Pick<
-                      UiSelectManyField,
-                      | 'label'
-                      | 'readOnly'
-                      | 'info'
-                      | 'required'
-                      | 'visible'
-                      | 'options'
-                      | 'query'
-                      | 'errCode'
-                      | 'errMsg'
-                      | 'errSeverity'
-                    > & { value?: Maybe<Array<Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>>>> }
-                  >;
-                }
-            >
-          >
-        >;
-        options?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'UIOptions' } & Pick<UiOptions, 'key'> & {
-                  values?: Maybe<
-                    Array<Maybe<{ __typename?: 'UIOption' } & Pick<UiOption, 'label' | 'value' | 'info'>>>
-                  >;
-                }
-            >
-          >
-        >;
-        commands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-      }
-  >;
-};
+
+export type FindAccessSpecializationQuery = (
+  { __typename?: 'Query' }
+  & { findAccessSpecialization?: Maybe<(
+    { __typename?: 'AccessSpecializationForm' }
+    & Pick<AccessSpecializationForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { name: (
+      { __typename?: 'UIStringField' }
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), organization: (
+      { __typename?: 'UIReadOnlyField' }
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), filters?: Maybe<Array<Maybe<(
+      { __typename?: 'SpecializationFilterForm' }
+      & Pick<SpecializationFilterForm, 'permission' | 'label' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { orgSids?: Maybe<(
+        { __typename?: 'UISelectManyField' }
+        & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & { value?: Maybe<Array<Maybe<(
+          { __typename?: 'NVPStr' }
+          & Pick<NvpStr, 'name' | 'value'>
+        )>>> }
+      )> }
+    )>>>, options?: Maybe<Array<Maybe<(
+      { __typename?: 'UIOptions' }
+      & Pick<UiOptions, 'key'>
+      & { values?: Maybe<Array<Maybe<(
+        { __typename?: 'UIOption' }
+        & Pick<UiOption, 'label' | 'value' | 'info'>
+      )>>> }
+    )>>>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>>> }
+  )> }
+);
 
 export type AccessPolicyGroupFormQueryVariables = Exact<{
   orgSid: Scalars['ID'];
   templateGroupSid?: Maybe<Scalars['ID']>;
 }>;
 
-export type AccessPolicyGroupFormQuery = { __typename?: 'Query' } & {
-  accessPolicyGroupForm?: Maybe<
-    { __typename?: 'AccessPolicyGroupForm' } & Pick<
-      AccessPolicyGroupForm,
-      'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'
-    > & {
-        name: { __typename?: 'UIStringField' } & Pick<
-          UiStringField,
-          | 'value'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'min'
-          | 'max'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        description: { __typename?: 'UIStringField' } & Pick<
-          UiStringField,
-          | 'value'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'min'
-          | 'max'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        organization: { __typename?: 'UIReadOnlyField' } & Pick<
-          UiReadOnlyField,
-          | 'value'
-          | 'description'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        tmpl?: Maybe<
-          { __typename?: 'UIBooleanField' } & Pick<
-            UiBooleanField,
-            'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-          >
-        >;
-        tmplUseAsIs?: Maybe<
-          { __typename?: 'UIBooleanField' } & Pick<
-            UiBooleanField,
-            'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-          >
-        >;
-        applicableOrgTypes?: Maybe<
-          { __typename?: 'UISelectManyField' } & Pick<
-            UiSelectManyField,
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'options'
-            | 'query'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          > & { value?: Maybe<Array<Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>>>> }
-        >;
-        policies?: Maybe<
-          { __typename?: 'UISelectManyField' } & Pick<
-            UiSelectManyField,
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'options'
-            | 'query'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          > & { value?: Maybe<Array<Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>>>> }
-        >;
-        specializations?: Maybe<
-          { __typename?: 'UISelectManyField' } & Pick<
-            UiSelectManyField,
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'options'
-            | 'query'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          > & { value?: Maybe<Array<Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>>>> }
-        >;
-        includeAllSubOrgs?: Maybe<
-          { __typename?: 'UIBooleanField' } & Pick<
-            UiBooleanField,
-            'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-          >
-        >;
-        includeOrgSids?: Maybe<
-          { __typename?: 'UISelectManyField' } & Pick<
-            UiSelectManyField,
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'options'
-            | 'query'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          > & { value?: Maybe<Array<Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>>>> }
-        >;
-        excludeOrgSids?: Maybe<
-          { __typename?: 'UISelectManyField' } & Pick<
-            UiSelectManyField,
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'options'
-            | 'query'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          > & { value?: Maybe<Array<Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>>>> }
-        >;
-        options?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'UIOptions' } & Pick<UiOptions, 'key'> & {
-                  values?: Maybe<
-                    Array<Maybe<{ __typename?: 'UIOption' } & Pick<UiOption, 'label' | 'value' | 'info'>>>
-                  >;
-                }
-            >
-          >
-        >;
-        commands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-      }
-  >;
-};
+
+export type AccessPolicyGroupFormQuery = (
+  { __typename?: 'Query' }
+  & { accessPolicyGroupForm?: Maybe<(
+    { __typename?: 'AccessPolicyGroupForm' }
+    & Pick<AccessPolicyGroupForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { name: (
+      { __typename?: 'UIStringField' }
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), description: (
+      { __typename?: 'UIStringField' }
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), organization: (
+      { __typename?: 'UIReadOnlyField' }
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), tmpl?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, tmplUseAsIs?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, applicableOrgTypes?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
+    )>, policies?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
+    )>, specializations?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
+    )>, includeAllSubOrgs?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, includeOrgSids?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
+    )>, excludeOrgSids?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
+    )>, options?: Maybe<Array<Maybe<(
+      { __typename?: 'UIOptions' }
+      & Pick<UiOptions, 'key'>
+      & { values?: Maybe<Array<Maybe<(
+        { __typename?: 'UIOption' }
+        & Pick<UiOption, 'label' | 'value' | 'info'>
+      )>>> }
+    )>>>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>>> }
+  )> }
+);
 
 export type FindAccessPolicyGroupQueryVariables = Exact<{
   policyGroupSid: Scalars['ID'];
 }>;
 
-export type FindAccessPolicyGroupQuery = { __typename?: 'Query' } & {
-  findAccessPolicyGroup?: Maybe<
-    { __typename?: 'AccessPolicyGroupForm' } & Pick<
-      AccessPolicyGroupForm,
-      'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'
-    > & {
-        name: { __typename?: 'UIStringField' } & Pick<
-          UiStringField,
-          | 'value'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'min'
-          | 'max'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        description: { __typename?: 'UIStringField' } & Pick<
-          UiStringField,
-          | 'value'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'min'
-          | 'max'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        organization: { __typename?: 'UIReadOnlyField' } & Pick<
-          UiReadOnlyField,
-          | 'value'
-          | 'description'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        tmpl?: Maybe<
-          { __typename?: 'UIBooleanField' } & Pick<
-            UiBooleanField,
-            'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-          >
-        >;
-        tmplUseAsIs?: Maybe<
-          { __typename?: 'UIBooleanField' } & Pick<
-            UiBooleanField,
-            'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-          >
-        >;
-        applicableOrgTypes?: Maybe<
-          { __typename?: 'UISelectManyField' } & Pick<
-            UiSelectManyField,
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'options'
-            | 'query'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          > & { value?: Maybe<Array<Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>>>> }
-        >;
-        policies?: Maybe<
-          { __typename?: 'UISelectManyField' } & Pick<
-            UiSelectManyField,
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'options'
-            | 'query'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          > & { value?: Maybe<Array<Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>>>> }
-        >;
-        specializations?: Maybe<
-          { __typename?: 'UISelectManyField' } & Pick<
-            UiSelectManyField,
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'options'
-            | 'query'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          > & { value?: Maybe<Array<Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>>>> }
-        >;
-        includeAllSubOrgs?: Maybe<
-          { __typename?: 'UIBooleanField' } & Pick<
-            UiBooleanField,
-            'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-          >
-        >;
-        includeOrgSids?: Maybe<
-          { __typename?: 'UISelectManyField' } & Pick<
-            UiSelectManyField,
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'options'
-            | 'query'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          > & { value?: Maybe<Array<Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>>>> }
-        >;
-        excludeOrgSids?: Maybe<
-          { __typename?: 'UISelectManyField' } & Pick<
-            UiSelectManyField,
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'options'
-            | 'query'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          > & { value?: Maybe<Array<Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>>>> }
-        >;
-        options?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'UIOptions' } & Pick<UiOptions, 'key'> & {
-                  values?: Maybe<
-                    Array<Maybe<{ __typename?: 'UIOption' } & Pick<UiOption, 'label' | 'value' | 'info'>>>
-                  >;
-                }
-            >
-          >
-        >;
-        commands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-      }
-  >;
-};
+
+export type FindAccessPolicyGroupQuery = (
+  { __typename?: 'Query' }
+  & { findAccessPolicyGroup?: Maybe<(
+    { __typename?: 'AccessPolicyGroupForm' }
+    & Pick<AccessPolicyGroupForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { name: (
+      { __typename?: 'UIStringField' }
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), description: (
+      { __typename?: 'UIStringField' }
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), organization: (
+      { __typename?: 'UIReadOnlyField' }
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), tmpl?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, tmplUseAsIs?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, applicableOrgTypes?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
+    )>, policies?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
+    )>, specializations?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
+    )>, includeAllSubOrgs?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, includeOrgSids?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
+    )>, excludeOrgSids?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
+    )>, options?: Maybe<Array<Maybe<(
+      { __typename?: 'UIOptions' }
+      & Pick<UiOptions, 'key'>
+      & { values?: Maybe<Array<Maybe<(
+        { __typename?: 'UIOption' }
+        & Pick<UiOption, 'label' | 'value' | 'info'>
+      )>>> }
+    )>>>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>>> }
+  )> }
+);
 
 export type TopLevelOrgsByTypeQueryVariables = Exact<{
   orgType: OrgType;
 }>;
 
-export type TopLevelOrgsByTypeQuery = { __typename?: 'Query' } & {
-  topLevelOrgsByType?: Maybe<
-    Array<Maybe<{ __typename?: 'Organization' } & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType'>>>
-  >;
-};
+
+export type TopLevelOrgsByTypeQuery = (
+  { __typename?: 'Query' }
+  & { topLevelOrgsByType?: Maybe<Array<Maybe<(
+    { __typename?: 'Organization' }
+    & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType'>
+  )>>> }
+);
 
 export type OrgByIdQueryVariables = Exact<{
   orgSid?: Maybe<Scalars['ID']>;
   orgId: Scalars['String'];
 }>;
 
-export type OrgByIdQuery = { __typename?: 'Query' } & {
-  orgById?: Maybe<{ __typename?: 'Organization' } & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType'>>;
-};
+
+export type OrgByIdQuery = (
+  { __typename?: 'Query' }
+  & { orgById?: Maybe<(
+    { __typename?: 'Organization' }
+    & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType'>
+  )> }
+);
 
 export type DirectOrganizationsQueryVariables = Exact<{
   orgSid: Scalars['ID'];
@@ -4376,217 +3866,127 @@ export type DirectOrganizationsQueryVariables = Exact<{
   pageableInput?: Maybe<PageableInput>;
 }>;
 
-export type DirectOrganizationsQuery = { __typename?: 'Query' } & {
-  directOrganizations?: Maybe<
-    { __typename?: 'OrganizationConnection' } & {
-      paginationInfo: { __typename?: 'PaginationInfo' } & FragmentPaginationInfoFragment;
-      listPageInfo?: Maybe<
-        { __typename?: 'ListPageInfo' } & Pick<ListPageInfo, 'pageHeaderLabel'> & {
-            pageCommands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-            listItemCommands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-            listItemBulkCommands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-          }
-      >;
-      nodes?: Maybe<
-        Array<Maybe<{ __typename?: 'Organization' } & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType'>>>
-      >;
-    }
-  >;
-};
+
+export type DirectOrganizationsQuery = (
+  { __typename?: 'Query' }
+  & { directOrganizations?: Maybe<(
+    { __typename?: 'OrganizationConnection' }
+    & { paginationInfo: (
+      { __typename?: 'PaginationInfo' }
+      & FragmentPaginationInfoFragment
+    ), listPageInfo?: Maybe<(
+      { __typename?: 'ListPageInfo' }
+      & Pick<ListPageInfo, 'pageHeaderLabel'>
+      & { pageCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>>, listItemCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>>, listItemBulkCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>> }
+    )>, nodes?: Maybe<Array<Maybe<(
+      { __typename?: 'Organization' }
+      & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType'>
+    )>>> }
+  )> }
+);
 
 export type OrganizationFormQueryVariables = Exact<{
   orgOwnerSid: Scalars['ID'];
 }>;
 
-export type OrganizationFormQuery = { __typename?: 'Query' } & {
-  organizationForm?: Maybe<
-    { __typename?: 'OrganizationForm' } & Pick<
-      OrganizationForm,
-      'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'
-    > & {
-        name: { __typename?: 'UIStringField' } & Pick<
-          UiStringField,
-          | 'value'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'min'
-          | 'max'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        orgId: { __typename?: 'UIStringField' } & Pick<
-          UiStringField,
-          | 'value'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'min'
-          | 'max'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        orgType?: Maybe<
-          { __typename?: 'UISelectOneField' } & Pick<
-            UiSelectOneField,
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'options'
-            | 'query'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          > & { value?: Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>> }
-        >;
-        active: { __typename?: 'UIBooleanField' } & Pick<
-          UiBooleanField,
-          'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-        >;
-        whitelist?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'OrgWhitelistForm' } & Pick<OrgWhitelistForm, 'errCode' | 'errMsg' | 'errSeverity'> & {
-                  pattern?: Maybe<
-                    { __typename?: 'UIStringField' } & Pick<
-                      UiStringField,
-                      | 'value'
-                      | 'label'
-                      | 'readOnly'
-                      | 'info'
-                      | 'required'
-                      | 'visible'
-                      | 'min'
-                      | 'max'
-                      | 'errCode'
-                      | 'errMsg'
-                      | 'errSeverity'
-                    >
-                  >;
-                }
-            >
-          >
-        >;
-        options?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'UIOptions' } & Pick<UiOptions, 'key'> & {
-                  values?: Maybe<
-                    Array<Maybe<{ __typename?: 'UIOption' } & Pick<UiOption, 'label' | 'value' | 'info'>>>
-                  >;
-                }
-            >
-          >
-        >;
-        commands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-      }
-  >;
-};
+
+export type OrganizationFormQuery = (
+  { __typename?: 'Query' }
+  & { organizationForm?: Maybe<(
+    { __typename?: 'OrganizationForm' }
+    & Pick<OrganizationForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { name: (
+      { __typename?: 'UIStringField' }
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), orgId: (
+      { __typename?: 'UIStringField' }
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), orgType?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & Pick<UiSelectOneField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )> }
+    )>, active: (
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), whitelist?: Maybe<Array<Maybe<(
+      { __typename?: 'OrgWhitelistForm' }
+      & Pick<OrgWhitelistForm, 'errCode' | 'errMsg' | 'errSeverity'>
+      & { pattern?: Maybe<(
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )> }
+    )>>>, options?: Maybe<Array<Maybe<(
+      { __typename?: 'UIOptions' }
+      & Pick<UiOptions, 'key'>
+      & { values?: Maybe<Array<Maybe<(
+        { __typename?: 'UIOption' }
+        & Pick<UiOption, 'label' | 'value' | 'info'>
+      )>>> }
+    )>>>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>>> }
+  )> }
+);
 
 export type FindOrganizationQueryVariables = Exact<{
   orgSid: Scalars['ID'];
 }>;
 
-export type FindOrganizationQuery = { __typename?: 'Query' } & {
-  findOrganization?: Maybe<
-    { __typename?: 'OrganizationForm' } & Pick<
-      OrganizationForm,
-      'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'
-    > & {
-        name: { __typename?: 'UIStringField' } & Pick<
-          UiStringField,
-          | 'value'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'min'
-          | 'max'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        orgId: { __typename?: 'UIStringField' } & Pick<
-          UiStringField,
-          | 'value'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'min'
-          | 'max'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        orgType?: Maybe<
-          { __typename?: 'UISelectOneField' } & Pick<
-            UiSelectOneField,
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'options'
-            | 'query'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          > & { value?: Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>> }
-        >;
-        active: { __typename?: 'UIBooleanField' } & Pick<
-          UiBooleanField,
-          'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-        >;
-        whitelist?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'OrgWhitelistForm' } & Pick<OrgWhitelistForm, 'errCode' | 'errMsg' | 'errSeverity'> & {
-                  pattern?: Maybe<
-                    { __typename?: 'UIStringField' } & Pick<
-                      UiStringField,
-                      | 'value'
-                      | 'label'
-                      | 'readOnly'
-                      | 'info'
-                      | 'required'
-                      | 'visible'
-                      | 'min'
-                      | 'max'
-                      | 'errCode'
-                      | 'errMsg'
-                      | 'errSeverity'
-                    >
-                  >;
-                }
-            >
-          >
-        >;
-        options?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'UIOptions' } & Pick<UiOptions, 'key'> & {
-                  values?: Maybe<
-                    Array<Maybe<{ __typename?: 'UIOption' } & Pick<UiOption, 'label' | 'value' | 'info'>>>
-                  >;
-                }
-            >
-          >
-        >;
-        commands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-      }
-  >;
-};
+
+export type FindOrganizationQuery = (
+  { __typename?: 'Query' }
+  & { findOrganization?: Maybe<(
+    { __typename?: 'OrganizationForm' }
+    & Pick<OrganizationForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { name: (
+      { __typename?: 'UIStringField' }
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), orgId: (
+      { __typename?: 'UIStringField' }
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), orgType?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & Pick<UiSelectOneField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )> }
+    )>, active: (
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), whitelist?: Maybe<Array<Maybe<(
+      { __typename?: 'OrgWhitelistForm' }
+      & Pick<OrgWhitelistForm, 'errCode' | 'errMsg' | 'errSeverity'>
+      & { pattern?: Maybe<(
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )> }
+    )>>>, options?: Maybe<Array<Maybe<(
+      { __typename?: 'UIOptions' }
+      & Pick<UiOptions, 'key'>
+      & { values?: Maybe<Array<Maybe<(
+        { __typename?: 'UIOption' }
+        & Pick<UiOption, 'label' | 'value' | 'info'>
+      )>>> }
+    )>>>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>>> }
+  )> }
+);
 
 export type SearchOrganizationsQueryVariables = Exact<{
   searchText: Scalars['String'];
@@ -4595,904 +3995,383 @@ export type SearchOrganizationsQueryVariables = Exact<{
   pageableInput?: Maybe<PageableInput>;
 }>;
 
-export type SearchOrganizationsQuery = { __typename?: 'Query' } & {
-  searchOrganizations?: Maybe<
-    { __typename?: 'OrganizationConnection' } & {
-      paginationInfo: { __typename?: 'PaginationInfo' } & FragmentPaginationInfoFragment;
-      listPageInfo?: Maybe<
-        { __typename?: 'ListPageInfo' } & Pick<ListPageInfo, 'pageHeaderLabel'> & {
-            pageCommands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-            listItemCommands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-            listItemBulkCommands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-          }
-      >;
-      nodes?: Maybe<
-        Array<Maybe<{ __typename?: 'Organization' } & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType'>>>
-      >;
-    }
-  >;
-};
+
+export type SearchOrganizationsQuery = (
+  { __typename?: 'Query' }
+  & { searchOrganizations?: Maybe<(
+    { __typename?: 'OrganizationConnection' }
+    & { paginationInfo: (
+      { __typename?: 'PaginationInfo' }
+      & FragmentPaginationInfoFragment
+    ), listPageInfo?: Maybe<(
+      { __typename?: 'ListPageInfo' }
+      & Pick<ListPageInfo, 'pageHeaderLabel'>
+      & { pageCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>>, listItemCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>>, listItemBulkCommands?: Maybe<Array<Maybe<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>> }
+    )>, nodes?: Maybe<Array<Maybe<(
+      { __typename?: 'Organization' }
+      & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType'>
+    )>>> }
+  )> }
+);
 
 export type OrganizationQuickSearchQueryVariables = Exact<{
   searchText: Scalars['String'];
   orgOwnerSid: Scalars['ID'];
 }>;
 
-export type OrganizationQuickSearchQuery = { __typename?: 'Query' } & {
-  organizationQuickSearch?: Maybe<
-    Array<Maybe<{ __typename?: 'Organization' } & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType'>>>
-  >;
-};
+
+export type OrganizationQuickSearchQuery = (
+  { __typename?: 'Query' }
+  & { organizationQuickSearch?: Maybe<Array<Maybe<(
+    { __typename?: 'Organization' }
+    & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType'>
+  )>>> }
+);
 
 export type VendorQuickSearchQueryVariables = Exact<{
   orgOwnerSid: Scalars['ID'];
   searchText: Scalars['String'];
 }>;
 
-export type VendorQuickSearchQuery = { __typename?: 'Query' } & {
-  vendorQuickSearch?: Maybe<
-    Array<Maybe<{ __typename?: 'Organization' } & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType'>>>
-  >;
-};
+
+export type VendorQuickSearchQuery = (
+  { __typename?: 'Query' }
+  & { vendorQuickSearch?: Maybe<Array<Maybe<(
+    { __typename?: 'Organization' }
+    & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType'>
+  )>>> }
+);
 
 export type DashThemeColorForOrgQueryVariables = Exact<{
   ownedInput?: Maybe<OwnedInput>;
   pageableInput?: Maybe<PageableInput>;
 }>;
 
-export type DashThemeColorForOrgQuery = { __typename?: 'Query' } & {
-  dashThemeColorForOrg?: Maybe<
-    { __typename?: 'DashThemeColorConnection' } & {
-      paginationInfo: { __typename?: 'PaginationInfo' } & FragmentPaginationInfoFragment;
-      nodes?: Maybe<
-        Array<
-          Maybe<
-            { __typename?: 'DashThemeColor' } & Pick<
-              DashThemeColor,
-              | 'id'
-              | 'defaultPalette'
-              | 'themeColorMode'
-              | 'allowDark'
-              | 'paletteNm'
-              | 'themePrimary'
-              | 'themeLighterAlt'
-              | 'themeLighter'
-              | 'themeLight'
-              | 'themeTertiary'
-              | 'themeSecondary'
-              | 'themeDarkAlt'
-              | 'themeDark'
-              | 'themeDarker'
-              | 'neutralLighterAlt'
-              | 'neutralLighter'
-              | 'neutralLight'
-              | 'neutralQuaternaryAlt'
-              | 'neutralQuaternary'
-              | 'neutralTertiaryAlt'
-              | 'neutralTertiary'
-              | 'neutralSecondary'
-              | 'neutralPrimaryAlt'
-              | 'neutralPrimary'
-              | 'neutralDark'
-              | 'black'
-              | 'white'
-            >
-          >
-        >
-      >;
-    }
-  >;
-};
+
+export type DashThemeColorForOrgQuery = (
+  { __typename?: 'Query' }
+  & { dashThemeColorForOrg?: Maybe<(
+    { __typename?: 'DashThemeColorConnection' }
+    & { paginationInfo: (
+      { __typename?: 'PaginationInfo' }
+      & FragmentPaginationInfoFragment
+    ), nodes?: Maybe<Array<Maybe<(
+      { __typename?: 'DashThemeColor' }
+      & Pick<DashThemeColor, 'id' | 'defaultPalette' | 'themeColorMode' | 'allowDark' | 'paletteNm' | 'themePrimary' | 'themeLighterAlt' | 'themeLighter' | 'themeLight' | 'themeTertiary' | 'themeSecondary' | 'themeDarkAlt' | 'themeDark' | 'themeDarker' | 'neutralLighterAlt' | 'neutralLighter' | 'neutralLight' | 'neutralQuaternaryAlt' | 'neutralQuaternary' | 'neutralTertiaryAlt' | 'neutralTertiary' | 'neutralSecondary' | 'neutralPrimaryAlt' | 'neutralPrimary' | 'neutralDark' | 'black' | 'white'>
+    )>>> }
+  )> }
+);
 
 export type DashSiteForOrgQueryVariables = Exact<{
   orgSidInput?: Maybe<OrgSidInput>;
 }>;
 
-export type DashSiteForOrgQuery = { __typename?: 'Query' } & {
-  dashSiteForOrg?: Maybe<{ __typename?: 'DashSite' } & Pick<DashSite, 'id' | 'active'>>;
-};
+
+export type DashSiteForOrgQuery = (
+  { __typename?: 'Query' }
+  & { dashSiteForOrg?: Maybe<(
+    { __typename?: 'DashSite' }
+    & Pick<DashSite, 'id' | 'active'>
+  )> }
+);
 
 export type DashThemeColorQueryVariables = Exact<{
   ownedInputSid?: Maybe<OwnedInputSid>;
 }>;
 
-export type DashThemeColorQuery = { __typename?: 'Query' } & {
-  dashThemeColor?: Maybe<
-    { __typename?: 'DashThemeColor' } & Pick<
-      DashThemeColor,
-      | 'id'
-      | 'defaultPalette'
-      | 'themeColorMode'
-      | 'allowDark'
-      | 'paletteNm'
-      | 'themePrimary'
-      | 'themeLighterAlt'
-      | 'themeLighter'
-      | 'themeLight'
-      | 'themeTertiary'
-      | 'themeSecondary'
-      | 'themeDarkAlt'
-      | 'themeDark'
-      | 'themeDarker'
-      | 'neutralLighterAlt'
-      | 'neutralLighter'
-      | 'neutralLight'
-      | 'neutralQuaternaryAlt'
-      | 'neutralQuaternary'
-      | 'neutralTertiaryAlt'
-      | 'neutralTertiary'
-      | 'neutralSecondary'
-      | 'neutralPrimaryAlt'
-      | 'neutralPrimary'
-      | 'neutralDark'
-      | 'black'
-      | 'white'
-    >
-  >;
-};
+
+export type DashThemeColorQuery = (
+  { __typename?: 'Query' }
+  & { dashThemeColor?: Maybe<(
+    { __typename?: 'DashThemeColor' }
+    & Pick<DashThemeColor, 'id' | 'defaultPalette' | 'themeColorMode' | 'allowDark' | 'paletteNm' | 'themePrimary' | 'themeLighterAlt' | 'themeLighter' | 'themeLight' | 'themeTertiary' | 'themeSecondary' | 'themeDarkAlt' | 'themeDark' | 'themeDarker' | 'neutralLighterAlt' | 'neutralLighter' | 'neutralLight' | 'neutralQuaternaryAlt' | 'neutralQuaternary' | 'neutralTertiaryAlt' | 'neutralTertiary' | 'neutralSecondary' | 'neutralPrimaryAlt' | 'neutralPrimary' | 'neutralDark' | 'black' | 'white'>
+  )> }
+);
 
 export type DashThemeColorByNameQueryVariables = Exact<{
   ownedInputName?: Maybe<OwnedInputName>;
 }>;
 
-export type DashThemeColorByNameQuery = { __typename?: 'Query' } & {
-  dashThemeColorByName?: Maybe<
-    { __typename?: 'DashThemeColor' } & Pick<
-      DashThemeColor,
-      | 'id'
-      | 'defaultPalette'
-      | 'themeColorMode'
-      | 'allowDark'
-      | 'paletteNm'
-      | 'themePrimary'
-      | 'themeLighterAlt'
-      | 'themeLighter'
-      | 'themeLight'
-      | 'themeTertiary'
-      | 'themeSecondary'
-      | 'themeDarkAlt'
-      | 'themeDark'
-      | 'themeDarker'
-      | 'neutralLighterAlt'
-      | 'neutralLighter'
-      | 'neutralLight'
-      | 'neutralQuaternaryAlt'
-      | 'neutralQuaternary'
-      | 'neutralTertiaryAlt'
-      | 'neutralTertiary'
-      | 'neutralSecondary'
-      | 'neutralPrimaryAlt'
-      | 'neutralPrimary'
-      | 'neutralDark'
-      | 'black'
-      | 'white'
-    >
-  >;
-};
+
+export type DashThemeColorByNameQuery = (
+  { __typename?: 'Query' }
+  & { dashThemeColorByName?: Maybe<(
+    { __typename?: 'DashThemeColor' }
+    & Pick<DashThemeColor, 'id' | 'defaultPalette' | 'themeColorMode' | 'allowDark' | 'paletteNm' | 'themePrimary' | 'themeLighterAlt' | 'themeLighter' | 'themeLight' | 'themeTertiary' | 'themeSecondary' | 'themeDarkAlt' | 'themeDark' | 'themeDarker' | 'neutralLighterAlt' | 'neutralLighter' | 'neutralLight' | 'neutralQuaternaryAlt' | 'neutralQuaternary' | 'neutralTertiaryAlt' | 'neutralTertiary' | 'neutralSecondary' | 'neutralPrimaryAlt' | 'neutralPrimary' | 'neutralDark' | 'black' | 'white'>
+  )> }
+);
 
 export type DefaultDashThemeForSiteQueryVariables = Exact<{
   ownedInput?: Maybe<OwnedInput>;
 }>;
 
-export type DefaultDashThemeForSiteQuery = { __typename?: 'Query' } & {
-  defaultDashThemeForSite?: Maybe<
-    { __typename?: 'DashTheme' } & Pick<DashTheme, 'id' | 'themeColorMode' | 'themeFontSize'> & {
-        dashThemeColor?: Maybe<
-          { __typename?: 'DashThemeColor' } & Pick<
-            DashThemeColor,
-            | 'id'
-            | 'defaultPalette'
-            | 'themeColorMode'
-            | 'allowDark'
-            | 'paletteNm'
-            | 'themePrimary'
-            | 'themeLighterAlt'
-            | 'themeLighter'
-            | 'themeLight'
-            | 'themeTertiary'
-            | 'themeSecondary'
-            | 'themeDarkAlt'
-            | 'themeDark'
-            | 'themeDarker'
-            | 'neutralLighterAlt'
-            | 'neutralLighter'
-            | 'neutralLight'
-            | 'neutralQuaternaryAlt'
-            | 'neutralQuaternary'
-            | 'neutralTertiaryAlt'
-            | 'neutralTertiary'
-            | 'neutralSecondary'
-            | 'neutralPrimaryAlt'
-            | 'neutralPrimary'
-            | 'neutralDark'
-            | 'black'
-            | 'white'
-          >
-        >;
-      }
-  >;
-};
+
+export type DefaultDashThemeForSiteQuery = (
+  { __typename?: 'Query' }
+  & { defaultDashThemeForSite?: Maybe<(
+    { __typename?: 'DashTheme' }
+    & Pick<DashTheme, 'id' | 'themeColorMode' | 'themeFontSize'>
+    & { dashThemeColor?: Maybe<(
+      { __typename?: 'DashThemeColor' }
+      & Pick<DashThemeColor, 'id' | 'defaultPalette' | 'themeColorMode' | 'allowDark' | 'paletteNm' | 'themePrimary' | 'themeLighterAlt' | 'themeLighter' | 'themeLight' | 'themeTertiary' | 'themeSecondary' | 'themeDarkAlt' | 'themeDark' | 'themeDarker' | 'neutralLighterAlt' | 'neutralLighter' | 'neutralLight' | 'neutralQuaternaryAlt' | 'neutralQuaternary' | 'neutralTertiaryAlt' | 'neutralTertiary' | 'neutralSecondary' | 'neutralPrimaryAlt' | 'neutralPrimary' | 'neutralDark' | 'black' | 'white'>
+    )> }
+  )> }
+);
 
 export type DefaultDashThemeForSitePageQueryVariables = Exact<{
   ownedInput?: Maybe<OwnedInput>;
 }>;
 
-export type DefaultDashThemeForSitePageQuery = { __typename?: 'Query' } & {
-  defaultDashThemeForSitePage?: Maybe<
-    { __typename?: 'DefaultDashThemePage' } & Pick<DefaultDashThemePage, 'themeColorModes' | 'themeFontSizes'> & {
-        themeColorPalettes?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'DashThemeColor' } & Pick<
-                DashThemeColor,
-                | 'id'
-                | 'defaultPalette'
-                | 'themeColorMode'
-                | 'allowDark'
-                | 'paletteNm'
-                | 'themePrimary'
-                | 'themeLighterAlt'
-                | 'themeLighter'
-                | 'themeLight'
-                | 'themeTertiary'
-                | 'themeSecondary'
-                | 'themeDarkAlt'
-                | 'themeDark'
-                | 'themeDarker'
-                | 'neutralLighterAlt'
-                | 'neutralLighter'
-                | 'neutralLight'
-                | 'neutralQuaternaryAlt'
-                | 'neutralQuaternary'
-                | 'neutralTertiaryAlt'
-                | 'neutralTertiary'
-                | 'neutralSecondary'
-                | 'neutralPrimaryAlt'
-                | 'neutralPrimary'
-                | 'neutralDark'
-                | 'black'
-                | 'white'
-              >
-            >
-          >
-        >;
-      }
-  >;
-};
 
-export type CurrentUserDashThemePageQueryVariables = Exact<{ [key: string]: never }>;
+export type DefaultDashThemeForSitePageQuery = (
+  { __typename?: 'Query' }
+  & { defaultDashThemeForSitePage?: Maybe<(
+    { __typename?: 'DefaultDashThemePage' }
+    & Pick<DefaultDashThemePage, 'themeColorModes' | 'themeFontSizes'>
+    & { themeColorPalettes?: Maybe<Array<Maybe<(
+      { __typename?: 'DashThemeColor' }
+      & Pick<DashThemeColor, 'id' | 'defaultPalette' | 'themeColorMode' | 'allowDark' | 'paletteNm' | 'themePrimary' | 'themeLighterAlt' | 'themeLighter' | 'themeLight' | 'themeTertiary' | 'themeSecondary' | 'themeDarkAlt' | 'themeDark' | 'themeDarker' | 'neutralLighterAlt' | 'neutralLighter' | 'neutralLight' | 'neutralQuaternaryAlt' | 'neutralQuaternary' | 'neutralTertiaryAlt' | 'neutralTertiary' | 'neutralSecondary' | 'neutralPrimaryAlt' | 'neutralPrimary' | 'neutralDark' | 'black' | 'white'>
+    )>>> }
+  )> }
+);
 
-export type CurrentUserDashThemePageQuery = { __typename?: 'Query' } & {
-  currentUserDashThemePage?: Maybe<
-    { __typename?: 'UserDashThemePage' } & Pick<UserDashThemePage, 'themeColorModes' | 'themeFontSizes'> & {
-        themeColorPalettes?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'DashThemeColor' } & Pick<
-                DashThemeColor,
-                | 'id'
-                | 'defaultPalette'
-                | 'themeColorMode'
-                | 'allowDark'
-                | 'paletteNm'
-                | 'themePrimary'
-                | 'themeLighterAlt'
-                | 'themeLighter'
-                | 'themeLight'
-                | 'themeTertiary'
-                | 'themeSecondary'
-                | 'themeDarkAlt'
-                | 'themeDark'
-                | 'themeDarker'
-                | 'neutralLighterAlt'
-                | 'neutralLighter'
-                | 'neutralLight'
-                | 'neutralQuaternaryAlt'
-                | 'neutralQuaternary'
-                | 'neutralTertiaryAlt'
-                | 'neutralTertiary'
-                | 'neutralSecondary'
-                | 'neutralPrimaryAlt'
-                | 'neutralPrimary'
-                | 'neutralDark'
-                | 'black'
-                | 'white'
-              >
-            >
-          >
-        >;
-        dashTheme?: Maybe<
-          { __typename?: 'DashTheme' } & Pick<DashTheme, 'id' | 'themeColorMode' | 'themeFontSize'> & {
-              dashThemeColor?: Maybe<
-                { __typename?: 'DashThemeColor' } & Pick<
-                  DashThemeColor,
-                  | 'id'
-                  | 'defaultPalette'
-                  | 'themeColorMode'
-                  | 'allowDark'
-                  | 'paletteNm'
-                  | 'themePrimary'
-                  | 'themeLighterAlt'
-                  | 'themeLighter'
-                  | 'themeLight'
-                  | 'themeTertiary'
-                  | 'themeSecondary'
-                  | 'themeDarkAlt'
-                  | 'themeDark'
-                  | 'themeDarker'
-                  | 'neutralLighterAlt'
-                  | 'neutralLighter'
-                  | 'neutralLight'
-                  | 'neutralQuaternaryAlt'
-                  | 'neutralQuaternary'
-                  | 'neutralTertiaryAlt'
-                  | 'neutralTertiary'
-                  | 'neutralSecondary'
-                  | 'neutralPrimaryAlt'
-                  | 'neutralPrimary'
-                  | 'neutralDark'
-                  | 'black'
-                  | 'white'
-                >
-              >;
-            }
-        >;
-      }
-  >;
-};
+export type CurrentUserDashThemePageQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CurrentUserDashThemePageQuery = (
+  { __typename?: 'Query' }
+  & { currentUserDashThemePage?: Maybe<(
+    { __typename?: 'UserDashThemePage' }
+    & Pick<UserDashThemePage, 'themeColorModes' | 'themeFontSizes'>
+    & { themeColorPalettes?: Maybe<Array<Maybe<(
+      { __typename?: 'DashThemeColor' }
+      & Pick<DashThemeColor, 'id' | 'defaultPalette' | 'themeColorMode' | 'allowDark' | 'paletteNm' | 'themePrimary' | 'themeLighterAlt' | 'themeLighter' | 'themeLight' | 'themeTertiary' | 'themeSecondary' | 'themeDarkAlt' | 'themeDark' | 'themeDarker' | 'neutralLighterAlt' | 'neutralLighter' | 'neutralLight' | 'neutralQuaternaryAlt' | 'neutralQuaternary' | 'neutralTertiaryAlt' | 'neutralTertiary' | 'neutralSecondary' | 'neutralPrimaryAlt' | 'neutralPrimary' | 'neutralDark' | 'black' | 'white'>
+    )>>>, dashTheme?: Maybe<(
+      { __typename?: 'DashTheme' }
+      & Pick<DashTheme, 'id' | 'themeColorMode' | 'themeFontSize'>
+      & { dashThemeColor?: Maybe<(
+        { __typename?: 'DashThemeColor' }
+        & Pick<DashThemeColor, 'id' | 'defaultPalette' | 'themeColorMode' | 'allowDark' | 'paletteNm' | 'themePrimary' | 'themeLighterAlt' | 'themeLighter' | 'themeLight' | 'themeTertiary' | 'themeSecondary' | 'themeDarkAlt' | 'themeDark' | 'themeDarker' | 'neutralLighterAlt' | 'neutralLighter' | 'neutralLight' | 'neutralQuaternaryAlt' | 'neutralQuaternary' | 'neutralTertiaryAlt' | 'neutralTertiary' | 'neutralSecondary' | 'neutralPrimaryAlt' | 'neutralPrimary' | 'neutralDark' | 'black' | 'white'>
+      )> }
+    )> }
+  )> }
+);
 
 export type NavigateToNewDomainQueryVariables = Exact<{
   domainNavInput?: Maybe<DomainNavInput>;
 }>;
 
-export type NavigateToNewDomainQuery = { __typename?: 'Query' } & {
-  navigateToNewDomain?: Maybe<
-    { __typename?: 'WebAppDomain' } & Pick<WebAppDomain, 'type' | 'selectedPage'> & {
-        navItems?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'WebNav' } & {
-                subNavItems?: Maybe<Array<Maybe<{ __typename?: 'WebNav' } & FragmentWebNavFragment>>>;
-              } & FragmentWebNavFragment
-            >
-          >
-        >;
-      }
-  >;
-};
 
-export type SimulateSessionExpirQueryVariables = Exact<{ [key: string]: never }>;
+export type NavigateToNewDomainQuery = (
+  { __typename?: 'Query' }
+  & { navigateToNewDomain?: Maybe<(
+    { __typename?: 'WebAppDomain' }
+    & Pick<WebAppDomain, 'type' | 'selectedPage'>
+    & { navItems?: Maybe<Array<Maybe<(
+      { __typename?: 'WebNav' }
+      & { subNavItems?: Maybe<Array<Maybe<(
+        { __typename?: 'WebNav' }
+        & FragmentWebNavFragment
+      )>>> }
+      & FragmentWebNavFragment
+    )>>> }
+  )> }
+);
 
-export type SimulateSessionExpirQuery = { __typename?: 'Query' } & {
-  simulateSessionExpir?: Maybe<{ __typename?: 'LogOutInfo' } & Pick<LogOutInfo, 'successful'>>;
-};
+export type SimulateSessionExpirQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SimulateSessionExpirQuery = (
+  { __typename?: 'Query' }
+  & { simulateSessionExpir?: Maybe<(
+    { __typename?: 'LogOutInfo' }
+    & Pick<LogOutInfo, 'successful'>
+  )> }
+);
 
 export type PasswordRulesFormQueryVariables = Exact<{
   orgSid: Scalars['ID'];
 }>;
 
-export type PasswordRulesFormQuery = { __typename?: 'Query' } & {
-  passwordRulesForm?: Maybe<
-    { __typename?: 'PasswordRulesForm' } & Pick<
-      PasswordRulesForm,
-      'response' | 'errCode' | 'errMsg' | 'errSeverity'
-    > & {
-        organization: { __typename?: 'UIReadOnlyField' } & Pick<
-          UiReadOnlyField,
-          | 'value'
-          | 'description'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        mustAlwaysBeMet?: Maybe<
-          { __typename?: 'RequiredPasswordRuleSetForm' } & {
-            mustNotContainWhiteSpace?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            mustNotContainUserName?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            mustNotContainNumericSequence?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            mustFollowLengthRequirements?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            minLength?: Maybe<
-              { __typename?: 'UIIntField' } & Pick<
-                UiIntField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-            maxLength?: Maybe<
-              { __typename?: 'UIIntField' } & Pick<
-                UiIntField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-            mustContainUpperCaseLetters?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            minUpperCaseLetters?: Maybe<
-              { __typename?: 'UIIntField' } & Pick<
-                UiIntField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-            mustContainLowerCaseLetters?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            minLowerCaseLetters?: Maybe<
-              { __typename?: 'UIIntField' } & Pick<
-                UiIntField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-            mustContainNumericDigits?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            minNumericDigits?: Maybe<
-              { __typename?: 'UIIntField' } & Pick<
-                UiIntField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-            mustContainSpecialCharacters?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            minSpecialCharacters?: Maybe<
-              { __typename?: 'UIIntField' } & Pick<
-                UiIntField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-            mustNotRepeatCharacters?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            maxAllowedRepeatedChars?: Maybe<
-              { __typename?: 'UIIntField' } & Pick<
-                UiIntField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-            mustNotReusePasswords?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            minPasswordHistoryVariations?: Maybe<
-              { __typename?: 'UIIntField' } & Pick<
-                UiIntField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-            mustNotMatchExactDictionaryWord?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            mustNotMatchPartialDictionaryWord?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-          }
-        >;
-        someMustBeMet?: Maybe<
-          { __typename?: 'CompositePasswordRuleSetForm' } & {
-            enabled?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            minPasswordComplexity?: Maybe<
-              { __typename?: 'UISelectOneField' } & Pick<
-                UiSelectOneField,
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'options'
-                | 'query'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              > & { value?: Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>> }
-            >;
-            requiredNumPassingRules?: Maybe<
-              { __typename?: 'UIIntField' } & Pick<
-                UiIntField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-            mustNotContainWhiteSpace?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            mustNotContainUserName?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            mustNotContainNumericSequence?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            mustFollowLengthRequirements?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            minLength?: Maybe<
-              { __typename?: 'UIIntField' } & Pick<
-                UiIntField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-            maxLength?: Maybe<
-              { __typename?: 'UIIntField' } & Pick<
-                UiIntField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-            mustContainUpperCaseLetters?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            minUpperCaseLetters?: Maybe<
-              { __typename?: 'UIIntField' } & Pick<
-                UiIntField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-            mustContainLowerCaseLetters?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            minLowerCaseLetters?: Maybe<
-              { __typename?: 'UIIntField' } & Pick<
-                UiIntField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-            mustContainNumericDigits?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            minNumericDigits?: Maybe<
-              { __typename?: 'UIIntField' } & Pick<
-                UiIntField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-            mustContainSpecialCharacters?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            minSpecialCharacters?: Maybe<
-              { __typename?: 'UIIntField' } & Pick<
-                UiIntField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-            mustNotRepeatCharacters?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            maxAllowedRepeatedChars?: Maybe<
-              { __typename?: 'UIIntField' } & Pick<
-                UiIntField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-            mustNotReusePasswords?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            minPasswordHistoryVariations?: Maybe<
-              { __typename?: 'UIIntField' } & Pick<
-                UiIntField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-            mustNotMatchExactDictionaryWord?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            mustNotMatchPartialDictionaryWord?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-          }
-        >;
-        autoLockAccount?: Maybe<
-          { __typename?: 'UIBooleanField' } & Pick<
-            UiBooleanField,
-            'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-          >
-        >;
-        autoLockAfterFailedAttempts?: Maybe<
-          { __typename?: 'UIIntField' } & Pick<
-            UiIntField,
-            | 'value'
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'min'
-            | 'max'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          >
-        >;
-        autoUnlockAccount?: Maybe<
-          { __typename?: 'UIBooleanField' } & Pick<
-            UiBooleanField,
-            'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-          >
-        >;
-        autoUnlockAccountDelayMinutes?: Maybe<
-          { __typename?: 'UIIntField' } & Pick<
-            UiIntField,
-            | 'value'
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'min'
-            | 'max'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          >
-        >;
-        options?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'UIOptions' } & Pick<UiOptions, 'key'> & {
-                  values?: Maybe<
-                    Array<Maybe<{ __typename?: 'UIOption' } & Pick<UiOption, 'label' | 'value' | 'info'>>>
-                  >;
-                }
-            >
-          >
-        >;
-      }
-  >;
-};
+
+export type PasswordRulesFormQuery = (
+  { __typename?: 'Query' }
+  & { passwordRulesForm?: Maybe<(
+    { __typename?: 'PasswordRulesForm' }
+    & Pick<PasswordRulesForm, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { organization: (
+      { __typename?: 'UIReadOnlyField' }
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), mustAlwaysBeMet?: Maybe<(
+      { __typename?: 'RequiredPasswordRuleSetForm' }
+      & { mustNotContainWhiteSpace?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotContainUserName?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotContainNumericSequence?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustFollowLengthRequirements?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minLength?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, maxLength?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustContainUpperCaseLetters?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minUpperCaseLetters?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustContainLowerCaseLetters?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minLowerCaseLetters?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustContainNumericDigits?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minNumericDigits?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustContainSpecialCharacters?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minSpecialCharacters?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotRepeatCharacters?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, maxAllowedRepeatedChars?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotReusePasswords?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minPasswordHistoryVariations?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotMatchExactDictionaryWord?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotMatchPartialDictionaryWord?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )> }
+    )>, someMustBeMet?: Maybe<(
+      { __typename?: 'CompositePasswordRuleSetForm' }
+      & { enabled?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minPasswordComplexity?: Maybe<(
+        { __typename?: 'UISelectOneField' }
+        & Pick<UiSelectOneField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & { value?: Maybe<(
+          { __typename?: 'NVPStr' }
+          & Pick<NvpStr, 'name' | 'value'>
+        )> }
+      )>, requiredNumPassingRules?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotContainWhiteSpace?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotContainUserName?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotContainNumericSequence?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustFollowLengthRequirements?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minLength?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, maxLength?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustContainUpperCaseLetters?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minUpperCaseLetters?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustContainLowerCaseLetters?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minLowerCaseLetters?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustContainNumericDigits?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minNumericDigits?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustContainSpecialCharacters?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minSpecialCharacters?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotRepeatCharacters?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, maxAllowedRepeatedChars?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotReusePasswords?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minPasswordHistoryVariations?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotMatchExactDictionaryWord?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotMatchPartialDictionaryWord?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )> }
+    )>, autoLockAccount?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, autoLockAfterFailedAttempts?: Maybe<(
+      { __typename?: 'UIIntField' }
+      & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, autoUnlockAccount?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, autoUnlockAccountDelayMinutes?: Maybe<(
+      { __typename?: 'UIIntField' }
+      & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, options?: Maybe<Array<Maybe<(
+      { __typename?: 'UIOptions' }
+      & Pick<UiOptions, 'key'>
+      & { values?: Maybe<Array<Maybe<(
+        { __typename?: 'UIOption' }
+        & Pick<UiOption, 'label' | 'value' | 'info'>
+      )>>> }
+    )>>> }
+  )> }
+);
 
 export type PasswordValidationQueryVariables = Exact<{
   orgSid: Scalars['ID'];
@@ -5500,2644 +4379,2272 @@ export type PasswordValidationQueryVariables = Exact<{
   password: Scalars['String'];
 }>;
 
-export type PasswordValidationQuery = { __typename?: 'Query' } & {
-  passwordValidation?: Maybe<
-    { __typename?: 'PasswordValidation' } & Pick<PasswordValidation, 'passes'> & {
-        mustAlwaysBeMet?: Maybe<
-          { __typename?: 'PasswordValidationGroup' } & Pick<
-            PasswordValidationGroup,
-            'enabled' | 'requiredNumPassingRules' | 'passes'
-          > & {
-              rules: Array<
-                Maybe<{ __typename?: 'PasswordValidationRule' } & Pick<PasswordValidationRule, 'passes' | 'label'>>
-              >;
-            }
-        >;
-        passwordStrength?: Maybe<
-          { __typename?: 'PasswordValidationStrengthRule' } & Pick<
-            PasswordValidationStrengthRule,
-            'passes' | 'minPasswordComplexity'
-          >
-        >;
-        someMustBeMet?: Maybe<
-          { __typename?: 'PasswordValidationGroup' } & Pick<
-            PasswordValidationGroup,
-            'enabled' | 'requiredNumPassingRules' | 'passes'
-          > & {
-              rules: Array<
-                Maybe<{ __typename?: 'PasswordValidationRule' } & Pick<PasswordValidationRule, 'passes' | 'label'>>
-              >;
-            }
-        >;
-      }
-  >;
-};
+
+export type PasswordValidationQuery = (
+  { __typename?: 'Query' }
+  & { passwordValidation?: Maybe<(
+    { __typename?: 'PasswordValidation' }
+    & Pick<PasswordValidation, 'passes'>
+    & { mustAlwaysBeMet?: Maybe<(
+      { __typename?: 'PasswordValidationGroup' }
+      & Pick<PasswordValidationGroup, 'enabled' | 'requiredNumPassingRules' | 'passes'>
+      & { rules: Array<Maybe<(
+        { __typename?: 'PasswordValidationRule' }
+        & Pick<PasswordValidationRule, 'passes' | 'label'>
+      )>> }
+    )>, passwordStrength?: Maybe<(
+      { __typename?: 'PasswordValidationStrengthRule' }
+      & Pick<PasswordValidationStrengthRule, 'passes' | 'minPasswordComplexity'>
+    )>, someMustBeMet?: Maybe<(
+      { __typename?: 'PasswordValidationGroup' }
+      & Pick<PasswordValidationGroup, 'enabled' | 'requiredNumPassingRules' | 'passes'>
+      & { rules: Array<Maybe<(
+        { __typename?: 'PasswordValidationRule' }
+        & Pick<PasswordValidationRule, 'passes' | 'label'>
+      )>> }
+    )> }
+  )> }
+);
 
 export type XpsftpTestQueryVariables = Exact<{
   orgSid?: Maybe<Scalars['ID']>;
 }>;
 
-export type XpsftpTestQuery = { __typename?: 'Query' } & {
-  xpsftpTest?: Maybe<
-    { __typename?: 'XPSFTPTestPage' } & Pick<XpsftpTestPage, 'includeFileUpload'> & {
-        xpSFTPForm: { __typename?: 'XPSFTPForm' } & Pick<
-          XpsftpForm,
-          'response' | 'errCode' | 'errMsg' | 'errSeverity'
-        > & {
-            host?: Maybe<
-              { __typename?: 'UIStringField' } & Pick<
-                UiStringField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-            port?: Maybe<
-              { __typename?: 'UIIntField' } & Pick<
-                UiIntField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-            user?: Maybe<
-              { __typename?: 'UIStringField' } & Pick<
-                UiStringField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-            password?: Maybe<
-              { __typename?: 'UIStringField' } & Pick<
-                UiStringField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-            folder?: Maybe<
-              { __typename?: 'UIStringField' } & Pick<
-                UiStringField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-            stepWise?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-          };
-        genTestFileForm?: Maybe<
-          { __typename?: 'SFTPTestGenerateTestFileForm' } & {
-            generate?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            fileName?: Maybe<
-              { __typename?: 'UIStringField' } & Pick<
-                UiStringField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-            fileBody?: Maybe<
-              { __typename?: 'UIStringField' } & Pick<
-                UiStringField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-          }
-        >;
-      }
-  >;
-};
+
+export type XpsftpTestQuery = (
+  { __typename?: 'Query' }
+  & { xpsftpTest?: Maybe<(
+    { __typename?: 'XPSFTPTestPage' }
+    & Pick<XpsftpTestPage, 'includeFileUpload'>
+    & { xpSFTPForm: (
+      { __typename?: 'XPSFTPForm' }
+      & Pick<XpsftpForm, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { host?: Maybe<(
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, port?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, user?: Maybe<(
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, password?: Maybe<(
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, folder?: Maybe<(
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, stepWise?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )> }
+    ), genTestFileForm?: Maybe<(
+      { __typename?: 'SFTPTestGenerateTestFileForm' }
+      & { generate?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, fileName?: Maybe<(
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, fileBody?: Maybe<(
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )> }
+    )> }
+  )> }
+);
 
 export type BeginLoginMutationVariables = Exact<{
   userId: Scalars['String'];
 }>;
 
-export type BeginLoginMutation = { __typename?: 'Mutation' } & {
-  beginLogin?: Maybe<
-    { __typename?: 'LoginStep' } & Pick<LoginStep, 'userId' | 'step' | 'redirectPath' | 'allowLostPassword'> & {
-        loginCompleteDomain?: Maybe<
-          { __typename?: 'WebAppDomain' } & Pick<WebAppDomain, 'type' | 'selectedPage'> & {
-              navItems?: Maybe<Array<Maybe<{ __typename?: 'WebNav' } & FragmentWebNavFragment>>>;
-            }
-        >;
-        tokenUser?: Maybe<
-          { __typename?: 'TokenUser' } & Pick<TokenUser, 'token'> & {
-              session?: Maybe<
-                { __typename?: 'UserSession' } & Pick<
-                  UserSession,
-                  'id' | 'orgId' | 'orgSid' | 'orgName' | 'userId' | 'firstNm' | 'pollInterval' | 'defaultAuthorities'
-                >
-              >;
-            }
-        >;
-      }
-  >;
-};
+
+export type BeginLoginMutation = (
+  { __typename?: 'Mutation' }
+  & { beginLogin?: Maybe<(
+    { __typename?: 'LoginStep' }
+    & Pick<LoginStep, 'userId' | 'step' | 'redirectPath' | 'allowLostPassword'>
+    & { loginCompleteDomain?: Maybe<(
+      { __typename?: 'WebAppDomain' }
+      & Pick<WebAppDomain, 'type' | 'selectedPage'>
+      & { navItems?: Maybe<Array<Maybe<(
+        { __typename?: 'WebNav' }
+        & FragmentWebNavFragment
+      )>>> }
+    )>, tokenUser?: Maybe<(
+      { __typename?: 'TokenUser' }
+      & Pick<TokenUser, 'token'>
+      & { session?: Maybe<(
+        { __typename?: 'UserSession' }
+        & Pick<UserSession, 'id' | 'orgId' | 'orgSid' | 'orgName' | 'userId' | 'firstNm' | 'pollInterval' | 'defaultAuthorities'>
+      )> }
+    )> }
+  )> }
+);
 
 export type PasswordLoginMutationVariables = Exact<{
   userId: Scalars['String'];
   password: Scalars['String'];
 }>;
 
-export type PasswordLoginMutation = { __typename?: 'Mutation' } & {
-  passwordLogin?: Maybe<
-    { __typename?: 'LoginStep' } & Pick<LoginStep, 'step' | 'redirectPath' | 'allowLostPassword'> & {
-        loginCompleteDomain?: Maybe<
-          { __typename?: 'WebAppDomain' } & Pick<WebAppDomain, 'type' | 'selectedPage'> & {
-              navItems?: Maybe<
-                Array<
-                  Maybe<
-                    { __typename?: 'WebNav' } & {
-                      subNavItems?: Maybe<Array<Maybe<{ __typename?: 'WebNav' } & FragmentWebNavFragment>>>;
-                    } & FragmentWebNavFragment
-                  >
-                >
-              >;
-            }
-        >;
-        tokenUser?: Maybe<
-          { __typename?: 'TokenUser' } & Pick<TokenUser, 'token'> & {
-              session?: Maybe<
-                { __typename?: 'UserSession' } & Pick<
-                  UserSession,
-                  'id' | 'orgId' | 'orgSid' | 'orgName' | 'userId' | 'firstNm' | 'pollInterval' | 'defaultAuthorities'
-                >
-              >;
-            }
-        >;
-      }
-  >;
-};
 
-export type LogOutMutationVariables = Exact<{ [key: string]: never }>;
+export type PasswordLoginMutation = (
+  { __typename?: 'Mutation' }
+  & { passwordLogin?: Maybe<(
+    { __typename?: 'LoginStep' }
+    & Pick<LoginStep, 'step' | 'redirectPath' | 'allowLostPassword'>
+    & { loginCompleteDomain?: Maybe<(
+      { __typename?: 'WebAppDomain' }
+      & Pick<WebAppDomain, 'type' | 'selectedPage'>
+      & { navItems?: Maybe<Array<Maybe<(
+        { __typename?: 'WebNav' }
+        & { subNavItems?: Maybe<Array<Maybe<(
+          { __typename?: 'WebNav' }
+          & FragmentWebNavFragment
+        )>>> }
+        & FragmentWebNavFragment
+      )>>> }
+    )>, tokenUser?: Maybe<(
+      { __typename?: 'TokenUser' }
+      & Pick<TokenUser, 'token'>
+      & { session?: Maybe<(
+        { __typename?: 'UserSession' }
+        & Pick<UserSession, 'id' | 'orgId' | 'orgSid' | 'orgName' | 'userId' | 'firstNm' | 'pollInterval' | 'defaultAuthorities'>
+      )> }
+    )> }
+  )> }
+);
 
-export type LogOutMutation = { __typename?: 'Mutation' } & {
-  logOut?: Maybe<{ __typename?: 'LogOutInfo' } & Pick<LogOutInfo, 'successful'>>;
-};
+export type LogOutMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type LogOutMutation = (
+  { __typename?: 'Mutation' }
+  & { logOut?: Maybe<(
+    { __typename?: 'LogOutInfo' }
+    & Pick<LogOutInfo, 'successful'>
+  )> }
+);
 
 export type UpdateOwnPasswordMutationVariables = Exact<{
   updateOwnPasswordInput: UpdateOwnPasswordInput;
 }>;
 
-export type UpdateOwnPasswordMutation = { __typename?: 'Mutation' } & {
-  updateOwnPassword?: Maybe<
-    { __typename?: 'UserSession' } & Pick<
-      UserSession,
-      'id' | 'orgId' | 'orgSid' | 'orgName' | 'userId' | 'firstNm' | 'pollInterval' | 'defaultAuthorities'
-    >
-  >;
-};
+
+export type UpdateOwnPasswordMutation = (
+  { __typename?: 'Mutation' }
+  & { updateOwnPassword?: Maybe<(
+    { __typename?: 'UserSession' }
+    & Pick<UserSession, 'id' | 'orgId' | 'orgSid' | 'orgName' | 'userId' | 'firstNm' | 'pollInterval' | 'defaultAuthorities'>
+  )> }
+);
 
 export type ResetPasswordMutationVariables = Exact<{
   userSid: Scalars['ID'];
 }>;
 
-export type ResetPasswordMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'resetPassword'>;
+
+export type ResetPasswordMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'resetPassword'>
+);
 
 export type UpdatePasswordMutationVariables = Exact<{
   updatePasswordInput: UpdatePasswordInput;
 }>;
 
-export type UpdatePasswordMutation = { __typename?: 'Mutation' } & {
-  updatePassword?: Maybe<
-    { __typename?: 'GenericResponse' } & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
-  >;
-};
+
+export type UpdatePasswordMutation = (
+  { __typename?: 'Mutation' }
+  & { updatePassword?: Maybe<(
+    { __typename?: 'GenericResponse' }
+    & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+  )> }
+);
 
 export type CreateOrgMutationVariables = Exact<{
   orgInfo: CreateOrgInput;
 }>;
 
-export type CreateOrgMutation = { __typename?: 'Mutation' } & {
-  createOrg?: Maybe<
-    { __typename?: 'OrganizationForm' } & Pick<
-      OrganizationForm,
-      'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'
-    > & {
-        name: { __typename?: 'UIStringField' } & Pick<
-          UiStringField,
-          | 'value'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'min'
-          | 'max'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        orgId: { __typename?: 'UIStringField' } & Pick<
-          UiStringField,
-          | 'value'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'min'
-          | 'max'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        orgType?: Maybe<
-          { __typename?: 'UISelectOneField' } & Pick<
-            UiSelectOneField,
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'options'
-            | 'query'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          > & { value?: Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>> }
-        >;
-        active: { __typename?: 'UIBooleanField' } & Pick<
-          UiBooleanField,
-          'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-        >;
-        whitelist?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'OrgWhitelistForm' } & Pick<OrgWhitelistForm, 'errCode' | 'errMsg' | 'errSeverity'> & {
-                  pattern?: Maybe<
-                    { __typename?: 'UIStringField' } & Pick<
-                      UiStringField,
-                      | 'value'
-                      | 'label'
-                      | 'readOnly'
-                      | 'info'
-                      | 'required'
-                      | 'visible'
-                      | 'min'
-                      | 'max'
-                      | 'errCode'
-                      | 'errMsg'
-                      | 'errSeverity'
-                    >
-                  >;
-                }
-            >
-          >
-        >;
-        options?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'UIOptions' } & Pick<UiOptions, 'key'> & {
-                  values?: Maybe<
-                    Array<Maybe<{ __typename?: 'UIOption' } & Pick<UiOption, 'label' | 'value' | 'info'>>>
-                  >;
-                }
-            >
-          >
-        >;
-        commands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-      }
-  >;
-};
+
+export type CreateOrgMutation = (
+  { __typename?: 'Mutation' }
+  & { createOrg?: Maybe<(
+    { __typename?: 'OrganizationForm' }
+    & Pick<OrganizationForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { name: (
+      { __typename?: 'UIStringField' }
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), orgId: (
+      { __typename?: 'UIStringField' }
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), orgType?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & Pick<UiSelectOneField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )> }
+    )>, active: (
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), whitelist?: Maybe<Array<Maybe<(
+      { __typename?: 'OrgWhitelistForm' }
+      & Pick<OrgWhitelistForm, 'errCode' | 'errMsg' | 'errSeverity'>
+      & { pattern?: Maybe<(
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )> }
+    )>>>, options?: Maybe<Array<Maybe<(
+      { __typename?: 'UIOptions' }
+      & Pick<UiOptions, 'key'>
+      & { values?: Maybe<Array<Maybe<(
+        { __typename?: 'UIOption' }
+        & Pick<UiOption, 'label' | 'value' | 'info'>
+      )>>> }
+    )>>>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>>> }
+  )> }
+);
 
 export type UpdateOrgMutationVariables = Exact<{
   orgInfo: UpdateOrgInput;
 }>;
 
-export type UpdateOrgMutation = { __typename?: 'Mutation' } & {
-  updateOrg?: Maybe<
-    { __typename?: 'OrganizationForm' } & Pick<
-      OrganizationForm,
-      'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'
-    > & {
-        name: { __typename?: 'UIStringField' } & Pick<
-          UiStringField,
-          | 'value'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'min'
-          | 'max'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        orgId: { __typename?: 'UIStringField' } & Pick<
-          UiStringField,
-          | 'value'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'min'
-          | 'max'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        orgType?: Maybe<
-          { __typename?: 'UISelectOneField' } & Pick<
-            UiSelectOneField,
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'options'
-            | 'query'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          > & { value?: Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>> }
-        >;
-        active: { __typename?: 'UIBooleanField' } & Pick<
-          UiBooleanField,
-          'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-        >;
-        whitelist?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'OrgWhitelistForm' } & Pick<OrgWhitelistForm, 'errCode' | 'errMsg' | 'errSeverity'> & {
-                  pattern?: Maybe<
-                    { __typename?: 'UIStringField' } & Pick<
-                      UiStringField,
-                      | 'value'
-                      | 'label'
-                      | 'readOnly'
-                      | 'info'
-                      | 'required'
-                      | 'visible'
-                      | 'min'
-                      | 'max'
-                      | 'errCode'
-                      | 'errMsg'
-                      | 'errSeverity'
-                    >
-                  >;
-                }
-            >
-          >
-        >;
-        options?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'UIOptions' } & Pick<UiOptions, 'key'> & {
-                  values?: Maybe<
-                    Array<Maybe<{ __typename?: 'UIOption' } & Pick<UiOption, 'label' | 'value' | 'info'>>>
-                  >;
-                }
-            >
-          >
-        >;
-        commands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-      }
-  >;
-};
+
+export type UpdateOrgMutation = (
+  { __typename?: 'Mutation' }
+  & { updateOrg?: Maybe<(
+    { __typename?: 'OrganizationForm' }
+    & Pick<OrganizationForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { name: (
+      { __typename?: 'UIStringField' }
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), orgId: (
+      { __typename?: 'UIStringField' }
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), orgType?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & Pick<UiSelectOneField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )> }
+    )>, active: (
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), whitelist?: Maybe<Array<Maybe<(
+      { __typename?: 'OrgWhitelistForm' }
+      & Pick<OrgWhitelistForm, 'errCode' | 'errMsg' | 'errSeverity'>
+      & { pattern?: Maybe<(
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )> }
+    )>>>, options?: Maybe<Array<Maybe<(
+      { __typename?: 'UIOptions' }
+      & Pick<UiOptions, 'key'>
+      & { values?: Maybe<Array<Maybe<(
+        { __typename?: 'UIOption' }
+        & Pick<UiOption, 'label' | 'value' | 'info'>
+      )>>> }
+    )>>>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>>> }
+  )> }
+);
 
 export type DeactivateOrgMutationVariables = Exact<{
   orgSid: Scalars['ID'];
 }>;
 
-export type DeactivateOrgMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'deactivateOrg'>;
+
+export type DeactivateOrgMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deactivateOrg'>
+);
 
 export type CreateAccessPolicyMutationVariables = Exact<{
   createAccessPolicyInput: CreateAccessPolicyInput;
 }>;
 
-export type CreateAccessPolicyMutation = { __typename?: 'Mutation' } & {
-  createAccessPolicy?: Maybe<
-    { __typename?: 'AccessPolicyForm' } & Pick<
-      AccessPolicyForm,
-      'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'
-    > & {
-        name: { __typename?: 'UIStringField' } & Pick<
-          UiStringField,
-          | 'value'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'min'
-          | 'max'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        organization: { __typename?: 'UIReadOnlyField' } & Pick<
-          UiReadOnlyField,
-          | 'value'
-          | 'description'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        permissions?: Maybe<
-          { __typename?: 'UISelectManyField' } & Pick<
-            UiSelectManyField,
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'options'
-            | 'query'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          > & { value?: Maybe<Array<Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>>>> }
-        >;
-        tmpl?: Maybe<
-          { __typename?: 'UIBooleanField' } & Pick<
-            UiBooleanField,
-            'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-          >
-        >;
-        tmplUseAsIs?: Maybe<
-          { __typename?: 'UIBooleanField' } & Pick<
-            UiBooleanField,
-            'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-          >
-        >;
-        applicableOrgTypes?: Maybe<
-          { __typename?: 'UISelectManyField' } & Pick<
-            UiSelectManyField,
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'options'
-            | 'query'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          > & { value?: Maybe<Array<Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>>>> }
-        >;
-        options?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'UIOptions' } & Pick<UiOptions, 'key'> & {
-                  values?: Maybe<
-                    Array<Maybe<{ __typename?: 'UIOption' } & Pick<UiOption, 'label' | 'value' | 'info'>>>
-                  >;
-                }
-            >
-          >
-        >;
-        commands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-      }
-  >;
-};
+
+export type CreateAccessPolicyMutation = (
+  { __typename?: 'Mutation' }
+  & { createAccessPolicy?: Maybe<(
+    { __typename?: 'AccessPolicyForm' }
+    & Pick<AccessPolicyForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { name: (
+      { __typename?: 'UIStringField' }
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), organization: (
+      { __typename?: 'UIReadOnlyField' }
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), permissions?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
+    )>, tmpl?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, tmplUseAsIs?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, applicableOrgTypes?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
+    )>, options?: Maybe<Array<Maybe<(
+      { __typename?: 'UIOptions' }
+      & Pick<UiOptions, 'key'>
+      & { values?: Maybe<Array<Maybe<(
+        { __typename?: 'UIOption' }
+        & Pick<UiOption, 'label' | 'value' | 'info'>
+      )>>> }
+    )>>>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>>> }
+  )> }
+);
 
 export type UpdateAccessPolicyMutationVariables = Exact<{
   updateAccessPolicyInput?: Maybe<UpdateAccessPolicyInput>;
 }>;
 
-export type UpdateAccessPolicyMutation = { __typename?: 'Mutation' } & {
-  updateAccessPolicy?: Maybe<
-    { __typename?: 'AccessPolicyForm' } & Pick<
-      AccessPolicyForm,
-      'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'
-    > & {
-        name: { __typename?: 'UIStringField' } & Pick<
-          UiStringField,
-          | 'value'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'min'
-          | 'max'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        organization: { __typename?: 'UIReadOnlyField' } & Pick<
-          UiReadOnlyField,
-          | 'value'
-          | 'description'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        permissions?: Maybe<
-          { __typename?: 'UISelectManyField' } & Pick<
-            UiSelectManyField,
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'options'
-            | 'query'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          > & { value?: Maybe<Array<Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>>>> }
-        >;
-        tmpl?: Maybe<
-          { __typename?: 'UIBooleanField' } & Pick<
-            UiBooleanField,
-            'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-          >
-        >;
-        tmplUseAsIs?: Maybe<
-          { __typename?: 'UIBooleanField' } & Pick<
-            UiBooleanField,
-            'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-          >
-        >;
-        applicableOrgTypes?: Maybe<
-          { __typename?: 'UISelectManyField' } & Pick<
-            UiSelectManyField,
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'options'
-            | 'query'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          > & { value?: Maybe<Array<Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>>>> }
-        >;
-        options?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'UIOptions' } & Pick<UiOptions, 'key'> & {
-                  values?: Maybe<
-                    Array<Maybe<{ __typename?: 'UIOption' } & Pick<UiOption, 'label' | 'value' | 'info'>>>
-                  >;
-                }
-            >
-          >
-        >;
-        commands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-      }
-  >;
-};
+
+export type UpdateAccessPolicyMutation = (
+  { __typename?: 'Mutation' }
+  & { updateAccessPolicy?: Maybe<(
+    { __typename?: 'AccessPolicyForm' }
+    & Pick<AccessPolicyForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { name: (
+      { __typename?: 'UIStringField' }
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), organization: (
+      { __typename?: 'UIReadOnlyField' }
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), permissions?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
+    )>, tmpl?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, tmplUseAsIs?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, applicableOrgTypes?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
+    )>, options?: Maybe<Array<Maybe<(
+      { __typename?: 'UIOptions' }
+      & Pick<UiOptions, 'key'>
+      & { values?: Maybe<Array<Maybe<(
+        { __typename?: 'UIOption' }
+        & Pick<UiOption, 'label' | 'value' | 'info'>
+      )>>> }
+    )>>>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>>> }
+  )> }
+);
 
 export type DeleteAccessPoliciesMutationVariables = Exact<{
   deleteAccessPoliciesInput?: Maybe<DeleteAccessPoliciesInput>;
 }>;
 
-export type DeleteAccessPoliciesMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'deleteAccessPolicies'>;
+
+export type DeleteAccessPoliciesMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteAccessPolicies'>
+);
 
 export type DeleteAccessPolicyMutationVariables = Exact<{
   policySid: Scalars['ID'];
 }>;
 
-export type DeleteAccessPolicyMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'deleteAccessPolicy'>;
+
+export type DeleteAccessPolicyMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteAccessPolicy'>
+);
 
 export type CreateAccessSpecializationMutationVariables = Exact<{
   createAccessSpecializationInput: CreateAccessSpecializationInput;
 }>;
 
-export type CreateAccessSpecializationMutation = { __typename?: 'Mutation' } & {
-  createAccessSpecialization?: Maybe<
-    { __typename?: 'AccessSpecializationForm' } & Pick<
-      AccessSpecializationForm,
-      'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'
-    > & {
-        name: { __typename?: 'UIStringField' } & Pick<
-          UiStringField,
-          | 'value'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'min'
-          | 'max'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        organization: { __typename?: 'UIReadOnlyField' } & Pick<
-          UiReadOnlyField,
-          | 'value'
-          | 'description'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        filters?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'SpecializationFilterForm' } & Pick<
-                SpecializationFilterForm,
-                'permission' | 'label' | 'errCode' | 'errMsg' | 'errSeverity'
-              > & {
-                  orgSids?: Maybe<
-                    { __typename?: 'UISelectManyField' } & Pick<
-                      UiSelectManyField,
-                      | 'label'
-                      | 'readOnly'
-                      | 'info'
-                      | 'required'
-                      | 'visible'
-                      | 'options'
-                      | 'query'
-                      | 'errCode'
-                      | 'errMsg'
-                      | 'errSeverity'
-                    > & { value?: Maybe<Array<Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>>>> }
-                  >;
-                }
-            >
-          >
-        >;
-        options?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'UIOptions' } & Pick<UiOptions, 'key'> & {
-                  values?: Maybe<
-                    Array<Maybe<{ __typename?: 'UIOption' } & Pick<UiOption, 'label' | 'value' | 'info'>>>
-                  >;
-                }
-            >
-          >
-        >;
-        commands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-      }
-  >;
-};
+
+export type CreateAccessSpecializationMutation = (
+  { __typename?: 'Mutation' }
+  & { createAccessSpecialization?: Maybe<(
+    { __typename?: 'AccessSpecializationForm' }
+    & Pick<AccessSpecializationForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { name: (
+      { __typename?: 'UIStringField' }
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), organization: (
+      { __typename?: 'UIReadOnlyField' }
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), filters?: Maybe<Array<Maybe<(
+      { __typename?: 'SpecializationFilterForm' }
+      & Pick<SpecializationFilterForm, 'permission' | 'label' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { orgSids?: Maybe<(
+        { __typename?: 'UISelectManyField' }
+        & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & { value?: Maybe<Array<Maybe<(
+          { __typename?: 'NVPStr' }
+          & Pick<NvpStr, 'name' | 'value'>
+        )>>> }
+      )> }
+    )>>>, options?: Maybe<Array<Maybe<(
+      { __typename?: 'UIOptions' }
+      & Pick<UiOptions, 'key'>
+      & { values?: Maybe<Array<Maybe<(
+        { __typename?: 'UIOption' }
+        & Pick<UiOption, 'label' | 'value' | 'info'>
+      )>>> }
+    )>>>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>>> }
+  )> }
+);
 
 export type UpdateAccessSpecializationMutationVariables = Exact<{
   updateAccessSpecializationInput?: Maybe<UpdateAccessSpecializationInput>;
 }>;
 
-export type UpdateAccessSpecializationMutation = { __typename?: 'Mutation' } & {
-  updateAccessSpecialization?: Maybe<
-    { __typename?: 'AccessSpecializationForm' } & Pick<
-      AccessSpecializationForm,
-      'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'
-    > & {
-        name: { __typename?: 'UIStringField' } & Pick<
-          UiStringField,
-          | 'value'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'min'
-          | 'max'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        organization: { __typename?: 'UIReadOnlyField' } & Pick<
-          UiReadOnlyField,
-          | 'value'
-          | 'description'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        filters?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'SpecializationFilterForm' } & Pick<
-                SpecializationFilterForm,
-                'permission' | 'label' | 'errCode' | 'errMsg' | 'errSeverity'
-              > & {
-                  orgSids?: Maybe<
-                    { __typename?: 'UISelectManyField' } & Pick<
-                      UiSelectManyField,
-                      | 'label'
-                      | 'readOnly'
-                      | 'info'
-                      | 'required'
-                      | 'visible'
-                      | 'options'
-                      | 'query'
-                      | 'errCode'
-                      | 'errMsg'
-                      | 'errSeverity'
-                    > & { value?: Maybe<Array<Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>>>> }
-                  >;
-                }
-            >
-          >
-        >;
-        options?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'UIOptions' } & Pick<UiOptions, 'key'> & {
-                  values?: Maybe<
-                    Array<Maybe<{ __typename?: 'UIOption' } & Pick<UiOption, 'label' | 'value' | 'info'>>>
-                  >;
-                }
-            >
-          >
-        >;
-        commands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-      }
-  >;
-};
+
+export type UpdateAccessSpecializationMutation = (
+  { __typename?: 'Mutation' }
+  & { updateAccessSpecialization?: Maybe<(
+    { __typename?: 'AccessSpecializationForm' }
+    & Pick<AccessSpecializationForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { name: (
+      { __typename?: 'UIStringField' }
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), organization: (
+      { __typename?: 'UIReadOnlyField' }
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), filters?: Maybe<Array<Maybe<(
+      { __typename?: 'SpecializationFilterForm' }
+      & Pick<SpecializationFilterForm, 'permission' | 'label' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { orgSids?: Maybe<(
+        { __typename?: 'UISelectManyField' }
+        & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & { value?: Maybe<Array<Maybe<(
+          { __typename?: 'NVPStr' }
+          & Pick<NvpStr, 'name' | 'value'>
+        )>>> }
+      )> }
+    )>>>, options?: Maybe<Array<Maybe<(
+      { __typename?: 'UIOptions' }
+      & Pick<UiOptions, 'key'>
+      & { values?: Maybe<Array<Maybe<(
+        { __typename?: 'UIOption' }
+        & Pick<UiOption, 'label' | 'value' | 'info'>
+      )>>> }
+    )>>>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>>> }
+  )> }
+);
 
 export type DeleteAccessSpecializationMutationVariables = Exact<{
   specializationSid: Scalars['ID'];
 }>;
 
-export type DeleteAccessSpecializationMutation = { __typename?: 'Mutation' } & Pick<
-  Mutation,
-  'deleteAccessSpecialization'
->;
+
+export type DeleteAccessSpecializationMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteAccessSpecialization'>
+);
 
 export type CreateAccessPolicyGroupMutationVariables = Exact<{
   createAccessPolicyGroupInput: CreateAccessPolicyGroupInput;
 }>;
 
-export type CreateAccessPolicyGroupMutation = { __typename?: 'Mutation' } & {
-  createAccessPolicyGroup?: Maybe<
-    { __typename?: 'AccessPolicyGroupForm' } & Pick<
-      AccessPolicyGroupForm,
-      'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'
-    > & {
-        name: { __typename?: 'UIStringField' } & Pick<
-          UiStringField,
-          | 'value'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'min'
-          | 'max'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        description: { __typename?: 'UIStringField' } & Pick<
-          UiStringField,
-          | 'value'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'min'
-          | 'max'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        organization: { __typename?: 'UIReadOnlyField' } & Pick<
-          UiReadOnlyField,
-          | 'value'
-          | 'description'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        tmpl?: Maybe<
-          { __typename?: 'UIBooleanField' } & Pick<
-            UiBooleanField,
-            'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-          >
-        >;
-        tmplUseAsIs?: Maybe<
-          { __typename?: 'UIBooleanField' } & Pick<
-            UiBooleanField,
-            'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-          >
-        >;
-        applicableOrgTypes?: Maybe<
-          { __typename?: 'UISelectManyField' } & Pick<
-            UiSelectManyField,
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'options'
-            | 'query'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          > & { value?: Maybe<Array<Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>>>> }
-        >;
-        policies?: Maybe<
-          { __typename?: 'UISelectManyField' } & Pick<
-            UiSelectManyField,
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'options'
-            | 'query'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          > & { value?: Maybe<Array<Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>>>> }
-        >;
-        specializations?: Maybe<
-          { __typename?: 'UISelectManyField' } & Pick<
-            UiSelectManyField,
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'options'
-            | 'query'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          > & { value?: Maybe<Array<Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>>>> }
-        >;
-        includeAllSubOrgs?: Maybe<
-          { __typename?: 'UIBooleanField' } & Pick<
-            UiBooleanField,
-            'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-          >
-        >;
-        includeOrgSids?: Maybe<
-          { __typename?: 'UISelectManyField' } & Pick<
-            UiSelectManyField,
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'options'
-            | 'query'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          > & { value?: Maybe<Array<Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>>>> }
-        >;
-        excludeOrgSids?: Maybe<
-          { __typename?: 'UISelectManyField' } & Pick<
-            UiSelectManyField,
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'options'
-            | 'query'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          > & { value?: Maybe<Array<Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>>>> }
-        >;
-        options?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'UIOptions' } & Pick<UiOptions, 'key'> & {
-                  values?: Maybe<
-                    Array<Maybe<{ __typename?: 'UIOption' } & Pick<UiOption, 'label' | 'value' | 'info'>>>
-                  >;
-                }
-            >
-          >
-        >;
-        commands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-      }
-  >;
-};
+
+export type CreateAccessPolicyGroupMutation = (
+  { __typename?: 'Mutation' }
+  & { createAccessPolicyGroup?: Maybe<(
+    { __typename?: 'AccessPolicyGroupForm' }
+    & Pick<AccessPolicyGroupForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { name: (
+      { __typename?: 'UIStringField' }
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), description: (
+      { __typename?: 'UIStringField' }
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), organization: (
+      { __typename?: 'UIReadOnlyField' }
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), tmpl?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, tmplUseAsIs?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, applicableOrgTypes?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
+    )>, policies?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
+    )>, specializations?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
+    )>, includeAllSubOrgs?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, includeOrgSids?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
+    )>, excludeOrgSids?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
+    )>, options?: Maybe<Array<Maybe<(
+      { __typename?: 'UIOptions' }
+      & Pick<UiOptions, 'key'>
+      & { values?: Maybe<Array<Maybe<(
+        { __typename?: 'UIOption' }
+        & Pick<UiOption, 'label' | 'value' | 'info'>
+      )>>> }
+    )>>>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>>> }
+  )> }
+);
 
 export type UpdateAccessPolicyGroupMutationVariables = Exact<{
   updateAccessPolicyGroupInput?: Maybe<UpdateAccessPolicyGroupInput>;
 }>;
 
-export type UpdateAccessPolicyGroupMutation = { __typename?: 'Mutation' } & {
-  updateAccessPolicyGroup?: Maybe<
-    { __typename?: 'AccessPolicyGroupForm' } & Pick<
-      AccessPolicyGroupForm,
-      'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'
-    > & {
-        name: { __typename?: 'UIStringField' } & Pick<
-          UiStringField,
-          | 'value'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'min'
-          | 'max'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        description: { __typename?: 'UIStringField' } & Pick<
-          UiStringField,
-          | 'value'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'min'
-          | 'max'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        organization: { __typename?: 'UIReadOnlyField' } & Pick<
-          UiReadOnlyField,
-          | 'value'
-          | 'description'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        tmpl?: Maybe<
-          { __typename?: 'UIBooleanField' } & Pick<
-            UiBooleanField,
-            'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-          >
-        >;
-        tmplUseAsIs?: Maybe<
-          { __typename?: 'UIBooleanField' } & Pick<
-            UiBooleanField,
-            'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-          >
-        >;
-        applicableOrgTypes?: Maybe<
-          { __typename?: 'UISelectManyField' } & Pick<
-            UiSelectManyField,
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'options'
-            | 'query'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          > & { value?: Maybe<Array<Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>>>> }
-        >;
-        policies?: Maybe<
-          { __typename?: 'UISelectManyField' } & Pick<
-            UiSelectManyField,
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'options'
-            | 'query'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          > & { value?: Maybe<Array<Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>>>> }
-        >;
-        specializations?: Maybe<
-          { __typename?: 'UISelectManyField' } & Pick<
-            UiSelectManyField,
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'options'
-            | 'query'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          > & { value?: Maybe<Array<Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>>>> }
-        >;
-        includeAllSubOrgs?: Maybe<
-          { __typename?: 'UIBooleanField' } & Pick<
-            UiBooleanField,
-            'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-          >
-        >;
-        includeOrgSids?: Maybe<
-          { __typename?: 'UISelectManyField' } & Pick<
-            UiSelectManyField,
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'options'
-            | 'query'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          > & { value?: Maybe<Array<Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>>>> }
-        >;
-        excludeOrgSids?: Maybe<
-          { __typename?: 'UISelectManyField' } & Pick<
-            UiSelectManyField,
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'options'
-            | 'query'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          > & { value?: Maybe<Array<Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>>>> }
-        >;
-        options?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'UIOptions' } & Pick<UiOptions, 'key'> & {
-                  values?: Maybe<
-                    Array<Maybe<{ __typename?: 'UIOption' } & Pick<UiOption, 'label' | 'value' | 'info'>>>
-                  >;
-                }
-            >
-          >
-        >;
-        commands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-      }
-  >;
-};
+
+export type UpdateAccessPolicyGroupMutation = (
+  { __typename?: 'Mutation' }
+  & { updateAccessPolicyGroup?: Maybe<(
+    { __typename?: 'AccessPolicyGroupForm' }
+    & Pick<AccessPolicyGroupForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { name: (
+      { __typename?: 'UIStringField' }
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), description: (
+      { __typename?: 'UIStringField' }
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), organization: (
+      { __typename?: 'UIReadOnlyField' }
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), tmpl?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, tmplUseAsIs?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, applicableOrgTypes?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
+    )>, policies?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
+    )>, specializations?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
+    )>, includeAllSubOrgs?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, includeOrgSids?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
+    )>, excludeOrgSids?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
+    )>, options?: Maybe<Array<Maybe<(
+      { __typename?: 'UIOptions' }
+      & Pick<UiOptions, 'key'>
+      & { values?: Maybe<Array<Maybe<(
+        { __typename?: 'UIOption' }
+        & Pick<UiOption, 'label' | 'value' | 'info'>
+      )>>> }
+    )>>>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>>> }
+  )> }
+);
 
 export type DeleteAccessPolicyGroupMutationVariables = Exact<{
   policyGroupSid: Scalars['ID'];
 }>;
 
-export type DeleteAccessPolicyGroupMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'deleteAccessPolicyGroup'>;
+
+export type DeleteAccessPolicyGroupMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteAccessPolicyGroup'>
+);
 
 export type CreateUserMutationVariables = Exact<{
   userInfo: CreateUserInput;
   personInfo: CreatePersonInput;
 }>;
 
-export type CreateUserMutation = { __typename?: 'Mutation' } & {
-  createUser?: Maybe<
-    { __typename?: 'UserAccountForm' } & Pick<
-      UserAccountForm,
-      'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'
-    > & {
-        email?: Maybe<
-          { __typename?: 'UIStringField' } & Pick<
-            UiStringField,
-            | 'value'
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'min'
-            | 'max'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          >
-        >;
-        active?: Maybe<
-          { __typename?: 'UIBooleanField' } & Pick<
-            UiBooleanField,
-            'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-          >
-        >;
-        person?: Maybe<
-          { __typename?: 'PersonForm' } & Pick<PersonForm, 'sid' | 'errCode' | 'errMsg' | 'errSeverity'> & {
-              firstNm: { __typename?: 'UIStringField' } & Pick<
-                UiStringField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >;
-              lastNm: { __typename?: 'UIStringField' } & Pick<
-                UiStringField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >;
-            }
-        >;
-        organization: { __typename?: 'UIReadOnlyField' } & Pick<
-          UiReadOnlyField,
-          | 'value'
-          | 'description'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        accessPolicyGroups?: Maybe<
-          { __typename?: 'UISelectManyField' } & Pick<
-            UiSelectManyField,
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'options'
-            | 'query'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          > & { value?: Maybe<Array<Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>>>> }
-        >;
-        sendActivationEmail?: Maybe<
-          { __typename?: 'UIBooleanField' } & Pick<
-            UiBooleanField,
-            'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-          >
-        >;
-        lastLogin?: Maybe<
-          { __typename?: 'UIReadOnlyField' } & Pick<
-            UiReadOnlyField,
-            | 'value'
-            | 'description'
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          >
-        >;
-        commands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-        options?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'UIOptions' } & Pick<UiOptions, 'key'> & {
-                  values?: Maybe<
-                    Array<Maybe<{ __typename?: 'UIOption' } & Pick<UiOption, 'label' | 'value' | 'info'>>>
-                  >;
-                }
-            >
-          >
-        >;
-      }
-  >;
-};
+
+export type CreateUserMutation = (
+  { __typename?: 'Mutation' }
+  & { createUser?: Maybe<(
+    { __typename?: 'UserAccountForm' }
+    & Pick<UserAccountForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { email?: Maybe<(
+      { __typename?: 'UIStringField' }
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, active?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, person?: Maybe<(
+      { __typename?: 'PersonForm' }
+      & Pick<PersonForm, 'sid' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { firstNm: (
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      ), lastNm: (
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      ) }
+    )>, organization: (
+      { __typename?: 'UIReadOnlyField' }
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), accessPolicyGroups?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
+    )>, sendActivationEmail?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, lastLogin?: Maybe<(
+      { __typename?: 'UIReadOnlyField' }
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>>>, options?: Maybe<Array<Maybe<(
+      { __typename?: 'UIOptions' }
+      & Pick<UiOptions, 'key'>
+      & { values?: Maybe<Array<Maybe<(
+        { __typename?: 'UIOption' }
+        & Pick<UiOption, 'label' | 'value' | 'info'>
+      )>>> }
+    )>>> }
+  )> }
+);
 
 export type UpdateUserMutationVariables = Exact<{
   userInfo: UpdateUserInput;
 }>;
 
-export type UpdateUserMutation = { __typename?: 'Mutation' } & {
-  updateUser?: Maybe<
-    { __typename?: 'UserAccountForm' } & Pick<
-      UserAccountForm,
-      'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'
-    > & {
-        email?: Maybe<
-          { __typename?: 'UIStringField' } & Pick<
-            UiStringField,
-            | 'value'
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'min'
-            | 'max'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          >
-        >;
-        active?: Maybe<
-          { __typename?: 'UIBooleanField' } & Pick<
-            UiBooleanField,
-            'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-          >
-        >;
-        person?: Maybe<
-          { __typename?: 'PersonForm' } & Pick<PersonForm, 'sid' | 'errCode' | 'errMsg' | 'errSeverity'> & {
-              firstNm: { __typename?: 'UIStringField' } & Pick<
-                UiStringField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >;
-              lastNm: { __typename?: 'UIStringField' } & Pick<
-                UiStringField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >;
-            }
-        >;
-        organization: { __typename?: 'UIReadOnlyField' } & Pick<
-          UiReadOnlyField,
-          | 'value'
-          | 'description'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        accessPolicyGroups?: Maybe<
-          { __typename?: 'UISelectManyField' } & Pick<
-            UiSelectManyField,
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'options'
-            | 'query'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          > & { value?: Maybe<Array<Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>>>> }
-        >;
-        sendActivationEmail?: Maybe<
-          { __typename?: 'UIBooleanField' } & Pick<
-            UiBooleanField,
-            'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-          >
-        >;
-        lastLogin?: Maybe<
-          { __typename?: 'UIReadOnlyField' } & Pick<
-            UiReadOnlyField,
-            | 'value'
-            | 'description'
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          >
-        >;
-        commands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-        options?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'UIOptions' } & Pick<UiOptions, 'key'> & {
-                  values?: Maybe<
-                    Array<Maybe<{ __typename?: 'UIOption' } & Pick<UiOption, 'label' | 'value' | 'info'>>>
-                  >;
-                }
-            >
-          >
-        >;
-      }
-  >;
-};
+
+export type UpdateUserMutation = (
+  { __typename?: 'Mutation' }
+  & { updateUser?: Maybe<(
+    { __typename?: 'UserAccountForm' }
+    & Pick<UserAccountForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { email?: Maybe<(
+      { __typename?: 'UIStringField' }
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, active?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, person?: Maybe<(
+      { __typename?: 'PersonForm' }
+      & Pick<PersonForm, 'sid' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { firstNm: (
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      ), lastNm: (
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      ) }
+    )>, organization: (
+      { __typename?: 'UIReadOnlyField' }
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), accessPolicyGroups?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
+    )>, sendActivationEmail?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, lastLogin?: Maybe<(
+      { __typename?: 'UIReadOnlyField' }
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>>>, options?: Maybe<Array<Maybe<(
+      { __typename?: 'UIOptions' }
+      & Pick<UiOptions, 'key'>
+      & { values?: Maybe<Array<Maybe<(
+        { __typename?: 'UIOption' }
+        & Pick<UiOption, 'label' | 'value' | 'info'>
+      )>>> }
+    )>>> }
+  )> }
+);
 
 export type UpdateUserAccessPolicyGroupsMutationVariables = Exact<{
   userAccessPolicyGroupUpdate?: Maybe<UpdateUserAccessPolicyGroupsInput>;
 }>;
 
-export type UpdateUserAccessPolicyGroupsMutation = { __typename?: 'Mutation' } & {
-  updateUserAccessPolicyGroups?: Maybe<
-    { __typename?: 'UserAccountForm' } & Pick<
-      UserAccountForm,
-      'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'
-    > & {
-        email?: Maybe<
-          { __typename?: 'UIStringField' } & Pick<
-            UiStringField,
-            | 'value'
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'min'
-            | 'max'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          >
-        >;
-        active?: Maybe<
-          { __typename?: 'UIBooleanField' } & Pick<
-            UiBooleanField,
-            'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-          >
-        >;
-        person?: Maybe<
-          { __typename?: 'PersonForm' } & Pick<PersonForm, 'sid' | 'errCode' | 'errMsg' | 'errSeverity'> & {
-              firstNm: { __typename?: 'UIStringField' } & Pick<
-                UiStringField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >;
-              lastNm: { __typename?: 'UIStringField' } & Pick<
-                UiStringField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >;
-            }
-        >;
-        organization: { __typename?: 'UIReadOnlyField' } & Pick<
-          UiReadOnlyField,
-          | 'value'
-          | 'description'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        accessPolicyGroups?: Maybe<
-          { __typename?: 'UISelectManyField' } & Pick<
-            UiSelectManyField,
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'options'
-            | 'query'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          > & { value?: Maybe<Array<Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>>>> }
-        >;
-        sendActivationEmail?: Maybe<
-          { __typename?: 'UIBooleanField' } & Pick<
-            UiBooleanField,
-            'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-          >
-        >;
-        lastLogin?: Maybe<
-          { __typename?: 'UIReadOnlyField' } & Pick<
-            UiReadOnlyField,
-            | 'value'
-            | 'description'
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          >
-        >;
-        commands?: Maybe<Array<Maybe<{ __typename?: 'WebCommand' } & FragmentWebCommandFragment>>>;
-        options?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'UIOptions' } & Pick<UiOptions, 'key'> & {
-                  values?: Maybe<
-                    Array<Maybe<{ __typename?: 'UIOption' } & Pick<UiOption, 'label' | 'value' | 'info'>>>
-                  >;
-                }
-            >
-          >
-        >;
-      }
-  >;
-};
+
+export type UpdateUserAccessPolicyGroupsMutation = (
+  { __typename?: 'Mutation' }
+  & { updateUserAccessPolicyGroups?: Maybe<(
+    { __typename?: 'UserAccountForm' }
+    & Pick<UserAccountForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { email?: Maybe<(
+      { __typename?: 'UIStringField' }
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, active?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, person?: Maybe<(
+      { __typename?: 'PersonForm' }
+      & Pick<PersonForm, 'sid' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { firstNm: (
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      ), lastNm: (
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      ) }
+    )>, organization: (
+      { __typename?: 'UIReadOnlyField' }
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), accessPolicyGroups?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { value?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & Pick<NvpStr, 'name' | 'value'>
+      )>>> }
+    )>, sendActivationEmail?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, lastLogin?: Maybe<(
+      { __typename?: 'UIReadOnlyField' }
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, commands?: Maybe<Array<Maybe<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>>>, options?: Maybe<Array<Maybe<(
+      { __typename?: 'UIOptions' }
+      & Pick<UiOptions, 'key'>
+      & { values?: Maybe<Array<Maybe<(
+        { __typename?: 'UIOption' }
+        & Pick<UiOption, 'label' | 'value' | 'info'>
+      )>>> }
+    )>>> }
+  )> }
+);
 
 export type DeactivateUserMutationVariables = Exact<{
   sidInput: SidInput;
 }>;
 
-export type DeactivateUserMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'deactivateUser'>;
+
+export type DeactivateUserMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deactivateUser'>
+);
 
 export type DeactivateUsersMutationVariables = Exact<{
   sidsInput: SidsInput;
 }>;
 
-export type DeactivateUsersMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'deactivateUsers'>;
+
+export type DeactivateUsersMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deactivateUsers'>
+);
 
 export type ActivateUserMutationVariables = Exact<{
   sidInput: SidInput;
 }>;
 
-export type ActivateUserMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'activateUser'>;
+
+export type ActivateUserMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'activateUser'>
+);
 
 export type ActivateUsersMutationVariables = Exact<{
   sidsInput: SidsInput;
 }>;
 
-export type ActivateUsersMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'activateUsers'>;
+
+export type ActivateUsersMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'activateUsers'>
+);
 
 export type CreateDashThemeColorMutationVariables = Exact<{
   createDashThemeColorInput: CreateDashThemeColorInput;
 }>;
 
-export type CreateDashThemeColorMutation = { __typename?: 'Mutation' } & {
-  createDashThemeColor?: Maybe<
-    { __typename?: 'DashThemeColor' } & Pick<
-      DashThemeColor,
-      | 'id'
-      | 'defaultPalette'
-      | 'themeColorMode'
-      | 'allowDark'
-      | 'paletteNm'
-      | 'themePrimary'
-      | 'themeLighterAlt'
-      | 'themeLighter'
-      | 'themeLight'
-      | 'themeTertiary'
-      | 'themeSecondary'
-      | 'themeDarkAlt'
-      | 'themeDark'
-      | 'themeDarker'
-      | 'neutralLighterAlt'
-      | 'neutralLighter'
-      | 'neutralLight'
-      | 'neutralQuaternaryAlt'
-      | 'neutralQuaternary'
-      | 'neutralTertiaryAlt'
-      | 'neutralTertiary'
-      | 'neutralSecondary'
-      | 'neutralPrimaryAlt'
-      | 'neutralPrimary'
-      | 'neutralDark'
-      | 'black'
-      | 'white'
-    >
-  >;
-};
+
+export type CreateDashThemeColorMutation = (
+  { __typename?: 'Mutation' }
+  & { createDashThemeColor?: Maybe<(
+    { __typename?: 'DashThemeColor' }
+    & Pick<DashThemeColor, 'id' | 'defaultPalette' | 'themeColorMode' | 'allowDark' | 'paletteNm' | 'themePrimary' | 'themeLighterAlt' | 'themeLighter' | 'themeLight' | 'themeTertiary' | 'themeSecondary' | 'themeDarkAlt' | 'themeDark' | 'themeDarker' | 'neutralLighterAlt' | 'neutralLighter' | 'neutralLight' | 'neutralQuaternaryAlt' | 'neutralQuaternary' | 'neutralTertiaryAlt' | 'neutralTertiary' | 'neutralSecondary' | 'neutralPrimaryAlt' | 'neutralPrimary' | 'neutralDark' | 'black' | 'white'>
+  )> }
+);
 
 export type UpdateDashThemeColorMutationVariables = Exact<{
   updateDashThemeColorInput: UpdateDashThemeColorInput;
 }>;
 
-export type UpdateDashThemeColorMutation = { __typename?: 'Mutation' } & {
-  updateDashThemeColor?: Maybe<
-    { __typename?: 'DashThemeColor' } & Pick<
-      DashThemeColor,
-      | 'id'
-      | 'defaultPalette'
-      | 'themeColorMode'
-      | 'allowDark'
-      | 'paletteNm'
-      | 'themePrimary'
-      | 'themeLighterAlt'
-      | 'themeLighter'
-      | 'themeLight'
-      | 'themeTertiary'
-      | 'themeSecondary'
-      | 'themeDarkAlt'
-      | 'themeDark'
-      | 'themeDarker'
-      | 'neutralLighterAlt'
-      | 'neutralLighter'
-      | 'neutralLight'
-      | 'neutralQuaternaryAlt'
-      | 'neutralQuaternary'
-      | 'neutralTertiaryAlt'
-      | 'neutralTertiary'
-      | 'neutralSecondary'
-      | 'neutralPrimaryAlt'
-      | 'neutralPrimary'
-      | 'neutralDark'
-      | 'black'
-      | 'white'
-    >
-  >;
-};
+
+export type UpdateDashThemeColorMutation = (
+  { __typename?: 'Mutation' }
+  & { updateDashThemeColor?: Maybe<(
+    { __typename?: 'DashThemeColor' }
+    & Pick<DashThemeColor, 'id' | 'defaultPalette' | 'themeColorMode' | 'allowDark' | 'paletteNm' | 'themePrimary' | 'themeLighterAlt' | 'themeLighter' | 'themeLight' | 'themeTertiary' | 'themeSecondary' | 'themeDarkAlt' | 'themeDark' | 'themeDarker' | 'neutralLighterAlt' | 'neutralLighter' | 'neutralLight' | 'neutralQuaternaryAlt' | 'neutralQuaternary' | 'neutralTertiaryAlt' | 'neutralTertiary' | 'neutralSecondary' | 'neutralPrimaryAlt' | 'neutralPrimary' | 'neutralDark' | 'black' | 'white'>
+  )> }
+);
 
 export type CreateDefaultDashThemeMutationVariables = Exact<{
   createDefaultDashThemeInput?: Maybe<CreateDefaultDashThemeInput>;
 }>;
 
-export type CreateDefaultDashThemeMutation = { __typename?: 'Mutation' } & {
-  createDefaultDashTheme?: Maybe<
-    { __typename?: 'DashTheme' } & Pick<DashTheme, 'id' | 'themeColorMode' | 'themeFontSize'> & {
-        dashThemeColor?: Maybe<
-          { __typename?: 'DashThemeColor' } & Pick<
-            DashThemeColor,
-            | 'id'
-            | 'defaultPalette'
-            | 'themeColorMode'
-            | 'allowDark'
-            | 'paletteNm'
-            | 'themePrimary'
-            | 'themeLighterAlt'
-            | 'themeLighter'
-            | 'themeLight'
-            | 'themeTertiary'
-            | 'themeSecondary'
-            | 'themeDarkAlt'
-            | 'themeDark'
-            | 'themeDarker'
-            | 'neutralLighterAlt'
-            | 'neutralLighter'
-            | 'neutralLight'
-            | 'neutralQuaternaryAlt'
-            | 'neutralQuaternary'
-            | 'neutralTertiaryAlt'
-            | 'neutralTertiary'
-            | 'neutralSecondary'
-            | 'neutralPrimaryAlt'
-            | 'neutralPrimary'
-            | 'neutralDark'
-            | 'black'
-            | 'white'
-          >
-        >;
-      }
-  >;
-};
+
+export type CreateDefaultDashThemeMutation = (
+  { __typename?: 'Mutation' }
+  & { createDefaultDashTheme?: Maybe<(
+    { __typename?: 'DashTheme' }
+    & Pick<DashTheme, 'id' | 'themeColorMode' | 'themeFontSize'>
+    & { dashThemeColor?: Maybe<(
+      { __typename?: 'DashThemeColor' }
+      & Pick<DashThemeColor, 'id' | 'defaultPalette' | 'themeColorMode' | 'allowDark' | 'paletteNm' | 'themePrimary' | 'themeLighterAlt' | 'themeLighter' | 'themeLight' | 'themeTertiary' | 'themeSecondary' | 'themeDarkAlt' | 'themeDark' | 'themeDarker' | 'neutralLighterAlt' | 'neutralLighter' | 'neutralLight' | 'neutralQuaternaryAlt' | 'neutralQuaternary' | 'neutralTertiaryAlt' | 'neutralTertiary' | 'neutralSecondary' | 'neutralPrimaryAlt' | 'neutralPrimary' | 'neutralDark' | 'black' | 'white'>
+    )> }
+  )> }
+);
 
 export type UpdateDefaultDashThemeMutationVariables = Exact<{
   updateDefaultDashThemeInput?: Maybe<UpdateDefaultDashThemeInput>;
 }>;
 
-export type UpdateDefaultDashThemeMutation = { __typename?: 'Mutation' } & {
-  updateDefaultDashTheme?: Maybe<
-    { __typename?: 'DashTheme' } & Pick<DashTheme, 'id' | 'themeColorMode' | 'themeFontSize'> & {
-        dashThemeColor?: Maybe<
-          { __typename?: 'DashThemeColor' } & Pick<
-            DashThemeColor,
-            | 'id'
-            | 'defaultPalette'
-            | 'themeColorMode'
-            | 'allowDark'
-            | 'paletteNm'
-            | 'themePrimary'
-            | 'themeLighterAlt'
-            | 'themeLighter'
-            | 'themeLight'
-            | 'themeTertiary'
-            | 'themeSecondary'
-            | 'themeDarkAlt'
-            | 'themeDark'
-            | 'themeDarker'
-            | 'neutralLighterAlt'
-            | 'neutralLighter'
-            | 'neutralLight'
-            | 'neutralQuaternaryAlt'
-            | 'neutralQuaternary'
-            | 'neutralTertiaryAlt'
-            | 'neutralTertiary'
-            | 'neutralSecondary'
-            | 'neutralPrimaryAlt'
-            | 'neutralPrimary'
-            | 'neutralDark'
-            | 'black'
-            | 'white'
-          >
-        >;
-      }
-  >;
-};
+
+export type UpdateDefaultDashThemeMutation = (
+  { __typename?: 'Mutation' }
+  & { updateDefaultDashTheme?: Maybe<(
+    { __typename?: 'DashTheme' }
+    & Pick<DashTheme, 'id' | 'themeColorMode' | 'themeFontSize'>
+    & { dashThemeColor?: Maybe<(
+      { __typename?: 'DashThemeColor' }
+      & Pick<DashThemeColor, 'id' | 'defaultPalette' | 'themeColorMode' | 'allowDark' | 'paletteNm' | 'themePrimary' | 'themeLighterAlt' | 'themeLighter' | 'themeLight' | 'themeTertiary' | 'themeSecondary' | 'themeDarkAlt' | 'themeDark' | 'themeDarker' | 'neutralLighterAlt' | 'neutralLighter' | 'neutralLight' | 'neutralQuaternaryAlt' | 'neutralQuaternary' | 'neutralTertiaryAlt' | 'neutralTertiary' | 'neutralSecondary' | 'neutralPrimaryAlt' | 'neutralPrimary' | 'neutralDark' | 'black' | 'white'>
+    )> }
+  )> }
+);
 
 export type RemoveDashThemeColorMutationVariables = Exact<{
   ownedInputSid?: Maybe<OwnedInputSid>;
 }>;
 
-export type RemoveDashThemeColorMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'removeDashThemeColor'>;
+
+export type RemoveDashThemeColorMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'removeDashThemeColor'>
+);
 
 export type RemoveDefaultDashThemeMutationVariables = Exact<{
   ownedInputSid?: Maybe<OwnedInputSid>;
 }>;
 
-export type RemoveDefaultDashThemeMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'removeDefaultDashTheme'>;
+
+export type RemoveDefaultDashThemeMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'removeDefaultDashTheme'>
+);
 
 export type SetDashThemeColorDefaultMutationVariables = Exact<{
   dashThemeColorDefaultInput?: Maybe<DashThemeColorDefaultInput>;
 }>;
 
-export type SetDashThemeColorDefaultMutation = { __typename?: 'Mutation' } & {
-  setDashThemeColorDefault?: Maybe<
-    { __typename?: 'DashThemeColor' } & Pick<
-      DashThemeColor,
-      | 'id'
-      | 'defaultPalette'
-      | 'themeColorMode'
-      | 'allowDark'
-      | 'paletteNm'
-      | 'themePrimary'
-      | 'themeLighterAlt'
-      | 'themeLighter'
-      | 'themeLight'
-      | 'themeTertiary'
-      | 'themeSecondary'
-      | 'themeDarkAlt'
-      | 'themeDark'
-      | 'themeDarker'
-      | 'neutralLighterAlt'
-      | 'neutralLighter'
-      | 'neutralLight'
-      | 'neutralQuaternaryAlt'
-      | 'neutralQuaternary'
-      | 'neutralTertiaryAlt'
-      | 'neutralTertiary'
-      | 'neutralSecondary'
-      | 'neutralPrimaryAlt'
-      | 'neutralPrimary'
-      | 'neutralDark'
-      | 'black'
-      | 'white'
-    >
-  >;
-};
+
+export type SetDashThemeColorDefaultMutation = (
+  { __typename?: 'Mutation' }
+  & { setDashThemeColorDefault?: Maybe<(
+    { __typename?: 'DashThemeColor' }
+    & Pick<DashThemeColor, 'id' | 'defaultPalette' | 'themeColorMode' | 'allowDark' | 'paletteNm' | 'themePrimary' | 'themeLighterAlt' | 'themeLighter' | 'themeLight' | 'themeTertiary' | 'themeSecondary' | 'themeDarkAlt' | 'themeDark' | 'themeDarker' | 'neutralLighterAlt' | 'neutralLighter' | 'neutralLight' | 'neutralQuaternaryAlt' | 'neutralQuaternary' | 'neutralTertiaryAlt' | 'neutralTertiary' | 'neutralSecondary' | 'neutralPrimaryAlt' | 'neutralPrimary' | 'neutralDark' | 'black' | 'white'>
+  )> }
+);
 
 export type CreateOrUpdateOwnDashThemeMutationVariables = Exact<{
   dashThemeInput?: Maybe<DashThemeInput>;
 }>;
 
-export type CreateOrUpdateOwnDashThemeMutation = { __typename?: 'Mutation' } & {
-  createOrUpdateOwnDashTheme?: Maybe<
-    { __typename?: 'DashTheme' } & Pick<DashTheme, 'id' | 'themeColorMode' | 'themeFontSize'> & {
-        dashThemeColor?: Maybe<
-          { __typename?: 'DashThemeColor' } & Pick<
-            DashThemeColor,
-            | 'id'
-            | 'defaultPalette'
-            | 'themeColorMode'
-            | 'allowDark'
-            | 'paletteNm'
-            | 'themePrimary'
-            | 'themeLighterAlt'
-            | 'themeLighter'
-            | 'themeLight'
-            | 'themeTertiary'
-            | 'themeSecondary'
-            | 'themeDarkAlt'
-            | 'themeDark'
-            | 'themeDarker'
-            | 'neutralLighterAlt'
-            | 'neutralLighter'
-            | 'neutralLight'
-            | 'neutralQuaternaryAlt'
-            | 'neutralQuaternary'
-            | 'neutralTertiaryAlt'
-            | 'neutralTertiary'
-            | 'neutralSecondary'
-            | 'neutralPrimaryAlt'
-            | 'neutralPrimary'
-            | 'neutralDark'
-            | 'black'
-            | 'white'
-          >
-        >;
-      }
-  >;
-};
+
+export type CreateOrUpdateOwnDashThemeMutation = (
+  { __typename?: 'Mutation' }
+  & { createOrUpdateOwnDashTheme?: Maybe<(
+    { __typename?: 'DashTheme' }
+    & Pick<DashTheme, 'id' | 'themeColorMode' | 'themeFontSize'>
+    & { dashThemeColor?: Maybe<(
+      { __typename?: 'DashThemeColor' }
+      & Pick<DashThemeColor, 'id' | 'defaultPalette' | 'themeColorMode' | 'allowDark' | 'paletteNm' | 'themePrimary' | 'themeLighterAlt' | 'themeLighter' | 'themeLight' | 'themeTertiary' | 'themeSecondary' | 'themeDarkAlt' | 'themeDark' | 'themeDarker' | 'neutralLighterAlt' | 'neutralLighter' | 'neutralLight' | 'neutralQuaternaryAlt' | 'neutralQuaternary' | 'neutralTertiaryAlt' | 'neutralTertiary' | 'neutralSecondary' | 'neutralPrimaryAlt' | 'neutralPrimary' | 'neutralDark' | 'black' | 'white'>
+    )> }
+  )> }
+);
 
 export type SetOwnDashThemeFontSizeMutationVariables = Exact<{
   dashThemeInput?: Maybe<DashThemeInput>;
 }>;
 
-export type SetOwnDashThemeFontSizeMutation = { __typename?: 'Mutation' } & {
-  setOwnDashThemeFontSize?: Maybe<
-    { __typename?: 'DashTheme' } & Pick<DashTheme, 'id' | 'themeColorMode' | 'themeFontSize'> & {
-        dashThemeColor?: Maybe<
-          { __typename?: 'DashThemeColor' } & Pick<
-            DashThemeColor,
-            | 'id'
-            | 'defaultPalette'
-            | 'themeColorMode'
-            | 'allowDark'
-            | 'paletteNm'
-            | 'themePrimary'
-            | 'themeLighterAlt'
-            | 'themeLighter'
-            | 'themeLight'
-            | 'themeTertiary'
-            | 'themeSecondary'
-            | 'themeDarkAlt'
-            | 'themeDark'
-            | 'themeDarker'
-            | 'neutralLighterAlt'
-            | 'neutralLighter'
-            | 'neutralLight'
-            | 'neutralQuaternaryAlt'
-            | 'neutralQuaternary'
-            | 'neutralTertiaryAlt'
-            | 'neutralTertiary'
-            | 'neutralSecondary'
-            | 'neutralPrimaryAlt'
-            | 'neutralPrimary'
-            | 'neutralDark'
-            | 'black'
-            | 'white'
-          >
-        >;
-      }
-  >;
-};
+
+export type SetOwnDashThemeFontSizeMutation = (
+  { __typename?: 'Mutation' }
+  & { setOwnDashThemeFontSize?: Maybe<(
+    { __typename?: 'DashTheme' }
+    & Pick<DashTheme, 'id' | 'themeColorMode' | 'themeFontSize'>
+    & { dashThemeColor?: Maybe<(
+      { __typename?: 'DashThemeColor' }
+      & Pick<DashThemeColor, 'id' | 'defaultPalette' | 'themeColorMode' | 'allowDark' | 'paletteNm' | 'themePrimary' | 'themeLighterAlt' | 'themeLighter' | 'themeLight' | 'themeTertiary' | 'themeSecondary' | 'themeDarkAlt' | 'themeDark' | 'themeDarker' | 'neutralLighterAlt' | 'neutralLighter' | 'neutralLight' | 'neutralQuaternaryAlt' | 'neutralQuaternary' | 'neutralTertiaryAlt' | 'neutralTertiary' | 'neutralSecondary' | 'neutralPrimaryAlt' | 'neutralPrimary' | 'neutralDark' | 'black' | 'white'>
+    )> }
+  )> }
+);
 
 export type UpdatePasswordRulesMutationVariables = Exact<{
   passwordRulesInput?: Maybe<PasswordRulesInput>;
 }>;
 
-export type UpdatePasswordRulesMutation = { __typename?: 'Mutation' } & {
-  updatePasswordRules?: Maybe<
-    { __typename?: 'PasswordRulesForm' } & Pick<
-      PasswordRulesForm,
-      'response' | 'errCode' | 'errMsg' | 'errSeverity'
-    > & {
-        organization: { __typename?: 'UIReadOnlyField' } & Pick<
-          UiReadOnlyField,
-          | 'value'
-          | 'description'
-          | 'label'
-          | 'readOnly'
-          | 'info'
-          | 'required'
-          | 'visible'
-          | 'errCode'
-          | 'errMsg'
-          | 'errSeverity'
-        >;
-        mustAlwaysBeMet?: Maybe<
-          { __typename?: 'RequiredPasswordRuleSetForm' } & {
-            mustNotContainWhiteSpace?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            mustNotContainUserName?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            mustNotContainNumericSequence?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            mustFollowLengthRequirements?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            minLength?: Maybe<
-              { __typename?: 'UIIntField' } & Pick<
-                UiIntField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-            maxLength?: Maybe<
-              { __typename?: 'UIIntField' } & Pick<
-                UiIntField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-            mustContainUpperCaseLetters?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            minUpperCaseLetters?: Maybe<
-              { __typename?: 'UIIntField' } & Pick<
-                UiIntField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-            mustContainLowerCaseLetters?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            minLowerCaseLetters?: Maybe<
-              { __typename?: 'UIIntField' } & Pick<
-                UiIntField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-            mustContainNumericDigits?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            minNumericDigits?: Maybe<
-              { __typename?: 'UIIntField' } & Pick<
-                UiIntField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-            mustContainSpecialCharacters?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            minSpecialCharacters?: Maybe<
-              { __typename?: 'UIIntField' } & Pick<
-                UiIntField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-            mustNotRepeatCharacters?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            maxAllowedRepeatedChars?: Maybe<
-              { __typename?: 'UIIntField' } & Pick<
-                UiIntField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-            mustNotReusePasswords?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            minPasswordHistoryVariations?: Maybe<
-              { __typename?: 'UIIntField' } & Pick<
-                UiIntField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-            mustNotMatchExactDictionaryWord?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            mustNotMatchPartialDictionaryWord?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-          }
-        >;
-        someMustBeMet?: Maybe<
-          { __typename?: 'CompositePasswordRuleSetForm' } & {
-            enabled?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            minPasswordComplexity?: Maybe<
-              { __typename?: 'UISelectOneField' } & Pick<
-                UiSelectOneField,
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'options'
-                | 'query'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              > & { value?: Maybe<{ __typename?: 'NVPStr' } & Pick<NvpStr, 'name' | 'value'>> }
-            >;
-            requiredNumPassingRules?: Maybe<
-              { __typename?: 'UIIntField' } & Pick<
-                UiIntField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-            mustNotContainWhiteSpace?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            mustNotContainUserName?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            mustNotContainNumericSequence?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            mustFollowLengthRequirements?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            minLength?: Maybe<
-              { __typename?: 'UIIntField' } & Pick<
-                UiIntField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-            maxLength?: Maybe<
-              { __typename?: 'UIIntField' } & Pick<
-                UiIntField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-            mustContainUpperCaseLetters?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            minUpperCaseLetters?: Maybe<
-              { __typename?: 'UIIntField' } & Pick<
-                UiIntField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-            mustContainLowerCaseLetters?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            minLowerCaseLetters?: Maybe<
-              { __typename?: 'UIIntField' } & Pick<
-                UiIntField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-            mustContainNumericDigits?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            minNumericDigits?: Maybe<
-              { __typename?: 'UIIntField' } & Pick<
-                UiIntField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-            mustContainSpecialCharacters?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            minSpecialCharacters?: Maybe<
-              { __typename?: 'UIIntField' } & Pick<
-                UiIntField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-            mustNotRepeatCharacters?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            maxAllowedRepeatedChars?: Maybe<
-              { __typename?: 'UIIntField' } & Pick<
-                UiIntField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-            mustNotReusePasswords?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            minPasswordHistoryVariations?: Maybe<
-              { __typename?: 'UIIntField' } & Pick<
-                UiIntField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-            mustNotMatchExactDictionaryWord?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            mustNotMatchPartialDictionaryWord?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-          }
-        >;
-        autoLockAccount?: Maybe<
-          { __typename?: 'UIBooleanField' } & Pick<
-            UiBooleanField,
-            'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-          >
-        >;
-        autoLockAfterFailedAttempts?: Maybe<
-          { __typename?: 'UIIntField' } & Pick<
-            UiIntField,
-            | 'value'
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'min'
-            | 'max'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          >
-        >;
-        autoUnlockAccount?: Maybe<
-          { __typename?: 'UIBooleanField' } & Pick<
-            UiBooleanField,
-            'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-          >
-        >;
-        autoUnlockAccountDelayMinutes?: Maybe<
-          { __typename?: 'UIIntField' } & Pick<
-            UiIntField,
-            | 'value'
-            | 'label'
-            | 'readOnly'
-            | 'info'
-            | 'required'
-            | 'visible'
-            | 'min'
-            | 'max'
-            | 'errCode'
-            | 'errMsg'
-            | 'errSeverity'
-          >
-        >;
-        options?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'UIOptions' } & Pick<UiOptions, 'key'> & {
-                  values?: Maybe<
-                    Array<Maybe<{ __typename?: 'UIOption' } & Pick<UiOption, 'label' | 'value' | 'info'>>>
-                  >;
-                }
-            >
-          >
-        >;
-      }
-  >;
-};
 
-export type ImplementationDeployMutationVariables = Exact<{ [key: string]: never }>;
+export type UpdatePasswordRulesMutation = (
+  { __typename?: 'Mutation' }
+  & { updatePasswordRules?: Maybe<(
+    { __typename?: 'PasswordRulesForm' }
+    & Pick<PasswordRulesForm, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { organization: (
+      { __typename?: 'UIReadOnlyField' }
+      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), mustAlwaysBeMet?: Maybe<(
+      { __typename?: 'RequiredPasswordRuleSetForm' }
+      & { mustNotContainWhiteSpace?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotContainUserName?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotContainNumericSequence?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustFollowLengthRequirements?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minLength?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, maxLength?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustContainUpperCaseLetters?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minUpperCaseLetters?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustContainLowerCaseLetters?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minLowerCaseLetters?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustContainNumericDigits?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minNumericDigits?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustContainSpecialCharacters?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minSpecialCharacters?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotRepeatCharacters?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, maxAllowedRepeatedChars?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotReusePasswords?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minPasswordHistoryVariations?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotMatchExactDictionaryWord?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotMatchPartialDictionaryWord?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )> }
+    )>, someMustBeMet?: Maybe<(
+      { __typename?: 'CompositePasswordRuleSetForm' }
+      & { enabled?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minPasswordComplexity?: Maybe<(
+        { __typename?: 'UISelectOneField' }
+        & Pick<UiSelectOneField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & { value?: Maybe<(
+          { __typename?: 'NVPStr' }
+          & Pick<NvpStr, 'name' | 'value'>
+        )> }
+      )>, requiredNumPassingRules?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotContainWhiteSpace?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotContainUserName?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotContainNumericSequence?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustFollowLengthRequirements?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minLength?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, maxLength?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustContainUpperCaseLetters?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minUpperCaseLetters?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustContainLowerCaseLetters?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minLowerCaseLetters?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustContainNumericDigits?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minNumericDigits?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustContainSpecialCharacters?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minSpecialCharacters?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotRepeatCharacters?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, maxAllowedRepeatedChars?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotReusePasswords?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, minPasswordHistoryVariations?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotMatchExactDictionaryWord?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, mustNotMatchPartialDictionaryWord?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )> }
+    )>, autoLockAccount?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, autoLockAfterFailedAttempts?: Maybe<(
+      { __typename?: 'UIIntField' }
+      & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, autoUnlockAccount?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, autoUnlockAccountDelayMinutes?: Maybe<(
+      { __typename?: 'UIIntField' }
+      & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    )>, options?: Maybe<Array<Maybe<(
+      { __typename?: 'UIOptions' }
+      & Pick<UiOptions, 'key'>
+      & { values?: Maybe<Array<Maybe<(
+        { __typename?: 'UIOption' }
+        & Pick<UiOption, 'label' | 'value' | 'info'>
+      )>>> }
+    )>>> }
+  )> }
+);
 
-export type ImplementationDeployMutation = { __typename?: 'Mutation' } & {
-  implementationDeploy?: Maybe<
-    { __typename?: 'ImplementationDeployResponse' } & Pick<
-      ImplementationDeployResponse,
-      'response' | 'timestamp' | 'references' | 'changes'
-    >
-  >;
-};
+export type ImplementationDeployMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ImplementationDeployMutation = (
+  { __typename?: 'Mutation' }
+  & { implementationDeploy?: Maybe<(
+    { __typename?: 'ImplementationDeployResponse' }
+    & Pick<ImplementationDeployResponse, 'response' | 'timestamp' | 'references' | 'changes'>
+  )> }
+);
 
 export type FtpTestMMutationVariables = Exact<{
   xpsftp: XsftpInput;
   genTestFile?: Maybe<SftpTestGenerateTestFile>;
 }>;
 
-export type FtpTestMMutation = { __typename?: 'Mutation' } & {
-  ftpTestM?: Maybe<
-    { __typename?: 'SFTPConfigSubscriptionResponse' } & Pick<
-      SftpConfigSubscriptionResponse,
-      'status' | 'clientProfileSnippet' | 'csvLog' | 'includeFileUpload'
-    > & {
-        logMessage: { __typename?: 'LogMessage' } & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'> & {
-            attributes?: Maybe<
-              Array<
-                Maybe<
-                  | ({ __typename?: 'NVPStr' } & UnionNvp_NvpStr_Fragment)
-                  | ({ __typename?: 'NVPId' } & UnionNvp_NvpId_Fragment)
-                >
-              >
-            >;
-          };
-        allMessages?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: 'LogMessage' } & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'> & {
-                  attributes?: Maybe<
-                    Array<
-                      Maybe<
-                        | ({ __typename?: 'NVPStr' } & UnionNvp_NvpStr_Fragment)
-                        | ({ __typename?: 'NVPId' } & UnionNvp_NvpId_Fragment)
-                      >
-                    >
-                  >;
-                }
-            >
-          >
-        >;
-        xpSFTPForm?: Maybe<
-          { __typename?: 'XPSFTPForm' } & Pick<XpsftpForm, 'response' | 'errCode' | 'errMsg' | 'errSeverity'> & {
-              host?: Maybe<
-                { __typename?: 'UIStringField' } & Pick<
-                  UiStringField,
-                  | 'value'
-                  | 'label'
-                  | 'readOnly'
-                  | 'info'
-                  | 'required'
-                  | 'visible'
-                  | 'min'
-                  | 'max'
-                  | 'errCode'
-                  | 'errMsg'
-                  | 'errSeverity'
-                >
-              >;
-              port?: Maybe<
-                { __typename?: 'UIIntField' } & Pick<
-                  UiIntField,
-                  | 'value'
-                  | 'label'
-                  | 'readOnly'
-                  | 'info'
-                  | 'required'
-                  | 'visible'
-                  | 'min'
-                  | 'max'
-                  | 'errCode'
-                  | 'errMsg'
-                  | 'errSeverity'
-                >
-              >;
-              user?: Maybe<
-                { __typename?: 'UIStringField' } & Pick<
-                  UiStringField,
-                  | 'value'
-                  | 'label'
-                  | 'readOnly'
-                  | 'info'
-                  | 'required'
-                  | 'visible'
-                  | 'min'
-                  | 'max'
-                  | 'errCode'
-                  | 'errMsg'
-                  | 'errSeverity'
-                >
-              >;
-              password?: Maybe<
-                { __typename?: 'UIStringField' } & Pick<
-                  UiStringField,
-                  | 'value'
-                  | 'label'
-                  | 'readOnly'
-                  | 'info'
-                  | 'required'
-                  | 'visible'
-                  | 'min'
-                  | 'max'
-                  | 'errCode'
-                  | 'errMsg'
-                  | 'errSeverity'
-                >
-              >;
-              folder?: Maybe<
-                { __typename?: 'UIStringField' } & Pick<
-                  UiStringField,
-                  | 'value'
-                  | 'label'
-                  | 'readOnly'
-                  | 'info'
-                  | 'required'
-                  | 'visible'
-                  | 'min'
-                  | 'max'
-                  | 'errCode'
-                  | 'errMsg'
-                  | 'errSeverity'
-                >
-              >;
-              stepWise?: Maybe<
-                { __typename?: 'UIBooleanField' } & Pick<
-                  UiBooleanField,
-                  | 'value'
-                  | 'label'
-                  | 'readOnly'
-                  | 'info'
-                  | 'required'
-                  | 'visible'
-                  | 'errCode'
-                  | 'errMsg'
-                  | 'errSeverity'
-                >
-              >;
-            }
-        >;
-        genTestFileForm?: Maybe<
-          { __typename?: 'SFTPTestGenerateTestFileForm' } & {
-            generate?: Maybe<
-              { __typename?: 'UIBooleanField' } & Pick<
-                UiBooleanField,
-                'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'
-              >
-            >;
-            fileName?: Maybe<
-              { __typename?: 'UIStringField' } & Pick<
-                UiStringField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-            fileBody?: Maybe<
-              { __typename?: 'UIStringField' } & Pick<
-                UiStringField,
-                | 'value'
-                | 'label'
-                | 'readOnly'
-                | 'info'
-                | 'required'
-                | 'visible'
-                | 'min'
-                | 'max'
-                | 'errCode'
-                | 'errMsg'
-                | 'errSeverity'
-              >
-            >;
-          }
-        >;
-      }
-  >;
-};
+
+export type FtpTestMMutation = (
+  { __typename?: 'Mutation' }
+  & { ftpTestM?: Maybe<(
+    { __typename?: 'SFTPConfigSubscriptionResponse' }
+    & Pick<SftpConfigSubscriptionResponse, 'status' | 'clientProfileSnippet' | 'csvLog' | 'includeFileUpload'>
+    & { logMessage: (
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>>> }
+    ), allMessages?: Maybe<Array<Maybe<(
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<Maybe<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>>> }
+    )>>>, xpSFTPForm?: Maybe<(
+      { __typename?: 'XPSFTPForm' }
+      & Pick<XpsftpForm, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { host?: Maybe<(
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, port?: Maybe<(
+        { __typename?: 'UIIntField' }
+        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, user?: Maybe<(
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, password?: Maybe<(
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, folder?: Maybe<(
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, stepWise?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )> }
+    )>, genTestFileForm?: Maybe<(
+      { __typename?: 'SFTPTestGenerateTestFileForm' }
+      & { generate?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, fileName?: Maybe<(
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, fileBody?: Maybe<(
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )> }
+    )> }
+  )> }
+);
 
 export const FragmentStatTypeFragmentDoc = gql`
-  fragment fragmentStatType on StatType {
-    count
-    facetTotal
-    inTolerance
-    toleranceMsg
-    hold
-  }
-`;
+    fragment fragmentStatType on StatType {
+  count
+  facetTotal
+  inTolerance
+  toleranceMsg
+  hold
+}
+    `;
 export const RecordCountsFragmentFragmentDoc = gql`
-  fragment recordCountsFragment on RecordCounts {
-    totalCount
-    showUser
-    recordCount {
-      name
-      count
-    }
+    fragment recordCountsFragment on RecordCounts {
+  totalCount
+  showUser
+  recordCount {
+    name
+    count
   }
-`;
+}
+    `;
 export const ExtractParameterFragmentFragmentDoc = gql`
-  fragment extractParameterFragment on ExtractParameter {
-    label
-    name
-    value
-  }
-`;
+    fragment extractParameterFragment on ExtractParameter {
+  label
+  name
+  value
+}
+    `;
 export const FieldCreationFragmentFragmentDoc = gql`
-  fragment fieldCreationFragment on FieldCreationEvent {
-    message
+    fragment fieldCreationFragment on FieldCreationEvent {
+  message
+  name
+  id
+  value
+  rawValue
+  type
+}
+    `;
+export const FragmentDashboardPeriodCountsFragmentDoc = gql`
+    fragment fragmentDashboardPeriodCounts on DashboardPeriodCounts {
+  vendorTransmissions {
     name
-    id
-    value
-    rawValue
+    secondaryDescr
+    count
+    total
+  }
+  vendorTransmissionsBySpec {
+    name
+    secondaryDescr
+    count
+    total
+  }
+  planSponsorTransmissions {
+    name
+    secondaryDescr
+    count
+    total
+  }
+  fileTransmissions {
+    name
+    secondaryDescr
+    count
+    total
+  }
+  vendorProcessErrors {
+    name
+    secondaryDescr
+    count
+    total
+  }
+  planSponsorProcessErrors {
+    name
+    secondaryDescr
+    count
+    total
+  }
+  fileProcessErrors {
+    name
+    secondaryDescr
+    count
+    total
+  }
+  showCountsByPlanSponsor
+  showCountsByFile
+  transmissionCount
+  billingUnitCount
+  processErrorCount
+}
+    `;
+export const StatInFragmentFragmentDoc = gql`
+    fragment statInFragment on StatInt {
+  prior
+  value
+}
+    `;
+export const InsuredStatCountFragmentFragmentDoc = gql`
+    fragment insuredStatCountFragment on InsuredStatCount {
+  active {
+    ...statInFragment
+  }
+  ended {
+    ...statInFragment
+  }
+  expectedTotal
+  inTolerance
+  toleranceMsg
+  hold
+}
+    ${StatInFragmentFragmentDoc}`;
+export const InsuredStatFragmentFragmentDoc = gql`
+    fragment insuredStatFragment on InsuredStat {
+  subscribers {
+    ...insuredStatCountFragment
+  }
+  dependents {
+    ...insuredStatCountFragment
+  }
+}
+    ${InsuredStatCountFragmentFragmentDoc}`;
+export const PlanInsuredStatFragmentFragmentDoc = gql`
+    fragment planInsuredStatFragment on PlanInsuredStat {
+  planCode
+  planType
+  subscribers {
+    ...insuredStatCountFragment
+  }
+  dependents {
+    ...insuredStatCountFragment
+  }
+}
+    ${InsuredStatCountFragmentFragmentDoc}`;
+export const EnrollmentStatFragmentFragmentDoc = gql`
+    fragment enrollmentStatFragment on EnrollmentStat {
+  insuredStat {
+    ...insuredStatFragment
+  }
+  excludedInsuredStat {
+    ...insuredStatFragment
+  }
+  excludedPlanInsuredStat {
+    ...planInsuredStatFragment
+  }
+  planInsuredStat {
+    ...planInsuredStatFragment
+  }
+}
+    ${InsuredStatFragmentFragmentDoc}
+${PlanInsuredStatFragmentFragmentDoc}`;
+export const UnionNvpFragmentDoc = gql`
+    fragment unionNVP on NVP {
+  __typename
+  ... on NVPStr {
+    name
+    strValue: value
+  }
+  ... on NVPId {
+    name
+    idValue: value
+  }
+}
+    `;
+export const FragmentWebPageFragmentDoc = gql`
+    fragment fragmentWebPage on WebPage {
+  type
+  parameters {
+    ...unionNVP
+  }
+  commands {
+    label
+    page {
+      type
+      parameters {
+        ...unionNVP
+      }
+    }
+    appDomain
+  }
+  pivots {
+    label
     type
   }
-`;
-export const FragmentDashboardPeriodCountsFragmentDoc = gql`
-  fragment fragmentDashboardPeriodCounts on DashboardPeriodCounts {
+}
+    ${UnionNvpFragmentDoc}`;
+export const FragmentWebNavFragmentDoc = gql`
+    fragment fragmentWebNav on WebNav {
+  orgId
+  label
+  page {
+    ...fragmentWebPage
+  }
+  appDomain
+}
+    ${FragmentWebPageFragmentDoc}`;
+export const FragmentAccessPolicyFragmentDoc = gql`
+    fragment fragmentAccessPolicy on AccessPolicy {
+  sid
+  name
+  permissions
+  tmpl
+  tmplUseAsIs
+  applicableOrgTypes
+}
+    `;
+export const FragmentWebCommandFragmentDoc = gql`
+    fragment fragmentWebCommand on WebCommand {
+  endPoint
+  label
+  parameters {
+    name
+    value
+  }
+  commandType
+}
+    `;
+export const FragmentWorkPacketCommandFragmentDoc = gql`
+    fragment fragmentWorkPacketCommand on WorkPacketCommand {
+  label
+  commandType
+}
+    `;
+export const FragmentPaginationInfoFragmentDoc = gql`
+    fragment fragmentPaginationInfo on PaginationInfo {
+  totalPages
+  totalElements
+  pageNumber
+  pageSize
+}
+    `;
+export const VersionDocument = gql`
+    query Version {
+  version
+}
+    `;
+
+/**
+ * __useVersionQuery__
+ *
+ * To run a query within a React component, call `useVersionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useVersionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useVersionQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useVersionQuery(baseOptions?: Apollo.QueryHookOptions<VersionQuery, VersionQueryVariables>) {
+        return Apollo.useQuery<VersionQuery, VersionQueryVariables>(VersionDocument, baseOptions);
+      }
+export function useVersionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<VersionQuery, VersionQueryVariables>) {
+          return Apollo.useLazyQuery<VersionQuery, VersionQueryVariables>(VersionDocument, baseOptions);
+        }
+export type VersionQueryHookResult = ReturnType<typeof useVersionQuery>;
+export type VersionLazyQueryHookResult = ReturnType<typeof useVersionLazyQuery>;
+export type VersionQueryResult = Apollo.QueryResult<VersionQuery, VersionQueryVariables>;
+export const VerifyPasswordResetTokenDocument = gql`
+    query VerifyPasswordResetToken($token: String!) {
+  verifyPasswordResetToken(token: $token) {
+    orgSid
+    userSid
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    `;
+
+/**
+ * __useVerifyPasswordResetTokenQuery__
+ *
+ * To run a query within a React component, call `useVerifyPasswordResetTokenQuery` and pass it any options that fit your needs.
+ * When your component renders, `useVerifyPasswordResetTokenQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useVerifyPasswordResetTokenQuery({
+ *   variables: {
+ *      token: // value for 'token'
+ *   },
+ * });
+ */
+export function useVerifyPasswordResetTokenQuery(baseOptions: Apollo.QueryHookOptions<VerifyPasswordResetTokenQuery, VerifyPasswordResetTokenQueryVariables>) {
+        return Apollo.useQuery<VerifyPasswordResetTokenQuery, VerifyPasswordResetTokenQueryVariables>(VerifyPasswordResetTokenDocument, baseOptions);
+      }
+export function useVerifyPasswordResetTokenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<VerifyPasswordResetTokenQuery, VerifyPasswordResetTokenQueryVariables>) {
+          return Apollo.useLazyQuery<VerifyPasswordResetTokenQuery, VerifyPasswordResetTokenQueryVariables>(VerifyPasswordResetTokenDocument, baseOptions);
+        }
+export type VerifyPasswordResetTokenQueryHookResult = ReturnType<typeof useVerifyPasswordResetTokenQuery>;
+export type VerifyPasswordResetTokenLazyQueryHookResult = ReturnType<typeof useVerifyPasswordResetTokenLazyQuery>;
+export type VerifyPasswordResetTokenQueryResult = Apollo.QueryResult<VerifyPasswordResetTokenQuery, VerifyPasswordResetTokenQueryVariables>;
+export const ExchangeActivityInProcessDocument = gql`
+    query ExchangeActivityInProcess($orgSidInput: OrgSidInput!, $searchText: String, $dateRange: DateTimeRangeInput!, $pageableInput: PageableInput!) {
+  exchangeActivityInProcess(
+    orgSidInput: $orgSidInput
+    searchText: $searchText
+    dateRange: $dateRange
+    pageableInput: $pageableInput
+  ) {
+    paginationInfo {
+      ...fragmentPaginationInfo
+    }
+    nodes {
+      id
+      orgId
+      name
+      type
+      activityTime
+    }
+  }
+}
+    ${FragmentPaginationInfoFragmentDoc}`;
+
+/**
+ * __useExchangeActivityInProcessQuery__
+ *
+ * To run a query within a React component, call `useExchangeActivityInProcessQuery` and pass it any options that fit your needs.
+ * When your component renders, `useExchangeActivityInProcessQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useExchangeActivityInProcessQuery({
+ *   variables: {
+ *      orgSidInput: // value for 'orgSidInput'
+ *      searchText: // value for 'searchText'
+ *      dateRange: // value for 'dateRange'
+ *      pageableInput: // value for 'pageableInput'
+ *   },
+ * });
+ */
+export function useExchangeActivityInProcessQuery(baseOptions: Apollo.QueryHookOptions<ExchangeActivityInProcessQuery, ExchangeActivityInProcessQueryVariables>) {
+        return Apollo.useQuery<ExchangeActivityInProcessQuery, ExchangeActivityInProcessQueryVariables>(ExchangeActivityInProcessDocument, baseOptions);
+      }
+export function useExchangeActivityInProcessLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ExchangeActivityInProcessQuery, ExchangeActivityInProcessQueryVariables>) {
+          return Apollo.useLazyQuery<ExchangeActivityInProcessQuery, ExchangeActivityInProcessQueryVariables>(ExchangeActivityInProcessDocument, baseOptions);
+        }
+export type ExchangeActivityInProcessQueryHookResult = ReturnType<typeof useExchangeActivityInProcessQuery>;
+export type ExchangeActivityInProcessLazyQueryHookResult = ReturnType<typeof useExchangeActivityInProcessLazyQuery>;
+export type ExchangeActivityInProcessQueryResult = Apollo.QueryResult<ExchangeActivityInProcessQuery, ExchangeActivityInProcessQueryVariables>;
+export const ExchangeActivityTransmittedDocument = gql`
+    query ExchangeActivityTransmitted($orgSidInput: OrgSidInput!, $searchText: String, $dateRange: DateTimeRangeInput!, $pageableInput: PageableInput!) {
+  exchangeActivityTransmitted(
+    orgSidInput: $orgSidInput
+    searchText: $searchText
+    dateRange: $dateRange
+    pageableInput: $pageableInput
+  ) {
+    paginationInfo {
+      ...fragmentPaginationInfo
+    }
+    nodes {
+      id
+      orgId
+      name
+      type
+      activityTime
+    }
+  }
+}
+    ${FragmentPaginationInfoFragmentDoc}`;
+
+/**
+ * __useExchangeActivityTransmittedQuery__
+ *
+ * To run a query within a React component, call `useExchangeActivityTransmittedQuery` and pass it any options that fit your needs.
+ * When your component renders, `useExchangeActivityTransmittedQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useExchangeActivityTransmittedQuery({
+ *   variables: {
+ *      orgSidInput: // value for 'orgSidInput'
+ *      searchText: // value for 'searchText'
+ *      dateRange: // value for 'dateRange'
+ *      pageableInput: // value for 'pageableInput'
+ *   },
+ * });
+ */
+export function useExchangeActivityTransmittedQuery(baseOptions: Apollo.QueryHookOptions<ExchangeActivityTransmittedQuery, ExchangeActivityTransmittedQueryVariables>) {
+        return Apollo.useQuery<ExchangeActivityTransmittedQuery, ExchangeActivityTransmittedQueryVariables>(ExchangeActivityTransmittedDocument, baseOptions);
+      }
+export function useExchangeActivityTransmittedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ExchangeActivityTransmittedQuery, ExchangeActivityTransmittedQueryVariables>) {
+          return Apollo.useLazyQuery<ExchangeActivityTransmittedQuery, ExchangeActivityTransmittedQueryVariables>(ExchangeActivityTransmittedDocument, baseOptions);
+        }
+export type ExchangeActivityTransmittedQueryHookResult = ReturnType<typeof useExchangeActivityTransmittedQuery>;
+export type ExchangeActivityTransmittedLazyQueryHookResult = ReturnType<typeof useExchangeActivityTransmittedLazyQuery>;
+export type ExchangeActivityTransmittedQueryResult = Apollo.QueryResult<ExchangeActivityTransmittedQuery, ExchangeActivityTransmittedQueryVariables>;
+export const ExchangeActivityErroredDocument = gql`
+    query ExchangeActivityErrored($orgSidInput: OrgSidInput!, $searchText: String, $dateRange: DateTimeRangeInput!, $pageableInput: PageableInput!) {
+  exchangeActivityErrored(
+    orgSidInput: $orgSidInput
+    searchText: $searchText
+    dateRange: $dateRange
+    pageableInput: $pageableInput
+  ) {
+    paginationInfo {
+      ...fragmentPaginationInfo
+    }
+    nodes {
+      id
+      orgId
+      name
+      type
+      activityTime
+    }
+  }
+}
+    ${FragmentPaginationInfoFragmentDoc}`;
+
+/**
+ * __useExchangeActivityErroredQuery__
+ *
+ * To run a query within a React component, call `useExchangeActivityErroredQuery` and pass it any options that fit your needs.
+ * When your component renders, `useExchangeActivityErroredQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useExchangeActivityErroredQuery({
+ *   variables: {
+ *      orgSidInput: // value for 'orgSidInput'
+ *      searchText: // value for 'searchText'
+ *      dateRange: // value for 'dateRange'
+ *      pageableInput: // value for 'pageableInput'
+ *   },
+ * });
+ */
+export function useExchangeActivityErroredQuery(baseOptions: Apollo.QueryHookOptions<ExchangeActivityErroredQuery, ExchangeActivityErroredQueryVariables>) {
+        return Apollo.useQuery<ExchangeActivityErroredQuery, ExchangeActivityErroredQueryVariables>(ExchangeActivityErroredDocument, baseOptions);
+      }
+export function useExchangeActivityErroredLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ExchangeActivityErroredQuery, ExchangeActivityErroredQueryVariables>) {
+          return Apollo.useLazyQuery<ExchangeActivityErroredQuery, ExchangeActivityErroredQueryVariables>(ExchangeActivityErroredDocument, baseOptions);
+        }
+export type ExchangeActivityErroredQueryHookResult = ReturnType<typeof useExchangeActivityErroredQuery>;
+export type ExchangeActivityErroredLazyQueryHookResult = ReturnType<typeof useExchangeActivityErroredLazyQuery>;
+export type ExchangeActivityErroredQueryResult = Apollo.QueryResult<ExchangeActivityErroredQuery, ExchangeActivityErroredQueryVariables>;
+export const WorkPacketStatusDetailsDocument = gql`
+    query WorkPacketStatusDetails($orgSid: ID!, $workOrderId: String!) {
+  workPacketStatusDetails(orgSid: $orgSid, workOrderId: $workOrderId) {
+    workOrderId
+    inboundFilename
+    timestamp
+    orgSid
+    orgId
+    orgName
+    vendorSid
+    vendorId
+    vendorName
+    specId
+    specImplName
+    fingerPrint
+    populationCount
+    suppressBilling
+    deliveredFiles {
+      filename
+      fileSizeInBytes
+      textSizeInBytes
+      timeDelivered
+      ftp {
+        protocol
+        host
+        username
+        folder
+        port
+      }
+      kcurl {
+        url
+      }
+    }
+    packetStatus
+    workStepStatus {
+      stepStatus
+      stepName
+      stepType
+      populationCount {
+        value
+      }
+      transformedArchiveFile {
+        value
+        label
+      }
+      recordCounts {
+        ...recordCountsFragment
+      }
+      stepFile {
+        value
+        label
+      }
+      nvp {
+        name
+        value
+      }
+    }
+    extractParameters {
+      originalParameter {
+        ...extractParameterFragment
+      }
+      overriddenParameter {
+        ...extractParameterFragment
+      }
+      derivedParameter {
+        ...extractParameterFragment
+      }
+    }
+    qualityChecks {
+      sequenceCreationEvent {
+        context
+        unitId
+        recordCreationEvent {
+          context
+          outerContext
+          unitId
+          error {
+            ...fieldCreationFragment
+          }
+          warning {
+            ...fieldCreationFragment
+          }
+          information {
+            ...fieldCreationFragment
+          }
+        }
+      }
+      totalRecordCount
+      fieldCreationWarningCount
+      fieldCreationErrorCount
+      fieldCreationInfoCount
+      accStructReqError {
+        ...fragmentStatType
+      }
+      clientSpecificReqError {
+        ...fragmentStatType
+      }
+      accStructTruncError {
+        ...fragmentStatType
+      }
+      reqError {
+        ...fragmentStatType
+      }
+      truncError {
+        ...fragmentStatType
+      }
+      codeListMappingError {
+        ...fragmentStatType
+      }
+      hasMoreEvents
+    }
+    enrollmentStats {
+      ...enrollmentStatFragment
+    }
+    inboundEnrollmentStats {
+      ...enrollmentStatFragment
+    }
+    outboundEnrollmentStats {
+      ...enrollmentStatFragment
+    }
+    outboundRecordCounts {
+      ...recordCountsFragment
+    }
+    inboundLabel
+    outboundLabel
+    clientFileArchivePath
+    vendorFileArchivePath
+    supplementalFilesArchivePaths
+    commands {
+      ...fragmentWorkPacketCommand
+    }
+  }
+}
+    ${RecordCountsFragmentFragmentDoc}
+${ExtractParameterFragmentFragmentDoc}
+${FieldCreationFragmentFragmentDoc}
+${FragmentStatTypeFragmentDoc}
+${EnrollmentStatFragmentFragmentDoc}
+${FragmentWorkPacketCommandFragmentDoc}`;
+
+/**
+ * __useWorkPacketStatusDetailsQuery__
+ *
+ * To run a query within a React component, call `useWorkPacketStatusDetailsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWorkPacketStatusDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useWorkPacketStatusDetailsQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *      workOrderId: // value for 'workOrderId'
+ *   },
+ * });
+ */
+export function useWorkPacketStatusDetailsQuery(baseOptions: Apollo.QueryHookOptions<WorkPacketStatusDetailsQuery, WorkPacketStatusDetailsQueryVariables>) {
+        return Apollo.useQuery<WorkPacketStatusDetailsQuery, WorkPacketStatusDetailsQueryVariables>(WorkPacketStatusDetailsDocument, baseOptions);
+      }
+export function useWorkPacketStatusDetailsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WorkPacketStatusDetailsQuery, WorkPacketStatusDetailsQueryVariables>) {
+          return Apollo.useLazyQuery<WorkPacketStatusDetailsQuery, WorkPacketStatusDetailsQueryVariables>(WorkPacketStatusDetailsDocument, baseOptions);
+        }
+export type WorkPacketStatusDetailsQueryHookResult = ReturnType<typeof useWorkPacketStatusDetailsQuery>;
+export type WorkPacketStatusDetailsLazyQueryHookResult = ReturnType<typeof useWorkPacketStatusDetailsLazyQuery>;
+export type WorkPacketStatusDetailsQueryResult = Apollo.QueryResult<WorkPacketStatusDetailsQuery, WorkPacketStatusDetailsQueryVariables>;
+export const WorkPacketStatusDocument = gql`
+    query WorkPacketStatus($orgSid: ID!, $workOrderId: String!) {
+  workPacketStatus(orgSid: $orgSid, workOrderId: $workOrderId) {
+    workOrderId
+    timestamp
+    orgId
+    orgSid
+    detailsPath
+    inboundFilename
+    vendorId
+    vendorSid
+    step
+    stepStatus
+    packetStatus
+    reprocessedBy
+    restartReason
+    recordHighlightCount
+    populationCount
+    recordHighlightType
+    clientFileArchivePath
+    vendorFileArchivePath
+    feedType
+    inboundDataType
+    inboundDataSize
+    version
+    supplementalFilesArchivePaths
+    archiveOnly
+    hasErrors
+    environment
+    commands {
+      ...fragmentWorkPacketCommand
+    }
+  }
+}
+    ${FragmentWorkPacketCommandFragmentDoc}`;
+
+/**
+ * __useWorkPacketStatusQuery__
+ *
+ * To run a query within a React component, call `useWorkPacketStatusQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWorkPacketStatusQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useWorkPacketStatusQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *      workOrderId: // value for 'workOrderId'
+ *   },
+ * });
+ */
+export function useWorkPacketStatusQuery(baseOptions: Apollo.QueryHookOptions<WorkPacketStatusQuery, WorkPacketStatusQueryVariables>) {
+        return Apollo.useQuery<WorkPacketStatusQuery, WorkPacketStatusQueryVariables>(WorkPacketStatusDocument, baseOptions);
+      }
+export function useWorkPacketStatusLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WorkPacketStatusQuery, WorkPacketStatusQueryVariables>) {
+          return Apollo.useLazyQuery<WorkPacketStatusQuery, WorkPacketStatusQueryVariables>(WorkPacketStatusDocument, baseOptions);
+        }
+export type WorkPacketStatusQueryHookResult = ReturnType<typeof useWorkPacketStatusQuery>;
+export type WorkPacketStatusLazyQueryHookResult = ReturnType<typeof useWorkPacketStatusLazyQuery>;
+export type WorkPacketStatusQueryResult = Apollo.QueryResult<WorkPacketStatusQuery, WorkPacketStatusQueryVariables>;
+export const WorkPacketStatusesDocument = gql`
+    query WorkPacketStatuses($orgSid: ID!, $searchText: String, $dateRange: DateTimeRangeInput, $pageableInput: PageableInput!) {
+  workPacketStatuses(
+    orgSid: $orgSid
+    searchText: $searchText
+    dateRange: $dateRange
+    pageableInput: $pageableInput
+  ) {
+    paginationInfo {
+      ...fragmentPaginationInfo
+    }
+    nodes {
+      workOrderId
+      timestamp
+      orgId
+      orgSid
+      detailsPath
+      inboundFilename
+      vendorId
+      vendorSid
+      step
+      stepStatus
+      packetStatus
+      reprocessedBy
+      restartReason
+      recordHighlightCount
+      populationCount
+      recordHighlightType
+      clientFileArchivePath
+      vendorFileArchivePath
+      feedType
+      inboundDataType
+      inboundDataSize
+      version
+      supplementalFilesArchivePaths
+      archiveOnly
+      hasErrors
+      environment
+      commands {
+        ...fragmentWorkPacketCommand
+      }
+    }
+  }
+}
+    ${FragmentPaginationInfoFragmentDoc}
+${FragmentWorkPacketCommandFragmentDoc}`;
+
+/**
+ * __useWorkPacketStatusesQuery__
+ *
+ * To run a query within a React component, call `useWorkPacketStatusesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWorkPacketStatusesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useWorkPacketStatusesQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *      searchText: // value for 'searchText'
+ *      dateRange: // value for 'dateRange'
+ *      pageableInput: // value for 'pageableInput'
+ *   },
+ * });
+ */
+export function useWorkPacketStatusesQuery(baseOptions: Apollo.QueryHookOptions<WorkPacketStatusesQuery, WorkPacketStatusesQueryVariables>) {
+        return Apollo.useQuery<WorkPacketStatusesQuery, WorkPacketStatusesQueryVariables>(WorkPacketStatusesDocument, baseOptions);
+      }
+export function useWorkPacketStatusesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WorkPacketStatusesQuery, WorkPacketStatusesQueryVariables>) {
+          return Apollo.useLazyQuery<WorkPacketStatusesQuery, WorkPacketStatusesQueryVariables>(WorkPacketStatusesDocument, baseOptions);
+        }
+export type WorkPacketStatusesQueryHookResult = ReturnType<typeof useWorkPacketStatusesQuery>;
+export type WorkPacketStatusesLazyQueryHookResult = ReturnType<typeof useWorkPacketStatusesLazyQuery>;
+export type WorkPacketStatusesQueryResult = Apollo.QueryResult<WorkPacketStatusesQuery, WorkPacketStatusesQueryVariables>;
+export const WorkPacketStatusesPollDocument = gql`
+    query WorkPacketStatusesPoll($orgSid: ID!, $searchText: String, $dateRange: DateTimeRangeInput, $lastUpdated: DateTime!) {
+  workPacketStatusesPoll(
+    orgSid: $orgSid
+    searchText: $searchText
+    dateRange: $dateRange
+    lastUpdated: $lastUpdated
+  )
+}
+    `;
+
+/**
+ * __useWorkPacketStatusesPollQuery__
+ *
+ * To run a query within a React component, call `useWorkPacketStatusesPollQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWorkPacketStatusesPollQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useWorkPacketStatusesPollQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *      searchText: // value for 'searchText'
+ *      dateRange: // value for 'dateRange'
+ *      lastUpdated: // value for 'lastUpdated'
+ *   },
+ * });
+ */
+export function useWorkPacketStatusesPollQuery(baseOptions: Apollo.QueryHookOptions<WorkPacketStatusesPollQuery, WorkPacketStatusesPollQueryVariables>) {
+        return Apollo.useQuery<WorkPacketStatusesPollQuery, WorkPacketStatusesPollQueryVariables>(WorkPacketStatusesPollDocument, baseOptions);
+      }
+export function useWorkPacketStatusesPollLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WorkPacketStatusesPollQuery, WorkPacketStatusesPollQueryVariables>) {
+          return Apollo.useLazyQuery<WorkPacketStatusesPollQuery, WorkPacketStatusesPollQueryVariables>(WorkPacketStatusesPollDocument, baseOptions);
+        }
+export type WorkPacketStatusesPollQueryHookResult = ReturnType<typeof useWorkPacketStatusesPollQuery>;
+export type WorkPacketStatusesPollLazyQueryHookResult = ReturnType<typeof useWorkPacketStatusesPollLazyQuery>;
+export type WorkPacketStatusesPollQueryResult = Apollo.QueryResult<WorkPacketStatusesPollQuery, WorkPacketStatusesPollQueryVariables>;
+export const WpProcessErrorsDocument = gql`
+    query WpProcessErrors($orgSid: ID!, $searchText: String, $dateRange: DateTimeRangeInput, $pageableInput: PageableInput) {
+  wpProcessErrors(
+    orgSid: $orgSid
+    searchText: $searchText
+    dateRange: $dateRange
+    pageableInput: $pageableInput
+  ) {
+    paginationInfo {
+      ...fragmentPaginationInfo
+    }
+    nodes {
+      id
+      workOrderId
+      startTime
+      stepName
+      orgSid
+      planSponsorId
+      vendorSid
+      vendorId
+      msg
+      inboundFilename
+      clientFileArchivePath
+      environment
+      commands {
+        ...fragmentWorkPacketCommand
+      }
+    }
+  }
+}
+    ${FragmentPaginationInfoFragmentDoc}
+${FragmentWorkPacketCommandFragmentDoc}`;
+
+/**
+ * __useWpProcessErrorsQuery__
+ *
+ * To run a query within a React component, call `useWpProcessErrorsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWpProcessErrorsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useWpProcessErrorsQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *      searchText: // value for 'searchText'
+ *      dateRange: // value for 'dateRange'
+ *      pageableInput: // value for 'pageableInput'
+ *   },
+ * });
+ */
+export function useWpProcessErrorsQuery(baseOptions: Apollo.QueryHookOptions<WpProcessErrorsQuery, WpProcessErrorsQueryVariables>) {
+        return Apollo.useQuery<WpProcessErrorsQuery, WpProcessErrorsQueryVariables>(WpProcessErrorsDocument, baseOptions);
+      }
+export function useWpProcessErrorsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WpProcessErrorsQuery, WpProcessErrorsQueryVariables>) {
+          return Apollo.useLazyQuery<WpProcessErrorsQuery, WpProcessErrorsQueryVariables>(WpProcessErrorsDocument, baseOptions);
+        }
+export type WpProcessErrorsQueryHookResult = ReturnType<typeof useWpProcessErrorsQuery>;
+export type WpProcessErrorsLazyQueryHookResult = ReturnType<typeof useWpProcessErrorsLazyQuery>;
+export type WpProcessErrorsQueryResult = Apollo.QueryResult<WpProcessErrorsQuery, WpProcessErrorsQueryVariables>;
+export const WpTransmissionsDocument = gql`
+    query WpTransmissions($orgSid: ID!, $searchText: String, $dateRange: DateTimeRangeInput, $pageableInput: PageableInput) {
+  wpTransmissions(
+    orgSid: $orgSid
+    searchText: $searchText
+    dateRange: $dateRange
+    pageableInput: $pageableInput
+  ) {
+    paginationInfo {
+      ...fragmentPaginationInfo
+    }
+    nodes {
+      id
+      workOrderId
+      deliveredOn
+      orgSid
+      planSponsorId
+      vendorSid
+      vendorId
+      specId
+      implementation
+      inboundFilename
+      outboundFilename
+      outboundFilesize
+      billingCount
+      totalRecords
+      extractType
+      extractVersion
+      environment
+      commands {
+        ...fragmentWorkPacketCommand
+      }
+    }
+  }
+}
+    ${FragmentPaginationInfoFragmentDoc}
+${FragmentWorkPacketCommandFragmentDoc}`;
+
+/**
+ * __useWpTransmissionsQuery__
+ *
+ * To run a query within a React component, call `useWpTransmissionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWpTransmissionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useWpTransmissionsQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *      searchText: // value for 'searchText'
+ *      dateRange: // value for 'dateRange'
+ *      pageableInput: // value for 'pageableInput'
+ *   },
+ * });
+ */
+export function useWpTransmissionsQuery(baseOptions: Apollo.QueryHookOptions<WpTransmissionsQuery, WpTransmissionsQueryVariables>) {
+        return Apollo.useQuery<WpTransmissionsQuery, WpTransmissionsQueryVariables>(WpTransmissionsDocument, baseOptions);
+      }
+export function useWpTransmissionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WpTransmissionsQuery, WpTransmissionsQueryVariables>) {
+          return Apollo.useLazyQuery<WpTransmissionsQuery, WpTransmissionsQueryVariables>(WpTransmissionsDocument, baseOptions);
+        }
+export type WpTransmissionsQueryHookResult = ReturnType<typeof useWpTransmissionsQuery>;
+export type WpTransmissionsLazyQueryHookResult = ReturnType<typeof useWpTransmissionsLazyQuery>;
+export type WpTransmissionsQueryResult = Apollo.QueryResult<WpTransmissionsQuery, WpTransmissionsQueryVariables>;
+export const ScheduleOccurrencesDocument = gql`
+    query ScheduleOccurrences($orgSid: ID!, $dateRange: DateTimeRangeInput, $pageableInput: PageableInput) {
+  scheduleOccurrences(
+    orgSid: $orgSid
+    dateRange: $dateRange
+    pageableInput: $pageableInput
+  ) {
+    paginationInfo {
+      ...fragmentPaginationInfo
+    }
+    nodes {
+      resource
+      scheduleId
+      timeScheduled
+      schedOccurStatus
+      runOccurrences {
+        workOrderId
+        timeRan
+        status
+      }
+    }
+  }
+}
+    ${FragmentPaginationInfoFragmentDoc}`;
+
+/**
+ * __useScheduleOccurrencesQuery__
+ *
+ * To run a query within a React component, call `useScheduleOccurrencesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useScheduleOccurrencesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useScheduleOccurrencesQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *      dateRange: // value for 'dateRange'
+ *      pageableInput: // value for 'pageableInput'
+ *   },
+ * });
+ */
+export function useScheduleOccurrencesQuery(baseOptions: Apollo.QueryHookOptions<ScheduleOccurrencesQuery, ScheduleOccurrencesQueryVariables>) {
+        return Apollo.useQuery<ScheduleOccurrencesQuery, ScheduleOccurrencesQueryVariables>(ScheduleOccurrencesDocument, baseOptions);
+      }
+export function useScheduleOccurrencesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ScheduleOccurrencesQuery, ScheduleOccurrencesQueryVariables>) {
+          return Apollo.useLazyQuery<ScheduleOccurrencesQuery, ScheduleOccurrencesQueryVariables>(ScheduleOccurrencesDocument, baseOptions);
+        }
+export type ScheduleOccurrencesQueryHookResult = ReturnType<typeof useScheduleOccurrencesQuery>;
+export type ScheduleOccurrencesLazyQueryHookResult = ReturnType<typeof useScheduleOccurrencesLazyQuery>;
+export type ScheduleOccurrencesQueryResult = Apollo.QueryResult<ScheduleOccurrencesQuery, ScheduleOccurrencesQueryVariables>;
+export const DashboardPeriodsDocument = gql`
+    query DashboardPeriods($orgSid: ID!) {
+  dashboardPeriods(orgSid: $orgSid) {
+    dailyCounts {
+      ...fragmentDashboardPeriodCounts
+    }
+    yesterdayCounts {
+      ...fragmentDashboardPeriodCounts
+    }
+    monthlyCounts {
+      ...fragmentDashboardPeriodCounts
+    }
+    lastMonthlyCounts {
+      ...fragmentDashboardPeriodCounts
+    }
+  }
+}
+    ${FragmentDashboardPeriodCountsFragmentDoc}`;
+
+/**
+ * __useDashboardPeriodsQuery__
+ *
+ * To run a query within a React component, call `useDashboardPeriodsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDashboardPeriodsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useDashboardPeriodsQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *   },
+ * });
+ */
+export function useDashboardPeriodsQuery(baseOptions: Apollo.QueryHookOptions<DashboardPeriodsQuery, DashboardPeriodsQueryVariables>) {
+        return Apollo.useQuery<DashboardPeriodsQuery, DashboardPeriodsQueryVariables>(DashboardPeriodsDocument, baseOptions);
+      }
+export function useDashboardPeriodsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DashboardPeriodsQuery, DashboardPeriodsQueryVariables>) {
+          return Apollo.useLazyQuery<DashboardPeriodsQuery, DashboardPeriodsQueryVariables>(DashboardPeriodsDocument, baseOptions);
+        }
+export type DashboardPeriodsQueryHookResult = ReturnType<typeof useDashboardPeriodsQuery>;
+export type DashboardPeriodsLazyQueryHookResult = ReturnType<typeof useDashboardPeriodsLazyQuery>;
+export type DashboardPeriodsQueryResult = Apollo.QueryResult<DashboardPeriodsQuery, DashboardPeriodsQueryVariables>;
+export const DashboardPeriodCountsDocument = gql`
+    query DashboardPeriodCounts($orgSid: ID!, $dateRange: DateTimeRangeInput) {
+  dashboardPeriodCounts(orgSid: $orgSid, dateRange: $dateRange) {
     vendorTransmissions {
       name
       secondaryDescr
@@ -8186,1135 +6693,8 @@ export const FragmentDashboardPeriodCountsFragmentDoc = gql`
     billingUnitCount
     processErrorCount
   }
-`;
-export const StatInFragmentFragmentDoc = gql`
-  fragment statInFragment on StatInt {
-    prior
-    value
-  }
-`;
-export const InsuredStatCountFragmentFragmentDoc = gql`
-  fragment insuredStatCountFragment on InsuredStatCount {
-    active {
-      ...statInFragment
-    }
-    ended {
-      ...statInFragment
-    }
-    expectedTotal
-    inTolerance
-    toleranceMsg
-    hold
-  }
-  ${StatInFragmentFragmentDoc}
-`;
-export const InsuredStatFragmentFragmentDoc = gql`
-  fragment insuredStatFragment on InsuredStat {
-    subscribers {
-      ...insuredStatCountFragment
-    }
-    dependents {
-      ...insuredStatCountFragment
-    }
-  }
-  ${InsuredStatCountFragmentFragmentDoc}
-`;
-export const PlanInsuredStatFragmentFragmentDoc = gql`
-  fragment planInsuredStatFragment on PlanInsuredStat {
-    planCode
-    planType
-    subscribers {
-      ...insuredStatCountFragment
-    }
-    dependents {
-      ...insuredStatCountFragment
-    }
-  }
-  ${InsuredStatCountFragmentFragmentDoc}
-`;
-export const EnrollmentStatFragmentFragmentDoc = gql`
-  fragment enrollmentStatFragment on EnrollmentStat {
-    insuredStat {
-      ...insuredStatFragment
-    }
-    excludedInsuredStat {
-      ...insuredStatFragment
-    }
-    excludedPlanInsuredStat {
-      ...planInsuredStatFragment
-    }
-    planInsuredStat {
-      ...planInsuredStatFragment
-    }
-  }
-  ${InsuredStatFragmentFragmentDoc}
-  ${PlanInsuredStatFragmentFragmentDoc}
-`;
-export const UnionNvpFragmentDoc = gql`
-  fragment unionNVP on NVP {
-    __typename
-    ... on NVPStr {
-      name
-      strValue: value
-    }
-    ... on NVPId {
-      name
-      idValue: value
-    }
-  }
-`;
-export const FragmentWebPageFragmentDoc = gql`
-  fragment fragmentWebPage on WebPage {
-    type
-    parameters {
-      ...unionNVP
-    }
-    commands {
-      label
-      page {
-        type
-        parameters {
-          ...unionNVP
-        }
-      }
-      appDomain
-    }
-    pivots {
-      label
-      type
-    }
-  }
-  ${UnionNvpFragmentDoc}
-`;
-export const FragmentWebNavFragmentDoc = gql`
-  fragment fragmentWebNav on WebNav {
-    orgId
-    label
-    page {
-      ...fragmentWebPage
-    }
-    appDomain
-  }
-  ${FragmentWebPageFragmentDoc}
-`;
-export const FragmentAccessPolicyFragmentDoc = gql`
-  fragment fragmentAccessPolicy on AccessPolicy {
-    sid
-    name
-    permissions
-    tmpl
-    tmplUseAsIs
-    applicableOrgTypes
-  }
-`;
-export const FragmentWebCommandFragmentDoc = gql`
-  fragment fragmentWebCommand on WebCommand {
-    endPoint
-    label
-    parameters {
-      name
-      value
-    }
-    commandType
-  }
-`;
-export const FragmentWorkPacketCommandFragmentDoc = gql`
-  fragment fragmentWorkPacketCommand on WorkPacketCommand {
-    label
-    commandType
-  }
-`;
-export const FragmentPaginationInfoFragmentDoc = gql`
-  fragment fragmentPaginationInfo on PaginationInfo {
-    totalPages
-    totalElements
-    pageNumber
-    pageSize
-  }
-`;
-export const VersionDocument = gql`
-  query Version {
-    version
-  }
-`;
-
-/**
- * __useVersionQuery__
- *
- * To run a query within a React component, call `useVersionQuery` and pass it any options that fit your needs.
- * When your component renders, `useVersionQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useVersionQuery({
- *   variables: {
- *   },
- * });
- */
-export function useVersionQuery(baseOptions?: Apollo.QueryHookOptions<VersionQuery, VersionQueryVariables>) {
-  return Apollo.useQuery<VersionQuery, VersionQueryVariables>(VersionDocument, baseOptions);
 }
-export function useVersionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<VersionQuery, VersionQueryVariables>) {
-  return Apollo.useLazyQuery<VersionQuery, VersionQueryVariables>(VersionDocument, baseOptions);
-}
-export type VersionQueryHookResult = ReturnType<typeof useVersionQuery>;
-export type VersionLazyQueryHookResult = ReturnType<typeof useVersionLazyQuery>;
-export type VersionQueryResult = Apollo.QueryResult<VersionQuery, VersionQueryVariables>;
-export const VerifyPasswordResetTokenDocument = gql`
-  query VerifyPasswordResetToken($token: String!) {
-    verifyPasswordResetToken(token: $token) {
-      orgSid
-      userSid
-      response
-      errCode
-      errMsg
-      errSeverity
-    }
-  }
-`;
-
-/**
- * __useVerifyPasswordResetTokenQuery__
- *
- * To run a query within a React component, call `useVerifyPasswordResetTokenQuery` and pass it any options that fit your needs.
- * When your component renders, `useVerifyPasswordResetTokenQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useVerifyPasswordResetTokenQuery({
- *   variables: {
- *      token: // value for 'token'
- *   },
- * });
- */
-export function useVerifyPasswordResetTokenQuery(
-  baseOptions: Apollo.QueryHookOptions<VerifyPasswordResetTokenQuery, VerifyPasswordResetTokenQueryVariables>
-) {
-  return Apollo.useQuery<VerifyPasswordResetTokenQuery, VerifyPasswordResetTokenQueryVariables>(
-    VerifyPasswordResetTokenDocument,
-    baseOptions
-  );
-}
-export function useVerifyPasswordResetTokenLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<VerifyPasswordResetTokenQuery, VerifyPasswordResetTokenQueryVariables>
-) {
-  return Apollo.useLazyQuery<VerifyPasswordResetTokenQuery, VerifyPasswordResetTokenQueryVariables>(
-    VerifyPasswordResetTokenDocument,
-    baseOptions
-  );
-}
-export type VerifyPasswordResetTokenQueryHookResult = ReturnType<typeof useVerifyPasswordResetTokenQuery>;
-export type VerifyPasswordResetTokenLazyQueryHookResult = ReturnType<typeof useVerifyPasswordResetTokenLazyQuery>;
-export type VerifyPasswordResetTokenQueryResult = Apollo.QueryResult<
-  VerifyPasswordResetTokenQuery,
-  VerifyPasswordResetTokenQueryVariables
->;
-export const ExchangeActivityInProcessDocument = gql`
-  query ExchangeActivityInProcess(
-    $orgSidInput: OrgSidInput!
-    $searchText: String
-    $dateRange: DateTimeRangeInput!
-    $pageableInput: PageableInput!
-  ) {
-    exchangeActivityInProcess(
-      orgSidInput: $orgSidInput
-      searchText: $searchText
-      dateRange: $dateRange
-      pageableInput: $pageableInput
-    ) {
-      paginationInfo {
-        ...fragmentPaginationInfo
-      }
-      nodes {
-        id
-        orgId
-        name
-        type
-        activityTime
-      }
-    }
-  }
-  ${FragmentPaginationInfoFragmentDoc}
-`;
-
-/**
- * __useExchangeActivityInProcessQuery__
- *
- * To run a query within a React component, call `useExchangeActivityInProcessQuery` and pass it any options that fit your needs.
- * When your component renders, `useExchangeActivityInProcessQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useExchangeActivityInProcessQuery({
- *   variables: {
- *      orgSidInput: // value for 'orgSidInput'
- *      searchText: // value for 'searchText'
- *      dateRange: // value for 'dateRange'
- *      pageableInput: // value for 'pageableInput'
- *   },
- * });
- */
-export function useExchangeActivityInProcessQuery(
-  baseOptions: Apollo.QueryHookOptions<ExchangeActivityInProcessQuery, ExchangeActivityInProcessQueryVariables>
-) {
-  return Apollo.useQuery<ExchangeActivityInProcessQuery, ExchangeActivityInProcessQueryVariables>(
-    ExchangeActivityInProcessDocument,
-    baseOptions
-  );
-}
-export function useExchangeActivityInProcessLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<ExchangeActivityInProcessQuery, ExchangeActivityInProcessQueryVariables>
-) {
-  return Apollo.useLazyQuery<ExchangeActivityInProcessQuery, ExchangeActivityInProcessQueryVariables>(
-    ExchangeActivityInProcessDocument,
-    baseOptions
-  );
-}
-export type ExchangeActivityInProcessQueryHookResult = ReturnType<typeof useExchangeActivityInProcessQuery>;
-export type ExchangeActivityInProcessLazyQueryHookResult = ReturnType<typeof useExchangeActivityInProcessLazyQuery>;
-export type ExchangeActivityInProcessQueryResult = Apollo.QueryResult<
-  ExchangeActivityInProcessQuery,
-  ExchangeActivityInProcessQueryVariables
->;
-export const ExchangeActivityTransmittedDocument = gql`
-  query ExchangeActivityTransmitted(
-    $orgSidInput: OrgSidInput!
-    $searchText: String
-    $dateRange: DateTimeRangeInput!
-    $pageableInput: PageableInput!
-  ) {
-    exchangeActivityTransmitted(
-      orgSidInput: $orgSidInput
-      searchText: $searchText
-      dateRange: $dateRange
-      pageableInput: $pageableInput
-    ) {
-      paginationInfo {
-        ...fragmentPaginationInfo
-      }
-      nodes {
-        id
-        orgId
-        name
-        type
-        activityTime
-      }
-    }
-  }
-  ${FragmentPaginationInfoFragmentDoc}
-`;
-
-/**
- * __useExchangeActivityTransmittedQuery__
- *
- * To run a query within a React component, call `useExchangeActivityTransmittedQuery` and pass it any options that fit your needs.
- * When your component renders, `useExchangeActivityTransmittedQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useExchangeActivityTransmittedQuery({
- *   variables: {
- *      orgSidInput: // value for 'orgSidInput'
- *      searchText: // value for 'searchText'
- *      dateRange: // value for 'dateRange'
- *      pageableInput: // value for 'pageableInput'
- *   },
- * });
- */
-export function useExchangeActivityTransmittedQuery(
-  baseOptions: Apollo.QueryHookOptions<ExchangeActivityTransmittedQuery, ExchangeActivityTransmittedQueryVariables>
-) {
-  return Apollo.useQuery<ExchangeActivityTransmittedQuery, ExchangeActivityTransmittedQueryVariables>(
-    ExchangeActivityTransmittedDocument,
-    baseOptions
-  );
-}
-export function useExchangeActivityTransmittedLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<ExchangeActivityTransmittedQuery, ExchangeActivityTransmittedQueryVariables>
-) {
-  return Apollo.useLazyQuery<ExchangeActivityTransmittedQuery, ExchangeActivityTransmittedQueryVariables>(
-    ExchangeActivityTransmittedDocument,
-    baseOptions
-  );
-}
-export type ExchangeActivityTransmittedQueryHookResult = ReturnType<typeof useExchangeActivityTransmittedQuery>;
-export type ExchangeActivityTransmittedLazyQueryHookResult = ReturnType<typeof useExchangeActivityTransmittedLazyQuery>;
-export type ExchangeActivityTransmittedQueryResult = Apollo.QueryResult<
-  ExchangeActivityTransmittedQuery,
-  ExchangeActivityTransmittedQueryVariables
->;
-export const ExchangeActivityErroredDocument = gql`
-  query ExchangeActivityErrored(
-    $orgSidInput: OrgSidInput!
-    $searchText: String
-    $dateRange: DateTimeRangeInput!
-    $pageableInput: PageableInput!
-  ) {
-    exchangeActivityErrored(
-      orgSidInput: $orgSidInput
-      searchText: $searchText
-      dateRange: $dateRange
-      pageableInput: $pageableInput
-    ) {
-      paginationInfo {
-        ...fragmentPaginationInfo
-      }
-      nodes {
-        id
-        orgId
-        name
-        type
-        activityTime
-      }
-    }
-  }
-  ${FragmentPaginationInfoFragmentDoc}
-`;
-
-/**
- * __useExchangeActivityErroredQuery__
- *
- * To run a query within a React component, call `useExchangeActivityErroredQuery` and pass it any options that fit your needs.
- * When your component renders, `useExchangeActivityErroredQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useExchangeActivityErroredQuery({
- *   variables: {
- *      orgSidInput: // value for 'orgSidInput'
- *      searchText: // value for 'searchText'
- *      dateRange: // value for 'dateRange'
- *      pageableInput: // value for 'pageableInput'
- *   },
- * });
- */
-export function useExchangeActivityErroredQuery(
-  baseOptions: Apollo.QueryHookOptions<ExchangeActivityErroredQuery, ExchangeActivityErroredQueryVariables>
-) {
-  return Apollo.useQuery<ExchangeActivityErroredQuery, ExchangeActivityErroredQueryVariables>(
-    ExchangeActivityErroredDocument,
-    baseOptions
-  );
-}
-export function useExchangeActivityErroredLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<ExchangeActivityErroredQuery, ExchangeActivityErroredQueryVariables>
-) {
-  return Apollo.useLazyQuery<ExchangeActivityErroredQuery, ExchangeActivityErroredQueryVariables>(
-    ExchangeActivityErroredDocument,
-    baseOptions
-  );
-}
-export type ExchangeActivityErroredQueryHookResult = ReturnType<typeof useExchangeActivityErroredQuery>;
-export type ExchangeActivityErroredLazyQueryHookResult = ReturnType<typeof useExchangeActivityErroredLazyQuery>;
-export type ExchangeActivityErroredQueryResult = Apollo.QueryResult<
-  ExchangeActivityErroredQuery,
-  ExchangeActivityErroredQueryVariables
->;
-export const WorkPacketStatusDetailsDocument = gql`
-  query WorkPacketStatusDetails($orgSid: ID!, $workOrderId: String!) {
-    workPacketStatusDetails(orgSid: $orgSid, workOrderId: $workOrderId) {
-      workOrderId
-      inboundFilename
-      timestamp
-      orgSid
-      orgId
-      orgName
-      vendorSid
-      vendorId
-      vendorName
-      specId
-      specImplName
-      fingerPrint
-      populationCount
-      suppressBilling
-      deliveredFiles {
-        filename
-        fileSizeInBytes
-        textSizeInBytes
-        timeDelivered
-        ftp {
-          protocol
-          host
-          username
-          folder
-          port
-        }
-        kcurl {
-          url
-        }
-      }
-      packetStatus
-      workStepStatus {
-        stepStatus
-        stepName
-        stepType
-        populationCount {
-          value
-        }
-        transformedArchiveFile {
-          value
-          label
-        }
-        recordCounts {
-          ...recordCountsFragment
-        }
-        stepFile {
-          value
-          label
-        }
-        nvp {
-          name
-          value
-        }
-      }
-      extractParameters {
-        originalParameter {
-          ...extractParameterFragment
-        }
-        overriddenParameter {
-          ...extractParameterFragment
-        }
-        derivedParameter {
-          ...extractParameterFragment
-        }
-      }
-      qualityChecks {
-        sequenceCreationEvent {
-          context
-          unitId
-          recordCreationEvent {
-            context
-            outerContext
-            unitId
-            error {
-              ...fieldCreationFragment
-            }
-            warning {
-              ...fieldCreationFragment
-            }
-            information {
-              ...fieldCreationFragment
-            }
-          }
-        }
-        totalRecordCount
-        fieldCreationWarningCount
-        fieldCreationErrorCount
-        fieldCreationInfoCount
-        accStructReqError {
-          ...fragmentStatType
-        }
-        clientSpecificReqError {
-          ...fragmentStatType
-        }
-        accStructTruncError {
-          ...fragmentStatType
-        }
-        reqError {
-          ...fragmentStatType
-        }
-        truncError {
-          ...fragmentStatType
-        }
-        codeListMappingError {
-          ...fragmentStatType
-        }
-        hasMoreEvents
-      }
-      enrollmentStats {
-        ...enrollmentStatFragment
-      }
-      inboundEnrollmentStats {
-        ...enrollmentStatFragment
-      }
-      outboundEnrollmentStats {
-        ...enrollmentStatFragment
-      }
-      outboundRecordCounts {
-        ...recordCountsFragment
-      }
-      inboundLabel
-      outboundLabel
-      clientFileArchivePath
-      vendorFileArchivePath
-      supplementalFilesArchivePaths
-      commands {
-        ...fragmentWorkPacketCommand
-      }
-    }
-  }
-  ${RecordCountsFragmentFragmentDoc}
-  ${ExtractParameterFragmentFragmentDoc}
-  ${FieldCreationFragmentFragmentDoc}
-  ${FragmentStatTypeFragmentDoc}
-  ${EnrollmentStatFragmentFragmentDoc}
-  ${FragmentWorkPacketCommandFragmentDoc}
-`;
-
-/**
- * __useWorkPacketStatusDetailsQuery__
- *
- * To run a query within a React component, call `useWorkPacketStatusDetailsQuery` and pass it any options that fit your needs.
- * When your component renders, `useWorkPacketStatusDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useWorkPacketStatusDetailsQuery({
- *   variables: {
- *      orgSid: // value for 'orgSid'
- *      workOrderId: // value for 'workOrderId'
- *   },
- * });
- */
-export function useWorkPacketStatusDetailsQuery(
-  baseOptions: Apollo.QueryHookOptions<WorkPacketStatusDetailsQuery, WorkPacketStatusDetailsQueryVariables>
-) {
-  return Apollo.useQuery<WorkPacketStatusDetailsQuery, WorkPacketStatusDetailsQueryVariables>(
-    WorkPacketStatusDetailsDocument,
-    baseOptions
-  );
-}
-export function useWorkPacketStatusDetailsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<WorkPacketStatusDetailsQuery, WorkPacketStatusDetailsQueryVariables>
-) {
-  return Apollo.useLazyQuery<WorkPacketStatusDetailsQuery, WorkPacketStatusDetailsQueryVariables>(
-    WorkPacketStatusDetailsDocument,
-    baseOptions
-  );
-}
-export type WorkPacketStatusDetailsQueryHookResult = ReturnType<typeof useWorkPacketStatusDetailsQuery>;
-export type WorkPacketStatusDetailsLazyQueryHookResult = ReturnType<typeof useWorkPacketStatusDetailsLazyQuery>;
-export type WorkPacketStatusDetailsQueryResult = Apollo.QueryResult<
-  WorkPacketStatusDetailsQuery,
-  WorkPacketStatusDetailsQueryVariables
->;
-export const WorkPacketStatusDocument = gql`
-  query WorkPacketStatus($orgSid: ID!, $workOrderId: String!) {
-    workPacketStatus(orgSid: $orgSid, workOrderId: $workOrderId) {
-      workOrderId
-      timestamp
-      orgId
-      orgSid
-      detailsPath
-      inboundFilename
-      vendorId
-      vendorSid
-      step
-      stepStatus
-      packetStatus
-      reprocessedBy
-      restartReason
-      recordHighlightCount
-      populationCount
-      recordHighlightType
-      clientFileArchivePath
-      vendorFileArchivePath
-      feedType
-      inboundDataType
-      inboundDataSize
-      version
-      supplementalFilesArchivePaths
-      archiveOnly
-      hasErrors
-      environment
-      commands {
-        ...fragmentWorkPacketCommand
-      }
-    }
-  }
-  ${FragmentWorkPacketCommandFragmentDoc}
-`;
-
-/**
- * __useWorkPacketStatusQuery__
- *
- * To run a query within a React component, call `useWorkPacketStatusQuery` and pass it any options that fit your needs.
- * When your component renders, `useWorkPacketStatusQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useWorkPacketStatusQuery({
- *   variables: {
- *      orgSid: // value for 'orgSid'
- *      workOrderId: // value for 'workOrderId'
- *   },
- * });
- */
-export function useWorkPacketStatusQuery(
-  baseOptions: Apollo.QueryHookOptions<WorkPacketStatusQuery, WorkPacketStatusQueryVariables>
-) {
-  return Apollo.useQuery<WorkPacketStatusQuery, WorkPacketStatusQueryVariables>(WorkPacketStatusDocument, baseOptions);
-}
-export function useWorkPacketStatusLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<WorkPacketStatusQuery, WorkPacketStatusQueryVariables>
-) {
-  return Apollo.useLazyQuery<WorkPacketStatusQuery, WorkPacketStatusQueryVariables>(
-    WorkPacketStatusDocument,
-    baseOptions
-  );
-}
-export type WorkPacketStatusQueryHookResult = ReturnType<typeof useWorkPacketStatusQuery>;
-export type WorkPacketStatusLazyQueryHookResult = ReturnType<typeof useWorkPacketStatusLazyQuery>;
-export type WorkPacketStatusQueryResult = Apollo.QueryResult<WorkPacketStatusQuery, WorkPacketStatusQueryVariables>;
-export const WorkPacketStatusesDocument = gql`
-  query WorkPacketStatuses(
-    $orgSid: ID!
-    $searchText: String
-    $dateRange: DateTimeRangeInput
-    $pageableInput: PageableInput!
-  ) {
-    workPacketStatuses(orgSid: $orgSid, searchText: $searchText, dateRange: $dateRange, pageableInput: $pageableInput) {
-      paginationInfo {
-        ...fragmentPaginationInfo
-      }
-      nodes {
-        workOrderId
-        timestamp
-        orgId
-        orgSid
-        detailsPath
-        inboundFilename
-        vendorId
-        vendorSid
-        step
-        stepStatus
-        packetStatus
-        reprocessedBy
-        restartReason
-        recordHighlightCount
-        populationCount
-        recordHighlightType
-        clientFileArchivePath
-        vendorFileArchivePath
-        feedType
-        inboundDataType
-        inboundDataSize
-        version
-        supplementalFilesArchivePaths
-        archiveOnly
-        hasErrors
-        environment
-        commands {
-          ...fragmentWorkPacketCommand
-        }
-      }
-    }
-  }
-  ${FragmentPaginationInfoFragmentDoc}
-  ${FragmentWorkPacketCommandFragmentDoc}
-`;
-
-/**
- * __useWorkPacketStatusesQuery__
- *
- * To run a query within a React component, call `useWorkPacketStatusesQuery` and pass it any options that fit your needs.
- * When your component renders, `useWorkPacketStatusesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useWorkPacketStatusesQuery({
- *   variables: {
- *      orgSid: // value for 'orgSid'
- *      searchText: // value for 'searchText'
- *      dateRange: // value for 'dateRange'
- *      pageableInput: // value for 'pageableInput'
- *   },
- * });
- */
-export function useWorkPacketStatusesQuery(
-  baseOptions: Apollo.QueryHookOptions<WorkPacketStatusesQuery, WorkPacketStatusesQueryVariables>
-) {
-  return Apollo.useQuery<WorkPacketStatusesQuery, WorkPacketStatusesQueryVariables>(
-    WorkPacketStatusesDocument,
-    baseOptions
-  );
-}
-export function useWorkPacketStatusesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<WorkPacketStatusesQuery, WorkPacketStatusesQueryVariables>
-) {
-  return Apollo.useLazyQuery<WorkPacketStatusesQuery, WorkPacketStatusesQueryVariables>(
-    WorkPacketStatusesDocument,
-    baseOptions
-  );
-}
-export type WorkPacketStatusesQueryHookResult = ReturnType<typeof useWorkPacketStatusesQuery>;
-export type WorkPacketStatusesLazyQueryHookResult = ReturnType<typeof useWorkPacketStatusesLazyQuery>;
-export type WorkPacketStatusesQueryResult = Apollo.QueryResult<
-  WorkPacketStatusesQuery,
-  WorkPacketStatusesQueryVariables
->;
-export const WorkPacketStatusesPollDocument = gql`
-  query WorkPacketStatusesPoll(
-    $orgSid: ID!
-    $searchText: String
-    $dateRange: DateTimeRangeInput
-    $lastUpdated: DateTime!
-  ) {
-    workPacketStatusesPoll(orgSid: $orgSid, searchText: $searchText, dateRange: $dateRange, lastUpdated: $lastUpdated)
-  }
-`;
-
-/**
- * __useWorkPacketStatusesPollQuery__
- *
- * To run a query within a React component, call `useWorkPacketStatusesPollQuery` and pass it any options that fit your needs.
- * When your component renders, `useWorkPacketStatusesPollQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useWorkPacketStatusesPollQuery({
- *   variables: {
- *      orgSid: // value for 'orgSid'
- *      searchText: // value for 'searchText'
- *      dateRange: // value for 'dateRange'
- *      lastUpdated: // value for 'lastUpdated'
- *   },
- * });
- */
-export function useWorkPacketStatusesPollQuery(
-  baseOptions: Apollo.QueryHookOptions<WorkPacketStatusesPollQuery, WorkPacketStatusesPollQueryVariables>
-) {
-  return Apollo.useQuery<WorkPacketStatusesPollQuery, WorkPacketStatusesPollQueryVariables>(
-    WorkPacketStatusesPollDocument,
-    baseOptions
-  );
-}
-export function useWorkPacketStatusesPollLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<WorkPacketStatusesPollQuery, WorkPacketStatusesPollQueryVariables>
-) {
-  return Apollo.useLazyQuery<WorkPacketStatusesPollQuery, WorkPacketStatusesPollQueryVariables>(
-    WorkPacketStatusesPollDocument,
-    baseOptions
-  );
-}
-export type WorkPacketStatusesPollQueryHookResult = ReturnType<typeof useWorkPacketStatusesPollQuery>;
-export type WorkPacketStatusesPollLazyQueryHookResult = ReturnType<typeof useWorkPacketStatusesPollLazyQuery>;
-export type WorkPacketStatusesPollQueryResult = Apollo.QueryResult<
-  WorkPacketStatusesPollQuery,
-  WorkPacketStatusesPollQueryVariables
->;
-export const WpProcessErrorsDocument = gql`
-  query WpProcessErrors(
-    $orgSid: ID!
-    $searchText: String
-    $dateRange: DateTimeRangeInput
-    $pageableInput: PageableInput
-  ) {
-    wpProcessErrors(orgSid: $orgSid, searchText: $searchText, dateRange: $dateRange, pageableInput: $pageableInput) {
-      paginationInfo {
-        ...fragmentPaginationInfo
-      }
-      nodes {
-        id
-        workOrderId
-        startTime
-        stepName
-        orgSid
-        planSponsorId
-        vendorSid
-        vendorId
-        msg
-        inboundFilename
-        clientFileArchivePath
-        environment
-        commands {
-          ...fragmentWorkPacketCommand
-        }
-      }
-    }
-  }
-  ${FragmentPaginationInfoFragmentDoc}
-  ${FragmentWorkPacketCommandFragmentDoc}
-`;
-
-/**
- * __useWpProcessErrorsQuery__
- *
- * To run a query within a React component, call `useWpProcessErrorsQuery` and pass it any options that fit your needs.
- * When your component renders, `useWpProcessErrorsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useWpProcessErrorsQuery({
- *   variables: {
- *      orgSid: // value for 'orgSid'
- *      searchText: // value for 'searchText'
- *      dateRange: // value for 'dateRange'
- *      pageableInput: // value for 'pageableInput'
- *   },
- * });
- */
-export function useWpProcessErrorsQuery(
-  baseOptions: Apollo.QueryHookOptions<WpProcessErrorsQuery, WpProcessErrorsQueryVariables>
-) {
-  return Apollo.useQuery<WpProcessErrorsQuery, WpProcessErrorsQueryVariables>(WpProcessErrorsDocument, baseOptions);
-}
-export function useWpProcessErrorsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<WpProcessErrorsQuery, WpProcessErrorsQueryVariables>
-) {
-  return Apollo.useLazyQuery<WpProcessErrorsQuery, WpProcessErrorsQueryVariables>(WpProcessErrorsDocument, baseOptions);
-}
-export type WpProcessErrorsQueryHookResult = ReturnType<typeof useWpProcessErrorsQuery>;
-export type WpProcessErrorsLazyQueryHookResult = ReturnType<typeof useWpProcessErrorsLazyQuery>;
-export type WpProcessErrorsQueryResult = Apollo.QueryResult<WpProcessErrorsQuery, WpProcessErrorsQueryVariables>;
-export const WpTransmissionsDocument = gql`
-  query WpTransmissions(
-    $orgSid: ID!
-    $searchText: String
-    $dateRange: DateTimeRangeInput
-    $pageableInput: PageableInput
-  ) {
-    wpTransmissions(orgSid: $orgSid, searchText: $searchText, dateRange: $dateRange, pageableInput: $pageableInput) {
-      paginationInfo {
-        ...fragmentPaginationInfo
-      }
-      nodes {
-        id
-        workOrderId
-        deliveredOn
-        orgSid
-        planSponsorId
-        vendorSid
-        vendorId
-        specId
-        implementation
-        inboundFilename
-        outboundFilename
-        outboundFilesize
-        billingCount
-        totalRecords
-        extractType
-        extractVersion
-        environment
-        commands {
-          ...fragmentWorkPacketCommand
-        }
-      }
-    }
-  }
-  ${FragmentPaginationInfoFragmentDoc}
-  ${FragmentWorkPacketCommandFragmentDoc}
-`;
-
-/**
- * __useWpTransmissionsQuery__
- *
- * To run a query within a React component, call `useWpTransmissionsQuery` and pass it any options that fit your needs.
- * When your component renders, `useWpTransmissionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useWpTransmissionsQuery({
- *   variables: {
- *      orgSid: // value for 'orgSid'
- *      searchText: // value for 'searchText'
- *      dateRange: // value for 'dateRange'
- *      pageableInput: // value for 'pageableInput'
- *   },
- * });
- */
-export function useWpTransmissionsQuery(
-  baseOptions: Apollo.QueryHookOptions<WpTransmissionsQuery, WpTransmissionsQueryVariables>
-) {
-  return Apollo.useQuery<WpTransmissionsQuery, WpTransmissionsQueryVariables>(WpTransmissionsDocument, baseOptions);
-}
-export function useWpTransmissionsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<WpTransmissionsQuery, WpTransmissionsQueryVariables>
-) {
-  return Apollo.useLazyQuery<WpTransmissionsQuery, WpTransmissionsQueryVariables>(WpTransmissionsDocument, baseOptions);
-}
-export type WpTransmissionsQueryHookResult = ReturnType<typeof useWpTransmissionsQuery>;
-export type WpTransmissionsLazyQueryHookResult = ReturnType<typeof useWpTransmissionsLazyQuery>;
-export type WpTransmissionsQueryResult = Apollo.QueryResult<WpTransmissionsQuery, WpTransmissionsQueryVariables>;
-export const ScheduleOccurrencesDocument = gql`
-  query ScheduleOccurrences($orgSid: ID!, $dateRange: DateTimeRangeInput, $pageableInput: PageableInput) {
-    scheduleOccurrences(orgSid: $orgSid, dateRange: $dateRange, pageableInput: $pageableInput) {
-      paginationInfo {
-        ...fragmentPaginationInfo
-      }
-      nodes {
-        resource
-        scheduleId
-        timeScheduled
-        schedOccurStatus
-        runOccurrences {
-          workOrderId
-          timeRan
-          status
-        }
-      }
-    }
-  }
-  ${FragmentPaginationInfoFragmentDoc}
-`;
-
-/**
- * __useScheduleOccurrencesQuery__
- *
- * To run a query within a React component, call `useScheduleOccurrencesQuery` and pass it any options that fit your needs.
- * When your component renders, `useScheduleOccurrencesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useScheduleOccurrencesQuery({
- *   variables: {
- *      orgSid: // value for 'orgSid'
- *      dateRange: // value for 'dateRange'
- *      pageableInput: // value for 'pageableInput'
- *   },
- * });
- */
-export function useScheduleOccurrencesQuery(
-  baseOptions: Apollo.QueryHookOptions<ScheduleOccurrencesQuery, ScheduleOccurrencesQueryVariables>
-) {
-  return Apollo.useQuery<ScheduleOccurrencesQuery, ScheduleOccurrencesQueryVariables>(
-    ScheduleOccurrencesDocument,
-    baseOptions
-  );
-}
-export function useScheduleOccurrencesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<ScheduleOccurrencesQuery, ScheduleOccurrencesQueryVariables>
-) {
-  return Apollo.useLazyQuery<ScheduleOccurrencesQuery, ScheduleOccurrencesQueryVariables>(
-    ScheduleOccurrencesDocument,
-    baseOptions
-  );
-}
-export type ScheduleOccurrencesQueryHookResult = ReturnType<typeof useScheduleOccurrencesQuery>;
-export type ScheduleOccurrencesLazyQueryHookResult = ReturnType<typeof useScheduleOccurrencesLazyQuery>;
-export type ScheduleOccurrencesQueryResult = Apollo.QueryResult<
-  ScheduleOccurrencesQuery,
-  ScheduleOccurrencesQueryVariables
->;
-export const DashboardPeriodsDocument = gql`
-  query DashboardPeriods($orgSid: ID!) {
-    dashboardPeriods(orgSid: $orgSid) {
-      dailyCounts {
-        ...fragmentDashboardPeriodCounts
-      }
-      yesterdayCounts {
-        ...fragmentDashboardPeriodCounts
-      }
-      monthlyCounts {
-        ...fragmentDashboardPeriodCounts
-      }
-      lastMonthlyCounts {
-        ...fragmentDashboardPeriodCounts
-      }
-    }
-  }
-  ${FragmentDashboardPeriodCountsFragmentDoc}
-`;
-
-/**
- * __useDashboardPeriodsQuery__
- *
- * To run a query within a React component, call `useDashboardPeriodsQuery` and pass it any options that fit your needs.
- * When your component renders, `useDashboardPeriodsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useDashboardPeriodsQuery({
- *   variables: {
- *      orgSid: // value for 'orgSid'
- *   },
- * });
- */
-export function useDashboardPeriodsQuery(
-  baseOptions: Apollo.QueryHookOptions<DashboardPeriodsQuery, DashboardPeriodsQueryVariables>
-) {
-  return Apollo.useQuery<DashboardPeriodsQuery, DashboardPeriodsQueryVariables>(DashboardPeriodsDocument, baseOptions);
-}
-export function useDashboardPeriodsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<DashboardPeriodsQuery, DashboardPeriodsQueryVariables>
-) {
-  return Apollo.useLazyQuery<DashboardPeriodsQuery, DashboardPeriodsQueryVariables>(
-    DashboardPeriodsDocument,
-    baseOptions
-  );
-}
-export type DashboardPeriodsQueryHookResult = ReturnType<typeof useDashboardPeriodsQuery>;
-export type DashboardPeriodsLazyQueryHookResult = ReturnType<typeof useDashboardPeriodsLazyQuery>;
-export type DashboardPeriodsQueryResult = Apollo.QueryResult<DashboardPeriodsQuery, DashboardPeriodsQueryVariables>;
-export const DashboardPeriodCountsDocument = gql`
-  query DashboardPeriodCounts($orgSid: ID!, $dateRange: DateTimeRangeInput) {
-    dashboardPeriodCounts(orgSid: $orgSid, dateRange: $dateRange) {
-      vendorTransmissions {
-        name
-        secondaryDescr
-        count
-        total
-      }
-      vendorTransmissionsBySpec {
-        name
-        secondaryDescr
-        count
-        total
-      }
-      planSponsorTransmissions {
-        name
-        secondaryDescr
-        count
-        total
-      }
-      fileTransmissions {
-        name
-        secondaryDescr
-        count
-        total
-      }
-      vendorProcessErrors {
-        name
-        secondaryDescr
-        count
-        total
-      }
-      planSponsorProcessErrors {
-        name
-        secondaryDescr
-        count
-        total
-      }
-      fileProcessErrors {
-        name
-        secondaryDescr
-        count
-        total
-      }
-      showCountsByPlanSponsor
-      showCountsByFile
-      transmissionCount
-      billingUnitCount
-      processErrorCount
-    }
-  }
-`;
+    `;
 
 /**
  * __useDashboardPeriodCountsQuery__
@@ -9333,77 +6713,67 @@ export const DashboardPeriodCountsDocument = gql`
  *   },
  * });
  */
-export function useDashboardPeriodCountsQuery(
-  baseOptions: Apollo.QueryHookOptions<DashboardPeriodCountsQuery, DashboardPeriodCountsQueryVariables>
-) {
-  return Apollo.useQuery<DashboardPeriodCountsQuery, DashboardPeriodCountsQueryVariables>(
-    DashboardPeriodCountsDocument,
-    baseOptions
-  );
-}
-export function useDashboardPeriodCountsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<DashboardPeriodCountsQuery, DashboardPeriodCountsQueryVariables>
-) {
-  return Apollo.useLazyQuery<DashboardPeriodCountsQuery, DashboardPeriodCountsQueryVariables>(
-    DashboardPeriodCountsDocument,
-    baseOptions
-  );
-}
+export function useDashboardPeriodCountsQuery(baseOptions: Apollo.QueryHookOptions<DashboardPeriodCountsQuery, DashboardPeriodCountsQueryVariables>) {
+        return Apollo.useQuery<DashboardPeriodCountsQuery, DashboardPeriodCountsQueryVariables>(DashboardPeriodCountsDocument, baseOptions);
+      }
+export function useDashboardPeriodCountsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DashboardPeriodCountsQuery, DashboardPeriodCountsQueryVariables>) {
+          return Apollo.useLazyQuery<DashboardPeriodCountsQuery, DashboardPeriodCountsQueryVariables>(DashboardPeriodCountsDocument, baseOptions);
+        }
 export type DashboardPeriodCountsQueryHookResult = ReturnType<typeof useDashboardPeriodCountsQuery>;
 export type DashboardPeriodCountsLazyQueryHookResult = ReturnType<typeof useDashboardPeriodCountsLazyQuery>;
-export type DashboardPeriodCountsQueryResult = Apollo.QueryResult<
-  DashboardPeriodCountsQuery,
-  DashboardPeriodCountsQueryVariables
->;
+export type DashboardPeriodCountsQueryResult = Apollo.QueryResult<DashboardPeriodCountsQuery, DashboardPeriodCountsQueryVariables>;
 export const UsersForOrgDocument = gql`
-  query UsersForOrg($orgSid: ID!, $userFilter: UserFilterInput, $pageableInput: PageableInput) {
-    usersForOrg(orgSid: $orgSid, userFilter: $userFilter, pageableInput: $pageableInput) {
-      paginationInfo {
-        ...fragmentPaginationInfo
+    query UsersForOrg($orgSid: ID!, $userFilter: UserFilterInput, $pageableInput: PageableInput) {
+  usersForOrg(
+    orgSid: $orgSid
+    userFilter: $userFilter
+    pageableInput: $pageableInput
+  ) {
+    paginationInfo {
+      ...fragmentPaginationInfo
+    }
+    listPageInfo {
+      pageHeaderLabel
+      pageCommands {
+        ...fragmentWebCommand
       }
-      listPageInfo {
-        pageHeaderLabel
-        pageCommands {
-          ...fragmentWebCommand
-        }
-        listItemCommands {
-          ...fragmentWebCommand
-        }
-        listItemBulkCommands {
-          ...fragmentWebCommand
-        }
+      listItemCommands {
+        ...fragmentWebCommand
       }
-      nodes {
-        item {
+      listItemBulkCommands {
+        ...fragmentWebCommand
+      }
+    }
+    nodes {
+      item {
+        sid
+        email
+        person {
           sid
-          email
-          person {
-            sid
-            firstNm
-            lastNm
-          }
-          accessPolicyGroups {
-            sid
-            name
-            description
-            tmpl
-            tmplUseAsIs
-            applicableOrgTypes
-            policies {
-              ...fragmentAccessPolicy
-            }
+          firstNm
+          lastNm
+        }
+        accessPolicyGroups {
+          sid
+          name
+          description
+          tmpl
+          tmplUseAsIs
+          applicableOrgTypes
+          policies {
+            ...fragmentAccessPolicy
           }
         }
-        listItemCommands {
-          ...fragmentWebCommand
-        }
+      }
+      listItemCommands {
+        ...fragmentWebCommand
       }
     }
   }
-  ${FragmentPaginationInfoFragmentDoc}
-  ${FragmentWebCommandFragmentDoc}
-  ${FragmentAccessPolicyFragmentDoc}
-`;
+}
+    ${FragmentPaginationInfoFragmentDoc}
+${FragmentWebCommandFragmentDoc}
+${FragmentAccessPolicyFragmentDoc}`;
 
 /**
  * __useUsersForOrgQuery__
@@ -9424,44 +6794,41 @@ export const UsersForOrgDocument = gql`
  * });
  */
 export function useUsersForOrgQuery(baseOptions: Apollo.QueryHookOptions<UsersForOrgQuery, UsersForOrgQueryVariables>) {
-  return Apollo.useQuery<UsersForOrgQuery, UsersForOrgQueryVariables>(UsersForOrgDocument, baseOptions);
-}
-export function useUsersForOrgLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<UsersForOrgQuery, UsersForOrgQueryVariables>
-) {
-  return Apollo.useLazyQuery<UsersForOrgQuery, UsersForOrgQueryVariables>(UsersForOrgDocument, baseOptions);
-}
+        return Apollo.useQuery<UsersForOrgQuery, UsersForOrgQueryVariables>(UsersForOrgDocument, baseOptions);
+      }
+export function useUsersForOrgLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UsersForOrgQuery, UsersForOrgQueryVariables>) {
+          return Apollo.useLazyQuery<UsersForOrgQuery, UsersForOrgQueryVariables>(UsersForOrgDocument, baseOptions);
+        }
 export type UsersForOrgQueryHookResult = ReturnType<typeof useUsersForOrgQuery>;
 export type UsersForOrgLazyQueryHookResult = ReturnType<typeof useUsersForOrgLazyQuery>;
 export type UsersForOrgQueryResult = Apollo.QueryResult<UsersForOrgQuery, UsersForOrgQueryVariables>;
 export const CurrentUserDocument = gql`
-  query CurrentUser {
-    currentUser {
-      domain {
-        type
-        selectedPage
-        navItems {
-          ...fragmentWebNav
-        }
+    query CurrentUser {
+  currentUser {
+    domain {
+      type
+      selectedPage
+      navItems {
+        ...fragmentWebNav
       }
-      tokenUser {
-        token
-        session {
-          id
-          orgId
-          orgSid
-          orgName
-          userId
-          firstNm
-          pollInterval
-          defaultAuthorities
-        }
-      }
-      loggedIn
     }
+    tokenUser {
+      token
+      session {
+        id
+        orgId
+        orgSid
+        orgName
+        userId
+        firstNm
+        pollInterval
+        defaultAuthorities
+      }
+    }
+    loggedIn
   }
-  ${FragmentWebNavFragmentDoc}
-`;
+}
+    ${FragmentWebNavFragmentDoc}`;
 
 /**
  * __useCurrentUserQuery__
@@ -9478,36 +6845,31 @@ export const CurrentUserDocument = gql`
  *   },
  * });
  */
-export function useCurrentUserQuery(
-  baseOptions?: Apollo.QueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>
-) {
-  return Apollo.useQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, baseOptions);
-}
-export function useCurrentUserLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>
-) {
-  return Apollo.useLazyQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, baseOptions);
-}
+export function useCurrentUserQuery(baseOptions?: Apollo.QueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>) {
+        return Apollo.useQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, baseOptions);
+      }
+export function useCurrentUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>) {
+          return Apollo.useLazyQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, baseOptions);
+        }
 export type CurrentUserQueryHookResult = ReturnType<typeof useCurrentUserQuery>;
 export type CurrentUserLazyQueryHookResult = ReturnType<typeof useCurrentUserLazyQuery>;
 export type CurrentUserQueryResult = Apollo.QueryResult<CurrentUserQuery, CurrentUserQueryVariables>;
 export const CurrentOrgNavDocument = gql`
-  query CurrentOrgNav($orgInput: OrgSidInput) {
-    currentOrgNav(orgInput: $orgInput) {
-      orgId
-      label
-      page {
-        ...fragmentWebPage
-      }
-      appDomain
-      subNavItems {
-        ...fragmentWebNav
-      }
+    query CurrentOrgNav($orgInput: OrgSidInput) {
+  currentOrgNav(orgInput: $orgInput) {
+    orgId
+    label
+    page {
+      ...fragmentWebPage
+    }
+    appDomain
+    subNavItems {
+      ...fragmentWebNav
     }
   }
-  ${FragmentWebPageFragmentDoc}
-  ${FragmentWebNavFragmentDoc}
-`;
+}
+    ${FragmentWebPageFragmentDoc}
+${FragmentWebNavFragmentDoc}`;
 
 /**
  * __useCurrentOrgNavQuery__
@@ -9525,57 +6887,53 @@ export const CurrentOrgNavDocument = gql`
  *   },
  * });
  */
-export function useCurrentOrgNavQuery(
-  baseOptions?: Apollo.QueryHookOptions<CurrentOrgNavQuery, CurrentOrgNavQueryVariables>
-) {
-  return Apollo.useQuery<CurrentOrgNavQuery, CurrentOrgNavQueryVariables>(CurrentOrgNavDocument, baseOptions);
-}
-export function useCurrentOrgNavLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<CurrentOrgNavQuery, CurrentOrgNavQueryVariables>
-) {
-  return Apollo.useLazyQuery<CurrentOrgNavQuery, CurrentOrgNavQueryVariables>(CurrentOrgNavDocument, baseOptions);
-}
+export function useCurrentOrgNavQuery(baseOptions?: Apollo.QueryHookOptions<CurrentOrgNavQuery, CurrentOrgNavQueryVariables>) {
+        return Apollo.useQuery<CurrentOrgNavQuery, CurrentOrgNavQueryVariables>(CurrentOrgNavDocument, baseOptions);
+      }
+export function useCurrentOrgNavLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CurrentOrgNavQuery, CurrentOrgNavQueryVariables>) {
+          return Apollo.useLazyQuery<CurrentOrgNavQuery, CurrentOrgNavQueryVariables>(CurrentOrgNavDocument, baseOptions);
+        }
 export type CurrentOrgNavQueryHookResult = ReturnType<typeof useCurrentOrgNavQuery>;
 export type CurrentOrgNavLazyQueryHookResult = ReturnType<typeof useCurrentOrgNavLazyQuery>;
 export type CurrentOrgNavQueryResult = Apollo.QueryResult<CurrentOrgNavQuery, CurrentOrgNavQueryVariables>;
 export const UserThemeDocument = gql`
-  query UserTheme($themeColorMode: ThemeColorMode) {
-    userTheme(themeColorMode: $themeColorMode) {
+    query UserTheme($themeColorMode: ThemeColorMode) {
+  userTheme(themeColorMode: $themeColorMode) {
+    id
+    themeColorMode
+    themeFontSize
+    dashThemeColor {
       id
+      defaultPalette
       themeColorMode
-      themeFontSize
-      dashThemeColor {
-        id
-        defaultPalette
-        themeColorMode
-        allowDark
-        paletteNm
-        themePrimary
-        themeLighterAlt
-        themeLighter
-        themeLight
-        themeTertiary
-        themeSecondary
-        themeDarkAlt
-        themeDark
-        themeDarker
-        neutralLighterAlt
-        neutralLighter
-        neutralLight
-        neutralQuaternaryAlt
-        neutralQuaternary
-        neutralTertiaryAlt
-        neutralTertiary
-        neutralSecondary
-        neutralPrimaryAlt
-        neutralPrimary
-        neutralDark
-        black
-        white
-      }
+      allowDark
+      paletteNm
+      themePrimary
+      themeLighterAlt
+      themeLighter
+      themeLight
+      themeTertiary
+      themeSecondary
+      themeDarkAlt
+      themeDark
+      themeDarker
+      neutralLighterAlt
+      neutralLighter
+      neutralLight
+      neutralQuaternaryAlt
+      neutralQuaternary
+      neutralTertiaryAlt
+      neutralTertiary
+      neutralSecondary
+      neutralPrimaryAlt
+      neutralPrimary
+      neutralDark
+      black
+      white
     }
   }
-`;
+}
+    `;
 
 /**
  * __useUserThemeQuery__
@@ -9594,41 +6952,38 @@ export const UserThemeDocument = gql`
  * });
  */
 export function useUserThemeQuery(baseOptions?: Apollo.QueryHookOptions<UserThemeQuery, UserThemeQueryVariables>) {
-  return Apollo.useQuery<UserThemeQuery, UserThemeQueryVariables>(UserThemeDocument, baseOptions);
-}
-export function useUserThemeLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<UserThemeQuery, UserThemeQueryVariables>
-) {
-  return Apollo.useLazyQuery<UserThemeQuery, UserThemeQueryVariables>(UserThemeDocument, baseOptions);
-}
+        return Apollo.useQuery<UserThemeQuery, UserThemeQueryVariables>(UserThemeDocument, baseOptions);
+      }
+export function useUserThemeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserThemeQuery, UserThemeQueryVariables>) {
+          return Apollo.useLazyQuery<UserThemeQuery, UserThemeQueryVariables>(UserThemeDocument, baseOptions);
+        }
 export type UserThemeQueryHookResult = ReturnType<typeof useUserThemeQuery>;
 export type UserThemeLazyQueryHookResult = ReturnType<typeof useUserThemeLazyQuery>;
 export type UserThemeQueryResult = Apollo.QueryResult<UserThemeQuery, UserThemeQueryVariables>;
 export const FindUserByEmailDocument = gql`
-  query FindUserByEmail($userEmail: String!) {
-    findUserByEmail(userEmail: $userEmail) {
+    query FindUserByEmail($userEmail: String!) {
+  findUserByEmail(userEmail: $userEmail) {
+    sid
+    email
+    person {
       sid
-      email
-      person {
-        sid
-        firstNm
-        lastNm
-      }
-      accessPolicyGroups {
-        sid
-        name
-        description
-        tmpl
-        tmplUseAsIs
-        applicableOrgTypes
-        policies {
-          ...fragmentAccessPolicy
-        }
+      firstNm
+      lastNm
+    }
+    accessPolicyGroups {
+      sid
+      name
+      description
+      tmpl
+      tmplUseAsIs
+      applicableOrgTypes
+      policies {
+        ...fragmentAccessPolicy
       }
     }
   }
-  ${FragmentAccessPolicyFragmentDoc}
-`;
+}
+    ${FragmentAccessPolicyFragmentDoc}`;
 
 /**
  * __useFindUserByEmailQuery__
@@ -9646,24 +7001,46 @@ export const FindUserByEmailDocument = gql`
  *   },
  * });
  */
-export function useFindUserByEmailQuery(
-  baseOptions: Apollo.QueryHookOptions<FindUserByEmailQuery, FindUserByEmailQueryVariables>
-) {
-  return Apollo.useQuery<FindUserByEmailQuery, FindUserByEmailQueryVariables>(FindUserByEmailDocument, baseOptions);
-}
-export function useFindUserByEmailLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<FindUserByEmailQuery, FindUserByEmailQueryVariables>
-) {
-  return Apollo.useLazyQuery<FindUserByEmailQuery, FindUserByEmailQueryVariables>(FindUserByEmailDocument, baseOptions);
-}
+export function useFindUserByEmailQuery(baseOptions: Apollo.QueryHookOptions<FindUserByEmailQuery, FindUserByEmailQueryVariables>) {
+        return Apollo.useQuery<FindUserByEmailQuery, FindUserByEmailQueryVariables>(FindUserByEmailDocument, baseOptions);
+      }
+export function useFindUserByEmailLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindUserByEmailQuery, FindUserByEmailQueryVariables>) {
+          return Apollo.useLazyQuery<FindUserByEmailQuery, FindUserByEmailQueryVariables>(FindUserByEmailDocument, baseOptions);
+        }
 export type FindUserByEmailQueryHookResult = ReturnType<typeof useFindUserByEmailQuery>;
 export type FindUserByEmailLazyQueryHookResult = ReturnType<typeof useFindUserByEmailLazyQuery>;
 export type FindUserByEmailQueryResult = Apollo.QueryResult<FindUserByEmailQuery, FindUserByEmailQueryVariables>;
 export const UserAccountFormDocument = gql`
-  query UserAccountForm($orgSid: ID!) {
-    userAccountForm(orgSid: $orgSid) {
+    query UserAccountForm($orgSid: ID!) {
+  userAccountForm(orgSid: $orgSid) {
+    sid
+    email {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
+      errCode
+      errMsg
+      errSeverity
+    }
+    active {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    person {
       sid
-      email {
+      firstNm {
         value
         label
         readOnly
@@ -9676,119 +7053,92 @@ export const UserAccountFormDocument = gql`
         errMsg
         errSeverity
       }
-      active {
+      lastNm {
         value
         label
         readOnly
         info
         required
         visible
+        min
+        max
         errCode
         errMsg
         errSeverity
-      }
-      person {
-        sid
-        firstNm {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        lastNm {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        errCode
-        errMsg
-        errSeverity
-      }
-      organization {
-        value
-        description
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      accessPolicyGroups {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      sendActivationEmail {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      lastLogin {
-        value
-        description
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      commands {
-        ...fragmentWebCommand
-      }
-      response
-      options {
-        key
-        values {
-          label
-          value
-          info
-        }
       }
       errCode
       errMsg
       errSeverity
     }
+    organization {
+      value
+      description
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    accessPolicyGroups {
+      value {
+        name
+        value
+      }
+      label
+      readOnly
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    sendActivationEmail {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    lastLogin {
+      value
+      description
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    options {
+      key
+      values {
+        label
+        value
+        info
+      }
+    }
+    errCode
+    errMsg
+    errSeverity
   }
-  ${FragmentWebCommandFragmentDoc}
-`;
+}
+    ${FragmentWebCommandFragmentDoc}`;
 
 /**
  * __useUserAccountFormQuery__
@@ -9806,24 +7156,46 @@ export const UserAccountFormDocument = gql`
  *   },
  * });
  */
-export function useUserAccountFormQuery(
-  baseOptions: Apollo.QueryHookOptions<UserAccountFormQuery, UserAccountFormQueryVariables>
-) {
-  return Apollo.useQuery<UserAccountFormQuery, UserAccountFormQueryVariables>(UserAccountFormDocument, baseOptions);
-}
-export function useUserAccountFormLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<UserAccountFormQuery, UserAccountFormQueryVariables>
-) {
-  return Apollo.useLazyQuery<UserAccountFormQuery, UserAccountFormQueryVariables>(UserAccountFormDocument, baseOptions);
-}
+export function useUserAccountFormQuery(baseOptions: Apollo.QueryHookOptions<UserAccountFormQuery, UserAccountFormQueryVariables>) {
+        return Apollo.useQuery<UserAccountFormQuery, UserAccountFormQueryVariables>(UserAccountFormDocument, baseOptions);
+      }
+export function useUserAccountFormLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserAccountFormQuery, UserAccountFormQueryVariables>) {
+          return Apollo.useLazyQuery<UserAccountFormQuery, UserAccountFormQueryVariables>(UserAccountFormDocument, baseOptions);
+        }
 export type UserAccountFormQueryHookResult = ReturnType<typeof useUserAccountFormQuery>;
 export type UserAccountFormLazyQueryHookResult = ReturnType<typeof useUserAccountFormLazyQuery>;
 export type UserAccountFormQueryResult = Apollo.QueryResult<UserAccountFormQuery, UserAccountFormQueryVariables>;
 export const FindUserAccountDocument = gql`
-  query FindUserAccount($userSid: ID!) {
-    findUserAccount(userSid: $userSid) {
+    query FindUserAccount($userSid: ID!) {
+  findUserAccount(userSid: $userSid) {
+    sid
+    email {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
+      errCode
+      errMsg
+      errSeverity
+    }
+    active {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    person {
       sid
-      email {
+      firstNm {
         value
         label
         readOnly
@@ -9836,119 +7208,92 @@ export const FindUserAccountDocument = gql`
         errMsg
         errSeverity
       }
-      active {
+      lastNm {
         value
         label
         readOnly
         info
         required
         visible
+        min
+        max
         errCode
         errMsg
         errSeverity
-      }
-      person {
-        sid
-        firstNm {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        lastNm {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        errCode
-        errMsg
-        errSeverity
-      }
-      organization {
-        value
-        description
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      accessPolicyGroups {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      sendActivationEmail {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      lastLogin {
-        value
-        description
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      commands {
-        ...fragmentWebCommand
-      }
-      response
-      options {
-        key
-        values {
-          label
-          value
-          info
-        }
       }
       errCode
       errMsg
       errSeverity
     }
+    organization {
+      value
+      description
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    accessPolicyGroups {
+      value {
+        name
+        value
+      }
+      label
+      readOnly
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    sendActivationEmail {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    lastLogin {
+      value
+      description
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    options {
+      key
+      values {
+        label
+        value
+        info
+      }
+    }
+    errCode
+    errMsg
+    errSeverity
   }
-  ${FragmentWebCommandFragmentDoc}
-`;
+}
+    ${FragmentWebCommandFragmentDoc}`;
 
 /**
  * __useFindUserAccountQuery__
@@ -9966,79 +7311,68 @@ export const FindUserAccountDocument = gql`
  *   },
  * });
  */
-export function useFindUserAccountQuery(
-  baseOptions: Apollo.QueryHookOptions<FindUserAccountQuery, FindUserAccountQueryVariables>
-) {
-  return Apollo.useQuery<FindUserAccountQuery, FindUserAccountQueryVariables>(FindUserAccountDocument, baseOptions);
-}
-export function useFindUserAccountLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<FindUserAccountQuery, FindUserAccountQueryVariables>
-) {
-  return Apollo.useLazyQuery<FindUserAccountQuery, FindUserAccountQueryVariables>(FindUserAccountDocument, baseOptions);
-}
+export function useFindUserAccountQuery(baseOptions: Apollo.QueryHookOptions<FindUserAccountQuery, FindUserAccountQueryVariables>) {
+        return Apollo.useQuery<FindUserAccountQuery, FindUserAccountQueryVariables>(FindUserAccountDocument, baseOptions);
+      }
+export function useFindUserAccountLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindUserAccountQuery, FindUserAccountQueryVariables>) {
+          return Apollo.useLazyQuery<FindUserAccountQuery, FindUserAccountQueryVariables>(FindUserAccountDocument, baseOptions);
+        }
 export type FindUserAccountQueryHookResult = ReturnType<typeof useFindUserAccountQuery>;
 export type FindUserAccountLazyQueryHookResult = ReturnType<typeof useFindUserAccountLazyQuery>;
 export type FindUserAccountQueryResult = Apollo.QueryResult<FindUserAccountQuery, FindUserAccountQueryVariables>;
 export const UserAccountAuditLogsDocument = gql`
-  query UserAccountAuditLogs(
-    $orgSid: ID!
-    $userSid: ID
-    $events: [UserAccountAuditEvent]
-    $dateRange: DateTimeRangeInput!
-    $pageableInput: PageableInput
+    query UserAccountAuditLogs($orgSid: ID!, $userSid: ID, $events: [UserAccountAuditEvent], $dateRange: DateTimeRangeInput!, $pageableInput: PageableInput) {
+  userAccountAuditLogs(
+    orgSid: $orgSid
+    userSid: $userSid
+    events: $events
+    dateRange: $dateRange
+    pageableInput: $pageableInput
   ) {
-    userAccountAuditLogs(
-      orgSid: $orgSid
-      userSid: $userSid
-      events: $events
-      dateRange: $dateRange
-      pageableInput: $pageableInput
-    ) {
-      paginationInfo {
-        ...fragmentPaginationInfo
+    paginationInfo {
+      ...fragmentPaginationInfo
+    }
+    listPageInfo {
+      pageHeaderLabel
+      pageCommands {
+        ...fragmentWebCommand
       }
-      listPageInfo {
-        pageHeaderLabel
-        pageCommands {
-          ...fragmentWebCommand
-        }
-        listItemCommands {
-          ...fragmentWebCommand
-        }
-        listItemBulkCommands {
-          ...fragmentWebCommand
+      listItemCommands {
+        ...fragmentWebCommand
+      }
+      listItemBulkCommands {
+        ...fragmentWebCommand
+      }
+    }
+    nodes {
+      auditDateTime
+      event
+      orgSid
+      userAccount {
+        sid
+        email
+        person {
+          sid
+          firstNm
+          lastNm
         }
       }
-      nodes {
-        auditDateTime
-        event
-        orgSid
-        userAccount {
+      oldValue
+      newValue
+      changedByUserAccount {
+        sid
+        email
+        person {
           sid
-          email
-          person {
-            sid
-            firstNm
-            lastNm
-          }
-        }
-        oldValue
-        newValue
-        changedByUserAccount {
-          sid
-          email
-          person {
-            sid
-            firstNm
-            lastNm
-          }
+          firstNm
+          lastNm
         }
       }
     }
   }
-  ${FragmentPaginationInfoFragmentDoc}
-  ${FragmentWebCommandFragmentDoc}
-`;
+}
+    ${FragmentPaginationInfoFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
 
 /**
  * __useUserAccountAuditLogsQuery__
@@ -10060,40 +7394,27 @@ export const UserAccountAuditLogsDocument = gql`
  *   },
  * });
  */
-export function useUserAccountAuditLogsQuery(
-  baseOptions: Apollo.QueryHookOptions<UserAccountAuditLogsQuery, UserAccountAuditLogsQueryVariables>
-) {
-  return Apollo.useQuery<UserAccountAuditLogsQuery, UserAccountAuditLogsQueryVariables>(
-    UserAccountAuditLogsDocument,
-    baseOptions
-  );
-}
-export function useUserAccountAuditLogsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<UserAccountAuditLogsQuery, UserAccountAuditLogsQueryVariables>
-) {
-  return Apollo.useLazyQuery<UserAccountAuditLogsQuery, UserAccountAuditLogsQueryVariables>(
-    UserAccountAuditLogsDocument,
-    baseOptions
-  );
-}
+export function useUserAccountAuditLogsQuery(baseOptions: Apollo.QueryHookOptions<UserAccountAuditLogsQuery, UserAccountAuditLogsQueryVariables>) {
+        return Apollo.useQuery<UserAccountAuditLogsQuery, UserAccountAuditLogsQueryVariables>(UserAccountAuditLogsDocument, baseOptions);
+      }
+export function useUserAccountAuditLogsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserAccountAuditLogsQuery, UserAccountAuditLogsQueryVariables>) {
+          return Apollo.useLazyQuery<UserAccountAuditLogsQuery, UserAccountAuditLogsQueryVariables>(UserAccountAuditLogsDocument, baseOptions);
+        }
 export type UserAccountAuditLogsQueryHookResult = ReturnType<typeof useUserAccountAuditLogsQuery>;
 export type UserAccountAuditLogsLazyQueryHookResult = ReturnType<typeof useUserAccountAuditLogsLazyQuery>;
-export type UserAccountAuditLogsQueryResult = Apollo.QueryResult<
-  UserAccountAuditLogsQuery,
-  UserAccountAuditLogsQueryVariables
->;
+export type UserAccountAuditLogsQueryResult = Apollo.QueryResult<UserAccountAuditLogsQuery, UserAccountAuditLogsQueryVariables>;
 export const AccessPolicyDocument = gql`
-  query AccessPolicy($orgSid: ID!, $policySid: ID!) {
-    accessPolicy(orgSid: $orgSid, policySid: $policySid) {
-      sid
-      name
-      permissions
-      tmpl
-      tmplUseAsIs
-      applicableOrgTypes
-    }
+    query AccessPolicy($orgSid: ID!, $policySid: ID!) {
+  accessPolicy(orgSid: $orgSid, policySid: $policySid) {
+    sid
+    name
+    permissions
+    tmpl
+    tmplUseAsIs
+    applicableOrgTypes
   }
-`;
+}
+    `;
 
 /**
  * __useAccessPolicyQuery__
@@ -10112,46 +7433,41 @@ export const AccessPolicyDocument = gql`
  *   },
  * });
  */
-export function useAccessPolicyQuery(
-  baseOptions: Apollo.QueryHookOptions<AccessPolicyQuery, AccessPolicyQueryVariables>
-) {
-  return Apollo.useQuery<AccessPolicyQuery, AccessPolicyQueryVariables>(AccessPolicyDocument, baseOptions);
-}
-export function useAccessPolicyLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<AccessPolicyQuery, AccessPolicyQueryVariables>
-) {
-  return Apollo.useLazyQuery<AccessPolicyQuery, AccessPolicyQueryVariables>(AccessPolicyDocument, baseOptions);
-}
+export function useAccessPolicyQuery(baseOptions: Apollo.QueryHookOptions<AccessPolicyQuery, AccessPolicyQueryVariables>) {
+        return Apollo.useQuery<AccessPolicyQuery, AccessPolicyQueryVariables>(AccessPolicyDocument, baseOptions);
+      }
+export function useAccessPolicyLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AccessPolicyQuery, AccessPolicyQueryVariables>) {
+          return Apollo.useLazyQuery<AccessPolicyQuery, AccessPolicyQueryVariables>(AccessPolicyDocument, baseOptions);
+        }
 export type AccessPolicyQueryHookResult = ReturnType<typeof useAccessPolicyQuery>;
 export type AccessPolicyLazyQueryHookResult = ReturnType<typeof useAccessPolicyLazyQuery>;
 export type AccessPolicyQueryResult = Apollo.QueryResult<AccessPolicyQuery, AccessPolicyQueryVariables>;
 export const AccessPoliciesForOrgDocument = gql`
-  query AccessPoliciesForOrg($orgSid: ID!, $pageableInput: PageableInput) {
-    accessPoliciesForOrg(orgSid: $orgSid, pageableInput: $pageableInput) {
-      paginationInfo {
-        ...fragmentPaginationInfo
+    query AccessPoliciesForOrg($orgSid: ID!, $pageableInput: PageableInput) {
+  accessPoliciesForOrg(orgSid: $orgSid, pageableInput: $pageableInput) {
+    paginationInfo {
+      ...fragmentPaginationInfo
+    }
+    listPageInfo {
+      pageHeaderLabel
+      pageCommands {
+        ...fragmentWebCommand
       }
-      listPageInfo {
-        pageHeaderLabel
-        pageCommands {
-          ...fragmentWebCommand
-        }
-        listItemCommands {
-          ...fragmentWebCommand
-        }
-        listItemBulkCommands {
-          ...fragmentWebCommand
-        }
+      listItemCommands {
+        ...fragmentWebCommand
       }
-      nodes {
-        ...fragmentAccessPolicy
+      listItemBulkCommands {
+        ...fragmentWebCommand
       }
     }
+    nodes {
+      ...fragmentAccessPolicy
+    }
   }
-  ${FragmentPaginationInfoFragmentDoc}
-  ${FragmentWebCommandFragmentDoc}
-  ${FragmentAccessPolicyFragmentDoc}
-`;
+}
+    ${FragmentPaginationInfoFragmentDoc}
+${FragmentWebCommandFragmentDoc}
+${FragmentAccessPolicyFragmentDoc}`;
 
 /**
  * __useAccessPoliciesForOrgQuery__
@@ -10170,37 +7486,24 @@ export const AccessPoliciesForOrgDocument = gql`
  *   },
  * });
  */
-export function useAccessPoliciesForOrgQuery(
-  baseOptions: Apollo.QueryHookOptions<AccessPoliciesForOrgQuery, AccessPoliciesForOrgQueryVariables>
-) {
-  return Apollo.useQuery<AccessPoliciesForOrgQuery, AccessPoliciesForOrgQueryVariables>(
-    AccessPoliciesForOrgDocument,
-    baseOptions
-  );
-}
-export function useAccessPoliciesForOrgLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<AccessPoliciesForOrgQuery, AccessPoliciesForOrgQueryVariables>
-) {
-  return Apollo.useLazyQuery<AccessPoliciesForOrgQuery, AccessPoliciesForOrgQueryVariables>(
-    AccessPoliciesForOrgDocument,
-    baseOptions
-  );
-}
+export function useAccessPoliciesForOrgQuery(baseOptions: Apollo.QueryHookOptions<AccessPoliciesForOrgQuery, AccessPoliciesForOrgQueryVariables>) {
+        return Apollo.useQuery<AccessPoliciesForOrgQuery, AccessPoliciesForOrgQueryVariables>(AccessPoliciesForOrgDocument, baseOptions);
+      }
+export function useAccessPoliciesForOrgLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AccessPoliciesForOrgQuery, AccessPoliciesForOrgQueryVariables>) {
+          return Apollo.useLazyQuery<AccessPoliciesForOrgQuery, AccessPoliciesForOrgQueryVariables>(AccessPoliciesForOrgDocument, baseOptions);
+        }
 export type AccessPoliciesForOrgQueryHookResult = ReturnType<typeof useAccessPoliciesForOrgQuery>;
 export type AccessPoliciesForOrgLazyQueryHookResult = ReturnType<typeof useAccessPoliciesForOrgLazyQuery>;
-export type AccessPoliciesForOrgQueryResult = Apollo.QueryResult<
-  AccessPoliciesForOrgQuery,
-  AccessPoliciesForOrgQueryVariables
->;
+export type AccessPoliciesForOrgQueryResult = Apollo.QueryResult<AccessPoliciesForOrgQuery, AccessPoliciesForOrgQueryVariables>;
 export const AccessPolicyTemplatesDocument = gql`
-  query AccessPolicyTemplates($orgSid: ID!) {
-    accessPolicyTemplates(orgSid: $orgSid) {
-      label
-      value
-      info
-    }
+    query AccessPolicyTemplates($orgSid: ID!) {
+  accessPolicyTemplates(orgSid: $orgSid) {
+    label
+    value
+    info
   }
-`;
+}
+    `;
 
 /**
  * __useAccessPolicyTemplatesQuery__
@@ -10218,60 +7521,46 @@ export const AccessPolicyTemplatesDocument = gql`
  *   },
  * });
  */
-export function useAccessPolicyTemplatesQuery(
-  baseOptions: Apollo.QueryHookOptions<AccessPolicyTemplatesQuery, AccessPolicyTemplatesQueryVariables>
-) {
-  return Apollo.useQuery<AccessPolicyTemplatesQuery, AccessPolicyTemplatesQueryVariables>(
-    AccessPolicyTemplatesDocument,
-    baseOptions
-  );
-}
-export function useAccessPolicyTemplatesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<AccessPolicyTemplatesQuery, AccessPolicyTemplatesQueryVariables>
-) {
-  return Apollo.useLazyQuery<AccessPolicyTemplatesQuery, AccessPolicyTemplatesQueryVariables>(
-    AccessPolicyTemplatesDocument,
-    baseOptions
-  );
-}
+export function useAccessPolicyTemplatesQuery(baseOptions: Apollo.QueryHookOptions<AccessPolicyTemplatesQuery, AccessPolicyTemplatesQueryVariables>) {
+        return Apollo.useQuery<AccessPolicyTemplatesQuery, AccessPolicyTemplatesQueryVariables>(AccessPolicyTemplatesDocument, baseOptions);
+      }
+export function useAccessPolicyTemplatesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AccessPolicyTemplatesQuery, AccessPolicyTemplatesQueryVariables>) {
+          return Apollo.useLazyQuery<AccessPolicyTemplatesQuery, AccessPolicyTemplatesQueryVariables>(AccessPolicyTemplatesDocument, baseOptions);
+        }
 export type AccessPolicyTemplatesQueryHookResult = ReturnType<typeof useAccessPolicyTemplatesQuery>;
 export type AccessPolicyTemplatesLazyQueryHookResult = ReturnType<typeof useAccessPolicyTemplatesLazyQuery>;
-export type AccessPolicyTemplatesQueryResult = Apollo.QueryResult<
-  AccessPolicyTemplatesQuery,
-  AccessPolicyTemplatesQueryVariables
->;
+export type AccessPolicyTemplatesQueryResult = Apollo.QueryResult<AccessPolicyTemplatesQuery, AccessPolicyTemplatesQueryVariables>;
 export const AccessSpecializationsForOrgDocument = gql`
-  query AccessSpecializationsForOrg($orgSid: ID!, $pageableInput: PageableInput) {
-    accessSpecializationsForOrg(orgSid: $orgSid, pageableInput: $pageableInput) {
-      paginationInfo {
-        ...fragmentPaginationInfo
+    query AccessSpecializationsForOrg($orgSid: ID!, $pageableInput: PageableInput) {
+  accessSpecializationsForOrg(orgSid: $orgSid, pageableInput: $pageableInput) {
+    paginationInfo {
+      ...fragmentPaginationInfo
+    }
+    listPageInfo {
+      pageHeaderLabel
+      pageCommands {
+        ...fragmentWebCommand
       }
-      listPageInfo {
-        pageHeaderLabel
-        pageCommands {
-          ...fragmentWebCommand
-        }
-        listItemCommands {
-          ...fragmentWebCommand
-        }
-        listItemBulkCommands {
-          ...fragmentWebCommand
-        }
+      listItemCommands {
+        ...fragmentWebCommand
       }
-      nodes {
+      listItemBulkCommands {
+        ...fragmentWebCommand
+      }
+    }
+    nodes {
+      sid
+      name
+      filters {
         sid
-        name
-        filters {
-          sid
-          permission
-          orgSids
-        }
+        permission
+        orgSids
       }
     }
   }
-  ${FragmentPaginationInfoFragmentDoc}
-  ${FragmentWebCommandFragmentDoc}
-`;
+}
+    ${FragmentPaginationInfoFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
 
 /**
  * __useAccessSpecializationsForOrgQuery__
@@ -10290,63 +7579,49 @@ export const AccessSpecializationsForOrgDocument = gql`
  *   },
  * });
  */
-export function useAccessSpecializationsForOrgQuery(
-  baseOptions: Apollo.QueryHookOptions<AccessSpecializationsForOrgQuery, AccessSpecializationsForOrgQueryVariables>
-) {
-  return Apollo.useQuery<AccessSpecializationsForOrgQuery, AccessSpecializationsForOrgQueryVariables>(
-    AccessSpecializationsForOrgDocument,
-    baseOptions
-  );
-}
-export function useAccessSpecializationsForOrgLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<AccessSpecializationsForOrgQuery, AccessSpecializationsForOrgQueryVariables>
-) {
-  return Apollo.useLazyQuery<AccessSpecializationsForOrgQuery, AccessSpecializationsForOrgQueryVariables>(
-    AccessSpecializationsForOrgDocument,
-    baseOptions
-  );
-}
+export function useAccessSpecializationsForOrgQuery(baseOptions: Apollo.QueryHookOptions<AccessSpecializationsForOrgQuery, AccessSpecializationsForOrgQueryVariables>) {
+        return Apollo.useQuery<AccessSpecializationsForOrgQuery, AccessSpecializationsForOrgQueryVariables>(AccessSpecializationsForOrgDocument, baseOptions);
+      }
+export function useAccessSpecializationsForOrgLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AccessSpecializationsForOrgQuery, AccessSpecializationsForOrgQueryVariables>) {
+          return Apollo.useLazyQuery<AccessSpecializationsForOrgQuery, AccessSpecializationsForOrgQueryVariables>(AccessSpecializationsForOrgDocument, baseOptions);
+        }
 export type AccessSpecializationsForOrgQueryHookResult = ReturnType<typeof useAccessSpecializationsForOrgQuery>;
 export type AccessSpecializationsForOrgLazyQueryHookResult = ReturnType<typeof useAccessSpecializationsForOrgLazyQuery>;
-export type AccessSpecializationsForOrgQueryResult = Apollo.QueryResult<
-  AccessSpecializationsForOrgQuery,
-  AccessSpecializationsForOrgQueryVariables
->;
+export type AccessSpecializationsForOrgQueryResult = Apollo.QueryResult<AccessSpecializationsForOrgQuery, AccessSpecializationsForOrgQueryVariables>;
 export const AccessPolicyGroupsForOrgDocument = gql`
-  query AccessPolicyGroupsForOrg($orgSid: ID!, $pageableInput: PageableInput) {
-    accessPolicyGroupsForOrg(orgSid: $orgSid, pageableInput: $pageableInput) {
-      paginationInfo {
-        ...fragmentPaginationInfo
+    query AccessPolicyGroupsForOrg($orgSid: ID!, $pageableInput: PageableInput) {
+  accessPolicyGroupsForOrg(orgSid: $orgSid, pageableInput: $pageableInput) {
+    paginationInfo {
+      ...fragmentPaginationInfo
+    }
+    listPageInfo {
+      pageHeaderLabel
+      pageCommands {
+        ...fragmentWebCommand
       }
-      listPageInfo {
-        pageHeaderLabel
-        pageCommands {
-          ...fragmentWebCommand
-        }
-        listItemCommands {
-          ...fragmentWebCommand
-        }
-        listItemBulkCommands {
-          ...fragmentWebCommand
-        }
+      listItemCommands {
+        ...fragmentWebCommand
       }
-      nodes {
-        sid
-        name
-        description
-        tmpl
-        tmplUseAsIs
-        applicableOrgTypes
-        policies {
-          ...fragmentAccessPolicy
-        }
+      listItemBulkCommands {
+        ...fragmentWebCommand
+      }
+    }
+    nodes {
+      sid
+      name
+      description
+      tmpl
+      tmplUseAsIs
+      applicableOrgTypes
+      policies {
+        ...fragmentAccessPolicy
       }
     }
   }
-  ${FragmentPaginationInfoFragmentDoc}
-  ${FragmentWebCommandFragmentDoc}
-  ${FragmentAccessPolicyFragmentDoc}
-`;
+}
+    ${FragmentPaginationInfoFragmentDoc}
+${FragmentWebCommandFragmentDoc}
+${FragmentAccessPolicyFragmentDoc}`;
 
 /**
  * __useAccessPolicyGroupsForOrgQuery__
@@ -10365,37 +7640,24 @@ export const AccessPolicyGroupsForOrgDocument = gql`
  *   },
  * });
  */
-export function useAccessPolicyGroupsForOrgQuery(
-  baseOptions: Apollo.QueryHookOptions<AccessPolicyGroupsForOrgQuery, AccessPolicyGroupsForOrgQueryVariables>
-) {
-  return Apollo.useQuery<AccessPolicyGroupsForOrgQuery, AccessPolicyGroupsForOrgQueryVariables>(
-    AccessPolicyGroupsForOrgDocument,
-    baseOptions
-  );
-}
-export function useAccessPolicyGroupsForOrgLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<AccessPolicyGroupsForOrgQuery, AccessPolicyGroupsForOrgQueryVariables>
-) {
-  return Apollo.useLazyQuery<AccessPolicyGroupsForOrgQuery, AccessPolicyGroupsForOrgQueryVariables>(
-    AccessPolicyGroupsForOrgDocument,
-    baseOptions
-  );
-}
+export function useAccessPolicyGroupsForOrgQuery(baseOptions: Apollo.QueryHookOptions<AccessPolicyGroupsForOrgQuery, AccessPolicyGroupsForOrgQueryVariables>) {
+        return Apollo.useQuery<AccessPolicyGroupsForOrgQuery, AccessPolicyGroupsForOrgQueryVariables>(AccessPolicyGroupsForOrgDocument, baseOptions);
+      }
+export function useAccessPolicyGroupsForOrgLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AccessPolicyGroupsForOrgQuery, AccessPolicyGroupsForOrgQueryVariables>) {
+          return Apollo.useLazyQuery<AccessPolicyGroupsForOrgQuery, AccessPolicyGroupsForOrgQueryVariables>(AccessPolicyGroupsForOrgDocument, baseOptions);
+        }
 export type AccessPolicyGroupsForOrgQueryHookResult = ReturnType<typeof useAccessPolicyGroupsForOrgQuery>;
 export type AccessPolicyGroupsForOrgLazyQueryHookResult = ReturnType<typeof useAccessPolicyGroupsForOrgLazyQuery>;
-export type AccessPolicyGroupsForOrgQueryResult = Apollo.QueryResult<
-  AccessPolicyGroupsForOrgQuery,
-  AccessPolicyGroupsForOrgQueryVariables
->;
+export type AccessPolicyGroupsForOrgQueryResult = Apollo.QueryResult<AccessPolicyGroupsForOrgQuery, AccessPolicyGroupsForOrgQueryVariables>;
 export const AccessPolicyGroupTemplatesDocument = gql`
-  query AccessPolicyGroupTemplates($orgSid: ID!) {
-    accessPolicyGroupTemplates(orgSid: $orgSid) {
-      label
-      value
-      info
-    }
+    query AccessPolicyGroupTemplates($orgSid: ID!) {
+  accessPolicyGroupTemplates(orgSid: $orgSid) {
+    label
+    value
+    info
   }
-`;
+}
+    `;
 
 /**
  * __useAccessPolicyGroupTemplatesQuery__
@@ -10413,130 +7675,116 @@ export const AccessPolicyGroupTemplatesDocument = gql`
  *   },
  * });
  */
-export function useAccessPolicyGroupTemplatesQuery(
-  baseOptions: Apollo.QueryHookOptions<AccessPolicyGroupTemplatesQuery, AccessPolicyGroupTemplatesQueryVariables>
-) {
-  return Apollo.useQuery<AccessPolicyGroupTemplatesQuery, AccessPolicyGroupTemplatesQueryVariables>(
-    AccessPolicyGroupTemplatesDocument,
-    baseOptions
-  );
-}
-export function useAccessPolicyGroupTemplatesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<AccessPolicyGroupTemplatesQuery, AccessPolicyGroupTemplatesQueryVariables>
-) {
-  return Apollo.useLazyQuery<AccessPolicyGroupTemplatesQuery, AccessPolicyGroupTemplatesQueryVariables>(
-    AccessPolicyGroupTemplatesDocument,
-    baseOptions
-  );
-}
+export function useAccessPolicyGroupTemplatesQuery(baseOptions: Apollo.QueryHookOptions<AccessPolicyGroupTemplatesQuery, AccessPolicyGroupTemplatesQueryVariables>) {
+        return Apollo.useQuery<AccessPolicyGroupTemplatesQuery, AccessPolicyGroupTemplatesQueryVariables>(AccessPolicyGroupTemplatesDocument, baseOptions);
+      }
+export function useAccessPolicyGroupTemplatesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AccessPolicyGroupTemplatesQuery, AccessPolicyGroupTemplatesQueryVariables>) {
+          return Apollo.useLazyQuery<AccessPolicyGroupTemplatesQuery, AccessPolicyGroupTemplatesQueryVariables>(AccessPolicyGroupTemplatesDocument, baseOptions);
+        }
 export type AccessPolicyGroupTemplatesQueryHookResult = ReturnType<typeof useAccessPolicyGroupTemplatesQuery>;
 export type AccessPolicyGroupTemplatesLazyQueryHookResult = ReturnType<typeof useAccessPolicyGroupTemplatesLazyQuery>;
-export type AccessPolicyGroupTemplatesQueryResult = Apollo.QueryResult<
-  AccessPolicyGroupTemplatesQuery,
-  AccessPolicyGroupTemplatesQueryVariables
->;
+export type AccessPolicyGroupTemplatesQueryResult = Apollo.QueryResult<AccessPolicyGroupTemplatesQuery, AccessPolicyGroupTemplatesQueryVariables>;
 export const AccessPolicyFormDocument = gql`
-  query AccessPolicyForm($orgSid: ID!, $templatePolicySid: ID) {
-    accessPolicyForm(orgSid: $orgSid, templatePolicySid: $templatePolicySid) {
-      sid
-      name {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
-      }
-      organization {
-        value
-        description
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      permissions {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      tmpl {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      tmplUseAsIs {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      applicableOrgTypes {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      options {
-        key
-        values {
-          label
-          value
-          info
-        }
-      }
-      commands {
-        ...fragmentWebCommand
-      }
-      response
+    query AccessPolicyForm($orgSid: ID!, $templatePolicySid: ID) {
+  accessPolicyForm(orgSid: $orgSid, templatePolicySid: $templatePolicySid) {
+    sid
+    name {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
       errCode
       errMsg
       errSeverity
     }
+    organization {
+      value
+      description
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    permissions {
+      value {
+        name
+        value
+      }
+      label
+      readOnly
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    tmpl {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    tmplUseAsIs {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    applicableOrgTypes {
+      value {
+        name
+        value
+      }
+      label
+      readOnly
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    options {
+      key
+      values {
+        label
+        value
+        info
+      }
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
   }
-  ${FragmentWebCommandFragmentDoc}
-`;
+}
+    ${FragmentWebCommandFragmentDoc}`;
 
 /**
  * __useAccessPolicyFormQuery__
@@ -10555,124 +7803,116 @@ export const AccessPolicyFormDocument = gql`
  *   },
  * });
  */
-export function useAccessPolicyFormQuery(
-  baseOptions: Apollo.QueryHookOptions<AccessPolicyFormQuery, AccessPolicyFormQueryVariables>
-) {
-  return Apollo.useQuery<AccessPolicyFormQuery, AccessPolicyFormQueryVariables>(AccessPolicyFormDocument, baseOptions);
-}
-export function useAccessPolicyFormLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<AccessPolicyFormQuery, AccessPolicyFormQueryVariables>
-) {
-  return Apollo.useLazyQuery<AccessPolicyFormQuery, AccessPolicyFormQueryVariables>(
-    AccessPolicyFormDocument,
-    baseOptions
-  );
-}
+export function useAccessPolicyFormQuery(baseOptions: Apollo.QueryHookOptions<AccessPolicyFormQuery, AccessPolicyFormQueryVariables>) {
+        return Apollo.useQuery<AccessPolicyFormQuery, AccessPolicyFormQueryVariables>(AccessPolicyFormDocument, baseOptions);
+      }
+export function useAccessPolicyFormLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AccessPolicyFormQuery, AccessPolicyFormQueryVariables>) {
+          return Apollo.useLazyQuery<AccessPolicyFormQuery, AccessPolicyFormQueryVariables>(AccessPolicyFormDocument, baseOptions);
+        }
 export type AccessPolicyFormQueryHookResult = ReturnType<typeof useAccessPolicyFormQuery>;
 export type AccessPolicyFormLazyQueryHookResult = ReturnType<typeof useAccessPolicyFormLazyQuery>;
 export type AccessPolicyFormQueryResult = Apollo.QueryResult<AccessPolicyFormQuery, AccessPolicyFormQueryVariables>;
 export const FindAccessPolicyDocument = gql`
-  query FindAccessPolicy($policySid: ID!) {
-    findAccessPolicy(policySid: $policySid) {
-      sid
-      name {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
-      }
-      organization {
-        value
-        description
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      permissions {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      tmpl {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      tmplUseAsIs {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      applicableOrgTypes {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      options {
-        key
-        values {
-          label
-          value
-          info
-        }
-      }
-      commands {
-        ...fragmentWebCommand
-      }
-      response
+    query FindAccessPolicy($policySid: ID!) {
+  findAccessPolicy(policySid: $policySid) {
+    sid
+    name {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
       errCode
       errMsg
       errSeverity
     }
+    organization {
+      value
+      description
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    permissions {
+      value {
+        name
+        value
+      }
+      label
+      readOnly
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    tmpl {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    tmplUseAsIs {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    applicableOrgTypes {
+      value {
+        name
+        value
+      }
+      label
+      readOnly
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    options {
+      key
+      values {
+        label
+        value
+        info
+      }
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
   }
-  ${FragmentWebCommandFragmentDoc}
-`;
+}
+    ${FragmentWebCommandFragmentDoc}`;
 
 /**
  * __useFindAccessPolicyQuery__
@@ -10690,93 +7930,85 @@ export const FindAccessPolicyDocument = gql`
  *   },
  * });
  */
-export function useFindAccessPolicyQuery(
-  baseOptions: Apollo.QueryHookOptions<FindAccessPolicyQuery, FindAccessPolicyQueryVariables>
-) {
-  return Apollo.useQuery<FindAccessPolicyQuery, FindAccessPolicyQueryVariables>(FindAccessPolicyDocument, baseOptions);
-}
-export function useFindAccessPolicyLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<FindAccessPolicyQuery, FindAccessPolicyQueryVariables>
-) {
-  return Apollo.useLazyQuery<FindAccessPolicyQuery, FindAccessPolicyQueryVariables>(
-    FindAccessPolicyDocument,
-    baseOptions
-  );
-}
+export function useFindAccessPolicyQuery(baseOptions: Apollo.QueryHookOptions<FindAccessPolicyQuery, FindAccessPolicyQueryVariables>) {
+        return Apollo.useQuery<FindAccessPolicyQuery, FindAccessPolicyQueryVariables>(FindAccessPolicyDocument, baseOptions);
+      }
+export function useFindAccessPolicyLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindAccessPolicyQuery, FindAccessPolicyQueryVariables>) {
+          return Apollo.useLazyQuery<FindAccessPolicyQuery, FindAccessPolicyQueryVariables>(FindAccessPolicyDocument, baseOptions);
+        }
 export type FindAccessPolicyQueryHookResult = ReturnType<typeof useFindAccessPolicyQuery>;
 export type FindAccessPolicyLazyQueryHookResult = ReturnType<typeof useFindAccessPolicyLazyQuery>;
 export type FindAccessPolicyQueryResult = Apollo.QueryResult<FindAccessPolicyQuery, FindAccessPolicyQueryVariables>;
 export const AccessSpecializationFormDocument = gql`
-  query AccessSpecializationForm($orgSid: ID!) {
-    accessSpecializationForm(orgSid: $orgSid) {
-      sid
-      name {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
-      }
-      organization {
-        value
-        description
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      filters {
-        permission
-        label
-        orgSids {
-          value {
-            name
-            value
-          }
-          label
-          readOnly
-          info
-          required
-          visible
-          options
-          query
-          errCode
-          errMsg
-          errSeverity
-        }
-        errCode
-        errMsg
-        errSeverity
-      }
-      options {
-        key
-        values {
-          label
-          value
-          info
-        }
-      }
-      commands {
-        ...fragmentWebCommand
-      }
-      response
+    query AccessSpecializationForm($orgSid: ID!) {
+  accessSpecializationForm(orgSid: $orgSid) {
+    sid
+    name {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
       errCode
       errMsg
       errSeverity
     }
+    organization {
+      value
+      description
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    filters {
+      permission
+      label
+      orgSids {
+        value {
+          name
+          value
+        }
+        label
+        readOnly
+        info
+        required
+        visible
+        options
+        query
+        errCode
+        errMsg
+        errSeverity
+      }
+      errCode
+      errMsg
+      errSeverity
+    }
+    options {
+      key
+      values {
+        label
+        value
+        info
+      }
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
   }
-  ${FragmentWebCommandFragmentDoc}
-`;
+}
+    ${FragmentWebCommandFragmentDoc}`;
 
 /**
  * __useAccessSpecializationFormQuery__
@@ -10794,99 +8026,85 @@ export const AccessSpecializationFormDocument = gql`
  *   },
  * });
  */
-export function useAccessSpecializationFormQuery(
-  baseOptions: Apollo.QueryHookOptions<AccessSpecializationFormQuery, AccessSpecializationFormQueryVariables>
-) {
-  return Apollo.useQuery<AccessSpecializationFormQuery, AccessSpecializationFormQueryVariables>(
-    AccessSpecializationFormDocument,
-    baseOptions
-  );
-}
-export function useAccessSpecializationFormLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<AccessSpecializationFormQuery, AccessSpecializationFormQueryVariables>
-) {
-  return Apollo.useLazyQuery<AccessSpecializationFormQuery, AccessSpecializationFormQueryVariables>(
-    AccessSpecializationFormDocument,
-    baseOptions
-  );
-}
+export function useAccessSpecializationFormQuery(baseOptions: Apollo.QueryHookOptions<AccessSpecializationFormQuery, AccessSpecializationFormQueryVariables>) {
+        return Apollo.useQuery<AccessSpecializationFormQuery, AccessSpecializationFormQueryVariables>(AccessSpecializationFormDocument, baseOptions);
+      }
+export function useAccessSpecializationFormLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AccessSpecializationFormQuery, AccessSpecializationFormQueryVariables>) {
+          return Apollo.useLazyQuery<AccessSpecializationFormQuery, AccessSpecializationFormQueryVariables>(AccessSpecializationFormDocument, baseOptions);
+        }
 export type AccessSpecializationFormQueryHookResult = ReturnType<typeof useAccessSpecializationFormQuery>;
 export type AccessSpecializationFormLazyQueryHookResult = ReturnType<typeof useAccessSpecializationFormLazyQuery>;
-export type AccessSpecializationFormQueryResult = Apollo.QueryResult<
-  AccessSpecializationFormQuery,
-  AccessSpecializationFormQueryVariables
->;
+export type AccessSpecializationFormQueryResult = Apollo.QueryResult<AccessSpecializationFormQuery, AccessSpecializationFormQueryVariables>;
 export const FindAccessSpecializationDocument = gql`
-  query FindAccessSpecialization($specializationSid: ID!) {
-    findAccessSpecialization(specializationSid: $specializationSid) {
-      sid
-      name {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
-      }
-      organization {
-        value
-        description
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      filters {
-        permission
-        label
-        orgSids {
-          value {
-            name
-            value
-          }
-          label
-          readOnly
-          info
-          required
-          visible
-          options
-          query
-          errCode
-          errMsg
-          errSeverity
-        }
-        errCode
-        errMsg
-        errSeverity
-      }
-      options {
-        key
-        values {
-          label
-          value
-          info
-        }
-      }
-      commands {
-        ...fragmentWebCommand
-      }
-      response
+    query FindAccessSpecialization($specializationSid: ID!) {
+  findAccessSpecialization(specializationSid: $specializationSid) {
+    sid
+    name {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
       errCode
       errMsg
       errSeverity
     }
+    organization {
+      value
+      description
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    filters {
+      permission
+      label
+      orgSids {
+        value {
+          name
+          value
+        }
+        label
+        readOnly
+        info
+        required
+        visible
+        options
+        query
+        errCode
+        errMsg
+        errSeverity
+      }
+      errCode
+      errMsg
+      errSeverity
+    }
+    options {
+      key
+      values {
+        label
+        value
+        info
+      }
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
   }
-  ${FragmentWebCommandFragmentDoc}
-`;
+}
+    ${FragmentWebCommandFragmentDoc}`;
 
 /**
  * __useFindAccessSpecializationQuery__
@@ -10904,202 +8122,188 @@ export const FindAccessSpecializationDocument = gql`
  *   },
  * });
  */
-export function useFindAccessSpecializationQuery(
-  baseOptions: Apollo.QueryHookOptions<FindAccessSpecializationQuery, FindAccessSpecializationQueryVariables>
-) {
-  return Apollo.useQuery<FindAccessSpecializationQuery, FindAccessSpecializationQueryVariables>(
-    FindAccessSpecializationDocument,
-    baseOptions
-  );
-}
-export function useFindAccessSpecializationLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<FindAccessSpecializationQuery, FindAccessSpecializationQueryVariables>
-) {
-  return Apollo.useLazyQuery<FindAccessSpecializationQuery, FindAccessSpecializationQueryVariables>(
-    FindAccessSpecializationDocument,
-    baseOptions
-  );
-}
+export function useFindAccessSpecializationQuery(baseOptions: Apollo.QueryHookOptions<FindAccessSpecializationQuery, FindAccessSpecializationQueryVariables>) {
+        return Apollo.useQuery<FindAccessSpecializationQuery, FindAccessSpecializationQueryVariables>(FindAccessSpecializationDocument, baseOptions);
+      }
+export function useFindAccessSpecializationLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindAccessSpecializationQuery, FindAccessSpecializationQueryVariables>) {
+          return Apollo.useLazyQuery<FindAccessSpecializationQuery, FindAccessSpecializationQueryVariables>(FindAccessSpecializationDocument, baseOptions);
+        }
 export type FindAccessSpecializationQueryHookResult = ReturnType<typeof useFindAccessSpecializationQuery>;
 export type FindAccessSpecializationLazyQueryHookResult = ReturnType<typeof useFindAccessSpecializationLazyQuery>;
-export type FindAccessSpecializationQueryResult = Apollo.QueryResult<
-  FindAccessSpecializationQuery,
-  FindAccessSpecializationQueryVariables
->;
+export type FindAccessSpecializationQueryResult = Apollo.QueryResult<FindAccessSpecializationQuery, FindAccessSpecializationQueryVariables>;
 export const AccessPolicyGroupFormDocument = gql`
-  query AccessPolicyGroupForm($orgSid: ID!, $templateGroupSid: ID) {
-    accessPolicyGroupForm(orgSid: $orgSid, templateGroupSid: $templateGroupSid) {
-      sid
-      name {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
-      }
-      description {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
-      }
-      organization {
-        value
-        description
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      tmpl {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      tmplUseAsIs {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      applicableOrgTypes {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      policies {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      specializations {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      includeAllSubOrgs {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      includeOrgSids {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      excludeOrgSids {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      options {
-        key
-        values {
-          label
-          value
-          info
-        }
-      }
-      commands {
-        ...fragmentWebCommand
-      }
-      response
+    query AccessPolicyGroupForm($orgSid: ID!, $templateGroupSid: ID) {
+  accessPolicyGroupForm(orgSid: $orgSid, templateGroupSid: $templateGroupSid) {
+    sid
+    name {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
       errCode
       errMsg
       errSeverity
     }
+    description {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
+      errCode
+      errMsg
+      errSeverity
+    }
+    organization {
+      value
+      description
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    tmpl {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    tmplUseAsIs {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    applicableOrgTypes {
+      value {
+        name
+        value
+      }
+      label
+      readOnly
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    policies {
+      value {
+        name
+        value
+      }
+      label
+      readOnly
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    specializations {
+      value {
+        name
+        value
+      }
+      label
+      readOnly
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    includeAllSubOrgs {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    includeOrgSids {
+      value {
+        name
+        value
+      }
+      label
+      readOnly
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    excludeOrgSids {
+      value {
+        name
+        value
+      }
+      label
+      readOnly
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    options {
+      key
+      values {
+        label
+        value
+        info
+      }
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
   }
-  ${FragmentWebCommandFragmentDoc}
-`;
+}
+    ${FragmentWebCommandFragmentDoc}`;
 
 /**
  * __useAccessPolicyGroupFormQuery__
@@ -11118,202 +8322,188 @@ export const AccessPolicyGroupFormDocument = gql`
  *   },
  * });
  */
-export function useAccessPolicyGroupFormQuery(
-  baseOptions: Apollo.QueryHookOptions<AccessPolicyGroupFormQuery, AccessPolicyGroupFormQueryVariables>
-) {
-  return Apollo.useQuery<AccessPolicyGroupFormQuery, AccessPolicyGroupFormQueryVariables>(
-    AccessPolicyGroupFormDocument,
-    baseOptions
-  );
-}
-export function useAccessPolicyGroupFormLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<AccessPolicyGroupFormQuery, AccessPolicyGroupFormQueryVariables>
-) {
-  return Apollo.useLazyQuery<AccessPolicyGroupFormQuery, AccessPolicyGroupFormQueryVariables>(
-    AccessPolicyGroupFormDocument,
-    baseOptions
-  );
-}
+export function useAccessPolicyGroupFormQuery(baseOptions: Apollo.QueryHookOptions<AccessPolicyGroupFormQuery, AccessPolicyGroupFormQueryVariables>) {
+        return Apollo.useQuery<AccessPolicyGroupFormQuery, AccessPolicyGroupFormQueryVariables>(AccessPolicyGroupFormDocument, baseOptions);
+      }
+export function useAccessPolicyGroupFormLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AccessPolicyGroupFormQuery, AccessPolicyGroupFormQueryVariables>) {
+          return Apollo.useLazyQuery<AccessPolicyGroupFormQuery, AccessPolicyGroupFormQueryVariables>(AccessPolicyGroupFormDocument, baseOptions);
+        }
 export type AccessPolicyGroupFormQueryHookResult = ReturnType<typeof useAccessPolicyGroupFormQuery>;
 export type AccessPolicyGroupFormLazyQueryHookResult = ReturnType<typeof useAccessPolicyGroupFormLazyQuery>;
-export type AccessPolicyGroupFormQueryResult = Apollo.QueryResult<
-  AccessPolicyGroupFormQuery,
-  AccessPolicyGroupFormQueryVariables
->;
+export type AccessPolicyGroupFormQueryResult = Apollo.QueryResult<AccessPolicyGroupFormQuery, AccessPolicyGroupFormQueryVariables>;
 export const FindAccessPolicyGroupDocument = gql`
-  query FindAccessPolicyGroup($policyGroupSid: ID!) {
-    findAccessPolicyGroup(policyGroupSid: $policyGroupSid) {
-      sid
-      name {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
-      }
-      description {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
-      }
-      organization {
-        value
-        description
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      tmpl {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      tmplUseAsIs {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      applicableOrgTypes {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      policies {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      specializations {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      includeAllSubOrgs {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      includeOrgSids {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      excludeOrgSids {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      options {
-        key
-        values {
-          label
-          value
-          info
-        }
-      }
-      commands {
-        ...fragmentWebCommand
-      }
-      response
+    query FindAccessPolicyGroup($policyGroupSid: ID!) {
+  findAccessPolicyGroup(policyGroupSid: $policyGroupSid) {
+    sid
+    name {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
       errCode
       errMsg
       errSeverity
     }
+    description {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
+      errCode
+      errMsg
+      errSeverity
+    }
+    organization {
+      value
+      description
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    tmpl {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    tmplUseAsIs {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    applicableOrgTypes {
+      value {
+        name
+        value
+      }
+      label
+      readOnly
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    policies {
+      value {
+        name
+        value
+      }
+      label
+      readOnly
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    specializations {
+      value {
+        name
+        value
+      }
+      label
+      readOnly
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    includeAllSubOrgs {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    includeOrgSids {
+      value {
+        name
+        value
+      }
+      label
+      readOnly
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    excludeOrgSids {
+      value {
+        name
+        value
+      }
+      label
+      readOnly
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    options {
+      key
+      values {
+        label
+        value
+        info
+      }
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
   }
-  ${FragmentWebCommandFragmentDoc}
-`;
+}
+    ${FragmentWebCommandFragmentDoc}`;
 
 /**
  * __useFindAccessPolicyGroupQuery__
@@ -11331,38 +8521,25 @@ export const FindAccessPolicyGroupDocument = gql`
  *   },
  * });
  */
-export function useFindAccessPolicyGroupQuery(
-  baseOptions: Apollo.QueryHookOptions<FindAccessPolicyGroupQuery, FindAccessPolicyGroupQueryVariables>
-) {
-  return Apollo.useQuery<FindAccessPolicyGroupQuery, FindAccessPolicyGroupQueryVariables>(
-    FindAccessPolicyGroupDocument,
-    baseOptions
-  );
-}
-export function useFindAccessPolicyGroupLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<FindAccessPolicyGroupQuery, FindAccessPolicyGroupQueryVariables>
-) {
-  return Apollo.useLazyQuery<FindAccessPolicyGroupQuery, FindAccessPolicyGroupQueryVariables>(
-    FindAccessPolicyGroupDocument,
-    baseOptions
-  );
-}
+export function useFindAccessPolicyGroupQuery(baseOptions: Apollo.QueryHookOptions<FindAccessPolicyGroupQuery, FindAccessPolicyGroupQueryVariables>) {
+        return Apollo.useQuery<FindAccessPolicyGroupQuery, FindAccessPolicyGroupQueryVariables>(FindAccessPolicyGroupDocument, baseOptions);
+      }
+export function useFindAccessPolicyGroupLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindAccessPolicyGroupQuery, FindAccessPolicyGroupQueryVariables>) {
+          return Apollo.useLazyQuery<FindAccessPolicyGroupQuery, FindAccessPolicyGroupQueryVariables>(FindAccessPolicyGroupDocument, baseOptions);
+        }
 export type FindAccessPolicyGroupQueryHookResult = ReturnType<typeof useFindAccessPolicyGroupQuery>;
 export type FindAccessPolicyGroupLazyQueryHookResult = ReturnType<typeof useFindAccessPolicyGroupLazyQuery>;
-export type FindAccessPolicyGroupQueryResult = Apollo.QueryResult<
-  FindAccessPolicyGroupQuery,
-  FindAccessPolicyGroupQueryVariables
->;
+export type FindAccessPolicyGroupQueryResult = Apollo.QueryResult<FindAccessPolicyGroupQuery, FindAccessPolicyGroupQueryVariables>;
 export const TopLevelOrgsByTypeDocument = gql`
-  query TopLevelOrgsByType($orgType: OrgType!) {
-    topLevelOrgsByType(orgType: $orgType) {
-      sid
-      name
-      orgId
-      orgType
-    }
+    query TopLevelOrgsByType($orgType: OrgType!) {
+  topLevelOrgsByType(orgType: $orgType) {
+    sid
+    name
+    orgId
+    orgType
   }
-`;
+}
+    `;
 
 /**
  * __useTopLevelOrgsByTypeQuery__
@@ -11380,38 +8557,25 @@ export const TopLevelOrgsByTypeDocument = gql`
  *   },
  * });
  */
-export function useTopLevelOrgsByTypeQuery(
-  baseOptions: Apollo.QueryHookOptions<TopLevelOrgsByTypeQuery, TopLevelOrgsByTypeQueryVariables>
-) {
-  return Apollo.useQuery<TopLevelOrgsByTypeQuery, TopLevelOrgsByTypeQueryVariables>(
-    TopLevelOrgsByTypeDocument,
-    baseOptions
-  );
-}
-export function useTopLevelOrgsByTypeLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<TopLevelOrgsByTypeQuery, TopLevelOrgsByTypeQueryVariables>
-) {
-  return Apollo.useLazyQuery<TopLevelOrgsByTypeQuery, TopLevelOrgsByTypeQueryVariables>(
-    TopLevelOrgsByTypeDocument,
-    baseOptions
-  );
-}
+export function useTopLevelOrgsByTypeQuery(baseOptions: Apollo.QueryHookOptions<TopLevelOrgsByTypeQuery, TopLevelOrgsByTypeQueryVariables>) {
+        return Apollo.useQuery<TopLevelOrgsByTypeQuery, TopLevelOrgsByTypeQueryVariables>(TopLevelOrgsByTypeDocument, baseOptions);
+      }
+export function useTopLevelOrgsByTypeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TopLevelOrgsByTypeQuery, TopLevelOrgsByTypeQueryVariables>) {
+          return Apollo.useLazyQuery<TopLevelOrgsByTypeQuery, TopLevelOrgsByTypeQueryVariables>(TopLevelOrgsByTypeDocument, baseOptions);
+        }
 export type TopLevelOrgsByTypeQueryHookResult = ReturnType<typeof useTopLevelOrgsByTypeQuery>;
 export type TopLevelOrgsByTypeLazyQueryHookResult = ReturnType<typeof useTopLevelOrgsByTypeLazyQuery>;
-export type TopLevelOrgsByTypeQueryResult = Apollo.QueryResult<
-  TopLevelOrgsByTypeQuery,
-  TopLevelOrgsByTypeQueryVariables
->;
+export type TopLevelOrgsByTypeQueryResult = Apollo.QueryResult<TopLevelOrgsByTypeQuery, TopLevelOrgsByTypeQueryVariables>;
 export const OrgByIdDocument = gql`
-  query OrgById($orgSid: ID, $orgId: String!) {
-    orgById(orgSid: $orgSid, orgId: $orgId) {
-      sid
-      name
-      orgId
-      orgType
-    }
+    query OrgById($orgSid: ID, $orgId: String!) {
+  orgById(orgSid: $orgSid, orgId: $orgId) {
+    sid
+    name
+    orgId
+    orgType
   }
-`;
+}
+    `;
 
 /**
  * __useOrgByIdQuery__
@@ -11431,43 +8595,46 @@ export const OrgByIdDocument = gql`
  * });
  */
 export function useOrgByIdQuery(baseOptions: Apollo.QueryHookOptions<OrgByIdQuery, OrgByIdQueryVariables>) {
-  return Apollo.useQuery<OrgByIdQuery, OrgByIdQueryVariables>(OrgByIdDocument, baseOptions);
-}
+        return Apollo.useQuery<OrgByIdQuery, OrgByIdQueryVariables>(OrgByIdDocument, baseOptions);
+      }
 export function useOrgByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OrgByIdQuery, OrgByIdQueryVariables>) {
-  return Apollo.useLazyQuery<OrgByIdQuery, OrgByIdQueryVariables>(OrgByIdDocument, baseOptions);
-}
+          return Apollo.useLazyQuery<OrgByIdQuery, OrgByIdQueryVariables>(OrgByIdDocument, baseOptions);
+        }
 export type OrgByIdQueryHookResult = ReturnType<typeof useOrgByIdQuery>;
 export type OrgByIdLazyQueryHookResult = ReturnType<typeof useOrgByIdLazyQuery>;
 export type OrgByIdQueryResult = Apollo.QueryResult<OrgByIdQuery, OrgByIdQueryVariables>;
 export const DirectOrganizationsDocument = gql`
-  query DirectOrganizations($orgSid: ID!, $orgFilter: OrgFilterInput, $pageableInput: PageableInput) {
-    directOrganizations(orgSid: $orgSid, orgFilter: $orgFilter, pageableInput: $pageableInput) {
-      paginationInfo {
-        ...fragmentPaginationInfo
+    query DirectOrganizations($orgSid: ID!, $orgFilter: OrgFilterInput, $pageableInput: PageableInput) {
+  directOrganizations(
+    orgSid: $orgSid
+    orgFilter: $orgFilter
+    pageableInput: $pageableInput
+  ) {
+    paginationInfo {
+      ...fragmentPaginationInfo
+    }
+    listPageInfo {
+      pageHeaderLabel
+      pageCommands {
+        ...fragmentWebCommand
       }
-      listPageInfo {
-        pageHeaderLabel
-        pageCommands {
-          ...fragmentWebCommand
-        }
-        listItemCommands {
-          ...fragmentWebCommand
-        }
-        listItemBulkCommands {
-          ...fragmentWebCommand
-        }
+      listItemCommands {
+        ...fragmentWebCommand
       }
-      nodes {
-        sid
-        name
-        orgId
-        orgType
+      listItemBulkCommands {
+        ...fragmentWebCommand
       }
     }
+    nodes {
+      sid
+      name
+      orgId
+      orgType
+    }
   }
-  ${FragmentPaginationInfoFragmentDoc}
-  ${FragmentWebCommandFragmentDoc}
-`;
+}
+    ${FragmentPaginationInfoFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
 
 /**
  * __useDirectOrganizationsQuery__
@@ -11487,122 +8654,108 @@ export const DirectOrganizationsDocument = gql`
  *   },
  * });
  */
-export function useDirectOrganizationsQuery(
-  baseOptions: Apollo.QueryHookOptions<DirectOrganizationsQuery, DirectOrganizationsQueryVariables>
-) {
-  return Apollo.useQuery<DirectOrganizationsQuery, DirectOrganizationsQueryVariables>(
-    DirectOrganizationsDocument,
-    baseOptions
-  );
-}
-export function useDirectOrganizationsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<DirectOrganizationsQuery, DirectOrganizationsQueryVariables>
-) {
-  return Apollo.useLazyQuery<DirectOrganizationsQuery, DirectOrganizationsQueryVariables>(
-    DirectOrganizationsDocument,
-    baseOptions
-  );
-}
+export function useDirectOrganizationsQuery(baseOptions: Apollo.QueryHookOptions<DirectOrganizationsQuery, DirectOrganizationsQueryVariables>) {
+        return Apollo.useQuery<DirectOrganizationsQuery, DirectOrganizationsQueryVariables>(DirectOrganizationsDocument, baseOptions);
+      }
+export function useDirectOrganizationsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DirectOrganizationsQuery, DirectOrganizationsQueryVariables>) {
+          return Apollo.useLazyQuery<DirectOrganizationsQuery, DirectOrganizationsQueryVariables>(DirectOrganizationsDocument, baseOptions);
+        }
 export type DirectOrganizationsQueryHookResult = ReturnType<typeof useDirectOrganizationsQuery>;
 export type DirectOrganizationsLazyQueryHookResult = ReturnType<typeof useDirectOrganizationsLazyQuery>;
-export type DirectOrganizationsQueryResult = Apollo.QueryResult<
-  DirectOrganizationsQuery,
-  DirectOrganizationsQueryVariables
->;
+export type DirectOrganizationsQueryResult = Apollo.QueryResult<DirectOrganizationsQuery, DirectOrganizationsQueryVariables>;
 export const OrganizationFormDocument = gql`
-  query OrganizationForm($orgOwnerSid: ID!) {
-    organizationForm(orgOwnerSid: $orgOwnerSid) {
-      sid
-      name {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
-      }
-      orgId {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
-      }
-      orgType {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      active {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      whitelist {
-        pattern {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        errCode
-        errMsg
-        errSeverity
-      }
-      options {
-        key
-        values {
-          label
-          value
-          info
-        }
-      }
-      commands {
-        ...fragmentWebCommand
-      }
-      response
+    query OrganizationForm($orgOwnerSid: ID!) {
+  organizationForm(orgOwnerSid: $orgOwnerSid) {
+    sid
+    name {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
       errCode
       errMsg
       errSeverity
     }
+    orgId {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
+      errCode
+      errMsg
+      errSeverity
+    }
+    orgType {
+      value {
+        name
+        value
+      }
+      label
+      readOnly
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    active {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    whitelist {
+      pattern {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      errCode
+      errMsg
+      errSeverity
+    }
+    options {
+      key
+      values {
+        label
+        value
+        info
+      }
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
   }
-  ${FragmentWebCommandFragmentDoc}
-`;
+}
+    ${FragmentWebCommandFragmentDoc}`;
 
 /**
  * __useOrganizationFormQuery__
@@ -11620,116 +8773,108 @@ export const OrganizationFormDocument = gql`
  *   },
  * });
  */
-export function useOrganizationFormQuery(
-  baseOptions: Apollo.QueryHookOptions<OrganizationFormQuery, OrganizationFormQueryVariables>
-) {
-  return Apollo.useQuery<OrganizationFormQuery, OrganizationFormQueryVariables>(OrganizationFormDocument, baseOptions);
-}
-export function useOrganizationFormLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<OrganizationFormQuery, OrganizationFormQueryVariables>
-) {
-  return Apollo.useLazyQuery<OrganizationFormQuery, OrganizationFormQueryVariables>(
-    OrganizationFormDocument,
-    baseOptions
-  );
-}
+export function useOrganizationFormQuery(baseOptions: Apollo.QueryHookOptions<OrganizationFormQuery, OrganizationFormQueryVariables>) {
+        return Apollo.useQuery<OrganizationFormQuery, OrganizationFormQueryVariables>(OrganizationFormDocument, baseOptions);
+      }
+export function useOrganizationFormLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OrganizationFormQuery, OrganizationFormQueryVariables>) {
+          return Apollo.useLazyQuery<OrganizationFormQuery, OrganizationFormQueryVariables>(OrganizationFormDocument, baseOptions);
+        }
 export type OrganizationFormQueryHookResult = ReturnType<typeof useOrganizationFormQuery>;
 export type OrganizationFormLazyQueryHookResult = ReturnType<typeof useOrganizationFormLazyQuery>;
 export type OrganizationFormQueryResult = Apollo.QueryResult<OrganizationFormQuery, OrganizationFormQueryVariables>;
 export const FindOrganizationDocument = gql`
-  query FindOrganization($orgSid: ID!) {
-    findOrganization(orgSid: $orgSid) {
-      sid
-      name {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
-      }
-      orgId {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
-      }
-      orgType {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      active {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      whitelist {
-        pattern {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        errCode
-        errMsg
-        errSeverity
-      }
-      options {
-        key
-        values {
-          label
-          value
-          info
-        }
-      }
-      commands {
-        ...fragmentWebCommand
-      }
-      response
+    query FindOrganization($orgSid: ID!) {
+  findOrganization(orgSid: $orgSid) {
+    sid
+    name {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
       errCode
       errMsg
       errSeverity
     }
+    orgId {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
+      errCode
+      errMsg
+      errSeverity
+    }
+    orgType {
+      value {
+        name
+        value
+      }
+      label
+      readOnly
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    active {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    whitelist {
+      pattern {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      errCode
+      errMsg
+      errSeverity
+    }
+    options {
+      key
+      values {
+        label
+        value
+        info
+      }
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
   }
-  ${FragmentWebCommandFragmentDoc}
-`;
+}
+    ${FragmentWebCommandFragmentDoc}`;
 
 /**
  * __useFindOrganizationQuery__
@@ -11747,61 +8892,48 @@ export const FindOrganizationDocument = gql`
  *   },
  * });
  */
-export function useFindOrganizationQuery(
-  baseOptions: Apollo.QueryHookOptions<FindOrganizationQuery, FindOrganizationQueryVariables>
-) {
-  return Apollo.useQuery<FindOrganizationQuery, FindOrganizationQueryVariables>(FindOrganizationDocument, baseOptions);
-}
-export function useFindOrganizationLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<FindOrganizationQuery, FindOrganizationQueryVariables>
-) {
-  return Apollo.useLazyQuery<FindOrganizationQuery, FindOrganizationQueryVariables>(
-    FindOrganizationDocument,
-    baseOptions
-  );
-}
+export function useFindOrganizationQuery(baseOptions: Apollo.QueryHookOptions<FindOrganizationQuery, FindOrganizationQueryVariables>) {
+        return Apollo.useQuery<FindOrganizationQuery, FindOrganizationQueryVariables>(FindOrganizationDocument, baseOptions);
+      }
+export function useFindOrganizationLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindOrganizationQuery, FindOrganizationQueryVariables>) {
+          return Apollo.useLazyQuery<FindOrganizationQuery, FindOrganizationQueryVariables>(FindOrganizationDocument, baseOptions);
+        }
 export type FindOrganizationQueryHookResult = ReturnType<typeof useFindOrganizationQuery>;
 export type FindOrganizationLazyQueryHookResult = ReturnType<typeof useFindOrganizationLazyQuery>;
 export type FindOrganizationQueryResult = Apollo.QueryResult<FindOrganizationQuery, FindOrganizationQueryVariables>;
 export const SearchOrganizationsDocument = gql`
-  query SearchOrganizations(
-    $searchText: String!
-    $orgOwnerSid: ID!
-    $orgFilter: OrgFilterInput
-    $pageableInput: PageableInput
+    query SearchOrganizations($searchText: String!, $orgOwnerSid: ID!, $orgFilter: OrgFilterInput, $pageableInput: PageableInput) {
+  searchOrganizations(
+    searchText: $searchText
+    orgOwnerSid: $orgOwnerSid
+    orgFilter: $orgFilter
+    pageableInput: $pageableInput
   ) {
-    searchOrganizations(
-      searchText: $searchText
-      orgOwnerSid: $orgOwnerSid
-      orgFilter: $orgFilter
-      pageableInput: $pageableInput
-    ) {
-      paginationInfo {
-        ...fragmentPaginationInfo
+    paginationInfo {
+      ...fragmentPaginationInfo
+    }
+    listPageInfo {
+      pageHeaderLabel
+      pageCommands {
+        ...fragmentWebCommand
       }
-      listPageInfo {
-        pageHeaderLabel
-        pageCommands {
-          ...fragmentWebCommand
-        }
-        listItemCommands {
-          ...fragmentWebCommand
-        }
-        listItemBulkCommands {
-          ...fragmentWebCommand
-        }
+      listItemCommands {
+        ...fragmentWebCommand
       }
-      nodes {
-        sid
-        name
-        orgId
-        orgType
+      listItemBulkCommands {
+        ...fragmentWebCommand
       }
     }
+    nodes {
+      sid
+      name
+      orgId
+      orgType
+    }
   }
-  ${FragmentPaginationInfoFragmentDoc}
-  ${FragmentWebCommandFragmentDoc}
-`;
+}
+    ${FragmentPaginationInfoFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
 
 /**
  * __useSearchOrganizationsQuery__
@@ -11822,38 +8954,25 @@ export const SearchOrganizationsDocument = gql`
  *   },
  * });
  */
-export function useSearchOrganizationsQuery(
-  baseOptions: Apollo.QueryHookOptions<SearchOrganizationsQuery, SearchOrganizationsQueryVariables>
-) {
-  return Apollo.useQuery<SearchOrganizationsQuery, SearchOrganizationsQueryVariables>(
-    SearchOrganizationsDocument,
-    baseOptions
-  );
-}
-export function useSearchOrganizationsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<SearchOrganizationsQuery, SearchOrganizationsQueryVariables>
-) {
-  return Apollo.useLazyQuery<SearchOrganizationsQuery, SearchOrganizationsQueryVariables>(
-    SearchOrganizationsDocument,
-    baseOptions
-  );
-}
+export function useSearchOrganizationsQuery(baseOptions: Apollo.QueryHookOptions<SearchOrganizationsQuery, SearchOrganizationsQueryVariables>) {
+        return Apollo.useQuery<SearchOrganizationsQuery, SearchOrganizationsQueryVariables>(SearchOrganizationsDocument, baseOptions);
+      }
+export function useSearchOrganizationsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchOrganizationsQuery, SearchOrganizationsQueryVariables>) {
+          return Apollo.useLazyQuery<SearchOrganizationsQuery, SearchOrganizationsQueryVariables>(SearchOrganizationsDocument, baseOptions);
+        }
 export type SearchOrganizationsQueryHookResult = ReturnType<typeof useSearchOrganizationsQuery>;
 export type SearchOrganizationsLazyQueryHookResult = ReturnType<typeof useSearchOrganizationsLazyQuery>;
-export type SearchOrganizationsQueryResult = Apollo.QueryResult<
-  SearchOrganizationsQuery,
-  SearchOrganizationsQueryVariables
->;
+export type SearchOrganizationsQueryResult = Apollo.QueryResult<SearchOrganizationsQuery, SearchOrganizationsQueryVariables>;
 export const OrganizationQuickSearchDocument = gql`
-  query OrganizationQuickSearch($searchText: String!, $orgOwnerSid: ID!) {
-    organizationQuickSearch(searchText: $searchText, orgOwnerSid: $orgOwnerSid) {
-      sid
-      name
-      orgId
-      orgType
-    }
+    query OrganizationQuickSearch($searchText: String!, $orgOwnerSid: ID!) {
+  organizationQuickSearch(searchText: $searchText, orgOwnerSid: $orgOwnerSid) {
+    sid
+    name
+    orgId
+    orgType
   }
-`;
+}
+    `;
 
 /**
  * __useOrganizationQuickSearchQuery__
@@ -11872,38 +8991,25 @@ export const OrganizationQuickSearchDocument = gql`
  *   },
  * });
  */
-export function useOrganizationQuickSearchQuery(
-  baseOptions: Apollo.QueryHookOptions<OrganizationQuickSearchQuery, OrganizationQuickSearchQueryVariables>
-) {
-  return Apollo.useQuery<OrganizationQuickSearchQuery, OrganizationQuickSearchQueryVariables>(
-    OrganizationQuickSearchDocument,
-    baseOptions
-  );
-}
-export function useOrganizationQuickSearchLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<OrganizationQuickSearchQuery, OrganizationQuickSearchQueryVariables>
-) {
-  return Apollo.useLazyQuery<OrganizationQuickSearchQuery, OrganizationQuickSearchQueryVariables>(
-    OrganizationQuickSearchDocument,
-    baseOptions
-  );
-}
+export function useOrganizationQuickSearchQuery(baseOptions: Apollo.QueryHookOptions<OrganizationQuickSearchQuery, OrganizationQuickSearchQueryVariables>) {
+        return Apollo.useQuery<OrganizationQuickSearchQuery, OrganizationQuickSearchQueryVariables>(OrganizationQuickSearchDocument, baseOptions);
+      }
+export function useOrganizationQuickSearchLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OrganizationQuickSearchQuery, OrganizationQuickSearchQueryVariables>) {
+          return Apollo.useLazyQuery<OrganizationQuickSearchQuery, OrganizationQuickSearchQueryVariables>(OrganizationQuickSearchDocument, baseOptions);
+        }
 export type OrganizationQuickSearchQueryHookResult = ReturnType<typeof useOrganizationQuickSearchQuery>;
 export type OrganizationQuickSearchLazyQueryHookResult = ReturnType<typeof useOrganizationQuickSearchLazyQuery>;
-export type OrganizationQuickSearchQueryResult = Apollo.QueryResult<
-  OrganizationQuickSearchQuery,
-  OrganizationQuickSearchQueryVariables
->;
+export type OrganizationQuickSearchQueryResult = Apollo.QueryResult<OrganizationQuickSearchQuery, OrganizationQuickSearchQueryVariables>;
 export const VendorQuickSearchDocument = gql`
-  query VendorQuickSearch($orgOwnerSid: ID!, $searchText: String!) {
-    vendorQuickSearch(orgOwnerSid: $orgOwnerSid, searchText: $searchText) {
-      sid
-      name
-      orgId
-      orgType
-    }
+    query VendorQuickSearch($orgOwnerSid: ID!, $searchText: String!) {
+  vendorQuickSearch(orgOwnerSid: $orgOwnerSid, searchText: $searchText) {
+    sid
+    name
+    orgId
+    orgType
   }
-`;
+}
+    `;
 
 /**
  * __useVendorQuickSearchQuery__
@@ -11922,64 +9028,53 @@ export const VendorQuickSearchDocument = gql`
  *   },
  * });
  */
-export function useVendorQuickSearchQuery(
-  baseOptions: Apollo.QueryHookOptions<VendorQuickSearchQuery, VendorQuickSearchQueryVariables>
-) {
-  return Apollo.useQuery<VendorQuickSearchQuery, VendorQuickSearchQueryVariables>(
-    VendorQuickSearchDocument,
-    baseOptions
-  );
-}
-export function useVendorQuickSearchLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<VendorQuickSearchQuery, VendorQuickSearchQueryVariables>
-) {
-  return Apollo.useLazyQuery<VendorQuickSearchQuery, VendorQuickSearchQueryVariables>(
-    VendorQuickSearchDocument,
-    baseOptions
-  );
-}
+export function useVendorQuickSearchQuery(baseOptions: Apollo.QueryHookOptions<VendorQuickSearchQuery, VendorQuickSearchQueryVariables>) {
+        return Apollo.useQuery<VendorQuickSearchQuery, VendorQuickSearchQueryVariables>(VendorQuickSearchDocument, baseOptions);
+      }
+export function useVendorQuickSearchLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<VendorQuickSearchQuery, VendorQuickSearchQueryVariables>) {
+          return Apollo.useLazyQuery<VendorQuickSearchQuery, VendorQuickSearchQueryVariables>(VendorQuickSearchDocument, baseOptions);
+        }
 export type VendorQuickSearchQueryHookResult = ReturnType<typeof useVendorQuickSearchQuery>;
 export type VendorQuickSearchLazyQueryHookResult = ReturnType<typeof useVendorQuickSearchLazyQuery>;
 export type VendorQuickSearchQueryResult = Apollo.QueryResult<VendorQuickSearchQuery, VendorQuickSearchQueryVariables>;
 export const DashThemeColorForOrgDocument = gql`
-  query DashThemeColorForOrg($ownedInput: OwnedInput, $pageableInput: PageableInput) {
-    dashThemeColorForOrg(ownedInput: $ownedInput, pageableInput: $pageableInput) {
-      paginationInfo {
-        ...fragmentPaginationInfo
-      }
-      nodes {
-        id
-        defaultPalette
-        themeColorMode
-        allowDark
-        paletteNm
-        themePrimary
-        themeLighterAlt
-        themeLighter
-        themeLight
-        themeTertiary
-        themeSecondary
-        themeDarkAlt
-        themeDark
-        themeDarker
-        neutralLighterAlt
-        neutralLighter
-        neutralLight
-        neutralQuaternaryAlt
-        neutralQuaternary
-        neutralTertiaryAlt
-        neutralTertiary
-        neutralSecondary
-        neutralPrimaryAlt
-        neutralPrimary
-        neutralDark
-        black
-        white
-      }
+    query DashThemeColorForOrg($ownedInput: OwnedInput, $pageableInput: PageableInput) {
+  dashThemeColorForOrg(ownedInput: $ownedInput, pageableInput: $pageableInput) {
+    paginationInfo {
+      ...fragmentPaginationInfo
+    }
+    nodes {
+      id
+      defaultPalette
+      themeColorMode
+      allowDark
+      paletteNm
+      themePrimary
+      themeLighterAlt
+      themeLighter
+      themeLight
+      themeTertiary
+      themeSecondary
+      themeDarkAlt
+      themeDark
+      themeDarker
+      neutralLighterAlt
+      neutralLighter
+      neutralLight
+      neutralQuaternaryAlt
+      neutralQuaternary
+      neutralTertiaryAlt
+      neutralTertiary
+      neutralSecondary
+      neutralPrimaryAlt
+      neutralPrimary
+      neutralDark
+      black
+      white
     }
   }
-  ${FragmentPaginationInfoFragmentDoc}
-`;
+}
+    ${FragmentPaginationInfoFragmentDoc}`;
 
 /**
  * __useDashThemeColorForOrgQuery__
@@ -11998,36 +9093,23 @@ export const DashThemeColorForOrgDocument = gql`
  *   },
  * });
  */
-export function useDashThemeColorForOrgQuery(
-  baseOptions?: Apollo.QueryHookOptions<DashThemeColorForOrgQuery, DashThemeColorForOrgQueryVariables>
-) {
-  return Apollo.useQuery<DashThemeColorForOrgQuery, DashThemeColorForOrgQueryVariables>(
-    DashThemeColorForOrgDocument,
-    baseOptions
-  );
-}
-export function useDashThemeColorForOrgLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<DashThemeColorForOrgQuery, DashThemeColorForOrgQueryVariables>
-) {
-  return Apollo.useLazyQuery<DashThemeColorForOrgQuery, DashThemeColorForOrgQueryVariables>(
-    DashThemeColorForOrgDocument,
-    baseOptions
-  );
-}
+export function useDashThemeColorForOrgQuery(baseOptions?: Apollo.QueryHookOptions<DashThemeColorForOrgQuery, DashThemeColorForOrgQueryVariables>) {
+        return Apollo.useQuery<DashThemeColorForOrgQuery, DashThemeColorForOrgQueryVariables>(DashThemeColorForOrgDocument, baseOptions);
+      }
+export function useDashThemeColorForOrgLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DashThemeColorForOrgQuery, DashThemeColorForOrgQueryVariables>) {
+          return Apollo.useLazyQuery<DashThemeColorForOrgQuery, DashThemeColorForOrgQueryVariables>(DashThemeColorForOrgDocument, baseOptions);
+        }
 export type DashThemeColorForOrgQueryHookResult = ReturnType<typeof useDashThemeColorForOrgQuery>;
 export type DashThemeColorForOrgLazyQueryHookResult = ReturnType<typeof useDashThemeColorForOrgLazyQuery>;
-export type DashThemeColorForOrgQueryResult = Apollo.QueryResult<
-  DashThemeColorForOrgQuery,
-  DashThemeColorForOrgQueryVariables
->;
+export type DashThemeColorForOrgQueryResult = Apollo.QueryResult<DashThemeColorForOrgQuery, DashThemeColorForOrgQueryVariables>;
 export const DashSiteForOrgDocument = gql`
-  query DashSiteForOrg($orgSidInput: OrgSidInput) {
-    dashSiteForOrg(orgSidInput: $orgSidInput) {
-      id
-      active
-    }
+    query DashSiteForOrg($orgSidInput: OrgSidInput) {
+  dashSiteForOrg(orgSidInput: $orgSidInput) {
+    id
+    active
   }
-`;
+}
+    `;
 
 /**
  * __useDashSiteForOrgQuery__
@@ -12045,52 +9127,48 @@ export const DashSiteForOrgDocument = gql`
  *   },
  * });
  */
-export function useDashSiteForOrgQuery(
-  baseOptions?: Apollo.QueryHookOptions<DashSiteForOrgQuery, DashSiteForOrgQueryVariables>
-) {
-  return Apollo.useQuery<DashSiteForOrgQuery, DashSiteForOrgQueryVariables>(DashSiteForOrgDocument, baseOptions);
-}
-export function useDashSiteForOrgLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<DashSiteForOrgQuery, DashSiteForOrgQueryVariables>
-) {
-  return Apollo.useLazyQuery<DashSiteForOrgQuery, DashSiteForOrgQueryVariables>(DashSiteForOrgDocument, baseOptions);
-}
+export function useDashSiteForOrgQuery(baseOptions?: Apollo.QueryHookOptions<DashSiteForOrgQuery, DashSiteForOrgQueryVariables>) {
+        return Apollo.useQuery<DashSiteForOrgQuery, DashSiteForOrgQueryVariables>(DashSiteForOrgDocument, baseOptions);
+      }
+export function useDashSiteForOrgLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DashSiteForOrgQuery, DashSiteForOrgQueryVariables>) {
+          return Apollo.useLazyQuery<DashSiteForOrgQuery, DashSiteForOrgQueryVariables>(DashSiteForOrgDocument, baseOptions);
+        }
 export type DashSiteForOrgQueryHookResult = ReturnType<typeof useDashSiteForOrgQuery>;
 export type DashSiteForOrgLazyQueryHookResult = ReturnType<typeof useDashSiteForOrgLazyQuery>;
 export type DashSiteForOrgQueryResult = Apollo.QueryResult<DashSiteForOrgQuery, DashSiteForOrgQueryVariables>;
 export const DashThemeColorDocument = gql`
-  query DashThemeColor($ownedInputSid: OwnedInputSid) {
-    dashThemeColor(ownedInputSid: $ownedInputSid) {
-      id
-      defaultPalette
-      themeColorMode
-      allowDark
-      paletteNm
-      themePrimary
-      themeLighterAlt
-      themeLighter
-      themeLight
-      themeTertiary
-      themeSecondary
-      themeDarkAlt
-      themeDark
-      themeDarker
-      neutralLighterAlt
-      neutralLighter
-      neutralLight
-      neutralQuaternaryAlt
-      neutralQuaternary
-      neutralTertiaryAlt
-      neutralTertiary
-      neutralSecondary
-      neutralPrimaryAlt
-      neutralPrimary
-      neutralDark
-      black
-      white
-    }
+    query DashThemeColor($ownedInputSid: OwnedInputSid) {
+  dashThemeColor(ownedInputSid: $ownedInputSid) {
+    id
+    defaultPalette
+    themeColorMode
+    allowDark
+    paletteNm
+    themePrimary
+    themeLighterAlt
+    themeLighter
+    themeLight
+    themeTertiary
+    themeSecondary
+    themeDarkAlt
+    themeDark
+    themeDarker
+    neutralLighterAlt
+    neutralLighter
+    neutralLight
+    neutralQuaternaryAlt
+    neutralQuaternary
+    neutralTertiaryAlt
+    neutralTertiary
+    neutralSecondary
+    neutralPrimaryAlt
+    neutralPrimary
+    neutralDark
+    black
+    white
   }
-`;
+}
+    `;
 
 /**
  * __useDashThemeColorQuery__
@@ -12108,22 +9186,81 @@ export const DashThemeColorDocument = gql`
  *   },
  * });
  */
-export function useDashThemeColorQuery(
-  baseOptions?: Apollo.QueryHookOptions<DashThemeColorQuery, DashThemeColorQueryVariables>
-) {
-  return Apollo.useQuery<DashThemeColorQuery, DashThemeColorQueryVariables>(DashThemeColorDocument, baseOptions);
-}
-export function useDashThemeColorLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<DashThemeColorQuery, DashThemeColorQueryVariables>
-) {
-  return Apollo.useLazyQuery<DashThemeColorQuery, DashThemeColorQueryVariables>(DashThemeColorDocument, baseOptions);
-}
+export function useDashThemeColorQuery(baseOptions?: Apollo.QueryHookOptions<DashThemeColorQuery, DashThemeColorQueryVariables>) {
+        return Apollo.useQuery<DashThemeColorQuery, DashThemeColorQueryVariables>(DashThemeColorDocument, baseOptions);
+      }
+export function useDashThemeColorLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DashThemeColorQuery, DashThemeColorQueryVariables>) {
+          return Apollo.useLazyQuery<DashThemeColorQuery, DashThemeColorQueryVariables>(DashThemeColorDocument, baseOptions);
+        }
 export type DashThemeColorQueryHookResult = ReturnType<typeof useDashThemeColorQuery>;
 export type DashThemeColorLazyQueryHookResult = ReturnType<typeof useDashThemeColorLazyQuery>;
 export type DashThemeColorQueryResult = Apollo.QueryResult<DashThemeColorQuery, DashThemeColorQueryVariables>;
 export const DashThemeColorByNameDocument = gql`
-  query DashThemeColorByName($ownedInputName: OwnedInputName) {
-    dashThemeColorByName(ownedInputName: $ownedInputName) {
+    query DashThemeColorByName($ownedInputName: OwnedInputName) {
+  dashThemeColorByName(ownedInputName: $ownedInputName) {
+    id
+    defaultPalette
+    themeColorMode
+    allowDark
+    paletteNm
+    themePrimary
+    themeLighterAlt
+    themeLighter
+    themeLight
+    themeTertiary
+    themeSecondary
+    themeDarkAlt
+    themeDark
+    themeDarker
+    neutralLighterAlt
+    neutralLighter
+    neutralLight
+    neutralQuaternaryAlt
+    neutralQuaternary
+    neutralTertiaryAlt
+    neutralTertiary
+    neutralSecondary
+    neutralPrimaryAlt
+    neutralPrimary
+    neutralDark
+    black
+    white
+  }
+}
+    `;
+
+/**
+ * __useDashThemeColorByNameQuery__
+ *
+ * To run a query within a React component, call `useDashThemeColorByNameQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDashThemeColorByNameQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useDashThemeColorByNameQuery({
+ *   variables: {
+ *      ownedInputName: // value for 'ownedInputName'
+ *   },
+ * });
+ */
+export function useDashThemeColorByNameQuery(baseOptions?: Apollo.QueryHookOptions<DashThemeColorByNameQuery, DashThemeColorByNameQueryVariables>) {
+        return Apollo.useQuery<DashThemeColorByNameQuery, DashThemeColorByNameQueryVariables>(DashThemeColorByNameDocument, baseOptions);
+      }
+export function useDashThemeColorByNameLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DashThemeColorByNameQuery, DashThemeColorByNameQueryVariables>) {
+          return Apollo.useLazyQuery<DashThemeColorByNameQuery, DashThemeColorByNameQueryVariables>(DashThemeColorByNameDocument, baseOptions);
+        }
+export type DashThemeColorByNameQueryHookResult = ReturnType<typeof useDashThemeColorByNameQuery>;
+export type DashThemeColorByNameLazyQueryHookResult = ReturnType<typeof useDashThemeColorByNameLazyQuery>;
+export type DashThemeColorByNameQueryResult = Apollo.QueryResult<DashThemeColorByNameQuery, DashThemeColorByNameQueryVariables>;
+export const DefaultDashThemeForSiteDocument = gql`
+    query DefaultDashThemeForSite($ownedInput: OwnedInput) {
+  defaultDashThemeForSite(ownedInput: $ownedInput) {
+    id
+    themeColorMode
+    themeFontSize
+    dashThemeColor {
       id
       defaultPalette
       themeColorMode
@@ -12153,49 +9290,132 @@ export const DashThemeColorByNameDocument = gql`
       white
     }
   }
-`;
+}
+    `;
 
 /**
- * __useDashThemeColorByNameQuery__
+ * __useDefaultDashThemeForSiteQuery__
  *
- * To run a query within a React component, call `useDashThemeColorByNameQuery` and pass it any options that fit your needs.
- * When your component renders, `useDashThemeColorByNameQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useDefaultDashThemeForSiteQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDefaultDashThemeForSiteQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useDashThemeColorByNameQuery({
+ * const { data, loading, error } = useDefaultDashThemeForSiteQuery({
  *   variables: {
- *      ownedInputName: // value for 'ownedInputName'
+ *      ownedInput: // value for 'ownedInput'
  *   },
  * });
  */
-export function useDashThemeColorByNameQuery(
-  baseOptions?: Apollo.QueryHookOptions<DashThemeColorByNameQuery, DashThemeColorByNameQueryVariables>
-) {
-  return Apollo.useQuery<DashThemeColorByNameQuery, DashThemeColorByNameQueryVariables>(
-    DashThemeColorByNameDocument,
-    baseOptions
-  );
+export function useDefaultDashThemeForSiteQuery(baseOptions?: Apollo.QueryHookOptions<DefaultDashThemeForSiteQuery, DefaultDashThemeForSiteQueryVariables>) {
+        return Apollo.useQuery<DefaultDashThemeForSiteQuery, DefaultDashThemeForSiteQueryVariables>(DefaultDashThemeForSiteDocument, baseOptions);
+      }
+export function useDefaultDashThemeForSiteLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DefaultDashThemeForSiteQuery, DefaultDashThemeForSiteQueryVariables>) {
+          return Apollo.useLazyQuery<DefaultDashThemeForSiteQuery, DefaultDashThemeForSiteQueryVariables>(DefaultDashThemeForSiteDocument, baseOptions);
+        }
+export type DefaultDashThemeForSiteQueryHookResult = ReturnType<typeof useDefaultDashThemeForSiteQuery>;
+export type DefaultDashThemeForSiteLazyQueryHookResult = ReturnType<typeof useDefaultDashThemeForSiteLazyQuery>;
+export type DefaultDashThemeForSiteQueryResult = Apollo.QueryResult<DefaultDashThemeForSiteQuery, DefaultDashThemeForSiteQueryVariables>;
+export const DefaultDashThemeForSitePageDocument = gql`
+    query DefaultDashThemeForSitePage($ownedInput: OwnedInput) {
+  defaultDashThemeForSitePage(ownedInput: $ownedInput) {
+    themeColorModes
+    themeFontSizes
+    themeColorPalettes {
+      id
+      defaultPalette
+      themeColorMode
+      allowDark
+      paletteNm
+      themePrimary
+      themeLighterAlt
+      themeLighter
+      themeLight
+      themeTertiary
+      themeSecondary
+      themeDarkAlt
+      themeDark
+      themeDarker
+      neutralLighterAlt
+      neutralLighter
+      neutralLight
+      neutralQuaternaryAlt
+      neutralQuaternary
+      neutralTertiaryAlt
+      neutralTertiary
+      neutralSecondary
+      neutralPrimaryAlt
+      neutralPrimary
+      neutralDark
+      black
+      white
+    }
+  }
 }
-export function useDashThemeColorByNameLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<DashThemeColorByNameQuery, DashThemeColorByNameQueryVariables>
-) {
-  return Apollo.useLazyQuery<DashThemeColorByNameQuery, DashThemeColorByNameQueryVariables>(
-    DashThemeColorByNameDocument,
-    baseOptions
-  );
-}
-export type DashThemeColorByNameQueryHookResult = ReturnType<typeof useDashThemeColorByNameQuery>;
-export type DashThemeColorByNameLazyQueryHookResult = ReturnType<typeof useDashThemeColorByNameLazyQuery>;
-export type DashThemeColorByNameQueryResult = Apollo.QueryResult<
-  DashThemeColorByNameQuery,
-  DashThemeColorByNameQueryVariables
->;
-export const DefaultDashThemeForSiteDocument = gql`
-  query DefaultDashThemeForSite($ownedInput: OwnedInput) {
-    defaultDashThemeForSite(ownedInput: $ownedInput) {
+    `;
+
+/**
+ * __useDefaultDashThemeForSitePageQuery__
+ *
+ * To run a query within a React component, call `useDefaultDashThemeForSitePageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDefaultDashThemeForSitePageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useDefaultDashThemeForSitePageQuery({
+ *   variables: {
+ *      ownedInput: // value for 'ownedInput'
+ *   },
+ * });
+ */
+export function useDefaultDashThemeForSitePageQuery(baseOptions?: Apollo.QueryHookOptions<DefaultDashThemeForSitePageQuery, DefaultDashThemeForSitePageQueryVariables>) {
+        return Apollo.useQuery<DefaultDashThemeForSitePageQuery, DefaultDashThemeForSitePageQueryVariables>(DefaultDashThemeForSitePageDocument, baseOptions);
+      }
+export function useDefaultDashThemeForSitePageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DefaultDashThemeForSitePageQuery, DefaultDashThemeForSitePageQueryVariables>) {
+          return Apollo.useLazyQuery<DefaultDashThemeForSitePageQuery, DefaultDashThemeForSitePageQueryVariables>(DefaultDashThemeForSitePageDocument, baseOptions);
+        }
+export type DefaultDashThemeForSitePageQueryHookResult = ReturnType<typeof useDefaultDashThemeForSitePageQuery>;
+export type DefaultDashThemeForSitePageLazyQueryHookResult = ReturnType<typeof useDefaultDashThemeForSitePageLazyQuery>;
+export type DefaultDashThemeForSitePageQueryResult = Apollo.QueryResult<DefaultDashThemeForSitePageQuery, DefaultDashThemeForSitePageQueryVariables>;
+export const CurrentUserDashThemePageDocument = gql`
+    query CurrentUserDashThemePage {
+  currentUserDashThemePage {
+    themeColorModes
+    themeFontSizes
+    themeColorPalettes {
+      id
+      defaultPalette
+      themeColorMode
+      allowDark
+      paletteNm
+      themePrimary
+      themeLighterAlt
+      themeLighter
+      themeLight
+      themeTertiary
+      themeSecondary
+      themeDarkAlt
+      themeDark
+      themeDarker
+      neutralLighterAlt
+      neutralLighter
+      neutralLight
+      neutralQuaternaryAlt
+      neutralQuaternary
+      neutralTertiaryAlt
+      neutralTertiary
+      neutralSecondary
+      neutralPrimaryAlt
+      neutralPrimary
+      neutralDark
+      black
+      white
+    }
+    dashTheme {
       id
       themeColorMode
       themeFontSize
@@ -12230,193 +9450,8 @@ export const DefaultDashThemeForSiteDocument = gql`
       }
     }
   }
-`;
-
-/**
- * __useDefaultDashThemeForSiteQuery__
- *
- * To run a query within a React component, call `useDefaultDashThemeForSiteQuery` and pass it any options that fit your needs.
- * When your component renders, `useDefaultDashThemeForSiteQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useDefaultDashThemeForSiteQuery({
- *   variables: {
- *      ownedInput: // value for 'ownedInput'
- *   },
- * });
- */
-export function useDefaultDashThemeForSiteQuery(
-  baseOptions?: Apollo.QueryHookOptions<DefaultDashThemeForSiteQuery, DefaultDashThemeForSiteQueryVariables>
-) {
-  return Apollo.useQuery<DefaultDashThemeForSiteQuery, DefaultDashThemeForSiteQueryVariables>(
-    DefaultDashThemeForSiteDocument,
-    baseOptions
-  );
 }
-export function useDefaultDashThemeForSiteLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<DefaultDashThemeForSiteQuery, DefaultDashThemeForSiteQueryVariables>
-) {
-  return Apollo.useLazyQuery<DefaultDashThemeForSiteQuery, DefaultDashThemeForSiteQueryVariables>(
-    DefaultDashThemeForSiteDocument,
-    baseOptions
-  );
-}
-export type DefaultDashThemeForSiteQueryHookResult = ReturnType<typeof useDefaultDashThemeForSiteQuery>;
-export type DefaultDashThemeForSiteLazyQueryHookResult = ReturnType<typeof useDefaultDashThemeForSiteLazyQuery>;
-export type DefaultDashThemeForSiteQueryResult = Apollo.QueryResult<
-  DefaultDashThemeForSiteQuery,
-  DefaultDashThemeForSiteQueryVariables
->;
-export const DefaultDashThemeForSitePageDocument = gql`
-  query DefaultDashThemeForSitePage($ownedInput: OwnedInput) {
-    defaultDashThemeForSitePage(ownedInput: $ownedInput) {
-      themeColorModes
-      themeFontSizes
-      themeColorPalettes {
-        id
-        defaultPalette
-        themeColorMode
-        allowDark
-        paletteNm
-        themePrimary
-        themeLighterAlt
-        themeLighter
-        themeLight
-        themeTertiary
-        themeSecondary
-        themeDarkAlt
-        themeDark
-        themeDarker
-        neutralLighterAlt
-        neutralLighter
-        neutralLight
-        neutralQuaternaryAlt
-        neutralQuaternary
-        neutralTertiaryAlt
-        neutralTertiary
-        neutralSecondary
-        neutralPrimaryAlt
-        neutralPrimary
-        neutralDark
-        black
-        white
-      }
-    }
-  }
-`;
-
-/**
- * __useDefaultDashThemeForSitePageQuery__
- *
- * To run a query within a React component, call `useDefaultDashThemeForSitePageQuery` and pass it any options that fit your needs.
- * When your component renders, `useDefaultDashThemeForSitePageQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useDefaultDashThemeForSitePageQuery({
- *   variables: {
- *      ownedInput: // value for 'ownedInput'
- *   },
- * });
- */
-export function useDefaultDashThemeForSitePageQuery(
-  baseOptions?: Apollo.QueryHookOptions<DefaultDashThemeForSitePageQuery, DefaultDashThemeForSitePageQueryVariables>
-) {
-  return Apollo.useQuery<DefaultDashThemeForSitePageQuery, DefaultDashThemeForSitePageQueryVariables>(
-    DefaultDashThemeForSitePageDocument,
-    baseOptions
-  );
-}
-export function useDefaultDashThemeForSitePageLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<DefaultDashThemeForSitePageQuery, DefaultDashThemeForSitePageQueryVariables>
-) {
-  return Apollo.useLazyQuery<DefaultDashThemeForSitePageQuery, DefaultDashThemeForSitePageQueryVariables>(
-    DefaultDashThemeForSitePageDocument,
-    baseOptions
-  );
-}
-export type DefaultDashThemeForSitePageQueryHookResult = ReturnType<typeof useDefaultDashThemeForSitePageQuery>;
-export type DefaultDashThemeForSitePageLazyQueryHookResult = ReturnType<typeof useDefaultDashThemeForSitePageLazyQuery>;
-export type DefaultDashThemeForSitePageQueryResult = Apollo.QueryResult<
-  DefaultDashThemeForSitePageQuery,
-  DefaultDashThemeForSitePageQueryVariables
->;
-export const CurrentUserDashThemePageDocument = gql`
-  query CurrentUserDashThemePage {
-    currentUserDashThemePage {
-      themeColorModes
-      themeFontSizes
-      themeColorPalettes {
-        id
-        defaultPalette
-        themeColorMode
-        allowDark
-        paletteNm
-        themePrimary
-        themeLighterAlt
-        themeLighter
-        themeLight
-        themeTertiary
-        themeSecondary
-        themeDarkAlt
-        themeDark
-        themeDarker
-        neutralLighterAlt
-        neutralLighter
-        neutralLight
-        neutralQuaternaryAlt
-        neutralQuaternary
-        neutralTertiaryAlt
-        neutralTertiary
-        neutralSecondary
-        neutralPrimaryAlt
-        neutralPrimary
-        neutralDark
-        black
-        white
-      }
-      dashTheme {
-        id
-        themeColorMode
-        themeFontSize
-        dashThemeColor {
-          id
-          defaultPalette
-          themeColorMode
-          allowDark
-          paletteNm
-          themePrimary
-          themeLighterAlt
-          themeLighter
-          themeLight
-          themeTertiary
-          themeSecondary
-          themeDarkAlt
-          themeDark
-          themeDarker
-          neutralLighterAlt
-          neutralLighter
-          neutralLight
-          neutralQuaternaryAlt
-          neutralQuaternary
-          neutralTertiaryAlt
-          neutralTertiary
-          neutralSecondary
-          neutralPrimaryAlt
-          neutralPrimary
-          neutralDark
-          black
-          white
-        }
-      }
-    }
-  }
-`;
+    `;
 
 /**
  * __useCurrentUserDashThemePageQuery__
@@ -12433,43 +9468,29 @@ export const CurrentUserDashThemePageDocument = gql`
  *   },
  * });
  */
-export function useCurrentUserDashThemePageQuery(
-  baseOptions?: Apollo.QueryHookOptions<CurrentUserDashThemePageQuery, CurrentUserDashThemePageQueryVariables>
-) {
-  return Apollo.useQuery<CurrentUserDashThemePageQuery, CurrentUserDashThemePageQueryVariables>(
-    CurrentUserDashThemePageDocument,
-    baseOptions
-  );
-}
-export function useCurrentUserDashThemePageLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<CurrentUserDashThemePageQuery, CurrentUserDashThemePageQueryVariables>
-) {
-  return Apollo.useLazyQuery<CurrentUserDashThemePageQuery, CurrentUserDashThemePageQueryVariables>(
-    CurrentUserDashThemePageDocument,
-    baseOptions
-  );
-}
+export function useCurrentUserDashThemePageQuery(baseOptions?: Apollo.QueryHookOptions<CurrentUserDashThemePageQuery, CurrentUserDashThemePageQueryVariables>) {
+        return Apollo.useQuery<CurrentUserDashThemePageQuery, CurrentUserDashThemePageQueryVariables>(CurrentUserDashThemePageDocument, baseOptions);
+      }
+export function useCurrentUserDashThemePageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CurrentUserDashThemePageQuery, CurrentUserDashThemePageQueryVariables>) {
+          return Apollo.useLazyQuery<CurrentUserDashThemePageQuery, CurrentUserDashThemePageQueryVariables>(CurrentUserDashThemePageDocument, baseOptions);
+        }
 export type CurrentUserDashThemePageQueryHookResult = ReturnType<typeof useCurrentUserDashThemePageQuery>;
 export type CurrentUserDashThemePageLazyQueryHookResult = ReturnType<typeof useCurrentUserDashThemePageLazyQuery>;
-export type CurrentUserDashThemePageQueryResult = Apollo.QueryResult<
-  CurrentUserDashThemePageQuery,
-  CurrentUserDashThemePageQueryVariables
->;
+export type CurrentUserDashThemePageQueryResult = Apollo.QueryResult<CurrentUserDashThemePageQuery, CurrentUserDashThemePageQueryVariables>;
 export const NavigateToNewDomainDocument = gql`
-  query NavigateToNewDomain($domainNavInput: DomainNavInput) {
-    navigateToNewDomain(domainNavInput: $domainNavInput) {
-      type
-      selectedPage
-      navItems {
+    query NavigateToNewDomain($domainNavInput: DomainNavInput) {
+  navigateToNewDomain(domainNavInput: $domainNavInput) {
+    type
+    selectedPage
+    navItems {
+      ...fragmentWebNav
+      subNavItems {
         ...fragmentWebNav
-        subNavItems {
-          ...fragmentWebNav
-        }
       }
     }
   }
-  ${FragmentWebNavFragmentDoc}
-`;
+}
+    ${FragmentWebNavFragmentDoc}`;
 
 /**
  * __useNavigateToNewDomainQuery__
@@ -12487,35 +9508,22 @@ export const NavigateToNewDomainDocument = gql`
  *   },
  * });
  */
-export function useNavigateToNewDomainQuery(
-  baseOptions?: Apollo.QueryHookOptions<NavigateToNewDomainQuery, NavigateToNewDomainQueryVariables>
-) {
-  return Apollo.useQuery<NavigateToNewDomainQuery, NavigateToNewDomainQueryVariables>(
-    NavigateToNewDomainDocument,
-    baseOptions
-  );
-}
-export function useNavigateToNewDomainLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<NavigateToNewDomainQuery, NavigateToNewDomainQueryVariables>
-) {
-  return Apollo.useLazyQuery<NavigateToNewDomainQuery, NavigateToNewDomainQueryVariables>(
-    NavigateToNewDomainDocument,
-    baseOptions
-  );
-}
+export function useNavigateToNewDomainQuery(baseOptions?: Apollo.QueryHookOptions<NavigateToNewDomainQuery, NavigateToNewDomainQueryVariables>) {
+        return Apollo.useQuery<NavigateToNewDomainQuery, NavigateToNewDomainQueryVariables>(NavigateToNewDomainDocument, baseOptions);
+      }
+export function useNavigateToNewDomainLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<NavigateToNewDomainQuery, NavigateToNewDomainQueryVariables>) {
+          return Apollo.useLazyQuery<NavigateToNewDomainQuery, NavigateToNewDomainQueryVariables>(NavigateToNewDomainDocument, baseOptions);
+        }
 export type NavigateToNewDomainQueryHookResult = ReturnType<typeof useNavigateToNewDomainQuery>;
 export type NavigateToNewDomainLazyQueryHookResult = ReturnType<typeof useNavigateToNewDomainLazyQuery>;
-export type NavigateToNewDomainQueryResult = Apollo.QueryResult<
-  NavigateToNewDomainQuery,
-  NavigateToNewDomainQueryVariables
->;
+export type NavigateToNewDomainQueryResult = Apollo.QueryResult<NavigateToNewDomainQuery, NavigateToNewDomainQueryVariables>;
 export const SimulateSessionExpirDocument = gql`
-  query SimulateSessionExpir {
-    simulateSessionExpir {
-      successful
-    }
+    query SimulateSessionExpir {
+  simulateSessionExpir {
+    successful
   }
-`;
+}
+    `;
 
 /**
  * __useSimulateSessionExpirQuery__
@@ -12532,622 +9540,609 @@ export const SimulateSessionExpirDocument = gql`
  *   },
  * });
  */
-export function useSimulateSessionExpirQuery(
-  baseOptions?: Apollo.QueryHookOptions<SimulateSessionExpirQuery, SimulateSessionExpirQueryVariables>
-) {
-  return Apollo.useQuery<SimulateSessionExpirQuery, SimulateSessionExpirQueryVariables>(
-    SimulateSessionExpirDocument,
-    baseOptions
-  );
-}
-export function useSimulateSessionExpirLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<SimulateSessionExpirQuery, SimulateSessionExpirQueryVariables>
-) {
-  return Apollo.useLazyQuery<SimulateSessionExpirQuery, SimulateSessionExpirQueryVariables>(
-    SimulateSessionExpirDocument,
-    baseOptions
-  );
-}
+export function useSimulateSessionExpirQuery(baseOptions?: Apollo.QueryHookOptions<SimulateSessionExpirQuery, SimulateSessionExpirQueryVariables>) {
+        return Apollo.useQuery<SimulateSessionExpirQuery, SimulateSessionExpirQueryVariables>(SimulateSessionExpirDocument, baseOptions);
+      }
+export function useSimulateSessionExpirLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SimulateSessionExpirQuery, SimulateSessionExpirQueryVariables>) {
+          return Apollo.useLazyQuery<SimulateSessionExpirQuery, SimulateSessionExpirQueryVariables>(SimulateSessionExpirDocument, baseOptions);
+        }
 export type SimulateSessionExpirQueryHookResult = ReturnType<typeof useSimulateSessionExpirQuery>;
 export type SimulateSessionExpirLazyQueryHookResult = ReturnType<typeof useSimulateSessionExpirLazyQuery>;
-export type SimulateSessionExpirQueryResult = Apollo.QueryResult<
-  SimulateSessionExpirQuery,
-  SimulateSessionExpirQueryVariables
->;
+export type SimulateSessionExpirQueryResult = Apollo.QueryResult<SimulateSessionExpirQuery, SimulateSessionExpirQueryVariables>;
 export const PasswordRulesFormDocument = gql`
-  query PasswordRulesForm($orgSid: ID!) {
-    passwordRulesForm(orgSid: $orgSid) {
-      organization {
-        value
-        description
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      mustAlwaysBeMet {
-        mustNotContainWhiteSpace {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustNotContainUserName {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustNotContainNumericSequence {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustFollowLengthRequirements {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        minLength {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        maxLength {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustContainUpperCaseLetters {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        minUpperCaseLetters {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustContainLowerCaseLetters {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        minLowerCaseLetters {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustContainNumericDigits {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        minNumericDigits {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustContainSpecialCharacters {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        minSpecialCharacters {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustNotRepeatCharacters {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        maxAllowedRepeatedChars {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustNotReusePasswords {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        minPasswordHistoryVariations {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustNotMatchExactDictionaryWord {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustNotMatchPartialDictionaryWord {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-      }
-      someMustBeMet {
-        enabled {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        minPasswordComplexity {
-          value {
-            name
-            value
-          }
-          label
-          readOnly
-          info
-          required
-          visible
-          options
-          query
-          errCode
-          errMsg
-          errSeverity
-        }
-        requiredNumPassingRules {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustNotContainWhiteSpace {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustNotContainUserName {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustNotContainNumericSequence {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustFollowLengthRequirements {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        minLength {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        maxLength {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustContainUpperCaseLetters {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        minUpperCaseLetters {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustContainLowerCaseLetters {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        minLowerCaseLetters {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustContainNumericDigits {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        minNumericDigits {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustContainSpecialCharacters {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        minSpecialCharacters {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustNotRepeatCharacters {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        maxAllowedRepeatedChars {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustNotReusePasswords {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        minPasswordHistoryVariations {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustNotMatchExactDictionaryWord {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustNotMatchPartialDictionaryWord {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-      }
-      autoLockAccount {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      autoLockAfterFailedAttempts {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
-      }
-      autoUnlockAccount {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      autoUnlockAccountDelayMinutes {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
-      }
-      response
-      options {
-        key
-        values {
-          label
-          value
-          info
-        }
-      }
+    query PasswordRulesForm($orgSid: ID!) {
+  passwordRulesForm(orgSid: $orgSid) {
+    organization {
+      value
+      description
+      label
+      readOnly
+      info
+      required
+      visible
       errCode
       errMsg
       errSeverity
     }
+    mustAlwaysBeMet {
+      mustNotContainWhiteSpace {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotContainUserName {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotContainNumericSequence {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustFollowLengthRequirements {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minLength {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      maxLength {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustContainUpperCaseLetters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minUpperCaseLetters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustContainLowerCaseLetters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minLowerCaseLetters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustContainNumericDigits {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minNumericDigits {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustContainSpecialCharacters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minSpecialCharacters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotRepeatCharacters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      maxAllowedRepeatedChars {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotReusePasswords {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minPasswordHistoryVariations {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotMatchExactDictionaryWord {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotMatchPartialDictionaryWord {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+    }
+    someMustBeMet {
+      enabled {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minPasswordComplexity {
+        value {
+          name
+          value
+        }
+        label
+        readOnly
+        info
+        required
+        visible
+        options
+        query
+        errCode
+        errMsg
+        errSeverity
+      }
+      requiredNumPassingRules {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotContainWhiteSpace {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotContainUserName {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotContainNumericSequence {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustFollowLengthRequirements {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minLength {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      maxLength {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustContainUpperCaseLetters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minUpperCaseLetters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustContainLowerCaseLetters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minLowerCaseLetters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustContainNumericDigits {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minNumericDigits {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustContainSpecialCharacters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minSpecialCharacters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotRepeatCharacters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      maxAllowedRepeatedChars {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotReusePasswords {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minPasswordHistoryVariations {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotMatchExactDictionaryWord {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotMatchPartialDictionaryWord {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+    }
+    autoLockAccount {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    autoLockAfterFailedAttempts {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
+      errCode
+      errMsg
+      errSeverity
+    }
+    autoUnlockAccount {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    autoUnlockAccountDelayMinutes {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
+      errCode
+      errMsg
+      errSeverity
+    }
+    response
+    options {
+      key
+      values {
+        label
+        value
+        info
+      }
+    }
+    errCode
+    errMsg
+    errSeverity
   }
-`;
+}
+    `;
 
 /**
  * __usePasswordRulesFormQuery__
@@ -13165,54 +10160,44 @@ export const PasswordRulesFormDocument = gql`
  *   },
  * });
  */
-export function usePasswordRulesFormQuery(
-  baseOptions: Apollo.QueryHookOptions<PasswordRulesFormQuery, PasswordRulesFormQueryVariables>
-) {
-  return Apollo.useQuery<PasswordRulesFormQuery, PasswordRulesFormQueryVariables>(
-    PasswordRulesFormDocument,
-    baseOptions
-  );
-}
-export function usePasswordRulesFormLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<PasswordRulesFormQuery, PasswordRulesFormQueryVariables>
-) {
-  return Apollo.useLazyQuery<PasswordRulesFormQuery, PasswordRulesFormQueryVariables>(
-    PasswordRulesFormDocument,
-    baseOptions
-  );
-}
+export function usePasswordRulesFormQuery(baseOptions: Apollo.QueryHookOptions<PasswordRulesFormQuery, PasswordRulesFormQueryVariables>) {
+        return Apollo.useQuery<PasswordRulesFormQuery, PasswordRulesFormQueryVariables>(PasswordRulesFormDocument, baseOptions);
+      }
+export function usePasswordRulesFormLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PasswordRulesFormQuery, PasswordRulesFormQueryVariables>) {
+          return Apollo.useLazyQuery<PasswordRulesFormQuery, PasswordRulesFormQueryVariables>(PasswordRulesFormDocument, baseOptions);
+        }
 export type PasswordRulesFormQueryHookResult = ReturnType<typeof usePasswordRulesFormQuery>;
 export type PasswordRulesFormLazyQueryHookResult = ReturnType<typeof usePasswordRulesFormLazyQuery>;
 export type PasswordRulesFormQueryResult = Apollo.QueryResult<PasswordRulesFormQuery, PasswordRulesFormQueryVariables>;
 export const PasswordValidationDocument = gql`
-  query PasswordValidation($orgSid: ID!, $userSid: ID!, $password: String!) {
-    passwordValidation(orgSid: $orgSid, userSid: $userSid, password: $password) {
+    query PasswordValidation($orgSid: ID!, $userSid: ID!, $password: String!) {
+  passwordValidation(orgSid: $orgSid, userSid: $userSid, password: $password) {
+    passes
+    mustAlwaysBeMet {
+      enabled
+      requiredNumPassingRules
       passes
-      mustAlwaysBeMet {
-        enabled
-        requiredNumPassingRules
+      rules {
         passes
-        rules {
-          passes
-          label
-        }
+        label
       }
-      passwordStrength {
+    }
+    passwordStrength {
+      passes
+      minPasswordComplexity
+    }
+    someMustBeMet {
+      enabled
+      requiredNumPassingRules
+      passes
+      rules {
         passes
-        minPasswordComplexity
-      }
-      someMustBeMet {
-        enabled
-        requiredNumPassingRules
-        passes
-        rules {
-          passes
-          label
-        }
+        label
       }
     }
   }
-`;
+}
+    `;
 
 /**
  * __usePasswordValidationQuery__
@@ -13232,169 +10217,156 @@ export const PasswordValidationDocument = gql`
  *   },
  * });
  */
-export function usePasswordValidationQuery(
-  baseOptions: Apollo.QueryHookOptions<PasswordValidationQuery, PasswordValidationQueryVariables>
-) {
-  return Apollo.useQuery<PasswordValidationQuery, PasswordValidationQueryVariables>(
-    PasswordValidationDocument,
-    baseOptions
-  );
-}
-export function usePasswordValidationLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<PasswordValidationQuery, PasswordValidationQueryVariables>
-) {
-  return Apollo.useLazyQuery<PasswordValidationQuery, PasswordValidationQueryVariables>(
-    PasswordValidationDocument,
-    baseOptions
-  );
-}
+export function usePasswordValidationQuery(baseOptions: Apollo.QueryHookOptions<PasswordValidationQuery, PasswordValidationQueryVariables>) {
+        return Apollo.useQuery<PasswordValidationQuery, PasswordValidationQueryVariables>(PasswordValidationDocument, baseOptions);
+      }
+export function usePasswordValidationLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PasswordValidationQuery, PasswordValidationQueryVariables>) {
+          return Apollo.useLazyQuery<PasswordValidationQuery, PasswordValidationQueryVariables>(PasswordValidationDocument, baseOptions);
+        }
 export type PasswordValidationQueryHookResult = ReturnType<typeof usePasswordValidationQuery>;
 export type PasswordValidationLazyQueryHookResult = ReturnType<typeof usePasswordValidationLazyQuery>;
-export type PasswordValidationQueryResult = Apollo.QueryResult<
-  PasswordValidationQuery,
-  PasswordValidationQueryVariables
->;
+export type PasswordValidationQueryResult = Apollo.QueryResult<PasswordValidationQuery, PasswordValidationQueryVariables>;
 export const XpsftpTestDocument = gql`
-  query XpsftpTest($orgSid: ID) {
-    xpsftpTest(orgSid: $orgSid) {
-      xpSFTPForm {
-        host {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        port {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        user {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        password {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        port {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        folder {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        stepWise {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        response
+    query XpsftpTest($orgSid: ID) {
+  xpsftpTest(orgSid: $orgSid) {
+    xpSFTPForm {
+      host {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
         errCode
         errMsg
         errSeverity
       }
-      genTestFileForm {
-        generate {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        fileName {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        fileBody {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
+      port {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
       }
-      includeFileUpload
+      user {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      password {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      port {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      folder {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      stepWise {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      response
+      errCode
+      errMsg
+      errSeverity
     }
+    genTestFileForm {
+      generate {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      fileName {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      fileBody {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+    }
+    includeFileUpload
   }
-`;
+}
+    `;
 
 /**
  * __useXpsftpTestQuery__
@@ -13413,47 +10385,44 @@ export const XpsftpTestDocument = gql`
  * });
  */
 export function useXpsftpTestQuery(baseOptions?: Apollo.QueryHookOptions<XpsftpTestQuery, XpsftpTestQueryVariables>) {
-  return Apollo.useQuery<XpsftpTestQuery, XpsftpTestQueryVariables>(XpsftpTestDocument, baseOptions);
-}
-export function useXpsftpTestLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<XpsftpTestQuery, XpsftpTestQueryVariables>
-) {
-  return Apollo.useLazyQuery<XpsftpTestQuery, XpsftpTestQueryVariables>(XpsftpTestDocument, baseOptions);
-}
+        return Apollo.useQuery<XpsftpTestQuery, XpsftpTestQueryVariables>(XpsftpTestDocument, baseOptions);
+      }
+export function useXpsftpTestLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<XpsftpTestQuery, XpsftpTestQueryVariables>) {
+          return Apollo.useLazyQuery<XpsftpTestQuery, XpsftpTestQueryVariables>(XpsftpTestDocument, baseOptions);
+        }
 export type XpsftpTestQueryHookResult = ReturnType<typeof useXpsftpTestQuery>;
 export type XpsftpTestLazyQueryHookResult = ReturnType<typeof useXpsftpTestLazyQuery>;
 export type XpsftpTestQueryResult = Apollo.QueryResult<XpsftpTestQuery, XpsftpTestQueryVariables>;
 export const BeginLoginDocument = gql`
-  mutation BeginLogin($userId: String!) {
-    beginLogin(userId: $userId) {
-      userId
-      step
-      redirectPath
-      allowLostPassword
-      loginCompleteDomain {
-        type
-        selectedPage
-        navItems {
-          ...fragmentWebNav
-        }
+    mutation BeginLogin($userId: String!) {
+  beginLogin(userId: $userId) {
+    userId
+    step
+    redirectPath
+    allowLostPassword
+    loginCompleteDomain {
+      type
+      selectedPage
+      navItems {
+        ...fragmentWebNav
       }
-      tokenUser {
-        token
-        session {
-          id
-          orgId
-          orgSid
-          orgName
-          userId
-          firstNm
-          pollInterval
-          defaultAuthorities
-        }
+    }
+    tokenUser {
+      token
+      session {
+        id
+        orgId
+        orgSid
+        orgName
+        userId
+        firstNm
+        pollInterval
+        defaultAuthorities
       }
     }
   }
-  ${FragmentWebNavFragmentDoc}
-`;
+}
+    ${FragmentWebNavFragmentDoc}`;
 export type BeginLoginMutationFn = Apollo.MutationFunction<BeginLoginMutation, BeginLoginMutationVariables>;
 
 /**
@@ -13473,47 +10442,44 @@ export type BeginLoginMutationFn = Apollo.MutationFunction<BeginLoginMutation, B
  *   },
  * });
  */
-export function useBeginLoginMutation(
-  baseOptions?: Apollo.MutationHookOptions<BeginLoginMutation, BeginLoginMutationVariables>
-) {
-  return Apollo.useMutation<BeginLoginMutation, BeginLoginMutationVariables>(BeginLoginDocument, baseOptions);
-}
+export function useBeginLoginMutation(baseOptions?: Apollo.MutationHookOptions<BeginLoginMutation, BeginLoginMutationVariables>) {
+        return Apollo.useMutation<BeginLoginMutation, BeginLoginMutationVariables>(BeginLoginDocument, baseOptions);
+      }
 export type BeginLoginMutationHookResult = ReturnType<typeof useBeginLoginMutation>;
 export type BeginLoginMutationResult = Apollo.MutationResult<BeginLoginMutation>;
 export type BeginLoginMutationOptions = Apollo.BaseMutationOptions<BeginLoginMutation, BeginLoginMutationVariables>;
 export const PasswordLoginDocument = gql`
-  mutation PasswordLogin($userId: String!, $password: String!) {
-    passwordLogin(userId: $userId, password: $password) {
-      step
-      redirectPath
-      allowLostPassword
-      loginCompleteDomain {
-        type
-        selectedPage
-        navItems {
+    mutation PasswordLogin($userId: String!, $password: String!) {
+  passwordLogin(userId: $userId, password: $password) {
+    step
+    redirectPath
+    allowLostPassword
+    loginCompleteDomain {
+      type
+      selectedPage
+      navItems {
+        ...fragmentWebNav
+        subNavItems {
           ...fragmentWebNav
-          subNavItems {
-            ...fragmentWebNav
-          }
-        }
-      }
-      tokenUser {
-        token
-        session {
-          id
-          orgId
-          orgSid
-          orgName
-          userId
-          firstNm
-          pollInterval
-          defaultAuthorities
         }
       }
     }
+    tokenUser {
+      token
+      session {
+        id
+        orgId
+        orgSid
+        orgName
+        userId
+        firstNm
+        pollInterval
+        defaultAuthorities
+      }
+    }
   }
-  ${FragmentWebNavFragmentDoc}
-`;
+}
+    ${FragmentWebNavFragmentDoc}`;
 export type PasswordLoginMutationFn = Apollo.MutationFunction<PasswordLoginMutation, PasswordLoginMutationVariables>;
 
 /**
@@ -13534,24 +10500,19 @@ export type PasswordLoginMutationFn = Apollo.MutationFunction<PasswordLoginMutat
  *   },
  * });
  */
-export function usePasswordLoginMutation(
-  baseOptions?: Apollo.MutationHookOptions<PasswordLoginMutation, PasswordLoginMutationVariables>
-) {
-  return Apollo.useMutation<PasswordLoginMutation, PasswordLoginMutationVariables>(PasswordLoginDocument, baseOptions);
-}
+export function usePasswordLoginMutation(baseOptions?: Apollo.MutationHookOptions<PasswordLoginMutation, PasswordLoginMutationVariables>) {
+        return Apollo.useMutation<PasswordLoginMutation, PasswordLoginMutationVariables>(PasswordLoginDocument, baseOptions);
+      }
 export type PasswordLoginMutationHookResult = ReturnType<typeof usePasswordLoginMutation>;
 export type PasswordLoginMutationResult = Apollo.MutationResult<PasswordLoginMutation>;
-export type PasswordLoginMutationOptions = Apollo.BaseMutationOptions<
-  PasswordLoginMutation,
-  PasswordLoginMutationVariables
->;
+export type PasswordLoginMutationOptions = Apollo.BaseMutationOptions<PasswordLoginMutation, PasswordLoginMutationVariables>;
 export const LogOutDocument = gql`
-  mutation LogOut {
-    logOut {
-      successful
-    }
+    mutation LogOut {
+  logOut {
+    successful
   }
-`;
+}
+    `;
 export type LogOutMutationFn = Apollo.MutationFunction<LogOutMutation, LogOutMutationVariables>;
 
 /**
@@ -13571,29 +10532,26 @@ export type LogOutMutationFn = Apollo.MutationFunction<LogOutMutation, LogOutMut
  * });
  */
 export function useLogOutMutation(baseOptions?: Apollo.MutationHookOptions<LogOutMutation, LogOutMutationVariables>) {
-  return Apollo.useMutation<LogOutMutation, LogOutMutationVariables>(LogOutDocument, baseOptions);
-}
+        return Apollo.useMutation<LogOutMutation, LogOutMutationVariables>(LogOutDocument, baseOptions);
+      }
 export type LogOutMutationHookResult = ReturnType<typeof useLogOutMutation>;
 export type LogOutMutationResult = Apollo.MutationResult<LogOutMutation>;
 export type LogOutMutationOptions = Apollo.BaseMutationOptions<LogOutMutation, LogOutMutationVariables>;
 export const UpdateOwnPasswordDocument = gql`
-  mutation UpdateOwnPassword($updateOwnPasswordInput: UpdateOwnPasswordInput!) {
-    updateOwnPassword(updateOwnPasswordInput: $updateOwnPasswordInput) {
-      id
-      orgId
-      orgSid
-      orgName
-      userId
-      firstNm
-      pollInterval
-      defaultAuthorities
-    }
+    mutation UpdateOwnPassword($updateOwnPasswordInput: UpdateOwnPasswordInput!) {
+  updateOwnPassword(updateOwnPasswordInput: $updateOwnPasswordInput) {
+    id
+    orgId
+    orgSid
+    orgName
+    userId
+    firstNm
+    pollInterval
+    defaultAuthorities
   }
-`;
-export type UpdateOwnPasswordMutationFn = Apollo.MutationFunction<
-  UpdateOwnPasswordMutation,
-  UpdateOwnPasswordMutationVariables
->;
+}
+    `;
+export type UpdateOwnPasswordMutationFn = Apollo.MutationFunction<UpdateOwnPasswordMutation, UpdateOwnPasswordMutationVariables>;
 
 /**
  * __useUpdateOwnPasswordMutation__
@@ -13612,25 +10570,17 @@ export type UpdateOwnPasswordMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useUpdateOwnPasswordMutation(
-  baseOptions?: Apollo.MutationHookOptions<UpdateOwnPasswordMutation, UpdateOwnPasswordMutationVariables>
-) {
-  return Apollo.useMutation<UpdateOwnPasswordMutation, UpdateOwnPasswordMutationVariables>(
-    UpdateOwnPasswordDocument,
-    baseOptions
-  );
-}
+export function useUpdateOwnPasswordMutation(baseOptions?: Apollo.MutationHookOptions<UpdateOwnPasswordMutation, UpdateOwnPasswordMutationVariables>) {
+        return Apollo.useMutation<UpdateOwnPasswordMutation, UpdateOwnPasswordMutationVariables>(UpdateOwnPasswordDocument, baseOptions);
+      }
 export type UpdateOwnPasswordMutationHookResult = ReturnType<typeof useUpdateOwnPasswordMutation>;
 export type UpdateOwnPasswordMutationResult = Apollo.MutationResult<UpdateOwnPasswordMutation>;
-export type UpdateOwnPasswordMutationOptions = Apollo.BaseMutationOptions<
-  UpdateOwnPasswordMutation,
-  UpdateOwnPasswordMutationVariables
->;
+export type UpdateOwnPasswordMutationOptions = Apollo.BaseMutationOptions<UpdateOwnPasswordMutation, UpdateOwnPasswordMutationVariables>;
 export const ResetPasswordDocument = gql`
-  mutation ResetPassword($userSid: ID!) {
-    resetPassword(userSid: $userSid)
-  }
-`;
+    mutation ResetPassword($userSid: ID!) {
+  resetPassword(userSid: $userSid)
+}
+    `;
 export type ResetPasswordMutationFn = Apollo.MutationFunction<ResetPasswordMutation, ResetPasswordMutationVariables>;
 
 /**
@@ -13650,27 +10600,22 @@ export type ResetPasswordMutationFn = Apollo.MutationFunction<ResetPasswordMutat
  *   },
  * });
  */
-export function useResetPasswordMutation(
-  baseOptions?: Apollo.MutationHookOptions<ResetPasswordMutation, ResetPasswordMutationVariables>
-) {
-  return Apollo.useMutation<ResetPasswordMutation, ResetPasswordMutationVariables>(ResetPasswordDocument, baseOptions);
-}
+export function useResetPasswordMutation(baseOptions?: Apollo.MutationHookOptions<ResetPasswordMutation, ResetPasswordMutationVariables>) {
+        return Apollo.useMutation<ResetPasswordMutation, ResetPasswordMutationVariables>(ResetPasswordDocument, baseOptions);
+      }
 export type ResetPasswordMutationHookResult = ReturnType<typeof useResetPasswordMutation>;
 export type ResetPasswordMutationResult = Apollo.MutationResult<ResetPasswordMutation>;
-export type ResetPasswordMutationOptions = Apollo.BaseMutationOptions<
-  ResetPasswordMutation,
-  ResetPasswordMutationVariables
->;
+export type ResetPasswordMutationOptions = Apollo.BaseMutationOptions<ResetPasswordMutation, ResetPasswordMutationVariables>;
 export const UpdatePasswordDocument = gql`
-  mutation UpdatePassword($updatePasswordInput: UpdatePasswordInput!) {
-    updatePassword(updatePasswordInput: $updatePasswordInput) {
-      response
-      errCode
-      errMsg
-      errSeverity
-    }
+    mutation UpdatePassword($updatePasswordInput: UpdatePasswordInput!) {
+  updatePassword(updatePasswordInput: $updatePasswordInput) {
+    response
+    errCode
+    errMsg
+    errSeverity
   }
-`;
+}
+    `;
 export type UpdatePasswordMutationFn = Apollo.MutationFunction<UpdatePasswordMutation, UpdatePasswordMutationVariables>;
 
 /**
@@ -13690,114 +10635,105 @@ export type UpdatePasswordMutationFn = Apollo.MutationFunction<UpdatePasswordMut
  *   },
  * });
  */
-export function useUpdatePasswordMutation(
-  baseOptions?: Apollo.MutationHookOptions<UpdatePasswordMutation, UpdatePasswordMutationVariables>
-) {
-  return Apollo.useMutation<UpdatePasswordMutation, UpdatePasswordMutationVariables>(
-    UpdatePasswordDocument,
-    baseOptions
-  );
-}
+export function useUpdatePasswordMutation(baseOptions?: Apollo.MutationHookOptions<UpdatePasswordMutation, UpdatePasswordMutationVariables>) {
+        return Apollo.useMutation<UpdatePasswordMutation, UpdatePasswordMutationVariables>(UpdatePasswordDocument, baseOptions);
+      }
 export type UpdatePasswordMutationHookResult = ReturnType<typeof useUpdatePasswordMutation>;
 export type UpdatePasswordMutationResult = Apollo.MutationResult<UpdatePasswordMutation>;
-export type UpdatePasswordMutationOptions = Apollo.BaseMutationOptions<
-  UpdatePasswordMutation,
-  UpdatePasswordMutationVariables
->;
+export type UpdatePasswordMutationOptions = Apollo.BaseMutationOptions<UpdatePasswordMutation, UpdatePasswordMutationVariables>;
 export const CreateOrgDocument = gql`
-  mutation CreateOrg($orgInfo: CreateOrgInput!) {
-    createOrg(orgInfo: $orgInfo) {
-      sid
-      name {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
-      }
-      orgId {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
-      }
-      orgType {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      active {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      whitelist {
-        pattern {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        errCode
-        errMsg
-        errSeverity
-      }
-      options {
-        key
-        values {
-          label
-          value
-          info
-        }
-      }
-      commands {
-        ...fragmentWebCommand
-      }
-      response
+    mutation CreateOrg($orgInfo: CreateOrgInput!) {
+  createOrg(orgInfo: $orgInfo) {
+    sid
+    name {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
       errCode
       errMsg
       errSeverity
     }
+    orgId {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
+      errCode
+      errMsg
+      errSeverity
+    }
+    orgType {
+      value {
+        name
+        value
+      }
+      label
+      readOnly
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    active {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    whitelist {
+      pattern {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      errCode
+      errMsg
+      errSeverity
+    }
+    options {
+      key
+      values {
+        label
+        value
+        info
+      }
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
   }
-  ${FragmentWebCommandFragmentDoc}
-`;
+}
+    ${FragmentWebCommandFragmentDoc}`;
 export type CreateOrgMutationFn = Apollo.MutationFunction<CreateOrgMutation, CreateOrgMutationVariables>;
 
 /**
@@ -13817,108 +10753,105 @@ export type CreateOrgMutationFn = Apollo.MutationFunction<CreateOrgMutation, Cre
  *   },
  * });
  */
-export function useCreateOrgMutation(
-  baseOptions?: Apollo.MutationHookOptions<CreateOrgMutation, CreateOrgMutationVariables>
-) {
-  return Apollo.useMutation<CreateOrgMutation, CreateOrgMutationVariables>(CreateOrgDocument, baseOptions);
-}
+export function useCreateOrgMutation(baseOptions?: Apollo.MutationHookOptions<CreateOrgMutation, CreateOrgMutationVariables>) {
+        return Apollo.useMutation<CreateOrgMutation, CreateOrgMutationVariables>(CreateOrgDocument, baseOptions);
+      }
 export type CreateOrgMutationHookResult = ReturnType<typeof useCreateOrgMutation>;
 export type CreateOrgMutationResult = Apollo.MutationResult<CreateOrgMutation>;
 export type CreateOrgMutationOptions = Apollo.BaseMutationOptions<CreateOrgMutation, CreateOrgMutationVariables>;
 export const UpdateOrgDocument = gql`
-  mutation UpdateOrg($orgInfo: UpdateOrgInput!) {
-    updateOrg(orgInfo: $orgInfo) {
-      sid
-      name {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
-      }
-      orgId {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
-      }
-      orgType {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      active {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      whitelist {
-        pattern {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        errCode
-        errMsg
-        errSeverity
-      }
-      options {
-        key
-        values {
-          label
-          value
-          info
-        }
-      }
-      commands {
-        ...fragmentWebCommand
-      }
-      response
+    mutation UpdateOrg($orgInfo: UpdateOrgInput!) {
+  updateOrg(orgInfo: $orgInfo) {
+    sid
+    name {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
       errCode
       errMsg
       errSeverity
     }
+    orgId {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
+      errCode
+      errMsg
+      errSeverity
+    }
+    orgType {
+      value {
+        name
+        value
+      }
+      label
+      readOnly
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    active {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    whitelist {
+      pattern {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      errCode
+      errMsg
+      errSeverity
+    }
+    options {
+      key
+      values {
+        label
+        value
+        info
+      }
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
   }
-  ${FragmentWebCommandFragmentDoc}
-`;
+}
+    ${FragmentWebCommandFragmentDoc}`;
 export type UpdateOrgMutationFn = Apollo.MutationFunction<UpdateOrgMutation, UpdateOrgMutationVariables>;
 
 /**
@@ -13938,19 +10871,17 @@ export type UpdateOrgMutationFn = Apollo.MutationFunction<UpdateOrgMutation, Upd
  *   },
  * });
  */
-export function useUpdateOrgMutation(
-  baseOptions?: Apollo.MutationHookOptions<UpdateOrgMutation, UpdateOrgMutationVariables>
-) {
-  return Apollo.useMutation<UpdateOrgMutation, UpdateOrgMutationVariables>(UpdateOrgDocument, baseOptions);
-}
+export function useUpdateOrgMutation(baseOptions?: Apollo.MutationHookOptions<UpdateOrgMutation, UpdateOrgMutationVariables>) {
+        return Apollo.useMutation<UpdateOrgMutation, UpdateOrgMutationVariables>(UpdateOrgDocument, baseOptions);
+      }
 export type UpdateOrgMutationHookResult = ReturnType<typeof useUpdateOrgMutation>;
 export type UpdateOrgMutationResult = Apollo.MutationResult<UpdateOrgMutation>;
 export type UpdateOrgMutationOptions = Apollo.BaseMutationOptions<UpdateOrgMutation, UpdateOrgMutationVariables>;
 export const DeactivateOrgDocument = gql`
-  mutation DeactivateOrg($orgSid: ID!) {
-    deactivateOrg(orgSid: $orgSid)
-  }
-`;
+    mutation DeactivateOrg($orgSid: ID!) {
+  deactivateOrg(orgSid: $orgSid)
+}
+    `;
 export type DeactivateOrgMutationFn = Apollo.MutationFunction<DeactivateOrgMutation, DeactivateOrgMutationVariables>;
 
 /**
@@ -13970,123 +10901,114 @@ export type DeactivateOrgMutationFn = Apollo.MutationFunction<DeactivateOrgMutat
  *   },
  * });
  */
-export function useDeactivateOrgMutation(
-  baseOptions?: Apollo.MutationHookOptions<DeactivateOrgMutation, DeactivateOrgMutationVariables>
-) {
-  return Apollo.useMutation<DeactivateOrgMutation, DeactivateOrgMutationVariables>(DeactivateOrgDocument, baseOptions);
-}
+export function useDeactivateOrgMutation(baseOptions?: Apollo.MutationHookOptions<DeactivateOrgMutation, DeactivateOrgMutationVariables>) {
+        return Apollo.useMutation<DeactivateOrgMutation, DeactivateOrgMutationVariables>(DeactivateOrgDocument, baseOptions);
+      }
 export type DeactivateOrgMutationHookResult = ReturnType<typeof useDeactivateOrgMutation>;
 export type DeactivateOrgMutationResult = Apollo.MutationResult<DeactivateOrgMutation>;
-export type DeactivateOrgMutationOptions = Apollo.BaseMutationOptions<
-  DeactivateOrgMutation,
-  DeactivateOrgMutationVariables
->;
+export type DeactivateOrgMutationOptions = Apollo.BaseMutationOptions<DeactivateOrgMutation, DeactivateOrgMutationVariables>;
 export const CreateAccessPolicyDocument = gql`
-  mutation CreateAccessPolicy($createAccessPolicyInput: CreateAccessPolicyInput!) {
-    createAccessPolicy(createAccessPolicyInput: $createAccessPolicyInput) {
-      sid
-      name {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
-      }
-      organization {
-        value
-        description
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      permissions {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      tmpl {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      tmplUseAsIs {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      applicableOrgTypes {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      options {
-        key
-        values {
-          label
-          value
-          info
-        }
-      }
-      commands {
-        ...fragmentWebCommand
-      }
-      response
+    mutation CreateAccessPolicy($createAccessPolicyInput: CreateAccessPolicyInput!) {
+  createAccessPolicy(createAccessPolicyInput: $createAccessPolicyInput) {
+    sid
+    name {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
       errCode
       errMsg
       errSeverity
     }
+    organization {
+      value
+      description
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    permissions {
+      value {
+        name
+        value
+      }
+      label
+      readOnly
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    tmpl {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    tmplUseAsIs {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    applicableOrgTypes {
+      value {
+        name
+        value
+      }
+      label
+      readOnly
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    options {
+      key
+      values {
+        label
+        value
+        info
+      }
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
   }
-  ${FragmentWebCommandFragmentDoc}
-`;
-export type CreateAccessPolicyMutationFn = Apollo.MutationFunction<
-  CreateAccessPolicyMutation,
-  CreateAccessPolicyMutationVariables
->;
+}
+    ${FragmentWebCommandFragmentDoc}`;
+export type CreateAccessPolicyMutationFn = Apollo.MutationFunction<CreateAccessPolicyMutation, CreateAccessPolicyMutationVariables>;
 
 /**
  * __useCreateAccessPolicyMutation__
@@ -14105,126 +11027,114 @@ export type CreateAccessPolicyMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useCreateAccessPolicyMutation(
-  baseOptions?: Apollo.MutationHookOptions<CreateAccessPolicyMutation, CreateAccessPolicyMutationVariables>
-) {
-  return Apollo.useMutation<CreateAccessPolicyMutation, CreateAccessPolicyMutationVariables>(
-    CreateAccessPolicyDocument,
-    baseOptions
-  );
-}
+export function useCreateAccessPolicyMutation(baseOptions?: Apollo.MutationHookOptions<CreateAccessPolicyMutation, CreateAccessPolicyMutationVariables>) {
+        return Apollo.useMutation<CreateAccessPolicyMutation, CreateAccessPolicyMutationVariables>(CreateAccessPolicyDocument, baseOptions);
+      }
 export type CreateAccessPolicyMutationHookResult = ReturnType<typeof useCreateAccessPolicyMutation>;
 export type CreateAccessPolicyMutationResult = Apollo.MutationResult<CreateAccessPolicyMutation>;
-export type CreateAccessPolicyMutationOptions = Apollo.BaseMutationOptions<
-  CreateAccessPolicyMutation,
-  CreateAccessPolicyMutationVariables
->;
+export type CreateAccessPolicyMutationOptions = Apollo.BaseMutationOptions<CreateAccessPolicyMutation, CreateAccessPolicyMutationVariables>;
 export const UpdateAccessPolicyDocument = gql`
-  mutation UpdateAccessPolicy($updateAccessPolicyInput: UpdateAccessPolicyInput) {
-    updateAccessPolicy(updateAccessPolicyInput: $updateAccessPolicyInput) {
-      sid
-      name {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
-      }
-      organization {
-        value
-        description
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      permissions {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      tmpl {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      tmplUseAsIs {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      applicableOrgTypes {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      options {
-        key
-        values {
-          label
-          value
-          info
-        }
-      }
-      commands {
-        ...fragmentWebCommand
-      }
-      response
+    mutation UpdateAccessPolicy($updateAccessPolicyInput: UpdateAccessPolicyInput) {
+  updateAccessPolicy(updateAccessPolicyInput: $updateAccessPolicyInput) {
+    sid
+    name {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
       errCode
       errMsg
       errSeverity
     }
+    organization {
+      value
+      description
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    permissions {
+      value {
+        name
+        value
+      }
+      label
+      readOnly
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    tmpl {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    tmplUseAsIs {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    applicableOrgTypes {
+      value {
+        name
+        value
+      }
+      label
+      readOnly
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    options {
+      key
+      values {
+        label
+        value
+        info
+      }
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
   }
-  ${FragmentWebCommandFragmentDoc}
-`;
-export type UpdateAccessPolicyMutationFn = Apollo.MutationFunction<
-  UpdateAccessPolicyMutation,
-  UpdateAccessPolicyMutationVariables
->;
+}
+    ${FragmentWebCommandFragmentDoc}`;
+export type UpdateAccessPolicyMutationFn = Apollo.MutationFunction<UpdateAccessPolicyMutation, UpdateAccessPolicyMutationVariables>;
 
 /**
  * __useUpdateAccessPolicyMutation__
@@ -14243,29 +11153,18 @@ export type UpdateAccessPolicyMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useUpdateAccessPolicyMutation(
-  baseOptions?: Apollo.MutationHookOptions<UpdateAccessPolicyMutation, UpdateAccessPolicyMutationVariables>
-) {
-  return Apollo.useMutation<UpdateAccessPolicyMutation, UpdateAccessPolicyMutationVariables>(
-    UpdateAccessPolicyDocument,
-    baseOptions
-  );
-}
+export function useUpdateAccessPolicyMutation(baseOptions?: Apollo.MutationHookOptions<UpdateAccessPolicyMutation, UpdateAccessPolicyMutationVariables>) {
+        return Apollo.useMutation<UpdateAccessPolicyMutation, UpdateAccessPolicyMutationVariables>(UpdateAccessPolicyDocument, baseOptions);
+      }
 export type UpdateAccessPolicyMutationHookResult = ReturnType<typeof useUpdateAccessPolicyMutation>;
 export type UpdateAccessPolicyMutationResult = Apollo.MutationResult<UpdateAccessPolicyMutation>;
-export type UpdateAccessPolicyMutationOptions = Apollo.BaseMutationOptions<
-  UpdateAccessPolicyMutation,
-  UpdateAccessPolicyMutationVariables
->;
+export type UpdateAccessPolicyMutationOptions = Apollo.BaseMutationOptions<UpdateAccessPolicyMutation, UpdateAccessPolicyMutationVariables>;
 export const DeleteAccessPoliciesDocument = gql`
-  mutation DeleteAccessPolicies($deleteAccessPoliciesInput: DeleteAccessPoliciesInput) {
-    deleteAccessPolicies(deleteAccessPoliciesInput: $deleteAccessPoliciesInput)
-  }
-`;
-export type DeleteAccessPoliciesMutationFn = Apollo.MutationFunction<
-  DeleteAccessPoliciesMutation,
-  DeleteAccessPoliciesMutationVariables
->;
+    mutation DeleteAccessPolicies($deleteAccessPoliciesInput: DeleteAccessPoliciesInput) {
+  deleteAccessPolicies(deleteAccessPoliciesInput: $deleteAccessPoliciesInput)
+}
+    `;
+export type DeleteAccessPoliciesMutationFn = Apollo.MutationFunction<DeleteAccessPoliciesMutation, DeleteAccessPoliciesMutationVariables>;
 
 /**
  * __useDeleteAccessPoliciesMutation__
@@ -14284,29 +11183,18 @@ export type DeleteAccessPoliciesMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useDeleteAccessPoliciesMutation(
-  baseOptions?: Apollo.MutationHookOptions<DeleteAccessPoliciesMutation, DeleteAccessPoliciesMutationVariables>
-) {
-  return Apollo.useMutation<DeleteAccessPoliciesMutation, DeleteAccessPoliciesMutationVariables>(
-    DeleteAccessPoliciesDocument,
-    baseOptions
-  );
-}
+export function useDeleteAccessPoliciesMutation(baseOptions?: Apollo.MutationHookOptions<DeleteAccessPoliciesMutation, DeleteAccessPoliciesMutationVariables>) {
+        return Apollo.useMutation<DeleteAccessPoliciesMutation, DeleteAccessPoliciesMutationVariables>(DeleteAccessPoliciesDocument, baseOptions);
+      }
 export type DeleteAccessPoliciesMutationHookResult = ReturnType<typeof useDeleteAccessPoliciesMutation>;
 export type DeleteAccessPoliciesMutationResult = Apollo.MutationResult<DeleteAccessPoliciesMutation>;
-export type DeleteAccessPoliciesMutationOptions = Apollo.BaseMutationOptions<
-  DeleteAccessPoliciesMutation,
-  DeleteAccessPoliciesMutationVariables
->;
+export type DeleteAccessPoliciesMutationOptions = Apollo.BaseMutationOptions<DeleteAccessPoliciesMutation, DeleteAccessPoliciesMutationVariables>;
 export const DeleteAccessPolicyDocument = gql`
-  mutation DeleteAccessPolicy($policySid: ID!) {
-    deleteAccessPolicy(policySid: $policySid)
-  }
-`;
-export type DeleteAccessPolicyMutationFn = Apollo.MutationFunction<
-  DeleteAccessPolicyMutation,
-  DeleteAccessPolicyMutationVariables
->;
+    mutation DeleteAccessPolicy($policySid: ID!) {
+  deleteAccessPolicy(policySid: $policySid)
+}
+    `;
+export type DeleteAccessPolicyMutationFn = Apollo.MutationFunction<DeleteAccessPolicyMutation, DeleteAccessPolicyMutationVariables>;
 
 /**
  * __useDeleteAccessPolicyMutation__
@@ -14325,95 +11213,85 @@ export type DeleteAccessPolicyMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useDeleteAccessPolicyMutation(
-  baseOptions?: Apollo.MutationHookOptions<DeleteAccessPolicyMutation, DeleteAccessPolicyMutationVariables>
-) {
-  return Apollo.useMutation<DeleteAccessPolicyMutation, DeleteAccessPolicyMutationVariables>(
-    DeleteAccessPolicyDocument,
-    baseOptions
-  );
-}
+export function useDeleteAccessPolicyMutation(baseOptions?: Apollo.MutationHookOptions<DeleteAccessPolicyMutation, DeleteAccessPolicyMutationVariables>) {
+        return Apollo.useMutation<DeleteAccessPolicyMutation, DeleteAccessPolicyMutationVariables>(DeleteAccessPolicyDocument, baseOptions);
+      }
 export type DeleteAccessPolicyMutationHookResult = ReturnType<typeof useDeleteAccessPolicyMutation>;
 export type DeleteAccessPolicyMutationResult = Apollo.MutationResult<DeleteAccessPolicyMutation>;
-export type DeleteAccessPolicyMutationOptions = Apollo.BaseMutationOptions<
-  DeleteAccessPolicyMutation,
-  DeleteAccessPolicyMutationVariables
->;
+export type DeleteAccessPolicyMutationOptions = Apollo.BaseMutationOptions<DeleteAccessPolicyMutation, DeleteAccessPolicyMutationVariables>;
 export const CreateAccessSpecializationDocument = gql`
-  mutation CreateAccessSpecialization($createAccessSpecializationInput: CreateAccessSpecializationInput!) {
-    createAccessSpecialization(createAccessSpecializationInput: $createAccessSpecializationInput) {
-      sid
-      name {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
-      }
-      organization {
-        value
-        description
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      filters {
-        permission
-        label
-        orgSids {
-          value {
-            name
-            value
-          }
-          label
-          readOnly
-          info
-          required
-          visible
-          options
-          query
-          errCode
-          errMsg
-          errSeverity
-        }
-        errCode
-        errMsg
-        errSeverity
-      }
-      options {
-        key
-        values {
-          label
-          value
-          info
-        }
-      }
-      commands {
-        ...fragmentWebCommand
-      }
-      response
+    mutation CreateAccessSpecialization($createAccessSpecializationInput: CreateAccessSpecializationInput!) {
+  createAccessSpecialization(
+    createAccessSpecializationInput: $createAccessSpecializationInput
+  ) {
+    sid
+    name {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
       errCode
       errMsg
       errSeverity
     }
+    organization {
+      value
+      description
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    filters {
+      permission
+      label
+      orgSids {
+        value {
+          name
+          value
+        }
+        label
+        readOnly
+        info
+        required
+        visible
+        options
+        query
+        errCode
+        errMsg
+        errSeverity
+      }
+      errCode
+      errMsg
+      errSeverity
+    }
+    options {
+      key
+      values {
+        label
+        value
+        info
+      }
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
   }
-  ${FragmentWebCommandFragmentDoc}
-`;
-export type CreateAccessSpecializationMutationFn = Apollo.MutationFunction<
-  CreateAccessSpecializationMutation,
-  CreateAccessSpecializationMutationVariables
->;
+}
+    ${FragmentWebCommandFragmentDoc}`;
+export type CreateAccessSpecializationMutationFn = Apollo.MutationFunction<CreateAccessSpecializationMutation, CreateAccessSpecializationMutationVariables>;
 
 /**
  * __useCreateAccessSpecializationMutation__
@@ -14432,98 +11310,85 @@ export type CreateAccessSpecializationMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useCreateAccessSpecializationMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateAccessSpecializationMutation,
-    CreateAccessSpecializationMutationVariables
-  >
-) {
-  return Apollo.useMutation<CreateAccessSpecializationMutation, CreateAccessSpecializationMutationVariables>(
-    CreateAccessSpecializationDocument,
-    baseOptions
-  );
-}
+export function useCreateAccessSpecializationMutation(baseOptions?: Apollo.MutationHookOptions<CreateAccessSpecializationMutation, CreateAccessSpecializationMutationVariables>) {
+        return Apollo.useMutation<CreateAccessSpecializationMutation, CreateAccessSpecializationMutationVariables>(CreateAccessSpecializationDocument, baseOptions);
+      }
 export type CreateAccessSpecializationMutationHookResult = ReturnType<typeof useCreateAccessSpecializationMutation>;
 export type CreateAccessSpecializationMutationResult = Apollo.MutationResult<CreateAccessSpecializationMutation>;
-export type CreateAccessSpecializationMutationOptions = Apollo.BaseMutationOptions<
-  CreateAccessSpecializationMutation,
-  CreateAccessSpecializationMutationVariables
->;
+export type CreateAccessSpecializationMutationOptions = Apollo.BaseMutationOptions<CreateAccessSpecializationMutation, CreateAccessSpecializationMutationVariables>;
 export const UpdateAccessSpecializationDocument = gql`
-  mutation UpdateAccessSpecialization($updateAccessSpecializationInput: UpdateAccessSpecializationInput) {
-    updateAccessSpecialization(updateAccessSpecializationInput: $updateAccessSpecializationInput) {
-      sid
-      name {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
-      }
-      organization {
-        value
-        description
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      filters {
-        permission
-        label
-        orgSids {
-          value {
-            name
-            value
-          }
-          label
-          readOnly
-          info
-          required
-          visible
-          options
-          query
-          errCode
-          errMsg
-          errSeverity
-        }
-        errCode
-        errMsg
-        errSeverity
-      }
-      options {
-        key
-        values {
-          label
-          value
-          info
-        }
-      }
-      commands {
-        ...fragmentWebCommand
-      }
-      response
+    mutation UpdateAccessSpecialization($updateAccessSpecializationInput: UpdateAccessSpecializationInput) {
+  updateAccessSpecialization(
+    updateAccessSpecializationInput: $updateAccessSpecializationInput
+  ) {
+    sid
+    name {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
       errCode
       errMsg
       errSeverity
     }
+    organization {
+      value
+      description
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    filters {
+      permission
+      label
+      orgSids {
+        value {
+          name
+          value
+        }
+        label
+        readOnly
+        info
+        required
+        visible
+        options
+        query
+        errCode
+        errMsg
+        errSeverity
+      }
+      errCode
+      errMsg
+      errSeverity
+    }
+    options {
+      key
+      values {
+        label
+        value
+        info
+      }
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
   }
-  ${FragmentWebCommandFragmentDoc}
-`;
-export type UpdateAccessSpecializationMutationFn = Apollo.MutationFunction<
-  UpdateAccessSpecializationMutation,
-  UpdateAccessSpecializationMutationVariables
->;
+}
+    ${FragmentWebCommandFragmentDoc}`;
+export type UpdateAccessSpecializationMutationFn = Apollo.MutationFunction<UpdateAccessSpecializationMutation, UpdateAccessSpecializationMutationVariables>;
 
 /**
  * __useUpdateAccessSpecializationMutation__
@@ -14542,32 +11407,18 @@ export type UpdateAccessSpecializationMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useUpdateAccessSpecializationMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UpdateAccessSpecializationMutation,
-    UpdateAccessSpecializationMutationVariables
-  >
-) {
-  return Apollo.useMutation<UpdateAccessSpecializationMutation, UpdateAccessSpecializationMutationVariables>(
-    UpdateAccessSpecializationDocument,
-    baseOptions
-  );
-}
+export function useUpdateAccessSpecializationMutation(baseOptions?: Apollo.MutationHookOptions<UpdateAccessSpecializationMutation, UpdateAccessSpecializationMutationVariables>) {
+        return Apollo.useMutation<UpdateAccessSpecializationMutation, UpdateAccessSpecializationMutationVariables>(UpdateAccessSpecializationDocument, baseOptions);
+      }
 export type UpdateAccessSpecializationMutationHookResult = ReturnType<typeof useUpdateAccessSpecializationMutation>;
 export type UpdateAccessSpecializationMutationResult = Apollo.MutationResult<UpdateAccessSpecializationMutation>;
-export type UpdateAccessSpecializationMutationOptions = Apollo.BaseMutationOptions<
-  UpdateAccessSpecializationMutation,
-  UpdateAccessSpecializationMutationVariables
->;
+export type UpdateAccessSpecializationMutationOptions = Apollo.BaseMutationOptions<UpdateAccessSpecializationMutation, UpdateAccessSpecializationMutationVariables>;
 export const DeleteAccessSpecializationDocument = gql`
-  mutation DeleteAccessSpecialization($specializationSid: ID!) {
-    deleteAccessSpecialization(specializationSid: $specializationSid)
-  }
-`;
-export type DeleteAccessSpecializationMutationFn = Apollo.MutationFunction<
-  DeleteAccessSpecializationMutation,
-  DeleteAccessSpecializationMutationVariables
->;
+    mutation DeleteAccessSpecialization($specializationSid: ID!) {
+  deleteAccessSpecialization(specializationSid: $specializationSid)
+}
+    `;
+export type DeleteAccessSpecializationMutationFn = Apollo.MutationFunction<DeleteAccessSpecializationMutation, DeleteAccessSpecializationMutationVariables>;
 
 /**
  * __useDeleteAccessSpecializationMutation__
@@ -14586,201 +11437,188 @@ export type DeleteAccessSpecializationMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useDeleteAccessSpecializationMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    DeleteAccessSpecializationMutation,
-    DeleteAccessSpecializationMutationVariables
-  >
-) {
-  return Apollo.useMutation<DeleteAccessSpecializationMutation, DeleteAccessSpecializationMutationVariables>(
-    DeleteAccessSpecializationDocument,
-    baseOptions
-  );
-}
+export function useDeleteAccessSpecializationMutation(baseOptions?: Apollo.MutationHookOptions<DeleteAccessSpecializationMutation, DeleteAccessSpecializationMutationVariables>) {
+        return Apollo.useMutation<DeleteAccessSpecializationMutation, DeleteAccessSpecializationMutationVariables>(DeleteAccessSpecializationDocument, baseOptions);
+      }
 export type DeleteAccessSpecializationMutationHookResult = ReturnType<typeof useDeleteAccessSpecializationMutation>;
 export type DeleteAccessSpecializationMutationResult = Apollo.MutationResult<DeleteAccessSpecializationMutation>;
-export type DeleteAccessSpecializationMutationOptions = Apollo.BaseMutationOptions<
-  DeleteAccessSpecializationMutation,
-  DeleteAccessSpecializationMutationVariables
->;
+export type DeleteAccessSpecializationMutationOptions = Apollo.BaseMutationOptions<DeleteAccessSpecializationMutation, DeleteAccessSpecializationMutationVariables>;
 export const CreateAccessPolicyGroupDocument = gql`
-  mutation CreateAccessPolicyGroup($createAccessPolicyGroupInput: CreateAccessPolicyGroupInput!) {
-    createAccessPolicyGroup(createAccessPolicyGroupInput: $createAccessPolicyGroupInput) {
-      sid
-      name {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
-      }
-      description {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
-      }
-      organization {
-        value
-        description
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      tmpl {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      tmplUseAsIs {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      applicableOrgTypes {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      policies {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      specializations {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      includeAllSubOrgs {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      includeOrgSids {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      excludeOrgSids {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      options {
-        key
-        values {
-          label
-          value
-          info
-        }
-      }
-      commands {
-        ...fragmentWebCommand
-      }
-      response
+    mutation CreateAccessPolicyGroup($createAccessPolicyGroupInput: CreateAccessPolicyGroupInput!) {
+  createAccessPolicyGroup(
+    createAccessPolicyGroupInput: $createAccessPolicyGroupInput
+  ) {
+    sid
+    name {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
       errCode
       errMsg
       errSeverity
     }
+    description {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
+      errCode
+      errMsg
+      errSeverity
+    }
+    organization {
+      value
+      description
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    tmpl {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    tmplUseAsIs {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    applicableOrgTypes {
+      value {
+        name
+        value
+      }
+      label
+      readOnly
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    policies {
+      value {
+        name
+        value
+      }
+      label
+      readOnly
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    specializations {
+      value {
+        name
+        value
+      }
+      label
+      readOnly
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    includeAllSubOrgs {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    includeOrgSids {
+      value {
+        name
+        value
+      }
+      label
+      readOnly
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    excludeOrgSids {
+      value {
+        name
+        value
+      }
+      label
+      readOnly
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    options {
+      key
+      values {
+        label
+        value
+        info
+      }
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
   }
-  ${FragmentWebCommandFragmentDoc}
-`;
-export type CreateAccessPolicyGroupMutationFn = Apollo.MutationFunction<
-  CreateAccessPolicyGroupMutation,
-  CreateAccessPolicyGroupMutationVariables
->;
+}
+    ${FragmentWebCommandFragmentDoc}`;
+export type CreateAccessPolicyGroupMutationFn = Apollo.MutationFunction<CreateAccessPolicyGroupMutation, CreateAccessPolicyGroupMutationVariables>;
 
 /**
  * __useCreateAccessPolicyGroupMutation__
@@ -14799,198 +11637,188 @@ export type CreateAccessPolicyGroupMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useCreateAccessPolicyGroupMutation(
-  baseOptions?: Apollo.MutationHookOptions<CreateAccessPolicyGroupMutation, CreateAccessPolicyGroupMutationVariables>
-) {
-  return Apollo.useMutation<CreateAccessPolicyGroupMutation, CreateAccessPolicyGroupMutationVariables>(
-    CreateAccessPolicyGroupDocument,
-    baseOptions
-  );
-}
+export function useCreateAccessPolicyGroupMutation(baseOptions?: Apollo.MutationHookOptions<CreateAccessPolicyGroupMutation, CreateAccessPolicyGroupMutationVariables>) {
+        return Apollo.useMutation<CreateAccessPolicyGroupMutation, CreateAccessPolicyGroupMutationVariables>(CreateAccessPolicyGroupDocument, baseOptions);
+      }
 export type CreateAccessPolicyGroupMutationHookResult = ReturnType<typeof useCreateAccessPolicyGroupMutation>;
 export type CreateAccessPolicyGroupMutationResult = Apollo.MutationResult<CreateAccessPolicyGroupMutation>;
-export type CreateAccessPolicyGroupMutationOptions = Apollo.BaseMutationOptions<
-  CreateAccessPolicyGroupMutation,
-  CreateAccessPolicyGroupMutationVariables
->;
+export type CreateAccessPolicyGroupMutationOptions = Apollo.BaseMutationOptions<CreateAccessPolicyGroupMutation, CreateAccessPolicyGroupMutationVariables>;
 export const UpdateAccessPolicyGroupDocument = gql`
-  mutation UpdateAccessPolicyGroup($updateAccessPolicyGroupInput: UpdateAccessPolicyGroupInput) {
-    updateAccessPolicyGroup(updateAccessPolicyGroupInput: $updateAccessPolicyGroupInput) {
-      sid
-      name {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
-      }
-      description {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
-      }
-      organization {
-        value
-        description
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      tmpl {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      tmplUseAsIs {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      applicableOrgTypes {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      policies {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      specializations {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      includeAllSubOrgs {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      includeOrgSids {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      excludeOrgSids {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      options {
-        key
-        values {
-          label
-          value
-          info
-        }
-      }
-      commands {
-        ...fragmentWebCommand
-      }
-      response
+    mutation UpdateAccessPolicyGroup($updateAccessPolicyGroupInput: UpdateAccessPolicyGroupInput) {
+  updateAccessPolicyGroup(
+    updateAccessPolicyGroupInput: $updateAccessPolicyGroupInput
+  ) {
+    sid
+    name {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
       errCode
       errMsg
       errSeverity
     }
+    description {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
+      errCode
+      errMsg
+      errSeverity
+    }
+    organization {
+      value
+      description
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    tmpl {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    tmplUseAsIs {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    applicableOrgTypes {
+      value {
+        name
+        value
+      }
+      label
+      readOnly
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    policies {
+      value {
+        name
+        value
+      }
+      label
+      readOnly
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    specializations {
+      value {
+        name
+        value
+      }
+      label
+      readOnly
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    includeAllSubOrgs {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    includeOrgSids {
+      value {
+        name
+        value
+      }
+      label
+      readOnly
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    excludeOrgSids {
+      value {
+        name
+        value
+      }
+      label
+      readOnly
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    options {
+      key
+      values {
+        label
+        value
+        info
+      }
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
   }
-  ${FragmentWebCommandFragmentDoc}
-`;
-export type UpdateAccessPolicyGroupMutationFn = Apollo.MutationFunction<
-  UpdateAccessPolicyGroupMutation,
-  UpdateAccessPolicyGroupMutationVariables
->;
+}
+    ${FragmentWebCommandFragmentDoc}`;
+export type UpdateAccessPolicyGroupMutationFn = Apollo.MutationFunction<UpdateAccessPolicyGroupMutation, UpdateAccessPolicyGroupMutationVariables>;
 
 /**
  * __useUpdateAccessPolicyGroupMutation__
@@ -15009,29 +11837,18 @@ export type UpdateAccessPolicyGroupMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useUpdateAccessPolicyGroupMutation(
-  baseOptions?: Apollo.MutationHookOptions<UpdateAccessPolicyGroupMutation, UpdateAccessPolicyGroupMutationVariables>
-) {
-  return Apollo.useMutation<UpdateAccessPolicyGroupMutation, UpdateAccessPolicyGroupMutationVariables>(
-    UpdateAccessPolicyGroupDocument,
-    baseOptions
-  );
-}
+export function useUpdateAccessPolicyGroupMutation(baseOptions?: Apollo.MutationHookOptions<UpdateAccessPolicyGroupMutation, UpdateAccessPolicyGroupMutationVariables>) {
+        return Apollo.useMutation<UpdateAccessPolicyGroupMutation, UpdateAccessPolicyGroupMutationVariables>(UpdateAccessPolicyGroupDocument, baseOptions);
+      }
 export type UpdateAccessPolicyGroupMutationHookResult = ReturnType<typeof useUpdateAccessPolicyGroupMutation>;
 export type UpdateAccessPolicyGroupMutationResult = Apollo.MutationResult<UpdateAccessPolicyGroupMutation>;
-export type UpdateAccessPolicyGroupMutationOptions = Apollo.BaseMutationOptions<
-  UpdateAccessPolicyGroupMutation,
-  UpdateAccessPolicyGroupMutationVariables
->;
+export type UpdateAccessPolicyGroupMutationOptions = Apollo.BaseMutationOptions<UpdateAccessPolicyGroupMutation, UpdateAccessPolicyGroupMutationVariables>;
 export const DeleteAccessPolicyGroupDocument = gql`
-  mutation DeleteAccessPolicyGroup($policyGroupSid: ID!) {
-    deleteAccessPolicyGroup(policyGroupSid: $policyGroupSid)
-  }
-`;
-export type DeleteAccessPolicyGroupMutationFn = Apollo.MutationFunction<
-  DeleteAccessPolicyGroupMutation,
-  DeleteAccessPolicyGroupMutationVariables
->;
+    mutation DeleteAccessPolicyGroup($policyGroupSid: ID!) {
+  deleteAccessPolicyGroup(policyGroupSid: $policyGroupSid)
+}
+    `;
+export type DeleteAccessPolicyGroupMutationFn = Apollo.MutationFunction<DeleteAccessPolicyGroupMutation, DeleteAccessPolicyGroupMutationVariables>;
 
 /**
  * __useDeleteAccessPolicyGroupMutation__
@@ -15050,25 +11867,43 @@ export type DeleteAccessPolicyGroupMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useDeleteAccessPolicyGroupMutation(
-  baseOptions?: Apollo.MutationHookOptions<DeleteAccessPolicyGroupMutation, DeleteAccessPolicyGroupMutationVariables>
-) {
-  return Apollo.useMutation<DeleteAccessPolicyGroupMutation, DeleteAccessPolicyGroupMutationVariables>(
-    DeleteAccessPolicyGroupDocument,
-    baseOptions
-  );
-}
+export function useDeleteAccessPolicyGroupMutation(baseOptions?: Apollo.MutationHookOptions<DeleteAccessPolicyGroupMutation, DeleteAccessPolicyGroupMutationVariables>) {
+        return Apollo.useMutation<DeleteAccessPolicyGroupMutation, DeleteAccessPolicyGroupMutationVariables>(DeleteAccessPolicyGroupDocument, baseOptions);
+      }
 export type DeleteAccessPolicyGroupMutationHookResult = ReturnType<typeof useDeleteAccessPolicyGroupMutation>;
 export type DeleteAccessPolicyGroupMutationResult = Apollo.MutationResult<DeleteAccessPolicyGroupMutation>;
-export type DeleteAccessPolicyGroupMutationOptions = Apollo.BaseMutationOptions<
-  DeleteAccessPolicyGroupMutation,
-  DeleteAccessPolicyGroupMutationVariables
->;
+export type DeleteAccessPolicyGroupMutationOptions = Apollo.BaseMutationOptions<DeleteAccessPolicyGroupMutation, DeleteAccessPolicyGroupMutationVariables>;
 export const CreateUserDocument = gql`
-  mutation CreateUser($userInfo: CreateUserInput!, $personInfo: CreatePersonInput!) {
-    createUser(userInfo: $userInfo, personInfo: $personInfo) {
+    mutation CreateUser($userInfo: CreateUserInput!, $personInfo: CreatePersonInput!) {
+  createUser(userInfo: $userInfo, personInfo: $personInfo) {
+    sid
+    email {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
+      errCode
+      errMsg
+      errSeverity
+    }
+    active {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    person {
       sid
-      email {
+      firstNm {
         value
         label
         readOnly
@@ -15081,119 +11916,92 @@ export const CreateUserDocument = gql`
         errMsg
         errSeverity
       }
-      active {
+      lastNm {
         value
         label
         readOnly
         info
         required
         visible
+        min
+        max
         errCode
         errMsg
         errSeverity
-      }
-      person {
-        sid
-        firstNm {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        lastNm {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        errCode
-        errMsg
-        errSeverity
-      }
-      organization {
-        value
-        description
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      accessPolicyGroups {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      sendActivationEmail {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      lastLogin {
-        value
-        description
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      commands {
-        ...fragmentWebCommand
-      }
-      response
-      options {
-        key
-        values {
-          label
-          value
-          info
-        }
       }
       errCode
       errMsg
       errSeverity
     }
+    organization {
+      value
+      description
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    accessPolicyGroups {
+      value {
+        name
+        value
+      }
+      label
+      readOnly
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    sendActivationEmail {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    lastLogin {
+      value
+      description
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    options {
+      key
+      values {
+        label
+        value
+        info
+      }
+    }
+    errCode
+    errMsg
+    errSeverity
   }
-  ${FragmentWebCommandFragmentDoc}
-`;
+}
+    ${FragmentWebCommandFragmentDoc}`;
 export type CreateUserMutationFn = Apollo.MutationFunction<CreateUserMutation, CreateUserMutationVariables>;
 
 /**
@@ -15214,19 +12022,43 @@ export type CreateUserMutationFn = Apollo.MutationFunction<CreateUserMutation, C
  *   },
  * });
  */
-export function useCreateUserMutation(
-  baseOptions?: Apollo.MutationHookOptions<CreateUserMutation, CreateUserMutationVariables>
-) {
-  return Apollo.useMutation<CreateUserMutation, CreateUserMutationVariables>(CreateUserDocument, baseOptions);
-}
+export function useCreateUserMutation(baseOptions?: Apollo.MutationHookOptions<CreateUserMutation, CreateUserMutationVariables>) {
+        return Apollo.useMutation<CreateUserMutation, CreateUserMutationVariables>(CreateUserDocument, baseOptions);
+      }
 export type CreateUserMutationHookResult = ReturnType<typeof useCreateUserMutation>;
 export type CreateUserMutationResult = Apollo.MutationResult<CreateUserMutation>;
 export type CreateUserMutationOptions = Apollo.BaseMutationOptions<CreateUserMutation, CreateUserMutationVariables>;
 export const UpdateUserDocument = gql`
-  mutation UpdateUser($userInfo: UpdateUserInput!) {
-    updateUser(userInfo: $userInfo) {
+    mutation UpdateUser($userInfo: UpdateUserInput!) {
+  updateUser(userInfo: $userInfo) {
+    sid
+    email {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
+      errCode
+      errMsg
+      errSeverity
+    }
+    active {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    person {
       sid
-      email {
+      firstNm {
         value
         label
         readOnly
@@ -15239,119 +12071,92 @@ export const UpdateUserDocument = gql`
         errMsg
         errSeverity
       }
-      active {
+      lastNm {
         value
         label
         readOnly
         info
         required
         visible
+        min
+        max
         errCode
         errMsg
         errSeverity
-      }
-      person {
-        sid
-        firstNm {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        lastNm {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        errCode
-        errMsg
-        errSeverity
-      }
-      organization {
-        value
-        description
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      accessPolicyGroups {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      sendActivationEmail {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      lastLogin {
-        value
-        description
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      commands {
-        ...fragmentWebCommand
-      }
-      response
-      options {
-        key
-        values {
-          label
-          value
-          info
-        }
       }
       errCode
       errMsg
       errSeverity
     }
+    organization {
+      value
+      description
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    accessPolicyGroups {
+      value {
+        name
+        value
+      }
+      label
+      readOnly
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    sendActivationEmail {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    lastLogin {
+      value
+      description
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    options {
+      key
+      values {
+        label
+        value
+        info
+      }
+    }
+    errCode
+    errMsg
+    errSeverity
   }
-  ${FragmentWebCommandFragmentDoc}
-`;
+}
+    ${FragmentWebCommandFragmentDoc}`;
 export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, UpdateUserMutationVariables>;
 
 /**
@@ -15371,19 +12176,45 @@ export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, U
  *   },
  * });
  */
-export function useUpdateUserMutation(
-  baseOptions?: Apollo.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>
-) {
-  return Apollo.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, baseOptions);
-}
+export function useUpdateUserMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>) {
+        return Apollo.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, baseOptions);
+      }
 export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
 export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
 export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
 export const UpdateUserAccessPolicyGroupsDocument = gql`
-  mutation UpdateUserAccessPolicyGroups($userAccessPolicyGroupUpdate: UpdateUserAccessPolicyGroupsInput) {
-    updateUserAccessPolicyGroups(userAccessPolicyGroupUpdate: $userAccessPolicyGroupUpdate) {
+    mutation UpdateUserAccessPolicyGroups($userAccessPolicyGroupUpdate: UpdateUserAccessPolicyGroupsInput) {
+  updateUserAccessPolicyGroups(
+    userAccessPolicyGroupUpdate: $userAccessPolicyGroupUpdate
+  ) {
+    sid
+    email {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
+      errCode
+      errMsg
+      errSeverity
+    }
+    active {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    person {
       sid
-      email {
+      firstNm {
         value
         label
         readOnly
@@ -15396,123 +12227,93 @@ export const UpdateUserAccessPolicyGroupsDocument = gql`
         errMsg
         errSeverity
       }
-      active {
+      lastNm {
         value
         label
         readOnly
         info
         required
         visible
+        min
+        max
         errCode
         errMsg
         errSeverity
-      }
-      person {
-        sid
-        firstNm {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        lastNm {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        errCode
-        errMsg
-        errSeverity
-      }
-      organization {
-        value
-        description
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      accessPolicyGroups {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
-      }
-      sendActivationEmail {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      lastLogin {
-        value
-        description
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      commands {
-        ...fragmentWebCommand
-      }
-      response
-      options {
-        key
-        values {
-          label
-          value
-          info
-        }
       }
       errCode
       errMsg
       errSeverity
     }
+    organization {
+      value
+      description
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    accessPolicyGroups {
+      value {
+        name
+        value
+      }
+      label
+      readOnly
+      info
+      required
+      visible
+      options
+      query
+      errCode
+      errMsg
+      errSeverity
+    }
+    sendActivationEmail {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    lastLogin {
+      value
+      description
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    options {
+      key
+      values {
+        label
+        value
+        info
+      }
+    }
+    errCode
+    errMsg
+    errSeverity
   }
-  ${FragmentWebCommandFragmentDoc}
-`;
-export type UpdateUserAccessPolicyGroupsMutationFn = Apollo.MutationFunction<
-  UpdateUserAccessPolicyGroupsMutation,
-  UpdateUserAccessPolicyGroupsMutationVariables
->;
+}
+    ${FragmentWebCommandFragmentDoc}`;
+export type UpdateUserAccessPolicyGroupsMutationFn = Apollo.MutationFunction<UpdateUserAccessPolicyGroupsMutation, UpdateUserAccessPolicyGroupsMutationVariables>;
 
 /**
  * __useUpdateUserAccessPolicyGroupsMutation__
@@ -15531,28 +12332,17 @@ export type UpdateUserAccessPolicyGroupsMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useUpdateUserAccessPolicyGroupsMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UpdateUserAccessPolicyGroupsMutation,
-    UpdateUserAccessPolicyGroupsMutationVariables
-  >
-) {
-  return Apollo.useMutation<UpdateUserAccessPolicyGroupsMutation, UpdateUserAccessPolicyGroupsMutationVariables>(
-    UpdateUserAccessPolicyGroupsDocument,
-    baseOptions
-  );
-}
+export function useUpdateUserAccessPolicyGroupsMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserAccessPolicyGroupsMutation, UpdateUserAccessPolicyGroupsMutationVariables>) {
+        return Apollo.useMutation<UpdateUserAccessPolicyGroupsMutation, UpdateUserAccessPolicyGroupsMutationVariables>(UpdateUserAccessPolicyGroupsDocument, baseOptions);
+      }
 export type UpdateUserAccessPolicyGroupsMutationHookResult = ReturnType<typeof useUpdateUserAccessPolicyGroupsMutation>;
 export type UpdateUserAccessPolicyGroupsMutationResult = Apollo.MutationResult<UpdateUserAccessPolicyGroupsMutation>;
-export type UpdateUserAccessPolicyGroupsMutationOptions = Apollo.BaseMutationOptions<
-  UpdateUserAccessPolicyGroupsMutation,
-  UpdateUserAccessPolicyGroupsMutationVariables
->;
+export type UpdateUserAccessPolicyGroupsMutationOptions = Apollo.BaseMutationOptions<UpdateUserAccessPolicyGroupsMutation, UpdateUserAccessPolicyGroupsMutationVariables>;
 export const DeactivateUserDocument = gql`
-  mutation DeactivateUser($sidInput: SidInput!) {
-    deactivateUser(sidInput: $sidInput)
-  }
-`;
+    mutation DeactivateUser($sidInput: SidInput!) {
+  deactivateUser(sidInput: $sidInput)
+}
+    `;
 export type DeactivateUserMutationFn = Apollo.MutationFunction<DeactivateUserMutation, DeactivateUserMutationVariables>;
 
 /**
@@ -15572,29 +12362,18 @@ export type DeactivateUserMutationFn = Apollo.MutationFunction<DeactivateUserMut
  *   },
  * });
  */
-export function useDeactivateUserMutation(
-  baseOptions?: Apollo.MutationHookOptions<DeactivateUserMutation, DeactivateUserMutationVariables>
-) {
-  return Apollo.useMutation<DeactivateUserMutation, DeactivateUserMutationVariables>(
-    DeactivateUserDocument,
-    baseOptions
-  );
-}
+export function useDeactivateUserMutation(baseOptions?: Apollo.MutationHookOptions<DeactivateUserMutation, DeactivateUserMutationVariables>) {
+        return Apollo.useMutation<DeactivateUserMutation, DeactivateUserMutationVariables>(DeactivateUserDocument, baseOptions);
+      }
 export type DeactivateUserMutationHookResult = ReturnType<typeof useDeactivateUserMutation>;
 export type DeactivateUserMutationResult = Apollo.MutationResult<DeactivateUserMutation>;
-export type DeactivateUserMutationOptions = Apollo.BaseMutationOptions<
-  DeactivateUserMutation,
-  DeactivateUserMutationVariables
->;
+export type DeactivateUserMutationOptions = Apollo.BaseMutationOptions<DeactivateUserMutation, DeactivateUserMutationVariables>;
 export const DeactivateUsersDocument = gql`
-  mutation DeactivateUsers($sidsInput: SidsInput!) {
-    deactivateUsers(sidsInput: $sidsInput)
-  }
-`;
-export type DeactivateUsersMutationFn = Apollo.MutationFunction<
-  DeactivateUsersMutation,
-  DeactivateUsersMutationVariables
->;
+    mutation DeactivateUsers($sidsInput: SidsInput!) {
+  deactivateUsers(sidsInput: $sidsInput)
+}
+    `;
+export type DeactivateUsersMutationFn = Apollo.MutationFunction<DeactivateUsersMutation, DeactivateUsersMutationVariables>;
 
 /**
  * __useDeactivateUsersMutation__
@@ -15613,25 +12392,17 @@ export type DeactivateUsersMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useDeactivateUsersMutation(
-  baseOptions?: Apollo.MutationHookOptions<DeactivateUsersMutation, DeactivateUsersMutationVariables>
-) {
-  return Apollo.useMutation<DeactivateUsersMutation, DeactivateUsersMutationVariables>(
-    DeactivateUsersDocument,
-    baseOptions
-  );
-}
+export function useDeactivateUsersMutation(baseOptions?: Apollo.MutationHookOptions<DeactivateUsersMutation, DeactivateUsersMutationVariables>) {
+        return Apollo.useMutation<DeactivateUsersMutation, DeactivateUsersMutationVariables>(DeactivateUsersDocument, baseOptions);
+      }
 export type DeactivateUsersMutationHookResult = ReturnType<typeof useDeactivateUsersMutation>;
 export type DeactivateUsersMutationResult = Apollo.MutationResult<DeactivateUsersMutation>;
-export type DeactivateUsersMutationOptions = Apollo.BaseMutationOptions<
-  DeactivateUsersMutation,
-  DeactivateUsersMutationVariables
->;
+export type DeactivateUsersMutationOptions = Apollo.BaseMutationOptions<DeactivateUsersMutation, DeactivateUsersMutationVariables>;
 export const ActivateUserDocument = gql`
-  mutation ActivateUser($sidInput: SidInput!) {
-    activateUser(sidInput: $sidInput)
-  }
-`;
+    mutation ActivateUser($sidInput: SidInput!) {
+  activateUser(sidInput: $sidInput)
+}
+    `;
 export type ActivateUserMutationFn = Apollo.MutationFunction<ActivateUserMutation, ActivateUserMutationVariables>;
 
 /**
@@ -15651,22 +12422,17 @@ export type ActivateUserMutationFn = Apollo.MutationFunction<ActivateUserMutatio
  *   },
  * });
  */
-export function useActivateUserMutation(
-  baseOptions?: Apollo.MutationHookOptions<ActivateUserMutation, ActivateUserMutationVariables>
-) {
-  return Apollo.useMutation<ActivateUserMutation, ActivateUserMutationVariables>(ActivateUserDocument, baseOptions);
-}
+export function useActivateUserMutation(baseOptions?: Apollo.MutationHookOptions<ActivateUserMutation, ActivateUserMutationVariables>) {
+        return Apollo.useMutation<ActivateUserMutation, ActivateUserMutationVariables>(ActivateUserDocument, baseOptions);
+      }
 export type ActivateUserMutationHookResult = ReturnType<typeof useActivateUserMutation>;
 export type ActivateUserMutationResult = Apollo.MutationResult<ActivateUserMutation>;
-export type ActivateUserMutationOptions = Apollo.BaseMutationOptions<
-  ActivateUserMutation,
-  ActivateUserMutationVariables
->;
+export type ActivateUserMutationOptions = Apollo.BaseMutationOptions<ActivateUserMutation, ActivateUserMutationVariables>;
 export const ActivateUsersDocument = gql`
-  mutation ActivateUsers($sidsInput: SidsInput!) {
-    activateUsers(sidsInput: $sidsInput)
-  }
-`;
+    mutation ActivateUsers($sidsInput: SidsInput!) {
+  activateUsers(sidsInput: $sidsInput)
+}
+    `;
 export type ActivateUsersMutationFn = Apollo.MutationFunction<ActivateUsersMutation, ActivateUsersMutationVariables>;
 
 /**
@@ -15686,54 +12452,46 @@ export type ActivateUsersMutationFn = Apollo.MutationFunction<ActivateUsersMutat
  *   },
  * });
  */
-export function useActivateUsersMutation(
-  baseOptions?: Apollo.MutationHookOptions<ActivateUsersMutation, ActivateUsersMutationVariables>
-) {
-  return Apollo.useMutation<ActivateUsersMutation, ActivateUsersMutationVariables>(ActivateUsersDocument, baseOptions);
-}
+export function useActivateUsersMutation(baseOptions?: Apollo.MutationHookOptions<ActivateUsersMutation, ActivateUsersMutationVariables>) {
+        return Apollo.useMutation<ActivateUsersMutation, ActivateUsersMutationVariables>(ActivateUsersDocument, baseOptions);
+      }
 export type ActivateUsersMutationHookResult = ReturnType<typeof useActivateUsersMutation>;
 export type ActivateUsersMutationResult = Apollo.MutationResult<ActivateUsersMutation>;
-export type ActivateUsersMutationOptions = Apollo.BaseMutationOptions<
-  ActivateUsersMutation,
-  ActivateUsersMutationVariables
->;
+export type ActivateUsersMutationOptions = Apollo.BaseMutationOptions<ActivateUsersMutation, ActivateUsersMutationVariables>;
 export const CreateDashThemeColorDocument = gql`
-  mutation CreateDashThemeColor($createDashThemeColorInput: CreateDashThemeColorInput!) {
-    createDashThemeColor(createDashThemeColorInput: $createDashThemeColorInput) {
-      id
-      defaultPalette
-      themeColorMode
-      allowDark
-      paletteNm
-      themePrimary
-      themeLighterAlt
-      themeLighter
-      themeLight
-      themeTertiary
-      themeSecondary
-      themeDarkAlt
-      themeDark
-      themeDarker
-      neutralLighterAlt
-      neutralLighter
-      neutralLight
-      neutralQuaternaryAlt
-      neutralQuaternary
-      neutralTertiaryAlt
-      neutralTertiary
-      neutralSecondary
-      neutralPrimaryAlt
-      neutralPrimary
-      neutralDark
-      black
-      white
-    }
+    mutation CreateDashThemeColor($createDashThemeColorInput: CreateDashThemeColorInput!) {
+  createDashThemeColor(createDashThemeColorInput: $createDashThemeColorInput) {
+    id
+    defaultPalette
+    themeColorMode
+    allowDark
+    paletteNm
+    themePrimary
+    themeLighterAlt
+    themeLighter
+    themeLight
+    themeTertiary
+    themeSecondary
+    themeDarkAlt
+    themeDark
+    themeDarker
+    neutralLighterAlt
+    neutralLighter
+    neutralLight
+    neutralQuaternaryAlt
+    neutralQuaternary
+    neutralTertiaryAlt
+    neutralTertiary
+    neutralSecondary
+    neutralPrimaryAlt
+    neutralPrimary
+    neutralDark
+    black
+    white
   }
-`;
-export type CreateDashThemeColorMutationFn = Apollo.MutationFunction<
-  CreateDashThemeColorMutation,
-  CreateDashThemeColorMutationVariables
->;
+}
+    `;
+export type CreateDashThemeColorMutationFn = Apollo.MutationFunction<CreateDashThemeColorMutation, CreateDashThemeColorMutationVariables>;
 
 /**
  * __useCreateDashThemeColorMutation__
@@ -15752,57 +12510,46 @@ export type CreateDashThemeColorMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useCreateDashThemeColorMutation(
-  baseOptions?: Apollo.MutationHookOptions<CreateDashThemeColorMutation, CreateDashThemeColorMutationVariables>
-) {
-  return Apollo.useMutation<CreateDashThemeColorMutation, CreateDashThemeColorMutationVariables>(
-    CreateDashThemeColorDocument,
-    baseOptions
-  );
-}
+export function useCreateDashThemeColorMutation(baseOptions?: Apollo.MutationHookOptions<CreateDashThemeColorMutation, CreateDashThemeColorMutationVariables>) {
+        return Apollo.useMutation<CreateDashThemeColorMutation, CreateDashThemeColorMutationVariables>(CreateDashThemeColorDocument, baseOptions);
+      }
 export type CreateDashThemeColorMutationHookResult = ReturnType<typeof useCreateDashThemeColorMutation>;
 export type CreateDashThemeColorMutationResult = Apollo.MutationResult<CreateDashThemeColorMutation>;
-export type CreateDashThemeColorMutationOptions = Apollo.BaseMutationOptions<
-  CreateDashThemeColorMutation,
-  CreateDashThemeColorMutationVariables
->;
+export type CreateDashThemeColorMutationOptions = Apollo.BaseMutationOptions<CreateDashThemeColorMutation, CreateDashThemeColorMutationVariables>;
 export const UpdateDashThemeColorDocument = gql`
-  mutation UpdateDashThemeColor($updateDashThemeColorInput: UpdateDashThemeColorInput!) {
-    updateDashThemeColor(updateDashThemeColorInput: $updateDashThemeColorInput) {
-      id
-      defaultPalette
-      themeColorMode
-      allowDark
-      paletteNm
-      themePrimary
-      themeLighterAlt
-      themeLighter
-      themeLight
-      themeTertiary
-      themeSecondary
-      themeDarkAlt
-      themeDark
-      themeDarker
-      neutralLighterAlt
-      neutralLighter
-      neutralLight
-      neutralQuaternaryAlt
-      neutralQuaternary
-      neutralTertiaryAlt
-      neutralTertiary
-      neutralSecondary
-      neutralPrimaryAlt
-      neutralPrimary
-      neutralDark
-      black
-      white
-    }
+    mutation UpdateDashThemeColor($updateDashThemeColorInput: UpdateDashThemeColorInput!) {
+  updateDashThemeColor(updateDashThemeColorInput: $updateDashThemeColorInput) {
+    id
+    defaultPalette
+    themeColorMode
+    allowDark
+    paletteNm
+    themePrimary
+    themeLighterAlt
+    themeLighter
+    themeLight
+    themeTertiary
+    themeSecondary
+    themeDarkAlt
+    themeDark
+    themeDarker
+    neutralLighterAlt
+    neutralLighter
+    neutralLight
+    neutralQuaternaryAlt
+    neutralQuaternary
+    neutralTertiaryAlt
+    neutralTertiary
+    neutralSecondary
+    neutralPrimaryAlt
+    neutralPrimary
+    neutralDark
+    black
+    white
   }
-`;
-export type UpdateDashThemeColorMutationFn = Apollo.MutationFunction<
-  UpdateDashThemeColorMutation,
-  UpdateDashThemeColorMutationVariables
->;
+}
+    `;
+export type UpdateDashThemeColorMutationFn = Apollo.MutationFunction<UpdateDashThemeColorMutation, UpdateDashThemeColorMutationVariables>;
 
 /**
  * __useUpdateDashThemeColorMutation__
@@ -15821,253 +12568,21 @@ export type UpdateDashThemeColorMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useUpdateDashThemeColorMutation(
-  baseOptions?: Apollo.MutationHookOptions<UpdateDashThemeColorMutation, UpdateDashThemeColorMutationVariables>
-) {
-  return Apollo.useMutation<UpdateDashThemeColorMutation, UpdateDashThemeColorMutationVariables>(
-    UpdateDashThemeColorDocument,
-    baseOptions
-  );
-}
+export function useUpdateDashThemeColorMutation(baseOptions?: Apollo.MutationHookOptions<UpdateDashThemeColorMutation, UpdateDashThemeColorMutationVariables>) {
+        return Apollo.useMutation<UpdateDashThemeColorMutation, UpdateDashThemeColorMutationVariables>(UpdateDashThemeColorDocument, baseOptions);
+      }
 export type UpdateDashThemeColorMutationHookResult = ReturnType<typeof useUpdateDashThemeColorMutation>;
 export type UpdateDashThemeColorMutationResult = Apollo.MutationResult<UpdateDashThemeColorMutation>;
-export type UpdateDashThemeColorMutationOptions = Apollo.BaseMutationOptions<
-  UpdateDashThemeColorMutation,
-  UpdateDashThemeColorMutationVariables
->;
+export type UpdateDashThemeColorMutationOptions = Apollo.BaseMutationOptions<UpdateDashThemeColorMutation, UpdateDashThemeColorMutationVariables>;
 export const CreateDefaultDashThemeDocument = gql`
-  mutation CreateDefaultDashTheme($createDefaultDashThemeInput: CreateDefaultDashThemeInput) {
-    createDefaultDashTheme(createDefaultDashThemeInput: $createDefaultDashThemeInput) {
-      id
-      themeColorMode
-      themeFontSize
-      dashThemeColor {
-        id
-        defaultPalette
-        themeColorMode
-        allowDark
-        paletteNm
-        themePrimary
-        themeLighterAlt
-        themeLighter
-        themeLight
-        themeTertiary
-        themeSecondary
-        themeDarkAlt
-        themeDark
-        themeDarker
-        neutralLighterAlt
-        neutralLighter
-        neutralLight
-        neutralQuaternaryAlt
-        neutralQuaternary
-        neutralTertiaryAlt
-        neutralTertiary
-        neutralSecondary
-        neutralPrimaryAlt
-        neutralPrimary
-        neutralDark
-        black
-        white
-      }
-    }
-  }
-`;
-export type CreateDefaultDashThemeMutationFn = Apollo.MutationFunction<
-  CreateDefaultDashThemeMutation,
-  CreateDefaultDashThemeMutationVariables
->;
-
-/**
- * __useCreateDefaultDashThemeMutation__
- *
- * To run a mutation, you first call `useCreateDefaultDashThemeMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateDefaultDashThemeMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createDefaultDashThemeMutation, { data, loading, error }] = useCreateDefaultDashThemeMutation({
- *   variables: {
- *      createDefaultDashThemeInput: // value for 'createDefaultDashThemeInput'
- *   },
- * });
- */
-export function useCreateDefaultDashThemeMutation(
-  baseOptions?: Apollo.MutationHookOptions<CreateDefaultDashThemeMutation, CreateDefaultDashThemeMutationVariables>
-) {
-  return Apollo.useMutation<CreateDefaultDashThemeMutation, CreateDefaultDashThemeMutationVariables>(
-    CreateDefaultDashThemeDocument,
-    baseOptions
-  );
-}
-export type CreateDefaultDashThemeMutationHookResult = ReturnType<typeof useCreateDefaultDashThemeMutation>;
-export type CreateDefaultDashThemeMutationResult = Apollo.MutationResult<CreateDefaultDashThemeMutation>;
-export type CreateDefaultDashThemeMutationOptions = Apollo.BaseMutationOptions<
-  CreateDefaultDashThemeMutation,
-  CreateDefaultDashThemeMutationVariables
->;
-export const UpdateDefaultDashThemeDocument = gql`
-  mutation UpdateDefaultDashTheme($updateDefaultDashThemeInput: UpdateDefaultDashThemeInput) {
-    updateDefaultDashTheme(updateDefaultDashThemeInput: $updateDefaultDashThemeInput) {
-      id
-      themeColorMode
-      themeFontSize
-      dashThemeColor {
-        id
-        defaultPalette
-        themeColorMode
-        allowDark
-        paletteNm
-        themePrimary
-        themeLighterAlt
-        themeLighter
-        themeLight
-        themeTertiary
-        themeSecondary
-        themeDarkAlt
-        themeDark
-        themeDarker
-        neutralLighterAlt
-        neutralLighter
-        neutralLight
-        neutralQuaternaryAlt
-        neutralQuaternary
-        neutralTertiaryAlt
-        neutralTertiary
-        neutralSecondary
-        neutralPrimaryAlt
-        neutralPrimary
-        neutralDark
-        black
-        white
-      }
-    }
-  }
-`;
-export type UpdateDefaultDashThemeMutationFn = Apollo.MutationFunction<
-  UpdateDefaultDashThemeMutation,
-  UpdateDefaultDashThemeMutationVariables
->;
-
-/**
- * __useUpdateDefaultDashThemeMutation__
- *
- * To run a mutation, you first call `useUpdateDefaultDashThemeMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateDefaultDashThemeMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateDefaultDashThemeMutation, { data, loading, error }] = useUpdateDefaultDashThemeMutation({
- *   variables: {
- *      updateDefaultDashThemeInput: // value for 'updateDefaultDashThemeInput'
- *   },
- * });
- */
-export function useUpdateDefaultDashThemeMutation(
-  baseOptions?: Apollo.MutationHookOptions<UpdateDefaultDashThemeMutation, UpdateDefaultDashThemeMutationVariables>
-) {
-  return Apollo.useMutation<UpdateDefaultDashThemeMutation, UpdateDefaultDashThemeMutationVariables>(
-    UpdateDefaultDashThemeDocument,
-    baseOptions
-  );
-}
-export type UpdateDefaultDashThemeMutationHookResult = ReturnType<typeof useUpdateDefaultDashThemeMutation>;
-export type UpdateDefaultDashThemeMutationResult = Apollo.MutationResult<UpdateDefaultDashThemeMutation>;
-export type UpdateDefaultDashThemeMutationOptions = Apollo.BaseMutationOptions<
-  UpdateDefaultDashThemeMutation,
-  UpdateDefaultDashThemeMutationVariables
->;
-export const RemoveDashThemeColorDocument = gql`
-  mutation RemoveDashThemeColor($ownedInputSid: OwnedInputSid) {
-    removeDashThemeColor(ownedInputSid: $ownedInputSid)
-  }
-`;
-export type RemoveDashThemeColorMutationFn = Apollo.MutationFunction<
-  RemoveDashThemeColorMutation,
-  RemoveDashThemeColorMutationVariables
->;
-
-/**
- * __useRemoveDashThemeColorMutation__
- *
- * To run a mutation, you first call `useRemoveDashThemeColorMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRemoveDashThemeColorMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [removeDashThemeColorMutation, { data, loading, error }] = useRemoveDashThemeColorMutation({
- *   variables: {
- *      ownedInputSid: // value for 'ownedInputSid'
- *   },
- * });
- */
-export function useRemoveDashThemeColorMutation(
-  baseOptions?: Apollo.MutationHookOptions<RemoveDashThemeColorMutation, RemoveDashThemeColorMutationVariables>
-) {
-  return Apollo.useMutation<RemoveDashThemeColorMutation, RemoveDashThemeColorMutationVariables>(
-    RemoveDashThemeColorDocument,
-    baseOptions
-  );
-}
-export type RemoveDashThemeColorMutationHookResult = ReturnType<typeof useRemoveDashThemeColorMutation>;
-export type RemoveDashThemeColorMutationResult = Apollo.MutationResult<RemoveDashThemeColorMutation>;
-export type RemoveDashThemeColorMutationOptions = Apollo.BaseMutationOptions<
-  RemoveDashThemeColorMutation,
-  RemoveDashThemeColorMutationVariables
->;
-export const RemoveDefaultDashThemeDocument = gql`
-  mutation RemoveDefaultDashTheme($ownedInputSid: OwnedInputSid) {
-    removeDefaultDashTheme(ownedInputSid: $ownedInputSid)
-  }
-`;
-export type RemoveDefaultDashThemeMutationFn = Apollo.MutationFunction<
-  RemoveDefaultDashThemeMutation,
-  RemoveDefaultDashThemeMutationVariables
->;
-
-/**
- * __useRemoveDefaultDashThemeMutation__
- *
- * To run a mutation, you first call `useRemoveDefaultDashThemeMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRemoveDefaultDashThemeMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [removeDefaultDashThemeMutation, { data, loading, error }] = useRemoveDefaultDashThemeMutation({
- *   variables: {
- *      ownedInputSid: // value for 'ownedInputSid'
- *   },
- * });
- */
-export function useRemoveDefaultDashThemeMutation(
-  baseOptions?: Apollo.MutationHookOptions<RemoveDefaultDashThemeMutation, RemoveDefaultDashThemeMutationVariables>
-) {
-  return Apollo.useMutation<RemoveDefaultDashThemeMutation, RemoveDefaultDashThemeMutationVariables>(
-    RemoveDefaultDashThemeDocument,
-    baseOptions
-  );
-}
-export type RemoveDefaultDashThemeMutationHookResult = ReturnType<typeof useRemoveDefaultDashThemeMutation>;
-export type RemoveDefaultDashThemeMutationResult = Apollo.MutationResult<RemoveDefaultDashThemeMutation>;
-export type RemoveDefaultDashThemeMutationOptions = Apollo.BaseMutationOptions<
-  RemoveDefaultDashThemeMutation,
-  RemoveDefaultDashThemeMutationVariables
->;
-export const SetDashThemeColorDefaultDocument = gql`
-  mutation SetDashThemeColorDefault($dashThemeColorDefaultInput: DashThemeColorDefaultInput) {
-    setDashThemeColorDefault(dashThemeColorDefaultInput: $dashThemeColorDefaultInput) {
+    mutation CreateDefaultDashTheme($createDefaultDashThemeInput: CreateDefaultDashThemeInput) {
+  createDefaultDashTheme(
+    createDefaultDashThemeInput: $createDefaultDashThemeInput
+  ) {
+    id
+    themeColorMode
+    themeFontSize
+    dashThemeColor {
       id
       defaultPalette
       themeColorMode
@@ -16097,11 +12612,194 @@ export const SetDashThemeColorDefaultDocument = gql`
       white
     }
   }
-`;
-export type SetDashThemeColorDefaultMutationFn = Apollo.MutationFunction<
-  SetDashThemeColorDefaultMutation,
-  SetDashThemeColorDefaultMutationVariables
->;
+}
+    `;
+export type CreateDefaultDashThemeMutationFn = Apollo.MutationFunction<CreateDefaultDashThemeMutation, CreateDefaultDashThemeMutationVariables>;
+
+/**
+ * __useCreateDefaultDashThemeMutation__
+ *
+ * To run a mutation, you first call `useCreateDefaultDashThemeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateDefaultDashThemeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createDefaultDashThemeMutation, { data, loading, error }] = useCreateDefaultDashThemeMutation({
+ *   variables: {
+ *      createDefaultDashThemeInput: // value for 'createDefaultDashThemeInput'
+ *   },
+ * });
+ */
+export function useCreateDefaultDashThemeMutation(baseOptions?: Apollo.MutationHookOptions<CreateDefaultDashThemeMutation, CreateDefaultDashThemeMutationVariables>) {
+        return Apollo.useMutation<CreateDefaultDashThemeMutation, CreateDefaultDashThemeMutationVariables>(CreateDefaultDashThemeDocument, baseOptions);
+      }
+export type CreateDefaultDashThemeMutationHookResult = ReturnType<typeof useCreateDefaultDashThemeMutation>;
+export type CreateDefaultDashThemeMutationResult = Apollo.MutationResult<CreateDefaultDashThemeMutation>;
+export type CreateDefaultDashThemeMutationOptions = Apollo.BaseMutationOptions<CreateDefaultDashThemeMutation, CreateDefaultDashThemeMutationVariables>;
+export const UpdateDefaultDashThemeDocument = gql`
+    mutation UpdateDefaultDashTheme($updateDefaultDashThemeInput: UpdateDefaultDashThemeInput) {
+  updateDefaultDashTheme(
+    updateDefaultDashThemeInput: $updateDefaultDashThemeInput
+  ) {
+    id
+    themeColorMode
+    themeFontSize
+    dashThemeColor {
+      id
+      defaultPalette
+      themeColorMode
+      allowDark
+      paletteNm
+      themePrimary
+      themeLighterAlt
+      themeLighter
+      themeLight
+      themeTertiary
+      themeSecondary
+      themeDarkAlt
+      themeDark
+      themeDarker
+      neutralLighterAlt
+      neutralLighter
+      neutralLight
+      neutralQuaternaryAlt
+      neutralQuaternary
+      neutralTertiaryAlt
+      neutralTertiary
+      neutralSecondary
+      neutralPrimaryAlt
+      neutralPrimary
+      neutralDark
+      black
+      white
+    }
+  }
+}
+    `;
+export type UpdateDefaultDashThemeMutationFn = Apollo.MutationFunction<UpdateDefaultDashThemeMutation, UpdateDefaultDashThemeMutationVariables>;
+
+/**
+ * __useUpdateDefaultDashThemeMutation__
+ *
+ * To run a mutation, you first call `useUpdateDefaultDashThemeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateDefaultDashThemeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateDefaultDashThemeMutation, { data, loading, error }] = useUpdateDefaultDashThemeMutation({
+ *   variables: {
+ *      updateDefaultDashThemeInput: // value for 'updateDefaultDashThemeInput'
+ *   },
+ * });
+ */
+export function useUpdateDefaultDashThemeMutation(baseOptions?: Apollo.MutationHookOptions<UpdateDefaultDashThemeMutation, UpdateDefaultDashThemeMutationVariables>) {
+        return Apollo.useMutation<UpdateDefaultDashThemeMutation, UpdateDefaultDashThemeMutationVariables>(UpdateDefaultDashThemeDocument, baseOptions);
+      }
+export type UpdateDefaultDashThemeMutationHookResult = ReturnType<typeof useUpdateDefaultDashThemeMutation>;
+export type UpdateDefaultDashThemeMutationResult = Apollo.MutationResult<UpdateDefaultDashThemeMutation>;
+export type UpdateDefaultDashThemeMutationOptions = Apollo.BaseMutationOptions<UpdateDefaultDashThemeMutation, UpdateDefaultDashThemeMutationVariables>;
+export const RemoveDashThemeColorDocument = gql`
+    mutation RemoveDashThemeColor($ownedInputSid: OwnedInputSid) {
+  removeDashThemeColor(ownedInputSid: $ownedInputSid)
+}
+    `;
+export type RemoveDashThemeColorMutationFn = Apollo.MutationFunction<RemoveDashThemeColorMutation, RemoveDashThemeColorMutationVariables>;
+
+/**
+ * __useRemoveDashThemeColorMutation__
+ *
+ * To run a mutation, you first call `useRemoveDashThemeColorMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveDashThemeColorMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeDashThemeColorMutation, { data, loading, error }] = useRemoveDashThemeColorMutation({
+ *   variables: {
+ *      ownedInputSid: // value for 'ownedInputSid'
+ *   },
+ * });
+ */
+export function useRemoveDashThemeColorMutation(baseOptions?: Apollo.MutationHookOptions<RemoveDashThemeColorMutation, RemoveDashThemeColorMutationVariables>) {
+        return Apollo.useMutation<RemoveDashThemeColorMutation, RemoveDashThemeColorMutationVariables>(RemoveDashThemeColorDocument, baseOptions);
+      }
+export type RemoveDashThemeColorMutationHookResult = ReturnType<typeof useRemoveDashThemeColorMutation>;
+export type RemoveDashThemeColorMutationResult = Apollo.MutationResult<RemoveDashThemeColorMutation>;
+export type RemoveDashThemeColorMutationOptions = Apollo.BaseMutationOptions<RemoveDashThemeColorMutation, RemoveDashThemeColorMutationVariables>;
+export const RemoveDefaultDashThemeDocument = gql`
+    mutation RemoveDefaultDashTheme($ownedInputSid: OwnedInputSid) {
+  removeDefaultDashTheme(ownedInputSid: $ownedInputSid)
+}
+    `;
+export type RemoveDefaultDashThemeMutationFn = Apollo.MutationFunction<RemoveDefaultDashThemeMutation, RemoveDefaultDashThemeMutationVariables>;
+
+/**
+ * __useRemoveDefaultDashThemeMutation__
+ *
+ * To run a mutation, you first call `useRemoveDefaultDashThemeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveDefaultDashThemeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeDefaultDashThemeMutation, { data, loading, error }] = useRemoveDefaultDashThemeMutation({
+ *   variables: {
+ *      ownedInputSid: // value for 'ownedInputSid'
+ *   },
+ * });
+ */
+export function useRemoveDefaultDashThemeMutation(baseOptions?: Apollo.MutationHookOptions<RemoveDefaultDashThemeMutation, RemoveDefaultDashThemeMutationVariables>) {
+        return Apollo.useMutation<RemoveDefaultDashThemeMutation, RemoveDefaultDashThemeMutationVariables>(RemoveDefaultDashThemeDocument, baseOptions);
+      }
+export type RemoveDefaultDashThemeMutationHookResult = ReturnType<typeof useRemoveDefaultDashThemeMutation>;
+export type RemoveDefaultDashThemeMutationResult = Apollo.MutationResult<RemoveDefaultDashThemeMutation>;
+export type RemoveDefaultDashThemeMutationOptions = Apollo.BaseMutationOptions<RemoveDefaultDashThemeMutation, RemoveDefaultDashThemeMutationVariables>;
+export const SetDashThemeColorDefaultDocument = gql`
+    mutation SetDashThemeColorDefault($dashThemeColorDefaultInput: DashThemeColorDefaultInput) {
+  setDashThemeColorDefault(
+    dashThemeColorDefaultInput: $dashThemeColorDefaultInput
+  ) {
+    id
+    defaultPalette
+    themeColorMode
+    allowDark
+    paletteNm
+    themePrimary
+    themeLighterAlt
+    themeLighter
+    themeLight
+    themeTertiary
+    themeSecondary
+    themeDarkAlt
+    themeDark
+    themeDarker
+    neutralLighterAlt
+    neutralLighter
+    neutralLight
+    neutralQuaternaryAlt
+    neutralQuaternary
+    neutralTertiaryAlt
+    neutralTertiary
+    neutralSecondary
+    neutralPrimaryAlt
+    neutralPrimary
+    neutralDark
+    black
+    white
+  }
+}
+    `;
+export type SetDashThemeColorDefaultMutationFn = Apollo.MutationFunction<SetDashThemeColorDefaultMutation, SetDashThemeColorDefaultMutationVariables>;
 
 /**
  * __useSetDashThemeColorDefaultMutation__
@@ -16120,62 +12818,51 @@ export type SetDashThemeColorDefaultMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useSetDashThemeColorDefaultMutation(
-  baseOptions?: Apollo.MutationHookOptions<SetDashThemeColorDefaultMutation, SetDashThemeColorDefaultMutationVariables>
-) {
-  return Apollo.useMutation<SetDashThemeColorDefaultMutation, SetDashThemeColorDefaultMutationVariables>(
-    SetDashThemeColorDefaultDocument,
-    baseOptions
-  );
-}
+export function useSetDashThemeColorDefaultMutation(baseOptions?: Apollo.MutationHookOptions<SetDashThemeColorDefaultMutation, SetDashThemeColorDefaultMutationVariables>) {
+        return Apollo.useMutation<SetDashThemeColorDefaultMutation, SetDashThemeColorDefaultMutationVariables>(SetDashThemeColorDefaultDocument, baseOptions);
+      }
 export type SetDashThemeColorDefaultMutationHookResult = ReturnType<typeof useSetDashThemeColorDefaultMutation>;
 export type SetDashThemeColorDefaultMutationResult = Apollo.MutationResult<SetDashThemeColorDefaultMutation>;
-export type SetDashThemeColorDefaultMutationOptions = Apollo.BaseMutationOptions<
-  SetDashThemeColorDefaultMutation,
-  SetDashThemeColorDefaultMutationVariables
->;
+export type SetDashThemeColorDefaultMutationOptions = Apollo.BaseMutationOptions<SetDashThemeColorDefaultMutation, SetDashThemeColorDefaultMutationVariables>;
 export const CreateOrUpdateOwnDashThemeDocument = gql`
-  mutation CreateOrUpdateOwnDashTheme($dashThemeInput: DashThemeInput) {
-    createOrUpdateOwnDashTheme(dashThemeInput: $dashThemeInput) {
+    mutation CreateOrUpdateOwnDashTheme($dashThemeInput: DashThemeInput) {
+  createOrUpdateOwnDashTheme(dashThemeInput: $dashThemeInput) {
+    id
+    themeColorMode
+    themeFontSize
+    dashThemeColor {
       id
+      defaultPalette
       themeColorMode
-      themeFontSize
-      dashThemeColor {
-        id
-        defaultPalette
-        themeColorMode
-        allowDark
-        paletteNm
-        themePrimary
-        themeLighterAlt
-        themeLighter
-        themeLight
-        themeTertiary
-        themeSecondary
-        themeDarkAlt
-        themeDark
-        themeDarker
-        neutralLighterAlt
-        neutralLighter
-        neutralLight
-        neutralQuaternaryAlt
-        neutralQuaternary
-        neutralTertiaryAlt
-        neutralTertiary
-        neutralSecondary
-        neutralPrimaryAlt
-        neutralPrimary
-        neutralDark
-        black
-        white
-      }
+      allowDark
+      paletteNm
+      themePrimary
+      themeLighterAlt
+      themeLighter
+      themeLight
+      themeTertiary
+      themeSecondary
+      themeDarkAlt
+      themeDark
+      themeDarker
+      neutralLighterAlt
+      neutralLighter
+      neutralLight
+      neutralQuaternaryAlt
+      neutralQuaternary
+      neutralTertiaryAlt
+      neutralTertiary
+      neutralSecondary
+      neutralPrimaryAlt
+      neutralPrimary
+      neutralDark
+      black
+      white
     }
   }
-`;
-export type CreateOrUpdateOwnDashThemeMutationFn = Apollo.MutationFunction<
-  CreateOrUpdateOwnDashThemeMutation,
-  CreateOrUpdateOwnDashThemeMutationVariables
->;
+}
+    `;
+export type CreateOrUpdateOwnDashThemeMutationFn = Apollo.MutationFunction<CreateOrUpdateOwnDashThemeMutation, CreateOrUpdateOwnDashThemeMutationVariables>;
 
 /**
  * __useCreateOrUpdateOwnDashThemeMutation__
@@ -16194,65 +12881,51 @@ export type CreateOrUpdateOwnDashThemeMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useCreateOrUpdateOwnDashThemeMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateOrUpdateOwnDashThemeMutation,
-    CreateOrUpdateOwnDashThemeMutationVariables
-  >
-) {
-  return Apollo.useMutation<CreateOrUpdateOwnDashThemeMutation, CreateOrUpdateOwnDashThemeMutationVariables>(
-    CreateOrUpdateOwnDashThemeDocument,
-    baseOptions
-  );
-}
+export function useCreateOrUpdateOwnDashThemeMutation(baseOptions?: Apollo.MutationHookOptions<CreateOrUpdateOwnDashThemeMutation, CreateOrUpdateOwnDashThemeMutationVariables>) {
+        return Apollo.useMutation<CreateOrUpdateOwnDashThemeMutation, CreateOrUpdateOwnDashThemeMutationVariables>(CreateOrUpdateOwnDashThemeDocument, baseOptions);
+      }
 export type CreateOrUpdateOwnDashThemeMutationHookResult = ReturnType<typeof useCreateOrUpdateOwnDashThemeMutation>;
 export type CreateOrUpdateOwnDashThemeMutationResult = Apollo.MutationResult<CreateOrUpdateOwnDashThemeMutation>;
-export type CreateOrUpdateOwnDashThemeMutationOptions = Apollo.BaseMutationOptions<
-  CreateOrUpdateOwnDashThemeMutation,
-  CreateOrUpdateOwnDashThemeMutationVariables
->;
+export type CreateOrUpdateOwnDashThemeMutationOptions = Apollo.BaseMutationOptions<CreateOrUpdateOwnDashThemeMutation, CreateOrUpdateOwnDashThemeMutationVariables>;
 export const SetOwnDashThemeFontSizeDocument = gql`
-  mutation SetOwnDashThemeFontSize($dashThemeInput: DashThemeInput) {
-    setOwnDashThemeFontSize(dashThemeInput: $dashThemeInput) {
+    mutation SetOwnDashThemeFontSize($dashThemeInput: DashThemeInput) {
+  setOwnDashThemeFontSize(dashThemeInput: $dashThemeInput) {
+    id
+    themeColorMode
+    themeFontSize
+    dashThemeColor {
       id
+      defaultPalette
       themeColorMode
-      themeFontSize
-      dashThemeColor {
-        id
-        defaultPalette
-        themeColorMode
-        allowDark
-        paletteNm
-        themePrimary
-        themeLighterAlt
-        themeLighter
-        themeLight
-        themeTertiary
-        themeSecondary
-        themeDarkAlt
-        themeDark
-        themeDarker
-        neutralLighterAlt
-        neutralLighter
-        neutralLight
-        neutralQuaternaryAlt
-        neutralQuaternary
-        neutralTertiaryAlt
-        neutralTertiary
-        neutralSecondary
-        neutralPrimaryAlt
-        neutralPrimary
-        neutralDark
-        black
-        white
-      }
+      allowDark
+      paletteNm
+      themePrimary
+      themeLighterAlt
+      themeLighter
+      themeLight
+      themeTertiary
+      themeSecondary
+      themeDarkAlt
+      themeDark
+      themeDarker
+      neutralLighterAlt
+      neutralLighter
+      neutralLight
+      neutralQuaternaryAlt
+      neutralQuaternary
+      neutralTertiaryAlt
+      neutralTertiary
+      neutralSecondary
+      neutralPrimaryAlt
+      neutralPrimary
+      neutralDark
+      black
+      white
     }
   }
-`;
-export type SetOwnDashThemeFontSizeMutationFn = Apollo.MutationFunction<
-  SetOwnDashThemeFontSizeMutation,
-  SetOwnDashThemeFontSizeMutationVariables
->;
+}
+    `;
+export type SetOwnDashThemeFontSizeMutationFn = Apollo.MutationFunction<SetOwnDashThemeFontSizeMutation, SetOwnDashThemeFontSizeMutationVariables>;
 
 /**
  * __useSetOwnDashThemeFontSizeMutation__
@@ -16271,618 +12944,607 @@ export type SetOwnDashThemeFontSizeMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useSetOwnDashThemeFontSizeMutation(
-  baseOptions?: Apollo.MutationHookOptions<SetOwnDashThemeFontSizeMutation, SetOwnDashThemeFontSizeMutationVariables>
-) {
-  return Apollo.useMutation<SetOwnDashThemeFontSizeMutation, SetOwnDashThemeFontSizeMutationVariables>(
-    SetOwnDashThemeFontSizeDocument,
-    baseOptions
-  );
-}
+export function useSetOwnDashThemeFontSizeMutation(baseOptions?: Apollo.MutationHookOptions<SetOwnDashThemeFontSizeMutation, SetOwnDashThemeFontSizeMutationVariables>) {
+        return Apollo.useMutation<SetOwnDashThemeFontSizeMutation, SetOwnDashThemeFontSizeMutationVariables>(SetOwnDashThemeFontSizeDocument, baseOptions);
+      }
 export type SetOwnDashThemeFontSizeMutationHookResult = ReturnType<typeof useSetOwnDashThemeFontSizeMutation>;
 export type SetOwnDashThemeFontSizeMutationResult = Apollo.MutationResult<SetOwnDashThemeFontSizeMutation>;
-export type SetOwnDashThemeFontSizeMutationOptions = Apollo.BaseMutationOptions<
-  SetOwnDashThemeFontSizeMutation,
-  SetOwnDashThemeFontSizeMutationVariables
->;
+export type SetOwnDashThemeFontSizeMutationOptions = Apollo.BaseMutationOptions<SetOwnDashThemeFontSizeMutation, SetOwnDashThemeFontSizeMutationVariables>;
 export const UpdatePasswordRulesDocument = gql`
-  mutation UpdatePasswordRules($passwordRulesInput: PasswordRulesInput) {
-    updatePasswordRules(passwordRulesInput: $passwordRulesInput) {
-      organization {
-        value
-        description
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      mustAlwaysBeMet {
-        mustNotContainWhiteSpace {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustNotContainUserName {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustNotContainNumericSequence {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustFollowLengthRequirements {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        minLength {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        maxLength {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustContainUpperCaseLetters {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        minUpperCaseLetters {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustContainLowerCaseLetters {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        minLowerCaseLetters {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustContainNumericDigits {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        minNumericDigits {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustContainSpecialCharacters {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        minSpecialCharacters {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustNotRepeatCharacters {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        maxAllowedRepeatedChars {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustNotReusePasswords {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        minPasswordHistoryVariations {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustNotMatchExactDictionaryWord {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustNotMatchPartialDictionaryWord {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-      }
-      someMustBeMet {
-        enabled {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        minPasswordComplexity {
-          value {
-            name
-            value
-          }
-          label
-          readOnly
-          info
-          required
-          visible
-          options
-          query
-          errCode
-          errMsg
-          errSeverity
-        }
-        requiredNumPassingRules {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustNotContainWhiteSpace {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustNotContainUserName {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustNotContainNumericSequence {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustFollowLengthRequirements {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        minLength {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        maxLength {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustContainUpperCaseLetters {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        minUpperCaseLetters {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustContainLowerCaseLetters {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        minLowerCaseLetters {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustContainNumericDigits {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        minNumericDigits {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustContainSpecialCharacters {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        minSpecialCharacters {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustNotRepeatCharacters {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        maxAllowedRepeatedChars {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustNotReusePasswords {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        minPasswordHistoryVariations {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustNotMatchExactDictionaryWord {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        mustNotMatchPartialDictionaryWord {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-      }
-      autoLockAccount {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      autoLockAfterFailedAttempts {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
-      }
-      autoUnlockAccount {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
-      }
-      autoUnlockAccountDelayMinutes {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
-      }
-      response
-      options {
-        key
-        values {
-          label
-          value
-          info
-        }
-      }
+    mutation UpdatePasswordRules($passwordRulesInput: PasswordRulesInput) {
+  updatePasswordRules(passwordRulesInput: $passwordRulesInput) {
+    organization {
+      value
+      description
+      label
+      readOnly
+      info
+      required
+      visible
       errCode
       errMsg
       errSeverity
     }
+    mustAlwaysBeMet {
+      mustNotContainWhiteSpace {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotContainUserName {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotContainNumericSequence {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustFollowLengthRequirements {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minLength {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      maxLength {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustContainUpperCaseLetters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minUpperCaseLetters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustContainLowerCaseLetters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minLowerCaseLetters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustContainNumericDigits {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minNumericDigits {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustContainSpecialCharacters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minSpecialCharacters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotRepeatCharacters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      maxAllowedRepeatedChars {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotReusePasswords {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minPasswordHistoryVariations {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotMatchExactDictionaryWord {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotMatchPartialDictionaryWord {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+    }
+    someMustBeMet {
+      enabled {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minPasswordComplexity {
+        value {
+          name
+          value
+        }
+        label
+        readOnly
+        info
+        required
+        visible
+        options
+        query
+        errCode
+        errMsg
+        errSeverity
+      }
+      requiredNumPassingRules {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotContainWhiteSpace {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotContainUserName {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotContainNumericSequence {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustFollowLengthRequirements {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minLength {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      maxLength {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustContainUpperCaseLetters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minUpperCaseLetters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustContainLowerCaseLetters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minLowerCaseLetters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustContainNumericDigits {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minNumericDigits {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustContainSpecialCharacters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minSpecialCharacters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotRepeatCharacters {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      maxAllowedRepeatedChars {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotReusePasswords {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      minPasswordHistoryVariations {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotMatchExactDictionaryWord {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      mustNotMatchPartialDictionaryWord {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+    }
+    autoLockAccount {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    autoLockAfterFailedAttempts {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
+      errCode
+      errMsg
+      errSeverity
+    }
+    autoUnlockAccount {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    autoUnlockAccountDelayMinutes {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
+      errCode
+      errMsg
+      errSeverity
+    }
+    response
+    options {
+      key
+      values {
+        label
+        value
+        info
+      }
+    }
+    errCode
+    errMsg
+    errSeverity
   }
-`;
-export type UpdatePasswordRulesMutationFn = Apollo.MutationFunction<
-  UpdatePasswordRulesMutation,
-  UpdatePasswordRulesMutationVariables
->;
+}
+    `;
+export type UpdatePasswordRulesMutationFn = Apollo.MutationFunction<UpdatePasswordRulesMutation, UpdatePasswordRulesMutationVariables>;
 
 /**
  * __useUpdatePasswordRulesMutation__
@@ -16901,34 +13563,23 @@ export type UpdatePasswordRulesMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useUpdatePasswordRulesMutation(
-  baseOptions?: Apollo.MutationHookOptions<UpdatePasswordRulesMutation, UpdatePasswordRulesMutationVariables>
-) {
-  return Apollo.useMutation<UpdatePasswordRulesMutation, UpdatePasswordRulesMutationVariables>(
-    UpdatePasswordRulesDocument,
-    baseOptions
-  );
-}
+export function useUpdatePasswordRulesMutation(baseOptions?: Apollo.MutationHookOptions<UpdatePasswordRulesMutation, UpdatePasswordRulesMutationVariables>) {
+        return Apollo.useMutation<UpdatePasswordRulesMutation, UpdatePasswordRulesMutationVariables>(UpdatePasswordRulesDocument, baseOptions);
+      }
 export type UpdatePasswordRulesMutationHookResult = ReturnType<typeof useUpdatePasswordRulesMutation>;
 export type UpdatePasswordRulesMutationResult = Apollo.MutationResult<UpdatePasswordRulesMutation>;
-export type UpdatePasswordRulesMutationOptions = Apollo.BaseMutationOptions<
-  UpdatePasswordRulesMutation,
-  UpdatePasswordRulesMutationVariables
->;
+export type UpdatePasswordRulesMutationOptions = Apollo.BaseMutationOptions<UpdatePasswordRulesMutation, UpdatePasswordRulesMutationVariables>;
 export const ImplementationDeployDocument = gql`
-  mutation ImplementationDeploy {
-    implementationDeploy {
-      response
-      timestamp
-      references
-      changes
-    }
+    mutation ImplementationDeploy {
+  implementationDeploy {
+    response
+    timestamp
+    references
+    changes
   }
-`;
-export type ImplementationDeployMutationFn = Apollo.MutationFunction<
-  ImplementationDeployMutation,
-  ImplementationDeployMutationVariables
->;
+}
+    `;
+export type ImplementationDeployMutationFn = Apollo.MutationFunction<ImplementationDeployMutation, ImplementationDeployMutationVariables>;
 
 /**
  * __useImplementationDeployMutation__
@@ -16946,183 +13597,174 @@ export type ImplementationDeployMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useImplementationDeployMutation(
-  baseOptions?: Apollo.MutationHookOptions<ImplementationDeployMutation, ImplementationDeployMutationVariables>
-) {
-  return Apollo.useMutation<ImplementationDeployMutation, ImplementationDeployMutationVariables>(
-    ImplementationDeployDocument,
-    baseOptions
-  );
-}
+export function useImplementationDeployMutation(baseOptions?: Apollo.MutationHookOptions<ImplementationDeployMutation, ImplementationDeployMutationVariables>) {
+        return Apollo.useMutation<ImplementationDeployMutation, ImplementationDeployMutationVariables>(ImplementationDeployDocument, baseOptions);
+      }
 export type ImplementationDeployMutationHookResult = ReturnType<typeof useImplementationDeployMutation>;
 export type ImplementationDeployMutationResult = Apollo.MutationResult<ImplementationDeployMutation>;
-export type ImplementationDeployMutationOptions = Apollo.BaseMutationOptions<
-  ImplementationDeployMutation,
-  ImplementationDeployMutationVariables
->;
+export type ImplementationDeployMutationOptions = Apollo.BaseMutationOptions<ImplementationDeployMutation, ImplementationDeployMutationVariables>;
 export const FtpTestMDocument = gql`
-  mutation FtpTestM($xpsftp: XSFTPInput!, $genTestFile: SFTPTestGenerateTestFile) {
-    ftpTestM(xpsftp: $xpsftp, genTestFile: $genTestFile) {
-      status
-      logMessage {
-        timeStamp
-        severity
-        name
-        body
-        attributes {
-          ...unionNVP
-        }
+    mutation FtpTestM($xpsftp: XSFTPInput!, $genTestFile: SFTPTestGenerateTestFile) {
+  ftpTestM(xpsftp: $xpsftp, genTestFile: $genTestFile) {
+    status
+    logMessage {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
       }
-      allMessages {
-        timeStamp
-        severity
-        name
-        body
-        attributes {
-          ...unionNVP
-        }
+    }
+    allMessages {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
       }
-      clientProfileSnippet
-      csvLog
-      xpSFTPForm {
-        host {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        port {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        user {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        password {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        port {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        folder {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        stepWise {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        response
+    }
+    clientProfileSnippet
+    csvLog
+    xpSFTPForm {
+      host {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
         errCode
         errMsg
         errSeverity
       }
-      genTestFileForm {
-        generate {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          errCode
-          errMsg
-          errSeverity
-        }
-        fileName {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
-        fileBody {
-          value
-          label
-          readOnly
-          info
-          required
-          visible
-          min
-          max
-          errCode
-          errMsg
-          errSeverity
-        }
+      port {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
       }
-      includeFileUpload
+      user {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      password {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      port {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      folder {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      stepWise {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      response
+      errCode
+      errMsg
+      errSeverity
     }
+    genTestFileForm {
+      generate {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      fileName {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      fileBody {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+    }
+    includeFileUpload
   }
-  ${UnionNvpFragmentDoc}
-`;
+}
+    ${UnionNvpFragmentDoc}`;
 export type FtpTestMMutationFn = Apollo.MutationFunction<FtpTestMMutation, FtpTestMMutationVariables>;
 
 /**
@@ -17143,11 +13785,9 @@ export type FtpTestMMutationFn = Apollo.MutationFunction<FtpTestMMutation, FtpTe
  *   },
  * });
  */
-export function useFtpTestMMutation(
-  baseOptions?: Apollo.MutationHookOptions<FtpTestMMutation, FtpTestMMutationVariables>
-) {
-  return Apollo.useMutation<FtpTestMMutation, FtpTestMMutationVariables>(FtpTestMDocument, baseOptions);
-}
+export function useFtpTestMMutation(baseOptions?: Apollo.MutationHookOptions<FtpTestMMutation, FtpTestMMutationVariables>) {
+        return Apollo.useMutation<FtpTestMMutation, FtpTestMMutationVariables>(FtpTestMDocument, baseOptions);
+      }
 export type FtpTestMMutationHookResult = ReturnType<typeof useFtpTestMMutation>;
 export type FtpTestMMutationResult = Apollo.MutationResult<FtpTestMMutation>;
 export type FtpTestMMutationOptions = Apollo.BaseMutationOptions<FtpTestMMutation, FtpTestMMutationVariables>;

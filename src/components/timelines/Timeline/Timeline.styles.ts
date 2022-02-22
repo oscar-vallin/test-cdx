@@ -30,6 +30,12 @@ export const StyledLi = styled.li<StyledLiProps>`
     & .error {
       color: ${({ theme }) => theme.colors.custom.error};
     }
+    & .info {
+      color: ${({ theme }) => theme.colors.custom.info};
+    }
+    & .warn {
+      color: ${({ theme }) => theme.colors.custom.warning};
+    }
   }
 
   .item__content {
@@ -64,6 +70,5 @@ export const StyledLi = styled.li<StyledLiProps>`
 `;
 
 type StyledLiProps = {
-  status: string;
   active: boolean;
 };
