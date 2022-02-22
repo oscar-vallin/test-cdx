@@ -10,16 +10,6 @@ type RuleItemsParam = {
   items: PasswordValidationRule[];
 };
 
-const RuleItems = ({ items }: RuleItemsParam) => {
-  const rows: ReactElement[] = [];
-  let idx = 0;
-  for (const item of items) {
-    rows.push(RuleItem(idx++, { item }));
-  }
-
-  return <div>{rows}</div>;
-};
-
 const RuleItem = (idx: number, { item }: RuleItemParam) => {
   return (
     <div key={`ruleItem_${idx}`} style={{ display: 'flex', alignItems: 'center' }}>
@@ -27,6 +17,16 @@ const RuleItem = (idx: number, { item }: RuleItemParam) => {
       {item.label}
     </div>
   );
+};
+
+const RuleItems = ({ items }: RuleItemsParam) => {
+  const rows: ReactElement[] = [];
+  let idx = 0;
+  items.forEach((item) => {
+    rows.push(RuleItem(idx++, { item }));
+  });
+
+  return <div>{rows}</div>;
 };
 
 export { RuleItems, RuleItem };
