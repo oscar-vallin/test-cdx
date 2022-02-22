@@ -28,10 +28,10 @@ import {
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { useOrgSid } from 'src/hooks/useOrgSid';
-import { StyledColumn } from './ActiveOrgsPage.styles';
 import { ROUTE_ACTIVE_ORGS } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { OrgPanel } from 'src/pages/Admin/Organizations/ActiveOrgs/OrgPanel';
+import { StyledColumn } from './ActiveOrgsPage.styles';
 
 const ActiveOrgsPage = () => {
   const { orgSid } = useOrgSid();
@@ -71,7 +71,7 @@ const ActiveOrgsPage = () => {
     return '';
   };
 
-  const onRenderOrgName = (item?: Organization, index: number = 0) => (
+  const onRenderOrgName = (item?: Organization, index = 0) => (
     <Link
       id={`__ActiveOrg__Name_Field_${index + 1}`}
       className={item?.orgId}
@@ -142,10 +142,10 @@ const ActiveOrgsPage = () => {
   useEffect(() => {
     if (!loading && data) {
       setOrgs(data.directOrganizations.nodes);
-      const createCmd = data?.directOrganizations?.listPageInfo?.pageCommands?.find(
-        (cmd) => cmd?.commandType == CdxWebCommandType.Create
+      const newCreateCmd = data?.directOrganizations?.listPageInfo?.pageCommands?.find(
+        (cmd) => cmd?.commandType === CdxWebCommandType.Create
       );
-      setCreateCmd(createCmd);
+      setCreateCmd(newCreateCmd);
     }
   }, [data, loading]);
 
@@ -165,6 +165,7 @@ const ActiveOrgsPage = () => {
         </PrimaryButton>
       );
     }
+    return null;
   };
 
   const renderBody = () => {

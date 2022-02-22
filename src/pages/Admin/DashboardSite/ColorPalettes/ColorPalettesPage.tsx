@@ -18,10 +18,10 @@ import { defaultTheme } from 'src/styles/themes';
 
 import Theming from 'src/utils/Theming';
 import { useNotification } from 'src/hooks/useNotification';
-import { StyledDiv, StyledChoiceGroup, StyledColorPicker } from './ColorPalettesPage.styles';
-import { PaletteColors } from './PaletteColors';
 import { ROUTE_COLOR_PALETTES } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
+import { StyledDiv, StyledChoiceGroup, StyledColorPicker } from './ColorPalettesPage.styles';
+import { PaletteColors } from './PaletteColors';
 
 const getThemeVariant = ({ themePrimary, neutralPrimary, white }) => ({
   ...Theming.generate.primary(themePrimary),

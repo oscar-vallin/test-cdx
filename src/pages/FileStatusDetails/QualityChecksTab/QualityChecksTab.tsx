@@ -13,8 +13,8 @@ import { ChartDataType } from 'src/components/charts/ChartDonut/ChartDonut';
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
 import { Text } from 'src/components/typography';
 import { ICheckboxProps } from '@fluentui/react/lib/components/Checkbox/Checkbox.types';
-import { SuperScript, WhiteButton } from '../FileStatusDetails.styles';
 import { EmptyState } from 'src/containers/states';
+import { SuperScript, WhiteButton } from '../FileStatusDetails.styles';
 
 const COLUMNS: IColumn[] = [
   { key: 'status', name: 'Status', fieldName: 'status', minWidth: 80, maxWidth: 80 },
@@ -103,7 +103,7 @@ const QualityChecksTab = ({ details }: QualityChecksTabProps): ReactElement => {
 
   const addChartData = (data: ChartDataType[], name: string, key: string, count?: number) => {
     if (count && count > 0) {
-      data.push({ name: name, key: key, value: count });
+      data.push({ name, key, value: count });
     }
   };
 
@@ -174,6 +174,8 @@ const QualityChecksTab = ({ details }: QualityChecksTabProps): ReactElement => {
     return rows;
   };
 
+  const renderCheckboxLabel = (props?: ICheckboxProps) => <Text>{props?.label}</Text>;
+
   const renderBody = () => (
     <Spacing padding="normal">
       {(hasQualityCheckStats || hasErrors) && (
@@ -242,6 +244,11 @@ const QualityChecksTab = ({ details }: QualityChecksTabProps): ReactElement => {
                               setShowError(false);
                               break;
                             }
+                            default: {
+                              setShowInfo(true);
+                              setShowWarn(true);
+                              setShowError(true);
+                            }
                           }
                         }}
                       />
@@ -298,7 +305,7 @@ const QualityChecksTab = ({ details }: QualityChecksTabProps): ReactElement => {
                 label="Info"
                 checked={showInfo}
                 onChange={() => setShowInfo(!showInfo)}
-                onRenderLabel={(props?: ICheckboxProps) => <Text>{props?.label}</Text>}
+                onRenderLabel={renderCheckboxLabel}
               />
             </Stack.Item>
             <Stack.Item>
@@ -306,7 +313,7 @@ const QualityChecksTab = ({ details }: QualityChecksTabProps): ReactElement => {
                 label="Warning"
                 checked={showWarn}
                 onChange={() => setShowWarn(!showWarn)}
-                onRenderLabel={(props?: ICheckboxProps) => <Text>{props?.label}</Text>}
+                onRenderLabel={renderCheckboxLabel}
               />
             </Stack.Item>
             <Stack.Item>
@@ -314,7 +321,7 @@ const QualityChecksTab = ({ details }: QualityChecksTabProps): ReactElement => {
                 label="Error"
                 checked={showError}
                 onChange={() => setShowError(!showError)}
-                onRenderLabel={(props?: ICheckboxProps) => <Text>{props?.label}</Text>}
+                onRenderLabel={renderCheckboxLabel}
               />
             </Stack.Item>
             <Stack.Item grow={1}>
@@ -330,30 +337,6 @@ const QualityChecksTab = ({ details }: QualityChecksTabProps): ReactElement => {
             onRenderItemColumn={onRenderItemColumn}
             isHeaderVisible
           />
-
-          {/*<Separator />*/}
-
-          {/*<div>*/}
-          {/*  <Button id="__QualityChecksTabId" variant="primary" onClick={() => null}>*/}
-          {/*    Continue processing*/}
-          {/*  </Button>{' '}*/}
-          {/*  &nbsp;*/}
-          {/*  <Button*/}
-          {/*    id="__QualityChecksTabId"*/}
-          {/*    variant=""*/}
-          {/*    split*/}
-          {/*    text="Cancel processing"*/}
-          {/*    onClick={() => {*/}
-          {/*      alert('Click');*/}
-          {/*      return null;*/}
-          {/*    }}*/}
-          {/*    menuProps={{*/}
-          {/*      items: [{ text: 'Error out', key: 'ErrorOut' }],*/}
-          {/*    }}*/}
-          {/*  >*/}
-          {/*    Cancel processing*/}
-          {/*  </Button>*/}
-          {/*</div>*/}
         </Card>
       </FormRow>
     </Spacing>
