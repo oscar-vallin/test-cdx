@@ -64,10 +64,10 @@ export const ThemeContextProvider = ({ children }) => {
     fontSize: any;
   };
 
-  const changeTheme = (theme = {}) => {
+  const changeTheme = (newTheme = {}) => {
     const customizedTheme = {
       ...styledTheme,
-      colors: { ...styledTheme.colors, ...theme },
+      colors: { ...styledTheme.colors, ...newTheme },
     };
 
     setStyledTheme(customizedTheme);
