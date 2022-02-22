@@ -22,6 +22,8 @@ import { PageTitle } from 'src/components/typography';
 import {
   CdxWebCommandType,
   Organization,
+  PaginationInfo,
+  SortDirection,
   useDirectOrganizationsLazyQuery,
   WebCommand,
 } from 'src/data/services/graphql';
@@ -31,6 +33,7 @@ import { useOrgSid } from 'src/hooks/useOrgSid';
 import { ROUTE_ACTIVE_ORGS } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { OrgPanel } from 'src/pages/Admin/Organizations/ActiveOrgs/OrgPanel';
+import { Paginator } from 'src/components/tables/Paginator';
 import { StyledColumn } from './ActiveOrgsPage.styles';
 
 const ActiveOrgsPage = () => {
@@ -41,13 +44,27 @@ const ActiveOrgsPage = () => {
   const [selectedOrgSid, setSelectedOrgSid] = useState<string>();
 
   const [directOrganizationsQuery, { data, loading }] = useQueryHandler(useDirectOrganizationsLazyQuery);
+  const [pagingInfo, setPagingInfo] = useState<PaginationInfo>({
+    pageNumber: 0,
+    pageSize: 100,
+    totalElements: 0,
+    totalPages: 0,
+  });
   const [createCmd, setCreateCmd] = useState<WebCommand | null>();
 
-  const fetchData = () => {
+  const fetchData = (pageNumber = 0) => {
     directOrganizationsQuery({
       variables: {
         orgSid,
         orgFilter: { activeFilter: 'ACTIVE' },
+        pageableInput: {
+          sort: [
+            { property: 'name', direction: SortDirection.Asc },
+            { property: 'orgId', direction: SortDirection.Asc },
+          ],
+          pageSize: 100,
+          pageNumber,
+        },
       },
     });
   };
@@ -55,6 +72,10 @@ const ActiveOrgsPage = () => {
   useEffect(() => {
     fetchData();
   }, [orgSid]);
+
+  const onPageChange = (pageNumber: number) => {
+    fetchData(pageNumber);
+  };
 
   const changeActiveOrg = (org?: Organization) => {
     ActiveDomainStore.setCurrentOrg({
@@ -142,6 +163,11 @@ const ActiveOrgsPage = () => {
   useEffect(() => {
     if (!loading && data) {
       setOrgs(data.directOrganizations.nodes);
+      // update the paging info
+      const newPagingInfo = data?.directOrganizations?.paginationInfo;
+      if (newPagingInfo) {
+        setPagingInfo(newPagingInfo);
+      }
       const newCreateCmd = data?.directOrganizations?.listPageInfo?.pageCommands?.find(
         (cmd) => cmd?.commandType === CdxWebCommandType.Create
       );
@@ -180,13 +206,16 @@ const ActiveOrgsPage = () => {
       return <EmptyState description="No active orgs found" />;
     }
     return (
-      <DetailsList
-        items={orgs}
-        selectionMode={SelectionMode.none}
-        columns={columns}
-        layoutMode={DetailsListLayoutMode.justified}
-        isHeaderVisible
-      />
+      <>
+        <DetailsList
+          items={orgs}
+          selectionMode={SelectionMode.none}
+          columns={columns}
+          layoutMode={DetailsListLayoutMode.justified}
+          isHeaderVisible
+        />
+        <Paginator pagingInfo={pagingInfo} onPageChange={onPageChange} />
+      </>
     );
   };
 
