@@ -26,6 +26,7 @@ import { Required } from 'src/components/labels/FormLabel/FormLabel.styles';
 import { LabelValue } from 'src/components/labels/LabelValue';
 import { theme } from 'src/styles/themes/theme';
 import { ArchivesTab } from 'src/pages/FileStatusDetails/ArchivesTab/ArchivesTab';
+import { isDateTimeValid } from 'src/utils/CDXUtils';
 import QualityChecksTab from './QualityChecksTab/QualityChecksTab';
 import WorkStepsTab from './WorkStepsTab/WorkStepsTab';
 import EnrollmentStatsTab from './EnrollmentStatsTab/EnrollmentStatsTab';
@@ -57,7 +58,9 @@ const WorkPacketCommandButton = ({ id, icon, command }: CommandButtonType) => {
 };
 
 const FileStatusDetailsPage = () => {
+  const urlParams = new URLSearchParams(window.location.search);
   const { orgSid } = useOrgSid();
+  const fsOrgSid = urlParams.get('fsOrgSid') ?? orgSid;
   const { hash } = useLocation();
 
   const { id }: any = useParams();
@@ -73,7 +76,7 @@ const FileStatusDetailsPage = () => {
   useEffect(() => {
     callGetWPDetails({
       variables: {
-        orgSid,
+        orgSid: fsOrgSid,
         workOrderId: realId,
       },
     });
@@ -98,7 +101,7 @@ const FileStatusDetailsPage = () => {
 
   const formatDate = (d?: Date): string => {
     // Check if this date has a valid time value
-    if (d && d.getTime() === d.getTime()) {
+    if (d && isDateTimeValid(d)) {
       return format(d, 'MM/dd/yyyy hh:mm a');
     }
     return 'N/A';
@@ -265,7 +268,7 @@ const FileStatusDetailsPage = () => {
             <EnrollmentStatsTab packet={packet} />
           </PivotItem>
           <PivotItem headerText="Vendor Count Stats" itemKey="#vendor">
-            <VendorCountStatsTab items={packet?.workStepStatus} />
+            <VendorCountStatsTab items={packet?.outboundRecordCounts} />
           </PivotItem>
           {packet?.workStepStatus && packet.workStepStatus.length > 0 && (
             <PivotItem headerText="Work Steps" itemKey="#work">

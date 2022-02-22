@@ -1,4 +1,4 @@
-import { getEnumByValue, yyyyMMdd } from './CDXUtils';
+import { getEnumByValue, isDateTimeValid, yyyyMMdd } from './CDXUtils';
 import { OrgType } from 'src/data/services/graphql';
 
 describe('CDX Utility testing', () => {
@@ -24,4 +24,21 @@ describe('CDX Utility testing', () => {
     expect(getEnumByValue(OrgType, undefined)).toBeNull();
     expect(getEnumByValue(OrgType, 'NotAValue')).toBeNull();
   });
+
+  it('isDateTimeValid null', () => {
+    expect(isDateTimeValid(null)).toEqual(false);
+  });
+
+  it('isDateTimeValid undefined', () => {
+    expect(isDateTimeValid(undefined)).toEqual(false);
+  });
+
+  it('isDateTimeValid now', () => {
+    expect(isDateTimeValid(new Date())).toEqual(true);
+  });
+
+  it('isDateTimeValid with bad time', () => {
+    expect(isDateTimeValid(new Date("2020-11-01T88:99:00"))).toEqual(false);
+  });
+
 });

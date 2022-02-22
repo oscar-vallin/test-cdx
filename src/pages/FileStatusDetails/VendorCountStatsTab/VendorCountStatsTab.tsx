@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
 import { IColumn, DetailsList, DetailsListLayoutMode, SelectionMode } from '@fluentui/react';
 import { Spacing } from 'src/components/spacings/Spacing';
-import { Maybe, RecordCounts, WorkStepStatus } from 'src/data/services/graphql';
+import { RecordCounts } from 'src/data/services/graphql';
 import { EmptyState } from 'src/containers/states';
 import { StatsRow, StyledVendorHeaderRow, StatsFooter } from '../FileStatusDetails.styles';
 
@@ -34,41 +34,25 @@ const onRenderDetailsFooter: any = (count) => {
 };
 
 type VendorCountStatsTabProps = {
-  items?: Maybe<WorkStepStatus>[] | null;
+  items?: RecordCounts | null;
 };
 
 const VendorCountStatsTab = ({ items }: VendorCountStatsTabProps): ReactElement => {
-  const recordCounts: RecordCounts[] = [];
-  items?.forEach((workStepStatus) => {
-    if (workStepStatus?.recordCounts) {
-      recordCounts.push(workStepStatus.recordCounts);
-    }
-  });
-
-  if (recordCounts.length > 0) {
+  if ((items?.recordCount?.length ?? 0) > 0) {
     return (
-      <>
-        {recordCounts.map((recordCount, index) => {
-          if (recordCount) {
-            return (
-              <Spacing key={`vendorStats_${index}`} padding="normal">
-                <DetailsList
-                  compact
-                  items={recordCount.recordCount || []}
-                  columns={COLUMNS}
-                  selectionMode={SelectionMode.none}
-                  layoutMode={DetailsListLayoutMode.justified}
-                  onRenderRow={onRenderRow}
-                  onRenderDetailsHeader={onRenderDetailsHeader}
-                  onRenderDetailsFooter={(args) => onRenderDetailsFooter(recordCount.totalCount, args)}
-                  isHeaderVisible
-                />
-              </Spacing>
-            );
-          }
-          return null;
-        })}
-      </>
+      <Spacing padding="normal">
+        <DetailsList
+          compact
+          items={items?.recordCount || []}
+          columns={COLUMNS}
+          selectionMode={SelectionMode.none}
+          layoutMode={DetailsListLayoutMode.justified}
+          onRenderRow={onRenderRow}
+          onRenderDetailsHeader={onRenderDetailsHeader}
+          onRenderDetailsFooter={(args) => onRenderDetailsFooter(items?.totalCount, args)}
+          isHeaderVisible
+        />
+      </Spacing>
     );
   }
 
