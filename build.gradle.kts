@@ -80,6 +80,10 @@ task<YarnTask>("yarnTest") {
     yarnCommand.set(listOf("run", "test:forbuild"))
 }
 
+task<YarnTask>("yarnE2E") {
+    yarnCommand.set(listOf("run", "test:e2e"))
+}
+
 task<YarnTask>("yarnLint") {
     yarnCommand.set(listOf("run", "lint"))
 }

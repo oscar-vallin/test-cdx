@@ -2,8 +2,6 @@ version: 0.2
 
 phases:
   install:
-    runtime-versions:
-      nodejs: 14
     commands:
       - echo update npm...
       - npm update -g npm
@@ -23,6 +21,8 @@ phases:
       - ln -s /lib/python2.7/site-packages/amazon_linux_extras ~/.pyenv/versions/3.9.5/lib/python3.9/site-packages/
       - /usr/bin/amazon-linux-extras install epel -y
       - yum install -y chromium
+      - wget https://services.gradle.org/distributions/gradle-7.3-all.zip
+      - unzip -d /opt/gradle gradle-7.3-all.zip
   pre_build:
     commands:
       - echo Installing source NPM dependencies...
@@ -36,7 +36,7 @@ phases:
   build:
     commands:
       - echo Started on `date`
-      - yarn test:e2e
+      - /opt/gradle/gradle-7.3/bin/gradle yarnE2E
   post_build:
     commands:
     - echo Build completed on `date`
