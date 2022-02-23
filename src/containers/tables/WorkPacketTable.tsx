@@ -16,11 +16,11 @@ import { useOrgSid } from 'src/hooks/useOrgSid';
 import { TableFiltersType } from 'src/hooks/useTableFilters';
 import { Paginator } from 'src/components/tables/Paginator';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
+import { useHistory } from 'react-router-dom';
 import { useWorkPacketColumns, WorkPacketColumn } from './WorkPacketColumns';
 import { TableFilters } from './TableFilters';
 import { EmptyState } from '../states';
 import { Box, Container } from './WorkPacketTable.styles';
-import { useHistory } from 'react-router-dom';
 
 type WorkPacketParams = {
   id: string;
@@ -55,19 +55,23 @@ export const WorkPacketTable = ({
 
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
 
-  const [apiCall, { data, loading, error }] = useQueryHandler(lazyQuery);
+  const openDetails = (fsOrgSid?: string | null, workOrderId?: string, tab?: string) => {
+    // The rendering of the columns is only done upon initialization of the column
+    // so we can't rely on state to change the parameters of the URL.
+    // So we have to do this hack where we read the start date and end date parameters from the
+    // url every time and not use any of the utilities we have to do so.
 
-  const apiPolling = pollingQuery
-    ? pollingQuery({
-        variables: {
-          orgSid,
-          searchText: tableFilters.searchText.delayedValue,
-          dateRange: { rangeStart: tableFilters.startDate.value, rangeEnd: tableFilters.endDate.value },
-          lastUpdated,
-        },
-        pollInterval: POLL_INTERVAL,
-      })
-    : useState({});
+    // const startDate = yyyyMMdd(tableFilters.startDate.value);
+    // const endDate = yyyyMMdd(tableFilters.endDate.value);
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const startDate = urlParams.get('startDate');
+    const endDate = urlParams.get('endDate');
+    const hash = tab ? `#${tab}` : '';
+    history.push(
+      `/file-status/${workOrderId}?orgSid=${orgSid}&fsOrgSid=${fsOrgSid}&startDate=${startDate}&endDate=${endDate}${hash}`
+    );
+  };
 
   const _doSort = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
     const newColumns: IColumn[] = columns.slice();
@@ -98,6 +102,25 @@ export const WorkPacketTable = ({
     tableFilters.setPagingParams(sortParam);
   };
 
+  const { initialColumns } = useWorkPacketColumns(cols, openDetails, _doSort);
+
+  const [columns, setColumns] = useState<IColumn[]>(initialColumns);
+  const [items, setItems] = useState<any[]>([]);
+
+  const [apiCall, { data, loading, error }] = useQueryHandler(lazyQuery);
+
+  const apiPolling = pollingQuery
+    ? pollingQuery({
+        variables: {
+          orgSid,
+          searchText: tableFilters.searchText.delayedValue,
+          dateRange: { rangeStart: tableFilters.startDate.value, rangeEnd: tableFilters.endDate.value },
+          lastUpdated,
+        },
+        pollInterval: POLL_INTERVAL,
+      })
+    : {};
+
   const onPageChange = (pageNumber: number) => {
     tableFilters.pagingParams.pageNumber = pageNumber;
     tableFilters.setPagingParams({
@@ -106,27 +129,6 @@ export const WorkPacketTable = ({
       sort: tableFilters.pagingParams.sort,
     });
   };
-
-  const openDetails = (fsOrgSid?: string | null, workOrderId?: string, tab?: string) => {
-    // The rendering of the columns is only done upon initialization of the column
-    // so we can't rely on state to change the parameters of the URL.
-    // So we have to do this hack where we read the start date and end date parameters from the
-    // url every time and not use any of the utilities we have to do so.
-
-    // const startDate = yyyyMMdd(tableFilters.startDate.value);
-    // const endDate = yyyyMMdd(tableFilters.endDate.value);
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const startDate = urlParams.get('startDate');
-    const endDate = urlParams.get('endDate');
-    const hash = tab ? `#${tab}` : '';
-    history.push(`/file-status/${workOrderId}?orgSid=${orgSid}&fsOrgSid=${fsOrgSid}&startDate=${startDate}&endDate=${endDate}${hash}`);
-  };
-
-  const { initialColumns } = useWorkPacketColumns(cols, openDetails, _doSort);
-
-  const [columns, setColumns] = useState<IColumn[]>(initialColumns);
-  const [items, setItems] = useState<any[]>([]);
 
   useEffect(() => {
     // Reset the page number when any filtering occurs
@@ -186,17 +188,17 @@ export const WorkPacketTable = ({
 
   useEffect(() => {
     if (
-      apiPolling.pollingData &&
-      apiPolling.pollingData.workPacketStatusesPoll &&
-      apiPolling.pollingData.workPacketStatusesPoll > 0
+      apiPolling.data &&
+      apiPolling.data.workPacketStatusesPoll &&
+      apiPolling.data.workPacketStatusesPoll > 0
     ) {
       setLastUpdated(new Date());
     }
-  }, [apiPolling.pollingData]);
+  }, [apiPolling.data]);
 
   useEffect(() => {
-    handleError(apiPolling.pollingDatapollingError);
-  }, [apiPolling.pollingDatapollingError]);
+    handleError(apiPolling.error);
+  }, [apiPolling.error]);
 
   const renderTable = () => {
     const classNames = mergeStyleSets({
@@ -253,5 +255,3 @@ export const WorkPacketTable = ({
     </>
   );
 };
-
-export default WorkPacketTable;
