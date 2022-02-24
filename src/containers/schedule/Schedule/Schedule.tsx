@@ -72,15 +72,23 @@ const Schedule = ({ id }) => {
                   id={`${id}-Month`}
                   selectedDate={selectedDate}
                   currentDate={currentDate}
+                  items={items}
                   onChangeDate={handleChangeDate}
                   onChangeView={handleChangeView}
-                  items={items}
                 />
               )}
               {isCurrentViewWeek(currentView) && (
-                <ScheduleWeek selectedDate={selectedDate} currentDate={currentDate} items={items} />
+                <ScheduleWeek
+                  selectedDate={selectedDate}
+                  currentDate={currentDate}
+                  items={items}
+                  onChangeDate={handleChangeDate}
+                  onChangeView={handleChangeView}
+                />
               )}
-              {isCurrentViewDay(currentView) && <ScheduleDay selectedDate={selectedDate} currentDate={currentDate} />}
+              {isCurrentViewDay(currentView) && (
+                <ScheduleDay selectedDate={selectedDate} currentDate={currentDate} items={items} />
+              )}
             </Card>
           </Column>
         </StyledRow>

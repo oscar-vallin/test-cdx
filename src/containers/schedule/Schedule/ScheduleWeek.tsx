@@ -1,6 +1,6 @@
-import { addDays, addHours, format, isSameDay, parseISO, startOfDay, startOfWeek } from 'date-fns';
+import { addDays, format, isSameDay, isSameHour, parseISO, startOfWeek } from 'date-fns';
 import { ReactElement } from 'react';
-
+import { ScheduleOccurrence } from 'src/data/services/graphql';
 import {
   Body,
   DayOfWeekContainer,
@@ -14,69 +14,84 @@ import {
 type ScheduleWeekProps = {
   currentDate: Date;
   selectedDate: Date;
-  items: any[] | undefined;
+  items: ScheduleOccurrence[];
+  onChangeDate: (d: Date) => void;
+  onChangeView: (viewName: string) => void;
 };
 
 //
 // ─── SCHEDULE WEEK COMPONENT ───────────────────────────────────────────────────────
 //
-export const ScheduleWeek = ({ currentDate, selectedDate, items }: ScheduleWeekProps) => {
+export const ScheduleWeek = ({ currentDate, selectedDate, items, onChangeDate, onChangeView }: ScheduleWeekProps) => {
   const startDate = startOfWeek(selectedDate ?? currentDate);
   const currentSelectedDate = selectedDate ?? currentDate;
 
-  const rows: ReactElement[] = [];
-  let days: ReactElement[] = [];
-  let day = startDate;
-  let formattedHour = '';
-
-  let hour = startOfDay(startDate);
   const hourFormat = 'h aa';
+
+  const handleChangeDate = (_date: Date) => {
+    if (isSameDay(_date, selectedDate)) {
+      onChangeView('day');
+      return;
+    }
+
+    onChangeDate(_date);
+  };
 
   //
   // ─── CREATE ROWS ─────────────────────────────────────────────────────────────────
-  const renderItems = (_day, allItems) => {
-    const dayRows = allItems.filter((_item) => isSameDay(parseISO(_item.datetime), _day));
+  const renderItems = (_day: Date, allItems: ScheduleOccurrence[]) => {
+    const dayRows = allItems.filter((_item) => isSameHour(parseISO(_item.timeScheduled), _day));
 
-    return dayRows?.map((_item, index) => <CellItem key={`cell_${_day}_${index}`}>{_item.label}</CellItem>);
+    return dayRows?.map((_item, index) => (
+      <CellItem key={`cell_${_day}_${index}`} title={_item.resource}>
+        {_item.resource}
+      </CellItem>
+    ));
   };
 
   //
   // ─── CREATE DAYS ─────────────────────────────────────────────────────────────────
   //
-  const _renderBody = () => {
-    for (let h = 1; h <= 24; h++) {
-      formattedHour = format(hour, hourFormat);
+  const renderDayOfWeek = (day: Date) => (
+    <DayOfWeekContainer
+      id={`CalendarBodyCell-${format(day, 'yyyy-MM-dd')}`}
+      isSameDay={isSameDay(day, currentSelectedDate)}
+      key={`dow_${day}`}
+      onClick={() => handleChangeDate(day)}
+    >
+      <CalendarBodyCellNumber id={`CalendarBodyCellNumber-${day}`}>{renderItems(day, items)}</CalendarBodyCellNumber>
+    </DayOfWeekContainer>
+  );
+
+  const renderHourRow = (hour: number, value: string, days: ReactElement[]) => (
+    <CalendarBodyRow id={`CalendarBodyRow-${hour}`} key={`row_${hour}`}>
+      <SWeekHourContainer>{hour > 0 && <SWeekHour>{value}</SWeekHour>}</SWeekHourContainer>
+      {days}
+    </CalendarBodyRow>
+  );
+
+  const renderBody = () => {
+    const rows: ReactElement[] = [];
+
+    for (let h = 0; h < 24; h++) {
+      const days: ReactElement[] = [];
+      let day = new Date(startDate);
+      day.setHours(h);
+      const formattedHour = format(day, hourFormat);
       for (let i = 0; i < 7; i++) {
-        days.push(
-          <DayOfWeekContainer
-            id={`CalendarBodyCell-${day}-${i}-${h}`}
-            isSameDay={isSameDay(day, currentSelectedDate)}
-            key={`dow_${day}_${i}-${h}`}
-          >
-            <CalendarBodyCellNumber id={`CalendarBodyCellNumber-${day}-${i}-${h}`}>
-              {renderItems(day, items)}
-            </CalendarBodyCellNumber>
-          </DayOfWeekContainer>
-        );
+        const cloneDay = new Date(day);
+        days.push(renderDayOfWeek(cloneDay));
 
         day = addDays(day, 1);
       }
 
-      rows.push(
-        <CalendarBodyRow id={`CalendarBodyRow-${day}-${h}`} key={`row_${day}-${h}`}>
-          <SWeekHourContainer>{h > 1 && <SWeekHour>{formattedHour}</SWeekHour>}</SWeekHourContainer>
-          {days}
-        </CalendarBodyRow>
-      );
-
-      days = [];
-      hour = addHours(hour, 1);
+      rows.push(renderHourRow(h, formattedHour, days));
     }
 
     return <div>{rows}</div>;
   };
 
-  return <Body id="CalendarBody">{_renderBody()}</Body>;
+  return <Body id="CalendarBody">{renderBody()}</Body>;
 };
 
 ScheduleWeek.propTypes = {};

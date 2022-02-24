@@ -1,6 +1,7 @@
 import styled from 'styled-components';
-import { Box as LayoutBox, Row as LayoutRow, Column as LayoutColumn } from '../../../components/layouts';
-import { Button } from '../../../components/buttons/Button';
+import { device } from 'src/styles/GlobalStyles';
+import { Box as LayoutBox, Row as LayoutRow, Column as LayoutColumn } from 'src/components/layouts';
+import { Button } from 'src/components/buttons';
 
 const COLOR_MAIN = ({ theme }) => theme.colors.themePrimary;
 const COLOR_TEXT = ({ theme }) => theme.colors.neutralPrimary;
@@ -26,14 +27,6 @@ export const Column = styled(LayoutColumn)`
   max-width: 300px;
 `;
 
-export const RightColumn = styled(LayoutColumn)`
-  width: 40%;
-`;
-
-export const CalendarColumn = styled(LayoutColumn)`
-  width: calc(100% / 7);
-`;
-
 type StyledHeaderButtonViewProps = {
   selected?: boolean | undefined;
 };
@@ -46,24 +39,6 @@ export const HeaderButtonView = styled(Button)<StyledHeaderButtonViewProps>`
   &:hover {
     border-color: ${({ theme }) => theme.colors.themePrimary};
   }
-`;
-
-export const ScheduleColumn = styled.img`
-  /* font-family: 'Material Icons', serif; */
-  font-style: normal;
-  display: inline-block;
-  vertical-align: middle;
-  line-height: 1;
-  text-transform: none;
-  letter-spacing: normal;
-  word-wrap: normal;
-  white-space: nowrap;
-  direction: ltr;
-
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-  -moz-osx-font-smoothing: grayscale;
-  font-feature-settings: 'liga';
 `;
 
 /* VARIABLES */
@@ -79,12 +54,7 @@ export const Root = styled.div`
 
 /* GENERAL */
 
-export const General = styled.div`
-  box-sizing: border-box;
-`;
-
 export const Body = styled.div`
-  font-family: 'Open Sans', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
   font-size: 1em;
   font-weight: 300;
   line-height: 1.5;
@@ -108,44 +78,9 @@ export const HeaderLogo = styled(Header)`
   line-height: 1;
 `;
 
-export const HeaderLogoIcon = styled(HeaderLogo)`
-  padding-right: 0.25em;
-`;
-
-export const Main = styled.div`
-  display: block;
-  margin: 0 auto;
-  margin-top: 5em;
-  max-width: 50em;
-`;
-
 /* GRID */
-export const GridRow = styled.div`
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  width: 100%;
-`;
 export const GridRowMiddle = styled.div`
   align-items: center;
-`;
-
-export const GridCol = styled.div`
-  flex-grow: 1;
-  flex-basis: 0;
-  max-width: 100%;
-`;
-
-export const GridColStart = styled.div`
-  justify-content: flex-start;
-  text-align: left;
-`;
-
-export const GridColCenter = styled.div`
-  justify-content: center;
-  text-align: center;
 `;
 
 export const GridColEnd = styled.div`
@@ -162,34 +97,6 @@ export const Calendar = styled.div`
   border: ${`1px solid ${COLOR_BORDER}`};
 `;
 
-export const CalendarHeader = styled(Calendar)`
-  text-transform: uppercase;
-  font-weight: 700;
-  font-size: 115%;
-  padding: 1.5em 0;
-  border-bottom: 1px solid var(--border-color);
-`;
-
-export const CalendarHeaderIcon = styled.div`
-  cursor: pointer;
-  transition: 0.15s ease-out;
-
-  &:focus {
-    transform: scale(1.75);
-    transition: 0.25s ease-out;
-    color: ${COLOR_MAIN};
-  }
-`;
-
-export const CalendarDays = styled.div`
-  text-transform: uppercase;
-  font-weight: 400;
-  color: ${COLOR_TEXT_LIGHT};
-  font-size: 70%;
-  padding: 0.75em 0;
-  border-bottom: 1px solid var(--border-color);
-`;
-
 type StyledCalendarBodyCellProps = {
   isSelectedDate?: boolean | undefined;
   isSameDay?: boolean | undefined;
@@ -199,6 +106,7 @@ type StyledCalendarBodyCellProps = {
 export const CalendarBodyCell = styled.div<StyledCalendarBodyCellProps>`
   border-color: ${({ isSelectedDate }) => (isSelectedDate ? COLOR_MAIN : COLOR_BORDER)};
   border-width: ${({ isSelectedDate }) => (isSelectedDate ? `5px 0px 0px` : `1px`)};
+  padding-top: ${({ isSelectedDate }) => (isSelectedDate ? `0px` : `5px`)};
   border-style: solid;
   cursor: pointer;
   background: ${({ isSameDay }) => (isSameDay ? COLOR_BG : COLOR_NEUTRAL)};
@@ -217,6 +125,9 @@ export const CalendarBodyCell = styled.div<StyledCalendarBodyCellProps>`
 
     return COLOR_TEXT_LIGHT;
   }};
+  &:hover {
+    background: ${COLOR_BORDER};
+  }
 `;
 
 export const CalendarBodySelected = styled.div`
@@ -256,27 +167,10 @@ export const LayoutBase = styled.div`
 
 export const ColumnHeader = styled(LayoutBase)``;
 
-export const RowHeader = styled(LayoutBase)`
-  flex-direction: row;
-  justify-content: space-between;
-  width: 100%;
-  align-items: center;
-  margin: 1em;
-`;
-
-export const RowHeaderItem = styled(LayoutBase)`
-  flex-direction: row;
-`;
-
 export const HeaderTextLarge = styled.span`
   font-family: Segoe UI;
   font-size: 1.75rem;
   margin-bottom: 5px;
-`;
-
-export const HeaderMonth = styled(HeaderTextLarge)`
-  font-weight: bold;
-  margin-right: 0.2em;
 `;
 
 export const HeaderYear = styled(HeaderTextLarge)`
@@ -284,10 +178,14 @@ export const HeaderYear = styled(HeaderTextLarge)`
 `;
 
 export const CalendarBodyCellNumber = styled.span`
-  font-size: 1.25rem;
+  font-size: ${({ theme }) => theme.fontSizes.large};
   line-height: 1;
   font-weight: 700;
   margin: 5px;
+  
+  @media ${device.tablet} {
+    font-size: ${({ theme }) => theme.fontSizes.xlarge};
+  }
 `;
 
 export const CalendarBodyDisabled = styled.div`

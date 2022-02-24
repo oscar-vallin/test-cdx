@@ -1,4 +1,4 @@
-import { useState, useEffect, ReactElement } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import {
   addDays,
   endOfMonth,
@@ -10,10 +10,26 @@ import {
   startOfMonth,
   startOfWeek,
 } from 'date-fns';
+import { SchedOccurStatusEnum, ScheduleOccurrence } from 'src/data/services/graphql';
+import { Body, CalendarBodyCell, CalendarBodyCellNumber, CalendarBodyRow, CellItem } from './ScheduleMonth.styles';
 
-import { Body, CalendarBodyCellNumber, CalendarBodyCell, CalendarBodyRow, CellItem } from './ScheduleMonth.styles';
+type ScheduleMonthType = {
+  id: string;
+  currentDate: Date;
+  selectedDate: Date;
+  items: ScheduleOccurrence[];
+  onChangeDate: (d: Date) => void;
+  onChangeView: (viewName: string) => void;
+};
 
-export const ScheduleMonth = ({ id, currentDate, selectedDate, onChangeDate, items, onChangeView }) => {
+export const ScheduleMonth = ({
+  id,
+  currentDate,
+  selectedDate,
+  items,
+  onChangeDate,
+  onChangeView,
+}: ScheduleMonthType) => {
   const [dates, setDates] = useState({
     currentMonth: currentDate,
     selectedDate: currentDate,
@@ -41,16 +57,26 @@ export const ScheduleMonth = ({ id, currentDate, selectedDate, onChangeDate, ite
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDate]);
 
-  //
-  //
-  const renderItems = (day, allItems) => {
-    const dayRows = allItems.filter((_item) => isSameDay(parseISO(_item.datetime), day));
+  const renderItems = (day: Date, allItems: ScheduleOccurrence[]) => {
+    let dayRows = allItems.filter((_item) => isSameDay(parseISO(_item.timeScheduled), day));
+    if (dayRows.length > 5) {
+      // Only show the first 5 items and then show an ellipsis
+      dayRows = dayRows.splice(5);
+      dayRows.push({
+        resource: '...',
+        schedOccurStatus: SchedOccurStatusEnum.Scheduled,
+      });
+    }
 
-    return dayRows.map((_item, index) => <CellItem key={`cell_${day}_${index}`}>{_item.label}</CellItem>);
+    return dayRows.map((_item, index) => (
+      <CellItem key={`cell_${day}_${index}`} title={_item.resource}>
+        {_item.resource}
+      </CellItem>
+    ));
   };
 
   // *
-  const handleChangeDate = (_date) => {
+  const handleChangeDate = (_date: Date) => {
     if (isSameDay(_date, selectedDate)) {
       onChangeView('day');
       return;
@@ -74,9 +100,9 @@ export const ScheduleMonth = ({ id, currentDate, selectedDate, onChangeDate, ite
         formattedDate = format(day, dateFormat);
         formattedDateNotValid = format(day, 'LLL d');
         const cloneDay = day;
-        // Collpase icon.
+        // Collapse icon.
         // Month View, Week Month, Day Month.
-        // Select Day highlihgt and Change the View.
+        // Select Day highlight and Change the View.
         // Just highlighted.
 
         days.push(

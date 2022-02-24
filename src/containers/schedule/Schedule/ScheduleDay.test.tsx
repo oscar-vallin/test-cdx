@@ -1,16 +1,16 @@
-import { mount } from 'enzyme';
-import { mountWithTheme, shallowWithTheme } from '../../../utils/testUtils';
-import { ScheduleDay as Component } from './ScheduleDay';
+import { mountWithTheme } from 'src/utils/testUtils';
+import { ScheduleDay } from './ScheduleDay';
 
 const defaultProps = {
   id: '',
   selectedDate: new Date(),
   currentDate: new Date(),
+  items: []
 };
 
 describe('Schedule Day Container...', () => {
   // const themedComponent = shallowWithTheme(<Component {...defaultProps} />);
-  const themedMount = mountWithTheme(<Component {...defaultProps} />);
+  const themedMount = mountWithTheme(<ScheduleDay {...defaultProps} />);
 
   it('Should be defined', () => {
     // expect(themedComponent).toBeDefined();

@@ -1,19 +1,13 @@
 import { useState, useEffect } from 'react';
-import { SchedOccurStatusEnum, useScheduleOccurrencesQuery } from '../../../data/services/graphql';
-// import { useInputValue } from '../../../hooks/useInputValue';
-
-type itemsType = {
-  datetime: string | null;
-  label: string | undefined;
-  status: SchedOccurStatusEnum | undefined;
-};
+import { ScheduleOccurrence, useScheduleOccurrencesQuery } from 'src/data/services/graphql';
+import { ErrorHandler } from 'src/utils/ErrorHandler';
 
 //
 export const useScheduleItems = (argOrgSid, argDateRange) => {
-  const [, setLoading] = useState(true);
-  const [items, setItems] = useState<itemsType[] | undefined>([]);
+  const [items, setItems] = useState<ScheduleOccurrence[]>([]);
+  const handleError = ErrorHandler();
 
-  const { data, loading, error } = useScheduleOccurrencesQuery({
+  const { data, error } = useScheduleOccurrencesQuery({
     variables: {
       orgSid: argOrgSid,
       dateRange: {
@@ -23,30 +17,16 @@ export const useScheduleItems = (argOrgSid, argDateRange) => {
     },
   });
 
-  // * Component Did Mount.
-  useEffect(() => {
-    setLoading(false);
-  }, []);
-
   useEffect(() => {
     if (error) {
-      // !TODO: Refactor to logout use-case */
-      // authLogout(error.message);
-      // history.push('/');
-      // }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+      handleError(error);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
 
   useEffect(() => {
     const doEffect = () => {
-      const _items = data?.scheduleOccurrences?.nodes?.map((item) => {
-        return {
-          datetime: item?.timeScheduled,
-          label: item?.resource,
-          status: item?.schedOccurStatus,
-        };
-      });
+      const _items = data?.scheduleOccurrences?.nodes ?? [];
 
       setItems(_items);
     };
@@ -55,11 +35,6 @@ export const useScheduleItems = (argOrgSid, argDateRange) => {
       doEffect();
     }
   }, [data]);
-
-  // * Loading Data
-  useEffect(() => {
-    setLoading(loading);
-  }, [loading]);
 
   return {
     items,
