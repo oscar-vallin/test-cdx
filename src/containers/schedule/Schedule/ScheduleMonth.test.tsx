@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 import { ScheduleMonth as Component } from './ScheduleMonth';
-import { mountWithTheme } from '../../../../src/utils/testUtils';
+import { mountWithTheme } from 'src/utils/testUtils';
 
 const defaultProps = {
   id: 'CalendarBodyCell-1',
@@ -12,7 +12,7 @@ const defaultProps = {
 };
 
 describe('ScheduleMonth', () => {
-  const tree = shallow(<Component {...defaultProps} />);
+  shallow(<Component {...defaultProps} />);
 
   it('Should be defined', () => {
     expect(Component).toBeDefined();

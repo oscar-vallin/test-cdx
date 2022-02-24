@@ -3,7 +3,6 @@ import { addDays, endOfMonth, endOfWeek, format, isSameDay, isSameMonth, startOf
 
 import { Text } from 'src/components/typography';
 import {
-  Row,
   DayOfWeek,
   WeekViewContainer,
   WeekViewNumber,
@@ -11,6 +10,7 @@ import {
   RowWeek,
   DayViewContainer,
   WeekHourSpace,
+  SubHeaderRow,
 } from './ScheduleSubHeader.styles';
 import { isCurrentViewDay, isCurrentViewWeek } from './helpers';
 
@@ -99,9 +99,9 @@ export const ScheduleSubHeader = ({ id, currentView, currentDate, selectedDate }
     }
 
     if (isCurrentViewWeek(currentView)) {
-      return <RowWeek>{days}</RowWeek>;
+      return <RowWeek id={id}>{days}</RowWeek>;
     }
-    return <Row>{days}</Row>;
+    return <SubHeaderRow id={id}>{days}</SubHeaderRow>;
   };
 
   return <>{_renderSubHeader()}</>;

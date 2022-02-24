@@ -1,28 +1,13 @@
 import styled from 'styled-components';
-import { Box as LayoutBox, Row as LayoutRow, Column as LayoutColumn } from '../../../components/layouts';
-import { Button } from '../../../components/buttons/Button';
-import { ButtonAction } from '../../../components/buttons/ButtonAction';
-
-// const COLOR_MAIN = 'rgb(0, 90, 158)';
-// const COLOR_TEXT = '#333';
-// const COLOR_TEXT_LIGHT = '#CCC';
-// const COLOR_BG = '#F9F9F9';
-// const COLOR_NEUTRAL = '#FFF';
-// const COLOR_BORDER = '#EEE';
+import { Box as LayoutBox, Row as LayoutRow, Column as LayoutColumn } from 'src/components/layouts';
+import { Button } from 'src/components/buttons';
+import { ButtonAction } from 'src/components/buttons';
 
 const COLOR_MAIN = ({ theme }) => theme.colors.themePrimary;
 const COLOR_TEXT = ({ theme }) => theme.colors.neutralPrimary;
 const COLOR_TEXT_LIGHT = ({ theme }) => theme.colors.neutralTertiaryAlt;
-const COLOR_BG = ({ theme }) => theme.colors.neutralLighterAlt;
 const COLOR_NEUTRAL = ({ theme }) => theme.colors.white;
 const COLOR_BORDER = ({ theme }) => theme.colors.neutralLight;
-
-// --main-color: #1a8fff;
-// --text-color: #777;
-// --text-color-light: #ccc;
-// --border-color: #eee;
-// --bg-color: #f9f9f9;
-// --neutral-color: #fff;
 
 export const Container = styled(LayoutBox)`
   width: 80%;
@@ -39,14 +24,6 @@ export const Row = styled(LayoutRow)`
 export const Column = styled(LayoutColumn)`
   width: 40%;
   max-width: 300px;
-`;
-
-export const RightColumn = styled(LayoutColumn)`
-  width: 40%;
-`;
-
-export const CalendarColumn = styled(LayoutColumn)`
-  width: calc(100% / 7);
 `;
 
 export const HeaderButtonView = styled(Button)<HeaderButtonViewProps>`
@@ -68,24 +45,6 @@ export const HeaderButtonTitle = styled(Button)<HeaderButtonTitleProps>`
   border: none;
 `;
 
-export const ScheduleColumn = styled.img`
-  /* font-family: 'Material Icons', serif; */
-  font-style: normal;
-  display: inline-block;
-  vertical-align: middle;
-  line-height: 1;
-  text-transform: none;
-  letter-spacing: normal;
-  word-wrap: normal;
-  white-space: nowrap;
-  direction: ltr;
-
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-  -moz-osx-font-smoothing: grayscale;
-  font-feature-settings: 'liga';
-`;
-
 /* VARIABLES */
 
 export const Root = styled.div`
@@ -98,24 +57,6 @@ export const Root = styled.div`
 `;
 
 /* GENERAL */
-
-export const General = styled.div`
-  box-sizing: border-box;
-`;
-
-export const Body = styled.div`
-  font-family: 'Open Sans', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
-  font-size: 1em;
-  font-weight: 300;
-  line-height: 1.5;
-  color: ${COLOR_TEXT};
-  background: ${COLOR_BG};
-
-  /* background-color: cyan; */
-  width: 100%;
-  /* color: ${COLOR_TEXT}; */
-`;
-
 export const Header = styled.div`
   display: block;
   width: 100%;
@@ -131,44 +72,9 @@ export const HeaderLogo = styled(Header)`
   line-height: 1;
 `;
 
-export const HeaderLogoIcon = styled(HeaderLogo)`
-  padding-right: 0.25em;
-`;
-
-export const Main = styled.div`
-  display: block;
-  margin: 0 auto;
-  margin-top: 5em;
-  max-width: 50em;
-`;
-
 /* GRID */
-export const GridRow = styled.div`
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  width: 100%;
-`;
 export const GridRowMiddle = styled.div`
   align-items: center;
-`;
-
-export const GridCol = styled.div`
-  flex-grow: 1;
-  flex-basis: 0;
-  max-width: 100%;
-`;
-
-export const GridColStart = styled.div`
-  justify-content: flex-start;
-  text-align: left;
-`;
-
-export const GridColCenter = styled.div`
-  justify-content: center;
-  text-align: center;
 `;
 
 export const GridColEnd = styled.div`
@@ -185,41 +91,6 @@ export const Calendar = styled.div`
   border: ${`1px solid ${COLOR_BORDER}`};
 `;
 
-export const CalendarHeader = styled(Calendar)`
-  text-transform: uppercase;
-  font-weight: 700;
-  font-size: 115%;
-  padding: 1.5em 0;
-  border-bottom: 1px solid var(--border-color);
-`;
-
-export const CalendarHeaderIcon = styled.div`
-  cursor: pointer;
-  transition: 0.15s ease-out;
-
-  &:focus {
-    transform: scale(1.75);
-    transition: 0.25s ease-out;
-    color: ${COLOR_MAIN};
-  }
-`;
-
-// .calendar .header .icon:first-of-type {
-//   margin-left: 1em;
-// }
-
-// .calendar .header .icon:last-of-type {
-//   margin-right: 1em;
-// }
-
-export const CalendarDays = styled.div`
-  text-transform: uppercase;
-  font-weight: 400;
-  color: ${COLOR_TEXT_LIGHT};
-  font-size: 70%;
-  padding: 0.75em 0;
-  border-bottom: 1px solid var(--border-color);
-`;
 
 export const CalendarBodyCell = styled.div<CalendarBodyCellProps>`
   /* position: relative;
@@ -270,14 +141,6 @@ export const LayoutBase = styled.div`
 `;
 
 export const ColumnHeader = styled(LayoutBase)``;
-
-export const RowHeader = styled(LayoutBase)`
-  flex-direction: row;
-  justify-content: space-between;
-  width: 100%;
-  align-items: center;
-  margin: 1em;
-`;
 
 export const FillerHours = styled.div`
   height: 100%;

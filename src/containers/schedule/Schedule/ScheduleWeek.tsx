@@ -4,12 +4,12 @@ import { ScheduleOccurrence } from 'src/data/services/graphql';
 import {
   Body,
   DayOfWeekContainer,
-  CalendarBodyCellNumber,
+  WeekBodyCellNumber,
   CalendarBodyRow,
   SWeekHour,
   SWeekHourContainer,
-  CellItem,
-} from './ScheduleWeek.styles';
+  WeekCellItem,
+} from './Schedule.styles';
 
 type ScheduleWeekProps = {
   currentDate: Date;
@@ -43,9 +43,9 @@ export const ScheduleWeek = ({ currentDate, selectedDate, items, onChangeDate, o
     const dayRows = allItems.filter((_item) => isSameHour(parseISO(_item.timeScheduled), _day));
 
     return dayRows?.map((_item, index) => (
-      <CellItem key={`cell_${_day}_${index}`} title={_item.resource}>
+      <WeekCellItem key={`cell_${_day}_${index}`} title={_item.resource}>
         {_item.resource}
-      </CellItem>
+      </WeekCellItem>
     ));
   };
 
@@ -59,7 +59,7 @@ export const ScheduleWeek = ({ currentDate, selectedDate, items, onChangeDate, o
       key={`dow_${day}`}
       onClick={() => handleChangeDate(day)}
     >
-      <CalendarBodyCellNumber id={`CalendarBodyCellNumber-${day}`}>{renderItems(day, items)}</CalendarBodyCellNumber>
+      <WeekBodyCellNumber id={`CalendarBodyCellNumber-${day}`}>{renderItems(day, items)}</WeekBodyCellNumber>
     </DayOfWeekContainer>
   );
 

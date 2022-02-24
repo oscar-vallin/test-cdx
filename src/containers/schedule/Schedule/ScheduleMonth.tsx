@@ -11,7 +11,7 @@ import {
   startOfWeek,
 } from 'date-fns';
 import { SchedOccurStatusEnum, ScheduleOccurrence } from 'src/data/services/graphql';
-import { Body, CalendarBodyCell, CalendarBodyCellNumber, CalendarBodyRow, CellItem } from './ScheduleMonth.styles';
+import { Body, CalendarBodyCell, CalendarBodyCellNumber, CalendarBodyRow, CellItem } from './Schedule.styles';
 
 type ScheduleMonthType = {
   id: string;
@@ -61,9 +61,9 @@ export const ScheduleMonth = ({
     let dayRows = allItems.filter((_item) => isSameDay(parseISO(_item.timeScheduled), day));
     if (dayRows.length > 5) {
       // Only show the first 5 items and then show an ellipsis
-      dayRows = dayRows.splice(5);
+      const remainder = dayRows.splice(5);
       dayRows.push({
-        resource: '...',
+        resource: `... ${remainder.length} more`,
         schedOccurStatus: SchedOccurStatusEnum.Scheduled,
       });
     }

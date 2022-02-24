@@ -45,7 +45,7 @@ const Schedule = ({ id }) => {
 
   return (
     <>
-      <PageHeader id={id} spacing="0">
+      <PageHeader id={`${id}_PageHeader`} spacing="0">
         <Container>
           <ScheduleHeader
             id={id}
@@ -62,7 +62,7 @@ const Schedule = ({ id }) => {
           <Column lg="12">
             <Card elevation="smallest">
               <ScheduleSubHeader
-                id={id}
+                id={`${id}_SubHeader`}
                 currentDate={currentDate}
                 currentView={currentView}
                 selectedDate={selectedDate}

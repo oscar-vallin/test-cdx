@@ -1,7 +1,10 @@
 import styled from 'styled-components';
-import { Box as LayoutBox, Row as LayoutRow, Column as LayoutColumn } from '../../../components/layouts';
+import { device } from 'src/styles/GlobalStyles';
+import { Box as LayoutBox, Row as LayoutRow, Column as LayoutColumn } from 'src/components/layouts';
 
+/* VARIABLES */
 const COLOR_MAIN = ({ theme }) => theme.colors.themePrimary;
+const COLOR_DARK = ({ theme }) => theme.colors.themeDark;
 const COLOR_TEXT = ({ theme }) => theme.colors.neutralPrimary;
 const COLOR_TEXT_LIGHT = ({ theme }) => theme.colors.neutralTertiaryAlt;
 const COLOR_BG = ({ theme }) => theme.colors.neutralLighterAlt;
@@ -21,10 +24,6 @@ export const Container = styled(LayoutBox)`
   padding-right: 10vw;
 `;
 
-export const Box = styled(LayoutBox)`
-  width: 100%;
-`;
-
 export const Row = styled(LayoutRow)`
   width: 100%;
 `;
@@ -34,53 +33,11 @@ export const Column = styled(LayoutColumn)`
   max-width: 300px;
 `;
 
-export const RightColumn = styled(LayoutColumn)`
-  width: 40%;
-`;
-
-export const CalendarColumn = styled(LayoutColumn)`
-  width: calc(100% / 7);
-`;
-
 export const StyledRow = styled(LayoutRow)`
   transform: translateY(-25px);
 `;
 
-export const ScheduleColumn = styled.img`
-  /* font-family: 'Material Icons', serif; */
-  font-style: normal;
-  display: inline-block;
-  vertical-align: middle;
-  line-height: 1;
-  text-transform: none;
-  letter-spacing: normal;
-  word-wrap: normal;
-  white-space: nowrap;
-  direction: ltr;
-
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-  -moz-osx-font-smoothing: grayscale;
-  font-feature-settings: 'liga';
-`;
-
-/* VARIABLES */
-
-export const Root = styled.div`
-  --main-color: #1a8fff;
-  --text-color: #777;
-  --text-color-light: #ccc;
-  --border-color: #eee;
-  --bg-color: #f9f9f9;
-  --neutral-color: #fff;
-`;
-
 /* GENERAL */
-
-export const General = styled.div`
-  box-sizing: border-box;
-`;
-
 export const Body = styled.div`
   font-family: 'Open Sans', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
   font-size: 1em;
@@ -94,66 +51,6 @@ export const Body = styled.div`
   /* color: ${COLOR_TEXT}; */
 `;
 
-export const Header = styled.div`
-  display: block;
-  width: 100%;
-  padding: 1.75em 0;
-  border-bottom: ${`1px solid ${'blue'}`};
-  background: ${COLOR_BORDER};
-`;
-
-export const HeaderLogo = styled(Header)`
-  font-size: 175%;
-  text-align: center;
-  color: ${COLOR_MAIN};
-  line-height: 1;
-`;
-
-export const HeaderLogoIcon = styled(HeaderLogo)`
-  padding-right: 0.25em;
-`;
-
-export const Main = styled.div`
-  display: block;
-  margin: 0 auto;
-  margin-top: 5em;
-  max-width: 50em;
-`;
-
-/* GRID */
-export const GridRow = styled.div`
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  width: 100%;
-`;
-export const GridRowMiddle = styled.div`
-  align-items: center;
-`;
-
-export const GridCol = styled.div`
-  flex-grow: 1;
-  flex-basis: 0;
-  max-width: 100%;
-`;
-
-export const GridColStart = styled.div`
-  justify-content: flex-start;
-  text-align: left;
-`;
-
-export const GridColCenter = styled.div`
-  justify-content: center;
-  text-align: center;
-`;
-
-export const GridColEnd = styled.div`
-  justify-content: flex-end;
-  text-align: right;
-`;
-
 /* Calendar */
 export const Calendar = styled.div`
   display: block;
@@ -163,67 +60,60 @@ export const Calendar = styled.div`
   border: ${`1px solid ${COLOR_BORDER}`};
 `;
 
-export const CalendarHeader = styled(Calendar)`
-  text-transform: uppercase;
-  font-weight: 700;
-  font-size: 115%;
-  padding: 1.5em 0;
-  border-bottom: 1px solid var(--border-color);
-`;
+type StyledDayOfWeekContainerProps = {
+  isSameMonth?: boolean | undefined;
+  isSameDay?: boolean | undefined;
+};
 
-export const CalendarHeaderIcon = styled.div`
+export const DayOfWeekContainer = styled.div<StyledDayOfWeekContainerProps>`
+  border: ${`1px solid ${COLOR_BORDER}`};
+  border-bottom-style: dashed;
   cursor: pointer;
-  transition: 0.15s ease-out;
+  background: ${COLOR_NEUTRAL};
+  width: calc((100% - 14px) / 7);
+  height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  color: ${({ isSameMonth }) => (isSameMonth ? COLOR_TEXT : COLOR_TEXT_LIGHT)};
 
-  &:focus {
-    transform: scale(1.75);
-    transition: 0.25s ease-out;
-    color: ${COLOR_MAIN};
+  &:hover {
+    background: ${COLOR_BORDER};
   }
 `;
 
-// .calendar .header .icon:first-of-type {
-//   margin-left: 1em;
-// }
-
-// .calendar .header .icon:last-of-type {
-//   margin-right: 1em;
-// }
-
-export const CalendarDays = styled.div`
-  text-transform: uppercase;
-  font-weight: 400;
-  color: ${COLOR_TEXT_LIGHT};
-  font-size: 70%;
-  padding: 0.75em 0;
-  border-bottom: 1px solid var(--border-color);
-`;
+type CalendarBodyCellProps = {
+  isSelectedDate?: boolean | undefined;
+  isSameDay?: boolean | undefined;
+  isSameMonth?: boolean | undefined;
+};
 
 export const CalendarBodyCell = styled.div<CalendarBodyCellProps>`
-  /* position: relative;
-  height: 5em;
-  border-right: 1px solid var(--border-color);
-  overflow: hidden;
+  border-color: ${({ isSelectedDate }) => (isSelectedDate ? COLOR_MAIN : COLOR_BORDER)};
+  border-width: ${({ isSelectedDate }) => (isSelectedDate ? `5px 0px 0px` : `1px`)};
+  padding-top: ${({ isSelectedDate }) => (isSelectedDate ? `0px` : `5px`)};
+  border-style: solid;
   cursor: pointer;
-  background: ${COLOR_BORDER};
-  transition: 0.25s ease-out;
-
-  &:hover {
-    background: var(--bg-color);
-    transition: 0.5s ease-out;
-  } */
-
-  /* background-color: blue; */
-  border-right: ${`1px solid ${COLOR_BORDER}`};
-  cursor: pointer;
-  background: ${COLOR_NEUTRAL};
+  background: ${({ isSameDay }) => (isSameDay ? COLOR_BG : COLOR_NEUTRAL)};
   width: calc(100% / 7);
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: flex-end;
-  color: ${({ isSameMonth }) => (isSameMonth ? COLOR_TEXT : COLOR_TEXT_LIGHT)};
+  align-items: flex-start;
+  color: ${({ isSameDay, isSameMonth, isSelectedDate }) => {
+    if (isSelectedDate) {
+      return COLOR_MAIN;
+    }
+
+    if (isSameMonth || isSameDay) return COLOR_TEXT;
+
+    return COLOR_TEXT_LIGHT;
+  }};
+  &:hover {
+    background: ${COLOR_BORDER};
+  }
 `;
 
 export const CalendarBodySelected = styled.div`
@@ -240,54 +130,46 @@ export const CalendarBodyRow = styled.div`
   height: calc(80vh / 5);
 `;
 
-export const LayoutBase = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-`;
-
-export const ColumnHeader = styled(LayoutBase)``;
-
-export const RowHeader = styled(LayoutBase)`
-  flex-direction: row;
-  justify-content: space-between;
-  width: 100%;
-  align-items: center;
-  margin: 1em;
-`;
-
-export const RowHeaderItem = styled(LayoutBase)`
-  flex-direction: row;
-`;
-
-export const HeaderTextLarge = styled.span`
-  font-family: Segoe UI;
-  font-size: 1.75rem;
+export const CellItem = styled.div`
+  font-size: ${({ theme }) => theme.fontSizes.xsmall};
+  width: calc(100% - 10px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background: ${COLOR_DARK};
+  color: ${COLOR_NEUTRAL};
+  border-radius: 3px;
+  margin-left: 5px;
+  margin-right: 5px;
+  padding: 0 5px;
   margin-bottom: 5px;
 `;
 
-export const HeaderMonth = styled(HeaderTextLarge)`
-  font-weight: bold;
-  margin-right: 0.2em;
-`;
-
-export const HeaderYear = styled(HeaderTextLarge)`
+export const HeaderYear = styled.span`
   font-weight: normal;
+  font-size: ${({ theme }) => theme.fontSizes.xlarge};
+  margin-bottom: 5px;
 `;
 
 export const CalendarBodyCellNumber = styled.span`
-  font-size: 82.5%;
+  font-size: ${({ theme }) => theme.fontSizes.large};
   line-height: 1;
-  top: 0.75em;
-  right: 0.75em;
   font-weight: 700;
-  margin: 10px 10px 0 0;
+  margin: 5px;
+  
+  @media ${device.tablet} {
+    margin: 10px;
+  }
 `;
 
 export const CalendarBodyDisabled = styled.div`
   color: ${COLOR_TEXT_LIGHT};
   pointer-events: none;
+`;
+
+export const DayContainer = styled.div`
+  width: 100%;
+  height: 100%;
 `;
 
 export const CalendarBodyCellBg = styled.span`
@@ -302,17 +184,64 @@ export const CalendarBodyCellBg = styled.span`
   letter-spacing: -0.07em;
 `;
 
-// .calendar .body .cell:hover .bg, .calendar .body .selected .bg  {
-//   opacity: 0.05;
-//   transition: .5s ease-in;
-// }
+/* Week View Specific Styles */
 
-export const CalendarBodyCol = styled.div`
-  flex-grow: 0;
-  flex-basis: calc(100% / 7);
-  width: calc(100% / 7);
+export const SWeekHourContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  padding-top: -10px;
+  height: 80px;
+  background: transparent;
+  width: 50px;
 `;
 
-type CalendarBodyCellProps = {
-  isSameMonth?: boolean;
-};
+export const SWeekHour = styled.span`
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: ${({ theme }) => theme.colors.neutralSecondary};
+  height: 100%;
+  margin-right: 5px;
+  margin-top: -8px;
+`;
+
+export const WeekBodyCellNumber = styled.span`
+  margin-top: 10px;
+  justify-content: flex-start;
+  width: calc(100% - 20px);
+  background: none;
+`;
+
+export const WeekCellItem = styled.div`
+  font-size: ${({ theme }) => theme.fontSizes.xsmall};
+  /*width: 100%;*/
+  margin: 5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background: ${({ theme }) => theme.colors.neutralSecondary};
+  color: ${COLOR_NEUTRAL};
+  border-radius: 3px;
+  padding: 0 5%;
+`;
+
+/* Day View Specific Styles */
+
+export const WeekRow = styled(LayoutRow)`
+  width: 100%;
+  /* height: calc(80vh); */
+  background-color: #fff;
+  /* margin-left: --50px; */
+  font-family: 'Open Sans', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+  margin-bottom: 50px;
+`;
+
+export const OccurrenceDetail = styled.div`
+  font-size: ${({ theme }) => theme.fontSizes.normal};
+  width: 100%;
+  background: ${({ theme }) => theme.colors.neutralSecondary};
+  color: ${COLOR_NEUTRAL};
+  border-radius: 3px;
+  margin: 5px;
+  padding: 5px;
+`;

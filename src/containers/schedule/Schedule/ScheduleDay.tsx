@@ -5,13 +5,13 @@ import { CalendarBodyCellNumber } from 'src/containers/schedule/Schedule/Schedul
 import { Badge } from 'src/components/badges/Badge';
 import {
   WeekRow,
-  Container,
+  DayContainer,
   DayOfWeekContainer,
   SWeekHourContainer,
   SWeekHour,
   CalendarBodyRow,
   OccurrenceDetail,
-} from './ScheduleDay.styles';
+} from './Schedule.styles';
 
 type ScheduleDayType = {
   currentDate: Date;
@@ -58,7 +58,7 @@ export const ScheduleDay = ({ currentDate, selectedDate, items }: ScheduleDayTyp
       rows.push(renderRow(h, formattedHour));
     }
 
-    return <Container id="__DayContainer">{rows}</Container>;
+    return <DayContainer id="__DayContainer">{rows}</DayContainer>;
   };
 
   return <WeekRow id="__DayRow">{renderBody()}</WeekRow>;
