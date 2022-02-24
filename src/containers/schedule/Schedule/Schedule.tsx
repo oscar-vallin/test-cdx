@@ -32,13 +32,13 @@ const Schedule = ({ id }) => {
   });
 
   //
-  const handleChangeView = (_newView) => {
+  const handleChangeView = (_newView: string) => {
     setCurrentView(_newView);
     return null;
   };
 
   //
-  const handleChangeDate = (_newDate) => {
+  const handleChangeDate = (_newDate: Date) => {
     setSelectedDate(_newDate);
     return null;
   };
@@ -50,6 +50,7 @@ const Schedule = ({ id }) => {
           <ScheduleHeader
             id={id}
             currentDate={currentDate}
+            selectedDate={selectedDate}
             currentView={currentView}
             onChangeView={handleChangeView}
             onChangeDate={handleChangeDate}

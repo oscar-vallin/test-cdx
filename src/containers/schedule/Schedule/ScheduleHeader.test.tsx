@@ -1,17 +1,16 @@
-import { mount } from 'enzyme';
-import { mountWithTheme, shallowWithTheme } from '../../../../src/utils/testUtils';
+import { mountWithTheme, shallowWithTheme } from 'src/utils/testUtils';
 import { ScheduleHeader as Component } from './ScheduleHeader';
 
 const defaultProps = {
   id: '',
   currentView: 'month',
   currentDate: new Date(),
+  selectedDate: new Date(),
   onChangeDate: () => null,
   onChangeView: () => null,
 };
 
 describe('ButtonAction', () => {
-  const mockFn = jest.fn();
   const themedComponent = shallowWithTheme(<Component {...defaultProps} />);
   const themedMount = mountWithTheme(<Component {...defaultProps} />);
 

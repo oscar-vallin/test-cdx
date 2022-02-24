@@ -9,10 +9,16 @@ const COLOR_TEXT = ({ theme }) => theme.colors.neutralPrimary;
 const COLOR_TEXT_LIGHT = ({ theme }) => theme.colors.neutralTertiaryAlt;
 const COLOR_BG = ({ theme }) => theme.colors.neutralLighterAlt;
 const COLOR_NEUTRAL = ({ theme }) => theme.colors.white;
+const COLOR_NEUTRAL_LIGHTER = ({ theme }) => theme.colors.neutralLighter;
 const COLOR_BORDER = ({ theme }) => theme.colors.neutralLight;
 const COLOR_DARK_BORDER = ({ theme }) => theme.colors.neutralTertiary;
 
 const COLOR_BACKGROUND = () => 'transparent';
+
+const FONT_SMALL = ({ theme }) => theme.fontSizes.small;
+const FONT_NORMAL = ({ theme }) => theme.fontSizes.normal;
+const FONT_LARGE = ({ theme }) => theme.fontSizes.large;
+const FONT_XLARGE = ({ theme }) => theme.fontSizes.xlarge;
 
 export const Container = styled(LayoutBox)`
   width: 100vw;
@@ -121,13 +127,13 @@ export const MonthBodyRow = styled.div`
 `;
 
 export const CellItem = styled.div`
-  font-size: ${({ theme }) => theme.fontSizes.xsmall};
+  font-size: ${FONT_SMALL};
   width: calc(100% - 10px);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   background: ${COLOR_DARK};
-  color: ${COLOR_NEUTRAL};
+  color: ${COLOR_NEUTRAL_LIGHTER};
   border-radius: 3px;
   margin-left: 5px;
   margin-right: 5px;
@@ -137,12 +143,12 @@ export const CellItem = styled.div`
 
 export const HeaderYear = styled.span`
   font-weight: normal;
-  font-size: ${({ theme }) => theme.fontSizes.xlarge};
+  font-size: ${FONT_XLARGE};
   margin-bottom: 5px;
 `;
 
 export const CalendarBodyCellNumber = styled.span`
-  font-size: ${({ theme }) => theme.fontSizes.large};
+  font-size: ${FONT_LARGE};
   line-height: 1;
   font-weight: 700;
   margin: 5px;
@@ -219,21 +225,48 @@ export const WeekDaysWrapper = styled.div`
 
 /* Day View Specific Styles */
 
-export const WeekRow = styled(LayoutRow)`
+export const DayRow = styled(LayoutRow)`
   width: 100%;
-  /* height: calc(80vh); */
-  background-color: #fff;
-  /* margin-left: --50px; */
-  font-family: 'Open Sans', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
-  margin-bottom: 50px;
+  background-color: ${COLOR_NEUTRAL};
+  margin: 0 0 20px 0;
+`;
+
+export const DayBodyRow = styled.div`
+  border-bottom: ${`1px solid ${COLOR_BORDER}`};
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: auto;
+`;
+
+export const DayHourWrapper = styled.div`
+  border-bottom: 1px dashed ${COLOR_DARK_BORDER};
+  width: calc(100% - 60px);
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 5px;
 `;
 
 export const OccurrenceDetail = styled.div`
-  font-size: ${({ theme }) => theme.fontSizes.normal};
-  width: 100%;
-  background: ${COLOR_MAIN};
-  color: ${COLOR_NEUTRAL};
+  font-size: ${FONT_NORMAL};
+  width: calc(100% - 5px);
+  background: ${COLOR_DARK};
+  color: ${COLOR_NEUTRAL_LIGHTER};
   border-radius: 3px;
-  margin: 5px;
+  margin: 5px 5px 0 5px;
   padding: 5px;
+  cursor: pointer;
+
+  &:hover {
+    background: ${COLOR_MAIN};
+  }
+`;
+
+export const OccurrenceItem = styled.span`
+  font-size: ${FONT_NORMAL};
+`;
+
+export const OccurrencePattern = styled.span`
+  font-size: ${FONT_NORMAL};
+  font-weight: ${({ theme }) => theme.fontWeights.bold};
 `;

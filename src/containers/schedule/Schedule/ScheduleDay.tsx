@@ -1,22 +1,35 @@
-import { format, isSameDay, isSameHour, parseISO } from 'date-fns';
 import React, { ReactElement } from 'react';
-import { ScheduleOccurrence } from 'src/data/services/graphql';
+import { format, isSameHour, parseISO } from 'date-fns';
+import { Stack, StackItem } from '@fluentui/react';
+import { useHistory } from 'react-router-dom';
+import { SchedOccurStatusEnum, ScheduleOccurrence } from 'src/data/services/graphql';
 import { Badge } from 'src/components/badges/Badge';
+import { useOrgSid } from 'src/hooks/useOrgSid';
 import {
-  WeekRow,
+  DayBodyRow,
   DayContainer,
-  DayOfWeekContainer,
-  SWeekHourContainer,
-  SWeekHour,
-  MonthBodyRow,
+  DayHourWrapper,
   OccurrenceDetail,
-  CalendarBodyCellNumber,
+  OccurrenceItem,
+  OccurrencePattern,
+  SWeekHour,
+  SWeekHourContainer,
+  DayRow,
 } from './Schedule.styles';
 
 type ScheduleDayType = {
   currentDate: Date;
   selectedDate: Date;
   items: ScheduleOccurrence[];
+};
+
+type RunOccurrence = {
+  runTime: Date;
+  resource: string;
+  workOrderId: string;
+  orgSid: string;
+  status: SchedOccurStatusEnum;
+  canViewDetails: boolean;
 };
 
 export const ScheduleDay = ({ currentDate, selectedDate, items }: ScheduleDayType) => {
@@ -26,28 +39,94 @@ export const ScheduleDay = ({ currentDate, selectedDate, items }: ScheduleDayTyp
 
   const hourFormat = 'h aa';
 
-  const renderItems = (hour: number, allItems: ScheduleOccurrence[]) => {
+  const runOccurrences: RunOccurrence[] = [];
+
+  const { orgSid } = useOrgSid();
+  const history = useHistory();
+
+  items.forEach((item) => {
+    if (item.runOccurrences) {
+      item.runOccurrences?.forEach((run) => {
+        runOccurrences.push({
+          runTime: parseISO(run.timeRan),
+          resource: item.resource,
+          workOrderId: run.workOrderId,
+          orgSid,
+          status: run.status,
+          canViewDetails: true, //run.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.ViewDetails),
+        });
+      });
+    } else {
+      runOccurrences.push({
+        runTime: parseISO(item.timeScheduled),
+        resource: item.resource,
+        workOrderId: '',
+        orgSid,
+        status: item.schedOccurStatus,
+        canViewDetails: false,
+      });
+    }
+  });
+
+  const badgeVariant = (status?: SchedOccurStatusEnum): string => {
+    switch (status) {
+      case SchedOccurStatusEnum.Errored:
+      case SchedOccurStatusEnum.ErroredCloseToSchedule:
+      case SchedOccurStatusEnum.ErroredOffSchedule:
+      case SchedOccurStatusEnum.ErroredEarly:
+      case SchedOccurStatusEnum.ErroredLate:
+        return 'error';
+      case SchedOccurStatusEnum.Missed:
+      case SchedOccurStatusEnum.ExchangeHeld:
+        return 'warning';
+      case SchedOccurStatusEnum.RanCloseToSchedule:
+      case SchedOccurStatusEnum.RanOffSchedule:
+      case SchedOccurStatusEnum.RanNotScheduled:
+      case SchedOccurStatusEnum.RanLate:
+      case SchedOccurStatusEnum.RanEarly:
+      case SchedOccurStatusEnum.RanInWindow:
+        return 'success';
+      default:
+        return 'info';
+    }
+  };
+
+  const openDetails = (runOccurrence: RunOccurrence) => {
+    if (runOccurrence.canViewDetails) {
+      history.push(`/file-status/${runOccurrence.workOrderId}?orgSid=${orgSid}&fsOrgSid=${runOccurrence.orgSid}`);
+    }
+  };
+
+  const renderItems = (hour: number, allItems: RunOccurrence[]) => {
     const day = new Date(currentSelectedDate);
     day.setHours(hour);
-    const dayRows = allItems.filter((_item) => isSameHour(parseISO(_item.timeScheduled), day));
+    const dayRows = allItems.filter((_item) => isSameHour(_item.runTime, day));
 
     return dayRows?.map((_item, index) => (
-      <OccurrenceDetail key={`cell_${hour}_${index}`} title={_item.resource}>
-        {format(parseISO(_item.timeScheduled), 'hh:mm')} {_item.resource}
-        <Badge variant="info" label={_item.schedOccurStatus} pill />
+      <OccurrenceDetail key={`cell_${hour}_${index}`} onClick={() => openDetails(_item)}>
+        <Stack horizontal tokens={{ childrenGap: 15 }} verticalAlign="center" wrap>
+          <StackItem>
+            <OccurrenceItem>{format(_item.runTime, 'hh:mm')}</OccurrenceItem>
+          </StackItem>
+          <StackItem>
+            <OccurrencePattern>{_item.resource}</OccurrencePattern>
+          </StackItem>
+          <StackItem>
+            <OccurrenceItem>{_item.workOrderId}</OccurrenceItem>
+          </StackItem>
+          <StackItem>
+            <Badge variant={badgeVariant(_item.status)} label={_item.status} pill />
+          </StackItem>
+        </Stack>
       </OccurrenceDetail>
     ));
   };
 
   const renderRow = (hour: number, value: string) => (
-    <MonthBodyRow id={`__CalendarBodyRow_${hour}`} key={value}>
+    <DayBodyRow id={`__DayBodyRow_${hour}`} key={value}>
       <SWeekHourContainer>{hour > 0 && <SWeekHour>{value}</SWeekHour>}</SWeekHourContainer>
-      <DayOfWeekContainer id={`__CalendarBodyCell_${hour}`} isSameDay={isSameDay(currentDate, currentSelectedDate)}>
-        <CalendarBodyCellNumber id={`CalendarBodyCellNumber-${hour}`}>
-          {renderItems(hour, items)}
-        </CalendarBodyCellNumber>
-      </DayOfWeekContainer>
-    </MonthBodyRow>
+      <DayHourWrapper id={`__HourWrapper_${hour}`}>{renderItems(hour, runOccurrences)}</DayHourWrapper>
+    </DayBodyRow>
   );
 
   const renderBody = () => {
@@ -61,5 +140,5 @@ export const ScheduleDay = ({ currentDate, selectedDate, items }: ScheduleDayTyp
     return <DayContainer id="__DayContainer">{rows}</DayContainer>;
   };
 
-  return <WeekRow id="__DayRow">{renderBody()}</WeekRow>;
+  return <DayRow id="__DayRow">{renderBody()}</DayRow>;
 };

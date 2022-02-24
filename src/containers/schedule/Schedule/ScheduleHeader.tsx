@@ -17,24 +17,41 @@ import {
   UpDownContainer,
   MonthYearContainer,
   HeaderButtonTitle,
-  FillerHours,
 } from './ScheduleHeader.styles';
 
-export const ScheduleHeader = ({ id, currentView, currentDate, onChangeDate, onChangeView }) => {
+type ScheduleHeaderType = {
+  id: string;
+  currentView: string;
+  currentDate: Date;
+  selectedDate: Date;
+  onChangeDate: (d: Date) => void;
+  onChangeView: (view: string) => void;
+};
+
+export const ScheduleHeader = ({
+  id,
+  currentView,
+  currentDate,
+  selectedDate,
+  onChangeDate,
+  onChangeView,
+}: ScheduleHeaderType) => {
   const [currentMonth, setCurrentMonth] = useState(currentDate ?? new Date());
-  const [currentWeek, setCurrentWeek] = useState(currentDate ?? new Date());
-  const [currentDay, setCurrentDay] = useState(currentDate ?? new Date());
+  const [currentWeek, setCurrentWeek] = useState(selectedDate ?? new Date());
+  const [currentDay, setCurrentDay] = useState(selectedDate ?? new Date());
   const headerMonthFormat = 'MMMM';
   const headerYearFormat = 'yyyy';
   const [calendarOpen, setCalendarOpen] = useState(false);
 
   //
   const handleChangeDate = (_newDate?: Date) => {
-    setCalendarOpen(false);
-    setCurrentMonth(_newDate);
-    setCurrentWeek(_newDate);
-    setCurrentDay(_newDate);
-    onChangeDate(_newDate);
+    if (_newDate) {
+      setCalendarOpen(false);
+      setCurrentMonth(_newDate);
+      setCurrentWeek(_newDate);
+      setCurrentDay(_newDate);
+      onChangeDate(_newDate);
+    }
   };
 
   //
@@ -118,7 +135,7 @@ export const ScheduleHeader = ({ id, currentView, currentDate, onChangeDate, onC
     if (isCurrentViewDay(currentView)) {
       return (
         <MonthYearContainer>
-          <HeaderMonth>{`${format(currentDay, formatWeek)}, ${format(currentDay, headerYearFormat)}`}</HeaderMonth>
+          <HeaderMonth>{`${format(selectedDate, formatWeek)}, ${format(selectedDate, headerYearFormat)}`}</HeaderMonth>
         </MonthYearContainer>
       );
     }
@@ -164,50 +181,20 @@ export const ScheduleHeader = ({ id, currentView, currentDate, onChangeDate, onC
       <UpDownContainer>
         {isCurrentViewDay(currentView) && (
           <>
-            <StyledButtonAction
-              id="ButtonPrev"
-              onClick={handlePrevDay}
-              icon="chromeBack"
-              disabled={false}
-              children={null}
-            />
-            <StyledButtonAction
-              id="ButtonNext"
-              onClick={handleNextDay}
-              icon="chromeNext"
-              disabled={false}
-              children={null}
-            />
+            <StyledButtonAction id="ButtonPrev" onClick={handlePrevDay} icon="chromeBack" disabled={false} />
+            <StyledButtonAction id="ButtonNext" onClick={handleNextDay} icon="chromeNext" disabled={false} />
           </>
         )}
         {isCurrentViewWeek(currentView) && (
           <>
-            <StyledButtonAction
-              id="ButtonPrev"
-              onClick={handlePrevWeek}
-              icon="chromeBack"
-              disabled={false}
-              children={null}
-            />
-            <StyledButtonAction
-              id="ButtonNext"
-              onClick={handleNextWeek}
-              icon="chromeNext"
-              disabled={false}
-              children={null}
-            />
+            <StyledButtonAction id="ButtonPrev" onClick={handlePrevWeek} icon="chromeBack" disabled={false} />
+            <StyledButtonAction id="ButtonNext" onClick={handleNextWeek} icon="chromeNext" disabled={false} />
           </>
         )}
         {isCurrentViewMonth(currentView) && (
           <>
-            <StyledButtonAction id="ButtonUp" onClick={handlePrevMonth} icon="up" disabled={false} children={null} />
-            <StyledButtonAction
-              id="ButtonDown"
-              onClick={handleNextMonth}
-              icon="down"
-              disabled={false}
-              children={null}
-            />
+            <StyledButtonAction id="ButtonUp" onClick={handlePrevMonth} icon="up" disabled={false} />
+            <StyledButtonAction id="ButtonDown" onClick={handleNextMonth} icon="down" disabled={false} />
           </>
         )}
       </UpDownContainer>
@@ -219,7 +206,6 @@ export const ScheduleHeader = ({ id, currentView, currentDate, onChangeDate, onC
       <Row id={id}>
         <Column lg="8">
           <RowHeaderItem>
-            {isCurrentViewWeek(currentView) && <FillerHours />}
             {renderTodayButton()}
             {renderNavArrows()}
             {renderHeaderTitle()}
