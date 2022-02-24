@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import { format, isSameHour, parseISO } from 'date-fns';
 import { Stack, StackItem } from '@fluentui/react';
 import { useHistory } from 'react-router-dom';
-import { SchedOccurStatusEnum, ScheduleOccurrence } from 'src/data/services/graphql';
+import { SchedOccurStatusEnum, ScheduleOccurrence, WorkPacketCommandType } from 'src/data/services/graphql';
 import { Badge } from 'src/components/badges/Badge';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import {
@@ -29,6 +29,7 @@ type RunOccurrence = {
   workOrderId: string;
   orgSid: string;
   status: SchedOccurStatusEnum;
+  statusLabel: string;
   canViewDetails: boolean;
 };
 
@@ -51,9 +52,10 @@ export const ScheduleDay = ({ currentDate, selectedDate, items }: ScheduleDayTyp
           runTime: parseISO(run.timeRan),
           resource: item.resource,
           workOrderId: run.workOrderId,
-          orgSid,
+          orgSid: item.orgSid,
           status: run.status,
-          canViewDetails: true, //run.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.ViewDetails),
+          statusLabel: run.statusLabel,
+          canViewDetails: !!run.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.ViewDetails),
         });
       });
     } else {
@@ -61,8 +63,9 @@ export const ScheduleDay = ({ currentDate, selectedDate, items }: ScheduleDayTyp
         runTime: parseISO(item.timeScheduled),
         resource: item.resource,
         workOrderId: '',
-        orgSid,
+        orgSid: item.orgSid,
         status: item.schedOccurStatus,
+        statusLabel: item.schedOccurStatusLabel,
         canViewDetails: false,
       });
     }
@@ -115,7 +118,7 @@ export const ScheduleDay = ({ currentDate, selectedDate, items }: ScheduleDayTyp
             <OccurrenceItem>{_item.workOrderId}</OccurrenceItem>
           </StackItem>
           <StackItem>
-            <Badge variant={badgeVariant(_item.status)} label={_item.status} pill />
+            <Badge variant={badgeVariant(_item.status)} label={_item.statusLabel} pill />
           </StackItem>
         </Stack>
       </OccurrenceDetail>

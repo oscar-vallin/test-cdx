@@ -58,13 +58,15 @@ export const ScheduleMonth = ({
   }, [selectedDate]);
 
   const renderItems = (day: Date, allItems: ScheduleOccurrence[]) => {
-    let dayRows = allItems.filter((_item) => isSameDay(parseISO(_item.timeScheduled), day));
+    const dayRows = allItems.filter((_item) => isSameDay(parseISO(_item.timeScheduled), day));
     if (dayRows.length > 5) {
       // Only show the first 5 items and then show an ellipsis
       const remainder = dayRows.splice(5);
       dayRows.push({
         resource: `... ${remainder.length} more`,
         schedOccurStatus: SchedOccurStatusEnum.Scheduled,
+        schedOccurStatusLabel: 'Scheduled',
+        orgSid: '-1',
       });
     }
 
