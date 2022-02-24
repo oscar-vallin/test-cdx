@@ -26,7 +26,6 @@ phases:
   pre_build:
     commands:
       - echo Installing source NPM dependencies...
-      - yarn install
       - echo updating the environment variable
       - echo SKIP_PREFLIGHT_CHECK=true > .env
       - echo REACT_APP_API_SERVER='https://x2-terraform-loadbalancer.k2u.xyz/graphql/' >> .env
