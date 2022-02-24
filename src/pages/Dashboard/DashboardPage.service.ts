@@ -63,6 +63,7 @@ export const useDashboardService = (orgSid: string, dateRangeType?: string | nul
     if (customPeriodError) {
       handleError(customPeriodError);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [customPeriodError]);
 
   // * Set Data Counters.

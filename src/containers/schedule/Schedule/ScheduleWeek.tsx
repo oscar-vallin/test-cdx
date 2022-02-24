@@ -5,10 +5,11 @@ import {
   Body,
   DayOfWeekContainer,
   WeekBodyCellNumber,
-  CalendarBodyRow,
+  WeekBodyRow,
   SWeekHour,
   SWeekHourContainer,
-  WeekCellItem,
+  CellItem,
+  WeekDaysWrapper,
 } from './Schedule.styles';
 
 type ScheduleWeekProps = {
@@ -43,31 +44,34 @@ export const ScheduleWeek = ({ currentDate, selectedDate, items, onChangeDate, o
     const dayRows = allItems.filter((_item) => isSameHour(parseISO(_item.timeScheduled), _day));
 
     return dayRows?.map((_item, index) => (
-      <WeekCellItem key={`cell_${_day}_${index}`} title={_item.resource}>
+      <CellItem key={`cell_${_day}_${index}`} title={_item.resource}>
         {_item.resource}
-      </WeekCellItem>
+      </CellItem>
     ));
   };
 
   //
   // ─── CREATE DAYS ─────────────────────────────────────────────────────────────────
   //
-  const renderDayOfWeek = (day: Date) => (
-    <DayOfWeekContainer
-      id={`CalendarBodyCell-${format(day, 'yyyy-MM-dd')}`}
-      isSameDay={isSameDay(day, currentSelectedDate)}
-      key={`dow_${day}`}
-      onClick={() => handleChangeDate(day)}
-    >
-      <WeekBodyCellNumber id={`CalendarBodyCellNumber-${day}`}>{renderItems(day, items)}</WeekBodyCellNumber>
-    </DayOfWeekContainer>
-  );
+  const renderDayOfWeek = (day: Date) => {
+    const id = format(day, 'yyyy-MM-dd-hh');
+    return (
+      <DayOfWeekContainer
+        id={`DayOfWeekBodyCell-${id}`}
+        isSameDay={isSameDay(day, currentSelectedDate)}
+        key={`dow_${day}`}
+        onClick={() => handleChangeDate(day)}
+      >
+        <WeekBodyCellNumber id={`DayOfWeekBodyCellNumber-${id}`}>{renderItems(day, items)}</WeekBodyCellNumber>
+      </DayOfWeekContainer>
+    );
+  };
 
   const renderHourRow = (hour: number, value: string, days: ReactElement[]) => (
-    <CalendarBodyRow id={`CalendarBodyRow-${hour}`} key={`row_${hour}`}>
+    <WeekBodyRow id={`CalendarBodyRow-${hour}`} key={`row_${hour}`}>
       <SWeekHourContainer>{hour > 0 && <SWeekHour>{value}</SWeekHour>}</SWeekHourContainer>
-      {days}
-    </CalendarBodyRow>
+      <WeekDaysWrapper>{days}</WeekDaysWrapper>
+    </WeekBodyRow>
   );
 
   const renderBody = () => {

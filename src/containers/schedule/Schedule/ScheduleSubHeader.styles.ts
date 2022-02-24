@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { device } from 'src/styles/GlobalStyles';
 import { Box as LayoutBox, Row as LayoutRow, Column as LayoutColumn } from 'src/components/layouts';
 import { Button } from 'src/components/buttons/Button';
 
@@ -25,7 +26,7 @@ export const Row = styled(LayoutRow)`
 
 export const SubHeaderRow = styled(LayoutRow)`
   width: 100%;
-  margin-bottom: 5px;
+  margin: 0 0 5px 0;
   background-color: ${COLOR_BACKGROUND};
 `;
 
@@ -33,6 +34,7 @@ export const RowWeek = styled(Row)`
   border-bottom-width: 5px;
   border-bottom-style: solid;
   border-bottom-color: ${COLOR_BORDER};
+  margin: 0;
 `;
 
 export const Column = styled(LayoutColumn)`
@@ -186,6 +188,7 @@ export const WeekViewContainer = styled.div<StyledWeekViewContainerProps>`
   height: 48px;
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   align-items: flex-end;
 
   color: ${({ isSameDay }) => (isSameDay ? COLOR_MAIN : COLOR_BORDER)};
@@ -215,12 +218,17 @@ export const DayViewContainer = styled(WeekViewContainer)`
 `;
 
 export const WeekViewNumber = styled(HeaderTextLarge)`
-  margin: 0 0 6px 10px;
-  font-size: 1.25rem;
-  height: 40px;
+  margin: 0 0 5px 5px;
+  font-size: ${({ theme }) => theme.fontSizes.normal};
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  
+  @media ${device.tablet} {
+    margin: 0 0 6px 10px;
+    font-size: ${({ theme }) => theme.fontSizes.large};
+    height: 40px;  
+  }
 `;
 
 type StyledWeekViewDayNameProps = {
@@ -228,13 +236,18 @@ type StyledWeekViewDayNameProps = {
 };
 
 export const WeekViewDayName = styled(HeaderTextLarge)<StyledWeekViewDayNameProps>`
-  margin: 0 0 8px 5px;
-  font-size: 0.875rem;
+  margin: 0 0 5px 5px;
+  font-size: ${({ theme }) => theme.fontSizes.small};
   color: ${({ isSameMonth }) => (isSameMonth ? COLOR_TEXT : COLOR_TEXT_LIGHT)};
-  height: 40px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+ 
+  @media ${device.tablet} {
+  margin: 0 0 8px 5px;
+    font-size: ${({ theme }) => theme.fontSizes.normal};
+    height: 40px;  
+  }
 `;
 
 export const HeaderYear = styled(HeaderTextLarge)`

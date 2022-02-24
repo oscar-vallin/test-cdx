@@ -1,7 +1,6 @@
 import { format, isSameDay, isSameHour, parseISO } from 'date-fns';
 import React, { ReactElement } from 'react';
 import { ScheduleOccurrence } from 'src/data/services/graphql';
-import { CalendarBodyCellNumber } from 'src/containers/schedule/Schedule/ScheduleWeek.styles';
 import { Badge } from 'src/components/badges/Badge';
 import {
   WeekRow,
@@ -9,8 +8,9 @@ import {
   DayOfWeekContainer,
   SWeekHourContainer,
   SWeekHour,
-  CalendarBodyRow,
+  MonthBodyRow,
   OccurrenceDetail,
+  CalendarBodyCellNumber,
 } from './Schedule.styles';
 
 type ScheduleDayType = {
@@ -40,14 +40,14 @@ export const ScheduleDay = ({ currentDate, selectedDate, items }: ScheduleDayTyp
   };
 
   const renderRow = (hour: number, value: string) => (
-    <CalendarBodyRow id={`__CalendarBodyRow_${hour}`} key={value}>
+    <MonthBodyRow id={`__CalendarBodyRow_${hour}`} key={value}>
       <SWeekHourContainer>{hour > 0 && <SWeekHour>{value}</SWeekHour>}</SWeekHourContainer>
       <DayOfWeekContainer id={`__CalendarBodyCell_${hour}`} isSameDay={isSameDay(currentDate, currentSelectedDate)}>
         <CalendarBodyCellNumber id={`CalendarBodyCellNumber-${hour}`}>
           {renderItems(hour, items)}
         </CalendarBodyCellNumber>
       </DayOfWeekContainer>
-    </CalendarBodyRow>
+    </MonthBodyRow>
   );
 
   const renderBody = () => {

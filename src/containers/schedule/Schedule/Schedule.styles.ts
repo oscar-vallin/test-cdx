@@ -10,6 +10,7 @@ const COLOR_TEXT_LIGHT = ({ theme }) => theme.colors.neutralTertiaryAlt;
 const COLOR_BG = ({ theme }) => theme.colors.neutralLighterAlt;
 const COLOR_NEUTRAL = ({ theme }) => theme.colors.white;
 const COLOR_BORDER = ({ theme }) => theme.colors.neutralLight;
+const COLOR_DARK_BORDER = ({ theme }) => theme.colors.neutralTertiary;
 
 const COLOR_BACKGROUND = () => 'transparent';
 
@@ -39,16 +40,11 @@ export const StyledRow = styled(LayoutRow)`
 
 /* GENERAL */
 export const Body = styled.div`
-  font-family: 'Open Sans', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
-  font-size: 1em;
-  font-weight: 300;
   line-height: 1.5;
   color: ${COLOR_TEXT};
   background: ${COLOR_BG};
 
-  /* background-color: cyan; */
   width: 100%;
-  /* color: ${COLOR_TEXT}; */
 `;
 
 /* Calendar */
@@ -67,11 +63,11 @@ type StyledDayOfWeekContainerProps = {
 
 export const DayOfWeekContainer = styled.div<StyledDayOfWeekContainerProps>`
   border: ${`1px solid ${COLOR_BORDER}`};
-  border-bottom-style: dashed;
+  /* border-bottom-style: dashed; */
   cursor: pointer;
   background: ${COLOR_NEUTRAL};
   width: calc((100% - 14px) / 7);
-  height: 80px;
+  min-height: 40px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -116,13 +112,7 @@ export const CalendarBodyCell = styled.div<CalendarBodyCellProps>`
   }
 `;
 
-export const CalendarBodySelected = styled.div`
-  border-left: 10px solid transparent;
-  border-image: linear-gradient(45deg, #1a8fff 0%, #53cbf1 40%);
-  border-image-slice: 1;
-`;
-
-export const CalendarBodyRow = styled.div`
+export const MonthBodyRow = styled.div`
   border-bottom: ${`1px solid ${COLOR_BORDER}`};
   display: flex;
   flex-direction: row;
@@ -156,7 +146,7 @@ export const CalendarBodyCellNumber = styled.span`
   line-height: 1;
   font-weight: 700;
   margin: 5px;
-  
+
   @media ${device.tablet} {
     margin: 10px;
   }
@@ -191,7 +181,7 @@ export const SWeekHourContainer = styled.div`
   flex-direction: row;
   justify-content: flex-end;
   padding-top: -10px;
-  height: 80px;
+  min-height: 40px;
   background: transparent;
   width: 50px;
 `;
@@ -208,21 +198,23 @@ export const SWeekHour = styled.span`
 export const WeekBodyCellNumber = styled.span`
   margin-top: 10px;
   justify-content: flex-start;
-  width: calc(100% - 20px);
+  width: 100%;
   background: none;
 `;
 
-export const WeekCellItem = styled.div`
-  font-size: ${({ theme }) => theme.fontSizes.xsmall};
-  /*width: 100%;*/
-  margin: 5px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  background: ${({ theme }) => theme.colors.neutralSecondary};
-  color: ${COLOR_NEUTRAL};
-  border-radius: 3px;
-  padding: 0 5%;
+export const WeekBodyRow = styled.div`
+  border-bottom: ${`1px solid ${COLOR_BORDER}`};
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: auto;
+`;
+
+export const WeekDaysWrapper = styled.div`
+  border-bottom: 1px dashed ${COLOR_DARK_BORDER};
+  width: 100%;
+  display: flex;
+  flex-direction: row;
 `;
 
 /* Day View Specific Styles */
@@ -239,7 +231,7 @@ export const WeekRow = styled(LayoutRow)`
 export const OccurrenceDetail = styled.div`
   font-size: ${({ theme }) => theme.fontSizes.normal};
   width: 100%;
-  background: ${({ theme }) => theme.colors.neutralSecondary};
+  background: ${COLOR_MAIN};
   color: ${COLOR_NEUTRAL};
   border-radius: 3px;
   margin: 5px;

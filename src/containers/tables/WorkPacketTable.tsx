@@ -155,6 +155,7 @@ export const WorkPacketTable = ({
         apiPolling?.stopPolling();
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orgSid, tableFilters.searchText.delayedValue, tableFilters.startDate.value, tableFilters.endDate.value]);
 
   useEffect(() => {
@@ -168,6 +169,7 @@ export const WorkPacketTable = ({
         },
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orgSid, tableFilters.pagingParams, lastUpdated]);
 
   useEffect(() => {
@@ -179,25 +181,23 @@ export const WorkPacketTable = ({
       setItems(transFormedItems);
 
       // update the paging info
-      const pagingInfo = data?.workPacketStatuses?.paginationInfo;
-      if (pagingInfo) {
-        setPagingInfo(pagingInfo);
+      const newPagingInfo = data?.workPacketStatuses?.paginationInfo;
+      if (newPagingInfo) {
+        setPagingInfo(newPagingInfo);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, loading]);
 
   useEffect(() => {
-    if (
-      apiPolling.data &&
-      apiPolling.data.workPacketStatusesPoll &&
-      apiPolling.data.workPacketStatusesPoll > 0
-    ) {
+    if (apiPolling.data && apiPolling.data.workPacketStatusesPoll && apiPolling.data.workPacketStatusesPoll > 0) {
       setLastUpdated(new Date());
     }
   }, [apiPolling.data]);
 
   useEffect(() => {
     handleError(apiPolling.error);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [apiPolling.error]);
 
   const renderTable = () => {
