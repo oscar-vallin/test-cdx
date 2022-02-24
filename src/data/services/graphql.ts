@@ -23,17 +23,17 @@ export type AccessPolicy = {
   __typename?: 'AccessPolicy';
   sid?: Maybe<Scalars['ID']>;
   name: Scalars['String'];
-  permissions?: Maybe<Array<Maybe<Permission>>>;
+  permissions?: Maybe<Array<Permission>>;
   tmpl?: Maybe<Scalars['Boolean']>;
   tmplUseAsIs?: Maybe<Scalars['Boolean']>;
-  applicableOrgTypes?: Maybe<Array<Maybe<OrgType>>>;
+  applicableOrgTypes?: Maybe<Array<OrgType>>;
 };
 
 export type AccessPolicyConnection = {
   __typename?: 'AccessPolicyConnection';
   paginationInfo: PaginationInfo;
   listPageInfo?: Maybe<ListPageInfo>;
-  nodes?: Maybe<Array<Maybe<AccessPolicy>>>;
+  nodes?: Maybe<Array<AccessPolicy>>;
 };
 
 export type AccessPolicyForm = {
@@ -45,8 +45,8 @@ export type AccessPolicyForm = {
   tmpl?: Maybe<UiBooleanField>;
   tmplUseAsIs?: Maybe<UiBooleanField>;
   applicableOrgTypes?: Maybe<UiSelectManyField>;
-  options?: Maybe<Array<Maybe<UiOptions>>>;
-  commands?: Maybe<Array<Maybe<WebCommand>>>;
+  options?: Maybe<Array<UiOptions>>;
+  commands?: Maybe<Array<WebCommand>>;
   response: GqOperationResponse;
   errCode?: Maybe<Scalars['String']>;
   errMsg?: Maybe<Scalars['String']>;
@@ -60,15 +60,15 @@ export type AccessPolicyGroup = {
   description?: Maybe<Scalars['String']>;
   tmpl?: Maybe<Scalars['Boolean']>;
   tmplUseAsIs?: Maybe<Scalars['Boolean']>;
-  applicableOrgTypes?: Maybe<Array<Maybe<OrgType>>>;
-  policies?: Maybe<Array<Maybe<AccessPolicy>>>;
+  applicableOrgTypes?: Maybe<Array<OrgType>>;
+  policies?: Maybe<Array<AccessPolicy>>;
 };
 
 export type AccessPolicyGroupConnection = {
   __typename?: 'AccessPolicyGroupConnection';
   paginationInfo: PaginationInfo;
   listPageInfo?: Maybe<ListPageInfo>;
-  nodes?: Maybe<Array<Maybe<AccessPolicyGroup>>>;
+  nodes?: Maybe<Array<AccessPolicyGroup>>;
 };
 
 export type AccessPolicyGroupForm = {
@@ -86,8 +86,8 @@ export type AccessPolicyGroupForm = {
   includeAllSubOrgs?: Maybe<UiBooleanField>;
   includeOrgSids?: Maybe<UiSelectManyField>;
   excludeOrgSids?: Maybe<UiSelectManyField>;
-  options?: Maybe<Array<Maybe<UiOptions>>>;
-  commands?: Maybe<Array<Maybe<WebCommand>>>;
+  options?: Maybe<Array<UiOptions>>;
+  commands?: Maybe<Array<WebCommand>>;
   response: GqOperationResponse;
   errCode?: Maybe<Scalars['String']>;
   errMsg?: Maybe<Scalars['String']>;
@@ -98,14 +98,14 @@ export type AccessSpecialization = {
   __typename?: 'AccessSpecialization';
   sid: Scalars['ID'];
   name: Scalars['String'];
-  filters?: Maybe<Array<Maybe<SpecializationFilter>>>;
+  filters?: Maybe<Array<SpecializationFilter>>;
 };
 
 export type AccessSpecializationConnection = {
   __typename?: 'AccessSpecializationConnection';
   paginationInfo: PaginationInfo;
   listPageInfo?: Maybe<ListPageInfo>;
-  nodes?: Maybe<Array<Maybe<AccessSpecialization>>>;
+  nodes?: Maybe<Array<AccessSpecialization>>;
 };
 
 export type AccessSpecializationForm = {
@@ -113,9 +113,9 @@ export type AccessSpecializationForm = {
   sid?: Maybe<Scalars['ID']>;
   name: UiStringField;
   organization: UiReadOnlyField;
-  filters?: Maybe<Array<Maybe<SpecializationFilterForm>>>;
-  options?: Maybe<Array<Maybe<UiOptions>>>;
-  commands?: Maybe<Array<Maybe<WebCommand>>>;
+  filters?: Maybe<Array<SpecializationFilterForm>>;
+  options?: Maybe<Array<UiOptions>>;
+  commands?: Maybe<Array<WebCommand>>;
   response: GqOperationResponse;
   errCode?: Maybe<Scalars['String']>;
   errMsg?: Maybe<Scalars['String']>;
@@ -420,7 +420,7 @@ export type DashThemeColor = {
 export type DashThemeColorConnection = {
   __typename?: 'DashThemeColorConnection';
   paginationInfo: PaginationInfo;
-  nodes?: Maybe<Array<Maybe<DashThemeColor>>>;
+  nodes?: Maybe<Array<DashThemeColor>>;
 };
 
 export type DashThemeColorDefaultInput = {
@@ -447,13 +447,13 @@ export type DashboardPeriodCount = {
 
 export type DashboardPeriodCounts = {
   __typename?: 'DashboardPeriodCounts';
-  vendorTransmissions?: Maybe<Array<Maybe<DashboardPeriodCount>>>;
-  vendorTransmissionsBySpec?: Maybe<Array<Maybe<DashboardPeriodCount>>>;
-  planSponsorTransmissions?: Maybe<Array<Maybe<DashboardPeriodCount>>>;
-  fileTransmissions?: Maybe<Array<Maybe<DashboardPeriodCount>>>;
-  vendorProcessErrors?: Maybe<Array<Maybe<DashboardPeriodCount>>>;
-  planSponsorProcessErrors?: Maybe<Array<Maybe<DashboardPeriodCount>>>;
-  fileProcessErrors?: Maybe<Array<Maybe<DashboardPeriodCount>>>;
+  vendorTransmissions?: Maybe<Array<DashboardPeriodCount>>;
+  vendorTransmissionsBySpec?: Maybe<Array<DashboardPeriodCount>>;
+  planSponsorTransmissions?: Maybe<Array<DashboardPeriodCount>>;
+  fileTransmissions?: Maybe<Array<DashboardPeriodCount>>;
+  vendorProcessErrors?: Maybe<Array<DashboardPeriodCount>>;
+  planSponsorProcessErrors?: Maybe<Array<DashboardPeriodCount>>;
+  fileProcessErrors?: Maybe<Array<DashboardPeriodCount>>;
   showCountsByPlanSponsor?: Maybe<Scalars['Boolean']>;
   showCountsByFile?: Maybe<Scalars['Boolean']>;
   transmissionCount?: Maybe<Scalars['Int']>;
@@ -478,9 +478,9 @@ export type DateTimeRangeInput = {
 
 export type DefaultDashThemePage = {
   __typename?: 'DefaultDashThemePage';
-  themeColorModes?: Maybe<Array<Maybe<ThemeColorMode>>>;
-  themeFontSizes?: Maybe<Array<Maybe<ThemeFontSize>>>;
-  themeColorPalettes?: Maybe<Array<Maybe<DashThemeColor>>>;
+  themeColorModes?: Maybe<Array<ThemeColorMode>>;
+  themeFontSizes?: Maybe<Array<ThemeFontSize>>;
+  themeColorPalettes?: Maybe<Array<DashThemeColor>>;
 };
 
 export type DeleteAccessPoliciesInput = {
@@ -522,8 +522,8 @@ export type EnrollmentStat = {
   __typename?: 'EnrollmentStat';
   insuredStat?: Maybe<InsuredStat>;
   excludedInsuredStat?: Maybe<InsuredStat>;
-  excludedPlanInsuredStat?: Maybe<Array<Maybe<PlanInsuredStat>>>;
-  planInsuredStat?: Maybe<Array<Maybe<PlanInsuredStat>>>;
+  excludedPlanInsuredStat?: Maybe<Array<PlanInsuredStat>>;
+  planInsuredStat?: Maybe<Array<PlanInsuredStat>>;
 };
 
 export enum Environment {
@@ -555,7 +555,7 @@ export type ExtractParameters = {
 
 export type FieldCreationEvent = {
   __typename?: 'FieldCreationEvent';
-  message?: Maybe<Array<Maybe<Scalars['String']>>>;
+  message?: Maybe<Array<Scalars['String']>>;
   name?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['String']>;
   value?: Maybe<Scalars['String']>;
@@ -581,8 +581,8 @@ export type ImplementationDeployResponse = {
   __typename?: 'ImplementationDeployResponse';
   response: GqOperationResponse;
   timestamp: Scalars['DateTime'];
-  references?: Maybe<Array<Maybe<Scalars['String']>>>;
-  changes?: Maybe<Array<Maybe<Scalars['String']>>>;
+  references?: Maybe<Array<Scalars['String']>>;
+  changes?: Maybe<Array<Scalars['String']>>;
 };
 
 export type InsuredStat = {
@@ -604,9 +604,9 @@ export type InsuredStatCount = {
 export type ListPageInfo = {
   __typename?: 'ListPageInfo';
   pageHeaderLabel?: Maybe<Scalars['String']>;
-  pageCommands?: Maybe<Array<Maybe<WebCommand>>>;
-  listItemCommands?: Maybe<Array<Maybe<WebCommand>>>;
-  listItemBulkCommands?: Maybe<Array<Maybe<WebCommand>>>;
+  pageCommands?: Maybe<Array<WebCommand>>;
+  listItemCommands?: Maybe<Array<WebCommand>>;
+  listItemBulkCommands?: Maybe<Array<WebCommand>>;
 };
 
 export enum LogLevel {
@@ -624,7 +624,7 @@ export type LogMessage = {
   severity: LogLevel;
   name: Scalars['String'];
   body?: Maybe<Scalars['String']>;
-  attributes?: Maybe<Array<Maybe<Nvp>>>;
+  attributes?: Maybe<Array<Nvp>>;
 };
 
 export type LogOutInfo = {
@@ -946,7 +946,7 @@ export type OrganizationConnection = {
   __typename?: 'OrganizationConnection';
   paginationInfo: PaginationInfo;
   listPageInfo?: Maybe<ListPageInfo>;
-  nodes?: Maybe<Array<Maybe<Organization>>>;
+  nodes?: Maybe<Array<Organization>>;
 };
 
 export type OrganizationForm = {
@@ -956,9 +956,9 @@ export type OrganizationForm = {
   orgId: UiStringField;
   orgType?: Maybe<UiSelectOneField>;
   active: UiBooleanField;
-  whitelist?: Maybe<Array<Maybe<OrgWhitelistForm>>>;
-  options?: Maybe<Array<Maybe<UiOptions>>>;
-  commands?: Maybe<Array<Maybe<WebCommand>>>;
+  whitelist?: Maybe<Array<OrgWhitelistForm>>;
+  options?: Maybe<Array<UiOptions>>;
+  commands?: Maybe<Array<WebCommand>>;
   response: GqOperationResponse;
   errCode?: Maybe<Scalars['String']>;
   errMsg?: Maybe<Scalars['String']>;
@@ -977,7 +977,7 @@ export type OrganizationLink = {
 export type OrganizationLinkConnection = {
   __typename?: 'OrganizationLinkConnection';
   paginationInfo: PaginationInfo;
-  nodes?: Maybe<Array<Maybe<OrganizationLink>>>;
+  nodes?: Maybe<Array<OrganizationLink>>;
 };
 
 export type OwnedInput = {
@@ -1111,7 +1111,7 @@ export type PasswordValidationGroup = {
   enabled: Scalars['Boolean'];
   requiredNumPassingRules?: Maybe<Scalars['Int']>;
   passes: Scalars['Boolean'];
-  rules: Array<Maybe<PasswordValidationRule>>;
+  rules: Array<PasswordValidationRule>;
 };
 
 export type PasswordValidationRule = {
@@ -1223,7 +1223,7 @@ export type PlanInsuredStat = {
 
 export type QualityChecks = {
   __typename?: 'QualityChecks';
-  sequenceCreationEvent?: Maybe<Array<Maybe<SequenceCreationEvent>>>;
+  sequenceCreationEvent?: Maybe<Array<SequenceCreationEvent>>;
   totalRecordCount?: Maybe<Scalars['Int']>;
   fieldCreationWarningCount?: Maybe<Scalars['Int']>;
   fieldCreationErrorCount?: Maybe<Scalars['Int']>;
@@ -1613,7 +1613,7 @@ export type RecordCounts = {
   __typename?: 'RecordCounts';
   totalCount?: Maybe<Scalars['Int']>;
   showUser?: Maybe<Scalars['Boolean']>;
-  recordCount?: Maybe<Array<Maybe<RecordCount>>>;
+  recordCount?: Maybe<Array<RecordCount>>;
 };
 
 export type RecordCreationEvent = {
@@ -1621,9 +1621,9 @@ export type RecordCreationEvent = {
   context?: Maybe<Scalars['String']>;
   outerContext?: Maybe<Scalars['String']>;
   unitId?: Maybe<Scalars['String']>;
-  error?: Maybe<Array<Maybe<FieldCreationEvent>>>;
-  warning?: Maybe<Array<Maybe<FieldCreationEvent>>>;
-  information?: Maybe<Array<Maybe<FieldCreationEvent>>>;
+  error?: Maybe<Array<FieldCreationEvent>>;
+  warning?: Maybe<Array<FieldCreationEvent>>;
+  information?: Maybe<Array<FieldCreationEvent>>;
 };
 
 export type RequiredPasswordRuleSet = {
@@ -1706,7 +1706,7 @@ export type SftpConfigSubscriptionResponse = {
   __typename?: 'SFTPConfigSubscriptionResponse';
   status: WorkStatus;
   logMessage: LogMessage;
-  allMessages?: Maybe<Array<Maybe<LogMessage>>>;
+  allMessages?: Maybe<Array<LogMessage>>;
   clientProfileSnippet?: Maybe<Scalars['String']>;
   csvLog?: Maybe<Scalars['String']>;
   xpSFTPForm?: Maybe<XpsftpForm>;
@@ -1753,13 +1753,13 @@ export type ScheduleOccurrence = {
   scheduleId?: Maybe<Scalars['ID']>;
   timeScheduled?: Maybe<Scalars['DateTime']>;
   schedOccurStatus: SchedOccurStatusEnum;
-  runOccurrences?: Maybe<Array<Maybe<ScheduleRunOccurrence>>>;
+  runOccurrences?: Maybe<Array<ScheduleRunOccurrence>>;
 };
 
 export type ScheduleOccurrenceConnection = {
   __typename?: 'ScheduleOccurrenceConnection';
   paginationInfo: PaginationInfo;
-  nodes?: Maybe<Array<Maybe<ScheduleOccurrence>>>;
+  nodes?: Maybe<Array<ScheduleOccurrence>>;
 };
 
 export type ScheduleRunOccurrence = {
@@ -1773,7 +1773,7 @@ export type SequenceCreationEvent = {
   __typename?: 'SequenceCreationEvent';
   context?: Maybe<Scalars['String']>;
   unitId?: Maybe<Scalars['String']>;
-  recordCreationEvent?: Maybe<Array<Maybe<RecordCreationEvent>>>;
+  recordCreationEvent?: Maybe<Array<RecordCreationEvent>>;
 };
 
 export type SidInput = {
@@ -1800,7 +1800,7 @@ export type SpecializationFilter = {
   __typename?: 'SpecializationFilter';
   sid: Scalars['ID'];
   permission: Permission;
-  orgSids?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  orgSids?: Maybe<Array<Scalars['ID']>>;
 };
 
 export type SpecializationFilterForm = {
@@ -1938,7 +1938,7 @@ export type UiOption = {
 export type UiOptions = {
   __typename?: 'UIOptions';
   key?: Maybe<Scalars['String']>;
-  values?: Maybe<Array<Maybe<UiOption>>>;
+  values?: Maybe<Array<UiOption>>;
 };
 
 export type UiReadOnlyField = UiField & {
@@ -1957,7 +1957,7 @@ export type UiReadOnlyField = UiField & {
 
 export type UiSelectManyField = UiField & {
   __typename?: 'UISelectManyField';
-  value?: Maybe<Array<Maybe<NvpStr>>>;
+  value?: Maybe<Array<NvpStr>>;
   label: Scalars['String'];
   readOnly?: Maybe<Scalars['Boolean']>;
   info?: Maybe<Scalars['String']>;
@@ -2125,7 +2125,7 @@ export type UserAccount = {
   sid: Scalars['ID'];
   email: Scalars['String'];
   person?: Maybe<Person>;
-  accessPolicyGroups?: Maybe<Array<Maybe<AccessPolicyGroup>>>;
+  accessPolicyGroups?: Maybe<Array<AccessPolicyGroup>>;
 };
 
 export enum UserAccountAuditEvent {
@@ -2165,9 +2165,9 @@ export type UserAccountForm = {
   /** Indicates that an email should be sent to the user with an activation link. */
   sendActivationEmail?: Maybe<UiBooleanField>;
   lastLogin?: Maybe<UiReadOnlyField>;
-  commands?: Maybe<Array<Maybe<WebCommand>>>;
+  commands?: Maybe<Array<WebCommand>>;
   response: GqOperationResponse;
-  options?: Maybe<Array<Maybe<UiOptions>>>;
+  options?: Maybe<Array<UiOptions>>;
   errCode?: Maybe<Scalars['String']>;
   errMsg?: Maybe<Scalars['String']>;
   errSeverity?: Maybe<ErrorSeverity>;
@@ -2177,21 +2177,21 @@ export type UserAccountLogConnection = {
   __typename?: 'UserAccountLogConnection';
   paginationInfo: PaginationInfo;
   listPageInfo?: Maybe<ListPageInfo>;
-  nodes?: Maybe<Array<Maybe<UserAccountAuditLog>>>;
+  nodes?: Maybe<Array<UserAccountAuditLog>>;
 };
 
 export type UserConnection = {
   __typename?: 'UserConnection';
   paginationInfo: PaginationInfo;
   listPageInfo?: Maybe<ListPageInfo>;
-  nodes?: Maybe<Array<Maybe<UserItem>>>;
+  nodes?: Maybe<Array<UserItem>>;
 };
 
 export type UserDashThemePage = {
   __typename?: 'UserDashThemePage';
-  themeColorModes?: Maybe<Array<Maybe<ThemeColorMode>>>;
-  themeFontSizes?: Maybe<Array<Maybe<ThemeFontSize>>>;
-  themeColorPalettes?: Maybe<Array<Maybe<DashThemeColor>>>;
+  themeColorModes?: Maybe<Array<ThemeColorMode>>;
+  themeFontSizes?: Maybe<Array<ThemeFontSize>>;
+  themeColorPalettes?: Maybe<Array<DashThemeColor>>;
   dashTheme?: Maybe<DashTheme>;
 };
 
@@ -2202,7 +2202,7 @@ export type UserFilterInput = {
 export type UserItem = {
   __typename?: 'UserItem';
   item: UserAccount;
-  listItemCommands?: Maybe<Array<Maybe<WebCommand>>>;
+  listItemCommands?: Maybe<Array<WebCommand>>;
 };
 
 export type UserSession = {
@@ -2231,13 +2231,13 @@ export type WpProcessError = {
   inboundFilename?: Maybe<Scalars['String']>;
   clientFileArchivePath?: Maybe<Scalars['String']>;
   environment?: Maybe<Environment>;
-  commands?: Maybe<Array<Maybe<WorkPacketCommand>>>;
+  commands?: Maybe<Array<WorkPacketCommand>>;
 };
 
 export type WpProcessErrorConnection = {
   __typename?: 'WPProcessErrorConnection';
   paginationInfo: PaginationInfo;
-  nodes?: Maybe<Array<Maybe<WpProcessError>>>;
+  nodes?: Maybe<Array<WpProcessError>>;
 };
 
 export type WpTransmission = {
@@ -2259,13 +2259,13 @@ export type WpTransmission = {
   extractType?: Maybe<Scalars['String']>;
   extractVersion?: Maybe<Scalars['String']>;
   environment?: Maybe<Environment>;
-  commands?: Maybe<Array<Maybe<WorkPacketCommand>>>;
+  commands?: Maybe<Array<WorkPacketCommand>>;
 };
 
 export type WpTransmissionConnection = {
   __typename?: 'WPTransmissionConnection';
   paginationInfo: PaginationInfo;
-  nodes?: Maybe<Array<Maybe<WpTransmission>>>;
+  nodes?: Maybe<Array<WpTransmission>>;
 };
 
 export type WebAppDomain = {
@@ -2274,7 +2274,7 @@ export type WebAppDomain = {
   /** selectedPage: either the page to load - must be in teh navItems */
   selectedPage?: Maybe<CdxWebPage>;
   /** navItems: either the left nav or top nav depending on the domain */
-  navItems?: Maybe<Array<Maybe<WebNav>>>;
+  navItems?: Maybe<Array<WebNav>>;
 };
 
 export type WebCommand = {
@@ -2293,7 +2293,7 @@ export type WebNav = {
   page?: Maybe<WebPage>;
   /** appDomain: only needs to be set here if this link will change domains */
   appDomain?: Maybe<CdxWebAppDomain>;
-  subNavItems?: Maybe<Array<Maybe<WebNav>>>;
+  subNavItems?: Maybe<Array<WebNav>>;
 };
 
 export type WebPage = {
@@ -2302,7 +2302,7 @@ export type WebPage = {
   /** parameters: any dynamic parameters the page end point needs to be called with */
   parameters?: Maybe<Array<Maybe<Nvp>>>;
   /** commands: actions on the page that may lead to another page e.g. add new */
-  commands?: Maybe<Array<Maybe<WebNav>>>;
+  commands?: Maybe<Array<WebNav>>;
   /** pivots: any pivots the page might have */
   pivots?: Maybe<Array<Maybe<WebPivot>>>;
 };
@@ -2363,13 +2363,13 @@ export type WorkPacketStatus = {
   archiveOnly?: Maybe<Scalars['Boolean']>;
   hasErrors?: Maybe<Scalars['Boolean']>;
   environment?: Maybe<Environment>;
-  commands?: Maybe<Array<Maybe<WorkPacketCommand>>>;
+  commands?: Maybe<Array<WorkPacketCommand>>;
 };
 
 export type WorkPacketStatusConnection = {
   __typename?: 'WorkPacketStatusConnection';
   paginationInfo: PaginationInfo;
-  nodes?: Maybe<Array<Maybe<WorkPacketStatus>>>;
+  nodes?: Maybe<Array<WorkPacketStatus>>;
 };
 
 export type WorkPacketStatusDetails = {
@@ -2388,7 +2388,7 @@ export type WorkPacketStatusDetails = {
   fingerPrint?: Maybe<Scalars['String']>;
   populationCount?: Maybe<Scalars['Int']>;
   suppressBilling?: Maybe<Scalars['Boolean']>;
-  deliveredFiles?: Maybe<Array<Maybe<DeliveredFile>>>;
+  deliveredFiles?: Maybe<Array<DeliveredFile>>;
   packetStatus: WorkStatus;
   workStepStatus?: Maybe<Array<Maybe<WorkStepStatus>>>;
   extractParameters?: Maybe<ExtractParameters>;
@@ -2402,7 +2402,7 @@ export type WorkPacketStatusDetails = {
   clientFileArchivePath?: Maybe<Scalars['String']>;
   vendorFileArchivePath?: Maybe<Scalars['String']>;
   supplementalFilesArchivePaths?: Maybe<Array<Maybe<Scalars['String']>>>;
-  commands?: Maybe<Array<Maybe<WorkPacketCommand>>>;
+  commands?: Maybe<Array<WorkPacketCommand>>;
 };
 
 export type WorkPacketStatusFilter = {
@@ -2437,7 +2437,7 @@ export type WorkStepStatus = {
   populationCount?: Maybe<StatCountType>;
   transformedArchiveFile?: Maybe<ArchiveFileType>;
   recordCounts?: Maybe<RecordCounts>;
-  stepFile?: Maybe<Array<Maybe<ArchiveFileType>>>;
+  stepFile?: Maybe<Array<ArchiveFileType>>;
   nvp?: Maybe<Array<Maybe<NvpStr>>>;
 };
 
@@ -2479,10 +2479,10 @@ export type FragmentStatTypeFragment = (
 export type RecordCountsFragmentFragment = (
   { __typename?: 'RecordCounts' }
   & Pick<RecordCounts, 'totalCount' | 'showUser'>
-  & { recordCount?: Maybe<Array<Maybe<(
+  & { recordCount?: Maybe<Array<(
     { __typename?: 'RecordCount' }
     & Pick<RecordCount, 'name' | 'count'>
-  )>>> }
+  )>> }
 );
 
 export type ExtractParameterFragmentFragment = (
@@ -2498,28 +2498,28 @@ export type FieldCreationFragmentFragment = (
 export type FragmentDashboardPeriodCountsFragment = (
   { __typename?: 'DashboardPeriodCounts' }
   & Pick<DashboardPeriodCounts, 'showCountsByPlanSponsor' | 'showCountsByFile' | 'transmissionCount' | 'billingUnitCount' | 'processErrorCount'>
-  & { vendorTransmissions?: Maybe<Array<Maybe<(
+  & { vendorTransmissions?: Maybe<Array<(
     { __typename?: 'DashboardPeriodCount' }
     & Pick<DashboardPeriodCount, 'name' | 'secondaryDescr' | 'count' | 'total'>
-  )>>>, vendorTransmissionsBySpec?: Maybe<Array<Maybe<(
+  )>>, vendorTransmissionsBySpec?: Maybe<Array<(
     { __typename?: 'DashboardPeriodCount' }
     & Pick<DashboardPeriodCount, 'name' | 'secondaryDescr' | 'count' | 'total'>
-  )>>>, planSponsorTransmissions?: Maybe<Array<Maybe<(
+  )>>, planSponsorTransmissions?: Maybe<Array<(
     { __typename?: 'DashboardPeriodCount' }
     & Pick<DashboardPeriodCount, 'name' | 'secondaryDescr' | 'count' | 'total'>
-  )>>>, fileTransmissions?: Maybe<Array<Maybe<(
+  )>>, fileTransmissions?: Maybe<Array<(
     { __typename?: 'DashboardPeriodCount' }
     & Pick<DashboardPeriodCount, 'name' | 'secondaryDescr' | 'count' | 'total'>
-  )>>>, vendorProcessErrors?: Maybe<Array<Maybe<(
+  )>>, vendorProcessErrors?: Maybe<Array<(
     { __typename?: 'DashboardPeriodCount' }
     & Pick<DashboardPeriodCount, 'name' | 'secondaryDescr' | 'count' | 'total'>
-  )>>>, planSponsorProcessErrors?: Maybe<Array<Maybe<(
+  )>>, planSponsorProcessErrors?: Maybe<Array<(
     { __typename?: 'DashboardPeriodCount' }
     & Pick<DashboardPeriodCount, 'name' | 'secondaryDescr' | 'count' | 'total'>
-  )>>>, fileProcessErrors?: Maybe<Array<Maybe<(
+  )>>, fileProcessErrors?: Maybe<Array<(
     { __typename?: 'DashboardPeriodCount' }
     & Pick<DashboardPeriodCount, 'name' | 'secondaryDescr' | 'count' | 'total'>
-  )>>> }
+  )>> }
 );
 
 export type EnrollmentStatFragmentFragment = (
@@ -2530,13 +2530,13 @@ export type EnrollmentStatFragmentFragment = (
   )>, excludedInsuredStat?: Maybe<(
     { __typename?: 'InsuredStat' }
     & InsuredStatFragmentFragment
-  )>, excludedPlanInsuredStat?: Maybe<Array<Maybe<(
+  )>, excludedPlanInsuredStat?: Maybe<Array<(
     { __typename?: 'PlanInsuredStat' }
     & PlanInsuredStatFragmentFragment
-  )>>>, planInsuredStat?: Maybe<Array<Maybe<(
+  )>>, planInsuredStat?: Maybe<Array<(
     { __typename?: 'PlanInsuredStat' }
     & PlanInsuredStatFragmentFragment
-  )>>> }
+  )>> }
 );
 
 export type InsuredStatFragmentFragment = (
@@ -2588,7 +2588,7 @@ export type FragmentWebPageFragment = (
   ) | (
     { __typename?: 'NVPId' }
     & UnionNvp_NvpId_Fragment
-  )>>>, commands?: Maybe<Array<Maybe<(
+  )>>>, commands?: Maybe<Array<(
     { __typename?: 'WebNav' }
     & Pick<WebNav, 'label' | 'appDomain'>
     & { page?: Maybe<(
@@ -2602,7 +2602,7 @@ export type FragmentWebPageFragment = (
         & UnionNvp_NvpId_Fragment
       )>>> }
     )> }
-  )>>>, pivots?: Maybe<Array<Maybe<(
+  )>>, pivots?: Maybe<Array<Maybe<(
     { __typename?: 'WebPivot' }
     & Pick<WebPivot, 'label' | 'type'>
   )>>> }
@@ -2691,10 +2691,10 @@ export type ExchangeActivityInProcessQuery = (
     & { paginationInfo: (
       { __typename?: 'PaginationInfo' }
       & FragmentPaginationInfoFragment
-    ), nodes?: Maybe<Array<Maybe<(
+    ), nodes?: Maybe<Array<(
       { __typename?: 'OrganizationLink' }
       & Pick<OrganizationLink, 'id' | 'orgId' | 'name' | 'type' | 'activityTime'>
-    )>>> }
+    )>> }
   )> }
 );
 
@@ -2713,10 +2713,10 @@ export type ExchangeActivityTransmittedQuery = (
     & { paginationInfo: (
       { __typename?: 'PaginationInfo' }
       & FragmentPaginationInfoFragment
-    ), nodes?: Maybe<Array<Maybe<(
+    ), nodes?: Maybe<Array<(
       { __typename?: 'OrganizationLink' }
       & Pick<OrganizationLink, 'id' | 'orgId' | 'name' | 'type' | 'activityTime'>
-    )>>> }
+    )>> }
   )> }
 );
 
@@ -2735,10 +2735,10 @@ export type ExchangeActivityErroredQuery = (
     & { paginationInfo: (
       { __typename?: 'PaginationInfo' }
       & FragmentPaginationInfoFragment
-    ), nodes?: Maybe<Array<Maybe<(
+    ), nodes?: Maybe<Array<(
       { __typename?: 'OrganizationLink' }
       & Pick<OrganizationLink, 'id' | 'orgId' | 'name' | 'type' | 'activityTime'>
-    )>>> }
+    )>> }
   )> }
 );
 
@@ -2753,7 +2753,7 @@ export type WorkPacketStatusDetailsQuery = (
   & { workPacketStatusDetails?: Maybe<(
     { __typename?: 'WorkPacketStatusDetails' }
     & Pick<WorkPacketStatusDetails, 'workOrderId' | 'inboundFilename' | 'timestamp' | 'orgSid' | 'orgId' | 'orgName' | 'vendorSid' | 'vendorId' | 'vendorName' | 'specId' | 'specImplName' | 'fingerPrint' | 'populationCount' | 'suppressBilling' | 'packetStatus' | 'inboundLabel' | 'outboundLabel' | 'clientFileArchivePath' | 'vendorFileArchivePath' | 'supplementalFilesArchivePaths'>
-    & { deliveredFiles?: Maybe<Array<Maybe<(
+    & { deliveredFiles?: Maybe<Array<(
       { __typename?: 'DeliveredFile' }
       & Pick<DeliveredFile, 'filename' | 'fileSizeInBytes' | 'textSizeInBytes' | 'timeDelivered'>
       & { ftp?: Maybe<(
@@ -2763,7 +2763,7 @@ export type WorkPacketStatusDetailsQuery = (
         { __typename?: 'DeliveredKCURL' }
         & Pick<DeliveredKcurl, 'url'>
       )> }
-    )>>>, workStepStatus?: Maybe<Array<Maybe<(
+    )>>, workStepStatus?: Maybe<Array<Maybe<(
       { __typename?: 'WorkStepStatus' }
       & Pick<WorkStepStatus, 'stepStatus' | 'stepName' | 'stepType'>
       & { populationCount?: Maybe<(
@@ -2775,10 +2775,10 @@ export type WorkPacketStatusDetailsQuery = (
       )>, recordCounts?: Maybe<(
         { __typename?: 'RecordCounts' }
         & RecordCountsFragmentFragment
-      )>, stepFile?: Maybe<Array<Maybe<(
+      )>, stepFile?: Maybe<Array<(
         { __typename?: 'ArchiveFileType' }
         & Pick<ArchiveFileType, 'value' | 'label'>
-      )>>>, nvp?: Maybe<Array<Maybe<(
+      )>>, nvp?: Maybe<Array<Maybe<(
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
       )>>> }
@@ -2797,24 +2797,24 @@ export type WorkPacketStatusDetailsQuery = (
     )>, qualityChecks?: Maybe<(
       { __typename?: 'QualityChecks' }
       & Pick<QualityChecks, 'totalRecordCount' | 'fieldCreationWarningCount' | 'fieldCreationErrorCount' | 'fieldCreationInfoCount' | 'hasMoreEvents'>
-      & { sequenceCreationEvent?: Maybe<Array<Maybe<(
+      & { sequenceCreationEvent?: Maybe<Array<(
         { __typename?: 'SequenceCreationEvent' }
         & Pick<SequenceCreationEvent, 'context' | 'unitId'>
-        & { recordCreationEvent?: Maybe<Array<Maybe<(
+        & { recordCreationEvent?: Maybe<Array<(
           { __typename?: 'RecordCreationEvent' }
           & Pick<RecordCreationEvent, 'context' | 'outerContext' | 'unitId'>
-          & { error?: Maybe<Array<Maybe<(
+          & { error?: Maybe<Array<(
             { __typename?: 'FieldCreationEvent' }
             & FieldCreationFragmentFragment
-          )>>>, warning?: Maybe<Array<Maybe<(
+          )>>, warning?: Maybe<Array<(
             { __typename?: 'FieldCreationEvent' }
             & FieldCreationFragmentFragment
-          )>>>, information?: Maybe<Array<Maybe<(
+          )>>, information?: Maybe<Array<(
             { __typename?: 'FieldCreationEvent' }
             & FieldCreationFragmentFragment
-          )>>> }
-        )>>> }
-      )>>>, accStructReqError?: Maybe<(
+          )>> }
+        )>> }
+      )>>, accStructReqError?: Maybe<(
         { __typename?: 'StatType' }
         & FragmentStatTypeFragment
       )>, clientSpecificReqError?: Maybe<(
@@ -2845,10 +2845,10 @@ export type WorkPacketStatusDetailsQuery = (
     )>, outboundRecordCounts?: Maybe<(
       { __typename?: 'RecordCounts' }
       & RecordCountsFragmentFragment
-    )>, commands?: Maybe<Array<Maybe<(
+    )>, commands?: Maybe<Array<(
       { __typename?: 'WorkPacketCommand' }
       & FragmentWorkPacketCommandFragment
-    )>>> }
+    )>> }
   )> }
 );
 
@@ -2863,10 +2863,10 @@ export type WorkPacketStatusQuery = (
   & { workPacketStatus?: Maybe<(
     { __typename?: 'WorkPacketStatus' }
     & Pick<WorkPacketStatus, 'workOrderId' | 'timestamp' | 'orgId' | 'orgSid' | 'detailsPath' | 'inboundFilename' | 'vendorId' | 'vendorSid' | 'step' | 'stepStatus' | 'packetStatus' | 'reprocessedBy' | 'restartReason' | 'recordHighlightCount' | 'populationCount' | 'recordHighlightType' | 'clientFileArchivePath' | 'vendorFileArchivePath' | 'feedType' | 'inboundDataType' | 'inboundDataSize' | 'version' | 'supplementalFilesArchivePaths' | 'archiveOnly' | 'hasErrors' | 'environment'>
-    & { commands?: Maybe<Array<Maybe<(
+    & { commands?: Maybe<Array<(
       { __typename?: 'WorkPacketCommand' }
       & FragmentWorkPacketCommandFragment
-    )>>> }
+    )>> }
   )> }
 );
 
@@ -2885,14 +2885,14 @@ export type WorkPacketStatusesQuery = (
     & { paginationInfo: (
       { __typename?: 'PaginationInfo' }
       & FragmentPaginationInfoFragment
-    ), nodes?: Maybe<Array<Maybe<(
+    ), nodes?: Maybe<Array<(
       { __typename?: 'WorkPacketStatus' }
       & Pick<WorkPacketStatus, 'workOrderId' | 'timestamp' | 'orgId' | 'orgSid' | 'detailsPath' | 'inboundFilename' | 'vendorId' | 'vendorSid' | 'step' | 'stepStatus' | 'packetStatus' | 'reprocessedBy' | 'restartReason' | 'recordHighlightCount' | 'populationCount' | 'recordHighlightType' | 'clientFileArchivePath' | 'vendorFileArchivePath' | 'feedType' | 'inboundDataType' | 'inboundDataSize' | 'version' | 'supplementalFilesArchivePaths' | 'archiveOnly' | 'hasErrors' | 'environment'>
-      & { commands?: Maybe<Array<Maybe<(
+      & { commands?: Maybe<Array<(
         { __typename?: 'WorkPacketCommand' }
         & FragmentWorkPacketCommandFragment
-      )>>> }
-    )>>> }
+      )>> }
+    )>> }
   )> }
 );
 
@@ -2924,14 +2924,14 @@ export type WpProcessErrorsQuery = (
     & { paginationInfo: (
       { __typename?: 'PaginationInfo' }
       & FragmentPaginationInfoFragment
-    ), nodes?: Maybe<Array<Maybe<(
+    ), nodes?: Maybe<Array<(
       { __typename?: 'WPProcessError' }
       & Pick<WpProcessError, 'id' | 'workOrderId' | 'startTime' | 'stepName' | 'orgSid' | 'planSponsorId' | 'vendorSid' | 'vendorId' | 'msg' | 'inboundFilename' | 'clientFileArchivePath' | 'environment'>
-      & { commands?: Maybe<Array<Maybe<(
+      & { commands?: Maybe<Array<(
         { __typename?: 'WorkPacketCommand' }
         & FragmentWorkPacketCommandFragment
-      )>>> }
-    )>>> }
+      )>> }
+    )>> }
   )> }
 );
 
@@ -2950,14 +2950,14 @@ export type WpTransmissionsQuery = (
     & { paginationInfo: (
       { __typename?: 'PaginationInfo' }
       & FragmentPaginationInfoFragment
-    ), nodes?: Maybe<Array<Maybe<(
+    ), nodes?: Maybe<Array<(
       { __typename?: 'WPTransmission' }
       & Pick<WpTransmission, 'id' | 'workOrderId' | 'deliveredOn' | 'orgSid' | 'planSponsorId' | 'vendorSid' | 'vendorId' | 'specId' | 'implementation' | 'inboundFilename' | 'outboundFilename' | 'outboundFilesize' | 'billingCount' | 'totalRecords' | 'extractType' | 'extractVersion' | 'environment'>
-      & { commands?: Maybe<Array<Maybe<(
+      & { commands?: Maybe<Array<(
         { __typename?: 'WorkPacketCommand' }
         & FragmentWorkPacketCommandFragment
-      )>>> }
-    )>>> }
+      )>> }
+    )>> }
   )> }
 );
 
@@ -2975,14 +2975,14 @@ export type ScheduleOccurrencesQuery = (
     & { paginationInfo: (
       { __typename?: 'PaginationInfo' }
       & FragmentPaginationInfoFragment
-    ), nodes?: Maybe<Array<Maybe<(
+    ), nodes?: Maybe<Array<(
       { __typename?: 'ScheduleOccurrence' }
       & Pick<ScheduleOccurrence, 'resource' | 'scheduleId' | 'timeScheduled' | 'schedOccurStatus'>
-      & { runOccurrences?: Maybe<Array<Maybe<(
+      & { runOccurrences?: Maybe<Array<(
         { __typename?: 'ScheduleRunOccurrence' }
         & Pick<ScheduleRunOccurrence, 'workOrderId' | 'timeRan' | 'status'>
-      )>>> }
-    )>>> }
+      )>> }
+    )>> }
   )> }
 );
 
@@ -3022,28 +3022,28 @@ export type DashboardPeriodCountsQuery = (
   & { dashboardPeriodCounts?: Maybe<(
     { __typename?: 'DashboardPeriodCounts' }
     & Pick<DashboardPeriodCounts, 'showCountsByPlanSponsor' | 'showCountsByFile' | 'transmissionCount' | 'billingUnitCount' | 'processErrorCount'>
-    & { vendorTransmissions?: Maybe<Array<Maybe<(
+    & { vendorTransmissions?: Maybe<Array<(
       { __typename?: 'DashboardPeriodCount' }
       & Pick<DashboardPeriodCount, 'name' | 'secondaryDescr' | 'count' | 'total'>
-    )>>>, vendorTransmissionsBySpec?: Maybe<Array<Maybe<(
+    )>>, vendorTransmissionsBySpec?: Maybe<Array<(
       { __typename?: 'DashboardPeriodCount' }
       & Pick<DashboardPeriodCount, 'name' | 'secondaryDescr' | 'count' | 'total'>
-    )>>>, planSponsorTransmissions?: Maybe<Array<Maybe<(
+    )>>, planSponsorTransmissions?: Maybe<Array<(
       { __typename?: 'DashboardPeriodCount' }
       & Pick<DashboardPeriodCount, 'name' | 'secondaryDescr' | 'count' | 'total'>
-    )>>>, fileTransmissions?: Maybe<Array<Maybe<(
+    )>>, fileTransmissions?: Maybe<Array<(
       { __typename?: 'DashboardPeriodCount' }
       & Pick<DashboardPeriodCount, 'name' | 'secondaryDescr' | 'count' | 'total'>
-    )>>>, vendorProcessErrors?: Maybe<Array<Maybe<(
+    )>>, vendorProcessErrors?: Maybe<Array<(
       { __typename?: 'DashboardPeriodCount' }
       & Pick<DashboardPeriodCount, 'name' | 'secondaryDescr' | 'count' | 'total'>
-    )>>>, planSponsorProcessErrors?: Maybe<Array<Maybe<(
+    )>>, planSponsorProcessErrors?: Maybe<Array<(
       { __typename?: 'DashboardPeriodCount' }
       & Pick<DashboardPeriodCount, 'name' | 'secondaryDescr' | 'count' | 'total'>
-    )>>>, fileProcessErrors?: Maybe<Array<Maybe<(
+    )>>, fileProcessErrors?: Maybe<Array<(
       { __typename?: 'DashboardPeriodCount' }
       & Pick<DashboardPeriodCount, 'name' | 'secondaryDescr' | 'count' | 'total'>
-    )>>> }
+    )>> }
   )> }
 );
 
@@ -3064,17 +3064,17 @@ export type UsersForOrgQuery = (
     ), listPageInfo?: Maybe<(
       { __typename?: 'ListPageInfo' }
       & Pick<ListPageInfo, 'pageHeaderLabel'>
-      & { pageCommands?: Maybe<Array<Maybe<(
+      & { pageCommands?: Maybe<Array<(
         { __typename?: 'WebCommand' }
         & FragmentWebCommandFragment
-      )>>>, listItemCommands?: Maybe<Array<Maybe<(
+      )>>, listItemCommands?: Maybe<Array<(
         { __typename?: 'WebCommand' }
         & FragmentWebCommandFragment
-      )>>>, listItemBulkCommands?: Maybe<Array<Maybe<(
+      )>>, listItemBulkCommands?: Maybe<Array<(
         { __typename?: 'WebCommand' }
         & FragmentWebCommandFragment
-      )>>> }
-    )>, nodes?: Maybe<Array<Maybe<(
+      )>> }
+    )>, nodes?: Maybe<Array<(
       { __typename?: 'UserItem' }
       & { item: (
         { __typename?: 'UserAccount' }
@@ -3082,19 +3082,19 @@ export type UsersForOrgQuery = (
         & { person?: Maybe<(
           { __typename?: 'Person' }
           & Pick<Person, 'sid' | 'firstNm' | 'lastNm'>
-        )>, accessPolicyGroups?: Maybe<Array<Maybe<(
+        )>, accessPolicyGroups?: Maybe<Array<(
           { __typename?: 'AccessPolicyGroup' }
           & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes'>
-          & { policies?: Maybe<Array<Maybe<(
+          & { policies?: Maybe<Array<(
             { __typename?: 'AccessPolicy' }
             & FragmentAccessPolicyFragment
-          )>>> }
-        )>>> }
-      ), listItemCommands?: Maybe<Array<Maybe<(
+          )>> }
+        )>> }
+      ), listItemCommands?: Maybe<Array<(
         { __typename?: 'WebCommand' }
         & FragmentWebCommandFragment
-      )>>> }
-    )>>> }
+      )>> }
+    )>> }
   )> }
 );
 
@@ -3109,10 +3109,10 @@ export type CurrentUserQuery = (
     & { domain?: Maybe<(
       { __typename?: 'WebAppDomain' }
       & Pick<WebAppDomain, 'type' | 'selectedPage'>
-      & { navItems?: Maybe<Array<Maybe<(
+      & { navItems?: Maybe<Array<(
         { __typename?: 'WebNav' }
         & FragmentWebNavFragment
-      )>>> }
+      )>> }
     )>, tokenUser?: Maybe<(
       { __typename?: 'TokenUser' }
       & Pick<TokenUser, 'token'>
@@ -3137,10 +3137,10 @@ export type CurrentOrgNavQuery = (
     & { page?: Maybe<(
       { __typename?: 'WebPage' }
       & FragmentWebPageFragment
-    )>, subNavItems?: Maybe<Array<Maybe<(
+    )>, subNavItems?: Maybe<Array<(
       { __typename?: 'WebNav' }
       & FragmentWebNavFragment
-    )>>> }
+    )>> }
   )> }
 );
 
@@ -3174,14 +3174,14 @@ export type FindUserByEmailQuery = (
     & { person?: Maybe<(
       { __typename?: 'Person' }
       & Pick<Person, 'sid' | 'firstNm' | 'lastNm'>
-    )>, accessPolicyGroups?: Maybe<Array<Maybe<(
+    )>, accessPolicyGroups?: Maybe<Array<(
       { __typename?: 'AccessPolicyGroup' }
       & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes'>
-      & { policies?: Maybe<Array<Maybe<(
+      & { policies?: Maybe<Array<(
         { __typename?: 'AccessPolicy' }
         & FragmentAccessPolicyFragment
-      )>>> }
-    )>>> }
+      )>> }
+    )>> }
   )> }
 );
 
@@ -3217,27 +3217,27 @@ export type UserAccountFormQuery = (
     ), accessPolicyGroups?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<Maybe<(
+      & { value?: Maybe<Array<(
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
-      )>>> }
+      )>> }
     )>, sendActivationEmail?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
       & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
-    )>, commands?: Maybe<Array<Maybe<(
+    )>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
-    )>>>, options?: Maybe<Array<Maybe<(
+    )>>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<Maybe<(
+      & { values?: Maybe<Array<(
         { __typename?: 'UIOption' }
         & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>>> }
-    )>>> }
+      )>> }
+    )>> }
   )> }
 );
 
@@ -3273,27 +3273,27 @@ export type FindUserAccountQuery = (
     ), accessPolicyGroups?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<Maybe<(
+      & { value?: Maybe<Array<(
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
-      )>>> }
+      )>> }
     )>, sendActivationEmail?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
       & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
-    )>, commands?: Maybe<Array<Maybe<(
+    )>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
-    )>>>, options?: Maybe<Array<Maybe<(
+    )>>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<Maybe<(
+      & { values?: Maybe<Array<(
         { __typename?: 'UIOption' }
         & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>>> }
-    )>>> }
+      )>> }
+    )>> }
   )> }
 );
 
@@ -3316,17 +3316,17 @@ export type UserAccountAuditLogsQuery = (
     ), listPageInfo?: Maybe<(
       { __typename?: 'ListPageInfo' }
       & Pick<ListPageInfo, 'pageHeaderLabel'>
-      & { pageCommands?: Maybe<Array<Maybe<(
+      & { pageCommands?: Maybe<Array<(
         { __typename?: 'WebCommand' }
         & FragmentWebCommandFragment
-      )>>>, listItemCommands?: Maybe<Array<Maybe<(
+      )>>, listItemCommands?: Maybe<Array<(
         { __typename?: 'WebCommand' }
         & FragmentWebCommandFragment
-      )>>>, listItemBulkCommands?: Maybe<Array<Maybe<(
+      )>>, listItemBulkCommands?: Maybe<Array<(
         { __typename?: 'WebCommand' }
         & FragmentWebCommandFragment
-      )>>> }
-    )>, nodes?: Maybe<Array<Maybe<(
+      )>> }
+    )>, nodes?: Maybe<Array<(
       { __typename?: 'UserAccountAuditLog' }
       & Pick<UserAccountAuditLog, 'auditDateTime' | 'event' | 'orgSid' | 'oldValue' | 'newValue'>
       & { userAccount: (
@@ -3344,7 +3344,7 @@ export type UserAccountAuditLogsQuery = (
           & Pick<Person, 'sid' | 'firstNm' | 'lastNm'>
         )> }
       )> }
-    )>>> }
+    )>> }
   )> }
 );
 
@@ -3378,20 +3378,20 @@ export type AccessPoliciesForOrgQuery = (
     ), listPageInfo?: Maybe<(
       { __typename?: 'ListPageInfo' }
       & Pick<ListPageInfo, 'pageHeaderLabel'>
-      & { pageCommands?: Maybe<Array<Maybe<(
+      & { pageCommands?: Maybe<Array<(
         { __typename?: 'WebCommand' }
         & FragmentWebCommandFragment
-      )>>>, listItemCommands?: Maybe<Array<Maybe<(
+      )>>, listItemCommands?: Maybe<Array<(
         { __typename?: 'WebCommand' }
         & FragmentWebCommandFragment
-      )>>>, listItemBulkCommands?: Maybe<Array<Maybe<(
+      )>>, listItemBulkCommands?: Maybe<Array<(
         { __typename?: 'WebCommand' }
         & FragmentWebCommandFragment
-      )>>> }
-    )>, nodes?: Maybe<Array<Maybe<(
+      )>> }
+    )>, nodes?: Maybe<Array<(
       { __typename?: 'AccessPolicy' }
       & FragmentAccessPolicyFragment
-    )>>> }
+    )>> }
   )> }
 );
 
@@ -3424,24 +3424,24 @@ export type AccessSpecializationsForOrgQuery = (
     ), listPageInfo?: Maybe<(
       { __typename?: 'ListPageInfo' }
       & Pick<ListPageInfo, 'pageHeaderLabel'>
-      & { pageCommands?: Maybe<Array<Maybe<(
+      & { pageCommands?: Maybe<Array<(
         { __typename?: 'WebCommand' }
         & FragmentWebCommandFragment
-      )>>>, listItemCommands?: Maybe<Array<Maybe<(
+      )>>, listItemCommands?: Maybe<Array<(
         { __typename?: 'WebCommand' }
         & FragmentWebCommandFragment
-      )>>>, listItemBulkCommands?: Maybe<Array<Maybe<(
+      )>>, listItemBulkCommands?: Maybe<Array<(
         { __typename?: 'WebCommand' }
         & FragmentWebCommandFragment
-      )>>> }
-    )>, nodes?: Maybe<Array<Maybe<(
+      )>> }
+    )>, nodes?: Maybe<Array<(
       { __typename?: 'AccessSpecialization' }
       & Pick<AccessSpecialization, 'sid' | 'name'>
-      & { filters?: Maybe<Array<Maybe<(
+      & { filters?: Maybe<Array<(
         { __typename?: 'SpecializationFilter' }
         & Pick<SpecializationFilter, 'sid' | 'permission' | 'orgSids'>
-      )>>> }
-    )>>> }
+      )>> }
+    )>> }
   )> }
 );
 
@@ -3461,24 +3461,24 @@ export type AccessPolicyGroupsForOrgQuery = (
     ), listPageInfo?: Maybe<(
       { __typename?: 'ListPageInfo' }
       & Pick<ListPageInfo, 'pageHeaderLabel'>
-      & { pageCommands?: Maybe<Array<Maybe<(
+      & { pageCommands?: Maybe<Array<(
         { __typename?: 'WebCommand' }
         & FragmentWebCommandFragment
-      )>>>, listItemCommands?: Maybe<Array<Maybe<(
+      )>>, listItemCommands?: Maybe<Array<(
         { __typename?: 'WebCommand' }
         & FragmentWebCommandFragment
-      )>>>, listItemBulkCommands?: Maybe<Array<Maybe<(
+      )>>, listItemBulkCommands?: Maybe<Array<(
         { __typename?: 'WebCommand' }
         & FragmentWebCommandFragment
-      )>>> }
-    )>, nodes?: Maybe<Array<Maybe<(
+      )>> }
+    )>, nodes?: Maybe<Array<(
       { __typename?: 'AccessPolicyGroup' }
       & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes'>
-      & { policies?: Maybe<Array<Maybe<(
+      & { policies?: Maybe<Array<(
         { __typename?: 'AccessPolicy' }
         & FragmentAccessPolicyFragment
-      )>>> }
-    )>>> }
+      )>> }
+    )>> }
   )> }
 );
 
@@ -3515,10 +3515,10 @@ export type AccessPolicyFormQuery = (
     ), permissions?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<Maybe<(
+      & { value?: Maybe<Array<(
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
-      )>>> }
+      )>> }
     )>, tmpl?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
@@ -3528,21 +3528,21 @@ export type AccessPolicyFormQuery = (
     )>, applicableOrgTypes?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<Maybe<(
+      & { value?: Maybe<Array<(
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
-      )>>> }
-    )>, options?: Maybe<Array<Maybe<(
+      )>> }
+    )>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<Maybe<(
+      & { values?: Maybe<Array<(
         { __typename?: 'UIOption' }
         & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>>> }
-    )>>>, commands?: Maybe<Array<Maybe<(
+      )>> }
+    )>>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
-    )>>> }
+    )>> }
   )> }
 );
 
@@ -3565,10 +3565,10 @@ export type FindAccessPolicyQuery = (
     ), permissions?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<Maybe<(
+      & { value?: Maybe<Array<(
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
-      )>>> }
+      )>> }
     )>, tmpl?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
@@ -3578,21 +3578,21 @@ export type FindAccessPolicyQuery = (
     )>, applicableOrgTypes?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<Maybe<(
+      & { value?: Maybe<Array<(
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
-      )>>> }
-    )>, options?: Maybe<Array<Maybe<(
+      )>> }
+    )>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<Maybe<(
+      & { values?: Maybe<Array<(
         { __typename?: 'UIOption' }
         & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>>> }
-    )>>>, commands?: Maybe<Array<Maybe<(
+      )>> }
+    )>>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
-    )>>> }
+    )>> }
   )> }
 );
 
@@ -3612,28 +3612,28 @@ export type AccessSpecializationFormQuery = (
     ), organization: (
       { __typename?: 'UIReadOnlyField' }
       & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
-    ), filters?: Maybe<Array<Maybe<(
+    ), filters?: Maybe<Array<(
       { __typename?: 'SpecializationFilterForm' }
       & Pick<SpecializationFilterForm, 'permission' | 'label' | 'errCode' | 'errMsg' | 'errSeverity'>
       & { orgSids?: Maybe<(
         { __typename?: 'UISelectManyField' }
         & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-        & { value?: Maybe<Array<Maybe<(
+        & { value?: Maybe<Array<(
           { __typename?: 'NVPStr' }
           & Pick<NvpStr, 'name' | 'value'>
-        )>>> }
+        )>> }
       )> }
-    )>>>, options?: Maybe<Array<Maybe<(
+    )>>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<Maybe<(
+      & { values?: Maybe<Array<(
         { __typename?: 'UIOption' }
         & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>>> }
-    )>>>, commands?: Maybe<Array<Maybe<(
+      )>> }
+    )>>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
-    )>>> }
+    )>> }
   )> }
 );
 
@@ -3653,28 +3653,28 @@ export type FindAccessSpecializationQuery = (
     ), organization: (
       { __typename?: 'UIReadOnlyField' }
       & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
-    ), filters?: Maybe<Array<Maybe<(
+    ), filters?: Maybe<Array<(
       { __typename?: 'SpecializationFilterForm' }
       & Pick<SpecializationFilterForm, 'permission' | 'label' | 'errCode' | 'errMsg' | 'errSeverity'>
       & { orgSids?: Maybe<(
         { __typename?: 'UISelectManyField' }
         & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-        & { value?: Maybe<Array<Maybe<(
+        & { value?: Maybe<Array<(
           { __typename?: 'NVPStr' }
           & Pick<NvpStr, 'name' | 'value'>
-        )>>> }
+        )>> }
       )> }
-    )>>>, options?: Maybe<Array<Maybe<(
+    )>>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<Maybe<(
+      & { values?: Maybe<Array<(
         { __typename?: 'UIOption' }
         & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>>> }
-    )>>>, commands?: Maybe<Array<Maybe<(
+      )>> }
+    )>>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
-    )>>> }
+    )>> }
   )> }
 );
 
@@ -3707,52 +3707,52 @@ export type AccessPolicyGroupFormQuery = (
     )>, applicableOrgTypes?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<Maybe<(
+      & { value?: Maybe<Array<(
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
-      )>>> }
+      )>> }
     )>, policies?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<Maybe<(
+      & { value?: Maybe<Array<(
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
-      )>>> }
+      )>> }
     )>, specializations?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<Maybe<(
+      & { value?: Maybe<Array<(
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
-      )>>> }
+      )>> }
     )>, includeAllSubOrgs?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, includeOrgSids?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<Maybe<(
+      & { value?: Maybe<Array<(
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
-      )>>> }
+      )>> }
     )>, excludeOrgSids?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<Maybe<(
+      & { value?: Maybe<Array<(
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
-      )>>> }
-    )>, options?: Maybe<Array<Maybe<(
+      )>> }
+    )>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<Maybe<(
+      & { values?: Maybe<Array<(
         { __typename?: 'UIOption' }
         & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>>> }
-    )>>>, commands?: Maybe<Array<Maybe<(
+      )>> }
+    )>>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
-    )>>> }
+    )>> }
   )> }
 );
 
@@ -3784,52 +3784,52 @@ export type FindAccessPolicyGroupQuery = (
     )>, applicableOrgTypes?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<Maybe<(
+      & { value?: Maybe<Array<(
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
-      )>>> }
+      )>> }
     )>, policies?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<Maybe<(
+      & { value?: Maybe<Array<(
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
-      )>>> }
+      )>> }
     )>, specializations?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<Maybe<(
+      & { value?: Maybe<Array<(
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
-      )>>> }
+      )>> }
     )>, includeAllSubOrgs?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, includeOrgSids?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<Maybe<(
+      & { value?: Maybe<Array<(
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
-      )>>> }
+      )>> }
     )>, excludeOrgSids?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<Maybe<(
+      & { value?: Maybe<Array<(
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
-      )>>> }
-    )>, options?: Maybe<Array<Maybe<(
+      )>> }
+    )>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<Maybe<(
+      & { values?: Maybe<Array<(
         { __typename?: 'UIOption' }
         & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>>> }
-    )>>>, commands?: Maybe<Array<Maybe<(
+      )>> }
+    )>>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
-    )>>> }
+    )>> }
   )> }
 );
 
@@ -3877,20 +3877,20 @@ export type DirectOrganizationsQuery = (
     ), listPageInfo?: Maybe<(
       { __typename?: 'ListPageInfo' }
       & Pick<ListPageInfo, 'pageHeaderLabel'>
-      & { pageCommands?: Maybe<Array<Maybe<(
+      & { pageCommands?: Maybe<Array<(
         { __typename?: 'WebCommand' }
         & FragmentWebCommandFragment
-      )>>>, listItemCommands?: Maybe<Array<Maybe<(
+      )>>, listItemCommands?: Maybe<Array<(
         { __typename?: 'WebCommand' }
         & FragmentWebCommandFragment
-      )>>>, listItemBulkCommands?: Maybe<Array<Maybe<(
+      )>>, listItemBulkCommands?: Maybe<Array<(
         { __typename?: 'WebCommand' }
         & FragmentWebCommandFragment
-      )>>> }
-    )>, nodes?: Maybe<Array<Maybe<(
+      )>> }
+    )>, nodes?: Maybe<Array<(
       { __typename?: 'Organization' }
       & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType'>
-    )>>> }
+    )>> }
   )> }
 );
 
@@ -3920,24 +3920,24 @@ export type OrganizationFormQuery = (
     )>, active: (
       { __typename?: 'UIBooleanField' }
       & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
-    ), whitelist?: Maybe<Array<Maybe<(
+    ), whitelist?: Maybe<Array<(
       { __typename?: 'OrgWhitelistForm' }
       & Pick<OrgWhitelistForm, 'errCode' | 'errMsg' | 'errSeverity'>
       & { pattern?: Maybe<(
         { __typename?: 'UIStringField' }
         & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
       )> }
-    )>>>, options?: Maybe<Array<Maybe<(
+    )>>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<Maybe<(
+      & { values?: Maybe<Array<(
         { __typename?: 'UIOption' }
         & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>>> }
-    )>>>, commands?: Maybe<Array<Maybe<(
+      )>> }
+    )>>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
-    )>>> }
+    )>> }
   )> }
 );
 
@@ -3967,24 +3967,24 @@ export type FindOrganizationQuery = (
     )>, active: (
       { __typename?: 'UIBooleanField' }
       & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
-    ), whitelist?: Maybe<Array<Maybe<(
+    ), whitelist?: Maybe<Array<(
       { __typename?: 'OrgWhitelistForm' }
       & Pick<OrgWhitelistForm, 'errCode' | 'errMsg' | 'errSeverity'>
       & { pattern?: Maybe<(
         { __typename?: 'UIStringField' }
         & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
       )> }
-    )>>>, options?: Maybe<Array<Maybe<(
+    )>>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<Maybe<(
+      & { values?: Maybe<Array<(
         { __typename?: 'UIOption' }
         & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>>> }
-    )>>>, commands?: Maybe<Array<Maybe<(
+      )>> }
+    )>>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
-    )>>> }
+    )>> }
   )> }
 );
 
@@ -4006,20 +4006,20 @@ export type SearchOrganizationsQuery = (
     ), listPageInfo?: Maybe<(
       { __typename?: 'ListPageInfo' }
       & Pick<ListPageInfo, 'pageHeaderLabel'>
-      & { pageCommands?: Maybe<Array<Maybe<(
+      & { pageCommands?: Maybe<Array<(
         { __typename?: 'WebCommand' }
         & FragmentWebCommandFragment
-      )>>>, listItemCommands?: Maybe<Array<Maybe<(
+      )>>, listItemCommands?: Maybe<Array<(
         { __typename?: 'WebCommand' }
         & FragmentWebCommandFragment
-      )>>>, listItemBulkCommands?: Maybe<Array<Maybe<(
+      )>>, listItemBulkCommands?: Maybe<Array<(
         { __typename?: 'WebCommand' }
         & FragmentWebCommandFragment
-      )>>> }
-    )>, nodes?: Maybe<Array<Maybe<(
+      )>> }
+    )>, nodes?: Maybe<Array<(
       { __typename?: 'Organization' }
       & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType'>
-    )>>> }
+    )>> }
   )> }
 );
 
@@ -4064,10 +4064,10 @@ export type DashThemeColorForOrgQuery = (
     & { paginationInfo: (
       { __typename?: 'PaginationInfo' }
       & FragmentPaginationInfoFragment
-    ), nodes?: Maybe<Array<Maybe<(
+    ), nodes?: Maybe<Array<(
       { __typename?: 'DashThemeColor' }
       & Pick<DashThemeColor, 'id' | 'defaultPalette' | 'themeColorMode' | 'allowDark' | 'paletteNm' | 'themePrimary' | 'themeLighterAlt' | 'themeLighter' | 'themeLight' | 'themeTertiary' | 'themeSecondary' | 'themeDarkAlt' | 'themeDark' | 'themeDarker' | 'neutralLighterAlt' | 'neutralLighter' | 'neutralLight' | 'neutralQuaternaryAlt' | 'neutralQuaternary' | 'neutralTertiaryAlt' | 'neutralTertiary' | 'neutralSecondary' | 'neutralPrimaryAlt' | 'neutralPrimary' | 'neutralDark' | 'black' | 'white'>
-    )>>> }
+    )>> }
   )> }
 );
 
@@ -4137,10 +4137,10 @@ export type DefaultDashThemeForSitePageQuery = (
   & { defaultDashThemeForSitePage?: Maybe<(
     { __typename?: 'DefaultDashThemePage' }
     & Pick<DefaultDashThemePage, 'themeColorModes' | 'themeFontSizes'>
-    & { themeColorPalettes?: Maybe<Array<Maybe<(
+    & { themeColorPalettes?: Maybe<Array<(
       { __typename?: 'DashThemeColor' }
       & Pick<DashThemeColor, 'id' | 'defaultPalette' | 'themeColorMode' | 'allowDark' | 'paletteNm' | 'themePrimary' | 'themeLighterAlt' | 'themeLighter' | 'themeLight' | 'themeTertiary' | 'themeSecondary' | 'themeDarkAlt' | 'themeDark' | 'themeDarker' | 'neutralLighterAlt' | 'neutralLighter' | 'neutralLight' | 'neutralQuaternaryAlt' | 'neutralQuaternary' | 'neutralTertiaryAlt' | 'neutralTertiary' | 'neutralSecondary' | 'neutralPrimaryAlt' | 'neutralPrimary' | 'neutralDark' | 'black' | 'white'>
-    )>>> }
+    )>> }
   )> }
 );
 
@@ -4152,10 +4152,10 @@ export type CurrentUserDashThemePageQuery = (
   & { currentUserDashThemePage?: Maybe<(
     { __typename?: 'UserDashThemePage' }
     & Pick<UserDashThemePage, 'themeColorModes' | 'themeFontSizes'>
-    & { themeColorPalettes?: Maybe<Array<Maybe<(
+    & { themeColorPalettes?: Maybe<Array<(
       { __typename?: 'DashThemeColor' }
       & Pick<DashThemeColor, 'id' | 'defaultPalette' | 'themeColorMode' | 'allowDark' | 'paletteNm' | 'themePrimary' | 'themeLighterAlt' | 'themeLighter' | 'themeLight' | 'themeTertiary' | 'themeSecondary' | 'themeDarkAlt' | 'themeDark' | 'themeDarker' | 'neutralLighterAlt' | 'neutralLighter' | 'neutralLight' | 'neutralQuaternaryAlt' | 'neutralQuaternary' | 'neutralTertiaryAlt' | 'neutralTertiary' | 'neutralSecondary' | 'neutralPrimaryAlt' | 'neutralPrimary' | 'neutralDark' | 'black' | 'white'>
-    )>>>, dashTheme?: Maybe<(
+    )>>, dashTheme?: Maybe<(
       { __typename?: 'DashTheme' }
       & Pick<DashTheme, 'id' | 'themeColorMode' | 'themeFontSize'>
       & { dashThemeColor?: Maybe<(
@@ -4176,14 +4176,14 @@ export type NavigateToNewDomainQuery = (
   & { navigateToNewDomain?: Maybe<(
     { __typename?: 'WebAppDomain' }
     & Pick<WebAppDomain, 'type' | 'selectedPage'>
-    & { navItems?: Maybe<Array<Maybe<(
+    & { navItems?: Maybe<Array<(
       { __typename?: 'WebNav' }
-      & { subNavItems?: Maybe<Array<Maybe<(
+      & { subNavItems?: Maybe<Array<(
         { __typename?: 'WebNav' }
         & FragmentWebNavFragment
-      )>>> }
+      )>> }
       & FragmentWebNavFragment
-    )>>> }
+    )>> }
   )> }
 );
 
@@ -4365,10 +4365,10 @@ export type PasswordRulesFormQuery = (
     )>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<Maybe<(
+      & { values?: Maybe<Array<(
         { __typename?: 'UIOption' }
         & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>>> }
+      )>> }
     )>>> }
   )> }
 );
@@ -4388,20 +4388,20 @@ export type PasswordValidationQuery = (
     & { mustAlwaysBeMet?: Maybe<(
       { __typename?: 'PasswordValidationGroup' }
       & Pick<PasswordValidationGroup, 'enabled' | 'requiredNumPassingRules' | 'passes'>
-      & { rules: Array<Maybe<(
+      & { rules: Array<(
         { __typename?: 'PasswordValidationRule' }
         & Pick<PasswordValidationRule, 'passes' | 'label'>
-      )>> }
+      )> }
     )>, passwordStrength?: Maybe<(
       { __typename?: 'PasswordValidationStrengthRule' }
       & Pick<PasswordValidationStrengthRule, 'passes' | 'minPasswordComplexity'>
     )>, someMustBeMet?: Maybe<(
       { __typename?: 'PasswordValidationGroup' }
       & Pick<PasswordValidationGroup, 'enabled' | 'requiredNumPassingRules' | 'passes'>
-      & { rules: Array<Maybe<(
+      & { rules: Array<(
         { __typename?: 'PasswordValidationRule' }
         & Pick<PasswordValidationRule, 'passes' | 'label'>
-      )>> }
+      )> }
     )> }
   )> }
 );
@@ -4467,10 +4467,10 @@ export type BeginLoginMutation = (
     & { loginCompleteDomain?: Maybe<(
       { __typename?: 'WebAppDomain' }
       & Pick<WebAppDomain, 'type' | 'selectedPage'>
-      & { navItems?: Maybe<Array<Maybe<(
+      & { navItems?: Maybe<Array<(
         { __typename?: 'WebNav' }
         & FragmentWebNavFragment
-      )>>> }
+      )>> }
     )>, tokenUser?: Maybe<(
       { __typename?: 'TokenUser' }
       & Pick<TokenUser, 'token'>
@@ -4496,14 +4496,14 @@ export type PasswordLoginMutation = (
     & { loginCompleteDomain?: Maybe<(
       { __typename?: 'WebAppDomain' }
       & Pick<WebAppDomain, 'type' | 'selectedPage'>
-      & { navItems?: Maybe<Array<Maybe<(
+      & { navItems?: Maybe<Array<(
         { __typename?: 'WebNav' }
-        & { subNavItems?: Maybe<Array<Maybe<(
+        & { subNavItems?: Maybe<Array<(
           { __typename?: 'WebNav' }
           & FragmentWebNavFragment
-        )>>> }
+        )>> }
         & FragmentWebNavFragment
-      )>>> }
+      )>> }
     )>, tokenUser?: Maybe<(
       { __typename?: 'TokenUser' }
       & Pick<TokenUser, 'token'>
@@ -4588,24 +4588,24 @@ export type CreateOrgMutation = (
     )>, active: (
       { __typename?: 'UIBooleanField' }
       & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
-    ), whitelist?: Maybe<Array<Maybe<(
+    ), whitelist?: Maybe<Array<(
       { __typename?: 'OrgWhitelistForm' }
       & Pick<OrgWhitelistForm, 'errCode' | 'errMsg' | 'errSeverity'>
       & { pattern?: Maybe<(
         { __typename?: 'UIStringField' }
         & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
       )> }
-    )>>>, options?: Maybe<Array<Maybe<(
+    )>>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<Maybe<(
+      & { values?: Maybe<Array<(
         { __typename?: 'UIOption' }
         & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>>> }
-    )>>>, commands?: Maybe<Array<Maybe<(
+      )>> }
+    )>>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
-    )>>> }
+    )>> }
   )> }
 );
 
@@ -4635,24 +4635,24 @@ export type UpdateOrgMutation = (
     )>, active: (
       { __typename?: 'UIBooleanField' }
       & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
-    ), whitelist?: Maybe<Array<Maybe<(
+    ), whitelist?: Maybe<Array<(
       { __typename?: 'OrgWhitelistForm' }
       & Pick<OrgWhitelistForm, 'errCode' | 'errMsg' | 'errSeverity'>
       & { pattern?: Maybe<(
         { __typename?: 'UIStringField' }
         & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
       )> }
-    )>>>, options?: Maybe<Array<Maybe<(
+    )>>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<Maybe<(
+      & { values?: Maybe<Array<(
         { __typename?: 'UIOption' }
         & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>>> }
-    )>>>, commands?: Maybe<Array<Maybe<(
+      )>> }
+    )>>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
-    )>>> }
+    )>> }
   )> }
 );
 
@@ -4685,10 +4685,10 @@ export type CreateAccessPolicyMutation = (
     ), permissions?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<Maybe<(
+      & { value?: Maybe<Array<(
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
-      )>>> }
+      )>> }
     )>, tmpl?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
@@ -4698,21 +4698,21 @@ export type CreateAccessPolicyMutation = (
     )>, applicableOrgTypes?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<Maybe<(
+      & { value?: Maybe<Array<(
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
-      )>>> }
-    )>, options?: Maybe<Array<Maybe<(
+      )>> }
+    )>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<Maybe<(
+      & { values?: Maybe<Array<(
         { __typename?: 'UIOption' }
         & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>>> }
-    )>>>, commands?: Maybe<Array<Maybe<(
+      )>> }
+    )>>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
-    )>>> }
+    )>> }
   )> }
 );
 
@@ -4735,10 +4735,10 @@ export type UpdateAccessPolicyMutation = (
     ), permissions?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<Maybe<(
+      & { value?: Maybe<Array<(
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
-      )>>> }
+      )>> }
     )>, tmpl?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
@@ -4748,21 +4748,21 @@ export type UpdateAccessPolicyMutation = (
     )>, applicableOrgTypes?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<Maybe<(
+      & { value?: Maybe<Array<(
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
-      )>>> }
-    )>, options?: Maybe<Array<Maybe<(
+      )>> }
+    )>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<Maybe<(
+      & { values?: Maybe<Array<(
         { __typename?: 'UIOption' }
         & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>>> }
-    )>>>, commands?: Maybe<Array<Maybe<(
+      )>> }
+    )>>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
-    )>>> }
+    )>> }
   )> }
 );
 
@@ -4802,28 +4802,28 @@ export type CreateAccessSpecializationMutation = (
     ), organization: (
       { __typename?: 'UIReadOnlyField' }
       & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
-    ), filters?: Maybe<Array<Maybe<(
+    ), filters?: Maybe<Array<(
       { __typename?: 'SpecializationFilterForm' }
       & Pick<SpecializationFilterForm, 'permission' | 'label' | 'errCode' | 'errMsg' | 'errSeverity'>
       & { orgSids?: Maybe<(
         { __typename?: 'UISelectManyField' }
         & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-        & { value?: Maybe<Array<Maybe<(
+        & { value?: Maybe<Array<(
           { __typename?: 'NVPStr' }
           & Pick<NvpStr, 'name' | 'value'>
-        )>>> }
+        )>> }
       )> }
-    )>>>, options?: Maybe<Array<Maybe<(
+    )>>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<Maybe<(
+      & { values?: Maybe<Array<(
         { __typename?: 'UIOption' }
         & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>>> }
-    )>>>, commands?: Maybe<Array<Maybe<(
+      )>> }
+    )>>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
-    )>>> }
+    )>> }
   )> }
 );
 
@@ -4843,28 +4843,28 @@ export type UpdateAccessSpecializationMutation = (
     ), organization: (
       { __typename?: 'UIReadOnlyField' }
       & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
-    ), filters?: Maybe<Array<Maybe<(
+    ), filters?: Maybe<Array<(
       { __typename?: 'SpecializationFilterForm' }
       & Pick<SpecializationFilterForm, 'permission' | 'label' | 'errCode' | 'errMsg' | 'errSeverity'>
       & { orgSids?: Maybe<(
         { __typename?: 'UISelectManyField' }
         & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-        & { value?: Maybe<Array<Maybe<(
+        & { value?: Maybe<Array<(
           { __typename?: 'NVPStr' }
           & Pick<NvpStr, 'name' | 'value'>
-        )>>> }
+        )>> }
       )> }
-    )>>>, options?: Maybe<Array<Maybe<(
+    )>>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<Maybe<(
+      & { values?: Maybe<Array<(
         { __typename?: 'UIOption' }
         & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>>> }
-    )>>>, commands?: Maybe<Array<Maybe<(
+      )>> }
+    )>>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
-    )>>> }
+    )>> }
   )> }
 );
 
@@ -4906,52 +4906,52 @@ export type CreateAccessPolicyGroupMutation = (
     )>, applicableOrgTypes?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<Maybe<(
+      & { value?: Maybe<Array<(
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
-      )>>> }
+      )>> }
     )>, policies?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<Maybe<(
+      & { value?: Maybe<Array<(
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
-      )>>> }
+      )>> }
     )>, specializations?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<Maybe<(
+      & { value?: Maybe<Array<(
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
-      )>>> }
+      )>> }
     )>, includeAllSubOrgs?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, includeOrgSids?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<Maybe<(
+      & { value?: Maybe<Array<(
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
-      )>>> }
+      )>> }
     )>, excludeOrgSids?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<Maybe<(
+      & { value?: Maybe<Array<(
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
-      )>>> }
-    )>, options?: Maybe<Array<Maybe<(
+      )>> }
+    )>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<Maybe<(
+      & { values?: Maybe<Array<(
         { __typename?: 'UIOption' }
         & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>>> }
-    )>>>, commands?: Maybe<Array<Maybe<(
+      )>> }
+    )>>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
-    )>>> }
+    )>> }
   )> }
 );
 
@@ -4983,52 +4983,52 @@ export type UpdateAccessPolicyGroupMutation = (
     )>, applicableOrgTypes?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<Maybe<(
+      & { value?: Maybe<Array<(
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
-      )>>> }
+      )>> }
     )>, policies?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<Maybe<(
+      & { value?: Maybe<Array<(
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
-      )>>> }
+      )>> }
     )>, specializations?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<Maybe<(
+      & { value?: Maybe<Array<(
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
-      )>>> }
+      )>> }
     )>, includeAllSubOrgs?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, includeOrgSids?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<Maybe<(
+      & { value?: Maybe<Array<(
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
-      )>>> }
+      )>> }
     )>, excludeOrgSids?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<Maybe<(
+      & { value?: Maybe<Array<(
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
-      )>>> }
-    )>, options?: Maybe<Array<Maybe<(
+      )>> }
+    )>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<Maybe<(
+      & { values?: Maybe<Array<(
         { __typename?: 'UIOption' }
         & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>>> }
-    )>>>, commands?: Maybe<Array<Maybe<(
+      )>> }
+    )>>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
-    )>>> }
+    )>> }
   )> }
 );
 
@@ -5075,27 +5075,27 @@ export type CreateUserMutation = (
     ), accessPolicyGroups?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<Maybe<(
+      & { value?: Maybe<Array<(
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
-      )>>> }
+      )>> }
     )>, sendActivationEmail?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
       & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
-    )>, commands?: Maybe<Array<Maybe<(
+    )>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
-    )>>>, options?: Maybe<Array<Maybe<(
+    )>>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<Maybe<(
+      & { values?: Maybe<Array<(
         { __typename?: 'UIOption' }
         & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>>> }
-    )>>> }
+      )>> }
+    )>> }
   )> }
 );
 
@@ -5131,27 +5131,27 @@ export type UpdateUserMutation = (
     ), accessPolicyGroups?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<Maybe<(
+      & { value?: Maybe<Array<(
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
-      )>>> }
+      )>> }
     )>, sendActivationEmail?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
       & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
-    )>, commands?: Maybe<Array<Maybe<(
+    )>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
-    )>>>, options?: Maybe<Array<Maybe<(
+    )>>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<Maybe<(
+      & { values?: Maybe<Array<(
         { __typename?: 'UIOption' }
         & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>>> }
-    )>>> }
+      )>> }
+    )>> }
   )> }
 );
 
@@ -5187,27 +5187,27 @@ export type UpdateUserAccessPolicyGroupsMutation = (
     ), accessPolicyGroups?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<Maybe<(
+      & { value?: Maybe<Array<(
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
-      )>>> }
+      )>> }
     )>, sendActivationEmail?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
       & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
-    )>, commands?: Maybe<Array<Maybe<(
+    )>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
-    )>>>, options?: Maybe<Array<Maybe<(
+    )>>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<Maybe<(
+      & { values?: Maybe<Array<(
         { __typename?: 'UIOption' }
         & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>>> }
-    )>>> }
+      )>> }
+    )>> }
   )> }
 );
 
@@ -5545,10 +5545,10 @@ export type UpdatePasswordRulesMutation = (
     )>, options?: Maybe<Array<Maybe<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<Maybe<(
+      & { values?: Maybe<Array<(
         { __typename?: 'UIOption' }
         & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>>> }
+      )>> }
     )>>> }
   )> }
 );
@@ -5578,24 +5578,24 @@ export type FtpTestMMutation = (
     & { logMessage: (
       { __typename?: 'LogMessage' }
       & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
-      & { attributes?: Maybe<Array<Maybe<(
+      & { attributes?: Maybe<Array<(
         { __typename?: 'NVPStr' }
         & UnionNvp_NvpStr_Fragment
       ) | (
         { __typename?: 'NVPId' }
         & UnionNvp_NvpId_Fragment
-      )>>> }
-    ), allMessages?: Maybe<Array<Maybe<(
+      )>> }
+    ), allMessages?: Maybe<Array<(
       { __typename?: 'LogMessage' }
       & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
-      & { attributes?: Maybe<Array<Maybe<(
+      & { attributes?: Maybe<Array<(
         { __typename?: 'NVPStr' }
         & UnionNvp_NvpStr_Fragment
       ) | (
         { __typename?: 'NVPId' }
         & UnionNvp_NvpId_Fragment
-      )>>> }
-    )>>>, xpSFTPForm?: Maybe<(
+      )>> }
+    )>>, xpSFTPForm?: Maybe<(
       { __typename?: 'XPSFTPForm' }
       & Pick<XpsftpForm, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
       & { host?: Maybe<(
