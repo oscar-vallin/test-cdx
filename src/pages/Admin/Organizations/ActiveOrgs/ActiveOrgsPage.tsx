@@ -139,8 +139,8 @@ const ActiveOrgsPage = () => {
     },
     {
       name: 'Org Type',
-      key: 'orgType',
-      fieldName: 'orgType',
+      key: 'orgTypeLabel',
+      fieldName: 'orgTypeLabel',
       data: 'string',
       isPadded: true,
       minWidth: 150,

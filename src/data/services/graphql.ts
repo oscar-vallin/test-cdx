@@ -940,6 +940,7 @@ export type Organization = {
   name?: Maybe<Scalars['String']>;
   orgId: Scalars['String'];
   orgType: OrgType;
+  orgTypeLabel: Scalars['String'];
 };
 
 export type OrganizationConnection = {
@@ -1751,8 +1752,10 @@ export type ScheduleOccurrence = {
   __typename?: 'ScheduleOccurrence';
   resource: Scalars['String'];
   scheduleId?: Maybe<Scalars['ID']>;
+  orgSid: Scalars['ID'];
   timeScheduled?: Maybe<Scalars['DateTime']>;
   schedOccurStatus: SchedOccurStatusEnum;
+  schedOccurStatusLabel: Scalars['String'];
   runOccurrences?: Maybe<Array<ScheduleRunOccurrence>>;
 };
 
@@ -1767,6 +1770,8 @@ export type ScheduleRunOccurrence = {
   workOrderId: Scalars['String'];
   timeRan?: Maybe<Scalars['DateTime']>;
   status: SchedOccurStatusEnum;
+  statusLabel: Scalars['String'];
+  commands?: Maybe<Array<WorkPacketCommand>>;
 };
 
 export type SequenceCreationEvent = {
@@ -2977,10 +2982,14 @@ export type ScheduleOccurrencesQuery = (
       & FragmentPaginationInfoFragment
     ), nodes?: Maybe<Array<(
       { __typename?: 'ScheduleOccurrence' }
-      & Pick<ScheduleOccurrence, 'resource' | 'scheduleId' | 'timeScheduled' | 'schedOccurStatus'>
+      & Pick<ScheduleOccurrence, 'resource' | 'scheduleId' | 'orgSid' | 'timeScheduled' | 'schedOccurStatus' | 'schedOccurStatusLabel'>
       & { runOccurrences?: Maybe<Array<(
         { __typename?: 'ScheduleRunOccurrence' }
-        & Pick<ScheduleRunOccurrence, 'workOrderId' | 'timeRan' | 'status'>
+        & Pick<ScheduleRunOccurrence, 'workOrderId' | 'timeRan' | 'status' | 'statusLabel'>
+        & { commands?: Maybe<Array<(
+          { __typename?: 'WorkPacketCommand' }
+          & FragmentWorkPacketCommandFragment
+        )>> }
       )>> }
     )>> }
   )> }
@@ -3842,7 +3851,7 @@ export type TopLevelOrgsByTypeQuery = (
   { __typename?: 'Query' }
   & { topLevelOrgsByType?: Maybe<Array<Maybe<(
     { __typename?: 'Organization' }
-    & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType'>
+    & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType' | 'orgTypeLabel'>
   )>>> }
 );
 
@@ -3856,7 +3865,7 @@ export type OrgByIdQuery = (
   { __typename?: 'Query' }
   & { orgById?: Maybe<(
     { __typename?: 'Organization' }
-    & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType'>
+    & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType' | 'orgTypeLabel'>
   )> }
 );
 
@@ -3889,7 +3898,7 @@ export type DirectOrganizationsQuery = (
       )>> }
     )>, nodes?: Maybe<Array<(
       { __typename?: 'Organization' }
-      & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType'>
+      & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType' | 'orgTypeLabel'>
     )>> }
   )> }
 );
@@ -4018,7 +4027,7 @@ export type SearchOrganizationsQuery = (
       )>> }
     )>, nodes?: Maybe<Array<(
       { __typename?: 'Organization' }
-      & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType'>
+      & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType' | 'orgTypeLabel'>
     )>> }
   )> }
 );
@@ -4033,7 +4042,7 @@ export type OrganizationQuickSearchQuery = (
   { __typename?: 'Query' }
   & { organizationQuickSearch?: Maybe<Array<Maybe<(
     { __typename?: 'Organization' }
-    & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType'>
+    & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType' | 'orgTypeLabel'>
   )>>> }
 );
 
@@ -4047,7 +4056,7 @@ export type VendorQuickSearchQuery = (
   { __typename?: 'Query' }
   & { vendorQuickSearch?: Maybe<Array<Maybe<(
     { __typename?: 'Organization' }
-    & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType'>
+    & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType' | 'orgTypeLabel'>
   )>>> }
 );
 
@@ -6559,17 +6568,24 @@ export const ScheduleOccurrencesDocument = gql`
     nodes {
       resource
       scheduleId
+      orgSid
       timeScheduled
       schedOccurStatus
+      schedOccurStatusLabel
       runOccurrences {
         workOrderId
         timeRan
         status
+        statusLabel
+        commands {
+          ...fragmentWorkPacketCommand
+        }
       }
     }
   }
 }
-    ${FragmentPaginationInfoFragmentDoc}`;
+    ${FragmentPaginationInfoFragmentDoc}
+${FragmentWorkPacketCommandFragmentDoc}`;
 
 /**
  * __useScheduleOccurrencesQuery__
@@ -8537,6 +8553,7 @@ export const TopLevelOrgsByTypeDocument = gql`
     name
     orgId
     orgType
+    orgTypeLabel
   }
 }
     `;
@@ -8573,6 +8590,7 @@ export const OrgByIdDocument = gql`
     name
     orgId
     orgType
+    orgTypeLabel
   }
 }
     `;
@@ -8630,6 +8648,7 @@ export const DirectOrganizationsDocument = gql`
       name
       orgId
       orgType
+      orgTypeLabel
     }
   }
 }
@@ -8929,6 +8948,7 @@ export const SearchOrganizationsDocument = gql`
       name
       orgId
       orgType
+      orgTypeLabel
     }
   }
 }
@@ -8970,6 +8990,7 @@ export const OrganizationQuickSearchDocument = gql`
     name
     orgId
     orgType
+    orgTypeLabel
   }
 }
     `;
@@ -9007,6 +9028,7 @@ export const VendorQuickSearchDocument = gql`
     name
     orgId
     orgType
+    orgTypeLabel
   }
 }
     `;
