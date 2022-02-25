@@ -22,7 +22,7 @@ export const UICheckboxList = ({
   emptyMessage = 'No options available',
 }: UICheckboxListType) => {
   const renderReadOnlyValues = () => {
-    if (value?.length == 0) {
+    if (value?.length === 0) {
       return (
         <OptionRow>
           <Text variant="muted">No values selected</Text>
@@ -30,7 +30,7 @@ export const UICheckboxList = ({
       );
     }
     return options
-      ?.filter((opt) => value?.find((o) => o == opt?.value))
+      ?.filter((opt) => value?.find((o) => o === opt?.value))
       ?.map((opt, index) => (
         <OptionRow key={`checkbox_list-${index}`}>
           <Text>

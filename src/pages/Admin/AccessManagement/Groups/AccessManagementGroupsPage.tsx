@@ -10,6 +10,7 @@ import {
   SpinnerSize,
   Link,
   IContextualMenuProps,
+  IContextualMenuItem,
 } from '@fluentui/react';
 import { EmptyState } from 'src/containers/states';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
@@ -22,19 +23,20 @@ import { PageTitle } from 'src/components/typography';
 import {
   AccessPolicyGroup,
   CdxWebCommandType,
+  UiOption,
   useAccessPolicyGroupsForOrgLazyQuery,
   useAccessPolicyGroupTemplatesLazyQuery,
   WebCommand,
 } from 'src/data/services/graphql';
 
 import { useOrgSid } from 'src/hooks/useOrgSid';
-import { StyledColumn, StyledCommandButton } from './AccessManagementGroupsPage.styles';
-import { AccessPolicyGroupPanel } from './AccessPolicyGroup';
 import { Spacing } from 'src/components/spacings/Spacing';
-import { useAccessManagementGroupsPageService } from './AccessManagementGroupsPage.service';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { ROUTE_ACCESS_MANAGEMENT_GROUPS } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
+import { useAccessManagementGroupsPageService } from './AccessManagementGroupsPage.service';
+import { AccessPolicyGroupPanel } from './AccessPolicyGroup';
+import { StyledColumn, StyledCommandButton } from './AccessManagementGroupsPage.styles';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -60,7 +62,7 @@ const AccessManagementGroupsContainer = () => {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [isDialog, setDialog] = useState(false);
   const Toast = useNotification();
-  const [templateId, setTemplateId] = useState();
+  const [templateId, setTemplateId] = useState<string>();
 
   const [apiAmGroupsForOrg, { data, loading, error }] = useAccessPolicyGroupsForOrgLazyQuery();
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>();
@@ -90,21 +92,21 @@ const AccessManagementGroupsContainer = () => {
 
   useEffect(() => {
     if (!loading && data) {
-      const groups: AccessPolicyGroup[] = [];
+      const _groups: AccessPolicyGroup[] = [];
       data.accessPolicyGroupsForOrg?.nodes?.forEach((node) => {
         if (node) {
-          groups.push(node);
+          _groups.push(node);
         }
       });
 
-      setGroups(groups);
+      setGroups(_groups);
 
       const pageCommands = data.accessPolicyGroupsForOrg?.listPageInfo?.pageCommands;
-      const createCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create);
-      setCreateCmd(createCmd);
+      const _createCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create);
+      setCreateCmd(_createCmd);
       const listCommands = data.accessPolicyGroupsForOrg?.listPageInfo?.listItemCommands;
-      const deleteCmd = listCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Delete);
-      setDeleteCmd(deleteCmd);
+      const _deleteCmd = listCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Delete);
+      setDeleteCmd(_deleteCmd);
     }
   }, [loading, data]);
 
@@ -114,7 +116,7 @@ const AccessManagementGroupsContainer = () => {
       if (deleteData.deleteAccessPolicyGroup === 'SUCCESS') {
         if (selectedGroupId || groups.length === 0) return;
 
-        const text = `Access Policy Group ${groups.find(({ sid }) => sid == selectedGroupId)?.name} Deleted.`;
+        const text = `Access Policy Group ${groups.find(({ sid }) => sid === selectedGroupId)?.name} Deleted.`;
         Toast.info({ text, duration: 3000 });
         setSelectedGroupId(null);
 
@@ -153,12 +155,10 @@ const AccessManagementGroupsContainer = () => {
 
   // *
   // * Handle Create Function.
-  const handleCreateGroup = (templateId) => {
+  const handleCreateGroup = (selectedTemplateId: string) => {
     setIsPanelOpen(true);
     setSelectedGroupId(null);
-    setTemplateId(templateId);
-
-    return null;
+    setTemplateId(selectedTemplateId);
   };
 
   const onRenderItemColumn = (item, index, column) => {
@@ -181,9 +181,8 @@ const AccessManagementGroupsContainer = () => {
             />
           </>
         );
-      } else {
-        return <span />;
       }
+      return <span />;
     }
 
     if (column.key === 'name') {
@@ -215,65 +214,49 @@ const AccessManagementGroupsContainer = () => {
     );
   };
 
-  //
-  // Render No Records found
-  const renderNoRecords = () => {
-    const emptyText = createCmd
-      ? 'There are no Access Policy Groups configured in this Organization. Click the button below to create a new group.'
-      : 'There are no Access Policy Groups configured in this Organization.';
-
-    return (
-      <EmptyState
-        title="No access groups found"
-        description={emptyText}
-        actions={renderCreateGroupButton(templatesData)}
-      />
-    );
-  };
-
-  const renderCreateGroupButton = (templates) => {
+  const renderCreateGroupButton = (uiOptions?: UiOption[] | null) => {
     if (!createCmd) {
-      return <></>;
+      return null;
     }
 
-    const { accessPolicyGroupTemplates: groupTemplates } = templates ?? {};
+    const numTemplates = uiOptions?.length ?? 0;
 
-    const numTemplates = groupTemplates?.length ?? 0;
+    let createMenuProps: IContextualMenuProps | undefined;
+    if (uiOptions && uiOptions?.length > 0) {
+      const items: IContextualMenuItem[] = [];
+      items.push({
+        key: '__Template_Header',
+        text: 'From Template:',
+        style: {
+          fontSize: '.75em',
+        },
+        disabled: true,
+      });
+      uiOptions.forEach((uiOption) => {
+        items.push({
+          text: uiOption.label,
+          key: uiOption.value,
+          style: {
+            padding: '0 5px 0 15px',
+          },
+          onClick: () => handleCreateGroup(uiOption.value),
+        });
+      });
 
-    const createMenuProps: IContextualMenuProps | undefined =
-      !!groupTemplates && numTemplates
-        ? {
-            items: [
-              {
-                key: '__Template_Header',
-                text: 'From Template:',
-                style: {
-                  fontSize: '.75em',
-                },
-                disabled: true,
-              },
-              ...groupTemplates?.map((template) => {
-                return {
-                  text: template.label,
-                  key: template.value,
-                  style: {
-                    padding: '0 5px 0 15px',
-                  },
-                  onClick: () => handleCreateGroup(template.value),
-                };
-              }),
-            ],
-          }
-        : undefined;
+      createMenuProps = {
+        items,
+      };
+    }
 
     return (
       <Button
         id="CreateGroupButton"
-        split={Boolean(!!groupTemplates && numTemplates)}
-        // split={true}
+        split={Boolean(numTemplates > 0)}
         variant="primary"
         aria-label={createCmd.label ?? undefined}
         onClick={() => {
+          setSelectedGroupId(undefined);
+          setTemplateId(undefined);
           setIsPanelOpen(true);
           return null;
         }}
@@ -285,23 +268,38 @@ const AccessManagementGroupsContainer = () => {
     );
   };
 
+  // Render No Records found
+  const renderNoRecords = () => {
+    const emptyText = createCmd
+      ? 'There are no Access Policy Groups configured in this Organization. Click the button below to create a new group.'
+      : 'There are no Access Policy Groups configured in this Organization.';
+
+    return (
+      <EmptyState
+        title="No access groups found"
+        description={emptyText}
+        actions={renderCreateGroupButton(templatesData?.accessPolicyGroupTemplates)}
+      />
+    );
+  };
+
   const renderBody = () => {
     if (loading) {
       return renderLoadingRecords();
-    } else if (!groups.length) {
-      return renderNoRecords();
-    } else {
-      return (
-        <DetailsList
-          items={groups}
-          selectionMode={SelectionMode.none}
-          columns={columns}
-          layoutMode={DetailsListLayoutMode.justified}
-          onRenderItemColumn={onRenderItemColumn}
-          isHeaderVisible
-        />
-      );
     }
+    if (!groups.length) {
+      return renderNoRecords();
+    }
+    return (
+      <DetailsList
+        items={groups}
+        selectionMode={SelectionMode.none}
+        columns={columns}
+        layoutMode={DetailsListLayoutMode.justified}
+        onRenderItemColumn={onRenderItemColumn}
+        isHeaderVisible
+      />
+    );
   };
 
   //
@@ -317,7 +315,7 @@ const AccessManagementGroupsContainer = () => {
                 <PageTitle id="__Page_Title" title="Access Policy Groups" />
               </Column>
               <Column lg="6" right>
-                {renderCreateGroupButton(templatesData)}
+                {renderCreateGroupButton(templatesData?.accessPolicyGroupTemplates)}
               </Column>
             </Row>
           </Container>
