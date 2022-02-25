@@ -268,27 +268,27 @@ export type CreateAccessPolicyGroupInput = {
   description?: Maybe<Scalars['String']>;
   tmpl?: Maybe<Scalars['Boolean']>;
   tmplUseAsIs?: Maybe<Scalars['Boolean']>;
-  applicableOrgTypes?: Maybe<Array<Maybe<OrgType>>>;
-  policySids?: Maybe<Array<Maybe<Scalars['ID']>>>;
-  specializationSids?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  applicableOrgTypes?: Maybe<Array<OrgType>>;
+  policySids?: Maybe<Array<Scalars['ID']>>;
+  specializationSids?: Maybe<Array<Scalars['ID']>>;
   includeAllSubOrgs?: Maybe<Scalars['Boolean']>;
-  includeOrgSids?: Maybe<Array<Maybe<Scalars['ID']>>>;
-  excludeOrgSids?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  includeOrgSids?: Maybe<Array<Scalars['ID']>>;
+  excludeOrgSids?: Maybe<Array<Scalars['ID']>>;
 };
 
 export type CreateAccessPolicyInput = {
   name: Scalars['String'];
   orgSid: Scalars['ID'];
-  permissions?: Maybe<Array<Maybe<Permission>>>;
+  permissions?: Maybe<Array<Permission>>;
   tmpl?: Maybe<Scalars['Boolean']>;
   tmplUseAsIs?: Maybe<Scalars['Boolean']>;
-  applicableOrgTypes?: Maybe<Array<Maybe<OrgType>>>;
+  applicableOrgTypes?: Maybe<Array<OrgType>>;
 };
 
 export type CreateAccessSpecializationInput = {
   orgSid: Scalars['ID'];
   name: Scalars['String'];
-  filters?: Maybe<Array<Maybe<CreateSpecializationFilterInput>>>;
+  filters?: Maybe<Array<CreateSpecializationFilterInput>>;
 };
 
 export type CreateDashThemeColorInput = {
@@ -335,7 +335,7 @@ export type CreateOrgInput = {
   name: Scalars['String'];
   orgType: OrgType;
   orgOwnerSid?: Maybe<Scalars['ID']>;
-  whitelist?: Maybe<Array<Maybe<Scalars['String']>>>;
+  whitelist?: Maybe<Array<Scalars['String']>>;
 };
 
 export type CreatePersonInput = {
@@ -345,7 +345,7 @@ export type CreatePersonInput = {
 
 export type CreateSpecializationFilterInput = {
   permission: Permission;
-  orgSids?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  orgSids?: Maybe<Array<Scalars['ID']>>;
 };
 
 export type CreateUserDashThemeInput = {
@@ -362,7 +362,7 @@ export type CreateUserInput = {
   orgSid: Scalars['ID'];
   /** Indicates that an email should be sent to the user with an activation link. */
   sendActivationEmail?: Maybe<Scalars['Boolean']>;
-  accessPolicyGroupSids?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  accessPolicyGroupSids?: Maybe<Array<Scalars['ID']>>;
 };
 
 export type CurrentUserInfo = {
@@ -484,7 +484,7 @@ export type DefaultDashThemePage = {
 };
 
 export type DeleteAccessPoliciesInput = {
-  policySids: Array<Maybe<Scalars['ID']>>;
+  policySids: Array<Scalars['ID']>;
 };
 
 export type DeliveredFile = {
@@ -543,14 +543,14 @@ export type ExtractParameter = {
   __typename?: 'ExtractParameter';
   label?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
-  value?: Maybe<Array<Maybe<Scalars['String']>>>;
+  value?: Maybe<Array<Scalars['String']>>;
 };
 
 export type ExtractParameters = {
   __typename?: 'ExtractParameters';
-  originalParameter?: Maybe<Array<Maybe<ExtractParameter>>>;
-  overriddenParameter?: Maybe<Array<Maybe<ExtractParameter>>>;
-  derivedParameter?: Maybe<Array<Maybe<ExtractParameter>>>;
+  originalParameter?: Maybe<Array<ExtractParameter>>;
+  overriddenParameter?: Maybe<Array<ExtractParameter>>;
+  derivedParameter?: Maybe<Array<ExtractParameter>>;
 };
 
 export type FieldCreationEvent = {
@@ -1001,7 +1001,7 @@ export type OwnedInputSid = {
 export type PageableInput = {
   pageNumber?: Maybe<Scalars['Int']>;
   pageSize?: Maybe<Scalars['Int']>;
-  sort?: Maybe<Array<Maybe<SortOrderInput>>>;
+  sort?: Maybe<Array<SortOrderInput>>;
 };
 
 export type PaginationInfo = {
@@ -1083,7 +1083,7 @@ export type PasswordRulesForm = {
   autoUnlockAccount?: Maybe<UiBooleanField>;
   autoUnlockAccountDelayMinutes?: Maybe<UiIntField>;
   response: GqOperationResponse;
-  options?: Maybe<Array<Maybe<UiOptions>>>;
+  options?: Maybe<Array<UiOptions>>;
   errCode?: Maybe<Scalars['String']>;
   errMsg?: Maybe<Scalars['String']>;
   errSeverity?: Maybe<ErrorSeverity>;
@@ -1267,10 +1267,10 @@ export type Query = {
   userAccountAuditLogs?: Maybe<UserAccountLogConnection>;
   accessPolicy?: Maybe<AccessPolicy>;
   accessPoliciesForOrg?: Maybe<AccessPolicyConnection>;
-  accessPolicyTemplates?: Maybe<Array<Maybe<UiOption>>>;
+  accessPolicyTemplates?: Maybe<Array<UiOption>>;
   accessSpecializationsForOrg?: Maybe<AccessSpecializationConnection>;
   accessPolicyGroupsForOrg?: Maybe<AccessPolicyGroupConnection>;
-  accessPolicyGroupTemplates?: Maybe<Array<Maybe<UiOption>>>;
+  accessPolicyGroupTemplates?: Maybe<Array<UiOption>>;
   accessPolicyForm?: Maybe<AccessPolicyForm>;
   findAccessPolicy?: Maybe<AccessPolicyForm>;
   accessSpecializationForm?: Maybe<AccessSpecializationForm>;
@@ -1278,14 +1278,14 @@ export type Query = {
   accessPolicyGroupForm?: Maybe<AccessPolicyGroupForm>;
   findAccessPolicyGroup?: Maybe<AccessPolicyGroupForm>;
   /** currentOrgInfo(orgInput: OrgSidInput): [Organization] */
-  topLevelOrgsByType?: Maybe<Array<Maybe<Organization>>>;
+  topLevelOrgsByType?: Maybe<Array<Organization>>;
   orgById?: Maybe<Organization>;
   directOrganizations?: Maybe<OrganizationConnection>;
   organizationForm?: Maybe<OrganizationForm>;
   findOrganization?: Maybe<OrganizationForm>;
   searchOrganizations?: Maybe<OrganizationConnection>;
-  organizationQuickSearch?: Maybe<Array<Maybe<Organization>>>;
-  vendorQuickSearch?: Maybe<Array<Maybe<Organization>>>;
+  organizationQuickSearch?: Maybe<Array<Organization>>;
+  vendorQuickSearch?: Maybe<Array<Organization>>;
   dashThemeColorForOrg?: Maybe<DashThemeColorConnection>;
   dashSiteForOrg?: Maybe<DashSite>;
   dashThemeColor?: Maybe<DashThemeColor>;
@@ -1432,7 +1432,7 @@ export type QueryFindUserAccountArgs = {
 export type QueryUserAccountAuditLogsArgs = {
   orgSid: Scalars['ID'];
   userSid?: Maybe<Scalars['ID']>;
-  events?: Maybe<Array<Maybe<UserAccountAuditEvent>>>;
+  events?: Maybe<Array<UserAccountAuditEvent>>;
   dateRange: DateTimeRangeInput;
   pageableInput?: Maybe<PageableInput>;
 };
@@ -1786,7 +1786,7 @@ export type SidInput = {
 };
 
 export type SidsInput = {
-  sids: Array<Maybe<Scalars['ID']>>;
+  sids: Array<Scalars['ID']>;
 };
 
 export enum SortDirection {
@@ -2015,27 +2015,27 @@ export type UpdateAccessPolicyGroupInput = {
   description?: Maybe<Scalars['String']>;
   tmpl?: Maybe<Scalars['Boolean']>;
   tmplUseAsIs?: Maybe<Scalars['Boolean']>;
-  applicableOrgTypes?: Maybe<Array<Maybe<OrgType>>>;
-  policySids?: Maybe<Array<Maybe<Scalars['ID']>>>;
-  specializationSids?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  applicableOrgTypes?: Maybe<Array<OrgType>>;
+  policySids?: Maybe<Array<Scalars['ID']>>;
+  specializationSids?: Maybe<Array<Scalars['ID']>>;
   includeAllSubOrgs?: Maybe<Scalars['Boolean']>;
-  includeOrgSids?: Maybe<Array<Maybe<Scalars['ID']>>>;
-  excludeOrgSids?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  includeOrgSids?: Maybe<Array<Scalars['ID']>>;
+  excludeOrgSids?: Maybe<Array<Scalars['ID']>>;
 };
 
 export type UpdateAccessPolicyInput = {
   policySid: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
-  permissions?: Maybe<Array<Maybe<Permission>>>;
+  permissions?: Maybe<Array<Permission>>;
   tmpl?: Maybe<Scalars['Boolean']>;
   tmplUseAsIs?: Maybe<Scalars['Boolean']>;
-  applicableOrgTypes?: Maybe<Array<Maybe<OrgType>>>;
+  applicableOrgTypes?: Maybe<Array<OrgType>>;
 };
 
 export type UpdateAccessSpecializationInput = {
   sid: Scalars['ID'];
   name: Scalars['String'];
-  filters?: Maybe<Array<Maybe<UpdateSpecializationFilterInput>>>;
+  filters?: Maybe<Array<UpdateSpecializationFilterInput>>;
 };
 
 export type UpdateDashThemeColorInput = {
@@ -2083,7 +2083,7 @@ export type UpdateOrgInput = {
   orgSid: Scalars['ID'];
   name: Scalars['String'];
   orgType: OrgType;
-  whitelist?: Maybe<Array<Maybe<Scalars['String']>>>;
+  whitelist?: Maybe<Array<Scalars['String']>>;
 };
 
 export type UpdateOwnPasswordInput = {
@@ -2101,12 +2101,12 @@ export type UpdatePasswordInput = {
 export type UpdateSpecializationFilterInput = {
   sid?: Maybe<Scalars['ID']>;
   permission: Permission;
-  orgSids?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  orgSids?: Maybe<Array<Scalars['ID']>>;
 };
 
 export type UpdateUserAccessPolicyGroupsInput = {
   userAccountSid: Scalars['ID'];
-  accessPolicyGroupSids?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  accessPolicyGroupSids?: Maybe<Array<Scalars['ID']>>;
 };
 
 export type UpdateUserDashThemeInput = {
@@ -2219,7 +2219,7 @@ export type UserSession = {
   userId: Scalars['String'];
   firstNm: Scalars['String'];
   pollInterval?: Maybe<Scalars['Int']>;
-  defaultAuthorities?: Maybe<Array<Maybe<Scalars['String']>>>;
+  defaultAuthorities?: Maybe<Array<Scalars['String']>>;
 };
 
 export type WpProcessError = {
@@ -2286,7 +2286,7 @@ export type WebCommand = {
   __typename?: 'WebCommand';
   endPoint?: Maybe<Scalars['String']>;
   label?: Maybe<Scalars['String']>;
-  parameters?: Maybe<Array<Maybe<NvpStr>>>;
+  parameters?: Maybe<Array<NvpStr>>;
   commandType?: Maybe<CdxWebCommandType>;
 };
 
@@ -2305,11 +2305,11 @@ export type WebPage = {
   __typename?: 'WebPage';
   type: CdxWebPage;
   /** parameters: any dynamic parameters the page end point needs to be called with */
-  parameters?: Maybe<Array<Maybe<Nvp>>>;
+  parameters?: Maybe<Array<Nvp>>;
   /** commands: actions on the page that may lead to another page e.g. add new */
   commands?: Maybe<Array<WebNav>>;
   /** pivots: any pivots the page might have */
-  pivots?: Maybe<Array<Maybe<WebPivot>>>;
+  pivots?: Maybe<Array<WebPivot>>;
 };
 
 export type WebPivot = {
@@ -2363,7 +2363,7 @@ export type WorkPacketStatus = {
   inboundDataType?: Maybe<Scalars['String']>;
   inboundDataSize?: Maybe<Scalars['Int']>;
   version?: Maybe<Scalars['String']>;
-  supplementalFilesArchivePaths?: Maybe<Array<Maybe<Scalars['String']>>>;
+  supplementalFilesArchivePaths?: Maybe<Array<Scalars['String']>>;
   /** Indicates this file didn't get delivered anywhere. Is only archived and is accessible from the CDX Dashboard */
   archiveOnly?: Maybe<Scalars['Boolean']>;
   hasErrors?: Maybe<Scalars['Boolean']>;
@@ -2395,7 +2395,7 @@ export type WorkPacketStatusDetails = {
   suppressBilling?: Maybe<Scalars['Boolean']>;
   deliveredFiles?: Maybe<Array<DeliveredFile>>;
   packetStatus: WorkStatus;
-  workStepStatus?: Maybe<Array<Maybe<WorkStepStatus>>>;
+  workStepStatus?: Maybe<Array<WorkStepStatus>>;
   extractParameters?: Maybe<ExtractParameters>;
   qualityChecks?: Maybe<QualityChecks>;
   enrollmentStats?: Maybe<EnrollmentStat>;
@@ -2406,12 +2406,12 @@ export type WorkPacketStatusDetails = {
   outboundLabel?: Maybe<Scalars['String']>;
   clientFileArchivePath?: Maybe<Scalars['String']>;
   vendorFileArchivePath?: Maybe<Scalars['String']>;
-  supplementalFilesArchivePaths?: Maybe<Array<Maybe<Scalars['String']>>>;
+  supplementalFilesArchivePaths?: Maybe<Array<Scalars['String']>>;
   commands?: Maybe<Array<WorkPacketCommand>>;
 };
 
 export type WorkPacketStatusFilter = {
-  excludedEnvs?: Maybe<Array<Maybe<Scalars['String']>>>;
+  excludedEnvs?: Maybe<Array<Scalars['String']>>;
 };
 
 export enum WorkStatus {
@@ -2443,7 +2443,7 @@ export type WorkStepStatus = {
   transformedArchiveFile?: Maybe<ArchiveFileType>;
   recordCounts?: Maybe<RecordCounts>;
   stepFile?: Maybe<Array<ArchiveFileType>>;
-  nvp?: Maybe<Array<Maybe<NvpStr>>>;
+  nvp?: Maybe<Array<NvpStr>>;
 };
 
 export type XpsftpForm = {
@@ -2587,30 +2587,30 @@ export type StatInFragmentFragment = (
 export type FragmentWebPageFragment = (
   { __typename?: 'WebPage' }
   & Pick<WebPage, 'type'>
-  & { parameters?: Maybe<Array<Maybe<(
+  & { parameters?: Maybe<Array<(
     { __typename?: 'NVPStr' }
     & UnionNvp_NvpStr_Fragment
   ) | (
     { __typename?: 'NVPId' }
     & UnionNvp_NvpId_Fragment
-  )>>>, commands?: Maybe<Array<(
+  )>>, commands?: Maybe<Array<(
     { __typename?: 'WebNav' }
     & Pick<WebNav, 'label' | 'appDomain'>
     & { page?: Maybe<(
       { __typename?: 'WebPage' }
       & Pick<WebPage, 'type'>
-      & { parameters?: Maybe<Array<Maybe<(
+      & { parameters?: Maybe<Array<(
         { __typename?: 'NVPStr' }
         & UnionNvp_NvpStr_Fragment
       ) | (
         { __typename?: 'NVPId' }
         & UnionNvp_NvpId_Fragment
-      )>>> }
+      )>> }
     )> }
-  )>>, pivots?: Maybe<Array<Maybe<(
+  )>>, pivots?: Maybe<Array<(
     { __typename?: 'WebPivot' }
     & Pick<WebPivot, 'label' | 'type'>
-  )>>> }
+  )>> }
 );
 
 export type FragmentWebNavFragment = (
@@ -2644,10 +2644,10 @@ export type FragmentAccessPolicyFragment = (
 export type FragmentWebCommandFragment = (
   { __typename?: 'WebCommand' }
   & Pick<WebCommand, 'endPoint' | 'label' | 'commandType'>
-  & { parameters?: Maybe<Array<Maybe<(
+  & { parameters?: Maybe<Array<(
     { __typename?: 'NVPStr' }
     & Pick<NvpStr, 'name' | 'value'>
-  )>>> }
+  )>> }
 );
 
 export type FragmentWorkPacketCommandFragment = (
@@ -2768,7 +2768,7 @@ export type WorkPacketStatusDetailsQuery = (
         { __typename?: 'DeliveredKCURL' }
         & Pick<DeliveredKcurl, 'url'>
       )> }
-    )>>, workStepStatus?: Maybe<Array<Maybe<(
+    )>>, workStepStatus?: Maybe<Array<(
       { __typename?: 'WorkStepStatus' }
       & Pick<WorkStepStatus, 'stepStatus' | 'stepName' | 'stepType'>
       & { populationCount?: Maybe<(
@@ -2783,22 +2783,22 @@ export type WorkPacketStatusDetailsQuery = (
       )>, stepFile?: Maybe<Array<(
         { __typename?: 'ArchiveFileType' }
         & Pick<ArchiveFileType, 'value' | 'label'>
-      )>>, nvp?: Maybe<Array<Maybe<(
+      )>>, nvp?: Maybe<Array<(
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
-      )>>> }
-    )>>>, extractParameters?: Maybe<(
+      )>> }
+    )>>, extractParameters?: Maybe<(
       { __typename?: 'ExtractParameters' }
-      & { originalParameter?: Maybe<Array<Maybe<(
+      & { originalParameter?: Maybe<Array<(
         { __typename?: 'ExtractParameter' }
         & ExtractParameterFragmentFragment
-      )>>>, overriddenParameter?: Maybe<Array<Maybe<(
+      )>>, overriddenParameter?: Maybe<Array<(
         { __typename?: 'ExtractParameter' }
         & ExtractParameterFragmentFragment
-      )>>>, derivedParameter?: Maybe<Array<Maybe<(
+      )>>, derivedParameter?: Maybe<Array<(
         { __typename?: 'ExtractParameter' }
         & ExtractParameterFragmentFragment
-      )>>> }
+      )>> }
     )>, qualityChecks?: Maybe<(
       { __typename?: 'QualityChecks' }
       & Pick<QualityChecks, 'totalRecordCount' | 'fieldCreationWarningCount' | 'fieldCreationErrorCount' | 'fieldCreationInfoCount' | 'hasMoreEvents'>
@@ -3309,7 +3309,7 @@ export type FindUserAccountQuery = (
 export type UserAccountAuditLogsQueryVariables = Exact<{
   orgSid: Scalars['ID'];
   userSid?: Maybe<Scalars['ID']>;
-  events?: Maybe<Array<Maybe<UserAccountAuditEvent>> | Maybe<UserAccountAuditEvent>>;
+  events?: Maybe<Array<UserAccountAuditEvent> | UserAccountAuditEvent>;
   dateRange: DateTimeRangeInput;
   pageableInput?: Maybe<PageableInput>;
 }>;
@@ -3411,10 +3411,10 @@ export type AccessPolicyTemplatesQueryVariables = Exact<{
 
 export type AccessPolicyTemplatesQuery = (
   { __typename?: 'Query' }
-  & { accessPolicyTemplates?: Maybe<Array<Maybe<(
+  & { accessPolicyTemplates?: Maybe<Array<(
     { __typename?: 'UIOption' }
     & Pick<UiOption, 'label' | 'value' | 'info'>
-  )>>> }
+  )>> }
 );
 
 export type AccessSpecializationsForOrgQueryVariables = Exact<{
@@ -3498,10 +3498,10 @@ export type AccessPolicyGroupTemplatesQueryVariables = Exact<{
 
 export type AccessPolicyGroupTemplatesQuery = (
   { __typename?: 'Query' }
-  & { accessPolicyGroupTemplates?: Maybe<Array<Maybe<(
+  & { accessPolicyGroupTemplates?: Maybe<Array<(
     { __typename?: 'UIOption' }
     & Pick<UiOption, 'label' | 'value' | 'info'>
-  )>>> }
+  )>> }
 );
 
 export type AccessPolicyFormQueryVariables = Exact<{
@@ -3849,10 +3849,10 @@ export type TopLevelOrgsByTypeQueryVariables = Exact<{
 
 export type TopLevelOrgsByTypeQuery = (
   { __typename?: 'Query' }
-  & { topLevelOrgsByType?: Maybe<Array<Maybe<(
+  & { topLevelOrgsByType?: Maybe<Array<(
     { __typename?: 'Organization' }
     & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType' | 'orgTypeLabel'>
-  )>>> }
+  )>> }
 );
 
 export type OrgByIdQueryVariables = Exact<{
@@ -4040,10 +4040,10 @@ export type OrganizationQuickSearchQueryVariables = Exact<{
 
 export type OrganizationQuickSearchQuery = (
   { __typename?: 'Query' }
-  & { organizationQuickSearch?: Maybe<Array<Maybe<(
+  & { organizationQuickSearch?: Maybe<Array<(
     { __typename?: 'Organization' }
     & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType' | 'orgTypeLabel'>
-  )>>> }
+  )>> }
 );
 
 export type VendorQuickSearchQueryVariables = Exact<{
@@ -4054,10 +4054,10 @@ export type VendorQuickSearchQueryVariables = Exact<{
 
 export type VendorQuickSearchQuery = (
   { __typename?: 'Query' }
-  & { vendorQuickSearch?: Maybe<Array<Maybe<(
+  & { vendorQuickSearch?: Maybe<Array<(
     { __typename?: 'Organization' }
     & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType' | 'orgTypeLabel'>
-  )>>> }
+  )>> }
 );
 
 export type DashThemeColorForOrgQueryVariables = Exact<{
@@ -4371,14 +4371,14 @@ export type PasswordRulesFormQuery = (
     )>, autoUnlockAccountDelayMinutes?: Maybe<(
       { __typename?: 'UIIntField' }
       & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
-    )>, options?: Maybe<Array<Maybe<(
+    )>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
       & { values?: Maybe<Array<(
         { __typename?: 'UIOption' }
         & Pick<UiOption, 'label' | 'value' | 'info'>
       )>> }
-    )>>> }
+    )>> }
   )> }
 );
 
@@ -5551,14 +5551,14 @@ export type UpdatePasswordRulesMutation = (
     )>, autoUnlockAccountDelayMinutes?: Maybe<(
       { __typename?: 'UIIntField' }
       & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
-    )>, options?: Maybe<Array<Maybe<(
+    )>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & Pick<UiOptions, 'key'>
       & { values?: Maybe<Array<(
         { __typename?: 'UIOption' }
         & Pick<UiOption, 'label' | 'value' | 'info'>
       )>> }
-    )>>> }
+    )>> }
   )> }
 );
 
@@ -7337,7 +7337,7 @@ export type FindUserAccountQueryHookResult = ReturnType<typeof useFindUserAccoun
 export type FindUserAccountLazyQueryHookResult = ReturnType<typeof useFindUserAccountLazyQuery>;
 export type FindUserAccountQueryResult = Apollo.QueryResult<FindUserAccountQuery, FindUserAccountQueryVariables>;
 export const UserAccountAuditLogsDocument = gql`
-    query UserAccountAuditLogs($orgSid: ID!, $userSid: ID, $events: [UserAccountAuditEvent], $dateRange: DateTimeRangeInput!, $pageableInput: PageableInput) {
+    query UserAccountAuditLogs($orgSid: ID!, $userSid: ID, $events: [UserAccountAuditEvent!], $dateRange: DateTimeRangeInput!, $pageableInput: PageableInput) {
   userAccountAuditLogs(
     orgSid: $orgSid
     userSid: $userSid
