@@ -2,7 +2,6 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 
 import { Checkbox, Label, Panel, PanelType, Spinner, SpinnerSize, Stack } from '@fluentui/react';
-import _ from 'lodash';
 
 import { useNotification } from 'src/hooks/useNotification';
 import { Multiselect } from 'src/components/selects/Multiselect';
@@ -54,7 +53,10 @@ type PermissionGroup = {
   permissions: PermissionSubGroup[];
 };
 
-const groupPermissions = (opts: UiOptions[]): PermissionGroup[] => {
+const groupPermissions = (opts?: UiOptions[] | null): PermissionGroup[] => {
+  if (!opts) {
+    return [];
+  }
   const uiOptions = opts.find((opt) => opt.key === 'Permission');
   const permGroups: any = {};
   const getGroup = (opt: UiOption) => {
@@ -150,6 +152,16 @@ const AccessPolicyPanel = ({
 
   const [fetchPolicy, { data: policy, loading: isLoadingPolicy }] = useQueryHandler(useFindAccessPolicyLazyQuery);
 
+  const doClosePanel = () => {
+    setState({ ...INITIAL_STATE });
+
+    // Reset the form
+    setPolicyForm(null);
+    setShowDialog(false);
+    setUnsavedChanges(false);
+    onDismiss();
+  };
+
   useEffect(() => {
     if (isOpen && selectedPolicyId > 0) {
       fetchPolicy({
@@ -227,45 +239,35 @@ const AccessPolicyPanel = ({
       setPermissions(groupPermissions(form.accessPolicyForm.options));
 
       if (selectedTemplateId) {
-        const { applicableOrgTypes, permissions } = form?.accessPolicyForm || {};
+        const _accessPolicyForm = form?.accessPolicyForm || {};
 
         setState({
           ...INITIAL_STATE,
-          permissions: permissions.value?.map(({ value }) => value) || [],
+          permissions: _accessPolicyForm?.permissions.value?.map(({ value }) => value) || [],
         });
 
-        setApplicableOrgTypes(applicableOrgTypes.value?.map(({ value }) => value) || []);
+        setApplicableOrgTypes(_accessPolicyForm?.applicableOrgTypes.value?.map(({ value }) => value) || []);
       }
     }
   }, [form, isOpen]);
 
   useEffect(() => {
     if (policy) {
-      const { name, applicableOrgTypes, permissions, sid, tmpl, tmplUseAsIs, options } = policy.findAccessPolicy;
+      const _accessPolicyForm: AccessPolicyForm = policy.findAccessPolicy;
 
-      setPolicyForm(policy.findAccessPolicy);
-      setPermissions(groupPermissions(options));
-      setApplicableOrgTypes(applicableOrgTypes.value.map(({ value }) => value));
+      setPolicyForm(_accessPolicyForm);
+      setPermissions(groupPermissions(_accessPolicyForm?.options));
+      setApplicableOrgTypes(_accessPolicyForm?.applicableOrgTypes?.value?.map(({ value }) => value));
 
       setState({
-        sid,
-        permissions: permissions.value?.map(({ value }) => value) || [],
-        policyName: name.value,
-        isTemplate: tmpl.value,
-        usedAsIs: tmplUseAsIs.value,
+        sid: _accessPolicyForm?.sid,
+        permissions: _accessPolicyForm?.permissions?.value?.map(({ value }) => value) || [],
+        policyName: _accessPolicyForm?.name.value,
+        isTemplate: _accessPolicyForm?.tmpl?.value,
+        usedAsIs: _accessPolicyForm?.tmplUseAsIs?.value,
       });
     }
   }, [policy]);
-
-  const doClosePanel = () => {
-    setState({ ...INITIAL_STATE });
-
-    // Reset the form
-    setPolicyForm(null);
-    setShowDialog(false);
-    setUnsavedChanges(false);
-    onDismiss();
-  };
 
   const onPanelClose = () => {
     if (unsavedChanges) {
@@ -280,7 +282,7 @@ const AccessPolicyPanel = ({
       <Column lg="12">
         <Stack horizontal styles={{ root: { height: 44 } }}>
           <PanelTitle id="__CreatePolicy_Panel_Title" variant="bold" size="large">
-            {!selectedPolicyId ? 'New access policy' : 'Update access policy'}
+            {!selectedPolicyId ? 'New Access Policy' : 'Update Access Policy'}
           </PanelTitle>
         </Stack>
       </Column>
@@ -336,9 +338,10 @@ const AccessPolicyPanel = ({
         </Button>
       );
     }
+    return null;
   };
 
-  const renderPermissionList = (options?: UiOption[], readOnly: boolean = true) => {
+  const renderPermissionList = (options?: UiOption[], readOnly = true) => {
     if (readOnly) {
       const selectedOptions = options?.filter((option) => state.permissions.includes(option.value)) ?? [];
       if (selectedOptions.length > 0) {
@@ -350,9 +353,9 @@ const AccessPolicyPanel = ({
             </Text>
           </Spacing>
         ));
-      } else {
-        return <EmptyValue>&lt;no access&gt;</EmptyValue>;
       }
+
+      return <EmptyValue>&lt;no access&gt;</EmptyValue>;
     }
     return options?.map((option, optIndex) => (
       <Spacing margin={{ top: 'small' }} key={`perm-${optIndex}`}>
@@ -512,27 +515,26 @@ const AccessPolicyPanel = ({
         isFooterAtBottom={true}
         isOpen={isOpen}
         onDismiss={onPanelClose}
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
         onOuterClick={() => {}}
       >
-        <>
-          <Row>
-            <Column lg="12">
-              {isLoadingForm || isLoadingPolicy ? (
-                <>
-                  <Spacing margin={{ top: 'normal', bottom: 'double' }}>
-                    <LightSeparator />
-                  </Spacing>
+        <Row>
+          <Column lg="12">
+            {isLoadingForm || isLoadingPolicy ? (
+              <>
+                <Spacing margin={{ top: 'normal', bottom: 'double' }}>
+                  <LightSeparator />
+                </Spacing>
 
-                  <Spacing>
-                    <Spinner size={SpinnerSize.large} label="Loading policy form" />
-                  </Spacing>
-                </>
-              ) : (
-                renderBody()
-              )}
-            </Column>
-          </Row>
-        </>
+                <Spacing>
+                  <Spinner size={SpinnerSize.large} label="Loading policy form" />
+                </Spacing>
+              </>
+            ) : (
+              renderBody()
+            )}
+          </Column>
+        </Row>
       </Panel>
       <DialogYesNo
         open={showDialog}
