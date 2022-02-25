@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { DefaultButton, Dialog, DialogFooter, DialogType, PrimaryButton, Spinner, SpinnerSize } from '@fluentui/react';
 import { EmptyState } from 'src/containers/states';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
-import { Button } from 'src/components/buttons';
 import { Column, Container, Row } from 'src/components/layouts';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { PageTitle } from 'src/components/typography';
@@ -31,6 +30,8 @@ const ActiveUsersPage = () => {
 
   const userService = useUsersLists(ActiveEnum.Active);
 
+  const createCmd = userService.commands?.find((cmd) => cmd.commandType === CdxWebCommandType.Create);
+
   const hideConfirmation = () => {
     setIsConfirmationHidden(true);
     setSelectedItems([]);
@@ -42,29 +43,30 @@ const ActiveUsersPage = () => {
     });
   };
 
-  const renderEmptyState = () => {
-    if (userService.commands?.find((cmd) => cmd.commandType === CdxWebCommandType.Create)) {
+  const renderCreateButton = () => {
+    if (createCmd) {
       return (
-        <EmptyState
-          title="No users found"
-          description="You haven't created a user yet. Click the button below to create a new user."
-          actions={
-            <Button
-              id="CreateUser"
-              variant="primary"
-              onClick={() => {
-                setIsCreateUserPanelOpen(true);
-                return null;
-              }}
-            >
-              Create user
-            </Button>
-          }
-        />
+        <PrimaryButton
+          id="__Create-User"
+          iconProps={{ iconName: 'AddFriend' }}
+          ariaLabel={createCmd.label ?? undefined}
+          onClick={() => {
+            setIsCreateUserPanelOpen(true);
+          }}
+        >
+          {createCmd.label}
+        </PrimaryButton>
       );
     }
+    return null;
+  };
 
-    return <EmptyState title="No users found" description="There are no active users in this organization." />;
+  const renderEmptyState = () => {
+    const emptyText = createCmd
+      ? 'There are no active users in this organization. Click the button below to create a new user.'
+      : 'There are no active users in this organization.';
+
+    return <EmptyState title="No users found" description={emptyText} actions={renderCreateButton()} />;
   };
 
   const renderBody = () => {
@@ -88,8 +90,6 @@ const ActiveUsersPage = () => {
     );
   };
 
-  const createCmd = userService.commands?.find((cmd) => cmd.commandType === CdxWebCommandType.Create);
-
   return (
     <LayoutDashboard id="PageActiveUsers" menuOptionSelected={ROUTE_ACTIVE_USERS.API_ID}>
       {userService.users && userService.users.length > 0 && (
@@ -100,20 +100,7 @@ const ActiveUsersPage = () => {
                 <PageTitle id="__Page_Title" title="Active Users" />
               </Column>
               <Column lg="6" right>
-                {createCmd && (
-                  <span>
-                    <PrimaryButton
-                      id="__Create-User"
-                      iconProps={{ iconName: 'AddFriend' }}
-                      ariaLabel={createCmd.label ?? undefined}
-                      onClick={() => {
-                        setIsCreateUserPanelOpen(true);
-                      }}
-                    >
-                      {createCmd.label}
-                    </PrimaryButton>
-                  </span>
-                )}
+                <span>{renderCreateButton()}</span>
               </Column>
             </Row>
           </Container>
