@@ -203,7 +203,10 @@ const ActiveOrgsPage = () => {
       );
     }
     if (!orgs.length) {
-      return <EmptyState description="No active orgs found" />;
+      const emptyText = createCmd
+        ? 'There are no active Organizations in this Organization. Click the button below to create a new Organization.'
+        : 'There are no active Organizations in this Organization.';
+      return <EmptyState title="No active orgs found" description={emptyText} actions={createOrgButton()} />;
     }
     return (
       <>
