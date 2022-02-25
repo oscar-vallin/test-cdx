@@ -8,6 +8,12 @@ const defaultProps = {
   items: []
 };
 
+jest.mock('src/hooks/useOrgSid', () => ({
+  useOrgSid: () => ({
+    orgSid: 1,
+  }),
+}));
+
 describe('Schedule Day Container...', () => {
   // const themedComponent = shallowWithTheme(<Component {...defaultProps} />);
   const themedMount = mountWithTheme(<ScheduleDay {...defaultProps} />);

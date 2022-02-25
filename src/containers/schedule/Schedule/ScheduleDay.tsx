@@ -42,7 +42,7 @@ export const ScheduleDay = ({ currentDate, selectedDate, items }: ScheduleDayTyp
 
   const runOccurrences: RunOccurrence[] = [];
 
-  const { orgSid } = useOrgSid();
+  const { orgSid, startDate, endDate } = useOrgSid();
   const history = useHistory();
 
   items.forEach((item) => {
@@ -96,7 +96,9 @@ export const ScheduleDay = ({ currentDate, selectedDate, items }: ScheduleDayTyp
 
   const openDetails = (runOccurrence: RunOccurrence) => {
     if (runOccurrence.canViewDetails) {
-      history.push(`/file-status/${runOccurrence.workOrderId}?orgSid=${orgSid}&fsOrgSid=${runOccurrence.orgSid}`);
+      history.push(
+        `/file-status/${runOccurrence.workOrderId}?orgSid=${orgSid}&fsOrgSid=${runOccurrence.orgSid}&startDate${startDate}=&endDate=${endDate}`
+      );
     }
   };
 

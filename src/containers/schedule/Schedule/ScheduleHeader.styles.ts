@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import { Box as LayoutBox, Row as LayoutRow, Column as LayoutColumn } from 'src/components/layouts';
-import { Button } from 'src/components/buttons';
-import { ButtonAction } from 'src/components/buttons';
+import { Button, ButtonAction } from 'src/components/buttons';
 
 const COLOR_MAIN = ({ theme }) => theme.colors.themePrimary;
 const COLOR_TEXT = ({ theme }) => theme.colors.neutralPrimary;
@@ -37,6 +36,10 @@ export const HeaderButtonView = styled(Button)<HeaderButtonViewProps>`
   && {
     border: none;
   }
+
+  &:hover {
+    background: ${COLOR_BORDER};
+  }
 `;
 
 export const HeaderButtonTitle = styled(Button)<HeaderButtonTitleProps>`
@@ -61,7 +64,7 @@ export const Header = styled.div`
   display: block;
   width: 100%;
   padding: 1.75em 0;
-  border-bottom: ${`1px solid ${'blue'}`};
+  border-bottom: 1px solid ${COLOR_MAIN};
   background: ${COLOR_BORDER};
 `;
 
@@ -90,7 +93,6 @@ export const Calendar = styled.div`
   background: ${COLOR_BORDER};
   border: ${`1px solid ${COLOR_BORDER}`};
 `;
-
 
 export const CalendarBodyCell = styled.div<CalendarBodyCellProps>`
   /* position: relative;
@@ -141,11 +143,6 @@ export const LayoutBase = styled.div`
 `;
 
 export const ColumnHeader = styled(LayoutBase)``;
-
-export const FillerHours = styled.div`
-  height: 100%;
-  width: 50px;
-`;
 
 export const RowHeaderItem = styled(LayoutBase)`
   flex-direction: row;

@@ -22,23 +22,12 @@ import {
 type ScheduleHeaderType = {
   id: string;
   currentView: string;
-  currentDate: Date;
   selectedDate: Date;
   onChangeDate: (d: Date) => void;
   onChangeView: (view: string) => void;
 };
 
-export const ScheduleHeader = ({
-  id,
-  currentView,
-  currentDate,
-  selectedDate,
-  onChangeDate,
-  onChangeView,
-}: ScheduleHeaderType) => {
-  const [currentMonth, setCurrentMonth] = useState(currentDate ?? new Date());
-  const [currentWeek, setCurrentWeek] = useState(selectedDate ?? new Date());
-  const [currentDay, setCurrentDay] = useState(selectedDate ?? new Date());
+export const ScheduleHeader = ({ id, currentView, selectedDate, onChangeDate, onChangeView }: ScheduleHeaderType) => {
   const headerMonthFormat = 'MMMM';
   const headerYearFormat = 'yyyy';
   const [calendarOpen, setCalendarOpen] = useState(false);
@@ -47,16 +36,13 @@ export const ScheduleHeader = ({
   const handleChangeDate = (_newDate?: Date) => {
     if (_newDate) {
       setCalendarOpen(false);
-      setCurrentMonth(_newDate);
-      setCurrentWeek(_newDate);
-      setCurrentDay(_newDate);
       onChangeDate(_newDate);
     }
   };
 
   //
   const handlePrevDay = () => {
-    const _currentDay = addDays(currentDay, -1);
+    const _currentDay = addDays(selectedDate, -1);
 
     handleChangeDate(_currentDay);
     return null;
@@ -64,7 +50,7 @@ export const ScheduleHeader = ({
 
   //
   const handleNextDay = () => {
-    const _currentDay = addDays(currentDay, 1);
+    const _currentDay = addDays(selectedDate, 1);
 
     handleChangeDate(_currentDay);
     return null;
@@ -72,7 +58,7 @@ export const ScheduleHeader = ({
 
   //
   const handlePrevWeek = () => {
-    const _currentWeek = addWeeks(currentWeek, -1);
+    const _currentWeek = addWeeks(selectedDate, -1);
 
     handleChangeDate(_currentWeek);
     return null;
@@ -80,7 +66,7 @@ export const ScheduleHeader = ({
 
   //
   const handleNextWeek = () => {
-    const _currentWeek = addWeeks(currentWeek, 1);
+    const _currentWeek = addWeeks(selectedDate, 1);
 
     handleChangeDate(_currentWeek);
     return null;
@@ -88,7 +74,7 @@ export const ScheduleHeader = ({
 
   //
   const handlePrevMonth = () => {
-    const _currentMonth = addMonths(currentMonth, -1);
+    const _currentMonth = addMonths(selectedDate, -1);
 
     handleChangeDate(_currentMonth);
     return null;
@@ -96,7 +82,7 @@ export const ScheduleHeader = ({
 
   //
   const handleNextMonth = () => {
-    const _currentMonth = addMonths(currentMonth, 1);
+    const _currentMonth = addMonths(selectedDate, 1);
 
     handleChangeDate(_currentMonth);
     return null;
@@ -131,7 +117,7 @@ export const ScheduleHeader = ({
   };
 
   const renderHeaderTitle = () => {
-    const formatWeek = 'LLLL d';
+    const formatWeek = 'LLL d';
     if (isCurrentViewDay(currentView)) {
       return (
         <MonthYearContainer>
@@ -141,14 +127,14 @@ export const ScheduleHeader = ({
     }
 
     if (isCurrentViewWeek(currentView)) {
-      const weekStart = startOfWeek(currentWeek);
-      const weekEnd = endOfWeek(currentWeek);
+      const weekStart = startOfWeek(selectedDate);
+      const weekEnd = endOfWeek(selectedDate);
 
       return (
         <MonthYearContainer>
           <HeaderMonth>
             {`${format(weekStart, formatWeek)} - ${format(weekEnd, formatWeek)}, ${format(
-              currentMonth,
+              selectedDate,
               headerYearFormat
             )}`}
           </HeaderMonth>
@@ -167,8 +153,8 @@ export const ScheduleHeader = ({
           onClick={() => handleCalendarOpen(true)}
           text=""
         >
-          <HeaderMonth>{format(currentMonth, headerMonthFormat)}</HeaderMonth>
-          <HeaderYear>{format(currentMonth, headerYearFormat)}</HeaderYear>
+          <HeaderMonth>{format(selectedDate, headerMonthFormat)}</HeaderMonth>
+          <HeaderYear>{format(selectedDate, headerYearFormat)}</HeaderYear>
         </HeaderButtonTitle>
       </MonthYearContainer>
     );
