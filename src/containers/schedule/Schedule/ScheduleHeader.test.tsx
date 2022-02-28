@@ -42,7 +42,7 @@ describe('ButtonAction', () => {
   it('Should sink in the button HeaderTitle', () => {
     const themedComponent = mountWithTheme(<Component {...defaultProps} />);
 
-    const btns = themedComponent.find('button[id="__HeaderButtonTitle_Id"]');
+    const btns = themedComponent.find('button[id="__MonthButtonTitle_Id"]');
     btns.simulate('click');
     expect(btns.length).toBe(1);
   });
