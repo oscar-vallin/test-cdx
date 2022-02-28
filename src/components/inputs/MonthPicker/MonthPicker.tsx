@@ -1,30 +1,15 @@
 import { ReactElement, useState } from 'react';
-import { Calendar, DayOfWeek, DateRangeType, DefaultButton } from '@fluentui/react';
+import { Calendar, DateRangeType, DayOfWeek, DefaultButton } from '@fluentui/react';
 import { addDays, getDateRangeArray } from '@fluentui/date-time-utilities';
 import { Container } from './MonthPicker.styles';
 
-const defaultProps = {
-  open: false,
-  onSelect: () => {},
-  showDates: false,
-  isMonthPickerVisible: true,
-  dateRangeType: DateRangeType.Month,
-  showGoToToday: true,
-  showNavigateButtons: true,
-  highlightCurrentMonth: true,
-  highlightSelectedMonth: true,
-  isDayPickerVisible: false,
-  showMonthPickerAsOverlay: true,
-  showWeekNumbers: false,
-  firstDayOfWeek: DayOfWeek.Monday,
-};
-
 type MonthPickerProps = {
   open?: boolean;
+  value?: Date;
   onSelect?: (date: Date) => void;
   showDates?: boolean;
   isMonthPickerVisible?: boolean;
-  dateRangeType?: any;
+  dateRangeType?: DateRangeType;
   showGoToToday?: boolean;
   showNavigateButtons?: boolean;
   highlightCurrentMonth?: boolean;
@@ -32,15 +17,14 @@ type MonthPickerProps = {
   isDayPickerVisible?: boolean;
   showMonthPickerAsOverlay?: boolean;
   showWeekNumbers?: boolean;
-  firstDayOfWeek?: any;
+  firstDayOfWeek?: DayOfWeek;
   /// /////////////////
-  minDate?: any;
-  maxDate?: any;
-  restrictedDates?: any;
-  showSixWeeksByDefault?: any;
-  workWeekDays?: any;
-  theme?: any;
-} & typeof defaultProps;
+  minDate?: Date;
+  maxDate?: Date;
+  restrictedDates?: Date[];
+  showSixWeeksByDefault?: boolean;
+  workWeekDays?: DayOfWeek[];
+};
 
 const dayPickerStrings = {
   months: [
@@ -76,28 +60,31 @@ const dayPickerStrings = {
 let dateRangeString = null as any;
 
 export const MonthPicker = ({
-  open,
-  onSelect,
-  showDates,
-  dateRangeType,
-  showGoToToday,
-  showNavigateButtons,
-  highlightCurrentMonth,
-  highlightSelectedMonth,
-  showMonthPickerAsOverlay,
-  minDate,
-  maxDate,
-  restrictedDates,
-  showSixWeeksByDefault,
-  workWeekDays,
-}: MonthPickerProps): ReactElement => {
+                              open,
+                              value,
+                              onSelect,
+                              showDates = false,
+                              dateRangeType = DateRangeType.Month,
+                              showGoToToday = true,
+                              showNavigateButtons = false,
+                              highlightCurrentMonth = true,
+                              highlightSelectedMonth = true,
+                              showMonthPickerAsOverlay = true,
+                              minDate,
+                              maxDate,
+                              restrictedDates,
+                              showSixWeeksByDefault,
+                              workWeekDays,
+                            }: MonthPickerProps): ReactElement => {
   const [selectedDateRange, setSelectedDateRange] = useState<Date[]>();
-  const [selectedDate, setSelectedDate] = useState<Date>();
+  const [selectedDate, setSelectedDate] = useState<Date>(value ?? new Date());
 
   const onSelectDate = (date: Date, dateRangeArray?: Date[]) => {
     setSelectedDate(date);
     setSelectedDateRange(dateRangeArray);
-    onSelect(date);
+    if (onSelect) {
+      onSelect(date);
+    }
   };
 
   const goPrevious = () => {
@@ -125,7 +112,7 @@ export const MonthPicker = ({
     };
   };
 
-  const onDismiss = () => {
+  const onCalendarDismiss = () => {
     return selectedDate;
   };
 
@@ -168,9 +155,10 @@ export const MonthPicker = ({
         </div>
       )}
       <Calendar
+        className="cdx-cal"
         data-testid="Calendar"
         onSelectDate={onSelectDate}
-        onDismiss={onDismiss}
+        onDismiss={onCalendarDismiss}
         isMonthPickerVisible
         dateRangeType={dateRangeType}
         showGoToToday={showGoToToday}
@@ -197,5 +185,3 @@ export const MonthPicker = ({
     </Container>
   );
 };
-
-MonthPicker.defaultProps = defaultProps;

@@ -144,18 +144,18 @@ export const ScheduleHeader = ({ id, currentView, selectedDate, onChangeDate, on
 
     return (
       <MonthYearContainer>
-        {calendarOpen && <MonthPicker open={calendarOpen} onSelect={handleChangeDate} />}
         <HeaderButtonTitle
           id="__HeaderButtonTitle_Id"
           variant="secondary"
           disabled={false}
           block={false}
-          onClick={() => handleCalendarOpen(true)}
+          onClick={() => handleCalendarOpen(!calendarOpen)}
           text=""
         >
           <HeaderMonth>{format(selectedDate, headerMonthFormat)}</HeaderMonth>
           <HeaderYear>{format(selectedDate, headerYearFormat)}</HeaderYear>
         </HeaderButtonTitle>
+        {calendarOpen && <MonthPicker open={calendarOpen} value={selectedDate} onSelect={handleChangeDate} />}
       </MonthYearContainer>
     );
   };

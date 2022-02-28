@@ -1,9 +1,9 @@
 import toJSON from 'enzyme-to-json';
 import { shallow } from 'enzyme';
 import { DayOfWeek, DateRangeType } from '@fluentui/react';
-import { MonthPicker as Component } from './index';
+import { MonthPicker as Component } from 'src/components/inputs/MonthPicker/index';
 import { Container } from './MonthPicker.styles';
-import { mountWithTheme } from 'src/utils/testUtils';
+import { mountWithTheme, shallowWithTheme } from 'src/utils/testUtils';
 
 const baseProps = {
   onSelect: () => null,
@@ -35,7 +35,7 @@ const theme = {
 };
 
 test('Matches Snapshot', () => {
-  const wrapper = shallow(<Component {...defaultProps} theme={theme} />);
+  const wrapper = shallow(<Component {...defaultProps} />);
 
   expect(toJSON(wrapper)).toMatchSnapshot();
 });
@@ -52,21 +52,21 @@ describe('Basic MonthPicker Component', () => {
   });
 
   it('Test styled Container component', () => {
-    const baseTree = shallow(
+    const baseTree = shallowWithTheme(
       <Container {...defaultProps} theme={theme}>
-        <div></div>
+        <div/>
       </Container>
     );
     expect(baseTree).toMatchSnapshot();
   });
 
   it('Test styled MonthPicker component', () => {
-    const wrapper = shallow(<Component {...defaultProps} theme={theme} restrictedDates={[new Date()]} />);
+    const wrapper = shallow(<Component {...defaultProps} restrictedDates={[new Date()]} />);
     expect(toJSON(wrapper)).toMatchSnapshot();
   });
 
   it('Test default props MonthPicker component', () => {
-    const wrapper = shallow(<Component {...baseProps} theme={theme} restrictedDates={[new Date()]} />);
+    const wrapper = shallow(<Component {...baseProps} restrictedDates={[new Date()]} />);
     expect(toJSON(wrapper)).toMatchSnapshot();
   });
 
