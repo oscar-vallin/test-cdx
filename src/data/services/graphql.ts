@@ -699,6 +699,13 @@ export type Mutation = {
   updatePasswordRules?: Maybe<PasswordRulesForm>;
   implementationDeploy?: Maybe<ImplementationDeployResponse>;
   ftpTestM?: Maybe<SftpConfigSubscriptionResponse>;
+  workPacketRerunStep?: Maybe<GenericResponse>;
+  workPacketDelete?: Maybe<GenericResponse>;
+  workPacketContinue?: Maybe<GenericResponse>;
+  workPacketCancel?: Maybe<GenericResponse>;
+  workPacketReprocess?: Maybe<ReprocessResponse>;
+  workPacketRenameAndReprocess?: Maybe<ReprocessResponse>;
+  workPacketResend?: Maybe<GenericResponse>;
 };
 
 
@@ -882,6 +889,43 @@ export type MutationUpdatePasswordRulesArgs = {
 export type MutationFtpTestMArgs = {
   xpsftp: XsftpInput;
   genTestFile?: Maybe<SftpTestGenerateTestFile>;
+};
+
+
+export type MutationWorkPacketRerunStepArgs = {
+  workOrderId: Scalars['String'];
+  stepName: Scalars['String'];
+};
+
+
+export type MutationWorkPacketDeleteArgs = {
+  workOrderId: Scalars['String'];
+};
+
+
+export type MutationWorkPacketContinueArgs = {
+  workOrderId: Scalars['String'];
+};
+
+
+export type MutationWorkPacketCancelArgs = {
+  workOrderId: Scalars['String'];
+};
+
+
+export type MutationWorkPacketReprocessArgs = {
+  workOrderId: Scalars['String'];
+};
+
+
+export type MutationWorkPacketRenameAndReprocessArgs = {
+  workOrderId: Scalars['String'];
+  newFileName: Scalars['String'];
+};
+
+
+export type MutationWorkPacketResendArgs = {
+  workOrderId: Scalars['String'];
 };
 
 export type Nvp = NvpStr | NvpId;
@@ -1247,6 +1291,8 @@ export type Query = {
   exchangeActivityErrored?: Maybe<OrganizationLinkConnection>;
   workPacketStatusDetails?: Maybe<WorkPacketStatusDetails>;
   workPacketStatus?: Maybe<WorkPacketStatus>;
+  /** Check if a specific Work Packet has been updated after the given last updated date time */
+  workPacketStatusPoll?: Maybe<Scalars['Int']>;
   workPacketStatuses?: Maybe<WorkPacketStatusConnection>;
   /** Get the number of Work Packet Statuses which have been updated after the given last updated date time */
   workPacketStatusesPoll?: Maybe<Scalars['Int']>;
@@ -1344,6 +1390,13 @@ export type QueryWorkPacketStatusDetailsArgs = {
 export type QueryWorkPacketStatusArgs = {
   orgSid: Scalars['ID'];
   workOrderId: Scalars['String'];
+};
+
+
+export type QueryWorkPacketStatusPollArgs = {
+  orgSid: Scalars['ID'];
+  workOrderId: Scalars['String'];
+  lastUpdated: Scalars['DateTime'];
 };
 
 
@@ -1625,6 +1678,16 @@ export type RecordCreationEvent = {
   error?: Maybe<Array<FieldCreationEvent>>;
   warning?: Maybe<Array<FieldCreationEvent>>;
   information?: Maybe<Array<FieldCreationEvent>>;
+};
+
+export type ReprocessResponse = {
+  __typename?: 'ReprocessResponse';
+  newWorkOrderId?: Maybe<Scalars['String']>;
+  orgSid?: Maybe<Scalars['ID']>;
+  response?: Maybe<GqOperationResponse>;
+  errCode?: Maybe<Scalars['String']>;
+  errMsg?: Maybe<Scalars['String']>;
+  errSeverity?: Maybe<ErrorSeverity>;
 };
 
 export type RequiredPasswordRuleSet = {
@@ -2873,6 +2936,18 @@ export type WorkPacketStatusQuery = (
       & FragmentWorkPacketCommandFragment
     )>> }
   )> }
+);
+
+export type WorkPacketStatusPollQueryVariables = Exact<{
+  orgSid: Scalars['ID'];
+  workOrderId: Scalars['String'];
+  lastUpdated: Scalars['DateTime'];
+}>;
+
+
+export type WorkPacketStatusPollQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'workPacketStatusPoll'>
 );
 
 export type WorkPacketStatusesQueryVariables = Exact<{
@@ -5642,6 +5717,99 @@ export type FtpTestMMutation = (
   )> }
 );
 
+export type WorkPacketRerunStepMutationVariables = Exact<{
+  workOrderId: Scalars['String'];
+  stepName: Scalars['String'];
+}>;
+
+
+export type WorkPacketRerunStepMutation = (
+  { __typename?: 'Mutation' }
+  & { workPacketRerunStep?: Maybe<(
+    { __typename?: 'GenericResponse' }
+    & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+  )> }
+);
+
+export type WorkPacketDeleteMutationVariables = Exact<{
+  workOrderId: Scalars['String'];
+}>;
+
+
+export type WorkPacketDeleteMutation = (
+  { __typename?: 'Mutation' }
+  & { workPacketDelete?: Maybe<(
+    { __typename?: 'GenericResponse' }
+    & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+  )> }
+);
+
+export type WorkPacketContinueMutationVariables = Exact<{
+  workOrderId: Scalars['String'];
+}>;
+
+
+export type WorkPacketContinueMutation = (
+  { __typename?: 'Mutation' }
+  & { workPacketContinue?: Maybe<(
+    { __typename?: 'GenericResponse' }
+    & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+  )> }
+);
+
+export type WorkPacketCancelMutationVariables = Exact<{
+  workOrderId: Scalars['String'];
+}>;
+
+
+export type WorkPacketCancelMutation = (
+  { __typename?: 'Mutation' }
+  & { workPacketCancel?: Maybe<(
+    { __typename?: 'GenericResponse' }
+    & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+  )> }
+);
+
+export type WorkPacketReprocessMutationVariables = Exact<{
+  workOrderId: Scalars['String'];
+}>;
+
+
+export type WorkPacketReprocessMutation = (
+  { __typename?: 'Mutation' }
+  & { workPacketReprocess?: Maybe<(
+    { __typename?: 'ReprocessResponse' }
+    & Pick<ReprocessResponse, 'newWorkOrderId' | 'orgSid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+  )> }
+);
+
+export type WorkPacketRenameAndReprocessMutationVariables = Exact<{
+  workOrderId: Scalars['String'];
+  newFileName: Scalars['String'];
+}>;
+
+
+export type WorkPacketRenameAndReprocessMutation = (
+  { __typename?: 'Mutation' }
+  & { workPacketRenameAndReprocess?: Maybe<(
+    { __typename?: 'ReprocessResponse' }
+    & Pick<ReprocessResponse, 'newWorkOrderId' | 'orgSid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+  )> }
+);
+
+export type WorkPacketResendMutationVariables = Exact<{
+  workOrderId: Scalars['String'];
+}>;
+
+
+export type WorkPacketResendMutation = (
+  { __typename?: 'Mutation' }
+  & { workPacketResend?: Maybe<(
+    { __typename?: 'GenericResponse' }
+    & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+  )> }
+);
+
 export const FragmentStatTypeFragmentDoc = gql`
     fragment fragmentStatType on StatType {
   count
@@ -6314,6 +6482,43 @@ export function useWorkPacketStatusLazyQuery(baseOptions?: Apollo.LazyQueryHookO
 export type WorkPacketStatusQueryHookResult = ReturnType<typeof useWorkPacketStatusQuery>;
 export type WorkPacketStatusLazyQueryHookResult = ReturnType<typeof useWorkPacketStatusLazyQuery>;
 export type WorkPacketStatusQueryResult = Apollo.QueryResult<WorkPacketStatusQuery, WorkPacketStatusQueryVariables>;
+export const WorkPacketStatusPollDocument = gql`
+    query WorkPacketStatusPoll($orgSid: ID!, $workOrderId: String!, $lastUpdated: DateTime!) {
+  workPacketStatusPoll(
+    orgSid: $orgSid
+    workOrderId: $workOrderId
+    lastUpdated: $lastUpdated
+  )
+}
+    `;
+
+/**
+ * __useWorkPacketStatusPollQuery__
+ *
+ * To run a query within a React component, call `useWorkPacketStatusPollQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWorkPacketStatusPollQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useWorkPacketStatusPollQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *      workOrderId: // value for 'workOrderId'
+ *      lastUpdated: // value for 'lastUpdated'
+ *   },
+ * });
+ */
+export function useWorkPacketStatusPollQuery(baseOptions: Apollo.QueryHookOptions<WorkPacketStatusPollQuery, WorkPacketStatusPollQueryVariables>) {
+        return Apollo.useQuery<WorkPacketStatusPollQuery, WorkPacketStatusPollQueryVariables>(WorkPacketStatusPollDocument, baseOptions);
+      }
+export function useWorkPacketStatusPollLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WorkPacketStatusPollQuery, WorkPacketStatusPollQueryVariables>) {
+          return Apollo.useLazyQuery<WorkPacketStatusPollQuery, WorkPacketStatusPollQueryVariables>(WorkPacketStatusPollDocument, baseOptions);
+        }
+export type WorkPacketStatusPollQueryHookResult = ReturnType<typeof useWorkPacketStatusPollQuery>;
+export type WorkPacketStatusPollLazyQueryHookResult = ReturnType<typeof useWorkPacketStatusPollLazyQuery>;
+export type WorkPacketStatusPollQueryResult = Apollo.QueryResult<WorkPacketStatusPollQuery, WorkPacketStatusPollQueryVariables>;
 export const WorkPacketStatusesDocument = gql`
     query WorkPacketStatuses($orgSid: ID!, $searchText: String, $dateRange: DateTimeRangeInput, $pageableInput: PageableInput!) {
   workPacketStatuses(
@@ -13813,3 +14018,257 @@ export function useFtpTestMMutation(baseOptions?: Apollo.MutationHookOptions<Ftp
 export type FtpTestMMutationHookResult = ReturnType<typeof useFtpTestMMutation>;
 export type FtpTestMMutationResult = Apollo.MutationResult<FtpTestMMutation>;
 export type FtpTestMMutationOptions = Apollo.BaseMutationOptions<FtpTestMMutation, FtpTestMMutationVariables>;
+export const WorkPacketRerunStepDocument = gql`
+    mutation WorkPacketRerunStep($workOrderId: String!, $stepName: String!) {
+  workPacketRerunStep(workOrderId: $workOrderId, stepName: $stepName) {
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    `;
+export type WorkPacketRerunStepMutationFn = Apollo.MutationFunction<WorkPacketRerunStepMutation, WorkPacketRerunStepMutationVariables>;
+
+/**
+ * __useWorkPacketRerunStepMutation__
+ *
+ * To run a mutation, you first call `useWorkPacketRerunStepMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useWorkPacketRerunStepMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [workPacketRerunStepMutation, { data, loading, error }] = useWorkPacketRerunStepMutation({
+ *   variables: {
+ *      workOrderId: // value for 'workOrderId'
+ *      stepName: // value for 'stepName'
+ *   },
+ * });
+ */
+export function useWorkPacketRerunStepMutation(baseOptions?: Apollo.MutationHookOptions<WorkPacketRerunStepMutation, WorkPacketRerunStepMutationVariables>) {
+        return Apollo.useMutation<WorkPacketRerunStepMutation, WorkPacketRerunStepMutationVariables>(WorkPacketRerunStepDocument, baseOptions);
+      }
+export type WorkPacketRerunStepMutationHookResult = ReturnType<typeof useWorkPacketRerunStepMutation>;
+export type WorkPacketRerunStepMutationResult = Apollo.MutationResult<WorkPacketRerunStepMutation>;
+export type WorkPacketRerunStepMutationOptions = Apollo.BaseMutationOptions<WorkPacketRerunStepMutation, WorkPacketRerunStepMutationVariables>;
+export const WorkPacketDeleteDocument = gql`
+    mutation WorkPacketDelete($workOrderId: String!) {
+  workPacketDelete(workOrderId: $workOrderId) {
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    `;
+export type WorkPacketDeleteMutationFn = Apollo.MutationFunction<WorkPacketDeleteMutation, WorkPacketDeleteMutationVariables>;
+
+/**
+ * __useWorkPacketDeleteMutation__
+ *
+ * To run a mutation, you first call `useWorkPacketDeleteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useWorkPacketDeleteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [workPacketDeleteMutation, { data, loading, error }] = useWorkPacketDeleteMutation({
+ *   variables: {
+ *      workOrderId: // value for 'workOrderId'
+ *   },
+ * });
+ */
+export function useWorkPacketDeleteMutation(baseOptions?: Apollo.MutationHookOptions<WorkPacketDeleteMutation, WorkPacketDeleteMutationVariables>) {
+        return Apollo.useMutation<WorkPacketDeleteMutation, WorkPacketDeleteMutationVariables>(WorkPacketDeleteDocument, baseOptions);
+      }
+export type WorkPacketDeleteMutationHookResult = ReturnType<typeof useWorkPacketDeleteMutation>;
+export type WorkPacketDeleteMutationResult = Apollo.MutationResult<WorkPacketDeleteMutation>;
+export type WorkPacketDeleteMutationOptions = Apollo.BaseMutationOptions<WorkPacketDeleteMutation, WorkPacketDeleteMutationVariables>;
+export const WorkPacketContinueDocument = gql`
+    mutation WorkPacketContinue($workOrderId: String!) {
+  workPacketContinue(workOrderId: $workOrderId) {
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    `;
+export type WorkPacketContinueMutationFn = Apollo.MutationFunction<WorkPacketContinueMutation, WorkPacketContinueMutationVariables>;
+
+/**
+ * __useWorkPacketContinueMutation__
+ *
+ * To run a mutation, you first call `useWorkPacketContinueMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useWorkPacketContinueMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [workPacketContinueMutation, { data, loading, error }] = useWorkPacketContinueMutation({
+ *   variables: {
+ *      workOrderId: // value for 'workOrderId'
+ *   },
+ * });
+ */
+export function useWorkPacketContinueMutation(baseOptions?: Apollo.MutationHookOptions<WorkPacketContinueMutation, WorkPacketContinueMutationVariables>) {
+        return Apollo.useMutation<WorkPacketContinueMutation, WorkPacketContinueMutationVariables>(WorkPacketContinueDocument, baseOptions);
+      }
+export type WorkPacketContinueMutationHookResult = ReturnType<typeof useWorkPacketContinueMutation>;
+export type WorkPacketContinueMutationResult = Apollo.MutationResult<WorkPacketContinueMutation>;
+export type WorkPacketContinueMutationOptions = Apollo.BaseMutationOptions<WorkPacketContinueMutation, WorkPacketContinueMutationVariables>;
+export const WorkPacketCancelDocument = gql`
+    mutation WorkPacketCancel($workOrderId: String!) {
+  workPacketCancel(workOrderId: $workOrderId) {
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    `;
+export type WorkPacketCancelMutationFn = Apollo.MutationFunction<WorkPacketCancelMutation, WorkPacketCancelMutationVariables>;
+
+/**
+ * __useWorkPacketCancelMutation__
+ *
+ * To run a mutation, you first call `useWorkPacketCancelMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useWorkPacketCancelMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [workPacketCancelMutation, { data, loading, error }] = useWorkPacketCancelMutation({
+ *   variables: {
+ *      workOrderId: // value for 'workOrderId'
+ *   },
+ * });
+ */
+export function useWorkPacketCancelMutation(baseOptions?: Apollo.MutationHookOptions<WorkPacketCancelMutation, WorkPacketCancelMutationVariables>) {
+        return Apollo.useMutation<WorkPacketCancelMutation, WorkPacketCancelMutationVariables>(WorkPacketCancelDocument, baseOptions);
+      }
+export type WorkPacketCancelMutationHookResult = ReturnType<typeof useWorkPacketCancelMutation>;
+export type WorkPacketCancelMutationResult = Apollo.MutationResult<WorkPacketCancelMutation>;
+export type WorkPacketCancelMutationOptions = Apollo.BaseMutationOptions<WorkPacketCancelMutation, WorkPacketCancelMutationVariables>;
+export const WorkPacketReprocessDocument = gql`
+    mutation WorkPacketReprocess($workOrderId: String!) {
+  workPacketReprocess(workOrderId: $workOrderId) {
+    newWorkOrderId
+    orgSid
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    `;
+export type WorkPacketReprocessMutationFn = Apollo.MutationFunction<WorkPacketReprocessMutation, WorkPacketReprocessMutationVariables>;
+
+/**
+ * __useWorkPacketReprocessMutation__
+ *
+ * To run a mutation, you first call `useWorkPacketReprocessMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useWorkPacketReprocessMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [workPacketReprocessMutation, { data, loading, error }] = useWorkPacketReprocessMutation({
+ *   variables: {
+ *      workOrderId: // value for 'workOrderId'
+ *   },
+ * });
+ */
+export function useWorkPacketReprocessMutation(baseOptions?: Apollo.MutationHookOptions<WorkPacketReprocessMutation, WorkPacketReprocessMutationVariables>) {
+        return Apollo.useMutation<WorkPacketReprocessMutation, WorkPacketReprocessMutationVariables>(WorkPacketReprocessDocument, baseOptions);
+      }
+export type WorkPacketReprocessMutationHookResult = ReturnType<typeof useWorkPacketReprocessMutation>;
+export type WorkPacketReprocessMutationResult = Apollo.MutationResult<WorkPacketReprocessMutation>;
+export type WorkPacketReprocessMutationOptions = Apollo.BaseMutationOptions<WorkPacketReprocessMutation, WorkPacketReprocessMutationVariables>;
+export const WorkPacketRenameAndReprocessDocument = gql`
+    mutation WorkPacketRenameAndReprocess($workOrderId: String!, $newFileName: String!) {
+  workPacketRenameAndReprocess(
+    workOrderId: $workOrderId
+    newFileName: $newFileName
+  ) {
+    newWorkOrderId
+    orgSid
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    `;
+export type WorkPacketRenameAndReprocessMutationFn = Apollo.MutationFunction<WorkPacketRenameAndReprocessMutation, WorkPacketRenameAndReprocessMutationVariables>;
+
+/**
+ * __useWorkPacketRenameAndReprocessMutation__
+ *
+ * To run a mutation, you first call `useWorkPacketRenameAndReprocessMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useWorkPacketRenameAndReprocessMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [workPacketRenameAndReprocessMutation, { data, loading, error }] = useWorkPacketRenameAndReprocessMutation({
+ *   variables: {
+ *      workOrderId: // value for 'workOrderId'
+ *      newFileName: // value for 'newFileName'
+ *   },
+ * });
+ */
+export function useWorkPacketRenameAndReprocessMutation(baseOptions?: Apollo.MutationHookOptions<WorkPacketRenameAndReprocessMutation, WorkPacketRenameAndReprocessMutationVariables>) {
+        return Apollo.useMutation<WorkPacketRenameAndReprocessMutation, WorkPacketRenameAndReprocessMutationVariables>(WorkPacketRenameAndReprocessDocument, baseOptions);
+      }
+export type WorkPacketRenameAndReprocessMutationHookResult = ReturnType<typeof useWorkPacketRenameAndReprocessMutation>;
+export type WorkPacketRenameAndReprocessMutationResult = Apollo.MutationResult<WorkPacketRenameAndReprocessMutation>;
+export type WorkPacketRenameAndReprocessMutationOptions = Apollo.BaseMutationOptions<WorkPacketRenameAndReprocessMutation, WorkPacketRenameAndReprocessMutationVariables>;
+export const WorkPacketResendDocument = gql`
+    mutation WorkPacketResend($workOrderId: String!) {
+  workPacketResend(workOrderId: $workOrderId) {
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    `;
+export type WorkPacketResendMutationFn = Apollo.MutationFunction<WorkPacketResendMutation, WorkPacketResendMutationVariables>;
+
+/**
+ * __useWorkPacketResendMutation__
+ *
+ * To run a mutation, you first call `useWorkPacketResendMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useWorkPacketResendMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [workPacketResendMutation, { data, loading, error }] = useWorkPacketResendMutation({
+ *   variables: {
+ *      workOrderId: // value for 'workOrderId'
+ *   },
+ * });
+ */
+export function useWorkPacketResendMutation(baseOptions?: Apollo.MutationHookOptions<WorkPacketResendMutation, WorkPacketResendMutationVariables>) {
+        return Apollo.useMutation<WorkPacketResendMutation, WorkPacketResendMutationVariables>(WorkPacketResendDocument, baseOptions);
+      }
+export type WorkPacketResendMutationHookResult = ReturnType<typeof useWorkPacketResendMutation>;
+export type WorkPacketResendMutationResult = Apollo.MutationResult<WorkPacketResendMutation>;
+export type WorkPacketResendMutationOptions = Apollo.BaseMutationOptions<WorkPacketResendMutation, WorkPacketResendMutationVariables>;

@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 
-import { useLocation, useParams } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 
-import { ROUTES } from 'src/data/constants/RouteConstants';
+import { ROUTE_FILE_STATUS, ROUTES } from 'src/data/constants/RouteConstants';
 
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Badge } from 'src/components/badges/Badge';
@@ -11,13 +11,13 @@ import { Text } from 'src/components/typography';
 import {
   DeliveredFile,
   useWorkPacketStatusDetailsLazyQuery,
-  WorkPacketCommand,
+  useWorkPacketStatusPollQuery,
   WorkPacketCommandType,
   WorkPacketStatusDetails,
   WorkStatus,
 } from 'src/data/services/graphql';
 
-import { ActionButton, IconButton, Pivot, PivotItem, Stack } from '@fluentui/react';
+import { IconButton, Pivot, PivotItem, Stack } from '@fluentui/react';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { InfoIcon } from 'src/components/badges/InfoIcon';
@@ -27,39 +27,20 @@ import { LabelValue } from 'src/components/labels/LabelValue';
 import { theme } from 'src/styles/themes/theme';
 import { ArchivesTab } from 'src/pages/FileStatusDetails/ArchivesTab/ArchivesTab';
 import { isDateTimeValid } from 'src/utils/CDXUtils';
+import { useWorkPacketCommands } from 'src/pages/FileStatusDetails/useWorkPacketCommands';
 import QualityChecksTab from './QualityChecksTab/QualityChecksTab';
 import WorkStepsTab from './WorkStepsTab/WorkStepsTab';
 import EnrollmentStatsTab from './EnrollmentStatsTab/EnrollmentStatsTab';
 import VendorCountStatsTab from './VendorCountStatsTab/VendorCountStatsTab';
-import { ShadowBox, FileMetaDetails, BadgeWrapper, FileTitle } from './FileStatusDetails.styles';
+import { WorkPacketCommandButton } from './WorkPacketCommandButton';
+import { BadgeWrapper, FileMetaDetails, FileTitle, ShadowBox } from './FileStatusDetails.styles';
 
-type CommandButtonType = {
-  id: string;
-  icon: string;
-  command?: WorkPacketCommand | null;
-};
-
-const WorkPacketCommandButton = ({ id, icon, command }: CommandButtonType) => {
-  if (command) {
-    return (
-      <Stack.Item align="center">
-        <ActionButton
-          id={id}
-          onClick={() => null}
-          iconProps={{ iconName: icon, style: { fontSize: theme.fontSizes.normal } }}
-          style={{ fontSize: theme.fontSizes.normal }}
-        >
-          {command.label}
-        </ActionButton>
-      </Stack.Item>
-    );
-  }
-  return null;
-};
+const POLL_INTERVAL = 20000;
 
 const FileStatusDetailsPage = () => {
   const urlParams = new URLSearchParams(window.location.search);
-  const { orgSid } = useOrgSid();
+  const { orgSid, startDate, endDate } = useOrgSid();
+  const history = useHistory();
   const fsOrgSid = urlParams.get('fsOrgSid') ?? orgSid;
   const { hash } = useLocation();
 
@@ -67,19 +48,27 @@ const FileStatusDetailsPage = () => {
   const [packet, setPacket] = useState<WorkPacketStatusDetails>();
   const [showDetails, setShowDetails] = useState(true);
   const realId = id.replace('*', '');
+  const [lastUpdatedPoll, setLastUpdatedPoll] = useState<Date>(new Date());
 
-  const [callGetWPDetails, { data, loading, error }] = useWorkPacketStatusDetailsLazyQuery();
+  const [callGetWPDetails, { data, loading, error }] = useWorkPacketStatusDetailsLazyQuery({
+    variables: {
+      orgSid: fsOrgSid,
+      workOrderId: realId,
+    },
+  });
+  const pollWPStatus = useWorkPacketStatusPollQuery({
+    variables: {
+      orgSid: fsOrgSid,
+      workOrderId: realId,
+      lastUpdated: lastUpdatedPoll,
+    },
+    pollInterval: POLL_INTERVAL,
+  });
+  const workPacketCommands = useWorkPacketCommands(realId);
   const handleError = ErrorHandler();
 
-  // const { enableRefresh, disableRefresh } = useRefresh(TABLE_NAMES.FILE_STATUS_DETAIL_ENROLLMENT, fSPacketStatusQuery);
-
   useEffect(() => {
-    callGetWPDetails({
-      variables: {
-        orgSid: fsOrgSid,
-        workOrderId: realId,
-      },
-    });
+    callGetWPDetails();
   }, [realId]);
 
   useEffect(() => {
@@ -87,15 +76,31 @@ const FileStatusDetailsPage = () => {
   }, [error]);
 
   useEffect(() => {
+    handleError(pollWPStatus.error);
+  }, [pollWPStatus.error]);
+
+  useEffect(() => {
     if (data?.workPacketStatusDetails && !loading) {
       setPacket(data?.workPacketStatusDetails);
+      setLastUpdatedPoll(new Date());
+      switch (data?.workPacketStatusDetails?.packetStatus) {
+        case WorkStatus.Submitted:
+        case WorkStatus.Queued:
+        case WorkStatus.Processing:
+          pollWPStatus.startPolling(POLL_INTERVAL);
+          break;
+        default:
+          pollWPStatus.stopPolling();
+          break;
+      }
     }
   }, [data, loading]);
 
   useEffect(() => {
-    // const condition = packet?.packetStatus === WorkStatus.Queued || packet?.packetStatus === WorkStatus.Processing|| packet?.packetStatus === WorkStatus.Submitted;
-    // enableRefresh(condition);
-  }, []);
+    if (pollWPStatus.data?.workPacketStatusPoll && pollWPStatus.data?.workPacketStatusPoll > 0) {
+      callGetWPDetails();
+    }
+  }, [pollWPStatus.data]);
 
   const errorCount = (): number => packet?.qualityChecks?.fieldCreationErrorCount ?? 0;
 
@@ -150,6 +155,7 @@ const FileStatusDetailsPage = () => {
   const resendCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Resend);
   const continueCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Continue);
   const reprocessCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Reprocess);
+  const reprocessRenameCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Rename);
   const cancelCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Cancel);
   const deleteCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Delete);
 
@@ -209,11 +215,63 @@ const FileStatusDetailsPage = () => {
           <Stack.Item align="center" grow>
             <Text variant="muted">{renderReceivedDate()}</Text>
           </Stack.Item>
-          <WorkPacketCommandButton id="__ResendBtn" icon="Send" command={resendCmd} />
-          <WorkPacketCommandButton id="__ContinueBtn" icon="PlayResume" command={continueCmd} />
-          <WorkPacketCommandButton id="__ReprocessBtn" icon="Rerun" command={reprocessCmd} />
-          <WorkPacketCommandButton id="__CancelBtn" icon="Cancel" command={cancelCmd} />
-          <WorkPacketCommandButton id="__DeleteBtn" icon="Delete" command={deleteCmd} />
+          <WorkPacketCommandButton
+            id="__ResendBtn"
+            icon="Send"
+            confirmationMsg="Are you sure you want to Resend this Work Packet?"
+            command={resendCmd}
+            onClick={workPacketCommands.apiCallResend}
+          />
+          <WorkPacketCommandButton
+            id="__ContinueBtn"
+            icon="PlayResume"
+            confirmationMsg="Are you sure you want to Continue this Work Packet?"
+            command={continueCmd}
+            onClick={() => {
+              workPacketCommands.apiCallContinue().then();
+              pollWPStatus.startPolling(POLL_INTERVAL);
+            }}
+          />
+          <WorkPacketCommandButton
+            id="__ReprocessBtn"
+            icon="Rerun"
+            confirmationMsg="Are you sure you want to Reprocess this Work Packet?"
+            command={reprocessCmd}
+            onClick={() => {
+              workPacketCommands.apiCallReprocess().then();
+              pollWPStatus.startPolling(POLL_INTERVAL);
+            }}
+          />
+          <WorkPacketCommandButton
+            id="__ReprocessRenameBtn"
+            icon="Rerun"
+            confirmationMsg="Are you sure you want to Reprocess this Work Packet?"
+            command={reprocessRenameCmd}
+            onClick={() => {
+              workPacketCommands.apiCallRenameReprocess().then();
+              pollWPStatus.startPolling(POLL_INTERVAL);
+            }}
+          />
+          <WorkPacketCommandButton
+            id="__CancelBtn"
+            icon="Cancel"
+            confirmationMsg="Are you sure you want to Cancel this Work Packet's processing?"
+            command={cancelCmd}
+            onClick={() => {
+              workPacketCommands.apiCallCancel().then();
+              pollWPStatus.startPolling(POLL_INTERVAL);
+            }}
+          />
+          <WorkPacketCommandButton
+            id="__DeleteBtn"
+            icon="Delete"
+            confirmationMsg="Are you sure you want to Delete this Work Packet?"
+            command={deleteCmd}
+            onClick={() => {
+              workPacketCommands.apiCallDelete().then();
+              history.push(`${ROUTE_FILE_STATUS.URL}?orgSid=${orgSid}&startDate=${startDate}&endDate=${endDate}`);
+            }}
+          />
         </Stack>
         {showDetails && (
           <FileMetaDetails>

@@ -12,7 +12,8 @@ import { StyledLi, StyledUl } from './Timeline.styles';
 type CDXTimelineProps = {
   packet?: WorkPacketStatusDetails;
   activeIndex?: number;
-  onClick?: any | null;
+  onClick?: (selectedStepIndex: number) => void | null;
+  onRedo?: (stepName?: string | null) => void;
 };
 
 const styles = mergeStyleSets({
@@ -54,7 +55,7 @@ const ConditionalLabelValue = ({ label, value }: ConditionalLabelValueType) => {
   return null;
 };
 
-const CDXTimeline = ({ packet, activeIndex = 0, onClick }: CDXTimelineProps): ReactElement => {
+const CDXTimeline = ({ packet, activeIndex = 0, onClick, onRedo }: CDXTimelineProps): ReactElement => {
   const [showCallout, setShowCallout] = useState(false);
   const redoCommand = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.RerunStep);
   const downloadCommand = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.DownloadFile);
@@ -105,7 +106,11 @@ const CDXTimeline = ({ packet, activeIndex = 0, onClick }: CDXTimelineProps): Re
       return (
         <Spacing margin={{ top: 'normal' }}>
           <PrimaryButton
-            onClick={() => null}
+            onClick={() => {
+              if (onRedo) {
+                onRedo(item?.stepName);
+              }
+            }}
             iconProps={{ iconName: 'Rerun', style: { fontSize: theme.fontSizes.small } }}
             style={{ fontSize: theme.fontSizes.small }}
           >
@@ -205,7 +210,9 @@ const CDXTimeline = ({ packet, activeIndex = 0, onClick }: CDXTimelineProps): Re
             className="item"
             active={index === activeIndex}
             onClick={() => {
-              onClick(index);
+              if (onClick) {
+                onClick(index);
+              }
               setShowCallout(!showCallout);
             }}
             key={index}
