@@ -50,8 +50,8 @@ export const ScheduleSubHeader = ({ id, currentView, currentDate, selectedDate }
     const _currentDay = selectedDate ?? currentDate;
 
     if (isCurrentViewDay(currentView)) {
-      const isCurrentDate = isSameDay(_currentDay, currentDate);
-      const isCurrentMonth = isSameMonth(_currentDay, currentDate);
+      const isCurrentDate = isSameDay(_currentDay, selectedDate);
+      const isCurrentMonth = isSameMonth(_currentDay, selectedDate);
       const isStartMonth = isSameDay(_currentDay, startOfMonth(_currentDay));
       const isEndMonth = isSameDay(_currentDay, endOfMonth(_currentDay));
 
@@ -73,9 +73,9 @@ export const ScheduleSubHeader = ({ id, currentView, currentDate, selectedDate }
 
     for (let i = 0; i < 7; i++) {
       if (isCurrentViewWeek(currentView)) {
-        const isCurrentDate = isSameDay(day, currentDate);
+        const isCurrentDate = isSameDay(day, selectedDate);
         // isSameMonth(day, dates.monthStart);
-        const isCurrentMonth = isSameMonth(day, currentDate);
+        const isCurrentMonth = isSameMonth(day, selectedDate);
         const isStartMonth = isSameDay(day, startOfMonth(_currentDate));
         const isEndMonth = isSameDay(day, endOfMonth(dates.selectedDate));
 
