@@ -60,22 +60,22 @@ const dayPickerStrings = {
 let dateRangeString = null as any;
 
 export const MonthPicker = ({
-                              open,
-                              value,
-                              onSelect,
-                              showDates = false,
-                              dateRangeType = DateRangeType.Month,
-                              showGoToToday = true,
-                              showNavigateButtons = false,
-                              highlightCurrentMonth = true,
-                              highlightSelectedMonth = true,
-                              showMonthPickerAsOverlay = true,
-                              minDate,
-                              maxDate,
-                              restrictedDates,
-                              showSixWeeksByDefault,
-                              workWeekDays,
-                            }: MonthPickerProps): ReactElement => {
+  open,
+  value,
+  onSelect,
+  showDates = false,
+  dateRangeType = DateRangeType.Month,
+  showGoToToday = true,
+  showNavigateButtons = false,
+  highlightCurrentMonth = true,
+  highlightSelectedMonth = true,
+  showMonthPickerAsOverlay = true,
+  minDate,
+  maxDate,
+  restrictedDates,
+  showSixWeeksByDefault,
+  workWeekDays,
+}: MonthPickerProps): ReactElement => {
   const [selectedDateRange, setSelectedDateRange] = useState<Date[]>();
   const [selectedDate, setSelectedDate] = useState<Date>(value ?? new Date());
 

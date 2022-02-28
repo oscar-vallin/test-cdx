@@ -1,22 +1,22 @@
 import { useState } from 'react';
 import { addDays, addMonths, endOfWeek, format, startOfWeek } from 'date-fns';
 
-import { addWeeks } from '@fluentui/react';
+import { addWeeks, DateRangeType } from '@fluentui/react';
 
 import { MonthPicker } from 'src/components/inputs/MonthPicker';
 
 import { Spacing } from 'src/components/spacings/Spacing';
-import { Row, Column } from 'src/components/layouts';
+import { Column, Row } from 'src/components/layouts';
 import { isCurrentViewDay, isCurrentViewMonth, isCurrentViewWeek } from './helpers';
 import {
-  RowHeaderItem,
+  HeaderButtonTitle,
+  HeaderButtonView,
   HeaderMonth,
   HeaderYear,
-  HeaderButtonView,
+  MonthYearContainer,
+  RowHeaderItem,
   StyledButtonAction,
   UpDownContainer,
-  MonthYearContainer,
-  HeaderButtonTitle,
 } from './ScheduleHeader.styles';
 
 type ScheduleHeaderType = {
@@ -121,7 +121,26 @@ export const ScheduleHeader = ({ id, currentView, selectedDate, onChangeDate, on
     if (isCurrentViewDay(currentView)) {
       return (
         <MonthYearContainer>
-          <HeaderMonth>{`${format(selectedDate, formatWeek)}, ${format(selectedDate, headerYearFormat)}`}</HeaderMonth>
+          <HeaderButtonTitle
+            id="__DayButtonTitle_Id"
+            variant="secondary"
+            disabled={false}
+            block={false}
+            onClick={() => handleCalendarOpen(!calendarOpen)}
+            text=""
+          >
+            <HeaderMonth>
+              {`${format(selectedDate, formatWeek)}, ${format(selectedDate, headerYearFormat)}`}
+            </HeaderMonth>
+          </HeaderButtonTitle>
+          {calendarOpen && (
+            <MonthPicker
+              open={calendarOpen}
+              value={selectedDate}
+              onSelect={handleChangeDate}
+              dateRangeType={DateRangeType.Day}
+            />
+          )}
         </MonthYearContainer>
       );
     }
@@ -132,12 +151,29 @@ export const ScheduleHeader = ({ id, currentView, selectedDate, onChangeDate, on
 
       return (
         <MonthYearContainer>
-          <HeaderMonth>
-            {`${format(weekStart, formatWeek)} - ${format(weekEnd, formatWeek)}, ${format(
-              selectedDate,
-              headerYearFormat
-            )}`}
-          </HeaderMonth>
+          <HeaderButtonTitle
+            id="__WeekButtonTitle_Id"
+            variant="secondary"
+            disabled={false}
+            block={false}
+            onClick={() => handleCalendarOpen(!calendarOpen)}
+            text=""
+          >
+            <HeaderMonth>
+              {`${format(weekStart, formatWeek)} - ${format(weekEnd, formatWeek)}, ${format(
+                selectedDate,
+                headerYearFormat
+              )}`}
+            </HeaderMonth>
+          </HeaderButtonTitle>
+          {calendarOpen && (
+            <MonthPicker
+              open={calendarOpen}
+              value={selectedDate}
+              onSelect={handleChangeDate}
+              dateRangeType={DateRangeType.Week}
+            />
+          )}
         </MonthYearContainer>
       );
     }
@@ -145,7 +181,7 @@ export const ScheduleHeader = ({ id, currentView, selectedDate, onChangeDate, on
     return (
       <MonthYearContainer>
         <HeaderButtonTitle
-          id="__HeaderButtonTitle_Id"
+          id="__MonthButtonTitle_Id"
           variant="secondary"
           disabled={false}
           block={false}
@@ -155,7 +191,14 @@ export const ScheduleHeader = ({ id, currentView, selectedDate, onChangeDate, on
           <HeaderMonth>{format(selectedDate, headerMonthFormat)}</HeaderMonth>
           <HeaderYear>{format(selectedDate, headerYearFormat)}</HeaderYear>
         </HeaderButtonTitle>
-        {calendarOpen && <MonthPicker open={calendarOpen} value={selectedDate} onSelect={handleChangeDate} />}
+        {calendarOpen && (
+          <MonthPicker
+            open={calendarOpen}
+            value={selectedDate}
+            onSelect={handleChangeDate}
+            dateRangeType={DateRangeType.Month}
+          />
+        )}
       </MonthYearContainer>
     );
   };
