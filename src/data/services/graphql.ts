@@ -149,7 +149,8 @@ export enum CdxWebCommandType {
   Delete = 'DELETE',
   Create = 'CREATE',
   Assign = 'ASSIGN',
-  Reset = 'RESET'
+  Reset = 'RESET',
+  Audit = 'AUDIT'
 }
 
 export enum CdxWebPage {
@@ -162,6 +163,7 @@ export enum CdxWebPage {
   OrgActivity = 'ORG_ACTIVITY',
   ActiveOrgs = 'ACTIVE_ORGS',
   ActiveUsers = 'ACTIVE_USERS',
+  UserAuditLogs = 'USER_AUDIT_LOGS',
   DeletedUsers = 'DELETED_USERS',
   AmGroups = 'AM_GROUPS',
   AmPolicies = 'AM_POLICIES',

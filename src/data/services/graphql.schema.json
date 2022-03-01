@@ -1277,6 +1277,12 @@
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "AUDIT",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "possibleTypes": null
@@ -1339,6 +1345,12 @@
           },
           {
             "name": "ACTIVE_USERS",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "USER_AUDIT_LOGS",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
