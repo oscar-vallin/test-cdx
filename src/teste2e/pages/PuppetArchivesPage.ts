@@ -13,7 +13,7 @@ export default class PuppetArchivesPage extends PuppetExchangeStatus {
 
   sponsorCol = 'div[data-item-key="orgId"]';
 
-  clientFileCol = 'div[data-item-key="inboundFileName"]';
+  clientFileCol = 'div[data-item-key="inboundFilename"]';
 
   vendorFileCol = 'div[data-item-key="vendorFileArchivePath"]';
 

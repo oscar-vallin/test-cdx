@@ -323,7 +323,7 @@ export const useWorkPacketColumns = (
       },
     },
     {
-      key: 'inboundFileName',
+      key: 'inboundFilename',
       name: 'Client File',
       targetWidthProportion: 1,
       minWidth: 100,
