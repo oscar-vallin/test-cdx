@@ -33,12 +33,12 @@ import {
 
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
-import { AccessSpecializationPanel } from './AccessSpecializationPanel';
-import { StyledColumn, StyledCommandButton } from '../AccessManagement.styles';
-import { Spacing } from '../../../../components/spacings/Spacing';
+import { Spacing } from 'src/components/spacings/Spacing';
 import { ROUTE_ACCESS_MANAGEMENT_SPECIALIZATION } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
+import { AccessSpecializationPanel } from './AccessSpecializationPanel';
+import { StyledColumn, StyledCommandButton } from '../AccessManagement.styles';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -145,14 +145,14 @@ const AccessManagementSpecializationPage = () => {
   useEffect(() => {
     if (data) {
       setSpecializations(data?.accessSpecializationsForOrg?.nodes);
-      const createCmd = data?.accessSpecializationsForOrg?.listPageInfo?.pageCommands?.find(
+      const _createCmd = data?.accessSpecializationsForOrg?.listPageInfo?.pageCommands?.find(
         (cmd) => cmd?.commandType === CdxWebCommandType.Create
       );
-      setCreateCmd(createCmd);
-      const deleteCmd = data?.accessSpecializationsForOrg?.listPageInfo?.listItemCommands?.find(
+      setCreateCmd(_createCmd);
+      const _deleteCmd = data?.accessSpecializationsForOrg?.listPageInfo?.listItemCommands?.find(
         (cmd) => cmd?.commandType === CdxWebCommandType.Delete
       );
-      setDeleteCmd(deleteCmd);
+      setDeleteCmd(_deleteCmd);
     }
   }, [data]);
 

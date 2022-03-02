@@ -35,11 +35,11 @@ import {
 
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
-import { AccessPolicyPanel } from './AccessPolicyPanel';
-import { StyledColumn, StyledCommandButton } from '../AccessManagement.styles';
 import { ROUTE_ACCESS_MANAGEMENT_POLICIES } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
+import { AccessPolicyPanel } from './AccessPolicyPanel';
+import { StyledColumn, StyledCommandButton } from '../AccessManagement.styles';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -125,21 +125,18 @@ const _AccessManagementPoliciesPage = () => {
       case 'actions':
         if (deleteCmd) {
           return (
-            <>
-              <StyledCommandButton
-                id={`DeleteBtn__${item?.name?.split(' ').join('_')}`}
-                iconProps={{ iconName: 'Delete' }}
-                title={deleteCmd.label ?? undefined}
-                onClick={() => {
-                  setSelectedPolicyId(item?.sid);
-                  setIsConfirmationHidden(false);
-                }}
-              />
-            </>
+            <StyledCommandButton
+              id={`DeleteBtn__${item?.name?.split(' ').join('_')}`}
+              iconProps={{ iconName: 'Delete' }}
+              title={deleteCmd.label ?? undefined}
+              onClick={() => {
+                setSelectedPolicyId(item?.sid);
+                setIsConfirmationHidden(false);
+              }}
+            />
           );
-        } else {
-          return <span />;
         }
+        return <span />;
       default:
         if (item) {
           return item[key];
@@ -198,11 +195,11 @@ const _AccessManagementPoliciesPage = () => {
     if (data) {
       setPolicies(data?.accessPoliciesForOrg?.nodes);
       const pageCommands = data.accessPoliciesForOrg?.listPageInfo?.pageCommands;
-      const createCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create);
-      setCreateCmd(createCmd);
+      const _createCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create);
+      setCreateCmd(_createCmd);
       const listCommands = data.accessPoliciesForOrg?.listPageInfo?.listItemCommands;
-      const deleteCmd = listCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Delete);
-      setDeleteCmd(deleteCmd);
+      const _deleteCmd = listCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Delete);
+      setDeleteCmd(_deleteCmd);
     }
   }, [data]);
 
@@ -236,6 +233,7 @@ const _AccessManagementPoliciesPage = () => {
         </Button>
       );
     }
+    return null;
   };
 
   const renderBody = () => {
@@ -245,19 +243,19 @@ const _AccessManagementPoliciesPage = () => {
           ? 'There are no Access Policies configured in this Organization. Click the button below to create a new policy.'
           : 'There are no Access Policies configured in this Organization.';
         return <EmptyState title="No policies found" description={emptyText} actions={createPolicyButton()} />;
-      } else {
-        return (
-          <DetailsList
-            items={policies}
-            selectionMode={SelectionMode.none}
-            columns={columns}
-            layoutMode={DetailsListLayoutMode.justified}
-            onRenderItemColumn={onRenderItemColumn}
-            isHeaderVisible
-          />
-        );
       }
+      return (
+        <DetailsList
+          items={policies}
+          selectionMode={SelectionMode.none}
+          columns={columns}
+          layoutMode={DetailsListLayoutMode.justified}
+          onRenderItemColumn={onRenderItemColumn}
+          isHeaderVisible
+        />
+      );
     }
+    return null;
   };
 
   return (

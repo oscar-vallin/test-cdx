@@ -24,8 +24,8 @@ async function orgQuickSearch(
     .query({
       errorPolicy: 'all',
       variables: {
-        orgOwnerSid: orgOwnerSid,
-        searchText: searchText,
+        orgOwnerSid,
+        searchText,
       },
       query: gql`
         query OrganizationQuickSearch($orgOwnerSid: ID!, $searchText: String!) {
@@ -57,8 +57,8 @@ async function vendorQuickSearch(
     .query({
       errorPolicy: 'all',
       variables: {
-        orgOwnerSid: orgOwnerSid,
-        searchText: searchText,
+        orgOwnerSid,
+        searchText,
       },
       query: gql`
         query VendorQuickSearch($orgOwnerSid: ID!, $searchText: String!) {
