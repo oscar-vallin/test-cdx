@@ -90,6 +90,7 @@ export const ScheduleHeader = ({ id, currentView, selectedDate, onChangeDate, on
 
   // * Refactored (SonarQube)
   const handleChangeView = (_newView) => {
+    setCalendarOpen(false);
     if (_newView !== currentView) {
       onChangeView(_newView);
     }
