@@ -1211,6 +1211,7 @@ export enum Permission {
   UserUpdate = 'USER_UPDATE',
   UserDelete = 'USER_DELETE',
   UserAssign = 'USER_ASSIGN',
+  UserAudit = 'USER_AUDIT',
   AccessPolicyCreate = 'ACCESS_POLICY_CREATE',
   AccessPolicyRead = 'ACCESS_POLICY_READ',
   AccessPolicyUpdate = 'ACCESS_POLICY_UPDATE',
@@ -1240,6 +1241,7 @@ export enum Permission {
   ThemeRead = 'THEME_READ',
   ThemeUpdate = 'THEME_UPDATE',
   ThemeDelete = 'THEME_DELETE',
+  FtpTest = 'FTP_TEST',
   ImplementationDeploy = 'IMPLEMENTATION_DEPLOY'
 }
 
