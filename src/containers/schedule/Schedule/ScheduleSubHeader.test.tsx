@@ -1,5 +1,4 @@
-import { mount } from 'enzyme';
-import { mountWithTheme, shallowWithTheme } from '../../../utils/testUtils';
+import { mountWithTheme, shallowWithTheme } from 'src/utils/testUtils';
 import { ScheduleSubHeader as Component } from './ScheduleSubHeader';
 
 const defaultProps = {
@@ -7,6 +6,8 @@ const defaultProps = {
   currentView: 'month',
   currentDate: new Date(),
   selectedDate: new Date(),
+  onChangeDate: jest.fn(),
+  onChangeView: jest.fn(),
 };
 
 describe('Schedule Subheader Test...', () => {

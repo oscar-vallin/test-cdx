@@ -104,7 +104,6 @@ export const Calendar = styled.div`
   border: ${`1px solid ${COLOR_BORDER}`};
 `;
 
-
 type StyledCalendarBodyCellProps = {
   isSameMonth?: boolean | undefined;
 };
@@ -211,6 +210,11 @@ export const WeekViewContainer = styled.div<StyledWeekViewContainerProps>`
   }};
   font-weight: ${({ isSameDay }) => (isSameDay ? '600' : '400')};
   background-color: ${COLOR_NEUTRAL};
+
+  &:hover {
+    background: ${COLOR_BORDER};
+    cursor: pointer;
+  }
 `;
 
 export const DayViewContainer = styled(WeekViewContainer)`
@@ -223,11 +227,11 @@ export const WeekViewNumber = styled(HeaderTextLarge)`
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  
+
   @media ${device.tablet} {
     margin: 0 0 6px 10px;
     font-size: ${({ theme }) => theme.fontSizes.large};
-    height: 40px;  
+    height: 40px;
   }
 `;
 
@@ -242,11 +246,11 @@ export const WeekViewDayName = styled(HeaderTextLarge)<StyledWeekViewDayNameProp
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
- 
+
   @media ${device.tablet} {
-  margin: 0 0 8px 5px;
+    margin: 0 0 8px 5px;
     font-size: ${({ theme }) => theme.fontSizes.normal};
-    height: 40px;  
+    height: 40px;
   }
 `;
 

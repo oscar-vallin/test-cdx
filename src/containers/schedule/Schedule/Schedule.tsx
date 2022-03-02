@@ -102,6 +102,8 @@ const Schedule = ({ id }) => {
                 currentDate={currentDate}
                 currentView={currentView}
                 selectedDate={selectedDate}
+                onChangeDate={handleChangeDate}
+                onChangeView={handleChangeView}
               />
               {renderBody()}
             </Card>

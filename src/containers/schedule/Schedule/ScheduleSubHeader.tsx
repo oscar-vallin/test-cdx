@@ -14,7 +14,23 @@ import {
 } from './ScheduleSubHeader.styles';
 import { isCurrentViewDay, isCurrentViewWeek } from './helpers';
 
-export const ScheduleSubHeader = ({ id, currentView, currentDate, selectedDate }) => {
+type ScheduleSubHeaderType = {
+  id: string;
+  currentView: string;
+  currentDate: Date;
+  selectedDate: Date;
+  onChangeDate: (d: Date) => void;
+  onChangeView: (viewName: string) => void;
+};
+
+export const ScheduleSubHeader = ({
+  id,
+  currentView,
+  currentDate,
+  selectedDate,
+  onChangeDate,
+  onChangeView,
+}: ScheduleSubHeaderType) => {
   const _currentDate = startOfWeek(currentDate);
   const [dates, setDates] = useState({
     currentMonth: currentDate,
@@ -43,10 +59,15 @@ export const ScheduleSubHeader = ({ id, currentView, currentDate, selectedDate }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDate]);
 
+  const clickWeekHeader = (d: Date) => {
+    //console.log(d);
+    onChangeDate(d);
+    onChangeView('day');
+  };
+
   const _renderSubHeader = () => {
     const dateFormat = 'EEEE';
     const days: ReactElement[] = [];
-    let day = dates.startDate;
     const _currentDay = selectedDate ?? currentDate;
 
     if (isCurrentViewDay(currentView)) {
@@ -57,7 +78,7 @@ export const ScheduleSubHeader = ({ id, currentView, currentDate, selectedDate }
 
       return (
         <RowWeek id={id} key={id}>
-          <DayViewContainer key={_currentDay} isSameDay={isCurrentDate} isSameMonth={isCurrentMonth}>
+          <DayViewContainer key={_currentDay?.toDateString()} isSameDay={isCurrentDate} isSameMonth={isCurrentMonth}>
             <WeekViewNumber>
               {isCurrentDate || isStartMonth || isEndMonth ? format(_currentDay, 'MMM d') : format(_currentDay, 'd')}
             </WeekViewNumber>
@@ -72,6 +93,8 @@ export const ScheduleSubHeader = ({ id, currentView, currentDate, selectedDate }
     }
 
     for (let i = 0; i < 7; i++) {
+      const day = addDays(dates.startDate, i);
+
       if (isCurrentViewWeek(currentView)) {
         const isCurrentDate = isSameDay(day, selectedDate);
         // isSameMonth(day, dates.monthStart);
@@ -80,7 +103,12 @@ export const ScheduleSubHeader = ({ id, currentView, currentDate, selectedDate }
         const isEndMonth = isSameDay(day, endOfMonth(dates.selectedDate));
 
         days.push(
-          <WeekViewContainer key={`day_${i}`} isSameDay={isCurrentDate} isSameMonth={isCurrentMonth}>
+          <WeekViewContainer
+            key={`day_${i}`}
+            isSameDay={isCurrentDate}
+            isSameMonth={isCurrentMonth}
+            onClick={() => clickWeekHeader(day)}
+          >
             <WeekViewNumber>
               {isCurrentDate || isStartMonth || isEndMonth ? format(day, 'MMM d') : format(day, 'd')}
             </WeekViewNumber>
@@ -94,8 +122,6 @@ export const ScheduleSubHeader = ({ id, currentView, currentDate, selectedDate }
           </DayOfWeek>
         );
       }
-
-      day = addDays(day, 1);
     }
 
     if (isCurrentViewWeek(currentView)) {
