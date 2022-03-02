@@ -48,7 +48,7 @@ describe('Basic MonthPicker Component', () => {
     expect(wrapper.prop('isMonthPickerVisible')).toBeFalsy();
     expect(wrapper.children().at(0).prop('showGoToToday')).toBeTruthy();
     expect(wrapper.children().at(0).prop('showWeekNumbers')).toBeFalsy();
-    expect(wrapper.children().at(0).prop('firstDayOfWeek')).toBeTruthy();
+    expect(wrapper.children().at(0).prop('firstDayOfWeek')).toEqual(DayOfWeek.Sunday);
   });
 
   it('Test styled Container component', () => {
