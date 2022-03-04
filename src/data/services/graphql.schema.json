@@ -11080,7 +11080,19 @@
                 "deprecationReason": null
               },
               {
-                "name": "userSid",
+                "name": "changedUserSid",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "changedByUserSid",
                 "description": null,
                 "type": {
                   "kind": "SCALAR",
@@ -17514,6 +17526,12 @@
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "ARCHIVE_ACCESS",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "possibleTypes": null
@@ -17601,6 +17619,18 @@
           },
           {
             "name": "newValue",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "workOrderId",
             "description": null,
             "args": [],
             "type": {

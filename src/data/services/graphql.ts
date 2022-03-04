@@ -1488,7 +1488,8 @@ export type QueryFindUserAccountArgs = {
 
 export type QueryUserAccountAuditLogsArgs = {
   orgSid: Scalars['ID'];
-  userSid?: Maybe<Scalars['ID']>;
+  changedUserSid?: Maybe<Scalars['ID']>;
+  changedByUserSid?: Maybe<Scalars['ID']>;
   events?: Maybe<Array<UserAccountAuditEvent>>;
   dateRange: DateTimeRangeInput;
   pageableInput?: Maybe<PageableInput>;
@@ -2212,7 +2213,8 @@ export enum UserAccountAuditEvent {
   LoginFail = 'LOGIN_FAIL',
   InactiveLoginAttempt = 'INACTIVE_LOGIN_ATTEMPT',
   LockedLoginAttempt = 'LOCKED_LOGIN_ATTEMPT',
-  Logout = 'LOGOUT'
+  Logout = 'LOGOUT',
+  ArchiveAccess = 'ARCHIVE_ACCESS'
 }
 
 export type UserAccountAuditLog = {
@@ -2223,6 +2225,7 @@ export type UserAccountAuditLog = {
   userAccount: UserAccount;
   oldValue?: Maybe<Scalars['String']>;
   newValue?: Maybe<Scalars['String']>;
+  workOrderId?: Maybe<Scalars['String']>;
   changedByUserAccount?: Maybe<UserAccount>;
 };
 
@@ -3387,7 +3390,8 @@ export type FindUserAccountQuery = (
 
 export type UserAccountAuditLogsQueryVariables = Exact<{
   orgSid: Scalars['ID'];
-  userSid?: Maybe<Scalars['ID']>;
+  changedUserSid?: Maybe<Scalars['ID']>;
+  changedByUserSid?: Maybe<Scalars['ID']>;
   events?: Maybe<Array<UserAccountAuditEvent> | UserAccountAuditEvent>;
   dateRange: DateTimeRangeInput;
   pageableInput?: Maybe<PageableInput>;
@@ -3416,7 +3420,7 @@ export type UserAccountAuditLogsQuery = (
       )>> }
     )>, nodes?: Maybe<Array<(
       { __typename?: 'UserAccountAuditLog' }
-      & Pick<UserAccountAuditLog, 'auditDateTime' | 'event' | 'orgSid' | 'oldValue' | 'newValue'>
+      & Pick<UserAccountAuditLog, 'auditDateTime' | 'event' | 'orgSid' | 'oldValue' | 'newValue' | 'workOrderId'>
       & { userAccount: (
         { __typename?: 'UserAccount' }
         & Pick<UserAccount, 'sid' | 'email'>
@@ -7546,10 +7550,11 @@ export type FindUserAccountQueryHookResult = ReturnType<typeof useFindUserAccoun
 export type FindUserAccountLazyQueryHookResult = ReturnType<typeof useFindUserAccountLazyQuery>;
 export type FindUserAccountQueryResult = Apollo.QueryResult<FindUserAccountQuery, FindUserAccountQueryVariables>;
 export const UserAccountAuditLogsDocument = gql`
-    query UserAccountAuditLogs($orgSid: ID!, $userSid: ID, $events: [UserAccountAuditEvent!], $dateRange: DateTimeRangeInput!, $pageableInput: PageableInput) {
+    query UserAccountAuditLogs($orgSid: ID!, $changedUserSid: ID, $changedByUserSid: ID, $events: [UserAccountAuditEvent!], $dateRange: DateTimeRangeInput!, $pageableInput: PageableInput) {
   userAccountAuditLogs(
     orgSid: $orgSid
-    userSid: $userSid
+    changedUserSid: $changedUserSid
+    changedByUserSid: $changedByUserSid
     events: $events
     dateRange: $dateRange
     pageableInput: $pageableInput
@@ -7584,6 +7589,7 @@ export const UserAccountAuditLogsDocument = gql`
       }
       oldValue
       newValue
+      workOrderId
       changedByUserAccount {
         sid
         email
@@ -7612,7 +7618,8 @@ ${FragmentWebCommandFragmentDoc}`;
  * const { data, loading, error } = useUserAccountAuditLogsQuery({
  *   variables: {
  *      orgSid: // value for 'orgSid'
- *      userSid: // value for 'userSid'
+ *      changedUserSid: // value for 'changedUserSid'
+ *      changedByUserSid: // value for 'changedByUserSid'
  *      events: // value for 'events'
  *      dateRange: // value for 'dateRange'
  *      pageableInput: // value for 'pageableInput'
