@@ -43,7 +43,7 @@ describe('User Administration Testing', () => {
     await panel.next();
     await panel.next();
 
-    await panel.expectSummary('<empty>', '<empty>', '<empty>', 'Cloud Data eXchange', 'No Access Groups Assigned');
+    await panel.expectSummary('<empty>', '<empty>', '<empty>', 'Cloud Data Xchange', 'No Access Groups Assigned');
 
     await panel.submit();
 
@@ -74,7 +74,7 @@ describe('User Administration Testing', () => {
     await panel.uncheckSendActivation();
     await panel.next();
 
-    await panel.expectSummary(firstName, lastName, email, 'Cloud Data eXchange', 'Auditor');
+    await panel.expectSummary(firstName, lastName, email, 'Cloud Data Xchange', 'Auditor');
     await panel.submit();
     await page.expectToasterPopup('User Account Successfully Created');
 
