@@ -20,7 +20,6 @@ import {
   CdxWebCommandType,
   GqOperationResponse,
   UiOption,
-  UiOptions,
   useAccessPolicyFormLazyQuery,
   useCreateAccessPolicyMutation,
   useFindAccessPolicyLazyQuery,
@@ -35,80 +34,18 @@ import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
 import { PanelHeader, PanelTitle } from 'src/layouts/Panels/Panels.styles';
 import { PaddedIcon } from 'src/components/inputs/CheckboxList/CheckboxList.styles';
 import { EmptyValue } from 'src/components/inputs/InputText/InputText.styles';
+import { InfoIcon } from 'src/components/badges/InfoIcon';
+import {
+  groupPermissions,
+  PermissionGroup,
+  PermissionGroups,
+} from 'src/pages/Admin/AccessManagement/Policies/AccessPolicyPanel/PermissionGrouping';
 
 const INITIAL_STATE = {
   policyName: '',
   isTemplate: false,
   usedAsIs: false,
   permissions: [],
-};
-
-type PermissionSubGroup = {
-  label: string;
-  options: UiOption[];
-};
-
-type PermissionGroup = {
-  label: string;
-  permissions: PermissionSubGroup[];
-};
-
-const groupPermissions = (opts?: UiOptions[] | null): PermissionGroup[] => {
-  if (!opts) {
-    return [];
-  }
-  const uiOptions = opts.find((opt) => opt.key === 'Permission');
-  const permGroups: any = {};
-  const getGroup = (opt: UiOption) => {
-    const permString = opt.value;
-    if (permString) {
-      const idx = permString.indexOf('_');
-      if (idx > 0) {
-        const prefix = permString.substring(0, idx);
-        let group = permGroups[prefix];
-        if (!group) {
-          group = [];
-          permGroups[prefix] = group;
-        }
-        return group;
-      }
-    }
-    return [];
-  };
-
-  uiOptions?.values?.forEach((opt) => {
-    if (opt) {
-      const permGroup = getGroup(opt);
-      permGroup.push(opt);
-    }
-  });
-
-  const exchangeStatus: PermissionSubGroup[] = [];
-  if (permGroups.K2U && permGroups.K2U.length > 0) {
-    exchangeStatus.push({ label: 'K2U Exchanges', options: permGroups.K2U });
-  }
-  exchangeStatus.push({ label: 'Test Exchanges', options: permGroups.TEST });
-  exchangeStatus.push({ label: 'UAT Exchanges', options: permGroups.UAT });
-  exchangeStatus.push({ label: 'Production Exchanges', options: permGroups.PROD });
-
-  const accessManagement: PermissionSubGroup[] = [
-    { label: 'Users', options: permGroups.USER },
-    { label: 'Access Management', options: permGroups.ACCESS },
-    { label: 'Organization', options: permGroups.ORG },
-  ];
-
-  const siteSettings: PermissionSubGroup[] = [
-    { label: 'Password', options: permGroups.PASSWORD },
-    { label: 'Color Palettes', options: permGroups.COLORPALETTE },
-    { label: 'Theme', options: permGroups.THEME },
-    { label: 'SSO', options: permGroups.SSOIDP },
-  ];
-
-  return [
-    { label: 'Exchange Status', permissions: exchangeStatus },
-    { label: 'Access Management', permissions: accessManagement },
-    { label: 'Site Settings', permissions: siteSettings },
-  ];
 };
 
 const defaultProps = {
@@ -140,7 +77,7 @@ const AccessPolicyPanel = ({
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [state, setState]: any = useState({ ...INITIAL_STATE });
   const [policyForm, setPolicyForm] = useState<AccessPolicyForm | null>();
-  const [permissions, setPermissions] = useState<PermissionGroup[]>([]);
+  const [permissions, setPermissions] = useState<PermissionGroups>();
   const [applicableOrgTypes, setApplicableOrgTypes]: any = useState([]);
 
   const [fetchPolicyForm, { data: form, loading: isLoadingForm }] = useQueryHandler(useAccessPolicyFormLazyQuery);
@@ -214,7 +151,7 @@ const AccessPolicyPanel = ({
     if (isOpen) {
       if (!selectedPolicyId || selectedTemplateId) {
         setApplicableOrgTypes([]);
-        setPermissions([]);
+        setPermissions(undefined);
         fetchPolicyForm({
           variables: {
             orgSid,
@@ -341,6 +278,15 @@ const AccessPolicyPanel = ({
     return null;
   };
 
+  const renderCheckboxLabel = (uiOption: UiOption): JSX.Element | null => {
+    return (
+      <>
+        <span>{uiOption?.label}</span>
+        <InfoIcon id={`__Perm-info-${uiOption?.value}`} tooltip={uiOption?.info} leftPad={true} />
+      </>
+    );
+  };
+
   const renderPermissionList = (options?: UiOption[], readOnly = true) => {
     if (readOnly) {
       const selectedOptions = options?.filter((option) => state.permissions.includes(option.value)) ?? [];
@@ -351,6 +297,7 @@ const AccessPolicyPanel = ({
               <PaddedIcon iconName="RadioBullet" />
               {option.label}
             </Text>
+            <InfoIcon id={`__Perm-info-${option.value}`} tooltip={option.info} leftPad={true} />
           </Spacing>
         ));
       }
@@ -361,6 +308,7 @@ const AccessPolicyPanel = ({
       <Spacing margin={{ top: 'small' }} key={`perm-${optIndex}`}>
         <Checkbox
           label={option.label}
+          onRenderLabel={() => renderCheckboxLabel(option)}
           checked={state.permissions.includes(option.value)}
           disabled={readOnly}
           id={option.value}
@@ -377,6 +325,41 @@ const AccessPolicyPanel = ({
         />
       </Spacing>
     ));
+  };
+
+  const renderPermissionGroup = (group?: PermissionGroup, permissionsReadOnly = true) => {
+    if (!group?.subGroup?.length) {
+      return null;
+    }
+    return (
+      <Collapse label={group.label} expanded>
+        <Spacing padding={{ top: 'normal', bottom: 'normal' }}>
+          <Row>
+            <Column lg="12">
+              <Card elevation="none" spacing="none">
+                <Row top>
+                  {group.subGroup
+                    ?.filter((subGroup) => subGroup?.options?.length)
+                    ?.map((subGroup, pIndex) => (
+                      <Column lg="3" key={`${pIndex}`}>
+                        <Card elevation="none">
+                          {subGroup.label.length > 0 && (
+                            <Spacing margin={{ bottom: 'normal' }}>
+                              <Label>{subGroup.label}</Label>
+                            </Spacing>
+                          )}
+
+                          {renderPermissionList(subGroup.options, permissionsReadOnly)}
+                        </Card>
+                      </Column>
+                    ))}
+                </Row>
+              </Card>
+            </Column>
+          </Row>
+        </Spacing>
+      </Collapse>
+    );
   };
 
   const renderBody = () => {
@@ -468,31 +451,11 @@ const AccessPolicyPanel = ({
 
             <FormRow>
               <Column lg="12">
-                {permissions.map((group: PermissionGroup, groupIndex) => (
-                  <Collapse label={group.label} expanded key={groupIndex}>
-                    <Spacing padding={{ top: 'normal', bottom: 'normal' }}>
-                      <Row>
-                        <Column lg="12">
-                          <Card elevation="none" spacing="none">
-                            <Row top>
-                              {group.permissions?.map((permission, pIndex) => (
-                                <Column lg="3" key={`${groupIndex}-${pIndex}`}>
-                                  <Card elevation="none">
-                                    <Spacing margin={{ bottom: 'normal' }}>
-                                      <Label>{permission.label}</Label>
-                                    </Spacing>
-
-                                    {renderPermissionList(permission.options, permissionsReadOnly)}
-                                  </Card>
-                                </Column>
-                              ))}
-                            </Row>
-                          </Card>
-                        </Column>
-                      </Row>
-                    </Spacing>
-                  </Collapse>
-                ))}
+                {renderPermissionGroup(permissions?.exchange, permissionsReadOnly)}
+                {renderPermissionGroup(permissions?.accessManagement, permissionsReadOnly)}
+                {renderPermissionGroup(permissions?.orgAdmin, permissionsReadOnly)}
+                {renderPermissionGroup(permissions?.tools, permissionsReadOnly)}
+                {renderPermissionGroup(permissions?.other, permissionsReadOnly)}
               </Column>
             </FormRow>
           </>
