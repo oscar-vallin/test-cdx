@@ -2429,6 +2429,7 @@ export type WorkPacketStatus = {
   /** The next three options only are returned when the user has the *_EXCHANGE_ARCHIVE_READ Permission */
   clientFileArchivePath?: Maybe<Scalars['String']>;
   vendorFileArchivePath?: Maybe<Scalars['String']>;
+  vendorFilename?: Maybe<Scalars['String']>;
   feedType?: Maybe<Scalars['String']>;
   inboundDataType?: Maybe<Scalars['String']>;
   inboundDataSize?: Maybe<Scalars['Int']>;
@@ -2937,7 +2938,7 @@ export type WorkPacketStatusQuery = (
   { __typename?: 'Query' }
   & { workPacketStatus?: Maybe<(
     { __typename?: 'WorkPacketStatus' }
-    & Pick<WorkPacketStatus, 'workOrderId' | 'timestamp' | 'orgId' | 'orgSid' | 'detailsPath' | 'inboundFilename' | 'vendorId' | 'vendorSid' | 'step' | 'stepStatus' | 'packetStatus' | 'reprocessedBy' | 'restartReason' | 'recordHighlightCount' | 'populationCount' | 'recordHighlightType' | 'clientFileArchivePath' | 'vendorFileArchivePath' | 'feedType' | 'inboundDataType' | 'inboundDataSize' | 'version' | 'supplementalFilesArchivePaths' | 'archiveOnly' | 'hasErrors' | 'environment'>
+    & Pick<WorkPacketStatus, 'workOrderId' | 'timestamp' | 'orgId' | 'orgSid' | 'detailsPath' | 'inboundFilename' | 'vendorId' | 'vendorSid' | 'step' | 'stepStatus' | 'packetStatus' | 'reprocessedBy' | 'restartReason' | 'recordHighlightCount' | 'populationCount' | 'recordHighlightType' | 'clientFileArchivePath' | 'vendorFileArchivePath' | 'vendorFilename' | 'feedType' | 'inboundDataType' | 'inboundDataSize' | 'version' | 'supplementalFilesArchivePaths' | 'archiveOnly' | 'hasErrors' | 'environment'>
     & { commands?: Maybe<Array<(
       { __typename?: 'WorkPacketCommand' }
       & FragmentWorkPacketCommandFragment
@@ -2974,7 +2975,7 @@ export type WorkPacketStatusesQuery = (
       & FragmentPaginationInfoFragment
     ), nodes?: Maybe<Array<(
       { __typename?: 'WorkPacketStatus' }
-      & Pick<WorkPacketStatus, 'workOrderId' | 'timestamp' | 'orgId' | 'orgSid' | 'detailsPath' | 'inboundFilename' | 'vendorId' | 'vendorSid' | 'step' | 'stepStatus' | 'packetStatus' | 'reprocessedBy' | 'restartReason' | 'recordHighlightCount' | 'populationCount' | 'recordHighlightType' | 'clientFileArchivePath' | 'vendorFileArchivePath' | 'feedType' | 'inboundDataType' | 'inboundDataSize' | 'version' | 'supplementalFilesArchivePaths' | 'archiveOnly' | 'hasErrors' | 'environment'>
+      & Pick<WorkPacketStatus, 'workOrderId' | 'timestamp' | 'orgId' | 'orgSid' | 'detailsPath' | 'inboundFilename' | 'vendorId' | 'vendorSid' | 'step' | 'stepStatus' | 'packetStatus' | 'reprocessedBy' | 'restartReason' | 'recordHighlightCount' | 'populationCount' | 'recordHighlightType' | 'clientFileArchivePath' | 'vendorFileArchivePath' | 'vendorFilename' | 'feedType' | 'inboundDataType' | 'inboundDataSize' | 'version' | 'supplementalFilesArchivePaths' | 'archiveOnly' | 'hasErrors' | 'environment'>
       & { commands?: Maybe<Array<(
         { __typename?: 'WorkPacketCommand' }
         & FragmentWorkPacketCommandFragment
@@ -6449,6 +6450,7 @@ export const WorkPacketStatusDocument = gql`
     recordHighlightType
     clientFileArchivePath
     vendorFileArchivePath
+    vendorFilename
     feedType
     inboundDataType
     inboundDataSize
@@ -6557,6 +6559,7 @@ export const WorkPacketStatusesDocument = gql`
       recordHighlightType
       clientFileArchivePath
       vendorFileArchivePath
+      vendorFilename
       feedType
       inboundDataType
       inboundDataSize
