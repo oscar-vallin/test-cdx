@@ -1,21 +1,21 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, memo } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 
 import {
   DetailsList,
   DetailsListLayoutMode,
+  FontIcon,
+  IContextualMenuItem,
+  IContextualMenuProps,
+  Link,
   SelectionMode,
   Spinner,
-  FontIcon,
   SpinnerSize,
-  Link,
-  IContextualMenuProps,
-  IContextualMenuItem,
 } from '@fluentui/react';
 import { EmptyState } from 'src/containers/states';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
 import { useNotification } from 'src/hooks/useNotification';
-import { Row, Column, Container } from 'src/components/layouts';
+import { Column, Container, Row } from 'src/components/layouts';
 import { Button } from 'src/components/buttons';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { PageTitle } from 'src/components/typography';
@@ -23,6 +23,7 @@ import { PageTitle } from 'src/components/typography';
 import {
   AccessPolicyGroup,
   CdxWebCommandType,
+  GqOperationResponse,
   UiOption,
   useAccessPolicyGroupsForOrgLazyQuery,
   useAccessPolicyGroupTemplatesLazyQuery,
@@ -74,7 +75,7 @@ const AccessManagementGroupsContainer = () => {
     },
   });
 
-  const { deleteAccessPolicyGroup, deleteError, deleteData } = useAccessManagementGroupsPageService();
+  const { deleteAccessPolicyGroup, deleteError, deleteData, deleteLoading } = useAccessManagementGroupsPageService();
 
   const [createCmd, setCreateCmd] = useState<WebCommand | null>();
   const [deleteCmd, setDeleteCmd] = useState<WebCommand | null>();
@@ -112,18 +113,18 @@ const AccessManagementGroupsContainer = () => {
 
   // Handle delete.
   useEffect(() => {
-    if (deleteData) {
-      if (deleteData.deleteAccessPolicyGroup === 'SUCCESS') {
-        if (selectedGroupId || groups.length === 0) return;
+    if (!deleteLoading && deleteData) {
+      if (deleteData.deleteAccessPolicyGroup === GqOperationResponse.Success) {
+        if (!selectedGroupId || groups.length === 0) return;
 
         const text = `Access Policy Group ${groups.find(({ sid }) => sid === selectedGroupId)?.name} Deleted.`;
-        Toast.info({ text, duration: 3000 });
+        Toast.info({ text, duration: 5000 });
         setSelectedGroupId(null);
 
         fetchData();
       }
     }
-  }, [deleteData]);
+  }, [deleteData, deleteLoading]);
 
   useEffect(() => {
     if (error) {
