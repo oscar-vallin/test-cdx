@@ -1,4 +1,3 @@
-import { AdminNavPanel, MobileTopNav, NavList, NavListItem } from './LeftNav.styles';
 import { useHistory } from 'react-router';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
@@ -6,6 +5,7 @@ import { getRouteByApiId } from 'src/data/constants/RouteConstants';
 import { NavItemType, NavPanel } from 'src/containers/menus/LeftNav/NavPanel';
 import { ActionButton } from '@fluentui/react';
 import { theme } from 'src/styles/themes/theme';
+import { AdminNavPanel, MobileTopNav, NavList, NavListItem } from './LeftNav.styles';
 
 type LeftNavProps = {
   menuOptionSelected?: string;
@@ -82,6 +82,7 @@ export const LeftNav = ({ menuOptionSelected, isOpen }: LeftNavProps) => {
         />
       );
     }
+    return null;
   };
 
   const renderMobileTopNav = () => {
@@ -159,13 +160,17 @@ export const LeftNav = ({ menuOptionSelected, isOpen }: LeftNavProps) => {
     ));
   };
 
-  return (
-    <AdminNavPanel id="__AdminNav" open={isOpen} data-e2e="AdminNav">
-      {renderMobileTopNav()}
+  if (ActiveDomainStore.nav.admin.length > 0) {
+    return (
+      <AdminNavPanel id="__AdminNav" open={isOpen} data-e2e="AdminNav">
+        {renderMobileTopNav()}
 
-      {renderOrgNavigation()}
+        {renderOrgNavigation()}
 
-      {renderAdminItems()}
-    </AdminNavPanel>
-  );
+        {renderAdminItems()}
+      </AdminNavPanel>
+    );
+  }
+
+  return null;
 };

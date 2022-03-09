@@ -1,9 +1,10 @@
-import { ReactElement, ReactNode, useState } from 'react';
+import { ReactElement, ReactNode, useEffect, useState } from 'react';
 import { AppHeader } from 'src/containers/headers/AppHeader';
 
 import { StyleConstants } from 'src/data/constants/StyleConstants';
-import { BoxStyled, DashboardBody } from './LayoutDashboard.styles';
 import { LeftNav } from 'src/containers/menus/LeftNav';
+import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
+import { BoxStyled, DashboardBody } from './LayoutDashboard.styles';
 
 const defaultProps = {
   id: '',
@@ -22,22 +23,27 @@ export const LayoutDashboard = ({
   menuOptionSelected = 'dashboard',
   children,
 }: LayoutDashboardProps): ReactElement => {
-  const [menuOpen, setMenuOpen] = useState(true);
+  const ActiveDomainStore = useActiveDomainStore();
+  const [menuOpen, setMenuOpen] = useState<boolean>(ActiveDomainStore.nav.admin.length > 0);
+
+  useEffect(() => {
+    setMenuOpen(ActiveDomainStore.nav.admin.length > 0);
+  }, []);
 
   return (
-    <>
-      <BoxStyled id={`${id}__Box`} direction={StyleConstants.DIRECTION_COLUMN} top>
-        <AppHeader
-          onMenuButtonClick={() => {
+    <BoxStyled id={`${id}__Box`} direction={StyleConstants.DIRECTION_COLUMN} top>
+      <AppHeader
+        onMenuButtonClick={() => {
+          if (ActiveDomainStore.nav.admin.length > 0) {
             setMenuOpen(!menuOpen);
-          }}
-        />
-        <LeftNav menuOptionSelected={menuOptionSelected} isOpen={menuOpen} />
-        <DashboardBody id="__DashboardBody" isMenuOpen={menuOpen}>
-          {children}
-        </DashboardBody>
-      </BoxStyled>
-    </>
+          }
+        }}
+      />
+      <LeftNav menuOptionSelected={menuOptionSelected} isOpen={menuOpen} />
+      <DashboardBody id="__DashboardBody" isMenuOpen={menuOpen}>
+        {children}
+      </DashboardBody>
+    </BoxStyled>
   );
 };
 
