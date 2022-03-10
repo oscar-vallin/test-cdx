@@ -287,6 +287,98 @@ const AccessPolicyPanel = ({
     );
   };
 
+  const isListOption = (option?: UiOption): boolean => {
+    return option?.value?.endsWith('_LIST') ?? false;
+  };
+
+  const isReadOption = (option?: UiOption): boolean => {
+    return option?.value?.endsWith('_READ') ?? false;
+  };
+
+  /**
+   * Given a permission option, find its corresponding LIST permission option in the
+   * given list of options
+   * @param option option to find
+   * @param options array of options to search
+   * @return UiOption which refers to a LIST permission OR undefined if a LIST permission option was not found
+   */
+  const findListOption = (option?: UiOption, options?: UiOption[]): UiOption | null => {
+    if (!option || !options) {
+      return null;
+    }
+    return options.find((opt) => isListOption(opt)) ?? null;
+  };
+
+  /**
+   * Given a permission option, find its corresponding READ permission option in the
+   * given list of options
+   * @param option option to find
+   * @param options array of options to search
+   * @return UiOption which refers to a READ permission OR undefined if a READ permission option was not found
+   */
+  const findReadOption = (option?: UiOption, options?: UiOption[]): UiOption | null => {
+    if (!option || !options) {
+      return null;
+    }
+    const perm = option.value;
+    const readPerm = `${perm.substring(0, perm.lastIndexOf('_'))}_READ`;
+    return options.find((opt) => opt.value === readPerm) ?? null;
+  };
+
+  /**
+   * Should the given option within a list of options be disabled based on if the corresponding READ permission is checked?
+   * @param option option to find
+   * @param options array of options to search
+   * @return true if the corresponding READ permission for the given option is unchecked,
+   *         false otherwise or if the given option does not have a corresponding READ permission
+   */
+  const isConditionallyDisabled = (option?: UiOption, options?: UiOption[]): boolean => {
+    if (isListOption(option)) {
+      return false;
+    }
+    const listOption = findListOption(option, options);
+    if (listOption && !state.permissions.includes(listOption.value)) {
+      return true;
+    }
+    if (isReadOption(option)) {
+      return false;
+    }
+    const readOption = findReadOption(option, options);
+    if (!readOption) {
+      return false;
+    }
+    return !state.permissions.includes(readOption.value);
+  };
+
+  const togglePermission = (option: UiOption, checked: boolean, options?: UiOption[]) => {
+    setUnsavedChanges(true);
+
+    let _permissions = checked
+      ? [...state.permissions, option.value]
+      : state.permissions.filter((value) => value !== option.value);
+
+    if (!checked) {
+      const permissionOptions = options?.map((opt) => opt.value);
+
+      if (isListOption(option)) {
+        // If this is a LIST permission and we unchecked, we need to uncheck all other permissions in this group
+        _permissions = _permissions.filter((value) => !permissionOptions?.includes(value));
+      } else if (isReadOption(option)) {
+        // If this is a READ permission and we unchecked, we need to uncheck all other _CREATE, _UPDATE, etc. permissions
+        const permPrefix = option.value.substring(0, option.value.lastIndexOf('_READ'));
+        const readControlledOptions = permissionOptions?.filter(
+          (perm) => perm.startsWith(permPrefix) && !perm.endsWith('_LIST')
+        );
+        _permissions = _permissions.filter((value) => !readControlledOptions?.includes(value));
+      }
+    }
+
+    setState({
+      ...state,
+      permissions: _permissions,
+    });
+  };
+
   const renderPermissionList = (options?: UiOption[], readOnly = true) => {
     if (readOnly) {
       const selectedOptions = options?.filter((option) => state.permissions.includes(option.value)) ?? [];
@@ -310,18 +402,9 @@ const AccessPolicyPanel = ({
           label={option.label}
           onRenderLabel={() => renderCheckboxLabel(option)}
           checked={state.permissions.includes(option.value)}
-          disabled={readOnly}
+          disabled={readOnly || isConditionallyDisabled(option, options)}
           id={option.value}
-          onChange={(event, checked) => {
-            setUnsavedChanges(true);
-
-            setState({
-              ...state,
-              permissions: checked
-                ? [...state.permissions, option.value]
-                : state.permissions.filter((value) => value !== option.value),
-            });
-          }}
+          onChange={(event, checked) => togglePermission(option, checked ?? false, options)}
         />
       </Spacing>
     ));
