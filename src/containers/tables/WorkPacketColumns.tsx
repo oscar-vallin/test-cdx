@@ -50,20 +50,19 @@ export const useWorkPacketColumns = (
   const renderDownloadLink = (
     workOrderId?: string,
     commands?: Maybe<Array<Maybe<WorkPacketCommand>>> | undefined,
+    filename?: string | null,
     filePath?: Maybe<Scalars['String']> | undefined
   ) => {
-    const idx = filePath?.lastIndexOf('/') ?? -1;
-    const fileName = filePath?.substring(idx + 1);
     if (commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.DownloadFile)) {
       return (
         <CellItemRow>
           <Link href={`${serverUrl}k/archive/download?workOrderID=${workOrderId}&s3Key=${filePath}`} target="_new">
-            {fileName}
+            {filename}
           </Link>
         </CellItemRow>
       );
     }
-    return <span>{fileName}</span>;
+    return <span>{filename}</span>;
   };
 
   const columnOptions: IColumn[] = [
@@ -328,7 +327,7 @@ export const useWorkPacketColumns = (
       targetWidthProportion: 1,
       minWidth: 100,
       maxWidth: 300,
-      fieldName: 'clientFileArchivePath',
+      fieldName: 'inboundFilename',
       isSorted: false,
       isSortedDescending: false,
       sortAscendingAriaLabel: 'Sorted A to Z',
@@ -336,7 +335,7 @@ export const useWorkPacketColumns = (
       data: WorkPacketColumn.CLIENT_FILE,
       onColumnClick: onSort,
       onRender: (item: WorkPacketStatus) =>
-        renderDownloadLink(item.workOrderId, item.commands, item.clientFileArchivePath),
+        renderDownloadLink(item.workOrderId, item.commands, item.inboundFilename, item.clientFileArchivePath),
     },
     {
       key: 'vendorFilename',
@@ -352,7 +351,7 @@ export const useWorkPacketColumns = (
       data: WorkPacketColumn.VENDOR_FILE,
       onColumnClick: onSort,
       onRender: (item: WorkPacketStatus) =>
-        renderDownloadLink(item.workOrderId, item.commands, item.vendorFileArchivePath),
+        renderDownloadLink(item.workOrderId, item.commands, item.vendorFilename, item.vendorFileArchivePath),
     },
     {
       key: 'totalRecords',
