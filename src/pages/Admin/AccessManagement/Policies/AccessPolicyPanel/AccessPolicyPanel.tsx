@@ -411,7 +411,7 @@ const AccessPolicyPanel = ({
   };
 
   const renderPermissionGroup = (group?: PermissionGroup, permissionsReadOnly = true) => {
-    if (!group?.subGroup?.length) {
+    if (!group?.subGroup?.find((sg) => sg?.options?.length > 0)) {
       return null;
     }
     return (
