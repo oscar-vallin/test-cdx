@@ -577,6 +577,7 @@ export type GenericResponse = {
   errCode?: Maybe<Scalars['String']>;
   errMsg?: Maybe<Scalars['String']>;
   errSeverity?: Maybe<ErrorSeverity>;
+  allMessages?: Maybe<Array<LogMessage>>;
 };
 
 export type ImplementationDeployResponse = {
@@ -4652,6 +4653,17 @@ export type UpdatePasswordMutation = (
   & { updatePassword?: Maybe<(
     { __typename?: 'GenericResponse' }
     & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { allMessages?: Maybe<Array<(
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>> }
+    )>> }
   )> }
 );
 
@@ -5737,6 +5749,17 @@ export type WorkPacketRerunStepMutation = (
   & { workPacketRerunStep?: Maybe<(
     { __typename?: 'GenericResponse' }
     & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { allMessages?: Maybe<Array<(
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>> }
+    )>> }
   )> }
 );
 
@@ -5750,6 +5773,17 @@ export type WorkPacketDeleteMutation = (
   & { workPacketDelete?: Maybe<(
     { __typename?: 'GenericResponse' }
     & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { allMessages?: Maybe<Array<(
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>> }
+    )>> }
   )> }
 );
 
@@ -5763,6 +5797,17 @@ export type WorkPacketContinueMutation = (
   & { workPacketContinue?: Maybe<(
     { __typename?: 'GenericResponse' }
     & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { allMessages?: Maybe<Array<(
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>> }
+    )>> }
   )> }
 );
 
@@ -5776,6 +5821,17 @@ export type WorkPacketCancelMutation = (
   & { workPacketCancel?: Maybe<(
     { __typename?: 'GenericResponse' }
     & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { allMessages?: Maybe<Array<(
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>> }
+    )>> }
   )> }
 );
 
@@ -5816,6 +5872,17 @@ export type WorkPacketResendMutation = (
   & { workPacketResend?: Maybe<(
     { __typename?: 'GenericResponse' }
     & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { allMessages?: Maybe<Array<(
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>> }
+    )>> }
   )> }
 );
 
@@ -10523,19 +10590,6 @@ export const XpsftpTestDocument = gql`
         errMsg
         errSeverity
       }
-      port {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
-      }
       folder {
         value
         label
@@ -10854,9 +10908,18 @@ export const UpdatePasswordDocument = gql`
     errCode
     errMsg
     errSeverity
+    allMessages {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
+      }
+    }
   }
 }
-    `;
+    ${UnionNvpFragmentDoc}`;
 export type UpdatePasswordMutationFn = Apollo.MutationFunction<UpdatePasswordMutation, UpdatePasswordMutationVariables>;
 
 /**
@@ -13921,19 +13984,6 @@ export const FtpTestMDocument = gql`
         errMsg
         errSeverity
       }
-      port {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
-      }
       folder {
         value
         label
@@ -14039,9 +14089,18 @@ export const WorkPacketRerunStepDocument = gql`
     errCode
     errMsg
     errSeverity
+    allMessages {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
+      }
+    }
   }
 }
-    `;
+    ${UnionNvpFragmentDoc}`;
 export type WorkPacketRerunStepMutationFn = Apollo.MutationFunction<WorkPacketRerunStepMutation, WorkPacketRerunStepMutationVariables>;
 
 /**
@@ -14075,9 +14134,18 @@ export const WorkPacketDeleteDocument = gql`
     errCode
     errMsg
     errSeverity
+    allMessages {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
+      }
+    }
   }
 }
-    `;
+    ${UnionNvpFragmentDoc}`;
 export type WorkPacketDeleteMutationFn = Apollo.MutationFunction<WorkPacketDeleteMutation, WorkPacketDeleteMutationVariables>;
 
 /**
@@ -14110,9 +14178,18 @@ export const WorkPacketContinueDocument = gql`
     errCode
     errMsg
     errSeverity
+    allMessages {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
+      }
+    }
   }
 }
-    `;
+    ${UnionNvpFragmentDoc}`;
 export type WorkPacketContinueMutationFn = Apollo.MutationFunction<WorkPacketContinueMutation, WorkPacketContinueMutationVariables>;
 
 /**
@@ -14145,9 +14222,18 @@ export const WorkPacketCancelDocument = gql`
     errCode
     errMsg
     errSeverity
+    allMessages {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
+      }
+    }
   }
 }
-    `;
+    ${UnionNvpFragmentDoc}`;
 export type WorkPacketCancelMutationFn = Apollo.MutationFunction<WorkPacketCancelMutation, WorkPacketCancelMutationVariables>;
 
 /**
@@ -14258,9 +14344,18 @@ export const WorkPacketResendDocument = gql`
     errCode
     errMsg
     errSeverity
+    allMessages {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
+      }
+    }
   }
 }
-    `;
+    ${UnionNvpFragmentDoc}`;
 export type WorkPacketResendMutationFn = Apollo.MutationFunction<WorkPacketResendMutation, WorkPacketResendMutationVariables>;
 
 /**
