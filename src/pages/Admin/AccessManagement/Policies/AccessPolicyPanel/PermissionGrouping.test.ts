@@ -12,15 +12,15 @@ const testUIOptions: UiOptions[] = [
       }, {
         "label": "Benefit Admin - Segregated",
         "value": "INTEGRATION_ADMIN_SEGREGATED",
-        "info": "Benefit Admin that treats plan sponsors independently but typically all transfers originate from the same place and they don't allow separate access per plan sponsor",
+        "info": "Benefit Admin that treats plan sponsors independently",
       }, {
-        "label": "Platform sponsor",
+        "label": "Xchange Platform",
         "value": "INTEGRATION_PLATFORM",
         "info": "Provides the platform to their clients",
       }, {
         "label": "Benefit Admin - Combined",
         "value": "INTEGRATION_ADMIN_COMBINED",
-        "info": "Typically sends one file with all plan sponsors / legal entities that are enrolled with a given vendor",
+        "info": "Benefit Admin that uses per vendor implementations instead of per sponsor",
       }, {
         "label": "Vendor",
         "value": "VENDOR",
