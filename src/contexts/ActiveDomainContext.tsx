@@ -49,6 +49,7 @@ export const ActiveDomainContextProvider = ({ children }: ActiveDomainContextPro
 
     if (SessionStore.user.token && orgSid) {
       performCurrentOrgUpdate({ orgSid });
+      performNavUpdate({ orgSid, domain: 'ORGANIZATION' });
     }
   }, [SessionStore.user.token, ActiveDomainStore.domainOrg.current.orgSid]);
 
