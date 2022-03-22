@@ -13,6 +13,13 @@ function yyyyMMdd(date?: Date | null): string {
   return '';
 }
 
+function yyyyMMdda(date?: Date | null): string {
+  if (date) {
+    return format(date, 'yyyy-MM-dd a');
+  }
+  return '';
+}
+
 function getEnumByValue(enumType, enumValue?: string) {
   const key = Object.keys(enumType).find((x) => enumType[x] === enumValue);
   if (key) {
@@ -21,4 +28,4 @@ function getEnumByValue(enumType, enumValue?: string) {
   return null;
 }
 
-export { isDateTimeValid, yyyyMMdd, getEnumByValue };
+export { isDateTimeValid, yyyyMMdd, getEnumByValue, yyyyMMdda};

@@ -51,3 +51,21 @@ export const StyledColorPreview = styled.div`
   margin: 0 15px;
   width: 30px;
 `;
+
+export const StyledSelectedFile = styled.div`
+  [data-icon-name*='Cancel'] {
+    font-size: 1.6em;
+    transform: translateY(2px);   
+    color: ${({ theme }) => theme.colors.black};
+  }
+
+  .ms-Button--icon {
+    &:hover { 
+      background: none;
+    }
+  }
+
+  span {
+    color: ${({ theme }) => theme.colors.themePrimary};
+  }
+`
