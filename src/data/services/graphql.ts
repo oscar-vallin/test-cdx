@@ -13,6 +13,7 @@ export type Scalars = {
   Float: number;
   Date: any;
   DateTime: any;
+  Upload: any;
 };
 
 
@@ -182,6 +183,11 @@ export enum CdxWebPage {
 export enum CdxWebPivot {
   Activity = 'ACTIVITY',
   InProgress = 'IN_PROGRESS'
+}
+
+export enum ChangeReason {
+  Internal = 'INTERNAL',
+  External = 'EXTERNAL'
 }
 
 export type CompositePasswordRuleSet = {
@@ -577,6 +583,7 @@ export type GenericResponse = {
   errCode?: Maybe<Scalars['String']>;
   errMsg?: Maybe<Scalars['String']>;
   errSeverity?: Maybe<ErrorSeverity>;
+  allMessages?: Maybe<Array<LogMessage>>;
 };
 
 export type ImplementationDeployResponse = {
@@ -891,12 +898,14 @@ export type MutationUpdatePasswordRulesArgs = {
 export type MutationFtpTestMArgs = {
   xpsftp: XsftpInput;
   genTestFile?: Maybe<SftpTestGenerateTestFile>;
+  testFile?: Maybe<Scalars['Upload']>;
 };
 
 
 export type MutationWorkPacketRerunStepArgs = {
   workOrderId: Scalars['String'];
   stepName: Scalars['String'];
+  changeReason?: Maybe<ChangeReason>;
 };
 
 
@@ -917,6 +926,7 @@ export type MutationWorkPacketCancelArgs = {
 
 export type MutationWorkPacketReprocessArgs = {
   workOrderId: Scalars['String'];
+  changeReason?: Maybe<ChangeReason>;
 };
 
 
@@ -1353,6 +1363,7 @@ export type Query = {
    */
   passwordValidation?: Maybe<PasswordValidation>;
   xpsftpTest?: Maybe<XpsftpTestPage>;
+  reprocessDialog?: Maybe<ReprocessDialog>;
 };
 
 
@@ -1662,6 +1673,11 @@ export type QueryXpsftpTestArgs = {
   orgSid?: Maybe<Scalars['ID']>;
 };
 
+
+export type QueryReprocessDialogArgs = {
+  workOrderId: Scalars['String'];
+};
+
 export type RecordCount = {
   __typename?: 'RecordCount';
   name: Scalars['String'];
@@ -1683,6 +1699,13 @@ export type RecordCreationEvent = {
   error?: Maybe<Array<FieldCreationEvent>>;
   warning?: Maybe<Array<FieldCreationEvent>>;
   information?: Maybe<Array<FieldCreationEvent>>;
+};
+
+export type ReprocessDialog = {
+  __typename?: 'ReprocessDialog';
+  captureChangeReason: Scalars['Boolean'];
+  title: Scalars['String'];
+  message: Scalars['String'];
 };
 
 export type ReprocessResponse = {
@@ -2192,6 +2215,7 @@ export type UpdateUserInput = {
   firstNm: Scalars['String'];
   lastNm?: Maybe<Scalars['String']>;
 };
+
 
 export type UserAccount = {
   __typename?: 'UserAccount';
@@ -4547,6 +4571,19 @@ export type XpsftpTestQuery = (
   )> }
 );
 
+export type ReprocessDialogQueryVariables = Exact<{
+  workOrderId: Scalars['String'];
+}>;
+
+
+export type ReprocessDialogQuery = (
+  { __typename?: 'Query' }
+  & { reprocessDialog?: Maybe<(
+    { __typename?: 'ReprocessDialog' }
+    & Pick<ReprocessDialog, 'captureChangeReason' | 'title' | 'message'>
+  )> }
+);
+
 export type BeginLoginMutationVariables = Exact<{
   userId: Scalars['String'];
 }>;
@@ -4652,6 +4689,17 @@ export type UpdatePasswordMutation = (
   & { updatePassword?: Maybe<(
     { __typename?: 'GenericResponse' }
     & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { allMessages?: Maybe<Array<(
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>> }
+    )>> }
   )> }
 );
 
@@ -5660,6 +5708,7 @@ export type ImplementationDeployMutation = (
 export type FtpTestMMutationVariables = Exact<{
   xpsftp: XsftpInput;
   genTestFile?: Maybe<SftpTestGenerateTestFile>;
+  testFile?: Maybe<Scalars['Upload']>;
 }>;
 
 
@@ -5729,6 +5778,7 @@ export type FtpTestMMutation = (
 export type WorkPacketRerunStepMutationVariables = Exact<{
   workOrderId: Scalars['String'];
   stepName: Scalars['String'];
+  changeReason?: Maybe<ChangeReason>;
 }>;
 
 
@@ -5737,6 +5787,17 @@ export type WorkPacketRerunStepMutation = (
   & { workPacketRerunStep?: Maybe<(
     { __typename?: 'GenericResponse' }
     & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { allMessages?: Maybe<Array<(
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>> }
+    )>> }
   )> }
 );
 
@@ -5750,6 +5811,17 @@ export type WorkPacketDeleteMutation = (
   & { workPacketDelete?: Maybe<(
     { __typename?: 'GenericResponse' }
     & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { allMessages?: Maybe<Array<(
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>> }
+    )>> }
   )> }
 );
 
@@ -5763,6 +5835,17 @@ export type WorkPacketContinueMutation = (
   & { workPacketContinue?: Maybe<(
     { __typename?: 'GenericResponse' }
     & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { allMessages?: Maybe<Array<(
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>> }
+    )>> }
   )> }
 );
 
@@ -5776,11 +5859,23 @@ export type WorkPacketCancelMutation = (
   & { workPacketCancel?: Maybe<(
     { __typename?: 'GenericResponse' }
     & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { allMessages?: Maybe<Array<(
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>> }
+    )>> }
   )> }
 );
 
 export type WorkPacketReprocessMutationVariables = Exact<{
   workOrderId: Scalars['String'];
+  changeReason?: Maybe<ChangeReason>;
 }>;
 
 
@@ -5816,6 +5911,17 @@ export type WorkPacketResendMutation = (
   & { workPacketResend?: Maybe<(
     { __typename?: 'GenericResponse' }
     & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { allMessages?: Maybe<Array<(
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>> }
+    )>> }
   )> }
 );
 
@@ -10523,19 +10629,6 @@ export const XpsftpTestDocument = gql`
         errMsg
         errSeverity
       }
-      port {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
-      }
       folder {
         value
         label
@@ -10634,6 +10727,41 @@ export function useXpsftpTestLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type XpsftpTestQueryHookResult = ReturnType<typeof useXpsftpTestQuery>;
 export type XpsftpTestLazyQueryHookResult = ReturnType<typeof useXpsftpTestLazyQuery>;
 export type XpsftpTestQueryResult = Apollo.QueryResult<XpsftpTestQuery, XpsftpTestQueryVariables>;
+export const ReprocessDialogDocument = gql`
+    query ReprocessDialog($workOrderId: String!) {
+  reprocessDialog(workOrderId: $workOrderId) {
+    captureChangeReason
+    title
+    message
+  }
+}
+    `;
+
+/**
+ * __useReprocessDialogQuery__
+ *
+ * To run a query within a React component, call `useReprocessDialogQuery` and pass it any options that fit your needs.
+ * When your component renders, `useReprocessDialogQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useReprocessDialogQuery({
+ *   variables: {
+ *      workOrderId: // value for 'workOrderId'
+ *   },
+ * });
+ */
+export function useReprocessDialogQuery(baseOptions: Apollo.QueryHookOptions<ReprocessDialogQuery, ReprocessDialogQueryVariables>) {
+        return Apollo.useQuery<ReprocessDialogQuery, ReprocessDialogQueryVariables>(ReprocessDialogDocument, baseOptions);
+      }
+export function useReprocessDialogLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ReprocessDialogQuery, ReprocessDialogQueryVariables>) {
+          return Apollo.useLazyQuery<ReprocessDialogQuery, ReprocessDialogQueryVariables>(ReprocessDialogDocument, baseOptions);
+        }
+export type ReprocessDialogQueryHookResult = ReturnType<typeof useReprocessDialogQuery>;
+export type ReprocessDialogLazyQueryHookResult = ReturnType<typeof useReprocessDialogLazyQuery>;
+export type ReprocessDialogQueryResult = Apollo.QueryResult<ReprocessDialogQuery, ReprocessDialogQueryVariables>;
 export const BeginLoginDocument = gql`
     mutation BeginLogin($userId: String!) {
   beginLogin(userId: $userId) {
@@ -10854,9 +10982,18 @@ export const UpdatePasswordDocument = gql`
     errCode
     errMsg
     errSeverity
+    allMessages {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
+      }
+    }
   }
 }
-    `;
+    ${UnionNvpFragmentDoc}`;
 export type UpdatePasswordMutationFn = Apollo.MutationFunction<UpdatePasswordMutation, UpdatePasswordMutationVariables>;
 
 /**
@@ -13845,8 +13982,8 @@ export type ImplementationDeployMutationHookResult = ReturnType<typeof useImplem
 export type ImplementationDeployMutationResult = Apollo.MutationResult<ImplementationDeployMutation>;
 export type ImplementationDeployMutationOptions = Apollo.BaseMutationOptions<ImplementationDeployMutation, ImplementationDeployMutationVariables>;
 export const FtpTestMDocument = gql`
-    mutation FtpTestM($xpsftp: XSFTPInput!, $genTestFile: SFTPTestGenerateTestFile) {
-  ftpTestM(xpsftp: $xpsftp, genTestFile: $genTestFile) {
+    mutation FtpTestM($xpsftp: XSFTPInput!, $genTestFile: SFTPTestGenerateTestFile, $testFile: Upload) {
+  ftpTestM(xpsftp: $xpsftp, genTestFile: $genTestFile, testFile: $testFile) {
     status
     logMessage {
       timeStamp
@@ -13909,19 +14046,6 @@ export const FtpTestMDocument = gql`
         errSeverity
       }
       password {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
-      }
-      port {
         value
         label
         readOnly
@@ -14023,6 +14147,7 @@ export type FtpTestMMutationFn = Apollo.MutationFunction<FtpTestMMutation, FtpTe
  *   variables: {
  *      xpsftp: // value for 'xpsftp'
  *      genTestFile: // value for 'genTestFile'
+ *      testFile: // value for 'testFile'
  *   },
  * });
  */
@@ -14033,15 +14158,28 @@ export type FtpTestMMutationHookResult = ReturnType<typeof useFtpTestMMutation>;
 export type FtpTestMMutationResult = Apollo.MutationResult<FtpTestMMutation>;
 export type FtpTestMMutationOptions = Apollo.BaseMutationOptions<FtpTestMMutation, FtpTestMMutationVariables>;
 export const WorkPacketRerunStepDocument = gql`
-    mutation WorkPacketRerunStep($workOrderId: String!, $stepName: String!) {
-  workPacketRerunStep(workOrderId: $workOrderId, stepName: $stepName) {
+    mutation WorkPacketRerunStep($workOrderId: String!, $stepName: String!, $changeReason: ChangeReason) {
+  workPacketRerunStep(
+    workOrderId: $workOrderId
+    stepName: $stepName
+    changeReason: $changeReason
+  ) {
     response
     errCode
     errMsg
     errSeverity
+    allMessages {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
+      }
+    }
   }
 }
-    `;
+    ${UnionNvpFragmentDoc}`;
 export type WorkPacketRerunStepMutationFn = Apollo.MutationFunction<WorkPacketRerunStepMutation, WorkPacketRerunStepMutationVariables>;
 
 /**
@@ -14059,6 +14197,7 @@ export type WorkPacketRerunStepMutationFn = Apollo.MutationFunction<WorkPacketRe
  *   variables: {
  *      workOrderId: // value for 'workOrderId'
  *      stepName: // value for 'stepName'
+ *      changeReason: // value for 'changeReason'
  *   },
  * });
  */
@@ -14075,9 +14214,18 @@ export const WorkPacketDeleteDocument = gql`
     errCode
     errMsg
     errSeverity
+    allMessages {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
+      }
+    }
   }
 }
-    `;
+    ${UnionNvpFragmentDoc}`;
 export type WorkPacketDeleteMutationFn = Apollo.MutationFunction<WorkPacketDeleteMutation, WorkPacketDeleteMutationVariables>;
 
 /**
@@ -14110,9 +14258,18 @@ export const WorkPacketContinueDocument = gql`
     errCode
     errMsg
     errSeverity
+    allMessages {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
+      }
+    }
   }
 }
-    `;
+    ${UnionNvpFragmentDoc}`;
 export type WorkPacketContinueMutationFn = Apollo.MutationFunction<WorkPacketContinueMutation, WorkPacketContinueMutationVariables>;
 
 /**
@@ -14145,9 +14302,18 @@ export const WorkPacketCancelDocument = gql`
     errCode
     errMsg
     errSeverity
+    allMessages {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
+      }
+    }
   }
 }
-    `;
+    ${UnionNvpFragmentDoc}`;
 export type WorkPacketCancelMutationFn = Apollo.MutationFunction<WorkPacketCancelMutation, WorkPacketCancelMutationVariables>;
 
 /**
@@ -14174,8 +14340,8 @@ export type WorkPacketCancelMutationHookResult = ReturnType<typeof useWorkPacket
 export type WorkPacketCancelMutationResult = Apollo.MutationResult<WorkPacketCancelMutation>;
 export type WorkPacketCancelMutationOptions = Apollo.BaseMutationOptions<WorkPacketCancelMutation, WorkPacketCancelMutationVariables>;
 export const WorkPacketReprocessDocument = gql`
-    mutation WorkPacketReprocess($workOrderId: String!) {
-  workPacketReprocess(workOrderId: $workOrderId) {
+    mutation WorkPacketReprocess($workOrderId: String!, $changeReason: ChangeReason) {
+  workPacketReprocess(workOrderId: $workOrderId, changeReason: $changeReason) {
     newWorkOrderId
     orgSid
     response
@@ -14201,6 +14367,7 @@ export type WorkPacketReprocessMutationFn = Apollo.MutationFunction<WorkPacketRe
  * const [workPacketReprocessMutation, { data, loading, error }] = useWorkPacketReprocessMutation({
  *   variables: {
  *      workOrderId: // value for 'workOrderId'
+ *      changeReason: // value for 'changeReason'
  *   },
  * });
  */
@@ -14258,9 +14425,18 @@ export const WorkPacketResendDocument = gql`
     errCode
     errMsg
     errSeverity
+    allMessages {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
+      }
+    }
   }
 }
-    `;
+    ${UnionNvpFragmentDoc}`;
 export type WorkPacketResendMutationFn = Apollo.MutationFunction<WorkPacketResendMutation, WorkPacketResendMutationVariables>;
 
 /**
