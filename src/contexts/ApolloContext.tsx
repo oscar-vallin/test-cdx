@@ -4,6 +4,7 @@ import { setContext } from '@apollo/client/link/context';
 import { useWatchCSRFToken } from 'src/hooks/useWatchCSRFToken';
 import { LoadingPage } from 'src/pages/Loading/LoadingPage';
 import { useCSRFToken } from '../hooks/useCSRFToken';
+import { createUploadLink } from "apollo-upload-client";
 
 const SERVER_URL = process.env.REACT_APP_API_SERVER;
 
@@ -55,9 +56,12 @@ export const ApolloContextProvider = ({ bypassLoading, children }: ApolloContext
     });
   });
 
+  const uploadLink = createUploadLink({ uri: SERVER_URL });
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const client = new ApolloClient({
-    link: afterwareLink.concat(authLink.concat(httpLink)),
+    link: ApolloLink.from([ authLink, afterwareLink, uploadLink]),
+    //afterwareLink.concat(authLink.concat(httpLink)),
     // cache: new InMemoryCache({ possibleTypes: introspection.possibleTypes }),
     cache: new InMemoryCache(),
     credentials: 'include',

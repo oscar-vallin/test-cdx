@@ -54,7 +54,7 @@ export const StyledColorPreview = styled.div`
 
 export const StyledSelectedFile = styled.div`
   [data-icon-name*='Cancel'] {
-    font-size: 1.6em;
+    font-size: 1em;
     transform: translateY(2px);   
     color: ${({ theme }) => theme.colors.black};
   }

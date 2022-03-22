@@ -1,14 +1,13 @@
 import { ReactNode, useState } from 'react';
 import { StyledLogMessageDiv } from './LogMessageItem.styles';
 import { IconButton, TextField,Stack} from '@fluentui/react';
-import { Container, Row } from 'src/components/layouts';
+import { Container, Row, Column } from 'src/components/layouts';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { Badge } from 'src/components/badges/Badge';
 import { LabelValue } from 'src/components/labels/LabelValue';
 import { Text } from 'src/components/typography';
 import { LogLevel } from 'src/data/services/graphql';
 import { yyyyMMdda } from 'src/utils/CDXUtils';
-
 
 type LogMessageItemProps = {
   logMessage: any;
@@ -17,7 +16,7 @@ type LogMessageItemProps = {
 export const LogMessageItem = ({ logMessage }: LogMessageItemProps): ReactNode | any => {
 
   const [showDetails, setShowDetails] = useState(false);
- 
+
   const getBadgeVariant = (severity): string => {
     if (!severity) {
       return 'info';
@@ -41,9 +40,8 @@ export const LogMessageItem = ({ logMessage }: LogMessageItemProps): ReactNode |
   }
 
   return (
-    
       <StyledLogMessageDiv>     
-        <Stack horizontal={true} wrap={true} tokens={{ childrenGap: 10 }}>
+        <Stack onClick={() => setShowDetails(!showDetails)} style={{cursor: 'pointer'}} horizontal={true} wrap={true} tokens={{ childrenGap: 10 }}>
           <Stack.Item align="center" disableShrink>
             <IconButton
               iconProps={{ iconName: showDetails ? 'ChevronUp' : 'ChevronDown' }}
@@ -51,7 +49,7 @@ export const LogMessageItem = ({ logMessage }: LogMessageItemProps): ReactNode |
             />
           </Stack.Item>
           <Stack.Item align="center" disableShrink>
-            <Text variant="muted"> {yyyyMMdda(new Date(logMessage.timeStamp))}</Text> 
+            <Text id='log-message-item-date' variant="muted">{yyyyMMdda(new Date(logMessage.timeStamp))}</Text> 
           </Stack.Item>
           <Stack.Item align="center" disableShrink>
             <Badge variant={getBadgeVariant(logMessage.severity)} label={logMessage.severity ? logMessage.severity : 'INFO'} pill />
@@ -60,7 +58,7 @@ export const LogMessageItem = ({ logMessage }: LogMessageItemProps): ReactNode |
             <Text variant="muted">{logMessage.name ? logMessage.name : ''}</Text> 
           </Stack.Item>
         </Stack>
-        {showDetails && 
+        {showDetails && (logMessage.body || logMessage.attributes?.length) &&
           <Container>
             <Row>    
               <Spacing margin={{ bottom: 'normal' }}> 
@@ -71,6 +69,7 @@ export const LogMessageItem = ({ logMessage }: LogMessageItemProps): ReactNode |
                     disabled
                     value={logMessage.body}
                     rows={5}
+                    resizable={false}
                   />)}           
               </Spacing>
               {logMessage.attributes?.length && ( 

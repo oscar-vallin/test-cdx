@@ -10,7 +10,6 @@ import { ROUTE_FTP_TEST } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import {
   useXpsftpTestLazyQuery,
-  useXpsftpTestQuery,
   XpsftpForm,
   SftpTestGenerateTestFileForm,
   useFtpTestMMutation,
@@ -18,38 +17,22 @@ import {
 } from 'src/data/services/graphql';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { Text } from 'src/components/typography';
-import { LogMessageItem } from './LogMessageItem';
+import { LogMessageItem } from 'src/components/collapses/LogMessageItem';
 import { Badge } from 'src/components/badges/Badge';
 import { StyledSelectedFile } from './FtpTestPage.styles';
+import { useNotification } from 'src/hooks/useNotification';
 
-import { gql, useMutation } from "@apollo/client";
-
-/* host files.known2u.com
-
-user guestfiles
-
-password w=A.Q2[#qP]4XpKq
-
-has one directory path test/inbox */
-
-const MUTATION = gql`
-  mutation uploadFile($file: Upload!) {
-    uploadFile(file: $file) {
-      success
-    }
-  }
-`;
 const _FtpTestPage = () => {
-  const [host, setHost] = useState('files.known2u.com');
-  const [user, setUser] = useState('guestfiles');
-  const [password, setPassword] = useState('w=A.Q2[#qP]4XpKq');
-  const [folder, setFolder] = useState('test/inbox');
+  const [host, setHost] = useState('');
+  const [user, setUser] = useState('');
+  const [password, setPassword] = useState('');
+  const [folder, setFolder] = useState('');
   const [port, setPort] = useState('22');
   const [vendorFileName, setVendorFileName] = useState('');
   const [textFileContent, setTextFileContent] = useState('');
   const [stepWise, setStepWise] = useState(true);
   const [sendFileTest, setSendFileTest] = useState(false);
-  const [file, setFile] = useState<File>()
+  const [testFile, setTestFile] = useState<File>()
   const { orgSid } = useOrgSid();
   const [fetchFtpTestForm, { data: dataForm, loading: loadingForm, error: errorForm }] = useXpsftpTestLazyQuery();
   const [callFtpTest, { data: ftpTestData, loading: ftpTestLoading, error: ftpTestError }] = useFtpTestMMutation();
@@ -60,6 +43,7 @@ const _FtpTestPage = () => {
   const [genTestFileForm, setGenTestFileForm] = useState<SftpTestGenerateTestFileForm | null>();
 
   const inputFileRef = React.useRef() as React.MutableRefObject<HTMLInputElement>;
+  const Toast = useNotification();
 
   useEffect(() => {
     if (orgSid) {
@@ -82,6 +66,7 @@ const _FtpTestPage = () => {
 
   const onTestBtn = async () => {
     setProcessing(true);
+   
     const { data, errors } = await callFtpTest(
       {
         variables: { 
@@ -94,12 +79,22 @@ const _FtpTestPage = () => {
             stepWise,
           },
           genTestFile: {
-            generate: sendFileTest && !file ? true : false,
-            fileName: !file && !vendorFileName ? 'default k2u-test-file.txt' : vendorFileName,
-            fileBody:  !file && !textFileContent ? 'Connection Test' : textFileContent,
-          }
+            generate: sendFileTest && !testFile ? true : false,
+            fileName: !testFile && !vendorFileName ? 'default k2u-test-file.txt' : vendorFileName,
+            fileBody:  !testFile && !textFileContent ? 'Connection Test' : textFileContent,
+          },
+          testFile: sendFileTest && testFile ? testFile : null
         },
       })
+
+      if (data?.ftpTestM?.status === 'ERROR'){
+        Toast.error({ text: data?.ftpTestM?.logMessage.body})
+      }
+
+      if (errors){
+        Toast.error({ text: errors[0].message})
+      }
+
       if (data?.ftpTestM?.xpSFTPForm) {
         setFtpTestForm(data?.ftpTestM?.xpSFTPForm);
       }
@@ -107,16 +102,12 @@ const _FtpTestPage = () => {
         setGenTestFileForm(data?.ftpTestM?.genTestFileForm);
       }
       setProcessing(false);
-      console.log('Data:', data)
-      console.log('Errors:',errors)
   };
 
   const handleOnTestBtn = () => {
     onTestBtn();
     return null;
   };
-
-  const [mutate] = useMutation(MUTATION);
 
   const handleChooseFile =(e) =>{
     const {
@@ -125,8 +116,7 @@ const _FtpTestPage = () => {
         files: [file],
       }
     } = e
-
-    if (validity.valid) setFile(file)//mutate({ variables: { file } });
+    if (validity.valid) setTestFile(file)
   }
 
   const renderForm = () => {
@@ -225,23 +215,23 @@ const _FtpTestPage = () => {
             )}
             {sendFileTest && (
               <Spacing margin={{ bottom: 'normal' }} padding={{left: 'normal'}}>               
-                {file ? 
+                {testFile ? 
                   <StyledSelectedFile>
-                    <Text variant='semiBold'>{file.name}</Text>                  
+                    <Text variant='semiBold'>{testFile.name}</Text>                  
                     <IconButton
                       iconProps={{ iconName: 'Cancel' }}
-                      onClick={() => setFile(undefined)}                        
+                      onClick={() => setTestFile(undefined)}                        
                     />
                   </StyledSelectedFile> :
                   <Link
                     underline
                     target="_new"
-                    onClick={()=>{inputFileRef.current.click()}}
+                    onClick={()=>{inputFileRef.current.value='';inputFileRef.current.click();}}
                     title={'Upload File'}>
                       Upload File...
                   </Link>
                 }
-                <input style={{display: 'none'}}type="file" ref={inputFileRef} onChange={handleChooseFile}/>
+                <input style={{display: 'none'}} type="file" ref={inputFileRef} onChange={handleChooseFile}/>
                 <Spacing margin={{top: 'double', left: 'normal', bottom: 'normal'}}>
                   <Text variant='semiBold'>Or</Text>
                 </Spacing>
@@ -301,7 +291,7 @@ const _FtpTestPage = () => {
           multiline
           disabled
           value={ftpTestData?.ftpTestM?.clientProfileSnippet}
-          rows={15}
+          rows={12}
           resizable={false}
         />)}
       </Spacing>
@@ -343,9 +333,8 @@ const _FtpTestPage = () => {
 
   const downloadLogsAsCsv =()=>{
     if(ftpTestData?.ftpTestM?.csvLog){
-      var encodedUri = encodeURI(ftpTestData?.ftpTestM?.csvLog);
       var downloadLink = document.createElement("a");
-      var blob = new Blob(["\ufeff", encodedUri]);
+      var blob = new Blob(["\ufeff", ftpTestData?.ftpTestM?.csvLog]);
       var url = URL.createObjectURL(blob);
       downloadLink.href = url;
       downloadLink.download = "ftp-test-logs.csv";

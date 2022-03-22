@@ -9,7 +9,7 @@ export type LabelValueProps = {
 };
 export const LabelValue = ({ label, value, title }: LabelValueProps) => {
   return (
-    <div>
+    <div className="label-value">
       <InlineLabel>{`${label}:`}</InlineLabel>
       {value ? (
         <Text size="small" title={title ?? undefined}>
