@@ -4622,12 +4622,16 @@ export type PasswordLoginMutation = (
   { __typename?: 'Mutation' }
   & { passwordLogin?: Maybe<(
     { __typename?: 'LoginStep' }
-    & Pick<LoginStep, 'userId' | 'step' | 'redirectPath' | 'allowLostPassword'>
+    & Pick<LoginStep, 'step' | 'redirectPath' | 'allowLostPassword'>
     & { loginCompleteDomain?: Maybe<(
       { __typename?: 'WebAppDomain' }
       & Pick<WebAppDomain, 'type' | 'selectedPage'>
       & { navItems?: Maybe<Array<(
         { __typename?: 'WebNav' }
+        & { subNavItems?: Maybe<Array<(
+          { __typename?: 'WebNav' }
+          & FragmentWebNavFragment
+        )>> }
         & FragmentWebNavFragment
       )>> }
     )>, tokenUser?: Maybe<(
@@ -10816,7 +10820,6 @@ export type BeginLoginMutationOptions = Apollo.BaseMutationOptions<BeginLoginMut
 export const PasswordLoginDocument = gql`
     mutation PasswordLogin($userId: String!, $password: String!) {
   passwordLogin(userId: $userId, password: $password) {
-    userId
     step
     redirectPath
     allowLostPassword
@@ -10825,6 +10828,9 @@ export const PasswordLoginDocument = gql`
       selectedPage
       navItems {
         ...fragmentWebNav
+        subNavItems {
+          ...fragmentWebNav
+        }
       }
     }
     tokenUser {
