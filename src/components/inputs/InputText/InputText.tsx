@@ -21,6 +21,7 @@ export type InputTextProps = {
   maxLength?: number;
   minLength?: number;
   info?: string;
+  autocomplete?: string
 };
 
 const InputText = ({
@@ -36,6 +37,7 @@ const InputText = ({
   info,
   required,
   renderLabel = true,
+  autocomplete,
   ...props
 }: InputTextProps): ReactElement => {
   const handleKey = (key) => {
@@ -64,6 +66,7 @@ const InputText = ({
       value={value ?? ''}
       errorMessage={errorMessage}
       onRenderLabel={onRenderLabel}
+      autoComplete={autocomplete}
       {...props}
     />
   );
@@ -104,9 +107,10 @@ type UIInputTextType = {
   value?: string;
   placeholder?: string;
   renderLabel?: boolean;
+  autocomplete?: string;
 };
 
-const UIInputText = ({ id, uiField, onChange, value, placeholder, renderLabel = true }: UIInputTextType) => {
+const UIInputText = ({ id, uiField, onChange, value, placeholder, renderLabel = true, autocomplete}: UIInputTextType) => {
   if (uiField?.readOnly === true) {
     return <UIInputTextReadOnly id={id} uiField={uiField} renderLabel={renderLabel} />;
   }
@@ -126,6 +130,7 @@ const UIInputText = ({ id, uiField, onChange, value, placeholder, renderLabel = 
       placeholder={placeholder}
       minLength={uiField?.min}
       maxLength={uiField?.max}
+      autocomplete={autocomplete}
     />
   );
 };

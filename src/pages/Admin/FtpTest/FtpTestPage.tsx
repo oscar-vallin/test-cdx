@@ -165,6 +165,7 @@ const _FtpTestPage = () => {
                   uiField={ftpTestForm.user}
                   placeholder="user"
                   value={user}
+                  autocomplete='off'
                   onChange={(event, newValue) => setUser(newValue ?? '')}
                 />
               </Spacing> 
@@ -182,6 +183,7 @@ const _FtpTestPage = () => {
                   maxLength={ftpTestForm?.password?.max}
                   canRevealPassword
                   type="password"
+                  autocomplete='new-password'
                   id="password"
                   placeholder="password"                  
                   value={password}
@@ -284,7 +286,7 @@ const _FtpTestPage = () => {
   
   const renderClientProfileSnippet = () => {
     return (
-      <Spacing margin={{ bottom: 'normal' }}>
+      <Spacing margin={{ bottom: 'normal', top: 'normal' }}>
         {ftpTestData?.ftpTestM?.clientProfileSnippet && ( 
         <TextField
           id="clientProfileSnippet"              
@@ -344,6 +346,12 @@ const _FtpTestPage = () => {
       document.body.removeChild(downloadLink);
     }
   }
+  const copyProfileSnippet =()=>{
+    navigator.clipboard.writeText(ftpTestData?.ftpTestM?.clientProfileSnippet ? 
+      ftpTestData.ftpTestM.clientProfileSnippet 
+      : '')
+      Toast.success({ text: 'Copied!'})
+  }
 
   return (
     <LayoutDashboard id="PageFtpTest" menuOptionSelected={ROUTE_FTP_TEST.API_ID}>
@@ -384,7 +392,7 @@ const _FtpTestPage = () => {
                 </Stack>
                 {ftpTestData.ftpTestM.csvLog && (
                   <Stack.Item align="center" disableShrink>
-                    <FontIcon iconName="DownloadDocument" style={{ paddingRight: '.5em' }} />
+                    <FontIcon onClick={downloadLogsAsCsv} iconName="DownloadDocument" style={{ paddingRight: '.5em', cursor: 'pointer' }} />
                     <Link
                       target="_new"
                       onClick={downloadLogsAsCsv}
@@ -402,13 +410,9 @@ const _FtpTestPage = () => {
                     <Text variant="bold">Client Profile Snippet</Text>
                   </Stack.Item>
                   <Stack.Item align="center" disableShrink>
-                    <FontIcon iconName="Copy" style={{ paddingRight: '.5em' }} />
+                    <FontIcon iconName="Copy"  onClick={copyProfileSnippet} style={{ paddingRight: '.5em', cursor: 'pointer'  }} />
                     <Link
-                      onClick={() => {
-                        navigator.clipboard.writeText(ftpTestData?.ftpTestM?.clientProfileSnippet ? 
-                          ftpTestData.ftpTestM.clientProfileSnippet 
-                          : '')
-                        }}
+                      onClick={copyProfileSnippet}
                       target="_new"
                       title={'Copy To Clipboard'}>
                       Copy To Clipboard

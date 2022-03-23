@@ -41,9 +41,10 @@ export const LogMessageItem = ({ logMessage }: LogMessageItemProps): ReactNode |
 
   return (
       <StyledLogMessageDiv>     
-        <Stack onClick={() => setShowDetails(!showDetails)} style={{cursor: 'pointer'}} horizontal={true} wrap={true} tokens={{ childrenGap: 10 }}>
+        <Stack onClick={() => setShowDetails(!showDetails)} style={ (logMessage.body || logMessage.attributes?.length) && {cursor: 'pointer'}} horizontal={true} wrap={true} tokens={{ childrenGap: 10 }}>
           <Stack.Item align="center" disableShrink>
             <IconButton
+              style={{visibility: (logMessage.body || logMessage.attributes?.length) ? 'visible' : 'hidden'}}
               iconProps={{ iconName: showDetails ? 'ChevronUp' : 'ChevronDown' }}
               onClick={() => setShowDetails(!showDetails)}
             />
