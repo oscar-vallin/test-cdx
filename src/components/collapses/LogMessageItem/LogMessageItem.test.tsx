@@ -4,23 +4,19 @@ import { yyyyMMdda } from 'src/utils/CDXUtils';
 
 const defaultProps = {
   logMessage: {
-    severity:'INFO',
-    name: "Current Directory",
+    severity: 'INFO',
+    name: 'Current Directory',
     timeStamp: '2022-03-22T17:28:17.574701Z',
-    body:'File uploaded succesfully',
+    body: 'File uploaded succesfully',
     attributes: [
-      { name: "server.dir", strValue: "/" },
-      { name: "server.dir", strValue: "/" }
+      { name: 'server.dir', strValue: '/' },
+      { name: 'server.dir', strValue: '/' },
     ],
   },
 };
 
 describe('LogMessageItem Testing Unit...', () => {
-
-  const tree = mountWithTheme(
-    <LogMessageItem {...defaultProps} >
-    </LogMessageItem>
-  );
+  const tree = mountWithTheme(<LogMessageItem {...defaultProps}></LogMessageItem>);
 
   it('Should be defined', () => {
     expect(LogMessageItem).toBeDefined();
@@ -40,12 +36,8 @@ describe('LogMessageItem Testing Unit...', () => {
     expect(tree.find('.label-value').length).toEqual(defaultProps.logMessage.attributes.length);
   });
   it('Test styled LogMessageItem component', () => {
-    const testTemp = shallowWithTheme(
-      <LogMessageItem {...defaultProps}>
-      </LogMessageItem>
-    ).dive();
+    const testTemp = shallowWithTheme(<LogMessageItem {...defaultProps}></LogMessageItem>).dive();
 
     expect(testTemp).toMatchSnapshot();
   });
 });
- 

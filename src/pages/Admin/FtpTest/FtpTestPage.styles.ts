@@ -55,12 +55,12 @@ export const StyledColorPreview = styled.div`
 export const StyledSelectedFile = styled.div`
   [data-icon-name*='Cancel'] {
     font-size: 1em;
-    transform: translateY(2px);   
+    transform: translateY(2px);
     color: ${({ theme }) => theme.colors.black};
   }
 
   .ms-Button--icon {
-    &:hover { 
+    &:hover {
       background: none;
     }
   }
@@ -68,4 +68,4 @@ export const StyledSelectedFile = styled.div`
   span {
     color: ${({ theme }) => theme.colors.themePrimary};
   }
-`
+`;

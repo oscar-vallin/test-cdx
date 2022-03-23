@@ -54,7 +54,7 @@ describe('Basic MonthPicker Component', () => {
   it('Test styled Container component', () => {
     const baseTree = shallowWithTheme(
       <Container {...defaultProps} theme={theme}>
-        <div/>
+        <div />
       </Container>
     );
     expect(baseTree).toMatchSnapshot();

@@ -38,7 +38,6 @@ describe('CDX Utility testing', () => {
   });
 
   it('isDateTimeValid with bad time', () => {
-    expect(isDateTimeValid(new Date("2020-11-01T88:99:00"))).toEqual(false);
+    expect(isDateTimeValid(new Date('2020-11-01T88:99:00'))).toEqual(false);
   });
-
 });

@@ -21,7 +21,7 @@ export type InputTextProps = {
   maxLength?: number;
   minLength?: number;
   info?: string;
-  autocomplete?: string
+  autocomplete?: string;
 };
 
 const InputText = ({
@@ -110,7 +110,15 @@ type UIInputTextType = {
   autocomplete?: string;
 };
 
-const UIInputText = ({ id, uiField, onChange, value, placeholder, renderLabel = true, autocomplete}: UIInputTextType) => {
+const UIInputText = ({
+  id,
+  uiField,
+  onChange,
+  value,
+  placeholder,
+  renderLabel = true,
+  autocomplete,
+}: UIInputTextType) => {
   if (uiField?.readOnly === true) {
     return <UIInputTextReadOnly id={id} uiField={uiField} renderLabel={renderLabel} />;
   }

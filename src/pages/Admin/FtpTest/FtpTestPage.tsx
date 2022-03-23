@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef, memo } from 'react';
-import { Checkbox, IconButton, TextField, FontIcon, Link, Stack, Spinner, SpinnerSize, Icon} from '@fluentui/react';
+import React, { useState, useEffect, memo } from 'react';
+import { Checkbox, IconButton, TextField, FontIcon, Link, Stack, Spinner, SpinnerSize } from '@fluentui/react';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Button } from 'src/components/buttons';
 import { Spacing } from 'src/components/spacings/Spacing';
@@ -13,7 +13,7 @@ import {
   XpsftpForm,
   SftpTestGenerateTestFileForm,
   useFtpTestMMutation,
-  WorkStatus
+  WorkStatus,
 } from 'src/data/services/graphql';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { Text } from 'src/components/typography';
@@ -32,7 +32,7 @@ const _FtpTestPage = () => {
   const [textFileContent, setTextFileContent] = useState('');
   const [stepWise, setStepWise] = useState(true);
   const [sendFileTest, setSendFileTest] = useState(false);
-  const [testFile, setTestFile] = useState<File>()
+  const [testFile, setTestFile] = useState<File>();
   const { orgSid } = useOrgSid();
   const [fetchFtpTestForm, { data: dataForm, loading: loadingForm, error: errorForm }] = useXpsftpTestLazyQuery();
   const [callFtpTest, { data: ftpTestData, loading: ftpTestLoading, error: ftpTestError }] = useFtpTestMMutation();
@@ -52,56 +52,55 @@ const _FtpTestPage = () => {
           orgSid,
         },
       });
-    } 
+    }
   }, [orgSid]);
 
   useEffect(() => {
     setProcessingForm(true);
     if (dataForm && !loadingForm) {
       setFtpTestForm(dataForm.xpsftpTest?.xpSFTPForm);
-      setGenTestFileForm(dataForm.xpsftpTest?.genTestFileForm)
+      setGenTestFileForm(dataForm.xpsftpTest?.genTestFileForm);
     }
     setProcessingForm(false);
   }, [dataForm, loadingForm]);
 
   const onTestBtn = async () => {
     setProcessing(true);
-   
-    const { data, errors } = await callFtpTest(
-      {
-        variables: { 
-          xpsftp: {
-            host,
-            user,
-            password,              
-            port: +port,
-            folder,
-            stepWise,
-          },
-          genTestFile: {
-            generate: sendFileTest && !testFile ? true : false,
-            fileName: !testFile && !vendorFileName ? 'default k2u-test-file.txt' : vendorFileName,
-            fileBody:  !testFile && !textFileContent ? 'Connection Test' : textFileContent,
-          },
-          testFile: sendFileTest && testFile ? testFile : null
+
+    const { data, errors } = await callFtpTest({
+      variables: {
+        xpsftp: {
+          host,
+          user,
+          password,
+          port: +port,
+          folder,
+          stepWise,
         },
-      })
+        genTestFile: {
+          generate: sendFileTest && !testFile ? true : false,
+          fileName: !testFile && !vendorFileName ? 'default k2u-test-file.txt' : vendorFileName,
+          fileBody: !testFile && !textFileContent ? 'Connection Test' : textFileContent,
+        },
+        testFile: sendFileTest && testFile ? testFile : null,
+      },
+    });
 
-      if (data?.ftpTestM?.status === 'ERROR'){
-        Toast.error({ text: data?.ftpTestM?.logMessage.body})
-      }
+    if (data?.ftpTestM?.status === 'ERROR') {
+      Toast.error({ text: data?.ftpTestM?.logMessage.body });
+    }
 
-      if (errors){
-        Toast.error({ text: errors[0].message})
-      }
+    if (errors) {
+      Toast.error({ text: errors[0].message });
+    }
 
-      if (data?.ftpTestM?.xpSFTPForm) {
-        setFtpTestForm(data?.ftpTestM?.xpSFTPForm);
-      }
-      if (data?.ftpTestM?.genTestFileForm) {
-        setGenTestFileForm(data?.ftpTestM?.genTestFileForm);
-      }
-      setProcessing(false);
+    if (data?.ftpTestM?.xpSFTPForm) {
+      setFtpTestForm(data?.ftpTestM?.xpSFTPForm);
+    }
+    if (data?.ftpTestM?.genTestFileForm) {
+      setGenTestFileForm(data?.ftpTestM?.genTestFileForm);
+    }
+    setProcessing(false);
   };
 
   const handleOnTestBtn = () => {
@@ -109,22 +108,22 @@ const _FtpTestPage = () => {
     return null;
   };
 
-  const handleChooseFile =(e) =>{
+  const handleChooseFile = (e) => {
     const {
       target: {
         validity,
         files: [file],
-      }
-    } = e
-    if (validity.valid) setTestFile(file)
-  }
+      },
+    } = e;
+    if (validity.valid) setTestFile(file);
+  };
 
   const renderForm = () => {
     return (
       <Container>
         <Row>
           <Column xxl="12" xl="12">
-            <Row >
+            <Row>
               <Column sm="8">
                 {ftpTestForm?.host?.visible && (
                   <Spacing margin={{ bottom: 'normal' }}>
@@ -133,31 +132,31 @@ const _FtpTestPage = () => {
                       uiField={ftpTestForm.host}
                       placeholder="host"
                       value={host}
-                      onChange={(event, newValue) => setHost(newValue ?? '')}                
+                      onChange={(event, newValue) => setHost(newValue ?? '')}
                     />
-                  </Spacing> 
+                  </Spacing>
                 )}
-                </Column>
-                <Column sm="4">
-                  {ftpTestForm?.port?.visible && (
-                    <Spacing margin={{ bottom: 'normal', left: 'normal'}}>
-                      <InputText
-                        disabled={ftpTestForm?.port?.readOnly ?? false}
-                        autofocus={false}
-                        label={ftpTestForm?.port?.label}
-                        errorMessage={ftpTestForm?.port?.errMsg ?? undefined}
-                        info={ftpTestForm?.port?.info ?? undefined}
-                        required={ftpTestForm?.port?.required ?? false}                  
-                        id="port"
-                        type="number"
-                        placeholder="port"
-                        value={port}
-                        onChange={(event, newValue) => setPort(newValue ?? '')}
-                      />
-                    </Spacing>
-                  )}
-                </Column>
-              </Row>
+              </Column>
+              <Column sm="4">
+                {ftpTestForm?.port?.visible && (
+                  <Spacing margin={{ bottom: 'normal', left: 'normal' }}>
+                    <InputText
+                      disabled={ftpTestForm?.port?.readOnly ?? false}
+                      autofocus={false}
+                      label={ftpTestForm?.port?.label}
+                      errorMessage={ftpTestForm?.port?.errMsg ?? undefined}
+                      info={ftpTestForm?.port?.info ?? undefined}
+                      required={ftpTestForm?.port?.required ?? false}
+                      id="port"
+                      type="number"
+                      placeholder="port"
+                      value={port}
+                      onChange={(event, newValue) => setPort(newValue ?? '')}
+                    />
+                  </Spacing>
+                )}
+              </Column>
+            </Row>
             {ftpTestForm?.user?.visible && (
               <Spacing margin={{ bottom: 'normal' }}>
                 <UIInputText
@@ -165,10 +164,10 @@ const _FtpTestPage = () => {
                   uiField={ftpTestForm.user}
                   placeholder="user"
                   value={user}
-                  autocomplete='off'
+                  autocomplete="off"
                   onChange={(event, newValue) => setUser(newValue ?? '')}
                 />
-              </Spacing> 
+              </Spacing>
             )}
             {ftpTestForm?.password?.visible && (
               <Spacing margin={{ bottom: 'normal' }}>
@@ -178,17 +177,17 @@ const _FtpTestPage = () => {
                   label={ftpTestForm?.password?.label}
                   errorMessage={ftpTestForm?.password?.errMsg ?? undefined}
                   info={ftpTestForm?.password?.info ?? undefined}
-                  required={ftpTestForm?.password?.required ?? false}                  
+                  required={ftpTestForm?.password?.required ?? false}
                   minLength={ftpTestForm?.password?.min}
                   maxLength={ftpTestForm?.password?.max}
                   canRevealPassword
                   type="password"
-                  autocomplete='new-password'
+                  autocomplete="new-password"
                   id="password"
-                  placeholder="password"                  
+                  placeholder="password"
                   value={password}
                   onChange={(event, newValue) => setPassword(newValue ?? '')}
-                  />
+                />
               </Spacing>
             )}
             {ftpTestForm?.folder?.visible && (
@@ -201,41 +200,48 @@ const _FtpTestPage = () => {
                 />
               </Spacing>
             )}
-            {ftpTestForm?.stepWise?.visible &&(
+            {ftpTestForm?.stepWise?.visible && (
               <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                <Checkbox checked={stepWise} id="stepWise" label="Step Wise" onChange={(event, _stepWise: any) => setStepWise(_stepWise)} />
+                <Checkbox
+                  checked={stepWise}
+                  id="stepWise"
+                  label="Step Wise"
+                  onChange={(event, _stepWise: any) => setStepWise(_stepWise)}
+                />
               </Spacing>
             )}
             {genTestFileForm && (
               <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                <Checkbox                 
+                <Checkbox
                   id="sendFileTest"
                   label="Send a test file"
                   onChange={(_event, _sendFileTest: any) => setSendFileTest(_sendFileTest)}
                 />
-              </Spacing> 
+              </Spacing>
             )}
             {sendFileTest && (
-              <Spacing margin={{ bottom: 'normal' }} padding={{left: 'normal'}}>               
-                {testFile ? 
+              <Spacing margin={{ bottom: 'normal' }} padding={{ left: 'normal' }}>
+                {testFile ? (
                   <StyledSelectedFile>
-                    <Text variant='semiBold'>{testFile.name}</Text>                  
-                    <IconButton
-                      iconProps={{ iconName: 'Cancel' }}
-                      onClick={() => setTestFile(undefined)}                        
-                    />
-                  </StyledSelectedFile> :
+                    <Text variant="semiBold">{testFile.name}</Text>
+                    <IconButton iconProps={{ iconName: 'Cancel' }} onClick={() => setTestFile(undefined)} />
+                  </StyledSelectedFile>
+                ) : (
                   <Link
                     underline
                     target="_new"
-                    onClick={()=>{inputFileRef.current.value='';inputFileRef.current.click();}}
-                    title={'Upload File'}>
-                      Upload File...
+                    onClick={() => {
+                      inputFileRef.current.value = '';
+                      inputFileRef.current.click();
+                    }}
+                    title={'Upload File'}
+                  >
+                    Upload File...
                   </Link>
-                }
-                <input style={{display: 'none'}} type="file" ref={inputFileRef} onChange={handleChooseFile}/>
-                <Spacing margin={{top: 'double', left: 'normal', bottom: 'normal'}}>
-                  <Text variant='semiBold'>Or</Text>
+                )}
+                <input style={{ display: 'none' }} type="file" ref={inputFileRef} onChange={handleChooseFile} />
+                <Spacing margin={{ top: 'double', left: 'normal', bottom: 'normal' }}>
+                  <Text variant="semiBold">Or</Text>
                 </Spacing>
                 {genTestFileForm?.fileName?.visible && (
                   <Spacing margin={{ bottom: 'normal' }}>
@@ -263,7 +269,7 @@ const _FtpTestPage = () => {
                 )}
               </Spacing>
             )}
-            {ftpTestForm && ( 
+            {ftpTestForm && (
               <Spacing margin={{ bottom: 'normal' }}>
                 <Button id="__FtpTestPageId" variant="primary" disabled={false} text="Test" onClick={handleOnTestBtn} />
               </Spacing>
@@ -277,25 +283,27 @@ const _FtpTestPage = () => {
   const renderResults = () => {
     return (
       <>
-          {ftpTestData?.ftpTestM?.allMessages && ftpTestData?.ftpTestM?.allMessages.map((logMessageItem, logMessageItemIndex) => (            
-            <LogMessageItem key={logMessageItemIndex} logMessage={logMessageItem}/>
+        {ftpTestData?.ftpTestM?.allMessages &&
+          ftpTestData?.ftpTestM?.allMessages.map((logMessageItem, logMessageItemIndex) => (
+            <LogMessageItem key={logMessageItemIndex} logMessage={logMessageItem} />
           ))}
       </>
     );
   };
-  
+
   const renderClientProfileSnippet = () => {
     return (
       <Spacing margin={{ bottom: 'normal', top: 'normal' }}>
-        {ftpTestData?.ftpTestM?.clientProfileSnippet && ( 
-        <TextField
-          id="clientProfileSnippet"              
-          multiline
-          disabled
-          value={ftpTestData?.ftpTestM?.clientProfileSnippet}
-          rows={12}
-          resizable={false}
-        />)}
+        {ftpTestData?.ftpTestM?.clientProfileSnippet && (
+          <TextField
+            id="clientProfileSnippet"
+            multiline
+            disabled
+            value={ftpTestData?.ftpTestM?.clientProfileSnippet}
+            rows={12}
+            resizable={false}
+          />
+        )}
       </Spacing>
     );
   };
@@ -333,25 +341,25 @@ const _FtpTestPage = () => {
     }
   };
 
-  const downloadLogsAsCsv =()=>{
-    if(ftpTestData?.ftpTestM?.csvLog){
-      var downloadLink = document.createElement("a");
-      var blob = new Blob(["\ufeff", ftpTestData?.ftpTestM?.csvLog]);
+  const downloadLogsAsCsv = () => {
+    if (ftpTestData?.ftpTestM?.csvLog) {
+      var downloadLink = document.createElement('a');
+      var blob = new Blob(['\ufeff', ftpTestData?.ftpTestM?.csvLog]);
       var url = URL.createObjectURL(blob);
       downloadLink.href = url;
-      downloadLink.download = "ftp-test-logs.csv";
-  
+      downloadLink.download = 'ftp-test-logs.csv';
+
       document.body.appendChild(downloadLink);
       downloadLink.click();
       document.body.removeChild(downloadLink);
     }
-  }
-  const copyProfileSnippet =()=>{
-    navigator.clipboard.writeText(ftpTestData?.ftpTestM?.clientProfileSnippet ? 
-      ftpTestData.ftpTestM.clientProfileSnippet 
-      : '')
-      Toast.success({ text: 'Copied!'})
-  }
+  };
+  const copyProfileSnippet = () => {
+    navigator.clipboard.writeText(
+      ftpTestData?.ftpTestM?.clientProfileSnippet ? ftpTestData.ftpTestM.clientProfileSnippet : ''
+    );
+    Toast.success({ text: 'Copied!' });
+  };
 
   return (
     <LayoutDashboard id="PageFtpTest" menuOptionSelected={ROUTE_FTP_TEST.API_ID}>
@@ -366,65 +374,75 @@ const _FtpTestPage = () => {
       </PageHeader>
       <Row>
         <Column xxl="6" xl="6">
-          {isProcessingForm ?
+          {isProcessingForm ? (
             <Spacing margin={{ top: 'double' }}>
               <Spinner size={SpinnerSize.large} label="Loading" />
-            </Spacing> : 
-            renderForm()}
+            </Spacing>
+          ) : (
+            renderForm()
+          )}
         </Column>
         <Column xxl="6" xl="6">
-        {isProcessing && (
-          <Spacing margin={{ top: 'double' }}>
-            <Spinner size={SpinnerSize.large} label="Loading" />
-          </Spacing>
-        )}
-        {ftpTestData?.ftpTestM?.status && (
-          <Container>
-            <Spacing margin={{ bottom: 'normal' }}>
-              <Stack horizontal={true} horizontalAlign="space-between"> 
-                <Stack horizontal={true} tokens={{ childrenGap: 10 }}> 
-                  <Stack.Item align="center" disableShrink >
-                    <Text variant="bold">Results</Text> 
-                  </Stack.Item>
-                  <Stack.Item align="center" disableShrink>
-                    <Badge variant={getBadgeVariant(ftpTestData?.ftpTestM?.status)} label={ftpTestData?.ftpTestM?.status ? ftpTestData?.ftpTestM?.status : ''} pill />
-                  </Stack.Item>
+          {isProcessing && (
+            <Spacing margin={{ top: 'double' }}>
+              <Spinner size={SpinnerSize.large} label="Loading" />
+            </Spacing>
+          )}
+          {ftpTestData?.ftpTestM?.status && (
+            <Container>
+              <Spacing margin={{ bottom: 'normal' }}>
+                <Stack horizontal={true} horizontalAlign="space-between">
+                  <Stack horizontal={true} tokens={{ childrenGap: 10 }}>
+                    <Stack.Item align="center" disableShrink>
+                      <Text variant="bold">Results</Text>
+                    </Stack.Item>
+                    <Stack.Item align="center" disableShrink>
+                      <Badge
+                        variant={getBadgeVariant(ftpTestData?.ftpTestM?.status)}
+                        label={ftpTestData?.ftpTestM?.status ? ftpTestData?.ftpTestM?.status : ''}
+                        pill
+                      />
+                    </Stack.Item>
+                  </Stack>
+                  {ftpTestData.ftpTestM.csvLog && (
+                    <Stack.Item align="center" disableShrink>
+                      <FontIcon
+                        onClick={downloadLogsAsCsv}
+                        iconName="DownloadDocument"
+                        style={{ paddingRight: '.5em', cursor: 'pointer' }}
+                      />
+                      <Link target="_new" onClick={downloadLogsAsCsv} title={'Download Logs'}>
+                        Download Logs
+                      </Link>
+                    </Stack.Item>
+                  )}
                 </Stack>
-                {ftpTestData.ftpTestM.csvLog && (
-                  <Stack.Item align="center" disableShrink>
-                    <FontIcon onClick={downloadLogsAsCsv} iconName="DownloadDocument" style={{ paddingRight: '.5em', cursor: 'pointer' }} />
-                    <Link
-                      target="_new"
-                      onClick={downloadLogsAsCsv}
-                      title={'Download Logs'}>
-                      Download Logs
-                    </Link>
-                  </Stack.Item>)}
-              </Stack>
-            </Spacing>            
-            {renderResults()}    
-            {ftpTestData?.ftpTestM?.clientProfileSnippet && (
-              <Spacing margin={{ bottom: 'normal', top: 'normal'}}>
-                <Stack horizontal={true} horizontalAlign="space-between"> 
-                  <Stack.Item align="center" disableShrink>
-                    <Text variant="bold">Client Profile Snippet</Text>
-                  </Stack.Item>
-                  <Stack.Item align="center" disableShrink>
-                    <FontIcon iconName="Copy"  onClick={copyProfileSnippet} style={{ paddingRight: '.5em', cursor: 'pointer'  }} />
-                    <Link
-                      onClick={copyProfileSnippet}
-                      target="_new"
-                      title={'Copy To Clipboard'}>
-                      Copy To Clipboard
-                    </Link>
-                  </Stack.Item>
-                </Stack>
-                {renderClientProfileSnippet()}
-              </Spacing>)}            
-          </Container>)}
+              </Spacing>
+              {renderResults()}
+              {ftpTestData?.ftpTestM?.clientProfileSnippet && (
+                <Spacing margin={{ bottom: 'normal', top: 'normal' }}>
+                  <Stack horizontal={true} horizontalAlign="space-between">
+                    <Stack.Item align="center" disableShrink>
+                      <Text variant="bold">Client Profile Snippet</Text>
+                    </Stack.Item>
+                    <Stack.Item align="center" disableShrink>
+                      <FontIcon
+                        iconName="Copy"
+                        onClick={copyProfileSnippet}
+                        style={{ paddingRight: '.5em', cursor: 'pointer' }}
+                      />
+                      <Link onClick={copyProfileSnippet} target="_new" title={'Copy To Clipboard'}>
+                        Copy To Clipboard
+                      </Link>
+                    </Stack.Item>
+                  </Stack>
+                  {renderClientProfileSnippet()}
+                </Spacing>
+              )}
+            </Container>
+          )}
         </Column>
       </Row>
-      
     </LayoutDashboard>
   );
 };

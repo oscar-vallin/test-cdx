@@ -5,7 +5,7 @@ const defaultProps = {
   id: '',
   selectedDate: new Date(),
   currentDate: new Date(),
-  items: []
+  items: [],
 };
 
 jest.mock('src/hooks/useOrgSid', () => ({

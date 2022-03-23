@@ -5,7 +5,7 @@ export const StyledLogMessageDiv = styled.div`
   width: 100%;
 
   background: none;
-  
+
   border-top: 1px solid ${({ theme }) => theme.colors.neutralLighter};
   color: ${({ theme }) => theme.colors.black};
   display: block;
@@ -17,15 +17,13 @@ export const StyledLogMessageDiv = styled.div`
 
   [data-icon-name*='Chevron'] {
     font-size: 0.75em;
-    transform: translateY(2px);   
+    transform: translateY(2px);
     color: ${({ theme }) => theme.colors.black};
   }
 
   .ms-Button--icon {
-    &:hover { 
+    &:hover {
       background: none;
     }
   }
-
 `;
-

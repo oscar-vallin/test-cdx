@@ -16,7 +16,7 @@ export type PermissionGroups = {
   orgAdmin: PermissionGroup;
   tools: PermissionGroup;
   other: PermissionGroup;
-}
+};
 
 const permissionGroupingDef = {
   exchange: {
@@ -71,7 +71,7 @@ const permissionGroupingDef = {
     security: {
       label: '',
       regex: '(PASSWORD_.+)|(SSOIDP_.+)',
-    }
+    },
   },
   tools: {
     ftp: {
@@ -80,7 +80,7 @@ const permissionGroupingDef = {
     },
     deploy: {
       label: '',
-      regex: 'IMPLEMENTATION_.+'
+      regex: 'IMPLEMENTATION_.+',
     },
   },
 };
@@ -89,24 +89,24 @@ export const groupPermissions = (opts?: UiOptions[] | null): PermissionGroups =>
   const permissionGroups: PermissionGroups = {
     exchange: {
       label: 'Exchange Status',
-      subGroup: []
+      subGroup: [],
     },
     accessManagement: {
       label: 'Access Management',
-      subGroup: []
+      subGroup: [],
     },
     orgAdmin: {
       label: 'Organization Admin',
-      subGroup: []
+      subGroup: [],
     },
     tools: {
       label: 'Tools',
-      subGroup: []
+      subGroup: [],
     },
     other: {
       label: 'Other',
-      subGroup: []
-    }
+      subGroup: [],
+    },
   };
   const uiOptions = opts?.find((opt) => opt.key === 'Permission');
   if (!uiOptions) {
@@ -125,7 +125,9 @@ export const groupPermissions = (opts?: UiOptions[] | null): PermissionGroups =>
       permissionGroups[groupName].subGroup.push(subGroup);
       const expr = new RegExp(permissionGroupingDef[groupName][subGroupName].regex);
       // find any matching permissions
-      const matchingOptions: UiOption[] = permissionOptions.filter((permissionOption) => expr.test(permissionOption?.value));
+      const matchingOptions: UiOption[] = permissionOptions.filter((permissionOption) =>
+        expr.test(permissionOption?.value)
+      );
       subGroup.options = matchingOptions;
 
       // Remove these permissions from the remaining options
@@ -135,12 +137,10 @@ export const groupPermissions = (opts?: UiOptions[] | null): PermissionGroups =>
 
   // Any remaining permissions we can put in the 'other' grouping
   if (permissionOptions.length > 0) {
-    permissionGroups.other.subGroup.push(
-      {
-        label: '',
-        options: permissionOptions,
-      }
-    );
+    permissionGroups.other.subGroup.push({
+      label: '',
+      options: permissionOptions,
+    });
   }
 
   return permissionGroups;

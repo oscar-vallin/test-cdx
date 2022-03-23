@@ -18,7 +18,7 @@ const workPacket: WorkPacketStatusDetails = {
         { name: 'khcm:version', value: '9.00.022.333.3' },
         { name: 'khcm:feed', value: 'Census' },
         { name: 'khcm:type', value: 'Third' },
-      ]
+      ],
     },
     {
       stepStatus: WorkStatus.NoRecords,

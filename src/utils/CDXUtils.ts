@@ -28,4 +28,4 @@ function getEnumByValue(enumType, enumValue?: string) {
   return null;
 }
 
-export { isDateTimeValid, yyyyMMdd, getEnumByValue, yyyyMMdda};
+export { isDateTimeValid, yyyyMMdd, getEnumByValue, yyyyMMdda };
