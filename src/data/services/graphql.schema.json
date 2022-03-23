@@ -6211,6 +6211,35 @@
             "deprecationReason": null
           },
           {
+            "name": "updateOrgSecurity",
+            "description": null,
+            "args": [
+              {
+                "name": "orgSecurityInfo",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "UpdateOrgSecurityInput",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "OrgSecurityForm",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "createAccessPolicy",
             "description": null,
             "args": [
@@ -6990,11 +7019,11 @@
                 "deprecationReason": null
               },
               {
-                "name": "genTestFile",
+                "name": "sendTestFile",
                 "description": null,
                 "type": {
                   "kind": "INPUT_OBJECT",
-                  "name": "SFTPTestGenerateTestFile",
+                  "name": "SFTPTestSendTestFile",
                   "ofType": null
                 },
                 "defaultValue": null,
@@ -7437,6 +7466,153 @@
           }
         ],
         "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "OrgSecurityForm",
+        "description": null,
+        "fields": [
+          {
+            "name": "orgSid",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ID",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "forgotPasswordEnabled",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "UIBooleanField",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "allowedEmailDomains",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "UIStringField",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "options",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "UIOptions",
+                  "ofType": null
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "commands",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "WebCommand",
+                  "ofType": null
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "response",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "GQOperationResponse",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "errCode",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "errMsg",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "errSeverity",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "ErrorSeverity",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
         "enumValues": null,
         "possibleTypes": null
       },
@@ -12044,6 +12220,35 @@
             "deprecationReason": null
           },
           {
+            "name": "orgSecurityForm",
+            "description": null,
+            "args": [
+              {
+                "name": "orgSid",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "OrgSecurityForm",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "dashThemeColorForOrg",
             "description": null,
             "args": [
@@ -13627,12 +13832,12 @@
             "deprecationReason": null
           },
           {
-            "name": "genTestFileForm",
+            "name": "sendTestFileForm",
             "description": null,
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "SFTPTestGenerateTestFileForm",
+              "name": "SFTPTestSendTestFileForm",
               "ofType": null
             },
             "isDeprecated": false,
@@ -13658,12 +13863,12 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "SFTPTestGenerateTestFile",
+        "name": "SFTPTestSendTestFile",
         "description": null,
         "fields": null,
         "inputFields": [
           {
-            "name": "generate",
+            "name": "sendTestFile",
             "description": null,
             "type": {
               "kind": "NON_NULL",
@@ -13671,6 +13876,22 @@
               "ofType": {
                 "kind": "SCALAR",
                 "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "testFileStrategy",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "TestFileStrategy",
                 "ofType": null
               }
             },
@@ -13709,16 +13930,28 @@
       },
       {
         "kind": "OBJECT",
-        "name": "SFTPTestGenerateTestFileForm",
+        "name": "SFTPTestSendTestFileForm",
         "description": null,
         "fields": [
           {
-            "name": "generate",
+            "name": "sendTestFile",
             "description": null,
             "args": [],
             "type": {
               "kind": "OBJECT",
               "name": "UIBooleanField",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "testFileStrategy",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "UISelectOneField",
               "ofType": null
             },
             "isDeprecated": false,
@@ -14632,11 +14865,11 @@
                 "deprecationReason": null
               },
               {
-                "name": "genTestFile",
+                "name": "sendTestFile",
                 "description": null,
                 "type": {
                   "kind": "INPUT_OBJECT",
-                  "name": "SFTPTestGenerateTestFile",
+                  "name": "SFTPTestSendTestFile",
                   "ofType": null
                 },
                 "defaultValue": null,
@@ -14656,6 +14889,29 @@
         "inputFields": null,
         "interfaces": [],
         "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "TestFileStrategy",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "UPLOAD",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "GENERATE",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
         "possibleTypes": null
       },
       {
@@ -17138,6 +17394,65 @@
                   "name": "String",
                   "ofType": null
                 }
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "UpdateOrgSecurityInput",
+        "description": null,
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "orgSid",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "forgotPasswordEnabled",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "allowedEmailDomains",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
               }
             },
             "defaultValue": null,
@@ -20682,12 +20997,12 @@
             "deprecationReason": null
           },
           {
-            "name": "genTestFileForm",
+            "name": "sendTestFileForm",
             "description": null,
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "SFTPTestGenerateTestFileForm",
+              "name": "SFTPTestSendTestFileForm",
               "ofType": null
             },
             "isDeprecated": false,

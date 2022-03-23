@@ -672,6 +672,7 @@ export type Mutation = {
   createOrg?: Maybe<OrganizationForm>;
   updateOrg?: Maybe<OrganizationForm>;
   deactivateOrg?: Maybe<GqOperationResponse>;
+  updateOrgSecurity?: Maybe<OrgSecurityForm>;
   createAccessPolicy?: Maybe<AccessPolicyForm>;
   updateAccessPolicy?: Maybe<AccessPolicyForm>;
   deleteAccessPolicies?: Maybe<GqOperationResponse>;
@@ -756,6 +757,11 @@ export type MutationUpdateOrgArgs = {
 
 export type MutationDeactivateOrgArgs = {
   orgSid: Scalars['ID'];
+};
+
+
+export type MutationUpdateOrgSecurityArgs = {
+  orgSecurityInfo: UpdateOrgSecurityInput;
 };
 
 
@@ -897,7 +903,7 @@ export type MutationUpdatePasswordRulesArgs = {
 
 export type MutationFtpTestMArgs = {
   xpsftp: XsftpInput;
-  genTestFile?: Maybe<SftpTestGenerateTestFile>;
+  sendTestFile?: Maybe<SftpTestSendTestFile>;
   testFile?: Maybe<Scalars['Upload']>;
 };
 
@@ -961,6 +967,19 @@ export enum NullHandling {
 
 export type OrgFilterInput = {
   activeFilter?: Maybe<ActiveEnum>;
+};
+
+export type OrgSecurityForm = {
+  __typename?: 'OrgSecurityForm';
+  orgSid?: Maybe<Scalars['ID']>;
+  forgotPasswordEnabled: UiBooleanField;
+  allowedEmailDomains: UiStringField;
+  options?: Maybe<Array<UiOptions>>;
+  commands?: Maybe<Array<WebCommand>>;
+  response: GqOperationResponse;
+  errCode?: Maybe<Scalars['String']>;
+  errMsg?: Maybe<Scalars['String']>;
+  errSeverity?: Maybe<ErrorSeverity>;
 };
 
 export type OrgSidInput = {
@@ -1346,6 +1365,7 @@ export type Query = {
   searchOrganizations?: Maybe<OrganizationConnection>;
   organizationQuickSearch?: Maybe<Array<Organization>>;
   vendorQuickSearch?: Maybe<Array<Organization>>;
+  orgSecurityForm?: Maybe<OrgSecurityForm>;
   dashThemeColorForOrg?: Maybe<DashThemeColorConnection>;
   dashSiteForOrg?: Maybe<DashSite>;
   dashThemeColor?: Maybe<DashThemeColor>;
@@ -1621,6 +1641,11 @@ export type QueryVendorQuickSearchArgs = {
 };
 
 
+export type QueryOrgSecurityFormArgs = {
+  orgSid: Scalars['ID'];
+};
+
+
 export type QueryDashThemeColorForOrgArgs = {
   ownedInput?: Maybe<OwnedInput>;
   pageableInput?: Maybe<PageableInput>;
@@ -1802,19 +1827,21 @@ export type SftpConfigSubscriptionResponse = {
   clientProfileSnippet?: Maybe<Scalars['String']>;
   csvLog?: Maybe<Scalars['String']>;
   xpSFTPForm?: Maybe<XpsftpForm>;
-  genTestFileForm?: Maybe<SftpTestGenerateTestFileForm>;
+  sendTestFileForm?: Maybe<SftpTestSendTestFileForm>;
   includeFileUpload?: Maybe<Scalars['Boolean']>;
 };
 
-export type SftpTestGenerateTestFile = {
-  generate: Scalars['Boolean'];
+export type SftpTestSendTestFile = {
+  sendTestFile: Scalars['Boolean'];
+  testFileStrategy: TestFileStrategy;
   fileName?: Maybe<Scalars['String']>;
   fileBody?: Maybe<Scalars['String']>;
 };
 
-export type SftpTestGenerateTestFileForm = {
-  __typename?: 'SFTPTestGenerateTestFileForm';
-  generate?: Maybe<UiBooleanField>;
+export type SftpTestSendTestFileForm = {
+  __typename?: 'SFTPTestSendTestFileForm';
+  sendTestFile?: Maybe<UiBooleanField>;
+  testFileStrategy?: Maybe<UiSelectOneField>;
   fileName?: Maybe<UiStringField>;
   fileBody?: Maybe<UiStringField>;
 };
@@ -1937,8 +1964,13 @@ export type Subscription = {
 
 export type SubscriptionFtpTestArgs = {
   xpsftp: XsftpInput;
-  genTestFile?: Maybe<SftpTestGenerateTestFile>;
+  sendTestFile?: Maybe<SftpTestSendTestFile>;
 };
+
+export enum TestFileStrategy {
+  Upload = 'UPLOAD',
+  Generate = 'GENERATE'
+}
 
 export enum ThemeColorMode {
   Light = 'LIGHT',
@@ -2175,6 +2207,12 @@ export type UpdateOrgInput = {
   name: Scalars['String'];
   orgType: OrgType;
   whitelist?: Maybe<Array<Scalars['String']>>;
+};
+
+export type UpdateOrgSecurityInput = {
+  orgSid: Scalars['ID'];
+  forgotPasswordEnabled: Scalars['Boolean'];
+  allowedEmailDomains: Scalars['String'];
 };
 
 export type UpdateOwnPasswordInput = {
@@ -2558,7 +2596,7 @@ export type XpsftpForm = {
 export type XpsftpTestPage = {
   __typename?: 'XPSFTPTestPage';
   xpSFTPForm: XpsftpForm;
-  genTestFileForm?: Maybe<SftpTestGenerateTestFileForm>;
+  sendTestFileForm?: Maybe<SftpTestSendTestFileForm>;
   includeFileUpload?: Maybe<Scalars['Boolean']>;
 };
 
@@ -4168,6 +4206,36 @@ export type VendorQuickSearchQuery = (
   )>> }
 );
 
+export type OrgSecurityFormQueryVariables = Exact<{
+  orgSid: Scalars['ID'];
+}>;
+
+
+export type OrgSecurityFormQuery = (
+  { __typename?: 'Query' }
+  & { orgSecurityForm?: Maybe<(
+    { __typename?: 'OrgSecurityForm' }
+    & Pick<OrgSecurityForm, 'orgSid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { forgotPasswordEnabled: (
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), allowedEmailDomains: (
+      { __typename?: 'UIStringField' }
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & Pick<UiOptions, 'key'>
+      & { values?: Maybe<Array<(
+        { __typename?: 'UIOption' }
+        & Pick<UiOption, 'label' | 'value' | 'info'>
+      )>> }
+    )>>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>> }
+  )> }
+);
+
 export type DashThemeColorForOrgQueryVariables = Exact<{
   ownedInput?: Maybe<OwnedInput>;
   pageableInput?: Maybe<PageableInput>;
@@ -4555,11 +4623,18 @@ export type XpsftpTestQuery = (
         { __typename?: 'UIBooleanField' }
         & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
       )> }
-    ), genTestFileForm?: Maybe<(
-      { __typename?: 'SFTPTestGenerateTestFileForm' }
-      & { generate?: Maybe<(
+    ), sendTestFileForm?: Maybe<(
+      { __typename?: 'SFTPTestSendTestFileForm' }
+      & { sendTestFile?: Maybe<(
         { __typename?: 'UIBooleanField' }
         & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, testFileStrategy?: Maybe<(
+        { __typename?: 'UISelectOneField' }
+        & Pick<UiSelectOneField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & { value?: Maybe<(
+          { __typename?: 'NVPStr' }
+          & Pick<NvpStr, 'name' | 'value'>
+        )> }
       )>, fileName?: Maybe<(
         { __typename?: 'UIStringField' }
         & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
@@ -4805,6 +4880,36 @@ export type DeactivateOrgMutationVariables = Exact<{
 export type DeactivateOrgMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'deactivateOrg'>
+);
+
+export type UpdateOrgSecurityMutationVariables = Exact<{
+  orgSecurityInfo: UpdateOrgSecurityInput;
+}>;
+
+
+export type UpdateOrgSecurityMutation = (
+  { __typename?: 'Mutation' }
+  & { updateOrgSecurity?: Maybe<(
+    { __typename?: 'OrgSecurityForm' }
+    & Pick<OrgSecurityForm, 'orgSid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { forgotPasswordEnabled: (
+      { __typename?: 'UIBooleanField' }
+      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), allowedEmailDomains: (
+      { __typename?: 'UIStringField' }
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & Pick<UiOptions, 'key'>
+      & { values?: Maybe<Array<(
+        { __typename?: 'UIOption' }
+        & Pick<UiOption, 'label' | 'value' | 'info'>
+      )>> }
+    )>>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>> }
+  )> }
 );
 
 export type CreateAccessPolicyMutationVariables = Exact<{
@@ -5707,7 +5812,7 @@ export type ImplementationDeployMutation = (
 
 export type FtpTestMMutationVariables = Exact<{
   xpsftp: XsftpInput;
-  genTestFile?: Maybe<SftpTestGenerateTestFile>;
+  sendTestFile?: Maybe<SftpTestSendTestFile>;
   testFile?: Maybe<Scalars['Upload']>;
 }>;
 
@@ -5759,11 +5864,18 @@ export type FtpTestMMutation = (
         { __typename?: 'UIBooleanField' }
         & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
       )> }
-    )>, genTestFileForm?: Maybe<(
-      { __typename?: 'SFTPTestGenerateTestFileForm' }
-      & { generate?: Maybe<(
+    )>, sendTestFileForm?: Maybe<(
+      { __typename?: 'SFTPTestSendTestFileForm' }
+      & { sendTestFile?: Maybe<(
         { __typename?: 'UIBooleanField' }
         & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, testFileStrategy?: Maybe<(
+        { __typename?: 'UISelectOneField' }
+        & Pick<UiSelectOneField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & { value?: Maybe<(
+          { __typename?: 'NVPStr' }
+          & Pick<NvpStr, 'name' | 'value'>
+        )> }
       )>, fileName?: Maybe<(
         { __typename?: 'UIStringField' }
         & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
@@ -9384,6 +9496,78 @@ export function useVendorQuickSearchLazyQuery(baseOptions?: Apollo.LazyQueryHook
 export type VendorQuickSearchQueryHookResult = ReturnType<typeof useVendorQuickSearchQuery>;
 export type VendorQuickSearchLazyQueryHookResult = ReturnType<typeof useVendorQuickSearchLazyQuery>;
 export type VendorQuickSearchQueryResult = Apollo.QueryResult<VendorQuickSearchQuery, VendorQuickSearchQueryVariables>;
+export const OrgSecurityFormDocument = gql`
+    query OrgSecurityForm($orgSid: ID!) {
+  orgSecurityForm(orgSid: $orgSid) {
+    orgSid
+    forgotPasswordEnabled {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    allowedEmailDomains {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
+      errCode
+      errMsg
+      errSeverity
+    }
+    options {
+      key
+      values {
+        label
+        value
+        info
+      }
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentWebCommandFragmentDoc}`;
+
+/**
+ * __useOrgSecurityFormQuery__
+ *
+ * To run a query within a React component, call `useOrgSecurityFormQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOrgSecurityFormQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOrgSecurityFormQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *   },
+ * });
+ */
+export function useOrgSecurityFormQuery(baseOptions: Apollo.QueryHookOptions<OrgSecurityFormQuery, OrgSecurityFormQueryVariables>) {
+        return Apollo.useQuery<OrgSecurityFormQuery, OrgSecurityFormQueryVariables>(OrgSecurityFormDocument, baseOptions);
+      }
+export function useOrgSecurityFormLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OrgSecurityFormQuery, OrgSecurityFormQueryVariables>) {
+          return Apollo.useLazyQuery<OrgSecurityFormQuery, OrgSecurityFormQueryVariables>(OrgSecurityFormDocument, baseOptions);
+        }
+export type OrgSecurityFormQueryHookResult = ReturnType<typeof useOrgSecurityFormQuery>;
+export type OrgSecurityFormLazyQueryHookResult = ReturnType<typeof useOrgSecurityFormLazyQuery>;
+export type OrgSecurityFormQueryResult = Apollo.QueryResult<OrgSecurityFormQuery, OrgSecurityFormQueryVariables>;
 export const DashThemeColorForOrgDocument = gql`
     query DashThemeColorForOrg($ownedInput: OwnedInput, $pageableInput: PageableInput) {
   dashThemeColorForOrg(ownedInput: $ownedInput, pageableInput: $pageableInput) {
@@ -10658,14 +10842,30 @@ export const XpsftpTestDocument = gql`
       errMsg
       errSeverity
     }
-    genTestFileForm {
-      generate {
+    sendTestFileForm {
+      sendTestFile {
         value
         label
         readOnly
         info
         required
         visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      testFileStrategy {
+        value {
+          name
+          value
+        }
+        label
+        readOnly
+        info
+        required
+        visible
+        options
+        query
         errCode
         errMsg
         errSeverity
@@ -11285,6 +11485,77 @@ export function useDeactivateOrgMutation(baseOptions?: Apollo.MutationHookOption
 export type DeactivateOrgMutationHookResult = ReturnType<typeof useDeactivateOrgMutation>;
 export type DeactivateOrgMutationResult = Apollo.MutationResult<DeactivateOrgMutation>;
 export type DeactivateOrgMutationOptions = Apollo.BaseMutationOptions<DeactivateOrgMutation, DeactivateOrgMutationVariables>;
+export const UpdateOrgSecurityDocument = gql`
+    mutation UpdateOrgSecurity($orgSecurityInfo: UpdateOrgSecurityInput!) {
+  updateOrgSecurity(orgSecurityInfo: $orgSecurityInfo) {
+    orgSid
+    forgotPasswordEnabled {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    allowedEmailDomains {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
+      errCode
+      errMsg
+      errSeverity
+    }
+    options {
+      key
+      values {
+        label
+        value
+        info
+      }
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentWebCommandFragmentDoc}`;
+export type UpdateOrgSecurityMutationFn = Apollo.MutationFunction<UpdateOrgSecurityMutation, UpdateOrgSecurityMutationVariables>;
+
+/**
+ * __useUpdateOrgSecurityMutation__
+ *
+ * To run a mutation, you first call `useUpdateOrgSecurityMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateOrgSecurityMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateOrgSecurityMutation, { data, loading, error }] = useUpdateOrgSecurityMutation({
+ *   variables: {
+ *      orgSecurityInfo: // value for 'orgSecurityInfo'
+ *   },
+ * });
+ */
+export function useUpdateOrgSecurityMutation(baseOptions?: Apollo.MutationHookOptions<UpdateOrgSecurityMutation, UpdateOrgSecurityMutationVariables>) {
+        return Apollo.useMutation<UpdateOrgSecurityMutation, UpdateOrgSecurityMutationVariables>(UpdateOrgSecurityDocument, baseOptions);
+      }
+export type UpdateOrgSecurityMutationHookResult = ReturnType<typeof useUpdateOrgSecurityMutation>;
+export type UpdateOrgSecurityMutationResult = Apollo.MutationResult<UpdateOrgSecurityMutation>;
+export type UpdateOrgSecurityMutationOptions = Apollo.BaseMutationOptions<UpdateOrgSecurityMutation, UpdateOrgSecurityMutationVariables>;
 export const CreateAccessPolicyDocument = gql`
     mutation CreateAccessPolicy($createAccessPolicyInput: CreateAccessPolicyInput!) {
   createAccessPolicy(createAccessPolicyInput: $createAccessPolicyInput) {
@@ -13982,8 +14253,8 @@ export type ImplementationDeployMutationHookResult = ReturnType<typeof useImplem
 export type ImplementationDeployMutationResult = Apollo.MutationResult<ImplementationDeployMutation>;
 export type ImplementationDeployMutationOptions = Apollo.BaseMutationOptions<ImplementationDeployMutation, ImplementationDeployMutationVariables>;
 export const FtpTestMDocument = gql`
-    mutation FtpTestM($xpsftp: XSFTPInput!, $genTestFile: SFTPTestGenerateTestFile, $testFile: Upload) {
-  ftpTestM(xpsftp: $xpsftp, genTestFile: $genTestFile, testFile: $testFile) {
+    mutation FtpTestM($xpsftp: XSFTPInput!, $sendTestFile: SFTPTestSendTestFile, $testFile: Upload) {
+  ftpTestM(xpsftp: $xpsftp, sendTestFile: $sendTestFile, testFile: $testFile) {
     status
     logMessage {
       timeStamp
@@ -14087,14 +14358,30 @@ export const FtpTestMDocument = gql`
       errMsg
       errSeverity
     }
-    genTestFileForm {
-      generate {
+    sendTestFileForm {
+      sendTestFile {
         value
         label
         readOnly
         info
         required
         visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      testFileStrategy {
+        value {
+          name
+          value
+        }
+        label
+        readOnly
+        info
+        required
+        visible
+        options
+        query
         errCode
         errMsg
         errSeverity
@@ -14146,7 +14433,7 @@ export type FtpTestMMutationFn = Apollo.MutationFunction<FtpTestMMutation, FtpTe
  * const [ftpTestMMutation, { data, loading, error }] = useFtpTestMMutation({
  *   variables: {
  *      xpsftp: // value for 'xpsftp'
- *      genTestFile: // value for 'genTestFile'
+ *      sendTestFile: // value for 'sendTestFile'
  *      testFile: // value for 'testFile'
  *   },
  * });

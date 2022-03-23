@@ -1,22 +1,22 @@
-import React, { useState, useEffect, memo } from 'react';
-import { Checkbox, IconButton, TextField, FontIcon, Link, Stack, Spinner, SpinnerSize } from '@fluentui/react';
+import React, { memo, useEffect, useState } from 'react';
+import { Checkbox, FontIcon, IconButton, Link, Spinner, SpinnerSize, Stack, TextField } from '@fluentui/react';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Button } from 'src/components/buttons';
 import { Spacing } from 'src/components/spacings/Spacing';
-import { Row, Column, Container } from 'src/components/layouts';
-import { UIInputText, InputText } from 'src/components/inputs/InputText';
-import { PageTitle } from 'src/components/typography';
+import { Column, Container, Row } from 'src/components/layouts';
+import { InputText, UIInputText } from 'src/components/inputs/InputText';
+import { PageTitle, Text } from 'src/components/typography';
 import { ROUTE_FTP_TEST } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import {
-  useXpsftpTestLazyQuery,
-  XpsftpForm,
-  SftpTestGenerateTestFileForm,
+  SftpTestSendTestFileForm,
+  TestFileStrategy,
   useFtpTestMMutation,
+  useXpsftpTestLazyQuery,
   WorkStatus,
+  XpsftpForm,
 } from 'src/data/services/graphql';
 import { useOrgSid } from 'src/hooks/useOrgSid';
-import { Text } from 'src/components/typography';
 import { LogMessageItem } from 'src/components/collapses/LogMessageItem';
 import { Badge } from 'src/components/badges/Badge';
 import { StyledSelectedFile } from './FtpTestPage.styles';
@@ -40,7 +40,7 @@ const _FtpTestPage = () => {
   const [isProcessingForm, setProcessingForm] = useState<boolean>(true);
 
   const [ftpTestForm, setFtpTestForm] = useState<XpsftpForm | null>();
-  const [genTestFileForm, setGenTestFileForm] = useState<SftpTestGenerateTestFileForm | null>();
+  const [genTestFileForm, setGenTestFileForm] = useState<SftpTestSendTestFileForm | null>();
 
   const inputFileRef = React.useRef() as React.MutableRefObject<HTMLInputElement>;
   const Toast = useNotification();
@@ -59,7 +59,7 @@ const _FtpTestPage = () => {
     setProcessingForm(true);
     if (dataForm && !loadingForm) {
       setFtpTestForm(dataForm.xpsftpTest?.xpSFTPForm);
-      setGenTestFileForm(dataForm.xpsftpTest?.genTestFileForm);
+      setGenTestFileForm(dataForm.xpsftpTest?.sendTestFileForm);
     }
     setProcessingForm(false);
   }, [dataForm, loadingForm]);
@@ -77,8 +77,9 @@ const _FtpTestPage = () => {
           folder,
           stepWise,
         },
-        genTestFile: {
-          generate: sendFileTest && !testFile ? true : false,
+        sendTestFile: {
+          sendTestFile: sendFileTest && !testFile,
+          testFileStrategy: testFile ? TestFileStrategy.Upload : TestFileStrategy.Generate,
           fileName: !testFile && !vendorFileName ? 'default k2u-test-file.txt' : vendorFileName,
           fileBody: !testFile && !textFileContent ? 'Connection Test' : textFileContent,
         },
@@ -97,8 +98,8 @@ const _FtpTestPage = () => {
     if (data?.ftpTestM?.xpSFTPForm) {
       setFtpTestForm(data?.ftpTestM?.xpSFTPForm);
     }
-    if (data?.ftpTestM?.genTestFileForm) {
-      setGenTestFileForm(data?.ftpTestM?.genTestFileForm);
+    if (data?.ftpTestM?.sendTestFileForm) {
+      setGenTestFileForm(data?.ftpTestM?.sendTestFileForm);
     }
     setProcessing(false);
   };
