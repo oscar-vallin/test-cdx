@@ -20,6 +20,12 @@ export const FilterSection = styled(LayoutRow)`
 
 export const StyledRow = styled(LayoutRow)`
   // padding: 15px;
+  .ms-ComboBox-container{
+    width: 100%;
+    label{
+      padding: 12px 0 13px;
+    }
+  }
 `;
 
 export const Column = styled(LayoutColumn)``;

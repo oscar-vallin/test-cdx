@@ -17,6 +17,7 @@ export const ROUTES_ID = {
   COLOR_PALETTES: 'color-palettes',
   DEFAULT_THEME: 'default-theme',
   ACTIVE_USERS: 'active-users',
+  USER_AUDIT_LOGS: 'user-audit-logs',
   DELETED_USERS: 'deleted-users',
   FTP_TEST: 'ftp-test',
   IMPL_DEPLOY: 'implementation-deploy',
@@ -46,6 +47,7 @@ export const URL_ROUTES = {
   COLOR_PALETTES: `/${ROUTES_ID.ADMIN}/dashboard-site/color-palettes`,
   DEFAULT_THEME: `/${ROUTES_ID.ADMIN}/dashboard-site/default-theme`,
   ACTIVE_USERS: `/${ROUTES_ID.ACTIVE_USERS}`,
+  USER_AUDIT_LOGS: `/${ROUTES_ID.USER_AUDIT_LOGS}`,
   DELETED_USERS: `/${ROUTES_ID.DELETED_USERS}`,
   FTP_TEST: `/${ROUTES_ID.FTP_TEST}`,
   IMPL_DEPLOY: `/${ROUTES_ID.IMPL_DEPLOY}`,
@@ -215,6 +217,14 @@ export const ROUTE_ACTIVE_USERS: RouteType = {
   API_ID: 'ACTIVE_USERS',
 };
 
+export const ROUTE_USER_AUDIT_LOGS: RouteType = {
+  ID: ROUTES_ID.USER_AUDIT_LOGS,
+  TITLE: 'User Audit Logs',
+  URL: URL_ROUTES.USER_AUDIT_LOGS,
+  MAIN_MENU: false,
+  API_ID: 'USER_AUDIT_LOGS',
+};
+
 export const ROUTE_DELETED_USERS: RouteType = {
   ID: ROUTES_ID.DELETED_USERS,
   TITLE: 'Inactive Users',
@@ -292,6 +302,7 @@ export const ROUTES = {
   ROUTE_DEFAULT_THEME,
   ROUTE_ACTIVE_USERS,
   ROUTE_DELETED_USERS,
+  ROUTE_USER_AUDIT_LOGS,
   ROUTE_FTP_TEST,
   ROUTE_IMPL_DEPLOY,
   ROUTE_PASSWORD_RULES,
@@ -320,6 +331,7 @@ export const ROUTES_ARRAY: RouteType[] = [
   ROUTE_COLOR_PALETTES,
   ROUTE_DEFAULT_THEME,
   ROUTE_ACTIVE_USERS,
+  ROUTE_USER_AUDIT_LOGS,
   ROUTE_DELETED_USERS,
   ROUTE_FTP_TEST,
   ROUTE_IMPL_DEPLOY,
