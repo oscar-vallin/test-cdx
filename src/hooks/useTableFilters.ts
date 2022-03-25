@@ -5,11 +5,13 @@ import { DateState, useDateValue, useEndDateValue } from './useDateValue';
 import { DelayedInput, useDelayedInputValue } from './useInputValue';
 import { useQueryParams } from './useQueryParams';
 import { useOrgSid } from './useOrgSid';
-import { Maybe, PageableInput, SortDirection, SortOrderInput } from '../data/services/graphql';
+import { Maybe, PageableInput, SortDirection, SortOrderInput, UserAccountAuditEvent } from '../data/services/graphql';
 import { yyyyMMdd } from 'src/utils/CDXUtils';
+import { useDropdownValue, DropdownInput } from './useDropdownValue';
 
 export type TableFiltersType = {
   searchText: DelayedInput;
+  eventType?: DropdownInput;
   startDate: DateState;
   endDate: DateState;
   pagingParams: PageableInput;
@@ -108,6 +110,7 @@ export const useTableFilters = (searchTextPlaceholder: string, defaultSort?: Sor
   const endDate = useEndDateValue('End Date...', deriveEndDate());
 
   const searchText = useDelayedInputValue('', searchTextPlaceholder, urlParams.get('filter') || '', '');
+  const eventType = useDropdownValue(urlParams.get('eventType') || '');
 
   const _addParamIfExists = (key, value) => (key ? { [key]: value } : {});
 
@@ -120,6 +123,8 @@ export const useTableFilters = (searchTextPlaceholder: string, defaultSort?: Sor
       ..._addParamIfExists('filter', searchText.value),
       ..._addParamIfExists('startDate', yyyyMMdd(startDateToFormat)),
       ..._addParamIfExists('endDate', yyyyMMdd(endDateToFormat)),
+      ..._addParamIfExists('eventType', eventType.value),
+
     };
 
     location.search = QueryParams.stringify(xParams);
@@ -131,5 +136,5 @@ export const useTableFilters = (searchTextPlaceholder: string, defaultSort?: Sor
     _pushQueryString();
   }, [searchText.delayedValue, startDate.value, endDate.value]);
 
-  return { searchText, startDate, endDate, pagingParams, setPagingParams };
+  return { searchText, startDate, endDate, pagingParams, setPagingParams, eventType};
 };

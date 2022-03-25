@@ -18,6 +18,7 @@ import { ColorPalettesPage, DefaultThemePage } from './Admin/DashboardSite';
 import { ActiveUsersPage } from './Admin/Users/ActiveUsers';
 import { DeletedUsersPage } from './Admin/Users/DeletedUsers';
 import { FtpTestPage } from './Admin/FtpTest';
+import { UserAuditLogsPage } from './Admin/Users/UserAuditLogs';
 import {
   AccessManagementGroupsPage,
   AccessManagementPoliciesPage,
@@ -96,6 +97,9 @@ export const Routes = () => {
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_DELETED_USERS.URL}>
         <DeletedUsersPage />
+      </AuthRoute>
+      <AuthRoute path={ROUTES.ROUTE_USER_AUDIT_LOGS.URL}>
+        <UserAuditLogsPage />
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_FTP_TEST.URL}>
         <FtpTestPage />
