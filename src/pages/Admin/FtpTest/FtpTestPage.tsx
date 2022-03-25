@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useState } from 'react';
-import { Checkbox, FontIcon, IconButton, Link, Spinner, SpinnerSize, Stack, TextField } from '@fluentui/react';
+import { Checkbox, FontIcon, IconButton, Link, Spinner, SpinnerSize, Stack, TextField, ChoiceGroup} from '@fluentui/react';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Button } from 'src/components/buttons';
 import { Spacing } from 'src/components/spacings/Spacing';
@@ -38,7 +38,6 @@ const _FtpTestPage = () => {
   const [callFtpTest, { data: ftpTestData, loading: ftpTestLoading, error: ftpTestError }] = useFtpTestMMutation();
   const [isProcessing, setProcessing] = useState<boolean>(false);
   const [isProcessingForm, setProcessingForm] = useState<boolean>(true);
-
   const [ftpTestForm, setFtpTestForm] = useState<XpsftpForm | null>();
   const [genTestFileForm, setGenTestFileForm] = useState<SftpTestSendTestFileForm | null>();
 
@@ -80,7 +79,7 @@ const _FtpTestPage = () => {
         sendTestFile: {
           sendTestFile: sendFileTest && !testFile,
           testFileStrategy: testFile ? TestFileStrategy.Upload : TestFileStrategy.Generate,
-          fileName: !testFile && !vendorFileName ? 'default k2u-test-file.txt' : vendorFileName,
+          fileName: !vendorFileName ? 'k2u-test-file.txt' : vendorFileName,
           fileBody: !testFile && !textFileContent ? 'Connection Test' : textFileContent,
         },
         testFile: sendFileTest && testFile ? testFile : null,
@@ -116,7 +115,10 @@ const _FtpTestPage = () => {
         files: [file],
       },
     } = e;
-    if (validity.valid) setTestFile(file);
+    if (validity.valid){
+      setTestFile(file);
+      setVendorFileName(file.name)
+    }
   };
 
   const renderForm = () => {
@@ -211,7 +213,7 @@ const _FtpTestPage = () => {
                 />
               </Spacing>
             )}
-            {genTestFileForm && (
+            {genTestFileForm?.sendTestFile?.visible && (
               <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                 <Checkbox
                   id="sendFileTest"
@@ -222,52 +224,102 @@ const _FtpTestPage = () => {
             )}
             {sendFileTest && (
               <Spacing margin={{ bottom: 'normal' }} padding={{ left: 'normal' }}>
-                {testFile ? (
-                  <StyledSelectedFile>
-                    <Text variant="semiBold">{testFile.name}</Text>
-                    <IconButton iconProps={{ iconName: 'Cancel' }} onClick={() => setTestFile(undefined)} />
-                  </StyledSelectedFile>
-                ) : (
-                  <Link
-                    underline
-                    target="_new"
-                    onClick={() => {
-                      inputFileRef.current.value = '';
-                      inputFileRef.current.click();
-                    }}
-                    title={'Upload File'}
-                  >
-                    Upload File...
-                  </Link>
-                )}
-                <input style={{ display: 'none' }} type="file" ref={inputFileRef} onChange={handleChooseFile} />
-                <Spacing margin={{ top: 'double', left: 'normal', bottom: 'normal' }}>
-                  <Text variant="semiBold">Or</Text>
+                <Spacing margin={{ bottom: 'normal' }}>
+                  <ChoiceGroup defaultSelectedKey={genTestFileForm?.testFileStrategy?.value?.value} 
+                    options={[
+                      { 
+                        key: TestFileStrategy.Upload, 
+                        text: '', 
+                        styles: { choiceFieldWrapper: { marginTop: '10px', width: '100%'}},
+                        onRenderLabel: (props) => {
+                          return( 
+                            <Spacing margin={{ left: 'double' }}>
+                              {testFile ? (
+                                <StyledSelectedFile>
+                                  <Text variant="normal">{testFile.name}</Text>
+                                  <IconButton iconProps={{ iconName: 'Cancel' }} onClick={() => setTestFile(undefined)} />
+                                </StyledSelectedFile>
+                              ) : (
+                                <Link
+                                  underline
+                                  target="_new"
+                                  onClick={() => {
+                                    inputFileRef.current.value = '';
+                                    inputFileRef.current.click();
+                                  }} 
+                                  disabled={!props?.checked}
+                                  title={'Upload File'}
+                                  style={{cursor: 'pointer'}}>
+                                  Upload File...
+                                </Link>
+                              )}
+                            </Spacing>
+                          )},
+                        onRenderField: (props, render) => {
+                          return(
+                            <>
+                              {render!(props)}
+                              <input style={{ display: 'none' }} type="file" ref={inputFileRef} onChange={handleChooseFile} />
+                              {props?.checked && genTestFileForm?.fileName?.visible && (
+                                <Spacing margin={{ bottom: 'normal', top: 'normal' }}>
+                                  <UIInputText
+                                    id="fileName"
+                                    uiField={genTestFileForm?.fileName}
+                                    value={vendorFileName}
+                                    onChange={(event, newValue) => setVendorFileName(newValue ?? '')}
+                                  />
+                                </Spacing>
+                              )}                              
+                            </>
+                          )
+                        },
+                      },
+                      {
+                        key: TestFileStrategy.Generate,
+                        text: 'Generate a File',
+                        styles: { choiceFieldWrapper: { marginTop: '10px', width: '100%'}},
+                        onRenderField: (props, render) => {
+                          return(
+                            <>
+                              {render!(props)}
+                              {props?.checked && (<>
+                                {genTestFileForm?.fileName?.visible && (
+                                  <Spacing margin={{ bottom: 'normal',  top: 'normal' }}>
+                                    <UIInputText
+                                      id="fileName"
+                                      uiField={genTestFileForm?.fileName}
+                                      value={vendorFileName}
+                                      onChange={(event, newValue) => setVendorFileName(newValue ?? '')}
+                                    />
+                                  </Spacing>
+                                )}
+                                {genTestFileForm?.fileBody?.visible && (
+                                  <Spacing margin={{ bottom: 'normal' }}>
+                                    <TextField
+                                      id="textFileContent"
+                                      label="Text File Contents"
+                                      placeholder="Put the text you want in the file here, if you leave blank the text 'Connection Test' will be used for the file's contents."
+                                      multiline
+                                      value={textFileContent}
+                                      onChange={(event, newValue: any) => setTextFileContent(newValue ?? '')}
+                                      rows={10}
+                                      resizable={false}
+                                    />
+                                  </Spacing>
+                                )} 
+                              </>)}
+                            </>
+                          )
+                        },
+                      },
+                    ]}
+                    onChange={()=>{
+                        setVendorFileName('');
+                        setTestFile(undefined);
+                      }
+                    }>                  
+                  </ChoiceGroup>
                 </Spacing>
-                {genTestFileForm?.fileName?.visible && (
-                  <Spacing margin={{ bottom: 'normal' }}>
-                    <UIInputText
-                      id="fileName"
-                      uiField={genTestFileForm?.fileName}
-                      value={vendorFileName}
-                      onChange={(event, newValue) => setVendorFileName(newValue ?? '')}
-                    />
-                  </Spacing>
-                )}
-                {genTestFileForm?.fileBody?.visible && (
-                  <Spacing margin={{ bottom: 'normal' }}>
-                    <TextField
-                      id="textFileContent"
-                      label="Text File Contents"
-                      placeholder="Put the text you want in the file here, if you leave blank the text 'Connection Test' will be used for the file's contents."
-                      multiline
-                      value={textFileContent}
-                      onChange={(event, newValue: any) => setTextFileContent(newValue ?? '')}
-                      rows={10}
-                      resizable={false}
-                    />
-                  </Spacing>
-                )}
               </Spacing>
             )}
             {ftpTestForm && (

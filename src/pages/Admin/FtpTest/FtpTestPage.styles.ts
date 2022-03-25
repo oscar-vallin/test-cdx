@@ -53,9 +53,14 @@ export const StyledColorPreview = styled.div`
 `;
 
 export const StyledSelectedFile = styled.div`
+  align-items: start;
+  justify-content: start;
+  display: flex;
+  height: 20px;
+
   [data-icon-name*='Cancel'] {
     font-size: 1em;
-    transform: translateY(2px);
+    transform: translateY(-4px);
     color: ${({ theme }) => theme.colors.black};
   }
 
