@@ -2319,9 +2319,19 @@ export type UserAccountLogConnection = {
 
 export type UserConnection = {
   __typename?: 'UserConnection';
+  userSearchForm?: Maybe<UserSearchForm>;
+  toolTips?: Maybe<UserConnectionTooltips>;
   paginationInfo: PaginationInfo;
   listPageInfo?: Maybe<ListPageInfo>;
   nodes?: Maybe<Array<UserItem>>;
+};
+
+export type UserConnectionTooltips = {
+  __typename?: 'UserConnectionTooltips';
+  accountLocked?: Maybe<Scalars['String']>;
+  pendingActivation?: Maybe<Scalars['String']>;
+  expiredActivation?: Maybe<Scalars['String']>;
+  notificationOnlyUser?: Maybe<Scalars['String']>;
 };
 
 export type UserDashThemePage = {
@@ -2334,12 +2344,36 @@ export type UserDashThemePage = {
 
 export type UserFilterInput = {
   activeFilter?: Maybe<ActiveEnum>;
+  searchText?: Maybe<Scalars['String']>;
+  /** Show only users who have a locked account */
+  lockedFilter?: Maybe<Scalars['Boolean']>;
+  /** Show only users who have a pending activation link */
+  pendingActivationFilter?: Maybe<Scalars['Boolean']>;
+  /** Show only users who have an expired activation link */
+  expiredActivationFilter?: Maybe<Scalars['Boolean']>;
+  /** Search for users regardless of Organization. Only valid for CDX Users when in the context of the CDX Organization. */
+  searchAllOrgs?: Maybe<Scalars['Boolean']>;
 };
 
 export type UserItem = {
   __typename?: 'UserItem';
   item: UserAccount;
+  accountLocked?: Maybe<Scalars['Boolean']>;
+  pendingActivation?: Maybe<Scalars['Boolean']>;
+  expiredActivation?: Maybe<Scalars['Boolean']>;
+  notificationOnlyUser?: Maybe<Scalars['Boolean']>;
+  orgId?: Maybe<Scalars['String']>;
+  orgName?: Maybe<Scalars['String']>;
   listItemCommands?: Maybe<Array<WebCommand>>;
+};
+
+export type UserSearchForm = {
+  __typename?: 'UserSearchForm';
+  searchText?: Maybe<UiStringField>;
+  lockedFilter?: Maybe<UiBooleanField>;
+  pendingActivationFilter?: Maybe<UiBooleanField>;
+  expiredActivationFilter?: Maybe<UiBooleanField>;
+  searchAllOrgs?: Maybe<UiBooleanField>;
 };
 
 export type UserSession = {
@@ -3212,7 +3246,28 @@ export type UsersForOrgQuery = (
   { __typename?: 'Query' }
   & { usersForOrg?: Maybe<(
     { __typename?: 'UserConnection' }
-    & { paginationInfo: (
+    & { userSearchForm?: Maybe<(
+      { __typename?: 'UserSearchForm' }
+      & { searchText?: Maybe<(
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, lockedFilter?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, pendingActivationFilter?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, expiredActivationFilter?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, searchAllOrgs?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )> }
+    )>, toolTips?: Maybe<(
+      { __typename?: 'UserConnectionTooltips' }
+      & Pick<UserConnectionTooltips, 'accountLocked' | 'pendingActivation' | 'expiredActivation' | 'notificationOnlyUser'>
+    )>, paginationInfo: (
       { __typename?: 'PaginationInfo' }
       & FragmentPaginationInfoFragment
     ), listPageInfo?: Maybe<(
@@ -3230,6 +3285,7 @@ export type UsersForOrgQuery = (
       )>> }
     )>, nodes?: Maybe<Array<(
       { __typename?: 'UserItem' }
+      & Pick<UserItem, 'accountLocked' | 'pendingActivation' | 'expiredActivation' | 'notificationOnlyUser' | 'orgId' | 'orgName'>
       & { item: (
         { __typename?: 'UserAccount' }
         & Pick<UserAccount, 'sid' | 'email'>
@@ -7179,6 +7235,71 @@ export const UsersForOrgDocument = gql`
     userFilter: $userFilter
     pageableInput: $pageableInput
   ) {
+    userSearchForm {
+      searchText {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      lockedFilter {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      pendingActivationFilter {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      expiredActivationFilter {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+      searchAllOrgs {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        errCode
+        errMsg
+        errSeverity
+      }
+    }
+    toolTips {
+      accountLocked
+      pendingActivation
+      expiredActivation
+      notificationOnlyUser
+    }
     paginationInfo {
       ...fragmentPaginationInfo
     }
@@ -7215,6 +7336,12 @@ export const UsersForOrgDocument = gql`
           }
         }
       }
+      accountLocked
+      pendingActivation
+      expiredActivation
+      notificationOnlyUser
+      orgId
+      orgName
       listItemCommands {
         ...fragmentWebCommand
       }
