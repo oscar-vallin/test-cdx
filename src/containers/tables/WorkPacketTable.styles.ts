@@ -20,9 +20,9 @@ export const FilterSection = styled(LayoutRow)`
 
 export const StyledRow = styled(LayoutRow)`
   // padding: 15px;
-  .ms-ComboBox-container{
+  .ms-ComboBox-container {
     width: 100%;
-    label{
+    label {
       padding: 12px 0 13px;
     }
   }

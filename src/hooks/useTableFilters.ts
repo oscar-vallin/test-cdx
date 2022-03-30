@@ -5,7 +5,7 @@ import { DateState, useDateValue, useEndDateValue } from './useDateValue';
 import { DelayedInput, useDelayedInputValue } from './useInputValue';
 import { useQueryParams } from './useQueryParams';
 import { useOrgSid } from './useOrgSid';
-import { Maybe, PageableInput, SortDirection, SortOrderInput, UserAccountAuditEvent } from '../data/services/graphql';
+import { Maybe, PageableInput, SortDirection, SortOrderInput } from '../data/services/graphql';
 import { yyyyMMdd } from 'src/utils/CDXUtils';
 import { useDropdownValue, DropdownInput } from './useDropdownValue';
 

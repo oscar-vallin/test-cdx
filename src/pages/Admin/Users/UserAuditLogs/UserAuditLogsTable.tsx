@@ -7,17 +7,21 @@ import {
   mergeStyleSets,
   ScrollablePane,
   ScrollbarVisibility,
-  IComboBoxOption
+  IComboBoxOption,
 } from '@fluentui/react';
 
 import { StyledContainer } from 'src/components/tables/Table/Table.styles';
-import { NullHandling, PageableInput, PaginationInfo, SortDirection, UserAccountAuditEvent } from 'src/data/services/graphql';
+import {
+  NullHandling,
+  PageableInput,
+  PaginationInfo,
+  SortDirection,
+  UserAccountAuditEvent,
+} from 'src/data/services/graphql';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { TableFiltersType } from 'src/hooks/useTableFilters';
 import { Paginator } from 'src/components/tables/Paginator';
-import { ErrorHandler } from 'src/utils/ErrorHandler';
-import { useHistory } from 'react-router-dom';
 import { useUserAuditLogsColumns, UserAuditLogsColumn } from './UserAuditLogsTableColumn';
 import { TableFilters } from 'src/containers/tables/TableFilters';
 import { EmptyState } from 'src/containers/states';
@@ -209,14 +213,17 @@ export const UserAuditLogsTable = ({
     return <EmptyState description="No data" filled={false} />;
   };
 
-  const setComboBoxOptions = () =>{
+  const setComboBoxOptions = () => {
     let options: IComboBoxOption[] = [];
-    options.push({ key: 'All', text: '(All Event Types Included)'})
+    options.push({ key: 'All', text: '(All Event Types Included)' });
     for (var enumMember in UserAccountAuditEvent) {
-      options.push({ key: UserAccountAuditEvent[enumMember], text: getEventTypeName(UserAccountAuditEvent[enumMember])})
+      options.push({
+        key: UserAccountAuditEvent[enumMember],
+        text: getEventTypeName(UserAccountAuditEvent[enumMember]),
+      });
     }
-    return options
-  }
+    return options;
+  };
 
   return (
     <>
@@ -238,4 +245,3 @@ export const UserAuditLogsTable = ({
     </>
   );
 };
-

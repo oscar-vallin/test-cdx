@@ -3,7 +3,6 @@ import { Card } from 'src/components/cards';
 import { InputText } from 'src/components/inputs/InputText';
 import { InputDateRange } from 'src/components/inputs/InputDateRange';
 import { Column, Container, FilterSection, StyledRow } from './WorkPacketTable.styles';
-import { UserAccountAuditEvent } from 'src/data/services/graphql';
 import { ComboBox, IComboBoxOption } from '@fluentui/react';
 
 type TableFilterParams = {
@@ -11,11 +10,18 @@ type TableFilterParams = {
   searchText?: any;
   startDate?: any;
   endDate: any;
-  eventType?:  any;
-  evenTypesDropdownItems?:  IComboBoxOption[];
+  eventType?: any;
+  evenTypesDropdownItems?: IComboBoxOption[];
 };
 
-export const TableFilters = ({ id, searchText, startDate, endDate, evenTypesDropdownItems, eventType }: TableFilterParams) => {
+export const TableFilters = ({
+  id,
+  searchText,
+  startDate,
+  endDate,
+  evenTypesDropdownItems,
+  eventType,
+}: TableFilterParams) => {
   return (
     <FilterSection id={`${id}-filters`}>
       <Container>
@@ -30,7 +36,8 @@ export const TableFilters = ({ id, searchText, startDate, endDate, evenTypesDrop
                   {...searchText}
                   label="Search"
                 />
-              </Column>)}
+              </Column>
+            )}
             {evenTypesDropdownItems?.length && (
               <Column lg="6">
                 <ComboBox
