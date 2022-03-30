@@ -36,7 +36,6 @@ const DashboardPage = () => {
 
   const handleChangeDate: any = (dateType: string, startDate?: Date, endDate?: Date) => {
     setDateId(dateType);
-
     if (dateType !== 'custom') {
       history.push(`?date=${dateType}&orgSid=${orgSid}`);
     } else if (startDate && endDate) {
@@ -229,6 +228,8 @@ const DashboardPage = () => {
                 data={dataCounters?.vendorProcessErrors}
                 altData={[]}
                 date={dateId}
+                fromDate={fromDate.value}
+                toDate={toDate.value}
                 loading={isLoadingData}
                 title="Failed Files by Vendor"
                 emptyMessage="None"

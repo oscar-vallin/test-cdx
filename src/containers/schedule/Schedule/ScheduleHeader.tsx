@@ -39,6 +39,10 @@ export const ScheduleHeader = ({ id, currentView, selectedDate, onChangeDate, on
       onChangeDate(_newDate);
     }
   };
+  //
+  const handleOnOutsideClick = () => {
+    setCalendarOpen(false);
+  };
 
   //
   const handlePrevDay = () => {
@@ -136,6 +140,7 @@ export const ScheduleHeader = ({ id, currentView, selectedDate, onChangeDate, on
           </HeaderButtonTitle>
           {calendarOpen && (
             <MonthPicker
+              onClickOutside={handleOnOutsideClick}
               open={calendarOpen}
               value={selectedDate}
               onSelect={handleChangeDate}
@@ -169,6 +174,7 @@ export const ScheduleHeader = ({ id, currentView, selectedDate, onChangeDate, on
           </HeaderButtonTitle>
           {calendarOpen && (
             <MonthPicker
+              onClickOutside={handleOnOutsideClick}
               open={calendarOpen}
               value={selectedDate}
               onSelect={handleChangeDate}
@@ -194,6 +200,7 @@ export const ScheduleHeader = ({ id, currentView, selectedDate, onChangeDate, on
         </HeaderButtonTitle>
         {calendarOpen && (
           <MonthPicker
+            onClickOutside={handleOnOutsideClick}
             open={calendarOpen}
             value={selectedDate}
             onSelect={handleChangeDate}

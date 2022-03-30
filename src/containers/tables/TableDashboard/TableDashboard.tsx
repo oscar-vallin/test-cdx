@@ -15,6 +15,8 @@ const TableDashboard = ({
   date,
   loading,
   title,
+  fromDate = new Date(),
+  toDate = new Date(),
   emptyMessage,
 }) => {
   const { tableProps, specs, setSpecs } = useTable(data, tableId, date, altData);
@@ -67,13 +69,14 @@ const TableDashboard = ({
   const onChangeOption = () => {
     setSpecs(!specs);
   };
-
   if (tableProps) {
     return (
       <TableBox id={`${id}`}>
         <Table
           id={`${id}`}
           date={date}
+          fromDate={fromDate}
+          toDate={toDate}
           onOption={onChangeOption}
           title={title}
           emptyMessage={emptyMessage}

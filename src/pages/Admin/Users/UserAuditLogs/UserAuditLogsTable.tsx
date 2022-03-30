@@ -149,10 +149,8 @@ export const UserAuditLogsTable = ({
           dateRange: { rangeStart: tableFilters.startDate.value, rangeEnd: tableFilters.endDate.value },
           pageableInput: tableFilters.pagingParams,
           events: tableFilters.eventType?.value.length ? tableFilters.eventType?.value : null,
-          /*
-          changedUserSid: '16', 
-          changedByUserSid: '1'
-          */
+          changedUserSid: tableFilters.userSid?.value.length ? tableFilters.userSid?.value : null,
+          changedByUserSid: tableFilters.changedByUserSid?.value.length ? tableFilters.changedByUserSid?.value : null,
         },
       });
     }

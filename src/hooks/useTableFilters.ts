@@ -16,6 +16,8 @@ export type TableFiltersType = {
   endDate: DateState;
   pagingParams: PageableInput;
   setPagingParams: React.Dispatch<any>;
+  userSid?: DropdownInput;
+  changedByUserSid?: DropdownInput;
 };
 
 export const toUTC = (date: Date): Date => {
@@ -111,7 +113,10 @@ export const useTableFilters = (searchTextPlaceholder: string, defaultSort?: Sor
 
   const searchText = useDelayedInputValue('', searchTextPlaceholder, urlParams.get('filter') || '', '');
   const eventType = useDropdownValue(urlParams.get('eventType') || '');
+  const userSid = useDropdownValue(urlParams.get('userSid') || '');
+  const changedByUserSid = useDropdownValue(urlParams.get('changedByUserSid') || '');
 
+  
   const _addParamIfExists = (key, value) => (key ? { [key]: value } : {});
 
   const _pushQueryString = () => {
@@ -124,6 +129,7 @@ export const useTableFilters = (searchTextPlaceholder: string, defaultSort?: Sor
       ..._addParamIfExists('startDate', yyyyMMdd(startDateToFormat)),
       ..._addParamIfExists('endDate', yyyyMMdd(endDateToFormat)),
       ..._addParamIfExists('eventType', eventType.value),
+      ..._addParamIfExists('userSid', userSid.value),
 
     };
 
@@ -136,5 +142,5 @@ export const useTableFilters = (searchTextPlaceholder: string, defaultSort?: Sor
     _pushQueryString();
   }, [searchText.delayedValue, startDate.value, endDate.value]);
 
-  return { searchText, startDate, endDate, pagingParams, setPagingParams, eventType};
+  return { searchText, startDate, endDate, pagingParams, setPagingParams, eventType, userSid, changedByUserSid};
 };

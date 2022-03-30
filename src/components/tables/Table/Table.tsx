@@ -138,6 +138,8 @@ type TableProps = {
   loading?: boolean;
   title?: string;
   emptyMessage?: string;
+  fromDate?: Date;
+  toDate?: Date;
 } & typeof defaultProps;
 
 const Table = ({
@@ -151,6 +153,8 @@ const Table = ({
   date,
   onItemsListChange,
   emptyMessage = 'No data',
+  fromDate,
+  toDate
 }: TableProps): ReactElement => {
   const { orgSid } = useOrgSid();
 
@@ -367,9 +371,15 @@ const Table = ({
         }
 
         {
-          const startFormatted = yyyyMMdd(getDates(date).startDate);
-          const endFormatted = yyyyMMdd(getDates(date).endDate);
-
+          let startFormatted, endFormatted
+          if(date === 'custom'){
+            startFormatted = yyyyMMdd(fromDate);
+            endFormatted = yyyyMMdd(toDate);
+          }else{
+            startFormatted = yyyyMMdd(getDates(date).startDate);
+            endFormatted = yyyyMMdd(getDates(date).endDate);
+          }
+          
           return (
             <StyledCell left>
               <Link>

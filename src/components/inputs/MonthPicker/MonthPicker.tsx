@@ -1,4 +1,4 @@
-import { ReactElement, useState } from 'react';
+import { ReactElement, useState, useRef, useEffect } from 'react';
 import { Calendar, DateRangeType, DayOfWeek, DefaultButton } from '@fluentui/react';
 import { addDays, getDateRangeArray } from '@fluentui/date-time-utilities';
 import { Container } from './MonthPicker.styles';
@@ -24,6 +24,7 @@ type MonthPickerProps = {
   restrictedDates?: Date[];
   showSixWeeksByDefault?: boolean;
   workWeekDays?: DayOfWeek[];
+  onClickOutside?: () => void;
 };
 
 const dayPickerStrings = {
@@ -75,6 +76,7 @@ export const MonthPicker = ({
   restrictedDates,
   showSixWeeksByDefault,
   workWeekDays,
+  onClickOutside
 }: MonthPickerProps): ReactElement => {
   const [selectedDateRange, setSelectedDateRange] = useState<Date[]>();
   const [selectedDate, setSelectedDate] = useState<Date>(value ?? new Date());
@@ -122,8 +124,30 @@ export const MonthPicker = ({
     dateRangeString = `${rangeStart.toLocaleDateString()}-${rangeEnd.toLocaleDateString()}`;
   }
 
+  const useOutsideAlerter =(ref, onClickOutside)=> {
+    useEffect(() => {
+      /**
+       * Alert if clicked on outside of element
+       */
+      const handleClickOutside=(event)=> {
+        if (ref.current && !ref.current.contains(event.target)) {
+          onClickOutside()
+        }
+      }
+      // Bind the event listener
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        // Unbind the event listener on clean up
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, [ref]);
+  }
+  
+  const monthPickerRef = useRef(null);
+  useOutsideAlerter(monthPickerRef, onClickOutside);
+
   return (
-    <Container id="MonthPickerModal" show={open}>
+    <Container ref={monthPickerRef} id="MonthPickerModal" show={open}>
       {showDates && (
         <>
           <div>
