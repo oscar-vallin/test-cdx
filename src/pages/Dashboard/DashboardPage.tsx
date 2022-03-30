@@ -36,6 +36,7 @@ const DashboardPage = () => {
 
   const handleChangeDate: any = (dateType: string, startDate?: Date, endDate?: Date) => {
     setDateId(dateType);
+    
     if (dateType !== 'custom') {
       history.push(`?date=${dateType}&orgSid=${orgSid}`);
     } else if (startDate && endDate) {
@@ -215,6 +216,8 @@ const DashboardPage = () => {
                 tableId={TABLE_NAMES.DASHBOARD_TRANSMISSIONS_VENDOR}
                 data={dataCounters?.vendorTransmissions}
                 altData={dataCounters?.vendorTransmissionsBySpec}
+                fromDate={fromDate.value}
+                toDate={toDate.value}
                 date={dateId}
                 loading={isLoadingData}
                 title="Transmissions / BUs by Vendor"
