@@ -151,7 +151,8 @@ export enum CdxWebCommandType {
   Create = 'CREATE',
   Assign = 'ASSIGN',
   Reset = 'RESET',
-  Audit = 'AUDIT'
+  Audit = 'AUDIT',
+  History = 'HISTORY'
 }
 
 export enum CdxWebPage {
