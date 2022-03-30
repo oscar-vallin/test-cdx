@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import FormLabel, { UIFormLabel } from 'src/components/labels/FormLabel';
-import { UiField, UiStringField } from 'src/data/services/graphql';
+import { UiField, UiStringField, UiIntField } from 'src/data/services/graphql';
 import { EmptyValue, FieldValue, StyledTextField } from './InputText.styles';
 
 export type InputTextProps = {
@@ -102,12 +102,13 @@ const UIInputTextReadOnly = ({ id, uiField, renderLabel = true }: UIReadOnlyType
 
 type UIInputTextType = {
   id: string;
-  uiField?: UiStringField;
+  uiField?: UiStringField | UiIntField;
   onChange?: (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => void | null;
   value?: string;
   placeholder?: string;
   renderLabel?: boolean;
   autocomplete?: string;
+  type?: string;
 };
 
 const UIInputText = ({
@@ -118,6 +119,7 @@ const UIInputText = ({
   placeholder,
   renderLabel = true,
   autocomplete,
+  type
 }: UIInputTextType) => {
   if (uiField?.readOnly === true) {
     return <UIInputTextReadOnly id={id} uiField={uiField} renderLabel={renderLabel} />;
@@ -125,7 +127,7 @@ const UIInputText = ({
   return (
     <InputText
       id={id}
-      type="text"
+      type={type ?? "text"}
       value={value}
       disabled={uiField?.readOnly ?? false}
       autofocus={false}
@@ -136,8 +138,8 @@ const UIInputText = ({
       renderLabel={renderLabel}
       onChange={onChange}
       placeholder={placeholder}
-      minLength={uiField?.min}
-      maxLength={uiField?.max}
+      minLength={uiField?.min ?? undefined}
+      maxLength={uiField?.max ?? undefined}
       autocomplete={autocomplete}
     />
   );

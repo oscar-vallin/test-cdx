@@ -1,6 +1,5 @@
 import React, { memo, useEffect, useState } from 'react';
 import {
-  Checkbox,
   FontIcon,
   IconButton,
   Link,
@@ -9,16 +8,20 @@ import {
   Stack,
   TextField,
   ChoiceGroup,
+  MessageBar,
+  MessageBarType,
 } from '@fluentui/react';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Button } from 'src/components/buttons';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { Column, Container, Row } from 'src/components/layouts';
-import { InputText, UIInputText } from 'src/components/inputs/InputText';
+import { InputText, UIInputText} from 'src/components/inputs/InputText';
+import { UIInputCheck } from 'src/components/inputs/InputCheck';
 import { PageTitle, Text } from 'src/components/typography';
 import { ROUTE_FTP_TEST } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import {
+  ErrorSeverity,
   SftpTestSendTestFileForm,
   TestFileStrategy,
   useFtpTestMMutation,
@@ -31,6 +34,7 @@ import { LogMessageItem } from 'src/components/collapses/LogMessageItem';
 import { Badge } from 'src/components/badges/Badge';
 import { StyledSelectedFile } from './FtpTestPage.styles';
 import { useNotification } from 'src/hooks/useNotification';
+import { UIInputTextArea } from 'src/components/inputs/InputTextArea';
 
 const _FtpTestPage = () => {
   const [host, setHost] = useState('');
@@ -50,6 +54,8 @@ const _FtpTestPage = () => {
   const [isProcessingForm, setProcessingForm] = useState<boolean>(true);
   const [ftpTestForm, setFtpTestForm] = useState<XpsftpForm | null>();
   const [genTestFileForm, setGenTestFileForm] = useState<SftpTestSendTestFileForm | null>();
+  const [message, setMessage] = useState<string | undefined>();
+  const [messageType, setMessageType] = useState<MessageBarType>(MessageBarType.info);
 
   const inputFileRef = React.useRef() as React.MutableRefObject<HTMLInputElement>;
   const Toast = useNotification();
@@ -75,7 +81,7 @@ const _FtpTestPage = () => {
 
   const onTestBtn = async () => {
     setProcessing(true);
-
+    setMessage(undefined);
     const { data, errors } = await callFtpTest({
       variables: {
         xpsftp: {
@@ -98,6 +104,11 @@ const _FtpTestPage = () => {
 
     if (data?.ftpTestM?.status === 'ERROR') {
       Toast.error({ text: data?.ftpTestM?.logMessage.body });
+      if(data?.ftpTestM?.xpSFTPForm?.errSeverity === ErrorSeverity.Error){        
+        const errorMsg = data.ftpTestM.xpSFTPForm.errMsg ?? data.ftpTestM.logMessage.body ?? "Error occurred, please verify the information and try again." 
+        setMessageType(MessageBarType.error);
+        setMessage(errorMsg);
+      }
     }
 
     if (errors) {
@@ -153,17 +164,12 @@ const _FtpTestPage = () => {
               <Column sm="4">
                 {ftpTestForm?.port?.visible && (
                   <Spacing margin={{ bottom: 'normal', left: 'normal' }}>
-                    <InputText
-                      disabled={ftpTestForm?.port?.readOnly ?? false}
-                      autofocus={false}
-                      label={ftpTestForm?.port?.label}
-                      errorMessage={ftpTestForm?.port?.errMsg ?? undefined}
-                      info={ftpTestForm?.port?.info ?? undefined}
-                      required={ftpTestForm?.port?.required ?? false}
+                    <UIInputText
                       id="port"
-                      type="number"
+                      uiField={ftpTestForm.port}
                       placeholder="port"
                       value={port}
+                      type="number"
                       onChange={(event, newValue) => setPort(newValue ?? '')}
                     />
                   </Spacing>
@@ -215,19 +221,19 @@ const _FtpTestPage = () => {
             )}
             {ftpTestForm?.stepWise?.visible && (
               <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                <Checkbox
-                  checked={stepWise}
+                <UIInputCheck
                   id="stepWise"
-                  label="Step Wise"
+                  uiField={ftpTestForm?.stepWise}
+                  value={stepWise}
                   onChange={(event, _stepWise: any) => setStepWise(_stepWise)}
                 />
               </Spacing>
             )}
             {genTestFileForm?.sendTestFile?.visible && (
               <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                <Checkbox
+                <UIInputCheck
                   id="sendFileTest"
-                  label="Send a test file"
+                  uiField={genTestFileForm?.sendTestFile}
                   onChange={(_event, _sendFileTest: any) => setSendFileTest(_sendFileTest)}
                 />
               </Spacing>
@@ -317,15 +323,15 @@ const _FtpTestPage = () => {
                                   )}
                                   {genTestFileForm?.fileBody?.visible && (
                                     <Spacing margin={{ bottom: 'normal' }}>
-                                      <TextField
+                                      <UIInputTextArea
                                         id="textFileContent"
-                                        label="Text File Contents"
-                                        placeholder="Put the text you want in the file here, if you leave blank the text 'Connection Test' will be used for the file's contents."
-                                        multiline
+                                        uiField={genTestFileForm?.fileBody}
                                         value={textFileContent}
+                                        multiline={true}
                                         onChange={(event, newValue: any) => setTextFileContent(newValue ?? '')}
-                                        rows={10}
+                                        placeholder="Put the text you want in the file here, if you leave blank the text 'Connection Test' will be used for the file's contents."
                                         resizable={false}
+                                        rows={10}
                                       />
                                     </Spacing>
                                   )}
@@ -465,6 +471,18 @@ const _FtpTestPage = () => {
           )}
           {ftpTestData?.ftpTestM?.status && (
             <Container>
+               {message && (
+                  <Spacing margin={{ bottom: 'normal' }}>
+                    <MessageBar
+                      id="__OrgPanel_Msg"
+                      messageBarType={messageType}
+                      isMultiline
+                      onDismiss={() => setMessage(undefined)}
+                    >
+                      {message}
+                    </MessageBar>
+                </Spacing>
+              )}
               <Spacing margin={{ bottom: 'normal' }}>
                 <Stack horizontal={true} horizontalAlign="space-between">
                   <Stack horizontal={true} tokens={{ childrenGap: 10 }}>

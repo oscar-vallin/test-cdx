@@ -15,7 +15,7 @@ function yyyyMMdd(date?: Date | null): string {
 
 function yyyyMMdda(date?: Date | null): string {
   if (date) {
-    return format(date, 'yyyy-MM-dd a');
+    return format(date, 'yyyy-MM-dd hh:mm:ss a');
   }
   return '';
 }
