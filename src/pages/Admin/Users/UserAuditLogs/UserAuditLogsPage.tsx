@@ -15,7 +15,6 @@ import { UserAuditLogsColumn } from './UserAuditLogsTableColumn';
 import { useTableFilters } from 'src/hooks/useTableFilters';
 
 const _UserAuditLogsPage = () => {
-  const [tableMeta, setTableMeta] = useState({ count: 0, loading: true });
 
   const tableFilters = useTableFilters('Extract Name, Status, Vendor, etc.', [
     {
@@ -61,10 +60,6 @@ const _UserAuditLogsPage = () => {
         lazyQuery={useUserAccountAuditLogsLazyQuery}
         getItems={mapData}
         tableFilters={tableFilters}
-        onItemsListChange={(data, loading) => {
-          const total = data?.workPacketStatuses?.paginationInfo?.totalElements ?? 0;
-          setTableMeta({ count: total, loading });
-        }}
       />
     </LayoutDashboard>
   );

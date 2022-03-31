@@ -33,7 +33,6 @@ type UserAuditLogsTableParams = {
   lazyQuery: any; // lazy query from the generated Apollo graphql.ts
   getItems: (data: any) => any[];
   tableFilters: TableFiltersType;
-  onItemsListChange?: (data: any, loading: boolean) => void;
 };
 
 export const getEventTypeName = (eventType?: UserAccountAuditEvent): string => {
@@ -79,7 +78,6 @@ export const UserAuditLogsTable = ({
   lazyQuery,
   getItems,
   tableFilters,
-  onItemsListChange,
 }: UserAuditLogsTableParams) => {
   const { orgSid } = useOrgSid();
 
@@ -143,7 +141,7 @@ export const UserAuditLogsTable = ({
       sort: tableFilters.pagingParams.sort,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orgSid, tableFilters.searchText.delayedValue, tableFilters.startDate.value, tableFilters.endDate.value]);
+  }, [orgSid, tableFilters.eventType?.delayedValue, tableFilters.startDate.value, tableFilters.endDate.value]);
 
   useEffect(() => {
     if (tableFilters.startDate.value && tableFilters.endDate.value) {
@@ -152,20 +150,17 @@ export const UserAuditLogsTable = ({
           orgSid,
           dateRange: { rangeStart: tableFilters.startDate.value, rangeEnd: tableFilters.endDate.value },
           pageableInput: tableFilters.pagingParams,
-          events: tableFilters.eventType?.value.length ? tableFilters.eventType?.value : null,
-          changedUserSid: tableFilters.userSid?.value.length ? tableFilters.userSid?.value : null,
-          changedByUserSid: tableFilters.changedByUserSid?.value.length ? tableFilters.changedByUserSid?.value : null,
+          events: tableFilters.eventType?.delayedValue.length ? tableFilters.eventType?.delayedValue : null,
+          changedUserSid: tableFilters.userSid?.delayedValue.length ? tableFilters.userSid?.delayedValue : null,
+          changedByUserSid: tableFilters.changedByUserSid?.delayedValue.length ? tableFilters.changedByUserSid?.delayedValue : null,
         },
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orgSid, tableFilters.pagingParams, tableFilters.eventType]);
+  }, [orgSid, tableFilters.pagingParams]);
 
   useEffect(() => {
     if (!loading) {
-      if (onItemsListChange) {
-        onItemsListChange(data, loading);
-      }
       const transFormedItems = getItems(data);
       setItems(transFormedItems);
 

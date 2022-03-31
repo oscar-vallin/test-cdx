@@ -47,4 +47,23 @@ const useDelayedInputValue = (label, placeholder, initialValue, type): DelayedIn
   return { label, placeholder, type, value, onChange, setValue, delayedValue };
 };
 
-export { useInputValue, useDelayedInputValue, useFormInputValue };
+const useDelayedDropdownValue = (label, placeholder, initialValue, type): DelayedInput => {  
+  const [delayedValue, setDelayedValue] = useState(initialValue);
+  const [value, setValue] = useState(initialValue);
+
+  useEffect(() => {
+    const timeOutId = setTimeout(() => {
+      setDelayedValue(value);
+    }, 500);
+    return () => clearTimeout(timeOutId);
+  }, [value]);
+
+  const onChange = (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, o?) => {
+    if (o.key === 'All') setValue('');
+    else setValue(o.key ?? '');
+  };
+
+  return { label, placeholder, type, value, onChange, setValue, delayedValue };
+};
+
+export { useInputValue, useDelayedInputValue, useFormInputValue, useDelayedDropdownValue };
