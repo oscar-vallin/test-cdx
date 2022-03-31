@@ -173,6 +173,7 @@ export enum CdxWebPage {
   FtpTest = 'FTP_TEST',
   ImplDeploy = 'IMPL_DEPLOY',
   UserAccountRules = 'USER_ACCOUNT_RULES',
+  SecuritySettings = 'SECURITY_SETTINGS',
   PasswordRules = 'PASSWORD_RULES',
   SsoConfig = 'SSO_CONFIG',
   AddOrg = 'ADD_ORG',
@@ -572,6 +573,12 @@ export type FieldCreationEvent = {
   type?: Maybe<Scalars['String']>;
 };
 
+export type ForgotPasswordResponse = {
+  __typename?: 'ForgotPasswordResponse';
+  response: GqOperationResponse;
+  responseMsg: Scalars['String'];
+};
+
 export enum GqOperationResponse {
   Success = 'SUCCESS',
   Fail = 'FAIL',
@@ -647,10 +654,11 @@ export type LoginStep = {
   userId: Scalars['String'];
   step: LoginStepType;
   redirectPath?: Maybe<Scalars['String']>;
-  allowLostPassword?: Maybe<Scalars['Boolean']>;
   /** this is the domain/section of the website to continue to if the login is complete */
   loginCompleteDomain?: Maybe<WebAppDomain>;
   tokenUser?: Maybe<TokenUser>;
+  forgotPasswordEnabled: Scalars['Boolean'];
+  forgotPasswordMsg?: Maybe<Scalars['String']>;
 };
 
 export enum LoginStepType {
@@ -664,6 +672,7 @@ export type Mutation = {
   beginLogin?: Maybe<LoginStep>;
   passwordLogin?: Maybe<LoginStep>;
   logOut?: Maybe<LogOutInfo>;
+  forgotPassword?: Maybe<ForgotPasswordResponse>;
   /** Update your own password.  This is based on the current session of the logged in user. */
   updateOwnPassword?: Maybe<UserSession>;
   /** Initiate a password reset for a user, by creating an account activation link for the user to reset their password with. */
@@ -728,6 +737,11 @@ export type MutationBeginLoginArgs = {
 export type MutationPasswordLoginArgs = {
   userId: Scalars['String'];
   password: Scalars['String'];
+};
+
+
+export type MutationForgotPasswordArgs = {
+  userId: Scalars['String'];
 };
 
 
@@ -974,6 +988,7 @@ export type OrgSecurityForm = {
   __typename?: 'OrgSecurityForm';
   orgSid?: Maybe<Scalars['ID']>;
   forgotPasswordEnabled: UiBooleanField;
+  forgotPasswordMsg: UiStringField;
   allowedEmailDomains: UiStringField;
   options?: Maybe<Array<UiOptions>>;
   commands?: Maybe<Array<WebCommand>>;
@@ -2213,6 +2228,7 @@ export type UpdateOrgInput = {
 export type UpdateOrgSecurityInput = {
   orgSid: Scalars['ID'];
   forgotPasswordEnabled: Scalars['Boolean'];
+  forgotPasswordMsg?: Maybe<Scalars['String']>;
   allowedEmailDomains: Scalars['String'];
 };
 
@@ -4276,6 +4292,9 @@ export type OrgSecurityFormQuery = (
     & { forgotPasswordEnabled: (
       { __typename?: 'UIBooleanField' }
       & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), forgotPasswordMsg: (
+      { __typename?: 'UIStringField' }
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), allowedEmailDomains: (
       { __typename?: 'UIStringField' }
       & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
@@ -4725,7 +4744,7 @@ export type BeginLoginMutation = (
   { __typename?: 'Mutation' }
   & { beginLogin?: Maybe<(
     { __typename?: 'LoginStep' }
-    & Pick<LoginStep, 'userId' | 'step' | 'redirectPath' | 'allowLostPassword'>
+    & Pick<LoginStep, 'userId' | 'step' | 'redirectPath' | 'forgotPasswordEnabled' | 'forgotPasswordMsg'>
     & { loginCompleteDomain?: Maybe<(
       { __typename?: 'WebAppDomain' }
       & Pick<WebAppDomain, 'type' | 'selectedPage'>
@@ -4754,7 +4773,7 @@ export type PasswordLoginMutation = (
   { __typename?: 'Mutation' }
   & { passwordLogin?: Maybe<(
     { __typename?: 'LoginStep' }
-    & Pick<LoginStep, 'step' | 'redirectPath' | 'allowLostPassword'>
+    & Pick<LoginStep, 'step' | 'redirectPath' | 'forgotPasswordEnabled' | 'forgotPasswordMsg'>
     & { loginCompleteDomain?: Maybe<(
       { __typename?: 'WebAppDomain' }
       & Pick<WebAppDomain, 'type' | 'selectedPage'>
@@ -4785,6 +4804,19 @@ export type LogOutMutation = (
   & { logOut?: Maybe<(
     { __typename?: 'LogOutInfo' }
     & Pick<LogOutInfo, 'successful'>
+  )> }
+);
+
+export type ForgotPasswordMutationVariables = Exact<{
+  userId: Scalars['String'];
+}>;
+
+
+export type ForgotPasswordMutation = (
+  { __typename?: 'Mutation' }
+  & { forgotPassword?: Maybe<(
+    { __typename?: 'ForgotPasswordResponse' }
+    & Pick<ForgotPasswordResponse, 'response' | 'responseMsg'>
   )> }
 );
 
@@ -4952,6 +4984,9 @@ export type UpdateOrgSecurityMutation = (
     & { forgotPasswordEnabled: (
       { __typename?: 'UIBooleanField' }
       & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+    ), forgotPasswordMsg: (
+      { __typename?: 'UIStringField' }
+      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
     ), allowedEmailDomains: (
       { __typename?: 'UIStringField' }
       & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
@@ -9639,6 +9674,19 @@ export const OrgSecurityFormDocument = gql`
       errMsg
       errSeverity
     }
+    forgotPasswordMsg {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
+      errCode
+      errMsg
+      errSeverity
+    }
     allowedEmailDomains {
       value
       label
@@ -11096,7 +11144,6 @@ export const BeginLoginDocument = gql`
     userId
     step
     redirectPath
-    allowLostPassword
     loginCompleteDomain {
       type
       selectedPage
@@ -11117,6 +11164,8 @@ export const BeginLoginDocument = gql`
         defaultAuthorities
       }
     }
+    forgotPasswordEnabled
+    forgotPasswordMsg
   }
 }
     ${FragmentWebNavFragmentDoc}`;
@@ -11150,7 +11199,6 @@ export const PasswordLoginDocument = gql`
   passwordLogin(userId: $userId, password: $password) {
     step
     redirectPath
-    allowLostPassword
     loginCompleteDomain {
       type
       selectedPage
@@ -11174,6 +11222,8 @@ export const PasswordLoginDocument = gql`
         defaultAuthorities
       }
     }
+    forgotPasswordEnabled
+    forgotPasswordMsg
   }
 }
     ${FragmentWebNavFragmentDoc}`;
@@ -11234,6 +11284,39 @@ export function useLogOutMutation(baseOptions?: Apollo.MutationHookOptions<LogOu
 export type LogOutMutationHookResult = ReturnType<typeof useLogOutMutation>;
 export type LogOutMutationResult = Apollo.MutationResult<LogOutMutation>;
 export type LogOutMutationOptions = Apollo.BaseMutationOptions<LogOutMutation, LogOutMutationVariables>;
+export const ForgotPasswordDocument = gql`
+    mutation ForgotPassword($userId: String!) {
+  forgotPassword(userId: $userId) {
+    response
+    responseMsg
+  }
+}
+    `;
+export type ForgotPasswordMutationFn = Apollo.MutationFunction<ForgotPasswordMutation, ForgotPasswordMutationVariables>;
+
+/**
+ * __useForgotPasswordMutation__
+ *
+ * To run a mutation, you first call `useForgotPasswordMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useForgotPasswordMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [forgotPasswordMutation, { data, loading, error }] = useForgotPasswordMutation({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useForgotPasswordMutation(baseOptions?: Apollo.MutationHookOptions<ForgotPasswordMutation, ForgotPasswordMutationVariables>) {
+        return Apollo.useMutation<ForgotPasswordMutation, ForgotPasswordMutationVariables>(ForgotPasswordDocument, baseOptions);
+      }
+export type ForgotPasswordMutationHookResult = ReturnType<typeof useForgotPasswordMutation>;
+export type ForgotPasswordMutationResult = Apollo.MutationResult<ForgotPasswordMutation>;
+export type ForgotPasswordMutationOptions = Apollo.BaseMutationOptions<ForgotPasswordMutation, ForgotPasswordMutationVariables>;
 export const UpdateOwnPasswordDocument = gql`
     mutation UpdateOwnPassword($updateOwnPasswordInput: UpdateOwnPasswordInput!) {
   updateOwnPassword(updateOwnPasswordInput: $updateOwnPasswordInput) {
@@ -11624,6 +11707,19 @@ export const UpdateOrgSecurityDocument = gql`
       info
       required
       visible
+      errCode
+      errMsg
+      errSeverity
+    }
+    forgotPasswordMsg {
+      value
+      label
+      readOnly
+      info
+      required
+      visible
+      min
+      max
       errCode
       errMsg
       errSeverity
