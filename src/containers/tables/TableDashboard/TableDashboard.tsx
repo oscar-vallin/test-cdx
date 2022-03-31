@@ -74,6 +74,7 @@ const TableDashboard = ({
       <TableBox id={`${id}`}>
         <Table
           id={`${id}`}
+          tableId={tableId}
           date={date}
           fromDate={fromDate}
           toDate={toDate}

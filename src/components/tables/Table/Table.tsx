@@ -33,6 +33,7 @@ import {
 
 import { TableHeader } from '../TableHeader';
 import { yyyyMMdd } from 'src/utils/CDXUtils';
+import { TABLE_NAMES } from 'src/data/constants/TableConstants';
 
 const _buildColumns = (
   items,
@@ -140,6 +141,7 @@ type TableProps = {
   emptyMessage?: string;
   fromDate?: Date;
   toDate?: Date;
+  tableId?: string;
 } & typeof defaultProps;
 
 const Table = ({
@@ -154,7 +156,8 @@ const Table = ({
   onItemsListChange,
   emptyMessage = 'No data',
   fromDate,
-  toDate
+  toDate,
+  tableId
 }: TableProps): ReactElement => {
   const { orgSid } = useOrgSid();
 
@@ -371,7 +374,7 @@ const Table = ({
         }
 
         {
-          let startFormatted, endFormatted
+          let startFormatted, endFormatted, redirectPage= 'file-status'
           if(date === 'custom'){
             startFormatted = yyyyMMdd(fromDate);
             endFormatted = yyyyMMdd(toDate);
@@ -380,11 +383,19 @@ const Table = ({
             endFormatted = yyyyMMdd(getDates(date).endDate);
           }
           
+          if(tableId){
+            if(tableId === TABLE_NAMES.DASHBOARD_TRANSMISSIONS_VENDOR || tableId === TABLE_NAMES.DASHBOARD_TRANSMISSIONS_PLANSPONSOR)
+              redirectPage='transmissions'
+
+            if(tableId === TABLE_NAMES.DASHBOARD_ERRORS_VENDOR || tableId === TABLE_NAMES.DASHBOARD_ERRORS_PLANSPONSOR)
+              redirectPage='errors'
+          }
+          
           return (
             <StyledCell left>
               <Link>
                 <RouteLink
-                  to={`/file-status?filter=${fieldContent}&orgSid=${orgSid}&startDate=${startFormatted}&endDate=${endFormatted}`}
+                  to={`/${redirectPage}?filter=${fieldContent}&orgSid=${orgSid}&startDate=${startFormatted}&endDate=${endFormatted}`}
                 >
                   {fieldContent}
                 </RouteLink>
