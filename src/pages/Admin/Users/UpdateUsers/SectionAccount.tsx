@@ -8,7 +8,7 @@ import { CdxWebCommandType, UserAccount, UserAccountForm } from 'src/data/servic
 import { UIInputTextReadOnly } from 'src/components/inputs/InputText/InputText';
 import { WizardBody } from 'src/layouts/Panels/Panels.styles';
 import UpdateUserFooter from './UpdateUserFooter';
-import { Link } from '@fluentui/react';
+import { CommandButton } from '@fluentui/react';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 
 type SectionAccountProps = {
@@ -23,6 +23,8 @@ const SectionAccount = ({ form, onSave, onFormChange }: SectionAccountProps) => 
   const formEmail = useFormInputValue(form.email?.value ?? '');
   const history = useHistory();
   const { orgSid } = useOrgSid();
+  const auditCommand = form.commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Audit)
+  const historyCommand = form.commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.History)
   const handleSave = () => {
     const user: UserAccount = {
       sid: '',
@@ -35,7 +37,14 @@ const SectionAccount = ({ form, onSave, onFormChange }: SectionAccountProps) => 
     };
     onSave(user);
   };
- 
+
+  const handleUserAuditLogsClick =()=>{
+    history.push(`/user-audit-logs?orgSid=${orgSid}&userSid=${form.person?.sid}`)
+  }
+  const handleUserChangeHistoryLogsClick =()=>{
+    history.push(`/user-audit-logs?orgSid=${orgSid}&changedByUserSid=${form.person?.sid}`)
+  }
+
   return (
     <>
       <WizardBody>
@@ -95,6 +104,30 @@ const SectionAccount = ({ form, onSave, onFormChange }: SectionAccountProps) => 
           </FormRow>
         ) : (
           ''
+        )}
+        {auditCommand && (
+          <FormRow>
+            <Column lg="12">
+              <CommandButton
+                id="__UserAuditLogs-Button"
+                iconProps={{ iconName: 'ComplianceAudit' }}
+                text={auditCommand.label ?? ''}
+                onClick={handleUserAuditLogsClick}
+              />
+            </Column>
+          </FormRow>
+        )}
+        {historyCommand && (   
+          <FormRow>
+            <Column lg="12">             
+              <CommandButton
+                id="__UserChangeHistory-Button"
+                iconProps={{ iconName: 'FullHistory' }}
+                text={historyCommand.label ?? ''}
+                onClick={handleUserChangeHistoryLogsClick}
+              />
+            </Column>
+          </FormRow>
         )}
       </WizardBody>
       {form.commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Update) && (
