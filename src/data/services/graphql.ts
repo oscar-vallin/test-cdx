@@ -1273,6 +1273,8 @@ export enum Permission {
   OrgRead = 'ORG_READ',
   OrgUpdate = 'ORG_UPDATE',
   OrgDelete = 'ORG_DELETE',
+  OrgSecurityRead = 'ORG_SECURITY_READ',
+  OrgSecurityUpdate = 'ORG_SECURITY_UPDATE',
   PasswordRulesUpdate = 'PASSWORD_RULES_UPDATE',
   SsoidpCreate = 'SSOIDP_CREATE',
   SsoidpRead = 'SSOIDP_READ',

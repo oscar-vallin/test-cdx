@@ -9961,6 +9961,18 @@
             "deprecationReason": null
           },
           {
+            "name": "ORG_SECURITY_READ",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ORG_SECURITY_UPDATE",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "PASSWORD_RULES_UPDATE",
             "description": null,
             "isDeprecated": false,
