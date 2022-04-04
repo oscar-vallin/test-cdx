@@ -39,10 +39,10 @@ const SectionAccount = ({ form, onSave, onFormChange }: SectionAccountProps) => 
   };
 
   const handleUserAuditLogsClick =()=>{
-    history.push(`/user-audit-logs?orgSid=${orgSid}&userSid=${form.person?.sid}`)
+    history.push(`/user-audit-logs?orgSid=${orgSid}&changedByUserSid=${form.person?.sid}`)
   }
   const handleUserChangeHistoryLogsClick =()=>{
-    history.push(`/user-audit-logs?orgSid=${orgSid}&changedByUserSid=${form.person?.sid}`)
+    history.push(`/user-audit-logs?orgSid=${orgSid}&userSid=${form.person?.sid}`)
   }
 
   return (
