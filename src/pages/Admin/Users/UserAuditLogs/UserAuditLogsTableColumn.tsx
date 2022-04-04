@@ -20,9 +20,8 @@ export const useUserAuditLogsColumns = (
   const getUserAccountAuditFormat = (userAccount: UserAccount) => {
     if (userAccount && userAccount.person) {
       return `${userAccount.person.firstNm} ${userAccount.person.lastNm} <${userAccount.email}> `;
-    } else {
-      return '';
     }
+    return '';
   };
 
   const columnOptions: IColumn[] = [
@@ -52,7 +51,8 @@ export const useUserAuditLogsColumns = (
       data: UserAuditLogsColumn.USER,
       //onColumnClick: onSort,
       onRender: (item: UserAccountAuditLog) => {
-        return <span>{getUserAccountAuditFormat(item.userAccount)}</span>;
+        const name = getUserAccountAuditFormat(item.userAccount);
+        return <span title={name}>{name}</span>;
       },
     },
     {
@@ -79,10 +79,10 @@ export const useUserAuditLogsColumns = (
       //onColumnClick: onSort,
       onRender: (item: UserAccountAuditLog) => {
         if (item.changedByUserAccount && item.changedByUserAccount.sid !== item.userAccount.sid) {
-          return <span>{getUserAccountAuditFormat(item.changedByUserAccount)}</span>;
-        } else {
-          return <span>Self</span>;
+          const name = getUserAccountAuditFormat(item.changedByUserAccount);
+          return <span title={name}>{name}</span>;
         }
+        return <span>Self</span>;
       },
     },
     {
@@ -94,6 +94,9 @@ export const useUserAuditLogsColumns = (
       fieldName: 'newValue',
       isPadded: true,
       data: UserAuditLogsColumn.NEW_VALUE,
+      onRender: (item: UserAccountAuditLog) => {
+        return <span title={item.newValue ?? undefined}>{item.newValue}</span>;
+      },
     },
     {
       key: 'oldValue',
@@ -103,6 +106,9 @@ export const useUserAuditLogsColumns = (
       fieldName: 'oldValue',
       isPadded: true,
       data: UserAuditLogsColumn.OLD_VALUE,
+      onRender: (item: UserAccountAuditLog) => {
+        return <span title={item.oldValue ?? undefined}>{item.oldValue}</span>;
+      },
     },
   ];
 
