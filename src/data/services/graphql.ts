@@ -2303,7 +2303,7 @@ export type UserAccountAuditLog = {
   auditDateTime: Scalars['DateTime'];
   event: UserAccountAuditEvent;
   orgSid: Scalars['ID'];
-  userAccount: UserAccount;
+  userAccount?: Maybe<UserAccount>;
   oldValue?: Maybe<Scalars['String']>;
   newValue?: Maybe<Scalars['String']>;
   workOrderId?: Maybe<Scalars['String']>;
@@ -2644,6 +2644,9 @@ export type XpsftpForm = {
   errCode?: Maybe<Scalars['String']>;
   errMsg?: Maybe<Scalars['String']>;
   errSeverity?: Maybe<ErrorSeverity>;
+  sshKeyPath?: Maybe<UiSelectOneField>;
+  sshKeyPassword?: Maybe<UiStringField>;
+  options?: Maybe<Array<UiOptions>>;
 };
 
 export type XpsftpTestPage = {
@@ -2660,6 +2663,8 @@ export type XsftpInput = {
   password?: Maybe<Scalars['String']>;
   folder?: Maybe<Scalars['String']>;
   stepWise?: Maybe<Scalars['Boolean']>;
+  sshKeyPath?: Maybe<Scalars['String']>;
+  sshKeyPassword?: Maybe<Scalars['String']>;
 };
 
 export type FragmentStatTypeFragment = (
@@ -3559,14 +3564,14 @@ export type UserAccountAuditLogsQuery = (
     )>, nodes?: Maybe<Array<(
       { __typename?: 'UserAccountAuditLog' }
       & Pick<UserAccountAuditLog, 'auditDateTime' | 'event' | 'orgSid' | 'oldValue' | 'newValue' | 'workOrderId'>
-      & { userAccount: (
+      & { userAccount?: Maybe<(
         { __typename?: 'UserAccount' }
         & Pick<UserAccount, 'sid' | 'email'>
         & { person?: Maybe<(
           { __typename?: 'Person' }
           & Pick<Person, 'sid' | 'firstNm' | 'lastNm'>
         )> }
-      ), changedByUserAccount?: Maybe<(
+      )>, changedByUserAccount?: Maybe<(
         { __typename?: 'UserAccount' }
         & Pick<UserAccount, 'sid' | 'email'>
         & { person?: Maybe<(
@@ -4700,7 +4705,24 @@ export type XpsftpTestQuery = (
       )>, stepWise?: Maybe<(
         { __typename?: 'UIBooleanField' }
         & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
-      )> }
+      )>, sshKeyPath?: Maybe<(
+        { __typename?: 'UISelectOneField' }
+        & Pick<UiSelectOneField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & { value?: Maybe<(
+          { __typename?: 'NVPStr' }
+          & Pick<NvpStr, 'name' | 'value'>
+        )> }
+      )>, sshKeyPassword?: Maybe<(
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, options?: Maybe<Array<(
+        { __typename?: 'UIOptions' }
+        & Pick<UiOptions, 'key'>
+        & { values?: Maybe<Array<(
+          { __typename?: 'UIOption' }
+          & Pick<UiOption, 'label' | 'value' | 'info'>
+        )>> }
+      )>> }
     ), sendTestFileForm?: Maybe<(
       { __typename?: 'SFTPTestSendTestFileForm' }
       & { sendTestFile?: Maybe<(
@@ -5957,7 +5979,24 @@ export type FtpTestMMutation = (
       )>, stepWise?: Maybe<(
         { __typename?: 'UIBooleanField' }
         & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
-      )> }
+      )>, sshKeyPath?: Maybe<(
+        { __typename?: 'UISelectOneField' }
+        & Pick<UiSelectOneField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & { value?: Maybe<(
+          { __typename?: 'NVPStr' }
+          & Pick<NvpStr, 'name' | 'value'>
+        )> }
+      )>, sshKeyPassword?: Maybe<(
+        { __typename?: 'UIStringField' }
+        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      )>, options?: Maybe<Array<(
+        { __typename?: 'UIOptions' }
+        & Pick<UiOptions, 'key'>
+        & { values?: Maybe<Array<(
+          { __typename?: 'UIOption' }
+          & Pick<UiOption, 'label' | 'value' | 'info'>
+        )>> }
+      )>> }
     )>, sendTestFileForm?: Maybe<(
       { __typename?: 'SFTPTestSendTestFileForm' }
       & { sendTestFile?: Maybe<(
@@ -11019,6 +11058,43 @@ export const XpsftpTestDocument = gql`
       errCode
       errMsg
       errSeverity
+      sshKeyPath {
+        value {
+          name
+          value
+        }
+        label
+        readOnly
+        info
+        required
+        visible
+        options
+        query
+        errCode
+        errMsg
+        errSeverity
+      }
+      sshKeyPassword {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      options {
+        key
+        values {
+          label
+          value
+          info
+        }
+      }
     }
     sendTestFileForm {
       sendTestFile {
@@ -14583,6 +14659,43 @@ export const FtpTestMDocument = gql`
       errCode
       errMsg
       errSeverity
+      sshKeyPath {
+        value {
+          name
+          value
+        }
+        label
+        readOnly
+        info
+        required
+        visible
+        options
+        query
+        errCode
+        errMsg
+        errSeverity
+      }
+      sshKeyPassword {
+        value
+        label
+        readOnly
+        info
+        required
+        visible
+        min
+        max
+        errCode
+        errMsg
+        errSeverity
+      }
+      options {
+        key
+        values {
+          label
+          value
+          info
+        }
+      }
     }
     sendTestFileForm {
       sendTestFile {
