@@ -6,7 +6,7 @@ import { Tabs } from 'src/components/tabs/Tabs';
 import { PanelBody, PanelHeader, PanelTitle } from 'src/layouts/Panels/Panels.styles';
 
 import { UseUpdateUserPanel } from 'src/pages/Admin/Users/UpdateUsers/useUpdateUserPanel';
-import { CdxWebCommandType, GqOperationResponse, UserAccount, UserAccountForm } from 'src/data/services/graphql';
+import { GqOperationResponse, UserAccount, UserAccountForm } from 'src/data/services/graphql';
 import { Column } from 'src/components/layouts';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import SectionAccessManagement from './SectionAccessManagement';
@@ -261,31 +261,27 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
       </Column>
       <Column lg="6" right>
         <Stack horizontal>
-          {useUpdateUserPanel.userAccountForm.commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Reset) && (
+          {useUpdateUserPanel.resetPasswordCmd && (
             <CommandButton
               id="__ResetPassword_Button"
               iconProps={{ iconName: 'Permissions' }}
-              text="Reset Password"
+              text={useUpdateUserPanel.resetPasswordCmd.label ?? 'Reset'}
               onClick={showResetPasswordDialog}
             />
           )}
-          {useUpdateUserPanel.userAccountForm.commands?.find(
-            (cmd) => cmd?.commandType === CdxWebCommandType.Deactivate
-          ) && (
+          {useUpdateUserPanel.deactivateUserCmd && (
             <CommandButton
               id="__DeactivateUser_Button"
               iconProps={{ iconName: 'UserRemove' }}
-              text="Deactivate User"
+              text={useUpdateUserPanel.deactivateUserCmd.label ?? 'Deactivate'}
               onClick={showDeactivateUserDialog}
             />
           )}
-          {useUpdateUserPanel.userAccountForm.commands?.find(
-            (cmd) => cmd?.commandType === CdxWebCommandType.Activate
-          ) && (
+          {useUpdateUserPanel.activateUserCmd && (
             <CommandButton
               id="__ActivateUser_Button"
               iconProps={{ iconName: 'UserFollowed' }}
-              text="Activate User"
+              text={useUpdateUserPanel.activateUserCmd.label ?? 'Activate'}
               onClick={showActivateUserDialog}
             />
           )}
