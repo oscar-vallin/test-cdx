@@ -12,6 +12,8 @@ import { useOrgSid } from 'src/hooks/useOrgSid';
 
 export const useUsersLists = (activeFilter: ActiveEnum) => {
   const [users, setUsers] = useState<UserItem[] | null | undefined>([]);
+  const [userSearchForm, setUserSearchForm] = useState<any>({})
+
   const [commands, setCommands] = useState<WebCommand[] | null | undefined>([]);
   const { orgSid } = useOrgSid();
   const [apiUsersForOrgFpLazy, { data, loading, error }] = useUsersForOrgLazyQuery();
@@ -24,17 +26,18 @@ export const useUsersLists = (activeFilter: ActiveEnum) => {
 
   const handleError = ErrorHandler();
 
-  const fetchUsers = async (pageNumber = 0) => {
+  const fetchUsers = async (pageNumber = 0, sortParam?, lockedFilter?, pendingActivationFilter?, expiredActivationFilter?, searchText? ) => {
+    const sort = sortParam ? sortParam : [
+      { property: 'person.lastNm', direction: SortDirection.Asc },
+      { property: 'person.firstNm', direction: SortDirection.Asc },
+      { property: 'email', direction: SortDirection.Asc },
+    ]
     apiUsersForOrgFpLazy({
       variables: {
         orgSid,
-        userFilter: { activeFilter },
+        userFilter: { activeFilter, lockedFilter, pendingActivationFilter, expiredActivationFilter, searchText: searchText ?? null },
         pageableInput: {
-          sort: [
-            { property: 'person.lastNm', direction: SortDirection.Asc },
-            { property: 'person.firstNm', direction: SortDirection.Asc },
-            { property: 'email', direction: SortDirection.Asc },
-          ],
+          sort,
           pageSize: 100,
           pageNumber,
         },
@@ -86,6 +89,7 @@ export const useUsersLists = (activeFilter: ActiveEnum) => {
         }
       });
 
+      setUserSearchForm(data?.usersForOrg?.userSearchForm)
       setCommands(newCommands);
       setUsers(items);
     }
@@ -102,5 +106,6 @@ export const useUsersLists = (activeFilter: ActiveEnum) => {
     commands,
     loading,
     fetchUsers,
+    userSearchForm
   };
 };

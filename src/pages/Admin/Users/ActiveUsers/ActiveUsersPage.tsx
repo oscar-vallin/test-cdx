@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { DefaultButton, Dialog, DialogFooter, DialogType, PrimaryButton, Spinner, SpinnerSize } from '@fluentui/react';
 import { EmptyState } from 'src/containers/states';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
@@ -6,7 +6,7 @@ import { Column, Container, Row } from 'src/components/layouts';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { PageTitle } from 'src/components/typography';
 
-import { ActiveEnum, CdxWebCommandType, useDeactivateUsersMutation, UserItem } from 'src/data/services/graphql';
+import { ActiveEnum, CdxWebCommandType, PageableInput, useDeactivateUsersMutation, UserItem, SortDirection, NullHandling } from 'src/data/services/graphql';
 
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { UsersTable } from 'src/pages/Admin/Users/UsersTable';
@@ -17,12 +17,24 @@ import { Paginator } from 'src/components/tables/Paginator';
 import { StyledColumn } from './ActiveUsersPage.styles';
 import { UpdateUserPanel, useUpdateUserPanel } from '../UpdateUsers';
 import { CreateUsersPanel } from '../CreateUsers';
+import { useTableFilters } from 'src/hooks/useTableFilters';
+import { InputText } from 'src/components/inputs/InputText';
+import { UIInputCheck } from 'src/components/inputs/InputCheck';
+import {  Stack } from '@fluentui/react';
 
 const ActiveUsersPage = () => {
   const { orgSid } = useOrgSid();
   const [isCreateUserPanelOpen, setIsCreateUserPanelOpen] = useState(false);
   const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);
   const [selectedItems, setSelectedItems] = useState<UserItem[]>([]);
+  const [lockedFilter, setLockedFilter] =useState<boolean>(false);
+  const [pendingActivationFilter, setPendingActivationFilter] =useState<boolean>(false);
+  const [expiredActivationFilter, setExpiredActivationFilter] =useState<boolean>(false);
+  const tableFilters = useTableFilters('Name, Last Name, Email, etc.', [
+    { property: 'person.lastNm', direction: SortDirection.Asc },
+    { property: 'person.firstNm', direction: SortDirection.Asc },
+    { property: 'email', direction: SortDirection.Asc },
+  ]);
 
   const [disableUser] = useDeactivateUsersMutation();
 
@@ -31,6 +43,20 @@ const ActiveUsersPage = () => {
   const userService = useUsersLists(ActiveEnum.Active);
 
   const createCmd = userService.commands?.find((cmd) => cmd.commandType === CdxWebCommandType.Create);
+
+  useEffect(() => {
+    // Reset the page number when any filtering occurs
+    tableFilters.setPagingParams({
+      pageNumber: 0,
+      pageSize: 100,
+      sort: tableFilters.pagingParams.sort,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lockedFilter, pendingActivationFilter, expiredActivationFilter, tableFilters.searchText.delayedValue]);
+
+  useEffect(()=>{
+    userService.fetchUsers(0, tableFilters.pagingParams.sort, lockedFilter, pendingActivationFilter, expiredActivationFilter, tableFilters.searchText.delayedValue)
+  }, [tableFilters.pagingParams])
 
   const hideConfirmation = () => {
     setIsConfirmationHidden(true);
@@ -62,29 +88,77 @@ const ActiveUsersPage = () => {
   };
 
   const renderEmptyState = () => {
-    const emptyText = createCmd
-      ? 'There are no active users in this organization. Click the button below to create a new user.'
-      : 'There are no active users in this organization.';
+    let emptyText = ''
+    
+    if(lockedFilter){
+      emptyText= 'There are no locked users found.'
+    }
 
+    if(pendingActivationFilter){
+      emptyText= 'There are no users pending activation.'
+    }
+
+    if(expiredActivationFilter){
+      emptyText= 'There are no users with and expired activation.'
+    }
+
+    if(!lockedFilter && !pendingActivationFilter && !expiredActivationFilter){
+      emptyText = createCmd
+        ? 'There are no active users in this organization. Click the button below to create a new user.'
+        : 'There are no active users in this organization.';
+    }
     return <EmptyState title="No users found" description={emptyText} actions={renderCreateButton()} />;
   };
 
   const renderBody = () => {
-    if (userService.loading) {
-      return (
-        <Spacing margin={{ top: 'double' }}>
-          <Spinner size={SpinnerSize.large} label="Loading active users" />
-        </Spacing>
-      );
-    }
-
-    if (!userService.users?.length) {
-      return renderEmptyState();
-    }
 
     return (
       <>
-        <UsersTable users={userService.users} onClickUser={updateUserPanel.showPanel} />
+        <Stack horizontal={true} wrap={true} style={{ width: '100%'}} verticalAlign='end' horizontalAlign='space-between'>
+          {tableFilters?.searchText && (
+            <Column lg="6">
+              <InputText
+                id={`Active_Users_Input-Search`}
+                autofocus
+                disabled={false}
+                {...tableFilters.searchText}
+                label="Search"
+              />
+            </Column>
+          )}
+          {userService.userSearchForm.lockedFilter &&(
+            <UIInputCheck 
+              id={`__Locked__Users-Checkbox`} 
+              uiField={userService.userSearchForm.lockedFilter}
+              onChange={(_event, _lockedFilter: any) => { setLockedFilter(_lockedFilter)}}
+              />
+          )}
+          {userService.userSearchForm.pendingActivationFilter &&(
+            <UIInputCheck 
+              id={`__PendingActivation__Users-Checkbox`} 
+              uiField={userService.userSearchForm.pendingActivationFilter }
+              onChange={(_event, _pendingActivationFilter: any) => { setPendingActivationFilter(_pendingActivationFilter)}}
+              />
+          )}
+          {userService.userSearchForm.expiredActivationFilter &&(
+            <UIInputCheck 
+              id={`__ExpiredActivation__Users-Checkbox`} 
+              uiField={userService.userSearchForm.expiredActivationFilter}
+              onChange={(_event, _expiredActivationFilter: any) => { setExpiredActivationFilter(_expiredActivationFilter)}}
+              />
+          )}
+        </Stack>
+       
+        {!userService.users?.length ? 
+          renderEmptyState() : 
+          <UsersTable 
+            tableFilters={tableFilters} 
+            users={userService.users} 
+            onClickUser={updateUserPanel.showPanel}
+          />
+        }
+        
+
         <Paginator pagingInfo={userService.pagingInfo} onPageChange={userService.onPageChange} />
       </>
     );
