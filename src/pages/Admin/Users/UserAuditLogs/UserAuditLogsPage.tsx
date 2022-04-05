@@ -13,6 +13,7 @@ import {
 } from 'src/data/services/graphql';
 import { UserAuditLogsColumn } from './UserAuditLogsTableColumn';
 import { useTableFilters } from 'src/hooks/useTableFilters';
+import { ROUTE_USER_AUDIT_LOGS } from 'src/data/constants/RouteConstants';
 
 const _UserAuditLogsPage = () => {
 
@@ -36,7 +37,7 @@ const _UserAuditLogsPage = () => {
   };
 
   return (
-    <LayoutDashboard id="PageUserAuditLogs" menuOptionSelected={ROUTES.ROUTE_FILE_STATUS.API_ID}>
+    <LayoutDashboard id="PageUserAuditLogs" menuOptionSelected={ROUTE_USER_AUDIT_LOGS.API_ID}>
       <PageHeader id="__UserAuditLogsHeader">
         <Container>
           <Row>
