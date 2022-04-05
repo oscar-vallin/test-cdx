@@ -55,6 +55,12 @@ const ActiveUsersPage = () => {
   }, [lockedFilter, pendingActivationFilter, expiredActivationFilter, tableFilters.searchText.delayedValue]);
 
   useEffect(()=>{
+    setLockedFilter(false);
+    setPendingActivationFilter(false);
+    setExpiredActivationFilter(false);
+  },[tableFilters.searchText.delayedValue])
+  
+  useEffect(()=>{
     userService.fetchUsers(0, tableFilters.pagingParams.sort, lockedFilter, pendingActivationFilter, expiredActivationFilter, tableFilters.searchText.delayedValue)
   }, [tableFilters.pagingParams])
 
@@ -102,7 +108,11 @@ const ActiveUsersPage = () => {
       emptyText= 'There are no users with and expired activation.'
     }
 
-    if(!lockedFilter && !pendingActivationFilter && !expiredActivationFilter){
+    if(tableFilters.searchText.delayedValue){
+      emptyText= `No users were found matching '${tableFilters.searchText.delayedValue}'.`
+    }
+
+    if(!lockedFilter && !pendingActivationFilter && !expiredActivationFilter && !tableFilters.searchText.delayedValue.length){
       emptyText = createCmd
         ? 'There are no active users in this organization. Click the button below to create a new user.'
         : 'There are no active users in this organization.';
@@ -129,6 +139,7 @@ const ActiveUsersPage = () => {
           {userService.userSearchForm.lockedFilter &&(
             <UIInputCheck 
               id={`__Locked__Users-Checkbox`} 
+              value={lockedFilter}
               uiField={userService.userSearchForm.lockedFilter}
               onChange={(_event, _lockedFilter: any) => { setLockedFilter(_lockedFilter)}}
               />
@@ -136,6 +147,7 @@ const ActiveUsersPage = () => {
           {userService.userSearchForm.pendingActivationFilter &&(
             <UIInputCheck 
               id={`__PendingActivation__Users-Checkbox`} 
+              value={pendingActivationFilter}
               uiField={userService.userSearchForm.pendingActivationFilter }
               onChange={(_event, _pendingActivationFilter: any) => { setPendingActivationFilter(_pendingActivationFilter)}}
               />
@@ -143,6 +155,7 @@ const ActiveUsersPage = () => {
           {userService.userSearchForm.expiredActivationFilter &&(
             <UIInputCheck 
               id={`__ExpiredActivation__Users-Checkbox`} 
+              value={expiredActivationFilter}
               uiField={userService.userSearchForm.expiredActivationFilter}
               onChange={(_event, _expiredActivationFilter: any) => { setExpiredActivationFilter(_expiredActivationFilter)}}
               />
