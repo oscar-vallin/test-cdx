@@ -1273,6 +1273,8 @@ export enum Permission {
   OrgRead = 'ORG_READ',
   OrgUpdate = 'ORG_UPDATE',
   OrgDelete = 'ORG_DELETE',
+  OrgSecurityRead = 'ORG_SECURITY_READ',
+  OrgSecurityUpdate = 'ORG_SECURITY_UPDATE',
   PasswordRulesUpdate = 'PASSWORD_RULES_UPDATE',
   SsoidpCreate = 'SSOIDP_CREATE',
   SsoidpRead = 'SSOIDP_READ',
@@ -2077,6 +2079,7 @@ export type UiOption = {
   label: Scalars['String'];
   value: Scalars['String'];
   info?: Maybe<Scalars['String']>;
+  category?: Maybe<Scalars['String']>;
 };
 
 export type UiOptions = {
@@ -2301,7 +2304,7 @@ export type UserAccountAuditLog = {
   auditDateTime: Scalars['DateTime'];
   event: UserAccountAuditEvent;
   orgSid: Scalars['ID'];
-  userAccount: UserAccount;
+  userAccount?: Maybe<UserAccount>;
   oldValue?: Maybe<Scalars['String']>;
   newValue?: Maybe<Scalars['String']>;
   workOrderId?: Maybe<Scalars['String']>;
@@ -2642,6 +2645,9 @@ export type XpsftpForm = {
   errCode?: Maybe<Scalars['String']>;
   errMsg?: Maybe<Scalars['String']>;
   errSeverity?: Maybe<ErrorSeverity>;
+  sshKeyPath?: Maybe<UiSelectOneField>;
+  sshKeyPassword?: Maybe<UiStringField>;
+  options?: Maybe<Array<UiOptions>>;
 };
 
 export type XpsftpTestPage = {
@@ -2658,6 +2664,8 @@ export type XsftpInput = {
   password?: Maybe<Scalars['String']>;
   folder?: Maybe<Scalars['String']>;
   stepWise?: Maybe<Scalars['Boolean']>;
+  sshKeyPath?: Maybe<Scalars['String']>;
+  sshKeyPassword?: Maybe<Scalars['String']>;
 };
 
 export type FragmentStatTypeFragment = (
@@ -2842,6 +2850,68 @@ export type FragmentWorkPacketCommandFragment = (
 export type FragmentPaginationInfoFragment = (
   { __typename?: 'PaginationInfo' }
   & Pick<PaginationInfo, 'totalPages' | 'totalElements' | 'pageNumber' | 'pageSize'>
+);
+
+export type FragmentUiOptionsFragment = (
+  { __typename?: 'UIOptions' }
+  & Pick<UiOptions, 'key'>
+  & { values?: Maybe<Array<(
+    { __typename?: 'UIOption' }
+    & FragmentUiOptionFragment
+  )>> }
+);
+
+export type FragmentUiOptionFragment = (
+  { __typename?: 'UIOption' }
+  & Pick<UiOption, 'label' | 'value' | 'info' | 'category'>
+);
+
+export type FragmentUiStringFieldFragment = (
+  { __typename?: 'UIStringField' }
+  & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+);
+
+export type FragmentUiBooleanFieldFragment = (
+  { __typename?: 'UIBooleanField' }
+  & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+);
+
+export type FragmentUiDateFieldFragment = (
+  { __typename?: 'UIDateField' }
+  & Pick<UiDateField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+);
+
+export type FragmentUiIntFieldFragment = (
+  { __typename?: 'UIIntField' }
+  & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+);
+
+export type FragmentUiLongFieldFragment = (
+  { __typename?: 'UILongField' }
+  & Pick<UiLongField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+);
+
+export type FragmentUiSelectOneFieldFragment = (
+  { __typename?: 'UISelectOneField' }
+  & Pick<UiSelectOneField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+  & { value?: Maybe<(
+    { __typename?: 'NVPStr' }
+    & Pick<NvpStr, 'name' | 'value'>
+  )> }
+);
+
+export type FragmentUiSelectManyFieldFragment = (
+  { __typename?: 'UISelectManyField' }
+  & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+  & { value?: Maybe<Array<(
+    { __typename?: 'NVPStr' }
+    & Pick<NvpStr, 'name' | 'value'>
+  )>> }
+);
+
+export type FragmentUiReadOnlyFieldFragment = (
+  { __typename?: 'UIReadOnlyField' }
+  & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
 );
 
 export type VersionQueryVariables = Exact<{ [key: string]: never; }>;
@@ -3267,19 +3337,19 @@ export type UsersForOrgQuery = (
       { __typename?: 'UserSearchForm' }
       & { searchText?: Maybe<(
         { __typename?: 'UIStringField' }
-        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiStringFieldFragment
       )>, lockedFilter?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, pendingActivationFilter?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, expiredActivationFilter?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, searchAllOrgs?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )> }
     )>, toolTips?: Maybe<(
       { __typename?: 'UserConnectionTooltips' }
@@ -3424,46 +3494,38 @@ export type UserAccountFormQuery = (
     & Pick<UserAccountForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { email?: Maybe<(
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiStringFieldFragment
     )>, active?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiBooleanFieldFragment
     )>, person?: Maybe<(
       { __typename?: 'PersonForm' }
       & Pick<PersonForm, 'sid' | 'errCode' | 'errMsg' | 'errSeverity'>
       & { firstNm: (
         { __typename?: 'UIStringField' }
-        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiStringFieldFragment
       ), lastNm: (
         { __typename?: 'UIStringField' }
-        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiStringFieldFragment
       ) }
     )>, organization: (
       { __typename?: 'UIReadOnlyField' }
-      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiReadOnlyFieldFragment
     ), accessPolicyGroups?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<(
-        { __typename?: 'NVPStr' }
-        & Pick<NvpStr, 'name' | 'value'>
-      )>> }
+      & FragmentUiSelectManyFieldFragment
     )>, sendActivationEmail?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiBooleanFieldFragment
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
-      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiReadOnlyFieldFragment
     )>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
     )>>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
-      & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<(
-        { __typename?: 'UIOption' }
-        & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>> }
+      & FragmentUiOptionsFragment
     )>> }
   )> }
 );
@@ -3480,46 +3542,38 @@ export type FindUserAccountQuery = (
     & Pick<UserAccountForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { email?: Maybe<(
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiStringFieldFragment
     )>, active?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiBooleanFieldFragment
     )>, person?: Maybe<(
       { __typename?: 'PersonForm' }
       & Pick<PersonForm, 'sid' | 'errCode' | 'errMsg' | 'errSeverity'>
       & { firstNm: (
         { __typename?: 'UIStringField' }
-        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiStringFieldFragment
       ), lastNm: (
         { __typename?: 'UIStringField' }
-        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiStringFieldFragment
       ) }
     )>, organization: (
       { __typename?: 'UIReadOnlyField' }
-      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiReadOnlyFieldFragment
     ), accessPolicyGroups?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<(
-        { __typename?: 'NVPStr' }
-        & Pick<NvpStr, 'name' | 'value'>
-      )>> }
+      & FragmentUiSelectManyFieldFragment
     )>, sendActivationEmail?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiBooleanFieldFragment
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
-      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiReadOnlyFieldFragment
     )>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
     )>>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
-      & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<(
-        { __typename?: 'UIOption' }
-        & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>> }
+      & FragmentUiOptionsFragment
     )>> }
   )> }
 );
@@ -3557,14 +3611,14 @@ export type UserAccountAuditLogsQuery = (
     )>, nodes?: Maybe<Array<(
       { __typename?: 'UserAccountAuditLog' }
       & Pick<UserAccountAuditLog, 'auditDateTime' | 'event' | 'orgSid' | 'oldValue' | 'newValue' | 'workOrderId'>
-      & { userAccount: (
+      & { userAccount?: Maybe<(
         { __typename?: 'UserAccount' }
         & Pick<UserAccount, 'sid' | 'email'>
         & { person?: Maybe<(
           { __typename?: 'Person' }
           & Pick<Person, 'sid' | 'firstNm' | 'lastNm'>
         )> }
-      ), changedByUserAccount?: Maybe<(
+      )>, changedByUserAccount?: Maybe<(
         { __typename?: 'UserAccount' }
         & Pick<UserAccount, 'sid' | 'email'>
         & { person?: Maybe<(
@@ -3632,7 +3686,7 @@ export type AccessPolicyTemplatesQuery = (
   { __typename?: 'Query' }
   & { accessPolicyTemplates?: Maybe<Array<(
     { __typename?: 'UIOption' }
-    & Pick<UiOption, 'label' | 'value' | 'info'>
+    & Pick<UiOption, 'label' | 'value' | 'info' | 'category'>
   )>> }
 );
 
@@ -3719,7 +3773,7 @@ export type AccessPolicyGroupTemplatesQuery = (
   { __typename?: 'Query' }
   & { accessPolicyGroupTemplates?: Maybe<Array<(
     { __typename?: 'UIOption' }
-    & Pick<UiOption, 'label' | 'value' | 'info'>
+    & Pick<UiOption, 'label' | 'value' | 'info' | 'category'>
   )>> }
 );
 
@@ -3736,37 +3790,25 @@ export type AccessPolicyFormQuery = (
     & Pick<AccessPolicyForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { name: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiStringFieldFragment
     ), organization: (
       { __typename?: 'UIReadOnlyField' }
-      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiReadOnlyFieldFragment
     ), permissions?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<(
-        { __typename?: 'NVPStr' }
-        & Pick<NvpStr, 'name' | 'value'>
-      )>> }
+      & FragmentUiSelectManyFieldFragment
     )>, tmpl?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiBooleanFieldFragment
     )>, tmplUseAsIs?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiBooleanFieldFragment
     )>, applicableOrgTypes?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<(
-        { __typename?: 'NVPStr' }
-        & Pick<NvpStr, 'name' | 'value'>
-      )>> }
+      & FragmentUiSelectManyFieldFragment
     )>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
-      & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<(
-        { __typename?: 'UIOption' }
-        & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>> }
+      & FragmentUiOptionsFragment
     )>>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
@@ -3786,37 +3828,25 @@ export type FindAccessPolicyQuery = (
     & Pick<AccessPolicyForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { name: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiStringFieldFragment
     ), organization: (
       { __typename?: 'UIReadOnlyField' }
-      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiReadOnlyFieldFragment
     ), permissions?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<(
-        { __typename?: 'NVPStr' }
-        & Pick<NvpStr, 'name' | 'value'>
-      )>> }
+      & FragmentUiSelectManyFieldFragment
     )>, tmpl?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiBooleanFieldFragment
     )>, tmplUseAsIs?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiBooleanFieldFragment
     )>, applicableOrgTypes?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<(
-        { __typename?: 'NVPStr' }
-        & Pick<NvpStr, 'name' | 'value'>
-      )>> }
+      & FragmentUiSelectManyFieldFragment
     )>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
-      & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<(
-        { __typename?: 'UIOption' }
-        & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>> }
+      & FragmentUiOptionsFragment
     )>>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
@@ -3836,28 +3866,20 @@ export type AccessSpecializationFormQuery = (
     & Pick<AccessSpecializationForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { name: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiStringFieldFragment
     ), organization: (
       { __typename?: 'UIReadOnlyField' }
-      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiReadOnlyFieldFragment
     ), filters?: Maybe<Array<(
       { __typename?: 'SpecializationFilterForm' }
       & Pick<SpecializationFilterForm, 'permission' | 'label' | 'errCode' | 'errMsg' | 'errSeverity'>
       & { orgSids?: Maybe<(
         { __typename?: 'UISelectManyField' }
-        & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-        & { value?: Maybe<Array<(
-          { __typename?: 'NVPStr' }
-          & Pick<NvpStr, 'name' | 'value'>
-        )>> }
+        & FragmentUiSelectManyFieldFragment
       )> }
     )>>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
-      & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<(
-        { __typename?: 'UIOption' }
-        & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>> }
+      & FragmentUiOptionsFragment
     )>>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
@@ -3877,28 +3899,20 @@ export type FindAccessSpecializationQuery = (
     & Pick<AccessSpecializationForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { name: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiStringFieldFragment
     ), organization: (
       { __typename?: 'UIReadOnlyField' }
-      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiReadOnlyFieldFragment
     ), filters?: Maybe<Array<(
       { __typename?: 'SpecializationFilterForm' }
       & Pick<SpecializationFilterForm, 'permission' | 'label' | 'errCode' | 'errMsg' | 'errSeverity'>
       & { orgSids?: Maybe<(
         { __typename?: 'UISelectManyField' }
-        & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-        & { value?: Maybe<Array<(
-          { __typename?: 'NVPStr' }
-          & Pick<NvpStr, 'name' | 'value'>
-        )>> }
+        & FragmentUiSelectManyFieldFragment
       )> }
     )>>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
-      & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<(
-        { __typename?: 'UIOption' }
-        & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>> }
+      & FragmentUiOptionsFragment
     )>>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
@@ -3919,64 +3933,40 @@ export type AccessPolicyGroupFormQuery = (
     & Pick<AccessPolicyGroupForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { name: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiStringFieldFragment
     ), description: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiStringFieldFragment
     ), organization: (
       { __typename?: 'UIReadOnlyField' }
-      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiReadOnlyFieldFragment
     ), tmpl?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiBooleanFieldFragment
     )>, tmplUseAsIs?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiBooleanFieldFragment
     )>, applicableOrgTypes?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<(
-        { __typename?: 'NVPStr' }
-        & Pick<NvpStr, 'name' | 'value'>
-      )>> }
+      & FragmentUiSelectManyFieldFragment
     )>, policies?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<(
-        { __typename?: 'NVPStr' }
-        & Pick<NvpStr, 'name' | 'value'>
-      )>> }
+      & FragmentUiSelectManyFieldFragment
     )>, specializations?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<(
-        { __typename?: 'NVPStr' }
-        & Pick<NvpStr, 'name' | 'value'>
-      )>> }
+      & FragmentUiSelectManyFieldFragment
     )>, includeAllSubOrgs?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiBooleanFieldFragment
     )>, includeOrgSids?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<(
-        { __typename?: 'NVPStr' }
-        & Pick<NvpStr, 'name' | 'value'>
-      )>> }
+      & FragmentUiSelectManyFieldFragment
     )>, excludeOrgSids?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<(
-        { __typename?: 'NVPStr' }
-        & Pick<NvpStr, 'name' | 'value'>
-      )>> }
+      & FragmentUiSelectManyFieldFragment
     )>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
-      & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<(
-        { __typename?: 'UIOption' }
-        & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>> }
+      & FragmentUiOptionsFragment
     )>>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
@@ -3996,64 +3986,40 @@ export type FindAccessPolicyGroupQuery = (
     & Pick<AccessPolicyGroupForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { name: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiStringFieldFragment
     ), description: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiStringFieldFragment
     ), organization: (
       { __typename?: 'UIReadOnlyField' }
-      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiReadOnlyFieldFragment
     ), tmpl?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiBooleanFieldFragment
     )>, tmplUseAsIs?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiBooleanFieldFragment
     )>, applicableOrgTypes?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<(
-        { __typename?: 'NVPStr' }
-        & Pick<NvpStr, 'name' | 'value'>
-      )>> }
+      & FragmentUiSelectManyFieldFragment
     )>, policies?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<(
-        { __typename?: 'NVPStr' }
-        & Pick<NvpStr, 'name' | 'value'>
-      )>> }
+      & FragmentUiSelectManyFieldFragment
     )>, specializations?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<(
-        { __typename?: 'NVPStr' }
-        & Pick<NvpStr, 'name' | 'value'>
-      )>> }
+      & FragmentUiSelectManyFieldFragment
     )>, includeAllSubOrgs?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiBooleanFieldFragment
     )>, includeOrgSids?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<(
-        { __typename?: 'NVPStr' }
-        & Pick<NvpStr, 'name' | 'value'>
-      )>> }
+      & FragmentUiSelectManyFieldFragment
     )>, excludeOrgSids?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<(
-        { __typename?: 'NVPStr' }
-        & Pick<NvpStr, 'name' | 'value'>
-      )>> }
+      & FragmentUiSelectManyFieldFragment
     )>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
-      & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<(
-        { __typename?: 'UIOption' }
-        & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>> }
+      & FragmentUiOptionsFragment
     )>>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
@@ -4134,34 +4100,26 @@ export type OrganizationFormQuery = (
     & Pick<OrganizationForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { name: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiStringFieldFragment
     ), orgId: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiStringFieldFragment
     ), orgType?: Maybe<(
       { __typename?: 'UISelectOneField' }
-      & Pick<UiSelectOneField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<(
-        { __typename?: 'NVPStr' }
-        & Pick<NvpStr, 'name' | 'value'>
-      )> }
+      & FragmentUiSelectOneFieldFragment
     )>, active: (
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiBooleanFieldFragment
     ), whitelist?: Maybe<Array<(
       { __typename?: 'OrgWhitelistForm' }
       & Pick<OrgWhitelistForm, 'errCode' | 'errMsg' | 'errSeverity'>
       & { pattern?: Maybe<(
         { __typename?: 'UIStringField' }
-        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiStringFieldFragment
       )> }
     )>>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
-      & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<(
-        { __typename?: 'UIOption' }
-        & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>> }
+      & FragmentUiOptionsFragment
     )>>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
@@ -4181,34 +4139,26 @@ export type FindOrganizationQuery = (
     & Pick<OrganizationForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { name: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiStringFieldFragment
     ), orgId: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiStringFieldFragment
     ), orgType?: Maybe<(
       { __typename?: 'UISelectOneField' }
-      & Pick<UiSelectOneField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<(
-        { __typename?: 'NVPStr' }
-        & Pick<NvpStr, 'name' | 'value'>
-      )> }
+      & FragmentUiSelectOneFieldFragment
     )>, active: (
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiBooleanFieldFragment
     ), whitelist?: Maybe<Array<(
       { __typename?: 'OrgWhitelistForm' }
       & Pick<OrgWhitelistForm, 'errCode' | 'errMsg' | 'errSeverity'>
       & { pattern?: Maybe<(
         { __typename?: 'UIStringField' }
-        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiStringFieldFragment
       )> }
     )>>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
-      & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<(
-        { __typename?: 'UIOption' }
-        & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>> }
+      & FragmentUiOptionsFragment
     )>>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
@@ -4291,20 +4241,16 @@ export type OrgSecurityFormQuery = (
     & Pick<OrgSecurityForm, 'orgSid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { forgotPasswordEnabled: (
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiBooleanFieldFragment
     ), forgotPasswordMsg: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiStringFieldFragment
     ), allowedEmailDomains: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiStringFieldFragment
     ), options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
-      & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<(
-        { __typename?: 'UIOption' }
-        & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>> }
+      & FragmentUiOptionsFragment
     )>>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
@@ -4471,165 +4417,157 @@ export type PasswordRulesFormQuery = (
     & Pick<PasswordRulesForm, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { organization: (
       { __typename?: 'UIReadOnlyField' }
-      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiReadOnlyFieldFragment
     ), mustAlwaysBeMet?: Maybe<(
       { __typename?: 'RequiredPasswordRuleSetForm' }
       & { mustNotContainWhiteSpace?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, mustNotContainUserName?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, mustNotContainNumericSequence?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, mustFollowLengthRequirements?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, minLength?: Maybe<(
         { __typename?: 'UIIntField' }
-        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiIntFieldFragment
       )>, maxLength?: Maybe<(
         { __typename?: 'UIIntField' }
-        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiIntFieldFragment
       )>, mustContainUpperCaseLetters?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, minUpperCaseLetters?: Maybe<(
         { __typename?: 'UIIntField' }
-        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiIntFieldFragment
       )>, mustContainLowerCaseLetters?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, minLowerCaseLetters?: Maybe<(
         { __typename?: 'UIIntField' }
-        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiIntFieldFragment
       )>, mustContainNumericDigits?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, minNumericDigits?: Maybe<(
         { __typename?: 'UIIntField' }
-        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiIntFieldFragment
       )>, mustContainSpecialCharacters?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, minSpecialCharacters?: Maybe<(
         { __typename?: 'UIIntField' }
-        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiIntFieldFragment
       )>, mustNotRepeatCharacters?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, maxAllowedRepeatedChars?: Maybe<(
         { __typename?: 'UIIntField' }
-        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiIntFieldFragment
       )>, mustNotReusePasswords?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, minPasswordHistoryVariations?: Maybe<(
         { __typename?: 'UIIntField' }
-        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiIntFieldFragment
       )>, mustNotMatchExactDictionaryWord?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, mustNotMatchPartialDictionaryWord?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )> }
     )>, someMustBeMet?: Maybe<(
       { __typename?: 'CompositePasswordRuleSetForm' }
       & { enabled?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, minPasswordComplexity?: Maybe<(
         { __typename?: 'UISelectOneField' }
-        & Pick<UiSelectOneField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-        & { value?: Maybe<(
-          { __typename?: 'NVPStr' }
-          & Pick<NvpStr, 'name' | 'value'>
-        )> }
+        & FragmentUiSelectOneFieldFragment
       )>, requiredNumPassingRules?: Maybe<(
         { __typename?: 'UIIntField' }
-        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiIntFieldFragment
       )>, mustNotContainWhiteSpace?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, mustNotContainUserName?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, mustNotContainNumericSequence?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, mustFollowLengthRequirements?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, minLength?: Maybe<(
         { __typename?: 'UIIntField' }
-        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiIntFieldFragment
       )>, maxLength?: Maybe<(
         { __typename?: 'UIIntField' }
-        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiIntFieldFragment
       )>, mustContainUpperCaseLetters?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, minUpperCaseLetters?: Maybe<(
         { __typename?: 'UIIntField' }
-        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiIntFieldFragment
       )>, mustContainLowerCaseLetters?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, minLowerCaseLetters?: Maybe<(
         { __typename?: 'UIIntField' }
-        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiIntFieldFragment
       )>, mustContainNumericDigits?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, minNumericDigits?: Maybe<(
         { __typename?: 'UIIntField' }
-        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiIntFieldFragment
       )>, mustContainSpecialCharacters?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, minSpecialCharacters?: Maybe<(
         { __typename?: 'UIIntField' }
-        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiIntFieldFragment
       )>, mustNotRepeatCharacters?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, maxAllowedRepeatedChars?: Maybe<(
         { __typename?: 'UIIntField' }
-        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiIntFieldFragment
       )>, mustNotReusePasswords?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, minPasswordHistoryVariations?: Maybe<(
         { __typename?: 'UIIntField' }
-        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiIntFieldFragment
       )>, mustNotMatchExactDictionaryWord?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, mustNotMatchPartialDictionaryWord?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )> }
     )>, autoLockAccount?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiBooleanFieldFragment
     )>, autoLockAfterFailedAttempts?: Maybe<(
       { __typename?: 'UIIntField' }
-      & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiIntFieldFragment
     )>, autoUnlockAccount?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiBooleanFieldFragment
     )>, autoUnlockAccountDelayMinutes?: Maybe<(
       { __typename?: 'UIIntField' }
-      & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiIntFieldFragment
     )>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
-      & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<(
-        { __typename?: 'UIOption' }
-        & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>> }
+      & FragmentUiOptionsFragment
     )>> }
   )> }
 );
@@ -4682,41 +4620,46 @@ export type XpsftpTestQuery = (
       & Pick<XpsftpForm, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
       & { host?: Maybe<(
         { __typename?: 'UIStringField' }
-        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiStringFieldFragment
       )>, port?: Maybe<(
         { __typename?: 'UIIntField' }
-        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiIntFieldFragment
       )>, user?: Maybe<(
         { __typename?: 'UIStringField' }
-        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiStringFieldFragment
       )>, password?: Maybe<(
         { __typename?: 'UIStringField' }
-        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiStringFieldFragment
       )>, folder?: Maybe<(
         { __typename?: 'UIStringField' }
-        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiStringFieldFragment
       )>, stepWise?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
-      )> }
+        & FragmentUiBooleanFieldFragment
+      )>, sshKeyPath?: Maybe<(
+        { __typename?: 'UISelectOneField' }
+        & FragmentUiSelectOneFieldFragment
+      )>, sshKeyPassword?: Maybe<(
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      )>, options?: Maybe<Array<(
+        { __typename?: 'UIOptions' }
+        & FragmentUiOptionsFragment
+      )>> }
     ), sendTestFileForm?: Maybe<(
       { __typename?: 'SFTPTestSendTestFileForm' }
       & { sendTestFile?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, testFileStrategy?: Maybe<(
         { __typename?: 'UISelectOneField' }
-        & Pick<UiSelectOneField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-        & { value?: Maybe<(
-          { __typename?: 'NVPStr' }
-          & Pick<NvpStr, 'name' | 'value'>
-        )> }
+        & FragmentUiSelectOneFieldFragment
       )>, fileName?: Maybe<(
         { __typename?: 'UIStringField' }
-        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiStringFieldFragment
       )>, fileBody?: Maybe<(
         { __typename?: 'UIStringField' }
-        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiStringFieldFragment
       )> }
     )> }
   )> }
@@ -4879,34 +4822,26 @@ export type CreateOrgMutation = (
     & Pick<OrganizationForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { name: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiStringFieldFragment
     ), orgId: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiStringFieldFragment
     ), orgType?: Maybe<(
       { __typename?: 'UISelectOneField' }
-      & Pick<UiSelectOneField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<(
-        { __typename?: 'NVPStr' }
-        & Pick<NvpStr, 'name' | 'value'>
-      )> }
+      & FragmentUiSelectOneFieldFragment
     )>, active: (
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiBooleanFieldFragment
     ), whitelist?: Maybe<Array<(
       { __typename?: 'OrgWhitelistForm' }
       & Pick<OrgWhitelistForm, 'errCode' | 'errMsg' | 'errSeverity'>
       & { pattern?: Maybe<(
         { __typename?: 'UIStringField' }
-        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiStringFieldFragment
       )> }
     )>>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
-      & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<(
-        { __typename?: 'UIOption' }
-        & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>> }
+      & FragmentUiOptionsFragment
     )>>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
@@ -4926,34 +4861,26 @@ export type UpdateOrgMutation = (
     & Pick<OrganizationForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { name: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiStringFieldFragment
     ), orgId: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiStringFieldFragment
     ), orgType?: Maybe<(
       { __typename?: 'UISelectOneField' }
-      & Pick<UiSelectOneField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<(
-        { __typename?: 'NVPStr' }
-        & Pick<NvpStr, 'name' | 'value'>
-      )> }
+      & FragmentUiSelectOneFieldFragment
     )>, active: (
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiBooleanFieldFragment
     ), whitelist?: Maybe<Array<(
       { __typename?: 'OrgWhitelistForm' }
       & Pick<OrgWhitelistForm, 'errCode' | 'errMsg' | 'errSeverity'>
       & { pattern?: Maybe<(
         { __typename?: 'UIStringField' }
-        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiStringFieldFragment
       )> }
     )>>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
-      & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<(
-        { __typename?: 'UIOption' }
-        & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>> }
+      & FragmentUiOptionsFragment
     )>>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
@@ -4983,20 +4910,16 @@ export type UpdateOrgSecurityMutation = (
     & Pick<OrgSecurityForm, 'orgSid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { forgotPasswordEnabled: (
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiBooleanFieldFragment
     ), forgotPasswordMsg: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiStringFieldFragment
     ), allowedEmailDomains: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiStringFieldFragment
     ), options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
-      & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<(
-        { __typename?: 'UIOption' }
-        & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>> }
+      & FragmentUiOptionsFragment
     )>>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
@@ -5016,37 +4939,25 @@ export type CreateAccessPolicyMutation = (
     & Pick<AccessPolicyForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { name: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiStringFieldFragment
     ), organization: (
       { __typename?: 'UIReadOnlyField' }
-      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiReadOnlyFieldFragment
     ), permissions?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<(
-        { __typename?: 'NVPStr' }
-        & Pick<NvpStr, 'name' | 'value'>
-      )>> }
+      & FragmentUiSelectManyFieldFragment
     )>, tmpl?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiBooleanFieldFragment
     )>, tmplUseAsIs?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiBooleanFieldFragment
     )>, applicableOrgTypes?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<(
-        { __typename?: 'NVPStr' }
-        & Pick<NvpStr, 'name' | 'value'>
-      )>> }
+      & FragmentUiSelectManyFieldFragment
     )>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
-      & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<(
-        { __typename?: 'UIOption' }
-        & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>> }
+      & FragmentUiOptionsFragment
     )>>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
@@ -5066,37 +4977,25 @@ export type UpdateAccessPolicyMutation = (
     & Pick<AccessPolicyForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { name: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiStringFieldFragment
     ), organization: (
       { __typename?: 'UIReadOnlyField' }
-      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiReadOnlyFieldFragment
     ), permissions?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<(
-        { __typename?: 'NVPStr' }
-        & Pick<NvpStr, 'name' | 'value'>
-      )>> }
+      & FragmentUiSelectManyFieldFragment
     )>, tmpl?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiBooleanFieldFragment
     )>, tmplUseAsIs?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiBooleanFieldFragment
     )>, applicableOrgTypes?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<(
-        { __typename?: 'NVPStr' }
-        & Pick<NvpStr, 'name' | 'value'>
-      )>> }
+      & FragmentUiSelectManyFieldFragment
     )>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
-      & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<(
-        { __typename?: 'UIOption' }
-        & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>> }
+      & FragmentUiOptionsFragment
     )>>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
@@ -5136,28 +5035,20 @@ export type CreateAccessSpecializationMutation = (
     & Pick<AccessSpecializationForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { name: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiStringFieldFragment
     ), organization: (
       { __typename?: 'UIReadOnlyField' }
-      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiReadOnlyFieldFragment
     ), filters?: Maybe<Array<(
       { __typename?: 'SpecializationFilterForm' }
       & Pick<SpecializationFilterForm, 'permission' | 'label' | 'errCode' | 'errMsg' | 'errSeverity'>
       & { orgSids?: Maybe<(
         { __typename?: 'UISelectManyField' }
-        & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-        & { value?: Maybe<Array<(
-          { __typename?: 'NVPStr' }
-          & Pick<NvpStr, 'name' | 'value'>
-        )>> }
+        & FragmentUiSelectManyFieldFragment
       )> }
     )>>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
-      & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<(
-        { __typename?: 'UIOption' }
-        & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>> }
+      & FragmentUiOptionsFragment
     )>>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
@@ -5177,28 +5068,20 @@ export type UpdateAccessSpecializationMutation = (
     & Pick<AccessSpecializationForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { name: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiStringFieldFragment
     ), organization: (
       { __typename?: 'UIReadOnlyField' }
-      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiReadOnlyFieldFragment
     ), filters?: Maybe<Array<(
       { __typename?: 'SpecializationFilterForm' }
       & Pick<SpecializationFilterForm, 'permission' | 'label' | 'errCode' | 'errMsg' | 'errSeverity'>
       & { orgSids?: Maybe<(
         { __typename?: 'UISelectManyField' }
-        & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-        & { value?: Maybe<Array<(
-          { __typename?: 'NVPStr' }
-          & Pick<NvpStr, 'name' | 'value'>
-        )>> }
+        & FragmentUiSelectManyFieldFragment
       )> }
     )>>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
-      & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<(
-        { __typename?: 'UIOption' }
-        & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>> }
+      & FragmentUiOptionsFragment
     )>>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
@@ -5228,64 +5111,40 @@ export type CreateAccessPolicyGroupMutation = (
     & Pick<AccessPolicyGroupForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { name: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiStringFieldFragment
     ), description: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiStringFieldFragment
     ), organization: (
       { __typename?: 'UIReadOnlyField' }
-      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiReadOnlyFieldFragment
     ), tmpl?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiBooleanFieldFragment
     )>, tmplUseAsIs?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiBooleanFieldFragment
     )>, applicableOrgTypes?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<(
-        { __typename?: 'NVPStr' }
-        & Pick<NvpStr, 'name' | 'value'>
-      )>> }
+      & FragmentUiSelectManyFieldFragment
     )>, policies?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<(
-        { __typename?: 'NVPStr' }
-        & Pick<NvpStr, 'name' | 'value'>
-      )>> }
+      & FragmentUiSelectManyFieldFragment
     )>, specializations?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<(
-        { __typename?: 'NVPStr' }
-        & Pick<NvpStr, 'name' | 'value'>
-      )>> }
+      & FragmentUiSelectManyFieldFragment
     )>, includeAllSubOrgs?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiBooleanFieldFragment
     )>, includeOrgSids?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<(
-        { __typename?: 'NVPStr' }
-        & Pick<NvpStr, 'name' | 'value'>
-      )>> }
+      & FragmentUiSelectManyFieldFragment
     )>, excludeOrgSids?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<(
-        { __typename?: 'NVPStr' }
-        & Pick<NvpStr, 'name' | 'value'>
-      )>> }
+      & FragmentUiSelectManyFieldFragment
     )>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
-      & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<(
-        { __typename?: 'UIOption' }
-        & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>> }
+      & FragmentUiOptionsFragment
     )>>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
@@ -5305,64 +5164,40 @@ export type UpdateAccessPolicyGroupMutation = (
     & Pick<AccessPolicyGroupForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { name: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiStringFieldFragment
     ), description: (
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiStringFieldFragment
     ), organization: (
       { __typename?: 'UIReadOnlyField' }
-      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiReadOnlyFieldFragment
     ), tmpl?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiBooleanFieldFragment
     )>, tmplUseAsIs?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiBooleanFieldFragment
     )>, applicableOrgTypes?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<(
-        { __typename?: 'NVPStr' }
-        & Pick<NvpStr, 'name' | 'value'>
-      )>> }
+      & FragmentUiSelectManyFieldFragment
     )>, policies?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<(
-        { __typename?: 'NVPStr' }
-        & Pick<NvpStr, 'name' | 'value'>
-      )>> }
+      & FragmentUiSelectManyFieldFragment
     )>, specializations?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<(
-        { __typename?: 'NVPStr' }
-        & Pick<NvpStr, 'name' | 'value'>
-      )>> }
+      & FragmentUiSelectManyFieldFragment
     )>, includeAllSubOrgs?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiBooleanFieldFragment
     )>, includeOrgSids?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<(
-        { __typename?: 'NVPStr' }
-        & Pick<NvpStr, 'name' | 'value'>
-      )>> }
+      & FragmentUiSelectManyFieldFragment
     )>, excludeOrgSids?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<(
-        { __typename?: 'NVPStr' }
-        & Pick<NvpStr, 'name' | 'value'>
-      )>> }
+      & FragmentUiSelectManyFieldFragment
     )>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
-      & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<(
-        { __typename?: 'UIOption' }
-        & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>> }
+      & FragmentUiOptionsFragment
     )>>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
@@ -5393,46 +5228,38 @@ export type CreateUserMutation = (
     & Pick<UserAccountForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { email?: Maybe<(
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiStringFieldFragment
     )>, active?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiBooleanFieldFragment
     )>, person?: Maybe<(
       { __typename?: 'PersonForm' }
       & Pick<PersonForm, 'sid' | 'errCode' | 'errMsg' | 'errSeverity'>
       & { firstNm: (
         { __typename?: 'UIStringField' }
-        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiStringFieldFragment
       ), lastNm: (
         { __typename?: 'UIStringField' }
-        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiStringFieldFragment
       ) }
     )>, organization: (
       { __typename?: 'UIReadOnlyField' }
-      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiReadOnlyFieldFragment
     ), accessPolicyGroups?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<(
-        { __typename?: 'NVPStr' }
-        & Pick<NvpStr, 'name' | 'value'>
-      )>> }
+      & FragmentUiSelectManyFieldFragment
     )>, sendActivationEmail?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiBooleanFieldFragment
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
-      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiReadOnlyFieldFragment
     )>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
     )>>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
-      & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<(
-        { __typename?: 'UIOption' }
-        & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>> }
+      & FragmentUiOptionsFragment
     )>> }
   )> }
 );
@@ -5449,46 +5276,38 @@ export type UpdateUserMutation = (
     & Pick<UserAccountForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { email?: Maybe<(
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiStringFieldFragment
     )>, active?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiBooleanFieldFragment
     )>, person?: Maybe<(
       { __typename?: 'PersonForm' }
       & Pick<PersonForm, 'sid' | 'errCode' | 'errMsg' | 'errSeverity'>
       & { firstNm: (
         { __typename?: 'UIStringField' }
-        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiStringFieldFragment
       ), lastNm: (
         { __typename?: 'UIStringField' }
-        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiStringFieldFragment
       ) }
     )>, organization: (
       { __typename?: 'UIReadOnlyField' }
-      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiReadOnlyFieldFragment
     ), accessPolicyGroups?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<(
-        { __typename?: 'NVPStr' }
-        & Pick<NvpStr, 'name' | 'value'>
-      )>> }
+      & FragmentUiSelectManyFieldFragment
     )>, sendActivationEmail?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiBooleanFieldFragment
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
-      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiReadOnlyFieldFragment
     )>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
     )>>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
-      & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<(
-        { __typename?: 'UIOption' }
-        & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>> }
+      & FragmentUiOptionsFragment
     )>> }
   )> }
 );
@@ -5505,46 +5324,38 @@ export type UpdateUserAccessPolicyGroupsMutation = (
     & Pick<UserAccountForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { email?: Maybe<(
       { __typename?: 'UIStringField' }
-      & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiStringFieldFragment
     )>, active?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiBooleanFieldFragment
     )>, person?: Maybe<(
       { __typename?: 'PersonForm' }
       & Pick<PersonForm, 'sid' | 'errCode' | 'errMsg' | 'errSeverity'>
       & { firstNm: (
         { __typename?: 'UIStringField' }
-        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiStringFieldFragment
       ), lastNm: (
         { __typename?: 'UIStringField' }
-        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiStringFieldFragment
       ) }
     )>, organization: (
       { __typename?: 'UIReadOnlyField' }
-      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiReadOnlyFieldFragment
     ), accessPolicyGroups?: Maybe<(
       { __typename?: 'UISelectManyField' }
-      & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { value?: Maybe<Array<(
-        { __typename?: 'NVPStr' }
-        & Pick<NvpStr, 'name' | 'value'>
-      )>> }
+      & FragmentUiSelectManyFieldFragment
     )>, sendActivationEmail?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiBooleanFieldFragment
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
-      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiReadOnlyFieldFragment
     )>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
     )>>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
-      & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<(
-        { __typename?: 'UIOption' }
-        & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>> }
+      & FragmentUiOptionsFragment
     )>> }
   )> }
 );
@@ -5728,165 +5539,157 @@ export type UpdatePasswordRulesMutation = (
     & Pick<PasswordRulesForm, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { organization: (
       { __typename?: 'UIReadOnlyField' }
-      & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiReadOnlyFieldFragment
     ), mustAlwaysBeMet?: Maybe<(
       { __typename?: 'RequiredPasswordRuleSetForm' }
       & { mustNotContainWhiteSpace?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, mustNotContainUserName?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, mustNotContainNumericSequence?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, mustFollowLengthRequirements?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, minLength?: Maybe<(
         { __typename?: 'UIIntField' }
-        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiIntFieldFragment
       )>, maxLength?: Maybe<(
         { __typename?: 'UIIntField' }
-        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiIntFieldFragment
       )>, mustContainUpperCaseLetters?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, minUpperCaseLetters?: Maybe<(
         { __typename?: 'UIIntField' }
-        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiIntFieldFragment
       )>, mustContainLowerCaseLetters?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, minLowerCaseLetters?: Maybe<(
         { __typename?: 'UIIntField' }
-        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiIntFieldFragment
       )>, mustContainNumericDigits?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, minNumericDigits?: Maybe<(
         { __typename?: 'UIIntField' }
-        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiIntFieldFragment
       )>, mustContainSpecialCharacters?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, minSpecialCharacters?: Maybe<(
         { __typename?: 'UIIntField' }
-        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiIntFieldFragment
       )>, mustNotRepeatCharacters?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, maxAllowedRepeatedChars?: Maybe<(
         { __typename?: 'UIIntField' }
-        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiIntFieldFragment
       )>, mustNotReusePasswords?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, minPasswordHistoryVariations?: Maybe<(
         { __typename?: 'UIIntField' }
-        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiIntFieldFragment
       )>, mustNotMatchExactDictionaryWord?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, mustNotMatchPartialDictionaryWord?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )> }
     )>, someMustBeMet?: Maybe<(
       { __typename?: 'CompositePasswordRuleSetForm' }
       & { enabled?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, minPasswordComplexity?: Maybe<(
         { __typename?: 'UISelectOneField' }
-        & Pick<UiSelectOneField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-        & { value?: Maybe<(
-          { __typename?: 'NVPStr' }
-          & Pick<NvpStr, 'name' | 'value'>
-        )> }
+        & FragmentUiSelectOneFieldFragment
       )>, requiredNumPassingRules?: Maybe<(
         { __typename?: 'UIIntField' }
-        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiIntFieldFragment
       )>, mustNotContainWhiteSpace?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, mustNotContainUserName?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, mustNotContainNumericSequence?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, mustFollowLengthRequirements?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, minLength?: Maybe<(
         { __typename?: 'UIIntField' }
-        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiIntFieldFragment
       )>, maxLength?: Maybe<(
         { __typename?: 'UIIntField' }
-        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiIntFieldFragment
       )>, mustContainUpperCaseLetters?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, minUpperCaseLetters?: Maybe<(
         { __typename?: 'UIIntField' }
-        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiIntFieldFragment
       )>, mustContainLowerCaseLetters?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, minLowerCaseLetters?: Maybe<(
         { __typename?: 'UIIntField' }
-        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiIntFieldFragment
       )>, mustContainNumericDigits?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, minNumericDigits?: Maybe<(
         { __typename?: 'UIIntField' }
-        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiIntFieldFragment
       )>, mustContainSpecialCharacters?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, minSpecialCharacters?: Maybe<(
         { __typename?: 'UIIntField' }
-        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiIntFieldFragment
       )>, mustNotRepeatCharacters?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, maxAllowedRepeatedChars?: Maybe<(
         { __typename?: 'UIIntField' }
-        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiIntFieldFragment
       )>, mustNotReusePasswords?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, minPasswordHistoryVariations?: Maybe<(
         { __typename?: 'UIIntField' }
-        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiIntFieldFragment
       )>, mustNotMatchExactDictionaryWord?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, mustNotMatchPartialDictionaryWord?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )> }
     )>, autoLockAccount?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiBooleanFieldFragment
     )>, autoLockAfterFailedAttempts?: Maybe<(
       { __typename?: 'UIIntField' }
-      & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiIntFieldFragment
     )>, autoUnlockAccount?: Maybe<(
       { __typename?: 'UIBooleanField' }
-      & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiBooleanFieldFragment
     )>, autoUnlockAccountDelayMinutes?: Maybe<(
       { __typename?: 'UIIntField' }
-      & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & FragmentUiIntFieldFragment
     )>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
-      & Pick<UiOptions, 'key'>
-      & { values?: Maybe<Array<(
-        { __typename?: 'UIOption' }
-        & Pick<UiOption, 'label' | 'value' | 'info'>
-      )>> }
+      & FragmentUiOptionsFragment
     )>> }
   )> }
 );
@@ -5939,41 +5742,46 @@ export type FtpTestMMutation = (
       & Pick<XpsftpForm, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
       & { host?: Maybe<(
         { __typename?: 'UIStringField' }
-        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiStringFieldFragment
       )>, port?: Maybe<(
         { __typename?: 'UIIntField' }
-        & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiIntFieldFragment
       )>, user?: Maybe<(
         { __typename?: 'UIStringField' }
-        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiStringFieldFragment
       )>, password?: Maybe<(
         { __typename?: 'UIStringField' }
-        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiStringFieldFragment
       )>, folder?: Maybe<(
         { __typename?: 'UIStringField' }
-        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiStringFieldFragment
       )>, stepWise?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
-      )> }
+        & FragmentUiBooleanFieldFragment
+      )>, sshKeyPath?: Maybe<(
+        { __typename?: 'UISelectOneField' }
+        & FragmentUiSelectOneFieldFragment
+      )>, sshKeyPassword?: Maybe<(
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      )>, options?: Maybe<Array<(
+        { __typename?: 'UIOptions' }
+        & FragmentUiOptionsFragment
+      )>> }
     )>, sendTestFileForm?: Maybe<(
       { __typename?: 'SFTPTestSendTestFileForm' }
       & { sendTestFile?: Maybe<(
         { __typename?: 'UIBooleanField' }
-        & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiBooleanFieldFragment
       )>, testFileStrategy?: Maybe<(
         { __typename?: 'UISelectOneField' }
-        & Pick<UiSelectOneField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
-        & { value?: Maybe<(
-          { __typename?: 'NVPStr' }
-          & Pick<NvpStr, 'name' | 'value'>
-        )> }
+        & FragmentUiSelectOneFieldFragment
       )>, fileName?: Maybe<(
         { __typename?: 'UIStringField' }
-        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiStringFieldFragment
       )>, fileBody?: Maybe<(
         { __typename?: 'UIStringField' }
-        & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+        & FragmentUiStringFieldFragment
       )> }
     )> }
   )> }
@@ -6353,6 +6161,143 @@ export const FragmentPaginationInfoFragmentDoc = gql`
   totalElements
   pageNumber
   pageSize
+}
+    `;
+export const FragmentUiOptionFragmentDoc = gql`
+    fragment fragmentUIOption on UIOption {
+  label
+  value
+  info
+  category
+}
+    `;
+export const FragmentUiOptionsFragmentDoc = gql`
+    fragment fragmentUIOptions on UIOptions {
+  key
+  values {
+    ...fragmentUIOption
+  }
+}
+    ${FragmentUiOptionFragmentDoc}`;
+export const FragmentUiStringFieldFragmentDoc = gql`
+    fragment fragmentUIStringField on UIStringField {
+  value
+  label
+  readOnly
+  info
+  required
+  visible
+  min
+  max
+  errCode
+  errMsg
+  errSeverity
+}
+    `;
+export const FragmentUiBooleanFieldFragmentDoc = gql`
+    fragment fragmentUIBooleanField on UIBooleanField {
+  value
+  label
+  readOnly
+  info
+  required
+  visible
+  errCode
+  errMsg
+  errSeverity
+}
+    `;
+export const FragmentUiDateFieldFragmentDoc = gql`
+    fragment fragmentUIDateField on UIDateField {
+  value
+  label
+  readOnly
+  info
+  required
+  visible
+  errCode
+  errMsg
+  errSeverity
+}
+    `;
+export const FragmentUiIntFieldFragmentDoc = gql`
+    fragment fragmentUIIntField on UIIntField {
+  value
+  label
+  readOnly
+  info
+  required
+  visible
+  min
+  max
+  errCode
+  errMsg
+  errSeverity
+}
+    `;
+export const FragmentUiLongFieldFragmentDoc = gql`
+    fragment fragmentUILongField on UILongField {
+  value
+  label
+  readOnly
+  info
+  required
+  visible
+  min
+  max
+  errCode
+  errMsg
+  errSeverity
+}
+    `;
+export const FragmentUiSelectOneFieldFragmentDoc = gql`
+    fragment fragmentUISelectOneField on UISelectOneField {
+  value {
+    name
+    value
+  }
+  label
+  readOnly
+  info
+  required
+  visible
+  options
+  query
+  errCode
+  errMsg
+  errSeverity
+}
+    `;
+export const FragmentUiSelectManyFieldFragmentDoc = gql`
+    fragment fragmentUISelectManyField on UISelectManyField {
+  value {
+    name
+    value
+  }
+  label
+  readOnly
+  info
+  required
+  visible
+  options
+  query
+  errCode
+  errMsg
+  errSeverity
+}
+    `;
+export const FragmentUiReadOnlyFieldFragmentDoc = gql`
+    fragment fragmentUIReadOnlyField on UIReadOnlyField {
+  value
+  description
+  label
+  readOnly
+  info
+  required
+  visible
+  errCode
+  errMsg
+  errSeverity
 }
     `;
 export const VersionDocument = gql`
@@ -7273,61 +7218,19 @@ export const UsersForOrgDocument = gql`
   ) {
     userSearchForm {
       searchText {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIStringField
       }
       lockedFilter {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       pendingActivationFilter {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       expiredActivationFilter {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       searchAllOrgs {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
     }
     toolTips {
@@ -7384,7 +7287,9 @@ export const UsersForOrgDocument = gql`
     }
   }
 }
-    ${FragmentPaginationInfoFragmentDoc}
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentPaginationInfoFragmentDoc}
 ${FragmentWebCommandFragmentDoc}
 ${FragmentAccessPolicyFragmentDoc}`;
 
@@ -7628,130 +7533,53 @@ export const UserAccountFormDocument = gql`
   userAccountForm(orgSid: $orgSid) {
     sid
     email {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIStringField
     }
     active {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIBooleanField
     }
     person {
       sid
       firstNm {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIStringField
       }
       lastNm {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIStringField
       }
       errCode
       errMsg
       errSeverity
     }
     organization {
-      value
-      description
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIReadOnlyField
     }
     accessPolicyGroups {
-      value {
-        name
-        value
-      }
-      label
-      readOnly
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUISelectManyField
     }
     sendActivationEmail {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIBooleanField
     }
     lastLogin {
-      value
-      description
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIReadOnlyField
     }
     commands {
       ...fragmentWebCommand
     }
     response
     options {
-      key
-      values {
-        label
-        value
-        info
-      }
+      ...fragmentUIOptions
     }
     errCode
     errMsg
     errSeverity
   }
 }
-    ${FragmentWebCommandFragmentDoc}`;
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiReadOnlyFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentWebCommandFragmentDoc}
+${FragmentUiOptionsFragmentDoc}`;
 
 /**
  * __useUserAccountFormQuery__
@@ -7783,130 +7611,53 @@ export const FindUserAccountDocument = gql`
   findUserAccount(userSid: $userSid) {
     sid
     email {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIStringField
     }
     active {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIBooleanField
     }
     person {
       sid
       firstNm {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIStringField
       }
       lastNm {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIStringField
       }
       errCode
       errMsg
       errSeverity
     }
     organization {
-      value
-      description
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIReadOnlyField
     }
     accessPolicyGroups {
-      value {
-        name
-        value
-      }
-      label
-      readOnly
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUISelectManyField
     }
     sendActivationEmail {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIBooleanField
     }
     lastLogin {
-      value
-      description
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIReadOnlyField
     }
     commands {
       ...fragmentWebCommand
     }
     response
     options {
-      key
-      values {
-        label
-        value
-        info
-      }
+      ...fragmentUIOptions
     }
     errCode
     errMsg
     errSeverity
   }
 }
-    ${FragmentWebCommandFragmentDoc}`;
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiReadOnlyFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentWebCommandFragmentDoc}
+${FragmentUiOptionsFragmentDoc}`;
 
 /**
  * __useFindUserAccountQuery__
@@ -8117,6 +7868,7 @@ export const AccessPolicyTemplatesDocument = gql`
     label
     value
     info
+    category
   }
 }
     `;
@@ -8271,6 +8023,7 @@ export const AccessPolicyGroupTemplatesDocument = gql`
     label
     value
     info
+    category
   }
 }
     `;
@@ -8305,91 +8058,25 @@ export const AccessPolicyFormDocument = gql`
   accessPolicyForm(orgSid: $orgSid, templatePolicySid: $templatePolicySid) {
     sid
     name {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIStringField
     }
     organization {
-      value
-      description
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIReadOnlyField
     }
     permissions {
-      value {
-        name
-        value
-      }
-      label
-      readOnly
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUISelectManyField
     }
     tmpl {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIBooleanField
     }
     tmplUseAsIs {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIBooleanField
     }
     applicableOrgTypes {
-      value {
-        name
-        value
-      }
-      label
-      readOnly
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUISelectManyField
     }
     options {
-      key
-      values {
-        label
-        value
-        info
-      }
+      ...fragmentUIOptions
     }
     commands {
       ...fragmentWebCommand
@@ -8400,7 +8087,12 @@ export const AccessPolicyFormDocument = gql`
     errSeverity
   }
 }
-    ${FragmentWebCommandFragmentDoc}`;
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiReadOnlyFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
 
 /**
  * __useAccessPolicyFormQuery__
@@ -8433,91 +8125,25 @@ export const FindAccessPolicyDocument = gql`
   findAccessPolicy(policySid: $policySid) {
     sid
     name {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIStringField
     }
     organization {
-      value
-      description
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIReadOnlyField
     }
     permissions {
-      value {
-        name
-        value
-      }
-      label
-      readOnly
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUISelectManyField
     }
     tmpl {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIBooleanField
     }
     tmplUseAsIs {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIBooleanField
     }
     applicableOrgTypes {
-      value {
-        name
-        value
-      }
-      label
-      readOnly
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUISelectManyField
     }
     options {
-      key
-      values {
-        label
-        value
-        info
-      }
+      ...fragmentUIOptions
     }
     commands {
       ...fragmentWebCommand
@@ -8528,7 +8154,12 @@ export const FindAccessPolicyDocument = gql`
     errSeverity
   }
 }
-    ${FragmentWebCommandFragmentDoc}`;
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiReadOnlyFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
 
 /**
  * __useFindAccessPolicyQuery__
@@ -8560,60 +8191,23 @@ export const AccessSpecializationFormDocument = gql`
   accessSpecializationForm(orgSid: $orgSid) {
     sid
     name {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIStringField
     }
     organization {
-      value
-      description
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIReadOnlyField
     }
     filters {
       permission
       label
       orgSids {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUISelectManyField
       }
       errCode
       errMsg
       errSeverity
     }
     options {
-      key
-      values {
-        label
-        value
-        info
-      }
+      ...fragmentUIOptions
     }
     commands {
       ...fragmentWebCommand
@@ -8624,7 +8218,11 @@ export const AccessSpecializationFormDocument = gql`
     errSeverity
   }
 }
-    ${FragmentWebCommandFragmentDoc}`;
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiReadOnlyFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
 
 /**
  * __useAccessSpecializationFormQuery__
@@ -8656,60 +8254,23 @@ export const FindAccessSpecializationDocument = gql`
   findAccessSpecialization(specializationSid: $specializationSid) {
     sid
     name {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIStringField
     }
     organization {
-      value
-      description
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIReadOnlyField
     }
     filters {
       permission
       label
       orgSids {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUISelectManyField
       }
       errCode
       errMsg
       errSeverity
     }
     options {
-      key
-      values {
-        label
-        value
-        info
-      }
+      ...fragmentUIOptions
     }
     commands {
       ...fragmentWebCommand
@@ -8720,7 +8281,11 @@ export const FindAccessSpecializationDocument = gql`
     errSeverity
   }
 }
-    ${FragmentWebCommandFragmentDoc}`;
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiReadOnlyFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
 
 /**
  * __useFindAccessSpecializationQuery__
@@ -8752,163 +8317,40 @@ export const AccessPolicyGroupFormDocument = gql`
   accessPolicyGroupForm(orgSid: $orgSid, templateGroupSid: $templateGroupSid) {
     sid
     name {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIStringField
     }
     description {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIStringField
     }
     organization {
-      value
-      description
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIReadOnlyField
     }
     tmpl {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIBooleanField
     }
     tmplUseAsIs {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIBooleanField
     }
     applicableOrgTypes {
-      value {
-        name
-        value
-      }
-      label
-      readOnly
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUISelectManyField
     }
     policies {
-      value {
-        name
-        value
-      }
-      label
-      readOnly
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUISelectManyField
     }
     specializations {
-      value {
-        name
-        value
-      }
-      label
-      readOnly
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUISelectManyField
     }
     includeAllSubOrgs {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIBooleanField
     }
     includeOrgSids {
-      value {
-        name
-        value
-      }
-      label
-      readOnly
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUISelectManyField
     }
     excludeOrgSids {
-      value {
-        name
-        value
-      }
-      label
-      readOnly
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUISelectManyField
     }
     options {
-      key
-      values {
-        label
-        value
-        info
-      }
+      ...fragmentUIOptions
     }
     commands {
       ...fragmentWebCommand
@@ -8919,7 +8361,12 @@ export const AccessPolicyGroupFormDocument = gql`
     errSeverity
   }
 }
-    ${FragmentWebCommandFragmentDoc}`;
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiReadOnlyFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
 
 /**
  * __useAccessPolicyGroupFormQuery__
@@ -8952,163 +8399,40 @@ export const FindAccessPolicyGroupDocument = gql`
   findAccessPolicyGroup(policyGroupSid: $policyGroupSid) {
     sid
     name {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIStringField
     }
     description {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIStringField
     }
     organization {
-      value
-      description
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIReadOnlyField
     }
     tmpl {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIBooleanField
     }
     tmplUseAsIs {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIBooleanField
     }
     applicableOrgTypes {
-      value {
-        name
-        value
-      }
-      label
-      readOnly
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUISelectManyField
     }
     policies {
-      value {
-        name
-        value
-      }
-      label
-      readOnly
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUISelectManyField
     }
     specializations {
-      value {
-        name
-        value
-      }
-      label
-      readOnly
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUISelectManyField
     }
     includeAllSubOrgs {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIBooleanField
     }
     includeOrgSids {
-      value {
-        name
-        value
-      }
-      label
-      readOnly
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUISelectManyField
     }
     excludeOrgSids {
-      value {
-        name
-        value
-      }
-      label
-      readOnly
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUISelectManyField
     }
     options {
-      key
-      values {
-        label
-        value
-        info
-      }
+      ...fragmentUIOptions
     }
     commands {
       ...fragmentWebCommand
@@ -9119,7 +8443,12 @@ export const FindAccessPolicyGroupDocument = gql`
     errSeverity
   }
 }
-    ${FragmentWebCommandFragmentDoc}`;
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiReadOnlyFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
 
 /**
  * __useFindAccessPolicyGroupQuery__
@@ -9287,83 +8616,27 @@ export const OrganizationFormDocument = gql`
   organizationForm(orgOwnerSid: $orgOwnerSid) {
     sid
     name {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIStringField
     }
     orgId {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIStringField
     }
     orgType {
-      value {
-        name
-        value
-      }
-      label
-      readOnly
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUISelectOneField
     }
     active {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIBooleanField
     }
     whitelist {
       pattern {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIStringField
       }
       errCode
       errMsg
       errSeverity
     }
     options {
-      key
-      values {
-        label
-        value
-        info
-      }
+      ...fragmentUIOptions
     }
     commands {
       ...fragmentWebCommand
@@ -9374,7 +8647,11 @@ export const OrganizationFormDocument = gql`
     errSeverity
   }
 }
-    ${FragmentWebCommandFragmentDoc}`;
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
 
 /**
  * __useOrganizationFormQuery__
@@ -9406,83 +8683,27 @@ export const FindOrganizationDocument = gql`
   findOrganization(orgSid: $orgSid) {
     sid
     name {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIStringField
     }
     orgId {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIStringField
     }
     orgType {
-      value {
-        name
-        value
-      }
-      label
-      readOnly
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUISelectOneField
     }
     active {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIBooleanField
     }
     whitelist {
       pattern {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIStringField
       }
       errCode
       errMsg
       errSeverity
     }
     options {
-      key
-      values {
-        label
-        value
-        info
-      }
+      ...fragmentUIOptions
     }
     commands {
       ...fragmentWebCommand
@@ -9493,7 +8714,11 @@ export const FindOrganizationDocument = gql`
     errSeverity
   }
 }
-    ${FragmentWebCommandFragmentDoc}`;
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
 
 /**
  * __useFindOrganizationQuery__
@@ -9664,49 +8889,16 @@ export const OrgSecurityFormDocument = gql`
   orgSecurityForm(orgSid: $orgSid) {
     orgSid
     forgotPasswordEnabled {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIBooleanField
     }
     forgotPasswordMsg {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIStringField
     }
     allowedEmailDomains {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIStringField
     }
     options {
-      key
-      values {
-        label
-        value
-        info
-      }
+      ...fragmentUIOptions
     }
     commands {
       ...fragmentWebCommand
@@ -9717,7 +8909,10 @@ export const OrgSecurityFormDocument = gql`
     errSeverity
   }
 }
-    ${FragmentWebCommandFragmentDoc}`;
+    ${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiStringFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
 
 /**
  * __useOrgSecurityFormQuery__
@@ -10260,596 +9455,167 @@ export const PasswordRulesFormDocument = gql`
     query PasswordRulesForm($orgSid: ID!) {
   passwordRulesForm(orgSid: $orgSid) {
     organization {
-      value
-      description
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIReadOnlyField
     }
     mustAlwaysBeMet {
       mustNotContainWhiteSpace {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       mustNotContainUserName {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       mustNotContainNumericSequence {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       mustFollowLengthRequirements {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       minLength {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIIntField
       }
       maxLength {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIIntField
       }
       mustContainUpperCaseLetters {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       minUpperCaseLetters {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIIntField
       }
       mustContainLowerCaseLetters {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       minLowerCaseLetters {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIIntField
       }
       mustContainNumericDigits {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       minNumericDigits {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIIntField
       }
       mustContainSpecialCharacters {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       minSpecialCharacters {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIIntField
       }
       mustNotRepeatCharacters {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       maxAllowedRepeatedChars {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIIntField
       }
       mustNotReusePasswords {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       minPasswordHistoryVariations {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIIntField
       }
       mustNotMatchExactDictionaryWord {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       mustNotMatchPartialDictionaryWord {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
     }
     someMustBeMet {
       enabled {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       minPasswordComplexity {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUISelectOneField
       }
       requiredNumPassingRules {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIIntField
       }
       mustNotContainWhiteSpace {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       mustNotContainUserName {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       mustNotContainNumericSequence {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       mustFollowLengthRequirements {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       minLength {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIIntField
       }
       maxLength {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIIntField
       }
       mustContainUpperCaseLetters {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       minUpperCaseLetters {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIIntField
       }
       mustContainLowerCaseLetters {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       minLowerCaseLetters {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIIntField
       }
       mustContainNumericDigits {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       minNumericDigits {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIIntField
       }
       mustContainSpecialCharacters {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       minSpecialCharacters {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIIntField
       }
       mustNotRepeatCharacters {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       maxAllowedRepeatedChars {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIIntField
       }
       mustNotReusePasswords {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       minPasswordHistoryVariations {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIIntField
       }
       mustNotMatchExactDictionaryWord {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       mustNotMatchPartialDictionaryWord {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
     }
     autoLockAccount {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIBooleanField
     }
     autoLockAfterFailedAttempts {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIIntField
     }
     autoUnlockAccount {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIBooleanField
     }
     autoUnlockAccountDelayMinutes {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIIntField
     }
     response
     options {
-      key
-      values {
-        label
-        value
-        info
-      }
+      ...fragmentUIOptions
     }
     errCode
     errMsg
     errSeverity
   }
 }
-    `;
+    ${FragmentUiReadOnlyFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiIntFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}`;
 
 /**
  * __usePasswordRulesFormQuery__
@@ -10938,145 +9704,59 @@ export const XpsftpTestDocument = gql`
   xpsftpTest(orgSid: $orgSid) {
     xpSFTPForm {
       host {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIStringField
       }
       port {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIIntField
       }
       user {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIStringField
       }
       password {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIStringField
       }
       folder {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIStringField
       }
       stepWise {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       response
       errCode
       errMsg
       errSeverity
+      sshKeyPath {
+        ...fragmentUISelectOneField
+      }
+      sshKeyPassword {
+        ...fragmentUIStringField
+      }
+      options {
+        ...fragmentUIOptions
+      }
     }
     sendTestFileForm {
       sendTestFile {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       testFileStrategy {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUISelectOneField
       }
       fileName {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIStringField
       }
       fileBody {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIStringField
       }
     }
     includeFileUpload
   }
 }
-    `;
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiIntFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}`;
 
 /**
  * __useXpsftpTestQuery__
@@ -11435,83 +10115,27 @@ export const CreateOrgDocument = gql`
   createOrg(orgInfo: $orgInfo) {
     sid
     name {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIStringField
     }
     orgId {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIStringField
     }
     orgType {
-      value {
-        name
-        value
-      }
-      label
-      readOnly
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUISelectOneField
     }
     active {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIBooleanField
     }
     whitelist {
       pattern {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIStringField
       }
       errCode
       errMsg
       errSeverity
     }
     options {
-      key
-      values {
-        label
-        value
-        info
-      }
+      ...fragmentUIOptions
     }
     commands {
       ...fragmentWebCommand
@@ -11522,7 +10146,11 @@ export const CreateOrgDocument = gql`
     errSeverity
   }
 }
-    ${FragmentWebCommandFragmentDoc}`;
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
 export type CreateOrgMutationFn = Apollo.MutationFunction<CreateOrgMutation, CreateOrgMutationVariables>;
 
 /**
@@ -11553,83 +10181,27 @@ export const UpdateOrgDocument = gql`
   updateOrg(orgInfo: $orgInfo) {
     sid
     name {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIStringField
     }
     orgId {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIStringField
     }
     orgType {
-      value {
-        name
-        value
-      }
-      label
-      readOnly
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUISelectOneField
     }
     active {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIBooleanField
     }
     whitelist {
       pattern {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIStringField
       }
       errCode
       errMsg
       errSeverity
     }
     options {
-      key
-      values {
-        label
-        value
-        info
-      }
+      ...fragmentUIOptions
     }
     commands {
       ...fragmentWebCommand
@@ -11640,7 +10212,11 @@ export const UpdateOrgDocument = gql`
     errSeverity
   }
 }
-    ${FragmentWebCommandFragmentDoc}`;
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
 export type UpdateOrgMutationFn = Apollo.MutationFunction<UpdateOrgMutation, UpdateOrgMutationVariables>;
 
 /**
@@ -11701,49 +10277,16 @@ export const UpdateOrgSecurityDocument = gql`
   updateOrgSecurity(orgSecurityInfo: $orgSecurityInfo) {
     orgSid
     forgotPasswordEnabled {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIBooleanField
     }
     forgotPasswordMsg {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIStringField
     }
     allowedEmailDomains {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIStringField
     }
     options {
-      key
-      values {
-        label
-        value
-        info
-      }
+      ...fragmentUIOptions
     }
     commands {
       ...fragmentWebCommand
@@ -11754,7 +10297,10 @@ export const UpdateOrgSecurityDocument = gql`
     errSeverity
   }
 }
-    ${FragmentWebCommandFragmentDoc}`;
+    ${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiStringFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
 export type UpdateOrgSecurityMutationFn = Apollo.MutationFunction<UpdateOrgSecurityMutation, UpdateOrgSecurityMutationVariables>;
 
 /**
@@ -11785,91 +10331,25 @@ export const CreateAccessPolicyDocument = gql`
   createAccessPolicy(createAccessPolicyInput: $createAccessPolicyInput) {
     sid
     name {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIStringField
     }
     organization {
-      value
-      description
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIReadOnlyField
     }
     permissions {
-      value {
-        name
-        value
-      }
-      label
-      readOnly
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUISelectManyField
     }
     tmpl {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIBooleanField
     }
     tmplUseAsIs {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIBooleanField
     }
     applicableOrgTypes {
-      value {
-        name
-        value
-      }
-      label
-      readOnly
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUISelectManyField
     }
     options {
-      key
-      values {
-        label
-        value
-        info
-      }
+      ...fragmentUIOptions
     }
     commands {
       ...fragmentWebCommand
@@ -11880,7 +10360,12 @@ export const CreateAccessPolicyDocument = gql`
     errSeverity
   }
 }
-    ${FragmentWebCommandFragmentDoc}`;
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiReadOnlyFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
 export type CreateAccessPolicyMutationFn = Apollo.MutationFunction<CreateAccessPolicyMutation, CreateAccessPolicyMutationVariables>;
 
 /**
@@ -11911,91 +10396,25 @@ export const UpdateAccessPolicyDocument = gql`
   updateAccessPolicy(updateAccessPolicyInput: $updateAccessPolicyInput) {
     sid
     name {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIStringField
     }
     organization {
-      value
-      description
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIReadOnlyField
     }
     permissions {
-      value {
-        name
-        value
-      }
-      label
-      readOnly
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUISelectManyField
     }
     tmpl {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIBooleanField
     }
     tmplUseAsIs {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIBooleanField
     }
     applicableOrgTypes {
-      value {
-        name
-        value
-      }
-      label
-      readOnly
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUISelectManyField
     }
     options {
-      key
-      values {
-        label
-        value
-        info
-      }
+      ...fragmentUIOptions
     }
     commands {
       ...fragmentWebCommand
@@ -12006,7 +10425,12 @@ export const UpdateAccessPolicyDocument = gql`
     errSeverity
   }
 }
-    ${FragmentWebCommandFragmentDoc}`;
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiReadOnlyFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
 export type UpdateAccessPolicyMutationFn = Apollo.MutationFunction<UpdateAccessPolicyMutation, UpdateAccessPolicyMutationVariables>;
 
 /**
@@ -12099,60 +10523,23 @@ export const CreateAccessSpecializationDocument = gql`
   ) {
     sid
     name {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIStringField
     }
     organization {
-      value
-      description
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIReadOnlyField
     }
     filters {
       permission
       label
       orgSids {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUISelectManyField
       }
       errCode
       errMsg
       errSeverity
     }
     options {
-      key
-      values {
-        label
-        value
-        info
-      }
+      ...fragmentUIOptions
     }
     commands {
       ...fragmentWebCommand
@@ -12163,7 +10550,11 @@ export const CreateAccessSpecializationDocument = gql`
     errSeverity
   }
 }
-    ${FragmentWebCommandFragmentDoc}`;
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiReadOnlyFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
 export type CreateAccessSpecializationMutationFn = Apollo.MutationFunction<CreateAccessSpecializationMutation, CreateAccessSpecializationMutationVariables>;
 
 /**
@@ -12196,60 +10587,23 @@ export const UpdateAccessSpecializationDocument = gql`
   ) {
     sid
     name {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIStringField
     }
     organization {
-      value
-      description
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIReadOnlyField
     }
     filters {
       permission
       label
       orgSids {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUISelectManyField
       }
       errCode
       errMsg
       errSeverity
     }
     options {
-      key
-      values {
-        label
-        value
-        info
-      }
+      ...fragmentUIOptions
     }
     commands {
       ...fragmentWebCommand
@@ -12260,7 +10614,11 @@ export const UpdateAccessSpecializationDocument = gql`
     errSeverity
   }
 }
-    ${FragmentWebCommandFragmentDoc}`;
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiReadOnlyFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
 export type UpdateAccessSpecializationMutationFn = Apollo.MutationFunction<UpdateAccessSpecializationMutation, UpdateAccessSpecializationMutationVariables>;
 
 /**
@@ -12323,163 +10681,40 @@ export const CreateAccessPolicyGroupDocument = gql`
   ) {
     sid
     name {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIStringField
     }
     description {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIStringField
     }
     organization {
-      value
-      description
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIReadOnlyField
     }
     tmpl {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIBooleanField
     }
     tmplUseAsIs {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIBooleanField
     }
     applicableOrgTypes {
-      value {
-        name
-        value
-      }
-      label
-      readOnly
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUISelectManyField
     }
     policies {
-      value {
-        name
-        value
-      }
-      label
-      readOnly
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUISelectManyField
     }
     specializations {
-      value {
-        name
-        value
-      }
-      label
-      readOnly
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUISelectManyField
     }
     includeAllSubOrgs {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIBooleanField
     }
     includeOrgSids {
-      value {
-        name
-        value
-      }
-      label
-      readOnly
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUISelectManyField
     }
     excludeOrgSids {
-      value {
-        name
-        value
-      }
-      label
-      readOnly
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUISelectManyField
     }
     options {
-      key
-      values {
-        label
-        value
-        info
-      }
+      ...fragmentUIOptions
     }
     commands {
       ...fragmentWebCommand
@@ -12490,7 +10725,12 @@ export const CreateAccessPolicyGroupDocument = gql`
     errSeverity
   }
 }
-    ${FragmentWebCommandFragmentDoc}`;
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiReadOnlyFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
 export type CreateAccessPolicyGroupMutationFn = Apollo.MutationFunction<CreateAccessPolicyGroupMutation, CreateAccessPolicyGroupMutationVariables>;
 
 /**
@@ -12523,163 +10763,40 @@ export const UpdateAccessPolicyGroupDocument = gql`
   ) {
     sid
     name {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIStringField
     }
     description {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIStringField
     }
     organization {
-      value
-      description
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIReadOnlyField
     }
     tmpl {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIBooleanField
     }
     tmplUseAsIs {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIBooleanField
     }
     applicableOrgTypes {
-      value {
-        name
-        value
-      }
-      label
-      readOnly
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUISelectManyField
     }
     policies {
-      value {
-        name
-        value
-      }
-      label
-      readOnly
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUISelectManyField
     }
     specializations {
-      value {
-        name
-        value
-      }
-      label
-      readOnly
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUISelectManyField
     }
     includeAllSubOrgs {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIBooleanField
     }
     includeOrgSids {
-      value {
-        name
-        value
-      }
-      label
-      readOnly
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUISelectManyField
     }
     excludeOrgSids {
-      value {
-        name
-        value
-      }
-      label
-      readOnly
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUISelectManyField
     }
     options {
-      key
-      values {
-        label
-        value
-        info
-      }
+      ...fragmentUIOptions
     }
     commands {
       ...fragmentWebCommand
@@ -12690,7 +10807,12 @@ export const UpdateAccessPolicyGroupDocument = gql`
     errSeverity
   }
 }
-    ${FragmentWebCommandFragmentDoc}`;
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiReadOnlyFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
 export type UpdateAccessPolicyGroupMutationFn = Apollo.MutationFunction<UpdateAccessPolicyGroupMutation, UpdateAccessPolicyGroupMutationVariables>;
 
 /**
@@ -12751,130 +10873,53 @@ export const CreateUserDocument = gql`
   createUser(userInfo: $userInfo, personInfo: $personInfo) {
     sid
     email {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIStringField
     }
     active {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIBooleanField
     }
     person {
       sid
       firstNm {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIStringField
       }
       lastNm {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIStringField
       }
       errCode
       errMsg
       errSeverity
     }
     organization {
-      value
-      description
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIReadOnlyField
     }
     accessPolicyGroups {
-      value {
-        name
-        value
-      }
-      label
-      readOnly
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUISelectManyField
     }
     sendActivationEmail {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIBooleanField
     }
     lastLogin {
-      value
-      description
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIReadOnlyField
     }
     commands {
       ...fragmentWebCommand
     }
     response
     options {
-      key
-      values {
-        label
-        value
-        info
-      }
+      ...fragmentUIOptions
     }
     errCode
     errMsg
     errSeverity
   }
 }
-    ${FragmentWebCommandFragmentDoc}`;
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiReadOnlyFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentWebCommandFragmentDoc}
+${FragmentUiOptionsFragmentDoc}`;
 export type CreateUserMutationFn = Apollo.MutationFunction<CreateUserMutation, CreateUserMutationVariables>;
 
 /**
@@ -12906,130 +10951,53 @@ export const UpdateUserDocument = gql`
   updateUser(userInfo: $userInfo) {
     sid
     email {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIStringField
     }
     active {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIBooleanField
     }
     person {
       sid
       firstNm {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIStringField
       }
       lastNm {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIStringField
       }
       errCode
       errMsg
       errSeverity
     }
     organization {
-      value
-      description
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIReadOnlyField
     }
     accessPolicyGroups {
-      value {
-        name
-        value
-      }
-      label
-      readOnly
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUISelectManyField
     }
     sendActivationEmail {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIBooleanField
     }
     lastLogin {
-      value
-      description
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIReadOnlyField
     }
     commands {
       ...fragmentWebCommand
     }
     response
     options {
-      key
-      values {
-        label
-        value
-        info
-      }
+      ...fragmentUIOptions
     }
     errCode
     errMsg
     errSeverity
   }
 }
-    ${FragmentWebCommandFragmentDoc}`;
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiReadOnlyFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentWebCommandFragmentDoc}
+${FragmentUiOptionsFragmentDoc}`;
 export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, UpdateUserMutationVariables>;
 
 /**
@@ -13062,130 +11030,53 @@ export const UpdateUserAccessPolicyGroupsDocument = gql`
   ) {
     sid
     email {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIStringField
     }
     active {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIBooleanField
     }
     person {
       sid
       firstNm {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIStringField
       }
       lastNm {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIStringField
       }
       errCode
       errMsg
       errSeverity
     }
     organization {
-      value
-      description
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIReadOnlyField
     }
     accessPolicyGroups {
-      value {
-        name
-        value
-      }
-      label
-      readOnly
-      info
-      required
-      visible
-      options
-      query
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUISelectManyField
     }
     sendActivationEmail {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIBooleanField
     }
     lastLogin {
-      value
-      description
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIReadOnlyField
     }
     commands {
       ...fragmentWebCommand
     }
     response
     options {
-      key
-      values {
-        label
-        value
-        info
-      }
+      ...fragmentUIOptions
     }
     errCode
     errMsg
     errSeverity
   }
 }
-    ${FragmentWebCommandFragmentDoc}`;
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiReadOnlyFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentWebCommandFragmentDoc}
+${FragmentUiOptionsFragmentDoc}`;
 export type UpdateUserAccessPolicyGroupsMutationFn = Apollo.MutationFunction<UpdateUserAccessPolicyGroupsMutation, UpdateUserAccessPolicyGroupsMutationVariables>;
 
 /**
@@ -13827,596 +11718,167 @@ export const UpdatePasswordRulesDocument = gql`
     mutation UpdatePasswordRules($passwordRulesInput: PasswordRulesInput) {
   updatePasswordRules(passwordRulesInput: $passwordRulesInput) {
     organization {
-      value
-      description
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIReadOnlyField
     }
     mustAlwaysBeMet {
       mustNotContainWhiteSpace {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       mustNotContainUserName {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       mustNotContainNumericSequence {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       mustFollowLengthRequirements {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       minLength {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIIntField
       }
       maxLength {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIIntField
       }
       mustContainUpperCaseLetters {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       minUpperCaseLetters {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIIntField
       }
       mustContainLowerCaseLetters {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       minLowerCaseLetters {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIIntField
       }
       mustContainNumericDigits {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       minNumericDigits {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIIntField
       }
       mustContainSpecialCharacters {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       minSpecialCharacters {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIIntField
       }
       mustNotRepeatCharacters {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       maxAllowedRepeatedChars {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIIntField
       }
       mustNotReusePasswords {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       minPasswordHistoryVariations {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIIntField
       }
       mustNotMatchExactDictionaryWord {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       mustNotMatchPartialDictionaryWord {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
     }
     someMustBeMet {
       enabled {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       minPasswordComplexity {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUISelectOneField
       }
       requiredNumPassingRules {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIIntField
       }
       mustNotContainWhiteSpace {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       mustNotContainUserName {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       mustNotContainNumericSequence {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       mustFollowLengthRequirements {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       minLength {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIIntField
       }
       maxLength {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIIntField
       }
       mustContainUpperCaseLetters {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       minUpperCaseLetters {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIIntField
       }
       mustContainLowerCaseLetters {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       minLowerCaseLetters {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIIntField
       }
       mustContainNumericDigits {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       minNumericDigits {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIIntField
       }
       mustContainSpecialCharacters {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       minSpecialCharacters {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIIntField
       }
       mustNotRepeatCharacters {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       maxAllowedRepeatedChars {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIIntField
       }
       mustNotReusePasswords {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       minPasswordHistoryVariations {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIIntField
       }
       mustNotMatchExactDictionaryWord {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       mustNotMatchPartialDictionaryWord {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
     }
     autoLockAccount {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIBooleanField
     }
     autoLockAfterFailedAttempts {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIIntField
     }
     autoUnlockAccount {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIBooleanField
     }
     autoUnlockAccountDelayMinutes {
-      value
-      label
-      readOnly
-      info
-      required
-      visible
-      min
-      max
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentUIIntField
     }
     response
     options {
-      key
-      values {
-        label
-        value
-        info
-      }
+      ...fragmentUIOptions
     }
     errCode
     errMsg
     errSeverity
   }
 }
-    `;
+    ${FragmentUiReadOnlyFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiIntFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}`;
 export type UpdatePasswordRulesMutationFn = Apollo.MutationFunction<UpdatePasswordRulesMutation, UpdatePasswordRulesMutationVariables>;
 
 /**
@@ -14502,145 +11964,60 @@ export const FtpTestMDocument = gql`
     csvLog
     xpSFTPForm {
       host {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIStringField
       }
       port {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIIntField
       }
       user {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIStringField
       }
       password {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIStringField
       }
       folder {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIStringField
       }
       stepWise {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       response
       errCode
       errMsg
       errSeverity
+      sshKeyPath {
+        ...fragmentUISelectOneField
+      }
+      sshKeyPassword {
+        ...fragmentUIStringField
+      }
+      options {
+        ...fragmentUIOptions
+      }
     }
     sendTestFileForm {
       sendTestFile {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIBooleanField
       }
       testFileStrategy {
-        value {
-          name
-          value
-        }
-        label
-        readOnly
-        info
-        required
-        visible
-        options
-        query
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUISelectOneField
       }
       fileName {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIStringField
       }
       fileBody {
-        value
-        label
-        readOnly
-        info
-        required
-        visible
-        min
-        max
-        errCode
-        errMsg
-        errSeverity
+        ...fragmentUIStringField
       }
     }
     includeFileUpload
   }
 }
-    ${UnionNvpFragmentDoc}`;
+    ${UnionNvpFragmentDoc}
+${FragmentUiStringFieldFragmentDoc}
+${FragmentUiIntFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}`;
 export type FtpTestMMutationFn = Apollo.MutationFunction<FtpTestMMutation, FtpTestMMutationVariables>;
 
 /**

@@ -1,7 +1,7 @@
 import React from 'react';
 import { IColumn } from '@fluentui/react';
 import { format } from 'date-fns';
-import { UserAccountAuditLog, UserAccount } from 'src/data/services/graphql';
+import { UserAccount, UserAccountAuditEvent, UserAccountAuditLog } from 'src/data/services/graphql';
 import { getEventTypeName } from './UserAuditLogsTable';
 
 export enum UserAuditLogsColumn {
@@ -17,12 +17,11 @@ export const useUserAuditLogsColumns = (
   selectedColumns: UserAuditLogsColumn[],
   onSort?: (ev: React.MouseEvent<HTMLElement>, column: IColumn) => void
 ) => {
-  const getUserAccountAuditFormat = (userAccount: UserAccount) => {
+  const getUserAccountAuditFormat = (userAccount?: UserAccount | null) => {
     if (userAccount && userAccount.person) {
       return `${userAccount.person.firstNm} ${userAccount.person.lastNm} <${userAccount.email}> `;
-    } else {
-      return '';
     }
+    return '';
   };
 
   const columnOptions: IColumn[] = [
@@ -31,7 +30,7 @@ export const useUserAuditLogsColumns = (
       name: 'Date/Time',
       targetWidthProportion: 1,
       minWidth: 80,
-      maxWidth: 200,
+      maxWidth: 150,
       fieldName: 'auditDateTime',
       isPadded: true,
       data: UserAuditLogsColumn.DATETIME,
@@ -43,7 +42,7 @@ export const useUserAuditLogsColumns = (
     },
     {
       key: 'userAccount',
-      name: 'User',
+      name: 'User / Work Packet',
       targetWidthProportion: 1,
       minWidth: 80,
       maxWidth: 200,
@@ -51,8 +50,12 @@ export const useUserAuditLogsColumns = (
       isPadded: true,
       data: UserAuditLogsColumn.USER,
       //onColumnClick: onSort,
-      onRender: (item: UserAccountAuditLog) => {
-        return <span>{getUserAccountAuditFormat(item.userAccount)}</span>;
+      onRender: (item?: UserAccountAuditLog) => {
+        if (item?.event === UserAccountAuditEvent.ArchiveAccess) {
+          return <span title={item?.workOrderId ?? undefined}>{item?.workOrderId}</span>
+        }
+        const name = getUserAccountAuditFormat(item?.userAccount);
+        return <span title={name}>{name}</span>;
       },
     },
     {
@@ -60,12 +63,12 @@ export const useUserAuditLogsColumns = (
       name: 'Event',
       targetWidthProportion: 1,
       minWidth: 80,
-      maxWidth: 200,
+      maxWidth: 100,
       fieldName: 'event',
       isPadded: true,
       data: UserAuditLogsColumn.EVENT_TYPE,
       onColumnClick: onSort,
-      onRender: (item: UserAccountAuditLog) => <span>{getEventTypeName(item.event)}</span>,
+      onRender: (item?: UserAccountAuditLog) => <span>{getEventTypeName(item?.event)}</span>,
     },
     {
       key: 'changedByUserAccount',
@@ -77,12 +80,12 @@ export const useUserAuditLogsColumns = (
       isPadded: true,
       data: UserAuditLogsColumn.CHANGED_BY,
       //onColumnClick: onSort,
-      onRender: (item: UserAccountAuditLog) => {
-        if (item.changedByUserAccount && item.changedByUserAccount.sid !== item.userAccount.sid) {
-          return <span>{getUserAccountAuditFormat(item.changedByUserAccount)}</span>;
-        } else {
-          return <span>Self</span>;
+      onRender: (item?: UserAccountAuditLog) => {
+        if (item?.changedByUserAccount && item?.changedByUserAccount.sid !== item?.userAccount?.sid) {
+          const name = getUserAccountAuditFormat(item.changedByUserAccount);
+          return <span title={name}>{name}</span>;
         }
+        return <span>Self</span>;
       },
     },
     {
@@ -94,6 +97,9 @@ export const useUserAuditLogsColumns = (
       fieldName: 'newValue',
       isPadded: true,
       data: UserAuditLogsColumn.NEW_VALUE,
+      onRender: (item: UserAccountAuditLog) => {
+        return <span title={item.newValue ?? undefined}>{item.newValue}</span>;
+      },
     },
     {
       key: 'oldValue',
@@ -103,6 +109,9 @@ export const useUserAuditLogsColumns = (
       fieldName: 'oldValue',
       isPadded: true,
       data: UserAuditLogsColumn.OLD_VALUE,
+      onRender: (item: UserAccountAuditLog) => {
+        return <span title={item.oldValue ?? undefined}>{item.oldValue}</span>;
+      },
     },
   ];
 
