@@ -168,6 +168,7 @@ const ActiveUsersPage = () => {
             tableFilters={tableFilters} 
             users={userService.users} 
             onClickUser={updateUserPanel.showPanel}
+            tooltips={userService.tooltips}
           />
         }
         

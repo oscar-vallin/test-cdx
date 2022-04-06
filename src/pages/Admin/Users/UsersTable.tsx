@@ -1,14 +1,14 @@
 import React , { useState } from 'react';
 import { DetailsList, DetailsListLayoutMode, IColumn, Link, SelectionMode, TooltipHost, FontIcon, Stack } from '@fluentui/react';
-import { UserItem, SortDirection, NullHandling, PageableInput, WebCommand, } from 'src/data/services/graphql';
+import { UserItem, SortDirection, NullHandling, PageableInput, UserConnectionTooltips} from 'src/data/services/graphql';
 import { UsersTableColumns, useUsersTableColumns } from './UsersTableColumn';
 import { TableFiltersType } from 'src/hooks/useTableFilters';
-import { Spacing } from 'src/components/spacings/Spacing';
 
 type UsersTableType = {
   users: UserItem[];
   onClickUser: (userSid: string) => any;
   tableFilters?: TableFiltersType;
+  tooltips?: UserConnectionTooltips;
 };
 
 const cols: UsersTableColumns[] = [
@@ -17,7 +17,7 @@ const cols: UsersTableColumns[] = [
   UsersTableColumns.EMAIL            
 ]
 
-export const UsersTable = ({ users, onClickUser, tableFilters}: UsersTableType) => {
+export const UsersTable = ({ users, onClickUser, tableFilters, tooltips}: UsersTableType) => {
   
   const _doSort = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
     const newColumns: IColumn[] = columns.slice();
@@ -82,23 +82,23 @@ export const UsersTable = ({ users, onClickUser, tableFilters}: UsersTableType) 
           </Link>
           {(column?.key === 'email') && (
             <>
-              {node?.notificationOnlyUser && (
-                <TooltipHost content={'This is a notification only user and cannot login to the CDX Dashboard.'} id={'NotificationOnlyUser-Tooltip'}>          
+              {(node?.notificationOnlyUser && !node?.pendingActivation) && (
+                <TooltipHost content={tooltips?.notificationOnlyUser ?? ''}>          
                   <FontIcon style={{color: 'black', fontSize:'18px', cursor: 'pointer'}}  aria-describedby={'NotificationOnlyUser-Icon'} iconName="BlockContact" />
                 </TooltipHost>
               )}
               {node?.expiredActivation && (
-                <TooltipHost content={'An account activation or password reset was requested, but has since expired. A password reset must be requested again.'} id={'ExpiredActivation-Tooltip'}>          
+                <TooltipHost content={tooltips?.expiredActivation ?? ''} id={'ExpiredActivation-Tooltip'}>          
                   <FontIcon style={{color: 'red', fontSize:'18px', cursor: 'pointer'}} aria-describedby={'ExpiredActivation-Icon'} iconName="UserOptional" />
                 </TooltipHost>
               )}
               {node?.pendingActivation && (
-                <TooltipHost content={'An account activation or password reset is pending.'} id={'PendingActivation-Tooltip'}>          
+                <TooltipHost content={tooltips?.pendingActivation ?? ''} id={'PendingActivation-Tooltip'}>          
                   <FontIcon  style={{color: 'green', fontSize:'18px', cursor: 'pointer'}} aria-describedby={'PendingActivation-Icon'} iconName="UserOptional" />
                 </TooltipHost>           
               )}
               {node?.accountLocked &&(               
-                <TooltipHost content={'This user account is locked.'} id={'AccountLocked-Tooltip'}>          
+                <TooltipHost content={tooltips?.accountLocked ?? ''} id={'AccountLocked-Tooltip'}>          
                   <FontIcon  style={{color: 'red', fontSize:'18px', cursor: 'pointer'}}  aria-describedby={'AccountLocked-Icon'} iconName="ProtectRestrict" />
                 </TooltipHost>            
               )}

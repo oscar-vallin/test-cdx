@@ -2,6 +2,7 @@ import {
   ActiveEnum,
   PaginationInfo,
   SortDirection,
+  UserConnectionTooltips,
   UserItem,
   useUsersForOrgLazyQuery,
   WebCommand,
@@ -13,7 +14,7 @@ import { useOrgSid } from 'src/hooks/useOrgSid';
 export const useUsersLists = (activeFilter: ActiveEnum) => {
   const [users, setUsers] = useState<UserItem[] | null | undefined>([]);
   const [userSearchForm, setUserSearchForm] = useState<any>({})
-
+  const [tooltips, setTooltips] = useState<UserConnectionTooltips>({});
   const [commands, setCommands] = useState<WebCommand[] | null | undefined>([]);
   const { orgSid } = useOrgSid();
   const [apiUsersForOrgFpLazy, { data, loading, error }] = useUsersForOrgLazyQuery();
@@ -71,6 +72,11 @@ export const useUsersLists = (activeFilter: ActiveEnum) => {
         setPagingInfo(newPagingInfo);
       }
 
+      const toolTips= data?.usersForOrg?.toolTips;
+      if(toolTips){
+        setTooltips(toolTips);
+      }
+
       const newCommands: WebCommand[] = [];
       const listPageInfo = data?.usersForOrg?.listPageInfo;
       listPageInfo?.listItemBulkCommands?.forEach((cmd) => {
@@ -89,6 +95,7 @@ export const useUsersLists = (activeFilter: ActiveEnum) => {
         }
       });
 
+    
       setUserSearchForm(data?.usersForOrg?.userSearchForm)
       setCommands(newCommands);
       setUsers(items);
@@ -106,6 +113,7 @@ export const useUsersLists = (activeFilter: ActiveEnum) => {
     commands,
     loading,
     fetchUsers,
-    userSearchForm
+    userSearchForm,
+    tooltips
   };
 };
