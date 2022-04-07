@@ -27,7 +27,7 @@ export const useUsersLists = (activeFilter: ActiveEnum) => {
 
   const handleError = ErrorHandler();
 
-  const fetchUsers = async (pageNumber = 0, sortParam?, lockedFilter?, pendingActivationFilter?, expiredActivationFilter?, searchText? ) => {
+  const fetchUsers = async (pageNumber = 0, sortParam?, lockedFilter?, pendingActivationFilter?, expiredActivationFilter?, searchAllOrgs?, searchText? ) => {
     const sort = sortParam ? sortParam : [
       { property: 'person.lastNm', direction: SortDirection.Asc },
       { property: 'person.firstNm', direction: SortDirection.Asc },
@@ -36,7 +36,7 @@ export const useUsersLists = (activeFilter: ActiveEnum) => {
     apiUsersForOrgFpLazy({
       variables: {
         orgSid,
-        userFilter: { activeFilter, lockedFilter, pendingActivationFilter, expiredActivationFilter, searchText: searchText ?? null },
+        userFilter: { activeFilter, lockedFilter, pendingActivationFilter, expiredActivationFilter, searchAllOrgs, searchText: searchText ?? null },
         pageableInput: {
           sort,
           pageSize: 100,

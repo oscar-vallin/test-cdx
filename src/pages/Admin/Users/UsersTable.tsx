@@ -1,4 +1,4 @@
-import React , { useState } from 'react';
+import React , { useEffect, useState } from 'react';
 import { DetailsList, DetailsListLayoutMode, IColumn, Link, SelectionMode, TooltipHost, FontIcon, Stack } from '@fluentui/react';
 import { UserItem, SortDirection, NullHandling, PageableInput, UserConnectionTooltips} from 'src/data/services/graphql';
 import { UsersTableColumns, useUsersTableColumns } from './UsersTableColumn';
@@ -9,16 +9,22 @@ type UsersTableType = {
   onClickUser: (userSid: string) => any;
   tableFilters?: TableFiltersType;
   tooltips?: UserConnectionTooltips;
+  searchAllOrgs?: Boolean;
 };
 
 const cols: UsersTableColumns[] = [
   UsersTableColumns.FIRST_NAME,
   UsersTableColumns.LAST_NAME,
-  UsersTableColumns.EMAIL            
+  UsersTableColumns.EMAIL
 ]
 
-export const UsersTable = ({ users, onClickUser, tableFilters, tooltips}: UsersTableType) => {
-  
+const searchAllOrgsCols: UsersTableColumns[] = [
+  ...cols,
+  UsersTableColumns.ORGANIZATION
+]
+
+export const UsersTable = ({ users, onClickUser, tableFilters, tooltips, searchAllOrgs}: UsersTableType) => {
+
   const _doSort = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
     const newColumns: IColumn[] = columns.slice();
     const currColumn: IColumn = newColumns.filter((currCol) => column.key === currCol.key)[0];
@@ -48,15 +54,22 @@ export const UsersTable = ({ users, onClickUser, tableFilters, tooltips}: UsersT
     tableFilters?.setPagingParams(sortParam);
   };
 
-  const { initialColumns } = useUsersTableColumns(cols, _doSort);
+  const { initialColumns } = useUsersTableColumns(searchAllOrgs ? searchAllOrgsCols : cols, _doSort);
 
   const [columns, setColumns] = useState<IColumn[]>(initialColumns);
 
+  useEffect(()=>{
+    const { initialColumns } = useUsersTableColumns(searchAllOrgs ? searchAllOrgsCols : cols, _doSort)
+    setColumns(initialColumns);
+  }, [searchAllOrgs])
+  
   const onRenderItemColumn = (node?: UserItem, itemIndex?: number, column?: IColumn) => {
     let columnVal: string | undefined;
     if (column?.key === 'email') {
       columnVal = node?.item?.email;
-    } else if (column) {
+    }else if (column?.key === 'organization') { 
+      columnVal = node?.orgName ?? '';
+    }else if (column) {
       let personProp;
       const person = node?.item?.person;
       if (person) {

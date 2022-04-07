@@ -5,7 +5,8 @@ import { IColumn } from '@fluentui/react';
 export enum UsersTableColumns {
   FIRST_NAME,
   LAST_NAME,
-  EMAIL
+  EMAIL,
+  ORGANIZATION
 }
 
 export const useUsersTableColumns = (
@@ -43,6 +44,14 @@ export const useUsersTableColumns = (
       minWidth: 255,
       isPadded: true,
       onColumnClick: onSort,
+    },
+    {
+      data: UsersTableColumns.ORGANIZATION,
+      name: 'Organization',
+      key: 'organization',
+      fieldName: 'orgName',
+      minWidth: 255,
+      isPadded: true
     },
   ];
 

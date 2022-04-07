@@ -30,6 +30,8 @@ const ActiveUsersPage = () => {
   const [lockedFilter, setLockedFilter] =useState<boolean>(false);
   const [pendingActivationFilter, setPendingActivationFilter] =useState<boolean>(false);
   const [expiredActivationFilter, setExpiredActivationFilter] =useState<boolean>(false);
+  const [searchAllOrgsFilter, setSearchAllOrgsFilter] = useState<boolean>(false);
+
   const tableFilters = useTableFilters('Name, Last Name, Email, etc.', [
     { property: 'person.lastNm', direction: SortDirection.Asc },
     { property: 'person.firstNm', direction: SortDirection.Asc },
@@ -52,7 +54,7 @@ const ActiveUsersPage = () => {
       sort: tableFilters.pagingParams.sort,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lockedFilter, pendingActivationFilter, expiredActivationFilter, tableFilters.searchText.delayedValue]);
+  }, [lockedFilter, pendingActivationFilter, expiredActivationFilter, searchAllOrgsFilter, tableFilters.searchText.delayedValue]);
 
   useEffect(()=>{
     setLockedFilter(false);
@@ -61,7 +63,7 @@ const ActiveUsersPage = () => {
   },[tableFilters.searchText.delayedValue])
   
   useEffect(()=>{
-    userService.fetchUsers(0, tableFilters.pagingParams.sort, lockedFilter, pendingActivationFilter, expiredActivationFilter, tableFilters.searchText.delayedValue)
+    userService.fetchUsers(0, tableFilters.pagingParams.sort, lockedFilter, pendingActivationFilter, expiredActivationFilter, searchAllOrgsFilter, tableFilters.searchText.delayedValue)
   }, [tableFilters.pagingParams])
 
   const hideConfirmation = () => {
@@ -121,7 +123,6 @@ const ActiveUsersPage = () => {
   };
 
   const renderBody = () => {
-
     return (
       <>
         <Stack horizontal={true} wrap={true} style={{ width: '100%'}} verticalAlign='end' horizontalAlign='space-between'>
@@ -161,7 +162,18 @@ const ActiveUsersPage = () => {
               />
           )}
         </Stack>
-       
+        {userService.userSearchForm.searchAllOrgs &&(
+          <Spacing margin={{top: 'normal'}}>
+            <Column lg="6">
+              <UIInputCheck 
+                id={`__SearchAllOrgs__Users-Checkbox`} 
+                value={searchAllOrgsFilter}
+                uiField={userService.userSearchForm.searchAllOrgs}
+                onChange={(_event, _searchAllOrgsFilter: any) => { setSearchAllOrgsFilter(_searchAllOrgsFilter)}}
+                />
+            </Column>
+          </Spacing>
+        )}  
         {!userService.users?.length ? 
           renderEmptyState() : 
           <UsersTable 
@@ -169,10 +181,9 @@ const ActiveUsersPage = () => {
             users={userService.users} 
             onClickUser={updateUserPanel.showPanel}
             tooltips={userService.tooltips}
+            searchAllOrgs={searchAllOrgsFilter}
           />
         }
-        
-
         <Paginator pagingInfo={userService.pagingInfo} onPageChange={userService.onPageChange} />
       </>
     );
