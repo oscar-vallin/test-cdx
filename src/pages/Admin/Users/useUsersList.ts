@@ -13,7 +13,7 @@ import { useOrgSid } from 'src/hooks/useOrgSid';
 
 export const useUsersLists = (activeFilter: ActiveEnum) => {
   const [users, setUsers] = useState<UserItem[] | null | undefined>([]);
-  const [userSearchForm, setUserSearchForm] = useState<any>({})
+  const [userSearchForm, setUserSearchForm] = useState<any>({});
   const [tooltips, setTooltips] = useState<UserConnectionTooltips>({});
   const [commands, setCommands] = useState<WebCommand[] | null | undefined>([]);
   const { orgSid } = useOrgSid();
@@ -27,16 +27,33 @@ export const useUsersLists = (activeFilter: ActiveEnum) => {
 
   const handleError = ErrorHandler();
 
-  const fetchUsers = async (pageNumber = 0, sortParam?, lockedFilter?, pendingActivationFilter?, expiredActivationFilter?, searchAllOrgs?, searchText? ) => {
-    const sort = sortParam ? sortParam : [
-      { property: 'person.lastNm', direction: SortDirection.Asc },
-      { property: 'person.firstNm', direction: SortDirection.Asc },
-      { property: 'email', direction: SortDirection.Asc },
-    ]
+  const fetchUsers = async (
+    pageNumber = 0,
+    sortParam?,
+    lockedFilter?,
+    pendingActivationFilter?,
+    expiredActivationFilter?,
+    searchAllOrgs?,
+    searchText?
+  ) => {
+    const sort = sortParam
+      ? sortParam
+      : [
+          { property: 'person.lastNm', direction: SortDirection.Asc },
+          { property: 'person.firstNm', direction: SortDirection.Asc },
+          { property: 'email', direction: SortDirection.Asc },
+        ];
     apiUsersForOrgFpLazy({
       variables: {
         orgSid,
-        userFilter: { activeFilter, lockedFilter, pendingActivationFilter, expiredActivationFilter, searchAllOrgs, searchText: searchText ?? null },
+        userFilter: {
+          activeFilter,
+          lockedFilter,
+          pendingActivationFilter,
+          expiredActivationFilter,
+          searchAllOrgs,
+          searchText: searchText ?? null,
+        },
         pageableInput: {
           sort,
           pageSize: 100,
@@ -72,8 +89,8 @@ export const useUsersLists = (activeFilter: ActiveEnum) => {
         setPagingInfo(newPagingInfo);
       }
 
-      const toolTips= data?.usersForOrg?.toolTips;
-      if(toolTips){
+      const toolTips = data?.usersForOrg?.toolTips;
+      if (toolTips) {
         setTooltips(toolTips);
       }
 
@@ -95,8 +112,7 @@ export const useUsersLists = (activeFilter: ActiveEnum) => {
         }
       });
 
-    
-      setUserSearchForm(data?.usersForOrg?.userSearchForm)
+      setUserSearchForm(data?.usersForOrg?.userSearchForm);
       setCommands(newCommands);
       setUsers(items);
     }
@@ -114,6 +130,6 @@ export const useUsersLists = (activeFilter: ActiveEnum) => {
     loading,
     fetchUsers,
     userSearchForm,
-    tooltips
+    tooltips,
   };
 };

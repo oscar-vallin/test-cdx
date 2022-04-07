@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { DefaultButton, Dialog, DialogFooter, DialogType, PrimaryButton, Spinner, SpinnerSize } from '@fluentui/react';
+import { DefaultButton, Dialog, DialogFooter, DialogType, PrimaryButton } from '@fluentui/react';
 import { EmptyState } from 'src/containers/states';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Column, Container, Row } from 'src/components/layouts';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { PageTitle } from 'src/components/typography';
 
-import { ActiveEnum, CdxWebCommandType, PageableInput, useDeactivateUsersMutation, UserItem, SortDirection, NullHandling } from 'src/data/services/graphql';
+import {
+  ActiveEnum,
+  CdxWebCommandType,
+  useDeactivateUsersMutation,
+  UserItem,
+  SortDirection,
+} from 'src/data/services/graphql';
 
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { UsersTable } from 'src/pages/Admin/Users/UsersTable';
@@ -20,16 +26,16 @@ import { CreateUsersPanel } from '../CreateUsers';
 import { useTableFilters } from 'src/hooks/useTableFilters';
 import { InputText } from 'src/components/inputs/InputText';
 import { UIInputCheck } from 'src/components/inputs/InputCheck';
-import {  Stack } from '@fluentui/react';
+import { Stack } from '@fluentui/react';
 
 const ActiveUsersPage = () => {
   const { orgSid } = useOrgSid();
   const [isCreateUserPanelOpen, setIsCreateUserPanelOpen] = useState(false);
   const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);
   const [selectedItems, setSelectedItems] = useState<UserItem[]>([]);
-  const [lockedFilter, setLockedFilter] =useState<boolean>(false);
-  const [pendingActivationFilter, setPendingActivationFilter] =useState<boolean>(false);
-  const [expiredActivationFilter, setExpiredActivationFilter] =useState<boolean>(false);
+  const [lockedFilter, setLockedFilter] = useState<boolean>(false);
+  const [pendingActivationFilter, setPendingActivationFilter] = useState<boolean>(false);
+  const [expiredActivationFilter, setExpiredActivationFilter] = useState<boolean>(false);
   const [searchAllOrgsFilter, setSearchAllOrgsFilter] = useState<boolean>(false);
 
   const tableFilters = useTableFilters('Name, Last Name, Email, etc.', [
@@ -54,17 +60,31 @@ const ActiveUsersPage = () => {
       sort: tableFilters.pagingParams.sort,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lockedFilter, pendingActivationFilter, expiredActivationFilter, searchAllOrgsFilter, tableFilters.searchText.delayedValue]);
+  }, [
+    lockedFilter,
+    pendingActivationFilter,
+    expiredActivationFilter,
+    searchAllOrgsFilter,
+    tableFilters.searchText.delayedValue,
+  ]);
 
-  useEffect(()=>{
+  useEffect(() => {
     setLockedFilter(false);
     setPendingActivationFilter(false);
     setExpiredActivationFilter(false);
-  },[tableFilters.searchText.delayedValue])
-  
-  useEffect(()=>{
-    userService.fetchUsers(0, tableFilters.pagingParams.sort, lockedFilter, pendingActivationFilter, expiredActivationFilter, searchAllOrgsFilter, tableFilters.searchText.delayedValue)
-  }, [tableFilters.pagingParams])
+  }, [tableFilters.searchText.delayedValue]);
+
+  useEffect(() => {
+    userService.fetchUsers(
+      0,
+      tableFilters.pagingParams.sort,
+      lockedFilter,
+      pendingActivationFilter,
+      expiredActivationFilter,
+      searchAllOrgsFilter,
+      tableFilters.searchText.delayedValue
+    );
+  }, [tableFilters.pagingParams]);
 
   const hideConfirmation = () => {
     setIsConfirmationHidden(true);
@@ -96,25 +116,30 @@ const ActiveUsersPage = () => {
   };
 
   const renderEmptyState = () => {
-    let emptyText = ''
-    
-    if(lockedFilter){
-      emptyText= 'There are no locked users found.'
+    let emptyText = '';
+
+    if (lockedFilter) {
+      emptyText = 'There are no locked users found.';
     }
 
-    if(pendingActivationFilter){
-      emptyText= 'There are no users pending activation.'
+    if (pendingActivationFilter) {
+      emptyText = 'There are no users pending activation.';
     }
 
-    if(expiredActivationFilter){
-      emptyText= 'There are no users with and expired activation.'
+    if (expiredActivationFilter) {
+      emptyText = 'There are no users with and expired activation.';
     }
 
-    if(tableFilters.searchText.delayedValue){
-      emptyText= `No users were found matching '${tableFilters.searchText.delayedValue}'.`
+    if (tableFilters.searchText.delayedValue) {
+      emptyText = `No users were found matching '${tableFilters.searchText.delayedValue}'.`;
     }
 
-    if(!lockedFilter && !pendingActivationFilter && !expiredActivationFilter && !tableFilters.searchText.delayedValue.length){
+    if (
+      !lockedFilter &&
+      !pendingActivationFilter &&
+      !expiredActivationFilter &&
+      !tableFilters.searchText.delayedValue.length
+    ) {
       emptyText = createCmd
         ? 'There are no active users in this organization. Click the button below to create a new user.'
         : 'There are no active users in this organization.';
@@ -125,7 +150,13 @@ const ActiveUsersPage = () => {
   const renderBody = () => {
     return (
       <>
-        <Stack horizontal={true} wrap={true} style={{ width: '100%'}} verticalAlign='end' horizontalAlign='space-between'>
+        <Stack
+          horizontal={true}
+          wrap={true}
+          style={{ width: '100%' }}
+          verticalAlign="end"
+          horizontalAlign="space-between"
+        >
           {tableFilters?.searchText && (
             <Column lg="6">
               <InputText
@@ -137,53 +168,62 @@ const ActiveUsersPage = () => {
               />
             </Column>
           )}
-          {userService.userSearchForm.lockedFilter &&(
-            <UIInputCheck 
-              id={`__Locked__Users-Checkbox`} 
+          {userService.userSearchForm.lockedFilter && (
+            <UIInputCheck
+              id={`__Locked__Users-Checkbox`}
               value={lockedFilter}
               uiField={userService.userSearchForm.lockedFilter}
-              onChange={(_event, _lockedFilter: any) => { setLockedFilter(_lockedFilter)}}
-              />
+              onChange={(_event, _lockedFilter: any) => {
+                setLockedFilter(_lockedFilter);
+              }}
+            />
           )}
-          {userService.userSearchForm.pendingActivationFilter &&(
-            <UIInputCheck 
-              id={`__PendingActivation__Users-Checkbox`} 
+          {userService.userSearchForm.pendingActivationFilter && (
+            <UIInputCheck
+              id={`__PendingActivation__Users-Checkbox`}
               value={pendingActivationFilter}
-              uiField={userService.userSearchForm.pendingActivationFilter }
-              onChange={(_event, _pendingActivationFilter: any) => { setPendingActivationFilter(_pendingActivationFilter)}}
-              />
+              uiField={userService.userSearchForm.pendingActivationFilter}
+              onChange={(_event, _pendingActivationFilter: any) => {
+                setPendingActivationFilter(_pendingActivationFilter);
+              }}
+            />
           )}
-          {userService.userSearchForm.expiredActivationFilter &&(
-            <UIInputCheck 
-              id={`__ExpiredActivation__Users-Checkbox`} 
+          {userService.userSearchForm.expiredActivationFilter && (
+            <UIInputCheck
+              id={`__ExpiredActivation__Users-Checkbox`}
               value={expiredActivationFilter}
               uiField={userService.userSearchForm.expiredActivationFilter}
-              onChange={(_event, _expiredActivationFilter: any) => { setExpiredActivationFilter(_expiredActivationFilter)}}
-              />
+              onChange={(_event, _expiredActivationFilter: any) => {
+                setExpiredActivationFilter(_expiredActivationFilter);
+              }}
+            />
           )}
         </Stack>
-        {userService.userSearchForm.searchAllOrgs &&(
-          <Spacing margin={{top: 'normal'}}>
+        {userService.userSearchForm.searchAllOrgs && (
+          <Spacing margin={{ top: 'normal' }}>
             <Column lg="6">
-              <UIInputCheck 
-                id={`__SearchAllOrgs__Users-Checkbox`} 
+              <UIInputCheck
+                id={`__SearchAllOrgs__Users-Checkbox`}
                 value={searchAllOrgsFilter}
                 uiField={userService.userSearchForm.searchAllOrgs}
-                onChange={(_event, _searchAllOrgsFilter: any) => { setSearchAllOrgsFilter(_searchAllOrgsFilter)}}
-                />
+                onChange={(_event, _searchAllOrgsFilter: any) => {
+                  setSearchAllOrgsFilter(_searchAllOrgsFilter);
+                }}
+              />
             </Column>
           </Spacing>
-        )}  
-        {!userService.users?.length ? 
-          renderEmptyState() : 
-          <UsersTable 
-            tableFilters={tableFilters} 
-            users={userService.users} 
+        )}
+        {!userService.users?.length ? (
+          renderEmptyState()
+        ) : (
+          <UsersTable
+            tableFilters={tableFilters}
+            users={userService.users}
             onClickUser={updateUserPanel.showPanel}
             tooltips={userService.tooltips}
             searchAllOrgs={searchAllOrgsFilter}
           />
-        }
+        )}
         <Paginator pagingInfo={userService.pagingInfo} onPageChange={userService.onPageChange} />
       </>
     );

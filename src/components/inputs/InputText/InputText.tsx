@@ -119,7 +119,7 @@ const UIInputText = ({
   placeholder,
   renderLabel = true,
   autocomplete,
-  type
+  type,
 }: UIInputTextType) => {
   if (uiField?.readOnly === true) {
     return <UIInputTextReadOnly id={id} uiField={uiField} renderLabel={renderLabel} />;
@@ -127,7 +127,7 @@ const UIInputText = ({
   return (
     <InputText
       id={id}
-      type={type ?? "text"}
+      type={type ?? 'text'}
       value={value}
       disabled={uiField?.readOnly ?? false}
       autofocus={false}

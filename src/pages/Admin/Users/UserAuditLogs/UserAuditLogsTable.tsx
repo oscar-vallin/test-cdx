@@ -72,13 +72,7 @@ export const getEventTypeName = (eventType?: UserAccountAuditEvent): string => {
   }
 };
 
-export const UserAuditLogsTable = ({
-  id,
-  cols,
-  lazyQuery,
-  getItems,
-  tableFilters,
-}: UserAuditLogsTableParams) => {
+export const UserAuditLogsTable = ({ id, cols, lazyQuery, getItems, tableFilters }: UserAuditLogsTableParams) => {
   const { orgSid } = useOrgSid();
 
   const [pagingInfo, setPagingInfo] = useState<PaginationInfo>({
@@ -152,7 +146,9 @@ export const UserAuditLogsTable = ({
           pageableInput: tableFilters.pagingParams,
           events: tableFilters.eventType?.delayedValue.length ? tableFilters.eventType?.delayedValue : null,
           changedUserSid: tableFilters.userSid?.delayedValue.length ? tableFilters.userSid?.delayedValue : null,
-          changedByUserSid: tableFilters.changedByUserSid?.delayedValue.length ? tableFilters.changedByUserSid?.delayedValue : null,
+          changedByUserSid: tableFilters.changedByUserSid?.delayedValue.length
+            ? tableFilters.changedByUserSid?.delayedValue
+            : null,
         },
       });
     }

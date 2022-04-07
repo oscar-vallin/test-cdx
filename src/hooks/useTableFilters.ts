@@ -115,7 +115,6 @@ export const useTableFilters = (searchTextPlaceholder: string, defaultSort?: Sor
   const userSid = useDelayedInputValue('', '', urlParams.get('userSid') || '', '');
   const changedByUserSid = useDelayedInputValue('', '', urlParams.get('changedByUserSid') || '', '');
 
-  
   const _addParamIfExists = (key, value) => (key ? { [key]: value } : {});
 
   const _pushQueryString = () => {
@@ -139,7 +138,14 @@ export const useTableFilters = (searchTextPlaceholder: string, defaultSort?: Sor
 
   useEffect(() => {
     _pushQueryString();
-  }, [searchText.delayedValue, startDate.value, endDate.value, userSid.delayedValue, eventType.delayedValue, changedByUserSid.delayedValue]);
+  }, [
+    searchText.delayedValue,
+    startDate.value,
+    endDate.value,
+    userSid.delayedValue,
+    eventType.delayedValue,
+    changedByUserSid.delayedValue,
+  ]);
 
-  return { searchText, startDate, endDate, pagingParams, setPagingParams, eventType, userSid, changedByUserSid};
+  return { searchText, startDate, endDate, pagingParams, setPagingParams, eventType, userSid, changedByUserSid };
 };

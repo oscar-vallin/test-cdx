@@ -157,7 +157,7 @@ const Table = ({
   emptyMessage = 'No data',
   fromDate,
   toDate,
-  tableId
+  tableId,
 }: TableProps): ReactElement => {
   const { orgSid } = useOrgSid();
 
@@ -374,23 +374,28 @@ const Table = ({
         }
 
         {
-          let startFormatted, endFormatted, redirectPage= 'file-status'
-          if(date === 'custom'){
+          let startFormatted,
+            endFormatted,
+            redirectPage = 'file-status';
+          if (date === 'custom') {
             startFormatted = yyyyMMdd(fromDate);
             endFormatted = yyyyMMdd(toDate);
-          }else{
+          } else {
             startFormatted = yyyyMMdd(getDates(date).startDate);
             endFormatted = yyyyMMdd(getDates(date).endDate);
           }
-          
-          if(tableId){
-            if(tableId === TABLE_NAMES.DASHBOARD_TRANSMISSIONS_VENDOR || tableId === TABLE_NAMES.DASHBOARD_TRANSMISSIONS_PLANSPONSOR)
-              redirectPage='transmissions'
 
-            if(tableId === TABLE_NAMES.DASHBOARD_ERRORS_VENDOR || tableId === TABLE_NAMES.DASHBOARD_ERRORS_PLANSPONSOR)
-              redirectPage='errors'
+          if (tableId) {
+            if (
+              tableId === TABLE_NAMES.DASHBOARD_TRANSMISSIONS_VENDOR ||
+              tableId === TABLE_NAMES.DASHBOARD_TRANSMISSIONS_PLANSPONSOR
+            )
+              redirectPage = 'transmissions';
+
+            if (tableId === TABLE_NAMES.DASHBOARD_ERRORS_VENDOR || tableId === TABLE_NAMES.DASHBOARD_ERRORS_PLANSPONSOR)
+              redirectPage = 'errors';
           }
-          
+
           return (
             <StyledCell left>
               <Link>

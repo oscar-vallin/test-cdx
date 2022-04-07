@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { ROUTES } from 'src/data/constants/RouteConstants';
+import React from 'react';
 import { Column, Container, Row } from 'src/components/layouts';
 import { PageTitle } from 'src/components/typography';
 import { PageHeader } from 'src/containers/headers/PageHeader';
@@ -16,7 +15,6 @@ import { useTableFilters } from 'src/hooks/useTableFilters';
 import { ROUTE_USER_AUDIT_LOGS } from 'src/data/constants/RouteConstants';
 
 const _UserAuditLogsPage = () => {
-
   const tableFilters = useTableFilters('Extract Name, Status, Vendor, etc.', [
     {
       property: 'auditDateTime',

@@ -48,7 +48,6 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
   const [changeHistoryCmd, setChangeHistoryCmd] = useState<WebCommand>();
   const [auditActivityCmd, setAuditActivityCmd] = useState<WebCommand>();
 
-
   const handleError = ErrorHandler();
 
   const [callFindUserAccount, { data: dataFindUserAccount, error: findUserAccountError }] =
@@ -222,8 +221,8 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
   };
 
   const findCmd = (cmdType: CdxWebCommandType): WebCommand | undefined => {
-    return userAccountForm.commands?.find((cmd) => cmd?.commandType === cmdType)
-  }
+    return userAccountForm.commands?.find((cmd) => cmd?.commandType === cmdType);
+  };
 
   //
   useEffect(() => {
@@ -239,7 +238,7 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
     setDeactivateUserCmd(findCmd(CdxWebCommandType.Deactivate));
     setChangeHistoryCmd(findCmd(CdxWebCommandType.History));
     setAuditActivityCmd(findCmd(CdxWebCommandType.Audit));
-  }, [userAccountForm])
+  }, [userAccountForm]);
 
   //
   // * Return the state of the form.

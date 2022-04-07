@@ -52,7 +52,7 @@ export const useUserAuditLogsColumns = (
       //onColumnClick: onSort,
       onRender: (item?: UserAccountAuditLog) => {
         if (item?.event === UserAccountAuditEvent.ArchiveAccess) {
-          return <span title={item?.workOrderId ?? undefined}>{item?.workOrderId}</span>
+          return <span title={item?.workOrderId ?? undefined}>{item?.workOrderId}</span>;
         }
         const name = getUserAccountAuditFormat(item?.userAccount);
         return <span title={name}>{name}</span>;

@@ -76,7 +76,7 @@ export const MonthPicker = ({
   restrictedDates,
   showSixWeeksByDefault,
   workWeekDays,
-  onClickOutside
+  onClickOutside,
 }: MonthPickerProps): ReactElement => {
   const [selectedDateRange, setSelectedDateRange] = useState<Date[]>();
   const [selectedDate, setSelectedDate] = useState<Date>(value ?? new Date());
@@ -124,25 +124,25 @@ export const MonthPicker = ({
     dateRangeString = `${rangeStart.toLocaleDateString()}-${rangeEnd.toLocaleDateString()}`;
   }
 
-  const useOutsideAlerter =(ref, onClickOutside)=> {
+  const useOutsideAlerter = (ref, onClickOutside) => {
     useEffect(() => {
       /**
        * Alert if clicked on outside of element
        */
-      const handleClickOutside=(event)=> {
+      const handleClickOutside = (event) => {
         if (ref.current && !ref.current.contains(event.target)) {
-          onClickOutside()
+          onClickOutside();
         }
-      }
+      };
       // Bind the event listener
-      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener('mousedown', handleClickOutside);
       return () => {
         // Unbind the event listener on clean up
-        document.removeEventListener("mousedown", handleClickOutside);
+        document.removeEventListener('mousedown', handleClickOutside);
       };
     }, [ref]);
-  }
-  
+  };
+
   const monthPickerRef = useRef(null);
   useOutsideAlerter(monthPickerRef, onClickOutside);
 

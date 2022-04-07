@@ -15,7 +15,7 @@ import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Button } from 'src/components/buttons';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { Column, Container, Row } from 'src/components/layouts';
-import { InputText, UIInputText} from 'src/components/inputs/InputText';
+import { InputText, UIInputText } from 'src/components/inputs/InputText';
 import { UIInputCheck } from 'src/components/inputs/InputCheck';
 import { PageTitle, Text } from 'src/components/typography';
 import { ROUTE_FTP_TEST } from 'src/data/constants/RouteConstants';
@@ -105,8 +105,11 @@ const _FtpTestPage = () => {
 
     if (data?.ftpTestM?.status === 'ERROR') {
       Toast.error({ text: data?.ftpTestM?.logMessage.body });
-      if(data?.ftpTestM?.xpSFTPForm?.errSeverity === ErrorSeverity.Error){        
-        const errorMsg = data.ftpTestM.xpSFTPForm.errMsg ?? data.ftpTestM.logMessage.body ?? "Error occurred, please verify the information and try again." 
+      if (data?.ftpTestM?.xpSFTPForm?.errSeverity === ErrorSeverity.Error) {
+        const errorMsg =
+          data.ftpTestM.xpSFTPForm.errMsg ??
+          data.ftpTestM.logMessage.body ??
+          'Error occurred, please verify the information and try again.';
         setMessageType(MessageBarType.error);
         setMessage(errorMsg);
       }
@@ -513,16 +516,16 @@ const _FtpTestPage = () => {
           )}
           {ftpTestData?.ftpTestM?.status && (
             <Container>
-               {message && (
-                  <Spacing margin={{ bottom: 'normal' }}>
-                    <MessageBar
-                      id="__OrgPanel_Msg"
-                      messageBarType={messageType}
-                      isMultiline
-                      onDismiss={() => setMessage(undefined)}
-                    >
-                      {message}
-                    </MessageBar>
+              {message && (
+                <Spacing margin={{ bottom: 'normal' }}>
+                  <MessageBar
+                    id="__OrgPanel_Msg"
+                    messageBarType={messageType}
+                    isMultiline
+                    onDismiss={() => setMessage(undefined)}
+                  >
+                    {message}
+                  </MessageBar>
                 </Spacing>
               )}
               <Spacing margin={{ bottom: 'normal' }}>
