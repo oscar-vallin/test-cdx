@@ -23,8 +23,8 @@ const SectionAccount = ({ form, onSave, onFormChange }: SectionAccountProps) => 
   const formEmail = useFormInputValue(form.email?.value ?? '');
   const history = useHistory();
   const { orgSid } = useOrgSid();
-  const auditCommand = form.commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Audit)
-  const historyCommand = form.commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.History)
+  const auditCommand = form.commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Audit);
+  const historyCommand = form.commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.History);
   const handleSave = () => {
     const user: UserAccount = {
       sid: '',
@@ -38,12 +38,12 @@ const SectionAccount = ({ form, onSave, onFormChange }: SectionAccountProps) => 
     onSave(user);
   };
 
-  const handleUserAuditLogsClick =()=>{
-    history.push(`/user-audit-logs?orgSid=${orgSid}&changedByUserSid=${form.person?.sid}`)
-  }
-  const handleUserChangeHistoryLogsClick =()=>{
-    history.push(`/user-audit-logs?orgSid=${orgSid}&userSid=${form.person?.sid}`)
-  }
+  const handleUserAuditLogsClick = () => {
+    history.push(`/user-audit-logs?orgSid=${orgSid}&changedByUserSid=${form.person?.sid}`);
+  };
+  const handleUserChangeHistoryLogsClick = () => {
+    history.push(`/user-audit-logs?orgSid=${orgSid}&userSid=${form.person?.sid}`);
+  };
 
   return (
     <>
@@ -117,9 +117,9 @@ const SectionAccount = ({ form, onSave, onFormChange }: SectionAccountProps) => 
             </Column>
           </FormRow>
         )}
-        {historyCommand && (   
+        {historyCommand && (
           <FormRow>
-            <Column lg="12">             
+            <Column lg="12">
               <CommandButton
                 id="__UserChangeHistory-Button"
                 iconProps={{ iconName: 'FullHistory' }}

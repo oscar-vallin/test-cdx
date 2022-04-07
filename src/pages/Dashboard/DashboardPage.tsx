@@ -36,7 +36,7 @@ const DashboardPage = () => {
 
   const handleChangeDate: any = (dateType: string, startDate?: Date, endDate?: Date) => {
     setDateId(dateType);
-    
+
     if (dateType !== 'custom') {
       history.push(`?date=${dateType}&orgSid=${orgSid}`);
     } else if (startDate && endDate) {

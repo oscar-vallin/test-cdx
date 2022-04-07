@@ -1,6 +1,21 @@
-import React , { useEffect, useState } from 'react';
-import { DetailsList, DetailsListLayoutMode, IColumn, Link, SelectionMode, TooltipHost, FontIcon, Stack } from '@fluentui/react';
-import { UserItem, SortDirection, NullHandling, PageableInput, UserConnectionTooltips} from 'src/data/services/graphql';
+import React, { useEffect, useState } from 'react';
+import {
+  DetailsList,
+  DetailsListLayoutMode,
+  IColumn,
+  Link,
+  SelectionMode,
+  TooltipHost,
+  FontIcon,
+  Stack,
+} from '@fluentui/react';
+import {
+  UserItem,
+  SortDirection,
+  NullHandling,
+  PageableInput,
+  UserConnectionTooltips,
+} from 'src/data/services/graphql';
 import { UsersTableColumns, useUsersTableColumns } from './UsersTableColumn';
 import { TableFiltersType } from 'src/hooks/useTableFilters';
 
@@ -12,23 +27,15 @@ type UsersTableType = {
   searchAllOrgs?: Boolean;
 };
 
-const cols: UsersTableColumns[] = [
-  UsersTableColumns.FIRST_NAME,
-  UsersTableColumns.LAST_NAME,
-  UsersTableColumns.EMAIL
-]
+const cols: UsersTableColumns[] = [UsersTableColumns.FIRST_NAME, UsersTableColumns.LAST_NAME, UsersTableColumns.EMAIL];
 
-const searchAllOrgsCols: UsersTableColumns[] = [
-  ...cols,
-  UsersTableColumns.ORGANIZATION
-]
+const searchAllOrgsCols: UsersTableColumns[] = [...cols, UsersTableColumns.ORGANIZATION];
 
-export const UsersTable = ({ users, onClickUser, tableFilters, tooltips, searchAllOrgs}: UsersTableType) => {
-
+export const UsersTable = ({ users, onClickUser, tableFilters, tooltips, searchAllOrgs }: UsersTableType) => {
   const _doSort = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
     const newColumns: IColumn[] = columns.slice();
     const currColumn: IColumn = newColumns.filter((currCol) => column.key === currCol.key)[0];
-    let sortParam: PageableInput = {}
+    let sortParam: PageableInput = {};
     newColumns.forEach((newCol: IColumn) => {
       if (newCol === currColumn) {
         currColumn.isSortedDescending = !currColumn.isSortedDescending;
@@ -58,18 +65,18 @@ export const UsersTable = ({ users, onClickUser, tableFilters, tooltips, searchA
 
   const [columns, setColumns] = useState<IColumn[]>(initialColumns);
 
-  useEffect(()=>{
-    const { initialColumns } = useUsersTableColumns(searchAllOrgs ? searchAllOrgsCols : cols, _doSort)
+  useEffect(() => {
+    const { initialColumns } = useUsersTableColumns(searchAllOrgs ? searchAllOrgsCols : cols, _doSort);
     setColumns(initialColumns);
-  }, [searchAllOrgs])
-  
+  }, [searchAllOrgs]);
+
   const onRenderItemColumn = (node?: UserItem, itemIndex?: number, column?: IColumn) => {
     let columnVal: string | undefined;
     if (column?.key === 'email') {
       columnVal = node?.item?.email;
-    }else if (column?.key === 'organization') { 
+    } else if (column?.key === 'organization') {
       columnVal = node?.orgName ?? '';
-    }else if (column) {
+    } else if (column) {
       let personProp;
       const person = node?.item?.person;
       if (person) {
@@ -82,7 +89,7 @@ export const UsersTable = ({ users, onClickUser, tableFilters, tooltips, searchA
 
     return (
       <>
-        <Stack horizontal horizontalAlign='start' tokens={{childrenGap: 10}}>
+        <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
           <Link
             id={`__ActiveUsersPage__${column?.key}_${(itemIndex ?? 0) + 1}`}
             onClick={() => {
@@ -93,27 +100,43 @@ export const UsersTable = ({ users, onClickUser, tableFilters, tooltips, searchA
           >
             {columnVal}
           </Link>
-          {(column?.key === 'email') && (
+          {column?.key === 'email' && (
             <>
-              {(node?.notificationOnlyUser && !node?.pendingActivation) && (
-                <TooltipHost content={tooltips?.notificationOnlyUser ?? ''}>          
-                  <FontIcon style={{color: 'black', fontSize:'18px', cursor: 'pointer'}}  aria-describedby={'NotificationOnlyUser-Icon'} iconName="BlockContact" />
+              {node?.notificationOnlyUser && !node?.pendingActivation && (
+                <TooltipHost content={tooltips?.notificationOnlyUser ?? ''}>
+                  <FontIcon
+                    style={{ color: 'black', fontSize: '18px', cursor: 'pointer' }}
+                    aria-describedby={'NotificationOnlyUser-Icon'}
+                    iconName="BlockContact"
+                  />
                 </TooltipHost>
               )}
               {node?.expiredActivation && (
-                <TooltipHost content={tooltips?.expiredActivation ?? ''} id={'ExpiredActivation-Tooltip'}>          
-                  <FontIcon style={{color: 'red', fontSize:'18px', cursor: 'pointer'}} aria-describedby={'ExpiredActivation-Icon'} iconName="UserOptional" />
+                <TooltipHost content={tooltips?.expiredActivation ?? ''} id={'ExpiredActivation-Tooltip'}>
+                  <FontIcon
+                    style={{ color: 'red', fontSize: '18px', cursor: 'pointer' }}
+                    aria-describedby={'ExpiredActivation-Icon'}
+                    iconName="UserOptional"
+                  />
                 </TooltipHost>
               )}
               {node?.pendingActivation && (
-                <TooltipHost content={tooltips?.pendingActivation ?? ''} id={'PendingActivation-Tooltip'}>          
-                  <FontIcon  style={{color: 'green', fontSize:'18px', cursor: 'pointer'}} aria-describedby={'PendingActivation-Icon'} iconName="UserOptional" />
-                </TooltipHost>           
+                <TooltipHost content={tooltips?.pendingActivation ?? ''} id={'PendingActivation-Tooltip'}>
+                  <FontIcon
+                    style={{ color: 'green', fontSize: '18px', cursor: 'pointer' }}
+                    aria-describedby={'PendingActivation-Icon'}
+                    iconName="UserOptional"
+                  />
+                </TooltipHost>
               )}
-              {node?.accountLocked &&(               
-                <TooltipHost content={tooltips?.accountLocked ?? ''} id={'AccountLocked-Tooltip'}>          
-                  <FontIcon  style={{color: 'red', fontSize:'18px', cursor: 'pointer'}}  aria-describedby={'AccountLocked-Icon'} iconName="ProtectRestrict" />
-                </TooltipHost>            
+              {node?.accountLocked && (
+                <TooltipHost content={tooltips?.accountLocked ?? ''} id={'AccountLocked-Tooltip'}>
+                  <FontIcon
+                    style={{ color: 'red', fontSize: '18px', cursor: 'pointer' }}
+                    aria-describedby={'AccountLocked-Icon'}
+                    iconName="ProtectRestrict"
+                  />
+                </TooltipHost>
               )}
             </>
           )}

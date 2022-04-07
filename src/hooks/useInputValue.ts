@@ -47,7 +47,7 @@ const useDelayedInputValue = (label, placeholder, initialValue, type): DelayedIn
   return { label, placeholder, type, value, onChange, setValue, delayedValue };
 };
 
-const useDelayedDropdownValue = (label, placeholder, initialValue, type): DelayedInput => {  
+const useDelayedDropdownValue = (label, placeholder, initialValue, type): DelayedInput => {
   const [delayedValue, setDelayedValue] = useState(initialValue);
   const [value, setValue] = useState(initialValue);
 

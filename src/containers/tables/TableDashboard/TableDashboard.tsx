@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { TABLE_NAMES } from '../../../data/constants/TableConstants';
+import { TABLE_NAMES } from 'src/data/constants/TableConstants';
 import { TableBox } from './TableDashboard.styles';
 import { useTable } from './TableDashboard.service';
 
-import { Table } from '../../../components/tables';
+import { Table } from 'src/components/tables';
 
 const TableDashboard = ({
   id,

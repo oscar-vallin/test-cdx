@@ -1,12 +1,11 @@
 import React from 'react';
 import { IColumn } from '@fluentui/react';
 
-
 export enum UsersTableColumns {
   FIRST_NAME,
   LAST_NAME,
   EMAIL,
-  ORGANIZATION
+  ORGANIZATION,
 }
 
 export const useUsersTableColumns = (
@@ -14,7 +13,7 @@ export const useUsersTableColumns = (
   onSort?: (ev: React.MouseEvent<HTMLElement>, column: IColumn) => void
 ) => {
   const columnOptions: IColumn[] = [
-    {     
+    {
       data: UsersTableColumns.FIRST_NAME,
       name: 'First Name',
       key: 'firstNm',
@@ -23,7 +22,6 @@ export const useUsersTableColumns = (
       maxWidth: 255,
       isPadded: true,
       onColumnClick: onSort,
-      
     },
     {
       data: UsersTableColumns.LAST_NAME,
@@ -34,7 +32,6 @@ export const useUsersTableColumns = (
       maxWidth: 255,
       isPadded: true,
       onColumnClick: onSort,
-      
     },
     {
       data: UsersTableColumns.EMAIL,
@@ -51,7 +48,7 @@ export const useUsersTableColumns = (
       key: 'organization',
       fieldName: 'orgName',
       minWidth: 255,
-      isPadded: true
+      isPadded: true,
     },
   ];
 
