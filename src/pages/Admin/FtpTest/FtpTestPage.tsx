@@ -350,7 +350,7 @@ const _FtpTestPage = () => {
                       setVendorFileName('');
                       setTestFile(undefined);
                     }}
-                  ></ChoiceGroup>
+                  />
                 </Spacing>
               </Spacing>
             )}
@@ -427,9 +427,9 @@ const _FtpTestPage = () => {
   };
 
   const downloadLogsAsCsv = () => {
-    if (ftpTestData?.ftpTestM?.allMessages?.length) {     
+    if (ftpTestData?.ftpTestM?.allMessages?.length) {
       var jsonObject = JSON.stringify(ftpTestData?.ftpTestM?.allMessages);
-      const str = ConvertToCSV(jsonObject)    
+      const str = ConvertToCSV(jsonObject);
       var downloadLink = document.createElement('a');
       var blob = new Blob(['\ufeff', str]);
       var url = URL.createObjectURL(blob);
@@ -442,43 +442,43 @@ const _FtpTestPage = () => {
     }
   };
 
-  const ConvertToCSV=(objArray)=> {
+  const ConvertToCSV = (objArray) => {
     var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
-    const baseColumns = ['Timestamp', 'Severity', 'Name', 'Body']
+    const baseColumns = ['Timestamp', 'Severity', 'Name', 'Body'];
     var str = '';
     let maxAttributes = 0;
-    for (var i = 0; i < array.length; i++) {       
-        var line = '';
-        for (var index in array[i]) {
-          if(index!='__typename'){
-            if (line != '') line += ',';
-            if(typeof array[i][index] !=  'object'){
-              if(index==='timeStamp'){
-                line += yyyyMMdda(new Date(array[i][index])).toString()
-              }else{
-                line += array[i][index];
-              }              
-            }else if(array[i][index] && array[i][index].length){
-              let attributes = array[i][index]
-              maxAttributes = Math.max(maxAttributes, attributes.length)
-              for (let j = 0; j < attributes.length; j++) {
-                for (var index in attributes[j]){
-                  if(index!='__typename') line +=attributes[j][index]+','
-                }
+    for (var i = 0; i < array.length; i++) {
+      var line = '';
+      for (var index in array[i]) {
+        if (index != '__typename') {
+          if (line != '') line += ',';
+          if (typeof array[i][index] != 'object') {
+            if (index === 'timeStamp') {
+              line += yyyyMMdda(new Date(array[i][index])).toString();
+            } else {
+              line += array[i][index];
+            }
+          } else if (array[i][index] && array[i][index].length) {
+            let attributes = array[i][index];
+            maxAttributes = Math.max(maxAttributes, attributes.length);
+            for (let j = 0; j < attributes.length; j++) {
+              for (var index in attributes[j]) {
+                if (index != '__typename') line += attributes[j][index] + ',';
               }
             }
           }
         }
+      }
 
-        str += line + '\r\n';
+      str += line + '\r\n';
     }
     let columnHeadersStr = baseColumns.join(',') + ',';
-    for(let i=0; i<maxAttributes; i++){
-      columnHeadersStr+=`Attribute ${i+1} Name,Attribute ${i+1} Value,`
+    for (let i = 0; i < maxAttributes; i++) {
+      columnHeadersStr += `Attribute ${i + 1} Name,Attribute ${i + 1} Value,`;
     }
-    str = columnHeadersStr+'\r\n'+str
+    str = columnHeadersStr + '\r\n' + str;
     return str;
-  }
+  };
 
   const copyProfileSnippet = () => {
     navigator.clipboard.writeText(
