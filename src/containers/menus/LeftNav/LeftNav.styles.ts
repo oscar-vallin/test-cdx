@@ -49,7 +49,7 @@ export const NavListItem = styled.li<NavListItemProps>`
   }
 
   &.return-home button {
-    border-top: 1px solid lightgray;
+    border-top: 2px solid ${({ theme }) => theme.colors.neutralTertiaryAlt};
   }
 
   & button {
@@ -78,10 +78,19 @@ export const MobileTopNav = styled.div`
   display: block;
 
   & ul li:last-child {
-    border-bottom: 1px solid lightgray;
+    border-bottom: 2px solid ${({ theme }) => theme.colors.neutralTertiaryAlt};
   }
 
   @media all and ${device.laptop} {
     display: none;
   }
 `;
+
+// Neutral tertiary alt
+export const MenuSeparator = styled.hr`
+  border: none;
+  border-bottom: 2px solid ${({ theme }) => theme.colors.neutralTertiaryAlt};
+  margin: 10px;
+  width: calc(100% - 20px);
+`;
+
