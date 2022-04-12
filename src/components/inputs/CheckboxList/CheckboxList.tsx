@@ -5,7 +5,7 @@ import { UiOption } from 'src/data/services/graphql';
 import { OptionRow } from './CheckboxList.styles';
 import { InfoIcon } from 'src/components/badges/InfoIcon';
 import { ErrorIcon } from 'src/components/badges/ErrorIcon';
-import { CheckBoxAlignBottom, InlineLabel } from 'src/components/inputs/InputCheck/UIInputCheck.styles';
+import { InlineLabel } from 'src/components/inputs/InputCheck/UIInputCheck.styles';
 
 type CheckboxListType = {
   id?: string;
@@ -83,7 +83,7 @@ const CheckboxList = ({ id, items, value, emptyMessage = 'No options available',
       {options.map((item, index) => {
         return (
           <OptionRow key={`checkbox_list-${index}`}>
-            <CheckBoxAlignBottom label={item.label} onRenderLabel={()=>renderLabel(item)} checked={item.checked} onChange={() => onItemCheck(item.value)} />
+            <Checkbox  label={item.label} onRenderLabel={()=>renderLabel(item)} checked={item.checked} onChange={() => onItemCheck(item.value)} />
           </OptionRow>
         );
       })}
