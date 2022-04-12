@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   DetailsList,
   DetailsListLayoutMode,
@@ -33,7 +33,7 @@ const searchAllOrgsCols: UsersTableColumns[] = [...cols, UsersTableColumns.ORGAN
 
 export const UsersTable = ({ users, onClickUser, tableFilters, tooltips, searchAllOrgs }: UsersTableType) => {
   const _doSort = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
-    const newColumns: IColumn[] = columns.slice();
+    const newColumns: IColumn[] = columnsRef?.current?.slice() ?? [];
     const currColumn: IColumn = newColumns.filter((currCol) => column.key === currCol.key)[0];
     let sortParam: PageableInput = {};
     newColumns.forEach((newCol: IColumn) => {
@@ -64,6 +64,11 @@ export const UsersTable = ({ users, onClickUser, tableFilters, tooltips, searchA
   const { initialColumns } = useUsersTableColumns(searchAllOrgs ? searchAllOrgsCols : cols, _doSort);
 
   const [columns, setColumns] = useState<IColumn[]>(initialColumns);
+  // make columnsRef always have the current count
+  // your "fixed" callbacks (doSort) can refer to this object whenever
+  // they need the current value, unlike default behaviour where doSort callback used stale state value 
+  const columnsRef = useRef<IColumn[]>();
+  columnsRef.current = columns;
 
   useEffect(() => {
     const { initialColumns } = useUsersTableColumns(searchAllOrgs ? searchAllOrgsCols : cols, _doSort);

@@ -3,6 +3,7 @@ import { UIFormLabel } from 'src/components/labels/FormLabel';
 import { CheckboxList } from 'src/components/inputs/CheckboxList/CheckboxList';
 import { Text } from 'src/components/typography';
 import { OptionRow, PaddedIcon } from './CheckboxList.styles';
+import { Spacing } from 'src/components/spacings/Spacing';
 
 type UICheckboxListType = {
   id: string;
@@ -11,6 +12,9 @@ type UICheckboxListType = {
   value?: string[];
   onChange: (selectedValues: string[]) => void;
   emptyMessage?: string;
+  hideLabel?: boolean;
+  subtitle?: string;
+  formatTooltip?: boolean;
 };
 
 export const UICheckboxList = ({
@@ -19,7 +23,10 @@ export const UICheckboxList = ({
   options,
   value,
   onChange,
+  subtitle,
   emptyMessage = 'No options available',
+  hideLabel = false,
+  formatTooltip = false
 }: UICheckboxListType) => {
   const renderReadOnlyValues = () => {
     if (value?.length === 0) {
@@ -43,9 +50,15 @@ export const UICheckboxList = ({
 
   return (
     <>
-      <UIFormLabel id={`${id}_lbl`} uiField={uiField} />
+      {!hideLabel && <UIFormLabel id={`${id}_lbl`} uiField={uiField} />}
+      {subtitle && subtitle.length &&(
+        <Spacing margin={{top: "normal", bottom: "small"}}>
+          <Text variant="muted">{subtitle}</Text>
+        </Spacing>
+      )}
       {!uiField?.readOnly ? (
         <CheckboxList
+          formatTooltip={formatTooltip}
           id={id}
           items={options ?? []}
           value={value ?? []}

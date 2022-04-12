@@ -3,6 +3,9 @@ import { useState } from 'react';
 import { CheckboxItem } from 'src/data/Types';
 import { UiOption } from 'src/data/services/graphql';
 import { OptionRow } from './CheckboxList.styles';
+import { InfoIcon } from 'src/components/badges/InfoIcon';
+import { ErrorIcon } from 'src/components/badges/ErrorIcon';
+import { CheckBoxAlignBottom, InlineLabel } from 'src/components/inputs/InputCheck/UIInputCheck.styles';
 
 type CheckboxListType = {
   id?: string;
@@ -10,9 +13,10 @@ type CheckboxListType = {
   value: string[];
   emptyMessage?: String;
   onChange: (selectedValues: string[]) => void;
+  formatTooltip?: boolean
 };
 
-const CheckboxList = ({ id, items, value, emptyMessage = 'No options available', onChange }: CheckboxListType) => {
+const CheckboxList = ({ id, items, value, emptyMessage = 'No options available', onChange, formatTooltip = false}: CheckboxListType) => {
   const [selectedValues, setSelectedValues] = useState<string[]>(Object.assign([], value));
 
   const clone = (checkboxItems: UiOption[]): CheckboxItem[] => {
@@ -23,6 +27,7 @@ const CheckboxList = ({ id, items, value, emptyMessage = 'No options available',
       copy.push({
         ...itm,
         checked: selectedValues.includes(itm.value),
+        info: itm.info
       });
     });
     return copy;
@@ -54,14 +59,31 @@ const CheckboxList = ({ id, items, value, emptyMessage = 'No options available',
     return <div id={id}>{emptyMessage}</div>;
   }
 
-  // console.log('rendering options')
-  // console.log(options);
+  const renderLabel = (item) => {
+    return (
+      <span>
+        <InlineLabel required={item?.required}>{item?.label}</InlineLabel>
+        <InfoIcon id={`${id}_Info`} tooltip={formatTooltip ? formatInfoTooltip(item?.info) : item?.info} />
+        <ErrorIcon id={`${id}-ErrorMsg`} errorMessage={item?.errMsg} />
+      </span>
+    );
+  };
+
+  const formatInfoTooltip=(str: string)=>{
+    let result = ""
+    if(str){
+      let regex = /;/g;
+      result = str.replace(regex, '\n');
+    }
+    return result
+  }
+
   return (
     <div id={id}>
       {options.map((item, index) => {
         return (
           <OptionRow key={`checkbox_list-${index}`}>
-            <Checkbox label={item.label} checked={item.checked} onChange={() => onItemCheck(item.value)} />
+            <CheckBoxAlignBottom label={item.label} onRenderLabel={()=>renderLabel(item)} checked={item.checked} onChange={() => onItemCheck(item.value)} />
           </OptionRow>
         );
       })}

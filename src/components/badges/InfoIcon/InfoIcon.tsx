@@ -16,7 +16,7 @@ export const InfoIcon = ({ id, tooltip, leftPad = true }: InfoIconType) => {
 
   if (tooltip) {
     return (
-      <TooltipHost content={tooltip} id={id}>
+      <TooltipHost style={{ whiteSpace: 'pre-wrap' }} content={tooltip} id={id}>
         {charPad()}
         <FontIcon aria-describedby={id} iconName="Info" />
       </TooltipHost>
