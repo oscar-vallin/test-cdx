@@ -982,6 +982,8 @@ export enum NullHandling {
 
 export type OrgFilterInput = {
   activeFilter?: Maybe<ActiveEnum>;
+  /** Search for users regardless of Organization. Only valid for CDX Users when in the context of the CDX Organization. */
+  searchAllOrgs?: Maybe<Scalars['Boolean']>;
 };
 
 export type OrgSecurityForm = {

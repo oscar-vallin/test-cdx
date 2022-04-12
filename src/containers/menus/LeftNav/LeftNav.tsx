@@ -1,11 +1,11 @@
 import { useHistory } from 'react-router';
+import { ActionButton } from '@fluentui/react';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
 import { getRouteByApiId } from 'src/data/constants/RouteConstants';
 import { NavItemType, NavPanel } from 'src/containers/menus/LeftNav/NavPanel';
-import { ActionButton } from '@fluentui/react';
 import { theme } from 'src/styles/themes/theme';
-import { AdminNavPanel, MobileTopNav, NavList, NavListItem } from './LeftNav.styles';
+import { AdminNavPanel, MenuSeparator, MobileTopNav, NavList, NavListItem } from './LeftNav.styles';
 
 type LeftNavProps = {
   menuOptionSelected?: string;
@@ -16,33 +16,6 @@ export const LeftNav = ({ menuOptionSelected, isOpen }: LeftNavProps) => {
   const history = useHistory();
   const { orgSid } = useOrgSid();
   const ActiveDomainStore = useActiveDomainStore();
-
-  type mapProps = {
-    type?: string;
-    label?: string;
-    destination?: string;
-    subNavItems?: { type: string }[] | any;
-  };
-
-  const parseLinks = (links = [], sidebarOpt: string) => {
-    return links.map(({ label, destination, subNavItems }: mapProps) => ({
-      name: label,
-      ...(subNavItems
-        ? {
-            isExpanded: subNavItems.find((item) => item.destination === sidebarOpt),
-            links: parseLinks(subNavItems, ''),
-          }
-        : {}),
-      ...(destination
-        ? {
-            url: getRouteByApiId(destination)?.URL,
-            key: destination,
-            // params: page.parameters,
-            // commands: page.commands,
-          }
-        : {}),
-    }));
-  };
 
   const renderOrgNavigation = () => {
     const items = ActiveDomainStore?.domainOrg?.current?.subNavItems ?? [];
@@ -129,35 +102,40 @@ export const LeftNav = ({ menuOptionSelected, isOpen }: LeftNavProps) => {
   };
 
   const renderAdminItems = () => {
-    return ActiveDomainStore.nav.admin.map((navItem, index) => (
-      <NavPanel
-        id={`__Nav_${navItem.label.replace(' ', '_')}`}
-        key={`adminNav_${index}`}
-        label={navItem.label}
-        elements={
-          navItem.subNavItems?.map((subNav) => {
-            return {
-              id: `__Nav_${subNav.destination}`,
-              label: subNav.label,
-              selected: subNav.destination == menuOptionSelected,
-              onClick: () => {
-                const url = getRouteByApiId(subNav.destination)?.URL;
-                if (url) {
-                  history.push(`${url}?orgSid=${orgSid}`);
-                }
-              },
-            };
-          }) || []
-        }
-        expanded={navItem.isExpanded}
-        onCollapse={() => {
-          navItem.isExpanded = false;
-        }}
-        onExpand={() => {
-          navItem.isExpanded = true;
-        }}
-      />
-    ));
+    return ActiveDomainStore.nav.admin.map((navItem, index) => {
+      if (navItem.label == '-') {
+        return <MenuSeparator key={`adminNav_separator_${index}`}/>;
+      }
+      return (
+        <NavPanel
+          id={`__Nav_${navItem.label.replace(' ', '_')}`}
+          key={`adminNav_${index}`}
+          label={navItem.label}
+          elements={
+            navItem.subNavItems?.map((subNav) => {
+              return {
+                id: `__Nav_${subNav.destination}`,
+                label: subNav.label,
+                selected: subNav.destination == menuOptionSelected,
+                onClick: () => {
+                  const url = getRouteByApiId(subNav.destination)?.URL;
+                  if (url) {
+                    history.push(`${url}?orgSid=${orgSid}`);
+                  }
+                },
+              };
+            }) || []
+          }
+          expanded={navItem.isExpanded}
+          onCollapse={() => {
+            navItem.isExpanded = false;
+          }}
+          onExpand={() => {
+            navItem.isExpanded = true;
+          }}
+        />
+      );
+    });
   };
 
   if (ActiveDomainStore.nav.admin.length > 0) {
