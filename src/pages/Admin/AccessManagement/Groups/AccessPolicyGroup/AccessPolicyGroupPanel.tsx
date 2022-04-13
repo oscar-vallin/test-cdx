@@ -1,19 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { ReactElement, useEffect, useState } from 'react';
 
-import { MessageBar, MessageBarType, Panel, PanelType, Stack } from '@fluentui/react';
+import { MessageBar, MessageBarType, Panel, PanelType, Stack, Checkbox } from '@fluentui/react';
 
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { Button } from 'src/components/buttons';
-import { Column } from 'src/components/layouts';
+import { Column, Row } from 'src/components/layouts';
 import { UIInputText } from 'src/components/inputs/InputText';
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
+import { UIFormLabel } from 'src/components/labels/FormLabel';
 
 import { useCreateGroupPanel } from 'src/pages/Admin/AccessManagement/Groups/AccessPolicyGroup/AccessPolicyGroupPanel.service';
 import { UIInputTextReadOnly } from 'src/components/inputs/InputText/InputText';
 import { UIInputCheck } from 'src/components/inputs/InputCheck';
-import { UICheckboxList } from 'src/components/inputs/CheckboxList';
-import { AccessPolicyGroupForm, CdxWebCommandType, GqOperationResponse } from 'src/data/services/graphql';
+import { UICheckboxList, formatInfoTooltip } from 'src/components/inputs/CheckboxList';
+import { AccessPolicyGroupForm, CdxWebCommandType, GqOperationResponse, UiOption } from 'src/data/services/graphql';
 import { UIInputMultiSelect } from 'src/components/inputs/InputDropdown';
 import { TagPicker } from 'src/components/inputs/TagPicker';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
@@ -23,6 +24,11 @@ import { Text } from 'src/components/typography';
 import { orgQuickSearch } from 'src/hooks/useQuickSearch';
 import { useApolloClient } from '@apollo/client';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
+import { Spacing } from 'src/components/spacings/Spacing';
+import { Card } from 'src/components/cards';
+import { InfoIcon } from 'src/components/badges/InfoIcon';
+import { ErrorIcon } from 'src/components/badges/ErrorIcon';
+import { InlineLabel } from 'src/components/inputs/InputCheck/UIInputCheck.styles';
 
 type AccessPolicyGroupPanelType = {
   isOpen?: boolean;
@@ -59,6 +65,9 @@ const AccessPolicyGroupPanel = ({
   const Toast = useNotification();
   const client = useApolloClient();
   const handleError = ErrorHandler();
+  const [selectedPoliciesValues, setSelectedPoliciesValues] = useState<string[]>(accessPolicyData.policySids);
+
+  const [selectedSpecializationsValues, setSelectedSpecializationsValues] = useState<string[]>(accessPolicyData.specializationSids);
 
   const doClosePanel = () => {
     // Reset the form
@@ -76,6 +85,13 @@ const AccessPolicyGroupPanel = ({
       doClosePanel();
     }
   };
+  useEffect(() => {
+    setSelectedPoliciesValues(accessPolicyData.policySids)
+  }, [accessPolicyData.policySids.length])
+
+  useEffect(() => {
+    setSelectedSpecializationsValues(accessPolicyData.specializationSids)
+  }, [accessPolicyData.specializationSids.length])
 
   useEffect(() => {
     const response: AccessPolicyGroupForm = createAccessPolicyGroupData?.createAccessPolicyGroup;
@@ -136,6 +152,91 @@ const AccessPolicyGroupPanel = ({
       clearAccessPolicyForm();
     }
   }, [isOpen]);
+
+  const renderLabel = (item) => {
+    return (
+      <span>
+        <InlineLabel required={item?.required}>{item?.label}</InlineLabel>
+        <InfoIcon id={`$_Info`} tooltip={formatInfoTooltip(item?.info)} />
+        <ErrorIcon id={`$-ErrorMsg`} errorMessage={item?.errMsg} />
+      </span>
+    );
+  };
+
+  const renderOptionsGroup = (formUiLabelField, options, onChange) => {
+
+    let subGroups: any[][] = new Array(
+      new Array(),
+      new Array()
+    );
+    for (let i = 0; i < options.length; i++) {
+      subGroups[i % 2].push(options[i]);
+    }
+    return (
+      <Spacing padding={{ top: 'normal', bottom: 'normal' }}>
+        <UIFormLabel id={`group_lbl`} uiField={formUiLabelField} />
+        <Row>
+          <Column lg="12">
+            <Card elevation="none" spacing="none">
+              <Row top>
+                {subGroups.map((subGroup, index) => {
+                  return (
+                    <Column lg="6" key={index}>
+                      <Card elevation="none">
+                        {subGroup.map((item, index) => {
+                          return (
+                            <Spacing margin={{ top: 'small' }} key={`perm-${index}`}>
+                              <Checkbox label={item.label} onRenderLabel={() => renderLabel(item)} checked={item.checked} onChange={() => onChange(item.value)} />
+                            </Spacing>
+                          )
+                        })}
+                      </Card>
+                    </Column>
+                  )
+                })}
+              </Row>
+            </Card>
+          </Column>
+        </Row>
+      </Spacing>
+    );
+  };
+
+  const onPolicyChange = (policySid) => {
+    const idx = selectedPoliciesValues.indexOf(policySid);
+    const checked = idx > -1;
+    if (checked) {
+      // remove it
+      selectedPoliciesValues.splice(idx, 1);
+    } else {
+      // add it
+      selectedPoliciesValues.push(policySid);
+    }
+    setUnsavedChanges(true);
+    addToAccessPolicyData({ policySids: selectedPoliciesValues });
+  }
+
+  const onSpecializationChange = (specializationSid) => {
+    const idx = selectedSpecializationsValues.indexOf(specializationSid);
+    const checked = idx > -1;
+    if (checked) {
+      // remove it
+      selectedSpecializationsValues.splice(idx, 1);
+    } else {
+      // add it
+      selectedSpecializationsValues.push(specializationSid);
+    }
+    setUnsavedChanges(true);
+    addToAccessPolicyData({ specializationSids: selectedSpecializationsValues });
+  }
+
+  const getCheckedValues = (options, selectedOptions) => {
+    let newOptions: any = [];
+    options.forEach(element => {
+      newOptions.push({ ...element, checked: selectedOptions.includes(element.value) })
+    });
+    return newOptions
+  }
 
   const renderBody = (form?: AccessPolicyGroupForm | null) => {
     if (form) {
@@ -218,41 +319,17 @@ const AccessPolicyGroupPanel = ({
                 </Column>
               </FormRow>
             )}
-            {form?.policies?.visible && (
-              <FormRow>
-                <Column lg="12">
-                  <UICheckboxList
-                    id="__policies"
-                    options={policies}
-                    value={accessPolicyData.policySids}
-                    uiField={form.policies}
-                    emptyMessage="No policies configured"
-                    onChange={(policySids) => {
-                      setUnsavedChanges(true);
-                      addToAccessPolicyData({ policySids });
-                    }}
-                  />
-                </Column>
-              </FormRow>
-            )}
 
-            {form?.specializations?.visible && (
-              <FormRow>
-                <Column lg="12">
-                  <UICheckboxList
-                    id="__specializations"
-                    uiField={form.specializations}
-                    options={specializations}
-                    value={accessPolicyData.specializationSids}
-                    emptyMessage="No specializations configured"
-                    onChange={(specializationSids) => {
-                      setUnsavedChanges(true);
-                      addToAccessPolicyData({ specializationSids });
-                    }}
-                  />
-                </Column>
-              </FormRow>
-            )}
+            {renderOptionsGroup(
+              form.policies, 
+              getCheckedValues(policies, selectedPoliciesValues), 
+              onPolicyChange
+              )}
+            {renderOptionsGroup(
+              form.specializations, 
+              getCheckedValues(specializations, selectedSpecializationsValues),
+              onSpecializationChange
+              )}
 
             <FormRow>
               <Column lg="12">
@@ -382,7 +459,7 @@ const AccessPolicyGroupPanel = ({
         isOpen={isOpen}
         onDismiss={onPanelClose}
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        onOuterClick={() => {}}
+        onOuterClick={() => { }}
       >
         <PanelBody>
           {errorMsg && (

@@ -16,7 +16,16 @@ type CheckboxListType = {
   formatTooltip?: boolean
 };
 
-const CheckboxList = ({ id, items, value, emptyMessage = 'No options available', onChange, formatTooltip = false}: CheckboxListType) => {
+const formatInfoTooltip = (str: string) => {
+  let result = ""
+  if (str) {
+    let regex = /;/g;
+    result = str.replace(regex, '\n');
+  }
+  return result
+}
+
+const CheckboxList = ({ id, items, value, emptyMessage = 'No options available', onChange, formatTooltip = false }: CheckboxListType) => {
   const [selectedValues, setSelectedValues] = useState<string[]>(Object.assign([], value));
 
   const clone = (checkboxItems: UiOption[]): CheckboxItem[] => {
@@ -69,21 +78,13 @@ const CheckboxList = ({ id, items, value, emptyMessage = 'No options available',
     );
   };
 
-  const formatInfoTooltip=(str: string)=>{
-    let result = ""
-    if(str){
-      let regex = /;/g;
-      result = str.replace(regex, '\n');
-    }
-    return result
-  }
 
   return (
     <div id={id}>
       {options.map((item, index) => {
         return (
           <OptionRow key={`checkbox_list-${index}`}>
-            <Checkbox  label={item.label} onRenderLabel={()=>renderLabel(item)} checked={item.checked} onChange={() => onItemCheck(item.value)} />
+            <Checkbox label={item.label} onRenderLabel={() => renderLabel(item)} checked={item.checked} onChange={() => onItemCheck(item.value)} />
           </OptionRow>
         );
       })}
@@ -91,4 +92,4 @@ const CheckboxList = ({ id, items, value, emptyMessage = 'No options available',
   );
 };
 
-export { CheckboxList };
+export { CheckboxList, formatInfoTooltip };
