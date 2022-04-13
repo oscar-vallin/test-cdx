@@ -104,7 +104,7 @@ export const LeftNav = ({ menuOptionSelected, isOpen }: LeftNavProps) => {
   const renderAdminItems = () => {
     return ActiveDomainStore.nav.admin.map((navItem, index) => {
       if (navItem.label == '-') {
-        return <MenuSeparator key={`adminNav_separator_${index}`}/>;
+        return <MenuSeparator key={`adminNav_separator_${index}`} />;
       }
       return (
         <NavPanel

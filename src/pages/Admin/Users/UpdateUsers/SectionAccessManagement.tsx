@@ -41,27 +41,31 @@ const SectionAccessManagement = ({ form, onSave, onFormChange }: SectionAccessPr
     );
   };
 
-  const getOrganizationSpeficGroups=( groupOptions)=>{
-    const orgSpecificGroupOptions = groupOptions.filter((g)=>g.category==="Organization specific groups");
+  const getOrganizationSpeficGroups = (groupOptions) => {
+    const orgSpecificGroupOptions = groupOptions.filter((g) => g.category === 'Organization specific groups');
     return orgSpecificGroupOptions;
-  }
-  
-  const getSystemManagedGroups=( groupOptions)=>{
-    const systemManagedGroupOptions = groupOptions.filter((g)=>g.category==="System managed groups");
+  };
+
+  const getSystemManagedGroups = (groupOptions) => {
+    const systemManagedGroupOptions = groupOptions.filter((g) => g.category === 'System managed groups');
     return systemManagedGroupOptions;
-  }
+  };
 
   const [selectedSids, setSelectedSids] = useState<string[]>(getSelectedAccessGroupSids(form));
   const [groupOptions, setGroupOptions] = useState<UiOption[]>(getAccessGroupOptions(form));
-  const [orgSpecificGroupOptions, setOrgSpecificGroupOptions] = useState<UiOption[]>(getOrganizationSpeficGroups(groupOptions))
-  const [systemManagedGroupOptions, setSystemManagedGroupOptions] = useState<UiOption[]>(getSystemManagedGroups(groupOptions))
+  const [orgSpecificGroupOptions, setOrgSpecificGroupOptions] = useState<UiOption[]>(
+    getOrganizationSpeficGroups(groupOptions)
+  );
+  const [systemManagedGroupOptions, setSystemManagedGroupOptions] = useState<UiOption[]>(
+    getSystemManagedGroups(groupOptions)
+  );
 
   useEffect(() => {
     if (form) {
       setSelectedSids(getSelectedAccessGroupSids(form));
       setGroupOptions(getAccessGroupOptions(form));
-      setOrgSpecificGroupOptions(getOrganizationSpeficGroups(groupOptions))
-      setSystemManagedGroupOptions(getSystemManagedGroups(groupOptions))
+      setOrgSpecificGroupOptions(getOrganizationSpeficGroups(groupOptions));
+      setSystemManagedGroupOptions(getSystemManagedGroups(groupOptions));
     }
   }, [form]);
 
@@ -69,7 +73,6 @@ const SectionAccessManagement = ({ form, onSave, onFormChange }: SectionAccessPr
     onSave(selectedSids);
   };
 
- 
   return (
     <>
       <WizardBody>
@@ -77,7 +80,7 @@ const SectionAccessManagement = ({ form, onSave, onFormChange }: SectionAccessPr
           <Column lg="12">
             <UICheckboxList
               id="__Access_Groups_List"
-              subtitle='System managed groups'
+              subtitle="System managed groups"
               uiField={form?.accessPolicyGroups ?? undefined}
               options={systemManagedGroupOptions}
               value={selectedSids}
@@ -89,11 +92,11 @@ const SectionAccessManagement = ({ form, onSave, onFormChange }: SectionAccessPr
               formatTooltip
             />
           </Column>
-          {(orgSpecificGroupOptions && orgSpecificGroupOptions.length) ? (
+          {orgSpecificGroupOptions && orgSpecificGroupOptions.length ? (
             <Column lg="12">
               <UICheckboxList
                 hideLabel
-                subtitle='Organization specific groups'
+                subtitle="Organization specific groups"
                 id="__Access_Groups_List"
                 uiField={form?.accessPolicyGroups ?? undefined}
                 options={orgSpecificGroupOptions}
@@ -106,7 +109,7 @@ const SectionAccessManagement = ({ form, onSave, onFormChange }: SectionAccessPr
                 formatTooltip
               />
             </Column>
-          ): null}
+          ) : null}
         </FormRow>
       </WizardBody>
       {form?.commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Assign) && (

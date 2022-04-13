@@ -1,4 +1,3 @@
-import { Checkbox } from '@fluentui/react';
 import { useState } from 'react';
 import { CheckboxItem } from 'src/data/Types';
 import { UiOption } from 'src/data/services/graphql';
@@ -13,10 +12,17 @@ type CheckboxListType = {
   value: string[];
   emptyMessage?: String;
   onChange: (selectedValues: string[]) => void;
-  formatTooltip?: boolean
+  formatTooltip?: boolean;
 };
 
-const CheckboxList = ({ id, items, value, emptyMessage = 'No options available', onChange, formatTooltip = false}: CheckboxListType) => {
+const CheckboxList = ({
+  id,
+  items,
+  value,
+  emptyMessage = 'No options available',
+  onChange,
+  formatTooltip = false,
+}: CheckboxListType) => {
   const [selectedValues, setSelectedValues] = useState<string[]>(Object.assign([], value));
 
   const clone = (checkboxItems: UiOption[]): CheckboxItem[] => {
@@ -27,7 +33,7 @@ const CheckboxList = ({ id, items, value, emptyMessage = 'No options available',
       copy.push({
         ...itm,
         checked: selectedValues.includes(itm.value),
-        info: itm.info
+        info: itm.info,
       });
     });
     return copy;
@@ -69,21 +75,26 @@ const CheckboxList = ({ id, items, value, emptyMessage = 'No options available',
     );
   };
 
-  const formatInfoTooltip=(str: string)=>{
-    let result = ""
-    if(str){
+  const formatInfoTooltip = (str: string) => {
+    let result = '';
+    if (str) {
       let regex = /;/g;
       result = str.replace(regex, '\n');
     }
-    return result
-  }
+    return result;
+  };
 
   return (
     <div id={id}>
       {options.map((item, index) => {
         return (
           <OptionRow key={`checkbox_list-${index}`}>
-            <CheckBoxAlignBottom label={item.label} onRenderLabel={()=>renderLabel(item)} checked={item.checked} onChange={() => onItemCheck(item.value)} />
+            <CheckBoxAlignBottom
+              label={item.label}
+              onRenderLabel={() => renderLabel(item)}
+              checked={item.checked}
+              onChange={() => onItemCheck(item.value)}
+            />
           </OptionRow>
         );
       })}
