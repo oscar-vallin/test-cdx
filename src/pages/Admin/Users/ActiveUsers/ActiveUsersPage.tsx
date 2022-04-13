@@ -168,7 +168,7 @@ const ActiveUsersPage = () => {
               />
             </Column>
           )}
-          {userService.userSearchForm.lockedFilter && (
+          {userService.userSearchForm.lockedFilter?.visible && (
             <UIInputCheck
               id={`__Locked__Users-Checkbox`}
               value={lockedFilter}
@@ -178,7 +178,7 @@ const ActiveUsersPage = () => {
               }}
             />
           )}
-          {userService.userSearchForm.pendingActivationFilter && (
+          {userService.userSearchForm.pendingActivationFilter?.visible && (
             <UIInputCheck
               id={`__PendingActivation__Users-Checkbox`}
               value={pendingActivationFilter}
@@ -188,7 +188,7 @@ const ActiveUsersPage = () => {
               }}
             />
           )}
-          {userService.userSearchForm.expiredActivationFilter && (
+          {userService.userSearchForm.expiredActivationFilter?.visible && (
             <UIInputCheck
               id={`__ExpiredActivation__Users-Checkbox`}
               value={expiredActivationFilter}
@@ -199,7 +199,7 @@ const ActiveUsersPage = () => {
             />
           )}
         </Stack>
-        {userService.userSearchForm.searchAllOrgs && (
+        {userService.userSearchForm.searchAllOrgs?.visible && (
           <Spacing margin={{ top: 'normal' }}>
             <Column lg="6">
               <UIInputCheck
