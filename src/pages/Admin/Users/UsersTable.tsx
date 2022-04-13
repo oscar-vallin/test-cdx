@@ -66,7 +66,7 @@ export const UsersTable = ({ users, onClickUser, tableFilters, tooltips, searchA
   const [columns, setColumns] = useState<IColumn[]>(initialColumns);
   // make columnsRef always have the current count
   // your "fixed" callbacks (doSort) can refer to this object whenever
-  // they need the current value, unlike default behaviour where doSort callback used stale state value 
+  // they need the current value, unlike default behaviour where doSort callback used stale state value
   const columnsRef = useRef<IColumn[]>();
   columnsRef.current = columns;
 

@@ -26,7 +26,7 @@ export const UICheckboxList = ({
   subtitle,
   emptyMessage = 'No options available',
   hideLabel = false,
-  formatTooltip = false
+  formatTooltip = false,
 }: UICheckboxListType) => {
   const renderReadOnlyValues = () => {
     if (value?.length === 0) {
@@ -51,8 +51,8 @@ export const UICheckboxList = ({
   return (
     <>
       {!hideLabel && <UIFormLabel id={`${id}_lbl`} uiField={uiField} />}
-      {subtitle && subtitle.length &&(
-        <Spacing margin={{top: "normal", bottom: "small"}}>
+      {subtitle && subtitle.length && (
+        <Spacing margin={{ top: 'normal', bottom: 'small' }}>
           <Text variant="muted">{subtitle}</Text>
         </Spacing>
       )}

@@ -93,4 +93,3 @@ export const MenuSeparator = styled.hr`
   margin: 10px;
   width: calc(100% - 20px);
 `;
-
