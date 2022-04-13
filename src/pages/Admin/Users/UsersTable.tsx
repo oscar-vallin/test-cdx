@@ -107,7 +107,7 @@ export const UsersTable = ({ users, onClickUser, tableFilters, tooltips, searchA
           </Link>
           {column?.key === 'email' && (
             <>
-              {node?.notificationOnlyUser && !node?.pendingActivation && (
+              {(node?.notificationOnlyUser && !node?.pendingActivation && !node?.expiredActivation) && (
                 <TooltipHost content={tooltips?.notificationOnlyUser ?? ''}>
                   <FontIcon
                     style={{ color: 'black', fontSize: '18px', cursor: 'pointer' }}
