@@ -164,7 +164,9 @@ export enum CdxWebPage {
   Errors = 'ERRORS',
   OrgActivity = 'ORG_ACTIVITY',
   ActiveOrgs = 'ACTIVE_ORGS',
+  ExternalOrgs = 'EXTERNAL_ORGS',
   ActiveUsers = 'ACTIVE_USERS',
+  ExternalUsers = 'EXTERNAL_USERS',
   UserAuditLogs = 'USER_AUDIT_LOGS',
   DeletedUsers = 'DELETED_USERS',
   AmGroups = 'AM_GROUPS',
@@ -594,6 +596,12 @@ export type GenericResponse = {
   allMessages?: Maybe<Array<LogMessage>>;
 };
 
+export type GrantExternalUserInput = {
+  orgSid: Scalars['ID'];
+  userAccountSid: Scalars['ID'];
+  accessPolicyGroupSids?: Maybe<Array<Scalars['ID']>>;
+};
+
 export type ImplementationDeployResponse = {
   __typename?: 'ImplementationDeployResponse';
   response: GqOperationResponse;
@@ -700,6 +708,9 @@ export type Mutation = {
   deactivateUsers?: Maybe<GqOperationResponse>;
   activateUser?: Maybe<GqOperationResponse>;
   activateUsers?: Maybe<GqOperationResponse>;
+  grantExternalUserAccess?: Maybe<UserAccountForm>;
+  createExternalUser?: Maybe<UserAccountForm>;
+  revokeExternalUserAccess?: Maybe<GenericResponse>;
   createDashThemeColor?: Maybe<DashThemeColor>;
   updateDashThemeColor?: Maybe<DashThemeColor>;
   createDefaultDashTheme?: Maybe<DashTheme>;
@@ -863,6 +874,23 @@ export type MutationActivateUserArgs = {
 
 export type MutationActivateUsersArgs = {
   sidsInput: SidsInput;
+};
+
+
+export type MutationGrantExternalUserAccessArgs = {
+  userInfo: GrantExternalUserInput;
+};
+
+
+export type MutationCreateExternalUserArgs = {
+  userInfo: CreateUserInput;
+  personInfo: CreatePersonInput;
+};
+
+
+export type MutationRevokeExternalUserAccessArgs = {
+  orgSid: Scalars['ID'];
+  userAccountSid: Scalars['ID'];
 };
 
 
@@ -1364,6 +1392,11 @@ export type Query = {
   userAccountForm?: Maybe<UserAccountForm>;
   findUserAccount?: Maybe<UserAccountForm>;
   userAccountAuditLogs?: Maybe<UserAccountLogConnection>;
+  /** Perform a quick search to find an consultant to grant access to. Returns up to 10 results. */
+  findExternalUsers?: Maybe<Array<UserAccount>>;
+  externalUsersForOrg?: Maybe<UserConnection>;
+  /** Find an external user who has been granted access to a given organization */
+  externalUserForOrg?: Maybe<UserAccountForm>;
   accessPolicy?: Maybe<AccessPolicy>;
   accessPoliciesForOrg?: Maybe<AccessPolicyConnection>;
   accessPolicyTemplates?: Maybe<Array<UiOption>>;
@@ -1376,7 +1409,6 @@ export type Query = {
   findAccessSpecialization?: Maybe<AccessSpecializationForm>;
   accessPolicyGroupForm?: Maybe<AccessPolicyGroupForm>;
   findAccessPolicyGroup?: Maybe<AccessPolicyGroupForm>;
-  /** currentOrgInfo(orgInput: OrgSidInput): [Organization] */
   topLevelOrgsByType?: Maybe<Array<Organization>>;
   orgById?: Maybe<Organization>;
   directOrganizations?: Maybe<OrganizationConnection>;
@@ -1386,13 +1418,14 @@ export type Query = {
   organizationQuickSearch?: Maybe<Array<Organization>>;
   vendorQuickSearch?: Maybe<Array<Organization>>;
   orgSecurityForm?: Maybe<OrgSecurityForm>;
+  /** Get a listing of external organizations the current user has been granted access to */
+  externalOrgs?: Maybe<OrganizationConnection>;
   dashThemeColorForOrg?: Maybe<DashThemeColorConnection>;
   dashSiteForOrg?: Maybe<DashSite>;
   dashThemeColor?: Maybe<DashThemeColor>;
   dashThemeColorByName?: Maybe<DashThemeColor>;
   defaultDashThemeForSite?: Maybe<DashTheme>;
   defaultDashThemeForSitePage?: Maybe<DefaultDashThemePage>;
-  /** userDashThemePage(ownedInput : OwnedInput) : UserDashThemePage */
   currentUserDashThemePage?: Maybe<UserDashThemePage>;
   navigateToNewDomain?: Maybe<WebAppDomain>;
   simulateSessionExpir?: Maybe<LogOutInfo>;
@@ -1547,6 +1580,24 @@ export type QueryUserAccountAuditLogsArgs = {
 };
 
 
+export type QueryFindExternalUsersArgs = {
+  searchText?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryExternalUsersForOrgArgs = {
+  orgSid: Scalars['ID'];
+  searchText?: Maybe<Scalars['String']>;
+  pageableInput?: Maybe<PageableInput>;
+};
+
+
+export type QueryExternalUserForOrgArgs = {
+  orgSid: Scalars['ID'];
+  userSid: Scalars['ID'];
+};
+
+
 export type QueryAccessPolicyArgs = {
   orgSid: Scalars['ID'];
   policySid: Scalars['ID'];
@@ -1663,6 +1714,11 @@ export type QueryVendorQuickSearchArgs = {
 
 export type QueryOrgSecurityFormArgs = {
   orgSid: Scalars['ID'];
+};
+
+
+export type QueryExternalOrgsArgs = {
+  pageableInput?: Maybe<PageableInput>;
 };
 
 
@@ -3632,6 +3688,152 @@ export type UserAccountAuditLogsQuery = (
   )> }
 );
 
+export type FindExternalUsersQueryVariables = Exact<{
+  searchText?: Maybe<Scalars['String']>;
+}>;
+
+
+export type FindExternalUsersQuery = (
+  { __typename?: 'Query' }
+  & { findExternalUsers?: Maybe<Array<(
+    { __typename?: 'UserAccount' }
+    & Pick<UserAccount, 'sid' | 'email'>
+    & { person?: Maybe<(
+      { __typename?: 'Person' }
+      & Pick<Person, 'sid' | 'firstNm' | 'lastNm'>
+    )>, accessPolicyGroups?: Maybe<Array<(
+      { __typename?: 'AccessPolicyGroup' }
+      & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes'>
+      & { policies?: Maybe<Array<(
+        { __typename?: 'AccessPolicy' }
+        & FragmentAccessPolicyFragment
+      )>> }
+    )>> }
+  )>> }
+);
+
+export type ExternalUsersForOrgQueryVariables = Exact<{
+  orgSid: Scalars['ID'];
+  searchText?: Maybe<Scalars['String']>;
+  pageableInput?: Maybe<PageableInput>;
+}>;
+
+
+export type ExternalUsersForOrgQuery = (
+  { __typename?: 'Query' }
+  & { externalUsersForOrg?: Maybe<(
+    { __typename?: 'UserConnection' }
+    & { userSearchForm?: Maybe<(
+      { __typename?: 'UserSearchForm' }
+      & { searchText?: Maybe<(
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      )>, lockedFilter?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & FragmentUiBooleanFieldFragment
+      )>, pendingActivationFilter?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & FragmentUiBooleanFieldFragment
+      )>, expiredActivationFilter?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & FragmentUiBooleanFieldFragment
+      )>, searchAllOrgs?: Maybe<(
+        { __typename?: 'UIBooleanField' }
+        & FragmentUiBooleanFieldFragment
+      )> }
+    )>, toolTips?: Maybe<(
+      { __typename?: 'UserConnectionTooltips' }
+      & Pick<UserConnectionTooltips, 'accountLocked' | 'pendingActivation' | 'expiredActivation' | 'notificationOnlyUser'>
+    )>, paginationInfo: (
+      { __typename?: 'PaginationInfo' }
+      & FragmentPaginationInfoFragment
+    ), listPageInfo?: Maybe<(
+      { __typename?: 'ListPageInfo' }
+      & Pick<ListPageInfo, 'pageHeaderLabel'>
+      & { pageCommands?: Maybe<Array<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>, listItemCommands?: Maybe<Array<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>, listItemBulkCommands?: Maybe<Array<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>> }
+    )>, nodes?: Maybe<Array<(
+      { __typename?: 'UserItem' }
+      & Pick<UserItem, 'accountLocked' | 'pendingActivation' | 'expiredActivation' | 'notificationOnlyUser' | 'orgId' | 'orgName'>
+      & { item: (
+        { __typename?: 'UserAccount' }
+        & Pick<UserAccount, 'sid' | 'email'>
+        & { person?: Maybe<(
+          { __typename?: 'Person' }
+          & Pick<Person, 'sid' | 'firstNm' | 'lastNm'>
+        )>, accessPolicyGroups?: Maybe<Array<(
+          { __typename?: 'AccessPolicyGroup' }
+          & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes'>
+          & { policies?: Maybe<Array<(
+            { __typename?: 'AccessPolicy' }
+            & FragmentAccessPolicyFragment
+          )>> }
+        )>> }
+      ), listItemCommands?: Maybe<Array<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>> }
+    )>> }
+  )> }
+);
+
+export type ExternalUserForOrgQueryVariables = Exact<{
+  orgSid: Scalars['ID'];
+  userSid: Scalars['ID'];
+}>;
+
+
+export type ExternalUserForOrgQuery = (
+  { __typename?: 'Query' }
+  & { externalUserForOrg?: Maybe<(
+    { __typename?: 'UserAccountForm' }
+    & Pick<UserAccountForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { email?: Maybe<(
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    )>, active?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & FragmentUiBooleanFieldFragment
+    )>, person?: Maybe<(
+      { __typename?: 'PersonForm' }
+      & Pick<PersonForm, 'sid' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { firstNm: (
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      ), lastNm: (
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      ) }
+    )>, organization: (
+      { __typename?: 'UIReadOnlyField' }
+      & FragmentUiReadOnlyFieldFragment
+    ), accessPolicyGroups?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    )>, sendActivationEmail?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & FragmentUiBooleanFieldFragment
+    )>, lastLogin?: Maybe<(
+      { __typename?: 'UIReadOnlyField' }
+      & FragmentUiReadOnlyFieldFragment
+    )>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>>, options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
+    )>> }
+  )> }
+);
+
 export type AccessPolicyQueryVariables = Exact<{
   orgSid: Scalars['ID'];
   policySid: Scalars['ID'];
@@ -4256,6 +4458,38 @@ export type OrgSecurityFormQuery = (
     )>>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
+    )>> }
+  )> }
+);
+
+export type ExternalOrgsQueryVariables = Exact<{
+  pageableInput?: Maybe<PageableInput>;
+}>;
+
+
+export type ExternalOrgsQuery = (
+  { __typename?: 'Query' }
+  & { externalOrgs?: Maybe<(
+    { __typename?: 'OrganizationConnection' }
+    & { paginationInfo: (
+      { __typename?: 'PaginationInfo' }
+      & FragmentPaginationInfoFragment
+    ), listPageInfo?: Maybe<(
+      { __typename?: 'ListPageInfo' }
+      & Pick<ListPageInfo, 'pageHeaderLabel'>
+      & { pageCommands?: Maybe<Array<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>, listItemCommands?: Maybe<Array<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>, listItemBulkCommands?: Maybe<Array<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>> }
+    )>, nodes?: Maybe<Array<(
+      { __typename?: 'Organization' }
+      & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType' | 'orgTypeLabel'>
     )>> }
   )> }
 );
@@ -5400,6 +5634,128 @@ export type ActivateUsersMutationVariables = Exact<{
 export type ActivateUsersMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'activateUsers'>
+);
+
+export type GrantExternalUserAccessMutationVariables = Exact<{
+  userInfo: GrantExternalUserInput;
+}>;
+
+
+export type GrantExternalUserAccessMutation = (
+  { __typename?: 'Mutation' }
+  & { grantExternalUserAccess?: Maybe<(
+    { __typename?: 'UserAccountForm' }
+    & Pick<UserAccountForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { email?: Maybe<(
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    )>, active?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & FragmentUiBooleanFieldFragment
+    )>, person?: Maybe<(
+      { __typename?: 'PersonForm' }
+      & Pick<PersonForm, 'sid' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { firstNm: (
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      ), lastNm: (
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      ) }
+    )>, organization: (
+      { __typename?: 'UIReadOnlyField' }
+      & FragmentUiReadOnlyFieldFragment
+    ), accessPolicyGroups?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    )>, sendActivationEmail?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & FragmentUiBooleanFieldFragment
+    )>, lastLogin?: Maybe<(
+      { __typename?: 'UIReadOnlyField' }
+      & FragmentUiReadOnlyFieldFragment
+    )>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>>, options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
+    )>> }
+  )> }
+);
+
+export type CreateExternalUserMutationVariables = Exact<{
+  userInfo: CreateUserInput;
+  personInfo: CreatePersonInput;
+}>;
+
+
+export type CreateExternalUserMutation = (
+  { __typename?: 'Mutation' }
+  & { createExternalUser?: Maybe<(
+    { __typename?: 'UserAccountForm' }
+    & Pick<UserAccountForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { email?: Maybe<(
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    )>, active?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & FragmentUiBooleanFieldFragment
+    )>, person?: Maybe<(
+      { __typename?: 'PersonForm' }
+      & Pick<PersonForm, 'sid' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { firstNm: (
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      ), lastNm: (
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      ) }
+    )>, organization: (
+      { __typename?: 'UIReadOnlyField' }
+      & FragmentUiReadOnlyFieldFragment
+    ), accessPolicyGroups?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    )>, sendActivationEmail?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & FragmentUiBooleanFieldFragment
+    )>, lastLogin?: Maybe<(
+      { __typename?: 'UIReadOnlyField' }
+      & FragmentUiReadOnlyFieldFragment
+    )>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>>, options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
+    )>> }
+  )> }
+);
+
+export type RevokeExternalUserAccessMutationVariables = Exact<{
+  orgSid: Scalars['ID'];
+  userAccountSid: Scalars['ID'];
+}>;
+
+
+export type RevokeExternalUserAccessMutation = (
+  { __typename?: 'Mutation' }
+  & { revokeExternalUserAccess?: Maybe<(
+    { __typename?: 'GenericResponse' }
+    & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { allMessages?: Maybe<Array<(
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>> }
+    )>> }
+  )> }
 );
 
 export type CreateDashThemeColorMutationVariables = Exact<{
@@ -7772,6 +8128,246 @@ export function useUserAccountAuditLogsLazyQuery(baseOptions?: Apollo.LazyQueryH
 export type UserAccountAuditLogsQueryHookResult = ReturnType<typeof useUserAccountAuditLogsQuery>;
 export type UserAccountAuditLogsLazyQueryHookResult = ReturnType<typeof useUserAccountAuditLogsLazyQuery>;
 export type UserAccountAuditLogsQueryResult = Apollo.QueryResult<UserAccountAuditLogsQuery, UserAccountAuditLogsQueryVariables>;
+export const FindExternalUsersDocument = gql`
+    query FindExternalUsers($searchText: String) {
+  findExternalUsers(searchText: $searchText) {
+    sid
+    email
+    person {
+      sid
+      firstNm
+      lastNm
+    }
+    accessPolicyGroups {
+      sid
+      name
+      description
+      tmpl
+      tmplUseAsIs
+      applicableOrgTypes
+      policies {
+        ...fragmentAccessPolicy
+      }
+    }
+  }
+}
+    ${FragmentAccessPolicyFragmentDoc}`;
+
+/**
+ * __useFindExternalUsersQuery__
+ *
+ * To run a query within a React component, call `useFindExternalUsersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindExternalUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindExternalUsersQuery({
+ *   variables: {
+ *      searchText: // value for 'searchText'
+ *   },
+ * });
+ */
+export function useFindExternalUsersQuery(baseOptions?: Apollo.QueryHookOptions<FindExternalUsersQuery, FindExternalUsersQueryVariables>) {
+        return Apollo.useQuery<FindExternalUsersQuery, FindExternalUsersQueryVariables>(FindExternalUsersDocument, baseOptions);
+      }
+export function useFindExternalUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindExternalUsersQuery, FindExternalUsersQueryVariables>) {
+          return Apollo.useLazyQuery<FindExternalUsersQuery, FindExternalUsersQueryVariables>(FindExternalUsersDocument, baseOptions);
+        }
+export type FindExternalUsersQueryHookResult = ReturnType<typeof useFindExternalUsersQuery>;
+export type FindExternalUsersLazyQueryHookResult = ReturnType<typeof useFindExternalUsersLazyQuery>;
+export type FindExternalUsersQueryResult = Apollo.QueryResult<FindExternalUsersQuery, FindExternalUsersQueryVariables>;
+export const ExternalUsersForOrgDocument = gql`
+    query ExternalUsersForOrg($orgSid: ID!, $searchText: String, $pageableInput: PageableInput) {
+  externalUsersForOrg(
+    orgSid: $orgSid
+    searchText: $searchText
+    pageableInput: $pageableInput
+  ) {
+    userSearchForm {
+      searchText {
+        ...fragmentUIStringField
+      }
+      lockedFilter {
+        ...fragmentUIBooleanField
+      }
+      pendingActivationFilter {
+        ...fragmentUIBooleanField
+      }
+      expiredActivationFilter {
+        ...fragmentUIBooleanField
+      }
+      searchAllOrgs {
+        ...fragmentUIBooleanField
+      }
+    }
+    toolTips {
+      accountLocked
+      pendingActivation
+      expiredActivation
+      notificationOnlyUser
+    }
+    paginationInfo {
+      ...fragmentPaginationInfo
+    }
+    listPageInfo {
+      pageHeaderLabel
+      pageCommands {
+        ...fragmentWebCommand
+      }
+      listItemCommands {
+        ...fragmentWebCommand
+      }
+      listItemBulkCommands {
+        ...fragmentWebCommand
+      }
+    }
+    nodes {
+      item {
+        sid
+        email
+        person {
+          sid
+          firstNm
+          lastNm
+        }
+        accessPolicyGroups {
+          sid
+          name
+          description
+          tmpl
+          tmplUseAsIs
+          applicableOrgTypes
+          policies {
+            ...fragmentAccessPolicy
+          }
+        }
+      }
+      accountLocked
+      pendingActivation
+      expiredActivation
+      notificationOnlyUser
+      orgId
+      orgName
+      listItemCommands {
+        ...fragmentWebCommand
+      }
+    }
+  }
+}
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentPaginationInfoFragmentDoc}
+${FragmentWebCommandFragmentDoc}
+${FragmentAccessPolicyFragmentDoc}`;
+
+/**
+ * __useExternalUsersForOrgQuery__
+ *
+ * To run a query within a React component, call `useExternalUsersForOrgQuery` and pass it any options that fit your needs.
+ * When your component renders, `useExternalUsersForOrgQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useExternalUsersForOrgQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *      searchText: // value for 'searchText'
+ *      pageableInput: // value for 'pageableInput'
+ *   },
+ * });
+ */
+export function useExternalUsersForOrgQuery(baseOptions: Apollo.QueryHookOptions<ExternalUsersForOrgQuery, ExternalUsersForOrgQueryVariables>) {
+        return Apollo.useQuery<ExternalUsersForOrgQuery, ExternalUsersForOrgQueryVariables>(ExternalUsersForOrgDocument, baseOptions);
+      }
+export function useExternalUsersForOrgLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ExternalUsersForOrgQuery, ExternalUsersForOrgQueryVariables>) {
+          return Apollo.useLazyQuery<ExternalUsersForOrgQuery, ExternalUsersForOrgQueryVariables>(ExternalUsersForOrgDocument, baseOptions);
+        }
+export type ExternalUsersForOrgQueryHookResult = ReturnType<typeof useExternalUsersForOrgQuery>;
+export type ExternalUsersForOrgLazyQueryHookResult = ReturnType<typeof useExternalUsersForOrgLazyQuery>;
+export type ExternalUsersForOrgQueryResult = Apollo.QueryResult<ExternalUsersForOrgQuery, ExternalUsersForOrgQueryVariables>;
+export const ExternalUserForOrgDocument = gql`
+    query ExternalUserForOrg($orgSid: ID!, $userSid: ID!) {
+  externalUserForOrg(orgSid: $orgSid, userSid: $userSid) {
+    sid
+    email {
+      ...fragmentUIStringField
+    }
+    active {
+      ...fragmentUIBooleanField
+    }
+    person {
+      sid
+      firstNm {
+        ...fragmentUIStringField
+      }
+      lastNm {
+        ...fragmentUIStringField
+      }
+      errCode
+      errMsg
+      errSeverity
+    }
+    organization {
+      ...fragmentUIReadOnlyField
+    }
+    accessPolicyGroups {
+      ...fragmentUISelectManyField
+    }
+    sendActivationEmail {
+      ...fragmentUIBooleanField
+    }
+    lastLogin {
+      ...fragmentUIReadOnlyField
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    options {
+      ...fragmentUIOptions
+    }
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiReadOnlyFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentWebCommandFragmentDoc}
+${FragmentUiOptionsFragmentDoc}`;
+
+/**
+ * __useExternalUserForOrgQuery__
+ *
+ * To run a query within a React component, call `useExternalUserForOrgQuery` and pass it any options that fit your needs.
+ * When your component renders, `useExternalUserForOrgQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useExternalUserForOrgQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *      userSid: // value for 'userSid'
+ *   },
+ * });
+ */
+export function useExternalUserForOrgQuery(baseOptions: Apollo.QueryHookOptions<ExternalUserForOrgQuery, ExternalUserForOrgQueryVariables>) {
+        return Apollo.useQuery<ExternalUserForOrgQuery, ExternalUserForOrgQueryVariables>(ExternalUserForOrgDocument, baseOptions);
+      }
+export function useExternalUserForOrgLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ExternalUserForOrgQuery, ExternalUserForOrgQueryVariables>) {
+          return Apollo.useLazyQuery<ExternalUserForOrgQuery, ExternalUserForOrgQueryVariables>(ExternalUserForOrgDocument, baseOptions);
+        }
+export type ExternalUserForOrgQueryHookResult = ReturnType<typeof useExternalUserForOrgQuery>;
+export type ExternalUserForOrgLazyQueryHookResult = ReturnType<typeof useExternalUserForOrgLazyQuery>;
+export type ExternalUserForOrgQueryResult = Apollo.QueryResult<ExternalUserForOrgQuery, ExternalUserForOrgQueryVariables>;
 export const AccessPolicyDocument = gql`
     query AccessPolicy($orgSid: ID!, $policySid: ID!) {
   accessPolicy(orgSid: $orgSid, policySid: $policySid) {
@@ -8941,6 +9537,61 @@ export function useOrgSecurityFormLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
 export type OrgSecurityFormQueryHookResult = ReturnType<typeof useOrgSecurityFormQuery>;
 export type OrgSecurityFormLazyQueryHookResult = ReturnType<typeof useOrgSecurityFormLazyQuery>;
 export type OrgSecurityFormQueryResult = Apollo.QueryResult<OrgSecurityFormQuery, OrgSecurityFormQueryVariables>;
+export const ExternalOrgsDocument = gql`
+    query ExternalOrgs($pageableInput: PageableInput) {
+  externalOrgs(pageableInput: $pageableInput) {
+    paginationInfo {
+      ...fragmentPaginationInfo
+    }
+    listPageInfo {
+      pageHeaderLabel
+      pageCommands {
+        ...fragmentWebCommand
+      }
+      listItemCommands {
+        ...fragmentWebCommand
+      }
+      listItemBulkCommands {
+        ...fragmentWebCommand
+      }
+    }
+    nodes {
+      sid
+      name
+      orgId
+      orgType
+      orgTypeLabel
+    }
+  }
+}
+    ${FragmentPaginationInfoFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
+
+/**
+ * __useExternalOrgsQuery__
+ *
+ * To run a query within a React component, call `useExternalOrgsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useExternalOrgsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useExternalOrgsQuery({
+ *   variables: {
+ *      pageableInput: // value for 'pageableInput'
+ *   },
+ * });
+ */
+export function useExternalOrgsQuery(baseOptions?: Apollo.QueryHookOptions<ExternalOrgsQuery, ExternalOrgsQueryVariables>) {
+        return Apollo.useQuery<ExternalOrgsQuery, ExternalOrgsQueryVariables>(ExternalOrgsDocument, baseOptions);
+      }
+export function useExternalOrgsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ExternalOrgsQuery, ExternalOrgsQueryVariables>) {
+          return Apollo.useLazyQuery<ExternalOrgsQuery, ExternalOrgsQueryVariables>(ExternalOrgsDocument, baseOptions);
+        }
+export type ExternalOrgsQueryHookResult = ReturnType<typeof useExternalOrgsQuery>;
+export type ExternalOrgsLazyQueryHookResult = ReturnType<typeof useExternalOrgsLazyQuery>;
+export type ExternalOrgsQueryResult = Apollo.QueryResult<ExternalOrgsQuery, ExternalOrgsQueryVariables>;
 export const DashThemeColorForOrgDocument = gql`
     query DashThemeColorForOrg($ownedInput: OwnedInput, $pageableInput: PageableInput) {
   dashThemeColorForOrg(ownedInput: $ownedInput, pageableInput: $pageableInput) {
@@ -11224,6 +11875,206 @@ export function useActivateUsersMutation(baseOptions?: Apollo.MutationHookOption
 export type ActivateUsersMutationHookResult = ReturnType<typeof useActivateUsersMutation>;
 export type ActivateUsersMutationResult = Apollo.MutationResult<ActivateUsersMutation>;
 export type ActivateUsersMutationOptions = Apollo.BaseMutationOptions<ActivateUsersMutation, ActivateUsersMutationVariables>;
+export const GrantExternalUserAccessDocument = gql`
+    mutation GrantExternalUserAccess($userInfo: GrantExternalUserInput!) {
+  grantExternalUserAccess(userInfo: $userInfo) {
+    sid
+    email {
+      ...fragmentUIStringField
+    }
+    active {
+      ...fragmentUIBooleanField
+    }
+    person {
+      sid
+      firstNm {
+        ...fragmentUIStringField
+      }
+      lastNm {
+        ...fragmentUIStringField
+      }
+      errCode
+      errMsg
+      errSeverity
+    }
+    organization {
+      ...fragmentUIReadOnlyField
+    }
+    accessPolicyGroups {
+      ...fragmentUISelectManyField
+    }
+    sendActivationEmail {
+      ...fragmentUIBooleanField
+    }
+    lastLogin {
+      ...fragmentUIReadOnlyField
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    options {
+      ...fragmentUIOptions
+    }
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiReadOnlyFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentWebCommandFragmentDoc}
+${FragmentUiOptionsFragmentDoc}`;
+export type GrantExternalUserAccessMutationFn = Apollo.MutationFunction<GrantExternalUserAccessMutation, GrantExternalUserAccessMutationVariables>;
+
+/**
+ * __useGrantExternalUserAccessMutation__
+ *
+ * To run a mutation, you first call `useGrantExternalUserAccessMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useGrantExternalUserAccessMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [grantExternalUserAccessMutation, { data, loading, error }] = useGrantExternalUserAccessMutation({
+ *   variables: {
+ *      userInfo: // value for 'userInfo'
+ *   },
+ * });
+ */
+export function useGrantExternalUserAccessMutation(baseOptions?: Apollo.MutationHookOptions<GrantExternalUserAccessMutation, GrantExternalUserAccessMutationVariables>) {
+        return Apollo.useMutation<GrantExternalUserAccessMutation, GrantExternalUserAccessMutationVariables>(GrantExternalUserAccessDocument, baseOptions);
+      }
+export type GrantExternalUserAccessMutationHookResult = ReturnType<typeof useGrantExternalUserAccessMutation>;
+export type GrantExternalUserAccessMutationResult = Apollo.MutationResult<GrantExternalUserAccessMutation>;
+export type GrantExternalUserAccessMutationOptions = Apollo.BaseMutationOptions<GrantExternalUserAccessMutation, GrantExternalUserAccessMutationVariables>;
+export const CreateExternalUserDocument = gql`
+    mutation CreateExternalUser($userInfo: CreateUserInput!, $personInfo: CreatePersonInput!) {
+  createExternalUser(userInfo: $userInfo, personInfo: $personInfo) {
+    sid
+    email {
+      ...fragmentUIStringField
+    }
+    active {
+      ...fragmentUIBooleanField
+    }
+    person {
+      sid
+      firstNm {
+        ...fragmentUIStringField
+      }
+      lastNm {
+        ...fragmentUIStringField
+      }
+      errCode
+      errMsg
+      errSeverity
+    }
+    organization {
+      ...fragmentUIReadOnlyField
+    }
+    accessPolicyGroups {
+      ...fragmentUISelectManyField
+    }
+    sendActivationEmail {
+      ...fragmentUIBooleanField
+    }
+    lastLogin {
+      ...fragmentUIReadOnlyField
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    options {
+      ...fragmentUIOptions
+    }
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiReadOnlyFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentWebCommandFragmentDoc}
+${FragmentUiOptionsFragmentDoc}`;
+export type CreateExternalUserMutationFn = Apollo.MutationFunction<CreateExternalUserMutation, CreateExternalUserMutationVariables>;
+
+/**
+ * __useCreateExternalUserMutation__
+ *
+ * To run a mutation, you first call `useCreateExternalUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateExternalUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createExternalUserMutation, { data, loading, error }] = useCreateExternalUserMutation({
+ *   variables: {
+ *      userInfo: // value for 'userInfo'
+ *      personInfo: // value for 'personInfo'
+ *   },
+ * });
+ */
+export function useCreateExternalUserMutation(baseOptions?: Apollo.MutationHookOptions<CreateExternalUserMutation, CreateExternalUserMutationVariables>) {
+        return Apollo.useMutation<CreateExternalUserMutation, CreateExternalUserMutationVariables>(CreateExternalUserDocument, baseOptions);
+      }
+export type CreateExternalUserMutationHookResult = ReturnType<typeof useCreateExternalUserMutation>;
+export type CreateExternalUserMutationResult = Apollo.MutationResult<CreateExternalUserMutation>;
+export type CreateExternalUserMutationOptions = Apollo.BaseMutationOptions<CreateExternalUserMutation, CreateExternalUserMutationVariables>;
+export const RevokeExternalUserAccessDocument = gql`
+    mutation RevokeExternalUserAccess($orgSid: ID!, $userAccountSid: ID!) {
+  revokeExternalUserAccess(orgSid: $orgSid, userAccountSid: $userAccountSid) {
+    response
+    errCode
+    errMsg
+    errSeverity
+    allMessages {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
+      }
+    }
+  }
+}
+    ${UnionNvpFragmentDoc}`;
+export type RevokeExternalUserAccessMutationFn = Apollo.MutationFunction<RevokeExternalUserAccessMutation, RevokeExternalUserAccessMutationVariables>;
+
+/**
+ * __useRevokeExternalUserAccessMutation__
+ *
+ * To run a mutation, you first call `useRevokeExternalUserAccessMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRevokeExternalUserAccessMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [revokeExternalUserAccessMutation, { data, loading, error }] = useRevokeExternalUserAccessMutation({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *      userAccountSid: // value for 'userAccountSid'
+ *   },
+ * });
+ */
+export function useRevokeExternalUserAccessMutation(baseOptions?: Apollo.MutationHookOptions<RevokeExternalUserAccessMutation, RevokeExternalUserAccessMutationVariables>) {
+        return Apollo.useMutation<RevokeExternalUserAccessMutation, RevokeExternalUserAccessMutationVariables>(RevokeExternalUserAccessDocument, baseOptions);
+      }
+export type RevokeExternalUserAccessMutationHookResult = ReturnType<typeof useRevokeExternalUserAccessMutation>;
+export type RevokeExternalUserAccessMutationResult = Apollo.MutationResult<RevokeExternalUserAccessMutation>;
+export type RevokeExternalUserAccessMutationOptions = Apollo.BaseMutationOptions<RevokeExternalUserAccessMutation, RevokeExternalUserAccessMutationVariables>;
 export const CreateDashThemeColorDocument = gql`
     mutation CreateDashThemeColor($createDashThemeColorInput: CreateDashThemeColorInput!) {
   createDashThemeColor(createDashThemeColorInput: $createDashThemeColorInput) {
