@@ -163,7 +163,7 @@ const AccessPolicyGroupPanel = ({
     );
   };
 
-  const renderOptionsGroup = (formUiLabelField, options, onChange) => {
+  const renderOptionsGroup = (formUiLabelField, options, onChange, id) => {
 
     let subGroups: any[][] = new Array(
       new Array(),
@@ -174,18 +174,18 @@ const AccessPolicyGroupPanel = ({
     }
     return (
       <Spacing padding={{ top: 'normal', bottom: 'normal' }}>
-        <UIFormLabel id={`group_lbl`} uiField={formUiLabelField} />
+        <UIFormLabel id={`${id}_Label`} uiField={formUiLabelField} />
         <Row>
           <Column lg="12">
-            <Card elevation="none" spacing="none">
+            <Card id={`${id}-Card`} elevation="none" spacing="none">
               <Row top>
                 {subGroups.map((subGroup, index) => {
                   return (
                     <Column lg="6" key={index}>
-                      <Card elevation="none">
-                        {subGroup.map((item, index) => {
+                      <Card id={`${id}_subGroup-${index}`} elevation="none">
+                        {subGroup.map((item, itemindex) => {
                           return (
-                            <Spacing margin={{ top: 'small' }} key={`perm-${index}`}>
+                            <Spacing id={`${id}_subGroup-${index}_item-${itemindex}`}  margin={{ top: 'small' }} key={`${index}-${itemindex}`}>
                               <Checkbox label={item.label} onRenderLabel={() => renderLabel(item)} checked={item.checked} onChange={() => onChange(item.value)} />
                             </Spacing>
                           )
@@ -323,12 +323,14 @@ const AccessPolicyGroupPanel = ({
             {renderOptionsGroup(
               form.policies, 
               getCheckedValues(policies, selectedPoliciesValues), 
-              onPolicyChange
+              onPolicyChange,
+              "policiesGroup"
               )}
             {renderOptionsGroup(
               form.specializations, 
               getCheckedValues(specializations, selectedSpecializationsValues),
-              onSpecializationChange
+              onSpecializationChange,
+              "specializationsGroup"
               )}
 
             <FormRow>
