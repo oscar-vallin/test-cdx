@@ -25,6 +25,7 @@ export const ROUTES_ID = {
   PASSWORD_RESET: 'password-reset',
   PAGE_NOT_FOUND: 'page-not-found',
   UNAUTHORIZED: 'unauthorized',
+  SECURITY_SETTINGS: 'security-settings'
 };
 
 export const URL_ROUTES = {
@@ -55,6 +56,7 @@ export const URL_ROUTES = {
   PASSWORD_RESET: `/ua/${ROUTES_ID.PASSWORD_RESET}/:token`,
   PAGE_NOT_FOUND: `/${ROUTES_ID.PAGE_NOT_FOUND}`,
   UNAUTHORIZED: `/${ROUTES_ID.UNAUTHORIZED}`,
+  SECURITY_SETTINGS: `/${ROUTES_ID.SECURITY_SETTINGS}`
 };
 
 type RouteType = {
@@ -257,6 +259,14 @@ export const ROUTE_PASSWORD_RULES = {
   API_ID: 'PASSWORD_RULES',
 };
 
+export const ROUTE_SECURITY_SETTINGS: RouteType = {
+  ID: ROUTES_ID.SECURITY_SETTINGS,
+  TITLE: 'Organization Security Settings',
+  URL: URL_ROUTES.SECURITY_SETTINGS,
+  MAIN_MENU: false,
+  API_ID: 'SECURITY_SETTINGS',
+};
+
 export const ROUTE_PASSWORD_RESET: RouteType = {
   ID: ROUTES_ID.PASSWORD_RESET,
   TITLE: 'Password Reset',
@@ -309,6 +319,7 @@ export const ROUTES = {
   ROUTE_PASSWORD_RESET,
   ROUTE_PAGE_NOT_FOUND,
   ROUTE_UNAUTHORIZED,
+  ROUTE_SECURITY_SETTINGS
 };
 
 export const ROUTES_ARRAY: RouteType[] = [
@@ -336,6 +347,7 @@ export const ROUTES_ARRAY: RouteType[] = [
   ROUTE_FTP_TEST,
   ROUTE_IMPL_DEPLOY,
   ROUTE_PASSWORD_RULES,
+  ROUTE_SECURITY_SETTINGS
 ];
 
 export const getRouteByApiId = (_apiId) => {

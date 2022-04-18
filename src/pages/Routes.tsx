@@ -29,6 +29,7 @@ import AuthRoute from './AuthRoute';
 import UnauthRoute from './UnauthRoute';
 import { ImplementationDeployPage } from './Admin/ImplDeploy';
 import { PasswordRulesPage } from './Admin/PasswordRules';
+import { OrganizationSecuritySettingsPage } from './Admin/OrganizationSecuritySettings';
 
 export const Routes = () => {
   return (
@@ -106,6 +107,9 @@ export const Routes = () => {
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_IMPL_DEPLOY.URL}>
         <ImplementationDeployPage />
+      </AuthRoute>
+      <AuthRoute path={ROUTES.ROUTE_SECURITY_SETTINGS.URL}>
+        <OrganizationSecuritySettingsPage />
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_PASSWORD_RULES.URL}>
         <PasswordRulesPage />
