@@ -7,7 +7,7 @@ import { Button } from 'src/components/buttons';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { useNotification } from 'src/hooks/useNotification';
 import { Column, Container, Row } from 'src/components/layouts';
-import { PageTitle, Text } from 'src/components/typography';
+import { PageTitle } from 'src/components/typography';
 import { LightSeparator } from 'src/components/separators/Separator';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Spacing } from 'src/components/spacings/Spacing';
@@ -19,12 +19,11 @@ import {
   useUpdateOrgSecurityMutation,
 } from 'src/data/services/graphql';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
-import { InfoIcon } from 'src/components/badges/InfoIcon';
-import { StyledColumn, StyledComboBox, StyledDiv } from './OrganizationSecuritySettingsPage.styles';
 import { useOrgSid } from 'src/hooks/useOrgSid';
-import { ROUTE_SECURITY_SETTINGS, ROUTE_PASSWORD_RULES } from 'src/data/constants/RouteConstants';
+import { ROUTE_SECURITY_SETTINGS } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { DEFAULT_FORM, extractFormValues} from './OrganizationSecuritySettingsPageUtils';
+import { UIInputToggle } from 'src/components/inputs/InputToggle';
 
 const _OrganizationSecuritySettingsPage = () => {
   const { orgSid } = useOrgSid();
@@ -115,25 +114,25 @@ const _OrganizationSecuritySettingsPage = () => {
                 />
               ) : (
                 <div id="__OrganizationSecuritySettings-Form">                    
-                    {form.forgotPasswordEnabled?.visible &&(
-                      <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                        <Toggle
-                          label={form.forgotPasswordEnabled.label}                            
-                          onText="On"
-                          offText="Off"
-                          defaultChecked={state.forgotPasswordEnabled ?? false}
-                          onChange={(ev: React.MouseEvent<HTMLElement>, checked?: boolean)=>{
-                            setState({...state, forgotPasswordEnabled: !!checked});
-                          }}
-                          role="checkbox"
-                        />
-                      </Spacing>
-                    )}
-                 
+                  {form.forgotPasswordEnabled?.visible &&(
+                    <Spacing margin={{ bottom: 'normal' }}>
+                      <UIInputToggle
+                        id="forgotPasswordEnabledToggle"
+                        uiField={form.forgotPasswordEnabled}
+                        onText="On"
+                        offText="Off"
+                        role="checkbox"
+                        value={state.forgotPasswordEnabled ?? false}
+                        onChange={(e?: React.MouseEvent<HTMLElement>, checked?: boolean)=>{
+                          setState({...state, forgotPasswordEnabled: !!checked});
+                        }}
+                      />
+                    </Spacing>
+                  )}
                   {form.forgotPasswordMsg?.visible &&(
                     <Spacing margin={{ bottom: 'normal' }}>
                         <UIInputTextArea
-                            id="forgotPasswordMsg"
+                            id="forgotPasswordMsgInput"
                             uiField={form.forgotPasswordMsg}
                             value={state.forgotPasswordMsg ?? ''} 
                             multiline={true}
@@ -157,42 +156,42 @@ const _OrganizationSecuritySettingsPage = () => {
                                 setState({...state, allowedEmailDomains: newValue ?? ''});
                             }}
                             resizable={false}
-                            rows={10}
+                            rows={8}
                         />
                     </Spacing>                             
                   )}
                   {form?.commands?.length &&(
-                    <Row>
-                      <Column lg="6">
-                        <Button
-                            id="__PasswordRules-Save"
-                            variant="primary"
-                            disabled={isLoadingForm || isUpdating}
-                            onClick={() => {
-                                useUpdateOrgSecurity({
-                                    variables: {
-                                        orgSecurityInfo: {
-                                            ...state,
-                                            orgSid: orgSid,
-                                        },
-                                        errorPolicy: 'all',
-                                    },
-                                }).catch(() => {
-                                    Toast.error({
-                                        text: 'An error occurred while updating the security settings. Please, try again.',
-                                    });
-                                });
-                            return null;
-                            }}
-                        >
-                          {form?.commands[0].label}
-                        </Button>
-                      </Column>
-                    </Row>
-                  )}
-                  
+                    <Spacing margin={{ top: 'normal' }}>
+                      <Row>
+                        <Column lg="6">
+                          <Button
+                              id="__PasswordRules-Save"
+                              variant="primary"
+                              disabled={isLoadingForm || isUpdating}
+                              onClick={() => {
+                                  useUpdateOrgSecurity({
+                                      variables: {
+                                          orgSecurityInfo: {
+                                              ...state,
+                                              orgSid: orgSid,
+                                          },
+                                          errorPolicy: 'all',
+                                      },
+                                  }).catch(() => {
+                                      Toast.error({
+                                          text: 'An error occurred while updating the security settings. Please, try again.',
+                                      });
+                                  });
+                              return null;
+                              }}
+                          >
+                            {form?.commands[0].label}
+                          </Button>
+                        </Column>
+                      </Row>
+                    </Spacing>
+                  )}                  
                 </div>
-                
               )}
             </Spacing> 
           </Column>

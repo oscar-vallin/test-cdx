@@ -3,7 +3,7 @@ import { UiStringField } from 'src/data/services/graphql';
 import { TextField } from '@fluentui/react';
 import FormLabel, { UIFormLabel } from 'src/components/labels/FormLabel';
 import ReactQuill from 'react-quill';
-
+import { StyledRichTextArea } from './UIInputTextArea.styles'
 
 type UIInputTextAreaType = {
   id: string;
@@ -64,9 +64,11 @@ const UIInputTextArea = ({
   return (
     <>
     {showRichTextEditor ? 
-      <>
+      <StyledRichTextArea>
         {onRenderLabel()}
         <ReactQuill 
+          id={id}
+          style={{border: '1px solid #605E5C', height: '256px'}}
           modules={modules}
           formats={formats}
           value={value}
@@ -74,7 +76,7 @@ const UIInputTextArea = ({
             if(onChange) onChange(undefined, value)
           }}
         />
-      </>: 
+      </StyledRichTextArea>: 
       <TextField
         id={id}
         type={type ?? 'text'}
