@@ -227,50 +227,41 @@ const FileStatusDetailsPage = () => {
             icon="PlayResume"
             confirmationMsg="Are you sure you want to Continue this Work Packet?"
             command={continueCmd}
-            onClick={() => {
-              workPacketCommands.apiCallContinue().then();
-              pollWPStatus.startPolling(POLL_INTERVAL);
-            }}
+            onClick={workPacketCommands.apiCallContinue}
+            callback={()=>{ pollWPStatus.startPolling(POLL_INTERVAL)}}
+
           />
           <WorkPacketCommandButton
             id="__ReprocessBtn"
             icon="Rerun"
             confirmationMsg="Are you sure you want to Reprocess this Work Packet?"
-            command={reprocessCmd}
-            onClick={() => {
-              workPacketCommands.apiCallReprocess().then();
-              pollWPStatus.startPolling(POLL_INTERVAL);
-            }}
+            command={reprocessCmd}          
+            onClick={workPacketCommands.apiCallReprocess}
+            callback={()=>{ pollWPStatus.startPolling(POLL_INTERVAL)}}
           />
           <WorkPacketCommandButton
             id="__ReprocessRenameBtn"
             icon="Rerun"
             confirmationMsg="Are you sure you want to Reprocess this Work Packet?"
             command={reprocessRenameCmd}
-            onClick={() => {
-              workPacketCommands.apiCallRenameReprocess().then();
-              pollWPStatus.startPolling(POLL_INTERVAL);
-            }}
+            onClick={workPacketCommands.apiCallRenameReprocess}
+            callback={()=>{ pollWPStatus.startPolling(POLL_INTERVAL)}}
           />
           <WorkPacketCommandButton
             id="__CancelBtn"
             icon="Cancel"
             confirmationMsg="Are you sure you want to Cancel this Work Packet's processing?"
-            command={cancelCmd}
-            onClick={() => {
-              workPacketCommands.apiCallCancel().then();
-              pollWPStatus.startPolling(POLL_INTERVAL);
-            }}
+            command={cancelCmd}            
+            onClick={workPacketCommands.apiCallCancel}
+            callback={()=>{ pollWPStatus.startPolling(POLL_INTERVAL)}}
           />
           <WorkPacketCommandButton
             id="__DeleteBtn"
             icon="Delete"
-            confirmationMsg="Are you sure you want to Delete this Work Packet?"
+            confirmationMsg={"Are you sure you want to Delete this Work Packet?"}
             command={deleteCmd}
-            onClick={() => {
-              workPacketCommands.apiCallDelete().then();
-              history.push(`${ROUTE_FILE_STATUS.URL}?orgSid=${orgSid}&startDate=${startDate}&endDate=${endDate}`);
-            }}
+            onClick={workPacketCommands.apiCallDelete}
+            callback={() => { history.push(`${ROUTE_FILE_STATUS.URL}?orgSid=${orgSid}&startDate=${startDate}&endDate=${endDate}`)}}
           />
         </Stack>
         {showDetails && (

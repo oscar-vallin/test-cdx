@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { ActionButton, DefaultButton, Dialog, DialogFooter, DialogType, PrimaryButton, Stack } from '@fluentui/react';
 import { WorkPacketCommand } from 'src/data/services/graphql';
 import { theme } from 'src/styles/themes/theme';
+import { LogMessageItem } from 'src/components/collapses/LogMessageItem';
+import { Spacing } from 'src/components/spacings/Spacing';
 
 type CommandButtonType = {
   id: string;
@@ -9,7 +11,8 @@ type CommandButtonType = {
   confirmationTitle?: string;
   confirmationMsg: string;
   command?: WorkPacketCommand | null;
-  onClick: () => void;
+  onClick: () => Promise<any>;
+  callback?: () => void;
 };
 
 export const WorkPacketCommandButton = ({
@@ -19,8 +22,10 @@ export const WorkPacketCommandButton = ({
   confirmationMsg,
   command,
   onClick,
+  callback,
 }: CommandButtonType) => {
   const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);
+  const [ responseLogMessages, setResponseLogMessages ] = useState<any[]>([])
 
   if (command) {
     return (
@@ -34,25 +39,55 @@ export const WorkPacketCommandButton = ({
           {command.label}
         </ActionButton>
         <Dialog
+          maxWidth={700}
           hidden={isConfirmationHidden}
           onDismiss={() => setIsConfirmationHidden(true)}
           dialogContentProps={{
             type: DialogType.normal,
-            title: confirmationTitle,
-            subText: confirmationMsg,
+            title: responseLogMessages?.length  ? "Log Messages" : confirmationTitle,
+            subText: responseLogMessages?.length  ? '' : confirmationMsg,
           }}
           modalProps={{ isBlocking: true }}
         >
-          <DialogFooter>
-            <PrimaryButton
-              onClick={() => {
-                onClick();
-                setIsConfirmationHidden(true);
-              }}
-              text="Yes"
-            />
-            <DefaultButton onClick={() => setIsConfirmationHidden(true)} text="No" />
-          </DialogFooter>
+          {responseLogMessages?.map((item, index)=>{
+            return (
+              <Spacing key={`dialog_logMessage-${index}`} padding={{ right: 'normal'}}>
+                <LogMessageItem logMessage={item} />
+              </Spacing>
+            )
+          })}
+          {responseLogMessages.length>0 &&(
+            <DialogFooter>
+              <PrimaryButton
+                  onClick={() => {
+                    setIsConfirmationHidden(true);
+                    if(callback) callback();
+                  }}
+                text="Close"
+              />
+            </DialogFooter>
+          )}
+          {!responseLogMessages?.length && (
+            <DialogFooter>
+              <PrimaryButton
+                onClick={() => {
+                  onClick().then((res)=>{
+                    if(res?.data){
+                      const workPacketKey = Object.keys(res.data)[0];
+                      if(res.data[workPacketKey].allMessages?.length){
+                        setResponseLogMessages(res.data.workPacketDelete.allMessages)                        
+                      }else{
+                        setIsConfirmationHidden(true);
+                        if(callback) callback();
+                      }
+                    }
+                  })                  
+                }}
+                text="Yes"
+              />
+              <DefaultButton onClick={() => setIsConfirmationHidden(true)} text="No" />
+            </DialogFooter>
+          )}          
         </Dialog>
       </Stack.Item>
     );
