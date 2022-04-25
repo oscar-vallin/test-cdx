@@ -158,6 +158,8 @@ const FileStatusDetailsPage = () => {
   const reprocessRenameCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Rename);
   const cancelCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Cancel);
   const deleteCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Delete);
+  const rerunCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.RerunStep);
+
 
   const renderDeliveredFileInfo = (fileInfo?: DeliveredFile | null) => {
     if (fileInfo) {
@@ -229,23 +231,43 @@ const FileStatusDetailsPage = () => {
             command={continueCmd}
             onClick={workPacketCommands.apiCallContinue}
             callback={()=>{ pollWPStatus.startPolling(POLL_INTERVAL)}}
-
+          />
+          <WorkPacketCommandButton
+            id="__RedoBtn"
+            icon="Rerun"
+            confirmationMsg="Are you sure you want to Redo this Work Packet?"
+            command={rerunCmd}    
+            packetStatus={packet?.packetStatus}
+            workPacketCommands={workPacketCommands}      
+            onClick={workPacketCommands.apiCallReprocessDialog}
+            realId={realId}
+            callback={()=>{ 
+              pollWPStatus.startPolling(POLL_INTERVAL)
+            }}
           />
           <WorkPacketCommandButton
             id="__ReprocessBtn"
             icon="Rerun"
             confirmationMsg="Are you sure you want to Reprocess this Work Packet?"
-            command={reprocessCmd}          
-            onClick={workPacketCommands.apiCallReprocess}
-            callback={()=>{ pollWPStatus.startPolling(POLL_INTERVAL)}}
+            command={reprocessCmd}    
+            workPacketCommands={workPacketCommands}      
+            onClick={workPacketCommands.apiCallReprocessDialog}
+            realId={realId}
+            callback={()=>{ 
+              pollWPStatus.startPolling(POLL_INTERVAL)
+            }}
           />
           <WorkPacketCommandButton
             id="__ReprocessRenameBtn"
             icon="Rerun"
             confirmationMsg="Are you sure you want to Reprocess this Work Packet?"
+            workPacketCommands={workPacketCommands}
+            realId={realId}
             command={reprocessRenameCmd}
             onClick={workPacketCommands.apiCallRenameReprocess}
-            callback={()=>{ pollWPStatus.startPolling(POLL_INTERVAL)}}
+            callback={()=>{ 
+              pollWPStatus.startPolling(POLL_INTERVAL)
+            }}
           />
           <WorkPacketCommandButton
             id="__CancelBtn"

@@ -9,6 +9,8 @@ import {
   useWorkPacketRenameAndReprocessMutation,
   useWorkPacketReprocessMutation,
   useWorkPacketResendMutation,
+  useReprocessDialogLazyQuery,
+  useWorkPacketRerunStepMutation
 } from 'src/data/services/graphql';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { useEffect } from 'react';
@@ -35,6 +37,14 @@ export const useWorkPacketCommands = (workOrderId: string) => {
       workOrderId,
     },
   });
+  const [apiCallRerun, { data: rerunData, error: rerunError }] = useWorkPacketRerunStepMutation();
+
+  const [apiCallReprocessDialog, { data: reprocesDialogData, loading: reprocesDialogLoading, error: reprocesDialogError }] = useReprocessDialogLazyQuery({
+    variables: {
+      workOrderId,
+    },
+  });
+
   const [apiCallRenameReprocess, { data: renameReprocessData, error: renameReprocessError }] =
     useWorkPacketRenameAndReprocessMutation();
 
@@ -70,6 +80,15 @@ export const useWorkPacketCommands = (workOrderId: string) => {
   useEffect(() => {
     handleError(resendError);
   }, [resendError]);
+
+  useEffect(() => {
+    handleError(reprocesDialogError);
+  }, [reprocesDialogError]);
+
+  
+  useEffect(() => {
+    handleError(rerunError);
+  }, [rerunError]);
 
   const handleGenericResponse = (response?: GenericResponse | null, successMsg?: string) => {
     switch (response?.response) {
@@ -127,6 +146,10 @@ export const useWorkPacketCommands = (workOrderId: string) => {
     handleReprocessResponse(renameReprocessData?.workPacketRenameAndReprocess, 'Work Packet is being reprocessed');
   }, [renameReprocessData]);
 
+  useEffect(() => {
+    handleGenericResponse(rerunData?.workPacketRerunStep, 'Re-running step has been requested');
+  }, [rerunData]);
+
   return {
     apiCallDelete,
     apiCallContinue,
@@ -134,5 +157,7 @@ export const useWorkPacketCommands = (workOrderId: string) => {
     apiCallReprocess,
     apiCallRenameReprocess,
     apiCallResend,
+    apiCallReprocessDialog,
+    apiCallRerun
   };
 };
