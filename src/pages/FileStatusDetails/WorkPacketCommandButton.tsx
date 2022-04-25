@@ -12,7 +12,7 @@ type CommandButtonType = {
   confirmationTitle?: string;
   confirmationMsg: string;
   command?: WorkPacketCommand | null;
-  onClick: () => Promise<any>;
+  onClick?: () => Promise<any>;
   callback?: () => void;
   workPacketCommands?: any;
   realId?: string;
@@ -61,7 +61,7 @@ export const WorkPacketCommandButton = ({
   
   const handleDefaultAction = () => {
     setIsConfirmationHidden(true);
-    onClick().then();
+    if(onClick) onClick().then();
     if(callback) callback();
   }
  
@@ -70,20 +70,22 @@ export const WorkPacketCommandButton = ({
   }
 
   const handleDeleteCmd =()=> {
-    onClick().then((res)=>{
-      if(res?.data){
-        const workPacketKey = Object.keys(res.data)[0];
-        if(res.data[workPacketKey].allMessages?.length){
-          setResponseLogMessages(res.data.workPacketDelete.allMessages)      
-          setButtonText("Close")
-          setShowSecondaryButton(false)                  
-        }else{
-          setIsConfirmationHidden(true);
-          setShowSecondaryButton(true);
-          if(callback) callback();
+    if(onClick) {
+      onClick().then((res)=>{
+        if(res?.data){
+          const workPacketKey = Object.keys(res.data)[0];
+          if(res.data[workPacketKey].allMessages?.length){
+            setResponseLogMessages(res.data.workPacketDelete.allMessages)
+            setButtonText("Close")
+            setShowSecondaryButton(false)
+          }else{
+            setIsConfirmationHidden(true);
+            setShowSecondaryButton(true);
+            if(callback) callback();
+          }
         }
-      }
-    })
+      })
+    }
   }
 
   const handleRenameCmd=()=>{
@@ -146,11 +148,11 @@ export const WorkPacketCommandButton = ({
 
   useEffect(()=>{ 
     if(command?.commandType===WorkPacketCommandType.Reprocess){
-      onClick().then((res)=>{
+      workPacketCommands.apiCallReprocessDialog().then((res)=>{
         if(res?.data?.reprocessDialog){
           const {title, message, captureChangeReason } = res.data.reprocessDialog 
           setTitle(title ?? confirmationTitle);
-          setSubText(message?? confirmationMsg);   
+          setSubText(message?? confirmationMsg);
           if(captureChangeReason){
             setButtonAction(ButtonActionTypes.HandleInternalReprocess);
             setSecondaryButtonAction(ButtonActionTypes.HandleExternalReprocess);
@@ -167,10 +169,9 @@ export const WorkPacketCommandButton = ({
 
   useEffect(()=>{ 
     if(command?.commandType===WorkPacketCommandType.RerunStep){
-      onClick().then((res)=>{
+      workPacketCommands.apiCallReprocessDialog().then((res)=>{
         if(res?.data?.reprocessDialog){
           const {title, message, captureChangeReason } = res.data.reprocessDialog
-          console.log( res.data.reprocessDialog.message)
           setTitle(title ?? confirmationTitle);
           setSubText(message?? confirmationMsg);   
           if(captureChangeReason){

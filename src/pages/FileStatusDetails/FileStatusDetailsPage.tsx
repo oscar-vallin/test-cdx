@@ -238,8 +238,7 @@ const FileStatusDetailsPage = () => {
             confirmationMsg="Are you sure you want to Redo this Work Packet?"
             command={rerunCmd}    
             packetStatus={packet?.packetStatus}
-            workPacketCommands={workPacketCommands}      
-            onClick={workPacketCommands.apiCallReprocessDialog}
+            workPacketCommands={workPacketCommands}
             realId={realId}
             callback={()=>{ 
               pollWPStatus.startPolling(POLL_INTERVAL)
@@ -251,7 +250,6 @@ const FileStatusDetailsPage = () => {
             confirmationMsg="Are you sure you want to Reprocess this Work Packet?"
             command={reprocessCmd}    
             workPacketCommands={workPacketCommands}      
-            onClick={workPacketCommands.apiCallReprocessDialog}
             realId={realId}
             callback={()=>{ 
               pollWPStatus.startPolling(POLL_INTERVAL)
