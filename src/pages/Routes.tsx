@@ -30,6 +30,7 @@ import UnauthRoute from './UnauthRoute';
 import { ImplementationDeployPage } from './Admin/ImplDeploy';
 import { PasswordRulesPage } from './Admin/PasswordRules';
 import { OrganizationSecuritySettingsPage } from './Admin/OrganizationSecuritySettings';
+import { ExternalUsersPage } from './Admin/Users/ExternalUsers/ExternalUsersPage';
 
 export const Routes = () => {
   return (
@@ -98,6 +99,9 @@ export const Routes = () => {
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_DELETED_USERS.URL}>
         <DeletedUsersPage />
+      </AuthRoute>
+      <AuthRoute path={ROUTES.ROUTE_EXTERNAL_USERS.URL}>
+        <ExternalUsersPage />
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_USER_AUDIT_LOGS.URL}>
         <UserAuditLogsPage />

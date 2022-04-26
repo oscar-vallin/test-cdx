@@ -19,6 +19,7 @@ export const ROUTES_ID = {
   ACTIVE_USERS: 'active-users',
   USER_AUDIT_LOGS: 'user-audit-logs',
   DELETED_USERS: 'deleted-users',
+  EXTERNAL_USERS: 'external-users',
   FTP_TEST: 'ftp-test',
   IMPL_DEPLOY: 'implementation-deploy',
   PASSWORD_RULES: 'password-rules',
@@ -50,6 +51,7 @@ export const URL_ROUTES = {
   ACTIVE_USERS: `/${ROUTES_ID.ACTIVE_USERS}`,
   USER_AUDIT_LOGS: `/${ROUTES_ID.USER_AUDIT_LOGS}`,
   DELETED_USERS: `/${ROUTES_ID.DELETED_USERS}`,
+  EXTERNAL_USERS: `/${ROUTES_ID.EXTERNAL_USERS}`,
   FTP_TEST: `/${ROUTES_ID.FTP_TEST}`,
   IMPL_DEPLOY: `/${ROUTES_ID.IMPL_DEPLOY}`,
   PASSWORD_RULES: `/${ROUTES_ID.PASSWORD_RULES}`,
@@ -235,6 +237,15 @@ export const ROUTE_DELETED_USERS: RouteType = {
   API_ID: 'DELETED_USERS',
 };
 
+
+export const ROUTE_EXTERNAL_USERS: RouteType = {
+  ID: ROUTES_ID.EXTERNAL_USERS,
+  TITLE: 'External Users',
+  URL: URL_ROUTES.EXTERNAL_USERS,
+  MAIN_MENU: false,
+  API_ID: 'EXTERNAL_USERS',
+};
+
 export const ROUTE_FTP_TEST: RouteType = {
   ID: ROUTES_ID.FTP_TEST,
   TITLE: 'FTP Test',
@@ -319,7 +330,8 @@ export const ROUTES = {
   ROUTE_PASSWORD_RESET,
   ROUTE_PAGE_NOT_FOUND,
   ROUTE_UNAUTHORIZED,
-  ROUTE_SECURITY_SETTINGS
+  ROUTE_SECURITY_SETTINGS,
+  ROUTE_EXTERNAL_USERS
 };
 
 export const ROUTES_ARRAY: RouteType[] = [
@@ -347,7 +359,8 @@ export const ROUTES_ARRAY: RouteType[] = [
   ROUTE_FTP_TEST,
   ROUTE_IMPL_DEPLOY,
   ROUTE_PASSWORD_RULES,
-  ROUTE_SECURITY_SETTINGS
+  ROUTE_SECURITY_SETTINGS,
+  ROUTE_EXTERNAL_USERS
 ];
 
 export const getRouteByApiId = (_apiId) => {
