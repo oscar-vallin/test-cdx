@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ActionButton, DefaultButton, Dialog, DialogFooter, DialogType, PrimaryButton, Stack } from '@fluentui/react';
-import { WorkPacketCommand, WorkPacketCommandType, ChangeReason, WorkStatus} from 'src/data/services/graphql';
+import { WorkPacketCommand, WorkPacketCommandType, ChangeReason, WorkStatus, useReprocessDialogLazyQuery} from 'src/data/services/graphql';
 import { theme } from 'src/styles/themes/theme';
 import { LogMessageItem } from 'src/components/collapses/LogMessageItem';
 import { Spacing } from 'src/components/spacings/Spacing';
@@ -58,7 +58,13 @@ export const WorkPacketCommandButton = ({
   const [ buttonAction, setButtonAction] = useState(ButtonActionTypes.Default)
   const [ secondaryButtonAction, setSecondaryButtonAction] = useState(ButtonActionTypes.SecondaryDefault)
   const [newFileName, setNewFileName] = useState('');
-  
+
+  const [apiCallReprocessDialog, { data: reprocesDialogData, loading: reprocesDialogLoading, error: reprocesDialogError }] = useReprocessDialogLazyQuery({
+    variables: {
+      workOrderId: realId ?? '',
+    },
+  });
+
   const handleDefaultAction = () => {
     setIsConfirmationHidden(true);
     if(onClick) onClick().then();
@@ -145,48 +151,41 @@ export const WorkPacketCommandButton = ({
     }
   }, [command?.commandType])
 
+  useEffect(()=>{ 
+    if(command?.commandType===WorkPacketCommandType.Reprocess || command?.commandType===WorkPacketCommandType.RerunStep){
+      apiCallReprocessDialog({
+        variables: {
+          workOrderId: realId??""
+        }
+      })
+    }
+  },[command?.commandType])
 
   useEffect(()=>{ 
-    if(command?.commandType===WorkPacketCommandType.Reprocess){
-      workPacketCommands.apiCallReprocessDialog().then((res)=>{
-        if(res?.data?.reprocessDialog){
-          const {title, message, captureChangeReason } = res.data.reprocessDialog 
-          setTitle(title ?? confirmationTitle);
-          setSubText(message?? confirmationMsg);
-          if(captureChangeReason){
+      if(reprocesDialogData && reprocesDialogData.reprocessDialog){
+        const {title, message, captureChangeReason } = reprocesDialogData.reprocessDialog;
+        setTitle(title ?? confirmationTitle);
+        setSubText(message?? confirmationMsg);
+        if(!captureChangeReason){
+          if(command?.commandType===WorkPacketCommandType.Reprocess){
             setButtonAction(ButtonActionTypes.HandleInternalReprocess);
             setSecondaryButtonAction(ButtonActionTypes.HandleExternalReprocess);
-            setButtonText('Internal Change');
-            setSecondaryButtonText('External Change');
-          }else{
-            setButtonAction(ButtonActionTypes.HandleReprocess);
-            setButtonText('Yes');
-          }
-        }
-      })
-    }
-  }, [command?.commandType])
-
-  useEffect(()=>{ 
-    if(command?.commandType===WorkPacketCommandType.RerunStep){
-      workPacketCommands.apiCallReprocessDialog().then((res)=>{
-        if(res?.data?.reprocessDialog){
-          const {title, message, captureChangeReason } = res.data.reprocessDialog
-          setTitle(title ?? confirmationTitle);
-          setSubText(message?? confirmationMsg);   
-          if(captureChangeReason){
+          }else if(command?.commandType===WorkPacketCommandType.RerunStep){
             setButtonAction(ButtonActionTypes.HandleInternalRerun);
             setSecondaryButtonAction(ButtonActionTypes.HandleExternalRerun);
-            setButtonText('Internal Change');
-            setSecondaryButtonText('External Change');
-          }else{
-            setButtonAction(ButtonActionTypes.HandleRerun);
-            setButtonText('Yes');
           }
-        }
-      })
-    }
-  }, [command?.commandType])
+          setButtonText('Internal Change');
+          setSecondaryButtonText('External Change');
+        }else{
+          if(command?.commandType===WorkPacketCommandType.Reprocess){
+            setButtonAction(ButtonActionTypes.HandleReprocess);
+          }else if(command?.commandType===WorkPacketCommandType.RerunStep){        
+            setButtonAction(ButtonActionTypes.HandleRerun);
+          }          
+          setButtonText('Yes');
+        } 
+      }
+  },[reprocesDialogData])
 
   const getButtonAction = (buttonAction: string) =>{
     let method = handleDefaultAction
