@@ -8,5 +8,8 @@ export const StyledRichTextArea = styled.div`
     .ql-container.ql-snow {
         border: none;
     }
+    .ql-editor{
+        height:210px;
+    }
     height:  ${({ theme }) => `${theme.space[8]}`};
 `;
