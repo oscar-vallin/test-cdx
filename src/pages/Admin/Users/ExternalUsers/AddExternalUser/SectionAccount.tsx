@@ -38,6 +38,7 @@ const SectionAccount = ({ form, onNext, saveOptions, searchExternalUsers, showCr
     };
     saveOptions(user);
   };
+
   const getSelectedUser = ()=>{
     let user: any[] = []
     if(form?.person?.sid){
@@ -52,6 +53,7 @@ const SectionAccount = ({ form, onNext, saveOptions, searchExternalUsers, showCr
 
     return user
   }
+  
   return (
     <>
       <WizardBody>        

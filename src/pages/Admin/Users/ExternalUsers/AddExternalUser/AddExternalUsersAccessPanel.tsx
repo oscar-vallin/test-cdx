@@ -99,13 +99,14 @@ const AddExternalUsersAccessPanel = ({ orgSid, isOpen, onDismiss, onGrantAccessT
   
   const findExternalUsers = async (text: string): Promise<ITag[]> =>{
     let externalUsers: ITag[] = []
-    const res = await addExternalUsersAccessService.callFindExternalUsers({
+
+    const res: any = await addExternalUsersAccessService.callFindExternalUsers({
       variables: {
         searchText: text
       }
     })
 
-    if(res?.data?.findExternalUsers){
+    if(res.data?.findExternalUsers){
       externalUsers=parseToPickerOpts(res?.data?.findExternalUsers)
     }
 
