@@ -99,15 +99,15 @@ const AddExternalUsersAccessPanel = ({ orgSid, isOpen, onDismiss, onGrantAccessT
   
   const findExternalUsers = async (text: string): Promise<ITag[]> =>{
     let externalUsers: ITag[] = []
-    await addExternalUsersAccessService.callFindExternalUsers({
+    const res = await addExternalUsersAccessService.callFindExternalUsers({
       variables: {
         searchText: text
       }
-    }).then((res)=>{
-      if(res?.data?.findExternalUsers){
-        externalUsers=parseToPickerOpts(res?.data?.findExternalUsers)
-      }
     })
+
+    if(res?.data?.findExternalUsers){
+      externalUsers=parseToPickerOpts(res?.data?.findExternalUsers)
+    }
 
     return externalUsers;
   }
@@ -192,7 +192,6 @@ const AddExternalUsersAccessPanel = ({ orgSid, isOpen, onDismiss, onGrantAccessT
                         onNext={handleNext}
                         showCreateExternalUserForm={false}
                         saveOptions={(user) => {
-                          console.log(user)
                           addExternalUsersAccessService.updateAccountInfo(user);
                           setUnsavedChanges(true);
                         }}

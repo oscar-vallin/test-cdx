@@ -20,7 +20,7 @@ type SectionSummaryPropsType = {
 
 const SectionSummary = ({ form, onPrev, onSubmit, isProcessing }: SectionSummaryPropsType): ReactElement => {
   const [groupOptions, setGroupOptions] = useState<CheckboxItem[]>([]);
-  console.log(form)
+
   const handlePrev = () => {
     onPrev();
 

@@ -1,15 +1,13 @@
 import { UIInputText } from 'src/components/inputs/InputText';
 import { Column } from 'src/components/layouts';
 import { useFormInputValue } from 'src/hooks/useInputValue';
-
+import { ITag } from '@fluentui/react';
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
 import { UserAccount, UserAccountForm } from 'src/data/services/graphql';
-import { UIInputTextReadOnly } from 'src/components/inputs/InputText/InputText';
 import { WizardBody } from 'src/layouts/Panels/Panels.styles';
 import AddExternalUsersAccessFooter from './AddExternalUsersAccessFooter';
 import { TagPicker } from 'src/components/inputs/TagPicker';
 import { FormLabel } from 'src/components/labels/FormLabel';
-import { useState } from 'react';
 
 type SectionAccountProps = {
   form: UserAccountForm;
@@ -40,7 +38,20 @@ const SectionAccount = ({ form, onNext, saveOptions, searchExternalUsers, showCr
     };
     saveOptions(user);
   };
+  const getSelectedUser = ()=>{
+    let user: any[] = []
+    if(form?.person?.sid){
+      user = [{ 
+        name: form?.email?.value ?? '',
+        key: form?.person?.sid ?? '', 
+        email: form?.email?.value ?? '',
+        firstName: form?.person?.firstNm?.value ?? '',
+        lastName: form?.person?.lastNm?.value ?? '',
+      }]
+    }
 
+    return user
+  }
   return (
     <>
       <WizardBody>        
@@ -51,12 +62,25 @@ const SectionAccount = ({ form, onNext, saveOptions, searchExternalUsers, showCr
               label='Search for and external user by email to grant them access to this organization'
               />   
             <TagPicker
-              id="__ExternalUsersPicker"              
+              itemLimit={1}
+              id="__ExternalUsersPicker"
+              defaultSelectedItems={getSelectedUser()}
               doSearch={(searchText) => searchExternalUsers(searchText)}
               onChange={(item) => {
                 const selectedItem: any = item;
-                if(selectedItem.length>0)
+                if(selectedItem.length>0){
                   saveFields(selectedItem[0].firstName ?? '', selectedItem[0].lastName ?? '', selectedItem[0].email ?? '', selectedItem[0].key ?? '')
+                }else{                  
+                  saveOptions({
+                    sid: '',
+                    email: '',
+                    person: {
+                      sid:  '',
+                      firstNm: '',
+                      lastNm: '',
+                    },
+                  });
+                }
               }}
             />
           </Column>

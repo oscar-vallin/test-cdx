@@ -16,6 +16,8 @@ type CDXTagPickerProps = {
   debounce?: number;
   onBlur?: any | null;
   onFocus?: any | null;
+  itemLimit?: number;
+  defaultSelectedItems?: any[]
 };
 
 const CDXTagPicker = ({
@@ -30,6 +32,8 @@ const CDXTagPicker = ({
   onBlur,
   onFocus,
   id,
+  itemLimit,
+  defaultSelectedItems
 }: CDXTagPickerProps): ReactElement => {
   const picker: any = useRef(null);
 
@@ -78,6 +82,8 @@ const CDXTagPicker = ({
           onFocus,
           placeholder: disabled ? '' : 'Type to Search',
         }}
+        itemLimit={itemLimit}
+        defaultSelectedItems={defaultSelectedItems}
       />
     </>
   );
