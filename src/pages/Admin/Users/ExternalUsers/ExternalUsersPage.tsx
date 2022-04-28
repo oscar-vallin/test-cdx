@@ -14,11 +14,12 @@ import { PageHeader } from 'src/containers/headers/PageHeader';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useTableFilters } from 'src/hooks/useTableFilters';
 import { InputText } from 'src/components/inputs/InputText';
+import AddExternalUserAccessPanel  from './AddExternalUser/AddExternalUsersAccessPanel'
 
 const ExternalUsersPage = () => {
   const { orgSid } = useOrgSid();
   const [ apiCall, { data, loading, error }] = useQueryHandler(useExternalUsersForOrgLazyQuery);
-  const [ isAssignExternalUserPanelOpen, setIsAssignExternalUserPanelOpen] = useState(false);
+  const [ isAddExternalUserAccessPanelOpen, setIsAddExternalUserAccessPanelOpen] = useState(false);
 
   const tableFilters = useTableFilters('Name, Last Name, Email, etc.');
   const assignCmd = data?.externalUsersForOrg?.listPageInfo?.pageCommands?.find((cmd) => cmd.commandType === CdxWebCommandType.Assign);
@@ -43,6 +44,14 @@ const ExternalUsersPage = () => {
     });
   }, [tableFilters.pagingParams]);
 
+  const handleGrantAccessToExternalUserSuccess = ()=>{
+    tableFilters.setPagingParams({
+      pageNumber: 0,
+      pageSize: 100,
+      sort: tableFilters.pagingParams.sort,
+    });
+  }
+
   const renderBody = () => {
     if (loading) {
       return (
@@ -61,6 +70,7 @@ const ExternalUsersPage = () => {
               users={data?.externalUsersForOrg?.nodes} 
               onClickUser={()=>{console.log("External User Clicked.")}} 
               searchAllOrgs
+              tooltips={data?.externalUsersForOrg?.toolTips}
            />;
   };
 
@@ -72,7 +82,7 @@ const ExternalUsersPage = () => {
           iconProps={{ iconName: 'AddFriend' }}
           ariaLabel={assignCmd.label ?? undefined}
           onClick={() => {
-            setIsAssignExternalUserPanelOpen(true);
+            setIsAddExternalUserAccessPanelOpen(true);
           }}
         >
           {assignCmd.label}
@@ -114,6 +124,12 @@ const ExternalUsersPage = () => {
           <StyledColumn>{renderBody()}</StyledColumn>
         </Row>
       </Container>
+        <AddExternalUserAccessPanel
+          isOpen={isAddExternalUserAccessPanelOpen}
+          orgSid={orgSid}
+          onDismiss={()=>{setIsAddExternalUserAccessPanelOpen(false)}}
+          onGrantAccessToExternalUser={handleGrantAccessToExternalUserSuccess}
+        />
     </LayoutDashboard>
   );
 };
