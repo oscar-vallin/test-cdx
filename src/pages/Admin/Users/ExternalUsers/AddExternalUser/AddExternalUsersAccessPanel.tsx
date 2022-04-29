@@ -42,7 +42,8 @@ const AddExternalUsersAccessPanel = ({ orgSid, isOpen, onDismiss, onGrantAccessT
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [isProcessing, setProcessing] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string | undefined>();
-  
+  const[ createExternalUser, setCreateExternalUser] = useState(false)
+
   const Toast = useNotification();
 
 
@@ -106,8 +107,8 @@ const AddExternalUsersAccessPanel = ({ orgSid, isOpen, onDismiss, onGrantAccessT
       }
     })
 
-    if(res.data?.findExternalUsers){
-      externalUsers=parseToPickerOpts(res?.data?.findExternalUsers)
+    if(res?.data?.findExternalUsers){
+      externalUsers=parseToPickerOpts(res.data.findExternalUsers)
     }
 
     return externalUsers;
@@ -144,6 +145,38 @@ const AddExternalUsersAccessPanel = ({ orgSid, isOpen, onDismiss, onGrantAccessT
         doClosePanel();
       }
     } 
+  };
+
+  const handleCreateExternalUser = async () => {
+    setProcessing(true);
+    const response = await addExternalUsersAccessService.callCreateExternalUser();
+    setProcessing(false);
+    
+    if (response?.createExternalUser) {
+      const responseCode = response?.createExternalUser?.response;
+
+      if (responseCode === GqOperationResponse.Fail) {
+        const errorMsg =
+        response?.createExternalUser?.errMsg ?? 'Error creating external user';
+        setErrorMsg(errorMsg);
+      } else {
+        setErrorMsg(undefined);
+      }
+
+      if (responseCode === GqOperationResponse.Success) {
+        Toast.success({ text: 'External user created and granted access'});
+      }
+      if (responseCode === GqOperationResponse.PartialSuccess) {
+        const errorMsg =
+        response?.createExternalUser?.errMsg ?? 'Error creating external user';
+        Toast.warning({ text: errorMsg });
+      }
+
+      if (responseCode === GqOperationResponse.Success || responseCode === GqOperationResponse.PartialSuccess) {
+        onGrantAccessToExternalUser(response.createExternalUser);
+        doClosePanel();
+      }
+    }  
   };
 
   const renderPanelHeader = () => (
@@ -191,9 +224,14 @@ const AddExternalUsersAccessPanel = ({ orgSid, isOpen, onDismiss, onGrantAccessT
                         searchExternalUsers={handleFindExternalUsers}
                         form={addExternalUsersAccessService.userAccountForm}
                         onNext={handleNext}
-                        showCreateExternalUserForm={false}
+                        createExternalUser={createExternalUser}
+                        setCreateExternalUser={setCreateExternalUser}
                         saveOptions={(user) => {
                           addExternalUsersAccessService.updateAccountInfo(user);
+                          setUnsavedChanges(true);
+                        }}
+                        saveActivationEmailOptions={(send) => {
+                          addExternalUsersAccessService.setSendAccountActivation(send);
                           setUnsavedChanges(true);
                         }}
                       />
@@ -221,7 +259,7 @@ const AddExternalUsersAccessPanel = ({ orgSid, isOpen, onDismiss, onGrantAccessT
                       <SectionSummary
                         form={addExternalUsersAccessService.userAccountForm}
                         onPrev={handlePrev}
-                        onSubmit={handleGrantAccess}
+                        onSubmit={createExternalUser ? handleCreateExternalUser :  handleGrantAccess}
                         isProcessing={isProcessing}
                       />
                     ),

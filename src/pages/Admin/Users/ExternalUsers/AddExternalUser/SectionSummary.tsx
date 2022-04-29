@@ -102,6 +102,17 @@ const SectionSummary = ({ form, onPrev, onSubmit, isProcessing }: SectionSummary
             <FieldValue id="__accessGroupsList_summary">{renderSelectedGroups()}</FieldValue>
           </Column>
         </FormRow>
+
+        {form.sendActivationEmail?.value == true && (
+          <FormRow>
+            <Column lg="12">
+              <UIFormLabel id="__sendActivation_summary" uiField={form.sendActivationEmail} />
+              <FieldValue>
+                <FontIcon iconName="CheckMark" />
+              </FieldValue>
+            </Column>
+          </FormRow>
+        )}
       </WizardBody>
       {isProcessing && <>Processing...</>}
       {!isProcessing && <AddExternalUsersAccessFooter onPrev={handlePrev} onSubmit={handleSubmit} />}
