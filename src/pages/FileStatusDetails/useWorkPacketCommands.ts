@@ -10,7 +10,7 @@ import {
   useWorkPacketReprocessMutation,
   useWorkPacketResendMutation,
   useReprocessDialogLazyQuery,
-  useWorkPacketRerunStepMutation
+  useWorkPacketRerunStepMutation,
 } from 'src/data/services/graphql';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { useEffect } from 'react';
@@ -39,7 +39,10 @@ export const useWorkPacketCommands = (workOrderId: string) => {
   });
   const [apiCallRerun, { data: rerunData, error: rerunError }] = useWorkPacketRerunStepMutation();
 
-  const [apiCallReprocessDialog, { data: reprocesDialogData, loading: reprocesDialogLoading, error: reprocesDialogError }] = useReprocessDialogLazyQuery({
+  const [
+    apiCallReprocessDialog,
+    { data: reprocesDialogData, loading: reprocesDialogLoading, error: reprocesDialogError },
+  ] = useReprocessDialogLazyQuery({
     variables: {
       workOrderId,
     },
@@ -85,7 +88,6 @@ export const useWorkPacketCommands = (workOrderId: string) => {
     handleError(reprocesDialogError);
   }, [reprocesDialogError]);
 
-  
   useEffect(() => {
     handleError(rerunError);
   }, [rerunError]);
@@ -158,6 +160,6 @@ export const useWorkPacketCommands = (workOrderId: string) => {
     apiCallRenameReprocess,
     apiCallResend,
     apiCallReprocessDialog,
-    apiCallRerun
+    apiCallRerun,
   };
 };

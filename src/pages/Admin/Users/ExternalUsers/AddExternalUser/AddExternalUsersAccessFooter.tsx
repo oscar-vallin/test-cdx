@@ -8,7 +8,11 @@ type AddExternalUsersAccessFooterProps = {
   onSubmit?: () => any;
 };
 
-const AddExternalUsersAccessFooter = ({ onNext, onPrev, onSubmit }: AddExternalUsersAccessFooterProps): ReactElement => {
+const AddExternalUsersAccessFooter = ({
+  onNext,
+  onPrev,
+  onSubmit,
+}: AddExternalUsersAccessFooterProps): ReactElement => {
   return (
     <>
       <WizardButtonRow>

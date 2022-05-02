@@ -26,7 +26,7 @@ export const ROUTES_ID = {
   PASSWORD_RESET: 'password-reset',
   PAGE_NOT_FOUND: 'page-not-found',
   UNAUTHORIZED: 'unauthorized',
-  SECURITY_SETTINGS: 'security-settings'
+  SECURITY_SETTINGS: 'security-settings',
 };
 
 export const URL_ROUTES = {
@@ -58,7 +58,7 @@ export const URL_ROUTES = {
   PASSWORD_RESET: `/ua/${ROUTES_ID.PASSWORD_RESET}/:token`,
   PAGE_NOT_FOUND: `/${ROUTES_ID.PAGE_NOT_FOUND}`,
   UNAUTHORIZED: `/${ROUTES_ID.UNAUTHORIZED}`,
-  SECURITY_SETTINGS: `/${ROUTES_ID.SECURITY_SETTINGS}`
+  SECURITY_SETTINGS: `/${ROUTES_ID.SECURITY_SETTINGS}`,
 };
 
 type RouteType = {
@@ -237,7 +237,6 @@ export const ROUTE_DELETED_USERS: RouteType = {
   API_ID: 'DELETED_USERS',
 };
 
-
 export const ROUTE_EXTERNAL_USERS: RouteType = {
   ID: ROUTES_ID.EXTERNAL_USERS,
   TITLE: 'External Users',
@@ -331,7 +330,7 @@ export const ROUTES = {
   ROUTE_PAGE_NOT_FOUND,
   ROUTE_UNAUTHORIZED,
   ROUTE_SECURITY_SETTINGS,
-  ROUTE_EXTERNAL_USERS
+  ROUTE_EXTERNAL_USERS,
 };
 
 export const ROUTES_ARRAY: RouteType[] = [
@@ -360,7 +359,7 @@ export const ROUTES_ARRAY: RouteType[] = [
   ROUTE_IMPL_DEPLOY,
   ROUTE_PASSWORD_RULES,
   ROUTE_SECURITY_SETTINGS,
-  ROUTE_EXTERNAL_USERS
+  ROUTE_EXTERNAL_USERS,
 ];
 
 export const getRouteByApiId = (_apiId) => {

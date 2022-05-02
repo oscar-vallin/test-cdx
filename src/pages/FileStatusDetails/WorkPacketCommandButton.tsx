@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { ActionButton, DefaultButton, Dialog, DialogFooter, DialogType, PrimaryButton, Stack } from '@fluentui/react';
-import { WorkPacketCommand, WorkPacketCommandType, ChangeReason, WorkStatus, useReprocessDialogLazyQuery} from 'src/data/services/graphql';
+import {
+  WorkPacketCommand,
+  WorkPacketCommandType,
+  ChangeReason,
+  WorkStatus,
+  useReprocessDialogLazyQuery,
+} from 'src/data/services/graphql';
 import { theme } from 'src/styles/themes/theme';
 import { LogMessageItem } from 'src/components/collapses/LogMessageItem';
 import { Spacing } from 'src/components/spacings/Spacing';
@@ -20,20 +26,19 @@ type CommandButtonType = {
 };
 
 enum ButtonActionTypes {
-  Default= 'DEFAULT',
-  SecondaryDefault= 'SECONDARY_DEFAULT',
+  Default = 'DEFAULT',
+  SecondaryDefault = 'SECONDARY_DEFAULT',
   HandleDeleteCmd = 'DELETE_CMD',
   HandleCloseLogMessageDialog = 'CLOSE_LOG_MESSAGE',
-  HandleExternalReprocess= 'EXTERNAL_REPROCESS',
-  HandleInternalReprocess= 'INTERNAL_REPROCESS',
+  HandleExternalReprocess = 'EXTERNAL_REPROCESS',
+  HandleInternalReprocess = 'INTERNAL_REPROCESS',
   HandleReprocess = 'REPROCESS',
   HandleRename = 'RENAME',
   HandleInternalRerun = 'INTERNAL_RERUN',
   HandleExternalRerun = 'EXTERNAL_RERUN',
   HandleRerun = "RERUN",
-  SecondaryDefaultCallback = "SECONDART_DEFAULT_CALLBACK"
+  SecondaryDefaultCallback = "SECONDARY_DEFAULT_CALLBACK"
 }
-
 
 export const WorkPacketCommandButton = ({
   id,
@@ -45,23 +50,26 @@ export const WorkPacketCommandButton = ({
   callback,
   workPacketCommands,
   realId,
-  packetStatus
+  packetStatus,
 }: CommandButtonType) => {
 
-  const [ isConfirmationHidden, setIsConfirmationHidden] = useState(true);
-  const [ showSecondaryButton, setShowSecondaryButton] = useState(true);
-  const [ showPrimaryButton, setShowPrimaryButton] = useState(true);
-  const [ responseLogMessages, setResponseLogMessages ] = useState<any[]>([]);
-  const [ title, setTitle ] = useState(responseLogMessages?.length  ? "Log Messages" : confirmationTitle)
-  const [ subText, setSubText ] = useState(responseLogMessages?.length  ? '' : confirmationMsg)
+  const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);
+  const [showSecondaryButton, setShowSecondaryButton] = useState(true);
+  const [showPrimaryButton, setShowPrimaryButton] = useState(true);
+  const [responseLogMessages, setResponseLogMessages] = useState<any[]>([]);
+  const [title, setTitle] = useState(responseLogMessages?.length ? "Log Messages" : confirmationTitle)
+  const [subText, setSubText] = useState(responseLogMessages?.length ? '' : confirmationMsg)
 
   const [buttonText, setButtonText] = useState("Yes");
   const [secondaryButtonText, setSecondaryButtonText] = useState("No");
-  const [ buttonAction, setButtonAction] = useState(ButtonActionTypes.Default)
-  const [ secondaryButtonAction, setSecondaryButtonAction] = useState(ButtonActionTypes.SecondaryDefault)
+  const [buttonAction, setButtonAction] = useState(ButtonActionTypes.Default)
+  const [secondaryButtonAction, setSecondaryButtonAction] = useState(ButtonActionTypes.SecondaryDefault)
   const [newFileName, setNewFileName] = useState('');
 
-  const [apiCallReprocessDialog, { data: reprocesDialogData, loading: reprocesDialogLoading, error: reprocesDialogError }] = useReprocessDialogLazyQuery({
+  const [
+    apiCallReprocessDialog,
+    { data: reprocesDialogData, loading: reprocesDialogLoading, error: reprocesDialogError },
+  ] = useReprocessDialogLazyQuery({
     variables: {
       workOrderId: realId ?? '',
     },
@@ -69,155 +77,169 @@ export const WorkPacketCommandButton = ({
 
   const handleDefaultAction = () => {
     setIsConfirmationHidden(true);
-    if(onClick) onClick().then();
-    if(callback) callback();
-  }
- 
-  const handleSecondaryDefaultAction = () =>{
+    if (onClick) onClick().then();
+    if (callback) callback();
+  };
+
+  const handleSecondaryDefaultAction = () => {
     setIsConfirmationHidden(true);
+  };
+
+  const handleSecondaryDefaultCallbackAction = () => {
+    setIsConfirmationHidden(true);
+    if (callback) callback();
   }
 
-  const handleSecondaryDefaultCallbackAction = () =>{
-    setIsConfirmationHidden(true);
-    if(callback) callback();
-  }
-
-  const handleDeleteCmd =()=> {
-    if(onClick) {
-      onClick().then((res)=>{
+  const handleDeleteCmd = () => {
+    if (onClick) {
+      onClick().then((res) => {
         setButtonAction(ButtonActionTypes.HandleCloseLogMessageDialog)
-        if(res?.data){
+        if (res?.data) {
           const workPacketKey = Object.keys(res.data)[0];
-          if(res.data[workPacketKey].allMessages?.length){
+          if (res.data[workPacketKey].allMessages?.length) {
             setResponseLogMessages(res.data.workPacketDelete.allMessages)
             setSecondaryButtonText("Close")
             setShowPrimaryButton(false)
             setSecondaryButtonAction(ButtonActionTypes.SecondaryDefaultCallback)
-          }else{
+          } else {
             setIsConfirmationHidden(true);
-            if(callback) callback();
+            if (callback) callback();
           }
         }
-      })
+      });
     }
-  }
+  };
 
-  const handleRenameCmd=()=>{
-    workPacketCommands.apiCallRenameReprocess({
-      variables: {
-        workOrderId: realId,
-        newFileName: newFileName
-      }
-    }).then(()=>{
-      handleCloseLogMessageDialog();
-      setNewFileName('')
-    })
-  }
+  const handleRenameCmd = () => {
+    workPacketCommands
+      .apiCallRenameReprocess({
+        variables: {
+          workOrderId: realId,
+          newFileName: newFileName,
+        },
+      })
+      .then(() => {
+        handleCloseLogMessageDialog();
+        setNewFileName('');
+      });
+  };
 
-  const handleCloseLogMessageDialog =()=> {
+  const handleCloseLogMessageDialog = () => {
     setIsConfirmationHidden(true);
-    if(callback) callback();
-  }        
+    if (callback) callback();
+  };
 
-  const handleChangeReasonReporcess = (changeReason?: ChangeReason) =>{
-    workPacketCommands.apiCallReprocess({
-      variables: {
-        workOrderId: realId,
-        changeReason: changeReason ?? null
-      }
-    }).then(()=>{
-      handleCloseLogMessageDialog();
-    })
-  }
-  
-  const handleChangeReasonRerun = (changeReason?: ChangeReason) =>{
-    workPacketCommands.apiCallRerun({
-      variables: {
-        workOrderId: realId,
-        stepName: packetStatus ?? '',
-        changeReason: changeReason ?? null
-      }
-    }).then(()=>{
-      handleCloseLogMessageDialog();
-    })
-  }
+  const handleChangeReasonReporcess = (changeReason?: ChangeReason) => {
+    workPacketCommands
+      .apiCallReprocess({
+        variables: {
+          workOrderId: realId,
+          changeReason: changeReason ?? null,
+        },
+      })
+      .then(() => {
+        handleCloseLogMessageDialog();
+      });
+  };
 
-  useEffect(()=>{ 
-    if(command?.commandType===WorkPacketCommandType.Delete){
+  const handleChangeReasonRerun = (changeReason?: ChangeReason) => {
+    workPacketCommands
+      .apiCallRerun({
+        variables: {
+          workOrderId: realId,
+          stepName: packetStatus ?? '',
+          changeReason: changeReason ?? null,
+        },
+      })
+      .then(() => {
+        handleCloseLogMessageDialog();
+      });
+  };
+
+  useEffect(() => {
+    if (command?.commandType === WorkPacketCommandType.Delete) {
       setShowPrimaryButton(true);
       setSecondaryButtonText("No");
       setSecondaryButtonAction(ButtonActionTypes.SecondaryDefault);
-      if(!responseLogMessages?.length){
+      if (!responseLogMessages?.length) {
         setButtonAction(ButtonActionTypes.HandleDeleteCmd);
-      }else{
+      } else {
         setButtonAction(ButtonActionTypes.HandleCloseLogMessageDialog);
       }
     }
-  }, [command?.commandType])
+  }, [command?.commandType]);
 
-
-  useEffect(()=>{ 
-    if(command?.commandType===WorkPacketCommandType.Rename){
-      setButtonAction(ButtonActionTypes.HandleRename)
+  useEffect(() => {
+    if (command?.commandType === WorkPacketCommandType.Rename) {
+      setButtonAction(ButtonActionTypes.HandleRename);
     }
-  }, [command?.commandType])
+  }, [command?.commandType]);
 
-  useEffect(()=>{ 
-    if(command?.commandType===WorkPacketCommandType.Reprocess || command?.commandType===WorkPacketCommandType.RerunStep){
+  useEffect(() => {
+    if (
+      command?.commandType === WorkPacketCommandType.Reprocess ||
+      command?.commandType === WorkPacketCommandType.RerunStep
+    ) {
       apiCallReprocessDialog({
         variables: {
-          workOrderId: realId??""
-        }
-      })
+          workOrderId: realId ?? '',
+        },
+      });
     }
-  },[command?.commandType])
+  }, [command?.commandType]);
 
-  useEffect(()=>{ 
-      if(reprocesDialogData && reprocesDialogData.reprocessDialog){
-        const {title, message, captureChangeReason } = reprocesDialogData.reprocessDialog;
-        setTitle(title ?? confirmationTitle);
-        setSubText(message?? confirmationMsg);
-        if(captureChangeReason){
-          if(command?.commandType===WorkPacketCommandType.Reprocess){
-            setButtonAction(ButtonActionTypes.HandleInternalReprocess);
-            setSecondaryButtonAction(ButtonActionTypes.HandleExternalReprocess);
-          }else if(command?.commandType===WorkPacketCommandType.RerunStep){
-            setButtonAction(ButtonActionTypes.HandleInternalRerun);
-            setSecondaryButtonAction(ButtonActionTypes.HandleExternalRerun);
-          }
-          setButtonText('Internal Change');
-          setSecondaryButtonText('External Change');
-        }else{
-          if(command?.commandType===WorkPacketCommandType.Reprocess){
-            setButtonAction(ButtonActionTypes.HandleReprocess);
-          }else if(command?.commandType===WorkPacketCommandType.RerunStep){        
-            setButtonAction(ButtonActionTypes.HandleRerun);
-          }          
-          setButtonText('Yes');
-        } 
+  useEffect(() => {
+    if (reprocesDialogData && reprocesDialogData.reprocessDialog) {
+      const { title, message, captureChangeReason } = reprocesDialogData.reprocessDialog;
+      setTitle(title ?? confirmationTitle);
+      setSubText(message ?? confirmationMsg);
+      if (captureChangeReason) {
+        if (command?.commandType === WorkPacketCommandType.Reprocess) {
+          setButtonAction(ButtonActionTypes.HandleInternalReprocess);
+          setSecondaryButtonAction(ButtonActionTypes.HandleExternalReprocess);
+        } else if (command?.commandType === WorkPacketCommandType.RerunStep) {
+          setButtonAction(ButtonActionTypes.HandleInternalRerun);
+          setSecondaryButtonAction(ButtonActionTypes.HandleExternalRerun);
+        }
+        setButtonText('Internal Change');
+        setSecondaryButtonText('External Change');
+      } else {
+        if (command?.commandType === WorkPacketCommandType.Reprocess) {
+          setButtonAction(ButtonActionTypes.HandleReprocess);
+        } else if (command?.commandType === WorkPacketCommandType.RerunStep) {
+          setButtonAction(ButtonActionTypes.HandleRerun);
+        }
+        setButtonText('Yes');
       }
-  },[reprocesDialogData])
+    }
+  }, [reprocesDialogData]);
 
-  const getButtonAction = (buttonAction: string) =>{
-    let method = handleDefaultAction
-    switch(buttonAction){
-      case ButtonActionTypes.HandleDeleteCmd: 
+  const getButtonAction = (buttonAction: string) => {
+    let method = handleDefaultAction;
+    switch (buttonAction) {
+      case ButtonActionTypes.HandleDeleteCmd:
         method = handleDeleteCmd;
         break;
       case ButtonActionTypes.Default:
-        method = handleDefaultAction
+        method = handleDefaultAction;
         break;
       case ButtonActionTypes.SecondaryDefault:
         method = handleSecondaryDefaultAction;
         break;
       case ButtonActionTypes.HandleReprocess:
-        method = ()=>{handleChangeReasonReporcess()};
+        method = () => {
+          handleChangeReasonReporcess();
+        };
         break;
       case ButtonActionTypes.HandleExternalReprocess:
-        method = ()=>{handleChangeReasonReporcess(ChangeReason.External)};
+        method = () => {
+          handleChangeReasonReporcess(ChangeReason.External);
+        };
         break;
-      case ButtonActionTypes.HandleInternalReprocess:        
-        method = ()=>{handleChangeReasonReporcess(ChangeReason.Internal)};
+      case ButtonActionTypes.HandleInternalReprocess:
+        method = () => {
+          handleChangeReasonReporcess(ChangeReason.Internal);
+        };
         break;
       case ButtonActionTypes.HandleCloseLogMessageDialog:
         method = handleCloseLogMessageDialog;
@@ -226,20 +248,26 @@ export const WorkPacketCommandButton = ({
         method = handleRenameCmd;
         break;
       case ButtonActionTypes.HandleInternalRerun:
-        method = ()=>{handleChangeReasonRerun(ChangeReason.Internal)};
+        method = () => {
+          handleChangeReasonRerun(ChangeReason.Internal);
+        };
         break;
       case ButtonActionTypes.HandleExternalRerun:
-        method = ()=>{handleChangeReasonRerun(ChangeReason.External)};
+        method = () => {
+          handleChangeReasonRerun(ChangeReason.External);
+        };
         break;
       case ButtonActionTypes.HandleRerun:
-        method = ()=>{handleChangeReasonRerun()};
+        method = () => {
+          handleChangeReasonRerun();
+        };
         break;
       case ButtonActionTypes.SecondaryDefaultCallback:
         method = handleSecondaryDefaultCallbackAction;
         break;
     }
-    return method
-  }
+    return method;
+  };
 
   if (command) {
     return (
@@ -263,40 +291,36 @@ export const WorkPacketCommandButton = ({
           }}
           modalProps={{ isBlocking: true }}
         >
-          {responseLogMessages?.map((item, index)=>{
+          {responseLogMessages?.map((item, index) => {
             return (
-              <Spacing key={`dialog_logMessage-${index}`} padding={{ right: 'normal'}}>
+              <Spacing key={`dialog_logMessage-${index}`} padding={{ right: 'normal' }}>
                 <LogMessageItem logMessage={item} />
               </Spacing>
-            )
+            );
           })}
-          {command?.commandType===WorkPacketCommandType.Rename && (             
+          {command?.commandType === WorkPacketCommandType.Rename && (
             <InputText
               id="renameInput"
               type="text"
               value={newFileName}
               label="Please specify a new file name to continue:"
-              onChange={(e, newValue)=>{
-                setNewFileName(newValue ??'')
+              onChange={(e, newValue) => {
+                setNewFileName(newValue ?? '');
               }}
             ></InputText>
-          )
-        }
+          )}
           <DialogFooter>
             {showPrimaryButton && (
               <PrimaryButton
-                disabled={(command?.commandType===WorkPacketCommandType.Rename && newFileName.length<=0)}
+                disabled={(command?.commandType === WorkPacketCommandType.Rename && newFileName.length <= 0)}
                 onClick={getButtonAction(buttonAction)}
                 text={buttonText}
               />
             )}
             {showSecondaryButton && (
-              <DefaultButton
-                onClick={getButtonAction(secondaryButtonAction)} 
-                text={secondaryButtonText}/>
+              <DefaultButton onClick={getButtonAction(secondaryButtonAction)} text={secondaryButtonText} />
             )}
           </DialogFooter>
-              
         </Dialog>
       </Stack.Item>
     );

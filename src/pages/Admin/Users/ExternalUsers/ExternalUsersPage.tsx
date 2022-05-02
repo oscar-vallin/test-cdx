@@ -5,7 +5,7 @@ import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Row, Column, Container } from 'src/components/layouts';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { PageTitle } from 'src/components/typography';
-import { useExternalUsersForOrgLazyQuery, SortDirection, CdxWebCommandType} from 'src/data/services/graphql';
+import { useExternalUsersForOrgLazyQuery, SortDirection, CdxWebCommandType } from 'src/data/services/graphql';
 import { UsersTable } from 'src/pages/Admin/Users/UsersTable';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { StyledColumn } from './ExternalUsersPage.styles';
@@ -25,7 +25,9 @@ const ExternalUsersPage = () => {
   const useUpdateExternalUsers = useUpdateExternalUsersService(orgSid);
 
   const tableFilters = useTableFilters('Name, Last Name, Email, etc.');
-  const assignCmd = data?.externalUsersForOrg?.listPageInfo?.pageCommands?.find((cmd) => cmd.commandType === CdxWebCommandType.Assign);
+  const assignCmd = data?.externalUsersForOrg?.listPageInfo?.pageCommands?.find(
+    (cmd) => cmd.commandType === CdxWebCommandType.Assign
+  );
 
   useEffect(() => {
     // Reset the page number when any filtering occurs
@@ -35,25 +37,25 @@ const ExternalUsersPage = () => {
       sort: tableFilters.pagingParams.sort,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ tableFilters.searchText.delayedValue ]);
+  }, [tableFilters.searchText.delayedValue]);
 
   useEffect(() => {
     apiCall({
-      variables: { 
+      variables: {
         orgSid,
         pageableInput: tableFilters.pagingParams,
-        searchText: tableFilters.searchText.delayedValue
-      }
+        searchText: tableFilters.searchText.delayedValue,
+      },
     });
   }, [tableFilters.pagingParams]);
 
-  const handleGrantAccessToExternalUserSuccess = ()=>{
+  const handleGrantAccessToExternalUserSuccess = () => {
     tableFilters.setPagingParams({
       pageNumber: 0,
       pageSize: 100,
       sort: tableFilters.pagingParams.sort,
     });
-  }
+  };
 
   const renderBody = () => {
     if (loading) {
@@ -96,7 +98,7 @@ const ExternalUsersPage = () => {
   };
 
   return (
-    <LayoutDashboard id="PageExternalUsers" menuOptionSelected={ROUTE_EXTERNAL_USERS.API_ID}>      
+    <LayoutDashboard id="PageExternalUsers" menuOptionSelected={ROUTE_EXTERNAL_USERS.API_ID}>
       <PageHeader id="__ExternalUsersHeader">
         <Container>
           <Row>
@@ -110,19 +112,19 @@ const ExternalUsersPage = () => {
         </Container>
       </PageHeader>
       <Container>
-          {tableFilters?.searchText && (
-            <Spacing margin={{ bottom: 'normal' }}>
-              <Column lg="6">
-                <InputText
-                  id={`Active_Users_Input-Search`}
-                  autofocus
-                  disabled={false}
-                  {...tableFilters.searchText}
-                  label="Search"
-                />
-              </Column>
-            </Spacing>
-          )}
+        {tableFilters?.searchText && (
+          <Spacing margin={{ bottom: 'normal' }}>
+            <Column lg="6">
+              <InputText
+                id={`Active_Users_Input-Search`}
+                autofocus
+                disabled={false}
+                {...tableFilters.searchText}
+                label="Search"
+              />
+            </Column>
+          </Spacing>
+        )}
         <Row>
           <StyledColumn>{renderBody()}</StyledColumn>
         </Row>
