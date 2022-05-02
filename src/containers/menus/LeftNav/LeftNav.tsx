@@ -113,6 +113,7 @@ export const LeftNav = ({ menuOptionSelected, isOpen }: LeftNavProps) => {
           label={navItem.label}
           elements={
             navItem.subNavItems?.map((subNav) => {
+              if(subNav.destination === menuOptionSelected) navItem.isExpanded = true;
               return {
                 id: `__Nav_${subNav.destination}`,
                 label: subNav.label,

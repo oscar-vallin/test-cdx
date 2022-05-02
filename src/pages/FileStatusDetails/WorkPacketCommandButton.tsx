@@ -30,7 +30,8 @@ enum ButtonActionTypes {
   HandleRename = 'RENAME',
   HandleInternalRerun = 'INTERNAL_RERUN',
   HandleExternalRerun = 'EXTERNAL_RERUN',
-  HandleRerun = "RERUN"
+  HandleRerun = "RERUN",
+  SecondaryDefaultCallback = "SECONDART_DEFAULT_CALLBACK"
 }
 
 
@@ -49,6 +50,7 @@ export const WorkPacketCommandButton = ({
 
   const [ isConfirmationHidden, setIsConfirmationHidden] = useState(true);
   const [ showSecondaryButton, setShowSecondaryButton] = useState(true);
+  const [ showPrimaryButton, setShowPrimaryButton] = useState(true);
   const [ responseLogMessages, setResponseLogMessages ] = useState<any[]>([]);
   const [ title, setTitle ] = useState(responseLogMessages?.length  ? "Log Messages" : confirmationTitle)
   const [ subText, setSubText ] = useState(responseLogMessages?.length  ? '' : confirmationMsg)
@@ -75,18 +77,24 @@ export const WorkPacketCommandButton = ({
     setIsConfirmationHidden(true);
   }
 
+  const handleSecondaryDefaultCallbackAction = () =>{
+    setIsConfirmationHidden(true);
+    if(callback) callback();
+  }
+
   const handleDeleteCmd =()=> {
     if(onClick) {
       onClick().then((res)=>{
+        setButtonAction(ButtonActionTypes.HandleCloseLogMessageDialog)
         if(res?.data){
           const workPacketKey = Object.keys(res.data)[0];
           if(res.data[workPacketKey].allMessages?.length){
             setResponseLogMessages(res.data.workPacketDelete.allMessages)
-            setButtonText("Close")
-            setShowSecondaryButton(false)
+            setSecondaryButtonText("Close")
+            setShowPrimaryButton(false)
+            setSecondaryButtonAction(ButtonActionTypes.SecondaryDefaultCallback)
           }else{
             setIsConfirmationHidden(true);
-            setShowSecondaryButton(true);
             if(callback) callback();
           }
         }
@@ -136,6 +144,9 @@ export const WorkPacketCommandButton = ({
 
   useEffect(()=>{ 
     if(command?.commandType===WorkPacketCommandType.Delete){
+      setShowPrimaryButton(true);
+      setSecondaryButtonText("No");
+      setSecondaryButtonAction(ButtonActionTypes.SecondaryDefault);
       if(!responseLogMessages?.length){
         setButtonAction(ButtonActionTypes.HandleDeleteCmd);
       }else{
@@ -166,7 +177,7 @@ export const WorkPacketCommandButton = ({
         const {title, message, captureChangeReason } = reprocesDialogData.reprocessDialog;
         setTitle(title ?? confirmationTitle);
         setSubText(message?? confirmationMsg);
-        if(!captureChangeReason){
+        if(captureChangeReason){
           if(command?.commandType===WorkPacketCommandType.Reprocess){
             setButtonAction(ButtonActionTypes.HandleInternalReprocess);
             setSecondaryButtonAction(ButtonActionTypes.HandleExternalReprocess);
@@ -223,6 +234,9 @@ export const WorkPacketCommandButton = ({
       case ButtonActionTypes.HandleRerun:
         method = ()=>{handleChangeReasonRerun()};
         break;
+      case ButtonActionTypes.SecondaryDefaultCallback:
+        method = handleSecondaryDefaultCallbackAction;
+        break;
     }
     return method
   }
@@ -244,8 +258,8 @@ export const WorkPacketCommandButton = ({
           onDismiss={() => setIsConfirmationHidden(true)}
           dialogContentProps={{
             type: DialogType.normal,
-            title,
-            subText
+            title: !responseLogMessages.length ? title : "Log Messages",
+            subText: !responseLogMessages.length ? subText : "",
           }}
           modalProps={{ isBlocking: true }}
         >
@@ -269,11 +283,13 @@ export const WorkPacketCommandButton = ({
           )
         }
           <DialogFooter>
-            <PrimaryButton
-              disabled={(command?.commandType===WorkPacketCommandType.Rename && newFileName.length<=0)}
-              onClick={getButtonAction(buttonAction)}
-              text={buttonText}
-            />
+            {showPrimaryButton && (
+              <PrimaryButton
+                disabled={(command?.commandType===WorkPacketCommandType.Rename && newFileName.length<=0)}
+                onClick={getButtonAction(buttonAction)}
+                text={buttonText}
+              />
+            )}
             {showSecondaryButton && (
               <DefaultButton
                 onClick={getButtonAction(secondaryButtonAction)} 
