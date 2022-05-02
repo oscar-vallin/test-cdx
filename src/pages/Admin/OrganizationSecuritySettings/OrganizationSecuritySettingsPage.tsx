@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { memo, useEffect, useState } from 'react';
 
-import { Spinner, SpinnerSize, Toggle } from '@fluentui/react';
+import { Spinner, SpinnerSize } from '@fluentui/react';
 import { EmptyState } from 'src/containers/states';
 import { Button } from 'src/components/buttons';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
@@ -52,10 +52,10 @@ const _OrganizationSecuritySettingsPage = () => {
     }
   }, [data]);
 
-  useEffect(() => {
-    console.log('State:', state);
-    console.log('Form:', form);
-  }, [state]);
+  // useEffect(() => {
+  //   console.log('State:', state);
+  //   console.log('Form:', form);
+  // }, [state]);
 
   useEffect(() => {
     handleError(formError);
