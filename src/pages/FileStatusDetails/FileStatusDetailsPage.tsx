@@ -173,16 +173,18 @@ const FileStatusDetailsPage = () => {
             <LabelValue label="Delivered on" value={formatDate(new Date(fileInfo.timeDelivered))} />
             <LabelValue label="Size" value={`${fileInfo.fileSizeInBytes} bytes (without encryption)`} />
           </Stack.Item>
-          <Stack.Item>
-            <Text size="small" variant="muted">
-              FTP details
-            </Text>
-            <LabelValue label="Protocol" value={fileInfo.ftp?.protocol} />
-            {fileInfo?.ftp?.port && <LabelValue label="Port" value={fileInfo.ftp?.port} />}
-            <LabelValue label="User" value="*******" title={fileInfo.ftp?.username} />
-            <LabelValue label="Host" value={fileInfo.ftp?.host} />
-            <LabelValue label="Folder" value={fileInfo.ftp?.folder} />
-          </Stack.Item>
+          {fileInfo?.ftp?.host && (
+            <Stack.Item>
+              <Text size="small" variant="muted">
+                FTP details
+              </Text>
+              <LabelValue label="Protocol" value={fileInfo.ftp?.protocol} />
+              {fileInfo?.ftp?.port && <LabelValue label="Port" value={fileInfo.ftp?.port} />}
+              <LabelValue label="User" value="*******" title={fileInfo.ftp?.username} />
+              <LabelValue label="Host" value={fileInfo.ftp?.host} />
+              <LabelValue label="Folder" value={fileInfo.ftp?.folder} />
+            </Stack.Item>
+          )}
         </>
       );
     }
