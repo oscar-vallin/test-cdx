@@ -22,7 +22,7 @@ import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { ROUTE_SECURITY_SETTINGS } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
-import { DEFAULT_FORM, extractFormValues} from './OrganizationSecuritySettingsPageUtils';
+import { DEFAULT_FORM, extractFormValues } from './OrganizationSecuritySettingsPageUtils';
 import { UIInputToggle } from 'src/components/inputs/InputToggle';
 
 const _OrganizationSecuritySettingsPage = () => {
@@ -46,15 +46,15 @@ const _OrganizationSecuritySettingsPage = () => {
   }, [orgSid]);
 
   useEffect(() => {
-    if(data?.orgSecurityForm){
-        setForm(data.orgSecurityForm)
-        setState({ ...state, ...extractFormValues(DEFAULT_FORM, data?.orgSecurityForm || {}) });
+    if (data?.orgSecurityForm) {
+      setForm(data.orgSecurityForm);
+      setState({ ...state, ...extractFormValues(DEFAULT_FORM, data?.orgSecurityForm || {}) });
     }
   }, [data]);
 
   useEffect(() => {
-    console.log("State:",state);
-    console.log('Form:',form);
+    console.log('State:', state);
+    console.log('Form:', form);
   }, [state]);
 
   useEffect(() => {
@@ -113,8 +113,8 @@ const _OrganizationSecuritySettingsPage = () => {
                   }
                 />
               ) : (
-                <div id="__OrganizationSecuritySettings-Form">                    
-                  {form.forgotPasswordEnabled?.visible &&(
+                <div id="__OrganizationSecuritySettings-Form">
+                  {form.forgotPasswordEnabled?.visible && (
                     <Spacing margin={{ bottom: 'normal' }}>
                       <UIInputToggle
                         id="forgotPasswordEnabledToggle"
@@ -123,77 +123,77 @@ const _OrganizationSecuritySettingsPage = () => {
                         offText="Off"
                         role="checkbox"
                         value={state.forgotPasswordEnabled ?? false}
-                        onChange={(e?: React.MouseEvent<HTMLElement>, checked?: boolean)=>{
-                          setState({...state, forgotPasswordEnabled: !!checked});
+                        onChange={(e?: React.MouseEvent<HTMLElement>, checked?: boolean) => {
+                          setState({ ...state, forgotPasswordEnabled: !!checked });
                         }}
                       />
                     </Spacing>
                   )}
-                  {form.forgotPasswordMsg?.visible &&(
+                  {form.forgotPasswordMsg?.visible && (
                     <Spacing margin={{ bottom: 'normal' }}>
-                        <UIInputTextArea
-                            id="forgotPasswordMsgInput"
-                            uiField={form.forgotPasswordMsg}
-                            value={state.forgotPasswordMsg ?? ''} 
-                            multiline={true}
-                            onChange={(ev?: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string)=>{
-                                setState({...state, forgotPasswordMsg: newValue});
-                            }}
-                            resizable={false}
-                            rows={10}
-                            showRichTextEditor
-                        />
-                    </Spacing>                             
+                      <UIInputTextArea
+                        id="forgotPasswordMsgInput"
+                        uiField={form.forgotPasswordMsg}
+                        value={state.forgotPasswordMsg ?? ''}
+                        multiline={true}
+                        onChange={(ev?: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
+                          setState({ ...state, forgotPasswordMsg: newValue });
+                        }}
+                        resizable={false}
+                        rows={10}
+                        showRichTextEditor
+                      />
+                    </Spacing>
                   )}
-                  {form.allowedEmailDomains?.visible &&(
+                  {form.allowedEmailDomains?.visible && (
                     <Spacing margin={{ bottom: 'normal' }}>
-                        <UIInputTextArea
-                            id="allowedEmailDomains"
-                            uiField={form.allowedEmailDomains}
-                            value={state.allowedEmailDomains ?? ''} 
-                            multiline={true}
-                            onChange={(ev?: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string)=>{
-                                setState({...state, allowedEmailDomains: newValue ?? ''});
-                            }}
-                            resizable={false}
-                            rows={8}
-                        />
-                    </Spacing>                             
+                      <UIInputTextArea
+                        id="allowedEmailDomains"
+                        uiField={form.allowedEmailDomains}
+                        value={state.allowedEmailDomains ?? ''}
+                        multiline={true}
+                        onChange={(ev?: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
+                          setState({ ...state, allowedEmailDomains: newValue ?? '' });
+                        }}
+                        resizable={false}
+                        rows={8}
+                      />
+                    </Spacing>
                   )}
-                  {form?.commands?.length &&(
+                  {form?.commands?.length && (
                     <Spacing margin={{ top: 'normal' }}>
                       <Row>
                         <Column lg="6">
                           <Button
-                              id="__PasswordRules-Save"
-                              variant="primary"
-                              disabled={isLoadingForm || isUpdating}
-                              onClick={() => {
-                                  useUpdateOrgSecurity({
-                                      variables: {
-                                          orgSecurityInfo: {
-                                              ...state,
-                                              orgSid: orgSid,
-                                          },
-                                          errorPolicy: 'all',
-                                      },
-                                  }).catch(() => {
-                                      Toast.error({
-                                          text: 'An error occurred while updating the security settings. Please, try again.',
-                                      });
-                                  });
+                            id="__PasswordRules-Save"
+                            variant="primary"
+                            disabled={isLoadingForm || isUpdating}
+                            onClick={() => {
+                              useUpdateOrgSecurity({
+                                variables: {
+                                  orgSecurityInfo: {
+                                    ...state,
+                                    orgSid: orgSid,
+                                  },
+                                  errorPolicy: 'all',
+                                },
+                              }).catch(() => {
+                                Toast.error({
+                                  text: 'An error occurred while updating the security settings. Please, try again.',
+                                });
+                              });
                               return null;
-                              }}
+                            }}
                           >
                             {form?.commands[0].label}
                           </Button>
                         </Column>
                       </Row>
                     </Spacing>
-                  )}                  
+                  )}
                 </div>
               )}
-            </Spacing> 
+            </Spacing>
           </Column>
         </Row>
       </Container>

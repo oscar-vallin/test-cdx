@@ -67,7 +67,9 @@ const AccessPolicyGroupPanel = ({
   const handleError = ErrorHandler();
   const [selectedPoliciesValues, setSelectedPoliciesValues] = useState<string[]>(accessPolicyData.policySids);
 
-  const [selectedSpecializationsValues, setSelectedSpecializationsValues] = useState<string[]>(accessPolicyData.specializationSids);
+  const [selectedSpecializationsValues, setSelectedSpecializationsValues] = useState<string[]>(
+    accessPolicyData.specializationSids
+  );
 
   const doClosePanel = () => {
     // Reset the form
@@ -86,12 +88,12 @@ const AccessPolicyGroupPanel = ({
     }
   };
   useEffect(() => {
-    setSelectedPoliciesValues(accessPolicyData.policySids)
-  }, [accessPolicyData.policySids.length])
+    setSelectedPoliciesValues(accessPolicyData.policySids);
+  }, [accessPolicyData.policySids.length]);
 
   useEffect(() => {
-    setSelectedSpecializationsValues(accessPolicyData.specializationSids)
-  }, [accessPolicyData.specializationSids.length])
+    setSelectedSpecializationsValues(accessPolicyData.specializationSids);
+  }, [accessPolicyData.specializationSids.length]);
 
   useEffect(() => {
     const response: AccessPolicyGroupForm = createAccessPolicyGroupData?.createAccessPolicyGroup;
@@ -164,11 +166,7 @@ const AccessPolicyGroupPanel = ({
   };
 
   const renderOptionsGroup = (formUiLabelField, options, onChange, id) => {
-
-    let subGroups: any[][] = new Array(
-      new Array(),
-      new Array()
-    );
+    let subGroups: any[][] = new Array(new Array(), new Array());
     for (let i = 0; i < options.length; i++) {
       subGroups[i % 2].push(options[i]);
     }
@@ -185,14 +183,23 @@ const AccessPolicyGroupPanel = ({
                       <Card id={`${id}_subGroup-${index}`} elevation="none">
                         {subGroup.map((item, itemindex) => {
                           return (
-                            <Spacing id={`${id}_subGroup-${index}_item-${itemindex}`}  margin={{ top: 'small' }} key={`${index}-${itemindex}`}>
-                              <Checkbox label={item.label} onRenderLabel={() => renderLabel(item)} checked={item.checked} onChange={() => onChange(item.value)} />
+                            <Spacing
+                              id={`${id}_subGroup-${index}_item-${itemindex}`}
+                              margin={{ top: 'small' }}
+                              key={`${index}-${itemindex}`}
+                            >
+                              <Checkbox
+                                label={item.label}
+                                onRenderLabel={() => renderLabel(item)}
+                                checked={item.checked}
+                                onChange={() => onChange(item.value)}
+                              />
                             </Spacing>
-                          )
+                          );
                         })}
                       </Card>
                     </Column>
-                  )
+                  );
                 })}
               </Row>
             </Card>
@@ -214,7 +221,7 @@ const AccessPolicyGroupPanel = ({
     }
     setUnsavedChanges(true);
     addToAccessPolicyData({ policySids: selectedPoliciesValues });
-  }
+  };
 
   const onSpecializationChange = (specializationSid) => {
     const idx = selectedSpecializationsValues.indexOf(specializationSid);
@@ -228,15 +235,15 @@ const AccessPolicyGroupPanel = ({
     }
     setUnsavedChanges(true);
     addToAccessPolicyData({ specializationSids: selectedSpecializationsValues });
-  }
+  };
 
   const getCheckedValues = (options, selectedOptions) => {
     let newOptions: any = [];
-    options.forEach(element => {
-      newOptions.push({ ...element, checked: selectedOptions.includes(element.value) })
+    options.forEach((element) => {
+      newOptions.push({ ...element, checked: selectedOptions.includes(element.value) });
     });
-    return newOptions
-  }
+    return newOptions;
+  };
 
   const renderBody = (form?: AccessPolicyGroupForm | null) => {
     if (form) {
@@ -321,17 +328,17 @@ const AccessPolicyGroupPanel = ({
             )}
 
             {renderOptionsGroup(
-              form.policies, 
-              getCheckedValues(policies, selectedPoliciesValues), 
+              form.policies,
+              getCheckedValues(policies, selectedPoliciesValues),
               onPolicyChange,
-              "policiesGroup"
-              )}
+              'policiesGroup'
+            )}
             {renderOptionsGroup(
-              form.specializations, 
+              form.specializations,
               getCheckedValues(specializations, selectedSpecializationsValues),
               onSpecializationChange,
-              "specializationsGroup"
-              )}
+              'specializationsGroup'
+            )}
 
             <FormRow>
               <Column lg="12">
@@ -461,7 +468,7 @@ const AccessPolicyGroupPanel = ({
         isOpen={isOpen}
         onDismiss={onPanelClose}
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        onOuterClick={() => { }}
+        onOuterClick={() => {}}
       >
         <PanelBody>
           {errorMsg && (

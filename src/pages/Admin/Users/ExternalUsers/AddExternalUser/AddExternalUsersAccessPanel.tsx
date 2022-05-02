@@ -34,7 +34,12 @@ const enum Tab {
   Summary = 2,
 }
 
-const AddExternalUsersAccessPanel = ({ orgSid, isOpen, onDismiss, onGrantAccessToExternalUser }: AddExternalUsersAccessPanelProps): ReactElement => {
+const AddExternalUsersAccessPanel = ({
+  orgSid,
+  isOpen,
+  onDismiss,
+  onGrantAccessToExternalUser,
+}: AddExternalUsersAccessPanelProps): ReactElement => {
   const addExternalUsersAccessService = useAddExternalUsersAccessService(orgSid);
 
   const [step, setStep] = useState(Tab.Account);
@@ -42,10 +47,9 @@ const AddExternalUsersAccessPanel = ({ orgSid, isOpen, onDismiss, onGrantAccessT
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [isProcessing, setProcessing] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string | undefined>();
-  const[ createExternalUser, setCreateExternalUser] = useState(false)
+  const [createExternalUser, setCreateExternalUser] = useState(false);
 
   const Toast = useNotification();
-
 
   const handleNext = (): null => {
     setStep(step + 1);
@@ -78,65 +82,61 @@ const AddExternalUsersAccessPanel = ({ orgSid, isOpen, onDismiss, onGrantAccessT
     setShowDialog(false);
     setUnsavedChanges(false);
     onDismiss();
-  }; 
-
+  };
 
   const parseToPickerOpts = (arr?: Maybe<UserAccount>[] | null): ITag[] => {
     if (!arr) {
       return [];
     }
-    return arr.map((user) => ({ 
-      name: user?.email ?? '', 
-      key: user?.sid ?? '', 
+    return arr.map((user) => ({
+      name: user?.email ?? '',
+      key: user?.sid ?? '',
       email: user?.email ?? '',
       firstName: user?.person?.firstNm ?? '',
       lastName: user?.person?.lastNm ?? '',
     }));
   };
 
-  const handleFindExternalUsers =  (text: string) =>{
-    return findExternalUsers(text)
-  }
-  
-  const findExternalUsers = async (text: string): Promise<ITag[]> =>{
-    let externalUsers: ITag[] = []
+  const handleFindExternalUsers = (text: string) => {
+    return findExternalUsers(text);
+  };
+
+  const findExternalUsers = async (text: string): Promise<ITag[]> => {
+    let externalUsers: ITag[] = [];
 
     const res: any = await addExternalUsersAccessService.callFindExternalUsers({
       variables: {
-        searchText: text
-      }
-    })
+        searchText: text,
+      },
+    });
 
-    if(res?.data?.findExternalUsers){
-      externalUsers=parseToPickerOpts(res.data.findExternalUsers)
+    if (res?.data?.findExternalUsers) {
+      externalUsers = parseToPickerOpts(res.data.findExternalUsers);
     }
 
     return externalUsers;
-  }
+  };
 
-  
   const handleGrantAccess = async () => {
     setProcessing(true);
     const response = await addExternalUsersAccessService.callGrantUserAccess();
     setProcessing(false);
-    
+
     if (response?.grantExternalUserAccess) {
       const responseCode = response?.grantExternalUserAccess?.response;
 
       if (responseCode === GqOperationResponse.Fail) {
-        const errorMsg =
-        response?.grantExternalUserAccess?.errMsg ?? 'Error Granting Access to External User';
+        const errorMsg = response?.grantExternalUserAccess?.errMsg ?? 'Error Granting Access to External User';
         setErrorMsg(errorMsg);
       } else {
         setErrorMsg(undefined);
       }
 
       if (responseCode === GqOperationResponse.Success) {
-        Toast.success({ text: 'External user has been granted access'});
+        Toast.success({ text: 'External user has been granted access' });
       }
       if (responseCode === GqOperationResponse.PartialSuccess) {
-        const errorMsg =
-        response?.grantExternalUserAccess?.errMsg ?? 'Error Granting Access to External User';
+        const errorMsg = response?.grantExternalUserAccess?.errMsg ?? 'Error Granting Access to External User';
         Toast.warning({ text: errorMsg });
       }
 
@@ -144,31 +144,29 @@ const AddExternalUsersAccessPanel = ({ orgSid, isOpen, onDismiss, onGrantAccessT
         onGrantAccessToExternalUser(response.grantExternalUserAccess);
         doClosePanel();
       }
-    } 
+    }
   };
 
   const handleCreateExternalUser = async () => {
     setProcessing(true);
     const response = await addExternalUsersAccessService.callCreateExternalUser();
     setProcessing(false);
-    
+
     if (response?.createExternalUser) {
       const responseCode = response?.createExternalUser?.response;
 
       if (responseCode === GqOperationResponse.Fail) {
-        const errorMsg =
-        response?.createExternalUser?.errMsg ?? 'Error creating external user';
+        const errorMsg = response?.createExternalUser?.errMsg ?? 'Error creating external user';
         setErrorMsg(errorMsg);
       } else {
         setErrorMsg(undefined);
       }
 
       if (responseCode === GqOperationResponse.Success) {
-        Toast.success({ text: 'External user created and granted access'});
+        Toast.success({ text: 'External user created and granted access' });
       }
       if (responseCode === GqOperationResponse.PartialSuccess) {
-        const errorMsg =
-        response?.createExternalUser?.errMsg ?? 'Error creating external user';
+        const errorMsg = response?.createExternalUser?.errMsg ?? 'Error creating external user';
         Toast.warning({ text: errorMsg });
       }
 
@@ -176,7 +174,7 @@ const AddExternalUsersAccessPanel = ({ orgSid, isOpen, onDismiss, onGrantAccessT
         onGrantAccessToExternalUser(response.createExternalUser);
         doClosePanel();
       }
-    }  
+    }
   };
 
   const renderPanelHeader = () => (
@@ -191,7 +189,6 @@ const AddExternalUsersAccessPanel = ({ orgSid, isOpen, onDismiss, onGrantAccessT
     </PanelHeader>
   );
 
-  
   return (
     <>
       <Panel
@@ -214,63 +211,62 @@ const AddExternalUsersAccessPanel = ({ orgSid, isOpen, onDismiss, onGrantAccessT
               {errorMsg}
             </MessageBar>
           )}
-            <>
-              <Tabs
-                items={[
-                  {
-                    title: 'External User',
-                    content: (
-                      <SectionAccount
-                        searchExternalUsers={handleFindExternalUsers}
-                        form={addExternalUsersAccessService.userAccountForm}
-                        onNext={handleNext}
-                        createExternalUser={createExternalUser}
-                        setCreateExternalUser={setCreateExternalUser}
-                        saveOptions={(user) => {
-                          addExternalUsersAccessService.updateAccountInfo(user);
-                          setUnsavedChanges(true);
-                        }}
-                        saveActivationEmailOptions={(send) => {
-                          addExternalUsersAccessService.setSendAccountActivation(send);
-                          setUnsavedChanges(true);
-                        }}
-                      />
-                    ),
-                    hash: '#account',
-                  },
-                  {
-                    title: 'Access Management',
-                    content: (
-                      <SectionAccessManagement
-                        form={addExternalUsersAccessService.userAccountForm}
-                        onPrev={handlePrev}
-                        onNext={handleNext}
-                        saveOptions={(sids) => {
-                          addExternalUsersAccessService.updateAccessPolicyGroups(sids);
-                          setUnsavedChanges(true);
-                        }}
-                      />
-                    ),
-                    hash: '#access',
-                  },
-                  {
-                    title: 'Summary',
-                    content: (
-                      <SectionSummary
-                        form={addExternalUsersAccessService.userAccountForm}
-                        onPrev={handlePrev}
-                        onSubmit={createExternalUser ? handleCreateExternalUser :  handleGrantAccess}
-                        isProcessing={isProcessing}
-                      />
-                    ),
-                    hash: '#summary',
-                  },
-                ]}
-                selectedKey={step < 0 ? '0' : step.toString()}
-                onClickTab={handleTabChange}
-              />
-            </>
-          
+          <>
+            <Tabs
+              items={[
+                {
+                  title: 'External User',
+                  content: (
+                    <SectionAccount
+                      searchExternalUsers={handleFindExternalUsers}
+                      form={addExternalUsersAccessService.userAccountForm}
+                      onNext={handleNext}
+                      createExternalUser={createExternalUser}
+                      setCreateExternalUser={setCreateExternalUser}
+                      saveOptions={(user) => {
+                        addExternalUsersAccessService.updateAccountInfo(user);
+                        setUnsavedChanges(true);
+                      }}
+                      saveActivationEmailOptions={(send) => {
+                        addExternalUsersAccessService.setSendAccountActivation(send);
+                        setUnsavedChanges(true);
+                      }}
+                    />
+                  ),
+                  hash: '#account',
+                },
+                {
+                  title: 'Access Management',
+                  content: (
+                    <SectionAccessManagement
+                      form={addExternalUsersAccessService.userAccountForm}
+                      onPrev={handlePrev}
+                      onNext={handleNext}
+                      saveOptions={(sids) => {
+                        addExternalUsersAccessService.updateAccessPolicyGroups(sids);
+                        setUnsavedChanges(true);
+                      }}
+                    />
+                  ),
+                  hash: '#access',
+                },
+                {
+                  title: 'Summary',
+                  content: (
+                    <SectionSummary
+                      form={addExternalUsersAccessService.userAccountForm}
+                      onPrev={handlePrev}
+                      onSubmit={createExternalUser ? handleCreateExternalUser : handleGrantAccess}
+                      isProcessing={isProcessing}
+                    />
+                  ),
+                  hash: '#summary',
+                },
+              ]}
+              selectedKey={step < 0 ? '0' : step.toString()}
+              onClickTab={handleTabChange}
+            />
+          </>
         </PanelBody>
       </Panel>
       <DialogYesNo

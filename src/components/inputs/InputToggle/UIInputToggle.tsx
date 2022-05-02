@@ -3,7 +3,6 @@ import { UiBooleanField } from 'src/data/services/graphql';
 import { Toggle } from '@fluentui/react';
 import FormLabel from 'src/components/labels/FormLabel';
 
-
 type UIInputTextAreaType = {
   id: string;
   uiField?: UiBooleanField;
@@ -12,7 +11,7 @@ type UIInputTextAreaType = {
   renderLabel?: boolean;
   onText?: string;
   offText?: string;
-  role?:  "switch" | "checkbox" | "menuitemcheckbox";
+  role?: 'switch' | 'checkbox' | 'menuitemcheckbox';
 };
 
 const UIInputToggle = ({
@@ -23,31 +22,35 @@ const UIInputToggle = ({
   renderLabel = true,
   onText,
   offText,
-  role
+  role,
 }: UIInputTextAreaType) => {
-
   const onRenderLabel = () => {
     if (renderLabel) {
-      return <FormLabel id={`${id}_lbl`} label={uiField?.label} required={uiField?.required} info={uiField?.info ?? ''} errorMessage={uiField?.errMsg ?? ''} />;
+      return (
+        <FormLabel
+          id={`${id}_lbl`}
+          label={uiField?.label}
+          required={uiField?.required}
+          info={uiField?.info ?? ''}
+          errorMessage={uiField?.errMsg ?? ''}
+        />
+      );
     }
     return null;
   };
 
- 
   return (
     <>
-        {uiField?.label && (
-            onRenderLabel()
-        )}
-        <Toggle
-            id={id}
-            disabled={uiField?.readOnly ?? false}
-            onText={onText}
-            offText={offText}
-            onChange={onChange}
-            defaultChecked={value ?? false}
-            role={role}
-        />
+      {uiField?.label && onRenderLabel()}
+      <Toggle
+        id={id}
+        disabled={uiField?.readOnly ?? false}
+        onText={onText}
+        offText={offText}
+        onChange={onChange}
+        defaultChecked={value ?? false}
+        role={role}
+      />
     </>
   );
 };

@@ -7,25 +7,29 @@ import {
   useUserAccountFormLazyQuery,
   useFindExternalUsersLazyQuery,
   useGrantExternalUserAccessMutation,
-  useCreateExternalUserMutation
+  useCreateExternalUserMutation,
 } from 'src/data/services/graphql';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { defaultForm, updateForm } from './AddExternalUsersFormUtil';
 
-
 export const useAddExternalUsersAccessService = (orgSid: string) => {
+  const [
+    callFindExternalUsers,
+    { data: dataFindExternalUsers, loading: loadingFindExternalUsers, error: errorFindExternalUsers },
+  ] = useFindExternalUsersLazyQuery();
 
-  const [callFindExternalUsers, { data: dataFindExternalUsers, loading: loadingFindExternalUsers, error: errorFindExternalUsers }] =
-  useFindExternalUsersLazyQuery();
-  
-  const [callGrantExternalUserAccess, { data: dataGrantExternalUserAccess, loading: loadingGrantExternalUserAccess, error: errorGrantExternalUserAccess }] =
-  useGrantExternalUserAccessMutation();
-   
-  const [callCreateExternalUser, { data: dataCreateExternalUser, loading: loadingCreateExternalUser, error: errorCreateExternalUser }] =
-  useCreateExternalUserMutation();
+  const [
+    callGrantExternalUserAccess,
+    { data: dataGrantExternalUserAccess, loading: loadingGrantExternalUserAccess, error: errorGrantExternalUserAccess },
+  ] = useGrantExternalUserAccessMutation();
+
+  const [
+    callCreateExternalUser,
+    { data: dataCreateExternalUser, loading: loadingCreateExternalUser, error: errorCreateExternalUser },
+  ] = useCreateExternalUserMutation();
 
   const [userAccountForm, setUserAccountForm] = useState<UserAccountForm>(defaultForm);
-  
+
   const [callUserAccountForm, { data: dataUserAccountForm, loading: userAccountLoading, error: userAccountError }] =
     useUserAccountFormLazyQuery({
       variables: {
@@ -33,7 +37,7 @@ export const useAddExternalUsersAccessService = (orgSid: string) => {
       },
     });
 
-  const [selectedExternalUsers, setSelectedExternalUsers] = useState<any[]>([])
+  const [selectedExternalUsers, setSelectedExternalUsers] = useState<any[]>([]);
 
   useEffect(() => {
     if (orgSid) {
@@ -51,9 +55,9 @@ export const useAddExternalUsersAccessService = (orgSid: string) => {
     }
   }, [dataUserAccountForm]);
 
-  useEffect(()=>{
-    if(dataFindExternalUsers?.findExternalUsers ) setSelectedExternalUsers(dataFindExternalUsers?.findExternalUsers )
-  },[dataFindExternalUsers])
+  useEffect(() => {
+    if (dataFindExternalUsers?.findExternalUsers) setSelectedExternalUsers(dataFindExternalUsers?.findExternalUsers);
+  }, [dataFindExternalUsers]);
 
   const resetForm = () => {
     if (orgSid) {
@@ -65,12 +69,11 @@ export const useAddExternalUsersAccessService = (orgSid: string) => {
     }
   };
 
-  
   const updateAccessPolicyGroups = (sids: string[]) => {
     const updated = updateForm(userAccountForm, undefined, sids);
     setUserAccountForm(updated);
   };
-  
+
   const updateAccountInfo = (updates: UserAccount) => {
     const updated = updateForm(userAccountForm, updates);
     setUserAccountForm(updated);
@@ -84,7 +87,6 @@ export const useAddExternalUsersAccessService = (orgSid: string) => {
   };
 
   const handleGrantUserAccess = async () => {
-
     const accessPolicyGroupSids: string[] =
       userAccountForm.accessPolicyGroups?.value
         ?.filter((opt) => opt != null && opt?.value != null)
@@ -95,11 +97,11 @@ export const useAddExternalUsersAccessService = (orgSid: string) => {
           userAccountSid: userAccountForm.sid ?? '',
           orgSid,
           accessPolicyGroupSids,
-        }
+        },
       },
       errorPolicy: 'all',
     });
- 
+
     if (data?.grantExternalUserAccess) {
       setUserAccountForm(data?.grantExternalUserAccess);
     }
@@ -117,12 +119,11 @@ export const useAddExternalUsersAccessService = (orgSid: string) => {
         errMsg: 'An internal server error has occurred.  Please contact your administrator.',
       };
     }
- 
+
     return data;
   };
 
   const handleCreateExternalUser = async () => {
-
     const accessPolicyGroupSids: string[] =
       userAccountForm.accessPolicyGroups?.value
         ?.filter((opt) => opt != null && opt?.value != null)
@@ -139,11 +140,11 @@ export const useAddExternalUsersAccessService = (orgSid: string) => {
         personInfo: {
           firstNm: userAccountForm.person?.firstNm.value ?? '',
           lastNm: userAccountForm.person?.lastNm.value ?? '',
-        }
+        },
       },
       errorPolicy: 'all',
     });
-  
+
     if (data?.createExternalUser) {
       setUserAccountForm(data?.createExternalUser);
     }
@@ -160,12 +161,11 @@ export const useAddExternalUsersAccessService = (orgSid: string) => {
         errCode: 'INTERNAL_ERROR',
         errMsg: 'An internal server error has occurred.  Please contact your administrator.',
       };
-    } 
- 
+    }
+
     return data;
   };
- 
- 
+
   // * Return the state of the form.
   return {
     callCreateExternalUser: handleCreateExternalUser,
@@ -176,6 +176,6 @@ export const useAddExternalUsersAccessService = (orgSid: string) => {
     selectedExternalUsers,
     resetForm,
     callFindExternalUsers,
-    userAccountForm
+    userAccountForm,
   };
 };

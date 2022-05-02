@@ -456,14 +456,16 @@ const _FtpTestPage = () => {
             if (index === 'timeStamp') {
               line += yyyyMMdda(new Date(array[i][index])).toString();
             } else {
-              line += needsQuote(array[i][index]) ? quoteField(array[i][index]) : (array[i][index]);
+              line += needsQuote(array[i][index]) ? quoteField(array[i][index]) : array[i][index];
             }
           } else if (array[i][index] && array[i][index].length) {
             let attributes = array[i][index];
             maxAttributes = Math.max(maxAttributes, attributes.length);
             for (let j = 0; j < attributes.length; j++) {
               for (var index in attributes[j]) {
-                if (index != '__typename')  line += (needsQuote(attributes[j][index]) ? quoteField(attributes[j][index]) : (attributes[j][index])) + ',';
+                if (index != '__typename')
+                  line +=
+                    (needsQuote(attributes[j][index]) ? quoteField(attributes[j][index]) : attributes[j][index]) + ',';
               }
             }
           }
@@ -480,15 +482,15 @@ const _FtpTestPage = () => {
     return str;
   };
 
-  const quoteField=(field: string)=> {    
-    field = `"${field.replace(/"/g, '""')}"`
-    return field
-  }
-  
-  const needsQuote=(str: string)=>{
-    const DEFAULT_FIELD_DELIMITER = ','
-    return str.includes(DEFAULT_FIELD_DELIMITER) || str.includes('\r') || str.includes('\n') || str.includes('"')
-  }
+  const quoteField = (field: string) => {
+    field = `"${field.replace(/"/g, '""')}"`;
+    return field;
+  };
+
+  const needsQuote = (str: string) => {
+    const DEFAULT_FIELD_DELIMITER = ',';
+    return str.includes(DEFAULT_FIELD_DELIMITER) || str.includes('\r') || str.includes('\n') || str.includes('"');
+  };
 
   const copyProfileSnippet = () => {
     navigator.clipboard.writeText(

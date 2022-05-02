@@ -5,7 +5,7 @@ import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Row, Column, Container } from 'src/components/layouts';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { PageTitle } from 'src/components/typography';
-import { useExternalUsersForOrgLazyQuery, SortDirection, CdxWebCommandType} from 'src/data/services/graphql';
+import { useExternalUsersForOrgLazyQuery, SortDirection, CdxWebCommandType } from 'src/data/services/graphql';
 import { UsersTable } from 'src/pages/Admin/Users/UsersTable';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { StyledColumn } from './ExternalUsersPage.styles';
@@ -14,15 +14,17 @@ import { PageHeader } from 'src/containers/headers/PageHeader';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useTableFilters } from 'src/hooks/useTableFilters';
 import { InputText } from 'src/components/inputs/InputText';
-import AddExternalUserAccessPanel  from './AddExternalUser/AddExternalUsersAccessPanel'
+import AddExternalUserAccessPanel from './AddExternalUser/AddExternalUsersAccessPanel';
 
 const ExternalUsersPage = () => {
   const { orgSid } = useOrgSid();
-  const [ apiCall, { data, loading, error }] = useQueryHandler(useExternalUsersForOrgLazyQuery);
-  const [ isAddExternalUserAccessPanelOpen, setIsAddExternalUserAccessPanelOpen] = useState(false);
+  const [apiCall, { data, loading, error }] = useQueryHandler(useExternalUsersForOrgLazyQuery);
+  const [isAddExternalUserAccessPanelOpen, setIsAddExternalUserAccessPanelOpen] = useState(false);
 
   const tableFilters = useTableFilters('Name, Last Name, Email, etc.');
-  const assignCmd = data?.externalUsersForOrg?.listPageInfo?.pageCommands?.find((cmd) => cmd.commandType === CdxWebCommandType.Assign);
+  const assignCmd = data?.externalUsersForOrg?.listPageInfo?.pageCommands?.find(
+    (cmd) => cmd.commandType === CdxWebCommandType.Assign
+  );
 
   useEffect(() => {
     // Reset the page number when any filtering occurs
@@ -32,25 +34,25 @@ const ExternalUsersPage = () => {
       sort: tableFilters.pagingParams.sort,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ tableFilters.searchText.delayedValue ]);
+  }, [tableFilters.searchText.delayedValue]);
 
   useEffect(() => {
     apiCall({
-      variables: { 
+      variables: {
         orgSid,
         pageableInput: tableFilters.pagingParams,
-        searchText: tableFilters.searchText.delayedValue
-      }
+        searchText: tableFilters.searchText.delayedValue,
+      },
     });
   }, [tableFilters.pagingParams]);
 
-  const handleGrantAccessToExternalUserSuccess = ()=>{
+  const handleGrantAccessToExternalUserSuccess = () => {
     tableFilters.setPagingParams({
       pageNumber: 0,
       pageSize: 100,
       sort: tableFilters.pagingParams.sort,
     });
-  }
+  };
 
   const renderBody = () => {
     if (loading) {
@@ -65,13 +67,17 @@ const ExternalUsersPage = () => {
         <EmptyState title="No external users" description="There aren't any external users in this organization" />
       );
     }
-    return <UsersTable             
-              tableFilters={tableFilters}
-              users={data?.externalUsersForOrg?.nodes} 
-              onClickUser={()=>{console.log("External User Clicked.")}} 
-              searchAllOrgs
-              tooltips={data?.externalUsersForOrg?.toolTips}
-           />;
+    return (
+      <UsersTable
+        tableFilters={tableFilters}
+        users={data?.externalUsersForOrg?.nodes}
+        onClickUser={() => {
+          console.log('External User Clicked.');
+        }}
+        searchAllOrgs
+        tooltips={data?.externalUsersForOrg?.toolTips}
+      />
+    );
   };
 
   const renderAssignExternalUserButton = () => {
@@ -93,7 +99,7 @@ const ExternalUsersPage = () => {
   };
 
   return (
-    <LayoutDashboard id="PageExternalUsers" menuOptionSelected={ROUTE_EXTERNAL_USERS.API_ID}>      
+    <LayoutDashboard id="PageExternalUsers" menuOptionSelected={ROUTE_EXTERNAL_USERS.API_ID}>
       <PageHeader id="__ExternalUsersHeader">
         <Container>
           <Row>
@@ -107,29 +113,31 @@ const ExternalUsersPage = () => {
         </Container>
       </PageHeader>
       <Container>
-          {tableFilters?.searchText && (
-            <Spacing margin={{ bottom: 'normal' }}>
-              <Column lg="6">
-                <InputText
-                  id={`Active_Users_Input-Search`}
-                  autofocus
-                  disabled={false}
-                  {...tableFilters.searchText}
-                  label="Search"
-                />
-              </Column>
-            </Spacing>
-          )}
+        {tableFilters?.searchText && (
+          <Spacing margin={{ bottom: 'normal' }}>
+            <Column lg="6">
+              <InputText
+                id={`Active_Users_Input-Search`}
+                autofocus
+                disabled={false}
+                {...tableFilters.searchText}
+                label="Search"
+              />
+            </Column>
+          </Spacing>
+        )}
         <Row>
           <StyledColumn>{renderBody()}</StyledColumn>
         </Row>
       </Container>
-        <AddExternalUserAccessPanel
-          isOpen={isAddExternalUserAccessPanelOpen}
-          orgSid={orgSid}
-          onDismiss={()=>{setIsAddExternalUserAccessPanelOpen(false)}}
-          onGrantAccessToExternalUser={handleGrantAccessToExternalUserSuccess}
-        />
+      <AddExternalUserAccessPanel
+        isOpen={isAddExternalUserAccessPanelOpen}
+        orgSid={orgSid}
+        onDismiss={() => {
+          setIsAddExternalUserAccessPanelOpen(false);
+        }}
+        onGrantAccessToExternalUser={handleGrantAccessToExternalUserSuccess}
+      />
     </LayoutDashboard>
   );
 };

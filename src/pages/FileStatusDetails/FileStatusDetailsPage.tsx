@@ -160,7 +160,6 @@ const FileStatusDetailsPage = () => {
   const deleteCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Delete);
   const rerunCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.RerunStep);
 
-
   const renderDeliveredFileInfo = (fileInfo?: DeliveredFile | null) => {
     if (fileInfo) {
       return (
@@ -232,29 +231,31 @@ const FileStatusDetailsPage = () => {
             confirmationMsg="Are you sure you want to Continue this Work Packet?"
             command={continueCmd}
             onClick={workPacketCommands.apiCallContinue}
-            callback={()=>{ pollWPStatus.startPolling(POLL_INTERVAL)}}
+            callback={() => {
+              pollWPStatus.startPolling(POLL_INTERVAL);
+            }}
           />
           <WorkPacketCommandButton
             id="__RedoBtn"
             icon="Rerun"
             confirmationMsg="Are you sure you want to Redo this Work Packet?"
-            command={rerunCmd}    
+            command={rerunCmd}
             packetStatus={packet?.packetStatus}
             workPacketCommands={workPacketCommands}
             realId={realId}
-            callback={()=>{ 
-              pollWPStatus.startPolling(POLL_INTERVAL)
+            callback={() => {
+              pollWPStatus.startPolling(POLL_INTERVAL);
             }}
           />
           <WorkPacketCommandButton
             id="__ReprocessBtn"
             icon="Rerun"
             confirmationMsg="Are you sure you want to Reprocess this Work Packet?"
-            command={reprocessCmd}    
-            workPacketCommands={workPacketCommands}      
+            command={reprocessCmd}
+            workPacketCommands={workPacketCommands}
             realId={realId}
-            callback={()=>{ 
-              pollWPStatus.startPolling(POLL_INTERVAL)
+            callback={() => {
+              pollWPStatus.startPolling(POLL_INTERVAL);
             }}
           />
           <WorkPacketCommandButton
@@ -265,25 +266,29 @@ const FileStatusDetailsPage = () => {
             realId={realId}
             command={reprocessRenameCmd}
             onClick={workPacketCommands.apiCallRenameReprocess}
-            callback={()=>{ 
-              pollWPStatus.startPolling(POLL_INTERVAL)
+            callback={() => {
+              pollWPStatus.startPolling(POLL_INTERVAL);
             }}
           />
           <WorkPacketCommandButton
             id="__CancelBtn"
             icon="Cancel"
             confirmationMsg="Are you sure you want to Cancel this Work Packet's processing?"
-            command={cancelCmd}            
+            command={cancelCmd}
             onClick={workPacketCommands.apiCallCancel}
-            callback={()=>{ pollWPStatus.startPolling(POLL_INTERVAL)}}
+            callback={() => {
+              pollWPStatus.startPolling(POLL_INTERVAL);
+            }}
           />
           <WorkPacketCommandButton
             id="__DeleteBtn"
             icon="Delete"
-            confirmationMsg={"Are you sure you want to Delete this Work Packet?"}
+            confirmationMsg={'Are you sure you want to Delete this Work Packet?'}
             command={deleteCmd}
             onClick={workPacketCommands.apiCallDelete}
-            callback={() => { history.push(`${ROUTE_FILE_STATUS.URL}?orgSid=${orgSid}&startDate=${startDate}&endDate=${endDate}`)}}
+            callback={() => {
+              history.push(`${ROUTE_FILE_STATUS.URL}?orgSid=${orgSid}&startDate=${startDate}&endDate=${endDate}`);
+            }}
           />
         </Stack>
         {showDetails && (
