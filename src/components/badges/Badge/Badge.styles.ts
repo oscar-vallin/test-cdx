@@ -22,7 +22,7 @@ export const StyledSpan = styled.span<StyledSpanProps>`
   font-size: ${({ theme, pill }) => (pill ? theme.fontSizes.small : '0.75rem')};
   font-weight: ${({ theme, pill }) => (pill ? theme.fontWeights.normal : theme.fontWeights.bold)};
   justify-content: center;
-  padding: 5px;
+  padding: 5px 7px;
   white-space: nowrap;
 `;
 
