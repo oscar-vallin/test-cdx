@@ -33,7 +33,7 @@ export const NavPanel = ({ id, label, elements, expanded, onExpand, onCollapse }
         <ActionButton
           id={id}
           iconProps={{
-            iconName: isOpen ? 'ChevronUp' : 'ChevronDown',
+            iconName: isOpen ? 'ChevronDown' : 'ChevronRight',
             style: {
               fontSize: theme.fontSizes.small,
               color: theme.colors.black,
