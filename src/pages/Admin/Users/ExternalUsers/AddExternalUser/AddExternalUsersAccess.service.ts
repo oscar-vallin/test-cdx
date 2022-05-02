@@ -10,7 +10,7 @@ import {
   useCreateExternalUserMutation
 } from 'src/data/services/graphql';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
-import { defaultForm, updateForm } from './AddExternalUsersFormUtil';
+import { defaultForm, updateForm } from '../ExternalUsersFormUtil';
 
 
 export const useAddExternalUsersAccessService = (orgSid: string) => {

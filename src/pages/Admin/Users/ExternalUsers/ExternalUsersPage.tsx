@@ -14,12 +14,15 @@ import { PageHeader } from 'src/containers/headers/PageHeader';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useTableFilters } from 'src/hooks/useTableFilters';
 import { InputText } from 'src/components/inputs/InputText';
-import AddExternalUserAccessPanel  from './AddExternalUser/AddExternalUsersAccessPanel'
+import AddExternalUserAccessPanel  from './AddExternalUser/AddExternalUsersAccessPanel';
+import { useUpdateExternalUsersService } from './UpdateExternalUser/UpdateExternalUsersService.service';
+import UpdateExternalUsersPanel from './UpdateExternalUser/UpdateExternalUsersPanel';
 
 const ExternalUsersPage = () => {
   const { orgSid } = useOrgSid();
   const [ apiCall, { data, loading, error }] = useQueryHandler(useExternalUsersForOrgLazyQuery);
   const [ isAddExternalUserAccessPanelOpen, setIsAddExternalUserAccessPanelOpen] = useState(false);
+  const useUpdateExternalUsers = useUpdateExternalUsersService(orgSid);
 
   const tableFilters = useTableFilters('Name, Last Name, Email, etc.');
   const assignCmd = data?.externalUsersForOrg?.listPageInfo?.pageCommands?.find((cmd) => cmd.commandType === CdxWebCommandType.Assign);
@@ -68,7 +71,7 @@ const ExternalUsersPage = () => {
     return <UsersTable             
               tableFilters={tableFilters}
               users={data?.externalUsersForOrg?.nodes} 
-              onClickUser={()=>{console.log("External User Clicked.")}} 
+              onClickUser={useUpdateExternalUsers.showPanel}
               searchAllOrgs
               tooltips={data?.externalUsersForOrg?.toolTips}
            />;
@@ -129,6 +132,12 @@ const ExternalUsersPage = () => {
           orgSid={orgSid}
           onDismiss={()=>{setIsAddExternalUserAccessPanelOpen(false)}}
           onGrantAccessToExternalUser={handleGrantAccessToExternalUserSuccess}
+        />
+        <UpdateExternalUsersPanel
+          useUpdateExternalUsers={useUpdateExternalUsers}
+          onUpdateUser={() => {
+            handleGrantAccessToExternalUserSuccess()
+          }}
         />
     </LayoutDashboard>
   );
