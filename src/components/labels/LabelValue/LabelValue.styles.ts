@@ -8,5 +8,5 @@ export const InlineLabel = styled.span`
   font-weight: ${({ theme }) => theme.fontWeights.bold};
   width: 'auto';
   line-height: normal;
-  padding-right: ${({ theme }) => theme.fontSizes.small};
+  padding-right: 5px;
 `;
