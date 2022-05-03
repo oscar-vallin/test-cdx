@@ -7,19 +7,27 @@ export const HighlightBubble = styled.div<StyledContainerProps>`
   justify-content: center;
   align-items: center;
   white-space: nowrap;
+  background: ${({ theme, type }) => {
+    if (type === 'ERROR' || type === 0) return `${theme.colors.custom.errorAlt}`;
+
+    if (type === 'WARNING' || type === 1) return `${theme.colors.custom.warningAlt}`;
+
+    return `${theme.colors.custom.infoAlt}`;
+  }};
+
   color: ${({ theme, type }) => {
-    if (type === 0) return theme.colors.error;
+    if (type === 'ERROR' || type === 0) return theme.colors.custom.error;
 
-    if (type === 1) return theme.colors.warning;
+    if (type === 'WARNING' || type === 1) return theme.colors.custom.warning;
 
-    return theme.colors.warning;
+    return theme.colors.custom.info;
   }};
   border-color: ${({ theme, type }) => {
-    if (type === 0) return theme.colors.error;
+    if (type === 'ERROR'|| type === 0) return theme.colors.custom.error;
 
-    if (type === 1) return theme.colors.warning;
+    if (type === 'WARNING'|| type === 1) return theme.colors.custom.warning;
 
-    return theme.colors.info;
+    return theme.colors.custom.info;
   }};
 
   margin-left: 5px;
@@ -28,7 +36,7 @@ export const HighlightBubble = styled.div<StyledContainerProps>`
   padding: 0px 2px;
   border-radius: 3px;
   font-size: 0.625rem;
-  min-width: 12px;
+  min-width: 16px;
 `;
 
 export const StyledLink = styled(Link)`

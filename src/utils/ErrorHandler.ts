@@ -14,8 +14,7 @@ export const ErrorHandler = () => {
     if (error) {
       if (error?.networkError?.statusCode === 403) {
         Toast.error({ text: 'Your session has expired please login again.' });
-
-        setTimeout(performUserLogout, 3000);
+        performUserLogout()
       } else {
         const { message } = error;
         const { extensions = null } = error?.graphQLErrors?.shift() || {};
@@ -23,8 +22,7 @@ export const ErrorHandler = () => {
         if (extensions) {
           if (extensions.errorSubType === 'NEED_AUTH') {
             Toast.error({ text: message });
-
-            setTimeout(performUserLogout, 3000);
+            performUserLogout()
           } else if (extensions.errorSubType === 'INSUFFICIENT_PRIVILEGES') {
             history.push(ROUTES.ROUTE_UNAUTHORIZED.URL);
           } else {

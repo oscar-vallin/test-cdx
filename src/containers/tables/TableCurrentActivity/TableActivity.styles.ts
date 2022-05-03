@@ -14,7 +14,7 @@ export const TableContainer = styled.div`
   ::-webkit-scrollbar {
     display: none;
   }
-  width: 100%;
+  width: 96%;
 `;
 
 export const StyledBox = styled(LayoutBox)`

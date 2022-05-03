@@ -108,6 +108,12 @@ export const STEP_STATUS = [
     archiveOnly: true,
     colors: [STEP_COLOR_GREEN, STEP_COLOR_GREEN, STEP_COLOR_BLUE],
   },
+  {
+    step: STEP_TRANSFORM,
+    stepStatus: STATUSES[7],
+    archiveOnly: true,
+    colors: [STEP_COLOR_YELLOW, STEP_COLOR_NONE, STEP_COLOR_NONE],
+  },
 ];
 
 export const getProgressItemByString = (argStringValues) => {
