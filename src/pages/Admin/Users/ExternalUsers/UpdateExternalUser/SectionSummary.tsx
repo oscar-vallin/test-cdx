@@ -1,11 +1,10 @@
 import { ReactElement, useEffect, useState } from 'react';
-import FormLabel, { UIFormLabel } from 'src/components/labels/FormLabel';
+import FormLabel from 'src/components/labels/FormLabel';
 import { Column } from 'src/components/layouts';
 
 import { Maybe, UiOption, UserAccountForm } from 'src/data/services/graphql';
 import { CheckboxItem } from 'src/data/Types';
 import { UIInputTextReadOnly } from 'src/components/inputs/InputText/InputText';
-import { FontIcon } from '@fluentui/react';
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
 import { FieldValue } from 'src/components/inputs/InputText/InputText.styles';
 import { WizardBody } from 'src/layouts/Panels/Panels.styles';
