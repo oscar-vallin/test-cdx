@@ -14,7 +14,7 @@ export const ErrorHandler = () => {
     if (error) {
       if (error?.networkError?.statusCode === 403) {
         Toast.error({ text: 'Your session has expired please login again.' });
-        
+
         setTimeout(performUserLogout, 3000);
       } else {
         const { message } = error;

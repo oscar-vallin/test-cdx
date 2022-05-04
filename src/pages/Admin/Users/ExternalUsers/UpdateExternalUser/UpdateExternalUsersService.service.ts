@@ -3,14 +3,13 @@ import {
   CdxWebCommandType,
   GqOperationResponse,
   GrantExternalUserAccessMutation,
-  UserAccount,
   UserAccountForm,
   useExternalUserForOrgLazyQuery,
   useGrantExternalUserAccessMutation,
   WebCommand,
 } from 'src/data/services/graphql';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
-import { defaultForm, updateForm } from '../ExternalUsersFormUtil';
+import { defaultForm } from '../ExternalUsersFormUtil';
 
 export type UseUpdateExternalUserPanel = {
   isPanelOpen: boolean;
@@ -38,12 +37,15 @@ export const useUpdateExternalUsersService = (orgSid: string): UseUpdateExternal
 
   const handleError = ErrorHandler();
 
+  const [
+    callGrantExternalUserAccess,
+    { data: dataGrantExternalUserAccess, loading: loadingGrantExternalUserAccess, error: errorGrantExternalUserAccess },
+  ] = useGrantExternalUserAccessMutation();
 
-  const [callGrantExternalUserAccess, { data: dataGrantExternalUserAccess, loading: loadingGrantExternalUserAccess, error: errorGrantExternalUserAccess }] =
-    useGrantExternalUserAccessMutation();
-
-  const [callExternalUserForOrg, { data: dataExternalUserForOrg, loading: loadingExternalUserForOrg, error: errorExternalUserForOrg }] = 
-    useExternalUserForOrgLazyQuery();
+  const [
+    callExternalUserForOrg,
+    { data: dataExternalUserForOrg, loading: loadingExternalUserForOrg, error: errorExternalUserForOrg },
+  ] = useExternalUserForOrgLazyQuery();
 
   const showPanel = (userAccountSid: string) => {
     setUserSid(userAccountSid);
@@ -67,7 +69,6 @@ export const useUpdateExternalUsersService = (orgSid: string): UseUpdateExternal
     handleError(errorExternalUserForOrg);
   }, [errorExternalUserForOrg]);
 
-
   const internalServerError = {
     sid: null,
     organization: {
@@ -80,7 +81,7 @@ export const useUpdateExternalUsersService = (orgSid: string): UseUpdateExternal
     errMsg: 'An internal server error has occurred.  Please contact your administrator.',
   };
 
- /*  const handleUpdateUserGroups = async (sids: string[]) => {
+  /*  const handleUpdateUserGroups = async (sids: string[]) => {
     updateForm(userAccountForm, undefined, sids);
     const { data, errors } = await callAssignGroups({
       variables: {
@@ -103,9 +104,7 @@ export const useUpdateExternalUsersService = (orgSid: string): UseUpdateExternal
   };
  */
 
-  
   const handleGrantUserAccess = async () => {
-
     const accessPolicyGroupSids: string[] =
       userAccountForm.accessPolicyGroups?.value
         ?.filter((opt) => opt != null && opt?.value != null)
@@ -116,11 +115,11 @@ export const useUpdateExternalUsersService = (orgSid: string): UseUpdateExternal
           userAccountSid: userAccountForm.sid ?? '',
           orgSid,
           accessPolicyGroupSids,
-        }
+        },
       },
       errorPolicy: 'all',
     });
- 
+
     if (data?.grantExternalUserAccess) {
       setUserAccountForm(data?.grantExternalUserAccess);
     }
@@ -138,7 +137,7 @@ export const useUpdateExternalUsersService = (orgSid: string): UseUpdateExternal
         errMsg: 'An internal server error has occurred.  Please contact your administrator.',
       };
     }
- 
+
     return data;
   };
 

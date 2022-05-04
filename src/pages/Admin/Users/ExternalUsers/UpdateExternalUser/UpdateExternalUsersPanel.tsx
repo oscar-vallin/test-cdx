@@ -1,15 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { ReactElement, useEffect, useState } from 'react';
-import { MessageBar, MessageBarType, Panel, PanelType, Stack, ITag } from '@fluentui/react';
+import React, { ReactElement, useState } from 'react';
+import { MessageBar, MessageBarType, Panel, PanelType, Stack } from '@fluentui/react';
 
 import { Tabs } from 'src/components/tabs/Tabs';
 import { PanelBody, PanelHeader, PanelTitle } from 'src/layouts/Panels/Panels.styles';
 
 import { useNotification } from 'src/hooks/useNotification';
-import { Maybe, UserAccount, UserAccountForm, GqOperationResponse } from 'src/data/services/graphql';
+import { UserAccountForm } from 'src/data/services/graphql';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
 import { Column } from 'src/components/layouts';
-import { UseUpdateExternalUserPanel,  } from './UpdateExternalUsersService.service';
+import { UseUpdateExternalUserPanel } from './UpdateExternalUsersService.service';
 import SectionAccessManagement from './SectionAccessManagement';
 import SectionSummary from './SectionSummary';
 
@@ -23,18 +23,22 @@ type UpdateExternalUsersPanelProps = {
   isOpen?: boolean;
   onDismiss?: any | null;
   onUpdateUser?: (form?: UserAccountForm) => void;
-  useUpdateExternalUsers: UseUpdateExternalUserPanel
+  useUpdateExternalUsers: UseUpdateExternalUserPanel;
 } & typeof defaultProps;
 
 const tabs = ['#account', '#access'];
 
 const enum Tab {
-    Account = 0,
-    Access = 1,
-  }
+  Account = 0,
+  Access = 1,
+}
 
-const UpdateExternalUsersPanel = ({ isOpen, onDismiss, useUpdateExternalUsers, onUpdateUser }: UpdateExternalUsersPanelProps): ReactElement => {
-
+const UpdateExternalUsersPanel = ({
+  isOpen,
+  onDismiss,
+  useUpdateExternalUsers,
+  onUpdateUser,
+}: UpdateExternalUsersPanelProps): ReactElement => {
   const [step, setStep] = useState(Tab.Account);
   const [showDialog, setShowDialog] = useState(false);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
@@ -57,16 +61,16 @@ const UpdateExternalUsersPanel = ({ isOpen, onDismiss, useUpdateExternalUsers, o
 
   const doClosePanel = () => {
     setErrorMsg(undefined);
-  
+
     // Set it back to the first tab
     setStep(Tab.Account);
     setShowDialog(false);
     setUnsavedChanges(false);
- 
+
     useUpdateExternalUsers.resetForm();
     useUpdateExternalUsers.closePanel();
     onDismiss();
-  }; 
+  };
 
   const userName = () => {
     const { person } = useUpdateExternalUsers.userAccountForm;
@@ -90,9 +94,9 @@ const UpdateExternalUsersPanel = ({ isOpen, onDismiss, useUpdateExternalUsers, o
     </PanelHeader>
   );
 
-  const handleSubmit = () =>{
-    return
-  }
+  const handleSubmit = () => {
+    return;
+  };
 
   return (
     <>
@@ -116,39 +120,38 @@ const UpdateExternalUsersPanel = ({ isOpen, onDismiss, useUpdateExternalUsers, o
               {errorMsg}
             </MessageBar>
           )}
-            <>
-              <Tabs
-                items={[
+          <>
+            <Tabs
+              items={[
                 {
-                    title: 'Summary',
-                    content: (
-                        <SectionSummary
-                            form={useUpdateExternalUsers.userAccountForm}                           
-                            onSubmit={handleSubmit}
-                            isProcessing={isProcessing}
-                        />
-                    ),
-                    hash: '#summary',
-                    },
-                  {
-                    title: 'Access Management',
-                    content: (
-                      <SectionAccessManagement
-                        form={useUpdateExternalUsers.userAccountForm}
-                        onSubmit={handleSubmit}
-                        saveOptions={(sids) => {
-                          setUnsavedChanges(true);
-                        }}
-                      />
-                    ),
-                    hash: '#access',
-                  }
-                ]}
-                selectedKey={step < 0 ? '0' : step.toString()}
-                onClickTab={handleTabChange}
-              />
-            </>
-          
+                  title: 'Summary',
+                  content: (
+                    <SectionSummary
+                      form={useUpdateExternalUsers.userAccountForm}
+                      onSubmit={handleSubmit}
+                      isProcessing={isProcessing}
+                    />
+                  ),
+                  hash: '#summary',
+                },
+                {
+                  title: 'Access Management',
+                  content: (
+                    <SectionAccessManagement
+                      form={useUpdateExternalUsers.userAccountForm}
+                      onSubmit={handleSubmit}
+                      saveOptions={(sids) => {
+                        setUnsavedChanges(true);
+                      }}
+                    />
+                  ),
+                  hash: '#access',
+                },
+              ]}
+              selectedKey={step < 0 ? '0' : step.toString()}
+              onClickTab={handleTabChange}
+            />
+          </>
         </PanelBody>
       </Panel>
       <DialogYesNo
