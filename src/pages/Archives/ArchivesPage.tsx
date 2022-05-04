@@ -14,9 +14,12 @@ import {
   WorkPacketStatus,
 } from 'src/data/services/graphql';
 import { useTableFilters } from 'src/hooks/useTableFilters';
+import { useFileStatusDetailsPanel } from 'src/pages/FileStatusDetails/useFileStatusDetailsPanel'
+import { FileStatusDetailsPage } from '../FileStatusDetails';
 
 const _ArchivePage = () => {
   const [tableMeta, setTableMeta] = useState({ count: 0, loading: true });
+  const fileStatusDetailsPanel = useFileStatusDetailsPanel();
   const tableFilters = useTableFilters('Extract Name, Status, Vendor, etc.', [
     {
       property: 'timestamp',
@@ -58,6 +61,7 @@ const _ArchivePage = () => {
       {/* <TableArchive onItemsListChange={setTableMeta} /> */}
       <WorkPacketTable
         id="TableArchive"
+        useFileStatusDetailsPanel={fileStatusDetailsPanel}
         cols={[
           WorkPacketColumn.TIMESTAMP,
           WorkPacketColumn.VENDOR,
@@ -74,6 +78,9 @@ const _ArchivePage = () => {
           setTableMeta({ count: total, loading });
         }}
       />
+      <FileStatusDetailsPage
+        useFileStatusDetailsPanel={fileStatusDetailsPanel}
+      ></FileStatusDetailsPage>
     </LayoutDashboard>
   );
 };

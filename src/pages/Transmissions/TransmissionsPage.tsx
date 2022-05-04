@@ -11,9 +11,12 @@ import { NullHandling, SortDirection, useWpTransmissionsLazyQuery, WpTransmissio
 import { tableFiltersToQueryParams, useTableFilters } from 'src/hooks/useTableFilters';
 import { DownloadLink } from 'src/containers/tables/WorkPacketTable.styles';
 import { useOrgSid } from 'src/hooks/useOrgSid';
+import { useFileStatusDetailsPanel } from 'src/pages/FileStatusDetails/useFileStatusDetailsPanel'
+import { FileStatusDetailsPage } from '../FileStatusDetails';
 
 const _TransmissionsPage = () => {
   const [tableMeta, setTableMeta] = useState({ count: 0, loading: true });
+  const fileStatusDetailsPanel = useFileStatusDetailsPanel();
   const { orgSid } = useOrgSid();
   const tableFilters = useTableFilters('Extract Name, Status, Vendor, etc.', [
     {
@@ -87,6 +90,7 @@ const _TransmissionsPage = () => {
 
       <WorkPacketTable
         id="TableTransmissions"
+        useFileStatusDetailsPanel={fileStatusDetailsPanel}
         cols={[
           WorkPacketColumn.DATETIME,
           WorkPacketColumn.PLAN_SPONSOR,
@@ -109,6 +113,9 @@ const _TransmissionsPage = () => {
           setTableMeta({ count: total, loading });
         }}
       />
+      <FileStatusDetailsPage
+        useFileStatusDetailsPanel={fileStatusDetailsPanel}
+      ></FileStatusDetailsPage>
     </LayoutDashboard>
   );
 };

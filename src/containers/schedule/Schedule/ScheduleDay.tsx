@@ -16,11 +16,13 @@ import {
   SWeekHourContainer,
   DayRow,
 } from './Schedule.styles';
+import { UseFileStatusDetailsPanel } from 'src/pages/FileStatusDetails/useFileStatusDetailsPanel'
 
 type ScheduleDayType = {
   currentDate: Date;
   selectedDate: Date;
   items: ScheduleOccurrence[];
+  useFileStatusDetailsPanel?: UseFileStatusDetailsPanel;
 };
 
 type RunOccurrence = {
@@ -33,7 +35,7 @@ type RunOccurrence = {
   canViewDetails: boolean;
 };
 
-export const ScheduleDay = ({ currentDate, selectedDate, items }: ScheduleDayType) => {
+export const ScheduleDay = ({ currentDate, selectedDate, items, useFileStatusDetailsPanel }: ScheduleDayType) => {
   const currentSelectedDate = selectedDate ?? currentDate;
 
   const rows: ReactElement[] = [];
@@ -96,9 +98,10 @@ export const ScheduleDay = ({ currentDate, selectedDate, items }: ScheduleDayTyp
 
   const openDetails = (runOccurrence: RunOccurrence) => {
     if (runOccurrence.canViewDetails) {
-      history.push(
+      useFileStatusDetailsPanel?.showPanel(runOccurrence.workOrderId ?? '', runOccurrence.orgSid ?? '', '');
+     /*  history.push(
         `/file-status/${runOccurrence.workOrderId}?orgSid=${orgSid}&fsOrgSid=${runOccurrence.orgSid}&startDate${startDate}=&endDate=${endDate}`
-      );
+      ); */
     }
   };
 
