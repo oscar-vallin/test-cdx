@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import {
   GqOperationResponse,
-  useCreateUserMutation,
   UserAccount,
   UserAccountForm,
   useUserAccountFormLazyQuery,
@@ -9,7 +8,6 @@ import {
   useGrantExternalUserAccessMutation,
   useCreateExternalUserMutation,
 } from 'src/data/services/graphql';
-import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { defaultForm, updateForm } from '../ExternalUsersFormUtil';
 
 export const useAddExternalUsersAccessService = (orgSid: string) => {

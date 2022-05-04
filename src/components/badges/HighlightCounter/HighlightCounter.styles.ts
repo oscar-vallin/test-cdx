@@ -23,9 +23,9 @@ export const HighlightBubble = styled.div<StyledContainerProps>`
     return theme.colors.custom.info;
   }};
   border-color: ${({ theme, type }) => {
-    if (type === 'ERROR'|| type === 0) return theme.colors.custom.error;
+    if (type === 'ERROR' || type === 0) return theme.colors.custom.error;
 
-    if (type === 'WARNING'|| type === 1) return theme.colors.custom.warning;
+    if (type === 'WARNING' || type === 1) return theme.colors.custom.warning;
 
     return theme.colors.custom.info;
   }};

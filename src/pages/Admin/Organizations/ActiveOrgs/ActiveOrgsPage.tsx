@@ -26,7 +26,7 @@ import {
   SortDirection,
   useDirectOrganizationsLazyQuery,
   WebCommand,
-  OrgType
+  OrgType,
 } from 'src/data/services/graphql';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
@@ -81,11 +81,11 @@ const ActiveOrgsPage = () => {
   const changeActiveOrg = (org?: Organization) => {
     ActiveDomainStore.setCurrentOrg({
       orgSid: org?.sid,
-      destination: org?.orgType ? 
-        [OrgType.IntegrationSponsor, OrgType.IntegrationAdminCombined].includes(org?.orgType) ? 
-        'FILE_STATUS' : 
-        'ORG_ACTIVITY' :
-          'ORG_ACTIVITY'
+      destination: org?.orgType
+        ? [OrgType.IntegrationSponsor, OrgType.IntegrationAdminCombined].includes(org?.orgType)
+          ? 'FILE_STATUS'
+          : 'ORG_ACTIVITY'
+        : 'ORG_ACTIVITY',
     });
   };
 

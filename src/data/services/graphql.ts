@@ -129,6 +129,20 @@ export enum ActiveEnum {
   All = 'ALL'
 }
 
+export enum AlertType {
+  All = 'ALL',
+  AllFailures = 'ALL_FAILURES',
+  AccountStructureIssue = 'ACCOUNT_STRUCTURE_ISSUE',
+  CodeListIssue = 'CODE_LIST_ISSUE',
+  CompanionReport = 'COMPANION_REPORT',
+  DailySummaryReport = 'DAILY_SUMMARY_REPORT',
+  QualityCheckFailure = 'QUALITY_CHECK_FAILURE',
+  Success = 'SUCCESS',
+  SystemFailure = 'SYSTEM_FAILURE',
+  TechMigrationFailure = 'TECH_MIGRATION_FAILURE',
+  UserReportableFailure = 'USER_REPORTABLE_FAILURE'
+}
+
 export type ArchiveFileType = {
   __typename?: 'ArchiveFileType';
   value: Scalars['String'];
@@ -523,6 +537,19 @@ export type DeliveredKcurl = {
   url: Scalars['String'];
 };
 
+/** Connects two Xchange components in a diagram together with a line and an arrow */
+export type DiagramConnector = {
+  __typename?: 'DiagramConnector';
+  fromKey: Scalars['String'];
+  toKey: Scalars['String'];
+};
+
+export type DiagramCoordinates = {
+  __typename?: 'DiagramCoordinates';
+  x: Scalars['Int'];
+  y: Scalars['Int'];
+};
+
 export type DomainNavInput = {
   orgSid: Scalars['ID'];
   ownerId?: Maybe<Scalars['ID']>;
@@ -542,7 +569,8 @@ export enum Environment {
   K2U = 'K2U',
   Test = 'TEST',
   Uat = 'UAT',
-  Prod = 'PROD'
+  Prod = 'PROD',
+  All = 'ALL'
 }
 
 export enum ErrorSeverity {
@@ -737,6 +765,10 @@ export type Mutation = {
   workPacketReprocess?: Maybe<ReprocessResponse>;
   workPacketRenameAndReprocess?: Maybe<ReprocessResponse>;
   workPacketResend?: Maybe<GenericResponse>;
+  /** Convert an Xchange profile from the 1.0 XML File version to being managed in the CDX Dashboard */
+  convertXchangeProfile?: Maybe<XchangeProfile>;
+  updateXchangeProfileComment?: Maybe<GenericResponse>;
+  publishXchangeProfile?: Maybe<GenericResponse>;
 };
 
 
@@ -989,6 +1021,22 @@ export type MutationWorkPacketResendArgs = {
   workOrderId: Scalars['String'];
 };
 
+
+export type MutationConvertXchangeProfileArgs = {
+  orgSid: Scalars['ID'];
+};
+
+
+export type MutationUpdateXchangeProfileCommentArgs = {
+  orgSid: Scalars['ID'];
+  comment: Scalars['String'];
+};
+
+
+export type MutationPublishXchangeProfileArgs = {
+  orgSid: Scalars['ID'];
+};
+
 export type Nvp = NvpStr | NvpId;
 
 export type NvpId = {
@@ -1049,7 +1097,7 @@ export enum OrgType {
 
 export type OrgWhitelistForm = {
   __typename?: 'OrgWhitelistForm';
-  pattern?: Maybe<UiStringField>;
+  pattern: UiStringField;
   errCode?: Maybe<Scalars['String']>;
   errMsg?: Maybe<Scalars['String']>;
   errSeverity?: Maybe<ErrorSeverity>;
@@ -1437,6 +1485,11 @@ export type Query = {
   passwordValidation?: Maybe<PasswordValidation>;
   xpsftpTest?: Maybe<XpsftpTestPage>;
   reprocessDialog?: Maybe<ReprocessDialog>;
+  xchangeProfile?: Maybe<XchangeProfile>;
+  xchangeDetails?: Maybe<XchangeConfigForm>;
+  previewConvertXchangeProfile?: Maybe<XchangeProfileConvertPreview>;
+  xchangeStepForm?: Maybe<XchangeStepForm>;
+  xchangeFileTransmissionForm?: Maybe<XchangeFileTransmissionForm>;
 };
 
 
@@ -1779,6 +1832,34 @@ export type QueryReprocessDialogArgs = {
   workOrderId: Scalars['String'];
 };
 
+
+export type QueryXchangeProfileArgs = {
+  orgSid: Scalars['ID'];
+};
+
+
+export type QueryXchangeDetailsArgs = {
+  orgSid: Scalars['ID'];
+  coreFilename: Scalars['String'];
+};
+
+
+export type QueryPreviewConvertXchangeProfileArgs = {
+  orgSid: Scalars['ID'];
+};
+
+
+export type QueryXchangeStepFormArgs = {
+  xchangeFileProcessSid: Scalars['ID'];
+  sid?: Maybe<Scalars['ID']>;
+};
+
+
+export type QueryXchangeFileTransmissionFormArgs = {
+  xchangeFileProcessSid: Scalars['ID'];
+  sid?: Maybe<Scalars['ID']>;
+};
+
 export type RecordCount = {
   __typename?: 'RecordCount';
   name: Scalars['String'];
@@ -2065,6 +2146,13 @@ export type TokenUser = {
   session?: Maybe<UserSession>;
 };
 
+export enum TransmissionProtocol {
+  Sftp = 'SFTP',
+  Ftps = 'FTPS',
+  Ftp = 'FTP',
+  Archive = 'ARCHIVE'
+}
+
 export type UiBooleanField = UiField & {
   __typename?: 'UIBooleanField';
   value?: Maybe<Scalars['Boolean']>;
@@ -2073,6 +2161,8 @@ export type UiBooleanField = UiField & {
   info?: Maybe<Scalars['String']>;
   required: Scalars['Boolean'];
   visible: Scalars['Boolean'];
+  inheritedFrom?: Maybe<Scalars['String']>;
+  inheritedBy?: Maybe<Array<Maybe<Scalars['String']>>>;
   errCode?: Maybe<Scalars['String']>;
   errMsg?: Maybe<Scalars['String']>;
   errSeverity?: Maybe<ErrorSeverity>;
@@ -2086,6 +2176,8 @@ export type UiDateField = UiField & {
   info?: Maybe<Scalars['String']>;
   required: Scalars['Boolean'];
   visible: Scalars['Boolean'];
+  inheritedFrom?: Maybe<Scalars['String']>;
+  inheritedBy?: Maybe<Array<Maybe<Scalars['String']>>>;
   errCode?: Maybe<Scalars['String']>;
   errMsg?: Maybe<Scalars['String']>;
   errSeverity?: Maybe<ErrorSeverity>;
@@ -2097,6 +2189,8 @@ export type UiField = {
   info?: Maybe<Scalars['String']>;
   required: Scalars['Boolean'];
   visible: Scalars['Boolean'];
+  inheritedFrom?: Maybe<Scalars['String']>;
+  inheritedBy?: Maybe<Array<Maybe<Scalars['String']>>>;
   errCode?: Maybe<Scalars['String']>;
   errMsg?: Maybe<Scalars['String']>;
   errSeverity?: Maybe<ErrorSeverity>;
@@ -2110,6 +2204,8 @@ export type UiIntField = UiField & {
   info?: Maybe<Scalars['String']>;
   required: Scalars['Boolean'];
   visible: Scalars['Boolean'];
+  inheritedFrom?: Maybe<Scalars['String']>;
+  inheritedBy?: Maybe<Array<Maybe<Scalars['String']>>>;
   min?: Maybe<Scalars['Int']>;
   max?: Maybe<Scalars['Int']>;
   errCode?: Maybe<Scalars['String']>;
@@ -2125,6 +2221,8 @@ export type UiLongField = UiField & {
   info?: Maybe<Scalars['String']>;
   required: Scalars['Boolean'];
   visible: Scalars['Boolean'];
+  inheritedFrom?: Maybe<Scalars['String']>;
+  inheritedBy?: Maybe<Array<Maybe<Scalars['String']>>>;
   min?: Maybe<Scalars['Int']>;
   max?: Maybe<Scalars['Int']>;
   errCode?: Maybe<Scalars['String']>;
@@ -2155,6 +2253,8 @@ export type UiReadOnlyField = UiField & {
   info?: Maybe<Scalars['String']>;
   required: Scalars['Boolean'];
   visible: Scalars['Boolean'];
+  inheritedFrom?: Maybe<Scalars['String']>;
+  inheritedBy?: Maybe<Array<Maybe<Scalars['String']>>>;
   errCode?: Maybe<Scalars['String']>;
   errMsg?: Maybe<Scalars['String']>;
   errSeverity?: Maybe<ErrorSeverity>;
@@ -2168,6 +2268,8 @@ export type UiSelectManyField = UiField & {
   info?: Maybe<Scalars['String']>;
   required: Scalars['Boolean'];
   visible: Scalars['Boolean'];
+  inheritedFrom?: Maybe<Scalars['String']>;
+  inheritedBy?: Maybe<Array<Maybe<Scalars['String']>>>;
   /** Name of the list of options the user can choose from to populate this value */
   options?: Maybe<Scalars['String']>;
   /** Query name to invoke to search for assignable values */
@@ -2185,6 +2287,8 @@ export type UiSelectOneField = UiField & {
   info?: Maybe<Scalars['String']>;
   required: Scalars['Boolean'];
   visible: Scalars['Boolean'];
+  inheritedFrom?: Maybe<Scalars['String']>;
+  inheritedBy?: Maybe<Array<Maybe<Scalars['String']>>>;
   /** Name of the list of options the user can choose from to populate this value */
   options?: Maybe<Scalars['String']>;
   /** Query name to invoke to search for assignable values */
@@ -2202,6 +2306,8 @@ export type UiStringField = UiField & {
   info?: Maybe<Scalars['String']>;
   required: Scalars['Boolean'];
   visible: Scalars['Boolean'];
+  inheritedFrom?: Maybe<Scalars['String']>;
+  inheritedBy?: Maybe<Array<Maybe<Scalars['String']>>>;
   min: Scalars['Int'];
   max: Scalars['Int'];
   errCode?: Maybe<Scalars['String']>;
@@ -2689,6 +2795,7 @@ export type WorkStepStatus = {
   recordCounts?: Maybe<RecordCounts>;
   stepFile?: Maybe<Array<ArchiveFileType>>;
   nvp?: Maybe<Array<NvpStr>>;
+  commands?: Maybe<Array<WorkPacketCommand>>;
 };
 
 export type XpsftpForm = {
@@ -2724,6 +2831,206 @@ export type XsftpInput = {
   stepWise?: Maybe<Scalars['Boolean']>;
   sshKeyPath?: Maybe<Scalars['String']>;
   sshKeyPassword?: Maybe<Scalars['String']>;
+};
+
+export type XchangeAlert = {
+  __typename?: 'XchangeAlert';
+  filenameQualifier?: Maybe<Scalars['String']>;
+  alertTypes?: Maybe<Array<AlertType>>;
+  subscribers?: Maybe<Array<XchangeAlertSubscriber>>;
+  commands?: Maybe<Array<WebCommand>>;
+};
+
+export type XchangeAlertForm = {
+  __typename?: 'XchangeAlertForm';
+  filenameQualifier: UiStringField;
+  alertTypes: UiSelectManyField;
+  subscribers?: Maybe<Array<XchangeAlertSubscriber>>;
+  options?: Maybe<Array<UiOptions>>;
+  commands?: Maybe<Array<WebCommand>>;
+  response: GqOperationResponse;
+  errCode?: Maybe<Scalars['String']>;
+  errMsg?: Maybe<Scalars['String']>;
+  errSeverity?: Maybe<ErrorSeverity>;
+};
+
+export type XchangeAlertSubscriber = {
+  __typename?: 'XchangeAlertSubscriber';
+  sid?: Maybe<Scalars['ID']>;
+  email: Scalars['String'];
+  firstNm?: Maybe<Scalars['String']>;
+  lastNm?: Maybe<Scalars['String']>;
+};
+
+export type XchangeAlertSummary = {
+  __typename?: 'XchangeAlertSummary';
+  coreFilename?: Maybe<Scalars['String']>;
+  numSubscribers: Scalars['Int'];
+  hasUnpublishedChanges: Scalars['Boolean'];
+};
+
+export type XchangeConfigActivity = {
+  __typename?: 'XchangeConfigActivity';
+  filesProcessed: Scalars['Int'];
+  lastActivity?: Maybe<Scalars['DateTime']>;
+};
+
+export type XchangeConfigForm = {
+  __typename?: 'XchangeConfigForm';
+  sid?: Maybe<Scalars['ID']>;
+  requiresConversion: Scalars['Boolean'];
+  coreFilename: UiStringField;
+  coreFilenamePattern: UiStringField;
+  comments: UiStringField;
+  processes?: Maybe<Array<XchangeFileProcessForm>>;
+  alerts?: Maybe<Array<XchangeAlert>>;
+  options?: Maybe<Array<UiOptions>>;
+  commands?: Maybe<Array<WebCommand>>;
+  response: GqOperationResponse;
+  errCode?: Maybe<Scalars['String']>;
+  errMsg?: Maybe<Scalars['String']>;
+  errSeverity?: Maybe<ErrorSeverity>;
+};
+
+export type XchangeConfigSummary = {
+  __typename?: 'XchangeConfigSummary';
+  vendorIds?: Maybe<Array<Scalars['String']>>;
+  specIds?: Maybe<Array<Scalars['String']>>;
+  coreFilename?: Maybe<Scalars['String']>;
+  uatActivity: XchangeConfigActivity;
+  testActivity: XchangeConfigActivity;
+  prodActivity: XchangeConfigActivity;
+  errorActivity?: Maybe<XchangeConfigActivity>;
+  active: Scalars['Boolean'];
+  hasUnpublishedChanges: Scalars['Boolean'];
+  hasAlerts: Scalars['Boolean'];
+  implementationPending: Scalars['Boolean'];
+};
+
+export type XchangeDiagram = {
+  __typename?: 'XchangeDiagram';
+  steps?: Maybe<Array<XchangeDiagramStep>>;
+  stepGroups?: Maybe<Array<XchangeDiagramStepGroup>>;
+  transmissions?: Maybe<Array<XchangeDiagramFileTransmission>>;
+  connectors?: Maybe<Array<DiagramConnector>>;
+};
+
+export type XchangeDiagramFileTransmission = {
+  __typename?: 'XchangeDiagramFileTransmission';
+  sid?: Maybe<Scalars['ID']>;
+  key: Scalars['String'];
+  protocol: TransmissionProtocol;
+  host?: Maybe<Scalars['String']>;
+  qualifier?: Maybe<Scalars['String']>;
+  commands?: Maybe<Array<WebCommand>>;
+  position: DiagramCoordinates;
+};
+
+export type XchangeDiagramStep = {
+  __typename?: 'XchangeDiagramStep';
+  sid?: Maybe<Scalars['ID']>;
+  key: Scalars['String'];
+  icon?: Maybe<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
+  subTitle?: Maybe<Scalars['String']>;
+  qualifier?: Maybe<Scalars['String']>;
+  commands?: Maybe<Array<WebCommand>>;
+  position: DiagramCoordinates;
+};
+
+export type XchangeDiagramStepGroup = {
+  __typename?: 'XchangeDiagramStepGroup';
+  start: DiagramCoordinates;
+  end: DiagramCoordinates;
+};
+
+export type XchangeFileProcessForm = {
+  __typename?: 'XchangeFileProcessForm';
+  sid?: Maybe<Scalars['ID']>;
+  vendor: UiSelectOneField;
+  specId: UiStringField;
+  filenameQualifiers: UiSelectManyField;
+  diagram: XchangeDiagram;
+  options?: Maybe<Array<UiOptions>>;
+  commands?: Maybe<Array<WebCommand>>;
+  response: GqOperationResponse;
+  errCode?: Maybe<Scalars['String']>;
+  errMsg?: Maybe<Scalars['String']>;
+  errSeverity?: Maybe<ErrorSeverity>;
+};
+
+export type XchangeFileTransmissionForm = {
+  __typename?: 'XchangeFileTransmissionForm';
+  sid?: Maybe<Scalars['ID']>;
+  parentId?: Maybe<Scalars['ID']>;
+  filenameQualifiers: UiSelectManyField;
+  protocol: UiSelectOneField;
+  host: UiStringField;
+  port: UiIntField;
+  userName: UiStringField;
+  password: UiStringField;
+  authKeyName: UiSelectOneField;
+  folder: UiStringField;
+  filenamePattern: UiStringField;
+  stepWise: UiBooleanField;
+  encryptionKeyName: UiSelectOneField;
+  lastUpdated?: Maybe<UiReadOnlyField>;
+  comments: UiStringField;
+  options?: Maybe<Array<UiOptions>>;
+  commands?: Maybe<Array<WebCommand>>;
+  response: GqOperationResponse;
+  errCode?: Maybe<Scalars['String']>;
+  errMsg?: Maybe<Scalars['String']>;
+  errSeverity?: Maybe<ErrorSeverity>;
+};
+
+export type XchangeProfile = {
+  __typename?: 'XchangeProfile';
+  xchanges?: Maybe<Array<XchangeConfigSummary>>;
+  globalXchangeAlerts?: Maybe<XchangeAlertSummary>;
+  individualXchangeAlerts?: Maybe<Array<XchangeAlertSummary>>;
+  comments?: Maybe<Scalars['String']>;
+  hasUnpublishedChanges: Scalars['Boolean'];
+  requiresConversion: Scalars['Boolean'];
+  tooltips: XchangeProfileTooltips;
+  commands?: Maybe<Array<WebCommand>>;
+  response: GqOperationResponse;
+  errCode?: Maybe<Scalars['String']>;
+  errMsg?: Maybe<Scalars['String']>;
+  errSeverity?: Maybe<ErrorSeverity>;
+};
+
+export type XchangeProfileConvertPreview = {
+  __typename?: 'XchangeProfileConvertPreview';
+  info: Scalars['String'];
+  newVendors?: Maybe<Array<Organization>>;
+  newUserAccounts?: Maybe<Array<Scalars['String']>>;
+  commands?: Maybe<Array<WebCommand>>;
+  response: GqOperationResponse;
+  errCode?: Maybe<Scalars['String']>;
+  errMsg?: Maybe<Scalars['String']>;
+  errSeverity?: Maybe<ErrorSeverity>;
+};
+
+export type XchangeProfileTooltips = {
+  __typename?: 'XchangeProfileTooltips';
+  inactive: Scalars['String'];
+  hasUnpublishedChanges: Scalars['String'];
+  hasAlerts: Scalars['String'];
+  implementationPending: Scalars['String'];
+  requiresConversion: Scalars['String'];
+};
+
+export type XchangeStepForm = {
+  __typename?: 'XchangeStepForm';
+  sid?: Maybe<Scalars['ID']>;
+  xml: UiStringField;
+  lastUpdated?: Maybe<UiReadOnlyField>;
+  commands?: Maybe<Array<WebCommand>>;
+  response: GqOperationResponse;
+  errCode?: Maybe<Scalars['String']>;
+  errMsg?: Maybe<Scalars['String']>;
+  errSeverity?: Maybe<ErrorSeverity>;
 };
 
 export type FragmentStatTypeFragment = (
@@ -2926,32 +3233,32 @@ export type FragmentUiOptionFragment = (
 
 export type FragmentUiStringFieldFragment = (
   { __typename?: 'UIStringField' }
-  & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+  & Pick<UiStringField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'inheritedFrom' | 'inheritedBy' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
 );
 
 export type FragmentUiBooleanFieldFragment = (
   { __typename?: 'UIBooleanField' }
-  & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+  & Pick<UiBooleanField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'inheritedFrom' | 'inheritedBy' | 'errCode' | 'errMsg' | 'errSeverity'>
 );
 
 export type FragmentUiDateFieldFragment = (
   { __typename?: 'UIDateField' }
-  & Pick<UiDateField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+  & Pick<UiDateField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'inheritedFrom' | 'inheritedBy' | 'errCode' | 'errMsg' | 'errSeverity'>
 );
 
 export type FragmentUiIntFieldFragment = (
   { __typename?: 'UIIntField' }
-  & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+  & Pick<UiIntField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'inheritedFrom' | 'inheritedBy' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
 );
 
 export type FragmentUiLongFieldFragment = (
   { __typename?: 'UILongField' }
-  & Pick<UiLongField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
+  & Pick<UiLongField, 'value' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'inheritedFrom' | 'inheritedBy' | 'min' | 'max' | 'errCode' | 'errMsg' | 'errSeverity'>
 );
 
 export type FragmentUiSelectOneFieldFragment = (
   { __typename?: 'UISelectOneField' }
-  & Pick<UiSelectOneField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+  & Pick<UiSelectOneField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'inheritedFrom' | 'inheritedBy' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
   & { value?: Maybe<(
     { __typename?: 'NVPStr' }
     & Pick<NvpStr, 'name' | 'value'>
@@ -2960,7 +3267,7 @@ export type FragmentUiSelectOneFieldFragment = (
 
 export type FragmentUiSelectManyFieldFragment = (
   { __typename?: 'UISelectManyField' }
-  & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
+  & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'inheritedFrom' | 'inheritedBy' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
   & { value?: Maybe<Array<(
     { __typename?: 'NVPStr' }
     & Pick<NvpStr, 'name' | 'value'>
@@ -2969,7 +3276,12 @@ export type FragmentUiSelectManyFieldFragment = (
 
 export type FragmentUiReadOnlyFieldFragment = (
   { __typename?: 'UIReadOnlyField' }
-  & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'errCode' | 'errMsg' | 'errSeverity'>
+  & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'inheritedFrom' | 'inheritedBy' | 'errCode' | 'errMsg' | 'errSeverity'>
+);
+
+export type FragmentXchangeConfigActivityFragment = (
+  { __typename?: 'XchangeConfigActivity' }
+  & Pick<XchangeConfigActivity, 'filesProcessed' | 'lastActivity'>
 );
 
 export type VersionQueryVariables = Exact<{ [key: string]: never; }>;
@@ -3098,6 +3410,9 @@ export type WorkPacketStatusDetailsQuery = (
       )>>, nvp?: Maybe<Array<(
         { __typename?: 'NVPStr' }
         & Pick<NvpStr, 'name' | 'value'>
+      )>>, commands?: Maybe<Array<(
+        { __typename?: 'WorkPacketCommand' }
+        & FragmentWorkPacketCommandFragment
       )>> }
     )>>, extractParameters?: Maybe<(
       { __typename?: 'ExtractParameters' }
@@ -4317,10 +4632,10 @@ export type OrganizationFormQuery = (
     ), whitelist?: Maybe<Array<(
       { __typename?: 'OrgWhitelistForm' }
       & Pick<OrgWhitelistForm, 'errCode' | 'errMsg' | 'errSeverity'>
-      & { pattern?: Maybe<(
+      & { pattern: (
         { __typename?: 'UIStringField' }
         & FragmentUiStringFieldFragment
-      )> }
+      ) }
     )>>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & FragmentUiOptionsFragment
@@ -4356,10 +4671,10 @@ export type FindOrganizationQuery = (
     ), whitelist?: Maybe<Array<(
       { __typename?: 'OrgWhitelistForm' }
       & Pick<OrgWhitelistForm, 'errCode' | 'errMsg' | 'errSeverity'>
-      & { pattern?: Maybe<(
+      & { pattern: (
         { __typename?: 'UIStringField' }
         & FragmentUiStringFieldFragment
-      )> }
+      ) }
     )>>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & FragmentUiOptionsFragment
@@ -4914,6 +5229,246 @@ export type ReprocessDialogQuery = (
   )> }
 );
 
+export type XchangeProfileQueryVariables = Exact<{
+  orgSid: Scalars['ID'];
+}>;
+
+
+export type XchangeProfileQuery = (
+  { __typename?: 'Query' }
+  & { xchangeProfile?: Maybe<(
+    { __typename?: 'XchangeProfile' }
+    & Pick<XchangeProfile, 'comments' | 'hasUnpublishedChanges' | 'requiresConversion' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { xchanges?: Maybe<Array<(
+      { __typename?: 'XchangeConfigSummary' }
+      & Pick<XchangeConfigSummary, 'vendorIds' | 'specIds' | 'coreFilename' | 'active' | 'hasUnpublishedChanges' | 'hasAlerts' | 'implementationPending'>
+      & { uatActivity: (
+        { __typename?: 'XchangeConfigActivity' }
+        & FragmentXchangeConfigActivityFragment
+      ), testActivity: (
+        { __typename?: 'XchangeConfigActivity' }
+        & FragmentXchangeConfigActivityFragment
+      ), prodActivity: (
+        { __typename?: 'XchangeConfigActivity' }
+        & FragmentXchangeConfigActivityFragment
+      ), errorActivity?: Maybe<(
+        { __typename?: 'XchangeConfigActivity' }
+        & FragmentXchangeConfigActivityFragment
+      )> }
+    )>>, globalXchangeAlerts?: Maybe<(
+      { __typename?: 'XchangeAlertSummary' }
+      & Pick<XchangeAlertSummary, 'coreFilename' | 'numSubscribers' | 'hasUnpublishedChanges'>
+    )>, individualXchangeAlerts?: Maybe<Array<(
+      { __typename?: 'XchangeAlertSummary' }
+      & Pick<XchangeAlertSummary, 'coreFilename' | 'numSubscribers' | 'hasUnpublishedChanges'>
+    )>>, tooltips: (
+      { __typename?: 'XchangeProfileTooltips' }
+      & Pick<XchangeProfileTooltips, 'inactive' | 'hasUnpublishedChanges' | 'hasAlerts' | 'implementationPending' | 'requiresConversion'>
+    ), commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>> }
+  )> }
+);
+
+export type XchangeDetailsQueryVariables = Exact<{
+  orgSid: Scalars['ID'];
+  coreFilename: Scalars['String'];
+}>;
+
+
+export type XchangeDetailsQuery = (
+  { __typename?: 'Query' }
+  & { xchangeDetails?: Maybe<(
+    { __typename?: 'XchangeConfigForm' }
+    & Pick<XchangeConfigForm, 'sid' | 'requiresConversion' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { coreFilename: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), coreFilenamePattern: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), comments: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), processes?: Maybe<Array<(
+      { __typename?: 'XchangeFileProcessForm' }
+      & Pick<XchangeFileProcessForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { vendor: (
+        { __typename?: 'UISelectOneField' }
+        & FragmentUiSelectOneFieldFragment
+      ), specId: (
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      ), filenameQualifiers: (
+        { __typename?: 'UISelectManyField' }
+        & FragmentUiSelectManyFieldFragment
+      ), diagram: (
+        { __typename?: 'XchangeDiagram' }
+        & { steps?: Maybe<Array<(
+          { __typename?: 'XchangeDiagramStep' }
+          & Pick<XchangeDiagramStep, 'sid' | 'key' | 'icon' | 'title' | 'subTitle' | 'qualifier'>
+          & { commands?: Maybe<Array<(
+            { __typename?: 'WebCommand' }
+            & FragmentWebCommandFragment
+          )>>, position: (
+            { __typename?: 'DiagramCoordinates' }
+            & Pick<DiagramCoordinates, 'x' | 'y'>
+          ) }
+        )>>, stepGroups?: Maybe<Array<(
+          { __typename?: 'XchangeDiagramStepGroup' }
+          & { start: (
+            { __typename?: 'DiagramCoordinates' }
+            & Pick<DiagramCoordinates, 'x' | 'y'>
+          ), end: (
+            { __typename?: 'DiagramCoordinates' }
+            & Pick<DiagramCoordinates, 'x' | 'y'>
+          ) }
+        )>>, transmissions?: Maybe<Array<(
+          { __typename?: 'XchangeDiagramFileTransmission' }
+          & Pick<XchangeDiagramFileTransmission, 'sid' | 'key' | 'protocol' | 'host' | 'qualifier'>
+          & { commands?: Maybe<Array<(
+            { __typename?: 'WebCommand' }
+            & FragmentWebCommandFragment
+          )>>, position: (
+            { __typename?: 'DiagramCoordinates' }
+            & Pick<DiagramCoordinates, 'x' | 'y'>
+          ) }
+        )>>, connectors?: Maybe<Array<(
+          { __typename?: 'DiagramConnector' }
+          & Pick<DiagramConnector, 'fromKey' | 'toKey'>
+        )>> }
+      ), options?: Maybe<Array<(
+        { __typename?: 'UIOptions' }
+        & FragmentUiOptionsFragment
+      )>>, commands?: Maybe<Array<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>> }
+    )>>, alerts?: Maybe<Array<(
+      { __typename?: 'XchangeAlert' }
+      & Pick<XchangeAlert, 'filenameQualifier' | 'alertTypes'>
+      & { subscribers?: Maybe<Array<(
+        { __typename?: 'XchangeAlertSubscriber' }
+        & Pick<XchangeAlertSubscriber, 'sid' | 'email' | 'firstNm' | 'lastNm'>
+      )>>, commands?: Maybe<Array<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>> }
+    )>>, options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
+    )>>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>> }
+  )> }
+);
+
+export type PreviewConvertXchangeProfileQueryVariables = Exact<{
+  orgSid: Scalars['ID'];
+}>;
+
+
+export type PreviewConvertXchangeProfileQuery = (
+  { __typename?: 'Query' }
+  & { previewConvertXchangeProfile?: Maybe<(
+    { __typename?: 'XchangeProfileConvertPreview' }
+    & Pick<XchangeProfileConvertPreview, 'info' | 'newUserAccounts' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { newVendors?: Maybe<Array<(
+      { __typename?: 'Organization' }
+      & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType' | 'orgTypeLabel'>
+    )>>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>> }
+  )> }
+);
+
+export type XchangeStepFormQueryVariables = Exact<{
+  xchangeFileProcessSid: Scalars['ID'];
+  sid?: Maybe<Scalars['ID']>;
+}>;
+
+
+export type XchangeStepFormQuery = (
+  { __typename?: 'Query' }
+  & { xchangeStepForm?: Maybe<(
+    { __typename?: 'XchangeStepForm' }
+    & Pick<XchangeStepForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { xml: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), lastUpdated?: Maybe<(
+      { __typename?: 'UIReadOnlyField' }
+      & FragmentUiReadOnlyFieldFragment
+    )>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>> }
+  )> }
+);
+
+export type XchangeFileTransmissionFormQueryVariables = Exact<{
+  xchangeFileProcessSid: Scalars['ID'];
+  sid?: Maybe<Scalars['ID']>;
+}>;
+
+
+export type XchangeFileTransmissionFormQuery = (
+  { __typename?: 'Query' }
+  & { xchangeFileTransmissionForm?: Maybe<(
+    { __typename?: 'XchangeFileTransmissionForm' }
+    & Pick<XchangeFileTransmissionForm, 'sid' | 'parentId' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { filenameQualifiers: (
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    ), protocol: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), host: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), port: (
+      { __typename?: 'UIIntField' }
+      & FragmentUiIntFieldFragment
+    ), userName: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), password: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), authKeyName: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), folder: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), filenamePattern: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), stepWise: (
+      { __typename?: 'UIBooleanField' }
+      & FragmentUiBooleanFieldFragment
+    ), encryptionKeyName: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), lastUpdated?: Maybe<(
+      { __typename?: 'UIReadOnlyField' }
+      & FragmentUiReadOnlyFieldFragment
+    )>, comments: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
+    )>>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>> }
+  )> }
+);
+
 export type BeginLoginMutationVariables = Exact<{
   userId: Scalars['String'];
 }>;
@@ -5071,10 +5626,10 @@ export type CreateOrgMutation = (
     ), whitelist?: Maybe<Array<(
       { __typename?: 'OrgWhitelistForm' }
       & Pick<OrgWhitelistForm, 'errCode' | 'errMsg' | 'errSeverity'>
-      & { pattern?: Maybe<(
+      & { pattern: (
         { __typename?: 'UIStringField' }
         & FragmentUiStringFieldFragment
-      )> }
+      ) }
     )>>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & FragmentUiOptionsFragment
@@ -5110,10 +5665,10 @@ export type UpdateOrgMutation = (
     ), whitelist?: Maybe<Array<(
       { __typename?: 'OrgWhitelistForm' }
       & Pick<OrgWhitelistForm, 'errCode' | 'errMsg' | 'errSeverity'>
-      & { pattern?: Maybe<(
+      & { pattern: (
         { __typename?: 'UIStringField' }
         & FragmentUiStringFieldFragment
-      )> }
+      ) }
     )>>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & FragmentUiOptionsFragment
@@ -6295,6 +6850,97 @@ export type WorkPacketResendMutation = (
   )> }
 );
 
+export type ConvertXchangeProfileMutationVariables = Exact<{
+  orgSid: Scalars['ID'];
+}>;
+
+
+export type ConvertXchangeProfileMutation = (
+  { __typename?: 'Mutation' }
+  & { convertXchangeProfile?: Maybe<(
+    { __typename?: 'XchangeProfile' }
+    & Pick<XchangeProfile, 'comments' | 'hasUnpublishedChanges' | 'requiresConversion' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { xchanges?: Maybe<Array<(
+      { __typename?: 'XchangeConfigSummary' }
+      & Pick<XchangeConfigSummary, 'vendorIds' | 'specIds' | 'coreFilename' | 'active' | 'hasUnpublishedChanges' | 'hasAlerts' | 'implementationPending'>
+      & { uatActivity: (
+        { __typename?: 'XchangeConfigActivity' }
+        & FragmentXchangeConfigActivityFragment
+      ), testActivity: (
+        { __typename?: 'XchangeConfigActivity' }
+        & FragmentXchangeConfigActivityFragment
+      ), prodActivity: (
+        { __typename?: 'XchangeConfigActivity' }
+        & FragmentXchangeConfigActivityFragment
+      ), errorActivity?: Maybe<(
+        { __typename?: 'XchangeConfigActivity' }
+        & FragmentXchangeConfigActivityFragment
+      )> }
+    )>>, globalXchangeAlerts?: Maybe<(
+      { __typename?: 'XchangeAlertSummary' }
+      & Pick<XchangeAlertSummary, 'coreFilename' | 'numSubscribers' | 'hasUnpublishedChanges'>
+    )>, individualXchangeAlerts?: Maybe<Array<(
+      { __typename?: 'XchangeAlertSummary' }
+      & Pick<XchangeAlertSummary, 'coreFilename' | 'numSubscribers' | 'hasUnpublishedChanges'>
+    )>>, tooltips: (
+      { __typename?: 'XchangeProfileTooltips' }
+      & Pick<XchangeProfileTooltips, 'inactive' | 'hasUnpublishedChanges' | 'hasAlerts' | 'implementationPending' | 'requiresConversion'>
+    ), commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>> }
+  )> }
+);
+
+export type UpdateXchangeProfileCommentMutationVariables = Exact<{
+  orgSid: Scalars['ID'];
+  comment: Scalars['String'];
+}>;
+
+
+export type UpdateXchangeProfileCommentMutation = (
+  { __typename?: 'Mutation' }
+  & { updateXchangeProfileComment?: Maybe<(
+    { __typename?: 'GenericResponse' }
+    & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { allMessages?: Maybe<Array<(
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>> }
+    )>> }
+  )> }
+);
+
+export type PublishXchangeProfileMutationVariables = Exact<{
+  orgSid: Scalars['ID'];
+}>;
+
+
+export type PublishXchangeProfileMutation = (
+  { __typename?: 'Mutation' }
+  & { publishXchangeProfile?: Maybe<(
+    { __typename?: 'GenericResponse' }
+    & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { allMessages?: Maybe<Array<(
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>> }
+    )>> }
+  )> }
+);
+
 export const FragmentStatTypeFragmentDoc = gql`
     fragment fragmentStatType on StatType {
   count
@@ -6545,6 +7191,8 @@ export const FragmentUiStringFieldFragmentDoc = gql`
   info
   required
   visible
+  inheritedFrom
+  inheritedBy
   min
   max
   errCode
@@ -6560,6 +7208,8 @@ export const FragmentUiBooleanFieldFragmentDoc = gql`
   info
   required
   visible
+  inheritedFrom
+  inheritedBy
   errCode
   errMsg
   errSeverity
@@ -6573,6 +7223,8 @@ export const FragmentUiDateFieldFragmentDoc = gql`
   info
   required
   visible
+  inheritedFrom
+  inheritedBy
   errCode
   errMsg
   errSeverity
@@ -6586,6 +7238,8 @@ export const FragmentUiIntFieldFragmentDoc = gql`
   info
   required
   visible
+  inheritedFrom
+  inheritedBy
   min
   max
   errCode
@@ -6601,6 +7255,8 @@ export const FragmentUiLongFieldFragmentDoc = gql`
   info
   required
   visible
+  inheritedFrom
+  inheritedBy
   min
   max
   errCode
@@ -6619,6 +7275,8 @@ export const FragmentUiSelectOneFieldFragmentDoc = gql`
   info
   required
   visible
+  inheritedFrom
+  inheritedBy
   options
   query
   errCode
@@ -6637,6 +7295,8 @@ export const FragmentUiSelectManyFieldFragmentDoc = gql`
   info
   required
   visible
+  inheritedFrom
+  inheritedBy
   options
   query
   errCode
@@ -6653,9 +7313,17 @@ export const FragmentUiReadOnlyFieldFragmentDoc = gql`
   info
   required
   visible
+  inheritedFrom
+  inheritedBy
   errCode
   errMsg
   errSeverity
+}
+    `;
+export const FragmentXchangeConfigActivityFragmentDoc = gql`
+    fragment fragmentXchangeConfigActivity on XchangeConfigActivity {
+  filesProcessed
+  lastActivity
 }
     `;
 export const VersionDocument = gql`
@@ -6932,6 +7600,9 @@ export const WorkPacketStatusDetailsDocument = gql`
         name
         value
       }
+      commands {
+        ...fragmentWorkPacketCommand
+      }
     }
     extractParameters {
       originalParameter {
@@ -7010,11 +7681,11 @@ export const WorkPacketStatusDetailsDocument = gql`
   }
 }
     ${RecordCountsFragmentFragmentDoc}
+${FragmentWorkPacketCommandFragmentDoc}
 ${ExtractParameterFragmentFragmentDoc}
 ${FieldCreationFragmentFragmentDoc}
 ${FragmentStatTypeFragmentDoc}
-${EnrollmentStatFragmentFragmentDoc}
-${FragmentWorkPacketCommandFragmentDoc}`;
+${EnrollmentStatFragmentFragmentDoc}`;
 
 /**
  * __useWorkPacketStatusDetailsQuery__
@@ -10471,6 +11142,416 @@ export function useReprocessDialogLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
 export type ReprocessDialogQueryHookResult = ReturnType<typeof useReprocessDialogQuery>;
 export type ReprocessDialogLazyQueryHookResult = ReturnType<typeof useReprocessDialogLazyQuery>;
 export type ReprocessDialogQueryResult = Apollo.QueryResult<ReprocessDialogQuery, ReprocessDialogQueryVariables>;
+export const XchangeProfileDocument = gql`
+    query XchangeProfile($orgSid: ID!) {
+  xchangeProfile(orgSid: $orgSid) {
+    xchanges {
+      vendorIds
+      specIds
+      coreFilename
+      uatActivity {
+        ...fragmentXchangeConfigActivity
+      }
+      testActivity {
+        ...fragmentXchangeConfigActivity
+      }
+      prodActivity {
+        ...fragmentXchangeConfigActivity
+      }
+      errorActivity {
+        ...fragmentXchangeConfigActivity
+      }
+      active
+      hasUnpublishedChanges
+      hasAlerts
+      implementationPending
+    }
+    globalXchangeAlerts {
+      coreFilename
+      numSubscribers
+      hasUnpublishedChanges
+    }
+    individualXchangeAlerts {
+      coreFilename
+      numSubscribers
+      hasUnpublishedChanges
+    }
+    comments
+    hasUnpublishedChanges
+    requiresConversion
+    tooltips {
+      inactive
+      hasUnpublishedChanges
+      hasAlerts
+      implementationPending
+      requiresConversion
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentXchangeConfigActivityFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
+
+/**
+ * __useXchangeProfileQuery__
+ *
+ * To run a query within a React component, call `useXchangeProfileQuery` and pass it any options that fit your needs.
+ * When your component renders, `useXchangeProfileQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useXchangeProfileQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *   },
+ * });
+ */
+export function useXchangeProfileQuery(baseOptions: Apollo.QueryHookOptions<XchangeProfileQuery, XchangeProfileQueryVariables>) {
+        return Apollo.useQuery<XchangeProfileQuery, XchangeProfileQueryVariables>(XchangeProfileDocument, baseOptions);
+      }
+export function useXchangeProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<XchangeProfileQuery, XchangeProfileQueryVariables>) {
+          return Apollo.useLazyQuery<XchangeProfileQuery, XchangeProfileQueryVariables>(XchangeProfileDocument, baseOptions);
+        }
+export type XchangeProfileQueryHookResult = ReturnType<typeof useXchangeProfileQuery>;
+export type XchangeProfileLazyQueryHookResult = ReturnType<typeof useXchangeProfileLazyQuery>;
+export type XchangeProfileQueryResult = Apollo.QueryResult<XchangeProfileQuery, XchangeProfileQueryVariables>;
+export const XchangeDetailsDocument = gql`
+    query XchangeDetails($orgSid: ID!, $coreFilename: String!) {
+  xchangeDetails(orgSid: $orgSid, coreFilename: $coreFilename) {
+    sid
+    requiresConversion
+    coreFilename {
+      ...fragmentUIStringField
+    }
+    coreFilenamePattern {
+      ...fragmentUIStringField
+    }
+    comments {
+      ...fragmentUIStringField
+    }
+    processes {
+      sid
+      vendor {
+        ...fragmentUISelectOneField
+      }
+      specId {
+        ...fragmentUIStringField
+      }
+      filenameQualifiers {
+        ...fragmentUISelectManyField
+      }
+      diagram {
+        steps {
+          sid
+          key
+          icon
+          title
+          subTitle
+          qualifier
+          commands {
+            ...fragmentWebCommand
+          }
+          position {
+            x
+            y
+          }
+        }
+        stepGroups {
+          start {
+            x
+            y
+          }
+          end {
+            x
+            y
+          }
+        }
+        transmissions {
+          sid
+          key
+          protocol
+          host
+          qualifier
+          commands {
+            ...fragmentWebCommand
+          }
+          position {
+            x
+            y
+          }
+        }
+        connectors {
+          fromKey
+          toKey
+        }
+      }
+      options {
+        ...fragmentUIOptions
+      }
+      commands {
+        ...fragmentWebCommand
+      }
+      response
+      errCode
+      errMsg
+      errSeverity
+    }
+    alerts {
+      filenameQualifier
+      alertTypes
+      subscribers {
+        sid
+        email
+        firstNm
+        lastNm
+      }
+      commands {
+        ...fragmentWebCommand
+      }
+    }
+    options {
+      ...fragmentUIOptions
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentWebCommandFragmentDoc}
+${FragmentUiOptionsFragmentDoc}`;
+
+/**
+ * __useXchangeDetailsQuery__
+ *
+ * To run a query within a React component, call `useXchangeDetailsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useXchangeDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useXchangeDetailsQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *      coreFilename: // value for 'coreFilename'
+ *   },
+ * });
+ */
+export function useXchangeDetailsQuery(baseOptions: Apollo.QueryHookOptions<XchangeDetailsQuery, XchangeDetailsQueryVariables>) {
+        return Apollo.useQuery<XchangeDetailsQuery, XchangeDetailsQueryVariables>(XchangeDetailsDocument, baseOptions);
+      }
+export function useXchangeDetailsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<XchangeDetailsQuery, XchangeDetailsQueryVariables>) {
+          return Apollo.useLazyQuery<XchangeDetailsQuery, XchangeDetailsQueryVariables>(XchangeDetailsDocument, baseOptions);
+        }
+export type XchangeDetailsQueryHookResult = ReturnType<typeof useXchangeDetailsQuery>;
+export type XchangeDetailsLazyQueryHookResult = ReturnType<typeof useXchangeDetailsLazyQuery>;
+export type XchangeDetailsQueryResult = Apollo.QueryResult<XchangeDetailsQuery, XchangeDetailsQueryVariables>;
+export const PreviewConvertXchangeProfileDocument = gql`
+    query PreviewConvertXchangeProfile($orgSid: ID!) {
+  previewConvertXchangeProfile(orgSid: $orgSid) {
+    info
+    newVendors {
+      sid
+      name
+      orgId
+      orgType
+      orgTypeLabel
+    }
+    newUserAccounts
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentWebCommandFragmentDoc}`;
+
+/**
+ * __usePreviewConvertXchangeProfileQuery__
+ *
+ * To run a query within a React component, call `usePreviewConvertXchangeProfileQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePreviewConvertXchangeProfileQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePreviewConvertXchangeProfileQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *   },
+ * });
+ */
+export function usePreviewConvertXchangeProfileQuery(baseOptions: Apollo.QueryHookOptions<PreviewConvertXchangeProfileQuery, PreviewConvertXchangeProfileQueryVariables>) {
+        return Apollo.useQuery<PreviewConvertXchangeProfileQuery, PreviewConvertXchangeProfileQueryVariables>(PreviewConvertXchangeProfileDocument, baseOptions);
+      }
+export function usePreviewConvertXchangeProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PreviewConvertXchangeProfileQuery, PreviewConvertXchangeProfileQueryVariables>) {
+          return Apollo.useLazyQuery<PreviewConvertXchangeProfileQuery, PreviewConvertXchangeProfileQueryVariables>(PreviewConvertXchangeProfileDocument, baseOptions);
+        }
+export type PreviewConvertXchangeProfileQueryHookResult = ReturnType<typeof usePreviewConvertXchangeProfileQuery>;
+export type PreviewConvertXchangeProfileLazyQueryHookResult = ReturnType<typeof usePreviewConvertXchangeProfileLazyQuery>;
+export type PreviewConvertXchangeProfileQueryResult = Apollo.QueryResult<PreviewConvertXchangeProfileQuery, PreviewConvertXchangeProfileQueryVariables>;
+export const XchangeStepFormDocument = gql`
+    query XchangeStepForm($xchangeFileProcessSid: ID!, $sid: ID) {
+  xchangeStepForm(xchangeFileProcessSid: $xchangeFileProcessSid, sid: $sid) {
+    sid
+    xml {
+      ...fragmentUIStringField
+    }
+    lastUpdated {
+      ...fragmentUIReadOnlyField
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiReadOnlyFieldFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
+
+/**
+ * __useXchangeStepFormQuery__
+ *
+ * To run a query within a React component, call `useXchangeStepFormQuery` and pass it any options that fit your needs.
+ * When your component renders, `useXchangeStepFormQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useXchangeStepFormQuery({
+ *   variables: {
+ *      xchangeFileProcessSid: // value for 'xchangeFileProcessSid'
+ *      sid: // value for 'sid'
+ *   },
+ * });
+ */
+export function useXchangeStepFormQuery(baseOptions: Apollo.QueryHookOptions<XchangeStepFormQuery, XchangeStepFormQueryVariables>) {
+        return Apollo.useQuery<XchangeStepFormQuery, XchangeStepFormQueryVariables>(XchangeStepFormDocument, baseOptions);
+      }
+export function useXchangeStepFormLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<XchangeStepFormQuery, XchangeStepFormQueryVariables>) {
+          return Apollo.useLazyQuery<XchangeStepFormQuery, XchangeStepFormQueryVariables>(XchangeStepFormDocument, baseOptions);
+        }
+export type XchangeStepFormQueryHookResult = ReturnType<typeof useXchangeStepFormQuery>;
+export type XchangeStepFormLazyQueryHookResult = ReturnType<typeof useXchangeStepFormLazyQuery>;
+export type XchangeStepFormQueryResult = Apollo.QueryResult<XchangeStepFormQuery, XchangeStepFormQueryVariables>;
+export const XchangeFileTransmissionFormDocument = gql`
+    query XchangeFileTransmissionForm($xchangeFileProcessSid: ID!, $sid: ID) {
+  xchangeFileTransmissionForm(
+    xchangeFileProcessSid: $xchangeFileProcessSid
+    sid: $sid
+  ) {
+    sid
+    parentId
+    filenameQualifiers {
+      ...fragmentUISelectManyField
+    }
+    protocol {
+      ...fragmentUISelectOneField
+    }
+    host {
+      ...fragmentUIStringField
+    }
+    port {
+      ...fragmentUIIntField
+    }
+    userName {
+      ...fragmentUIStringField
+    }
+    password {
+      ...fragmentUIStringField
+    }
+    authKeyName {
+      ...fragmentUISelectOneField
+    }
+    folder {
+      ...fragmentUIStringField
+    }
+    filenamePattern {
+      ...fragmentUIStringField
+    }
+    stepWise {
+      ...fragmentUIBooleanField
+    }
+    encryptionKeyName {
+      ...fragmentUISelectOneField
+    }
+    lastUpdated {
+      ...fragmentUIReadOnlyField
+    }
+    comments {
+      ...fragmentUIStringField
+    }
+    options {
+      ...fragmentUIOptions
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
+${FragmentUiStringFieldFragmentDoc}
+${FragmentUiIntFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiReadOnlyFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
+
+/**
+ * __useXchangeFileTransmissionFormQuery__
+ *
+ * To run a query within a React component, call `useXchangeFileTransmissionFormQuery` and pass it any options that fit your needs.
+ * When your component renders, `useXchangeFileTransmissionFormQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useXchangeFileTransmissionFormQuery({
+ *   variables: {
+ *      xchangeFileProcessSid: // value for 'xchangeFileProcessSid'
+ *      sid: // value for 'sid'
+ *   },
+ * });
+ */
+export function useXchangeFileTransmissionFormQuery(baseOptions: Apollo.QueryHookOptions<XchangeFileTransmissionFormQuery, XchangeFileTransmissionFormQueryVariables>) {
+        return Apollo.useQuery<XchangeFileTransmissionFormQuery, XchangeFileTransmissionFormQueryVariables>(XchangeFileTransmissionFormDocument, baseOptions);
+      }
+export function useXchangeFileTransmissionFormLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<XchangeFileTransmissionFormQuery, XchangeFileTransmissionFormQueryVariables>) {
+          return Apollo.useLazyQuery<XchangeFileTransmissionFormQuery, XchangeFileTransmissionFormQueryVariables>(XchangeFileTransmissionFormDocument, baseOptions);
+        }
+export type XchangeFileTransmissionFormQueryHookResult = ReturnType<typeof useXchangeFileTransmissionFormQuery>;
+export type XchangeFileTransmissionFormLazyQueryHookResult = ReturnType<typeof useXchangeFileTransmissionFormLazyQuery>;
+export type XchangeFileTransmissionFormQueryResult = Apollo.QueryResult<XchangeFileTransmissionFormQuery, XchangeFileTransmissionFormQueryVariables>;
 export const BeginLoginDocument = gql`
     mutation BeginLogin($userId: String!) {
   beginLogin(userId: $userId) {
@@ -13203,3 +14284,172 @@ export function useWorkPacketResendMutation(baseOptions?: Apollo.MutationHookOpt
 export type WorkPacketResendMutationHookResult = ReturnType<typeof useWorkPacketResendMutation>;
 export type WorkPacketResendMutationResult = Apollo.MutationResult<WorkPacketResendMutation>;
 export type WorkPacketResendMutationOptions = Apollo.BaseMutationOptions<WorkPacketResendMutation, WorkPacketResendMutationVariables>;
+export const ConvertXchangeProfileDocument = gql`
+    mutation ConvertXchangeProfile($orgSid: ID!) {
+  convertXchangeProfile(orgSid: $orgSid) {
+    xchanges {
+      vendorIds
+      specIds
+      coreFilename
+      uatActivity {
+        ...fragmentXchangeConfigActivity
+      }
+      testActivity {
+        ...fragmentXchangeConfigActivity
+      }
+      prodActivity {
+        ...fragmentXchangeConfigActivity
+      }
+      errorActivity {
+        ...fragmentXchangeConfigActivity
+      }
+      active
+      hasUnpublishedChanges
+      hasAlerts
+      implementationPending
+    }
+    globalXchangeAlerts {
+      coreFilename
+      numSubscribers
+      hasUnpublishedChanges
+    }
+    individualXchangeAlerts {
+      coreFilename
+      numSubscribers
+      hasUnpublishedChanges
+    }
+    comments
+    hasUnpublishedChanges
+    requiresConversion
+    tooltips {
+      inactive
+      hasUnpublishedChanges
+      hasAlerts
+      implementationPending
+      requiresConversion
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentXchangeConfigActivityFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
+export type ConvertXchangeProfileMutationFn = Apollo.MutationFunction<ConvertXchangeProfileMutation, ConvertXchangeProfileMutationVariables>;
+
+/**
+ * __useConvertXchangeProfileMutation__
+ *
+ * To run a mutation, you first call `useConvertXchangeProfileMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useConvertXchangeProfileMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [convertXchangeProfileMutation, { data, loading, error }] = useConvertXchangeProfileMutation({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *   },
+ * });
+ */
+export function useConvertXchangeProfileMutation(baseOptions?: Apollo.MutationHookOptions<ConvertXchangeProfileMutation, ConvertXchangeProfileMutationVariables>) {
+        return Apollo.useMutation<ConvertXchangeProfileMutation, ConvertXchangeProfileMutationVariables>(ConvertXchangeProfileDocument, baseOptions);
+      }
+export type ConvertXchangeProfileMutationHookResult = ReturnType<typeof useConvertXchangeProfileMutation>;
+export type ConvertXchangeProfileMutationResult = Apollo.MutationResult<ConvertXchangeProfileMutation>;
+export type ConvertXchangeProfileMutationOptions = Apollo.BaseMutationOptions<ConvertXchangeProfileMutation, ConvertXchangeProfileMutationVariables>;
+export const UpdateXchangeProfileCommentDocument = gql`
+    mutation UpdateXchangeProfileComment($orgSid: ID!, $comment: String!) {
+  updateXchangeProfileComment(orgSid: $orgSid, comment: $comment) {
+    response
+    errCode
+    errMsg
+    errSeverity
+    allMessages {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
+      }
+    }
+  }
+}
+    ${UnionNvpFragmentDoc}`;
+export type UpdateXchangeProfileCommentMutationFn = Apollo.MutationFunction<UpdateXchangeProfileCommentMutation, UpdateXchangeProfileCommentMutationVariables>;
+
+/**
+ * __useUpdateXchangeProfileCommentMutation__
+ *
+ * To run a mutation, you first call `useUpdateXchangeProfileCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateXchangeProfileCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateXchangeProfileCommentMutation, { data, loading, error }] = useUpdateXchangeProfileCommentMutation({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *      comment: // value for 'comment'
+ *   },
+ * });
+ */
+export function useUpdateXchangeProfileCommentMutation(baseOptions?: Apollo.MutationHookOptions<UpdateXchangeProfileCommentMutation, UpdateXchangeProfileCommentMutationVariables>) {
+        return Apollo.useMutation<UpdateXchangeProfileCommentMutation, UpdateXchangeProfileCommentMutationVariables>(UpdateXchangeProfileCommentDocument, baseOptions);
+      }
+export type UpdateXchangeProfileCommentMutationHookResult = ReturnType<typeof useUpdateXchangeProfileCommentMutation>;
+export type UpdateXchangeProfileCommentMutationResult = Apollo.MutationResult<UpdateXchangeProfileCommentMutation>;
+export type UpdateXchangeProfileCommentMutationOptions = Apollo.BaseMutationOptions<UpdateXchangeProfileCommentMutation, UpdateXchangeProfileCommentMutationVariables>;
+export const PublishXchangeProfileDocument = gql`
+    mutation PublishXchangeProfile($orgSid: ID!) {
+  publishXchangeProfile(orgSid: $orgSid) {
+    response
+    errCode
+    errMsg
+    errSeverity
+    allMessages {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
+      }
+    }
+  }
+}
+    ${UnionNvpFragmentDoc}`;
+export type PublishXchangeProfileMutationFn = Apollo.MutationFunction<PublishXchangeProfileMutation, PublishXchangeProfileMutationVariables>;
+
+/**
+ * __usePublishXchangeProfileMutation__
+ *
+ * To run a mutation, you first call `usePublishXchangeProfileMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePublishXchangeProfileMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [publishXchangeProfileMutation, { data, loading, error }] = usePublishXchangeProfileMutation({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *   },
+ * });
+ */
+export function usePublishXchangeProfileMutation(baseOptions?: Apollo.MutationHookOptions<PublishXchangeProfileMutation, PublishXchangeProfileMutationVariables>) {
+        return Apollo.useMutation<PublishXchangeProfileMutation, PublishXchangeProfileMutationVariables>(PublishXchangeProfileDocument, baseOptions);
+      }
+export type PublishXchangeProfileMutationHookResult = ReturnType<typeof usePublishXchangeProfileMutation>;
+export type PublishXchangeProfileMutationResult = Apollo.MutationResult<PublishXchangeProfileMutation>;
+export type PublishXchangeProfileMutationOptions = Apollo.BaseMutationOptions<PublishXchangeProfileMutation, PublishXchangeProfileMutationVariables>;

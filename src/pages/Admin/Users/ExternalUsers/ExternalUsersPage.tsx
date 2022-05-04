@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Dialog, DialogType, DialogFooter, SpinnerSize, PrimaryButton, DefaultButton, Spinner } from '@fluentui/react';
+import { SpinnerSize, PrimaryButton, Spinner } from '@fluentui/react';
 import { EmptyState } from 'src/containers/states';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Row, Column, Container } from 'src/components/layouts';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { PageTitle } from 'src/components/typography';
-import { useExternalUsersForOrgLazyQuery, SortDirection, CdxWebCommandType } from 'src/data/services/graphql';
+import { useExternalUsersForOrgLazyQuery, CdxWebCommandType } from 'src/data/services/graphql';
 import { UsersTable } from 'src/pages/Admin/Users/UsersTable';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { StyledColumn } from './ExternalUsersPage.styles';
@@ -14,14 +14,14 @@ import { PageHeader } from 'src/containers/headers/PageHeader';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useTableFilters } from 'src/hooks/useTableFilters';
 import { InputText } from 'src/components/inputs/InputText';
-import AddExternalUserAccessPanel  from './AddExternalUser/AddExternalUsersAccessPanel';
+import AddExternalUserAccessPanel from './AddExternalUser/AddExternalUsersAccessPanel';
 import { useUpdateExternalUsersService } from './UpdateExternalUser/UpdateExternalUsersService.service';
 import UpdateExternalUsersPanel from './UpdateExternalUser/UpdateExternalUsersPanel';
 
 const ExternalUsersPage = () => {
   const { orgSid } = useOrgSid();
-  const [ apiCall, { data, loading, error }] = useQueryHandler(useExternalUsersForOrgLazyQuery);
-  const [ isAddExternalUserAccessPanelOpen, setIsAddExternalUserAccessPanelOpen] = useState(false);
+  const [apiCall, { data, loading, error }] = useQueryHandler(useExternalUsersForOrgLazyQuery);
+  const [isAddExternalUserAccessPanelOpen, setIsAddExternalUserAccessPanelOpen] = useState(false);
   const useUpdateExternalUsers = useUpdateExternalUsersService(orgSid);
 
   const tableFilters = useTableFilters('Name, Last Name, Email, etc.');
@@ -70,13 +70,15 @@ const ExternalUsersPage = () => {
         <EmptyState title="No external users" description="There aren't any external users in this organization" />
       );
     }
-    return <UsersTable             
-              tableFilters={tableFilters}
-              users={data?.externalUsersForOrg?.nodes} 
-              onClickUser={useUpdateExternalUsers.showPanel}
-              searchAllOrgs
-              tooltips={data?.externalUsersForOrg?.toolTips}
-           />;
+    return (
+      <UsersTable
+        tableFilters={tableFilters}
+        users={data?.externalUsersForOrg?.nodes}
+        onClickUser={useUpdateExternalUsers.showPanel}
+        searchAllOrgs
+        tooltips={data?.externalUsersForOrg?.toolTips}
+      />
+    );
   };
 
   const renderAssignExternalUserButton = () => {
@@ -129,18 +131,20 @@ const ExternalUsersPage = () => {
           <StyledColumn>{renderBody()}</StyledColumn>
         </Row>
       </Container>
-        <AddExternalUserAccessPanel
-          isOpen={isAddExternalUserAccessPanelOpen}
-          orgSid={orgSid}
-          onDismiss={()=>{setIsAddExternalUserAccessPanelOpen(false)}}
-          onGrantAccessToExternalUser={handleGrantAccessToExternalUserSuccess}
-        />
-        <UpdateExternalUsersPanel
-          useUpdateExternalUsers={useUpdateExternalUsers}
-          onUpdateUser={() => {
-            handleGrantAccessToExternalUserSuccess()
-          }}
-        />
+      <AddExternalUserAccessPanel
+        isOpen={isAddExternalUserAccessPanelOpen}
+        orgSid={orgSid}
+        onDismiss={() => {
+          setIsAddExternalUserAccessPanelOpen(false);
+        }}
+        onGrantAccessToExternalUser={handleGrantAccessToExternalUserSuccess}
+      />
+      <UpdateExternalUsersPanel
+        useUpdateExternalUsers={useUpdateExternalUsers}
+        onUpdateUser={() => {
+          handleGrantAccessToExternalUserSuccess();
+        }}
+      />
     </LayoutDashboard>
   );
 };
