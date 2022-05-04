@@ -21,6 +21,7 @@ import { useWorkPacketColumns, WorkPacketColumn } from './WorkPacketColumns';
 import { TableFilters } from './TableFilters';
 import { EmptyState } from '../states';
 import { Box, Container } from './WorkPacketTable.styles';
+import { UseFileStatusDetailsPanel } from 'src/pages/FileStatusDetails/useFileStatusDetailsPanel'
 
 type WorkPacketParams = {
   id: string;
@@ -29,6 +30,7 @@ type WorkPacketParams = {
   pollingQuery?: any; // lazy query to poll if there are any changes
   getItems: (data: any) => any[];
   tableFilters: TableFiltersType;
+  useFileStatusDetailsPanel?: UseFileStatusDetailsPanel;
   onItemsListChange?: (data: any, loading: boolean) => void;
 };
 
@@ -40,6 +42,7 @@ export const WorkPacketTable = ({
   getItems,
   tableFilters,
   onItemsListChange,
+  useFileStatusDetailsPanel
 }: WorkPacketParams) => {
   const POLL_INTERVAL = 20000;
   const { orgSid } = useOrgSid();
@@ -62,15 +65,18 @@ export const WorkPacketTable = ({
     // url every time and not use any of the utilities we have to do so.
 
     // const startDate = yyyyMMdd(tableFilters.startDate.value);
-    // const endDate = yyyyMMdd(tableFilters.endDate.value);
-
+    // const endDate = yyyyMMdd(tableFilters.endDate.value); 
+    /*
     const urlParams = new URLSearchParams(window.location.search);
     const startDate = urlParams.get('startDate');
     const endDate = urlParams.get('endDate');
-    const hash = tab ? `#${tab}` : '';
+
     history.push(
       `/file-status/${workOrderId}?orgSid=${orgSid}&fsOrgSid=${fsOrgSid}&startDate=${startDate}&endDate=${endDate}${hash}`
     );
+    */
+    const hash = tab ? `#${tab}` : ''; 
+    useFileStatusDetailsPanel?.showPanel(workOrderId ?? '', fsOrgSid ??'', hash);
   };
 
   const _doSort = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {

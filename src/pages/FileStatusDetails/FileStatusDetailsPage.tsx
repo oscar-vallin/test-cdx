@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react';
 
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 
-import { ROUTE_FILE_STATUS, ROUTES } from 'src/data/constants/RouteConstants';
+import { ROUTE_FILE_STATUS } from 'src/data/constants/RouteConstants';
+import { PanelBody } from 'src/layouts/Panels/Panels.styles';
 
-import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Badge } from 'src/components/badges/Badge';
 import { Text } from 'src/components/typography';
 import {
@@ -17,7 +17,7 @@ import {
   WorkStatus,
 } from 'src/data/services/graphql';
 
-import { IconButton, Pivot, PivotItem, Stack } from '@fluentui/react';
+import { IconButton, Pivot, PivotItem, Stack, PanelType, Panel, Spinner, SpinnerSize} from '@fluentui/react';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { InfoIcon } from 'src/components/badges/InfoIcon';
@@ -34,20 +34,29 @@ import EnrollmentStatsTab from './EnrollmentStatsTab/EnrollmentStatsTab';
 import VendorCountStatsTab from './VendorCountStatsTab/VendorCountStatsTab';
 import { WorkPacketCommandButton } from './WorkPacketCommandButton';
 import { BadgeWrapper, FileMetaDetails, FileTitle, ShadowBox } from './FileStatusDetails.styles';
+import { UseFileStatusDetailsPanel } from './useFileStatusDetailsPanel'
+import { Spacing } from 'src/components/spacings/Spacing';
 
 const POLL_INTERVAL = 20000;
+type FileStatusDetailsPageProps = {
+  useFileStatusDetailsPanel?: UseFileStatusDetailsPanel;
+}
 
-const FileStatusDetailsPage = () => {
+const FileStatusDetailsPage = ({ useFileStatusDetailsPanel }: FileStatusDetailsPageProps) => {
   const urlParams = new URLSearchParams(window.location.search);
   const { orgSid, startDate, endDate } = useOrgSid();
   const history = useHistory();
+  /* 
   const fsOrgSid = urlParams.get('fsOrgSid') ?? orgSid;
   const { hash } = useLocation();
-
-  const { id }: any = useParams();
+  const { id }: any = useParams(); 
+  */
+  const fsOrgSid = useFileStatusDetailsPanel?.fsOrgSid ?? '';
+  const hash = useFileStatusDetailsPanel?.hash;
+  const id = useFileStatusDetailsPanel?.workOrderId ?? '';
   const [packet, setPacket] = useState<WorkPacketStatusDetails>();
   const [showDetails, setShowDetails] = useState(true);
-  const realId = id.replace('*', '');
+  const realId = id?.replace('*', '');
   const [lastUpdatedPoll, setLastUpdatedPoll] = useState<Date>(new Date());
 
   const [callGetWPDetails, { data, loading, error }] = useWorkPacketStatusDetailsLazyQuery({
@@ -322,44 +331,57 @@ const FileStatusDetailsPage = () => {
   );
 
   return (
-    <LayoutDashboard id="PageFileStatusDetails" menuOptionSelected={ROUTES.ROUTE_FILE_STATUS.ID}>
-      {renderFileMetaData()}
+    <Panel
+      closeButtonAriaLabel="Close"
+      type={PanelType.extraLarge}
+      isOpen={useFileStatusDetailsPanel?.isPanelOpen}
+      onDismiss={useFileStatusDetailsPanel?.closePanel}
+      onOuterClick={() => {}}
+    >
+      {loading ? 
+        <Spacing margin={{ top: 'double' }}>
+          <Spinner size={SpinnerSize.large} label="Loading file status details" />
+        </Spacing> :  
+        <PanelBody>
+          {renderFileMetaData()}
+          <ShadowBox>
+            <Pivot
+              overflowBehavior="menu"
+              overflowAriaLabel="more items"
+              styles={{
+                link: {
+                  fontSize: theme.fontSizes.normal,
+                },
+                linkIsSelected: {
+                  fontSize: theme.fontSizes.normal,
+                },
+              }}
+              style={{ fontSize: theme.fontSizes.normal }}
+              defaultSelectedKey={hash}
+            >
+              <PivotItem headerText="Enrollment Stats" itemKey="#enrollment">
+                <EnrollmentStatsTab packet={packet} />
+              </PivotItem>
+              <PivotItem headerText="Vendor Count Stats" itemKey="#vendor">
+                <VendorCountStatsTab items={packet?.outboundRecordCounts} />
+              </PivotItem>
+              {packet?.workStepStatus && packet.workStepStatus.length > 0 && (
+                <PivotItem headerText="Work Steps" itemKey="#work">
+                  <WorkStepsTab packet={packet} />
+                </PivotItem>
+              )}
+              <PivotItem headerText="Quality Checks" itemKey="#quality" onRenderItemLink={onRenderItemLink}>
+                <QualityChecksTab details={packet} />
+              </PivotItem>
+              <PivotItem headerText="Archives">
+                <ArchivesTab packet={packet} />
+              </PivotItem>
+            </Pivot>
+          </ShadowBox>
+        </PanelBody>
+      }
+    </Panel>
 
-      <ShadowBox>
-        <Pivot
-          overflowBehavior="menu"
-          overflowAriaLabel="more items"
-          styles={{
-            link: {
-              fontSize: theme.fontSizes.normal,
-            },
-            linkIsSelected: {
-              fontSize: theme.fontSizes.normal,
-            },
-          }}
-          style={{ fontSize: theme.fontSizes.normal }}
-          defaultSelectedKey={hash}
-        >
-          <PivotItem headerText="Enrollment Stats" itemKey="#enrollment">
-            <EnrollmentStatsTab packet={packet} />
-          </PivotItem>
-          <PivotItem headerText="Vendor Count Stats" itemKey="#vendor">
-            <VendorCountStatsTab items={packet?.outboundRecordCounts} />
-          </PivotItem>
-          {packet?.workStepStatus && packet.workStepStatus.length > 0 && (
-            <PivotItem headerText="Work Steps" itemKey="#work">
-              <WorkStepsTab packet={packet} />
-            </PivotItem>
-          )}
-          <PivotItem headerText="Quality Checks" itemKey="#quality" onRenderItemLink={onRenderItemLink}>
-            <QualityChecksTab details={packet} />
-          </PivotItem>
-          <PivotItem headerText="Archives">
-            <ArchivesTab packet={packet} />
-          </PivotItem>
-        </Pivot>
-      </ShadowBox>
-    </LayoutDashboard>
   );
 };
 

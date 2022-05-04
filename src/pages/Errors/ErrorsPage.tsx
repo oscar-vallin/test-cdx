@@ -9,9 +9,12 @@ import { WorkPacketTable } from 'src/containers/tables/WorkPacketTable';
 import { WorkPacketColumn } from 'src/containers/tables/WorkPacketColumns';
 import { NullHandling, SortDirection, useWpProcessErrorsLazyQuery, WorkPacketStatus } from 'src/data/services/graphql';
 import { useTableFilters } from 'src/hooks/useTableFilters';
+import { useFileStatusDetailsPanel } from 'src/pages/FileStatusDetails/useFileStatusDetailsPanel'
+import { FileStatusDetailsPage } from 'src/pages/FileStatusDetails';
 
 const _ErrorsPage = () => {
   const [tableMeta, setTableMeta] = useState({ count: 0, loading: true });
+  const fileStatusDetailsPanel = useFileStatusDetailsPanel();
   const tableFilters = useTableFilters('Extract Name, Status, Vendor, etc.', [
     {
       property: 'timestamp',
@@ -51,6 +54,7 @@ const _ErrorsPage = () => {
 
       <WorkPacketTable
         id="TableFileStatus"
+        useFileStatusDetailsPanel={fileStatusDetailsPanel}
         cols={[
           WorkPacketColumn.START_TIME,
           WorkPacketColumn.INBOUND_FILENAME,
@@ -67,6 +71,9 @@ const _ErrorsPage = () => {
           setTableMeta({ count: total, loading });
         }}
       />
+      <FileStatusDetailsPage
+        useFileStatusDetailsPanel={fileStatusDetailsPanel}
+      ></FileStatusDetailsPage>
     </LayoutDashboard>
   );
 };
