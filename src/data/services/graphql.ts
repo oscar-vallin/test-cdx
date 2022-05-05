@@ -2592,6 +2592,7 @@ export type WpProcessError = {
 
 export type WpProcessErrorConnection = {
   __typename?: 'WPProcessErrorConnection';
+  listPageInfo?: Maybe<ListPageInfo>;
   paginationInfo: PaginationInfo;
   nodes?: Maybe<Array<WpProcessError>>;
 };
@@ -2620,6 +2621,7 @@ export type WpTransmission = {
 
 export type WpTransmissionConnection = {
   __typename?: 'WPTransmissionConnection';
+  listPageInfo?: Maybe<ListPageInfo>;
   paginationInfo: PaginationInfo;
   nodes?: Maybe<Array<WpTransmission>>;
 };
@@ -3585,7 +3587,10 @@ export type WpProcessErrorsQuery = (
   { __typename?: 'Query' }
   & { wpProcessErrors?: Maybe<(
     { __typename?: 'WPProcessErrorConnection' }
-    & { paginationInfo: (
+    & { listPageInfo?: Maybe<(
+      { __typename?: 'ListPageInfo' }
+      & FragmentListPageInfoFragment
+    )>, paginationInfo: (
       { __typename?: 'PaginationInfo' }
       & FragmentPaginationInfoFragment
     ), nodes?: Maybe<Array<(
@@ -3611,7 +3616,10 @@ export type WpTransmissionsQuery = (
   { __typename?: 'Query' }
   & { wpTransmissions?: Maybe<(
     { __typename?: 'WPTransmissionConnection' }
-    & { paginationInfo: (
+    & { listPageInfo?: Maybe<(
+      { __typename?: 'ListPageInfo' }
+      & FragmentListPageInfoFragment
+    )>, paginationInfo: (
       { __typename?: 'PaginationInfo' }
       & FragmentPaginationInfoFragment
     ), nodes?: Maybe<Array<(
@@ -7885,6 +7893,9 @@ export const WpProcessErrorsDocument = gql`
     dateRange: $dateRange
     pageableInput: $pageableInput
   ) {
+    listPageInfo {
+      ...fragmentListPageInfo
+    }
     paginationInfo {
       ...fragmentPaginationInfo
     }
@@ -7907,7 +7918,8 @@ export const WpProcessErrorsDocument = gql`
     }
   }
 }
-    ${FragmentPaginationInfoFragmentDoc}
+    ${FragmentListPageInfoFragmentDoc}
+${FragmentPaginationInfoFragmentDoc}
 ${FragmentWorkPacketCommandFragmentDoc}`;
 
 /**
@@ -7946,6 +7958,9 @@ export const WpTransmissionsDocument = gql`
     dateRange: $dateRange
     pageableInput: $pageableInput
   ) {
+    listPageInfo {
+      ...fragmentListPageInfo
+    }
     paginationInfo {
       ...fragmentPaginationInfo
     }
@@ -7973,7 +7988,8 @@ export const WpTransmissionsDocument = gql`
     }
   }
 }
-    ${FragmentPaginationInfoFragmentDoc}
+    ${FragmentListPageInfoFragmentDoc}
+${FragmentPaginationInfoFragmentDoc}
 ${FragmentWorkPacketCommandFragmentDoc}`;
 
 /**
