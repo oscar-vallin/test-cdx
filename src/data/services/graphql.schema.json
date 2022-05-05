@@ -5894,6 +5894,18 @@
             "deprecationReason": null
           },
           {
+            "name": "secondaryHeaderLabel",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "pageCommands",
             "description": null,
             "args": [],
@@ -20501,6 +20513,18 @@
         "description": null,
         "fields": [
           {
+            "name": "listPageInfo",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "ListPageInfo",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "paginationInfo",
             "description": null,
             "args": [],
@@ -20794,6 +20818,18 @@
         "name": "WPTransmissionConnection",
         "description": null,
         "fields": [
+          {
+            "name": "listPageInfo",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "ListPageInfo",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
           {
             "name": "paginationInfo",
             "description": null,
@@ -21449,6 +21485,18 @@
             "deprecationReason": null
           },
           {
+            "name": "reprocessedOn",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "DateTime",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "restartReason",
             "description": null,
             "args": [],
@@ -21667,6 +21715,18 @@
         "name": "WorkPacketStatusConnection",
         "description": null,
         "fields": [
+          {
+            "name": "listPageInfo",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "ListPageInfo",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
           {
             "name": "paginationInfo",
             "description": null,
