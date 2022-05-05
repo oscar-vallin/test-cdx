@@ -2705,6 +2705,7 @@ export type WorkPacketStatus = {
   packetStatus: WorkStatus;
   /** User email address */
   reprocessedBy?: Maybe<Scalars['String']>;
+  reprocessedOn?: Maybe<Scalars['DateTime']>;
   restartReason?: Maybe<RestartReason>;
   recordHighlightCount?: Maybe<Scalars['Int']>;
   populationCount?: Maybe<Scalars['Int']>;
@@ -3513,7 +3514,7 @@ export type WorkPacketStatusQuery = (
   { __typename?: 'Query' }
   & { workPacketStatus?: Maybe<(
     { __typename?: 'WorkPacketStatus' }
-    & Pick<WorkPacketStatus, 'workOrderId' | 'timestamp' | 'orgId' | 'orgSid' | 'detailsPath' | 'inboundFilename' | 'vendorId' | 'vendorSid' | 'step' | 'stepStatus' | 'packetStatus' | 'reprocessedBy' | 'restartReason' | 'recordHighlightCount' | 'populationCount' | 'recordHighlightType' | 'clientFileArchivePath' | 'vendorFileArchivePath' | 'vendorFilename' | 'feedType' | 'inboundDataType' | 'inboundDataSize' | 'version' | 'supplementalFilesArchivePaths' | 'archiveOnly' | 'hasErrors' | 'environment'>
+    & Pick<WorkPacketStatus, 'workOrderId' | 'timestamp' | 'orgId' | 'orgSid' | 'detailsPath' | 'inboundFilename' | 'vendorId' | 'vendorSid' | 'step' | 'stepStatus' | 'packetStatus' | 'reprocessedBy' | 'reprocessedOn' | 'restartReason' | 'recordHighlightCount' | 'populationCount' | 'recordHighlightType' | 'clientFileArchivePath' | 'vendorFileArchivePath' | 'vendorFilename' | 'feedType' | 'inboundDataType' | 'inboundDataSize' | 'version' | 'supplementalFilesArchivePaths' | 'archiveOnly' | 'hasErrors' | 'environment'>
     & { commands?: Maybe<Array<(
       { __typename?: 'WorkPacketCommand' }
       & FragmentWorkPacketCommandFragment
@@ -3553,7 +3554,7 @@ export type WorkPacketStatusesQuery = (
       & FragmentPaginationInfoFragment
     ), nodes?: Maybe<Array<(
       { __typename?: 'WorkPacketStatus' }
-      & Pick<WorkPacketStatus, 'workOrderId' | 'timestamp' | 'orgId' | 'orgSid' | 'detailsPath' | 'inboundFilename' | 'vendorId' | 'vendorSid' | 'step' | 'stepStatus' | 'packetStatus' | 'reprocessedBy' | 'restartReason' | 'recordHighlightCount' | 'populationCount' | 'recordHighlightType' | 'clientFileArchivePath' | 'vendorFileArchivePath' | 'vendorFilename' | 'feedType' | 'inboundDataType' | 'inboundDataSize' | 'version' | 'supplementalFilesArchivePaths' | 'archiveOnly' | 'hasErrors' | 'environment'>
+      & Pick<WorkPacketStatus, 'workOrderId' | 'timestamp' | 'orgId' | 'orgSid' | 'detailsPath' | 'inboundFilename' | 'vendorId' | 'vendorSid' | 'step' | 'stepStatus' | 'packetStatus' | 'reprocessedBy' | 'reprocessedOn' | 'restartReason' | 'recordHighlightCount' | 'populationCount' | 'recordHighlightType' | 'clientFileArchivePath' | 'vendorFileArchivePath' | 'vendorFilename' | 'feedType' | 'inboundDataType' | 'inboundDataSize' | 'version' | 'supplementalFilesArchivePaths' | 'archiveOnly' | 'hasErrors' | 'environment'>
       & { commands?: Maybe<Array<(
         { __typename?: 'WorkPacketCommand' }
         & FragmentWorkPacketCommandFragment
@@ -7681,6 +7682,7 @@ export const WorkPacketStatusDocument = gql`
     stepStatus
     packetStatus
     reprocessedBy
+    reprocessedOn
     restartReason
     recordHighlightCount
     populationCount
@@ -7793,6 +7795,7 @@ export const WorkPacketStatusesDocument = gql`
       stepStatus
       packetStatus
       reprocessedBy
+      reprocessedOn
       restartReason
       recordHighlightCount
       populationCount
