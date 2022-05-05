@@ -12,6 +12,10 @@ export const ShadowBox = styled.div`
   max-width: unset;
   padding: 10px 15px 15px;
   margin: 0 20px 20px 20px;
+
+  .ms-CommandBar-primaryCommand{
+    justify-content: flex-end;
+  }
 `;
 
 export const FileMetaDetails = styled.div`

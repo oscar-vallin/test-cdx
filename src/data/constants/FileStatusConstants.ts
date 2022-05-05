@@ -50,12 +50,6 @@ export const STEP_STATUS_DEFAULT = [
 export const STEP_STATUS = [
   {
     step: STEP_RECEIVE,
-    stepStatus: STATUSES[2],
-    archiveOnly: false,
-    colors: [STEP_COLOR_GREEN, STEP_COLOR_NONE, STEP_COLOR_NONE],
-  },
-  {
-    step: STEP_RECEIVE,
     stepStatus: STATUSES[0],
     archiveOnly: false,
     colors: [STEP_COLOR_BLUE, STEP_COLOR_NONE, STEP_COLOR_NONE],
@@ -73,16 +67,10 @@ export const STEP_STATUS = [
     colors: [STEP_COLOR_GREEN, STEP_COLOR_GREEN, STEP_COLOR_NONE],
   },
   {
-    step: STEP_TRANSFORM,
-    stepStatus: STATUSES[6],
+    step: STEP_RECEIVE,
+    stepStatus: STATUSES[2],
     archiveOnly: false,
-    colors: [STEP_COLOR_GREEN, STEP_COLOR_YELLOW, STEP_COLOR_NONE],
-  },
-  {
-    step: STEP_TRANSFORM,
-    stepStatus: STATUSES[3],
-    archiveOnly: false,
-    colors: [STEP_COLOR_GREEN, STEP_COLOR_RED, STEP_COLOR_NONE],
+    colors: [STEP_COLOR_GREEN, STEP_COLOR_NONE, STEP_COLOR_NONE],
   },
   {
     step: STEP_TRANSMIT,
@@ -97,22 +85,76 @@ export const STEP_STATUS = [
     colors: [STEP_COLOR_GREEN, STEP_COLOR_GREEN, STEP_COLOR_BLUE],
   },
   {
+    step: STEP_RECEIVE,
+    stepStatus: STATUSES[3],
+    archiveOnly: false,
+    colors: [STEP_COLOR_RED, STEP_COLOR_NONE, STEP_COLOR_NONE],
+  },
+  {
     step: STEP_TRANSFORM,
-    stepStatus: STATUSES[8],
-    archiveOnly: true,
-    colors: [STEP_COLOR_GREEN, STEP_COLOR_GREEN, STEP_COLOR_RED],
+    stepStatus: STATUSES[3],
+    archiveOnly: false,
+    colors: [STEP_COLOR_GREEN, STEP_COLOR_RED, STEP_COLOR_NONE],
   },
   {
     step: STEP_TRANSMIT,
-    stepStatus: STATUSES[8],
-    archiveOnly: true,
-    colors: [STEP_COLOR_GREEN, STEP_COLOR_GREEN, STEP_COLOR_BLUE],
+    stepStatus: STATUSES[3],
+    archiveOnly: false,
+    colors: [STEP_COLOR_GREEN, STEP_COLOR_GREEN, STEP_COLOR_RED],
+  },
+  {
+    step: STEP_RECEIVE,
+    stepStatus: STATUSES[5],
+    archiveOnly: false,
+    colors: [STEP_COLOR_YELLOW, STEP_COLOR_NONE, STEP_COLOR_NONE],
+  },
+  {
+    step: STEP_TRANSFORM,
+    stepStatus: STATUSES[5],
+    archiveOnly: false,
+    colors: [STEP_COLOR_GREEN, STEP_COLOR_YELLOW, STEP_COLOR_NONE],
+  },
+  {
+    step: STEP_TRANSMIT,
+    stepStatus: STATUSES[5],
+    archiveOnly: false,
+    colors: [STEP_COLOR_GREEN, STEP_COLOR_GREEN, STEP_COLOR_YELLOW],
+  },
+  {
+    step: STEP_TRANSFORM,
+    stepStatus: STATUSES[6],
+    archiveOnly: false,
+    colors: [STEP_COLOR_GREEN, STEP_COLOR_YELLOW, STEP_COLOR_NONE],
+  },
+  {
+    step: STEP_RECEIVE,
+    stepStatus: STATUSES[7],
+    archiveOnly: false,
+    colors: [STEP_COLOR_RED, STEP_COLOR_NONE, STEP_COLOR_NONE],
   },
   {
     step: STEP_TRANSFORM,
     stepStatus: STATUSES[7],
-    archiveOnly: true,
-    colors: [STEP_COLOR_YELLOW, STEP_COLOR_NONE, STEP_COLOR_NONE],
+    archiveOnly: false,
+    colors: [STEP_COLOR_GREEN, STEP_COLOR_RED, STEP_COLOR_NONE],
+  },
+  {
+    step: STEP_TRANSMIT,
+    stepStatus: STATUSES[7],
+    archiveOnly: false,
+    colors: [STEP_COLOR_GREEN, STEP_COLOR_GREEN, STEP_COLOR_RED],
+  },
+  {
+    step: STEP_TRANSFORM,
+    stepStatus: STATUSES[8],
+    archiveOnly: false,
+    colors: [STEP_COLOR_GREEN, STEP_COLOR_RED, STEP_COLOR_NONE],
+  },
+  {
+    step: STEP_TRANSMIT,
+    stepStatus: STATUSES[8],
+    archiveOnly: false,
+    colors: [STEP_COLOR_GREEN, STEP_COLOR_GREEN, STEP_COLOR_BLUE],
   },
 ];
 
@@ -138,14 +180,14 @@ export const getStepStatusLabel = (stepStatusId) => {
   return STEP_STATUS.find((step) => step?.stepStatus?.value === stepStatusId)?.stepStatus.label;
 };
 
-const getStepStatus = (stepId, stepStatusId) => {
+const getStepStatus = (stepId, stepStatusId, isArchiveOnly = false) => {
   return (
-    STEP_STATUS.find(({ step, stepStatus }) => step === stepId && stepStatus.value === stepStatusId) ??
+    STEP_STATUS.find(({ step, stepStatus, archiveOnly}) => step === stepId && stepStatus.value === stepStatusId && archiveOnly === (stepId === STEP_TRANSMIT && stepStatusId==='COMPLETE' ? isArchiveOnly : false )) ??
     STEP_STATUS_DEFAULT.find((step) => step === stepId) ??
     STEP_STATUS_DEFAULT[0]
   );
 };
 
-export const getProgressByValues = (step, stepStatus) => {
-  return getStepStatus(step, stepStatus);
+export const getProgressByValues = (step, stepStatus, isArchiveOnly) => {
+  return getStepStatus(step, stepStatus, isArchiveOnly);
 };

@@ -316,7 +316,7 @@ export const useWorkPacketColumns = (
       onRender: (item: WorkPacketStatus) => {
         return (
           <StyledCell id={`__Progress_${item.workOrderId}`}>
-            <FileProgress step={item.step} stepStatus={item.stepStatus} />
+            <FileProgress step={item.step} stepStatus={item.stepStatus} archiveOnly={item.archiveOnly ?? false}/>
           </StyledCell>
         );
       },

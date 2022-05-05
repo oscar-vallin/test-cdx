@@ -27,6 +27,7 @@ type RowProps = {
   between?: string;
   evenly?: string;
   around?: boolean;
+  wrap?: boolean;
 } & typeof defaultProps;
 
 const Row = ({
@@ -40,6 +41,7 @@ const Row = ({
   between,
   evenly,
   around,
+  wrap,
   ...props
 }: RowProps): ReactElement => {
   return (
@@ -54,6 +56,7 @@ const Row = ({
       between={between}
       evenly={evenly}
       around={around}
+      wrap={wrap}
     >
       {children}
     </DivStyled>

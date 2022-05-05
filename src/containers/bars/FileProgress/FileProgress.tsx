@@ -7,16 +7,18 @@ const defaultProps = {
   id: '',
   step: 'primary',
   stepStatus: true,
+  archiveOnly: false
 };
 
 type FileProgressProps = {
   id?: string;
   step?: any;
   stepStatus?: any;
+  archiveOnly?: boolean;
 } & typeof defaultProps;
 
-const FileProgress = ({ id, step, stepStatus }: FileProgressProps): ReactElement | null => {
-  const progressItem = getProgressByValues(step, stepStatus);
+const FileProgress = ({ id, step, stepStatus, archiveOnly }: FileProgressProps): ReactElement | null => {
+  const progressItem = getProgressByValues(step, stepStatus, archiveOnly);
 
   if (!progressItem) return null;
 

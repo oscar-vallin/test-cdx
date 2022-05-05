@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 
-import { useHistory, useLocation, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 import { ROUTE_FILE_STATUS } from 'src/data/constants/RouteConstants';
 import { PanelBody } from 'src/layouts/Panels/Panels.styles';
@@ -17,7 +17,7 @@ import {
   WorkStatus,
 } from 'src/data/services/graphql';
 
-import { IconButton, Pivot, PivotItem, Stack, PanelType, Panel, Spinner, SpinnerSize} from '@fluentui/react';
+import { IconButton, Pivot, PivotItem, Stack, PanelType, Panel, Spinner, SpinnerSize, CommandBar, ICommandBarItemProps} from '@fluentui/react';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { InfoIcon } from 'src/components/badges/InfoIcon';
@@ -36,6 +36,7 @@ import { WorkPacketCommandButton } from './WorkPacketCommandButton';
 import { BadgeWrapper, FileMetaDetails, FileTitle, ShadowBox } from './FileStatusDetails.styles';
 import { UseFileStatusDetailsPanel } from './useFileStatusDetailsPanel'
 import { Spacing } from 'src/components/spacings/Spacing';
+import { Row } from 'src/components/layouts';
 
 const POLL_INTERVAL = 20000;
 type FileStatusDetailsPageProps = {
@@ -167,8 +168,98 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel }: FileStatusDetailsP
   const reprocessRenameCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Rename);
   const cancelCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Cancel);
   const deleteCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Delete);
-  const rerunCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.RerunStep);
-
+  //const rerunCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.RerunStep);
+  
+  const renderWorkPacketCommandButton = (item: any) =>{
+    if(!item) return <></>
+    return (
+      <WorkPacketCommandButton
+        id={item.id}
+        icon={item.icon}
+        confirmationMsg={item.confirmationMsg}
+        command={item.command}
+        onClick={item.onClick}
+        workPacketCommands={item.workPacketCommands}
+        realId={item.realId}
+        callback={item.callback}
+      />
+    )
+  }
+  
+  const commandBarItems: any= [
+    { 
+      id:"__ResendBtn",
+      key:"__ResendBtn",
+      icon: "Send",
+      confirmationMsg:"Are you sure you want to Resend this Work Packet?",
+      command: resendCmd,
+      onClick: workPacketCommands.apiCallResend,
+      onRender: renderWorkPacketCommandButton
+    },
+    {
+      id: "__ContinueBtn",
+      key: "__ContinueBtn",
+      icon: "PlayResume",
+      confirmationMsg: "Are you sure you want to Continue this Work Packet?",
+      command: continueCmd,
+      onClick: workPacketCommands.apiCallContinue,
+      callback:() => {
+        pollWPStatus.startPolling(POLL_INTERVAL)
+      },
+      onRender: renderWorkPacketCommandButton
+    },
+    {
+      id: "__ReprocessBtn",
+      key: "__ReprocessBtn",
+      icon: "Rerun",
+      confirmationMsg: "Are you sure you want to Reprocess this Work Packet?",
+      command: reprocessCmd,
+      workPacketCommands: workPacketCommands,
+      realId: realId,
+      callback: () => {
+        pollWPStatus.startPolling(POLL_INTERVAL);
+      },
+      onRender: renderWorkPacketCommandButton
+    },
+    {
+      id: "__ReprocessRenameBtn",
+      key: "__ReprocessRenameBtn",
+      icon: "Rerun",
+      confirmationMsg: "Are you sure you want to Reprocess this Work Packet?",
+      workPacketCommands:workPacketCommands,
+      realId: realId,
+      command: reprocessRenameCmd,
+      onClick: workPacketCommands.apiCallRenameReprocess,
+      callback: () => {
+        pollWPStatus.startPolling(POLL_INTERVAL);
+      },
+      onRender: renderWorkPacketCommandButton
+    },
+    {
+      id: "__CancelBtn",
+      key: "__CancelBtn",
+      icon: "Cancel",
+      confirmationMsg: "Are you sure you want to Cancel this Work Packet's processing?",
+      command: cancelCmd,
+      onClick: workPacketCommands.apiCallCancel,
+      callback: () => {
+        pollWPStatus.startPolling(POLL_INTERVAL);
+      },
+      onRender: renderWorkPacketCommandButton
+    },
+    {
+      id: "__DeleteBtn",
+      key: "__DeleteBtn",
+      icon:"Delete",
+      confirmationMsg: 'Are you sure you want to Delete this Work Packet?',
+      command: deleteCmd,
+      onClick: workPacketCommands.apiCallDelete,
+      callback:() => {
+        history.push(`${ROUTE_FILE_STATUS.URL}?orgSid=${orgSid}&startDate=${startDate}&endDate=${endDate}`)
+      },
+      onRender: renderWorkPacketCommandButton
+    }
+  ]
   const renderDeliveredFileInfo = (fileInfo?: DeliveredFile | null) => {
     if (fileInfo) {
       return (
@@ -202,104 +293,45 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel }: FileStatusDetailsP
   const renderFileMetaData = () => {
     return (
       <ShadowBox id="__FileMeta">
-        <Stack horizontal={true} wrap={true} tokens={{ childrenGap: 10 }}>
-          <Stack.Item align="center" disableShrink>
-            <IconButton
-              iconProps={{ iconName: showDetails ? 'ChevronUp' : 'ChevronDown' }}
-              onClick={() => setShowDetails(!showDetails)}
-            />
-          </Stack.Item>
-          <Stack.Item align="center">
-            <FileTitle>{packet?.inboundFilename ?? packet?.workOrderId}</FileTitle>
-          </Stack.Item>
-          <Stack.Item align="center">
-            <Badge variant={getBadgeVariant(packet?.packetStatus)} label={packet?.packetStatus} pill />
-          </Stack.Item>
-          <Stack.Item align="center">
-            <Badge variant="info" label={`Billing Units: ${packet?.populationCount ?? 'none'}`} pill />
-            {packet?.suppressBilling && (
-              <>
-                <Required>*</Required>
-                <InfoIcon id="billingUnitInfo" tooltip="This exchange was not billed" />
-              </>
+        <Row center wrap={false}>
+          <Stack horizontal={true} wrap={true} tokens={{ childrenGap: 10 }}>
+            <Stack.Item align="center" disableShrink>
+              <IconButton
+                iconProps={{ iconName: showDetails ? 'ChevronUp' : 'ChevronDown' }}
+                onClick={() => setShowDetails(!showDetails)}
+              />
+            </Stack.Item>
+            <Stack.Item align="center">
+              <FileTitle>{packet?.inboundFilename ?? packet?.workOrderId}</FileTitle>
+            </Stack.Item>
+            {packet?.packetStatus===WorkStatus.Processing &&(
+              <Spinner size={SpinnerSize.medium}/>
             )}
-          </Stack.Item>
-          <Stack.Item align="center" grow>
-            <Text variant="muted">{renderReceivedDate()}</Text>
-          </Stack.Item>
-          <WorkPacketCommandButton
-            id="__ResendBtn"
-            icon="Send"
-            confirmationMsg="Are you sure you want to Resend this Work Packet?"
-            command={resendCmd}
-            onClick={workPacketCommands.apiCallResend}
-          />
-          <WorkPacketCommandButton
-            id="__ContinueBtn"
-            icon="PlayResume"
-            confirmationMsg="Are you sure you want to Continue this Work Packet?"
-            command={continueCmd}
-            onClick={workPacketCommands.apiCallContinue}
-            callback={() => {
-              pollWPStatus.startPolling(POLL_INTERVAL);
-            }}
-          />
-          <WorkPacketCommandButton
-            id="__RedoBtn"
-            icon="Rerun"
-            confirmationMsg="Are you sure you want to Redo this Work Packet?"
-            command={rerunCmd}
-            packetStatus={packet?.packetStatus}
-            workPacketCommands={workPacketCommands}
-            realId={realId}
-            callback={() => {
-              pollWPStatus.startPolling(POLL_INTERVAL);
-            }}
-          />
-          <WorkPacketCommandButton
-            id="__ReprocessBtn"
-            icon="Rerun"
-            confirmationMsg="Are you sure you want to Reprocess this Work Packet?"
-            command={reprocessCmd}
-            workPacketCommands={workPacketCommands}
-            realId={realId}
-            callback={() => {
-              pollWPStatus.startPolling(POLL_INTERVAL);
-            }}
-          />
-          <WorkPacketCommandButton
-            id="__ReprocessRenameBtn"
-            icon="Rerun"
-            confirmationMsg="Are you sure you want to Reprocess this Work Packet?"
-            workPacketCommands={workPacketCommands}
-            realId={realId}
-            command={reprocessRenameCmd}
-            onClick={workPacketCommands.apiCallRenameReprocess}
-            callback={() => {
-              pollWPStatus.startPolling(POLL_INTERVAL);
-            }}
-          />
-          <WorkPacketCommandButton
-            id="__CancelBtn"
-            icon="Cancel"
-            confirmationMsg="Are you sure you want to Cancel this Work Packet's processing?"
-            command={cancelCmd}
-            onClick={workPacketCommands.apiCallCancel}
-            callback={() => {
-              pollWPStatus.startPolling(POLL_INTERVAL);
-            }}
-          />
-          <WorkPacketCommandButton
-            id="__DeleteBtn"
-            icon="Delete"
-            confirmationMsg={'Are you sure you want to Delete this Work Packet?'}
-            command={deleteCmd}
-            onClick={workPacketCommands.apiCallDelete}
-            callback={() => {
-              history.push(`${ROUTE_FILE_STATUS.URL}?orgSid=${orgSid}&startDate=${startDate}&endDate=${endDate}`);
-            }}
-          />
-        </Stack>
+            <Stack.Item align="center">
+              <Badge variant={getBadgeVariant(packet?.packetStatus)} label={packet?.packetStatus} pill />
+            </Stack.Item>
+            <Stack.Item align="center">
+              <Badge variant="info" label={`Billing Units: ${packet?.populationCount ?? 'none'}`} pill />
+              {packet?.suppressBilling && (
+                <>
+                  <Required>*</Required>
+                  <InfoIcon id="billingUnitInfo" tooltip="This exchange was not billed" />
+                </>
+              )}
+            </Stack.Item>
+            <Stack.Item align="center" grow>
+              <Text variant="muted">{renderReceivedDate()}</Text>
+            </Stack.Item>
+          </Stack>
+          <Stack horizontal={true} wrap={false} grow>
+            <Stack.Item grow align="end">
+              <CommandBar
+                items={commandBarItems}
+                overflowButtonProps={{ ariaLabel: 'More commands' }}
+              />
+            </Stack.Item>
+          </Stack>
+         </Row >
         {showDetails && (
           <FileMetaDetails>
             <Stack horizontal={true} wrap={true} tokens={{ childrenGap: 15 }}>
