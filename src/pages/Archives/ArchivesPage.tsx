@@ -19,6 +19,7 @@ import { FileStatusDetailsPage } from '../FileStatusDetails';
 
 const _ArchivePage = () => {
   const [tableMeta, setTableMeta] = useState({ count: 0, loading: true });
+  const [pageTitle, setPageTitle] = useState('')
   const fileStatusDetailsPanel = useFileStatusDetailsPanel();
   const tableFilters = useTableFilters('Extract Name, Status, Vendor, etc.', [
     {
@@ -28,6 +29,10 @@ const _ArchivePage = () => {
       ignoreCase: true,
     },
   ]);
+
+  const handleSetPageTitle=(title: string)=>{
+    setPageTitle(title)
+  }
 
   const mapData = (data) => {
     const items: WorkPacketStatus[] = [];
@@ -45,7 +50,7 @@ const _ArchivePage = () => {
         <Container>
           <Row>
             <Column sm="6" direction="row">
-              <PageTitle id="__Archives_Title" title="Archives" subTitle="Advanced search" icon="FilterSolid" />
+              <PageTitle id="__Archives_Title" title={pageTitle} subTitle="Advanced search" icon="FilterSolid" />
             </Column>
             <Column sm="6" right>
               <Text size="large" right>
@@ -62,6 +67,8 @@ const _ArchivePage = () => {
       <WorkPacketTable
         id="TableArchive"
         useFileStatusDetailsPanel={fileStatusDetailsPanel}
+        setContextualTitle={handleSetPageTitle}
+        routeId={ROUTES.ROUTE_ARCHIVES.ID}
         cols={[
           WorkPacketColumn.TIMESTAMP,
           WorkPacketColumn.VENDOR,

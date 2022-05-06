@@ -16,6 +16,7 @@ import { FileStatusDetailsPage } from '../FileStatusDetails';
 
 const _TransmissionsPage = () => {
   const [tableMeta, setTableMeta] = useState({ count: 0, loading: true });
+  const [pageTitle, setPageTitle] = useState('')
   const fileStatusDetailsPanel = useFileStatusDetailsPanel();
   const { orgSid } = useOrgSid();
   const tableFilters = useTableFilters('Extract Name, Status, Vendor, etc.', [
@@ -26,6 +27,10 @@ const _TransmissionsPage = () => {
       ignoreCase: true,
     },
   ]);
+
+  const handleSetPageTitle=(title: string)=>{
+    setPageTitle(title)
+  }
 
   const mapData = (data) => {
     const items: WpTransmission[] = [];
@@ -73,7 +78,7 @@ const _TransmissionsPage = () => {
             <Column sm="6" direction="row">
               <PageTitle
                 id="__Transmissions_Title"
-                title="Transmissions"
+                title={pageTitle} 
                 subTitle="Advanced search"
                 icon="FilterSolid"
               />
@@ -91,6 +96,7 @@ const _TransmissionsPage = () => {
       <WorkPacketTable
         id="TableTransmissions"
         useFileStatusDetailsPanel={fileStatusDetailsPanel}
+        setContextualTitle={handleSetPageTitle}
         cols={[
           WorkPacketColumn.DATETIME,
           WorkPacketColumn.PLAN_SPONSOR,

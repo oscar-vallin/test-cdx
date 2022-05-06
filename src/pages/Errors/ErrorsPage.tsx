@@ -14,6 +14,7 @@ import { FileStatusDetailsPage } from 'src/pages/FileStatusDetails';
 
 const _ErrorsPage = () => {
   const [tableMeta, setTableMeta] = useState({ count: 0, loading: true });
+  const [pageTitle, setPageTitle] = useState('')
   const fileStatusDetailsPanel = useFileStatusDetailsPanel();
   const tableFilters = useTableFilters('Extract Name, Status, Vendor, etc.', [
     {
@@ -23,6 +24,11 @@ const _ErrorsPage = () => {
       ignoreCase: true,
     },
   ]);
+
+  const handleSetPageTitle=(title: string)=>{
+    setPageTitle(title)
+  }
+
   const mapData = (data) => {
     const items: WorkPacketStatus[] = [];
     data?.wpProcessErrors?.nodes?.forEach((value) => {
@@ -39,7 +45,7 @@ const _ErrorsPage = () => {
         <Container>
           <Row>
             <Column sm="6" direction="row">
-              <PageTitle id="__Errors_Title" title="Errors" subTitle="Advanced search" icon="FilterSolid" />
+              <PageTitle id="__Errors_Title" title={pageTitle} subTitle="Advanced search" icon="FilterSolid" />
             </Column>
             <Column sm="6" right>
               <Text size="large" right>
@@ -55,6 +61,7 @@ const _ErrorsPage = () => {
       <WorkPacketTable
         id="TableFileStatus"
         useFileStatusDetailsPanel={fileStatusDetailsPanel}
+        setContextualTitle={handleSetPageTitle}
         cols={[
           WorkPacketColumn.START_TIME,
           WorkPacketColumn.INBOUND_FILENAME,

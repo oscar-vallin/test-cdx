@@ -22,6 +22,7 @@ import { TableFilters } from './TableFilters';
 import { EmptyState } from '../states';
 import { Box, Container } from './WorkPacketTable.styles';
 import { UseFileStatusDetailsPanel } from 'src/pages/FileStatusDetails/useFileStatusDetailsPanel'
+import { ROUTES } from 'src/data/constants/RouteConstants';
 
 type WorkPacketParams = {
   id: string;
@@ -32,6 +33,8 @@ type WorkPacketParams = {
   tableFilters: TableFiltersType;
   useFileStatusDetailsPanel?: UseFileStatusDetailsPanel;
   onItemsListChange?: (data: any, loading: boolean) => void;
+  setContextualTitle?: (title: string) => void;
+  routeId?: string;
 };
 
 export const WorkPacketTable = ({
@@ -42,7 +45,9 @@ export const WorkPacketTable = ({
   getItems,
   tableFilters,
   onItemsListChange,
-  useFileStatusDetailsPanel
+  useFileStatusDetailsPanel,
+  routeId,
+  setContextualTitle
 }: WorkPacketParams) => {
   const POLL_INTERVAL = 20000;
   const { orgSid } = useOrgSid();
@@ -190,6 +195,20 @@ export const WorkPacketTable = ({
       const newPagingInfo = data?.workPacketStatuses?.paginationInfo;
       if (newPagingInfo) {
         setPagingInfo(newPagingInfo);
+      }
+  
+      //update contextual page title
+      if(data){
+        const key = Object.keys(data)[0];
+        const listPageInfo = data?.[key]?.listPageInfo;
+
+        if (listPageInfo && setContextualTitle) {
+          if(routeId === ROUTES.ROUTE_ARCHIVES.ID){
+            setContextualTitle(listPageInfo.secondaryHeaderLabel)
+          }else{
+            setContextualTitle(listPageInfo.pageHeaderLabel)
+          }
+        }
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
