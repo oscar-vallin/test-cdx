@@ -37,13 +37,15 @@ import { BadgeWrapper, FileMetaDetails, FileTitle, ShadowBox } from './FileStatu
 import { UseFileStatusDetailsPanel } from './useFileStatusDetailsPanel'
 import { Spacing } from 'src/components/spacings/Spacing';
 import { Row } from 'src/components/layouts';
+import { TableFiltersType } from 'src/hooks/useTableFilters';
 
 const POLL_INTERVAL = 20000;
 type FileStatusDetailsPageProps = {
   useFileStatusDetailsPanel?: UseFileStatusDetailsPanel;
+  tableFilters?: TableFiltersType;
 }
 
-const FileStatusDetailsPage = ({ useFileStatusDetailsPanel }: FileStatusDetailsPageProps) => {
+const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters}: FileStatusDetailsPageProps) => {
   const urlParams = new URLSearchParams(window.location.search);
   const { orgSid, startDate, endDate } = useOrgSid();
   const history = useHistory();
@@ -182,6 +184,7 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel }: FileStatusDetailsP
         workPacketCommands={item.workPacketCommands}
         realId={item.realId}
         callback={item.callback}
+        fileName={packet?.inboundFilename ?? ''}
       />
     )
   }
@@ -255,7 +258,12 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel }: FileStatusDetailsP
       command: deleteCmd,
       onClick: workPacketCommands.apiCallDelete,
       callback:() => {
-        history.push(`${ROUTE_FILE_STATUS.URL}?orgSid=${orgSid}&startDate=${startDate}&endDate=${endDate}`)
+        useFileStatusDetailsPanel?.closePanel()
+        tableFilters?.setPagingParams({
+          pageNumber: 0,
+          pageSize: 100,
+          sort: tableFilters.pagingParams.sort,
+        });
       },
       onRender: renderWorkPacketCommandButton
     }

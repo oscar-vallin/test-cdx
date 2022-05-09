@@ -55,10 +55,22 @@ export const STEP_STATUS = [
     colors: [STEP_COLOR_BLUE, STEP_COLOR_NONE, STEP_COLOR_NONE],
   },
   {
+    step: STEP_RECEIVE,
+    stepStatus: STATUSES[1],
+    archiveOnly: false,
+    colors: [STEP_COLOR_PURPLE, STEP_COLOR_NONE, STEP_COLOR_NONE],
+  },
+  {
     step: STEP_TRANSFORM,
     stepStatus: STATUSES[1],
     archiveOnly: false,
     colors: [STEP_COLOR_GREEN, STEP_COLOR_PURPLE, STEP_COLOR_NONE],
+  },
+  {
+    step: STEP_TRANSMIT,
+    stepStatus: STATUSES[1],
+    archiveOnly: false,
+    colors: [STEP_COLOR_GREEN, STEP_COLOR_GREEN, STEP_COLOR_PURPLE],
   },
   {
     step: STEP_TRANSFORM,
@@ -104,6 +116,12 @@ export const STEP_STATUS = [
   },
   {
     step: STEP_RECEIVE,
+    stepStatus: STATUSES[4],
+    archiveOnly: false,
+    colors: [STEP_COLOR_BLUE, STEP_COLOR_NONE, STEP_COLOR_NONE],
+  },
+  {
+    step: STEP_RECEIVE,
     stepStatus: STATUSES[5],
     archiveOnly: false,
     colors: [STEP_COLOR_YELLOW, STEP_COLOR_NONE, STEP_COLOR_NONE],
@@ -119,6 +137,12 @@ export const STEP_STATUS = [
     stepStatus: STATUSES[5],
     archiveOnly: false,
     colors: [STEP_COLOR_GREEN, STEP_COLOR_GREEN, STEP_COLOR_YELLOW],
+  },
+  {
+    step: STEP_RECEIVE,
+    stepStatus: STATUSES[6],
+    archiveOnly: false,
+    colors: [STEP_COLOR_YELLOW, STEP_COLOR_NONE, STEP_COLOR_NONE],
   },
   {
     step: STEP_TRANSFORM,
@@ -149,13 +173,7 @@ export const STEP_STATUS = [
     stepStatus: STATUSES[8],
     archiveOnly: false,
     colors: [STEP_COLOR_GREEN, STEP_COLOR_RED, STEP_COLOR_NONE],
-  },
-  {
-    step: STEP_TRANSMIT,
-    stepStatus: STATUSES[8],
-    archiveOnly: false,
-    colors: [STEP_COLOR_GREEN, STEP_COLOR_GREEN, STEP_COLOR_BLUE],
-  },
+  }
 ];
 
 export const getProgressItemByString = (argStringValues) => {

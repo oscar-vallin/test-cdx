@@ -13,9 +13,13 @@ import {
   useExchangeActivityTransmittedLazyQuery,
 } from '../../../data/services/graphql';
 import { useOrgSid } from '../../../hooks/useOrgSid';
+import { useHistory } from 'react-router-dom';
+import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
 
 const TablesCurrentActivity = ({ id = 'TableCurrentActivity' }) => {
   const { orgSid } = useOrgSid();
+  const history = useHistory();
+  const ActiveDomainStore = useActiveDomainStore();
 
   const { searchText, startDate, endDate } = useTableFilters('Name, Id, Last Activity');
   const [apiCompleted, { data: dataCompleted, loading: loadingCompleted, error: errorCompleted }] = useQueryHandler(
@@ -86,6 +90,19 @@ const TablesCurrentActivity = ({ id = 'TableCurrentActivity' }) => {
     }
   }, [dataErrored, loadingErrored]);
 
+  
+  const onClick = (orgSid?: string | null) => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const startDate = urlParams.get('startDate');
+    const endDate = urlParams.get('endDate');
+    ActiveDomainStore.setCurrentOrg({
+      orgSid:orgSid,
+    })
+    history.push(
+      `/file-status?orgSid=${orgSid}&startDate=${startDate}&endDate=${endDate}`
+    );
+  };
+
   return (
     <Container id={id}>
       <TableFilters id={id} searchText={searchText} startDate={startDate} endDate={endDate} />
@@ -93,6 +110,7 @@ const TablesCurrentActivity = ({ id = 'TableCurrentActivity' }) => {
         <Row>
           <Column lg="6">
             <TableActivity
+              onClick={onClick}
               id="__Table__In__Process"
               tableName="In Process"
               items={inProcessItems}
@@ -102,6 +120,7 @@ const TablesCurrentActivity = ({ id = 'TableCurrentActivity' }) => {
           </Column>
           <Column lg="6">
             <TableActivity
+              onClick={onClick}
               id="__Table__Completed"
               tableName="Completed"
               color="complete"
@@ -114,6 +133,7 @@ const TablesCurrentActivity = ({ id = 'TableCurrentActivity' }) => {
         <Row>
           <Column lg="12">
             <TableActivity
+              onClick={onClick}
               id="__Table__Errored"
               tableName="Errored"
               color="error"

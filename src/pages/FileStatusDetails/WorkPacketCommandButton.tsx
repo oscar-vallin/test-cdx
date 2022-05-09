@@ -23,6 +23,7 @@ type CommandButtonType = {
   workPacketCommands?: any;
   realId?: string;
   packetStatus?: WorkStatus;
+  fileName: string;
 };
 
 enum ButtonActionTypes {
@@ -51,6 +52,7 @@ export const WorkPacketCommandButton = ({
   workPacketCommands,
   realId,
   packetStatus,
+  fileName
 }: CommandButtonType) => {
   const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);
   const [showSecondaryButton, setShowSecondaryButton] = useState(true);
@@ -63,7 +65,7 @@ export const WorkPacketCommandButton = ({
   const [secondaryButtonText, setSecondaryButtonText] = useState('No');
   const [buttonAction, setButtonAction] = useState(ButtonActionTypes.Default);
   const [secondaryButtonAction, setSecondaryButtonAction] = useState(ButtonActionTypes.SecondaryDefault);
-  const [newFileName, setNewFileName] = useState('');
+  const [newFileName, setNewFileName] = useState(fileName);
 
   const [
     apiCallReprocessDialog,
@@ -92,17 +94,20 @@ export const WorkPacketCommandButton = ({
   const handleDeleteCmd = () => {
     if (onClick) {
       onClick().then((res) => {
-        setButtonAction(ButtonActionTypes.HandleCloseLogMessageDialog);
         if (res?.data) {
           const workPacketKey = Object.keys(res.data)[0];
+          setButtonText('Ok');
+          setShowSecondaryButton(false);
+          setButtonAction(ButtonActionTypes.SecondaryDefaultCallback);
           if (res.data[workPacketKey].allMessages?.length) {
-            setResponseLogMessages(res.data.workPacketDelete.allMessages);
-            setSecondaryButtonText('Close');
-            setShowPrimaryButton(false);
-            setSecondaryButtonAction(ButtonActionTypes.SecondaryDefaultCallback);
-          } else {
-            setIsConfirmationHidden(true);
-            if (callback) callback();
+            setResponseLogMessages(res.data.workPacketDelete.allMessages);          
+          }
+          if(res.data[workPacketKey].response === 'SUCCESS'){
+            setTitle('Success')
+            setSubText('This Work Packet has been deleted')
+          }else{
+            setTitle('Failure')
+            setSubText('Unable to delete this Work Packet')
           }
         }
       });
@@ -157,9 +162,8 @@ export const WorkPacketCommandButton = ({
 
   useEffect(() => {
     if (command?.commandType === WorkPacketCommandType.Delete) {
-      setShowPrimaryButton(true);
-      setSecondaryButtonText('No');
-      setSecondaryButtonAction(ButtonActionTypes.SecondaryDefault);
+      setShowSecondaryButton(true);
+      setButtonText('Yes');
       if (!responseLogMessages?.length) {
         setButtonAction(ButtonActionTypes.HandleDeleteCmd);
       } else {
@@ -171,6 +175,7 @@ export const WorkPacketCommandButton = ({
   useEffect(() => {
     if (command?.commandType === WorkPacketCommandType.Rename) {
       setButtonAction(ButtonActionTypes.HandleRename);
+      setNewFileName(fileName)
     }
   }, [command?.commandType]);
 
@@ -285,8 +290,8 @@ export const WorkPacketCommandButton = ({
           onDismiss={() => setIsConfirmationHidden(true)}
           dialogContentProps={{
             type: DialogType.normal,
-            title: !responseLogMessages.length ? title : 'Log Messages',
-            subText: !responseLogMessages.length ? subText : '',
+            title: title,
+            subText: subText,
           }}
           modalProps={{ isBlocking: true }}
         >

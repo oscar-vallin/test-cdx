@@ -16,6 +16,7 @@ const defaultProps = {
   tableName: 'Test Table',
   items: items,
   loading: false,
+  onClick: (orgSid: string)=>{}
 };
 
 describe('Table Activity Container Testing Unit...', () => {

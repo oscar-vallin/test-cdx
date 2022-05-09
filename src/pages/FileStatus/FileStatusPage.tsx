@@ -117,6 +117,7 @@ const _FileStatusPage = () => {
         }}
       />
       <FileStatusDetailsPage
+        tableFilters={tableFilters}
         useFileStatusDetailsPanel={fileStatusDetailsPanel}
       ></FileStatusDetailsPage>
     </LayoutDashboard>
