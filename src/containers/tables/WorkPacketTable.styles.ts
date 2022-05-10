@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { Link } from '@fluentui/react';
 import { Box as LayoutBox, Row as LayoutRow, Column as LayoutColumn } from 'src/components/layouts';
+import { Text as ComponentText } from 'src/components/typography/Text';
 
 export const Container = styled(LayoutBox)`
   padding: 0 20px;
@@ -34,4 +35,9 @@ export const RightColumn = styled(LayoutColumn)``;
 
 export const DownloadLink = styled(Link)`
   padding-right: 10px;
+`;
+
+export const Text = styled(ComponentText)`
+  color: gray;
+  font-size: 0.70rem;
 `;
