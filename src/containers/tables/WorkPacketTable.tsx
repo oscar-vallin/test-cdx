@@ -23,6 +23,7 @@ import { EmptyState } from '../states';
 import { Box, Container } from './WorkPacketTable.styles';
 import { UseFileStatusDetailsPanel } from 'src/pages/FileStatusDetails/useFileStatusDetailsPanel'
 import { ROUTES } from 'src/data/constants/RouteConstants';
+import { useQueryParams } from 'src/hooks/useQueryParams';
 
 type WorkPacketParams = {
   id: string;
@@ -62,6 +63,7 @@ export const WorkPacketTable = ({
   });
 
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+  const QueryParams = useQueryParams();
 
   const openDetails = (fsOrgSid?: string | null, workOrderId?: string, tab?: string) => {
     // The rendering of the columns is only done upon initialization of the column
@@ -81,6 +83,13 @@ export const WorkPacketTable = ({
     );
     */
     const hash = tab ? `#${tab}` : ''; 
+    const xParams = {
+      workOrderId: workOrderId??'',
+      fsOrgSid: fsOrgSid??'',
+      tab: tab ?? 'enrollment',
+      redirectUrl: true
+    };
+    history.replace(QueryParams.merge(location, xParams));
     useFileStatusDetailsPanel?.showPanel(workOrderId ?? '', fsOrgSid ??'', hash);
   };
 

@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useState, useEffect } from 'react';
 import { ROUTES } from 'src/data/constants/RouteConstants';
 import { Column, Container, Row } from 'src/components/layouts';
 import { PageTitle, Text } from 'src/components/typography';
@@ -21,6 +21,18 @@ const _ArchivePage = () => {
   const [tableMeta, setTableMeta] = useState({ count: 0, loading: true });
   const [pageTitle, setPageTitle] = useState('')
   const fileStatusDetailsPanel = useFileStatusDetailsPanel();
+
+  useEffect(()=>{
+    const urlParams = new URLSearchParams(window.location.search);
+    const fsOrgSid = urlParams.get('fsOrgSid');
+    const tab = urlParams.get('tab');
+    const workOrderId = urlParams.get('workOrderId');
+    const hash = tab ? `#${tab}` : null; 
+    if(hash && workOrderId && fsOrgSid){
+      fileStatusDetailsPanel?.showPanel(workOrderId, fsOrgSid, hash);
+    }
+  },[])
+
   const tableFilters = useTableFilters('Extract Name, Status, Vendor, etc.', [
     {
       property: 'timestamp',

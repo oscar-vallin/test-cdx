@@ -56,7 +56,7 @@ const Row = ({
       between={between}
       evenly={evenly}
       around={around}
-      wrap={wrap ? wrap : undefined}
+      isWrap={wrap}
     >
       {children}
     </DivStyled>

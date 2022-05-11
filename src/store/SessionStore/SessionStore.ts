@@ -6,7 +6,9 @@ export interface SessionModel {
   status: SessionStatus;
   setSessionStage: Action<SessionModel, string>;
   setCurrentSession: Action<SessionModel, SessionUser>;
+  setRedirectUrl: Action<SessionModel, string>;
   onCurrentSessionUpdate: ActionOn<SessionModel>;
+  redirectUrl: string | null;
 }
 
 const setSessionStage = (state, payload) => {
@@ -16,6 +18,10 @@ const setSessionStage = (state, payload) => {
 const setCurrentSession = (state, payload) => {
   state.user = payload;
 };
+
+const setRedirectUrl = (state, payload) => {
+  state.redirectUrl = payload
+}
 
 export const INITIAL_SESSION_STATE: SessionModel = {
   user: {
@@ -29,12 +35,14 @@ export const INITIAL_SESSION_STATE: SessionModel = {
   },
   setCurrentSession: action(setCurrentSession),
   setSessionStage: action(setSessionStage),
+  setRedirectUrl: action(setRedirectUrl),
   onCurrentSessionUpdate: actionOn(
     (actions) => actions.setCurrentSession,
     (state, { payload }) => {
       state.status.stage = payload.token ? SessionStages.LoggedIn : SessionStages.LoggedOut;
     }
   ),
+  redirectUrl: null
 };
 
 export default INITIAL_SESSION_STATE;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ROUTES } from 'src/data/constants/RouteConstants';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Column, Container, Row } from 'src/components/layouts';
@@ -16,6 +16,18 @@ const _ErrorsPage = () => {
   const [tableMeta, setTableMeta] = useState({ count: 0, loading: true });
   const [pageTitle, setPageTitle] = useState('')
   const fileStatusDetailsPanel = useFileStatusDetailsPanel();
+
+  useEffect(()=>{
+    const urlParams = new URLSearchParams(window.location.search);
+    const fsOrgSid = urlParams.get('fsOrgSid');
+    const tab = urlParams.get('tab');
+    const workOrderId = urlParams.get('workOrderId');
+    const hash = tab ? `#${tab}` : null; 
+    if(hash && workOrderId && fsOrgSid){
+      fileStatusDetailsPanel?.showPanel(workOrderId, fsOrgSid, hash);
+    }
+  },[])
+
   const tableFilters = useTableFilters('Extract Name, Status, Vendor, etc.', [
     {
       property: 'timestamp',

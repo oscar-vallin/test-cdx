@@ -38,6 +38,7 @@ import { UseFileStatusDetailsPanel } from './useFileStatusDetailsPanel'
 import { Spacing } from 'src/components/spacings/Spacing';
 import { Row } from 'src/components/layouts';
 import { TableFiltersType } from 'src/hooks/useTableFilters';
+import { useNotification } from 'src/hooks/useNotification';
 
 const POLL_INTERVAL = 20000;
 type FileStatusDetailsPageProps = {
@@ -61,6 +62,7 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters}: FileS
   const [showDetails, setShowDetails] = useState(true);
   const realId = id?.replace('*', '');
   const [lastUpdatedPoll, setLastUpdatedPoll] = useState<Date>(new Date());
+  const Toast = useNotification();
 
   const [callGetWPDetails, { data, loading, error }] = useWorkPacketStatusDetailsLazyQuery({
     variables: {
@@ -68,6 +70,7 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters}: FileS
       workOrderId: realId,
     },
   });
+
   const pollWPStatus = useWorkPacketStatusPollQuery({
     variables: {
       orgSid: fsOrgSid,
@@ -76,6 +79,7 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters}: FileS
     },
     pollInterval: POLL_INTERVAL,
   });
+
   const workPacketCommands = useWorkPacketCommands(realId);
   const handleError = ErrorHandler();
 
@@ -297,6 +301,10 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters}: FileS
     }
     return null;
   };
+  const copyFileStatusDetailsUrl = () => {
+    navigator.clipboard.writeText(window.location.href);
+    Toast.success({ text: 'URL copied succesfully' });
+  };
 
   const renderFileMetaData = () => {
     return (
@@ -315,6 +323,12 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters}: FileS
             {packet?.packetStatus===WorkStatus.Processing &&(
               <Spinner size={SpinnerSize.medium}/>
             )}
+            <Stack.Item align="center">
+              <IconButton
+                iconProps={{ iconName: 'Copy' }}
+                onClick={copyFileStatusDetailsUrl}
+              />
+            </Stack.Item>
             <Stack.Item align="center">
               <Badge variant={getBadgeVariant(packet?.packetStatus)} label={packet?.packetStatus} pill />
             </Stack.Item>
@@ -370,13 +384,29 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters}: FileS
     </>
   );
 
+  const handleClosePanel = () =>{
+    let params = new URLSearchParams(window.location.search);
+    params.delete('tab')
+    params.delete('workOrderId')
+    params.delete('fsOrgSid')
+    params.delete('redirectUrl')
+    history.replace(`${window.location.pathname}?${params.toString()}`)
+    useFileStatusDetailsPanel?.closePanel()
+  }
+
+  const handleFilesDetailsTabChange = (item, ev) =>{
+    let params = new URLSearchParams(window.location.search);
+    params.set('tab', item.props.itemKey.replace('#',''))
+    history.replace(`${window.location.pathname}?${params.toString()}`)
+  }
+
   return (
     <Panel
       closeButtonAriaLabel="Close"
       type={PanelType.extraLarge}
       isOpen={useFileStatusDetailsPanel?.isPanelOpen}
-      onDismiss={useFileStatusDetailsPanel?.closePanel}
-      onOuterClick={() => {}}
+      onDismiss={handleClosePanel}
+      onOuterClick={handleClosePanel}
     >
       {loading ? 
         <Spacing margin={{ top: 'double' }}>
@@ -386,6 +416,7 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters}: FileS
           {renderFileMetaData()}
           <ShadowBox>
             <Pivot
+              onLinkClick= {handleFilesDetailsTabChange}
               overflowBehavior="menu"
               overflowAriaLabel="more items"
               styles={{
