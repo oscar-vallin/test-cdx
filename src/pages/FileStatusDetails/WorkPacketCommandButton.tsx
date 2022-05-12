@@ -57,12 +57,15 @@ export const WorkPacketCommandButton = ({
   const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);
   const [showSecondaryButton, setShowSecondaryButton] = useState(true);
   const [showPrimaryButton, setShowPrimaryButton] = useState(true);
+  const [showReprocessSecondButton, setShowReprocessSecondButton] = useState(false);
   const [responseLogMessages, setResponseLogMessages] = useState<any[]>([]);
   const [title, setTitle] = useState(responseLogMessages?.length ? 'Log Messages' : confirmationTitle);
   const [subText, setSubText] = useState(responseLogMessages?.length ? '' : confirmationMsg);
 
   const [buttonText, setButtonText] = useState('Yes');
   const [secondaryButtonText, setSecondaryButtonText] = useState('No');
+  const [reprocesSecondButtonText, setReprocessSecondButtonText] = useState('External Exchange')
+  const [reprocessSecondButtonAction, setReprocessSecondButtonAction] = useState(ButtonActionTypes.HandleExternalReprocess)
   const [buttonAction, setButtonAction] = useState(ButtonActionTypes.Default);
   const [secondaryButtonAction, setSecondaryButtonAction] = useState(ButtonActionTypes.SecondaryDefault);
   const [newFileName, setNewFileName] = useState(fileName);
@@ -200,13 +203,17 @@ export const WorkPacketCommandButton = ({
       if (captureChangeReason) {
         if (command?.commandType === WorkPacketCommandType.Reprocess) {
           setButtonAction(ButtonActionTypes.HandleInternalReprocess);
-          setSecondaryButtonAction(ButtonActionTypes.HandleExternalReprocess);
+          setReprocessSecondButtonAction(ButtonActionTypes.HandleExternalReprocess);
         } else if (command?.commandType === WorkPacketCommandType.RerunStep) {
           setButtonAction(ButtonActionTypes.HandleInternalRerun);
-          setSecondaryButtonAction(ButtonActionTypes.HandleExternalRerun);
+          setReprocessSecondButtonAction(ButtonActionTypes.HandleExternalRerun);
         }
+        
         setButtonText('Internal Change');
-        setSecondaryButtonText('External Change');
+        setReprocessSecondButtonText('External Change');
+        setShowReprocessSecondButton(true);
+        setSecondaryButtonText('Cancel');
+        
       } else {
         if (command?.commandType === WorkPacketCommandType.Reprocess) {
           setButtonAction(ButtonActionTypes.HandleReprocess);
@@ -319,6 +326,12 @@ export const WorkPacketCommandButton = ({
                 disabled={command?.commandType === WorkPacketCommandType.Rename && newFileName.length <= 0}
                 onClick={getButtonAction(buttonAction)}
                 text={buttonText}
+              />
+            )}
+            {showReprocessSecondButton && (
+              <PrimaryButton
+                onClick={getButtonAction(reprocessSecondButtonAction)}
+                text={reprocesSecondButtonText}
               />
             )}
             {showSecondaryButton && (
