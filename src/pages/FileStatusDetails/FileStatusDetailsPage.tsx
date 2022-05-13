@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 
 import { useHistory } from 'react-router-dom';
 
-import { ROUTE_FILE_STATUS } from 'src/data/constants/RouteConstants';
 import { PanelBody } from 'src/layouts/Panels/Panels.styles';
 
 import { Badge } from 'src/components/badges/Badge';
@@ -17,7 +16,17 @@ import {
   WorkStatus,
 } from 'src/data/services/graphql';
 
-import { IconButton, Pivot, PivotItem, Stack, PanelType, Panel, Spinner, SpinnerSize, CommandBar, ICommandBarItemProps} from '@fluentui/react';
+import {
+  IconButton,
+  Pivot,
+  PivotItem,
+  Stack,
+  PanelType,
+  Panel,
+  Spinner,
+  SpinnerSize,
+  CommandBar,
+} from '@fluentui/react';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { InfoIcon } from 'src/components/badges/InfoIcon';
@@ -34,7 +43,7 @@ import EnrollmentStatsTab from './EnrollmentStatsTab/EnrollmentStatsTab';
 import VendorCountStatsTab from './VendorCountStatsTab/VendorCountStatsTab';
 import { WorkPacketCommandButton } from './WorkPacketCommandButton';
 import { BadgeWrapper, FileMetaDetails, FileTitle, ShadowBox } from './FileStatusDetails.styles';
-import { UseFileStatusDetailsPanel } from './useFileStatusDetailsPanel'
+import { UseFileStatusDetailsPanel } from './useFileStatusDetailsPanel';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { Row } from 'src/components/layouts';
 import { TableFiltersType } from 'src/hooks/useTableFilters';
@@ -44,9 +53,9 @@ const POLL_INTERVAL = 20000;
 type FileStatusDetailsPageProps = {
   useFileStatusDetailsPanel?: UseFileStatusDetailsPanel;
   tableFilters?: TableFiltersType;
-}
+};
 
-const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters}: FileStatusDetailsPageProps) => {
+const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: FileStatusDetailsPageProps) => {
   const urlParams = new URLSearchParams(window.location.search);
   const { orgSid, startDate, endDate } = useOrgSid();
   const history = useHistory();
@@ -175,9 +184,9 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters}: FileS
   const cancelCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Cancel);
   const deleteCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Delete);
   //const rerunCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.RerunStep);
-  
-  const renderWorkPacketCommandButton = (item: any) =>{
-    if(!item) return <></>
+
+  const renderWorkPacketCommandButton = (item: any) => {
+    if (!item) return <></>;
     return (
       <WorkPacketCommandButton
         id={item.id}
@@ -190,88 +199,88 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters}: FileS
         callback={item.callback}
         fileName={packet?.inboundFilename ?? ''}
       />
-    )
-  }
-  
-  const commandBarItems: any= [
-    { 
-      id:"__ResendBtn",
-      key:"__ResendBtn",
-      icon: "Send",
-      confirmationMsg:"Are you sure you want to Resend this Work Packet?",
+    );
+  };
+
+  const commandBarItems: any = [
+    {
+      id: '__ResendBtn',
+      key: '__ResendBtn',
+      icon: 'Send',
+      confirmationMsg: 'Are you sure you want to Resend this Work Packet?',
       command: resendCmd,
       onClick: workPacketCommands.apiCallResend,
-      onRender: renderWorkPacketCommandButton
+      onRender: renderWorkPacketCommandButton,
     },
     {
-      id: "__ContinueBtn",
-      key: "__ContinueBtn",
-      icon: "PlayResume",
-      confirmationMsg: "Are you sure you want to Continue this Work Packet?",
+      id: '__ContinueBtn',
+      key: '__ContinueBtn',
+      icon: 'PlayResume',
+      confirmationMsg: 'Are you sure you want to Continue this Work Packet?',
       command: continueCmd,
       onClick: workPacketCommands.apiCallContinue,
-      callback:() => {
-        pollWPStatus.startPolling(POLL_INTERVAL)
+      callback: () => {
+        pollWPStatus.startPolling(POLL_INTERVAL);
       },
-      onRender: renderWorkPacketCommandButton
+      onRender: renderWorkPacketCommandButton,
     },
     {
-      id: "__ReprocessBtn",
-      key: "__ReprocessBtn",
-      icon: "Rerun",
-      confirmationMsg: "Are you sure you want to Reprocess this Work Packet?",
+      id: '__ReprocessBtn',
+      key: '__ReprocessBtn',
+      icon: 'Rerun',
+      confirmationMsg: 'Are you sure you want to Reprocess this Work Packet?',
       command: reprocessCmd,
       workPacketCommands: workPacketCommands,
       realId: realId,
       callback: () => {
         pollWPStatus.startPolling(POLL_INTERVAL);
       },
-      onRender: renderWorkPacketCommandButton
+      onRender: renderWorkPacketCommandButton,
     },
     {
-      id: "__ReprocessRenameBtn",
-      key: "__ReprocessRenameBtn",
-      icon: "Rerun",
-      confirmationMsg: "Are you sure you want to Reprocess this Work Packet?",
-      workPacketCommands:workPacketCommands,
+      id: '__ReprocessRenameBtn',
+      key: '__ReprocessRenameBtn',
+      icon: 'Rerun',
+      confirmationMsg: 'Are you sure you want to Reprocess this Work Packet?',
+      workPacketCommands: workPacketCommands,
       realId: realId,
       command: reprocessRenameCmd,
       onClick: workPacketCommands.apiCallRenameReprocess,
       callback: () => {
         pollWPStatus.startPolling(POLL_INTERVAL);
       },
-      onRender: renderWorkPacketCommandButton
+      onRender: renderWorkPacketCommandButton,
     },
     {
-      id: "__CancelBtn",
-      key: "__CancelBtn",
-      icon: "Cancel",
+      id: '__CancelBtn',
+      key: '__CancelBtn',
+      icon: 'Cancel',
       confirmationMsg: "Are you sure you want to Cancel this Work Packet's processing?",
       command: cancelCmd,
       onClick: workPacketCommands.apiCallCancel,
       callback: () => {
         pollWPStatus.startPolling(POLL_INTERVAL);
       },
-      onRender: renderWorkPacketCommandButton
+      onRender: renderWorkPacketCommandButton,
     },
     {
-      id: "__DeleteBtn",
-      key: "__DeleteBtn",
-      icon:"Delete",
+      id: '__DeleteBtn',
+      key: '__DeleteBtn',
+      icon: 'Delete',
       confirmationMsg: 'Are you sure you want to Delete this Work Packet?',
       command: deleteCmd,
       onClick: workPacketCommands.apiCallDelete,
-      callback:() => {
-        useFileStatusDetailsPanel?.closePanel()
+      callback: () => {
+        useFileStatusDetailsPanel?.closePanel();
         tableFilters?.setPagingParams({
           pageNumber: 0,
           pageSize: 100,
           sort: tableFilters.pagingParams.sort,
         });
       },
-      onRender: renderWorkPacketCommandButton
-    }
-  ]
+      onRender: renderWorkPacketCommandButton,
+    },
+  ];
   const renderDeliveredFileInfo = (fileInfo?: DeliveredFile | null) => {
     if (fileInfo) {
       return (
@@ -320,14 +329,9 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters}: FileS
             <Stack.Item align="center">
               <FileTitle>{packet?.inboundFilename ?? packet?.workOrderId}</FileTitle>
             </Stack.Item>
-            {packet?.packetStatus===WorkStatus.Processing &&(
-              <Spinner size={SpinnerSize.medium}/>
-            )}
+            {packet?.packetStatus === WorkStatus.Processing && <Spinner size={SpinnerSize.medium} />}
             <Stack.Item align="center">
-              <IconButton
-                iconProps={{ iconName: 'Copy' }}
-                onClick={copyFileStatusDetailsUrl}
-              />
+              <IconButton iconProps={{ iconName: 'Copy' }} onClick={copyFileStatusDetailsUrl} />
             </Stack.Item>
             <Stack.Item align="center">
               <Badge variant={getBadgeVariant(packet?.packetStatus)} label={packet?.packetStatus} pill />
@@ -347,13 +351,10 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters}: FileS
           </Stack>
           <Stack horizontal={true} wrap={false} grow>
             <Stack.Item grow align="end">
-              <CommandBar
-                items={commandBarItems}
-                overflowButtonProps={{ ariaLabel: 'More commands' }}
-              />
+              <CommandBar items={commandBarItems} overflowButtonProps={{ ariaLabel: 'More commands' }} />
             </Stack.Item>
           </Stack>
-         </Row >
+        </Row>
         {showDetails && (
           <FileMetaDetails>
             <Stack horizontal={true} wrap={true} tokens={{ childrenGap: 15 }}>
@@ -384,21 +385,21 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters}: FileS
     </>
   );
 
-  const handleClosePanel = () =>{
+  const handleClosePanel = () => {
     let params = new URLSearchParams(window.location.search);
-    params.delete('tab')
-    params.delete('workOrderId')
-    params.delete('fsOrgSid')
-    params.delete('redirectUrl')
-    history.replace(`${window.location.pathname}?${params.toString()}`)
-    useFileStatusDetailsPanel?.closePanel()
-  }
+    params.delete('tab');
+    params.delete('workOrderId');
+    params.delete('fsOrgSid');
+    params.delete('redirectUrl');
+    history.replace(`${window.location.pathname}?${params.toString()}`);
+    useFileStatusDetailsPanel?.closePanel();
+  };
 
-  const handleFilesDetailsTabChange = (item, ev) =>{
+  const handleFilesDetailsTabChange = (item, ev) => {
     let params = new URLSearchParams(window.location.search);
-    params.set('tab', item.props.itemKey.replace('#',''))
-    history.replace(`${window.location.pathname}?${params.toString()}`)
-  }
+    params.set('tab', item.props.itemKey.replace('#', ''));
+    history.replace(`${window.location.pathname}?${params.toString()}`);
+  };
 
   return (
     <Panel
@@ -408,15 +409,16 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters}: FileS
       onDismiss={handleClosePanel}
       onOuterClick={handleClosePanel}
     >
-      {loading ? 
+      {loading ? (
         <Spacing margin={{ top: 'double' }}>
           <Spinner size={SpinnerSize.large} label="Loading file status details" />
-        </Spacing> :  
+        </Spacing>
+      ) : (
         <PanelBody>
           {renderFileMetaData()}
           <ShadowBox>
             <Pivot
-              onLinkClick= {handleFilesDetailsTabChange}
+              onLinkClick={handleFilesDetailsTabChange}
               overflowBehavior="menu"
               overflowAriaLabel="more items"
               styles={{
@@ -450,9 +452,8 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters}: FileS
             </Pivot>
           </ShadowBox>
         </PanelBody>
-      }
+      )}
     </Panel>
-
   );
 };
 

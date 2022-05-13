@@ -20,8 +20,8 @@ const setCurrentSession = (state, payload) => {
 };
 
 const setRedirectUrl = (state, payload) => {
-  state.redirectUrl = payload
-}
+  state.redirectUrl = payload;
+};
 
 export const INITIAL_SESSION_STATE: SessionModel = {
   user: {
@@ -42,7 +42,7 @@ export const INITIAL_SESSION_STATE: SessionModel = {
       state.status.stage = payload.token ? SessionStages.LoggedIn : SessionStages.LoggedOut;
     }
   ),
-  redirectUrl: null
+  redirectUrl: null,
 };
 
 export default INITIAL_SESSION_STATE;

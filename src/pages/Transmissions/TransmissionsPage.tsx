@@ -11,25 +11,25 @@ import { NullHandling, SortDirection, useWpTransmissionsLazyQuery, WpTransmissio
 import { tableFiltersToQueryParams, useTableFilters } from 'src/hooks/useTableFilters';
 import { DownloadLink } from 'src/containers/tables/WorkPacketTable.styles';
 import { useOrgSid } from 'src/hooks/useOrgSid';
-import { useFileStatusDetailsPanel } from 'src/pages/FileStatusDetails/useFileStatusDetailsPanel'
+import { useFileStatusDetailsPanel } from 'src/pages/FileStatusDetails/useFileStatusDetailsPanel';
 import { FileStatusDetailsPage } from '../FileStatusDetails';
 
 const _TransmissionsPage = () => {
   const [tableMeta, setTableMeta] = useState({ count: 0, loading: true });
-  const [pageTitle, setPageTitle] = useState('')
+  const [pageTitle, setPageTitle] = useState('');
   const fileStatusDetailsPanel = useFileStatusDetailsPanel();
   const { orgSid } = useOrgSid();
 
-  useEffect(()=>{
+  useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const fsOrgSid = urlParams.get('fsOrgSid');
     const tab = urlParams.get('tab');
     const workOrderId = urlParams.get('workOrderId');
-    const hash = tab ? `#${tab}` : null; 
-    if(hash && workOrderId && fsOrgSid){
+    const hash = tab ? `#${tab}` : null;
+    if (hash && workOrderId && fsOrgSid) {
       fileStatusDetailsPanel?.showPanel(workOrderId, fsOrgSid, hash);
     }
-  },[])
+  }, []);
 
   const tableFilters = useTableFilters('Extract Name, Status, Vendor, etc.', [
     {
@@ -40,9 +40,9 @@ const _TransmissionsPage = () => {
     },
   ]);
 
-  const handleSetPageTitle=(title: string)=>{
-    setPageTitle(title)
-  }
+  const handleSetPageTitle = (title: string) => {
+    setPageTitle(title);
+  };
 
   const mapData = (data) => {
     const items: WpTransmission[] = [];
@@ -88,12 +88,7 @@ const _TransmissionsPage = () => {
         <Container>
           <Row>
             <Column sm="6" direction="row">
-              <PageTitle
-                id="__Transmissions_Title"
-                title={pageTitle} 
-                subTitle="Advanced search"
-                icon="FilterSolid"
-              />
+              <PageTitle id="__Transmissions_Title" title={pageTitle} subTitle="Advanced search" icon="FilterSolid" />
             </Column>
             <Column sm="6" right>
               <Text size="large" right>
@@ -131,9 +126,7 @@ const _TransmissionsPage = () => {
           setTableMeta({ count: total, loading });
         }}
       />
-      <FileStatusDetailsPage
-        useFileStatusDetailsPanel={fileStatusDetailsPanel}
-      ></FileStatusDetailsPage>
+      <FileStatusDetailsPage useFileStatusDetailsPanel={fileStatusDetailsPanel}></FileStatusDetailsPage>
     </LayoutDashboard>
   );
 };

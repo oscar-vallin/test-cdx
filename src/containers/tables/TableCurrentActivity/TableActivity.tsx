@@ -23,8 +23,15 @@ type TableActivityProps = {
   onClick: (orgSid: string) => void;
 } & typeof defaultProps;
 
-const TableActivity = ({ id, items, loading, tableName, color, emptyMessage, onClick }: TableActivityProps): ReactElement => {
-  
+const TableActivity = ({
+  id,
+  items,
+  loading,
+  tableName,
+  color,
+  emptyMessage,
+  onClick,
+}: TableActivityProps): ReactElement => {
   const columns: IColumn[] = [
     {
       name: 'Client Name',
@@ -38,9 +45,15 @@ const TableActivity = ({ id, items, loading, tableName, color, emptyMessage, onC
       flexGrow: 1,
       onRender: (item: OrganizationLink) => {
         return (
-          <Link onClick={()=>{onClick(item.id)}}>{item.name}</Link>
+          <Link
+            onClick={() => {
+              onClick(item.id);
+            }}
+          >
+            {item.name}
+          </Link>
         );
-      }
+      },
     },
     {
       name: 'Last Activity',
@@ -54,8 +67,14 @@ const TableActivity = ({ id, items, loading, tableName, color, emptyMessage, onC
       flexGrow: 1,
       onRender: (item: OrganizationLink) => {
         return (
-          <Link onClick={()=>{onClick(item.id)}}>{format(new Date(item.activityTime), 'MM/dd/yyyy hh:mm a')}</Link>
-        ) 
+          <Link
+            onClick={() => {
+              onClick(item.id);
+            }}
+          >
+            {format(new Date(item.activityTime), 'MM/dd/yyyy hh:mm a')}
+          </Link>
+        );
       },
     },
   ];

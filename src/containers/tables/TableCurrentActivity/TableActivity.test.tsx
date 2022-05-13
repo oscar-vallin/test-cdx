@@ -1,5 +1,5 @@
 import Component from './TableActivity';
-import { mountWithTheme, shallowWithTheme } from '../../../utils/testUtils';
+import { shallowWithTheme } from 'src/utils/testUtils';
 import { OrganizationLink } from 'src/data/services/graphql';
 
 const items: OrganizationLink[] = [
@@ -16,7 +16,7 @@ const defaultProps = {
   tableName: 'Test Table',
   items: items,
   loading: false,
-  onClick: (orgSid: string)=>{}
+  onClick: (orgSid: string) => {},
 };
 
 describe('Table Activity Container Testing Unit...', () => {

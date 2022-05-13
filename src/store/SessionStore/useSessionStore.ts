@@ -12,6 +12,6 @@ export const useSessionStore = (): any => {
     redirectUrl,
     setCurrentSession,
     setSessionStage,
-    setRedirectUrl
+    setRedirectUrl,
   };
 };

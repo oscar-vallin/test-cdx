@@ -13,7 +13,7 @@ export const ShadowBox = styled.div`
   padding: 10px 15px 15px;
   margin: 0 20px 20px 20px;
 
-  .ms-CommandBar-primaryCommand{
+  .ms-CommandBar-primaryCommand {
     justify-content: flex-end;
   }
 `;

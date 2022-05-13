@@ -1,9 +1,8 @@
 import { useState } from 'react';
 
-
 export type UseFileStatusDetailsPanel = {
   isPanelOpen: boolean;
-  showPanel: ( workOrderId: string, hash: string, fsOrgSid: string) => void;
+  showPanel: (workOrderId: string, hash: string, fsOrgSid: string) => void;
   closePanel: () => void;
   workOrderId: string;
   hash: string;
@@ -11,15 +10,15 @@ export type UseFileStatusDetailsPanel = {
 };
 
 export const useFileStatusDetailsPanel = (): UseFileStatusDetailsPanel => {
-  const [ workOrderId, setWorkOrderId ] = useState("")
-  const [ hash, setHash ] = useState("")
-  const [ fsOrgSid, setFsOrgSid] = useState("")
+  const [workOrderId, setWorkOrderId] = useState('');
+  const [hash, setHash] = useState('');
+  const [fsOrgSid, setFsOrgSid] = useState('');
   const [panelOpen, setPanelOpen] = useState(false);
 
   const showPanel = (workOrderId, fsOrgSid, hash) => {
     setWorkOrderId(workOrderId);
     setFsOrgSid(fsOrgSid);
-    setHash(hash)
+    setHash(hash);
     setPanelOpen(true);
   };
 
@@ -33,6 +32,6 @@ export const useFileStatusDetailsPanel = (): UseFileStatusDetailsPanel => {
     closePanel,
     workOrderId,
     hash,
-    fsOrgSid
+    fsOrgSid,
   };
 };

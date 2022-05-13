@@ -288,17 +288,24 @@ export const useWorkPacketColumns = (
       data: WorkPacketColumn.PACKET_STATUS,
       onColumnClick: onSort,
       onRender: (item: WorkPacketStatus) => {
-        const reprocessOnTimestamp = item.reprocessedOn ? format(new Date(item.reprocessedOn), 'MM/dd/yyyy hh:mm a') : null
-        const workOrderId = item.reprocessedBy ?? null
-        if(reprocessOnTimestamp){
+        const reprocessOnTimestamp = item.reprocessedOn
+          ? format(new Date(item.reprocessedOn), 'MM/dd/yyyy hh:mm a')
+          : null;
+        const workOrderId = item.reprocessedBy ?? null;
+        if (reprocessOnTimestamp) {
           return (
             <StyledColumn>
-              <Link disabled={workOrderId ? false : true} onClick={workOrderId ? () => openDetails(item.orgSid, workOrderId) : ()=>null} >Reprocessed on</Link>
+              <Link
+                disabled={workOrderId ? false : true}
+                onClick={workOrderId ? () => openDetails(item.orgSid, workOrderId) : () => null}
+              >
+                Reprocessed on
+              </Link>
               <Text>{reprocessOnTimestamp}</Text>
             </StyledColumn>
-          )
+          );
         }
-        return <span>{getStepStatusLabel(item.packetStatus)}</span>; 
+        return <span>{getStepStatusLabel(item.packetStatus)}</span>;
       },
     },
     {
@@ -327,7 +334,7 @@ export const useWorkPacketColumns = (
       onRender: (item: WorkPacketStatus) => {
         return (
           <StyledCell id={`__Progress_${item.workOrderId}`}>
-            <FileProgress step={item.step} stepStatus={item.stepStatus} archiveOnly={item.archiveOnly ?? false}/>
+            <FileProgress step={item.step} stepStatus={item.stepStatus} archiveOnly={item.archiveOnly ?? false} />
           </StyledCell>
         );
       },

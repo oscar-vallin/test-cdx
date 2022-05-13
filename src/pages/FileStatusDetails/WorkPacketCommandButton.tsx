@@ -52,7 +52,7 @@ export const WorkPacketCommandButton = ({
   workPacketCommands,
   realId,
   packetStatus,
-  fileName
+  fileName,
 }: CommandButtonType) => {
   const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);
   const [showSecondaryButton, setShowSecondaryButton] = useState(true);
@@ -64,8 +64,10 @@ export const WorkPacketCommandButton = ({
 
   const [buttonText, setButtonText] = useState('Yes');
   const [secondaryButtonText, setSecondaryButtonText] = useState('No');
-  const [reprocesSecondButtonText, setReprocessSecondButtonText] = useState('External Exchange')
-  const [reprocessSecondButtonAction, setReprocessSecondButtonAction] = useState(ButtonActionTypes.HandleExternalReprocess)
+  const [reprocesSecondButtonText, setReprocessSecondButtonText] = useState('External Exchange');
+  const [reprocessSecondButtonAction, setReprocessSecondButtonAction] = useState(
+    ButtonActionTypes.HandleExternalReprocess
+  );
   const [buttonAction, setButtonAction] = useState(ButtonActionTypes.Default);
   const [secondaryButtonAction, setSecondaryButtonAction] = useState(ButtonActionTypes.SecondaryDefault);
   const [newFileName, setNewFileName] = useState(fileName);
@@ -103,14 +105,14 @@ export const WorkPacketCommandButton = ({
           setShowSecondaryButton(false);
           setButtonAction(ButtonActionTypes.SecondaryDefaultCallback);
           if (res.data[workPacketKey].allMessages?.length) {
-            setResponseLogMessages(res.data.workPacketDelete.allMessages);          
+            setResponseLogMessages(res.data.workPacketDelete.allMessages);
           }
-          if(res.data[workPacketKey].response === 'SUCCESS'){
-            setTitle('Success')
-            setSubText('This Work Packet has been deleted')
-          }else{
-            setTitle('Failure')
-            setSubText('Unable to delete this Work Packet')
+          if (res.data[workPacketKey].response === 'SUCCESS') {
+            setTitle('Success');
+            setSubText('This Work Packet has been deleted');
+          } else {
+            setTitle('Failure');
+            setSubText('Unable to delete this Work Packet');
           }
         }
       });
@@ -178,7 +180,7 @@ export const WorkPacketCommandButton = ({
   useEffect(() => {
     if (command?.commandType === WorkPacketCommandType.Rename) {
       setButtonAction(ButtonActionTypes.HandleRename);
-      setNewFileName(fileName)
+      setNewFileName(fileName);
     }
   }, [command?.commandType]);
 
@@ -208,12 +210,11 @@ export const WorkPacketCommandButton = ({
           setButtonAction(ButtonActionTypes.HandleInternalRerun);
           setReprocessSecondButtonAction(ButtonActionTypes.HandleExternalRerun);
         }
-        
+
         setButtonText('Internal Change');
         setReprocessSecondButtonText('External Change');
         setShowReprocessSecondButton(true);
         setSecondaryButtonText('Cancel');
-        
       } else {
         if (command?.commandType === WorkPacketCommandType.Reprocess) {
           setButtonAction(ButtonActionTypes.HandleReprocess);
@@ -329,10 +330,7 @@ export const WorkPacketCommandButton = ({
               />
             )}
             {showReprocessSecondButton && (
-              <PrimaryButton
-                onClick={getButtonAction(reprocessSecondButtonAction)}
-                text={reprocesSecondButtonText}
-              />
+              <PrimaryButton onClick={getButtonAction(reprocessSecondButtonAction)} text={reprocesSecondButtonText} />
             )}
             {showSecondaryButton && (
               <DefaultButton onClick={getButtonAction(secondaryButtonAction)} text={secondaryButtonText} />
