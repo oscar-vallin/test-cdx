@@ -17,7 +17,7 @@ import {
   WorkStatus,
 } from 'src/data/services/graphql';
 
-import { IconButton, Pivot, PivotItem, Stack, PanelType, Panel, Spinner, SpinnerSize, CommandBar, ICommandBarItemProps} from '@fluentui/react';
+import { IconButton, Pivot, PivotItem, Stack, PanelType, Panel, Spinner, SpinnerSize, CommandBar, PrimaryButton} from '@fluentui/react';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { InfoIcon } from 'src/components/badges/InfoIcon';
@@ -39,6 +39,8 @@ import { Spacing } from 'src/components/spacings/Spacing';
 import { Row } from 'src/components/layouts';
 import { TableFiltersType } from 'src/hooks/useTableFilters';
 import { useNotification } from 'src/hooks/useNotification';
+import { EmptyState } from 'src/containers/states';
+import { Button, ButtonAction } from 'src/components/buttons';
 
 const POLL_INTERVAL = 20000;
 type FileStatusDetailsPageProps = {
@@ -94,7 +96,7 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters}: FileS
   useEffect(() => {
     handleError(pollWPStatus.error);
   }, [pollWPStatus.error]);
-
+  
   useEffect(() => {
     if (data?.workPacketStatusDetails && !loading) {
       setPacket(data?.workPacketStatusDetails);
@@ -413,42 +415,56 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters}: FileS
           <Spinner size={SpinnerSize.large} label="Loading file status details" />
         </Spacing> :  
         <PanelBody>
-          {renderFileMetaData()}
-          <ShadowBox>
-            <Pivot
-              onLinkClick= {handleFilesDetailsTabChange}
-              overflowBehavior="menu"
-              overflowAriaLabel="more items"
-              styles={{
-                link: {
-                  fontSize: theme.fontSizes.normal,
-                },
-                linkIsSelected: {
-                  fontSize: theme.fontSizes.normal,
-                },
-              }}
-              style={{ fontSize: theme.fontSizes.normal }}
-              defaultSelectedKey={hash}
-            >
-              <PivotItem headerText="Enrollment Stats" itemKey="#enrollment">
-                <EnrollmentStatsTab packet={packet} />
-              </PivotItem>
-              <PivotItem headerText="Vendor Count Stats" itemKey="#vendor">
-                <VendorCountStatsTab items={packet?.outboundRecordCounts} />
-              </PivotItem>
-              {packet?.workStepStatus && packet.workStepStatus.length > 0 && (
-                <PivotItem headerText="Work Steps" itemKey="#work">
-                  <WorkStepsTab packet={packet} />
-                </PivotItem>
-              )}
-              <PivotItem headerText="Quality Checks" itemKey="#quality" onRenderItemLink={onRenderItemLink}>
-                <QualityChecksTab details={packet} />
-              </PivotItem>
-              <PivotItem headerText="Archives">
-                <ArchivesTab packet={packet} />
-              </PivotItem>
-            </Pivot>
-          </ShadowBox>
+          {data?.workPacketStatusDetails ? 
+            <>
+              {renderFileMetaData()}
+              <ShadowBox>
+                <Pivot
+                  onLinkClick= {handleFilesDetailsTabChange}
+                  overflowBehavior="menu"
+                  overflowAriaLabel="more items"
+                  styles={{
+                    link: {
+                      fontSize: theme.fontSizes.normal,
+                    },
+                    linkIsSelected: {
+                      fontSize: theme.fontSizes.normal,
+                    },
+                  }}
+                  style={{ fontSize: theme.fontSizes.normal }}
+                  defaultSelectedKey={hash}
+                >
+                  <PivotItem headerText="Enrollment Stats" itemKey="#enrollment">
+                    <EnrollmentStatsTab packet={packet} />
+                  </PivotItem>
+                  <PivotItem headerText="Vendor Count Stats" itemKey="#vendor">
+                    <VendorCountStatsTab items={packet?.outboundRecordCounts} />
+                  </PivotItem>
+                  {packet?.workStepStatus && packet.workStepStatus.length > 0 && (
+                    <PivotItem headerText="Work Steps" itemKey="#work">
+                      <WorkStepsTab packet={packet} />
+                    </PivotItem>
+                  )}
+                  <PivotItem headerText="Quality Checks" itemKey="#quality" onRenderItemLink={onRenderItemLink}>
+                    <QualityChecksTab details={packet} />
+                  </PivotItem>
+                  <PivotItem headerText="Archives" itemKey="#archives">
+                    <ArchivesTab packet={packet} />
+                  </PivotItem>
+                </Pivot>
+              </ShadowBox>
+            </> : 
+            <ShadowBox id="__FileMeta-Empty">
+              <EmptyState 
+                title="There is no available data for this Exchange" 
+                actions={
+                  <PrimaryButton
+                  onClick={handleClosePanel}
+                  text={"Close"}
+                />}
+              />
+            </ShadowBox>
+          }
         </PanelBody>
       }
     </Panel>
