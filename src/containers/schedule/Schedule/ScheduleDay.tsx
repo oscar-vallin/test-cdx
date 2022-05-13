@@ -16,7 +16,7 @@ import {
   SWeekHourContainer,
   DayRow,
 } from './Schedule.styles';
-import { UseFileStatusDetailsPanel } from 'src/pages/FileStatusDetails/useFileStatusDetailsPanel'
+import { UseFileStatusDetailsPanel } from 'src/pages/FileStatusDetails/useFileStatusDetailsPanel';
 
 type ScheduleDayType = {
   currentDate: Date;
@@ -99,7 +99,7 @@ export const ScheduleDay = ({ currentDate, selectedDate, items, useFileStatusDet
   const openDetails = (runOccurrence: RunOccurrence) => {
     if (runOccurrence.canViewDetails) {
       useFileStatusDetailsPanel?.showPanel(runOccurrence.workOrderId ?? '', runOccurrence.orgSid ?? '', '');
-     /*  history.push(
+      /*  history.push(
         `/file-status/${runOccurrence.workOrderId}?orgSid=${orgSid}&fsOrgSid=${runOccurrence.orgSid}&startDate${startDate}=&endDate=${endDate}`
       ); */
     }

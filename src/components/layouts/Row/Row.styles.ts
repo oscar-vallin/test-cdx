@@ -3,8 +3,8 @@ import styled from 'styled-components';
 export const DivStyled = styled.div<DivStyledProps>`
   display: flex;
   flex-direction: row;
-  flex-wrap: ${({ wrap }) => {
-    if (wrap === false) return 'nowrap';
+  flex-wrap: ${({ isWrap }) => {
+    if (isWrap === false) return 'nowrap';
 
     return 'wrap';
   }};
@@ -50,5 +50,5 @@ type DivStyledProps = {
   bottom: boolean;
   variant: string;
   top: boolean;
-  wrap?: boolean;
+  isWrap?: boolean;
 };

@@ -131,7 +131,7 @@ export const useTableFilters = (searchTextPlaceholder: string, defaultSort?: Sor
       ..._addParamIfExists('changedByUserSid', changedByUserSid.value),
     };
 
-    location.search = QueryParams.stringify(xParams);
+    //location.search = QueryParams.stringify(xParams);
 
     history.replace(QueryParams.merge(location, xParams));
   };

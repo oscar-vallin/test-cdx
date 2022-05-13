@@ -10,10 +10,11 @@ import {
   WpProcessError,
   WpTransmission,
 } from 'src/data/services/graphql';
-import { CellItemRow, StyledCell } from 'src/components/tables/Table/Table.styles';
+import { CellItemRow, StyledCell, StyledColumn } from 'src/components/tables/Table/Table.styles';
 import { HighlightCounter } from 'src/components/badges/HighlightCounter';
 import { getStepStatusLabel } from 'src/data/constants/FileStatusConstants';
 import { FileProgress } from '../bars/FileProgress';
+import { Text } from './WorkPacketTable.styles';
 
 export enum WorkPacketColumn {
   TIMESTAMP,
@@ -201,7 +202,7 @@ export const useWorkPacketColumns = (
       name: 'Extract Name',
       targetWidthProportion: 2,
       minWidth: 100,
-      maxWidth: 500,
+      maxWidth: 450,
       fieldName: 'inboundFilename',
       sortAscendingAriaLabel: 'Sorted A to Z',
       sortDescendingAriaLabel: 'Sorted Z to A',
@@ -278,8 +279,8 @@ export const useWorkPacketColumns = (
       key: 'packetStatus',
       name: 'Overall',
       targetWidthProportion: 1,
-      minWidth: 80,
-      maxWidth: 120,
+      minWidth: 120,
+      maxWidth: 180,
       fieldName: 'packetStatus',
       sortAscendingAriaLabel: 'Sorted A to Z',
       sortDescendingAriaLabel: 'Sorted Z to A',
@@ -287,6 +288,23 @@ export const useWorkPacketColumns = (
       data: WorkPacketColumn.PACKET_STATUS,
       onColumnClick: onSort,
       onRender: (item: WorkPacketStatus) => {
+        const reprocessOnTimestamp = item.reprocessedOn
+          ? format(new Date(item.reprocessedOn), 'MM/dd/yyyy hh:mm a')
+          : null;
+        const workOrderId = item.reprocessedBy ?? null;
+        if (reprocessOnTimestamp) {
+          return (
+            <StyledColumn>
+              <Link
+                disabled={workOrderId ? false : true}
+                onClick={workOrderId ? () => openDetails(item.orgSid, workOrderId) : () => null}
+              >
+                Reprocessed on
+              </Link>
+              <Text>{reprocessOnTimestamp}</Text>
+            </StyledColumn>
+          );
+        }
         return <span>{getStepStatusLabel(item.packetStatus)}</span>;
       },
     },
@@ -316,7 +334,7 @@ export const useWorkPacketColumns = (
       onRender: (item: WorkPacketStatus) => {
         return (
           <StyledCell id={`__Progress_${item.workOrderId}`}>
-            <FileProgress step={item.step} stepStatus={item.stepStatus} archiveOnly={item.archiveOnly ?? false}/>
+            <FileProgress step={item.step} stepStatus={item.stepStatus} archiveOnly={item.archiveOnly ?? false} />
           </StyledCell>
         );
       },

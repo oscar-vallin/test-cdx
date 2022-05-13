@@ -21,8 +21,9 @@ import { useWorkPacketColumns, WorkPacketColumn } from './WorkPacketColumns';
 import { TableFilters } from './TableFilters';
 import { EmptyState } from '../states';
 import { Box, Container } from './WorkPacketTable.styles';
-import { UseFileStatusDetailsPanel } from 'src/pages/FileStatusDetails/useFileStatusDetailsPanel'
+import { UseFileStatusDetailsPanel } from 'src/pages/FileStatusDetails/useFileStatusDetailsPanel';
 import { ROUTES } from 'src/data/constants/RouteConstants';
+import { useQueryParams } from 'src/hooks/useQueryParams';
 
 type WorkPacketParams = {
   id: string;
@@ -47,7 +48,7 @@ export const WorkPacketTable = ({
   onItemsListChange,
   useFileStatusDetailsPanel,
   routeId,
-  setContextualTitle
+  setContextualTitle,
 }: WorkPacketParams) => {
   const POLL_INTERVAL = 20000;
   const { orgSid } = useOrgSid();
@@ -62,6 +63,7 @@ export const WorkPacketTable = ({
   });
 
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+  const QueryParams = useQueryParams();
 
   const openDetails = (fsOrgSid?: string | null, workOrderId?: string, tab?: string) => {
     // The rendering of the columns is only done upon initialization of the column
@@ -70,7 +72,7 @@ export const WorkPacketTable = ({
     // url every time and not use any of the utilities we have to do so.
 
     // const startDate = yyyyMMdd(tableFilters.startDate.value);
-    // const endDate = yyyyMMdd(tableFilters.endDate.value); 
+    // const endDate = yyyyMMdd(tableFilters.endDate.value);
     /*
     const urlParams = new URLSearchParams(window.location.search);
     const startDate = urlParams.get('startDate');
@@ -80,8 +82,15 @@ export const WorkPacketTable = ({
       `/file-status/${workOrderId}?orgSid=${orgSid}&fsOrgSid=${fsOrgSid}&startDate=${startDate}&endDate=${endDate}${hash}`
     );
     */
-    const hash = tab ? `#${tab}` : ''; 
-    useFileStatusDetailsPanel?.showPanel(workOrderId ?? '', fsOrgSid ??'', hash);
+    const hash = tab ? `#${tab}` : '';
+    const xParams = {
+      workOrderId: workOrderId ?? '',
+      fsOrgSid: fsOrgSid ?? '',
+      tab: tab ?? 'enrollment',
+      redirectUrl: true,
+    };
+    history.replace(QueryParams.merge(location, xParams));
+    useFileStatusDetailsPanel?.showPanel(workOrderId ?? '', fsOrgSid ?? '', hash);
   };
 
   const _doSort = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
@@ -196,17 +205,17 @@ export const WorkPacketTable = ({
       if (newPagingInfo) {
         setPagingInfo(newPagingInfo);
       }
-  
+
       //update contextual page title
-      if(data){
+      if (data) {
         const key = Object.keys(data)[0];
         const listPageInfo = data?.[key]?.listPageInfo;
 
         if (listPageInfo && setContextualTitle) {
-          if(routeId === ROUTES.ROUTE_ARCHIVES.ID){
-            setContextualTitle(listPageInfo.secondaryHeaderLabel)
-          }else{
-            setContextualTitle(listPageInfo.pageHeaderLabel)
+          if (routeId === ROUTES.ROUTE_ARCHIVES.ID) {
+            setContextualTitle(listPageInfo.secondaryHeaderLabel);
+          } else {
+            setContextualTitle(listPageInfo.pageHeaderLabel);
           }
         }
       }

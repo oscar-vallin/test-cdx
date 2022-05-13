@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import { Icon } from '@fluentui/react';
 import { ROUTES } from 'src/data/constants/RouteConstants';
 import { Column, Container, Row } from 'src/components/layouts';
@@ -17,14 +17,26 @@ import { WorkPacketColumn } from 'src/containers/tables/WorkPacketColumns';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { tableFiltersToQueryParams, useTableFilters } from 'src/hooks/useTableFilters';
 import { DownloadLink } from 'src/containers/tables/WorkPacketTable.styles';
-import { useFileStatusDetailsPanel } from 'src/pages/FileStatusDetails/useFileStatusDetailsPanel'
+import { useFileStatusDetailsPanel } from 'src/pages/FileStatusDetails/useFileStatusDetailsPanel';
 import { FileStatusDetailsPage } from '../FileStatusDetails';
 
 const _FileStatusPage = () => {
   const [tableMeta, setTableMeta] = useState({ count: 0, loading: true });
-  const [pageTitle, setPageTitle] = useState('')
+  const [pageTitle, setPageTitle] = useState('');
   const fileStatusDetailsPanel = useFileStatusDetailsPanel();
   const { orgSid } = useOrgSid();
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const fsOrgSid = urlParams.get('fsOrgSid');
+    const tab = urlParams.get('tab');
+    const workOrderId = urlParams.get('workOrderId');
+    const hash = tab ? `#${tab}` : null;
+    if (hash && workOrderId && fsOrgSid) {
+      fileStatusDetailsPanel?.showPanel(workOrderId, fsOrgSid, hash);
+    }
+  }, []);
+
   const tableFilters = useTableFilters('Extract Name, Status, Vendor, etc.', [
     {
       property: 'timestamp',
@@ -34,9 +46,9 @@ const _FileStatusPage = () => {
     },
   ]);
 
-  const handleSetPageTitle=(title: string)=>{
-    setPageTitle(title)
-  }
+  const handleSetPageTitle = (title: string) => {
+    setPageTitle(title);
+  };
 
   const mapData = (data) => {
     const items: WorkPacketStatus[] = [];

@@ -35,6 +35,11 @@ export const SessionContextProvider = ({ children }: SessionContextProviderProps
   }, [isRehydrated, SessionStore.user.token]);
 
   useEffect(() => {
+    const currentUrl = `${window.location.pathname}${window.location.search}`;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('redirectUrl')) {
+      SessionStore.setRedirectUrl(currentUrl);
+    }
     if (isRehydrated && !SessionStore.user.token && location.pathname.indexOf('ua/password-reset') < 0) {
       history.push('/login');
     }

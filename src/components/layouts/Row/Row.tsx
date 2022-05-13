@@ -1,5 +1,5 @@
 import { ReactElement } from 'react';
-import { getClassNames } from '../../../helpers/helperStyles';
+import { getClassNames } from 'src/helpers/helperStyles';
 import { DivStyled } from './Row.styles';
 
 const defaultProps = {
@@ -56,7 +56,7 @@ const Row = ({
       between={between}
       evenly={evenly}
       around={around}
-      wrap={wrap ? wrap : undefined}
+      isWrap={wrap}
     >
       {children}
     </DivStyled>
