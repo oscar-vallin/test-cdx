@@ -1,17 +1,20 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { ReactElement, useState, useEffect } from 'react';
-import { SpinnerSize } from '@fluentui/react';
+import { SpinnerSize, Text, Link } from '@fluentui/react';
 import { BigTitle, Card500, CenteredWrapper, K2ULogo, LogoRow } from 'src/layouts/LayoutLogin/LayoutLogin.styles';
 import { Column } from 'src/components/layouts';
 import { InputText } from 'src/components/inputs/InputText';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { Spinner } from 'src/components/spinners/Spinner';
+// import { Link } from 'src/components/buttons/Link';
 
 import { useSessionStore } from 'src/store/SessionStore';
 import { useLoginUseCase } from 'src/use-cases/Authentication';
 import { useNotification } from 'src/hooks/useNotification';
 import { StyledRow, StyledButton, StyledText, StyledButtonIcon } from './FormLogin.styles';
+
+import { ForgotPasswordModal } from 'src/containers/modals/ForgotPasswordModal';
 
 const defaultProps = {
   id: '',
@@ -31,6 +34,7 @@ const FormLogin = ({ id }: FormLoginProps): ReactElement => {
 
   const [values, setValues] = useState({ ...INITIAL_STATE });
   const [isValidEmail, setIsValidEmail] = useState(false);
+  const [forgotPassword, setForgotPassword] = useState(false);
 
   useEffect(() => {
     setIsValidEmail(state.step === 'PASSWORD');
@@ -134,6 +138,25 @@ const FormLogin = ({ id }: FormLoginProps): ReactElement => {
                     >
                       {state.loading ? <Spinner /> : !isValidEmail ? 'Next' : 'Login'}
                     </StyledButton>
+                    {isValidEmail && ( <StyledRow id={`${id}__Card__Row--sublabel`}>
+                      <Column id={`${id}__Card__Row__Column--label`}>
+
+                        <Link
+                          onClick={() => setForgotPassword(true)}
+                        >
+                            Forgot your password?
+                        </Link>
+                      </Column>
+                    </StyledRow>
+                    )}
+
+                    { forgotPassword && (
+                      <ForgotPasswordModal 
+                        isOpen={setForgotPassword}
+                        open={forgotPassword}
+                      />
+                    )}
+
                   </Column>
                 </StyledRow>
               </>

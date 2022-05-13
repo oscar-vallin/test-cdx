@@ -39,5 +39,5 @@ export const DownloadLink = styled(Link)`
 
 export const Text = styled(ComponentText)`
   color: gray;
-  font-size: 0.70rem;
+  font-size: 0.7rem;
 `;

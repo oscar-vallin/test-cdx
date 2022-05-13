@@ -2,17 +2,17 @@ import { useEffect, useState } from 'react';
 import { TableActivity } from './TableActivity';
 import { Container, TableContainer } from './TableActivity.styles';
 
-import { useTableFilters } from '../../../hooks/useTableFilters';
+import { useTableFilters } from 'src/hooks/useTableFilters';
 import { TableFilters } from '../TableFilters';
-import { Row, Column } from '../../../components/layouts';
-import { useQueryHandler } from '../../../hooks/useQueryHandler';
+import { Row, Column } from 'src/components/layouts';
+import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import {
   OrganizationLink,
   useExchangeActivityErroredLazyQuery,
   useExchangeActivityInProcessLazyQuery,
   useExchangeActivityTransmittedLazyQuery,
-} from '../../../data/services/graphql';
-import { useOrgSid } from '../../../hooks/useOrgSid';
+} from 'src/data/services/graphql';
+import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useHistory } from 'react-router-dom';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
 
@@ -90,17 +90,14 @@ const TablesCurrentActivity = ({ id = 'TableCurrentActivity' }) => {
     }
   }, [dataErrored, loadingErrored]);
 
-  
   const onClick = (orgSid?: string | null) => {
     const urlParams = new URLSearchParams(window.location.search);
     const startDate = urlParams.get('startDate');
     const endDate = urlParams.get('endDate');
     ActiveDomainStore.setCurrentOrg({
-      orgSid:orgSid,
-    })
-    history.push(
-      `/file-status?orgSid=${orgSid}&startDate=${startDate}&endDate=${endDate}`
-    );
+      orgSid: orgSid,
+    });
+    history.push(`/file-status?orgSid=${orgSid}&startDate=${startDate}&endDate=${endDate}`);
   };
 
   return (

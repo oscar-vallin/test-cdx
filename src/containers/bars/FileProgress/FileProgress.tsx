@@ -1,13 +1,13 @@
 import { ReactElement } from 'react';
-import { FileProgressBar } from '../../../components/bars/FileProgressBar';
+import { FileProgressBar } from 'src/components/bars/FileProgressBar';
 import { Box, Text } from './FileProgress.styles';
-import { getProgressByValues } from '../../../data/constants/FileStatusConstants';
+import { getProgressByValues } from 'src/data/constants/FileStatusConstants';
 
 const defaultProps = {
   id: '',
   step: 'primary',
   stepStatus: true,
-  archiveOnly: false
+  archiveOnly: false,
 };
 
 type FileProgressProps = {

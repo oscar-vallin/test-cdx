@@ -173,7 +173,7 @@ export const STEP_STATUS = [
     stepStatus: STATUSES[8],
     archiveOnly: false,
     colors: [STEP_COLOR_GREEN, STEP_COLOR_RED, STEP_COLOR_NONE],
-  }
+  },
 ];
 
 export const getProgressItemByString = (argStringValues) => {
@@ -200,7 +200,12 @@ export const getStepStatusLabel = (stepStatusId) => {
 
 const getStepStatus = (stepId, stepStatusId, isArchiveOnly = false) => {
   return (
-    STEP_STATUS.find(({ step, stepStatus, archiveOnly}) => step === stepId && stepStatus.value === stepStatusId && archiveOnly === (stepId === STEP_TRANSMIT && stepStatusId==='COMPLETE' ? isArchiveOnly : false )) ??
+    STEP_STATUS.find(
+      ({ step, stepStatus, archiveOnly }) =>
+        step === stepId &&
+        stepStatus.value === stepStatusId &&
+        archiveOnly === (stepId === STEP_TRANSMIT && stepStatusId === 'COMPLETE' ? isArchiveOnly : false)
+    ) ??
     STEP_STATUS_DEFAULT.find((step) => step === stepId) ??
     STEP_STATUS_DEFAULT[0]
   );
