@@ -28,7 +28,6 @@ import {
   CommandBar,
   PrimaryButton,
 } from '@fluentui/react';
-import { useOrgSid } from 'src/hooks/useOrgSid';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { InfoIcon } from 'src/components/badges/InfoIcon';
 import { format } from 'date-fns';
@@ -58,8 +57,6 @@ type FileStatusDetailsPageProps = {
 };
 
 const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: FileStatusDetailsPageProps) => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const { orgSid, startDate, endDate } = useOrgSid();
   const history = useHistory();
   /* 
   const fsOrgSid = urlParams.get('fsOrgSid') ?? orgSid;
@@ -95,7 +92,9 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
   const handleError = ErrorHandler();
 
   useEffect(() => {
-    callGetWPDetails();
+    if (realId) {
+      callGetWPDetails();
+    }
   }, [realId]);
 
   useEffect(() => {
