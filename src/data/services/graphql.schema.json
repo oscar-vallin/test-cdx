@@ -1487,12 +1487,6 @@
             "deprecationReason": null
           },
           {
-            "name": "USER_ACCOUNT_RULES",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "SECURITY_SETTINGS",
             "description": null,
             "isDeprecated": false,
@@ -1506,6 +1500,24 @@
           },
           {
             "name": "SSO_CONFIG",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "XCHANGE_LIST",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "XCHANGE_ALERTS",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "XCHANGE_NAMING",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
