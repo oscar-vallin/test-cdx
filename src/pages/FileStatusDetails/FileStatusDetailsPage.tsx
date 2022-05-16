@@ -16,17 +16,17 @@ import {
   WorkStatus,
 } from 'src/data/services/graphql';
 
-import { 
-  IconButton, 
-  Pivot, 
-  PivotItem, 
-  Stack, 
-  PanelType, 
-  Panel, 
-  Spinner, 
-  SpinnerSize, 
-  CommandBar, 
-  PrimaryButton
+import {
+  IconButton,
+  Pivot,
+  PivotItem,
+  Stack,
+  PanelType,
+  Panel,
+  Spinner,
+  SpinnerSize,
+  CommandBar,
+  PrimaryButton,
 } from '@fluentui/react';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
@@ -50,7 +50,6 @@ import { Row } from 'src/components/layouts';
 import { TableFiltersType } from 'src/hooks/useTableFilters';
 import { useNotification } from 'src/hooks/useNotification';
 import { EmptyState } from 'src/containers/states';
-import { Button, ButtonAction } from 'src/components/buttons';
 
 const POLL_INTERVAL = 20000;
 type FileStatusDetailsPageProps = {
@@ -106,7 +105,7 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
   useEffect(() => {
     handleError(pollWPStatus.error);
   }, [pollWPStatus.error]);
-  
+
   useEffect(() => {
     if (data?.workPacketStatusDetails && !loading) {
       setPacket(data?.workPacketStatusDetails);
@@ -418,12 +417,12 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
         </Spacing>
       ) : (
         <PanelBody>
-          {data?.workPacketStatusDetails ? 
+          {data?.workPacketStatusDetails ? (
             <>
               {renderFileMetaData()}
               <ShadowBox>
                 <Pivot
-                  onLinkClick= {handleFilesDetailsTabChange}
+                  onLinkClick={handleFilesDetailsTabChange}
                   overflowBehavior="menu"
                   overflowAriaLabel="more items"
                   styles={{
@@ -456,18 +455,15 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
                   </PivotItem>
                 </Pivot>
               </ShadowBox>
-            </> : 
+            </>
+          ) : (
             <ShadowBox id="__FileMeta-Empty">
-              <EmptyState 
-                title="There is no available data for this Exchange" 
-                actions={
-                  <PrimaryButton
-                  onClick={handleClosePanel}
-                  text={"Close"}
-                />}
+              <EmptyState
+                title="There is no available data for this Exchange"
+                actions={<PrimaryButton onClick={handleClosePanel} text={'Close'} />}
               />
             </ShadowBox>
-          }
+          )}
         </PanelBody>
       )}
     </Panel>

@@ -1,7 +1,7 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { ReactElement, useState, useEffect } from 'react';
-import { SpinnerSize, Text, Link } from '@fluentui/react';
+import { SpinnerSize, Link } from '@fluentui/react';
 import { BigTitle, Card500, CenteredWrapper, K2ULogo, LogoRow } from 'src/layouts/LayoutLogin/LayoutLogin.styles';
 import { Column } from 'src/components/layouts';
 import { InputText } from 'src/components/inputs/InputText';
@@ -138,25 +138,15 @@ const FormLogin = ({ id }: FormLoginProps): ReactElement => {
                     >
                       {state.loading ? <Spinner /> : !isValidEmail ? 'Next' : 'Login'}
                     </StyledButton>
-                    {isValidEmail && ( <StyledRow id={`${id}__Card__Row--sublabel`}>
-                      <Column id={`${id}__Card__Row__Column--label`}>
-
-                        <Link
-                          onClick={() => setForgotPassword(true)}
-                        >
-                            Forgot your password?
-                        </Link>
-                      </Column>
-                    </StyledRow>
+                    {isValidEmail && (
+                      <StyledRow id={`${id}__Card__Row--sublabel`}>
+                        <Column id={`${id}__Card__Row__Column--label`}>
+                          <Link onClick={() => setForgotPassword(true)}>Forgot your password?</Link>
+                        </Column>
+                      </StyledRow>
                     )}
 
-                    { forgotPassword && (
-                      <ForgotPasswordModal 
-                        isOpen={setForgotPassword}
-                        open={forgotPassword}
-                      />
-                    )}
-
+                    {forgotPassword && <ForgotPasswordModal isOpen={setForgotPassword} open={forgotPassword} />}
                   </Column>
                 </StyledRow>
               </>

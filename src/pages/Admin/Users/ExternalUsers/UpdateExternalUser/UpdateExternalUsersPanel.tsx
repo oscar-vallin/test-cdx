@@ -6,7 +6,7 @@ import { Tabs } from 'src/components/tabs/Tabs';
 import { PanelBody, PanelHeader, PanelTitle } from 'src/layouts/Panels/Panels.styles';
 
 import { useNotification } from 'src/hooks/useNotification';
-import { UserAccountForm, GqOperationResponse} from 'src/data/services/graphql';
+import { GqOperationResponse } from 'src/data/services/graphql';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
 import { Column } from 'src/components/layouts';
 import { UseUpdateExternalUserPanel } from './UpdateExternalUsersService.service';
