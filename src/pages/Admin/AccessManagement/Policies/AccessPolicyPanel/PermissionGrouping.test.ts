@@ -789,6 +789,10 @@ describe('Permissions Grouping Test', () => {
               },
             ],
           },
+          {
+            label: '',
+            options: [],
+          },
         ],
       },
       other: {

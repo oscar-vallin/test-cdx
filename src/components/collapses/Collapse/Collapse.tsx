@@ -4,6 +4,7 @@ import { FontIcon } from '@fluentui/react';
 import { StyledDiv, StyledButton } from './Collapse.styles';
 
 const CDXCollapse = ({
+  id = '',
   label,
   children,
   className = '',
@@ -33,7 +34,7 @@ const CDXCollapse = ({
 
   return (
     <StyledDiv className={`collapse ${className}`} {...props}>
-      <StyledButton className="collapse__trigger" onClick={handleClick} {...props}>
+      <StyledButton id={id ? `${id}_Collapse_Button` : undefined} className="collapse__trigger" onClick={handleClick} {...props}>
         {label} &nbsp; <FontIcon iconName={!isExpanded ? 'ChevronRight' : 'ChevronDown'} />
       </StyledButton>
 
