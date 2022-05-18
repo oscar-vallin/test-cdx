@@ -83,7 +83,11 @@ export const useWorkPacketColumns = (
       onColumnClick: onSort,
       onRender: (item: WorkPacketStatus) => {
         const timestamp = format(new Date(item.timestamp), 'MM/dd/yyyy hh:mm a');
-        if (item.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.ViewDetails)) {
+        if (
+          item.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.ViewDetails) &&
+          !item.reprocessedOn &&
+          !item.reprocessedBy
+        ) {
           return (
             <CellItemRow>
               <Link onClick={() => openDetails(item.orgSid, item.workOrderId)}>{timestamp}</Link>
@@ -292,7 +296,10 @@ export const useWorkPacketColumns = (
           ? format(new Date(item.reprocessedOn), 'MM/dd/yyyy hh:mm a')
           : null;
         const workOrderId = item.reprocessedBy ?? null;
-        if (reprocessOnTimestamp) {
+        if (
+          reprocessOnTimestamp &&
+          item.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.ViewDetails)
+        ) {
           return (
             <StyledColumn>
               <Link

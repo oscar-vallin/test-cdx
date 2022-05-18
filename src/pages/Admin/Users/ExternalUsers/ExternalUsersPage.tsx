@@ -141,9 +141,7 @@ const ExternalUsersPage = () => {
       />
       <UpdateExternalUsersPanel
         useUpdateExternalUsers={useUpdateExternalUsers}
-        onUpdateUser={() => {
-          handleGrantAccessToExternalUserSuccess();
-        }}
+        onUpdateUser={handleGrantAccessToExternalUserSuccess}
       />
     </LayoutDashboard>
   );

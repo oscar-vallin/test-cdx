@@ -57,7 +57,6 @@ const ConditionalLabelValue = ({ label, value }: ConditionalLabelValueType) => {
 
 const CDXTimeline = ({ packet, activeIndex = 0, onClick, onRedo }: CDXTimelineProps): ReactElement => {
   const [showCallout, setShowCallout] = useState(false);
-  const redoCommand = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.RerunStep);
   const downloadCommand = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.DownloadFile);
 
   function isComplete(workStepStatus?: WorkStepStatus | null): boolean {
@@ -102,6 +101,7 @@ const CDXTimeline = ({ packet, activeIndex = 0, onClick, onRedo }: CDXTimelinePr
   };
 
   const renderRedo = (item?: WorkStepStatus | null) => {
+    const redoCommand = item?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.RerunStep);
     if ((isComplete(item) || isError(item)) && redoCommand) {
       return (
         <Spacing margin={{ top: 'normal' }}>

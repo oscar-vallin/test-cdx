@@ -231,6 +231,31 @@ const testUIOptions: UiOptions[] = [
         info: null,
       },
       {
+        label: 'Xchange Profile - Read',
+        value: 'XCHANGE_PROFILE_READ',
+        info: null,
+      },
+      {
+        label: 'Xchange Profile - Create',
+        value: 'XCHANGE_PROFILE_CREATE',
+        info: null,
+      },
+      {
+        label: 'Xchange Profile - Update',
+        value: 'XCHANGE_PROFILE_UPDATE',
+        info: null,
+      },
+      {
+        label: 'Xchange Profile - Delete',
+        value: 'XCHANGE_PROFILE_DELETE',
+        info: null,
+      },
+      {
+        label: 'Xchange Profile - Publish',
+        value: 'XCHANGE_PROFILE_PUBLISH',
+        info: null,
+      },
+      {
         label: 'Users - Read',
         value: 'USER_READ',
         info: null,
@@ -453,9 +478,11 @@ describe('Permissions Grouping Test', () => {
   it('Test Full', () => {
     const expected = {
       exchange: {
+        id: 'ExchangeStatus',
         label: 'Exchange Status',
         subGroup: [
           {
+            id: 'Permissions_K2U_Exchanges',
             label: 'K2U Exchanges',
             options: [
               {
@@ -489,6 +516,7 @@ describe('Permissions Grouping Test', () => {
             ],
           },
           {
+            id: 'Permissions_TEST_Exchanges',
             label: 'Test Exchanges',
             options: [
               {
@@ -522,6 +550,7 @@ describe('Permissions Grouping Test', () => {
             ],
           },
           {
+            id: 'Permissions_UAT_Exchanges',
             label: 'UAT Exchanges',
             options: [
               {
@@ -555,6 +584,7 @@ describe('Permissions Grouping Test', () => {
             ],
           },
           {
+            id: 'Permissions_PROD_Exchanges',
             label: 'Production Exchanges',
             options: [
               {
@@ -590,9 +620,11 @@ describe('Permissions Grouping Test', () => {
         ],
       },
       accessManagement: {
+        id: 'AccessManagement',
         label: 'Access Management',
         subGroup: [
           {
+            id: 'Permissions_UserAdmin',
             label: '',
             options: [
               { label: 'Users - Read', value: 'USER_READ', info: null },
@@ -616,6 +648,7 @@ describe('Permissions Grouping Test', () => {
             ],
           },
           {
+            id: 'Permissions_AccessPolicies',
             label: '',
             options: [
               {
@@ -637,6 +670,7 @@ describe('Permissions Grouping Test', () => {
             ],
           },
           {
+            id: 'Permissions_AccessGroups',
             label: '',
             options: [
               {
@@ -658,6 +692,7 @@ describe('Permissions Grouping Test', () => {
             ],
           },
           {
+            id: 'Permissions_AccessSpecs',
             label: '',
             options: [
               {
@@ -681,9 +716,11 @@ describe('Permissions Grouping Test', () => {
         ],
       },
       orgAdmin: {
+        id: 'OrgAdmin',
         label: 'Organization Admin',
         subGroup: [
           {
+            id: 'Permissions_OrgAdmin',
             label: '',
             options: [
               {
@@ -701,6 +738,7 @@ describe('Permissions Grouping Test', () => {
             ],
           },
           {
+            id: 'Permissions_ColorPalettes',
             label: '',
             options: [
               {
@@ -722,6 +760,7 @@ describe('Permissions Grouping Test', () => {
             ],
           },
           {
+            id: 'Permissions_Themes',
             label: '',
             options: [
               { label: 'Theme - Read', value: 'THEME_READ', info: null },
@@ -739,6 +778,7 @@ describe('Permissions Grouping Test', () => {
             ],
           },
           {
+            id: 'Permissions_Security',
             label: '',
             options: [
               {
@@ -767,9 +807,11 @@ describe('Permissions Grouping Test', () => {
         ],
       },
       tools: {
+        id: 'Tools',
         label: 'Tools',
         subGroup: [
           {
+            id: 'Permissions_FTP',
             label: '',
             options: [
               {
@@ -780,6 +822,7 @@ describe('Permissions Grouping Test', () => {
             ],
           },
           {
+            id: 'Permissions_Implementation',
             label: '',
             options: [
               {
@@ -789,12 +832,45 @@ describe('Permissions Grouping Test', () => {
               },
             ],
           },
+          {
+            id: 'Permissions_XchangeProfile',
+            label: '',
+            options: [
+              {
+                label: 'Xchange Profile - Read',
+                value: 'XCHANGE_PROFILE_READ',
+                info: null,
+              },
+              {
+                label: 'Xchange Profile - Create',
+                value: 'XCHANGE_PROFILE_CREATE',
+                info: null,
+              },
+              {
+                label: 'Xchange Profile - Update',
+                value: 'XCHANGE_PROFILE_UPDATE',
+                info: null,
+              },
+              {
+                label: 'Xchange Profile - Delete',
+                value: 'XCHANGE_PROFILE_DELETE',
+                info: null,
+              },
+              {
+                label: 'Xchange Profile - Publish',
+                value: 'XCHANGE_PROFILE_PUBLISH',
+                info: null,
+              },
+            ],
+          },
         ],
       },
       other: {
+        id: 'Other',
         label: 'Other',
         subGroup: [
           {
+            id: 'Misc',
             label: '',
             options: [
               {

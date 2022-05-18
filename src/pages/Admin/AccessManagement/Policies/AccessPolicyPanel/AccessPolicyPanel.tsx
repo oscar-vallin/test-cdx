@@ -385,7 +385,7 @@ const AccessPolicyPanel = ({
       if (selectedOptions.length > 0) {
         return selectedOptions.map((option, optIndex) => (
           <Spacing margin={{ top: 'small' }} key={`perm-${optIndex}`}>
-            <Text>
+            <Text id={`__Permission_${option.value}_ReadOnly`}>
               <PaddedIcon iconName="RadioBullet" />
               {option.label}
             </Text>
@@ -415,7 +415,7 @@ const AccessPolicyPanel = ({
       return null;
     }
     return (
-      <Collapse label={group.label} expanded>
+      <Collapse id={`__${group.id}`} label={group.label} expanded>
         <Spacing padding={{ top: 'normal', bottom: 'normal' }}>
           <Row>
             <Column lg="12">
@@ -425,10 +425,10 @@ const AccessPolicyPanel = ({
                     ?.filter((subGroup) => subGroup?.options?.length)
                     ?.map((subGroup, pIndex) => (
                       <Column lg="3" key={`${pIndex}`}>
-                        <Card elevation="none">
+                        <Card id={`__Permissions_${subGroup.id}_Card`} elevation="none">
                           {subGroup.label.length > 0 && (
                             <Spacing margin={{ bottom: 'normal' }}>
-                              <Label>{subGroup.label}</Label>
+                              <Label id={`__Permissions_${subGroup.id}_Label`}>{subGroup.label}</Label>
                             </Spacing>
                           )}
 

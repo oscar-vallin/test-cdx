@@ -6,7 +6,7 @@ import { Tabs } from 'src/components/tabs/Tabs';
 import { PanelBody, PanelHeader, PanelTitle } from 'src/layouts/Panels/Panels.styles';
 
 import { useNotification } from 'src/hooks/useNotification';
-import { UserAccountForm } from 'src/data/services/graphql';
+import { GqOperationResponse } from 'src/data/services/graphql';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
 import { Column } from 'src/components/layouts';
 import { UseUpdateExternalUserPanel } from './UpdateExternalUsersService.service';
@@ -16,13 +16,13 @@ import SectionSummary from './SectionSummary';
 const defaultProps = {
   isOpen: false,
   onDismiss: () => null,
-  onGrantAccessToExternalUser: () => null,
+  onUpdateUser: () => null,
 };
 
 type UpdateExternalUsersPanelProps = {
   isOpen?: boolean;
   onDismiss?: any | null;
-  onUpdateUser?: (form?: UserAccountForm) => void;
+  onUpdateUser?: any | null;
   useUpdateExternalUsers: UseUpdateExternalUserPanel;
 } & typeof defaultProps;
 
@@ -94,8 +94,34 @@ const UpdateExternalUsersPanel = ({
     </PanelHeader>
   );
 
-  const handleSubmit = () => {
-    return;
+  const handleGrantAccess = async () => {
+    setProcessing(true);
+    const response = await useUpdateExternalUsers.callGrantUserAccess();
+    setProcessing(false);
+
+    if (response?.grantExternalUserAccess) {
+      const responseCode = response?.grantExternalUserAccess?.response;
+
+      if (responseCode === GqOperationResponse.Fail) {
+        const errorMsg = response?.grantExternalUserAccess?.errMsg ?? 'Error Updating Access for External User';
+        setErrorMsg(errorMsg);
+      } else {
+        setErrorMsg(undefined);
+      }
+
+      if (responseCode === GqOperationResponse.Success) {
+        Toast.success({ text: 'External user access has been updated' });
+      }
+      if (responseCode === GqOperationResponse.PartialSuccess) {
+        const errorMsg = response?.grantExternalUserAccess?.errMsg ?? 'Error Updating Access for External User';
+        Toast.warning({ text: errorMsg });
+      }
+
+      if (responseCode === GqOperationResponse.Success || responseCode === GqOperationResponse.PartialSuccess) {
+        onUpdateUser(response.grantExternalUserAccess);
+        doClosePanel();
+      }
+    }
   };
 
   return (
@@ -128,7 +154,7 @@ const UpdateExternalUsersPanel = ({
                   content: (
                     <SectionSummary
                       form={useUpdateExternalUsers.userAccountForm}
-                      onSubmit={handleSubmit}
+                      onSubmit={handleGrantAccess}
                       isProcessing={isProcessing}
                     />
                   ),
@@ -139,7 +165,7 @@ const UpdateExternalUsersPanel = ({
                   content: (
                     <SectionAccessManagement
                       form={useUpdateExternalUsers.userAccountForm}
-                      onSubmit={handleSubmit}
+                      onSubmit={handleGrantAccess}
                       saveOptions={(sids) => {
                         setUnsavedChanges(true);
                       }}
