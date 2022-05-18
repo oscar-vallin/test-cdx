@@ -13,6 +13,7 @@ import { AccessDenied, PageNotFound } from './ErrorHandling';
 import { FileStatusPage } from './FileStatus';
 import { FileStatusDetailsPage } from './FileStatusDetails';
 import { ActiveOrgsPage } from './Admin/Organizations';
+import { ExternalOrgsPage } from './Admin/ExternalOrganization';
 import { CurrentActivityPage } from './Admin/Activity';
 import { ColorPalettesPage, DefaultThemePage } from './Admin/DashboardSite';
 import { ActiveUsersPage } from './Admin/Users/ActiveUsers';
@@ -84,6 +85,9 @@ export const Routes = () => {
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_ACTIVE_ORGS.URL}>
         <ActiveOrgsPage />
+      </AuthRoute>
+      <AuthRoute path={ROUTES.ROUTE_EXTERNAL_ORGS.URL}>
+        <ExternalOrgsPage />
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_ACTIVITY_CURRENT.URL}>
         <CurrentActivityPage />

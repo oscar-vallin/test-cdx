@@ -3,6 +3,7 @@ import { useHistory, useLocation } from 'react-router';
 import { Icon } from '@fluentui/react';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
 import { ProfileMenu } from 'src/containers/menus/ProfileMenu';
+import { ROUTE_EXTERNAL_ORGS } from 'src/data/constants/RouteConstants';
 import { useCurrentUserTheme } from 'src/hooks/useCurrentUserTheme';
 import { useThemeStore } from 'src/store/ThemeStore';
 import { useSessionStore } from 'src/store/SessionStore';
@@ -99,40 +100,44 @@ const AppHeader = ({ onMenuButtonClick }: AppHeaderProps): ReactElement => {
   };
 
   const renderTopNavButtons = () => {
-    return ActiveDomainStore.nav.dashboard.map((menuOption: { label: string; destination: string }) => {
-      const opt:
-        | {
-            ID?: string;
-            TITLE?: string;
-            URL?: string;
-            MAIN_MENU?: boolean;
-            API_ID?: string;
-          }
-        | any = getRouteByApiId(menuOption.label !== 'Admin' ? menuOption.destination : 'ADMIN');
 
-      return opt.MAIN_MENU ? (
-        <StyledNavButton
-          id={`__${menuOption.destination}_Tab`}
-          key={menuOption.destination}
-          data-e2e={menuOption.destination}
-          selected={location.pathname === opt.URL}
-          onClick={() => {
-            let dest = `${opt.URL}?orgSid=${orgSid}`;
-            if (startDate) {
-              dest += `&startDate=${startDate}`;
+    if(ActiveDomainStore.domainOrg.origin.destination !== ROUTE_EXTERNAL_ORGS.API_ID){
+      return ActiveDomainStore.nav.dashboard.map((menuOption: { label: string; destination: string }) => {
+        const opt:
+          | {
+              ID?: string;
+              TITLE?: string;
+              URL?: string;
+              MAIN_MENU?: boolean;
+              API_ID?: string;
             }
-            if (endDate) {
-              dest += `&endDate=${endDate}`;
-            }
-            history.push(dest);
-
-            return null;
-          }}
-        >
-          {menuOption.label}
-        </StyledNavButton>
-      ) : null;
-    });
+          | any = getRouteByApiId(menuOption.label !== 'Admin' ? menuOption.destination : 'ADMIN');
+  
+        return opt.MAIN_MENU ? (
+          <StyledNavButton
+            id={`__${menuOption.destination}_Tab`}
+            key={menuOption.destination}
+            data-e2e={menuOption.destination}
+            selected={location.pathname === opt.URL}
+            onClick={() => {
+              let dest = `${opt.URL}?orgSid=${orgSid}`;
+              if (startDate) {
+                dest += `&startDate=${startDate}`;
+              }
+              if (endDate) {
+                dest += `&endDate=${endDate}`;
+              }
+              history.push(dest);
+  
+              return null;
+            }}
+          >
+            {menuOption.label}
+          </StyledNavButton>
+        ) : null;
+      });
+    }
+    return;
   };
 
   const renderOrgName = () => {
@@ -146,12 +151,26 @@ const AppHeader = ({ onMenuButtonClick }: AppHeaderProps): ReactElement => {
     );
   };
 
-  return (
-    <StyledHeader data-e2e="AppHeader">
-      <NavButton id="__AdminNavBtn" onClick={onMenuButtonClick} data-e2e="AdminNavBtn">
-        <StyledNavIcon iconName="GlobalNavButton" />
+  const showStyledNavIcon = () => {
+    if(ActiveDomainStore.domainOrg.origin.destination !== ROUTE_EXTERNAL_ORGS.API_ID){
+      return (
+        <NavButton id="__AdminNavBtn" onClick={onMenuButtonClick} data-e2e="AdminNavBtn">
+          <StyledNavIcon iconName="GlobalNavButton" />
+          {renderOrgName()}
+        </NavButton>
+      )
+    }
+    return (
+      <NavButton  id="__AdminNavBtn" data-e2e="AdminNavBtn">
         {renderOrgName()}
       </NavButton>
+    )
+  }
+
+  return (
+    <StyledHeader data-e2e="AppHeader">
+      
+        {showStyledNavIcon()}
 
       <StyledNavButton
         onClick={() => {

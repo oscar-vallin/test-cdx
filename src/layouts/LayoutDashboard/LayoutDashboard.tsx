@@ -2,6 +2,7 @@ import { ReactElement, ReactNode, useEffect, useState } from 'react';
 import { AppHeader } from 'src/containers/headers/AppHeader';
 
 import { StyleConstants } from 'src/data/constants/StyleConstants';
+import { ROUTE_EXTERNAL_ORGS } from 'src/data/constants/RouteConstants';
 import { LeftNav } from 'src/containers/menus/LeftNav';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
 import { BoxStyled, DashboardBody } from './LayoutDashboard.styles';
@@ -28,7 +29,18 @@ export const LayoutDashboard = ({
 
   useEffect(() => {
     setMenuOpen(ActiveDomainStore.nav.admin.length > 0);
+    console.log("Active Domain ", ActiveDomainStore)
   }, []);
+
+  const showLeftMenu = () => {
+
+    if(ActiveDomainStore.domainOrg.origin.destination !== ROUTE_EXTERNAL_ORGS.API_ID){
+      return (
+        <LeftNav menuOptionSelected={menuOptionSelected} isOpen={menuOpen} />
+      )
+    }
+    return;
+  }
 
   return (
     <BoxStyled id={`${id}__Box`} direction={StyleConstants.DIRECTION_COLUMN} top>
@@ -39,7 +51,7 @@ export const LayoutDashboard = ({
           }
         }}
       />
-      <LeftNav menuOptionSelected={menuOptionSelected} isOpen={menuOpen} />
+      {showLeftMenu()}
       <DashboardBody id="__DashboardBody" isMenuOpen={menuOpen}>
         {children}
       </DashboardBody>

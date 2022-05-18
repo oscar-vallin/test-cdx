@@ -60,6 +60,7 @@ export const useLoginUseCase = () => {
 
   const returnToInitialStep = () => {
     setState({ ...state, step: 'USER_ID', loading: false, error: null, reset: false });
+    console.log("state ", state)
   };
 
   useEffect(() => {
