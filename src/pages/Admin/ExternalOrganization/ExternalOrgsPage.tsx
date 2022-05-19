@@ -52,7 +52,7 @@ const ExternalOrgsPage = () => {
     };
 
     useEffect(() => {
-        fetchData()
+        fetchData();
     },[orgSid]);
 
     

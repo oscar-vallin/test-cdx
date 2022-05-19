@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Dialog, DialogType, DialogFooter, SpinnerSize, PrimaryButton, DefaultButton, Spinner } from '@fluentui/react';
 import { EmptyState } from 'src/containers/states';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Row, Column, Container } from 'src/components/layouts';
-import { Spacing } from 'src/components/spacings/Spacing';
 import { PageTitle } from 'src/components/typography';
-import { ActiveEnum, useActivateUsersMutation, UserItem } from 'src/data/services/graphql';
+import { 
+  ActiveEnum, 
+  useActivateUsersMutation, 
+  UserItem, 
+  SortDirection 
+} from 'src/data/services/graphql';
 
 import { UpdateUserPanel, useUpdateUserPanel } from 'src/pages/Admin/Users/UpdateUsers';
 import { UsersTable } from 'src/pages/Admin/Users/UsersTable';
@@ -13,16 +17,40 @@ import { useUsersLists } from 'src/pages/Admin/Users/useUsersList';
 import { StyledColumn } from './DeletedUsersPage.styles';
 import { ROUTE_DELETED_USERS } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
+import { useTableFilters } from 'src/hooks/useTableFilters';
 
 const DeletedUsersPage = () => {
   const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);
   const [selectedItems, setSelectedItems] = useState<UserItem[]>([]);
+
+  const tableFilters = useTableFilters('Name, Last Name, Email, etc.', [
+    { property: 'person.lastNm', direction: SortDirection.Asc },
+    { property: 'person.firstNm', direction: SortDirection.Asc },
+    { property: 'email', direction: SortDirection.Asc },
+  ]);
 
   const [enableUser] = useActivateUsersMutation();
 
   const updateUserPanel = useUpdateUserPanel();
 
   const userService = useUsersLists(ActiveEnum.Inactive);
+
+  useEffect(() => {
+    // Reset the page number when any filtering occurs
+    tableFilters.setPagingParams({
+      pageNumber: 0,
+      pageSize: 100,
+      sort: tableFilters.pagingParams.sort,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tableFilters.searchText.delayedValue]);
+
+  useEffect(() => {
+    userService.fetchUsers(
+      0,
+      tableFilters.pagingParams.sort,
+    );
+  }, [tableFilters.pagingParams]);
 
   const hideConfirmation = () => {
     setIsConfirmationHidden(true);
@@ -36,19 +64,18 @@ const DeletedUsersPage = () => {
   };
 
   const renderBody = () => {
-    if (userService.loading) {
-      return (
-        <Spacing margin={{ top: 'double' }}>
-          <Spinner size={SpinnerSize.large} label="Loading inactive users" />
-        </Spacing>
-      );
-    }
     if (!userService.users?.length) {
       return (
         <EmptyState title="No inactive users" description="There aren't any inactive users in this organization" />
       );
     }
-    return <UsersTable users={userService.users} onClickUser={updateUserPanel.showPanel} />;
+    return (
+      <UsersTable
+            tableFilters={tableFilters}
+            users={userService.users}
+            onClickUser={updateUserPanel.showPanel}
+        />
+    );
   };
 
   return (
