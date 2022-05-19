@@ -27,14 +27,15 @@ export const LayoutDashboard = ({
   const ActiveDomainStore = useActiveDomainStore();
   const [menuOpen, setMenuOpen] = useState<boolean>(ActiveDomainStore.nav.admin.length > 0);
 
+  const notShowLeftMenu = ActiveDomainStore.domainOrg.origin.destination !== ROUTE_EXTERNAL_ORGS.API_ID;
+  
   useEffect(() => {
     setMenuOpen(ActiveDomainStore.nav.admin.length > 0);
-    console.log("Active Domain ", ActiveDomainStore)
   }, []);
 
   const showLeftMenu = () => {
 
-    if(ActiveDomainStore.domainOrg.origin.destination !== ROUTE_EXTERNAL_ORGS.API_ID){
+    if(notShowLeftMenu){
       return (
         <LeftNav menuOptionSelected={menuOptionSelected} isOpen={menuOpen} />
       )
@@ -52,7 +53,7 @@ export const LayoutDashboard = ({
         }}
       />
       {showLeftMenu()}
-      <DashboardBody id="__DashboardBody" isMenuOpen={menuOpen}>
+      <DashboardBody id="__DashboardBody" isMenuOpen={menuOpen && notShowLeftMenu}>
         {children}
       </DashboardBody>
     </BoxStyled>

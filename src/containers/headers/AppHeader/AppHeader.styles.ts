@@ -129,7 +129,13 @@ export const StyledMenuItem = styled.div<SelectableProps>`
   font-weight: ${({ selected }) => (selected ? '700' : '400')};
 `;
 
-export const StyledOverFlow = styled.small`
+export const StyledOverFlow = styled.div`
   overflow: hidden;
-  width: 506px;
+  width: 507px;
+ 
 `;
+export const StyledOverFlowExt = styled.div`
+  overflow: hidden;
+  width: 260px;
+`;
+

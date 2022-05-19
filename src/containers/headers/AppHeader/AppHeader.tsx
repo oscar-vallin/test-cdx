@@ -19,7 +19,8 @@ import {
   StyledIconButton,
   StyledHeader,
   StyledMenuItem,
-  StyledOverFlow
+  StyledOverFlow,
+  StyledOverFlowExt
 } from './AppHeader.styles';
 
 const defaultProps = {
@@ -155,25 +156,30 @@ const AppHeader = ({ onMenuButtonClick }: AppHeaderProps): ReactElement => {
   const showStyledNavIcon = () => {
     if(ActiveDomainStore.domainOrg.origin.destination !== ROUTE_EXTERNAL_ORGS.API_ID){
       return (
-        <NavButton id="__AdminNavBtn" onClick={onMenuButtonClick} data-e2e="AdminNavBtn">
-          <StyledNavIcon iconName="GlobalNavButton" />
-          {renderOrgName()}
-        </NavButton>
+        <StyledOverFlow>
+          <NavButton id="__AdminNavBtn" onClick={onMenuButtonClick} data-e2e="AdminNavBtn">
+            <StyledNavIcon iconName="GlobalNavButton" />
+            {renderOrgName()}
+          </NavButton>
+        </StyledOverFlow>
       )
     }
     return (
-      <NavButton  id="__AdminNavBtn" data-e2e="AdminNavBtn">
-        {renderOrgName()}
-      </NavButton>
+      <StyledOverFlowExt>
+        <NavButton  id="__AdminNavBtn" data-e2e="AdminNavBtn" >
+          {renderOrgName()}
+        </NavButton>
+      </StyledOverFlowExt>
     )
   }
 
   return (
     <StyledHeader data-e2e="AppHeader">
-      <StyledOverFlow>
+      
         {showStyledNavIcon()}
-      </StyledOverFlow>
+     
       <StyledNavButton
+        id='__ProfileMenu_Home_button'
         onClick={() => {
           ActiveDomainStore.setCurrentOrg(ActiveDomainStore.domainOrg.origin);
         }}
