@@ -22,7 +22,7 @@ describe('Forgot Password...', () => {
     expect(ForgotPasswordModal).toBeDefined();
   });
 
-  it('Should show an alert with message "Cancel" when click on Cancel button', () => {
+  it('the modal should be closed', () => {
     const wrapper = mountWithTheme(
       <StoreProvider store={store}>
         <ApolloContextProvider bypassLoading={true}>
@@ -34,7 +34,7 @@ describe('Forgot Password...', () => {
     expect(tree).toMatchSnapshot();
   });
 
-  it('Should show an alert with message "Submit" when click on Submit button', () => {
+  it('it should show another modal where it is indicated that an email was sent', () => {
     const wrapper = mountWithTheme(
       <StoreProvider store={store}>
         <ApolloContextProvider bypassLoading={true}>

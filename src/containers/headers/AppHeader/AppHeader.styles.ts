@@ -128,3 +128,8 @@ export const StyledMenuItem = styled.div<SelectableProps>`
   color: ${({ selected, theme }) => (selected ? theme.colors.themePrimary : theme.colors.black)};
   font-weight: ${({ selected }) => (selected ? '700' : '400')};
 `;
+
+export const StyledOverFlow = styled.small`
+  overflow: hidden;
+  width: 506px;
+`;

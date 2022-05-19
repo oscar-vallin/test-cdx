@@ -19,6 +19,7 @@ import {
   StyledIconButton,
   StyledHeader,
   StyledMenuItem,
+  StyledOverFlow
 } from './AppHeader.styles';
 
 const defaultProps = {
@@ -169,9 +170,9 @@ const AppHeader = ({ onMenuButtonClick }: AppHeaderProps): ReactElement => {
 
   return (
     <StyledHeader data-e2e="AppHeader">
-      
+      <StyledOverFlow>
         {showStyledNavIcon()}
-
+      </StyledOverFlow>
       <StyledNavButton
         onClick={() => {
           ActiveDomainStore.setCurrentOrg(ActiveDomainStore.domainOrg.origin);
