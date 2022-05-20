@@ -393,6 +393,23 @@ export type CreateUserInput = {
   accessPolicyGroupSids?: Maybe<Array<Scalars['ID']>>;
 };
 
+export type CreateXchangeFileTransmissionInput = {
+  xchangeFileProcessSid: Scalars['ID'];
+  parentSid?: Maybe<Scalars['ID']>;
+  filenameQualifiers?: Maybe<Array<Scalars['String']>>;
+  protocol: ExtensionField;
+  host: ExtensionField;
+  port: ExtensionField;
+  userName: ExtensionField;
+  password: ExtensionField;
+  authKeyName: ExtensionField;
+  folder: ExtensionField;
+  filenamePattern: ExtensionField;
+  stepWise: ExtensionField;
+  encryptionKeyName: ExtensionField;
+  comments?: Maybe<Scalars['String']>;
+};
+
 export type CreateXchangeStepInput = {
   xchangeFileProcessSid: Scalars['ID'];
   xml: Scalars['String'];
@@ -585,6 +602,11 @@ export enum ErrorSeverity {
   Warning = 'WARNING',
   Info = 'INFO'
 }
+
+export type ExtensionField = {
+  value?: Maybe<Scalars['String']>;
+  inherited?: Maybe<Scalars['Boolean']>;
+};
 
 export type ExtractParameter = {
   __typename?: 'ExtractParameter';
@@ -779,7 +801,12 @@ export type Mutation = {
   publishXchangeProfile?: Maybe<GenericResponse>;
   createXchangeStep?: Maybe<XchangeStepForm>;
   updateXchangeStep?: Maybe<XchangeStepForm>;
-  copyXchangeStep?: Maybe<XchangeFileProcessForm>;
+  moveUpXchangeStep?: Maybe<XchangeFileProcessForm>;
+  moveDownXchangeStep?: Maybe<XchangeFileProcessForm>;
+  deleteXchangeStep?: Maybe<XchangeFileProcessForm>;
+  createXchangeFileTransmission?: Maybe<XchangeFileTransmissionForm>;
+  updateXchangeFileTransmission?: Maybe<XchangeFileTransmissionForm>;
+  deleteXchangeFileTransmission?: Maybe<XchangeFileProcessForm>;
 };
 
 
@@ -1059,7 +1086,35 @@ export type MutationUpdateXchangeStepArgs = {
 };
 
 
-export type MutationCopyXchangeStepArgs = {
+export type MutationMoveUpXchangeStepArgs = {
+  xchangeFileProcessSid: Scalars['ID'];
+  sid: Scalars['ID'];
+};
+
+
+export type MutationMoveDownXchangeStepArgs = {
+  xchangeFileProcessSid: Scalars['ID'];
+  sid: Scalars['ID'];
+};
+
+
+export type MutationDeleteXchangeStepArgs = {
+  xchangeFileProcessSid: Scalars['ID'];
+  sid: Scalars['ID'];
+};
+
+
+export type MutationCreateXchangeFileTransmissionArgs = {
+  transInput?: Maybe<CreateXchangeFileTransmissionInput>;
+};
+
+
+export type MutationUpdateXchangeFileTransmissionArgs = {
+  transInput?: Maybe<UpdateXchangeFileTransmissionInput>;
+};
+
+
+export type MutationDeleteXchangeFileTransmissionArgs = {
   xchangeFileProcessSid: Scalars['ID'];
   sid: Scalars['ID'];
 };
@@ -1519,9 +1574,13 @@ export type Query = {
   reprocessDialog?: Maybe<ReprocessDialog>;
   xchangeProfile?: Maybe<XchangeProfile>;
   xchangeDetails?: Maybe<XchangeConfigForm>;
+  xchangeFileProcessForm?: Maybe<XchangeFileProcessForm>;
   previewConvertXchangeProfile?: Maybe<XchangeProfileConvertPreview>;
   xchangeStepForm?: Maybe<XchangeStepForm>;
+  copyXchangeStep?: Maybe<XchangeStepForm>;
   xchangeFileTransmissionForm?: Maybe<XchangeFileTransmissionForm>;
+  copyXchangeFileTransmission?: Maybe<XchangeFileTransmissionForm>;
+  previewFilenamePattern: Scalars['String'];
 };
 
 
@@ -1876,6 +1935,11 @@ export type QueryXchangeDetailsArgs = {
 };
 
 
+export type QueryXchangeFileProcessFormArgs = {
+  xchangeFileProcessSid: Scalars['ID'];
+};
+
+
 export type QueryPreviewConvertXchangeProfileArgs = {
   orgSid: Scalars['ID'];
 };
@@ -1887,9 +1951,26 @@ export type QueryXchangeStepFormArgs = {
 };
 
 
+export type QueryCopyXchangeStepArgs = {
+  xchangeFileProcessSid: Scalars['ID'];
+  sid: Scalars['ID'];
+};
+
+
 export type QueryXchangeFileTransmissionFormArgs = {
   xchangeFileProcessSid: Scalars['ID'];
   sid?: Maybe<Scalars['ID']>;
+};
+
+
+export type QueryCopyXchangeFileTransmissionArgs = {
+  xchangeFileProcessSid: Scalars['ID'];
+  sid: Scalars['ID'];
+};
+
+
+export type QueryPreviewFilenamePatternArgs = {
+  pattern: Scalars['String'];
 };
 
 export type RecordCount = {
@@ -2470,6 +2551,24 @@ export type UpdateUserInput = {
   lastNm?: Maybe<Scalars['String']>;
 };
 
+export type UpdateXchangeFileTransmissionInput = {
+  xchangeFileProcessSid: Scalars['ID'];
+  sid: Scalars['ID'];
+  parentSid?: Maybe<Scalars['ID']>;
+  filenameQualifiers?: Maybe<Array<Scalars['String']>>;
+  protocol: ExtensionField;
+  host: ExtensionField;
+  port: ExtensionField;
+  userName: ExtensionField;
+  password: ExtensionField;
+  authKeyName: ExtensionField;
+  folder: ExtensionField;
+  filenamePattern: ExtensionField;
+  stepWise: ExtensionField;
+  encryptionKeyName: ExtensionField;
+  comments?: Maybe<Scalars['String']>;
+};
+
 export type UpdateXchangeStepInput = {
   sid: Scalars['ID'];
   xml: Scalars['String'];
@@ -3000,10 +3099,28 @@ export type XchangeFileProcessForm = {
   errSeverity?: Maybe<ErrorSeverity>;
 };
 
+export type XchangeFileTransmission = {
+  __typename?: 'XchangeFileTransmission';
+  sid?: Maybe<Scalars['ID']>;
+  filenameQualifiers?: Maybe<Array<Scalars['String']>>;
+  protocol?: Maybe<Scalars['String']>;
+  host?: Maybe<Scalars['String']>;
+  port?: Maybe<Scalars['Int']>;
+  userName?: Maybe<Scalars['String']>;
+  password?: Maybe<Scalars['String']>;
+  authKeyName?: Maybe<Scalars['String']>;
+  folder?: Maybe<Scalars['String']>;
+  filenamePattern?: Maybe<Scalars['String']>;
+  stepWise?: Maybe<Scalars['Boolean']>;
+  encryptionKeyName?: Maybe<Scalars['String']>;
+  lastUpdated?: Maybe<Scalars['DateTime']>;
+  comments?: Maybe<Scalars['String']>;
+};
+
 export type XchangeFileTransmissionForm = {
   __typename?: 'XchangeFileTransmissionForm';
   sid?: Maybe<Scalars['ID']>;
-  parentId?: Maybe<Scalars['ID']>;
+  parent?: Maybe<XchangeFileTransmission>;
   filenameQualifiers: UiSelectManyField;
   protocol: UiSelectOneField;
   host: UiStringField;
@@ -5340,6 +5457,70 @@ export type XchangeDetailsQuery = (
   )> }
 );
 
+export type XchangeFileProcessFormQueryVariables = Exact<{
+  xchangeFileProcessSid: Scalars['ID'];
+}>;
+
+
+export type XchangeFileProcessFormQuery = (
+  { __typename?: 'Query' }
+  & { xchangeFileProcessForm?: Maybe<(
+    { __typename?: 'XchangeFileProcessForm' }
+    & Pick<XchangeFileProcessForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { vendor: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), specId: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), filenameQualifiers: (
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    ), diagram: (
+      { __typename?: 'XchangeDiagram' }
+      & { steps?: Maybe<Array<(
+        { __typename?: 'XchangeDiagramStep' }
+        & Pick<XchangeDiagramStep, 'sid' | 'key' | 'icon' | 'title' | 'subTitle' | 'qualifier'>
+        & { commands?: Maybe<Array<(
+          { __typename?: 'WebCommand' }
+          & FragmentWebCommandFragment
+        )>>, position: (
+          { __typename?: 'DiagramCoordinates' }
+          & Pick<DiagramCoordinates, 'x' | 'y'>
+        ) }
+      )>>, stepGroups?: Maybe<Array<(
+        { __typename?: 'XchangeDiagramStepGroup' }
+        & { start: (
+          { __typename?: 'DiagramCoordinates' }
+          & Pick<DiagramCoordinates, 'x' | 'y'>
+        ), end: (
+          { __typename?: 'DiagramCoordinates' }
+          & Pick<DiagramCoordinates, 'x' | 'y'>
+        ) }
+      )>>, transmissions?: Maybe<Array<(
+        { __typename?: 'XchangeDiagramFileTransmission' }
+        & Pick<XchangeDiagramFileTransmission, 'sid' | 'key' | 'protocol' | 'host' | 'qualifier'>
+        & { commands?: Maybe<Array<(
+          { __typename?: 'WebCommand' }
+          & FragmentWebCommandFragment
+        )>>, position: (
+          { __typename?: 'DiagramCoordinates' }
+          & Pick<DiagramCoordinates, 'x' | 'y'>
+        ) }
+      )>>, connectors?: Maybe<Array<(
+        { __typename?: 'DiagramConnector' }
+        & Pick<DiagramConnector, 'fromKey' | 'toKey'>
+      )>> }
+    ), options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
+    )>>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>> }
+  )> }
+);
+
 export type PreviewConvertXchangeProfileQueryVariables = Exact<{
   orgSid: Scalars['ID'];
 }>;
@@ -5384,6 +5565,30 @@ export type XchangeStepFormQuery = (
   )> }
 );
 
+export type CopyXchangeStepQueryVariables = Exact<{
+  xchangeFileProcessSid: Scalars['ID'];
+  sid: Scalars['ID'];
+}>;
+
+
+export type CopyXchangeStepQuery = (
+  { __typename?: 'Query' }
+  & { copyXchangeStep?: Maybe<(
+    { __typename?: 'XchangeStepForm' }
+    & Pick<XchangeStepForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { xml: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), lastUpdated?: Maybe<(
+      { __typename?: 'UIReadOnlyField' }
+      & FragmentUiReadOnlyFieldFragment
+    )>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>> }
+  )> }
+);
+
 export type XchangeFileTransmissionFormQueryVariables = Exact<{
   xchangeFileProcessSid: Scalars['ID'];
   sid?: Maybe<Scalars['ID']>;
@@ -5394,8 +5599,11 @@ export type XchangeFileTransmissionFormQuery = (
   { __typename?: 'Query' }
   & { xchangeFileTransmissionForm?: Maybe<(
     { __typename?: 'XchangeFileTransmissionForm' }
-    & Pick<XchangeFileTransmissionForm, 'sid' | 'parentId' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
-    & { filenameQualifiers: (
+    & Pick<XchangeFileTransmissionForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { parent?: Maybe<(
+      { __typename?: 'XchangeFileTransmission' }
+      & Pick<XchangeFileTransmission, 'sid' | 'filenameQualifiers' | 'protocol' | 'host' | 'port' | 'userName' | 'password' | 'authKeyName' | 'folder' | 'filenamePattern' | 'stepWise' | 'encryptionKeyName' | 'lastUpdated' | 'comments'>
+    )>, filenameQualifiers: (
       { __typename?: 'UISelectManyField' }
       & FragmentUiSelectManyFieldFragment
     ), protocol: (
@@ -5442,6 +5650,79 @@ export type XchangeFileTransmissionFormQuery = (
       & FragmentWebCommandFragment
     )>> }
   )> }
+);
+
+export type CopyXchangeFileTransmissionQueryVariables = Exact<{
+  xchangeFileProcessSid: Scalars['ID'];
+  sid: Scalars['ID'];
+}>;
+
+
+export type CopyXchangeFileTransmissionQuery = (
+  { __typename?: 'Query' }
+  & { copyXchangeFileTransmission?: Maybe<(
+    { __typename?: 'XchangeFileTransmissionForm' }
+    & Pick<XchangeFileTransmissionForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { parent?: Maybe<(
+      { __typename?: 'XchangeFileTransmission' }
+      & Pick<XchangeFileTransmission, 'sid' | 'filenameQualifiers' | 'protocol' | 'host' | 'port' | 'userName' | 'password' | 'authKeyName' | 'folder' | 'filenamePattern' | 'stepWise' | 'encryptionKeyName' | 'lastUpdated' | 'comments'>
+    )>, filenameQualifiers: (
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    ), protocol: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), host: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), port: (
+      { __typename?: 'UIIntField' }
+      & FragmentUiIntFieldFragment
+    ), userName: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), password: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), authKeyName: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), folder: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), filenamePattern: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), stepWise: (
+      { __typename?: 'UIBooleanField' }
+      & FragmentUiBooleanFieldFragment
+    ), encryptionKeyName: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), lastUpdated?: Maybe<(
+      { __typename?: 'UIReadOnlyField' }
+      & FragmentUiReadOnlyFieldFragment
+    )>, comments: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
+    )>>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>> }
+  )> }
+);
+
+export type PreviewFilenamePatternQueryVariables = Exact<{
+  pattern: Scalars['String'];
+}>;
+
+
+export type PreviewFilenamePatternQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'previewFilenamePattern'>
 );
 
 export type BeginLoginMutationVariables = Exact<{
@@ -6962,15 +7243,334 @@ export type UpdateXchangeStepMutation = (
   )> }
 );
 
-export type CopyXchangeStepMutationVariables = Exact<{
+export type MoveUpXchangeStepMutationVariables = Exact<{
   xchangeFileProcessSid: Scalars['ID'];
   sid: Scalars['ID'];
 }>;
 
 
-export type CopyXchangeStepMutation = (
+export type MoveUpXchangeStepMutation = (
   { __typename?: 'Mutation' }
-  & { copyXchangeStep?: Maybe<(
+  & { moveUpXchangeStep?: Maybe<(
+    { __typename?: 'XchangeFileProcessForm' }
+    & Pick<XchangeFileProcessForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { vendor: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), specId: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), filenameQualifiers: (
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    ), diagram: (
+      { __typename?: 'XchangeDiagram' }
+      & { steps?: Maybe<Array<(
+        { __typename?: 'XchangeDiagramStep' }
+        & Pick<XchangeDiagramStep, 'sid' | 'key' | 'icon' | 'title' | 'subTitle' | 'qualifier'>
+        & { commands?: Maybe<Array<(
+          { __typename?: 'WebCommand' }
+          & FragmentWebCommandFragment
+        )>>, position: (
+          { __typename?: 'DiagramCoordinates' }
+          & Pick<DiagramCoordinates, 'x' | 'y'>
+        ) }
+      )>>, stepGroups?: Maybe<Array<(
+        { __typename?: 'XchangeDiagramStepGroup' }
+        & { start: (
+          { __typename?: 'DiagramCoordinates' }
+          & Pick<DiagramCoordinates, 'x' | 'y'>
+        ), end: (
+          { __typename?: 'DiagramCoordinates' }
+          & Pick<DiagramCoordinates, 'x' | 'y'>
+        ) }
+      )>>, transmissions?: Maybe<Array<(
+        { __typename?: 'XchangeDiagramFileTransmission' }
+        & Pick<XchangeDiagramFileTransmission, 'sid' | 'key' | 'protocol' | 'host' | 'qualifier'>
+        & { commands?: Maybe<Array<(
+          { __typename?: 'WebCommand' }
+          & FragmentWebCommandFragment
+        )>>, position: (
+          { __typename?: 'DiagramCoordinates' }
+          & Pick<DiagramCoordinates, 'x' | 'y'>
+        ) }
+      )>>, connectors?: Maybe<Array<(
+        { __typename?: 'DiagramConnector' }
+        & Pick<DiagramConnector, 'fromKey' | 'toKey'>
+      )>> }
+    ), options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
+    )>>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>> }
+  )> }
+);
+
+export type MoveDownXchangeStepMutationVariables = Exact<{
+  xchangeFileProcessSid: Scalars['ID'];
+  sid: Scalars['ID'];
+}>;
+
+
+export type MoveDownXchangeStepMutation = (
+  { __typename?: 'Mutation' }
+  & { moveDownXchangeStep?: Maybe<(
+    { __typename?: 'XchangeFileProcessForm' }
+    & Pick<XchangeFileProcessForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { vendor: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), specId: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), filenameQualifiers: (
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    ), diagram: (
+      { __typename?: 'XchangeDiagram' }
+      & { steps?: Maybe<Array<(
+        { __typename?: 'XchangeDiagramStep' }
+        & Pick<XchangeDiagramStep, 'sid' | 'key' | 'icon' | 'title' | 'subTitle' | 'qualifier'>
+        & { commands?: Maybe<Array<(
+          { __typename?: 'WebCommand' }
+          & FragmentWebCommandFragment
+        )>>, position: (
+          { __typename?: 'DiagramCoordinates' }
+          & Pick<DiagramCoordinates, 'x' | 'y'>
+        ) }
+      )>>, stepGroups?: Maybe<Array<(
+        { __typename?: 'XchangeDiagramStepGroup' }
+        & { start: (
+          { __typename?: 'DiagramCoordinates' }
+          & Pick<DiagramCoordinates, 'x' | 'y'>
+        ), end: (
+          { __typename?: 'DiagramCoordinates' }
+          & Pick<DiagramCoordinates, 'x' | 'y'>
+        ) }
+      )>>, transmissions?: Maybe<Array<(
+        { __typename?: 'XchangeDiagramFileTransmission' }
+        & Pick<XchangeDiagramFileTransmission, 'sid' | 'key' | 'protocol' | 'host' | 'qualifier'>
+        & { commands?: Maybe<Array<(
+          { __typename?: 'WebCommand' }
+          & FragmentWebCommandFragment
+        )>>, position: (
+          { __typename?: 'DiagramCoordinates' }
+          & Pick<DiagramCoordinates, 'x' | 'y'>
+        ) }
+      )>>, connectors?: Maybe<Array<(
+        { __typename?: 'DiagramConnector' }
+        & Pick<DiagramConnector, 'fromKey' | 'toKey'>
+      )>> }
+    ), options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
+    )>>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>> }
+  )> }
+);
+
+export type DeleteXchangeStepMutationVariables = Exact<{
+  xchangeFileProcessSid: Scalars['ID'];
+  sid: Scalars['ID'];
+}>;
+
+
+export type DeleteXchangeStepMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteXchangeStep?: Maybe<(
+    { __typename?: 'XchangeFileProcessForm' }
+    & Pick<XchangeFileProcessForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { vendor: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), specId: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), filenameQualifiers: (
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    ), diagram: (
+      { __typename?: 'XchangeDiagram' }
+      & { steps?: Maybe<Array<(
+        { __typename?: 'XchangeDiagramStep' }
+        & Pick<XchangeDiagramStep, 'sid' | 'key' | 'icon' | 'title' | 'subTitle' | 'qualifier'>
+        & { commands?: Maybe<Array<(
+          { __typename?: 'WebCommand' }
+          & FragmentWebCommandFragment
+        )>>, position: (
+          { __typename?: 'DiagramCoordinates' }
+          & Pick<DiagramCoordinates, 'x' | 'y'>
+        ) }
+      )>>, stepGroups?: Maybe<Array<(
+        { __typename?: 'XchangeDiagramStepGroup' }
+        & { start: (
+          { __typename?: 'DiagramCoordinates' }
+          & Pick<DiagramCoordinates, 'x' | 'y'>
+        ), end: (
+          { __typename?: 'DiagramCoordinates' }
+          & Pick<DiagramCoordinates, 'x' | 'y'>
+        ) }
+      )>>, transmissions?: Maybe<Array<(
+        { __typename?: 'XchangeDiagramFileTransmission' }
+        & Pick<XchangeDiagramFileTransmission, 'sid' | 'key' | 'protocol' | 'host' | 'qualifier'>
+        & { commands?: Maybe<Array<(
+          { __typename?: 'WebCommand' }
+          & FragmentWebCommandFragment
+        )>>, position: (
+          { __typename?: 'DiagramCoordinates' }
+          & Pick<DiagramCoordinates, 'x' | 'y'>
+        ) }
+      )>>, connectors?: Maybe<Array<(
+        { __typename?: 'DiagramConnector' }
+        & Pick<DiagramConnector, 'fromKey' | 'toKey'>
+      )>> }
+    ), options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
+    )>>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>> }
+  )> }
+);
+
+export type CreateXchangeFileTransmissionMutationVariables = Exact<{
+  transInput?: Maybe<CreateXchangeFileTransmissionInput>;
+}>;
+
+
+export type CreateXchangeFileTransmissionMutation = (
+  { __typename?: 'Mutation' }
+  & { createXchangeFileTransmission?: Maybe<(
+    { __typename?: 'XchangeFileTransmissionForm' }
+    & Pick<XchangeFileTransmissionForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { parent?: Maybe<(
+      { __typename?: 'XchangeFileTransmission' }
+      & Pick<XchangeFileTransmission, 'sid' | 'filenameQualifiers' | 'protocol' | 'host' | 'port' | 'userName' | 'password' | 'authKeyName' | 'folder' | 'filenamePattern' | 'stepWise' | 'encryptionKeyName' | 'lastUpdated' | 'comments'>
+    )>, filenameQualifiers: (
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    ), protocol: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), host: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), port: (
+      { __typename?: 'UIIntField' }
+      & FragmentUiIntFieldFragment
+    ), userName: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), password: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), authKeyName: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), folder: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), filenamePattern: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), stepWise: (
+      { __typename?: 'UIBooleanField' }
+      & FragmentUiBooleanFieldFragment
+    ), encryptionKeyName: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), lastUpdated?: Maybe<(
+      { __typename?: 'UIReadOnlyField' }
+      & FragmentUiReadOnlyFieldFragment
+    )>, comments: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
+    )>>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>> }
+  )> }
+);
+
+export type UpdateXchangeFileTransmissionMutationVariables = Exact<{
+  transInput?: Maybe<UpdateXchangeFileTransmissionInput>;
+}>;
+
+
+export type UpdateXchangeFileTransmissionMutation = (
+  { __typename?: 'Mutation' }
+  & { updateXchangeFileTransmission?: Maybe<(
+    { __typename?: 'XchangeFileTransmissionForm' }
+    & Pick<XchangeFileTransmissionForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { parent?: Maybe<(
+      { __typename?: 'XchangeFileTransmission' }
+      & Pick<XchangeFileTransmission, 'sid' | 'filenameQualifiers' | 'protocol' | 'host' | 'port' | 'userName' | 'password' | 'authKeyName' | 'folder' | 'filenamePattern' | 'stepWise' | 'encryptionKeyName' | 'lastUpdated' | 'comments'>
+    )>, filenameQualifiers: (
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    ), protocol: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), host: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), port: (
+      { __typename?: 'UIIntField' }
+      & FragmentUiIntFieldFragment
+    ), userName: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), password: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), authKeyName: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), folder: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), filenamePattern: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), stepWise: (
+      { __typename?: 'UIBooleanField' }
+      & FragmentUiBooleanFieldFragment
+    ), encryptionKeyName: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), lastUpdated?: Maybe<(
+      { __typename?: 'UIReadOnlyField' }
+      & FragmentUiReadOnlyFieldFragment
+    )>, comments: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
+    )>>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>> }
+  )> }
+);
+
+export type DeleteXchangeFileTransmissionMutationVariables = Exact<{
+  xchangeFileProcessSid: Scalars['ID'];
+  sid: Scalars['ID'];
+}>;
+
+
+export type DeleteXchangeFileTransmissionMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteXchangeFileTransmission?: Maybe<(
     { __typename?: 'XchangeFileProcessForm' }
     & Pick<XchangeFileProcessForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { vendor: (
@@ -11397,6 +11997,107 @@ export function useXchangeDetailsLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type XchangeDetailsQueryHookResult = ReturnType<typeof useXchangeDetailsQuery>;
 export type XchangeDetailsLazyQueryHookResult = ReturnType<typeof useXchangeDetailsLazyQuery>;
 export type XchangeDetailsQueryResult = Apollo.QueryResult<XchangeDetailsQuery, XchangeDetailsQueryVariables>;
+export const XchangeFileProcessFormDocument = gql`
+    query XchangeFileProcessForm($xchangeFileProcessSid: ID!) {
+  xchangeFileProcessForm(xchangeFileProcessSid: $xchangeFileProcessSid) {
+    sid
+    vendor {
+      ...fragmentUISelectOneField
+    }
+    specId {
+      ...fragmentUIStringField
+    }
+    filenameQualifiers {
+      ...fragmentUISelectManyField
+    }
+    diagram {
+      steps {
+        sid
+        key
+        icon
+        title
+        subTitle
+        qualifier
+        commands {
+          ...fragmentWebCommand
+        }
+        position {
+          x
+          y
+        }
+      }
+      stepGroups {
+        start {
+          x
+          y
+        }
+        end {
+          x
+          y
+        }
+      }
+      transmissions {
+        sid
+        key
+        protocol
+        host
+        qualifier
+        commands {
+          ...fragmentWebCommand
+        }
+        position {
+          x
+          y
+        }
+      }
+      connectors {
+        fromKey
+        toKey
+      }
+    }
+    options {
+      ...fragmentUIOptions
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiSelectOneFieldFragmentDoc}
+${FragmentUiStringFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentWebCommandFragmentDoc}
+${FragmentUiOptionsFragmentDoc}`;
+
+/**
+ * __useXchangeFileProcessFormQuery__
+ *
+ * To run a query within a React component, call `useXchangeFileProcessFormQuery` and pass it any options that fit your needs.
+ * When your component renders, `useXchangeFileProcessFormQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useXchangeFileProcessFormQuery({
+ *   variables: {
+ *      xchangeFileProcessSid: // value for 'xchangeFileProcessSid'
+ *   },
+ * });
+ */
+export function useXchangeFileProcessFormQuery(baseOptions: Apollo.QueryHookOptions<XchangeFileProcessFormQuery, XchangeFileProcessFormQueryVariables>) {
+        return Apollo.useQuery<XchangeFileProcessFormQuery, XchangeFileProcessFormQueryVariables>(XchangeFileProcessFormDocument, baseOptions);
+      }
+export function useXchangeFileProcessFormLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<XchangeFileProcessFormQuery, XchangeFileProcessFormQueryVariables>) {
+          return Apollo.useLazyQuery<XchangeFileProcessFormQuery, XchangeFileProcessFormQueryVariables>(XchangeFileProcessFormDocument, baseOptions);
+        }
+export type XchangeFileProcessFormQueryHookResult = ReturnType<typeof useXchangeFileProcessFormQuery>;
+export type XchangeFileProcessFormLazyQueryHookResult = ReturnType<typeof useXchangeFileProcessFormLazyQuery>;
+export type XchangeFileProcessFormQueryResult = Apollo.QueryResult<XchangeFileProcessFormQuery, XchangeFileProcessFormQueryVariables>;
 export const PreviewConvertXchangeProfileDocument = gql`
     query PreviewConvertXchangeProfile($orgSid: ID!) {
   previewConvertXchangeProfile(orgSid: $orgSid) {
@@ -11494,6 +12195,55 @@ export function useXchangeStepFormLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
 export type XchangeStepFormQueryHookResult = ReturnType<typeof useXchangeStepFormQuery>;
 export type XchangeStepFormLazyQueryHookResult = ReturnType<typeof useXchangeStepFormLazyQuery>;
 export type XchangeStepFormQueryResult = Apollo.QueryResult<XchangeStepFormQuery, XchangeStepFormQueryVariables>;
+export const CopyXchangeStepDocument = gql`
+    query CopyXchangeStep($xchangeFileProcessSid: ID!, $sid: ID!) {
+  copyXchangeStep(xchangeFileProcessSid: $xchangeFileProcessSid, sid: $sid) {
+    sid
+    xml {
+      ...fragmentUIStringField
+    }
+    lastUpdated {
+      ...fragmentUIReadOnlyField
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiReadOnlyFieldFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
+
+/**
+ * __useCopyXchangeStepQuery__
+ *
+ * To run a query within a React component, call `useCopyXchangeStepQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCopyXchangeStepQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCopyXchangeStepQuery({
+ *   variables: {
+ *      xchangeFileProcessSid: // value for 'xchangeFileProcessSid'
+ *      sid: // value for 'sid'
+ *   },
+ * });
+ */
+export function useCopyXchangeStepQuery(baseOptions: Apollo.QueryHookOptions<CopyXchangeStepQuery, CopyXchangeStepQueryVariables>) {
+        return Apollo.useQuery<CopyXchangeStepQuery, CopyXchangeStepQueryVariables>(CopyXchangeStepDocument, baseOptions);
+      }
+export function useCopyXchangeStepLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CopyXchangeStepQuery, CopyXchangeStepQueryVariables>) {
+          return Apollo.useLazyQuery<CopyXchangeStepQuery, CopyXchangeStepQueryVariables>(CopyXchangeStepDocument, baseOptions);
+        }
+export type CopyXchangeStepQueryHookResult = ReturnType<typeof useCopyXchangeStepQuery>;
+export type CopyXchangeStepLazyQueryHookResult = ReturnType<typeof useCopyXchangeStepLazyQuery>;
+export type CopyXchangeStepQueryResult = Apollo.QueryResult<CopyXchangeStepQuery, CopyXchangeStepQueryVariables>;
 export const XchangeFileTransmissionFormDocument = gql`
     query XchangeFileTransmissionForm($xchangeFileProcessSid: ID!, $sid: ID) {
   xchangeFileTransmissionForm(
@@ -11501,7 +12251,22 @@ export const XchangeFileTransmissionFormDocument = gql`
     sid: $sid
   ) {
     sid
-    parentId
+    parent {
+      sid
+      filenameQualifiers
+      protocol
+      host
+      port
+      userName
+      password
+      authKeyName
+      folder
+      filenamePattern
+      stepWise
+      encryptionKeyName
+      lastUpdated
+      comments
+    }
     filenameQualifiers {
       ...fragmentUISelectManyField
     }
@@ -11588,6 +12353,146 @@ export function useXchangeFileTransmissionFormLazyQuery(baseOptions?: Apollo.Laz
 export type XchangeFileTransmissionFormQueryHookResult = ReturnType<typeof useXchangeFileTransmissionFormQuery>;
 export type XchangeFileTransmissionFormLazyQueryHookResult = ReturnType<typeof useXchangeFileTransmissionFormLazyQuery>;
 export type XchangeFileTransmissionFormQueryResult = Apollo.QueryResult<XchangeFileTransmissionFormQuery, XchangeFileTransmissionFormQueryVariables>;
+export const CopyXchangeFileTransmissionDocument = gql`
+    query CopyXchangeFileTransmission($xchangeFileProcessSid: ID!, $sid: ID!) {
+  copyXchangeFileTransmission(
+    xchangeFileProcessSid: $xchangeFileProcessSid
+    sid: $sid
+  ) {
+    sid
+    parent {
+      sid
+      filenameQualifiers
+      protocol
+      host
+      port
+      userName
+      password
+      authKeyName
+      folder
+      filenamePattern
+      stepWise
+      encryptionKeyName
+      lastUpdated
+      comments
+    }
+    filenameQualifiers {
+      ...fragmentUISelectManyField
+    }
+    protocol {
+      ...fragmentUISelectOneField
+    }
+    host {
+      ...fragmentUIStringField
+    }
+    port {
+      ...fragmentUIIntField
+    }
+    userName {
+      ...fragmentUIStringField
+    }
+    password {
+      ...fragmentUIStringField
+    }
+    authKeyName {
+      ...fragmentUISelectOneField
+    }
+    folder {
+      ...fragmentUIStringField
+    }
+    filenamePattern {
+      ...fragmentUIStringField
+    }
+    stepWise {
+      ...fragmentUIBooleanField
+    }
+    encryptionKeyName {
+      ...fragmentUISelectOneField
+    }
+    lastUpdated {
+      ...fragmentUIReadOnlyField
+    }
+    comments {
+      ...fragmentUIStringField
+    }
+    options {
+      ...fragmentUIOptions
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
+${FragmentUiStringFieldFragmentDoc}
+${FragmentUiIntFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiReadOnlyFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
+
+/**
+ * __useCopyXchangeFileTransmissionQuery__
+ *
+ * To run a query within a React component, call `useCopyXchangeFileTransmissionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCopyXchangeFileTransmissionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCopyXchangeFileTransmissionQuery({
+ *   variables: {
+ *      xchangeFileProcessSid: // value for 'xchangeFileProcessSid'
+ *      sid: // value for 'sid'
+ *   },
+ * });
+ */
+export function useCopyXchangeFileTransmissionQuery(baseOptions: Apollo.QueryHookOptions<CopyXchangeFileTransmissionQuery, CopyXchangeFileTransmissionQueryVariables>) {
+        return Apollo.useQuery<CopyXchangeFileTransmissionQuery, CopyXchangeFileTransmissionQueryVariables>(CopyXchangeFileTransmissionDocument, baseOptions);
+      }
+export function useCopyXchangeFileTransmissionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CopyXchangeFileTransmissionQuery, CopyXchangeFileTransmissionQueryVariables>) {
+          return Apollo.useLazyQuery<CopyXchangeFileTransmissionQuery, CopyXchangeFileTransmissionQueryVariables>(CopyXchangeFileTransmissionDocument, baseOptions);
+        }
+export type CopyXchangeFileTransmissionQueryHookResult = ReturnType<typeof useCopyXchangeFileTransmissionQuery>;
+export type CopyXchangeFileTransmissionLazyQueryHookResult = ReturnType<typeof useCopyXchangeFileTransmissionLazyQuery>;
+export type CopyXchangeFileTransmissionQueryResult = Apollo.QueryResult<CopyXchangeFileTransmissionQuery, CopyXchangeFileTransmissionQueryVariables>;
+export const PreviewFilenamePatternDocument = gql`
+    query PreviewFilenamePattern($pattern: String!) {
+  previewFilenamePattern(pattern: $pattern)
+}
+    `;
+
+/**
+ * __usePreviewFilenamePatternQuery__
+ *
+ * To run a query within a React component, call `usePreviewFilenamePatternQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePreviewFilenamePatternQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePreviewFilenamePatternQuery({
+ *   variables: {
+ *      pattern: // value for 'pattern'
+ *   },
+ * });
+ */
+export function usePreviewFilenamePatternQuery(baseOptions: Apollo.QueryHookOptions<PreviewFilenamePatternQuery, PreviewFilenamePatternQueryVariables>) {
+        return Apollo.useQuery<PreviewFilenamePatternQuery, PreviewFilenamePatternQueryVariables>(PreviewFilenamePatternDocument, baseOptions);
+      }
+export function usePreviewFilenamePatternLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PreviewFilenamePatternQuery, PreviewFilenamePatternQueryVariables>) {
+          return Apollo.useLazyQuery<PreviewFilenamePatternQuery, PreviewFilenamePatternQueryVariables>(PreviewFilenamePatternDocument, baseOptions);
+        }
+export type PreviewFilenamePatternQueryHookResult = ReturnType<typeof usePreviewFilenamePatternQuery>;
+export type PreviewFilenamePatternLazyQueryHookResult = ReturnType<typeof usePreviewFilenamePatternLazyQuery>;
+export type PreviewFilenamePatternQueryResult = Apollo.QueryResult<PreviewFilenamePatternQuery, PreviewFilenamePatternQueryVariables>;
 export const BeginLoginDocument = gql`
     mutation BeginLogin($userId: String!) {
   beginLogin(userId: $userId) {
@@ -14583,9 +15488,9 @@ export function useUpdateXchangeStepMutation(baseOptions?: Apollo.MutationHookOp
 export type UpdateXchangeStepMutationHookResult = ReturnType<typeof useUpdateXchangeStepMutation>;
 export type UpdateXchangeStepMutationResult = Apollo.MutationResult<UpdateXchangeStepMutation>;
 export type UpdateXchangeStepMutationOptions = Apollo.BaseMutationOptions<UpdateXchangeStepMutation, UpdateXchangeStepMutationVariables>;
-export const CopyXchangeStepDocument = gql`
-    mutation CopyXchangeStep($xchangeFileProcessSid: ID!, $sid: ID!) {
-  copyXchangeStep(xchangeFileProcessSid: $xchangeFileProcessSid, sid: $sid) {
+export const MoveUpXchangeStepDocument = gql`
+    mutation MoveUpXchangeStep($xchangeFileProcessSid: ID!, $sid: ID!) {
+  moveUpXchangeStep(xchangeFileProcessSid: $xchangeFileProcessSid, sid: $sid) {
     sid
     vendor {
       ...fragmentUISelectOneField
@@ -14658,29 +15563,543 @@ ${FragmentUiStringFieldFragmentDoc}
 ${FragmentUiSelectManyFieldFragmentDoc}
 ${FragmentWebCommandFragmentDoc}
 ${FragmentUiOptionsFragmentDoc}`;
-export type CopyXchangeStepMutationFn = Apollo.MutationFunction<CopyXchangeStepMutation, CopyXchangeStepMutationVariables>;
+export type MoveUpXchangeStepMutationFn = Apollo.MutationFunction<MoveUpXchangeStepMutation, MoveUpXchangeStepMutationVariables>;
 
 /**
- * __useCopyXchangeStepMutation__
+ * __useMoveUpXchangeStepMutation__
  *
- * To run a mutation, you first call `useCopyXchangeStepMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCopyXchangeStepMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useMoveUpXchangeStepMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMoveUpXchangeStepMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [copyXchangeStepMutation, { data, loading, error }] = useCopyXchangeStepMutation({
+ * const [moveUpXchangeStepMutation, { data, loading, error }] = useMoveUpXchangeStepMutation({
  *   variables: {
  *      xchangeFileProcessSid: // value for 'xchangeFileProcessSid'
  *      sid: // value for 'sid'
  *   },
  * });
  */
-export function useCopyXchangeStepMutation(baseOptions?: Apollo.MutationHookOptions<CopyXchangeStepMutation, CopyXchangeStepMutationVariables>) {
-        return Apollo.useMutation<CopyXchangeStepMutation, CopyXchangeStepMutationVariables>(CopyXchangeStepDocument, baseOptions);
+export function useMoveUpXchangeStepMutation(baseOptions?: Apollo.MutationHookOptions<MoveUpXchangeStepMutation, MoveUpXchangeStepMutationVariables>) {
+        return Apollo.useMutation<MoveUpXchangeStepMutation, MoveUpXchangeStepMutationVariables>(MoveUpXchangeStepDocument, baseOptions);
       }
-export type CopyXchangeStepMutationHookResult = ReturnType<typeof useCopyXchangeStepMutation>;
-export type CopyXchangeStepMutationResult = Apollo.MutationResult<CopyXchangeStepMutation>;
-export type CopyXchangeStepMutationOptions = Apollo.BaseMutationOptions<CopyXchangeStepMutation, CopyXchangeStepMutationVariables>;
+export type MoveUpXchangeStepMutationHookResult = ReturnType<typeof useMoveUpXchangeStepMutation>;
+export type MoveUpXchangeStepMutationResult = Apollo.MutationResult<MoveUpXchangeStepMutation>;
+export type MoveUpXchangeStepMutationOptions = Apollo.BaseMutationOptions<MoveUpXchangeStepMutation, MoveUpXchangeStepMutationVariables>;
+export const MoveDownXchangeStepDocument = gql`
+    mutation MoveDownXchangeStep($xchangeFileProcessSid: ID!, $sid: ID!) {
+  moveDownXchangeStep(xchangeFileProcessSid: $xchangeFileProcessSid, sid: $sid) {
+    sid
+    vendor {
+      ...fragmentUISelectOneField
+    }
+    specId {
+      ...fragmentUIStringField
+    }
+    filenameQualifiers {
+      ...fragmentUISelectManyField
+    }
+    diagram {
+      steps {
+        sid
+        key
+        icon
+        title
+        subTitle
+        qualifier
+        commands {
+          ...fragmentWebCommand
+        }
+        position {
+          x
+          y
+        }
+      }
+      stepGroups {
+        start {
+          x
+          y
+        }
+        end {
+          x
+          y
+        }
+      }
+      transmissions {
+        sid
+        key
+        protocol
+        host
+        qualifier
+        commands {
+          ...fragmentWebCommand
+        }
+        position {
+          x
+          y
+        }
+      }
+      connectors {
+        fromKey
+        toKey
+      }
+    }
+    options {
+      ...fragmentUIOptions
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiSelectOneFieldFragmentDoc}
+${FragmentUiStringFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentWebCommandFragmentDoc}
+${FragmentUiOptionsFragmentDoc}`;
+export type MoveDownXchangeStepMutationFn = Apollo.MutationFunction<MoveDownXchangeStepMutation, MoveDownXchangeStepMutationVariables>;
+
+/**
+ * __useMoveDownXchangeStepMutation__
+ *
+ * To run a mutation, you first call `useMoveDownXchangeStepMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMoveDownXchangeStepMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [moveDownXchangeStepMutation, { data, loading, error }] = useMoveDownXchangeStepMutation({
+ *   variables: {
+ *      xchangeFileProcessSid: // value for 'xchangeFileProcessSid'
+ *      sid: // value for 'sid'
+ *   },
+ * });
+ */
+export function useMoveDownXchangeStepMutation(baseOptions?: Apollo.MutationHookOptions<MoveDownXchangeStepMutation, MoveDownXchangeStepMutationVariables>) {
+        return Apollo.useMutation<MoveDownXchangeStepMutation, MoveDownXchangeStepMutationVariables>(MoveDownXchangeStepDocument, baseOptions);
+      }
+export type MoveDownXchangeStepMutationHookResult = ReturnType<typeof useMoveDownXchangeStepMutation>;
+export type MoveDownXchangeStepMutationResult = Apollo.MutationResult<MoveDownXchangeStepMutation>;
+export type MoveDownXchangeStepMutationOptions = Apollo.BaseMutationOptions<MoveDownXchangeStepMutation, MoveDownXchangeStepMutationVariables>;
+export const DeleteXchangeStepDocument = gql`
+    mutation DeleteXchangeStep($xchangeFileProcessSid: ID!, $sid: ID!) {
+  deleteXchangeStep(xchangeFileProcessSid: $xchangeFileProcessSid, sid: $sid) {
+    sid
+    vendor {
+      ...fragmentUISelectOneField
+    }
+    specId {
+      ...fragmentUIStringField
+    }
+    filenameQualifiers {
+      ...fragmentUISelectManyField
+    }
+    diagram {
+      steps {
+        sid
+        key
+        icon
+        title
+        subTitle
+        qualifier
+        commands {
+          ...fragmentWebCommand
+        }
+        position {
+          x
+          y
+        }
+      }
+      stepGroups {
+        start {
+          x
+          y
+        }
+        end {
+          x
+          y
+        }
+      }
+      transmissions {
+        sid
+        key
+        protocol
+        host
+        qualifier
+        commands {
+          ...fragmentWebCommand
+        }
+        position {
+          x
+          y
+        }
+      }
+      connectors {
+        fromKey
+        toKey
+      }
+    }
+    options {
+      ...fragmentUIOptions
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiSelectOneFieldFragmentDoc}
+${FragmentUiStringFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentWebCommandFragmentDoc}
+${FragmentUiOptionsFragmentDoc}`;
+export type DeleteXchangeStepMutationFn = Apollo.MutationFunction<DeleteXchangeStepMutation, DeleteXchangeStepMutationVariables>;
+
+/**
+ * __useDeleteXchangeStepMutation__
+ *
+ * To run a mutation, you first call `useDeleteXchangeStepMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteXchangeStepMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteXchangeStepMutation, { data, loading, error }] = useDeleteXchangeStepMutation({
+ *   variables: {
+ *      xchangeFileProcessSid: // value for 'xchangeFileProcessSid'
+ *      sid: // value for 'sid'
+ *   },
+ * });
+ */
+export function useDeleteXchangeStepMutation(baseOptions?: Apollo.MutationHookOptions<DeleteXchangeStepMutation, DeleteXchangeStepMutationVariables>) {
+        return Apollo.useMutation<DeleteXchangeStepMutation, DeleteXchangeStepMutationVariables>(DeleteXchangeStepDocument, baseOptions);
+      }
+export type DeleteXchangeStepMutationHookResult = ReturnType<typeof useDeleteXchangeStepMutation>;
+export type DeleteXchangeStepMutationResult = Apollo.MutationResult<DeleteXchangeStepMutation>;
+export type DeleteXchangeStepMutationOptions = Apollo.BaseMutationOptions<DeleteXchangeStepMutation, DeleteXchangeStepMutationVariables>;
+export const CreateXchangeFileTransmissionDocument = gql`
+    mutation CreateXchangeFileTransmission($transInput: CreateXchangeFileTransmissionInput) {
+  createXchangeFileTransmission(transInput: $transInput) {
+    sid
+    parent {
+      sid
+      filenameQualifiers
+      protocol
+      host
+      port
+      userName
+      password
+      authKeyName
+      folder
+      filenamePattern
+      stepWise
+      encryptionKeyName
+      lastUpdated
+      comments
+    }
+    filenameQualifiers {
+      ...fragmentUISelectManyField
+    }
+    protocol {
+      ...fragmentUISelectOneField
+    }
+    host {
+      ...fragmentUIStringField
+    }
+    port {
+      ...fragmentUIIntField
+    }
+    userName {
+      ...fragmentUIStringField
+    }
+    password {
+      ...fragmentUIStringField
+    }
+    authKeyName {
+      ...fragmentUISelectOneField
+    }
+    folder {
+      ...fragmentUIStringField
+    }
+    filenamePattern {
+      ...fragmentUIStringField
+    }
+    stepWise {
+      ...fragmentUIBooleanField
+    }
+    encryptionKeyName {
+      ...fragmentUISelectOneField
+    }
+    lastUpdated {
+      ...fragmentUIReadOnlyField
+    }
+    comments {
+      ...fragmentUIStringField
+    }
+    options {
+      ...fragmentUIOptions
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
+${FragmentUiStringFieldFragmentDoc}
+${FragmentUiIntFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiReadOnlyFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
+export type CreateXchangeFileTransmissionMutationFn = Apollo.MutationFunction<CreateXchangeFileTransmissionMutation, CreateXchangeFileTransmissionMutationVariables>;
+
+/**
+ * __useCreateXchangeFileTransmissionMutation__
+ *
+ * To run a mutation, you first call `useCreateXchangeFileTransmissionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateXchangeFileTransmissionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createXchangeFileTransmissionMutation, { data, loading, error }] = useCreateXchangeFileTransmissionMutation({
+ *   variables: {
+ *      transInput: // value for 'transInput'
+ *   },
+ * });
+ */
+export function useCreateXchangeFileTransmissionMutation(baseOptions?: Apollo.MutationHookOptions<CreateXchangeFileTransmissionMutation, CreateXchangeFileTransmissionMutationVariables>) {
+        return Apollo.useMutation<CreateXchangeFileTransmissionMutation, CreateXchangeFileTransmissionMutationVariables>(CreateXchangeFileTransmissionDocument, baseOptions);
+      }
+export type CreateXchangeFileTransmissionMutationHookResult = ReturnType<typeof useCreateXchangeFileTransmissionMutation>;
+export type CreateXchangeFileTransmissionMutationResult = Apollo.MutationResult<CreateXchangeFileTransmissionMutation>;
+export type CreateXchangeFileTransmissionMutationOptions = Apollo.BaseMutationOptions<CreateXchangeFileTransmissionMutation, CreateXchangeFileTransmissionMutationVariables>;
+export const UpdateXchangeFileTransmissionDocument = gql`
+    mutation UpdateXchangeFileTransmission($transInput: UpdateXchangeFileTransmissionInput) {
+  updateXchangeFileTransmission(transInput: $transInput) {
+    sid
+    parent {
+      sid
+      filenameQualifiers
+      protocol
+      host
+      port
+      userName
+      password
+      authKeyName
+      folder
+      filenamePattern
+      stepWise
+      encryptionKeyName
+      lastUpdated
+      comments
+    }
+    filenameQualifiers {
+      ...fragmentUISelectManyField
+    }
+    protocol {
+      ...fragmentUISelectOneField
+    }
+    host {
+      ...fragmentUIStringField
+    }
+    port {
+      ...fragmentUIIntField
+    }
+    userName {
+      ...fragmentUIStringField
+    }
+    password {
+      ...fragmentUIStringField
+    }
+    authKeyName {
+      ...fragmentUISelectOneField
+    }
+    folder {
+      ...fragmentUIStringField
+    }
+    filenamePattern {
+      ...fragmentUIStringField
+    }
+    stepWise {
+      ...fragmentUIBooleanField
+    }
+    encryptionKeyName {
+      ...fragmentUISelectOneField
+    }
+    lastUpdated {
+      ...fragmentUIReadOnlyField
+    }
+    comments {
+      ...fragmentUIStringField
+    }
+    options {
+      ...fragmentUIOptions
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
+${FragmentUiStringFieldFragmentDoc}
+${FragmentUiIntFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiReadOnlyFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
+export type UpdateXchangeFileTransmissionMutationFn = Apollo.MutationFunction<UpdateXchangeFileTransmissionMutation, UpdateXchangeFileTransmissionMutationVariables>;
+
+/**
+ * __useUpdateXchangeFileTransmissionMutation__
+ *
+ * To run a mutation, you first call `useUpdateXchangeFileTransmissionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateXchangeFileTransmissionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateXchangeFileTransmissionMutation, { data, loading, error }] = useUpdateXchangeFileTransmissionMutation({
+ *   variables: {
+ *      transInput: // value for 'transInput'
+ *   },
+ * });
+ */
+export function useUpdateXchangeFileTransmissionMutation(baseOptions?: Apollo.MutationHookOptions<UpdateXchangeFileTransmissionMutation, UpdateXchangeFileTransmissionMutationVariables>) {
+        return Apollo.useMutation<UpdateXchangeFileTransmissionMutation, UpdateXchangeFileTransmissionMutationVariables>(UpdateXchangeFileTransmissionDocument, baseOptions);
+      }
+export type UpdateXchangeFileTransmissionMutationHookResult = ReturnType<typeof useUpdateXchangeFileTransmissionMutation>;
+export type UpdateXchangeFileTransmissionMutationResult = Apollo.MutationResult<UpdateXchangeFileTransmissionMutation>;
+export type UpdateXchangeFileTransmissionMutationOptions = Apollo.BaseMutationOptions<UpdateXchangeFileTransmissionMutation, UpdateXchangeFileTransmissionMutationVariables>;
+export const DeleteXchangeFileTransmissionDocument = gql`
+    mutation DeleteXchangeFileTransmission($xchangeFileProcessSid: ID!, $sid: ID!) {
+  deleteXchangeFileTransmission(
+    xchangeFileProcessSid: $xchangeFileProcessSid
+    sid: $sid
+  ) {
+    sid
+    vendor {
+      ...fragmentUISelectOneField
+    }
+    specId {
+      ...fragmentUIStringField
+    }
+    filenameQualifiers {
+      ...fragmentUISelectManyField
+    }
+    diagram {
+      steps {
+        sid
+        key
+        icon
+        title
+        subTitle
+        qualifier
+        commands {
+          ...fragmentWebCommand
+        }
+        position {
+          x
+          y
+        }
+      }
+      stepGroups {
+        start {
+          x
+          y
+        }
+        end {
+          x
+          y
+        }
+      }
+      transmissions {
+        sid
+        key
+        protocol
+        host
+        qualifier
+        commands {
+          ...fragmentWebCommand
+        }
+        position {
+          x
+          y
+        }
+      }
+      connectors {
+        fromKey
+        toKey
+      }
+    }
+    options {
+      ...fragmentUIOptions
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiSelectOneFieldFragmentDoc}
+${FragmentUiStringFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentWebCommandFragmentDoc}
+${FragmentUiOptionsFragmentDoc}`;
+export type DeleteXchangeFileTransmissionMutationFn = Apollo.MutationFunction<DeleteXchangeFileTransmissionMutation, DeleteXchangeFileTransmissionMutationVariables>;
+
+/**
+ * __useDeleteXchangeFileTransmissionMutation__
+ *
+ * To run a mutation, you first call `useDeleteXchangeFileTransmissionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteXchangeFileTransmissionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteXchangeFileTransmissionMutation, { data, loading, error }] = useDeleteXchangeFileTransmissionMutation({
+ *   variables: {
+ *      xchangeFileProcessSid: // value for 'xchangeFileProcessSid'
+ *      sid: // value for 'sid'
+ *   },
+ * });
+ */
+export function useDeleteXchangeFileTransmissionMutation(baseOptions?: Apollo.MutationHookOptions<DeleteXchangeFileTransmissionMutation, DeleteXchangeFileTransmissionMutationVariables>) {
+        return Apollo.useMutation<DeleteXchangeFileTransmissionMutation, DeleteXchangeFileTransmissionMutationVariables>(DeleteXchangeFileTransmissionDocument, baseOptions);
+      }
+export type DeleteXchangeFileTransmissionMutationHookResult = ReturnType<typeof useDeleteXchangeFileTransmissionMutation>;
+export type DeleteXchangeFileTransmissionMutationResult = Apollo.MutationResult<DeleteXchangeFileTransmissionMutation>;
+export type DeleteXchangeFileTransmissionMutationOptions = Apollo.BaseMutationOptions<DeleteXchangeFileTransmissionMutation, DeleteXchangeFileTransmissionMutationVariables>;
