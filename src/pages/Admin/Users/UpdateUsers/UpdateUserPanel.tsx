@@ -1,17 +1,29 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+/*eslint-disable react-hooks/exhaustive-deps */
 import React, { ReactElement, useState } from 'react';
-import { MessageBar, MessageBarType, Panel, PanelType, Stack, CommandButton } from '@fluentui/react';
+import { useHistory } from 'react-router-dom';
+import { 
+  MessageBar, 
+  MessageBarType, 
+  Panel, 
+  PanelType, 
+  Stack, 
+  CommandButton, 
+  CommandBar, 
+  ICommandBarItemProps, 
+  IButtonProps 
+} from '@fluentui/react';
 
 import { Tabs } from 'src/components/tabs/Tabs';
 import { PanelBody, PanelHeader, PanelTitle } from 'src/layouts/Panels/Panels.styles';
 
 import { UseUpdateUserPanel } from 'src/pages/Admin/Users/UpdateUsers/useUpdateUserPanel';
-import { GqOperationResponse, UserAccount, UserAccountForm } from 'src/data/services/graphql';
+import { GqOperationResponse, UserAccount, UserAccountForm, CdxWebCommandType} from 'src/data/services/graphql';
 import { Column } from 'src/components/layouts';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import SectionAccessManagement from './SectionAccessManagement';
 import { SectionAccount } from './SectionAccount';
 import { ActiveIcon, InactiveIcon } from './UpdateUserPanel.styles';
+import { useOrgSid } from 'src/hooks/useOrgSid';
 
 const defaultProps = {
   onDismiss: () => {},
@@ -48,12 +60,38 @@ const defaultDialogProps: DialogYesNoProps = {
 };
 
 const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: UpdateUserPanelProps): ReactElement => {
+  const history = useHistory();
+  const { orgSid } = useOrgSid();
   const [step, setStep] = useState(Tab.Account);
   const [showDialog, setShowDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [messageType, setMessageType] = useState<MessageBarType>(MessageBarType.info);
   const [message, setMessage] = useState<string | undefined>();
+
+  const overflowProps: IButtonProps = { ariaLabel: 'More commands' };
+
+  
+  const form = useUpdateUserPanel.userAccountForm;
+  
+  const auditCommand = form.commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Audit);
+  const historyCommand = form.commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.History);
+
+  const handleUserAuditLogsClick = () => {
+    if(auditCommand){
+      history.push(`/user-audit-logs?orgSid=${orgSid}&changedByUserSid=${form.person?.sid}`);
+    }
+  };
+  const handleUserChangeHistoryLogsClick = () => {
+    if(historyCommand){
+      history.push(`/user-audit-logs?orgSid=${orgSid}&userSid=${form.person?.sid}`);
+    }
+  };
+  
+  const _overflowItems: ICommandBarItemProps[] = [
+    { key: 'audit', text: auditCommand?.label ?? '', onClick: handleUserAuditLogsClick, iconProps: { iconName: 'ComplianceAudit' } },
+    { key: 'history', text: historyCommand?.label ?? '', onClick: handleUserChangeHistoryLogsClick, iconProps: { iconName: 'FullHistory' } },
+  ];
 
   const handleTabChange = (hash): void => {
     setStep(tabs.indexOf(hash));
@@ -285,6 +323,14 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
               onClick={showActivateUserDialog}
             />
           )}
+          <CommandBar
+            items={[]}
+            overflowItems={_overflowItems}
+            overflowButtonProps={overflowProps}
+            ariaLabel="Inbox actions"
+            primaryGroupAriaLabel="Email actions"
+            farItemsGroupAriaLabel="More actions"
+          />
         </Stack>
       </Column>
     </PanelHeader>
