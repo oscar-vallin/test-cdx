@@ -1,4 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+/*eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 
 import { useHistory } from 'react-router-dom';
@@ -66,6 +66,7 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
   const fsOrgSid = useFileStatusDetailsPanel?.fsOrgSid ?? '';
   const hash = useFileStatusDetailsPanel?.hash;
   const id = useFileStatusDetailsPanel?.workOrderId ?? '';
+  
   const [packet, setPacket] = useState<WorkPacketStatusDetails>();
   const [showDetails, setShowDetails] = useState(true);
   const realId = id?.replace('*', '');
@@ -79,6 +80,7 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
     },
   });
 
+
   const pollWPStatus = useWorkPacketStatusPollQuery({
     variables: {
       orgSid: fsOrgSid,
@@ -87,6 +89,7 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
     },
     pollInterval: POLL_INTERVAL,
   });
+
 
   const workPacketCommands = useWorkPacketCommands(realId);
   const handleError = ErrorHandler();
@@ -106,6 +109,7 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
   }, [pollWPStatus.error]);
 
   useEffect(() => {
+ 
     if (data?.workPacketStatusDetails && !loading) {
       setPacket(data?.workPacketStatusDetails);
       setLastUpdatedPoll(new Date());
@@ -121,6 +125,19 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
       }
     }
   }, [data, loading]);
+
+  const validateStatus = () => {
+    if (data?.workPacketStatusDetails && !loading) {
+      switch (data?.workPacketStatusDetails?.packetStatus) {
+        case WorkStatus.Submitted:
+        case WorkStatus.Queued:
+        case WorkStatus.Processing:
+          pollWPStatus.startPolling(POLL_INTERVAL);
+          break;
+        default:
+      }
+    }
+  };
 
   useEffect(() => {
     if (pollWPStatus.data?.workPacketStatusPoll && pollWPStatus.data?.workPacketStatusPoll > 0) {
@@ -220,9 +237,7 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
       confirmationMsg: 'Are you sure you want to Continue this Work Packet?',
       command: continueCmd,
       onClick: workPacketCommands.apiCallContinue,
-      callback: () => {
-        pollWPStatus.startPolling(POLL_INTERVAL);
-      },
+      callback: ()  => validateStatus(),
       onRender: renderWorkPacketCommandButton,
     },
     {
@@ -233,9 +248,7 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
       command: reprocessCmd,
       workPacketCommands: workPacketCommands,
       realId: realId,
-      callback: () => {
-        pollWPStatus.startPolling(POLL_INTERVAL);
-      },
+      callback: ()  => validateStatus(),
       onRender: renderWorkPacketCommandButton,
     },
     {
@@ -247,9 +260,7 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
       realId: realId,
       command: reprocessRenameCmd,
       onClick: workPacketCommands.apiCallRenameReprocess,
-      callback: () => {
-        pollWPStatus.startPolling(POLL_INTERVAL);
-      },
+      callback: ()  => validateStatus(),
       onRender: renderWorkPacketCommandButton,
     },
     {
@@ -259,9 +270,7 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
       confirmationMsg: "Are you sure you want to Cancel this Work Packet's processing?",
       command: cancelCmd,
       onClick: workPacketCommands.apiCallCancel,
-      callback: () => {
-        pollWPStatus.startPolling(POLL_INTERVAL);
-      },
+      callback: ()  => validateStatus(),
       onRender: renderWorkPacketCommandButton,
     },
     {
