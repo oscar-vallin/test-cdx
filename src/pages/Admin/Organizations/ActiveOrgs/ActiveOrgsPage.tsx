@@ -1,4 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+ /*eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 
 import { Link } from 'react-router-dom';
@@ -12,6 +12,7 @@ import {
   SelectionMode,
   Spinner,
   SpinnerSize,
+  Stack,
 } from '@fluentui/react';
 import { EmptyState } from 'src/containers/states';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
@@ -24,7 +25,7 @@ import {
   Organization,
   PaginationInfo,
   SortDirection,
-  useDirectOrganizationsLazyQuery,
+  useSearchOrganizationsLazyQuery,
   WebCommand,
   OrgType,
 } from 'src/data/services/graphql';
@@ -35,16 +36,20 @@ import { ROUTE_ACTIVE_ORGS } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { OrgPanel } from 'src/pages/Admin/Organizations/ActiveOrgs/OrgPanel';
 import { Paginator } from 'src/components/tables/Paginator';
+import { InputText } from 'src/components/inputs/InputText';
+import { Checkbox } from '@fluentui/react';
 import { StyledColumn } from './ActiveOrgsPage.styles';
 
 const ActiveOrgsPage = () => {
-  const { orgSid } = useOrgSid();
+  const { orgSid: orgOwnerSid } = useOrgSid();
   const ActiveDomainStore = useActiveDomainStore();
   const [orgs, setOrgs] = useState<Organization[]>([]);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [selectedOrgSid, setSelectedOrgSid] = useState<string>();
-
-  const [directOrganizationsQuery, { data, loading }] = useQueryHandler(useDirectOrganizationsLazyQuery);
+  const [searchText, setSearchText] = useState<string>('');
+  const [searchAllOrgsFilter, setSearchAllOrgsFilter] = useState<boolean>(true);
+  
+  const [directSearchQuery, { data: dataSearch, loading: loadingSearch }] = useQueryHandler(useSearchOrganizationsLazyQuery);
   const [pagingInfo, setPagingInfo] = useState<PaginationInfo>({
     pageNumber: 0,
     pageSize: 100,
@@ -54,9 +59,10 @@ const ActiveOrgsPage = () => {
   const [createCmd, setCreateCmd] = useState<WebCommand | null>();
 
   const fetchData = (pageNumber = 0) => {
-    directOrganizationsQuery({
+    directSearchQuery({
       variables: {
-        orgSid,
+        searchText: searchText,
+        orgOwnerSid: orgOwnerSid,
         orgFilter: { activeFilter: 'ACTIVE' },
         pageableInput: {
           sort: [
@@ -68,11 +74,15 @@ const ActiveOrgsPage = () => {
         },
       },
     });
+    
   };
 
   useEffect(() => {
     fetchData();
-  }, [orgSid]);
+    if(searchText !== ''){
+      setSearchAllOrgsFilter(true);
+    }
+  }, [orgOwnerSid, searchText]);
 
   const onPageChange = (pageNumber: number) => {
     fetchData(pageNumber);
@@ -166,19 +176,20 @@ const ActiveOrgsPage = () => {
   ];
 
   useEffect(() => {
-    if (!loading && data) {
-      setOrgs(data.directOrganizations.nodes);
+    if (!loadingSearch && dataSearch) {
+      setOrgs(dataSearch.searchOrganizations.nodes);
+      
       // update the paging info
-      const newPagingInfo = data?.directOrganizations?.paginationInfo;
+      const newPagingInfo = dataSearch?.searchOrganizations?.paginationInfo;
       if (newPagingInfo) {
         setPagingInfo(newPagingInfo);
       }
-      const newCreateCmd = data?.directOrganizations?.listPageInfo?.pageCommands?.find(
+      const newCreateCmd = dataSearch?.searchOrganizations?.listPageInfo?.pageCommands?.find(
         (cmd) => cmd?.commandType === CdxWebCommandType.Create
       );
       setCreateCmd(newCreateCmd);
     }
-  }, [data, loading]);
+  }, [dataSearch, loadingSearch]);
 
   const createOrgButton = () => {
     if (createCmd) {
@@ -200,12 +211,16 @@ const ActiveOrgsPage = () => {
   };
 
   const renderBody = () => {
-    if (loading) {
+    if (loadingSearch) {
       return (
         <Spacing margin={{ top: 'double' }}>
           <Spinner size={SpinnerSize.large} label="Loading active orgs" />
         </Spacing>
       );
+    }
+
+    if(!searchAllOrgsFilter){
+      return;
     }
     if (!orgs.length) {
       const emptyText = createCmd
@@ -244,6 +259,38 @@ const ActiveOrgsPage = () => {
         </PageHeader>
       )}
 
+  <Container>
+      <Row>
+        <Stack
+          horizontal={true}
+          wrap={true}
+          style={{ width: '100%' }}
+          verticalAlign="end"
+        
+        >
+          <Column lg="6" >
+            <InputText
+              id={`Active_Orgs_Input-Search`}
+              autofocus
+              disabled={false}
+              value={searchText}
+              onChange={(event, newValue) => setSearchText(newValue ?? '')}
+              placeholder="Search"
+            />
+
+          </Column>
+            <Checkbox
+              id={`__SearchAllOrgs__Orgs-Checkbox`}
+              label="Search all organizations"
+              onChange={(_event, _searchAllOrgsFilter: any) => {
+                setSearchAllOrgsFilter(_searchAllOrgsFilter);
+              }}
+              checked={searchAllOrgsFilter}
+            />
+        </Stack>
+        
+      </Row>
+    </Container>
       <Container>
         <Row>
           <StyledColumn>{renderBody()}</StyledColumn>
