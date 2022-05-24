@@ -17,6 +17,7 @@ import { Spacing } from 'src/components/spacings/Spacing';
 import { Column, Container, Row } from 'src/components/layouts';
 import { InputText, UIInputText } from 'src/components/inputs/InputText';
 import { UIInputCheck } from 'src/components/inputs/InputCheck';
+import { UIInputSelectOne } from 'src/components/inputs/InputDropdown';
 import { PageTitle, Text } from 'src/components/typography';
 import { ROUTE_FTP_TEST } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
@@ -32,7 +33,7 @@ import {
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { LogMessageItem } from 'src/components/collapses/LogMessageItem';
 import { Badge } from 'src/components/badges/Badge';
-import { StyledSelectedFile } from './FtpTestPage.styles';
+import { StyledSelectedFile, StyledError } from './FtpTestPage.styles';
 import { useNotification } from 'src/hooks/useNotification';
 import { UIInputTextArea } from 'src/components/inputs/InputTextArea';
 import { yyyyMMdda } from 'src/utils/CDXUtils';
@@ -57,6 +58,10 @@ const _FtpTestPage = () => {
   const [genTestFileForm, setGenTestFileForm] = useState<SftpTestSendTestFileForm | null>();
   const [message, setMessage] = useState<string | undefined>();
   const [messageType, setMessageType] = useState<MessageBarType>(MessageBarType.info);
+  const [showSSHKeys, setShowSShKeys] = useState<boolean>(false);
+  const [sshKeyPath, setSshKeyPath] = useState<string>('');
+  const [errorValidatePasswordSSHKey, setErrorValidatePasswordSSHKey] = useState<boolean>(false);
+
 
   const inputFileRef = React.useRef() as React.MutableRefObject<HTMLInputElement>;
   const Toast = useNotification();
@@ -92,6 +97,7 @@ const _FtpTestPage = () => {
           port: +port,
           folder,
           stepWise,
+          sshKeyPath,
         },
         sendTestFile: {
           sendTestFile: sendFileTest && !testFile,
@@ -104,6 +110,7 @@ const _FtpTestPage = () => {
     });
 
     if (data?.ftpTestM?.status === 'ERROR') {
+      console.log("error 1")
       Toast.error({ text: data?.ftpTestM?.logMessage.body });
       if (data?.ftpTestM?.xpSFTPForm?.errSeverity === ErrorSeverity.Error) {
         const errorMsg =
@@ -128,7 +135,17 @@ const _FtpTestPage = () => {
     setProcessing(false);
   };
 
+  const validatePasswordAndSSHKey = () => {
+    if((password.trim() === '' && sshKeyPath.trim() === '') && showSSHKeys){
+      setErrorValidatePasswordSSHKey(true);
+      return;
+    }
+
+    setErrorValidatePasswordSSHKey(false);
+  }
+
   const handleOnTestBtn = () => {
+    validatePasswordAndSSHKey();
     onTestBtn();
     return null;
   };
@@ -145,6 +162,8 @@ const _FtpTestPage = () => {
       setVendorFileName(file.name);
     }
   };
+
+  
 
   const renderForm = () => {
     return (
@@ -211,6 +230,33 @@ const _FtpTestPage = () => {
                   value={password}
                   onChange={(event, newValue) => setPassword(newValue ?? '')}
                 />
+                {errorValidatePasswordSSHKey && (
+                  <StyledError>Either the Password or SSH Key must be provided</StyledError>
+                )}
+              </Spacing>
+            )}
+            {!showSSHKeys && (
+              <Spacing>
+                <Column>
+                  <Link
+                    onClick={() => setShowSShKeys(true)}
+                  >use key-based authentication</Link>
+                </Column>
+              </Spacing>
+            )}
+            {ftpTestForm?.sshKeyPath?.visible && showSSHKeys && (
+              <Spacing>
+                <UIInputSelectOne 
+                  id='sshKey'
+                  uiField={ftpTestForm.sshKeyPath}
+                  options={ftpTestForm.options}
+                  value={sshKeyPath}
+                  onChange={(newValue) => setSshKeyPath(newValue ?? '')}
+                  placeholder="(no key selected)"
+                />
+                {errorValidatePasswordSSHKey && (
+                  <StyledError>Either the Password or SSH Key must be provided</StyledError>
+                )}
               </Spacing>
             )}
             {ftpTestForm?.folder?.visible && (
