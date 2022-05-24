@@ -393,6 +393,14 @@ export type CreateUserInput = {
   accessPolicyGroupSids?: Maybe<Array<Scalars['ID']>>;
 };
 
+export type CreateXchangeConfigAlertInput = {
+  orgSid: Scalars['ID'];
+  coreFilename: Scalars['String'];
+  filenameQualifier?: Maybe<Scalars['String']>;
+  alertTypes?: Maybe<Array<AlertType>>;
+  subscriberSids?: Maybe<Array<Scalars['ID']>>;
+};
+
 export type CreateXchangeFileTransmissionInput = {
   xchangeFileProcessSid: Scalars['ID'];
   parentSid?: Maybe<Scalars['ID']>;
@@ -408,6 +416,12 @@ export type CreateXchangeFileTransmissionInput = {
   stepWise: ExtensionField;
   encryptionKeyName: ExtensionField;
   comments?: Maybe<Scalars['String']>;
+};
+
+export type CreateXchangeProfileAlertInput = {
+  orgSid: Scalars['ID'];
+  alertTypes?: Maybe<Array<AlertType>>;
+  subscriberSids?: Maybe<Array<Scalars['ID']>>;
 };
 
 export type CreateXchangeStepInput = {
@@ -799,6 +813,7 @@ export type Mutation = {
   convertXchangeProfile?: Maybe<XchangeProfile>;
   updateXchangeProfileComment?: Maybe<GenericResponse>;
   publishXchangeProfile?: Maybe<GenericResponse>;
+  updateXchangeConfigComment?: Maybe<GenericResponse>;
   createXchangeStep?: Maybe<XchangeStepForm>;
   updateXchangeStep?: Maybe<XchangeStepForm>;
   moveUpXchangeStep?: Maybe<XchangeFileProcessForm>;
@@ -807,6 +822,12 @@ export type Mutation = {
   createXchangeFileTransmission?: Maybe<XchangeFileTransmissionForm>;
   updateXchangeFileTransmission?: Maybe<XchangeFileTransmissionForm>;
   deleteXchangeFileTransmission?: Maybe<XchangeFileProcessForm>;
+  createXchangeProfileAlert?: Maybe<XchangeProfileAlertForm>;
+  updateXchangeProfileAlert?: Maybe<XchangeProfileAlertForm>;
+  deleteXchangeProfileAlert?: Maybe<GenericResponse>;
+  createXchangeConfigAlert?: Maybe<XchangeConfigAlertForm>;
+  updateXchangeConfigAlert?: Maybe<XchangeConfigAlertForm>;
+  deleteXchangeConfigAlert?: Maybe<GenericResponse>;
 };
 
 
@@ -1076,6 +1097,12 @@ export type MutationPublishXchangeProfileArgs = {
 };
 
 
+export type MutationUpdateXchangeConfigCommentArgs = {
+  sid: Scalars['ID'];
+  comment: Scalars['String'];
+};
+
+
 export type MutationCreateXchangeStepArgs = {
   stepInput?: Maybe<CreateXchangeStepInput>;
 };
@@ -1116,6 +1143,36 @@ export type MutationUpdateXchangeFileTransmissionArgs = {
 
 export type MutationDeleteXchangeFileTransmissionArgs = {
   xchangeFileProcessSid: Scalars['ID'];
+  sid: Scalars['ID'];
+};
+
+
+export type MutationCreateXchangeProfileAlertArgs = {
+  alertInput?: Maybe<CreateXchangeProfileAlertInput>;
+};
+
+
+export type MutationUpdateXchangeProfileAlertArgs = {
+  alertInput?: Maybe<UpdateXchangeProfileAlertInput>;
+};
+
+
+export type MutationDeleteXchangeProfileAlertArgs = {
+  sid: Scalars['ID'];
+};
+
+
+export type MutationCreateXchangeConfigAlertArgs = {
+  alertInput?: Maybe<CreateXchangeConfigAlertInput>;
+};
+
+
+export type MutationUpdateXchangeConfigAlertArgs = {
+  alertInput?: Maybe<UpdateXchangeConfigAlertInput>;
+};
+
+
+export type MutationDeleteXchangeConfigAlertArgs = {
   sid: Scalars['ID'];
 };
 
@@ -1527,6 +1584,12 @@ export type Query = {
   userAccountForm?: Maybe<UserAccountForm>;
   findUserAccount?: Maybe<UserAccountForm>;
   userAccountAuditLogs?: Maybe<UserAccountLogConnection>;
+  /**
+   * Perform a quick search to find a user who has access to the given organization
+   * This can either be a user of this organization, a parent organization,
+   * or an external user who has been granted access to this organization
+   */
+  userQuickSearch?: Maybe<Array<UserAccount>>;
   /** Perform a quick search to find an consultant to grant access to. Returns up to 10 results. */
   findExternalUsers?: Maybe<Array<UserAccount>>;
   externalUsersForOrg?: Maybe<UserConnection>;
@@ -1573,7 +1636,7 @@ export type Query = {
   xpsftpTest?: Maybe<XpsftpTestPage>;
   reprocessDialog?: Maybe<ReprocessDialog>;
   xchangeProfile?: Maybe<XchangeProfile>;
-  xchangeDetails?: Maybe<XchangeConfigForm>;
+  xchangeConfig?: Maybe<XchangeConfigForm>;
   xchangeFileProcessForm?: Maybe<XchangeFileProcessForm>;
   previewConvertXchangeProfile?: Maybe<XchangeProfileConvertPreview>;
   xchangeStepForm?: Maybe<XchangeStepForm>;
@@ -1581,6 +1644,9 @@ export type Query = {
   xchangeFileTransmissionForm?: Maybe<XchangeFileTransmissionForm>;
   copyXchangeFileTransmission?: Maybe<XchangeFileTransmissionForm>;
   previewFilenamePattern: Scalars['String'];
+  xchangeProfileAlerts?: Maybe<XchangeProfileAlerts>;
+  xchangeProfileAlertForm?: Maybe<XchangeProfileAlertForm>;
+  xchangeConfigAlertForm?: Maybe<XchangeConfigAlertForm>;
 };
 
 
@@ -1721,6 +1787,12 @@ export type QueryUserAccountAuditLogsArgs = {
   events?: Maybe<Array<UserAccountAuditEvent>>;
   dateRange: DateTimeRangeInput;
   pageableInput?: Maybe<PageableInput>;
+};
+
+
+export type QueryUserQuickSearchArgs = {
+  orgSid: Scalars['ID'];
+  searchText?: Maybe<Scalars['String']>;
 };
 
 
@@ -1929,7 +2001,7 @@ export type QueryXchangeProfileArgs = {
 };
 
 
-export type QueryXchangeDetailsArgs = {
+export type QueryXchangeConfigArgs = {
   orgSid: Scalars['ID'];
   coreFilename: Scalars['String'];
 };
@@ -1971,6 +2043,24 @@ export type QueryCopyXchangeFileTransmissionArgs = {
 
 export type QueryPreviewFilenamePatternArgs = {
   pattern: Scalars['String'];
+};
+
+
+export type QueryXchangeProfileAlertsArgs = {
+  orgSid: Scalars['ID'];
+};
+
+
+export type QueryXchangeProfileAlertFormArgs = {
+  orgSid: Scalars['ID'];
+  sid?: Maybe<Scalars['ID']>;
+};
+
+
+export type QueryXchangeConfigAlertFormArgs = {
+  orgSid: Scalars['ID'];
+  coreFilename: Scalars['String'];
+  sid?: Maybe<Scalars['ID']>;
 };
 
 export type RecordCount = {
@@ -2551,6 +2641,13 @@ export type UpdateUserInput = {
   lastNm?: Maybe<Scalars['String']>;
 };
 
+export type UpdateXchangeConfigAlertInput = {
+  sid: Scalars['ID'];
+  filenameQualifier?: Maybe<Scalars['String']>;
+  alertTypes?: Maybe<Array<AlertType>>;
+  subscriberSids?: Maybe<Array<Scalars['ID']>>;
+};
+
 export type UpdateXchangeFileTransmissionInput = {
   xchangeFileProcessSid: Scalars['ID'];
   sid: Scalars['ID'];
@@ -2567,6 +2664,12 @@ export type UpdateXchangeFileTransmissionInput = {
   stepWise: ExtensionField;
   encryptionKeyName: ExtensionField;
   comments?: Maybe<Scalars['String']>;
+};
+
+export type UpdateXchangeProfileAlertInput = {
+  sid: Scalars['ID'];
+  alertTypes?: Maybe<Array<AlertType>>;
+  subscriberSids?: Maybe<Array<Scalars['ID']>>;
 };
 
 export type UpdateXchangeStepInput = {
@@ -2975,23 +3078,12 @@ export type XsftpInput = {
 
 export type XchangeAlert = {
   __typename?: 'XchangeAlert';
+  sid?: Maybe<Scalars['ID']>;
+  coreFilename?: Maybe<Scalars['String']>;
   filenameQualifier?: Maybe<Scalars['String']>;
   alertTypes?: Maybe<Array<AlertType>>;
   subscribers?: Maybe<Array<XchangeAlertSubscriber>>;
   commands?: Maybe<Array<WebCommand>>;
-};
-
-export type XchangeAlertForm = {
-  __typename?: 'XchangeAlertForm';
-  filenameQualifier: UiStringField;
-  alertTypes: UiSelectManyField;
-  subscribers?: Maybe<Array<XchangeAlertSubscriber>>;
-  options?: Maybe<Array<UiOptions>>;
-  commands?: Maybe<Array<WebCommand>>;
-  response: GqOperationResponse;
-  errCode?: Maybe<Scalars['String']>;
-  errMsg?: Maybe<Scalars['String']>;
-  errSeverity?: Maybe<ErrorSeverity>;
 };
 
 export type XchangeAlertSubscriber = {
@@ -3013,6 +3105,20 @@ export type XchangeConfigActivity = {
   __typename?: 'XchangeConfigActivity';
   filesProcessed: Scalars['Int'];
   lastActivity?: Maybe<Scalars['DateTime']>;
+};
+
+export type XchangeConfigAlertForm = {
+  __typename?: 'XchangeConfigAlertForm';
+  sid?: Maybe<Scalars['ID']>;
+  filenameQualifier: UiSelectOneField;
+  alertTypes: UiSelectManyField;
+  subscribers: UiSelectManyField;
+  options?: Maybe<Array<UiOptions>>;
+  commands?: Maybe<Array<WebCommand>>;
+  response: GqOperationResponse;
+  errCode?: Maybe<Scalars['String']>;
+  errMsg?: Maybe<Scalars['String']>;
+  errSeverity?: Maybe<ErrorSeverity>;
 };
 
 export type XchangeConfigForm = {
@@ -3152,6 +3258,32 @@ export type XchangeProfile = {
   requiresConversion: Scalars['Boolean'];
   tooltips: XchangeProfileTooltips;
   commands?: Maybe<Array<WebCommand>>;
+  response: GqOperationResponse;
+  errCode?: Maybe<Scalars['String']>;
+  errMsg?: Maybe<Scalars['String']>;
+  errSeverity?: Maybe<ErrorSeverity>;
+};
+
+export type XchangeProfileAlertForm = {
+  __typename?: 'XchangeProfileAlertForm';
+  sid?: Maybe<Scalars['ID']>;
+  alertTypes: UiSelectManyField;
+  subscribers: UiSelectManyField;
+  options?: Maybe<Array<UiOptions>>;
+  commands?: Maybe<Array<WebCommand>>;
+  response: GqOperationResponse;
+  errCode?: Maybe<Scalars['String']>;
+  errMsg?: Maybe<Scalars['String']>;
+  errSeverity?: Maybe<ErrorSeverity>;
+};
+
+export type XchangeProfileAlerts = {
+  __typename?: 'XchangeProfileAlerts';
+  globalXchangeAlerts?: Maybe<Array<Maybe<XchangeAlert>>>;
+  individualXchangeAlerts?: Maybe<Array<XchangeAlert>>;
+  hasUnpublishedChanges: Scalars['Boolean'];
+  tooltips: XchangeProfileTooltips;
+  listPageInfo: ListPageInfo;
   response: GqOperationResponse;
   errCode?: Maybe<Scalars['String']>;
   errMsg?: Maybe<Scalars['String']>;
@@ -4163,6 +4295,31 @@ export type UserAccountAuditLogsQuery = (
       )> }
     )>> }
   )> }
+);
+
+export type UserQuickSearchQueryVariables = Exact<{
+  orgSid: Scalars['ID'];
+  searchText?: Maybe<Scalars['String']>;
+}>;
+
+
+export type UserQuickSearchQuery = (
+  { __typename?: 'Query' }
+  & { userQuickSearch?: Maybe<Array<(
+    { __typename?: 'UserAccount' }
+    & Pick<UserAccount, 'sid' | 'email'>
+    & { person?: Maybe<(
+      { __typename?: 'Person' }
+      & Pick<Person, 'sid' | 'firstNm' | 'lastNm'>
+    )>, accessPolicyGroups?: Maybe<Array<(
+      { __typename?: 'AccessPolicyGroup' }
+      & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes'>
+      & { policies?: Maybe<Array<(
+        { __typename?: 'AccessPolicy' }
+        & FragmentAccessPolicyFragment
+      )>> }
+    )>> }
+  )>> }
 );
 
 export type FindExternalUsersQueryVariables = Exact<{
@@ -5363,15 +5520,15 @@ export type XchangeProfileQuery = (
   )> }
 );
 
-export type XchangeDetailsQueryVariables = Exact<{
+export type XchangeConfigQueryVariables = Exact<{
   orgSid: Scalars['ID'];
   coreFilename: Scalars['String'];
 }>;
 
 
-export type XchangeDetailsQuery = (
+export type XchangeConfigQuery = (
   { __typename?: 'Query' }
-  & { xchangeDetails?: Maybe<(
+  & { xchangeConfig?: Maybe<(
     { __typename?: 'XchangeConfigForm' }
     & Pick<XchangeConfigForm, 'sid' | 'requiresConversion' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { coreFilename: (
@@ -5439,7 +5596,7 @@ export type XchangeDetailsQuery = (
       )>> }
     )>>, alerts?: Maybe<Array<(
       { __typename?: 'XchangeAlert' }
-      & Pick<XchangeAlert, 'filenameQualifier' | 'alertTypes'>
+      & Pick<XchangeAlert, 'sid' | 'coreFilename' | 'filenameQualifier' | 'alertTypes'>
       & { subscribers?: Maybe<Array<(
         { __typename?: 'XchangeAlertSubscriber' }
         & Pick<XchangeAlertSubscriber, 'sid' | 'email' | 'firstNm' | 'lastNm'>
@@ -5723,6 +5880,104 @@ export type PreviewFilenamePatternQueryVariables = Exact<{
 export type PreviewFilenamePatternQuery = (
   { __typename?: 'Query' }
   & Pick<Query, 'previewFilenamePattern'>
+);
+
+export type XchangeProfileAlertsQueryVariables = Exact<{
+  orgSid: Scalars['ID'];
+}>;
+
+
+export type XchangeProfileAlertsQuery = (
+  { __typename?: 'Query' }
+  & { xchangeProfileAlerts?: Maybe<(
+    { __typename?: 'XchangeProfileAlerts' }
+    & Pick<XchangeProfileAlerts, 'hasUnpublishedChanges' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { globalXchangeAlerts?: Maybe<Array<Maybe<(
+      { __typename?: 'XchangeAlert' }
+      & Pick<XchangeAlert, 'sid' | 'coreFilename' | 'filenameQualifier' | 'alertTypes'>
+      & { subscribers?: Maybe<Array<(
+        { __typename?: 'XchangeAlertSubscriber' }
+        & Pick<XchangeAlertSubscriber, 'sid' | 'email' | 'firstNm' | 'lastNm'>
+      )>>, commands?: Maybe<Array<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>> }
+    )>>>, individualXchangeAlerts?: Maybe<Array<(
+      { __typename?: 'XchangeAlert' }
+      & Pick<XchangeAlert, 'sid' | 'coreFilename' | 'filenameQualifier' | 'alertTypes'>
+      & { subscribers?: Maybe<Array<(
+        { __typename?: 'XchangeAlertSubscriber' }
+        & Pick<XchangeAlertSubscriber, 'sid' | 'email' | 'firstNm' | 'lastNm'>
+      )>>, commands?: Maybe<Array<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>> }
+    )>>, tooltips: (
+      { __typename?: 'XchangeProfileTooltips' }
+      & Pick<XchangeProfileTooltips, 'inactive' | 'hasUnpublishedChanges' | 'hasAlerts' | 'implementationPending' | 'requiresConversion'>
+    ), listPageInfo: (
+      { __typename?: 'ListPageInfo' }
+      & FragmentListPageInfoFragment
+    ) }
+  )> }
+);
+
+export type XchangeProfileAlertFormQueryVariables = Exact<{
+  orgSid: Scalars['ID'];
+  sid?: Maybe<Scalars['ID']>;
+}>;
+
+
+export type XchangeProfileAlertFormQuery = (
+  { __typename?: 'Query' }
+  & { xchangeProfileAlertForm?: Maybe<(
+    { __typename?: 'XchangeProfileAlertForm' }
+    & Pick<XchangeProfileAlertForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { alertTypes: (
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    ), subscribers: (
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    ), options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
+    )>>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>> }
+  )> }
+);
+
+export type XchangeConfigAlertFormQueryVariables = Exact<{
+  orgSid: Scalars['ID'];
+  coreFilename: Scalars['String'];
+  sid?: Maybe<Scalars['ID']>;
+}>;
+
+
+export type XchangeConfigAlertFormQuery = (
+  { __typename?: 'Query' }
+  & { xchangeConfigAlertForm?: Maybe<(
+    { __typename?: 'XchangeConfigAlertForm' }
+    & Pick<XchangeConfigAlertForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { filenameQualifier: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), alertTypes: (
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    ), subscribers: (
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    ), options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
+    )>>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>> }
+  )> }
 );
 
 export type BeginLoginMutationVariables = Exact<{
@@ -7197,6 +7452,31 @@ export type PublishXchangeProfileMutation = (
   )> }
 );
 
+export type UpdateXchangeConfigCommentMutationVariables = Exact<{
+  sid: Scalars['ID'];
+  comment: Scalars['String'];
+}>;
+
+
+export type UpdateXchangeConfigCommentMutation = (
+  { __typename?: 'Mutation' }
+  & { updateXchangeConfigComment?: Maybe<(
+    { __typename?: 'GenericResponse' }
+    & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { allMessages?: Maybe<Array<(
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>> }
+    )>> }
+  )> }
+);
+
 export type CreateXchangeStepMutationVariables = Exact<{
   stepInput?: Maybe<CreateXchangeStepInput>;
 }>;
@@ -7623,6 +7903,164 @@ export type DeleteXchangeFileTransmissionMutation = (
     )>>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
+    )>> }
+  )> }
+);
+
+export type CreateXchangeProfileAlertMutationVariables = Exact<{
+  alertInput?: Maybe<CreateXchangeProfileAlertInput>;
+}>;
+
+
+export type CreateXchangeProfileAlertMutation = (
+  { __typename?: 'Mutation' }
+  & { createXchangeProfileAlert?: Maybe<(
+    { __typename?: 'XchangeProfileAlertForm' }
+    & Pick<XchangeProfileAlertForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { alertTypes: (
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    ), subscribers: (
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    ), options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
+    )>>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>> }
+  )> }
+);
+
+export type UpdateXchangeProfileAlertMutationVariables = Exact<{
+  alertInput?: Maybe<UpdateXchangeProfileAlertInput>;
+}>;
+
+
+export type UpdateXchangeProfileAlertMutation = (
+  { __typename?: 'Mutation' }
+  & { updateXchangeProfileAlert?: Maybe<(
+    { __typename?: 'XchangeProfileAlertForm' }
+    & Pick<XchangeProfileAlertForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { alertTypes: (
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    ), subscribers: (
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    ), options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
+    )>>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>> }
+  )> }
+);
+
+export type DeleteXchangeProfileAlertMutationVariables = Exact<{
+  sid: Scalars['ID'];
+}>;
+
+
+export type DeleteXchangeProfileAlertMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteXchangeProfileAlert?: Maybe<(
+    { __typename?: 'GenericResponse' }
+    & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { allMessages?: Maybe<Array<(
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>> }
+    )>> }
+  )> }
+);
+
+export type CreateXchangeConfigAlertMutationVariables = Exact<{
+  alertInput?: Maybe<CreateXchangeConfigAlertInput>;
+}>;
+
+
+export type CreateXchangeConfigAlertMutation = (
+  { __typename?: 'Mutation' }
+  & { createXchangeConfigAlert?: Maybe<(
+    { __typename?: 'XchangeConfigAlertForm' }
+    & Pick<XchangeConfigAlertForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { filenameQualifier: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), alertTypes: (
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    ), subscribers: (
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    ), options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
+    )>>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>> }
+  )> }
+);
+
+export type UpdateXchangeConfigAlertMutationVariables = Exact<{
+  alertInput?: Maybe<UpdateXchangeConfigAlertInput>;
+}>;
+
+
+export type UpdateXchangeConfigAlertMutation = (
+  { __typename?: 'Mutation' }
+  & { updateXchangeConfigAlert?: Maybe<(
+    { __typename?: 'XchangeConfigAlertForm' }
+    & Pick<XchangeConfigAlertForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { filenameQualifier: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), alertTypes: (
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    ), subscribers: (
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    ), options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
+    )>>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>> }
+  )> }
+);
+
+export type DeleteXchangeConfigAlertMutationVariables = Exact<{
+  sid: Scalars['ID'];
+}>;
+
+
+export type DeleteXchangeConfigAlertMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteXchangeConfigAlert?: Maybe<(
+    { __typename?: 'GenericResponse' }
+    & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { allMessages?: Maybe<Array<(
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>> }
     )>> }
   )> }
 );
@@ -9497,6 +9935,57 @@ export function useUserAccountAuditLogsLazyQuery(baseOptions?: Apollo.LazyQueryH
 export type UserAccountAuditLogsQueryHookResult = ReturnType<typeof useUserAccountAuditLogsQuery>;
 export type UserAccountAuditLogsLazyQueryHookResult = ReturnType<typeof useUserAccountAuditLogsLazyQuery>;
 export type UserAccountAuditLogsQueryResult = Apollo.QueryResult<UserAccountAuditLogsQuery, UserAccountAuditLogsQueryVariables>;
+export const UserQuickSearchDocument = gql`
+    query UserQuickSearch($orgSid: ID!, $searchText: String) {
+  userQuickSearch(orgSid: $orgSid, searchText: $searchText) {
+    sid
+    email
+    person {
+      sid
+      firstNm
+      lastNm
+    }
+    accessPolicyGroups {
+      sid
+      name
+      description
+      tmpl
+      tmplUseAsIs
+      applicableOrgTypes
+      policies {
+        ...fragmentAccessPolicy
+      }
+    }
+  }
+}
+    ${FragmentAccessPolicyFragmentDoc}`;
+
+/**
+ * __useUserQuickSearchQuery__
+ *
+ * To run a query within a React component, call `useUserQuickSearchQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserQuickSearchQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserQuickSearchQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *      searchText: // value for 'searchText'
+ *   },
+ * });
+ */
+export function useUserQuickSearchQuery(baseOptions: Apollo.QueryHookOptions<UserQuickSearchQuery, UserQuickSearchQueryVariables>) {
+        return Apollo.useQuery<UserQuickSearchQuery, UserQuickSearchQueryVariables>(UserQuickSearchDocument, baseOptions);
+      }
+export function useUserQuickSearchLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQuickSearchQuery, UserQuickSearchQueryVariables>) {
+          return Apollo.useLazyQuery<UserQuickSearchQuery, UserQuickSearchQueryVariables>(UserQuickSearchDocument, baseOptions);
+        }
+export type UserQuickSearchQueryHookResult = ReturnType<typeof useUserQuickSearchQuery>;
+export type UserQuickSearchLazyQueryHookResult = ReturnType<typeof useUserQuickSearchLazyQuery>;
+export type UserQuickSearchQueryResult = Apollo.QueryResult<UserQuickSearchQuery, UserQuickSearchQueryVariables>;
 export const FindExternalUsersDocument = gql`
     query FindExternalUsers($searchText: String) {
   findExternalUsers(searchText: $searchText) {
@@ -11859,9 +12348,9 @@ export function useXchangeProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type XchangeProfileQueryHookResult = ReturnType<typeof useXchangeProfileQuery>;
 export type XchangeProfileLazyQueryHookResult = ReturnType<typeof useXchangeProfileLazyQuery>;
 export type XchangeProfileQueryResult = Apollo.QueryResult<XchangeProfileQuery, XchangeProfileQueryVariables>;
-export const XchangeDetailsDocument = gql`
-    query XchangeDetails($orgSid: ID!, $coreFilename: String!) {
-  xchangeDetails(orgSid: $orgSid, coreFilename: $coreFilename) {
+export const XchangeConfigDocument = gql`
+    query XchangeConfig($orgSid: ID!, $coreFilename: String!) {
+  xchangeConfig(orgSid: $orgSid, coreFilename: $coreFilename) {
     sid
     requiresConversion
     coreFilename {
@@ -11941,6 +12430,8 @@ export const XchangeDetailsDocument = gql`
       errSeverity
     }
     alerts {
+      sid
+      coreFilename
       filenameQualifier
       alertTypes
       subscribers {
@@ -11972,31 +12463,31 @@ ${FragmentWebCommandFragmentDoc}
 ${FragmentUiOptionsFragmentDoc}`;
 
 /**
- * __useXchangeDetailsQuery__
+ * __useXchangeConfigQuery__
  *
- * To run a query within a React component, call `useXchangeDetailsQuery` and pass it any options that fit your needs.
- * When your component renders, `useXchangeDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useXchangeConfigQuery` and pass it any options that fit your needs.
+ * When your component renders, `useXchangeConfigQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useXchangeDetailsQuery({
+ * const { data, loading, error } = useXchangeConfigQuery({
  *   variables: {
  *      orgSid: // value for 'orgSid'
  *      coreFilename: // value for 'coreFilename'
  *   },
  * });
  */
-export function useXchangeDetailsQuery(baseOptions: Apollo.QueryHookOptions<XchangeDetailsQuery, XchangeDetailsQueryVariables>) {
-        return Apollo.useQuery<XchangeDetailsQuery, XchangeDetailsQueryVariables>(XchangeDetailsDocument, baseOptions);
+export function useXchangeConfigQuery(baseOptions: Apollo.QueryHookOptions<XchangeConfigQuery, XchangeConfigQueryVariables>) {
+        return Apollo.useQuery<XchangeConfigQuery, XchangeConfigQueryVariables>(XchangeConfigDocument, baseOptions);
       }
-export function useXchangeDetailsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<XchangeDetailsQuery, XchangeDetailsQueryVariables>) {
-          return Apollo.useLazyQuery<XchangeDetailsQuery, XchangeDetailsQueryVariables>(XchangeDetailsDocument, baseOptions);
+export function useXchangeConfigLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<XchangeConfigQuery, XchangeConfigQueryVariables>) {
+          return Apollo.useLazyQuery<XchangeConfigQuery, XchangeConfigQueryVariables>(XchangeConfigDocument, baseOptions);
         }
-export type XchangeDetailsQueryHookResult = ReturnType<typeof useXchangeDetailsQuery>;
-export type XchangeDetailsLazyQueryHookResult = ReturnType<typeof useXchangeDetailsLazyQuery>;
-export type XchangeDetailsQueryResult = Apollo.QueryResult<XchangeDetailsQuery, XchangeDetailsQueryVariables>;
+export type XchangeConfigQueryHookResult = ReturnType<typeof useXchangeConfigQuery>;
+export type XchangeConfigLazyQueryHookResult = ReturnType<typeof useXchangeConfigLazyQuery>;
+export type XchangeConfigQueryResult = Apollo.QueryResult<XchangeConfigQuery, XchangeConfigQueryVariables>;
 export const XchangeFileProcessFormDocument = gql`
     query XchangeFileProcessForm($xchangeFileProcessSid: ID!) {
   xchangeFileProcessForm(xchangeFileProcessSid: $xchangeFileProcessSid) {
@@ -12493,6 +12984,193 @@ export function usePreviewFilenamePatternLazyQuery(baseOptions?: Apollo.LazyQuer
 export type PreviewFilenamePatternQueryHookResult = ReturnType<typeof usePreviewFilenamePatternQuery>;
 export type PreviewFilenamePatternLazyQueryHookResult = ReturnType<typeof usePreviewFilenamePatternLazyQuery>;
 export type PreviewFilenamePatternQueryResult = Apollo.QueryResult<PreviewFilenamePatternQuery, PreviewFilenamePatternQueryVariables>;
+export const XchangeProfileAlertsDocument = gql`
+    query XchangeProfileAlerts($orgSid: ID!) {
+  xchangeProfileAlerts(orgSid: $orgSid) {
+    globalXchangeAlerts {
+      sid
+      coreFilename
+      filenameQualifier
+      alertTypes
+      subscribers {
+        sid
+        email
+        firstNm
+        lastNm
+      }
+      commands {
+        ...fragmentWebCommand
+      }
+    }
+    individualXchangeAlerts {
+      sid
+      coreFilename
+      filenameQualifier
+      alertTypes
+      subscribers {
+        sid
+        email
+        firstNm
+        lastNm
+      }
+      commands {
+        ...fragmentWebCommand
+      }
+    }
+    hasUnpublishedChanges
+    tooltips {
+      inactive
+      hasUnpublishedChanges
+      hasAlerts
+      implementationPending
+      requiresConversion
+    }
+    listPageInfo {
+      ...fragmentListPageInfo
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentWebCommandFragmentDoc}
+${FragmentListPageInfoFragmentDoc}`;
+
+/**
+ * __useXchangeProfileAlertsQuery__
+ *
+ * To run a query within a React component, call `useXchangeProfileAlertsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useXchangeProfileAlertsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useXchangeProfileAlertsQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *   },
+ * });
+ */
+export function useXchangeProfileAlertsQuery(baseOptions: Apollo.QueryHookOptions<XchangeProfileAlertsQuery, XchangeProfileAlertsQueryVariables>) {
+        return Apollo.useQuery<XchangeProfileAlertsQuery, XchangeProfileAlertsQueryVariables>(XchangeProfileAlertsDocument, baseOptions);
+      }
+export function useXchangeProfileAlertsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<XchangeProfileAlertsQuery, XchangeProfileAlertsQueryVariables>) {
+          return Apollo.useLazyQuery<XchangeProfileAlertsQuery, XchangeProfileAlertsQueryVariables>(XchangeProfileAlertsDocument, baseOptions);
+        }
+export type XchangeProfileAlertsQueryHookResult = ReturnType<typeof useXchangeProfileAlertsQuery>;
+export type XchangeProfileAlertsLazyQueryHookResult = ReturnType<typeof useXchangeProfileAlertsLazyQuery>;
+export type XchangeProfileAlertsQueryResult = Apollo.QueryResult<XchangeProfileAlertsQuery, XchangeProfileAlertsQueryVariables>;
+export const XchangeProfileAlertFormDocument = gql`
+    query XchangeProfileAlertForm($orgSid: ID!, $sid: ID) {
+  xchangeProfileAlertForm(orgSid: $orgSid, sid: $sid) {
+    sid
+    alertTypes {
+      ...fragmentUISelectManyField
+    }
+    subscribers {
+      ...fragmentUISelectManyField
+    }
+    options {
+      ...fragmentUIOptions
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
+
+/**
+ * __useXchangeProfileAlertFormQuery__
+ *
+ * To run a query within a React component, call `useXchangeProfileAlertFormQuery` and pass it any options that fit your needs.
+ * When your component renders, `useXchangeProfileAlertFormQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useXchangeProfileAlertFormQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *      sid: // value for 'sid'
+ *   },
+ * });
+ */
+export function useXchangeProfileAlertFormQuery(baseOptions: Apollo.QueryHookOptions<XchangeProfileAlertFormQuery, XchangeProfileAlertFormQueryVariables>) {
+        return Apollo.useQuery<XchangeProfileAlertFormQuery, XchangeProfileAlertFormQueryVariables>(XchangeProfileAlertFormDocument, baseOptions);
+      }
+export function useXchangeProfileAlertFormLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<XchangeProfileAlertFormQuery, XchangeProfileAlertFormQueryVariables>) {
+          return Apollo.useLazyQuery<XchangeProfileAlertFormQuery, XchangeProfileAlertFormQueryVariables>(XchangeProfileAlertFormDocument, baseOptions);
+        }
+export type XchangeProfileAlertFormQueryHookResult = ReturnType<typeof useXchangeProfileAlertFormQuery>;
+export type XchangeProfileAlertFormLazyQueryHookResult = ReturnType<typeof useXchangeProfileAlertFormLazyQuery>;
+export type XchangeProfileAlertFormQueryResult = Apollo.QueryResult<XchangeProfileAlertFormQuery, XchangeProfileAlertFormQueryVariables>;
+export const XchangeConfigAlertFormDocument = gql`
+    query XchangeConfigAlertForm($orgSid: ID!, $coreFilename: String!, $sid: ID) {
+  xchangeConfigAlertForm(orgSid: $orgSid, coreFilename: $coreFilename, sid: $sid) {
+    sid
+    filenameQualifier {
+      ...fragmentUISelectOneField
+    }
+    alertTypes {
+      ...fragmentUISelectManyField
+    }
+    subscribers {
+      ...fragmentUISelectManyField
+    }
+    options {
+      ...fragmentUIOptions
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiSelectOneFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
+
+/**
+ * __useXchangeConfigAlertFormQuery__
+ *
+ * To run a query within a React component, call `useXchangeConfigAlertFormQuery` and pass it any options that fit your needs.
+ * When your component renders, `useXchangeConfigAlertFormQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useXchangeConfigAlertFormQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *      coreFilename: // value for 'coreFilename'
+ *      sid: // value for 'sid'
+ *   },
+ * });
+ */
+export function useXchangeConfigAlertFormQuery(baseOptions: Apollo.QueryHookOptions<XchangeConfigAlertFormQuery, XchangeConfigAlertFormQueryVariables>) {
+        return Apollo.useQuery<XchangeConfigAlertFormQuery, XchangeConfigAlertFormQueryVariables>(XchangeConfigAlertFormDocument, baseOptions);
+      }
+export function useXchangeConfigAlertFormLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<XchangeConfigAlertFormQuery, XchangeConfigAlertFormQueryVariables>) {
+          return Apollo.useLazyQuery<XchangeConfigAlertFormQuery, XchangeConfigAlertFormQueryVariables>(XchangeConfigAlertFormDocument, baseOptions);
+        }
+export type XchangeConfigAlertFormQueryHookResult = ReturnType<typeof useXchangeConfigAlertFormQuery>;
+export type XchangeConfigAlertFormLazyQueryHookResult = ReturnType<typeof useXchangeConfigAlertFormLazyQuery>;
+export type XchangeConfigAlertFormQueryResult = Apollo.QueryResult<XchangeConfigAlertFormQuery, XchangeConfigAlertFormQueryVariables>;
 export const BeginLoginDocument = gql`
     mutation BeginLogin($userId: String!) {
   beginLogin(userId: $userId) {
@@ -15394,6 +16072,51 @@ export function usePublishXchangeProfileMutation(baseOptions?: Apollo.MutationHo
 export type PublishXchangeProfileMutationHookResult = ReturnType<typeof usePublishXchangeProfileMutation>;
 export type PublishXchangeProfileMutationResult = Apollo.MutationResult<PublishXchangeProfileMutation>;
 export type PublishXchangeProfileMutationOptions = Apollo.BaseMutationOptions<PublishXchangeProfileMutation, PublishXchangeProfileMutationVariables>;
+export const UpdateXchangeConfigCommentDocument = gql`
+    mutation UpdateXchangeConfigComment($sid: ID!, $comment: String!) {
+  updateXchangeConfigComment(sid: $sid, comment: $comment) {
+    response
+    errCode
+    errMsg
+    errSeverity
+    allMessages {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
+      }
+    }
+  }
+}
+    ${UnionNvpFragmentDoc}`;
+export type UpdateXchangeConfigCommentMutationFn = Apollo.MutationFunction<UpdateXchangeConfigCommentMutation, UpdateXchangeConfigCommentMutationVariables>;
+
+/**
+ * __useUpdateXchangeConfigCommentMutation__
+ *
+ * To run a mutation, you first call `useUpdateXchangeConfigCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateXchangeConfigCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateXchangeConfigCommentMutation, { data, loading, error }] = useUpdateXchangeConfigCommentMutation({
+ *   variables: {
+ *      sid: // value for 'sid'
+ *      comment: // value for 'comment'
+ *   },
+ * });
+ */
+export function useUpdateXchangeConfigCommentMutation(baseOptions?: Apollo.MutationHookOptions<UpdateXchangeConfigCommentMutation, UpdateXchangeConfigCommentMutationVariables>) {
+        return Apollo.useMutation<UpdateXchangeConfigCommentMutation, UpdateXchangeConfigCommentMutationVariables>(UpdateXchangeConfigCommentDocument, baseOptions);
+      }
+export type UpdateXchangeConfigCommentMutationHookResult = ReturnType<typeof useUpdateXchangeConfigCommentMutation>;
+export type UpdateXchangeConfigCommentMutationResult = Apollo.MutationResult<UpdateXchangeConfigCommentMutation>;
+export type UpdateXchangeConfigCommentMutationOptions = Apollo.BaseMutationOptions<UpdateXchangeConfigCommentMutation, UpdateXchangeConfigCommentMutationVariables>;
 export const CreateXchangeStepDocument = gql`
     mutation CreateXchangeStep($stepInput: CreateXchangeStepInput) {
   createXchangeStep(stepInput: $stepInput) {
@@ -16103,3 +16826,299 @@ export function useDeleteXchangeFileTransmissionMutation(baseOptions?: Apollo.Mu
 export type DeleteXchangeFileTransmissionMutationHookResult = ReturnType<typeof useDeleteXchangeFileTransmissionMutation>;
 export type DeleteXchangeFileTransmissionMutationResult = Apollo.MutationResult<DeleteXchangeFileTransmissionMutation>;
 export type DeleteXchangeFileTransmissionMutationOptions = Apollo.BaseMutationOptions<DeleteXchangeFileTransmissionMutation, DeleteXchangeFileTransmissionMutationVariables>;
+export const CreateXchangeProfileAlertDocument = gql`
+    mutation CreateXchangeProfileAlert($alertInput: CreateXchangeProfileAlertInput) {
+  createXchangeProfileAlert(alertInput: $alertInput) {
+    sid
+    alertTypes {
+      ...fragmentUISelectManyField
+    }
+    subscribers {
+      ...fragmentUISelectManyField
+    }
+    options {
+      ...fragmentUIOptions
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
+export type CreateXchangeProfileAlertMutationFn = Apollo.MutationFunction<CreateXchangeProfileAlertMutation, CreateXchangeProfileAlertMutationVariables>;
+
+/**
+ * __useCreateXchangeProfileAlertMutation__
+ *
+ * To run a mutation, you first call `useCreateXchangeProfileAlertMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateXchangeProfileAlertMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createXchangeProfileAlertMutation, { data, loading, error }] = useCreateXchangeProfileAlertMutation({
+ *   variables: {
+ *      alertInput: // value for 'alertInput'
+ *   },
+ * });
+ */
+export function useCreateXchangeProfileAlertMutation(baseOptions?: Apollo.MutationHookOptions<CreateXchangeProfileAlertMutation, CreateXchangeProfileAlertMutationVariables>) {
+        return Apollo.useMutation<CreateXchangeProfileAlertMutation, CreateXchangeProfileAlertMutationVariables>(CreateXchangeProfileAlertDocument, baseOptions);
+      }
+export type CreateXchangeProfileAlertMutationHookResult = ReturnType<typeof useCreateXchangeProfileAlertMutation>;
+export type CreateXchangeProfileAlertMutationResult = Apollo.MutationResult<CreateXchangeProfileAlertMutation>;
+export type CreateXchangeProfileAlertMutationOptions = Apollo.BaseMutationOptions<CreateXchangeProfileAlertMutation, CreateXchangeProfileAlertMutationVariables>;
+export const UpdateXchangeProfileAlertDocument = gql`
+    mutation UpdateXchangeProfileAlert($alertInput: UpdateXchangeProfileAlertInput) {
+  updateXchangeProfileAlert(alertInput: $alertInput) {
+    sid
+    alertTypes {
+      ...fragmentUISelectManyField
+    }
+    subscribers {
+      ...fragmentUISelectManyField
+    }
+    options {
+      ...fragmentUIOptions
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
+export type UpdateXchangeProfileAlertMutationFn = Apollo.MutationFunction<UpdateXchangeProfileAlertMutation, UpdateXchangeProfileAlertMutationVariables>;
+
+/**
+ * __useUpdateXchangeProfileAlertMutation__
+ *
+ * To run a mutation, you first call `useUpdateXchangeProfileAlertMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateXchangeProfileAlertMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateXchangeProfileAlertMutation, { data, loading, error }] = useUpdateXchangeProfileAlertMutation({
+ *   variables: {
+ *      alertInput: // value for 'alertInput'
+ *   },
+ * });
+ */
+export function useUpdateXchangeProfileAlertMutation(baseOptions?: Apollo.MutationHookOptions<UpdateXchangeProfileAlertMutation, UpdateXchangeProfileAlertMutationVariables>) {
+        return Apollo.useMutation<UpdateXchangeProfileAlertMutation, UpdateXchangeProfileAlertMutationVariables>(UpdateXchangeProfileAlertDocument, baseOptions);
+      }
+export type UpdateXchangeProfileAlertMutationHookResult = ReturnType<typeof useUpdateXchangeProfileAlertMutation>;
+export type UpdateXchangeProfileAlertMutationResult = Apollo.MutationResult<UpdateXchangeProfileAlertMutation>;
+export type UpdateXchangeProfileAlertMutationOptions = Apollo.BaseMutationOptions<UpdateXchangeProfileAlertMutation, UpdateXchangeProfileAlertMutationVariables>;
+export const DeleteXchangeProfileAlertDocument = gql`
+    mutation DeleteXchangeProfileAlert($sid: ID!) {
+  deleteXchangeProfileAlert(sid: $sid) {
+    response
+    errCode
+    errMsg
+    errSeverity
+    allMessages {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
+      }
+    }
+  }
+}
+    ${UnionNvpFragmentDoc}`;
+export type DeleteXchangeProfileAlertMutationFn = Apollo.MutationFunction<DeleteXchangeProfileAlertMutation, DeleteXchangeProfileAlertMutationVariables>;
+
+/**
+ * __useDeleteXchangeProfileAlertMutation__
+ *
+ * To run a mutation, you first call `useDeleteXchangeProfileAlertMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteXchangeProfileAlertMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteXchangeProfileAlertMutation, { data, loading, error }] = useDeleteXchangeProfileAlertMutation({
+ *   variables: {
+ *      sid: // value for 'sid'
+ *   },
+ * });
+ */
+export function useDeleteXchangeProfileAlertMutation(baseOptions?: Apollo.MutationHookOptions<DeleteXchangeProfileAlertMutation, DeleteXchangeProfileAlertMutationVariables>) {
+        return Apollo.useMutation<DeleteXchangeProfileAlertMutation, DeleteXchangeProfileAlertMutationVariables>(DeleteXchangeProfileAlertDocument, baseOptions);
+      }
+export type DeleteXchangeProfileAlertMutationHookResult = ReturnType<typeof useDeleteXchangeProfileAlertMutation>;
+export type DeleteXchangeProfileAlertMutationResult = Apollo.MutationResult<DeleteXchangeProfileAlertMutation>;
+export type DeleteXchangeProfileAlertMutationOptions = Apollo.BaseMutationOptions<DeleteXchangeProfileAlertMutation, DeleteXchangeProfileAlertMutationVariables>;
+export const CreateXchangeConfigAlertDocument = gql`
+    mutation CreateXchangeConfigAlert($alertInput: CreateXchangeConfigAlertInput) {
+  createXchangeConfigAlert(alertInput: $alertInput) {
+    sid
+    filenameQualifier {
+      ...fragmentUISelectOneField
+    }
+    alertTypes {
+      ...fragmentUISelectManyField
+    }
+    subscribers {
+      ...fragmentUISelectManyField
+    }
+    options {
+      ...fragmentUIOptions
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiSelectOneFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
+export type CreateXchangeConfigAlertMutationFn = Apollo.MutationFunction<CreateXchangeConfigAlertMutation, CreateXchangeConfigAlertMutationVariables>;
+
+/**
+ * __useCreateXchangeConfigAlertMutation__
+ *
+ * To run a mutation, you first call `useCreateXchangeConfigAlertMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateXchangeConfigAlertMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createXchangeConfigAlertMutation, { data, loading, error }] = useCreateXchangeConfigAlertMutation({
+ *   variables: {
+ *      alertInput: // value for 'alertInput'
+ *   },
+ * });
+ */
+export function useCreateXchangeConfigAlertMutation(baseOptions?: Apollo.MutationHookOptions<CreateXchangeConfigAlertMutation, CreateXchangeConfigAlertMutationVariables>) {
+        return Apollo.useMutation<CreateXchangeConfigAlertMutation, CreateXchangeConfigAlertMutationVariables>(CreateXchangeConfigAlertDocument, baseOptions);
+      }
+export type CreateXchangeConfigAlertMutationHookResult = ReturnType<typeof useCreateXchangeConfigAlertMutation>;
+export type CreateXchangeConfigAlertMutationResult = Apollo.MutationResult<CreateXchangeConfigAlertMutation>;
+export type CreateXchangeConfigAlertMutationOptions = Apollo.BaseMutationOptions<CreateXchangeConfigAlertMutation, CreateXchangeConfigAlertMutationVariables>;
+export const UpdateXchangeConfigAlertDocument = gql`
+    mutation UpdateXchangeConfigAlert($alertInput: UpdateXchangeConfigAlertInput) {
+  updateXchangeConfigAlert(alertInput: $alertInput) {
+    sid
+    filenameQualifier {
+      ...fragmentUISelectOneField
+    }
+    alertTypes {
+      ...fragmentUISelectManyField
+    }
+    subscribers {
+      ...fragmentUISelectManyField
+    }
+    options {
+      ...fragmentUIOptions
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiSelectOneFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
+export type UpdateXchangeConfigAlertMutationFn = Apollo.MutationFunction<UpdateXchangeConfigAlertMutation, UpdateXchangeConfigAlertMutationVariables>;
+
+/**
+ * __useUpdateXchangeConfigAlertMutation__
+ *
+ * To run a mutation, you first call `useUpdateXchangeConfigAlertMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateXchangeConfigAlertMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateXchangeConfigAlertMutation, { data, loading, error }] = useUpdateXchangeConfigAlertMutation({
+ *   variables: {
+ *      alertInput: // value for 'alertInput'
+ *   },
+ * });
+ */
+export function useUpdateXchangeConfigAlertMutation(baseOptions?: Apollo.MutationHookOptions<UpdateXchangeConfigAlertMutation, UpdateXchangeConfigAlertMutationVariables>) {
+        return Apollo.useMutation<UpdateXchangeConfigAlertMutation, UpdateXchangeConfigAlertMutationVariables>(UpdateXchangeConfigAlertDocument, baseOptions);
+      }
+export type UpdateXchangeConfigAlertMutationHookResult = ReturnType<typeof useUpdateXchangeConfigAlertMutation>;
+export type UpdateXchangeConfigAlertMutationResult = Apollo.MutationResult<UpdateXchangeConfigAlertMutation>;
+export type UpdateXchangeConfigAlertMutationOptions = Apollo.BaseMutationOptions<UpdateXchangeConfigAlertMutation, UpdateXchangeConfigAlertMutationVariables>;
+export const DeleteXchangeConfigAlertDocument = gql`
+    mutation DeleteXchangeConfigAlert($sid: ID!) {
+  deleteXchangeConfigAlert(sid: $sid) {
+    response
+    errCode
+    errMsg
+    errSeverity
+    allMessages {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
+      }
+    }
+  }
+}
+    ${UnionNvpFragmentDoc}`;
+export type DeleteXchangeConfigAlertMutationFn = Apollo.MutationFunction<DeleteXchangeConfigAlertMutation, DeleteXchangeConfigAlertMutationVariables>;
+
+/**
+ * __useDeleteXchangeConfigAlertMutation__
+ *
+ * To run a mutation, you first call `useDeleteXchangeConfigAlertMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteXchangeConfigAlertMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteXchangeConfigAlertMutation, { data, loading, error }] = useDeleteXchangeConfigAlertMutation({
+ *   variables: {
+ *      sid: // value for 'sid'
+ *   },
+ * });
+ */
+export function useDeleteXchangeConfigAlertMutation(baseOptions?: Apollo.MutationHookOptions<DeleteXchangeConfigAlertMutation, DeleteXchangeConfigAlertMutationVariables>) {
+        return Apollo.useMutation<DeleteXchangeConfigAlertMutation, DeleteXchangeConfigAlertMutationVariables>(DeleteXchangeConfigAlertDocument, baseOptions);
+      }
+export type DeleteXchangeConfigAlertMutationHookResult = ReturnType<typeof useDeleteXchangeConfigAlertMutation>;
+export type DeleteXchangeConfigAlertMutationResult = Apollo.MutationResult<DeleteXchangeConfigAlertMutation>;
+export type DeleteXchangeConfigAlertMutationOptions = Apollo.BaseMutationOptions<DeleteXchangeConfigAlertMutation, DeleteXchangeConfigAlertMutationVariables>;

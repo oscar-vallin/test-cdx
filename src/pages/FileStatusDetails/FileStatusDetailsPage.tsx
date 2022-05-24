@@ -49,6 +49,7 @@ import { Row } from 'src/components/layouts';
 import { TableFiltersType } from 'src/hooks/useTableFilters';
 import { useNotification } from 'src/hooks/useNotification';
 import { EmptyState } from 'src/containers/states';
+import { ICommandBarItemProps } from '@fluentui/react/lib/components/CommandBar/CommandBar.types';
 
 const POLL_INTERVAL = 20000;
 type FileStatusDetailsPageProps = {
@@ -66,8 +67,9 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
   const fsOrgSid = useFileStatusDetailsPanel?.fsOrgSid ?? '';
   const hash = useFileStatusDetailsPanel?.hash;
   const id = useFileStatusDetailsPanel?.workOrderId ?? '';
-  
+
   const [packet, setPacket] = useState<WorkPacketStatusDetails>();
+  const [commandBarItems, setCommandBarItems] = useState<ICommandBarItemProps[]>([]);
   const [showDetails, setShowDetails] = useState(true);
   const realId = id?.replace('*', '');
   const [lastUpdatedPoll, setLastUpdatedPoll] = useState<Date>(new Date());
@@ -109,7 +111,7 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
   }, [pollWPStatus.error]);
 
   useEffect(() => {
- 
+
     if (data?.workPacketStatusDetails && !loading) {
       setPacket(data?.workPacketStatusDetails);
       setLastUpdatedPoll(new Date());
@@ -195,12 +197,6 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
   const deliveredFile: DeliveredFile | undefined | null = packet?.deliveredFiles
     ? packet?.deliveredFiles[0]
     : undefined;
-  const resendCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Resend);
-  const continueCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Continue);
-  const reprocessCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Reprocess);
-  const reprocessRenameCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Rename);
-  const cancelCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Cancel);
-  const deleteCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Delete);
   //const rerunCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.RerunStep);
 
   const renderWorkPacketCommandButton = (item: any) => {
@@ -220,77 +216,88 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
     );
   };
 
-  const commandBarItems: any = [
-    {
-      id: '__ResendBtn',
-      key: '__ResendBtn',
-      icon: 'Send',
-      confirmationMsg: 'Are you sure you want to Resend this Work Packet?',
-      command: resendCmd,
-      onClick: workPacketCommands.apiCallResend,
-      onRender: renderWorkPacketCommandButton,
-    },
-    {
-      id: '__ContinueBtn',
-      key: '__ContinueBtn',
-      icon: 'PlayResume',
-      confirmationMsg: 'Are you sure you want to Continue this Work Packet?',
-      command: continueCmd,
-      onClick: workPacketCommands.apiCallContinue,
-      callback: ()  => validateStatus(),
-      onRender: renderWorkPacketCommandButton,
-    },
-    {
-      id: '__ReprocessBtn',
-      key: '__ReprocessBtn',
-      icon: 'Rerun',
-      confirmationMsg: 'Are you sure you want to Reprocess this Work Packet?',
-      command: reprocessCmd,
-      workPacketCommands: workPacketCommands,
-      realId: realId,
-      callback: ()  => validateStatus(),
-      onRender: renderWorkPacketCommandButton,
-    },
-    {
-      id: '__ReprocessRenameBtn',
-      key: '__ReprocessRenameBtn',
-      icon: 'Rerun',
-      confirmationMsg: 'Are you sure you want to Reprocess this Work Packet?',
-      workPacketCommands: workPacketCommands,
-      realId: realId,
-      command: reprocessRenameCmd,
-      onClick: workPacketCommands.apiCallRenameReprocess,
-      callback: ()  => validateStatus(),
-      onRender: renderWorkPacketCommandButton,
-    },
-    {
-      id: '__CancelBtn',
-      key: '__CancelBtn',
-      icon: 'Cancel',
-      confirmationMsg: "Are you sure you want to Cancel this Work Packet's processing?",
-      command: cancelCmd,
-      onClick: workPacketCommands.apiCallCancel,
-      callback: ()  => validateStatus(),
-      onRender: renderWorkPacketCommandButton,
-    },
-    {
-      id: '__DeleteBtn',
-      key: '__DeleteBtn',
-      icon: 'Delete',
-      confirmationMsg: 'Are you sure you want to Delete this Work Packet?',
-      command: deleteCmd,
-      onClick: workPacketCommands.apiCallDelete,
-      callback: () => {
-        useFileStatusDetailsPanel?.closePanel();
-        tableFilters?.setPagingParams({
-          pageNumber: 0,
-          pageSize: 100,
-          sort: tableFilters.pagingParams.sort,
-        });
+  useEffect(() => {
+    const resendCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Resend);
+    const continueCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Continue);
+    const reprocessCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Reprocess);
+    const reprocessRenameCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Rename);
+    const cancelCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Cancel);
+    const deleteCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Delete);
+
+    const commandBarItems = [
+      {
+        id: '__ResendBtn',
+        key: '__ResendBtn',
+        icon: 'Send',
+        confirmationMsg: 'Are you sure you want to Resend this Work Packet?',
+        command: resendCmd,
+        onClick: () => { workPacketCommands.apiCallResend().then() },
+        onRender: renderWorkPacketCommandButton,
       },
-      onRender: renderWorkPacketCommandButton,
-    },
-  ];
+      {
+        id: '__ContinueBtn',
+        key: '__ContinueBtn',
+        icon: 'PlayResume',
+        confirmationMsg: 'Are you sure you want to Continue this Work Packet?',
+        command: continueCmd,
+        onClick: () => { workPacketCommands.apiCallContinue().then() },
+        callback: ()  => validateStatus(),
+        onRender: renderWorkPacketCommandButton,
+      },
+      {
+        id: '__ReprocessBtn',
+        key: '__ReprocessBtn',
+        icon: 'Rerun',
+        confirmationMsg: 'Are you sure you want to Reprocess this Work Packet?',
+        command: reprocessCmd,
+        workPacketCommands: workPacketCommands,
+        realId: realId,
+        callback: ()  => validateStatus(),
+        onRender: renderWorkPacketCommandButton,
+      },
+      {
+        id: '__ReprocessRenameBtn',
+        key: '__ReprocessRenameBtn',
+        icon: 'Rerun',
+        confirmationMsg: 'Are you sure you want to Reprocess this Work Packet?',
+        workPacketCommands: workPacketCommands,
+        realId: realId,
+        command: reprocessRenameCmd,
+        onClick: () => { workPacketCommands.apiCallRenameReprocess().then() },
+        callback: ()  => validateStatus(),
+        onRender: renderWorkPacketCommandButton,
+      },
+      {
+        id: '__CancelBtn',
+        key: '__CancelBtn',
+        icon: 'Cancel',
+        confirmationMsg: "Are you sure you want to Cancel this Work Packet's processing?",
+        command: cancelCmd,
+        onClick: () => { workPacketCommands.apiCallCancel().then() },
+        callback: ()  => validateStatus(),
+        onRender: renderWorkPacketCommandButton,
+      },
+      {
+        id: '__DeleteBtn',
+        key: '__DeleteBtn',
+        icon: 'Delete',
+        confirmationMsg: 'Are you sure you want to Delete this Work Packet?',
+        command: deleteCmd,
+        onClick: () => { workPacketCommands.apiCallDelete().then() },
+        callback: () => {
+          useFileStatusDetailsPanel?.closePanel();
+          tableFilters?.setPagingParams({
+            pageNumber: 0,
+            pageSize: 100,
+            sort: tableFilters.pagingParams.sort,
+          });
+        },
+        onRender: renderWorkPacketCommandButton,
+      },
+    ];
+    setCommandBarItems(commandBarItems);
+  }, [packet])
+
   const renderDeliveredFileInfo = (fileInfo?: DeliveredFile | null) => {
     if (fileInfo) {
       return (
