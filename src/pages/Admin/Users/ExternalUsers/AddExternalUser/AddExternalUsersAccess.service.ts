@@ -4,17 +4,14 @@ import {
   UserAccount,
   UserAccountForm,
   useUserAccountFormLazyQuery,
-  useFindExternalUsersLazyQuery,
   useGrantExternalUserAccessMutation,
-  useCreateExternalUserMutation,
+  useCreateExternalUserMutation, Maybe,
 } from 'src/data/services/graphql';
 import { defaultForm, updateForm } from '../ExternalUsersFormUtil';
+import { ApolloClient, gql } from '@apollo/client';
+import { ITag } from '@fluentui/react';
 
 export const useAddExternalUsersAccessService = (orgSid: string) => {
-  const [
-    callFindExternalUsers,
-    { data: dataFindExternalUsers, loading: loadingFindExternalUsers, error: errorFindExternalUsers },
-  ] = useFindExternalUsersLazyQuery();
 
   const [
     callGrantExternalUserAccess,
@@ -52,10 +49,6 @@ export const useAddExternalUsersAccessService = (orgSid: string) => {
       setUserAccountForm(dataUserAccountForm?.userAccountForm ?? defaultForm);
     }
   }, [dataUserAccountForm]);
-
-  useEffect(() => {
-    if (dataFindExternalUsers?.findExternalUsers) setSelectedExternalUsers(dataFindExternalUsers?.findExternalUsers);
-  }, [dataFindExternalUsers]);
 
   const resetForm = () => {
     if (orgSid) {
@@ -163,6 +156,53 @@ export const useAddExternalUsersAccessService = (orgSid: string) => {
 
     return data;
   };
+
+  const parseToPickerOpts = (arr?: Maybe<UserAccount>[] | null): ITag[] => {
+    if (!arr) {
+      return [];
+    }
+    return arr.map((user) => ({
+      name: user?.email ?? '',
+      key: user?.sid ?? '',
+      email: user?.email ?? '',
+      firstName: user?.person?.firstNm ?? '',
+      lastName: user?.person?.lastNm ?? '',
+    }));
+  };
+
+  async function callFindExternalUsers(
+    client: ApolloClient<object>,
+    handleError: (error?: any) => void,
+    searchText: string
+  ): Promise<ITag[]> {
+    let users: ITag[] = [];
+    await client
+    .query({
+      errorPolicy: 'all',
+      variables: {
+        searchText,
+      },
+      query: gql`
+        query FindExternalUsers($searchText: String!) {
+          findExternalUsers(searchText: $searchText) {
+            sid
+            email
+            person {
+              firstNm
+              lastNm
+            }
+          }
+        }
+      `,
+    })
+    .then((result) => {
+      handleError(result.error);
+      users = parseToPickerOpts(result.data.findExternalUsers);
+    });
+
+    return users;
+  }
+
 
   // * Return the state of the form.
   return {

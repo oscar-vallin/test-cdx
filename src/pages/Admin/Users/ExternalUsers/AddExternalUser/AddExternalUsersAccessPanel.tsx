@@ -1,18 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement, useState } from 'react';
 import { MessageBar, MessageBarType, Panel, PanelType, Stack, ITag } from '@fluentui/react';
 
 import { Tabs } from 'src/components/tabs/Tabs';
 import { PanelBody, PanelHeader, PanelTitle } from 'src/layouts/Panels/Panels.styles';
 
 import { useNotification } from 'src/hooks/useNotification';
-import { Maybe, UserAccount, GqOperationResponse } from 'src/data/services/graphql';
+import { GqOperationResponse } from 'src/data/services/graphql';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
 import { Column } from 'src/components/layouts';
 import { useAddExternalUsersAccessService } from './AddExternalUsersAccess.service';
 import { SectionAccount } from './SectionAccount';
 import SectionAccessManagement from './SectionAccessManagement';
 import SectionSummary from './SectionSummary';
+import { useApolloClient } from '@apollo/client';
+import { ErrorHandler } from 'src/utils/ErrorHandler';
 
 const defaultProps = {
   isOpen: false,
@@ -48,6 +50,8 @@ const AddExternalUsersAccessPanel = ({
   const [isProcessing, setProcessing] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string | undefined>();
   const [createExternalUser, setCreateExternalUser] = useState(false);
+  const client = useApolloClient();
+  const handleError = ErrorHandler();
 
   const Toast = useNotification();
 
@@ -84,37 +88,12 @@ const AddExternalUsersAccessPanel = ({
     onDismiss();
   };
 
-  const parseToPickerOpts = (arr?: Maybe<UserAccount>[] | null): ITag[] => {
-    if (!arr) {
-      return [];
-    }
-    return arr.map((user) => ({
-      name: user?.email ?? '',
-      key: user?.sid ?? '',
-      email: user?.email ?? '',
-      firstName: user?.person?.firstNm ?? '',
-      lastName: user?.person?.lastNm ?? '',
-    }));
-  };
-
   const handleFindExternalUsers = (text: string) => {
     return findExternalUsers(text);
   };
 
   const findExternalUsers = async (text: string): Promise<ITag[]> => {
-    let externalUsers: ITag[] = [];
-
-    const res: any = await addExternalUsersAccessService.callFindExternalUsers({
-      variables: {
-        searchText: text,
-      },
-    });
-
-    if (res?.data?.findExternalUsers) {
-      externalUsers = parseToPickerOpts(res.data.findExternalUsers);
-    }
-
-    return externalUsers;
+    return addExternalUsersAccessService.callFindExternalUsers(client, handleError, text);
   };
 
   const handleGrantAccess = async () => {
