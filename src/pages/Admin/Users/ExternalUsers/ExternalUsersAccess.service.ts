@@ -5,50 +5,82 @@ import {
   UserAccountForm,
   useUserAccountFormLazyQuery,
   useGrantExternalUserAccessMutation,
-  useCreateExternalUserMutation, Maybe,
+  useCreateExternalUserMutation, Maybe, useExternalUserForOrgLazyQuery,
 } from 'src/data/services/graphql';
-import { defaultForm, updateForm } from '../ExternalUsersFormUtil';
+import { defaultForm, updateForm } from './ExternalUsersFormUtil';
 import { ApolloClient, gql } from '@apollo/client';
 import { ITag } from '@fluentui/react';
+import { ErrorHandler } from 'src/utils/ErrorHandler';
 
-export const useAddExternalUsersAccessService = (orgSid: string) => {
+export const useExternalUsersAccessService = (orgSid: string, userAccountSid?: string) => {
 
-  const [
-    callGrantExternalUserAccess,
-    { data: dataGrantExternalUserAccess, loading: loadingGrantExternalUserAccess, error: errorGrantExternalUserAccess },
-  ] = useGrantExternalUserAccessMutation();
+  const [callGrantExternalUserAccess, {error: grantExternalUserAccessError}] = useGrantExternalUserAccessMutation();
 
-  const [
-    callCreateExternalUser,
-    { data: dataCreateExternalUser, loading: loadingCreateExternalUser, error: errorCreateExternalUser },
-  ] = useCreateExternalUserMutation();
+  const [callCreateExternalUser, {error: createExternalUserError}] = useCreateExternalUserMutation();
 
   const [userAccountForm, setUserAccountForm] = useState<UserAccountForm>(defaultForm);
 
-  const [callUserAccountForm, { data: dataUserAccountForm, loading: userAccountLoading, error: userAccountError }] =
+  const [callUserAccountForm, {
+    data: dataUserAccountForm,
+    loading: userAccountFormLoading,
+    error: userAccountFormError
+  }] =
     useUserAccountFormLazyQuery({
       variables: {
         orgSid,
       },
     });
 
-  const [selectedExternalUsers, setSelectedExternalUsers] = useState<any[]>([]);
+  const [callExternalUserForOrg, {
+    data: dataExternalUserForOrg,
+    loading: externalUsersForOrgLoading,
+    error: externalUserForOrgError
+  }] = useExternalUserForOrgLazyQuery();
+
+  const handleError = ErrorHandler();
+  useEffect(() => {
+    handleError(grantExternalUserAccessError);
+  }, [grantExternalUserAccessError]);
+  useEffect(() => {
+    handleError(createExternalUserError);
+  }, [createExternalUserError]);
+  useEffect(() => {
+    handleError(userAccountFormError);
+  }, [userAccountFormError]);
+  useEffect(() => {
+    handleError(externalUserForOrgError);
+  }, [externalUserForOrgError]);
 
   useEffect(() => {
     if (orgSid) {
-      callUserAccountForm({
-        variables: {
-          orgSid,
-        },
-      });
+      if (userAccountSid) {
+        callExternalUserForOrg({
+          variables: {
+            orgSid,
+            userSid: userAccountSid
+          }
+        });
+      } else {
+        callUserAccountForm({
+          variables: {
+            orgSid,
+          },
+        });
+      }
     }
-  }, [orgSid]);
+  }, [orgSid, userAccountSid]);
 
   useEffect(() => {
-    if (dataUserAccountForm) {
-      setUserAccountForm(dataUserAccountForm?.userAccountForm ?? defaultForm);
+    if (!userAccountFormLoading && dataUserAccountForm) {
+      setUserAccountForm(dataUserAccountForm.userAccountForm ?? defaultForm);
     }
-  }, [dataUserAccountForm]);
+  }, [userAccountFormLoading, dataUserAccountForm]);
+
+  useEffect(() => {
+    if (!externalUsersForOrgLoading && dataExternalUserForOrg) {
+      setUserAccountForm(dataExternalUserForOrg.externalUserForOrg ?? defaultForm)
+    }
+  }, [externalUsersForOrgLoading, dataExternalUserForOrg]);
 
   const resetForm = () => {
     if (orgSid) {
@@ -82,7 +114,7 @@ export const useAddExternalUsersAccessService = (orgSid: string) => {
       userAccountForm.accessPolicyGroups?.value
         ?.filter((opt) => opt != null && opt?.value != null)
         ?.map((opt) => opt?.value ?? '') ?? [];
-    const { data, errors } = await callGrantExternalUserAccess({
+    const {data, errors} = await callGrantExternalUserAccess({
       variables: {
         userInfo: {
           userAccountSid: userAccountForm.sid ?? '',
@@ -120,7 +152,7 @@ export const useAddExternalUsersAccessService = (orgSid: string) => {
         ?.filter((opt) => opt != null && opt?.value != null)
         ?.map((opt) => opt?.value ?? '') ?? [];
 
-    const { data, errors } = await callCreateExternalUser({
+    const {data, errors} = await callCreateExternalUser({
       variables: {
         userInfo: {
           email: userAccountForm.email?.value ?? '',
@@ -211,7 +243,6 @@ export const useAddExternalUsersAccessService = (orgSid: string) => {
     callGrantUserAccess: handleGrantUserAccess,
     updateAccountInfo,
     updateAccessPolicyGroups,
-    selectedExternalUsers,
     resetForm,
     callFindExternalUsers,
     userAccountForm,

@@ -6,25 +6,20 @@ import { Tabs } from 'src/components/tabs/Tabs';
 import { PanelBody, PanelHeader, PanelTitle } from 'src/layouts/Panels/Panels.styles';
 
 import { useNotification } from 'src/hooks/useNotification';
-import { GqOperationResponse } from 'src/data/services/graphql';
+import { GqOperationResponse, UserAccountForm } from 'src/data/services/graphql';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
 import { Column } from 'src/components/layouts';
-import { UseUpdateExternalUserPanel } from './UpdateExternalUsersService.service';
+import { useExternalUsersAccessService } from 'src/pages/Admin/Users/ExternalUsers/ExternalUsersAccess.service';
 import SectionAccessManagement from './SectionAccessManagement';
 import SectionSummary from './SectionSummary';
 
-const defaultProps = {
-  isOpen: false,
-  onDismiss: () => null,
-  onUpdateUser: () => null,
-};
-
 type UpdateExternalUsersPanelProps = {
+  orgSid: string;
+  userAccountSid?: string;
   isOpen?: boolean;
-  onDismiss?: any | null;
-  onUpdateUser?: any | null;
-  useUpdateExternalUsers: UseUpdateExternalUserPanel;
-} & typeof defaultProps;
+  onDismiss?: () => void;
+  onUpdateUser?: (form?: UserAccountForm) => void;
+};
 
 const tabs = ['#account', '#access'];
 
@@ -34,11 +29,14 @@ const enum Tab {
 }
 
 const UpdateExternalUsersPanel = ({
-  isOpen,
-  onDismiss,
-  useUpdateExternalUsers,
-  onUpdateUser,
+  orgSid,
+  userAccountSid,
+  isOpen = false,
+  onDismiss = () => {},
+  onUpdateUser = () => {},
 }: UpdateExternalUsersPanelProps): ReactElement => {
+  const externalUsersAccessService = useExternalUsersAccessService(orgSid, userAccountSid);
+  
   const [step, setStep] = useState(Tab.Account);
   const [showDialog, setShowDialog] = useState(false);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
@@ -62,18 +60,18 @@ const UpdateExternalUsersPanel = ({
   const doClosePanel = () => {
     setErrorMsg(undefined);
 
+    externalUsersAccessService.resetForm();
+
     // Set it back to the first tab
     setStep(Tab.Account);
     setShowDialog(false);
     setUnsavedChanges(false);
 
-    useUpdateExternalUsers.resetForm();
-    useUpdateExternalUsers.closePanel();
     onDismiss();
   };
 
   const userName = () => {
-    const { person } = useUpdateExternalUsers.userAccountForm;
+    const { person } = externalUsersAccessService.userAccountForm;
     const firstNm = person?.firstNm?.value;
     const lastNm = person?.lastNm?.value;
     if (!firstNm && !lastNm) {
@@ -86,7 +84,7 @@ const UpdateExternalUsersPanel = ({
     <PanelHeader>
       <Column lg="12">
         <Stack horizontal styles={{ root: { height: 44 } }}>
-          <PanelTitle id="__CreateUser_Panel_Title" variant="bold" size="large">
+          <PanelTitle id="__UpdateExternalUser_Panel_Title" variant="bold" size="large">
             {userName()}
           </PanelTitle>
         </Stack>
@@ -96,7 +94,7 @@ const UpdateExternalUsersPanel = ({
 
   const handleGrantAccess = async () => {
     setProcessing(true);
-    const response = await useUpdateExternalUsers.callGrantUserAccess();
+    const response = await externalUsersAccessService.callGrantUserAccess();
     setProcessing(false);
 
     if (response?.grantExternalUserAccess) {
@@ -129,16 +127,16 @@ const UpdateExternalUsersPanel = ({
       <Panel
         closeButtonAriaLabel="Close"
         type={PanelType.medium}
-        headerText="New User"
+        headerText={userName()}
         onRenderHeader={renderPanelHeader}
-        isOpen={useUpdateExternalUsers.isPanelOpen}
+        isOpen={isOpen}
         onDismiss={onPanelClose}
         onOuterClick={() => {}}
       >
         <PanelBody>
           {errorMsg && (
             <MessageBar
-              id="__CreateUser_Error"
+              id="__UpdateExternalUser_Error"
               messageBarType={MessageBarType.error}
               isMultiline
               onDismiss={() => setErrorMsg(undefined)}
@@ -153,7 +151,7 @@ const UpdateExternalUsersPanel = ({
                   title: 'Summary',
                   content: (
                     <SectionSummary
-                      form={useUpdateExternalUsers.userAccountForm}
+                      form={externalUsersAccessService.userAccountForm}
                       onSubmit={handleGrantAccess}
                       isProcessing={isProcessing}
                     />
@@ -164,9 +162,10 @@ const UpdateExternalUsersPanel = ({
                   title: 'Access Management',
                   content: (
                     <SectionAccessManagement
-                      form={useUpdateExternalUsers.userAccountForm}
+                      form={externalUsersAccessService.userAccountForm}
                       onSubmit={handleGrantAccess}
                       saveOptions={(sids) => {
+                        externalUsersAccessService.updateAccessPolicyGroups(sids)
                         setUnsavedChanges(true);
                       }}
                     />
@@ -198,7 +197,5 @@ const UpdateExternalUsersPanel = ({
     </>
   );
 };
-
-UpdateExternalUsersPanel.defaultProps = defaultProps;
 
 export default UpdateExternalUsersPanel;

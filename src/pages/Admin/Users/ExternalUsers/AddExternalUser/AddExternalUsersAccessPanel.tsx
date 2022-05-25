@@ -6,28 +6,22 @@ import { Tabs } from 'src/components/tabs/Tabs';
 import { PanelBody, PanelHeader, PanelTitle } from 'src/layouts/Panels/Panels.styles';
 
 import { useNotification } from 'src/hooks/useNotification';
-import { GqOperationResponse } from 'src/data/services/graphql';
+import { GqOperationResponse, UserAccountForm } from 'src/data/services/graphql';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
 import { Column } from 'src/components/layouts';
-import { useAddExternalUsersAccessService } from './AddExternalUsersAccess.service';
+import { useExternalUsersAccessService } from 'src/pages/Admin/Users/ExternalUsers/ExternalUsersAccess.service';
 import { SectionAccount } from './SectionAccount';
 import SectionAccessManagement from './SectionAccessManagement';
 import SectionSummary from './SectionSummary';
 import { useApolloClient } from '@apollo/client';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 
-const defaultProps = {
-  isOpen: false,
-  onDismiss: () => null,
-  onGrantAccessToExternalUser: () => null,
-};
-
 type AddExternalUsersAccessPanelProps = {
   orgSid: string;
   isOpen?: boolean;
-  onDismiss?: any | null;
-  onGrantAccessToExternalUser?: any | null;
-} & typeof defaultProps;
+  onDismiss?: () => void;
+  onGrantAccessToExternalUser?: (form?: UserAccountForm) => void;
+};
 
 const tabs = ['#account', '#access', '#summary'];
 const enum Tab {
@@ -38,11 +32,11 @@ const enum Tab {
 
 const AddExternalUsersAccessPanel = ({
   orgSid,
-  isOpen,
-  onDismiss,
-  onGrantAccessToExternalUser,
+  isOpen = false,
+  onDismiss = () => {},
+  onGrantAccessToExternalUser = () => {},
 }: AddExternalUsersAccessPanelProps): ReactElement => {
-  const addExternalUsersAccessService = useAddExternalUsersAccessService(orgSid);
+  const externalUsersAccessService = useExternalUsersAccessService(orgSid);
 
   const [step, setStep] = useState(Tab.Account);
   const [showDialog, setShowDialog] = useState(false);
@@ -80,7 +74,7 @@ const AddExternalUsersAccessPanel = ({
   const doClosePanel = () => {
     setErrorMsg(undefined);
     // Reset the form
-    addExternalUsersAccessService.resetForm();
+    externalUsersAccessService.resetForm();
     // Set it back to the first tab
     setStep(Tab.Account);
     setShowDialog(false);
@@ -93,12 +87,12 @@ const AddExternalUsersAccessPanel = ({
   };
 
   const findExternalUsers = async (text: string): Promise<ITag[]> => {
-    return addExternalUsersAccessService.callFindExternalUsers(client, handleError, text);
+    return externalUsersAccessService.callFindExternalUsers(client, handleError, text);
   };
 
   const handleGrantAccess = async () => {
     setProcessing(true);
-    const response = await addExternalUsersAccessService.callGrantUserAccess();
+    const response = await externalUsersAccessService.callGrantUserAccess();
     setProcessing(false);
 
     if (response?.grantExternalUserAccess) {
@@ -128,7 +122,7 @@ const AddExternalUsersAccessPanel = ({
 
   const handleCreateExternalUser = async () => {
     setProcessing(true);
-    const response = await addExternalUsersAccessService.callCreateExternalUser();
+    const response = await externalUsersAccessService.callCreateExternalUser();
     setProcessing(false);
 
     if (response?.createExternalUser) {
@@ -182,7 +176,7 @@ const AddExternalUsersAccessPanel = ({
         <PanelBody>
           {errorMsg && (
             <MessageBar
-              id="__CreateUser_Error"
+              id="__CreateExternalUser_Error"
               messageBarType={MessageBarType.error}
               isMultiline
               onDismiss={() => setErrorMsg(undefined)}
@@ -198,16 +192,16 @@ const AddExternalUsersAccessPanel = ({
                   content: (
                     <SectionAccount
                       searchExternalUsers={handleFindExternalUsers}
-                      form={addExternalUsersAccessService.userAccountForm}
+                      form={externalUsersAccessService.userAccountForm}
                       onNext={handleNext}
                       createExternalUser={createExternalUser}
                       setCreateExternalUser={setCreateExternalUser}
                       saveOptions={(user) => {
-                        addExternalUsersAccessService.updateAccountInfo(user);
+                        externalUsersAccessService.updateAccountInfo(user);
                         setUnsavedChanges(true);
                       }}
                       saveActivationEmailOptions={(send) => {
-                        addExternalUsersAccessService.setSendAccountActivation(send);
+                        externalUsersAccessService.setSendAccountActivation(send);
                         setUnsavedChanges(true);
                       }}
                     />
@@ -218,11 +212,11 @@ const AddExternalUsersAccessPanel = ({
                   title: 'Access Management',
                   content: (
                     <SectionAccessManagement
-                      form={addExternalUsersAccessService.userAccountForm}
+                      form={externalUsersAccessService.userAccountForm}
                       onPrev={handlePrev}
                       onNext={handleNext}
                       saveOptions={(sids) => {
-                        addExternalUsersAccessService.updateAccessPolicyGroups(sids);
+                        externalUsersAccessService.updateAccessPolicyGroups(sids);
                         setUnsavedChanges(true);
                       }}
                     />
@@ -233,7 +227,7 @@ const AddExternalUsersAccessPanel = ({
                   title: 'Summary',
                   content: (
                     <SectionSummary
-                      form={addExternalUsersAccessService.userAccountForm}
+                      form={externalUsersAccessService.userAccountForm}
                       onPrev={handlePrev}
                       onSubmit={createExternalUser ? handleCreateExternalUser : handleGrantAccess}
                       isProcessing={isProcessing}
@@ -266,7 +260,5 @@ const AddExternalUsersAccessPanel = ({
     </>
   );
 };
-
-AddExternalUsersAccessPanel.defaultProps = defaultProps;
 
 export default AddExternalUsersAccessPanel;
