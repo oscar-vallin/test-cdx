@@ -78,6 +78,6 @@ export const StyledSelectedFile = styled.div`
 export const StyledError = styled.span`
   color: rgb(164, 38, 44);
   font-size: 12px;
-  font-family: Segoe UI, Segoe UI Web (West European), Segoe UI, -apple-system, BlinkMacSystemFont, Roboto, Helvetica Neue, sans-serif;
-`
-;
+  font-family: Segoe UI, Segoe UI Web (West European), Segoe UI, -apple-system, BlinkMacSystemFont, Roboto,
+    Helvetica Neue, sans-serif;
+`;

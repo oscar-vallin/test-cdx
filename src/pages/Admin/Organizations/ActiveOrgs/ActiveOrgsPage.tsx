@@ -1,4 +1,4 @@
- /*eslint-disable react-hooks/exhaustive-deps */
+/*eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 
 import { Link } from 'react-router-dom';
@@ -48,8 +48,10 @@ const ActiveOrgsPage = () => {
   const [selectedOrgSid, setSelectedOrgSid] = useState<string>();
   const [searchText, setSearchText] = useState<string>('');
   const [searchAllOrgsFilter, setSearchAllOrgsFilter] = useState<boolean>(true);
-  
-  const [directSearchQuery, { data: dataSearch, loading: loadingSearch }] = useQueryHandler(useSearchOrganizationsLazyQuery);
+
+  const [directSearchQuery, { data: dataSearch, loading: loadingSearch }] = useQueryHandler(
+    useSearchOrganizationsLazyQuery
+  );
   const [pagingInfo, setPagingInfo] = useState<PaginationInfo>({
     pageNumber: 0,
     pageSize: 100,
@@ -74,12 +76,11 @@ const ActiveOrgsPage = () => {
         },
       },
     });
-    
   };
 
   useEffect(() => {
     fetchData();
-    if(searchText !== ''){
+    if (searchText !== '') {
       setSearchAllOrgsFilter(true);
     }
   }, [orgOwnerSid, searchText]);
@@ -178,7 +179,7 @@ const ActiveOrgsPage = () => {
   useEffect(() => {
     if (!loadingSearch && dataSearch) {
       setOrgs(dataSearch.searchOrganizations.nodes);
-      
+
       // update the paging info
       const newPagingInfo = dataSearch?.searchOrganizations?.paginationInfo;
       if (newPagingInfo) {
@@ -219,7 +220,7 @@ const ActiveOrgsPage = () => {
       );
     }
 
-    if(!searchAllOrgsFilter){
+    if (!searchAllOrgsFilter) {
       return;
     }
     if (!orgs.length) {
@@ -259,26 +260,19 @@ const ActiveOrgsPage = () => {
         </PageHeader>
       )}
 
-  <Container>
-      <Row>
-        <Stack
-          horizontal={true}
-          wrap={true}
-          style={{ width: '100%' }}
-          verticalAlign="end"
-        
-        >
-          <Column lg="6" >
-            <InputText
-              id={`Active_Orgs_Input-Search`}
-              autofocus
-              disabled={false}
-              value={searchText}
-              onChange={(event, newValue) => setSearchText(newValue ?? '')}
-              placeholder="Search"
-            />
-
-          </Column>
+      <Container>
+        <Row>
+          <Stack horizontal={true} wrap={true} style={{ width: '100%' }} verticalAlign="end">
+            <Column lg="6">
+              <InputText
+                id={`Active_Orgs_Input-Search`}
+                autofocus
+                disabled={false}
+                value={searchText}
+                onChange={(event, newValue) => setSearchText(newValue ?? '')}
+                placeholder="Search"
+              />
+            </Column>
             <Checkbox
               id={`__SearchAllOrgs__Orgs-Checkbox`}
               label="Search all organizations"
@@ -287,10 +281,9 @@ const ActiveOrgsPage = () => {
               }}
               checked={searchAllOrgsFilter}
             />
-        </Stack>
-        
-      </Row>
-    </Container>
+          </Stack>
+        </Row>
+      </Container>
       <Container>
         <Row>
           <StyledColumn>{renderBody()}</StyledColumn>

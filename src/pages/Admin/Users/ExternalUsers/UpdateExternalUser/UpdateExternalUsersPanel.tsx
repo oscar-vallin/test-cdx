@@ -36,7 +36,7 @@ const UpdateExternalUsersPanel = ({
   onUpdateUser = () => {},
 }: UpdateExternalUsersPanelProps): ReactElement => {
   const externalUsersAccessService = useExternalUsersAccessService(orgSid, userAccountSid);
-  
+
   const [step, setStep] = useState(Tab.Account);
   const [showDialog, setShowDialog] = useState(false);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
@@ -165,7 +165,7 @@ const UpdateExternalUsersPanel = ({
                       form={externalUsersAccessService.userAccountForm}
                       onSubmit={handleGrantAccess}
                       saveOptions={(sids) => {
-                        externalUsersAccessService.updateAccessPolicyGroups(sids)
+                        externalUsersAccessService.updateAccessPolicyGroups(sids);
                         setUnsavedChanges(true);
                       }}
                     />

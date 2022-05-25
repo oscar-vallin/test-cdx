@@ -28,20 +28,17 @@ export const LayoutDashboard = ({
   const [menuOpen, setMenuOpen] = useState<boolean>(ActiveDomainStore.nav.admin.length > 0);
 
   const notShowLeftMenu = ActiveDomainStore.domainOrg.origin.destination !== ROUTE_EXTERNAL_ORGS.API_ID;
-  
+
   useEffect(() => {
     setMenuOpen(ActiveDomainStore.nav.admin.length > 0);
   }, []);
 
   const showLeftMenu = () => {
-
-    if(notShowLeftMenu){
-      return (
-        <LeftNav menuOptionSelected={menuOptionSelected} isOpen={menuOpen} />
-      )
+    if (notShowLeftMenu) {
+      return <LeftNav menuOptionSelected={menuOptionSelected} isOpen={menuOpen} />;
     }
     return;
-  }
+  };
 
   return (
     <BoxStyled id={`${id}__Box`} direction={StyleConstants.DIRECTION_COLUMN} top>

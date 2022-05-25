@@ -62,7 +62,6 @@ const _FtpTestPage = () => {
   const [sshKeyPath, setSshKeyPath] = useState<string>('');
   const [errorValidatePasswordSSHKey, setErrorValidatePasswordSSHKey] = useState<boolean>(false);
 
-
   const inputFileRef = React.useRef() as React.MutableRefObject<HTMLInputElement>;
   const Toast = useNotification();
 
@@ -110,7 +109,7 @@ const _FtpTestPage = () => {
     });
 
     if (data?.ftpTestM?.status === 'ERROR') {
-      console.log("error 1")
+      console.log('error 1');
       Toast.error({ text: data?.ftpTestM?.logMessage.body });
       if (data?.ftpTestM?.xpSFTPForm?.errSeverity === ErrorSeverity.Error) {
         const errorMsg =
@@ -136,13 +135,13 @@ const _FtpTestPage = () => {
   };
 
   const validatePasswordAndSSHKey = () => {
-    if((password.trim() === '' && sshKeyPath.trim() === '') && showSSHKeys){
+    if (password.trim() === '' && sshKeyPath.trim() === '' && showSSHKeys) {
       setErrorValidatePasswordSSHKey(true);
       return;
     }
 
     setErrorValidatePasswordSSHKey(false);
-  }
+  };
 
   const handleOnTestBtn = () => {
     validatePasswordAndSSHKey();
@@ -162,8 +161,6 @@ const _FtpTestPage = () => {
       setVendorFileName(file.name);
     }
   };
-
-  
 
   const renderForm = () => {
     return (
@@ -238,16 +235,14 @@ const _FtpTestPage = () => {
             {!showSSHKeys && (
               <Spacing>
                 <Column>
-                  <Link
-                    onClick={() => setShowSShKeys(true)}
-                  >use key-based authentication</Link>
+                  <Link onClick={() => setShowSShKeys(true)}>use key-based authentication</Link>
                 </Column>
               </Spacing>
             )}
             {ftpTestForm?.sshKeyPath?.visible && showSSHKeys && (
               <Spacing>
-                <UIInputSelectOne 
-                  id='sshKey'
+                <UIInputSelectOne
+                  id="sshKey"
                   uiField={ftpTestForm.sshKeyPath}
                   options={ftpTestForm.options}
                   value={sshKeyPath}

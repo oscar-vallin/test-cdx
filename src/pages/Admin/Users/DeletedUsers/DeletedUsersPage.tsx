@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Dialog, DialogType, DialogFooter, SpinnerSize, PrimaryButton, DefaultButton, Spinner } from '@fluentui/react';
+import { Dialog, DialogType, DialogFooter, PrimaryButton, DefaultButton } from '@fluentui/react';
 import { EmptyState } from 'src/containers/states';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Row, Column, Container } from 'src/components/layouts';
 import { PageTitle } from 'src/components/typography';
-import { 
-  ActiveEnum, 
-  useActivateUsersMutation, 
-  UserItem, 
-  SortDirection 
-} from 'src/data/services/graphql';
+import { ActiveEnum, useActivateUsersMutation, UserItem, SortDirection } from 'src/data/services/graphql';
 
 import { UpdateUserPanel, useUpdateUserPanel } from 'src/pages/Admin/Users/UpdateUsers';
 import { UsersTable } from 'src/pages/Admin/Users/UsersTable';
@@ -46,10 +41,7 @@ const DeletedUsersPage = () => {
   }, [tableFilters.searchText.delayedValue]);
 
   useEffect(() => {
-    userService.fetchUsers(
-      0,
-      tableFilters.pagingParams.sort,
-    );
+    userService.fetchUsers(0, tableFilters.pagingParams.sort);
   }, [tableFilters.pagingParams]);
 
   const hideConfirmation = () => {
@@ -69,13 +61,7 @@ const DeletedUsersPage = () => {
         <EmptyState title="No inactive users" description="There aren't any inactive users in this organization" />
       );
     }
-    return (
-      <UsersTable
-            tableFilters={tableFilters}
-            users={userService.users}
-            onClickUser={updateUserPanel.showPanel}
-        />
-    );
+    return <UsersTable tableFilters={tableFilters} users={userService.users} onClickUser={updateUserPanel.showPanel} />;
   };
 
   return (

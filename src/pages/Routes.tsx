@@ -31,7 +31,7 @@ import UnauthRoute from './UnauthRoute';
 import { ImplementationDeployPage } from './Admin/ImplDeploy';
 import { PasswordRulesPage } from './Admin/PasswordRules';
 import { OrganizationSecuritySettingsPage } from './Admin/OrganizationSecuritySettings';
-import { ExternalUsersPage } from './Admin/Users/ExternalUsers/ExternalUsersPage';
+import { ExternalUsersPage } from 'src/pages/Admin/Users/ExternalUsers';
 
 export const Routes = () => {
   return (

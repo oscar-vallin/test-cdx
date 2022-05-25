@@ -5,7 +5,9 @@ import {
   UserAccountForm,
   useUserAccountFormLazyQuery,
   useGrantExternalUserAccessMutation,
-  useCreateExternalUserMutation, Maybe, useExternalUserForOrgLazyQuery,
+  useCreateExternalUserMutation,
+  Maybe,
+  useExternalUserForOrgLazyQuery,
 } from 'src/data/services/graphql';
 import { defaultForm, updateForm } from './ExternalUsersFormUtil';
 import { ApolloClient, gql } from '@apollo/client';
@@ -13,29 +15,25 @@ import { ITag } from '@fluentui/react';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 
 export const useExternalUsersAccessService = (orgSid: string, userAccountSid?: string) => {
+  const [callGrantExternalUserAccess, { error: grantExternalUserAccessError }] = useGrantExternalUserAccessMutation();
 
-  const [callGrantExternalUserAccess, {error: grantExternalUserAccessError}] = useGrantExternalUserAccessMutation();
-
-  const [callCreateExternalUser, {error: createExternalUserError}] = useCreateExternalUserMutation();
+  const [callCreateExternalUser, { error: createExternalUserError }] = useCreateExternalUserMutation();
 
   const [userAccountForm, setUserAccountForm] = useState<UserAccountForm>(defaultForm);
 
-  const [callUserAccountForm, {
-    data: dataUserAccountForm,
-    loading: userAccountFormLoading,
-    error: userAccountFormError
-  }] =
-    useUserAccountFormLazyQuery({
-      variables: {
-        orgSid,
-      },
-    });
+  const [
+    callUserAccountForm,
+    { data: dataUserAccountForm, loading: userAccountFormLoading, error: userAccountFormError },
+  ] = useUserAccountFormLazyQuery({
+    variables: {
+      orgSid,
+    },
+  });
 
-  const [callExternalUserForOrg, {
-    data: dataExternalUserForOrg,
-    loading: externalUsersForOrgLoading,
-    error: externalUserForOrgError
-  }] = useExternalUserForOrgLazyQuery();
+  const [
+    callExternalUserForOrg,
+    { data: dataExternalUserForOrg, loading: externalUsersForOrgLoading, error: externalUserForOrgError },
+  ] = useExternalUserForOrgLazyQuery();
 
   const handleError = ErrorHandler();
   useEffect(() => {
@@ -57,8 +55,8 @@ export const useExternalUsersAccessService = (orgSid: string, userAccountSid?: s
         callExternalUserForOrg({
           variables: {
             orgSid,
-            userSid: userAccountSid
-          }
+            userSid: userAccountSid,
+          },
         });
       } else {
         callUserAccountForm({
@@ -78,7 +76,7 @@ export const useExternalUsersAccessService = (orgSid: string, userAccountSid?: s
 
   useEffect(() => {
     if (!externalUsersForOrgLoading && dataExternalUserForOrg) {
-      setUserAccountForm(dataExternalUserForOrg.externalUserForOrg ?? defaultForm)
+      setUserAccountForm(dataExternalUserForOrg.externalUserForOrg ?? defaultForm);
     }
   }, [externalUsersForOrgLoading, dataExternalUserForOrg]);
 
@@ -114,7 +112,7 @@ export const useExternalUsersAccessService = (orgSid: string, userAccountSid?: s
       userAccountForm.accessPolicyGroups?.value
         ?.filter((opt) => opt != null && opt?.value != null)
         ?.map((opt) => opt?.value ?? '') ?? [];
-    const {data, errors} = await callGrantExternalUserAccess({
+    const { data, errors } = await callGrantExternalUserAccess({
       variables: {
         userInfo: {
           userAccountSid: userAccountForm.sid ?? '',
@@ -152,7 +150,7 @@ export const useExternalUsersAccessService = (orgSid: string, userAccountSid?: s
         ?.filter((opt) => opt != null && opt?.value != null)
         ?.map((opt) => opt?.value ?? '') ?? [];
 
-    const {data, errors} = await callCreateExternalUser({
+    const { data, errors } = await callCreateExternalUser({
       variables: {
         userInfo: {
           email: userAccountForm.email?.value ?? '',
@@ -209,32 +207,31 @@ export const useExternalUsersAccessService = (orgSid: string, userAccountSid?: s
   ): Promise<ITag[]> {
     let users: ITag[] = [];
     await client
-    .query({
-      errorPolicy: 'all',
-      variables: {
-        searchText,
-      },
-      query: gql`
-        query FindExternalUsers($searchText: String!) {
-          findExternalUsers(searchText: $searchText) {
-            sid
-            email
-            person {
-              firstNm
-              lastNm
+      .query({
+        errorPolicy: 'all',
+        variables: {
+          searchText,
+        },
+        query: gql`
+          query FindExternalUsers($searchText: String!) {
+            findExternalUsers(searchText: $searchText) {
+              sid
+              email
+              person {
+                firstNm
+                lastNm
+              }
             }
           }
-        }
-      `,
-    })
-    .then((result) => {
-      handleError(result.error);
-      users = parseToPickerOpts(result.data.findExternalUsers);
-    });
+        `,
+      })
+      .then((result) => {
+        handleError(result.error);
+        users = parseToPickerOpts(result.data.findExternalUsers);
+      });
 
     return users;
   }
-
 
   // * Return the state of the form.
   return {

@@ -19,8 +19,8 @@ import UpdateExternalUsersPanel from './UpdateExternalUser/UpdateExternalUsersPa
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 
 const ExternalUsersPage = () => {
-  const {orgSid} = useOrgSid();
-  const [apiCall, {data, loading, error}] = useQueryHandler(useExternalUsersForOrgLazyQuery);
+  const { orgSid } = useOrgSid();
+  const [apiCall, { data, loading, error }] = useQueryHandler(useExternalUsersForOrgLazyQuery);
   const [users, setUsers] = useState<UserItem[]>([]);
 
   const [isAddExternalUserAccessPanelOpen, setIsAddExternalUserAccessPanelOpen] = useState(false);
@@ -38,9 +38,11 @@ const ExternalUsersPage = () => {
   useEffect(() => {
     if (!loading && data) {
       setUsers(data.externalUsersForOrg?.nodes);
-      setAssignCmd(data.externalUsersForOrg?.listPageInfo?.pageCommands?.find(
-        (cmd) => cmd.commandType === CdxWebCommandType.Assign
-      ));
+      setAssignCmd(
+        data.externalUsersForOrg?.listPageInfo?.pageCommands?.find(
+          (cmd) => cmd.commandType === CdxWebCommandType.Assign
+        )
+      );
     }
   }, [data, loading]);
 
@@ -75,7 +77,7 @@ const ExternalUsersPage = () => {
   const renderBody = () => {
     if (!users.length) {
       return (
-        <EmptyState title="No external users" description="There aren't any external users in this organization"/>
+        <EmptyState title="No external users" description="There aren't any external users in this organization" />
       );
     }
     return (
@@ -97,7 +99,7 @@ const ExternalUsersPage = () => {
       return (
         <PrimaryButton
           id="__Assign-ExternalUser"
-          iconProps={{iconName: 'AddFriend'}}
+          iconProps={{ iconName: 'AddFriend' }}
           ariaLabel={assignCmd.label ?? undefined}
           onClick={() => {
             setIsAddExternalUserAccessPanelOpen(true);
@@ -116,7 +118,7 @@ const ExternalUsersPage = () => {
         <Container>
           <Row>
             <Column lg="6" direction="row">
-              <PageTitle id="__Page_Title" title="External Users"/>
+              <PageTitle id="__Page_Title" title="External Users" />
             </Column>
             <Column lg="6" right>
               <span>{renderAssignExternalUserButton()}</span>
@@ -126,7 +128,7 @@ const ExternalUsersPage = () => {
       </PageHeader>
       <Container>
         {tableFilters?.searchText && (
-          <Spacing margin={{bottom: 'normal'}}>
+          <Spacing margin={{ bottom: 'normal' }}>
             <Column lg="6">
               <InputText
                 id={`Active_Users_Input-Search`}

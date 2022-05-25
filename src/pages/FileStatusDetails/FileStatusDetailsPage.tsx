@@ -82,7 +82,6 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
     },
   });
 
-
   const pollWPStatus = useWorkPacketStatusPollQuery({
     variables: {
       orgSid: fsOrgSid,
@@ -91,7 +90,6 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
     },
     pollInterval: POLL_INTERVAL,
   });
-
 
   const workPacketCommands = useWorkPacketCommands(realId);
   const handleError = ErrorHandler();
@@ -111,7 +109,6 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
   }, [pollWPStatus.error]);
 
   useEffect(() => {
-
     if (data?.workPacketStatusDetails && !loading) {
       setPacket(data?.workPacketStatusDetails);
       setLastUpdatedPoll(new Date());
@@ -231,7 +228,9 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
         icon: 'Send',
         confirmationMsg: 'Are you sure you want to Resend this Work Packet?',
         command: resendCmd,
-        onClick: () => { workPacketCommands.apiCallResend().then() },
+        onClick: () => {
+          workPacketCommands.apiCallResend().then();
+        },
         onRender: renderWorkPacketCommandButton,
       },
       {
@@ -240,8 +239,10 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
         icon: 'PlayResume',
         confirmationMsg: 'Are you sure you want to Continue this Work Packet?',
         command: continueCmd,
-        onClick: () => { workPacketCommands.apiCallContinue().then() },
-        callback: ()  => validateStatus(),
+        onClick: () => {
+          workPacketCommands.apiCallContinue().then();
+        },
+        callback: () => validateStatus(),
         onRender: renderWorkPacketCommandButton,
       },
       {
@@ -252,7 +253,7 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
         command: reprocessCmd,
         workPacketCommands: workPacketCommands,
         realId: realId,
-        callback: ()  => validateStatus(),
+        callback: () => validateStatus(),
         onRender: renderWorkPacketCommandButton,
       },
       {
@@ -263,8 +264,10 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
         workPacketCommands: workPacketCommands,
         realId: realId,
         command: reprocessRenameCmd,
-        onClick: () => { workPacketCommands.apiCallRenameReprocess().then() },
-        callback: ()  => validateStatus(),
+        onClick: () => {
+          workPacketCommands.apiCallRenameReprocess().then();
+        },
+        callback: () => validateStatus(),
         onRender: renderWorkPacketCommandButton,
       },
       {
@@ -273,8 +276,10 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
         icon: 'Cancel',
         confirmationMsg: "Are you sure you want to Cancel this Work Packet's processing?",
         command: cancelCmd,
-        onClick: () => { workPacketCommands.apiCallCancel().then() },
-        callback: ()  => validateStatus(),
+        onClick: () => {
+          workPacketCommands.apiCallCancel().then();
+        },
+        callback: () => validateStatus(),
         onRender: renderWorkPacketCommandButton,
       },
       {
@@ -283,7 +288,9 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
         icon: 'Delete',
         confirmationMsg: 'Are you sure you want to Delete this Work Packet?',
         command: deleteCmd,
-        onClick: () => { workPacketCommands.apiCallDelete().then() },
+        onClick: () => {
+          workPacketCommands.apiCallDelete().then();
+        },
         callback: () => {
           useFileStatusDetailsPanel?.closePanel();
           tableFilters?.setPagingParams({
@@ -296,7 +303,7 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
       },
     ];
     setCommandBarItems(commandBarItems);
-  }, [packet])
+  }, [packet]);
 
   const renderDeliveredFileInfo = (fileInfo?: DeliveredFile | null) => {
     if (fileInfo) {

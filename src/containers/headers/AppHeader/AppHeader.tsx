@@ -20,7 +20,7 @@ import {
   StyledHeader,
   StyledMenuItem,
   StyledOverFlow,
-  StyledOverFlowExt
+  StyledOverFlowExt,
 } from './AppHeader.styles';
 
 const defaultProps = {
@@ -102,8 +102,7 @@ const AppHeader = ({ onMenuButtonClick }: AppHeaderProps): ReactElement => {
   };
 
   const renderTopNavButtons = () => {
-
-    if(ActiveDomainStore.domainOrg.origin.destination !== ROUTE_EXTERNAL_ORGS.API_ID){
+    if (ActiveDomainStore.domainOrg.origin.destination !== ROUTE_EXTERNAL_ORGS.API_ID) {
       return ActiveDomainStore.nav.dashboard.map((menuOption: { label: string; destination: string }) => {
         const opt:
           | {
@@ -114,7 +113,7 @@ const AppHeader = ({ onMenuButtonClick }: AppHeaderProps): ReactElement => {
               API_ID?: string;
             }
           | any = getRouteByApiId(menuOption.label !== 'Admin' ? menuOption.destination : 'ADMIN');
-  
+
         return opt.MAIN_MENU ? (
           <StyledNavButton
             id={`__${menuOption.destination}_Tab`}
@@ -130,7 +129,7 @@ const AppHeader = ({ onMenuButtonClick }: AppHeaderProps): ReactElement => {
                 dest += `&endDate=${endDate}`;
               }
               history.push(dest);
-  
+
               return null;
             }}
           >
@@ -154,7 +153,7 @@ const AppHeader = ({ onMenuButtonClick }: AppHeaderProps): ReactElement => {
   };
 
   const showStyledNavIcon = () => {
-    if(ActiveDomainStore.domainOrg.origin.destination !== ROUTE_EXTERNAL_ORGS.API_ID){
+    if (ActiveDomainStore.domainOrg.origin.destination !== ROUTE_EXTERNAL_ORGS.API_ID) {
       return (
         <StyledOverFlow>
           <NavButton id="__AdminNavBtn" onClick={onMenuButtonClick} data-e2e="AdminNavBtn">
@@ -162,24 +161,23 @@ const AppHeader = ({ onMenuButtonClick }: AppHeaderProps): ReactElement => {
             {renderOrgName()}
           </NavButton>
         </StyledOverFlow>
-      )
+      );
     }
     return (
       <StyledOverFlowExt>
-        <NavButton  id="__AdminNavBtn" data-e2e="AdminNavBtn" >
+        <NavButton id="__AdminNavBtn" data-e2e="AdminNavBtn">
           {renderOrgName()}
         </NavButton>
       </StyledOverFlowExt>
-    )
-  }
+    );
+  };
 
   return (
     <StyledHeader data-e2e="AppHeader">
-      
-        {showStyledNavIcon()}
-     
+      {showStyledNavIcon()}
+
       <StyledNavButton
-        id='__ProfileMenu_Home_button'
+        id="__ProfileMenu_Home_button"
         onClick={() => {
           ActiveDomainStore.setCurrentOrg(ActiveDomainStore.domainOrg.origin);
         }}
