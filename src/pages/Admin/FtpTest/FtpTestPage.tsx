@@ -109,7 +109,6 @@ const _FtpTestPage = () => {
     });
 
     if (data?.ftpTestM?.status === 'ERROR') {
-      console.log('error 1');
       Toast.error({ text: data?.ftpTestM?.logMessage.body });
       if (data?.ftpTestM?.xpSFTPForm?.errSeverity === ErrorSeverity.Error) {
         const errorMsg =

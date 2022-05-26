@@ -20,7 +20,6 @@ import {
   StyledHeader,
   StyledMenuItem,
   StyledOverFlow,
-  StyledOverFlowExt,
 } from './AppHeader.styles';
 
 const defaultProps = {
@@ -41,6 +40,8 @@ const AppHeader = ({ onMenuButtonClick }: AppHeaderProps): ReactElement => {
   const ActiveDomainStore = useActiveDomainStore();
 
   const { setOwnDashFontSize } = useCurrentUserTheme();
+
+  let originDestination = ActiveDomainStore.domainOrg.origin.destination !== ROUTE_EXTERNAL_ORGS.API_ID;
 
   type mapProps = {
     type?: string;
@@ -102,7 +103,8 @@ const AppHeader = ({ onMenuButtonClick }: AppHeaderProps): ReactElement => {
   };
 
   const renderTopNavButtons = () => {
-    if (ActiveDomainStore.domainOrg.origin.destination !== ROUTE_EXTERNAL_ORGS.API_ID) {
+
+    if(originDestination){
       return ActiveDomainStore.nav.dashboard.map((menuOption: { label: string; destination: string }) => {
         const opt:
           | {
@@ -146,31 +148,27 @@ const AppHeader = ({ onMenuButtonClick }: AppHeaderProps): ReactElement => {
       <div className="HeaderBtnText">
         <div>
           <h2 className="HeaderBtnText__title">{ActiveDomainStore.domainOrg.current.orgId}</h2>
-          <small className="HeaderBtnText__description">{ActiveDomainStore.domainOrg.current.label}</small>
+          <StyledOverFlow><small className="HeaderBtnText__description">{ActiveDomainStore.domainOrg.current.label}</small></StyledOverFlow>
         </div>
       </div>
     );
   };
 
   const showStyledNavIcon = () => {
-    if (ActiveDomainStore.domainOrg.origin.destination !== ROUTE_EXTERNAL_ORGS.API_ID) {
+    if(originDestination){
       return (
-        <StyledOverFlow>
           <NavButton id="__AdminNavBtn" onClick={onMenuButtonClick} data-e2e="AdminNavBtn">
             <StyledNavIcon iconName="GlobalNavButton" />
             {renderOrgName()}
           </NavButton>
-        </StyledOverFlow>
-      );
+      )
     }
     return (
-      <StyledOverFlowExt>
-        <NavButton id="__AdminNavBtn" data-e2e="AdminNavBtn">
+        <NavButton  id="__AdminNavBtn" data-e2e="AdminNavBtn" >
           {renderOrgName()}
         </NavButton>
-      </StyledOverFlowExt>
-    );
-  };
+    )
+  }
 
   return (
     <StyledHeader data-e2e="AppHeader">

@@ -146,7 +146,13 @@ const FormLogin = ({ id }: FormLoginProps): ReactElement => {
                       </StyledRow>
                     )}
 
-                    {forgotPassword && <ForgotPasswordModal isOpen={setForgotPassword} open={forgotPassword} />}
+                    {forgotPassword && (
+                      <ForgotPasswordModal 
+                        isOpen={setForgotPassword} 
+                        open={forgotPassword} 
+                        currentUserId={values.userId}
+                      />
+                    )}
                   </Column>
                 </StyledRow>
               </>
