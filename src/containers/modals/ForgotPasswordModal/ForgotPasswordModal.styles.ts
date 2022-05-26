@@ -5,3 +5,9 @@ export const StyledDiv = styled.div`
   display: flex;
   justify-content: flex-end;
 `;
+
+export const StyledError = styled.span`
+  color: rgb(164, 38, 44);
+  font-size: 12px;
+`
+;
