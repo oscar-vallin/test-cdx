@@ -47,7 +47,7 @@ const ActiveOrgsPage = () => {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [selectedOrgSid, setSelectedOrgSid] = useState<string>();
   const [searchText, setSearchText] = useState<string>('');
-  const [searchAllOrgsFilter, setSearchAllOrgsFilter] = useState<boolean>(true);
+  const [searchAllOrgsFilter, setSearchAllOrgsFilter] = useState<boolean>(false);
 
   const [directSearchQuery, { data: dataSearch, loading: loadingSearch }] = useQueryHandler(
     useSearchOrganizationsLazyQuery
@@ -243,6 +243,21 @@ const ActiveOrgsPage = () => {
     );
   };
 
+  const showCheckbox = () => {
+    if(ActiveDomainStore.domainOrg.origin.orgSid === orgOwnerSid){
+      return (
+        <Checkbox
+            id="__SearchAllOrgs__Orgs-Checkbox"
+            label="Search all organizations"
+            onChange={(_event, _searchAllOrgsFilter: any) => {
+              setSearchAllOrgsFilter(_searchAllOrgsFilter);
+            }}
+            checked={searchAllOrgsFilter}
+          />
+      );
+    };
+  };
+
   return (
     <LayoutDashboard id="PageActiveOrgs" menuOptionSelected={ROUTE_ACTIVE_ORGS.API_ID}>
       {orgs.length > 0 && (
@@ -265,7 +280,7 @@ const ActiveOrgsPage = () => {
           <Stack horizontal={true} wrap={true} style={{ width: '100%' }} verticalAlign="end">
             <Column lg="6">
               <InputText
-                id={`Active_Orgs_Input-Search`}
+                id="Active_Orgs_Input-Search"
                 autofocus
                 disabled={false}
                 value={searchText}
@@ -273,14 +288,7 @@ const ActiveOrgsPage = () => {
                 placeholder="Search"
               />
             </Column>
-            <Checkbox
-              id={`__SearchAllOrgs__Orgs-Checkbox`}
-              label="Search all organizations"
-              onChange={(_event, _searchAllOrgsFilter: any) => {
-                setSearchAllOrgsFilter(_searchAllOrgsFilter);
-              }}
-              checked={searchAllOrgsFilter}
-            />
+            {showCheckbox()}
           </Stack>
         </Row>
       </Container>
