@@ -8,11 +8,14 @@ import {
   useCreateExternalUserMutation,
   Maybe,
   useExternalUserForOrgLazyQuery,
+  WebCommand,
+  CdxWebCommandType,
+  useRevokeExternalUserAccessMutation,
 } from 'src/data/services/graphql';
-import { defaultForm, updateForm } from './ExternalUsersFormUtil';
 import { ApolloClient, gql } from '@apollo/client';
 import { ITag } from '@fluentui/react';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
+import { defaultForm, updateForm } from './ExternalUsersFormUtil';
 
 export const useExternalUsersAccessService = (orgSid: string, userAccountSid?: string) => {
   const [callGrantExternalUserAccess, { error: grantExternalUserAccessError }] = useGrantExternalUserAccessMutation();
@@ -20,6 +23,7 @@ export const useExternalUsersAccessService = (orgSid: string, userAccountSid?: s
   const [callCreateExternalUser, { error: createExternalUserError }] = useCreateExternalUserMutation();
 
   const [userAccountForm, setUserAccountForm] = useState<UserAccountForm>(defaultForm);
+  const [revokeAccessCmd, setRevokeAccessCmd] = useState<WebCommand>();
 
   const [
     callUserAccountForm,
@@ -35,19 +39,24 @@ export const useExternalUsersAccessService = (orgSid: string, userAccountSid?: s
     { data: dataExternalUserForOrg, loading: externalUsersForOrgLoading, error: externalUserForOrgError },
   ] = useExternalUserForOrgLazyQuery();
 
+  const [callRevokeExternalUserAccess, { error: revokeExternalUserAccess }] = useRevokeExternalUserAccessMutation();
+
   const handleError = ErrorHandler();
   useEffect(() => {
     handleError(grantExternalUserAccessError);
-  }, [grantExternalUserAccessError]);
+  }, [grantExternalUserAccessError, handleError]);
   useEffect(() => {
     handleError(createExternalUserError);
-  }, [createExternalUserError]);
+  }, [createExternalUserError, handleError]);
   useEffect(() => {
     handleError(userAccountFormError);
-  }, [userAccountFormError]);
+  }, [userAccountFormError, handleError]);
   useEffect(() => {
     handleError(externalUserForOrgError);
-  }, [externalUserForOrgError]);
+  }, [externalUserForOrgError, handleError]);
+  useEffect(() => {
+    handleError(revokeExternalUserAccess);
+  }, [revokeExternalUserAccess, handleError]);
 
   useEffect(() => {
     if (orgSid) {
@@ -79,6 +88,12 @@ export const useExternalUsersAccessService = (orgSid: string, userAccountSid?: s
       setUserAccountForm(dataExternalUserForOrg.externalUserForOrg ?? defaultForm);
     }
   }, [externalUsersForOrgLoading, dataExternalUserForOrg]);
+
+  useEffect(() => {
+    if (userAccountForm) {
+      setRevokeAccessCmd(userAccountForm.commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Deactivate));
+    }
+  }, [userAccountForm]);
 
   const resetForm = () => {
     if (orgSid) {
@@ -187,6 +202,20 @@ export const useExternalUsersAccessService = (orgSid: string, userAccountSid?: s
     return data;
   };
 
+  const handleRevokeExternalUserAccess = async () => {
+    if (userAccountSid) {
+      const { data } = await callRevokeExternalUserAccess({
+        variables: {
+          orgSid,
+          userAccountSid,
+        },
+        errorPolicy: 'all',
+      });
+      return data;
+    }
+    return null;
+  };
+
   const parseToPickerOpts = (arr?: Maybe<UserAccount>[] | null): ITag[] => {
     if (!arr) {
       return [];
@@ -202,7 +231,7 @@ export const useExternalUsersAccessService = (orgSid: string, userAccountSid?: s
 
   async function callFindExternalUsers(
     client: ApolloClient<object>,
-    handleError: (error?: any) => void,
+    handleApolloError: (error?: any) => void,
     searchText: string
   ): Promise<ITag[]> {
     let users: ITag[] = [];
@@ -226,7 +255,7 @@ export const useExternalUsersAccessService = (orgSid: string, userAccountSid?: s
         `,
       })
       .then((result) => {
-        handleError(result.error);
+        handleApolloError(result.error);
         users = parseToPickerOpts(result.data.findExternalUsers);
       });
 
@@ -238,10 +267,12 @@ export const useExternalUsersAccessService = (orgSid: string, userAccountSid?: s
     callCreateExternalUser: handleCreateExternalUser,
     setSendAccountActivation,
     callGrantUserAccess: handleGrantUserAccess,
+    callRevokeExternalUserAccess: handleRevokeExternalUserAccess,
     updateAccountInfo,
     updateAccessPolicyGroups,
     resetForm,
     callFindExternalUsers,
     userAccountForm,
+    revokeAccessCmd,
   };
 };
