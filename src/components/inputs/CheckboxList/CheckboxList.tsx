@@ -19,7 +19,7 @@ type CheckboxListType = {
 const formatInfoTooltip = (str: string) => {
   let result = '';
   if (str) {
-    let regex = /;/g;
+    let regex = /;\s+/g;
     result = str.replace(regex, '\n');
   }
   return result;

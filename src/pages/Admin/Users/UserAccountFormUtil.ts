@@ -1,4 +1,5 @@
-import { GqOperationResponse, UserAccount, UserAccountForm } from 'src/data/services/graphql';
+import { GqOperationResponse, Maybe, UiOption, UserAccount, UserAccountForm } from 'src/data/services/graphql';
+import { CheckboxItem } from 'src/data/Types';
 
 export const defaultForm = {
   sid: null,
@@ -78,4 +79,68 @@ export const updateForm = (
   }
 
   return userAccountForm;
+};
+
+export const renderSelectedGroupsReadOnly = (form?: UserAccountForm): string => {
+  const groupOptions: CheckboxItem[] = [];
+
+  if (form) {
+    const formOpts: Maybe<UiOption>[] =
+      form?.options?.find((itm) => {
+        return itm?.key === form?.accessPolicyGroups?.options;
+      })?.values ?? [];
+    const groupSids = form?.accessPolicyGroups?.value?.map((nvp) => nvp?.value) ?? [];
+
+    formOpts.forEach((opt) => {
+      if (opt) {
+        if (groupSids.includes(opt.value)) {
+          groupOptions.push({
+            ...opt,
+            checked: true,
+          });
+        }
+      }
+    });
+  }
+
+  if (groupOptions.length > 0) {
+    return groupOptions.map((opt) => opt.label).join(', ');
+  }
+  return 'No Access Groups Assigned';
+};
+
+
+export const getAccessGroupOptions = (form?: UserAccountForm): UiOption[] => {
+  const formOpts: Maybe<UiOption>[] =
+    form?.options?.find((itm) => {
+      return itm?.key == form?.accessPolicyGroups?.options;
+    })?.values ?? [];
+
+  const groupOpts: UiOption[] = [];
+  formOpts.forEach((opt) => {
+    if (opt) {
+      groupOpts.push({
+        ...opt,
+      });
+    }
+  });
+  return groupOpts;
+};
+
+export const getSelectedAccessGroupSids = (form?: UserAccountForm): string[] => {
+  return (
+    form?.accessPolicyGroups?.value
+      ?.filter((grp) => grp && grp.value)
+      ?.map((grp) => {
+        return grp?.value || '';
+      }) ?? []
+  );
+};
+
+export const getOrganizationSpecificGroups = (groupOptions: UiOption[]) => {
+  return groupOptions.filter((g) => g.category === 'Organization specific groups');
+};
+
+export const getSystemManagedGroups = (groupOptions: UiOption[]) => {
+  return groupOptions.filter((g) => g.category === 'System managed groups');
 };

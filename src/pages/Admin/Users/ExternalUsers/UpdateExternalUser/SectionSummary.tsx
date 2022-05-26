@@ -1,13 +1,13 @@
-import { ReactElement, useEffect, useState } from 'react';
+import { ReactElement } from 'react';
 import FormLabel from 'src/components/labels/FormLabel';
 import { Column } from 'src/components/layouts';
 
-import { Maybe, UiOption, UserAccountForm } from 'src/data/services/graphql';
-import { CheckboxItem } from 'src/data/Types';
+import { UserAccountForm } from 'src/data/services/graphql';
 import { UIInputTextReadOnly } from 'src/components/inputs/InputText/InputText';
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
 import { FieldValue } from 'src/components/inputs/InputText/InputText.styles';
 import { WizardBody } from 'src/layouts/Panels/Panels.styles';
+import { renderSelectedGroupsReadOnly } from 'src/pages/Admin/Users/UserAccountFormUtil';
 import UpdateExternalUserFooter from './UpdateExternalUserFooter';
 
 type SectionSummaryPropsType = {
@@ -17,46 +17,9 @@ type SectionSummaryPropsType = {
 };
 
 const SectionSummary = ({ form, onSubmit, isProcessing }: SectionSummaryPropsType): ReactElement => {
-  const [groupOptions, setGroupOptions] = useState<CheckboxItem[]>([]);
-
   const handleSubmit = () => {
     onSubmit();
     return null;
-  };
-
-  useEffect(() => {
-    if (form) {
-      const formOpts: Maybe<UiOption>[] =
-        form?.options?.find((itm) => {
-          return itm?.key == form?.accessPolicyGroups?.options;
-        })?.values ?? [];
-      const groupSids = form?.accessPolicyGroups?.value?.map((nvp) => nvp?.value) ?? [];
-
-      const groupOptions: CheckboxItem[] = [];
-      formOpts.forEach((opt) => {
-        if (opt) {
-          if (groupSids.includes(opt.value)) {
-            groupOptions.push({
-              ...opt,
-              checked: true,
-            });
-          }
-        }
-      });
-
-      setGroupOptions(groupOptions);
-    }
-
-    return () => {
-      setGroupOptions([]);
-    };
-  }, [form]);
-
-  const renderSelectedGroups = () => {
-    if (groupOptions.length > 0) {
-      return groupOptions.map((opt) => opt.label).join(', ');
-    }
-    return 'No Access Groups Assigned';
   };
 
   return (
@@ -91,7 +54,7 @@ const SectionSummary = ({ form, onSubmit, isProcessing }: SectionSummaryPropsTyp
         <FormRow>
           <Column lg="12">
             <FormLabel label="Access Granted To" />
-            <FieldValue id="__accessGroupsList_summary">{renderSelectedGroups()}</FieldValue>
+            <FieldValue id="__accessGroupsList_summary">{renderSelectedGroupsReadOnly(form)}</FieldValue>
           </Column>
         </FormRow>
       </WizardBody>
