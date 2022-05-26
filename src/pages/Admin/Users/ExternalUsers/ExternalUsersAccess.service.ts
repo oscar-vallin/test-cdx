@@ -1,16 +1,15 @@
 import { useEffect, useState } from 'react';
 import {
-  GqOperationResponse,
+  CdxWebCommandType,
+  Maybe,
+  useCreateExternalUserMutation,
+  useExternalUserForOrgLazyQuery,
+  useGrantExternalUserAccessMutation,
   UserAccount,
   UserAccountForm,
-  useUserAccountFormLazyQuery,
-  useGrantExternalUserAccessMutation,
-  useCreateExternalUserMutation,
-  Maybe,
-  useExternalUserForOrgLazyQuery,
-  WebCommand,
-  CdxWebCommandType,
   useRevokeExternalUserAccessMutation,
+  useUserAccountFormLazyQuery,
+  WebCommand,
 } from 'src/data/services/graphql';
 import { ApolloClient, gql } from '@apollo/client';
 import { ITag } from '@fluentui/react';
@@ -127,7 +126,7 @@ export const useExternalUsersAccessService = (orgSid: string, userAccountSid?: s
       userAccountForm.accessPolicyGroups?.value
         ?.filter((opt) => opt != null && opt?.value != null)
         ?.map((opt) => opt?.value ?? '') ?? [];
-    const { data, errors } = await callGrantExternalUserAccess({
+    const { data } = await callGrantExternalUserAccess({
       variables: {
         userInfo: {
           userAccountSid: userAccountForm.sid ?? '',
@@ -141,20 +140,6 @@ export const useExternalUsersAccessService = (orgSid: string, userAccountSid?: s
     if (data?.grantExternalUserAccess) {
       setUserAccountForm(data?.grantExternalUserAccess);
     }
-    if (data && errors && errors.length > 0) {
-      // Set errors into the objet itself
-      data.grantExternalUserAccess = {
-        sid: null,
-        organization: {
-          label: 'Organization',
-          required: false,
-          visible: true,
-        },
-        response: GqOperationResponse.Fail,
-        errCode: 'INTERNAL_ERROR',
-        errMsg: 'An internal server error has occurred.  Please contact your administrator.',
-      };
-    }
 
     return data;
   };
@@ -165,7 +150,7 @@ export const useExternalUsersAccessService = (orgSid: string, userAccountSid?: s
         ?.filter((opt) => opt != null && opt?.value != null)
         ?.map((opt) => opt?.value ?? '') ?? [];
 
-    const { data, errors } = await callCreateExternalUser({
+    const { data } = await callCreateExternalUser({
       variables: {
         userInfo: {
           email: userAccountForm.email?.value ?? '',
@@ -183,20 +168,6 @@ export const useExternalUsersAccessService = (orgSid: string, userAccountSid?: s
 
     if (data?.createExternalUser) {
       setUserAccountForm(data?.createExternalUser);
-    }
-    if (data && errors && errors.length > 0) {
-      // Set errors into the objet itself
-      data.createExternalUser = {
-        sid: null,
-        organization: {
-          label: 'Organization',
-          required: false,
-          visible: true,
-        },
-        response: GqOperationResponse.Fail,
-        errCode: 'INTERNAL_ERROR',
-        errMsg: 'An internal server error has occurred.  Please contact your administrator.',
-      };
     }
 
     return data;

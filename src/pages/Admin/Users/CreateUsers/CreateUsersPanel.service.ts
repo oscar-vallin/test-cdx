@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import {
-  GqOperationResponse,
   useCreateUserMutation,
   UserAccount,
   UserAccountForm,
@@ -74,7 +73,7 @@ export const useCreateUsersPanel = (orgSid: string) => {
         ?.filter((opt) => opt != null && opt?.value != null)
         ?.map((opt) => opt?.value ?? '') ?? [];
 
-    const { data, errors } = await callCreateUser({
+    const { data } = await callCreateUser({
       variables: {
         userInfo: {
           email: userAccountForm.email?.value ?? '',
@@ -92,20 +91,6 @@ export const useCreateUsersPanel = (orgSid: string) => {
 
     if (data?.createUser) {
       setUserAccountForm(data?.createUser);
-    }
-    if (data && errors && errors.length > 0) {
-      // Set errors into the objet itself
-      data.createUser = {
-        sid: null,
-        organization: {
-          label: 'Organization',
-          required: false,
-          visible: true,
-        },
-        response: GqOperationResponse.Fail,
-        errCode: 'INTERNAL_ERROR',
-        errMsg: 'An internal server error has occurred.  Please contact your administrator.',
-      };
     }
 
     return data;
