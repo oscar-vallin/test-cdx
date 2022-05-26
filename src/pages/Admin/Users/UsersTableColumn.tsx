@@ -31,6 +31,8 @@ export const useUsersTableColumns = (
       minWidth: 100,
       maxWidth: 255,
       isPadded: true,
+      isSorted: true,
+      isSortedDescending: false,
       onColumnClick: onSort,
     },
     {

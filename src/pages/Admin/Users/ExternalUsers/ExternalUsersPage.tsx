@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { SpinnerSize, PrimaryButton, Spinner } from '@fluentui/react';
+import { PrimaryButton } from '@fluentui/react';
 import { EmptyState } from 'src/containers/states';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Row, Column, Container } from 'src/components/layouts';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { PageTitle } from 'src/components/typography';
-import { useExternalUsersForOrgLazyQuery, CdxWebCommandType } from 'src/data/services/graphql';
+import { useExternalUsersForOrgLazyQuery, CdxWebCommandType, UserItem, WebCommand } from 'src/data/services/graphql';
 import { UsersTable } from 'src/pages/Admin/Users/UsersTable';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { StyledColumn } from './ExternalUsersPage.styles';
@@ -15,19 +15,36 @@ import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useTableFilters } from 'src/hooks/useTableFilters';
 import { InputText } from 'src/components/inputs/InputText';
 import AddExternalUserAccessPanel from './AddExternalUser/AddExternalUsersAccessPanel';
-import { useUpdateExternalUsersService } from './UpdateExternalUser/UpdateExternalUsersService.service';
 import UpdateExternalUsersPanel from './UpdateExternalUser/UpdateExternalUsersPanel';
+import { ErrorHandler } from 'src/utils/ErrorHandler';
 
 const ExternalUsersPage = () => {
   const { orgSid } = useOrgSid();
   const [apiCall, { data, loading, error }] = useQueryHandler(useExternalUsersForOrgLazyQuery);
+  const [users, setUsers] = useState<UserItem[]>([]);
+
   const [isAddExternalUserAccessPanelOpen, setIsAddExternalUserAccessPanelOpen] = useState(false);
-  const useUpdateExternalUsers = useUpdateExternalUsersService(orgSid);
+  const [isUpdatePanelOpen, setIsUpdatePanelOpen] = useState(false);
+  const [selectedUserSid, setSelectedUserSid] = useState<string>();
 
   const tableFilters = useTableFilters('Name, Last Name, Email, etc.');
-  const assignCmd = data?.externalUsersForOrg?.listPageInfo?.pageCommands?.find(
-    (cmd) => cmd.commandType === CdxWebCommandType.Assign
-  );
+  const [assignCmd, setAssignCmd] = useState<WebCommand | null | undefined>();
+
+  const handleError = ErrorHandler();
+  useEffect(() => {
+    handleError(error);
+  }, [error]);
+
+  useEffect(() => {
+    if (!loading && data) {
+      setUsers(data.externalUsersForOrg?.nodes);
+      setAssignCmd(
+        data.externalUsersForOrg?.listPageInfo?.pageCommands?.find(
+          (cmd) => cmd.commandType === CdxWebCommandType.Assign
+        )
+      );
+    }
+  }, [data, loading]);
 
   useEffect(() => {
     // Reset the page number when any filtering occurs
@@ -58,14 +75,7 @@ const ExternalUsersPage = () => {
   };
 
   const renderBody = () => {
-    if (loading) {
-      return (
-        <Spacing margin={{ top: 'double' }}>
-          <Spinner size={SpinnerSize.large} label="Loading external users" />
-        </Spacing>
-      );
-    }
-    if (!data?.externalUsersForOrg?.nodes?.length) {
+    if (!users.length) {
       return (
         <EmptyState title="No external users" description="There aren't any external users in this organization" />
       );
@@ -73,8 +83,11 @@ const ExternalUsersPage = () => {
     return (
       <UsersTable
         tableFilters={tableFilters}
-        users={data?.externalUsersForOrg?.nodes}
-        onClickUser={useUpdateExternalUsers.showPanel}
+        users={users}
+        onClickUser={(userSid) => {
+          setSelectedUserSid(userSid);
+          setIsUpdatePanelOpen(true);
+        }}
         searchAllOrgs
         tooltips={data?.externalUsersForOrg?.toolTips}
       />
@@ -85,7 +98,7 @@ const ExternalUsersPage = () => {
     if (assignCmd) {
       return (
         <PrimaryButton
-          id="__Assing-ExternalUser"
+          id="__Assign-ExternalUser"
           iconProps={{ iconName: 'AddFriend' }}
           ariaLabel={assignCmd.label ?? undefined}
           onClick={() => {
@@ -131,18 +144,25 @@ const ExternalUsersPage = () => {
           <StyledColumn>{renderBody()}</StyledColumn>
         </Row>
       </Container>
-      <AddExternalUserAccessPanel
-        isOpen={isAddExternalUserAccessPanelOpen}
-        orgSid={orgSid}
-        onDismiss={() => {
-          setIsAddExternalUserAccessPanelOpen(false);
-        }}
-        onGrantAccessToExternalUser={handleGrantAccessToExternalUserSuccess}
-      />
-      <UpdateExternalUsersPanel
-        useUpdateExternalUsers={useUpdateExternalUsers}
-        onUpdateUser={handleGrantAccessToExternalUserSuccess}
-      />
+      {isAddExternalUserAccessPanelOpen && (
+        <AddExternalUserAccessPanel
+          isOpen={isAddExternalUserAccessPanelOpen}
+          orgSid={orgSid}
+          onDismiss={() => {
+            setIsAddExternalUserAccessPanelOpen(false);
+          }}
+          onGrantAccessToExternalUser={handleGrantAccessToExternalUserSuccess}
+        />
+      )}
+      {isUpdatePanelOpen && (
+        <UpdateExternalUsersPanel
+          isOpen={isUpdatePanelOpen}
+          orgSid={orgSid}
+          userAccountSid={selectedUserSid}
+          onDismiss={() => setIsUpdatePanelOpen(false)}
+          onUpdateUser={handleGrantAccessToExternalUserSuccess}
+        />
+      )}
     </LayoutDashboard>
   );
 };

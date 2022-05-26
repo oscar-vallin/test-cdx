@@ -115,7 +115,7 @@ const AppHeader = ({ onMenuButtonClick }: AppHeaderProps): ReactElement => {
               API_ID?: string;
             }
           | any = getRouteByApiId(menuOption.label !== 'Admin' ? menuOption.destination : 'ADMIN');
-  
+
         return opt.MAIN_MENU ? (
           <StyledNavButton
             id={`__${menuOption.destination}_Tab`}
@@ -131,7 +131,7 @@ const AppHeader = ({ onMenuButtonClick }: AppHeaderProps): ReactElement => {
                 dest += `&endDate=${endDate}`;
               }
               history.push(dest);
-  
+
               return null;
             }}
           >
@@ -172,11 +172,10 @@ const AppHeader = ({ onMenuButtonClick }: AppHeaderProps): ReactElement => {
 
   return (
     <StyledHeader data-e2e="AppHeader">
-      
-        {showStyledNavIcon()}
-     
+      {showStyledNavIcon()}
+
       <StyledNavButton
-        id='__ProfileMenu_Home_button'
+        id="__ProfileMenu_Home_button"
         onClick={() => {
           ActiveDomainStore.setCurrentOrg(ActiveDomainStore.domainOrg.origin);
         }}

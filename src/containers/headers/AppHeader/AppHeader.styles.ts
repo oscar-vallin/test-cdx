@@ -132,5 +132,12 @@ export const StyledMenuItem = styled.div<SelectableProps>`
 export const StyledOverFlow = styled.div`
   width: 180px;
   overflow: hidden;
+<<<<<<< HEAD
+=======
+  width: 507px;
 `;
-
+export const StyledOverFlowExt = styled.div`
+  overflow: hidden;
+  width: 260px;
+>>>>>>> c967fb1aaefdde3392b0a2887f7ff8c90ac229ff
+`;
