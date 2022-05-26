@@ -44,6 +44,7 @@ const AddExternalUsersAccessPanel = ({
   const [isProcessing, setProcessing] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string | undefined>();
   const [createExternalUser, setCreateExternalUser] = useState(false);
+  const [userSelected, setUserSelected] = useState(false);
   const client = useApolloClient();
   const handleError = ErrorHandler();
 
@@ -60,7 +61,9 @@ const AddExternalUsersAccessPanel = ({
   };
 
   const handleTabChange = (hash): void => {
-    setStep(tabs.indexOf(hash));
+    if (userSelected) {
+      setStep(tabs.indexOf(hash));
+    }
   };
 
   const onPanelClose = () => {
@@ -69,6 +72,11 @@ const AddExternalUsersAccessPanel = ({
     } else {
       doClosePanel();
     }
+  };
+
+  const onCreateExternalUser = (val: boolean) => {
+    setUserSelected(true);
+    setCreateExternalUser(val);
   };
 
   const doClosePanel = () => {
@@ -194,15 +202,21 @@ const AddExternalUsersAccessPanel = ({
                       searchExternalUsers={handleFindExternalUsers}
                       form={externalUsersAccessService.userAccountForm}
                       onNext={handleNext}
+                      userSelected={userSelected}
+                      setUserSelected={setUserSelected}
                       createExternalUser={createExternalUser}
-                      setCreateExternalUser={setCreateExternalUser}
+                      setCreateExternalUser={onCreateExternalUser}
                       saveOptions={(user) => {
                         externalUsersAccessService.updateAccountInfo(user);
                         setUnsavedChanges(true);
+                        if (user.sid) {
+                          setUserSelected(true);
+                        }
                       }}
                       saveActivationEmailOptions={(send) => {
                         externalUsersAccessService.setSendAccountActivation(send);
                         setUnsavedChanges(true);
+                        setUserSelected(true);
                       }}
                     />
                   ),

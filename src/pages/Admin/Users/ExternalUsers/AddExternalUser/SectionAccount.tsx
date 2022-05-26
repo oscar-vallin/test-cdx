@@ -20,6 +20,8 @@ type SectionAccountProps = {
   saveOptions: (userAccount: UserAccount) => void;
   saveActivationEmailOptions: (sendActivationEmail: boolean) => void;
   searchExternalUsers: any;
+  userSelected: boolean;
+  setUserSelected: (boolean) => void;
   createExternalUser: boolean;
   setCreateExternalUser: (boolean) => void;
 };
@@ -30,6 +32,8 @@ const SectionAccount = ({
   saveOptions,
   saveActivationEmailOptions,
   searchExternalUsers,
+  userSelected,
+  setUserSelected,
   createExternalUser,
   setCreateExternalUser,
 }: SectionAccountProps) => {
@@ -86,6 +90,7 @@ const SectionAccount = ({
             <Link
               id={`__noResultsFound-Link`}
               onClick={() => {
+                setUserSelected(true);
                 setCreateExternalUser(true);
               }}
             >
@@ -127,6 +132,7 @@ const SectionAccount = ({
                 setCreateExternalUser(false);
                 const selectedItem: any = item;
                 if (selectedItem.length > 0) {
+                  setUserSelected(true);
                   saveFields(
                     selectedItem[0].firstName ?? '',
                     selectedItem[0].lastName ?? '',
@@ -134,6 +140,7 @@ const SectionAccount = ({
                     selectedItem[0].key ?? ''
                   );
                 } else {
+                  setUserSelected(false);
                   saveOptions({
                     sid: '',
                     email: '',
@@ -223,10 +230,9 @@ const SectionAccount = ({
           </>
         )}
       </WizardBody>
-      <AddExternalUsersAccessFooter onNext={handleNext} />
+      <AddExternalUsersAccessFooter userSelected={userSelected} onNext={handleNext} />
     </>
   );
 };
 
 export { SectionAccount };
-export default SectionAccount;
