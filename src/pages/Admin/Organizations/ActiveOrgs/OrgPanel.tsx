@@ -1,5 +1,4 @@
 import {
-  ActionButton,
   MessageBar,
   MessageBarType,
   Panel,
@@ -19,14 +18,13 @@ import {
   GqOperationResponse,
   OrganizationForm,
   OrgType,
-  UiStringField,
   useCreateOrgMutation,
   useFindOrganizationLazyQuery,
   useOrganizationFormLazyQuery,
   useUpdateOrgMutation,
 } from 'src/data/services/graphql';
 import { Button } from 'src/components/buttons';
-import { FieldRow, FormRow } from 'src/components/layouts/Row/Row.styles';
+import { FormRow } from 'src/components/layouts/Row/Row.styles';
 import { UIInputText } from 'src/components/inputs/InputText';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { useOrgSid } from 'src/hooks/useOrgSid';
@@ -34,7 +32,6 @@ import { UIInputSelectOne } from 'src/components/inputs/InputDropdown';
 import { getEnumByValue } from 'src/utils/CDXUtils';
 import { UIInputTextReadOnly } from 'src/components/inputs/InputText/InputText';
 import { useNotification } from 'src/hooks/useNotification';
-import { UIFormLabel } from 'src/components/labels/FormLabel';
 
 type OrgPanelType = {
   isOpen: boolean;
@@ -48,7 +45,6 @@ type OrgStateType = {
   name?: string;
   orgId?: string;
   orgType?: OrgType;
-  whitelist?: string[];
 };
 
 const INITIAL_STATE: OrgStateType = {
@@ -62,7 +58,6 @@ export const OrgPanel = ({ isOpen, selectedOrgSid, onDismiss, onSave }: OrgPanel
   const { orgSid: orgOwnerSid } = useOrgSid();
   const [orgState, setOrgState] = useState<OrgStateType>(INITIAL_STATE);
   const [orgForm, setOrgForm] = useState<OrganizationForm | null>();
-  const [whitelistFields, setWhiteListFields] = useState<UiStringField[]>([]);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
   const [messageType, setMessageType] = useState<MessageBarType>(MessageBarType.info);
@@ -146,27 +141,15 @@ export const OrgPanel = ({ isOpen, selectedOrgSid, onDismiss, onSave }: OrgPanel
 
   useEffect(() => {
     if (orgForm) {
-      const whitelistValues: string[] = [];
-      const whitelistFields: UiStringField[] = [];
-      orgForm.whitelist?.forEach((whitelistForm) => {
-        if (whitelistForm?.pattern) {
-          whitelistFields.push(whitelistForm.pattern);
-          whitelistValues.push(whitelistForm.pattern?.value ?? '');
-        }
-      });
-      setWhiteListFields(whitelistFields);
-
       const orgState: OrgStateType = {
         sid: orgForm?.sid ?? undefined,
         orgId: orgForm?.orgId?.value ?? '',
         name: orgForm?.name?.value ?? undefined,
         orgType: getEnumByValue(OrgType, orgForm?.orgType?.value?.value),
-        whitelist: whitelistValues,
       };
 
       setOrgState(orgState);
     } else {
-      setWhiteListFields([]);
       setOrgState(INITIAL_STATE);
     }
   }, [orgForm]);
@@ -238,43 +221,6 @@ export const OrgPanel = ({ isOpen, selectedOrgSid, onDismiss, onSave }: OrgPanel
             />
           </Column>
         </FormRow>
-        <FormRow>
-          <Column lg="12">
-            <UIFormLabel id="__WhiteList_lbl" uiField={whitelistFields[0]} />
-            {whitelistFields.map((field, index) => (
-              <FieldRow key={`__Whitelist_IP_${index}`}>
-                <UIInputText
-                  id={`__Whitelist_IP_${index}`}
-                  uiField={field}
-                  value={orgState?.whitelist ? orgState?.whitelist[index] : ''}
-                  onChange={(event, newValue) => {
-                    setUnsavedChanges(true);
-                    const clone: string[] = Object.assign([], orgState?.whitelist ?? []);
-                    clone[index] = newValue ?? '';
-                    setOrgState({ ...orgState, whitelist: clone });
-                  }}
-                  renderLabel={false}
-                />
-              </FieldRow>
-            ))}
-            {!whitelistFields[0]?.readOnly && whitelistFields[0]?.visible && (
-              <ActionButton
-                id="__Add_Whitelist"
-                ariaLabel="Add more IP Addresses/Netmask"
-                onClick={() => {
-                  setUnsavedChanges(true);
-                  const whitelistClone: UiStringField[] = Object.assign([], whitelistFields);
-                  const fieldClone: UiStringField = Object.assign({}, whitelistClone[0]);
-                  fieldClone.value = '';
-                  whitelistClone.push(fieldClone);
-                  setWhiteListFields(whitelistClone);
-                }}
-              >
-                + Add more IP Addresses/Netmask
-              </ActionButton>
-            )}
-          </Column>
-        </FormRow>
       </>
     );
   };
@@ -292,9 +238,6 @@ export const OrgPanel = ({ isOpen, selectedOrgSid, onDismiss, onSave }: OrgPanel
   );
 
   const doSave = () => {
-    // Remove any blank values
-    const whitelist = orgState.whitelist?.filter((o) => o?.trim().length > 0);
-    orgState.whitelist = whitelist;
     if (!selectedOrgSid) {
       createOrg({
         variables: {
@@ -303,7 +246,6 @@ export const OrgPanel = ({ isOpen, selectedOrgSid, onDismiss, onSave }: OrgPanel
             name: orgState.name ?? '',
             orgType: orgState.orgType ?? OrgType.IntegrationSponsor,
             orgOwnerSid: orgOwnerSid,
-            whitelist: whitelist,
           },
         },
       }).then();
@@ -314,7 +256,6 @@ export const OrgPanel = ({ isOpen, selectedOrgSid, onDismiss, onSave }: OrgPanel
             orgSid: selectedOrgSid,
             name: orgState.name ?? '',
             orgType: orgState.orgType ?? OrgType.IntegrationSponsor,
-            whitelist: whitelist,
           },
         },
       }).then();
