@@ -63,9 +63,9 @@ const ActiveOrgsPage = () => {
   const fetchData = (pageNumber = 0) => {
     directSearchQuery({
       variables: {
-        searchText: searchAllOrgsFilter ? '' : searchText,
-        orgOwnerSid: orgOwnerSid,
-        orgFilter: { activeFilter: 'ACTIVE' },
+        searchText,
+        orgOwnerSid,
+        orgFilter: { activeFilter: 'ACTIVE', searchAllOrgs: searchAllOrgsFilter },
         pageableInput: {
           sort: [
             { property: 'name', direction: SortDirection.Asc },
