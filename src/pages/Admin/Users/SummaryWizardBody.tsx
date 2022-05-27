@@ -9,11 +9,10 @@ import { FieldValue } from 'src/components/inputs/InputText/InputText.styles';
 import { renderSelectedGroupsReadOnly } from 'src/pages/Admin/Users/UserAccountFormUtil';
 
 type SummaryWizardBodyType = {
-  form: UserAccountForm
-}
+  form: UserAccountForm;
+};
 
 export const SummaryWizardBody = ({ form }: SummaryWizardBodyType) => {
-
   return (
     <WizardBody>
       <FormRow>
@@ -61,4 +60,4 @@ export const SummaryWizardBody = ({ form }: SummaryWizardBodyType) => {
       )}
     </WizardBody>
   );
-}
+};

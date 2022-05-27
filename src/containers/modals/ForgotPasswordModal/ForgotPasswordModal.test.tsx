@@ -7,7 +7,7 @@ import store from 'src/store/index';
 const defaultProps = {
   open: true,
   isOpen: (data: boolean) => {},
-  currentUserId: ''
+  currentUserId: '',
 };
 
 describe('Forgot Password...', () => {

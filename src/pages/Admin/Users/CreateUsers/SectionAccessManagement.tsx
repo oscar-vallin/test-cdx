@@ -10,7 +10,6 @@ type SectionAccessProps = {
 };
 
 const SectionAccessManagement = ({ form, onPrev, onNext, saveOptions }: SectionAccessProps) => {
-
   const handlePrev = () => {
     onPrev();
     return null;
@@ -23,7 +22,7 @@ const SectionAccessManagement = ({ form, onPrev, onNext, saveOptions }: SectionA
 
   return (
     <>
-      <AccessManagementWizardBody form={form} saveOptions={saveOptions}/>
+      <AccessManagementWizardBody form={form} saveOptions={saveOptions} />
       <CreateUsersFooter onPrev={handlePrev} onNext={handleNext} />
     </>
   );

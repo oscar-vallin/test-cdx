@@ -217,7 +217,6 @@ const ActiveOrgsPage = () => {
       );
     }
 
-  
     if (!orgs.length) {
       const emptyText = createCmd
         ? 'There are no active Organizations in this Organization. Click the button below to create a new Organization.'
@@ -239,18 +238,18 @@ const ActiveOrgsPage = () => {
   };
 
   const showCheckbox = () => {
-    if(ActiveDomainStore.domainOrg.origin.orgSid === orgOwnerSid){
+    if (ActiveDomainStore.domainOrg.origin.orgSid === orgOwnerSid) {
       return (
         <Checkbox
-            id="__SearchAllOrgs__Orgs-Checkbox"
-            label="Search all organizations"
-            onChange={(_event, _searchAllOrgsFilter: any) => {
-              setSearchAllOrgsFilter(_searchAllOrgsFilter);
-            }}
-            checked={searchAllOrgsFilter}
-          />
+          id="__SearchAllOrgs__Orgs-Checkbox"
+          label="Search all organizations"
+          onChange={(_event, _searchAllOrgsFilter: any) => {
+            setSearchAllOrgsFilter(_searchAllOrgsFilter);
+          }}
+          checked={searchAllOrgsFilter}
+        />
       );
-    };
+    }
   };
 
   return (

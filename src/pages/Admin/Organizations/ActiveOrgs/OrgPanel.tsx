@@ -1,12 +1,4 @@
-import {
-  MessageBar,
-  MessageBarType,
-  Panel,
-  PanelType,
-  Spinner,
-  SpinnerSize,
-  Stack,
-} from '@fluentui/react';
+import { MessageBar, MessageBarType, Panel, PanelType, Spinner, SpinnerSize, Stack } from '@fluentui/react';
 import { Column } from 'src/components/layouts';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { LightSeparator } from 'src/components/separators/Separator';

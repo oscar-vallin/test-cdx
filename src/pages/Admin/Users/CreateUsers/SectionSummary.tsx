@@ -26,7 +26,7 @@ const SectionSummary = ({ form, onPrev, onSubmit, isProcessing }: SectionSummary
 
   return (
     <>
-      <SummaryWizardBody form={form}/>
+      <SummaryWizardBody form={form} />
       {isProcessing && <>Processing</>}
       {!isProcessing && <CreateUsersFooter onPrev={handlePrev} onSubmit={handleSubmit} />}
     </>

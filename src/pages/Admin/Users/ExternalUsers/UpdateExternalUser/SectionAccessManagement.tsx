@@ -9,10 +9,9 @@ type SectionAccessProps = {
 };
 
 const SectionAccessManagement = ({ form, onSubmit, saveOptions }: SectionAccessProps) => {
-
   return (
     <>
-      <AccessManagementWizardBody form={form} saveOptions={saveOptions}/>
+      <AccessManagementWizardBody form={form} saveOptions={saveOptions} />
       <UpdateExternalUserFooter onSave={onSubmit} />
     </>
   );

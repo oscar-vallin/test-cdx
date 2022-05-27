@@ -8,16 +8,15 @@ import {
   getAccessGroupOptions,
   getOrganizationSpecificGroups,
   getSelectedAccessGroupSids,
-  getSystemManagedGroups
+  getSystemManagedGroups,
 } from 'src/pages/Admin/Users/UserAccountFormUtil';
 
 type AccessManagementWizardBodyType = {
   form?: UserAccountForm;
   saveOptions: (sids: string[]) => void;
-}
+};
 
 export const AccessManagementWizardBody = ({ form, saveOptions }: AccessManagementWizardBodyType) => {
-
   const [selectedSids, setSelectedSids] = useState<string[]>(getSelectedAccessGroupSids(form));
   const [groupOptions, setGroupOptions] = useState<UiOption[]>(getAccessGroupOptions(form));
   const [orgSpecificGroupOptions, setOrgSpecificGroupOptions] = useState<UiOption[]>(
@@ -71,4 +70,4 @@ export const AccessManagementWizardBody = ({ form, saveOptions }: AccessManageme
       </WizardBody>
     </>
   );
-}
+};

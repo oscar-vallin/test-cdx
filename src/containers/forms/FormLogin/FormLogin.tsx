@@ -147,9 +147,9 @@ const FormLogin = ({ id }: FormLoginProps): ReactElement => {
                     )}
 
                     {forgotPassword && (
-                      <ForgotPasswordModal 
-                        isOpen={setForgotPassword} 
-                        open={forgotPassword} 
+                      <ForgotPasswordModal
+                        isOpen={setForgotPassword}
+                        open={forgotPassword}
                         currentUserId={values.userId}
                       />
                     )}
