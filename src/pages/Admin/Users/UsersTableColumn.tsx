@@ -51,6 +51,7 @@ export const useUsersTableColumns = (
       fieldName: 'orgName',
       minWidth: 255,
       isPadded: true,
+      onColumnClick: onSort,
     },
   ];
 
