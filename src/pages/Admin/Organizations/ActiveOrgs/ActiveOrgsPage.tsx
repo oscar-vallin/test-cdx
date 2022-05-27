@@ -63,7 +63,7 @@ const ActiveOrgsPage = () => {
   const fetchData = (pageNumber = 0) => {
     directSearchQuery({
       variables: {
-        searchText: searchText,
+        searchText: searchAllOrgsFilter ? '' : searchText,
         orgOwnerSid: orgOwnerSid,
         orgFilter: { activeFilter: 'ACTIVE' },
         pageableInput: {
@@ -80,10 +80,7 @@ const ActiveOrgsPage = () => {
 
   useEffect(() => {
     fetchData();
-    if (searchText !== '') {
-      setSearchAllOrgsFilter(true);
-    }
-  }, [orgOwnerSid, searchText]);
+  }, [orgOwnerSid, searchText, searchAllOrgsFilter]);
 
   const onPageChange = (pageNumber: number) => {
     fetchData(pageNumber);
@@ -220,9 +217,7 @@ const ActiveOrgsPage = () => {
       );
     }
 
-    if (!searchAllOrgsFilter) {
-      return;
-    }
+  
     if (!orgs.length) {
       const emptyText = createCmd
         ? 'There are no active Organizations in this Organization. Click the button below to create a new Organization.'
