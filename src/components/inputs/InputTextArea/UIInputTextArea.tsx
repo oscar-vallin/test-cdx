@@ -1,7 +1,7 @@
 import React from 'react';
 import { UiStringField } from 'src/data/services/graphql';
 import { TextField } from '@fluentui/react';
-import FormLabel, { UIFormLabel } from 'src/components/labels/FormLabel';
+import FormLabel from 'src/components/labels/FormLabel';
 import ReactQuill from 'react-quill';
 import { StyledRichTextArea } from './UIInputTextArea.styles';
 
@@ -73,6 +73,10 @@ const UIInputTextArea = ({
     'indent',
     'link',
   ];
+
+  if (uiField?.visible != true) {
+    return null;
+  }
 
   return (
     <>
