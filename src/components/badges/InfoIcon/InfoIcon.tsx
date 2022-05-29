@@ -16,7 +16,14 @@ export const InfoIcon = ({ id, tooltip, leftPad = true }: InfoIconType) => {
 
   if (tooltip) {
     return (
-      <TooltipHost style={{ whiteSpace: 'pre-wrap' }} content={tooltip} id={id}>
+      <TooltipHost
+        style={{ whiteSpace: 'pre-wrap' }}
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        onMouseLeave={() => {}}
+        content={tooltip}
+        id={id}
+        calloutProps={{ gapSpace: 0 }}
+      >
         {charPad()}
         <FontIcon aria-describedby={id} iconName="Info" />
       </TooltipHost>
