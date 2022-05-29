@@ -109,7 +109,6 @@ export const renderSelectedGroupsReadOnly = (form?: UserAccountForm): string => 
   return 'No Access Groups Assigned';
 };
 
-
 export const getAccessGroupOptions = (form?: UserAccountForm): UiOption[] => {
   const formOpts: Maybe<UiOption>[] =
     form?.options?.find((itm) => {

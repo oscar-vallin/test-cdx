@@ -9,5 +9,4 @@ export const StyledDiv = styled.div`
 export const StyledError = styled.span`
   color: rgb(164, 38, 44);
   font-size: 12px;
-`
-;
+`;

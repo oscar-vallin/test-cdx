@@ -12,12 +12,7 @@ import {
   SelectionMode,
 } from '@fluentui/react';
 
-import {
-  useExternalOrgsLazyQuery,
-  SortDirection,
-  Organization,
-  OrgType,
-} from 'src/data/services/graphql';
+import { useExternalOrgsLazyQuery, SortDirection, Organization, OrgType } from 'src/data/services/graphql';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';

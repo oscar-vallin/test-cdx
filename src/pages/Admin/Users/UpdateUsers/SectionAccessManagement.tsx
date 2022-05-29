@@ -24,7 +24,7 @@ const SectionAccessManagement = ({ form, onSave, onFormChange }: SectionAccessPr
 
   return (
     <>
-      <AccessManagementWizardBody form={form} saveOptions={saveOptions}/>
+      <AccessManagementWizardBody form={form} saveOptions={saveOptions} />
       {form?.commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Assign) && (
         <UpdateUserFooter onSave={handleSave} />
       )}

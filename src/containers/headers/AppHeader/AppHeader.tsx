@@ -103,8 +103,7 @@ const AppHeader = ({ onMenuButtonClick }: AppHeaderProps): ReactElement => {
   };
 
   const renderTopNavButtons = () => {
-
-    if(originDestination){
+    if (originDestination) {
       return ActiveDomainStore.nav.dashboard.map((menuOption: { label: string; destination: string }) => {
         const opt:
           | {
@@ -148,27 +147,29 @@ const AppHeader = ({ onMenuButtonClick }: AppHeaderProps): ReactElement => {
       <div className="HeaderBtnText">
         <div>
           <h2 className="HeaderBtnText__title">{ActiveDomainStore.domainOrg.current.orgId}</h2>
-          <StyledOverFlow><small className="HeaderBtnText__description">{ActiveDomainStore.domainOrg.current.label}</small></StyledOverFlow>
+          <StyledOverFlow>
+            <small className="HeaderBtnText__description">{ActiveDomainStore.domainOrg.current.label}</small>
+          </StyledOverFlow>
         </div>
       </div>
     );
   };
 
   const showStyledNavIcon = () => {
-    if(originDestination){
+    if (originDestination) {
       return (
-          <NavButton id="__AdminNavBtn" onClick={onMenuButtonClick} data-e2e="AdminNavBtn">
-            <StyledNavIcon iconName="GlobalNavButton" />
-            {renderOrgName()}
-          </NavButton>
-      )
-    }
-    return (
-        <NavButton  id="__AdminNavBtn" data-e2e="AdminNavBtn" >
+        <NavButton id="__AdminNavBtn" onClick={onMenuButtonClick} data-e2e="AdminNavBtn">
+          <StyledNavIcon iconName="GlobalNavButton" />
           {renderOrgName()}
         </NavButton>
-    )
-  }
+      );
+    }
+    return (
+      <NavButton id="__AdminNavBtn" data-e2e="AdminNavBtn">
+        {renderOrgName()}
+      </NavButton>
+    );
+  };
 
   return (
     <StyledHeader data-e2e="AppHeader">

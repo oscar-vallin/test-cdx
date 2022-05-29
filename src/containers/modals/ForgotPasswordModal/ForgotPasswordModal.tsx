@@ -9,7 +9,7 @@ import { StyledError } from './ForgotPasswordModal.styles';
 const defaultProps = {
   open: false,
   isOpen: (data: boolean) => {},
-  currentUserId: ''
+  currentUserId: '',
 };
 
 type ForgotPasswordModalProps = {
@@ -30,7 +30,7 @@ const ForgotPasswordModal = ({ isOpen, open, currentUserId }: ForgotPasswordModa
   const [forgotPasswordMutation, { data, loading }] = useForgotPasswordMutation();
 
   const sendIdUser = (user: string) => {
-    if(user !== currentUserId && user.trim() !== ''){
+    if (user !== currentUserId && user.trim() !== '') {
       setErrorText('the email address must match the login address you entered');
       setError(true);
       return;
@@ -42,14 +42,13 @@ const ForgotPasswordModal = ({ isOpen, open, currentUserId }: ForgotPasswordModa
     });
   };
 
-  
   const cancelForgotPassword = () => {
     isOpen(false);
     setForgotPassword(false);
   };
 
   useEffect(() => {
-    if (data?.forgotPassword?.response === "SUCCESS") {
+    if (data?.forgotPassword?.response === 'SUCCESS') {
       let message = data.forgotPassword?.responseMsg;
       message = message.replace('<p>', '');
       message = message.replace('</p>', '');
@@ -57,12 +56,11 @@ const ForgotPasswordModal = ({ isOpen, open, currentUserId }: ForgotPasswordModa
       setSuccess(true);
       setForgotPassword(false);
     }
-    if(data?.forgotPassword?.response === "FAIL"){
+    if (data?.forgotPassword?.response === 'FAIL') {
       let message = data.forgotPassword?.responseMsg;
       setErrorText(message);
       setError(true);
     }
- 
   }, [data]);
 
   return (
@@ -83,9 +81,7 @@ const ForgotPasswordModal = ({ isOpen, open, currentUserId }: ForgotPasswordModa
               setUserId(newValue ?? '');
             }}
           ></InputText>
-          {error && (
-            <StyledError>{errorText}</StyledError>
-          )}
+          {error && <StyledError>{errorText}</StyledError>}
         </Spacing>
         <DialogFooter>
           <PrimaryButton id="forgotPaswwordModal-submit-button" text="Submit" onClick={() => sendIdUser(userId)} />

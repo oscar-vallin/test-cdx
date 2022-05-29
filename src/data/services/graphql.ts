@@ -363,7 +363,6 @@ export type CreateOrgInput = {
   name: Scalars['String'];
   orgType: OrgType;
   orgOwnerSid?: Maybe<Scalars['ID']>;
-  whitelist?: Maybe<Array<Scalars['String']>>;
 };
 
 export type CreatePersonInput = {
@@ -828,6 +827,8 @@ export type Mutation = {
   createXchangeConfigAlert?: Maybe<XchangeConfigAlertForm>;
   updateXchangeConfigAlert?: Maybe<XchangeConfigAlertForm>;
   deleteXchangeConfigAlert?: Maybe<GenericResponse>;
+  deactivateXchangeConfig?: Maybe<GenericResponse>;
+  activateXchangeConfig?: Maybe<GenericResponse>;
 };
 
 
@@ -1176,6 +1177,16 @@ export type MutationDeleteXchangeConfigAlertArgs = {
   sid: Scalars['ID'];
 };
 
+
+export type MutationDeactivateXchangeConfigArgs = {
+  sid: Scalars['ID'];
+};
+
+
+export type MutationActivateXchangeConfigArgs = {
+  sid: Scalars['ID'];
+};
+
 export type Nvp = NvpStr | NvpId;
 
 export type NvpId = {
@@ -1207,6 +1218,7 @@ export type OrgSecurityForm = {
   forgotPasswordEnabled: UiBooleanField;
   forgotPasswordMsg: UiStringField;
   allowedEmailDomains: UiStringField;
+  whitelist?: Maybe<Array<OrgWhitelistForm>>;
   options?: Maybe<Array<UiOptions>>;
   commands?: Maybe<Array<WebCommand>>;
   response: GqOperationResponse;
@@ -1265,7 +1277,6 @@ export type OrganizationForm = {
   orgId: UiStringField;
   orgType?: Maybe<UiSelectOneField>;
   active: UiBooleanField;
-  whitelist?: Maybe<Array<OrgWhitelistForm>>;
   options?: Maybe<Array<UiOptions>>;
   commands?: Maybe<Array<WebCommand>>;
   response: GqOperationResponse;
@@ -2592,7 +2603,6 @@ export type UpdateOrgInput = {
   orgSid: Scalars['ID'];
   name: Scalars['String'];
   orgType: OrgType;
-  whitelist?: Maybe<Array<Scalars['String']>>;
 };
 
 export type UpdateOrgSecurityInput = {
@@ -2600,6 +2610,7 @@ export type UpdateOrgSecurityInput = {
   forgotPasswordEnabled: Scalars['Boolean'];
   forgotPasswordMsg?: Maybe<Scalars['String']>;
   allowedEmailDomains: Scalars['String'];
+  whitelist?: Maybe<Array<Scalars['String']>>;
 };
 
 export type UpdateOwnPasswordInput = {
@@ -4898,14 +4909,7 @@ export type OrganizationFormQuery = (
     )>, active: (
       { __typename?: 'UIBooleanField' }
       & FragmentUiBooleanFieldFragment
-    ), whitelist?: Maybe<Array<(
-      { __typename?: 'OrgWhitelistForm' }
-      & Pick<OrgWhitelistForm, 'errCode' | 'errMsg' | 'errSeverity'>
-      & { pattern: (
-        { __typename?: 'UIStringField' }
-        & FragmentUiStringFieldFragment
-      ) }
-    )>>, options?: Maybe<Array<(
+    ), options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & FragmentUiOptionsFragment
     )>>, commands?: Maybe<Array<(
@@ -4937,14 +4941,7 @@ export type FindOrganizationQuery = (
     )>, active: (
       { __typename?: 'UIBooleanField' }
       & FragmentUiBooleanFieldFragment
-    ), whitelist?: Maybe<Array<(
-      { __typename?: 'OrgWhitelistForm' }
-      & Pick<OrgWhitelistForm, 'errCode' | 'errMsg' | 'errSeverity'>
-      & { pattern: (
-        { __typename?: 'UIStringField' }
-        & FragmentUiStringFieldFragment
-      ) }
-    )>>, options?: Maybe<Array<(
+    ), options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & FragmentUiOptionsFragment
     )>>, commands?: Maybe<Array<(
@@ -5026,7 +5023,14 @@ export type OrgSecurityFormQuery = (
     ), allowedEmailDomains: (
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
-    ), options?: Maybe<Array<(
+    ), whitelist?: Maybe<Array<(
+      { __typename?: 'OrgWhitelistForm' }
+      & Pick<OrgWhitelistForm, 'errCode' | 'errMsg' | 'errSeverity'>
+      & { pattern: (
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      ) }
+    )>>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & FragmentUiOptionsFragment
     )>>, commands?: Maybe<Array<(
@@ -6134,14 +6138,7 @@ export type CreateOrgMutation = (
     )>, active: (
       { __typename?: 'UIBooleanField' }
       & FragmentUiBooleanFieldFragment
-    ), whitelist?: Maybe<Array<(
-      { __typename?: 'OrgWhitelistForm' }
-      & Pick<OrgWhitelistForm, 'errCode' | 'errMsg' | 'errSeverity'>
-      & { pattern: (
-        { __typename?: 'UIStringField' }
-        & FragmentUiStringFieldFragment
-      ) }
-    )>>, options?: Maybe<Array<(
+    ), options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & FragmentUiOptionsFragment
     )>>, commands?: Maybe<Array<(
@@ -6173,14 +6170,7 @@ export type UpdateOrgMutation = (
     )>, active: (
       { __typename?: 'UIBooleanField' }
       & FragmentUiBooleanFieldFragment
-    ), whitelist?: Maybe<Array<(
-      { __typename?: 'OrgWhitelistForm' }
-      & Pick<OrgWhitelistForm, 'errCode' | 'errMsg' | 'errSeverity'>
-      & { pattern: (
-        { __typename?: 'UIStringField' }
-        & FragmentUiStringFieldFragment
-      ) }
-    )>>, options?: Maybe<Array<(
+    ), options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & FragmentUiOptionsFragment
     )>>, commands?: Maybe<Array<(
@@ -6219,7 +6209,14 @@ export type UpdateOrgSecurityMutation = (
     ), allowedEmailDomains: (
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
-    ), options?: Maybe<Array<(
+    ), whitelist?: Maybe<Array<(
+      { __typename?: 'OrgWhitelistForm' }
+      & Pick<OrgWhitelistForm, 'errCode' | 'errMsg' | 'errSeverity'>
+      & { pattern: (
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      ) }
+    )>>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & FragmentUiOptionsFragment
     )>>, commands?: Maybe<Array<(
@@ -8049,6 +8046,54 @@ export type DeleteXchangeConfigAlertMutationVariables = Exact<{
 export type DeleteXchangeConfigAlertMutation = (
   { __typename?: 'Mutation' }
   & { deleteXchangeConfigAlert?: Maybe<(
+    { __typename?: 'GenericResponse' }
+    & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { allMessages?: Maybe<Array<(
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>> }
+    )>> }
+  )> }
+);
+
+export type DeactivateXchangeConfigMutationVariables = Exact<{
+  sid: Scalars['ID'];
+}>;
+
+
+export type DeactivateXchangeConfigMutation = (
+  { __typename?: 'Mutation' }
+  & { deactivateXchangeConfig?: Maybe<(
+    { __typename?: 'GenericResponse' }
+    & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { allMessages?: Maybe<Array<(
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>> }
+    )>> }
+  )> }
+);
+
+export type ActivateXchangeConfigMutationVariables = Exact<{
+  sid: Scalars['ID'];
+}>;
+
+
+export type ActivateXchangeConfigMutation = (
+  { __typename?: 'Mutation' }
+  & { activateXchangeConfig?: Maybe<(
     { __typename?: 'GenericResponse' }
     & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { allMessages?: Maybe<Array<(
@@ -11039,14 +11084,6 @@ export const OrganizationFormDocument = gql`
     active {
       ...fragmentUIBooleanField
     }
-    whitelist {
-      pattern {
-        ...fragmentUIStringField
-      }
-      errCode
-      errMsg
-      errSeverity
-    }
     options {
       ...fragmentUIOptions
     }
@@ -11105,14 +11142,6 @@ export const FindOrganizationDocument = gql`
     }
     active {
       ...fragmentUIBooleanField
-    }
-    whitelist {
-      pattern {
-        ...fragmentUIStringField
-      }
-      errCode
-      errMsg
-      errSeverity
     }
     options {
       ...fragmentUIOptions
@@ -11299,6 +11328,14 @@ export const OrgSecurityFormDocument = gql`
     }
     allowedEmailDomains {
       ...fragmentUIStringField
+    }
+    whitelist {
+      pattern {
+        ...fragmentUIStringField
+      }
+      errCode
+      errMsg
+      errSeverity
     }
     options {
       ...fragmentUIOptions
@@ -13479,14 +13516,6 @@ export const CreateOrgDocument = gql`
     active {
       ...fragmentUIBooleanField
     }
-    whitelist {
-      pattern {
-        ...fragmentUIStringField
-      }
-      errCode
-      errMsg
-      errSeverity
-    }
     options {
       ...fragmentUIOptions
     }
@@ -13544,14 +13573,6 @@ export const UpdateOrgDocument = gql`
     }
     active {
       ...fragmentUIBooleanField
-    }
-    whitelist {
-      pattern {
-        ...fragmentUIStringField
-      }
-      errCode
-      errMsg
-      errSeverity
     }
     options {
       ...fragmentUIOptions
@@ -13637,6 +13658,14 @@ export const UpdateOrgSecurityDocument = gql`
     }
     allowedEmailDomains {
       ...fragmentUIStringField
+    }
+    whitelist {
+      pattern {
+        ...fragmentUIStringField
+      }
+      errCode
+      errMsg
+      errSeverity
     }
     options {
       ...fragmentUIOptions
@@ -17122,3 +17151,91 @@ export function useDeleteXchangeConfigAlertMutation(baseOptions?: Apollo.Mutatio
 export type DeleteXchangeConfigAlertMutationHookResult = ReturnType<typeof useDeleteXchangeConfigAlertMutation>;
 export type DeleteXchangeConfigAlertMutationResult = Apollo.MutationResult<DeleteXchangeConfigAlertMutation>;
 export type DeleteXchangeConfigAlertMutationOptions = Apollo.BaseMutationOptions<DeleteXchangeConfigAlertMutation, DeleteXchangeConfigAlertMutationVariables>;
+export const DeactivateXchangeConfigDocument = gql`
+    mutation DeactivateXchangeConfig($sid: ID!) {
+  deactivateXchangeConfig(sid: $sid) {
+    response
+    errCode
+    errMsg
+    errSeverity
+    allMessages {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
+      }
+    }
+  }
+}
+    ${UnionNvpFragmentDoc}`;
+export type DeactivateXchangeConfigMutationFn = Apollo.MutationFunction<DeactivateXchangeConfigMutation, DeactivateXchangeConfigMutationVariables>;
+
+/**
+ * __useDeactivateXchangeConfigMutation__
+ *
+ * To run a mutation, you first call `useDeactivateXchangeConfigMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeactivateXchangeConfigMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deactivateXchangeConfigMutation, { data, loading, error }] = useDeactivateXchangeConfigMutation({
+ *   variables: {
+ *      sid: // value for 'sid'
+ *   },
+ * });
+ */
+export function useDeactivateXchangeConfigMutation(baseOptions?: Apollo.MutationHookOptions<DeactivateXchangeConfigMutation, DeactivateXchangeConfigMutationVariables>) {
+        return Apollo.useMutation<DeactivateXchangeConfigMutation, DeactivateXchangeConfigMutationVariables>(DeactivateXchangeConfigDocument, baseOptions);
+      }
+export type DeactivateXchangeConfigMutationHookResult = ReturnType<typeof useDeactivateXchangeConfigMutation>;
+export type DeactivateXchangeConfigMutationResult = Apollo.MutationResult<DeactivateXchangeConfigMutation>;
+export type DeactivateXchangeConfigMutationOptions = Apollo.BaseMutationOptions<DeactivateXchangeConfigMutation, DeactivateXchangeConfigMutationVariables>;
+export const ActivateXchangeConfigDocument = gql`
+    mutation ActivateXchangeConfig($sid: ID!) {
+  activateXchangeConfig(sid: $sid) {
+    response
+    errCode
+    errMsg
+    errSeverity
+    allMessages {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
+      }
+    }
+  }
+}
+    ${UnionNvpFragmentDoc}`;
+export type ActivateXchangeConfigMutationFn = Apollo.MutationFunction<ActivateXchangeConfigMutation, ActivateXchangeConfigMutationVariables>;
+
+/**
+ * __useActivateXchangeConfigMutation__
+ *
+ * To run a mutation, you first call `useActivateXchangeConfigMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useActivateXchangeConfigMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [activateXchangeConfigMutation, { data, loading, error }] = useActivateXchangeConfigMutation({
+ *   variables: {
+ *      sid: // value for 'sid'
+ *   },
+ * });
+ */
+export function useActivateXchangeConfigMutation(baseOptions?: Apollo.MutationHookOptions<ActivateXchangeConfigMutation, ActivateXchangeConfigMutationVariables>) {
+        return Apollo.useMutation<ActivateXchangeConfigMutation, ActivateXchangeConfigMutationVariables>(ActivateXchangeConfigDocument, baseOptions);
+      }
+export type ActivateXchangeConfigMutationHookResult = ReturnType<typeof useActivateXchangeConfigMutation>;
+export type ActivateXchangeConfigMutationResult = Apollo.MutationResult<ActivateXchangeConfigMutation>;
+export type ActivateXchangeConfigMutationOptions = Apollo.BaseMutationOptions<ActivateXchangeConfigMutation, ActivateXchangeConfigMutationVariables>;

@@ -39,6 +39,10 @@ const UIInputToggle = ({
     return null;
   };
 
+  if (uiField?.visible != true) {
+    return null;
+  }
+
   return (
     <>
       {uiField?.label && onRenderLabel()}
