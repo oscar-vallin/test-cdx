@@ -87,20 +87,32 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
     }
   };
 
-  const _overflowItems: ICommandBarItemProps[] = [
-    {
-      key: 'audit',
-      text: auditCommand?.label ?? '',
-      onClick: handleUserAuditLogsClick,
-      iconProps: { iconName: 'ComplianceAudit' },
-    },
-    {
-      key: 'history',
-      text: historyCommand?.label ?? '',
-      onClick: handleUserChangeHistoryLogsClick,
-      iconProps: { iconName: 'FullHistory' },
-    },
-  ];
+  const overflowItems = (): ICommandBarItemProps[] | undefined => {
+    const _overflowItems: ICommandBarItemProps[] = [];
+
+    if (auditCommand) {
+      _overflowItems.push({
+        key: 'audit',
+        text: auditCommand?.label ?? '',
+        onClick: handleUserAuditLogsClick,
+        iconProps: { iconName: 'ComplianceAudit' },
+      });
+    }
+
+    if (historyCommand) {
+      _overflowItems.push({
+        key: 'history',
+        text: historyCommand?.label ?? '',
+        onClick: handleUserChangeHistoryLogsClick,
+        iconProps: { iconName: 'FullHistory' },
+      });
+    }
+
+    if (_overflowItems.length === 0) {
+      _overflowItems.push({ key: '' });
+    }
+    return _overflowItems;
+  };
 
   const handleTabChange = (hash): void => {
     setStep(tabs.indexOf(hash));
@@ -334,7 +346,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
           )}
           <CommandBar
             items={[]}
-            overflowItems={_overflowItems}
+            overflowItems={overflowItems()}
             overflowButtonProps={overflowProps}
             ariaLabel="Inbox actions"
             primaryGroupAriaLabel="Email actions"
