@@ -9,7 +9,7 @@ type SectionAccessProps = {
 };
 
 const SectionAccessManagement = ({ form, onSubmit, saveOptions }: SectionAccessProps) => {
-  const saveCmd = form?.commands?.find((cmd) => cmd.commandType === CdxWebCommandType.Assign)
+  const saveCmd = form?.commands?.find((cmd) => cmd.commandType === CdxWebCommandType.Assign);
 
   return (
     <>

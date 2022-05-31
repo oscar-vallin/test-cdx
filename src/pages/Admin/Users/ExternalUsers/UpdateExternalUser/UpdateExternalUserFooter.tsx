@@ -11,7 +11,7 @@ type UpdateExternalUserFooterProps = {
 const UpdateExternalUserFooter = ({ saveCmd, onSave }: UpdateExternalUserFooterProps): ReactElement => {
   return (
     <WizardButtonRow>
-      { saveCmd && (
+      {saveCmd && (
         <span>
           <Button id="__User_Save_Button" onClick={onSave} variant="primary">
             Save
