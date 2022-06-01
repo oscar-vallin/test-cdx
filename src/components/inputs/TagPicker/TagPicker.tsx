@@ -78,6 +78,7 @@ const CDXTagPicker = ({
         disabled={disabled}
         inputProps={{
           id,
+          inputMode: 'search',
           onBlur,
           onFocus,
           placeholder: disabled ? '' : 'Type to Search',

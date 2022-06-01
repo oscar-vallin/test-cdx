@@ -1,6 +1,7 @@
 import { UserAccountForm } from 'src/data/services/graphql';
 import CreateUsersFooter from './CreateUsersFooter';
 import { AccessManagementWizardBody } from 'src/pages/Admin/Users/AccessManagementWizardBody';
+import { WizardBody } from 'src/layouts/Panels/Panels.styles';
 
 type SectionAccessProps = {
   form?: UserAccountForm;
@@ -22,7 +23,9 @@ const SectionAccessManagement = ({ form, onPrev, onNext, saveOptions }: SectionA
 
   return (
     <>
-      <AccessManagementWizardBody form={form} saveOptions={saveOptions} />
+      <WizardBody>
+        <AccessManagementWizardBody form={form} saveOptions={saveOptions} />
+      </WizardBody>
       <CreateUsersFooter onPrev={handlePrev} onNext={handleNext} />
     </>
   );

@@ -17,13 +17,14 @@ import { Tabs } from 'src/components/tabs/Tabs';
 import { PanelBody, PanelHeader, PanelTitle } from 'src/layouts/Panels/Panels.styles';
 
 import { UseUpdateUserPanel } from 'src/pages/Admin/Users/UpdateUsers/useUpdateUserPanel';
-import { GqOperationResponse, UserAccount, UserAccountForm, CdxWebCommandType } from 'src/data/services/graphql';
+import { GqOperationResponse, UserAccount } from 'src/data/services/graphql';
 import { Column } from 'src/components/layouts';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import SectionAccessManagement from './SectionAccessManagement';
 import { SectionAccount } from './SectionAccount';
 import { ActiveIcon, InactiveIcon } from './UpdateUserPanel.styles';
 import { useOrgSid } from 'src/hooks/useOrgSid';
+import { MigrateUserDialog } from 'src/pages/Admin/Users/UpdateUsers/MigrateUserDialog';
 
 const defaultProps = {
   onDismiss: () => {},
@@ -33,7 +34,7 @@ const defaultProps = {
 type UpdateUserPanelProps = {
   useUpdateUserPanel: UseUpdateUserPanel;
   onDismiss?: () => void;
-  onUpdateUser?: (form?: UserAccountForm) => void;
+  onUpdateUser?: () => void;
 } & typeof defaultProps;
 
 const tabs = ['#account', '#access'];
@@ -64,6 +65,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
   const { orgSid } = useOrgSid();
   const [step, setStep] = useState(Tab.Account);
   const [showDialog, setShowDialog] = useState(false);
+  const [showMigrateUserDialog, setShowMigrateUserDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [messageType, setMessageType] = useState<MessageBarType>(MessageBarType.info);
@@ -73,16 +75,13 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
 
   const form = useUpdateUserPanel.userAccountForm;
 
-  const auditCommand = form.commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Audit);
-  const historyCommand = form.commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.History);
-
   const handleUserAuditLogsClick = () => {
-    if (auditCommand) {
+    if (useUpdateUserPanel.auditActivityCmd) {
       history.push(`/user-audit-logs?orgSid=${orgSid}&changedByUserSid=${form.person?.sid}`);
     }
   };
   const handleUserChangeHistoryLogsClick = () => {
-    if (historyCommand) {
+    if (useUpdateUserPanel.changeHistoryCmd) {
       history.push(`/user-audit-logs?orgSid=${orgSid}&userSid=${form.person?.sid}`);
     }
   };
@@ -90,22 +89,33 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
   const overflowItems = (): ICommandBarItemProps[] | undefined => {
     const _overflowItems: ICommandBarItemProps[] = [];
 
-    if (auditCommand) {
+    if (useUpdateUserPanel.auditActivityCmd) {
       _overflowItems.push({
         key: 'audit',
-        text: auditCommand?.label ?? '',
+        text: useUpdateUserPanel.auditActivityCmd?.label ?? '',
         onClick: handleUserAuditLogsClick,
         iconProps: { iconName: 'ComplianceAudit' },
       });
     }
 
-    if (historyCommand) {
+    if (useUpdateUserPanel.changeHistoryCmd) {
       _overflowItems.push({
         key: 'history',
-        text: historyCommand?.label ?? '',
+        text: useUpdateUserPanel.changeHistoryCmd?.label ?? '',
         onClick: handleUserChangeHistoryLogsClick,
         iconProps: { iconName: 'FullHistory' },
       });
+    }
+
+    if (useUpdateUserPanel.migrateUserCmd) {
+      _overflowItems.push({
+        key: 'migrate',
+        text: useUpdateUserPanel.migrateUserCmd?.label ?? 'Migrate',
+        onClick: () => {
+          setShowMigrateUserDialog(true);
+        },
+        iconProps: { iconName: 'FollowUser' },
+      })
     }
 
     if (_overflowItems.length === 0) {
@@ -132,7 +142,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
       }
 
       if (responseCode === GqOperationResponse.Success || responseCode === GqOperationResponse.PartialSuccess) {
-        onUpdateUser(responseCreate.updateUser);
+        onUpdateUser();
         setMessageType(MessageBarType.success);
         setMessage('User Profile Saved');
         setUnsavedChanges(false);
@@ -154,7 +164,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
       }
 
       if (responseCode === GqOperationResponse.Success || responseCode === GqOperationResponse.PartialSuccess) {
-        onUpdateUser(response.updateUserAccessPolicyGroups);
+        onUpdateUser();
         setMessageType(MessageBarType.success);
         setMessage('User Profile Saved');
         setUnsavedChanges(false);
@@ -304,6 +314,12 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
     return `${firstNm ?? ''} ${lastNm ?? ''}`;
   };
 
+  const onMigrateUser = () => {
+    setShowMigrateUserDialog(false);
+    onUpdateUser();
+    doClosePanel();
+  };
+
   const renderPanelHeader = () => (
     <PanelHeader>
       <Column lg="6">
@@ -413,6 +429,12 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
         </PanelBody>
       </Panel>
       <DialogYesNo {...dialogProps} open={showDialog} />
+      {showMigrateUserDialog && (
+        <MigrateUserDialog useUpdateUserPanel={useUpdateUserPanel}
+                           userName={userName()}
+                           onMigrateUser={onMigrateUser}
+                           onCancel={() => setShowMigrateUserDialog(false)}/>
+      )}
     </>
   );
 };

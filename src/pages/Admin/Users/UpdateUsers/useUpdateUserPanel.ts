@@ -4,12 +4,14 @@ import {
   CdxWebCommandType,
   DeactivateUserMutation,
   GqOperationResponse,
+  MigrateUserMutation,
   ResetPasswordMutation,
   UpdateUserAccessPolicyGroupsMutation,
   UpdateUserMutation,
   useActivateUserMutation,
   useDeactivateUserMutation,
   useFindUserAccountLazyQuery,
+  useMigrateUserMutation,
   UserAccount,
   UserAccountForm,
   useResetPasswordMutation,
@@ -30,11 +32,13 @@ export type UseUpdateUserPanel = {
   deactivateUserCmd: WebCommand | null | undefined;
   changeHistoryCmd: WebCommand | null | undefined;
   auditActivityCmd: WebCommand | null | undefined;
+  migrateUserCmd: WebCommand | null | undefined;
   callUpdateUser: (updates: UserAccount) => Promise<UpdateUserMutation | null | undefined>;
   callAssignGroups: (sids: string[]) => Promise<UpdateUserAccessPolicyGroupsMutation | null | undefined>;
   callResetPassword: () => Promise<ResetPasswordMutation | null | undefined>;
   callDeactivateUser: () => Promise<DeactivateUserMutation | null | undefined>;
   callActivateUser: () => Promise<ActivateUserMutation | null | undefined>;
+  callMigrateUser: (orgSid: string, accessPolicyGroupSids: string[]) => Promise<MigrateUserMutation | null | undefined>;
   resetForm: () => void;
 };
 
@@ -47,6 +51,7 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
   const [deactivateUserCmd, setDeactivateUserCmd] = useState<WebCommand>();
   const [changeHistoryCmd, setChangeHistoryCmd] = useState<WebCommand>();
   const [auditActivityCmd, setAuditActivityCmd] = useState<WebCommand>();
+  const [migrateUserCmd, setMigrateUserCmd] = useState<WebCommand>();
 
   const handleError = ErrorHandler();
 
@@ -62,6 +67,8 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
   const [callDeactivateUser, { error: deactivateUserError }] = useDeactivateUserMutation();
 
   const [callActivateUser, { error: activateUserError }] = useActivateUserMutation();
+
+  const [callMigrateUser, { error: migrateUserError }] = useMigrateUserMutation();
 
   const showPanel = (userAccountSid: string) => {
     setUserSid(userAccountSid);
@@ -100,6 +107,10 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
     handleError(activateUserError);
   }, [activateUserError]);
 
+  useEffect(() => {
+    handleError(migrateUserError);
+  }, [migrateUserError]);
+
   const internalServerError = {
     sid: null,
     organization: {
@@ -107,6 +118,7 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
       required: false,
       visible: true,
     },
+    accessGrantOrgNames: [],
     response: GqOperationResponse.Fail,
     errCode: 'INTERNAL_ERROR',
     errMsg: 'An internal server error has occurred.  Please contact your administrator.',
@@ -214,6 +226,30 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
     return data;
   };
 
+  const handleMigrateUser = async (orgSid: string, accessPolicyGroupSids: string[]) => {
+    const { data } = await callMigrateUser({
+      variables: {
+        migrateInput: {
+          userAccountSid: userSid,
+          orgSid,
+          accessPolicyGroupSids,
+        },
+      },
+      errorPolicy: 'all',
+    });
+
+    if (data?.migrateUser === GqOperationResponse.Success) {
+      // Update the form
+      callFindUserAccount({
+        variables: {
+          userSid,
+        },
+      });
+    }
+
+    return data;
+  };
+
   const resetForm = () => {
     if (userSid) {
       // setUserAccountForm(defaultForm);
@@ -238,6 +274,7 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
     setDeactivateUserCmd(findCmd(CdxWebCommandType.Deactivate));
     setChangeHistoryCmd(findCmd(CdxWebCommandType.History));
     setAuditActivityCmd(findCmd(CdxWebCommandType.Audit));
+    setMigrateUserCmd(findCmd(CdxWebCommandType.Migrate));
   }, [userAccountForm]);
 
   //
@@ -252,11 +289,13 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
     deactivateUserCmd,
     changeHistoryCmd,
     auditActivityCmd,
+    migrateUserCmd,
     callUpdateUser: handleUpdateUser,
     callAssignGroups: handleUpdateUserGroups,
     callResetPassword: handleResetPassword,
     callDeactivateUser: handleDeactivateUser,
     callActivateUser: handleActivateUser,
+    callMigrateUser: handleMigrateUser,
     resetForm,
   };
 };

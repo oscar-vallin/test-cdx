@@ -57,6 +57,10 @@ const fullForm: UserAccountForm = {
     visible: true,
     options: 'AccessPolicyGroup',
   },
+  accessGrantOrgNames: [
+    'Other Org 1',
+    'Other Org 2',
+  ],
   organization: {
     label: 'Organization',
     value: '1',

@@ -68,7 +68,7 @@ export const useUserAuditLogsColumns = (
       isPadded: true,
       data: UserAuditLogsColumn.EVENT_TYPE,
       onColumnClick: onSort,
-      onRender: (item?: UserAccountAuditLog) => <span>{getEventTypeName(item?.event)}</span>,
+      onRender: (item?: UserAccountAuditLog) => <span title={getEventTypeName(item?.event)}>{getEventTypeName(item?.event)}</span>,
     },
     {
       key: 'changedByUserAccount',

@@ -166,7 +166,8 @@ export enum CdxWebCommandType {
   Assign = 'ASSIGN',
   Reset = 'RESET',
   Audit = 'AUDIT',
-  History = 'HISTORY'
+  History = 'HISTORY',
+  Migrate = 'MIGRATE'
 }
 
 export enum CdxWebPage {
@@ -746,6 +747,12 @@ export enum LoginStepType {
   Complete = 'COMPLETE'
 }
 
+export type MigrateUserInput = {
+  userAccountSid: Scalars['ID'];
+  orgSid: Scalars['ID'];
+  accessPolicyGroupSids?: Maybe<Array<Scalars['ID']>>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   beginLogin?: Maybe<LoginStep>;
@@ -779,6 +786,7 @@ export type Mutation = {
   deactivateUsers?: Maybe<GqOperationResponse>;
   activateUser?: Maybe<GqOperationResponse>;
   activateUsers?: Maybe<GqOperationResponse>;
+  migrateUser?: Maybe<GenericResponse>;
   grantExternalUserAccess?: Maybe<UserAccountForm>;
   createExternalUser?: Maybe<UserAccountForm>;
   revokeExternalUserAccess?: Maybe<GenericResponse>;
@@ -966,6 +974,11 @@ export type MutationActivateUserArgs = {
 
 export type MutationActivateUsersArgs = {
   sidsInput: SidsInput;
+};
+
+
+export type MutationMigrateUserArgs = {
+  migrateInput?: Maybe<MigrateUserInput>;
 };
 
 
@@ -2707,6 +2720,7 @@ export enum UserAccountAuditEvent {
   ProfileUpdate = 'PROFILE_UPDATE',
   LoginSuccess = 'LOGIN_SUCCESS',
   LoginFail = 'LOGIN_FAIL',
+  UserMigration = 'USER_MIGRATION',
   InactiveLoginAttempt = 'INACTIVE_LOGIN_ATTEMPT',
   LockedLoginAttempt = 'LOCKED_LOGIN_ATTEMPT',
   Logout = 'LOGOUT',
@@ -2733,6 +2747,7 @@ export type UserAccountForm = {
   person?: Maybe<PersonForm>;
   organization: UiReadOnlyField;
   accessPolicyGroups?: Maybe<UiSelectManyField>;
+  accessGrantOrgNames: Array<Scalars['String']>;
   /** Indicates that an email should be sent to the user with an activation link. */
   sendActivationEmail?: Maybe<UiBooleanField>;
   lastLogin?: Maybe<UiReadOnlyField>;
@@ -4179,7 +4194,7 @@ export type UserAccountFormQuery = (
   { __typename?: 'Query' }
   & { userAccountForm?: Maybe<(
     { __typename?: 'UserAccountForm' }
-    & Pick<UserAccountForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & Pick<UserAccountForm, 'sid' | 'accessGrantOrgNames' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { email?: Maybe<(
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
@@ -4227,7 +4242,7 @@ export type FindUserAccountQuery = (
   { __typename?: 'Query' }
   & { findUserAccount?: Maybe<(
     { __typename?: 'UserAccountForm' }
-    & Pick<UserAccountForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & Pick<UserAccountForm, 'sid' | 'accessGrantOrgNames' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { email?: Maybe<(
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
@@ -4430,7 +4445,7 @@ export type ExternalUserForOrgQuery = (
   { __typename?: 'Query' }
   & { externalUserForOrg?: Maybe<(
     { __typename?: 'UserAccountForm' }
-    & Pick<UserAccountForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & Pick<UserAccountForm, 'sid' | 'accessGrantOrgNames' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { email?: Maybe<(
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
@@ -6524,7 +6539,7 @@ export type CreateUserMutation = (
   { __typename?: 'Mutation' }
   & { createUser?: Maybe<(
     { __typename?: 'UserAccountForm' }
-    & Pick<UserAccountForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & Pick<UserAccountForm, 'sid' | 'accessGrantOrgNames' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { email?: Maybe<(
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
@@ -6572,7 +6587,7 @@ export type UpdateUserMutation = (
   { __typename?: 'Mutation' }
   & { updateUser?: Maybe<(
     { __typename?: 'UserAccountForm' }
-    & Pick<UserAccountForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & Pick<UserAccountForm, 'sid' | 'accessGrantOrgNames' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { email?: Maybe<(
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
@@ -6620,7 +6635,7 @@ export type UpdateUserAccessPolicyGroupsMutation = (
   { __typename?: 'Mutation' }
   & { updateUserAccessPolicyGroups?: Maybe<(
     { __typename?: 'UserAccountForm' }
-    & Pick<UserAccountForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & Pick<UserAccountForm, 'sid' | 'accessGrantOrgNames' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { email?: Maybe<(
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
@@ -6699,6 +6714,30 @@ export type ActivateUsersMutation = (
   & Pick<Mutation, 'activateUsers'>
 );
 
+export type MigrateUserMutationVariables = Exact<{
+  migrateInput?: Maybe<MigrateUserInput>;
+}>;
+
+
+export type MigrateUserMutation = (
+  { __typename?: 'Mutation' }
+  & { migrateUser?: Maybe<(
+    { __typename?: 'GenericResponse' }
+    & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { allMessages?: Maybe<Array<(
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>> }
+    )>> }
+  )> }
+);
+
 export type GrantExternalUserAccessMutationVariables = Exact<{
   userInfo: GrantExternalUserInput;
 }>;
@@ -6708,7 +6747,7 @@ export type GrantExternalUserAccessMutation = (
   { __typename?: 'Mutation' }
   & { grantExternalUserAccess?: Maybe<(
     { __typename?: 'UserAccountForm' }
-    & Pick<UserAccountForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & Pick<UserAccountForm, 'sid' | 'accessGrantOrgNames' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { email?: Maybe<(
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
@@ -6757,7 +6796,7 @@ export type CreateExternalUserMutation = (
   { __typename?: 'Mutation' }
   & { createExternalUser?: Maybe<(
     { __typename?: 'UserAccountForm' }
-    & Pick<UserAccountForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & Pick<UserAccountForm, 'sid' | 'accessGrantOrgNames' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { email?: Maybe<(
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
@@ -9775,6 +9814,7 @@ export const UserAccountFormDocument = gql`
     accessPolicyGroups {
       ...fragmentUISelectManyField
     }
+    accessGrantOrgNames
     sendActivationEmail {
       ...fragmentUIBooleanField
     }
@@ -9853,6 +9893,7 @@ export const FindUserAccountDocument = gql`
     accessPolicyGroups {
       ...fragmentUISelectManyField
     }
+    accessGrantOrgNames
     sendActivationEmail {
       ...fragmentUIBooleanField
     }
@@ -10212,6 +10253,7 @@ export const ExternalUserForOrgDocument = gql`
     accessPolicyGroups {
       ...fragmentUISelectManyField
     }
+    accessGrantOrgNames
     sendActivationEmail {
       ...fragmentUIBooleanField
     }
@@ -14278,6 +14320,7 @@ export const CreateUserDocument = gql`
     accessPolicyGroups {
       ...fragmentUISelectManyField
     }
+    accessGrantOrgNames
     sendActivationEmail {
       ...fragmentUIBooleanField
     }
@@ -14356,6 +14399,7 @@ export const UpdateUserDocument = gql`
     accessPolicyGroups {
       ...fragmentUISelectManyField
     }
+    accessGrantOrgNames
     sendActivationEmail {
       ...fragmentUIBooleanField
     }
@@ -14435,6 +14479,7 @@ export const UpdateUserAccessPolicyGroupsDocument = gql`
     accessPolicyGroups {
       ...fragmentUISelectManyField
     }
+    accessGrantOrgNames
     sendActivationEmail {
       ...fragmentUIBooleanField
     }
@@ -14604,6 +14649,50 @@ export function useActivateUsersMutation(baseOptions?: Apollo.MutationHookOption
 export type ActivateUsersMutationHookResult = ReturnType<typeof useActivateUsersMutation>;
 export type ActivateUsersMutationResult = Apollo.MutationResult<ActivateUsersMutation>;
 export type ActivateUsersMutationOptions = Apollo.BaseMutationOptions<ActivateUsersMutation, ActivateUsersMutationVariables>;
+export const MigrateUserDocument = gql`
+    mutation MigrateUser($migrateInput: MigrateUserInput) {
+  migrateUser(migrateInput: $migrateInput) {
+    response
+    errCode
+    errMsg
+    errSeverity
+    allMessages {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
+      }
+    }
+  }
+}
+    ${UnionNvpFragmentDoc}`;
+export type MigrateUserMutationFn = Apollo.MutationFunction<MigrateUserMutation, MigrateUserMutationVariables>;
+
+/**
+ * __useMigrateUserMutation__
+ *
+ * To run a mutation, you first call `useMigrateUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMigrateUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [migrateUserMutation, { data, loading, error }] = useMigrateUserMutation({
+ *   variables: {
+ *      migrateInput: // value for 'migrateInput'
+ *   },
+ * });
+ */
+export function useMigrateUserMutation(baseOptions?: Apollo.MutationHookOptions<MigrateUserMutation, MigrateUserMutationVariables>) {
+        return Apollo.useMutation<MigrateUserMutation, MigrateUserMutationVariables>(MigrateUserDocument, baseOptions);
+      }
+export type MigrateUserMutationHookResult = ReturnType<typeof useMigrateUserMutation>;
+export type MigrateUserMutationResult = Apollo.MutationResult<MigrateUserMutation>;
+export type MigrateUserMutationOptions = Apollo.BaseMutationOptions<MigrateUserMutation, MigrateUserMutationVariables>;
 export const GrantExternalUserAccessDocument = gql`
     mutation GrantExternalUserAccess($userInfo: GrantExternalUserInput!) {
   grantExternalUserAccess(userInfo: $userInfo) {
@@ -14632,6 +14721,7 @@ export const GrantExternalUserAccessDocument = gql`
     accessPolicyGroups {
       ...fragmentUISelectManyField
     }
+    accessGrantOrgNames
     sendActivationEmail {
       ...fragmentUIBooleanField
     }
@@ -14709,6 +14799,7 @@ export const CreateExternalUserDocument = gql`
     accessPolicyGroups {
       ...fragmentUISelectManyField
     }
+    accessGrantOrgNames
     sendActivationEmail {
       ...fragmentUIBooleanField
     }

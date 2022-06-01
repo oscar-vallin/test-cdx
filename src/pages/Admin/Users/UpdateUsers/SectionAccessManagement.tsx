@@ -3,6 +3,7 @@ import UpdateUserFooter from './UpdateUserFooter';
 import { AccessManagementWizardBody } from 'src/pages/Admin/Users/AccessManagementWizardBody';
 import { useState } from 'react';
 import { getSelectedAccessGroupSids } from 'src/pages/Admin/Users/UserAccountFormUtil';
+import { WizardBody } from 'src/layouts/Panels/Panels.styles';
 
 type SectionAccessProps = {
   form?: UserAccountForm;
@@ -24,7 +25,9 @@ const SectionAccessManagement = ({ form, onSave, onFormChange }: SectionAccessPr
 
   return (
     <>
-      <AccessManagementWizardBody form={form} saveOptions={saveOptions} />
+      <WizardBody>
+        <AccessManagementWizardBody form={form} saveOptions={saveOptions} />
+      </WizardBody>
       {form?.commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Assign) && (
         <UpdateUserFooter onSave={handleSave} />
       )}
