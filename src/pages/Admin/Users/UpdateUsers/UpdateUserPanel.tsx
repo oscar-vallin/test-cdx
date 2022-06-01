@@ -108,9 +108,6 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
       });
     }
 
-    if (_overflowItems.length === 0) {
-      _overflowItems.push({ key: '' });
-    }
     return _overflowItems;
   };
 
