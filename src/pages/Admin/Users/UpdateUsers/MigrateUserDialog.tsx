@@ -24,35 +24,34 @@ type MigrateUserDialogType = {
 };
 
 export const MigrateUserDialog = ({ useUpdateUserPanel, userName, onMigrateUser, onCancel }: MigrateUserDialogType) => {
-
   const [selectedOrgs, setSelectedOrgs] = useState<ITag[]>();
   const [selectedGroupSids, setSelectedGroupSids] = useState<string[]>(
     getSelectedAccessGroupSids(useUpdateUserPanel.userAccountForm)
   );
-  const [callUserAccountForm, { data: dataUserAccountForm, loading: userAccountFormLoading, error: userAccountFormError }] =
-    useUserAccountFormLazyQuery();
+  const [
+    callUserAccountForm,
+    { data: dataUserAccountForm, loading: userAccountFormLoading, error: userAccountFormError },
+  ] = useUserAccountFormLazyQuery();
   const [otherOrgForm, setOtherOrgForm] = useState<UserAccountForm | null>();
   const client = useApolloClient();
   const handleError = ErrorHandler();
   const Toast = useNotification();
 
   const migrateUser = () => {
-    const selectedOrg = (selectedOrgs && selectedOrgs.length > 0) ? selectedOrgs[0] : null;
+    const selectedOrg = selectedOrgs && selectedOrgs.length > 0 ? selectedOrgs[0] : null;
     if (selectedOrg) {
       const orgSid = selectedOrg.key.toString();
 
-      useUpdateUserPanel
-        .callMigrateUser(orgSid, selectedGroupSids)
-        .then((data) => {
-          if (data?.migrateUser?.response === GqOperationResponse.Success) {
-            Toast.success({ text: `${userName} has been migrated to ${selectedOrg.name}` })
-            onMigrateUser()
-          }
-        });
+      useUpdateUserPanel.callMigrateUser(orgSid, selectedGroupSids).then((data) => {
+        if (data?.migrateUser?.response === GqOperationResponse.Success) {
+          Toast.success({ text: `${userName} has been migrated to ${selectedOrg.name}` });
+          onMigrateUser();
+        }
+      });
     }
 
     return null;
-  }
+  };
 
   useEffect(() => {
     handleError(userAccountFormError);
@@ -63,22 +62,22 @@ export const MigrateUserDialog = ({ useUpdateUserPanel, userName, onMigrateUser,
       const orgSid = selectedOrgs[0].key.toString();
       callUserAccountForm({
         variables: {
-          orgSid
-        }
-      })
+          orgSid,
+        },
+      });
     } else {
       setOtherOrgForm(undefined);
     }
-  }, [selectedOrgs]);
+  }, [callUserAccountForm, selectedOrgs]);
 
   useEffect(() => {
     if (dataUserAccountForm && !userAccountFormLoading) {
-      const userAccountForm = dataUserAccountForm.userAccountForm;
+      const { userAccountForm } = dataUserAccountForm;
       // Prepopulate the values of the access groups with the access groups the user currently has
       if (userAccountForm?.accessPolicyGroups) {
         userAccountForm.accessPolicyGroups.value = selectedGroupSids.map((id) => {
           return { name: id, value: id };
-        })
+        });
         userAccountForm.accessPolicyGroups.label = 'New Access Groups';
       }
       setOtherOrgForm(userAccountForm);
@@ -98,29 +97,23 @@ export const MigrateUserDialog = ({ useUpdateUserPanel, userName, onMigrateUser,
       ));
     }
 
-    return (
-      <Text variant='muted'>&lt;none&gt;</Text>
-    );
+    return <Text variant="muted">&lt;none&gt;</Text>;
   };
 
   const renderExistingGrants = () => {
-    const accessGrantOrgNames = useUpdateUserPanel.userAccountForm.accessGrantOrgNames;
+    const { accessGrantOrgNames } = useUpdateUserPanel.userAccountForm;
     if (accessGrantOrgNames && accessGrantOrgNames.length > 0) {
-      return accessGrantOrgNames.map((orgName, index) => (
-        <Text key={`orgName=${index}`}>{orgName}</Text>
-      ));
+      return accessGrantOrgNames.map((orgName, index) => <Text key={`orgName=${index}`}>{orgName}</Text>);
     }
 
-    return (
-      <Text variant='muted'>&lt;none&gt;</Text>
-    )
+    return <Text variant="muted">&lt;none&gt;</Text>;
   };
 
   return (
     <Dialog
       dialogContentProps={{
         type: DialogType.normal,
-        title: "Migrate user",
+        title: 'Migrate user',
       }}
       minWidth="500px"
       modalProps={{
@@ -130,12 +123,12 @@ export const MigrateUserDialog = ({ useUpdateUserPanel, userName, onMigrateUser,
       onDismiss={onCancel}
     >
       <Column lg="12">
-        <FormLabel id='__OrgSearch_lbl' label={`Migrate ${userName} to:`}/>
+        <FormLabel id="__OrgSearch_lbl" label={`Migrate ${userName} to:`} />
         <TagPicker
-          id='__OrgSearch_Input'
+          id="__OrgSearch_Input"
           debounce={500}
           itemLimit={1}
-          doSearch={(searchText) => orgQuickSearch(client, handleError, searchText, "1")}
+          doSearch={(searchText) => orgQuickSearch(client, handleError, searchText, '1')}
           value={selectedOrgs}
           onChange={setSelectedOrgs}
         />
@@ -144,13 +137,13 @@ export const MigrateUserDialog = ({ useUpdateUserPanel, userName, onMigrateUser,
         <>
           <FormRow>
             <Column lg="12">
-              <Stack horizontal tokens={{ childrenGap: 15 }} verticalAlign="baseline" wrap style={{width: '100%'}}>
+              <Stack horizontal tokens={{ childrenGap: 15 }} verticalAlign="baseline" wrap style={{ width: '100%' }}>
                 <Stack.Item grow={3}>
-                  <FormLabel id="__ExistingGroups_lbl" label="Existing Access Groups"/>
+                  <FormLabel id="__ExistingGroups_lbl" label="Existing Access Groups" />
                   {renderExistingGroups()}
                 </Stack.Item>
                 <Stack.Item grow={3}>
-                  <FormLabel id="__ExistingGrants_lbl" label="Granted Access to"/>
+                  <FormLabel id="__ExistingGrants_lbl" label="Granted Access to" />
                   {renderExistingGrants()}
                 </Stack.Item>
               </Stack>
@@ -160,14 +153,20 @@ export const MigrateUserDialog = ({ useUpdateUserPanel, userName, onMigrateUser,
         </>
       )}
       <DialogFooter>
-        <Button variant="primary"
-                text={useUpdateUserPanel.migrateUserCmd?.label}
-                disabled={selectedOrgs?.length != 1}
-                onClick={migrateUser}/>
-        <Button variant="secondary" text="Cancel" onClick={() => {
-          onCancel();
-          return null;
-        }}/>
+        <Button
+          variant="primary"
+          text={useUpdateUserPanel.migrateUserCmd?.label}
+          disabled={selectedOrgs?.length !== 1}
+          onClick={migrateUser}
+        />
+        <Button
+          variant="secondary"
+          text="Cancel"
+          onClick={() => {
+            onCancel();
+            return null;
+          }}
+        />
       </DialogFooter>
     </Dialog>
   );

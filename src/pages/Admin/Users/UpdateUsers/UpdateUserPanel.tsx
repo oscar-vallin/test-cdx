@@ -1,4 +1,4 @@
-/*eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { ReactElement, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
@@ -20,11 +20,11 @@ import { UseUpdateUserPanel } from 'src/pages/Admin/Users/UpdateUsers/useUpdateU
 import { GqOperationResponse, UserAccount } from 'src/data/services/graphql';
 import { Column } from 'src/components/layouts';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
+import { useOrgSid } from 'src/hooks/useOrgSid';
+import { MigrateUserDialog } from 'src/pages/Admin/Users/UpdateUsers/MigrateUserDialog';
 import SectionAccessManagement from './SectionAccessManagement';
 import { SectionAccount } from './SectionAccount';
 import { ActiveIcon, InactiveIcon } from './UpdateUserPanel.styles';
-import { useOrgSid } from 'src/hooks/useOrgSid';
-import { MigrateUserDialog } from 'src/pages/Admin/Users/UpdateUsers/MigrateUserDialog';
 
 const defaultProps = {
   onDismiss: () => {},
@@ -115,7 +115,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
           setShowMigrateUserDialog(true);
         },
         iconProps: { iconName: 'FollowUser' },
-      })
+      });
     }
 
     if (_overflowItems.length === 0) {
@@ -430,10 +430,12 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
       </Panel>
       <DialogYesNo {...dialogProps} open={showDialog} />
       {showMigrateUserDialog && (
-        <MigrateUserDialog useUpdateUserPanel={useUpdateUserPanel}
-                           userName={userName()}
-                           onMigrateUser={onMigrateUser}
-                           onCancel={() => setShowMigrateUserDialog(false)}/>
+        <MigrateUserDialog
+          useUpdateUserPanel={useUpdateUserPanel}
+          userName={userName()}
+          onMigrateUser={onMigrateUser}
+          onCancel={() => setShowMigrateUserDialog(false)}
+        />
       )}
     </>
   );
