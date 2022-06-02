@@ -132,15 +132,13 @@ const ExternalOrgsPage = () => {
       return;
     }
     return (
-      <>
-        <DetailsList
-          items={orgs}
-          selectionMode={SelectionMode.none}
-          columns={columns}
-          layoutMode={DetailsListLayoutMode.justified}
-          isHeaderVisible
-        />
-      </>
+      <DetailsList
+        items={orgs}
+        selectionMode={SelectionMode.none}
+        columns={columns}
+        layoutMode={DetailsListLayoutMode.justified}
+        isHeaderVisible
+      />
     );
   };
   return (

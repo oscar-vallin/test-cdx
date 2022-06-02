@@ -157,11 +157,7 @@ export const MigrateUserDialog = ({ useUpdateUserPanel, userName, onMigrateUser,
           disabled={selectedOrgs?.length !== 1}
           onClick={migrateUser}
         />
-        <Button
-          variant="secondary"
-          text="Cancel"
-          onClick={onCancel}
-        />
+        <Button variant="secondary" text="Cancel" onClick={onCancel} />
       </DialogFooter>
     </Dialog>
   );

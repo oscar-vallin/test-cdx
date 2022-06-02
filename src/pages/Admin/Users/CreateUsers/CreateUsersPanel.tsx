@@ -155,70 +155,68 @@ const CreateUsersPanel = ({ orgSid, isOpen, onDismiss, onCreateUser }: CreateUse
           )}
           {userAccountLoading && <Text>Loading...</Text>}
           {!userAccountLoading && (
-            <>
-              <Tabs
-                items={[
-                  {
-                    title: 'Account',
-                    content: (
-                      <SectionAccount
-                        form={createUserService.userAccountForm}
-                        onNext={handleNext}
-                        saveOptions={(userAccount) => {
-                          createUserService.updateAccountInfo(userAccount);
-                          setUnsavedChanges(true);
-                        }}
-                      />
-                    ),
-                    hash: '#account',
-                  },
-                  {
-                    title: 'Access Management',
-                    content: (
-                      <SectionAccessManagement
-                        form={createUserService.userAccountForm}
-                        onPrev={handlePrev}
-                        onNext={handleNext}
-                        saveOptions={(sids) => {
-                          createUserService.updateAccessPolicyGroups(sids);
-                          setUnsavedChanges(true);
-                        }}
-                      />
-                    ),
-                    hash: '#access',
-                  },
-                  {
-                    title: 'Authentication',
-                    content: (
-                      <SectionAuthentication
-                        form={createUserService.userAccountForm}
-                        onPrev={handlePrev}
-                        onNext={handleNext}
-                        saveOptions={(send) => {
-                          createUserService.setSendAccountActivation(send);
-                          setUnsavedChanges(true);
-                        }}
-                      />
-                    ),
-                    hash: '#auth',
-                  },
-                  {
-                    title: 'Summary',
-                    content: (
-                      <SectionSummary
-                        form={createUserService.userAccountForm}
-                        onPrev={handlePrev}
-                        onSubmit={handleCreateUser}
-                        isProcessing={isProcessing}
-                      />
-                    ),
-                    hash: '#summary',
-                  },
-                ]}
-                selectedKey={step < 0 ? '0' : step.toString()}
-                onClickTab={handleTabChange}
-              />
-            </>
+            <Tabs
+              items={[
+                {
+                  title: 'Account',
+                  content: (
+                    <SectionAccount
+                      form={createUserService.userAccountForm}
+                      onNext={handleNext}
+                      saveOptions={(userAccount) => {
+                        createUserService.updateAccountInfo(userAccount);
+                        setUnsavedChanges(true);
+                      }}
+                    />
+                  ),
+                  hash: '#account',
+                },
+                {
+                  title: 'Access Management',
+                  content: (
+                    <SectionAccessManagement
+                      form={createUserService.userAccountForm}
+                      onPrev={handlePrev}
+                      onNext={handleNext}
+                      saveOptions={(sids) => {
+                        createUserService.updateAccessPolicyGroups(sids);
+                        setUnsavedChanges(true);
+                      }}
+                    />
+                  ),
+                  hash: '#access',
+                },
+                {
+                  title: 'Authentication',
+                  content: (
+                    <SectionAuthentication
+                      form={createUserService.userAccountForm}
+                      onPrev={handlePrev}
+                      onNext={handleNext}
+                      saveOptions={(send) => {
+                        createUserService.setSendAccountActivation(send);
+                        setUnsavedChanges(true);
+                      }}
+                    />
+                  ),
+                  hash: '#auth',
+                },
+                {
+                  title: 'Summary',
+                  content: (
+                    <SectionSummary
+                      form={createUserService.userAccountForm}
+                      onPrev={handlePrev}
+                      onSubmit={handleCreateUser}
+                      isProcessing={isProcessing}
+                    />
+                  ),
+                  hash: '#summary',
+                },
+              ]}
+              selectedKey={step < 0 ? '0' : step.toString()}
+              onClickTab={handleTabChange}
+            />
           )}
         </PanelBody>
       </Panel>

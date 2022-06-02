@@ -6,12 +6,12 @@ import { Column, Container, Row } from 'src/components/layouts';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { useSessionStore } from 'src/store/SessionStore';
 import { StyledRow, StyledCard } from 'src/pages/Admin/DashboardSite/DefaultTheme/DefaultThemePage.styles';
+import { PageTitle } from 'src/components/typography';
 import { PasswordChange } from './PasswordChange';
 import { PasswordRules } from './PasswordRules';
 import { ThemeSettings } from './ThemeSettings';
 
 import { PasswordState } from './PasswordChange/PasswordChange';
-import { PageTitle } from 'src/components/typography';
 
 const _UserSettingsPage = () => {
   const { user } = useSessionStore();

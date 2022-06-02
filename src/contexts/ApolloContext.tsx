@@ -3,8 +3,8 @@ import { ApolloProvider, ApolloClient, InMemoryCache, HttpLink, ApolloLink } fro
 import { setContext } from '@apollo/client/link/context';
 import { useWatchCSRFToken } from 'src/hooks/useWatchCSRFToken';
 import { LoadingPage } from 'src/pages/Loading/LoadingPage';
-import { useCSRFToken } from '../hooks/useCSRFToken';
 import { createUploadLink } from 'apollo-upload-client';
+import { useCSRFToken } from '../hooks/useCSRFToken';
 
 const SERVER_URL = process.env.REACT_APP_API_SERVER;
 
@@ -61,7 +61,7 @@ export const ApolloContextProvider = ({ bypassLoading, children }: ApolloContext
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const client = new ApolloClient({
     link: ApolloLink.from([authLink, afterwareLink, uploadLink]),
-    //afterwareLink.concat(authLink.concat(httpLink)),
+    // afterwareLink.concat(authLink.concat(httpLink)),
     // cache: new InMemoryCache({ possibleTypes: introspection.possibleTypes }),
     cache: new InMemoryCache(),
     credentials: 'include',

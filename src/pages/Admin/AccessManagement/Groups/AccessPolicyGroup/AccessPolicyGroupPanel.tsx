@@ -159,14 +159,14 @@ const AccessPolicyGroupPanel = ({
     return (
       <span>
         <InlineLabel required={item?.required}>{item?.label}</InlineLabel>
-        <InfoIcon id={`$_Info`} tooltip={formatInfoTooltip(item?.info)} />
-        <ErrorIcon id={`$-ErrorMsg`} errorMessage={item?.errMsg} />
+        <InfoIcon id="$_Info" tooltip={formatInfoTooltip(item?.info)} />
+        <ErrorIcon id="$-ErrorMsg" errorMessage={item?.errMsg} />
       </span>
     );
   };
 
   const renderOptionsGroup = (formUiLabelField, options, onChange, id) => {
-    let subGroups: any[][] = [[], []];
+    const subGroups: any[][] = [[], []];
     for (let i = 0; i < options.length; i++) {
       subGroups[i % 2].push(options[i]);
     }
@@ -238,7 +238,7 @@ const AccessPolicyGroupPanel = ({
   };
 
   const getCheckedValues = (options, selectedOptions) => {
-    let newOptions: any = [];
+    const newOptions: any = [];
     options.forEach((element) => {
       newOptions.push({ ...element, checked: selectedOptions.includes(element.value) });
     });

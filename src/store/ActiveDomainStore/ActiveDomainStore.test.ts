@@ -1,7 +1,7 @@
 import { createStore } from 'easy-peasy';
 
-import ActiveDomainStore, { INITIAL_NAV_STATE, INITIAL_ORG_STATE } from './ActiveDomainStore';
 import { DomainNavItem } from 'src/store/ActiveDomainStore/ActiveDomainTypes';
+import ActiveDomainStore, { INITIAL_NAV_STATE, INITIAL_ORG_STATE } from './ActiveDomainStore';
 
 describe('Unit::ActiveDomainStore', () => {
   const store = createStore(ActiveDomainStore);

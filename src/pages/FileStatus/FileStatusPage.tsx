@@ -128,10 +128,7 @@ const _FileStatusPage = () => {
           setTableMeta({ count: total, loading });
         }}
       />
-      <FileStatusDetailsPage
-        tableFilters={tableFilters}
-        useFileStatusDetailsPanel={fileStatusDetailsPanel}
-      ></FileStatusDetailsPage>
+      <FileStatusDetailsPage tableFilters={tableFilters} useFileStatusDetailsPanel={fileStatusDetailsPanel} />
     </LayoutDashboard>
   );
 };

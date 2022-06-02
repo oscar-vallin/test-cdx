@@ -11,9 +11,16 @@ type ButtonIconProps = {
   variant?: string;
   onClick?: () => void;
   block?: boolean;
-}
+};
 
-const ButtonIcon = ({ id = '', disabled = true, icon = '', size, onClick, ...props }: ButtonIconProps): ReactElement => {
+const ButtonIcon = ({
+  id = '',
+  disabled = true,
+  icon = '',
+  size,
+  onClick,
+  ...props
+}: ButtonIconProps): ReactElement => {
   return (
     <StyledButton id={id} disabled={disabled} onClick={onClick} {...props}>
       <StyledFontIcon iconName={icon} size={size} />

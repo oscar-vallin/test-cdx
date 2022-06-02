@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { Box as LayoutBox, Row as LayoutRow } from '../../../components/layouts';
 import { Text } from 'src/components/typography';
+import { Box as LayoutBox, Row as LayoutRow } from '../../../components/layouts';
 
 export const Container = styled.div`
   width: 100%;

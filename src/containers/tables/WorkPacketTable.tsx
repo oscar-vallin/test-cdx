@@ -17,13 +17,13 @@ import { TableFiltersType } from 'src/hooks/useTableFilters';
 import { Paginator } from 'src/components/tables/Paginator';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { useHistory } from 'react-router-dom';
+import { UseFileStatusDetailsPanel } from 'src/pages/FileStatusDetails/useFileStatusDetailsPanel';
+import { ROUTES } from 'src/data/constants/RouteConstants';
+import { useQueryParams } from 'src/hooks/useQueryParams';
 import { useWorkPacketColumns, WorkPacketColumn } from './WorkPacketColumns';
 import { TableFilters } from './TableFilters';
 import { EmptyState } from '../states';
 import { Box, Container } from './WorkPacketTable.styles';
-import { UseFileStatusDetailsPanel } from 'src/pages/FileStatusDetails/useFileStatusDetailsPanel';
-import { ROUTES } from 'src/data/constants/RouteConstants';
-import { useQueryParams } from 'src/hooks/useQueryParams';
 
 type WorkPacketParams = {
   id: string;
@@ -206,7 +206,7 @@ export const WorkPacketTable = ({
         setPagingInfo(newPagingInfo);
       }
 
-      //update contextual page title
+      // update contextual page title
       if (data) {
         const key = Object.keys(data)[0];
         const listPageInfo = data?.[key]?.listPageInfo;

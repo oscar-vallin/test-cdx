@@ -79,7 +79,7 @@ export const OrgPanel = ({ isOpen, selectedOrgSid, onDismiss, onSave }: OrgPanel
     } else {
       fetchOrgForm({
         variables: {
-          orgOwnerSid: orgOwnerSid,
+          orgOwnerSid,
         },
       });
     }
@@ -195,7 +195,7 @@ export const OrgPanel = ({ isOpen, selectedOrgSid, onDismiss, onSave }: OrgPanel
               onChange={(newValue) => {
                 setUnsavedChanges(true);
                 const orgType = getEnumByValue(OrgType, newValue);
-                setOrgState({ ...orgState, orgType: orgType });
+                setOrgState({ ...orgState, orgType });
               }}
             />
           </Column>
@@ -237,7 +237,7 @@ export const OrgPanel = ({ isOpen, selectedOrgSid, onDismiss, onSave }: OrgPanel
             orgId: orgState.orgId ?? '',
             name: orgState.name ?? '',
             orgType: orgState.orgType ?? OrgType.IntegrationSponsor,
-            orgOwnerSid: orgOwnerSid,
+            orgOwnerSid,
           },
         },
       }).then();

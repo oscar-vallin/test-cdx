@@ -6,9 +6,9 @@ import { Column, Container } from 'src/components/layouts';
 import { PageTitle, Text } from 'src/components/typography';
 import { ImplementationDeployMutation, useImplementationDeployMutation } from 'src/data/services/graphql';
 import { Spinner } from 'src/components/spinners/Spinner';
-import { DeployButton, Row } from './ImplementationDeployPage.styles';
 import { ROUTE_IMPL_DEPLOY } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
+import { DeployButton, Row } from './ImplementationDeployPage.styles';
 
 const _ImplementationDeployPage = () => {
   const onImplementationDeploy = (data: ImplementationDeployMutation) => {

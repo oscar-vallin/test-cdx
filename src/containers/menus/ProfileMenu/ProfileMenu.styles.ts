@@ -1,10 +1,9 @@
 import styled from 'styled-components';
-import { Box, Row as LayoutRow, Column as LayoutColumn } from '../../../components/layouts';
 import { Card } from 'src/components/cards';
-import { Button } from 'src/components/buttons';
-import { ButtonAction } from 'src/components/buttons';
+import { Button, ButtonAction } from 'src/components/buttons';
 import { Image } from 'src/components/images/Image';
 import { Text } from 'src/components/typography';
+import { Box, Row as LayoutRow, Column as LayoutColumn } from '../../../components/layouts';
 
 export const StyledBox = styled(Box)<StyledBoxProps>`
   padding: 0px 0px;

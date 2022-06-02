@@ -12,7 +12,7 @@ type ButtonContextualProps = {
 const ButtonContextual = ({ id, children, items }: ButtonContextualProps): ReactElement => {
   const menuProps: IContextualMenuProps = useConst(() => ({
     shouldFocusOnMount: true,
-    items: items,
+    items,
   }));
 
   return (

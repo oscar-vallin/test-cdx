@@ -2,10 +2,9 @@ import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { TABLE_NAMES } from 'src/data/constants/TableConstants';
+import { Table } from 'src/components/tables';
 import { TableBox } from './TableDashboard.styles';
 import { useTable } from './TableDashboard.service';
-
-import { Table } from 'src/components/tables';
 
 const TableDashboard = ({
   id,

@@ -30,7 +30,7 @@ export default class PuppetActiveOrgs extends PuppetBasePage {
   }
 
   async clickOnPolicyTemplate() {
-    //const nameInputSelector = '#PolicyInput__Name';
+    // const nameInputSelector = '#PolicyInput__Name';
 
     await this.page.waitForTimeout(2000);
 

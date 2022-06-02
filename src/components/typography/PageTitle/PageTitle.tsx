@@ -1,7 +1,7 @@
 import { FontIcon } from '@fluentui/react';
 import React from 'react';
-import { Text } from '../Text';
 import { theme } from 'src/styles/themes/theme';
+import { Text } from '../Text';
 import { SubTitle } from './PageTitle.styles';
 
 type PageTitleParams = {

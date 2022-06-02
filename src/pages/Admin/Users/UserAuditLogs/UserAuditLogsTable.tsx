@@ -22,10 +22,10 @@ import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { TableFiltersType } from 'src/hooks/useTableFilters';
 import { Paginator } from 'src/components/tables/Paginator';
-import { UserAuditLogsColumn, useUserAuditLogsColumns } from './UserAuditLogsTableColumn';
 import { TableFilters } from 'src/containers/tables/TableFilters';
 import { EmptyState } from 'src/containers/states';
 import { Box, Container } from 'src/components/layouts';
+import { UserAuditLogsColumn, useUserAuditLogsColumns } from './UserAuditLogsTableColumn';
 
 type UserAuditLogsTableParams = {
   id: string;
@@ -207,9 +207,9 @@ export const UserAuditLogsTable = ({ id, cols, lazyQuery, getItems, tableFilters
   };
 
   const setComboBoxOptions = () => {
-    let options: IComboBoxOption[] = [];
+    const options: IComboBoxOption[] = [];
     options.push({ key: 'All', text: '(All Event Types Included)' });
-    for (var enumMember in UserAccountAuditEvent) {
+    for (const enumMember in UserAccountAuditEvent) {
       options.push({
         key: UserAccountAuditEvent[enumMember],
         text: getEventTypeName(UserAccountAuditEvent[enumMember]),

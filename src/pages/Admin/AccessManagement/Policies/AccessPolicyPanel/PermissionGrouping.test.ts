@@ -1,5 +1,5 @@
-import { PermissionGroups, groupPermissions } from './PermissionGrouping';
 import { UiOptions } from 'src/data/services/graphql';
+import { PermissionGroups, groupPermissions } from './PermissionGrouping';
 
 const testUIOptions: UiOptions[] = [
   {

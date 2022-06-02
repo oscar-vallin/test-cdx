@@ -21,7 +21,8 @@ const HighlightCounter = ({ id, type, href, onClick, children, ...props }: Highl
         </StyledLink>
       </HighlightBubble>
     );
-  } else if (onClick) {
+  }
+  if (onClick) {
     return (
       <HighlightBubble id={id} type={type} {...props}>
         <StyledLink
@@ -36,13 +37,12 @@ const HighlightCounter = ({ id, type, href, onClick, children, ...props }: Highl
         </StyledLink>
       </HighlightBubble>
     );
-  } else {
-    return (
-      <HighlightBubble id={id} type={type} {...props}>
-        {children}
-      </HighlightBubble>
-    );
   }
+  return (
+    <HighlightBubble id={id} type={type} {...props}>
+      {children}
+    </HighlightBubble>
+  );
 };
 
 export { HighlightCounter };

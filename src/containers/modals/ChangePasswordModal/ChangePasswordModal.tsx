@@ -21,29 +21,27 @@ const ChangePasswordModal = ({ hidden, ...props }: ChangePasswordModalProps): Re
 
   const ModalFooter = () => {
     return (
-      <>
-        <StyledDiv>
-          <Spacing margin={{ right: 'small' }}>
-            <Button
-              id="__ChangePasswordModalID"
-              text="Cancel"
-              variant="secondary"
-              disabled={false}
-              block={false}
-              onClick={() => handleAlert('Cancel')}
-            />
-          </Spacing>
-
+      <StyledDiv>
+        <Spacing margin={{ right: 'small' }}>
           <Button
             id="__ChangePasswordModalID"
-            variant="primary"
-            text="Save"
+            text="Cancel"
+            variant="secondary"
             disabled={false}
             block={false}
-            onClick={() => handleAlert('Save')}
+            onClick={() => handleAlert('Cancel')}
           />
-        </StyledDiv>
-      </>
+        </Spacing>
+
+        <Button
+          id="__ChangePasswordModalID"
+          variant="primary"
+          text="Save"
+          disabled={false}
+          block={false}
+          onClick={() => handleAlert('Save')}
+        />
+      </StyledDiv>
     );
   };
 

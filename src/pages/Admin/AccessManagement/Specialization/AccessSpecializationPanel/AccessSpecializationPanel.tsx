@@ -220,9 +220,8 @@ const AccessSpecializationPanel = ({
   const doOrgSearch = async (option: SpecializationOption, text: string): Promise<ITag[]> => {
     if (option.orgSids.query === 'vendorQuickSearch') {
       return vendorQuickSearch(client, handleError, text, orgSid);
-    } else {
-      return orgQuickSearch(client, handleError, text, orgSid);
     }
+    return orgQuickSearch(client, handleError, text, orgSid);
   };
 
   const renderBody = () => {

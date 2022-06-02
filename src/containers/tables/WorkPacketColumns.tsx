@@ -303,7 +303,7 @@ export const useWorkPacketColumns = (
           return (
             <StyledColumn>
               <Link
-                disabled={workOrderId ? false : true}
+                disabled={!workOrderId}
                 onClick={workOrderId ? () => openDetails(item.orgSid, workOrderId) : () => null}
               >
                 Reprocessed on

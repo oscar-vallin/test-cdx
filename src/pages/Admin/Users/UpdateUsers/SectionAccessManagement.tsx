@@ -1,9 +1,9 @@
 import { CdxWebCommandType, UserAccountForm } from 'src/data/services/graphql';
-import UpdateUserFooter from './UpdateUserFooter';
 import { AccessManagementWizardBody } from 'src/pages/Admin/Users/AccessManagementWizardBody';
 import { useState } from 'react';
 import { getSelectedAccessGroupSids } from 'src/pages/Admin/Users/UserAccountFormUtil';
 import { WizardBody } from 'src/layouts/Panels/Panels.styles';
+import UpdateUserFooter from './UpdateUserFooter';
 
 type SectionAccessProps = {
   form?: UserAccountForm;

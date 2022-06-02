@@ -1,7 +1,7 @@
 import { UserAccountForm } from 'src/data/services/graphql';
-import AddExternalUsersAccessFooter from './AddExternalUsersAccessFooter';
 import { AccessManagementWizardBody } from 'src/pages/Admin/Users/AccessManagementWizardBody';
 import { WizardBody } from 'src/layouts/Panels/Panels.styles';
+import AddExternalUsersAccessFooter from './AddExternalUsersAccessFooter';
 
 type SectionAccessProps = {
   form?: UserAccountForm;

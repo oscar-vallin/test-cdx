@@ -60,7 +60,7 @@ export const ScheduleSubHeader = ({
   }, [selectedDate]);
 
   const clickWeekHeader = (d: Date) => {
-    //console.log(d);
+    // console.log(d);
     onChangeDate(d);
     onChangeView('day');
   };

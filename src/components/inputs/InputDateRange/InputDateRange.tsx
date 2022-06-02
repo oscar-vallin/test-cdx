@@ -1,9 +1,9 @@
 import { ReactElement } from 'react';
-import { Row, Column } from './InputDateRange.styles';
 import { FormLabel } from 'src/components/labels/FormLabel';
 import { DateState } from 'src/hooks/useDateValue';
 import { DatePicker } from '@fluentui/react';
 import { DayPickerStrings, firstDayOfWeek } from 'src/components/inputs/DateConstants';
+import { Row, Column } from './InputDateRange.styles';
 
 type InputDateRangeProps = {
   startDate: DateState;
@@ -14,7 +14,7 @@ type InputDateRangeProps = {
 const ERR_FROM_DATE = 'The "From" date must be before the "To" date';
 const ERR_TO_DATE = 'The "To" date must be after the "From" date';
 
-//Get tomorrow's date for maxDate value
+// Get tomorrow's date for maxDate value
 const today = new Date();
 const tomorrow = new Date(today);
 tomorrow.setDate(tomorrow.getDate() + 1);

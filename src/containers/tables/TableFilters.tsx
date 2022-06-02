@@ -2,8 +2,8 @@ import React from 'react';
 import { Card } from 'src/components/cards';
 import { InputText } from 'src/components/inputs/InputText';
 import { InputDateRange } from 'src/components/inputs/InputDateRange';
-import { Column, Container, FilterSection, StyledRow } from './WorkPacketTable.styles';
 import { ComboBox, IComboBoxOption } from '@fluentui/react';
+import { Column, Container, FilterSection, StyledRow } from './WorkPacketTable.styles';
 
 type TableFilterParams = {
   id: string;
@@ -43,7 +43,7 @@ export const TableFilters = ({
                 <ComboBox
                   id={`${id}__Card__Row__Dropdown`}
                   label="Event"
-                  defaultSelectedKey={'All'}
+                  defaultSelectedKey="All"
                   options={evenTypesDropdownItems}
                   {...eventType}
                 />

@@ -124,7 +124,7 @@ export const WorkPacketCommandButton = ({
       .apiCallRenameReprocess({
         variables: {
           workOrderId: realId,
-          newFileName: newFileName,
+          newFileName,
         },
       })
       .then(() => {
@@ -298,8 +298,8 @@ export const WorkPacketCommandButton = ({
           onDismiss={() => setIsConfirmationHidden(true)}
           dialogContentProps={{
             type: DialogType.normal,
-            title: title,
-            subText: subText,
+            title,
+            subText,
           }}
           modalProps={{ isBlocking: true }}
         >
@@ -319,7 +319,7 @@ export const WorkPacketCommandButton = ({
               onChange={(e, newValue) => {
                 setNewFileName(newValue ?? '');
               }}
-            ></InputText>
+            />
           )}
           <DialogFooter>
             {showPrimaryButton && (

@@ -96,7 +96,7 @@ export const useCreateGroupPanel = (isOpen, orgSid, selectedGroupId, templateId)
   const updateFromForm = (form: AccessPolicyGroupForm) => {
     setAccessPolicyForm(form);
     if (form) {
-      const options = form.options;
+      const { options } = form;
       const data: AccessGroupState = {
         sid: form.sid ?? undefined,
         orgSid: form.organization?.value ?? undefined,

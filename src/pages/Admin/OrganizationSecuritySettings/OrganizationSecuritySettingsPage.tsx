@@ -199,7 +199,7 @@ const _OrganizationSecuritySettingsPage = () => {
                         ariaLabel="Add more IP Addresses/Netmask"
                         onClick={() => {
                           const whitelistClone: UiStringField[] = Object.assign([], whitelistFields);
-                          const fieldClone: UiStringField = Object.assign({}, whitelistClone[0]);
+                          const fieldClone: UiStringField = { ...whitelistClone[0] };
                           fieldClone.value = '';
                           whitelistClone.push(fieldClone);
                           setWhiteListFields(whitelistClone);

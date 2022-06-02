@@ -90,7 +90,7 @@ const _ErrorsPage = () => {
           setTableMeta({ count: total, loading });
         }}
       />
-      <FileStatusDetailsPage useFileStatusDetailsPanel={fileStatusDetailsPanel}></FileStatusDetailsPage>
+      <FileStatusDetailsPage useFileStatusDetailsPanel={fileStatusDetailsPanel} />
     </LayoutDashboard>
   );
 };

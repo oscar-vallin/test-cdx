@@ -373,9 +373,9 @@ const Table = ({
         }
 
         {
-          let startFormatted,
-            endFormatted,
-            redirectPage = 'file-status';
+          let startFormatted;
+          let endFormatted;
+          let redirectPage = 'file-status';
           if (date === 'custom') {
             startFormatted = yyyyMMdd(fromDate);
             endFormatted = yyyyMMdd(toDate);

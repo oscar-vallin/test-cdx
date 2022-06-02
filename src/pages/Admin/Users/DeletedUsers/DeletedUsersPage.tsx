@@ -9,10 +9,10 @@ import { ActiveEnum, useActivateUsersMutation, UserItem, SortDirection } from 's
 import { UpdateUserPanel, useUpdateUserPanel } from 'src/pages/Admin/Users/UpdateUsers';
 import { UsersTable } from 'src/pages/Admin/Users/UsersTable';
 import { useUsersLists } from 'src/pages/Admin/Users/useUsersList';
-import { StyledColumn } from './DeletedUsersPage.styles';
 import { ROUTE_DELETED_USERS } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { useTableFilters } from 'src/hooks/useTableFilters';
+import { StyledColumn } from './DeletedUsersPage.styles';
 
 const DeletedUsersPage = () => {
   const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);

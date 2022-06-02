@@ -61,7 +61,7 @@ const CDXTagPicker = ({
       <StyledTagPicker
         removeButtonAriaLabel="Remove"
         componentRef={picker}
-        onResolveSuggestions={doSearch ? doSearch : () => options ?? []}
+        onResolveSuggestions={doSearch || (() => options ?? [])}
         selectedItems={value}
         onItemSelected={handleItemSelection}
         onChange={onChange}

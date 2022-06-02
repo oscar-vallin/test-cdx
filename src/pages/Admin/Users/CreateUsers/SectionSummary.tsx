@@ -1,8 +1,8 @@
 import { ReactElement } from 'react';
 
 import { UserAccountForm } from 'src/data/services/graphql';
-import CreateUsersFooter from './CreateUsersFooter';
 import { SummaryWizardBody } from 'src/pages/Admin/Users/SummaryWizardBody';
+import CreateUsersFooter from './CreateUsersFooter';
 
 type SectionSummaryPropsType = {
   form: UserAccountForm;
