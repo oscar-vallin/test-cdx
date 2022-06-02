@@ -238,7 +238,8 @@ const ActiveOrgsPage = () => {
   };
 
   const showCheckbox = () => {
-    if (ActiveDomainStore.domainOrg.origin.orgSid === orgOwnerSid) {
+    console.log(ActiveDomainStore.domainOrg)
+    if (ActiveDomainStore.domainOrg.current.orgId === 'CDX') {
       return (
         <Checkbox
           id="__SearchAllOrgs__Orgs-Checkbox"
@@ -250,6 +251,7 @@ const ActiveOrgsPage = () => {
         />
       );
     }
+    return null;
   };
 
   return (
