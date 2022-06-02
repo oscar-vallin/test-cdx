@@ -13,8 +13,8 @@ import { UIFormLabel } from 'src/components/labels/FormLabel';
 import { useCreateGroupPanel } from 'src/pages/Admin/AccessManagement/Groups/AccessPolicyGroup/AccessPolicyGroupPanel.service';
 import { UIInputTextReadOnly } from 'src/components/inputs/InputText/InputText';
 import { UIInputCheck } from 'src/components/inputs/InputCheck';
-import { UICheckboxList, formatInfoTooltip } from 'src/components/inputs/CheckboxList';
-import { AccessPolicyGroupForm, CdxWebCommandType, GqOperationResponse, UiOption } from 'src/data/services/graphql';
+import { formatInfoTooltip } from 'src/components/inputs/CheckboxList';
+import { AccessPolicyGroupForm, CdxWebCommandType, GqOperationResponse } from 'src/data/services/graphql';
 import { UIInputMultiSelect } from 'src/components/inputs/InputDropdown';
 import { TagPicker } from 'src/components/inputs/TagPicker';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
@@ -166,7 +166,7 @@ const AccessPolicyGroupPanel = ({
   };
 
   const renderOptionsGroup = (formUiLabelField, options, onChange, id) => {
-    let subGroups: any[][] = new Array(new Array(), new Array());
+    let subGroups: any[][] = [[], []];
     for (let i = 0; i < options.length; i++) {
       subGroups[i % 2].push(options[i]);
     }
@@ -445,7 +445,6 @@ const AccessPolicyGroupPanel = ({
                   createAccessPolicyGroupInput: { orgSid, ...commonVariables },
                 }).then();
               }
-              return null;
             }}
           >
             {command.label}

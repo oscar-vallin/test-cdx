@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { getDates } from 'src/helpers/tableHelpers.service';
 
 import { useOrgSid } from 'src/hooks/useOrgSid';
+import { yyyyMMdd } from 'src/utils/CDXUtils';
 import {
   HeaderTable,
   StyledColumn,
@@ -12,7 +13,6 @@ import {
   StyledMenuButton,
   StyledRow,
 } from './TableHeader.styles';
-import { yyyyMMdd } from 'src/utils/CDXUtils';
 
 const TableHeader = ({ id, header, sortLabel, onSort, onOption, date, ...props }) => {
   const { orgSid } = useOrgSid();

@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
 
-import { HighlightBubble, StyledLink } from './HighlightCounter.styles';
 import { ErrorSeverity, Maybe } from 'src/data/services/graphql';
+import { HighlightBubble, StyledLink } from './HighlightCounter.styles';
 
 type HighlightCounterProps = {
   id: string;

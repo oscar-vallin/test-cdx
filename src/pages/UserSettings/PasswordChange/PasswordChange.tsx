@@ -118,7 +118,6 @@ const PasswordChange = ({ state, onChange, validationPassed }: PasswordChangePar
                   },
                   errorPolicy: 'all',
                 }).then();
-                return null;
               }}
             />
           </Spacing>

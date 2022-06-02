@@ -116,8 +116,6 @@ const _OrganizationSecuritySettingsPage = () => {
         text: 'An error occurred while updating the security settings. Please, try again.',
       });
     });
-
-    return null;
   };
 
   return (

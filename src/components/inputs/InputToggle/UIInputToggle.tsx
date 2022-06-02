@@ -39,7 +39,7 @@ const UIInputToggle = ({
     return null;
   };
 
-  if (uiField?.visible != true) {
+  if (uiField?.visible !== true) {
     return null;
   }
 

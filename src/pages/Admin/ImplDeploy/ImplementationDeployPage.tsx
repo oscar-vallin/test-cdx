@@ -37,7 +37,6 @@ const _ImplementationDeployPage = () => {
         setInit(false);
       }
     });
-    return null;
   };
 
   const renderDeploymentResult = () => {

@@ -160,7 +160,6 @@ const ThemeSettings = () => {
                     },
                   },
                 });
-                return null;
               }}
             />
           </Spacing>

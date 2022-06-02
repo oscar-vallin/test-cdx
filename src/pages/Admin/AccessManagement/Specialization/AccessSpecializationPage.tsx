@@ -165,7 +165,6 @@ const AccessManagementSpecializationPage = () => {
           aria-label={createCmd.label}
           onClick={() => {
             setIsPanelOpen(true);
-            return null;
           }}
         >
           {createCmd.label}

@@ -98,19 +98,15 @@ export const ScheduleHeader = ({ id, currentView, selectedDate, onChangeDate, on
     if (_newView !== currentView) {
       onChangeView(_newView);
     }
-
-    return null;
   };
 
   const handleSelectToday = () => {
     handleChangeDate(new Date());
-    return null;
   };
 
   //
   const handleCalendarOpen = (open: boolean) => {
     setCalendarOpen(open);
-    return null;
   };
 
   const renderTodayButton = () => {

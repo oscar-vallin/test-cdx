@@ -5,7 +5,7 @@ import { WebCommand } from 'src/data/services/graphql';
 
 type UpdateExternalUserFooterProps = {
   saveCmd?: WebCommand;
-  onSave: () => any;
+  onSave: () => void;
 };
 
 const UpdateExternalUserFooter = ({ saveCmd, onSave }: UpdateExternalUserFooterProps): ReactElement => {

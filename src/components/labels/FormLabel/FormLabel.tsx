@@ -1,8 +1,8 @@
 import { ReactElement } from 'react';
 import { UiField } from 'src/data/services/graphql';
-import { LabelRow, Label, Required } from './FormLabel.styles';
 import { InfoIcon } from 'src/components/badges/InfoIcon';
 import { ErrorIcon } from 'src/components/badges/ErrorIcon';
+import { LabelRow, Label, Required } from './FormLabel.styles';
 
 const defaultProps = {
   required: false,

@@ -6,7 +6,9 @@ import 'react-quill/dist/quill.snow.css';
 export const App: React.FC = (): React.ReactElement => {
   const ApplicationStore = useApplicationStore();
 
-  useEffect(ApplicationStore.initStatusCheck, []);
+  useEffect(() => {
+    ApplicationStore.initStatusCheck();
+  }, []);
 
   useEffect(() => {
     if (ApplicationStore.status.isOffline) {

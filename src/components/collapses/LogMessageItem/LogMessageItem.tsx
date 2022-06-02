@@ -1,5 +1,4 @@
 import { ReactNode, useState } from 'react';
-import { StyledLogMessageDiv } from './LogMessageItem.styles';
 import { IconButton, TextField, Stack } from '@fluentui/react';
 import { Container, Row } from 'src/components/layouts';
 import { Spacing } from 'src/components/spacings/Spacing';
@@ -8,6 +7,7 @@ import { LabelValue } from 'src/components/labels/LabelValue';
 import { Text } from 'src/components/typography';
 import { LogLevel } from 'src/data/services/graphql';
 import { yyyyMMdda } from 'src/utils/CDXUtils';
+import { StyledLogMessageDiv } from './LogMessageItem.styles';
 
 type LogMessageItemProps = {
   logMessage: any;

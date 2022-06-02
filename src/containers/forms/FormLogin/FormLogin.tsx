@@ -133,7 +133,6 @@ const FormLogin = ({ id }: FormLoginProps): ReactElement => {
                         } else {
                           performUserIdVerification(values);
                         }
-                        return null;
                       }}
                     >
                       {state.loading ? <Spinner /> : !isValidEmail ? 'Next' : 'Login'}

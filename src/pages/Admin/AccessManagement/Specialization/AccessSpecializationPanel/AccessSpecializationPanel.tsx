@@ -371,8 +371,6 @@ const AccessSpecializationPanel = ({
                   },
                 });
               }
-
-              return null;
             }}
           >
             {command.label}

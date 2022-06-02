@@ -49,8 +49,6 @@ export const MigrateUserDialog = ({ useUpdateUserPanel, userName, onMigrateUser,
         }
       });
     }
-
-    return null;
   };
 
   useEffect(() => {
@@ -162,10 +160,7 @@ export const MigrateUserDialog = ({ useUpdateUserPanel, userName, onMigrateUser,
         <Button
           variant="secondary"
           text="Cancel"
-          onClick={() => {
-            onCancel();
-            return null;
-          }}
+          onClick={onCancel}
         />
       </DialogFooter>
     </Dialog>

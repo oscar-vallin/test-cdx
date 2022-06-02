@@ -19,7 +19,7 @@ export const UIInputMultiSelect = ({ id, uiField, options, value, onChange, plac
 
   const renderReadOnlyValues = () => {
     if (uiField?.value?.length && uiField?.value?.length > 0) {
-      return uiField?.value.map((value) => value?.name).join(', ');
+      return uiField?.value.map((v) => v?.name).join(', ');
     }
     return <EmptyValue>&lt;empty&gt;</EmptyValue>;
   };

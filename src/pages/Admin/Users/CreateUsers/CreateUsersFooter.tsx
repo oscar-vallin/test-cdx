@@ -3,9 +3,9 @@ import { Button } from 'src/components/buttons';
 import { WizardButtonRow } from 'src/layouts/Panels/Panels.styles';
 
 type CreateUsersFooterProps = {
-  onNext?: () => null;
-  onPrev?: () => null;
-  onSubmit?: () => any;
+  onNext?: () => void;
+  onPrev?: () => void;
+  onSubmit?: () => void;
 };
 
 const CreateUsersFooter = ({ onNext, onPrev, onSubmit }: CreateUsersFooterProps): ReactElement => {

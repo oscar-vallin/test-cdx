@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 import { Box, Row as LayoutRow, Column as LayoutColumn } from '../../../components/layouts';
-import { Card } from '../../../components/cards';
-import { Button } from '../../../components/buttons/Button';
-import { ButtonAction } from '../../../components/buttons/ButtonAction';
-import { Image } from '../../../components/images/Image';
-import { Text } from '../../../components/typography/Text';
+import { Card } from 'src/components/cards';
+import { Button } from 'src/components/buttons';
+import { ButtonAction } from 'src/components/buttons';
+import { Image } from 'src/components/images/Image';
+import { Text } from 'src/components/typography';
 
 export const StyledBox = styled(Box)<StyledBoxProps>`
   padding: 0px 0px;

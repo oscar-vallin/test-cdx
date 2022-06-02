@@ -117,8 +117,6 @@ const _PasswordRulesPage = () => {
                             orgSid: orgSid,
                           },
                         });
-
-                        return null;
                       }}
                       block={false}
                     >
@@ -338,8 +336,6 @@ const _PasswordRulesPage = () => {
                               text: 'An error occurred while updating the password rules. Please, try again.',
                             });
                           });
-
-                          return null;
                         }}
                       >
                         Save

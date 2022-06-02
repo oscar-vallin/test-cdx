@@ -306,7 +306,6 @@ const _ColorPalettesPage = () => {
                           } else {
                             updateColorPalette(selectedPaletteId, params);
                           }
-                          return null;
                         }}
                       />
 
@@ -319,7 +318,6 @@ const _ColorPalettesPage = () => {
                         disabled={isProcessingPalettes}
                         onClick={() => {
                           setWantsReset(true);
-                          return null;
                         }}
                       />
 
@@ -334,7 +332,6 @@ const _ColorPalettesPage = () => {
                           onClick={() => {
                             removeColorPalette(selectedPaletteId);
                             setWantsReset(true);
-                            return null;
                           }}
                         />
                       )}

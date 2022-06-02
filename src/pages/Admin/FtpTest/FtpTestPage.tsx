@@ -33,10 +33,11 @@ import {
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { LogMessageItem } from 'src/components/collapses/LogMessageItem';
 import { Badge } from 'src/components/badges/Badge';
-import { StyledSelectedFile, StyledError } from './FtpTestPage.styles';
 import { useNotification } from 'src/hooks/useNotification';
 import { UIInputTextArea } from 'src/components/inputs/InputTextArea';
 import { yyyyMMdda } from 'src/utils/CDXUtils';
+import { ErrorHandler } from 'src/utils/ErrorHandler';
+import { StyledSelectedFile, StyledError } from './FtpTestPage.styles';
 
 const _FtpTestPage = () => {
   const [host, setHost] = useState('');
@@ -64,6 +65,15 @@ const _FtpTestPage = () => {
 
   const inputFileRef = React.useRef() as React.MutableRefObject<HTMLInputElement>;
   const Toast = useNotification();
+  const handleError = ErrorHandler();
+
+  useEffect(() => {
+    handleError(errorForm);
+  }, [errorForm]);
+
+  useEffect(() => {
+    handleError(ftpTestError);
+  }, [ftpTestError]);
 
   useEffect(() => {
     if (orgSid) {
@@ -145,7 +155,6 @@ const _FtpTestPage = () => {
   const handleOnTestBtn = () => {
     validatePasswordAndSSHKey();
     onTestBtn();
-    return null;
   };
 
   const handleChooseFile = (e) => {
