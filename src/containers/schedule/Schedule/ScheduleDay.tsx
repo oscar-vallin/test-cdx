@@ -5,6 +5,7 @@ import { useHistory } from 'react-router-dom';
 import { SchedOccurStatusEnum, ScheduleOccurrence, WorkPacketCommandType } from 'src/data/services/graphql';
 import { Badge } from 'src/components/badges/Badge';
 import { useOrgSid } from 'src/hooks/useOrgSid';
+import { UseFileStatusDetailsPanel } from 'src/pages/FileStatusDetails/useFileStatusDetailsPanel';
 import {
   DayBodyRow,
   DayContainer,
@@ -16,7 +17,6 @@ import {
   SWeekHourContainer,
   DayRow,
 } from './Schedule.styles';
-import { UseFileStatusDetailsPanel } from 'src/pages/FileStatusDetails/useFileStatusDetailsPanel';
 
 type ScheduleDayType = {
   currentDate: Date;

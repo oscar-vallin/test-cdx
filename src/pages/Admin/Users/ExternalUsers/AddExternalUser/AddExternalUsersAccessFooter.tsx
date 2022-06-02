@@ -4,9 +4,9 @@ import { WizardButtonRow } from 'src/layouts/Panels/Panels.styles';
 
 type AddExternalUsersAccessFooterProps = {
   userSelected?: boolean;
-  onNext?: () => null;
-  onPrev?: () => null;
-  onSubmit?: () => any;
+  onNext?: () => void;
+  onPrev?: () => void;
+  onSubmit?: () => void;
 };
 
 const AddExternalUsersAccessFooter = ({

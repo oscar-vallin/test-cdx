@@ -2,16 +2,16 @@ import { Checkbox } from '@fluentui/react';
 import { useState } from 'react';
 import { CheckboxItem } from 'src/data/Types';
 import { UiOption } from 'src/data/services/graphql';
-import { OptionRow } from './CheckboxList.styles';
 import { InfoIcon } from 'src/components/badges/InfoIcon';
 import { ErrorIcon } from 'src/components/badges/ErrorIcon';
 import { InlineLabel } from 'src/components/inputs/InputCheck/UIInputCheck.styles';
+import { OptionRow } from './CheckboxList.styles';
 
 type CheckboxListType = {
   id?: string;
   items: UiOption[];
   value: string[];
-  emptyMessage?: String;
+  emptyMessage?: string;
   onChange: (selectedValues: string[]) => void;
   formatTooltip?: boolean;
 };
@@ -19,7 +19,7 @@ type CheckboxListType = {
 const formatInfoTooltip = (str: string) => {
   let result = '';
   if (str) {
-    let regex = /;\s*/g;
+    const regex = /;\s*/g;
     result = str.replace(regex, '\n');
   }
   return result;

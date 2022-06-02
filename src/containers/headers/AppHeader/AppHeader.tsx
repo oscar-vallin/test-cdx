@@ -3,11 +3,10 @@ import { useHistory, useLocation } from 'react-router';
 import { Icon } from '@fluentui/react';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
 import { ProfileMenu } from 'src/containers/menus/ProfileMenu';
-import { ROUTE_EXTERNAL_ORGS } from 'src/data/constants/RouteConstants';
+import { ROUTE_EXTERNAL_ORGS, getRouteByApiId, ROUTE_USER_SETTINGS } from 'src/data/constants/RouteConstants';
 import { useCurrentUserTheme } from 'src/hooks/useCurrentUserTheme';
 import { useThemeStore } from 'src/store/ThemeStore';
 import { useSessionStore } from 'src/store/SessionStore';
-import { getRouteByApiId, ROUTE_USER_SETTINGS } from 'src/data/constants/RouteConstants';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 
 import {
@@ -41,7 +40,7 @@ const AppHeader = ({ onMenuButtonClick }: AppHeaderProps): ReactElement => {
 
   const { setOwnDashFontSize } = useCurrentUserTheme();
 
-  let originDestination = ActiveDomainStore.domainOrg.origin.destination !== ROUTE_EXTERNAL_ORGS.API_ID;
+  const originDestination = ActiveDomainStore.domainOrg.origin.destination !== ROUTE_EXTERNAL_ORGS.API_ID;
 
   type mapProps = {
     type?: string;
@@ -139,7 +138,6 @@ const AppHeader = ({ onMenuButtonClick }: AppHeaderProps): ReactElement => {
         ) : null;
       });
     }
-    return;
   };
 
   const renderOrgName = () => {

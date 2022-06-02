@@ -1,5 +1,5 @@
-import { getEnumByValue, isDateTimeValid, yyyyMMdd } from './CDXUtils';
 import { OrgType } from 'src/data/services/graphql';
+import { getEnumByValue, isDateTimeValid, yyyyMMdd } from './CDXUtils';
 
 describe('CDX Utility testing', () => {
   it('yyyyMMdd null', () => {

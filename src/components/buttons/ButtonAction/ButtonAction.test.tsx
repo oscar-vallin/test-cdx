@@ -1,5 +1,4 @@
-import { mount } from 'enzyme';
-import { mountWithTheme, shallowWithTheme } from '../../../../src/utils/testUtils';
+import { mountWithTheme, shallowWithTheme } from 'src/utils/testUtils';
 import { ButtonAction } from './ButtonAction';
 
 const defaultProps = {

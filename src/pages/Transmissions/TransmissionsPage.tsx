@@ -126,7 +126,7 @@ const _TransmissionsPage = () => {
           setTableMeta({ count: total, loading });
         }}
       />
-      <FileStatusDetailsPage useFileStatusDetailsPanel={fileStatusDetailsPanel}></FileStatusDetailsPage>
+      <FileStatusDetailsPage useFileStatusDetailsPanel={fileStatusDetailsPanel} />
     </LayoutDashboard>
   );
 };

@@ -1,12 +1,12 @@
 import { getHours, format, isValid, startOfYesterday, startOfToday, endOfToday, endOfTomorrow } from 'date-fns';
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
+import { yyyyMMdd } from 'src/utils/CDXUtils';
 import { DateState, useDateValue, useEndDateValue } from './useDateValue';
 import { DelayedInput, useDelayedInputValue, useDelayedDropdownValue } from './useInputValue';
 import { useQueryParams } from './useQueryParams';
 import { useOrgSid } from './useOrgSid';
 import { Maybe, PageableInput, SortDirection, SortOrderInput } from '../data/services/graphql';
-import { yyyyMMdd } from 'src/utils/CDXUtils';
 
 export type TableFiltersType = {
   searchText: DelayedInput;
@@ -131,7 +131,7 @@ export const useTableFilters = (searchTextPlaceholder: string, defaultSort?: Sor
       ..._addParamIfExists('changedByUserSid', changedByUserSid.value),
     };
 
-    //location.search = QueryParams.stringify(xParams);
+    // location.search = QueryParams.stringify(xParams);
 
     history.replace(QueryParams.merge(location, xParams));
   };

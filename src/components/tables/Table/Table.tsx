@@ -18,6 +18,9 @@ import { EmptyState } from 'src/containers/states';
 import { getDates } from 'src/helpers/tableHelpers.service';
 
 import { useOrgSid } from 'src/hooks/useOrgSid';
+import { yyyyMMdd } from 'src/utils/CDXUtils';
+import { TABLE_NAMES } from 'src/data/constants/TableConstants';
+import { TableHeader } from '../TableHeader';
 import {
   StyledText,
   StyledContainer,
@@ -30,10 +33,6 @@ import {
   StyledMenuIcon,
   StyledEmptyTable,
 } from './Table.styles';
-
-import { TableHeader } from '../TableHeader';
-import { yyyyMMdd } from 'src/utils/CDXUtils';
-import { TABLE_NAMES } from 'src/data/constants/TableConstants';
 
 const _buildColumns = (
   items,
@@ -374,9 +373,9 @@ const Table = ({
         }
 
         {
-          let startFormatted,
-            endFormatted,
-            redirectPage = 'file-status';
+          let startFormatted;
+          let endFormatted;
+          let redirectPage = 'file-status';
           if (date === 'custom') {
             startFormatted = yyyyMMdd(fromDate);
             endFormatted = yyyyMMdd(toDate);

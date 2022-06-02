@@ -3,7 +3,7 @@ import { Button } from 'src/components/buttons';
 import { WizardButtonRow } from 'src/layouts/Panels/Panels.styles';
 
 type UpdateUserFooterProps = {
-  onSave: () => any;
+  onSave: () => void;
 };
 
 const UpdateUserFooter = ({ onSave }: UpdateUserFooterProps): ReactElement => {

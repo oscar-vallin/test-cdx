@@ -1,8 +1,8 @@
 import { Checkbox, MaskedTextField } from '@fluentui/react';
 import { Column, Row } from 'src/components/layouts';
 import { Text } from 'src/components/typography';
-import { StyledDiv } from './PasswordRulesPage.styles';
 import { PasswordComplexity, PasswordRules, PasswordRulesForm } from 'src/data/services/graphql';
+import { StyledDiv } from './PasswordRulesPage.styles';
 
 export const DEFAULT_FORM: PasswordRules = {
   orgSid: '',

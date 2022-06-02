@@ -267,8 +267,6 @@ const AccessPolicyPanel = ({
                 errorPolicy: 'all',
               });
             }
-
-            return null;
           }}
         >
           {saveCmd.label}

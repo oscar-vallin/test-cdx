@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { DefaultButton, Dialog, DialogFooter, DialogType, PrimaryButton } from '@fluentui/react';
+import { DefaultButton, Dialog, DialogFooter, DialogType, PrimaryButton, Stack } from '@fluentui/react';
 import { EmptyState } from 'src/containers/states';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Column, Container, Row } from 'src/components/layouts';
@@ -20,13 +20,12 @@ import { useUsersLists } from 'src/pages/Admin/Users/useUsersList';
 import { ROUTE_ACTIVE_USERS } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { Paginator } from 'src/components/tables/Paginator';
-import { StyledColumn } from './ActiveUsersPage.styles';
-import { UpdateUserPanel, useUpdateUserPanel } from '../UpdateUsers';
-import { CreateUsersPanel } from '../CreateUsers';
 import { useTableFilters } from 'src/hooks/useTableFilters';
 import { InputText } from 'src/components/inputs/InputText';
 import { UIInputCheck } from 'src/components/inputs/InputCheck';
-import { Stack } from '@fluentui/react';
+import { StyledColumn } from './ActiveUsersPage.styles';
+import { UpdateUserPanel, useUpdateUserPanel } from '../UpdateUsers';
+import { CreateUsersPanel } from '../CreateUsers';
 
 const ActiveUsersPage = () => {
   const { orgSid } = useOrgSid();
@@ -160,7 +159,7 @@ const ActiveUsersPage = () => {
           {tableFilters?.searchText && (
             <Column lg="6">
               <InputText
-                id={`Active_Users_Input-Search`}
+                id="Active_Users_Input-Search"
                 autofocus
                 disabled={false}
                 {...tableFilters.searchText}
@@ -170,7 +169,7 @@ const ActiveUsersPage = () => {
           )}
           {userService.userSearchForm.lockedFilter?.visible && (
             <UIInputCheck
-              id={`__Locked__Users-Checkbox`}
+              id="__Locked__Users-Checkbox"
               value={lockedFilter}
               uiField={userService.userSearchForm.lockedFilter}
               onChange={(_event, _lockedFilter: any) => {
@@ -180,7 +179,7 @@ const ActiveUsersPage = () => {
           )}
           {userService.userSearchForm.pendingActivationFilter?.visible && (
             <UIInputCheck
-              id={`__PendingActivation__Users-Checkbox`}
+              id="__PendingActivation__Users-Checkbox"
               value={pendingActivationFilter}
               uiField={userService.userSearchForm.pendingActivationFilter}
               onChange={(_event, _pendingActivationFilter: any) => {
@@ -190,7 +189,7 @@ const ActiveUsersPage = () => {
           )}
           {userService.userSearchForm.expiredActivationFilter?.visible && (
             <UIInputCheck
-              id={`__ExpiredActivation__Users-Checkbox`}
+              id="__ExpiredActivation__Users-Checkbox"
               value={expiredActivationFilter}
               uiField={userService.userSearchForm.expiredActivationFilter}
               onChange={(_event, _expiredActivationFilter: any) => {
@@ -203,7 +202,7 @@ const ActiveUsersPage = () => {
           <Spacing margin={{ top: 'normal' }}>
             <Column lg="6">
               <UIInputCheck
-                id={`__SearchAllOrgs__Users-Checkbox`}
+                id="__SearchAllOrgs__Users-Checkbox"
                 value={searchAllOrgsFilter}
                 uiField={userService.userSearchForm.searchAllOrgs}
                 onChange={(_event, _searchAllOrgsFilter: any) => {

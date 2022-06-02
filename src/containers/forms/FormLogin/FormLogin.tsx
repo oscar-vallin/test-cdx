@@ -12,9 +12,8 @@ import { Spinner } from 'src/components/spinners/Spinner';
 import { useSessionStore } from 'src/store/SessionStore';
 import { useLoginUseCase } from 'src/use-cases/Authentication';
 import { useNotification } from 'src/hooks/useNotification';
-import { StyledRow, StyledButton, StyledText, StyledButtonIcon } from './FormLogin.styles';
-
 import { ForgotPasswordModal } from 'src/containers/modals/ForgotPasswordModal';
+import { StyledRow, StyledButton, StyledText, StyledButtonIcon } from './FormLogin.styles';
 
 const defaultProps = {
   id: '',
@@ -133,7 +132,6 @@ const FormLogin = ({ id }: FormLoginProps): ReactElement => {
                         } else {
                           performUserIdVerification(values);
                         }
-                        return null;
                       }}
                     >
                       {state.loading ? <Spinner /> : !isValidEmail ? 'Next' : 'Login'}

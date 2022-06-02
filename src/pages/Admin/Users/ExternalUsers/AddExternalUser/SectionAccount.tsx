@@ -3,16 +3,15 @@ import { Column } from 'src/components/layouts';
 import { useFormInputValue } from 'src/hooks/useInputValue';
 import { Link, Checkbox } from '@fluentui/react';
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
-import { UserAccount, UserAccountForm } from 'src/data/services/graphql';
+import { UserAccount, UserAccountForm, CdxWebCommandType } from 'src/data/services/graphql';
 import { WizardBody } from 'src/layouts/Panels/Panels.styles';
-import AddExternalUsersAccessFooter from './AddExternalUsersAccessFooter';
 import { TagPicker } from 'src/components/inputs/TagPicker';
 import { FormLabel } from 'src/components/labels/FormLabel';
 import { Text } from 'src/components/typography/Text';
 import { Spacing } from 'src/components/spacings/Spacing';
-import { MenuSeparator } from './AddExternalUsersAccessPanel.styles';
 import { useState } from 'react';
-import { CdxWebCommandType } from 'src/data/services/graphql';
+import { MenuSeparator } from './AddExternalUsersAccessPanel.styles';
+import AddExternalUsersAccessFooter from './AddExternalUsersAccessFooter';
 
 type SectionAccountProps = {
   form: UserAccountForm;
@@ -79,16 +78,16 @@ const SectionAccount = ({
 
   const handleNoResultsFound = () => {
     return (
-      <Spacing id={`__noResultsFound-Container`} margin="normal">
+      <Spacing id="__noResultsFound-Container" margin="normal">
         <FormRow>
-          <Text id={`__noResultsFound-Label`} size="small">
+          <Text id="__noResultsFound-Label" size="small">
             No matching account found
           </Text>
         </FormRow>
         {creatUserCmd && (
           <FormRow>
             <Link
-              id={`__noResultsFound-Link`}
+              id="__noResultsFound-Link"
               onClick={() => {
                 setUserSelected(true);
                 setCreateExternalUser(true);
@@ -112,7 +111,7 @@ const SectionAccount = ({
     <>
       <WizardBody>
         <FormRow>
-          <Column lg={'12'}>
+          <Column lg="12">
             <FormLabel
               id="findExtrernalUsers-Input-Label"
               label="Search for and external user by email to grant them access to this organization"
@@ -159,20 +158,20 @@ const SectionAccount = ({
           <>
             <Spacing margin={{ top: 'double', bottom: 'normal' }}>
               <FormRow style={{ justifyContent: 'center' }}>
-                <Column sm={'4'} lg={'4'}>
+                <Column sm="4" lg="4">
                   <MenuSeparator />
                 </Column>
-                <Column sm={'3'} lg={'3'}>
+                <Column sm="3" lg="3">
                   <Text center="true">New Account</Text>
                 </Column>
-                <Column sm={'4'} lg={'4'}>
+                <Column sm="4" lg="4">
                   <MenuSeparator />
                 </Column>
               </FormRow>
             </Spacing>
             <FormRow>
               {form.person?.firstNm?.visible && (
-                <Column lg={'12'}>
+                <Column lg="12">
                   <UIInputText
                     id="__userFirstNm"
                     uiField={form.person?.firstNm}
@@ -187,7 +186,7 @@ const SectionAccount = ({
             </FormRow>
             <FormRow>
               {form.person?.lastNm?.visible && (
-                <Column lg={'12'}>
+                <Column lg="12">
                   <UIInputText
                     id="__userLastNm"
                     uiField={form.person?.lastNm}

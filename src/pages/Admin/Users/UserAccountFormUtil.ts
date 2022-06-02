@@ -36,6 +36,7 @@ export const defaultForm = {
     required: false,
     visible: true,
   },
+  accessGrantOrgNames: [],
   sendActivationEmail: {
     label: 'Send Activation Email',
     required: false,

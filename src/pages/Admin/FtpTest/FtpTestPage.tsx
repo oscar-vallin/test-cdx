@@ -33,10 +33,11 @@ import {
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { LogMessageItem } from 'src/components/collapses/LogMessageItem';
 import { Badge } from 'src/components/badges/Badge';
-import { StyledSelectedFile, StyledError } from './FtpTestPage.styles';
 import { useNotification } from 'src/hooks/useNotification';
 import { UIInputTextArea } from 'src/components/inputs/InputTextArea';
 import { yyyyMMdda } from 'src/utils/CDXUtils';
+import { ErrorHandler } from 'src/utils/ErrorHandler';
+import { StyledSelectedFile, StyledError } from './FtpTestPage.styles';
 
 const _FtpTestPage = () => {
   const [host, setHost] = useState('');
@@ -64,6 +65,15 @@ const _FtpTestPage = () => {
 
   const inputFileRef = React.useRef() as React.MutableRefObject<HTMLInputElement>;
   const Toast = useNotification();
+  const handleError = ErrorHandler();
+
+  useEffect(() => {
+    handleError(errorForm);
+  }, [errorForm]);
+
+  useEffect(() => {
+    handleError(ftpTestError);
+  }, [ftpTestError]);
 
   useEffect(() => {
     if (orgSid) {
@@ -145,7 +155,6 @@ const _FtpTestPage = () => {
   const handleOnTestBtn = () => {
     validatePasswordAndSSHKey();
     onTestBtn();
-    return null;
   };
 
   const handleChooseFile = (e) => {
@@ -312,7 +321,7 @@ const _FtpTestPage = () => {
                                     inputFileRef.current.click();
                                   }}
                                   disabled={!props?.checked}
-                                  title={'Upload File'}
+                                  title="Upload File"
                                   style={{ cursor: 'pointer' }}
                                 >
                                   Upload File...
@@ -468,11 +477,11 @@ const _FtpTestPage = () => {
 
   const downloadLogsAsCsv = () => {
     if (ftpTestData?.ftpTestM?.allMessages?.length) {
-      var jsonObject = JSON.stringify(ftpTestData?.ftpTestM?.allMessages);
+      const jsonObject = JSON.stringify(ftpTestData?.ftpTestM?.allMessages);
       const str = ConvertToCSV(jsonObject);
-      var downloadLink = document.createElement('a');
-      var blob = new Blob(['\ufeff', str]);
-      var url = URL.createObjectURL(blob);
+      const downloadLink = document.createElement('a');
+      const blob = new Blob(['\ufeff', str]);
+      const url = URL.createObjectURL(blob);
       downloadLink.href = url;
       downloadLink.download = 'ftp-test-logs.csv';
 
@@ -483,42 +492,43 @@ const _FtpTestPage = () => {
   };
 
   const ConvertToCSV = (objArray) => {
-    var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+    const array = typeof objArray !== 'object' ? JSON.parse(objArray) : objArray;
     const baseColumns = ['Timestamp', 'Severity', 'Name', 'Body'];
-    var str = '';
+    let str = '';
     let maxAttributes = 0;
-    for (var i = 0; i < array.length; i++) {
-      var line = '';
+    for (let i = 0; i < array.length; i++) {
+      let line = '';
       for (var index in array[i]) {
         if (index != '__typename') {
           if (line != '') line += ',';
-          if (typeof array[i][index] != 'object') {
+          if (typeof array[i][index] !== 'object') {
             if (index === 'timeStamp') {
               line += yyyyMMdda(new Date(array[i][index])).toString();
             } else {
               line += needsQuote(array[i][index]) ? quoteField(array[i][index]) : array[i][index];
             }
           } else if (array[i][index] && array[i][index].length) {
-            let attributes = array[i][index];
+            const attributes = array[i][index];
             maxAttributes = Math.max(maxAttributes, attributes.length);
             for (let j = 0; j < attributes.length; j++) {
               for (var index in attributes[j]) {
                 if (index != '__typename')
-                  line +=
-                    (needsQuote(attributes[j][index]) ? quoteField(attributes[j][index]) : attributes[j][index]) + ',';
+                  line += `${
+                    needsQuote(attributes[j][index]) ? quoteField(attributes[j][index]) : attributes[j][index]
+                  },`;
               }
             }
           }
         }
       }
 
-      str += line + '\r\n';
+      str += `${line}\r\n`;
     }
-    let columnHeadersStr = baseColumns.join(',') + ',';
+    let columnHeadersStr = `${baseColumns.join(',')},`;
     for (let i = 0; i < maxAttributes; i++) {
       columnHeadersStr += `Attribute ${i + 1} Name,Attribute ${i + 1} Value,`;
     }
-    str = columnHeadersStr + '\r\n' + str;
+    str = `${columnHeadersStr}\r\n${str}`;
     return str;
   };
 
@@ -601,7 +611,7 @@ const _FtpTestPage = () => {
                         iconName="DownloadDocument"
                         style={{ paddingRight: '.5em', cursor: 'pointer' }}
                       />
-                      <Link target="_new" onClick={downloadLogsAsCsv} title={'Download Logs'}>
+                      <Link target="_new" onClick={downloadLogsAsCsv} title="Download Logs">
                         Download Logs
                       </Link>
                     </Stack.Item>
@@ -621,7 +631,7 @@ const _FtpTestPage = () => {
                         onClick={copyProfileSnippet}
                         style={{ paddingRight: '.5em', cursor: 'pointer' }}
                       />
-                      <Link onClick={copyProfileSnippet} target="_new" title={'Copy To Clipboard'}>
+                      <Link onClick={copyProfileSnippet} target="_new" title="Copy To Clipboard">
                         Copy To Clipboard
                       </Link>
                     </Stack.Item>

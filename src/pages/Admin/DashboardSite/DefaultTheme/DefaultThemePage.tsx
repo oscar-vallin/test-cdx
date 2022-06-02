@@ -202,8 +202,6 @@ const _DefaultThemePage = () => {
                         },
                       });
                     }
-
-                    return null;
                   }}
                 />
               </>

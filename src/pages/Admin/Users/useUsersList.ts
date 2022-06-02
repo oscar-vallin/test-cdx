@@ -36,13 +36,11 @@ export const useUsersLists = (activeFilter: ActiveEnum) => {
     searchAllOrgs?,
     searchText?
   ) => {
-    const sort = sortParam
-      ? sortParam
-      : [
-          { property: 'person.lastNm', direction: SortDirection.Asc },
-          { property: 'person.firstNm', direction: SortDirection.Asc },
-          { property: 'email', direction: SortDirection.Asc },
-        ];
+    const sort = sortParam || [
+      { property: 'person.lastNm', direction: SortDirection.Asc },
+      { property: 'person.firstNm', direction: SortDirection.Asc },
+      { property: 'email', direction: SortDirection.Asc },
+    ];
     apiUsersForOrgFpLazy({
       variables: {
         orgSid,

@@ -3,11 +3,11 @@ import {
   DetailsList,
   DetailsListLayoutMode,
   IColumn,
-  SelectionMode,
+  IComboBoxOption,
   mergeStyleSets,
   ScrollablePane,
   ScrollbarVisibility,
-  IComboBoxOption,
+  SelectionMode,
 } from '@fluentui/react';
 
 import { StyledContainer } from 'src/components/tables/Table/Table.styles';
@@ -22,10 +22,10 @@ import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { TableFiltersType } from 'src/hooks/useTableFilters';
 import { Paginator } from 'src/components/tables/Paginator';
-import { useUserAuditLogsColumns, UserAuditLogsColumn } from './UserAuditLogsTableColumn';
 import { TableFilters } from 'src/containers/tables/TableFilters';
 import { EmptyState } from 'src/containers/states';
 import { Box, Container } from 'src/components/layouts';
+import { UserAuditLogsColumn, useUserAuditLogsColumns } from './UserAuditLogsTableColumn';
 
 type UserAuditLogsTableParams = {
   id: string;
@@ -67,6 +67,8 @@ export const getEventTypeName = (eventType?: UserAccountAuditEvent): string => {
       return 'Profile Update';
     case UserAccountAuditEvent.ResetPasswordRequested:
       return 'Reset Password Requested';
+    case UserAccountAuditEvent.UserMigration:
+      return 'User Migration';
     default:
       return '';
   }
@@ -205,9 +207,9 @@ export const UserAuditLogsTable = ({ id, cols, lazyQuery, getItems, tableFilters
   };
 
   const setComboBoxOptions = () => {
-    let options: IComboBoxOption[] = [];
+    const options: IComboBoxOption[] = [];
     options.push({ key: 'All', text: '(All Event Types Included)' });
-    for (var enumMember in UserAccountAuditEvent) {
+    for (const enumMember in UserAccountAuditEvent) {
       options.push({
         key: UserAccountAuditEvent[enumMember],
         text: getEventTypeName(UserAccountAuditEvent[enumMember]),

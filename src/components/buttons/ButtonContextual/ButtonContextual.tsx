@@ -1,7 +1,7 @@
 import { ReactElement, ReactNode } from 'react';
 import { useConst } from '@uifabric/react-hooks';
-import { StyledButton } from './ButtonContextual.styles';
 import { IContextualMenuProps, IContextualMenuItem } from '@fluentui/react';
+import { StyledButton } from './ButtonContextual.styles';
 
 type ButtonContextualProps = {
   id?: string;
@@ -12,7 +12,7 @@ type ButtonContextualProps = {
 const ButtonContextual = ({ id, children, items }: ButtonContextualProps): ReactElement => {
   const menuProps: IContextualMenuProps = useConst(() => ({
     shouldFocusOnMount: true,
-    items: items,
+    items,
   }));
 
   return (

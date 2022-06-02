@@ -16,15 +16,15 @@ import {
   PageableInput,
   UserConnectionTooltips,
 } from 'src/data/services/graphql';
-import { UsersTableColumns, useUsersTableColumns } from './UsersTableColumn';
 import { TableFiltersType } from 'src/hooks/useTableFilters';
+import { UsersTableColumns, useUsersTableColumns } from './UsersTableColumn';
 
 type UsersTableType = {
   users: UserItem[];
   onClickUser: (userSid: string) => any;
   tableFilters?: TableFiltersType;
   tooltips?: UserConnectionTooltips;
-  searchAllOrgs?: Boolean;
+  searchAllOrgs?: boolean;
 };
 
 const cols: UsersTableColumns[] = [UsersTableColumns.FIRST_NAME, UsersTableColumns.LAST_NAME, UsersTableColumns.EMAIL];
@@ -93,60 +93,58 @@ export const UsersTable = ({ users, onClickUser, tableFilters, tooltips, searchA
     }
 
     return (
-      <>
-        <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
-          <Link
-            id={`__ActiveUsersPage__${column?.key}_${(itemIndex ?? 0) + 1}`}
-            onClick={() => {
-              if (node) {
-                onClickUser(node?.item?.sid);
-              }
-            }}
-          >
-            {columnVal}
-          </Link>
-          {column?.key === 'email' && (
-            <>
-              {node?.notificationOnlyUser && !node?.pendingActivation && !node?.expiredActivation && (
-                <TooltipHost content={tooltips?.notificationOnlyUser ?? ''}>
-                  <FontIcon
-                    style={{ color: 'black', fontSize: '18px', cursor: 'pointer' }}
-                    aria-describedby={'NotificationOnlyUser-Icon'}
-                    iconName="BlockContact"
-                  />
-                </TooltipHost>
-              )}
-              {node?.expiredActivation && (
-                <TooltipHost content={tooltips?.expiredActivation ?? ''} id={'ExpiredActivation-Tooltip'}>
-                  <FontIcon
-                    style={{ color: 'red', fontSize: '18px', cursor: 'pointer' }}
-                    aria-describedby={'ExpiredActivation-Icon'}
-                    iconName="UserOptional"
-                  />
-                </TooltipHost>
-              )}
-              {node?.pendingActivation && (
-                <TooltipHost content={tooltips?.pendingActivation ?? ''} id={'PendingActivation-Tooltip'}>
-                  <FontIcon
-                    style={{ color: 'green', fontSize: '18px', cursor: 'pointer' }}
-                    aria-describedby={'PendingActivation-Icon'}
-                    iconName="UserOptional"
-                  />
-                </TooltipHost>
-              )}
-              {node?.accountLocked && (
-                <TooltipHost content={tooltips?.accountLocked ?? ''} id={'AccountLocked-Tooltip'}>
-                  <FontIcon
-                    style={{ color: 'red', fontSize: '18px', cursor: 'pointer' }}
-                    aria-describedby={'AccountLocked-Icon'}
-                    iconName="ProtectRestrict"
-                  />
-                </TooltipHost>
-              )}
-            </>
-          )}
-        </Stack>
-      </>
+      <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
+        <Link
+          id={`__ActiveUsersPage__${column?.key}_${(itemIndex ?? 0) + 1}`}
+          onClick={() => {
+            if (node) {
+              onClickUser(node?.item?.sid);
+            }
+          }}
+        >
+          {columnVal}
+        </Link>
+        {column?.key === 'email' && (
+          <>
+            {node?.notificationOnlyUser && !node?.pendingActivation && !node?.expiredActivation && (
+              <TooltipHost content={tooltips?.notificationOnlyUser ?? ''}>
+                <FontIcon
+                  style={{ color: 'black', fontSize: '18px', cursor: 'pointer' }}
+                  aria-describedby="NotificationOnlyUser-Icon"
+                  iconName="BlockContact"
+                />
+              </TooltipHost>
+            )}
+            {node?.expiredActivation && (
+              <TooltipHost content={tooltips?.expiredActivation ?? ''} id="ExpiredActivation-Tooltip">
+                <FontIcon
+                  style={{ color: 'red', fontSize: '18px', cursor: 'pointer' }}
+                  aria-describedby="ExpiredActivation-Icon"
+                  iconName="UserOptional"
+                />
+              </TooltipHost>
+            )}
+            {node?.pendingActivation && (
+              <TooltipHost content={tooltips?.pendingActivation ?? ''} id="PendingActivation-Tooltip">
+                <FontIcon
+                  style={{ color: 'green', fontSize: '18px', cursor: 'pointer' }}
+                  aria-describedby="PendingActivation-Icon"
+                  iconName="UserOptional"
+                />
+              </TooltipHost>
+            )}
+            {node?.accountLocked && (
+              <TooltipHost content={tooltips?.accountLocked ?? ''} id="AccountLocked-Tooltip">
+                <FontIcon
+                  style={{ color: 'red', fontSize: '18px', cursor: 'pointer' }}
+                  aria-describedby="AccountLocked-Icon"
+                  iconName="ProtectRestrict"
+                />
+              </TooltipHost>
+            )}
+          </>
+        )}
+      </Stack>
     );
   };
 

@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import { shallowWithTheme } from '../../../../src/utils/testUtils';
+import { shallowWithTheme } from 'src/utils/testUtils';
 import { Button } from './Button';
 
 const defaultProps = {

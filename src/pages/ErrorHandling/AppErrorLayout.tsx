@@ -31,7 +31,6 @@ const AppErrorLayout = ({ id, children }: AppErrorLayoutType) => {
                   <Button
                     onClick={() => {
                       ActiveDomainStore.setCurrentOrg(ActiveDomainStore.domainOrg.origin);
-                      return null;
                     }}
                   >
                     Click here to return home

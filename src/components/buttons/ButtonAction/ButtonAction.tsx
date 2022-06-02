@@ -5,14 +5,13 @@ const defaultProps = {
   id: '',
   icon: '',
   disabled: false,
-  onClick: () => null,
 };
 
 type ButtonActionProps = {
   id?: string;
   children?: ReactNode;
   disabled?: boolean;
-  onClick?: () => null;
+  onClick?: () => void;
   icon?: string;
 } & typeof defaultProps;
 

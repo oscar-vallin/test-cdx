@@ -8,15 +8,15 @@ import { PageTitle } from 'src/components/typography';
 import { useExternalUsersForOrgLazyQuery, CdxWebCommandType, UserItem, WebCommand } from 'src/data/services/graphql';
 import { UsersTable } from 'src/pages/Admin/Users/UsersTable';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
-import { StyledColumn } from './ExternalUsersPage.styles';
 import { ROUTE_EXTERNAL_USERS } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useTableFilters } from 'src/hooks/useTableFilters';
 import { InputText } from 'src/components/inputs/InputText';
+import { ErrorHandler } from 'src/utils/ErrorHandler';
 import AddExternalUserAccessPanel from './AddExternalUser/AddExternalUsersAccessPanel';
 import UpdateExternalUsersPanel from './UpdateExternalUser/UpdateExternalUsersPanel';
-import { ErrorHandler } from 'src/utils/ErrorHandler';
+import { StyledColumn } from './ExternalUsersPage.styles';
 
 const ExternalUsersPage = () => {
   const { orgSid } = useOrgSid();
@@ -131,7 +131,7 @@ const ExternalUsersPage = () => {
           <Spacing margin={{ bottom: 'normal' }}>
             <Column lg="6">
               <InputText
-                id={`Active_Users_Input-Search`}
+                id="Active_Users_Input-Search"
                 autofocus
                 disabled={false}
                 {...tableFilters.searchText}

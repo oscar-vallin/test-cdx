@@ -1,4 +1,4 @@
-/*eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 
 import { useHistory } from 'react-router-dom';
@@ -37,6 +37,12 @@ import { theme } from 'src/styles/themes/theme';
 import { ArchivesTab } from 'src/pages/FileStatusDetails/ArchivesTab/ArchivesTab';
 import { isDateTimeValid } from 'src/utils/CDXUtils';
 import { useWorkPacketCommands } from 'src/pages/FileStatusDetails/useWorkPacketCommands';
+import { Spacing } from 'src/components/spacings/Spacing';
+import { Row } from 'src/components/layouts';
+import { TableFiltersType } from 'src/hooks/useTableFilters';
+import { useNotification } from 'src/hooks/useNotification';
+import { EmptyState } from 'src/containers/states';
+import { ICommandBarItemProps } from '@fluentui/react/lib/components/CommandBar/CommandBar.types';
 import QualityChecksTab from './QualityChecksTab/QualityChecksTab';
 import WorkStepsTab from './WorkStepsTab/WorkStepsTab';
 import EnrollmentStatsTab from './EnrollmentStatsTab/EnrollmentStatsTab';
@@ -44,12 +50,6 @@ import VendorCountStatsTab from './VendorCountStatsTab/VendorCountStatsTab';
 import { WorkPacketCommandButton } from './WorkPacketCommandButton';
 import { BadgeWrapper, FileMetaDetails, FileTitle, ShadowBox } from './FileStatusDetails.styles';
 import { UseFileStatusDetailsPanel } from './useFileStatusDetailsPanel';
-import { Spacing } from 'src/components/spacings/Spacing';
-import { Row } from 'src/components/layouts';
-import { TableFiltersType } from 'src/hooks/useTableFilters';
-import { useNotification } from 'src/hooks/useNotification';
-import { EmptyState } from 'src/containers/states';
-import { ICommandBarItemProps } from '@fluentui/react/lib/components/CommandBar/CommandBar.types';
 
 const POLL_INTERVAL = 20000;
 type FileStatusDetailsPageProps = {
@@ -194,7 +194,7 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
   const deliveredFile: DeliveredFile | undefined | null = packet?.deliveredFiles
     ? packet?.deliveredFiles[0]
     : undefined;
-  //const rerunCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.RerunStep);
+  // const rerunCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.RerunStep);
 
   const renderWorkPacketCommandButton = (item: any) => {
     if (!item) return <></>;
@@ -251,8 +251,8 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
         icon: 'Rerun',
         confirmationMsg: 'Are you sure you want to Reprocess this Work Packet?',
         command: reprocessCmd,
-        workPacketCommands: workPacketCommands,
-        realId: realId,
+        workPacketCommands,
+        realId,
         callback: () => validateStatus(),
         onRender: renderWorkPacketCommandButton,
       },
@@ -261,8 +261,8 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
         key: '__ReprocessRenameBtn',
         icon: 'Rerun',
         confirmationMsg: 'Are you sure you want to Reprocess this Work Packet?',
-        workPacketCommands: workPacketCommands,
-        realId: realId,
+        workPacketCommands,
+        realId,
         command: reprocessRenameCmd,
         onClick: () => {
           workPacketCommands.apiCallRenameReprocess().then();
@@ -410,7 +410,7 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
   );
 
   const handleClosePanel = () => {
-    let params = new URLSearchParams(window.location.search);
+    const params = new URLSearchParams(window.location.search);
     params.delete('tab');
     params.delete('workOrderId');
     params.delete('fsOrgSid');
@@ -420,7 +420,7 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
   };
 
   const handleFilesDetailsTabChange = (item, ev) => {
-    let params = new URLSearchParams(window.location.search);
+    const params = new URLSearchParams(window.location.search);
     params.set('tab', item.props.itemKey.replace('#', ''));
     history.replace(`${window.location.pathname}?${params.toString()}`);
   };
@@ -482,7 +482,7 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
             <ShadowBox id="__FileMeta-Empty">
               <EmptyState
                 title="There is no available data for this Exchange"
-                actions={<PrimaryButton onClick={handleClosePanel} text={'Close'} />}
+                actions={<PrimaryButton onClick={handleClosePanel} text="Close" />}
               />
             </ShadowBox>
           )}

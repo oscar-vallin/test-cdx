@@ -2,8 +2,8 @@ import { UiField, UiOption } from 'src/data/services/graphql';
 import { UIFormLabel } from 'src/components/labels/FormLabel';
 import { CheckboxList } from 'src/components/inputs/CheckboxList/CheckboxList';
 import { Text } from 'src/components/typography';
-import { OptionRow, PaddedIcon } from './CheckboxList.styles';
 import { Spacing } from 'src/components/spacings/Spacing';
+import { OptionRow, PaddedIcon } from './CheckboxList.styles';
 
 type UICheckboxListType = {
   id: string;

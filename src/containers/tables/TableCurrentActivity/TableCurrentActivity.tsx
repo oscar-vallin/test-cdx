@@ -1,9 +1,6 @@
 import { useEffect, useState } from 'react';
-import { TableActivity } from './TableActivity';
-import { Container, TableContainer } from './TableActivity.styles';
 
 import { useTableFilters } from 'src/hooks/useTableFilters';
-import { TableFilters } from '../TableFilters';
 import { Row, Column } from 'src/components/layouts';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import {
@@ -15,6 +12,9 @@ import {
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useHistory } from 'react-router-dom';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
+import { TableFilters } from '../TableFilters';
+import { Container, TableContainer } from './TableActivity.styles';
+import { TableActivity } from './TableActivity';
 
 const TablesCurrentActivity = ({ id = 'TableCurrentActivity' }) => {
   const { orgSid } = useOrgSid();
@@ -95,7 +95,7 @@ const TablesCurrentActivity = ({ id = 'TableCurrentActivity' }) => {
     const startDate = urlParams.get('startDate');
     const endDate = urlParams.get('endDate');
     ActiveDomainStore.setCurrentOrg({
-      orgSid: orgSid,
+      orgSid,
     });
     history.push(`/file-status?orgSid=${orgSid}&startDate=${startDate}&endDate=${endDate}`);
   };

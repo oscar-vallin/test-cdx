@@ -1,6 +1,7 @@
 import { CdxWebCommandType, UserAccountForm } from 'src/data/services/graphql';
-import { UpdateExternalUserFooter } from './UpdateExternalUserFooter';
 import { AccessManagementWizardBody } from 'src/pages/Admin/Users/AccessManagementWizardBody';
+import { WizardBody } from 'src/layouts/Panels/Panels.styles';
+import { UpdateExternalUserFooter } from './UpdateExternalUserFooter';
 
 type SectionAccessProps = {
   form?: UserAccountForm;
@@ -13,7 +14,9 @@ const SectionAccessManagement = ({ form, onSubmit, saveOptions }: SectionAccessP
 
   return (
     <>
-      <AccessManagementWizardBody form={form} saveOptions={saveOptions} />
+      <WizardBody>
+        <AccessManagementWizardBody form={form} saveOptions={saveOptions} />
+      </WizardBody>
       <UpdateExternalUserFooter saveCmd={saveCmd} onSave={onSubmit} />
     </>
   );

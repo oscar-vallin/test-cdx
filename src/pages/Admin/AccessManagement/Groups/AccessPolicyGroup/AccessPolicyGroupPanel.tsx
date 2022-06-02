@@ -13,8 +13,8 @@ import { UIFormLabel } from 'src/components/labels/FormLabel';
 import { useCreateGroupPanel } from 'src/pages/Admin/AccessManagement/Groups/AccessPolicyGroup/AccessPolicyGroupPanel.service';
 import { UIInputTextReadOnly } from 'src/components/inputs/InputText/InputText';
 import { UIInputCheck } from 'src/components/inputs/InputCheck';
-import { UICheckboxList, formatInfoTooltip } from 'src/components/inputs/CheckboxList';
-import { AccessPolicyGroupForm, CdxWebCommandType, GqOperationResponse, UiOption } from 'src/data/services/graphql';
+import { formatInfoTooltip } from 'src/components/inputs/CheckboxList';
+import { AccessPolicyGroupForm, CdxWebCommandType, GqOperationResponse } from 'src/data/services/graphql';
 import { UIInputMultiSelect } from 'src/components/inputs/InputDropdown';
 import { TagPicker } from 'src/components/inputs/TagPicker';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
@@ -159,14 +159,14 @@ const AccessPolicyGroupPanel = ({
     return (
       <span>
         <InlineLabel required={item?.required}>{item?.label}</InlineLabel>
-        <InfoIcon id={`$_Info`} tooltip={formatInfoTooltip(item?.info)} />
-        <ErrorIcon id={`$-ErrorMsg`} errorMessage={item?.errMsg} />
+        <InfoIcon id="$_Info" tooltip={formatInfoTooltip(item?.info)} />
+        <ErrorIcon id="$-ErrorMsg" errorMessage={item?.errMsg} />
       </span>
     );
   };
 
   const renderOptionsGroup = (formUiLabelField, options, onChange, id) => {
-    let subGroups: any[][] = new Array(new Array(), new Array());
+    const subGroups: any[][] = [[], []];
     for (let i = 0; i < options.length; i++) {
       subGroups[i % 2].push(options[i]);
     }
@@ -238,7 +238,7 @@ const AccessPolicyGroupPanel = ({
   };
 
   const getCheckedValues = (options, selectedOptions) => {
-    let newOptions: any = [];
+    const newOptions: any = [];
     options.forEach((element) => {
       newOptions.push({ ...element, checked: selectedOptions.includes(element.value) });
     });
@@ -445,7 +445,6 @@ const AccessPolicyGroupPanel = ({
                   createAccessPolicyGroupInput: { orgSid, ...commonVariables },
                 }).then();
               }
-              return null;
             }}
           >
             {command.label}

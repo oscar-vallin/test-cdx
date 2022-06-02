@@ -22,11 +22,11 @@ import {
 } from 'src/data/services/graphql';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { InfoIcon } from 'src/components/badges/InfoIcon';
-import { DEFAULT_FORM, extractFormValues, FormInput, FormOptions, replaceInputs } from './PasswordRulesFormUtils';
-import { StyledColumn, StyledComboBox, StyledDiv } from './PasswordRulesPage.styles';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { ROUTE_PASSWORD_RULES } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
+import { StyledColumn, StyledComboBox, StyledDiv } from './PasswordRulesPage.styles';
+import { DEFAULT_FORM, extractFormValues, FormInput, FormOptions, replaceInputs } from './PasswordRulesFormUtils';
 
 const _PasswordRulesPage = () => {
   const { orgSid } = useOrgSid();
@@ -42,7 +42,7 @@ const _PasswordRulesPage = () => {
   useEffect(() => {
     fetchPageForm({
       variables: {
-        orgSid: orgSid,
+        orgSid,
       },
     });
   }, [orgSid]);
@@ -114,11 +114,9 @@ const _PasswordRulesPage = () => {
                       onClick={() => {
                         fetchPageForm({
                           variables: {
-                            orgSid: orgSid,
+                            orgSid,
                           },
                         });
-
-                        return null;
                       }}
                       block={false}
                     >
@@ -329,7 +327,7 @@ const _PasswordRulesPage = () => {
                             variables: {
                               passwordRulesInput: {
                                 ...state,
-                                orgSid: orgSid,
+                                orgSid,
                               },
                               errorPolicy: 'all',
                             },
@@ -338,8 +336,6 @@ const _PasswordRulesPage = () => {
                               text: 'An error occurred while updating the password rules. Please, try again.',
                             });
                           });
-
-                          return null;
                         }}
                       >
                         Save

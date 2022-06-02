@@ -69,7 +69,7 @@ export const useLoginUseCase = () => {
 
   useEffect(() => {
     if (userIdVerificationError) {
-      const networkError = userIdVerificationError.networkError;
+      const { networkError } = userIdVerificationError;
       if (networkError && 'statusCode' in networkError && networkError.statusCode === 403) {
         // prevent an infinite loop of calls
         if (retries < 3) {

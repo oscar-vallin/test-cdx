@@ -37,7 +37,6 @@ export const LayoutDashboard = ({
     if (notShowLeftMenu) {
       return <LeftNav menuOptionSelected={menuOptionSelected} isOpen={menuOpen} />;
     }
-    return;
   };
 
   return (

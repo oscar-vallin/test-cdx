@@ -74,7 +74,7 @@ const UIInputTextArea = ({
     'link',
   ];
 
-  if (uiField?.visible != true) {
+  if (uiField?.visible !== true) {
     return null;
   }
 
@@ -89,8 +89,8 @@ const UIInputTextArea = ({
             modules={modules}
             formats={formats}
             value={value}
-            onChange={(value) => {
-              if (onChange) onChange(undefined, value);
+            onChange={(v) => {
+              if (onChange) onChange(undefined, v);
             }}
           />
         </StyledRichTextArea>

@@ -49,7 +49,7 @@ export const useUserAuditLogsColumns = (
       fieldName: 'userAccount',
       isPadded: true,
       data: UserAuditLogsColumn.USER,
-      //onColumnClick: onSort,
+      // onColumnClick: onSort,
       onRender: (item?: UserAccountAuditLog) => {
         if (item?.event === UserAccountAuditEvent.ArchiveAccess) {
           return <span title={item?.workOrderId ?? undefined}>{item?.workOrderId}</span>;
@@ -68,7 +68,9 @@ export const useUserAuditLogsColumns = (
       isPadded: true,
       data: UserAuditLogsColumn.EVENT_TYPE,
       onColumnClick: onSort,
-      onRender: (item?: UserAccountAuditLog) => <span>{getEventTypeName(item?.event)}</span>,
+      onRender: (item?: UserAccountAuditLog) => (
+        <span title={getEventTypeName(item?.event)}>{getEventTypeName(item?.event)}</span>
+      ),
     },
     {
       key: 'changedByUserAccount',
@@ -79,7 +81,7 @@ export const useUserAuditLogsColumns = (
       fieldName: 'changedByUserAccount',
       isPadded: true,
       data: UserAuditLogsColumn.CHANGED_BY,
-      //onColumnClick: onSort,
+      // onColumnClick: onSort,
       onRender: (item?: UserAccountAuditLog) => {
         if (item?.changedByUserAccount && item?.changedByUserAccount.sid !== item?.userAccount?.sid) {
           const name = getUserAccountAuditFormat(item.changedByUserAccount);

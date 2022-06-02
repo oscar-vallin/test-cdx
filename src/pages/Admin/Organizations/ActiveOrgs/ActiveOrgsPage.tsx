@@ -1,4 +1,4 @@
-/*eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 
 import { Link } from 'react-router-dom';
@@ -13,6 +13,7 @@ import {
   Spinner,
   SpinnerSize,
   Stack,
+  Checkbox,
 } from '@fluentui/react';
 import { EmptyState } from 'src/containers/states';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
@@ -37,7 +38,6 @@ import { PageHeader } from 'src/containers/headers/PageHeader';
 import { OrgPanel } from 'src/pages/Admin/Organizations/ActiveOrgs/OrgPanel';
 import { Paginator } from 'src/components/tables/Paginator';
 import { InputText } from 'src/components/inputs/InputText';
-import { Checkbox } from '@fluentui/react';
 import { StyledColumn } from './ActiveOrgsPage.styles';
 
 const ActiveOrgsPage = () => {

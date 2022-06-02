@@ -1,7 +1,6 @@
 import { ReactElement, useEffect, useState } from 'react';
 import { UserToken } from 'src/components/images/UserToken';
 
-import { StyledBox } from './ProfileMenu.styles';
 import { ButtonContextual } from 'src/components/buttons/ButtonContextual';
 
 import { useLogoutUseCase } from 'src/use-cases/Authentication';
@@ -9,6 +8,7 @@ import { useSessionStore } from 'src/store/SessionStore';
 import { IContextualMenuItem } from '@fluentui/react';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { useVersionQuery } from 'src/data/services/graphql';
+import { StyledBox } from './ProfileMenu.styles';
 
 const defaultProps = {
   id: '',

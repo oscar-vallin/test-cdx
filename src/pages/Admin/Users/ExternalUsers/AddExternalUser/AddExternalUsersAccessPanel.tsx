@@ -10,11 +10,11 @@ import { GqOperationResponse, UserAccountForm } from 'src/data/services/graphql'
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
 import { Column } from 'src/components/layouts';
 import { useExternalUsersAccessService } from 'src/pages/Admin/Users/ExternalUsers/ExternalUsersAccess.service';
+import { useApolloClient } from '@apollo/client';
+import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { SectionAccount } from './SectionAccount';
 import SectionAccessManagement from './SectionAccessManagement';
 import SectionSummary from './SectionSummary';
-import { useApolloClient } from '@apollo/client';
-import { ErrorHandler } from 'src/utils/ErrorHandler';
 
 type AddExternalUsersAccessPanelProps = {
   orgSid: string;

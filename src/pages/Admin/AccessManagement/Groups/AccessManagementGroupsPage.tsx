@@ -259,7 +259,6 @@ const AccessManagementGroupsContainer = () => {
           setSelectedGroupId(undefined);
           setTemplateId(undefined);
           setIsPanelOpen(true);
-          return null;
         }}
         menuProps={createMenuProps}
         block={false}

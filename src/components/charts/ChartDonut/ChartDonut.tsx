@@ -32,7 +32,7 @@ const ChartDonut = ({ id, label, size = 50, data, totalRecords, onClickSlice }: 
 
   const [activeIndex, setActiveIndex] = useState<number>();
 
-  const onMouseOver = (data, index) => {
+  const onMouseOver = (slice, index) => {
     setActiveIndex(index);
   };
 
@@ -40,9 +40,9 @@ const ChartDonut = ({ id, label, size = 50, data, totalRecords, onClickSlice }: 
     setActiveIndex(undefined);
   };
 
-  const onClick = (data) => {
+  const onClick = (slice) => {
     if (onClickSlice) {
-      onClickSlice(data?.key);
+      onClickSlice(slice?.key);
     }
   };
 

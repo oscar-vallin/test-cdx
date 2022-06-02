@@ -216,7 +216,6 @@ const _AccessManagementPoliciesPage = () => {
           variant="primary"
           onClick={() => {
             setIsPanelOpen(true);
-            return null;
           }}
           {...(!isLoadingTemplatePolicies && templatePolicyMenu.length > 0
             ? {

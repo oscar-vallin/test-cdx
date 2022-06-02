@@ -97,7 +97,7 @@ const _ArchivePage = () => {
           setTableMeta({ count: total, loading });
         }}
       />
-      <FileStatusDetailsPage useFileStatusDetailsPanel={fileStatusDetailsPanel}></FileStatusDetailsPage>
+      <FileStatusDetailsPage useFileStatusDetailsPanel={fileStatusDetailsPanel} />
     </LayoutDashboard>
   );
 };

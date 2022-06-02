@@ -3,16 +3,16 @@ import { Column, Container, Row } from 'src/components/layouts';
 import { PageTitle } from 'src/components/typography';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
-import { UserAuditLogsTable } from './UserAuditLogsTable';
 import {
   NullHandling,
   SortDirection,
   useUserAccountAuditLogsLazyQuery,
   UserAccountAuditLog,
 } from 'src/data/services/graphql';
-import { UserAuditLogsColumn } from './UserAuditLogsTableColumn';
 import { useTableFilters } from 'src/hooks/useTableFilters';
 import { ROUTE_USER_AUDIT_LOGS } from 'src/data/constants/RouteConstants';
+import { UserAuditLogsColumn } from './UserAuditLogsTableColumn';
+import { UserAuditLogsTable } from './UserAuditLogsTable';
 
 const _UserAuditLogsPage = () => {
   const tableFilters = useTableFilters('Extract Name, Status, Vendor, etc.', [

@@ -36,6 +36,7 @@ export const defaultForm = {
     required: false,
     visible: true,
   },
+  accessGrantOrgNames: [],
   sendActivationEmail: {
     label: 'Send Activation Email',
     required: false,
@@ -50,11 +51,11 @@ export const updateForm = (
   accessPolicyGroupSids?: string[]
 ): UserAccountForm => {
   if (userAccount) {
-    (userAccountForm.sid = userAccount.person?.sid),
-      (userAccountForm.email = {
-        ...(userAccountForm?.email ?? defaultForm.email),
-        value: userAccount.email,
-      });
+    userAccountForm.sid = userAccount.sid;
+    userAccountForm.email = {
+      ...(userAccountForm?.email ?? defaultForm.email),
+      value: userAccount.email,
+    };
     userAccountForm.person = {
       firstNm: {
         ...(userAccountForm?.person?.firstNm ?? defaultForm.person?.firstNm),

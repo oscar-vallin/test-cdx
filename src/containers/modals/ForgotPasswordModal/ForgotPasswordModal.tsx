@@ -57,7 +57,7 @@ const ForgotPasswordModal = ({ isOpen, open, currentUserId }: ForgotPasswordModa
       setForgotPassword(false);
     }
     if (data?.forgotPassword?.response === 'FAIL') {
-      let message = data.forgotPassword?.responseMsg;
+      const message = data.forgotPassword?.responseMsg;
       setErrorText(message);
       setError(true);
     }
@@ -80,7 +80,7 @@ const ForgotPasswordModal = ({ isOpen, open, currentUserId }: ForgotPasswordModa
             onChange={(e, newValue) => {
               setUserId(newValue ?? '');
             }}
-          ></InputText>
+          />
           {error && <StyledError>{errorText}</StyledError>}
         </Spacing>
         <DialogFooter>
