@@ -9,7 +9,7 @@ import { TagPicker } from 'src/components/inputs/TagPicker';
 import { Text } from 'src/components/typography/Text';
 import { Column } from 'src/components/layouts';
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
-import { orgQuickSearch } from 'src/hooks/useQuickSearch';
+import { userOrgsQuickSearch } from 'src/hooks/useQuickSearch';
 import { UseUpdateUserPanel } from 'src/pages/Admin/Users/UpdateUsers/useUpdateUserPanel';
 import { getSelectedAccessGroupSids } from 'src/pages/Admin/Users/UserAccountFormUtil';
 import { AccessManagementWizardBody } from 'src/pages/Admin/Users/AccessManagementWizardBody';
@@ -126,7 +126,7 @@ export const MigrateUserDialog = ({ useUpdateUserPanel, userName, onMigrateUser,
           id="__OrgSearch_Input"
           debounce={500}
           itemLimit={1}
-          doSearch={(searchText) => orgQuickSearch(client, handleError, searchText, '1')}
+          doSearch={(searchText) => userOrgsQuickSearch(client, handleError, searchText)}
           value={selectedOrgs}
           onChange={setSelectedOrgs}
         />

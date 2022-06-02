@@ -1639,6 +1639,11 @@ export type Query = {
   searchOrganizations?: Maybe<OrganizationConnection>;
   organizationQuickSearch?: Maybe<Array<Organization>>;
   vendorQuickSearch?: Maybe<Array<Organization>>;
+  /**
+   * Perform a quick search for organizations to migrate a user.
+   * These organizations are active and are of Org Types which can have users.
+   */
+  userOrgsQuickSearch?: Maybe<Array<Organization>>;
   orgSecurityForm?: Maybe<OrgSecurityForm>;
   /** Get a listing of external organizations the current user has been granted access to */
   externalOrgs?: Maybe<OrganizationConnection>;
@@ -1948,6 +1953,11 @@ export type QueryOrganizationQuickSearchArgs = {
 
 export type QueryVendorQuickSearchArgs = {
   orgOwnerSid: Scalars['ID'];
+  searchText: Scalars['String'];
+};
+
+
+export type QueryUserOrgsQuickSearchArgs = {
   searchText: Scalars['String'];
 };
 
@@ -5014,6 +5024,19 @@ export type VendorQuickSearchQueryVariables = Exact<{
 export type VendorQuickSearchQuery = (
   { __typename?: 'Query' }
   & { vendorQuickSearch?: Maybe<Array<(
+    { __typename?: 'Organization' }
+    & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType' | 'orgTypeLabel'>
+  )>> }
+);
+
+export type UserOrgsQuickSearchQueryVariables = Exact<{
+  searchText: Scalars['String'];
+}>;
+
+
+export type UserOrgsQuickSearchQuery = (
+  { __typename?: 'Query' }
+  & { userOrgsQuickSearch?: Maybe<Array<(
     { __typename?: 'Organization' }
     & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType' | 'orgTypeLabel'>
   )>> }
@@ -11358,6 +11381,43 @@ export function useVendorQuickSearchLazyQuery(baseOptions?: Apollo.LazyQueryHook
 export type VendorQuickSearchQueryHookResult = ReturnType<typeof useVendorQuickSearchQuery>;
 export type VendorQuickSearchLazyQueryHookResult = ReturnType<typeof useVendorQuickSearchLazyQuery>;
 export type VendorQuickSearchQueryResult = Apollo.QueryResult<VendorQuickSearchQuery, VendorQuickSearchQueryVariables>;
+export const UserOrgsQuickSearchDocument = gql`
+    query UserOrgsQuickSearch($searchText: String!) {
+  userOrgsQuickSearch(searchText: $searchText) {
+    sid
+    name
+    orgId
+    orgType
+    orgTypeLabel
+  }
+}
+    `;
+
+/**
+ * __useUserOrgsQuickSearchQuery__
+ *
+ * To run a query within a React component, call `useUserOrgsQuickSearchQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserOrgsQuickSearchQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserOrgsQuickSearchQuery({
+ *   variables: {
+ *      searchText: // value for 'searchText'
+ *   },
+ * });
+ */
+export function useUserOrgsQuickSearchQuery(baseOptions: Apollo.QueryHookOptions<UserOrgsQuickSearchQuery, UserOrgsQuickSearchQueryVariables>) {
+        return Apollo.useQuery<UserOrgsQuickSearchQuery, UserOrgsQuickSearchQueryVariables>(UserOrgsQuickSearchDocument, baseOptions);
+      }
+export function useUserOrgsQuickSearchLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserOrgsQuickSearchQuery, UserOrgsQuickSearchQueryVariables>) {
+          return Apollo.useLazyQuery<UserOrgsQuickSearchQuery, UserOrgsQuickSearchQueryVariables>(UserOrgsQuickSearchDocument, baseOptions);
+        }
+export type UserOrgsQuickSearchQueryHookResult = ReturnType<typeof useUserOrgsQuickSearchQuery>;
+export type UserOrgsQuickSearchLazyQueryHookResult = ReturnType<typeof useUserOrgsQuickSearchLazyQuery>;
+export type UserOrgsQuickSearchQueryResult = Apollo.QueryResult<UserOrgsQuickSearchQuery, UserOrgsQuickSearchQueryVariables>;
 export const OrgSecurityFormDocument = gql`
     query OrgSecurityForm($orgSid: ID!) {
   orgSecurityForm(orgSid: $orgSid) {

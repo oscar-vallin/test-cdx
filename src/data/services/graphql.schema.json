@@ -14150,6 +14150,43 @@
             "deprecationReason": null
           },
           {
+            "name": "userOrgsQuickSearch",
+            "description": "Perform a quick search for organizations to migrate a user.\nThese organizations are active and are of Org Types which can have users.",
+            "args": [
+              {
+                "name": "searchText",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Organization",
+                  "ofType": null
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "orgSecurityForm",
             "description": null,
             "args": [
