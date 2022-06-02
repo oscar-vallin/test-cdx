@@ -1,6 +1,16 @@
 import { ReactElement } from 'react';
 import { StyledButton, StyledFontIcon } from './ButtonIcon.styles';
 
+const defaultProps = {
+  id: '',
+  disabled: true,
+  text: '',
+  icon: '',
+  children: '',
+  variant: '',
+  block: false,
+};
+
 type ButtonIconProps = {
   id?: string;
   disabled?: boolean;
@@ -11,7 +21,7 @@ type ButtonIconProps = {
   variant?: string;
   onClick?: () => void;
   block?: boolean;
-};
+} & typeof defaultProps;
 
 const ButtonIcon = ({
   id = '',
@@ -27,5 +37,7 @@ const ButtonIcon = ({
     </StyledButton>
   );
 };
+
+ButtonIcon.defaultProps = defaultProps;
 
 export { ButtonIcon };

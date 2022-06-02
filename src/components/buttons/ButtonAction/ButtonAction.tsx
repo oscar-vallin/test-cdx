@@ -1,13 +1,19 @@
 import { ReactNode } from 'react';
 import { StyledButtonAction } from './ButtonAction.styles';
 
+const defaultProps = {
+  id: '',
+  icon: '',
+  disabled: false,
+};
+
 type ButtonActionProps = {
   id?: string;
   children?: ReactNode;
   disabled?: boolean;
   onClick?: () => void;
   icon?: string;
-};
+} & typeof defaultProps;
 
 const buttonIcons = {
   edit: 'Edit',
@@ -22,7 +28,7 @@ const buttonIcons = {
   desc: 'SortDown',
 };
 
-const ButtonAction = ({ id = '', children, icon = '', disabled = false, onClick, ...props }: ButtonActionProps) => {
+const ButtonAction = ({ id, children, icon, disabled, onClick, ...props }: ButtonActionProps) => {
   const _icon = { iconName: buttonIcons[icon] };
 
   return (
@@ -31,5 +37,7 @@ const ButtonAction = ({ id = '', children, icon = '', disabled = false, onClick,
     </StyledButtonAction>
   );
 };
+
+ButtonAction.defaultProps = defaultProps;
 
 export { ButtonAction };
