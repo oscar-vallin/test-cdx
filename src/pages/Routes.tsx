@@ -2,6 +2,7 @@ import { Switch } from 'react-router-dom';
 import { ROUTES } from 'src/data/constants/RouteConstants';
 // Routes
 import { PasswordResetPage } from 'src/pages/PasswordReset';
+import { ExternalUsersPage } from 'src/pages/Admin/Users/ExternalUsers';
 import { LoginPage } from './Login';
 import { UserSettingsPage } from './UserSettings';
 import { DashboardPage } from './Dashboard';
@@ -18,6 +19,7 @@ import { CurrentActivityPage } from './Admin/Activity';
 import { ColorPalettesPage, DefaultThemePage } from './Admin/DashboardSite';
 import { ActiveUsersPage } from './Admin/Users/ActiveUsers';
 import { DeletedUsersPage } from './Admin/Users/DeletedUsers';
+import { XChangePage } from './Admin/XChange';
 import { FtpTestPage } from './Admin/FtpTest';
 import { UserAuditLogsPage } from './Admin/Users/UserAuditLogs';
 import {
@@ -31,7 +33,6 @@ import UnauthRoute from './UnauthRoute';
 import { ImplementationDeployPage } from './Admin/ImplDeploy';
 import { PasswordRulesPage } from './Admin/PasswordRules';
 import { OrganizationSecuritySettingsPage } from './Admin/OrganizationSecuritySettings';
-import { ExternalUsersPage } from 'src/pages/Admin/Users/ExternalUsers';
 
 export const Routes = () => {
   return (
@@ -73,7 +74,6 @@ export const Routes = () => {
       <AuthRoute path={ROUTES.ROUTE_ERRORS.URL}>
         <ErrorsPage />
       </AuthRoute>
-
       <AuthRoute path={ROUTES.ROUTE_ACCESS_MANAGEMENT_GROUPS.URL}>
         <AccessManagementGroupsPage />
       </AuthRoute>
@@ -109,6 +109,9 @@ export const Routes = () => {
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_USER_AUDIT_LOGS.URL}>
         <UserAuditLogsPage />
+      </AuthRoute>
+      <AuthRoute path={ROUTES.ROUTE_XCHANGE_LIST.URL}>
+        <XChangePage />
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_FTP_TEST.URL}>
         <FtpTestPage />

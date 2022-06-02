@@ -238,7 +238,6 @@ const ActiveOrgsPage = () => {
   };
 
   const showCheckbox = () => {
-    console.log(ActiveDomainStore.domainOrg)
     if (ActiveDomainStore.domainOrg.current.orgId === 'CDX') {
       return (
         <Checkbox
