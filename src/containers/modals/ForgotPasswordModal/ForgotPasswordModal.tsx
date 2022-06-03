@@ -27,11 +27,11 @@ const ForgotPasswordModal = ({ isOpen, open, currentUserId }: ForgotPasswordModa
   const [error, setError] = useState<boolean>(false);
   const [errorText, setErrorText] = useState<string>('');
 
-  const [forgotPasswordMutation, { data, loading }] = useForgotPasswordMutation();
+  const [forgotPasswordMutation, { data: dataForgotPassword }] = useForgotPasswordMutation();
 
   const sendIdUser = (user: string) => {
     if (user !== currentUserId && user.trim() !== '') {
-      setErrorText('the email address must match the login address you entered');
+      setErrorText('The email address must match the login address you entered');
       setError(true);
       return;
     }
@@ -47,21 +47,36 @@ const ForgotPasswordModal = ({ isOpen, open, currentUserId }: ForgotPasswordModa
     setForgotPassword(false);
   };
 
+  const deleteTag = (message: string): string => {
+    let correctMessage: string;
+    let index: number;
+
+    if (message.includes('<') || message.includes('>')) {
+      index = message.indexOf('>');
+      correctMessage = message.slice(index + 1, message.length);
+      index = correctMessage.indexOf('<');
+      correctMessage = correctMessage.slice(0, index);
+      return correctMessage;
+    }
+
+    return message;
+  };
+
   useEffect(() => {
-    if (data?.forgotPassword?.response === 'SUCCESS') {
-      let message = data.forgotPassword?.responseMsg;
-      message = message.replace('<p>', '');
-      message = message.replace('</p>', '');
-      setSuccessfulText(message);
+    let message: string;
+    if (dataForgotPassword?.forgotPassword?.response === 'SUCCESS') {
+      message = dataForgotPassword.forgotPassword?.responseMsg;
+      const correctMessage = deleteTag(message);
+      setSuccessfulText(correctMessage);
       setSuccess(true);
       setForgotPassword(false);
     }
-    if (data?.forgotPassword?.response === 'FAIL') {
-      const message = data.forgotPassword?.responseMsg;
+    if (dataForgotPassword?.forgotPassword?.response === 'FAIL') {
+      message = dataForgotPassword.forgotPassword?.responseMsg;
       setErrorText(message);
       setError(true);
     }
-  }, [data]);
+  }, [dataForgotPassword]);
 
   return (
     <>
