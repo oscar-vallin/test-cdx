@@ -1,7 +1,7 @@
 /* eslint-disable no-alert */
 import { ReactElement, useEffect, useState } from 'react';
 import { Text, Dialog, DialogFooter, PrimaryButton, DefaultButton } from '@fluentui/react';
-import { useForgotPasswordMutation } from 'src/data/services/graphql';
+import { useForgotPasswordMutation, useBeginLoginMutation } from 'src/data/services/graphql';
 import { InputText } from 'src/components/inputs/InputText';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { StyledError } from './ForgotPasswordModal.styles';
@@ -29,6 +29,9 @@ const ForgotPasswordModal = ({ isOpen, open, currentUserId }: ForgotPasswordModa
 
   const [forgotPasswordMutation, { data: dataForgotPassword }] = useForgotPasswordMutation();
 
+  const [verifyUserId, { data: verifiedUserId, loading: isVerifyingUserId }] = useBeginLoginMutation();
+
+
   const sendIdUser = (user: string) => {
     if (user !== currentUserId && user.trim() !== '') {
       setErrorText('The email address must match the login address you entered');
@@ -42,12 +45,20 @@ const ForgotPasswordModal = ({ isOpen, open, currentUserId }: ForgotPasswordModa
     });
   };
 
+  const getUserForgotPasswordEnabled = () => {
+    verifyUserId({
+      variables: {
+        userId: currentUserId,
+      },
+    });
+  };
+
   const cancelForgotPassword = () => {
     isOpen(false);
     setForgotPassword(false);
   };
 
-  const deleteTag = (message: string): string => {
+  const deleteTag = (message: any): string => {
     let correctMessage: string;
     let index: number;
 
@@ -62,12 +73,56 @@ const ForgotPasswordModal = ({ isOpen, open, currentUserId }: ForgotPasswordModa
     return message;
   };
 
+  const showDialog = () => {
+    if (!isVerifyingUserId) {
+      if (!verifiedUserId?.beginLogin?.forgotPasswordEnabled) {
+        return (
+          <Dialog hidden={!forgotPassword} onDismiss={() => setForgotPassword(true)} minWidth="500px">
+            <Text>{successfulText || 'Forgot password email'}</Text>
+            <DialogFooter>
+              <DefaultButton id="forgotPaswwordModal-cancel-button" text="Cancel" onClick={cancelForgotPassword} />
+            </DialogFooter>
+          </Dialog>
+        );
+      }
+      return (
+        <Dialog
+          title="Forgot Password"
+          hidden={!forgotPassword}
+          onDismiss={() => setForgotPassword(true)}
+          minWidth="500px"
+        >
+          <Spacing margin={{ bottom: 'small' }}>
+            <InputText
+              id="renameInput"
+              type="email"
+              value={userId}
+              label="Please re-enter you email address *"
+              onChange={(e, newValue) => {
+                setUserId(newValue ?? '');
+              }}
+            />
+            {error && <StyledError>{errorText}</StyledError>}
+          </Spacing>
+          <DialogFooter>
+            <PrimaryButton id="forgotPaswwordModal-submit-button" text="Submit" onClick={() => sendIdUser(userId)} />
+            <DefaultButton id="forgotPaswwordModal-cancel-button" text="Cancel" onClick={cancelForgotPassword} />
+          </DialogFooter>
+        </Dialog>
+      );
+    }
+  };
+
   useEffect(() => {
     let message: string;
+    if (verifiedUserId) {
+      const messageEnabled = verifiedUserId.beginLogin?.forgotPasswordMsg;
+      const correctMessage = deleteTag(messageEnabled);
+      setSuccessfulText(correctMessage);
+    }
     if (dataForgotPassword?.forgotPassword?.response === 'SUCCESS') {
       message = dataForgotPassword.forgotPassword?.responseMsg;
-      const correctMessage = deleteTag(message);
-      setSuccessfulText(correctMessage);
+      setSuccessfulText(message);
       setSuccess(true);
       setForgotPassword(false);
     }
@@ -76,34 +131,15 @@ const ForgotPasswordModal = ({ isOpen, open, currentUserId }: ForgotPasswordModa
       setErrorText(message);
       setError(true);
     }
-  }, [dataForgotPassword]);
+  }, [dataForgotPassword, verifiedUserId]);
+
+  useEffect(() => {
+    getUserForgotPasswordEnabled();
+  },[]);
 
   return (
     <>
-      <Dialog
-        title="Forgot Password"
-        hidden={!forgotPassword}
-        onDismiss={() => setForgotPassword(true)}
-        minWidth="500px"
-      >
-        <Spacing margin={{ bottom: 'small' }}>
-          <InputText
-            id="renameInput"
-            type="email"
-            value={userId}
-            label="Please re-enter you email address *"
-            onChange={(e, newValue) => {
-              setUserId(newValue ?? '');
-            }}
-          />
-          {error && <StyledError>{errorText}</StyledError>}
-        </Spacing>
-        <DialogFooter>
-          <PrimaryButton id="forgotPaswwordModal-submit-button" text="Submit" onClick={() => sendIdUser(userId)} />
-          <DefaultButton id="forgotPaswwordModal-cancel-button" text="Cancel" onClick={cancelForgotPassword} />
-        </DialogFooter>
-      </Dialog>
-
+      {showDialog()}
       {success && (
         <Dialog hidden={!closeProcess} title="Password reset submitted" minWidth="500px">
           <Spacing>
