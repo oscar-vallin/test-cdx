@@ -9,9 +9,10 @@ import { useXchangeProfileLazyQuery } from 'src/data/services/graphql';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 
 const XChangePage = () => {
-    const { orgSid } = useOrgSid();
+  const { orgSid } = useOrgSid();
 
-    const [xchangeProfile, { data: dataXchange, loading: loadingXchange, error: errorXchange } ] = useQueryHandler(useXchangeProfileLazyQuery);
+  const [xchangeProfile, { data: dataXchange, loading: loadingXchange, error: errorXchange }] =
+    useQueryHandler(useXchangeProfileLazyQuery);
 
   const fetchData = () => {
     xchangeProfile({
@@ -21,27 +22,27 @@ const XChangePage = () => {
     });
   };
 
-    useEffect(() => {
-        fetchData();
-    }, [useOrgSid]);
+  useEffect(() => {
+    fetchData();
+  }, [useOrgSid]);
 
-    useEffect(() => {
-        console.log(dataXchange);
-    }, [dataXchange]);
+  useEffect(() => {
+    console.log(dataXchange);
+  }, [dataXchange]);
 
-    return (
-        <LayoutDashboard id='PageXChangePage' menuOptionSelected={ROUTE_XCHANGE_LIST.API_ID}>
-          <PageHeader id="__ActiveUsersHeader">
-                <Container>
-                <Row>
-                    <Column lg="6" direction="row">
-                    <PageTitle id="__Page_Title" title="Xchange Profile" />
-                    </Column>
-                </Row>
-                </Container>
-            </PageHeader>
-        </LayoutDashboard>
-    )
+  return (
+    <LayoutDashboard id="PageXChangePage" menuOptionSelected={ROUTE_XCHANGE_LIST.API_ID}>
+      <PageHeader id="__ActiveUsersHeader">
+        <Container>
+          <Row>
+            <Column lg="6" direction="row">
+              <PageTitle id="__Page_Title" title="Xchange Profile" />
+            </Column>
+          </Row>
+        </Container>
+      </PageHeader>
+    </LayoutDashboard>
+  );
 };
 
 export { XChangePage };

@@ -31,7 +31,6 @@ const ForgotPasswordModal = ({ isOpen, open, currentUserId }: ForgotPasswordModa
 
   const [verifyUserId, { data: verifiedUserId, loading: isVerifyingUserId }] = useBeginLoginMutation();
 
-
   const sendIdUser = (user: string) => {
     if (user !== currentUserId && user.trim() !== '') {
       setErrorText('The email address must match the login address you entered');
@@ -135,7 +134,7 @@ const ForgotPasswordModal = ({ isOpen, open, currentUserId }: ForgotPasswordModa
 
   useEffect(() => {
     getUserForgotPasswordEnabled();
-  },[]);
+  }, []);
 
   return (
     <>
