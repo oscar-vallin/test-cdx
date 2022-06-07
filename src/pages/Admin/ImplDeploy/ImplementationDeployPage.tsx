@@ -8,6 +8,7 @@ import { ImplementationDeployMutation, useImplementationDeployMutation } from 's
 import { Spinner } from 'src/components/spinners/Spinner';
 import { ROUTE_IMPL_DEPLOY } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
+import { PageBody } from 'src/components/layouts/Column';
 import { DeployButton, Row } from './ImplementationDeployPage.styles';
 
 const _ImplementationDeployPage = () => {
@@ -104,14 +105,21 @@ const _ImplementationDeployPage = () => {
           </Row>
         </Container>
       </PageHeader>
-      <Container>
-        {renderDeploymentResult()}
-        <Row>
-          <Column>
-            <DeployButton id="__DeployBtn" variant="primary" disabled={dataLoading} text="Deploy" onClick={doDeploy} />
-          </Column>
-        </Row>
-      </Container>
+      <PageBody id="__ImplDeployBody">
+        <Container>
+          {renderDeploymentResult()}
+          <Row>
+            <Column>
+              <DeployButton
+                id="__DeployBtn"
+                variant="primary"
+                disabled={dataLoading}
+                text="Deploy"
+                onClick={doDeploy} />
+            </Column>
+          </Row>
+        </Container>
+      </PageBody>
     </LayoutDashboard>
   );
 };

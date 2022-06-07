@@ -14,6 +14,7 @@ import {
   SpinnerSize,
   Stack,
   Checkbox,
+  SearchBox,
 } from '@fluentui/react';
 import { EmptyState } from 'src/containers/states';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
@@ -37,8 +38,7 @@ import { ROUTE_ACTIVE_ORGS } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { OrgPanel } from 'src/pages/Admin/Organizations/ActiveOrgs/OrgPanel';
 import { Paginator } from 'src/components/tables/Paginator';
-import { InputText } from 'src/components/inputs/InputText';
-import { StyledColumn } from './ActiveOrgsPage.styles';
+import { PageBody } from 'src/components/layouts/Column';
 
 const ActiveOrgsPage = () => {
   const { orgSid: orgOwnerSid } = useOrgSid();
@@ -255,43 +255,39 @@ const ActiveOrgsPage = () => {
 
   return (
     <LayoutDashboard id="PageActiveOrgs" menuOptionSelected={ROUTE_ACTIVE_ORGS.API_ID}>
-      {orgs.length > 0 && (
-        <PageHeader id="__ActiveOrgsHeader">
-          <Container>
-            <Row>
-              <Column lg="6" direction="row">
-                <PageTitle id="__Page_Title" title="Active orgs" />
-              </Column>
-              <Column lg="6" right>
-                {createOrgButton()}
-              </Column>
-            </Row>
-          </Container>
-        </PageHeader>
-      )}
-
-      <Container>
-        <Row>
-          <Stack horizontal={true} wrap={true} style={{ width: '100%' }} verticalAlign="end">
-            <Column lg="6">
-              <InputText
-                id="Active_Orgs_Input-Search"
-                autofocus
-                disabled={false}
-                value={searchText}
-                onChange={(event, newValue) => setSearchText(newValue ?? '')}
-                placeholder="Search"
-              />
+      <PageHeader id="__ActiveOrgsHeader">
+        <Container>
+          <Row>
+            <Column lg="6" direction="row">
+              <PageTitle id="__Page_Title" title="Active orgs" />
             </Column>
-            {showCheckbox()}
-          </Stack>
-        </Row>
-      </Container>
-      <Container>
-        <Row>
-          <StyledColumn>{renderBody()}</StyledColumn>
-        </Row>
-      </Container>
+            <Column lg="6" right>
+              {createOrgButton()}
+            </Column>
+          </Row>
+        </Container>
+      </PageHeader>
+
+      <PageBody id="__ActiveOrgsBody">
+        <Container>
+          <Row>
+            <Stack horizontal={true} wrap={true} style={{ width: '100%' }} verticalAlign="end">
+              <Column lg="6">
+                <SearchBox
+                  id="Active_Orgs_Input-Search"
+                  disabled={false}
+                  value={searchText}
+                  styles={{ root: { width: '100%' } }}
+                  onChange={(event, newValue) => setSearchText(newValue ?? '')}
+                  placeholder="Search"
+                />
+              </Column>
+              {showCheckbox()}
+            </Stack>
+          </Row>
+          <Row>{renderBody()}</Row>
+        </Container>
+      </PageBody>
 
       {isPanelOpen && (
         <OrgPanel

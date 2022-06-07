@@ -37,6 +37,7 @@ import { useNotification } from 'src/hooks/useNotification';
 import { UIInputTextArea } from 'src/components/inputs/InputTextArea';
 import { yyyyMMdda } from 'src/utils/CDXUtils';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
+import { PageBody } from 'src/components/layouts/Column';
 import { StyledSelectedFile, StyledError } from './FtpTestPage.styles';
 
 const _FtpTestPage = () => {
@@ -481,8 +482,7 @@ const _FtpTestPage = () => {
       const str = ConvertToCSV(jsonObject);
       const downloadLink = document.createElement('a');
       const blob = new Blob(['\ufeff', str]);
-      const url = URL.createObjectURL(blob);
-      downloadLink.href = url;
+      downloadLink.href = URL.createObjectURL(blob);
       downloadLink.download = 'ftp-test-logs.csv';
 
       document.body.appendChild(downloadLink);
@@ -498,7 +498,7 @@ const _FtpTestPage = () => {
     let maxAttributes = 0;
     for (let i = 0; i < array.length; i++) {
       let line = '';
-      for (var index in array[i]) {
+      for (const index in array[i]) {
         if (index != '__typename') {
           if (line != '') line += ',';
           if (typeof array[i][index] !== 'object') {
@@ -511,7 +511,7 @@ const _FtpTestPage = () => {
             const attributes = array[i][index];
             maxAttributes = Math.max(maxAttributes, attributes.length);
             for (let j = 0; j < attributes.length; j++) {
-              for (var index in attributes[j]) {
+              for (const index in attributes[j]) {
                 if (index != '__typename')
                   line += `${
                     needsQuote(attributes[j][index]) ? quoteField(attributes[j][index]) : attributes[j][index]
@@ -545,8 +545,9 @@ const _FtpTestPage = () => {
   const copyProfileSnippet = () => {
     navigator.clipboard.writeText(
       ftpTestData?.ftpTestM?.clientProfileSnippet ? ftpTestData.ftpTestM.clientProfileSnippet : ''
-    );
-    Toast.success({ text: 'Copied!' });
+    ).then(() => {
+      Toast.success({ text: 'Copied!' });
+    });
   };
 
   return (
@@ -560,89 +561,91 @@ const _FtpTestPage = () => {
           </Row>
         </Container>
       </PageHeader>
-      <Row>
-        <Column xxl="6" xl="6">
-          {isProcessingForm ? (
-            <Spacing margin={{ top: 'double' }}>
-              <Spinner size={SpinnerSize.large} label="Loading" />
-            </Spacing>
-          ) : (
-            renderForm()
-          )}
-        </Column>
-        <Column xxl="6" xl="6">
-          {isProcessing && (
-            <Spacing margin={{ top: 'double' }}>
-              <Spinner size={SpinnerSize.large} label="Loading" />
-            </Spacing>
-          )}
-          {ftpTestData?.ftpTestM?.status && (
-            <Container>
-              {message && (
-                <Spacing margin={{ bottom: 'normal' }}>
-                  <MessageBar
-                    id="__OrgPanel_Msg"
-                    messageBarType={messageType}
-                    isMultiline
-                    onDismiss={() => setMessage(undefined)}
-                  >
-                    {message}
-                  </MessageBar>
-                </Spacing>
-              )}
-              <Spacing margin={{ bottom: 'normal' }}>
-                <Stack horizontal={true} horizontalAlign="space-between">
-                  <Stack horizontal={true} tokens={{ childrenGap: 10 }}>
-                    <Stack.Item align="center" disableShrink>
-                      <Text variant="bold">Results</Text>
-                    </Stack.Item>
-                    <Stack.Item align="center" disableShrink>
-                      <Badge
-                        variant={getBadgeVariant(ftpTestData?.ftpTestM?.status)}
-                        label={ftpTestData?.ftpTestM?.status ? ftpTestData?.ftpTestM?.status : ''}
-                        pill
-                      />
-                    </Stack.Item>
-                  </Stack>
-                  {ftpTestData.ftpTestM.csvLog && (
-                    <Stack.Item align="center" disableShrink>
-                      <FontIcon
-                        onClick={downloadLogsAsCsv}
-                        iconName="DownloadDocument"
-                        style={{ paddingRight: '.5em', cursor: 'pointer' }}
-                      />
-                      <Link target="_new" onClick={downloadLogsAsCsv} title="Download Logs">
-                        Download Logs
-                      </Link>
-                    </Stack.Item>
-                  )}
-                </Stack>
+      <PageBody id="__FTPTestBody">
+        <Row>
+          <Column xxl="6" xl="6">
+            {isProcessingForm ? (
+              <Spacing margin={{ top: 'double' }}>
+                <Spinner size={SpinnerSize.large} label="Loading" />
               </Spacing>
-              {renderResults()}
-              {ftpTestData?.ftpTestM?.clientProfileSnippet && (
-                <Spacing margin={{ bottom: 'normal', top: 'normal' }}>
+            ) : (
+              renderForm()
+            )}
+          </Column>
+          <Column xxl="6" xl="6">
+            {isProcessing && (
+              <Spacing margin={{ top: 'double' }}>
+                <Spinner size={SpinnerSize.large} label="Loading" />
+              </Spacing>
+            )}
+            {ftpTestData?.ftpTestM?.status && (
+              <Container>
+                {message && (
+                  <Spacing margin={{ bottom: 'normal' }}>
+                    <MessageBar
+                      id="__OrgPanel_Msg"
+                      messageBarType={messageType}
+                      isMultiline
+                      onDismiss={() => setMessage(undefined)}
+                    >
+                      {message}
+                    </MessageBar>
+                  </Spacing>
+                )}
+                <Spacing margin={{ bottom: 'normal' }}>
                   <Stack horizontal={true} horizontalAlign="space-between">
-                    <Stack.Item align="center" disableShrink>
-                      <Text variant="bold">Client Profile Snippet</Text>
-                    </Stack.Item>
-                    <Stack.Item align="center" disableShrink>
-                      <FontIcon
-                        iconName="Copy"
-                        onClick={copyProfileSnippet}
-                        style={{ paddingRight: '.5em', cursor: 'pointer' }}
-                      />
-                      <Link onClick={copyProfileSnippet} target="_new" title="Copy To Clipboard">
-                        Copy To Clipboard
-                      </Link>
-                    </Stack.Item>
+                    <Stack horizontal={true} tokens={{ childrenGap: 10 }}>
+                      <Stack.Item align="center" disableShrink>
+                        <Text variant="bold">Results</Text>
+                      </Stack.Item>
+                      <Stack.Item align="center" disableShrink>
+                        <Badge
+                          variant={getBadgeVariant(ftpTestData?.ftpTestM?.status)}
+                          label={ftpTestData?.ftpTestM?.status ? ftpTestData?.ftpTestM?.status : ''}
+                          pill
+                        />
+                      </Stack.Item>
+                    </Stack>
+                    {ftpTestData.ftpTestM.csvLog && (
+                      <Stack.Item align="center" disableShrink>
+                        <FontIcon
+                          onClick={downloadLogsAsCsv}
+                          iconName="DownloadDocument"
+                          style={{ paddingRight: '.5em', cursor: 'pointer' }}
+                        />
+                        <Link target="_new" onClick={downloadLogsAsCsv} title="Download Logs">
+                          Download Logs
+                        </Link>
+                      </Stack.Item>
+                    )}
                   </Stack>
-                  {renderClientProfileSnippet()}
                 </Spacing>
-              )}
-            </Container>
-          )}
-        </Column>
-      </Row>
+                {renderResults()}
+                {ftpTestData?.ftpTestM?.clientProfileSnippet && (
+                  <Spacing margin={{ bottom: 'normal', top: 'normal' }}>
+                    <Stack horizontal={true} horizontalAlign="space-between">
+                      <Stack.Item align="center" disableShrink>
+                        <Text variant="bold">Client Profile Snippet</Text>
+                      </Stack.Item>
+                      <Stack.Item align="center" disableShrink>
+                        <FontIcon
+                          iconName="Copy"
+                          onClick={copyProfileSnippet}
+                          style={{ paddingRight: '.5em', cursor: 'pointer' }}
+                        />
+                        <Link onClick={copyProfileSnippet} target="_new" title="Copy To Clipboard">
+                          Copy To Clipboard
+                        </Link>
+                      </Stack.Item>
+                    </Stack>
+                    {renderClientProfileSnippet()}
+                  </Spacing>
+                )}
+              </Container>
+            )}
+          </Column>
+        </Row>
+      </PageBody>
     </LayoutDashboard>
   );
 };

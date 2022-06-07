@@ -25,7 +25,8 @@ import { InfoIcon } from 'src/components/badges/InfoIcon';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { ROUTE_PASSWORD_RULES } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
-import { StyledColumn, StyledComboBox, StyledDiv } from './PasswordRulesPage.styles';
+import { PageBody } from 'src/components/layouts/Column';
+import { StyledComboBox, StyledDiv } from './PasswordRulesPage.styles';
 import { DEFAULT_FORM, extractFormValues, FormInput, FormOptions, replaceInputs } from './PasswordRulesFormUtils';
 
 const _PasswordRulesPage = () => {
@@ -90,16 +91,16 @@ const _PasswordRulesPage = () => {
           </Row>
         </Container>
       </PageHeader>
-      <Container>
-        <Row>
-          <Column lg="12">
-            <Spacing margin={{ top: 'normal' }}>
-              <LightSeparator />
-            </Spacing>
-          </Column>
-        </Row>
-        <Row>
-          <StyledColumn sm="12" xxl={form ? '10' : '12'}>
+      <PageBody id="__PasswordRulesBody">
+        <Container>
+          <Row>
+            <Column lg="12">
+              <Spacing margin={{ top: 'normal' }}>
+                <LightSeparator />
+              </Spacing>
+            </Column>
+          </Row>
+          <Row>
             <Spacing margin={{ top: !form ? 'normal' : 'double' }}>
               {isLoadingForm ? (
                 <Spinner size={SpinnerSize.large} label="Loading password rules" />
@@ -345,9 +346,9 @@ const _PasswordRulesPage = () => {
                 </div>
               )}
             </Spacing>
-          </StyledColumn>
-        </Row>
-      </Container>
+          </Row>
+        </Container>
+      </PageBody>
     </LayoutDashboard>
   );
 };
@@ -355,4 +356,3 @@ const _PasswordRulesPage = () => {
 const PasswordRulesPage = memo(_PasswordRulesPage);
 
 export { PasswordRulesPage };
-export default PasswordRulesPage;
