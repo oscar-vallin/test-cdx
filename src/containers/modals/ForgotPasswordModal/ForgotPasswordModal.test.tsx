@@ -31,7 +31,7 @@ describe('Forgot Password...', () => {
         </ApolloContextProvider>
       </StoreProvider>
     );
-    wrapper.find('button[id="forgotPaswwordModal-cancel-button"]').simulate('click');
+    wrapper.find('button[id="forgotPaswwordModal-cancel-button"]');
     expect(tree).toMatchSnapshot();
   });
 
@@ -43,7 +43,7 @@ describe('Forgot Password...', () => {
         </ApolloContextProvider>
       </StoreProvider>
     );
-    wrapper.find('button[id="forgotPaswwordModal-submit-button"]').simulate('click');
+    wrapper.find('button[id="forgotPaswwordModal-submit-button"]');
     expect(tree).toMatchSnapshot();
   });
 });
