@@ -1,5 +1,5 @@
 import { ReactElement } from 'react';
-import { Row, Column } from '../../../components/layouts';
+import { Row, Column } from 'src/components/layouts';
 
 import { StyledBox } from './PageHeader.styles';
 

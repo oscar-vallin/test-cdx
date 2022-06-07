@@ -25,7 +25,7 @@ export const InfoIcon = ({ id, tooltip, leftPad = true }: InfoIconType) => {
         calloutProps={{ gapSpace: 0 }}
       >
         {charPad()}
-        <FontIcon aria-describedby={id} iconName="Info" />
+        <FontIcon aria-describedby={id} iconName="Info" style={{ cursor: "pointer" }}/>
       </TooltipHost>
     );
   }

@@ -28,7 +28,7 @@ export const ActiveDomainContextProvider = ({ children }: ActiveDomainContextPro
   const parseToStoreObj = (link) => ({
     label: link.label,
     destination: link.page?.type || null,
-    orgSid: link.page?.parameters.find((param) => param.name === 'orgSid')?.idValue || null,
+    orgSid: link.page?.parameters?.find((param) => param.name === 'orgSid')?.idValue || null,
     subNavItems: link.subNavItems?.map(parseToStoreObj),
   });
 

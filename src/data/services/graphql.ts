@@ -195,6 +195,7 @@ export enum CdxWebPage {
   XchangeList = 'XCHANGE_LIST',
   XchangeAlerts = 'XCHANGE_ALERTS',
   XchangeNaming = 'XCHANGE_NAMING',
+  OntologyBrowser = 'ONTOLOGY_BROWSER',
   AddOrg = 'ADD_ORG',
   AddUser = 'ADD_USER',
   ColorPalettes = 'COLOR_PALETTES',
@@ -1219,6 +1220,31 @@ export enum NullHandling {
   NullsLast = 'NULLS_LAST'
 }
 
+export type OntologyClass = {
+  __typename?: 'OntologyClass';
+  id: Scalars['String'];
+  name: Scalars['String'];
+  description: Scalars['String'];
+  properties: Array<OntologyProperty>;
+  superClasses: Array<OntologyElement>;
+};
+
+export type OntologyElement = {
+  __typename?: 'OntologyElement';
+  id: Scalars['String'];
+  name: Scalars['String'];
+  description: Scalars['String'];
+};
+
+export type OntologyProperty = {
+  __typename?: 'OntologyProperty';
+  id: Scalars['String'];
+  name: Scalars['String'];
+  description: Scalars['String'];
+  dataType?: Maybe<Scalars['String']>;
+  range?: Maybe<Scalars['String']>;
+};
+
 export type OrgFilterInput = {
   activeFilter?: Maybe<ActiveEnum>;
   /** Search for users regardless of Organization. Only valid for CDX Users when in the context of the CDX Organization. */
@@ -1676,6 +1702,8 @@ export type Query = {
   xchangeProfileAlerts?: Maybe<XchangeProfileAlerts>;
   xchangeProfileAlertForm?: Maybe<XchangeProfileAlertForm>;
   xchangeConfigAlertForm?: Maybe<XchangeConfigAlertForm>;
+  findOntologyClass?: Maybe<OntologyClass>;
+  searchOntology: Array<OntologyClass>;
 };
 
 
@@ -2095,6 +2123,16 @@ export type QueryXchangeConfigAlertFormArgs = {
   orgSid: Scalars['ID'];
   coreFilename: Scalars['String'];
   sid?: Maybe<Scalars['ID']>;
+};
+
+
+export type QueryFindOntologyClassArgs = {
+  id: Scalars['String'];
+};
+
+
+export type QuerySearchOntologyArgs = {
+  searchText: Scalars['String'];
 };
 
 export type RecordCount = {
@@ -6019,6 +6057,46 @@ export type XchangeConfigAlertFormQuery = (
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
     )>> }
+  )> }
+);
+
+export type FindOntologyClassQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type FindOntologyClassQuery = (
+  { __typename?: 'Query' }
+  & { findOntologyClass?: Maybe<(
+    { __typename?: 'OntologyClass' }
+    & Pick<OntologyClass, 'id' | 'name' | 'description'>
+    & { properties: Array<(
+      { __typename?: 'OntologyProperty' }
+      & Pick<OntologyProperty, 'id' | 'name' | 'description' | 'dataType' | 'range'>
+    )>, superClasses: Array<(
+      { __typename?: 'OntologyElement' }
+      & Pick<OntologyElement, 'id' | 'name' | 'description'>
+    )> }
+  )> }
+);
+
+export type SearchOntologyQueryVariables = Exact<{
+  searchText: Scalars['String'];
+}>;
+
+
+export type SearchOntologyQuery = (
+  { __typename?: 'Query' }
+  & { searchOntology: Array<(
+    { __typename?: 'OntologyClass' }
+    & Pick<OntologyClass, 'id' | 'name' | 'description'>
+    & { properties: Array<(
+      { __typename?: 'OntologyProperty' }
+      & Pick<OntologyProperty, 'id' | 'name' | 'description' | 'dataType' | 'range'>
+    )>, superClasses: Array<(
+      { __typename?: 'OntologyElement' }
+      & Pick<OntologyElement, 'id' | 'name' | 'description'>
+    )> }
   )> }
 );
 
@@ -13310,6 +13388,100 @@ export function useXchangeConfigAlertFormLazyQuery(baseOptions?: Apollo.LazyQuer
 export type XchangeConfigAlertFormQueryHookResult = ReturnType<typeof useXchangeConfigAlertFormQuery>;
 export type XchangeConfigAlertFormLazyQueryHookResult = ReturnType<typeof useXchangeConfigAlertFormLazyQuery>;
 export type XchangeConfigAlertFormQueryResult = Apollo.QueryResult<XchangeConfigAlertFormQuery, XchangeConfigAlertFormQueryVariables>;
+export const FindOntologyClassDocument = gql`
+    query FindOntologyClass($id: String!) {
+  findOntologyClass(id: $id) {
+    id
+    name
+    description
+    properties {
+      id
+      name
+      description
+      dataType
+      range
+    }
+    superClasses {
+      id
+      name
+      description
+    }
+  }
+}
+    `;
+
+/**
+ * __useFindOntologyClassQuery__
+ *
+ * To run a query within a React component, call `useFindOntologyClassQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindOntologyClassQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindOntologyClassQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useFindOntologyClassQuery(baseOptions: Apollo.QueryHookOptions<FindOntologyClassQuery, FindOntologyClassQueryVariables>) {
+        return Apollo.useQuery<FindOntologyClassQuery, FindOntologyClassQueryVariables>(FindOntologyClassDocument, baseOptions);
+      }
+export function useFindOntologyClassLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindOntologyClassQuery, FindOntologyClassQueryVariables>) {
+          return Apollo.useLazyQuery<FindOntologyClassQuery, FindOntologyClassQueryVariables>(FindOntologyClassDocument, baseOptions);
+        }
+export type FindOntologyClassQueryHookResult = ReturnType<typeof useFindOntologyClassQuery>;
+export type FindOntologyClassLazyQueryHookResult = ReturnType<typeof useFindOntologyClassLazyQuery>;
+export type FindOntologyClassQueryResult = Apollo.QueryResult<FindOntologyClassQuery, FindOntologyClassQueryVariables>;
+export const SearchOntologyDocument = gql`
+    query SearchOntology($searchText: String!) {
+  searchOntology(searchText: $searchText) {
+    id
+    name
+    description
+    properties {
+      id
+      name
+      description
+      dataType
+      range
+    }
+    superClasses {
+      id
+      name
+      description
+    }
+  }
+}
+    `;
+
+/**
+ * __useSearchOntologyQuery__
+ *
+ * To run a query within a React component, call `useSearchOntologyQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchOntologyQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchOntologyQuery({
+ *   variables: {
+ *      searchText: // value for 'searchText'
+ *   },
+ * });
+ */
+export function useSearchOntologyQuery(baseOptions: Apollo.QueryHookOptions<SearchOntologyQuery, SearchOntologyQueryVariables>) {
+        return Apollo.useQuery<SearchOntologyQuery, SearchOntologyQueryVariables>(SearchOntologyDocument, baseOptions);
+      }
+export function useSearchOntologyLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchOntologyQuery, SearchOntologyQueryVariables>) {
+          return Apollo.useLazyQuery<SearchOntologyQuery, SearchOntologyQueryVariables>(SearchOntologyDocument, baseOptions);
+        }
+export type SearchOntologyQueryHookResult = ReturnType<typeof useSearchOntologyQuery>;
+export type SearchOntologyLazyQueryHookResult = ReturnType<typeof useSearchOntologyLazyQuery>;
+export type SearchOntologyQueryResult = Apollo.QueryResult<SearchOntologyQuery, SearchOntologyQueryVariables>;
 export const BeginLoginDocument = gql`
     mutation BeginLogin($userId: String!) {
   beginLogin(userId: $userId) {
