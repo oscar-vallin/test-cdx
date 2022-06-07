@@ -38,21 +38,21 @@ export const useLoginUseCase = () => {
     { data: userSession, loading: isVerifyingCredentials, error: credentialsVerificationError },
   ] = usePasswordLoginMutation();
 
-  const performUserIdVerification = ({ userId }) => {
-    setUserId(userId);
+  const performUserIdVerification = ({ userId: _userId }) => {
+    setUserId(_userId);
 
     verifyUserId({
       variables: {
-        userId,
+        userId: _userId,
       },
       errorPolicy: 'all',
     }).catch(() => null);
   };
 
-  const performUserAuthentication = ({ userId, password }) =>
+  const performUserAuthentication = ({ userId: _userId, password }) =>
     verifyUserCredentials({
       variables: {
-        userId,
+        userId: _userId,
         password,
       },
       errorPolicy: 'all',

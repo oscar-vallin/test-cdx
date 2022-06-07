@@ -31,8 +31,8 @@ const OntologyPage = () => {
     useSearchOntologyLazyQuery();
   const [
     callFindOntologyById,
-    { data: dataFindOntologyById, loading: loadingFindOntologyById, error: errorFindOntologyById }] =
-    useFindOntologyClassLazyQuery();
+    { data: dataFindOntologyById, loading: loadingFindOntologyById, error: errorFindOntologyById },
+  ] = useFindOntologyClassLazyQuery();
   const [searchText, setSearchText] = useState<string>();
 
   const handleError = ErrorHandler();
@@ -54,9 +54,9 @@ const OntologyPage = () => {
     if (dataFindOntologyById && !loadingFindOntologyById) {
       const _ontologyClasses: OntologyClass[] = [];
       if (dataFindOntologyById.findOntologyClass) {
-        _ontologyClasses.push(dataFindOntologyById.findOntologyClass)
+        _ontologyClasses.push(dataFindOntologyById.findOntologyClass);
       }
-      setOntologyClasses(_ontologyClasses)
+      setOntologyClasses(_ontologyClasses);
     }
   }, [dataFindOntologyById, loadingFindOntologyById]);
 
@@ -64,35 +64,35 @@ const OntologyPage = () => {
     setSearchText(text);
     callSearchOntology({
       variables: {
-        searchText: text
-      }
+        searchText: text,
+      },
     });
   };
   const doFind = (id: string) => {
     callFindOntologyById({
       variables: {
-        id
-      }
+        id,
+      },
     });
   };
 
   const copyToClipboard = (text: string) => {
-    navigator
-      .clipboard
-      .writeText(text)
-      .then(() => {
-        Toast.info({text: "ID Copied to clipboard", duration: 2000} )
-      });
+    navigator.clipboard.writeText(text).then(() => {
+      Toast.info({ text: 'ID Copied to clipboard', duration: 2000 });
+    });
   };
 
   const renderCopyButton = (id: string) => {
     const buttonId = id.split('/').pop()?.replace('#', '_');
     return (
-      <IconButton id={`__CopyButton_${buttonId}`}
-                  key={ buttonId }
-                  iconProps={{ iconName: 'Copy' }}
-                  title="Copy Id to Clipboard"
-                  onClick={() => { copyToClipboard(id) }}
+      <IconButton
+        id={`__CopyButton_${buttonId}`}
+        key={buttonId}
+        iconProps={{ iconName: 'Copy' }}
+        title="Copy Id to Clipboard"
+        onClick={() => {
+          copyToClipboard(id);
+        }}
       />
     );
   };
@@ -105,7 +105,7 @@ const OntologyPage = () => {
       <div key={property.id}>
         <Text>{property.name}</Text>
         <InfoIcon id={`__prop_icon_${property.name}`} tooltip={property.description} />
-        { renderCopyButton(property.id) }
+        {renderCopyButton(property.id)}
       </div>
     );
   };
@@ -118,7 +118,7 @@ const OntologyPage = () => {
       <div key={element.id}>
         <ButtonAction onClick={() => doFind(element.id)}>{element.name}</ButtonAction>
         <InfoIcon id={`__prop_icon_${element.name}`} tooltip={element.description} />
-        { renderCopyButton(element.id) }
+        {renderCopyButton(element.id)}
       </div>
     );
   };
@@ -131,7 +131,7 @@ const OntologyPage = () => {
       <Stack.Item key="properties">
         <Collapse label="Properties" expanded={true}>
           <Indent>
-            <List items={ properties } onRenderCell={ renderProperty } />
+            <List items={properties} onRenderCell={renderProperty} />
           </Indent>
         </Collapse>
       </Stack.Item>
@@ -159,7 +159,7 @@ const OntologyPage = () => {
     }
     return (
       <ClassBlock key={ontologyClass.name}>
-        <Stack tokens={{ childrenGap: 5 }} >
+        <Stack tokens={{ childrenGap: 5 }}>
           <Stack.Item key="metadata">
             <Text variant="bold">{ontologyClass.name}</Text>
             {renderCopyButton(ontologyClass.id)}
@@ -170,7 +170,7 @@ const OntologyPage = () => {
           {renderProperties(ontologyClass.properties)}
           {renderSuperclasses(ontologyClass.superClasses)}
         </Stack>
-        <LightSeparator/>
+        <LightSeparator />
       </ClassBlock>
     );
   };
@@ -180,17 +180,17 @@ const OntologyPage = () => {
     if (searchText) {
       message = `No results found for "${searchText}"`;
     } else {
-      message = 'Search for a class, property, or role in the ontology.'
+      message = 'Search for a class, property, or role in the ontology.';
     }
 
-    return <EmptyState id='__EmptyResults' description={message}/>
+    return <EmptyState id="__EmptyResults" description={message} />;
   };
 
   const renderResults = () => {
     if (!ontologyClasses || ontologyClasses.length < 1) {
       return emptyMessage();
     }
-    return <List items={ontologyClasses} onRenderCell={renderOntologyClass} />
+    return <List items={ontologyClasses} onRenderCell={renderOntologyClass} />;
   };
 
   return (
@@ -206,14 +206,16 @@ const OntologyPage = () => {
       </PageHeader>
       <PageBody id="__Ontology_Body">
         <Container id="__Ontology_Page_Container">
-          <Stack tokens={{ childrenGap: 10 }} styles={{ root: {width: "100%" }}}>
+          <Stack tokens={{ childrenGap: 10 }} styles={{ root: { width: '100%' } }}>
             <Stack.Item key="searchbar">
               <Column lg="6">
                 <FormLabel id="__Search_Lbl" label="Search" />
-                <SearchBox placeholder="Search"
-                           onSearch={(text) => doSearch(text)} width={"100%"}
-                           styles={{ root: { width: "100%" }}}
-                           onClear={() => setOntologyClasses([])}
+                <SearchBox
+                  placeholder="Search"
+                  onSearch={(text) => doSearch(text)}
+                  width="100%"
+                  styles={{ root: { width: '100%' } }}
+                  onClear={() => setOntologyClasses([])}
                 />
               </Column>
             </Stack.Item>

@@ -10,7 +10,7 @@ import {
   DetailsListLayoutMode,
   IconButton,
   TooltipHost,
-  Stack
+  Stack,
 } from '@fluentui/react';
 import { Column, Container, Row } from 'src/components/layouts';
 import { Spacing } from 'src/components/spacings/Spacing';
@@ -20,7 +20,6 @@ import { ROUTE_XCHANGE_LIST } from 'src/data/constants/RouteConstants';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useXchangeProfileLazyQuery } from 'src/data/services/graphql';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
-import { Link } from 'react-router-dom';
 
 const XChangePage = () => {
   const { orgSid } = useOrgSid();
@@ -28,7 +27,7 @@ const XChangePage = () => {
   const [xchangeProfile, { data: dataXchange, loading: loadingXchange, error: errorXchange }] =
     useQueryHandler(useXchangeProfileLazyQuery);
 
-    const [vendors, setVendors] = useState([]);
+  const [vendors, setVendors] = useState([]);
   const fetchData = () => {
     xchangeProfile({
       variables: {
@@ -48,11 +47,11 @@ const XChangePage = () => {
   }, [dataXchange, loadingXchange]);
 
   useEffect(() => {
-    console.log(vendors)
-  },[vendors])
+    console.log(vendors);
+  }, [vendors]);
 
   const onRenderItemColum = (node, itemIndex, column?: IColumn) => {
-    console.log(node)
+    console.log(node);
     return (
       <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
         {/* <Link>
@@ -64,7 +63,7 @@ const XChangePage = () => {
           </TooltipHost>
         )}
       </Stack>
-    )
+    );
   };
 
   // const onRenderSpecificAlert = (vendors: any) => (
@@ -79,12 +78,7 @@ const XChangePage = () => {
   //   </TooltipHost>
   // )
 
-  const onRenderAction = () => (
-    <IconButton
-      iconProps={{ iconName: 'Trash' }}
-      title="View Org Details"
-    />
-  );
+  const onRenderAction = () => <IconButton iconProps={{ iconName: 'Trash' }} title="View Org Details" />;
 
   const columns: IColumn[] = [
     {
@@ -135,7 +129,7 @@ const XChangePage = () => {
       isPadded: true,
       minWidth: 50,
       maxWidth: 50,
-      onRender: onRenderAction
+      onRender: onRenderAction,
     },
   ];
 
@@ -165,7 +159,7 @@ const XChangePage = () => {
   };
 
   return (
-    <LayoutDashboard id='PageXChangePage' menuOptionSelected={ROUTE_XCHANGE_LIST.API_ID}>
+    <LayoutDashboard id="PageXChangePage" menuOptionSelected={ROUTE_XCHANGE_LIST.API_ID}>
       <PageHeader id="__ActiveUsersHeader">
         <Container>
           <Row>
@@ -176,7 +170,7 @@ const XChangePage = () => {
         </Container>
       </PageHeader>
       <Container>
-          <Row>{renderBody()}</Row>
+        <Row>{renderBody()}</Row>
       </Container>
     </LayoutDashboard>
   );

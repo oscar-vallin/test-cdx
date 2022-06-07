@@ -22,7 +22,7 @@ export const StyledDiv = styled.div`
     }
 
     [data-icon-name*='Chevron'] {
-      font-size: 0.75em;      
+      font-size: 0.75em;
     }
   }
 `;
