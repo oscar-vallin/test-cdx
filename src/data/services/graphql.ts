@@ -1227,6 +1227,7 @@ export type OntologyClass = {
   description: Scalars['String'];
   properties: Array<OntologyProperty>;
   superClasses: Array<OntologyElement>;
+  subClasses: Array<OntologyElement>;
 };
 
 export type OntologyElement = {
@@ -1702,6 +1703,7 @@ export type Query = {
   xchangeProfileAlerts?: Maybe<XchangeProfileAlerts>;
   xchangeProfileAlertForm?: Maybe<XchangeProfileAlertForm>;
   xchangeConfigAlertForm?: Maybe<XchangeConfigAlertForm>;
+  topLevelOntologyClasses: Array<OntologyClass>;
   findOntologyClass?: Maybe<OntologyClass>;
   searchOntology: Array<OntologyClass>;
 };
@@ -6060,6 +6062,27 @@ export type XchangeConfigAlertFormQuery = (
   )> }
 );
 
+export type TopLevelOntologyClassesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type TopLevelOntologyClassesQuery = (
+  { __typename?: 'Query' }
+  & { topLevelOntologyClasses: Array<(
+    { __typename?: 'OntologyClass' }
+    & Pick<OntologyClass, 'id' | 'name' | 'description'>
+    & { properties: Array<(
+      { __typename?: 'OntologyProperty' }
+      & Pick<OntologyProperty, 'id' | 'name' | 'description' | 'dataType' | 'range'>
+    )>, superClasses: Array<(
+      { __typename?: 'OntologyElement' }
+      & Pick<OntologyElement, 'id' | 'name' | 'description'>
+    )>, subClasses: Array<(
+      { __typename?: 'OntologyElement' }
+      & Pick<OntologyElement, 'id' | 'name' | 'description'>
+    )> }
+  )> }
+);
+
 export type FindOntologyClassQueryVariables = Exact<{
   id: Scalars['String'];
 }>;
@@ -6074,6 +6097,9 @@ export type FindOntologyClassQuery = (
       { __typename?: 'OntologyProperty' }
       & Pick<OntologyProperty, 'id' | 'name' | 'description' | 'dataType' | 'range'>
     )>, superClasses: Array<(
+      { __typename?: 'OntologyElement' }
+      & Pick<OntologyElement, 'id' | 'name' | 'description'>
+    )>, subClasses: Array<(
       { __typename?: 'OntologyElement' }
       & Pick<OntologyElement, 'id' | 'name' | 'description'>
     )> }
@@ -6094,6 +6120,9 @@ export type SearchOntologyQuery = (
       { __typename?: 'OntologyProperty' }
       & Pick<OntologyProperty, 'id' | 'name' | 'description' | 'dataType' | 'range'>
     )>, superClasses: Array<(
+      { __typename?: 'OntologyElement' }
+      & Pick<OntologyElement, 'id' | 'name' | 'description'>
+    )>, subClasses: Array<(
       { __typename?: 'OntologyElement' }
       & Pick<OntologyElement, 'id' | 'name' | 'description'>
     )> }
@@ -13388,6 +13417,57 @@ export function useXchangeConfigAlertFormLazyQuery(baseOptions?: Apollo.LazyQuer
 export type XchangeConfigAlertFormQueryHookResult = ReturnType<typeof useXchangeConfigAlertFormQuery>;
 export type XchangeConfigAlertFormLazyQueryHookResult = ReturnType<typeof useXchangeConfigAlertFormLazyQuery>;
 export type XchangeConfigAlertFormQueryResult = Apollo.QueryResult<XchangeConfigAlertFormQuery, XchangeConfigAlertFormQueryVariables>;
+export const TopLevelOntologyClassesDocument = gql`
+    query TopLevelOntologyClasses {
+  topLevelOntologyClasses {
+    id
+    name
+    description
+    properties {
+      id
+      name
+      description
+      dataType
+      range
+    }
+    superClasses {
+      id
+      name
+      description
+    }
+    subClasses {
+      id
+      name
+      description
+    }
+  }
+}
+    `;
+
+/**
+ * __useTopLevelOntologyClassesQuery__
+ *
+ * To run a query within a React component, call `useTopLevelOntologyClassesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTopLevelOntologyClassesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTopLevelOntologyClassesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useTopLevelOntologyClassesQuery(baseOptions?: Apollo.QueryHookOptions<TopLevelOntologyClassesQuery, TopLevelOntologyClassesQueryVariables>) {
+        return Apollo.useQuery<TopLevelOntologyClassesQuery, TopLevelOntologyClassesQueryVariables>(TopLevelOntologyClassesDocument, baseOptions);
+      }
+export function useTopLevelOntologyClassesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TopLevelOntologyClassesQuery, TopLevelOntologyClassesQueryVariables>) {
+          return Apollo.useLazyQuery<TopLevelOntologyClassesQuery, TopLevelOntologyClassesQueryVariables>(TopLevelOntologyClassesDocument, baseOptions);
+        }
+export type TopLevelOntologyClassesQueryHookResult = ReturnType<typeof useTopLevelOntologyClassesQuery>;
+export type TopLevelOntologyClassesLazyQueryHookResult = ReturnType<typeof useTopLevelOntologyClassesLazyQuery>;
+export type TopLevelOntologyClassesQueryResult = Apollo.QueryResult<TopLevelOntologyClassesQuery, TopLevelOntologyClassesQueryVariables>;
 export const FindOntologyClassDocument = gql`
     query FindOntologyClass($id: String!) {
   findOntologyClass(id: $id) {
@@ -13402,6 +13482,11 @@ export const FindOntologyClassDocument = gql`
       range
     }
     superClasses {
+      id
+      name
+      description
+    }
+    subClasses {
       id
       name
       description
@@ -13449,6 +13534,11 @@ export const SearchOntologyDocument = gql`
       range
     }
     superClasses {
+      id
+      name
+      description
+    }
+    subClasses {
       id
       name
       description
