@@ -79,7 +79,7 @@ const ForgotPasswordModal = ({ isOpen, open, currentUserId }: ForgotPasswordModa
       return (
         <Dialog
           dialogContentProps={{
-            title: 'Forgot Password'
+            title: 'Forgot Password',
           }}
           hidden={!forgotPassword}
           onDismiss={() => setForgotPassword(true)}

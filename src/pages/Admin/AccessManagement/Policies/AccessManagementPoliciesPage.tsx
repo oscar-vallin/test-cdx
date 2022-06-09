@@ -38,8 +38,8 @@ import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { ROUTE_ACCESS_MANAGEMENT_POLICIES } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
-import { StyledCommandButton } from '../AccessManagement.styles';
 import { PageBody } from 'src/components/layouts/Column';
+import { StyledCommandButton } from '../AccessManagement.styles';
 import { AccessPolicyPanel } from './AccessPolicyPanel';
 
 const generateColumns = () => {

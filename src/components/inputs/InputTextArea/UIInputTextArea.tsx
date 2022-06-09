@@ -35,7 +35,7 @@ const UIInputTextArea = ({
 }: UIInputTextAreaType) => {
   const onRenderLabel = () => {
     if (renderLabel) {
-      return <UIFormLabel id={`${id}_lbl`} uiField={uiField}/>;
+      return <UIFormLabel id={`${id}_lbl`} uiField={uiField} />;
     }
     return null;
   };
@@ -75,7 +75,7 @@ const UIInputTextArea = ({
       return (
         <>
           {onRenderLabel()}
-          <ReadOnlyTextArea dangerouslySetInnerHTML={{ __html: value ?? '' }} ></ReadOnlyTextArea>
+          <ReadOnlyTextArea dangerouslySetInnerHTML={{ __html: value ?? '' }} />
         </>
       );
     }
@@ -123,7 +123,7 @@ const UIInputTextArea = ({
       maxLength={uiField?.max ?? undefined}
       resizable={resizable ?? true}
       multiline={multiline ?? true}
-      styles={{ root: { width: '100%' }}}
+      styles={{ root: { width: '100%' } }}
     />
   );
 };

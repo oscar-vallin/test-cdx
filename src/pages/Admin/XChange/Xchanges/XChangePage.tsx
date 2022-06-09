@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
-import { 
+import {
   IColumn,
-  DetailsList, 
-  Text, 
-  Spinner, 
+  DetailsList,
+  Text,
+  Spinner,
   SpinnerSize,
   SelectionMode,
   DetailsListLayoutMode,
@@ -12,7 +12,7 @@ import {
   TooltipHost,
   Stack,
   PrimaryButton,
-  TextField
+  TextField,
 } from '@fluentui/react';
 import { Column, Container, Row } from 'src/components/layouts';
 import { Spacing } from 'src/components/spacings/Spacing';
@@ -22,7 +22,6 @@ import { ROUTE_XCHANGE_LIST } from 'src/data/constants/RouteConstants';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useXchangeProfileLazyQuery, XchangeConfigSummary } from 'src/data/services/graphql';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
-import { Link } from 'react-router-dom';
 import { InputText } from 'src/components/inputs/InputText';
 import { SetupStyled, CardStyled, ContainerInput, CircleStyled } from './XchangePage.styles';
 
@@ -179,7 +178,7 @@ const XChangePage = () => {
                 </TooltipHost>
               )}
             </>
-        )}
+          )}
         </>
       </Stack>
     );
@@ -320,10 +319,10 @@ const XChangePage = () => {
           <Stack horizontal={true} wrap={true} style={{ width: '100%' }} verticalAlign="end">
             <Column lg="8">
               <InputText
-                id="Xchange_Input-Search" 
-                autofocus 
-                disabled={false} 
-                placeholder="Search" 
+                id="Xchange_Input-Search"
+                autofocus
+                disabled={false}
+                placeholder="Search"
                 value={searchXchanges}
                 onChange={(event, newValue) => setSearchXchanges(newValue ?? '')}
               />

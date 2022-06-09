@@ -543,11 +543,11 @@ const _FtpTestPage = () => {
   };
 
   const copyProfileSnippet = () => {
-    navigator.clipboard.writeText(
-      ftpTestData?.ftpTestM?.clientProfileSnippet ? ftpTestData.ftpTestM.clientProfileSnippet : ''
-    ).then(() => {
-      Toast.success({ text: 'Copied!' });
-    });
+    navigator.clipboard
+      .writeText(ftpTestData?.ftpTestM?.clientProfileSnippet ? ftpTestData.ftpTestM.clientProfileSnippet : '')
+      .then(() => {
+        Toast.success({ text: 'Copied!' });
+      });
   };
 
   return (
