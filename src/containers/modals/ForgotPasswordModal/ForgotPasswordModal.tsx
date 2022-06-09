@@ -62,7 +62,6 @@ const ForgotPasswordModal = ({ isOpen, open, currentUserId }: ForgotPasswordModa
     if (successfulText) {
       return <div dangerouslySetInnerHTML={{ __html: successfulText }} />;
     }
-    return null;
   };
 
   const showDialog = () => {
@@ -108,7 +107,7 @@ const ForgotPasswordModal = ({ isOpen, open, currentUserId }: ForgotPasswordModa
   useEffect(() => {
     let message: string;
     if (verifiedUserId && !verifiedUserId?.beginLogin?.forgotPasswordEnabled) {
-      const enabledMessage = verifiedUserId?.beginLogin?.forgotPasswordMsg;
+      const enabledMessage = verifiedUserId?.beginLogin?.forgotPasswordMsg ?? '';
       setSuccessfulText(enabledMessage);
       setEnabledUserId(true);
     }
