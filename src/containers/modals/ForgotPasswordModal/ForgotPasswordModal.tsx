@@ -26,11 +26,11 @@ const ForgotPasswordModal = ({ isOpen, open, currentUserId }: ForgotPasswordModa
   const [closeProcess, setCloseProcess] = useState(true);
   const [error, setError] = useState<boolean>(false);
   const [errorText, setErrorText] = useState<string>('');
+  const [enabledUserId, setEnabledUserId] = useState<boolean>(false);
 
   const [forgotPasswordMutation, { data: dataForgotPassword }] = useForgotPasswordMutation();
 
   const [verifyUserId, { data: verifiedUserId, loading: isVerifyingUserId }] = useBeginLoginMutation();
-
 
   const sendIdUser = (user: string) => {
     if (user !== currentUserId && user.trim() !== '') {
@@ -58,19 +58,8 @@ const ForgotPasswordModal = ({ isOpen, open, currentUserId }: ForgotPasswordModa
     setForgotPassword(false);
   };
 
-  const deleteTag = (message: any): string => {
-    let correctMessage: string;
-    let index: number;
-
-    if (message.includes('<') || message.includes('>')) {
-      index = message.indexOf('>');
-      correctMessage = message.slice(index + 1, message.length);
-      index = correctMessage.indexOf('<');
-      correctMessage = correctMessage.slice(0, index);
-      return correctMessage;
-    }
-
-    return message;
+  const parserMsg = () => {
+    return <div dangerouslySetInnerHTML={{ __html: successfulText }} />;
   };
 
   const showDialog = () => {
@@ -78,7 +67,7 @@ const ForgotPasswordModal = ({ isOpen, open, currentUserId }: ForgotPasswordModa
       if (!verifiedUserId?.beginLogin?.forgotPasswordEnabled) {
         return (
           <Dialog hidden={!forgotPassword} onDismiss={() => setForgotPassword(true)} minWidth="500px">
-            <Text>{successfulText || 'Forgot password email'}</Text>
+            {enabledUserId && parserMsg()}
             <DialogFooter>
               <DefaultButton id="forgotPaswwordModal-cancel-button" text="Cancel" onClick={cancelForgotPassword} />
             </DialogFooter>
@@ -115,10 +104,10 @@ const ForgotPasswordModal = ({ isOpen, open, currentUserId }: ForgotPasswordModa
 
   useEffect(() => {
     let message: string;
-    if (verifiedUserId) {
-      const messageEnabled = verifiedUserId.beginLogin?.forgotPasswordMsg;
-      const correctMessage = deleteTag(messageEnabled);
-      setSuccessfulText(correctMessage);
+    if (verifiedUserId && !verifiedUserId?.beginLogin?.forgotPasswordEnabled) {
+      const enabledMessage = verifiedUserId?.beginLogin?.forgotPasswordMsg;
+      setSuccessfulText(enabledMessage);
+      setEnabledUserId(true);
     }
     if (dataForgotPassword?.forgotPassword?.response === 'SUCCESS') {
       message = dataForgotPassword.forgotPassword?.responseMsg;
@@ -141,7 +130,7 @@ const ForgotPasswordModal = ({ isOpen, open, currentUserId }: ForgotPasswordModa
     <>
       {showDialog()}
       {success && (
-        <Dialog hidden={!closeProcess} title="Password reset submitted" minWidth="500px">
+        <Dialog hidden={!closeProcess} dialogContentProps={{ title: 'Password reset submitted' }} minWidth="500px">
           <Spacing>
             <Text>{successfulText}</Text>
           </Spacing>
