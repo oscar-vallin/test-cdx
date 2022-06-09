@@ -22,7 +22,7 @@ const ForgotPasswordModal = ({ isOpen, open, currentUserId }: ForgotPasswordModa
   const [forgotPassword, setForgotPassword] = useState(open);
   const [userId, setUserId] = useState('');
   const [success, setSuccess] = useState(false);
-  const [successfulText, setSuccessfulText] = useState<string | undefined>('');
+  const [successfulText, setSuccessfulText] = useState<string>('');
   const [closeProcess, setCloseProcess] = useState(true);
   const [error, setError] = useState<boolean>(false);
   const [errorText, setErrorText] = useState<string>('');
@@ -59,7 +59,10 @@ const ForgotPasswordModal = ({ isOpen, open, currentUserId }: ForgotPasswordModa
   };
 
   const parserMsg = () => {
-    return <div dangerouslySetInnerHTML={{ __html: successfulText }} />;
+    if (successfulText) {
+      return <div dangerouslySetInnerHTML={{ __html: successfulText }} />;
+    }
+    return null;
   };
 
   const showDialog = () => {
