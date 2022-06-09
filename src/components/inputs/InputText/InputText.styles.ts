@@ -8,11 +8,11 @@ type StyledTextFieldProps = {
 
 export const FieldValue = styled.div`
   padding: 0 0 5px 0;
-  font-size: ${({ theme }) => theme.fontSizes.normal ?? '1em'};
-  font-weight: normal;
+  font: ${({ theme }) => theme.fontStyles.normal};
 `;
 
 export const EmptyValue = styled.span`
+  font: ${({ theme }) => theme.fontStyles.normal};
   color: ${({ theme }) => theme.colors.neutralTertiary};
 `;
 
