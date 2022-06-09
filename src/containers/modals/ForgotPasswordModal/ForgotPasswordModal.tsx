@@ -4,7 +4,7 @@ import { Text, Dialog, DialogFooter, PrimaryButton, DefaultButton } from '@fluen
 import { useForgotPasswordMutation, useBeginLoginMutation } from 'src/data/services/graphql';
 import { InputText } from 'src/components/inputs/InputText';
 import { Spacing } from 'src/components/spacings/Spacing';
-import { StyledError } from './ForgotPasswordModal.styles';
+import { DialogMessageWrapper, StyledError } from './ForgotPasswordModal.styles';
 
 const defaultProps = {
   open: false,
@@ -42,7 +42,7 @@ const ForgotPasswordModal = ({ isOpen, open, currentUserId }: ForgotPasswordModa
       variables: {
         userId: user,
       },
-    });
+    }).then();
   };
 
   const getUserForgotPasswordEnabled = () => {
@@ -50,7 +50,7 @@ const ForgotPasswordModal = ({ isOpen, open, currentUserId }: ForgotPasswordModa
       variables: {
         userId: currentUserId,
       },
-    });
+    }).then();
   };
 
   const cancelForgotPassword = () => {
@@ -60,7 +60,7 @@ const ForgotPasswordModal = ({ isOpen, open, currentUserId }: ForgotPasswordModa
 
   const parserMsg = () => {
     if (successfulText) {
-      return <div dangerouslySetInnerHTML={{ __html: successfulText }} />;
+      return <DialogMessageWrapper dangerouslySetInnerHTML={{ __html: successfulText }} />;
     }
   };
 
@@ -71,14 +71,16 @@ const ForgotPasswordModal = ({ isOpen, open, currentUserId }: ForgotPasswordModa
           <Dialog hidden={!forgotPassword} onDismiss={() => setForgotPassword(true)} minWidth="500px">
             {enabledUserId && parserMsg()}
             <DialogFooter>
-              <DefaultButton id="forgotPaswwordModal-cancel-button" text="Cancel" onClick={cancelForgotPassword} />
+              <PrimaryButton id="forgotPasswordModal-cancel-button" text="Ok" onClick={cancelForgotPassword} />
             </DialogFooter>
           </Dialog>
         );
       }
       return (
         <Dialog
-          title="Forgot Password"
+          dialogContentProps={{
+            title: 'Forgot Password'
+          }}
           hidden={!forgotPassword}
           onDismiss={() => setForgotPassword(true)}
           minWidth="500px"
@@ -96,8 +98,8 @@ const ForgotPasswordModal = ({ isOpen, open, currentUserId }: ForgotPasswordModa
             {error && <StyledError>{errorText}</StyledError>}
           </Spacing>
           <DialogFooter>
-            <PrimaryButton id="forgotPaswwordModal-submit-button" text="Submit" onClick={() => sendIdUser(userId)} />
-            <DefaultButton id="forgotPaswwordModal-cancel-button" text="Cancel" onClick={cancelForgotPassword} />
+            <PrimaryButton id="forgotPasswordModal-submit-button" text="Submit" onClick={() => sendIdUser(userId)} />
+            <DefaultButton id="forgotPasswordModal-cancel-button" text="Cancel" onClick={cancelForgotPassword} />
           </DialogFooter>
         </Dialog>
       );
