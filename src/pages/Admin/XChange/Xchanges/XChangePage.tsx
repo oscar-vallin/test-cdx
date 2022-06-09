@@ -72,7 +72,7 @@ const XChangePage = () => {
         <span style={{ color: currentColor, fontWeight: 'bold' }}> {filesProcessed} </span>
         {type} files have been processed in the last 30 days <br />
         <span style={{ marginLeft: '88px' }}>Last Run: {date}</span> <br /> <br />
-        <Link style={{ marginLeft: '88px' }}> Click for details</Link>
+        <Text style={{ marginLeft: '88px' }}> Click for details</Text>
       </>
     );
   };
@@ -109,7 +109,7 @@ const XChangePage = () => {
 
     return (
       <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
-        <Link>{columnVal}</Link>
+        <Text>{columnVal}</Text>
         <>
           {column?.key === 'active' && (
             <>
