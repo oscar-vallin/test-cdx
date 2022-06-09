@@ -143,9 +143,9 @@ const _OrganizationSecuritySettingsPage = () => {
           </Column>
         </FormRow>
         <FormRow>
-          <Column lg="8">
+          <Column lg="6">
             {form && (
-              <div id="__OrganizationSecuritySettings-Form">
+              <>
                 <UIInputToggle
                   id="forgotPasswordEnabledToggle"
                   uiField={form.forgotPasswordEnabled}
@@ -157,29 +157,33 @@ const _OrganizationSecuritySettingsPage = () => {
                     setState({ ...state, forgotPasswordEnabled: !!checked });
                   }}
                 />
-                <UIInputTextArea
-                  id="forgotPasswordMsgInput"
-                  uiField={form.forgotPasswordMsg}
-                  value={state.forgotPasswordMsg ?? ''}
-                  multiline={true}
-                  onChange={(ev?: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
-                    setState({ ...state, forgotPasswordMsg: newValue });
-                  }}
-                  resizable={false}
-                  rows={10}
-                  showRichTextEditor
-                />
-                <UIInputTextArea
-                  id="allowedEmailDomains"
-                  uiField={form.allowedEmailDomains}
-                  value={state.allowedEmailDomains ?? ''}
-                  multiline={true}
-                  onChange={(ev?: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
-                    setState({ ...state, allowedEmailDomains: newValue ?? '' });
-                  }}
-                  resizable={false}
-                  rows={8}
-                />
+                <FormRow>
+                  <UIInputTextArea
+                    id="forgotPasswordMsgInput"
+                    uiField={form.forgotPasswordMsg}
+                    value={state.forgotPasswordMsg ?? ''}
+                    multiline={true}
+                    onChange={(ev?: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
+                      setState({ ...state, forgotPasswordMsg: newValue });
+                    }}
+                    resizable={false}
+                    rows={10}
+                    showRichTextEditor
+                  />
+                </FormRow>
+                <FormRow>
+                  <UIInputTextArea
+                    id="allowedEmailDomains"
+                    uiField={form.allowedEmailDomains}
+                    value={state.allowedEmailDomains ?? ''}
+                    multiline={true}
+                    onChange={(ev?: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
+                      setState({ ...state, allowedEmailDomains: newValue ?? '' });
+                    }}
+                    resizable={false}
+                    rows={8}
+                  />
+                </FormRow>
                 <FormRow>
                   <Text variant="extraBold">Dashboard IP Whitelist</Text>
                   {/*Need to use FormLabel as opposed to UIFormLabel to force the required flag not to show*/}
@@ -237,7 +241,7 @@ const _OrganizationSecuritySettingsPage = () => {
                     </Row>
                   </Spacing>
                 )}
-              </div>
+              </>
             )}
           </Column>
         </FormRow>
