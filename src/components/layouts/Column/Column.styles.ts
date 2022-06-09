@@ -18,6 +18,21 @@ export const DivStyled = styled.div<DivStyledProps>`
   }};
 `;
 
+export const PageBody = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding-left: 8px;
+  padding-right: 8px;
+  margin-top: 10px;
+
+  .ms-Viewport {
+    width: 100%;
+  }
+`;
+
 type DivStyledProps = {
   variant: string;
   direction: string;

@@ -38,8 +38,9 @@ import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { ROUTE_ACCESS_MANAGEMENT_POLICIES } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
+import { StyledCommandButton } from '../AccessManagement.styles';
+import { PageBody } from 'src/components/layouts/Column';
 import { AccessPolicyPanel } from './AccessPolicyPanel';
-import { StyledColumn, StyledCommandButton } from '../AccessManagement.styles';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -275,11 +276,11 @@ const _AccessManagementPoliciesPage = () => {
           </PageHeader>
         )}
 
-        <Container>
-          <Row>
-            <StyledColumn lg="12">{renderBody()}</StyledColumn>
-          </Row>
-        </Container>
+        <PageBody id="__AccessPoliciesBody">
+          <Container>
+            <Row>{renderBody()}</Row>
+          </Container>
+        </PageBody>
 
         <AccessPolicyPanel
           isOpen={isPanelOpen}

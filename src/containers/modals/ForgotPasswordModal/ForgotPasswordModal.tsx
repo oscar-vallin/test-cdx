@@ -124,7 +124,7 @@ const ForgotPasswordModal = ({ isOpen, open, currentUserId }: ForgotPasswordModa
 
   useEffect(() => {
     getUserForgotPasswordEnabled();
-  },[]);
+  }, []);
 
   return (
     <>

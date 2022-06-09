@@ -79,37 +79,35 @@ async function vendorQuickSearch(
   return orgs;
 }
 
-
 async function userOrgsQuickSearch(
   client: ApolloClient<object>,
   handleError: (error?: any) => void,
-  searchText: string,
+  searchText: string
 ): Promise<ITag[]> {
   let orgs: ITag[] = [];
   await client
-  .query({
-    errorPolicy: 'all',
-    variables: {
-      searchText,
-    },
-    query: gql`
-      query UserOrgsQuickSearch($searchText: String!) {
-        userOrgsQuickSearch(searchText: $searchText) {
-          sid
-          name
-          orgId
-          orgType
+    .query({
+      errorPolicy: 'all',
+      variables: {
+        searchText,
+      },
+      query: gql`
+        query UserOrgsQuickSearch($searchText: String!) {
+          userOrgsQuickSearch(searchText: $searchText) {
+            sid
+            name
+            orgId
+            orgType
+          }
         }
-      }
-    `,
-  })
-  .then((result) => {
-    handleError(result.error);
-    orgs = parseToPickerOpts(result.data.userOrgsQuickSearch);
-  });
+      `,
+    })
+    .then((result) => {
+      handleError(result.error);
+      orgs = parseToPickerOpts(result.data.userOrgsQuickSearch);
+    });
 
   return orgs;
 }
-
 
 export { orgQuickSearch, vendorQuickSearch, userOrgsQuickSearch };

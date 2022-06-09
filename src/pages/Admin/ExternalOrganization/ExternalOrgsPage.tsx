@@ -22,7 +22,7 @@ import { Row, Column, Container } from 'src/components/layouts';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { PageTitle } from 'src/components/typography';
 import { Spacing } from 'src/components/spacings/Spacing';
-import { StyledColumn } from './ExternalOrgPage.styles';
+import { PageBody } from 'src/components/layouts/Column';
 
 const ExternalOrgsPage = () => {
   const { orgSid } = useOrgSid();
@@ -129,7 +129,7 @@ const ExternalOrgsPage = () => {
       );
     }
     if (!orgs.length) {
-      return;
+      return null;
     }
     return (
       <DetailsList
@@ -161,12 +161,11 @@ const ExternalOrgsPage = () => {
           </Row>
         </Container>
       </PageHeader>
-
-      <Container>
-        <Row>
-          <StyledColumn>{renderBody()}</StyledColumn>
-        </Row>
-      </Container>
+      <PageBody id="__ExternalOrgsBody">
+        <Container>
+          <Row>{renderBody()}</Row>
+        </Container>
+      </PageBody>
     </LayoutDashboard>
   );
 };

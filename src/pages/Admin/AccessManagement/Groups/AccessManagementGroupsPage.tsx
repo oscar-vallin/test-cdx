@@ -36,8 +36,9 @@ import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { ROUTE_ACCESS_MANAGEMENT_GROUPS } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { useAccessManagementGroupsPageService } from './AccessManagementGroupsPage.service';
+import { StyledCommandButton } from '../AccessManagement.styles';
+import { PageBody } from 'src/components/layouts/Column';
 import { AccessPolicyGroupPanel } from './AccessPolicyGroup';
-import { StyledColumn, StyledCommandButton } from './AccessManagementGroupsPage.styles';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -321,11 +322,11 @@ const AccessManagementGroupsContainer = () => {
           </Container>
         </PageHeader>
       )}
-      <Container>
-        <Row>
-          <StyledColumn lg="12">{renderBody()}</StyledColumn>
-        </Row>
-      </Container>
+      <PageBody id="__AccessGroupBody">
+        <Container>
+          <Row>{renderBody()}</Row>
+        </Container>
+      </PageBody>
 
       {isDialog && (
         <DialogYesNo

@@ -1,9 +1,9 @@
 import React from 'react';
 import { UiStringField } from 'src/data/services/graphql';
 import { TextField } from '@fluentui/react';
-import FormLabel from 'src/components/labels/FormLabel';
+import { UIFormLabel } from 'src/components/labels/FormLabel';
 import ReactQuill from 'react-quill';
-import { StyledRichTextArea } from './UIInputTextArea.styles';
+import { QuillWrapper, ReadOnlyTextArea } from './UIInputTextArea.styles';
 
 type UIInputTextAreaType = {
   id: string;
@@ -35,15 +35,7 @@ const UIInputTextArea = ({
 }: UIInputTextAreaType) => {
   const onRenderLabel = () => {
     if (renderLabel) {
-      return (
-        <FormLabel
-          id={`${id}_lbl`}
-          label={uiField?.label}
-          required={uiField?.required}
-          info={uiField?.info ?? ''}
-          errorMessage={uiField?.errMsg ?? ''}
-        />
-      );
+      return <UIFormLabel id={`${id}_lbl`} uiField={uiField}/>;
     }
     return null;
   };
@@ -78,14 +70,31 @@ const UIInputTextArea = ({
     return null;
   }
 
-  return (
-    <>
-      {showRichTextEditor ? (
-        <StyledRichTextArea>
+  if (uiField?.readOnly) {
+    if (showRichTextEditor) {
+      return (
+        <>
           {onRenderLabel()}
+          <ReadOnlyTextArea dangerouslySetInnerHTML={{ __html: value ?? '' }} ></ReadOnlyTextArea>
+        </>
+      );
+    }
+    return (
+      <>
+        {onRenderLabel()}
+        <ReadOnlyTextArea>{value}</ReadOnlyTextArea>
+      </>
+    );
+  }
+
+  if (showRichTextEditor) {
+    return (
+      <>
+        {onRenderLabel()}
+        <QuillWrapper>
           <ReactQuill
             id={id}
-            style={{ border: '1px solid #605E5C', height: '256px' }}
+            style={{ height: '256px', width: '100%' }}
             modules={modules}
             formats={formats}
             value={value}
@@ -93,27 +102,29 @@ const UIInputTextArea = ({
               if (onChange) onChange(undefined, v);
             }}
           />
-        </StyledRichTextArea>
-      ) : (
-        <TextField
-          id={id}
-          type={type ?? 'text'}
-          value={value}
-          disabled={uiField?.readOnly ?? false}
-          rows={rows}
-          label={uiField?.label}
-          errorMessage={uiField?.errMsg ?? undefined}
-          required={uiField?.required ?? false}
-          onChange={onChange}
-          onRenderLabel={onRenderLabel}
-          placeholder={placeholder}
-          minLength={uiField?.min ?? undefined}
-          maxLength={uiField?.max ?? undefined}
-          resizable={resizable ?? true}
-          multiline={multiline ?? true}
-        />
-      )}
-    </>
+        </QuillWrapper>
+      </>
+    );
+  }
+
+  return (
+    <TextField
+      id={id}
+      type={type ?? 'text'}
+      value={value}
+      rows={rows}
+      label={uiField?.label}
+      errorMessage={uiField?.errMsg ?? undefined}
+      required={uiField?.required ?? false}
+      onChange={onChange}
+      onRenderLabel={onRenderLabel}
+      placeholder={placeholder}
+      minLength={uiField?.min ?? undefined}
+      maxLength={uiField?.max ?? undefined}
+      resizable={resizable ?? true}
+      multiline={multiline ?? true}
+      styles={{ root: { width: '100%' }}}
+    />
   );
 };
 

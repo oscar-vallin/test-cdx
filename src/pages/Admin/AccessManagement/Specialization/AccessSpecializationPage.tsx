@@ -37,8 +37,9 @@ import { Spacing } from 'src/components/spacings/Spacing';
 import { ROUTE_ACCESS_MANAGEMENT_SPECIALIZATION } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
+import { PageBody } from 'src/components/layouts/Column';
 import { AccessSpecializationPanel } from './AccessSpecializationPanel';
-import { StyledColumn, StyledCommandButton } from '../AccessManagement.styles';
+import { StyledCommandButton } from '../AccessManagement.styles';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -219,11 +220,12 @@ const AccessManagementSpecializationPage = () => {
           </Container>
         </PageHeader>
       )}
-      <Container>
-        <Row>
-          <StyledColumn lg="12">{renderBody()}</StyledColumn>
-        </Row>
-      </Container>
+      <PageBody id="__AccessSpecBody">
+        <Container>
+          <Row>{renderBody()}</Row>
+        </Container>
+      </PageBody>
+
       <AccessSpecializationPanel
         isOpen={isPanelOpen}
         onCreateSpecialization={() => {

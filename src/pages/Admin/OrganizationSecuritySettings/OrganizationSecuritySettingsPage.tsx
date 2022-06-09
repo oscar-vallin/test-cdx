@@ -11,12 +11,14 @@ import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { UIInputTextArea } from 'src/components/inputs/InputTextArea';
 import {
+  CdxWebCommandType,
   GqOperationResponse,
   OrgSecurityForm,
   UiStringField,
   UpdateOrgSecurityInput,
   useOrgSecurityFormLazyQuery,
   useUpdateOrgSecurityMutation,
+  WebCommand,
 } from 'src/data/services/graphql';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { useOrgSid } from 'src/hooks/useOrgSid';
@@ -24,8 +26,9 @@ import { ROUTE_SECURITY_SETTINGS } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { UIInputToggle } from 'src/components/inputs/InputToggle';
 import { FieldRow, FormRow } from 'src/components/layouts/Row/Row.styles';
-import { UIFormLabel } from 'src/components/labels/FormLabel';
+import { FormLabel } from 'src/components/labels/FormLabel';
 import { UIInputText } from 'src/components/inputs/InputText';
+import { Text } from 'src/components/typography/Text';
 import { DEFAULT_FORM, extractFormValues } from './OrganizationSecuritySettingsPageUtils';
 
 const _OrganizationSecuritySettingsPage = () => {
@@ -37,6 +40,7 @@ const _OrganizationSecuritySettingsPage = () => {
 
   const [state, setState] = useState<UpdateOrgSecurityInput>({ ...DEFAULT_FORM });
   const [form, setForm] = useState<OrgSecurityForm | null>();
+  const [updateCmd, setUpdateCmd] = useState<WebCommand>();
   const [whitelistFields, setWhiteListFields] = useState<UiStringField[]>([]);
 
   const handleError = ErrorHandler();
@@ -59,6 +63,7 @@ const _OrganizationSecuritySettingsPage = () => {
         ...extractFormValues(DEFAULT_FORM, orgSecurityForm),
         whitelist: whitelistValues,
       });
+      setUpdateCmd(orgSecurityForm.commands?.find((cmd) => cmd.commandType === CdxWebCommandType.Update));
     } else {
       setWhiteListFields([]);
       setState({ ...DEFAULT_FORM });
@@ -138,9 +143,9 @@ const _OrganizationSecuritySettingsPage = () => {
           </Column>
         </FormRow>
         <FormRow>
-          <Column lg="8">
+          <Column lg="6">
             {form && (
-              <div id="__OrganizationSecuritySettings-Form">
+              <>
                 <UIInputToggle
                   id="forgotPasswordEnabledToggle"
                   uiField={form.forgotPasswordEnabled}
@@ -152,65 +157,75 @@ const _OrganizationSecuritySettingsPage = () => {
                     setState({ ...state, forgotPasswordEnabled: !!checked });
                   }}
                 />
-                <UIInputTextArea
-                  id="forgotPasswordMsgInput"
-                  uiField={form.forgotPasswordMsg}
-                  value={state.forgotPasswordMsg ?? ''}
-                  multiline={true}
-                  onChange={(ev?: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
-                    setState({ ...state, forgotPasswordMsg: newValue });
-                  }}
-                  resizable={false}
-                  rows={10}
-                  showRichTextEditor
-                />
-                <UIInputTextArea
-                  id="allowedEmailDomains"
-                  uiField={form.allowedEmailDomains}
-                  value={state.allowedEmailDomains ?? ''}
-                  multiline={true}
-                  onChange={(ev?: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
-                    setState({ ...state, allowedEmailDomains: newValue ?? '' });
-                  }}
-                  resizable={false}
-                  rows={8}
-                />
                 <FormRow>
-                  <Column lg="12">
-                    <UIFormLabel id="__WhiteList_lbl" uiField={whitelistFields[0]} />
-                    {whitelistFields.map((field, index) => (
-                      <FieldRow key={`__Whitelist_IP_${index}`}>
-                        <UIInputText
-                          id={`__Whitelist_IP_${index}`}
-                          uiField={field}
-                          value={state?.whitelist ? state?.whitelist[index] : ''}
-                          onChange={(event, newValue) => {
-                            const clone: string[] = Object.assign([], state?.whitelist ?? []);
-                            clone[index] = newValue ?? '';
-                            setState({ ...state, whitelist: clone });
-                          }}
-                          renderLabel={false}
-                        />
-                      </FieldRow>
-                    ))}
-                    {!whitelistFields[0]?.readOnly && whitelistFields[0]?.visible && (
-                      <ActionButton
-                        id="__Add_Whitelist"
-                        ariaLabel="Add more IP Addresses/Netmask"
-                        onClick={() => {
-                          const whitelistClone: UiStringField[] = Object.assign([], whitelistFields);
-                          const fieldClone: UiStringField = { ...whitelistClone[0] };
-                          fieldClone.value = '';
-                          whitelistClone.push(fieldClone);
-                          setWhiteListFields(whitelistClone);
-                        }}
-                      >
-                        + Add more IP Addresses/Netmask
-                      </ActionButton>
-                    )}
-                  </Column>
+                  <UIInputTextArea
+                    id="forgotPasswordMsgInput"
+                    uiField={form.forgotPasswordMsg}
+                    value={state.forgotPasswordMsg ?? ''}
+                    multiline={true}
+                    onChange={(ev?: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
+                      setState({ ...state, forgotPasswordMsg: newValue });
+                    }}
+                    resizable={false}
+                    rows={10}
+                    showRichTextEditor
+                  />
                 </FormRow>
-                {form?.commands?.length && (
+                <FormRow>
+                  <UIInputTextArea
+                    id="allowedEmailDomains"
+                    uiField={form.allowedEmailDomains}
+                    value={state.allowedEmailDomains ?? ''}
+                    multiline={true}
+                    onChange={(ev?: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
+                      setState({ ...state, allowedEmailDomains: newValue ?? '' });
+                    }}
+                    resizable={false}
+                    rows={8}
+                  />
+                </FormRow>
+                <FormRow>
+                  <Text variant="extraBold">Dashboard IP Whitelist</Text>
+                  {/*Need to use FormLabel as opposed to UIFormLabel to force the required flag not to show*/}
+                  <FormLabel
+                    id="__WhiteList_lbl"
+                    label={whitelistFields[0]?.label ?? ''}
+                    required={false}
+                    info={whitelistFields[0]?.info ?? undefined}
+                    errorMessage={whitelistFields[0]?.errMsg ?? undefined}
+                  />
+                  {whitelistFields.map((field, index) => (
+                    <FieldRow key={`__Whitelist_IP_${index}`}>
+                      <UIInputText
+                        id={`__Whitelist_IP_${index}`}
+                        uiField={field}
+                        value={state?.whitelist ? state?.whitelist[index] : ''}
+                        onChange={(event, newValue) => {
+                          const clone: string[] = Object.assign([], state?.whitelist ?? []);
+                          clone[index] = newValue ?? '';
+                          setState({ ...state, whitelist: clone });
+                        }}
+                        renderLabel={false}
+                      />
+                    </FieldRow>
+                  ))}
+                  {!whitelistFields[0]?.readOnly && whitelistFields[0]?.visible && (
+                    <ActionButton
+                      id="__Add_Whitelist"
+                      ariaLabel="Add more IP Addresses/Netmask"
+                      onClick={() => {
+                        const whitelistClone: UiStringField[] = Object.assign([], whitelistFields);
+                        const fieldClone: UiStringField = { ...whitelistClone[0] };
+                        fieldClone.value = '';
+                        whitelistClone.push(fieldClone);
+                        setWhiteListFields(whitelistClone);
+                      }}
+                    >
+                      + Add more IP Addresses/Netmask
+                    </ActionButton>
+                  )}
+                </FormRow>
+                {updateCmd && (
                   <Spacing margin={{ top: 'normal' }}>
                     <Row>
                       <Column lg="6">
@@ -220,13 +235,13 @@ const _OrganizationSecuritySettingsPage = () => {
                           disabled={isLoadingForm || isUpdating}
                           onClick={doSave}
                         >
-                          {form?.commands[0].label}
+                          {updateCmd.label}
                         </Button>
                       </Column>
                     </Row>
                   </Spacing>
                 )}
-              </div>
+              </>
             )}
           </Column>
         </FormRow>

@@ -236,7 +236,7 @@ const XChangePage = () => {
       isPadded: true,
       minWidth: 50,
       maxWidth: 50,
-      onRender: onRenderAction
+      onRender: onRenderAction,
     },
   ];
 
