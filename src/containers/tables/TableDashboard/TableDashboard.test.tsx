@@ -1,6 +1,5 @@
 import { TableDashboard } from './TableDashboard';
-import { mountWithTheme } from '../../../utils/testUtils';
-import { TABLE_NAMES } from '../../../data/constants/TableConstants';
+import { mountWithTheme } from 'src/utils/testUtils';
 import { StoreProvider } from 'easy-peasy';
 import store from '../../../store/index';
 import { BrowserRouter as Router } from 'react-router-dom';
@@ -11,9 +10,9 @@ const defaultProps = {
   altData: [],
   date: '',
   loading: false,
-  tableId: TABLE_NAMES.DASHBOARD_TRANSMISSIONS_VENDOR,
-  title: '',
-  emptyMessage: false,
+  title: 'Dashboard Table',
+  titleRedirectPage: 'transmissions',
+  emptyMessage: 'None',
 };
 
 describe('Table Dashboard Testing Unit...', () => {

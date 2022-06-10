@@ -1,10 +1,10 @@
-import { shallow, render } from 'enzyme';
+import { shallow } from 'enzyme';
 import toJSON from 'enzyme-to-json';
 import { Table as Component } from './index';
 import { TableHeader } from '../TableHeader';
 import { StoreProvider } from 'easy-peasy';
 import store from '../../../store/index';
-import { mountWithTheme, shallowWithTheme } from 'src/utils/testUtils';
+import { mountWithTheme, renderWithTheme, shallowWithTheme } from 'src/utils/testUtils';
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -18,117 +18,6 @@ jest.mock('src/hooks/useOrgSid', () => ({
     orgSid: 1,
   }),
 }));
-
-const items = [
-  [
-    {
-      child: undefined,
-      columnId: 'datetime',
-      id: 'datetime',
-      sublabel: undefined,
-      text: '11/04/2020 08:12 AM',
-      value: '11/04/2020 08:12 AM',
-    },
-  ],
-  [{ child: undefined, columnId: 'planSponsor', id: 'planSponsor', sublabel: undefined, text: 'PZZA', value: 'PZZA' }],
-  [{ child: undefined, columnId: 'vendorId', id: 'vendorId', sublabel: undefined, text: 'Disc', value: 'Disc' }],
-  [{ child: undefined, columnId: 'specId', id: 'specId', sublabel: undefined, text: 'DiscSpec', value: 'DiscSpec' }],
-  [
-    {
-      child: undefined,
-      columnId: 'implementation',
-      id: 'implementation',
-      sublabel: undefined,
-      text: 'DiscImplementation',
-      value: 'DiscImplementation',
-    },
-  ],
-  [
-    {
-      child: undefined,
-      columnId: 'inboundFilename',
-      id: 'inboundFilename',
-      sublabel: undefined,
-      text: 'K2UDEMO-MetLife-TEST-Warnings.xml',
-      value: 'K2UDEMO-MetLife-TEST-Warnings.xml',
-    },
-  ],
-  [
-    {
-      child: undefined,
-      columnId: 'outboundFilename',
-      id: 'outboundFilename',
-      sublabel: undefined,
-      text: 'K2UDEMO-MetLife-12282020085407.txt',
-      value: 'K2UDEMO-MetLife-12282020085407.txt',
-    },
-  ],
-  [
-    {
-      child: undefined,
-      columnId: 'outboundFilesize',
-      id: 'outboundFilesize',
-      sublabel: undefined,
-      text: 45919,
-      value: 45919,
-    },
-  ],
-  [
-    {
-      child: undefined,
-      columnId: 'billingCount',
-      id: 'billingCount',
-      sublabel: undefined,
-      text: 89,
-      value: 89,
-    },
-  ],
-  [
-    {
-      child: undefined,
-      columnId: 'totalRecords',
-      id: 'totalRecords',
-      sublabel: undefined,
-      text: 132,
-      value: 132,
-    },
-  ],
-  [
-    {
-      child: undefined,
-      columnId: 'extractType',
-      id: 'extractType',
-      sublabel: undefined,
-      text: 'Enrollment',
-      value: 'Enrollment',
-    },
-  ],
-  [
-    {
-      child: undefined,
-      columnId: 'extractVersion',
-      id: 'extractVersion',
-      sublabel: undefined,
-      text: '1.0.0.2020092018',
-      value: '1.0.0.2020092018',
-    },
-  ],
-];
-
-const columns = [
-  { key: 'datetime', label: 'Delivered On', style: 'text' },
-  { key: 'planSponsor', label: 'Plan Sponsor', style: 'text' },
-  { key: 'vendorId', label: 'Vendor', style: 'text' },
-  { key: 'specId', label: 'Spec', style: 'text' },
-  { key: 'implementation', label: 'Implementation', style: 'text' },
-  { key: 'inboundFilename', label: 'Client File', style: 'link' },
-  { key: 'outboundFilename', label: 'Vendor File', style: 'link' },
-  { key: 'outboundFilesize', label: 'Outbound File Size', style: 'text' },
-  { key: 'billingCount', label: 'Billing Unit Count', style: 'text' },
-  { key: 'totalRecords', label: 'Total Records', style: 'text' },
-  { key: 'extractType', label: 'Feed', style: 'text' },
-  { key: 'extractVersion', label: 'Version', style: 'text' },
-];
 
 const defaultProps = {
   id: 'default',
@@ -231,6 +120,7 @@ const defaultProps = {
   onItemsListChange: () => null,
   loading: false,
   title: '',
+  titleRedirectPage: 'file-status',
   emptyMessage: 'No data',
 };
 
@@ -271,15 +161,10 @@ describe('Basic Table Component', () => {
   });
 
   it('Should render table correctly', () => {
-    const tree = render(
+    const tree = renderWithTheme(
       <StoreProvider store={store}>
         <Component
           {...defaultProps}
-          structure={{
-            header: {
-              type: 'other',
-            },
-          }}
         />
       </StoreProvider>
     );
@@ -343,11 +228,6 @@ describe('Basic Table Component', () => {
       <StoreProvider store={store}>
         <Component
           {...defaultProps}
-          structure={{
-            header: {
-              type: 'other',
-            },
-          }}
           loading={false}
           items={[]}
         />
@@ -370,7 +250,7 @@ describe('Basic Table Component', () => {
       <StoreProvider store={store}>
         <Component
           {...defaultProps}
-          structure={{ header: { type: 'dashboard', buttons: ['Sort', 'Specs'], title: 'title' } }}
+          sortButtons={['Sort', 'Specs']}
         />
       </StoreProvider>
     );
@@ -384,22 +264,12 @@ describe('Basic Table Component', () => {
       <StoreProvider store={store}>
         <Component
           {...defaultProps}
-          structure={{ header: { type: 'dashboard', buttons: ['Sort', 'Specs'], title: 'title' } }}
+          sortButtons={['Sort', 'Specs']}
         />
       </StoreProvider>
     );
     const buttonSimulate = wrapper.find('button[id="__EyeButton"]').first();
     buttonSimulate.simulate('click');
     expect(buttonSimulate.length).toBe(1);
-  });
-
-  it('Should render the component sending the property structure, columns and items', () => {
-    const wrapper = mountWithTheme(
-      <StoreProvider store={store}>
-        <Component {...defaultProps} items={items} columns={columns} structure={{ header: { type: 'file_status' } }} />
-      </StoreProvider>
-    );
-    const searchId = wrapper.find('#Delivered__On').first();
-    expect(searchId.length).toBe(1);
   });
 });

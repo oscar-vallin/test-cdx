@@ -1,10 +1,7 @@
 import PropTypes from 'prop-types';
 import { DetailsHeader, DetailsListLayoutMode } from '@fluentui/react';
 import { useHistory } from 'react-router-dom';
-import { getDates } from 'src/helpers/tableHelpers.service';
 
-import { useOrgSid } from 'src/hooks/useOrgSid';
-import { yyyyMMdd } from 'src/utils/CDXUtils';
 import {
   HeaderTable,
   StyledColumn,
@@ -14,8 +11,7 @@ import {
   StyledRow,
 } from './TableHeader.styles';
 
-const TableHeader = ({ id, header, sortLabel, onSort, onOption, date, ...props }) => {
-  const { orgSid } = useOrgSid();
+const TableHeader = ({ id, header, sortLabel, onSort, onOption, ...props }) => {
   const history = useHistory();
   if ((!header || !header.type || header.type === 'default') && props) {
     return (
@@ -27,20 +23,11 @@ const TableHeader = ({ id, header, sortLabel, onSort, onOption, date, ...props }
     );
   }
 
-  const startFormatted = yyyyMMdd(getDates(date).startDate);
-  const endFormatted = yyyyMMdd(getDates(date).endDate);
-
   if (header.type === 'dashboard') {
     return (
       <HeaderTable id={`${id}-HeaderTable_dashboard`}>
         <StyledColumnTitle center paddingLeft sm={6}>
-          <StyledLink
-            onClick={() =>
-              history.push(`/transmissions?startDate=${startFormatted}&endDate=${endFormatted}&orgSid=${orgSid}`)
-            }
-          >
-            {header.title}
-          </StyledLink>
+          <StyledLink onClick={() => history.push(header.url)}>{header.title}</StyledLink>
         </StyledColumnTitle>
         {header.buttons && (
           <StyledColumn sm={6}>

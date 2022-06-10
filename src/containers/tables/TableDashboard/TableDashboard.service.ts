@@ -1,16 +1,12 @@
 import { useState, useEffect } from 'react';
-import { getTableStructure } from '../../../data/constants/TableConstants';
-import { formatField } from '../../../helpers/tableHelpers.service';
+import { formatField } from 'src/helpers/tableHelpers.service';
 
 //
-export const useTable = (data, tableName, date, altData) => {
-  const [loading, setLoading] = useState(true);
+export const useTable = (data, loading, date, altData) => {
   const [items, setItems] = useState([]);
   const [columns, setColumns] = useState<any[]>([]);
   const [specs, setSpecs] = useState(false);
   const [dataItems, setDataItems] = useState(data);
-
-  const structure = getTableStructure(tableName);
 
   // * Component Did Mount.
 
@@ -20,9 +16,11 @@ export const useTable = (data, tableName, date, altData) => {
   };
 
   useEffect(() => {
-    updateData();
+    if (loading) {
+      updateData();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [specs, data, altData]);
+  }, [specs, data, altData, loading]);
 
   useEffect(() => {
     const doEffect = () => {
@@ -58,20 +56,13 @@ export const useTable = (data, tableName, date, altData) => {
 
     if (data || altData) doEffect();
 
-    setLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataItems]);
-
-  // * Loading Data
-  useEffect(() => {
-    setLoading(loading);
-  }, [loading]);
 
   return {
     tableProps: {
       items,
       columns,
-      structure,
       loading,
     },
     specs,

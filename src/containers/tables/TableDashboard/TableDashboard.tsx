@@ -1,24 +1,38 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { TABLE_NAMES } from 'src/data/constants/TableConstants';
 import { Table } from 'src/components/tables';
 import { TableBox } from './TableDashboard.styles';
 import { useTable } from './TableDashboard.service';
 
+type TableDashboardType = {
+  id: string;
+  data: any;
+  altData: any;
+  date: string;
+  loading: boolean;
+  title: string;
+  titleRedirectPage: string;
+  sortButtons?: string[];
+  fromDate?: Date;
+  toDate?: Date;
+  emptyMessage: string;
+};
+
 const TableDashboard = ({
   id,
-  tableId = TABLE_NAMES.DASHBOARD_TRANSMISSIONS_VENDOR,
   data,
   altData,
   date,
   loading,
   title,
+  titleRedirectPage = 'file-status',
+  sortButtons,
   fromDate = new Date(),
   toDate = new Date(),
   emptyMessage,
-}) => {
-  const { tableProps, specs, setSpecs } = useTable(data, tableId, date, altData);
+}: TableDashboardType) => {
+  const { tableProps, specs, setSpecs } = useTable(data, loading, date, altData);
 
   const [, setTableData] = useState();
 
@@ -73,13 +87,14 @@ const TableDashboard = ({
       <TableBox id={`${id}`}>
         <Table
           id={`${id}`}
-          tableId={tableId}
+          titleRedirectPage={titleRedirectPage}
           date={date}
           fromDate={fromDate}
           toDate={toDate}
           onOption={onChangeOption}
           title={title}
           emptyMessage={emptyMessage}
+          sortButtons={sortButtons}
           {...tableProps}
         />
       </TableBox>

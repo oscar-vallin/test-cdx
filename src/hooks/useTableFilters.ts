@@ -115,7 +115,7 @@ export const useTableFilters = (searchTextPlaceholder: string, defaultSort?: Sor
   const userSid = useDelayedInputValue('', '', urlParams.get('userSid') || '', '');
   const changedByUserSid = useDelayedInputValue('', '', urlParams.get('changedByUserSid') || '', '');
 
-  const _addParamIfExists = (key, value) => (key ? { [key]: value } : {});
+  const _addParamIfExists = (key, value) => (value ? { [key]: value } : {});
 
   const _pushQueryString = () => {
     const startDateToFormat = isValid(startDate.value) ? startDate.value : defaultStartDate;

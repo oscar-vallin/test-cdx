@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-import { Box as LayoutBox, Row as LayoutRow, Column as LayoutColumn } from '../../../components/layouts';
-import { Table } from '../../../components/tables/Table';
+import { Box as LayoutBox, Row as LayoutRow, Column as LayoutColumn } from 'src/components/layouts';
 
 export const StyledBox = styled(LayoutBox)`
   width: 100%;
@@ -18,7 +17,5 @@ export const StyledRow = styled(LayoutRow)<StyledRowProps>`
 export const StyledColumn = styled(LayoutColumn)`
   width: 50%;
 `;
-
-export const StyledTable = styled(Table)``;
 
 export const TableBox = styled(LayoutBox)``;
