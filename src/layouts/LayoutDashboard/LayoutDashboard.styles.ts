@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Breadcrumb } from '@fluentui/react';
 import { Box } from 'src/components/layouts';
 import { device } from 'src/styles/GlobalStyles';
 
@@ -30,5 +31,21 @@ export const DashboardBody = styled.div<DashboardBodyProps>`
   @media ${device.tablet} {
     margin-left: ${({ isMenuOpen }) => (isMenuOpen ? '230px' : '0')};
     width: ${({ isMenuOpen }) => (isMenuOpen ? 'calc(100% - 230px)' : '100%')};
+  }
+`;
+
+export const SmallBreadcrumbs = styled(Breadcrumb)`
+  font-size: 1em;
+  margin: 0 20px 10px 20px;
+  
+  .ms-Breadcrumb-itemLink {
+    font-size: ${({ theme }) => theme.fontSizes.small};
+    line-height: 2em;
+    color: ${({ theme }) => theme.colors.themePrimary};
+  }
+  
+  .ms-Breadcrumb-item {
+    font-size: ${({ theme }) => theme.fontSizes.small};
+    line-height: 2em;
   }
 `;

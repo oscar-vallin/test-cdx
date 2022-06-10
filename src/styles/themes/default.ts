@@ -34,5 +34,6 @@ export const defaultTheme: ThemeColorsType = {
     successAlt: '#DFF6DD',
     info: '#005A9E',
     infoAlt: '#C7E0F4',
+    link: '#0078D4',
   },
 };

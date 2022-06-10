@@ -6,6 +6,7 @@ import { ROUTE_EXTERNAL_ORGS } from 'src/data/constants/RouteConstants';
 import { LeftNav } from 'src/containers/menus/LeftNav';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
 import { BoxStyled, DashboardBody } from './LayoutDashboard.styles';
+import { OrgBreadcrumbs } from './OrgBreadcrumbs';
 
 const defaultProps = {
   id: '',
@@ -50,6 +51,7 @@ export const LayoutDashboard = ({
       />
       {showLeftMenu()}
       <DashboardBody id="__DashboardBody" isMenuOpen={menuOpen && notShowLeftMenu}>
+        <OrgBreadcrumbs/>
         {children}
       </DashboardBody>
     </BoxStyled>
