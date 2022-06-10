@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
+import { Link } from 'react-router-dom';
 import {
   IColumn,
   DetailsList,
@@ -25,6 +26,20 @@ import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { InputText } from 'src/components/inputs/InputText';
 import { SetupStyled, CardStyled, ContainerInput, CircleStyled } from './XchangePage.styles';
 
+type TooltipsProps = {
+  hasAlerts: string;
+  hasUnpublishedChanges: string;
+  implementationPending: string;
+  inactive: string;
+  requiresConversion: string;
+};
+
+type GlobalXchangeAlertsProps = {
+  coreFilename?: string;
+  numSubscribers: number;
+  hasUnpublishedChanges: boolean;
+};
+
 const XChangePage = () => {
   const { orgSid } = useOrgSid();
 
@@ -33,6 +48,8 @@ const XChangePage = () => {
   const [xchanges, setXchanges] = useState<XchangeConfigSummary[]>([]);
   const [searchXchanges, setSearchXchanges] = useState<string>('');
   const [filterXchange, setFilterXchange] = useState<XchangeConfigSummary[]>([]);
+  const [tooltipContent, setTooltipContent] = useState<TooltipsProps>();
+  const [globalXchangeAlerts, setGlobalXchangeAlerts] = useState<GlobalXchangeAlertsProps>();
 
   const fetchData = () => {
     xchangeProfile({
@@ -83,11 +100,13 @@ const XChangePage = () => {
   useEffect(() => {
     if (!loadingXchange && dataXchange) {
       setXchanges(dataXchange.xchangeProfile.xchanges);
+      setTooltipContent(dataXchange.xchangeProfile.tooltips);
+      setGlobalXchangeAlerts(dataXchange.xchangeProfile.globalXchangeAlerts);
     }
   }, [dataXchange, loadingXchange]);
 
   useEffect(() => {
-    console.log(xchanges);
+    console.log(dataXchange);
   }, [xchanges]);
 
   useEffect(() => {
@@ -152,15 +171,12 @@ const XChangePage = () => {
           {column?.key === 'vendorIds' && (
             <>
               {node?.hasAlerts && (
-                <TooltipHost id="index" content="Has Xchange specific Alerts">
+                <TooltipHost id="index" content={tooltipContent?.hasAlerts}>
                   <IconButton iconProps={{ iconName: 'Ringer' }} style={{ color: 'black' }} aria-describedby="index" />
                 </TooltipHost>
               )}
               {node?.hasAlerts && (
-                <TooltipHost
-                  id="index"
-                  content="This Xchange configuration is incomplete. Publishing the Xchange Profile will not include this Xchange"
-                >
+                <TooltipHost id="index" content={tooltipContent?.implementationPending}>
                   <IconButton
                     iconProps={{ iconName: 'Warning' }}
                     style={{ color: 'orange' }}
@@ -169,7 +185,7 @@ const XChangePage = () => {
                 </TooltipHost>
               )}
               {node?.implementationPending && (
-                <TooltipHost id="index" content="Has unpublished changes">
+                <TooltipHost id="index" content={tooltipContent?.hasUnpublishedChanges}>
                   <IconButton
                     iconProps={{ iconName: '6PointStar' }}
                     style={{ color: 'red' }}
@@ -285,6 +301,46 @@ const XChangePage = () => {
     );
   };
 
+  const cardBox = () => {
+    return (
+      <>
+        <CardStyled>
+          <Link to={`/xchange-alerts?orgSid=${orgSid}`}>
+            <IconButton iconProps={{ iconName: 'Ringer' }} />
+            Alerts
+          </Link>
+          <Spacing margin="normal">
+            <Row>
+              <Text style={{ fontWeight: 'bold' }}>Alert on all Xchanges</Text>
+            </Row>
+            <Spacing margin="normal"/>
+            <Link to={`/xchange-alerts?orgSid=${orgSid}`}>({globalXchangeAlerts?.numSubscribers}) Subscribers</Link>
+          </Spacing>
+          <Spacing margin="normal">
+            <Row>
+              <Text style={{ fontWeight: 'bold' }}>Individual Xchange Alerts</Text>
+            </Row>
+          </Spacing>
+        </CardStyled>
+        <Spacing margin={{ top: 'normal' }}>
+          <CardStyled>
+            <ContainerInput>
+              <Row>
+                <Column lg="8">
+                  <Text style={{ fontWeight: 'bold', marginTop: '10px' }}>Comments</Text>
+                </Column>
+                <Column lg="4" right>
+                  <IconButton iconProps={{ iconName: 'PencilReply' }} />
+                </Column>
+              </Row>
+              <TextField multiline borderless={true} resizable={false} rows={7} />
+            </ContainerInput>
+          </CardStyled>
+        </Spacing>
+      </>
+    );
+  };
+
   return (
     <LayoutDashboard id="PageXChangePage" menuOptionSelected={ROUTE_XCHANGE_LIST.API_ID}>
       <PageHeader id="__XChangeHeader">
@@ -333,16 +389,7 @@ const XChangePage = () => {
       <Container>
         <Row>
           <Column lg="9">{renderBody()}</Column>
-          <Column lg="3">
-            <CardStyled />
-            <Spacing margin={{ top: 'normal' }}>
-              <CardStyled>
-                <ContainerInput>
-                  <TextField multiline borderless={true} label="Comments" resizable={false} rows={7} />
-                </ContainerInput>
-              </CardStyled>
-            </Spacing>
-          </Column>
+          <Column lg="3">{cardBox()}</Column>
         </Row>
       </Container>
     </LayoutDashboard>
