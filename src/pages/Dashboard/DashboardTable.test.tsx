@@ -56,36 +56,41 @@ describe('Dashboard Table', () => {
   it('Filled Table', () => {
     const items: DashboardPeriodCount[] = [
       {
-        "name": "ANTHEM",
-        "secondaryDescr": null,
-        "count": 3,
-        "total": 207,
-      }, {
-        "name": "CARECENTRAL",
-        "secondaryDescr": null,
-        "count": 3,
-        "total": 325,
-      }, {
-        "name": "HEALTHADVOCATE",
-        "secondaryDescr": null,
-        "count": 1,
-        "total": 123,
-      }, {
-        "name": "MERCER",
-        "secondaryDescr": null,
-        "count": 2,
-        "total": 284,
-      }, {
-        "name": "NAVIGATE",
-        "secondaryDescr": null,
-        "count": 1,
-        "total": 54,
-      }, {
-        "name": "VIRGINPULSE",
-        "secondaryDescr": null,
-        "count": 6,
-        "total": 619,
-      }
+        name: 'ANTHEM',
+        secondaryDescr: null,
+        count: 3,
+        total: 207,
+      },
+      {
+        name: 'CARECENTRAL',
+        secondaryDescr: null,
+        count: 3,
+        total: 325,
+      },
+      {
+        name: 'HEALTHADVOCATE',
+        secondaryDescr: null,
+        count: 1,
+        total: 123,
+      },
+      {
+        name: 'MERCER',
+        secondaryDescr: null,
+        count: 2,
+        total: 284,
+      },
+      {
+        name: 'NAVIGATE',
+        secondaryDescr: null,
+        count: 1,
+        total: 54,
+      },
+      {
+        name: 'VIRGINPULSE',
+        secondaryDescr: null,
+        count: 6,
+        total: 619,
+      },
     ];
 
     const table = mountWithTheme(
@@ -126,35 +131,38 @@ describe('Dashboard Table', () => {
     expect(cells.first().find('LinkBase.vendor-name').props().href).toContain('endDate=2021-09-28');
   });
 
-
   it('Filled Table with Specs', () => {
     const items: DashboardPeriodCount[] = [
       {
-        "name": "ANTHEM",
-        "secondaryDescr": "1000Byte",
-        "count": 1,
-        "total": 87,
-      }, {
-        "name": "ANTHEM",
-        "secondaryDescr": "600Byte",
-        "count": 1,
-        "total": 93,
-      }, {
-        "name": "ANTHEM",
-        "secondaryDescr": "834x5010",
-        "count": 1,
-        "total": 27,
-      }, {
-        "name": "CARECENTRAL",
-        "secondaryDescr": "Eligibility",
-        "count": 1,
-        "total": 22,
-      }, {
-        "name": "CARECENTRAL",
-        "secondaryDescr": "834x5010",
-        "count": 1,
-        "total": 152,
-      }
+        name: 'ANTHEM',
+        secondaryDescr: '1000Byte',
+        count: 1,
+        total: 87,
+      },
+      {
+        name: 'ANTHEM',
+        secondaryDescr: '600Byte',
+        count: 1,
+        total: 93,
+      },
+      {
+        name: 'ANTHEM',
+        secondaryDescr: '834x5010',
+        count: 1,
+        total: 27,
+      },
+      {
+        name: 'CARECENTRAL',
+        secondaryDescr: 'Eligibility',
+        count: 1,
+        total: 22,
+      },
+      {
+        name: 'CARECENTRAL',
+        secondaryDescr: '834x5010',
+        count: 1,
+        total: 152,
+      },
     ];
 
     const table = mountWithTheme(
@@ -198,4 +206,3 @@ describe('Dashboard Table', () => {
     expect(cells.first().find('Text.spec-name').text()).toEqual('spec: 1000Byte');
   });
 });
-

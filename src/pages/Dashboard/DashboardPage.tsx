@@ -18,13 +18,13 @@ import { ROUTE_DASHBOARD } from 'src/data/constants/RouteConstants';
 import { InputDateRange } from 'src/components/inputs/InputDateRange';
 import { useDateValue, useEndDateValue } from 'src/hooks/useDateValue';
 import { yyyyMMdd } from 'src/utils/CDXUtils';
-import { DateRangeButton, StyledRow } from './DashboardPage.styles';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import {
   DashboardPeriodCounts,
   useDashboardPeriodCountsLazyQuery,
-  useDashboardPeriodsLazyQuery
+  useDashboardPeriodsLazyQuery,
 } from 'src/data/services/graphql';
+import { DateRangeButton, StyledRow } from './DashboardPage.styles';
 import { DashboardTable } from './DashboardTable';
 
 const DATE_OPTION_NAME = {
@@ -41,23 +41,25 @@ const DashboardPage = () => {
   const urlParams = new URLSearchParams(location.search);
   const dateParam = urlParams.get('date');
 
-  const [ dateRangeType, setDateRangeType ] = useState(((startDate != null) ? DATE_OPTION_NAME.custom : dateParam) ?? DATE_OPTION_NAME.today);
+  const [dateRangeType, setDateRangeType] = useState(
+    (startDate != null ? DATE_OPTION_NAME.custom : dateParam) ?? DATE_OPTION_NAME.today
+  );
   const history = useHistory();
   const fromDate = useDateValue('', startDate ? new Date(`${startDate}T00:00:00.000`) : new Date());
   const toDate = useEndDateValue('', endDate ? new Date(`${endDate}T23:59:59.999`) : new Date());
 
-  const [ dashboardPeriodCounts, setDashboardPeriodCounts ] = useState<DashboardPeriodCounts | null>();
+  const [dashboardPeriodCounts, setDashboardPeriodCounts] = useState<DashboardPeriodCounts | null>();
 
   const handleError = ErrorHandler();
 
   const [
     callDashboardPeriods,
-    {data: dataDashboardPeriods, loading: loadingDashboardPeriods, error: errorDashboardPeriods}
+    { data: dataDashboardPeriods, loading: loadingDashboardPeriods, error: errorDashboardPeriods },
   ] = useDashboardPeriodsLazyQuery();
 
   const [
     callCustomDashboardPeriod,
-    {data: dataCustomDashboardPeriod, loading: loadingCustomDashboardPeriod, error: errorCustomDashboardPeriod}
+    { data: dataCustomDashboardPeriod, loading: loadingCustomDashboardPeriod, error: errorCustomDashboardPeriod },
   ] = useDashboardPeriodCountsLazyQuery();
 
   useEffect(() => {
@@ -81,6 +83,8 @@ const DashboardPage = () => {
           break;
         case DATE_OPTION_NAME.lastMonth:
           setDashboardPeriodCounts(dataDashboardPeriods.dashboardPeriods?.lastMonthlyCounts);
+          break;
+        default:
           break;
       }
     }
@@ -113,6 +117,8 @@ const DashboardPage = () => {
       case DATE_OPTION_NAME.lastMonth:
         fromDate.setValue(startOfMonth(subMonths(_newDate, 1)));
         toDate.setValue(endOfMonth(subMonths(_newDate, 1)));
+        break;
+      default:
         break;
     }
   };
@@ -330,19 +336,19 @@ const DashboardPage = () => {
                 endDate={toDate.value}
                 items={dashboardPeriodCounts?.vendorTransmissions ?? []}
               />
-              {/*<TableDashboard*/}
-              {/*  id="__Table_Transmissions_Vendor"*/}
-              {/*  data={dashboardPeriodCounts?.vendorTransmissions}*/}
-              {/*  altData={dashboardPeriodCounts?.vendorTransmissionsBySpec}*/}
-              {/*  fromDate={fromDate.value}*/}
-              {/*  toDate={toDate.value}*/}
-              {/*  date={dateId}*/}
-              {/*  loading={isLoadingData}*/}
-              {/*  title="Transmissions / BUs by Vendor"*/}
-              {/*  titleRedirectPage="transmissions"*/}
-              {/*  sortButtons={['Sort', 'Specs']}*/}
-              {/*  emptyMessage="None"*/}
-              {/*/>*/}
+              {/* <TableDashboard */}
+              {/*  id="__Table_Transmissions_Vendor" */}
+              {/*  data={dashboardPeriodCounts?.vendorTransmissions} */}
+              {/*  altData={dashboardPeriodCounts?.vendorTransmissionsBySpec} */}
+              {/*  fromDate={fromDate.value} */}
+              {/*  toDate={toDate.value} */}
+              {/*  date={dateId} */}
+              {/*  loading={isLoadingData} */}
+              {/*  title="Transmissions / BUs by Vendor" */}
+              {/*  titleRedirectPage="transmissions" */}
+              {/*  sortButtons={['Sort', 'Specs']} */}
+              {/*  emptyMessage="None" */}
+              {/* /> */}
             </Column>
             <Column lg="6">
               <DashboardTable

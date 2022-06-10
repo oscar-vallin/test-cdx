@@ -313,7 +313,7 @@ const XChangePage = () => {
             <Row>
               <Text style={{ fontWeight: 'bold' }}>Alert on all Xchanges</Text>
             </Row>
-            <Spacing margin="normal"/>
+            <Spacing margin="normal" />
             <Link to={`/xchange-alerts?orgSid=${orgSid}`}>({globalXchangeAlerts?.numSubscribers}) Subscribers</Link>
           </Spacing>
           <Spacing margin="normal">

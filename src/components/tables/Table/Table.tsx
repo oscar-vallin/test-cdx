@@ -98,7 +98,7 @@ type TableProps = {
   id?: string;
   items?: any;
   columns?: any;
-  sortButtons?: string[]
+  sortButtons?: string[];
   onOption?: any | null;
   groups?: any;
   searchInput?: any;
@@ -112,7 +112,7 @@ type TableProps = {
   titleRedirectPage: string;
 } & typeof defaultProps;
 
-const Table = ({
+export const Table = ({
   id,
   items,
   columns,
@@ -295,31 +295,30 @@ const Table = ({
       case 'bus':
         return <StyledText right>{fieldContent}</StyledText>;
 
-      case 'vendor':
-        {
-          let startFormatted;
-          let endFormatted;
-          if (date === 'custom') {
-            startFormatted = yyyyMMdd(fromDate);
-            endFormatted = yyyyMMdd(toDate);
-          } else {
-            startFormatted = yyyyMMdd(getDates(date).startDate);
-            endFormatted = yyyyMMdd(getDates(date).endDate);
-          }
-
-          return (
-            <StyledCell left>
-              <Link>
-                <RouteLink
-                  to={`/${titleRedirectPage}?filter=${fieldContent}&orgSid=${orgSid}&startDate=${startFormatted}&endDate=${endFormatted}`}
-                >
-                  {fieldContent}
-                </RouteLink>
-              </Link>
-              {fieldItem.sublabel && <StyledSpecs>{`spec: ${fieldItem.sublabel}`}</StyledSpecs>}
-            </StyledCell>
-          );
+      case 'vendor': {
+        let startFormatted;
+        let endFormatted;
+        if (date === 'custom') {
+          startFormatted = yyyyMMdd(fromDate);
+          endFormatted = yyyyMMdd(toDate);
+        } else {
+          startFormatted = yyyyMMdd(getDates(date).startDate);
+          endFormatted = yyyyMMdd(getDates(date).endDate);
         }
+
+        return (
+          <StyledCell left>
+            <Link>
+              <RouteLink
+                to={`/${titleRedirectPage}?filter=${fieldContent}&orgSid=${orgSid}&startDate=${startFormatted}&endDate=${endFormatted}`}
+              >
+                {fieldContent}
+              </RouteLink>
+            </Link>
+            {fieldItem.sublabel && <StyledSpecs>{`spec: ${fieldItem.sublabel}`}</StyledSpecs>}
+          </StyledCell>
+        );
+      }
 
       // case 'progress':
       //   return <FileProgress stringValues={item.progress} />;
@@ -387,7 +386,7 @@ const Table = ({
           type: 'dashboard',
           title,
           url: `/${titleRedirectPage}?orgSid=${orgSid}&startDate=${yyyyMMdd(fromDate)}&endDate=${yyyyMMdd(toDate)}`,
-          buttons: sortButtons
+          buttons: sortButtons,
         }}
         sortLabel={sortLabel}
         onSort={_onSort}
@@ -494,5 +493,3 @@ const Table = ({
 };
 
 Table.defaultProps = defaultProps;
-
-export { Table };

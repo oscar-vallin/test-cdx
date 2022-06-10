@@ -37,13 +37,13 @@ export const DashboardBody = styled.div<DashboardBodyProps>`
 export const SmallBreadcrumbs = styled(Breadcrumb)`
   font-size: 1em;
   margin: 0 20px 10px 20px;
-  
+
   .ms-Breadcrumb-itemLink {
     font-size: ${({ theme }) => theme.fontSizes.small};
     line-height: 2em;
     color: ${({ theme }) => theme.colors.themePrimary};
   }
-  
+
   .ms-Breadcrumb-item {
     font-size: ${({ theme }) => theme.fontSizes.small};
     line-height: 2em;

@@ -163,9 +163,7 @@ describe('Basic Table Component', () => {
   it('Should render table correctly', () => {
     const tree = renderWithTheme(
       <StoreProvider store={store}>
-        <Component
-          {...defaultProps}
-        />
+        <Component {...defaultProps} />
       </StoreProvider>
     );
     expect(tree.prop('id')).toBeUndefined();
@@ -226,11 +224,7 @@ describe('Basic Table Component', () => {
   it('Should render the component sending the property structure, loading and items', () => {
     const wrapper = mountWithTheme(
       <StoreProvider store={store}>
-        <Component
-          {...defaultProps}
-          loading={false}
-          items={[]}
-        />
+        <Component {...defaultProps} loading={false} items={[]} />
       </StoreProvider>
     );
     expect(wrapper).toMatchSnapshot();
@@ -248,10 +242,7 @@ describe('Basic Table Component', () => {
   it('Should simulate clicking the button with Id __SortButton', () => {
     const wrapper = mountWithTheme(
       <StoreProvider store={store}>
-        <Component
-          {...defaultProps}
-          sortButtons={['Sort', 'Specs']}
-        />
+        <Component {...defaultProps} sortButtons={['Sort', 'Specs']} />
       </StoreProvider>
     );
     const buttonSimulate = wrapper.find('button[id="__SortButton"]').first();
@@ -262,10 +253,7 @@ describe('Basic Table Component', () => {
   it('Should simulate clicking the button with Id __EyeButton', () => {
     const wrapper = mountWithTheme(
       <StoreProvider store={store}>
-        <Component
-          {...defaultProps}
-          sortButtons={['Sort', 'Specs']}
-        />
+        <Component {...defaultProps} sortButtons={['Sort', 'Specs']} />
       </StoreProvider>
     );
     const buttonSimulate = wrapper.find('button[id="__EyeButton"]').first();

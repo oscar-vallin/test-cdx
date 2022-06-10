@@ -24,27 +24,27 @@ export const DashboardTableWrapper = styled.div`
 `;
 
 export const HeaderLink = styled(Link)`
-  font: ${({ theme }) => (theme.fontStyles.headerTitle )};
-  color: ${({ theme }) => (theme.colors.themePrimary )};
+  font: ${({ theme }) => theme.fontStyles.headerTitle};
+  color: ${({ theme }) => theme.colors.themePrimary};
   text-decoration: none;
-  font-size: ${({ theme }) => (theme.fontSizes.normal )};
+  font-size: ${({ theme }) => theme.fontSizes.normal};
   line-height: 2.5em;
   margin: 10px;
-  
+
   &:hover {
-    color: ${({ theme }) => (theme.colors.themeDark )};
-    text-decoration:underline;
+    color: ${({ theme }) => theme.colors.themeDark};
+    text-decoration: underline;
   }
 `;
 
 export const CellLink = styled(Link)`
-  color: ${({ theme }) => (theme.colors.themePrimary )};
+  color: ${({ theme }) => theme.colors.themePrimary};
   text-decoration: none;
-  font-size: ${({ theme }) => (theme.fontSizes.small )};
-  
+  font-size: ${({ theme }) => theme.fontSizes.small};
+
   &:hover {
-    color: ${({ theme }) => (theme.colors.themeDark )};
-    text-decoration:underline;
+    color: ${({ theme }) => theme.colors.themeDark};
+    text-decoration: underline;
   }
 `;
 
@@ -53,23 +53,22 @@ export const SpecText = styled(Text)`
   margin-left: 5px;
   justify-content: 'flex-start';
   align-items: center;
-  color: ${({ theme }) => (theme.colors.neutralSecondary)};
-  font-size: ${({ theme }) => (theme.fontSizes.small)};
+  color: ${({ theme }) => theme.colors.neutralSecondary};
+  font-size: ${({ theme }) => theme.fontSizes.small};
 `;
 
 export const CellTotal = styled(Text)`
-  font-size: ${({ theme }) => (theme.fontSizes.small )};
+  font-size: ${({ theme }) => theme.fontSizes.small};
   width: 100%;
   text-align: end;
-`
+`;
 
 export const EmptyTable = styled(Text)`
   margin-top: 10px;
   margin-left: 10px;
   margin-bottom: 40px;
-`
+`;
 
 type DateRangeButtonProps = {
   selected?: boolean;
 };
-

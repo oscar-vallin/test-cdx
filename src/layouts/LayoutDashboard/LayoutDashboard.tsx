@@ -51,7 +51,7 @@ export const LayoutDashboard = ({
       />
       {showLeftMenu()}
       <DashboardBody id="__DashboardBody" isMenuOpen={menuOpen && notShowLeftMenu}>
-        <OrgBreadcrumbs/>
+        <OrgBreadcrumbs />
         {children}
       </DashboardBody>
     </BoxStyled>
