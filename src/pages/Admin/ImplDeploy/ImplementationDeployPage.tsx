@@ -115,7 +115,8 @@ const _ImplementationDeployPage = () => {
                 variant="primary"
                 disabled={dataLoading}
                 text="Deploy"
-                onClick={doDeploy} />
+                onClick={doDeploy}
+              />
             </Column>
           </Row>
         </Container>

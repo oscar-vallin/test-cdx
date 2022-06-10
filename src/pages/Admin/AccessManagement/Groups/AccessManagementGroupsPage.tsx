@@ -35,9 +35,9 @@ import { Spacing } from 'src/components/spacings/Spacing';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { ROUTE_ACCESS_MANAGEMENT_GROUPS } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
+import { PageBody } from 'src/components/layouts/Column';
 import { useAccessManagementGroupsPageService } from './AccessManagementGroupsPage.service';
 import { StyledCommandButton } from '../AccessManagement.styles';
-import { PageBody } from 'src/components/layouts/Column';
 import { AccessPolicyGroupPanel } from './AccessPolicyGroup';
 
 const generateColumns = () => {

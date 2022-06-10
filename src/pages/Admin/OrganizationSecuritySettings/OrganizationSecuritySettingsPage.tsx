@@ -186,7 +186,7 @@ const _OrganizationSecuritySettingsPage = () => {
                 </FormRow>
                 <FormRow>
                   <Text variant="extraBold">Dashboard IP Whitelist</Text>
-                  {/*Need to use FormLabel as opposed to UIFormLabel to force the required flag not to show*/}
+                  {/* Need to use FormLabel as opposed to UIFormLabel to force the required flag not to show */}
                   <FormLabel
                     id="__WhiteList_lbl"
                     label={whitelistFields[0]?.label ?? ''}
