@@ -18,7 +18,17 @@ type DashboardTableType = {
   renderTotal: (item: DashboardPeriodCount) => ReactElement;
 };
 
-export const DashboardTable = ({ id, title, items, linkTo, orgSid, startDate, endDate, buttons, renderTotal }: DashboardTableType) => {
+export const DashboardTable = ({
+  id,
+  title,
+  items,
+  linkTo,
+  orgSid,
+  startDate,
+  endDate,
+  buttons,
+  renderTotal,
+}: DashboardTableType) => {
   const destinationUrl = () =>
     `/${linkTo}?&orgSid=${orgSid}&startDate=${yyyyMMdd(startDate)}&endDate=${yyyyMMdd(endDate)}`;
 
