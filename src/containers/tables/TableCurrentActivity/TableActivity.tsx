@@ -1,8 +1,9 @@
 import { ReactElement } from 'react';
-import { IColumn, DetailsList, DetailsListLayoutMode, SelectionMode, Spinner, Link } from '@fluentui/react';
+import { IColumn, DetailsListLayoutMode, SelectionMode, Spinner, Link } from '@fluentui/react';
 import { format } from 'date-fns';
 import { Column } from 'src/components/layouts';
 import { OrganizationLink } from 'src/data/services/graphql';
+import { ThemedDetailsList } from '../ThemedDetailsList.style';
 import { TableName, TableWrap, EmptyMessage } from './TableActivity.styles';
 
 const defaultProps = {
@@ -89,7 +90,7 @@ const TableActivity = ({
       <Column>
         {!loading ? (
           items.length > 0 ? (
-            <DetailsList
+            <ThemedDetailsList
               items={items}
               selectionMode={SelectionMode.none}
               columns={columns}

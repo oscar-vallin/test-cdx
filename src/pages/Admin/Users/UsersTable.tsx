@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
 import {
-  DetailsList,
   DetailsListLayoutMode,
   IColumn,
   Link,
@@ -17,6 +16,7 @@ import {
   UserConnectionTooltips,
 } from 'src/data/services/graphql';
 import { TableFiltersType } from 'src/hooks/useTableFilters';
+import { ThemedDetailsList } from 'src/containers/tables/ThemedDetailsList.style';
 import { UsersTableColumns, useUsersTableColumns } from './UsersTableColumn';
 
 type UsersTableType = {
@@ -149,7 +149,7 @@ export const UsersTable = ({ users, onClickUser, tableFilters, tooltips, searchA
   };
 
   return (
-    <DetailsList
+    <ThemedDetailsList
       items={users}
       columns={columns}
       layoutMode={DetailsListLayoutMode.justified}

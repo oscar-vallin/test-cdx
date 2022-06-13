@@ -1,10 +1,11 @@
-import { DetailsList, DetailsListLayoutMode, IColumn, SelectionMode } from '@fluentui/react';
+import React, { ReactElement } from 'react';
+import { DetailsListLayoutMode, IColumn, SelectionMode } from '@fluentui/react';
 import { DashboardPeriodCount } from 'src/data/services/graphql';
 import { yyyyMMdd } from 'src/utils/CDXUtils';
 import { DarkSeparator } from 'src/components/separators/Separator';
 import { Column, Row } from 'src/components/layouts';
+import { ThemedDetailsList } from 'src/containers/tables/ThemedDetailsList.style';
 import { CellLink, DashboardTableWrapper, EmptyTable, HeaderLink, SpecText } from './DashboardPage.styles';
-import React, { ReactElement } from 'react';
 
 type DashboardTableType = {
   id: string;
@@ -68,7 +69,7 @@ export const DashboardTable = ({
     }
 
     return (
-      <DetailsList
+      <ThemedDetailsList
         items={items}
         columns={columns}
         layoutMode={DetailsListLayoutMode.justified}

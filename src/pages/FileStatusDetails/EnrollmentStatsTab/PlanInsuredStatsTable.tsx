@@ -1,6 +1,5 @@
 import { Card } from 'src/components/cards';
 import {
-  DetailsList,
   DetailsListLayoutMode,
   IColumn,
   IDetailsColumnProps,
@@ -10,6 +9,7 @@ import {
 } from '@fluentui/react';
 import { Text } from 'src/components/typography';
 import { EnrollmentStatType } from 'src/pages/FileStatusDetails/EnrollmentStatsTab/types';
+import { ThemedDetailsList } from 'src/containers/tables/ThemedDetailsList.style';
 
 const centerColumn = (item?: any, index?: number, column?: IColumn) => {
   return (
@@ -52,7 +52,7 @@ export const PlanInsuredStatsTable = ({ header, planInsuredStats }: PlanInsuredS
           <Text>Dependents</Text>
         </Stack.Item>
       </Stack>
-      <DetailsList
+      <ThemedDetailsList
         compact
         items={planInsuredStats}
         columns={COLUMNS}

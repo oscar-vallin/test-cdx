@@ -1,6 +1,6 @@
 /* eslint-disable no-alert */
 import React, { ReactElement, useState } from 'react';
-import { Checkbox, DetailsList, DetailsListLayoutMode, IColumn, SelectionMode, Stack } from '@fluentui/react';
+import { Checkbox, DetailsListLayoutMode, IColumn, SelectionMode, Stack, ICheckboxProps} from '@fluentui/react';
 
 import { Badge } from 'src/components/badges/Badge';
 import { Card } from 'src/components/cards/Card';
@@ -12,8 +12,8 @@ import { theme } from 'src/styles/themes/theme';
 import { ChartDataType } from 'src/components/charts/ChartDonut/ChartDonut';
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
 import { Text } from 'src/components/typography';
-import { ICheckboxProps } from '@fluentui/react/lib/components/Checkbox/Checkbox.types';
 import { EmptyState } from 'src/containers/states';
+import { ThemedDetailsList } from 'src/containers/tables/ThemedDetailsList.style';
 import { SuperScript, WhiteButton } from '../FileStatusDetails.styles';
 
 const COLUMNS: IColumn[] = [
@@ -328,7 +328,7 @@ const QualityChecksTab = ({ details }: QualityChecksTabProps): ReactElement => {
               <DarkSeparator />
             </Stack.Item>
           </Stack>
-          <DetailsList
+          <ThemedDetailsList
             compact
             items={data()}
             columns={COLUMNS}

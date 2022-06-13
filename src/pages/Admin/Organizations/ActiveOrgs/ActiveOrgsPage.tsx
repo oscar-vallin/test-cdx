@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import {
-  DetailsList,
   DetailsListLayoutMode,
   IColumn,
   IconButton,
@@ -39,6 +38,7 @@ import { PageHeader } from 'src/containers/headers/PageHeader';
 import { OrgPanel } from 'src/pages/Admin/Organizations/ActiveOrgs/OrgPanel';
 import { Paginator } from 'src/components/tables/Paginator';
 import { PageBody } from 'src/components/layouts/Column';
+import { ThemedDetailsList } from 'src/containers/tables/ThemedDetailsList.style';
 
 const ActiveOrgsPage = () => {
   const { orgSid: orgOwnerSid } = useOrgSid();
@@ -225,7 +225,7 @@ const ActiveOrgsPage = () => {
     }
     return (
       <>
-        <DetailsList
+        <ThemedDetailsList
           items={orgs}
           selectionMode={SelectionMode.none}
           columns={columns}

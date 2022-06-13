@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import {
-  DetailsList,
   DetailsListLayoutMode,
   IColumn,
   IComboBoxOption,
@@ -22,6 +21,7 @@ import { useOrgSid } from 'src/hooks/useOrgSid';
 import { TableFiltersType } from 'src/hooks/useTableFilters';
 import { Paginator } from 'src/components/tables/Paginator';
 import { TableFilters } from 'src/containers/tables/TableFilters';
+import { ThemedDetailsList } from 'src/containers/tables/ThemedDetailsList.style';
 import { EmptyState } from 'src/containers/states';
 import { Box, Container } from 'src/components/layouts';
 import { UserAuditLogsColumn, useUserAuditLogsColumns } from './UserAuditLogsTableColumn';
@@ -189,7 +189,7 @@ export const UserAuditLogsTable = ({ id, cols, lazyQuery, getItems, tableFilters
     if (items && items.length > 0) {
       return (
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
-          <DetailsList
+          <ThemedDetailsList
             className={classNames.root}
             items={items}
             columns={columns}

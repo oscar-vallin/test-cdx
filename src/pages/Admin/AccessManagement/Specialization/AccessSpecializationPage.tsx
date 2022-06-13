@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import {
   PrimaryButton,
   DefaultButton,
-  DetailsList,
   DetailsListLayoutMode,
   SelectionMode,
   Dialog,
@@ -38,6 +37,7 @@ import { ROUTE_ACCESS_MANAGEMENT_SPECIALIZATION } from 'src/data/constants/Route
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { PageBody } from 'src/components/layouts/Column';
+import { ThemedDetailsList } from 'src/containers/tables/ThemedDetailsList.style';
 import { AccessSpecializationPanel } from './AccessSpecializationPanel';
 import { StyledCommandButton } from '../AccessManagement.styles';
 
@@ -193,7 +193,7 @@ const AccessManagementSpecializationPage = () => {
     }
 
     return (
-      <DetailsList
+      <ThemedDetailsList
         items={specializations}
         selectionMode={SelectionMode.none}
         columns={columns}
