@@ -1,43 +1,31 @@
 import { ReactNode } from 'react';
 import { StyledButtonAction } from './ButtonAction.styles';
 
-const defaultProps = {
-  id: '',
-  icon: '',
-  disabled: false,
-};
-
 type ButtonActionProps = {
   id?: string;
   children?: ReactNode;
   disabled?: boolean;
   onClick?: () => void;
-  icon?: string;
-} & typeof defaultProps;
-
-const buttonIcons = {
-  edit: 'Edit',
-  sort: 'Sort',
-  eye: 'RedEye',
-  chromeBack: 'ChromeBack',
-  chromeNext: 'ChromeBackMirrored',
-  up: 'Up',
-  down: 'Down',
-  today: 'GotoToday',
-  asc: 'SortUp',
-  desc: 'SortDown',
+  iconName?: string;
+  title?: string;
 };
 
-const ButtonAction = ({ id, children, icon, disabled, onClick, ...props }: ButtonActionProps) => {
-  const _icon = { iconName: buttonIcons[icon] };
+const ButtonAction = ({ id, children, iconName, disabled, onClick, title, ...props }: ButtonActionProps) => {
+  const _icon = { iconName };
 
   return (
-    <StyledButtonAction id={id} disabled={disabled} onClick={onClick} iconProps={_icon} {...props}>
+    <StyledButtonAction
+      id={id}
+      disabled={disabled}
+      onClick={onClick}
+      iconProps={_icon}
+      title={title}
+      ariaLabel={title}
+      {...props}
+    >
       {children}
     </StyledButtonAction>
   );
 };
-
-ButtonAction.defaultProps = defaultProps;
 
 export { ButtonAction };

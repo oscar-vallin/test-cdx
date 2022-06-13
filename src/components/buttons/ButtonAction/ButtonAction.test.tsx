@@ -12,7 +12,7 @@ const defaultProps = {
 describe('ButtonAction', () => {
   const mockFn = jest.fn();
   const tree = shallowWithTheme(
-    <ButtonAction {...defaultProps} onClick={mockFn} icon="edit">
+    <ButtonAction {...defaultProps} onClick={mockFn} iconName="Edit">
       Testing ButtonAction
     </ButtonAction>
   );
@@ -31,7 +31,7 @@ describe('ButtonAction', () => {
   });
 
   it('Should have an icon', () => {
-    expect(tree.children().props().icon).toEqual('edit');
+    expect(tree.children().props().iconName).toEqual('Edit');
   });
 
   it('Should renders children', () => {
@@ -58,20 +58,20 @@ describe('ButtonAction', () => {
 
   it('Default props values, Should have a props', () => {
     const defaultTree = shallowWithTheme(
-      <ButtonAction id={'__ButtonAction'} icon="up">
+      <ButtonAction id={'__ButtonAction'} iconName="SortUp">
         Button Text
       </ButtonAction>
     );
     const mountTree = mountWithTheme(
-      <ButtonAction id={'__ButtonAction'} icon="up">
+      <ButtonAction id={'__ButtonAction'} iconName="SortUp">
         Button Text
       </ButtonAction>
     );
     expect(defaultTree).toMatchSnapshot();
 
     expect(defaultTree.children().props().id).toEqual('__ButtonAction');
-    expect(defaultTree.children().props().icon).toEqual('up');
-    expect(defaultTree.children().props().disabled).toEqual(false);
+    expect(defaultTree.children().props().iconName).toEqual('SortUp');
+    expect(defaultTree.children().props().disabled).toEqual(undefined);
     expect(mountTree.children().props().id).toEqual('__ButtonAction');
     // expect(defaultTree.children().props().disabled).toBeTruthy();
     defaultTree.children().simulate('click');

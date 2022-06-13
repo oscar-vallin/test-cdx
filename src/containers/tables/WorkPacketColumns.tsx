@@ -10,11 +10,10 @@ import {
   WpProcessError,
   WpTransmission,
 } from 'src/data/services/graphql';
-import { CellItemRow, StyledCell, StyledColumn } from 'src/components/tables/Table/Table.styles';
 import { HighlightCounter } from 'src/components/badges/HighlightCounter';
 import { getStepStatusLabel } from 'src/data/constants/FileStatusConstants';
 import { FileProgress } from '../bars/FileProgress';
-import { Text } from './WorkPacketTable.styles';
+import { Text, CellItemRow, StyledCell, StyledColumn } from './WorkPacketTable.styles';
 
 export enum WorkPacketColumn {
   TIMESTAMP,

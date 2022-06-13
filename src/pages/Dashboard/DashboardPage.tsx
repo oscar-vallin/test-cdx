@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 // components
 import { useHistory, useLocation } from 'react-router-dom';
+import { endOfMonth, endOfYesterday, startOfDay, startOfMonth, startOfYesterday, subMonths } from 'date-fns';
 import { SpinnerSize } from '@fluentui/react';
 import { CardDashboard } from 'src/containers/cards/CardDashboard';
-import { TableDashboard } from 'src/containers/tables/TableDashboard';
 
 import { Column, Container, Row } from 'src/components/layouts';
 import { Spacing } from 'src/components/spacings/Spacing';
@@ -12,65 +12,187 @@ import { PageHeader } from 'src/containers/headers/PageHeader';
 
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 
-import { TABLE_NAMES } from 'src/data/constants/TableConstants';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { PageTitle } from 'src/components/typography';
 import { ROUTE_DASHBOARD } from 'src/data/constants/RouteConstants';
 import { InputDateRange } from 'src/components/inputs/InputDateRange';
 import { useDateValue, useEndDateValue } from 'src/hooks/useDateValue';
 import { yyyyMMdd } from 'src/utils/CDXUtils';
-import { StyledButton, StyledRow } from './DashboardPage.styles';
-import { useDashboardService } from './DashboardPage.service';
+import { ErrorHandler } from 'src/utils/ErrorHandler';
+import {
+  DashboardPeriodCounts,
+  useDashboardPeriodCountsLazyQuery,
+  useDashboardPeriodsLazyQuery,
+} from 'src/data/services/graphql';
+import { DateRangeButton, StyledRow } from './DashboardPage.styles';
+import { DashboardErrorsTable } from 'src/pages/Dashboard/DashboardErrorsTable';
+import { TransmissionsByVendorTable } from 'src/pages/Dashboard/TransmissionsByVendorTable';
+import { DashboardTransmissionsTable } from 'src/pages/Dashboard/DashboardTransmissionsTable';
+
+const DATE_OPTION_NAME = {
+  today: 'today',
+  yesterday: 'yesterday',
+  thisMonth: 'thisMonth',
+  lastMonth: 'lastMonth',
+  custom: 'custom',
+};
 
 const DashboardPage = () => {
   const { orgSid, startDate, endDate } = useOrgSid();
   const location = useLocation();
   const urlParams = new URLSearchParams(location.search);
   const dateParam = urlParams.get('date');
-  const service = useDashboardService(orgSid, startDate ? 'custom' : dateParam);
-  const { isLoadingData, datesOptions, dataCounters, getPeriodCounts }: any = service;
-  const { setDateId, dateId } = service;
+
+  const [dateRangeType, setDateRangeType] = useState(
+    (startDate != null ? DATE_OPTION_NAME.custom : dateParam) ?? DATE_OPTION_NAME.today
+  );
   const history = useHistory();
   const fromDate = useDateValue('', startDate ? new Date(`${startDate}T00:00:00.000`) : new Date());
   const toDate = useEndDateValue('', endDate ? new Date(`${endDate}T23:59:59.999`) : new Date());
 
-  const handleChangeDate: any = (dateType: string, startDate?: Date, endDate?: Date) => {
-    setDateId(dateType);
+  const [dashboardPeriodCounts, setDashboardPeriodCounts] = useState<DashboardPeriodCounts | null>();
 
-    if (dateType !== 'custom') {
-      history.push(`?date=${dateType}&orgSid=${orgSid}`);
-    } else if (startDate && endDate) {
-      history.push(`?startDate=${yyyyMMdd(startDate)}&endDate=${yyyyMMdd(endDate)}&orgSid=${orgSid}`);
-    } else {
-      history.push(`?startDate=${yyyyMMdd(fromDate.value)}&endDate=${yyyyMMdd(toDate.value)}&orgSid=${orgSid}`);
+  const handleError = ErrorHandler();
+
+  const [
+    callDashboardPeriods,
+    { data: dataDashboardPeriods, loading: loadingDashboardPeriods, error: errorDashboardPeriods },
+  ] = useDashboardPeriodsLazyQuery();
+
+  const [
+    callCustomDashboardPeriod,
+    { data: dataCustomDashboardPeriod, loading: loadingCustomDashboardPeriod, error: errorCustomDashboardPeriod },
+  ] = useDashboardPeriodCountsLazyQuery();
+
+  useEffect(() => {
+    handleError(errorDashboardPeriods);
+  }, [errorDashboardPeriods, handleError]);
+  useEffect(() => {
+    handleError(errorCustomDashboardPeriod);
+  }, [errorCustomDashboardPeriod, handleError]);
+
+  useEffect(() => {
+    if (!loadingDashboardPeriods && dataDashboardPeriods) {
+      switch (dateRangeType) {
+        case DATE_OPTION_NAME.today:
+          setDashboardPeriodCounts(dataDashboardPeriods.dashboardPeriods?.dailyCounts);
+          break;
+        case DATE_OPTION_NAME.yesterday:
+          setDashboardPeriodCounts(dataDashboardPeriods.dashboardPeriods?.yesterdayCounts);
+          break;
+        case DATE_OPTION_NAME.thisMonth:
+          setDashboardPeriodCounts(dataDashboardPeriods.dashboardPeriods?.monthlyCounts);
+          break;
+        case DATE_OPTION_NAME.lastMonth:
+          setDashboardPeriodCounts(dataDashboardPeriods.dashboardPeriods?.lastMonthlyCounts);
+          break;
+        default:
+          break;
+      }
+    }
+  }, [dataDashboardPeriods, loadingDashboardPeriods, dateRangeType]);
+
+  useEffect(() => {
+    if (!loadingCustomDashboardPeriod && dataCustomDashboardPeriod) {
+      setDashboardPeriodCounts(dataCustomDashboardPeriod.dashboardPeriodCounts);
+    }
+  }, [dataCustomDashboardPeriod, loadingCustomDashboardPeriod]);
+
+  const handleChangeDate: any = (dateType: string) => {
+    setDateRangeType(dateType);
+
+    const _newDate = new Date();
+
+    switch (dateType) {
+      case DATE_OPTION_NAME.today:
+        fromDate.setValue(startOfDay(_newDate));
+        toDate.setValue(startOfDay(_newDate));
+        break;
+      case DATE_OPTION_NAME.yesterday:
+        fromDate.setValue(startOfYesterday());
+        toDate.setValue(endOfYesterday());
+        break;
+      case DATE_OPTION_NAME.thisMonth:
+        fromDate.setValue(startOfMonth(_newDate));
+        toDate.setValue(endOfMonth(_newDate));
+        break;
+      case DATE_OPTION_NAME.lastMonth:
+        fromDate.setValue(startOfMonth(subMonths(_newDate, 1)));
+        toDate.setValue(endOfMonth(subMonths(_newDate, 1)));
+        break;
+      default:
+        break;
     }
   };
 
   useEffect(() => {
-    history.push(`?startDate=${yyyyMMdd(fromDate.value)}&endDate=${yyyyMMdd(toDate.value)}&orgSid=${orgSid}`);
-  }, [fromDate.value, toDate.value]);
+    if (dateRangeType === DATE_OPTION_NAME.custom) {
+      history.push(`?startDate=${yyyyMMdd(fromDate.value)}&endDate=${yyyyMMdd(toDate.value)}&orgSid=${orgSid}`);
+    } else {
+      history.push(`?date=${dateRangeType}&orgSid=${orgSid}`);
+    }
+  }, [dateRangeType, fromDate.value, toDate.value]);
 
   useEffect(() => {
-    if (dateId === 'custom') {
-      getPeriodCounts(fromDate.value, toDate.value);
+    if (dateRangeType === 'custom' && fromDate.value && toDate.value) {
+      callCustomDashboardPeriod({
+        variables: {
+          orgSid,
+          dateRange: {
+            rangeStart: fromDate.value,
+            rangeEnd: toDate.value,
+          },
+        },
+      });
+    } else {
+      callDashboardPeriods({
+        variables: {
+          orgSid,
+        },
+      });
     }
-  }, [fromDate.value, toDate.value, dateId]);
+  }, [fromDate.value, toDate.value, dateRangeType]);
 
   // Render Buttons Bar
   const renderDateButtons = () => {
-    if (!datesOptions) return null;
-
-    return datesOptions.map((option, index) => (
+    const dateOptions = [
+      {
+        id: DATE_OPTION_NAME.today,
+        selected: dateRangeType === DATE_OPTION_NAME.today,
+        label: 'Today',
+      },
+      {
+        id: DATE_OPTION_NAME.yesterday,
+        selected: dateRangeType === DATE_OPTION_NAME.yesterday,
+        label: 'Yesterday',
+      },
+      {
+        id: DATE_OPTION_NAME.thisMonth,
+        selected: dateRangeType === DATE_OPTION_NAME.thisMonth,
+        label: 'Month',
+      },
+      {
+        id: DATE_OPTION_NAME.lastMonth,
+        selected: dateRangeType === DATE_OPTION_NAME.lastMonth,
+        label: 'Last Month',
+      },
+      {
+        id: DATE_OPTION_NAME.custom,
+        selected: dateRangeType === DATE_OPTION_NAME.custom,
+        label: 'Custom',
+      },
+    ];
+    return dateOptions.map((option, index) => (
       <Spacing margin={{ left: 'normal' }} key={index}>
-        <StyledButton
+        <DateRangeButton
           id={`__Button-${option.id}`}
           key={`Button-${option.id}`}
           variant={option.selected ? 'primary' : 'secondary'}
           selected={option.selected}
           onClick={() => handleChangeDate(option.id)}
         >
-          {option.name}
-        </StyledButton>
+          {option.label}
+        </DateRangeButton>
       </Spacing>
     ));
   };
@@ -84,34 +206,30 @@ const DashboardPage = () => {
   };
 
   const renderCountsByFile = () => {
-    if (dataCounters?.showCountsByFile !== true) {
-      return <span />;
+    if (dashboardPeriodCounts?.showCountsByFile !== true) {
+      return null;
     }
 
     return (
       <Row>
         <Column lg="6">
-          <TableDashboard
+          <DashboardTransmissionsTable
             id="__Table_Transmissions_Files"
-            tableId={TABLE_NAMES.DASHBOARD_TRANSMISSIONS_FILES}
-            data={dataCounters?.fileTransmissions}
-            altData={[]}
-            date={dateId}
-            loading={isLoadingData}
             title="Transmissions / BUs by File"
-            emptyMessage="None"
+            orgSid={orgSid}
+            startDate={fromDate.value}
+            endDate={toDate.value}
+            items={dashboardPeriodCounts.fileTransmissions ?? []}
           />
         </Column>
         <Column lg="6">
-          <TableDashboard
+          <DashboardErrorsTable
             id="__Table_Errors_Files"
-            tableId={TABLE_NAMES.DASHBOARD_ERRORS_FILES}
-            data={dataCounters?.fileProcessErrors}
-            altData={[]}
-            date={dateId}
-            loading={isLoadingData}
             title="Failed Files by File"
-            emptyMessage="None"
+            orgSid={orgSid}
+            startDate={fromDate.value}
+            endDate={toDate.value}
+            items={dashboardPeriodCounts.fileProcessErrors ?? []}
           />
         </Column>
       </Row>
@@ -119,34 +237,30 @@ const DashboardPage = () => {
   };
 
   const renderCountsByPlanSponsor = () => {
-    if (dataCounters?.showCountsByPlanSponsor !== true) {
-      return <span />;
+    if (dashboardPeriodCounts?.showCountsByPlanSponsor !== true) {
+      return null;
     }
 
     return (
       <Row>
         <Column lg="6">
-          <TableDashboard
+          <DashboardTransmissionsTable
             id="__Table_Transmissions_PlanSponsor"
-            tableId={TABLE_NAMES.DASHBOARD_TRANSMISSIONS_PLANSPONSOR}
-            data={dataCounters?.planSponsorTransmissions}
-            altData={[]}
-            date={dateId}
-            loading={isLoadingData}
             title="Transmissions / BUs by Plan Sponsor"
-            emptyMessage="None"
+            orgSid={orgSid}
+            startDate={fromDate.value}
+            endDate={toDate.value}
+            items={dashboardPeriodCounts.planSponsorTransmissions ?? []}
           />
         </Column>
         <Column lg="6">
-          <TableDashboard
+          <DashboardErrorsTable
             id="__Table_Errors_PlanSponsor"
-            tableId={TABLE_NAMES.DASHBOARD_ERRORS_PLANSPONSOR}
-            data={dataCounters?.planSponsorProcessErrors}
-            altData={[]}
-            date={dateId}
-            loading={isLoadingData}
             title="Failed Files by Plan Sponsor"
-            emptyMessage="None"
+            orgSid={orgSid}
+            startDate={fromDate.value}
+            endDate={toDate.value}
+            items={dashboardPeriodCounts.planSponsorProcessErrors ?? []}
           />
         </Column>
       </Row>
@@ -169,7 +283,7 @@ const DashboardPage = () => {
 
             <br />
 
-            {dateId === 'custom' && (
+            {dateRangeType === DATE_OPTION_NAME.custom && (
               <Row>
                 <Column lg="6" />
                 <Column lg="6">
@@ -187,11 +301,11 @@ const DashboardPage = () => {
                 id="__Transmissions__Billing_Units"
                 title="Transmissions"
                 subtitle="Billing Units."
-                value={dataCounters?.transmissionCount ?? 0}
-                total={dataCounters?.billingUnitCount ?? 0}
+                value={dashboardPeriodCounts?.transmissionCount ?? 0}
+                total={dashboardPeriodCounts?.billingUnitCount ?? 0}
                 color="#219653"
                 noDataLabel="No Transmissions"
-                loading={isLoadingData}
+                loading={loadingDashboardPeriods || loadingCustomDashboardPeriod}
               />
             </Column>
 
@@ -200,42 +314,48 @@ const DashboardPage = () => {
                 id="__Failed__Files__Billing_Units"
                 title="Failed Files"
                 subtitle="Billing Units."
-                value={dataCounters?.processErrorCount ?? 0}
-                total={dataCounters?.billingUnitCount ?? 0}
+                value={dashboardPeriodCounts?.processErrorCount ?? 0}
+                total={dashboardPeriodCounts?.billingUnitCount ?? 0}
                 color="#A80000"
                 noDataLabel="No Failed"
-                loading={isLoadingData}
+                loading={loadingDashboardPeriods || loadingCustomDashboardPeriod}
               />
             </Column>
           </StyledRow>
 
           <Row>
             <Column lg="6">
-              <TableDashboard
+              <TransmissionsByVendorTable
                 id="__Table_Transmissions_Vendor"
-                tableId={TABLE_NAMES.DASHBOARD_TRANSMISSIONS_VENDOR}
-                data={dataCounters?.vendorTransmissions}
-                altData={dataCounters?.vendorTransmissionsBySpec}
-                fromDate={fromDate.value}
-                toDate={toDate.value}
-                date={dateId}
-                loading={isLoadingData}
                 title="Transmissions / BUs by Vendor"
-                emptyMessage="None"
+                orgSid={orgSid}
+                startDate={fromDate.value}
+                endDate={toDate.value}
+                items={dashboardPeriodCounts?.vendorTransmissions ?? []}
+                itemsBySpec={dashboardPeriodCounts?.vendorTransmissionsBySpec ?? []}
               />
+              {/* <TableDashboard */}
+              {/*  id="__Table_Transmissions_Vendor" */}
+              {/*  data={dashboardPeriodCounts?.vendorTransmissions} */}
+              {/*  altData={dashboardPeriodCounts?.vendorTransmissionsBySpec} */}
+              {/*  fromDate={fromDate.value} */}
+              {/*  toDate={toDate.value} */}
+              {/*  date={dateId} */}
+              {/*  loading={isLoadingData} */}
+              {/*  title="Transmissions / BUs by Vendor" */}
+              {/*  titleRedirectPage="transmissions" */}
+              {/*  sortButtons={['Sort', 'Specs']} */}
+              {/*  emptyMessage="None" */}
+              {/* /> */}
             </Column>
             <Column lg="6">
-              <TableDashboard
+              <DashboardErrorsTable
                 id="__Table_Errors_Vendor"
-                tableId={TABLE_NAMES.DASHBOARD_ERRORS_VENDOR}
-                data={dataCounters?.vendorProcessErrors}
-                altData={[]}
-                date={dateId}
-                fromDate={fromDate.value}
-                toDate={toDate.value}
-                loading={isLoadingData}
                 title="Failed Files by Vendor"
-                emptyMessage="None"
+                orgSid={orgSid}
+                startDate={fromDate.value}
+                endDate={toDate.value}
+                items={dashboardPeriodCounts?.vendorProcessErrors ?? []}
               />
             </Column>
           </Row>

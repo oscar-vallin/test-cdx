@@ -3,6 +3,12 @@ import { Link } from '@fluentui/react';
 import { Box as LayoutBox, Row as LayoutRow, Column as LayoutColumn } from 'src/components/layouts';
 import { Text as ComponentText } from 'src/components/typography/Text';
 
+type RowProps = {
+  left?: boolean;
+  marginH?: boolean;
+  paddingLeft?: boolean;
+};
+
 export const Container = styled(LayoutBox)`
   padding: 0 20px;
   width: 100%;
@@ -40,4 +46,26 @@ export const DownloadLink = styled(Link)`
 export const Text = styled(ComponentText)`
   color: gray;
   font-size: 0.7rem;
+`;
+
+export const CellItemRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+`;
+
+export const StyledCell = styled(LayoutRow)<RowProps>`
+  font-size: 0.75rem;
+  width: 100%;
+  margin-left: ${({ marginH }) => (marginH ? `${marginH}px` : '0px')};
+  margin-right: ${({ marginH }) => (marginH ? `${marginH}px` : '0px')};
+`;
+
+export const StyledColumn = styled(LayoutColumn)<RowProps>`
+  width: 100%;
+  padding-left: ${({ paddingLeft }) => (paddingLeft ? `${paddingLeft}px` : '0px')};
+  margin-left: ${({ marginH }) => (marginH ? `${marginH}px` : '0px')};
+  margin-right: ${({ marginH }) => (marginH ? `${marginH}px` : '0px')};
 `;

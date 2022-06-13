@@ -10,7 +10,6 @@ import {
   SelectionMode,
 } from '@fluentui/react';
 
-import { StyledContainer } from 'src/components/tables/Table/Table.styles';
 import {
   NullHandling,
   PageableInput,
@@ -229,9 +228,9 @@ export const UserAuditLogsTable = ({ id, cols, lazyQuery, getItems, tableFilters
       />
       <Container>
         <Box id={`${id}_TableWrap`}>
-          <StyledContainer id="Table_Detailed" style={{ width: '100%', height: 'calc(100vh - 325px)' }}>
+          <div id="Table_Detailed" style={{ width: '100%', height: 'calc(100vh - 325px)' }}>
             {renderTable()}
-          </StyledContainer>
+          </div>
           <Paginator pagingInfo={pagingInfo} onPageChange={onPageChange} />
         </Box>
       </Container>

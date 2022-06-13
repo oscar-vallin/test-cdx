@@ -111,7 +111,7 @@ export const ScheduleHeader = ({ id, currentView, selectedDate, onChangeDate, on
 
   const renderTodayButton = () => {
     return (
-      <StyledButtonAction id="ButtonToday" onClick={handleSelectToday} icon="today" disabled={false}>
+      <StyledButtonAction id="ButtonToday" onClick={handleSelectToday} iconName="GotoToday" disabled={false}>
         Today
       </StyledButtonAction>
     );
@@ -214,20 +214,20 @@ export const ScheduleHeader = ({ id, currentView, selectedDate, onChangeDate, on
       <UpDownContainer>
         {isCurrentViewDay(currentView) && (
           <>
-            <StyledButtonAction id="ButtonPrev" onClick={handlePrevDay} icon="chromeBack" disabled={false} />
-            <StyledButtonAction id="ButtonNext" onClick={handleNextDay} icon="chromeNext" disabled={false} />
+            <StyledButtonAction id="ButtonPrev" onClick={handlePrevDay} iconName="ChromeBack" disabled={false} />
+            <StyledButtonAction id="ButtonNext" onClick={handleNextDay} iconName="ChromeBackMirrored" disabled={false} />
           </>
         )}
         {isCurrentViewWeek(currentView) && (
           <>
-            <StyledButtonAction id="ButtonPrev" onClick={handlePrevWeek} icon="chromeBack" disabled={false} />
-            <StyledButtonAction id="ButtonNext" onClick={handleNextWeek} icon="chromeNext" disabled={false} />
+            <StyledButtonAction id="ButtonPrev" onClick={handlePrevWeek} iconName="ChromeBack" disabled={false} />
+            <StyledButtonAction id="ButtonNext" onClick={handleNextWeek} iconName="ChromeBackMirrored" disabled={false} />
           </>
         )}
         {isCurrentViewMonth(currentView) && (
           <>
-            <StyledButtonAction id="ButtonUp" onClick={handlePrevMonth} icon="up" disabled={false} />
-            <StyledButtonAction id="ButtonDown" onClick={handleNextMonth} icon="down" disabled={false} />
+            <StyledButtonAction id="ButtonUp" onClick={handlePrevMonth} iconName="SortUp" disabled={false} />
+            <StyledButtonAction id="ButtonDown" onClick={handleNextMonth} iconName="SortDown" disabled={false} />
           </>
         )}
       </UpDownContainer>
