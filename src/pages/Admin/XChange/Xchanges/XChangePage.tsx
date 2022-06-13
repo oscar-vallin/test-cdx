@@ -22,6 +22,7 @@ import { PageHeader } from 'src/containers/headers/PageHeader';
 import { ROUTE_XCHANGE_LIST } from 'src/data/constants/RouteConstants';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useXchangeProfileLazyQuery, XchangeConfigSummary } from 'src/data/services/graphql';
+import { yyyyMMdd } from 'src/utils/CDXUtils';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { InputText } from 'src/components/inputs/InputText';
 import { SetupStyled, CardStyled, ContainerInput, CircleStyled } from './XchangePage.styles';
@@ -50,6 +51,7 @@ const XChangePage = () => {
   const [filterXchange, setFilterXchange] = useState<XchangeConfigSummary[]>([]);
   const [tooltipContent, setTooltipContent] = useState<TooltipsProps>();
   const [globalXchangeAlerts, setGlobalXchangeAlerts] = useState<GlobalXchangeAlertsProps>();
+  const [individualXchangeAlerts, setIndividualXchangeAlerts] = useState<GlobalXchangeAlertsProps[]>();
 
   const fetchData = () => {
     xchangeProfile({
@@ -74,7 +76,25 @@ const XChangePage = () => {
     });
   };
 
-  const tooltipHostContent = (filesProcessed: number, type: string, date: null) => {
+  const updateDateFormat = (date: Date) => {
+    const currentDate = new Date(date);
+    const formattedDate = currentDate.toDateString();
+    let hour = currentDate.getHours();
+    let minutes = currentDate.getMinutes();
+
+    const format = hour >= 12 ? 'PM' : 'AM';
+    hour %= 12;
+    hour = hour || 12;
+    minutes = minutes < 10 ? minutes : minutes;
+    const newHour = `${formattedDate} ${hour}:${minutes}${format}`;
+
+    return newHour;
+  };
+
+  const tooltipHostContent = (lastActivity: Date, type?: string, vendorName?: string[] | null) => {
+    const error = type?.trim() !== '';
+    const fromDate = new Date(lastActivity);
+    const vendor = vendorName && vendorName[0];
     let currentColor: string;
     if (type === 'UAT') {
       currentColor = 'purple';
@@ -83,12 +103,38 @@ const XChangePage = () => {
     } else {
       currentColor = 'orange';
     }
+
+    const currentDate = updateDateFormat(lastActivity);
+    const startFormatted = yyyyMMdd(fromDate);
+
     return (
+      // eslint-disable-next-line react/jsx-no-useless-fragment
       <>
-        <span style={{ color: currentColor, fontWeight: 'bold' }}> {filesProcessed} </span>
-        {type} files have been processed in the last 30 days <br />
-        <span style={{ marginLeft: '88px' }}>Last Run: {date}</span> <br /> <br />
-        <Text style={{ marginLeft: '88px' }}> Click for details</Text>
+        {error ? (
+          <>
+            <span style={{ color: currentColor, fontWeight: 'bold' }}> {} </span>
+            {type} files have been processed in the last 30 days <br />
+            <span style={{ marginLeft: '40px' }}>Last Run: {currentDate}</span> <br /> <br />
+            <Link
+              style={{ marginLeft: '88px' }}
+              to={`/file-status?filter=${vendor}&orgSid=${orgSid}&startDate=${startFormatted}`}
+            >
+              {' '}
+              Click for details
+            </Link>
+          </>
+        ) : (
+          <>
+            <span>A file processed on {lastActivity} result in an error</span> <br /> <br />
+            <Link
+              to={`/file-status?filter=${vendor}&orgSid=${orgSid}&startDate=${startFormatted}`}
+              style={{ marginLeft: '40px' }}
+            >
+              {' '}
+              Click for details
+            </Link>
+          </>
+        )}
       </>
     );
   };
@@ -102,12 +148,9 @@ const XChangePage = () => {
       setXchanges(dataXchange.xchangeProfile.xchanges);
       setTooltipContent(dataXchange.xchangeProfile.tooltips);
       setGlobalXchangeAlerts(dataXchange.xchangeProfile.globalXchangeAlerts);
+      setIndividualXchangeAlerts(dataXchange.xchangeProfile.individualXchangeAlerts);
     }
   }, [dataXchange, loadingXchange]);
-
-  useEffect(() => {
-    console.log(dataXchange);
-  }, [xchanges]);
 
   useEffect(() => {
     if (xchanges.length > 0) {
@@ -127,70 +170,53 @@ const XChangePage = () => {
 
     return (
       <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
-        <Text>{columnVal}</Text>
+        <Link to={`/xchange-list?orgSid=${orgSid}`}>{columnVal}</Link>
         <>
           {column?.key === 'active' && (
             <>
               {node?.uatActivity.filesProcessed > 0 ? (
-                <TooltipHost
-                  content={tooltipHostContent(node?.uatActivity.filesProcessed, 'UAT', node?.uatActivity?.lastActivity)}
-                >
+                <TooltipHost content={tooltipHostContent(node?.uatActivity?.lastActivity, 'UAT', node?.vendorIds)}>
                   <CircleStyled color="purple">{node?.uatActivity.filesProcessed}</CircleStyled>
                 </TooltipHost>
               ) : (
                 <CircleStyled color="gray">0</CircleStyled>
               )}
               {node?.testActivity.filesProcessed > 0 ? (
-                <TooltipHost
-                  content={tooltipHostContent(
-                    node?.testActivity.filesProcessed,
-                    'TEST',
-                    node?.testActivity?.lastActivity
-                  )}
-                >
+                <TooltipHost content={tooltipHostContent(node?.testActivity.lastActivity, 'TEST', node?.vendorIds)}>
                   <CircleStyled color="orange">{node?.testActivity.filesProcessed}</CircleStyled>
                 </TooltipHost>
               ) : (
                 <CircleStyled color="gray">0</CircleStyled>
               )}
               {node?.prodActivity.filesProcessed > 0 ? (
-                <TooltipHost
-                  content={tooltipHostContent(
-                    node?.prodActivity.filesProcessed,
-                    'PROD',
-                    node?.prodActivity?.lastActivity
-                  )}
-                >
-                  <CircleStyled color="blue">{node?.testActivity.filesProcessed}</CircleStyled>
+                <TooltipHost content={tooltipHostContent(node?.prodActivity?.lastActivity, 'PROD', node?.vendorIds)}>
+                  <CircleStyled color="blue">{node?.prodActivity.filesProcessed}</CircleStyled>
                 </TooltipHost>
               ) : (
                 <CircleStyled color="gray">0</CircleStyled>
+              )}
+              {node?.errorActivity && node?.errorActivity.filesProcessed > 0 && (
+                <TooltipHost content={tooltipHostContent(node?.errorActivity?.lastActivity, '', node?.vendorIds)}>
+                  <IconButton iconProps={{ iconName: 'FileBug' }} style={{ color: 'red' }} />
+                </TooltipHost>
               )}
             </>
           )}
           {column?.key === 'vendorIds' && (
             <>
               {node?.hasAlerts && (
-                <TooltipHost id="index" content={tooltipContent?.hasAlerts}>
-                  <IconButton iconProps={{ iconName: 'Ringer' }} style={{ color: 'black' }} aria-describedby="index" />
-                </TooltipHost>
-              )}
-              {node?.hasAlerts && (
-                <TooltipHost id="index" content={tooltipContent?.implementationPending}>
-                  <IconButton
-                    iconProps={{ iconName: 'Warning' }}
-                    style={{ color: 'orange' }}
-                    aria-describedby="index"
-                  />
+                <TooltipHost content={tooltipContent?.hasAlerts}>
+                  <IconButton iconProps={{ iconName: 'Ringer' }} style={{ color: 'black' }} />
                 </TooltipHost>
               )}
               {node?.implementationPending && (
-                <TooltipHost id="index" content={tooltipContent?.hasUnpublishedChanges}>
-                  <IconButton
-                    iconProps={{ iconName: '6PointStar' }}
-                    style={{ color: 'red' }}
-                    aria-describedby="index"
-                  />
+                <TooltipHost content={tooltipContent?.implementationPending}>
+                  <IconButton iconProps={{ iconName: 'Warning' }} style={{ color: 'orange' }} />
+                </TooltipHost>
+              )}
+              {node?.hasUnpublishedChanges && (
+                <TooltipHost content={tooltipContent?.hasUnpublishedChanges}>
+                  <IconButton iconProps={{ iconName: '6PointStar' }} style={{ color: 'red' }} />
                 </TooltipHost>
               )}
             </>
@@ -200,7 +226,7 @@ const XChangePage = () => {
     );
   };
 
-  const onRenderAction = () => <IconButton iconProps={{ iconName: 'Trash' }} title="View Org Details" />;
+  const onRenderAction = () => <IconButton iconProps={{ iconName: 'Trash' }} />;
 
   const columns: IColumn[] = [
     {
@@ -313,13 +339,32 @@ const XChangePage = () => {
             <Row>
               <Text style={{ fontWeight: 'bold' }}>Alert on all Xchanges</Text>
             </Row>
-            <Spacing margin="normal"/>
+            <Spacing margin="normal" />
             <Link to={`/xchange-alerts?orgSid=${orgSid}`}>({globalXchangeAlerts?.numSubscribers}) Subscribers</Link>
           </Spacing>
           <Spacing margin="normal">
             <Row>
               <Text style={{ fontWeight: 'bold' }}>Individual Xchange Alerts</Text>
             </Row>
+            <Spacing margin="normal" />
+            {individualXchangeAlerts?.map((individualXchange: GlobalXchangeAlertsProps, index: number) => (
+              <Spacing margin={{ bottom: 'normal' }} key={index}>
+                <Row>
+                  <Column lg="8">
+                    <Link to={`/xchange-alerts?orgSid=${orgSid}`} style={{ fontSize: '12px' }}>
+                      {' '}
+                      {individualXchange.coreFilename}{' '}
+                    </Link>
+                  </Column>
+                  <Column lg="4">
+                    <Link to={`/xchange-alerts?orgSid=${orgSid}`} style={{ fontSize: '12px' }}>
+                      {' '}
+                      ({individualXchange.numSubscribers}) Subscriber
+                    </Link>
+                  </Column>
+                </Row>
+              </Spacing>
+            ))}
           </Spacing>
         </CardStyled>
         <Spacing margin={{ top: 'normal' }}>
