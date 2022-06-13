@@ -49,10 +49,8 @@ export const CellLink = styled(Link)`
 `;
 
 export const SpecText = styled(Text)`
-  display: flex;
+  display: inline;
   margin-left: 5px;
-  justify-content: 'flex-start';
-  align-items: center;
   color: ${({ theme }) => theme.colors.neutralSecondary};
   font-size: ${({ theme }) => theme.fontSizes.small};
 `;
@@ -67,6 +65,10 @@ export const EmptyTable = styled(Text)`
   margin-top: 10px;
   margin-left: 10px;
   margin-bottom: 40px;
+`;
+
+export const ButtonWrapper = styled.div`
+  margin: 5px;
 `;
 
 type DateRangeButtonProps = {

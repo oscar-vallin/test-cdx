@@ -25,7 +25,9 @@ import {
   useDashboardPeriodsLazyQuery,
 } from 'src/data/services/graphql';
 import { DateRangeButton, StyledRow } from './DashboardPage.styles';
-import { DashboardTable } from './DashboardTable';
+import { DashboardErrorsTable } from 'src/pages/Dashboard/DashboardErrorsTable';
+import { TransmissionsByVendorTable } from 'src/pages/Dashboard/TransmissionsByVendorTable';
+import { DashboardTransmissionsTable } from 'src/pages/Dashboard/DashboardTransmissionsTable';
 
 const DATE_OPTION_NAME = {
   today: 'today',
@@ -211,10 +213,9 @@ const DashboardPage = () => {
     return (
       <Row>
         <Column lg="6">
-          <DashboardTable
+          <DashboardTransmissionsTable
             id="__Table_Transmissions_Files"
             title="Transmissions / BUs by File"
-            linkTo="transmissions"
             orgSid={orgSid}
             startDate={fromDate.value}
             endDate={toDate.value}
@@ -222,10 +223,9 @@ const DashboardPage = () => {
           />
         </Column>
         <Column lg="6">
-          <DashboardTable
+          <DashboardErrorsTable
             id="__Table_Errors_Files"
             title="Failed Files by File"
-            linkTo="errors"
             orgSid={orgSid}
             startDate={fromDate.value}
             endDate={toDate.value}
@@ -244,10 +244,9 @@ const DashboardPage = () => {
     return (
       <Row>
         <Column lg="6">
-          <DashboardTable
+          <DashboardTransmissionsTable
             id="__Table_Transmissions_PlanSponsor"
             title="Transmissions / BUs by Plan Sponsor"
-            linkTo="transmissions"
             orgSid={orgSid}
             startDate={fromDate.value}
             endDate={toDate.value}
@@ -255,10 +254,9 @@ const DashboardPage = () => {
           />
         </Column>
         <Column lg="6">
-          <DashboardTable
+          <DashboardErrorsTable
             id="__Table_Errors_PlanSponsor"
             title="Failed Files by Plan Sponsor"
-            linkTo="errors"
             orgSid={orgSid}
             startDate={fromDate.value}
             endDate={toDate.value}
@@ -327,14 +325,14 @@ const DashboardPage = () => {
 
           <Row>
             <Column lg="6">
-              <DashboardTable
+              <TransmissionsByVendorTable
                 id="__Table_Transmissions_Vendor"
                 title="Transmissions / BUs by Vendor"
-                linkTo="transmissions"
                 orgSid={orgSid}
                 startDate={fromDate.value}
                 endDate={toDate.value}
                 items={dashboardPeriodCounts?.vendorTransmissions ?? []}
+                itemsBySpec={dashboardPeriodCounts?.vendorTransmissionsBySpec ?? []}
               />
               {/* <TableDashboard */}
               {/*  id="__Table_Transmissions_Vendor" */}
@@ -351,10 +349,9 @@ const DashboardPage = () => {
               {/* /> */}
             </Column>
             <Column lg="6">
-              <DashboardTable
+              <DashboardErrorsTable
                 id="__Table_Errors_Vendor"
                 title="Failed Files by Vendor"
-                linkTo="errors"
                 orgSid={orgSid}
                 startDate={fromDate.value}
                 endDate={toDate.value}

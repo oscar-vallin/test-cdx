@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Card } from 'src/components/cards';
-import { Button, ButtonAction } from 'src/components/buttons';
+import { Button } from 'src/components/buttons';
 import { Image } from 'src/components/images/Image';
 import { Text } from 'src/components/typography';
 import { Box, Row as LayoutRow, Column as LayoutColumn } from '../../../components/layouts';
@@ -50,8 +50,6 @@ export const StyledButton = styled(Button)`
   align-items: center;
   background: transparent;
 `;
-
-export const StyledButtonIcon = styled(ButtonAction)``;
 
 export const StyledImage = styled(Image)`
   width: 100%;

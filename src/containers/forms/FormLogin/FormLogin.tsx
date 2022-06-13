@@ -96,7 +96,7 @@ const FormLogin = ({ id }: FormLoginProps): ReactElement => {
                         id={`${id}__Card__Row__Column__Button--Edit`}
                         disabled={state.loading}
                         onClick={handleReturnToInitialStep}
-                        icon="edit"
+                        iconName="Edit"
                       >
                         Edit
                       </StyledButtonIcon>

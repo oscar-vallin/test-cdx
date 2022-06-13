@@ -2,7 +2,9 @@ import { DetailsList, DetailsListLayoutMode, IColumn, SelectionMode } from '@flu
 import { DashboardPeriodCount } from 'src/data/services/graphql';
 import { yyyyMMdd } from 'src/utils/CDXUtils';
 import { DarkSeparator } from 'src/components/separators/Separator';
-import { CellLink, CellTotal, DashboardTableWrapper, EmptyTable, HeaderLink, SpecText } from './DashboardPage.styles';
+import { Column, Row } from 'src/components/layouts';
+import { CellLink, DashboardTableWrapper, EmptyTable, HeaderLink, SpecText } from './DashboardPage.styles';
+import React, { ReactElement } from 'react';
 
 type DashboardTableType = {
   id: string;
@@ -12,9 +14,11 @@ type DashboardTableType = {
   orgSid: string;
   startDate: Date;
   endDate: Date;
+  buttons?: ReactElement;
+  renderTotal: (item: DashboardPeriodCount) => ReactElement;
 };
 
-export const DashboardTable = ({ id, title, items, linkTo, orgSid, startDate, endDate }: DashboardTableType) => {
+export const DashboardTable = ({ id, title, items, linkTo, orgSid, startDate, endDate, buttons, renderTotal }: DashboardTableType) => {
   const destinationUrl = () =>
     `/${linkTo}?&orgSid=${orgSid}&startDate=${yyyyMMdd(startDate)}&endDate=${yyyyMMdd(endDate)}`;
 
@@ -25,12 +29,6 @@ export const DashboardTable = ({ id, title, items, linkTo, orgSid, startDate, en
       </CellLink>
       {item.secondaryDescr && <SpecText className="spec-name">spec: {item.secondaryDescr}</SpecText>}
     </>
-  );
-
-  const renderTotal = (item: DashboardPeriodCount) => (
-    <CellTotal>
-      {item.count}/{item.total}
-    </CellTotal>
   );
 
   const columns: IColumn[] = [
@@ -72,9 +70,16 @@ export const DashboardTable = ({ id, title, items, linkTo, orgSid, startDate, en
 
   return (
     <DashboardTableWrapper id={id}>
-      <HeaderLink id={`${id}_header`} to={destinationUrl()} className="dash-table-title">
-        {title}
-      </HeaderLink>
+      <Row>
+        <Column lg="6">
+          <HeaderLink id={`${id}_header`} to={destinationUrl()} className="dash-table-title">
+            {title}
+          </HeaderLink>
+        </Column>
+        <Column lg="6" right>
+          {buttons}
+        </Column>
+      </Row>
       <DarkSeparator />
       {renderTable()}
     </DashboardTableWrapper>
