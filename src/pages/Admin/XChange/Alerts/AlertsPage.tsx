@@ -12,7 +12,7 @@ const AlertsPage = () => {
         <Container>
           <Row>
             <Column lg="6" direction="row">
-              <PageTitle id="__Page_Title_Xchange" title="Alerts" />
+              <PageTitle id="__Page_Title_Alerts" title="Alerts" />
             </Column>
           </Row>
         </Container>
