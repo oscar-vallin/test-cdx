@@ -12,6 +12,7 @@ export const StyledDiv = styled.div`
   margin: 8px 0;
 
   .Text {
+    margin-left: 5px;
     align-items: center;
     display: flex;
     justify-content: flex-start;
@@ -21,6 +22,14 @@ export const StyledDiv = styled.div`
     .ms-TextField {
       margin: 0 5px;
       width: 60px;
+    }
+  }
+
+  & .ms-Checkbox-checkbox {
+    border-color: ${({ theme }) => theme.colors.neutralPrimary};
+    
+    &:hover {
+      border-color: ${({ theme }) => theme.colors.neutralTertiary};    
     }
   }
 `;

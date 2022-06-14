@@ -155,8 +155,7 @@ export const FormOptions = ({ form, group = '_', state, disabled = false, onChan
                     mustNotContainWhiteSpace: !!checked,
                   },
                 })
-              }
-            />
+              }/>
 
             <Text {...(form[group]?.mustNotContainWhiteSpace?.errMsg ? { variant: 'error' } : {})}>
               {form[group]?.mustNotContainWhiteSpace?.label || 'Missing label from form'}
@@ -178,8 +177,7 @@ export const FormOptions = ({ form, group = '_', state, disabled = false, onChan
                     mustFollowLengthRequirements: !!checked,
                   },
                 })
-              }
-            />
+              }/>
 
             <Text {...(form[group]?.mustFollowLengthRequirements?.errMsg ? { variant: 'error' } : {})}>
               {form[group]?.mustFollowLengthRequirements?.label

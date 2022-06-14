@@ -21,4 +21,11 @@ export const StyledTextField = styled(TextField)<StyledTextFieldProps>`
   FormLabel {
     padding-left: 0;
   }
+  .ms-TextField-fieldGroup {
+    background-color: ${({ theme }) => theme.colors.neutralLight};
+    
+    input {
+      color: ${({ theme }) => theme.colors.neutralSecondary};
+    }
+  }
 `;

@@ -1,6 +1,6 @@
 import { ReactElement } from 'react';
 import { useHistory, useLocation } from 'react-router';
-import { Icon } from '@fluentui/react';
+import { Icon, IContextualMenuItem } from '@fluentui/react';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
 import { ProfileMenu } from 'src/containers/menus/ProfileMenu';
 import { ROUTE_EXTERNAL_ORGS, getRouteByApiId, ROUTE_USER_SETTINGS } from 'src/data/constants/RouteConstants';
@@ -20,11 +20,6 @@ import {
   StyledMenuItem,
   StyledOverFlow,
 } from './AppHeader.styles';
-
-const defaultProps = {
-  id: '',
-  children: '',
-};
 
 type AppHeaderProps = {
   onMenuButtonClick: () => void;
@@ -57,7 +52,7 @@ const AppHeader = ({ onMenuButtonClick }: AppHeaderProps): ReactElement => {
     ThemeStore.setUserTheme(fontSize);
   };
 
-  const settingsMenu = [
+  const settingsMenu: IContextualMenuItem[] = [
     {
       id: '__Small_Font_Size_Btn',
       key: 'SMALL',
@@ -207,7 +202,5 @@ const AppHeader = ({ onMenuButtonClick }: AppHeaderProps): ReactElement => {
     </StyledHeader>
   );
 };
-
-AppHeader.defaultProps = defaultProps;
 
 export { AppHeader };

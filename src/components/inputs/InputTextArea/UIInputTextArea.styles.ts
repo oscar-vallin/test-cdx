@@ -4,6 +4,19 @@ export const QuillWrapper = styled.div`
   .ql-toolbar.ql-snow {
     border: none;
     border-bottom: 1px solid #ccc;
+    
+    .ql-header {
+      color: ${({ theme }) => theme.colors.neutralSecondary};
+      .ql-stroke {
+        stroke: ${({ theme }) => theme.colors.neutralSecondary};
+      }
+    }
+    .ql-formats {
+      .ql-stroke,
+      .ql-fill {
+        stroke: ${({ theme }) => theme.colors.neutralSecondary};
+      }     
+    }
   }
   .ql-container.ql-snow {
     border: none;

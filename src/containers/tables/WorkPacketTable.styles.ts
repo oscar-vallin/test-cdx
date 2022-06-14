@@ -33,6 +33,14 @@ export const StyledRow = styled(LayoutRow)`
       padding: 12px 0 13px;
     }
   }
+  
+  .ms-ComboBox {
+    background-color: ${({ theme }) => theme.colors.neutralLight};
+    input {
+      background-color: ${({ theme }) => theme.colors.neutralLight};
+      color: ${({ theme }) => theme.colors.neutralSecondary};
+    }  
+  }
 `;
 
 export const Column = styled(LayoutColumn)``;

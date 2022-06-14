@@ -1,8 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { memo, useEffect, useState } from 'react';
 
-import { ActionButton } from '@fluentui/react';
-import { Button } from 'src/components/buttons';
+import { Button, ButtonAction } from 'src/components/buttons';
 import { useNotification } from 'src/hooks/useNotification';
 import { Column, Container, Row } from 'src/components/layouts';
 import { PageTitle } from 'src/components/typography';
@@ -210,9 +209,9 @@ const _OrganizationSecuritySettingsPage = () => {
                     </FieldRow>
                   ))}
                   {!whitelistFields[0]?.readOnly && whitelistFields[0]?.visible && (
-                    <ActionButton
+                    <ButtonAction
                       id="__Add_Whitelist"
-                      ariaLabel="Add more IP Addresses/Netmask"
+                      title="Add more IP Addresses/Netmask"
                       onClick={() => {
                         const whitelistClone: UiStringField[] = Object.assign([], whitelistFields);
                         const fieldClone: UiStringField = { ...whitelistClone[0] };
@@ -222,7 +221,7 @@ const _OrganizationSecuritySettingsPage = () => {
                       }}
                     >
                       + Add more IP Addresses/Netmask
-                    </ActionButton>
+                    </ButtonAction>
                   )}
                 </FormRow>
                 {updateCmd && (
