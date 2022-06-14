@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { ReactElement, useEffect, useState } from 'react';
-import { MessageBar, MessageBarType, Panel, PanelType, Stack } from '@fluentui/react';
+import { MessageBar, MessageBarType, PanelType, Stack } from '@fluentui/react';
 
 import { Tabs } from 'src/components/tabs/Tabs';
 import { Text } from 'src/components/typography';
-import { PanelBody, PanelHeader, PanelTitle } from 'src/layouts/Panels/Panels.styles';
+import { PanelBody, PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
 
 import { useNotification } from 'src/hooks/useNotification';
 import { GqOperationResponse } from 'src/data/services/graphql';
@@ -133,7 +133,7 @@ const CreateUsersPanel = ({ orgSid, isOpen, onDismiss, onCreateUser }: CreateUse
 
   return (
     <>
-      <Panel
+      <ThemedPanel
         closeButtonAriaLabel="Close"
         type={PanelType.medium}
         headerText="New User"
@@ -219,7 +219,7 @@ const CreateUsersPanel = ({ orgSid, isOpen, onDismiss, onCreateUser }: CreateUse
             />
           )}
         </PanelBody>
-      </Panel>
+      </ThemedPanel>
       <DialogYesNo
         open={showDialog}
         highlightNo

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { PrimaryButton } from '@fluentui/react';
+import { CommandButton, PrimaryButton } from '@fluentui/react';
 
 const getBorderVariant = (theme, variant) => {
   return `1px solid ${variant === 'secondary' ? theme.colors.black : 'transparent'}`;
@@ -48,6 +48,16 @@ export const StyledButton = styled(PrimaryButton)<StyledButtonProps>`
 
   &:disabled {
     background: ${({ theme }) => theme.colors.neutralTertiaryAlt};
+  }
+`;
+
+export const ThemedCommandButton = styled(CommandButton)`
+  .ms-Button-label {
+    color: ${({ theme }) => theme.colors.neutralPrimary};
+    
+    &:hover {
+      color: ${({ theme }) => theme.colors.themeDark};
+    }
   }
 `;
 

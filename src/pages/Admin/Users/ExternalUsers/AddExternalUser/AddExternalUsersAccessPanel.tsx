@@ -1,16 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { ReactElement, useState } from 'react';
-import { MessageBar, MessageBarType, Panel, PanelType, Stack, ITag } from '@fluentui/react';
+import { MessageBar, MessageBarType, PanelType, Stack, ITag } from '@fluentui/react';
+import { useApolloClient } from '@apollo/client';
 
 import { Tabs } from 'src/components/tabs/Tabs';
-import { PanelBody, PanelHeader, PanelTitle } from 'src/layouts/Panels/Panels.styles';
+import { PanelBody, PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
 
 import { useNotification } from 'src/hooks/useNotification';
 import { GqOperationResponse, UserAccountForm } from 'src/data/services/graphql';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
 import { Column } from 'src/components/layouts';
 import { useExternalUsersAccessService } from 'src/pages/Admin/Users/ExternalUsers/ExternalUsersAccess.service';
-import { useApolloClient } from '@apollo/client';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { SectionAccount } from './SectionAccount';
 import SectionAccessManagement from './SectionAccessManagement';
@@ -172,7 +172,7 @@ const AddExternalUsersAccessPanel = ({
 
   return (
     <>
-      <Panel
+      <ThemedPanel
         closeButtonAriaLabel="Close"
         type={PanelType.medium}
         headerText="New User"
@@ -255,7 +255,7 @@ const AddExternalUsersAccessPanel = ({
             />
           </>
         </PanelBody>
-      </Panel>
+      </ThemedPanel>
       <DialogYesNo
         open={showDialog}
         highlightNo

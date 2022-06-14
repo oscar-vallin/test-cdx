@@ -1,10 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { ReactElement, useEffect, useState } from 'react';
 
-import { Checkbox, Label, Panel, PanelType, Spinner, SpinnerSize, Stack } from '@fluentui/react';
+import { PanelType, Spinner, SpinnerSize, Stack } from '@fluentui/react';
 
 import { useNotification } from 'src/hooks/useNotification';
-import { Multiselect } from 'src/components/selects/Multiselect';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { Card } from 'src/components/cards';
 import { Button } from 'src/components/buttons';
@@ -27,11 +26,10 @@ import {
 } from 'src/data/services/graphql';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { UIInputTextReadOnly } from 'src/components/inputs/InputText/InputText';
-import { UIFormLabel } from 'src/components/labels/FormLabel';
 import { UIInputCheck } from 'src/components/inputs/InputCheck';
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
-import { PanelHeader, PanelTitle } from 'src/layouts/Panels/Panels.styles';
+import { PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
 import { PaddedIcon } from 'src/components/inputs/CheckboxList/CheckboxList.styles';
 import { EmptyValue } from 'src/components/inputs/InputText/InputText.styles';
 import { InfoIcon } from 'src/components/badges/InfoIcon';
@@ -40,6 +38,8 @@ import {
   PermissionGroup,
   PermissionGroups,
 } from 'src/pages/Admin/AccessManagement/Policies/AccessPolicyPanel/PermissionGrouping';
+import { UIInputMultiSelect } from 'src/components/inputs/InputDropdown';
+import { CheckBoxAlignBottom } from 'src/components/inputs/InputCheck/UIInputCheck.styles';
 
 const INITIAL_STATE = {
   policyName: '',
@@ -279,7 +279,7 @@ const AccessPolicyPanel = ({
   const renderCheckboxLabel = (uiOption: UiOption): JSX.Element | null => {
     return (
       <>
-        <span>{uiOption?.label}</span>
+        <Text>{uiOption?.label}</Text>
         <InfoIcon id={`__Perm-info-${uiOption?.value}`} tooltip={uiOption?.info} />
       </>
     );
@@ -396,7 +396,7 @@ const AccessPolicyPanel = ({
     }
     return options?.map((option, optIndex) => (
       <Spacing margin={{ top: 'small' }} key={`perm-${optIndex}`}>
-        <Checkbox
+        <CheckBoxAlignBottom
           label={option.label}
           onRenderLabel={() => renderCheckboxLabel(option)}
           checked={state.permissions.includes(option.value)}
@@ -426,7 +426,7 @@ const AccessPolicyPanel = ({
                         <Card id={`__Permissions_${subGroup.id}_Card`} elevation="none">
                           {subGroup.label.length > 0 && (
                             <Spacing margin={{ bottom: 'normal' }}>
-                              <Label id={`__Permissions_${subGroup.id}_Label`}>{subGroup.label}</Label>
+                              <Text variant="bold" id={`__Permissions_${subGroup.id}_Label`}>{subGroup.label}</Text>
                             </Spacing>
                           )}
 
@@ -494,28 +494,16 @@ const AccessPolicyPanel = ({
 
           <Column lg="6">
             {policyForm?.applicableOrgTypes?.visible && state.isTemplate && (
-              <>
-                <UIFormLabel id="applicableOrgTypes" uiField={policyForm?.applicableOrgTypes} />
-
-                <Multiselect
-                  value={applicableOrgTypes}
-                  disabled={policyForm?.applicableOrgTypes?.readOnly ?? true}
-                  options={
-                    policyForm?.options
-                      ?.find((opt) => opt?.key === 'OrgType')
-                      ?.values?.map((opt) => ({ key: opt?.value, text: opt?.label })) || []
-                  }
-                  onChange={(evt, item) => {
-                    setUnsavedChanges(true);
-
-                    const opts = item.selected
-                      ? [...applicableOrgTypes, item.key as string]
-                      : applicableOrgTypes.filter((key) => key !== item.key);
-
-                    setApplicableOrgTypes(opts);
-                  }}
-                />
-              </>
+              <UIInputMultiSelect
+                id="applicableOrgTypes"
+                uiField={policyForm?.applicableOrgTypes}
+                value={applicableOrgTypes}
+                options={policyForm?.options}
+                onChange={(newValue) => {
+                  setUnsavedChanges(true);
+                  setApplicableOrgTypes(newValue);
+                }}
+              />
             )}
           </Column>
         </FormRow>
@@ -549,7 +537,7 @@ const AccessPolicyPanel = ({
 
   return (
     <>
-      <Panel
+      <ThemedPanel
         id="AccessPolicyPanel"
         closeButtonAriaLabel="Close"
         type={PanelType.large}
@@ -579,7 +567,7 @@ const AccessPolicyPanel = ({
             )}
           </Column>
         </Row>
-      </Panel>
+      </ThemedPanel>
       <DialogYesNo
         open={showDialog}
         highlightNo

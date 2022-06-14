@@ -1,10 +1,10 @@
-import { MessageBar, MessageBarType, Panel, PanelType, Spinner, SpinnerSize, Stack } from '@fluentui/react';
+import { MessageBar, MessageBarType, PanelType, Spinner, SpinnerSize, Stack } from '@fluentui/react';
 import { Column } from 'src/components/layouts';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { LightSeparator } from 'src/components/separators/Separator';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
 import React, { useEffect, useState } from 'react';
-import { PanelBody, PanelHeader, PanelTitle } from 'src/layouts/Panels/Panels.styles';
+import { PanelBody, PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
 import {
   CdxWebCommandType,
   GqOperationResponse,
@@ -281,7 +281,7 @@ export const OrgPanel = ({ isOpen, selectedOrgSid, onDismiss, onSave }: OrgPanel
 
   return (
     <>
-      <Panel
+      <ThemedPanel
         id="org-panel"
         closeButtonAriaLabel="Close"
         type={PanelType.medium}
@@ -317,7 +317,7 @@ export const OrgPanel = ({ isOpen, selectedOrgSid, onDismiss, onSave }: OrgPanel
             renderBody()
           )}
         </PanelBody>
-      </Panel>
+      </ThemedPanel>
       <DialogYesNo
         open={showDialog}
         highlightNo

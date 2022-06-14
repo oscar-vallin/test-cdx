@@ -27,6 +27,7 @@ export const FileTitle = styled.span`
   display: inline-block;
   font-size: ${({ theme }) => theme.fontSizes.normal};
   font-weight: ${({ theme }) => theme.fontWeights.semiBold};
+  color: ${({ theme }) => theme.colors.neutralPrimary};
   text-overflow: ellipsis;
   white-space: nowrap;
 

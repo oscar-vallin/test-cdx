@@ -10,7 +10,6 @@ import {
   Spinner,
   SpinnerSize,
   Stack,
-  SearchBox,
   Link,
 } from '@fluentui/react';
 import { EmptyState } from 'src/containers/states';
@@ -39,6 +38,7 @@ import { Paginator } from 'src/components/tables/Paginator';
 import { PageBody } from 'src/components/layouts/Column';
 import { ThemedDetailsList } from 'src/containers/tables/ThemedDetailsList.style';
 import { UIInputCheck } from 'src/components/inputs/InputCheck';
+import { ThemedSearchBox } from 'src/components/inputs/SearchBox/ThemedSearchBox.styles';
 
 const ActiveOrgsPage = () => {
   const { orgSid: orgOwnerSid } = useOrgSid();
@@ -281,7 +281,7 @@ const ActiveOrgsPage = () => {
           <Row>
             <Stack horizontal={true} wrap={true} style={{ width: '100%' }} verticalAlign="end">
               <Column lg="6">
-                <SearchBox
+                <ThemedSearchBox
                   id="Active_Orgs_Input-Search"
                   disabled={false}
                   value={searchText}

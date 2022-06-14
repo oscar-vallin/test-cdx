@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { ReactElement, useEffect, useState } from 'react';
 
-import { MessageBar, MessageBarType, Panel, PanelType, Stack, Checkbox } from '@fluentui/react';
+import { MessageBar, MessageBarType, PanelType, Stack, Checkbox } from '@fluentui/react';
 
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { Button } from 'src/components/buttons';
@@ -19,7 +19,7 @@ import { UIInputMultiSelect } from 'src/components/inputs/InputDropdown';
 import { TagPicker } from 'src/components/inputs/TagPicker';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
 import { useNotification } from 'src/hooks/useNotification';
-import { PanelBody, PanelHeader, PanelTitle } from 'src/layouts/Panels/Panels.styles';
+import { PanelBody, PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
 import { Text } from 'src/components/typography';
 import { orgQuickSearch } from 'src/hooks/useQuickSearch';
 import { useApolloClient } from '@apollo/client';
@@ -457,7 +457,7 @@ const AccessPolicyGroupPanel = ({
 
   return (
     <>
-      <Panel
+      <ThemedPanel
         id="__createGroupPanel"
         closeButtonAriaLabel="Close"
         type={PanelType.large}
@@ -482,7 +482,7 @@ const AccessPolicyGroupPanel = ({
           )}
           {loading ? <Text>Loading...</Text> : renderBody(accessPolicyForm)}
         </PanelBody>
-      </Panel>
+      </ThemedPanel>
       <DialogYesNo
         open={showDialog}
         highlightNo

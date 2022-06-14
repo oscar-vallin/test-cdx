@@ -11,7 +11,9 @@ export const ThemedCommandBar = styled(CommandBar)`
       .ms-Button-label {
         color: ${({ theme }) => theme.colors.neutralPrimary};
         
-        &:hover: ${({ theme }) => theme.colors.themePrimary};
+        &:hover {
+          color: ${({ theme }) => theme.colors.themeDark};
+        }
       }  
     }
   }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { IconButton, List, SearchBox, Stack } from '@fluentui/react';
+import { IconButton, List, Stack } from '@fluentui/react';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Column, Container, Row } from 'src/components/layouts';
 import { PageTitle } from 'src/components/typography';
@@ -19,6 +19,7 @@ import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { InfoIcon } from 'src/components/badges/InfoIcon';
 import { FormLabel } from 'src/components/labels/FormLabel';
 import { Collapse } from 'src/components/collapses/Collapse';
+import { ThemedSearchBox } from 'src/components/inputs/SearchBox/ThemedSearchBox.styles';
 import { useNotification } from 'src/hooks/useNotification';
 import { DarkSeparator, LightSeparator } from 'src/components/separators/Separator';
 import { ButtonAction } from 'src/components/buttons';
@@ -282,7 +283,7 @@ const OntologyPage = () => {
           <Row>
             <Column lg="6">
               <FormLabel id="__Search_Lbl" label="Search" />
-              <SearchBox
+              <ThemedSearchBox
                 placeholder="Search"
                 value={searchText}
                 onChange={(event, text) => setSearchText(text ?? '')}

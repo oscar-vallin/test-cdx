@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { TextField } from '@fluentui/react';
+import { MaskedTextField, TextField } from '@fluentui/react';
 
 type StyledTextFieldProps = {
   autofocus: boolean;
@@ -27,6 +27,24 @@ export const StyledTextField = styled(TextField)<StyledTextFieldProps>`
     
     input {
       color: ${({ theme }) => theme.colors.neutralSecondary};
+      
+      &:disabled {
+        background-color: ${({ theme }) => theme.colors.neutralLight};
+      }
+    }
+  }
+`;
+
+export const ThemedMaskedTextField = styled(MaskedTextField)`
+  .ms-TextField-fieldGroup {
+    background-color: ${({ theme }) => theme.colors.white};
+    
+    input {
+      color: ${({ theme }) => theme.colors.neutralSecondary};
+      
+      &:disabled {
+        background-color: ${({ theme }) => theme.colors.neutralLight};
+      }
     }
   }
 `;
