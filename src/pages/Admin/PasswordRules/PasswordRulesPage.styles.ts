@@ -27,7 +27,6 @@ export const StyledDiv = styled.div`
 
   & .ms-Checkbox-checkbox {
     border-color: ${({ theme }) => theme.colors.neutralPrimary};
-    
     &:hover {
       border-color: ${({ theme }) => theme.colors.neutralTertiary};    
     }

@@ -280,7 +280,7 @@ const AccessPolicyPanel = ({
     return (
       <>
         <span>{uiOption?.label}</span>
-        <InfoIcon id={`__Perm-info-${uiOption?.value}`} tooltip={uiOption?.info} leftPad={true} />
+        <InfoIcon id={`__Perm-info-${uiOption?.value}`} tooltip={uiOption?.info} />
       </>
     );
   };
@@ -387,7 +387,7 @@ const AccessPolicyPanel = ({
               <PaddedIcon iconName="RadioBullet" />
               {option.label}
             </Text>
-            <InfoIcon id={`__Perm-info-${option.value}`} tooltip={option.info} leftPad={true} />
+            <InfoIcon id={`__Perm-info-${option.value}`} tooltip={option.info} />
           </Spacing>
         ));
       }

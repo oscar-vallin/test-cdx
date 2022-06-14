@@ -9,6 +9,7 @@ type StyledTextFieldProps = {
 export const FieldValue = styled.div`
   padding: 0 0 5px 0;
   font: ${({ theme }) => theme.fontStyles.normal};
+  color: ${({ theme }) => theme.colors.neutralSecondary};
 `;
 
 export const EmptyValue = styled.span`
@@ -22,7 +23,7 @@ export const StyledTextField = styled(TextField)<StyledTextFieldProps>`
     padding-left: 0;
   }
   .ms-TextField-fieldGroup {
-    background-color: ${({ theme }) => theme.colors.neutralLight};
+    background-color: ${({ theme }) => theme.colors.white};
     
     input {
       color: ${({ theme }) => theme.colors.neutralSecondary};

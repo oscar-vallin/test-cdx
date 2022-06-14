@@ -19,7 +19,7 @@ export const Column = styled(LayoutColumn)``;
 
 export const ThemedDatePicker = styled(DatePicker)`
   input {
-    background-color: ${({ theme }) => theme.colors.neutralLight};
+    background-color: ${({ theme }) => theme.colors.white};
     color: ${({ theme }) => theme.colors.neutralSecondary};
   }
 `

@@ -14,7 +14,7 @@ export const ThemedDetailsList = styled(DetailsList)`
     color: ${({ theme }) => theme.colors.neutralPrimary};
     &:hover,
     &:active {
-      background-color: ${({ theme }) => theme.colors.neutralLight};
+      background-color: ${({ theme }) => theme.colors.white};
     }
   }
 

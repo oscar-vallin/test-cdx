@@ -35,9 +35,9 @@ export const StyledRow = styled(LayoutRow)`
   }
   
   .ms-ComboBox {
-    background-color: ${({ theme }) => theme.colors.neutralLight};
+    background-color: ${({ theme }) => theme.colors.white};
     input {
-      background-color: ${({ theme }) => theme.colors.neutralLight};
+      background-color: ${({ theme }) => theme.colors.white};
       color: ${({ theme }) => theme.colors.neutralSecondary};
     }  
   }
