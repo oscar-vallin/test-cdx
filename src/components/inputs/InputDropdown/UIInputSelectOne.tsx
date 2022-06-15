@@ -1,9 +1,10 @@
-import { Maybe, UiOptions, UiSelectOneField } from 'src/data/services/graphql';
 import React from 'react';
+import { IComboBox, IComboBoxOption } from '@fluentui/react';
+import { Maybe, UiOptions, UiSelectOneField } from 'src/data/services/graphql';
 import { UIFormLabel } from 'src/components/labels/FormLabel';
-import { ComboBox, IComboBox, IComboBoxOption } from '@fluentui/react';
 import { EmptyValue, FieldValue } from 'src/components/inputs/InputText/InputText.styles';
 import { buildComboBoxOptions } from './DropdownCommon';
+import { ThemedComboBox } from './InputDropdown.styles';
 
 type UIInputMultiSelectType = {
   id: string;
@@ -44,7 +45,7 @@ export const UIInputSelectOne = ({ id, uiField, options, value, onChange, placeh
   }
 
   return (
-    <ComboBox
+    <ThemedComboBox
       id={id}
       style={{
         width: '100%',

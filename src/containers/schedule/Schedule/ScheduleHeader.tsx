@@ -215,13 +215,23 @@ export const ScheduleHeader = ({ id, currentView, selectedDate, onChangeDate, on
         {isCurrentViewDay(currentView) && (
           <>
             <StyledButtonAction id="ButtonPrev" onClick={handlePrevDay} iconName="ChromeBack" disabled={false} />
-            <StyledButtonAction id="ButtonNext" onClick={handleNextDay} iconName="ChromeBackMirrored" disabled={false} />
+            <StyledButtonAction
+              id="ButtonNext"
+              onClick={handleNextDay}
+              iconName="ChromeBackMirrored"
+              disabled={false}
+            />
           </>
         )}
         {isCurrentViewWeek(currentView) && (
           <>
             <StyledButtonAction id="ButtonPrev" onClick={handlePrevWeek} iconName="ChromeBack" disabled={false} />
-            <StyledButtonAction id="ButtonNext" onClick={handleNextWeek} iconName="ChromeBackMirrored" disabled={false} />
+            <StyledButtonAction
+              id="ButtonNext"
+              onClick={handleNextWeek}
+              iconName="ChromeBackMirrored"
+              disabled={false}
+            />
           </>
         )}
         {isCurrentViewMonth(currentView) && (

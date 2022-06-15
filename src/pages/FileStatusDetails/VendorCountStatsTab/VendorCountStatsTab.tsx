@@ -1,8 +1,9 @@
 import { ReactElement } from 'react';
-import { IColumn, DetailsList, DetailsListLayoutMode, SelectionMode } from '@fluentui/react';
+import { IColumn, DetailsListLayoutMode, SelectionMode } from '@fluentui/react';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { RecordCounts } from 'src/data/services/graphql';
 import { EmptyState } from 'src/containers/states';
+import { ThemedDetailsList } from 'src/containers/tables/ThemedDetailsList.style';
 import { StatsRow, StyledVendorHeaderRow, StatsFooter } from '../FileStatusDetails.styles';
 
 const COLUMNS: IColumn[] = [
@@ -41,7 +42,7 @@ const VendorCountStatsTab = ({ items }: VendorCountStatsTabProps): ReactElement 
   if ((items?.recordCount?.length ?? 0) > 0) {
     return (
       <Spacing padding="normal">
-        <DetailsList
+        <ThemedDetailsList
           compact
           items={items?.recordCount || []}
           columns={COLUMNS}

@@ -1,9 +1,8 @@
 import { ReactElement } from 'react';
 import { FormLabel } from 'src/components/labels/FormLabel';
 import { DateState } from 'src/hooks/useDateValue';
-import { DatePicker } from '@fluentui/react';
 import { DayPickerStrings, firstDayOfWeek } from 'src/components/inputs/DateConstants';
-import { Row, Column } from './InputDateRange.styles';
+import { Row, Column, ThemedDatePicker } from './InputDateRange.styles';
 
 type InputDateRangeProps = {
   startDate: DateState;
@@ -24,7 +23,7 @@ const InputDateRange = ({ startDate, endDate, showLabels = true }: InputDateRang
     <Row id="InputDateRange--Row">
       <Column id="InputDateRange--Column--From" lg="6" direction="column">
         {showLabels && <FormLabel label="From" required={true} />}
-        <DatePicker
+        <ThemedDatePicker
           id="Input__From__Date"
           firstDayOfWeek={firstDayOfWeek}
           strings={{
@@ -42,7 +41,7 @@ const InputDateRange = ({ startDate, endDate, showLabels = true }: InputDateRang
       </Column>
       <Column id="InputDateRange--Column--To" lg="6">
         {showLabels && <FormLabel label="To" required={true} />}
-        <DatePicker
+        <ThemedDatePicker
           id="Input__To__Date"
           firstDayOfWeek={firstDayOfWeek}
           strings={{

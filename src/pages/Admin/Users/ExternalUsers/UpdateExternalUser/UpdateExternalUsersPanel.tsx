@@ -1,15 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { ReactElement, useState } from 'react';
-import { CommandButton, MessageBar, MessageBarType, Panel, PanelType, Stack } from '@fluentui/react';
+import { MessageBar, MessageBarType, PanelType, Stack } from '@fluentui/react';
 
 import { Tabs } from 'src/components/tabs/Tabs';
-import { PanelBody, PanelHeader, PanelTitle } from 'src/layouts/Panels/Panels.styles';
+import { PanelBody, PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
 
 import { useNotification } from 'src/hooks/useNotification';
 import { GqOperationResponse, UserAccountForm } from 'src/data/services/graphql';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
 import { Column } from 'src/components/layouts';
 import { useExternalUsersAccessService } from 'src/pages/Admin/Users/ExternalUsers/ExternalUsersAccess.service';
+import { ThemedCommandButton } from 'src/components/buttons/Button/Button.styles';
 import SectionAccessManagement from './SectionAccessManagement';
 import SectionSummary from './SectionSummary';
 
@@ -93,7 +94,7 @@ const UpdateExternalUsersPanel = ({
       <Column lg="6" right>
         {externalUsersAccessService.revokeAccessCmd && (
           <Stack horizontal>
-            <CommandButton
+            <ThemedCommandButton
               id="__RevokeAccess_Button"
               iconProps={{ iconName: 'UserRemove' }}
               text={externalUsersAccessService.revokeAccessCmd.label ?? 'Revoke'}
@@ -153,7 +154,7 @@ const UpdateExternalUsersPanel = ({
 
   return (
     <>
-      <Panel
+      <ThemedPanel
         closeButtonAriaLabel="Close"
         type={PanelType.medium}
         headerText={userName()}
@@ -205,7 +206,7 @@ const UpdateExternalUsersPanel = ({
             onClickTab={handleTabChange}
           />
         </PanelBody>
-      </Panel>
+      </ThemedPanel>
       <DialogYesNo
         open={showUnsavedChangesDialog}
         highlightNo

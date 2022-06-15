@@ -13,4 +13,8 @@ export const StyledTagPicker = styled(TagPicker)`
       color: ${({ theme }) => theme.colors.white};
     }
   }
+  
+  input {
+      color: ${({ theme }) => theme.colors.neutralSecondary};
+  }
 `;

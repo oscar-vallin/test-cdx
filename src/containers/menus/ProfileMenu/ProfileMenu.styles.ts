@@ -7,6 +7,7 @@ import { Box, Row as LayoutRow, Column as LayoutColumn } from '../../../componen
 
 export const StyledBox = styled(Box)<StyledBoxProps>`
   padding: 0px 0px;
+  height: 100%;
 `;
 
 type StyledBoxProps = {

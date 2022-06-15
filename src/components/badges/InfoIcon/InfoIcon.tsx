@@ -1,18 +1,12 @@
-import { FontIcon, TooltipHost } from '@fluentui/react';
+import { TooltipHost } from '@fluentui/react';
+import { BlueInfo } from 'src/components/badges/InfoIcon/InfoIcon.styles';
 
 type InfoIconType = {
   id: string;
   tooltip?: string | null;
-  leftPad?: boolean;
 };
 
-export const InfoIcon = ({ id, tooltip, leftPad = true }: InfoIconType) => {
-  const charPad = (): string => {
-    if (leftPad) {
-      return '\xa0';
-    }
-    return '';
-  };
+export const InfoIcon = ({ id, tooltip }: InfoIconType) => {
 
   if (tooltip) {
     return (
@@ -24,8 +18,7 @@ export const InfoIcon = ({ id, tooltip, leftPad = true }: InfoIconType) => {
         id={id}
         calloutProps={{ gapSpace: 0 }}
       >
-        {charPad()}
-        <FontIcon aria-describedby={id} iconName="Info" style={{ cursor: 'pointer' }} />
+        <BlueInfo aria-describedby={id} iconName="Info" style={{ cursor: 'pointer' }} />
       </TooltipHost>
     );
   }

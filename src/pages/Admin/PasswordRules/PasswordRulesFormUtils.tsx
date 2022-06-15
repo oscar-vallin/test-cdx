@@ -1,4 +1,5 @@
-import { Checkbox, MaskedTextField } from '@fluentui/react';
+import { Checkbox } from '@fluentui/react';
+import { ThemedMaskedTextField } from 'src/components/inputs/InputText/InputText.styles';
 import { Column, Row } from 'src/components/layouts';
 import { Text } from 'src/components/typography';
 import { PasswordComplexity, PasswordRules, PasswordRulesForm } from 'src/data/services/graphql';
@@ -80,7 +81,7 @@ export const FormInput = ({
   errorMessage,
   onChange,
 }: FormInputProps) => (
-  <MaskedTextField
+  <ThemedMaskedTextField
     maskFormat={{
       '*': /[0-9_]/,
     }}
@@ -155,8 +156,7 @@ export const FormOptions = ({ form, group = '_', state, disabled = false, onChan
                     mustNotContainWhiteSpace: !!checked,
                   },
                 })
-              }
-            />
+              }/>
 
             <Text {...(form[group]?.mustNotContainWhiteSpace?.errMsg ? { variant: 'error' } : {})}>
               {form[group]?.mustNotContainWhiteSpace?.label || 'Missing label from form'}
@@ -178,8 +178,7 @@ export const FormOptions = ({ form, group = '_', state, disabled = false, onChan
                     mustFollowLengthRequirements: !!checked,
                   },
                 })
-              }
-            />
+              }/>
 
             <Text {...(form[group]?.mustFollowLengthRequirements?.errMsg ? { variant: 'error' } : {})}>
               {form[group]?.mustFollowLengthRequirements?.label

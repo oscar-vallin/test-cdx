@@ -12,11 +12,8 @@ type DashboardErrorsTableType = {
   endDate: Date;
 };
 
-export const DashboardErrorsTable = ({id, title, items, orgSid, startDate, endDate}: DashboardErrorsTableType) => {
-
-  const renderTotal = (item: DashboardPeriodCount) => (
-    <CellTotal>{item.count}</CellTotal>
-  );
+export const DashboardErrorsTable = ({ id, title, items, orgSid, startDate, endDate }: DashboardErrorsTableType) => {
+  const renderTotal = (item: DashboardPeriodCount) => <CellTotal>{item.count}</CellTotal>;
 
   return (
     <DashboardTable
@@ -30,4 +27,4 @@ export const DashboardErrorsTable = ({id, title, items, orgSid, startDate, endDa
       renderTotal={renderTotal}
     />
   );
-}
+};

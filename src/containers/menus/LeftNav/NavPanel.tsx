@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ActionButton } from '@fluentui/react';
 import { theme } from 'src/styles/themes/theme';
-import { NavList, NavListItem } from './LeftNav.styles';
+import { NavHeader, NavList, NavListItem } from './LeftNav.styles';
 
 export type NavItemType = {
   id: string;
@@ -29,14 +29,13 @@ export const NavPanel = ({ id, label, elements, expanded, onExpand, onCollapse }
 
   return (
     <div data-name={label} className={isOpen ? 'is-expanded' : ''}>
-      <div>
+      <NavHeader>
         <ActionButton
           id={id}
           iconProps={{
             iconName: isOpen ? 'ChevronDown' : 'ChevronRight',
             style: {
               fontSize: theme.fontSizes.small,
-              color: theme.colors.black,
             },
           }}
           style={{
@@ -55,7 +54,7 @@ export const NavPanel = ({ id, label, elements, expanded, onExpand, onCollapse }
         >
           {label}
         </ActionButton>
-      </div>
+      </NavHeader>
       {isOpen && (
         <NavList>
           {elements.map((elem, index) => (

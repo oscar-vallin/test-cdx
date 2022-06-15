@@ -12,10 +12,18 @@ type DashboardTransmissionsTableType = {
   endDate: Date;
 };
 
-export const DashboardTransmissionsTable = ({id, title, items, orgSid, startDate, endDate}: DashboardTransmissionsTableType) => {
-
+export const DashboardTransmissionsTable = ({
+  id,
+  title,
+  items,
+  orgSid,
+  startDate,
+  endDate,
+}: DashboardTransmissionsTableType) => {
   const renderTotal = (item: DashboardPeriodCount) => (
-    <CellTotal>{item.count}/{item.total}</CellTotal>
+    <CellTotal>
+      {item.count}/{item.total}
+    </CellTotal>
   );
 
   return (
@@ -30,4 +38,4 @@ export const DashboardTransmissionsTable = ({id, title, items, orgSid, startDate
       renderTotal={renderTotal}
     />
   );
-}
+};

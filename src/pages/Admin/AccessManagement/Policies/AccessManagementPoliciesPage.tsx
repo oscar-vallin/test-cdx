@@ -4,7 +4,6 @@ import React, { useState, useEffect, memo } from 'react';
 import {
   PrimaryButton,
   DefaultButton,
-  DetailsList,
   DetailsListLayoutMode,
   SelectionMode,
   Dialog,
@@ -39,6 +38,7 @@ import { ROUTE_ACCESS_MANAGEMENT_POLICIES } from 'src/data/constants/RouteConsta
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { PageBody } from 'src/components/layouts/Column';
+import { ThemedDetailsList } from 'src/containers/tables/ThemedDetailsList.style';
 import { StyledCommandButton } from '../AccessManagement.styles';
 import { AccessPolicyPanel } from './AccessPolicyPanel';
 
@@ -245,7 +245,7 @@ const _AccessManagementPoliciesPage = () => {
         return <EmptyState title="No policies found" description={emptyText} actions={createPolicyButton()} />;
       }
       return (
-        <DetailsList
+        <ThemedDetailsList
           items={policies}
           selectionMode={SelectionMode.none}
           columns={columns}

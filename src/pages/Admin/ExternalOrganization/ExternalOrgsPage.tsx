@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 
 import {
   Text,
-  DetailsList,
   Spinner,
   IColumn,
   DetailsListLayoutMode,
@@ -23,6 +22,7 @@ import { PageHeader } from 'src/containers/headers/PageHeader';
 import { PageTitle } from 'src/components/typography';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { PageBody } from 'src/components/layouts/Column';
+import { ThemedDetailsList } from 'src/containers/tables/ThemedDetailsList.style';
 
 const ExternalOrgsPage = () => {
   const { orgSid } = useOrgSid();
@@ -132,7 +132,7 @@ const ExternalOrgsPage = () => {
       return null;
     }
     return (
-      <DetailsList
+      <ThemedDetailsList
         items={orgs}
         selectionMode={SelectionMode.none}
         columns={columns}

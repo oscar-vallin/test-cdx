@@ -1,8 +1,9 @@
 import React from 'react';
+import { ComboBox, IComboBoxOption } from '@fluentui/react';
 import { Card } from 'src/components/cards';
 import { InputText } from 'src/components/inputs/InputText';
 import { InputDateRange } from 'src/components/inputs/InputDateRange';
-import { ComboBox, IComboBoxOption } from '@fluentui/react';
+import { FormLabel } from 'src/components/labels/FormLabel';
 import { Column, Container, FilterSection, StyledRow } from './WorkPacketTable.styles';
 
 type TableFilterParams = {
@@ -22,6 +23,8 @@ export const TableFilters = ({
   evenTypesDropdownItems,
   eventType,
 }: TableFilterParams) => {
+  const renderLabel = () => <FormLabel id={`${id}__Event_Label`} label="Event" />;
+
   return (
     <FilterSection id={`${id}-filters`}>
       <Container>
@@ -45,6 +48,7 @@ export const TableFilters = ({
                   label="Event"
                   defaultSelectedKey="All"
                   options={evenTypesDropdownItems}
+                  onRenderLabel={renderLabel}
                   {...eventType}
                 />
               </Column>

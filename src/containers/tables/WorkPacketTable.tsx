@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import {
-  DetailsList,
   DetailsListLayoutMode,
   IColumn,
   SelectionMode,
@@ -23,6 +22,7 @@ import { useWorkPacketColumns, WorkPacketColumn } from './WorkPacketColumns';
 import { TableFilters } from './TableFilters';
 import { EmptyState } from '../states';
 import { Box, Container } from './WorkPacketTable.styles';
+import { ThemedDetailsList } from './ThemedDetailsList.style';
 
 type WorkPacketParams = {
   id: string;
@@ -252,7 +252,7 @@ export const WorkPacketTable = ({
     if (items && items.length > 0) {
       return (
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
-          <DetailsList
+          <ThemedDetailsList
             className={classNames.root}
             items={items}
             columns={columns}

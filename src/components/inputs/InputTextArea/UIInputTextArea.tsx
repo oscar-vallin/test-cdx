@@ -1,9 +1,8 @@
 import React from 'react';
 import { UiStringField } from 'src/data/services/graphql';
-import { TextField } from '@fluentui/react';
 import { UIFormLabel } from 'src/components/labels/FormLabel';
 import ReactQuill from 'react-quill';
-import { QuillWrapper, ReadOnlyTextArea } from './UIInputTextArea.styles';
+import { QuillWrapper, ReadOnlyTextArea, ThemedTextField } from './UIInputTextArea.styles';
 
 type UIInputTextAreaType = {
   id: string;
@@ -108,7 +107,7 @@ const UIInputTextArea = ({
   }
 
   return (
-    <TextField
+    <ThemedTextField
       id={id}
       type={type ?? 'text'}
       value={value}

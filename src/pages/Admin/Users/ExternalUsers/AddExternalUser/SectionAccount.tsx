@@ -1,7 +1,7 @@
 import { UIInputText } from 'src/components/inputs/InputText';
 import { Column } from 'src/components/layouts';
 import { useFormInputValue } from 'src/hooks/useInputValue';
-import { Link, Checkbox } from '@fluentui/react';
+import { Link } from '@fluentui/react';
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
 import { UserAccount, UserAccountForm, CdxWebCommandType } from 'src/data/services/graphql';
 import { WizardBody } from 'src/layouts/Panels/Panels.styles';
@@ -12,6 +12,7 @@ import { Spacing } from 'src/components/spacings/Spacing';
 import { useState } from 'react';
 import { MenuSeparator } from './AddExternalUsersAccessPanel.styles';
 import AddExternalUsersAccessFooter from './AddExternalUsersAccessFooter';
+import { UIInputCheck } from 'src/components/inputs/InputCheck';
 
 type SectionAccountProps = {
   form: UserAccountForm;
@@ -217,10 +218,10 @@ const SectionAccount = ({
             <FormRow>
               {form.sendActivationEmail?.visible && (
                 <Column lg="12">
-                  <Checkbox
+                  <UIInputCheck
                     id="__userSendActivation"
-                    label={form?.sendActivationEmail?.label}
-                    checked={sendEmail}
+                    uiField={form?.sendActivationEmail}
+                    value={sendEmail}
                     onChange={onCheck}
                   />
                 </Column>

@@ -105,11 +105,11 @@ export const StyledIconButton = styled(IconButton)`
     color: ${({ theme }) => theme.colors.white};
     padding: 0px 8px;
     min-width: 0px;
+    height: 100%;
 
     &:hover,
     &.is-expanded {
-      background: ${({ theme }) => theme.colors.white} !important;
-      color: ${({ theme }) => theme.colors.themePrimary} !important;
+      background: rgba(0, 0, 0, 0.15);
     }
   }
 `;
@@ -125,19 +125,13 @@ export const StyledDiv = styled.div`
 export const StyledMenuItem = styled.div<SelectableProps>`
   padding-left: 5px;
   padding-right: 5px;
-  color: ${({ selected, theme }) => (selected ? theme.colors.themePrimary : theme.colors.black)};
+  # color: ${({ selected, theme }) => (selected ? theme.colors.themePrimary : theme.colors.black)};
+  color: #201F1E;
   font-weight: ${({ selected }) => (selected ? '700' : '400')};
 `;
 
 export const StyledOverFlow = styled.div`
   width: 180px;
   overflow: hidden;
-<<<<<<< HEAD
-=======
   width: 507px;
-`;
-export const StyledOverFlowExt = styled.div`
-  overflow: hidden;
-  width: 260px;
->>>>>>> c967fb1aaefdde3392b0a2887f7ff8c90ac229ff
 `;

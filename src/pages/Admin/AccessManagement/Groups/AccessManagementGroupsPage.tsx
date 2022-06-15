@@ -2,7 +2,6 @@
 import React, { memo, useEffect, useState } from 'react';
 
 import {
-  DetailsList,
   DetailsListLayoutMode,
   FontIcon,
   IContextualMenuItem,
@@ -36,6 +35,7 @@ import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { ROUTE_ACCESS_MANAGEMENT_GROUPS } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { PageBody } from 'src/components/layouts/Column';
+import { ThemedDetailsList } from 'src/containers/tables/ThemedDetailsList.style';
 import { useAccessManagementGroupsPageService } from './AccessManagementGroupsPage.service';
 import { StyledCommandButton } from '../AccessManagement.styles';
 import { AccessPolicyGroupPanel } from './AccessPolicyGroup';
@@ -292,7 +292,7 @@ const AccessManagementGroupsContainer = () => {
       return renderNoRecords();
     }
     return (
-      <DetailsList
+      <ThemedDetailsList
         items={groups}
         selectionMode={SelectionMode.none}
         columns={columns}

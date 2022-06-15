@@ -1,7 +1,7 @@
 import React from 'react';
 import { UiBooleanField } from 'src/data/services/graphql';
-import { Toggle } from '@fluentui/react';
 import FormLabel from 'src/components/labels/FormLabel';
+import { ThemedToggle } from './UIInputToggle.styles';
 
 type UIInputTextAreaType = {
   id: string;
@@ -46,7 +46,7 @@ const UIInputToggle = ({
   return (
     <>
       {uiField?.label && onRenderLabel()}
-      <Toggle
+      <ThemedToggle
         id={id}
         disabled={uiField?.readOnly ?? false}
         onText={onText}

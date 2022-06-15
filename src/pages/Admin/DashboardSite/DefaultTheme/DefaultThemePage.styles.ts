@@ -54,6 +54,9 @@ export const StyledChoiceGroup = styled(ChoiceGroup)`
         margin: 0 ${({ theme }) => theme.spacing.normal} 0 0;
       }
     }
+    label {
+      color: ${({ theme }) => theme.colors.neutralPrimary};
+    }
   }
 `;
 

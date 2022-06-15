@@ -35,14 +35,27 @@ export const AdminNavPanel = styled.div<ToggableProps>`
   }
 `;
 
+export const NavHeader = styled.div`
+    color: ${({ theme }) => theme.colors.neutralPrimary };
+    
+    & button {
+      color: ${({ theme }) => theme.colors.neutralPrimary };
+    }
+    
+    & .ms-Button-icon {
+      color: ${({ theme }) => theme.colors.neutralPrimary };
+    }
+`;
+
 export const NavList = styled.ul`
   list-style: none;
 `;
 
 export const NavListItem = styled.li<NavListItemProps>`
   padding-left: ${({ selected }) => (selected ? '18px' : '21px')};
-  background: ${({ selected }) => (selected ? 'rgb(237, 235, 233)' : 'none')};
+  background: ${({ theme, selected }) => (selected ? theme.colors.neutralLight : 'none')};
   border-left: ${({ theme, selected }) => (selected ? `${theme.colors.themePrimary} solid 3px` : 'none')};
+  color: ${({ theme }) => theme.colors.neutralPrimary };
 
   &:hover {
     background: ${({ theme }) => theme.colors.white};
@@ -54,6 +67,7 @@ export const NavListItem = styled.li<NavListItemProps>`
 
   & button {
     width: 192px;
+    color: ${({ theme }) => theme.colors.neutralPrimary };
   }
 
   & button span span {

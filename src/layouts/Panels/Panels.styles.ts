@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Text } from 'src/components/typography/Text';
+import { Panel } from '@fluentui/react';
 
 export const PanelTitle = styled(Text)`
   position: absolute;
@@ -32,4 +33,16 @@ export const WizardButtonRow = styled.div`
   button {
     margin-left: 10px;
   }
+`;
+export const ThemedPanel = styled(Panel)`
+  .ms-Panel-main {
+    background-color: ${({theme}) => theme.colors.white};  
+    .ms-Panel-commands {
+      z-index: 9999; 
+    }
+    .ms-Panel-footer {
+      border-top: ${({theme}) => `1px solid ${theme.colors.neutralLight}`};
+      background-color: ${({theme}) => theme.colors.white};
+    }
+  }  
 `;

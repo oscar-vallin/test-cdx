@@ -4,17 +4,14 @@ import { useHistory } from 'react-router-dom';
 import {
   MessageBar,
   MessageBarType,
-  Panel,
   PanelType,
   Stack,
-  CommandButton,
-  CommandBar,
   ICommandBarItemProps,
   IButtonProps,
 } from '@fluentui/react';
 
 import { Tabs } from 'src/components/tabs/Tabs';
-import { PanelBody, PanelHeader, PanelTitle } from 'src/layouts/Panels/Panels.styles';
+import { PanelBody, PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
 
 import { UseUpdateUserPanel } from 'src/pages/Admin/Users/UpdateUsers/useUpdateUserPanel';
 import { GqOperationResponse, UserAccount } from 'src/data/services/graphql';
@@ -24,6 +21,7 @@ import { useOrgSid } from 'src/hooks/useOrgSid';
 import { MigrateUserDialog } from 'src/pages/Admin/Users/UpdateUsers/MigrateUserDialog';
 import SectionAccessManagement from './SectionAccessManagement';
 import { SectionAccount } from './SectionAccount';
+import { ThemedCommandBar } from 'src/components/buttons/CommandBar/ThemedCommandBar.styles';
 import { ActiveIcon, InactiveIcon } from './UpdateUserPanel.styles';
 
 const defaultProps = {
@@ -86,13 +84,46 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
     }
   };
 
-  const overflowItems = (): ICommandBarItemProps[] | undefined => {
+  const commandItems = (): ICommandBarItemProps[] => {
+    const items: ICommandBarItemProps[] = [];
+
+    if (useUpdateUserPanel.resetPasswordCmd) {
+      items.push({
+        key: 'reset',
+        text: useUpdateUserPanel.resetPasswordCmd?.label ?? 'Reset',
+        onClick: showResetPasswordDialog,
+        iconProps: { iconName: 'Permissions' },
+      });
+    }
+
+    if (useUpdateUserPanel.deactivateUserCmd) {
+      items.push({
+        key: 'deactivate',
+        text: useUpdateUserPanel.deactivateUserCmd?.label ?? 'Deactivate',
+        onClick: showDeactivateUserDialog,
+        iconProps: { iconName: 'UserRemove' },
+      });
+    }
+
+    if (useUpdateUserPanel.activateUserCmd) {
+      items.push({
+        key: 'activate',
+        text: useUpdateUserPanel.activateUserCmd?.label ?? 'Activate',
+        onClick: showActivateUserDialog,
+        iconProps: { iconName: 'UserFollowed' },
+      });
+    }
+
+    return items;
+  };
+
+  const overflowItems = (): ICommandBarItemProps[] => {
     const _overflowItems: ICommandBarItemProps[] = [];
 
     if (useUpdateUserPanel.auditActivityCmd) {
       _overflowItems.push({
         key: 'audit',
-        text: useUpdateUserPanel.auditActivityCmd?.label ?? '',
+        text: useUpdateUserPanel.auditActivityCmd?.label ?? 'Audit Activity',
         onClick: handleUserAuditLogsClick,
         iconProps: { iconName: 'ComplianceAudit' },
       });
@@ -101,7 +132,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
     if (useUpdateUserPanel.changeHistoryCmd) {
       _overflowItems.push({
         key: 'history',
-        text: useUpdateUserPanel.changeHistoryCmd?.label ?? '',
+        text: useUpdateUserPanel.changeHistoryCmd?.label ?? 'Change History',
         onClick: handleUserChangeHistoryLogsClick,
         iconProps: { iconName: 'FullHistory' },
       });
@@ -335,47 +366,20 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
         </Stack>
       </Column>
       <Column lg="6" right>
-        <Stack horizontal>
-          {useUpdateUserPanel.resetPasswordCmd && (
-            <CommandButton
-              id="__ResetPassword_Button"
-              iconProps={{ iconName: 'Permissions' }}
-              text={useUpdateUserPanel.resetPasswordCmd.label ?? 'Reset'}
-              onClick={showResetPasswordDialog}
-            />
-          )}
-          {useUpdateUserPanel.deactivateUserCmd && (
-            <CommandButton
-              id="__DeactivateUser_Button"
-              iconProps={{ iconName: 'UserRemove' }}
-              text={useUpdateUserPanel.deactivateUserCmd.label ?? 'Deactivate'}
-              onClick={showDeactivateUserDialog}
-            />
-          )}
-          {useUpdateUserPanel.activateUserCmd && (
-            <CommandButton
-              id="__ActivateUser_Button"
-              iconProps={{ iconName: 'UserFollowed' }}
-              text={useUpdateUserPanel.activateUserCmd.label ?? 'Activate'}
-              onClick={showActivateUserDialog}
-            />
-          )}
-          <CommandBar
-            items={[]}
-            overflowItems={overflowItems()}
-            overflowButtonProps={overflowProps}
-            ariaLabel="Inbox actions"
-            primaryGroupAriaLabel="Email actions"
-            farItemsGroupAriaLabel="More actions"
-          />
-        </Stack>
+        <ThemedCommandBar
+          items={commandItems()}
+          overflowItems={overflowItems()}
+          overflowButtonProps={overflowProps}
+          ariaLabel="User actions"
+          onReduceData={() => {return undefined}}
+        />
       </Column>
     </PanelHeader>
   );
 
   return (
     <>
-      <Panel
+      <ThemedPanel
         closeButtonAriaLabel="Close"
         headerText={userName()}
         type={PanelType.medium}
@@ -427,7 +431,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
             onClickTab={handleTabChange}
           />
         </PanelBody>
-      </Panel>
+      </ThemedPanel>
       <DialogYesNo {...dialogProps} open={showDialog} />
       {showMigrateUserDialog && (
         <MigrateUserDialog

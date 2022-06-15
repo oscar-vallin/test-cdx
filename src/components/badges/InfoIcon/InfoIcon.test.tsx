@@ -1,5 +1,6 @@
 import { InfoIcon } from './InfoIcon';
-import { mount, shallow } from 'enzyme';
+import { shallow } from 'enzyme';
+import { mountWithTheme } from 'src/utils/testUtils';
 
 describe('Information Icon component', () => {
   it('Empty value', () => {
@@ -7,15 +8,9 @@ describe('Information Icon component', () => {
     expect(wrapper.children()).toHaveLength(0);
   });
 
-  it('Tooltip with left pad defaulted', () => {
-    const wrapper = mount(<InfoIcon id="info" tooltip="Hot Tips" />);
+  it('Info icon and Tooltip ', () => {
+    const wrapper = mountWithTheme(<InfoIcon id="info" tooltip="Hot Tips" />);
     expect(wrapper.find('FontIcon')).toHaveLength(1);
-    expect(wrapper.html()).toContain('&nbsp;');
   });
 
-  it('Tooltip with no left pad', () => {
-    const wrapper = mount(<InfoIcon id="info" tooltip="Hot Tips" leftPad={false} />);
-    expect(wrapper.find('FontIcon')).toHaveLength(1);
-    expect(wrapper.html().indexOf('&nbsp;')).toBeLessThan(0);
-  });
 });

@@ -14,9 +14,16 @@ type TransmissionsByVendorTableType = {
   endDate: Date;
 };
 
-export const TransmissionsByVendorTable = ({id, title, items, itemsBySpec, orgSid, startDate, endDate}: TransmissionsByVendorTableType) => {
-
-  const [sortMode, setSortMode] = useState<"Vendors" | "Transmissions">("Vendors");
+export const TransmissionsByVendorTable = ({
+  id,
+  title,
+  items,
+  itemsBySpec,
+  orgSid,
+  startDate,
+  endDate,
+}: TransmissionsByVendorTableType) => {
+  const [sortMode, setSortMode] = useState<'Vendors' | 'Transmissions'>('Vendors');
   const [showSpecs, setShowSpecs] = useState(false);
   const [controlledItems, setControlledItems] = useState<DashboardPeriodCount[]>(items ?? []);
 
@@ -27,16 +34,16 @@ export const TransmissionsByVendorTable = ({id, title, items, itemsBySpec, orgSi
   );
 
   const toggleSort = (_sortMode: string) => {
-    if (_sortMode === "Vendors") {
-      setSortMode("Transmissions");
+    if (_sortMode === 'Vendors') {
+      setSortMode('Transmissions');
     } else {
-      setSortMode("Vendors");
+      setSortMode('Vendors');
     }
   };
 
   const toggleSpecs = (_showSpecs: boolean) => {
     setShowSpecs(!_showSpecs);
-  }
+  };
 
   const renderButtons = () => {
     if (controlledItems.length === 0) {
@@ -46,9 +53,9 @@ export const TransmissionsByVendorTable = ({id, title, items, itemsBySpec, orgSi
       <ButtonWrapper>
         <ButtonAction
           id={`${id}_sortBtn`}
-          iconName={(sortMode === 'Vendors') ? 'SortUp' : 'SortDown'}
+          iconName={sortMode === 'Vendors' ? 'SortUp' : 'SortDown'}
           onClick={() => toggleSort(sortMode)}
-          title={(sortMode === 'Vendors') ? 'Sorted by Vendor Name ascending' : 'Sorted by Transmissions descending'}
+          title={sortMode === 'Vendors' ? 'Sorted by Vendor Name ascending' : 'Sorted by Transmissions descending'}
         >
           {sortMode}
         </ButtonAction>
@@ -61,10 +68,10 @@ export const TransmissionsByVendorTable = ({id, title, items, itemsBySpec, orgSi
           Specs
         </ButtonAction>
       </ButtonWrapper>
-    )
-  }
+    );
+  };
 
-  const sortByName = ((a: DashboardPeriodCount, b: DashboardPeriodCount) => {
+  const sortByName = (a: DashboardPeriodCount, b: DashboardPeriodCount) => {
     const nameA = a.name?.toUpperCase() ?? '';
     const nameB = b.name?.toUpperCase() ?? '';
     if (nameA < nameB) {
@@ -74,7 +81,7 @@ export const TransmissionsByVendorTable = ({id, title, items, itemsBySpec, orgSi
       return 1;
     }
     return 0;
-  });
+  };
 
   useEffect(() => {
     let visibleItems: DashboardPeriodCount[] = [];
@@ -84,7 +91,7 @@ export const TransmissionsByVendorTable = ({id, title, items, itemsBySpec, orgSi
     } else if (items) {
       visibleItems = [...items];
     }
-    if (sortMode === "Transmissions") {
+    if (sortMode === 'Transmissions') {
       visibleItems.sort((a: DashboardPeriodCount, b: DashboardPeriodCount) => {
         let c = (b.count ?? 0) - (a.count ?? 0);
         if (c != 0) {

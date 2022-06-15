@@ -195,7 +195,6 @@ const _PasswordRulesPage = () => {
                               <InfoIcon
                                 id="passComplexityTooltip"
                                 tooltip={form?.someMustBeMet?.minPasswordComplexity?.info}
-                                leftPad={false}
                               />
                               <strong>&nbsp;OR Match</strong>
 

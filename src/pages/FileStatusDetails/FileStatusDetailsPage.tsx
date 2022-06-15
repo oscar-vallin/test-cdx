@@ -1,9 +1,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
-
+import {
+  IconButton,
+  Pivot,
+  PivotItem,
+  Stack,
+  PanelType,
+  Spinner,
+  SpinnerSize,
+  PrimaryButton,
+  ICommandBarItemProps,
+} from '@fluentui/react';
 import { useHistory } from 'react-router-dom';
 
-import { PanelBody } from 'src/layouts/Panels/Panels.styles';
+import { PanelBody, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
 
 import { Badge } from 'src/components/badges/Badge';
 import { Text } from 'src/components/typography';
@@ -16,18 +26,6 @@ import {
   WorkStatus,
 } from 'src/data/services/graphql';
 
-import {
-  IconButton,
-  Pivot,
-  PivotItem,
-  Stack,
-  PanelType,
-  Panel,
-  Spinner,
-  SpinnerSize,
-  CommandBar,
-  PrimaryButton,
-} from '@fluentui/react';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { InfoIcon } from 'src/components/badges/InfoIcon';
 import { format } from 'date-fns';
@@ -42,7 +40,6 @@ import { Row } from 'src/components/layouts';
 import { TableFiltersType } from 'src/hooks/useTableFilters';
 import { useNotification } from 'src/hooks/useNotification';
 import { EmptyState } from 'src/containers/states';
-import { ICommandBarItemProps } from '@fluentui/react/lib/components/CommandBar/CommandBar.types';
 import QualityChecksTab from './QualityChecksTab/QualityChecksTab';
 import WorkStepsTab from './WorkStepsTab/WorkStepsTab';
 import EnrollmentStatsTab from './EnrollmentStatsTab/EnrollmentStatsTab';
@@ -50,6 +47,7 @@ import VendorCountStatsTab from './VendorCountStatsTab/VendorCountStatsTab';
 import { WorkPacketCommandButton } from './WorkPacketCommandButton';
 import { BadgeWrapper, FileMetaDetails, FileTitle, ShadowBox } from './FileStatusDetails.styles';
 import { UseFileStatusDetailsPanel } from './useFileStatusDetailsPanel';
+import { ThemedCommandBar } from 'src/components/buttons/CommandBar/ThemedCommandBar.styles';
 
 const POLL_INTERVAL = 20000;
 type FileStatusDetailsPageProps = {
@@ -335,8 +333,8 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
     return null;
   };
   const copyFileStatusDetailsUrl = () => {
-    navigator.clipboard.writeText(window.location.href);
-    Toast.success({ text: 'URL copied succesfully' });
+    navigator.clipboard.writeText(window.location.href).then();
+    Toast.success({ text: 'URL copied successfully' });
   };
 
   const renderFileMetaData = () => {
@@ -375,7 +373,7 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
           </Stack>
           <Stack horizontal={true} wrap={false} grow>
             <Stack.Item grow align="end">
-              <CommandBar items={commandBarItems} overflowButtonProps={{ ariaLabel: 'More commands' }} />
+              <ThemedCommandBar items={commandBarItems} overflowButtonProps={{ ariaLabel: 'More commands' }} />
             </Stack.Item>
           </Stack>
         </Row>
@@ -419,14 +417,14 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
     useFileStatusDetailsPanel?.closePanel();
   };
 
-  const handleFilesDetailsTabChange = (item, ev) => {
+  const handleFilesDetailsTabChange = (item) => {
     const params = new URLSearchParams(window.location.search);
     params.set('tab', item.props.itemKey.replace('#', ''));
     history.replace(`${window.location.pathname}?${params.toString()}`);
   };
 
   return (
-    <Panel
+    <ThemedPanel
       closeButtonAriaLabel="Close"
       type={PanelType.extraLarge}
       isOpen={useFileStatusDetailsPanel?.isPanelOpen}
@@ -488,7 +486,7 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
           )}
         </PanelBody>
       )}
-    </Panel>
+    </ThemedPanel>
   );
 };
 

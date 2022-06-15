@@ -1,10 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 
-import { Link } from 'react-router-dom';
-
 import {
-  DetailsList,
   DetailsListLayoutMode,
   IColumn,
   IconButton,
@@ -13,8 +10,7 @@ import {
   Spinner,
   SpinnerSize,
   Stack,
-  Checkbox,
-  SearchBox,
+  Link,
 } from '@fluentui/react';
 import { EmptyState } from 'src/containers/states';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
@@ -30,6 +26,7 @@ import {
   useSearchOrganizationsLazyQuery,
   WebCommand,
   OrgType,
+  UiBooleanField,
 } from 'src/data/services/graphql';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
@@ -39,6 +36,9 @@ import { PageHeader } from 'src/containers/headers/PageHeader';
 import { OrgPanel } from 'src/pages/Admin/Organizations/ActiveOrgs/OrgPanel';
 import { Paginator } from 'src/components/tables/Paginator';
 import { PageBody } from 'src/components/layouts/Column';
+import { ThemedDetailsList } from 'src/containers/tables/ThemedDetailsList.style';
+import { UIInputCheck } from 'src/components/inputs/InputCheck';
+import { ThemedSearchBox } from 'src/components/inputs/SearchBox/ThemedSearchBox.styles';
 
 const ActiveOrgsPage = () => {
   const { orgSid: orgOwnerSid } = useOrgSid();
@@ -87,13 +87,15 @@ const ActiveOrgsPage = () => {
   };
 
   const changeActiveOrg = (org?: Organization) => {
+    let destination: string;
+    if (org?.orgType && [OrgType.IntegrationSponsor, OrgType.IntegrationAdminCombined].includes(org?.orgType)) {
+      destination = 'FILE_STATUS';
+    } else {
+      destination = 'ORG_ACTIVITY';
+    }
     ActiveDomainStore.setCurrentOrg({
       orgSid: org?.sid,
-      destination: org?.orgType
-        ? [OrgType.IntegrationSponsor, OrgType.IntegrationAdminCombined].includes(org?.orgType)
-          ? 'FILE_STATUS'
-          : 'ORG_ACTIVITY'
-        : 'ORG_ACTIVITY',
+      destination,
     });
   };
 
@@ -225,7 +227,7 @@ const ActiveOrgsPage = () => {
     }
     return (
       <>
-        <DetailsList
+        <ThemedDetailsList
           items={orgs}
           selectionMode={SelectionMode.none}
           columns={columns}
@@ -237,16 +239,22 @@ const ActiveOrgsPage = () => {
     );
   };
 
+  const searchAllField: UiBooleanField = {
+    label: 'Search all organizations',
+    value: searchAllOrgsFilter,
+    visible: true,
+    required: false,
+  };
+
   const showCheckbox = () => {
     if (ActiveDomainStore.domainOrg.current.orgId === 'CDX') {
       return (
-        <Checkbox
+        <UIInputCheck
           id="__SearchAllOrgs__Orgs-Checkbox"
-          label="Search all organizations"
+          uiField={searchAllField}
           onChange={(_event, _searchAllOrgsFilter: any) => {
             setSearchAllOrgsFilter(_searchAllOrgsFilter);
           }}
-          checked={searchAllOrgsFilter}
         />
       );
     }
@@ -273,7 +281,7 @@ const ActiveOrgsPage = () => {
           <Row>
             <Stack horizontal={true} wrap={true} style={{ width: '100%' }} verticalAlign="end">
               <Column lg="6">
-                <SearchBox
+                <ThemedSearchBox
                   id="Active_Orgs_Input-Search"
                   disabled={false}
                   value={searchText}

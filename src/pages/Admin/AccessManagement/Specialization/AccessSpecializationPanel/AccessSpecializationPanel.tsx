@@ -1,8 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { ReactElement, useState, useEffect } from 'react';
 
-import { SpinnerSize, Panel, PanelType, Spinner, ITag, Stack } from '@fluentui/react';
+import { SpinnerSize, PanelType, Spinner, ITag, Stack } from '@fluentui/react';
 import _ from 'lodash';
+import { useApolloClient } from '@apollo/client';
 
 import { useNotification } from 'src/hooks/useNotification';
 import { Spacing } from 'src/components/spacings/Spacing';
@@ -29,9 +30,8 @@ import { TagPicker } from 'src/components/inputs/TagPicker';
 import { UIInputTextReadOnly } from 'src/components/inputs/InputText/InputText';
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
-import { PanelHeader, PanelTitle } from 'src/layouts/Panels/Panels.styles';
+import { PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
 import { orgQuickSearch, vendorQuickSearch } from 'src/hooks/useQuickSearch';
-import { useApolloClient } from '@apollo/client';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 
 type SpecializationOption = {
@@ -278,7 +278,7 @@ const AccessSpecializationPanel = ({
                           <Spacing margin={{ top: 'small', bottom: 'small' }} key={`group_${optIndex}`}>
                             <Row center>
                               <Column lg="3" key={`${groupIndex}-${optIndex}-left`}>
-                                {option.label}
+                                <Text>{option.label}</Text>
                               </Column>
 
                               <Column lg="9" key={`${groupIndex}-${optIndex}-right`}>
@@ -383,7 +383,7 @@ const AccessSpecializationPanel = ({
 
   return (
     <>
-      <Panel
+      <ThemedPanel
         id="create-specialization-panel"
         closeButtonAriaLabel="Close"
         type={PanelType.large}
@@ -413,7 +413,7 @@ const AccessSpecializationPanel = ({
             </Column>
           </Row>
         </>
-      </Panel>
+      </ThemedPanel>
       <DialogYesNo
         open={showDialog}
         highlightNo

@@ -20,9 +20,9 @@ export const Label = styled(Text)`
   font-family: 'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto,
     'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
+  color: ${({ theme }) => theme.colors.neutralPrimary};
   font-size: ${({ theme }) => theme.fontSizes.normal ?? '1em'};
   font-weight: 600;
-  color: rgb(50, 49, 48);
   box-sizing: border-box;
   box-shadow: none;
   margin: 0px;
