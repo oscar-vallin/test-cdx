@@ -14,6 +14,7 @@ import {
   Stack,
   PrimaryButton,
   TextField,
+  SearchBox,
 } from '@fluentui/react';
 import { Column, Container, Row } from 'src/components/layouts';
 import { Spacing } from 'src/components/spacings/Spacing';
@@ -24,7 +25,7 @@ import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useXchangeProfileLazyQuery, XchangeConfigSummary } from 'src/data/services/graphql';
 import { yyyyMMdd } from 'src/utils/CDXUtils';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
-import { InputText } from 'src/components/inputs/InputText';
+import { PageBody } from 'src/components/layouts/Column';
 import { SetupStyled, CardStyled, ContainerInput, CircleStyled } from './XchangePage.styles';
 
 type TooltipsProps = {
@@ -35,7 +36,7 @@ type TooltipsProps = {
   requiresConversion: string;
 };
 
-type GlobalXchangeAlertsProps = {
+type XchangeAlertsProps = {
   coreFilename?: string;
   numSubscribers: number;
   hasUnpublishedChanges: boolean;
@@ -50,8 +51,8 @@ const XChangePage = () => {
   const [searchXchanges, setSearchXchanges] = useState<string>('');
   const [filterXchange, setFilterXchange] = useState<XchangeConfigSummary[]>([]);
   const [tooltipContent, setTooltipContent] = useState<TooltipsProps>();
-  const [globalXchangeAlerts, setGlobalXchangeAlerts] = useState<GlobalXchangeAlertsProps>();
-  const [individualXchangeAlerts, setIndividualXchangeAlerts] = useState<GlobalXchangeAlertsProps[]>();
+  const [globalXchangeAlerts, setGlobalXchangeAlerts] = useState<XchangeAlertsProps>();
+  const [individualXchangeAlerts, setIndividualXchangeAlerts] = useState<XchangeAlertsProps[]>();
 
   const fetchData = () => {
     xchangeProfile({
@@ -168,9 +169,10 @@ const XChangePage = () => {
       columnVal = node?.coreFilename ?? '';
     }
 
+    const coreFilename = node?.coreFilename;
     return (
       <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
-        <Link to={`/xchange-list?orgSid=${orgSid}`}>{columnVal}</Link>
+        <Link to={`/xchange-details?orgSid=${orgSid}&coreFilename=${coreFilename}`}>{columnVal}</Link>
         <>
           {column?.key === 'active' && (
             <>
@@ -347,7 +349,7 @@ const XChangePage = () => {
               <Text style={{ fontWeight: 'bold' }}>Individual Xchange Alerts</Text>
             </Row>
             <Spacing margin="normal" />
-            {individualXchangeAlerts?.map((individualXchange: GlobalXchangeAlertsProps, index: number) => (
+            {individualXchangeAlerts?.map((individualXchange: XchangeAlertsProps, index: number) => (
               <Spacing margin={{ bottom: 'normal' }} key={index}>
                 <Row>
                   <Column lg="8">
@@ -387,7 +389,7 @@ const XChangePage = () => {
   };
 
   return (
-    <LayoutDashboard id="PageXChangePage" menuOptionSelected={ROUTE_XCHANGE_LIST.API_ID}>
+    <LayoutDashboard id="XChangePage" menuOptionSelected={ROUTE_XCHANGE_LIST.API_ID}>
       <PageHeader id="__XChangeHeader">
         <Container>
           <Row>
@@ -400,43 +402,41 @@ const XChangePage = () => {
           </Row>
         </Container>
       </PageHeader>
-      <Spacing margin={{ top: 'double' }}>
-        <Container>
-          <Row>
-            <Column lg="6">
-              <Text style={{ fontWeight: 'bold' }}>Xchanges</Text>
-            </Column>
-            <Column lg="2" right>
-              <SetupStyled>
-                <IconButton iconProps={{ iconName: 'Add' }} />
-                <Text>Setup new Xchange</Text>
-              </SetupStyled>
-            </Column>
-          </Row>
-        </Container>
-      </Spacing>
-      <Container>
-        <Row>
-          <Stack horizontal={true} wrap={true} style={{ width: '100%' }} verticalAlign="end">
-            <Column lg="8">
-              <InputText
-                id="Xchange_Input-Search"
-                autofocus
-                disabled={false}
-                placeholder="Search"
-                value={searchXchanges}
-                onChange={(event, newValue) => setSearchXchanges(newValue ?? '')}
-              />
-            </Column>
-          </Stack>
-        </Row>
-      </Container>
-      <Container>
-        <Row>
-          <Column lg="9">{renderBody()}</Column>
-          <Column lg="3">{cardBox()}</Column>
-        </Row>
-      </Container>
+      <PageBody id="__XchangeListBody">
+        <Spacing margin={{ top: 'double' }}>
+          <Container>
+            <Row>
+              <Column lg="7">
+                <Text style={{ fontWeight: 'bold' }}>Xchanges</Text>
+              </Column>
+              <Column lg="2" right>
+                <SetupStyled>
+                  <IconButton iconProps={{ iconName: 'Add' }} />
+                  <Text>Setup new Xchange</Text>
+                </SetupStyled>
+              </Column>
+            </Row>
+            <Row>
+              <Stack horizontal={true} wrap={true} style={{ width: '100%' }} verticalAlign="end">
+                <Column lg="9">
+                  <SearchBox
+                    id="Xchange_Input-Search"
+                    disabled={false}
+                    styles={{ root: { width: '100%' } }}
+                    value={searchXchanges}
+                    onChange={(event, newValue) => setSearchXchanges(newValue ?? '')}
+                    placeholder="Search"
+                  />
+                </Column>
+              </Stack>
+            </Row>
+            <Row>
+              <Column lg="9">{renderBody()}</Column>
+              <Column lg="3">{cardBox()}</Column>
+            </Row>
+          </Container>
+        </Spacing>
+      </PageBody>
     </LayoutDashboard>
   );
 };
