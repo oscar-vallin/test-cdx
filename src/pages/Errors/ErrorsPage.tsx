@@ -56,7 +56,7 @@ const _ErrorsPage = () => {
       return <FileStatusDetailsPanel useFileStatusDetailsPanel={fileStatusDetailsPanel} />;
     }
     return null;
-  }
+  };
   return (
     <LayoutDashboard id="PageErrors" menuOptionSelected={ROUTES.ROUTE_ERRORS.API_ID}>
       <PageHeader id="__ErrorsPageHeader">

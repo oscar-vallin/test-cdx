@@ -14,7 +14,7 @@ import {
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { InputText } from 'src/components/inputs/InputText';
 import { Spacing } from 'src/components/spacings/Spacing';
-import { IconButton, Spinner, SpinnerSize, Stack, Text } from '@fluentui/react';
+import { IconButton, Spinner, SpinnerSize, Text } from '@fluentui/react';
 import { UIInputMultiSelect } from 'src/components/inputs/InputDropdown';
 import { PageBody } from 'src/components/layouts/Column';
 import { CardStyled, StyledColumTabs, SubsStyled } from './XchangeDetailsPage.styles';
@@ -81,7 +81,7 @@ const XchangeDetailsPage = () => {
           </CardStyled>
           <Spacing margin={{ top: 'normal' }}>
             <CardStyled>
-              <Container>  
+              <Container>
                 {fileProcess?.map((process: XchangeFileProcessForm) => (
                   <UIInputMultiSelect
                     id="__applicableOrgTypes"
@@ -155,7 +155,7 @@ const XchangeDetailsPage = () => {
   }, [detailsData, detailsLoading]);
 
   useEffect(() => {
-      console.log(xchangeDataDetails)
+    console.log(xchangeDataDetails);
     if (xchangeDataDetails?.coreFilename) {
       setCoreFilenameData(xchangeDataDetails?.coreFilename);
       setCoreFilenameValue(xchangeDataDetails?.coreFilename.value ?? '');

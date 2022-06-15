@@ -53,8 +53,8 @@ type FileStatusDetailsPanelProps = {
 };
 
 const FileStatusDetailsPanel = ({ useFileStatusDetailsPanel, tableFilters }: FileStatusDetailsPanelProps) => {
-  const fsOrgSid = useFileStatusDetailsPanel.fsOrgSid;
-  const hash = useFileStatusDetailsPanel.hash;
+  const { fsOrgSid } = useFileStatusDetailsPanel;
+  const { hash } = useFileStatusDetailsPanel;
   const id = useFileStatusDetailsPanel.workOrderId;
 
   const history = useHistory();
@@ -302,7 +302,7 @@ const FileStatusDetailsPanel = ({ useFileStatusDetailsPanel, tableFilters }: Fil
     return (
       <ShadowBox id="__FileMeta">
         <Row center wrap={false}>
-          <Stack horizontal={true} wrap={true} grow tokens={{ childrenGap: 10 } }>
+          <Stack horizontal={true} wrap={true} grow tokens={{ childrenGap: 10 }}>
             <Stack.Item align="center" disableShrink>
               <IconButton
                 iconProps={{ iconName: showDetails ? 'ChevronUp' : 'ChevronDown' }}

@@ -94,7 +94,7 @@ const Schedule = ({ id }) => {
       return <FileStatusDetailsPanel useFileStatusDetailsPanel={fileStatusDetailsPanel} />;
     }
     return null;
-  }
+  };
 
   return (
     <>

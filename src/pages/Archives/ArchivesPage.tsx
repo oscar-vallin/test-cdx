@@ -61,7 +61,7 @@ const _ArchivePage = () => {
       return <FileStatusDetailsPanel useFileStatusDetailsPanel={fileStatusDetailsPanel} />;
     }
     return null;
-  }
+  };
 
   return (
     <LayoutDashboard id="PageArchive" menuOptionSelected={ROUTES.ROUTE_ARCHIVES.API_ID}>

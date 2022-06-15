@@ -24,10 +24,10 @@ import {
   useDashboardPeriodCountsLazyQuery,
   useDashboardPeriodsLazyQuery,
 } from 'src/data/services/graphql';
-import { DateRangeButton, StyledRow } from './DashboardPage.styles';
 import { DashboardErrorsTable } from 'src/pages/Dashboard/DashboardErrorsTable';
 import { TransmissionsByVendorTable } from 'src/pages/Dashboard/TransmissionsByVendorTable';
 import { DashboardTransmissionsTable } from 'src/pages/Dashboard/DashboardTransmissionsTable';
+import { DateRangeButton, StyledRow } from './DashboardPage.styles';
 
 const DATE_OPTION_NAME = {
   today: 'today',

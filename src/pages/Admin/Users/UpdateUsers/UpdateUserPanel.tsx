@@ -12,9 +12,9 @@ import { Column } from 'src/components/layouts';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { MigrateUserDialog } from 'src/pages/Admin/Users/UpdateUsers/MigrateUserDialog';
+import { ThemedCommandBar } from 'src/components/buttons/CommandBar/ThemedCommandBar.styles';
 import SectionAccessManagement from './SectionAccessManagement';
 import { SectionAccount } from './SectionAccount';
-import { ThemedCommandBar } from 'src/components/buttons/CommandBar/ThemedCommandBar.styles';
 import { ActiveIcon, InactiveIcon } from './UpdateUserPanel.styles';
 
 const defaultProps = {
