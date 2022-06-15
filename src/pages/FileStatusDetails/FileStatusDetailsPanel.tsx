@@ -1,15 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import {
+  ICommandBarItemProps,
   IconButton,
-  Pivot,
-  PivotItem,
-  Stack,
   PanelType,
+  PrimaryButton,
   Spinner,
   SpinnerSize,
-  PrimaryButton,
-  ICommandBarItemProps,
+  Stack,
 } from '@fluentui/react';
 import { useHistory } from 'react-router-dom';
 
@@ -21,6 +19,7 @@ import {
   DeliveredFile,
   useWorkPacketStatusDetailsLazyQuery,
   useWorkPacketStatusPollQuery,
+  WorkPacketCommand,
   WorkPacketCommandType,
   WorkPacketStatusDetails,
   WorkStatus,
@@ -31,7 +30,6 @@ import { InfoIcon } from 'src/components/badges/InfoIcon';
 import { format } from 'date-fns';
 import { Required } from 'src/components/labels/FormLabel/FormLabel.styles';
 import { LabelValue } from 'src/components/labels/LabelValue';
-import { theme } from 'src/styles/themes/theme';
 import { ArchivesTab } from 'src/pages/FileStatusDetails/ArchivesTab/ArchivesTab';
 import { isDateTimeValid } from 'src/utils/CDXUtils';
 import { useWorkPacketCommands } from 'src/pages/FileStatusDetails/useWorkPacketCommands';
@@ -45,26 +43,27 @@ import WorkStepsTab from './WorkStepsTab/WorkStepsTab';
 import EnrollmentStatsTab from './EnrollmentStatsTab/EnrollmentStatsTab';
 import VendorCountStatsTab from './VendorCountStatsTab/VendorCountStatsTab';
 import { WorkPacketCommandButton } from './WorkPacketCommandButton';
-import { BadgeWrapper, FileMetaDetails, FileTitle, ShadowBox } from './FileStatusDetails.styles';
+import { FileMetaDetails, FileTitle, ShadowBox } from './FileStatusDetails.styles';
 import { UseFileStatusDetailsPanel } from './useFileStatusDetailsPanel';
 import { ThemedCommandBar } from 'src/components/buttons/CommandBar/ThemedCommandBar.styles';
+import { CDXTabsItemType, Tabs } from 'src/components/tabs/Tabs';
 
-const POLL_INTERVAL = 20000;
-type FileStatusDetailsPageProps = {
+const POLL_INTERVAL = 1000;
+type FileStatusDetailsPanelProps = {
   useFileStatusDetailsPanel?: UseFileStatusDetailsPanel;
   tableFilters?: TableFiltersType;
 };
 
-const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: FileStatusDetailsPageProps) => {
-  const history = useHistory();
-  /* 
-  const fsOrgSid = urlParams.get('fsOrgSid') ?? orgSid;
-  const { hash } = useLocation();
-  const { id }: any = useParams(); 
-  */
-  const fsOrgSid = useFileStatusDetailsPanel?.fsOrgSid ?? '';
+const FileStatusDetailsPanel = ({ useFileStatusDetailsPanel, tableFilters }: FileStatusDetailsPanelProps) => {
+  const fsOrgSid = useFileStatusDetailsPanel?.fsOrgSid;
   const hash = useFileStatusDetailsPanel?.hash;
-  const id = useFileStatusDetailsPanel?.workOrderId ?? '';
+  const id = useFileStatusDetailsPanel?.workOrderId;
+
+  if (!fsOrgSid || !id) {
+    return null;
+  }
+
+  const history = useHistory();
 
   const [packet, setPacket] = useState<WorkPacketStatusDetails>();
   const [commandBarItems, setCommandBarItems] = useState<ICommandBarItemProps[]>([]);
@@ -107,6 +106,10 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
   }, [pollWPStatus.error]);
 
   useEffect(() => {
+    validateStatus();
+  }, [data, loading]);
+
+  const validateStatus = () => {
     if (data?.workPacketStatusDetails && !loading) {
       setPacket(data?.workPacketStatusDetails);
       setLastUpdatedPoll(new Date());
@@ -119,19 +122,6 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
         default:
           pollWPStatus.stopPolling();
           break;
-      }
-    }
-  }, [data, loading]);
-
-  const validateStatus = () => {
-    if (data?.workPacketStatusDetails && !loading) {
-      switch (data?.workPacketStatusDetails?.packetStatus) {
-        case WorkStatus.Submitted:
-        case WorkStatus.Queued:
-        case WorkStatus.Processing:
-          pollWPStatus.startPolling(POLL_INTERVAL);
-          break;
-        default:
       }
     }
   };
@@ -219,7 +209,36 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
     const cancelCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Cancel);
     const deleteCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Delete);
 
-    const commandBarItems = [
+
+    const startCmd: WorkPacketCommand = {
+      label: 'Start',
+      commandType: WorkPacketCommandType.RerunStep,
+    }
+    const stopCmd: WorkPacketCommand = {
+      label: 'Stop',
+      commandType: WorkPacketCommandType.Cancel,
+    }
+    const commandBarItems: ICommandBarItemProps[] = [
+      {
+        id: '__startPoll',
+        key: '__startPoll',
+        icon: 'Play',
+        command: startCmd,
+        onClick: () => {
+          pollWPStatus.startPolling(POLL_INTERVAL);
+        },
+        onRender: renderWorkPacketCommandButton,
+      },
+      {
+        id: '__stopPoll',
+        key: '__stopPoll',
+        icon: 'Stop',
+        command: stopCmd,
+        onClick: () => {
+          pollWPStatus.stopPolling();
+        },
+        onRender: renderWorkPacketCommandButton,
+      },
       {
         id: '__ResendBtn',
         key: '__ResendBtn',
@@ -396,18 +415,8 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
     );
   };
 
-  const onRenderItemLink = (link: any, defaultRenderer: any): any => (
-    <>
-      {defaultRenderer(link)}
-      {packet?.qualityChecks?.sequenceCreationEvent && errorCount() > 0 && (
-        <BadgeWrapper>
-          <Badge variant="error" label={errorCount().toString()} />
-        </BadgeWrapper>
-      )}
-    </>
-  );
-
   const handleClosePanel = () => {
+    pollWPStatus.stopPolling();
     const params = new URLSearchParams(window.location.search);
     params.delete('tab');
     params.delete('workOrderId');
@@ -417,10 +426,96 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
     useFileStatusDetailsPanel?.closePanel();
   };
 
-  const handleFilesDetailsTabChange = (item) => {
+  const handleFilesDetailsTabChange = (item: string) => {
     const params = new URLSearchParams(window.location.search);
-    params.set('tab', item.props.itemKey.replace('#', ''));
+    params.set('tab', item.replace('#', ''));
     history.replace(`${window.location.pathname}?${params.toString()}`);
+  };
+
+  const buildTabs = (): CDXTabsItemType[] => {
+    const tabs: CDXTabsItemType[] = [
+      {
+        title: 'Enrollment Stats',
+        hash: '#enrollment',
+        content: <EnrollmentStatsTab packet={packet} />,
+      },
+      {
+        title: 'Vendor Count Stats',
+        hash: '#vendor',
+        content: <VendorCountStatsTab items={packet?.outboundRecordCounts} />,
+      },
+    ];
+    if (packet?.workStepStatus && packet.workStepStatus.length > 0) {
+      tabs.push(
+        {
+          title: 'Work Steps',
+          hash: '#work',
+          content: <WorkStepsTab packet={packet} />,
+        },
+      );
+    }
+    if (packet?.qualityChecks?.sequenceCreationEvent && errorCount() > 0) {
+      tabs.push(
+        {
+          title: 'Quality Checks',
+          hash: '#quality',
+          content: <QualityChecksTab details={packet} />,
+          badge: {
+            variant: 'error',
+            label: errorCount().toString(),
+          }
+        }
+      );
+    } else {
+      tabs.push(
+        {
+          title: 'Quality Checks',
+          hash: '#quality',
+          content: <QualityChecksTab details={packet} />,
+        }
+      );
+    }
+    tabs.push(
+      {
+        title: 'Archives',
+        hash: '#archives',
+        content: <ArchivesTab packet={packet} />,
+      },
+    );
+
+    return tabs;
+  }
+
+  const renderBody = () => {
+    if (loading) {
+      return (
+        <Spacing margin={{ top: 'double' }}>
+          <Spinner size={SpinnerSize.large} label="Loading file status details" />
+        </Spacing>
+      );
+    }
+    if (data?.workPacketStatusDetails) {
+      return (
+        <>
+          {renderFileMetaData()}
+          <ShadowBox>
+            <Tabs
+              items={buildTabs()}
+              selectedKey={hash}
+              onClickTab={handleFilesDetailsTabChange}
+            />
+          </ShadowBox>
+        </>
+      );
+    }
+    return (
+      <ShadowBox id="__FileMeta-Empty">
+        <EmptyState
+          title="There is no available data for this Exchange"
+          actions={<PrimaryButton onClick={handleClosePanel} text="Close" />}
+        />
+      </ShadowBox>
+    );
   };
 
   return (
@@ -431,63 +526,11 @@ const FileStatusDetailsPage = ({ useFileStatusDetailsPanel, tableFilters }: File
       onDismiss={handleClosePanel}
       onOuterClick={handleClosePanel}
     >
-      {loading ? (
-        <Spacing margin={{ top: 'double' }}>
-          <Spinner size={SpinnerSize.large} label="Loading file status details" />
-        </Spacing>
-      ) : (
-        <PanelBody>
-          {data?.workPacketStatusDetails ? (
-            <>
-              {renderFileMetaData()}
-              <ShadowBox>
-                <Pivot
-                  onLinkClick={handleFilesDetailsTabChange}
-                  overflowBehavior="menu"
-                  overflowAriaLabel="more items"
-                  styles={{
-                    link: {
-                      fontSize: theme.fontSizes.normal,
-                    },
-                    linkIsSelected: {
-                      fontSize: theme.fontSizes.normal,
-                    },
-                  }}
-                  style={{ fontSize: theme.fontSizes.normal }}
-                  defaultSelectedKey={hash}
-                >
-                  <PivotItem headerText="Enrollment Stats" itemKey="#enrollment">
-                    <EnrollmentStatsTab packet={packet} />
-                  </PivotItem>
-                  <PivotItem headerText="Vendor Count Stats" itemKey="#vendor">
-                    <VendorCountStatsTab items={packet?.outboundRecordCounts} />
-                  </PivotItem>
-                  {packet?.workStepStatus && packet.workStepStatus.length > 0 && (
-                    <PivotItem headerText="Work Steps" itemKey="#work">
-                      <WorkStepsTab packet={packet} />
-                    </PivotItem>
-                  )}
-                  <PivotItem headerText="Quality Checks" itemKey="#quality" onRenderItemLink={onRenderItemLink}>
-                    <QualityChecksTab details={packet} />
-                  </PivotItem>
-                  <PivotItem headerText="Archives" itemKey="#archives">
-                    <ArchivesTab packet={packet} />
-                  </PivotItem>
-                </Pivot>
-              </ShadowBox>
-            </>
-          ) : (
-            <ShadowBox id="__FileMeta-Empty">
-              <EmptyState
-                title="There is no available data for this Exchange"
-                actions={<PrimaryButton onClick={handleClosePanel} text="Close" />}
-              />
-            </ShadowBox>
-          )}
-        </PanelBody>
-      )}
+      <PanelBody>
+        {renderBody()}
+      </PanelBody>
     </ThemedPanel>
   );
 };
 
-export { FileStatusDetailsPage };
+export { FileStatusDetailsPanel };

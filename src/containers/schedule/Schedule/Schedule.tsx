@@ -11,7 +11,7 @@ import { ROUTE_SCHEDULE } from 'src/data/constants/RouteConstants';
 import { yyyyMMdd } from 'src/utils/CDXUtils';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { useFileStatusDetailsPanel } from 'src/pages/FileStatusDetails/useFileStatusDetailsPanel';
-import { FileStatusDetailsPage } from 'src/pages/FileStatusDetails';
+import { FileStatusDetailsPanel } from 'src/pages/FileStatusDetails';
 import { isCurrentViewWeek, isCurrentViewDay } from './helpers';
 import { ScheduleHeader } from './ScheduleHeader';
 import { ScheduleWeek } from './ScheduleWeek';
@@ -120,7 +120,7 @@ const Schedule = ({ id }) => {
           </Column>
         </StyledRow>
       </Container>
-      <FileStatusDetailsPage useFileStatusDetailsPanel={fileStatusDetailsPanel} />
+      <FileStatusDetailsPanel useFileStatusDetailsPanel={fileStatusDetailsPanel} />
     </>
   );
 };

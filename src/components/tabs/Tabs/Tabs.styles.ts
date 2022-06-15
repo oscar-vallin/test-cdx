@@ -21,9 +21,8 @@ export const StyledSpan = styled.span`
   
   color: ${({theme}) => theme.colors.neutralPrimary};
 
-
-  #__CDXBadge {
-    line-height: 0.8;
-    margin: ${({ theme }) => `0 0 0 ${theme.spacing.small}`};
+  & .cdx-badge {
+    margin-left: 0.5em;
+    height: 1.5em;
   }
 `;

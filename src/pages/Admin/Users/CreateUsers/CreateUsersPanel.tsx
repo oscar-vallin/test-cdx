@@ -90,7 +90,7 @@ const CreateUsersPanel = ({ orgSid, isOpen, onDismiss, onCreateUser }: CreateUse
     return null;
   };
 
-  const handleTabChange = (hash): void => {
+  const handleTabChange = (hash: string): void => {
     setStep(tabs.indexOf(hash));
   };
 

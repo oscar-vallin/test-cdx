@@ -18,7 +18,7 @@ import { useOrgSid } from 'src/hooks/useOrgSid';
 import { tableFiltersToQueryParams, useTableFilters } from 'src/hooks/useTableFilters';
 import { DownloadLink } from 'src/containers/tables/WorkPacketTable.styles';
 import { useFileStatusDetailsPanel } from 'src/pages/FileStatusDetails/useFileStatusDetailsPanel';
-import { FileStatusDetailsPage } from '../FileStatusDetails';
+import { FileStatusDetailsPanel } from '../FileStatusDetails';
 
 const _FileStatusPage = () => {
   const [tableMeta, setTableMeta] = useState({ count: 0, loading: true });
@@ -128,7 +128,7 @@ const _FileStatusPage = () => {
           setTableMeta({ count: total, loading });
         }}
       />
-      <FileStatusDetailsPage tableFilters={tableFilters} useFileStatusDetailsPanel={fileStatusDetailsPanel} />
+      <FileStatusDetailsPanel tableFilters={tableFilters} useFileStatusDetailsPanel={fileStatusDetailsPanel} />
     </LayoutDashboard>
   );
 };

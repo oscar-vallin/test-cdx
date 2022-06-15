@@ -116,13 +116,6 @@ export const StatsFooter = styled.div`
   }
 `;
 
-export const BadgeWrapper = styled.span`
-  & span {
-    margin-left: 0.5em;
-    height: 1.5em;
-  }
-`;
-
 export const SuperScript = styled(Text)`
   vertical-align: top;
   padding-top: 0.5rem;

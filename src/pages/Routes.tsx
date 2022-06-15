@@ -12,7 +12,7 @@ import { TransmissionsPage } from './Transmissions';
 import { ErrorsPage } from './Errors';
 import { AccessDenied, PageNotFound } from './ErrorHandling';
 import { FileStatusPage } from './FileStatus';
-import { FileStatusDetailsPage } from './FileStatusDetails';
+import { FileStatusDetailsPanel } from './FileStatusDetails';
 import { ActiveOrgsPage } from './Admin/Organizations';
 import { ExternalOrgsPage } from './Admin/ExternalOrganization';
 import { CurrentActivityPage } from './Admin/Activity';
@@ -57,7 +57,7 @@ export const Routes = () => {
         <FileStatusPage />
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_FILE_STATUS_DETAILS.URL}>
-        <FileStatusDetailsPage />
+        <FileStatusDetailsPanel />
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_FILE_STATUS.URL}>
         <FileStatusPage />

@@ -4,29 +4,23 @@ import { Badge } from 'src/components/badges/Badge';
 import { theme } from 'src/styles/themes/theme';
 import { StyledPivot, StyledSpan } from './Tabs.styles';
 
-const defaultProps = {
-  items: [],
-  selectedKey: '',
-  onClickTab: () => null,
-};
-
-type itemsProps = {
+export type CDXTabsItemType = {
   title: string;
   content: ReactElement;
-  badge: { variant?: string; label?: string };
-  hash: () => null;
+  hash: string;
+  badge?: { variant: string; label: string };
 };
 
-type CDXTabsProps = {
-  items?: { title: string; content: string; badge: string; hash: string }[] | any;
+type CDXTabsType = {
+  items?: CDXTabsItemType[] | any;
   selectedKey?: string;
-  onClickTab?: any | null;
-} & typeof defaultProps;
+  onClickTab: (key: string) => void;
+};
 
-const CDXTabs = ({ items, selectedKey, onClickTab }: CDXTabsProps): ReactElement => {
+const CDXTabs = ({ items, selectedKey, onClickTab }: CDXTabsType): ReactElement => {
   return (
     <StyledPivot
-      selectedKey={String(selectedKey)}
+      defaultSelectedKey={selectedKey}
       overflowBehavior="menu"
       overflowAriaLabel="more items"
       styles={{
@@ -39,10 +33,11 @@ const CDXTabs = ({ items, selectedKey, onClickTab }: CDXTabsProps): ReactElement
       }}
       style={{ fontSize: theme.fontSizes.normal }}
     >
-      {items.map(({ title, content, badge, hash }: itemsProps, index) => (
+      {items.map(({ title, content, badge, hash }: CDXTabsItemType, index) => (
         <PivotItem
           headerText={title}
           key={index}
+          itemKey={hash}
           onRenderItemLink={(link: any, defaultRenderer: any): any => (
             <StyledSpan onClick={() => onClickTab(hash)}>
               {defaultRenderer(link)}
@@ -56,7 +51,5 @@ const CDXTabs = ({ items, selectedKey, onClickTab }: CDXTabsProps): ReactElement
     </StyledPivot>
   );
 };
-
-CDXTabs.defaultProps = defaultProps;
 
 export { CDXTabs };
