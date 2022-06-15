@@ -86,6 +86,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
         text: useUpdateUserPanel.resetPasswordCmd?.label ?? 'Reset',
         onClick: showResetPasswordDialog,
         iconProps: { iconName: 'Permissions' },
+        className: 'reset-button',
       });
     }
 
@@ -95,6 +96,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
         text: useUpdateUserPanel.deactivateUserCmd?.label ?? 'Deactivate',
         onClick: showDeactivateUserDialog,
         iconProps: { iconName: 'UserRemove' },
+        className: 'deactivate-button',
       });
     }
 
@@ -104,6 +106,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
         text: useUpdateUserPanel.activateUserCmd?.label ?? 'Activate',
         onClick: showActivateUserDialog,
         iconProps: { iconName: 'UserFollowed' },
+        className: 'activate-button',
       });
     }
 
@@ -119,6 +122,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
         text: useUpdateUserPanel.auditActivityCmd?.label ?? 'Audit Activity',
         onClick: handleUserAuditLogsClick,
         iconProps: { iconName: 'ComplianceAudit' },
+        className: 'audit-button',
       });
     }
 
@@ -128,6 +132,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
         text: useUpdateUserPanel.changeHistoryCmd?.label ?? 'Change History',
         onClick: handleUserChangeHistoryLogsClick,
         iconProps: { iconName: 'FullHistory' },
+        className: 'history-button',
       });
     }
 
@@ -139,6 +144,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
           setShowMigrateUserDialog(true);
         },
         iconProps: { iconName: 'FollowUser' },
+        className: 'migrate-button',
       });
     }
 

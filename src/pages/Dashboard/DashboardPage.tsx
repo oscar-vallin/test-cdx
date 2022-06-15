@@ -334,19 +334,6 @@ const DashboardPage = () => {
                 items={dashboardPeriodCounts?.vendorTransmissions ?? []}
                 itemsBySpec={dashboardPeriodCounts?.vendorTransmissionsBySpec ?? []}
               />
-              {/* <TableDashboard */}
-              {/*  id="__Table_Transmissions_Vendor" */}
-              {/*  data={dashboardPeriodCounts?.vendorTransmissions} */}
-              {/*  altData={dashboardPeriodCounts?.vendorTransmissionsBySpec} */}
-              {/*  fromDate={fromDate.value} */}
-              {/*  toDate={toDate.value} */}
-              {/*  date={dateId} */}
-              {/*  loading={isLoadingData} */}
-              {/*  title="Transmissions / BUs by Vendor" */}
-              {/*  titleRedirectPage="transmissions" */}
-              {/*  sortButtons={['Sort', 'Specs']} */}
-              {/*  emptyMessage="None" */}
-              {/* /> */}
             </Column>
             <Column lg="6">
               <DashboardErrorsTable
