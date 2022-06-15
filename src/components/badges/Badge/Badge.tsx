@@ -17,7 +17,7 @@ type CDXBadgeProps = {
 
 const CDXBadge = ({ id, variant = 'primary', pill, label, children }: CDXBadgeProps): ReactElement => {
   return (
-    <StyledSpan id={id} variant={variant} pill={pill} className='cdx-badge'>
+    <StyledSpan id={id} variant={variant} pill={pill} className="cdx-badge">
       {label || children}
     </StyledSpan>
   );

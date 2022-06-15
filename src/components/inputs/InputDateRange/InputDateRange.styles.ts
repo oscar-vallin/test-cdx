@@ -22,4 +22,4 @@ export const ThemedDatePicker = styled(DatePicker)`
     background-color: ${({ theme }) => theme.colors.white};
     color: ${({ theme }) => theme.colors.neutralSecondary};
   }
-`
+`;

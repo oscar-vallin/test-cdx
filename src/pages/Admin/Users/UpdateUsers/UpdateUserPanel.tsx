@@ -1,14 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { ReactElement, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import {
-  MessageBar,
-  MessageBarType,
-  PanelType,
-  Stack,
-  ICommandBarItemProps,
-  IButtonProps,
-} from '@fluentui/react';
+import { MessageBar, MessageBarType, PanelType, Stack, ICommandBarItemProps, IButtonProps } from '@fluentui/react';
 
 import { Tabs } from 'src/components/tabs/Tabs';
 import { PanelBody, PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
@@ -371,7 +364,9 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
           overflowItems={overflowItems()}
           overflowButtonProps={overflowProps}
           ariaLabel="User actions"
-          onReduceData={() => {return undefined}}
+          onReduceData={() => {
+            return undefined;
+          }}
         />
       </Column>
     </PanelHeader>

@@ -1,13 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import {
-  DetailsListLayoutMode,
-  IColumn,
-  Link,
-  SelectionMode,
-  TooltipHost,
-  FontIcon,
-  Stack,
-} from '@fluentui/react';
+import { DetailsListLayoutMode, IColumn, Link, SelectionMode, TooltipHost, FontIcon, Stack } from '@fluentui/react';
 import {
   UserItem,
   SortDirection,

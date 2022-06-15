@@ -209,15 +209,14 @@ const FileStatusDetailsPanel = ({ useFileStatusDetailsPanel, tableFilters }: Fil
     const cancelCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Cancel);
     const deleteCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Delete);
 
-
     const startCmd: WorkPacketCommand = {
       label: 'Start',
       commandType: WorkPacketCommandType.RerunStep,
-    }
+    };
     const stopCmd: WorkPacketCommand = {
       label: 'Stop',
       commandType: WorkPacketCommandType.Cancel,
-    }
+    };
     const commandBarItems: ICommandBarItemProps[] = [
       {
         id: '__startPoll',
@@ -446,45 +445,37 @@ const FileStatusDetailsPanel = ({ useFileStatusDetailsPanel, tableFilters }: Fil
       },
     ];
     if (packet?.workStepStatus && packet.workStepStatus.length > 0) {
-      tabs.push(
-        {
-          title: 'Work Steps',
-          hash: '#work',
-          content: <WorkStepsTab packet={packet} />,
-        },
-      );
+      tabs.push({
+        title: 'Work Steps',
+        hash: '#work',
+        content: <WorkStepsTab packet={packet} />,
+      });
     }
     if (packet?.qualityChecks?.sequenceCreationEvent && errorCount() > 0) {
-      tabs.push(
-        {
-          title: 'Quality Checks',
-          hash: '#quality',
-          content: <QualityChecksTab details={packet} />,
-          badge: {
-            variant: 'error',
-            label: errorCount().toString(),
-          }
-        }
-      );
+      tabs.push({
+        title: 'Quality Checks',
+        hash: '#quality',
+        content: <QualityChecksTab details={packet} />,
+        badge: {
+          variant: 'error',
+          label: errorCount().toString(),
+        },
+      });
     } else {
-      tabs.push(
-        {
-          title: 'Quality Checks',
-          hash: '#quality',
-          content: <QualityChecksTab details={packet} />,
-        }
-      );
+      tabs.push({
+        title: 'Quality Checks',
+        hash: '#quality',
+        content: <QualityChecksTab details={packet} />,
+      });
     }
-    tabs.push(
-      {
-        title: 'Archives',
-        hash: '#archives',
-        content: <ArchivesTab packet={packet} />,
-      },
-    );
+    tabs.push({
+      title: 'Archives',
+      hash: '#archives',
+      content: <ArchivesTab packet={packet} />,
+    });
 
     return tabs;
-  }
+  };
 
   const renderBody = () => {
     if (loading) {
@@ -499,11 +490,7 @@ const FileStatusDetailsPanel = ({ useFileStatusDetailsPanel, tableFilters }: Fil
         <>
           {renderFileMetaData()}
           <ShadowBox>
-            <Tabs
-              items={buildTabs()}
-              selectedKey={hash}
-              onClickTab={handleFilesDetailsTabChange}
-            />
+            <Tabs items={buildTabs()} selectedKey={hash} onClickTab={handleFilesDetailsTabChange} />
           </ShadowBox>
         </>
       );
@@ -526,9 +513,7 @@ const FileStatusDetailsPanel = ({ useFileStatusDetailsPanel, tableFilters }: Fil
       onDismiss={handleClosePanel}
       onOuterClick={handleClosePanel}
     >
-      <PanelBody>
-        {renderBody()}
-      </PanelBody>
+      <PanelBody>{renderBody()}</PanelBody>
     </ThemedPanel>
   );
 };

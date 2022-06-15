@@ -36,13 +36,13 @@ export const WizardButtonRow = styled.div`
 `;
 export const ThemedPanel = styled(Panel)`
   .ms-Panel-main {
-    background-color: ${({theme}) => theme.colors.white};  
+    background-color: ${({ theme }) => theme.colors.white};
     .ms-Panel-commands {
-      z-index: 9999; 
+      z-index: 9999;
     }
     .ms-Panel-footer {
-      border-top: ${({theme}) => `1px solid ${theme.colors.neutralLight}`};
-      background-color: ${({theme}) => theme.colors.white};
+      border-top: ${({ theme }) => `1px solid ${theme.colors.neutralLight}`};
+      background-color: ${({ theme }) => theme.colors.white};
     }
-  }  
+  }
 `;

@@ -2,14 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import { Link } from 'react-router-dom';
 
-import {
-  Text,
-  Spinner,
-  IColumn,
-  DetailsListLayoutMode,
-  SpinnerSize,
-  SelectionMode,
-} from '@fluentui/react';
+import { Text, Spinner, IColumn, DetailsListLayoutMode, SpinnerSize, SelectionMode } from '@fluentui/react';
 
 import { useExternalOrgsLazyQuery, SortDirection, Organization, OrgType } from 'src/data/services/graphql';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';

@@ -7,7 +7,6 @@ type InfoIconType = {
 };
 
 export const InfoIcon = ({ id, tooltip }: InfoIconType) => {
-
   if (tooltip) {
     return (
       <TooltipHost
