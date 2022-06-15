@@ -56,6 +56,13 @@ const _ArchivePage = () => {
     return items;
   };
 
+  const renderDetailsPanel = () => {
+    if (fileStatusDetailsPanel.fsOrgSid && fileStatusDetailsPanel.workOrderId) {
+      return <FileStatusDetailsPanel useFileStatusDetailsPanel={fileStatusDetailsPanel} />;
+    }
+    return null;
+  }
+
   return (
     <LayoutDashboard id="PageArchive" menuOptionSelected={ROUTES.ROUTE_ARCHIVES.API_ID}>
       <PageHeader id="__ArchivesHeader">
@@ -97,7 +104,7 @@ const _ArchivePage = () => {
           setTableMeta({ count: total, loading });
         }}
       />
-      <FileStatusDetailsPanel useFileStatusDetailsPanel={fileStatusDetailsPanel} />
+      {renderDetailsPanel()}
     </LayoutDashboard>
   );
 };

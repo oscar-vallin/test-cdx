@@ -11,6 +11,7 @@ import { theme } from 'src/styles/themes/theme';
 import { LogMessageItem } from 'src/components/collapses/LogMessageItem';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { InputText } from 'src/components/inputs/InputText';
+import { ErrorHandler } from 'src/utils/ErrorHandler';
 
 type CommandButtonType = {
   id: string;
@@ -64,7 +65,7 @@ export const WorkPacketCommandButton = ({
 
   const [buttonText, setButtonText] = useState('Yes');
   const [secondaryButtonText, setSecondaryButtonText] = useState('No');
-  const [reprocesSecondButtonText, setReprocessSecondButtonText] = useState('External Exchange');
+  const [reprocessSecondButtonText, setReprocessSecondButtonText] = useState('External Exchange');
   const [reprocessSecondButtonAction, setReprocessSecondButtonAction] = useState(
     ButtonActionTypes.HandleExternalReprocess
   );
@@ -72,14 +73,20 @@ export const WorkPacketCommandButton = ({
   const [secondaryButtonAction, setSecondaryButtonAction] = useState(ButtonActionTypes.SecondaryDefault);
   const [newFileName, setNewFileName] = useState(fileName);
 
+  const handleError = ErrorHandler();
+
   const [
     apiCallReprocessDialog,
-    { data: reprocesDialogData, loading: reprocesDialogLoading, error: reprocesDialogError },
+    { data: dataReprocessDialog, loading: loadingReprocessDialog, error: errorReprocessDialog },
   ] = useReprocessDialogLazyQuery({
     variables: {
       workOrderId: realId ?? '',
     },
   });
+
+  useEffect(() => {
+    handleError(errorReprocessDialog);
+  }, [errorReprocessDialog, handleError]);
 
   const handleDefaultAction = () => {
     setIsConfirmationHidden(true);
@@ -138,7 +145,7 @@ export const WorkPacketCommandButton = ({
     if (callback) callback();
   };
 
-  const handleChangeReasonReporcess = (changeReason?: ChangeReason) => {
+  const handleChangeReasonReprocess = (changeReason?: ChangeReason) => {
     workPacketCommands
       .apiCallReprocess({
         variables: {
@@ -185,21 +192,8 @@ export const WorkPacketCommandButton = ({
   }, [command?.commandType]);
 
   useEffect(() => {
-    if (
-      command?.commandType === WorkPacketCommandType.Reprocess ||
-      command?.commandType === WorkPacketCommandType.RerunStep
-    ) {
-      apiCallReprocessDialog({
-        variables: {
-          workOrderId: realId ?? '',
-        },
-      });
-    }
-  }, [command?.commandType]);
-
-  useEffect(() => {
-    if (reprocesDialogData && reprocesDialogData.reprocessDialog) {
-      const { title, message, captureChangeReason } = reprocesDialogData.reprocessDialog;
+    if (!loadingReprocessDialog && dataReprocessDialog && dataReprocessDialog.reprocessDialog) {
+      const { title, message, captureChangeReason } = dataReprocessDialog.reprocessDialog;
       setTitle(title ?? confirmationTitle);
       setSubText(message ?? confirmationMsg);
       if (captureChangeReason) {
@@ -224,7 +218,7 @@ export const WorkPacketCommandButton = ({
         setButtonText('Yes');
       }
     }
-  }, [reprocesDialogData]);
+  }, [dataReprocessDialog]);
 
   const getButtonAction = (buttonAction: string) => {
     let method = handleDefaultAction;
@@ -240,17 +234,17 @@ export const WorkPacketCommandButton = ({
         break;
       case ButtonActionTypes.HandleReprocess:
         method = () => {
-          handleChangeReasonReporcess();
+          handleChangeReasonReprocess();
         };
         break;
       case ButtonActionTypes.HandleExternalReprocess:
         method = () => {
-          handleChangeReasonReporcess(ChangeReason.External);
+          handleChangeReasonReprocess(ChangeReason.External);
         };
         break;
       case ButtonActionTypes.HandleInternalReprocess:
         method = () => {
-          handleChangeReasonReporcess(ChangeReason.Internal);
+          handleChangeReasonReprocess(ChangeReason.Internal);
         };
         break;
       case ButtonActionTypes.HandleCloseLogMessageDialog:
@@ -281,12 +275,27 @@ export const WorkPacketCommandButton = ({
     return method;
   };
 
+  const showDialog = () => {
+    if (
+      realId &&
+      (command?.commandType === WorkPacketCommandType.Reprocess ||
+        command?.commandType === WorkPacketCommandType.RerunStep)
+    ) {
+      apiCallReprocessDialog({
+        variables: {
+          workOrderId: realId,
+        },
+      });
+    }
+    setIsConfirmationHidden(false);
+  };
+
   if (command) {
     return (
       <Stack.Item align="center">
         <ActionButton
           id={id}
-          onClick={() => setIsConfirmationHidden(false)}
+          onClick={showDialog}
           iconProps={{ iconName: icon, style: { fontSize: theme.fontSizes.normal } }}
           style={{ fontSize: theme.fontSizes.normal }}
         >
@@ -330,7 +339,7 @@ export const WorkPacketCommandButton = ({
               />
             )}
             {showReprocessSecondButton && (
-              <PrimaryButton onClick={getButtonAction(reprocessSecondButtonAction)} text={reprocesSecondButtonText} />
+              <PrimaryButton onClick={getButtonAction(reprocessSecondButtonAction)} text={reprocessSecondButtonText} />
             )}
             {showSecondaryButton && (
               <DefaultButton onClick={getButtonAction(secondaryButtonAction)} text={secondaryButtonText} />

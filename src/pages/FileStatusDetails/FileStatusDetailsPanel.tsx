@@ -18,8 +18,6 @@ import { Text } from 'src/components/typography';
 import {
   DeliveredFile,
   useWorkPacketStatusDetailsLazyQuery,
-  useWorkPacketStatusPollQuery,
-  WorkPacketCommand,
   WorkPacketCommandType,
   WorkPacketStatusDetails,
   WorkStatus,
@@ -35,6 +33,8 @@ import { isDateTimeValid } from 'src/utils/CDXUtils';
 import { useWorkPacketCommands } from 'src/pages/FileStatusDetails/useWorkPacketCommands';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { Row } from 'src/components/layouts';
+import { ThemedCommandBar } from 'src/components/buttons/CommandBar/ThemedCommandBar.styles';
+import { CDXTabsItemType, Tabs } from 'src/components/tabs/Tabs';
 import { TableFiltersType } from 'src/hooks/useTableFilters';
 import { useNotification } from 'src/hooks/useNotification';
 import { EmptyState } from 'src/containers/states';
@@ -45,31 +45,24 @@ import VendorCountStatsTab from './VendorCountStatsTab/VendorCountStatsTab';
 import { WorkPacketCommandButton } from './WorkPacketCommandButton';
 import { FileMetaDetails, FileTitle, ShadowBox } from './FileStatusDetails.styles';
 import { UseFileStatusDetailsPanel } from './useFileStatusDetailsPanel';
-import { ThemedCommandBar } from 'src/components/buttons/CommandBar/ThemedCommandBar.styles';
-import { CDXTabsItemType, Tabs } from 'src/components/tabs/Tabs';
+import { useFileStatusDetailsPoll } from './useFileStatusDetailsPoll';
 
-const POLL_INTERVAL = 1000;
 type FileStatusDetailsPanelProps = {
-  useFileStatusDetailsPanel?: UseFileStatusDetailsPanel;
+  useFileStatusDetailsPanel: UseFileStatusDetailsPanel;
   tableFilters?: TableFiltersType;
 };
 
 const FileStatusDetailsPanel = ({ useFileStatusDetailsPanel, tableFilters }: FileStatusDetailsPanelProps) => {
-  const fsOrgSid = useFileStatusDetailsPanel?.fsOrgSid;
-  const hash = useFileStatusDetailsPanel?.hash;
-  const id = useFileStatusDetailsPanel?.workOrderId;
-
-  if (!fsOrgSid || !id) {
-    return null;
-  }
+  const fsOrgSid = useFileStatusDetailsPanel.fsOrgSid;
+  const hash = useFileStatusDetailsPanel.hash;
+  const id = useFileStatusDetailsPanel.workOrderId;
 
   const history = useHistory();
 
   const [packet, setPacket] = useState<WorkPacketStatusDetails>();
   const [commandBarItems, setCommandBarItems] = useState<ICommandBarItemProps[]>([]);
   const [showDetails, setShowDetails] = useState(true);
-  const realId = id?.replace('*', '');
-  const [lastUpdatedPoll, setLastUpdatedPoll] = useState<Date>(new Date());
+  const realId: string = id?.replace('*', '');
   const Toast = useNotification();
 
   const [callGetWPDetails, { data, loading, error }] = useWorkPacketStatusDetailsLazyQuery({
@@ -77,15 +70,6 @@ const FileStatusDetailsPanel = ({ useFileStatusDetailsPanel, tableFilters }: Fil
       orgSid: fsOrgSid,
       workOrderId: realId,
     },
-  });
-
-  const pollWPStatus = useWorkPacketStatusPollQuery({
-    variables: {
-      orgSid: fsOrgSid,
-      workOrderId: realId,
-      lastUpdated: lastUpdatedPoll,
-    },
-    pollInterval: POLL_INTERVAL,
   });
 
   const workPacketCommands = useWorkPacketCommands(realId);
@@ -102,35 +86,22 @@ const FileStatusDetailsPanel = ({ useFileStatusDetailsPanel, tableFilters }: Fil
   }, [error]);
 
   useEffect(() => {
-    handleError(pollWPStatus.error);
-  }, [pollWPStatus.error]);
-
-  useEffect(() => {
     validateStatus();
   }, [data, loading]);
 
   const validateStatus = () => {
     if (data?.workPacketStatusDetails && !loading) {
       setPacket(data?.workPacketStatusDetails);
-      setLastUpdatedPoll(new Date());
-      switch (data?.workPacketStatusDetails?.packetStatus) {
-        case WorkStatus.Submitted:
-        case WorkStatus.Queued:
-        case WorkStatus.Processing:
-          pollWPStatus.startPolling(POLL_INTERVAL);
-          break;
-        default:
-          pollWPStatus.stopPolling();
-          break;
-      }
     }
   };
 
+  const pollWPStatus = useFileStatusDetailsPoll(fsOrgSid, realId, packet?.packetStatus);
+
   useEffect(() => {
-    if (pollWPStatus.data?.workPacketStatusPoll && pollWPStatus.data?.workPacketStatusPoll > 0) {
+    if (pollWPStatus.dataUpdated) {
       callGetWPDetails();
     }
-  }, [pollWPStatus.data]);
+  }, [pollWPStatus.dataUpdated]);
 
   const errorCount = (): number => packet?.qualityChecks?.fieldCreationErrorCount ?? 0;
 
@@ -185,7 +156,7 @@ const FileStatusDetailsPanel = ({ useFileStatusDetailsPanel, tableFilters }: Fil
   // const rerunCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.RerunStep);
 
   const renderWorkPacketCommandButton = (item: any) => {
-    if (!item) return <></>;
+    if (!item) return null;
     return (
       <WorkPacketCommandButton
         id={item.id}
@@ -209,35 +180,7 @@ const FileStatusDetailsPanel = ({ useFileStatusDetailsPanel, tableFilters }: Fil
     const cancelCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Cancel);
     const deleteCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Delete);
 
-    const startCmd: WorkPacketCommand = {
-      label: 'Start',
-      commandType: WorkPacketCommandType.RerunStep,
-    };
-    const stopCmd: WorkPacketCommand = {
-      label: 'Stop',
-      commandType: WorkPacketCommandType.Cancel,
-    };
-    const commandBarItems: ICommandBarItemProps[] = [
-      {
-        id: '__startPoll',
-        key: '__startPoll',
-        icon: 'Play',
-        command: startCmd,
-        onClick: () => {
-          pollWPStatus.startPolling(POLL_INTERVAL);
-        },
-        onRender: renderWorkPacketCommandButton,
-      },
-      {
-        id: '__stopPoll',
-        key: '__stopPoll',
-        icon: 'Stop',
-        command: stopCmd,
-        onClick: () => {
-          pollWPStatus.stopPolling();
-        },
-        onRender: renderWorkPacketCommandButton,
-      },
+    const items: ICommandBarItemProps[] = [
       {
         id: '__ResendBtn',
         key: '__ResendBtn',
@@ -318,7 +261,7 @@ const FileStatusDetailsPanel = ({ useFileStatusDetailsPanel, tableFilters }: Fil
         onRender: renderWorkPacketCommandButton,
       },
     ];
-    setCommandBarItems(commandBarItems);
+    setCommandBarItems(items);
   }, [packet]);
 
   const renderDeliveredFileInfo = (fileInfo?: DeliveredFile | null) => {
@@ -359,7 +302,7 @@ const FileStatusDetailsPanel = ({ useFileStatusDetailsPanel, tableFilters }: Fil
     return (
       <ShadowBox id="__FileMeta">
         <Row center wrap={false}>
-          <Stack horizontal={true} wrap={true} tokens={{ childrenGap: 10 }}>
+          <Stack horizontal={true} wrap={true} grow tokens={{ childrenGap: 10 } }>
             <Stack.Item align="center" disableShrink>
               <IconButton
                 iconProps={{ iconName: showDetails ? 'ChevronUp' : 'ChevronDown' }}

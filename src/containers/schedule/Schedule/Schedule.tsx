@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { endOfMonth, startOfMonth } from 'date-fns';
@@ -89,6 +89,13 @@ const Schedule = ({ id }) => {
     );
   };
 
+  const renderDetailsPanel = () => {
+    if (fileStatusDetailsPanel.fsOrgSid && fileStatusDetailsPanel.workOrderId) {
+      return <FileStatusDetailsPanel useFileStatusDetailsPanel={fileStatusDetailsPanel} />;
+    }
+    return null;
+  }
+
   return (
     <>
       <PageHeader id={`${id}_PageHeader`} spacing="0">
@@ -120,7 +127,7 @@ const Schedule = ({ id }) => {
           </Column>
         </StyledRow>
       </Container>
-      <FileStatusDetailsPanel useFileStatusDetailsPanel={fileStatusDetailsPanel} />
+      {renderDetailsPanel()}
     </>
   );
 };
