@@ -17,16 +17,11 @@ import SectionAccessManagement from './SectionAccessManagement';
 import { SectionAccount } from './SectionAccount';
 import { ActiveIcon, InactiveIcon } from './UpdateUserPanel.styles';
 
-const defaultProps = {
-  onDismiss: () => {},
-  onUpdateUser: () => {},
-};
-
 type UpdateUserPanelProps = {
   useUpdateUserPanel: UseUpdateUserPanel;
   onDismiss?: () => void;
   onUpdateUser?: () => void;
-} & typeof defaultProps;
+};
 
 const tabs = ['#account', '#access'];
 
@@ -172,7 +167,9 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
       }
 
       if (responseCode === GqOperationResponse.Success || responseCode === GqOperationResponse.PartialSuccess) {
-        onUpdateUser();
+        if (onUpdateUser) {
+          onUpdateUser();
+        }
         setMessageType(MessageBarType.success);
         setMessage('User Profile Saved');
         setUnsavedChanges(false);
@@ -194,7 +191,9 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
       }
 
       if (responseCode === GqOperationResponse.Success || responseCode === GqOperationResponse.PartialSuccess) {
-        onUpdateUser();
+        if (onUpdateUser) {
+          onUpdateUser();
+        }
         setMessageType(MessageBarType.success);
         setMessage('User Profile Saved');
         setUnsavedChanges(false);
@@ -223,7 +222,9 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
     const responseReset = await useUpdateUserPanel.callDeactivateUser();
     if (responseReset?.deactivateUser) {
       if (responseReset?.deactivateUser === GqOperationResponse.Success) {
-        onUpdateUser();
+        if (onUpdateUser) {
+          onUpdateUser();
+        }
         setMessageType(MessageBarType.success);
         setMessage('User has been deactivated');
       } else {
@@ -237,7 +238,9 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
     const responseReset = await useUpdateUserPanel.callActivateUser();
     if (responseReset?.activateUser) {
       if (responseReset?.activateUser === GqOperationResponse.Success) {
-        onUpdateUser();
+        if (onUpdateUser) {
+          onUpdateUser();
+        }
         setMessageType(MessageBarType.success);
         setMessage('User has been activated');
       } else {
@@ -259,7 +262,9 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
     // Reset the form
     useUpdateUserPanel.resetForm();
     useUpdateUserPanel.closePanel();
-    onDismiss();
+    if (onDismiss) {
+      onDismiss();
+    }
   };
 
   const showUnsavedChangesDialog = () => {
@@ -346,7 +351,9 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
 
   const onMigrateUser = () => {
     setShowMigrateUserDialog(false);
-    onUpdateUser();
+    if (onUpdateUser) {
+      onUpdateUser();
+    }
     doClosePanel();
   };
 
@@ -445,7 +452,5 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
     </>
   );
 };
-
-UpdateUserPanel.defaultProps = defaultProps;
 
 export default UpdateUserPanel;
