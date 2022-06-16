@@ -19,9 +19,9 @@ import Theming from 'src/utils/Theming';
 import { useNotification } from 'src/hooks/useNotification';
 import { ROUTE_COLOR_PALETTES } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
+import { useThemeStore } from 'src/store/ThemeStore';
 import { StyledDiv, StyledChoiceGroup, StyledColorPicker } from './ColorPalettesPage.styles';
 import { PaletteColors } from './PaletteColors';
-import { useThemeStore } from 'src/store/ThemeStore';
 
 const getThemeVariant = ({ themePrimary, neutralPrimary, white }) => ({
   ...Theming.generate.primary(themePrimary),

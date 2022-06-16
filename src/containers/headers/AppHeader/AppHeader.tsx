@@ -9,6 +9,7 @@ import { useThemeStore } from 'src/store/ThemeStore';
 import { useSessionStore } from 'src/store/SessionStore';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 
+import { ThemeFontSize } from 'src/data/services/graphql';
 import {
   NavButton,
   StyledDiv,
@@ -20,7 +21,6 @@ import {
   StyledNavIcon,
   StyledOverFlow,
 } from './AppHeader.styles';
-import { ThemeFontSize } from 'src/data/services/graphql';
 
 type AppHeaderProps = {
   onMenuButtonClick: () => void;
@@ -195,10 +195,7 @@ const AppHeader = ({ onMenuButtonClick }: AppHeaderProps): ReactElement => {
           }}
         />
 
-        <ProfileMenu
-          id="__ProfileMenu"
-          onUserSettings={openUserSettings}
-        />
+        <ProfileMenu id="__ProfileMenu" onUserSettings={openUserSettings} />
       </StyledDiv>
     </StyledHeader>
   );

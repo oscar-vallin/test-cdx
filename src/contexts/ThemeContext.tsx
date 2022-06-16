@@ -58,7 +58,6 @@ export const ThemeContextProvider = ({ children }) => {
     fontSize: ThemeFontSize;
   };
 
-
   return (
     <ThemeProvider theme={ThemeStore.userTheme}>
       {isLoadingTheme ? (

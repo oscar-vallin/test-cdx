@@ -1,4 +1,4 @@
-import { Action, action, } from 'easy-peasy';
+import { Action, action } from 'easy-peasy';
 import { theme as DefaultTheme, ThemeDefinition } from 'src/styles/themes/theme';
 
 export interface ThemeModel {
@@ -8,7 +8,7 @@ export interface ThemeModel {
 }
 
 const INITIAL_THEME: ThemeDefinition = {
-  ...DefaultTheme
+  ...DefaultTheme,
 };
 
 const setUserTheme = (state, payload) => {
@@ -20,7 +20,7 @@ const reset = (state) => {
 };
 
 const INITIAL_THEME_STATE: ThemeModel = {
-  userTheme: {...INITIAL_THEME},
+  userTheme: { ...INITIAL_THEME },
   reset: action(reset),
   setUserTheme: action(setUserTheme),
 };

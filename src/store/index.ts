@@ -1,15 +1,15 @@
 import { createStore, persist, thunkOn, ThunkOn } from 'easy-peasy';
 
-import { ApplicationStore } from './ApplicationStore';
-import { SessionStore } from './SessionStore';
-import { ActiveDomainStore } from './ActiveDomainStore';
-import { ThemeStore } from './ThemeStore';
-import { QueryParamStore } from './QueryParamStore';
 import { ThemeModel } from 'src/store/ThemeStore/ThemeStore';
 import { QueryParamModel } from 'src/store/QueryParamStore/QueryParamStore';
 import { ApplicationModel } from 'src/store/ApplicationStore/ApplicationStore';
 import { SessionModel } from 'src/store/SessionStore/SessionStore';
 import { ActiveDomainModel } from 'src/store/ActiveDomainStore/ActiveDomainTypes';
+import { ApplicationStore } from './ApplicationStore';
+import { SessionStore } from './SessionStore';
+import { ActiveDomainStore } from './ActiveDomainStore';
+import { ThemeStore } from './ThemeStore';
+import { QueryParamStore } from './QueryParamStore';
 
 const onSetCurrentSession = (store) => store.SessionStore.setCurrentSession;
 
@@ -30,7 +30,7 @@ export interface StoreModel {
   ApplicationStore: ApplicationModel;
   SessionStore: SessionModel;
   ActiveDomainStore: ActiveDomainModel;
-  onSessionChange: ThunkOn<SessionModel>
+  onSessionChange: ThunkOn<SessionModel>;
 }
 
 const model: StoreModel = {

@@ -1,6 +1,6 @@
 import { ThemeColorsType } from 'src/styles/themes/types';
-import { defaultTheme } from './default';
 import { ThemeColorMode, ThemeFontSize } from 'src/data/services/graphql';
+import { defaultTheme } from './default';
 
 const fonts = {
   SegoeUI: 'Segoe UI',
@@ -47,7 +47,7 @@ const fontSizes: FontSizesType = {
   logoNavBar: '1.3vw',
 };
 
-type FontWeightsType= {
+type FontWeightsType = {
   thin: number;
   extraLight: number;
   light: number;

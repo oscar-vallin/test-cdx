@@ -65,7 +65,7 @@ const _ProfileMenu = ({ id, onUserSettings }: ProfileMenuProps): ReactElement =>
 
     return () => {
       setItems([]);
-    }
+    };
   }, [ApplicationStore.version]);
 
   // Render

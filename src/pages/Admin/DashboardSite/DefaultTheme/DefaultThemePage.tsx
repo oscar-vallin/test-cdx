@@ -23,8 +23,8 @@ import { useNotification } from 'src/hooks/useNotification';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useSessionStore } from 'src/store/SessionStore';
 import { ROUTE_DEFAULT_THEME } from 'src/data/constants/RouteConstants';
-import { StyledChoiceGroup, StyledDiv } from './DefaultThemePage.styles';
 import { useThemeStore } from 'src/store/ThemeStore';
+import { StyledChoiceGroup, StyledDiv } from './DefaultThemePage.styles';
 
 const _DefaultThemePage = () => {
   const SessionStore = useSessionStore();

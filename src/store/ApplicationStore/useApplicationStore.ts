@@ -25,7 +25,7 @@ export const useApplicationStore = (): ApplicationStoreType => {
     if (!version && SessionStore.status.isAuthenticated) {
       callGetVersion();
     }
-  }, [SessionStore.user.token, version])
+  }, [SessionStore.user.token, version, callGetVersion]);
 
   useEffect(() => {
     if (!loading) {
@@ -35,7 +35,7 @@ export const useApplicationStore = (): ApplicationStoreType => {
         setIsOffline(true);
       }
     }
-  }, [data, loading, error]);
+  }, [data, loading, error, setIsOffline, updateVersion]);
 
   return {
     status,

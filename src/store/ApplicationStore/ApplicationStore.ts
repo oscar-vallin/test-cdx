@@ -11,7 +11,7 @@ export interface ApplicationModel {
 
 export const DEFAULT_APPLICATION_STATE = {
   status: {
-    isOffline: (!process.env.NODE_ENV || process.env.NODE_ENV === 'development'),
+    isOffline: !process.env.NODE_ENV || process.env.NODE_ENV === 'development',
   },
   version: '',
 };

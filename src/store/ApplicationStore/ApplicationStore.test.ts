@@ -15,7 +15,7 @@ describe('Unit::ApplicationStore', () => {
     expect(store.getState().status.isOffline).toEqual(true);
   });
 
-  it ('Should update the version', async () => {
+  it('Should update the version', async () => {
     expect(store.getState().version).toEqual('');
     store.getActions().updateVersion('2.0.1.TEST');
 
