@@ -10,7 +10,6 @@ import { MessageBar } from 'src/components/notifications/MessageBar';
 import { Spinner } from 'src/components/spinners/Spinner';
 import { Text } from 'src/components/typography/Text';
 
-import { useThemeContext } from 'src/contexts/ThemeContext';
 import { useColorPalettes } from 'src/hooks/useColorPalettes';
 import Theming from 'src/utils/Theming';
 import { darkTheme } from 'src/styles/themes';
@@ -25,6 +24,7 @@ import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useSessionStore } from 'src/store/SessionStore';
 import { ROUTE_DEFAULT_THEME } from 'src/data/constants/RouteConstants';
 import { StyledChoiceGroup, StyledDiv } from './DefaultThemePage.styles';
+import { useThemeStore } from 'src/store/ThemeStore';
 
 const _DefaultThemePage = () => {
   const SessionStore = useSessionStore();
@@ -42,7 +42,8 @@ const _DefaultThemePage = () => {
     apiDefaultDashThemeQuery({ variables: { ownedInput } });
   }, []);
 
-  const { changeTheme }: any = useThemeContext();
+  const { changeThemeColors } = useThemeStore();
+
   const [palettes, setPalettes]: any = useState([
     {
       id: null,
@@ -103,7 +104,7 @@ const _DefaultThemePage = () => {
     setPalette(selectedPalette);
     setThemeColorMode(themeColorMode);
 
-    changeTheme(variant);
+    changeThemeColors(variant);
   }, [selectedPaletteId, themeColorMode]);
 
   return (

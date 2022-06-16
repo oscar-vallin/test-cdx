@@ -6,7 +6,7 @@ export interface SessionModel {
   status: SessionStatus;
   setSessionStage: Action<SessionModel, string>;
   setCurrentSession: Action<SessionModel, SessionUser>;
-  setRedirectUrl: Action<SessionModel, string>;
+  setRedirectUrl: Action<SessionModel, string | null>;
   onCurrentSessionUpdate: ActionOn<SessionModel>;
   redirectUrl: string | null;
 }
@@ -28,10 +28,9 @@ export const INITIAL_SESSION_STATE: SessionModel = {
     token: null,
   },
   status: {
-    stage: SessionStages.Rehydrating,
+    stage: SessionStages.LoggedOut,
     isAuthenticated: computed((state) => state.stage === SessionStages.LoggedIn),
     isAuthenticating: computed((state) => state.stage === SessionStages.Validating),
-    isRehydrating: computed((state) => state.stage === SessionStages.Rehydrating),
   },
   setCurrentSession: action(setCurrentSession),
   setSessionStage: action(setSessionStage),

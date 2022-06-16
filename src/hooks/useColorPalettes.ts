@@ -15,7 +15,7 @@ export const useColorPalettes = () => {
   const SessionStore = useSessionStore();
 
   const { orgSid } = useOrgSid();
-  const ownedInput = { orgSid, ownerId: SessionStore.user.id };
+  const ownedInput = { orgSid, ownerId: SessionStore.user.id ?? '' };
 
   const [getDashThemeColorForOrg, { data: palettes, loading: isLoadingPalettes }] = useDashThemeColorForOrgLazyQuery();
   const [createDashThemeColorMutation, { data: createdPalette, loading: isCreatingPalette }] =
@@ -100,7 +100,7 @@ export const useColorPalettes = () => {
       variables: {
         createDashThemeColorInput: { ...ownedInput, ...params },
       },
-    });
+    }).then();
   };
 
   const updateColorPalette = (sid, params) => {
@@ -108,15 +108,15 @@ export const useColorPalettes = () => {
       variables: {
         updateDashThemeColorInput: { ...ownedInput, sid, ...params },
       },
-    });
+    }).then();
   };
 
-  const removeColorPalette = (sid) => {
+  const removeColorPalette = (sid: string) => {
     removeDashThemeColorMutation({
       variables: {
         ownedInputSid: { ...ownedInput, sid },
       },
-    });
+    }).then();
   };
 
   return {

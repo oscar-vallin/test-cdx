@@ -12,7 +12,6 @@ import { InputText } from 'src/components/inputs/InputText';
 import { MessageBar } from 'src/components/notifications/MessageBar';
 import { PageTitle, Text } from 'src/components/typography';
 
-import { useThemeContext } from 'src/contexts/ThemeContext';
 import { useColorPalettes } from 'src/hooks/useColorPalettes';
 import { defaultTheme } from 'src/styles/themes';
 
@@ -22,6 +21,7 @@ import { ROUTE_COLOR_PALETTES } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { StyledDiv, StyledChoiceGroup, StyledColorPicker } from './ColorPalettesPage.styles';
 import { PaletteColors } from './PaletteColors';
+import { useThemeStore } from 'src/store/ThemeStore';
 
 const getThemeVariant = ({ themePrimary, neutralPrimary, white }) => ({
   ...Theming.generate.primary(themePrimary),
@@ -31,7 +31,7 @@ const getThemeVariant = ({ themePrimary, neutralPrimary, white }) => ({
 
 const _ColorPalettesPage = () => {
   const Toast = useNotification();
-  const { changeTheme, themeConfig }: any = useThemeContext();
+  const { changeThemeColors } = useThemeStore();
   const {
     colorPalettes,
     isLoadingPalettes,
@@ -54,7 +54,7 @@ const _ColorPalettesPage = () => {
   const [isDefaultPalette, setIsDefaultPalette] = useState(false);
 
   const [colors, setColors]: any = useState({
-    themePrimary: (themeConfig.themeColorPalettes || [])[0],
+    themePrimary: defaultTheme,
   });
 
   const [activeColor, setActiveColor] = useState({
@@ -99,7 +99,7 @@ const _ColorPalettesPage = () => {
 
     setColors(paletteColors);
     setActiveColor({ key: 'themePrimary', color: variant.themePrimary });
-    changeTheme(getThemeVariant({ ...variant, ...paletteColors }));
+    changeThemeColors(getThemeVariant({ ...variant, ...paletteColors }));
 
     setEnableDarkMode(selectedPaletteId ? Boolean(currentVariant.allowDark) : isExtendingPalette);
   }, [paletteType, selectedPaletteId, colorPalettes]);
@@ -134,7 +134,7 @@ const _ColorPalettesPage = () => {
       setColors({ themePrimary, neutralPrimary, white });
       setActiveColor({ key: 'themePrimary', color: themePrimary });
 
-      changeTheme(variant);
+      changeThemeColors(variant);
       setWantsReset(false);
     }
   }, [wantsReset]);
@@ -148,7 +148,7 @@ const _ColorPalettesPage = () => {
     setColors({ ...colors, [activeColor.key]: str });
     setActiveColor({ ...activeColor, color: str });
 
-    changeTheme(variant);
+    changeThemeColors(variant);
   };
 
   return (

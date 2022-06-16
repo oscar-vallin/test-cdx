@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect, useMemo, useContext, createContext } from 'react';
+import { createContext, useEffect, useMemo } from 'react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 
 import 'office-ui-fabric-react/dist/css/fabric.css';
@@ -8,7 +8,7 @@ import { useCurrentUserTheme } from 'src/hooks/useCurrentUserTheme';
 import { useSessionStore } from 'src/store/SessionStore';
 import { useThemeStore } from 'src/store/ThemeStore';
 import { LoadingPage } from 'src/pages/Loading/LoadingPage';
-import { theme, theme as styledComponentsTheme } from '../styles/themes/theme';
+import { ThemeFontSize } from 'src/data/services/graphql';
 
 export const ThemeContext = createContext(() => {
   return {};
@@ -25,7 +25,6 @@ export const ThemeContextProvider = ({ children }) => {
   const ThemeStore = useThemeStore();
 
   const { isLoadingTheme, fetchTheme } = useCurrentUserTheme();
-  const [styledTheme, setStyledTheme] = useState(styledComponentsTheme);
   const themeConfig = {};
 
   useEffect(() => {
@@ -52,32 +51,27 @@ export const ThemeContextProvider = ({ children }) => {
     }
 
     [class*="ms-DetailsHeader"] {
-      font-size: ${theme.fontSizes.normal};
+      font-size: ${ThemeStore.userTheme.fontSizes.normal};
     }
 
     [class*="ms-DetailsRow"] {
-      font-size: ${theme.fontSizes.normal};
+      font-size: ${ThemeStore.userTheme.fontSizes.normal};
     }
   `;
 
   type GlobalStyleProps = {
-    fontSize: any;
+    fontSize: ThemeFontSize;
   };
 
   const changeTheme = (newTheme = {}) => {
-    const customizedTheme = {
-      ...styledTheme,
-      colors: { ...styledTheme.colors, ...newTheme },
-    };
 
-    setStyledTheme(customizedTheme);
   };
 
   useEffect(() => {
     if (!isLoadingTheme) {
-      changeTheme(ThemeStore.themes.current);
+      changeTheme(ThemeStore.userTheme);
     }
-  }, [ThemeStore.themes.current]);
+  }, [ThemeStore.userTheme]);
 
   // eslint-disable-next-line
   const values: any = useMemo(
@@ -91,13 +85,13 @@ export const ThemeContextProvider = ({ children }) => {
   );
 
   return (
-    <ThemeProvider theme={styledTheme}>
+    <ThemeProvider theme={ThemeStore.userTheme}>
       <ThemeContext.Provider value={values}>
         {isLoadingTheme ? (
           <LoadingPage />
         ) : (
           <>
-            <GlobalStyle fontSize={ThemeStore.themes.current.themeFontSize} />
+            <GlobalStyle fontSize={ThemeStore.userTheme.themeFontSize ?? ThemeFontSize.Medium} />
             {children}
           </>
         )}
@@ -105,8 +99,3 @@ export const ThemeContextProvider = ({ children }) => {
     </ThemeProvider>
   );
 };
-
-//
-export function useThemeContext() {
-  return useContext(ThemeContext);
-}

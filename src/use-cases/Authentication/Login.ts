@@ -122,7 +122,11 @@ export const useLoginUseCase = () => {
 
       SessionStore.setCurrentSession({
         token: passwordLogin?.tokenUser?.token,
-        ...passwordLogin?.tokenUser?.session,
+        id: passwordLogin?.tokenUser?.session?.id,
+        orgSid: passwordLogin?.tokenUser?.session?.orgSid,
+        userId: passwordLogin?.tokenUser?.session?.userId,
+        firstName: passwordLogin?.tokenUser?.session?.firstNm,
+        defaultAuthorities: passwordLogin?.tokenUser?.session?.defaultAuthorities,
       });
 
       ActiveDomainStore.setOriginOrg(organization);

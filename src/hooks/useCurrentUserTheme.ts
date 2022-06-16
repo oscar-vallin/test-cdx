@@ -1,77 +1,59 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react';
-import { defaultTheme, darkTheme } from '../styles/themes';
 
-import {
-  useUserThemeLazyQuery,
-  useCreateOrUpdateOwnDashThemeMutation,
-  useSetOwnDashThemeFontSizeMutation,
-} from '../data/services/graphql';
+import { ThemeFontSize, useSetOwnDashThemeFontSizeMutation, useUserThemeLazyQuery } from 'src/data/services/graphql';
+import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { useSessionStore } from '../store/SessionStore';
 import { useThemeStore } from '../store/ThemeStore';
 
 export const useCurrentUserTheme = () => {
   const SessionStore = useSessionStore();
   const ThemeStore = useThemeStore();
+  const handleError = ErrorHandler();
 
   const { isAuthenticated } = SessionStore.status;
 
-  const [apiUserThemeQuery, { data: theme, loading: isLoadingTheme }] = useUserThemeLazyQuery();
+  const [callUserThemeQuery, { data: dataTheme, loading: loadingTheme }] = useUserThemeLazyQuery();
+  const [callSetOwnDashFontSize, { data: dataUpdatedFont, loading: loadingFont, error: errorFont }] =
+    useSetOwnDashThemeFontSizeMutation();
+
+  useEffect(() => {
+    handleError(errorFont);
+  }, [errorFont, handleError]);
 
   const fetchTheme = () => {
     if (isAuthenticated) {
-      apiUserThemeQuery({ variables: { themeColorMode: null } });
+      callUserThemeQuery({ variables: { themeColorMode: null } });
     }
   };
 
-  const [createOrUpdateOwnDashTheme, { data: updatedTheme, loading: isHandlingTheme }] =
-    useCreateOrUpdateOwnDashThemeMutation();
-
-  const [setOwnDashFontSize] = useSetOwnDashThemeFontSizeMutation();
+  useEffect(() => {
+    if (loadingTheme) {
+      return;
+    }
+    ThemeStore.changeThemeColors(dataTheme?.userTheme?.dashThemeColor);
+  }, [dataTheme, loadingTheme]);
 
   useEffect(() => {
-    if (theme?.userTheme) {
-      ThemeStore.setUserTheme(theme.userTheme);
+    if (loadingFont) {
+      return;
     }
-  }, [theme]);
+    ThemeStore.setFontSize(dataUpdatedFont?.setOwnDashThemeFontSize?.themeFontSize);
+  }, [dataUpdatedFont, loadingFont]);
 
-  useEffect(() => {
-    if (theme || updatedTheme) {
-      const data = {
-        ...(theme?.userTheme || {}),
-        ...(updatedTheme?.createOrUpdateOwnDashTheme || {}),
-      };
-
-      const { dashThemeColor, themeColorMode, themeFontSize }: any = data;
-
-      const palette = themeColorMode
-        ? {
-            ...(themeColorMode === 'LIGHT' ? defaultTheme : darkTheme),
-            themePrimary: dashThemeColor?.themePrimary,
-          }
-        : dashThemeColor;
-
-      ThemeStore.setUserTheme({
-        paletteNm: dashThemeColor?.paletteNm,
-        dashThemeColor: palette,
-        themeColorMode,
-        themeFontSize,
-        // loading: isLoadingTheme,
-      });
-    }
-  }, [theme, updatedTheme]);
+  const setFontSize = (fontSize: ThemeFontSize) => {
+    callSetOwnDashFontSize({
+      variables: {
+        dashThemeInput: {
+          themeFontSize: fontSize,
+        },
+      },
+    }).then();
+  };
 
   return {
-    createOrUpdateTheme: (dashThemeInput) => {
-      createOrUpdateOwnDashTheme({ variables: { dashThemeInput } });
-    },
-    setOwnDashFontSize: (dashThemeInput) => {
-      setOwnDashFontSize({ variables: { dashThemeInput } });
-    },
-    updatedTheme,
-    isHandlingTheme,
-    isLoadingTheme,
-    // isHandlingFontSize,
+    setFontSize,
+    isLoadingTheme: loadingTheme,
     fetchTheme,
   };
 };

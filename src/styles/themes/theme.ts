@@ -1,11 +1,33 @@
+import { ThemeColorsType } from 'src/styles/themes/types';
 import { defaultTheme } from './default';
+import { ThemeColorMode, ThemeFontSize } from 'src/data/services/graphql';
 
 const fonts = {
   SegoeUI: 'Segoe UI',
   SourceSansPro: 'Source Sans Pro',
 };
 
-const fontSizes = {
+type FontSizesType = {
+  xsmall: string;
+  small: string;
+  normal: string;
+  large: string;
+  xlarge: string;
+  huge: string;
+  giant: string;
+  subtitle: string;
+  title: string;
+  h1: string;
+  h2: string;
+  h3: string;
+  h4: string;
+  h5: string;
+  regular: string;
+  logo: string;
+  logoNavBar: string;
+};
+
+const fontSizes: FontSizesType = {
   xsmall: '0.625rem',
   small: '0.75rem',
   normal: '0.875rem',
@@ -25,7 +47,19 @@ const fontSizes = {
   logoNavBar: '1.3vw',
 };
 
-const fontWeights = {
+type FontWeightsType= {
+  thin: number;
+  extraLight: number;
+  light: number;
+  normal: number;
+  medium: number;
+  semiBold: number;
+  bold: number;
+  extraBold: number;
+  black: number;
+};
+
+const fontWeights: FontWeightsType = {
   thin: 100,
   extraLight: 200,
   light: 300,
@@ -37,13 +71,29 @@ const fontWeights = {
   black: 900,
 };
 
-const lineHeights = {
+type LineHeightsType = {
+  normal: string;
+  title: string;
+  paragraph: string;
+};
+
+const lineHeights: LineHeightsType = {
   normal: '1',
   title: '1.25',
   paragraph: '1.5',
 };
 
-const radius = {
+type RadiusType = {
+  none: string;
+  small: string;
+  normal: string;
+  medium: string;
+  large: string;
+  rounded: string;
+  circle: string;
+};
+
+const radius: RadiusType = {
   none: '0px',
   small: '2px',
   normal: '5px',
@@ -53,7 +103,16 @@ const radius = {
   circle: '48px',
 };
 
-const spacing = {
+type SpacingType = {
+  none: string;
+  small: string;
+  normal: string;
+  double: string;
+  triple: string;
+  quadruple: string;
+};
+
+const spacing: SpacingType = {
   none: '0',
   small: '5px' /* Third, base? */,
   normal: '15px',
@@ -62,11 +121,25 @@ const spacing = {
   quadruple: '60px',
 };
 
-const boxShadows = {
+type BoxShadowsType = {
+  smallest: string;
+  small: string;
+  normal: string;
+  large: string;
+};
+
+const boxShadows: BoxShadowsType = {
   smallest: '0 1.6px 3.6px 0 rgba(0, 0, 0, .132), 0 0.3px 0.9px 0 rgba(0, 0, 0, .108)',
   small: '0 3.2px 7.2px 0 rgba(0, 0, 0, .132), 0 0.6px 1.8px 0 rgba(0 0, 0, .108)',
   normal: '0 6.4px 14.4px 0 rgba(0, 0, 0, .132), 0 1.2px 3.6px 0 rgba(0, 0, 0, .108)',
   large: '0 25.6px 57.6px 0 rgba(0, 0, 0, .22), 0 4.8px 14.4px 0 rgba(0, 0, 0, .18)',
+};
+
+type FontStylesType = {
+  normal: string;
+  logo: string;
+  link: string;
+  headerTitle: string;
 };
 
 const fontStyles = {
@@ -76,7 +149,27 @@ const fontStyles = {
   headerTitle: `normal ${fontWeights.bold} ${fontSizes.logoNavBar}/${lineHeights.normal} ${fonts.SegoeUI}, ${fonts.SourceSansPro}, sans-serif`,
 };
 
-export const theme = {
+export interface ThemeDefinition {
+  breakpoints: number[];
+  space: number[];
+  fontSizes: FontSizesType;
+  fontWeights: FontWeightsType;
+  lineHeights: LineHeightsType;
+  letterSpacings: {
+    normal: string;
+  };
+  radius: RadiusType;
+  spacing: SpacingType;
+  boxShadows: BoxShadowsType;
+  fontStyles: FontStylesType;
+
+  paletteNm?: string | null;
+  themeColorMode?: ThemeColorMode | null;
+  themeFontSize?: ThemeFontSize | null;
+  colors: ThemeColorsType;
+}
+
+export const theme: ThemeDefinition = {
   breakpoints: [32, 48, 64],
   space: [0, 4, 8, 16, 24, 32, 48, 64, 128, 256, 512],
   fontSizes,

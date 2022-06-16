@@ -13,7 +13,7 @@ import { ThemeContextProvider } from './contexts/ThemeContext';
 import { SessionContextProvider } from './contexts/SessionContext';
 import { ActiveDomainContextProvider } from './contexts/ActiveDomainContext';
 import { NotificationContextProvider } from './contexts/NotificationContext';
-import store from './store/index';
+import store from './store';
 
 initializeIcons();
 
