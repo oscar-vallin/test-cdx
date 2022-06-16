@@ -24,13 +24,13 @@ export const useLogoutUseCase = () => {
   const [apiCall, { loading: isLoggingOut, error: logoutError }] = useLogOutMutation();
 
   const clearTokens = () => {
-    SessionStore.setCurrentSession({ token: null });
     setCSRFToken('');
     setAuthToken('');
     setState({ ...INITIAL_STATE });
   };
 
   const logoutUser = () => {
+    SessionStore.logout();
     apiCall()
       .catch(() => {
         // catch any error and just reset the tokens regardless

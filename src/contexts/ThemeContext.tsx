@@ -28,7 +28,7 @@ export const ThemeContextProvider = ({ children }) => {
     if (isAuthenticated) {
       fetchTheme();
     }
-  }, [SessionStore.status.isAuthenticated]);
+  }, [SessionStore.user.token]);
 
   const GlobalStyle = createGlobalStyle<GlobalStyleProps>`
     * {

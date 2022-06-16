@@ -11,17 +11,15 @@ import { ActiveDomainStore } from './ActiveDomainStore';
 import { ThemeStore } from './ThemeStore';
 import { QueryParamStore } from './QueryParamStore';
 
-const onSetCurrentSession = (store) => store.SessionStore.setCurrentSession;
+const onLogout = (store) => store.SessionStore.logout;
 
 const resetStores = async (actions, target, { getStoreActions }) => {
   const StoreActions = await getStoreActions();
 
-  if (!target.payload.token) {
-    StoreActions.ApplicationStore.reset();
-    StoreActions.ActiveDomainStore.reset();
-    StoreActions.ThemeStore.reset();
-    StoreActions.QueryParamStore.reset();
-  }
+  StoreActions.ThemeStore.reset();
+  StoreActions.ApplicationStore.reset();
+  StoreActions.ActiveDomainStore.reset();
+  StoreActions.QueryParamStore.reset();
 };
 
 export interface StoreModel {
@@ -30,7 +28,7 @@ export interface StoreModel {
   ApplicationStore: ApplicationModel;
   SessionStore: SessionModel;
   ActiveDomainStore: ActiveDomainModel;
-  onSessionChange: ThunkOn<SessionModel>;
+  onLogout: ThunkOn<SessionModel>;
 }
 
 const model: StoreModel = {
@@ -39,7 +37,7 @@ const model: StoreModel = {
   ApplicationStore,
   SessionStore: persist(SessionStore),
   ActiveDomainStore: persist(ActiveDomainStore),
-  onSessionChange: thunkOn(onSetCurrentSession, resetStores),
+  onLogout: thunkOn(onLogout, resetStores),
 };
 
 const store = createStore(model);

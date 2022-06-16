@@ -10,6 +10,7 @@ type SessionStoreType = {
     stage: SessionStages;
   };
   redirectUrl: string | null;
+  logout: () => void;
   setSessionStage: (state: string) => void;
   setCurrentSession: (user: SessionUser) => void;
   setRedirectUrl: (url: string | null) => void;
@@ -19,7 +20,7 @@ export const useSessionStore = (): SessionStoreType => {
   const typedHooks = createTypedHooks<StoreModel>();
 
   const { user, status, redirectUrl } = typedHooks.useStoreState((state) => state.SessionStore);
-  const { setCurrentSession, setSessionStage, setRedirectUrl } = typedHooks.useStoreActions(
+  const { logout, setCurrentSession, setSessionStage, setRedirectUrl } = typedHooks.useStoreActions(
     (state) => state.SessionStore
   );
 
@@ -27,6 +28,7 @@ export const useSessionStore = (): SessionStoreType => {
     user,
     status,
     redirectUrl,
+    logout,
     setCurrentSession,
     setSessionStage,
     setRedirectUrl,
