@@ -125,8 +125,6 @@ export const StyledDiv = styled.div`
 export const StyledMenuItem = styled.div<SelectableProps>`
   padding-left: 5px;
   padding-right: 5px;
-  # color: ${({ selected, theme }) => (selected ? theme.colors.themePrimary : theme.colors.black)};
-  color: #201F1E;
   font-weight: ${({ selected }) => (selected ? '700' : '400')};
 `;
 
