@@ -49,7 +49,7 @@ export const useLoginUseCase = () => {
     }).catch(() => null);
   };
 
-  const performUserAuthentication = ({ userId: _userId, password }) =>
+  const performUserAuthentication = ({ userId: _userId, password }) => {
     verifyUserCredentials({
       variables: {
         userId: _userId,
@@ -57,6 +57,7 @@ export const useLoginUseCase = () => {
       },
       errorPolicy: 'all',
     }).catch(() => null);
+  };
 
   const returnToInitialStep = () => {
     setState({ ...state, step: 'USER_ID', loading: false, error: null, reset: false });

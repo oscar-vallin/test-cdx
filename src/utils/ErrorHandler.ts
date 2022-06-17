@@ -3,9 +3,11 @@ import { ROUTES } from 'src/data/constants/RouteConstants';
 import { useNotification } from '../hooks/useNotification';
 import { useApplicationStore } from '../store/ApplicationStore';
 import { useLogoutUseCase } from '../use-cases/Authentication';
+import { useSessionStore } from 'src/store/SessionStore';
 
 export const ErrorHandler = () => {
   const Toast = useNotification();
+  const SessionStore = useSessionStore();
   const ApplicationStore = useApplicationStore();
   const { performUserLogout } = useLogoutUseCase();
   const history = useHistory();
@@ -13,18 +15,16 @@ export const ErrorHandler = () => {
   return (error?: any) => {
     if (error) {
       if (error?.networkError?.statusCode === 403) {
-        Toast.error({ text: 'Your session has expired please login again.' });
-
-        setTimeout(performUserLogout, 3000);
+        SessionStore.setGlobalError('Your session has expired please login again.');
+        performUserLogout();
       } else {
         const { message } = error;
         const { extensions = null } = error?.graphQLErrors?.shift() || {};
 
         if (extensions) {
           if (extensions.errorSubType === 'NEED_AUTH') {
-            Toast.error({ text: message });
-
-            setTimeout(performUserLogout, 3000);
+            SessionStore.setGlobalError(message);
+            performUserLogout();
           } else if (extensions.errorSubType === 'INSUFFICIENT_PRIVILEGES') {
             history.push(ROUTES.ROUTE_UNAUTHORIZED.URL);
           } else {

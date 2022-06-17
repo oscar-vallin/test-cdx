@@ -1,14 +1,14 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { ReactElement, useState, useEffect } from 'react';
-import { Link } from '@fluentui/react';
+import React, { ReactElement, useState, useEffect } from 'react';
+import { Link, MessageBar, MessageBarType } from '@fluentui/react';
 import { BigTitle, Card500, CenteredWrapper, K2ULogo, LogoRow } from 'src/layouts/LayoutLogin/LayoutLogin.styles';
 import { Column } from 'src/components/layouts';
 import { InputText } from 'src/components/inputs/InputText';
 import { Spinner } from 'src/components/spinners/Spinner';
 import { useLoginUseCase } from 'src/use-cases/Authentication';
-import { useNotification } from 'src/hooks/useNotification';
 import { ForgotPasswordModal } from 'src/containers/modals/ForgotPasswordModal';
+import { useSessionStore } from 'src/store/SessionStore';
 import { StyledRow, StyledButton, StyledText, StyledButtonIcon } from './FormLogin.styles';
 
 const defaultProps = {
@@ -22,7 +22,7 @@ type FormLoginProps = {
 const INITIAL_STATE = { userId: '', password: '' };
 
 const FormLogin = ({ id }: FormLoginProps): ReactElement => {
-  const Toast = useNotification();
+  const SessionStore = useSessionStore();
 
   const { performUserIdVerification, performUserAuthentication, returnToInitialStep, state } = useLoginUseCase();
 
@@ -38,12 +38,31 @@ const FormLogin = ({ id }: FormLoginProps): ReactElement => {
     }
 
     if (state.error) {
-      Toast.error({ text: state.error });
+      SessionStore.setGlobalError(state.error);
+    } else {
+      SessionStore.setGlobalError(null);
     }
   }, [state]);
 
   const handleReturnToInitialStep = (): null => {
     returnToInitialStep();
+    return null;
+  };
+
+  const renderGlobalError = () => {
+    if (SessionStore.globalError) {
+      return (
+        <StyledRow>
+          <MessageBar
+            id="__Global_Error"
+            messageBarType={MessageBarType.error}
+            isMultiline
+          >
+            {SessionStore.globalError}
+          </MessageBar>
+        </StyledRow>
+      );
+    }
     return null;
   };
 
@@ -62,6 +81,7 @@ const FormLogin = ({ id }: FormLoginProps): ReactElement => {
                 <BigTitle>CDX DASHBOARD</BigTitle>
               </Column>
             </StyledRow>
+            {renderGlobalError()}
             <StyledRow id={`${id}__Card__Row--sublabel`}>
               <Column id={`${id}__Card__Row__Column--sublabel`}>
                 <StyledText>Sign in to access your dashboard</StyledText>
@@ -117,7 +137,7 @@ const FormLogin = ({ id }: FormLoginProps): ReactElement => {
                   text=""
                   onClick={() => {
                     if (isValidEmail) {
-                      performUserAuthentication(values).then();
+                      performUserAuthentication(values);
                     } else {
                       performUserIdVerification(values);
                     }
