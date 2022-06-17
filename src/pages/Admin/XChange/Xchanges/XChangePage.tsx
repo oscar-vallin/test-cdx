@@ -15,6 +15,7 @@ import {
   PrimaryButton,
   TextField,
   SearchBox,
+  FontIcon,
 } from '@fluentui/react';
 import { Column, Container, Row } from 'src/components/layouts';
 import { Spacing } from 'src/components/spacings/Spacing';
@@ -26,7 +27,7 @@ import { useXchangeProfileLazyQuery, XchangeConfigSummary } from 'src/data/servi
 import { yyyyMMdd } from 'src/utils/CDXUtils';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { PageBody } from 'src/components/layouts/Column';
-import { SetupStyled, CardStyled, ContainerInput, CircleStyled } from './XchangePage.styles';
+import { SetupStyled, CardStyled, ContainerInput, CircleStyled, StyledButtonAction } from './XchangePage.styles';
 
 type TooltipsProps = {
   hasAlerts: string;
@@ -206,17 +207,29 @@ const XChangePage = () => {
             <>
               {node?.hasAlerts && (
                 <TooltipHost content={tooltipContent?.hasAlerts}>
-                  <IconButton iconProps={{ iconName: 'Ringer' }} style={{ color: 'black' }} />
+                  <FontIcon
+                    style={{ color: 'black', fontSize: '15px', cursor: 'pointer', marginTop: '4px' }}
+                    aria-describedby="XchangeSpecificAlerts-Icon"
+                    iconName="Ringer"
+                  />
                 </TooltipHost>
               )}
               {node?.implementationPending && (
                 <TooltipHost content={tooltipContent?.implementationPending}>
-                  <IconButton iconProps={{ iconName: 'Warning' }} style={{ color: 'orange' }} />
+                  <FontIcon
+                    style={{ color: 'orange', fontSize: '15px', cursor: 'pointer', marginTop: '4px' }}
+                    aria-describedby="XchangeImplementationPending-Icon"
+                    iconName="Warning"
+                  />
                 </TooltipHost>
               )}
               {node?.hasUnpublishedChanges && (
                 <TooltipHost content={tooltipContent?.hasUnpublishedChanges}>
-                  <IconButton iconProps={{ iconName: '6PointStar' }} style={{ color: 'red' }} />
+                  <FontIcon
+                    style={{ color: 'red', fontSize: '12px', cursor: 'pointer' }}
+                    aria-describedby="XchangeUnpublishedChanges-Icon"
+                    iconName="6PointStar"
+                  />
                 </TooltipHost>
               )}
             </>
@@ -375,7 +388,7 @@ const XChangePage = () => {
                   <Text style={{ fontWeight: 'bold', marginTop: '10px' }}>Comments</Text>
                 </Column>
                 <Column lg="4" right>
-                  <IconButton iconProps={{ iconName: 'PencilReply' }} />
+                  <IconButton iconProps={{ iconName: 'EditSolid12' }} />
                 </Column>
               </Row>
               <TextField multiline borderless={true} resizable={false} rows={7} />
@@ -409,8 +422,9 @@ const XChangePage = () => {
               </Column>
               <Column lg="2" right>
                 <SetupStyled>
-                  <IconButton iconProps={{ iconName: 'Add' }} />
-                  <Text>Setup new Xchange</Text>
+                  <StyledButtonAction id="__SetupNewXchange">
+                    + <Text style={{ paddingTop: '5px' }}>Setup new Xchange</Text>
+                  </StyledButtonAction>
                 </SetupStyled>
               </Column>
             </Row>

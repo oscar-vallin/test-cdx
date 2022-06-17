@@ -17,6 +17,7 @@ import { Spacing } from 'src/components/spacings/Spacing';
 import { IconButton, Spinner, SpinnerSize, Text } from '@fluentui/react';
 import { UIInputMultiSelect } from 'src/components/inputs/InputDropdown';
 import { PageBody } from 'src/components/layouts/Column';
+import { Diagram } from './Diagram/Diagram';
 import { CardStyled, StyledColumTabs, SubsStyled } from './XchangeDetailsPage.styles';
 
 const XchangeDetailsPage = () => {
@@ -198,9 +199,12 @@ const XchangeDetailsPage = () => {
                   </Text>
                 </StyledColumTabs>
               ))}
-            <Column lg="3" right>
-              {cardBox()}
+          </Row>
+          <Row>
+            <Column lg="9">
+              <Diagram />
             </Column>
+            <Column lg="3">{cardBox()}</Column>
           </Row>
         </Container>
       </PageBody>

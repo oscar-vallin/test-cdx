@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { DocumentCard } from '@fluentui/react';
+import { ButtonAction } from 'src/components/buttons';
 
 export const CardStyled = styled(DocumentCard)`
   background: ${({ theme }) => theme.colors.neutralLighter};
@@ -35,14 +36,18 @@ export const CircleStyled = styled.div<CircleStyledProps>`
   border-radius: 50%;
   width: 20px;
   height: 20px;
-  padding: 5px;
+  padding: 3px 1px 7px 0;
   background: #fff;
   border: 1.5px solid ${({ color }) => color};
   color: ${({ color }) => color};
   text-align: center;
-  font: 10px Arial, sans-serif;
+  font: 11px Arial, sans-serif;
 `;
 
 type CircleStyledProps = {
   color: string;
 };
+
+export const StyledButtonAction = styled(ButtonAction)`
+  font-size: 24px;
+`;
