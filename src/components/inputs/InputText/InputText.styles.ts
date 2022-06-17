@@ -34,11 +34,11 @@ export const StyledTextField = styled(TextField)<StyledTextFieldProps>`
       }
     }
   }
-  
-  &.is-active  {
+
+  &.is-active {
     .ms-TextField-fieldGroup {
       border: 1px solid ${({ theme }) => theme.colors.themePrimary};
-    }    
+    }
   }
 `;
 

@@ -69,9 +69,9 @@ const ThemeSettings = () => {
     if (!loadingThemesForOrg && dataThemesForOrg?.dashThemeColorForOrg?.nodes) {
       setPalettes(dataThemesForOrg.dashThemeColorForOrg?.nodes);
     }
-    return (() => {
+    return () => {
       setPalettes([]);
-    });
+    };
   }, [dataThemesForOrg, loadingThemesForOrg]);
 
   const [createOrUpdateOwnDashTheme, { data: themeResponse, loading: isHandlingTheme }] =
@@ -90,9 +90,9 @@ const ThemeSettings = () => {
       setSelectedPaletteId(dataUserTheme.userTheme?.id ?? undefined);
     }
 
-    return (() => {
+    return () => {
       setSelectedPaletteId(undefined);
-    });
+    };
   }, [dataUserTheme, loadingUserTheme]);
 
   const selectTheme = (paletteId: string) => {

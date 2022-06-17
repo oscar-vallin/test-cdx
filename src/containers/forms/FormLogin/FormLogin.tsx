@@ -53,11 +53,7 @@ const FormLogin = ({ id }: FormLoginProps): ReactElement => {
     if (SessionStore.globalError) {
       return (
         <StyledRow>
-          <MessageBar
-            id="__Global_Error"
-            messageBarType={MessageBarType.error}
-            isMultiline
-          >
+          <MessageBar id="__Global_Error" messageBarType={MessageBarType.error} isMultiline>
             {SessionStore.globalError}
           </MessageBar>
         </StyledRow>

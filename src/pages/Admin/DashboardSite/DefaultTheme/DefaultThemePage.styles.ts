@@ -47,6 +47,6 @@ export const StyledChoiceGroup = styled(ChoiceGroup)`
       & label:hover .ms-ChoiceFieldLabel {
         color: ${({ theme }) => theme.colors.themePrimary} !important;
       }
-    }    
+    }
   }
 `;

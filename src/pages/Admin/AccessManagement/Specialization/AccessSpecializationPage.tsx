@@ -11,7 +11,8 @@ import {
   DialogFooter,
   Spinner,
   SpinnerSize,
-  Link, DetailsList,
+  Link,
+  DetailsList,
 } from '@fluentui/react';
 
 import { EmptyState } from 'src/containers/states';

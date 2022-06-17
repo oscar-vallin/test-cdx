@@ -23,7 +23,7 @@ export const darkTheme: ThemeColorsType = {
   neutralDark: '#f4f4f4',
   black: '#f8f8f8',
   white: '#1f1f1f',
-  red: '#a4262c',
+  red: '#e33136',
   custom: {
     severeError: '#FA4100',
     error: '#a80000',

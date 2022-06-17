@@ -14,7 +14,7 @@ jest
     useVersionQuery: () => ({
       version: '2.0.0.TEST',
     }),
-    useVersionLazyQuery: () => ([
+    useVersionLazyQuery: () => [
       jest.fn(),
       {
         data: {
@@ -22,8 +22,8 @@ jest
         },
         loading: false,
         error: null,
-      }
-    ]),
+      },
+    ],
   }))
   .mock('src/use-cases/Authentication', () => ({
     useLogoutUseCase: () => ({

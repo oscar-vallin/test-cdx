@@ -289,7 +289,10 @@ export const WorkPacketTable = ({
 
       <Container>
         <Box id={`${id}_TableWrap`}>
-          <div id="Table_Detailed" style={{ width: '100%', height: `calc(100vh - ${hasMorePages ? '325px': '250px'})` }}>
+          <div
+            id="Table_Detailed"
+            style={{ width: '100%', height: `calc(100vh - ${hasMorePages ? '325px' : '250px'})` }}
+          >
             {renderTable()}
           </div>
           <Paginator pagingInfo={pagingInfo} onPageChange={onPageChange} />
