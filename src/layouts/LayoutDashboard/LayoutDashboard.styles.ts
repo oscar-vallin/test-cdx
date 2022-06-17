@@ -7,12 +7,13 @@ interface DashboardBodyProps {
   isMenuOpen?: boolean;
 }
 
-export const BoxStyled = styled(Box)`
+export const DashboardContainer = styled(Box)`
   background: ${({ theme }) => theme.colors.white};
   color: ${({ theme }) => theme.colors.black};
   overflow: auto;
   padding: 58px 0 0;
   width: 100%;
+  height: 100vh;
 
   [data-icon-name='FilterSolid'] {
     margin: 3px 10px 0 0;

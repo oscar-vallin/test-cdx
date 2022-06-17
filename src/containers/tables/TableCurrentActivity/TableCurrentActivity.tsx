@@ -12,6 +12,7 @@ import {
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useHistory } from 'react-router-dom';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
+import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { TableFilters } from '../TableFilters';
 import { Container, TableContainer } from './TableActivity.styles';
 import { TableActivity } from './TableActivity';
@@ -20,6 +21,7 @@ const TablesCurrentActivity = ({ id = 'TableCurrentActivity' }) => {
   const { orgSid } = useOrgSid();
   const history = useHistory();
   const ActiveDomainStore = useActiveDomainStore();
+  const handleError = ErrorHandler();
 
   const { searchText, startDate, endDate } = useTableFilters('Name, Id, Last Activity');
   const [apiCompleted, { data: dataCompleted, loading: loadingCompleted, error: errorCompleted }] = useQueryHandler(
@@ -31,6 +33,16 @@ const TablesCurrentActivity = ({ id = 'TableCurrentActivity' }) => {
   const [apiInProcess, { data: dataInProcess, loading: loadingInProcess, error: errorInProcess }] = useQueryHandler(
     useExchangeActivityInProcessLazyQuery
   );
+
+  useEffect(() => {
+    handleError(errorCompleted);
+  }, [errorCompleted]);
+  useEffect(() => {
+    handleError(errorErrored);
+  }, [errorErrored]);
+  useEffect(() => {
+    handleError(errorInProcess);
+  }, [errorInProcess]);
 
   const [completedItems, setCompletedItems] = useState<OrganizationLink[]>([]);
   const [erroredItems, setErroredItems] = useState<OrganizationLink[]>([]);
@@ -90,14 +102,14 @@ const TablesCurrentActivity = ({ id = 'TableCurrentActivity' }) => {
     }
   }, [dataErrored, loadingErrored]);
 
-  const onClick = (orgSid?: string | null) => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const startDate = urlParams.get('startDate');
-    const endDate = urlParams.get('endDate');
+  const onClick = (_orgSid?: string | null) => {
+    const _urlParams = new URLSearchParams(window.location.search);
+    const _startDate = _urlParams.get('startDate');
+    const _endDate = _urlParams.get('endDate');
     ActiveDomainStore.setCurrentOrg({
-      orgSid,
+      orgSid: _orgSid,
     });
-    history.push(`/file-status?orgSid=${orgSid}&startDate=${startDate}&endDate=${endDate}`);
+    history.push(`/file-status?orgSid=${_orgSid}&startDate=${_startDate}&endDate=${_endDate}`);
   };
 
   return (
@@ -111,6 +123,7 @@ const TablesCurrentActivity = ({ id = 'TableCurrentActivity' }) => {
               id="__Table__In__Process"
               tableName="In Process"
               items={inProcessItems}
+              color="info"
               loading={false}
               emptyMessage="There are no clients with files In Process in this date range"
             />

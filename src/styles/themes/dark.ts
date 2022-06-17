@@ -29,11 +29,10 @@ export const darkTheme: ThemeColorsType = {
     error: '#a80000',
     errorAlt: '#fde7e9',
     warning: '#D83B01',
-    warningAlt: '#FED9CC',
+    warningAlt: '#fcde54',
     success: '#107C10',
     successAlt: '#DFF6DD',
-    info: '#005A9E',
+    info: '#0068ff',
     infoAlt: '#C7E0F4',
-    link: '#0078D4',
   },
 };

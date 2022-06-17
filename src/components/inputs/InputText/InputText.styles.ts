@@ -24,6 +24,7 @@ export const StyledTextField = styled(TextField)<StyledTextFieldProps>`
   }
   .ms-TextField-fieldGroup {
     background-color: ${({ theme }) => theme.colors.white};
+    border: 1px solid ${({ theme }) => theme.colors.neutralSecondary};
 
     input {
       color: ${({ theme }) => theme.colors.neutralSecondary};
@@ -32,6 +33,12 @@ export const StyledTextField = styled(TextField)<StyledTextFieldProps>`
         background-color: ${({ theme }) => theme.colors.neutralLight};
       }
     }
+  }
+  
+  &.is-active  {
+    .ms-TextField-fieldGroup {
+      border: 1px solid ${({ theme }) => theme.colors.themePrimary};
+    }    
   }
 `;
 

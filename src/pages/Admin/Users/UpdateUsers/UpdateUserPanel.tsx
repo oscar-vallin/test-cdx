@@ -1,7 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { ReactElement, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { MessageBar, MessageBarType, PanelType, Stack, ICommandBarItemProps, IButtonProps } from '@fluentui/react';
+import {
+  MessageBar,
+  MessageBarType,
+  PanelType,
+  Stack,
+  ICommandBarItemProps,
+  IButtonProps,
+  CommandBar,
+} from '@fluentui/react';
 
 import { Tabs } from 'src/components/tabs/Tabs';
 import { PanelBody, PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
@@ -12,7 +20,6 @@ import { Column } from 'src/components/layouts';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { MigrateUserDialog } from 'src/pages/Admin/Users/UpdateUsers/MigrateUserDialog';
-import { ThemedCommandBar } from 'src/components/buttons/CommandBar/ThemedCommandBar.styles';
 import SectionAccessManagement from './SectionAccessManagement';
 import { SectionAccount } from './SectionAccount';
 import { ActiveIcon, InactiveIcon } from './UpdateUserPanel.styles';
@@ -372,7 +379,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
         </Stack>
       </Column>
       <Column lg="6" right>
-        <ThemedCommandBar
+        <CommandBar
           items={commandItems()}
           overflowItems={overflowItems()}
           overflowButtonProps={overflowProps}

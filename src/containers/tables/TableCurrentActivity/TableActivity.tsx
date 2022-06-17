@@ -1,28 +1,20 @@
 import { ReactElement } from 'react';
-import { IColumn, DetailsListLayoutMode, SelectionMode, Spinner, Link } from '@fluentui/react';
+import { IColumn, DetailsListLayoutMode, SelectionMode, Spinner, DetailsList } from '@fluentui/react';
 import { format } from 'date-fns';
 import { Column } from 'src/components/layouts';
 import { OrganizationLink } from 'src/data/services/graphql';
-import { ThemedDetailsList } from '../ThemedDetailsList.style';
+import { ButtonLink } from 'src/components/buttons';
 import { TableName, TableWrap, EmptyMessage } from './TableActivity.styles';
-
-const defaultProps = {
-  id: '',
-  loading: false,
-  tableName: '',
-  color: '',
-  emptyMessage: '(None)',
-};
 
 type TableActivityProps = {
   id?: string;
   items: OrganizationLink[];
   loading: boolean;
-  tableName?: any;
-  color?: any;
+  tableName?: string;
+  color: string;
   emptyMessage: string;
   onClick: (orgSid: string) => void;
-} & typeof defaultProps;
+};
 
 const TableActivity = ({
   id,
@@ -33,6 +25,30 @@ const TableActivity = ({
   emptyMessage,
   onClick,
 }: TableActivityProps): ReactElement => {
+  const renderOrgName = (item: OrganizationLink) => {
+    return (
+      <ButtonLink
+        onClick={() => {
+          onClick(item.id);
+        }}
+      >
+        {item.name}
+      </ButtonLink>
+    );
+  };
+
+  const renderLastActivity = (item: OrganizationLink) => {
+    return (
+      <ButtonLink
+        onClick={() => {
+          onClick(item.id);
+        }}
+      >
+        {format(new Date(item.activityTime), 'MM/dd/yyyy hh:mm a')}
+      </ButtonLink>
+    );
+  };
+
   const columns: IColumn[] = [
     {
       name: 'Client Name',
@@ -44,17 +60,7 @@ const TableActivity = ({
       maxWidth: 1000,
       targetWidthProportion: 1,
       flexGrow: 1,
-      onRender: (item: OrganizationLink) => {
-        return (
-          <Link
-            onClick={() => {
-              onClick(item.id);
-            }}
-          >
-            {item.name}
-          </Link>
-        );
-      },
+      onRender: renderOrgName,
     },
     {
       name: 'Last Activity',
@@ -66,19 +72,27 @@ const TableActivity = ({
       maxWidth: 1000,
       targetWidthProportion: 1,
       flexGrow: 1,
-      onRender: (item: OrganizationLink) => {
-        return (
-          <Link
-            onClick={() => {
-              onClick(item.id);
-            }}
-          >
-            {format(new Date(item.activityTime), 'MM/dd/yyyy hh:mm a')}
-          </Link>
-        );
-      },
+      onRender: renderLastActivity,
     },
   ];
+
+  const renderBody = () => {
+    if (loading) {
+      return <Spinner label="Loading Activity" />;
+    }
+    if (items.length > 0) {
+      return (
+        <DetailsList
+          items={items}
+          selectionMode={SelectionMode.none}
+          columns={columns}
+          layoutMode={DetailsListLayoutMode.justified}
+          isHeaderVisible
+        />
+      );
+    }
+    return <EmptyMessage>{emptyMessage}</EmptyMessage>;
+  };
 
   return (
     <TableWrap id={id}>
@@ -87,28 +101,10 @@ const TableActivity = ({
           {tableName}
         </TableName>
       </Column>
-      <Column>
-        {!loading ? (
-          items.length > 0 ? (
-            <ThemedDetailsList
-              items={items}
-              selectionMode={SelectionMode.none}
-              columns={columns}
-              layoutMode={DetailsListLayoutMode.justified}
-              isHeaderVisible
-            />
-          ) : (
-            <EmptyMessage>{emptyMessage}</EmptyMessage>
-          )
-        ) : (
-          <Spinner label="Loading Activity" />
-        )}
-      </Column>
+      <Column>{renderBody()}</Column>
     </TableWrap>
   );
 };
-
-TableActivity.defaultProps = defaultProps;
 
 export { TableActivity };
 export default TableActivity;

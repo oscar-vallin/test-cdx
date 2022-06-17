@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { DatePicker } from '@fluentui/react';
 import { Box as LayoutBox, Row as LayoutRow, Column as LayoutColumn } from '../../layouts';
 
 export const Box = styled(LayoutBox)`
@@ -16,10 +15,3 @@ export const Row = styled(LayoutRow)`
 `;
 
 export const Column = styled(LayoutColumn)``;
-
-export const ThemedDatePicker = styled(DatePicker)`
-  input {
-    background-color: ${({ theme }) => theme.colors.white};
-    color: ${({ theme }) => theme.colors.neutralSecondary};
-  }
-`;

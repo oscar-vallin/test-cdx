@@ -2,11 +2,11 @@
 import React, { memo, useEffect, useState } from 'react';
 
 import {
+  DetailsList,
   DetailsListLayoutMode,
   FontIcon,
   IContextualMenuItem,
   IContextualMenuProps,
-  Link,
   SelectionMode,
   Spinner,
   SpinnerSize,
@@ -15,7 +15,7 @@ import { EmptyState } from 'src/containers/states';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
 import { useNotification } from 'src/hooks/useNotification';
 import { Column, Container, Row } from 'src/components/layouts';
-import { Button } from 'src/components/buttons';
+import { Button, ButtonLink } from 'src/components/buttons';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { PageTitle } from 'src/components/typography';
 
@@ -35,7 +35,6 @@ import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { ROUTE_ACCESS_MANAGEMENT_GROUPS } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { PageBody } from 'src/components/layouts/Column';
-import { ThemedDetailsList } from 'src/containers/tables/ThemedDetailsList.style';
 import { useAccessManagementGroupsPageService } from './AccessManagementGroupsPage.service';
 import { StyledCommandButton } from '../AccessManagement.styles';
 import { AccessPolicyGroupPanel } from './AccessPolicyGroup';
@@ -191,7 +190,7 @@ const AccessManagementGroupsContainer = () => {
       return (
         <>
           &nbsp;
-          <Link
+          <ButtonLink
             id={`__AccessManagement__Name_Field_${index + 1}`}
             onClick={() => {
               setSelectedGroupId(item.sid);
@@ -199,7 +198,7 @@ const AccessManagementGroupsContainer = () => {
             }}
           >
             {item.name}
-          </Link>
+          </ButtonLink>
         </>
       );
     }
@@ -292,7 +291,7 @@ const AccessManagementGroupsContainer = () => {
       return renderNoRecords();
     }
     return (
-      <ThemedDetailsList
+      <DetailsList
         items={groups}
         selectionMode={SelectionMode.none}
         columns={columns}

@@ -11,7 +11,7 @@ import {
   DialogFooter,
   Spinner,
   SpinnerSize,
-  Link,
+  Link, DetailsList,
 } from '@fluentui/react';
 
 import { EmptyState } from 'src/containers/states';
@@ -37,7 +37,6 @@ import { ROUTE_ACCESS_MANAGEMENT_SPECIALIZATION } from 'src/data/constants/Route
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { PageBody } from 'src/components/layouts/Column';
-import { ThemedDetailsList } from 'src/containers/tables/ThemedDetailsList.style';
 import { AccessSpecializationPanel } from './AccessSpecializationPanel';
 import { StyledCommandButton } from '../AccessManagement.styles';
 
@@ -193,7 +192,7 @@ const AccessManagementSpecializationPage = () => {
     }
 
     return (
-      <ThemedDetailsList
+      <DetailsList
         items={specializations}
         selectionMode={SelectionMode.none}
         columns={columns}

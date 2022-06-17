@@ -16,7 +16,9 @@ const defaultProps = {
   tableName: 'Test Table',
   items: items,
   loading: false,
-  onClick: (orgSid: string) => {},
+  color: 'info',
+  emptyMessage: 'None',
+  onClick: jest.fn(),
 };
 
 describe('Table Activity Container Testing Unit...', () => {

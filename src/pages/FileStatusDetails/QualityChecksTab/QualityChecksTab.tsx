@@ -1,7 +1,16 @@
 /* eslint-disable no-alert */
 import React, { ReactElement, useState } from 'react';
-import { Checkbox, DetailsListLayoutMode, IColumn, SelectionMode, Stack, ICheckboxProps } from '@fluentui/react';
+import {
+  Checkbox,
+  DetailsListLayoutMode,
+  IColumn,
+  SelectionMode,
+  Stack,
+  ICheckboxProps,
+  DetailsList,
+} from '@fluentui/react';
 
+import { useThemeStore } from 'src/store/ThemeStore';
 import { Badge } from 'src/components/badges/Badge';
 import { Card } from 'src/components/cards/Card';
 import { ChartDonut } from 'src/components/charts/ChartDonut';
@@ -13,7 +22,6 @@ import { ChartDataType } from 'src/components/charts/ChartDonut/ChartDonut';
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
 import { Text } from 'src/components/typography';
 import { EmptyState } from 'src/containers/states';
-import { ThemedDetailsList } from 'src/containers/tables/ThemedDetailsList.style';
 import { SuperScript, WhiteButton } from '../FileStatusDetails.styles';
 
 const COLUMNS: IColumn[] = [
@@ -83,6 +91,7 @@ type QualityChecksTabProps = {
 };
 
 const QualityChecksTab = ({ details }: QualityChecksTabProps): ReactElement => {
+  const ThemeStore = useThemeStore();
   const qualityChecks = details?.qualityChecks;
 
   const items = qualityChecks?.sequenceCreationEvent ?? [];
@@ -208,19 +217,19 @@ const QualityChecksTab = ({ details }: QualityChecksTabProps): ReactElement => {
                             key: 'ERROR',
                             name: 'Errors',
                             value: qualityChecks?.fieldCreationErrorCount ?? 0,
-                            color: '#990000',
+                            color: ThemeStore.userTheme.colors.custom.error,
                           },
                           {
                             key: 'WARNING',
                             name: 'Warnings',
                             value: qualityChecks?.fieldCreationWarningCount ?? 0,
-                            color: '#fcde54',
+                            color: ThemeStore.userTheme.colors.custom.warningAlt,
                           },
                           {
                             key: 'INFO',
                             name: 'Information',
                             value: qualityChecks?.fieldCreationInfoCount ?? 0,
-                            color: '#005A9E',
+                            color: ThemeStore.userTheme.colors.custom.info,
                           },
                         ]}
                         totalRecords={totalRecords}
@@ -328,7 +337,7 @@ const QualityChecksTab = ({ details }: QualityChecksTabProps): ReactElement => {
               <DarkSeparator />
             </Stack.Item>
           </Stack>
-          <ThemedDetailsList
+          <DetailsList
             compact
             items={data()}
             columns={COLUMNS}

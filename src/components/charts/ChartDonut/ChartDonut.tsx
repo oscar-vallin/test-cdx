@@ -2,8 +2,8 @@ import { ReactElement, useState } from 'react';
 import chroma from 'chroma-js';
 import { PieChart, Pie, Cell, Label, Legend, Sector } from 'recharts';
 import { Text } from 'src/components/typography';
-import { Link } from '@fluentui/react';
-import { theme } from 'src/styles/themes/theme';
+import { useThemeStore } from 'src/store/ThemeStore';
+import { ButtonLink } from 'src/components/buttons';
 
 export type ChartDataType = {
   key?: string;
@@ -24,6 +24,7 @@ type ChartDonutProps = {
 const COLORS = ['#0088FE', '#D0D0D0', '#FFAAAA', '#AADD00', '#EEAA00', '#DDCCFF', '#00AAAA'];
 
 const ChartDonut = ({ id, label, size = 50, data, totalRecords, onClickSlice }: ChartDonutProps): ReactElement => {
+  const ThemeStore = useThemeStore();
   const total = totalRecords ?? data?.reduce((sum, current) => sum + current.value, 0);
   const totalDigits = total?.toString().length ?? 0;
   // Fix these font sizes since they are inside of the donut chart
@@ -48,7 +49,7 @@ const ChartDonut = ({ id, label, size = 50, data, totalRecords, onClickSlice }: 
 
   const renderLegendText = (value: string, entry: any, index: number) => {
     return (
-      <Link
+      <ButtonLink
         onMouseOver={() => onMouseOver(entry, index)}
         onMouseLeave={() => onMouseLeave()}
         onClick={() => onClick(entry.payload)}
@@ -56,7 +57,7 @@ const ChartDonut = ({ id, label, size = 50, data, totalRecords, onClickSlice }: 
         <Text size="small" variant={index === activeIndex ? 'bold' : 'normal'}>
           {value} ({entry.payload.value}/{total})
         </Text>
-      </Link>
+      </ButtonLink>
     );
   };
 
@@ -104,7 +105,7 @@ const ChartDonut = ({ id, label, size = 50, data, totalRecords, onClickSlice }: 
         dx={5}
         dy={11}
         textAnchor="middle"
-        fill={theme.colors.black}
+        fill={ThemeStore.userTheme.colors.black}
         style={{ fontSize: totalFontSize }}
       >
         {total}
