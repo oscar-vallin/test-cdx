@@ -120,4 +120,21 @@ describe('Paginator Use Cases', () => {
 
     expect(paginator.text()).toBe('');
   });
+
+  it('101 Items should render a paginator', () => {
+    const paginator = shallow(
+      <Paginator
+        pagingInfo={{
+          pageNumber: 0,
+          pageSize: 100,
+          totalPages: 2,
+          totalElements: 101,
+        }}
+        onPageChange={() => null}
+      />
+    );
+
+    const button = paginator.find('CustomizedIconButton[title="Next Page"]');
+    expect(button).toHaveLength(1);
+  });
 });
