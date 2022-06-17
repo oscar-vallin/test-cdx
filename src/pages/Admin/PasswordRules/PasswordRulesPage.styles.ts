@@ -6,7 +6,7 @@ export const StyledComboBox = styled(ComboBox)`
   width: 150px;
   .ms-ComboBox {
     background-color: ${({ theme }) => theme.colors.white};
-    
+
     input {
       background-color: inherit;
       color: ${({ theme }) => theme.colors.neutralSecondary};
@@ -14,15 +14,15 @@ export const StyledComboBox = styled(ComboBox)`
         color: ${({ theme }) => theme.colors.neutralSecondary};
       }
     }
-    
+
     .ms-ComboBox-CaretDown-button {
       background: none;
       color: ${({ theme }) => theme.colors.neutralSecondary};
       &:hover {
-        background-color: ${({ theme }) => theme.colors.neutralLight};      
-      }    
+        background-color: ${({ theme }) => theme.colors.neutralLight};
+      }
     }
-    
+
     &.is-disabled {
       background-color: ${({ theme }) => theme.colors.neutralLight};
       .ms-ComboBox-CaretDown-button {
@@ -54,7 +54,7 @@ export const StyledDiv = styled.div`
   & .ms-Checkbox-checkbox {
     border-color: ${({ theme }) => theme.colors.neutralPrimary};
     &:hover {
-      border-color: ${({ theme }) => theme.colors.neutralTertiary};    
+      border-color: ${({ theme }) => theme.colors.neutralTertiary};
     }
   }
 `;

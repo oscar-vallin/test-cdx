@@ -3,21 +3,22 @@ import { useHistory, useLocation } from 'react-router';
 import { Icon, IContextualMenuItem } from '@fluentui/react';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
 import { ProfileMenu } from 'src/containers/menus/ProfileMenu';
-import { ROUTE_EXTERNAL_ORGS, getRouteByApiId, ROUTE_USER_SETTINGS } from 'src/data/constants/RouteConstants';
+import { getRouteByApiId, ROUTE_EXTERNAL_ORGS, ROUTE_USER_SETTINGS } from 'src/data/constants/RouteConstants';
 import { useCurrentUserTheme } from 'src/hooks/useCurrentUserTheme';
 import { useThemeStore } from 'src/store/ThemeStore';
 import { useSessionStore } from 'src/store/SessionStore';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 
+import { ThemeFontSize } from 'src/data/services/graphql';
 import {
   NavButton,
-  StyledNavIcon,
+  StyledDiv,
+  StyledHeader,
+  StyledIconButton,
+  StyledMenuItem,
   StyledNav,
   StyledNavButton,
-  StyledDiv,
-  StyledIconButton,
-  StyledHeader,
-  StyledMenuItem,
+  StyledNavIcon,
   StyledOverFlow,
 } from './AppHeader.styles';
 
@@ -33,7 +34,7 @@ const AppHeader = ({ onMenuButtonClick }: AppHeaderProps): ReactElement => {
   const { user } = useSessionStore();
   const ActiveDomainStore = useActiveDomainStore();
 
-  const { setOwnDashFontSize } = useCurrentUserTheme();
+  const { setFontSize } = useCurrentUserTheme();
 
   const originDestination = ActiveDomainStore.domainOrg.origin.destination !== ROUTE_EXTERNAL_ORGS.API_ID;
 
@@ -44,12 +45,8 @@ const AppHeader = ({ onMenuButtonClick }: AppHeaderProps): ReactElement => {
     subNavItems?: { type: string }[] | any;
   };
 
-  const updateThemeFontSize = (key) => {
-    const fontSize = { themeFontSize: key };
-
-    setOwnDashFontSize(fontSize);
-
-    ThemeStore.setUserTheme(fontSize);
+  const updateThemeFontSize = (fontSize: ThemeFontSize) => {
+    setFontSize(fontSize);
   };
 
   const settingsMenu: IContextualMenuItem[] = [
@@ -58,21 +55,21 @@ const AppHeader = ({ onMenuButtonClick }: AppHeaderProps): ReactElement => {
       key: 'SMALL',
       iconProps: { iconName: 'FontDecrease' },
       text: 'Small font size',
-      onClick: () => updateThemeFontSize('SMALL'),
+      onClick: () => updateThemeFontSize(ThemeFontSize.Small),
     },
     {
       id: '__Medium_Font_Size_Btn',
       key: 'MEDIUM',
       iconProps: { iconName: 'FontColorA' },
       text: 'Medium font size (default)',
-      onClick: () => updateThemeFontSize('MEDIUM'),
+      onClick: () => updateThemeFontSize(ThemeFontSize.Medium),
     },
     {
       id: '__Large_Font_Size_Btn',
       key: 'LARGE',
       iconProps: { iconName: 'FontIncrease' },
       text: 'Large font size',
-      onClick: () => updateThemeFontSize('LARGE'),
+      onClick: () => updateThemeFontSize(ThemeFontSize.Large),
     },
   ];
 
@@ -164,6 +161,10 @@ const AppHeader = ({ onMenuButtonClick }: AppHeaderProps): ReactElement => {
     );
   };
 
+  const openUserSettings = () => {
+    history.push(`${ROUTE_USER_SETTINGS.URL}?orgSid=${user.orgSid}`);
+  };
+
   return (
     <StyledHeader data-e2e="AppHeader">
       {showStyledNavIcon()}
@@ -187,17 +188,14 @@ const AppHeader = ({ onMenuButtonClick }: AppHeaderProps): ReactElement => {
           menuProps={{
             items: settingsMenu,
             contextualMenuItemAs: (props) => (
-              <StyledMenuItem selected={ThemeStore.themes.user.themeFontSize === props.item.key}>
+              <StyledMenuItem selected={ThemeStore.userTheme.themeFontSize === props.item.key}>
                 {props.item.text}
               </StyledMenuItem>
             ),
           }}
         />
 
-        <ProfileMenu
-          id="__ProfileMenu"
-          onUserSettings={() => history.push(`${ROUTE_USER_SETTINGS.URL}?orgSid=${user.orgSid}`)}
-        />
+        <ProfileMenu id="__ProfileMenu" onUserSettings={openUserSettings} />
       </StyledDiv>
     </StyledHeader>
   );

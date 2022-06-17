@@ -1,13 +1,10 @@
-import { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
+import { IContextualMenuItem } from '@fluentui/react';
 import { UserToken } from 'src/components/images/UserToken';
-
 import { ButtonContextual } from 'src/components/buttons/ButtonContextual';
-
 import { useLogoutUseCase } from 'src/use-cases/Authentication';
 import { useSessionStore } from 'src/store/SessionStore';
-import { IContextualMenuItem } from '@fluentui/react';
-import { ErrorHandler } from 'src/utils/ErrorHandler';
-import { useVersionQuery } from 'src/data/services/graphql';
+import { useApplicationStore } from 'src/store/ApplicationStore';
 import { StyledBox } from './ProfileMenu.styles';
 
 const defaultProps = {
@@ -16,25 +13,22 @@ const defaultProps = {
 
 type ProfileMenuProps = {
   id?: string;
-  onUserSettings?: any | null;
+  onUserSettings?: () => void | null;
 } & typeof defaultProps;
 
-const ProfileMenu = ({ id, onUserSettings }: ProfileMenuProps): ReactElement => {
+const _ProfileMenu = ({ id, onUserSettings }: ProfileMenuProps): ReactElement => {
   const SessionStore = useSessionStore();
   const { performUserLogout } = useLogoutUseCase();
-  const { data: verData, loading: verLoading, error: versionError } = useVersionQuery();
-  const handleError = ErrorHandler();
-
-  useEffect(() => {
-    handleError(versionError);
-  }, [versionError]);
+  const ApplicationStore = useApplicationStore();
 
   const handleLogout = () => {
     performUserLogout();
   };
 
   const handleSettings = () => {
-    onUserSettings();
+    if (onUserSettings) {
+      onUserSettings();
+    }
   };
 
   const buildMenuItems = (version: string): IContextualMenuItem[] => {
@@ -47,8 +41,8 @@ const ProfileMenu = ({ id, onUserSettings }: ProfileMenuProps): ReactElement => 
       },
       { id: '__Logout_button', key: 'ProfileMenu_Logout', text: 'Logout', onClick: handleLogout },
       {
-        id: '__seperator',
-        key: 'ProfileMenu_Seperator',
+        id: '__separator',
+        key: 'ProfileMenu_Separator',
         text: '-',
         disabled: true,
       },
@@ -67,23 +61,27 @@ const ProfileMenu = ({ id, onUserSettings }: ProfileMenuProps): ReactElement => 
   const [items, setItems] = useState<IContextualMenuItem[]>([]);
 
   useEffect(() => {
-    if (verData?.version && !verLoading) {
-      setItems(buildMenuItems(verData?.version));
-    }
-  }, [verData, verLoading]);
+    setItems(buildMenuItems(ApplicationStore.version));
+
+    return () => {
+      setItems([]);
+    };
+  }, [ApplicationStore.version]);
 
   // Render
   return (
     <StyledBox id={id} noStyle>
       {items.length > 0 && (
         <ButtonContextual id="__ButtonContext" items={items}>
-          <UserToken id="__UserToken" name={SessionStore.user.firstNm} />
+          <UserToken id="__UserToken" name={SessionStore.user.firstName} />
         </ButtonContextual>
       )}
     </StyledBox>
   );
 };
 
-ProfileMenu.defaultProps = defaultProps;
+_ProfileMenu.defaultProps = defaultProps;
+
+const ProfileMenu = React.memo(_ProfileMenu);
 
 export { ProfileMenu };

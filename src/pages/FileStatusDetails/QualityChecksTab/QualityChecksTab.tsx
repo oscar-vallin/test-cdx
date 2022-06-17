@@ -1,6 +1,6 @@
 /* eslint-disable no-alert */
 import React, { ReactElement, useState } from 'react';
-import { Checkbox, DetailsListLayoutMode, IColumn, SelectionMode, Stack, ICheckboxProps} from '@fluentui/react';
+import { Checkbox, DetailsListLayoutMode, IColumn, SelectionMode, Stack, ICheckboxProps } from '@fluentui/react';
 
 import { Badge } from 'src/components/badges/Badge';
 import { Card } from 'src/components/cards/Card';

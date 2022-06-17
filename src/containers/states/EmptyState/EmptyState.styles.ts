@@ -22,10 +22,12 @@ export const StyledImg = styled.img``;
 
 export const StyledTitle = styled.h3`
   margin-bottom: ${({ theme }) => theme.spacing.normal};
+  color: ${({ theme }) => theme.colors.neutralSecondary};
 `;
 
 export const StyledText = styled.p`
   margin: ${({ theme }) => `${theme.spacing.normal} 0`};
+  color: ${({ theme }) => theme.colors.neutralSecondary};
 `;
 
 export const StyledActions = styled.div`

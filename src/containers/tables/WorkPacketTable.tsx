@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import {
+  ConstrainMode,
   DetailsListLayoutMode,
   IColumn,
-  SelectionMode,
   mergeStyleSets,
   ScrollablePane,
   ScrollbarVisibility,
+  SelectionMode,
 } from '@fluentui/react';
 
 import { NullHandling, PageableInput, PaginationInfo, SortDirection } from 'src/data/services/graphql';
@@ -200,7 +201,13 @@ export const WorkPacketTable = ({
       setItems(transFormedItems);
 
       // update the paging info
-      const newPagingInfo = data?.workPacketStatuses?.paginationInfo;
+      let newPagingInfo = data?.workPacketStatuses?.paginationInfo;
+      if (!newPagingInfo) {
+        newPagingInfo = data?.wpTransmissions?.paginationInfo;
+      }
+      if (!newPagingInfo) {
+        newPagingInfo = data?.wpProcessErrors?.paginationInfo;
+      }
       if (newPagingInfo) {
         setPagingInfo(newPagingInfo);
       }
@@ -260,6 +267,7 @@ export const WorkPacketTable = ({
             setKey="none"
             layoutMode={DetailsListLayoutMode.justified}
             isHeaderVisible
+            constrainMode={ConstrainMode.unconstrained}
           />
         </ScrollablePane>
       );
@@ -267,6 +275,8 @@ export const WorkPacketTable = ({
 
     return <EmptyState description="No data" filled={false} />;
   };
+
+  const hasMorePages = pagingInfo?.totalPages && pagingInfo.totalPages > 1;
 
   return (
     <>
@@ -279,7 +289,7 @@ export const WorkPacketTable = ({
 
       <Container>
         <Box id={`${id}_TableWrap`}>
-          <div id="Table_Detailed" style={{ width: '100%', height: 'calc(100vh - 325px)' }}>
+          <div id="Table_Detailed" style={{ width: '100%', height: `calc(100vh - ${hasMorePages ? '325px': '250px'})` }}>
             {renderTable()}
           </div>
           <Paginator pagingInfo={pagingInfo} onPageChange={onPageChange} />

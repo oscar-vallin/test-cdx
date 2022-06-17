@@ -15,6 +15,13 @@ describe('Unit::ApplicationStore', () => {
     expect(store.getState().status.isOffline).toEqual(true);
   });
 
+  it('Should update the version', async () => {
+    expect(store.getState().version).toEqual('');
+    store.getActions().updateVersion('2.0.1.TEST');
+
+    expect(store.getState().version).toEqual('2.0.1.TEST');
+  });
+
   // !TODO: Verify erorr on this test.
   // it('Should reset its state', async () => {
   //   store.getActions().reset();

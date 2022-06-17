@@ -18,7 +18,7 @@ import { useOrgSid } from 'src/hooks/useOrgSid';
 import { tableFiltersToQueryParams, useTableFilters } from 'src/hooks/useTableFilters';
 import { DownloadLink } from 'src/containers/tables/WorkPacketTable.styles';
 import { useFileStatusDetailsPanel } from 'src/pages/FileStatusDetails/useFileStatusDetailsPanel';
-import { FileStatusDetailsPage } from '../FileStatusDetails';
+import { FileStatusDetailsPanel } from '../FileStatusDetails';
 
 const _FileStatusPage = () => {
   const [tableMeta, setTableMeta] = useState({ count: 0, loading: true });
@@ -35,7 +35,7 @@ const _FileStatusPage = () => {
     if (hash && workOrderId && fsOrgSid) {
       fileStatusDetailsPanel?.showPanel(workOrderId, fsOrgSid, hash);
     }
-  }, []);
+  }, [fileStatusDetailsPanel]);
 
   const tableFilters = useTableFilters('Extract Name, Status, Vendor, etc.', [
     {
@@ -88,6 +88,13 @@ const _FileStatusPage = () => {
     return <span />;
   };
 
+  const renderDetailsPanel = () => {
+    if (fileStatusDetailsPanel.fsOrgSid && fileStatusDetailsPanel.workOrderId) {
+      return <FileStatusDetailsPanel useFileStatusDetailsPanel={fileStatusDetailsPanel} />;
+    }
+    return null;
+  };
+
   return (
     <LayoutDashboard id="PageFileStatus" menuOptionSelected={ROUTES.ROUTE_FILE_STATUS.API_ID}>
       <PageHeader id="__FileStatusHeader">
@@ -128,7 +135,7 @@ const _FileStatusPage = () => {
           setTableMeta({ count: total, loading });
         }}
       />
-      <FileStatusDetailsPage tableFilters={tableFilters} useFileStatusDetailsPanel={fileStatusDetailsPanel} />
+      {renderDetailsPanel()}
     </LayoutDashboard>
   );
 };

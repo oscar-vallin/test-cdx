@@ -24,10 +24,10 @@ export const StyledTextField = styled(TextField)<StyledTextFieldProps>`
   }
   .ms-TextField-fieldGroup {
     background-color: ${({ theme }) => theme.colors.white};
-    
+
     input {
       color: ${({ theme }) => theme.colors.neutralSecondary};
-      
+
       &:disabled {
         background-color: ${({ theme }) => theme.colors.neutralLight};
       }
@@ -38,10 +38,10 @@ export const StyledTextField = styled(TextField)<StyledTextFieldProps>`
 export const ThemedMaskedTextField = styled(MaskedTextField)`
   .ms-TextField-fieldGroup {
     background-color: ${({ theme }) => theme.colors.white};
-    
+
     input {
       color: ${({ theme }) => theme.colors.neutralSecondary};
-      
+
       &:disabled {
         background-color: ${({ theme }) => theme.colors.neutralLight};
       }

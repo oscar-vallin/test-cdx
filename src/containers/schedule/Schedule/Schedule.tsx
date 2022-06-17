@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { endOfMonth, startOfMonth } from 'date-fns';
@@ -11,7 +11,7 @@ import { ROUTE_SCHEDULE } from 'src/data/constants/RouteConstants';
 import { yyyyMMdd } from 'src/utils/CDXUtils';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { useFileStatusDetailsPanel } from 'src/pages/FileStatusDetails/useFileStatusDetailsPanel';
-import { FileStatusDetailsPage } from 'src/pages/FileStatusDetails';
+import { FileStatusDetailsPanel } from 'src/pages/FileStatusDetails';
 import { isCurrentViewWeek, isCurrentViewDay } from './helpers';
 import { ScheduleHeader } from './ScheduleHeader';
 import { ScheduleWeek } from './ScheduleWeek';
@@ -89,6 +89,13 @@ const Schedule = ({ id }) => {
     );
   };
 
+  const renderDetailsPanel = () => {
+    if (fileStatusDetailsPanel.fsOrgSid && fileStatusDetailsPanel.workOrderId) {
+      return <FileStatusDetailsPanel useFileStatusDetailsPanel={fileStatusDetailsPanel} />;
+    }
+    return null;
+  };
+
   return (
     <>
       <PageHeader id={`${id}_PageHeader`} spacing="0">
@@ -120,7 +127,7 @@ const Schedule = ({ id }) => {
           </Column>
         </StyledRow>
       </Container>
-      <FileStatusDetailsPage useFileStatusDetailsPanel={fileStatusDetailsPanel} />
+      {renderDetailsPanel()}
     </>
   );
 };

@@ -5,8 +5,6 @@ import { Button } from 'src/components/buttons';
 import { Row, Column } from 'src/components/layouts';
 import { Spacing } from 'src/components/spacings/Spacing';
 
-import { useThemeContext } from 'src/contexts/ThemeContext';
-
 import {
   DashThemeColor,
   useCreateOrUpdateOwnDashThemeMutation,
@@ -23,11 +21,12 @@ import {
   StyledChoiceGroup,
 } from 'src/pages/Admin/DashboardSite/DefaultTheme/DefaultThemePage.styles';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
+import { useThemeStore } from 'src/store/ThemeStore';
 
 const ThemeSettings = () => {
   const Toast = useNotification();
   const handleError = ErrorHandler();
-  const { changeTheme }: any = useThemeContext();
+  const { changeThemeColors } = useThemeStore();
 
   const { orgSid } = useOrgSid();
   const {
@@ -92,7 +91,7 @@ const ThemeSettings = () => {
   const selectTheme = (paletteId: string) => {
     setSelectedPaletteId(paletteId);
     const finalPalette = palettes.find(({ id }): any => id === paletteId) || defaultTheme;
-    changeTheme(finalPalette);
+    changeThemeColors(finalPalette);
   };
 
   return (

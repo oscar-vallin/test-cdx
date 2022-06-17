@@ -43,27 +43,15 @@ describe('Unit::SessionStore', () => {
     expect(store.getState().status.isAuthenticated).toEqual(false);
   });
 
-  it('Should set isAutheticating to true if the session stage is VALIDATING', async () => {
+  it('Should set isAuthenticating to true if the session stage is VALIDATING', async () => {
     store.getActions().setSessionStage(SessionStages.Validating);
 
     expect(store.getState().status.isAuthenticating).toEqual(true);
   });
 
-  it('Should set isAutheticating to false if the session stage is not VALIDATING', async () => {
+  it('Should set isAuthenticating to false if the session stage is not VALIDATING', async () => {
     store.getActions().setSessionStage(SessionStages.LoggedOut);
 
     expect(store.getState().status.isAuthenticating).toEqual(false);
-  });
-
-  it('Should set isRehydrating to true if the session stage is REHYDRATING', async () => {
-    store.getActions().setSessionStage(SessionStages.Rehydrating);
-
-    expect(store.getState().status.isRehydrating).toEqual(true);
-  });
-
-  it('Should set isRehydrating to false if the session stage is not REHYDRATING', async () => {
-    store.getActions().setSessionStage(SessionStages.LoggedOut);
-
-    expect(store.getState().status.isRehydrating).toEqual(false);
   });
 });

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect, useMemo, useContext, createContext } from 'react';
+import { useEffect } from 'react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 
 import 'office-ui-fabric-react/dist/css/fabric.css';
@@ -8,11 +8,7 @@ import { useCurrentUserTheme } from 'src/hooks/useCurrentUserTheme';
 import { useSessionStore } from 'src/store/SessionStore';
 import { useThemeStore } from 'src/store/ThemeStore';
 import { LoadingPage } from 'src/pages/Loading/LoadingPage';
-import { theme, theme as styledComponentsTheme } from '../styles/themes/theme';
-
-export const ThemeContext = createContext(() => {
-  return {};
-});
+import { ThemeFontSize } from 'src/data/services/graphql';
 
 const sizes = {
   SMALL: '.75rem',
@@ -25,8 +21,6 @@ export const ThemeContextProvider = ({ children }) => {
   const ThemeStore = useThemeStore();
 
   const { isLoadingTheme, fetchTheme } = useCurrentUserTheme();
-  const [styledTheme, setStyledTheme] = useState(styledComponentsTheme);
-  const themeConfig = {};
 
   useEffect(() => {
     const { isAuthenticated } = SessionStore.status;
@@ -34,7 +28,7 @@ export const ThemeContextProvider = ({ children }) => {
     if (isAuthenticated) {
       fetchTheme();
     }
-  }, [SessionStore.status.isAuthenticated]);
+  }, [SessionStore.user.token]);
 
   const GlobalStyle = createGlobalStyle<GlobalStyleProps>`
     * {
@@ -52,61 +46,28 @@ export const ThemeContextProvider = ({ children }) => {
     }
 
     [class*="ms-DetailsHeader"] {
-      font-size: ${theme.fontSizes.normal};
+      font-size: ${ThemeStore.userTheme.fontSizes.normal};
     }
 
     [class*="ms-DetailsRow"] {
-      font-size: ${theme.fontSizes.normal};
+      font-size: ${ThemeStore.userTheme.fontSizes.normal};
     }
   `;
 
   type GlobalStyleProps = {
-    fontSize: any;
+    fontSize: ThemeFontSize;
   };
-
-  const changeTheme = (newTheme = {}) => {
-    const customizedTheme = {
-      ...styledTheme,
-      colors: { ...styledTheme.colors, ...newTheme },
-    };
-
-    setStyledTheme(customizedTheme);
-  };
-
-  useEffect(() => {
-    if (!isLoadingTheme) {
-      changeTheme(ThemeStore.themes.current);
-    }
-  }, [ThemeStore.themes.current]);
-
-  // eslint-disable-next-line
-  const values: any = useMemo(
-    () => ({
-      // isContextLoading: isLoadingCurrentUserThemeParams,
-      changeTheme,
-      themeConfig,
-    }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [themeConfig]
-  );
 
   return (
-    <ThemeProvider theme={styledTheme}>
-      <ThemeContext.Provider value={values}>
-        {isLoadingTheme ? (
-          <LoadingPage />
-        ) : (
-          <>
-            <GlobalStyle fontSize={ThemeStore.themes.current.themeFontSize} />
-            {children}
-          </>
-        )}
-      </ThemeContext.Provider>
+    <ThemeProvider theme={ThemeStore.userTheme}>
+      {isLoadingTheme ? (
+        <LoadingPage />
+      ) : (
+        <>
+          <GlobalStyle fontSize={ThemeStore.userTheme.themeFontSize ?? ThemeFontSize.Medium} />
+          {children}
+        </>
+      )}
     </ThemeProvider>
   );
 };
-
-//
-export function useThemeContext() {
-  return useContext(ThemeContext);
-}

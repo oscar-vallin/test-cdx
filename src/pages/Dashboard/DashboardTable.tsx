@@ -65,7 +65,11 @@ export const DashboardTable = ({
 
   const renderTable = () => {
     if (items == null || items.length < 1) {
-      return <EmptyTable variant="muted">None</EmptyTable>;
+      return (
+        <EmptyTable variant="muted" className="EmptyTable">
+          None
+        </EmptyTable>
+      );
     }
 
     return (

@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
-import { useNavigateToNewDomainLazyQuery, useCurrentOrgNavLazyQuery } from '../../data/services/graphql';
+import { useNavigateToNewDomainLazyQuery, useCurrentOrgNavLazyQuery } from 'src/data/services/graphql';
+import { useSessionStore } from 'src/store/SessionStore';
 
 type QueryResult = {
   loading: boolean;
@@ -32,6 +33,7 @@ const INITIAL_STATE: ActiveDomainState = {
 
 export const useActiveDomainUseCase = () => {
   const [state, setState] = useState({ ...INITIAL_STATE });
+  const SessionStore = useSessionStore();
 
   const [fetchDashNav, { data: dashNav, loading: isFetchingDashNav, error: dashNavError }] =
     useNavigateToNewDomainLazyQuery();
@@ -43,26 +45,30 @@ export const useActiveDomainUseCase = () => {
     useCurrentOrgNavLazyQuery();
 
   const performNavUpdate = ({ orgSid, domain }) => {
-    const params = { domainNavInput: { orgSid, appDomain: domain } };
+    if (SessionStore.status.isAuthenticated) {
+      const params = { domainNavInput: { orgSid, appDomain: domain } };
 
-    switch (domain) {
-      case 'ORGANIZATION':
-        fetchOrgNav({ variables: params });
-        break;
-      case 'DASHBOARD':
-        fetchDashNav({ variables: params });
-        break;
-      default:
-        break;
+      switch (domain) {
+        case 'ORGANIZATION':
+          fetchOrgNav({ variables: params });
+          break;
+        case 'DASHBOARD':
+          fetchDashNav({ variables: params });
+          break;
+        default:
+          break;
+      }
     }
   };
 
   const performCurrentOrgUpdate = ({ orgSid }) => {
-    fetchCurrentOrgNav({
-      variables: {
-        orgInput: { orgSid },
-      },
-    });
+    if (SessionStore.status.isAuthenticated) {
+      fetchCurrentOrgNav({
+        variables: {
+          orgInput: { orgSid },
+        },
+      });
+    }
   };
 
   const updateNavState = (domain, value) => {

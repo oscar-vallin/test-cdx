@@ -10,7 +10,7 @@ import { WorkPacketColumn } from 'src/containers/tables/WorkPacketColumns';
 import { NullHandling, SortDirection, useWpProcessErrorsLazyQuery, WorkPacketStatus } from 'src/data/services/graphql';
 import { useTableFilters } from 'src/hooks/useTableFilters';
 import { useFileStatusDetailsPanel } from 'src/pages/FileStatusDetails/useFileStatusDetailsPanel';
-import { FileStatusDetailsPage } from 'src/pages/FileStatusDetails';
+import { FileStatusDetailsPanel } from 'src/pages/FileStatusDetails';
 
 const _ErrorsPage = () => {
   const [tableMeta, setTableMeta] = useState({ count: 0, loading: true });
@@ -51,6 +51,12 @@ const _ErrorsPage = () => {
     return items;
   };
 
+  const renderDetailsPanel = () => {
+    if (fileStatusDetailsPanel.fsOrgSid && fileStatusDetailsPanel.workOrderId) {
+      return <FileStatusDetailsPanel useFileStatusDetailsPanel={fileStatusDetailsPanel} />;
+    }
+    return null;
+  };
   return (
     <LayoutDashboard id="PageErrors" menuOptionSelected={ROUTES.ROUTE_ERRORS.API_ID}>
       <PageHeader id="__ErrorsPageHeader">
@@ -90,7 +96,7 @@ const _ErrorsPage = () => {
           setTableMeta({ count: total, loading });
         }}
       />
-      <FileStatusDetailsPage useFileStatusDetailsPanel={fileStatusDetailsPanel} />
+      {renderDetailsPanel()}
     </LayoutDashboard>
   );
 };

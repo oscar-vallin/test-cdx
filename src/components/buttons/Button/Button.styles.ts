@@ -54,7 +54,7 @@ export const StyledButton = styled(PrimaryButton)<StyledButtonProps>`
 export const ThemedCommandButton = styled(CommandButton)`
   .ms-Button-label {
     color: ${({ theme }) => theme.colors.neutralPrimary};
-    
+
     &:hover {
       color: ${({ theme }) => theme.colors.themeDark};
     }

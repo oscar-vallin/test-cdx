@@ -1,4 +1,4 @@
-import QueryParams from './QueryParams';
+import QueryParams from 'src/utils/QueryParams/QueryParams';
 
 describe('QueryParams Testing Unit...', () => {
   it('Should parse the query params from the search string', () => {

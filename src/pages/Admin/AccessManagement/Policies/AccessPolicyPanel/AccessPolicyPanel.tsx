@@ -426,7 +426,9 @@ const AccessPolicyPanel = ({
                         <Card id={`__Permissions_${subGroup.id}_Card`} elevation="none">
                           {subGroup.label.length > 0 && (
                             <Spacing margin={{ bottom: 'normal' }}>
-                              <Text variant="bold" id={`__Permissions_${subGroup.id}_Label`}>{subGroup.label}</Text>
+                              <Text variant="bold" id={`__Permissions_${subGroup.id}_Label`}>
+                                {subGroup.label}
+                              </Text>
                             </Spacing>
                           )}
 

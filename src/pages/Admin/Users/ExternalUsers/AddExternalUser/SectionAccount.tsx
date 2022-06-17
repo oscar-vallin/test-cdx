@@ -10,9 +10,9 @@ import { FormLabel } from 'src/components/labels/FormLabel';
 import { Text } from 'src/components/typography/Text';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { useState } from 'react';
+import { UIInputCheck } from 'src/components/inputs/InputCheck';
 import { MenuSeparator } from './AddExternalUsersAccessPanel.styles';
 import AddExternalUsersAccessFooter from './AddExternalUsersAccessFooter';
-import { UIInputCheck } from 'src/components/inputs/InputCheck';
 
 type SectionAccountProps = {
   form: UserAccountForm;

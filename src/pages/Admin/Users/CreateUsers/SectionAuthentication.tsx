@@ -3,9 +3,9 @@ import { Column } from 'src/components/layouts';
 
 import { UserAccountForm } from 'src/data/services/graphql';
 import { WizardBody } from 'src/layouts/Panels/Panels.styles';
+import { UIInputCheck } from 'src/components/inputs/InputCheck';
 import CreateUsersFooter from './CreateUsersFooter';
 import { StyledOptionRow } from './CreateUsersPanel.styles';
-import { UIInputCheck } from 'src/components/inputs/InputCheck';
 
 type SectionAuthProps = {
   form: UserAccountForm;

@@ -1,14 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { ReactElement, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import {
-  MessageBar,
-  MessageBarType,
-  PanelType,
-  Stack,
-  ICommandBarItemProps,
-  IButtonProps,
-} from '@fluentui/react';
+import { MessageBar, MessageBarType, PanelType, Stack, ICommandBarItemProps, IButtonProps } from '@fluentui/react';
 
 import { Tabs } from 'src/components/tabs/Tabs';
 import { PanelBody, PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
@@ -19,21 +12,16 @@ import { Column } from 'src/components/layouts';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { MigrateUserDialog } from 'src/pages/Admin/Users/UpdateUsers/MigrateUserDialog';
+import { ThemedCommandBar } from 'src/components/buttons/CommandBar/ThemedCommandBar.styles';
 import SectionAccessManagement from './SectionAccessManagement';
 import { SectionAccount } from './SectionAccount';
-import { ThemedCommandBar } from 'src/components/buttons/CommandBar/ThemedCommandBar.styles';
 import { ActiveIcon, InactiveIcon } from './UpdateUserPanel.styles';
-
-const defaultProps = {
-  onDismiss: () => {},
-  onUpdateUser: () => {},
-};
 
 type UpdateUserPanelProps = {
   useUpdateUserPanel: UseUpdateUserPanel;
   onDismiss?: () => void;
   onUpdateUser?: () => void;
-} & typeof defaultProps;
+};
 
 const tabs = ['#account', '#access'];
 
@@ -93,6 +81,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
         text: useUpdateUserPanel.resetPasswordCmd?.label ?? 'Reset',
         onClick: showResetPasswordDialog,
         iconProps: { iconName: 'Permissions' },
+        className: 'reset-button',
       });
     }
 
@@ -102,6 +91,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
         text: useUpdateUserPanel.deactivateUserCmd?.label ?? 'Deactivate',
         onClick: showDeactivateUserDialog,
         iconProps: { iconName: 'UserRemove' },
+        className: 'deactivate-button',
       });
     }
 
@@ -111,6 +101,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
         text: useUpdateUserPanel.activateUserCmd?.label ?? 'Activate',
         onClick: showActivateUserDialog,
         iconProps: { iconName: 'UserFollowed' },
+        className: 'activate-button',
       });
     }
 
@@ -126,6 +117,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
         text: useUpdateUserPanel.auditActivityCmd?.label ?? 'Audit Activity',
         onClick: handleUserAuditLogsClick,
         iconProps: { iconName: 'ComplianceAudit' },
+        className: 'audit-button',
       });
     }
 
@@ -135,6 +127,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
         text: useUpdateUserPanel.changeHistoryCmd?.label ?? 'Change History',
         onClick: handleUserChangeHistoryLogsClick,
         iconProps: { iconName: 'FullHistory' },
+        className: 'history-button',
       });
     }
 
@@ -146,6 +139,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
           setShowMigrateUserDialog(true);
         },
         iconProps: { iconName: 'FollowUser' },
+        className: 'migrate-button',
       });
     }
 
@@ -173,7 +167,9 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
       }
 
       if (responseCode === GqOperationResponse.Success || responseCode === GqOperationResponse.PartialSuccess) {
-        onUpdateUser();
+        if (onUpdateUser) {
+          onUpdateUser();
+        }
         setMessageType(MessageBarType.success);
         setMessage('User Profile Saved');
         setUnsavedChanges(false);
@@ -195,7 +191,9 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
       }
 
       if (responseCode === GqOperationResponse.Success || responseCode === GqOperationResponse.PartialSuccess) {
-        onUpdateUser();
+        if (onUpdateUser) {
+          onUpdateUser();
+        }
         setMessageType(MessageBarType.success);
         setMessage('User Profile Saved');
         setUnsavedChanges(false);
@@ -224,7 +222,9 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
     const responseReset = await useUpdateUserPanel.callDeactivateUser();
     if (responseReset?.deactivateUser) {
       if (responseReset?.deactivateUser === GqOperationResponse.Success) {
-        onUpdateUser();
+        if (onUpdateUser) {
+          onUpdateUser();
+        }
         setMessageType(MessageBarType.success);
         setMessage('User has been deactivated');
       } else {
@@ -238,7 +238,9 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
     const responseReset = await useUpdateUserPanel.callActivateUser();
     if (responseReset?.activateUser) {
       if (responseReset?.activateUser === GqOperationResponse.Success) {
-        onUpdateUser();
+        if (onUpdateUser) {
+          onUpdateUser();
+        }
         setMessageType(MessageBarType.success);
         setMessage('User has been activated');
       } else {
@@ -260,7 +262,9 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
     // Reset the form
     useUpdateUserPanel.resetForm();
     useUpdateUserPanel.closePanel();
-    onDismiss();
+    if (onDismiss) {
+      onDismiss();
+    }
   };
 
   const showUnsavedChangesDialog = () => {
@@ -347,7 +351,9 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
 
   const onMigrateUser = () => {
     setShowMigrateUserDialog(false);
-    onUpdateUser();
+    if (onUpdateUser) {
+      onUpdateUser();
+    }
     doClosePanel();
   };
 
@@ -371,7 +377,9 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
           overflowItems={overflowItems()}
           overflowButtonProps={overflowProps}
           ariaLabel="User actions"
-          onReduceData={() => {return undefined}}
+          onReduceData={() => {
+            return undefined;
+          }}
         />
       </Column>
     </PanelHeader>
@@ -444,7 +452,5 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
     </>
   );
 };
-
-UpdateUserPanel.defaultProps = defaultProps;
 
 export default UpdateUserPanel;

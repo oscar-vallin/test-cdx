@@ -1,15 +1,24 @@
-import { Action, ActionOn, action, actionOn, computed } from 'easy-peasy';
-import { SessionUser, SessionStatus, SessionStages } from './SessionTypes';
+import { Action, action, computed } from 'easy-peasy';
+import { SessionStages, SessionStatus, SessionUser } from './SessionTypes';
 
 export interface SessionModel {
   user: SessionUser;
   status: SessionStatus;
+  globalError?: string | null;
+  logout: Action<SessionModel>;
   setSessionStage: Action<SessionModel, string>;
   setCurrentSession: Action<SessionModel, SessionUser>;
-  setRedirectUrl: Action<SessionModel, string>;
-  onCurrentSessionUpdate: ActionOn<SessionModel>;
+  setRedirectUrl: Action<SessionModel, string | null>;
+  setGlobalError: Action<SessionModel, string | null>;
   redirectUrl: string | null;
 }
+
+const logout = (state) => {
+  state.status.stage = SessionStages.LoggedOut;
+  state.user = {
+    token: null,
+  };
+};
 
 const setSessionStage = (state, payload) => {
   state.status.stage = payload;
@@ -17,10 +26,15 @@ const setSessionStage = (state, payload) => {
 
 const setCurrentSession = (state, payload) => {
   state.user = payload;
+  state.status.stage = payload.token ? SessionStages.LoggedIn : SessionStages.LoggedOut
 };
 
 const setRedirectUrl = (state, payload) => {
   state.redirectUrl = payload;
+};
+
+const setGlobalError = (state, payload) => {
+  state.globalError = payload;
 };
 
 export const INITIAL_SESSION_STATE: SessionModel = {
@@ -28,20 +42,15 @@ export const INITIAL_SESSION_STATE: SessionModel = {
     token: null,
   },
   status: {
-    stage: SessionStages.Rehydrating,
+    stage: SessionStages.LoggedOut,
     isAuthenticated: computed((state) => state.stage === SessionStages.LoggedIn),
     isAuthenticating: computed((state) => state.stage === SessionStages.Validating),
-    isRehydrating: computed((state) => state.stage === SessionStages.Rehydrating),
   },
+  logout: action(logout),
   setCurrentSession: action(setCurrentSession),
   setSessionStage: action(setSessionStage),
   setRedirectUrl: action(setRedirectUrl),
-  onCurrentSessionUpdate: actionOn(
-    (actions) => actions.setCurrentSession,
-    (state, { payload }) => {
-      state.status.stage = payload.token ? SessionStages.LoggedIn : SessionStages.LoggedOut;
-    }
-  ),
+  setGlobalError: action(setGlobalError),
   redirectUrl: null,
 };
 

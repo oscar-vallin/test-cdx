@@ -12,5 +12,4 @@ describe('Information Icon component', () => {
     const wrapper = mountWithTheme(<InfoIcon id="info" tooltip="Hot Tips" />);
     expect(wrapper.find('FontIcon')).toHaveLength(1);
   });
-
 });

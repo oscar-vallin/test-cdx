@@ -1,6 +1,6 @@
 import React from 'react';
 import { IconButton } from '@fluentui/react';
-import { PaginationInfo } from '../../../data/services/graphql';
+import { PaginationInfo } from 'src/data/services/graphql';
 import { PaginatorWrapper, PagingInfo } from './Paginator.styles';
 
 type PaginatorParams = {
@@ -21,7 +21,7 @@ export const Paginator = ({ pagingInfo, onPageChange }: PaginatorParams) => {
   }
 
   if (total < pSize) {
-    return <></>;
+    return null;
   }
 
   return (

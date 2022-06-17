@@ -3,7 +3,7 @@ import { QueryParams } from './QueryParamTypes';
 
 export interface QueryParamModel {
   params: QueryParams;
-  setGlobalParam: Action<QueryParamModel>;
+  setGlobalParam: Action<QueryParamModel, any>;
   reset: Action<QueryParamModel>;
 }
 
@@ -19,7 +19,7 @@ const reset = (state) => {
   state.params = { ...DEFAULT_QUERY_PARAMS };
 };
 
-const INITIAL_QUERY_PARAM_STATE = {
+const INITIAL_QUERY_PARAM_STATE: QueryParamModel = {
   params: { ...DEFAULT_QUERY_PARAMS },
   setGlobalParam: action(setGlobalParam),
   reset: action(reset),

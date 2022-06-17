@@ -88,9 +88,7 @@ const XChangePage = () => {
     hour %= 12;
     hour = hour || 12;
     minutes = minutes < 10 ? minutes : minutes;
-    const newHour = `${formattedDate} ${hour}:${minutes}${format}`;
-
-    return newHour;
+    return `${formattedDate} ${hour}:${minutes}${format}`;
   };
 
   const tooltipHostContent = (lastActivity: Date, type?: string, vendorName?: string[] | null) => {

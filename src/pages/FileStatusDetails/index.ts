@@ -1,3 +1,3 @@
-import { FileStatusDetailsPage } from './FileStatusDetailsPage';
+import { FileStatusDetailsPanel } from 'src/pages/FileStatusDetails/FileStatusDetailsPanel';
 
-export { FileStatusDetailsPage };
+export { FileStatusDetailsPanel };

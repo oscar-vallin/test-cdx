@@ -1,18 +1,10 @@
 /* eslint-disable no-shadow */
-export enum ColorModes {
-  Light = 'LIGHT',
-  Dark = 'DARK',
-}
-
-export enum FontSizes {
-  Small = 'SMALL',
-  Medium = 'MEDIUM',
-  Large = 'LARGE',
-}
+import { ThemeColorsType } from 'src/styles/themes';
+import { ThemeColorMode, ThemeFontSize } from 'src/data/services/graphql';
 
 export type Theme = {
-  dashThemeColor: any;
-  paletteNm: string;
-  themeColorMode: ColorModes;
-  themeFontSize: FontSizes;
+  dashThemeColor?: ThemeColorsType | null;
+  paletteNm?: string | null;
+  themeColorMode?: ThemeColorMode | null;
+  themeFontSize?: ThemeFontSize | null;
 };
