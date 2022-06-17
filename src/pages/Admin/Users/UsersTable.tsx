@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React from 'react';
 import {
   DetailsListLayoutMode,
   IColumn,
@@ -8,22 +8,17 @@ import {
   Stack,
   DetailsList,
 } from '@fluentui/react';
-import {
-  UserItem,
-  SortDirection,
-  NullHandling,
-  PageableInput,
-  UserConnectionTooltips,
-} from 'src/data/services/graphql';
+import { UserItem, UserConnectionTooltips } from 'src/data/services/graphql';
 import { TableFiltersType } from 'src/hooks/useTableFilters';
 import { useThemeStore } from 'src/store/ThemeStore';
 import { ButtonLink } from 'src/components/buttons';
 import { UsersTableColumns, useUsersTableColumns } from './UsersTableColumn';
+import { useSortableColumns } from 'src/containers/tables/useSortableColumns';
 
 type UsersTableType = {
   users: UserItem[];
   onClickUser: (userSid: string) => any;
-  tableFilters?: TableFiltersType;
+  tableFilters: TableFiltersType;
   tooltips?: UserConnectionTooltips;
   searchAllOrgs?: boolean;
 };
@@ -34,48 +29,12 @@ const searchAllOrgsCols: UsersTableColumns[] = [...cols, UsersTableColumns.ORGAN
 
 export const UsersTable = ({ users, onClickUser, tableFilters, tooltips, searchAllOrgs }: UsersTableType) => {
   const ThemeStore = useThemeStore();
-  // make columnsRef always have the current count
-  // your "fixed" callbacks (doSort) can refer to this object whenever
-  // they need the current value, unlike default behaviour where doSort callback used stale state value
-  const columnsRef = useRef<IColumn[]>();
-  const _doSort = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
-    const newColumns: IColumn[] = columnsRef?.current?.slice() ?? [];
-    const currColumn: IColumn = newColumns.filter((currCol) => column.key === currCol.key)[0];
-    let sortParam: PageableInput = {};
-    newColumns.forEach((newCol: IColumn) => {
-      if (newCol === currColumn) {
-        currColumn.isSortedDescending = !currColumn.isSortedDescending;
-        currColumn.isSorted = true;
-        sortParam = {
-          pageNumber: 0,
-          pageSize: 100,
-          sort: [
-            {
-              property: currColumn.key,
-              direction: currColumn.isSortedDescending ? SortDirection.Desc : SortDirection.Asc,
-              nullHandling: NullHandling.NullsFirst,
-              ignoreCase: true,
-            },
-          ],
-        };
-      } else {
-        newCol.isSorted = false;
-        newCol.isSortedDescending = true;
-      }
-    });
-    setColumns(newColumns);
-    tableFilters?.setPagingParams(sortParam);
-  };
 
-  const { initialColumns } = useUsersTableColumns(cols, _doSort);
-  const { initialColumns: allOrgsColumns } = useUsersTableColumns(searchAllOrgsCols, _doSort);
+  const { initialColumns } = useUsersTableColumns(cols);
+  const { initialColumns: allOrgsInitColumns } = useUsersTableColumns(searchAllOrgsCols);
 
-  const [columns, setColumns] = useState<IColumn[]>(initialColumns);
-  columnsRef.current = columns;
-
-  useEffect(() => {
-    setColumns(allOrgsColumns);
-  }, [searchAllOrgs]);
+  const { columns } = useSortableColumns(tableFilters, initialColumns(), ["firstNm", "lastNm", "email", "organization"] )
+  const { columns: allOrgColumns } = useSortableColumns(tableFilters, allOrgsInitColumns(), ["firstNm", "lastNm", "email", "organization"] )
 
   const onRenderItemColumn = (node?: UserItem, itemIndex?: number, column?: IColumn) => {
     let columnVal: string | undefined;
@@ -153,7 +112,7 @@ export const UsersTable = ({ users, onClickUser, tableFilters, tooltips, searchA
   return (
     <DetailsList
       items={users}
-      columns={columns}
+      columns={searchAllOrgs ? allOrgColumns : columns}
       layoutMode={DetailsListLayoutMode.justified}
       onRenderItemColumn={onRenderItemColumn}
       selectionMode={SelectionMode.none}
