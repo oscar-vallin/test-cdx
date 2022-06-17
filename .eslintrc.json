@@ -23,7 +23,7 @@
   "rules": {
     "semi": 0,
     "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn",
+    "react-hooks/exhaustive-deps": "off",
     "react/function-component-definition": ["warn", {
       "namedComponents": "arrow-function",
       "unnamedComponents": "arrow-function"
