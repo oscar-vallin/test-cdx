@@ -9,10 +9,7 @@ import {
   SelectionMode,
 } from '@fluentui/react';
 
-import {
-  PaginationInfo,
-  UserAccountAuditEvent,
-} from 'src/data/services/graphql';
+import { PaginationInfo, UserAccountAuditEvent } from 'src/data/services/graphql';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { TableFiltersType } from 'src/hooks/useTableFilters';
@@ -20,8 +17,8 @@ import { Paginator } from 'src/components/tables/Paginator';
 import { TableFilters } from 'src/containers/tables/TableFilters';
 import { EmptyState } from 'src/containers/states';
 import { Box, Container } from 'src/components/layouts';
-import { UserAuditLogsColumn, useUserAuditLogsColumns } from './UserAuditLogsTableColumn';
 import { useSortableColumns } from 'src/containers/tables/useSortableColumns';
+import { UserAuditLogsColumn, useUserAuditLogsColumns } from './UserAuditLogsTableColumn';
 
 type UserAuditLogsTableParams = {
   id: string;
@@ -82,7 +79,7 @@ export const UserAuditLogsTable = ({ id, cols, lazyQuery, getItems, tableFilters
 
   const { initialColumns } = useUserAuditLogsColumns(cols);
 
-  const { columns } = useSortableColumns(tableFilters, initialColumns(), ["auditDateTime", "event"])
+  const { columns } = useSortableColumns(tableFilters, initialColumns(), ['auditDateTime', 'event']);
   // const [columns, setColumns] = useState<IColumn[]>(initialColumns);
   const [items, setItems] = useState<any[]>([]);
 

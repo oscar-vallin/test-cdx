@@ -40,9 +40,8 @@ jest.mock('src/store/ThemeStore/useThemeStore', () => ({
       setFontSize: jest.fn(),
       reset: jest.fn(),
     };
-  }
+  },
 }));
-
 
 describe('Basic Input Component', () => {
   it('Renders 6 sectors circles in simple PieChart', () => {

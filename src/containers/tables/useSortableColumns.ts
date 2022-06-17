@@ -12,8 +12,7 @@ export const useSortableColumns = (
   tableColumns: IColumn[],
   sortable: string[],
   onSort?: (key: string) => void
-) : UseSortableColumnsType => {
-
+): UseSortableColumnsType => {
   const [columns, setColumns] = useState(tableColumns);
 
   const _doSort = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
@@ -52,11 +51,11 @@ export const useSortableColumns = (
   const clonedColumns = [...tableColumns];
   clonedColumns.forEach((value) => {
     if (sortable.includes(value.key)) {
-      value.onColumnClick = _doSort
+      value.onColumnClick = _doSort;
     }
   });
 
   return {
-    columns
+    columns,
   };
-}
+};

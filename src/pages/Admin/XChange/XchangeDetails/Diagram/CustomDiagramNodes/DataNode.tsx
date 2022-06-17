@@ -1,11 +1,11 @@
 import { IconButton } from '@fluentui/react';
-import { Handle, Position } from "react-flow-renderer";
+import { Handle, Position } from 'react-flow-renderer';
 import React, { memo } from 'react';
-import Node,{ contentStyle as style } from './Node';
+import Node, { contentStyle as style } from './Node';
 
 const DataNode = ({ data }) => {
   return (
-    <Node 
+    <Node
       label={data.name}
       content={
         <div style={style.io}>

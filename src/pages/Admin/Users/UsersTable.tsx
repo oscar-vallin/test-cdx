@@ -12,8 +12,8 @@ import { UserItem, UserConnectionTooltips } from 'src/data/services/graphql';
 import { TableFiltersType } from 'src/hooks/useTableFilters';
 import { useThemeStore } from 'src/store/ThemeStore';
 import { ButtonLink } from 'src/components/buttons';
-import { UsersTableColumns, useUsersTableColumns } from './UsersTableColumn';
 import { useSortableColumns } from 'src/containers/tables/useSortableColumns';
+import { UsersTableColumns, useUsersTableColumns } from './UsersTableColumn';
 
 type UsersTableType = {
   users: UserItem[];
@@ -33,8 +33,18 @@ export const UsersTable = ({ users, onClickUser, tableFilters, tooltips, searchA
   const { initialColumns } = useUsersTableColumns(cols);
   const { initialColumns: allOrgsInitColumns } = useUsersTableColumns(searchAllOrgsCols);
 
-  const { columns } = useSortableColumns(tableFilters, initialColumns(), ["firstNm", "lastNm", "email", "organization"] )
-  const { columns: allOrgColumns } = useSortableColumns(tableFilters, allOrgsInitColumns(), ["firstNm", "lastNm", "email", "organization"] )
+  const { columns } = useSortableColumns(tableFilters, initialColumns(), [
+    'firstNm',
+    'lastNm',
+    'email',
+    'organization',
+  ]);
+  const { columns: allOrgColumns } = useSortableColumns(tableFilters, allOrgsInitColumns(), [
+    'firstNm',
+    'lastNm',
+    'email',
+    'organization',
+  ]);
 
   const onRenderItemColumn = (node?: UserItem, itemIndex?: number, column?: IColumn) => {
     let columnVal: string | undefined;

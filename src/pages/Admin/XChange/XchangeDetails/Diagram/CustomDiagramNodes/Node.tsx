@@ -60,15 +60,15 @@ const style: StyledProps | undefined = {
     border: '2px solid gray',
     width: '220px',
   },
-//   title: {
-//     position: 'relative',
-//     padding: '8px 32px',
-//     flexGrow: 1,
-//     backgroundColor: '#eee',
-//   },
-//   contentWrapper: {
-//     padding: '8px 0px',
-//   },
+  //   title: {
+  //     position: 'relative',
+  //     padding: '8px 32px',
+  //     flexGrow: 1,
+  //     backgroundColor: '#eee',
+  //   },
+  //   contentWrapper: {
+  //     padding: '8px 0px',
+  //   },
 };
 
 interface NodeProps {

@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import * as React from "react";
 import { DocumentCard } from '@fluentui/react';
 import { Column } from 'src/components/layouts';
 
@@ -32,7 +31,6 @@ export const SubsStyled = styled.div`
 export const StyledColumTabs = styled(Column)`
   display: inline-block;
 `;
-
 
 export const StyledContainer = styled.div<DemoCanvasWidgetProps>`
   height: 550px;

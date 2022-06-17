@@ -19,11 +19,11 @@ import { useHistory } from 'react-router-dom';
 import { UseFileStatusDetailsPanel } from 'src/pages/FileStatusDetails/useFileStatusDetailsPanel';
 import { ROUTES } from 'src/data/constants/RouteConstants';
 import { useQueryParams } from 'src/hooks/useQueryParams';
+import { useSortableColumns } from 'src/containers/tables/useSortableColumns';
 import { useWorkPacketColumns, WorkPacketColumn } from './WorkPacketColumns';
 import { TableFilters } from './TableFilters';
 import { EmptyState } from '../states';
 import { Box, Container } from './WorkPacketTable.styles';
-import { useSortableColumns } from 'src/containers/tables/useSortableColumns';
 
 type WorkPacketParams = {
   id: string;
