@@ -16,7 +16,7 @@ import AddExternalUsersAccessFooter from './AddExternalUsersAccessFooter';
 
 type SectionAccountProps = {
   form: UserAccountForm;
-  onNext: () => null;
+  onNext: () => void;
   saveOptions: (userAccount: UserAccount) => void;
   saveActivationEmailOptions: (sendActivationEmail: boolean) => void;
   searchExternalUsers: any;

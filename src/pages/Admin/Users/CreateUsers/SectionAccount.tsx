@@ -10,7 +10,7 @@ import CreateUsersFooter from './CreateUsersFooter';
 
 type SectionAccountProps = {
   form: UserAccountForm;
-  onNext: () => null;
+  onNext: () => void;
   saveOptions: (userAccount: UserAccount) => void;
 };
 

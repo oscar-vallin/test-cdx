@@ -15,6 +15,7 @@ import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { SectionAccount } from './SectionAccount';
 import SectionAccessManagement from './SectionAccessManagement';
 import SectionSummary from './SectionSummary';
+import { useWizardTabs } from 'src/pages/Admin/Users/useWizardTabs';
 
 type AddExternalUsersAccessPanelProps = {
   orgSid: string;
@@ -24,11 +25,6 @@ type AddExternalUsersAccessPanelProps = {
 };
 
 const tabs = ['#account', '#access', '#summary'];
-const enum Tab {
-  Account = 0,
-  Access = 1,
-  Summary = 2,
-}
 
 const AddExternalUsersAccessPanel = ({
   orgSid,
@@ -38,7 +34,7 @@ const AddExternalUsersAccessPanel = ({
 }: AddExternalUsersAccessPanelProps): ReactElement => {
   const externalUsersAccessService = useExternalUsersAccessService(orgSid);
 
-  const [step, setStep] = useState(Tab.Account);
+  const { selectedTab, handleNext, handlePrev, handleTabChange, resetTabs } = useWizardTabs(tabs);
   const [showDialog, setShowDialog] = useState(false);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [isProcessing, setProcessing] = useState<boolean>(false);
@@ -49,22 +45,6 @@ const AddExternalUsersAccessPanel = ({
   const handleError = ErrorHandler();
 
   const Toast = useNotification();
-
-  const handleNext = (): null => {
-    setStep(step + 1);
-    return null;
-  };
-
-  const handlePrev = (): null => {
-    setStep(step - 1);
-    return null;
-  };
-
-  const handleTabChange = (hash): void => {
-    if (userSelected) {
-      setStep(tabs.indexOf(hash));
-    }
-  };
 
   const onPanelClose = () => {
     if (unsavedChanges) {
@@ -84,7 +64,7 @@ const AddExternalUsersAccessPanel = ({
     // Reset the form
     externalUsersAccessService.resetForm();
     // Set it back to the first tab
-    setStep(Tab.Account);
+    resetTabs();
     setShowDialog(false);
     setUnsavedChanges(false);
     onDismiss();
@@ -252,7 +232,7 @@ const AddExternalUsersAccessPanel = ({
                   disabled: !userSelected,
                 },
               ]}
-              selectedKey={step < 0 ? '0' : step.toString()}
+              selectedKey={selectedTab}
               onClickTab={handleTabChange}
             />
           </>

@@ -6,6 +6,7 @@ export type UseFileStatusDetailsPanel = {
   closePanel: () => void;
   workOrderId: string;
   hash: string;
+  setHash: ((h: string) => void);
   fsOrgSid: string;
 };
 
@@ -32,6 +33,7 @@ export const useFileStatusDetailsPanel = (): UseFileStatusDetailsPanel => {
     closePanel,
     workOrderId,
     hash,
+    setHash,
     fsOrgSid,
   };
 };

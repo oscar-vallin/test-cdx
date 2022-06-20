@@ -9,8 +9,8 @@ import { StyledOptionRow } from './CreateUsersPanel.styles';
 
 type SectionAuthProps = {
   form: UserAccountForm;
-  onPrev: () => null;
-  onNext: () => null;
+  onPrev: () => void;
+  onNext: () => void;
   saveOptions: (sendActivationEmail: boolean) => void;
 };
 

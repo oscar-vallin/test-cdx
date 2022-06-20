@@ -28,7 +28,8 @@ const renderHeader = (
   onClickTab: (key: string) => void,
   badge?: BadgeType,
   link?: IPivotItemProps,
-  defaultRenderer?: (props?: IPivotItemProps) => JSX.Element | null) =>
+  defaultRenderer?: (props?: IPivotItemProps) => JSX.Element | null
+) =>
 (
   <StyledSpan onClick={() => onClickTab(hash)}>
     {defaultRenderer && defaultRenderer(link)}
@@ -39,7 +40,7 @@ const renderHeader = (
 const CDXTabs = ({ items, selectedKey, onClickTab }: CDXTabsType): ReactElement => {
   return (
     <StyledPivot
-      defaultSelectedKey={selectedKey}
+      selectedKey={selectedKey}
       overflowBehavior="menu"
       overflowAriaLabel="more items"
       styles={{
@@ -59,7 +60,7 @@ const CDXTabs = ({ items, selectedKey, onClickTab }: CDXTabsType): ReactElement 
           itemKey={hash}
           onRenderItemLink={(link, defaultRenderer) => renderHeader(hash, onClickTab, badge, link, defaultRenderer)}
           headerButtonProps={{
-            disabled
+            disabled,
           }}
         >
           {content}

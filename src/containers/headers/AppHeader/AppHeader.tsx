@@ -103,6 +103,7 @@ const AppHeader = ({ onMenuButtonClick }: AppHeaderProps): ReactElement => {
         ) : null;
       });
     }
+    return null;
   };
 
   const renderOrgName = () => {

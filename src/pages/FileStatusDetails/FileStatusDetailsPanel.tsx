@@ -54,7 +54,7 @@ type FileStatusDetailsPanelProps = {
 
 const FileStatusDetailsPanel = ({ useFileStatusDetailsPanel, tableFilters }: FileStatusDetailsPanelProps) => {
   const { fsOrgSid } = useFileStatusDetailsPanel;
-  const { hash } = useFileStatusDetailsPanel;
+  const { hash, setHash } = useFileStatusDetailsPanel;
   const id = useFileStatusDetailsPanel.workOrderId;
 
   const history = useHistory();
@@ -369,6 +369,7 @@ const FileStatusDetailsPanel = ({ useFileStatusDetailsPanel, tableFilters }: Fil
   };
 
   const handleFilesDetailsTabChange = (item: string) => {
+    setHash(item);
     const params = new URLSearchParams(window.location.search);
     params.set('tab', item.replace('#', ''));
     history.replace(`${window.location.pathname}?${params.toString()}`);

@@ -5,8 +5,8 @@ import AddExternalUsersAccessFooter from './AddExternalUsersAccessFooter';
 
 type SectionAccessProps = {
   form?: UserAccountForm;
-  onPrev: () => null;
-  onNext: () => null;
+  onPrev: () => void;
+  onNext: () => void;
   saveOptions: (sids: string[]) => void;
 };
 

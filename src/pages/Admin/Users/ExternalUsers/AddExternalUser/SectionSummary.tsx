@@ -6,8 +6,8 @@ import AddExternalUsersAccessFooter from './AddExternalUsersAccessFooter';
 
 type SectionSummaryPropsType = {
   form: UserAccountForm;
-  onPrev: () => null;
-  onSubmit: () => any;
+  onPrev: () => void;
+  onSubmit: () => void;
   isProcessing?: boolean;
 };
 
