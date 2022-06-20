@@ -236,6 +236,7 @@ const AddExternalUsersAccessPanel = ({
                     />
                   ),
                   hash: '#access',
+                  disabled: !userSelected,
                 },
                 {
                   title: 'Summary',
@@ -248,6 +249,7 @@ const AddExternalUsersAccessPanel = ({
                     />
                   ),
                   hash: '#summary',
+                  disabled: !userSelected,
                 },
               ]}
               selectedKey={step < 0 ? '0' : step.toString()}

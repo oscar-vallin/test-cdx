@@ -14,6 +14,7 @@ export type CDXTabsItemType = {
   content: ReactElement;
   hash: string;
   badge?: BadgeType;
+  disabled?: boolean;
 };
 
 type CDXTabsType = {
@@ -51,12 +52,15 @@ const CDXTabs = ({ items, selectedKey, onClickTab }: CDXTabsType): ReactElement 
       }}
       style={{ fontSize: theme.fontSizes.normal }}
     >
-      {items.map(({ title, content, badge, hash }: CDXTabsItemType, index) => (
+      {items.map(({ title, content, badge, hash, disabled }: CDXTabsItemType, index) => (
         <PivotItem
           headerText={title}
           key={index}
           itemKey={hash}
           onRenderItemLink={(link, defaultRenderer) => renderHeader(hash, onClickTab, badge, link, defaultRenderer)}
+          headerButtonProps={{
+            disabled
+          }}
         >
           {content}
         </PivotItem>
