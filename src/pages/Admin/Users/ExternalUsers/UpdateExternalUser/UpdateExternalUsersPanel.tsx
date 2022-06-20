@@ -33,8 +33,8 @@ const UpdateExternalUsersPanel = ({
   orgSid,
   userAccountSid,
   isOpen = false,
-  onDismiss = () => {},
-  onUpdateUser = () => {},
+  onDismiss = undefined,
+  onUpdateUser = undefined,
 }: UpdateExternalUsersPanelProps): ReactElement => {
   const externalUsersAccessService = useExternalUsersAccessService(orgSid, userAccountSid);
 
@@ -69,7 +69,9 @@ const UpdateExternalUsersPanel = ({
     setShowUnsavedChangesDialog(false);
     setUnsavedChanges(false);
 
-    onDismiss();
+    if (onDismiss) {
+      onDismiss();
+    }
   };
 
   const userName = () => {
@@ -130,7 +132,9 @@ const UpdateExternalUsersPanel = ({
       }
 
       if (responseCode === GqOperationResponse.Success || responseCode === GqOperationResponse.PartialSuccess) {
-        onUpdateUser(response.grantExternalUserAccess);
+        if (onUpdateUser) {
+          onUpdateUser(response.grantExternalUserAccess);
+        }
         doClosePanel();
       }
     }
@@ -145,7 +149,9 @@ const UpdateExternalUsersPanel = ({
       setShowRevokeAccessDialog(false);
       doClosePanel();
       Toast.success({ text: `${userName()}'s access has been revoked` });
-      onUpdateUser();
+      if (onUpdateUser) {
+        onUpdateUser();
+      }
     } else {
       const errMsg = response?.revokeExternalUserAccess?.errMsg ?? 'Unexpected error';
       setErrorMsg(errMsg);
@@ -161,7 +167,7 @@ const UpdateExternalUsersPanel = ({
         onRenderHeader={renderPanelHeader}
         isOpen={isOpen}
         onDismiss={onPanelClose}
-        onOuterClick={() => {}}
+        onOuterClick={undefined}
       >
         <PanelBody>
           {errorMsg && (

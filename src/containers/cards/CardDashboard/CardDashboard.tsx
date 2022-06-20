@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
-import { Row, Column } from '../../../components/layouts';
-import { Card } from '../../../components/cards/Card';
-import { Spacing } from '../../../components/spacings/Spacing';
+import { Row, Column } from 'src/components/layouts';
+import { Card } from 'src/components/cards';
+import { Spacing } from 'src/components/spacings/Spacing/index';
 import { StyledTitle, StyledSubtitle, StyledValues } from './CardDashboard.styles';
 
 export const defaultProps = {
@@ -27,8 +27,6 @@ type CardDashboardProps = {
 } & typeof defaultProps;
 
 const CardDashboard = ({ id, title, subtitle, value, total }: CardDashboardProps): ReactElement => {
-  const isNotData = (total ?? 0) === 0;
-
   return (
     <Card id={id} elevation="smallest">
       <Row>
@@ -56,4 +54,3 @@ const CardDashboard = ({ id, title, subtitle, value, total }: CardDashboardProps
 CardDashboard.defaultProps = defaultProps;
 
 export { CardDashboard };
-export default CardDashboard;

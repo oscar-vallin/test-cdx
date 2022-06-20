@@ -6,8 +6,6 @@ import { LabelRow, Label, Required } from './FormLabel.styles';
 
 const defaultProps = {
   required: false,
-  iconName: 'Error',
-  arial: 'Tooltip',
 };
 
 type FormLabelProps = {
@@ -16,10 +14,9 @@ type FormLabelProps = {
   required?: boolean;
   info?: string;
   errorMessage?: string;
-  arial?: string;
 } & typeof defaultProps;
 
-const FormLabel = ({ id, label, required, info, errorMessage, arial, ...props }: FormLabelProps): ReactElement => {
+const FormLabel = ({ id, label, required, info, errorMessage, ...props }: FormLabelProps): ReactElement => {
   return (
     <LabelRow id={id}>
       <Label {...props} id={id ? `${id}-Label` : undefined}>

@@ -21,12 +21,12 @@ export const LeftNav = ({ menuOptionSelected, isOpen }: LeftNavProps) => {
     const items = ActiveDomainStore?.domainOrg?.current?.subNavItems ?? [];
     if (items.length > 1) {
       const navItems: NavItemType[] = items
-        .filter((item) => item.orgSid != orgSid)
+        .filter((item) => item.orgSid !== orgSid)
         .map((item) => {
           return {
             id: `__NavToOrg_${item.orgSid}`,
             label: item.label,
-            selected: item.destination == menuOptionSelected,
+            selected: item.destination === menuOptionSelected,
             onClick: () => ActiveDomainStore?.setCurrentOrg(item),
           };
         });
@@ -64,7 +64,7 @@ export const LeftNav = ({ menuOptionSelected, isOpen }: LeftNavProps) => {
       return {
         id: `__NavTo_${item.destination}`,
         label: item.label,
-        selected: item.destination == menuOptionSelected,
+        selected: item.destination === menuOptionSelected,
         onClick: () => {
           const url = getRouteByApiId(item.destination)?.URL;
           if (url) {
@@ -103,7 +103,7 @@ export const LeftNav = ({ menuOptionSelected, isOpen }: LeftNavProps) => {
 
   const renderAdminItems = () => {
     return ActiveDomainStore.nav.admin.map((navItem, index) => {
-      if (navItem.label == '-') {
+      if (navItem.label === '-') {
         return <MenuSeparator key={`adminNav_separator_${index}`} />;
       }
       return (
@@ -117,7 +117,7 @@ export const LeftNav = ({ menuOptionSelected, isOpen }: LeftNavProps) => {
               return {
                 id: `__Nav_${subNav.destination}`,
                 label: subNav.label,
-                selected: subNav.destination == menuOptionSelected,
+                selected: subNav.destination === menuOptionSelected,
                 onClick: () => {
                   const url = getRouteByApiId(subNav.destination)?.URL;
                   if (url) {

@@ -76,6 +76,14 @@ const ChartDonut = ({ id, label, size = 50, data, totalRecords, onClickSlice }: 
     );
   };
 
+  const calcCellColor = (index: number, chartData?: ChartDataType[]): string => {
+    const dataLen = chartData?.length ?? 0;
+    if (!chartData || dataLen === 0) {
+      return COLORS[0];
+    }
+    return chartData[index % dataLen]?.color ?? COLORS[index % COLORS.length];
+  };
+
   return (
     <PieChart id={id} width={size + size * 5.0} height={size + size * 1.2}>
       <Pie
@@ -96,7 +104,7 @@ const ChartDonut = ({ id, label, size = 50, data, totalRecords, onClickSlice }: 
       >
         <Label value={label} position="center" className="label" fontSize="1rem" />
         {data?.map((entry, index) => (
-          <Cell key={index} fill={data[index % data?.length]?.color ?? COLORS[index % COLORS.length]} />
+          <Cell key={index} fill={calcCellColor(index, data)} />
         ))}
       </Pie>
       <text

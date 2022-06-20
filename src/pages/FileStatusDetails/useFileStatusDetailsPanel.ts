@@ -15,10 +15,10 @@ export const useFileStatusDetailsPanel = (): UseFileStatusDetailsPanel => {
   const [fsOrgSid, setFsOrgSid] = useState('');
   const [panelOpen, setPanelOpen] = useState(false);
 
-  const showPanel = (workOrderId, fsOrgSid, hash) => {
-    setWorkOrderId(workOrderId);
-    setFsOrgSid(fsOrgSid);
-    setHash(hash);
+  const showPanel = (_workOrderId, _fsOrgSid, _hash) => {
+    setWorkOrderId(_workOrderId);
+    setFsOrgSid(_fsOrgSid);
+    setHash(_hash);
     setPanelOpen(true);
   };
 

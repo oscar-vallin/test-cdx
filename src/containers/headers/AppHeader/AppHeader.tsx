@@ -38,13 +38,6 @@ const AppHeader = ({ onMenuButtonClick }: AppHeaderProps): ReactElement => {
 
   const originDestination = ActiveDomainStore.domainOrg.origin.destination !== ROUTE_EXTERNAL_ORGS.API_ID;
 
-  type mapProps = {
-    type?: string;
-    label?: string;
-    destination?: string;
-    subNavItems?: { type: string }[] | any;
-  };
-
   const updateThemeFontSize = (fontSize: ThemeFontSize) => {
     setFontSize(fontSize);
   };
@@ -72,26 +65,6 @@ const AppHeader = ({ onMenuButtonClick }: AppHeaderProps): ReactElement => {
       onClick: () => updateThemeFontSize(ThemeFontSize.Large),
     },
   ];
-
-  const parseLinks = (links = [], sidebarOpt: string) => {
-    return links.map(({ label, destination, subNavItems }: mapProps) => ({
-      name: label,
-      ...(subNavItems
-        ? {
-            isExpanded: subNavItems.find((item) => item.destination === sidebarOpt),
-            links: parseLinks(subNavItems, ''),
-          }
-        : {}),
-      ...(destination
-        ? {
-            url: getRouteByApiId(destination)?.URL,
-            key: destination,
-            // params: page.parameters,
-            // commands: page.commands,
-          }
-        : {}),
-    }));
-  };
 
   const renderTopNavButtons = () => {
     if (originDestination) {

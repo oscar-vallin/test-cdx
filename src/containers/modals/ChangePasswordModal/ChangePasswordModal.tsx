@@ -14,36 +14,37 @@ type ChangePasswordModalProps = {
   hidden?: boolean;
 } & typeof defaultProps;
 
-const ChangePasswordModal = ({ hidden, ...props }: ChangePasswordModalProps): ReactElement => {
-  const handleAlert = (message: string) => {
-    alert(message);
-  };
+const handleAlert = (message: string) => {
+  alert(message);
+};
 
-  const ModalFooter = () => {
-    return (
-      <StyledDiv>
-        <Spacing margin={{ right: 'small' }}>
-          <Button
-            id="__ChangePasswordModalID"
-            text="Cancel"
-            variant="secondary"
-            disabled={false}
-            block={false}
-            onClick={() => handleAlert('Cancel')}
-          />
-        </Spacing>
-
+const ModalFooter = () => {
+  return (
+    <StyledDiv>
+      <Spacing margin={{ right: 'small' }}>
         <Button
           id="__ChangePasswordModalID"
-          variant="primary"
-          text="Save"
+          text="Cancel"
+          variant="secondary"
           disabled={false}
           block={false}
-          onClick={() => handleAlert('Save')}
+          onClick={() => handleAlert('Cancel')}
         />
-      </StyledDiv>
-    );
-  };
+      </Spacing>
+
+      <Button
+        id="__ChangePasswordModalID"
+        variant="primary"
+        text="Save"
+        disabled={false}
+        block={false}
+        onClick={() => handleAlert('Save')}
+      />
+    </StyledDiv>
+  );
+};
+
+const ChangePasswordModal = ({ hidden, ...props }: ChangePasswordModalProps): ReactElement => {
 
   return (
     <Modal title="Change password" hidden={hidden} footer={<ModalFooter />} {...props}>

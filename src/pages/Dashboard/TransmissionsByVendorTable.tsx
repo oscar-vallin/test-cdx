@@ -94,7 +94,7 @@ export const TransmissionsByVendorTable = ({
     if (sortMode === 'Transmissions') {
       visibleItems.sort((a: DashboardPeriodCount, b: DashboardPeriodCount) => {
         const c = (b.count ?? 0) - (a.count ?? 0);
-        if (c != 0) {
+        if (c !== 0) {
           return c;
         }
         return sortByName(a, b);

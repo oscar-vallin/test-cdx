@@ -46,6 +46,7 @@
     // note you must disable the base rule as it can report incorrect errors
     "no-use-before-define": "off",
     "@typescript-eslint/no-use-before-define": ["error"],
+    "@typescript-eslint/no-shadow": ["error"],
     "import/no-extraneous-dependencies": "off",
     "no-param-reassign": "off",
     "@typescript-eslint/no-explicit-any": "off",

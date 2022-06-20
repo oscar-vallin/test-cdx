@@ -113,7 +113,7 @@ export const renderSelectedGroupsReadOnly = (form?: UserAccountForm): string => 
 export const getAccessGroupOptions = (form?: UserAccountForm): UiOption[] => {
   const formOpts: Maybe<UiOption>[] =
     form?.options?.find((itm) => {
-      return itm?.key == form?.accessPolicyGroups?.options;
+      return itm?.key === form?.accessPolicyGroups?.options;
     })?.values ?? [];
 
   const groupOpts: UiOption[] = [];

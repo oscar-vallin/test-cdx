@@ -18,17 +18,12 @@ function querystring(name, url = window.location.href) {
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
 
-//
-const defaultProps = {
-  children: <></>,
-};
-
 type UnauthenticatedRouteProps = {
   children?: ReactElement | string;
   path?: string;
-} & typeof defaultProps;
+};
 
-export default function UnauthenticatedRoute({ children, ...rest }: UnauthenticatedRouteProps): ReactElement {
+export const UnauthenticatedRoute = ({ children, ...rest }: UnauthenticatedRouteProps): ReactElement => {
   const { status } = useSessionStore();
   const redirect = querystring('redirect');
 
@@ -37,6 +32,6 @@ export default function UnauthenticatedRoute({ children, ...rest }: Unauthentica
       {!status.isAuthenticated ? children : <Redirect to={redirect === '' || redirect === null ? '/' : redirect} />}
     </Route>
   );
-}
+};
 
-UnauthenticatedRoute.defaultProps = defaultProps;
+export default UnauthenticatedRoute;

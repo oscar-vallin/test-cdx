@@ -1,12 +1,12 @@
 import { ReactElement } from 'react';
-import { getClassNames } from '../../../helpers/helperStyles';
+import { getClassNames } from 'src/helpers/helperStyles';
 import { DivStyled } from './Column.styles';
 
 const defaultProps = {
   id: '',
   variant: 'normal',
   direction: 'column',
-  children: <></>,
+  children: undefined,
   center: false,
   right: false,
   top: false,
