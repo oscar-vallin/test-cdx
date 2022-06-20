@@ -23,9 +23,9 @@ import { Paginator } from 'src/components/tables/Paginator';
 import { useTableFilters } from 'src/hooks/useTableFilters';
 import { InputText } from 'src/components/inputs/InputText';
 import { UIInputCheck } from 'src/components/inputs/InputCheck';
+import { PageBody } from 'src/components/layouts/Column';
 import { UpdateUserPanel, useUpdateUserPanel } from '../UpdateUsers';
 import { CreateUsersPanel } from '../CreateUsers';
-import { PageBody } from 'src/components/layouts/Column';
 
 const ActiveUsersPage = () => {
   const { orgSid } = useOrgSid();
@@ -74,15 +74,17 @@ const ActiveUsersPage = () => {
   }, [tableFilters.searchText.delayedValue]);
 
   useEffect(() => {
-    userService.fetchUsers(
-      0,
-      tableFilters.pagingParams.sort,
-      lockedFilter,
-      pendingActivationFilter,
-      expiredActivationFilter,
-      searchAllOrgsFilter,
-      tableFilters.searchText.delayedValue
-    ).then();
+    userService
+      .fetchUsers(
+        0,
+        tableFilters.pagingParams.sort,
+        lockedFilter,
+        pendingActivationFilter,
+        expiredActivationFilter,
+        searchAllOrgsFilter,
+        tableFilters.searchText.delayedValue
+      )
+      .then();
   }, [tableFilters.pagingParams]);
 
   const hideConfirmation = () => {

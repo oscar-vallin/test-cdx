@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
 import { UserAccountForm } from 'src/data/services/graphql';
-import UpdateExternalUserFooter from './UpdateExternalUserFooter';
 import { SummaryWizardBody } from 'src/pages/Admin/Users/SummaryWizardBody';
+import UpdateExternalUserFooter from './UpdateExternalUserFooter';
 
 type SectionSummaryPropsType = {
   form: UserAccountForm;
@@ -17,7 +17,7 @@ const SectionSummary = ({ form, onSubmit, isProcessing }: SectionSummaryPropsTyp
 
   return (
     <>
-      <SummaryWizardBody form={form}/>
+      <SummaryWizardBody form={form} />
       {isProcessing && <>Processing...</>}
       {!isProcessing && <UpdateExternalUserFooter onSave={handleSubmit} />}
     </>

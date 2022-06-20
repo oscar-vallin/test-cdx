@@ -45,10 +45,10 @@ const ExternalUsersPage = () => {
       );
     }
 
-    return (() => {
+    return () => {
       setUsers([]);
       setAssignCmd(undefined);
-    })
+    };
   }, [data, loading]);
 
   useEffect(() => {

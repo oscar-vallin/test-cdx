@@ -45,7 +45,6 @@ const ModalFooter = () => {
 };
 
 const ChangePasswordModal = ({ hidden, ...props }: ChangePasswordModalProps): ReactElement => {
-
   return (
     <Modal title="Change password" hidden={hidden} footer={<ModalFooter />} {...props}>
       <Spacing margin={{ bottom: 'small' }}>

@@ -11,9 +11,9 @@ import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
 import { Column } from 'src/components/layouts';
 import { useExternalUsersAccessService } from 'src/pages/Admin/Users/ExternalUsers/ExternalUsersAccess.service';
 import { ThemedCommandButton } from 'src/components/buttons/Button/Button.styles';
+import { useWizardTabs } from 'src/pages/Admin/Users/useWizardTabs';
 import SectionAccessManagement from './SectionAccessManagement';
 import SectionSummary from './SectionSummary';
-import { useWizardTabs } from 'src/pages/Admin/Users/useWizardTabs';
 
 type UpdateExternalUsersPanelProps = {
   orgSid: string;

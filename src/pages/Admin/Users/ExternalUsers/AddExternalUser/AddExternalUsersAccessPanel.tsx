@@ -12,10 +12,10 @@ import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
 import { Column } from 'src/components/layouts';
 import { useExternalUsersAccessService } from 'src/pages/Admin/Users/ExternalUsers/ExternalUsersAccess.service';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
+import { useWizardTabs } from 'src/pages/Admin/Users/useWizardTabs';
 import { SectionAccount } from './SectionAccount';
 import SectionAccessManagement from './SectionAccessManagement';
 import SectionSummary from './SectionSummary';
-import { useWizardTabs } from 'src/pages/Admin/Users/useWizardTabs';
 
 type AddExternalUsersAccessPanelProps = {
   orgSid: string;

@@ -48,7 +48,7 @@ export const SummaryWizardBody = ({ form }: SummaryWizardBodyType) => {
         </Column>
       </FormRow>
 
-      {!form.person?.sid && (form.sendActivationEmail?.value === true) && (
+      {!form.person?.sid && form.sendActivationEmail?.value === true && (
         <FormRow>
           <Column lg="12">
             <UIFormLabel id="__sendActivation_summary" uiField={form.sendActivationEmail} />

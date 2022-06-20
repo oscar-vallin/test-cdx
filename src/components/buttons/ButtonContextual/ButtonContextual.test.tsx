@@ -67,8 +67,12 @@ describe('ButtonContextual', () => {
   });
 
   it('Default props values, Should have a props', () => {
-    const defaultTree = shallowWithTheme(<ButtonContextual id={'__ButtonContextual'} title="Profile Menu" items={itemsData} />);
-    const mountTree = mountWithTheme(<ButtonContextual id={'__ButtonContextual'} title="Profile Menu" items={itemsData} />);
+    const defaultTree = shallowWithTheme(
+      <ButtonContextual id={'__ButtonContextual'} title="Profile Menu" items={itemsData} />
+    );
+    const mountTree = mountWithTheme(
+      <ButtonContextual id={'__ButtonContextual'} title="Profile Menu" items={itemsData} />
+    );
     expect(defaultTree).toMatchSnapshot();
 
     expect(defaultTree.children().props().id).toEqual('__ButtonContextual');

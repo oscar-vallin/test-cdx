@@ -10,12 +10,12 @@ import { useNotification } from 'src/hooks/useNotification';
 import { GqOperationResponse } from 'src/data/services/graphql';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
 import { Column } from 'src/components/layouts';
+import { useWizardTabs } from 'src/pages/Admin/Users/useWizardTabs';
 import { useCreateUsersPanel } from './CreateUsersPanel.service';
 import { SectionAccount } from './SectionAccount';
 import SectionAccessManagement from './SectionAccessManagement';
 import SectionAuthentication from './SectionAuthentication';
 import SectionSummary from './SectionSummary';
-import { useWizardTabs } from 'src/pages/Admin/Users/useWizardTabs';
 
 const defaultProps = {
   isOpen: false,

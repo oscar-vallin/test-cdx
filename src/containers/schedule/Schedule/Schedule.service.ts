@@ -29,10 +29,9 @@ export const useScheduleItems = (argOrgSid, argDateRange) => {
       setItems(data?.scheduleOccurrences?.nodes ?? []);
     }
 
-    return (() => {
+    return () => {
       setItems([]);
-    });
-
+    };
   }, [data, loading]);
 
   return {

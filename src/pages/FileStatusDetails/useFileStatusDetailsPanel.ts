@@ -6,7 +6,7 @@ export type UseFileStatusDetailsPanel = {
   closePanel: () => void;
   workOrderId: string;
   hash: string;
-  setHash: ((h: string) => void);
+  setHash: (h: string) => void;
   fsOrgSid: string;
 };
 

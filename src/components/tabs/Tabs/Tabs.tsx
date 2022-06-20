@@ -29,8 +29,7 @@ const renderHeader = (
   badge?: BadgeType,
   link?: IPivotItemProps,
   defaultRenderer?: (props?: IPivotItemProps) => JSX.Element | null
-) =>
-(
+) => (
   <StyledSpan onClick={() => onClickTab(hash)}>
     {defaultRenderer && defaultRenderer(link)}
     {badge && <Badge variant={badge.variant} label={badge.label?.toString()} />}
