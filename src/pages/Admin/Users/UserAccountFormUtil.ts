@@ -51,6 +51,7 @@ export const updateForm = (
   accessPolicyGroupSids?: string[]
 ): UserAccountForm => {
   if (userAccount) {
+    userAccountForm.sid = userAccount.sid;
     userAccountForm.email = {
       ...(userAccountForm?.email ?? defaultForm.email),
       value: userAccount.email,
@@ -64,6 +65,7 @@ export const updateForm = (
         ...(userAccountForm?.person?.lastNm ?? defaultForm.person?.lastNm),
         value: userAccount.person?.lastNm,
       },
+      sid: userAccount.person?.sid,
     };
   }
 
