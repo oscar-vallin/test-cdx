@@ -1,6 +1,7 @@
-import { ErrorSeverity, UiOptions, UiSelectOneField } from 'src/data/services/graphql';
+import { ErrorSeverity, UiSelectOneField } from 'src/data/services/graphql';
 import { UIInputSelectOne } from './UIInputSelectOne';
 import { mountWithTheme } from 'src/utils/testUtils';
+import { expectInfoIcon, expectInfoWarningIcons, expectNoIcons, uiOptions } from './testData.test';
 
 const fullField: UiSelectOneField = {
   value: {
@@ -16,42 +17,6 @@ const fullField: UiSelectOneField = {
   errSeverity: ErrorSeverity.Error,
   options: 'fieldOpts',
 };
-
-const uiOptions: UiOptions[] = [
-  {
-    key: 'ignoreMe',
-    values: [],
-  },
-  {
-    key: 'fieldOpts',
-    values: [
-      {
-        value: '1',
-        label: 'One',
-      },
-      {
-        value: '2',
-        label: 'Two',
-      },
-      {
-        value: '3',
-        label: 'Three',
-      },
-      {
-        value: '4',
-        label: 'Four',
-      },
-      {
-        value: '5',
-        label: 'Five',
-      },
-    ],
-  },
-  {
-    key: 'ignoreMeToo',
-    values: [],
-  },
-];
 
 describe('Select One UI Input', () => {
   it('Full Field', () => {
@@ -75,8 +40,7 @@ describe('Select One UI Input', () => {
     expect(wrapper.find('#selectOne-input').hostNodes().props().value).toEqual('Four');
     expect(html).toContain('Select One Field');
 
-    expect(wrapper.find('i[data-icon-name="Info"]').hostNodes()).toHaveLength(1);
-    expect(wrapper.find('i[data-icon-name="Warning12"]').hostNodes()).toHaveLength(1);
+    expectInfoWarningIcons(wrapper);
   });
 
   it('Hidden Field', () => {
@@ -102,8 +66,7 @@ describe('Select One UI Input', () => {
     expect(wrapper.find('#selectOne_lbl-Required-Text')).toHaveLength(0);
     expect(html.indexOf('Select Many Field')).toBeLessThan(0);
 
-    expect(wrapper.find('i[data-icon-name="Info"]')).toHaveLength(0);
-    expect(wrapper.find('i[data-icon-name="Warning12"]')).toHaveLength(0);
+    expectNoIcons(wrapper);
   });
 
   const expectLabels = (wrapper) => {
@@ -134,8 +97,7 @@ describe('Select One UI Input', () => {
     expectLabels(wrapper);
     expect(html).toContain('Four');
 
-    expect(wrapper.find('i[data-icon-name="Info"]').hostNodes()).toHaveLength(1);
-    expect(wrapper.find('i[data-icon-name="Warning12"]').hostNodes()).toHaveLength(0);
+    expectInfoIcon(wrapper);
   });
 
   it('Empty Read Only Field', () => {
@@ -158,7 +120,6 @@ describe('Select One UI Input', () => {
     expectLabels(wrapper);
     expect(html).toContain('empty');
 
-    expect(wrapper.find('i[data-icon-name="Info"]').hostNodes()).toHaveLength(1);
-    expect(wrapper.find('i[data-icon-name="Warning12"]').hostNodes()).toHaveLength(1);
+    expectInfoWarningIcons(wrapper);
   });
 });
