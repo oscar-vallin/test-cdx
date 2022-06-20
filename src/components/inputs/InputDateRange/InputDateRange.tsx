@@ -52,7 +52,6 @@ const InputDateRange = ({ startDate, endDate, showLabels = true }: InputDateRang
           placeholder="Select a Date..."
           ariaLabel="Select a Date..."
           minDate={startDate.value}
-          maxDate={tomorrow}
           onSelectDate={endDate.onChange}
           value={endDate.value}
           allowTextInput
