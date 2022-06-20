@@ -40,7 +40,12 @@ describe('ButtonContextual', () => {
   });
 
   it('Should render aria label', () => {
-    expect(tree.children().props().ariaLabel).toEqual('Profile menu');
+    const wrapper = mountWithTheme(
+      <ButtonContextual id="__ButtonContextual" title="Profile menu" items={itemsData}>
+        Button Contextual
+      </ButtonContextual>
+    );
+    expect(wrapper.find('button').prop('aria-label')).toEqual('Profile menu');
   });
 
   it('Should renders children when passed in', () => {
