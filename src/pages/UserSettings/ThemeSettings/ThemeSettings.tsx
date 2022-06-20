@@ -87,7 +87,7 @@ const ThemeSettings = () => {
 
   useEffect(() => {
     if (!loadingUserTheme && dataUserTheme?.userTheme) {
-      setSelectedPaletteId(dataUserTheme.userTheme?.id ?? undefined);
+      setSelectedPaletteId(dataUserTheme.userTheme?.dashThemeColor?.id ?? undefined);
     }
 
     return () => {
