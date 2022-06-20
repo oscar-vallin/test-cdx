@@ -44,6 +44,11 @@ const ExternalUsersPage = () => {
         )
       );
     }
+
+    return (() => {
+      setUsers([]);
+      setAssignCmd(undefined);
+    })
   }, [data, loading]);
 
   useEffect(() => {

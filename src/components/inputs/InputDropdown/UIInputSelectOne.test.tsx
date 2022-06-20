@@ -106,14 +106,20 @@ describe('Select One UI Input', () => {
     expect(wrapper.find('i[data-icon-name="Warning12"]')).toHaveLength(0);
   });
 
-  it('Read Only Field', () => {
-    const onChange = jest.fn();
+  const expectLabels = (wrapper) => {
+    const html = wrapper.html();
+    expect(wrapper.find('#selectOne_lbl-Label-Text').hostNodes()).toHaveLength(1);
+    expect(wrapper.find('#selectOne-input').hostNodes()).toHaveLength(0);
+    expect(wrapper.find('#selectOne_lbl-Required-Text').hostNodes()).toHaveLength(1);
+    expect(html).toContain('Select One Field');
+  };
 
+  it('Read Only Field', () => {
     const wrapper = mountWithTheme(
       <UIInputSelectOne
         id="selectOne"
         value={'4'}
-        onChange={onChange}
+        onChange={jest.fn()}
         uiField={{
           ...fullField,
           readOnly: true,
@@ -125,10 +131,7 @@ describe('Select One UI Input', () => {
     );
 
     const html = wrapper.html();
-    expect(wrapper.find('#selectOne_lbl-Label-Text').hostNodes()).toHaveLength(1);
-    expect(wrapper.find('#selectOne-input').hostNodes()).toHaveLength(0);
-    expect(wrapper.find('#selectOne_lbl-Required-Text').hostNodes()).toHaveLength(1);
-    expect(html).toContain('Select One Field');
+    expectLabels(wrapper);
     expect(html).toContain('Four');
 
     expect(wrapper.find('i[data-icon-name="Info"]').hostNodes()).toHaveLength(1);
@@ -136,13 +139,11 @@ describe('Select One UI Input', () => {
   });
 
   it('Empty Read Only Field', () => {
-    const onChange = jest.fn();
-
     const wrapper = mountWithTheme(
       <UIInputSelectOne
         id="selectOne"
         value={'4'}
-        onChange={onChange}
+        onChange={jest.fn()}
         uiField={{
           ...fullField,
           readOnly: true,
@@ -154,10 +155,7 @@ describe('Select One UI Input', () => {
     );
 
     const html = wrapper.html();
-    expect(wrapper.find('#selectOne_lbl-Label-Text').hostNodes()).toHaveLength(1);
-    expect(wrapper.find('#selectOne-input').hostNodes()).toHaveLength(0);
-    expect(wrapper.find('#selectOne_lbl-Required-Text').hostNodes()).toHaveLength(1);
-    expect(html).toContain('Select One Field');
+    expectLabels(wrapper);
     expect(html).toContain('empty');
 
     expect(wrapper.find('i[data-icon-name="Info"]').hostNodes()).toHaveLength(1);

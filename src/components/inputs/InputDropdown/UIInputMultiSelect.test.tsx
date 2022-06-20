@@ -112,14 +112,20 @@ describe('Multi Select UI Input', () => {
     expect(wrapper.find('i[data-icon-name="Warning12"]')).toHaveLength(0);
   });
 
-  it('Read Only Field', () => {
-    const onChange = jest.fn();
+  const expectLabels = (wrapper) => {
+    const html = wrapper.html();
+    expect(wrapper.find('#multiSelect_lbl-Label-Text').hostNodes()).toHaveLength(1);
+    expect(wrapper.find('#multiSelect-input').hostNodes()).toHaveLength(0);
+    expect(wrapper.find('#multiSelect_lbl-Required-Text').hostNodes()).toHaveLength(1);
+    expect(html).toContain('Select Many Field');
+  };
 
+  it('Read Only Field', () => {
     const wrapper = mountWithTheme(
       <UIInputMultiSelect
         id="multiSelect"
         value={['1', '4']}
-        onChange={onChange}
+        onChange={jest.fn()}
         uiField={{
           ...fullField,
           readOnly: true,
@@ -131,10 +137,7 @@ describe('Multi Select UI Input', () => {
     );
 
     const html = wrapper.html();
-    expect(wrapper.find('#multiSelect_lbl-Label-Text').hostNodes()).toHaveLength(1);
-    expect(wrapper.find('#multiSelect-input').hostNodes()).toHaveLength(0);
-    expect(wrapper.find('#multiSelect_lbl-Required-Text').hostNodes()).toHaveLength(1);
-    expect(html).toContain('Select Many Field');
+    expectLabels(wrapper);
     expect(html).toContain('One, Four');
 
     expect(wrapper.find('i[data-icon-name="Info"]').hostNodes()).toHaveLength(1);
@@ -142,13 +145,11 @@ describe('Multi Select UI Input', () => {
   });
 
   it('Empty Read Only Field', () => {
-    const onChange = jest.fn();
-
     const wrapper = mountWithTheme(
       <UIInputMultiSelect
         id="multiSelect"
         value={['1', '4']}
-        onChange={onChange}
+        onChange={jest.fn()}
         uiField={{
           ...fullField,
           readOnly: true,
@@ -160,10 +161,7 @@ describe('Multi Select UI Input', () => {
     );
 
     const html = wrapper.html();
-    expect(wrapper.find('#multiSelect_lbl-Label-Text').hostNodes()).toHaveLength(1);
-    expect(wrapper.find('#multiSelect-input').hostNodes()).toHaveLength(0);
-    expect(wrapper.find('#multiSelect_lbl-Required-Text').hostNodes()).toHaveLength(1);
-    expect(html).toContain('Select Many Field');
+    expectLabels(wrapper);
     expect(html).toContain('empty');
 
     expect(wrapper.find('i[data-icon-name="Info"]').hostNodes()).toHaveLength(1);
