@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
-import { useNavigateToNewDomainLazyQuery, useCurrentOrgNavLazyQuery } from 'src/data/services/graphql';
+import { CdxWebAppDomain, useCurrentOrgNavLazyQuery, useNavigateToNewDomainLazyQuery } from 'src/data/services/graphql';
 import { useSessionStore } from 'src/store/SessionStore';
 
 type QueryResult = {
@@ -44,20 +44,23 @@ export const useActiveDomainUseCase = () => {
   const [fetchCurrentOrgNav, { data: currentOrgNav, loading: isFetchingCurrentOrgNav, error: currentOrgNavError }] =
     useCurrentOrgNavLazyQuery();
 
-  const performNavUpdate = ({ orgSid, domain }) => {
+  const performNavUpdate = ({ orgSid }) => {
     if (SessionStore.status.isAuthenticated) {
-      const params = { domainNavInput: { orgSid, appDomain: domain } };
-
-      switch (domain) {
-        case 'ORGANIZATION':
-          fetchOrgNav({ variables: params });
-          break;
-        case 'DASHBOARD':
-          fetchDashNav({ variables: params });
-          break;
-        default:
-          break;
-      }
+      fetchOrgNav({
+        variables: {
+          domainNavInput: {
+            orgSid,
+            appDomain: CdxWebAppDomain.Organization,
+          },
+        },
+      });
+      fetchDashNav({
+        variables: {
+          domainNavInput: {
+            orgSid,
+            appDomain: CdxWebAppDomain.Dashboard,
+          },
+        }});
     }
   };
 
