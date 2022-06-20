@@ -174,6 +174,8 @@ const AppHeader = ({ onMenuButtonClick }: AppHeaderProps): ReactElement => {
         onClick={() => {
           ActiveDomainStore.setCurrentOrg(ActiveDomainStore.domainOrg.origin);
         }}
+        title="Home"
+        aria-label="Home"
       >
         <Icon iconName="Home" />
       </StyledNavButton>
@@ -185,6 +187,7 @@ const AppHeader = ({ onMenuButtonClick }: AppHeaderProps): ReactElement => {
           id="__ProfileMenu_Font_Buttons"
           iconProps={{ iconName: 'Font' }}
           title="Font sizes"
+          aria-label="Font sizes"
           menuProps={{
             items: settingsMenu,
             contextualMenuItemAs: (props) => (

@@ -72,7 +72,7 @@ const _ProfileMenu = ({ id, onUserSettings }: ProfileMenuProps): ReactElement =>
   return (
     <StyledBox id={id} noStyle>
       {items.length > 0 && (
-        <ButtonContextual id="__ButtonContext" items={items}>
+        <ButtonContextual id="__ButtonContext" title="Profile menu" items={items}>
           <UserToken id="__UserToken" name={SessionStore.user.firstName} />
         </ButtonContextual>
       )}
