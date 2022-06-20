@@ -111,7 +111,7 @@ export const ScheduleHeader = ({ id, currentView, selectedDate, onChangeDate, on
 
   const renderTodayButton = () => {
     return (
-      <ButtonAction id="ButtonToday" onClick={handleSelectToday} iconName="GotoToday" disabled={false}>
+      <ButtonAction id="__Today_Button" onClick={handleSelectToday} iconName="GotoToday" disabled={false}>
         Today
       </ButtonAction>
     );
