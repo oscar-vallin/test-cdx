@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { DocumentCard } from '@fluentui/react';
+import { DocumentCard, Text } from '@fluentui/react';
 import { Column } from 'src/components/layouts';
 
 export const CardStyled = styled(DocumentCard)`
@@ -33,7 +33,7 @@ export const StyledColumTabs = styled(Column)`
 `;
 
 export const StyledContainer = styled.div<DemoCanvasWidgetProps>`
-  height: 550px;
+  height: 650px;
   min-width: 1200px;
   width: 100%;
   background-color: #fff;
@@ -42,3 +42,34 @@ type DemoCanvasWidgetProps = {
   color?: string;
   background?: string;
 };
+
+export const StyledSFTP = styled.rect`
+  x: 10;
+  y: 10;
+  width: 50px;
+  height: 100;
+  rx: 40;
+  ry: 20;
+  border: 2px solid #666666;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const StyledHorizontalButtons = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  min-height: 600px;
+  width: 100%;
+`;
+
+export const StyledText = styled(Text)`
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: 18px;
+  font-weight: bold;
+  margin-left: 20px;
+  height: 200px;
+`;
