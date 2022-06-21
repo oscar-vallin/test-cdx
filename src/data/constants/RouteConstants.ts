@@ -71,7 +71,7 @@ export const URL_ROUTES = {
   SECURITY_SETTINGS: `/${ROUTES_ID.SECURITY_SETTINGS}`,
 };
 
-type RouteType = {
+export type RouteType = {
   ID: string;
   TITLE: string;
   URL: string;
