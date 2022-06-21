@@ -20,29 +20,31 @@ const DataNodeSteps = ({ data, id }) => {
     <Node
       content={
         <>
-        <Handle style={{width: '0px'}} type='target' id={id} position={Position.Top} />
-        <Container>
-          <Row>
-            <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
-            <FontIcon
-              style={{
-                color: '#fff',
-                fontSize: '18px',
-                cursor: 'pointer',
-                width: "37px",
-                height: "37px",
-                borderRadius: '50%',
-                backgroundColor: '#00a341',
-                padding: "8px 1px 7px 0px",
-                textAlign: "center"
-              }}
-              iconName={iconName}
-            />
-            <Text style={styles}>{data.label} <br /> <span>{subTitle.trim() !== '' && <Text>{subTitle}</Text>}</span></Text>
-            </Stack>
-          </Row>
+          <Handle style={{ width: '0px' }} type="target" id={id} position={Position.Top} />
+          <Container>
+            <Row>
+              <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
+                <FontIcon
+                  style={{
+                    color: '#fff',
+                    fontSize: '18px',
+                    cursor: 'pointer',
+                    width: '37px',
+                    height: '37px',
+                    borderRadius: '50%',
+                    backgroundColor: '#00a341',
+                    padding: '8px 1px 7px 0px',
+                    textAlign: 'center',
+                  }}
+                  iconName={iconName}
+                />
+                <Text style={styles}>
+                  {data.label} <br /> <span>{subTitle.trim() !== '' && <Text>{subTitle}</Text>}</span>
+                </Text>
+              </Stack>
+            </Row>
           </Container>
-          <Handle style={{width: '2px'}} type="source" id={id} position={Position.Bottom} />
+          <Handle style={{ width: '2px' }} type="source" id={id} position={Position.Bottom} />
         </>
       }
     />

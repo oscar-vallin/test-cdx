@@ -60,7 +60,8 @@ export const useActiveDomainUseCase = () => {
             orgSid,
             appDomain: CdxWebAppDomain.Dashboard,
           },
-        }});
+        },
+      });
     }
   };
 

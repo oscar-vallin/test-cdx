@@ -1,5 +1,5 @@
-import { PermissionGroups, groupPermissions } from './PermissionGrouping';
 import testData from 'src/pages/Admin/AccessManagement/Policies/AccessPolicyPanel/testData.json';
+import { PermissionGroups, groupPermissions } from './PermissionGrouping';
 
 const testUIOptions = testData.uiOptions;
 
