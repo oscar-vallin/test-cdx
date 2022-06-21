@@ -11,6 +11,7 @@ import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
 import { Column } from 'src/components/layouts';
 import { useExternalUsersAccessService } from 'src/pages/Admin/Users/ExternalUsers/ExternalUsersAccess.service';
 import { ThemedCommandButton } from 'src/components/buttons/Button/Button.styles';
+import { useWizardTabs } from 'src/pages/Admin/Users/useWizardTabs';
 import SectionAccessManagement from './SectionAccessManagement';
 import SectionSummary from './SectionSummary';
 
@@ -24,21 +25,16 @@ type UpdateExternalUsersPanelProps = {
 
 const tabs = ['#account', '#access'];
 
-const enum Tab {
-  Account = 0,
-  Access = 1,
-}
-
 const UpdateExternalUsersPanel = ({
   orgSid,
   userAccountSid,
   isOpen = false,
-  onDismiss = () => {},
-  onUpdateUser = () => {},
+  onDismiss = undefined,
+  onUpdateUser = undefined,
 }: UpdateExternalUsersPanelProps): ReactElement => {
   const externalUsersAccessService = useExternalUsersAccessService(orgSid, userAccountSid);
 
-  const [step, setStep] = useState(Tab.Account);
+  const { selectedTab, handleTabChange, resetTabs } = useWizardTabs(tabs);
   const [showRevokeAccessDialog, setShowRevokeAccessDialog] = useState(false);
   const [showUnsavedChangesDialog, setShowUnsavedChangesDialog] = useState(false);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
@@ -46,10 +42,6 @@ const UpdateExternalUsersPanel = ({
   const [errorMsg, setErrorMsg] = useState<string | undefined>();
 
   const Toast = useNotification();
-
-  const handleTabChange = (hash): void => {
-    setStep(tabs.indexOf(hash));
-  };
 
   const onPanelClose = () => {
     if (unsavedChanges) {
@@ -65,11 +57,13 @@ const UpdateExternalUsersPanel = ({
     externalUsersAccessService.resetForm();
 
     // Set it back to the first tab
-    setStep(Tab.Account);
+    resetTabs();
     setShowUnsavedChangesDialog(false);
     setUnsavedChanges(false);
 
-    onDismiss();
+    if (onDismiss) {
+      onDismiss();
+    }
   };
 
   const userName = () => {
@@ -130,7 +124,9 @@ const UpdateExternalUsersPanel = ({
       }
 
       if (responseCode === GqOperationResponse.Success || responseCode === GqOperationResponse.PartialSuccess) {
-        onUpdateUser(response.grantExternalUserAccess);
+        if (onUpdateUser) {
+          onUpdateUser(response.grantExternalUserAccess);
+        }
         doClosePanel();
       }
     }
@@ -145,7 +141,9 @@ const UpdateExternalUsersPanel = ({
       setShowRevokeAccessDialog(false);
       doClosePanel();
       Toast.success({ text: `${userName()}'s access has been revoked` });
-      onUpdateUser();
+      if (onUpdateUser) {
+        onUpdateUser();
+      }
     } else {
       const errMsg = response?.revokeExternalUserAccess?.errMsg ?? 'Unexpected error';
       setErrorMsg(errMsg);
@@ -161,7 +159,7 @@ const UpdateExternalUsersPanel = ({
         onRenderHeader={renderPanelHeader}
         isOpen={isOpen}
         onDismiss={onPanelClose}
-        onOuterClick={() => {}}
+        onOuterClick={undefined}
       >
         <PanelBody>
           {errorMsg && (
@@ -202,7 +200,7 @@ const UpdateExternalUsersPanel = ({
                 hash: '#access',
               },
             ]}
-            selectedKey={step < 0 ? '0' : step.toString()}
+            selectedKey={selectedTab}
             onClickTab={handleTabChange}
           />
         </PanelBody>
@@ -229,11 +227,9 @@ const UpdateExternalUsersPanel = ({
         message="Are you sure you want to revoke this user's access to this Organization? This user will no longer have access to any data in this organization."
         onYes={() => {
           handleRevokeAccess().then();
-          return null;
         }}
         onClose={() => {
           setShowRevokeAccessDialog(false);
-          return null;
         }}
       />
     </>

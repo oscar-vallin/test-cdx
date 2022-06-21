@@ -2,7 +2,15 @@ import React, { useState, useEffect } from 'react';
 
 import { Link } from 'react-router-dom';
 
-import { Text, Spinner, IColumn, DetailsListLayoutMode, SpinnerSize, SelectionMode } from '@fluentui/react';
+import {
+  Text,
+  Spinner,
+  IColumn,
+  DetailsListLayoutMode,
+  SpinnerSize,
+  SelectionMode,
+  DetailsList,
+} from '@fluentui/react';
 
 import { useExternalOrgsLazyQuery, SortDirection, Organization, OrgType } from 'src/data/services/graphql';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
@@ -15,7 +23,6 @@ import { PageHeader } from 'src/containers/headers/PageHeader';
 import { PageTitle } from 'src/components/typography';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { PageBody } from 'src/components/layouts/Column';
-import { ThemedDetailsList } from 'src/containers/tables/ThemedDetailsList.style';
 
 const ExternalOrgsPage = () => {
   const { orgSid } = useOrgSid();
@@ -125,7 +132,7 @@ const ExternalOrgsPage = () => {
       return null;
     }
     return (
-      <ThemedDetailsList
+      <DetailsList
         items={orgs}
         selectionMode={SelectionMode.none}
         columns={columns}

@@ -1,7 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { ReactElement, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { MessageBar, MessageBarType, PanelType, Stack, ICommandBarItemProps, IButtonProps } from '@fluentui/react';
+import {
+  MessageBar,
+  MessageBarType,
+  PanelType,
+  Stack,
+  ICommandBarItemProps,
+  IButtonProps,
+  CommandBar,
+} from '@fluentui/react';
 
 import { Tabs } from 'src/components/tabs/Tabs';
 import { PanelBody, PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
@@ -12,7 +20,7 @@ import { Column } from 'src/components/layouts';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { MigrateUserDialog } from 'src/pages/Admin/Users/UpdateUsers/MigrateUserDialog';
-import { ThemedCommandBar } from 'src/components/buttons/CommandBar/ThemedCommandBar.styles';
+import { useWizardTabs } from 'src/pages/Admin/Users/useWizardTabs';
 import SectionAccessManagement from './SectionAccessManagement';
 import { SectionAccount } from './SectionAccount';
 import { ActiveIcon, InactiveIcon } from './UpdateUserPanel.styles';
@@ -24,11 +32,6 @@ type UpdateUserPanelProps = {
 };
 
 const tabs = ['#account', '#access'];
-
-const enum Tab {
-  Account = 0,
-  Access = 1,
-}
 
 const defaultDialogProps: DialogYesNoProps = {
   open: false,
@@ -49,7 +52,7 @@ const defaultDialogProps: DialogYesNoProps = {
 const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: UpdateUserPanelProps): ReactElement => {
   const history = useHistory();
   const { orgSid } = useOrgSid();
-  const [step, setStep] = useState(Tab.Account);
+  const { selectedTab, handleTabChange, resetTabs } = useWizardTabs(tabs);
   const [showDialog, setShowDialog] = useState(false);
   const [showMigrateUserDialog, setShowMigrateUserDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
@@ -147,10 +150,6 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
       _overflowItems.push({ key: '' });
     }
     return _overflowItems;
-  };
-
-  const handleTabChange = (hash): void => {
-    setStep(tabs.indexOf(hash));
   };
 
   const handleUpdateUser = async (userAccount: UserAccount) => {
@@ -258,7 +257,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
     setUnsavedChanges(false);
     setMessage(undefined);
     // Set it back to the first tab
-    setStep(Tab.Account);
+    resetTabs();
     // Reset the form
     useUpdateUserPanel.resetForm();
     useUpdateUserPanel.closePanel();
@@ -372,7 +371,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
         </Stack>
       </Column>
       <Column lg="6" right>
-        <ThemedCommandBar
+        <CommandBar
           items={commandItems()}
           overflowItems={overflowItems()}
           overflowButtonProps={overflowProps}
@@ -435,7 +434,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
                 hash: '#access',
               },
             ]}
-            selectedKey={step < 0 ? '0' : step.toString()}
+            selectedKey={selectedTab}
             onClickTab={handleTabChange}
           />
         </PanelBody>

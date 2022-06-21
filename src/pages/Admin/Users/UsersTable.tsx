@@ -1,20 +1,24 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { DetailsListLayoutMode, IColumn, Link, SelectionMode, TooltipHost, FontIcon, Stack } from '@fluentui/react';
+import React from 'react';
 import {
-  UserItem,
-  SortDirection,
-  NullHandling,
-  PageableInput,
-  UserConnectionTooltips,
-} from 'src/data/services/graphql';
+  DetailsListLayoutMode,
+  IColumn,
+  SelectionMode,
+  TooltipHost,
+  FontIcon,
+  Stack,
+  DetailsList,
+} from '@fluentui/react';
+import { UserItem, UserConnectionTooltips } from 'src/data/services/graphql';
 import { TableFiltersType } from 'src/hooks/useTableFilters';
-import { ThemedDetailsList } from 'src/containers/tables/ThemedDetailsList.style';
+import { useThemeStore } from 'src/store/ThemeStore';
+import { ButtonLink } from 'src/components/buttons';
+import { useSortableColumns } from 'src/containers/tables/useSortableColumns';
 import { UsersTableColumns, useUsersTableColumns } from './UsersTableColumn';
 
 type UsersTableType = {
   users: UserItem[];
   onClickUser: (userSid: string) => any;
-  tableFilters?: TableFiltersType;
+  tableFilters: TableFiltersType;
   tooltips?: UserConnectionTooltips;
   searchAllOrgs?: boolean;
 };
@@ -24,48 +28,23 @@ const cols: UsersTableColumns[] = [UsersTableColumns.FIRST_NAME, UsersTableColum
 const searchAllOrgsCols: UsersTableColumns[] = [...cols, UsersTableColumns.ORGANIZATION];
 
 export const UsersTable = ({ users, onClickUser, tableFilters, tooltips, searchAllOrgs }: UsersTableType) => {
-  const _doSort = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
-    const newColumns: IColumn[] = columnsRef?.current?.slice() ?? [];
-    const currColumn: IColumn = newColumns.filter((currCol) => column.key === currCol.key)[0];
-    let sortParam: PageableInput = {};
-    newColumns.forEach((newCol: IColumn) => {
-      if (newCol === currColumn) {
-        currColumn.isSortedDescending = !currColumn.isSortedDescending;
-        currColumn.isSorted = true;
-        sortParam = {
-          pageNumber: 0,
-          pageSize: 100,
-          sort: [
-            {
-              property: currColumn.key,
-              direction: currColumn.isSortedDescending ? SortDirection.Desc : SortDirection.Asc,
-              nullHandling: NullHandling.NullsFirst,
-              ignoreCase: true,
-            },
-          ],
-        };
-      } else {
-        newCol.isSorted = false;
-        newCol.isSortedDescending = true;
-      }
-    });
-    setColumns(newColumns);
-    tableFilters?.setPagingParams(sortParam);
-  };
+  const ThemeStore = useThemeStore();
 
-  const { initialColumns } = useUsersTableColumns(searchAllOrgs ? searchAllOrgsCols : cols, _doSort);
+  const { initialColumns } = useUsersTableColumns(cols);
+  const { initialColumns: allOrgsInitColumns } = useUsersTableColumns(searchAllOrgsCols);
 
-  const [columns, setColumns] = useState<IColumn[]>(initialColumns);
-  // make columnsRef always have the current count
-  // your "fixed" callbacks (doSort) can refer to this object whenever
-  // they need the current value, unlike default behaviour where doSort callback used stale state value
-  const columnsRef = useRef<IColumn[]>();
-  columnsRef.current = columns;
-
-  useEffect(() => {
-    const { initialColumns } = useUsersTableColumns(searchAllOrgs ? searchAllOrgsCols : cols, _doSort);
-    setColumns(initialColumns);
-  }, [searchAllOrgs]);
+  const { columns } = useSortableColumns(tableFilters, initialColumns(), [
+    'firstNm',
+    'lastNm',
+    'email',
+    'organization',
+  ]);
+  const { columns: allOrgColumns } = useSortableColumns(tableFilters, allOrgsInitColumns(), [
+    'firstNm',
+    'lastNm',
+    'email',
+    'organization',
+  ]);
 
   const onRenderItemColumn = (node?: UserItem, itemIndex?: number, column?: IColumn) => {
     let columnVal: string | undefined;
@@ -86,7 +65,7 @@ export const UsersTable = ({ users, onClickUser, tableFilters, tooltips, searchA
 
     return (
       <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
-        <Link
+        <ButtonLink
           id={`__ActiveUsersPage__${column?.key}_${(itemIndex ?? 0) + 1}`}
           onClick={() => {
             if (node) {
@@ -95,13 +74,13 @@ export const UsersTable = ({ users, onClickUser, tableFilters, tooltips, searchA
           }}
         >
           {columnVal}
-        </Link>
+        </ButtonLink>
         {column?.key === 'email' && (
           <>
             {node?.notificationOnlyUser && !node?.pendingActivation && !node?.expiredActivation && (
               <TooltipHost content={tooltips?.notificationOnlyUser ?? ''}>
                 <FontIcon
-                  style={{ color: 'black', fontSize: '18px', cursor: 'pointer' }}
+                  style={{ color: ThemeStore.userTheme.colors.black, fontSize: '18px', cursor: 'pointer' }}
                   aria-describedby="NotificationOnlyUser-Icon"
                   iconName="BlockContact"
                 />
@@ -110,7 +89,7 @@ export const UsersTable = ({ users, onClickUser, tableFilters, tooltips, searchA
             {node?.expiredActivation && (
               <TooltipHost content={tooltips?.expiredActivation ?? ''} id="ExpiredActivation-Tooltip">
                 <FontIcon
-                  style={{ color: 'red', fontSize: '18px', cursor: 'pointer' }}
+                  style={{ color: ThemeStore.userTheme.colors.custom.error, fontSize: '18px', cursor: 'pointer' }}
                   aria-describedby="ExpiredActivation-Icon"
                   iconName="UserOptional"
                 />
@@ -119,7 +98,7 @@ export const UsersTable = ({ users, onClickUser, tableFilters, tooltips, searchA
             {node?.pendingActivation && (
               <TooltipHost content={tooltips?.pendingActivation ?? ''} id="PendingActivation-Tooltip">
                 <FontIcon
-                  style={{ color: 'green', fontSize: '18px', cursor: 'pointer' }}
+                  style={{ color: ThemeStore.userTheme.colors.custom.success, fontSize: '18px', cursor: 'pointer' }}
                   aria-describedby="PendingActivation-Icon"
                   iconName="UserOptional"
                 />
@@ -128,7 +107,7 @@ export const UsersTable = ({ users, onClickUser, tableFilters, tooltips, searchA
             {node?.accountLocked && (
               <TooltipHost content={tooltips?.accountLocked ?? ''} id="AccountLocked-Tooltip">
                 <FontIcon
-                  style={{ color: 'red', fontSize: '18px', cursor: 'pointer' }}
+                  style={{ color: ThemeStore.userTheme.colors.custom.error, fontSize: '18px', cursor: 'pointer' }}
                   aria-describedby="AccountLocked-Icon"
                   iconName="ProtectRestrict"
                 />
@@ -141,9 +120,9 @@ export const UsersTable = ({ users, onClickUser, tableFilters, tooltips, searchA
   };
 
   return (
-    <ThemedDetailsList
+    <DetailsList
       items={users}
-      columns={columns}
+      columns={searchAllOrgs ? allOrgColumns : columns}
       layoutMode={DetailsListLayoutMode.justified}
       onRenderItemColumn={onRenderItemColumn}
       selectionMode={SelectionMode.none}

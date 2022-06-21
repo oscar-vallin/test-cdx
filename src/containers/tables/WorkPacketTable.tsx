@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import {
   ConstrainMode,
+  DetailsList,
   DetailsListLayoutMode,
-  IColumn,
   mergeStyleSets,
   ScrollablePane,
   ScrollbarVisibility,
   SelectionMode,
 } from '@fluentui/react';
 
-import { NullHandling, PageableInput, PaginationInfo, SortDirection } from 'src/data/services/graphql';
+import { PaginationInfo } from 'src/data/services/graphql';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { TableFiltersType } from 'src/hooks/useTableFilters';
@@ -19,11 +19,11 @@ import { useHistory } from 'react-router-dom';
 import { UseFileStatusDetailsPanel } from 'src/pages/FileStatusDetails/useFileStatusDetailsPanel';
 import { ROUTES } from 'src/data/constants/RouteConstants';
 import { useQueryParams } from 'src/hooks/useQueryParams';
+import { useSortableColumns } from 'src/containers/tables/useSortableColumns';
 import { useWorkPacketColumns, WorkPacketColumn } from './WorkPacketColumns';
 import { TableFilters } from './TableFilters';
 import { EmptyState } from '../states';
 import { Box, Container } from './WorkPacketTable.styles';
-import { ThemedDetailsList } from './ThemedDetailsList.style';
 
 type WorkPacketParams = {
   id: string;
@@ -93,38 +93,30 @@ export const WorkPacketTable = ({
     useFileStatusDetailsPanel?.showPanel(workOrderId ?? '', fsOrgSid ?? '', hash);
   };
 
-  const _doSort = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
-    const newColumns: IColumn[] = columns.slice();
-    const currColumn: IColumn = newColumns.filter((currCol) => column.key === currCol.key)[0];
-    let sortParam: PageableInput = tableFilters.pagingParams;
-    newColumns.forEach((newCol: IColumn) => {
-      if (newCol === currColumn) {
-        currColumn.isSortedDescending = !currColumn.isSortedDescending;
-        currColumn.isSorted = true;
-        sortParam = {
-          pageNumber: 0,
-          pageSize: 100,
-          sort: [
-            {
-              property: currColumn.key,
-              direction: currColumn.isSortedDescending ? SortDirection.Desc : SortDirection.Asc,
-              nullHandling: NullHandling.NullsFirst,
-              ignoreCase: true,
-            },
-          ],
-        };
-      } else {
-        newCol.isSorted = false;
-        newCol.isSortedDescending = true;
-      }
-    });
-    setColumns(newColumns);
-    tableFilters.setPagingParams(sortParam);
-  };
+  const { initialColumns } = useWorkPacketColumns(cols, openDetails);
 
-  const { initialColumns } = useWorkPacketColumns(cols, openDetails, _doSort);
-
-  const [columns, setColumns] = useState<IColumn[]>(initialColumns);
+  const sortableColumns = [
+    'billingCount',
+    'deliveredOn',
+    'extractType',
+    'extractVersion',
+    'implementation',
+    'inboundFilename',
+    'msg',
+    'outboundFilename',
+    'outboundFilesize',
+    'orgId',
+    'packetStatus',
+    'planSponsorId',
+    'specId',
+    'step',
+    'startTime',
+    'timestamp',
+    'totalRecords',
+    'vendorId',
+    'vendorFilename',
+  ];
+  const { columns } = useSortableColumns(tableFilters, initialColumns(), sortableColumns);
   const [items, setItems] = useState<any[]>([]);
 
   const [apiCall, { data, loading, error }] = useQueryHandler(lazyQuery);
@@ -259,7 +251,7 @@ export const WorkPacketTable = ({
     if (items && items.length > 0) {
       return (
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
-          <ThemedDetailsList
+          <DetailsList
             className={classNames.root}
             items={items}
             columns={columns}
@@ -289,7 +281,10 @@ export const WorkPacketTable = ({
 
       <Container>
         <Box id={`${id}_TableWrap`}>
-          <div id="Table_Detailed" style={{ width: '100%', height: `calc(100vh - ${hasMorePages ? '325px': '250px'})` }}>
+          <div
+            id="Table_Detailed"
+            style={{ width: '100%', height: `calc(100vh - ${hasMorePages ? '325px' : '250px'})` }}
+          >
             {renderTable()}
           </div>
           <Paginator pagingInfo={pagingInfo} onPageChange={onPageChange} />

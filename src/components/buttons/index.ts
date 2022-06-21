@@ -1,6 +1,6 @@
 import { Button } from './Button';
 import { ButtonText } from './ButtonText';
 import { ButtonAction } from './ButtonAction';
-import { Link } from './Link';
+import { ButtonLink } from './Link';
 
-export { Button, ButtonText, ButtonAction, Link };
+export { Button, ButtonText, ButtonAction, ButtonLink };

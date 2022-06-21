@@ -11,6 +11,7 @@ import {
   SpinnerSize,
   Stack,
   Link,
+  DetailsList,
 } from '@fluentui/react';
 import { EmptyState } from 'src/containers/states';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
@@ -36,7 +37,6 @@ import { PageHeader } from 'src/containers/headers/PageHeader';
 import { OrgPanel } from 'src/pages/Admin/Organizations/ActiveOrgs/OrgPanel';
 import { Paginator } from 'src/components/tables/Paginator';
 import { PageBody } from 'src/components/layouts/Column';
-import { ThemedDetailsList } from 'src/containers/tables/ThemedDetailsList.style';
 import { UIInputCheck } from 'src/components/inputs/InputCheck';
 import { ThemedSearchBox } from 'src/components/inputs/SearchBox/ThemedSearchBox.styles';
 
@@ -227,7 +227,7 @@ const ActiveOrgsPage = () => {
     }
     return (
       <>
-        <ThemedDetailsList
+        <DetailsList
           items={orgs}
           selectionMode={SelectionMode.none}
           columns={columns}

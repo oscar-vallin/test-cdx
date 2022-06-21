@@ -6,6 +6,7 @@ import { addWeeks, DateRangeType } from '@fluentui/react';
 import { MonthPicker } from 'src/components/inputs/MonthPicker';
 
 import { Spacing } from 'src/components/spacings/Spacing';
+import { ButtonAction } from 'src/components/buttons';
 import { Column, Row } from 'src/components/layouts';
 import { isCurrentViewDay, isCurrentViewMonth, isCurrentViewWeek } from './helpers';
 import {
@@ -15,7 +16,6 @@ import {
   HeaderYear,
   MonthYearContainer,
   RowHeaderItem,
-  StyledButtonAction,
   UpDownContainer,
 } from './ScheduleHeader.styles';
 
@@ -111,9 +111,9 @@ export const ScheduleHeader = ({ id, currentView, selectedDate, onChangeDate, on
 
   const renderTodayButton = () => {
     return (
-      <StyledButtonAction id="ButtonToday" onClick={handleSelectToday} iconName="GotoToday" disabled={false}>
+      <ButtonAction id="__Today_Button" onClick={handleSelectToday} iconName="GotoToday" disabled={false}>
         Today
-      </StyledButtonAction>
+      </ButtonAction>
     );
   };
 
@@ -214,30 +214,20 @@ export const ScheduleHeader = ({ id, currentView, selectedDate, onChangeDate, on
       <UpDownContainer>
         {isCurrentViewDay(currentView) && (
           <>
-            <StyledButtonAction id="ButtonPrev" onClick={handlePrevDay} iconName="ChromeBack" disabled={false} />
-            <StyledButtonAction
-              id="ButtonNext"
-              onClick={handleNextDay}
-              iconName="ChromeBackMirrored"
-              disabled={false}
-            />
+            <ButtonAction id="ButtonPrev" onClick={handlePrevDay} iconName="ChromeBack" disabled={false} />
+            <ButtonAction id="ButtonNext" onClick={handleNextDay} iconName="ChromeBackMirrored" disabled={false} />
           </>
         )}
         {isCurrentViewWeek(currentView) && (
           <>
-            <StyledButtonAction id="ButtonPrev" onClick={handlePrevWeek} iconName="ChromeBack" disabled={false} />
-            <StyledButtonAction
-              id="ButtonNext"
-              onClick={handleNextWeek}
-              iconName="ChromeBackMirrored"
-              disabled={false}
-            />
+            <ButtonAction id="ButtonPrev" onClick={handlePrevWeek} iconName="ChromeBack" disabled={false} />
+            <ButtonAction id="ButtonNext" onClick={handleNextWeek} iconName="ChromeBackMirrored" disabled={false} />
           </>
         )}
         {isCurrentViewMonth(currentView) && (
           <>
-            <StyledButtonAction id="ButtonUp" onClick={handlePrevMonth} iconName="SortUp" disabled={false} />
-            <StyledButtonAction id="ButtonDown" onClick={handleNextMonth} iconName="SortDown" disabled={false} />
+            <ButtonAction id="ButtonUp" onClick={handlePrevMonth} iconName="SortUp" disabled={false} />
+            <ButtonAction id="ButtonDown" onClick={handleNextMonth} iconName="SortDown" disabled={false} />
           </>
         )}
       </UpDownContainer>

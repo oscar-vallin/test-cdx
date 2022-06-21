@@ -26,7 +26,7 @@ const setSessionStage = (state, payload) => {
 
 const setCurrentSession = (state, payload) => {
   state.user = payload;
-  state.status.stage = payload.token ? SessionStages.LoggedIn : SessionStages.LoggedOut
+  state.status.stage = payload.token ? SessionStages.LoggedIn : SessionStages.LoggedOut;
 };
 
 const setRedirectUrl = (state, payload) => {

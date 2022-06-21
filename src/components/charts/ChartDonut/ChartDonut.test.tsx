@@ -1,7 +1,6 @@
-import { render, shallow } from 'enzyme';
-import toJSON from 'enzyme-to-json';
-import { ChartDonut as Component } from './index';
+import { render } from 'enzyme';
 import { renderWithTheme } from 'src/utils/testUtils';
+import { ChartDonut as Component } from './index';
 
 const defaultProps = {
   id: '__ChartDonut',
@@ -17,11 +16,32 @@ const defaultProps = {
   ],
 };
 
-test('Matches Snapshot', () => {
-  const wrapper = shallow(<Component {...defaultProps} />);
-
-  expect(toJSON(wrapper)).toMatchSnapshot();
-});
+jest.mock('src/store/ThemeStore/useThemeStore', () => ({
+  useThemeStore: () => {
+    return {
+      userTheme: {
+        colors: {
+          black: '#121829',
+          white: '#fefefe',
+          custom: {
+            severeError: '#FA4100',
+            error: '#a80000',
+            errorAlt: '#fde7e9',
+            warning: '#D83B01',
+            warningAlt: '#fcde54',
+            success: '#107C10',
+            successAlt: '#DFF6DD',
+            info: '#005A9E',
+            infoAlt: '#C7E0F4',
+          },
+        },
+      },
+      changeThemeColors: jest.fn(),
+      setFontSize: jest.fn(),
+      reset: jest.fn(),
+    };
+  },
+}));
 
 describe('Basic Input Component', () => {
   it('Renders 6 sectors circles in simple PieChart', () => {

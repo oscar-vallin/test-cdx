@@ -6,6 +6,7 @@ export type UseFileStatusDetailsPanel = {
   closePanel: () => void;
   workOrderId: string;
   hash: string;
+  setHash: (h: string) => void;
   fsOrgSid: string;
 };
 
@@ -15,10 +16,10 @@ export const useFileStatusDetailsPanel = (): UseFileStatusDetailsPanel => {
   const [fsOrgSid, setFsOrgSid] = useState('');
   const [panelOpen, setPanelOpen] = useState(false);
 
-  const showPanel = (workOrderId, fsOrgSid, hash) => {
-    setWorkOrderId(workOrderId);
-    setFsOrgSid(fsOrgSid);
-    setHash(hash);
+  const showPanel = (_workOrderId, _fsOrgSid, _hash) => {
+    setWorkOrderId(_workOrderId);
+    setFsOrgSid(_fsOrgSid);
+    setHash(_hash);
     setPanelOpen(true);
   };
 
@@ -32,6 +33,7 @@ export const useFileStatusDetailsPanel = (): UseFileStatusDetailsPanel => {
     closePanel,
     workOrderId,
     hash,
+    setHash,
     fsOrgSid,
   };
 };

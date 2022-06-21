@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
+  DetailsList,
   DetailsListLayoutMode,
-  IColumn,
   IComboBoxOption,
   mergeStyleSets,
   ScrollablePane,
@@ -9,21 +9,15 @@ import {
   SelectionMode,
 } from '@fluentui/react';
 
-import {
-  NullHandling,
-  PageableInput,
-  PaginationInfo,
-  SortDirection,
-  UserAccountAuditEvent,
-} from 'src/data/services/graphql';
+import { PaginationInfo, UserAccountAuditEvent } from 'src/data/services/graphql';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { TableFiltersType } from 'src/hooks/useTableFilters';
 import { Paginator } from 'src/components/tables/Paginator';
 import { TableFilters } from 'src/containers/tables/TableFilters';
-import { ThemedDetailsList } from 'src/containers/tables/ThemedDetailsList.style';
 import { EmptyState } from 'src/containers/states';
 import { Box, Container } from 'src/components/layouts';
+import { useSortableColumns } from 'src/containers/tables/useSortableColumns';
 import { UserAuditLogsColumn, useUserAuditLogsColumns } from './UserAuditLogsTableColumn';
 
 type UserAuditLogsTableParams = {
@@ -83,38 +77,10 @@ export const UserAuditLogsTable = ({ id, cols, lazyQuery, getItems, tableFilters
     totalPages: 0,
   });
 
-  const _doSort = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
-    const newColumns: IColumn[] = columns.slice();
-    const currColumn: IColumn = newColumns.filter((currCol) => column.key === currCol.key)[0];
-    let sortParam: PageableInput = tableFilters.pagingParams;
-    newColumns.forEach((newCol: IColumn) => {
-      if (newCol === currColumn) {
-        currColumn.isSortedDescending = !currColumn.isSortedDescending;
-        currColumn.isSorted = true;
-        sortParam = {
-          pageNumber: 0,
-          pageSize: 100,
-          sort: [
-            {
-              property: currColumn.key,
-              direction: currColumn.isSortedDescending ? SortDirection.Desc : SortDirection.Asc,
-              nullHandling: NullHandling.NullsFirst,
-              ignoreCase: true,
-            },
-          ],
-        };
-      } else {
-        newCol.isSorted = false;
-        newCol.isSortedDescending = true;
-      }
-    });
-    setColumns(newColumns);
-    tableFilters.setPagingParams(sortParam);
-  };
+  const { initialColumns } = useUserAuditLogsColumns(cols);
 
-  const { initialColumns } = useUserAuditLogsColumns(cols, _doSort);
-
-  const [columns, setColumns] = useState<IColumn[]>(initialColumns);
+  const { columns } = useSortableColumns(tableFilters, initialColumns(), ['auditDateTime', 'event']);
+  // const [columns, setColumns] = useState<IColumn[]>(initialColumns);
   const [items, setItems] = useState<any[]>([]);
 
   const [apiCall, { data, loading, error }] = useQueryHandler(lazyQuery);
@@ -189,7 +155,7 @@ export const UserAuditLogsTable = ({ id, cols, lazyQuery, getItems, tableFilters
     if (items && items.length > 0) {
       return (
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
-          <ThemedDetailsList
+          <DetailsList
             className={classNames.root}
             items={items}
             columns={columns}

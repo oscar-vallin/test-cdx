@@ -32,6 +32,5 @@ export type ThemeColorsType = {
     successAlt: string;
     info: string;
     infoAlt: string;
-    link: string;
   };
 };

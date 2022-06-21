@@ -36,11 +36,7 @@ export const ActiveDomainContextProvider = ({ children }: ActiveDomainContextPro
     const { origin } = ActiveDomainStore.domainOrg;
 
     if (SessionStore.user.token && origin.orgSid) {
-      performNavUpdate({ orgSid: origin.orgSid, domain: 'DASHBOARD' });
-
-      if (origin.type === 'ORGANIZATION') {
-        performNavUpdate({ orgSid: origin.orgSid, domain: 'ORGANIZATION' });
-      }
+      performNavUpdate({ orgSid: origin.orgSid });
     }
   }, [SessionStore.user.token, ActiveDomainStore.domainOrg.origin]);
 
@@ -49,7 +45,7 @@ export const ActiveDomainContextProvider = ({ children }: ActiveDomainContextPro
 
     if (SessionStore.user.token && orgSid) {
       performCurrentOrgUpdate({ orgSid });
-      performNavUpdate({ orgSid, domain: 'ORGANIZATION' });
+      performNavUpdate({ orgSid });
     }
   }, [SessionStore.user.token, ActiveDomainStore.domainOrg.current.orgSid]);
 

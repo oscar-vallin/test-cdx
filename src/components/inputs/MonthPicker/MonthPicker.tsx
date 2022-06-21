@@ -124,14 +124,14 @@ export const MonthPicker = ({
     dateRangeString = `${rangeStart.toLocaleDateString()}-${rangeEnd.toLocaleDateString()}`;
   }
 
-  const useOutsideAlerter = (ref, onClickOutside) => {
+  const useOutsideAlerter = (ref, _onClickOutside) => {
     useEffect(() => {
       /**
        * Alert if clicked on outside of element
        */
       const handleClickOutside = (event) => {
         if (ref.current && !ref.current.contains(event.target)) {
-          onClickOutside();
+          _onClickOutside();
         }
       };
       // Bind the event listener

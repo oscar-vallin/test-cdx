@@ -14,7 +14,7 @@ import {
 import { ApolloClient, gql } from '@apollo/client';
 import { ITag } from '@fluentui/react';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
-import { defaultForm, updateForm } from './ExternalUsersFormUtil';
+import { defaultForm, updateForm } from '../UserAccountFormUtil';
 
 export const useExternalUsersAccessService = (orgSid: string, userAccountSid?: string) => {
   const [callGrantExternalUserAccess, { error: grantExternalUserAccessError }] = useGrantExternalUserAccessMutation();

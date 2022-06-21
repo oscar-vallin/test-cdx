@@ -5,7 +5,7 @@ import { StyleConstants } from 'src/data/constants/StyleConstants';
 import { ROUTE_EXTERNAL_ORGS } from 'src/data/constants/RouteConstants';
 import { LeftNav } from 'src/containers/menus/LeftNav';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
-import { BoxStyled, DashboardBody } from './LayoutDashboard.styles';
+import { DashboardContainer, DashboardBody } from './LayoutDashboard.styles';
 import { OrgBreadcrumbs } from './OrgBreadcrumbs';
 
 const defaultProps = {
@@ -41,7 +41,7 @@ export const LayoutDashboard = ({
   };
 
   return (
-    <BoxStyled id={`${id}__Box`} direction={StyleConstants.DIRECTION_COLUMN} top>
+    <DashboardContainer id={`${id}__Box`} direction={StyleConstants.DIRECTION_COLUMN} top>
       <AppHeader
         onMenuButtonClick={() => {
           if (ActiveDomainStore.nav.admin.length > 0) {
@@ -54,7 +54,7 @@ export const LayoutDashboard = ({
         <OrgBreadcrumbs />
         {children}
       </DashboardBody>
-    </BoxStyled>
+    </DashboardContainer>
   );
 };
 

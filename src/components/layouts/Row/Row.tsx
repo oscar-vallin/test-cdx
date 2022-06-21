@@ -5,7 +5,7 @@ import { DivStyled } from './Row.styles';
 const defaultProps = {
   id: '',
   variant: 'normal',
-  children: <></>,
+  children: undefined,
   center: false,
   right: false,
   top: false,

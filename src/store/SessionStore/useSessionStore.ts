@@ -35,6 +35,6 @@ export const useSessionStore = (): SessionStoreType => {
     setCurrentSession,
     setSessionStage,
     setRedirectUrl,
-    setGlobalError
+    setGlobalError,
   };
 };

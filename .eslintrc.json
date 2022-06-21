@@ -23,7 +23,7 @@
   "rules": {
     "semi": 0,
     "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn",
+    "react-hooks/exhaustive-deps": "off",
     "react/function-component-definition": ["warn", {
       "namedComponents": "arrow-function",
       "unnamedComponents": "arrow-function"
@@ -46,6 +46,7 @@
     // note you must disable the base rule as it can report incorrect errors
     "no-use-before-define": "off",
     "@typescript-eslint/no-use-before-define": ["error"],
+    "@typescript-eslint/no-shadow": ["error"],
     "import/no-extraneous-dependencies": "off",
     "no-param-reassign": "off",
     "@typescript-eslint/no-explicit-any": "off",

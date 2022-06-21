@@ -11,7 +11,7 @@ export const Container = styled.div<ContainerProps>`
   border-color: ${({ theme }) => theme.colors.themePrimary};
   border-width: 2px;
   padding: 5px;
-  font-family: 'Open Sans', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+  font: ${({ theme }) => theme.fontStyles.normal};
   box-shadow: ${({ theme }) => theme.boxShadows.normal};
 `;
 

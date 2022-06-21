@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import {
+  CommandBar,
   ICommandBarItemProps,
   IconButton,
   PanelType,
@@ -33,7 +34,6 @@ import { isDateTimeValid } from 'src/utils/CDXUtils';
 import { useWorkPacketCommands } from 'src/pages/FileStatusDetails/useWorkPacketCommands';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { Row } from 'src/components/layouts';
-import { ThemedCommandBar } from 'src/components/buttons/CommandBar/ThemedCommandBar.styles';
 import { CDXTabsItemType, Tabs } from 'src/components/tabs/Tabs';
 import { TableFiltersType } from 'src/hooks/useTableFilters';
 import { useNotification } from 'src/hooks/useNotification';
@@ -54,7 +54,7 @@ type FileStatusDetailsPanelProps = {
 
 const FileStatusDetailsPanel = ({ useFileStatusDetailsPanel, tableFilters }: FileStatusDetailsPanelProps) => {
   const { fsOrgSid } = useFileStatusDetailsPanel;
-  const { hash } = useFileStatusDetailsPanel;
+  const { hash, setHash } = useFileStatusDetailsPanel;
   const id = useFileStatusDetailsPanel.workOrderId;
 
   const history = useHistory();
@@ -85,15 +85,15 @@ const FileStatusDetailsPanel = ({ useFileStatusDetailsPanel, tableFilters }: Fil
     handleError(error);
   }, [error]);
 
-  useEffect(() => {
-    validateStatus();
-  }, [data, loading]);
-
   const validateStatus = () => {
     if (data?.workPacketStatusDetails && !loading) {
       setPacket(data?.workPacketStatusDetails);
     }
   };
+
+  useEffect(() => {
+    validateStatus();
+  }, [data, loading, validateStatus]);
 
   const pollWPStatus = useFileStatusDetailsPoll(fsOrgSid, realId, packet?.packetStatus);
 
@@ -334,7 +334,7 @@ const FileStatusDetailsPanel = ({ useFileStatusDetailsPanel, tableFilters }: Fil
           </Stack>
           <Stack horizontal={true} wrap={false} grow>
             <Stack.Item grow align="end">
-              <ThemedCommandBar items={commandBarItems} overflowButtonProps={{ ariaLabel: 'More commands' }} />
+              <CommandBar items={commandBarItems} overflowButtonProps={{ ariaLabel: 'More commands' }} />
             </Stack.Item>
           </Stack>
         </Row>
@@ -369,6 +369,7 @@ const FileStatusDetailsPanel = ({ useFileStatusDetailsPanel, tableFilters }: Fil
   };
 
   const handleFilesDetailsTabChange = (item: string) => {
+    setHash(item);
     const params = new URLSearchParams(window.location.search);
     params.set('tab', item.replace('#', ''));
     history.replace(`${window.location.pathname}?${params.toString()}`);

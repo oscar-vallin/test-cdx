@@ -7,7 +7,7 @@ export const useScheduleItems = (argOrgSid, argDateRange) => {
   const [items, setItems] = useState<ScheduleOccurrence[]>([]);
   const handleError = ErrorHandler();
 
-  const { data, error } = useScheduleOccurrencesQuery({
+  const { data, loading, error } = useScheduleOccurrencesQuery({
     variables: {
       orgSid: argOrgSid,
       dateRange: {
@@ -25,43 +25,17 @@ export const useScheduleItems = (argOrgSid, argDateRange) => {
   }, [error]);
 
   useEffect(() => {
-    const doEffect = () => {
-      const _items = data?.scheduleOccurrences?.nodes ?? [];
-
-      setItems(_items);
-    };
-
-    if (data) {
-      doEffect();
+    if (!loading && data) {
+      setItems(data?.scheduleOccurrences?.nodes ?? []);
     }
-  }, [data]);
+
+    return () => {
+      setItems([]);
+    };
+  }, [data, loading]);
 
   return {
     items,
     error,
-  };
-};
-
-const useInput = (placeholder) => {
-  const [value, setValue] = useState();
-  const onChange = (e) => {
-    setValue(e);
-  };
-
-  return {
-    value,
-    onChange,
-    placeholder,
-  };
-};
-
-//
-export const useInputs = () => {
-  const startDate = useInput('Start Date...');
-  const endDate = useInput('End Date...');
-
-  return {
-    startDate,
-    endDate,
   };
 };

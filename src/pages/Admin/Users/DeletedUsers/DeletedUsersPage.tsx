@@ -12,7 +12,7 @@ import { useUsersLists } from 'src/pages/Admin/Users/useUsersList';
 import { ROUTE_DELETED_USERS } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { useTableFilters } from 'src/hooks/useTableFilters';
-import { StyledColumn } from './DeletedUsersPage.styles';
+import { PageBody } from 'src/components/layouts/Column';
 
 const DeletedUsersPage = () => {
   const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);
@@ -41,7 +41,7 @@ const DeletedUsersPage = () => {
   }, [tableFilters.searchText.delayedValue]);
 
   useEffect(() => {
-    userService.fetchUsers(0, tableFilters.pagingParams.sort);
+    userService.fetchUsers(0, tableFilters.pagingParams.sort).then();
   }, [tableFilters.pagingParams]);
 
   const hideConfirmation = () => {
@@ -77,12 +77,11 @@ const DeletedUsersPage = () => {
           </Container>
         </PageHeader>
       )}
-
-      <Container>
-        <Row>
-          <StyledColumn>{renderBody()}</StyledColumn>
-        </Row>
-      </Container>
+      <PageBody>
+        <Container>
+          <Row>{renderBody()}</Row>
+        </Container>
+      </PageBody>
 
       <UpdateUserPanel
         useUpdateUserPanel={updateUserPanel}

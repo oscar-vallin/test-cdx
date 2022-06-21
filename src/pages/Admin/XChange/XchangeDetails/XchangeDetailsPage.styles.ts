@@ -72,5 +72,4 @@ export const StyledText = styled(Text)`
   font-weight: bold;
   margin-left: 20px;
   height: 200px;
-
 `;

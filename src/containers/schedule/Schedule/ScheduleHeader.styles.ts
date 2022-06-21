@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Box as LayoutBox, Row as LayoutRow, Column as LayoutColumn } from 'src/components/layouts';
-import { Button, ButtonAction } from 'src/components/buttons';
+import { Button } from 'src/components/buttons';
 
 const COLOR_MAIN = ({ theme }) => theme.colors.themePrimary;
 const COLOR_TEXT = ({ theme }) => theme.colors.neutralPrimary;
@@ -162,7 +162,7 @@ export const MonthYearContainer = styled(LayoutBase)`
 `;
 
 export const HeaderTextLarge = styled.span`
-  font-family: Segoe UI;
+  font: ${({ theme }) => theme.fontStyles.normal};
   font-size: 0.875rem;
   color: ${COLOR_MAIN};
 `;
@@ -210,10 +210,6 @@ export const CalendarBodyCol = styled.div`
   flex-grow: 0;
   flex-basis: calc(100% / 7);
   width: calc(100% / 7);
-`;
-
-export const StyledButtonAction = styled(ButtonAction)`
-  color: #005a9e;
 `;
 
 type HeaderButtonViewProps = {

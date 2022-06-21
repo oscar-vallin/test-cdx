@@ -1,14 +1,20 @@
 import { ReactElement } from 'react';
-import { PivotItem } from '@fluentui/react';
+import { IPivotItemProps, PivotItem } from '@fluentui/react';
 import { Badge } from 'src/components/badges/Badge';
 import { theme } from 'src/styles/themes/theme';
 import { StyledPivot, StyledSpan } from './Tabs.styles';
+
+type BadgeType = {
+  variant: string;
+  label: string;
+};
 
 export type CDXTabsItemType = {
   title: string;
   content: ReactElement;
   hash: string;
-  badge?: { variant: string; label: string };
+  badge?: BadgeType;
+  disabled?: boolean;
 };
 
 type CDXTabsType = {
@@ -17,10 +23,23 @@ type CDXTabsType = {
   onClickTab: (key: string) => void;
 };
 
+const renderHeader = (
+  hash: string,
+  onClickTab: (key: string) => void,
+  badge?: BadgeType,
+  link?: IPivotItemProps,
+  defaultRenderer?: (props?: IPivotItemProps) => JSX.Element | null
+) => (
+  <StyledSpan onClick={() => onClickTab(hash)}>
+    {defaultRenderer && defaultRenderer(link)}
+    {badge && <Badge variant={badge.variant} label={badge.label?.toString()} />}
+  </StyledSpan>
+);
+
 const CDXTabs = ({ items, selectedKey, onClickTab }: CDXTabsType): ReactElement => {
   return (
     <StyledPivot
-      defaultSelectedKey={selectedKey}
+      selectedKey={selectedKey}
       overflowBehavior="menu"
       overflowAriaLabel="more items"
       styles={{
@@ -33,17 +52,15 @@ const CDXTabs = ({ items, selectedKey, onClickTab }: CDXTabsType): ReactElement 
       }}
       style={{ fontSize: theme.fontSizes.normal }}
     >
-      {items.map(({ title, content, badge, hash }: CDXTabsItemType, index) => (
+      {items.map(({ title, content, badge, hash, disabled }: CDXTabsItemType, index) => (
         <PivotItem
           headerText={title}
           key={index}
           itemKey={hash}
-          onRenderItemLink={(link: any, defaultRenderer: any): any => (
-            <StyledSpan onClick={() => onClickTab(hash)}>
-              {defaultRenderer(link)}
-              {badge && <Badge variant={badge.variant} label={badge.label?.toString()} />}
-            </StyledSpan>
-          )}
+          onRenderItemLink={(link, defaultRenderer) => renderHeader(hash, onClickTab, badge, link, defaultRenderer)}
+          headerButtonProps={{
+            disabled,
+          }}
         >
           {content}
         </PivotItem>

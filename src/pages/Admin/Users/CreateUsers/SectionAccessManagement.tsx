@@ -5,8 +5,8 @@ import CreateUsersFooter from './CreateUsersFooter';
 
 type SectionAccessProps = {
   form?: UserAccountForm;
-  onPrev: () => null;
-  onNext: () => null;
+  onPrev: () => void;
+  onNext: () => void;
   saveOptions: (sids: string[]) => void;
 };
 

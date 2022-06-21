@@ -1,8 +1,9 @@
 import { ReactElement } from 'react';
+import { DatePicker } from '@fluentui/react';
 import { FormLabel } from 'src/components/labels/FormLabel';
 import { DateState } from 'src/hooks/useDateValue';
 import { DayPickerStrings, firstDayOfWeek } from 'src/components/inputs/DateConstants';
-import { Row, Column, ThemedDatePicker } from './InputDateRange.styles';
+import { Row, Column } from './InputDateRange.styles';
 
 type InputDateRangeProps = {
   startDate: DateState;
@@ -23,7 +24,7 @@ const InputDateRange = ({ startDate, endDate, showLabels = true }: InputDateRang
     <Row id="InputDateRange--Row">
       <Column id="InputDateRange--Column--From" lg="6" direction="column">
         {showLabels && <FormLabel label="From" required={true} />}
-        <ThemedDatePicker
+        <DatePicker
           id="Input__From__Date"
           firstDayOfWeek={firstDayOfWeek}
           strings={{
@@ -41,7 +42,7 @@ const InputDateRange = ({ startDate, endDate, showLabels = true }: InputDateRang
       </Column>
       <Column id="InputDateRange--Column--To" lg="6">
         {showLabels && <FormLabel label="To" required={true} />}
-        <ThemedDatePicker
+        <DatePicker
           id="Input__To__Date"
           firstDayOfWeek={firstDayOfWeek}
           strings={{
@@ -51,7 +52,6 @@ const InputDateRange = ({ startDate, endDate, showLabels = true }: InputDateRang
           placeholder="Select a Date..."
           ariaLabel="Select a Date..."
           minDate={startDate.value}
-          maxDate={tomorrow}
           onSelectDate={endDate.onChange}
           value={endDate.value}
           allowTextInput

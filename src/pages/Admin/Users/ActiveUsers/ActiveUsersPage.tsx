@@ -23,7 +23,7 @@ import { Paginator } from 'src/components/tables/Paginator';
 import { useTableFilters } from 'src/hooks/useTableFilters';
 import { InputText } from 'src/components/inputs/InputText';
 import { UIInputCheck } from 'src/components/inputs/InputCheck';
-import { StyledColumn } from './ActiveUsersPage.styles';
+import { PageBody } from 'src/components/layouts/Column';
 import { UpdateUserPanel, useUpdateUserPanel } from '../UpdateUsers';
 import { CreateUsersPanel } from '../CreateUsers';
 
@@ -74,15 +74,17 @@ const ActiveUsersPage = () => {
   }, [tableFilters.searchText.delayedValue]);
 
   useEffect(() => {
-    userService.fetchUsers(
-      0,
-      tableFilters.pagingParams.sort,
-      lockedFilter,
-      pendingActivationFilter,
-      expiredActivationFilter,
-      searchAllOrgsFilter,
-      tableFilters.searchText.delayedValue
-    );
+    userService
+      .fetchUsers(
+        0,
+        tableFilters.pagingParams.sort,
+        lockedFilter,
+        pendingActivationFilter,
+        expiredActivationFilter,
+        searchAllOrgsFilter,
+        tableFilters.searchText.delayedValue
+      )
+      .then();
   }, [tableFilters.pagingParams]);
 
   const hideConfirmation = () => {
@@ -244,11 +246,11 @@ const ActiveUsersPage = () => {
           </Container>
         </PageHeader>
       )}
-      <Container>
-        <Row>
-          <StyledColumn>{renderBody()}</StyledColumn>
-        </Row>
-      </Container>
+      <PageBody>
+        <Container>
+          <Row>{renderBody()}</Row>
+        </Container>
+      </PageBody>
       <CreateUsersPanel
         orgSid={orgSid}
         isOpen={isCreateUserPanelOpen}

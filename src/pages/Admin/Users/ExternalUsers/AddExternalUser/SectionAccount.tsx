@@ -1,8 +1,8 @@
 import { UIInputText } from 'src/components/inputs/InputText';
 import { Column } from 'src/components/layouts';
 import { useFormInputValue } from 'src/hooks/useInputValue';
-import { Link } from '@fluentui/react';
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
+import { ButtonLink } from 'src/components/buttons';
 import { UserAccount, UserAccountForm, CdxWebCommandType } from 'src/data/services/graphql';
 import { WizardBody } from 'src/layouts/Panels/Panels.styles';
 import { TagPicker } from 'src/components/inputs/TagPicker';
@@ -16,7 +16,7 @@ import AddExternalUsersAccessFooter from './AddExternalUsersAccessFooter';
 
 type SectionAccountProps = {
   form: UserAccountForm;
-  onNext: () => null;
+  onNext: () => void;
   saveOptions: (userAccount: UserAccount) => void;
   saveActivationEmailOptions: (sendActivationEmail: boolean) => void;
   searchExternalUsers: any;
@@ -87,7 +87,7 @@ const SectionAccount = ({
         </FormRow>
         {creatUserCmd && (
           <FormRow>
-            <Link
+            <ButtonLink
               id="__noResultsFound-Link"
               onClick={() => {
                 setUserSelected(true);
@@ -95,7 +95,7 @@ const SectionAccount = ({
               }}
             >
               Add a new account
-            </Link>
+            </ButtonLink>
           </FormRow>
         )}
       </Spacing>

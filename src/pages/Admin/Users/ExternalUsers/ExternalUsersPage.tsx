@@ -5,6 +5,7 @@ import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Row, Column, Container } from 'src/components/layouts';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { PageTitle } from 'src/components/typography';
+import { PageBody } from 'src/components/layouts/Column';
 import { useExternalUsersForOrgLazyQuery, CdxWebCommandType, UserItem, WebCommand } from 'src/data/services/graphql';
 import { UsersTable } from 'src/pages/Admin/Users/UsersTable';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
@@ -16,7 +17,6 @@ import { InputText } from 'src/components/inputs/InputText';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import AddExternalUserAccessPanel from './AddExternalUser/AddExternalUsersAccessPanel';
 import UpdateExternalUsersPanel from './UpdateExternalUser/UpdateExternalUsersPanel';
-import { StyledColumn } from './ExternalUsersPage.styles';
 
 const ExternalUsersPage = () => {
   const { orgSid } = useOrgSid();
@@ -44,6 +44,11 @@ const ExternalUsersPage = () => {
         )
       );
     }
+
+    return () => {
+      setUsers([]);
+      setAssignCmd(undefined);
+    };
   }, [data, loading]);
 
   useEffect(() => {
@@ -126,24 +131,24 @@ const ExternalUsersPage = () => {
           </Row>
         </Container>
       </PageHeader>
-      <Container>
-        {tableFilters?.searchText && (
-          <Spacing margin={{ bottom: 'normal' }}>
-            <Column lg="6">
-              <InputText
-                id="Active_Users_Input-Search"
-                autofocus
-                disabled={false}
-                {...tableFilters.searchText}
-                label="Search"
-              />
-            </Column>
-          </Spacing>
-        )}
-        <Row>
-          <StyledColumn>{renderBody()}</StyledColumn>
-        </Row>
-      </Container>
+      <PageBody>
+        <Container>
+          {tableFilters?.searchText && (
+            <Spacing margin={{ bottom: 'normal' }}>
+              <Column lg="6">
+                <InputText
+                  id="Active_Users_Input-Search"
+                  autofocus
+                  disabled={false}
+                  {...tableFilters.searchText}
+                  label="Search"
+                />
+              </Column>
+            </Spacing>
+          )}
+          <Row>{renderBody()}</Row>
+        </Container>
+      </PageBody>
       {isAddExternalUserAccessPanelOpen && (
         <AddExternalUserAccessPanel
           isOpen={isAddExternalUserAccessPanelOpen}

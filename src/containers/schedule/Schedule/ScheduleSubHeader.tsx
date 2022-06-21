@@ -104,6 +104,7 @@ export const ScheduleSubHeader = ({
 
         days.push(
           <WeekViewContainer
+            id={`__WeekSubHeader_${i}`}
             key={`day_${i}`}
             isSameDay={isCurrentDate}
             isSameMonth={isCurrentMonth}
@@ -117,7 +118,7 @@ export const ScheduleSubHeader = ({
         );
       } else {
         days.push(
-          <DayOfWeek key={`day_${i}`}>
+          <DayOfWeek id={`__MonthSubHeader_${i}`} key={`day_${i}`}>
             <Text size="small">{format(day, dateFormat)}</Text>
           </DayOfWeek>
         );

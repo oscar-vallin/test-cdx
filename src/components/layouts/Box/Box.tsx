@@ -1,12 +1,12 @@
-import { ReactElement } from 'react';
-import { getClassNames } from '../../../helpers/helperStyles';
-import { StyleConstants } from '../../../data/constants/StyleConstants';
+import React, { ReactElement } from 'react';
+import { getClassNames } from 'src/helpers/helperStyles';
+import { StyleConstants } from 'src/data/constants/StyleConstants';
 import { validateDirection } from './Box.handlers';
 import { ComponentStyled } from './Box.styles';
 
 const defaultProps = {
   id: '',
-  children: <></>,
+  children: undefined,
   direction: StyleConstants.DIRECTION_COLUMN,
   left: false,
   right: false,

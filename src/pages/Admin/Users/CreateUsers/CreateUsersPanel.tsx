@@ -10,6 +10,7 @@ import { useNotification } from 'src/hooks/useNotification';
 import { GqOperationResponse } from 'src/data/services/graphql';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
 import { Column } from 'src/components/layouts';
+import { useWizardTabs } from 'src/pages/Admin/Users/useWizardTabs';
 import { useCreateUsersPanel } from './CreateUsersPanel.service';
 import { SectionAccount } from './SectionAccount';
 import SectionAccessManagement from './SectionAccessManagement';
@@ -30,17 +31,11 @@ type CreateUsersPanelProps = {
 } & typeof defaultProps;
 
 const tabs = ['#account', '#access', '#auth', '#summary'];
-const enum Tab {
-  Account = 0,
-  Access = 1,
-  Auth = 2,
-  Summary = 3,
-}
 
 const CreateUsersPanel = ({ orgSid, isOpen, onDismiss, onCreateUser }: CreateUsersPanelProps): ReactElement => {
   const createUserService = useCreateUsersPanel(orgSid);
 
-  const [step, setStep] = useState(Tab.Account);
+  const { selectedTab, handleNext, handlePrev, handleTabChange, resetTabs } = useWizardTabs(tabs);
   const { userAccountLoading } = createUserService ?? {};
   const [showDialog, setShowDialog] = useState(false);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
@@ -80,20 +75,6 @@ const CreateUsersPanel = ({ orgSid, isOpen, onDismiss, onCreateUser }: CreateUse
     }
   };
 
-  const handleNext = (): null => {
-    setStep(step + 1);
-    return null;
-  };
-
-  const handlePrev = (): null => {
-    setStep(step - 1);
-    return null;
-  };
-
-  const handleTabChange = (hash: string): void => {
-    setStep(tabs.indexOf(hash));
-  };
-
   useEffect(() => {
     if (createUserService.isUserCreated && createUserService.responseCreateUser) {
       onDismiss();
@@ -113,7 +94,7 @@ const CreateUsersPanel = ({ orgSid, isOpen, onDismiss, onCreateUser }: CreateUse
     // Reset the form
     createUserService.resetForm();
     // Set it back to the first tab
-    setStep(Tab.Account);
+    resetTabs();
     setShowDialog(false);
     setUnsavedChanges(false);
     onDismiss();
@@ -214,7 +195,7 @@ const CreateUsersPanel = ({ orgSid, isOpen, onDismiss, onCreateUser }: CreateUse
                   hash: '#summary',
                 },
               ]}
-              selectedKey={step < 0 ? '0' : step.toString()}
+              selectedKey={selectedTab}
               onClickTab={handleTabChange}
             />
           )}
@@ -228,11 +209,9 @@ const CreateUsersPanel = ({ orgSid, isOpen, onDismiss, onCreateUser }: CreateUse
         onYes={() => {
           setShowDialog(false);
           doClosePanel();
-          return null;
         }}
         onClose={() => {
           setShowDialog(false);
-          return null;
         }}
       />
     </>

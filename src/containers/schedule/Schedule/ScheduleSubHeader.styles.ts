@@ -159,7 +159,7 @@ export const LayoutBase = styled.div`
 export const ColumnHeader = styled(LayoutBase)``;
 
 export const HeaderTextLarge = styled.span`
-  font-family: Segoe UI;
+  font: ${({ theme }) => theme.fontStyles.normal};
   margin-bottom: 10px;
   margin-top: 20px;
   font-size: 0.75rem;

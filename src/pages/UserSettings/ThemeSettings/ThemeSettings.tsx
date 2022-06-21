@@ -69,6 +69,9 @@ const ThemeSettings = () => {
     if (!loadingThemesForOrg && dataThemesForOrg?.dashThemeColorForOrg?.nodes) {
       setPalettes(dataThemesForOrg.dashThemeColorForOrg?.nodes);
     }
+    return () => {
+      setPalettes([]);
+    };
   }, [dataThemesForOrg, loadingThemesForOrg]);
 
   const [createOrUpdateOwnDashTheme, { data: themeResponse, loading: isHandlingTheme }] =
@@ -84,8 +87,12 @@ const ThemeSettings = () => {
 
   useEffect(() => {
     if (!loadingUserTheme && dataUserTheme?.userTheme) {
-      setSelectedPaletteId(dataUserTheme.userTheme?.id ?? undefined);
+      setSelectedPaletteId(dataUserTheme.userTheme?.dashThemeColor?.id ?? undefined);
     }
+
+    return () => {
+      setSelectedPaletteId(undefined);
+    };
   }, [dataUserTheme, loadingUserTheme]);
 
   const selectTheme = (paletteId: string) => {

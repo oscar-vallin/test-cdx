@@ -14,7 +14,7 @@ const itemsData: IContextualMenuItem[] = [
 
 describe('ButtonContextual', () => {
   const tree = shallowWithTheme(
-    <ButtonContextual id="__ButtonContextual" items={itemsData}>
+    <ButtonContextual id="__ButtonContextual" title="Profile menu" items={itemsData}>
       Button Contextual
     </ButtonContextual>
   );
@@ -35,9 +35,22 @@ describe('ButtonContextual', () => {
     expect(tree.children().contains('Button Contextual')).toEqual(true);
   });
 
+  it('Should render title', () => {
+    expect(tree.children().props().title).toEqual('Profile menu');
+  });
+
+  it('Should render aria label', () => {
+    const wrapper = mountWithTheme(
+      <ButtonContextual id="__ButtonContextual" title="Profile menu" items={itemsData}>
+        Button Contextual
+      </ButtonContextual>
+    );
+    expect(wrapper.find('button').prop('aria-label')).toEqual('Profile menu');
+  });
+
   it('Should renders children when passed in', () => {
     const wrapper = shallowWithTheme(
-      <ButtonContextual id="" items={[]}>
+      <ButtonContextual id="" title="Profile Menu" items={[]}>
         <div className="children" />
       </ButtonContextual>
     );
@@ -46,7 +59,7 @@ describe('ButtonContextual', () => {
 
   it('Test styled ButtonContextual component', () => {
     const wrapper = shallowWithTheme(
-      <ButtonContextual id="" items={[]}>
+      <ButtonContextual id="" title="Profile Menu" items={[]}>
         <div className="children" />
       </ButtonContextual>
     ).dive();
@@ -54,8 +67,12 @@ describe('ButtonContextual', () => {
   });
 
   it('Default props values, Should have a props', () => {
-    const defaultTree = shallowWithTheme(<ButtonContextual id={'__ButtonContextual'} items={itemsData} />);
-    const mountTree = mountWithTheme(<ButtonContextual id={'__ButtonContextual'} items={itemsData} />);
+    const defaultTree = shallowWithTheme(
+      <ButtonContextual id={'__ButtonContextual'} title="Profile Menu" items={itemsData} />
+    );
+    const mountTree = mountWithTheme(
+      <ButtonContextual id={'__ButtonContextual'} title="Profile Menu" items={itemsData} />
+    );
     expect(defaultTree).toMatchSnapshot();
 
     expect(defaultTree.children().props().id).toEqual('__ButtonContextual');
