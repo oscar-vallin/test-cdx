@@ -10,6 +10,7 @@ import {
   UiStringField,
   XchangeAlert,
   XchangeFileProcessForm,
+  XchangeDiagram,
 } from 'src/data/services/graphql';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { InputText } from 'src/components/inputs/InputText';
@@ -31,6 +32,7 @@ const XchangeDetailsPage = () => {
   const [coreFilenamePatternValue, setCoreFilenamePatternValue] = useState<string>('');
   const [xchangesAlerts, setXchangesAlerts] = useState<XchangeAlert[]>();
   const [fileProcess, setFileProcess] = useState<XchangeFileProcessForm[]>();
+  const [dataDiagram, setDataDiagram] = useState<XchangeDiagram>();
 
   const [xchangeDetails, { data: detailsData, loading: detailsLoading }] = useQueryHandler(useXchangeConfigLazyQuery);
 
@@ -160,6 +162,9 @@ const XchangeDetailsPage = () => {
     if (xchangeDataDetails?.coreFilename) {
       setCoreFilenameData(xchangeDataDetails?.coreFilename);
       setCoreFilenameValue(xchangeDataDetails?.coreFilename.value ?? '');
+      if (xchangeDataDetails?.processes && xchangeDataDetails?.processes[0]) {
+        setDataDiagram(xchangeDataDetails?.processes[0]?.diagram);
+      }
     }
 
     if (xchangeDataDetails?.coreFilenamePattern) {
@@ -201,9 +206,7 @@ const XchangeDetailsPage = () => {
               ))}
           </Row>
           <Row>
-            <Column lg="9">
-              <Diagram />
-            </Column>
+            <Column lg="9">{dataDiagram && <Diagram data={dataDiagram} />}</Column>
             <Column lg="3">{cardBox()}</Column>
           </Row>
         </Container>

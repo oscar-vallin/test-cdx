@@ -1,93 +1,56 @@
 import { useState } from 'react';
-import ReactFlow, { MarkerType } from 'react-flow-renderer';
-import { StyledContainer } from '../XchangeDetailsPage.styles';
-import DataNode from './CustomDiagramNodes/DataNode';
+import { XchangeDiagram } from 'src/data/services/graphql';
+import ReactFlow, { useNodesState, useEdgesState, addEdge, Connection, Edge } from 'react-flow-renderer';
+import { ButtonAction } from 'src/components/buttons';
+import { Column, Container, Row } from 'src/components/layouts';
+import { StyledContainer, StyledHorizontalButtons, StyledText } from '../XchangeDetailsPage.styles';
+import DataNodeSteps from './CustomDiagramNodes/DataNodeSteps';
+import DataNodeTransmissions from './CustomDiagramNodes/DataNodeTransmissions';
+import { InitialNodes } from './nodes/nodes';
+import { InitialEdges } from './edges/edges';
 
 const nodeTypes = {
-  dataNode: DataNode,
+  dataNodeSteps: DataNodeSteps,
+  dataNodeTransmissions: DataNodeTransmissions,
 };
 
-const newElements = [
-  {
-    id: 'A-1',
-    type: 'dataNode',
-    data: { label: 'OSIPI' },
-    position: { x: 100, y: 50 },
-  },
-  {
-    id: 'A-2',
-    type: 'dataNode',
-    data: { label: 'some_source_data' },
-    position: { x: 100, y: 125 },
-  },
-  //   {
-  //     id: '3',
-  //     type: 'dataNode',
-  //     data: { name: 'some_source_data' },
-  //     position: { x: 350, y: 210 },
-  //   },
-  //   {
-  //     id: '4',
-  //     type: 'dataNode',
-  //     data: { name: 'some_source_data' },
-  //     position: { x: 100, y: 300 },
-  //   },
-  //   {
-  //     id: '5',
-  //     type: 'dataNode',
-  //     data: { name: 'some_source_data' },
-  //     position: { x: 350, y: 300 },
-  //   },
-  //   {
-  //     id: '6',
-  //     type: 'dataNode',
-  //     data: { name: 'some_source_data' },
-  //     position: { x: 100, y: 400 },
-  //   },
-  //   {
-  //     id: '7',
-  //     type: 'dataNode',
-  //     data: { name: 'some_source_data' },
-  //     position: { x: 100, y: 490 },
-  //   },
-  //   {
-  //     id: '8',
-  //     type: 'dataNode',
-  //     data: { name: 'some_source_data' },
-  //     position: { x: 350, y: 490 },
-  //   },
-  //   {
-  //     id: '9',
-  //     type: 'dataNode',
-  //     data: { name: 'some_source_data' },
-  //     position: { x: 625, y: 490 },
-  //   },
-  //   {
-  //     id: '10',
-  //     type: 'dataNode',
-  //     data: { name: 'some_source_data' },
-  //     position: { x: 900, y: 490 },
-  //   },
-];
+const Diagram = ({ data }) => {
+  const { initialNodes } = InitialNodes(data);
+  const { initialEdges } = InitialEdges(data);
+  const [nodes, , onNodesChange] = useNodesState(initialNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
-const newEdges = [
-  {
-    id: 'a1-a2',
-    source: 'A-1',
-    target: 'A-2',
-    labelBgBorderRadius: 4,
-    labelStyle: { fill: 'red', fontWeight: 700 },
-    markerEnd: { type: MarkerType.ArrowClosed },
-  },
-];
-
-const Diagram = () => {
-  const [edges, setEdges] = useState(newEdges);
+  const onConnect = (params: Edge<any> | Connection) => setEdges((eds) => addEdge(params, eds));
 
   return (
-    <StyledContainer>
-      <ReactFlow nodes={newElements} edges={edges} nodeTypes={nodeTypes} zoomOnScroll={false} />;
-    </StyledContainer>
+    <Container>
+      <Row>
+        <Column lg="1">
+          <StyledHorizontalButtons>
+            <ButtonAction>
+              <StyledText>Xchange Steps +</StyledText>
+            </ButtonAction>
+            <ButtonAction>
+              <StyledText>File Transmissions +</StyledText>
+            </ButtonAction>
+          </StyledHorizontalButtons>
+        </Column>
+        <Column lg="10">
+          <StyledContainer>
+            <ReactFlow
+              nodes={nodes}
+              edges={edges}
+              nodeTypes={nodeTypes}
+              zoomOnScroll={false}
+              onNodesChange={onNodesChange}
+              onEdgesChange={onEdgesChange}
+              onConnect={onConnect}
+            />
+            ;
+          </StyledContainer>
+        </Column>
+      </Row>
+    </Container>
   );
 };
 
