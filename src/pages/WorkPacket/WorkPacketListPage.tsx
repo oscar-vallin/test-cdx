@@ -11,11 +11,6 @@ import { TableFiltersType, useTableFilters } from 'src/hooks/useTableFilters';
 import { useFileStatusDetailsPanel } from 'src/pages/FileStatusDetails/useFileStatusDetailsPanel';
 import { FileStatusDetailsPanel } from 'src/pages/FileStatusDetails';
 
-export type TableMetaData = {
-  count: number;
-  loading: boolean;
-};
-
 type WorkPacketListPageType = {
   id: string;
   pageRoute: RouteType;
@@ -25,7 +20,7 @@ type WorkPacketListPageType = {
   getItems: (any) => any[];
   getTotal: (any) => number;
   pollingQuery?: any;
-  renderTotalRecords?: (tableMeta: TableMetaData, tableFilters: TableFiltersType) => JSX.Element;
+  renderTotalRecords?: (totalRecords: number, tableFilters: TableFiltersType) => JSX.Element;
 };
 
 export const WorkPacketListPage = ({
@@ -39,7 +34,8 @@ export const WorkPacketListPage = ({
   pollingQuery,
   renderTotalRecords,
 }: WorkPacketListPageType) => {
-  const [tableMeta, setTableMeta] = useState<TableMetaData>({ count: 0, loading: true });
+  const [loading, setLoading] = useState(false);
+  const [totalRecords, setTotalRecords] = useState(0);
   const [pageTitle, setPageTitle] = useState('');
   const fileStatusDetailsPanel = useFileStatusDetailsPanel();
 
@@ -62,7 +58,7 @@ export const WorkPacketListPage = ({
 
   const renderUpperRight = () => {
     if (renderTotalRecords) {
-      return <span id="__PageTotal">{renderTotalRecords(tableMeta, tableFilters)}</span>;
+      return <span id="__PageTotal">{renderTotalRecords(totalRecords, tableFilters)}</span>;
     }
     return null;
   };
@@ -80,7 +76,13 @@ export const WorkPacketListPage = ({
         <Container>
           <Row>
             <Column sm="6" direction="row">
-              <PageTitle id={`__${id}_Title`} title={pageTitle} subTitle="Advanced search" icon="FilterSolid" />
+              <PageTitle
+                id={`__${id}_Title`}
+                title={pageTitle}
+                subTitle="Advanced search"
+                icon="FilterSolid"
+                loading={loading}
+              />
             </Column>
             <Column sm="6" right>
               <Text size="large" right>
@@ -101,9 +103,10 @@ export const WorkPacketListPage = ({
         pollingQuery={pollingQuery}
         getItems={getItems}
         tableFilters={tableFilters}
-        onItemsListChange={(data, loading) => {
+        onLoading={setLoading}
+        onItemsListChange={(data) => {
           const total = getTotal(data);
-          setTableMeta({ count: total, loading });
+          setTotalRecords(total);
         }}
       />
       {renderDetailsPanel()}

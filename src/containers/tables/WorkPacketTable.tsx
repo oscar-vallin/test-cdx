@@ -33,7 +33,8 @@ type WorkPacketParams = {
   getItems: (data: any) => any[];
   tableFilters: TableFiltersType;
   useFileStatusDetailsPanel?: UseFileStatusDetailsPanel;
-  onItemsListChange?: (data: any, loading: boolean) => void;
+  onLoading: (loading: boolean) => void;
+  onItemsListChange?: (data: any) => void;
   setContextualTitle?: (title: string) => void;
   routeId?: string;
 };
@@ -45,6 +46,7 @@ export const WorkPacketTable = ({
   pollingQuery,
   getItems,
   tableFilters,
+  onLoading,
   onItemsListChange,
   useFileStatusDetailsPanel,
   routeId,
@@ -71,17 +73,6 @@ export const WorkPacketTable = ({
     // So we have to do this hack where we read the start date and end date parameters from the
     // url every time and not use any of the utilities we have to do so.
 
-    // const startDate = yyyyMMdd(tableFilters.startDate.value);
-    // const endDate = yyyyMMdd(tableFilters.endDate.value);
-    /*
-    const urlParams = new URLSearchParams(window.location.search);
-    const startDate = urlParams.get('startDate');
-    const endDate = urlParams.get('endDate');
-
-    history.push(
-      `/file-status/${workOrderId}?orgSid=${orgSid}&fsOrgSid=${fsOrgSid}&startDate=${startDate}&endDate=${endDate}${hash}`
-    );
-    */
     const hash = tab ? `#${tab}` : '';
     const xParams = {
       workOrderId: workOrderId ?? '',
@@ -185,9 +176,10 @@ export const WorkPacketTable = ({
   }, [orgSid, tableFilters.pagingParams, lastUpdated]);
 
   useEffect(() => {
+    onLoading(loading);
     if (!loading) {
       if (onItemsListChange) {
-        onItemsListChange(data, loading);
+        onItemsListChange(data);
       }
       const transFormedItems = getItems(data);
       setItems(transFormedItems);

@@ -6,7 +6,7 @@ import { NullHandling, SortDirection, useWpTransmissionsLazyQuery, WpTransmissio
 import { tableFiltersToQueryParams, TableFiltersType } from 'src/hooks/useTableFilters';
 import { DownloadLink } from 'src/containers/tables/WorkPacketTable.styles';
 import { useOrgSid } from 'src/hooks/useOrgSid';
-import { TableMetaData, WorkPacketListPage } from 'src/pages/WorkPacket/WorkPacketListPage';
+import { WorkPacketListPage } from 'src/pages/WorkPacket/WorkPacketListPage';
 
 export const TransmissionsPage = () => {
   const { orgSid } = useOrgSid();
@@ -23,19 +23,15 @@ export const TransmissionsPage = () => {
 
   const getTotal = (data) => data?.wpTransmissions?.paginationInfo?.totalElements ?? 0;
 
-  const renderTotal = (tableMeta: TableMetaData) => {
-    if (!tableMeta.loading && tableMeta.count !== null) {
-      return <span>{tableMeta.count > 0 ? `${tableMeta.count} results found` : 'No results found'}</span>;
-    }
-
-    return <span />;
+  const renderTotal = (totalRecords: number) => {
+    return <span>{totalRecords > 0 ? `${totalRecords} results found` : 'No results found'}</span>;
   };
 
-  const renderDownloadLink = (tableMeta: TableMetaData, tableFilters: TableFiltersType): ReactElement => {
+  const renderDownloadLink = (totalRecords: number, tableFilters: TableFiltersType): ReactElement => {
     const graphQLUrl = process.env.REACT_APP_API_SERVER;
     const serverUrl = graphQLUrl?.replace('/graphql', '') ?? '';
 
-    if (!tableMeta.loading && tableMeta.count > 0) {
+    if (totalRecords > 0) {
       const filterString = tableFiltersToQueryParams(tableFilters);
       return (
         <DownloadLink
@@ -51,11 +47,11 @@ export const TransmissionsPage = () => {
     return <span />;
   };
 
-  const renderTotalRecords = (tableMeta: TableMetaData, tableFilters: TableFiltersType) => {
+  const renderTotalRecords = (totalRecords: number, tableFilters: TableFiltersType) => {
     return (
       <>
-        {renderDownloadLink(tableMeta, tableFilters)}
-        {renderTotal(tableMeta)}
+        {renderDownloadLink(totalRecords, tableFilters)}
+        {renderTotal(totalRecords)}
       </>
     );
   };

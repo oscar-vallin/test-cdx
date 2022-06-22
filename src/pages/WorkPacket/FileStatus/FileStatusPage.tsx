@@ -12,7 +12,7 @@ import { WorkPacketColumn } from 'src/containers/tables/WorkPacketColumns';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { tableFiltersToQueryParams, TableFiltersType } from 'src/hooks/useTableFilters';
 import { DownloadLink } from 'src/containers/tables/WorkPacketTable.styles';
-import { TableMetaData, WorkPacketListPage } from '../WorkPacketListPage';
+import { WorkPacketListPage } from '../WorkPacketListPage';
 
 export const FileStatusPage = () => {
   const { orgSid } = useOrgSid();
@@ -29,19 +29,15 @@ export const FileStatusPage = () => {
 
   const getTotal = (data) => data?.workPacketStatuses?.paginationInfo?.totalElements ?? 0;
 
-  const renderTotal = (tableMeta: TableMetaData): ReactElement => {
-    if (!tableMeta.loading && tableMeta.count !== null) {
-      return <span>{tableMeta.count > 0 ? `${tableMeta.count} results found` : 'No results found'}</span>;
-    }
-
-    return <span />;
+  const renderTotal = (totalRecords: number): ReactElement => {
+    return <span>{totalRecords > 0 ? `${totalRecords} results found` : 'No results found'}</span>;
   };
 
-  const renderDownloadLink = (tableMeta: TableMetaData, tableFilters: TableFiltersType): ReactElement => {
+  const renderDownloadLink = (totalRecords: number, tableFilters: TableFiltersType): ReactElement => {
     const graphQLUrl = process.env.REACT_APP_API_SERVER;
     const serverUrl = graphQLUrl?.replace('/graphql', '') ?? '';
 
-    if (!tableMeta.loading && tableMeta.count > 0) {
+    if (totalRecords > 0) {
       const filterString = tableFiltersToQueryParams(tableFilters);
       return (
         <DownloadLink
@@ -57,11 +53,11 @@ export const FileStatusPage = () => {
     return <span />;
   };
 
-  const renderTotalRecords = (tableMeta: TableMetaData, tableFilters: TableFiltersType) => {
+  const renderTotalRecords = (totalRecords: number, tableFilters: TableFiltersType) => {
     return (
       <>
-        {renderDownloadLink(tableMeta, tableFilters)}
-        {renderTotal(tableMeta)}
+        {renderDownloadLink(totalRecords, tableFilters)}
+        {renderTotal(totalRecords)}
       </>
     );
   };

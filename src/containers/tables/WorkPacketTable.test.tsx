@@ -1,7 +1,7 @@
 import { WorkPacketTable } from './WorkPacketTable';
 import { shallowWithTheme } from 'src/utils/testUtils';
 import { WorkPacketColumn } from './WorkPacketColumns';
-import { SortDirection, useWorkPacketStatusesLazyQuery } from 'src/data/services/graphql';
+import { SortDirection } from 'src/data/services/graphql';
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -30,36 +30,9 @@ const defaultProps = {
       ignoreCase: true,
     },
   ],
-  onItemsListChange: () => {},
+  onLoading: jest.fn(),
+  onItemsListChange: jest.fn(),
 };
-
-const mocks: any[] = [
-  {
-    request: {
-      query: useWorkPacketStatusesLazyQuery,
-      variables: {
-        orgSid: '-1',
-        searchText: '',
-        dateRange: { rangeStart: new Date().toDateString, rangeEnd: new Date().toDateString },
-        pageableInput: {
-          pageNumber: 0,
-          pageSize: 100,
-          sort: [
-            {
-              property: 'timestamp',
-              direction: 'DESC',
-              nullHandling: 'NULLS_FIRST',
-              ignoreCase: true,
-            },
-          ],
-        },
-      },
-    },
-    result: {
-      data: {},
-    },
-  },
-];
 
 describe('Work Packet Table Container Testing Unit...', () => {
   const mountedComponent = shallowWithTheme(
