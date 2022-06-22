@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Spinner } from '@fluentui/react';
 import { device } from 'src/styles/GlobalStyles';
 
 export const SubTitle = styled.span`
@@ -8,3 +9,7 @@ export const SubTitle = styled.span`
     display: inline;
   }
 `;
+
+export const PaddedSpinner = styled(Spinner)`
+  margin-right: 9px;
+`
