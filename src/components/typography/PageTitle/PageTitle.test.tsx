@@ -29,6 +29,6 @@ describe('PageTitle', () => {
 
   it('Loading Spinner', () => {
     const wrapper = shallow(<PageTitle id="__Page_Title" title="Page Title" subTitle="SubSub" icon="FavoriteStar" loading={true} />);
-    expect(wrapper.find('StyledSpinnerBase')).toHaveLength(1);
+    expect(wrapper.find('Styled(StyledSpinnerBase)')).toHaveLength(1);
   });
 });
