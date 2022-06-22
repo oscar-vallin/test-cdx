@@ -11,7 +11,6 @@ const defaultProps = {
 };
 
 describe('Schedule Subheader Test...', () => {
-
   it('Month View', () => {
     const wrapper = mountWithTheme(<ScheduleSubHeader {...defaultProps} />);
 
@@ -31,7 +30,7 @@ describe('Schedule Subheader Test...', () => {
     const onChangeView = jest.fn();
 
     const wrapper = mountWithTheme(
-      <ScheduleSubHeader {...defaultProps} currentView="week" onChangeView={onChangeView} onChangeDate={onChangeDate}/>
+      <ScheduleSubHeader {...defaultProps} currentView="week" onChangeView={onChangeView} onChangeDate={onChangeDate} />
     );
 
     expect(wrapper.find('span[id^="__MonthSubHeader"]')).toHaveLength(0);
@@ -54,5 +53,4 @@ describe('Schedule Subheader Test...', () => {
 
     expect(wrapper.find('div[id="__SubHeader"]').text()).toEqual('Jun 21Tue');
   });
-
 });

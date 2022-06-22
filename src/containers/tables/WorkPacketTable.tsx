@@ -89,7 +89,7 @@ export const WorkPacketTable = ({
       tab: tab ?? 'enrollment',
       redirectUrl: true,
     };
-    history.replace(QueryParams.merge(location, xParams));
+    history.replace(QueryParams.merge(window.location, xParams));
     useFileStatusDetailsPanel?.showPanel(workOrderId ?? '', fsOrgSid ?? '', hash);
   };
 

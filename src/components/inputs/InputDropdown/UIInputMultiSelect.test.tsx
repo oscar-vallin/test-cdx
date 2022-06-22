@@ -1,7 +1,12 @@
 import { ErrorSeverity, UiSelectManyField } from 'src/data/services/graphql';
 import { UIInputMultiSelect } from 'src/components/inputs/InputDropdown/index';
 import { mountWithTheme } from 'src/utils/testUtils';
-import { expectInfoIcon, expectInfoWarningIcons, expectNoIcons, uiOptions } from 'src/components/inputs/InputDropdown/testData';
+import {
+  expectInfoIcon,
+  expectInfoWarningIcons,
+  expectNoIcons,
+  uiOptions,
+} from 'src/components/inputs/InputDropdown/testData';
 
 const fullField: UiSelectManyField = {
   value: [

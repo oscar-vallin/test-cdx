@@ -1,7 +1,12 @@
 import { ErrorSeverity, UiSelectOneField } from 'src/data/services/graphql';
 import { UIInputSelectOne } from './UIInputSelectOne';
 import { mountWithTheme } from 'src/utils/testUtils';
-import { expectInfoIcon, expectInfoWarningIcons, expectNoIcons, uiOptions } from 'src/components/inputs/InputDropdown/testData';
+import {
+  expectInfoIcon,
+  expectInfoWarningIcons,
+  expectNoIcons,
+  uiOptions,
+} from 'src/components/inputs/InputDropdown/testData';
 
 const fullField: UiSelectOneField = {
   value: {

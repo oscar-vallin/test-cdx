@@ -18,36 +18,36 @@ const DataNodeTransmissions = ({ data, id }) => {
   }
 
   if (data.protocol === 'ARCHIVE') {
-      return(
-        <Node
+    return (
+      <Node
         content={
             <>
             <Handle style={{width: '2px', top: 1}} type='target' id={id} position={Position.Top} />
             <Container>
-            <Row>
-            <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
-                <FontIcon 
-                style={{
-                    color: '#757575',
-                    fontSize: '18px',
-                    cursor: 'pointer',
-                    width: "35px",
-                    height: "35px",
-                    border: "2px solid #757575",
-                    borderRadius: '10px',
-                    padding: "8px 1px 7px 0px",
-                    textAlign: "center"
-                }}
+              <Row>
+                <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
+                  <FontIcon
+                    style={{
+                      color: '#757575',
+                      fontSize: '18px',
+                      cursor: 'pointer',
+                      width: '35px',
+                      height: '35px',
+                      border: '2px solid #757575',
+                      borderRadius: '10px',
+                      padding: '8px 1px 7px 0px',
+                      textAlign: 'center',
+                    }}
                     iconName="Archive"
-                />
-            <Text style={{lineHeight: '36px'}}>[archive]</Text>
-            </Stack>
-            </Row>
+                  />
+                  <Text style={{ lineHeight: '36px' }}>[archive]</Text>
+                </Stack>
+              </Row>
             </Container>
-            </>
+          </>
         }
-    />
-   )
+      />
+    );
   }
   return (
     <Node

@@ -1,37 +1,18 @@
-import { UserAccountForm } from 'src/data/services/graphql';
 import { AccessManagementWizardBody } from 'src/pages/Admin/Users/AccessManagementWizardBody';
 import { WizardBody } from 'src/layouts/Panels/Panels.styles';
+import { SectionAccessManagementProps } from 'src/pages/Admin/Users/WizardTypes';
 import CreateUsersFooter from './CreateUsersFooter';
 
-type SectionAccessProps = {
-  form?: UserAccountForm;
-  onPrev: () => void;
-  onNext: () => void;
-  saveOptions: (sids: string[]) => void;
-};
-
-const SectionAccessManagement = ({ form, onPrev, onNext, saveOptions }: SectionAccessProps) => {
-  const handlePrev = () => {
-    onPrev();
-    return null;
-  };
-
-  const handleNext = () => {
-    onNext();
-    return null;
-  };
-
+const SectionAccessManagement = ({ form, onPrev, onNext, saveOptions }: SectionAccessManagementProps) => {
   return (
     <>
       <WizardBody>
         <AccessManagementWizardBody form={form} saveOptions={saveOptions} />
       </WizardBody>
-      <CreateUsersFooter onPrev={handlePrev} onNext={handleNext} />
+      <CreateUsersFooter onPrev={onPrev} onNext={onNext} />
     </>
   );
 };
-
-// SectionAccessManagement.defaultProps = defaultProps;
 
 export { SectionAccessManagement };
 export default SectionAccessManagement;

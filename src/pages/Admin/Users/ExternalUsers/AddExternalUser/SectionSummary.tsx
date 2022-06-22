@@ -1,15 +1,7 @@
 import { ReactElement } from 'react';
-
-import { UserAccountForm } from 'src/data/services/graphql';
 import { SummaryWizardBody } from 'src/pages/Admin/Users/SummaryWizardBody';
+import { SectionSummaryPropsType } from 'src/pages/Admin/Users/WizardTypes';
 import AddExternalUsersAccessFooter from './AddExternalUsersAccessFooter';
-
-type SectionSummaryPropsType = {
-  form: UserAccountForm;
-  onPrev: () => void;
-  onSubmit: () => void;
-  isProcessing?: boolean;
-};
 
 const SectionSummary = ({ form, onPrev, onSubmit, isProcessing }: SectionSummaryPropsType): ReactElement => {
   const handlePrev = () => {

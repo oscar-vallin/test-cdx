@@ -1,7 +1,6 @@
 import { mountWithTheme } from 'src/utils/testUtils';
 import { ScheduleHeader } from './ScheduleHeader';
 
-
 const onChangeView = jest.fn();
 
 const defaultProps = {
@@ -29,8 +28,7 @@ const PREV_DAY_BUTTON = 'ButtonAction[id="ButtonPrev"]';
 const NEXT_DAY_BUTTON = 'ButtonAction[id="ButtonNext"]';
 
 describe('ButtonAction', () => {
-
-  it ('Month View', () => {
+  it('Month View', () => {
     const onChangeDate = jest.fn();
 
     const wrapper = mountWithTheme(<ScheduleHeader {...defaultProps} onChangeDate={onChangeDate} />);
@@ -60,10 +58,10 @@ describe('ButtonAction', () => {
     expect(onChangeView).toHaveBeenCalled();
   });
 
-  it ('Week View', () => {
+  it('Week View', () => {
     const onChangeDate = jest.fn();
 
-    const wrapper = mountWithTheme(<ScheduleHeader {...defaultProps} currentView="week" onChangeDate={onChangeDate}/>);
+    const wrapper = mountWithTheme(<ScheduleHeader {...defaultProps} currentView="week" onChangeDate={onChangeDate} />);
 
     wrapper.find(WEEK_BUTTON).simulate('click');
     expect(wrapper.find(MONTH_BUTTON).props().selected).toEqual(false);
@@ -85,10 +83,10 @@ describe('ButtonAction', () => {
     expect(wrapper.find(MONTH_PICKER)).toHaveLength(1);
   });
 
-  it ('Day View', () => {
+  it('Day View', () => {
     const onChangeDate = jest.fn();
 
-    const wrapper = mountWithTheme(<ScheduleHeader {...defaultProps} currentView="day" onChangeDate={onChangeDate}/>);
+    const wrapper = mountWithTheme(<ScheduleHeader {...defaultProps} currentView="day" onChangeDate={onChangeDate} />);
 
     wrapper.find(DAY_BUTTON).simulate('click');
     expect(wrapper.find(MONTH_BUTTON).props().selected).toEqual(false);
@@ -110,7 +108,7 @@ describe('ButtonAction', () => {
     expect(wrapper.find(MONTH_PICKER)).toHaveLength(1);
   });
 
-  it ('Today Button', () => {
+  it('Today Button', () => {
     const onChangeDate = jest.fn();
 
     const wrapper = mountWithTheme(<ScheduleHeader {...defaultProps} onChangeDate={onChangeDate} />);
@@ -119,5 +117,4 @@ describe('ButtonAction', () => {
     wrapper.find(TODAY_BUTTON).simulate('click');
     expect(onChangeDate).toBeCalled();
   });
-
 });

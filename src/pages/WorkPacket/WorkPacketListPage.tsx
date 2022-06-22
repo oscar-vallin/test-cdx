@@ -1,19 +1,45 @@
-import React, { useState, useEffect } from 'react';
-import { ROUTES } from 'src/data/constants/RouteConstants';
-import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
+import React, { useEffect, useState } from 'react';
+import { RouteType } from 'src/data/constants/RouteConstants';
 import { Column, Container, Row } from 'src/components/layouts';
 import { PageTitle, Text } from 'src/components/typography';
 import { PageHeader } from 'src/containers/headers/PageHeader';
-
+import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { WorkPacketTable } from 'src/containers/tables/WorkPacketTable';
+import { SortOrderInput } from 'src/data/services/graphql';
 import { WorkPacketColumn } from 'src/containers/tables/WorkPacketColumns';
-import { NullHandling, SortDirection, useWpProcessErrorsLazyQuery, WorkPacketStatus } from 'src/data/services/graphql';
-import { useTableFilters } from 'src/hooks/useTableFilters';
+import { TableFiltersType, useTableFilters } from 'src/hooks/useTableFilters';
 import { useFileStatusDetailsPanel } from 'src/pages/FileStatusDetails/useFileStatusDetailsPanel';
 import { FileStatusDetailsPanel } from 'src/pages/FileStatusDetails';
 
-const _ErrorsPage = () => {
-  const [tableMeta, setTableMeta] = useState({ count: 0, loading: true });
+export type TableMetaData = {
+  count: number;
+  loading: boolean;
+};
+
+type WorkPacketListPageType = {
+  id: string;
+  pageRoute: RouteType;
+  columns: WorkPacketColumn[];
+  defaultSort: SortOrderInput[];
+  pageDataQuery: any;
+  getItems: (any) => any[];
+  getTotal: (any) => number;
+  pollingQuery?: any;
+  renderTotalRecords?: (tableMeta: TableMetaData, tableFilters: TableFiltersType) => JSX.Element;
+};
+
+export const WorkPacketListPage = ({
+  id,
+  pageRoute,
+  columns,
+  defaultSort,
+  pageDataQuery,
+  getItems,
+  getTotal,
+  pollingQuery,
+  renderTotalRecords,
+}: WorkPacketListPageType) => {
+  const [tableMeta, setTableMeta] = useState<TableMetaData>({ count: 0, loading: true });
   const [pageTitle, setPageTitle] = useState('');
   const fileStatusDetailsPanel = useFileStatusDetailsPanel();
 
@@ -26,29 +52,19 @@ const _ErrorsPage = () => {
     if (hash && workOrderId && fsOrgSid) {
       fileStatusDetailsPanel?.showPanel(workOrderId, fsOrgSid, hash);
     }
-  }, []);
+  }, [fileStatusDetailsPanel]);
 
-  const tableFilters = useTableFilters('Extract Name, Status, Vendor, etc.', [
-    {
-      property: 'timestamp',
-      direction: SortDirection.Desc,
-      nullHandling: NullHandling.NullsFirst,
-      ignoreCase: true,
-    },
-  ]);
+  const tableFilters = useTableFilters('Extract Name, Status, Vendor, etc.', defaultSort);
 
   const handleSetPageTitle = (title: string) => {
     setPageTitle(title);
   };
 
-  const mapData = (data) => {
-    const items: WorkPacketStatus[] = [];
-    data?.wpProcessErrors?.nodes?.forEach((value) => {
-      if (value) {
-        items.push(value);
-      }
-    });
-    return items;
+  const renderUpperRight = () => {
+    if (renderTotalRecords) {
+      return <span id="__PageTotal">{renderTotalRecords(tableMeta, tableFilters)}</span>;
+    }
+    return null;
   };
 
   const renderDetailsPanel = () => {
@@ -57,19 +73,18 @@ const _ErrorsPage = () => {
     }
     return null;
   };
+
   return (
-    <LayoutDashboard id="PageErrors" menuOptionSelected={ROUTES.ROUTE_ERRORS.API_ID}>
-      <PageHeader id="__ErrorsPageHeader">
+    <LayoutDashboard id={`__Page_${id}`} menuOptionSelected={pageRoute.API_ID}>
+      <PageHeader id={`__${id}Header`}>
         <Container>
           <Row>
             <Column sm="6" direction="row">
-              <PageTitle id="__Errors_Title" title={pageTitle} subTitle="Advanced search" icon="FilterSolid" />
+              <PageTitle id={`__${id}_Title`} title={pageTitle} subTitle="Advanced search" icon="FilterSolid" />
             </Column>
             <Column sm="6" right>
               <Text size="large" right>
-                {!tableMeta.loading && tableMeta.count !== null && tableMeta.count > 0
-                  ? `${tableMeta.count} results found`
-                  : 'No results found'}
+                {renderUpperRight()}
               </Text>
             </Column>
           </Row>
@@ -77,22 +92,17 @@ const _ErrorsPage = () => {
       </PageHeader>
 
       <WorkPacketTable
-        id="TableFileStatus"
         useFileStatusDetailsPanel={fileStatusDetailsPanel}
+        id={`__Table${id}`}
         setContextualTitle={handleSetPageTitle}
-        cols={[
-          WorkPacketColumn.START_TIME,
-          WorkPacketColumn.INBOUND_FILENAME,
-          WorkPacketColumn.STEP,
-          WorkPacketColumn.PLAN_SPONSOR,
-          WorkPacketColumn.VENDOR,
-          WorkPacketColumn.MESSAGE,
-        ]}
-        lazyQuery={useWpProcessErrorsLazyQuery}
-        getItems={mapData}
+        routeId={pageRoute.ID}
+        cols={columns}
+        lazyQuery={pageDataQuery}
+        pollingQuery={pollingQuery}
+        getItems={getItems}
         tableFilters={tableFilters}
         onItemsListChange={(data, loading) => {
-          const total = data?.wpProcessErrors?.paginationInfo?.totalElements ?? 0;
+          const total = getTotal(data);
           setTableMeta({ count: total, loading });
         }}
       />
@@ -100,7 +110,3 @@ const _ErrorsPage = () => {
     </LayoutDashboard>
   );
 };
-
-const ErrorsPage = React.memo(_ErrorsPage);
-
-export { ErrorsPage };
