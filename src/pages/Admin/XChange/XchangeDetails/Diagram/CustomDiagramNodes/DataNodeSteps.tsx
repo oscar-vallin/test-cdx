@@ -3,24 +3,34 @@ import { Handle, Position } from 'react-flow-renderer';
 import React, { memo } from 'react';
 import { Container, Row } from 'src/components/layouts';
 import Node from './Node';
+import { StyledQualifier } from '../../XchangeDetailsPage.styles';
 
 const DataNodeSteps = ({ data, id }) => {
   let iconName = data.icon;
+  const { qualifier } = data;
   const subTitle: string = data.subTitle ?? '';
   if (iconName === 'Column Arrow Right') {
     iconName = 'PaddingRight';
   } else if (iconName === 'Brain Circuit') {
-    iconName = 'AccessTime';
+    iconName = 'BrainCircuit';
   }
 
   const styles = {
     lineHeight: subTitle.trim() === '' ? '36px' : '18px',
   };
+  let width = '48px';
+  let color = 'blue';
+
+  if (qualifier === 'TEST') {
+    color = 'orange';
+  } else if (qualifier === 'PROD-OE') {
+    width = '60px';
+  }
   return (
     <Node
       content={
         <>
-        <Handle style={{width: '0px'}} type='target' id={id} position={Position.Top} />
+        <Handle style={{width: '2px', top: 1}} type='target' id={id} position={Position.Top} />
         <Container>
           <Row>
             <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
@@ -41,8 +51,11 @@ const DataNodeSteps = ({ data, id }) => {
             <Text style={styles}>{data.label} <br /> <span>{subTitle.trim() !== '' && <Text>{subTitle}</Text>}</span></Text>
             </Stack>
           </Row>
-          </Container>
-          <Handle style={{width: '2px'}} type="source" id={id} position={Position.Bottom} />
+        </Container>
+          <Handle style={{width: '2px', bottom: 1}} type="source" id={id} position={Position.Bottom} />
+          {qualifier && (<StyledQualifier width={width} color={color}>
+          {qualifier}
+                         </StyledQualifier>)}
         </>
       }
     />

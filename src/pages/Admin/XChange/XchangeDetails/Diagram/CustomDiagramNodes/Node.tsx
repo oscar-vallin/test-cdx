@@ -18,7 +18,7 @@ const style: StyledProps | undefined = {
     backgroundColor: '#fff',
     borderRadius: '50px',
     border: '2px solid #8f8f8f',
-    width: '270px',
+    width: '250px',
     height: '55px',
   },
 };

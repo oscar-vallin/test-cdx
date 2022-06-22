@@ -18,7 +18,7 @@ export function InitialNodes(data) {
 
     values['id'] = step.key;
     values['type'] = 'dataNodeSteps';
-    values['data'] = { label: step['title'], icon: step['icon'], subTitle: step.subTitle };
+    values['data'] = { label: step['title'], icon: step['icon'], subTitle: step.subTitle, qualifier: step.qualifier };
     values['position'] = { x: positions[index]['x'], y: positions[index]['y'] };
 
     return values;
@@ -26,7 +26,6 @@ export function InitialNodes(data) {
 
   const initialTransmissions = data.transmissions.map((transmission, index: number) => {
     const values = {};
-
     values['id'] = transmission.key;
     values['type'] = 'dataNodeTransmissions';
     values['data'] = {

@@ -46,15 +46,16 @@ type DemoCanvasWidgetProps = {
 export const StyledSFTP = styled.rect`
   x: 10;
   y: 10;
-  width: 50px;
-  height: 100;
-  rx: 40;
-  ry: 20;
+  width: 40px;
+  height: 25px;
+  rx: 10;
+  ry: 10;
   border: 2px solid #666666;
-  border-radius: 10px;
+  border-radius: 3px;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 6px;
 `;
 
 export const StyledHorizontalButtons = styled.div`
@@ -71,5 +72,28 @@ export const StyledText = styled(Text)`
   font-size: 18px;
   font-weight: bold;
   margin-left: 20px;
-  height: 200px;
+  height: 190px;
 `;
+
+export const StyledQualifier = styled.div<StyledQualifierProps>`
+  background-color: #fff;
+  width: ${({ width }) => width};
+  height: 22px;
+  border-top-left-radius: 5em 5em;
+  border-top-right-radius: 5em 5em;
+  border-bottom-right-radius: 5em 5em;
+  border-bottom-left-radius: 5em 5em;
+  border: solid 1px ${({ color }) => color};
+  position: absolute;
+  top: 43px;
+  left: 180px;
+  text-align: center;
+  color: ${({ color }) => color};
+  font-size: 12px;
+  font-weight: 500;
+`;
+
+type StyledQualifierProps = {
+  width?: string;
+  color?: string;
+};

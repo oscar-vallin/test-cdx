@@ -3,15 +3,26 @@ import { Handle, Position } from 'react-flow-renderer';
 import React, { memo } from 'react';
 import { Container, Row } from 'src/components/layouts';
 import Node from './Node';
-import { StyledSFTP } from '../../XchangeDetailsPage.styles';
+import { StyledQualifier, StyledSFTP } from '../../XchangeDetailsPage.styles';
 
 const DataNodeTransmissions = ({ data, id }) => {
+  const { qualifier } = data;
+
+  let width = '48px';
+  let color = 'blue';
+
+  if (qualifier === 'TEST') {
+    color = 'orange';
+  } else if (qualifier === 'PROD-OE') {
+    width = '60px';
+  }
+
   if (data.protocol === 'ARCHIVE') {
       return(
         <Node
         content={
             <>
-            <Handle style={{width: '2px'}} type='target' id={id} position={Position.Top} />
+            <Handle style={{width: '2px', top: 1}} type='target' id={id} position={Position.Top} />
             <Container>
             <Row>
             <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
@@ -42,17 +53,20 @@ const DataNodeTransmissions = ({ data, id }) => {
     <Node
       content={
           <>
-        <Handle style={{width: '2px'}} type='target' id={id} position={Position.Top} />
+        <Handle style={{width: '0px', top: 1}} type='target' id={id} position={Position.Top} />
         <Container>
           <Row>
           <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
               <StyledSFTP>
-                  <Text style={{fontWeight: 'bold', color: "#666666"}}>{data.protocol}</Text>
+                  <Text style={{fontWeight: 700, color: "#666666"}}>{data.protocol}</Text>
               </StyledSFTP>
-            <Text style={{lineHeight: '36px'}}>{data.host}</Text>
+            <Text style={{lineHeight: '38px'}}>{data.host}</Text>
             </Stack>
           </Row>
         </Container>
+        {qualifier && (<StyledQualifier color={color} width={width}>
+          {qualifier}
+          </StyledQualifier>)}
         </>
       }
     />
