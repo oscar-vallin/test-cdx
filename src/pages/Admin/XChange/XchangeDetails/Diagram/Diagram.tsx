@@ -42,6 +42,10 @@ const Diagram = ({ data }) => {
               edges={edges}
               nodeTypes={nodeTypes}
               zoomOnScroll={false}
+              panOnScroll={false}
+              preventScrolling={false}
+              zoomOnDoubleClick={false}
+              elementsSelectable={false}
               onNodesChange={onNodesChange}
               onEdgesChange={onEdgesChange}
               onConnect={onConnect}
