@@ -279,7 +279,7 @@ export const WorkPacketTable = ({
           >
             {renderTable()}
           </div>
-          <Paginator pagingInfo={pagingInfo} onPageChange={onPageChange} />
+          <Paginator id="__Paginator" pagingInfo={pagingInfo} onPageChange={onPageChange} />
         </Box>
       </Container>
     </>

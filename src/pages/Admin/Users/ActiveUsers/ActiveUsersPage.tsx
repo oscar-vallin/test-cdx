@@ -225,7 +225,7 @@ const ActiveUsersPage = () => {
             searchAllOrgs={searchAllOrgsFilter}
           />
         )}
-        <Paginator pagingInfo={userService.pagingInfo} onPageChange={userService.onPageChange} />
+        <Paginator id="__Paginator" pagingInfo={userService.pagingInfo} onPageChange={userService.onPageChange} />
       </>
     );
   };

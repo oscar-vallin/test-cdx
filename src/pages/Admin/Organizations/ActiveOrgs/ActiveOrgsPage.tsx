@@ -234,7 +234,7 @@ const ActiveOrgsPage = () => {
           layoutMode={DetailsListLayoutMode.justified}
           isHeaderVisible
         />
-        <Paginator pagingInfo={pagingInfo} onPageChange={onPageChange} />
+        <Paginator id="__Paginator" pagingInfo={pagingInfo} onPageChange={onPageChange} />
       </>
     );
   };
