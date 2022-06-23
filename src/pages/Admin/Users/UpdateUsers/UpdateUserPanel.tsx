@@ -23,7 +23,7 @@ import { MigrateUserDialog } from 'src/pages/Admin/Users/UpdateUsers/MigrateUser
 import { useWizardTabs } from 'src/pages/Admin/Users/useWizardTabs';
 import SectionAccessManagement from './SectionAccessManagement';
 import { SectionAccount } from './SectionAccount';
-import { ActiveIcon, InactiveIcon } from './UpdateUserPanel.styles';
+import { ActiveIcon, EllipsisTitle, InactiveIcon } from './UpdateUserPanel.styles';
 
 type UpdateUserPanelProps = {
   useUpdateUserPanel: UseUpdateUserPanel;
@@ -361,7 +361,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
       <Column lg="6">
         <Stack horizontal styles={{ root: { height: 44 } }}>
           <PanelTitle id="__UserUpdate_Panel_Title" variant="bold" size="large">
-            {userName()}
+            <EllipsisTitle>{userName()}</EllipsisTitle>
             {useUpdateUserPanel.userAccountForm.active?.value ? (
               <ActiveIcon iconName="CompletedSolid" title="Active" />
             ) : (
