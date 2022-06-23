@@ -18,4 +18,3 @@ export const EllipsisTitle = styled.span`
   text-overflow: ellipsis;
   width: 187px;
 `;
-

@@ -21,8 +21,8 @@ const DataNodeTransmissions = ({ data, id }) => {
     return (
       <Node
         content={
-            <>
-            <Handle style={{width: '2px', top: 1}} type='target' id={id} position={Position.Top} />
+          <>
+            <Handle style={{ width: '2px', top: 1 }} type="target" id={id} position={Position.Top} />
             <Container>
               <Row>
                 <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
@@ -52,21 +52,23 @@ const DataNodeTransmissions = ({ data, id }) => {
   return (
     <Node
       content={
-          <>
-        <Handle style={{width: '0px', top: 1}} type='target' id={id} position={Position.Top} />
-        <Container>
-          <Row>
-          <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
-              <StyledSFTP>
-                  <Text style={{fontWeight: 700, color: "#666666"}}>{data.protocol}</Text>
-              </StyledSFTP>
-            <Text style={{lineHeight: '38px'}}>{data.host}</Text>
-            </Stack>
-          </Row>
-        </Container>
-        {qualifier && (<StyledQualifier color={color} width={width}>
-          {qualifier}
-          </StyledQualifier>)}
+        <>
+          <Handle style={{ width: '0px', top: 1 }} type="target" id={id} position={Position.Top} />
+          <Container>
+            <Row>
+              <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
+                <StyledSFTP>
+                  <Text style={{ fontWeight: 700, color: '#666666' }}>{data.protocol}</Text>
+                </StyledSFTP>
+                <Text style={{ lineHeight: '38px' }}>{data.host}</Text>
+              </Stack>
+            </Row>
+          </Container>
+          {qualifier && (
+            <StyledQualifier color={color} width={width}>
+              {qualifier}
+            </StyledQualifier>
+          )}
         </>
       }
     />

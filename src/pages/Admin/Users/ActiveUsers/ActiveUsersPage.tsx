@@ -144,7 +144,9 @@ const ActiveUsersPage = () => {
         ? 'There are no active users in this organization. Click the button below to create a new user.'
         : 'There are no active users in this organization.';
     }
-    return <EmptyState title="No users found" description={emptyText} actions={renderCreateButton('__Create-User-Empty')} />;
+    return (
+      <EmptyState title="No users found" description={emptyText} actions={renderCreateButton('__Create-User-Empty')} />
+    );
   };
 
   const renderBody = () => {
@@ -253,15 +255,17 @@ const ActiveUsersPage = () => {
         isOpen={isCreateUserPanelOpen}
         onCreateUser={() => {
           setSelectedItems([]);
-          userService.fetchUsers(
-            0,
-            tableFilters.pagingParams.sort,
-            lockedFilter,
-            pendingActivationFilter,
-            expiredActivationFilter,
-            searchAllOrgsFilter,
-            tableFilters.searchText.delayedValue
-          ).then();
+          userService
+            .fetchUsers(
+              0,
+              tableFilters.pagingParams.sort,
+              lockedFilter,
+              pendingActivationFilter,
+              expiredActivationFilter,
+              searchAllOrgsFilter,
+              tableFilters.searchText.delayedValue
+            )
+            .then();
         }}
         onDismiss={() => {
           setIsCreateUserPanelOpen(false);
@@ -272,15 +276,17 @@ const ActiveUsersPage = () => {
         useUpdateUserPanel={updateUserPanel}
         onUpdateUser={() => {
           setSelectedItems([]);
-          userService.fetchUsers(
-            0,
-            tableFilters.pagingParams.sort,
-            lockedFilter,
-            pendingActivationFilter,
-            expiredActivationFilter,
-            searchAllOrgsFilter,
-            tableFilters.searchText.delayedValue
-          ).then();
+          userService
+            .fetchUsers(
+              0,
+              tableFilters.pagingParams.sort,
+              lockedFilter,
+              pendingActivationFilter,
+              expiredActivationFilter,
+              searchAllOrgsFilter,
+              tableFilters.searchText.delayedValue
+            )
+            .then();
         }}
       />
 

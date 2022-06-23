@@ -12,4 +12,4 @@ export const SubTitle = styled.span`
 
 export const PaddedSpinner = styled(Spinner)`
   margin-right: 9px;
-`
+`;
