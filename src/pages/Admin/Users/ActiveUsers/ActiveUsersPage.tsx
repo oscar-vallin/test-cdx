@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { DefaultButton, Dialog, DialogFooter, DialogType, PrimaryButton, Stack } from '@fluentui/react';
+import { DefaultButton, Dialog, DialogFooter, DialogType, PrimaryButton, SearchBox, Stack } from '@fluentui/react';
 import { EmptyState } from 'src/containers/states';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Column, Container, Row } from 'src/components/layouts';
@@ -21,7 +21,6 @@ import { ROUTE_ACTIVE_USERS } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { Paginator } from 'src/components/tables/Paginator';
 import { useTableFilters } from 'src/hooks/useTableFilters';
-import { InputText } from 'src/components/inputs/InputText';
 import { UIInputCheck } from 'src/components/inputs/InputCheck';
 import { PageBody } from 'src/components/layouts/Column';
 import { UpdateUserPanel, useUpdateUserPanel } from '../UpdateUsers';
@@ -98,11 +97,11 @@ const ActiveUsersPage = () => {
     });
   };
 
-  const renderCreateButton = () => {
+  const renderCreateButton = (id: string) => {
     if (createCmd) {
       return (
         <PrimaryButton
-          id="__Create-User"
+          id={id}
           iconProps={{ iconName: 'AddFriend' }}
           ariaLabel={createCmd.label ?? undefined}
           onClick={() => {
@@ -145,7 +144,7 @@ const ActiveUsersPage = () => {
         ? 'There are no active users in this organization. Click the button below to create a new user.'
         : 'There are no active users in this organization.';
     }
-    return <EmptyState title="No users found" description={emptyText} actions={renderCreateButton()} />;
+    return <EmptyState title="No users found" description={emptyText} actions={renderCreateButton('__Create-User-Empty')} />;
   };
 
   const renderBody = () => {
@@ -160,12 +159,12 @@ const ActiveUsersPage = () => {
         >
           {tableFilters?.searchText && (
             <Column lg="6">
-              <InputText
+              <SearchBox
                 id="Active_Users_Input-Search"
-                autofocus
-                disabled={false}
-                {...tableFilters.searchText}
-                label="Search"
+                autoFocus
+                styles={{ root: { width: '100%' } }}
+                onChange={tableFilters.searchText.onChange}
+                placeholder="Search"
               />
             </Column>
           )}
@@ -232,20 +231,18 @@ const ActiveUsersPage = () => {
 
   return (
     <LayoutDashboard id="PageActiveUsers" menuOptionSelected={ROUTE_ACTIVE_USERS.API_ID}>
-      {userService.users && userService.users.length > 0 && (
-        <PageHeader id="__ActiveUsersHeader">
-          <Container>
-            <Row>
-              <Column lg="6" direction="row">
-                <PageTitle id="__Page_Title" title="Active Users" />
-              </Column>
-              <Column lg="6" right>
-                <span>{renderCreateButton()}</span>
-              </Column>
-            </Row>
-          </Container>
-        </PageHeader>
-      )}
+      <PageHeader id="__ActiveUsersHeader">
+        <Container>
+          <Row>
+            <Column lg="6" direction="row">
+              <PageTitle id="__Page_Title" title="Active Users" />
+            </Column>
+            <Column lg="6" right>
+              <span>{renderCreateButton('__Create-User')}</span>
+            </Column>
+          </Row>
+        </Container>
+      </PageHeader>
       <PageBody>
         <Container>
           <Row>{renderBody()}</Row>
@@ -256,7 +253,15 @@ const ActiveUsersPage = () => {
         isOpen={isCreateUserPanelOpen}
         onCreateUser={() => {
           setSelectedItems([]);
-          userService.fetchUsers().then();
+          userService.fetchUsers(
+            0,
+            tableFilters.pagingParams.sort,
+            lockedFilter,
+            pendingActivationFilter,
+            expiredActivationFilter,
+            searchAllOrgsFilter,
+            tableFilters.searchText.delayedValue
+          ).then();
         }}
         onDismiss={() => {
           setIsCreateUserPanelOpen(false);
@@ -267,7 +272,15 @@ const ActiveUsersPage = () => {
         useUpdateUserPanel={updateUserPanel}
         onUpdateUser={() => {
           setSelectedItems([]);
-          userService.fetchUsers().then();
+          userService.fetchUsers(
+            0,
+            tableFilters.pagingParams.sort,
+            lockedFilter,
+            pendingActivationFilter,
+            expiredActivationFilter,
+            searchAllOrgsFilter,
+            tableFilters.searchText.delayedValue
+          ).then();
         }}
       />
 
