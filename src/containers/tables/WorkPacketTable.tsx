@@ -1,14 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import {
-  ConstrainMode,
-  DetailsList,
-  DetailsListLayoutMode,
-  mergeStyleSets,
-  ScrollablePane,
-  ScrollbarVisibility,
-  SelectionMode,
-} from '@fluentui/react';
-
 import { PaginationInfo } from 'src/data/services/graphql';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { useOrgSid } from 'src/hooks/useOrgSid';
@@ -18,11 +8,11 @@ import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { useHistory } from 'react-router-dom';
 import { UseFileStatusDetailsPanel } from 'src/pages/FileStatusDetails/useFileStatusDetailsPanel';
 import { ROUTES } from 'src/data/constants/RouteConstants';
+import { ScrollableTable } from 'src/containers/tables/ScrollableTable';
 import { useQueryParams } from 'src/hooks/useQueryParams';
 import { useSortableColumns } from 'src/containers/tables/useSortableColumns';
 import { useWorkPacketColumns, WorkPacketColumn } from './WorkPacketColumns';
 import { TableFilters } from './TableFilters';
-import { EmptyState } from '../states';
 import { Box, Container } from './WorkPacketTable.styles';
 
 type WorkPacketParams = {
@@ -224,41 +214,6 @@ export const WorkPacketTable = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [apiPolling.error]);
 
-  const renderTable = () => {
-    const classNames = mergeStyleSets({
-      root: {
-        width: '100%',
-      },
-
-      headerDivider: {
-        display: 'inline-block',
-        height: '100%',
-      },
-    });
-
-    if (error) {
-      return <span id="__spanError">Error: {error?.message || 'Something went wrong'}</span>;
-    }
-
-    if (items && items.length > 0) {
-      return (
-        <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
-          <DetailsList
-            className={classNames.root}
-            items={items}
-            columns={columns}
-            selectionMode={SelectionMode.none}
-            setKey="none"
-            layoutMode={DetailsListLayoutMode.justified}
-            isHeaderVisible
-            constrainMode={ConstrainMode.unconstrained}
-          />
-        </ScrollablePane>
-      );
-    }
-
-    return <EmptyState description="No data" filled={false} />;
-  };
 
   const hasMorePages = pagingInfo?.totalPages && pagingInfo.totalPages > 1;
 
@@ -277,7 +232,7 @@ export const WorkPacketTable = ({
             id="Table_Detailed"
             style={{ width: '100%', height: `calc(100vh - ${hasMorePages ? '325px' : '250px'})` }}
           >
-            {renderTable()}
+            <ScrollableTable id={`${id}_Table`} columns={columns} items={items} error={error} />
           </div>
           <Paginator id="__Paginator" pagingInfo={pagingInfo} onPageChange={onPageChange} />
         </Box>
