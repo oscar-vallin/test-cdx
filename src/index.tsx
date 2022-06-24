@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
-import 'office-ui-fabric-react/dist/css/fabric.css';
-import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
+import { initializeIcons } from '@fluentui/react';
+import '@fluentui/react/dist/css/fabric.css';
 import { StoreProvider } from 'easy-peasy';
 
 import MetaTags from 'react-meta-tags';

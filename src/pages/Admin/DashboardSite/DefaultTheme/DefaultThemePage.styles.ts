@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
+import { ChoiceGroup } from '@fluentui/react';
 
 import { Row } from 'src/components/layouts';
 import { Card } from 'src/components/cards';

@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { ThemeProvider as FluentThemeProvider, createTheme } from '@fluentui/react';
 
-import 'office-ui-fabric-react/dist/css/fabric.css';
+import '@fluentui/react/dist/css/fabric.css';
 
 import { useCurrentUserTheme } from 'src/hooks/useCurrentUserTheme';
 import { useSessionStore } from 'src/store/SessionStore';

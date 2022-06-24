@@ -1,5 +1,5 @@
 import { ReactElement, ReactNode } from 'react';
-import { useConst } from '@uifabric/react-hooks';
+import { useConst } from '@fluentui/react-hooks';
 import { IContextualMenuProps, IContextualMenuItem } from '@fluentui/react';
 import { StyledButton } from './ButtonContextual.styles';
 

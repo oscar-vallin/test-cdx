@@ -8,7 +8,7 @@
     "@babel/plugin-transform-modules-commonjs": "^7.15.0",
     "@fluentui/react": "8.52.1",
     "@fluentui/react-icons": "1.1.145",
-    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^12.0.0",
     "@testing-library/user-event": "^12.1.10",
     "@types/jest": "^26.0.15",
@@ -29,7 +29,6 @@
     "enzyme-adapter-react-16": "^1.15.6",
     "graphql": "^15.3.0",
     "lodash": "^4.17.21",
-    "office-ui-fabric-react": "7.181.1",
     "query-string": "^7.0.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
@@ -94,6 +93,7 @@
     "@babel/core": "^7.18.5",
     "@babel/plugin-transform-react-jsx": "^7.12.5",
     "@babel/preset-env": "^7.18.2",
+    "@testing-library/react-hooks": "^8.0.1",
     "@types/babel__core": "^7.1.19",
     "@types/babel__preset-env": "^7.9.2",
     "@types/enzyme": "^3.10.9",
@@ -189,7 +189,6 @@
     "moduleNameMapper": {
       "^react-native$": "react-native-web",
       "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy",
-      "office-ui-fabric-react/lib/(.*)$": "office-ui-fabric-react/lib-commonjs/$1",
       "src/pages/(.*)$": "<rootDir>/src/pages/$1"
     }
   },

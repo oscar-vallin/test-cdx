@@ -1733,14 +1733,6 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
-"@fluentui/date-time-utilities@^7.9.1":
-  version "7.9.1"
-  resolved "https://registry.npmjs.org/@fluentui/date-time-utilities/-/date-time-utilities-7.9.1.tgz"
-  integrity sha512-o8iU1VIY+QsqVRWARKiky29fh4KR1xaKSgMClXIi65qkt8EDDhjmlzL0KVDEoDA2GWukwb/1PpaVCWDg4v3cUQ==
-  dependencies:
-    "@uifabric/set-version" "^7.0.24"
-    tslib "^1.10.0"
-
 "@fluentui/date-time-utilities@^8.3.0":
   version "8.3.0"
   resolved "https://registry.yarnpkg.com/@fluentui/date-time-utilities/-/date-time-utilities-8.3.0.tgz#a51cd59ea327b948bdb76a083d9c42d95a71c98a"
@@ -1748,14 +1740,6 @@
   dependencies:
     "@fluentui/set-version" "^8.1.5"
     tslib "^2.1.0"
-
-"@fluentui/dom-utilities@^1.1.2":
-  version "1.1.2"
-  resolved "https://registry.npmjs.org/@fluentui/dom-utilities/-/dom-utilities-1.1.2.tgz"
-  integrity sha512-XqPS7l3YoMwxdNlaYF6S2Mp0K3FmVIOIy2K3YkMc+eRxu9wFK6emr2Q/3rBhtG5u/On37NExRT7/5CTLnoi9gw==
-  dependencies:
-    "@uifabric/set-version" "^7.0.24"
-    tslib "^1.10.0"
 
 "@fluentui/dom-utilities@^2.1.5":
   version "2.1.5"
@@ -1785,13 +1769,6 @@
     "@fluentui/utilities" "^8.3.9"
     tslib "^2.1.0"
 
-"@fluentui/keyboard-key@^0.2.12":
-  version "0.2.17"
-  resolved "https://registry.npmjs.org/@fluentui/keyboard-key/-/keyboard-key-0.2.17.tgz"
-  integrity sha512-iT1bU56rKrKEOfODoW6fScY11qj3iaYrZ+z11T6fo5+TDm84UGkkXjLXJTE57ZJzg0/gbccHQWYv+chY7bJN8Q==
-  dependencies:
-    tslib "^1.10.0"
-
 "@fluentui/keyboard-key@^0.3.5":
   version "0.3.5"
   resolved "https://registry.yarnpkg.com/@fluentui/keyboard-key/-/keyboard-key-0.3.5.tgz#af1273bbd8db3e7e08bf8ce8a303890d33d4d8b2"
@@ -1806,18 +1783,6 @@
   dependencies:
     "@fluentui/set-version" "^8.1.5"
     tslib "^2.1.0"
-
-"@fluentui/react-focus@^7.18.1":
-  version "7.18.1"
-  resolved "https://registry.yarnpkg.com/@fluentui/react-focus/-/react-focus-7.18.1.tgz#e29fc5f6bb0541daedff0dffa1924385d59f273b"
-  integrity sha512-WXXkMR3t5mr9m5hg5vRWH/JZ+kaZmbuTGpTA7E7uc+Ag/RZfG/uVN+ZwBdDpP6Xg7+6f3wlkGCBtY/UDcW6qmw==
-  dependencies:
-    "@fluentui/keyboard-key" "^0.2.12"
-    "@uifabric/merge-styles" "^7.19.2"
-    "@uifabric/set-version" "^7.0.24"
-    "@uifabric/styling" "^7.20.0"
-    "@uifabric/utilities" "^7.33.5"
-    tslib "^1.10.0"
 
 "@fluentui/react-focus@^8.3.15":
   version "8.3.15"
@@ -1845,14 +1810,6 @@
   version "1.1.145"
   resolved "https://registry.yarnpkg.com/@fluentui/react-icons/-/react-icons-1.1.145.tgz#6a0c81a1aa2632c633b8df5f4d27cc97c398ac82"
   integrity sha512-2zUoUN/Bu9hF5DA/1GkAy1c5D/j9eD8nLnXgU7aF9Q2KdM+gJV4VH9cmsJvHN0d1+Y/Bjv29lKq7fAbpkEBZpA==
-
-"@fluentui/react-window-provider@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.npmjs.org/@fluentui/react-window-provider/-/react-window-provider-1.0.2.tgz"
-  integrity sha512-fGSgL3Vp/+6t1Ysfz21FWZmqsU+iFVxOigvHnm5uKVyyRPwtaabv/F6kQ2y5isLMI2YmJaUd2i0cDJKu8ggrvw==
-  dependencies:
-    "@uifabric/set-version" "^7.0.24"
-    tslib "^1.10.0"
 
 "@fluentui/react-window-provider@^2.1.6":
   version "2.1.6"
@@ -1899,16 +1856,6 @@
     "@fluentui/utilities" "^8.3.9"
     "@microsoft/load-themed-styles" "^1.10.26"
     tslib "^2.1.0"
-
-"@fluentui/theme@^1.7.4":
-  version "1.7.4"
-  resolved "https://registry.npmjs.org/@fluentui/theme/-/theme-1.7.4.tgz"
-  integrity sha512-o4eo7lstLxxXl1g2RR9yz18Yt8yjQO/LbQuZjsiAfv/4Bf0CRnb+3j1F7gxIdBWAchKj9gzaMpIFijfI98pvYQ==
-  dependencies:
-    "@uifabric/merge-styles" "^7.19.2"
-    "@uifabric/set-version" "^7.0.24"
-    "@uifabric/utilities" "^7.33.5"
-    tslib "^1.10.0"
 
 "@fluentui/theme@^2.4.6":
   version "2.4.6"
@@ -2438,20 +2385,28 @@
     lz-string "^1.4.4"
     pretty-format "^27.0.2"
 
-"@testing-library/jest-dom@^5.14.1":
-  version "5.14.1"
-  resolved "https://registry.npmjs.org/@testing-library/jest-dom/-/jest-dom-5.14.1.tgz"
-  integrity sha512-dfB7HVIgTNCxH22M1+KU6viG5of2ldoA5ly8Ar8xkezKHKXjRvznCdbMbqjYGgO2xjRbwnR+rR8MLUIqF3kKbQ==
+"@testing-library/jest-dom@^5.16.4":
+  version "5.16.4"
+  resolved "https://registry.yarnpkg.com/@testing-library/jest-dom/-/jest-dom-5.16.4.tgz#938302d7b8b483963a3ae821f1c0808f872245cd"
+  integrity sha512-Gy+IoFutbMQcky0k+bqqumXZ1cTGswLsFqmNLzNdSKkU9KGV2u9oXhukCbbJ9/LRPKiqwxEE8VpV/+YZlfkPUA==
   dependencies:
     "@babel/runtime" "^7.9.2"
     "@types/testing-library__jest-dom" "^5.9.1"
-    aria-query "^4.2.2"
+    aria-query "^5.0.0"
     chalk "^3.0.0"
     css "^3.0.0"
     css.escape "^1.5.1"
     dom-accessibility-api "^0.5.6"
     lodash "^4.17.15"
     redent "^3.0.0"
+
+"@testing-library/react-hooks@^8.0.1":
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/@testing-library/react-hooks/-/react-hooks-8.0.1.tgz#0924bbd5b55e0c0c0502d1754657ada66947ca12"
+  integrity sha512-Aqhl2IVmLt8IovEVarNDFuJDVWVvhnr9/GCU6UUnrYXwgDFF9h2L2o2P9KBni1AST5sT6riAyoukFLyjQUgD/g==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    react-error-boundary "^3.1.0"
 
 "@testing-library/react@^12.0.0":
   version "12.0.0"
@@ -3047,74 +3002,6 @@
     "@typescript-eslint/types" "5.12.0"
     eslint-visitor-keys "^3.0.0"
 
-"@uifabric/foundation@^7.10.1":
-  version "7.10.1"
-  resolved "https://registry.yarnpkg.com/@uifabric/foundation/-/foundation-7.10.1.tgz#a5c65fc9e5341c525ce8d2b765194f0a33463ea5"
-  integrity sha512-Op05qHLBFEieT4+fG8OgpzqDHTQyei1dgVXDd6M4VS6CFJ5ZIPtC7Lwi+ZlkPkwUwccQ9mijuQumzpNKdv035A==
-  dependencies:
-    "@uifabric/merge-styles" "^7.19.2"
-    "@uifabric/set-version" "^7.0.24"
-    "@uifabric/styling" "^7.20.0"
-    "@uifabric/utilities" "^7.33.5"
-    tslib "^1.10.0"
-
-"@uifabric/icons@^7.6.2":
-  version "7.6.2"
-  resolved "https://registry.yarnpkg.com/@uifabric/icons/-/icons-7.6.2.tgz#07b439fb894e41d89bab0743512b2b1ebbfba46b"
-  integrity sha512-q7jEIwB5Tt2Egw9fqdgNPlBqBQ6hNNMQ3qs5y4S4YETRluB+AQTdKbrbYMsXo3Pm0FsJnRfiDojMzxusGX+MWA==
-  dependencies:
-    "@uifabric/set-version" "^7.0.24"
-    "@uifabric/styling" "^7.20.0"
-    tslib "^1.10.0"
-
-"@uifabric/merge-styles@^7.19.2":
-  version "7.19.2"
-  resolved "https://registry.npmjs.org/@uifabric/merge-styles/-/merge-styles-7.19.2.tgz"
-  integrity sha512-kTlhwglDqwVgIaJq+0yXgzi65plGhmFcPrfme/rXUGMJZoU+qlGT5jXj5d3kuI59p6VB8jWEg9DAxHozhYeu0g==
-  dependencies:
-    "@uifabric/set-version" "^7.0.24"
-    tslib "^1.10.0"
-
-"@uifabric/react-hooks@^7.14.0":
-  version "7.14.0"
-  resolved "https://registry.npmjs.org/@uifabric/react-hooks/-/react-hooks-7.14.0.tgz"
-  integrity sha512-Ndu/DEKHF4gFXEZa2AGgSkdWaj+njVrsSyXbkWRh2UZReFWnH1LMko9p/ZCwk1i9kAd5CUmyIfURUzIEya9YCg==
-  dependencies:
-    "@fluentui/react-window-provider" "^1.0.2"
-    "@uifabric/set-version" "^7.0.24"
-    "@uifabric/utilities" "^7.33.5"
-    tslib "^1.10.0"
-
-"@uifabric/set-version@^7.0.24":
-  version "7.0.24"
-  resolved "https://registry.npmjs.org/@uifabric/set-version/-/set-version-7.0.24.tgz"
-  integrity sha512-t0Pt21dRqdC707/ConVJC0WvcQ/KF7tKLU8AZY7YdjgJpMHi1c0C427DB4jfUY19I92f60LOQyhJ4efH+KpFEg==
-  dependencies:
-    tslib "^1.10.0"
-
-"@uifabric/styling@^7.20.0":
-  version "7.20.0"
-  resolved "https://registry.yarnpkg.com/@uifabric/styling/-/styling-7.20.0.tgz#afe5e2f591e4efab7e7570579fca0661c5ce7493"
-  integrity sha512-SoaK5J4cwn8D9DWejRlWo+TmKZaHIiVlkIH+B2zLXE8Uc4ZYcotwYGxaSc1gCA16viLvGQkQU+ieWFq91RxdRw==
-  dependencies:
-    "@fluentui/theme" "^1.7.4"
-    "@microsoft/load-themed-styles" "^1.10.26"
-    "@uifabric/merge-styles" "^7.19.2"
-    "@uifabric/set-version" "^7.0.24"
-    "@uifabric/utilities" "^7.33.5"
-    tslib "^1.10.0"
-
-"@uifabric/utilities@^7.33.5":
-  version "7.33.5"
-  resolved "https://registry.npmjs.org/@uifabric/utilities/-/utilities-7.33.5.tgz"
-  integrity sha512-I+Oi0deD/xltSluFY8l2EVd/J4mvOaMljxKO2knSD9/KoGDlo/o5GN4gbnVo8nIt76HWHLAk3KtlJKJm6BhbIQ==
-  dependencies:
-    "@fluentui/dom-utilities" "^1.1.2"
-    "@uifabric/merge-styles" "^7.19.2"
-    "@uifabric/set-version" "^7.0.24"
-    prop-types "^15.7.2"
-    tslib "^1.10.0"
-
 "@webassemblyjs/ast@1.11.1":
   version "1.11.1"
   resolved "https://registry.yarnpkg.com/@webassemblyjs/ast/-/ast-1.11.1.tgz#2bfd767eae1a6996f432ff7e8d7fc75679c0b6a7"
@@ -3564,6 +3451,11 @@ aria-query@^4.2.2:
   dependencies:
     "@babel/runtime" "^7.10.2"
     "@babel/runtime-corejs3" "^7.10.2"
+
+aria-query@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/aria-query/-/aria-query-5.0.0.tgz#210c21aaf469613ee8c9a62c7f86525e058db52c"
+  integrity sha512-V+SM7AbUwJ+EBnB8+DXs0hPZHO0W6pqBcc0dW90OwtVG02PswOu/teuARoLQjdDOH+t9pJgGnW5/Qmouf3gPJg==
 
 array-flatten@1.1.1:
   version "1.1.1"
@@ -8258,25 +8150,6 @@ obuf@^1.0.0, obuf@^1.1.2:
   resolved "https://registry.yarnpkg.com/obuf/-/obuf-1.1.2.tgz#09bea3343d41859ebd446292d11c9d4db619084e"
   integrity sha512-PX1wu0AmAdPqOL1mWhqmlOd8kOIZQwGZw6rh7uby9fTc5lhaOWFLX3I6R1hrF9k3zUY40e6igsLGkDXK92LJNg==
 
-office-ui-fabric-react@7.181.1:
-  version "7.181.1"
-  resolved "https://registry.yarnpkg.com/office-ui-fabric-react/-/office-ui-fabric-react-7.181.1.tgz#6a22f861e38e36672e74e6696c78ac1506c1b2b3"
-  integrity sha512-sZc0bOFqcv3JnTaWTU4OvaFJMKAmr+5jLKHLHCSFVVzShVSE3wlK4OauK7M46yc8edTEBUUDG14tdpA7+KNBUg==
-  dependencies:
-    "@fluentui/date-time-utilities" "^7.9.1"
-    "@fluentui/react-focus" "^7.18.1"
-    "@fluentui/react-window-provider" "^1.0.2"
-    "@microsoft/load-themed-styles" "^1.10.26"
-    "@uifabric/foundation" "^7.10.1"
-    "@uifabric/icons" "^7.6.2"
-    "@uifabric/merge-styles" "^7.19.2"
-    "@uifabric/react-hooks" "^7.14.0"
-    "@uifabric/set-version" "^7.0.24"
-    "@uifabric/styling" "^7.20.0"
-    "@uifabric/utilities" "^7.33.5"
-    prop-types "^15.7.2"
-    tslib "^1.10.0"
-
 on-finished@~2.3.0:
   version "2.3.0"
   resolved "https://registry.npmjs.org/on-finished/-/on-finished-2.3.0.tgz"
@@ -9407,6 +9280,13 @@ react-dom@^17.0.1:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
     scheduler "^0.20.2"
+
+react-error-boundary@^3.1.0:
+  version "3.1.4"
+  resolved "https://registry.yarnpkg.com/react-error-boundary/-/react-error-boundary-3.1.4.tgz#255db92b23197108757a888b01e5b729919abde0"
+  integrity sha512-uM9uPzZJTF6wRQORmSrvOIgt4lJ9MC1sNgEOj2XGsDTRE4kmpWxg7ENK9EWNKJRMAOY9z0MuF4yIfl6gp4sotA==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
 
 react-error-boundary@^3.1.3:
   version "3.1.3"
