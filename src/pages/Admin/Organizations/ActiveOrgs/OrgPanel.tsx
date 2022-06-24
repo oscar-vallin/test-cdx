@@ -62,6 +62,24 @@ export const OrgPanel = ({ isOpen, selectedOrgSid, onDismiss, onSave }: OrgPanel
   const Toast = useNotification();
   const handleError = ErrorHandler();
 
+  const doClosePanel = () => {
+    setOrgState({ ...INITIAL_STATE });
+
+    // Reset the form
+    setOrgForm(null);
+    setShowDialog(false);
+    setUnsavedChanges(false);
+    onDismiss();
+  };
+
+  const onPanelClose = () => {
+    if (unsavedChanges) {
+      setShowDialog(true);
+    } else {
+      doClosePanel();
+    }
+  };
+
   useEffect(() => {
     handleError(errorForm);
     handleError(errorOrg);
@@ -133,36 +151,18 @@ export const OrgPanel = ({ isOpen, selectedOrgSid, onDismiss, onSave }: OrgPanel
 
   useEffect(() => {
     if (orgForm) {
-      const orgState: OrgStateType = {
+      const _orgState: OrgStateType = {
         sid: orgForm?.sid ?? undefined,
         orgId: orgForm?.orgId?.value ?? '',
         name: orgForm?.name?.value ?? undefined,
         orgType: getEnumByValue(OrgType, orgForm?.orgType?.value?.value),
       };
 
-      setOrgState(orgState);
+      setOrgState(_orgState);
     } else {
       setOrgState(INITIAL_STATE);
     }
   }, [orgForm]);
-
-  const onPanelClose = () => {
-    if (unsavedChanges) {
-      setShowDialog(true);
-    } else {
-      doClosePanel();
-    }
-  };
-
-  const doClosePanel = () => {
-    setOrgState({ ...INITIAL_STATE });
-
-    // Reset the form
-    setOrgForm(null);
-    setShowDialog(false);
-    setUnsavedChanges(false);
-    onDismiss();
-  };
 
   const renderOrgId = () => {
     if (selectedOrgSid) {

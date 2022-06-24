@@ -64,25 +64,19 @@ const groupSpecializations = (opts): SpecializationGroup[] => {
   ];
 };
 
-const defaultProps = {
-  isOpen: false,
-  onDismiss: () => null,
-  onCreateSpecialization: () => null,
-};
-
 type CreateAccessSpecializationPanelProps = {
   isOpen?: boolean;
   onDismiss?: any | null;
-  onCreateSpecialization?: any | null;
-  onUpdateSpecialization?: any | null;
+  onCreateSpecialization?: (form: AccessSpecializationForm) => void;
+  onUpdateSpecialization?: (form: AccessSpecializationForm) => void;
   selectedAccessId?: any;
-} & typeof defaultProps;
+};
 
 const AccessSpecializationPanel = ({
   isOpen,
   onDismiss,
-  onCreateSpecialization = () => {},
-  onUpdateSpecialization = () => {},
+  onCreateSpecialization,
+  onUpdateSpecialization,
   selectedAccessId,
 }: CreateAccessSpecializationPanelProps): ReactElement => {
   const Toast = useNotification();
@@ -110,6 +104,24 @@ const AccessSpecializationPanel = ({
     useUpdateAccessSpecializationMutation
   );
 
+  const doClosePanel = () => {
+    setState({ ...INITIAL_STATE });
+
+    // Reset the form
+    setAccessForm(null);
+    setShowDialog(false);
+    setUnsavedChanges(false);
+    onDismiss();
+  };
+
+  const onPanelClose = () => {
+    if (unsavedChanges) {
+      setShowDialog(true);
+    } else {
+      doClosePanel();
+    }
+  };
+
   useEffect(() => {
     if (isOpen && selectedAccessId > 0) {
       fetchSpecialization({
@@ -129,7 +141,9 @@ const AccessSpecializationPanel = ({
         const errorMsg = createAccessSpecialization.errMsg ?? 'Please, check the highlighted fields and try again';
         Toast.error({ text: errorMsg });
       } else {
-        onCreateSpecialization(createAccessSpecialization);
+        if (onCreateSpecialization) {
+          onCreateSpecialization(createAccessSpecialization);
+        }
         Toast.success({ text: 'Access specialization created successfully' });
         doClosePanel();
       }
@@ -145,7 +159,9 @@ const AccessSpecializationPanel = ({
         const errorMsg = updateAccessSpecialization.errMsg ?? 'Please, check the highlighted fields and try again';
         Toast.error({ text: errorMsg });
       } else {
-        onUpdateSpecialization(updateAccessSpecialization);
+        if (onUpdateSpecialization) {
+          onUpdateSpecialization(updateAccessSpecialization);
+        }
         Toast.success({ text: 'Access specialization updated successfully' });
         doClosePanel();
       }
@@ -187,7 +203,7 @@ const AccessSpecializationPanel = ({
       const opts = filters.reduce(
         (obj, item) => ({
           ...obj,
-          [item.permission]: item.orgSids.value?.map(({ name, value }) => ({ name, key: value })) || [],
+          [item.permission]: item.orgSids.value?.map(({ name: itemName, value }) => ({ name: itemName, key: value })) || [],
         }),
         {}
       );
@@ -198,24 +214,6 @@ const AccessSpecializationPanel = ({
       setSpecializations(opts);
     }
   }, [specialization]);
-
-  const onPanelClose = () => {
-    if (unsavedChanges) {
-      setShowDialog(true);
-    } else {
-      doClosePanel();
-    }
-  };
-
-  const doClosePanel = () => {
-    setState({ ...INITIAL_STATE });
-
-    // Reset the form
-    setAccessForm(null);
-    setShowDialog(false);
-    setUnsavedChanges(false);
-    onDismiss();
-  };
 
   const doOrgSearch = async (option: SpecializationOption, text: string): Promise<ITag[]> => {
     if (option.orgSids.query === 'vendorQuickSearch') {
@@ -432,7 +430,5 @@ const AccessSpecializationPanel = ({
     </>
   );
 };
-
-AccessSpecializationPanel.defaultProps = defaultProps;
 
 export default AccessSpecializationPanel;
