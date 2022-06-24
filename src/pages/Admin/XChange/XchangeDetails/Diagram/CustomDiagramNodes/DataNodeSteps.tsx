@@ -44,7 +44,12 @@ const DataNodeSteps = ({ data, id }) => {
   const renderNode = () => {
     return (
       <>
-        <Handle style={{ width: '2px', top: 1 }} type="target" id={id} position={Position['Top'] || Position['Right']} />
+        <Handle
+          style={{ width: '2px', top: 1 }}
+          type="target"
+          id={id}
+          position={Position['Top'] || Position['Right']}
+        />
         <Container>
           <Row>
             <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>

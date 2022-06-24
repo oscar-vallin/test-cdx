@@ -9,8 +9,8 @@ import { Paginator } from 'src/components/tables/Paginator';
 import { TableFilters } from 'src/containers/tables/TableFilters';
 import { Box, Container } from 'src/components/layouts';
 import { useSortableColumns } from 'src/containers/tables/useSortableColumns';
-import { UserAuditLogsColumn, useUserAuditLogsColumns } from './UserAuditLogsTableColumn';
 import { ScrollableTable } from 'src/containers/tables/ScrollableTable';
+import { UserAuditLogsColumn, useUserAuditLogsColumns } from './UserAuditLogsTableColumn';
 
 type UserAuditLogsTableParams = {
   id: string;

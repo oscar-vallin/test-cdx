@@ -214,7 +214,6 @@ export const WorkPacketTable = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [apiPolling.error]);
 
-
   const hasMorePages = pagingInfo?.totalPages && pagingInfo.totalPages > 1;
 
   return (

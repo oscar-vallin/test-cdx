@@ -6,7 +6,8 @@ import {
   WorkPacketCommandType,
   WorkPacketStatus,
   WorkStatus,
-  WorkStep, WpProcessError,
+  WorkStep,
+  WpProcessError,
   WpTransmission,
 } from 'src/data/services/graphql';
 import { mountWithTheme } from 'src/utils/testUtils';

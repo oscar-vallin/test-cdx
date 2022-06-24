@@ -6,7 +6,7 @@ import {
   mergeStyleSets,
   ScrollablePane,
   ScrollbarVisibility,
-  SelectionMode
+  SelectionMode,
 } from '@fluentui/react';
 import React from 'react';
 import { ApolloError } from '@apollo/client';
@@ -19,7 +19,7 @@ type ScrollableTableType = {
   error?: ApolloError;
 };
 
-export const ScrollableTable = ({ id, columns, items, error } : ScrollableTableType) => {
+export const ScrollableTable = ({ id, columns, items, error }: ScrollableTableType) => {
   const classNames = mergeStyleSets({
     root: {
       width: '100%',
