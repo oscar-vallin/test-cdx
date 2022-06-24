@@ -9,7 +9,7 @@ export function InitialEdges(data) {
     values['target'] = connector.toKey;
     values['markerEnd'] = { type: MarkerType.ArrowClosed, color: '#0078D4' };
     values['type'] = 'smoothstep';
-    values['style'] = { strokeWidth: 2, stroke: '#0078D4' };
+    values['style'] = { strokeWidth: 3, stroke: '#0078D4' };
 
     return values;
   });

@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { DocumentCard, Text } from '@fluentui/react';
 import { Column } from 'src/components/layouts';
+import { ButtonAction } from 'src/components/buttons';
 
 export const CardStyled = styled(DocumentCard)`
   background: ${({ theme }) => theme.colors.neutralLighter};
@@ -30,6 +31,7 @@ export const SubsStyled = styled.div`
 
 export const StyledColumTabs = styled(Column)`
   display: inline-block;
+  margin-left: 30px;
 `;
 
 export const StyledContainer = styled.div<DemoCanvasWidgetProps>`
@@ -71,7 +73,6 @@ export const StyledText = styled(Text)`
   transform: rotate(180deg);
   font-size: 18px;
   font-weight: bold;
-  margin-left: 20px;
   height: 190px;
 `;
 
@@ -97,3 +98,19 @@ type StyledQualifierProps = {
   width?: string;
   color?: string;
 };
+
+export const StyledButtonAction = styled(ButtonAction)<StyledButtonActionProps>`
+  font-size: ${({ fontSize }) => fontSize};
+`;
+
+type StyledButtonActionProps = {
+  fontSize: number;
+};
+
+export const StyledProcessValueText = styled(Text)`
+  font-weight: bold;
+  text-decoration: underline #0078d4 2px;
+  text-underline-offset: 7px;
+  text-decoration-thickness: 2px;
+  margin-right: 10px;
+`;
