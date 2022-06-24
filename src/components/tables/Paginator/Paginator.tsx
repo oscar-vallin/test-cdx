@@ -4,11 +4,12 @@ import { PaginationInfo } from 'src/data/services/graphql';
 import { PaginatorWrapper, PagingInfo } from './Paginator.styles';
 
 type PaginatorParams = {
+  id: string;
   pagingInfo: PaginationInfo;
   onPageChange: (pageNumber: number) => void;
 };
 
-export const Paginator = ({ pagingInfo, onPageChange }: PaginatorParams) => {
+export const Paginator = ({ id, pagingInfo, onPageChange }: PaginatorParams) => {
   const pNum = pagingInfo?.pageNumber ?? 0;
   const pSize = pagingInfo?.pageSize ?? 100;
   const total = pagingInfo?.totalElements ?? 0;
@@ -25,9 +26,10 @@ export const Paginator = ({ pagingInfo, onPageChange }: PaginatorParams) => {
   }
 
   return (
-    <PaginatorWrapper>
+    <PaginatorWrapper id={id}>
       <div>
         <IconButton
+          id={`${id}_Prev`}
           iconProps={{ iconName: 'ChevronLeft' }}
           title="Previous Page"
           disabled={pNum <= 0}
@@ -36,10 +38,11 @@ export const Paginator = ({ pagingInfo, onPageChange }: PaginatorParams) => {
             return null;
           }}
         />
-        <PagingInfo id="__PagingInfo">
+        <PagingInfo id={`${id}_PagingInfo`}>
           {firstRow}-{lastRow} of {total}
         </PagingInfo>
         <IconButton
+          id={`${id}_Next`}
           iconProps={{ iconName: 'ChevronRight' }}
           title="Next Page"
           disabled={pNum === totalPages - 1}

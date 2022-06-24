@@ -38,7 +38,7 @@ export const AccessManagementWizardBody = ({ form, saveOptions }: AccessManageme
     <FormRow>
       <Column lg="12">
         <UICheckboxList
-          id="__Access_Groups_List"
+          id="__System_Access_Groups_List"
           subtitle="System managed groups"
           uiField={form?.accessPolicyGroups ?? undefined}
           options={systemManagedGroupOptions}
@@ -51,9 +51,9 @@ export const AccessManagementWizardBody = ({ form, saveOptions }: AccessManageme
       {orgSpecificGroupOptions && orgSpecificGroupOptions.length ? (
         <Column lg="12">
           <UICheckboxList
+            id="__Org_Access_Groups_List"
             hideLabel
             subtitle="Organization specific groups"
-            id="__Access_Groups_List"
             uiField={form?.accessPolicyGroups ?? undefined}
             options={orgSpecificGroupOptions}
             value={selectedSids}

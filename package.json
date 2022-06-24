@@ -156,12 +156,10 @@
       "/node/",
       "/node_modules/",
       "src/pages",
-      "src/utils",
       "src/store",
       "src/contexts",
       "src/data",
       "src/hooks",
-      "src/teste2e",
       "src/use-cases"
     ],
     "coverageReporters": [

@@ -8,7 +8,7 @@ import {
   useWorkPacketStatusesPollQuery,
   WorkPacketStatus,
 } from 'src/data/services/graphql';
-import { TableMetaData, WorkPacketListPage } from 'src/pages/WorkPacket/WorkPacketListPage';
+import { WorkPacketListPage } from 'src/pages/WorkPacket/WorkPacketListPage';
 
 export const ArchivePage = () => {
   const getItems = (data) => {
@@ -23,12 +23,12 @@ export const ArchivePage = () => {
 
   const getTotal = (data) => data?.workPacketStatuses?.paginationInfo?.totalElements ?? 0;
 
-  const renderTotalRecords = (tableMeta: TableMetaData) => {
-    if (tableMeta.loading || tableMeta.count === null || tableMeta.count === 0) {
+  const renderTotalRecords = (totalRecords: number) => {
+    if (totalRecords === 0) {
       return <span>No results found</span>;
     }
 
-    return <span>{`${tableMeta.count} results found`}</span>;
+    return <span>{`${totalRecords} results found`}</span>;
   };
 
   return (

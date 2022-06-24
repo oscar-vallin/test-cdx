@@ -1,19 +1,23 @@
-import { FontIcon } from '@fluentui/react';
+import { FontIcon, SpinnerSize } from '@fluentui/react';
 import React from 'react';
 import { theme } from 'src/styles/themes/theme';
 import { Text } from '../Text';
-import { SubTitle } from './PageTitle.styles';
+import { PaddedSpinner, SubTitle } from './PageTitle.styles';
 
 type PageTitleParams = {
   id: string;
   title: string;
   subTitle?: string;
   icon?: string;
+  loading?: boolean;
 };
 
-const PageTitle = ({ id, title, subTitle, icon }: PageTitleParams) => {
+const PageTitle = ({ id, title, subTitle, icon, loading }: PageTitleParams) => {
   const renderIcon = () => {
     if (icon) {
+      if (loading) {
+        return <PaddedSpinner id={`${id}_Loading`} size={SpinnerSize.medium} />;
+      }
       return <FontIcon style={{ fontSize: theme.fontSizes.large }} iconName={icon} />;
     }
     return '';

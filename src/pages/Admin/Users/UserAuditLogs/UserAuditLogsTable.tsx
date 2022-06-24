@@ -197,7 +197,7 @@ export const UserAuditLogsTable = ({ id, cols, lazyQuery, getItems, tableFilters
           <div id="Table_Detailed" style={{ width: '100%', height: 'calc(100vh - 325px)' }}>
             {renderTable()}
           </div>
-          <Paginator pagingInfo={pagingInfo} onPageChange={onPageChange} />
+          <Paginator id="__Paginator" pagingInfo={pagingInfo} onPageChange={onPageChange} />
         </Box>
       </Container>
     </>

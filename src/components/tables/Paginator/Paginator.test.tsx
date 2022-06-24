@@ -10,6 +10,7 @@ describe('Paginator Use Cases', () => {
   it('Matches Snapshot', () => {
     const wrapper = shallow(
       <Paginator
+        id="__Pager"
         pagingInfo={{
           pageNumber: 0,
           pageSize: 100,
@@ -28,6 +29,7 @@ describe('Paginator Use Cases', () => {
 
     const paginator = shallow(
       <Paginator
+        id="__Pager"
         pagingInfo={{
           pageNumber: 1,
           pageSize: 100,
@@ -49,6 +51,7 @@ describe('Paginator Use Cases', () => {
 
     const paginator = shallow(
       <Paginator
+        id="__Pager"
         pagingInfo={{
           pageNumber: 1,
           pageSize: 100,
@@ -70,6 +73,7 @@ describe('Paginator Use Cases', () => {
 
     const paginator = shallow(
       <Paginator
+        id="__Pager"
         pagingInfo={{
           pageNumber: 0,
           pageSize: 100,
@@ -90,6 +94,7 @@ describe('Paginator Use Cases', () => {
 
     const paginator = shallow(
       <Paginator
+        id="__Pager"
         pagingInfo={{
           pageNumber: 3,
           pageSize: 100,
@@ -108,6 +113,7 @@ describe('Paginator Use Cases', () => {
   it('No Paginator Rendered', () => {
     const paginator = shallow(
       <Paginator
+        id="__Pager"
         pagingInfo={{
           pageNumber: 0,
           pageSize: 100,
@@ -124,6 +130,7 @@ describe('Paginator Use Cases', () => {
   it('101 Items should render a paginator', () => {
     const paginator = shallow(
       <Paginator
+        id="__Pager"
         pagingInfo={{
           pageNumber: 0,
           pageSize: 100,

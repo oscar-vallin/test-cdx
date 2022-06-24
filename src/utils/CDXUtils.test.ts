@@ -1,5 +1,5 @@
 import { OrgType } from 'src/data/services/graphql';
-import { getEnumByValue, isDateTimeValid, yyyyMMdd } from './CDXUtils';
+import { getEnumByValue, isDateTimeValid, yyyyMMdd, yyyyMMdda } from 'src/utils/CDXUtils';
 
 describe('CDX Utility testing', () => {
   it('yyyyMMdd null', () => {
@@ -15,6 +15,18 @@ describe('CDX Utility testing', () => {
     expect(yyyyMMdd(date)).toEqual('2020-11-15');
   });
 
+  it('yyyyMMdda null', () => {
+    expect(yyyyMMdda(null)).toEqual('');
+  });
+
+  it('yyyyMMdda undefined', () => {
+    expect(yyyyMMdda(undefined)).toEqual('');
+  });
+
+  it('yyyyMMdda date format', () => {
+    const date = new Date(2020, 10, 15, 11, 12, 13);
+    expect(yyyyMMdda(date)).toEqual('2020-11-15 11:12:13 AM');
+  });
   it('getEnumByValue', () => {
     expect(getEnumByValue(OrgType, 'VENDOR')).toEqual(OrgType.Vendor);
     expect(getEnumByValue(OrgType, 'INTEGRATION_SPONSOR')).toEqual(OrgType.IntegrationSponsor);
