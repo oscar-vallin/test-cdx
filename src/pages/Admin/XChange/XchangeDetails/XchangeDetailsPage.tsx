@@ -19,7 +19,13 @@ import { IconButton, Spinner, SpinnerSize, Text } from '@fluentui/react';
 import { UIInputMultiSelect } from 'src/components/inputs/InputDropdown';
 import { PageBody } from 'src/components/layouts/Column';
 import { Diagram } from './Diagram/Diagram';
-import { CardStyled, StyledColumTabs, SubsStyled } from './XchangeDetailsPage.styles';
+import {
+  CardStyled,
+  StyledColumTabs,
+  SubsStyled,
+  StyledButtonAction,
+  StyledProcessValueText,
+} from './XchangeDetailsPage.styles';
 
 const XchangeDetailsPage = () => {
   const location = useLocation();
@@ -85,14 +91,20 @@ const XchangeDetailsPage = () => {
           <Spacing margin={{ top: 'normal' }}>
             <CardStyled>
               <Container>
-                {fileProcess?.map((process: XchangeFileProcessForm) => (
-                  <UIInputMultiSelect
-                    id="__applicableOrgTypes"
-                    uiField={process.filenameQualifiers}
-                    options={process.options ?? []}
-                    placeholder="--Applies to All Org Types--"
-                  />
-                ))}
+                <Row>
+                  {fileProcess?.map((process: XchangeFileProcessForm) => (
+                    <UIInputMultiSelect
+                      id="__applicableOrgTypes"
+                      uiField={process.filenameQualifiers}
+                      options={process.options ?? []}
+                    />
+                  ))}
+                </Row>
+                <Row>
+                  <StyledButtonAction fontSize={18} id="__Add_FilenameQualifer">
+                    + Add Filename Qualifer
+                  </StyledButtonAction>
+                </Row>
               </Container>
             </CardStyled>
           </Spacing>
@@ -195,13 +207,13 @@ const XchangeDetailsPage = () => {
             {fileProcess &&
               fileProcess?.map((process, index) => (
                 <StyledColumTabs lg="9" key={index}>
-                  <Text style={{ fontWeight: 'bold' }}>
+                  <StyledProcessValueText variant="large">
                     {process.vendor.value?.name}-{process.specId.value}
-                  </Text>
-                  <Text>
-                    <IconButton iconProps={{ iconName: 'Add' }} />
-                    Add File Process
-                  </Text>
+                  </StyledProcessValueText>
+                  <StyledButtonAction fontSize={28} id="__Add_FileProcess">
+                    <span style={{ color: '#0078D4', fontSize: '22px' }}>+</span>{' '}
+                    <Text variant="large">Add File Process</Text>
+                  </StyledButtonAction>
                 </StyledColumTabs>
               ))}
           </Row>

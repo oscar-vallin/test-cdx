@@ -3,7 +3,7 @@ import { XchangeDiagram } from 'src/data/services/graphql';
 import ReactFlow, { useNodesState, useEdgesState, addEdge, Connection, Edge } from 'react-flow-renderer';
 import { ButtonAction } from 'src/components/buttons';
 import { Column, Container, Row } from 'src/components/layouts';
-import { StyledContainer, StyledHorizontalButtons, StyledText } from '../XchangeDetailsPage.styles';
+import { StyledContainer, StyledHorizontalButtons, StyledText, StyledButtonAction } from '../XchangeDetailsPage.styles';
 import DataNodeSteps from './CustomDiagramNodes/DataNodeSteps';
 import DataNodeTransmissions from './CustomDiagramNodes/DataNodeTransmissions';
 import { InitialNodes } from './nodes/nodes';
@@ -27,12 +27,16 @@ const Diagram = ({ data }) => {
       <Row>
         <Column lg="1">
           <StyledHorizontalButtons>
-            <ButtonAction>
-              <StyledText>Xchange Steps +</StyledText>
-            </ButtonAction>
-            <ButtonAction>
-              <StyledText>File Transmissions +</StyledText>
-            </ButtonAction>
+            <StyledButtonAction fontSize={24} id="__Add_XchangeSteps" title="Add Step">
+              <StyledText>
+                Xchange Steps <span style={{ color: '#0078D4', fontSize: '22px' }}>+</span>
+              </StyledText>
+            </StyledButtonAction>
+            <StyledButtonAction fontSize={24} id="__Add_FileTransmission" title="Add File Transmission">
+              <StyledText>
+                File Transmissions <span style={{ color: '#0078D4', fontSize: '22px' }}>+</span>
+              </StyledText>
+            </StyledButtonAction>
           </StyledHorizontalButtons>
         </Column>
         <Column lg="10">
