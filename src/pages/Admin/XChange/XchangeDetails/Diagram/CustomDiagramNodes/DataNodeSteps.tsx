@@ -30,7 +30,11 @@ const DataNodeSteps = ({ data, id }) => {
     width = '60px';
   }
   const hanldeSourcePosition = () => {
-    if (trans || ((sourceBottom === '1' || sourceBottom === '0') && data.label === 'Semantic Map')) {
+    if (
+      trans ||
+      data.position.x === 1 ||
+      ((sourceBottom === '1' || sourceBottom === '0') && data.label === 'Semantic Map')
+    ) {
       return <Handle style={{ width: '2px', bottom: 1 }} type="source" id={id} position={Position.Bottom} />;
     }
 
@@ -40,7 +44,7 @@ const DataNodeSteps = ({ data, id }) => {
   const renderNode = () => {
     return (
       <>
-        <Handle style={{ width: '2px', top: 1 }} type="target" id={id} position={Position['Top']} />
+        <Handle style={{ width: '2px', top: 1 }} type="target" id={id} position={Position['Top'] || Position['Right']} />
         <Container>
           <Row>
             <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>

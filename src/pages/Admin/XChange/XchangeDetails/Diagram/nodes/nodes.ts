@@ -31,6 +31,7 @@ export function InitialNodes(data) {
       subTitle: step.subTitle,
       qualifier: step.qualifier,
       connectors: data.connectors,
+      position: step.position,
     };
     values['position'] = { x: positionX, y: positionY };
 
