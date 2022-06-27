@@ -35,16 +35,16 @@ const DataNodeSteps = ({ data, id }) => {
       data.position.x === 1 ||
       ((sourceBottom === '1' || sourceBottom === '0') && data.label === 'Semantic Map')
     ) {
-      return <Handle style={{ width: '2px', bottom: 1 }} type="source" id={id} position={Position.Bottom} />;
+      return <Handle type="source" id={id} position={Position['Bottom']} />;
     }
 
-    return <Handle style={{ width: '2px', bottom: 1 }} type="source" id={id} position={Position.Left} />;
+    return <Handle type="source" id={id} position={Position['Left']} />;
   };
 
   const renderNode = () => {
     return (
       <>
-        <Handle style={{ width: '2px', top: 1 }} type="target" id={id} position={Position['Top'] || Position['Right']} />
+        <Handle type="target" id={id} position={Position['Top']} />
         <Container>
           <Row>
             <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>

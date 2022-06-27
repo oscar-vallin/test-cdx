@@ -22,7 +22,7 @@ const DataNodeTransmissions = ({ data, id }) => {
     if (data.protocol === 'ARCHIVE') {
       return (
         <>
-          <Handle style={{ width: '2px', top: 1 }} type="target" id={id} position={Position.Top} />
+          <Handle type="target" id={id} position={Position['Top']} />
           <Container>
             <Row>
               <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
@@ -71,7 +71,7 @@ const DataNodeTransmissions = ({ data, id }) => {
               />
             </TooltipHost>
           </div>
-          <Handle style={{ width: '0px', top: 1 }} type="target" id={id} position={Position.Top} />
+          <Handle type="target" id={id} position={Position['Top']} />
           <Container>
             <Row>
               <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
@@ -95,7 +95,7 @@ const DataNodeTransmissions = ({ data, id }) => {
 
     return (
       <>
-        <Handle style={{ width: '0px', top: 1 }} type="target" id={id} position={Position.Top} />
+        <Handle type="target" id={id} position={Position['Top']} />
         <Container>
           <Row>
             <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
