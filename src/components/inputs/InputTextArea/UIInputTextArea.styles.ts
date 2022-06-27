@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { TextField } from '@fluentui/react';
 
 export const QuillWrapper = styled.div`
   .ql-toolbar.ql-snow {
@@ -27,16 +26,6 @@ export const QuillWrapper = styled.div`
   }
   border: 0.5px solid ${({ theme }) => theme.colors.neutralSecondary};
   width: 100%;
-`;
-
-export const ThemedTextField = styled(TextField)`
-  .ms-TextField-fieldGroup {
-    background-color: ${({ theme }) => theme.colors.white};
-
-    textarea {
-      color: ${({ theme }) => theme.colors.neutralSecondary};
-    }
-  }
 `;
 
 export const ReadOnlyTextArea = styled.pre`

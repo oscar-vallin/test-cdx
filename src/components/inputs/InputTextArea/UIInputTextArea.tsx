@@ -1,8 +1,10 @@
 import React from 'react';
+import ReactQuill from 'react-quill';
+import { TextField } from '@fluentui/react';
 import { UiStringField } from 'src/data/services/graphql';
 import { UIFormLabel } from 'src/components/labels/FormLabel';
-import ReactQuill from 'react-quill';
-import { QuillWrapper, ReadOnlyTextArea, ThemedTextField } from './UIInputTextArea.styles';
+import { EmptyValue } from 'src/components/inputs/InputText/InputText.styles';
+import { QuillWrapper, ReadOnlyTextArea } from './UIInputTextArea.styles';
 
 type UIInputTextAreaType = {
   id: string;
@@ -70,18 +72,26 @@ const UIInputTextArea = ({
   }
 
   if (uiField?.readOnly) {
+    if (!value || value.trim().length === 0) {
+      return (
+        <>
+          {onRenderLabel()}
+          <EmptyValue id={id}>&lt;empty&gt;</EmptyValue>;
+        </>
+      );
+    }
     if (showRichTextEditor) {
       return (
         <>
           {onRenderLabel()}
-          <ReadOnlyTextArea dangerouslySetInnerHTML={{ __html: value ?? '' }} />
+          <ReadOnlyTextArea id={id} dangerouslySetInnerHTML={{ __html: value }} />
         </>
       );
     }
     return (
       <>
         {onRenderLabel()}
-        <ReadOnlyTextArea>{value}</ReadOnlyTextArea>
+        <ReadOnlyTextArea id={id}>{value}</ReadOnlyTextArea>
       </>
     );
   }
@@ -107,7 +117,7 @@ const UIInputTextArea = ({
   }
 
   return (
-    <ThemedTextField
+    <TextField
       id={id}
       type={type ?? 'text'}
       value={value}
