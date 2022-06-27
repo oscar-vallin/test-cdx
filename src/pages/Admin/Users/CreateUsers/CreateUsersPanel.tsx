@@ -43,44 +43,6 @@ const CreateUsersPanel = ({ orgSid, isOpen, onDismiss, onCreateUser }: CreateUse
   const [errorMsg, setErrorMsg] = useState<string | undefined>();
   const Toast = useNotification();
 
-  const handleCreateUser = async () => {
-    setProcessing(true);
-    const responseCreate = await createUserService.callUpdateUser();
-    setProcessing(false);
-    //
-    if (responseCreate?.createUser) {
-      const responseCode = responseCreate?.createUser?.response;
-
-      if (responseCode === GqOperationResponse.Fail) {
-        const errorMsg =
-          responseCreate?.createUser?.errMsg ?? responseCreate?.createUser?.response ?? 'Error Creating User';
-        setErrorMsg(errorMsg);
-      } else {
-        setErrorMsg(undefined);
-      }
-
-      if (responseCode === GqOperationResponse.Success) {
-        Toast.success({ text: 'User Account Successfully Created' });
-      }
-      if (responseCode === GqOperationResponse.PartialSuccess) {
-        const errorMsg =
-          responseCreate?.createUser?.errMsg ?? responseCreate?.createUser?.response ?? 'Error Creating User';
-        Toast.warning({ text: errorMsg });
-      }
-
-      if (responseCode === GqOperationResponse.Success || responseCode === GqOperationResponse.PartialSuccess) {
-        onCreateUser(responseCreate.createUser);
-        doClosePanel();
-      }
-    }
-  };
-
-  useEffect(() => {
-    if (createUserService.isUserCreated && createUserService.responseCreateUser) {
-      onDismiss();
-    }
-  }, [createUserService.isUserCreated]);
-
   const onPanelClose = () => {
     if (unsavedChanges) {
       setShowDialog(true);
@@ -99,6 +61,44 @@ const CreateUsersPanel = ({ orgSid, isOpen, onDismiss, onCreateUser }: CreateUse
     setUnsavedChanges(false);
     onDismiss();
   };
+
+  const handleCreateUser = async () => {
+    setProcessing(true);
+    const responseCreate = await createUserService.callUpdateUser();
+    setProcessing(false);
+    //
+    if (responseCreate?.createUser) {
+      const responseCode = responseCreate?.createUser?.response;
+
+      if (responseCode === GqOperationResponse.Fail) {
+        const _errorMsg =
+          responseCreate?.createUser?.errMsg ?? responseCreate?.createUser?.response ?? 'Error Creating User';
+        setErrorMsg(_errorMsg);
+      } else {
+        setErrorMsg(undefined);
+      }
+
+      if (responseCode === GqOperationResponse.Success) {
+        Toast.success({ text: 'User Account Successfully Created' });
+      }
+      if (responseCode === GqOperationResponse.PartialSuccess) {
+        const _errorMsg =
+          responseCreate?.createUser?.errMsg ?? responseCreate?.createUser?.response ?? 'Error Creating User';
+        Toast.warning({ text: _errorMsg });
+      }
+
+      if (responseCode === GqOperationResponse.Success || responseCode === GqOperationResponse.PartialSuccess) {
+        onCreateUser(responseCreate.createUser);
+        doClosePanel();
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (createUserService.isUserCreated && createUserService.responseCreateUser) {
+      onDismiss();
+    }
+  }, [createUserService.isUserCreated]);
 
   const renderPanelHeader = () => (
     <PanelHeader>

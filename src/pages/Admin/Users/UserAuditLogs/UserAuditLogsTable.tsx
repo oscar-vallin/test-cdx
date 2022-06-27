@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  DetailsList,
-  DetailsListLayoutMode,
-  IComboBoxOption,
-  mergeStyleSets,
-  ScrollablePane,
-  ScrollbarVisibility,
-  SelectionMode,
-} from '@fluentui/react';
+import { IComboBoxOption } from '@fluentui/react';
 
 import { PaginationInfo, UserAccountAuditEvent } from 'src/data/services/graphql';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
@@ -15,9 +7,9 @@ import { useOrgSid } from 'src/hooks/useOrgSid';
 import { TableFiltersType } from 'src/hooks/useTableFilters';
 import { Paginator } from 'src/components/tables/Paginator';
 import { TableFilters } from 'src/containers/tables/TableFilters';
-import { EmptyState } from 'src/containers/states';
 import { Box, Container } from 'src/components/layouts';
 import { useSortableColumns } from 'src/containers/tables/useSortableColumns';
+import { ScrollableTable } from 'src/containers/tables/ScrollableTable';
 import { UserAuditLogsColumn, useUserAuditLogsColumns } from './UserAuditLogsTableColumn';
 
 type UserAuditLogsTableParams = {
@@ -136,41 +128,6 @@ export const UserAuditLogsTable = ({ id, cols, lazyQuery, getItems, tableFilters
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, loading]);
 
-  const renderTable = () => {
-    const classNames = mergeStyleSets({
-      root: {
-        width: '100%',
-      },
-
-      headerDivider: {
-        display: 'inline-block',
-        height: '100%',
-      },
-    });
-
-    if (error) {
-      return <span id="__spanError">Error: {error?.message || 'Something went wrong'}</span>;
-    }
-
-    if (items && items.length > 0) {
-      return (
-        <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
-          <DetailsList
-            className={classNames.root}
-            items={items}
-            columns={columns}
-            selectionMode={SelectionMode.none}
-            setKey="none"
-            layoutMode={DetailsListLayoutMode.justified}
-            isHeaderVisible
-          />
-        </ScrollablePane>
-      );
-    }
-
-    return <EmptyState description="No data" filled={false} />;
-  };
-
   const setComboBoxOptions = () => {
     const options: IComboBoxOption[] = [];
     options.push({ key: 'All', text: '(All Event Types Included)' });
@@ -195,7 +152,7 @@ export const UserAuditLogsTable = ({ id, cols, lazyQuery, getItems, tableFilters
       <Container>
         <Box id={`${id}_TableWrap`}>
           <div id="Table_Detailed" style={{ width: '100%', height: 'calc(100vh - 325px)' }}>
-            {renderTable()}
+            <ScrollableTable id={`${id}_Table`} columns={columns} items={items} error={error} />
           </div>
           <Paginator id="__Paginator" pagingInfo={pagingInfo} onPageChange={onPageChange} />
         </Box>

@@ -1,5 +1,5 @@
+import React, { useState } from 'react';
 import { IColumn } from '@fluentui/react';
-import { useState } from 'react';
 import { NullHandling, PageableInput, SortDirection } from 'src/data/services/graphql';
 import { TableFiltersType } from 'src/hooks/useTableFilters';
 
