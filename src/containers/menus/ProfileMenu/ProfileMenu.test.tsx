@@ -9,30 +9,34 @@ const defaultProps = {
   onUserSettings: () => {},
 };
 
-jest
-  .mock('src/data/services/graphql', () => ({
-    useVersionQuery: () => ({
-      version: '2.0.0.TEST',
-    }),
-    useVersionLazyQuery: () => [
-      jest.fn(),
-      {
-        data: {
-          version: '2.0.0.TEST',
+export const mockLogouts = () => {
+  jest
+    .mock('src/data/services/graphql', () => ({
+      useVersionQuery: () => ({
+        version: '2.0.0.TEST',
+      }),
+      useVersionLazyQuery: () => [
+        jest.fn(),
+        {
+          data: {
+            version: '2.0.0.TEST',
+          },
+          loading: false,
+          error: null,
         },
-        loading: false,
-        error: null,
-      },
-    ],
-  }))
-  .mock('src/use-cases/Authentication', () => ({
-    useLogoutUseCase: () => ({
-      performUserLogout: jest.fn(),
-    }),
-  }))
-  .mock('src/utils/ErrorHandler', () => ({
-    ErrorHandler: () => jest.fn(),
-  }));
+      ],
+    }))
+    .mock('src/use-cases/Authentication', () => ({
+      useLogoutUseCase: () => ({
+        performUserLogout: jest.fn(),
+      }),
+    }))
+    .mock('src/utils/ErrorHandler', () => ({
+      ErrorHandler: () => jest.fn(),
+    }));
+};
+
+mockLogouts();
 
 describe('Profile Menu Testing Unit...', () => {
   const tree = shallowWithTheme(<ProfileMenu {...defaultProps} />);
@@ -51,7 +55,6 @@ describe('Profile Menu Testing Unit...', () => {
       <ApolloProvider client={dummyClient}>
         <StoreProvider store={store}>
           <ProfileMenu {...defaultProps} />
-          );
         </StoreProvider>
       </ApolloProvider>
     );
