@@ -203,7 +203,8 @@ const AccessSpecializationPanel = ({
       const opts = filters.reduce(
         (obj, item) => ({
           ...obj,
-          [item.permission]: item.orgSids.value?.map(({ name: itemName, value }) => ({ name: itemName, key: value })) || [],
+          [item.permission]:
+            item.orgSids.value?.map(({ name: itemName, value }) => ({ name: itemName, key: value })) || [],
         }),
         {}
       );
