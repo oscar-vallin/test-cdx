@@ -82,12 +82,11 @@ const XChangePage = () => {
     const currentDate = new Date(date);
     const formattedDate = currentDate.toDateString();
     let hour = currentDate.getHours();
-    let minutes = currentDate.getMinutes();
-
+    let minutes: string = currentDate.getMinutes().toString();
     const format = hour >= 12 ? 'PM' : 'AM';
     hour %= 12;
     hour = hour || 12;
-    minutes = minutes < 10 ? minutes : minutes;
+    minutes = minutes.length < 2 ? `0${minutes}` : minutes;
     return `${formattedDate} ${hour}:${minutes}${format}`;
   };
 
