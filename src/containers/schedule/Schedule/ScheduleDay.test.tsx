@@ -43,8 +43,8 @@ const items: ScheduleOccurrence[] = [
         ],
       },
       {
-        workOrderId: '2022-05-01-2305016567u1b01',
-        timeRan: '2022-05-01T23:05:01-04:00',
+        workOrderId: '2022-05-01-1605016567u1b01',
+        timeRan: '2022-05-01T16:05:01-04:00',
         status: SchedOccurStatusEnum.Errored,
         statusLabel: 'Errored',
         commands: [
@@ -59,8 +59,8 @@ const items: ScheduleOccurrence[] = [
         ],
       },
       {
-        workOrderId: '2022-05-01-23265293f00b01',
-        timeRan: '2022-05-01T23:26:52-04:00',
+        workOrderId: '2022-05-01-18265293f00b01',
+        timeRan: '2022-05-01T18:26:52-04:00',
         status: SchedOccurStatusEnum.Errored,
         statusLabel: 'Errored',
         commands: [
@@ -105,7 +105,7 @@ describe('Schedule Day Container...', () => {
 
     // Occurrences should be rendered on the calendar
     expect(wrapper.find('div[id="__Occurrence_2022-05-01-141326918xxl101"]')).toHaveLength(1);
-    expect(wrapper.find('div[id="__Occurrence_2022-05-01-23265293f00b01"]')).toHaveLength(1);
+    expect(wrapper.find('div[id="__Occurrence_2022-05-01-18265293f00b01"]')).toHaveLength(1);
 
     // Clicking on an occurrence should open up the calendar
     wrapper.find('div[id="__Occurrence_2022-05-01-141326918xxl101"]').simulate('click');
