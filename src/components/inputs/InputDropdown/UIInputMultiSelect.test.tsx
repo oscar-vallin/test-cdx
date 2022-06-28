@@ -52,6 +52,24 @@ describe('Multi Select UI Input', () => {
     expect(html).toContain('Select Many Field');
 
     expectInfoWarningIcons(wrapper);
+
+    // Change the options
+    wrapper.find('button.ms-ComboBox-CaretDown-button').simulate('click');
+    expect(wrapper.find('input[type="checkbox"]')).toHaveLength(5);
+
+    // uncheck 1, check 2
+    wrapper
+      .find('div.ms-ComboBox-option > input')
+      .at(0)
+      .simulate('change', { target: { checked: true } });
+    expect(onChange).toHaveBeenCalledWith(['4']);
+    onChange.mockClear();
+    wrapper
+      .find('div.ms-ComboBox-option > input')
+      .at(1)
+      .simulate('change', { target: { checked: true } });
+    expect(onChange).toHaveBeenCalledWith(['1', '4', '2']);
+    onChange.mockClear();
   });
 
   it('Hidden Field', () => {
