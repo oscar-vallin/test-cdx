@@ -1,42 +1,32 @@
-import Component from './LayoutDashboard';
-import { mountWithTheme, shallowWithTheme } from 'src/utils/testUtils';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { mockUseActiveDomainStore } from 'src/utils/mockActiveDomainStore';
 import { StoreProvider } from 'easy-peasy';
 import store from 'src/store';
 import { ApolloContextProvider } from 'src/contexts/ApolloContext';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { mountWithTheme } from 'src/utils/testUtils';
+import { LayoutDashboard } from './LayoutDashboard';
 
-const defaultProps = {
-  id: '',
-};
+jest.mock('src/store/ActiveDomainStore', () => ({
+  useActiveDomainStore: mockUseActiveDomainStore,
+}));
 
 describe('Layout Login Container Testing Unit...', () => {
-  const themedComponent = shallowWithTheme(
-    <StoreProvider store={store}>
-      <ApolloContextProvider bypassLoading={true}>
-        <Router>
-          <Component {...defaultProps} />
-        </Router>
-      </ApolloContextProvider>
-    </StoreProvider>
-  );
-  const mountedComponent = mountWithTheme(
-    <StoreProvider store={store}>
-      <ApolloContextProvider>
-        <Router>
-          <Component {...defaultProps} />
-        </Router>
-      </ApolloContextProvider>
-    </StoreProvider>
-  );
+  it('Layout', () => {
+    const wrapper = mountWithTheme(
+      <StoreProvider store={store}>
+        <ApolloContextProvider bypassLoading={true}>
+          <Router>
+            <LayoutDashboard id="__TestLayout">
+              <p id="__hello">Hello</p>
+            </LayoutDashboard>
+          </Router>
+        </ApolloContextProvider>
+      </StoreProvider>
+    );
 
-  it('Should be defined', () => {
-    expect(themedComponent).toBeDefined();
-    expect(mountedComponent).toBeDefined();
-  });
-
-  /* e2e-review: RangeError: Invalid string length */
-  it.skip('Should render correctly', () => {
-    // expect(mountedComponent).toMatchSnapshot();
-    expect(mountedComponent).toMatchSnapshot();
+    expect(wrapper.find('Box[id="__TestLayout__Box"]')).toHaveLength(1);
+    expect(wrapper.find('AppHeader')).toHaveLength(1);
+    expect(wrapper.find('LeftNav')).toHaveLength(1);
+    expect(wrapper.find('#__hello')).toHaveLength(1);
   });
 });
