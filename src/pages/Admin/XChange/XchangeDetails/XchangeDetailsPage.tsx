@@ -74,8 +74,8 @@ const XchangeDetailsPage = () => {
                 <Text style={{ fontWeight: 'bold' }}>Subscribers:</Text>
               </Row>
               <Spacing margin="normal" />
-              {xchangesAlerts?.map((xchangeData: XchangeAlert, index: number) =>
-                xchangeData.subscribers?.map((subs) => (
+              {xchangesAlerts?.map((xchangeData: XchangeAlert) =>
+                xchangeData.subscribers?.map((subs, index: number) => (
                   <Spacing margin={{ bottom: 'normal' }} key={index}>
                     <Row>
                       <SubsStyled>
@@ -92,8 +92,9 @@ const XchangeDetailsPage = () => {
             <CardStyled>
               <Container>
                 <Row>
-                  {fileProcess?.map((process: XchangeFileProcessForm) => (
+                  {fileProcess?.map((process: XchangeFileProcessForm, index: number) => (
                     <UIInputMultiSelect
+                      key={index}
                       id="__applicableOrgTypes"
                       uiField={process.filenameQualifiers}
                       options={process.options ?? []}
@@ -111,6 +112,7 @@ const XchangeDetailsPage = () => {
         </>
       );
     }
+    return null;
   };
 
   const renderBody = () => {

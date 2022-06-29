@@ -45,7 +45,7 @@ type DemoCanvasWidgetProps = {
   background?: string;
 };
 
-export const StyledSFTP = styled.rect`
+export const StyledSFTP = styled.div`
   x: 10;
   y: 10;
   width: 40px;
