@@ -32,6 +32,24 @@ export const ContainerInput = styled.div`
   margin: 0 auto;
 `;
 
+export const StyledIconsComments = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-center;
+
+  [data-icon-name*='Save'] {
+    font-size: 0.9em;
+    color: #0078d4;
+  }
+  [data-icon-name*='Cancel'] {
+    font-size: 0.9em;
+    color: #0078d4;
+    padding-left: 10px;
+  }
+
+ 
+`;
+
 export const CircleStyled = styled.div<CircleStyledProps>`
   border-radius: 50%;
   width: 20px;
