@@ -1,10 +1,8 @@
 import React, { ReactElement } from 'react';
 import { format, isSameHour, parseISO } from 'date-fns';
 import { Stack, StackItem } from '@fluentui/react';
-import { useHistory } from 'react-router-dom';
 import { SchedOccurStatusEnum, ScheduleOccurrence, WorkPacketCommandType } from 'src/data/services/graphql';
 import { Badge } from 'src/components/badges/Badge';
-import { useOrgSid } from 'src/hooks/useOrgSid';
 import { UseFileStatusDetailsPanel } from 'src/pages/FileStatusDetails/useFileStatusDetailsPanel';
 import {
   DayBodyRow,
@@ -43,9 +41,6 @@ export const ScheduleDay = ({ currentDate, selectedDate, items, useFileStatusDet
   const hourFormat = 'h aa';
 
   const runOccurrences: RunOccurrence[] = [];
-
-  const { orgSid, startDate, endDate } = useOrgSid();
-  const history = useHistory();
 
   items.forEach((item) => {
     if (item.runOccurrences) {
@@ -99,9 +94,6 @@ export const ScheduleDay = ({ currentDate, selectedDate, items, useFileStatusDet
   const openDetails = (runOccurrence: RunOccurrence) => {
     if (runOccurrence.canViewDetails) {
       useFileStatusDetailsPanel?.showPanel(runOccurrence.workOrderId ?? '', runOccurrence.orgSid ?? '', '');
-      /*  history.push(
-        `/file-status/${runOccurrence.workOrderId}?orgSid=${orgSid}&fsOrgSid=${runOccurrence.orgSid}&startDate${startDate}=&endDate=${endDate}`
-      ); */
     }
   };
 
@@ -111,7 +103,11 @@ export const ScheduleDay = ({ currentDate, selectedDate, items, useFileStatusDet
     const dayRows = allItems.filter((_item) => isSameHour(_item.runTime, day));
 
     return dayRows?.map((_item, index) => (
-      <OccurrenceDetail key={`cell_${hour}_${index}`} onClick={() => openDetails(_item)}>
+      <OccurrenceDetail
+        id={`__Occurrence_${_item.workOrderId}`}
+        key={`cell_${hour}_${index}`}
+        onClick={() => openDetails(_item)}
+      >
         <Stack horizontal tokens={{ childrenGap: 15 }} verticalAlign="center" wrap>
           <StackItem>
             <OccurrenceItem>{format(_item.runTime, 'hh:mm')}</OccurrenceItem>

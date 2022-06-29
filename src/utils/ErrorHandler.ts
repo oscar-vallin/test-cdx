@@ -1,9 +1,9 @@
 import { useHistory } from 'react-router-dom';
 import { ROUTES } from 'src/data/constants/RouteConstants';
 import { useSessionStore } from 'src/store/SessionStore';
-import { useNotification } from '../hooks/useNotification';
-import { useApplicationStore } from '../store/ApplicationStore';
-import { useLogoutUseCase } from '../use-cases/Authentication';
+import { useNotification } from 'src/hooks/useNotification';
+import { useApplicationStore } from 'src/store/ApplicationStore';
+import { useLogoutUseCase } from 'src/use-cases/Authentication';
 
 export const ErrorHandler = () => {
   const Toast = useNotification();

@@ -19,12 +19,12 @@ jest.mock('react-router-dom', () => ({
 }));
 
 const tableFilters = (includeToday: boolean): TableFiltersType => {
-  const sDate = includeToday? startOfYesterday() : new Date(2020, 10, 13);
-  const eDate = includeToday? endOfToday() : new Date(2020, 10, 14);
+  const sDate = includeToday ? startOfYesterday() : new Date(2020, 10, 13);
+  const eDate = includeToday ? endOfToday() : new Date(2020, 10, 14);
 
   return {
-    startDate: {value: sDate, setValue: jest.fn(), onChange: jest.fn()},
-    endDate: {value: eDate, setValue: jest.fn(), onChange: jest.fn()},
+    startDate: { value: sDate, setValue: jest.fn(), onChange: jest.fn() },
+    endDate: { value: eDate, setValue: jest.fn(), onChange: jest.fn() },
     searchText: {
       value: '',
       label: '',
@@ -80,7 +80,7 @@ const mockGraphQLLazy = () => [
   },
 ];
 
-const mockEmptyGraphQLLazy= () => [
+const mockEmptyGraphQLLazy = () => [
   () => {
     lazyQueryCalled = true;
   },
@@ -159,12 +159,12 @@ jest.mock('src/utils/ErrorHandler', () => ({
   ErrorHandler: () => {
     return () => {
       // do nothing ;
-    }
-  }
+    };
+  },
 }));
 
 describe('Work Packet Table Container Testing Unit...', () => {
-  it ('Table is rendered', () => {
+  it('Table is rendered', () => {
     const wrapper = mountWithTheme(
       <StoreProvider store={store}>
         <WorkPacketTable {...defaultProps} />
@@ -201,10 +201,9 @@ describe('Work Packet Table Container Testing Unit...', () => {
     expect(nextButton).toHaveLength(1);
     nextButton.simulate('click');
     // Table Filters should change
-
   });
 
-  it ('Empty Polling Table', () => {
+  it('Empty Polling Table', () => {
     const startPolling = jest.fn();
     const stopPolling = jest.fn();
     const pollingQuery = () => ({
@@ -219,7 +218,7 @@ describe('Work Packet Table Container Testing Unit...', () => {
 
     const wrapper = mountWithTheme(
       <StoreProvider store={store}>
-        <WorkPacketTable {...emptyTableProps} pollingQuery={ pollingQuery }/>
+        <WorkPacketTable {...emptyTableProps} pollingQuery={pollingQuery} />
       </StoreProvider>
     );
 
@@ -232,7 +231,7 @@ describe('Work Packet Table Container Testing Unit...', () => {
     expect(stopPolling).toHaveBeenCalledTimes(0);
   });
 
-  it ('No Polling Outside of Today', () => {
+  it('No Polling Outside of Today', () => {
     const startPolling = jest.fn();
     const stopPolling = jest.fn();
     const pollingQuery = () => ({
@@ -247,7 +246,7 @@ describe('Work Packet Table Container Testing Unit...', () => {
 
     const wrapper = mountWithTheme(
       <StoreProvider store={store}>
-        <WorkPacketTable {...emptyTableProps} pollingQuery={ pollingQuery } tableFilters={tableFilters(false)}/>
+        <WorkPacketTable {...emptyTableProps} pollingQuery={pollingQuery} tableFilters={tableFilters(false)} />
       </StoreProvider>
     );
 

@@ -29,7 +29,7 @@ export const UICheckboxList = ({
   formatTooltip = false,
 }: UICheckboxListType) => {
   const renderReadOnlyValues = () => {
-    if (value?.length === 0) {
+    if (!value || value?.length === 0) {
       return (
         <OptionRow>
           <Text variant="muted">No values selected</Text>
@@ -47,6 +47,10 @@ export const UICheckboxList = ({
         </OptionRow>
       ));
   };
+
+  if (uiField?.visible === false) {
+    return null;
+  }
 
   return (
     <>
@@ -66,7 +70,7 @@ export const UICheckboxList = ({
           emptyMessage={emptyMessage}
         />
       ) : (
-        <div>{renderReadOnlyValues()}</div>
+        <div id={id}>{renderReadOnlyValues()}</div>
       )}
     </>
   );
