@@ -49,7 +49,13 @@ const Diagram = ({ data }) => {
               panOnScroll={false}
               preventScrolling={false}
               zoomOnDoubleClick={false}
-              elementsSelectable={false}
+              // elementsSelectable={false}
+              // selectionKeyCode={null}
+              // multiSelectionKeyCode={null}
+              // selectNodesOnDrag={false}
+              nodesDraggable={false}
+              nodesConnectable={false}
+              panOnDrag={false}
               onNodesChange={onNodesChange}
               onEdgesChange={onEdgesChange}
               onConnect={onConnect}
