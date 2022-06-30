@@ -14,13 +14,16 @@ const DataNodeSteps = ({ data, id }) => {
   const trans = findFromKey.toKey.includes('trans');
   const { qualifier } = data;
   const subTitle: string = data.subTitle ?? '';
+  const styles = { lineHeight: subTitle.trim() === '' ? '36px' : '18px' };
   if (iconName === 'Column Arrow Right') {
     iconName = 'PaddingRight';
   }
+  if (subTitle.trim() !== '') {
+    styles['maxWidth'] = '180px';
+    styles['width'] = '100%';
+    styles['overflow'] = 'hidden';
+  }
 
-  const styles = {
-    lineHeight: subTitle.trim() === '' ? '36px' : '18px',
-  };
   let width = '48px';
   let color = 'blue';
 
@@ -59,7 +62,7 @@ const DataNodeSteps = ({ data, id }) => {
                     height: '37px',
                     borderRadius: '50%',
                     backgroundColor: '#00a341',
-                    padding: '6px 1px 7px 0px',
+                    padding: '6px 3px 7px 3px',
                     textAlign: 'center',
                   }}
                 />
@@ -80,7 +83,7 @@ const DataNodeSteps = ({ data, id }) => {
                 />
               )}
               <Text style={styles}>
-                {data.label} <br /> <span>{subTitle.trim() !== '' && <Text variant="small">{subTitle}</Text>}</span>
+                {data.label} <br /> {subTitle.trim() !== '' && <Text variant="small">{subTitle}</Text>}
               </Text>
             </Stack>
           </Row>

@@ -4,6 +4,12 @@ export function InitialNodes(data) {
     { x: 270, y: 530 },
     { x: 540, y: 530 },
     { x: 820, y: 530 },
+    { x: 0, y: 700 },
+    { x: 270, y: 700 },
+    { x: 540, y: 700 },
+    { x: 820, y: 700 },
+    { x: 820, y: 700 },
+    { x: 820, y: 700 },
   ];
   const initialSteps = data.steps.map((step, index: number) => {
     const values = {};

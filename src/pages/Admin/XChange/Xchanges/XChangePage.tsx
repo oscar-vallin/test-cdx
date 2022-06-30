@@ -23,11 +23,23 @@ import { PageTitle } from 'src/components/typography';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { ROUTE_XCHANGE_LIST } from 'src/data/constants/RouteConstants';
 import { useOrgSid } from 'src/hooks/useOrgSid';
-import { useXchangeProfileLazyQuery, XchangeConfigSummary } from 'src/data/services/graphql';
+import {
+  useXchangeProfileLazyQuery,
+  XchangeConfigSummary,
+  useUpdateXchangeProfileCommentMutation,
+} from 'src/data/services/graphql';
 import { yyyyMMdd } from 'src/utils/CDXUtils';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { PageBody } from 'src/components/layouts/Column';
-import { SetupStyled, CardStyled, ContainerInput, CircleStyled, StyledButtonAction } from './XchangePage.styles';
+import { PreviewConvertXchangePanel } from './PreviewConvertXchangePanel';
+import {
+  SetupStyled,
+  CardStyled,
+  ContainerInput,
+  CircleStyled,
+  StyledButtonAction,
+  StyledIconsComments,
+} from './XchangePage.styles';
 
 type TooltipsProps = {
   hasAlerts: string;
@@ -48,12 +60,20 @@ const XChangePage = () => {
 
   const [xchangeProfile, { data: dataXchange, loading: loadingXchange }] = useQueryHandler(useXchangeProfileLazyQuery);
 
+  // const [xchangeProfileComment, { data: dataComment, loading: loadingComment }] = useQueryHandler(useUpdateXchangeProfileCommentMutation);
+
   const [xchanges, setXchanges] = useState<XchangeConfigSummary[]>([]);
   const [searchXchanges, setSearchXchanges] = useState<string>('');
   const [filterXchange, setFilterXchange] = useState<XchangeConfigSummary[]>([]);
   const [tooltipContent, setTooltipContent] = useState<TooltipsProps>();
   const [globalXchangeAlerts, setGlobalXchangeAlerts] = useState<XchangeAlertsProps>();
   const [individualXchangeAlerts, setIndividualXchangeAlerts] = useState<XchangeAlertsProps[]>();
+  const [requiresConversion, setRequiresConversion] = useState<boolean>();
+  const [editComment, setEditComment] = useState(false);
+  const [comment, setComment] = useState('');
+  const [saveComment, setSaveComment] = useState(false);
+  const [refreshDataXchange, setRefreshDataXchange] = useState(false);
+  const [openPanel, setOpenPanel] = useState(false);
 
   const fetchData = () => {
     xchangeProfile({
@@ -140,7 +160,7 @@ const XChangePage = () => {
 
   useEffect(() => {
     fetchData();
-  }, [useOrgSid]);
+  }, [useOrgSid, refreshDataXchange]);
 
   useEffect(() => {
     if (!loadingXchange && dataXchange) {
@@ -148,6 +168,7 @@ const XChangePage = () => {
       setTooltipContent(dataXchange.xchangeProfile.tooltips);
       setGlobalXchangeAlerts(dataXchange.xchangeProfile.globalXchangeAlerts);
       setIndividualXchangeAlerts(dataXchange.xchangeProfile.individualXchangeAlerts);
+      setRequiresConversion(dataXchange.xchangeProfile.requiresConversion);
     }
   }, [dataXchange, loadingXchange]);
 
@@ -155,6 +176,16 @@ const XChangePage = () => {
     if (xchanges.length > 0) {
       filterData();
     }
+
+    // if (saveComment) {
+    //   console.log(orgSid, comment)
+    //   xchangeProfileComment({
+    //     variables: {
+    //       orgSid,
+    //       comment,
+    //     },
+    //   });
+    // }
   }, [searchXchanges]);
 
   const onRenderItemColum = (node: XchangeConfigSummary, itemIndex?: number, column?: IColumn) => {
@@ -238,7 +269,12 @@ const XChangePage = () => {
     );
   };
 
-  const onRenderAction = () => <IconButton iconProps={{ iconName: 'Trash' }} />;
+  const onRenderAction = () => {
+    if (!requiresConversion) {
+      return <IconButton iconProps={{ iconName: 'Trash' }} />;
+    }
+    return null;
+  };
 
   const columns: IColumn[] = [
     {
@@ -294,18 +330,28 @@ const XChangePage = () => {
   ];
 
   const renderCreateButton = () => {
-    return (
-      <PrimaryButton id="__Create-User" iconProps={{ iconName: 'FileHTML' }}>
-        Publish
-      </PrimaryButton>
-    );
+    if (dataXchange && !requiresConversion) {
+      return (
+        <PrimaryButton id="__Publish" iconProps={{ iconName: 'FileHTML' }}>
+          Publish
+        </PrimaryButton>
+      );
+    }
+    if (dataXchange && requiresConversion) {
+      return (
+        <PrimaryButton id="__Convert-NewFormat" iconProps={{ iconName: 'Play' }} onClick={() => setOpenPanel(true)}>
+          Convert to new Format
+        </PrimaryButton>
+      );
+    }
+    return null;
   };
 
   const renderBody = () => {
     if (loadingXchange) {
       return (
         <Spacing margin={{ top: 'double' }}>
-          <Spinner size={SpinnerSize.large} label="Loading active orgs" />
+          <Spinner size={SpinnerSize.large} label="Loading xchanges" />
         </Spacing>
       );
     }
@@ -337,6 +383,17 @@ const XChangePage = () => {
         isHeaderVisible
       />
     );
+  };
+
+  const readonlyComments = () => {
+    if (requiresConversion) {
+      return true;
+    }
+
+    if (editComment) {
+      return false;
+    }
+    return true;
   };
 
   const cardBox = () => {
@@ -383,14 +440,41 @@ const XChangePage = () => {
           <CardStyled>
             <ContainerInput>
               <Row>
-                <Column lg="8">
+                <Column lg="6">
                   <Text style={{ fontWeight: 'bold', marginTop: '10px' }}>Comments</Text>
                 </Column>
-                <Column lg="4" right>
-                  <IconButton iconProps={{ iconName: 'EditSolid12' }} />
-                </Column>
+                {!requiresConversion && editComment ? (
+                  <>
+                    <Column lg="3">
+                      <StyledIconsComments>
+                        <IconButton iconProps={{ iconName: 'Save' }} onClick={() => setSaveComment(true)} />
+                        <Text variant="small">Save</Text>
+                      </StyledIconsComments>
+                    </Column>
+                    <Column lg="3" right>
+                      <StyledIconsComments>
+                        <IconButton iconProps={{ iconName: 'Cancel' }} onClick={() => setEditComment(false)} />
+                        <Text variant="small">Cancel</Text>
+                      </StyledIconsComments>
+                    </Column>
+                  </>
+                ) : (
+                  <Column lg="6" right>
+                    <IconButton
+                      iconProps={{ iconName: 'EditSolid12' }}
+                      onClick={() => setEditComment(!requiresConversion && true)}
+                    />
+                  </Column>
+                )}
               </Row>
-              <TextField multiline borderless={true} resizable={false} rows={7} />
+              <TextField
+                multiline
+                borderless={true}
+                readOnly={readonlyComments()}
+                resizable={false}
+                rows={7}
+                onChange={(event, newValue) => setComment(newValue ?? '')}
+              />
             </ContainerInput>
           </CardStyled>
         </Spacing>
@@ -405,6 +489,21 @@ const XChangePage = () => {
           <Row>
             <Column lg="6" direction="row">
               <PageTitle id="__Page_Title_Xchange" title="Xchange Profile" />
+              {requiresConversion && (
+                <TooltipHost content={tooltipContent?.requiresConversion} id="requiresConversion">
+                  <FontIcon
+                    iconName="ReportWarning"
+                    id="requiresConversion"
+                    style={{
+                      color: 'orange',
+                      fontWeight: 700,
+                      fontSize: '18px',
+                      margin: '5px 0 0 8px',
+                      cursor: 'pointer',
+                    }}
+                  />
+                </TooltipHost>
+              )}
             </Column>
             <Column lg="6" right>
               {renderCreateButton()}
@@ -419,13 +518,15 @@ const XChangePage = () => {
               <Column lg="7">
                 <Text style={{ fontWeight: 'bold' }}>Xchanges</Text>
               </Column>
-              <Column lg="2" right>
-                <SetupStyled>
-                  <StyledButtonAction id="__SetupNewXchange">
-                    + <Text style={{ paddingTop: '5px' }}>Setup new Xchange</Text>
-                  </StyledButtonAction>
-                </SetupStyled>
-              </Column>
+              {!requiresConversion && (
+                <Column lg="2" right>
+                  <SetupStyled>
+                    <StyledButtonAction id="__SetupNewXchange">
+                      + <Text style={{ paddingTop: '5px' }}>Setup new Xchange</Text>
+                    </StyledButtonAction>
+                  </SetupStyled>
+                </Column>
+              )}
             </Row>
             <Row>
               <Stack horizontal={true} wrap={true} style={{ width: '100%' }} verticalAlign="end">
@@ -448,6 +549,11 @@ const XChangePage = () => {
           </Container>
         </Spacing>
       </PageBody>
+      <PreviewConvertXchangePanel
+        isPanelOpen={openPanel}
+        closePanel={setOpenPanel}
+        refreshXchangePage={setRefreshDataXchange}
+      />
     </LayoutDashboard>
   );
 };

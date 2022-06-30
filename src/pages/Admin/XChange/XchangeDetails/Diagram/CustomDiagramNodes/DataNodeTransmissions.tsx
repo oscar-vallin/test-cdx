@@ -78,7 +78,7 @@ const DataNodeTransmissions = ({ data, id }) => {
                 <StyledSFTP>
                   <Text style={{ fontWeight: 700, color: '#666666' }}>{data.protocol}</Text>
                 </StyledSFTP>
-                <Text style={{ lineHeight: '38px' }} variant="small">
+                <Text style={{ lineHeight: '38px', width: '200px' }} variant="small">
                   {data.host}
                 </Text>
               </Stack>
@@ -102,7 +102,7 @@ const DataNodeTransmissions = ({ data, id }) => {
               <StyledSFTP>
                 <Text style={{ fontWeight: 700, color: '#666666' }}>{data.protocol}</Text>
               </StyledSFTP>
-              <Text style={{ lineHeight: '38px' }} variant="small">
+              <Text style={{ lineHeight: '38px', width: '200px' }} variant="small">
                 {data.host}
               </Text>
             </Stack>
