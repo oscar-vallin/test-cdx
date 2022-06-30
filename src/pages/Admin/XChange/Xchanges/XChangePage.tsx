@@ -72,6 +72,7 @@ const XChangePage = () => {
   const [editComment, setEditComment] = useState(false);
   const [comment, setComment] = useState('');
   const [saveComment, setSaveComment] = useState(false);
+  const [refreshDataXchange, setRefreshDataXchange] = useState(false);
   const [openPanel, setOpenPanel] = useState(false);
 
   const fetchData = () => {
@@ -159,11 +160,10 @@ const XChangePage = () => {
 
   useEffect(() => {
     fetchData();
-  }, [useOrgSid]);
+  }, [useOrgSid, refreshDataXchange]);
 
   useEffect(() => {
     if (!loadingXchange && dataXchange) {
-      console.log(dataXchange)
       setXchanges(dataXchange.xchangeProfile.xchanges);
       setTooltipContent(dataXchange.xchangeProfile.tooltips);
       setGlobalXchangeAlerts(dataXchange.xchangeProfile.globalXchangeAlerts);
@@ -187,10 +187,6 @@ const XChangePage = () => {
     //   });
     // }
   }, [searchXchanges]);
-
-  // useEffect(() => {
-  //   console.log(dataComment)
-  // }, [dataComment]);
 
   const onRenderItemColum = (node: XchangeConfigSummary, itemIndex?: number, column?: IColumn) => {
     let columnVal: string | undefined;
@@ -389,6 +385,17 @@ const XChangePage = () => {
     );
   };
 
+  const readonlyComments = () => {
+    if (requiresConversion) {
+      return true;
+    }
+
+    if (editComment) {
+      return false;
+    }
+    return true;
+  };
+
   const cardBox = () => {
     return (
       <>
@@ -463,7 +470,7 @@ const XChangePage = () => {
               <TextField
                 multiline
                 borderless={true}
-                readOnly={requiresConversion && !editComment}
+                readOnly={readonlyComments()}
                 resizable={false}
                 rows={7}
                 onChange={(event, newValue) => setComment(newValue ?? '')}
@@ -542,7 +549,11 @@ const XChangePage = () => {
           </Container>
         </Spacing>
       </PageBody>
-      <PreviewConvertXchangePanel isPanelOpen={openPanel} closePanel={setOpenPanel} />
+      <PreviewConvertXchangePanel
+        isPanelOpen={openPanel}
+        closePanel={setOpenPanel}
+        refreshXchangePage={setRefreshDataXchange}
+      />
     </LayoutDashboard>
   );
 };
