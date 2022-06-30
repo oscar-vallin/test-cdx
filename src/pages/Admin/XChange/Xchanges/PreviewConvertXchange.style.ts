@@ -1,6 +1,9 @@
 import styled from 'styled-components';
 
-export const StyledTextList = styled.ul`
+export const StyledList = styled.div`
   list-style-type: disc;
-  border: solid 1px black;
+
+  li {
+    margin-left: 10px;
+  }
 `;

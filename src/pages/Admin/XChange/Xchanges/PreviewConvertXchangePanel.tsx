@@ -1,30 +1,34 @@
 import React, { useEffect, useState } from 'react';
-import { DetailsList, PanelType, Stack, Text, List, PrimaryButton } from '@fluentui/react';
-import {
-  PanelBody,
-  PanelHeader,
-  PanelTitle,
-  ThemedPanel,
-  WizardBody,
-  WizardButtonRow,
-} from 'src/layouts/Panels/Panels.styles';
+import { PanelType, Text, PrimaryButton } from '@fluentui/react';
+import { PanelBody, ThemedPanel, WizardBody, WizardButtonRow } from 'src/layouts/Panels/Panels.styles';
 
 import { useOrgSid } from 'src/hooks/useOrgSid';
-import { usePreviewConvertXchangeProfileLazyQuery, Organization } from 'src/data/services/graphql';
+import {
+  usePreviewConvertXchangeProfileLazyQuery,
+  Organization,
+  useConvertXchangeProfileMutation,
+} from 'src/data/services/graphql';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
-import { Container, Row } from 'src/components/layouts';
+import { useNotification } from 'src/hooks/useNotification';
 import { Spacing } from 'src/components/spacings/Spacing';
-import { StyledTextList } from './PreviewConvertXchange.style';
+import { StyledList } from './PreviewConvertXchange.style';
 
 type PreviewConvertXchangePanel = {
   isPanelOpen: boolean;
   closePanel: (data: boolean) => void;
+  refreshXchangePage: (data: boolean) => void;
 };
 
-const PreviewConvertXchangePanel = ({ isPanelOpen, closePanel }: PreviewConvertXchangePanel) => {
+const PreviewConvertXchangePanel = ({ isPanelOpen, closePanel, refreshXchangePage }: PreviewConvertXchangePanel) => {
   const { orgSid } = useOrgSid();
+  const Toast = useNotification();
+
   const [xchangePreviewConvert, { data: dataPreviewConvert, loading: loadingPreviewConvert }] = useQueryHandler(
     usePreviewConvertXchangeProfileLazyQuery
+  );
+
+  const [xchangeConvert, { data: dataConvert, loading: loadingConvert, error: errorConvert }] = useQueryHandler(
+    useConvertXchangeProfileMutation
   );
 
   const [newUsersAccounts, setNewUsersAccounts] = useState([]);
@@ -38,17 +42,35 @@ const PreviewConvertXchangePanel = ({ isPanelOpen, closePanel }: PreviewConvertX
     });
   };
 
+  const convertsClietnProfile = () => {
+    xchangeConvert({
+      variables: {
+        orgSid,
+      },
+    });
+  };
+
   useEffect(() => {
     getPreviewConvertData();
   }, []);
 
   useEffect(() => {
     if (!loadingPreviewConvert && dataPreviewConvert) {
-      console.log(dataPreviewConvert);
       setNewUsersAccounts(dataPreviewConvert.previewConvertXchangeProfile.newUserAccounts);
       setNewVendors(dataPreviewConvert.previewConvertXchangeProfile.newVendors);
     }
   }, [dataPreviewConvert, loadingPreviewConvert]);
+
+  useEffect(() => {
+    if (dataConvert && !loadingConvert) {
+      Toast.success({ text: 'Client Profile converted successfully' });
+      refreshXchangePage(true);
+      closePanel(false);
+    }
+    if (errorConvert && !loadingConvert) {
+      Toast.error({ text: 'there was an error to Convert to new Format' });
+    }
+  }, [dataConvert, errorConvert, loadingConvert]);
 
   return (
     <ThemedPanel
@@ -66,36 +88,39 @@ const PreviewConvertXchangePanel = ({ isPanelOpen, closePanel }: PreviewConvertX
           {newVendors.length > 0 && (
             <>
               <Spacing margin={{ top: 'double', bottom: 'normal' }}>
-                <Text>Vendors</Text>
+                <Text style={{ fontWeight: 'bold' }}>Vendors</Text>
                 <br />
                 <Text>The following Vendor organization will be created in order to support this conversion.</Text>
               </Spacing>
-              <List items={newVendors} />
+              <StyledList>
+                {newVendors.map((vendor: Organization) => (
+                  <li key={vendor.orgId}>{vendor.name}</li>
+                ))}
+              </StyledList>
             </>
           )}
           {newUsersAccounts.length > 0 && (
             <>
               <Spacing margin={{ top: 'double', bottom: 'normal' }}>
-                <Text>User Accounts</Text>
+                <Text style={{ fontWeight: 'bold' }}>User Accounts</Text>
                 <br />
                 <Text>The following User Accounts will be created in order to support this conversion.</Text>
               </Spacing>
-              <List
-                role="listbox"
-                items={newUsersAccounts.map((user) => {
-                  const userEmail = {};
-                  userEmail['name'] = user;
-                  return userEmail;
-                })}
-              />
+              <StyledList>
+                {newUsersAccounts.map((user: string, index: number) => (
+                  <li key={index}>{user}</li>
+                ))}
+              </StyledList>
             </>
           )}
         </WizardBody>
-        <WizardButtonRow>
-          <PrimaryButton id="__Convert-NewFormat" iconProps={{ iconName: 'Play' }}>
-            Convert to new Format
-          </PrimaryButton>
-        </WizardButtonRow>
+        {dataPreviewConvert && dataPreviewConvert.previewConvertXchangeProfile.commands.length > 0 && (
+          <WizardButtonRow>
+            <PrimaryButton id="__Convert-NewFormat" iconProps={{ iconName: 'Play' }} onClick={convertsClietnProfile}>
+              Convert to new Format
+            </PrimaryButton>
+          </WizardButtonRow>
+        )}
       </PanelBody>
     </ThemedPanel>
   );
