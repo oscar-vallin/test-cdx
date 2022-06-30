@@ -46,8 +46,6 @@ export const StyledIconsComments = styled.div`
     color: #0078d4;
     padding-left: 10px;
   }
-
- 
 `;
 
 export const CircleStyled = styled.div<CircleStyledProps>`
