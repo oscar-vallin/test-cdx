@@ -351,7 +351,7 @@ const XChangePage = () => {
     if (loadingXchange) {
       return (
         <Spacing margin={{ top: 'double' }}>
-          <Spinner size={SpinnerSize.large} label="Loading active orgs" />
+          <Spinner size={SpinnerSize.large} label="Loading xchanges" />
         </Spacing>
       );
     }
