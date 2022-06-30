@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { PanelType, Text, PrimaryButton } from '@fluentui/react';
+import { PanelType, Text, PrimaryButton, Spinner, SpinnerSize } from '@fluentui/react';
 import { PanelBody, ThemedPanel, WizardBody, WizardButtonRow } from 'src/layouts/Panels/Panels.styles';
 
 import { useOrgSid } from 'src/hooks/useOrgSid';
@@ -33,6 +33,7 @@ const PreviewConvertXchangePanel = ({ isPanelOpen, closePanel, refreshXchangePag
 
   const [newUsersAccounts, setNewUsersAccounts] = useState([]);
   const [newVendors, setNewVendors] = useState<Organization[]>([]);
+  const [disableButton, setDisableButton] = useState(false);
 
   const getPreviewConvertData = () => {
     xchangePreviewConvert({
@@ -43,11 +44,23 @@ const PreviewConvertXchangePanel = ({ isPanelOpen, closePanel, refreshXchangePag
   };
 
   const convertsClietnProfile = () => {
+    setDisableButton(true);
     xchangeConvert({
       variables: {
         orgSid,
       },
     });
+  };
+
+  const renderSpinner = () => {
+    if (loadingConvert) {
+      return (
+        <Spacing margin={{ top: 'double' }}>
+          <Spinner size={SpinnerSize.large} label="Converting" />
+        </Spacing>
+      );
+    }
+    return null;
   };
 
   useEffect(() => {
@@ -56,6 +69,7 @@ const PreviewConvertXchangePanel = ({ isPanelOpen, closePanel, refreshXchangePag
 
   useEffect(() => {
     if (!loadingPreviewConvert && dataPreviewConvert) {
+      console.log(dataPreviewConvert);
       setNewUsersAccounts(dataPreviewConvert.previewConvertXchangeProfile.newUserAccounts);
       setNewVendors(dataPreviewConvert.previewConvertXchangeProfile.newVendors);
     }
@@ -66,9 +80,11 @@ const PreviewConvertXchangePanel = ({ isPanelOpen, closePanel, refreshXchangePag
       Toast.success({ text: 'Client Profile converted successfully' });
       refreshXchangePage(true);
       closePanel(false);
+      setDisableButton(false);
     }
     if (errorConvert && !loadingConvert) {
       Toast.error({ text: 'there was an error to Convert to new Format' });
+      setDisableButton(false);
     }
   }, [dataConvert, errorConvert, loadingConvert]);
 
@@ -113,10 +129,16 @@ const PreviewConvertXchangePanel = ({ isPanelOpen, closePanel, refreshXchangePag
               </StyledList>
             </>
           )}
+          {renderSpinner()}
         </WizardBody>
         {dataPreviewConvert && dataPreviewConvert.previewConvertXchangeProfile.commands.length > 0 && (
           <WizardButtonRow>
-            <PrimaryButton id="__Convert-NewFormat" iconProps={{ iconName: 'Play' }} onClick={convertsClietnProfile}>
+            <PrimaryButton
+              disabled={disableButton}
+              id="__Convert-NewFormat"
+              iconProps={{ iconName: 'Play' }}
+              onClick={convertsClietnProfile}
+            >
               Convert to new Format
             </PrimaryButton>
           </WizardButtonRow>
