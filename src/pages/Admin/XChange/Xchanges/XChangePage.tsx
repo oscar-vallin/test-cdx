@@ -186,9 +186,11 @@ const XChangePage = () => {
       setComment(dataXchange.xchangeProfile.comments);
     }
 
-    const pageCommands = dataXchange?.xchangeProfile?.commands;
-    const _updateCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Update);
-    setUpdateCmd(_updateCmd);
+    if (!dataXchange?.xchangeProfile?.requiresConversion) {
+      const pageCommands = dataXchange?.xchangeProfile?.commands;
+      const _updateCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Update);
+      setUpdateCmd(_updateCmd);
+    }
   }, [dataXchange, loadingXchange]);
 
   useEffect(() => {
@@ -483,7 +485,7 @@ const XChangePage = () => {
                   <Column lg="6" right>
                     <IconButton
                       iconProps={{ iconName: 'EditSolid12' }}
-                      onClick={() => setEditComment(!requiresConversion && true)}
+                      onClick={() => setEditComment(updateCmd !== undefined && true)}
                     />
                   </Column>
                 )}
