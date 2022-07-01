@@ -7,6 +7,8 @@ import {
   usePreviewConvertXchangeProfileLazyQuery,
   Organization,
   useConvertXchangeProfileMutation,
+  CdxWebCommandType,
+  WebCommand,
 } from 'src/data/services/graphql';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { useNotification } from 'src/hooks/useNotification';
@@ -34,6 +36,8 @@ const PreviewConvertXchangePanel = ({ isPanelOpen, closePanel, refreshXchangePag
   const [newUsersAccounts, setNewUsersAccounts] = useState([]);
   const [newVendors, setNewVendors] = useState<Organization[]>([]);
   const [disableButton, setDisableButton] = useState(false);
+
+  const [createCmd, setCreateCmd] = useState<WebCommand | null>();
 
   const getPreviewConvertData = () => {
     xchangePreviewConvert({
@@ -69,9 +73,11 @@ const PreviewConvertXchangePanel = ({ isPanelOpen, closePanel, refreshXchangePag
 
   useEffect(() => {
     if (!loadingPreviewConvert && dataPreviewConvert) {
-      console.log(dataPreviewConvert);
       setNewUsersAccounts(dataPreviewConvert.previewConvertXchangeProfile.newUserAccounts);
       setNewVendors(dataPreviewConvert.previewConvertXchangeProfile.newVendors);
+      const pageCommands = dataPreviewConvert.previewConvertXchangeProfile.commands;
+      const _createCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create);
+      setCreateCmd(_createCmd);
     }
   }, [dataPreviewConvert, loadingPreviewConvert]);
 
@@ -131,7 +137,7 @@ const PreviewConvertXchangePanel = ({ isPanelOpen, closePanel, refreshXchangePag
           )}
           {renderSpinner()}
         </WizardBody>
-        {dataPreviewConvert && dataPreviewConvert.previewConvertXchangeProfile.commands.length > 0 && (
+        {dataPreviewConvert && createCmd && (
           <WizardButtonRow>
             <PrimaryButton
               disabled={disableButton}
