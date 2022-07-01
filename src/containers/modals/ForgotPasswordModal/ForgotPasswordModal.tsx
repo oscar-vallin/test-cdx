@@ -21,9 +21,8 @@ type ForgotPasswordModalProps = {
 const ForgotPasswordModal = ({ isOpen, open, currentUserId }: ForgotPasswordModalProps): ReactElement => {
   const [forgotPassword, setForgotPassword] = useState(open);
   const [userId, setUserId] = useState('');
-  const [success, setSuccess] = useState(false);
   const [successfulText, setSuccessfulText] = useState<string>('');
-  const [closeProcess, setCloseProcess] = useState(true);
+  const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
   const [error, setError] = useState<boolean>(false);
   const [errorText, setErrorText] = useState<string>('');
   const [enabledUserId, setEnabledUserId] = useState<boolean>(false);
@@ -38,6 +37,8 @@ const ForgotPasswordModal = ({ isOpen, open, currentUserId }: ForgotPasswordModa
       setError(true);
       return;
     }
+    setErrorText('');
+    setError(false);
     forgotPasswordMutation({
       variables: {
         userId: user,
@@ -60,18 +61,20 @@ const ForgotPasswordModal = ({ isOpen, open, currentUserId }: ForgotPasswordModa
 
   const parserMsg = () => {
     if (successfulText) {
-      return <DialogMessageWrapper dangerouslySetInnerHTML={{ __html: successfulText }} />;
+      return (
+        <DialogMessageWrapper id="__ForgotPasswordDisabled_Msg" dangerouslySetInnerHTML={{ __html: successfulText }} />
+      );
     }
   };
 
-  const showDialog = () => {
+  const renderForgotPasswordDialog = () => {
     if (!isVerifyingUserId) {
       if (!verifiedUserId?.beginLogin?.forgotPasswordEnabled) {
         return (
           <Dialog hidden={!forgotPassword} onDismiss={() => setForgotPassword(true)} minWidth="500px">
             {enabledUserId && parserMsg()}
             <DialogFooter>
-              <PrimaryButton id="forgotPasswordModal-cancel-button" text="Ok" onClick={cancelForgotPassword} />
+              <PrimaryButton id="__ForgotPassword_message_ok_button" text="Ok" onClick={cancelForgotPassword} />
             </DialogFooter>
           </Dialog>
         );
@@ -87,19 +90,24 @@ const ForgotPasswordModal = ({ isOpen, open, currentUserId }: ForgotPasswordModa
         >
           <Spacing margin={{ bottom: 'small' }}>
             <InputText
-              id="renameInput"
+              id="emailVerify"
               type="email"
               value={userId}
-              label="Please re-enter you email address *"
+              label="Please re-enter your email address *"
               onChange={(e, newValue) => {
                 setUserId(newValue ?? '');
               }}
             />
-            {error && <StyledError>{errorText}</StyledError>}
+            {error && <StyledError id="__ForgotPassword_error">{errorText}</StyledError>}
           </Spacing>
           <DialogFooter>
-            <PrimaryButton id="forgotPasswordModal-submit-button" text="Submit" onClick={() => sendIdUser(userId)} />
-            <DefaultButton id="forgotPasswordModal-cancel-button" text="Cancel" onClick={cancelForgotPassword} />
+            <PrimaryButton
+              id="__ForgotPassword_submit_button"
+              text="Submit"
+              onClick={() => sendIdUser(userId)}
+              disabled={userId.trim().length === 0}
+            />
+            <DefaultButton id="__ForgotPassword_cancel_button" text="Cancel" onClick={cancelForgotPassword} />
           </DialogFooter>
         </Dialog>
       );
@@ -116,7 +124,7 @@ const ForgotPasswordModal = ({ isOpen, open, currentUserId }: ForgotPasswordModa
     if (dataForgotPassword?.forgotPassword?.response === 'SUCCESS') {
       message = dataForgotPassword.forgotPassword?.responseMsg;
       setSuccessfulText(message);
-      setSuccess(true);
+      setShowConfirmationDialog(true);
       setForgotPassword(false);
     }
     if (dataForgotPassword?.forgotPassword?.response === 'FAIL') {
@@ -130,19 +138,32 @@ const ForgotPasswordModal = ({ isOpen, open, currentUserId }: ForgotPasswordModa
     getUserForgotPasswordEnabled();
   }, []);
 
-  return (
-    <>
-      {showDialog()}
-      {success && (
-        <Dialog hidden={!closeProcess} dialogContentProps={{ title: 'Password reset submitted' }} minWidth="500px">
+  const renderConfirmationDialog = () => {
+    if (!showConfirmationDialog) {
+      return null;
+    }
+    return (
+      <Dialog hidden={false} dialogContentProps={{ title: 'Password reset submitted' }} minWidth="500px">
+        <div id="__ConfirmBody">
           <Spacing>
-            <Text>{successfulText}</Text>
+            <Text id="__ForgotPassword_success">{successfulText}</Text>
           </Spacing>
           <DialogFooter>
-            <PrimaryButton text="ok" onClick={() => setCloseProcess(false)} />
+            <PrimaryButton
+              id="__ForgotPassword_confirm_ok"
+              text="Ok"
+              onClick={() => setShowConfirmationDialog(false)}
+            />
           </DialogFooter>
-        </Dialog>
-      )}
+        </div>
+      </Dialog>
+    );
+  };
+
+  return (
+    <>
+      {renderForgotPasswordDialog()}
+      {renderConfirmationDialog()}
     </>
   );
 };
