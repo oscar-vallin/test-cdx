@@ -123,14 +123,8 @@ describe('Paginator Use Cases', () => {
     expect(button).toHaveLength(1);
   });
 
-  it ('Default values', () => {
-    const paginator = shallow(
-      <Paginator
-        id="__Pager"
-        pagingInfo={{}}
-        onPageChange={() => null}
-      />
-    );
+  it('Default values', () => {
+    const paginator = shallow(<Paginator id="__Pager" pagingInfo={{}} onPageChange={() => null} />);
 
     expect(paginator.html()).toBeNull();
   });
