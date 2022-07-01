@@ -35,7 +35,6 @@ export const ContainerInput = styled.div`
 export const StyledIconsComments = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-center;
 
   [data-icon-name*='Save'] {
     font-size: 0.9em;
@@ -46,8 +45,6 @@ export const StyledIconsComments = styled.div`
     color: #0078d4;
     padding-left: 10px;
   }
-
- 
 `;
 
 export const CircleStyled = styled.div<CircleStyledProps>`

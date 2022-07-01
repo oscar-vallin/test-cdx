@@ -27,6 +27,8 @@ import {
   useXchangeProfileLazyQuery,
   XchangeConfigSummary,
   useUpdateXchangeProfileCommentMutation,
+  CdxWebCommandType,
+  WebCommand,
 } from 'src/data/services/graphql';
 import { yyyyMMdd } from 'src/utils/CDXUtils';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
@@ -60,7 +62,9 @@ const XChangePage = () => {
 
   const [xchangeProfile, { data: dataXchange, loading: loadingXchange }] = useQueryHandler(useXchangeProfileLazyQuery);
 
-  // const [xchangeProfileComment, { data: dataComment, loading: loadingComment }] = useQueryHandler(useUpdateXchangeProfileCommentMutation);
+  const [xchangeProfileComment, { data: dataComment, loading: loadingComment }] = useQueryHandler(
+    useUpdateXchangeProfileCommentMutation
+  );
 
   const [xchanges, setXchanges] = useState<XchangeConfigSummary[]>([]);
   const [searchXchanges, setSearchXchanges] = useState<string>('');
@@ -69,9 +73,9 @@ const XChangePage = () => {
   const [globalXchangeAlerts, setGlobalXchangeAlerts] = useState<XchangeAlertsProps>();
   const [individualXchangeAlerts, setIndividualXchangeAlerts] = useState<XchangeAlertsProps[]>();
   const [requiresConversion, setRequiresConversion] = useState<boolean>();
+  const [updateCmd, setUpdateCmd] = useState<WebCommand | null>();
   const [editComment, setEditComment] = useState(false);
-  const [comment, setComment] = useState('');
-  const [saveComment, setSaveComment] = useState(false);
+  const [comment, setComment] = useState<string | null>();
   const [refreshDataXchange, setRefreshDataXchange] = useState(false);
   const [openPanel, setOpenPanel] = useState(false);
 
@@ -81,6 +85,16 @@ const XChangePage = () => {
         orgSid,
       },
     });
+  };
+
+  const sendComment = () => {
+    xchangeProfileComment({
+      variables: {
+        orgSid,
+        comment,
+      },
+    });
+    setEditComment(false);
   };
 
   const filterData = () => {
@@ -169,24 +183,25 @@ const XChangePage = () => {
       setGlobalXchangeAlerts(dataXchange.xchangeProfile.globalXchangeAlerts);
       setIndividualXchangeAlerts(dataXchange.xchangeProfile.individualXchangeAlerts);
       setRequiresConversion(dataXchange.xchangeProfile.requiresConversion);
+      setComment(dataXchange.xchangeProfile.comments);
     }
+
+    const pageCommands = dataXchange?.xchangeProfile?.commands;
+    const _updateCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Update);
+    setUpdateCmd(_updateCmd);
   }, [dataXchange, loadingXchange]);
 
   useEffect(() => {
     if (xchanges.length > 0) {
       filterData();
     }
-
-    // if (saveComment) {
-    //   console.log(orgSid, comment)
-    //   xchangeProfileComment({
-    //     variables: {
-    //       orgSid,
-    //       comment,
-    //     },
-    //   });
-    // }
   }, [searchXchanges]);
+
+  useEffect(() => {
+    if (!loadingComment && dataComment) {
+      fetchData();
+    }
+  }, [dataComment, loadingComment]);
 
   const onRenderItemColum = (node: XchangeConfigSummary, itemIndex?: number, column?: IColumn) => {
     let columnVal: string | undefined;
@@ -386,7 +401,7 @@ const XChangePage = () => {
   };
 
   const readonlyComments = () => {
-    if (requiresConversion) {
+    if (!updateCmd) {
       return true;
     }
 
@@ -447,13 +462,19 @@ const XChangePage = () => {
                   <>
                     <Column lg="3">
                       <StyledIconsComments>
-                        <IconButton iconProps={{ iconName: 'Save' }} onClick={() => setSaveComment(true)} />
+                        <IconButton iconProps={{ iconName: 'Save' }} onClick={sendComment} />
                         <Text variant="small">Save</Text>
                       </StyledIconsComments>
                     </Column>
-                    <Column lg="3" right>
+                    <Column lg="3">
                       <StyledIconsComments>
-                        <IconButton iconProps={{ iconName: 'Cancel' }} onClick={() => setEditComment(false)} />
+                        <IconButton
+                          iconProps={{ iconName: 'Cancel' }}
+                          onClick={() => {
+                            setEditComment(false);
+                            setComment(dataXchange.xchangeProfile.comments);
+                          }}
+                        />
                         <Text variant="small">Cancel</Text>
                       </StyledIconsComments>
                     </Column>
@@ -472,6 +493,7 @@ const XChangePage = () => {
                 borderless={true}
                 readOnly={readonlyComments()}
                 resizable={false}
+                value={comment ?? ''}
                 rows={7}
                 onChange={(event, newValue) => setComment(newValue ?? '')}
               />
