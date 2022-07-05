@@ -43,6 +43,7 @@ const XchangeDetailsPage = () => {
   const [fileProcesses, setFileProcesses] = useState<XchangeFileProcessForm[]>();
   const [fileProcess, setFileProcess] = useState<XchangeFileProcessForm>();
   const [dataDiagram, setDataDiagram] = useState<XchangeDiagram>();
+  const [refreshXchangeDetails, setRefreshXchangeDetails] = useState(false);
 
   const [callXchangeDetails, { data: detailsData, loading: detailsLoading, error: detailsError }] =
     useXchangeConfigLazyQuery();
@@ -129,7 +130,7 @@ const XchangeDetailsPage = () => {
     if (detailsLoading) {
       return (
         <Spacing margin={{ top: 'double' }}>
-          <Spinner size={SpinnerSize.large} label="Loading active orgs" />
+          <Spinner size={SpinnerSize.large} label="Loading Xchange Details" />
         </Spacing>
       );
     }
@@ -171,8 +172,9 @@ const XchangeDetailsPage = () => {
   };
 
   useEffect(() => {
+    setRefreshXchangeDetails(false);
     fetchData();
-  }, []);
+  }, [refreshXchangeDetails]);
 
   useEffect(() => {
     if (detailsData?.xchangeConfig && !detailsLoading) {
@@ -259,7 +261,15 @@ const XchangeDetailsPage = () => {
               ))}
           </Row>
           <Row>
-            <Column lg="9">{dataDiagram && <Diagram data={dataDiagram} />}</Column>
+            <Column lg="9">
+              {dataDiagram && (
+                <Diagram
+                  data={dataDiagram}
+                  refreshDetailsPage={setRefreshXchangeDetails}
+                  xchangeFileProcessSid={xchangeDataDetails?.sid ?? ''}
+                />
+              )}
+            </Column>
             <Column lg="3">{cardBox()}</Column>
           </Row>
         </Container>

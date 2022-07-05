@@ -13,7 +13,7 @@ import {
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { useNotification } from 'src/hooks/useNotification';
 import { Spacing } from 'src/components/spacings/Spacing';
-import { StyledList } from './PreviewConvertXchange.style';
+import { StyledList } from './PreviewConvertXchangePanel.style';
 
 type PreviewConvertXchangePanel = {
   isPanelOpen: boolean;
