@@ -1,7 +1,4 @@
-import { useState } from 'react';
-import { XchangeDiagram } from 'src/data/services/graphql';
 import ReactFlow, { useNodesState, useEdgesState, addEdge, Connection, Edge } from 'react-flow-renderer';
-import { ButtonAction } from 'src/components/buttons';
 import { Column, Container, Row } from 'src/components/layouts';
 import { StyledContainer, StyledHorizontalButtons, StyledText, StyledButtonAction } from '../XchangeDetailsPage.styles';
 import DataNodeSteps from './CustomDiagramNodes/DataNodeSteps';
@@ -60,7 +57,6 @@ const Diagram = ({ data }) => {
               onEdgesChange={onEdgesChange}
               onConnect={onConnect}
             />
-            ;
           </StyledContainer>
         </Column>
       </Row>
