@@ -18,7 +18,7 @@ type DiagramProps = {
   data: XchangeDiagram;
   refreshDetailsPage: (data: boolean) => void;
   xchangeFileProcessSid?: string;
-}
+};
 
 const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramProps) => {
   const { initialNodes } = InitialNodes(data);

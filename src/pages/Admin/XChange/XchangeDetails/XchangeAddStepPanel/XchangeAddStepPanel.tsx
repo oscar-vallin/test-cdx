@@ -1,6 +1,5 @@
 import { PanelType, PrimaryButton, TextField } from '@fluentui/react';
 import { useEffect, useState } from 'react';
-import { UIInputTextArea } from 'src/components/inputs/InputTextArea';
 import { useXchangeStepFormLazyQuery, XchangeStepForm, useCreateXchangeStepMutation } from 'src/data/services/graphql';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import { useNotification } from 'src/hooks/useNotification';
