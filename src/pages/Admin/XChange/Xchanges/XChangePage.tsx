@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
-import { Link } from 'react-router-dom';
 import {
   IColumn,
   DetailsList,
@@ -17,6 +16,7 @@ import {
   SearchBox,
   FontIcon,
 } from '@fluentui/react';
+import { ButtonLink } from 'src/components/buttons';
 import { Column, Container, Row } from 'src/components/layouts';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { PageTitle } from 'src/components/typography';
@@ -33,6 +33,7 @@ import {
 import { yyyyMMdd } from 'src/utils/CDXUtils';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { PageBody } from 'src/components/layouts/Column';
+import { useThemeStore } from 'src/store/ThemeStore';
 import { PreviewConvertXchangePanel } from './PreviewConvertXchangePanel';
 import {
   SetupStyled,
@@ -59,7 +60,7 @@ type XchangeAlertsProps = {
 
 const XChangePage = () => {
   const { orgSid } = useOrgSid();
-
+  const ThemeStore = useThemeStore();
   const [xchangeProfile, { data: dataXchange, loading: loadingXchange }] = useQueryHandler(useXchangeProfileLazyQuery);
 
   const [xchangeProfileComment, { data: dataComment, loading: loadingComment }] = useQueryHandler(
@@ -148,24 +149,24 @@ const XChangePage = () => {
             <span style={{ color: currentColor, fontWeight: 'bold' }}> {} </span>
             {type} files have been processed in the last 30 days <br />
             <span style={{ marginLeft: '40px' }}>Last Run: {currentDate}</span> <br /> <br />
-            <Link
+            <ButtonLink
               style={{ marginLeft: '88px' }}
               to={`/file-status?filter=${vendor}&orgSid=${orgSid}&startDate=${startFormatted}`}
             >
               {' '}
               Click for details
-            </Link>
+            </ButtonLink>
           </>
         ) : (
           <>
             <span>A file processed on {lastActivity} result in an error</span> <br /> <br />
-            <Link
+            <ButtonLink
               to={`/file-status?filter=${vendor}&orgSid=${orgSid}&startDate=${startFormatted}`}
               style={{ marginLeft: '40px' }}
             >
               {' '}
               Click for details
-            </Link>
+            </ButtonLink>
           </>
         )}
       </>
@@ -218,7 +219,7 @@ const XChangePage = () => {
     const coreFilename = node?.coreFilename;
     return (
       <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
-        <Link to={`/xchange-details?orgSid=${orgSid}&coreFilename=${coreFilename}`}>{columnVal}</Link>
+        <ButtonLink to={`/xchange-details?orgSid=${orgSid}&coreFilename=${coreFilename}`}>{columnVal}</ButtonLink>
         <>
           {column?.key === 'active' && (
             <>
@@ -245,7 +246,10 @@ const XChangePage = () => {
               )}
               {node?.errorActivity && node?.errorActivity.filesProcessed > 0 && (
                 <TooltipHost content={tooltipHostContent(node?.errorActivity?.lastActivity, '', node?.vendorIds)}>
-                  <IconButton iconProps={{ iconName: 'FileBug' }} style={{ color: 'red' }} />
+                  <IconButton
+                    iconProps={{ iconName: 'FileBug' }}
+                    style={{ color: ThemeStore.userTheme.colors.custom.error }}
+                  />
                 </TooltipHost>
               )}
             </>
@@ -255,7 +259,12 @@ const XChangePage = () => {
               {node?.hasAlerts && (
                 <TooltipHost content={tooltipContent?.hasAlerts}>
                   <FontIcon
-                    style={{ color: 'black', fontSize: '15px', cursor: 'pointer', marginTop: '4px' }}
+                    style={{
+                      color: ThemeStore.userTheme.colors.black,
+                      fontSize: '15px',
+                      cursor: 'pointer',
+                      marginTop: '4px',
+                    }}
                     aria-describedby="XchangeSpecificAlerts-Icon"
                     iconName="Ringer"
                   />
@@ -264,7 +273,12 @@ const XChangePage = () => {
               {node?.implementationPending && (
                 <TooltipHost content={tooltipContent?.implementationPending}>
                   <FontIcon
-                    style={{ color: 'orange', fontSize: '15px', cursor: 'pointer', marginTop: '4px' }}
+                    style={{
+                      color: ThemeStore.userTheme.colors.custom.warning,
+                      fontSize: '15px',
+                      cursor: 'pointer',
+                      marginTop: '4px',
+                    }}
                     aria-describedby="XchangeImplementationPending-Icon"
                     iconName="Warning"
                   />
@@ -273,7 +287,7 @@ const XChangePage = () => {
               {node?.hasUnpublishedChanges && (
                 <TooltipHost content={tooltipContent?.hasUnpublishedChanges}>
                   <FontIcon
-                    style={{ color: 'red', fontSize: '12px', cursor: 'pointer' }}
+                    style={{ color: ThemeStore.userTheme.colors.custom.error, fontSize: '12px', cursor: 'pointer' }}
                     aria-describedby="XchangeUnpublishedChanges-Icon"
                     iconName="6PointStar"
                   />
@@ -407,26 +421,25 @@ const XChangePage = () => {
       return true;
     }
 
-    if (editComment) {
-      return false;
-    }
-    return true;
+    return !editComment;
   };
 
   const cardBox = () => {
     return (
       <>
         <CardStyled>
-          <Link to={`/xchange-alerts?orgSid=${orgSid}`}>
+          <ButtonLink to={`/xchange-alerts?orgSid=${orgSid}`}>
             <IconButton iconProps={{ iconName: 'Ringer' }} />
             Alerts
-          </Link>
+          </ButtonLink>
           <Spacing margin="normal">
             <Row>
               <Text style={{ fontWeight: 'bold' }}>Alert on all Xchanges</Text>
             </Row>
             <Spacing margin="normal" />
-            <Link to={`/xchange-alerts?orgSid=${orgSid}`}>({globalXchangeAlerts?.numSubscribers}) Subscribers</Link>
+            <ButtonLink to={`/xchange-alerts?orgSid=${orgSid}`}>
+              ({globalXchangeAlerts?.numSubscribers}) Subscribers
+            </ButtonLink>
           </Spacing>
           <Spacing margin="normal">
             <Row>
@@ -437,16 +450,16 @@ const XChangePage = () => {
               <Spacing margin={{ bottom: 'normal' }} key={index}>
                 <Row>
                   <Column lg="8">
-                    <Link to={`/xchange-alerts?orgSid=${orgSid}`} style={{ fontSize: '12px' }}>
+                    <ButtonLink to={`/xchange-alerts?orgSid=${orgSid}`} style={{ fontSize: '12px' }}>
                       {' '}
                       {individualXchange.coreFilename}{' '}
-                    </Link>
+                    </ButtonLink>
                   </Column>
                   <Column lg="4">
-                    <Link to={`/xchange-alerts?orgSid=${orgSid}`} style={{ fontSize: '12px' }}>
+                    <ButtonLink to={`/xchange-alerts?orgSid=${orgSid}`} style={{ fontSize: '12px' }}>
                       {' '}
                       ({individualXchange.numSubscribers}) Subscriber
-                    </Link>
+                    </ButtonLink>
                   </Column>
                 </Row>
               </Spacing>
@@ -519,7 +532,7 @@ const XChangePage = () => {
                     iconName="ReportWarning"
                     id="requiresConversion"
                     style={{
-                      color: 'orange',
+                      color: ThemeStore.userTheme.colors.custom.warning,
                       fontWeight: 700,
                       fontSize: '18px',
                       margin: '5px 0 0 8px',

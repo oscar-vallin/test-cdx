@@ -1,3 +1,3 @@
-import { ButtonLink } from './ButtonLink.styles';
+import { ButtonLink } from './ButtonLink';
 
 export { ButtonLink };
