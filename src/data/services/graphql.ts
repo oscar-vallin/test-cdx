@@ -817,6 +817,8 @@ export type Mutation = {
   workPacketReprocess?: Maybe<ReprocessResponse>;
   workPacketRenameAndReprocess?: Maybe<ReprocessResponse>;
   workPacketResend?: Maybe<GenericResponse>;
+  /** Upload a file to be processed */
+  xchangeFileUpload?: Maybe<GenericResponse>;
   /** Convert an Xchange profile from the 1.0 XML File version to being managed in the CDX Dashboard */
   convertXchangeProfile?: Maybe<XchangeProfile>;
   updateXchangeProfileComment?: Maybe<GenericResponse>;
@@ -1093,6 +1095,15 @@ export type MutationWorkPacketRenameAndReprocessArgs = {
 
 export type MutationWorkPacketResendArgs = {
   workOrderId: Scalars['String'];
+};
+
+
+export type MutationXchangeFileUploadArgs = {
+  orgSid: Scalars['ID'];
+  vendorSid: Scalars['ID'];
+  spec: Scalars['String'];
+  qualifier: Scalars['String'];
+  file?: Maybe<Scalars['Upload']>;
 };
 
 
@@ -2009,12 +2020,12 @@ export type QueryDashThemeColorForOrgArgs = {
 
 
 export type QueryDashSiteForOrgArgs = {
-  orgSidInput?: Maybe<OrgSidInput>;
+  orgSidInput: OrgSidInput;
 };
 
 
 export type QueryDashThemeColorArgs = {
-  ownedInputSid?: Maybe<OwnedInputSid>;
+  ownedInputSid: OwnedInputSid;
 };
 
 
@@ -3255,6 +3266,7 @@ export type XchangeDiagramStep = {
   icon?: Maybe<Scalars['String']>;
   title?: Maybe<Scalars['String']>;
   subTitle?: Maybe<Scalars['String']>;
+  info?: Maybe<Scalars['String']>;
   qualifier?: Maybe<Scalars['String']>;
   commands?: Maybe<Array<WebCommand>>;
   position: DiagramCoordinates;
@@ -5161,7 +5173,7 @@ export type DashThemeColorForOrgQuery = (
 );
 
 export type DashSiteForOrgQueryVariables = Exact<{
-  orgSidInput?: Maybe<OrgSidInput>;
+  orgSidInput: OrgSidInput;
 }>;
 
 
@@ -5174,7 +5186,7 @@ export type DashSiteForOrgQuery = (
 );
 
 export type DashThemeColorQueryVariables = Exact<{
-  ownedInputSid?: Maybe<OwnedInputSid>;
+  ownedInputSid: OwnedInputSid;
 }>;
 
 
@@ -5638,7 +5650,7 @@ export type XchangeConfigQuery = (
         { __typename?: 'XchangeDiagram' }
         & { steps?: Maybe<Array<(
           { __typename?: 'XchangeDiagramStep' }
-          & Pick<XchangeDiagramStep, 'sid' | 'key' | 'icon' | 'title' | 'subTitle' | 'qualifier'>
+          & Pick<XchangeDiagramStep, 'sid' | 'key' | 'icon' | 'title' | 'subTitle' | 'info' | 'qualifier'>
           & { commands?: Maybe<Array<(
             { __typename?: 'WebCommand' }
             & FragmentWebCommandFragment
@@ -5719,7 +5731,7 @@ export type XchangeFileProcessFormQuery = (
       { __typename?: 'XchangeDiagram' }
       & { steps?: Maybe<Array<(
         { __typename?: 'XchangeDiagramStep' }
-        & Pick<XchangeDiagramStep, 'sid' | 'key' | 'icon' | 'title' | 'subTitle' | 'qualifier'>
+        & Pick<XchangeDiagramStep, 'sid' | 'key' | 'icon' | 'title' | 'subTitle' | 'info' | 'qualifier'>
         & { commands?: Maybe<Array<(
           { __typename?: 'WebCommand' }
           & FragmentWebCommandFragment
@@ -7527,6 +7539,34 @@ export type WorkPacketResendMutation = (
   )> }
 );
 
+export type XchangeFileUploadMutationVariables = Exact<{
+  orgSid: Scalars['ID'];
+  vendorSid: Scalars['ID'];
+  spec: Scalars['String'];
+  qualifier: Scalars['String'];
+  file?: Maybe<Scalars['Upload']>;
+}>;
+
+
+export type XchangeFileUploadMutation = (
+  { __typename?: 'Mutation' }
+  & { xchangeFileUpload?: Maybe<(
+    { __typename?: 'GenericResponse' }
+    & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { allMessages?: Maybe<Array<(
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>> }
+    )>> }
+  )> }
+);
+
 export type ConvertXchangeProfileMutationVariables = Exact<{
   orgSid: Scalars['ID'];
 }>;
@@ -7713,7 +7753,7 @@ export type MoveUpXchangeStepMutation = (
       { __typename?: 'XchangeDiagram' }
       & { steps?: Maybe<Array<(
         { __typename?: 'XchangeDiagramStep' }
-        & Pick<XchangeDiagramStep, 'sid' | 'key' | 'icon' | 'title' | 'subTitle' | 'qualifier'>
+        & Pick<XchangeDiagramStep, 'sid' | 'key' | 'icon' | 'title' | 'subTitle' | 'info' | 'qualifier'>
         & { commands?: Maybe<Array<(
           { __typename?: 'WebCommand' }
           & FragmentWebCommandFragment
@@ -7778,7 +7818,7 @@ export type MoveDownXchangeStepMutation = (
       { __typename?: 'XchangeDiagram' }
       & { steps?: Maybe<Array<(
         { __typename?: 'XchangeDiagramStep' }
-        & Pick<XchangeDiagramStep, 'sid' | 'key' | 'icon' | 'title' | 'subTitle' | 'qualifier'>
+        & Pick<XchangeDiagramStep, 'sid' | 'key' | 'icon' | 'title' | 'subTitle' | 'info' | 'qualifier'>
         & { commands?: Maybe<Array<(
           { __typename?: 'WebCommand' }
           & FragmentWebCommandFragment
@@ -7843,7 +7883,7 @@ export type DeleteXchangeStepMutation = (
       { __typename?: 'XchangeDiagram' }
       & { steps?: Maybe<Array<(
         { __typename?: 'XchangeDiagramStep' }
-        & Pick<XchangeDiagramStep, 'sid' | 'key' | 'icon' | 'title' | 'subTitle' | 'qualifier'>
+        & Pick<XchangeDiagramStep, 'sid' | 'key' | 'icon' | 'title' | 'subTitle' | 'info' | 'qualifier'>
         & { commands?: Maybe<Array<(
           { __typename?: 'WebCommand' }
           & FragmentWebCommandFragment
@@ -8032,7 +8072,7 @@ export type DeleteXchangeFileTransmissionMutation = (
       { __typename?: 'XchangeDiagram' }
       & { steps?: Maybe<Array<(
         { __typename?: 'XchangeDiagramStep' }
-        & Pick<XchangeDiagramStep, 'sid' | 'key' | 'icon' | 'title' | 'subTitle' | 'qualifier'>
+        & Pick<XchangeDiagramStep, 'sid' | 'key' | 'icon' | 'title' | 'subTitle' | 'info' | 'qualifier'>
         & { commands?: Maybe<Array<(
           { __typename?: 'WebCommand' }
           & FragmentWebCommandFragment
@@ -11700,7 +11740,7 @@ export type DashThemeColorForOrgQueryHookResult = ReturnType<typeof useDashTheme
 export type DashThemeColorForOrgLazyQueryHookResult = ReturnType<typeof useDashThemeColorForOrgLazyQuery>;
 export type DashThemeColorForOrgQueryResult = Apollo.QueryResult<DashThemeColorForOrgQuery, DashThemeColorForOrgQueryVariables>;
 export const DashSiteForOrgDocument = gql`
-    query DashSiteForOrg($orgSidInput: OrgSidInput) {
+    query DashSiteForOrg($orgSidInput: OrgSidInput!) {
   dashSiteForOrg(orgSidInput: $orgSidInput) {
     id
     active
@@ -11724,7 +11764,7 @@ export const DashSiteForOrgDocument = gql`
  *   },
  * });
  */
-export function useDashSiteForOrgQuery(baseOptions?: Apollo.QueryHookOptions<DashSiteForOrgQuery, DashSiteForOrgQueryVariables>) {
+export function useDashSiteForOrgQuery(baseOptions: Apollo.QueryHookOptions<DashSiteForOrgQuery, DashSiteForOrgQueryVariables>) {
         return Apollo.useQuery<DashSiteForOrgQuery, DashSiteForOrgQueryVariables>(DashSiteForOrgDocument, baseOptions);
       }
 export function useDashSiteForOrgLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DashSiteForOrgQuery, DashSiteForOrgQueryVariables>) {
@@ -11734,7 +11774,7 @@ export type DashSiteForOrgQueryHookResult = ReturnType<typeof useDashSiteForOrgQ
 export type DashSiteForOrgLazyQueryHookResult = ReturnType<typeof useDashSiteForOrgLazyQuery>;
 export type DashSiteForOrgQueryResult = Apollo.QueryResult<DashSiteForOrgQuery, DashSiteForOrgQueryVariables>;
 export const DashThemeColorDocument = gql`
-    query DashThemeColor($ownedInputSid: OwnedInputSid) {
+    query DashThemeColor($ownedInputSid: OwnedInputSid!) {
   dashThemeColor(ownedInputSid: $ownedInputSid) {
     id
     defaultPalette
@@ -11783,7 +11823,7 @@ export const DashThemeColorDocument = gql`
  *   },
  * });
  */
-export function useDashThemeColorQuery(baseOptions?: Apollo.QueryHookOptions<DashThemeColorQuery, DashThemeColorQueryVariables>) {
+export function useDashThemeColorQuery(baseOptions: Apollo.QueryHookOptions<DashThemeColorQuery, DashThemeColorQueryVariables>) {
         return Apollo.useQuery<DashThemeColorQuery, DashThemeColorQueryVariables>(DashThemeColorDocument, baseOptions);
       }
 export function useDashThemeColorLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DashThemeColorQuery, DashThemeColorQueryVariables>) {
@@ -12626,6 +12666,7 @@ export const XchangeConfigDocument = gql`
           icon
           title
           subTitle
+          info
           qualifier
           commands {
             ...fragmentWebCommand
@@ -12754,6 +12795,7 @@ export const XchangeFileProcessFormDocument = gql`
         icon
         title
         subTitle
+        info
         qualifier
         commands {
           ...fragmentWebCommand
@@ -16345,6 +16387,60 @@ export function useWorkPacketResendMutation(baseOptions?: Apollo.MutationHookOpt
 export type WorkPacketResendMutationHookResult = ReturnType<typeof useWorkPacketResendMutation>;
 export type WorkPacketResendMutationResult = Apollo.MutationResult<WorkPacketResendMutation>;
 export type WorkPacketResendMutationOptions = Apollo.BaseMutationOptions<WorkPacketResendMutation, WorkPacketResendMutationVariables>;
+export const XchangeFileUploadDocument = gql`
+    mutation XchangeFileUpload($orgSid: ID!, $vendorSid: ID!, $spec: String!, $qualifier: String!, $file: Upload) {
+  xchangeFileUpload(
+    orgSid: $orgSid
+    vendorSid: $vendorSid
+    spec: $spec
+    qualifier: $qualifier
+    file: $file
+  ) {
+    response
+    errCode
+    errMsg
+    errSeverity
+    allMessages {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
+      }
+    }
+  }
+}
+    ${UnionNvpFragmentDoc}`;
+export type XchangeFileUploadMutationFn = Apollo.MutationFunction<XchangeFileUploadMutation, XchangeFileUploadMutationVariables>;
+
+/**
+ * __useXchangeFileUploadMutation__
+ *
+ * To run a mutation, you first call `useXchangeFileUploadMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useXchangeFileUploadMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [xchangeFileUploadMutation, { data, loading, error }] = useXchangeFileUploadMutation({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *      vendorSid: // value for 'vendorSid'
+ *      spec: // value for 'spec'
+ *      qualifier: // value for 'qualifier'
+ *      file: // value for 'file'
+ *   },
+ * });
+ */
+export function useXchangeFileUploadMutation(baseOptions?: Apollo.MutationHookOptions<XchangeFileUploadMutation, XchangeFileUploadMutationVariables>) {
+        return Apollo.useMutation<XchangeFileUploadMutation, XchangeFileUploadMutationVariables>(XchangeFileUploadDocument, baseOptions);
+      }
+export type XchangeFileUploadMutationHookResult = ReturnType<typeof useXchangeFileUploadMutation>;
+export type XchangeFileUploadMutationResult = Apollo.MutationResult<XchangeFileUploadMutation>;
+export type XchangeFileUploadMutationOptions = Apollo.BaseMutationOptions<XchangeFileUploadMutation, XchangeFileUploadMutationVariables>;
 export const ConvertXchangeProfileDocument = gql`
     mutation ConvertXchangeProfile($orgSid: ID!) {
   convertXchangeProfile(orgSid: $orgSid) {
@@ -16673,6 +16769,7 @@ export const MoveUpXchangeStepDocument = gql`
         icon
         title
         subTitle
+        info
         qualifier
         commands {
           ...fragmentWebCommand
@@ -16774,6 +16871,7 @@ export const MoveDownXchangeStepDocument = gql`
         icon
         title
         subTitle
+        info
         qualifier
         commands {
           ...fragmentWebCommand
@@ -16875,6 +16973,7 @@ export const DeleteXchangeStepDocument = gql`
         icon
         title
         subTitle
+        info
         qualifier
         commands {
           ...fragmentWebCommand
@@ -17187,6 +17286,7 @@ export const DeleteXchangeFileTransmissionDocument = gql`
         icon
         title
         subTitle
+        info
         qualifier
         commands {
           ...fragmentWebCommand

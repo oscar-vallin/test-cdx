@@ -1,29 +1,7 @@
 import { shallow } from 'enzyme';
-import toJSON from 'enzyme-to-json';
 import { Paginator } from './index';
 
 describe('Paginator Use Cases', () => {
-  it('Should be defined', () => {
-    expect(Paginator).toBeDefined();
-  });
-
-  it('Matches Snapshot', () => {
-    const wrapper = shallow(
-      <Paginator
-        id="__Pager"
-        pagingInfo={{
-          pageNumber: 0,
-          pageSize: 100,
-          totalPages: 4,
-          totalElements: 322,
-        }}
-        onPageChange={() => null}
-      />
-    );
-
-    expect(toJSON(wrapper)).toMatchSnapshot();
-  });
-
   it('Previous Button Click', () => {
     let pageChosen = 0;
 
@@ -143,5 +121,11 @@ describe('Paginator Use Cases', () => {
 
     const button = paginator.find('CustomizedIconButton[title="Next Page"]');
     expect(button).toHaveLength(1);
+  });
+
+  it('Default values', () => {
+    const paginator = shallow(<Paginator id="__Pager" pagingInfo={{}} onPageChange={() => null} />);
+
+    expect(paginator.html()).toBeNull();
   });
 });
