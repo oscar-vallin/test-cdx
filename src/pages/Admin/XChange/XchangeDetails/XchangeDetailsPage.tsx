@@ -39,6 +39,7 @@ const XchangeDetailsPage = () => {
   const [xchangesAlerts, setXchangesAlerts] = useState<XchangeAlert[]>();
   const [fileProcess, setFileProcess] = useState<XchangeFileProcessForm[]>();
   const [dataDiagram, setDataDiagram] = useState<XchangeDiagram>();
+  const [refreshXchangeDetails, setRefreshXchangeDetails] = useState(false);
 
   const [xchangeDetails, { data: detailsData, loading: detailsLoading }] = useQueryHandler(useXchangeConfigLazyQuery);
 
@@ -119,7 +120,7 @@ const XchangeDetailsPage = () => {
     if (detailsLoading) {
       return (
         <Spacing margin={{ top: 'double' }}>
-          <Spinner size={SpinnerSize.large} label="Loading active orgs" />
+          <Spinner size={SpinnerSize.large} label="Loading Xchange Details" />
         </Spacing>
       );
     }
@@ -161,8 +162,9 @@ const XchangeDetailsPage = () => {
   };
 
   useEffect(() => {
+    setRefreshXchangeDetails(false);
     fetchData();
-  }, []);
+  }, [refreshXchangeDetails]);
 
   useEffect(() => {
     if (detailsData && !detailsLoading) {
@@ -176,6 +178,7 @@ const XchangeDetailsPage = () => {
     if (xchangeDataDetails?.coreFilename) {
       setCoreFilenameData(xchangeDataDetails?.coreFilename);
       setCoreFilenameValue(xchangeDataDetails?.coreFilename.value ?? '');
+      setFileProcess(xchangeDataDetails?.processes ?? []);
       if (xchangeDataDetails?.processes && xchangeDataDetails?.processes[0]) {
         setDataDiagram(xchangeDataDetails?.processes[0]?.diagram);
       }
@@ -184,10 +187,6 @@ const XchangeDetailsPage = () => {
     if (xchangeDataDetails?.coreFilenamePattern) {
       setCoreFilenamePatternData(xchangeDataDetails?.coreFilenamePattern);
       setCoreFilenamePatternValue(xchangeDataDetails?.coreFilenamePattern.value ?? '');
-    }
-
-    if (xchangeDataDetails?.processes) {
-      setFileProcess(xchangeDataDetails?.processes);
     }
   }, [xchangeDataDetails]);
 
@@ -220,7 +219,15 @@ const XchangeDetailsPage = () => {
               ))}
           </Row>
           <Row>
-            <Column lg="9">{dataDiagram && <Diagram data={dataDiagram} />}</Column>
+            <Column lg="9">
+              {dataDiagram && (
+                <Diagram
+                  data={dataDiagram}
+                  refreshDetailsPage={setRefreshXchangeDetails}
+                  xchangeFileProcessSid={xchangeDataDetails?.sid ?? ''}
+                />
+              )}
+            </Column>
             <Column lg="3">{cardBox()}</Column>
           </Row>
         </Container>
