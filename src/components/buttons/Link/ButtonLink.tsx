@@ -10,7 +10,7 @@ export const ButtonLink = (props: ButtonLinkProps) => {
   const history = useHistory();
 
   let { onClick } = props;
-  const whereTo = props?.to;
+  const { to: whereTo } = props;
   if (!onClick && whereTo) {
     onClick = () => {
       history.push(whereTo);
