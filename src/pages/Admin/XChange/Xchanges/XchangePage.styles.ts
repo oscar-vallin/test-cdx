@@ -51,7 +51,7 @@ export const CircleStyled = styled.div<CircleStyledProps>`
   border-radius: 50%;
   width: 20px;
   height: 20px;
-  padding: 3px 1px 7px 0;
+  padding: 2.5px 1px 7px 1px;
   background: #fff;
   border: 1.5px solid ${({ color }) => color};
   color: ${({ color }) => color};

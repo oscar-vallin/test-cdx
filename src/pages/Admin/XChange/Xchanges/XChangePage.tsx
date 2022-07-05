@@ -160,8 +160,8 @@ const XChangePage = () => {
           <>
             <span>A file processed on {lastActivity} result in an error</span> <br /> <br />
             <Link
-              to={`/file-status?filter=${vendor}&orgSid=${orgSid}&startDate=${startFormatted}`}
-              style={{ marginLeft: '40px' }}
+              to={`/transmissions?filter=${vendor}&orgSid=${orgSid}&startDate=${startFormatted}`}
+              style={{ marginLeft: '125px' }}
             >
               {' '}
               Click for details
@@ -245,7 +245,7 @@ const XChangePage = () => {
               )}
               {node?.errorActivity && node?.errorActivity.filesProcessed > 0 && (
                 <TooltipHost content={tooltipHostContent(node?.errorActivity?.lastActivity, '', node?.vendorIds)}>
-                  <IconButton iconProps={{ iconName: 'FileBug' }} style={{ color: 'red' }} />
+                  <FontIcon iconName="FileBug" style={{ color: 'red', cursor: 'pointer' }} />
                 </TooltipHost>
               )}
             </>
