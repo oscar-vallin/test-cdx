@@ -1372,6 +1372,12 @@
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "UPLOAD",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "possibleTypes": null
@@ -11814,6 +11820,12 @@
           },
           {
             "name": "XCHANGE_PROFILE_PUBLISH",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "XCHANGE_FILE_UPLOAD",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
