@@ -12,13 +12,14 @@ import {
   XchangeFileProcessForm,
   XchangeDiagram,
 } from 'src/data/services/graphql';
-import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { InputText } from 'src/components/inputs/InputText';
 import { Spacing } from 'src/components/spacings/Spacing';
-import { IconButton, Spinner, SpinnerSize, Text } from '@fluentui/react';
+import { IconButton, PrimaryButton, Spinner, SpinnerSize, Text } from '@fluentui/react';
 import { UIInputMultiSelect } from 'src/components/inputs/InputDropdown';
 import { PageBody } from 'src/components/layouts/Column';
-import { Diagram } from './Diagram/Diagram';
+import { useOrgSid } from 'src/hooks/useOrgSid';
+import { FileUploadDialog } from 'src/pages/Admin/XChange/XchangeDetails/FileUpload/FileUploadDialog';
+import { ErrorHandler } from 'src/utils/ErrorHandler';
 import {
   CardStyled,
   StyledColumTabs,
@@ -26,10 +27,12 @@ import {
   StyledButtonAction,
   StyledProcessValueText,
 } from './XchangeDetailsPage.styles';
+import { Diagram } from './Diagram/Diagram';
 
 const XchangeDetailsPage = () => {
   const location = useLocation();
   const urlParams = new URLSearchParams(location.search);
+  const { orgSid } = useOrgSid();
 
   const [xchangeDataDetails, setXchangeDataDetails] = useState<XchangeConfigForm>();
   const [coreFilenameData, setCoreFilenameData] = useState<UiStringField>();
@@ -37,18 +40,25 @@ const XchangeDetailsPage = () => {
   const [coreFilenameValue, setCoreFilenameValue] = useState<string>('');
   const [coreFilenamePatternValue, setCoreFilenamePatternValue] = useState<string>('');
   const [xchangesAlerts, setXchangesAlerts] = useState<XchangeAlert[]>();
-  const [fileProcess, setFileProcess] = useState<XchangeFileProcessForm[]>();
+  const [fileProcesses, setFileProcesses] = useState<XchangeFileProcessForm[]>();
+  const [fileProcess, setFileProcess] = useState<XchangeFileProcessForm>();
   const [dataDiagram, setDataDiagram] = useState<XchangeDiagram>();
 
-  const [xchangeDetails, { data: detailsData, loading: detailsLoading }] = useQueryHandler(useXchangeConfigLazyQuery);
+  const [callXchangeDetails, { data: detailsData, loading: detailsLoading, error: detailsError }] =
+    useXchangeConfigLazyQuery();
+  const [showFileUpload, setShowFileUpload] = useState(false);
+  const handleError = ErrorHandler();
+
+  useEffect(() => {
+    handleError(detailsError);
+  }, [detailsError]);
 
   const fetchData = () => {
-    const orgSid = urlParams.get('orgSid');
     const coreFilename = urlParams.get('coreFilename');
-    xchangeDetails({
+    callXchangeDetails({
       variables: {
         orgSid,
-        coreFilename,
+        coreFilename: coreFilename ?? '',
       },
     });
   };
@@ -92,7 +102,7 @@ const XchangeDetailsPage = () => {
             <CardStyled>
               <Container>
                 <Row>
-                  {fileProcess?.map((process: XchangeFileProcessForm, index: number) => (
+                  {fileProcesses?.map((process: XchangeFileProcessForm, index: number) => (
                     <UIInputMultiSelect
                       key={index}
                       id="__applicableOrgTypes"
@@ -103,7 +113,7 @@ const XchangeDetailsPage = () => {
                 </Row>
                 <Row>
                   <StyledButtonAction fontSize={18} id="__Add_FilenameQualifer">
-                    + Add Filename Qualifer
+                    + Add Filename Qualifier
                   </StyledButtonAction>
                 </Row>
               </Container>
@@ -165,38 +175,68 @@ const XchangeDetailsPage = () => {
   }, []);
 
   useEffect(() => {
-    if (detailsData && !detailsLoading) {
-      setXchangeDataDetails(detailsData.xchangeConfig);
-      setXchangesAlerts(detailsData.xchangeConfig.alerts);
+    if (detailsData?.xchangeConfig && !detailsLoading) {
+      const { xchangeConfig } = detailsData;
+      setXchangeDataDetails(xchangeConfig);
+
+      if (xchangeConfig.coreFilename) {
+        setCoreFilenameData(xchangeConfig.coreFilename);
+        setCoreFilenameValue(xchangeConfig.coreFilename.value ?? '');
+      }
+
+      if (xchangeConfig.coreFilenamePattern) {
+        setCoreFilenamePatternData(xchangeConfig.coreFilenamePattern);
+        setCoreFilenamePatternValue(xchangeDataDetails?.coreFilenamePattern.value ?? '');
+      }
+
+      if (xchangeConfig.processes) {
+        setFileProcesses(xchangeConfig.processes);
+        if (xchangeConfig.processes.length > 0) {
+          setFileProcess(xchangeConfig.processes[0]);
+          setDataDiagram(xchangeConfig.processes[0].diagram);
+        }
+      }
+
+      if (xchangeConfig.alerts) {
+        setXchangesAlerts(xchangeConfig?.alerts);
+      }
     }
   }, [detailsData, detailsLoading]);
 
-  useEffect(() => {
-    if (xchangeDataDetails?.coreFilename) {
-      setCoreFilenameData(xchangeDataDetails?.coreFilename);
-      setCoreFilenameValue(xchangeDataDetails?.coreFilename.value ?? '');
-      if (xchangeDataDetails?.processes && xchangeDataDetails?.processes[0]) {
-        setDataDiagram(xchangeDataDetails?.processes[0]?.diagram);
-      }
+  const renderFileUploadDialog = () => {
+    const vendorSid = fileProcess?.vendor?.value?.value;
+    const specId = fileProcess?.specId?.value;
+    if (!showFileUpload || !vendorSid || !specId) {
+      return null;
     }
 
-    if (xchangeDataDetails?.coreFilenamePattern) {
-      setCoreFilenamePatternData(xchangeDataDetails?.coreFilenamePattern);
-      setCoreFilenamePatternValue(xchangeDataDetails?.coreFilenamePattern.value ?? '');
-    }
-
-    if (xchangeDataDetails?.processes) {
-      setFileProcess(xchangeDataDetails?.processes);
-    }
-  }, [xchangeDataDetails]);
+    return (
+      <FileUploadDialog
+        orgSid={orgSid}
+        vendorSid={vendorSid}
+        spec={specId}
+        open={showFileUpload}
+        onDismiss={() => setShowFileUpload(false)}
+      />
+    );
+  };
 
   return (
     <LayoutDashboard id="XchangeDetailsPage">
       <PageHeader id="__XchangeDetailsPage">
         <Container>
           <Row>
-            <Column lg="6" direction="row">
+            <Column lg="6">
               <PageTitle id="__Page__Title__Details" title="Xchange Details" />
+            </Column>
+            <Column lg="6" right>
+              <PrimaryButton
+                id="__FileUploadButton"
+                iconProps={{ iconName: 'Upload' }}
+                onClick={() => setShowFileUpload(true)}
+              >
+                Upload
+              </PrimaryButton>
             </Column>
           </Row>
         </Container>
@@ -205,8 +245,8 @@ const XchangeDetailsPage = () => {
         <Container>
           <Row>{renderBody()}</Row>
           <Row>
-            {fileProcess &&
-              fileProcess?.map((process, index) => (
+            {fileProcesses &&
+              fileProcesses?.map((process, index) => (
                 <StyledColumTabs lg="9" key={index}>
                   <StyledProcessValueText variant="large">
                     {process.vendor.value?.name}-{process.specId.value}
@@ -223,6 +263,7 @@ const XchangeDetailsPage = () => {
             <Column lg="3">{cardBox()}</Column>
           </Row>
         </Container>
+        {renderFileUploadDialog()}
       </PageBody>
     </LayoutDashboard>
   );
