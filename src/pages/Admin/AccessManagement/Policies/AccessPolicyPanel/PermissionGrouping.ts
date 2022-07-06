@@ -101,7 +101,7 @@ const permissionGroupingDef = {
     xprofile: {
       id: 'XchangeProfile',
       label: '',
-      regex: 'XCHANGE_PROFILE_.+',
+      regex: '(XCHANGE_PROFILE_.+)|(XCHANGE_FILE_UPLOAD)',
     },
   },
 };
