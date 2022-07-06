@@ -16,6 +16,7 @@ export const TruncatedButton = styled(ButtonAction)`
     width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
+    text-align: left;
     line-height: 1.5em;
   }
 `;
