@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { PanelType, Text, PrimaryButton, Spinner, SpinnerSize } from '@fluentui/react';
-import { PanelBody, ThemedPanel, WizardBody, WizardButtonRow } from 'src/layouts/Panels/Panels.styles';
+import { PanelBody, ThemedPanel, WizardButtonRow } from 'src/layouts/Panels/Panels.styles';
 
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import {
@@ -94,6 +94,25 @@ const PreviewConvertXchangePanel = ({ isPanelOpen, closePanel, refreshXchangePag
     }
   }, [dataConvert, errorConvert, loadingConvert]);
 
+  const renderFooter = () => {
+    if (dataPreviewConvert && createCmd) {
+      return (
+        <WizardButtonRow>
+          <PrimaryButton
+            disabled={disableButton}
+            id="__Convert-NewFormat"
+            iconProps={{ iconName: 'Play' }}
+            onClick={convertsClietnProfile}
+          >
+            Convert to new Format
+          </PrimaryButton>
+        </WizardButtonRow>
+      )
+    }
+
+    return null;
+  };
+
   return (
     <ThemedPanel
       closeButtonAriaLabel="Close"
@@ -101,54 +120,41 @@ const PreviewConvertXchangePanel = ({ isPanelOpen, closePanel, refreshXchangePag
       headerText="Convert client profile"
       isOpen={isPanelOpen}
       onDismiss={() => closePanel(false)}
+      onRenderFooter={renderFooter}
     >
       <PanelBody>
-        <WizardBody>
-          <Spacing margin={{ top: 'double', bottom: 'double' }}>
-            {dataPreviewConvert && <Text>{dataPreviewConvert.previewConvertXchangeProfile.info ?? ''}</Text>}
-          </Spacing>
-          {newVendors.length > 0 && (
-            <>
-              <Spacing margin={{ top: 'double', bottom: 'normal' }}>
-                <Text style={{ fontWeight: 'bold' }}>Vendors</Text>
-                <br />
-                <Text>The following Vendor organization will be created in order to support this conversion.</Text>
-              </Spacing>
-              <StyledList>
-                {newVendors.map((vendor: Organization) => (
-                  <li key={vendor.orgId}>{vendor.name}</li>
-                ))}
-              </StyledList>
-            </>
-          )}
-          {newUsersAccounts.length > 0 && (
-            <>
-              <Spacing margin={{ top: 'double', bottom: 'normal' }}>
-                <Text style={{ fontWeight: 'bold' }}>User Accounts</Text>
-                <br />
-                <Text>The following User Accounts will be created in order to support this conversion.</Text>
-              </Spacing>
-              <StyledList>
-                {newUsersAccounts.map((user: string, index: number) => (
-                  <li key={index}>{user}</li>
-                ))}
-              </StyledList>
-            </>
-          )}
-          {renderSpinner()}
-        </WizardBody>
-        {dataPreviewConvert && createCmd && (
-          <WizardButtonRow>
-            <PrimaryButton
-              disabled={disableButton}
-              id="__Convert-NewFormat"
-              iconProps={{ iconName: 'Play' }}
-              onClick={convertsClietnProfile}
-            >
-              Convert to new Format
-            </PrimaryButton>
-          </WizardButtonRow>
+        <Spacing margin={{ top: 'double', bottom: 'double' }}>
+          {dataPreviewConvert && <Text>{dataPreviewConvert.previewConvertXchangeProfile.info ?? ''}</Text>}
+        </Spacing>
+        {newVendors.length > 0 && (
+          <>
+            <Spacing margin={{ top: 'double', bottom: 'normal' }}>
+              <Text style={{ fontWeight: 'bold' }}>Vendors</Text>
+              <br />
+              <Text>The following Vendor organization will be created in order to support this conversion.</Text>
+            </Spacing>
+            <StyledList>
+              {newVendors.map((vendor: Organization) => (
+                <li key={vendor.orgId}>{vendor.name}</li>
+              ))}
+            </StyledList>
+          </>
         )}
+        {newUsersAccounts.length > 0 && (
+          <>
+            <Spacing margin={{ top: 'double', bottom: 'normal' }}>
+              <Text style={{ fontWeight: 'bold' }}>User Accounts</Text>
+              <br />
+              <Text>The following User Accounts will be created in order to support this conversion.</Text>
+            </Spacing>
+            <StyledList>
+              {newUsersAccounts.map((user: string, index: number) => (
+                <li key={index}>{user}</li>
+              ))}
+            </StyledList>
+          </>
+        )}
+        {renderSpinner()}
       </PanelBody>
     </ThemedPanel>
   );
