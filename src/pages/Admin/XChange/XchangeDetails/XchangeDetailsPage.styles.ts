@@ -38,7 +38,7 @@ export const StyledContainer = styled.div<DemoCanvasWidgetProps>`
   height: 650px;
   min-width: 1200px;
   width: 100%;
-  background-color: #fff;
+  background-color: ${({ theme }) => theme.colors.white};
 `;
 type DemoCanvasWidgetProps = {
   color?: string;
@@ -77,7 +77,7 @@ export const StyledText = styled(Text)`
 `;
 
 export const StyledQualifier = styled.div<StyledQualifierProps>`
-  background-color: #fff;
+  background-color: ${({ theme }) => theme.colors.white};
   width: ${({ width }) => width};
   height: 22px;
   border-top-left-radius: 5em 5em;

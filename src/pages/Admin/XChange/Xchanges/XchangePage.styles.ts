@@ -52,7 +52,7 @@ export const CircleStyled = styled.div<CircleStyledProps>`
   width: 20px;
   height: 20px;
   padding: 2.5px 1px 7px 1px;
-  background: #fff;
+  background: ${({ theme }) => theme.colors.white};
   border: 1.5px solid ${({ color }) => color};
   color: ${({ color }) => color};
   text-align: center;

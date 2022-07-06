@@ -167,7 +167,8 @@ export enum CdxWebCommandType {
   Reset = 'RESET',
   Audit = 'AUDIT',
   History = 'HISTORY',
-  Migrate = 'MIGRATE'
+  Migrate = 'MIGRATE',
+  Upload = 'UPLOAD'
 }
 
 export enum CdxWebPage {
@@ -1535,6 +1536,7 @@ export enum Permission {
   XchangeProfileUpdate = 'XCHANGE_PROFILE_UPDATE',
   XchangeProfileDelete = 'XCHANGE_PROFILE_DELETE',
   XchangeProfilePublish = 'XCHANGE_PROFILE_PUBLISH',
+  XchangeFileUpload = 'XCHANGE_FILE_UPLOAD',
   UserCreate = 'USER_CREATE',
   UserRead = 'USER_READ',
   UserUpdate = 'USER_UPDATE',

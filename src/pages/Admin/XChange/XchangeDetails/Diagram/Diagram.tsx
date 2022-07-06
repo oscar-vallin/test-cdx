@@ -18,7 +18,7 @@ type DiagramProps = {
   data: XchangeDiagram;
   refreshDetailsPage: (data: boolean) => void;
   xchangeFileProcessSid?: string;
-}
+};
 
 const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramProps) => {
   const dataSid = data?.steps ? data?.steps[0].sid : '';
@@ -71,7 +71,6 @@ const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramPro
               onEdgesChange={onEdgesChange}
               onConnect={onConnect}
             />
-            ;
           </StyledContainer>
         </Column>
       </Row>

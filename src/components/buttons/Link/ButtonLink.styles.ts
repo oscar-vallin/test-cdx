@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Link } from '@fluentui/react';
 
-export const ButtonLink = styled(Link)`
+export const OverflowLink = styled(Link)`
   overflow: visible;
 `;
