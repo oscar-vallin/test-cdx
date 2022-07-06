@@ -21,6 +21,8 @@ type DiagramProps = {
 }
 
 const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramProps) => {
+  const dataSid = data?.steps ? data?.steps[0].sid : '';
+  const dataTitle = data?.steps ? data?.steps[0].title : '';
   const { initialNodes } = InitialNodes(data);
   const { initialEdges } = InitialEdges(data);
   const [nodes, , onNodesChange] = useNodesState(initialNodes);
@@ -78,7 +80,8 @@ const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramPro
         closePanel={setOpenPanel}
         refreshDetailsPage={refreshDetailsPage}
         xchangeFileProcessSid={xchangeFileProcessSid ?? ''}
-        xchangeStepSid={'104' ?? ''}
+        xchangeStepSid={dataSid ?? ''}
+        xchangeStepTitle={dataTitle ?? ''}
       />
     </Container>
   );
