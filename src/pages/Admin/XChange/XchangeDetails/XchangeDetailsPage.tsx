@@ -174,7 +174,6 @@ const XchangeDetailsPage = () => {
   }, [detailsData, detailsLoading]);
 
   useEffect(() => {
-    console.log(xchangeDataDetails);
     if (xchangeDataDetails?.coreFilename) {
       setCoreFilenameData(xchangeDataDetails?.coreFilename);
       setCoreFilenameValue(xchangeDataDetails?.coreFilename.value ?? '');
