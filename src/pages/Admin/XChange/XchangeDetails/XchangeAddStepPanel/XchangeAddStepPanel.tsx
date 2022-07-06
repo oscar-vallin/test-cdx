@@ -1,5 +1,9 @@
-import { PanelType, PrimaryButton, TextField } from '@fluentui/react';
+import { PanelType, PrimaryButton } from '@fluentui/react';
 import { useEffect, useState } from 'react';
+import CodeMirror from '@uiw/react-codemirror';
+import { createTheme } from '@uiw/codemirror-themes';
+import { javascript } from '@codemirror/lang-javascript';
+import { tags as t } from '@lezer/highlight';
 import { useXchangeStepFormLazyQuery, XchangeStepForm, useCreateXchangeStepMutation } from 'src/data/services/graphql';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import { useNotification } from 'src/hooks/useNotification';
@@ -12,6 +16,7 @@ type XchangeAddStepPanelProps = {
   refreshDetailsPage: (data: boolean) => void;
   xchangeFileProcessSid?: string;
   xchangeStepSid?: string;
+  xchangeStepTitle?: string;
 };
 
 const defaultDialogProps: DialogYesNoProps = {
@@ -30,12 +35,42 @@ const defaultDialogProps: DialogYesNoProps = {
   onClose: () => null,
 };
 
+const myTheme = createTheme({
+  theme: 'light',
+  settings: {
+    background: '#ffffff',
+    foreground: 'black',
+    caret: '#5d00ff',
+    selection: '#036dd626',
+    selectionMatch: '#036dd626',
+    lineHighlight: '#fff',
+    gutterBackground: '#fff',
+    gutterForeground: '#fff',
+    gutterBorder: '#fff',
+  },
+  styles: [
+    { tag: t.comment, color: '#0078D4' },
+    { tag: t.variableName, color: '#0078D4' },
+    { tag: [t.string, t.special(t.brace)], color: '#0078D4' },
+    { tag: t.number, color: '#0078D4' },
+    { tag: t.bool, color: '#0078D4' },
+    { tag: t.null, color: '#0078D4' },
+    { tag: t.keyword, color: '#0078D4' },
+    { tag: t.operator, color: '#0078D4' },
+    { tag: t.className, color: '#0078D4' },
+    { tag: t.definition(t.typeName), color: '#0078D4' },
+    { tag: t.typeName, color: '#0078D4' },
+    { tag: t.angleBracket, color: '#0078D4' },
+  ],
+});
+
 const XchangeAddStepPanel = ({
   isPanelOpen,
   closePanel,
   refreshDetailsPage,
   xchangeFileProcessSid,
   xchangeStepSid,
+  xchangeStepTitle,
 }: XchangeAddStepPanelProps) => {
   const Toast = useNotification();
   const [xchangeStep, setChangeStep] = useState<XchangeStepForm>();
@@ -64,6 +99,8 @@ const XchangeAddStepPanel = ({
     setShowDialog(false);
   };
 
+  const removeLineBreakXml = (xmlValue: string) => xmlValue.split('\n').toString().replace(/,/g, '');
+
   const showUnsavedChangesDialog = () => {
     const updatedDialog = { ...defaultDialogProps };
     updatedDialog.title = 'You have unsaved changes';
@@ -74,6 +111,7 @@ const XchangeAddStepPanel = ({
       hideDialog();
       closePanel(false);
       setUnsavedChanges(false);
+      getxmlData();
     };
     updatedDialog.onClose = () => {
       hideDialog();
@@ -91,15 +129,41 @@ const XchangeAddStepPanel = ({
   };
 
   const saveAddStep = () => {
+    const xml = removeLineBreakXml(editXmlData ?? '');
     createXchangeStepMutation({
       variables: {
         stepInput: {
           xchangeFileProcessSid,
-          xml: editXmlData,
+          xml,
         },
       },
     });
   };
+
+  const addlineBreakeXml = (xmlValue: string) => {
+    let xml = '';
+    const xmlLen = xmlValue?.length ?? 0;
+    if (xmlValue) {
+      for (let i = 0; i < xmlLen; i++) {
+        if (xmlValue[i] === '>' && xmlValue[i + 1] === '<') {
+          xml += `${xmlValue[i]}\n`;
+        } else {
+          xml += `${xmlValue[i]}`;
+        }
+      }
+    }
+    return xml;
+  };
+
+  const comparePreviousXml = (editXml: string, preXml: string) => {
+    const currentXmlValue = removeLineBreakXml(editXml);
+    if (currentXmlValue !== preXml) {
+      setUnsavedChanges(true);
+      return;
+    }
+    setUnsavedChanges(false);
+  };
+
   useEffect(() => {
     getxmlData();
   }, []);
@@ -107,19 +171,15 @@ const XchangeAddStepPanel = ({
   useEffect(() => {
     if (!loadingAddStep && dataAddStep) {
       console.log(dataAddStep);
-      setEditXmlData(dataAddStep.xchangeStepForm.xml.value);
+      const xmlValue = addlineBreakeXml(dataAddStep.xchangeStepForm.xml.value);
+      setEditXmlData(xmlValue);
       setPreviousXmlDate(dataAddStep.xchangeStepForm.xml.value);
       setChangeStep(dataAddStep.xchangeStepForm);
     }
   }, [dataAddStep, loadingAddStep]);
 
   useEffect(() => {
-    if (editXmlData?.trim() !== previousXmlData?.trim()) {
-      setUnsavedChanges(true);
-      return;
-    }
-
-    setUnsavedChanges(false);
+    comparePreviousXml(editXmlData ?? '', previousXmlData ?? '');
   }, [editXmlData]);
 
   useEffect(() => {
@@ -139,6 +199,7 @@ const XchangeAddStepPanel = ({
       <ThemedPanel
         closeButtonAriaLabel="Close"
         type={PanelType.medium}
+        headerText={xchangeStepTitle ? `Xchange Step-${xchangeStepTitle}` : 'Xchange Step'}
         title="New Xchange Step"
         isOpen={isPanelOpen}
         onDismiss={() => {
@@ -148,14 +209,13 @@ const XchangeAddStepPanel = ({
         <PanelBody>
           <WizardBody>
             {xchangeStep?.xml && (
-              <TextField
-                id="AddStepXml"
-                label={xchangeStep.xml.label}
+              <CodeMirror
+                height="400px"
+                style={{ border: '1px solid gray', fontWeight: 'bold' }}
+                theme={myTheme}
+                extensions={[javascript({ jsx: true })]}
                 value={editXmlData ?? ''}
-                multiline={true}
-                rows={20}
-                resizable={false}
-                onChange={(event, newValue) => setEditXmlData(newValue ?? '')}
+                onChange={(value) => setEditXmlData(value)}
               />
             )}
           </WizardBody>
