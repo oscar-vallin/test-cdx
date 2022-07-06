@@ -544,11 +544,9 @@ const XChangePage = () => {
               </Column>
               {!requiresConversion && (
                 <Column lg="2" right>
-                  <SetupStyled>
-                    <StyledButtonAction id="__SetupNewXchange">
-                      + <Text style={{ paddingTop: '5px' }}>Setup new Xchange</Text>
-                    </StyledButtonAction>
-                  </SetupStyled>
+                  <StyledButtonAction id="__SetupNewXchange">
+                    + <Text style={{ paddingTop: '5px' }}>Setup new Xchange</Text>
+                  </StyledButtonAction>
                 </Column>
               )}
             </Row>
