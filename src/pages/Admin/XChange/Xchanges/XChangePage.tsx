@@ -36,7 +36,6 @@ import { PageBody } from 'src/components/layouts/Column';
 import { useThemeStore } from 'src/store/ThemeStore';
 import { PreviewConvertXchangePanel } from './PreviewConvertXchangePanel';
 import {
-  SetupStyled,
   CardStyled,
   ContainerInput,
   CircleStyled,
@@ -429,7 +428,7 @@ const XChangePage = () => {
       <>
         <CardStyled>
           <ButtonLink to={`/xchange-alerts?orgSid=${orgSid}`}>
-            <IconButton iconProps={{ iconName: 'Ringer' }} />
+            <FontIcon iconName="Ringer" style={{ margin: '10px 6px 0 6px' }} />
             Alerts
           </ButtonLink>
           <Spacing margin="normal">
