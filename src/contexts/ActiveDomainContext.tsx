@@ -78,6 +78,7 @@ export const ActiveDomainContextProvider = ({ children }: ActiveDomainContextPro
         label: currentOrgNav.label,
         orgId: currentOrgNav.orgId,
         orgSid: subNavItems.find(({ label }) => label.includes(currentOrgNav.label))?.orgSid,
+        destination: currentOrgNav.page?.type
       });
     }
   }, [activeDomainState.currentOrg.data]);
@@ -88,6 +89,7 @@ export const ActiveDomainContextProvider = ({ children }: ActiveDomainContextPro
       history.push(SessionStore.redirectUrl);
       SessionStore.setRedirectUrl(null);
     } else if (destination) {
+      console.log(`Going to ${destination}`)
       ActiveDomainStore.setCurrentOrg({ destination: null });
       history.push(`${URL_ROUTES[destination]}?orgSid=${ActiveDomainStore.domainOrg.current.orgSid}`);
     }
