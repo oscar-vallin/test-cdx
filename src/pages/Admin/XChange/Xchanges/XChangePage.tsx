@@ -36,7 +36,6 @@ import { PageBody } from 'src/components/layouts/Column';
 import { useThemeStore } from 'src/store/ThemeStore';
 import { PreviewConvertXchangePanel } from './PreviewConvertXchangePanel';
 import {
-  SetupStyled,
   CardStyled,
   ContainerInput,
   CircleStyled,
