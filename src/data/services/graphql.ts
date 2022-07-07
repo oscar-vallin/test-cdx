@@ -366,6 +366,8 @@ export type CreateOrgInput = {
   name: Scalars['String'];
   orgType: OrgType;
   orgOwnerSid?: Maybe<Scalars['ID']>;
+  mv1Id?: Maybe<Scalars['Int']>;
+  mv1Folder?: Maybe<Scalars['String']>;
 };
 
 export type CreatePersonInput = {
@@ -1334,6 +1336,8 @@ export type OrganizationForm = {
   orgId: UiStringField;
   orgType?: Maybe<UiSelectOneField>;
   active: UiBooleanField;
+  mv1Id: UiLongField;
+  mv1Folder: UiStringField;
   options?: Maybe<Array<UiOptions>>;
   commands?: Maybe<Array<WebCommand>>;
   response: GqOperationResponse;
@@ -2684,6 +2688,8 @@ export type UpdateOrgInput = {
   orgSid: Scalars['ID'];
   name: Scalars['String'];
   orgType: OrgType;
+  mv1Id?: Maybe<Scalars['Int']>;
+  mv1Folder?: Maybe<Scalars['String']>;
 };
 
 export type UpdateOrgSecurityInput = {
@@ -5164,6 +5170,12 @@ export type OrganizationFormQuery = (
     )>, active: (
       { __typename?: 'UIBooleanField' }
       & FragmentUiBooleanFieldFragment
+    ), mv1Id: (
+      { __typename?: 'UILongField' }
+      & FragmentUiLongFieldFragment
+    ), mv1Folder: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
     ), options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & FragmentUiOptionsFragment
@@ -5196,6 +5208,12 @@ export type FindOrganizationQuery = (
     )>, active: (
       { __typename?: 'UIBooleanField' }
       & FragmentUiBooleanFieldFragment
+    ), mv1Id: (
+      { __typename?: 'UILongField' }
+      & FragmentUiLongFieldFragment
+    ), mv1Folder: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
     ), options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & FragmentUiOptionsFragment
@@ -6452,6 +6470,12 @@ export type CreateOrgMutation = (
     )>, active: (
       { __typename?: 'UIBooleanField' }
       & FragmentUiBooleanFieldFragment
+    ), mv1Id: (
+      { __typename?: 'UILongField' }
+      & FragmentUiLongFieldFragment
+    ), mv1Folder: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
     ), options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & FragmentUiOptionsFragment
@@ -6484,6 +6508,12 @@ export type UpdateOrgMutation = (
     )>, active: (
       { __typename?: 'UIBooleanField' }
       & FragmentUiBooleanFieldFragment
+    ), mv1Id: (
+      { __typename?: 'UILongField' }
+      & FragmentUiLongFieldFragment
+    ), mv1Folder: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
     ), options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & FragmentUiOptionsFragment
@@ -11680,6 +11710,12 @@ export const OrganizationFormDocument = gql`
     active {
       ...fragmentUIBooleanField
     }
+    mv1Id {
+      ...fragmentUILongField
+    }
+    mv1Folder {
+      ...fragmentUIStringField
+    }
     options {
       ...fragmentUIOptions
     }
@@ -11695,6 +11731,7 @@ export const OrganizationFormDocument = gql`
     ${FragmentUiStringFieldFragmentDoc}
 ${FragmentUiSelectOneFieldFragmentDoc}
 ${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiLongFieldFragmentDoc}
 ${FragmentUiOptionsFragmentDoc}
 ${FragmentWebCommandFragmentDoc}`;
 
@@ -11739,6 +11776,12 @@ export const FindOrganizationDocument = gql`
     active {
       ...fragmentUIBooleanField
     }
+    mv1Id {
+      ...fragmentUILongField
+    }
+    mv1Folder {
+      ...fragmentUIStringField
+    }
     options {
       ...fragmentUIOptions
     }
@@ -11754,6 +11797,7 @@ export const FindOrganizationDocument = gql`
     ${FragmentUiStringFieldFragmentDoc}
 ${FragmentUiSelectOneFieldFragmentDoc}
 ${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiLongFieldFragmentDoc}
 ${FragmentUiOptionsFragmentDoc}
 ${FragmentWebCommandFragmentDoc}`;
 
@@ -14147,6 +14191,12 @@ export const CreateOrgDocument = gql`
     active {
       ...fragmentUIBooleanField
     }
+    mv1Id {
+      ...fragmentUILongField
+    }
+    mv1Folder {
+      ...fragmentUIStringField
+    }
     options {
       ...fragmentUIOptions
     }
@@ -14162,6 +14212,7 @@ export const CreateOrgDocument = gql`
     ${FragmentUiStringFieldFragmentDoc}
 ${FragmentUiSelectOneFieldFragmentDoc}
 ${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiLongFieldFragmentDoc}
 ${FragmentUiOptionsFragmentDoc}
 ${FragmentWebCommandFragmentDoc}`;
 export type CreateOrgMutationFn = Apollo.MutationFunction<CreateOrgMutation, CreateOrgMutationVariables>;
@@ -14205,6 +14256,12 @@ export const UpdateOrgDocument = gql`
     active {
       ...fragmentUIBooleanField
     }
+    mv1Id {
+      ...fragmentUILongField
+    }
+    mv1Folder {
+      ...fragmentUIStringField
+    }
     options {
       ...fragmentUIOptions
     }
@@ -14220,6 +14277,7 @@ export const UpdateOrgDocument = gql`
     ${FragmentUiStringFieldFragmentDoc}
 ${FragmentUiSelectOneFieldFragmentDoc}
 ${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiLongFieldFragmentDoc}
 ${FragmentUiOptionsFragmentDoc}
 ${FragmentWebCommandFragmentDoc}`;
 export type UpdateOrgMutationFn = Apollo.MutationFunction<UpdateOrgMutation, UpdateOrgMutationVariables>;
