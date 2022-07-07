@@ -26,8 +26,8 @@ import { ButtonAction } from 'src/components/buttons';
 import { EmptyState } from 'src/containers/states';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { Card } from 'src/components/cards';
-import { ClassBlock, Indent, TruncatedButton } from './OntologyPage.styles';
 import { OntologyPropElement } from 'src/pages/Admin/XChange/Ontology/OntologyPropElement';
+import { ClassBlock, Indent, TruncatedButton } from './OntologyPage.styles';
 
 const OntologyPage = () => {
   const [ontologyClasses, setOntologyClasses] = useState<OntologyClass[]>([]);

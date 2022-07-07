@@ -29,7 +29,7 @@ export const OntologyPropElement = ({ property, renderCopyButton }: OntologyProp
 
   const renderCopyPathButton = (path: OntologyPath, index?: number) => {
     let fullPath = path.propertyPath.map((p) => p.id).join('\n');
-    fullPath = `${path.ontologyClass.id}\n${fullPath}\n${property?.id}`
+    fullPath = `${path.ontologyClass.id}\n${fullPath}\n${property?.id}`;
     return (
       <IconButton
         id={`__CopyPath_${index}`}
