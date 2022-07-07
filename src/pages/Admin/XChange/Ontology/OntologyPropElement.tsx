@@ -91,7 +91,7 @@ export const OntologyPropElement = ({ property, renderCopyButton }: OntologyProp
           <>
             <FormRow>
               <Text variant="normal" size="large">
-                Paths
+                Paths to {property?.name}
               </Text>
             </FormRow>
             <FormRow>
