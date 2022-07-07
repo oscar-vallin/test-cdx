@@ -16,9 +16,9 @@ const defaultProps = {
 type TextProps = {
   id?: string;
   children?: ReactNode | string;
-  variant?: string;
+  variant?: 'normal' | 'semiBold' | 'bold' | 'extraBold' | 'muted' | 'error';
   transform?: string;
-  size?: string;
+  size?: 'small' | 'normal' | 'large' | 'giant';
   center?: string;
   right?: boolean;
   top?: any;
