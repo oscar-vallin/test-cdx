@@ -1,10 +1,16 @@
-import { PanelType, PrimaryButton } from '@fluentui/react';
+import { IconButton, PanelType, PrimaryButton, Text } from '@fluentui/react';
 import { useEffect, useState } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import { createTheme } from '@uiw/codemirror-themes';
 import { javascript } from '@codemirror/lang-javascript';
 import { tags as t } from '@lezer/highlight';
-import { useXchangeStepFormLazyQuery, XchangeStepForm, useCreateXchangeStepMutation } from 'src/data/services/graphql';
+import {
+  useXchangeStepFormLazyQuery,
+  XchangeStepForm,
+  useCreateXchangeStepMutation,
+  CdxWebCommandType,
+  WebCommand,
+} from 'src/data/services/graphql';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import { useNotification } from 'src/hooks/useNotification';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
@@ -40,25 +46,12 @@ const myTheme = createTheme({
   settings: {
     background: '#ffffff',
     foreground: 'black',
-    caret: '#5d00ff',
-    selection: '#036dd626',
-    selectionMatch: '#036dd626',
     lineHighlight: '#fff',
     gutterBackground: '#fff',
     gutterForeground: '#fff',
     gutterBorder: '#fff',
   },
   styles: [
-    { tag: t.comment, color: '#0078D4' },
-    { tag: t.variableName, color: '#0078D4' },
-    { tag: [t.string, t.special(t.brace)], color: '#0078D4' },
-    { tag: t.number, color: '#0078D4' },
-    { tag: t.bool, color: '#0078D4' },
-    { tag: t.null, color: '#0078D4' },
-    { tag: t.keyword, color: '#0078D4' },
-    { tag: t.operator, color: '#0078D4' },
-    { tag: t.className, color: '#0078D4' },
-    { tag: t.definition(t.typeName), color: '#0078D4' },
     { tag: t.typeName, color: '#0078D4' },
     { tag: t.angleBracket, color: '#0078D4' },
   ],
@@ -76,6 +69,7 @@ const XchangeAddStepPanel = ({
   const [xchangeStep, setChangeStep] = useState<XchangeStepForm>();
   const [editXmlData, setEditXmlData] = useState<string>();
   const [previousXmlData, setPreviousXmlDate] = useState<string>();
+  const [updateCmd, setUpdateCmd] = useState<WebCommand | null>();
   const [showDialog, setShowDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
@@ -176,6 +170,12 @@ const XchangeAddStepPanel = ({
       setPreviousXmlDate(dataAddStep.xchangeStepForm.xml.value);
       setChangeStep(dataAddStep.xchangeStepForm);
     }
+
+    if (dataAddStep?.xchangeStepForm) {
+      const pageCommands = dataAddStep?.xchangeStepForm?.commands;
+      const _updateCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Update);
+      setUpdateCmd(_updateCmd);
+    }
   }, [dataAddStep, loadingAddStep]);
 
   useEffect(() => {
@@ -200,7 +200,6 @@ const XchangeAddStepPanel = ({
         closeButtonAriaLabel="Close"
         type={PanelType.medium}
         headerText={xchangeStepTitle ? `Xchange Step-${xchangeStepTitle}` : 'Xchange Step'}
-        title="New Xchange Step"
         isOpen={isPanelOpen}
         onDismiss={() => {
           onPanelClose();
@@ -208,22 +207,36 @@ const XchangeAddStepPanel = ({
       >
         <PanelBody>
           <WizardBody>
-            {xchangeStep?.xml && (
-              <CodeMirror
-                height="400px"
-                style={{ border: '1px solid gray', fontWeight: 'bold' }}
-                theme={myTheme}
-                extensions={[javascript({ jsx: true })]}
-                value={editXmlData ?? ''}
-                onChange={(value) => setEditXmlData(value)}
-              />
+            {updateCmd && xchangeStep?.xml && (
+              <>
+                {dataAddStep && (
+                  <>
+                    <Text>{dataAddStep.xchangeStepForm.xml.label}</Text>
+                    <IconButton
+                      title={dataAddStep.xchangeStepForm.xml.info}
+                      iconProps={{ iconName: 'Info' }}
+                      style={{ color: 'black' }}
+                    />
+                  </>
+                )}
+                <CodeMirror
+                  height="400px"
+                  style={{ border: '1px solid gray', fontWeight: 'bold', fontSize: '16px' }}
+                  theme={myTheme}
+                  extensions={[javascript({ jsx: true })]}
+                  value={editXmlData ?? ''}
+                  onChange={(value) => setEditXmlData(value)}
+                />
+              </>
             )}
           </WizardBody>
-          <WizardButtonRow>
-            <PrimaryButton id="__Xchange_AddStep_Button" iconProps={{ iconName: 'Save' }} onClick={saveAddStep}>
-              Save
-            </PrimaryButton>
-          </WizardButtonRow>
+          {updateCmd && (
+            <WizardButtonRow>
+              <PrimaryButton id="__Xchange_AddStep_Button" iconProps={{ iconName: 'Save' }} onClick={saveAddStep}>
+                Save
+              </PrimaryButton>
+            </WizardButtonRow>
+          )}
         </PanelBody>
       </ThemedPanel>
       <DialogYesNo {...dialogProps} open={showDialog} />

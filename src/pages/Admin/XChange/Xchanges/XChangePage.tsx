@@ -428,7 +428,7 @@ const XChangePage = () => {
       <>
         <CardStyled>
           <ButtonLink to={`/xchange-alerts?orgSid=${orgSid}`}>
-            <IconButton iconProps={{ iconName: 'Ringer' }} />
+            <FontIcon iconName="Ringer" style={{ margin: '10px 6px 0 6px' }} />
             Alerts
           </ButtonLink>
           <Spacing margin="normal">
