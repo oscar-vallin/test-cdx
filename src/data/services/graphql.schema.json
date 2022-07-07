@@ -8359,7 +8359,7 @@
             "description": "Upload a file to be processed",
             "args": [
               {
-                "name": "orgSid",
+                "name": "xchangeConfigSid",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",
@@ -8367,38 +8367,6 @@
                   "ofType": {
                     "kind": "SCALAR",
                     "name": "ID",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "vendorSid",
-                "description": null,
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "ID",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "spec",
-                "description": null,
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "String",
                     "ofType": null
                   }
                 },
@@ -9291,7 +9259,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "OBJECT",
-                    "name": "OntologyProperty",
+                    "name": "OntologyPropElement",
                     "ofType": null
                   }
                 }
@@ -9466,7 +9434,7 @@
       },
       {
         "kind": "OBJECT",
-        "name": "OntologyProperty",
+        "name": "OntologyPropElement",
         "description": null,
         "fields": [
           {

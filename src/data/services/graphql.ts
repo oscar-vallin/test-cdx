@@ -1100,9 +1100,7 @@ export type MutationWorkPacketResendArgs = {
 
 
 export type MutationXchangeFileUploadArgs = {
-  orgSid: Scalars['ID'];
-  vendorSid: Scalars['ID'];
-  spec: Scalars['String'];
+  xchangeConfigSid: Scalars['ID'];
   qualifier: Scalars['String'];
   file?: Maybe<Scalars['Upload']>;
 };
@@ -1237,7 +1235,7 @@ export type OntologyClass = {
   id: Scalars['String'];
   name: Scalars['String'];
   description: Scalars['String'];
-  properties: Array<OntologyProperty>;
+  properties: Array<OntologyPropElement>;
   superClasses: Array<OntologyElement>;
   subClasses: Array<OntologyElement>;
 };
@@ -1255,8 +1253,8 @@ export type OntologyPath = {
   propertyPath: Array<OntologyElement>;
 };
 
-export type OntologyProperty = {
-  __typename?: 'OntologyProperty';
+export type OntologyPropElement = {
+  __typename?: 'OntologyPropElement';
   id: Scalars['String'];
   name: Scalars['String'];
   description: Scalars['String'];
@@ -3836,8 +3834,8 @@ export type FragmentOntologyClassFragment = (
   { __typename?: 'OntologyClass' }
   & Pick<OntologyClass, 'id' | 'name' | 'description'>
   & { properties: Array<(
-    { __typename?: 'OntologyProperty' }
-    & Pick<OntologyProperty, 'id' | 'name' | 'description' | 'dataType' | 'range'>
+    { __typename?: 'OntologyPropElement' }
+    & Pick<OntologyPropElement, 'id' | 'name' | 'description' | 'dataType' | 'range'>
     & { paths: Array<(
       { __typename?: 'OntologyPath' }
       & { ontologyClass: (
@@ -6212,8 +6210,8 @@ export type TopLevelOntologyClassesQuery = (
     { __typename?: 'OntologyClass' }
     & Pick<OntologyClass, 'id' | 'name' | 'description'>
     & { properties: Array<(
-      { __typename?: 'OntologyProperty' }
-      & Pick<OntologyProperty, 'id' | 'name' | 'description' | 'dataType' | 'range'>
+      { __typename?: 'OntologyPropElement' }
+      & Pick<OntologyPropElement, 'id' | 'name' | 'description' | 'dataType' | 'range'>
       & { paths: Array<(
         { __typename?: 'OntologyPath' }
         & { ontologyClass: (
@@ -6245,8 +6243,8 @@ export type FindOntologyClassQuery = (
     { __typename?: 'OntologyClass' }
     & Pick<OntologyClass, 'id' | 'name' | 'description'>
     & { properties: Array<(
-      { __typename?: 'OntologyProperty' }
-      & Pick<OntologyProperty, 'id' | 'name' | 'description' | 'dataType' | 'range'>
+      { __typename?: 'OntologyPropElement' }
+      & Pick<OntologyPropElement, 'id' | 'name' | 'description' | 'dataType' | 'range'>
       & { paths: Array<(
         { __typename?: 'OntologyPath' }
         & { ontologyClass: (
@@ -6278,8 +6276,8 @@ export type SearchOntologyQuery = (
     { __typename?: 'OntologyClass' }
     & Pick<OntologyClass, 'id' | 'name' | 'description'>
     & { properties: Array<(
-      { __typename?: 'OntologyProperty' }
-      & Pick<OntologyProperty, 'id' | 'name' | 'description' | 'dataType' | 'range'>
+      { __typename?: 'OntologyPropElement' }
+      & Pick<OntologyPropElement, 'id' | 'name' | 'description' | 'dataType' | 'range'>
       & { paths: Array<(
         { __typename?: 'OntologyPath' }
         & { ontologyClass: (
@@ -7699,9 +7697,7 @@ export type WorkPacketResendMutation = (
 );
 
 export type XchangeFileUploadMutationVariables = Exact<{
-  orgSid: Scalars['ID'];
-  vendorSid: Scalars['ID'];
-  spec: Scalars['String'];
+  xchangeConfigSid: Scalars['ID'];
   qualifier: Scalars['String'];
   file?: Maybe<Scalars['Upload']>;
 }>;
@@ -16513,11 +16509,9 @@ export type WorkPacketResendMutationHookResult = ReturnType<typeof useWorkPacket
 export type WorkPacketResendMutationResult = Apollo.MutationResult<WorkPacketResendMutation>;
 export type WorkPacketResendMutationOptions = Apollo.BaseMutationOptions<WorkPacketResendMutation, WorkPacketResendMutationVariables>;
 export const XchangeFileUploadDocument = gql`
-    mutation XchangeFileUpload($orgSid: ID!, $vendorSid: ID!, $spec: String!, $qualifier: String!, $file: Upload) {
+    mutation XchangeFileUpload($xchangeConfigSid: ID!, $qualifier: String!, $file: Upload) {
   xchangeFileUpload(
-    orgSid: $orgSid
-    vendorSid: $vendorSid
-    spec: $spec
+    xchangeConfigSid: $xchangeConfigSid
     qualifier: $qualifier
     file: $file
   ) {
@@ -16552,9 +16546,7 @@ export type XchangeFileUploadMutationFn = Apollo.MutationFunction<XchangeFileUpl
  * @example
  * const [xchangeFileUploadMutation, { data, loading, error }] = useXchangeFileUploadMutation({
  *   variables: {
- *      orgSid: // value for 'orgSid'
- *      vendorSid: // value for 'vendorSid'
- *      spec: // value for 'spec'
+ *      xchangeConfigSid: // value for 'xchangeConfigSid'
  *      qualifier: // value for 'qualifier'
  *      file: // value for 'file'
  *   },
