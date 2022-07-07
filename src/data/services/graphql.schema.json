@@ -9259,7 +9259,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "OBJECT",
-                    "name": "OntologyPropElement",
+                    "name": "OntologyProperty",
                     "ofType": null
                   }
                 }
@@ -9434,7 +9434,7 @@
       },
       {
         "kind": "OBJECT",
-        "name": "OntologyPropElement",
+        "name": "OntologyProperty",
         "description": null,
         "fields": [
           {

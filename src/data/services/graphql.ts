@@ -1235,7 +1235,7 @@ export type OntologyClass = {
   id: Scalars['String'];
   name: Scalars['String'];
   description: Scalars['String'];
-  properties: Array<OntologyPropElement>;
+  properties: Array<OntologyProperty>;
   superClasses: Array<OntologyElement>;
   subClasses: Array<OntologyElement>;
 };
@@ -1253,8 +1253,8 @@ export type OntologyPath = {
   propertyPath: Array<OntologyElement>;
 };
 
-export type OntologyPropElement = {
-  __typename?: 'OntologyPropElement';
+export type OntologyProperty = {
+  __typename?: 'OntologyProperty';
   id: Scalars['String'];
   name: Scalars['String'];
   description: Scalars['String'];
@@ -3834,8 +3834,8 @@ export type FragmentOntologyClassFragment = (
   { __typename?: 'OntologyClass' }
   & Pick<OntologyClass, 'id' | 'name' | 'description'>
   & { properties: Array<(
-    { __typename?: 'OntologyPropElement' }
-    & Pick<OntologyPropElement, 'id' | 'name' | 'description' | 'dataType' | 'range'>
+    { __typename?: 'OntologyProperty' }
+    & Pick<OntologyProperty, 'id' | 'name' | 'description' | 'dataType' | 'range'>
     & { paths: Array<(
       { __typename?: 'OntologyPath' }
       & { ontologyClass: (
@@ -6210,8 +6210,8 @@ export type TopLevelOntologyClassesQuery = (
     { __typename?: 'OntologyClass' }
     & Pick<OntologyClass, 'id' | 'name' | 'description'>
     & { properties: Array<(
-      { __typename?: 'OntologyPropElement' }
-      & Pick<OntologyPropElement, 'id' | 'name' | 'description' | 'dataType' | 'range'>
+      { __typename?: 'OntologyProperty' }
+      & Pick<OntologyProperty, 'id' | 'name' | 'description' | 'dataType' | 'range'>
       & { paths: Array<(
         { __typename?: 'OntologyPath' }
         & { ontologyClass: (
@@ -6243,8 +6243,8 @@ export type FindOntologyClassQuery = (
     { __typename?: 'OntologyClass' }
     & Pick<OntologyClass, 'id' | 'name' | 'description'>
     & { properties: Array<(
-      { __typename?: 'OntologyPropElement' }
-      & Pick<OntologyPropElement, 'id' | 'name' | 'description' | 'dataType' | 'range'>
+      { __typename?: 'OntologyProperty' }
+      & Pick<OntologyProperty, 'id' | 'name' | 'description' | 'dataType' | 'range'>
       & { paths: Array<(
         { __typename?: 'OntologyPath' }
         & { ontologyClass: (
@@ -6276,8 +6276,8 @@ export type SearchOntologyQuery = (
     { __typename?: 'OntologyClass' }
     & Pick<OntologyClass, 'id' | 'name' | 'description'>
     & { properties: Array<(
-      { __typename?: 'OntologyPropElement' }
-      & Pick<OntologyPropElement, 'id' | 'name' | 'description' | 'dataType' | 'range'>
+      { __typename?: 'OntologyProperty' }
+      & Pick<OntologyProperty, 'id' | 'name' | 'description' | 'dataType' | 'range'>
       & { paths: Array<(
         { __typename?: 'OntologyPath' }
         & { ontologyClass: (
