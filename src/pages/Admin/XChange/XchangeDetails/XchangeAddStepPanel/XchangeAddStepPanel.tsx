@@ -151,7 +151,7 @@ const XchangeAddStepPanel = ({
 
   const comparePreviousXml = (editXml: string, preXml: string) => {
     const currentXmlValue = removeLineBreakXml(editXml);
-    if (currentXmlValue !== preXml) {
+    if (currentXmlValue.trim() !== preXml.trim()) {
       setUnsavedChanges(true);
       return;
     }
@@ -164,7 +164,6 @@ const XchangeAddStepPanel = ({
 
   useEffect(() => {
     if (!loadingAddStep && dataAddStep) {
-      console.log(dataAddStep);
       const xmlValue = addlineBreakeXml(dataAddStep.xchangeStepForm.xml.value);
       setEditXmlData(xmlValue);
       setPreviousXmlDate(dataAddStep.xchangeStepForm.xml.value);
