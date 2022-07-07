@@ -1249,6 +1249,12 @@ export type OntologyElement = {
   description: Scalars['String'];
 };
 
+export type OntologyPath = {
+  __typename?: 'OntologyPath';
+  ontologyClass: OntologyElement;
+  propertyPath: Array<OntologyElement>;
+};
+
 export type OntologyProperty = {
   __typename?: 'OntologyProperty';
   id: Scalars['String'];
@@ -1256,6 +1262,7 @@ export type OntologyProperty = {
   description: Scalars['String'];
   dataType?: Maybe<Scalars['String']>;
   range?: Maybe<Scalars['String']>;
+  paths: Array<OntologyPath>;
 };
 
 export type OrgFilterInput = {
@@ -3612,6 +3619,27 @@ export type FragmentPaginationInfoFragment = (
   & Pick<PaginationInfo, 'totalPages' | 'totalElements' | 'pageNumber' | 'pageSize'>
 );
 
+export type FragmentDashThemeColorFragment = (
+  { __typename?: 'DashThemeColor' }
+  & Pick<DashThemeColor, 'id' | 'defaultPalette' | 'themeColorMode' | 'allowDark' | 'paletteNm' | 'themePrimary' | 'themeLighterAlt' | 'themeLighter' | 'themeLight' | 'themeTertiary' | 'themeSecondary' | 'themeDarkAlt' | 'themeDark' | 'themeDarker' | 'neutralLighterAlt' | 'neutralLighter' | 'neutralLight' | 'neutralQuaternaryAlt' | 'neutralQuaternary' | 'neutralTertiaryAlt' | 'neutralTertiary' | 'neutralSecondary' | 'neutralPrimaryAlt' | 'neutralPrimary' | 'neutralDark' | 'black' | 'white'>
+);
+
+export type FragmentGenericResponseFragment = (
+  { __typename?: 'GenericResponse' }
+  & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+  & { allMessages?: Maybe<Array<(
+    { __typename?: 'LogMessage' }
+    & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+    & { attributes?: Maybe<Array<(
+      { __typename?: 'NVPStr' }
+      & UnionNvp_NvpStr_Fragment
+    ) | (
+      { __typename?: 'NVPId' }
+      & UnionNvp_NvpId_Fragment
+    )>> }
+  )>> }
+);
+
 export type FragmentUiOptionsFragment = (
   { __typename?: 'UIOptions' }
   & Pick<UiOptions, 'key'>
@@ -3677,6 +3705,156 @@ export type FragmentUiReadOnlyFieldFragment = (
 export type FragmentXchangeConfigActivityFragment = (
   { __typename?: 'XchangeConfigActivity' }
   & Pick<XchangeConfigActivity, 'filesProcessed' | 'lastActivity'>
+);
+
+export type FragmentXchangeFileProcessFormFragment = (
+  { __typename?: 'XchangeFileProcessForm' }
+  & Pick<XchangeFileProcessForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+  & { vendor: (
+    { __typename?: 'UISelectOneField' }
+    & FragmentUiSelectOneFieldFragment
+  ), specId: (
+    { __typename?: 'UIStringField' }
+    & FragmentUiStringFieldFragment
+  ), filenameQualifiers: (
+    { __typename?: 'UISelectManyField' }
+    & FragmentUiSelectManyFieldFragment
+  ), diagram: (
+    { __typename?: 'XchangeDiagram' }
+    & { steps?: Maybe<Array<(
+      { __typename?: 'XchangeDiagramStep' }
+      & Pick<XchangeDiagramStep, 'sid' | 'key' | 'icon' | 'title' | 'subTitle' | 'info' | 'qualifier'>
+      & { commands?: Maybe<Array<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>, position: (
+        { __typename?: 'DiagramCoordinates' }
+        & Pick<DiagramCoordinates, 'x' | 'y'>
+      ) }
+    )>>, stepGroups?: Maybe<Array<(
+      { __typename?: 'XchangeDiagramStepGroup' }
+      & { start: (
+        { __typename?: 'DiagramCoordinates' }
+        & Pick<DiagramCoordinates, 'x' | 'y'>
+      ), end: (
+        { __typename?: 'DiagramCoordinates' }
+        & Pick<DiagramCoordinates, 'x' | 'y'>
+      ) }
+    )>>, transmissions?: Maybe<Array<(
+      { __typename?: 'XchangeDiagramFileTransmission' }
+      & Pick<XchangeDiagramFileTransmission, 'sid' | 'key' | 'protocol' | 'host' | 'qualifier'>
+      & { commands?: Maybe<Array<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>>, position: (
+        { __typename?: 'DiagramCoordinates' }
+        & Pick<DiagramCoordinates, 'x' | 'y'>
+      ) }
+    )>>, connectors?: Maybe<Array<(
+      { __typename?: 'DiagramConnector' }
+      & Pick<DiagramConnector, 'fromKey' | 'toKey'>
+    )>> }
+  ), options?: Maybe<Array<(
+    { __typename?: 'UIOptions' }
+    & FragmentUiOptionsFragment
+  )>>, commands?: Maybe<Array<(
+    { __typename?: 'WebCommand' }
+    & FragmentWebCommandFragment
+  )>> }
+);
+
+export type FragmentXchangeStepFormFragment = (
+  { __typename?: 'XchangeStepForm' }
+  & Pick<XchangeStepForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+  & { xml: (
+    { __typename?: 'UIStringField' }
+    & FragmentUiStringFieldFragment
+  ), lastUpdated?: Maybe<(
+    { __typename?: 'UIReadOnlyField' }
+    & FragmentUiReadOnlyFieldFragment
+  )>, commands?: Maybe<Array<(
+    { __typename?: 'WebCommand' }
+    & FragmentWebCommandFragment
+  )>> }
+);
+
+export type FragmentXchangeFileTransmissionFormFragment = (
+  { __typename?: 'XchangeFileTransmissionForm' }
+  & Pick<XchangeFileTransmissionForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+  & { parent?: Maybe<(
+    { __typename?: 'XchangeFileTransmission' }
+    & Pick<XchangeFileTransmission, 'sid' | 'filenameQualifiers' | 'protocol' | 'host' | 'port' | 'userName' | 'password' | 'authKeyName' | 'folder' | 'filenamePattern' | 'stepWise' | 'encryptionKeyName' | 'lastUpdated' | 'comments'>
+  )>, filenameQualifiers: (
+    { __typename?: 'UISelectManyField' }
+    & FragmentUiSelectManyFieldFragment
+  ), protocol: (
+    { __typename?: 'UISelectOneField' }
+    & FragmentUiSelectOneFieldFragment
+  ), host: (
+    { __typename?: 'UIStringField' }
+    & FragmentUiStringFieldFragment
+  ), port: (
+    { __typename?: 'UIIntField' }
+    & FragmentUiIntFieldFragment
+  ), userName: (
+    { __typename?: 'UIStringField' }
+    & FragmentUiStringFieldFragment
+  ), password: (
+    { __typename?: 'UIStringField' }
+    & FragmentUiStringFieldFragment
+  ), authKeyName: (
+    { __typename?: 'UISelectOneField' }
+    & FragmentUiSelectOneFieldFragment
+  ), folder: (
+    { __typename?: 'UIStringField' }
+    & FragmentUiStringFieldFragment
+  ), filenamePattern: (
+    { __typename?: 'UIStringField' }
+    & FragmentUiStringFieldFragment
+  ), stepWise: (
+    { __typename?: 'UIBooleanField' }
+    & FragmentUiBooleanFieldFragment
+  ), encryptionKeyName: (
+    { __typename?: 'UISelectOneField' }
+    & FragmentUiSelectOneFieldFragment
+  ), lastUpdated?: Maybe<(
+    { __typename?: 'UIReadOnlyField' }
+    & FragmentUiReadOnlyFieldFragment
+  )>, comments: (
+    { __typename?: 'UIStringField' }
+    & FragmentUiStringFieldFragment
+  ), options?: Maybe<Array<(
+    { __typename?: 'UIOptions' }
+    & FragmentUiOptionsFragment
+  )>>, commands?: Maybe<Array<(
+    { __typename?: 'WebCommand' }
+    & FragmentWebCommandFragment
+  )>> }
+);
+
+export type FragmentOntologyClassFragment = (
+  { __typename?: 'OntologyClass' }
+  & Pick<OntologyClass, 'id' | 'name' | 'description'>
+  & { properties: Array<(
+    { __typename?: 'OntologyProperty' }
+    & Pick<OntologyProperty, 'id' | 'name' | 'description' | 'dataType' | 'range'>
+    & { paths: Array<(
+      { __typename?: 'OntologyPath' }
+      & { ontologyClass: (
+        { __typename?: 'OntologyElement' }
+        & Pick<OntologyElement, 'id' | 'name' | 'description'>
+      ), propertyPath: Array<(
+        { __typename?: 'OntologyElement' }
+        & Pick<OntologyElement, 'id' | 'name' | 'description'>
+      )> }
+    )> }
+  )>, superClasses: Array<(
+    { __typename?: 'OntologyElement' }
+    & Pick<OntologyElement, 'id' | 'name' | 'description'>
+  )>, subClasses: Array<(
+    { __typename?: 'OntologyElement' }
+    & Pick<OntologyElement, 'id' | 'name' | 'description'>
+  )> }
 );
 
 export type VersionQueryVariables = Exact<{ [key: string]: never; }>;
@@ -4220,7 +4398,7 @@ export type UserThemeQuery = (
     & Pick<DashTheme, 'id' | 'themeColorMode' | 'themeFontSize'>
     & { dashThemeColor?: Maybe<(
       { __typename?: 'DashThemeColor' }
-      & Pick<DashThemeColor, 'id' | 'defaultPalette' | 'themeColorMode' | 'allowDark' | 'paletteNm' | 'themePrimary' | 'themeLighterAlt' | 'themeLighter' | 'themeLight' | 'themeTertiary' | 'themeSecondary' | 'themeDarkAlt' | 'themeDark' | 'themeDarker' | 'neutralLighterAlt' | 'neutralLighter' | 'neutralLight' | 'neutralQuaternaryAlt' | 'neutralQuaternary' | 'neutralTertiaryAlt' | 'neutralTertiary' | 'neutralSecondary' | 'neutralPrimaryAlt' | 'neutralPrimary' | 'neutralDark' | 'black' | 'white'>
+      & FragmentDashThemeColorFragment
     )> }
   )> }
 );
@@ -5169,7 +5347,7 @@ export type DashThemeColorForOrgQuery = (
       & FragmentPaginationInfoFragment
     ), nodes?: Maybe<Array<(
       { __typename?: 'DashThemeColor' }
-      & Pick<DashThemeColor, 'id' | 'defaultPalette' | 'themeColorMode' | 'allowDark' | 'paletteNm' | 'themePrimary' | 'themeLighterAlt' | 'themeLighter' | 'themeLight' | 'themeTertiary' | 'themeSecondary' | 'themeDarkAlt' | 'themeDark' | 'themeDarker' | 'neutralLighterAlt' | 'neutralLighter' | 'neutralLight' | 'neutralQuaternaryAlt' | 'neutralQuaternary' | 'neutralTertiaryAlt' | 'neutralTertiary' | 'neutralSecondary' | 'neutralPrimaryAlt' | 'neutralPrimary' | 'neutralDark' | 'black' | 'white'>
+      & FragmentDashThemeColorFragment
     )>> }
   )> }
 );
@@ -5225,7 +5403,7 @@ export type DefaultDashThemeForSiteQuery = (
     & Pick<DashTheme, 'id' | 'themeColorMode' | 'themeFontSize'>
     & { dashThemeColor?: Maybe<(
       { __typename?: 'DashThemeColor' }
-      & Pick<DashThemeColor, 'id' | 'defaultPalette' | 'themeColorMode' | 'allowDark' | 'paletteNm' | 'themePrimary' | 'themeLighterAlt' | 'themeLighter' | 'themeLight' | 'themeTertiary' | 'themeSecondary' | 'themeDarkAlt' | 'themeDark' | 'themeDarker' | 'neutralLighterAlt' | 'neutralLighter' | 'neutralLight' | 'neutralQuaternaryAlt' | 'neutralQuaternary' | 'neutralTertiaryAlt' | 'neutralTertiary' | 'neutralSecondary' | 'neutralPrimaryAlt' | 'neutralPrimary' | 'neutralDark' | 'black' | 'white'>
+      & FragmentDashThemeColorFragment
     )> }
   )> }
 );
@@ -5242,7 +5420,7 @@ export type DefaultDashThemeForSitePageQuery = (
     & Pick<DefaultDashThemePage, 'themeColorModes' | 'themeFontSizes'>
     & { themeColorPalettes?: Maybe<Array<(
       { __typename?: 'DashThemeColor' }
-      & Pick<DashThemeColor, 'id' | 'defaultPalette' | 'themeColorMode' | 'allowDark' | 'paletteNm' | 'themePrimary' | 'themeLighterAlt' | 'themeLighter' | 'themeLight' | 'themeTertiary' | 'themeSecondary' | 'themeDarkAlt' | 'themeDark' | 'themeDarker' | 'neutralLighterAlt' | 'neutralLighter' | 'neutralLight' | 'neutralQuaternaryAlt' | 'neutralQuaternary' | 'neutralTertiaryAlt' | 'neutralTertiary' | 'neutralSecondary' | 'neutralPrimaryAlt' | 'neutralPrimary' | 'neutralDark' | 'black' | 'white'>
+      & FragmentDashThemeColorFragment
     )>> }
   )> }
 );
@@ -5257,13 +5435,13 @@ export type CurrentUserDashThemePageQuery = (
     & Pick<UserDashThemePage, 'themeColorModes' | 'themeFontSizes'>
     & { themeColorPalettes?: Maybe<Array<(
       { __typename?: 'DashThemeColor' }
-      & Pick<DashThemeColor, 'id' | 'defaultPalette' | 'themeColorMode' | 'allowDark' | 'paletteNm' | 'themePrimary' | 'themeLighterAlt' | 'themeLighter' | 'themeLight' | 'themeTertiary' | 'themeSecondary' | 'themeDarkAlt' | 'themeDark' | 'themeDarker' | 'neutralLighterAlt' | 'neutralLighter' | 'neutralLight' | 'neutralQuaternaryAlt' | 'neutralQuaternary' | 'neutralTertiaryAlt' | 'neutralTertiary' | 'neutralSecondary' | 'neutralPrimaryAlt' | 'neutralPrimary' | 'neutralDark' | 'black' | 'white'>
+      & FragmentDashThemeColorFragment
     )>>, dashTheme?: Maybe<(
       { __typename?: 'DashTheme' }
       & Pick<DashTheme, 'id' | 'themeColorMode' | 'themeFontSize'>
       & { dashThemeColor?: Maybe<(
         { __typename?: 'DashThemeColor' }
-        & Pick<DashThemeColor, 'id' | 'defaultPalette' | 'themeColorMode' | 'allowDark' | 'paletteNm' | 'themePrimary' | 'themeLighterAlt' | 'themeLighter' | 'themeLight' | 'themeTertiary' | 'themeSecondary' | 'themeDarkAlt' | 'themeDark' | 'themeDarker' | 'neutralLighterAlt' | 'neutralLighter' | 'neutralLight' | 'neutralQuaternaryAlt' | 'neutralQuaternary' | 'neutralTertiaryAlt' | 'neutralTertiary' | 'neutralSecondary' | 'neutralPrimaryAlt' | 'neutralPrimary' | 'neutralDark' | 'black' | 'white'>
+        & FragmentDashThemeColorFragment
       )> }
     )> }
   )> }
@@ -5638,58 +5816,7 @@ export type XchangeConfigQuery = (
       & FragmentUiStringFieldFragment
     ), processes?: Maybe<Array<(
       { __typename?: 'XchangeFileProcessForm' }
-      & Pick<XchangeFileProcessForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
-      & { vendor: (
-        { __typename?: 'UISelectOneField' }
-        & FragmentUiSelectOneFieldFragment
-      ), specId: (
-        { __typename?: 'UIStringField' }
-        & FragmentUiStringFieldFragment
-      ), filenameQualifiers: (
-        { __typename?: 'UISelectManyField' }
-        & FragmentUiSelectManyFieldFragment
-      ), diagram: (
-        { __typename?: 'XchangeDiagram' }
-        & { steps?: Maybe<Array<(
-          { __typename?: 'XchangeDiagramStep' }
-          & Pick<XchangeDiagramStep, 'sid' | 'key' | 'icon' | 'title' | 'subTitle' | 'info' | 'qualifier'>
-          & { commands?: Maybe<Array<(
-            { __typename?: 'WebCommand' }
-            & FragmentWebCommandFragment
-          )>>, position: (
-            { __typename?: 'DiagramCoordinates' }
-            & Pick<DiagramCoordinates, 'x' | 'y'>
-          ) }
-        )>>, stepGroups?: Maybe<Array<(
-          { __typename?: 'XchangeDiagramStepGroup' }
-          & { start: (
-            { __typename?: 'DiagramCoordinates' }
-            & Pick<DiagramCoordinates, 'x' | 'y'>
-          ), end: (
-            { __typename?: 'DiagramCoordinates' }
-            & Pick<DiagramCoordinates, 'x' | 'y'>
-          ) }
-        )>>, transmissions?: Maybe<Array<(
-          { __typename?: 'XchangeDiagramFileTransmission' }
-          & Pick<XchangeDiagramFileTransmission, 'sid' | 'key' | 'protocol' | 'host' | 'qualifier'>
-          & { commands?: Maybe<Array<(
-            { __typename?: 'WebCommand' }
-            & FragmentWebCommandFragment
-          )>>, position: (
-            { __typename?: 'DiagramCoordinates' }
-            & Pick<DiagramCoordinates, 'x' | 'y'>
-          ) }
-        )>>, connectors?: Maybe<Array<(
-          { __typename?: 'DiagramConnector' }
-          & Pick<DiagramConnector, 'fromKey' | 'toKey'>
-        )>> }
-      ), options?: Maybe<Array<(
-        { __typename?: 'UIOptions' }
-        & FragmentUiOptionsFragment
-      )>>, commands?: Maybe<Array<(
-        { __typename?: 'WebCommand' }
-        & FragmentWebCommandFragment
-      )>> }
+      & FragmentXchangeFileProcessFormFragment
     )>>, alerts?: Maybe<Array<(
       { __typename?: 'XchangeAlert' }
       & Pick<XchangeAlert, 'sid' | 'coreFilename' | 'filenameQualifier' | 'alertTypes'>
@@ -6087,6 +6214,16 @@ export type TopLevelOntologyClassesQuery = (
     & { properties: Array<(
       { __typename?: 'OntologyProperty' }
       & Pick<OntologyProperty, 'id' | 'name' | 'description' | 'dataType' | 'range'>
+      & { paths: Array<(
+        { __typename?: 'OntologyPath' }
+        & { ontologyClass: (
+          { __typename?: 'OntologyElement' }
+          & Pick<OntologyElement, 'id' | 'name' | 'description'>
+        ), propertyPath: Array<(
+          { __typename?: 'OntologyElement' }
+          & Pick<OntologyElement, 'id' | 'name' | 'description'>
+        )> }
+      )> }
     )>, superClasses: Array<(
       { __typename?: 'OntologyElement' }
       & Pick<OntologyElement, 'id' | 'name' | 'description'>
@@ -6110,6 +6247,16 @@ export type FindOntologyClassQuery = (
     & { properties: Array<(
       { __typename?: 'OntologyProperty' }
       & Pick<OntologyProperty, 'id' | 'name' | 'description' | 'dataType' | 'range'>
+      & { paths: Array<(
+        { __typename?: 'OntologyPath' }
+        & { ontologyClass: (
+          { __typename?: 'OntologyElement' }
+          & Pick<OntologyElement, 'id' | 'name' | 'description'>
+        ), propertyPath: Array<(
+          { __typename?: 'OntologyElement' }
+          & Pick<OntologyElement, 'id' | 'name' | 'description'>
+        )> }
+      )> }
     )>, superClasses: Array<(
       { __typename?: 'OntologyElement' }
       & Pick<OntologyElement, 'id' | 'name' | 'description'>
@@ -6133,6 +6280,16 @@ export type SearchOntologyQuery = (
     & { properties: Array<(
       { __typename?: 'OntologyProperty' }
       & Pick<OntologyProperty, 'id' | 'name' | 'description' | 'dataType' | 'range'>
+      & { paths: Array<(
+        { __typename?: 'OntologyPath' }
+        & { ontologyClass: (
+          { __typename?: 'OntologyElement' }
+          & Pick<OntologyElement, 'id' | 'name' | 'description'>
+        ), propertyPath: Array<(
+          { __typename?: 'OntologyElement' }
+          & Pick<OntologyElement, 'id' | 'name' | 'description'>
+        )> }
+      )> }
     )>, superClasses: Array<(
       { __typename?: 'OntologyElement' }
       & Pick<OntologyElement, 'id' | 'name' | 'description'>
@@ -7042,7 +7199,7 @@ export type CreateDefaultDashThemeMutation = (
     & Pick<DashTheme, 'id' | 'themeColorMode' | 'themeFontSize'>
     & { dashThemeColor?: Maybe<(
       { __typename?: 'DashThemeColor' }
-      & Pick<DashThemeColor, 'id' | 'defaultPalette' | 'themeColorMode' | 'allowDark' | 'paletteNm' | 'themePrimary' | 'themeLighterAlt' | 'themeLighter' | 'themeLight' | 'themeTertiary' | 'themeSecondary' | 'themeDarkAlt' | 'themeDark' | 'themeDarker' | 'neutralLighterAlt' | 'neutralLighter' | 'neutralLight' | 'neutralQuaternaryAlt' | 'neutralQuaternary' | 'neutralTertiaryAlt' | 'neutralTertiary' | 'neutralSecondary' | 'neutralPrimaryAlt' | 'neutralPrimary' | 'neutralDark' | 'black' | 'white'>
+      & FragmentDashThemeColorFragment
     )> }
   )> }
 );
@@ -7059,7 +7216,7 @@ export type UpdateDefaultDashThemeMutation = (
     & Pick<DashTheme, 'id' | 'themeColorMode' | 'themeFontSize'>
     & { dashThemeColor?: Maybe<(
       { __typename?: 'DashThemeColor' }
-      & Pick<DashThemeColor, 'id' | 'defaultPalette' | 'themeColorMode' | 'allowDark' | 'paletteNm' | 'themePrimary' | 'themeLighterAlt' | 'themeLighter' | 'themeLight' | 'themeTertiary' | 'themeSecondary' | 'themeDarkAlt' | 'themeDark' | 'themeDarker' | 'neutralLighterAlt' | 'neutralLighter' | 'neutralLight' | 'neutralQuaternaryAlt' | 'neutralQuaternary' | 'neutralTertiaryAlt' | 'neutralTertiary' | 'neutralSecondary' | 'neutralPrimaryAlt' | 'neutralPrimary' | 'neutralDark' | 'black' | 'white'>
+      & FragmentDashThemeColorFragment
     )> }
   )> }
 );
@@ -7109,7 +7266,7 @@ export type CreateOrUpdateOwnDashThemeMutation = (
     & Pick<DashTheme, 'id' | 'themeColorMode' | 'themeFontSize'>
     & { dashThemeColor?: Maybe<(
       { __typename?: 'DashThemeColor' }
-      & Pick<DashThemeColor, 'id' | 'defaultPalette' | 'themeColorMode' | 'allowDark' | 'paletteNm' | 'themePrimary' | 'themeLighterAlt' | 'themeLighter' | 'themeLight' | 'themeTertiary' | 'themeSecondary' | 'themeDarkAlt' | 'themeDark' | 'themeDarker' | 'neutralLighterAlt' | 'neutralLighter' | 'neutralLight' | 'neutralQuaternaryAlt' | 'neutralQuaternary' | 'neutralTertiaryAlt' | 'neutralTertiary' | 'neutralSecondary' | 'neutralPrimaryAlt' | 'neutralPrimary' | 'neutralDark' | 'black' | 'white'>
+      & FragmentDashThemeColorFragment
     )> }
   )> }
 );
@@ -7126,7 +7283,7 @@ export type SetOwnDashThemeFontSizeMutation = (
     & Pick<DashTheme, 'id' | 'themeColorMode' | 'themeFontSize'>
     & { dashThemeColor?: Maybe<(
       { __typename?: 'DashThemeColor' }
-      & Pick<DashThemeColor, 'id' | 'defaultPalette' | 'themeColorMode' | 'allowDark' | 'paletteNm' | 'themePrimary' | 'themeLighterAlt' | 'themeLighter' | 'themeLight' | 'themeTertiary' | 'themeSecondary' | 'themeDarkAlt' | 'themeDark' | 'themeDarker' | 'neutralLighterAlt' | 'neutralLighter' | 'neutralLight' | 'neutralQuaternaryAlt' | 'neutralQuaternary' | 'neutralTertiaryAlt' | 'neutralTertiary' | 'neutralSecondary' | 'neutralPrimaryAlt' | 'neutralPrimary' | 'neutralDark' | 'black' | 'white'>
+      & FragmentDashThemeColorFragment
     )> }
   )> }
 );
@@ -8562,6 +8719,149 @@ export const FragmentPaginationInfoFragmentDoc = gql`
   pageSize
 }
     `;
+export const FragmentDashThemeColorFragmentDoc = gql`
+    fragment fragmentDashThemeColor on DashThemeColor {
+  id
+  defaultPalette
+  themeColorMode
+  allowDark
+  paletteNm
+  themePrimary
+  themeLighterAlt
+  themeLighter
+  themeLight
+  themeTertiary
+  themeSecondary
+  themeDarkAlt
+  themeDark
+  themeDarker
+  neutralLighterAlt
+  neutralLighter
+  neutralLight
+  neutralQuaternaryAlt
+  neutralQuaternary
+  neutralTertiaryAlt
+  neutralTertiary
+  neutralSecondary
+  neutralPrimaryAlt
+  neutralPrimary
+  neutralDark
+  black
+  white
+}
+    `;
+export const FragmentGenericResponseFragmentDoc = gql`
+    fragment fragmentGenericResponse on GenericResponse {
+  response
+  errCode
+  errMsg
+  errSeverity
+  allMessages {
+    timeStamp
+    severity
+    name
+    body
+    attributes {
+      ...unionNVP
+    }
+  }
+}
+    ${UnionNvpFragmentDoc}`;
+export const FragmentUiDateFieldFragmentDoc = gql`
+    fragment fragmentUIDateField on UIDateField {
+  value
+  label
+  readOnly
+  info
+  required
+  visible
+  inheritedFrom
+  inheritedBy
+  errCode
+  errMsg
+  errSeverity
+}
+    `;
+export const FragmentUiLongFieldFragmentDoc = gql`
+    fragment fragmentUILongField on UILongField {
+  value
+  label
+  readOnly
+  info
+  required
+  visible
+  inheritedFrom
+  inheritedBy
+  min
+  max
+  errCode
+  errMsg
+  errSeverity
+}
+    `;
+export const FragmentXchangeConfigActivityFragmentDoc = gql`
+    fragment fragmentXchangeConfigActivity on XchangeConfigActivity {
+  filesProcessed
+  lastActivity
+}
+    `;
+export const FragmentUiSelectOneFieldFragmentDoc = gql`
+    fragment fragmentUISelectOneField on UISelectOneField {
+  value {
+    name
+    value
+  }
+  label
+  readOnly
+  info
+  required
+  visible
+  inheritedFrom
+  inheritedBy
+  options
+  query
+  errCode
+  errMsg
+  errSeverity
+}
+    `;
+export const FragmentUiStringFieldFragmentDoc = gql`
+    fragment fragmentUIStringField on UIStringField {
+  value
+  label
+  readOnly
+  info
+  required
+  visible
+  inheritedFrom
+  inheritedBy
+  min
+  max
+  errCode
+  errMsg
+  errSeverity
+}
+    `;
+export const FragmentUiSelectManyFieldFragmentDoc = gql`
+    fragment fragmentUISelectManyField on UISelectManyField {
+  value {
+    name
+    value
+  }
+  label
+  readOnly
+  info
+  required
+  visible
+  inheritedFrom
+  inheritedBy
+  options
+  query
+  errCode
+  errMsg
+  errSeverity
+}
+    `;
 export const FragmentUiOptionFragmentDoc = gql`
     fragment fragmentUIOption on UIOption {
   label
@@ -8578,8 +8878,118 @@ export const FragmentUiOptionsFragmentDoc = gql`
   }
 }
     ${FragmentUiOptionFragmentDoc}`;
-export const FragmentUiStringFieldFragmentDoc = gql`
-    fragment fragmentUIStringField on UIStringField {
+export const FragmentXchangeFileProcessFormFragmentDoc = gql`
+    fragment fragmentXchangeFileProcessForm on XchangeFileProcessForm {
+  sid
+  vendor {
+    ...fragmentUISelectOneField
+  }
+  specId {
+    ...fragmentUIStringField
+  }
+  filenameQualifiers {
+    ...fragmentUISelectManyField
+  }
+  diagram {
+    steps {
+      sid
+      key
+      icon
+      title
+      subTitle
+      info
+      qualifier
+      commands {
+        ...fragmentWebCommand
+      }
+      position {
+        x
+        y
+      }
+    }
+    stepGroups {
+      start {
+        x
+        y
+      }
+      end {
+        x
+        y
+      }
+    }
+    transmissions {
+      sid
+      key
+      protocol
+      host
+      qualifier
+      commands {
+        ...fragmentWebCommand
+      }
+      position {
+        x
+        y
+      }
+    }
+    connectors {
+      fromKey
+      toKey
+    }
+  }
+  options {
+    ...fragmentUIOptions
+  }
+  commands {
+    ...fragmentWebCommand
+  }
+  response
+  errCode
+  errMsg
+  errSeverity
+}
+    ${FragmentUiSelectOneFieldFragmentDoc}
+${FragmentUiStringFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentWebCommandFragmentDoc}
+${FragmentUiOptionsFragmentDoc}`;
+export const FragmentUiReadOnlyFieldFragmentDoc = gql`
+    fragment fragmentUIReadOnlyField on UIReadOnlyField {
+  value
+  description
+  label
+  readOnly
+  info
+  required
+  visible
+  inheritedFrom
+  inheritedBy
+  errCode
+  errMsg
+  errSeverity
+}
+    `;
+export const FragmentXchangeStepFormFragmentDoc = gql`
+    fragment fragmentXchangeStepForm on XchangeStepForm {
+  sid
+  xml {
+    ...fragmentUIStringField
+  }
+  lastUpdated {
+    ...fragmentUIReadOnlyField
+  }
+  commands {
+    ...fragmentWebCommand
+  }
+  response
+  errCode
+  errMsg
+  errSeverity
+}
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiReadOnlyFieldFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
+export const FragmentUiIntFieldFragmentDoc = gql`
+    fragment fragmentUIIntField on UIIntField {
   value
   label
   readOnly
@@ -8610,115 +9020,117 @@ export const FragmentUiBooleanFieldFragmentDoc = gql`
   errSeverity
 }
     `;
-export const FragmentUiDateFieldFragmentDoc = gql`
-    fragment fragmentUIDateField on UIDateField {
-  value
-  label
-  readOnly
-  info
-  required
-  visible
-  inheritedFrom
-  inheritedBy
-  errCode
-  errMsg
-  errSeverity
-}
-    `;
-export const FragmentUiIntFieldFragmentDoc = gql`
-    fragment fragmentUIIntField on UIIntField {
-  value
-  label
-  readOnly
-  info
-  required
-  visible
-  inheritedFrom
-  inheritedBy
-  min
-  max
-  errCode
-  errMsg
-  errSeverity
-}
-    `;
-export const FragmentUiLongFieldFragmentDoc = gql`
-    fragment fragmentUILongField on UILongField {
-  value
-  label
-  readOnly
-  info
-  required
-  visible
-  inheritedFrom
-  inheritedBy
-  min
-  max
-  errCode
-  errMsg
-  errSeverity
-}
-    `;
-export const FragmentUiSelectOneFieldFragmentDoc = gql`
-    fragment fragmentUISelectOneField on UISelectOneField {
-  value {
-    name
-    value
+export const FragmentXchangeFileTransmissionFormFragmentDoc = gql`
+    fragment fragmentXchangeFileTransmissionForm on XchangeFileTransmissionForm {
+  sid
+  parent {
+    sid
+    filenameQualifiers
+    protocol
+    host
+    port
+    userName
+    password
+    authKeyName
+    folder
+    filenamePattern
+    stepWise
+    encryptionKeyName
+    lastUpdated
+    comments
   }
-  label
-  readOnly
-  info
-  required
-  visible
-  inheritedFrom
-  inheritedBy
-  options
-  query
-  errCode
-  errMsg
-  errSeverity
-}
-    `;
-export const FragmentUiSelectManyFieldFragmentDoc = gql`
-    fragment fragmentUISelectManyField on UISelectManyField {
-  value {
-    name
-    value
+  filenameQualifiers {
+    ...fragmentUISelectManyField
   }
-  label
-  readOnly
-  info
-  required
-  visible
-  inheritedFrom
-  inheritedBy
-  options
-  query
+  protocol {
+    ...fragmentUISelectOneField
+  }
+  host {
+    ...fragmentUIStringField
+  }
+  port {
+    ...fragmentUIIntField
+  }
+  userName {
+    ...fragmentUIStringField
+  }
+  password {
+    ...fragmentUIStringField
+  }
+  authKeyName {
+    ...fragmentUISelectOneField
+  }
+  folder {
+    ...fragmentUIStringField
+  }
+  filenamePattern {
+    ...fragmentUIStringField
+  }
+  stepWise {
+    ...fragmentUIBooleanField
+  }
+  encryptionKeyName {
+    ...fragmentUISelectOneField
+  }
+  lastUpdated {
+    ...fragmentUIReadOnlyField
+  }
+  comments {
+    ...fragmentUIStringField
+  }
+  options {
+    ...fragmentUIOptions
+  }
+  commands {
+    ...fragmentWebCommand
+  }
+  response
   errCode
   errMsg
   errSeverity
 }
-    `;
-export const FragmentUiReadOnlyFieldFragmentDoc = gql`
-    fragment fragmentUIReadOnlyField on UIReadOnlyField {
-  value
+    ${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
+${FragmentUiStringFieldFragmentDoc}
+${FragmentUiIntFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiReadOnlyFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
+export const FragmentOntologyClassFragmentDoc = gql`
+    fragment fragmentOntologyClass on OntologyClass {
+  id
+  name
   description
-  label
-  readOnly
-  info
-  required
-  visible
-  inheritedFrom
-  inheritedBy
-  errCode
-  errMsg
-  errSeverity
-}
-    `;
-export const FragmentXchangeConfigActivityFragmentDoc = gql`
-    fragment fragmentXchangeConfigActivity on XchangeConfigActivity {
-  filesProcessed
-  lastActivity
+  properties {
+    id
+    name
+    description
+    dataType
+    range
+    paths {
+      ontologyClass {
+        id
+        name
+        description
+      }
+      propertyPath {
+        id
+        name
+        description
+      }
+    }
+  }
+  superClasses {
+    id
+    name
+    description
+  }
+  subClasses {
+    id
+    name
+    description
+  }
 }
     `;
 export const VersionDocument = gql`
@@ -9851,37 +10263,11 @@ export const UserThemeDocument = gql`
     themeColorMode
     themeFontSize
     dashThemeColor {
-      id
-      defaultPalette
-      themeColorMode
-      allowDark
-      paletteNm
-      themePrimary
-      themeLighterAlt
-      themeLighter
-      themeLight
-      themeTertiary
-      themeSecondary
-      themeDarkAlt
-      themeDark
-      themeDarker
-      neutralLighterAlt
-      neutralLighter
-      neutralLight
-      neutralQuaternaryAlt
-      neutralQuaternary
-      neutralTertiaryAlt
-      neutralTertiary
-      neutralSecondary
-      neutralPrimaryAlt
-      neutralPrimary
-      neutralDark
-      black
-      white
+      ...fragmentDashThemeColor
     }
   }
 }
-    `;
+    ${FragmentDashThemeColorFragmentDoc}`;
 
 /**
  * __useUserThemeQuery__
@@ -11683,37 +12069,12 @@ export const DashThemeColorForOrgDocument = gql`
       ...fragmentPaginationInfo
     }
     nodes {
-      id
-      defaultPalette
-      themeColorMode
-      allowDark
-      paletteNm
-      themePrimary
-      themeLighterAlt
-      themeLighter
-      themeLight
-      themeTertiary
-      themeSecondary
-      themeDarkAlt
-      themeDark
-      themeDarker
-      neutralLighterAlt
-      neutralLighter
-      neutralLight
-      neutralQuaternaryAlt
-      neutralQuaternary
-      neutralTertiaryAlt
-      neutralTertiary
-      neutralSecondary
-      neutralPrimaryAlt
-      neutralPrimary
-      neutralDark
-      black
-      white
+      ...fragmentDashThemeColor
     }
   }
 }
-    ${FragmentPaginationInfoFragmentDoc}`;
+    ${FragmentPaginationInfoFragmentDoc}
+${FragmentDashThemeColorFragmentDoc}`;
 
 /**
  * __useDashThemeColorForOrgQuery__
@@ -11900,37 +12261,11 @@ export const DefaultDashThemeForSiteDocument = gql`
     themeColorMode
     themeFontSize
     dashThemeColor {
-      id
-      defaultPalette
-      themeColorMode
-      allowDark
-      paletteNm
-      themePrimary
-      themeLighterAlt
-      themeLighter
-      themeLight
-      themeTertiary
-      themeSecondary
-      themeDarkAlt
-      themeDark
-      themeDarker
-      neutralLighterAlt
-      neutralLighter
-      neutralLight
-      neutralQuaternaryAlt
-      neutralQuaternary
-      neutralTertiaryAlt
-      neutralTertiary
-      neutralSecondary
-      neutralPrimaryAlt
-      neutralPrimary
-      neutralDark
-      black
-      white
+      ...fragmentDashThemeColor
     }
   }
 }
-    `;
+    ${FragmentDashThemeColorFragmentDoc}`;
 
 /**
  * __useDefaultDashThemeForSiteQuery__
@@ -11963,37 +12298,11 @@ export const DefaultDashThemeForSitePageDocument = gql`
     themeColorModes
     themeFontSizes
     themeColorPalettes {
-      id
-      defaultPalette
-      themeColorMode
-      allowDark
-      paletteNm
-      themePrimary
-      themeLighterAlt
-      themeLighter
-      themeLight
-      themeTertiary
-      themeSecondary
-      themeDarkAlt
-      themeDark
-      themeDarker
-      neutralLighterAlt
-      neutralLighter
-      neutralLight
-      neutralQuaternaryAlt
-      neutralQuaternary
-      neutralTertiaryAlt
-      neutralTertiary
-      neutralSecondary
-      neutralPrimaryAlt
-      neutralPrimary
-      neutralDark
-      black
-      white
+      ...fragmentDashThemeColor
     }
   }
 }
-    `;
+    ${FragmentDashThemeColorFragmentDoc}`;
 
 /**
  * __useDefaultDashThemeForSitePageQuery__
@@ -12026,71 +12335,19 @@ export const CurrentUserDashThemePageDocument = gql`
     themeColorModes
     themeFontSizes
     themeColorPalettes {
-      id
-      defaultPalette
-      themeColorMode
-      allowDark
-      paletteNm
-      themePrimary
-      themeLighterAlt
-      themeLighter
-      themeLight
-      themeTertiary
-      themeSecondary
-      themeDarkAlt
-      themeDark
-      themeDarker
-      neutralLighterAlt
-      neutralLighter
-      neutralLight
-      neutralQuaternaryAlt
-      neutralQuaternary
-      neutralTertiaryAlt
-      neutralTertiary
-      neutralSecondary
-      neutralPrimaryAlt
-      neutralPrimary
-      neutralDark
-      black
-      white
+      ...fragmentDashThemeColor
     }
     dashTheme {
       id
       themeColorMode
       themeFontSize
       dashThemeColor {
-        id
-        defaultPalette
-        themeColorMode
-        allowDark
-        paletteNm
-        themePrimary
-        themeLighterAlt
-        themeLighter
-        themeLight
-        themeTertiary
-        themeSecondary
-        themeDarkAlt
-        themeDark
-        themeDarker
-        neutralLighterAlt
-        neutralLighter
-        neutralLight
-        neutralQuaternaryAlt
-        neutralQuaternary
-        neutralTertiaryAlt
-        neutralTertiary
-        neutralSecondary
-        neutralPrimaryAlt
-        neutralPrimary
-        neutralDark
-        black
-        white
+        ...fragmentDashThemeColor
       }
     }
   }
 }
-    `;
+    ${FragmentDashThemeColorFragmentDoc}`;
 
 /**
  * __useCurrentUserDashThemePageQuery__
@@ -12651,72 +12908,7 @@ export const XchangeConfigDocument = gql`
       ...fragmentUIStringField
     }
     processes {
-      sid
-      vendor {
-        ...fragmentUISelectOneField
-      }
-      specId {
-        ...fragmentUIStringField
-      }
-      filenameQualifiers {
-        ...fragmentUISelectManyField
-      }
-      diagram {
-        steps {
-          sid
-          key
-          icon
-          title
-          subTitle
-          info
-          qualifier
-          commands {
-            ...fragmentWebCommand
-          }
-          position {
-            x
-            y
-          }
-        }
-        stepGroups {
-          start {
-            x
-            y
-          }
-          end {
-            x
-            y
-          }
-        }
-        transmissions {
-          sid
-          key
-          protocol
-          host
-          qualifier
-          commands {
-            ...fragmentWebCommand
-          }
-          position {
-            x
-            y
-          }
-        }
-        connectors {
-          fromKey
-          toKey
-        }
-      }
-      options {
-        ...fragmentUIOptions
-      }
-      commands {
-        ...fragmentWebCommand
-      }
-      response
-      errCode
-      errMsg
-      errSeverity
+      ...fragmentXchangeFileProcessForm
     }
     alerts {
       sid
@@ -12746,8 +12938,7 @@ export const XchangeConfigDocument = gql`
   }
 }
     ${FragmentUiStringFieldFragmentDoc}
-${FragmentUiSelectOneFieldFragmentDoc}
-${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentXchangeFileProcessFormFragmentDoc}
 ${FragmentWebCommandFragmentDoc}
 ${FragmentUiOptionsFragmentDoc}`;
 
@@ -13473,6 +13664,18 @@ export const TopLevelOntologyClassesDocument = gql`
       description
       dataType
       range
+      paths {
+        ontologyClass {
+          id
+          name
+          description
+        }
+        propertyPath {
+          id
+          name
+          description
+        }
+      }
     }
     superClasses {
       id
@@ -13524,6 +13727,18 @@ export const FindOntologyClassDocument = gql`
       description
       dataType
       range
+      paths {
+        ontologyClass {
+          id
+          name
+          description
+        }
+        propertyPath {
+          id
+          name
+          description
+        }
+      }
     }
     superClasses {
       id
@@ -13576,6 +13791,18 @@ export const SearchOntologyDocument = gql`
       description
       dataType
       range
+      paths {
+        ontologyClass {
+          id
+          name
+          description
+        }
+        propertyPath {
+          id
+          name
+          description
+        }
+      }
     }
     superClasses {
       id
@@ -15386,37 +15613,11 @@ export const CreateDefaultDashThemeDocument = gql`
     themeColorMode
     themeFontSize
     dashThemeColor {
-      id
-      defaultPalette
-      themeColorMode
-      allowDark
-      paletteNm
-      themePrimary
-      themeLighterAlt
-      themeLighter
-      themeLight
-      themeTertiary
-      themeSecondary
-      themeDarkAlt
-      themeDark
-      themeDarker
-      neutralLighterAlt
-      neutralLighter
-      neutralLight
-      neutralQuaternaryAlt
-      neutralQuaternary
-      neutralTertiaryAlt
-      neutralTertiary
-      neutralSecondary
-      neutralPrimaryAlt
-      neutralPrimary
-      neutralDark
-      black
-      white
+      ...fragmentDashThemeColor
     }
   }
 }
-    `;
+    ${FragmentDashThemeColorFragmentDoc}`;
 export type CreateDefaultDashThemeMutationFn = Apollo.MutationFunction<CreateDefaultDashThemeMutation, CreateDefaultDashThemeMutationVariables>;
 
 /**
@@ -15451,37 +15652,11 @@ export const UpdateDefaultDashThemeDocument = gql`
     themeColorMode
     themeFontSize
     dashThemeColor {
-      id
-      defaultPalette
-      themeColorMode
-      allowDark
-      paletteNm
-      themePrimary
-      themeLighterAlt
-      themeLighter
-      themeLight
-      themeTertiary
-      themeSecondary
-      themeDarkAlt
-      themeDark
-      themeDarker
-      neutralLighterAlt
-      neutralLighter
-      neutralLight
-      neutralQuaternaryAlt
-      neutralQuaternary
-      neutralTertiaryAlt
-      neutralTertiary
-      neutralSecondary
-      neutralPrimaryAlt
-      neutralPrimary
-      neutralDark
-      black
-      white
+      ...fragmentDashThemeColor
     }
   }
 }
-    `;
+    ${FragmentDashThemeColorFragmentDoc}`;
 export type UpdateDefaultDashThemeMutationFn = Apollo.MutationFunction<UpdateDefaultDashThemeMutation, UpdateDefaultDashThemeMutationVariables>;
 
 /**
@@ -15634,37 +15809,11 @@ export const CreateOrUpdateOwnDashThemeDocument = gql`
     themeColorMode
     themeFontSize
     dashThemeColor {
-      id
-      defaultPalette
-      themeColorMode
-      allowDark
-      paletteNm
-      themePrimary
-      themeLighterAlt
-      themeLighter
-      themeLight
-      themeTertiary
-      themeSecondary
-      themeDarkAlt
-      themeDark
-      themeDarker
-      neutralLighterAlt
-      neutralLighter
-      neutralLight
-      neutralQuaternaryAlt
-      neutralQuaternary
-      neutralTertiaryAlt
-      neutralTertiary
-      neutralSecondary
-      neutralPrimaryAlt
-      neutralPrimary
-      neutralDark
-      black
-      white
+      ...fragmentDashThemeColor
     }
   }
 }
-    `;
+    ${FragmentDashThemeColorFragmentDoc}`;
 export type CreateOrUpdateOwnDashThemeMutationFn = Apollo.MutationFunction<CreateOrUpdateOwnDashThemeMutation, CreateOrUpdateOwnDashThemeMutationVariables>;
 
 /**
@@ -15697,37 +15846,11 @@ export const SetOwnDashThemeFontSizeDocument = gql`
     themeColorMode
     themeFontSize
     dashThemeColor {
-      id
-      defaultPalette
-      themeColorMode
-      allowDark
-      paletteNm
-      themePrimary
-      themeLighterAlt
-      themeLighter
-      themeLight
-      themeTertiary
-      themeSecondary
-      themeDarkAlt
-      themeDark
-      themeDarker
-      neutralLighterAlt
-      neutralLighter
-      neutralLight
-      neutralQuaternaryAlt
-      neutralQuaternary
-      neutralTertiaryAlt
-      neutralTertiary
-      neutralSecondary
-      neutralPrimaryAlt
-      neutralPrimary
-      neutralDark
-      black
-      white
+      ...fragmentDashThemeColor
     }
   }
 }
-    `;
+    ${FragmentDashThemeColorFragmentDoc}`;
 export type SetOwnDashThemeFontSizeMutationFn = Apollo.MutationFunction<SetOwnDashThemeFontSizeMutation, SetOwnDashThemeFontSizeMutationVariables>;
 
 /**

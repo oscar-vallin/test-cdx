@@ -223,6 +223,21 @@ const XchangeDetailsPage = () => {
     );
   };
 
+  const renderUploadButton = () => {
+    if (xchangeDataDetails?.commands?.find((cmd) => cmd.endPoint === 'xchangeFileUpload')) {
+      return (
+        <PrimaryButton
+          id="__FileUploadButton"
+          iconProps={{ iconName: 'Upload' }}
+          onClick={() => setShowFileUpload(true)}
+        >
+          Upload
+        </PrimaryButton>
+      );
+    }
+    return null;
+  };
+
   return (
     <LayoutDashboard id="XchangeDetailsPage">
       <PageHeader id="__XchangeDetailsPage">
@@ -232,13 +247,7 @@ const XchangeDetailsPage = () => {
               <PageTitle id="__Page__Title__Details" title="Xchange Details" />
             </Column>
             <Column lg="6" right>
-              <PrimaryButton
-                id="__FileUploadButton"
-                iconProps={{ iconName: 'Upload' }}
-                onClick={() => setShowFileUpload(true)}
-              >
-                Upload
-              </PrimaryButton>
+              {renderUploadButton()}
             </Column>
           </Row>
         </Container>

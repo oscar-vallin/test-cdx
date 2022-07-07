@@ -26,7 +26,7 @@ import { ButtonAction } from 'src/components/buttons';
 import { EmptyState } from 'src/containers/states';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { Card } from 'src/components/cards';
-import { ClassBlock, Indent } from './OntologyPage.styles';
+import { ClassBlock, Indent, TruncatedButton } from './OntologyPage.styles';
 
 const OntologyPage = () => {
   const [ontologyClasses, setOntologyClasses] = useState<OntologyClass[]>([]);
@@ -223,9 +223,12 @@ const OntologyPage = () => {
   };
 
   const renderRecentItem = (item?: string, index?: number) => (
-    <ButtonAction key={index} onClick={() => doSearch(item)}>
+    <TruncatedButton key={index} onClick={() => {
+      setSearchText(item ?? '');
+      doSearch(item);
+    }}>
       {item}
-    </ButtonAction>
+    </TruncatedButton>
   );
 
   const renderRecentItems = () => {
