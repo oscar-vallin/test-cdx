@@ -107,7 +107,7 @@ const PreviewConvertXchangePanel = ({ isPanelOpen, closePanel, refreshXchangePag
             Convert to new Format
           </PrimaryButton>
         </WizardButtonRow>
-      )
+      );
     }
 
     return null;
