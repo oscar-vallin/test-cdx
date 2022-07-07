@@ -1,4 +1,4 @@
-import { FontIcon, Stack, Text } from '@fluentui/react';
+import { FontIcon, Stack, Text, TooltipHost } from '@fluentui/react';
 import { Handle, Position } from 'react-flow-renderer';
 import { BrainCircuit24Regular } from '@fluentui/react-icons';
 import React, { memo } from 'react';
@@ -7,6 +7,7 @@ import Node from './Node';
 import { StyledQualifier } from '../../XchangeDetailsPage.styles';
 
 const DataNodeSteps = ({ data, id }) => {
+  console.log(data)
   let iconName = data.icon;
   const sourceBottom = id[id.length - 1];
   const { connectors } = data;
@@ -20,7 +21,9 @@ const DataNodeSteps = ({ data, id }) => {
   }
   if (subTitle.trim() !== '') {
     styles['maxWidth'] = '180px';
+    styles['maxHeight'] = '45px';
     styles['width'] = '100%';
+    styles['height'] = '100%';
     styles['overflow'] = 'hidden';
   }
 
@@ -93,6 +96,11 @@ const DataNodeSteps = ({ data, id }) => {
           <StyledQualifier width={width} color={color}>
             {qualifier}
           </StyledQualifier>
+        )}
+        {data.info && (
+          <TooltipHost content={data.info}>
+            <FontIcon iconName="InfoSolid" style={{ position: 'absolute', bottom: '18px', fontSize: '18px' }} />
+          </TooltipHost>
         )}
       </>
     );

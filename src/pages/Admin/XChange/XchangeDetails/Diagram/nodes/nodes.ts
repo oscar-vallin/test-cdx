@@ -32,12 +32,13 @@ export function InitialNodes(data) {
     values['id'] = step.key;
     values['type'] = 'dataNodeSteps';
     values['data'] = {
-      label: step['title'],
-      icon: step['icon'],
+      label: step.title,
+      icon: step.icon,
       subTitle: step.subTitle,
       qualifier: step.qualifier,
       connectors: data.connectors,
       position: step.position,
+      info: step.info,
     };
     values['position'] = { x: positionX, y: positionY };
 
