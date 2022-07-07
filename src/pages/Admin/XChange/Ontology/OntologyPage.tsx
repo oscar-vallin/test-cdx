@@ -27,6 +27,7 @@ import { EmptyState } from 'src/containers/states';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { Card } from 'src/components/cards';
 import { ClassBlock, Indent, TruncatedButton } from './OntologyPage.styles';
+import { OntologyPropElement } from 'src/pages/Admin/XChange/Ontology/OntologyPropElement';
 
 const OntologyPage = () => {
   const [ontologyClasses, setOntologyClasses] = useState<OntologyClass[]>([]);
@@ -142,13 +143,7 @@ const OntologyPage = () => {
     if (!property) {
       return null;
     }
-    return (
-      <div key={property.id}>
-        <Text>{property.name}</Text>
-        <InfoIcon id={`__prop_icon_${property.name}`} tooltip={property.description} />
-        {renderCopyButton(property.id)}
-      </div>
-    );
+    return <OntologyPropElement property={property} renderCopyButton={renderCopyButton} />;
   };
 
   const renderOntologyElement = (element?: OntologyElement) => {
@@ -157,9 +152,9 @@ const OntologyPage = () => {
     }
     return (
       <div key={element.id}>
+        {renderCopyButton(element.id)}
         <ButtonAction onClick={() => doFind(element.id)}>{element.name}</ButtonAction>
         <InfoIcon id={`__prop_icon_${element.name}`} tooltip={element.description} />
-        {renderCopyButton(element.id)}
       </div>
     );
   };
@@ -208,8 +203,8 @@ const OntologyPage = () => {
       <ClassBlock key={ontologyClass.name}>
         <Stack tokens={{ childrenGap: 5 }}>
           <Stack.Item key="metadata">
-            <Text variant="bold">{ontologyClass.name}</Text>
             {renderCopyButton(ontologyClass.id)}
+            <Text variant="bold">{ontologyClass.name}</Text>
           </Stack.Item>
           <Stack.Item key="description">
             <Text variant="muted">{ontologyClass.description}</Text>
@@ -223,10 +218,13 @@ const OntologyPage = () => {
   };
 
   const renderRecentItem = (item?: string, index?: number) => (
-    <TruncatedButton key={index} onClick={() => {
-      setSearchText(item ?? '');
-      doSearch(item);
-    }}>
+    <TruncatedButton
+      key={index}
+      onClick={() => {
+        setSearchText(item ?? '');
+        doSearch(item);
+      }}
+    >
       {item}
     </TruncatedButton>
   );
@@ -239,7 +237,7 @@ const OntologyPage = () => {
       <Card elevation="smallest">
         <Stack tokens={{ childrenGap: 10 }}>
           <Stack.Item>
-            <Text variant="semibold">recent searches</Text>
+            <Text variant="semiBold">recent searches</Text>
           </Stack.Item>
           <Stack.Item>
             <DarkSeparator />

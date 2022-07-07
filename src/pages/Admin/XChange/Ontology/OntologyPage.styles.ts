@@ -11,7 +11,7 @@ export const ClassBlock = styled.div`
 
 export const TruncatedButton = styled(ButtonAction)`
   width: 100%;
-  
+
   span {
     width: 100%;
     overflow: hidden;
