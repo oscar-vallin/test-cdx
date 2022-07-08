@@ -27,10 +27,10 @@ export const useLogoutUseCase = () => {
     setCSRFToken('');
     setAuthToken('');
     setState({ ...INITIAL_STATE });
+    SessionStore.logout();
   };
 
   const logoutUser = () => {
-    SessionStore.logout();
     apiCall()
       .catch(() => {
         // catch any error and just reset the tokens regardless

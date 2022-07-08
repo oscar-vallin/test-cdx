@@ -21,7 +21,9 @@ const setIsOffline = (state, payload) => {
 };
 
 const updateVersion = (state, payload) => {
-  state.version = payload;
+  if (payload) {
+    state.version = payload;
+  }
 };
 
 const reset = (state) => {

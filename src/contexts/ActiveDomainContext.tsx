@@ -43,11 +43,11 @@ export const ActiveDomainContextProvider = ({ children }: ActiveDomainContextPro
   useEffect(() => {
     const { orgSid } = ActiveDomainStore.domainOrg.current;
 
-    if (SessionStore.user.token && orgSid) {
+    if (SessionStore.status.isAuthenticated && orgSid) {
       performCurrentOrgUpdate({ orgSid });
       performNavUpdate({ orgSid });
     }
-  }, [SessionStore.user.token, ActiveDomainStore.domainOrg.current.orgSid]);
+  }, [SessionStore.status.stage, ActiveDomainStore.domainOrg.current.orgSid]);
 
   useEffect(() => {
     const { dashboard } = activeDomainState.nav;
