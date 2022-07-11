@@ -50,7 +50,7 @@ const DataNodeTransmissions = ({ data, id }) => {
     if (lastTrans) {
       return (
         <>
-          <div style={{ display: 'flex', marginLeft: '-35px', position: 'relative', bottom: 40, left: 200 }}>
+          {/* <div style={{ display: 'flex', marginLeft: '-35px', position: 'relative', bottom: 40, left: 200 }}>
             <TooltipHost content="Copy">
               <FontIcon
                 iconName="Copy"
@@ -70,7 +70,7 @@ const DataNodeTransmissions = ({ data, id }) => {
                 }}
               />
             </TooltipHost>
-          </div>
+          </div> */}
           <Handle type="target" id={id} position={Position['Top']} />
           <Container>
             <Row>
