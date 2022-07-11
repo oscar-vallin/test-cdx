@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import FormLabel, { UIFormLabel } from 'src/components/labels/FormLabel';
-import { UiField, UiStringField, UiIntField } from 'src/data/services/graphql';
+import { UiField, UiStringField, UiIntField, UiLongField } from 'src/data/services/graphql';
 import { EmptyValue, FieldValue, StyledTextField } from './InputText.styles';
 
 export type InputTextProps = {
@@ -102,7 +102,7 @@ const UIInputTextReadOnly = ({ id, uiField, renderLabel = true }: UIReadOnlyType
 
 type UIInputTextType = {
   id: string;
-  uiField?: UiStringField | UiIntField;
+  uiField?: UiStringField | UiIntField | UiLongField;
   onChange?: (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => void | null;
   value?: string;
   placeholder?: string;
@@ -121,6 +121,10 @@ const UIInputText = ({
   autocomplete,
   type,
 }: UIInputTextType) => {
+  if (!uiField?.visible) {
+    return null;
+  }
+
   if (uiField?.readOnly === true) {
     return <UIInputTextReadOnly id={id} uiField={uiField} renderLabel={renderLabel} />;
   }

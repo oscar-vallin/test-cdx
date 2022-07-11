@@ -43,11 +43,11 @@ export const ActiveDomainContextProvider = ({ children }: ActiveDomainContextPro
   useEffect(() => {
     const { orgSid } = ActiveDomainStore.domainOrg.current;
 
-    if (SessionStore.user.token && orgSid) {
+    if (SessionStore.status.isAuthenticated && orgSid) {
       performCurrentOrgUpdate({ orgSid });
       performNavUpdate({ orgSid });
     }
-  }, [SessionStore.user.token, ActiveDomainStore.domainOrg.current.orgSid]);
+  }, [SessionStore.status.stage, ActiveDomainStore.domainOrg.current.orgSid]);
 
   useEffect(() => {
     const { dashboard } = activeDomainState.nav;
@@ -78,6 +78,7 @@ export const ActiveDomainContextProvider = ({ children }: ActiveDomainContextPro
         label: currentOrgNav.label,
         orgId: currentOrgNav.orgId,
         orgSid: subNavItems.find(({ label }) => label.includes(currentOrgNav.label))?.orgSid,
+        destination: currentOrgNav.page?.type
       });
     }
   }, [activeDomainState.currentOrg.data]);

@@ -37,6 +37,8 @@ type OrgStateType = {
   name?: string;
   orgId?: string;
   orgType?: OrgType;
+  mv1Id?: string;
+  mv1Folder?: string | null;
 };
 
 const INITIAL_STATE: OrgStateType = {
@@ -156,6 +158,8 @@ export const OrgPanel = ({ isOpen, selectedOrgSid, onDismiss, onSave }: OrgPanel
         orgId: orgForm?.orgId?.value ?? '',
         name: orgForm?.name?.value ?? undefined,
         orgType: getEnumByValue(OrgType, orgForm?.orgType?.value?.value),
+        mv1Id: orgForm?.mv1Id?.value?.toString(),
+        mv1Folder: orgForm?.mv1Folder?.value,
       };
 
       setOrgState(_orgState);
@@ -213,6 +217,30 @@ export const OrgPanel = ({ isOpen, selectedOrgSid, onDismiss, onSave }: OrgPanel
             />
           </Column>
         </FormRow>
+        <FormRow>
+          <Column lg="6">
+            <UIInputText
+              id="__Mv1Id"
+              uiField={orgForm?.mv1Id}
+              value={orgState.mv1Id ?? ''}
+              onChange={(event, newValue) => {
+                setUnsavedChanges(true);
+                setOrgState({ ...orgState, mv1Id: newValue });
+              }}
+            />
+          </Column>
+          <Column lg="6">
+            <UIInputText
+              id="__Mv1Folder"
+              uiField={orgForm?.mv1Folder}
+              value={orgState.mv1Folder ?? ''}
+              onChange={(event, newValue) => {
+                setUnsavedChanges(true);
+                setOrgState({ ...orgState, mv1Folder: newValue });
+              }}
+            />
+          </Column>
+        </FormRow>
       </>
     );
   };
@@ -237,6 +265,8 @@ export const OrgPanel = ({ isOpen, selectedOrgSid, onDismiss, onSave }: OrgPanel
             orgId: orgState.orgId ?? '',
             name: orgState.name ?? '',
             orgType: orgState.orgType ?? OrgType.IntegrationSponsor,
+            mv1Id: orgState.mv1Id ? +orgState.mv1Id : undefined,
+            mv1Folder: orgState.mv1Folder,
             orgOwnerSid,
           },
         },
@@ -248,6 +278,8 @@ export const OrgPanel = ({ isOpen, selectedOrgSid, onDismiss, onSave }: OrgPanel
             orgSid: selectedOrgSid,
             name: orgState.name ?? '',
             orgType: orgState.orgType ?? OrgType.IntegrationSponsor,
+            mv1Id: orgState.mv1Id ? +orgState.mv1Id : undefined,
+            mv1Folder: orgState.mv1Folder,
           },
         },
       }).then();

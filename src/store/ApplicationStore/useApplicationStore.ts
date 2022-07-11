@@ -25,7 +25,7 @@ export const useApplicationStore = (): ApplicationStoreType => {
     if (!version && SessionStore.status.isAuthenticated) {
       callGetVersion();
     }
-  }, [SessionStore.user.token, version, callGetVersion]);
+  }, [SessionStore.user.token, version]);
 
   useEffect(() => {
     if (!loading) {

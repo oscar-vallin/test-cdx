@@ -10,14 +10,12 @@ import { FormRow } from 'src/components/layouts/Row/Row.styles';
 import { Spacing } from 'src/components/spacings/Spacing';
 
 type FileUploadDialogType = {
-  orgSid: string;
-  vendorSid: string;
-  spec: string;
+  xchangeConfigSid: string;
   open: boolean;
   onDismiss: () => void;
 };
 
-export const FileUploadDialog = ({ orgSid, vendorSid, spec, open, onDismiss }: FileUploadDialogType) => {
+export const FileUploadDialog = ({ xchangeConfigSid, open, onDismiss }: FileUploadDialogType) => {
   const [callUseFileUpload, { data, loading, error }] = useXchangeFileUploadMutation();
   const handleError = ErrorHandler();
   const Toast = useNotification();
@@ -31,9 +29,7 @@ export const FileUploadDialog = ({ orgSid, vendorSid, spec, open, onDismiss }: F
   const upload = () => {
     callUseFileUpload({
       variables: {
-        orgSid,
-        vendorSid,
-        spec,
+        xchangeConfigSid,
         qualifier,
         file,
       },

@@ -206,17 +206,14 @@ const XchangeDetailsPage = () => {
   }, [detailsData, detailsLoading]);
 
   const renderFileUploadDialog = () => {
-    const vendorSid = fileProcess?.vendor?.value?.value;
-    const specId = fileProcess?.specId?.value;
-    if (!showFileUpload || !vendorSid || !specId) {
+    const xchangeConfigSid = xchangeDataDetails?.sid
+    if (!showFileUpload || !xchangeConfigSid) {
       return null;
     }
 
     return (
       <FileUploadDialog
-        orgSid={orgSid}
-        vendorSid={vendorSid}
-        spec={specId}
+        xchangeConfigSid={xchangeConfigSid}
         open={showFileUpload}
         onDismiss={() => setShowFileUpload(false)}
       />

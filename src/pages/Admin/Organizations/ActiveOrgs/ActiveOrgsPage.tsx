@@ -26,7 +26,6 @@ import {
   SortDirection,
   useSearchOrganizationsLazyQuery,
   WebCommand,
-  OrgType,
   UiBooleanField,
 } from 'src/data/services/graphql';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
@@ -87,15 +86,8 @@ const ActiveOrgsPage = () => {
   };
 
   const changeActiveOrg = (org?: Organization) => {
-    let destination: string;
-    if (org?.orgType && [OrgType.IntegrationSponsor, OrgType.IntegrationAdminCombined].includes(org?.orgType)) {
-      destination = 'FILE_STATUS';
-    } else {
-      destination = 'ORG_ACTIVITY';
-    }
     ActiveDomainStore.setCurrentOrg({
       orgSid: org?.sid,
-      destination,
     });
   };
 

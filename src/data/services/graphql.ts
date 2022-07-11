@@ -366,6 +366,8 @@ export type CreateOrgInput = {
   name: Scalars['String'];
   orgType: OrgType;
   orgOwnerSid?: Maybe<Scalars['ID']>;
+  mv1Id?: Maybe<Scalars['Int']>;
+  mv1Folder?: Maybe<Scalars['String']>;
 };
 
 export type CreatePersonInput = {
@@ -1100,9 +1102,7 @@ export type MutationWorkPacketResendArgs = {
 
 
 export type MutationXchangeFileUploadArgs = {
-  orgSid: Scalars['ID'];
-  vendorSid: Scalars['ID'];
-  spec: Scalars['String'];
+  xchangeConfigSid: Scalars['ID'];
   qualifier: Scalars['String'];
   file?: Maybe<Scalars['Upload']>;
 };
@@ -1336,6 +1336,8 @@ export type OrganizationForm = {
   orgId: UiStringField;
   orgType?: Maybe<UiSelectOneField>;
   active: UiBooleanField;
+  mv1Id: UiLongField;
+  mv1Folder: UiStringField;
   options?: Maybe<Array<UiOptions>>;
   commands?: Maybe<Array<WebCommand>>;
   response: GqOperationResponse;
@@ -2686,6 +2688,8 @@ export type UpdateOrgInput = {
   orgSid: Scalars['ID'];
   name: Scalars['String'];
   orgType: OrgType;
+  mv1Id?: Maybe<Scalars['Int']>;
+  mv1Folder?: Maybe<Scalars['String']>;
 };
 
 export type UpdateOrgSecurityInput = {
@@ -5166,6 +5170,12 @@ export type OrganizationFormQuery = (
     )>, active: (
       { __typename?: 'UIBooleanField' }
       & FragmentUiBooleanFieldFragment
+    ), mv1Id: (
+      { __typename?: 'UILongField' }
+      & FragmentUiLongFieldFragment
+    ), mv1Folder: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
     ), options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & FragmentUiOptionsFragment
@@ -5198,6 +5208,12 @@ export type FindOrganizationQuery = (
     )>, active: (
       { __typename?: 'UIBooleanField' }
       & FragmentUiBooleanFieldFragment
+    ), mv1Id: (
+      { __typename?: 'UILongField' }
+      & FragmentUiLongFieldFragment
+    ), mv1Folder: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
     ), options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & FragmentUiOptionsFragment
@@ -6454,6 +6470,12 @@ export type CreateOrgMutation = (
     )>, active: (
       { __typename?: 'UIBooleanField' }
       & FragmentUiBooleanFieldFragment
+    ), mv1Id: (
+      { __typename?: 'UILongField' }
+      & FragmentUiLongFieldFragment
+    ), mv1Folder: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
     ), options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & FragmentUiOptionsFragment
@@ -6486,6 +6508,12 @@ export type UpdateOrgMutation = (
     )>, active: (
       { __typename?: 'UIBooleanField' }
       & FragmentUiBooleanFieldFragment
+    ), mv1Id: (
+      { __typename?: 'UILongField' }
+      & FragmentUiLongFieldFragment
+    ), mv1Folder: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
     ), options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & FragmentUiOptionsFragment
@@ -7699,9 +7727,7 @@ export type WorkPacketResendMutation = (
 );
 
 export type XchangeFileUploadMutationVariables = Exact<{
-  orgSid: Scalars['ID'];
-  vendorSid: Scalars['ID'];
-  spec: Scalars['String'];
+  xchangeConfigSid: Scalars['ID'];
   qualifier: Scalars['String'];
   file?: Maybe<Scalars['Upload']>;
 }>;
@@ -11684,6 +11710,12 @@ export const OrganizationFormDocument = gql`
     active {
       ...fragmentUIBooleanField
     }
+    mv1Id {
+      ...fragmentUILongField
+    }
+    mv1Folder {
+      ...fragmentUIStringField
+    }
     options {
       ...fragmentUIOptions
     }
@@ -11699,6 +11731,7 @@ export const OrganizationFormDocument = gql`
     ${FragmentUiStringFieldFragmentDoc}
 ${FragmentUiSelectOneFieldFragmentDoc}
 ${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiLongFieldFragmentDoc}
 ${FragmentUiOptionsFragmentDoc}
 ${FragmentWebCommandFragmentDoc}`;
 
@@ -11743,6 +11776,12 @@ export const FindOrganizationDocument = gql`
     active {
       ...fragmentUIBooleanField
     }
+    mv1Id {
+      ...fragmentUILongField
+    }
+    mv1Folder {
+      ...fragmentUIStringField
+    }
     options {
       ...fragmentUIOptions
     }
@@ -11758,6 +11797,7 @@ export const FindOrganizationDocument = gql`
     ${FragmentUiStringFieldFragmentDoc}
 ${FragmentUiSelectOneFieldFragmentDoc}
 ${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiLongFieldFragmentDoc}
 ${FragmentUiOptionsFragmentDoc}
 ${FragmentWebCommandFragmentDoc}`;
 
@@ -14151,6 +14191,12 @@ export const CreateOrgDocument = gql`
     active {
       ...fragmentUIBooleanField
     }
+    mv1Id {
+      ...fragmentUILongField
+    }
+    mv1Folder {
+      ...fragmentUIStringField
+    }
     options {
       ...fragmentUIOptions
     }
@@ -14166,6 +14212,7 @@ export const CreateOrgDocument = gql`
     ${FragmentUiStringFieldFragmentDoc}
 ${FragmentUiSelectOneFieldFragmentDoc}
 ${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiLongFieldFragmentDoc}
 ${FragmentUiOptionsFragmentDoc}
 ${FragmentWebCommandFragmentDoc}`;
 export type CreateOrgMutationFn = Apollo.MutationFunction<CreateOrgMutation, CreateOrgMutationVariables>;
@@ -14209,6 +14256,12 @@ export const UpdateOrgDocument = gql`
     active {
       ...fragmentUIBooleanField
     }
+    mv1Id {
+      ...fragmentUILongField
+    }
+    mv1Folder {
+      ...fragmentUIStringField
+    }
     options {
       ...fragmentUIOptions
     }
@@ -14224,6 +14277,7 @@ export const UpdateOrgDocument = gql`
     ${FragmentUiStringFieldFragmentDoc}
 ${FragmentUiSelectOneFieldFragmentDoc}
 ${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiLongFieldFragmentDoc}
 ${FragmentUiOptionsFragmentDoc}
 ${FragmentWebCommandFragmentDoc}`;
 export type UpdateOrgMutationFn = Apollo.MutationFunction<UpdateOrgMutation, UpdateOrgMutationVariables>;
@@ -16513,11 +16567,9 @@ export type WorkPacketResendMutationHookResult = ReturnType<typeof useWorkPacket
 export type WorkPacketResendMutationResult = Apollo.MutationResult<WorkPacketResendMutation>;
 export type WorkPacketResendMutationOptions = Apollo.BaseMutationOptions<WorkPacketResendMutation, WorkPacketResendMutationVariables>;
 export const XchangeFileUploadDocument = gql`
-    mutation XchangeFileUpload($orgSid: ID!, $vendorSid: ID!, $spec: String!, $qualifier: String!, $file: Upload) {
+    mutation XchangeFileUpload($xchangeConfigSid: ID!, $qualifier: String!, $file: Upload) {
   xchangeFileUpload(
-    orgSid: $orgSid
-    vendorSid: $vendorSid
-    spec: $spec
+    xchangeConfigSid: $xchangeConfigSid
     qualifier: $qualifier
     file: $file
   ) {
@@ -16552,9 +16604,7 @@ export type XchangeFileUploadMutationFn = Apollo.MutationFunction<XchangeFileUpl
  * @example
  * const [xchangeFileUploadMutation, { data, loading, error }] = useXchangeFileUploadMutation({
  *   variables: {
- *      orgSid: // value for 'orgSid'
- *      vendorSid: // value for 'vendorSid'
- *      spec: // value for 'spec'
+ *      xchangeConfigSid: // value for 'xchangeConfigSid'
  *      qualifier: // value for 'qualifier'
  *      file: // value for 'file'
  *   },
