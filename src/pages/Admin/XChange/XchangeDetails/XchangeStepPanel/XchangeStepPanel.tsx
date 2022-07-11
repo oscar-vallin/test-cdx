@@ -1,4 +1,4 @@
-import { IconButton, PanelType, PrimaryButton, Text } from '@fluentui/react';
+import { IconButton, PanelType, PrimaryButton, Spinner, SpinnerSize, Text } from '@fluentui/react';
 import { useEffect, useState } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import { createTheme } from '@uiw/codemirror-themes';
@@ -6,8 +6,8 @@ import { javascript } from '@codemirror/lang-javascript';
 import { tags as t } from '@lezer/highlight';
 import {
   useXchangeStepFormLazyQuery,
-  XchangeStepForm,
   useCreateXchangeStepMutation,
+  useCopyXchangeStepLazyQuery,
   CdxWebCommandType,
   WebCommand,
 } from 'src/data/services/graphql';
@@ -15,11 +15,15 @@ import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo
 import { useNotification } from 'src/hooks/useNotification';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { ThemedPanel, PanelBody, WizardButtonRow, WizardBody } from 'src/layouts/Panels/Panels.styles';
+import { Spacing } from 'src/components/spacings/Spacing';
 
-type XchangeAddStepPanelProps = {
+type XchangeStepPanelProps = {
   isPanelOpen: boolean;
   closePanel: (data: boolean) => void;
   refreshDetailsPage: (data: boolean) => void;
+  hiddeIconCopyStep: (data: boolean) => void;
+  setOptionXchangeStep: (data: string) => void;
+  optionXchangeStep?: string;
   xchangeFileProcessSid?: string;
   xchangeStepSid?: string;
   xchangeStepTitle?: string;
@@ -57,19 +61,22 @@ const myTheme = createTheme({
   ],
 });
 
-const XchangeAddStepPanel = ({
+const XchangeStepPanel = ({
   isPanelOpen,
   closePanel,
   refreshDetailsPage,
+  hiddeIconCopyStep,
+  setOptionXchangeStep,
+  optionXchangeStep,
   xchangeFileProcessSid,
   xchangeStepSid,
   xchangeStepTitle,
-}: XchangeAddStepPanelProps) => {
+}: XchangeStepPanelProps) => {
   const Toast = useNotification();
-  const [xchangeStep, setChangeStep] = useState<XchangeStepForm>();
   const [editXmlData, setEditXmlData] = useState<string>();
   const [previousXmlData, setPreviousXmlDate] = useState<string>();
   const [updateCmd, setUpdateCmd] = useState<WebCommand | null>();
+  const [createCmd, setCreateCmd] = useState<WebCommand | null>();
   const [showDialog, setShowDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
@@ -77,23 +84,35 @@ const XchangeAddStepPanel = ({
   const [xchangeStepForm, { data: dataAddStep, loading: loadingAddStep }] =
     useQueryHandler(useXchangeStepFormLazyQuery);
 
-  const [createXchangeStepMutation, { data: dataCreateStep, loading: loadingCreateStep, error: errorCreateStep }] =
+  const [xchangeCopyStepForm, { data: dataCopyStep, loading: loadingCopyStep }] =
+    useQueryHandler(useCopyXchangeStepLazyQuery);
+
+  const [createXchangeStep, { data: dataCreateStep, loading: loadingCreateStep, error: errorCreateStep }] =
     useQueryHandler(useCreateXchangeStepMutation);
 
   const getxmlData = () => {
-    xchangeStepForm({
-      variables: {
-        xchangeFileProcessSid,
-        sid: xchangeStepSid,
-      },
-    });
+    if (isPanelOpen) {
+      if (optionXchangeStep === 'add') {
+        xchangeStepForm({
+          variables: {
+            xchangeFileProcessSid,
+            sid: xchangeStepSid,
+          },
+        });
+      } else if (optionXchangeStep === 'copy') {
+        xchangeCopyStepForm({
+          variables: {
+            xchangeFileProcessSid,
+            sid: xchangeStepSid,
+          },
+        });
+      }
+    }
   };
 
   const hideDialog = () => {
     setShowDialog(false);
   };
-
-  const removeLineBreakXml = (xmlValue: string) => xmlValue.split('\n').toString().replace(/,/g, '');
 
   const showUnsavedChangesDialog = () => {
     const updatedDialog = { ...defaultDialogProps };
@@ -105,7 +124,7 @@ const XchangeAddStepPanel = ({
       hideDialog();
       closePanel(false);
       setUnsavedChanges(false);
-      getxmlData();
+      setOptionXchangeStep('');
     };
     updatedDialog.onClose = () => {
       hideDialog();
@@ -119,12 +138,15 @@ const XchangeAddStepPanel = ({
       showUnsavedChangesDialog();
     } else {
       closePanel(false);
+      setOptionXchangeStep('');
     }
   };
 
-  const saveAddStep = () => {
+  const removeLineBreakXml = (xmlValue: string) => xmlValue.split('\n').toString().replace(/,/g, '');
+
+  const saveStep = () => {
     const xml = removeLineBreakXml(editXmlData ?? '');
-    createXchangeStepMutation({
+    createXchangeStep({
       variables: {
         stepInput: {
           xchangeFileProcessSid,
@@ -158,38 +180,117 @@ const XchangeAddStepPanel = ({
     setUnsavedChanges(false);
   };
 
+  const renderBody = () => {
+    if (loadingAddStep || loadingCopyStep) {
+      return (
+        <Spacing margin={{ top: 'double' }}>
+          <Spinner size={SpinnerSize.large} label="Loading xml file" />
+        </Spacing>
+      );
+    }
+
+    if (updateCmd || createCmd) {
+      return (
+        <PanelBody>
+          <WizardBody>
+            <>
+              {dataAddStep ? (
+                <>
+                  <Text>{dataAddStep.xchangeStepForm.xml.label}</Text>
+                  <IconButton
+                    title={dataAddStep.xchangeStepForm.xml.info}
+                    iconProps={{ iconName: 'Info' }}
+                    style={{ color: 'black' }}
+                  />
+                </>
+              ) : (
+                <>
+                  <Text>{dataCopyStep.copyXchangeStep.xml.label}</Text>
+                  <IconButton
+                    title={dataCopyStep.copyXchangeStep.xml.info}
+                    iconProps={{ iconName: 'Info' }}
+                    style={{ color: 'black' }}
+                  />
+                </>
+              )}
+              <CodeMirror
+                height="400px"
+                style={{ border: '1px solid gray', fontWeight: 'bold', fontSize: '16px' }}
+                theme={myTheme}
+                extensions={[javascript({ jsx: true })]}
+                value={editXmlData ?? ''}
+                onChange={(value) => setEditXmlData(value)}
+              />
+            </>
+          </WizardBody>
+          {(updateCmd || createCmd) && (
+            <WizardButtonRow>
+              <PrimaryButton id="__Xchange_AddStep_Button" iconProps={{ iconName: 'Save' }} onClick={saveStep}>
+                Save
+              </PrimaryButton>
+            </WizardButtonRow>
+          )}
+        </PanelBody>
+      );
+    }
+    return null;
+  };
+
+  const renderPanelHeaderText = () => {
+    if (!loadingAddStep && !loadingCopyStep) {
+      return `${updateCmd ? 'New Xchange Step' : 'Copy of'}-${xchangeStepTitle}`;
+    }
+    return undefined;
+  };
+
   useEffect(() => {
     getxmlData();
-  }, []);
+  }, [isPanelOpen]);
 
   useEffect(() => {
     if (!loadingAddStep && dataAddStep) {
       const xmlValue = addlineBreakeXml(dataAddStep.xchangeStepForm.xml.value);
       setEditXmlData(xmlValue);
       setPreviousXmlDate(dataAddStep.xchangeStepForm.xml.value);
-      setChangeStep(dataAddStep.xchangeStepForm);
     }
 
     if (dataAddStep?.xchangeStepForm) {
       const pageCommands = dataAddStep?.xchangeStepForm?.commands;
       const _updateCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Update);
       setUpdateCmd(_updateCmd);
+      setCreateCmd(null);
     }
   }, [dataAddStep, loadingAddStep]);
+
+  useEffect(() => {
+    if (!loadingCopyStep && dataCopyStep) {
+      const xmlValue = addlineBreakeXml(dataCopyStep.copyXchangeStep.xml.value);
+      setEditXmlData(xmlValue);
+      setPreviousXmlDate(dataCopyStep.copyXchangeStep.xml.value);
+    }
+
+    if (dataCopyStep?.copyXchangeStep) {
+      const pageCommands = dataCopyStep?.copyXchangeStep?.commands;
+      const _createCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create);
+      setCreateCmd(_createCmd);
+      setUpdateCmd(null);
+    }
+  }, [dataCopyStep, loadingCopyStep]);
 
   useEffect(() => {
     comparePreviousXml(editXmlData ?? '', previousXmlData ?? '');
   }, [editXmlData]);
 
   useEffect(() => {
+    const message = optionXchangeStep === 'add' ? 'added' : 'updated';
     if (!loadingCreateStep && dataCreateStep) {
-      Toast.success({ text: 'Xchange step added' });
+      Toast.success({ text: `Xchange step ${message}` });
       refreshDetailsPage(true);
       closePanel(false);
     }
 
     if (!loadingCreateStep && errorCreateStep) {
-      Toast.error({ text: 'There was an error to Create Step' });
+      Toast.error({ text: `There was an error to ${message} step` });
     }
   }, [dataCreateStep, loadingCreateStep, errorCreateStep]);
 
@@ -198,49 +299,18 @@ const XchangeAddStepPanel = ({
       <ThemedPanel
         closeButtonAriaLabel="Close"
         type={PanelType.medium}
-        headerText={xchangeStepTitle ? `Xchange Step-${xchangeStepTitle}` : 'Xchange Step'}
+        headerText={renderPanelHeaderText()}
         isOpen={isPanelOpen}
         onDismiss={() => {
           onPanelClose();
+          hiddeIconCopyStep(true);
         }}
       >
-        <PanelBody>
-          <WizardBody>
-            {updateCmd && xchangeStep?.xml && (
-              <>
-                {dataAddStep && (
-                  <>
-                    <Text>{dataAddStep.xchangeStepForm.xml.label}</Text>
-                    <IconButton
-                      title={dataAddStep.xchangeStepForm.xml.info}
-                      iconProps={{ iconName: 'Info' }}
-                      style={{ color: 'black' }}
-                    />
-                  </>
-                )}
-                <CodeMirror
-                  height="400px"
-                  style={{ border: '1px solid gray', fontWeight: 'bold', fontSize: '16px' }}
-                  theme={myTheme}
-                  extensions={[javascript({ jsx: true })]}
-                  value={editXmlData ?? ''}
-                  onChange={(value) => setEditXmlData(value)}
-                />
-              </>
-            )}
-          </WizardBody>
-          {updateCmd && (
-            <WizardButtonRow>
-              <PrimaryButton id="__Xchange_AddStep_Button" iconProps={{ iconName: 'Save' }} onClick={saveAddStep}>
-                Save
-              </PrimaryButton>
-            </WizardButtonRow>
-          )}
-        </PanelBody>
+        {renderBody()}
       </ThemedPanel>
       <DialogYesNo {...dialogProps} open={showDialog} />
     </>
   );
 };
 
-export { XchangeAddStepPanel };
+export { XchangeStepPanel };
