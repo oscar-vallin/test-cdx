@@ -20,7 +20,7 @@ export function InitialNodes(data) {
     }
 
     if (step.position.y === 1) {
-      positionY = 125;
+      positionY = 145;
     } else if (step.position.y === 2) {
       positionY = 210;
     } else if (step.position.y === 3) {
@@ -32,6 +32,8 @@ export function InitialNodes(data) {
     values['id'] = step.key;
     values['type'] = 'dataNodeSteps';
     values['data'] = {
+      index,
+      sid: step.sid,
       label: step.title,
       icon: step.icon,
       subTitle: step.subTitle,
@@ -39,6 +41,10 @@ export function InitialNodes(data) {
       connectors: data.connectors,
       position: step.position,
       info: step.info,
+      copyStep: false,
+      addStep: false,
+      refreshDetailsPage: null,
+      xchangeFileProcessSid: null,
     };
     values['position'] = { x: positionX, y: positionY };
 

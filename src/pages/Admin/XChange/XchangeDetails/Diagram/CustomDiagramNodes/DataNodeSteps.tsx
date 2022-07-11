@@ -1,13 +1,25 @@
+import { useState, memo, useEffect } from 'react';
 import { FontIcon, Stack, Text, TooltipHost } from '@fluentui/react';
 import { Handle, Position } from 'react-flow-renderer';
 import { BrainCircuit24Regular } from '@fluentui/react-icons';
-import React, { memo } from 'react';
 import { Container, Row } from 'src/components/layouts';
 import Node from './Node';
 import { StyledQualifier } from '../../XchangeDetailsPage.styles';
+import { XchangeStepPanel } from '../../XchangeStepPanel/XchangeStepPanel';
 
 const DataNodeSteps = ({ data, id }) => {
-  console.log(data)
+  const { addStep } = data;
+  const { copyStep } = data;
+  const { refreshDetailsPage } = data;
+  const { xchangeFileProcessSid } = data;
+  const { sid } = data;
+  const { label } = data;
+
+  const [openPanel, setOpenPanel] = useState(false);
+  const [hiddeIconCopy, setHiddeIconCopy] = useState(true);
+  const [showIconCopy, setShowIconCopy] = useState<boolean>();
+  const [optionXchangeStep, setOptionXchangeStep] = useState<string>();
+
   let iconName = data.icon;
   const sourceBottom = id[id.length - 1];
   const { connectors } = data;
@@ -50,6 +62,24 @@ const DataNodeSteps = ({ data, id }) => {
   const renderNode = () => {
     return (
       <>
+        {showIconCopy && hiddeIconCopy && (
+          <div style={{ display: 'flex', position: 'absolute', bottom: 55, left: 180 }}>
+            <TooltipHost content="Copy Step">
+              <FontIcon
+                iconName="Copy"
+                style={{
+                  fontSize: '15px',
+                  cursor: 'pointer',
+                }}
+                onClick={() => {
+                  setOpenPanel(true);
+                  setHiddeIconCopy(false);
+                  setOptionXchangeStep('copy');
+                }}
+              />
+            </TooltipHost>
+          </div>
+        )}
         <Handle type="target" id={id} position={Position['Top']} />
         <Container>
           <Row>
@@ -102,9 +132,38 @@ const DataNodeSteps = ({ data, id }) => {
             <FontIcon iconName="InfoSolid" style={{ position: 'absolute', bottom: '18px', fontSize: '18px' }} />
           </TooltipHost>
         )}
+        <XchangeStepPanel
+          isPanelOpen={openPanel}
+          closePanel={setOpenPanel}
+          hiddeIconCopyStep={setHiddeIconCopy}
+          setOptionXchangeStep={setOptionXchangeStep}
+          optionXchangeStep={optionXchangeStep}
+          refreshDetailsPage={refreshDetailsPage}
+          xchangeFileProcessSid={xchangeFileProcessSid}
+          xchangeStepSid={sid}
+          xchangeStepTitle={label}
+        />
       </>
     );
   };
+
+  useEffect(() => {
+    if (!copyStep) {
+      setTimeout(() => setShowIconCopy(false), 1000);
+    }
+
+    if (copyStep) {
+      setShowIconCopy(copyStep);
+    }
+    if (addStep) {
+      setOptionXchangeStep('add');
+      setOpenPanel(true);
+      setHiddeIconCopy(false);
+      return;
+    }
+
+    setHiddeIconCopy(true);
+  }, [addStep, copyStep]);
 
   return <Node content={renderNode()} />;
 };

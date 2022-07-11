@@ -1,8 +1,6 @@
-import { useState } from 'react';
 import ReactFlow, { useNodesState, useEdgesState, addEdge, Connection, Edge } from 'react-flow-renderer';
 import { Column, Container, Row } from 'src/components/layouts';
 import { XchangeDiagram } from 'src/data/services/graphql';
-import { XchangeAddStepPanel } from '../XchangeAddStepPanel/XchangeAddStepPanel';
 import { StyledContainer, StyledHorizontalButtons, StyledText, StyledButtonAction } from '../XchangeDetailsPage.styles';
 import DataNodeSteps from './CustomDiagramNodes/DataNodeSteps';
 import DataNodeTransmissions from './CustomDiagramNodes/DataNodeTransmissions';
@@ -21,28 +19,87 @@ type DiagramProps = {
 };
 
 const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramProps) => {
-  const dataSid = data?.steps ? data?.steps[0].sid : '';
-  const dataTitle = data?.steps ? data?.steps[0].title : '';
   const { initialNodes } = InitialNodes(data);
   const { initialEdges } = InitialEdges(data);
-  const [nodes, , onNodesChange] = useNodesState(initialNodes);
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
-  const [openPanel, setOpenPanel] = useState(false);
-
   const onConnect = (params: Edge<any> | Connection) => setEdges((eds) => addEdge(params, eds));
+
+  const addNewStep = (event, node) => {
+    setNodes((nds) =>
+      nds.map((n) => {
+        if (n.data.sid && n.data.index === node.data.index && !n.id.includes('trans')) {
+          n.data = {
+            ...node.data,
+            copyStep: false,
+            addStep: true,
+            refreshDetailsPage,
+            xchangeFileProcessSid,
+          };
+        }
+        return n;
+      })
+    );
+  };
+
+  const showCopyStep = (event, node) => {
+    setNodes((nds) =>
+      nds.map((n) => {
+        if (n.data.sid && n.data.index === node.data.index && !n.id.includes('trans')) {
+          n.data = {
+            ...node.data,
+            copyStep: true,
+            addStep: false,
+            refreshDetailsPage,
+            xchangeFileProcessSid,
+          };
+        }
+        return n;
+      })
+    );
+  };
+
+  const hideCopyStep = (event, node) => {
+    setNodes((nds) =>
+      nds.map((n) => {
+        if (n.data.sid && n.data.index === node.data.index && !n.id.includes('trans')) {
+          n.data = {
+            ...node.data,
+            copyStep: false,
+            addStep: false,
+            refreshDetailsPage: null,
+            xchangeFileProcessSid: null,
+          };
+        }
+        return n;
+      })
+    );
+  };
+
+  const handleCopyStep = (event, node) => {
+    setNodes((nds) =>
+      nds.map((n) => {
+        if (n.data.sid && n.data.index === node.data.index && !n.id.includes('trans')) {
+          n.data = {
+            ...node.data,
+            copyStep: true,
+            addStep: false,
+            refreshDetailsPage: null,
+            xchangeFileProcessSid: null,
+          };
+        }
+        return n;
+      })
+    );
+  };
 
   return (
     <Container>
       <Row>
         <Column lg="1">
           <StyledHorizontalButtons>
-            <StyledButtonAction
-              fontSize={24}
-              id="__Add_XchangeSteps"
-              title="Add Step"
-              onClick={() => setOpenPanel(true)}
-            >
+            <StyledButtonAction fontSize={24} id="__Add_XchangeSteps" title="Add Step">
               <StyledText>
                 Xchange Steps <span style={{ color: '#0078D4', fontSize: '22px' }}>+</span>
               </StyledText>
@@ -60,6 +117,10 @@ const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramPro
               nodes={nodes}
               edges={edges}
               nodeTypes={nodeTypes}
+              onNodeMouseLeave={hideCopyStep}
+              onNodeMouseEnter={handleCopyStep}
+              onNodeMouseMove={showCopyStep}
+              onNodeClick={addNewStep}
               zoomOnScroll={false}
               panOnScroll={false}
               preventScrolling={false}
@@ -74,14 +135,6 @@ const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramPro
           </StyledContainer>
         </Column>
       </Row>
-      <XchangeAddStepPanel
-        isPanelOpen={openPanel}
-        closePanel={setOpenPanel}
-        refreshDetailsPage={refreshDetailsPage}
-        xchangeFileProcessSid={xchangeFileProcessSid ?? ''}
-        xchangeStepSid={dataSid ?? ''}
-        xchangeStepTitle={dataTitle ?? ''}
-      />
     </Container>
   );
 };
