@@ -2,23 +2,49 @@ import { useState, memo, useEffect } from 'react';
 import { FontIcon, Stack, Text, TooltipHost } from '@fluentui/react';
 import { Handle, Position } from 'react-flow-renderer';
 import { BrainCircuit24Regular } from '@fluentui/react-icons';
+import { useDeleteXchangeStepMutation } from 'src/data/services/graphql';
+import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import { Container, Row } from 'src/components/layouts';
+import { useNotification } from 'src/hooks/useNotification';
+import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import Node from './Node';
 import { StyledQualifier } from '../../XchangeDetailsPage.styles';
 import { XchangeStepPanel } from '../../XchangeStepPanel/XchangeStepPanel';
 
+const defaultDialogProps: DialogYesNoProps = {
+  open: false,
+  title: '',
+  message: '',
+  messageYes: 'Yes',
+  messageNo: 'No',
+  onYesNo: () => null,
+  onYes: () => {},
+  onNo: () => {},
+  closeOnNo: true,
+  closeOnYes: true,
+  highlightNo: true,
+  highlightYes: false,
+  onClose: () => null,
+};
+
 const DataNodeSteps = ({ data, id }) => {
   const { addStep } = data;
-  const { copyStep } = data;
+  const { handleTrashAndCopyIcons } = data;
   const { refreshDetailsPage } = data;
   const { xchangeFileProcessSid } = data;
   const { sid } = data;
   const { label } = data;
 
+  const Toast = useNotification();
   const [openPanel, setOpenPanel] = useState(false);
-  const [hiddeIconCopy, setHiddeIconCopy] = useState(true);
-  const [showIconCopy, setShowIconCopy] = useState<boolean>();
+  const [hiddeIcon, setHiddeIcon] = useState(true);
+  const [showIcons, setShowIcons] = useState<boolean>();
   const [optionXchangeStep, setOptionXchangeStep] = useState<string>();
+  const [showDialog, setShowDialog] = useState(false);
+  const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
+
+  const [deleteXchangeStep, { data: dataDeleteStep, loading: loadingDeeleteStep, error: errorDeleteStep }] =
+    useQueryHandler(useDeleteXchangeStepMutation);
 
   let iconName = data.icon;
   const sourceBottom = id[id.length - 1];
@@ -47,6 +73,7 @@ const DataNodeSteps = ({ data, id }) => {
   } else if (qualifier === 'PROD-OE') {
     width = '60px';
   }
+
   const hanldeSourcePosition = () => {
     if (
       trans ||
@@ -59,10 +86,34 @@ const DataNodeSteps = ({ data, id }) => {
     return <Handle type="source" id={id} position={Position['Left']} />;
   };
 
+  const hideDialog = () => {
+    setShowDialog(false);
+  };
+
+  const showUnsavedChangesDialog = (title: string) => {
+    const updatedDialog = { ...defaultDialogProps };
+    updatedDialog.message = `Are you sure you want to delete this Xchange step ${title}?`;
+
+    updatedDialog.onYes = () => {
+      hideDialog();
+      deleteXchangeStep({
+        variables: {
+          xchangeFileProcessSid,
+          sid,
+        },
+      });
+    };
+    updatedDialog.onClose = () => {
+      hideDialog();
+    };
+    setDialogProps(updatedDialog);
+    setShowDialog(true);
+  };
+
   const renderNode = () => {
     return (
       <>
-        {showIconCopy && hiddeIconCopy && (
+        {showIcons && hiddeIcon && (
           <div style={{ display: 'flex', position: 'absolute', bottom: 55, left: 180 }}>
             <TooltipHost content="Copy Step">
               <FontIcon
@@ -73,8 +124,24 @@ const DataNodeSteps = ({ data, id }) => {
                 }}
                 onClick={() => {
                   setOpenPanel(true);
-                  setHiddeIconCopy(false);
+                  setHiddeIcon(false);
                   setOptionXchangeStep('copy');
+                }}
+              />
+            </TooltipHost>
+            <TooltipHost content="Delete">
+              <FontIcon
+                iconName="Trash"
+                style={{
+                  fontSize: '15px',
+                  color: 'black',
+                  cursor: 'pointer',
+                  paddingLeft: '10px',
+                }}
+                onClick={() => {
+                  setOpenPanel(false);
+                  setShowDialog(true);
+                  showUnsavedChangesDialog(label);
                 }}
               />
             </TooltipHost>
@@ -135,7 +202,7 @@ const DataNodeSteps = ({ data, id }) => {
         <XchangeStepPanel
           isPanelOpen={openPanel}
           closePanel={setOpenPanel}
-          hiddeIconCopyStep={setHiddeIconCopy}
+          hiddeIconCopyStep={setHiddeIcon}
           setOptionXchangeStep={setOptionXchangeStep}
           optionXchangeStep={optionXchangeStep}
           refreshDetailsPage={refreshDetailsPage}
@@ -148,24 +215,40 @@ const DataNodeSteps = ({ data, id }) => {
   };
 
   useEffect(() => {
-    if (!copyStep) {
-      setTimeout(() => setShowIconCopy(false), 1000);
+    if (!handleTrashAndCopyIcons) {
+      setTimeout(() => setShowIcons(false), 1000);
     }
 
-    if (copyStep) {
-      setShowIconCopy(copyStep);
+    if (handleTrashAndCopyIcons) {
+      setShowIcons(handleTrashAndCopyIcons);
     }
-    if (addStep) {
+    if (addStep && !showDialog) {
       setOptionXchangeStep('add');
       setOpenPanel(true);
-      setHiddeIconCopy(false);
+      setHiddeIcon(false);
       return;
     }
 
-    setHiddeIconCopy(true);
-  }, [addStep, copyStep]);
+    setHiddeIcon(true);
+  }, [addStep, handleTrashAndCopyIcons]);
 
-  return <Node content={renderNode()} />;
+  useEffect(() => {
+    if (!loadingDeeleteStep && dataDeleteStep) {
+      refreshDetailsPage(true);
+      Toast.success({ text: `Xchange step ${label}` });
+    }
+
+    if (!loadingDeeleteStep && errorDeleteStep) {
+      Toast.error({ text: `There was an error deleting ${label} ` });
+    }
+  }, [dataDeleteStep, loadingDeeleteStep, errorDeleteStep])
+
+  return (
+    <>
+      <Node content={renderNode()} />
+      <DialogYesNo {...dialogProps} open={showDialog} />
+    </>
+  );
 };
 
 export default memo(DataNodeSteps);

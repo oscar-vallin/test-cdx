@@ -41,7 +41,7 @@ export function InitialNodes(data) {
       connectors: data.connectors,
       position: step.position,
       info: step.info,
-      copyStep: false,
+      handleTrashAndCopyIcons: false,
       addStep: false,
       refreshDetailsPage: null,
       xchangeFileProcessSid: null,

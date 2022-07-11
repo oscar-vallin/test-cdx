@@ -32,7 +32,7 @@ const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramPro
         if (n.data.sid && n.data.index === node.data.index && !n.id.includes('trans')) {
           n.data = {
             ...node.data,
-            copyStep: false,
+            handleTrashAndCopyIcons: false,
             addStep: true,
             refreshDetailsPage,
             xchangeFileProcessSid,
@@ -43,13 +43,13 @@ const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramPro
     );
   };
 
-  const showCopyStep = (event, node) => {
+  const showIcons = (event, node) => {
     setNodes((nds) =>
       nds.map((n) => {
         if (n.data.sid && n.data.index === node.data.index && !n.id.includes('trans')) {
           n.data = {
             ...node.data,
-            copyStep: true,
+            handleTrashAndCopyIcons: true,
             addStep: false,
             refreshDetailsPage,
             xchangeFileProcessSid,
@@ -60,13 +60,13 @@ const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramPro
     );
   };
 
-  const hideCopyStep = (event, node) => {
+  const hideIcons = (event, node) => {
     setNodes((nds) =>
       nds.map((n) => {
         if (n.data.sid && n.data.index === node.data.index && !n.id.includes('trans')) {
           n.data = {
             ...node.data,
-            copyStep: false,
+            handleTrashAndCopyIcons: false,
             addStep: false,
             refreshDetailsPage: null,
             xchangeFileProcessSid: null,
@@ -77,13 +77,13 @@ const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramPro
     );
   };
 
-  const handleCopyStep = (event, node) => {
+  const handleIcons = (event, node) => {
     setNodes((nds) =>
       nds.map((n) => {
         if (n.data.sid && n.data.index === node.data.index && !n.id.includes('trans')) {
           n.data = {
             ...node.data,
-            copyStep: true,
+            handleTrashAndCopyIcons: true,
             addStep: false,
             refreshDetailsPage: null,
             xchangeFileProcessSid: null,
@@ -117,9 +117,9 @@ const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramPro
               nodes={nodes}
               edges={edges}
               nodeTypes={nodeTypes}
-              onNodeMouseLeave={hideCopyStep}
-              onNodeMouseEnter={handleCopyStep}
-              onNodeMouseMove={showCopyStep}
+              onNodeMouseLeave={hideIcons}
+              onNodeMouseEnter={handleIcons}
+              onNodeMouseMove={showIcons}
               onNodeClick={addNewStep}
               zoomOnScroll={false}
               panOnScroll={false}
