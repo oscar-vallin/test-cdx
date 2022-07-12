@@ -74,6 +74,7 @@ const XChangePage = () => {
   const [individualXchangeAlerts, setIndividualXchangeAlerts] = useState<XchangeAlertsProps[]>();
   const [requiresConversion, setRequiresConversion] = useState<boolean>();
   const [updateCmd, setUpdateCmd] = useState<WebCommand | null>();
+  const [createCmd, setCreateCmd] = useState<WebCommand | null>();
   const [editComment, setEditComment] = useState(false);
   const [comment, setComment] = useState<string | null>();
   const [refreshDataXchange, setRefreshDataXchange] = useState(false);
@@ -124,7 +125,12 @@ const XChangePage = () => {
     return `${formattedDate} ${hour}:${minutes}${format}`;
   };
 
-  const tooltipHostContent = (lastActivity: Date, type?: string, vendorName?: string[] | null) => {
+  const tooltipHostContent = (
+    lastActivity: Date,
+    type?: string,
+    vendorName?: string[] | null,
+    filesProcessed?: number
+  ) => {
     const error = type?.trim() !== '';
     const fromDate = new Date(lastActivity);
     const vendor = vendorName && vendorName[0];
@@ -145,11 +151,11 @@ const XChangePage = () => {
       <>
         {error ? (
           <>
-            <span style={{ color: currentColor, fontWeight: 'bold' }}> {} </span>
+            <span style={{ color: currentColor, fontWeight: 'bold' }}> {filesProcessed} </span>
             {type} files have been processed in the last 30 days <br />
             <span style={{ marginLeft: '40px' }}>Last Run: {currentDate}</span> <br /> <br />
             <ButtonLink
-              style={{ marginLeft: '88px' }}
+              style={{ marginLeft: '97px' }}
               to={`/file-status?filter=${vendor}&orgSid=${orgSid}&startDate=${startFormatted}`}
             >
               {' '}
@@ -158,7 +164,7 @@ const XChangePage = () => {
           </>
         ) : (
           <>
-            <span>A file processed on {lastActivity} result in an error</span> <br /> <br />
+            <span>A file processed on {currentDate} result in an error</span> <br /> <br />
             <ButtonLink
               to={`/transmissions?filter=${vendor}&orgSid=${orgSid}&startDate=${startFormatted}`}
               style={{ marginLeft: '125px' }}
@@ -186,10 +192,12 @@ const XChangePage = () => {
       setComment(dataXchange.xchangeProfile.comments);
     }
 
-    if (!dataXchange?.xchangeProfile?.requiresConversion) {
+    if (dataXchange?.xchangeProfile?.commands) {
       const pageCommands = dataXchange?.xchangeProfile?.commands;
       const _updateCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Update);
       setUpdateCmd(_updateCmd);
+      const _createCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create);
+      setCreateCmd(_createCmd);
     }
   }, [dataXchange, loadingXchange]);
 
@@ -215,6 +223,10 @@ const XChangePage = () => {
       columnVal = node?.coreFilename ?? '';
     }
 
+    const uatFilesProcessed = node?.uatActivity.filesProcessed;
+    const testFilesProcessed = node?.testActivity.filesProcessed;
+    const prodFilesProcessed = node?.prodActivity.filesProcessed;
+
     const coreFilename = node?.coreFilename;
     return (
       <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
@@ -222,23 +234,44 @@ const XChangePage = () => {
         <>
           {column?.key === 'active' && (
             <>
-              {node?.uatActivity.filesProcessed > 0 ? (
-                <TooltipHost content={tooltipHostContent(node?.uatActivity?.lastActivity, 'UAT', node?.vendorIds)}>
-                  <CircleStyled color="purple">{node?.uatActivity.filesProcessed}</CircleStyled>
+              {uatFilesProcessed > 0 ? (
+                <TooltipHost
+                  content={tooltipHostContent(
+                    node?.uatActivity?.lastActivity,
+                    'UAT',
+                    node?.vendorIds,
+                    uatFilesProcessed
+                  )}
+                >
+                  <CircleStyled color="purple">{uatFilesProcessed}</CircleStyled>
                 </TooltipHost>
               ) : (
                 <CircleStyled color="gray">0</CircleStyled>
               )}
-              {node?.testActivity.filesProcessed > 0 ? (
-                <TooltipHost content={tooltipHostContent(node?.testActivity.lastActivity, 'TEST', node?.vendorIds)}>
-                  <CircleStyled color="orange">{node?.testActivity.filesProcessed}</CircleStyled>
+              {testFilesProcessed > 0 ? (
+                <TooltipHost
+                  content={tooltipHostContent(
+                    node?.testActivity.lastActivity,
+                    'TEST',
+                    node?.vendorIds,
+                    testFilesProcessed
+                  )}
+                >
+                  <CircleStyled color="orange">{testFilesProcessed}</CircleStyled>
                 </TooltipHost>
               ) : (
                 <CircleStyled color="gray">0</CircleStyled>
               )}
-              {node?.prodActivity.filesProcessed > 0 ? (
-                <TooltipHost content={tooltipHostContent(node?.prodActivity?.lastActivity, 'PROD', node?.vendorIds)}>
-                  <CircleStyled color="blue">{node?.prodActivity.filesProcessed}</CircleStyled>
+              {prodFilesProcessed > 0 ? (
+                <TooltipHost
+                  content={tooltipHostContent(
+                    node?.prodActivity?.lastActivity,
+                    'PROD',
+                    node?.vendorIds,
+                    prodFilesProcessed
+                  )}
+                >
+                  <CircleStyled color="blue">{prodFilesProcessed}</CircleStyled>
                 </TooltipHost>
               ) : (
                 <CircleStyled color="gray">0</CircleStyled>
@@ -247,7 +280,11 @@ const XChangePage = () => {
                 <TooltipHost content={tooltipHostContent(node?.errorActivity?.lastActivity, '', node?.vendorIds)}>
                   <IconButton
                     iconProps={{ iconName: 'FileBug' }}
-                    style={{ color: ThemeStore.userTheme.colors.custom.error, cursor: 'pointer' }}
+                    style={{
+                      color: ThemeStore.userTheme.colors.custom.error,
+                      cursor: 'pointer',
+                      paddingBottom: '12px',
+                    }}
                   />
                 </TooltipHost>
               )}
@@ -554,10 +591,10 @@ const XChangePage = () => {
               <Column lg="7">
                 <Text style={{ fontWeight: 'bold' }}>Xchanges</Text>
               </Column>
-              {!requiresConversion && (
+              {createCmd && (
                 <Column lg="2" right>
                   <StyledButtonAction id="__SetupNewXchange">
-                    + <Text style={{ paddingTop: '5px' }}>Setup new Xchange</Text>
+                    + <Text style={{ paddingTop: '5px' }}>{createCmd.label}</Text>
                   </StyledButtonAction>
                 </Column>
               )}
