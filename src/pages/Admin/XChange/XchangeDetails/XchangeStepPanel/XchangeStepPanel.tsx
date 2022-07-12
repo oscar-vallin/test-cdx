@@ -284,8 +284,8 @@ const XchangeStepPanel = ({
   useEffect(() => {
     const message = optionXchangeStep === 'add' ? 'added' : 'updated';
     if (!loadingCreateStep && dataCreateStep) {
-      Toast.success({ text: `Xchange step ${message}` });
       refreshDetailsPage(true);
+      Toast.success({ text: `Xchange step ${message}` });
       closePanel(false);
     }
 

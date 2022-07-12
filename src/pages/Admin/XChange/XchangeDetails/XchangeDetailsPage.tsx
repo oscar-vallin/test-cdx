@@ -206,7 +206,7 @@ const XchangeDetailsPage = () => {
   }, [detailsData, detailsLoading]);
 
   const renderFileUploadDialog = () => {
-    const xchangeConfigSid = xchangeDataDetails?.sid
+    const xchangeConfigSid = xchangeDataDetails?.sid;
     if (!showFileUpload || !xchangeConfigSid) {
       return null;
     }
@@ -230,6 +230,19 @@ const XchangeDetailsPage = () => {
         >
           Upload
         </PrimaryButton>
+      );
+    }
+    return null;
+  };
+
+  const renderDiagram = () => {
+    if (!detailsLoading && dataDiagram) {
+      return (
+        <Diagram
+          data={dataDiagram}
+          refreshDetailsPage={setRefreshXchangeDetails}
+          xchangeFileProcessSid={xchangeDataDetails?.sid ?? ''}
+        />
       );
     }
     return null;
@@ -267,15 +280,7 @@ const XchangeDetailsPage = () => {
               ))}
           </Row>
           <Row>
-            <Column lg="9">
-              {dataDiagram && (
-                <Diagram
-                  data={dataDiagram}
-                  refreshDetailsPage={setRefreshXchangeDetails}
-                  xchangeFileProcessSid={xchangeDataDetails?.sid ?? ''}
-                />
-              )}
-            </Column>
+            <Column lg="9">{renderDiagram()}</Column>
             <Column lg="3">{cardBox()}</Column>
           </Row>
         </Container>

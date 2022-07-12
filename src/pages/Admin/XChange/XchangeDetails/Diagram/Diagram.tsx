@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import ReactFlow, { useNodesState, useEdgesState, addEdge, Connection, Edge } from 'react-flow-renderer';
 import { Column, Container, Row } from 'src/components/layouts';
 import { XchangeDiagram } from 'src/data/services/graphql';
@@ -68,7 +69,7 @@ const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramPro
             ...node.data,
             handleTrashAndCopyIcons: false,
             addStep: false,
-            refreshDetailsPage: null,
+            refreshDetailsPage,
             xchangeFileProcessSid: null,
           };
         }
@@ -85,7 +86,7 @@ const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramPro
             ...node.data,
             handleTrashAndCopyIcons: true,
             addStep: false,
-            refreshDetailsPage: null,
+            refreshDetailsPage,
             xchangeFileProcessSid: null,
           };
         }
@@ -93,6 +94,11 @@ const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramPro
       })
     );
   };
+
+  useEffect(() => {
+    setNodes(initialNodes);
+    setEdges(initialEdges);
+  }, [data]);
 
   return (
     <Container>

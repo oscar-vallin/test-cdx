@@ -2,7 +2,7 @@ import { useState, memo, useEffect } from 'react';
 import { FontIcon, Stack, Text, TooltipHost } from '@fluentui/react';
 import { Handle, Position } from 'react-flow-renderer';
 import { BrainCircuit24Regular } from '@fluentui/react-icons';
-import { useDeleteXchangeStepMutation } from 'src/data/services/graphql';
+import { useDeleteXchangeStepMutation, DiagramConnector, DiagramCoordinates } from 'src/data/services/graphql';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import { Container, Row } from 'src/components/layouts';
 import { useNotification } from 'src/hooks/useNotification';
@@ -27,7 +27,28 @@ const defaultDialogProps: DialogYesNoProps = {
   onClose: () => null,
 };
 
-const DataNodeSteps = ({ data, id }) => {
+type DataProps = {
+  index?: number;
+  sid?: string;
+  label?: string;
+  subTitle?: string;
+  icon?: string;
+  qualifier?: string;
+  connectors: DiagramConnector[];
+  position: DiagramCoordinates;
+  info?: string;
+  handleTrashAndCopyIcons: boolean;
+  addStep: boolean;
+  refreshDetailsPage: (data: boolean) => void;
+  xchangeFileProcessSid?: string;
+};
+
+type DataNodeProps = {
+  data: DataProps;
+  id: string | undefined;
+};
+
+const DataNodeSteps = ({ data, id }: DataNodeProps) => {
   const { addStep } = data;
   const { handleTrashAndCopyIcons } = data;
   const { refreshDetailsPage } = data;
@@ -47,10 +68,10 @@ const DataNodeSteps = ({ data, id }) => {
     useQueryHandler(useDeleteXchangeStepMutation);
 
   let iconName = data.icon;
-  const sourceBottom = id[id.length - 1];
+  const sourceBottom = id && id[id.length - 1];
   const { connectors } = data;
   const findFromKey = connectors.find((connector) => connector.fromKey === id);
-  const trans = findFromKey.toKey.includes('trans');
+  const trans = findFromKey && findFromKey.toKey.includes('trans');
   const { qualifier } = data;
   const subTitle: string = data.subTitle ?? '';
   const styles = { lineHeight: subTitle.trim() === '' ? '36px' : '18px' };
@@ -103,9 +124,10 @@ const DataNodeSteps = ({ data, id }) => {
         },
       });
     };
-    updatedDialog.onClose = () => {
+    updatedDialog.onNo = () => {
       hideDialog();
     };
+
     setDialogProps(updatedDialog);
     setShowDialog(true);
   };
@@ -141,7 +163,7 @@ const DataNodeSteps = ({ data, id }) => {
                 onClick={() => {
                   setOpenPanel(false);
                   setShowDialog(true);
-                  showUnsavedChangesDialog(label);
+                  showUnsavedChangesDialog(label ?? '');
                 }}
               />
             </TooltipHost>
@@ -235,13 +257,13 @@ const DataNodeSteps = ({ data, id }) => {
   useEffect(() => {
     if (!loadingDeeleteStep && dataDeleteStep) {
       refreshDetailsPage(true);
-      Toast.success({ text: `Xchange step ${label}` });
+      Toast.success({ text: `Xchange step ${label} has been deleted` });
     }
 
     if (!loadingDeeleteStep && errorDeleteStep) {
       Toast.error({ text: `There was an error deleting ${label} ` });
     }
-  }, [dataDeleteStep, loadingDeeleteStep, errorDeleteStep])
+  }, [dataDeleteStep, loadingDeeleteStep, errorDeleteStep]);
 
   return (
     <>
