@@ -12,7 +12,7 @@ import {
   XchangeFileProcessForm,
   XchangeDiagram,
 } from 'src/data/services/graphql';
-import { InputText } from 'src/components/inputs/InputText';
+import { UIInputText } from 'src/components/inputs/InputText';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { IconButton, PrimaryButton, Spinner, SpinnerSize, Text } from '@fluentui/react';
 import { UIInputMultiSelect } from 'src/components/inputs/InputDropdown';
@@ -139,30 +139,20 @@ const XchangeDetailsPage = () => {
       <>
         <Column lg="3" direction="row">
           <Spacing margin={{ bottom: 'normal', top: 'normal' }}>
-            <InputText
+            <UIInputText
               id="coreFilename"
-              type="text"
               value={coreFilenameValue}
-              disabled={coreFilenameData?.readOnly ?? false}
-              label={coreFilenameData?.label}
-              info={coreFilenameData?.info ?? undefined}
-              minLength={coreFilenameData?.min ?? undefined}
-              maxLength={coreFilenameData?.max ?? undefined}
+              uiField={coreFilenameData}
               onChange={(event, newValue) => setCoreFilenameValue(newValue ?? '')}
             />
           </Spacing>
         </Column>
         <Column lg="3">
           <Spacing margin={{ bottom: 'normal', top: 'normal' }}>
-            <InputText
+            <UIInputText
               id="coreFilenamePattern"
-              type="text"
               value={coreFilenamePatternValue}
-              disabled={coreFilenamePatternData?.readOnly ?? false}
-              label={coreFilenamePatternData?.label}
-              info={coreFilenamePatternData?.info ?? undefined}
-              minLength={coreFilenamePatternData?.min ?? undefined}
-              maxLength={coreFilenamePatternData?.max ?? undefined}
+              uiField={coreFilenamePatternData}
               onChange={(event, newValue) => setCoreFilenamePatternValue(newValue ?? '')}
             />
           </Spacing>
@@ -188,7 +178,7 @@ const XchangeDetailsPage = () => {
 
       if (xchangeConfig.coreFilenamePattern) {
         setCoreFilenamePatternData(xchangeConfig.coreFilenamePattern);
-        setCoreFilenamePatternValue(xchangeDataDetails?.coreFilenamePattern.value ?? '');
+        setCoreFilenamePatternValue(xchangeConfig.coreFilenamePattern.value ?? '');
       }
 
       if (xchangeConfig.processes) {
