@@ -79,9 +79,9 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
     iconName = 'PaddingRight';
   }
   if (subTitle.trim() !== '') {
-    styles['maxWidth'] = '180px';
+    styles['maxWidth'] = '250px';
     styles['maxHeight'] = '45px';
-    styles['width'] = '100%';
+    styles['width'] = '70%';
     styles['height'] = '100%';
     styles['overflow'] = 'hidden';
   }
@@ -180,11 +180,11 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
                     color: '#fff',
                     fontSize: '18px',
                     cursor: 'pointer',
-                    width: '37px',
+                    width: '43px',
                     height: '37px',
                     borderRadius: '50%',
                     backgroundColor: '#00a341',
-                    padding: '6px 3px 7px 3px',
+                    padding: '6px 0px 6px 0px',
                     textAlign: 'center',
                   }}
                 />
@@ -218,7 +218,10 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
         )}
         {data.info && (
           <TooltipHost content={data.info}>
-            <FontIcon iconName="InfoSolid" style={{ position: 'absolute', bottom: '18px', fontSize: '18px' }} />
+            <FontIcon
+              iconName="InfoSolid"
+              style={{ position: 'absolute', bottom: '18px', fontSize: '18px', cursor: 'pointer' }}
+            />
           </TooltipHost>
         )}
         <XchangeStepPanel
