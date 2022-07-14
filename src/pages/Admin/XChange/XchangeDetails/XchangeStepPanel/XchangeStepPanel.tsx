@@ -8,6 +8,7 @@ import {
   useXchangeStepFormLazyQuery,
   useCreateXchangeStepMutation,
   useCopyXchangeStepLazyQuery,
+  useUpdateXchangeStepMutation,
   CdxWebCommandType,
   WebCommand,
 } from 'src/data/services/graphql';
@@ -87,12 +88,15 @@ const XchangeStepPanel = ({
   const [xchangeCopyStepForm, { data: dataCopyStep, loading: loadingCopyStep }] =
     useQueryHandler(useCopyXchangeStepLazyQuery);
 
+  const [updateXchangeStep, { data: dataUpdateStep, loading: loadingUpdateXchange, error: errorUpdateXchange }] =
+    useQueryHandler(useUpdateXchangeStepMutation);
+
   const [createXchangeStep, { data: dataCreateStep, loading: loadingCreateStep, error: errorCreateStep }] =
     useQueryHandler(useCreateXchangeStepMutation);
 
   const getxmlData = () => {
     if (isPanelOpen) {
-      if (optionXchangeStep === 'add') {
+      if (optionXchangeStep === 'add' || optionXchangeStep === 'update') {
         xchangeStepForm({
           variables: {
             xchangeFileProcessSid,
@@ -146,14 +150,26 @@ const XchangeStepPanel = ({
 
   const saveStep = () => {
     const xml = removeLineBreakXml(editXmlData ?? '');
-    createXchangeStep({
-      variables: {
-        stepInput: {
-          xchangeFileProcessSid,
-          xml,
+
+    if (optionXchangeStep === 'update') {
+      updateXchangeStep({
+        variables: {
+          stepInput: {
+            sid: xchangeStepSid,
+            xml,
+          },
         },
-      },
-    });
+      });
+    } else if (optionXchangeStep === 'add' || optionXchangeStep === 'copy') {
+      createXchangeStep({
+        variables: {
+          stepInput: {
+            xchangeFileProcessSid,
+            xml,
+          },
+        },
+      });
+    }
   };
 
   const addlineBreakeXml = (xmlValue: string) => {
@@ -293,6 +309,18 @@ const XchangeStepPanel = ({
       Toast.error({ text: `There was an error to ${message} step` });
     }
   }, [dataCreateStep, loadingCreateStep, errorCreateStep]);
+
+  useEffect(() => {
+    if (!loadingUpdateXchange && dataUpdateStep) {
+      refreshDetailsPage(true);
+      Toast.success({ text: `Xchange step updated` });
+      closePanel(false);
+    }
+
+    if (!loadingUpdateXchange && errorUpdateXchange) {
+      Toast.error({ text: `There was an error to update step` });
+    }
+  }, [dataUpdateStep, loadingUpdateXchange, errorUpdateXchange]);
 
   return (
     <>
