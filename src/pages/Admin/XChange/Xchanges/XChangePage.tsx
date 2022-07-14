@@ -167,7 +167,7 @@ const XChangePage = () => {
             <span>A file processed on {currentDate} result in an error</span> <br /> <br />
             <ButtonLink
               to={`/transmissions?filter=${vendor}&orgSid=${orgSid}&startDate=${startFormatted}`}
-              style={{ marginLeft: '125px' }}
+              style={{ marginLeft: '120px' }}
             >
               {' '}
               Click for details
@@ -511,7 +511,7 @@ const XChangePage = () => {
                 </Column>
                 {!requiresConversion && editComment ? (
                   <>
-                    <Column lg="3">
+                    <Column lg="3" md={12}>
                       <StyledIconsComments>
                         <IconButton iconProps={{ iconName: 'Save' }} onClick={sendComment} />
                         <Text variant="small">Save</Text>
