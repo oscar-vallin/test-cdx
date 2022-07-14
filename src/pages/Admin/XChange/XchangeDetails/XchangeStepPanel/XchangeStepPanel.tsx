@@ -22,7 +22,6 @@ type XchangeStepPanelProps = {
   isPanelOpen: boolean;
   closePanel: (data: boolean) => void;
   refreshDetailsPage: (data: boolean) => void;
-  hiddeIconCopyStep: (data: boolean) => void;
   setOptionXchangeStep: (data: string) => void;
   optionXchangeStep?: string;
   xchangeFileProcessSid?: string;
@@ -66,7 +65,6 @@ const XchangeStepPanel = ({
   isPanelOpen,
   closePanel,
   refreshDetailsPage,
-  hiddeIconCopyStep,
   setOptionXchangeStep,
   optionXchangeStep,
   xchangeFileProcessSid,
@@ -128,6 +126,7 @@ const XchangeStepPanel = ({
       hideDialog();
       closePanel(false);
       setUnsavedChanges(false);
+      setEditXmlData('');
       setOptionXchangeStep('');
     };
     updatedDialog.onClose = () => {
@@ -254,7 +253,11 @@ const XchangeStepPanel = ({
 
   const renderPanelHeaderText = () => {
     if (!loadingAddStep && !loadingCopyStep) {
-      return `${updateCmd ? 'New Xchange Step' : 'Copy of'}-${xchangeStepTitle}`;
+      if (optionXchangeStep === 'add') {
+        return xchangeStepTitle;
+      }
+
+      return `${!createCmd ? xchangeStepTitle : `Copy of ${xchangeStepTitle}`}`;
     }
     return undefined;
   };
@@ -265,16 +268,19 @@ const XchangeStepPanel = ({
 
   useEffect(() => {
     if (!loadingAddStep && dataAddStep) {
-      const xmlValue = addlineBreakeXml(dataAddStep.xchangeStepForm.xml.value);
-      setEditXmlData(xmlValue);
-      setPreviousXmlDate(dataAddStep.xchangeStepForm.xml.value);
+      if (dataAddStep.xchangeStepForm.xml.value) {
+        const xmlValue = addlineBreakeXml(dataAddStep.xchangeStepForm.xml.value);
+        setEditXmlData(xmlValue);
+        setPreviousXmlDate(dataAddStep.xchangeStepForm.xml.value);
+      }
     }
 
     if (dataAddStep?.xchangeStepForm) {
       const pageCommands = dataAddStep?.xchangeStepForm?.commands;
       const _updateCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Update);
       setUpdateCmd(_updateCmd);
-      setCreateCmd(null);
+      const _createCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create);
+      setCreateCmd(_createCmd);
     }
   }, [dataAddStep, loadingAddStep]);
 
@@ -289,7 +295,6 @@ const XchangeStepPanel = ({
       const pageCommands = dataCopyStep?.copyXchangeStep?.commands;
       const _createCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create);
       setCreateCmd(_createCmd);
-      setUpdateCmd(null);
     }
   }, [dataCopyStep, loadingCopyStep]);
 
@@ -331,7 +336,6 @@ const XchangeStepPanel = ({
         isOpen={isPanelOpen}
         onDismiss={() => {
           onPanelClose();
-          hiddeIconCopyStep(true);
         }}
       >
         {renderBody()}

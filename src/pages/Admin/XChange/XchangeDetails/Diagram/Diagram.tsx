@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import ReactFlow, { useNodesState, useEdgesState, addEdge, Connection, Edge } from 'react-flow-renderer';
 import { Column, Container, Row } from 'src/components/layouts';
 import { XchangeDiagram } from 'src/data/services/graphql';
@@ -7,6 +7,7 @@ import DataNodeSteps from './CustomDiagramNodes/DataNodeSteps';
 import DataNodeTransmissions from './CustomDiagramNodes/DataNodeTransmissions';
 import { InitialNodes } from './nodes/nodes';
 import { InitialEdges } from './edges/edges';
+import { XchangeStepPanel } from '../XchangeStepPanel/XchangeStepPanel';
 
 const nodeTypes = {
   dataNodeSteps: DataNodeSteps,
@@ -24,6 +25,9 @@ const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramPro
   const { initialEdges } = InitialEdges(data);
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+
+  const [openPanel, setOpenPanel] = useState(false);
+  const [optionXchangeStep, setOptionXchangeStep] = useState<string>();
 
   const onConnect = (params: Edge<any> | Connection) => setEdges((eds) => addEdge(params, eds));
 
@@ -105,7 +109,15 @@ const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramPro
       <Row>
         <Column lg="1">
           <StyledHorizontalButtons>
-            <StyledButtonAction fontSize={24} id="__Add_XchangeSteps" title="Add Step">
+            <StyledButtonAction
+              fontSize={24}
+              id="__Add_XchangeSteps"
+              title="Add Step"
+              onClick={() => {
+                setOpenPanel(true);
+                setOptionXchangeStep('add');
+              }}
+            >
               <StyledText>
                 Xchange Steps <span style={{ color: '#0078D4', fontSize: '22px' }}>+</span>
               </StyledText>
@@ -141,6 +153,15 @@ const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramPro
           </StyledContainer>
         </Column>
       </Row>
+      <XchangeStepPanel
+        isPanelOpen={openPanel}
+        closePanel={setOpenPanel}
+        setOptionXchangeStep={setOptionXchangeStep}
+        optionXchangeStep={optionXchangeStep}
+        refreshDetailsPage={refreshDetailsPage}
+        xchangeFileProcessSid={xchangeFileProcessSid}
+        xchangeStepTitle="New Xchange Step"
+      />
     </Container>
   );
 };
