@@ -1,34 +1,34 @@
 import { ReactElement } from 'react';
+import { TooltipHost } from '@fluentui/react';
+import { STEP_COLOR_PURPLE, StepStatusSegment, StepStatusType } from 'src/data/constants/FileStatusConstants';
 import { Box, Bar, BarAnimated } from './FileProgressBar.styles';
-import { STEP_COLOR_PURPLE } from '../../../data/constants/FileStatusConstants';
-
-const defaultProps = {
-  id: '',
-  colors: [],
-};
 
 type FileProgressBarProps = {
-  id?: string;
-  colors?: string[] | any;
-} & typeof defaultProps;
+  id: string;
+  stepStatus: StepStatusType;
+};
 
-const FileProgressBar = ({ id, colors }: FileProgressBarProps): ReactElement => {
+const FileProgressBar = ({ id, stepStatus }: FileProgressBarProps): ReactElement => {
+  const renderSegment = (segment: StepStatusSegment, index: number) => {
+    if (segment.color === STEP_COLOR_PURPLE) {
+      return (
+        <Bar key={`${index}`} order={index} color={segment.color}>
+          <BarAnimated />
+        </Bar>
+      );
+    }
+    return <Bar key={`${index}`} order={index} color={segment.color} />;
+  };
+
   return (
     <Box id={id}>
-      {colors.map((color, index) => {
-        if (color === STEP_COLOR_PURPLE) {
-          return (
-            <Bar key={`${index}`} order={index} color={color}>
-              <BarAnimated />
-            </Bar>
-          );
-        }
-        return <Bar key={`${index}`} order={index} color={color} />;
-      })}
+      {stepStatus.segments.map((segment, index) => (
+        <TooltipHost key={`segment_${index}`} content={segment.label}>
+          {renderSegment(segment, index)}
+        </TooltipHost>
+      ))}
     </Box>
   );
 };
-
-FileProgressBar.defaultProps = defaultProps;
 
 export { FileProgressBar };
