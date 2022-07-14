@@ -78,7 +78,7 @@ export const ActiveDomainContextProvider = ({ children }: ActiveDomainContextPro
         label: currentOrgNav.label,
         orgId: currentOrgNav.orgId,
         orgSid: subNavItems.find(({ label }) => label.includes(currentOrgNav.label))?.orgSid,
-        destination: currentOrgNav.page?.type
+        destination: currentOrgNav.page?.type,
       });
     }
   }, [activeDomainState.currentOrg.data]);

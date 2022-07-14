@@ -206,7 +206,7 @@ const XchangeDetailsPage = () => {
   }, [detailsData, detailsLoading]);
 
   const renderFileUploadDialog = () => {
-    const xchangeConfigSid = xchangeDataDetails?.sid
+    const xchangeConfigSid = xchangeDataDetails?.sid;
     if (!showFileUpload || !xchangeConfigSid) {
       return null;
     }
