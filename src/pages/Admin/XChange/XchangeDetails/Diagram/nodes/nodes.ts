@@ -13,10 +13,11 @@ export function InitialNodes(data) {
   ];
   const initialSteps = data.steps.map((step, index: number) => {
     const values = {};
+    const lastNode = index === data.steps.length - 1;
     let positionX = 0;
     let positionY = 50;
     if (step.position.x === 1 || step.position.x === 2) {
-      positionX = 270;
+      positionX = 290;
     }
 
     if (step.position.y === 1) {
@@ -33,6 +34,7 @@ export function InitialNodes(data) {
     values['type'] = 'dataNodeSteps';
     values['data'] = {
       index,
+      lastNode,
       sid: step.sid,
       label: step.title,
       icon: step.icon,
@@ -41,8 +43,8 @@ export function InitialNodes(data) {
       connectors: data.connectors,
       position: step.position,
       info: step.info,
-      copyStep: false,
-      addStep: false,
+      hoverOverShowIcons: false,
+      updateStep: false,
       refreshDetailsPage: null,
       xchangeFileProcessSid: null,
     };

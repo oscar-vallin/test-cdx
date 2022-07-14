@@ -12,7 +12,7 @@ import {
   XchangeFileProcessForm,
   XchangeDiagram,
 } from 'src/data/services/graphql';
-import { InputText } from 'src/components/inputs/InputText';
+import { UIInputText } from 'src/components/inputs/InputText';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { IconButton, PrimaryButton, Spinner, SpinnerSize, Text } from '@fluentui/react';
 import { UIInputMultiSelect } from 'src/components/inputs/InputDropdown';
@@ -20,6 +20,7 @@ import { PageBody } from 'src/components/layouts/Column';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { FileUploadDialog } from 'src/pages/Admin/XChange/XchangeDetails/FileUpload/FileUploadDialog';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
+import { ROUTE_XCHANGE_DETAILS } from 'src/data/constants/RouteConstants';
 import {
   CardStyled,
   StyledColumTabs,
@@ -139,30 +140,20 @@ const XchangeDetailsPage = () => {
       <>
         <Column lg="3" direction="row">
           <Spacing margin={{ bottom: 'normal', top: 'normal' }}>
-            <InputText
+            <UIInputText
               id="coreFilename"
-              type="text"
               value={coreFilenameValue}
-              disabled={coreFilenameData?.readOnly ?? false}
-              label={coreFilenameData?.label}
-              info={coreFilenameData?.info ?? undefined}
-              minLength={coreFilenameData?.min ?? undefined}
-              maxLength={coreFilenameData?.max ?? undefined}
+              uiField={coreFilenameData}
               onChange={(event, newValue) => setCoreFilenameValue(newValue ?? '')}
             />
           </Spacing>
         </Column>
         <Column lg="3">
           <Spacing margin={{ bottom: 'normal', top: 'normal' }}>
-            <InputText
+            <UIInputText
               id="coreFilenamePattern"
-              type="text"
               value={coreFilenamePatternValue}
-              disabled={coreFilenamePatternData?.readOnly ?? false}
-              label={coreFilenamePatternData?.label}
-              info={coreFilenamePatternData?.info ?? undefined}
-              minLength={coreFilenamePatternData?.min ?? undefined}
-              maxLength={coreFilenamePatternData?.max ?? undefined}
+              uiField={coreFilenamePatternData}
               onChange={(event, newValue) => setCoreFilenamePatternValue(newValue ?? '')}
             />
           </Spacing>
@@ -188,7 +179,7 @@ const XchangeDetailsPage = () => {
 
       if (xchangeConfig.coreFilenamePattern) {
         setCoreFilenamePatternData(xchangeConfig.coreFilenamePattern);
-        setCoreFilenamePatternValue(xchangeDataDetails?.coreFilenamePattern.value ?? '');
+        setCoreFilenamePatternValue(xchangeConfig.coreFilenamePattern.value ?? '');
       }
 
       if (xchangeConfig.processes) {
@@ -235,8 +226,21 @@ const XchangeDetailsPage = () => {
     return null;
   };
 
+  const renderDiagram = () => {
+    if (!detailsLoading && dataDiagram) {
+      return (
+        <Diagram
+          data={dataDiagram}
+          refreshDetailsPage={setRefreshXchangeDetails}
+          xchangeFileProcessSid={xchangeDataDetails?.sid ?? ''}
+        />
+      );
+    }
+    return null;
+  };
+
   return (
-    <LayoutDashboard id="XchangeDetailsPage">
+    <LayoutDashboard id="XchangeDetailsPage" menuOptionSelected={ROUTE_XCHANGE_DETAILS.API_ID}>
       <PageHeader id="__XchangeDetailsPage">
         <Container>
           <Row>
@@ -267,15 +271,7 @@ const XchangeDetailsPage = () => {
               ))}
           </Row>
           <Row>
-            <Column lg="9">
-              {dataDiagram && (
-                <Diagram
-                  data={dataDiagram}
-                  refreshDetailsPage={setRefreshXchangeDetails}
-                  xchangeFileProcessSid={xchangeDataDetails?.sid ?? ''}
-                />
-              )}
-            </Column>
+            <Column lg="9">{renderDiagram()}</Column>
             <Column lg="3">{cardBox()}</Column>
           </Row>
         </Container>
