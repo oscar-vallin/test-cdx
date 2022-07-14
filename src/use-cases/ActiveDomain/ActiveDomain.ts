@@ -2,6 +2,8 @@
 import { useEffect, useState } from 'react';
 import { CdxWebAppDomain, useCurrentOrgNavLazyQuery, useNavigateToNewDomainLazyQuery } from 'src/data/services/graphql';
 import { useSessionStore } from 'src/store/SessionStore';
+import { ROUTES } from 'src/data/constants/RouteConstants';
+import { useHistory } from 'react-router-dom';
 
 type QueryResult = {
   loading: boolean;
@@ -35,6 +37,8 @@ export const useActiveDomainUseCase = () => {
   const [state, setState] = useState({ ...INITIAL_STATE });
   const SessionStore = useSessionStore();
 
+  const history = useHistory();
+
   const [fetchDashNav, { data: dashNav, loading: isFetchingDashNav, error: dashNavError }] =
     useNavigateToNewDomainLazyQuery();
 
@@ -43,6 +47,17 @@ export const useActiveDomainUseCase = () => {
 
   const [fetchCurrentOrgNav, { data: currentOrgNav, loading: isFetchingCurrentOrgNav, error: currentOrgNavError }] =
     useCurrentOrgNavLazyQuery();
+
+  const handleSessionTimeout = (error?: any) => {
+    if (window.location.pathname !== ROUTES.ROUTE_LOGIN.URL && error?.networkError?.statusCode === 403) {
+      SessionStore.setGlobalError('Your session has expired please login again.');
+      history.push(ROUTES.ROUTE_LOGIN.URL);
+    }
+  };
+
+  useEffect(() => {
+    handleSessionTimeout(currentOrgNavError);
+  }, [currentOrgNavError]);
 
   const performNavUpdate = ({ orgSid }) => {
     if (SessionStore.status.isAuthenticated) {
