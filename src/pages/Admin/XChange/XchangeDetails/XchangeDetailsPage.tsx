@@ -20,6 +20,7 @@ import { PageBody } from 'src/components/layouts/Column';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { FileUploadDialog } from 'src/pages/Admin/XChange/XchangeDetails/FileUpload/FileUploadDialog';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
+import { ROUTE_XCHANGE_DETAILS } from 'src/data/constants/RouteConstants';
 import {
   CardStyled,
   StyledColumTabs,
@@ -239,7 +240,7 @@ const XchangeDetailsPage = () => {
   };
 
   return (
-    <LayoutDashboard id="XchangeDetailsPage">
+    <LayoutDashboard id="XchangeDetailsPage" menuOptionSelected={ROUTE_XCHANGE_DETAILS.API_ID}>
       <PageHeader id="__XchangeDetailsPage">
         <Container>
           <Row>
