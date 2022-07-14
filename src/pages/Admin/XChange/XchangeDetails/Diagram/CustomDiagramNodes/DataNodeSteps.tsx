@@ -2,7 +2,13 @@ import { useState, memo, useEffect } from 'react';
 import { FontIcon, Stack, Text, TooltipHost } from '@fluentui/react';
 import { Handle, Position } from 'react-flow-renderer';
 import { BrainCircuit24Regular } from '@fluentui/react-icons';
-import { useDeleteXchangeStepMutation, DiagramConnector, DiagramCoordinates } from 'src/data/services/graphql';
+import {
+  useDeleteXchangeStepMutation,
+  DiagramConnector,
+  DiagramCoordinates,
+  useMoveUpXchangeStepMutation,
+  useMoveDownXchangeStepMutation,
+} from 'src/data/services/graphql';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import { Container, Row } from 'src/components/layouts';
 import { useNotification } from 'src/hooks/useNotification';
@@ -28,7 +34,8 @@ const defaultDialogProps: DialogYesNoProps = {
 };
 
 type DataProps = {
-  index?: number;
+  index: number;
+  lastNode: boolean;
   sid?: string;
   label?: string;
   subTitle?: string;
@@ -37,8 +44,8 @@ type DataProps = {
   connectors: DiagramConnector[];
   position: DiagramCoordinates;
   info?: string;
-  handleTrashAndCopyIcons: boolean;
-  addStep: boolean;
+  hoverOverShowIcons: boolean;
+  updateStep: boolean;
   refreshDetailsPage: (data: boolean) => void;
   xchangeFileProcessSid?: string;
 };
@@ -49,36 +56,48 @@ type DataNodeProps = {
 };
 
 const DataNodeSteps = ({ data, id }: DataNodeProps) => {
-  const { addStep } = data;
-  const { handleTrashAndCopyIcons } = data;
-  const { refreshDetailsPage } = data;
-  const { xchangeFileProcessSid } = data;
-  const { sid } = data;
-  const { label } = data;
+  const {
+    index,
+    lastNode,
+    sid,
+    label,
+    qualifier,
+    connectors,
+    info,
+    hoverOverShowIcons,
+    updateStep,
+    refreshDetailsPage,
+    xchangeFileProcessSid,
+  } = data;
 
   const Toast = useNotification();
   const [openPanel, setOpenPanel] = useState(false);
   const [hiddeIcon, setHiddeIcon] = useState(true);
   const [showIcons, setShowIcons] = useState<boolean>();
+  const [hoverIcon, setHoverIcon] = useState(false);
   const [optionXchangeStep, setOptionXchangeStep] = useState<string>();
   const [showDialog, setShowDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
 
-  const [deleteXchangeStep, { data: dataDeleteStep, loading: loadingDeeleteStep, error: errorDeleteStep }] =
+  const [deleteXchangeStep, { data: dataDeleteStep, loading: loadingDeleteStep, error: errorDeleteStep }] =
     useQueryHandler(useDeleteXchangeStepMutation);
 
+  const [moveUpXchangeStep, { data: dataMoveUp, loading: loadingMoveUp }] =
+    useQueryHandler(useMoveUpXchangeStepMutation);
+
+  const [moveDownxchangeStep, { data: dataMoveDown, loading: loadingMoveDown }] =
+    useQueryHandler(useMoveDownXchangeStepMutation);
+
   let iconName = data.icon;
+  const subTitle = data.subTitle ?? '';
   const sourceBottom = id && id[id.length - 1];
-  const { connectors } = data;
   const findFromKey = connectors.find((connector) => connector.fromKey === id);
   const trans = findFromKey && findFromKey.toKey.includes('trans');
-  const { qualifier } = data;
-  const subTitle: string = data.subTitle ?? '';
   const styles = { lineHeight: subTitle.trim() === '' ? '36px' : '18px' };
   if (iconName === 'Column Arrow Right') {
     iconName = 'PaddingRight';
   }
-  if (subTitle.trim() !== '') {
+  if (subTitle && subTitle.trim() !== '') {
     styles['maxWidth'] = '250px';
     styles['maxHeight'] = '45px';
     styles['width'] = '70%';
@@ -136,38 +155,85 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
     return (
       <>
         {showIcons && hiddeIcon && (
-          <div style={{ display: 'flex', position: 'absolute', bottom: 55, left: 180 }}>
-            <TooltipHost content="Copy Step">
-              <FontIcon
-                iconName="Copy"
-                style={{
-                  fontSize: '15px',
-                  cursor: 'pointer',
-                }}
-                onClick={() => {
-                  setOpenPanel(true);
-                  setHiddeIcon(false);
-                  setOptionXchangeStep('copy');
-                }}
-              />
-            </TooltipHost>
-            <TooltipHost content="Delete">
-              <FontIcon
-                iconName="Trash"
-                style={{
-                  fontSize: '15px',
-                  color: 'black',
-                  cursor: 'pointer',
-                  paddingLeft: '10px',
-                }}
-                onClick={() => {
-                  setOpenPanel(false);
-                  setShowDialog(true);
-                  showUnsavedChangesDialog(label ?? '');
-                }}
-              />
-            </TooltipHost>
-          </div>
+          <>
+            <div style={{ display: 'flex', position: 'absolute', bottom: 55, left: 180 }}>
+              <TooltipHost content="Copy Step">
+                <FontIcon
+                  iconName="Copy"
+                  style={{
+                    fontSize: '15px',
+                    cursor: 'pointer',
+                  }}
+                  onClick={() => {
+                    setOpenPanel(true);
+                    setHiddeIcon(false);
+                    setOptionXchangeStep('copy');
+                  }}
+                />
+              </TooltipHost>
+            </div>
+            <div style={{ display: 'flex', position: 'absolute', bottom: 55, left: 210 }}>
+              <TooltipHost content="Delete">
+                <FontIcon
+                  iconName="Trash"
+                  style={{
+                    fontSize: '15px',
+                    color: 'black',
+                    cursor: 'pointer',
+                  }}
+                  onClick={() => {
+                    setOpenPanel(false);
+                    setShowDialog(true);
+                    showUnsavedChangesDialog(label ?? '');
+                  }}
+                />
+              </TooltipHost>
+            </div>
+            <div style={{ position: 'absolute', left: 255, bottom: 30 }}>
+              <TooltipHost content={index > 0 ? 'Move up' : ''}>
+                <FontIcon
+                  iconName="ChevronUp"
+                  style={index > 0 ? { cursor: 'pointer' } : { color: 'gray', cursor: 'auto' }}
+                  onClick={() => {
+                    setOpenPanel(false);
+                    setHiddeIcon(true);
+                    if (index > 0) {
+                      moveUpXchangeStep({
+                        variables: {
+                          xchangeFileProcessSid,
+                          sid,
+                        },
+                      });
+                    }
+                  }}
+                  onMouseMove={() => setHoverIcon(true)}
+                  onMouseLeave={() => setHoverIcon(false)}
+                />
+              </TooltipHost>
+            </div>
+            <div style={{ position: 'absolute', left: 255, top: 30 }}>
+              <TooltipHost content={lastNode ? '' : 'Move down'}>
+                <FontIcon
+                  iconName="ChevronDown"
+                  style={!lastNode ? { cursor: 'pointer' } : { color: 'gray', cursor: 'auto' }}
+                  onClick={() => {
+                    setOpenPanel(false);
+                    setHiddeIcon(true);
+                    if (!lastNode) {
+                      moveDownxchangeStep({
+                        variables: {
+                          xchangeFileProcessSid,
+                          sid,
+                        },
+                      });
+                    }
+                  }}
+                  onMouseMove={() => setHoverIcon(true)}
+                  onMouseLeave={() => setHoverIcon(false)}
+                />
+              </TooltipHost>
+            </div>
+          </>
         )}
         <Handle type="target" id={id} position={Position['Top']} />
         <Container>
@@ -180,7 +246,7 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
                     color: '#fff',
                     fontSize: '18px',
                     cursor: 'pointer',
-                    width: '43px',
+                    width: '40px',
                     height: '37px',
                     borderRadius: '50%',
                     backgroundColor: '#00a341',
@@ -205,7 +271,7 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
                 />
               )}
               <Text style={styles}>
-                {data.label} <br /> {subTitle.trim() !== '' && <Text variant="small">{subTitle}</Text>}
+                {data.label} <br /> {subTitle && subTitle.trim() !== '' && <Text variant="small">{subTitle}</Text>}
               </Text>
             </Stack>
           </Row>
@@ -216,14 +282,15 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
             {qualifier}
           </StyledQualifier>
         )}
-        {data.info && (
-          <TooltipHost content={data.info}>
+        {info && (
+          <TooltipHost content={info}>
             <FontIcon
               iconName="InfoSolid"
               style={{ position: 'absolute', bottom: '18px', fontSize: '18px', cursor: 'pointer' }}
             />
           </TooltipHost>
         )}
+        {}
         <XchangeStepPanel
           isPanelOpen={openPanel}
           closePanel={setOpenPanel}
@@ -240,33 +307,50 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
   };
 
   useEffect(() => {
-    if (!handleTrashAndCopyIcons) {
-      setTimeout(() => setShowIcons(false), 1000);
-    }
-
-    if (handleTrashAndCopyIcons) {
-      setShowIcons(handleTrashAndCopyIcons);
-    }
-    if (addStep && !showDialog) {
-      setOptionXchangeStep('add');
+    if (updateStep && !showDialog && !hoverIcon) {
+      setOptionXchangeStep('update');
       setOpenPanel(true);
       setHiddeIcon(false);
       return;
     }
 
     setHiddeIcon(true);
-  }, [addStep, handleTrashAndCopyIcons]);
+  }, [updateStep]);
 
   useEffect(() => {
-    if (!loadingDeeleteStep && dataDeleteStep) {
+    if (!hoverOverShowIcons) {
+      setTimeout(() => {
+        if (!hoverIcon) {
+          setShowIcons(false);
+        }
+      }, 1000);
+    }
+
+    if (hoverOverShowIcons) {
+      setShowIcons(hoverOverShowIcons);
+    }
+  }, [hoverOverShowIcons, hoverIcon]);
+
+  useEffect(() => {
+    if (!loadingDeleteStep && dataDeleteStep) {
       refreshDetailsPage(true);
       Toast.success({ text: `Xchange step ${label} has been deleted` });
     }
 
-    if (!loadingDeeleteStep && errorDeleteStep) {
+    if (!loadingDeleteStep && errorDeleteStep) {
       Toast.error({ text: `There was an error deleting ${label} ` });
     }
-  }, [dataDeleteStep, loadingDeeleteStep, errorDeleteStep]);
+  }, [dataDeleteStep, loadingDeleteStep, errorDeleteStep]);
+
+  useEffect(() => {
+    if (!loadingMoveUp && dataMoveUp) {
+      refreshDetailsPage(true);
+    }
+
+    if (!loadingMoveDown && dataMoveDown) {
+      refreshDetailsPage(true);
+    }
+  }, [dataMoveUp, loadingMoveUp, dataMoveDown, loadingMoveDown]);
 
   return (
     <>
