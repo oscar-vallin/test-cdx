@@ -290,11 +290,9 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
             />
           </TooltipHost>
         )}
-        {}
         <XchangeStepPanel
           isPanelOpen={openPanel}
           closePanel={setOpenPanel}
-          hiddeIconCopyStep={setHiddeIcon}
           setOptionXchangeStep={setOptionXchangeStep}
           optionXchangeStep={optionXchangeStep}
           refreshDetailsPage={refreshDetailsPage}
