@@ -191,7 +191,7 @@ describe('Basic Input Component', () => {
     expect(wrapper.find('UIInputTextReadOnly')).toHaveLength(1);
   });
 
-  it ('Hidden UI Field', () => {
+  it('Hidden UI Field', () => {
     const hiddenField: UiStringField = {
       ...nickName,
       visible: false,
@@ -199,6 +199,6 @@ describe('Basic Input Component', () => {
 
     const wrapper = mountWithTheme(<UIInputText id="_Hidden" uiField={hiddenField} />);
 
-    expect(wrapper.html()).toEqual("");
-  })
+    expect(wrapper.html()).toEqual('');
+  });
 });

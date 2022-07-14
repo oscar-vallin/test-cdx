@@ -1,4 +1,4 @@
-import { FontIcon, Stack, Text, TooltipHost } from '@fluentui/react';
+import { FontIcon, Stack, Text } from '@fluentui/react';
 import { Handle, Position } from 'react-flow-renderer';
 import React, { memo } from 'react';
 import { Container, Row } from 'src/components/layouts';
