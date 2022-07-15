@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ActionButton, DefaultButton, Dialog, DialogFooter, DialogType, PrimaryButton, Stack } from '@fluentui/react';
+import { DefaultButton, Dialog, DialogFooter, DialogType, PrimaryButton, Stack } from '@fluentui/react';
 import {
   WorkPacketCommand,
   WorkPacketCommandType,
@@ -130,7 +130,7 @@ export const WorkPacketCommandButton = ({
     workPacketCommands
       .apiCallRenameReprocess({
         variables: {
-          workOrderId: realId,
+          workOrderId: realId ?? '',
           newFileName,
         },
       })
@@ -149,7 +149,7 @@ export const WorkPacketCommandButton = ({
     workPacketCommands
       .apiCallReprocess({
         variables: {
-          workOrderId: realId,
+          workOrderId: realId ?? '',
           changeReason: changeReason ?? null,
         },
       })
@@ -162,7 +162,7 @@ export const WorkPacketCommandButton = ({
     workPacketCommands
       .apiCallRerun({
         variables: {
-          workOrderId: realId,
+          workOrderId: realId ?? '',
           stepName: packetStatus ?? '',
           changeReason: changeReason ?? null,
         },
@@ -293,14 +293,14 @@ export const WorkPacketCommandButton = ({
   if (command) {
     return (
       <Stack.Item align="center">
-        <ActionButton
+        <PrimaryButton
           id={id}
           onClick={showDialog}
           iconProps={{ iconName: icon, style: { fontSize: theme.fontSizes.normal } }}
           style={{ fontSize: theme.fontSizes.normal }}
         >
           {command.label}
-        </ActionButton>
+        </PrimaryButton>
         <Dialog
           maxWidth={700}
           hidden={isConfirmationHidden}
