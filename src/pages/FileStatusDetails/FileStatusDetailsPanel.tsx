@@ -422,7 +422,7 @@ const FileStatusDetailsPanel = ({ useFileStatusDetailsPanel, tableFilters }: Fil
         <CommandBar items={commandBarItems} overflowButtonProps={{ ariaLabel: 'More commands' }} />
       </PanelFooter>
     );
-  }
+  };
 
   const renderBody = () => {
     if (loading) {

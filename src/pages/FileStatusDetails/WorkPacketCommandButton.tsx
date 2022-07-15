@@ -193,8 +193,8 @@ export const WorkPacketCommandButton = ({
 
   useEffect(() => {
     if (!loadingReprocessDialog && dataReprocessDialog && dataReprocessDialog.reprocessDialog) {
-      const { title, message, captureChangeReason } = dataReprocessDialog.reprocessDialog;
-      setTitle(title ?? confirmationTitle);
+      const { title: _title, message, captureChangeReason } = dataReprocessDialog.reprocessDialog;
+      setTitle(_title ?? confirmationTitle);
       setSubText(message ?? confirmationMsg);
       if (captureChangeReason) {
         if (command?.commandType === WorkPacketCommandType.Reprocess) {
@@ -220,9 +220,9 @@ export const WorkPacketCommandButton = ({
     }
   }, [dataReprocessDialog]);
 
-  const getButtonAction = (buttonAction: string) => {
+  const getButtonAction = (_buttonAction: string) => {
     let method = handleDefaultAction;
-    switch (buttonAction) {
+    switch (_buttonAction) {
       case ButtonActionTypes.HandleDeleteCmd:
         method = handleDeleteCmd;
         break;
