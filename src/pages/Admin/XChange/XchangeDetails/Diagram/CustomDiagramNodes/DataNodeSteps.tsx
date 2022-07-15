@@ -1,5 +1,5 @@
 import { useState, memo, useEffect } from 'react';
-import { FontIcon, Stack, Text, TooltipHost } from '@fluentui/react';
+import { DirectionalHint, FontIcon, Stack, Text, TooltipHost } from '@fluentui/react';
 import { Handle, Position } from 'react-flow-renderer';
 import { BrainCircuit24Regular } from '@fluentui/react-icons';
 import {
@@ -72,8 +72,8 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
 
   const Toast = useNotification();
   const [openPanel, setOpenPanel] = useState(false);
-  const [hiddeIcon, setHiddeIcon] = useState(true);
-  const [showIcons, setShowIcons] = useState<boolean>();
+  const [hiddeIcon, setHiddeIcon] = useState(false);
+  const [showIcons, setShowIcons] = useState(false);
   const [hoverIcon, setHoverIcon] = useState(false);
   const [optionXchangeStep, setOptionXchangeStep] = useState<string>();
   const [showDialog, setShowDialog] = useState(false);
@@ -113,6 +113,22 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
   } else if (qualifier === 'PROD-OE') {
     width = '60px';
   }
+
+  const styleMoveUp = {
+    cursor: index > 0 ? 'pointer' : 'auto',
+    color: index > 0 ? '#000000' : '#dddddd',
+    padding: '10px',
+    fontSize: '10px',
+    marginBottom: '-2px',
+  };
+
+  const styleMoveDown = {
+    cursor: !lastNode ? 'pointer' : 'auto',
+    color: !lastNode ? '#000000' : '#dddddd',
+    padding: '10px',
+    fontSize: '10px',
+    marginTop: '-2px',
+  };
 
   const hanldeSourcePosition = () => {
     if (
@@ -189,11 +205,12 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
                 />
               </TooltipHost>
             </div>
-            <div style={{ position: 'absolute', left: 255, bottom: 30 }}>
+            <div style={{ position: 'absolute', left: 251, bottom: 30 }}>
               <TooltipHost content={index > 0 ? 'Move up' : ''}>
                 <FontIcon
+                  aria-disabled={index === 0}
                   iconName="ChevronUp"
-                  style={index > 0 ? { cursor: 'pointer' } : { color: 'gray', cursor: 'auto' }}
+                  style={styleMoveUp}
                   onClick={() => {
                     setOpenPanel(false);
                     setHiddeIcon(true);
@@ -207,15 +224,15 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
                     }
                   }}
                   onMouseMove={() => setHoverIcon(true)}
-                  onMouseLeave={() => setHoverIcon(false)}
                 />
               </TooltipHost>
             </div>
-            <div style={{ position: 'absolute', left: 255, top: 30 }}>
-              <TooltipHost content={lastNode ? '' : 'Move down'}>
+            <div style={{ position: 'absolute', left: 251, top: 30 }}>
+              <TooltipHost content={lastNode ? '' : 'Move down'} directionalHint={DirectionalHint['bottomCenter']}>
                 <FontIcon
+                  aria-disabled={lastNode}
                   iconName="ChevronDown"
-                  style={!lastNode ? { cursor: 'pointer' } : { color: 'gray', cursor: 'auto' }}
+                  style={styleMoveDown}
                   onClick={() => {
                     setOpenPanel(false);
                     setHiddeIcon(true);
@@ -229,7 +246,6 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
                     }
                   }}
                   onMouseMove={() => setHoverIcon(true)}
-                  onMouseLeave={() => setHoverIcon(false)}
                 />
               </TooltipHost>
             </div>
@@ -318,9 +334,7 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
   useEffect(() => {
     if (!hoverOverShowIcons) {
       setTimeout(() => {
-        if (!hoverIcon) {
-          setShowIcons(false);
-        }
+        setShowIcons(false);
       }, 1000);
     }
 
