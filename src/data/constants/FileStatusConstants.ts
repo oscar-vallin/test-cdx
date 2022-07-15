@@ -1,22 +1,4 @@
-export const STATUSES_DEFAULT = { label: '', value: '' };
-
-export const STATUSES = [
-  { label: 'Queued', value: 'QUEUED' },
-  { label: 'Processing', value: 'PROCESSING' },
-  { label: 'Complete', value: 'COMPLETE' },
-  { label: 'Error', value: 'ERROR' },
-  { label: 'Submitted', value: 'SUBMITTED' },
-  { label: 'Warning', value: 'WARNING' },
-  { label: 'Hold', value: 'HOLD' },
-  { label: 'Canceled', value: 'CANCELED' },
-  { label: 'Quality Check Failed', value: 'QUALITY_CHECK_FAILED' },
-  { label: 'No Records', value: 'NO_RECORDS' },
-  { label: 'Tech migration Check Failed', value: 'TECH_MIGRATION_CHECK_FAILED' },
-];
-
-const STEP_RECEIVE = 'ENQUEUE_EXTRACT';
-const STEP_TRANSFORM = 'TRANSFORM_EXTRACT';
-const STEP_TRANSMIT = 'TRANSMIT_FILE';
+import { WorkStatus, WorkStep } from 'src/data/services/graphql';
 
 export const STEP_COLOR_GREEN = '#29c891';
 export const STEP_COLOR_YELLOW = '#e5d64f';
@@ -26,191 +8,326 @@ export const STEP_COLOR_PURPLE = '#A333C8';
 export const STEP_COLOR_CYAN = '#56CCF2';
 export const STEP_COLOR_RED = '#EB5757';
 
-export const STEP_STATUS_DEFAULT = [
+export type StepStatusSegment = {
+  color: string;
+  label: string;
+};
+
+export type StepStatusType = {
+  step: WorkStep;
+  stepStatus: WorkStatus;
+  label: string;
+  archiveOnly: boolean;
+  segments: StepStatusSegment[];
+};
+
+export const STEP_STATUS_DEFAULT: StepStatusType[] = [
   {
-    step: STEP_RECEIVE,
-    stepStatus: STATUSES_DEFAULT,
+    step: WorkStep.EnqueueExtract,
+    stepStatus: WorkStatus.Submitted,
+    label: 'Submitted',
     archiveOnly: false,
-    colors: [STEP_COLOR_BLUE, STEP_COLOR_NONE, STEP_COLOR_NONE],
+    segments: [
+      { color: STEP_COLOR_BLUE, label: 'Receive' },
+      { color: STEP_COLOR_NONE, label: 'Transform' },
+      { color: STEP_COLOR_NONE, label: 'Transmit' },
+    ],
   },
   {
-    step: STEP_TRANSFORM,
-    stepStatus: STATUSES_DEFAULT,
+    step: WorkStep.TransformExtract,
+    stepStatus: WorkStatus.Processing,
+    label: 'Processing',
     archiveOnly: false,
-    colors: [STEP_COLOR_GREEN, STEP_COLOR_CYAN, STEP_COLOR_NONE],
+    segments: [
+      { color: STEP_COLOR_GREEN, label: 'Received' },
+      { color: STEP_COLOR_CYAN, label: 'Transforming' },
+      { color: STEP_COLOR_NONE, label: 'Transmitted' },
+    ],
   },
   {
-    step: STEP_TRANSMIT,
-    stepStatus: STATUSES_DEFAULT,
+    step: WorkStep.TransmitFile,
+    stepStatus: WorkStatus.Processing,
+    label: 'Transmitting',
     archiveOnly: false,
-    colors: [STEP_COLOR_GREEN, STEP_COLOR_GREEN, STEP_COLOR_CYAN],
+    segments: [
+      { color: STEP_COLOR_GREEN, label: 'Received' },
+      { color: STEP_COLOR_GREEN, label: 'Transformed' },
+      { color: STEP_COLOR_CYAN, label: 'Transmitting' },
+    ],
   },
 ];
 
-export const STEP_STATUS = [
+export const STEP_STATUS: StepStatusType[] = [
   {
-    step: STEP_RECEIVE,
-    stepStatus: STATUSES[0],
+    step: WorkStep.EnqueueExtract,
+    stepStatus: WorkStatus.Queued,
+    label: 'Queued',
     archiveOnly: false,
-    colors: [STEP_COLOR_BLUE, STEP_COLOR_NONE, STEP_COLOR_NONE],
+    segments: [
+      { color: STEP_COLOR_BLUE, label: 'Queued' },
+      { color: STEP_COLOR_NONE, label: 'Transform' },
+      { color: STEP_COLOR_NONE, label: 'Transmit' },
+    ],
   },
   {
-    step: STEP_RECEIVE,
-    stepStatus: STATUSES[1],
+    step: WorkStep.EnqueueExtract,
+    stepStatus: WorkStatus.Processing,
+    label: 'Processing',
     archiveOnly: false,
-    colors: [STEP_COLOR_PURPLE, STEP_COLOR_NONE, STEP_COLOR_NONE],
+    segments: [
+      { color: STEP_COLOR_PURPLE, label: 'Receiving' },
+      { color: STEP_COLOR_NONE, label: 'Transform' },
+      { color: STEP_COLOR_NONE, label: 'Transmit' },
+    ],
   },
   {
-    step: STEP_TRANSFORM,
-    stepStatus: STATUSES[1],
+    step: WorkStep.TransformExtract,
+    stepStatus: WorkStatus.Processing,
+    label: 'Processing',
     archiveOnly: false,
-    colors: [STEP_COLOR_GREEN, STEP_COLOR_PURPLE, STEP_COLOR_NONE],
+    segments: [
+      { color: STEP_COLOR_GREEN, label: 'Received' },
+      { color: STEP_COLOR_PURPLE, label: 'Transforming' },
+      { color: STEP_COLOR_NONE, label: 'Transmit' },
+    ],
   },
   {
-    step: STEP_TRANSMIT,
-    stepStatus: STATUSES[1],
+    step: WorkStep.TransmitFile,
+    stepStatus: WorkStatus.Processing,
+    label: 'Transmitting File',
     archiveOnly: false,
-    colors: [STEP_COLOR_GREEN, STEP_COLOR_GREEN, STEP_COLOR_PURPLE],
+    segments: [
+      { color: STEP_COLOR_GREEN, label: 'Received' },
+      { color: STEP_COLOR_GREEN, label: 'Transformed' },
+      { color: STEP_COLOR_PURPLE, label: 'Transmitting' },
+    ],
   },
   {
-    step: STEP_TRANSFORM,
-    stepStatus: STATUSES[2],
+    step: WorkStep.TransformExtract,
+    stepStatus: WorkStatus.Complete,
+    label: 'Transformed',
     archiveOnly: false,
-    colors: [STEP_COLOR_GREEN, STEP_COLOR_GREEN, STEP_COLOR_NONE],
+    segments: [
+      { color: STEP_COLOR_GREEN, label: 'Received' },
+      { color: STEP_COLOR_GREEN, label: 'Transformed' },
+      { color: STEP_COLOR_NONE, label: 'Transmit' },
+    ],
   },
   {
-    step: STEP_RECEIVE,
-    stepStatus: STATUSES[2],
+    step: WorkStep.EnqueueExtract,
+    stepStatus: WorkStatus.Complete,
+    label: 'Received',
     archiveOnly: false,
-    colors: [STEP_COLOR_GREEN, STEP_COLOR_NONE, STEP_COLOR_NONE],
+    segments: [
+      { color: STEP_COLOR_GREEN, label: 'Received' },
+      { color: STEP_COLOR_NONE, label: 'Transform' },
+      { color: STEP_COLOR_NONE, label: 'Transmit' },
+    ],
   },
   {
-    step: STEP_TRANSMIT,
-    stepStatus: STATUSES[2],
+    step: WorkStep.TransmitFile,
+    stepStatus: WorkStatus.Complete,
+    label: 'Complete',
     archiveOnly: false,
-    colors: [STEP_COLOR_GREEN, STEP_COLOR_GREEN, STEP_COLOR_GREEN],
+    segments: [
+      { color: STEP_COLOR_GREEN, label: 'Received' },
+      { color: STEP_COLOR_GREEN, label: 'Transformed' },
+      { color: STEP_COLOR_GREEN, label: 'Transmitted' },
+    ],
   },
   {
-    step: STEP_TRANSMIT,
-    stepStatus: STATUSES[2],
+    step: WorkStep.TransmitFile,
+    stepStatus: WorkStatus.Complete,
+    label: 'Complete - Archived',
     archiveOnly: true,
-    colors: [STEP_COLOR_GREEN, STEP_COLOR_GREEN, STEP_COLOR_BLUE],
+    segments: [
+      { color: STEP_COLOR_GREEN, label: 'Received' },
+      { color: STEP_COLOR_GREEN, label: 'Transformed' },
+      { color: STEP_COLOR_BLUE, label: 'Archived' },
+    ],
   },
   {
-    step: STEP_RECEIVE,
-    stepStatus: STATUSES[3],
+    step: WorkStep.EnqueueExtract,
+    stepStatus: WorkStatus.Error,
+    label: 'Error',
     archiveOnly: false,
-    colors: [STEP_COLOR_RED, STEP_COLOR_NONE, STEP_COLOR_NONE],
+    segments: [
+      { color: STEP_COLOR_RED, label: 'Receive' },
+      { color: STEP_COLOR_NONE, label: 'Transform' },
+      { color: STEP_COLOR_NONE, label: 'Transmit' },
+    ],
   },
   {
-    step: STEP_TRANSFORM,
-    stepStatus: STATUSES[3],
+    step: WorkStep.TransformExtract,
+    stepStatus: WorkStatus.Error,
+    label: 'Error',
     archiveOnly: false,
-    colors: [STEP_COLOR_GREEN, STEP_COLOR_RED, STEP_COLOR_NONE],
+    segments: [
+      { color: STEP_COLOR_GREEN, label: 'Received' },
+      { color: STEP_COLOR_RED, label: 'Transform' },
+      { color: STEP_COLOR_NONE, label: 'Transmit' },
+    ],
   },
   {
-    step: STEP_TRANSMIT,
-    stepStatus: STATUSES[3],
+    step: WorkStep.TransmitFile,
+    stepStatus: WorkStatus.Error,
+    label: 'Error',
     archiveOnly: false,
-    colors: [STEP_COLOR_GREEN, STEP_COLOR_GREEN, STEP_COLOR_RED],
+    segments: [
+      { color: STEP_COLOR_GREEN, label: 'Received' },
+      { color: STEP_COLOR_GREEN, label: 'Transformed' },
+      { color: STEP_COLOR_RED, label: 'Transmit' },
+    ],
   },
   {
-    step: STEP_RECEIVE,
-    stepStatus: STATUSES[4],
+    step: WorkStep.EnqueueExtract,
+    stepStatus: WorkStatus.Submitted,
+    label: 'Submitted',
     archiveOnly: false,
-    colors: [STEP_COLOR_BLUE, STEP_COLOR_NONE, STEP_COLOR_NONE],
+    segments: [
+      { color: STEP_COLOR_BLUE, label: 'Receive' },
+      { color: STEP_COLOR_NONE, label: 'Transform' },
+      { color: STEP_COLOR_NONE, label: 'Transmit' },
+    ],
   },
   {
-    step: STEP_RECEIVE,
-    stepStatus: STATUSES[5],
+    step: WorkStep.EnqueueExtract,
+    stepStatus: WorkStatus.Warning,
+    label: 'Warning',
     archiveOnly: false,
-    colors: [STEP_COLOR_YELLOW, STEP_COLOR_NONE, STEP_COLOR_NONE],
+    segments: [
+      { color: STEP_COLOR_YELLOW, label: 'Receive' },
+      { color: STEP_COLOR_NONE, label: 'Transform' },
+      { color: STEP_COLOR_NONE, label: 'Transmit' },
+    ],
   },
   {
-    step: STEP_TRANSFORM,
-    stepStatus: STATUSES[5],
+    step: WorkStep.TransformExtract,
+    stepStatus: WorkStatus.Warning,
+    label: 'Warning',
     archiveOnly: false,
-    colors: [STEP_COLOR_GREEN, STEP_COLOR_YELLOW, STEP_COLOR_NONE],
+    segments: [
+      { color: STEP_COLOR_GREEN, label: 'Received' },
+      { color: STEP_COLOR_YELLOW, label: 'Transform' },
+      { color: STEP_COLOR_NONE, label: 'Transmit' },
+    ],
   },
   {
-    step: STEP_TRANSMIT,
-    stepStatus: STATUSES[5],
+    step: WorkStep.TransmitFile,
+    stepStatus: WorkStatus.Warning,
+    label: 'Warning',
     archiveOnly: false,
-    colors: [STEP_COLOR_GREEN, STEP_COLOR_GREEN, STEP_COLOR_YELLOW],
+    segments: [
+      { color: STEP_COLOR_GREEN, label: 'Received' },
+      { color: STEP_COLOR_GREEN, label: 'Transformed' },
+      { color: STEP_COLOR_YELLOW, label: 'Transmit' },
+    ],
   },
   {
-    step: STEP_RECEIVE,
-    stepStatus: STATUSES[6],
+    step: WorkStep.EnqueueExtract,
+    stepStatus: WorkStatus.Hold,
+    label: 'Hold',
     archiveOnly: false,
-    colors: [STEP_COLOR_YELLOW, STEP_COLOR_NONE, STEP_COLOR_NONE],
+    segments: [
+      { color: STEP_COLOR_YELLOW, label: 'Received' },
+      { color: STEP_COLOR_NONE, label: 'Transform' },
+      { color: STEP_COLOR_NONE, label: 'Transmit' },
+    ],
   },
   {
-    step: STEP_TRANSFORM,
-    stepStatus: STATUSES[6],
+    step: WorkStep.TransformExtract,
+    stepStatus: WorkStatus.Hold,
+    label: 'Hold',
     archiveOnly: false,
-    colors: [STEP_COLOR_GREEN, STEP_COLOR_YELLOW, STEP_COLOR_NONE],
+    segments: [
+      { color: STEP_COLOR_GREEN, label: 'Received' },
+      { color: STEP_COLOR_YELLOW, label: 'Transform' },
+      { color: STEP_COLOR_NONE, label: 'Transmit' },
+    ],
   },
   {
-    step: STEP_RECEIVE,
-    stepStatus: STATUSES[7],
+    step: WorkStep.EnqueueExtract,
+    stepStatus: WorkStatus.Canceled,
+    label: 'Canceled',
     archiveOnly: false,
-    colors: [STEP_COLOR_RED, STEP_COLOR_NONE, STEP_COLOR_NONE],
+    segments: [
+      { color: STEP_COLOR_RED, label: 'Receive' },
+      { color: STEP_COLOR_NONE, label: 'Transform' },
+      { color: STEP_COLOR_NONE, label: 'Transmit' },
+    ],
   },
   {
-    step: STEP_TRANSFORM,
-    stepStatus: STATUSES[7],
+    step: WorkStep.TransformExtract,
+    stepStatus: WorkStatus.Canceled,
+    label: 'Canceled',
     archiveOnly: false,
-    colors: [STEP_COLOR_GREEN, STEP_COLOR_RED, STEP_COLOR_NONE],
+    segments: [
+      { color: STEP_COLOR_GREEN, label: 'Received' },
+      { color: STEP_COLOR_RED, label: 'Transform' },
+      { color: STEP_COLOR_NONE, label: 'Transmit' },
+    ],
   },
   {
-    step: STEP_TRANSMIT,
-    stepStatus: STATUSES[7],
+    step: WorkStep.TransmitFile,
+    stepStatus: WorkStatus.Canceled,
+    label: 'Canceled',
     archiveOnly: false,
-    colors: [STEP_COLOR_GREEN, STEP_COLOR_GREEN, STEP_COLOR_RED],
+    segments: [
+      { color: STEP_COLOR_GREEN, label: 'Received' },
+      { color: STEP_COLOR_GREEN, label: 'Transformed' },
+      { color: STEP_COLOR_RED, label: 'Transmit' },
+    ],
   },
   {
-    step: STEP_TRANSFORM,
-    stepStatus: STATUSES[8],
+    step: WorkStep.TransformExtract,
+    stepStatus: WorkStatus.QualityCheckFailed,
+    label: 'Quality Check Failed',
     archiveOnly: false,
-    colors: [STEP_COLOR_GREEN, STEP_COLOR_RED, STEP_COLOR_NONE],
+    segments: [
+      { color: STEP_COLOR_GREEN, label: 'Received' },
+      { color: STEP_COLOR_RED, label: 'Transform' },
+      { color: STEP_COLOR_NONE, label: 'Transmit' },
+    ],
   },
 ];
 
-export const getProgressItemByString = (argStringValues) => {
-  const stringVal = argStringValues.split(',');
-  const _step = stringVal[0];
-  const _stepStatus = stringVal[1];
-
-  return (
-    STEP_STATUS.find(({ step, stepStatus }) => step === _step && stepStatus.value === _stepStatus) ??
-    STEP_STATUS_DEFAULT.find((step) => step === _step) ??
-    STEP_STATUS_DEFAULT[0]
-  );
+export const getStepStatusLabel = (status: WorkStatus) => {
+  switch (status) {
+    case WorkStatus.Queued:
+      return 'Queued';
+    case WorkStatus.Processing:
+      return 'Processing';
+    case WorkStatus.Complete:
+      return 'Complete';
+    case WorkStatus.Error:
+      return 'Error';
+    case WorkStatus.Submitted:
+      return 'Submitted';
+    case WorkStatus.Warning:
+      return 'Warning';
+    case WorkStatus.Hold:
+      return 'Hold';
+    case WorkStatus.Canceled:
+      return 'Canceled';
+    case WorkStatus.QualityCheckFailed:
+      return 'Quality Check Failed';
+    case WorkStatus.NoRecords:
+      return 'No Records';
+    case WorkStatus.TechMigrationCheckFailed:
+      return 'Tech Migration Check Failed';
+  }
+  return '';
 };
 
-export const getColorsByString = (argStringValues) => {
-  const xColors = getProgressItemByString(argStringValues);
-
-  return xColors.colors;
-};
-
-export const getStepStatusLabel = (stepStatusId) => {
-  return STEP_STATUS.find((step) => step?.stepStatus?.value === stepStatusId)?.stepStatus.label;
-};
-
-const getStepStatus = (stepId, stepStatusId, isArchiveOnly = false) => {
+export const getStepStatus = (stepId: WorkStep, stepStatusId: WorkStatus, isArchiveOnly: boolean) => {
   return (
     STEP_STATUS.find(
       ({ step, stepStatus, archiveOnly }) =>
         step === stepId &&
-        stepStatus.value === stepStatusId &&
-        archiveOnly === (stepId === STEP_TRANSMIT && stepStatusId === 'COMPLETE' ? isArchiveOnly : false)
+        stepStatus === stepStatusId &&
+        archiveOnly === (stepId === WorkStep.TransmitFile && stepStatusId === 'COMPLETE' ? isArchiveOnly : false)
     ) ??
-    STEP_STATUS_DEFAULT.find((step) => step === stepId) ??
+    STEP_STATUS_DEFAULT.find((step) => step.step === stepId) ??
     STEP_STATUS_DEFAULT[0]
   );
-};
-
-export const getProgressByValues = (step, stepStatus, isArchiveOnly) => {
-  return getStepStatus(step, stepStatus, isArchiveOnly);
 };

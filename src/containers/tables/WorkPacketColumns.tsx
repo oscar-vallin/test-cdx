@@ -339,8 +339,13 @@ export const useWorkPacketColumns = (
       data: WorkPacketColumn.PROGRESS,
       onRender: (item: WorkPacketStatus) => {
         return (
-          <StyledCell id={`__Progress_${item.workOrderId}`}>
-            <FileProgress step={item.step} stepStatus={item.stepStatus} archiveOnly={item.archiveOnly ?? false} />
+          <StyledCell>
+            <FileProgress
+              id={`__Progress_${item.workOrderId}`}
+              step={item.step}
+              stepStatus={item.stepStatus}
+              archiveOnly={item.archiveOnly ?? false}
+            />
           </StyledCell>
         );
       },

@@ -36,11 +36,10 @@ const FormLogin = ({ id }: FormLoginProps): ReactElement => {
 
     if (state.reset) {
       setValues({ ...INITIAL_STATE });
-    }
-
-    if (state.error) {
+      SessionStore.setGlobalError(null);
+    } else if (state.error) {
       SessionStore.setGlobalError(state.error);
-    } else {
+    } else if (state.data) {
       SessionStore.setGlobalError(null);
     }
   }, [state]);

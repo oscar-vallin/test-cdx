@@ -1,32 +1,41 @@
+import { STEP_COLOR_PURPLE } from 'src/data/constants/FileStatusConstants';
+import { mountWithTheme } from 'src/utils/testUtils';
 import { FileProgressBar } from './FileProgressBar';
-import { STEP_COLOR_PURPLE } from '../../../data/constants/FileStatusConstants';
-import { mountWithTheme } from '../../../utils/testUtils';
-
-const defaultProps = {
-  id: 'Box',
-  colors: ['#29c891'],
-};
+import { WorkStatus, WorkStep } from 'src/data/services/graphql';
 
 describe('FileProgressBar Testing Unit...', () => {
-  const tree = mountWithTheme(<FileProgressBar {...defaultProps} />);
-
-  it('Should be defined', () => {
-    expect(FileProgressBar).toBeDefined();
-  });
-
-  it('Should render correctly', () => {
-    expect(tree).toMatchSnapshot();
-  });
-
   it('Should render the provided color if its not processing', () => {
+    const tree = mountWithTheme(
+      <FileProgressBar
+        id="Box"
+        stepStatus={{
+          stepStatus: WorkStatus.Complete,
+          step: WorkStep.TransmitFile,
+          label: 'IgnoreMe',
+          archiveOnly: false,
+          segments: [{ color: '#29c891', label: 'Step' }],
+        }}
+      />
+    );
     const node = tree.find('#Box .ms-Grid-col').last().getDOMNode();
     const style = window.getComputedStyle(node);
 
     expect(style.background).toEqual('rgb(41, 200, 145)');
   });
 
-  it('Should render the provided color if its not processing', () => {
-    const wrapper = mountWithTheme(<FileProgressBar colors={[STEP_COLOR_PURPLE]} id={'Box'} />);
+  it('Should render the barber pole if processing', () => {
+    const wrapper = mountWithTheme(
+      <FileProgressBar
+        id="Box"
+        stepStatus={{
+          stepStatus: WorkStatus.Processing,
+          step: WorkStep.EnqueueExtract,
+          label: 'Processing',
+          archiveOnly: false,
+          segments: [{ color: STEP_COLOR_PURPLE, label: 'Receiving' }],
+        }}
+      />
+    );
     const node = wrapper.find('#Box .ms-Grid-col').last().getDOMNode();
     const style = window.getComputedStyle(node);
 
