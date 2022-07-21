@@ -34,15 +34,17 @@ const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramPro
   const updateStep = (event, node) => {
     setNodes((nds) =>
       nds.map((n) => {
-        if (n.data.sid && n.data.index === node.data.index && !n.id.includes('trans')) {
+        if (n.data.sid && n.data.index === node.data.index && node.type === 'dataNodeSteps') {
           n.data = {
             ...node.data,
+            qualifier: node.data.qualifier,
             hoverOverShowIcons: false,
             updateStep: true,
             refreshDetailsPage,
             xchangeFileProcessSid,
           };
         }
+        // console.log(n)
         return n;
       })
     );
@@ -51,9 +53,18 @@ const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramPro
   const showIcons = (event, node) => {
     setNodes((nds) =>
       nds.map((n) => {
-        if (n.data.sid && n.data.index === node.data.index && !n.id.includes('trans')) {
+        if (node.type === 'dataNodeTransmissions' && n.data.sid && n.data.sid === node.data.sid) {
           n.data = {
             ...node.data,
+            hoverOverShowIcons: true,
+            refreshDetailsPage,
+            xchangeFileProcessSid,
+          };
+        }
+        if (n.data.sid && n.data.index === node.data.index && node.type === 'dataNodeSteps') {
+          n.data = {
+            ...node.data,
+            qualifier: node.data.qualifier,
             hoverOverShowIcons: true,
             updateStep: false,
             refreshDetailsPage,
@@ -68,9 +79,18 @@ const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramPro
   const hideIcons = (event, node) => {
     setNodes((nds) =>
       nds.map((n) => {
-        if (n.data.sid && n.data.index === node.data.index && !n.id.includes('trans')) {
+        if (node.type === 'dataNodeTransmissions' && n.data.sid && n.data.sid === node.data.sid) {
           n.data = {
             ...node.data,
+            hoverOverShowIcons: false,
+            refreshDetailsPage,
+            xchangeFileProcessSid,
+          };
+        }
+        if (n.data.sid && n.data.index === node.data.index && node.type === 'dataNodeSteps') {
+          n.data = {
+            ...node.data,
+            qualifier: node.data.qualifier,
             hoverOverShowIcons: false,
             updateStep: false,
             refreshDetailsPage,
@@ -85,13 +105,22 @@ const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramPro
   const handleIcons = (event, node) => {
     setNodes((nds) =>
       nds.map((n) => {
-        if (n.data.sid && n.data.index === node.data.index && !n.id.includes('trans')) {
+        if (node.type === 'dataNodeTransmissions' && n.data.sid && n.data.sid === node.data.sid) {
           n.data = {
             ...node.data,
             hoverOverShowIcons: true,
-            addStep: false,
             refreshDetailsPage,
-            xchangeFileProcessSid: null,
+            xchangeFileProcessSid,
+          };
+        }
+        if (n.data.sid && n.data.index === node.data.index && node.type === 'dataNodeSteps') {
+          n.data = {
+            ...node.data,
+            qualifier: node.data.qualifier,
+            hoverOverShowIcons: true,
+            updateStep: false,
+            refreshDetailsPage,
+            xchangeFileProcessSid,
           };
         }
         return n;
