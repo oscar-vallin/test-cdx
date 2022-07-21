@@ -21,6 +21,7 @@ export type InputTextProps = {
   maxLength?: number;
   minLength?: number;
   info?: string;
+  inherit?: string;
   autocomplete?: string;
 };
 
@@ -35,6 +36,7 @@ const InputText = ({
   onKeyEnter,
   value,
   info,
+  inherit,
   required,
   renderLabel = true,
   autocomplete,
@@ -50,7 +52,16 @@ const InputText = ({
 
   const onRenderLabel = () => {
     if (renderLabel) {
-      return <FormLabel id={`${id}_lbl`} required={required} info={info} errorMessage={errorMessage} {...props} />;
+      return (
+        <FormLabel
+          id={`${id}_lbl`}
+          required={required}
+          info={info}
+          inherit={inherit}
+          errorMessage={errorMessage}
+          {...props}
+        />
+      );
     }
     return null;
   };
@@ -138,6 +149,7 @@ const UIInputText = ({
       label={uiField?.label}
       errorMessage={uiField?.errMsg ?? undefined}
       info={uiField?.info ?? undefined}
+      inherit={uiField.inheritedFrom ?? undefined}
       required={uiField?.required ?? false}
       renderLabel={renderLabel}
       onChange={onChange}
