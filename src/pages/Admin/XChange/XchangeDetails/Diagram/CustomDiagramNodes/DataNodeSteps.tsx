@@ -75,6 +75,7 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
   const [hiddeIcon, setHiddeIcon] = useState(false);
   const [showIcons, setShowIcons] = useState(false);
   const [hoverIcon, setHoverIcon] = useState(false);
+  const [updateStepPanel, setUpdateStepPanel] = useState(false);
   const [optionXchangeStep, setOptionXchangeStep] = useState<string>();
   const [showDialog, setShowDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
@@ -167,90 +168,98 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
     setShowDialog(true);
   };
 
+  const renderHoverIcons = () => {
+    if (showIcons && hiddeIcon) {
+      return (
+        <>
+          <div style={{ display: 'flex', position: 'absolute', bottom: 55, left: 180 }}>
+            <TooltipHost content="Copy Step">
+              <FontIcon
+                iconName="Copy"
+                style={{
+                  fontSize: '15px',
+                  cursor: 'pointer',
+                }}
+                onClick={() => {
+                  setOpenPanel(true);
+                  setHiddeIcon(false);
+                  setOptionXchangeStep('copy');
+                }}
+              />
+            </TooltipHost>
+          </div>
+          <div style={{ display: 'flex', position: 'absolute', bottom: 55, left: 210 }}>
+            <TooltipHost content="Delete">
+              <FontIcon
+                iconName="Trash"
+                style={{
+                  fontSize: '15px',
+                  color: 'black',
+                  cursor: 'pointer',
+                }}
+                onClick={() => {
+                  setOpenPanel(false);
+                  setShowDialog(true);
+                  showUnsavedChangesDialog(label ?? '');
+                }}
+              />
+            </TooltipHost>
+          </div>
+          <div style={{ position: 'absolute', left: 251, bottom: 30 }}>
+            <TooltipHost content={index > 0 ? 'Move up' : ''}>
+              <FontIcon
+                aria-disabled={index === 0}
+                iconName="ChevronUp"
+                style={styleMoveUp}
+                onClick={() => {
+                  setOpenPanel(false);
+                  setHiddeIcon(true);
+                  if (index > 0) {
+                    moveUpXchangeStep({
+                      variables: {
+                        xchangeFileProcessSid,
+                        sid,
+                      },
+                    });
+                  }
+                }}
+                onMouseMove={() => setHoverIcon(true)}
+              />
+            </TooltipHost>
+          </div>
+          <div style={{ position: 'absolute', left: 251, top: 30 }}>
+            <TooltipHost content={lastNode ? '' : 'Move down'} directionalHint={DirectionalHint['bottomCenter']}>
+              <FontIcon
+                aria-disabled={lastNode}
+                iconName="ChevronDown"
+                style={styleMoveDown}
+                onClick={() => {
+                  setOpenPanel(false);
+                  setHiddeIcon(true);
+                  if (!lastNode) {
+                    moveDownxchangeStep({
+                      variables: {
+                        xchangeFileProcessSid,
+                        sid,
+                      },
+                    });
+                  }
+                }}
+                onMouseMove={() => setHoverIcon(true)}
+              />
+            </TooltipHost>
+          </div>
+        </>
+      );
+    }
+
+    return null;
+  };
+
   const renderNode = () => {
     return (
       <>
-        {showIcons && hiddeIcon && (
-          <>
-            <div style={{ display: 'flex', position: 'absolute', bottom: 55, left: 180 }}>
-              <TooltipHost content="Copy Step">
-                <FontIcon
-                  iconName="Copy"
-                  style={{
-                    fontSize: '15px',
-                    cursor: 'pointer',
-                  }}
-                  onClick={() => {
-                    setOpenPanel(true);
-                    setHiddeIcon(false);
-                    setOptionXchangeStep('copy');
-                  }}
-                />
-              </TooltipHost>
-            </div>
-            <div style={{ display: 'flex', position: 'absolute', bottom: 55, left: 210 }}>
-              <TooltipHost content="Delete">
-                <FontIcon
-                  iconName="Trash"
-                  style={{
-                    fontSize: '15px',
-                    color: 'black',
-                    cursor: 'pointer',
-                  }}
-                  onClick={() => {
-                    setOpenPanel(false);
-                    setShowDialog(true);
-                    showUnsavedChangesDialog(label ?? '');
-                  }}
-                />
-              </TooltipHost>
-            </div>
-            <div style={{ position: 'absolute', left: 251, bottom: 30 }}>
-              <TooltipHost content={index > 0 ? 'Move up' : ''}>
-                <FontIcon
-                  aria-disabled={index === 0}
-                  iconName="ChevronUp"
-                  style={styleMoveUp}
-                  onClick={() => {
-                    setOpenPanel(false);
-                    setHiddeIcon(true);
-                    if (index > 0) {
-                      moveUpXchangeStep({
-                        variables: {
-                          xchangeFileProcessSid,
-                          sid,
-                        },
-                      });
-                    }
-                  }}
-                  onMouseMove={() => setHoverIcon(true)}
-                />
-              </TooltipHost>
-            </div>
-            <div style={{ position: 'absolute', left: 251, top: 30 }}>
-              <TooltipHost content={lastNode ? '' : 'Move down'} directionalHint={DirectionalHint['bottomCenter']}>
-                <FontIcon
-                  aria-disabled={lastNode}
-                  iconName="ChevronDown"
-                  style={styleMoveDown}
-                  onClick={() => {
-                    setOpenPanel(false);
-                    setHiddeIcon(true);
-                    if (!lastNode) {
-                      moveDownxchangeStep({
-                        variables: {
-                          xchangeFileProcessSid,
-                          sid,
-                        },
-                      });
-                    }
-                  }}
-                  onMouseMove={() => setHoverIcon(true)}
-                />
-              </TooltipHost>
-            </div>
-          </>
-        )}
+        {renderHoverIcons()}
         <Handle type="target" id={id} position={Position['Top']} />
         <Container>
           <Row>
@@ -321,27 +330,39 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
   };
 
   useEffect(() => {
-    if (updateStep && !showDialog && !hoverIcon) {
+    if (updateStepPanel && !showDialog && !hoverIcon) {
       setOptionXchangeStep('update');
       setOpenPanel(true);
       setHiddeIcon(false);
+      setUpdateStepPanel(false);
       return;
     }
 
     setHiddeIcon(true);
-  }, [updateStep]);
+  }, [updateStepPanel]);
 
   useEffect(() => {
+    let isMounted = true;
     if (!hoverOverShowIcons) {
       setTimeout(() => {
-        setShowIcons(false);
+        if (isMounted) {
+          setShowIcons(false);
+        }
       }, 1000);
     }
 
     if (hoverOverShowIcons) {
       setShowIcons(hoverOverShowIcons);
     }
-  }, [hoverOverShowIcons, hoverIcon]);
+
+    if (updateStep) {
+      setUpdateStepPanel(true);
+    }
+
+    return () => {
+      isMounted = false;
+    };
+  }, [hoverOverShowIcons, hoverIcon, updateStep]);
 
   useEffect(() => {
     if (!loadingDeleteStep && dataDeleteStep) {
