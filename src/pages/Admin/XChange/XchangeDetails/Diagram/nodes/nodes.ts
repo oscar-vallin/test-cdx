@@ -59,11 +59,16 @@ export function InitialNodes(data) {
     values['id'] = transmission.key;
     values['type'] = 'dataNodeTransmissions';
     values['data'] = {
-      protocol: transmission['protocol'],
-      host: transmission['host'],
-      qualifier: transmission['qualifier'],
       lastTrans,
+      sid: transmission.sid,
+      hoverOverShowIcons: false,
+      refreshDetailsPage: null,
+      xchangeFileProcessSid: null,
+      protocol: transmission.protocol,
+      host: transmission.host,
+      qualifier: transmission.qualifier,
     };
+
     values['position'] = { x: postionTransmissions[index]['x'], y: postionTransmissions[index]['y'] };
 
     return values;

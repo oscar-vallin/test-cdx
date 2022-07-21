@@ -1,13 +1,43 @@
-import { FontIcon, Stack, Text } from '@fluentui/react';
+import React, { memo, useEffect, useState } from 'react';
+import { DirectionalHint, FontIcon, Stack, Text, TooltipHost } from '@fluentui/react';
+import { useDeleteXchangeFileTransmissionMutation } from 'src/data/services/graphql'
+import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import { Handle, Position } from 'react-flow-renderer';
-import React, { memo } from 'react';
 import { Container, Row } from 'src/components/layouts';
+import { useQueryHandler } from 'src/hooks/useQueryHandler';
+import { useNotification } from 'src/hooks/useNotification';
 import Node from './Node';
 import { StyledQualifier, StyledSFTP } from '../../XchangeDetailsPage.styles';
+import { XchangeTransmissionPanel } from '../../XchangeTransmissionPanel/XchangeTransmissionPanel';
+
+const defaultDialogProps: DialogYesNoProps = {
+  open: false,
+  title: '',
+  message: '',
+  messageYes: 'Yes',
+  messageNo: 'No',
+  onYesNo: () => null,
+  onYes: () => {},
+  onNo: () => {},
+  closeOnNo: true,
+  closeOnYes: true,
+  highlightNo: true,
+  highlightYes: false,
+  onClose: () => null,
+};
 
 const DataNodeTransmissions = ({ data, id }) => {
-  const { qualifier } = data;
-  const { lastTrans } = data;
+  const { sid, qualifier, protocol, host, hoverOverShowIcons, xchangeFileProcessSid, refreshDetailsPage } = data;
+
+  const Toast = useNotification();
+  const [showIcons, setShowIcons] = useState(false);
+  const [openPanel, setOpenPanel] = useState(false);
+  const [showDialog, setShowDialog] = useState(false);
+  const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
+
+  const [deleteXchangeFileTransmission, { data: dataDelete, loading: loadingDelete }] = useQueryHandler(
+    useDeleteXchangeFileTransmissionMutation
+  );
 
   let width = '48px';
   let color = 'blue';
@@ -17,11 +47,80 @@ const DataNodeTransmissions = ({ data, id }) => {
   } else if (qualifier === 'PROD-OE') {
     width = '60px';
   }
+  const hideDialog = () => {
+    setShowDialog(false);
+  };
+
+  const showUnsavedChangesDialog = (filenameHost: string) => {
+    const updatedDialog = { ...defaultDialogProps };
+    updatedDialog.message = `Are you sure you want to delete this File Transmission ${filenameHost}?`;
+
+    updatedDialog.onYes = () => {
+      hideDialog();
+      deleteXchangeFileTransmission({
+        variables: {
+          xchangeFileProcessSid,
+          sid,
+        },
+      });
+    };
+    updatedDialog.onNo = () => {
+      hideDialog();
+    };
+
+    setDialogProps(updatedDialog);
+    setShowDialog(true);
+  };
+
+  const renderHoverIcons = () => {
+    if (showIcons) {
+      return (
+        <>
+          <div style={{ display: 'flex', position: 'absolute', bottom: 55, left: 180 }}>
+            <TooltipHost content="Copy Step">
+              <FontIcon
+                iconName="Copy"
+                style={{
+                  fontSize: '15px',
+                  cursor: 'pointer',
+                }}
+                onClick={() => {
+                  setOpenPanel(true);
+                  setShowIcons(false);
+                }}
+              />
+            </TooltipHost>
+          </div>
+          <div style={{ display: 'flex', position: 'absolute', bottom: 55, left: 210 }}>
+            <TooltipHost content="Delete" directionalHint={DirectionalHint['rightCenter']}>
+              <FontIcon
+                iconName="Trash"
+                style={{
+                  fontSize: '15px',
+                  color: 'black',
+                  cursor: 'pointer',
+                }}
+                onClick={() => {
+                  setShowDialog(true);
+                  setOpenPanel(false);
+                  setShowIcons(false);
+                  showUnsavedChangesDialog(host ?? '');
+                }}
+              />
+            </TooltipHost>
+          </div>
+        </>
+      );
+    }
+
+    return null;
+  };
 
   const renderNode = () => {
     if (data.protocol === 'ARCHIVE') {
       return (
         <>
+          {renderHoverIcons()}
           <Handle type="target" id={id} position={Position['Top']} />
           <Container>
             <Row>
@@ -47,63 +146,19 @@ const DataNodeTransmissions = ({ data, id }) => {
         </>
       );
     }
-    if (lastTrans) {
-      return (
-        <>
-          {/* <div style={{ display: 'flex', marginLeft: '-35px', position: 'relative', bottom: 40, left: 200 }}>
-            <TooltipHost content="Copy">
-              <FontIcon
-                iconName="Copy"
-                style={{
-                  fontSize: '18px',
-                  cursor: 'pointer',
-                }}
-              />
-            </TooltipHost>
-            <TooltipHost content="Delete">
-              <FontIcon
-                iconName="Trash"
-                style={{
-                  fontSize: '18px',
-                  color: 'black',
-                  cursor: 'pointer',
-                }}
-              />
-            </TooltipHost>
-          </div> */}
-          <Handle type="target" id={id} position={Position['Top']} />
-          <Container>
-            <Row>
-              <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
-                <StyledSFTP>
-                  <Text style={{ fontWeight: 700, color: '#666666' }}>{data.protocol}</Text>
-                </StyledSFTP>
-                <Text style={{ lineHeight: '38px', width: '200px' }} variant="small">
-                  {data.host}
-                </Text>
-              </Stack>
-            </Row>
-          </Container>
-          {qualifier && (
-            <StyledQualifier color={color} width={width}>
-              {qualifier}
-            </StyledQualifier>
-          )}
-        </>
-      );
-    }
 
     return (
       <>
+        {renderHoverIcons()}
         <Handle type="target" id={id} position={Position['Top']} />
         <Container>
           <Row>
             <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
               <StyledSFTP>
-                <Text style={{ fontWeight: 700, color: '#666666' }}>{data.protocol}</Text>
+                <Text style={{ fontWeight: 700, color: '#666666' }}>{protocol}</Text>
               </StyledSFTP>
               <Text style={{ lineHeight: '38px', width: '200px' }} variant="small">
-                {data.host}
+                {host}
               </Text>
             </Stack>
           </Row>
@@ -113,11 +168,51 @@ const DataNodeTransmissions = ({ data, id }) => {
             {qualifier}
           </StyledQualifier>
         )}
+        <XchangeTransmissionPanel
+          isPanelOpen={openPanel}
+          closePanel={setOpenPanel}
+          refreshDetailsPage={refreshDetailsPage}
+          xchangeFileProcessSid={xchangeFileProcessSid}
+          xchangeStepSid={sid}
+          orifinalFileTransmission={host}
+          qualifier={qualifier}
+        />
       </>
     );
   };
 
-  return <Node content={renderNode()} />;
+  useEffect(() => {
+    let isMounted = true;
+    if (!hoverOverShowIcons) {
+      setTimeout(() => {
+        if (isMounted) {
+          setShowIcons(false);
+        }
+      }, 1000);
+    }
+
+    if (hoverOverShowIcons) {
+      setShowIcons(hoverOverShowIcons);
+    }
+
+    return () => {
+      isMounted = false;
+    };
+  }, [hoverOverShowIcons]);
+
+  useEffect(() => {
+    if (!loadingDelete && dataDelete) {
+      refreshDetailsPage(true);
+      Toast.success({ text: `Xchange step ${host} has been deleted` });
+    }
+  }, [dataDelete, loadingDelete]);
+
+  return (
+    <>
+      <Node content={renderNode()} />
+      <DialogYesNo {...dialogProps} open={showDialog} />
+    </>
+  );
 };
 
 export default memo(DataNodeTransmissions);
