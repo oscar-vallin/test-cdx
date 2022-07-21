@@ -149,3 +149,9 @@ export const Archive = styled.div`
     margin-bottom: 10px;
   }
 `;
+
+export const PanelFooter = styled.div`
+  & .ms-StackItem {
+    margin-right: 10px;
+  }
+`;

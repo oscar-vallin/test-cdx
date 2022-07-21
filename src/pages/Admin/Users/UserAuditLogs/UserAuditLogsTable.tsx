@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { IComboBoxOption } from '@fluentui/react';
 
-import { PaginationInfo, UserAccountAuditEvent } from 'src/data/services/graphql';
+import { PaginationInfo, UserAccountAuditEvent, UserAccountAuditLogsQuery } from 'src/data/services/graphql';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { TableFiltersType } from 'src/hooks/useTableFilters';
@@ -16,8 +16,9 @@ type UserAuditLogsTableParams = {
   id: string;
   cols: UserAuditLogsColumn[];
   lazyQuery: any; // lazy query from the generated Apollo graphql.ts
-  getItems: (data: any) => any[];
+  getItems: (data: UserAccountAuditLogsQuery) => any[];
   tableFilters: TableFiltersType;
+  onItemsListChange: (data: UserAccountAuditLogsQuery) => void;
 };
 
 export const getEventTypeName = (eventType?: UserAccountAuditEvent): string => {
@@ -59,7 +60,14 @@ export const getEventTypeName = (eventType?: UserAccountAuditEvent): string => {
   }
 };
 
-export const UserAuditLogsTable = ({ id, cols, lazyQuery, getItems, tableFilters }: UserAuditLogsTableParams) => {
+export const UserAuditLogsTable = ({
+  id,
+  cols,
+  lazyQuery,
+  getItems,
+  tableFilters,
+  onItemsListChange,
+}: UserAuditLogsTableParams) => {
   const { orgSid } = useOrgSid();
 
   const [pagingInfo, setPagingInfo] = useState<PaginationInfo>({
@@ -115,7 +123,8 @@ export const UserAuditLogsTable = ({ id, cols, lazyQuery, getItems, tableFilters
   }, [orgSid, tableFilters.pagingParams]);
 
   useEffect(() => {
-    if (!loading) {
+    if (!loading && data) {
+      onItemsListChange(data);
       const transFormedItems = getItems(data);
       setItems(transFormedItems);
 

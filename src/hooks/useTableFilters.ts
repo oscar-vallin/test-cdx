@@ -65,9 +65,10 @@ export const tableFiltersToQueryParams = (filters: TableFiltersType): string => 
   const rangeStart = format(toUTC(filters.startDate.value), dateFormat);
   const rangeEnd = format(toUTC(filters.endDate.value), dateFormat);
   const searchText = filters.searchText.delayedValue;
+  const events = filters.eventType?.delayedValue;
   const sort = sortToString(filters.pagingParams.sort ?? null);
 
-  return `&searchText=${searchText}&rangeStart=${rangeStart}&rangeEnd=${rangeEnd}&sort=${sort}`;
+  return `&searchText=${searchText}&rangeStart=${rangeStart}&rangeEnd=${rangeEnd}&events=${events}&sort=${sort}`;
 };
 
 //

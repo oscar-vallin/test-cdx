@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ActionButton, DefaultButton, Dialog, DialogFooter, DialogType, PrimaryButton, Stack } from '@fluentui/react';
+import { DefaultButton, Dialog, DialogFooter, DialogType, PrimaryButton, Stack } from '@fluentui/react';
 import {
   WorkPacketCommand,
   WorkPacketCommandType,
@@ -130,7 +130,7 @@ export const WorkPacketCommandButton = ({
     workPacketCommands
       .apiCallRenameReprocess({
         variables: {
-          workOrderId: realId,
+          workOrderId: realId ?? '',
           newFileName,
         },
       })
@@ -149,7 +149,7 @@ export const WorkPacketCommandButton = ({
     workPacketCommands
       .apiCallReprocess({
         variables: {
-          workOrderId: realId,
+          workOrderId: realId ?? '',
           changeReason: changeReason ?? null,
         },
       })
@@ -162,7 +162,7 @@ export const WorkPacketCommandButton = ({
     workPacketCommands
       .apiCallRerun({
         variables: {
-          workOrderId: realId,
+          workOrderId: realId ?? '',
           stepName: packetStatus ?? '',
           changeReason: changeReason ?? null,
         },
@@ -193,8 +193,8 @@ export const WorkPacketCommandButton = ({
 
   useEffect(() => {
     if (!loadingReprocessDialog && dataReprocessDialog && dataReprocessDialog.reprocessDialog) {
-      const { title, message, captureChangeReason } = dataReprocessDialog.reprocessDialog;
-      setTitle(title ?? confirmationTitle);
+      const { title: _title, message, captureChangeReason } = dataReprocessDialog.reprocessDialog;
+      setTitle(_title ?? confirmationTitle);
       setSubText(message ?? confirmationMsg);
       if (captureChangeReason) {
         if (command?.commandType === WorkPacketCommandType.Reprocess) {
@@ -220,9 +220,9 @@ export const WorkPacketCommandButton = ({
     }
   }, [dataReprocessDialog]);
 
-  const getButtonAction = (buttonAction: string) => {
+  const getButtonAction = (_buttonAction: string) => {
     let method = handleDefaultAction;
-    switch (buttonAction) {
+    switch (_buttonAction) {
       case ButtonActionTypes.HandleDeleteCmd:
         method = handleDeleteCmd;
         break;
@@ -293,14 +293,14 @@ export const WorkPacketCommandButton = ({
   if (command) {
     return (
       <Stack.Item align="center">
-        <ActionButton
+        <PrimaryButton
           id={id}
           onClick={showDialog}
           iconProps={{ iconName: icon, style: { fontSize: theme.fontSizes.normal } }}
           style={{ fontSize: theme.fontSizes.normal }}
         >
           {command.label}
-        </ActionButton>
+        </PrimaryButton>
         <Dialog
           maxWidth={700}
           hidden={isConfirmationHidden}

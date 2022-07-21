@@ -43,7 +43,7 @@ import WorkStepsTab from './WorkStepsTab/WorkStepsTab';
 import EnrollmentStatsTab from './EnrollmentStatsTab/EnrollmentStatsTab';
 import VendorCountStatsTab from './VendorCountStatsTab/VendorCountStatsTab';
 import { WorkPacketCommandButton } from './WorkPacketCommandButton';
-import { FileMetaDetails, FileTitle, ShadowBox } from './FileStatusDetails.styles';
+import { FileMetaDetails, FileTitle, PanelFooter, ShadowBox } from './FileStatusDetails.styles';
 import { UseFileStatusDetailsPanel } from './useFileStatusDetailsPanel';
 import { useFileStatusDetailsPoll } from './useFileStatusDetailsPoll';
 
@@ -301,7 +301,7 @@ const FileStatusDetailsPanel = ({ useFileStatusDetailsPanel, tableFilters }: Fil
   const renderFileMetaData = () => {
     return (
       <ShadowBox id="__FileMeta">
-        <Row center wrap={false}>
+        <Row wrap={false}>
           <Stack horizontal={true} wrap={true} grow tokens={{ childrenGap: 10 }}>
             <Stack.Item align="center" disableShrink>
               <IconButton
@@ -330,11 +330,6 @@ const FileStatusDetailsPanel = ({ useFileStatusDetailsPanel, tableFilters }: Fil
             </Stack.Item>
             <Stack.Item align="center" grow>
               <Text variant="muted">{renderReceivedDate()}</Text>
-            </Stack.Item>
-          </Stack>
-          <Stack horizontal={true} wrap={false} grow>
-            <Stack.Item grow align="end">
-              <CommandBar items={commandBarItems} overflowButtonProps={{ ariaLabel: 'More commands' }} />
             </Stack.Item>
           </Stack>
         </Row>
@@ -421,6 +416,14 @@ const FileStatusDetailsPanel = ({ useFileStatusDetailsPanel, tableFilters }: Fil
     return tabs;
   };
 
+  const renderFooter = () => {
+    return (
+      <PanelFooter>
+        <CommandBar items={commandBarItems} overflowButtonProps={{ ariaLabel: 'More commands' }} />
+      </PanelFooter>
+    );
+  };
+
   const renderBody = () => {
     if (loading) {
       return (
@@ -456,6 +459,8 @@ const FileStatusDetailsPanel = ({ useFileStatusDetailsPanel, tableFilters }: Fil
       isOpen={useFileStatusDetailsPanel?.isPanelOpen}
       onDismiss={handleClosePanel}
       onOuterClick={handleClosePanel}
+      onRenderFooterContent={renderFooter}
+      isFooterAtBottom={true}
     >
       <PanelBody>{renderBody()}</PanelBody>
     </ThemedPanel>
