@@ -5,8 +5,8 @@ import {
   useCopyXchangeFileTransmissionLazyQuery,
   XchangeFileTransmissionForm,
   useCreateXchangeFileTransmissionMutation,
-  NvpStr,
 } from 'src/data/services/graphql';
+import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import { useNotification } from 'src/hooks/useNotification';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { UIInputMultiSelect } from 'src/components/inputs/InputDropdown/UIInputMultiSelect';
@@ -24,6 +24,22 @@ type XchangeTransmissionPanelProps = {
   xchangeFileProcessSid?: string;
   orifinalFileTransmission?: string;
   qualifier?: string;
+};
+
+const defaultDialogProps: DialogYesNoProps = {
+  open: false,
+  title: '',
+  message: '',
+  messageYes: 'Yes',
+  messageNo: 'No',
+  onYesNo: () => null,
+  onYes: () => {},
+  onNo: () => {},
+  closeOnNo: true,
+  closeOnYes: true,
+  highlightNo: true,
+  highlightYes: false,
+  onClose: () => null,
 };
 
 type OverrideProps = {
@@ -74,7 +90,10 @@ const XchangeTransmissionPanel = ({
   const [stepWise, setStepWise] = useState<boolean>();
   const [encryptionKeyName, setEncryptionKeyName] = useState('');
   const [detach, setDetach] = useState(false);
-  const [override, setOverride] = useState<OverrideProps>(DefaultOverrideProps);
+  const [overrides, setOverrides] = useState<OverrideProps>(DefaultOverrideProps);
+  const [showDialog, setShowDialog] = useState(false);
+  const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
+  const [unsavedChanges, setUnsavedChanges] = useState(false);
 
   const [xchangeFileTransmission, { data: dataCopyTransmission, loading: loadingCopyTransmission }] = useQueryHandler(
     useCopyXchangeFileTransmissionLazyQuery
@@ -99,19 +118,132 @@ const XchangeTransmissionPanel = ({
           xchangeFileProcessSid,
           parentSid: xchangeStepSid,
           filenameQualifiers,
-          protocol: { value: protocol, inherited: override['protocol'] },
-          host: { value: host, inherited: override['host'] },
-          port: { value: port, inherited: override['port'] },
-          userName: { value: userName, inherited: override['userName'] },
-          password: { value: password, inherited: override['password'] },
-          authKeyName: { value: null, inherited: override['authKeyName'] },
-          folder: { value: folder, inherited: override['folder'] },
-          filenamePattern: { value: filenamePattern, inherited: override['filenamePattern'] },
-          stepWise: { value: stepWise, inherited: override['stepWise'] },
-          encryptionKeyName: { value: encryptionKeyName, inherited: override['encryptionKeyName'] },
+          protocol: {
+            value: overrides.protocol ? protocol : copyXchangeFileTransmission?.protocol.value?.value,
+            inherited: overrides['protocol'],
+          },
+          host: {
+            value: overrides.host ? host : copyXchangeFileTransmission?.port.value,
+            inherited: overrides['host'],
+          },
+          port: { value: port, inherited: overrides['port'] },
+          userName: {
+            value: overrides.userName ? userName : copyXchangeFileTransmission?.userName.value,
+            inherited: overrides['userName'],
+          },
+          password: {
+            value: overrides.password ? password : copyXchangeFileTransmission?.password.value,
+            inherited: overrides['password'],
+          },
+          authKeyName: { value: null, inherited: overrides['authKeyName'] },
+          folder: {
+            value: overrides.folder ? folder : copyXchangeFileTransmission?.folder.value,
+            inherited: overrides['folder'],
+          },
+          filenamePattern: {
+            value: overrides.filenamePattern ? filenamePattern : copyXchangeFileTransmission?.filenamePattern.value,
+            inherited: overrides['filenamePattern'],
+          },
+          stepWise: {
+            value: overrides.stepWise ? stepWise : copyXchangeFileTransmission?.stepWise.value,
+            inherited: overrides['stepWise'],
+          },
+          encryptionKeyName: {
+            value: overrides.encryptionKeyName
+              ? encryptionKeyName
+              : copyXchangeFileTransmission?.encryptionKeyName.value,
+            inherited: overrides['encryptionKeyName'],
+          },
         },
       },
     });
+  };
+
+  const enableUpdate = (file: string) => {
+    if (overrides[file] || detach) {
+      return (
+        <Text
+          style={{ color: '#0078D4', cursor: 'pointer' }}
+          onClick={() => setOverrides({ ...overrides, [file]: false })}
+        >
+          inherit
+        </Text>
+      );
+    }
+
+    return (
+      <Text
+        style={{ color: '#0078D4', cursor: 'pointer' }}
+        onClick={() => setOverrides({ ...overrides, [file]: true })}
+      >
+        override
+      </Text>
+    );
+  };
+
+  const overrideEnables = (uiFieldData, file: string) => {
+    const uiField = { ...uiFieldData };
+    if (overrides[file] || detach) {
+      uiField.inheritedFrom = null;
+    } else {
+      if (file === 'password') {
+        uiField.value = '********';
+      }
+      if (file === 'port') {
+        uiField.value = '22';
+      }
+      uiField.readOnly = true;
+    }
+    return uiField;
+  };
+
+  const reviewChanges = () => {
+    if (detach) {
+      setUnsavedChanges(true);
+      return;
+    }
+
+    const validateOverides = Object.values(overrides);
+
+    if (validateOverides.includes(true)) {
+      setUnsavedChanges(true);
+    } else {
+      setUnsavedChanges(false);
+    }
+  };
+
+  const hideDialog = () => {
+    setShowDialog(false);
+  };
+
+  const showUnsavedChangesDialog = () => {
+    const updatedDialog = { ...defaultDialogProps };
+    updatedDialog.title = 'You have unsaved changes';
+    updatedDialog.message =
+      'Changes made to this Xchange step will be discarded?  Are you sure you wish to continue and lose your changes?';
+
+    updatedDialog.onYes = () => {
+      hideDialog();
+      closePanel(false);
+      setUnsavedChanges(false);
+      setOverrides(DefaultOverrideProps);
+      setDetach(false);
+    };
+    updatedDialog.onClose = () => {
+      hideDialog();
+    };
+    setDialogProps(updatedDialog);
+    setShowDialog(true);
+  };
+
+  const onPanelClose = () => {
+    if (unsavedChanges) {
+      showUnsavedChangesDialog();
+    } else {
+      closePanel(false);
+      setOverrides(DefaultOverrideProps);
+      setDetach(false);
+    }
   };
 
   const renderBody = () => {
@@ -122,44 +254,6 @@ const XchangeTransmissionPanel = ({
         </Spacing>
       );
     }
-
-    const overrideEnables = (uiFieldData, file: string) => {
-      const uiField = { ...uiFieldData };
-      if (override[file] || detach) {
-        uiField.inheritedFrom = null;
-      } else {
-        if (file === 'password') {
-          uiField.value = '********';
-        }
-        if (file === 'port') {
-          uiField.value = '22';
-        }
-        uiField.readOnly = true;
-      }
-      return uiField;
-    };
-
-    const enableUpdate = (file: string) => {
-      if (override[file] || detach) {
-        return (
-          <Text
-            style={{ color: '#0078D4', cursor: 'pointer' }}
-            onClick={() => setOverride({ ...override, [file]: false })}
-          >
-            inherit
-          </Text>
-        );
-      }
-
-      return (
-        <Text
-          style={{ color: '#0078D4', cursor: 'pointer' }}
-          onClick={() => setOverride({ ...override, [file]: true })}
-        >
-          override
-        </Text>
-      );
-    };
 
     return (
       <PanelBody>
@@ -180,7 +274,7 @@ const XchangeTransmissionPanel = ({
                 style={{ color: '#0078D4', cursor: 'pointer' }}
                 onClick={() => {
                   setDetach(true);
-                  setOverride({
+                  setOverrides({
                     protocol: true,
                     host: true,
                     port: true,
@@ -372,24 +466,26 @@ const XchangeTransmissionPanel = ({
     }
 
     if (!loadingCreateFile && errorCreateFile) {
-      console.log(errorCreateFile)
       Toast.error({ text: `There was an error to add File Transmission` });
     }
   }, [dataCreateFile, loadingCreateFile, errorCreateFile]);
 
   useEffect(() => {
+    reviewChanges();
+  }, [overrides]);
+
+  useEffect(() => {
     if (!loadingCopyTransmission && dataCopyTransmission) {
-      console.log(dataCopyTransmission);
       setCopyXchangeFileTransmission(dataCopyTransmission.copyXchangeFileTransmission);
       setProtocol(copyXchangeFileTransmission?.protocol.value?.value ?? '');
       setPort(dataCopyTransmission.copyXchangeFileTransmission?.port.value ?? '22');
-      setFilenamePattern(dataCopyTransmission.copyXchangeFileTransmission.filenamePattern.value ?? '');
-      setHost(dataCopyTransmission.copyXchangeFileTransmission.protocol.value ?? '');
+      setHost(dataCopyTransmission.copyXchangeFileTransmission.host.value ?? '');
       setUserName(dataCopyTransmission.copyXchangeFileTransmission?.userName.value ?? '');
-      setPassword(dataCopyTransmission.copyXchangeFileTransmission.password.value ?? '');
+      setPassword(dataCopyTransmission.copyXchangeFileTransmission?.password.value ?? '');
       setFolder(dataCopyTransmission.copyXchangeFileTransmission?.folder.value ?? '');
+      setFilenamePattern(dataCopyTransmission.copyXchangeFileTransmission.filenamePattern.value ?? '');
       setStepWise(dataCopyTransmission.copyXchangeFileTransmission?.stepWise.value ?? false);
-      setEncryptionKeyName(dataCopyTransmission.copyXchangeFileTransmission?.encryptionKeyName ?? '');
+      setEncryptionKeyName(dataCopyTransmission.copyXchangeFileTransmission?.encryptionKeyName.value ?? '');
     }
   }, [dataCopyTransmission, loadingCopyTransmission]);
   return (
@@ -399,12 +495,11 @@ const XchangeTransmissionPanel = ({
       type={PanelType.medium}
       isOpen={isPanelOpen}
       onDismiss={() => {
-        closePanel(false);
-        setOverride(DefaultOverrideProps);
-        setDetach(false);
+        onPanelClose();
       }}
     >
       {renderBody()}
+      <DialogYesNo {...dialogProps} open={showDialog} />
     </ThemedPanel>
   );
 };
