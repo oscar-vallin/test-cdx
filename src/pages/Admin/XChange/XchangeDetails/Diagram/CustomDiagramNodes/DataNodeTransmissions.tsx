@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useState } from 'react';
 import { DirectionalHint, FontIcon, Stack, Text, TooltipHost } from '@fluentui/react';
-import { useDeleteXchangeFileTransmissionMutation } from 'src/data/services/graphql'
+import { useDeleteXchangeFileTransmissionMutation } from 'src/data/services/graphql';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import { Handle, Position } from 'react-flow-renderer';
 import { Container, Row } from 'src/components/layouts';
@@ -142,6 +142,16 @@ const DataNodeTransmissions = ({ data, id }) => {
                 <Text style={{ lineHeight: '36px' }}>[archive]</Text>
               </Stack>
             </Row>
+            <XchangeTransmissionPanel
+              isPanelOpen={openPanel}
+              closePanel={setOpenPanel}
+              refreshDetailsPage={refreshDetailsPage}
+              setShowIcons={setShowIcons}
+              xchangeFileProcessSid={xchangeFileProcessSid}
+              xchangeStepSid={sid}
+              orifinalFileTransmission={host}
+              qualifier={qualifier}
+            />
           </Container>
         </>
       );
@@ -172,6 +182,7 @@ const DataNodeTransmissions = ({ data, id }) => {
           isPanelOpen={openPanel}
           closePanel={setOpenPanel}
           refreshDetailsPage={refreshDetailsPage}
+          setShowIcons={setShowIcons}
           xchangeFileProcessSid={xchangeFileProcessSid}
           xchangeStepSid={sid}
           orifinalFileTransmission={host}

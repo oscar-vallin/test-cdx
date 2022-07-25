@@ -15,11 +15,13 @@ import { Column, Container, Row } from 'src/components/layouts';
 import { UIInputSelectOne } from 'src/components/inputs/InputDropdown';
 import { UIInputText } from 'src/components/inputs/InputText';
 import { UIInputCheck } from 'src/components/inputs/InputCheck';
+import { ButtonLink } from 'src/components/buttons';
 
 type XchangeTransmissionPanelProps = {
   isPanelOpen: boolean;
   closePanel: (data: boolean) => void;
   refreshDetailsPage: (data: boolean) => void;
+  setShowIcons: (data: boolean) => void;
   xchangeStepSid?: string;
   xchangeFileProcessSid?: string;
   orifinalFileTransmission?: string;
@@ -72,6 +74,7 @@ const XchangeTransmissionPanel = ({
   isPanelOpen,
   closePanel,
   refreshDetailsPage,
+  setShowIcons,
   xchangeStepSid,
   xchangeFileProcessSid,
   orifinalFileTransmission,
@@ -79,6 +82,7 @@ const XchangeTransmissionPanel = ({
 }: XchangeTransmissionPanelProps) => {
   const Toast = useNotification();
   const [copyXchangeFileTransmission, setCopyXchangeFileTransmission] = useState<XchangeFileTransmissionForm>();
+  const [authKeyName, setAuthKeyName] = useState('');
   const [filenameQualifiers, setFilenameQualifiers] = useState<string[]>();
   const [protocol, setProtocol] = useState('');
   const [host, setHost] = useState('');
@@ -89,6 +93,7 @@ const XchangeTransmissionPanel = ({
   const [folder, setFolder] = useState('');
   const [stepWise, setStepWise] = useState<boolean>();
   const [encryptionKeyName, setEncryptionKeyName] = useState('');
+  const [comments, setComments] = useState('');
   const [detach, setDetach] = useState(false);
   const [overrides, setOverrides] = useState<OverrideProps>(DefaultOverrideProps);
   const [showDialog, setShowDialog] = useState(false);
@@ -123,7 +128,7 @@ const XchangeTransmissionPanel = ({
             inherited: overrides['protocol'],
           },
           host: {
-            value: overrides.host ? host : copyXchangeFileTransmission?.port.value,
+            value: overrides.host ? host : copyXchangeFileTransmission?.host.value,
             inherited: overrides['host'],
           },
           port: { value: port, inherited: overrides['port'] },
@@ -135,7 +140,7 @@ const XchangeTransmissionPanel = ({
             value: overrides.password ? password : copyXchangeFileTransmission?.password.value,
             inherited: overrides['password'],
           },
-          authKeyName: { value: null, inherited: overrides['authKeyName'] },
+          authKeyName: { value: authKeyName, inherited: overrides['authKeyName'] },
           folder: {
             value: overrides.folder ? folder : copyXchangeFileTransmission?.folder.value,
             inherited: overrides['folder'],
@@ -154,6 +159,7 @@ const XchangeTransmissionPanel = ({
               : copyXchangeFileTransmission?.encryptionKeyName.value,
             inherited: overrides['encryptionKeyName'],
           },
+          comments,
         },
       },
     });
@@ -161,27 +167,13 @@ const XchangeTransmissionPanel = ({
 
   const enableUpdate = (file: string) => {
     if (overrides[file] || detach) {
-      return (
-        <Text
-          style={{ color: '#0078D4', cursor: 'pointer' }}
-          onClick={() => setOverrides({ ...overrides, [file]: false })}
-        >
-          inherit
-        </Text>
-      );
+      return <ButtonLink onClick={() => setOverrides({ ...overrides, [file]: false })}>inherit</ButtonLink>;
     }
 
-    return (
-      <Text
-        style={{ color: '#0078D4', cursor: 'pointer' }}
-        onClick={() => setOverrides({ ...overrides, [file]: true })}
-      >
-        override
-      </Text>
-    );
+    return <ButtonLink onClick={() => setOverrides({ ...overrides, [file]: true })}>override</ButtonLink>;
   };
 
-  const overrideEnables = (uiFieldData, file: string) => {
+  const overrideEnables = (uiFieldData, file) => {
     const uiField = { ...uiFieldData };
     if (overrides[file] || detach) {
       uiField.inheritedFrom = null;
@@ -225,7 +217,9 @@ const XchangeTransmissionPanel = ({
     updatedDialog.onYes = () => {
       hideDialog();
       closePanel(false);
+      setShowIcons(false);
       setUnsavedChanges(false);
+      setFilenameQualifiers([]);
       setOverrides(DefaultOverrideProps);
       setDetach(false);
     };
@@ -241,7 +235,9 @@ const XchangeTransmissionPanel = ({
       showUnsavedChangesDialog();
     } else {
       closePanel(false);
+      setShowIcons(false);
       setOverrides(DefaultOverrideProps);
+      setFilenameQualifiers([]);
       setDetach(false);
     }
   };
@@ -270,7 +266,7 @@ const XchangeTransmissionPanel = ({
               </Column>
             )}
             <Column lg="2">
-              <Text
+              <ButtonLink
                 style={{ color: '#0078D4', cursor: 'pointer' }}
                 onClick={() => {
                   setDetach(true);
@@ -289,7 +285,7 @@ const XchangeTransmissionPanel = ({
                 }}
               >
                 detach
-              </Text>
+              </ButtonLink>
             </Column>
           </Row>
           {copyXchangeFileTransmission?.filenameQualifiers.visible && (
@@ -298,7 +294,7 @@ const XchangeTransmissionPanel = ({
                 <Column lg="12">
                   <UIInputMultiSelect
                     id="__filenameQualifier"
-                    value={filenameQualifiers}
+                    value={filenameQualifiers ?? []}
                     uiField={copyXchangeFileTransmission?.filenameQualifiers}
                     options={copyXchangeFileTransmission?.options ?? []}
                     onChange={(newValue) => {
@@ -477,7 +473,16 @@ const XchangeTransmissionPanel = ({
   useEffect(() => {
     if (!loadingCopyTransmission && dataCopyTransmission) {
       setCopyXchangeFileTransmission(dataCopyTransmission.copyXchangeFileTransmission);
-      setProtocol(copyXchangeFileTransmission?.protocol.value?.value ?? '');
+      setAuthKeyName(dataCopyTransmission.copyXchangeFileTransmission?.authKeyName.value ?? '');
+      if (
+        dataCopyTransmission.copyXchangeFileTransmission?.filenameQualifiers.value &&
+        dataCopyTransmission.copyXchangeFileTransmission?.filenameQualifiers.value.length > 0
+      ) {
+        setFilenameQualifiers(
+          [dataCopyTransmission.copyXchangeFileTransmission.filenameQualifiers.value[0].value] ?? []
+        );
+      }
+      setProtocol(dataCopyTransmission.copyXchangeFileTransmission?.protocol.value?.value ?? '');
       setPort(dataCopyTransmission.copyXchangeFileTransmission?.port.value ?? '22');
       setHost(dataCopyTransmission.copyXchangeFileTransmission.host.value ?? '');
       setUserName(dataCopyTransmission.copyXchangeFileTransmission?.userName.value ?? '');
@@ -486,8 +491,10 @@ const XchangeTransmissionPanel = ({
       setFilenamePattern(dataCopyTransmission.copyXchangeFileTransmission.filenamePattern.value ?? '');
       setStepWise(dataCopyTransmission.copyXchangeFileTransmission?.stepWise.value ?? false);
       setEncryptionKeyName(dataCopyTransmission.copyXchangeFileTransmission?.encryptionKeyName.value ?? '');
+      setComments(dataCopyTransmission.copyXchangeFileTransmission?.comments.value ?? '');
     }
   }, [dataCopyTransmission, loadingCopyTransmission]);
+
   return (
     <ThemedPanel
       closeButtonAriaLabel="Close"
