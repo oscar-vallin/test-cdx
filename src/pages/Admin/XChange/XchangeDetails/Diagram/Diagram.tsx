@@ -28,6 +28,7 @@ const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramPro
 
   const [openPanel, setOpenPanel] = useState(false);
   const [optionXchangeStep, setOptionXchangeStep] = useState<string>();
+  const [showIcons, setShowIcons] = useState(false);
 
   const onConnect = (params: Edge<any> | Connection) => setEdges((eds) => addEdge(params, eds));
 
@@ -50,7 +51,7 @@ const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramPro
     );
   };
 
-  const showIcons = (event, node) => {
+  const showIconsEachNode = (event, node) => {
     setNodes((nds) =>
       nds.map((n) => {
         if (node.type === 'dataNodeTransmissions' && n.data.sid && n.data.sid === node.data.sid) {
@@ -131,7 +132,7 @@ const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramPro
   useEffect(() => {
     setNodes(initialNodes);
     setEdges(initialEdges);
-  }, [data]);
+  }, [data, showIcons]);
 
   return (
     <Container>
@@ -166,7 +167,7 @@ const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramPro
               nodeTypes={nodeTypes}
               onNodeMouseLeave={hideIcons}
               onNodeMouseEnter={handleIcons}
-              onNodeMouseMove={showIcons}
+              onNodeMouseMove={showIconsEachNode}
               onNodeClick={updateStep}
               zoomOnScroll={false}
               panOnScroll={false}
@@ -188,6 +189,7 @@ const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramPro
         setOptionXchangeStep={setOptionXchangeStep}
         optionXchangeStep={optionXchangeStep}
         refreshDetailsPage={refreshDetailsPage}
+        setShowIcons={setShowIcons}
         xchangeFileProcessSid={xchangeFileProcessSid}
         xchangeStepTitle="New Xchange Step"
       />

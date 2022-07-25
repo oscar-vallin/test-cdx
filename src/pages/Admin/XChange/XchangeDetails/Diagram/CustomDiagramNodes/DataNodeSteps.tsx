@@ -321,6 +321,7 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
           setOptionXchangeStep={setOptionXchangeStep}
           optionXchangeStep={optionXchangeStep}
           refreshDetailsPage={refreshDetailsPage}
+          setShowIcons={setShowIcons}
           xchangeFileProcessSid={xchangeFileProcessSid}
           xchangeStepSid={sid}
           xchangeStepTitle={label}

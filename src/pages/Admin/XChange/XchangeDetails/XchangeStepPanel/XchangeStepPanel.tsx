@@ -22,6 +22,7 @@ type XchangeStepPanelProps = {
   isPanelOpen: boolean;
   closePanel: (data: boolean) => void;
   refreshDetailsPage: (data: boolean) => void;
+  setShowIcons: (data: boolean) => void;
   setOptionXchangeStep: (data: string) => void;
   optionXchangeStep?: string;
   xchangeFileProcessSid?: string;
@@ -65,6 +66,7 @@ const XchangeStepPanel = ({
   isPanelOpen,
   closePanel,
   refreshDetailsPage,
+  setShowIcons,
   setOptionXchangeStep,
   optionXchangeStep,
   xchangeFileProcessSid,
@@ -126,6 +128,7 @@ const XchangeStepPanel = ({
       hideDialog();
       closePanel(false);
       setUnsavedChanges(false);
+      setShowIcons(false);
       setEditXmlData('');
       setOptionXchangeStep('');
     };
@@ -141,6 +144,7 @@ const XchangeStepPanel = ({
       showUnsavedChangesDialog();
     } else {
       closePanel(false);
+      setShowIcons(false);
       setOptionXchangeStep('');
     }
   };
