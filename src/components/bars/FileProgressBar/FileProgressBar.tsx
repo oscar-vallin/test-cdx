@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
-import { TooltipHost } from '@fluentui/react';
+import { TooltipDelay, TooltipHost } from '@fluentui/react';
 import { STEP_COLOR_PURPLE, StepStatusSegment, StepStatusType } from 'src/data/constants/FileStatusConstants';
-import { Box, Bar, BarAnimated } from './FileProgressBar.styles';
+import { Bar, BarAnimated, Box } from './FileProgressBar.styles';
 
 type FileProgressBarProps = {
   id: string;
@@ -23,7 +23,7 @@ const FileProgressBar = ({ id, stepStatus }: FileProgressBarProps): ReactElement
   return (
     <Box id={id}>
       {stepStatus.segments.map((segment, index) => (
-        <TooltipHost key={`segment_${index}`} content={segment.label}>
+        <TooltipHost key={`segment_${index}`} content={segment.label} delay={TooltipDelay.zero}>
           {renderSegment(segment, index)}
         </TooltipHost>
       ))}
