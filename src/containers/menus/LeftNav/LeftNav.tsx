@@ -2,7 +2,7 @@ import { useHistory } from 'react-router';
 import { ActionButton } from '@fluentui/react';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
-import { getRouteByApiId } from 'src/data/constants/RouteConstants';
+import { getRouteByApiId, ROUTE_XCHANGE_DETAILS } from 'src/data/constants/RouteConstants';
 import { NavItemType, NavPanel } from 'src/containers/menus/LeftNav/NavPanel';
 import { theme } from 'src/styles/themes/theme';
 import { AdminNavPanel, MenuSeparator, MobileTopNav, NavList, NavListItem } from './LeftNav.styles';
@@ -106,6 +106,28 @@ export const LeftNav = ({ menuOptionSelected, isOpen }: LeftNavProps) => {
       if (navItem.label === '-') {
         return <MenuSeparator key={`adminNav_separator_${index}`} />;
       }
+
+      if (menuOptionSelected === ROUTE_XCHANGE_DETAILS.API_ID && navItem.label === 'Xchange Profile') {
+        if (navItem.subNavItems.length < 5) {
+          const positionOne = navItem.subNavItems[0];
+          navItem.subNavItems.shift();
+          navItem.subNavItems.unshift({
+            label: 'Details',
+            destination: 'XCHANGE_DETAILS',
+            orgSid: positionOne.orgSid,
+            subNavItems: undefined,
+          });
+          navItem.subNavItems.unshift(positionOne);
+        }
+      } else if (menuOptionSelected !== ROUTE_XCHANGE_DETAILS.API_ID && navItem.label === 'Xchange Profile') {
+        if (navItem.subNavItems.length > 4) {
+          const positionOne = navItem.subNavItems[0];
+          navItem.subNavItems.shift();
+          navItem.subNavItems.shift();
+          navItem.subNavItems.unshift(positionOne);
+        }
+      }
+
       return (
         <NavPanel
           id={`__Nav_${navItem.label.replace(' ', '_')}`}

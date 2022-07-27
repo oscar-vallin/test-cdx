@@ -62,6 +62,15 @@ export const NavPanel = ({ id, label, elements, expanded, onExpand, onCollapse }
               <div data-name={elem.label}>
                 <ActionButton
                   id={elem.id}
+                  iconProps={{
+                    iconName: elem.label === 'Details' ? 'ArrowTallUpRight' : '',
+                    style: {
+                      marginTop: '5px',
+                      transform: 'rotate(45deg)',
+                      color: theme.colors.black,
+                      fontWeight: theme.fontWeights.bold,
+                    },
+                  }}
                   onClick={elem.onClick}
                   style={{
                     fontSize: theme.fontSizes.normal,
