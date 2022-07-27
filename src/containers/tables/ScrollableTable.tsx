@@ -31,6 +31,11 @@ export const ScrollableTable = ({ id, columns, items, error }: ScrollableTableTy
     },
   });
 
+  const renderItem = (item, index, column) => {
+    const key = column?.fieldName ?? 'orgId';
+    return <span title={item[key]}>{item[key]}</span>;
+  };
+
   if (error) {
     return <span id={`${id}_Error`}>Error: {error?.message || 'An unexpected error occurred'}</span>;
   }
@@ -47,12 +52,7 @@ export const ScrollableTable = ({ id, columns, items, error }: ScrollableTableTy
           layoutMode={DetailsListLayoutMode.justified}
           isHeaderVisible
           constrainMode={ConstrainMode.unconstrained}
-          onRenderItemColumn={(item, index, column) => {
-            const key = column?.fieldName ?? 'orgId'
-            return (
-              <span title={item[key]}>{item[key]}</span>
-            );
-          }}
+          onRenderItemColumn={renderItem}
         />
       </ScrollablePane>
     );
