@@ -92,7 +92,7 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
   let iconName = data.icon;
   const subTitle = data.subTitle ?? '';
   const sourceBottom = id && id[id.length - 1];
-  const findFromKey = connectors.find((connector) => connector.fromKey === id);
+  const findFromKey = connectors && connectors.find((connector) => connector.fromKey === id);
   const trans = findFromKey && findFromKey.toKey.includes('trans');
   const styles = { lineHeight: subTitle.trim() === '' ? '36px' : '18px' };
   if (iconName === 'Column Arrow Right') {
