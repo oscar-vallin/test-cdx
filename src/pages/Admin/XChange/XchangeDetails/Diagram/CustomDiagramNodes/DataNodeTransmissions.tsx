@@ -27,11 +27,22 @@ const defaultDialogProps: DialogYesNoProps = {
 };
 
 const DataNodeTransmissions = ({ data, id }) => {
-  const { sid, qualifier, protocol, host, hoverOverShowIcons, xchangeFileProcessSid, refreshDetailsPage } = data;
+  const {
+    sid,
+    qualifier,
+    protocol,
+    host,
+    hoverOverShowIcons,
+    updateTransmission,
+    xchangeFileProcessSid,
+    refreshDetailsPage,
+  } = data;
 
   const Toast = useNotification();
   const [showIcons, setShowIcons] = useState(false);
   const [openPanel, setOpenPanel] = useState(false);
+  const [updateTransmissionPanel, setUpdateTransmissionPanel] = useState(false);
+  const [optionXchangeTransmission, setOptionXchangeTransmission] = useState<string>();
   const [showDialog, setShowDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
 
@@ -44,7 +55,7 @@ const DataNodeTransmissions = ({ data, id }) => {
 
   if (qualifier === 'TEST') {
     color = 'orange';
-  } else if (qualifier === 'PROD-OE') {
+  } else if (qualifier === 'PROD-OE' || qualifier === 'TEST-OE') {
     width = '60px';
   }
   const hideDialog = () => {
@@ -86,7 +97,7 @@ const DataNodeTransmissions = ({ data, id }) => {
                 }}
                 onClick={() => {
                   setOpenPanel(true);
-                  setShowIcons(false);
+                  setOptionXchangeTransmission('copy');
                 }}
               />
             </TooltipHost>
@@ -145,6 +156,8 @@ const DataNodeTransmissions = ({ data, id }) => {
             <XchangeTransmissionPanel
               isPanelOpen={openPanel}
               closePanel={setOpenPanel}
+              setOptionXchangeTransmission={setOptionXchangeTransmission}
+              optionXchangeTransmission={optionXchangeTransmission}
               refreshDetailsPage={refreshDetailsPage}
               setShowIcons={setShowIcons}
               xchangeFileProcessSid={xchangeFileProcessSid}
@@ -181,6 +194,8 @@ const DataNodeTransmissions = ({ data, id }) => {
         <XchangeTransmissionPanel
           isPanelOpen={openPanel}
           closePanel={setOpenPanel}
+          setOptionXchangeTransmission={setOptionXchangeTransmission}
+          optionXchangeTransmission={optionXchangeTransmission}
           refreshDetailsPage={refreshDetailsPage}
           setShowIcons={setShowIcons}
           xchangeFileProcessSid={xchangeFileProcessSid}
@@ -191,6 +206,14 @@ const DataNodeTransmissions = ({ data, id }) => {
       </>
     );
   };
+
+  useEffect(() => {
+    if (updateTransmissionPanel && !showDialog) {
+      setOptionXchangeTransmission('update');
+      setOpenPanel(true);
+      setUpdateTransmissionPanel(false);
+    }
+  }, [updateTransmissionPanel]);
 
   useEffect(() => {
     let isMounted = true;
@@ -206,10 +229,14 @@ const DataNodeTransmissions = ({ data, id }) => {
       setShowIcons(hoverOverShowIcons);
     }
 
+    if (updateTransmission) {
+      setUpdateTransmissionPanel(true);
+    }
+
     return () => {
       isMounted = false;
     };
-  }, [hoverOverShowIcons]);
+  }, [hoverOverShowIcons, updateTransmission]);
 
   useEffect(() => {
     if (!loadingDelete && dataDelete) {
