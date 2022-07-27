@@ -486,40 +486,6 @@
           ]
         },
         {
-          "id": "Permissions_TEST_Exchanges",
-          "label": "Test Exchanges",
-          "options": [
-            {
-              "label": "Exchange - List",
-              "value": "TEST_EXCHANGE_LIST",
-              "info": null
-            },
-            { "label": "Exchange - Read", "value": "TEST_EXCHANGE_READ", "info": null },
-            {
-              "label": "Exchange - Update",
-              "value": "TEST_EXCHANGE_UPDATE",
-              "info": null
-            },
-            {
-              "label": "Exchange - Process",
-              "value": "TEST_EXCHANGE_EXECUTE",
-              "info": "Grants ability to Resume and Restart any Test Exchanges"
-            },
-            { "label": "Exchange - Cancel", "value": "TEST_EXCHANGE_CANCEL", "info": null },
-            {
-              "label": "Archive - Read",
-              "value": "TEST_EXCHANGE_ARCHIVE_READ",
-              "info": null
-            },
-            {
-              "label": "Archive Steps - Read",
-              "value": "TEST_EXCHANGE_ARCHIVE_STEPS_READ",
-              "info": "Download any internal archives from steps in the transformation process"
-            },
-            { "label": "Exchange - Delete", "value": "TEST_EXCHANGE_DELETE", "info": null }
-          ]
-        },
-        {
           "id": "Permissions_UAT_Exchanges",
           "label": "UAT Exchanges",
           "options": [
@@ -551,6 +517,40 @@
               "info": "Download any internal archives from steps in the transformation process"
             },
             { "label": "Exchange - Delete", "value": "UAT_EXCHANGE_DELETE", "info": null }
+          ]
+        },
+        {
+          "id": "Permissions_TEST_Exchanges",
+          "label": "Test Exchanges",
+          "options": [
+            {
+              "label": "Exchange - List",
+              "value": "TEST_EXCHANGE_LIST",
+              "info": null
+            },
+            { "label": "Exchange - Read", "value": "TEST_EXCHANGE_READ", "info": null },
+            {
+              "label": "Exchange - Update",
+              "value": "TEST_EXCHANGE_UPDATE",
+              "info": null
+            },
+            {
+              "label": "Exchange - Process",
+              "value": "TEST_EXCHANGE_EXECUTE",
+              "info": "Grants ability to Resume and Restart any Test Exchanges"
+            },
+            { "label": "Exchange - Cancel", "value": "TEST_EXCHANGE_CANCEL", "info": null },
+            {
+              "label": "Archive - Read",
+              "value": "TEST_EXCHANGE_ARCHIVE_READ",
+              "info": null
+            },
+            {
+              "label": "Archive Steps - Read",
+              "value": "TEST_EXCHANGE_ARCHIVE_STEPS_READ",
+              "info": "Download any internal archives from steps in the transformation process"
+            },
+            { "label": "Exchange - Delete", "value": "TEST_EXCHANGE_DELETE", "info": null }
           ]
         },
         {
