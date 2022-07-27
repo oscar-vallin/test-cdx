@@ -1781,32 +1781,28 @@ export type QueryWorkPacketStatusPollArgs = {
 
 export type QueryWorkPacketStatusesArgs = {
   orgSid: Scalars['ID'];
-  searchText?: Maybe<Scalars['String']>;
-  dateRange?: Maybe<DateTimeRangeInput>;
+  filter?: Maybe<WorkPacketStatusFilter>;
   pageableInput: PageableInput;
 };
 
 
 export type QueryWorkPacketStatusesPollArgs = {
   orgSid: Scalars['ID'];
-  searchText?: Maybe<Scalars['String']>;
-  dateRange?: Maybe<DateTimeRangeInput>;
+  filter?: Maybe<WorkPacketStatusFilter>;
   lastUpdated: Scalars['DateTime'];
 };
 
 
 export type QueryWpProcessErrorsArgs = {
   orgSid: Scalars['ID'];
-  searchText?: Maybe<Scalars['String']>;
-  dateRange?: Maybe<DateTimeRangeInput>;
+  filter?: Maybe<WpProcessErrorFilter>;
   pageableInput?: Maybe<PageableInput>;
 };
 
 
 export type QueryWpTransmissionsArgs = {
   orgSid: Scalars['ID'];
-  searchText?: Maybe<Scalars['String']>;
-  dateRange?: Maybe<DateTimeRangeInput>;
+  filter?: Maybe<WpTransmissionFilter>;
   pageableInput?: Maybe<PageableInput>;
 };
 
@@ -2935,6 +2931,16 @@ export type WpProcessErrorConnection = {
   nodes?: Maybe<Array<WpProcessError>>;
 };
 
+export type WpProcessErrorFilter = {
+  searchText?: Maybe<Scalars['String']>;
+  dateRange?: Maybe<DateTimeRangeInput>;
+  orgId?: Maybe<Scalars['String']>;
+  vendorId?: Maybe<Scalars['String']>;
+  inboundFilename?: Maybe<Scalars['String']>;
+  stepName?: Maybe<Scalars['String']>;
+  msg?: Maybe<Scalars['String']>;
+};
+
 export type WpTransmission = {
   __typename?: 'WPTransmission';
   id: Scalars['ID'];
@@ -2962,6 +2968,17 @@ export type WpTransmissionConnection = {
   listPageInfo?: Maybe<ListPageInfo>;
   paginationInfo: PaginationInfo;
   nodes?: Maybe<Array<WpTransmission>>;
+};
+
+export type WpTransmissionFilter = {
+  searchText?: Maybe<Scalars['String']>;
+  dateRange?: Maybe<DateTimeRangeInput>;
+  orgId?: Maybe<Scalars['String']>;
+  vendorId?: Maybe<Scalars['String']>;
+  inboundFilename?: Maybe<Scalars['String']>;
+  specId?: Maybe<Scalars['String']>;
+  implementation?: Maybe<Scalars['String']>;
+  vendorFilename?: Maybe<Scalars['String']>;
 };
 
 export type WebAppDomain = {
@@ -3039,7 +3056,6 @@ export type WorkPacketStatus = {
   vendorSid: Scalars['ID'];
   step: WorkStep;
   stepStatus: WorkStatus;
-  /** Make Enumeration @see OrigWorkPacketStatusConverter */
   packetStatus: WorkStatus;
   /** User email address */
   reprocessedBy?: Maybe<Scalars['String']>;
@@ -3105,7 +3121,13 @@ export type WorkPacketStatusDetails = {
 };
 
 export type WorkPacketStatusFilter = {
-  excludedEnvs?: Maybe<Array<Scalars['String']>>;
+  searchText?: Maybe<Scalars['String']>;
+  dateRange?: Maybe<DateTimeRangeInput>;
+  orgId?: Maybe<Scalars['String']>;
+  vendorId?: Maybe<Scalars['String']>;
+  inboundFilename?: Maybe<Scalars['String']>;
+  vendorFilename?: Maybe<Scalars['String']>;
+  packetStatus?: Maybe<Array<WorkStatus>>;
 };
 
 export enum WorkStatus {
@@ -4093,8 +4115,7 @@ export type WorkPacketStatusPollQuery = (
 
 export type WorkPacketStatusesQueryVariables = Exact<{
   orgSid: Scalars['ID'];
-  searchText?: Maybe<Scalars['String']>;
-  dateRange?: Maybe<DateTimeRangeInput>;
+  filter?: Maybe<WorkPacketStatusFilter>;
   pageableInput: PageableInput;
 }>;
 
@@ -4122,8 +4143,7 @@ export type WorkPacketStatusesQuery = (
 
 export type WorkPacketStatusesPollQueryVariables = Exact<{
   orgSid: Scalars['ID'];
-  searchText?: Maybe<Scalars['String']>;
-  dateRange?: Maybe<DateTimeRangeInput>;
+  filter?: Maybe<WorkPacketStatusFilter>;
   lastUpdated: Scalars['DateTime'];
 }>;
 
@@ -4135,8 +4155,7 @@ export type WorkPacketStatusesPollQuery = (
 
 export type WpProcessErrorsQueryVariables = Exact<{
   orgSid: Scalars['ID'];
-  searchText?: Maybe<Scalars['String']>;
-  dateRange?: Maybe<DateTimeRangeInput>;
+  filter?: Maybe<WpProcessErrorFilter>;
   pageableInput?: Maybe<PageableInput>;
 }>;
 
@@ -4164,8 +4183,7 @@ export type WpProcessErrorsQuery = (
 
 export type WpTransmissionsQueryVariables = Exact<{
   orgSid: Scalars['ID'];
-  searchText?: Maybe<Scalars['String']>;
-  dateRange?: Maybe<DateTimeRangeInput>;
+  filter?: Maybe<WpTransmissionFilter>;
   pageableInput?: Maybe<PageableInput>;
 }>;
 
@@ -9648,11 +9666,10 @@ export type WorkPacketStatusPollQueryHookResult = ReturnType<typeof useWorkPacke
 export type WorkPacketStatusPollLazyQueryHookResult = ReturnType<typeof useWorkPacketStatusPollLazyQuery>;
 export type WorkPacketStatusPollQueryResult = Apollo.QueryResult<WorkPacketStatusPollQuery, WorkPacketStatusPollQueryVariables>;
 export const WorkPacketStatusesDocument = gql`
-    query WorkPacketStatuses($orgSid: ID!, $searchText: String, $dateRange: DateTimeRangeInput, $pageableInput: PageableInput!) {
+    query WorkPacketStatuses($orgSid: ID!, $filter: WorkPacketStatusFilter, $pageableInput: PageableInput!) {
   workPacketStatuses(
     orgSid: $orgSid
-    searchText: $searchText
-    dateRange: $dateRange
+    filter: $filter
     pageableInput: $pageableInput
   ) {
     listPageInfo {
@@ -9713,8 +9730,7 @@ ${FragmentWorkPacketCommandFragmentDoc}`;
  * const { data, loading, error } = useWorkPacketStatusesQuery({
  *   variables: {
  *      orgSid: // value for 'orgSid'
- *      searchText: // value for 'searchText'
- *      dateRange: // value for 'dateRange'
+ *      filter: // value for 'filter'
  *      pageableInput: // value for 'pageableInput'
  *   },
  * });
@@ -9729,11 +9745,10 @@ export type WorkPacketStatusesQueryHookResult = ReturnType<typeof useWorkPacketS
 export type WorkPacketStatusesLazyQueryHookResult = ReturnType<typeof useWorkPacketStatusesLazyQuery>;
 export type WorkPacketStatusesQueryResult = Apollo.QueryResult<WorkPacketStatusesQuery, WorkPacketStatusesQueryVariables>;
 export const WorkPacketStatusesPollDocument = gql`
-    query WorkPacketStatusesPoll($orgSid: ID!, $searchText: String, $dateRange: DateTimeRangeInput, $lastUpdated: DateTime!) {
+    query WorkPacketStatusesPoll($orgSid: ID!, $filter: WorkPacketStatusFilter, $lastUpdated: DateTime!) {
   workPacketStatusesPoll(
     orgSid: $orgSid
-    searchText: $searchText
-    dateRange: $dateRange
+    filter: $filter
     lastUpdated: $lastUpdated
   )
 }
@@ -9752,8 +9767,7 @@ export const WorkPacketStatusesPollDocument = gql`
  * const { data, loading, error } = useWorkPacketStatusesPollQuery({
  *   variables: {
  *      orgSid: // value for 'orgSid'
- *      searchText: // value for 'searchText'
- *      dateRange: // value for 'dateRange'
+ *      filter: // value for 'filter'
  *      lastUpdated: // value for 'lastUpdated'
  *   },
  * });
@@ -9768,13 +9782,8 @@ export type WorkPacketStatusesPollQueryHookResult = ReturnType<typeof useWorkPac
 export type WorkPacketStatusesPollLazyQueryHookResult = ReturnType<typeof useWorkPacketStatusesPollLazyQuery>;
 export type WorkPacketStatusesPollQueryResult = Apollo.QueryResult<WorkPacketStatusesPollQuery, WorkPacketStatusesPollQueryVariables>;
 export const WpProcessErrorsDocument = gql`
-    query WpProcessErrors($orgSid: ID!, $searchText: String, $dateRange: DateTimeRangeInput, $pageableInput: PageableInput) {
-  wpProcessErrors(
-    orgSid: $orgSid
-    searchText: $searchText
-    dateRange: $dateRange
-    pageableInput: $pageableInput
-  ) {
+    query WpProcessErrors($orgSid: ID!, $filter: WPProcessErrorFilter, $pageableInput: PageableInput) {
+  wpProcessErrors(orgSid: $orgSid, filter: $filter, pageableInput: $pageableInput) {
     listPageInfo {
       ...fragmentListPageInfo
     }
@@ -9817,8 +9826,7 @@ ${FragmentWorkPacketCommandFragmentDoc}`;
  * const { data, loading, error } = useWpProcessErrorsQuery({
  *   variables: {
  *      orgSid: // value for 'orgSid'
- *      searchText: // value for 'searchText'
- *      dateRange: // value for 'dateRange'
+ *      filter: // value for 'filter'
  *      pageableInput: // value for 'pageableInput'
  *   },
  * });
@@ -9833,13 +9841,8 @@ export type WpProcessErrorsQueryHookResult = ReturnType<typeof useWpProcessError
 export type WpProcessErrorsLazyQueryHookResult = ReturnType<typeof useWpProcessErrorsLazyQuery>;
 export type WpProcessErrorsQueryResult = Apollo.QueryResult<WpProcessErrorsQuery, WpProcessErrorsQueryVariables>;
 export const WpTransmissionsDocument = gql`
-    query WpTransmissions($orgSid: ID!, $searchText: String, $dateRange: DateTimeRangeInput, $pageableInput: PageableInput) {
-  wpTransmissions(
-    orgSid: $orgSid
-    searchText: $searchText
-    dateRange: $dateRange
-    pageableInput: $pageableInput
-  ) {
+    query WpTransmissions($orgSid: ID!, $filter: WPTransmissionFilter, $pageableInput: PageableInput) {
+  wpTransmissions(orgSid: $orgSid, filter: $filter, pageableInput: $pageableInput) {
     listPageInfo {
       ...fragmentListPageInfo
     }
@@ -9887,8 +9890,7 @@ ${FragmentWorkPacketCommandFragmentDoc}`;
  * const { data, loading, error } = useWpTransmissionsQuery({
  *   variables: {
  *      orgSid: // value for 'orgSid'
- *      searchText: // value for 'searchText'
- *      dateRange: // value for 'dateRange'
+ *      filter: // value for 'filter'
  *      pageableInput: // value for 'pageableInput'
  *   },
  * });
