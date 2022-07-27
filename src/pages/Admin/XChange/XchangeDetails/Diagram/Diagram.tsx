@@ -35,6 +35,15 @@ const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramPro
   const updateStep = (event, node) => {
     setNodes((nds) =>
       nds.map((n) => {
+        if (node.type === 'dataNodeTransmissions' && n.data.sid && n.data.sid === node.data.sid) {
+          n.data = {
+            ...node.data,
+            hoverOverShowIcons: false,
+            updateTransmission: true,
+            refreshDetailsPage,
+            xchangeFileProcessSid,
+          };
+        }
         if (n.data.sid && n.data.index === node.data.index && node.type === 'dataNodeSteps') {
           n.data = {
             ...node.data,
@@ -45,7 +54,6 @@ const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramPro
             xchangeFileProcessSid,
           };
         }
-        // console.log(n)
         return n;
       })
     );
@@ -58,6 +66,7 @@ const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramPro
           n.data = {
             ...node.data,
             hoverOverShowIcons: true,
+            updateTransmission: false,
             refreshDetailsPage,
             xchangeFileProcessSid,
           };
@@ -84,6 +93,7 @@ const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramPro
           n.data = {
             ...node.data,
             hoverOverShowIcons: false,
+            updateTransmission: false,
             refreshDetailsPage,
             xchangeFileProcessSid,
           };
@@ -110,6 +120,7 @@ const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramPro
           n.data = {
             ...node.data,
             hoverOverShowIcons: true,
+            updateTransmission: false,
             refreshDetailsPage,
             xchangeFileProcessSid,
           };
