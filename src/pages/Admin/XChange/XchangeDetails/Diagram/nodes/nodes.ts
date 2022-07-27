@@ -16,17 +16,36 @@ export function InitialNodes(data) {
     const lastNode = index === data.steps.length - 1;
     let positionX = 0;
     let positionY = 50;
+
     if (step.position.x === 1 || step.position.x === 2) {
       positionX = 290;
     }
 
-    if (step.position.y === 1) {
+    if (data.steps.length === 3) {
+      if (step.position.y === 1) {
+        positionY = 185;
+      } else if (step.position.y === 2) {
+        positionY = 350;
+      }
+    }
+
+    if (data.steps.length === 4) {
+      if (step.position.y === 1) {
+        positionY = 150;
+      } else if (step.position.y === 2) {
+        positionY = 275;
+      } else if (step.position.y === 3) {
+        positionY = 400;
+      }
+    }
+
+    if (step.position.y === 1 && data.steps.length > 4) {
       positionY = 145;
-    } else if (step.position.y === 2) {
+    } else if (step.position.y === 2 && data.steps.length > 4) {
       positionY = 210;
-    } else if (step.position.y === 3) {
+    } else if (step.position.y === 3 && data.steps.length > 4) {
       positionY = 300;
-    } else if (step.position.y === 4) {
+    } else if (step.position.y === 4 && data.steps.length > 4) {
       positionY = 400;
     }
 
@@ -62,6 +81,8 @@ export function InitialNodes(data) {
       lastTrans,
       sid: transmission.sid,
       hoverOverShowIcons: false,
+      updateTransmission: false,
+      position: transmission.position,
       refreshDetailsPage: null,
       xchangeFileProcessSid: null,
       protocol: transmission.protocol,
