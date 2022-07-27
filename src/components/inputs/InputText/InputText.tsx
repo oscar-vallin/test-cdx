@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import FormLabel, { UIFormLabel } from 'src/components/labels/FormLabel';
-import { UiField, UiStringField, UiIntField, UiLongField } from 'src/data/services/graphql';
+import { UiField, UiStringField, UiIntField, UiLongField, Maybe } from 'src/data/services/graphql';
 import { EmptyValue, FieldValue, StyledTextField } from './InputText.styles';
 
 export type InputTextProps = {
@@ -21,7 +21,8 @@ export type InputTextProps = {
   maxLength?: number;
   minLength?: number;
   info?: string;
-  inherit?: string;
+  inheritedFrom?: string;
+  inheritedBy?: Maybe<string>[];
   autocomplete?: string;
 };
 
@@ -36,7 +37,8 @@ const InputText = ({
   onKeyEnter,
   value,
   info,
-  inherit,
+  inheritedFrom,
+  inheritedBy,
   required,
   renderLabel = true,
   autocomplete,
@@ -57,7 +59,8 @@ const InputText = ({
           id={`${id}_lbl`}
           required={required}
           info={info}
-          inherit={inherit}
+          inheritedFrom={inheritedFrom}
+          inheritedBy={inheritedBy}
           errorMessage={errorMessage}
           {...props}
         />
@@ -149,7 +152,8 @@ const UIInputText = ({
       label={uiField?.label}
       errorMessage={uiField?.errMsg ?? undefined}
       info={uiField?.info ?? undefined}
-      inherit={uiField.inheritedFrom ?? undefined}
+      inheritedFrom={uiField?.inheritedFrom ?? undefined}
+      inheritedBy={uiField?.inheritedBy ? uiField?.inheritedBy : undefined}
       required={uiField?.required ?? false}
       renderLabel={renderLabel}
       onChange={onChange}
