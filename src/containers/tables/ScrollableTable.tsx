@@ -47,6 +47,12 @@ export const ScrollableTable = ({ id, columns, items, error }: ScrollableTableTy
           layoutMode={DetailsListLayoutMode.justified}
           isHeaderVisible
           constrainMode={ConstrainMode.unconstrained}
+          onRenderItemColumn={(item, index, column) => {
+            const key = column?.fieldName ?? 'orgId'
+            return (
+              <span title={item[key]}>{item[key]}</span>
+            );
+          }}
         />
       </ScrollablePane>
     );
