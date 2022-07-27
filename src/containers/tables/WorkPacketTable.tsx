@@ -156,8 +156,13 @@ export const WorkPacketTable = ({
       apiCall({
         variables: {
           orgSid,
-          searchText: tableFilters.searchText.delayedValue,
-          dateRange: { rangeStart: tableFilters.startDate.value, rangeEnd: tableFilters.endDate.value },
+          filter: {
+            searchText: tableFilters.searchText.delayedValue,
+            dateRange: {
+              rangeStart: tableFilters.startDate.value,
+              rangeEnd: tableFilters.endDate.value,
+            },
+          },
           pageableInput: tableFilters.pagingParams,
         },
       });

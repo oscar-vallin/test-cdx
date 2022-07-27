@@ -27,15 +27,15 @@ const permissionGroupingDef = {
       label: 'K2U Exchanges',
       regex: 'K2U_.+',
     },
-    test: {
-      id: 'TEST_Exchanges',
-      label: 'Test Exchanges',
-      regex: 'TEST_.+',
-    },
     uat: {
       id: 'UAT_Exchanges',
       label: 'UAT Exchanges',
       regex: 'UAT_.+',
+    },
+    test: {
+      id: 'TEST_Exchanges',
+      label: 'Test Exchanges',
+      regex: 'TEST_.+',
     },
     prod: {
       id: 'PROD_Exchanges',
