@@ -33,18 +33,8 @@ export const UsersTable = ({ users, onClickUser, tableFilters, tooltips, searchA
   const { initialColumns } = useUsersTableColumns(cols);
   const { initialColumns: allOrgsInitColumns } = useUsersTableColumns(searchAllOrgsCols);
 
-  const { columns } = useSortableColumns(tableFilters, initialColumns(), [
-    'firstNm',
-    'lastNm',
-    'email',
-    'organization',
-  ]);
-  const { columns: allOrgColumns } = useSortableColumns(tableFilters, allOrgsInitColumns(), [
-    'firstNm',
-    'lastNm',
-    'email',
-    'organization',
-  ]);
+  const { columns } = useSortableColumns(tableFilters, initialColumns());
+  const { columns: allOrgColumns } = useSortableColumns(tableFilters, allOrgsInitColumns());
 
   const onRenderItemColumn = (node?: UserItem, itemIndex?: number, column?: IColumn) => {
     let columnVal: string | undefined;

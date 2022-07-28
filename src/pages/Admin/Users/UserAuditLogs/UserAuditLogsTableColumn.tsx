@@ -2,6 +2,7 @@ import React from 'react';
 import { IColumn } from '@fluentui/react';
 import { format } from 'date-fns';
 import { UserAccount, UserAccountAuditEvent, UserAccountAuditLog } from 'src/data/services/graphql';
+import { DataColumn } from 'src/containers/tables';
 import { getEventTypeName } from './UserAuditLogsTable';
 
 export enum UserAuditLogsColumn {
@@ -13,10 +14,7 @@ export enum UserAuditLogsColumn {
   OLD_VALUE,
 }
 
-export const useUserAuditLogsColumns = (
-  selectedColumns: UserAuditLogsColumn[],
-  onSort?: (ev: React.MouseEvent<HTMLElement>, column: IColumn) => void
-) => {
+export const useUserAuditLogsColumns = (selectedColumns: UserAuditLogsColumn[]) => {
   const getUserAccountAuditFormat = (userAccount?: UserAccount | null) => {
     if (userAccount && userAccount.person) {
       return `${userAccount.person.firstNm} ${userAccount.person.lastNm} <${userAccount.email}> `;
@@ -24,7 +22,7 @@ export const useUserAuditLogsColumns = (
     return '';
   };
 
-  const columnOptions: IColumn[] = [
+  const columnOptions: DataColumn[] = [
     {
       key: 'auditDateTime',
       name: 'Date/Time',
@@ -34,7 +32,9 @@ export const useUserAuditLogsColumns = (
       fieldName: 'auditDateTime',
       isPadded: true,
       data: UserAuditLogsColumn.DATETIME,
-      onColumnClick: onSort,
+      dataType: 'date',
+      sortable: true,
+      filterable: false,
       onRender: (item: UserAccountAuditLog) => {
         const timestamp = format(new Date(item.auditDateTime), 'MM/dd/yyyy hh:mm a');
         return <span>{timestamp}</span>;
@@ -49,7 +49,9 @@ export const useUserAuditLogsColumns = (
       fieldName: 'userAccount',
       isPadded: true,
       data: UserAuditLogsColumn.USER,
-      // onColumnClick: onSort,
+      dataType: 'string',
+      sortable: false,
+      filterable: false,
       onRender: (item?: UserAccountAuditLog) => {
         if (item?.event === UserAccountAuditEvent.ArchiveAccess) {
           return <span title={item?.workOrderId ?? undefined}>{item?.workOrderId}</span>;
@@ -67,7 +69,9 @@ export const useUserAuditLogsColumns = (
       fieldName: 'event',
       isPadded: true,
       data: UserAuditLogsColumn.EVENT_TYPE,
-      onColumnClick: onSort,
+      dataType: 'string',
+      sortable: true,
+      filterable: false,
       onRender: (item?: UserAccountAuditLog) => (
         <span title={getEventTypeName(item?.event)}>{getEventTypeName(item?.event)}</span>
       ),
@@ -81,7 +85,9 @@ export const useUserAuditLogsColumns = (
       fieldName: 'changedByUserAccount',
       isPadded: true,
       data: UserAuditLogsColumn.CHANGED_BY,
-      // onColumnClick: onSort,
+      dataType: 'string',
+      sortable: false,
+      filterable: false,
       onRender: (item?: UserAccountAuditLog) => {
         if (item?.changedByUserAccount && item?.changedByUserAccount.sid !== item?.userAccount?.sid) {
           const name = getUserAccountAuditFormat(item.changedByUserAccount);
@@ -99,6 +105,9 @@ export const useUserAuditLogsColumns = (
       fieldName: 'newValue',
       isPadded: true,
       data: UserAuditLogsColumn.NEW_VALUE,
+      dataType: 'string',
+      sortable: false,
+      filterable: false,
       onRender: (item: UserAccountAuditLog) => {
         return <span title={item.newValue ?? undefined}>{item.newValue}</span>;
       },
@@ -111,14 +120,17 @@ export const useUserAuditLogsColumns = (
       fieldName: 'oldValue',
       isPadded: true,
       data: UserAuditLogsColumn.OLD_VALUE,
+      dataType: 'string',
+      sortable: false,
+      filterable: false,
       onRender: (item: UserAccountAuditLog) => {
         return <span title={item.oldValue ?? undefined}>{item.oldValue}</span>;
       },
     },
   ];
 
-  const initialColumns = (): IColumn[] => {
-    const initCols: IColumn[] = [];
+  const initialColumns = (): DataColumn[] => {
+    const initCols: DataColumn[] = [];
     selectedColumns.forEach((sCol: UserAuditLogsColumn) => {
       const matching = columnOptions.find((colOpt: IColumn) => {
         return colOpt.data === sCol;

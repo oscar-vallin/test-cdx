@@ -2934,7 +2934,7 @@ export type WpProcessErrorConnection = {
 export type WpProcessErrorFilter = {
   searchText?: Maybe<Scalars['String']>;
   dateRange?: Maybe<DateTimeRangeInput>;
-  orgId?: Maybe<Scalars['String']>;
+  planSponsorId?: Maybe<Scalars['String']>;
   vendorId?: Maybe<Scalars['String']>;
   inboundFilename?: Maybe<Scalars['String']>;
   stepName?: Maybe<Scalars['String']>;
@@ -2973,12 +2973,12 @@ export type WpTransmissionConnection = {
 export type WpTransmissionFilter = {
   searchText?: Maybe<Scalars['String']>;
   dateRange?: Maybe<DateTimeRangeInput>;
-  orgId?: Maybe<Scalars['String']>;
+  planSponsorId?: Maybe<Scalars['String']>;
   vendorId?: Maybe<Scalars['String']>;
   inboundFilename?: Maybe<Scalars['String']>;
+  outboundFilename?: Maybe<Scalars['String']>;
   specId?: Maybe<Scalars['String']>;
   implementation?: Maybe<Scalars['String']>;
-  vendorFilename?: Maybe<Scalars['String']>;
 };
 
 export type WebAppDomain = {

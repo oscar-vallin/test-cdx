@@ -55,6 +55,8 @@ export const ArchivePage = () => {
       getTotal={getTotal}
       pollingQuery={useWorkPacketStatusesPollQuery}
       renderTotalRecords={renderTotalRecords}
+      emptyTitle="No archives found"
+      emptyDescription="There are no archives found for the given date range with the provided filters."
     />
   );
 };
