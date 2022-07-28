@@ -21,7 +21,6 @@ import { UIInputSelectOne } from 'src/components/inputs/InputDropdown';
 import { InputText, UIInputText } from 'src/components/inputs/InputText';
 import { UIInputCheck } from 'src/components/inputs/InputCheck';
 import { ButtonLink } from 'src/components/buttons';
-import { theme } from 'src/styles/themes/theme';
 
 type XchangeTransmissionPanelProps = {
   isPanelOpen: boolean;
@@ -251,7 +250,16 @@ const XchangeTransmissionPanel = ({
 
   const enableUpdate = (file: string) => {
     if (overrides[file] || detach) {
-      return <ButtonLink onClick={() => setOverrides({ ...overrides, [file]: false })}>inherit</ButtonLink>;
+      return (
+        <ButtonLink
+          onClick={() => {
+            setOverrides({ ...overrides, [file]: false });
+            if (file === 'protocol') setChoseArchive(false);
+          }}
+        >
+          inherit
+        </ButtonLink>
+      );
     }
 
     return <ButtonLink onClick={() => setOverrides({ ...overrides, [file]: true })}>override</ButtonLink>;
@@ -703,7 +711,6 @@ const XchangeTransmissionPanel = ({
     if (!loadingCopyTransmission && dataCopyTransmission) {
       setOptionXchangeTransmission('copy');
       setXchangeFileTransmission(dataCopyTransmission.copyXchangeFileTransmission);
-      setEncryptionKeyName(dataCopyTransmission.copyXchangeFileTransmission?.encryptionKeyName.value ?? '');
       setAuthKeyName(dataCopyTransmission.copyXchangeFileTransmission?.authKeyName.value ?? '');
       if (
         dataCopyTransmission.copyXchangeFileTransmission?.filenameQualifiers.value &&
@@ -724,10 +731,9 @@ const XchangeTransmissionPanel = ({
   }, [dataCopyTransmission, loadingCopyTransmission]);
 
   useEffect(() => {
-    if (!loadingCopyTransmission && dataUpdateTransmission) {
+    if (!loadingUpdateTransmission && dataUpdateTransmission) {
       setOptionXchangeTransmission('update');
       setXchangeFileTransmission(dataUpdateTransmission.xchangeFileTransmissionForm);
-      setEncryptionKeyName(dataUpdateTransmission.xchangeFileTransmissionForm?.encryptionKeyName?.value ?? '');
       if (
         dataUpdateTransmission.xchangeFileTransmissionForm?.filenameQualifiers.value &&
         dataUpdateTransmission.xchangeFileTransmissionForm?.filenameQualifiers.value.length > 0
@@ -747,7 +753,9 @@ const XchangeTransmissionPanel = ({
 
   useEffect(() => {
     if (xchangeFileTransmission) {
-      setProtocol(xchangeFileTransmission?.protocol.value?.value ?? '');
+      const currentProtocol = xchangeFileTransmission.protocol.value?.value ?? '';
+      if (currentProtocol === 'ARCHIVE') setChoseArchive(true);
+      setProtocol(currentProtocol);
       setHost(xchangeFileTransmission.host.value ?? '');
       setUserName(xchangeFileTransmission?.userName.value ?? '');
       setPassword(xchangeFileTransmission?.password.value ?? '');
@@ -755,6 +763,7 @@ const XchangeTransmissionPanel = ({
       setFilenamePattern(xchangeFileTransmission.filenamePattern.value ?? '');
       setStepWise(xchangeFileTransmission?.stepWise.value ?? false);
       setComments(xchangeFileTransmission?.comments.value ?? '');
+      setEncryptionKeyName(xchangeFileTransmission?.encryptionKeyName.value?.value ?? '');
     }
 
     if (xchangeFileTransmission) {
