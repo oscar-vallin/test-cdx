@@ -3,10 +3,14 @@ import {
   DetailsList,
   DetailsListLayoutMode,
   IColumn,
+  IDetailsHeaderProps,
   mergeStyleSets,
   ScrollablePane,
   ScrollbarVisibility,
   SelectionMode,
+  TooltipHost,
+  IDetailsColumnRenderTooltipProps,
+  ITooltipHostStyles,
 } from '@fluentui/react';
 import React from 'react';
 import { ApolloError } from '@apollo/client';
@@ -60,6 +64,40 @@ export const ScrollableTable = (
     return null;
   }
 
+  const tooltipStyles: ITooltipHostStyles = {
+    root: {
+      display: 'block',
+      position: 'absolute',
+      inset: '0',
+    },
+  };
+
+  const renderHeaderTooltip = (props?: IDetailsColumnRenderTooltipProps, defaultRender?: (props?: IDetailsColumnRenderTooltipProps) => JSX.Element | null) => {
+    if (!defaultRender) {
+      return null;
+    }
+    // return defaultRender(props);
+    const filterLabel = props?.column?.filterAriaLabel;
+    return (
+      <TooltipHost content={filterLabel} styles={tooltipStyles}>
+        {props?.children}
+      </TooltipHost>
+    )
+  };
+
+  const renderDetailsHeader = (
+    props?: IDetailsHeaderProps,
+    defaultRender?: (props?: IDetailsHeaderProps) => JSX.Element | null,
+  ) => {
+    if (props) {
+      props.onRenderColumnHeaderTooltip = renderHeaderTooltip
+    }
+    if (defaultRender) {
+      return defaultRender(props);
+    }
+    return null;
+  };
+
   return (
     <ScrollablePane id={id} scrollbarVisibility={ScrollbarVisibility.auto}>
       <DetailsList
@@ -72,6 +110,7 @@ export const ScrollableTable = (
         isHeaderVisible
         constrainMode={ConstrainMode.unconstrained}
         onRenderItemColumn={renderItem}
+        onRenderDetailsHeader={renderDetailsHeader}
       />
       {renderError()}
       {renderEmpty()}
