@@ -12,6 +12,7 @@ export function InitialNodes(data) {
     { x: 820, y: 700 },
   ];
   const initialSteps = data.steps.map((step, index: number) => {
+    console.log(data.steps)
     const values = {};
     const lastNode = index === data.steps.length - 1;
     let positionX = 0;
@@ -39,14 +40,26 @@ export function InitialNodes(data) {
       }
     }
 
-    if (step.position.y === 1 && data.steps.length > 4) {
-      positionY = 145;
-    } else if (step.position.y === 2 && data.steps.length > 4) {
-      positionY = 210;
-    } else if (step.position.y === 3 && data.steps.length > 4) {
-      positionY = 300;
-    } else if (step.position.y === 4 && data.steps.length > 4) {
-      positionY = 400;
+    if (data.steps.length === 5) {
+      if (step.position.y === 1) {
+        positionY = 145;
+      } else if (step.position.y === 2) {
+        positionY = 265;
+      } else if (step.position.y === 3) {
+        positionY = 385;
+      }
+    }
+
+    if (data.steps.length > 5) {
+      if (step.position.y === 1 && data.steps.length > 4) {
+        positionY = 145;
+      } else if (step.position.y === 2 && data.steps.length > 4) {
+        positionY = 210;
+      } else if (step.position.y === 3 && data.steps.length > 4) {
+        positionY = 300;
+      } else if (step.position.y === 4 && data.steps.length > 4) {
+        positionY = 400;
+      }
     }
 
     values['id'] = step.key;
