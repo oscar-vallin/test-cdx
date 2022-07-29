@@ -25,10 +25,10 @@ describe('Scrollable Table component', () => {
 
   it('Empty Table', () => {
     const table = mountWithTheme(<ScrollableTable id="_ItsATable" columns={columns} items={[]} />);
-    expect(table.find('ScrollablePaneBase')).toHaveLength(0);
-    expect(table.find('DetailsListBase')).toHaveLength(0);
+    expect(table.find('ScrollablePaneBase')).toHaveLength(1);
+    expect(table.find('DetailsListBase')).toHaveLength(1);
     expect(table.find('EmptyState')).toHaveLength(1);
-    expect(table.find('#_ItsATable_Error')).toHaveLength(0);
+    expect(table.find('#_ItsATable_Error')).toHaveLength(1);
   });
 
   it('Error Table', () => {
@@ -42,8 +42,8 @@ describe('Scrollable Table component', () => {
       message: 'There be an issue afoot',
     };
     const table = mountWithTheme(<ScrollableTable id="_ItsATable" columns={columns} error={error} />);
-    expect(table.find('ScrollablePaneBase')).toHaveLength(0);
-    expect(table.find('DetailsListBase')).toHaveLength(0);
+    expect(table.find('ScrollablePaneBase')).toHaveLength(1);
+    expect(table.find('DetailsListBase')).toHaveLength(1);
     expect(table.find('EmptyState')).toHaveLength(0);
     expect(table.find('#_ItsATable_Error')).toHaveLength(1);
     expect(table.find('#_ItsATable_Error').text()).toEqual('Error: There be an issue afoot');

@@ -57,7 +57,7 @@ export const ScrollableTable = ({
   };
 
   const renderEmpty = () => {
-    if (!items || items.length === 0) {
+    if (!error && (!items || items.length === 0)) {
       return <EmptyState id={`${id}_EmptyState`} title={emptyTitle} description={emptyDescription} filled={false} />;
     }
     return null;
