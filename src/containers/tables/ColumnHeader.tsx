@@ -60,7 +60,7 @@ export const ColumnHeader = ({ id, col, filterValue, onFilter }: ColumnHeaderTyp
     });
     menuItems.push({
       key: 'sortDesc',
-      className: `sort-asc-${col.fieldName}`,
+      className: `sort-desc-${col.fieldName}`,
       text: descText,
       iconProps: {
         iconName: col.isSorted && col.isSortedDescending ? 'CheckMark' : '',
