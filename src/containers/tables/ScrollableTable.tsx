@@ -25,15 +25,14 @@ type ScrollableTableType = {
   emptyDescription?: string;
 };
 
-export const ScrollableTable = (
-  {
-    id,
-    columns,
-    items,
-    error,
-    emptyTitle = 'No data',
-    emptyDescription,
-  }: ScrollableTableType) => {
+export const ScrollableTable = ({
+  id,
+  columns,
+  items,
+  error,
+  emptyTitle = 'No data',
+  emptyDescription,
+}: ScrollableTableType) => {
   const classNames = mergeStyleSets({
     root: {
       width: '100%',
@@ -55,14 +54,14 @@ export const ScrollableTable = (
       return <span id={`${id}_Error`}>Error: {error?.message || 'An unexpected error occurred'}</span>;
     }
     return null;
-  }
+  };
 
   const renderEmpty = () => {
     if (!items || items.length === 0) {
-      return <EmptyState id={`${id}_EmptyState`} title={emptyTitle} description={emptyDescription} filled={false}/>;
+      return <EmptyState id={`${id}_EmptyState`} title={emptyTitle} description={emptyDescription} filled={false} />;
     }
     return null;
-  }
+  };
 
   const tooltipStyles: ITooltipHostStyles = {
     root: {
@@ -72,7 +71,10 @@ export const ScrollableTable = (
     },
   };
 
-  const renderHeaderTooltip = (props?: IDetailsColumnRenderTooltipProps, defaultRender?: (props?: IDetailsColumnRenderTooltipProps) => JSX.Element | null) => {
+  const renderHeaderTooltip = (
+    props?: IDetailsColumnRenderTooltipProps,
+    defaultRender?: (_props?: IDetailsColumnRenderTooltipProps) => JSX.Element | null
+  ) => {
     if (!defaultRender) {
       return null;
     }
@@ -82,15 +84,15 @@ export const ScrollableTable = (
       <TooltipHost content={filterLabel} styles={tooltipStyles}>
         {props?.children}
       </TooltipHost>
-    )
+    );
   };
 
   const renderDetailsHeader = (
     props?: IDetailsHeaderProps,
-    defaultRender?: (props?: IDetailsHeaderProps) => JSX.Element | null,
+    defaultRender?: (_props?: IDetailsHeaderProps) => JSX.Element | null
   ) => {
     if (props) {
-      props.onRenderColumnHeaderTooltip = renderHeaderTooltip
+      props.onRenderColumnHeaderTooltip = renderHeaderTooltip;
     }
     if (defaultRender) {
       return defaultRender(props);
@@ -116,5 +118,4 @@ export const ScrollableTable = (
       {renderEmpty()}
     </ScrollablePane>
   );
-}
-
+};

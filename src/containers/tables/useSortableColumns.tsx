@@ -11,6 +11,7 @@ type UseSortableColumnsType = {
 export const useSortableColumns = (
   tableFilters: TableFiltersType,
   tableColumns: DataColumn[],
+  onFilter?: (key: string, value?: any) => void
 ): UseSortableColumnsType => {
   const [columns, setColumns] = useState(tableColumns);
 
@@ -51,34 +52,27 @@ export const useSortableColumns = (
     _doSort(column, true);
   };
 
-  const cloneFilters = () => {
-    const clone = {};
-    for (const field in tableFilters.additionalFilters) {
-      clone[field] = tableFilters.additionalFilters[field];
+  const doFilter = (col: DataColumn, fieldName: string, filterText?: string) => {
+    if (onFilter) {
+      onFilter(fieldName, filterText);
+      if (filterText && filterText.trim().length > 0) {
+        col.filterAriaLabel = `Filtered by "${filterText}"`;
+      } else {
+        col.filterAriaLabel = undefined;
+      }
     }
-    return clone;
-  }
+  };
 
-  const renderColumnHeader = (
-    col: DataColumn,
-    props?: IDetailsColumnProps,
-    defaultRender?: (props?: IDetailsColumnProps) => JSX.Element | null,
-  ) => {
+  const renderColumnHeader = (col: DataColumn, _additionalFilters: any, props?: IDetailsColumnProps) => {
     const fieldName = props?.column?.fieldName ?? 'orgId';
     return (
-      <span id={`__Col_${fieldName}`} className="ms-DetailsHeader-cellTitle" role="button">
-        <span className="ms-DetailsHeader-cellName">
-          <ColumnHeader
-            id={`__Col_${fieldName}_button`}
-            col={col}
-            filterValue={tableFilters.additionalFilters[fieldName]}
-            onFilter={(filterText) => {
-              const _columnFilters = cloneFilters();
-              _columnFilters[fieldName] = filterText;
-              tableFilters.setAdditionalFilters(_columnFilters);
-            }}
-          />
-        </span>
+      <span id={`__Col_${fieldName}`} className="ms-DetailsHeader-cellName">
+        <ColumnHeader
+          id={`__Col_${fieldName}_button`}
+          col={col}
+          filterValue={_additionalFilters[fieldName]}
+          onFilter={(filterText) => doFilter(col, fieldName, filterText)}
+        />
       </span>
     );
   };
@@ -89,7 +83,7 @@ export const useSortableColumns = (
     if (col.sortable) {
       col.onSortAsc = () => sortAsc(col);
       col.onSortDesc = () => sortDesc(col);
-      col.onRenderHeader = (props, defaultRender) => renderColumnHeader(col, props, defaultRender);
+      col.onRenderHeader = (props) => renderColumnHeader(col, tableFilters.additionalFilters, props);
     }
   });
 

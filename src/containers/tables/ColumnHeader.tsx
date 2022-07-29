@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import {
   DefaultButton,
   IButtonStyles,
@@ -7,13 +8,10 @@ import {
   IRenderFunction,
   SearchBox,
 } from '@fluentui/react';
-import { FilterWrapper } from './ColumnHeader.styles';
 import { useDelayedInputValue } from 'src/hooks/useInputValue';
-import { useEffect } from 'react';
+import { FilterWrapper } from './ColumnHeader.styles';
 
-/**
- * An extension of the Fluent UI IColumn
- **/
+// An extension of the Fluent UI IColumn
 export interface DataColumn extends IColumn {
   dataType: 'string' | 'number' | 'date' | 'boolean' | 'enum';
   sortable?: boolean;
@@ -56,7 +54,7 @@ export const ColumnHeader = ({ id, col, filterValue, onFilter }: ColumnHeaderTyp
       className: `sort-asc-${col.fieldName}`,
       text: ascText,
       iconProps: {
-        iconName: (col.isSorted && !col.isSortedDescending) ? 'CheckMark' : ''
+        iconName: col.isSorted && !col.isSortedDescending ? 'CheckMark' : '',
       },
       onClick: col.onSortAsc,
     });
@@ -65,7 +63,7 @@ export const ColumnHeader = ({ id, col, filterValue, onFilter }: ColumnHeaderTyp
       className: `sort-asc-${col.fieldName}`,
       text: descText,
       iconProps: {
-        iconName: (col.isSorted && col.isSortedDescending) ? 'CheckMark' : ''
+        iconName: col.isSorted && col.isSortedDescending ? 'CheckMark' : '',
       },
       onClick: col.onSortDesc,
     });
@@ -77,7 +75,7 @@ export const ColumnHeader = ({ id, col, filterValue, onFilter }: ColumnHeaderTyp
       onFilter(text);
       col.isFiltered = text !== undefined && text?.trim().length > 0;
     }
-  }, [filterText.delayedValue])
+  }, [filterText.delayedValue]);
 
   const renderTextFilter = () => {
     if (!col.filterable || col.dataType !== 'string') {
@@ -143,6 +141,8 @@ export const ColumnHeader = ({ id, col, filterValue, onFilter }: ColumnHeaderTyp
           styles: calloutStyles,
         },
       }}
+      title={col.name}
+      ariaLabel={col.name}
     />
   );
 };

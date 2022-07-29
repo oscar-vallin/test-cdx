@@ -80,7 +80,7 @@ export const WorkPacketTable = ({
 
   const { initialColumns } = useWorkPacketColumns(cols, openDetails);
 
-  const { columns } = useSortableColumns(tableFilters, initialColumns());
+  const { columns } = useSortableColumns(tableFilters, initialColumns(), tableFilters.setFilter);
   const [items, setItems] = useState<any[]>([]);
 
   const [apiCall, { data, loading, error }] = useQueryHandler(lazyQuery);

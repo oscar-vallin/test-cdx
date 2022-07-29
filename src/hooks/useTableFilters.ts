@@ -18,7 +18,7 @@ export type TableFiltersType = {
   userSid?: DelayedInput;
   changedByUserSid?: DelayedInput;
   additionalFilters: any;
-  setAdditionalFilters: React.Dispatch<any>;
+  setFilter: (key: string, value?: any) => void;
 };
 
 export const toUTC = (date: Date): Date => {
@@ -119,6 +119,20 @@ export const useTableFilters = (searchTextPlaceholder: string, defaultSort?: Sor
   const changedByUserSid = useDelayedInputValue('', '', urlParams.get('changedByUserSid') || '', '');
   const [additionalFilters, setAdditionalFilters] = useState({});
 
+  const cloneFilters = (filters) => {
+    const clone = {};
+    Object.keys(filters).forEach((k) => {
+      clone[k] = filters[k];
+    });
+    return clone;
+  };
+
+  const setFilter = (key: string, value?: any) => {
+    additionalFilters[key] = value;
+    const clone = cloneFilters(additionalFilters);
+    setAdditionalFilters(clone);
+  };
+
   const _addParamIfExists = (key, value) => (value ? { [key]: value } : {});
 
   const _pushQueryString = () => {
@@ -161,6 +175,6 @@ export const useTableFilters = (searchTextPlaceholder: string, defaultSort?: Sor
     userSid,
     changedByUserSid,
     additionalFilters,
-    setAdditionalFilters,
+    setFilter,
   };
 };

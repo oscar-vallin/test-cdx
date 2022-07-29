@@ -37,7 +37,7 @@ const tableFilters = (includeToday: boolean): TableFiltersType => {
     pagingParams: {},
     setPagingParams: jest.fn(),
     additionalFilters: {},
-    setAdditionalFilters: jest.fn(),
+    setFilter: jest.fn(),
   };
 };
 
