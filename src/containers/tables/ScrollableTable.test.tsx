@@ -28,7 +28,7 @@ describe('Scrollable Table component', () => {
     expect(table.find('ScrollablePaneBase')).toHaveLength(1);
     expect(table.find('DetailsListBase')).toHaveLength(1);
     expect(table.find('EmptyState')).toHaveLength(1);
-    expect(table.find('#_ItsATable_Error')).toHaveLength(1);
+    expect(table.find('#_ItsATable_Error')).toHaveLength(0);
   });
 
   it('Error Table', () => {
