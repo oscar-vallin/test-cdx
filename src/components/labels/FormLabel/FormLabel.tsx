@@ -1,8 +1,9 @@
 import { ReactElement } from 'react';
-import { UiField } from 'src/data/services/graphql';
+import { Maybe, UiField } from 'src/data/services/graphql';
 import { InfoIcon } from 'src/components/badges/InfoIcon';
 import { ErrorIcon } from 'src/components/badges/ErrorIcon';
-import { InheritIcon } from 'src/components/badges/InheritIcon';
+import { InheritedFromIcon } from 'src/components/badges/InheritedFromIcon';
+import { InheritedByIcon } from 'src/components/badges/InheritedByIcon';
 import { LabelRow, Label, Required } from './FormLabel.styles';
 
 const defaultProps = {
@@ -14,11 +15,21 @@ type FormLabelProps = {
   label?: string;
   required?: boolean;
   info?: string;
-  inherit?: string;
+  inheritedFrom?: string;
+  inheritedBy?: Maybe<string>[];
   errorMessage?: string;
 } & typeof defaultProps;
 
-const FormLabel = ({ id, label, required, info, inherit, errorMessage, ...props }: FormLabelProps): ReactElement => {
+const FormLabel = ({
+  id,
+  label,
+  required,
+  info,
+  inheritedFrom,
+  inheritedBy,
+  errorMessage,
+  ...props
+}: FormLabelProps): ReactElement => {
   return (
     <LabelRow id={id}>
       <Label {...props} id={id ? `${id}-Label` : undefined}>
@@ -26,7 +37,8 @@ const FormLabel = ({ id, label, required, info, inherit, errorMessage, ...props 
       </Label>
       {required && <Required id={id ? `${id}-Required` : undefined}>&nbsp;*</Required>}
       <InfoIcon id={`${id}-Info`} tooltip={info} />
-      <InheritIcon id={`${id}-Inherit`} tooltip={inherit} />
+      <InheritedFromIcon id={`${id}-inheritedFrom`} tooltip={inheritedFrom} />
+      <InheritedByIcon id={`${id}-inheritedBy`} tooltip={inheritedBy && inheritedBy[0]} />
       <ErrorIcon id={`${id}-ErrorMsg`} errorMessage={errorMessage} />
     </LabelRow>
   );
@@ -46,7 +58,8 @@ const UIFormLabel = ({ id, uiField }: UIFormLabelType) => {
       label={uiField?.label ?? ''}
       required={uiField?.required ?? false}
       info={uiField?.info ?? undefined}
-      inherit={uiField?.inheritedFrom ?? undefined}
+      inheritedFrom={uiField?.inheritedFrom ?? undefined}
+      inheritedBy={uiField?.inheritedBy ? uiField.inheritedBy : undefined}
       errorMessage={uiField?.errMsg ?? undefined}
     />
   );
