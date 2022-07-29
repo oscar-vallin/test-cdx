@@ -186,13 +186,16 @@ describe('Work Packet Table Container Testing Unit...', () => {
     expect(wrapper.find('.ms-DetailsHeader-cellTitle')).toHaveLength(5);
     // Timestamp should be sorted by default
     expect(wrapper.find('.ms-DetailsHeader-cellTitle').at(0).find('FontIcon[iconName="SortDown"]')).toHaveLength(1);
-    // Click Timestamp column to sort ascending
-    wrapper.find('.ms-DetailsHeader-cellTitle').at(0).simulate('click');
+    // Click Timestamp column open its menu and sort ascending
+    wrapper.find('button[id="__Col_timestamp_button"]').at(0).simulate('click');
+    wrapper.find('li.sort-asc-timestamp button').simulate('click');
     expect(wrapper.find('.ms-DetailsHeader-cellTitle').at(0).find('FontIcon[iconName="SortUp"]')).toHaveLength(1);
     // Now sort a different column
-    wrapper.find('.ms-DetailsHeader-cellTitle').at(1).simulate('click');
+    wrapper.find('button[id="__Col_vendorId_button"]').simulate('click');
+    wrapper.find('li.sort-asc-vendorId button').simulate('click');
     expect(wrapper.find('.ms-DetailsHeader-cellTitle').at(1).find('FontIcon[iconName="SortUp"]')).toHaveLength(1);
-    expect(wrapper.find('.ms-DetailsHeader-cellTitle').at(0).find('FontIcon')).toHaveLength(0);
+    expect(wrapper.find('.ms-DetailsHeader-cellTitle').at(0).find('FontIcon[iconName="SortDown"]')).toHaveLength(0);
+    expect(wrapper.find('.ms-DetailsHeader-cellTitle').at(0).find('FontIcon[iconName="SortUp"]')).toHaveLength(0);
 
     // Click on a details link
     expect(wrapper.find('div.ms-DetailsRow-cell')).toHaveLength(50);
@@ -225,9 +228,9 @@ describe('Work Packet Table Container Testing Unit...', () => {
     );
 
     expect(lazyQueryCalled).toEqual(true);
+    expect(wrapper.find('EmptyState')).toHaveLength(1);
     expect(wrapper.find('TableFilters')).toHaveLength(1);
     expect(wrapper.find('ScrollableTable')).toHaveLength(1);
-    expect(wrapper.find('EmptyState')).toHaveLength(1);
     expect(wrapper.find('span[id="__Paginator_PagingInfo-Text"]')).toHaveLength(0);
     expect(startPolling).toBeCalled();
     expect(stopPolling).toHaveBeenCalledTimes(0);
