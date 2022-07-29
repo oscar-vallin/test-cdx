@@ -12,7 +12,7 @@ export function InitialNodes(data) {
     { x: 820, y: 700 },
   ];
   const initialSteps = data.steps.map((step, index: number) => {
-    console.log(data.steps)
+    console.log(data.steps);
     const values = {};
     const lastNode = index === data.steps.length - 1;
     let positionX = 0;

@@ -1,7 +1,6 @@
 import { mountWithTheme } from 'src/utils/testUtils';
 import { ColumnHeader, DataColumn } from 'src/containers/tables/ColumnHeader';
 
-
 describe('Column Header Testing', () => {
   it('Default Render', () => {
     const col: DataColumn = {
@@ -11,7 +10,7 @@ describe('Column Header Testing', () => {
       dataType: 'string',
       minWidth: 0,
     };
-    const wrapper = mountWithTheme(<ColumnHeader id={'ColHeader'} col={col}/>);
+    const wrapper = mountWithTheme(<ColumnHeader id={'ColHeader'} col={col} />);
     // Not sortable or filterable so no menu
     const button = wrapper.find('button[id="ColHeader"]');
     expect(button).toHaveLength(1);
@@ -33,7 +32,7 @@ describe('Column Header Testing', () => {
       sortable: true,
       isSorted: true,
     };
-    const wrapper = mountWithTheme(<ColumnHeader id={'ColHeader'} col={col}/>);
+    const wrapper = mountWithTheme(<ColumnHeader id={'ColHeader'} col={col} />);
     // Not sortable or filterable so no menu
     const button = wrapper.find('button[id="ColHeader"]');
     button.simulate('click');
@@ -58,7 +57,7 @@ describe('Column Header Testing', () => {
       isSorted: true,
       isSortedDescending: true,
     };
-    const wrapper = mountWithTheme(<ColumnHeader id={'ColHeader'} col={col}/>);
+    const wrapper = mountWithTheme(<ColumnHeader id={'ColHeader'} col={col} />);
     // Not sortable or filterable so no menu
     const button = wrapper.find('button[id="ColHeader"]');
     button.simulate('click');
@@ -81,7 +80,7 @@ describe('Column Header Testing', () => {
       minWidth: 0,
       sortable: true,
     };
-    const wrapper = mountWithTheme(<ColumnHeader id={'ColHeader'} col={col}/>);
+    const wrapper = mountWithTheme(<ColumnHeader id={'ColHeader'} col={col} />);
     // Not sortable or filterable so no menu
     const button = wrapper.find('button[id="ColHeader"]');
     button.simulate('click');
@@ -106,7 +105,7 @@ describe('Column Header Testing', () => {
       sortable: true,
       filterable: true,
     };
-    const wrapper = mountWithTheme(<ColumnHeader id={'ColHeader'} col={col} onFilter={onFilter}/>);
+    const wrapper = mountWithTheme(<ColumnHeader id={'ColHeader'} col={col} onFilter={onFilter} />);
     // Not sortable or filterable so no menu
     const button = wrapper.find('button[id="ColHeader"]');
     button.simulate('click');
@@ -117,7 +116,7 @@ describe('Column Header Testing', () => {
     const inputFilter = wrapper.find('input[id="ColHeader_filter"]');
     expect(inputFilter).toHaveLength(1);
     inputFilter.simulate('change', {
-      target: { value: "abc" },
+      target: { value: 'abc' },
     });
     await new Promise((r) => setTimeout(r, 1000));
     expect(onFilter).toHaveBeenCalledWith('abc');
@@ -130,5 +129,4 @@ describe('Column Header Testing', () => {
 
     expect(onFilter).toHaveBeenCalledWith('');
   });
-
 });

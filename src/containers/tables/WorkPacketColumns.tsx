@@ -12,9 +12,9 @@ import {
 } from 'src/data/services/graphql';
 import { HighlightCounter } from 'src/components/badges/HighlightCounter';
 import { getStepStatusLabel } from 'src/data/constants/FileStatusConstants';
+import { DataColumn } from 'src/containers/tables/ColumnHeader';
 import { FileProgress } from '../bars/FileProgress';
 import { CellItemRow, StyledCell, StyledColumn, Text } from './WorkPacketTable.styles';
-import { DataColumn } from 'src/containers/tables/ColumnHeader';
 
 export enum WorkPacketColumn {
   TIMESTAMP,
