@@ -78,7 +78,7 @@ const XChangePage = () => {
   const [editComment, setEditComment] = useState(false);
   const [comment, setComment] = useState<string | null>();
   const [refreshDataXchange, setRefreshDataXchange] = useState(false);
-  const [openPanel, setOpenPanel] = useState(false);
+  const [isPreviewPanelOpen, setIsPreviewPanelOpen] = useState(false);
 
   const fetchData = () => {
     xchangeProfile({
@@ -406,7 +406,11 @@ const XChangePage = () => {
     }
     if (dataXchange && requiresConversion) {
       return (
-        <PrimaryButton id="__Convert-NewFormat" iconProps={{ iconName: 'Play' }} onClick={() => setOpenPanel(true)}>
+        <PrimaryButton
+          id="__Convert-NewFormat"
+          iconProps={{ iconName: 'Play' }}
+          onClick={() => setIsPreviewPanelOpen(true)}
+        >
           Convert to new Format
         </PrimaryButton>
       );
@@ -620,11 +624,13 @@ const XChangePage = () => {
           </Container>
         </Spacing>
       </PageBody>
-      <PreviewConvertXchangePanel
-        isPanelOpen={openPanel}
-        closePanel={setOpenPanel}
-        refreshXchangePage={setRefreshDataXchange}
-      />
+      {isPreviewPanelOpen && (
+        <PreviewConvertXchangePanel
+          isPanelOpen={isPreviewPanelOpen}
+          closePanel={setIsPreviewPanelOpen}
+          refreshXchangePage={setRefreshDataXchange}
+        />
+      )}
     </LayoutDashboard>
   );
 };
