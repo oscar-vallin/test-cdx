@@ -31,19 +31,14 @@ type XchangeStepPanelProps = {
 };
 
 const defaultDialogProps: DialogYesNoProps = {
+  id: '__XchangeStep_Dlg',
   open: false,
   title: '',
   message: '',
-  messageYes: 'Yes',
-  messageNo: 'No',
-  onYesNo: () => null,
-  onYes: () => {},
-  onNo: () => {},
-  closeOnNo: true,
-  closeOnYes: true,
+  labelYes: 'Yes',
+  labelNo: 'No',
   highlightNo: true,
   highlightYes: false,
-  onClose: () => null,
 };
 
 const myTheme = createTheme({

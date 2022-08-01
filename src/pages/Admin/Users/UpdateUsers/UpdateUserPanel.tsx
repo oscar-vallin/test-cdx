@@ -34,19 +34,14 @@ type UpdateUserPanelProps = {
 const tabs = ['#account', '#access'];
 
 const defaultDialogProps: DialogYesNoProps = {
+  id: '__UpdateUser_Dialog',
   open: false,
   title: 'Are you sure?',
   message: '',
-  messageYes: 'Yes',
-  messageNo: 'No',
-  onYesNo: () => null,
-  onYes: () => {},
-  onNo: () => {},
-  closeOnNo: true,
-  closeOnYes: true,
+  labelYes: 'Yes',
+  labelNo: 'No',
   highlightNo: true,
   highlightYes: false,
-  onClose: () => null,
 };
 
 const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: UpdateUserPanelProps): ReactElement => {
@@ -73,42 +68,6 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
     if (useUpdateUserPanel.changeHistoryCmd) {
       history.push(`/user-audit-logs?orgSid=${orgSid}&userSid=${form.person?.sid}`);
     }
-  };
-
-  const commandItems = (): ICommandBarItemProps[] => {
-    const items: ICommandBarItemProps[] = [];
-
-    if (useUpdateUserPanel.resetPasswordCmd) {
-      items.push({
-        key: 'reset',
-        text: useUpdateUserPanel.resetPasswordCmd?.label ?? 'Reset',
-        onClick: showResetPasswordDialog,
-        iconProps: { iconName: 'Permissions' },
-        className: 'reset-button',
-      });
-    }
-
-    if (useUpdateUserPanel.deactivateUserCmd) {
-      items.push({
-        key: 'deactivate',
-        text: useUpdateUserPanel.deactivateUserCmd?.label ?? 'Deactivate',
-        onClick: showDeactivateUserDialog,
-        iconProps: { iconName: 'UserRemove' },
-        className: 'deactivate-button',
-      });
-    }
-
-    if (useUpdateUserPanel.activateUserCmd) {
-      items.push({
-        key: 'activate',
-        text: useUpdateUserPanel.activateUserCmd?.label ?? 'Activate',
-        onClick: showActivateUserDialog,
-        iconProps: { iconName: 'UserFollowed' },
-        className: 'activate-button',
-      });
-    }
-
-    return items;
   };
 
   const overflowItems = (): ICommandBarItemProps[] => {
@@ -328,6 +287,42 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
     };
     setDialogProps(updatedDialog);
     setShowDialog(true);
+  };
+
+  const commandItems = (): ICommandBarItemProps[] => {
+    const items: ICommandBarItemProps[] = [];
+
+    if (useUpdateUserPanel.resetPasswordCmd) {
+      items.push({
+        key: 'reset',
+        text: useUpdateUserPanel.resetPasswordCmd?.label ?? 'Reset',
+        onClick: showResetPasswordDialog,
+        iconProps: { iconName: 'Permissions' },
+        className: 'reset-button',
+      });
+    }
+
+    if (useUpdateUserPanel.deactivateUserCmd) {
+      items.push({
+        key: 'deactivate',
+        text: useUpdateUserPanel.deactivateUserCmd?.label ?? 'Deactivate',
+        onClick: showDeactivateUserDialog,
+        iconProps: { iconName: 'UserRemove' },
+        className: 'deactivate-button',
+      });
+    }
+
+    if (useUpdateUserPanel.activateUserCmd) {
+      items.push({
+        key: 'activate',
+        text: useUpdateUserPanel.activateUserCmd?.label ?? 'Activate',
+        onClick: showActivateUserDialog,
+        iconProps: { iconName: 'UserFollowed' },
+        className: 'activate-button',
+      });
+    }
+
+    return items;
   };
 
   const onPanelClose = () => {

@@ -43,14 +43,6 @@ const UpdateExternalUsersPanel = ({
 
   const Toast = useNotification();
 
-  const onPanelClose = () => {
-    if (unsavedChanges) {
-      setShowUnsavedChangesDialog(true);
-    } else {
-      doClosePanel();
-    }
-  };
-
   const doClosePanel = () => {
     setErrorMsg(undefined);
 
@@ -63,6 +55,14 @@ const UpdateExternalUsersPanel = ({
 
     if (onDismiss) {
       onDismiss();
+    }
+  };
+
+  const onPanelClose = () => {
+    if (unsavedChanges) {
+      setShowUnsavedChangesDialog(true);
+    } else {
+      doClosePanel();
     }
   };
 
@@ -159,7 +159,7 @@ const UpdateExternalUsersPanel = ({
         onRenderHeader={renderPanelHeader}
         isOpen={isOpen}
         onDismiss={onPanelClose}
-        onOuterClick={undefined}
+        onOuterClick={() => {}}
       >
         <PanelBody>
           {errorMsg && (
@@ -206,6 +206,7 @@ const UpdateExternalUsersPanel = ({
         </PanelBody>
       </ThemedPanel>
       <DialogYesNo
+        id="__UpdateExtUserUnsavedChanges_Dlg"
         open={showUnsavedChangesDialog}
         highlightNo
         title="You have unsaved changes"
@@ -213,14 +214,13 @@ const UpdateExternalUsersPanel = ({
         onYes={() => {
           setShowUnsavedChangesDialog(false);
           doClosePanel();
-          return null;
         }}
         onClose={() => {
           setShowUnsavedChangesDialog(false);
-          return null;
         }}
       />
       <DialogYesNo
+        id="__ExtUserRevokeConfirm_Dlg"
         open={showRevokeAccessDialog}
         highlightNo
         title="Revoke Access?"

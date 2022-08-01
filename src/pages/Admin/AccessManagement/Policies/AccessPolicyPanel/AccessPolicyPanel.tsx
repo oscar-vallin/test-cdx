@@ -571,6 +571,7 @@ const AccessPolicyPanel = ({
         </Row>
       </ThemedPanel>
       <DialogYesNo
+        id="__AMPolicyUnsavedChanges_Dlg"
         open={showDialog}
         highlightNo
         title="You have unsaved changes"
@@ -578,11 +579,9 @@ const AccessPolicyPanel = ({
         onYes={() => {
           setShowDialog(false);
           doClosePanel();
-          return null;
         }}
         onClose={() => {
           setShowDialog(false);
-          return null;
         }}
       />
     </>

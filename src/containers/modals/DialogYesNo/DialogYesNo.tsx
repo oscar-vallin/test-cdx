@@ -1,107 +1,93 @@
-import { useState, useEffect, ReactElement } from 'react';
-import { Dialog, DialogType, DialogFooter } from '@fluentui/react';
-import { Button } from 'src/components/buttons';
-
-const defaultPropsDialogYesNo = {
-  open: false,
-  title: 'Validation',
-  message: 'Are you sure to continue?',
-  messageYes: 'Yes',
-  messageNo: 'No',
-  onYesNo: () => null,
-  onYes: () => {},
-  onNo: () => {},
-  closeOnNo: true,
-  closeOnYes: true,
-  highlightNo: false,
-  highlightYes: false,
-  onClose: () => {},
-};
+import { ReactElement } from 'react';
+import { Dialog, DialogType, DialogFooter, PrimaryButton, DefaultButton } from '@fluentui/react';
 
 export type DialogYesNoProps = {
+  id: string;
   open?: boolean;
-  title?: string;
-  message?: string;
-  messageYes?: string;
-  messageNo?: string;
-  onYesNo?: () => void;
-  onYes?: () => any;
-  onNo?: () => any;
-  closeOnNo?: boolean;
-  closeOnYes?: boolean;
+  title: string;
+  message: string;
+  labelYes?: string;
+  labelNo?: string;
+  onYes?: () => void;
+  onNo?: () => void;
   highlightNo?: boolean;
   highlightYes?: boolean;
-  onClose?: () => any;
-} & typeof defaultPropsDialogYesNo;
+  onClose?: () => void;
+};
 
 //
 // ─── DIALOG YES NO ───────────────────────────────────────────────────────────────
 //
-const DialogYesNo = (props: DialogYesNoProps): ReactElement => {
-  const [isOpen, setIsOpen] = useState(props.open);
-
-  useEffect(() => {
-    setIsOpen(props.open);
-  }, [props.open]);
-
-  const handleYesNo = (isYes: boolean): null => {
-    setIsOpen(false);
-
-    if (isYes) {
-      return props.onYes ? props.onYes() : null;
+export const DialogYesNo = ({
+  id,
+  open,
+  title,
+  message,
+  labelYes = 'Yes',
+  labelNo = 'No',
+  onYes,
+  onNo,
+  highlightNo,
+  highlightYes,
+  onClose,
+}: DialogYesNoProps): ReactElement => {
+  const handleYes = (): void => {
+    if (onYes) {
+      onYes();
     }
-
-    return props.onNo ? props.onNo() : null;
+    if (onClose) {
+      onClose();
+    }
   };
 
-  const handleYes = (): null => {
-    if (props.closeOnYes) {
-      props.onClose();
-      setIsOpen(false);
+  const handleNo = (): void => {
+    if (onNo) {
+      onNo();
     }
-
-    return handleYesNo(true);
+    if (onClose) {
+      onClose();
+    }
   };
 
-  const handleNo = (): null => {
-    if (props.closeOnYes) {
-      props.onClose();
-      setIsOpen(false);
+  const handleDismiss = () => {
+    if (onClose) {
+      onClose();
     }
+  };
 
-    return handleYesNo(false);
+  const renderYesButton = () => {
+    if (highlightYes) {
+      return <PrimaryButton id={`${id}_Yes`} onClick={handleYes} text={labelYes} />;
+    }
+    return <DefaultButton id={`${id}_Yes`} onClick={handleYes} text={labelYes} />;
+  };
+
+  const renderNoButton = () => {
+    if (highlightNo) {
+      return <PrimaryButton id={`${id}_No`} onClick={handleNo} text={labelNo} />;
+    }
+    return <DefaultButton id={`${id}_No`} onClick={handleNo} text={labelNo} />;
   };
 
   return (
     <Dialog
-      hidden={!isOpen}
-      onDismiss={() => setIsOpen(false)}
+      hidden={!open}
+      onDismiss={handleDismiss}
       dialogContentProps={{
         type: DialogType.normal,
-        title: props.title,
-        subText: props.message,
+        title,
+        titleProps: {
+          id: `${id}_title`,
+        },
+        subTextId: `${id}_subtitle`,
+        subText: message,
       }}
       modalProps={{ isBlocking: true, containerClassName: 'dialog-yes-no' }}
     >
       <DialogFooter>
-        <Button
-          id="__optionDialogYes"
-          onClick={handleYes}
-          text={props.messageYes}
-          variant={props.highlightYes ? 'primary' : undefined}
-        />
-        <Button
-          id="__optionDialogNo"
-          onClick={handleNo}
-          text={props.messageNo}
-          variant={props.highlightNo ? 'primary' : undefined}
-        />
+        {renderYesButton()}
+        {renderNoButton()}
       </DialogFooter>
     </Dialog>
   );
 };
-
-DialogYesNo.defaultProps = defaultPropsDialogYesNo;
-
-export { DialogYesNo };
-export default DialogYesNo;

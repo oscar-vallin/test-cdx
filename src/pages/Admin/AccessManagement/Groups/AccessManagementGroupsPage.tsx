@@ -61,7 +61,7 @@ const AccessManagementGroupsContainer = () => {
   const [groups, setGroups] = useState<AccessPolicyGroup[]>([]);
   const columns = generateColumns();
   const [isPanelOpen, setIsPanelOpen] = useState(false);
-  const [isDialog, setDialog] = useState(false);
+  const [isDialogOpen, setDialogOpen] = useState(false);
   const Toast = useNotification();
   const [templateId, setTemplateId] = useState<string>();
 
@@ -151,7 +151,7 @@ const AccessManagementGroupsContainer = () => {
   // * Handle Delete function.
   const handleDeleteGroup = (id) => {
     setSelectedGroupId(id);
-    setDialog(true);
+    setDialogOpen(true);
   };
 
   // *
@@ -327,24 +327,21 @@ const AccessManagementGroupsContainer = () => {
         </Container>
       </PageBody>
 
-      {isDialog && (
-        <DialogYesNo
-          open={isDialog}
-          highlightNo
-          title="Delete Group"
-          message="Are you sure you want to delete this Access Policy Group?"
-          onYes={() => {
-            if (selectedGroupId) {
-              deleteAccessPolicyGroup(selectedGroupId).then();
-            }
-            return null;
-          }}
-          onClose={() => {
-            setDialog(false);
-            return null;
-          }}
-        />
-      )}
+      <DialogYesNo
+        id="__DeleteGroup_Confirm_Dlg"
+        open={isDialogOpen}
+        highlightNo
+        title="Delete Group"
+        message="Are you sure you want to delete this Access Policy Group?"
+        onYes={() => {
+          if (selectedGroupId) {
+            deleteAccessPolicyGroup(selectedGroupId).then();
+          }
+        }}
+        onClose={() => {
+          setDialogOpen(false);
+        }}
+      />
 
       <AccessPolicyGroupPanel
         isOpen={isPanelOpen}

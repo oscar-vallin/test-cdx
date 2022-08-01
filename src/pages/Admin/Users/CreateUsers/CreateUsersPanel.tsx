@@ -43,14 +43,6 @@ const CreateUsersPanel = ({ orgSid, isOpen, onDismiss, onCreateUser }: CreateUse
   const [errorMsg, setErrorMsg] = useState<string | undefined>();
   const Toast = useNotification();
 
-  const onPanelClose = () => {
-    if (unsavedChanges) {
-      setShowDialog(true);
-    } else {
-      doClosePanel();
-    }
-  };
-
   const doClosePanel = () => {
     setErrorMsg(undefined);
     // Reset the form
@@ -60,6 +52,14 @@ const CreateUsersPanel = ({ orgSid, isOpen, onDismiss, onCreateUser }: CreateUse
     setShowDialog(false);
     setUnsavedChanges(false);
     onDismiss();
+  };
+
+  const onPanelClose = () => {
+    if (unsavedChanges) {
+      setShowDialog(true);
+    } else {
+      doClosePanel();
+    }
   };
 
   const handleCreateUser = async () => {
@@ -202,6 +202,7 @@ const CreateUsersPanel = ({ orgSid, isOpen, onDismiss, onCreateUser }: CreateUse
         </PanelBody>
       </ThemedPanel>
       <DialogYesNo
+        id="__NewUserUnsavedChanges_Dlg"
         open={showDialog}
         highlightNo
         title="You have unsaved changes"
