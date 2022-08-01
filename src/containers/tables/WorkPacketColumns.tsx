@@ -7,12 +7,14 @@ import {
   WorkPacketCommand,
   WorkPacketCommandType,
   WorkPacketStatus,
+  WorkStatus,
   WpProcessError,
   WpTransmission,
 } from 'src/data/services/graphql';
 import { HighlightCounter } from 'src/components/badges/HighlightCounter';
-import { getStepStatusLabel } from 'src/data/constants/FileStatusConstants';
+import { ButtonLink } from 'src/components/buttons';
 import { DataColumn } from 'src/containers/tables/ColumnHeader';
+import { prettyEnumValue } from 'src/utils/CDXUtils';
 import { FileProgress } from '../bars/FileProgress';
 import { CellItemRow, StyledCell, StyledColumn, Text } from './WorkPacketTable.styles';
 
@@ -91,7 +93,7 @@ export const useWorkPacketColumns = (
         ) {
           return (
             <CellItemRow>
-              <Link onClick={() => openDetails(item.orgSid, item.workOrderId)}>{timestamp}</Link>
+              <ButtonLink onClick={() => openDetails(item.orgSid, item.workOrderId)}>{timestamp}</ButtonLink>
               {item.recordHighlightCount && (
                 <HighlightCounter
                   id={`__FileStatus_Highlight_Counter_${item.workOrderId}`}
@@ -138,7 +140,7 @@ export const useWorkPacketColumns = (
       onRender: (item: WpTransmission) => {
         const timestamp = format(new Date(item.deliveredOn), 'MM/dd/yyyy hh:mm a');
         if (item.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.ViewDetails)) {
-          return <Link onClick={() => openDetails(item.orgSid, item.workOrderId)}>{timestamp}</Link>;
+          return <ButtonLink onClick={() => openDetails(item.orgSid, item.workOrderId)}>{timestamp}</ButtonLink>;
         }
         return <span>{timestamp}</span>;
       },
@@ -162,7 +164,7 @@ export const useWorkPacketColumns = (
       onRender: (item: WpProcessError) => {
         const timestamp = format(new Date(item.startTime), 'MM/dd/yyyy hh:mm a');
         if (item.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.ViewDetails)) {
-          return <Link onClick={() => openDetails(item.orgSid, item.workOrderId)}>{timestamp}</Link>;
+          return <ButtonLink onClick={() => openDetails(item.orgSid, item.workOrderId)}>{timestamp}</ButtonLink>;
         }
         return <span>{timestamp}</span>;
       },
@@ -314,8 +316,9 @@ export const useWorkPacketColumns = (
       isPadded: true,
       data: WorkPacketColumn.PACKET_STATUS,
       dataType: 'enum',
+      enumType: WorkStatus,
       sortable: true,
-      filterable: false,
+      filterable: true,
       onRender: (item: WorkPacketStatus) => {
         const reprocessOnTimestamp = item.reprocessedOn
           ? format(new Date(item.reprocessedOn), 'MM/dd/yyyy hh:mm a')
@@ -327,17 +330,17 @@ export const useWorkPacketColumns = (
         ) {
           return (
             <StyledColumn>
-              <Link
+              <ButtonLink
                 disabled={!workOrderId}
                 onClick={workOrderId ? () => openDetails(item.orgSid, workOrderId) : () => null}
               >
                 Reprocessed on
-              </Link>
+              </ButtonLink>
               <Text>{reprocessOnTimestamp}</Text>
             </StyledColumn>
           );
         }
-        return <span>{getStepStatusLabel(item.packetStatus)}</span>;
+        return <span>{prettyEnumValue(item.packetStatus)}</span>;
       },
     },
     {

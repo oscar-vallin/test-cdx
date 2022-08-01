@@ -9,11 +9,14 @@ import {
   SearchBox,
 } from '@fluentui/react';
 import { useDelayedInputValue } from 'src/hooks/useInputValue';
+import { prettyEnumValue } from 'src/utils/CDXUtils';
 import { FilterWrapper } from './ColumnHeader.styles';
 
 // An extension of the Fluent UI IColumn
 export interface DataColumn extends IColumn {
   dataType: 'string' | 'number' | 'date' | 'boolean' | 'enum';
+  // When dataType = enum, specify the enumeration here
+  enumType?: any;
   sortable?: boolean;
   filterable?: boolean;
   onSortAsc?: () => void;
@@ -66,6 +69,39 @@ export const ColumnHeader = ({ id, col, filterValue, onFilter }: ColumnHeaderTyp
         iconName: col.isSorted && col.isSortedDescending ? 'CheckMark' : '',
       },
       onClick: col.onSortDesc,
+    });
+  }
+  if (col.filterable && col.dataType === 'enum' && col.enumType) {
+    // Include enum filters
+    if (col.sortable) {
+      // Add a Separator
+      menuItems.push({
+        key: 'separator',
+        text: '-',
+      });
+    }
+    Object.keys(col.enumType).forEach((key, index) => {
+      const value = col.enumType[key];
+      const isChecked = filterValue === value.toString();
+      menuItems.push({
+        key: `enum-${index}`,
+        className: `filter-enum-${key}`,
+        text: prettyEnumValue(value),
+        iconProps: {
+          iconName: isChecked ? 'CheckMark' : '',
+        },
+        onClick: () => {
+          if (onFilter) {
+            if (isChecked) {
+              onFilter(undefined);
+              col.isFiltered = false;
+            } else {
+              onFilter(value.toString());
+              col.isFiltered = true;
+            }
+          }
+        },
+      });
     });
   }
 

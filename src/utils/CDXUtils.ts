@@ -28,4 +28,17 @@ function getEnumByValue(enumType, enumValue?: string) {
   return null;
 }
 
-export { isDateTimeValid, yyyyMMdd, getEnumByValue, yyyyMMdda };
+function prettyEnumValue(enumValue?) {
+  if (!enumValue) {
+    return '';
+  }
+
+  return enumValue
+    .toString()
+    .replace(/_/g, ' ')
+    .replace(/(?<=[A-Z])[A-Z]+/g, (str) => {
+      return str.toLowerCase();
+    });
+}
+
+export { isDateTimeValid, yyyyMMdd, getEnumByValue, yyyyMMdda, prettyEnumValue };

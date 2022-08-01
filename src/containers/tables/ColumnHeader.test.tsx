@@ -1,5 +1,6 @@
 import { mountWithTheme } from 'src/utils/testUtils';
 import { ColumnHeader, DataColumn } from 'src/containers/tables/ColumnHeader';
+import { WorkStatus } from 'src/data/services/graphql';
 
 describe('Column Header Testing', () => {
   it('Default Render', () => {
@@ -10,7 +11,7 @@ describe('Column Header Testing', () => {
       dataType: 'string',
       minWidth: 0,
     };
-    const wrapper = mountWithTheme(<ColumnHeader id={'ColHeader'} col={col} />);
+    const wrapper = mountWithTheme(<ColumnHeader id="ColHeader" col={col} />);
     // Not sortable or filterable so no menu
     const button = wrapper.find('button[id="ColHeader"]');
     expect(button).toHaveLength(1);
@@ -32,8 +33,7 @@ describe('Column Header Testing', () => {
       sortable: true,
       isSorted: true,
     };
-    const wrapper = mountWithTheme(<ColumnHeader id={'ColHeader'} col={col} />);
-    // Not sortable or filterable so no menu
+    const wrapper = mountWithTheme(<ColumnHeader id="ColHeader" col={col} />);
     const button = wrapper.find('button[id="ColHeader"]');
     button.simulate('click');
     // Menu should show
@@ -57,8 +57,7 @@ describe('Column Header Testing', () => {
       isSorted: true,
       isSortedDescending: true,
     };
-    const wrapper = mountWithTheme(<ColumnHeader id={'ColHeader'} col={col} />);
-    // Not sortable or filterable so no menu
+    const wrapper = mountWithTheme(<ColumnHeader id="ColHeader" col={col} />);
     const button = wrapper.find('button[id="ColHeader"]');
     button.simulate('click');
     // Menu should show
@@ -80,8 +79,7 @@ describe('Column Header Testing', () => {
       minWidth: 0,
       sortable: true,
     };
-    const wrapper = mountWithTheme(<ColumnHeader id={'ColHeader'} col={col} />);
-    // Not sortable or filterable so no menu
+    const wrapper = mountWithTheme(<ColumnHeader id="ColHeader" col={col} />);
     const button = wrapper.find('button[id="ColHeader"]');
     button.simulate('click');
     // Menu should show
@@ -105,8 +103,7 @@ describe('Column Header Testing', () => {
       sortable: true,
       filterable: true,
     };
-    const wrapper = mountWithTheme(<ColumnHeader id={'ColHeader'} col={col} onFilter={onFilter} />);
-    // Not sortable or filterable so no menu
+    const wrapper = mountWithTheme(<ColumnHeader id="ColHeader" col={col} onFilter={onFilter} />);
     const button = wrapper.find('button[id="ColHeader"]');
     button.simulate('click');
     // Menu should show
@@ -128,5 +125,61 @@ describe('Column Header Testing', () => {
     await new Promise((r) => setTimeout(r, 1000));
 
     expect(onFilter).toHaveBeenCalledWith('');
+  });
+
+  it('Filterable Enum Column Check', async () => {
+    const onFilter = jest.fn();
+    const col: DataColumn = {
+      key: 'packetStatus',
+      name: 'Status',
+      fieldName: 'packetStatus',
+      dataType: 'enum',
+      enumType: WorkStatus,
+      minWidth: 0,
+      sortable: true,
+      filterable: true,
+    };
+    const wrapper = mountWithTheme(<ColumnHeader id="ColHeader" col={col} onFilter={onFilter} />);
+    const button = wrapper.find('button[id="ColHeader"]');
+    button.simulate('click');
+    // Menu should show
+    expect(wrapper.find('CalloutContentBase')).toHaveLength(1);
+
+    // options should show
+    expect(wrapper.find('li.filter-enum-Queued')).toHaveLength(1);
+    expect(wrapper.find('li.filter-enum-Processing')).toHaveLength(1);
+    expect(wrapper.find('li.filter-enum-QualityCheckFailed')).toHaveLength(1);
+    expect(wrapper.find('li.filter-enum-TechMigrationCheckFailed')).toHaveLength(1);
+    wrapper.find('li.filter-enum-Hold button').simulate('click');
+
+    expect(onFilter).toHaveBeenCalledWith('HOLD');
+  });
+
+  it('Filterable Enum Column Uncheck', async () => {
+    const onFilter = jest.fn();
+    const col: DataColumn = {
+      key: 'packetStatus',
+      name: 'Status',
+      fieldName: 'packetStatus',
+      dataType: 'enum',
+      enumType: WorkStatus,
+      isFiltered: true,
+      minWidth: 0,
+      sortable: true,
+      filterable: true,
+    };
+    const wrapper = mountWithTheme(<ColumnHeader id="ColHeader" col={col} onFilter={onFilter} filterValue="HOLD"/>);
+    const button = wrapper.find('button[id="ColHeader"]');
+    button.simulate('click');
+    // Menu should show
+    expect(wrapper.find('CalloutContentBase')).toHaveLength(1);
+
+    // options should show
+    const holdOption = wrapper.find('li.filter-enum-Hold button');
+    expect(holdOption).toHaveLength(1);
+    expect(holdOption.find('StyledIconBase').props()['iconName']).toEqual('CheckMark');
+    holdOption.simulate('click');
+
+    expect(onFilter).toHaveBeenCalledWith(undefined);
   });
 });
