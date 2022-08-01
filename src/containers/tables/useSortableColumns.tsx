@@ -28,7 +28,7 @@ export const useSortableColumns = (
           pageSize: 100,
           sort: [
             {
-              property: currColumn.key,
+              property: currColumn.fieldName,
               direction: desc ? SortDirection.Desc : SortDirection.Asc,
               nullHandling: NullHandling.NullsFirst,
               ignoreCase: true,
