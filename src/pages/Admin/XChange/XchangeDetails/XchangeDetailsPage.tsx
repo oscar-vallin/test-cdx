@@ -228,11 +228,12 @@ const XchangeDetailsPage = () => {
 
   const renderDiagram = () => {
     if (!detailsLoading && dataDiagram) {
+      const xchangeFileProcessSid = xchangeDataDetails?.processes ? xchangeDataDetails?.processes[0].sid : '';
       return (
         <Diagram
           data={dataDiagram}
           refreshDetailsPage={setRefreshXchangeDetails}
-          xchangeFileProcessSid={xchangeDataDetails?.sid ?? ''}
+          xchangeFileProcessSid={xchangeFileProcessSid ?? ''}
         />
       );
     }

@@ -108,6 +108,7 @@ const XchangeTransmissionPanel = ({
   const [comments, setComments] = useState('');
   const [copyCmd, setCopyCmd] = useState<WebCommand | null>();
   const [updateCmd, setUpdateCmd] = useState<WebCommand | null>();
+  const [createCmd, setCreateCmd] = useState<WebCommand | null>();
   const [detach, setDetach] = useState(false);
   const [overrides, setOverrides] = useState<OverrideProps>(DefaultOverrideProps);
   const [showDialog, setShowDialog] = useState(false);
@@ -119,7 +120,7 @@ const XchangeTransmissionPanel = ({
     useCopyXchangeFileTransmissionLazyQuery
   );
 
-  const [updateFileTransmission, { data: dataUpdateTransmission, loading: loadingUpdateTransmission }] =
+  const [fileTransmissionForm, { data: dataFileTransmissionForm, loading: loadingFileTransmissionForm }] =
     useQueryHandler(useXchangeFileTransmissionFormLazyQuery);
 
   const [createXchangeFileTransmission, { data: dataCreateFile, loading: loadingCreateFile, error: errorCreateFile }] =
@@ -135,7 +136,7 @@ const XchangeTransmissionPanel = ({
   const getFileTransmissionData = () => {
     setCustomQualifier(false);
     if (optionXchangeTransmission === 'update' || optionXchangeTransmission === 'add') {
-      updateFileTransmission({
+      fileTransmissionForm({
         variables: {
           xchangeFileProcessSid,
           sid: xchangeStepSid,
@@ -152,7 +153,7 @@ const XchangeTransmissionPanel = ({
   };
 
   const saveFileTransmission = () => {
-    if (copyCmd && optionXchangeTransmission === 'copy') {
+    if ((copyCmd && optionXchangeTransmission === 'copy') || (createCmd && optionXchangeTransmission === 'add')) {
       createXchangeFileTransmission({
         variables: {
           transInput: {
@@ -161,37 +162,40 @@ const XchangeTransmissionPanel = ({
             filenameQualifiers,
             protocol: {
               value: overrides.protocol ? protocol : xchangeFileTransmission?.protocol.value?.value,
-              inherited: overrides['protocol'],
+              inherited: copyCmd ? overrides['protocol'] : !overrides['protocol'],
             },
             host: {
               value: overrides.host ? host : xchangeFileTransmission?.host.value,
-              inherited: overrides['host'],
+              inherited: copyCmd ? overrides['host'] : !overrides['host'],
             },
-            port: { value: port, inherited: overrides['port'] },
+            port: { value: port, inherited: copyCmd ? overrides['port'] : !overrides['port'] },
             userName: {
               value: overrides.userName ? userName : xchangeFileTransmission?.userName.value,
-              inherited: overrides['userName'],
+              inherited: copyCmd ? overrides['userName'] : !overrides['userName'],
             },
             password: {
               value: overrides.password ? password : xchangeFileTransmission?.password.value,
-              inherited: overrides['password'],
+              inherited: copyCmd ? overrides['password'] : !overrides['password'],
             },
-            authKeyName: { value: authKeyName, inherited: overrides['authKeyName'] },
+            authKeyName: {
+              value: authKeyName,
+              inherited: copyCmd ? overrides['authKeyName'] : !overrides['authKeyName'],
+            },
             folder: {
               value: overrides.folder ? folder : xchangeFileTransmission?.folder.value,
-              inherited: overrides['folder'],
+              inherited: copyCmd ? overrides['folder'] : !overrides['folder'],
             },
             filenamePattern: {
               value: overrides.filenamePattern ? filenamePattern : xchangeFileTransmission?.filenamePattern.value,
-              inherited: overrides['filenamePattern'],
+              inherited: copyCmd ? overrides['filenamePattern'] : !overrides['filenamePattern'],
             },
             stepWise: {
               value: overrides.stepWise ? stepWise : xchangeFileTransmission?.stepWise.value,
-              inherited: overrides['stepWise'],
+              inherited: copyCmd ? overrides['stepWise'] : !overrides['stepWise'],
             },
             encryptionKeyName: {
               value: overrides.encryptionKeyName ? encryptionKeyName : xchangeFileTransmission?.encryptionKeyName.value,
-              inherited: overrides['encryptionKeyName'],
+              inherited: copyCmd ? overrides['encryptionKeyName'] : !overrides['encryptionKeyName'],
             },
             comments,
           },
@@ -286,7 +290,7 @@ const XchangeTransmissionPanel = ({
   };
 
   const keyBaseAuth = () => {
-    if (updateCmd && !showSSHKeys) {
+    if ((updateCmd || createCmd) && !showSSHKeys) {
       return <ButtonLink onClick={() => setShowSShKeys(true)}>use key-based authentication</ButtonLink>;
     }
 
@@ -505,7 +509,7 @@ const XchangeTransmissionPanel = ({
   };
 
   const renderBody = () => {
-    if (loadingCopyTransmission || loadingUpdateTransmission) {
+    if (loadingCopyTransmission || loadingFileTransmissionForm) {
       return (
         <Spacing margin={{ top: 'double' }}>
           <Spinner size={SpinnerSize.large} label="Loading File Transmission" />
@@ -513,7 +517,7 @@ const XchangeTransmissionPanel = ({
       );
     }
 
-    if (copyCmd || updateCmd) {
+    if (copyCmd || updateCmd || createCmd) {
       return (
         <PanelBody>
           <Container>
@@ -734,31 +738,39 @@ const XchangeTransmissionPanel = ({
         const _copyCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create);
         setCopyCmd(_copyCmd);
         setUpdateCmd(null);
+        setCreateCmd(null);
       }
     }
   }, [dataCopyTransmission, loadingCopyTransmission]);
 
   useEffect(() => {
-    if (!loadingUpdateTransmission && dataUpdateTransmission) {
+    if (!loadingFileTransmissionForm && dataFileTransmissionForm) {
       console.log(optionXchangeTransmission);
       setOptionXchangeTransmission('update');
-      setXchangeFileTransmission(dataUpdateTransmission.xchangeFileTransmissionForm);
+      setXchangeFileTransmission(dataFileTransmissionForm.xchangeFileTransmissionForm);
       if (
-        dataUpdateTransmission.xchangeFileTransmissionForm?.filenameQualifiers.value &&
-        dataUpdateTransmission.xchangeFileTransmissionForm?.filenameQualifiers.value.length > 0
+        dataFileTransmissionForm.xchangeFileTransmissionForm?.filenameQualifiers.value &&
+        dataFileTransmissionForm.xchangeFileTransmissionForm?.filenameQualifiers.value.length > 0
       ) {
         setFilenameQualifiers(
-          [dataUpdateTransmission.xchangeFileTransmissionForm.filenameQualifiers.value[0].value] ?? []
+          [dataFileTransmissionForm.xchangeFileTransmissionForm.filenameQualifiers.value[0].value] ?? []
         );
       }
-      if (dataUpdateTransmission.xchangeFileTransmissionForm?.commands) {
-        const pageCommands = dataUpdateTransmission.xchangeFileTransmissionForm?.commands;
+      if (dataFileTransmissionForm.xchangeFileTransmissionForm?.commands) {
+        const pageCommands = dataFileTransmissionForm.xchangeFileTransmissionForm?.commands;
         const _updateCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Update);
+        const _createCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create);
         setUpdateCmd(_updateCmd);
+        setCreateCmd(_createCmd);
+        if (_updateCmd) {
+          setOptionXchangeTransmission('update');
+        } else {
+          setOptionXchangeTransmission('add');
+        }
         setCopyCmd(null);
       }
     }
-  }, [dataUpdateTransmission, loadingUpdateTransmission]);
+  }, [dataFileTransmissionForm, loadingFileTransmissionForm]);
 
   useEffect(() => {
     if (xchangeFileTransmission) {
@@ -775,7 +787,7 @@ const XchangeTransmissionPanel = ({
       setEncryptionKeyName(xchangeFileTransmission?.encryptionKeyName.value?.value ?? '');
     }
 
-    if (xchangeFileTransmission) {
+    if (xchangeFileTransmission && (updateCmd || copyCmd)) {
       previewFilenamePattern({
         variables: {
           pattern: xchangeFileTransmission.filenamePattern.value,
