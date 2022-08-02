@@ -108,6 +108,7 @@ const XchangeTransmissionPanel = ({
   const [comments, setComments] = useState('');
   const [copyCmd, setCopyCmd] = useState<WebCommand | null>();
   const [updateCmd, setUpdateCmd] = useState<WebCommand | null>();
+  const [createCmd, setCreateCmd] = useState<WebCommand | null>();
   const [detach, setDetach] = useState(false);
   const [overrides, setOverrides] = useState<OverrideProps>(DefaultOverrideProps);
   const [showDialog, setShowDialog] = useState(false);
@@ -119,7 +120,7 @@ const XchangeTransmissionPanel = ({
     useCopyXchangeFileTransmissionLazyQuery
   );
 
-  const [updateFileTransmission, { data: dataUpdateTransmission, loading: loadingUpdateTransmission }] =
+  const [fileTransmissionForm, { data: dataFileTransmissionForm, loading: loadingFileTransmissionForm }] =
     useQueryHandler(useXchangeFileTransmissionFormLazyQuery);
 
   const [createXchangeFileTransmission, { data: dataCreateFile, loading: loadingCreateFile, error: errorCreateFile }] =
@@ -135,7 +136,7 @@ const XchangeTransmissionPanel = ({
   const getFileTransmissionData = () => {
     setCustomQualifier(false);
     if (optionXchangeTransmission === 'update' || optionXchangeTransmission === 'add') {
-      updateFileTransmission({
+      fileTransmissionForm({
         variables: {
           xchangeFileProcessSid,
           sid: xchangeStepSid,
@@ -286,7 +287,7 @@ const XchangeTransmissionPanel = ({
   };
 
   const keyBaseAuth = () => {
-    if (updateCmd && !showSSHKeys) {
+    if ((updateCmd || createCmd) && !showSSHKeys) {
       return <ButtonLink onClick={() => setShowSShKeys(true)}>use key-based authentication</ButtonLink>;
     }
 
@@ -505,7 +506,7 @@ const XchangeTransmissionPanel = ({
   };
 
   const renderBody = () => {
-    if (loadingCopyTransmission || loadingUpdateTransmission) {
+    if (loadingCopyTransmission || loadingFileTransmissionForm) {
       return (
         <Spacing margin={{ top: 'double' }}>
           <Spinner size={SpinnerSize.large} label="Loading File Transmission" />
@@ -513,7 +514,7 @@ const XchangeTransmissionPanel = ({
       );
     }
 
-    if (copyCmd || updateCmd) {
+    if (copyCmd || updateCmd || createCmd) {
       return (
         <PanelBody>
           <Container>
@@ -734,31 +735,33 @@ const XchangeTransmissionPanel = ({
         const _copyCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create);
         setCopyCmd(_copyCmd);
         setUpdateCmd(null);
+        setCreateCmd(null);
       }
     }
   }, [dataCopyTransmission, loadingCopyTransmission]);
 
   useEffect(() => {
-    if (!loadingUpdateTransmission && dataUpdateTransmission) {
-      console.log(optionXchangeTransmission)
+    if (!loadingFileTransmissionForm && dataFileTransmissionForm) {
       setOptionXchangeTransmission('update');
-      setXchangeFileTransmission(dataUpdateTransmission.xchangeFileTransmissionForm);
+      setXchangeFileTransmission(dataFileTransmissionForm.xchangeFileTransmissionForm);
       if (
-        dataUpdateTransmission.xchangeFileTransmissionForm?.filenameQualifiers.value &&
-        dataUpdateTransmission.xchangeFileTransmissionForm?.filenameQualifiers.value.length > 0
+        dataFileTransmissionForm.xchangeFileTransmissionForm?.filenameQualifiers.value &&
+        dataFileTransmissionForm.xchangeFileTransmissionForm?.filenameQualifiers.value.length > 0
       ) {
         setFilenameQualifiers(
-          [dataUpdateTransmission.xchangeFileTransmissionForm.filenameQualifiers.value[0].value] ?? []
+          [dataFileTransmissionForm.xchangeFileTransmissionForm.filenameQualifiers.value[0].value] ?? []
         );
       }
-      if (dataUpdateTransmission.xchangeFileTransmissionForm?.commands) {
-        const pageCommands = dataUpdateTransmission.xchangeFileTransmissionForm?.commands;
+      if (dataFileTransmissionForm.xchangeFileTransmissionForm?.commands) {
+        const pageCommands = dataFileTransmissionForm.xchangeFileTransmissionForm?.commands;
         const _updateCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Update);
+        const _createCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create);
         setUpdateCmd(_updateCmd);
+        setCreateCmd(_createCmd);
         setCopyCmd(null);
       }
     }
-  }, [dataUpdateTransmission, loadingUpdateTransmission]);
+  }, [dataFileTransmissionForm, loadingFileTransmissionForm]);
 
   useEffect(() => {
     if (xchangeFileTransmission) {
@@ -775,7 +778,7 @@ const XchangeTransmissionPanel = ({
       setEncryptionKeyName(xchangeFileTransmission?.encryptionKeyName.value?.value ?? '');
     }
 
-    if (xchangeFileTransmission) {
+    if (xchangeFileTransmission && (updateCmd || copyCmd)) {
       previewFilenamePattern({
         variables: {
           pattern: xchangeFileTransmission.filenamePattern.value,
