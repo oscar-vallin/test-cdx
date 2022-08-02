@@ -153,7 +153,7 @@ const XchangeTransmissionPanel = ({
   };
 
   const saveFileTransmission = () => {
-    if (copyCmd && optionXchangeTransmission === 'copy') {
+    if ((copyCmd && optionXchangeTransmission === 'copy') || (createCmd && optionXchangeTransmission === 'add')) {
       createXchangeFileTransmission({
         variables: {
           transInput: {
@@ -162,37 +162,40 @@ const XchangeTransmissionPanel = ({
             filenameQualifiers,
             protocol: {
               value: overrides.protocol ? protocol : xchangeFileTransmission?.protocol.value?.value,
-              inherited: overrides['protocol'],
+              inherited: copyCmd ? overrides['protocol'] : !overrides['protocol'],
             },
             host: {
               value: overrides.host ? host : xchangeFileTransmission?.host.value,
-              inherited: overrides['host'],
+              inherited: copyCmd ? overrides['host'] : !overrides['host'],
             },
-            port: { value: port, inherited: overrides['port'] },
+            port: { value: port, inherited: copyCmd ? overrides['port'] : !overrides['port'] },
             userName: {
               value: overrides.userName ? userName : xchangeFileTransmission?.userName.value,
-              inherited: overrides['userName'],
+              inherited: copyCmd ? overrides['userName'] : !overrides['userName'],
             },
             password: {
               value: overrides.password ? password : xchangeFileTransmission?.password.value,
-              inherited: overrides['password'],
+              inherited: copyCmd ? overrides['password'] : !overrides['password'],
             },
-            authKeyName: { value: authKeyName, inherited: overrides['authKeyName'] },
+            authKeyName: {
+              value: authKeyName,
+              inherited: copyCmd ? overrides['authKeyName'] : !overrides['authKeyName'],
+            },
             folder: {
               value: overrides.folder ? folder : xchangeFileTransmission?.folder.value,
-              inherited: overrides['folder'],
+              inherited: copyCmd ? overrides['folder'] : !overrides['folder'],
             },
             filenamePattern: {
               value: overrides.filenamePattern ? filenamePattern : xchangeFileTransmission?.filenamePattern.value,
-              inherited: overrides['filenamePattern'],
+              inherited: copyCmd ? overrides['filenamePattern'] : !overrides['filenamePattern'],
             },
             stepWise: {
               value: overrides.stepWise ? stepWise : xchangeFileTransmission?.stepWise.value,
-              inherited: overrides['stepWise'],
+              inherited: copyCmd ? overrides['stepWise'] : !overrides['stepWise'],
             },
             encryptionKeyName: {
               value: overrides.encryptionKeyName ? encryptionKeyName : xchangeFileTransmission?.encryptionKeyName.value,
-              inherited: overrides['encryptionKeyName'],
+              inherited: copyCmd ? overrides['encryptionKeyName'] : !overrides['encryptionKeyName'],
             },
             comments,
           },
@@ -742,7 +745,6 @@ const XchangeTransmissionPanel = ({
 
   useEffect(() => {
     if (!loadingFileTransmissionForm && dataFileTransmissionForm) {
-      setOptionXchangeTransmission('update');
       setXchangeFileTransmission(dataFileTransmissionForm.xchangeFileTransmissionForm);
       if (
         dataFileTransmissionForm.xchangeFileTransmissionForm?.filenameQualifiers.value &&
@@ -758,6 +760,11 @@ const XchangeTransmissionPanel = ({
         const _createCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create);
         setUpdateCmd(_updateCmd);
         setCreateCmd(_createCmd);
+        if (_updateCmd) {
+          setOptionXchangeTransmission('update');
+        } else {
+          setOptionXchangeTransmission('add');
+        }
         setCopyCmd(null);
       }
     }
@@ -830,7 +837,7 @@ const XchangeTransmissionPanel = ({
       {renderBody()}
       <DialogYesNo {...dialogProps} open={showDialog} />
       {testFileTransmissionModal && (
-        <TestFileTransmissionModal isOpen={setTestFileTransmissionModal} open={testFileTransmissionModal}/>
+        <TestFileTransmissionModal isOpen={setTestFileTransmissionModal} open={testFileTransmissionModal} />
       )}
     </ThemedPanel>
   );
