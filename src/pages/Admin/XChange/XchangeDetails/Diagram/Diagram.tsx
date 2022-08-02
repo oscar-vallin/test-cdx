@@ -8,6 +8,7 @@ import DataNodeTransmissions from './CustomDiagramNodes/DataNodeTransmissions';
 import { InitialNodes } from './nodes/nodes';
 import { InitialEdges } from './edges/edges';
 import { XchangeStepPanel } from '../XchangeStepPanel/XchangeStepPanel';
+import { XchangeTransmissionPanel } from '../XchangeTransmissionPanel/XchangeTransmissionPanel';
 
 const nodeTypes = {
   dataNodeSteps: DataNodeSteps,
@@ -26,8 +27,10 @@ const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramPro
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
-  const [openPanel, setOpenPanel] = useState(false);
+  const [openStepPanel, setOpenStepPanel] = useState(false);
+  const [openFilePanel, setOpenFilePanel] = useState(false);
   const [optionXchangeStep, setOptionXchangeStep] = useState<string>();
+  const [optionXchangeFileTransmission, setOptionXchangeFileTransmission] = useState<string>();
   const [showIcons, setShowIcons] = useState(false);
 
   const onConnect = (params: Edge<any> | Connection) => setEdges((eds) => addEdge(params, eds));
@@ -155,7 +158,7 @@ const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramPro
               id="__Add_XchangeSteps"
               title="Add Step"
               onClick={() => {
-                setOpenPanel(true);
+                setOpenStepPanel(true);
                 setOptionXchangeStep('add');
               }}
             >
@@ -163,7 +166,15 @@ const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramPro
                 Xchange Steps <span style={{ color: '#0078D4', fontSize: '22px' }}>+</span>
               </StyledText>
             </StyledButtonAction>
-            <StyledButtonAction fontSize={24} id="__Add_FileTransmission" title="Add File Transmission">
+            <StyledButtonAction
+              fontSize={24}
+              id="__Add_FileTransmission"
+              title="Add File Transmission"
+              onClick={() => {
+                setOpenFilePanel(true);
+                setOptionXchangeFileTransmission('add');
+              }}
+            >
               <StyledText>
                 File Transmissions <span style={{ color: '#0078D4', fontSize: '22px' }}>+</span>
               </StyledText>
@@ -195,14 +206,23 @@ const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramPro
         </Column>
       </Row>
       <XchangeStepPanel
-        isPanelOpen={openPanel}
-        closePanel={setOpenPanel}
-        setOptionXchangeStep={setOptionXchangeStep}
-        optionXchangeStep={optionXchangeStep}
+        isPanelOpen={openStepPanel}
+        closePanel={setOpenStepPanel}
         refreshDetailsPage={refreshDetailsPage}
         setShowIcons={setShowIcons}
+        setOptionXchangeStep={setOptionXchangeStep}
+        optionXchangeStep={optionXchangeStep}
         xchangeFileProcessSid={xchangeFileProcessSid}
         xchangeStepTitle="New Xchange Step"
+      />
+      <XchangeTransmissionPanel
+        isPanelOpen={openFilePanel}
+        closePanel={setOpenFilePanel}
+        refreshDetailsPage={refreshDetailsPage}
+        setShowIcons={setShowIcons}
+        setOptionXchangeTransmission={setOptionXchangeFileTransmission}
+        optionXchangeTransmission={optionXchangeFileTransmission}
+        xchangeFileProcessSid={xchangeFileProcessSid}
       />
     </Container>
   );
