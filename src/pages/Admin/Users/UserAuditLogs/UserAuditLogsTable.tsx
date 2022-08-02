@@ -6,10 +6,10 @@ import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { TableFiltersType } from 'src/hooks/useTableFilters';
 import { Paginator } from 'src/components/tables/Paginator';
-import { TableFilters } from 'src/containers/tables/TableFilters';
 import { Box, Container } from 'src/components/layouts';
 import { useSortableColumns } from 'src/containers/tables/useSortableColumns';
-import { ScrollableTable } from 'src/containers/tables/ScrollableTable';
+import { TableFilters, ScrollableTable } from 'src/containers/tables';
+import { prettyEnumValue } from 'src/utils/CDXUtils';
 import { UserAuditLogsColumn, useUserAuditLogsColumns } from './UserAuditLogsTableColumn';
 
 type UserAuditLogsTableParams = {
@@ -19,45 +19,6 @@ type UserAuditLogsTableParams = {
   getItems: (data: UserAccountAuditLogsQuery) => any[];
   tableFilters: TableFiltersType;
   onItemsListChange: (data: UserAccountAuditLogsQuery) => void;
-};
-
-export const getEventTypeName = (eventType?: UserAccountAuditEvent): string => {
-  if (!eventType) {
-    return '';
-  }
-
-  switch (eventType) {
-    case UserAccountAuditEvent.AccountCreation:
-      return 'Account Creation';
-    case UserAccountAuditEvent.Activation:
-      return 'Activation';
-    case UserAccountAuditEvent.ArchiveAccess:
-      return 'Archive Access';
-    case UserAccountAuditEvent.Deactivation:
-      return 'Deactivation';
-    case UserAccountAuditEvent.GroupAssignmentUpdate:
-      return 'Group Assigment Update';
-    case UserAccountAuditEvent.InactiveLoginAttempt:
-      return 'Inactive Login Attempt';
-    case UserAccountAuditEvent.LockedLoginAttempt:
-      return 'Locked Login Attempt';
-    case UserAccountAuditEvent.LoginFail:
-      return 'Login Fail';
-    case UserAccountAuditEvent.LoginSuccess:
-      return 'Login Success';
-    case UserAccountAuditEvent.Logout:
-      return 'Logout';
-    case UserAccountAuditEvent.PasswordUpdate:
-      return 'Password Update';
-    case UserAccountAuditEvent.ProfileUpdate:
-      return 'Profile Update';
-    case UserAccountAuditEvent.ResetPasswordRequested:
-      return 'Reset Password Requested';
-    case UserAccountAuditEvent.UserMigration:
-      return 'User Migration';
-    default:
-      return '';
-  }
 };
 
 export const UserAuditLogsTable = ({
@@ -79,7 +40,7 @@ export const UserAuditLogsTable = ({
 
   const { initialColumns } = useUserAuditLogsColumns(cols);
 
-  const { columns } = useSortableColumns(tableFilters, initialColumns(), ['auditDateTime', 'event']);
+  const { columns } = useSortableColumns(tableFilters, initialColumns());
   // const [columns, setColumns] = useState<IColumn[]>(initialColumns);
   const [items, setItems] = useState<any[]>([]);
 
@@ -143,7 +104,7 @@ export const UserAuditLogsTable = ({
     for (const enumMember in UserAccountAuditEvent) {
       options.push({
         key: UserAccountAuditEvent[enumMember],
-        text: getEventTypeName(UserAccountAuditEvent[enumMember]),
+        text: prettyEnumValue(UserAccountAuditEvent[enumMember]),
       });
     }
     return options;

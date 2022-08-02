@@ -1,5 +1,11 @@
-import { OrgType } from 'src/data/services/graphql';
-import { getEnumByValue, isDateTimeValid, yyyyMMdd, yyyyMMdda } from 'src/utils/CDXUtils';
+import { OrgType, WorkStatus } from 'src/data/services/graphql';
+import {
+  getEnumByValue,
+  isDateTimeValid,
+  yyyyMMdd,
+  yyyyMMdda,
+  prettyEnumValue
+} from 'src/utils/CDXUtils';
 
 describe('CDX Utility testing', () => {
   it('yyyyMMdd null', () => {
@@ -51,5 +57,11 @@ describe('CDX Utility testing', () => {
 
   it('isDateTimeValid with bad time', () => {
     expect(isDateTimeValid(new Date('2020-11-01T88:99:00'))).toEqual(false);
+  });
+
+  it('Pretty Enum Value', () => {
+    expect(prettyEnumValue(WorkStatus.TechMigrationCheckFailed)).toEqual('Tech Migration Check Failed');
+    expect(prettyEnumValue(OrgType.Vendor)).toEqual('Vendor');
+    expect(prettyEnumValue(undefined)).toEqual('');
   });
 });

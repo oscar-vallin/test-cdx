@@ -21,6 +21,8 @@ type WorkPacketListPageType = {
   getTotal: (any) => number;
   pollingQuery?: any;
   renderTotalRecords?: (totalRecords: number, tableFilters: TableFiltersType) => JSX.Element;
+  emptyTitle?: string;
+  emptyDescription?: string;
 };
 
 export const WorkPacketListPage = ({
@@ -33,6 +35,8 @@ export const WorkPacketListPage = ({
   getTotal,
   pollingQuery,
   renderTotalRecords,
+  emptyTitle,
+  emptyDescription,
 }: WorkPacketListPageType) => {
   const [loading, setLoading] = useState(false);
   const [totalRecords, setTotalRecords] = useState(0);
@@ -103,6 +107,8 @@ export const WorkPacketListPage = ({
         pollingQuery={pollingQuery}
         getItems={getItems}
         tableFilters={tableFilters}
+        emptyTitle={emptyTitle}
+        emptyDescription={emptyDescription}
         onLoading={setLoading}
         onItemsListChange={(data) => {
           const total = getTotal(data);

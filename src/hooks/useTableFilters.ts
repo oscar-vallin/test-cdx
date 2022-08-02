@@ -17,6 +17,8 @@ export type TableFiltersType = {
   setPagingParams: React.Dispatch<any>;
   userSid?: DelayedInput;
   changedByUserSid?: DelayedInput;
+  additionalFilters: any;
+  setFilter: (key: string, value?: any) => void;
 };
 
 export const toUTC = (date: Date): Date => {
@@ -115,6 +117,21 @@ export const useTableFilters = (searchTextPlaceholder: string, defaultSort?: Sor
   const eventType = useDelayedDropdownValue('Event', '', urlParams.get('eventType') || '', '');
   const userSid = useDelayedInputValue('', '', urlParams.get('userSid') || '', '');
   const changedByUserSid = useDelayedInputValue('', '', urlParams.get('changedByUserSid') || '', '');
+  const [additionalFilters, setAdditionalFilters] = useState({});
+
+  const cloneFilters = (filters) => {
+    const clone = {};
+    Object.keys(filters).forEach((k) => {
+      clone[k] = filters[k];
+    });
+    return clone;
+  };
+
+  const setFilter = (key: string, value?: any) => {
+    additionalFilters[key] = value;
+    const clone = cloneFilters(additionalFilters);
+    setAdditionalFilters(clone);
+  };
 
   const _addParamIfExists = (key, value) => (value ? { [key]: value } : {});
 
@@ -148,5 +165,16 @@ export const useTableFilters = (searchTextPlaceholder: string, defaultSort?: Sor
     changedByUserSid.delayedValue,
   ]);
 
-  return { searchText, startDate, endDate, pagingParams, setPagingParams, eventType, userSid, changedByUserSid };
+  return {
+    searchText,
+    startDate,
+    endDate,
+    pagingParams,
+    setPagingParams,
+    eventType,
+    userSid,
+    changedByUserSid,
+    additionalFilters,
+    setFilter,
+  };
 };

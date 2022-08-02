@@ -7,13 +7,16 @@ import {
   WorkPacketCommand,
   WorkPacketCommandType,
   WorkPacketStatus,
+  WorkStatus,
   WpProcessError,
   WpTransmission,
 } from 'src/data/services/graphql';
 import { HighlightCounter } from 'src/components/badges/HighlightCounter';
-import { getStepStatusLabel } from 'src/data/constants/FileStatusConstants';
+import { ButtonLink } from 'src/components/buttons';
+import { DataColumn } from 'src/containers/tables/ColumnHeader';
+import { prettyEnumValue } from 'src/utils/CDXUtils';
 import { FileProgress } from '../bars/FileProgress';
-import { Text, CellItemRow, StyledCell, StyledColumn } from './WorkPacketTable.styles';
+import { CellItemRow, StyledCell, StyledColumn, Text } from './WorkPacketTable.styles';
 
 export enum WorkPacketColumn {
   TIMESTAMP,
@@ -41,8 +44,7 @@ export enum WorkPacketColumn {
 
 export const useWorkPacketColumns = (
   selectedColumns: WorkPacketColumn[],
-  openDetails: (fsOrgSid?: string | null, workOrderId?: string, tab?: string) => void,
-  onSort?: (ev: React.MouseEvent<HTMLElement>, column: IColumn) => void
+  openDetails: (fsOrgSid?: string | null, workOrderId?: string, tab?: string) => void
 ) => {
   const graphQLUrl = process.env.REACT_APP_API_SERVER;
   const serverUrl = graphQLUrl?.replace('/graphql', '') ?? '';
@@ -65,7 +67,7 @@ export const useWorkPacketColumns = (
     return <span>{filename}</span>;
   };
 
-  const columnOptions: IColumn[] = [
+  const columnOptions: DataColumn[] = [
     {
       key: 'timestamp',
       name: 'Received On',
@@ -79,7 +81,9 @@ export const useWorkPacketColumns = (
       sortAscendingAriaLabel: 'Sorted Oldest to Most Recent',
       sortDescendingAriaLabel: 'Sorted Most Recent to Oldest',
       data: WorkPacketColumn.TIMESTAMP,
-      onColumnClick: onSort,
+      dataType: 'date',
+      sortable: true,
+      filterable: false,
       onRender: (item: WorkPacketStatus) => {
         const timestamp = format(new Date(item.timestamp), 'MM/dd/yyyy hh:mm a');
         if (
@@ -89,7 +93,7 @@ export const useWorkPacketColumns = (
         ) {
           return (
             <CellItemRow>
-              <Link onClick={() => openDetails(item.orgSid, item.workOrderId)}>{timestamp}</Link>
+              <ButtonLink onClick={() => openDetails(item.orgSid, item.workOrderId)}>{timestamp}</ButtonLink>
               {item.recordHighlightCount && (
                 <HighlightCounter
                   id={`__FileStatus_Highlight_Counter_${item.workOrderId}`}
@@ -130,11 +134,13 @@ export const useWorkPacketColumns = (
       sortAscendingAriaLabel: 'Sorted Oldest to Most Recent',
       sortDescendingAriaLabel: 'Sorted Most Recent to Oldest',
       data: WorkPacketColumn.DATETIME,
-      onColumnClick: onSort,
+      dataType: 'date',
+      sortable: true,
+      filterable: false,
       onRender: (item: WpTransmission) => {
         const timestamp = format(new Date(item.deliveredOn), 'MM/dd/yyyy hh:mm a');
         if (item.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.ViewDetails)) {
-          return <Link onClick={() => openDetails(item.orgSid, item.workOrderId)}>{timestamp}</Link>;
+          return <ButtonLink onClick={() => openDetails(item.orgSid, item.workOrderId)}>{timestamp}</ButtonLink>;
         }
         return <span>{timestamp}</span>;
       },
@@ -152,11 +158,13 @@ export const useWorkPacketColumns = (
       sortAscendingAriaLabel: 'Sorted Oldest to Most Recent',
       sortDescendingAriaLabel: 'Sorted Most Recent to Oldest',
       data: WorkPacketColumn.START_TIME,
-      onColumnClick: onSort,
+      dataType: 'date',
+      sortable: true,
+      filterable: false,
       onRender: (item: WpProcessError) => {
         const timestamp = format(new Date(item.startTime), 'MM/dd/yyyy hh:mm a');
         if (item.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.ViewDetails)) {
-          return <Link onClick={() => openDetails(item.orgSid, item.workOrderId)}>{timestamp}</Link>;
+          return <ButtonLink onClick={() => openDetails(item.orgSid, item.workOrderId)}>{timestamp}</ButtonLink>;
         }
         return <span>{timestamp}</span>;
       },
@@ -172,7 +180,9 @@ export const useWorkPacketColumns = (
       sortDescendingAriaLabel: 'Sorted Z to A',
       isPadded: true,
       data: WorkPacketColumn.VENDOR,
-      onColumnClick: onSort,
+      dataType: 'string',
+      sortable: true,
+      filterable: true,
     },
     {
       key: 'planSponsorId',
@@ -185,7 +195,9 @@ export const useWorkPacketColumns = (
       sortDescendingAriaLabel: 'Sorted Z to A',
       isPadded: true,
       data: WorkPacketColumn.PLAN_SPONSOR,
-      onColumnClick: onSort,
+      dataType: 'string',
+      sortable: true,
+      filterable: true,
     },
     {
       key: 'orgId',
@@ -198,7 +210,9 @@ export const useWorkPacketColumns = (
       sortDescendingAriaLabel: 'Sorted Z to A',
       isPadded: true,
       data: WorkPacketColumn.ORG_ID,
-      onColumnClick: onSort,
+      dataType: 'string',
+      sortable: true,
+      filterable: true,
     },
     {
       key: 'inboundFilename',
@@ -211,7 +225,9 @@ export const useWorkPacketColumns = (
       sortDescendingAriaLabel: 'Sorted Z to A',
       isPadded: true,
       data: WorkPacketColumn.INBOUND_FILENAME,
-      onColumnClick: onSort,
+      dataType: 'string',
+      sortable: true,
+      filterable: true,
     },
     {
       key: 'outboundFilename',
@@ -224,7 +240,9 @@ export const useWorkPacketColumns = (
       sortDescendingAriaLabel: 'Sorted Z to A',
       isPadded: true,
       data: WorkPacketColumn.OUTBOUND_FILENAME,
-      onColumnClick: onSort,
+      dataType: 'string',
+      sortable: true,
+      filterable: true,
     },
     {
       key: 'outboundFilesize',
@@ -237,7 +255,9 @@ export const useWorkPacketColumns = (
       sortDescendingAriaLabel: 'Sorted Largest to Smallest',
       isPadded: true,
       data: WorkPacketColumn.OUTBOUND_FILESIZE,
-      onColumnClick: onSort,
+      dataType: 'number',
+      sortable: true,
+      filterable: false,
     },
     {
       key: 'specId',
@@ -250,7 +270,9 @@ export const useWorkPacketColumns = (
       sortDescendingAriaLabel: 'Sorted Z to A',
       isPadded: true,
       data: WorkPacketColumn.SPEC_ID,
-      onColumnClick: onSort,
+      dataType: 'string',
+      sortable: true,
+      filterable: true,
     },
     {
       key: 'implementation',
@@ -263,7 +285,9 @@ export const useWorkPacketColumns = (
       sortDescendingAriaLabel: 'Sorted Z to A',
       isPadded: true,
       data: WorkPacketColumn.IMPLEMENTATION,
-      onColumnClick: onSort,
+      dataType: 'string',
+      sortable: true,
+      filterable: true,
     },
     {
       key: 'billingCount',
@@ -276,7 +300,9 @@ export const useWorkPacketColumns = (
       sortDescendingAriaLabel: 'Sorted Largest to Smallest',
       isPadded: true,
       data: WorkPacketColumn.BILLING_COUNT,
-      onColumnClick: onSort,
+      dataType: 'number',
+      sortable: true,
+      filterable: false,
     },
     {
       key: 'packetStatus',
@@ -289,7 +315,10 @@ export const useWorkPacketColumns = (
       sortDescendingAriaLabel: 'Sorted Z to A',
       isPadded: true,
       data: WorkPacketColumn.PACKET_STATUS,
-      onColumnClick: onSort,
+      dataType: 'enum',
+      enumType: WorkStatus,
+      sortable: true,
+      filterable: true,
       onRender: (item: WorkPacketStatus) => {
         const reprocessOnTimestamp = item.reprocessedOn
           ? format(new Date(item.reprocessedOn), 'MM/dd/yyyy hh:mm a')
@@ -301,31 +330,33 @@ export const useWorkPacketColumns = (
         ) {
           return (
             <StyledColumn>
-              <Link
+              <ButtonLink
                 disabled={!workOrderId}
                 onClick={workOrderId ? () => openDetails(item.orgSid, workOrderId) : () => null}
               >
                 Reprocessed on
-              </Link>
+              </ButtonLink>
               <Text>{reprocessOnTimestamp}</Text>
             </StyledColumn>
           );
         }
-        return <span>{getStepStatusLabel(item.packetStatus)}</span>;
+        return <span>{prettyEnumValue(item.packetStatus)}</span>;
       },
     },
     {
-      key: 'step',
+      key: 'stepName',
       name: 'Work Step',
       targetWidthProportion: 1,
       minWidth: 80,
       maxWidth: 120,
-      fieldName: 'step',
+      fieldName: 'stepName',
       sortAscendingAriaLabel: 'Sorted A to Z',
       sortDescendingAriaLabel: 'Sorted Z to A',
       isPadded: true,
       data: WorkPacketColumn.STEP,
-      onColumnClick: onSort,
+      dataType: 'string',
+      sortable: true,
+      filterable: true,
       onRender: (item: WpProcessError) => {
         return <span>{item.stepName}</span>;
       },
@@ -337,6 +368,9 @@ export const useWorkPacketColumns = (
       minWidth: 150,
       maxWidth: 300,
       data: WorkPacketColumn.PROGRESS,
+      dataType: 'enum',
+      sortable: false,
+      filterable: false,
       onRender: (item: WorkPacketStatus) => {
         return (
           <StyledCell>
@@ -362,7 +396,9 @@ export const useWorkPacketColumns = (
       sortAscendingAriaLabel: 'Sorted A to Z',
       sortDescendingAriaLabel: 'Sorted Z to A',
       data: WorkPacketColumn.CLIENT_FILE,
-      onColumnClick: onSort,
+      dataType: 'string',
+      sortable: true,
+      filterable: true,
       onRender: (item: WorkPacketStatus) =>
         renderDownloadLink(item.workOrderId, item.commands, item.inboundFilename, item.clientFileArchivePath),
     },
@@ -378,7 +414,9 @@ export const useWorkPacketColumns = (
       sortAscendingAriaLabel: 'Sorted A to Z',
       sortDescendingAriaLabel: 'Sorted Z to A',
       data: WorkPacketColumn.VENDOR_FILE,
-      onColumnClick: onSort,
+      dataType: 'string',
+      sortable: true,
+      filterable: true,
       onRender: (item: WorkPacketStatus) =>
         renderDownloadLink(item.workOrderId, item.commands, item.vendorFilename, item.vendorFileArchivePath),
     },
@@ -393,7 +431,9 @@ export const useWorkPacketColumns = (
       sortDescendingAriaLabel: 'Sorted Largest to Smallest',
       isPadded: true,
       data: WorkPacketColumn.TOTAL_RECORDS,
-      onColumnClick: onSort,
+      dataType: 'number',
+      sortable: true,
+      filterable: false,
     },
     {
       key: 'extractType',
@@ -406,7 +446,9 @@ export const useWorkPacketColumns = (
       sortDescendingAriaLabel: 'Sorted Z to A',
       isPadded: true,
       data: WorkPacketColumn.EXTRACT_TYPE,
-      onColumnClick: onSort,
+      dataType: 'string',
+      sortable: true,
+      filterable: false,
     },
     {
       key: 'extractVersion',
@@ -419,7 +461,9 @@ export const useWorkPacketColumns = (
       sortDescendingAriaLabel: 'Sorted Z to A',
       isPadded: true,
       data: WorkPacketColumn.EXTRACT_VERSION,
-      onColumnClick: onSort,
+      dataType: 'string',
+      sortable: true,
+      filterable: false,
     },
     {
       key: 'msg',
@@ -432,12 +476,14 @@ export const useWorkPacketColumns = (
       sortDescendingAriaLabel: 'Sorted Z to A',
       isPadded: true,
       data: WorkPacketColumn.MESSAGE,
-      onColumnClick: onSort,
+      dataType: 'string',
+      sortable: true,
+      filterable: true,
     },
   ];
 
-  const initialColumns = (): IColumn[] => {
-    const initCols: IColumn[] = [];
+  const initialColumns = (): DataColumn[] => {
+    const initCols: DataColumn[] = [];
     selectedColumns.forEach((sCol: WorkPacketColumn) => {
       const matching = columnOptions.find((colOpt: IColumn) => {
         return colOpt.data === sCol;

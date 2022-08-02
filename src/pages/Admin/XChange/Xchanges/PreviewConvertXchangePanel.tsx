@@ -47,7 +47,7 @@ const PreviewConvertXchangePanel = ({ isPanelOpen, closePanel, refreshXchangePag
     });
   };
 
-  const convertsClietnProfile = () => {
+  const convertsClientProfile = () => {
     setDisableButton(true);
     xchangeConvert({
       variables: {
@@ -61,6 +61,13 @@ const PreviewConvertXchangePanel = ({ isPanelOpen, closePanel, refreshXchangePag
       return (
         <Spacing margin={{ top: 'double' }}>
           <Spinner size={SpinnerSize.large} label="Converting" />
+        </Spacing>
+      );
+    }
+    if (loadingPreviewConvert) {
+      return (
+        <Spacing margin={{ top: 'double' }}>
+          <Spinner size={SpinnerSize.large} label="Calculating Conversion Dependencies" />
         </Spacing>
       );
     }
@@ -102,7 +109,7 @@ const PreviewConvertXchangePanel = ({ isPanelOpen, closePanel, refreshXchangePag
             disabled={disableButton}
             id="__Convert-NewFormat"
             iconProps={{ iconName: 'Play' }}
-            onClick={convertsClietnProfile}
+            onClick={convertsClientProfile}
           >
             Convert to new Format
           </PrimaryButton>

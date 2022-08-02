@@ -18,19 +18,14 @@ import { StyledQualifier } from '../../XchangeDetailsPage.styles';
 import { XchangeStepPanel } from '../../XchangeStepPanel/XchangeStepPanel';
 
 const defaultDialogProps: DialogYesNoProps = {
+  id: '__DiagramStep_Dlg',
   open: false,
   title: '',
   message: '',
-  messageYes: 'Yes',
-  messageNo: 'No',
-  onYesNo: () => null,
-  onYes: () => {},
-  onNo: () => {},
-  closeOnNo: true,
-  closeOnYes: true,
+  labelYes: 'Yes',
+  labelNo: 'No',
   highlightNo: true,
   highlightYes: false,
-  onClose: () => null,
 };
 
 type DataProps = {

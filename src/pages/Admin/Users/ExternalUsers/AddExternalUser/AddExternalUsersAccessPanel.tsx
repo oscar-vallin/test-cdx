@@ -247,6 +247,7 @@ const AddExternalUsersAccessPanel = ({
         </PanelBody>
       </ThemedPanel>
       <DialogYesNo
+        id="__ExtUserUnsavedChanges_Dlg"
         open={showDialog}
         highlightNo
         title="You have unsaved changes"
@@ -254,11 +255,9 @@ const AddExternalUsersAccessPanel = ({
         onYes={() => {
           setShowDialog(false);
           doClosePanel();
-          return null;
         }}
         onClose={() => {
           setShowDialog(false);
-          return null;
         }}
       />
     </>

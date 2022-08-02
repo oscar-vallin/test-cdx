@@ -1,5 +1,5 @@
-import React from 'react';
 import { IColumn } from '@fluentui/react';
+import { DataColumn } from 'src/containers/tables';
 
 export enum UsersTableColumns {
   FIRST_NAME,
@@ -8,11 +8,8 @@ export enum UsersTableColumns {
   ORGANIZATION,
 }
 
-export const useUsersTableColumns = (
-  selectedColumns: UsersTableColumns[],
-  onSort?: (ev: React.MouseEvent<HTMLElement>, column: IColumn) => void
-) => {
-  const columnOptions: IColumn[] = [
+export const useUsersTableColumns = (selectedColumns: UsersTableColumns[]) => {
+  const columnOptions: DataColumn[] = [
     {
       data: UsersTableColumns.FIRST_NAME,
       name: 'First Name',
@@ -21,7 +18,9 @@ export const useUsersTableColumns = (
       minWidth: 100,
       maxWidth: 255,
       isPadded: true,
-      onColumnClick: onSort,
+      dataType: 'string',
+      sortable: true,
+      filterable: false,
     },
     {
       data: UsersTableColumns.LAST_NAME,
@@ -33,7 +32,9 @@ export const useUsersTableColumns = (
       isPadded: true,
       isSorted: true,
       isSortedDescending: false,
-      onColumnClick: onSort,
+      dataType: 'string',
+      sortable: true,
+      filterable: false,
     },
     {
       data: UsersTableColumns.EMAIL,
@@ -42,7 +43,9 @@ export const useUsersTableColumns = (
       fieldName: 'email',
       minWidth: 255,
       isPadded: true,
-      onColumnClick: onSort,
+      dataType: 'string',
+      sortable: true,
+      filterable: false,
     },
     {
       data: UsersTableColumns.ORGANIZATION,
@@ -51,12 +54,14 @@ export const useUsersTableColumns = (
       fieldName: 'orgName',
       minWidth: 255,
       isPadded: true,
-      onColumnClick: onSort,
+      dataType: 'string',
+      sortable: true,
+      filterable: false,
     },
   ];
 
-  const initialColumns = (): IColumn[] => {
-    const initCols: IColumn[] = [];
+  const initialColumns = (): DataColumn[] => {
+    const initCols: DataColumn[] = [];
     selectedColumns.forEach((sCol: UsersTableColumns) => {
       const matching = columnOptions.find((colOpt: IColumn) => {
         return colOpt.data === sCol;

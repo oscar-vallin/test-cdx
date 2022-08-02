@@ -484,6 +484,7 @@ const AccessPolicyGroupPanel = ({
         </PanelBody>
       </ThemedPanel>
       <DialogYesNo
+        id="__AMGroupUnsavedChanges_Dlg"
         open={showDialog}
         highlightNo
         title="You have unsaved changes"
@@ -491,11 +492,9 @@ const AccessPolicyGroupPanel = ({
         onYes={() => {
           setShowDialog(false);
           doClosePanel();
-          return null;
         }}
         onClose={() => {
           setShowDialog(false);
-          return null;
         }}
       />
     </>

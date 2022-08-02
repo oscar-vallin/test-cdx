@@ -38,6 +38,8 @@ import { Paginator } from 'src/components/tables/Paginator';
 import { PageBody } from 'src/components/layouts/Column';
 import { UIInputCheck } from 'src/components/inputs/InputCheck';
 import { ThemedSearchBox } from 'src/components/inputs/SearchBox/ThemedSearchBox.styles';
+import { DataColumn, useSortableColumns } from 'src/containers/tables';
+import { useTableFilters } from 'src/hooks/useTableFilters';
 
 const ActiveOrgsPage = () => {
   const { orgSid: orgOwnerSid } = useOrgSid();
@@ -45,7 +47,6 @@ const ActiveOrgsPage = () => {
   const [orgs, setOrgs] = useState<Organization[]>([]);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [selectedOrgSid, setSelectedOrgSid] = useState<string>();
-  const [searchText, setSearchText] = useState<string>('');
   const [searchAllOrgsFilter, setSearchAllOrgsFilter] = useState<boolean>(false);
 
   const [directSearchQuery, { data: dataSearch, loading: loadingSearch }] = useQueryHandler(
@@ -58,32 +59,6 @@ const ActiveOrgsPage = () => {
     totalPages: 0,
   });
   const [createCmd, setCreateCmd] = useState<WebCommand | null>();
-
-  const fetchData = (pageNumber = 0) => {
-    directSearchQuery({
-      variables: {
-        searchText,
-        orgOwnerSid,
-        orgFilter: { activeFilter: 'ACTIVE', searchAllOrgs: searchAllOrgsFilter },
-        pageableInput: {
-          sort: [
-            { property: 'name', direction: SortDirection.Asc },
-            { property: 'orgId', direction: SortDirection.Asc },
-          ],
-          pageSize: 100,
-          pageNumber,
-        },
-      },
-    });
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, [orgOwnerSid, searchText, searchAllOrgsFilter]);
-
-  const onPageChange = (pageNumber: number) => {
-    fetchData(pageNumber);
-  };
 
   const changeActiveOrg = (org?: Organization) => {
     ActiveDomainStore.setCurrentOrg({
@@ -121,12 +96,15 @@ const ActiveOrgsPage = () => {
     />
   );
 
-  const columns: IColumn[] = [
+  const initColumns: DataColumn[] = [
     {
       name: 'Name',
       key: 'name',
       fieldName: 'name',
       data: 'string',
+      dataType: 'string',
+      sortable: true,
+      isSorted: true,
       isPadded: true,
       minWidth: 150,
       maxWidth: 600,
@@ -138,6 +116,9 @@ const ActiveOrgsPage = () => {
       key: 'orgId',
       fieldName: 'orgId',
       data: 'string',
+      dataType: 'string',
+      sortable: true,
+      isSorted: true,
       isPadded: true,
       minWidth: 150,
       maxWidth: 400,
@@ -147,8 +128,10 @@ const ActiveOrgsPage = () => {
     {
       name: 'Org Type',
       key: 'orgTypeLabel',
-      fieldName: 'orgTypeLabel',
+      fieldName: 'orgType',
       data: 'string',
+      dataType: 'enum',
+      sortable: true,
       isPadded: true,
       minWidth: 150,
       maxWidth: 400,
@@ -160,12 +143,43 @@ const ActiveOrgsPage = () => {
       key: 'actions',
       fieldName: 'actions',
       data: 'string',
+      dataType: 'string',
       isPadded: true,
       minWidth: 50,
       maxWidth: 50,
       onRender: onRenderAction,
     },
   ];
+
+  const tableFilters = useTableFilters('Search', [
+    { property: 'name', direction: SortDirection.Asc },
+    { property: 'orgId', direction: SortDirection.Asc },
+  ]);
+  const { columns } = useSortableColumns(tableFilters, initColumns);
+
+  const fetchData = () => {
+    directSearchQuery({
+      variables: {
+        searchText: tableFilters.searchText.delayedValue,
+        orgOwnerSid,
+        orgFilter: { activeFilter: 'ACTIVE', searchAllOrgs: searchAllOrgsFilter },
+        pageableInput: tableFilters.pagingParams,
+      },
+    });
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [orgOwnerSid, tableFilters.searchText.delayedValue, searchAllOrgsFilter, tableFilters.pagingParams]);
+
+  const onPageChange = (pageNumber: number) => {
+    tableFilters.pagingParams.pageNumber = pageNumber;
+    tableFilters.setPagingParams({
+      pageNumber,
+      pageSize: 100,
+      sort: tableFilters.pagingParams.sort,
+    });
+  };
 
   useEffect(() => {
     if (!loadingSearch && dataSearch) {
@@ -276,9 +290,9 @@ const ActiveOrgsPage = () => {
                 <ThemedSearchBox
                   id="Active_Orgs_Input-Search"
                   disabled={false}
-                  value={searchText}
+                  value={tableFilters.searchText.value}
                   styles={{ root: { width: '100%' } }}
-                  onChange={(event, newValue) => setSearchText(newValue ?? '')}
+                  onChange={tableFilters.searchText.onChange}
                   placeholder="Search"
                 />
               </Column>

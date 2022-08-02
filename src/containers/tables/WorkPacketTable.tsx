@@ -27,6 +27,8 @@ type WorkPacketParams = {
   onItemsListChange?: (data: any) => void;
   setContextualTitle?: (title: string) => void;
   routeId?: string;
+  emptyTitle?: string;
+  emptyDescription?: string;
 };
 
 export const WorkPacketTable = ({
@@ -41,6 +43,8 @@ export const WorkPacketTable = ({
   useFileStatusDetailsPanel,
   routeId,
   setContextualTitle,
+  emptyTitle,
+  emptyDescription,
 }: WorkPacketParams) => {
   const POLL_INTERVAL = 20000;
   const { orgSid } = useOrgSid();
@@ -76,28 +80,7 @@ export const WorkPacketTable = ({
 
   const { initialColumns } = useWorkPacketColumns(cols, openDetails);
 
-  const sortableColumns = [
-    'billingCount',
-    'deliveredOn',
-    'extractType',
-    'extractVersion',
-    'implementation',
-    'inboundFilename',
-    'msg',
-    'outboundFilename',
-    'outboundFilesize',
-    'orgId',
-    'packetStatus',
-    'planSponsorId',
-    'specId',
-    'step',
-    'startTime',
-    'timestamp',
-    'totalRecords',
-    'vendorId',
-    'vendorFilename',
-  ];
-  const { columns } = useSortableColumns(tableFilters, initialColumns(), sortableColumns);
+  const { columns } = useSortableColumns(tableFilters, initialColumns(), tableFilters.setFilter);
   const [items, setItems] = useState<any[]>([]);
 
   const [apiCall, { data, loading, error }] = useQueryHandler(lazyQuery);
@@ -162,13 +145,14 @@ export const WorkPacketTable = ({
               rangeStart: tableFilters.startDate.value,
               rangeEnd: tableFilters.endDate.value,
             },
+            ...tableFilters.additionalFilters,
           },
           pageableInput: tableFilters.pagingParams,
         },
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orgSid, tableFilters.pagingParams, lastUpdated]);
+  }, [orgSid, tableFilters.pagingParams, tableFilters.additionalFilters, lastUpdated]);
 
   useEffect(() => {
     onLoading(loading);
@@ -236,7 +220,14 @@ export const WorkPacketTable = ({
             id="Table_Detailed"
             style={{ width: '100%', height: `calc(100vh - ${hasMorePages ? '325px' : '250px'})` }}
           >
-            <ScrollableTable id={`${id}_Table`} columns={columns} items={items} error={error} />
+            <ScrollableTable
+              id={`${id}_Table`}
+              columns={columns}
+              items={items}
+              error={error}
+              emptyTitle={emptyTitle}
+              emptyDescription={emptyDescription}
+            />
           </div>
           <Paginator id="__Paginator" pagingInfo={pagingInfo} onPageChange={onPageChange} />
         </Box>

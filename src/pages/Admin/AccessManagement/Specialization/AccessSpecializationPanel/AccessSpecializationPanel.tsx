@@ -393,27 +393,26 @@ const AccessSpecializationPanel = ({
         onDismiss={onPanelClose}
         onOuterClick={() => {}}
       >
-        <>
-          <Row>
-            <Column lg="12">
-              {!accessForm || isLoadingForm || isLoadingSpecialization ? (
-                <>
-                  <Spacing margin={{ top: 'normal', bottom: 'double' }}>
-                    <LightSeparator />
-                  </Spacing>
+        <Row>
+          <Column lg="12">
+            {!accessForm || isLoadingForm || isLoadingSpecialization ? (
+              <>
+                <Spacing margin={{ top: 'normal', bottom: 'double' }}>
+                  <LightSeparator />
+                </Spacing>
 
-                  <Spacing>
-                    <Spinner size={SpinnerSize.large} label="Loading policy form" />
-                  </Spacing>
-                </>
-              ) : (
-                renderBody()
-              )}
-            </Column>
-          </Row>
-        </>
+                <Spacing>
+                  <Spinner size={SpinnerSize.large} label="Loading policy form" />
+                </Spacing>
+              </>
+            ) : (
+              renderBody()
+            )}
+          </Column>
+        </Row>
       </ThemedPanel>
       <DialogYesNo
+        id="__AMSpecializationUnsavedChanges_Dlg"
         open={showDialog}
         highlightNo
         title="You have unsaved changes"
@@ -421,11 +420,9 @@ const AccessSpecializationPanel = ({
         onYes={() => {
           setShowDialog(false);
           doClosePanel();
-          return null;
         }}
         onClose={() => {
           setShowDialog(false);
-          return null;
         }}
       />
     </>

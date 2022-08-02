@@ -351,6 +351,7 @@ export const OrgPanel = ({ isOpen, selectedOrgSid, onDismiss, onSave }: OrgPanel
         </PanelBody>
       </ThemedPanel>
       <DialogYesNo
+        id="__OrgUnsavedChanges_Dlg"
         open={showDialog}
         highlightNo
         title="You have unsaved changes"
@@ -358,11 +359,9 @@ export const OrgPanel = ({ isOpen, selectedOrgSid, onDismiss, onSave }: OrgPanel
         onYes={() => {
           setShowDialog(false);
           doClosePanel();
-          return null;
         }}
         onClose={() => {
           setShowDialog(false);
-          return null;
         }}
       />
     </>

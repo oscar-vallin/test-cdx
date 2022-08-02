@@ -87,6 +87,8 @@ export const FileStatusPage = () => {
       getTotal={getTotal}
       pollingQuery={useWorkPacketStatusesPollQuery}
       renderTotalRecords={renderTotalRecords}
+      emptyTitle="No files found"
+      emptyDescription="There are no files found for the given date range with the provided filters."
     />
   );
 };

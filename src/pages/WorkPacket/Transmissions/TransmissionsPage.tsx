@@ -86,6 +86,8 @@ export const TransmissionsPage = () => {
       getItems={getItems}
       getTotal={getTotal}
       renderTotalRecords={renderTotalRecords}
+      emptyTitle="No file transmissions found"
+      emptyDescription="There are no file transmissions found for the given date range with the provided filters."
     />
   );
 };

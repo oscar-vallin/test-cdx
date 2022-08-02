@@ -49,6 +49,8 @@ export const ErrorsPage = () => {
       getItems={getItems}
       getTotal={getTotal}
       renderTotalRecords={renderTotalRecords}
+      emptyTitle="No errored files found"
+      emptyDescription="There are no errored files found for the given date range with the provided filters."
     />
   );
 };
