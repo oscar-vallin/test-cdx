@@ -1,11 +1,5 @@
 import { OrgType, WorkStatus } from 'src/data/services/graphql';
-import {
-  getEnumByValue,
-  isDateTimeValid,
-  yyyyMMdd,
-  yyyyMMdda,
-  prettyEnumValue
-} from 'src/utils/CDXUtils';
+import { getEnumByValue, isDateTimeValid, yyyyMMdd, yyyyMMdda, prettyEnumValue } from 'src/utils/CDXUtils';
 
 describe('CDX Utility testing', () => {
   it('yyyyMMdd null', () => {

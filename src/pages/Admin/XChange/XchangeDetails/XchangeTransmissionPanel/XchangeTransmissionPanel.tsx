@@ -740,7 +740,7 @@ const XchangeTransmissionPanel = ({
 
   useEffect(() => {
     if (!loadingUpdateTransmission && dataUpdateTransmission) {
-      console.log(optionXchangeTransmission)
+      console.log(optionXchangeTransmission);
       setOptionXchangeTransmission('update');
       setXchangeFileTransmission(dataUpdateTransmission.xchangeFileTransmissionForm);
       if (
@@ -827,7 +827,7 @@ const XchangeTransmissionPanel = ({
       {renderBody()}
       <DialogYesNo {...dialogProps} open={showDialog} />
       {testFileTransmissionModal && (
-        <TestFileTransmissionModal isOpen={setTestFileTransmissionModal} open={testFileTransmissionModal}/>
+        <TestFileTransmissionModal isOpen={setTestFileTransmissionModal} open={testFileTransmissionModal} />
       )}
     </ThemedPanel>
   );

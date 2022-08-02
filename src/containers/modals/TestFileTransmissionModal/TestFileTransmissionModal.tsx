@@ -117,7 +117,7 @@ const TestFileTransmissionModal = ({ isOpen, open }: TestFileTransmissionModalPr
       },
     });
 
-    console.log(data)
+    console.log(data);
     if (data?.ftpTestM?.status === 'ERROR') {
       Toast.error({ text: data?.ftpTestM?.logMessage.body });
       if (data?.ftpTestM?.xpSFTPForm?.errSeverity === ErrorSeverity.Error) {
