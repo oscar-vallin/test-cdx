@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { PanelType, PrimaryButton, Spinner, SpinnerSize, Stack, Text } from '@fluentui/react';
+import { DefaultButton, PanelType, PrimaryButton, Spinner, SpinnerSize, Stack, Text } from '@fluentui/react';
 import { PanelBody, PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
 import {
   useCopyXchangeFileTransmissionLazyQuery,
@@ -21,6 +21,8 @@ import { UIInputSelectOne } from 'src/components/inputs/InputDropdown';
 import { InputText, UIInputText } from 'src/components/inputs/InputText';
 import { UIInputCheck } from 'src/components/inputs/InputCheck';
 import { ButtonLink } from 'src/components/buttons';
+import { TestFileTransmissionModal } from 'src/containers/modals/TestFileTransmissionModal';
+import { theme } from 'src/styles/themes/theme';
 
 type XchangeTransmissionPanelProps = {
   isPanelOpen: boolean;
@@ -116,6 +118,7 @@ const XchangeTransmissionPanel = ({
   const [showDialog, setShowDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
+  const [testFileTransmissionModal, setTestFileTransmissionModal] = useState(false);
 
   const [copyFileTransmission, { data: dataCopyTransmission, loading: loadingCopyTransmission }] = useQueryHandler(
     useCopyXchangeFileTransmissionLazyQuery
@@ -136,15 +139,15 @@ const XchangeTransmissionPanel = ({
 
   const getFileTransmissionData = () => {
     setCustomQualifier(false);
-    if (optionXchangeTransmission === 'copy') {
-      copyFileTransmission({
+    if (optionXchangeTransmission === 'update' || optionXchangeTransmission === 'add') {
+      updateFileTransmission({
         variables: {
           xchangeFileProcessSid,
           sid: xchangeStepSid,
         },
       });
-    } else if (optionXchangeTransmission === 'update') {
-      updateFileTransmission({
+    } else if (optionXchangeTransmission === 'copy') {
+      copyFileTransmission({
         variables: {
           xchangeFileProcessSid,
           sid: xchangeStepSid,
@@ -693,6 +696,16 @@ const XchangeTransmissionPanel = ({
               >
                 Save
               </PrimaryButton>
+              {!choseArchive && (
+                <DefaultButton
+                  iconProps={{
+                    iconName: 'Phone',
+                    style: { color: theme.colors.black, fontWeight: theme.fontWeights.bold },
+                  }}
+                  text="Test Configuration"
+                  onClick={() => setTestFileTransmissionModal(true)}
+                />
+              )}
             </Spacing>
           </Container>
         </PanelBody>
@@ -732,6 +745,7 @@ const XchangeTransmissionPanel = ({
 
   useEffect(() => {
     if (!loadingUpdateTransmission && dataUpdateTransmission) {
+      console.log(optionXchangeTransmission)
       setOptionXchangeTransmission('update');
       setXchangeFileTransmission(dataUpdateTransmission.xchangeFileTransmissionForm);
       if (
@@ -817,6 +831,9 @@ const XchangeTransmissionPanel = ({
     >
       {renderBody()}
       <DialogYesNo {...dialogProps} open={showDialog} />
+      {testFileTransmissionModal && (
+        <TestFileTransmissionModal isOpen={setTestFileTransmissionModal} open={testFileTransmissionModal}/>
+      )}
     </ThemedPanel>
   );
 };
