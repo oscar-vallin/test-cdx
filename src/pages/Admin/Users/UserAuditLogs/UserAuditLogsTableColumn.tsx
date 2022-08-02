@@ -3,7 +3,7 @@ import { IColumn } from '@fluentui/react';
 import { format } from 'date-fns';
 import { UserAccount, UserAccountAuditEvent, UserAccountAuditLog } from 'src/data/services/graphql';
 import { DataColumn } from 'src/containers/tables';
-import { getEventTypeName } from './UserAuditLogsTable';
+import { prettyEnumValue } from 'src/utils/CDXUtils';
 
 export enum UserAuditLogsColumn {
   DATETIME,
@@ -73,7 +73,7 @@ export const useUserAuditLogsColumns = (selectedColumns: UserAuditLogsColumn[]) 
       sortable: true,
       filterable: false,
       onRender: (item?: UserAccountAuditLog) => (
-        <span title={getEventTypeName(item?.event)}>{getEventTypeName(item?.event)}</span>
+        <span title={prettyEnumValue(item?.event)}>{prettyEnumValue(item?.event)}</span>
       ),
     },
     {
