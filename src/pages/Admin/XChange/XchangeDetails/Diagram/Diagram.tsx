@@ -62,32 +62,32 @@ const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramPro
     );
   };
 
-  const showIconsEachNode = (event, node) => {
-    setNodes((nds) =>
-      nds.map((n) => {
-        if (node.type === 'dataNodeTransmissions' && n.data.sid && n.data.sid === node.data.sid) {
-          n.data = {
-            ...node.data,
-            hoverOverShowIcons: true,
-            updateTransmission: false,
-            refreshDetailsPage,
-            xchangeFileProcessSid,
-          };
-        }
-        if (n.data.sid && n.data.index === node.data.index && node.type === 'dataNodeSteps') {
-          n.data = {
-            ...node.data,
-            qualifier: node.data.qualifier,
-            hoverOverShowIcons: true,
-            updateStep: false,
-            refreshDetailsPage,
-            xchangeFileProcessSid,
-          };
-        }
-        return n;
-      })
-    );
-  };
+  // const showIconsEachNode = (event, node) => {
+  //   setNodes((nds) =>
+  //     nds.map((n) => {
+  //       if (node.type === 'dataNodeTransmissions' && n.data.sid && n.data.sid === node.data.sid) {
+  //         n.data = {
+  //           ...node.data,
+  //           hoverOverShowIcons: true,
+  //           updateTransmission: false,
+  //           refreshDetailsPage,
+  //           xchangeFileProcessSid,
+  //         };
+  //       }
+  //       if (n.data.sid && n.data.index === node.data.index && node.type === 'dataNodeSteps') {
+  //         n.data = {
+  //           ...node.data,
+  //           qualifier: node.data.qualifier,
+  //           hoverOverShowIcons: true,
+  //           updateStep: false,
+  //           refreshDetailsPage,
+  //           xchangeFileProcessSid,
+  //         };
+  //       }
+  //       return n;
+  //     })
+  //   );
+  // };
 
   const hideIcons = (event, node) => {
     setNodes((nds) =>
@@ -189,7 +189,7 @@ const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramPro
               nodeTypes={nodeTypes}
               onNodeMouseLeave={hideIcons}
               onNodeMouseEnter={handleIcons}
-              onNodeMouseMove={showIconsEachNode}
+              // onNodeMouseMove={showIconsEachNode}
               onNodeClick={updateStep}
               zoomOnScroll={false}
               panOnScroll={false}
@@ -215,15 +215,17 @@ const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramPro
         xchangeFileProcessSid={xchangeFileProcessSid}
         xchangeStepTitle="New Xchange Step"
       />
-      <XchangeTransmissionPanel
-        isPanelOpen={openFilePanel}
-        closePanel={setOpenFilePanel}
-        refreshDetailsPage={refreshDetailsPage}
-        setShowIcons={setShowIcons}
-        setOptionXchangeTransmission={setOptionXchangeFileTransmission}
-        optionXchangeTransmission={optionXchangeFileTransmission}
-        xchangeFileProcessSid={xchangeFileProcessSid}
-      />
+      {openFilePanel && (
+        <XchangeTransmissionPanel
+          isPanelOpen={openFilePanel}
+          closePanel={setOpenFilePanel}
+          refreshDetailsPage={refreshDetailsPage}
+          setShowIcons={setShowIcons}
+          setOptionXchangeTransmission={setOptionXchangeFileTransmission}
+          optionXchangeTransmission={optionXchangeFileTransmission}
+          xchangeFileProcessSid={xchangeFileProcessSid}
+        />
+      )}
     </Container>
   );
 };
