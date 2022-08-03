@@ -20,6 +20,7 @@ jest.mock('src/data/services/graphql', () => ({
             data: {
                 xpsftpTest: {
                     includeFileUpload: true,
+                    sendTestFile:{visible:true}
                 }
             },
             loading: false,
@@ -28,9 +29,7 @@ jest.mock('src/data/services/graphql', () => ({
     useFtpTestMMutation: () => [
         jest.fn(async () => {}),
         {
-            data: {
-                ftpTestM: {}
-            }
+            data: {}
         }
     ]
 }));
@@ -44,10 +43,8 @@ describe('Test File Transmission we can do Test', () => {
       </StoreProvider>
     );
 
+    wrapper.find('button[id="__TestFileTransmission_test_button"]').simulate('click')
     // Close the dialog
-    setTimeout(() => {
-      wrapper.find('button[id="__TestFileTransmission_test_button"]').simulate('click')
-      wrapper.find('button[id="__TestFileTransmission_cancel_button"]').simulate('click')
-    }, 1000);
+    wrapper.find('button[id="__TestFileTransmission_cancel_button"]').simulate('click')
     });
 });

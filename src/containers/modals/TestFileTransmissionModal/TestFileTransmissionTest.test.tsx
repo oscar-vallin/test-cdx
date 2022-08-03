@@ -2,6 +2,7 @@ import { StoreProvider } from 'easy-peasy';
 import { mountWithTheme } from 'src/utils/testUtils';
 import store from 'src/store/index';
 import { TestFileTransmissionModal } from './TestFileTransmissionModal';
+import { WorkStatus } from 'src/data/services/graphql';
 
 jest.mock('src/hooks/useOrgSid', () => ({
     useOrgSid: () => ({
@@ -17,17 +18,17 @@ jest.mock('src/data/services/graphql', () => ({
     useXpsftpTestLazyQuery: () => [
         jest.fn(async () => {}),
         {
-            data: {
-                xpsftpTest:{}
-            },
-            loading: false,
+            data: {}
+                
         }
     ],
     useFtpTestMMutation: () => [
         jest.fn(async () => {}),
         {
             data: {
-                ftpTestM: {}
+                ftpTestM: {
+                    logMessage: {severity: "INFO"}
+                }
             }
         }
     ]
@@ -43,7 +44,7 @@ describe('Test File Transmission we can do Test', () => {
     );
 
     // Close the dialog
-    expect(wrapper.find('button[id="__FtpTest_ok"]'))
+    wrapper.find('button[id="__FtpTest_ok"]').simulate('click');
     
     })
 })
