@@ -186,18 +186,20 @@ const DataNodeTransmissions = ({ data, id }) => {
             {qualifier}
           </StyledQualifier>
         )}
-        <XchangeTransmissionPanel
-          isPanelOpen={openPanel}
-          closePanel={setOpenPanel}
-          setOptionXchangeTransmission={setOptionXchangeTransmission}
-          optionXchangeTransmission={optionXchangeTransmission}
-          refreshDetailsPage={refreshDetailsPage}
-          setShowIcons={setShowIcons}
-          xchangeFileProcessSid={xchangeFileProcessSid}
-          xchangeStepSid={sid}
-          orifinalFileTransmission={host}
-          qualifier={qualifier}
-        />
+        {openPanel && (
+          <XchangeTransmissionPanel
+            isPanelOpen={openPanel}
+            closePanel={setOpenPanel}
+            setOptionXchangeTransmission={setOptionXchangeTransmission}
+            optionXchangeTransmission={optionXchangeTransmission}
+            refreshDetailsPage={refreshDetailsPage}
+            setShowIcons={setShowIcons}
+            xchangeFileProcessSid={xchangeFileProcessSid}
+            xchangeStepSid={sid}
+            orifinalFileTransmission={host}
+            qualifier={qualifier}
+          />
+        )}
       </>
     );
   };

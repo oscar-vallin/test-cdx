@@ -697,6 +697,7 @@ const XchangeTransmissionPanel = ({
               </PrimaryButton>
               {!choseArchive && (
                 <DefaultButton
+                  style={{ marginLeft: '10px' }}
                   iconProps={{
                     iconName: 'Phone',
                     style: { color: theme.colors.black, fontWeight: theme.fontWeights.bold },

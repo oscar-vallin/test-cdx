@@ -87,7 +87,6 @@ const TestFileTransmissionModal = ({ isOpen, open }: TestFileTransmissionModalPr
   useEffect(() => {
     setProcessingForm(true);
     if (dataForm && !loadingForm) {
-      console.log(dataForm);
       setFtpTestForm(dataForm.xpsftpTest?.xpSFTPForm);
       setGenTestFileForm(dataForm.xpsftpTest?.sendTestFileForm);
     }
@@ -99,11 +98,11 @@ const TestFileTransmissionModal = ({ isOpen, open }: TestFileTransmissionModalPr
     const { data, errors } = await callFtpTest({
       variables: {
         xpsftp: {
-          host: 'files.known2u.com',
-          user: 'guestfiles',
-          password: 'w=A.Q2[#qP]4XpKq',
+          host: ftpTestForm?.host?.value ?? '',
+          user: ftpTestForm?.user?.value ?? '',
+          password: ftpTestForm?.password?.value,
           port: ftpTestForm?.port?.value,
-          folder: 'test/inbox',
+          folder: ftpTestForm?.folder?.value,
           stepWise: ftpTestForm?.stepWise?.value,
           sshKeyPath: ftpTestForm?.sshKeyPath?.value?.value,
         },
@@ -117,7 +116,6 @@ const TestFileTransmissionModal = ({ isOpen, open }: TestFileTransmissionModalPr
       },
     });
 
-    console.log(data);
     if (data?.ftpTestM?.status === 'ERROR') {
       Toast.error({ text: data?.ftpTestM?.logMessage.body });
       if (data?.ftpTestM?.xpSFTPForm?.errSeverity === ErrorSeverity.Error) {
@@ -304,7 +302,7 @@ const TestFileTransmissionModal = ({ isOpen, open }: TestFileTransmissionModalPr
       );
     }
 
-    if (!ftpTestData && !isProcessingForm && genTestFileForm) {
+    if (!ftpTestData && !loadingForm) {
       return (
         <Container>
           <Row>
@@ -341,6 +339,7 @@ const TestFileTransmissionModal = ({ isOpen, open }: TestFileTransmissionModalPr
                                 </StyledSelectedFile>
                               ) : (
                                 <ButtonLink
+                                  id="__Upload_File"
                                   underline
                                   target="_new"
                                   onClick={() => {
@@ -511,24 +510,35 @@ const TestFileTransmissionModal = ({ isOpen, open }: TestFileTransmissionModalPr
     return null;
   };
 
+  const renderButtons = () => {
+    if (dataForm?.xpsftpTest?.includeFileUpload && !ftpTestData?.ftpTestM) {
+      return (
+        <>
+          <PrimaryButton
+            id="__TestFileTransmission_test_button"
+            text="Test"
+            iconProps={{ iconName: 'Phone' }}
+            onClick={handleOnTestBtn}
+          />
+          <DefaultButton
+            style={{ marginLeft: '10px' }}
+            id="__TestFileTransmission_cancel_button"
+            text="Cancel"
+            onClick={() => isOpen(false)}
+          />
+        </>
+      );
+    }
+
+    if (ftpTestData?.ftpTestM) {
+      return <PrimaryButton id="__FtpTest_ok" text="ok" onClick={() => isOpen(false)} />;
+    }
+  };
+
   return (
     <Dialog hidden={false} dialogContentProps={{ title: 'Test File Transmission' }} minWidth="500px">
       {renderForm()}
-      <DialogFooter>
-        {!ftpTestData ? (
-          <>
-            <PrimaryButton
-              id="__TestFileTransmission_test_button"
-              text="Test"
-              iconProps={{ iconName: 'Phone' }}
-              onClick={handleOnTestBtn}
-            />
-            <DefaultButton id="__TestFileTransmission_cancel_button" text="Cancel" onClick={() => isOpen(false)} />
-          </>
-        ) : (
-          <PrimaryButton id="__FtpTest_ok" text="ok" onClick={() => isOpen(false)} />
-        )}
-      </DialogFooter>
+      <DialogFooter>{renderButtons()}</DialogFooter>
     </Dialog>
   );
 };

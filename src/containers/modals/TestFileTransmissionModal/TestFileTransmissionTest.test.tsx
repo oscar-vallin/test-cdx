@@ -2,35 +2,36 @@ import { StoreProvider } from 'easy-peasy';
 import { mountWithTheme } from 'src/utils/testUtils';
 import store from 'src/store/index';
 import { TestFileTransmissionModal } from './TestFileTransmissionModal';
+import { WorkStatus } from 'src/data/services/graphql';
 
 jest.mock('src/hooks/useOrgSid', () => ({
-  useOrgSid: () => ({
-    orgSid: 8,
-  }),
+    useOrgSid: () => ({
+      orgSid: 8,
+    }),
 }));
 
 jest.mock('src/utils/ErrorHandler', () => ({
-  ErrorHandler: () => jest.fn(),
+    ErrorHandler: () => jest.fn(),
 }));
 
 jest.mock('src/data/services/graphql', () => ({
-  useXpsftpTestLazyQuery: () => [
-    jest.fn(async () => {}),
-    {
-      data: {
-        xpsftpTest: {},
-      },
-      loading: false,
-    },
-  ],
-  useFtpTestMMutation: () => [
-    jest.fn(async () => {}),
-    {
-      data: {
-        ftpTestM: {},
-      },
-    },
-  ],
+    useXpsftpTestLazyQuery: () => [
+        jest.fn(async () => {}),
+        {
+            data: {}
+                
+        }
+    ],
+    useFtpTestMMutation: () => [
+        jest.fn(async () => {}),
+        {
+            data: {
+                ftpTestM: {
+                    logMessage: {severity: "INFO"}
+                }
+            }
+        }
+    ]
 }));
 
 describe('Test File Transmission we can do Test', () => {
@@ -38,11 +39,12 @@ describe('Test File Transmission we can do Test', () => {
     const onOpen = jest.fn();
     const wrapper = mountWithTheme(
       <StoreProvider store={store}>
-        <TestFileTransmissionModal isOpen={onOpen} open={true} />
+        <TestFileTransmissionModal  isOpen={onOpen} open={true}/>
       </StoreProvider>
     );
 
     // Close the dialog
-    expect(wrapper.find('button[id="__FtpTest_ok"]'));
-  });
-});
+    wrapper.find('button[id="__FtpTest_ok"]').simulate('click');
+    
+    })
+})
